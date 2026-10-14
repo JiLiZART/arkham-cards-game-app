@@ -1,0 +1,69 @@
+{
+  "id": "the-gathering",
+  "name": "The Gathering",
+  "card": "01104",
+  "intro": "Strange events have been taking place in Arkham. Late one night you wake to find the door of your study has vanished — and something is moving in the walls.",
+  "encounterSets": ["torch", "rats", "ghouls", "striking_fear", "ancient_evils", "chilling_cold"],
+  "acts": ["01108", "01109", "01110"],
+  "agendas": ["01105", "01106", "01107"],
+  "setup": [
+    { "do": "putIntoPlay", "codes": ["01111"] },
+    { "do": "setAside", "codes": ["01116", "01117"] },
+    { "do": "startAt", "code": "01111" }
+  ],
+  "connections": [["01112", "01113"], ["01112", "01114"], ["01112", "01115"]],
+  "layout": { "01111": [0, 0], "01112": [0, 0], "01113": [0, -1], "01114": [0, 1], "01115": [1, 0] },
+  "tokens": {
+    "easy": {
+      "skull": { "modifier": "X", "x": "ghoulsAtYourLocation" },
+      "cultist": { "modifier": -1, "onFail": [{ "op": "takeHorror", "amount": 1 }] },
+      "tablet": { "modifier": -2, "condition": { "enemyAtYourLocation": { "trait": "Ghoul" } }, "onReveal": [{ "op": "takeDamage", "amount": 1 }] }
+    },
+    "standard": {
+      "skull": { "modifier": "X", "x": "ghoulsAtYourLocation" },
+      "cultist": { "modifier": -1, "onFail": [{ "op": "takeHorror", "amount": 1 }] },
+      "tablet": { "modifier": -2, "condition": { "enemyAtYourLocation": { "trait": "Ghoul" } }, "onReveal": [{ "op": "takeDamage", "amount": 1 }] }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "You barely escape your house with your lives. The red-haired woman from your parlor follows, and promises to tell you what she knows.",
+      "effects": [
+        { "do": "record", "key": "houseStanding" },
+        { "do": "record", "key": "ghoulPriestAlive" },
+        { "do": "earnCard", "code": "01117", "who": "lead" },
+        { "do": "xp", "victory": true, "bonus": 2 }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "You let the red-haired woman set your house ablaze and watch everything you own burn. \"Come with me,\" she says. \"Alone we are doomed.\"",
+      "effects": [
+        { "do": "record", "key": "houseBurned" },
+        { "do": "earnCard", "code": "01117", "who": "lead" },
+        { "do": "trauma", "who": "lead", "mental": 1 },
+        { "do": "xp", "victory": true, "bonus": 2 }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "You refuse to let the overzealous woman burn your home, but still shaken, you decide to hear her out.",
+      "effects": [
+        { "do": "record", "key": "houseStanding" },
+        { "do": "xp", "who": "lead", "bonus": 1 },
+        { "do": "xp", "victory": true, "bonus": 2 }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "Trapped in the burning house, the horde of feral creatures closes in, and you have nowhere to run.",
+      "effects": [
+        { "do": "record", "key": "litaFindsOthers" },
+        { "do": "record", "key": "houseStanding" },
+        { "do": "record", "key": "ghoulPriestAlive" },
+        { "do": "kill", "who": "notResigned" }
+      ]
+    }
+  }
+}

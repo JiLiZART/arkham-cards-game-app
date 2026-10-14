@@ -1,0 +1,31 @@
+{
+  "code": "01002",
+  "signatures": [
+    "01008"
+  ],
+  "weaknesses": [
+    "01009"
+  ],
+  "deckSize": 30,
+  "deckOptions": [
+    {
+      "faction": [
+        "seeker",
+        "neutral"
+      ],
+      "level": {
+        "min": 0,
+        "max": 5
+      }
+    },
+    {
+      "faction": [
+        "mystic"
+      ],
+      "level": {
+        "min": 0,
+        "max": 2
+      }
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "id": "the-midnight-masks",
+  "name": "The Midnight Masks",
+  "card": "01120",
+  "intro": "A cult that worships the master of the ghouls is hidden among Arkham's townsfolk. Before midnight you must find as many of its members as you can.",
+  "encounterSets": ["arkham", "chilling_cold", "nightgaunts", "pentagram", "locked_doors"],
+  "sideDecks": { "cultists": ["cultists"] },
+  "acts": ["01123"],
+  "agendas": ["01121a", "01122"],
+  "setup": [
+    { "do": "putRandomIntoPlay", "from": ["01130", "01131"], "count": 1 },
+    { "do": "putRandomIntoPlay", "from": ["01126", "01127"], "count": 1 },
+    { "do": "putIntoPlay", "codes": ["01134", "01132", "01125", "01128", "01133", "01129", "01124"] },
+    { "do": "setAside", "codes": ["01121b"] },
+    { "do": "spawn", "code": "01169", "at": "Southside", "when": { "playersAtLeast": 2 } },
+    { "do": "spawn", "code": "01169", "at": "Downtown", "when": { "playersAtLeast": 3 } },
+    { "do": "spawn", "code": "01169", "at": "Graveyard", "when": { "playersAtLeast": 4 } },
+    { "do": "remove", "codes": ["01124"], "when": { "logHas": "houseBurned" } },
+    { "do": "startAt", "code": "Rivertown", "when": { "logHas": "houseBurned" } },
+    { "do": "startAt", "code": "01124", "when": { "not": { "logHas": "houseBurned" } } },
+    { "do": "shuffleIntoEncounter", "codes": ["01116"], "create": true, "when": { "logHas": "ghoulPriestAlive" } }
+  ],
+  "connections": [
+    ["01134", "01130"], ["01134", "01131"], ["01134", "01132"], ["01134", "01129"],
+    ["01130", "01132"], ["01131", "01132"], ["01130", "01125"], ["01131", "01125"], ["01130", "01128"], ["01131", "01128"],
+    ["01132", "01125"],
+    ["01125", "01126"], ["01125", "01127"], ["01125", "01133"], ["01125", "01124"],
+    ["01126", "01129"], ["01127", "01129"], ["01126", "01128"], ["01127", "01128"]
+  ],
+  "layout": {
+    "01134": [1, 0], "01130": [2, 0], "01131": [2, 0], "01132": [3, 0],
+    "01129": [0, 1], "01128": [2, 1], "01125": [3, 1], "01133": [4, 1],
+    "01126": [1, 2], "01127": [1, 2], "01124": [3, 2]
+  },
+  "tokens": {
+    "easy": {
+      "skull": { "modifier": "X", "x": "highestDoomOnCultist" },
+      "cultist": { "modifier": -2, "onReveal": [{ "op": "placeDoom", "amount": 1, "on": "nearestCultist" }] },
+      "tablet": { "modifier": -3, "onFail": [{ "op": "dropClues", "amount": 1 }] }
+    },
+    "standard": {
+      "skull": { "modifier": "X", "x": "highestDoomOnCultist" },
+      "cultist": { "modifier": -2, "onReveal": [{ "op": "placeDoom", "amount": 1, "on": "nearestCultist" }] },
+      "tablet": { "modifier": -3, "onFail": [{ "op": "dropClues", "amount": 1 }] }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "You've managed to obtain some useful information about the cult and its plans. You can only hope it's enough.",
+      "effects": [
+        { "do": "recordCards", "key": "cultistsInterrogated", "source": "victoryUniqueCultists" },
+        { "do": "recordCards", "key": "cultistsGotAway", "source": "remainingUniqueCultists" },
+        { "do": "crossOutIfInVictory", "key": "ghoulPriestAlive", "code": "01116" },
+        { "do": "xp", "victory": true }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "You've managed to obtain some useful information about the cult and its plans. You can only hope it's enough.",
+      "effects": [
+        { "do": "recordCards", "key": "cultistsInterrogated", "source": "victoryUniqueCultists" },
+        { "do": "recordCards", "key": "cultistsGotAway", "source": "remainingUniqueCultists" },
+        { "do": "crossOutIfInVictory", "key": "ghoulPriestAlive", "code": "01116" },
+        { "do": "xp", "victory": true }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "Twelve bells ring out, signaling midnight. You're out of time; the cult's ritual will begin shortly.",
+      "effects": [
+        { "do": "recordCards", "key": "cultistsInterrogated", "source": "victoryUniqueCultists" },
+        { "do": "recordCards", "key": "cultistsGotAway", "source": "remainingUniqueCultists" },
+        { "do": "record", "key": "pastMidnight" },
+        { "do": "crossOutIfInVictory", "key": "ghoulPriestAlive", "code": "01116" },
+        { "do": "xp", "victory": true }
+      ]
+    }
+  }
+}
