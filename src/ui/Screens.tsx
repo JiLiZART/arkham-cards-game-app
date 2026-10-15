@@ -4,6 +4,7 @@ import type { Difficulty } from "../content/schema";
 import { currentScenarioId } from "../engine/campaign";
 import { validateDeck } from "../engine/decks";
 import { db, gameStore, useGame } from "./context";
+import { cardImage } from "./images";
 import { SAVE_KEY, safeStorage } from "./store";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
@@ -62,7 +63,7 @@ export function MenuScreen() {
             const name = cardText(db, i.code, locale);
             return (
               <div key={i.code} className={`inv-card ${sel ? "selected" : ""}`} onClick={() => toggle(i.code)}>
-                <img src={`/cards/${i.code}.webp`} alt="" onError={(e) => (e.currentTarget.style.display = "none")} />
+                <img src={cardImage(db.cards[i.code], "front") ?? ""} alt="" onError={(e) => (e.currentTarget.style.display = "none")} />
                 <div>
                   <b>{name.name}</b> {sel && <span className="badge">P{k + 1}</span>}
                   <div className="sub">{name.subname}</div>

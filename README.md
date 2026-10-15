@@ -14,9 +14,18 @@ npm run check:content  # validate every file under content/
 npm run build
 ```
 
-Card images are loaded from `https://cdn.arkham.build/optimized/<code>.webp`. That CDN sends no CORS headers, so the dev and preview servers proxy `/cards/*` to it (see `vite.config.ts`). In production, set up the same rewrite on your host, or set `VITE_CARD_IMAGE_BASE` to a CORS-enabled mirror. When an image cannot load, the card is drawn from its data instead.
+Card images are loaded from `https://cdn.arkham.build/optimized/<code>.webp`. That CDN sends no CORS headers, so the dev and preview servers proxy `/cards/*` to it (see `vite.config.ts`). The GitHub Pages build downloads the scans into the site instead (see Deploying). On another host, set up the same rewrite, or set `VITE_CARD_IMAGE_BASE` to a CORS-enabled mirror. When an image cannot load, the card is drawn from its data instead.
 
 Icons come from the ArkhamCards icon fonts in `inspired/ArkhamCards` (`arkhamicons`, `arkhamslim` for small and inline icons, `tokens` for chaos tokens, `blood` and `standalone` for later sets). Only art the fonts don't have is a PNG: the physical damage, horror, clue, doom and resource tokens, the lead token, the chaos bag and the connector plaques (from `inspired/icons`, cut out along the hand-made transparent copies in `inspired/icons/transparent`). The card backs come from ArkhamCards too, and the framed table background from `inspired/icons`; the card fonts are Teutonic, Teutonic RU and Alegreya. `scripts/extract-assets.sh` copies all of these into `public/icons`, `public/table` and `public/fonts`, and writes the glyph map `src/ui/glyphs.generated.json` from the fonts' IcoMoon configs; it needs ImageMagick and node. The copies are committed, so builds never read `inspired/`. Like the card scans, the art, fonts and imported text are for personal use.
+
+## Deploying
+
+Every push to `main` deploys the game to GitHub Pages at **https://jilizart.github.io/arkham-cards-game-app/** (`.github/workflows/deploy.yml`). The workflow runs the tests, lint and content check, builds with `PAGES_BASE=/arkham-cards-game-app/` (Vite's base path; locally it stays `/`), and then publishes. A failing check publishes nothing and the site keeps the previous version. To deploy without a push, use Actions → "Deploy to GitHub Pages" → Run workflow.
+
+- **One-time setup:** in the repository, set Settings → Pages → Source to "GitHub Actions".
+- **Card scans:** `npm run fetch:cards -- dist` downloads every scan the game uses (about 230 files, 46 MB) into `dist/cards`, so the map's WebGL cards load them from the same origin. They are cached in `.cache/cards` and never committed. A scan that can't be downloaded is listed in the log and that card shows its drawn face. The scans are publicly hosted on the Pages site.
+- **Trying a Pages build locally:** `PAGES_BASE=/arkham-cards-game-app/ npm run build && npm run fetch:cards -- dist && PAGES_BASE=/arkham-cards-game-app/ npx vite preview`, then open http://localhost:4173/arkham-cards-game-app/.
+- In code, files under `public/` are referenced with `asset("…")` from `src/ui/images.ts`, never with a leading `/`; a test enforces this.
 
 ## Layout
 

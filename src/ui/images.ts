@@ -1,6 +1,9 @@
 import type { CardDef } from "../content/schema";
 
-const BASE = (import.meta.env?.VITE_CARD_IMAGE_BASE as string | undefined) ?? "/cards";
+/** a file under public/, at the site's base path ("/" locally, "/arkham-cards-game-app/" on GitHub Pages) */
+export const asset = (path: string) => `${(import.meta.env?.BASE_URL as string | undefined) ?? "/"}${path}`;
+
+const BASE = (import.meta.env?.VITE_CARD_IMAGE_BASE as string | undefined) ?? asset("cards");
 
 /** front/back image URLs for a card; double-sided cards use the "<code>b" image for their back */
 export function cardImage(card: Pick<CardDef, "code" | "doubleSided" | "image" | "backImage">, side: "front" | "back"): string | null {
@@ -10,7 +13,7 @@ export function cardImage(card: Pick<CardDef, "code" | "doubleSided" | "image" |
 }
 
 /** generic card back art by kind (player cards without their own back scan, encounter cards) */
-export const backUrl = (kind: "player" | "encounter") => (kind === "encounter" ? "/table/back-encounter.png" : "/table/back-player.png");
+export const backUrl = (kind: "player" | "encounter") => asset(kind === "encounter" ? "table/back-encounter.png" : "table/back-player.png");
 
 /** cards that use the generic encounter back; the others use the player back */
 export const isEncounterCard = (c: Pick<CardDef, "faction" | "subtype">) => c.faction === "mythos" && !c.subtype;

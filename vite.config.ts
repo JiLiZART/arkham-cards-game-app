@@ -3,7 +3,8 @@ import { defineConfig } from "vitest/config";
 
 // card images come from the arkham.build CDN, which sends no CORS headers; WebGL textures need
 // same-origin (or CORS) images, so the dev/preview server proxies /cards/* to the CDN.
-// In production, configure the same rewrite on the host or set VITE_CARD_IMAGE_BASE.
+// On GitHub Pages the scans are downloaded into the build instead (scripts/fetch-card-images.ts);
+// elsewhere, configure the same rewrite on the host or set VITE_CARD_IMAGE_BASE.
 const cardProxy = {
   "/cards": {
     target: "https://cdn.arkham.build",
@@ -13,6 +14,8 @@ const cardProxy = {
 };
 
 export default defineConfig({
+  // GitHub Pages serves the site under /<repo>/ (the deploy workflow sets PAGES_BASE); locally it is /
+  base: process.env.PAGES_BASE ?? "/",
   plugins: [react()],
   server: { proxy: cardProxy },
   preview: { proxy: cardProxy },

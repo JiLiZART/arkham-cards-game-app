@@ -11,7 +11,8 @@
     "typecheck": "tsc --noEmit",
     "import:cards": "tsx scripts/import-cards.ts",
     "import:i18n": "tsx scripts/import-i18n.ts",
-    "check:content": "tsx scripts/check-content.ts"
+    "check:content": "tsx scripts/check-content.ts",
+    "fetch:cards": "tsx scripts/fetch-card-images.ts"
   },
   "dependencies": {
     "@react-three/drei": "^9.122.0",

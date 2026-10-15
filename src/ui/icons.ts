@@ -1,3 +1,5 @@
+import { asset } from "./images";
+
 /**
  * The one place that maps game concepts to icon sources. Icon-font glyphs come first (sharp at any size, coloured
  * like the printed icons); PNG art (public/icons, from scripts/extract-assets.sh) only where the fonts have nothing:
@@ -53,7 +55,7 @@ export const iconSource = (name: IconName): IconSource => ICON_SOURCES[name];
 export const iconUrl = (name: IconName) => {
   const s = ICON_SOURCES[name] as IconSource;
   if (!("png" in s)) throw new Error(`${name} is drawn from the icon font, not a PNG`);
-  return `/icons/${s.png}.png`;
+  return asset(`icons/${s.png}.png`);
 };
 
 /** ArkhamDB markup keys → icon names (anything else falls through to a plain glyph, see glyphs.ts) */
