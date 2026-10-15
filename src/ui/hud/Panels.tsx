@@ -8,6 +8,7 @@ import { useCardClick } from "../cardClick";
 import { groupTokens } from "../chaos";
 import { db, gameStore, useGame } from "../context";
 import { Icon } from "../Icon";
+import { introHides } from "../intro";
 import { iconUrl } from "../icons";
 import { backUrl, isEncounterCard } from "../images";
 import { handVisible } from "../scene/Table";
@@ -15,8 +16,9 @@ import { viewerOf } from "../store";
 import { TokenBadges } from "../TokenBadges";
 import { useView } from "../view";
 import { ChaosTokenIcon } from "./ChaosTokenIcon";
+import { referenceSide } from "./DeckViewer";
 import { useFlyIn } from "./flights";
-import { Modal } from "./Modals";
+import { Modal, useCardOptions } from "./Modals";
 import { RESOLVE_BOX } from "./Reveal";
 import { stripAction } from "./ActionRail";
 
@@ -51,19 +53,49 @@ export function MiniCard({ id, w, h, legal, exhausted, target, onClick, faceDown
   );
 }
 
+/** options on the act or agenda (Advance act…) as buttons laid over the card; the rest of the card still opens the viewer */
+export function CardOptions({ id }: { id: InstId | null }) {
+  const choose = useGame((s) => s.choose);
+  const options = useCardOptions([id]);
+  if (!options.length) return null;
+  return (
+    <div className="card-options">
+      {options.map((o) => (
+        <button
+          key={o.id}
+          className="primary"
+          title={o.label}
+          onClick={(e) => {
+            e.stopPropagation();
+            useView.getState().setModal(null);
+            choose(o.id);
+          }}
+        >
+          {(o.value as { kind?: string } | null)?.kind === "advanceAct" ? tr("act.advance") : o.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
 /** act and agenda, small and the right way up, top-left; a click shows both sides */
 export function ScenarioPanel() {
   const game = useGame((s) => s.game) as GameState;
+  const locale = useGame((s) => s.locale);
   const { byCard } = useCardClick();
   const g = gOf();
-  const open = (id: InstId) => useView.getState().setModal({ card: id });
+  const open = (deck: "act" | "agenda" | "reference") => useView.getState().setModal({ deck });
+  const ref = db.scenarios[game.scenarioId].card;
   const agendaDef = game.agenda ? db.cards[game.cards[game.agenda].code] : null;
   const cost = actClueCost(g);
+  // during the mulligan and the introduction the cards keep their place (the introduction flies them there) but hide
+  const hides = introHides(game, useView((s) => s.intro?.step));
   return (
     <div className="scenario-panel">
       {game.agenda && (
-        <div className="scenario-card">
-          <MiniCard id={game.agenda} w={170} h={122} legal={byCard.has(game.agenda)} onClick={() => open(game.agenda!)} />
+        <div className={`scenario-card ${hides.agenda ? "intro-hidden" : ""}`}>
+          <MiniCard id={game.agenda} w={170} h={122} legal={byCard.has(game.agenda)} onClick={() => open("agenda")} />
+          <CardOptions id={game.agenda} />
           <span className="scenario-badge" title={`${tr("stat.doom")} ${doomInPlay(g)} / ${agendaDef?.doom ?? "?"}`}>
             <Icon name="doom" size={22} /> <b>{doomInPlay(g)}</b>
             <small>/{agendaDef?.doom ?? "?"}</small>
@@ -71,13 +103,21 @@ export function ScenarioPanel() {
         </div>
       )}
       {game.act && (
-        <div className="scenario-card">
-          <MiniCard id={game.act} w={170} h={122} legal={byCard.has(game.act)} onClick={() => open(game.act!)} />
+        <div className={`scenario-card ${hides.act ? "intro-hidden" : ""}`}>
+          <MiniCard id={game.act} w={170} h={122} legal={byCard.has(game.act)} onClick={() => open("act")} />
+          <CardOptions id={game.act} />
           {Number.isFinite(cost) && (
             <span className="scenario-badge" title={`${tr("stat.clues")} ${cost}`}>
               <Icon name="clue" size={22} /> <b>{cost}</b>
             </span>
           )}
+        </div>
+      )}
+      {ref && db.cards[ref] && (
+        <div className={`scenario-card ${hides.act ? "intro-hidden" : ""}`}>
+          <button className="mini-card scenario-ref" style={{ width: 86, height: 122 }} onClick={() => open("reference")} title={tr("viewer.reference")}>
+            <CardFace code={ref} locale={locale} side={referenceSide(game)} />
+          </button>
         </div>
       )}
     </div>

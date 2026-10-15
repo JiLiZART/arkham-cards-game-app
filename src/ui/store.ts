@@ -6,6 +6,7 @@ import {
 } from "../engine/campaign";
 import { createGame, dispatch, ENGINE_VERSION, replay } from "../engine/engine";
 import { quietNextGame } from "./arrivals";
+import { useView } from "./view";
 import type { Action, ContentDb, GameEvent, GameSetup, GameState, InvId } from "../engine/types";
 
 export const SAVE_KEY = "ah:save";
@@ -39,12 +40,16 @@ export interface UiState {
   current: QueuedEvent | null;
   /** investigator whose hand was revealed after the last hand-off */
   revealedFor: InvId | null;
+  /** how many of `actions` Undo can never take back: up to the last one that revealed hidden information or ended a mulligan */
+  undoFloor: number;
   notice: string | null;
   error: string | null;
 
   newCampaign(opts: NewCampaign): void;
   startScenario(seed?: number): void;
   choose(optionId: string): void;
+  /** take back the last choice: replay without it (only down to `undoFloor`) */
+  undo(): void;
   finishScenario(): void;
   resume(): boolean;
   abandon(): void;
@@ -87,6 +92,25 @@ export function viewerOf(s: GameState | null): InvId | null {
   return s.pending?.inv ?? s.active ?? s.lead;
 }
 
+/** is the choice that turned `prev` into `next` beyond Undo: it revealed hidden information, or it was a mulligan choice */
+export const pastUndo = (prev: GameState, next: GameState) => next.counters.reveal !== prev.counters.reveal || prev.pending?.kind === "mulligan";
+
+/** whether Undo can take back the last choice now */
+export const canUndo = (s: Pick<UiState, "actions" | "undoFloor" | "game">) => !!s.game && s.game.phase !== "ended" && s.actions.length > s.undoFloor;
+
+/** replay a recorded game, noting how far back Undo may go */
+export function replayWithFloor(db: ContentDb, setup: GameSetup, actions: Action[]): { state: GameState; undoFloor: number } {
+  let state = createGame(db, setup).state;
+  let undoFloor = 0;
+  actions.forEach((a, k) => {
+    const r = dispatch(db, state, a);
+    if (r.error) throw new Error(`replay failed at ${JSON.stringify(a)}: ${r.error}`);
+    if (pastUndo(state, r.state)) undoFloor = k + 1;
+    state = r.state;
+  });
+  return { state, undoFloor };
+}
+
 export function createGameStore(db: ContentDb, storage: Storage = safeStorage()): StoreApi<UiState> {
   const store = createStore<UiState>((set, get) => {
     const persist = () => {
@@ -109,7 +133,7 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage())
     };
     return {
       screen: "menu", locale: "en", privacy: true, drawByHand: true, campaign: null, setup: null, actions: [], game: null,
-      queue: [], current: null, revealedFor: null, notice: null, error: null,
+      queue: [], current: null, revealedFor: null, undoFloor: 0, notice: null, error: null,
 
       newCampaign(opts) {
         const campaign = startCampaign(db, opts);
@@ -120,23 +144,33 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage())
       startScenario(seed) {
         const c = get().campaign;
         if (!c || !currentScenarioId(db, c)) return;
-        const setup = scenarioSetup(db, c, seed ?? (Date.now() >>> 0));
+        const setup: GameSetup = { ...scenarioSetup(db, c, seed ?? (Date.now() >>> 0)), pacePhases: true };
         const r = createGame(db, setup);
-        set({ setup, actions: [], game: r.state, screen: "game", queue: [], current: null, revealedFor: null, error: null });
+        set({ setup, actions: [], undoFloor: 0, game: r.state, screen: "game", queue: [], current: null, revealedFor: null, error: null });
         persist();
       },
 
       choose(optionId) {
         const { game, actions, queue, current } = get();
-        if (!game?.pending || queue.length || current) return; // input is blocked while animating
+        const v = useView.getState();
+        if (!game?.pending || queue.length || current || v.intro || v.showcase.length) return; // input is blocked while animating, introducing or showing drawn cards
         const action: Action = { type: "choose", inv: game.pending.inv, option: optionId };
         const r = dispatch(db, game, action);
         if (r.error) {
           set({ error: r.error });
           return;
         }
-        set({ game: r.state, actions: [...actions, action], error: null });
+        set({ game: r.state, actions: [...actions, action], error: null, ...(pastUndo(game, r.state) ? { undoFloor: actions.length + 1 } : {}) });
         enqueue(r.events);
+        persist();
+      },
+
+      undo() {
+        const { setup, actions } = get();
+        if (!setup || !canUndo(get()) || useView.getState().intro) return;
+        const rest = actions.slice(0, -1);
+        // the shortened list replays to exactly the game before the last choice; animations still waiting are dropped
+        set({ game: replay(db, setup, rest).state, actions: rest, queue: [], current: null, error: null });
         persist();
       },
 
@@ -167,9 +201,9 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage())
           return true;
         }
         try {
-          const r = replay(db, save.setup, save.actions);
+          const r = replayWithFloor(db, save.setup, save.actions);
           quietNextGame();
-          set({ ...settings, campaign: save.campaign, setup: save.setup, actions: save.actions, game: r.state, screen: "game", queue: [], current: null, revealedFor: null });
+          set({ ...settings, campaign: save.campaign, setup: save.setup, actions: save.actions, game: r.state, undoFloor: r.undoFloor, screen: "game", queue: [], current: null, revealedFor: null });
         } catch {
           set({ ...settings, campaign: save.campaign, setup: null, actions: [], game: null, screen: "log", notice: "The saved scenario could not be restored; it will restart." });
         }
@@ -210,12 +244,15 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage())
         if (!game?.pending) return;
         let r = { state: game, events: [] as GameEvent[] };
         const added: Action[] = [];
+        let undoFloor = get().undoFloor;
         for (let k = 0; k < n && r.state.pending; k++) {
           const a: Action = { type: "choose", inv: r.state.pending.inv, option: botChoice(db, r) };
+          const prev = r.state;
           r = dispatch(db, r.state, a);
           added.push(a);
+          if (pastUndo(prev, r.state)) undoFloor = actions.length + added.length;
         }
-        set({ game: r.state, actions: [...actions, ...added], queue: [], current: null });
+        set({ game: r.state, actions: [...actions, ...added], undoFloor, queue: [], current: null });
         persist();
       },
 
@@ -226,9 +263,9 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage())
 
       importLog(json) {
         const data = JSON.parse(json) as { setup: GameSetup; actions: Action[]; campaign?: CampaignState };
-        const r = replay(db, data.setup, data.actions);
+        const r = replayWithFloor(db, data.setup, data.actions);
         quietNextGame();
-        set({ setup: data.setup, actions: data.actions, game: r.state, campaign: data.campaign ?? get().campaign, screen: "game", queue: [], current: null });
+        set({ setup: data.setup, actions: data.actions, game: r.state, undoFloor: r.undoFloor, campaign: data.campaign ?? get().campaign, screen: "game", queue: [], current: null });
         persist();
       },
     };

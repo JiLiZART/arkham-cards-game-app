@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { db } from "../engine/testkit";
-import { createGameStore, SAVE_KEY, type Storage } from "./store";
+import { canUndo, createGameStore, SAVE_KEY, type Storage } from "./store";
 
 const mem = (): Storage & { data: Map<string, string> } => {
   const data = new Map<string, string>();
@@ -13,11 +13,18 @@ const start = (storage: Storage) => {
   return s;
 };
 
+/** past the mulligan and the pause before the first phase */
+const begin = (s: ReturnType<typeof start>) => {
+  while (s.getState().game!.pending!.kind === "mulligan") s.getState().choose("done");
+  expect(s.getState().game!.pending!.kind).toBe("phase");
+  s.getState().choose("continue");
+};
+
 describe("ui store", () => {
   it("dispatch through the store updates the game state", () => {
     const s = start(mem());
     expect(s.getState().screen).toBe("game");
-    while (s.getState().game!.pending!.kind === "mulligan") s.getState().choose("done");
+    begin(s);
     s.getState().skipEvents();
     const res = s.getState().game!.invs["01001"].resources;
     s.getState().choose(JSON.stringify({ kind: "resource" }));
@@ -26,7 +33,7 @@ describe("ui store", () => {
 
   it("blocks input while events are animating", () => {
     const s = start(mem());
-    while (s.getState().game!.pending!.kind === "mulligan") s.getState().choose("done");
+    begin(s);
     s.getState().skipEvents();
     s.getState().choose(JSON.stringify({ kind: "investigate" }));
     if (s.getState().game!.pending!.kind === "commit") s.getState().choose("done"); // token + result events queue up
@@ -39,7 +46,7 @@ describe("ui store", () => {
   it("reload mid-scenario resumes the identical state", () => {
     const storage = mem();
     const s = start(storage);
-    while (s.getState().game!.pending!.kind === "mulligan") s.getState().choose("done");
+    begin(s);
     s.getState().skipEvents();
     s.getState().choose(JSON.stringify({ kind: "draw" }));
     s.getState().skipEvents();
@@ -60,5 +67,46 @@ describe("ui store", () => {
     expect(s.getState().screen).toBe("log");
     expect(s.getState().campaign).not.toBeNull();
     expect(s.getState().notice).toMatch(/restart/);
+  });
+});
+
+describe("undo", () => {
+  it("takes back a commit, then the action; never past the token draw", () => {
+    const s = start(mem());
+    begin(s);
+    s.getState().skipEvents();
+    const g0 = s.getState().game!;
+    const n0 = s.getState().actions.length;
+    s.getState().choose(JSON.stringify({ kind: "investigate" }));
+    const commit = s.getState().game!.pending!.options.find((o) => /^Commit/.test(o.label))!;
+    s.getState().choose(commit.id);
+    expect(canUndo(s.getState())).toBe(true);
+    s.getState().undo();
+    expect(s.getState().game!.invs["01001"].hand).toContain(commit.card);
+    expect(s.getState().game!.pending!.kind).toBe("commit");
+    s.getState().undo();
+    expect(s.getState().game).toEqual(g0);
+    expect(s.getState().actions.length).toBe(n0);
+    // the phase Continue revealed nothing, so it can still be taken back; the token draw can't
+    expect(canUndo(s.getState())).toBe(true);
+    s.getState().choose(JSON.stringify({ kind: "investigate" }));
+    s.getState().choose("done");
+    expect(canUndo(s.getState())).toBe(false);
+    const n = s.getState().actions.length;
+    s.getState().undo();
+    expect(s.getState().actions.length).toBe(n);
+  });
+
+  it("a reload keeps the floor", () => {
+    const storage = mem();
+    const s = start(storage);
+    begin(s);
+    s.getState().skipEvents();
+    s.getState().choose(JSON.stringify({ kind: "draw" }));
+    s.getState().skipEvents();
+    const reloaded = createGameStore(db, storage);
+    reloaded.getState().resume();
+    expect(reloaded.getState().undoFloor).toBe(s.getState().undoFloor);
+    expect(canUndo(reloaded.getState())).toBe(false);
   });
 });

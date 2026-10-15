@@ -103,6 +103,8 @@ export function useFeedEntries(): { shown: number; entries: Map<number, FeedEntr
   const setup = useGame((s) => s.setup);
   const cache = useRef<{ locale: string; setup: unknown; map: Map<number, FeedEntry | null> }>({ locale, setup: null, map: new Map() });
   if (cache.current.locale !== locale || cache.current.setup !== setup) cache.current = { locale, setup, map: new Map() };
+  // an undo shortens the log: entries past its end are gone (their indexes will be reused)
+  for (const i of cache.current.map.keys()) if (i >= game.log.length) cache.current.map.delete(i);
   const shown = shownCount(game.log.length, current, queue);
   for (let i = 0; i < shown; i++) if (!cache.current.map.has(i)) cache.current.map.set(i, feedEntry(game.log[i], game, db, locale));
   return { shown, entries: cache.current.map, game };

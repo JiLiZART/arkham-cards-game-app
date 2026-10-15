@@ -93,11 +93,11 @@ export const assignDamageHandler: Handler<"AssignDamage"> = (g, step) => {
       c.damage += d;
       c.horror += h;
       if (d > 0 || h > 0) touchedAssets.push(target);
-      emit(g, "assetDamage", `${def(g, target).name} takes ${d} damage, ${h} horror`, { card: target, inv: step.inv, data: { damage: d, horror: h } });
+      emit(g, "assetDamage", `${def(g, target).name} takes ${d} damage, ${h} horror`, { card: target, inv: step.inv, data: { damage: d, horror: h, source: step.source } });
     }
   }
   if (invDamage || invHorror) {
-    emit(g, "damage", `${me.name} takes ${invDamage} damage and ${invHorror} horror`, { inv: step.inv, data: { damage: invDamage, horror: invHorror } });
+    emit(g, "damage", `${me.name} takes ${invDamage} damage and ${invHorror} horror`, { inv: step.inv, data: { damage: invDamage, horror: invHorror, source: step.source } });
   }
   push(g, { t: "AfterDamage", inv: step.inv, damage: invDamage, horror: invHorror, assets: touchedAssets, enemy: step.enemy ?? null });
 };
@@ -240,11 +240,16 @@ export const mulliganHandler: Handler<"Mulligan"> = (g, step) => {
   const me = inv(g, step.inv);
   const chosen = step.chosen ?? [];
   const opts = me.hand.filter((h) => !chosen.includes(h));
-  const pick = ask<string>(g, step, step.inv, "mulligan", `${me.name}: mulligan — choose cards to redraw (${chosen.length} chosen)`, [
+  const pick = ask<string | { unpick: InstId }>(g, step, step.inv, "mulligan", `${me.name}: mulligan — choose cards to redraw (${chosen.length} chosen)`, [
     { id: "done", label: chosen.length ? `Redraw ${chosen.length} card(s)` : "Keep hand", value: "done" },
     ...(chosen.length < 5 ? opts.map((h) => ({ id: h, label: def(g, h).name, card: h, value: h })) : []),
+    ...chosen.map((h) => ({ id: `un:${h}`, label: `Take back ${def(g, h).name}`, card: h, value: { unpick: h } })),
   ], { key: "mulligan", vars: { n: chosen.length } });
   if (pick === undefined) return;
+  if (typeof pick === "object") {
+    push(g, { ...step, choice: undefined, chosen: chosen.filter((h) => h !== pick.unpick) });
+    return;
+  }
   if (pick !== "done") {
     push(g, { ...step, choice: undefined, chosen: [...chosen, pick] });
     return;

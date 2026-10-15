@@ -3,7 +3,7 @@ import { botChoice } from "../engine/bot";
 import { dispatch } from "../engine/engine";
 import { db, skipMulligans, start } from "../engine/testkit";
 import { layout } from "./layout";
-import { optionHome, optionOwner } from "./optionHome";
+import { onRail, optionHome, optionOwner } from "./optionHome";
 import { viewerOf } from "./store";
 
 describe("every pending option is reachable without a sidebar", () => {
@@ -39,4 +39,34 @@ describe("every pending option is reachable without a sidebar", () => {
       expect(seen.has("board") && seen.has("hand") && seen.has("rail")).toBe(true);
     });
   }
+});
+
+describe("mulligan options", () => {
+  it("picks are offered in the hand, take-backs on the \"to redraw\" row", () => {
+    let r = start("the-gathering", ["01001"], 5);
+    const h = r.state.invs["01001"].hand[0];
+    r = dispatch(db, r.state, { type: "choose", inv: "01001", option: h });
+    const homes = Object.fromEntries(r.state.pending!.options.map((o) => [o.id, optionHome(o, r.state, "01001")]));
+    expect(homes[`un:${h}`]).toBe("mulligan");
+    expect(homes.done).toBe("rail");
+    expect(Object.entries(homes).filter(([id]) => id !== "done" && !id.startsWith("un:")).every(([, home]) => home === "hand")).toBe(true);
+  });
+});
+
+describe("phase pause", () => {
+  it("Continue lives on the phase title", () => {
+    const r = skipMulligans(start("the-gathering", ["01001", "01002"], 5, { pacePhases: true }));
+    expect(r.state.pending!.kind).toBe("phase");
+    expect(optionHome(r.state.pending!.options[0], r.state, "01002")).toBe("phase");
+  });
+});
+
+describe("investigate on the rail", () => {
+  it("beside Draw and Gain resource, and still on the location", () => {
+    const r = skipMulligans(start("the-gathering", ["01001"], 5));
+    const rail = r.state.pending!.options.filter((o) => onRail(o, r.state, "01001")).map((o) => o.label);
+    expect(rail).toEqual(expect.arrayContaining(["Investigate Study", "Draw 1 card", "Gain 1 resource"]));
+    const inv = r.state.pending!.options.find((o) => /^Investigate/.test(o.label))!;
+    expect(optionHome(inv, r.state, "01001")).toBe("board");
+  });
 });

@@ -9,7 +9,7 @@ export interface Arrival {
   to: Zone;
   /** whose hand / play area it went to (null for the map) */
   owner: InvId | null;
-  /** the opening hand or a mulligan redraw: no stop at the show spot */
+  /** the opening hand or a mulligan redraw (also the last one, which ends setup): no stop at the show spot */
   opening: boolean;
   /** position among arrivals of the same state change going to the same place, for staggering */
   batch: number;
@@ -35,7 +35,7 @@ export function diffArrivals(prev: GameState | null, next: GameState): Arrival[]
     const batch = count.get(k) ?? 0;
     count.set(k, batch + 1);
     seen.add(id);
-    out.push({ id, from, to, owner, opening: next.phase === "setup", batch, log: next.log.length, shown: shownCards.has(id) });
+    out.push({ id, from, to, owner, opening: next.phase === "setup" || prev?.phase === "setup", batch, log: next.log.length, shown: shownCards.has(id) });
   };
   for (const i of next.order)
     for (const id of next.invs[i].hand) {
@@ -51,7 +51,7 @@ export function diffArrivals(prev: GameState | null, next: GameState): Arrival[]
 }
 
 const MAX_AGE = 1500;
-const reducedMotion = () => typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
+export const reducedMotion = () => typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 let record = new Map<InstId, Arrival & { at: number }>();
 
@@ -100,6 +100,21 @@ export const rememberRect = (id: InstId, el: Element) => {
   const r = el.getBoundingClientRect();
   if (r.width) lastRects.set(id, { x: r.left, y: r.top, w: r.width, h: r.height });
 };
+
+// ---------- moves inside the HUD that don't change the card's zone (a mulligan pick and its take-back) ----------
+const localMoves = new Map<InstId, ScreenBox & { at: number }>();
+/** the card is about to leave this screen box for another HUD place in the same zone */
+export const noteLocalMove = (id: InstId, el: Element, now = performance.now()) => {
+  const r = el.getBoundingClientRect();
+  if (r.width) localMoves.set(id, { x: r.left, y: r.top, w: r.width, h: r.height, at: now });
+};
+/** where the card was, once, while fresh (nothing under reduced motion) */
+export function takeLocalMove(id: InstId, now = performance.now()): ScreenBox | null {
+  const m = localMoves.get(id);
+  if (!m) return null;
+  localMoves.delete(id);
+  return now - m.at > MAX_AGE || reducedMotion() ? null : m;
+}
 
 // ---------- where an arrival flies from ----------
 /** named HUD places an arrival can start from */
@@ -156,11 +171,15 @@ export function domPlace(p: Place, resolve: () => ScreenBox): ScreenBox | null {
 // ---------- is anything still flying? (the chaos draw and phase titles wait for cards to land) ----------
 /** map cards still gliding to their place (CardMesh keeps this up to date every frame) */
 export const mapMoving = new Set<InstId>();
+/** map cards dealt face down that haven't turned to their side yet, or are flipping (portraits on them wait) */
+export const mapPending = new Set<InstId>();
+/** map cards being dealt: held back, gliding face down, or turning over for the first time (their portraits wait) */
+export const mapDealing = new Set<InstId>();
 const FLYING = "[data-card], .flight, .ghost-card, .fan-card, .resolving";
 
 /** true while an HTML card flight or a map card glide is running */
 export function cardsFlying(): boolean {
-  if (mapMoving.size) return true;
+  if (mapMoving.size || mapPending.size) return true;
   if (typeof document === "undefined" || !document.getAnimations) return false;
   return document.getAnimations().some((a) => {
     const target = (a.effect as KeyframeEffect | null)?.target;

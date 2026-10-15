@@ -144,7 +144,7 @@ export interface ChoiceOption {
 export interface PendingChoice {
   seq: number;
   inv: InvId;
-  kind: "turn" | "target" | "commit" | "reaction" | "generic" | "mulligan" | "assign" | "order";
+  kind: "turn" | "target" | "commit" | "reaction" | "generic" | "mulligan" | "assign" | "order" | "phase";
   prompt: string;
   /** translation key and values for the prompt (the English text above is the fallback); ids in the values are investigators or cards */
   promptKey?: string;
@@ -171,6 +171,7 @@ export type Step = { choice?: any } & (
   | { t: "Setup" }
   | { t: "Mulligan"; inv: InvId; chosen?: InstId[] }
   | { t: "StartRound" }
+  | { t: "PhasePause"; phase: "mythos" | "investigation" | "enemy" | "upkeep" }
   | { t: "MythosPhase" }
   | { t: "MythosDraw"; inv: InvId }
   | { t: "InvestigationPhase" }
@@ -254,12 +255,15 @@ export interface GameState {
   difficulty: Difficulty;
   round: number;
   phase: "setup" | "mythos" | "investigation" | "enemy" | "upkeep" | "ended";
-  counters: { turn: number; phase: number; round: number; test: number };
+  /** `reveal`: bumped by every choice that brought hidden information into play (a random draw, a card leaving a deck, deck cards shown) */
+  counters: { turn: number; phase: number; round: number; test: number; reveal: number };
   cards: Record<InstId, CardInst>;
   invs: Record<InvId, InvState>;
   order: InvId[];
   lead: InvId;
   active: InvId | null;
+  /** set from the setup: each phase waits for the lead investigator */
+  pacePhases?: boolean;
   encounterDeck: InstId[];
   encounterDiscard: InstId[];
   sideDecks: Record<string, InstId[]>;
@@ -333,4 +337,6 @@ export interface GameSetup {
   }[];
   campaignLog?: Record<string, unknown>;
   chaosBag?: ChaosToken[];
+  /** wait for the lead investigator before each phase (the UI's games; engine tests and old saves don't) */
+  pacePhases?: boolean;
 }

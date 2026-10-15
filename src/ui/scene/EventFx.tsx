@@ -3,16 +3,21 @@ import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
 import { useGame } from "../context";
+import { useView } from "../view";
 import type { Vec3 } from "../layout";
 import { Icon } from "../Icon";
 import type { IconName } from "../icons";
 
 /** "−2 [damage]" style numbers floating up from a card */
+/** matches the HUD's hit streak (hud/Floats HIT_MS plus its start delay) */
+const HIT_WAIT_MS = 600;
+
 function FloatingNumber({ parts, at, startedAt, color }: { parts: [IconName | null, number][]; at: Vec3; startedAt: number; color: string }) {
   const ref = useRef<THREE.Group>(null);
   useFrame(() => {
     const t = Math.min(1, (performance.now() - startedAt) / 700);
-    ref.current?.position.set(at[0], 6, at[2] - t * 1.4);
+    ref.current?.position.set(at[0], 6, at[2] - Math.max(0, t) * 1.4);
+    if (ref.current) ref.current.visible = t >= 0;
   });
   return (
     <group ref={ref}>
@@ -35,7 +40,10 @@ export function EventFx({ cards, minis }: { cards: Map<string, { pos: Vec3 }>; m
   const current = useGame((s) => s.current);
   const game = useGame((s) => s.game);
   const started = useRef<{ e: unknown; at: number }>({ e: null, at: 0 });
+  // a hit from a card waits for the table to settle (see the HUD's event player), then its streak, then the numbers
+  const settledFor = useView((s) => s.settledFor);
   if (!current || !game) return null;
+  if (current.type === "damage" && current.data?.source && settledFor !== current) return null;
   if (started.current.e !== current) started.current = { e: current, at: performance.now() };
   const at = started.current.at;
   if (current.type === "damage" && current.inv && game.invs[current.inv]) {
@@ -45,7 +53,9 @@ export function EventFx({ cards, minis }: { cards: Map<string, { pos: Vec3 }>; m
     const parts: [IconName, number][] = [];
     if (d.damage) parts.push(["damage", d.damage]);
     if (d.horror) parts.push(["horror", d.horror]);
-    if (p) return <FloatingNumber key={at} parts={parts} at={p} startedAt={at} color="#ff8a80" />;
+    // a hit from a card: the numbers rise once its streak has landed
+    const wait = d && current.data?.source ? HIT_WAIT_MS : 0;
+    if (p) return <FloatingNumber key={at} parts={parts} at={p} startedAt={at + wait} color="#ff8a80" />;
   }
   if (current.type === "enemyDamage" && current.card) {
     const p = cards.get(current.card)?.pos;

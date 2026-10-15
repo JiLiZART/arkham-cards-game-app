@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { card, connections, def, enemyStat, inv, invsAt, skillValue } from "./core";
+import { card, connections, def, enemyStat, findByCode, inv, invsAt, moveCard, skillValue } from "./core";
 import { testParts, testValue } from "./rules/skillTest";
 import { deserialize, dispatch, getLegalActions, replay, serialize } from "./engine";
 import { commitDone, db, gOf, giveCard, locId, mutate, options, pick, putEnemy, setup, skipMulligans, start } from "./testkit";
@@ -39,6 +39,33 @@ describe("state & determinism", () => {
     }
     const again = replay(db, s, [...all, ...actions]);
     expect(again.state).toEqual(r.state);
+  });
+
+  it("mulligan: a picked card can be taken back before confirming", () => {
+    const s = setup("the-gathering", [ROLAND], 7);
+    const actions: Action[] = [];
+    let r = replay(db, s, []);
+    const choose = (option: string) => {
+      actions.push({ type: "choose", inv: ROLAND, option });
+      r = dispatch(db, r.state, actions.at(-1)!);
+      if (r.error) throw new Error(r.error);
+    };
+    const [a, b] = r.state.invs[ROLAND].hand;
+    choose(a);
+    choose(b);
+    expect(r.state.pending!.options.map((o) => o.id)).toEqual(expect.arrayContaining([`un:${a}`, `un:${b}`]));
+    choose(`un:${a}`);
+    const p = r.state.pending!;
+    expect(p.kind).toBe("mulligan");
+    expect(p.options.map((o) => o.id)).toContain(a); // offered for picking again
+    expect(p.options.map((o) => o.id)).not.toContain(`un:${a}`);
+    expect(p.options.find((o) => o.id === "done")!.label).toBe("Redraw 1 card(s)");
+    choose("done");
+    const hand = r.state.invs[ROLAND].hand;
+    expect(hand).toContain(a);
+    expect(hand).not.toContain(b);
+    expect(hand).toHaveLength(5);
+    expect(replay(db, s, actions).state).toEqual(r.state);
   });
 
   it("save and resume", () => {
@@ -106,6 +133,47 @@ describe("round structure", () => {
     }
     expect(discards).toBe(3);
     expect(r.state.invs[ROLAND].hand.length).toBe(8);
+  });
+});
+
+describe("phase pacing", () => {
+  const paced = () => skipMulligans(start("the-gathering", [ROLAND, DAISY], 1, { pacePhases: true, chaosBag: ["0"] as never }));
+
+  it("each phase waits for the lead investigator before it begins", () => {
+    let r = paced();
+    expect(r.state.pending).toMatchObject({ kind: "phase", inv: ROLAND, options: [{ id: "continue" }] });
+    expect(r.state.phase).toBe("setup");
+    r = pick(r, "continue");
+    expect(r.state.phase).toBe("investigation");
+    // put a Ghoul on Roland, then both end their turns: the enemy phase waits, no attack yet
+    r = mutate(r, (g) => void putEnemy(g, "01160", inv(g, ROLAND).location!, ROLAND));
+    while (r.state.pending?.kind !== "phase") r = pick(r, /End turn|Roland|Daisy/);
+    expect(r.state.pending!.step).toMatchObject({ t: "PhasePause", phase: "enemy" });
+    expect(r.state.invs[ROLAND].damage + r.state.invs[ROLAND].horror).toBe(0);
+    r = pick(r, "continue");
+    expect(r.state.log.some((e) => e.type === "phase" && e.data?.phase === "enemy")).toBe(true);
+    // the enemy phase resolves (the Ghoul attacks), then upkeep waits
+    while (r.state.pending?.kind !== "phase") r = pick(r, /./);
+    expect(r.state.pending!.step).toMatchObject({ phase: "upkeep" });
+    expect(r.state.invs[ROLAND].damage + r.state.invs[ROLAND].horror).toBeGreaterThan(0);
+  });
+
+  it("replays exactly; unpaced setups never pause", () => {
+    const s = setup("the-gathering", [ROLAND], 3, { pacePhases: true });
+    const actions: Action[] = [];
+    let r = replay(db, s, []);
+    for (let k = 0; k < 40 && r.state.pending; k++) {
+      const a: Action = { type: "choose", inv: r.state.pending.inv, option: r.state.pending.options.at(-1)!.id };
+      actions.push(a);
+      r = dispatch(db, r.state, a);
+    }
+    expect(actions.length).toBeGreaterThan(10);
+    expect(replay(db, s, actions).state).toEqual(r.state);
+    let u = gathering();
+    for (let k = 0; k < 40 && u.state.pending; k++) {
+      expect(u.state.pending.kind).not.toBe("phase");
+      u = pick(u, /./);
+    }
   });
 });
 
@@ -507,5 +575,76 @@ describe("taking back committed cards", () => {
     expect(r.state.pending?.inv).toBe(DAISY);
     expect(r.state.pending?.kind).toBe("commit");
     expect(r.state.pending?.options.some((o) => o.id.startsWith("un:"))).toBe(false);
+  });
+});
+
+describe("reveal counter", () => {
+  const rev = (r: { state: { counters: { reveal: number } } }) => r.state.counters.reveal;
+
+  it("a move or a commit reveals nothing; a draw and the token draw do", () => {
+    let r = gathering([ROLAND], ["0"]);
+    r = mutate(r, (g) => void giveCard(g, ROLAND, "01025"));
+    const n = rev(r);
+    r = pick(r, "Investigate Study");
+    r = pick(r, /^Commit/);
+    expect(rev(r)).toBe(n);
+    r = pick(r, "done");
+    expect(rev(r)).toBe(n + 1);
+    const m = rev(r);
+    r = pick(r, "Draw 1 card");
+    expect(rev(r)).toBe(m + 1);
+  });
+
+  it("showing deck cards for a search reveals", () => {
+    let r = skipMulligans(start("the-gathering", ["01002"], 3));
+    r = mutate(r, (g) => {
+      const book = Object.values(g.s.cards).find((c) => c.code === "01031")!;
+      g.s.invs["01002"].deck = g.s.invs["01002"].deck.filter((x) => x !== book.id);
+      g.s.invs["01002"].hand = g.s.invs["01002"].hand.filter((x) => x !== book.id);
+      Object.assign(book, { zone: "play", controller: "01002", owner: "01002" });
+    });
+    const n = rev(r);
+    r = pick(r, /Old Book/);
+    if (r.state.pending?.kind === "target") r = pick(r, "Daisy Walker");
+    expect(r.state.pending?.prompt).toMatch(/Search your deck/);
+    expect(rev(r)).toBe(n + 1);
+  });
+
+  it("random bot games: every change to decks, the bag or the RNG bumps it", () => {
+    for (const seed of [1, 2, 3]) {
+      let r = skipMulligans(start("the-gathering", [ROLAND, DAISY], seed));
+      for (let k = 0; k < 150 && r.state.pending; k++) {
+        const p = r.state.pending;
+        const next = dispatch(db, r.state, { type: "choose", inv: p.inv, option: p.options[(k * 7) % p.options.length].id });
+        const touched = next.state.rng !== r.state.rng || next.state.chaosBag.length < r.state.chaosBag.length
+          || next.state.encounterDeck.length < r.state.encounterDeck.length
+          || Object.keys(r.state.invs).some((i) => next.state.invs[i].deck.length < r.state.invs[i].deck.length);
+        if (touched) expect(rev(next)).toBe(rev(r) + 1);
+        r = next;
+      }
+    }
+  });
+});
+
+describe("event sources", () => {
+  it("the Attic's horror names the Attic; a Ghoul's attack names the Ghoul", () => {
+    let r = gathering([ROLAND]);
+    let attic = "";
+    let ghoul = "";
+    r = mutate(r, (g) => {
+      const hall = findByCode(g, "01112", ["setAside", "location"])!.id;
+      attic = findByCode(g, "01113", ["setAside", "location"])!.id;
+      moveCard(g, hall, "location");
+      moveCard(g, attic, "location");
+      g.s.cards[hall].revealed = true;
+      g.s.invs[ROLAND].location = hall;
+    });
+    r = pick(r, "Move to Attic");
+    while (r.state.pending?.kind === "assign") r = pick(r, /./);
+    const hit = r.state.log.findLast((e) => e.type === "damage");
+    expect(hit?.data).toMatchObject({ horror: 1, source: attic });
+    r = mutate(r, (g) => void (ghoul = putEnemy(g, "01160", attic, ROLAND)));
+    while (!r.state.log.some((e) => e.type === "damage" && e.data?.source === ghoul) && r.state.pending) r = pick(r, r.state.pending.kind === "turn" ? "End turn" : /./);
+    expect(r.state.log.some((e) => e.type === "damage" && e.data?.source === ghoul)).toBe(true);
   });
 });

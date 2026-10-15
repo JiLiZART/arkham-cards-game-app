@@ -45,6 +45,16 @@ describe("diffArrivals", () => {
     expect(a.map((x) => x.batch)).toEqual([0, 1, 2, 3, 4]);
   });
 
+  it("the last mulligan's redraw, which ends setup, is still an opening draw", () => {
+    const r0 = start("the-gathering", ["01001"], 1);
+    const r1 = pick(r0, r0.state.invs["01001"].hand[0]);
+    const r2 = pick(r1, "done");
+    expect(r2.state.phase).not.toBe("setup");
+    const a = diffArrivals(r1.state, r2.state).filter((x) => x.to === "hand");
+    expect(a).toHaveLength(1);
+    expect(a[0].opening).toBe(true);
+  });
+
   it("nothing moved, nothing arrives", () => {
     expect(diffArrivals(base.state, base.state)).toEqual([]);
   });

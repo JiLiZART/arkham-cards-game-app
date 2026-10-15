@@ -32,8 +32,8 @@ export interface ViewState {
   camTick: number;
   bumpCamera(): void;
   /** full-size detail of a card, or an investigator's stats / hand / play area */
-  modal: { card: InstId } | { inv: InvId } | { bag: true } | null;
-  setModal(m: { card: InstId } | { inv: InvId } | { bag: true } | null): void;
+  modal: Modal;
+  setModal(m: Modal): void;
   setMoveDrag(d: MoveDrag | null): void;
   setHovered(id: InstId | null): void;
   openMenu(x: number, y: number, options: ChoiceOption[]): void;
@@ -42,12 +42,23 @@ export interface ViewState {
   toggle(panel: "debug"): void;
   /** the token event whose draw may start: the screen settled after it became current */
   settledFor: unknown;
+  /** the scenario introduction after the last mulligan (agenda, act, then dealing the locations); input waits meanwhile */
+  intro: { step: IntroStep; setup: unknown } | null;
+  /** cards just drawn into the on-screen hand, held large in the middle until sent on to the hand; input waits meanwhile */
+  showcase: InstId[];
 }
+
+/** a card at full size, an investigator, the chaos bag, or every act / agenda / the reference card */
+export type Modal = { card: InstId } | { inv: InvId } | { bag: true } | { deck: "act" | "agenda" | "reference" } | null;
+
+export type IntroStep = "agenda" | "act" | "deal";
 
 export const useView = create<ViewState>((set, get) => ({
   hovered: null,
   hoverRect: null,
   settledFor: null,
+  intro: null,
+  showcase: [],
   setHover: (hovered, rect) => set({ hovered, hoverRect: rect ? { x0: rect.left, y0: rect.top, x1: rect.right, y1: rect.bottom } : null }),
   menu: null,
   dragging: null,

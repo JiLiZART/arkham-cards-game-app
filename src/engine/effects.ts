@@ -98,7 +98,7 @@ export const effHandler = (g: G, step: EffStep) => {
         } else if (e.op === "loseResources") {
           const lost = Math.min(n, me.resources);
           me.resources -= lost;
-          emit(g, "resource", `${me.name} loses ${lost} resources`, { inv: i, data: { n: lost, lost: true } });
+          emit(g, "resource", `${me.name} loses ${lost} resources`, { inv: i, data: { n: lost, lost: true, source: ctx.source ?? null } });
         } else push(g, { t: "Draw", inv: i, n });
       }
       return;
@@ -481,7 +481,7 @@ export const effHandler = (g: G, step: EffStep) => {
       if (n <= 0 || !me.location) return;
       me.clues -= n;
       card(g, me.location).clues += n;
-      emit(g, "clues", `${me.name} places ${n} clue(s) on ${def(g, me.location).name}`, { inv: you, card: me.location, data: { n, placed: true } });
+      emit(g, "clues", `${me.name} places ${n} clue(s) on ${def(g, me.location).name}`, { inv: you, card: me.location, data: { n, placed: true, source: ctx.source ?? null } });
       return;
     }
     case "spendClues": {

@@ -1,6 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { cardText, scenarioText, t } from "../../content/i18n";
 import { testParts } from "../../engine/rules/skillTest";
+import type { GameEvent } from "../../engine/types";
 import { rememberRect, whenSettled } from "../arrivals";
 import { useOptionsByCard } from "../cardClick";
 import { Icon } from "../Icon";
@@ -9,16 +10,19 @@ import { viewerOf } from "../store";
 import { handVisible } from "../scene/Table";
 import { glyphHtml } from "../glyphs";
 import { iconSource, isIcon, MARKUP_ICONS } from "../icons";
-import { ActionRail, CameraButtons, PromptBanner } from "./ActionRail";
+import { ActionRail, CameraButtons, PromptBanner, UndoButton } from "./ActionRail";
 import { ChaosTokenIcon } from "./ChaosTokenIcon";
 import { HoverCard } from "./HoverCard";
 import { Feed } from "./Feed";
-import { ActionFloats } from "./Floats";
+import { ActionFloats, HitFx, HIT_MS } from "./Floats";
 import { Modals } from "./Modals";
 import { TestBreakdown, TokenDraw } from "./TokenDraw";
 import { RevealOverlay } from "./Reveal";
 import { ChaosBagButton, MiniCard, PileColumn, PlayStrip, ScenarioPanel } from "./Panels";
 import { InvTokens } from "./Investigators";
+import { MulliganRow } from "./MulliganRow";
+import { IntroOverlay } from "./IntroOverlay";
+import { Showcase } from "./Showcase";
 import { StatBar } from "./Stats";
 import { useView } from "../view";
 
@@ -28,6 +32,9 @@ const gOf = () => ({ s: gameStore.getState().game!, db, events: [] });
 /** how long each animated event holds the screen (ms) */
 const DURATION: Record<string, number> = { token: 650, testResult: 1300, encounter: 1400, attack: 700, spawn: 500, agendaAdvance: 1500, actAdvance: 1500, resolution: 800, enemyDefeated: 600, defeated: 1200, damage: 750, enemyDamage: 650, clues: 450, doom: 450 };
 
+/** events that start only once every card on screen has landed: the chaos draw, and a hit from a card */
+export const waitsForSettle = (e: GameEvent | null) => e?.type === "token" || (e?.type === "damage" && !!e.data?.source);
+
 /** plays queued events one by one; input is blocked meanwhile */
 function EventPlayer() {
   const current = useGame((s) => s.current);
@@ -35,16 +42,19 @@ function EventPlayer() {
   const byHand = useGame((s) => s.drawByHand);
   // a chaos token draw waits until every card on screen has landed
   const settledFor = useView((s) => s.settledFor);
-  const ready = current?.type !== "token" || settledFor === current;
+  // so does a hit from a card (its streak and numbers follow a revealed location's flip)
+  const ready = !waitsForSettle(current) || settledFor === current;
   useEffect(() => {
-    if (current?.type !== "token") return;
+    if (!waitsForSettle(current)) return;
     return whenSettled(() => useView.setState({ settledFor: current }));
   }, [current]);
   // drawing by hand: the token draw and the result panel wait for the player instead of a timer
   const waits = byHand && (current?.type === "token" || current?.type === "testResult");
   useEffect(() => {
     if (!current || waits || !ready) return;
-    const id = setTimeout(next, current.type === "testResult" ? 1800 : (DURATION[current.type] ?? 500));
+    // a hit from a card plays its streak first, then the numbers
+    const hit = current.type === "damage" && current.data?.source ? HIT_MS + 300 : 0;
+    const id = setTimeout(next, current.type === "testResult" ? 1800 : (DURATION[current.type] ?? 500) + hit);
     return () => clearTimeout(id);
   }, [current, next, waits, ready]);
   if (!current || !ready) return null;
@@ -62,6 +72,7 @@ const TITLED = new Set(["mythos", "investigation", "enemy", "upkeep"]);
 /**
  * A new phase shows like a film's chapter title: the phase name in large type across the middle, the round under it.
  * Titles play one after another, wait for the chaos draw, test results and encounter reveals, and never take the pointer.
+ * In a paced game the title is the lead investigator's pause before the phase: it stays, with Continue, until chosen.
  */
 function PhaseTitle() {
   const game = useGame((s) => s.game)!;
@@ -70,22 +81,32 @@ function PhaseTitle() {
   const seen = useRef<{ setup: unknown; n: number }>({ setup, n: game.log.length });
   const queue = useRef<{ phase: string; round: number; key: number }[]>([]);
   const [showing, setShowing] = useState<{ phase: string; round: number; key: number } | null>(null);
-  // a new game (new or loaded) starts from its current log: nothing plays for phases already past
-  if (seen.current.setup !== setup) seen.current = { setup, n: game.log.length };
+  // a new game (new or loaded) starts from its current log: nothing plays for phases already past; an undo shortens it
+  if (seen.current.setup !== setup || game.log.length < seen.current.n) seen.current = { setup, n: game.log.length };
   if (game.log.length > seen.current.n) {
     for (let i = seen.current.n; i < game.log.length; i++) {
       const e = game.log[i];
       const phase = String(e.data?.phase ?? "");
-      if (e.type === "phase" && TITLED.has(phase)) queue.current.push({ phase, round: Number(e.data?.round ?? game.round), key: i });
+      // a paced game's title is its pause (below), not the log entry that follows it
+      if (e.type === "phase" && TITLED.has(phase) && !game.pacePhases) queue.current.push({ phase, round: Number(e.data?.round ?? game.round), key: i });
     }
     seen.current.n = game.log.length;
   }
-  const blocked = !!current && TITLE_WAITS.has(current.type);
+  // the scenario introduction plays before the first phase title
+  const intro = useView((s) => !!s.intro || s.showcase.length > 0);
+  const blocked = intro || (!!current && TITLE_WAITS.has(current.type));
   const waiting = queue.current.length;
   useEffect(() => {
     if (showing || blocked || !waiting) return;
     return whenSettled(() => setShowing(queue.current.shift() ?? null));
   }, [showing, blocked, waiting]);
+  const pause = game.pending?.kind === "phase" ? game.pending : null;
+  const [settled, setSettled] = useState<unknown>(null);
+  useEffect(() => {
+    if (!pause || blocked || current) return;
+    return whenSettled(() => setSettled(pause));
+  }, [pause, blocked, current]);
+  if (pause && settled === pause && !blocked && !current) return <PhasePause key={pause.seq} />;
   if (!showing) return null;
   return (
     <div
@@ -98,6 +119,34 @@ function PhaseTitle() {
     >
       <div className="phase-title-name">{tr(`phase.title.${showing.phase}`)}</div>
       <div className="phase-title-round">{tr("phase.round", { n: showing.round })}</div>
+    </div>
+  );
+}
+
+/** the paced pause: the coming phase's title stays until the lead investigator continues (button, Space or Enter) */
+function PhasePause() {
+  const game = useGame((s) => s.game)!;
+  const locale = useGame((s) => s.locale);
+  const choose = useGame((s) => s.choose);
+  const p = game.pending!;
+  const phase = (p.step as { phase?: string }).phase ?? "";
+  useEffect(() => {
+    const key = (e: KeyboardEvent) => {
+      if (e.key !== " " && e.key !== "Enter") return;
+      if ((e.target as HTMLElement | null)?.closest?.("button, input, textarea")) return;
+      e.preventDefault();
+      choose("continue");
+    };
+    window.addEventListener("keydown", key);
+    return () => window.removeEventListener("keydown", key);
+  }, [choose]);
+  return (
+    <div className="phase-title held">
+      <div className="phase-title-name">{tr(`phase.title.${phase}`)}</div>
+      <div className="phase-title-round">{tr("phase.round", { n: game.round })}</div>
+      <button className="primary big phase-continue" onClick={() => choose("continue")} autoFocus>
+        {tr("phase.continue", { name: cardText(db, p.inv, locale).name })}
+      </button>
     </div>
   );
 }
@@ -195,8 +244,11 @@ function HandOff() {
   const confirm = useGame((s) => s.confirmHandoff);
   const busy = useGame((s) => !!s.current || s.queue.length > 0);
   const locale = useGame((s) => s.locale);
+  // the hand-off waits for the introduction and for drawn cards still on show
+  const intro = useView((s) => !!s.intro || s.showcase.length > 0);
   const viewer = viewerOf(game);
-  if (busy || !game.pending || handVisible(privacy, game.order.length, viewer, revealedFor)) return null;
+  // the pause before a phase is for the whole table: no hand to hide
+  if (busy || intro || !game.pending || game.pending.kind === "phase" || handVisible(privacy, game.order.length, viewer, revealedFor)) return null;
   const name = cardText(db, viewer!, locale).name;
   return (
     <div className="handoff">
@@ -346,12 +398,14 @@ export function Hud() {
       </div>
       <StatBar />
       <PlayStrip />
+      <MulliganRow />
       <div className="center-col">
         <PromptBanner />
         <SkillTestPanel />
       </div>
       <div className="right-dock">
         <CameraButtons />
+        <UndoButton />
         <ActionRail />
       </div>
       <HoverCard />
@@ -360,8 +414,11 @@ export function Hud() {
       <DebugPanel />
       <RevealOverlay />
       <ActionFloats />
+      <HitFx />
       <EventPlayer />
       <PhaseTitle />
+      <Showcase />
+      <IntroOverlay />
       <HandOff />
       <ScenarioEnd />
       <ErrorToast />

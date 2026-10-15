@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { t } from "../../content/i18n";
 import type { ChoiceOption, GameState } from "../../engine/types";
 import { db, useGame } from "../context";
@@ -5,10 +6,10 @@ import { Icon } from "../Icon";
 import type { IconName } from "../icons";
 import { backUrl } from "../images";
 import { promptParts } from "../feed";
-import { optionHome } from "../optionHome";
+import { onRail } from "../optionHome";
 import { Sentence } from "./Feed";
 import { handVisible } from "../scene/Table";
-import { viewerOf } from "../store";
+import { canUndo, viewerOf } from "../store";
 import { useView } from "../view";
 
 export interface RailItem {
@@ -29,6 +30,7 @@ export function railItem(o: ChoiceOption): RailItem {
   const kind = (o.value as { kind?: string } | null)?.kind;
   if (kind === "draw") return { key: "rail.draw", img: backUrl("player"), primary: false };
   if (kind === "resource") return { key: "rail.resource", icon: "resource", primary: false };
+  if (kind === "investigate") return { key: "rail.investigate", icon: "intellect", primary: false };
   if (kind === "endTurn") return { key: "rail.endTurn", symbol: "⏎", primary: true };
   if (o.id === "done") {
     const redraw = /^Redraw (\d+)/.exec(o.label);
@@ -62,7 +64,8 @@ export function PromptBanner() {
   const privacy = useGame((s) => s.privacy);
   const revealedFor = useGame((s) => s.revealedFor);
   const p = game.pending;
-  if (!p || game.phase === "ended") return null;
+  // the pause before a phase speaks for itself (the phase title)
+  if (!p || game.phase === "ended" || p.kind === "phase") return null;
   if (!handVisible(privacy, game.order.length, viewerOf(game), revealedFor)) return null;
   const parts = promptParts(p, game, db, locale);
   // no translation for this prompt: the engine's English text, without the leading name (the banner shows it)
@@ -86,7 +89,7 @@ export function ActionRail() {
   const p = game.pending;
   const viewer = viewerOf(game);
   if (!p || game.phase === "ended" || !handVisible(privacy, game.order.length, viewer, revealedFor)) return null;
-  const items = p.options.filter((o) => optionHome(o, game, viewer) === "rail");
+  const items = p.options.filter((o) => onRail(o, game, viewer));
   if (!items.length) return null;
   return (
     <div className={`action-rail ${busy ? "busy" : ""}`}>
@@ -103,6 +106,31 @@ export function ActionRail() {
         );
       })}
     </div>
+  );
+}
+
+/** take back the last choice (also Ctrl/Cmd+Z), down to the last reveal of hidden information */
+export function UndoButton() {
+  const locale = useGame((s) => s.locale);
+  const able = useGame(canUndo);
+  const ended = useGame((s) => s.game?.phase === "ended");
+  const undo = useGame((s) => s.undo);
+  const intro = useView((s) => !!s.intro);
+  useEffect(() => {
+    const key = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() !== "z" || !(e.ctrlKey || e.metaKey) || e.shiftKey) return;
+      if ((e.target as HTMLElement | null)?.closest?.("input, textarea")) return;
+      e.preventDefault();
+      undo();
+    };
+    window.addEventListener("keydown", key);
+    return () => window.removeEventListener("keydown", key);
+  }, [undo]);
+  if (ended) return null;
+  return (
+    <button className="undo-btn" disabled={!able || intro} onClick={undo} title={t(db, locale, able ? "undo.hint" : "undo.blocked")}>
+      ↶ {t(db, locale, "undo.label")}
+    </button>
   );
 }
 

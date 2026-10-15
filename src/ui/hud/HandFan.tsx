@@ -4,7 +4,7 @@ import type { ChoiceOption, GameState, InstId } from "../../engine/types";
 import { db, useGame } from "../context";
 import { CardFace as Face } from "../CardFace";
 import { backUrl } from "../images";
-import { domPlace, lastRects, originRect, rememberRect, takeArrival, type Arrival } from "../arrivals";
+import { domPlace, lastRects, noteLocalMove, originRect, rememberRect, takeArrival, takeLocalMove, type Arrival } from "../arrivals";
 import { placeDetails } from "../details";
 import { handVisible } from "../scene/Table";
 import { viewerOf } from "../store";
@@ -12,6 +12,7 @@ import { useView } from "../view";
 import { boxTransform, dockRadius, dockRect, dockTransform, dockWeight, FAN_CARD_H, FAN_CARD_W, FAN_LEGAL_RAISE, FAN_REST_VISIBLE, fanLayout, fanWidth, hoverScale, showBox, STAT_BAR_W } from "./fan";
 import { flyDraw, flyIn, STAGGER_MS } from "./flights";
 import { DETAILS_W, HandDetails } from "./HandDetails";
+import { mulliganPicks } from "./MulliganRow";
 import { RESOLVE_BOX } from "./Reveal";
 
 const DRAG_TO_PLAY = 110;
@@ -51,7 +52,11 @@ export function HandFan() {
 
   const viewer = viewerOf(game);
   const visible = handVisible(privacy, game.order.length, viewer, revealedFor);
-  const hand = viewer && visible ? game.invs[viewer].hand : [];
+  // cards picked for the mulligan sit on the "to redraw" row instead
+  const picks = mulliganPicks(game, viewer);
+  // cards just drawn wait in the showcase until sent on
+  const showcase = useView((s) => s.showcase);
+  const hand = viewer && visible ? game.invs[viewer].hand.filter((h) => !picks.includes(h) && !showcase.includes(h)) : [];
   const optionsFor = (id: InstId): ChoiceOption[] => (!busy && game.pending?.options.filter((o) => o.card === id)) || [];
 
   const width = fanWidth(vw);
@@ -163,9 +168,12 @@ export function HandFan() {
     hand.forEach((id, i) => {
       if (seen.has(id)) return;
       seen.add(id);
+      // a card moved inside the HUD (a mulligan pick taken back, a card from the showcase) flies from where it stood
+      const from = takeLocalMove(id);
       const a = takeArrival(id);
       const el = els.current.get(id);
-      if (a && el) launch(el, a, i);
+      if (from && el) flyIn(el, null, boxTransform(from, slots[i].x, FAN_LEFT, innerHeight), el.style.transform, 0, false, 500);
+      else if (a && el) launch(el, a, i);
     });
     for (const id of seen) if (!hand.includes(id)) seen.delete(id);
   });
@@ -198,6 +206,7 @@ export function HandFan() {
     // a card played from here flies to the table from where it is now
     const el = els.current.get(id);
     if (el) rememberRect(id, el);
+    if (el && game.pending?.kind === "mulligan") noteLocalMove(id, el);
     const opts = optionsFor(id);
     const play = opts.filter((o) => /^Play/.test(o.label));
     const list = preferPlay && play.length ? play : opts;

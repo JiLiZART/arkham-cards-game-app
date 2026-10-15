@@ -1,8 +1,12 @@
 import { useEffect, useRef, useState } from "react";
+import type { GameEvent, InstId, InvId } from "../../engine/types";
+import { reducedMotion, whenSettled, type ScreenBox } from "../arrivals";
 import { floatLife, type FeedEntry } from "../feed";
+import { viewerOf } from "../store";
 import { mapProjector } from "../scene/Table";
 import { useView } from "../view";
 import { Sentence, useFeedEntries } from "./Feed";
+import { useGame } from "../context";
 
 const STAGGER_MS = 900;
 const MAX_VISIBLE = 2;
@@ -40,6 +44,12 @@ export function ActionFloats() {
 
   // new entries since last render go into the queue (a new game starts from its current log)
   if (seen.current.entries !== entries) seen.current = { entries, shown };
+  // an undo shortens the log: its floats go, waiting or showing
+  if (shown < seen.current.shown) {
+    seen.current.shown = shown;
+    pending.current = pending.current.filter((f) => f.key < shown);
+    if (active.some((f) => f.key >= shown)) setActive(active.filter((f) => f.key < shown));
+  }
   if (shown > seen.current.shown) {
     const fresh: Float[] = [];
     for (let i = seen.current.shown; i < shown; i++) {
@@ -82,4 +92,114 @@ export function ActionFloats() {
       })}
     </>
   );
+}
+
+// ---------- effect hits: the source card pulses and a streak flies to the investigator it hurt ----------
+
+/** how long a streak takes from the source to the portrait (the floating numbers wait for it) */
+export const HIT_MS = 450;
+const HIT_GAP_MS = 550;
+
+/** an investigator lost something to a card's effect: damage / horror, resources, or clues dropped */
+export function hitOf(e: GameEvent): { source: InstId; inv: InvId } | null {
+  const source = e.data?.source as InstId | null | undefined;
+  if (!source || !e.inv) return null;
+  if (e.type === "damage" || (e.type === "resource" && e.data?.lost) || (e.type === "clues" && e.data?.placed)) return { source, inv: e.inv };
+  return null;
+}
+
+const boxOfEl = (el: Element | null): ScreenBox | null => {
+  const r = el?.getBoundingClientRect();
+  return r && r.width ? { x: r.left, y: r.top, w: r.width, h: r.height } : null;
+};
+
+/** where the source card is on screen: an HTML card (threat strip, panel, resolve spot) or a card on the map */
+function sourceBox(id: InstId): ScreenBox | null {
+  const html = boxOfEl(document.querySelector(`[data-card="${id}"]`));
+  if (html) return html;
+  const r = mapProjector.rect(id);
+  return r ? { x: r.x0, y: r.y0, w: r.x1 - r.x0, h: r.y1 - r.y0 } : null;
+}
+
+/** the investigator's portrait: the stat bar for the one on screen, their row in the list, else their portrait on the map */
+function targetEl(inv: InvId, viewer: InvId | null): { el: HTMLElement | null; box: ScreenBox | null } {
+  const el = (inv === viewer ? document.querySelector<HTMLElement>(".stat-dock .portrait-btn") : null) ?? document.querySelector<HTMLElement>(`.inv-token[data-inv="${inv}"]`);
+  if (el) return { el, box: boxOfEl(el) };
+  const p = mapProjector.mini(inv);
+  return { el: null, box: p ? { x: p.x - 30, y: p.y - 30, w: 60, h: 60 } : null };
+}
+
+function playHit(source: InstId, inv: InvId, viewer: InvId | null) {
+  const from = sourceBox(source);
+  if (!from) return;
+  const pulse = document.createElement("div");
+  pulse.className = "hit-pulse";
+  Object.assign(pulse.style, { left: `${from.x}px`, top: `${from.y}px`, width: `${from.w}px`, height: `${from.h}px` });
+  document.body.appendChild(pulse);
+  pulse.animate([{ opacity: 0, transform: "scale(1)" }, { opacity: 1, transform: "scale(1.04)", offset: 0.3 }, { opacity: 0, transform: "scale(1)" }], { duration: 700, easing: "ease-out" })
+    .finished.catch(() => undefined).finally(() => pulse.remove());
+  if (reducedMotion()) return;
+  const to = targetEl(inv, viewer);
+  if (!to.box) return;
+  const c0 = { x: from.x + from.w / 2, y: from.y + from.h / 2 };
+  const c1 = { x: to.box.x + to.box.w / 2, y: to.box.y + to.box.h / 2 };
+  const streak = document.createElement("div");
+  streak.className = "hit-streak";
+  Object.assign(streak.style, { left: `${c1.x - 14}px`, top: `${c1.y - 14}px` });
+  document.body.appendChild(streak);
+  const angle = Math.atan2(c1.y - c0.y, c1.x - c0.x);
+  streak.animate(
+    [
+      { transform: `translate(${c0.x - c1.x}px, ${c0.y - c1.y}px) rotate(${angle}rad) scale(0.6, 0.6)`, opacity: 0 },
+      { transform: `translate(${(c0.x - c1.x) * 0.6}px, ${(c0.y - c1.y) * 0.6}px) rotate(${angle}rad) scale(2.4, 0.8)`, opacity: 1, offset: 0.4 },
+      { transform: `translate(0, 0) rotate(${angle}rad) scale(1, 1)`, opacity: 1 },
+    ],
+    { duration: HIT_MS, delay: 150, easing: "cubic-bezier(.5,0,.6,1)", fill: "backwards" },
+  ).finished.catch(() => undefined).finally(() => {
+    streak.remove();
+    to.el?.animate([{ filter: "drop-shadow(0 0 0 #f33)", transform: "scale(1)" }, { filter: "drop-shadow(0 0 18px #f33)", transform: "scale(1.08)" }, { filter: "drop-shadow(0 0 0 #f33)", transform: "scale(1)" }], { duration: 420, easing: "ease-out" });
+  });
+}
+
+/** plays a hit for each log entry as it is shown (in step with the event animations); one effect's hits together */
+export function HitFx() {
+  const { shown, game } = useFeedEntries();
+  const setup = useGame((s) => s.setup);
+  const seen = useRef<{ setup: unknown; n: number }>({ setup, n: shown });
+  const nextFree = useRef(0);
+  // queued in render (kept across StrictMode's double render), played after commit
+  const queue = useRef<{ source: InstId; inv: InvId }[]>([]);
+  // a new game starts from its current log; an undo shortens it
+  if (seen.current.setup !== setup || shown < seen.current.n) seen.current = { setup, n: shown };
+  for (let i = seen.current.n; i < shown; i++) {
+    // damage plays with its event (below); losses that aren't animated events play as they are logged
+    const h = game.log[i].type === "damage" ? null : hitOf(game.log[i]);
+    if (h) queue.current.push(h);
+  }
+  seen.current.n = shown;
+  const settledFor = useView((s) => s.settledFor) as GameEvent | null;
+  const played = useRef<unknown>(null);
+  useEffect(() => {
+    const h = settledFor?.type === "damage" ? hitOf(settledFor) : null;
+    if (!h || played.current === settledFor) return;
+    played.current = settledFor;
+    playHit(h.source, h.inv, viewerOf(game));
+  }, [settledFor]);
+  useEffect(() => {
+    if (!queue.current.length) return;
+    const fresh = queue.current.splice(0);
+    const viewer = viewerOf(game);
+    // after the cards on screen have landed (a location revealed by the move flips first)
+    whenSettled(() => {
+      let last: InstId | null = null;
+      let at = Math.max(performance.now(), nextFree.current);
+      for (const h of fresh) {
+        if (last && h.source !== last) at += HIT_GAP_MS;
+        last = h.source;
+        setTimeout(() => playHit(h.source, h.inv, viewer), Math.max(0, at - performance.now()));
+      }
+      nextFree.current = at + HIT_GAP_MS;
+    });
+  });
+  return null;
 }

@@ -11,6 +11,7 @@ import { useView } from "../view";
 import { formatText } from "./Hud";
 import { InvModal } from "./Investigators";
 import { ChaosBagModal } from "./Panels";
+import { DeckViewer } from "./DeckViewer";
 
 /** a native modal dialog: Escape and focus trapping come from <dialog>; a click on the backdrop closes it */
 export function Modal({ onClose, className, children }: { onClose: () => void; className?: string; children: ReactNode }) {
@@ -133,5 +134,6 @@ export function Modals() {
   if (!modal || !handVisible(privacy, game.order.length, viewerOf(game), revealedFor)) return null;
   if ("card" in modal) return <CardModal key={modal.card} id={modal.card} />;
   if ("bag" in modal) return <ChaosBagModal />;
+  if ("deck" in modal) return <DeckViewer key={modal.deck} kind={modal.deck} />;
   return <InvModal key={modal.inv} inv={modal.inv} />;
 }

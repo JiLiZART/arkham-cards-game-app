@@ -12,7 +12,7 @@ import {
 } from "./rules/investigators";
 import { allEliminated, finishRevelation, handlers as scenarioHandlers, nextAct, nextAgenda } from "./rules/scenario";
 import { handlers as testHandlers, startTest } from "./rules/skillTest";
-import type { Action, ChoiceOption, ContentDb, EffCtx, GameEvent, GameSetup, GameState, Step } from "./types";
+import type { Action, ChoiceOption, ContentDb, EffCtx, GameEvent, GameSetup, GameState, InstId, Step } from "./types";
 
 export const ENGINE_VERSION = 1;
 
@@ -93,11 +93,12 @@ function emptyState(setup: GameSetup): GameState {
   return {
     version: ENGINE_VERSION, seed: setup.seed, rng: setup.seed >>> 0, seq: 0,
     scenarioId: setup.scenarioId, campaignId: setup.campaignId, difficulty: setup.difficulty,
-    round: 0, phase: "setup", counters: { turn: 0, phase: 0, round: 0, test: 0 },
+    round: 0, phase: "setup", counters: { turn: 0, phase: 0, round: 0, test: 0, reveal: 0 },
     cards: {}, invs: {}, order: [], lead: setup.investigators[0].code, active: null,
     encounterDeck: [], encounterDiscard: [], sideDecks: {}, act: null, agenda: null, actDeck: [], agendaDeck: [],
     chaosBag: [], skillTest: null, testStack: [], tempMods: [], usage: {}, queue: [], pending: null, cancelled: [],
     log: [], flags: {}, campaignLog: setup.campaignLog ?? {}, resolution: null, nextId: 1,
+    ...(setup.pacePhases ? { pacePhases: true } : {}),
   };
 }
 
@@ -252,7 +253,19 @@ export function dispatch(db: ContentDb, state: GameState, action: Action): Resul
   g.s.pending = null;
   g.s.queue.push({ ...p.step, choice: opt.value } as Step);
   run(g);
+  if (revealed(state, g.s, events)) g.s.counters.reveal = (state.counters.reveal ?? 0) + 1;
   return { state: g.s, events };
+}
+
+/** did this choice bring hidden information into play: the RNG used, a card left a deck, or deck cards were shown? */
+export function revealed(prev: GameState, next: GameState, events: GameEvent[]): boolean {
+  if (next.rng !== prev.rng) return true;
+  const left = (a: InstId[], b: InstId[]) => a.some((id) => !b.includes(id));
+  if (left(prev.encounterDeck, next.encounterDeck)) return true;
+  for (const [i, me] of Object.entries(prev.invs)) if (left(me.deck, next.invs[i].deck)) return true;
+  if (events.some((e) => e.type === "look")) return true;
+  const shown = (s: GameState) => (s.pending?.options ?? []).some((o) => o.card && ["deck", "encounterDeck"].includes(s.cards[o.card]?.zone));
+  return shown(next) && !shown(prev);
 }
 
 export const getPending = (s: GameState) => s.pending;

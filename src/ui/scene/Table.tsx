@@ -1,10 +1,10 @@
 import { Html, Line, OrthographicCamera } from "@react-three/drei";
 import { Canvas, useFrame, useLoader, useThree } from "@react-three/fiber";
-import { Suspense, useMemo, useRef, type PointerEvent as ReactPointerEvent } from "react";
+import { Suspense, useEffect, useMemo, useRef, type PointerEvent as ReactPointerEvent } from "react";
 import * as THREE from "three";
 import { t } from "../../content/i18n";
 import type { GameState, InstId } from "../../engine/types";
-import { domPlace, lastRects, originRect, takeArrival } from "../arrivals";
+import { domPlace, lastRects, mapDealing, mapMoving, originRect, takeArrival, type ScreenBox } from "../arrivals";
 import { useCardClick } from "../cardClick";
 import { iconUrl } from "../icons";
 import { Portrait } from "../Portrait";
@@ -12,6 +12,7 @@ import { db, gameStore, useGame } from "../context";
 import { RESOLVE_BOX } from "../hud/Reveal";
 import { CARD_H, CARD_W, footprint, layout, type Placement, type Vec3 } from "../layout";
 import { hitRect, type ScreenRect } from "../hit";
+import { introHides } from "../intro";
 import { viewerOf } from "../store";
 import { useView } from "../view";
 import { CardMesh } from "./CardMesh";
@@ -24,6 +25,10 @@ export const mapProjector: {
   /** screen point of an investigator's portrait on the map */
   mini: (inv: string) => { x: number; y: number } | null;
 } = { rect: () => null, mini: () => null };
+
+/** locations are dealt this far apart (ms) */
+const DEAL_MS = 250;
+const hiddenAll = () => true;
 
 export function handVisible(privacy: boolean, players: number, viewer: string | null, revealedFor: string | null) {
   return !privacy || players <= 1 || (viewer !== null && revealedFor === viewer);
@@ -45,9 +50,12 @@ export function projectRect(p: Placement, camera: THREE.Camera, box: DOMRect): O
 /** portrait marker: drawn MINI_PX wide in its own space, scaled with the map zoom to about a third of a location's width */
 const MINI_PX = 100;
 
-function Mini({ pos, code, active, worldSize, moves, rects, onTap }: { pos: Vec3; code: string; active: boolean; worldSize: number; moves: Record<InstId, string> | null; rects: () => ScreenRect[]; onTap: (x: number, y: number) => void }) {
+function Mini({ pos, code, at, hidden, active, worldSize, moves, rects, onTap }: { pos: Vec3; code: string; at: InstId | null; hidden: boolean; active: boolean; worldSize: number; moves: Record<InstId, string> | null; rects: () => ScreenRect[]; onTap: (x: number, y: number) => void }) {
   const camera = useThree((s) => s.camera);
   const ref = useRef<THREE.Group>(null);
+  const el = useRef<HTMLDivElement>(null);
+  const key = `mini:${code}`;
+  useEffect(() => () => void mapMoving.delete(key), [key]);
   const drag = useView((s) => (s.moveDrag?.inv === code ? s.moveDrag : null));
   const choose = useGame((s) => s.choose);
   const locale = useGame((s) => s.locale);
@@ -56,6 +64,11 @@ function Mini({ pos, code, active, worldSize, moves, rects, onTap }: { pos: Vec3
     if (!g) return;
     g.position.x = THREE.MathUtils.damp(g.position.x, pos[0], 6, dt);
     g.position.z = THREE.MathUtils.damp(g.position.z, pos[2], 6, dt);
+    // a location the portrait moves into turns over once it has arrived
+    if (Math.abs(g.position.x - pos[0]) + Math.abs(g.position.z - pos[2]) > 0.03) mapMoving.add(key);
+    else mapMoving.delete(key);
+    // a portrait appears on its starting location once that has been dealt and turned over
+    if (el.current) el.current.style.visibility = hidden || (at && mapDealing.has(at)) ? "hidden" : "";
   });
   const start = (e: ReactPointerEvent) => {
     if (!moves || e.button !== 0) return;
@@ -92,6 +105,7 @@ function Mini({ pos, code, active, worldSize, moves, rects, onTap }: { pos: Vec3
     <group ref={ref} position={pos}>
       <Html center zIndexRange={[drag ? 60 : 25, 0]} distanceFactor={worldSize / MINI_PX} pointerEvents={moves ? "auto" : "none"}>
         <div
+          ref={el}
           className={`mini ${moves ? "draggable" : ""} ${drag ? "dragging" : ""}`}
           style={drag ? { transform: `translate(${drag.dx}px, ${drag.dy}px) scale(1.15)` } : undefined}
           onPointerDown={start}
@@ -165,7 +179,7 @@ function SceneInner({ game }: { game: GameState }) {
   };
   // cards that just arrived on the map glide in from where they came from (a shown encounter card, a pile, the act panel)
   const known = useRef<Set<InstId> | null>(null);
-  const arrivals = useRef(new Map<InstId, { from: Vec3; scale: number; hold?: () => boolean }>());
+  const arrivals = useRef(new Map<InstId, { from: Vec3; scale: number; hold?: () => boolean; faceDown?: boolean }>());
   // card ids repeat between games: a new game starts from scratch
   const setup = useGame((st) => st.setup);
   const forSetup = useRef(setup);
@@ -179,23 +193,47 @@ function SceneInner({ game }: { game: GameState }) {
     known.current = new Set(L.cards.keys());
     for (const id of L.cards.keys()) takeArrival(id);
   }
+  // a map card gliding in from a screen box: where it starts and at what size
+  const glideFrom = (o: ScreenBox, place: typeof L.cards extends Map<InstId, infer P> ? P : never) => {
+    const box = gl.domElement.getBoundingClientRect();
+    const v = new THREE.Vector3((((o.x + o.w / 2 - box.left) / box.width) * 2 - 1), -(((o.y + o.h / 2 - box.top) / box.height) * 2 - 1), 0).unproject(camera);
+    const r = projectRect(place, camera, box);
+    return { from: [v.x, place.pos[1] + 0.5, v.z] as Vec3, scale: place.scale * (o.h / Math.max(1, r.y1 - r.y0)) };
+  };
+  const t0 = performance.now();
   for (const [id, place] of L.cards) {
     if (known.current.has(id)) continue;
     known.current.add(id);
     const a = takeArrival(id);
     if (!a) continue;
-    const box = gl.domElement.getBoundingClientRect();
     const o = originRect(a, viewer, (pl) => domPlace(pl, RESOLVE_BOX), (i) => lastRects.get(i) ?? null, innerWidth, innerHeight);
-    const v = new THREE.Vector3((((o.x + o.w / 2 - box.left) / box.width) * 2 - 1), -(((o.y + o.h / 2 - box.top) / box.height) * 2 - 1), 0).unproject(camera);
-    const r = projectRect(place, camera, box);
     const held = (e: { type: string; card?: string | null } | null) => e?.type === "encounter" && e.card === id;
+    // locations put into play are dealt face down one after another, then turn over if they came in revealed
+    const dealt = a.to === "location";
+    const shown = a.shown ? () => { const st = gameStore.getState(); return held(st.current) || st.queue.some(held); } : null;
     arrivals.current.set(id, {
-      from: [v.x, place.pos[1] + 0.5, v.z],
-      scale: place.scale * (o.h / Math.max(1, r.y1 - r.y0)),
+      ...glideFrom(o, place),
       // an enemy from an encounter card stays hidden until that card has been shown
-      hold: a.shown ? () => { const st = gameStore.getState(); return held(st.current) || st.queue.some(held); } : undefined,
+      hold: shown || dealt ? () => !!shown?.() || (dealt && performance.now() < t0 + a.batch * DEAL_MS) : undefined,
+      faceDown: dealt,
     });
   }
+
+  // the scenario introduction: nothing is on the map until its locations are dealt from the act/agenda panel
+  const intro = useView((st) => st.intro);
+  const hides = introHides(game, intro?.step);
+  const dealing = useRef<{ intro: unknown; n: number }>({ intro: null, n: 0 });
+  if (intro?.step === "deal" && dealing.current.intro !== intro) {
+    dealing.current = { intro, n: dealing.current.n + 1 };
+    const o = domPlace("actAgenda", RESOLVE_BOX);
+    const starts = new Set(game.order.map((i) => game.invs[i].location));
+    const locs = [...L.cards.keys()].filter((id) => game.cards[id].zone === "location");
+    // the starting locations first, then the rest in layout order
+    [...locs.filter((id) => starts.has(id)), ...locs.filter((id) => !starts.has(id))].forEach((id, k) => {
+      arrivals.current.set(id, { ...(o ? glideFrom(o, L.cards.get(id)!) : { from: L.cards.get(id)!.pos, scale: L.cards.get(id)!.scale }), hold: () => performance.now() < t0 + k * DEAL_MS, faceDown: true });
+    });
+  }
+
 
   // dev-only: lets browser automation find a card on the map
   if (import.meta.env.DEV) (window as unknown as { __arkhamRects: unknown }).__arkhamRects = cardRects;
@@ -203,7 +241,7 @@ function SceneInner({ game }: { game: GameState }) {
 
   // a press that panned the map is not a click
   const click = (id: InstId, x: number, y: number) => {
-    if (camInput.panned) return;
+    if (camInput.panned || hides.map) return;
     clickCard(id, x, y);
   };
 
@@ -213,11 +251,11 @@ function SceneInner({ game }: { game: GameState }) {
       <MapCamera bounds={L.bounds} locH={locH} focus={focus} focusKey={`${decider}:${deciderLoc}`} />
       <ambientLight intensity={1.6} />
       <directionalLight position={[4, 20, 6]} intensity={0.6} />
-      {L.links.map(({ a, b }, k) => (
+      {!hides.map && L.links.map(({ a, b }, k) => (
         <Line key={k} points={[[a[0], -0.25, a[2]], [b[0], -0.25, b[2]]]} color="#4a2e14" lineWidth={2} transparent opacity={0.5} />
       ))}
       <Suspense fallback={null}>
-        {L.links.map((l, k) => (
+        {!hides.map && L.links.map((l, k) => (
           <Connector key={k} {...l} size={L.connectorSize} />
         ))}
       </Suspense>
@@ -226,6 +264,8 @@ function SceneInner({ game }: { game: GameState }) {
           key={m.inv}
           pos={m.pos}
           code={m.inv}
+          at={game.invs[m.inv].location}
+          hidden={hides.map}
           active={game.active === m.inv}
           worldSize={CARD_W * L.locScale * 0.32}
           moves={m.inv === game.pending?.inv ? moveTargets : null}
@@ -241,15 +281,17 @@ function SceneInner({ game }: { game: GameState }) {
         const arr = arrivals.current.get(id);
         return (
           <CardMesh
-            key={id}
+            // dealing restarts every map card from the act/agenda panel
+            key={`${id}:${dealing.current.n}`}
             inst={inst}
             place={arr ? { ...place, from: arr.from } : place}
             fromScale={arr?.scale}
-            hold={arr?.hold}
+            hold={hides.map ? hiddenAll : arr?.hold}
+            faceDown={arr?.faceDown}
             highlighted={moveDrag ? id in moveDrag.targets : byCard.has(id)}
             hovered={moveDrag ? moveDrag.over === id : hovered === id}
             exhausted={inst.exhausted && inst.zone === "enemy"}
-            onHover={(over) => setHovered(over ? id : useView.getState().hovered === id ? null : useView.getState().hovered)}
+            onHover={(over) => !hides.map && setHovered(over ? id : useView.getState().hovered === id ? null : useView.getState().hovered)}
             onClick={(e) => {
               e.stopPropagation();
               click(id, e.nativeEvent.clientX, e.nativeEvent.clientY);

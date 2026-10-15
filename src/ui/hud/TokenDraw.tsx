@@ -1,4 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { reducedMotion } from "../arrivals";
+import { centreTransform } from "./flights";
 import { t } from "../../content/i18n";
 import type { GameEvent, GameState } from "../../engine/types";
 import { db, gameStore, useGame } from "../context";
@@ -72,10 +74,32 @@ export function TokenDraw({ e }: { e: GameEvent }) {
   const [landed, setLanded] = useState(false);
   const token = String(e.data?.token);
   const bag = { x: innerWidth / 2, y: innerHeight / 2 + 60 };
+  // the bag grows out of the chaos-bag button into the middle; the circles appear once it is there
+  const bagRef = useRef<HTMLImageElement>(null);
+  const [arrived, setArrived] = useState(false);
+  const button = () => document.getElementById("chaos-bag")?.getBoundingClientRect();
+  const boxOf = (r: DOMRect) => ({ x: r.left, y: r.top, w: r.width, h: r.height });
+  useLayoutEffect(() => {
+    const el = bagRef.current;
+    const from = button();
+    if (!el || !from?.width || reducedMotion()) return setArrived(true);
+    const a = el.animate([{ transform: centreTransform(boxOf(el.getBoundingClientRect()), boxOf(from)), opacity: 0.6 }, { transform: "none", opacity: 1 }], { duration: 450, easing: "cubic-bezier(.2,.8,.2,1)" });
+    let live = true;
+    a.finished.catch(() => undefined).finally(() => live && setArrived(true));
+    return () => {
+      live = false;
+      a.cancel();
+    };
+  }, []);
 
   const pick = (k: number) => {
-    if (picked !== null) return;
+    if (picked !== null || !arrived) return;
     setPicked(k);
+    // the bag shrinks back into its button while the token flies out
+    const el = bagRef.current;
+    const to = button();
+    if (el && to?.width && !reducedMotion())
+      el.animate([{ transform: "none", opacity: 1 }, { transform: centreTransform(boxOf(el.getBoundingClientRect()), boxOf(to)), opacity: 0.4 }], { duration: 450, delay: 250, easing: "cubic-bezier(.5,0,.6,1)", fill: "forwards" });
     requestAnimationFrame(() => requestAnimationFrame(() => setLanded(true)));
     setTimeout(next, 1100);
   };
@@ -95,8 +119,8 @@ export function TokenDraw({ e }: { e: GameEvent }) {
     <div className={`token-draw ${picked !== null ? "picked" : ""}`}>
       <div className="token-draw-hint">{picked === null ? tr("draw.hint") : ""}</div>
       <TestSubject e={e} />
-      <img className="token-draw-bag" src={iconUrl("chaosBag")} alt="" draggable={false} style={{ left: bag.x - BAG / 2, top: bag.y - BAG * 0.42, width: BAG }} />
-      {circles.map((c, k) => {
+      <img ref={bagRef} className="token-draw-bag" src={iconUrl("chaosBag")} alt="" draggable={false} style={{ left: bag.x - BAG / 2, top: bag.y - BAG * 0.42, width: BAG }} />
+      {arrived && circles.map((c, k) => {
         const chosen = picked === k;
         const at = chosen && landed ? { left: land.x - 40, top: land.y - 40, size: 80 } : { left: bag.x + c.x - CIRCLE_R, top: bag.y - BAG * 0.42 + c.y - CIRCLE_R, size: CIRCLE_R * 2 };
         return (

@@ -81,6 +81,7 @@ function InvToken({ inv }: { inv: InvId }) {
   return (
     <button
       ref={ref}
+      data-inv={inv}
       className={`inv-token ${game.active === inv ? "active" : ""} ${options.length ? "legal" : ""} ${st.status}`}
       onClick={() => useView.getState().setModal({ inv })}
       title={st.status !== "playing" ? `${name} (${st.status})` : name}

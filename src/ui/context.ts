@@ -3,11 +3,15 @@ import type { StoreApi } from "zustand";
 import { useStore } from "zustand";
 import { content } from "../content";
 import { trackArrivals } from "./arrivals";
+import { trackIntro } from "./intro";
+import { trackShowcase } from "./showcase";
 import { createGameStore, type UiState } from "./store";
 
 export const db = content;
 export const gameStore = createGameStore(content);
 trackArrivals(gameStore);
+trackIntro(gameStore);
+trackShowcase(gameStore);
 export const GameContext = createContext<StoreApi<UiState>>(gameStore);
 
 /** select from the game store (engine state + session) */

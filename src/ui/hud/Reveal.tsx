@@ -3,6 +3,7 @@ import type { GameState } from "../../engine/types";
 import { CardFace } from "../CardFace";
 import { useGame } from "../context";
 import { backUrl } from "../images";
+import { iconUrl } from "../icons";
 import { viewerOf } from "../store";
 import { useView } from "../view";
 import { useFlyIn } from "./flights";
@@ -66,10 +67,14 @@ function TokenPop({ token }: { token: string }) {
     },
     () => ({ x: innerWidth / 2 + 170, y: 64, w: 80, h: 80 }),
   );
+  const b = rectOf("#chaos-bag");
   return (
-    <div className="flight token-flight" style={{ left: box.x, top: box.y, width: box.w, height: box.h }}>
-      <ChaosTokenIcon token={token} size={80} />
-    </div>
+    <>
+      <img className="token-pop-bag" src={iconUrl("chaosBag")} alt="" style={{ left: b.x + b.w / 2 - 50, top: b.y + b.h / 2 - 50 }} />
+      <div className="flight token-flight" style={{ left: box.x, top: box.y, width: box.w, height: box.h }}>
+        <ChaosTokenIcon token={token} size={80} />
+      </div>
+    </>
   );
 }
 

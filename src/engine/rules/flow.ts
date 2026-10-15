@@ -24,7 +24,17 @@ export const startRoundHandler: Handler<"StartRound"> = (g) => {
   g.s.round++;
   g.s.counters.round++;
   for (const i of Object.values(g.s.invs)) i.actionsThisRound = [];
-  push(g, ...(g.s.round > 1 ? [{ t: "MythosPhase" } as Step] : []), { t: "InvestigationPhase" }, { t: "EnemyPhase" }, { t: "UpkeepPhase" }, { t: "EndRound" });
+  const paced = (phase: Extract<Step, { t: "PhasePause" }>["phase"], step: Step): Step[] => (g.s.pacePhases ? [{ t: "PhasePause", phase }, step] : [step]);
+  push(g,
+    ...(g.s.round > 1 ? paced("mythos", { t: "MythosPhase" }) : []), ...paced("investigation", { t: "InvestigationPhase" }), ...paced("enemy", { t: "EnemyPhase" }),
+    ...paced("upkeep", { t: "UpkeepPhase" }), { t: "EndRound" });
+};
+
+/** a paced game waits for the lead investigator before each phase (a recorded choice, so replays stay exact) */
+export const phasePauseHandler: Handler<"PhasePause"> = (g, step) => {
+  if (g.s.phase === "ended" || !activeInvs(g).length) return;
+  const lead = activeInvs(g).includes(g.s.lead) ? g.s.lead : activeInvs(g)[0];
+  ask(g, step, lead, "phase", `Begin the ${step.phase} phase`, [{ id: "continue", label: "Continue", value: "continue" }], { key: "phasePause", vars: { phase: step.phase } });
 };
 
 export const mythosHandler: Handler<"MythosPhase"> = (g) => {
@@ -292,6 +302,7 @@ export { checkEngagement };
 
 export const handlers = {
   StartRound: startRoundHandler,
+  PhasePause: phasePauseHandler,
   MythosPhase: mythosHandler,
   MythosDraw: mythosDrawHandler,
   InvestigationPhase: investigationHandler,
