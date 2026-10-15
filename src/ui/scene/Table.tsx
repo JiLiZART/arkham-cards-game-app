@@ -1,11 +1,12 @@
-import { Html, Line, MapControls, PerspectiveCamera } from "@react-three/drei";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Html, Line, OrthographicCamera } from "@react-three/drei";
+import { Canvas, useFrame, useLoader, useThree } from "@react-three/fiber";
+import { Suspense, useLayoutEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import type { ChoiceOption, GameState, InstId } from "../../engine/types";
 import { FACTION_COLORS } from "../images";
 import { db, useGame } from "../context";
-import { CARD_H, CARD_W, layout, type Pile, type Vec3 } from "../layout";
+import { BOARD, CARD_H, CARD_W, layout, type Pile, type Vec3 } from "../layout";
+import { SAFE_INSETS } from "../safeArea";
 import { viewerOf } from "../store";
 import { useView } from "../view";
 import { CardMesh } from "./CardMesh";
@@ -16,13 +17,41 @@ export function handVisible(privacy: boolean, players: number, viewer: string | 
   return !privacy || players <= 1 || (viewer !== null && revealedFor === viewer);
 }
 
-function Felt() {
+const BOARD_W = BOARD.x1 - BOARD.x0;
+const BOARD_H = BOARD.z1 - BOARD.z0;
+
+/** the Learn to Play play-area spread as the table surface */
+function Parchment() {
+  const tex = useLoader(THREE.TextureLoader, "/table/parchment.jpg");
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = 16;
   return (
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.02, 0]} receiveShadow>
-      <planeGeometry args={[40, 26]} />
-      <meshStandardMaterial color="#1f3a2b" roughness={1} />
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[(BOARD.x0 + BOARD.x1) / 2, -0.03, (BOARD.z0 + BOARD.z1) / 2]} receiveShadow>
+      <planeGeometry args={[BOARD_W, BOARD_H]} />
+      <meshBasicMaterial map={tex} toneMapped={false} />
     </mesh>
   );
+}
+
+/**
+ * Fixed top-down orthographic camera, zoomed so the whole board fits the screen area not covered by HUD panels.
+ * There are no controls: the view never pans, zooms or rotates.
+ */
+function FittedCamera() {
+  const { size, camera } = useThree();
+  useLayoutEffect(() => {
+    const w = Math.max(100, size.width - SAFE_INSETS.left - SAFE_INSETS.right);
+    const h = Math.max(100, size.height - SAFE_INSETS.top - SAFE_INSETS.bottom);
+    const zoom = Math.min(w / BOARD_W, h / BOARD_H);
+    // screen offset of the safe rect's centre from the canvas centre, converted to world units
+    const dx = SAFE_INSETS.left + w / 2 - size.width / 2;
+    const dz = SAFE_INSETS.top + h / 2 - size.height / 2;
+    camera.zoom = zoom;
+    camera.position.set((BOARD.x0 + BOARD.x1) / 2 - dx / zoom, 50, (BOARD.z0 + BOARD.z1) / 2 - dz / zoom);
+    camera.rotation.set(-Math.PI / 2, 0, 0);
+    camera.updateProjectionMatrix();
+  }, [size, camera]);
+  return null;
 }
 
 function PileMesh({ pile, game }: { pile: Pile; game: GameState }) {
@@ -51,9 +80,10 @@ function PileMesh({ pile, game }: { pile: Pile; game: GameState }) {
         <meshStandardMaterial attach="material-4" color="#d8cfb5" />
         <meshStandardMaterial attach="material-5" color="#d8cfb5" />
       </mesh>
-      <Html position={[0, h / 2 + 0.05, CARD_H / 2 + 0.15]} center zIndexRange={[10, 0]} style={{ pointerEvents: "none" }}>
-        <div className="pile-label">
-          {pile.label} · {pile.count}
+      <Html position={[0, h / 2 + 0.05, CARD_H / 2 + 0.12]} center zIndexRange={[10, 0]}>
+        {/* small piles (other players) only show their count; the name is in the tooltip */}
+        <div className="pile-label" title={`${pile.label}: ${pile.count}`}>
+          {pile.scale >= 1 ? `${pile.label} · ${pile.count}` : pile.count}
         </div>
       </Html>
     </group>
@@ -112,44 +142,18 @@ function SceneInner({ game }: { game: GameState }) {
   const revealedFor = useGame((s) => s.revealedFor);
   const choose = useGame((s) => s.choose);
   const busy = useGame((s) => !!s.current || s.queue.length > 0);
-  const { hovered, setHovered, openMenu, dragging, setDragging } = useView();
+  const { hovered, setHovered, openMenu } = useView();
   const viewer = viewerOf(game);
   const visible = handVisible(privacy, game.order.length, viewer, revealedFor);
-  const L = useMemo(() => layout(db, game, viewer, visible), [game, viewer, visible]);
-  const [dragDy, setDragDy] = useState(0);
-  const dragStart = useRef(0);
-  const controls = useThree((st) => st.controls) as unknown as { enabled: boolean } | null;
-  useEffect(() => {
-    // dragging a card must not pan the camera
-    if (controls) controls.enabled = !dragging;
-  }, [dragging, controls]);
+  const L = useMemo(() => layout(db, game, viewer), [game, viewer]);
 
   // options that correspond to a card or location on the table
   const byCard = useMemo(() => {
     const m = new Map<InstId, ChoiceOption[]>();
-    if (!game.pending || busy) return m;
-    if (!visible && game.order.length > 1 && privacy) return m;
+    if (!game.pending || busy || !visible) return m;
     for (const o of game.pending.options) if (o.card) m.set(o.card, [...(m.get(o.card) ?? []), o]);
     return m;
-  }, [game.pending, busy, visible, privacy, game.order.length]);
-
-  useEffect(() => {
-    if (!dragging) return;
-    const move = (e: PointerEvent) => setDragDy((dragStart.current - e.clientY) / 70);
-    const up = (e: PointerEvent) => {
-      const dy = dragStart.current - e.clientY;
-      const play = byCard.get(dragging)?.find((o) => /^Play/.test(o.label));
-      if (dy > 90 && play) choose(play.id);
-      setDragging(null);
-      setDragDy(0);
-    };
-    window.addEventListener("pointermove", move);
-    window.addEventListener("pointerup", up);
-    return () => {
-      window.removeEventListener("pointermove", move);
-      window.removeEventListener("pointerup", up);
-    };
-  }, [dragging, byCard, choose, setDragging]);
+  }, [game.pending, busy, visible]);
 
   const click = (id: InstId, x: number, y: number) => {
     const opts = byCard.get(id);
@@ -160,13 +164,15 @@ function SceneInner({ game }: { game: GameState }) {
 
   return (
     <>
-      <PerspectiveCamera makeDefault position={[0, 13.5, 9.8]} fov={52} />
-      <MapControls makeDefault enableRotate={false} minDistance={8} maxDistance={30} target={[0, 0, 0.6]} screenSpacePanning={false} />
-      <ambientLight intensity={1.1} />
-      <directionalLight position={[6, 14, 6]} intensity={1.2} castShadow shadow-mapSize={[2048, 2048]} />
-      <Felt />
+      <OrthographicCamera makeDefault position={[0, 50, 0]} near={0.1} far={200} />
+      <FittedCamera />
+      <ambientLight intensity={1.6} />
+      <directionalLight position={[4, 20, 6]} intensity={0.6} castShadow shadow-mapSize={[2048, 2048]} />
+      <Suspense fallback={null}>
+        <Parchment />
+      </Suspense>
       {L.links.map(([a, b], k) => (
-        <Line key={k} points={[[a[0], 0.01, a[2]], [b[0], 0.01, b[2]]]} color="#c9a95c" lineWidth={2} transparent opacity={0.55} />
+        <Line key={k} points={[[a[0], 0.01, a[2]], [b[0], 0.01, b[2]]]} color="#4a2e14" lineWidth={2.5} transparent opacity={0.7} />
       ))}
       {L.piles.map((p) => (
         <PileMesh key={p.key} pile={p} game={game} />
@@ -177,7 +183,6 @@ function SceneInner({ game }: { game: GameState }) {
       <ChaosBag pos={L.chaosBag} count={game.chaosBag.length} />
       {[...L.cards.entries()].map(([id, place]) => {
         const inst = game.cards[id];
-        const inHand = place.group === "hand";
         return (
           <CardMesh
             key={id}
@@ -186,17 +191,9 @@ function SceneInner({ game }: { game: GameState }) {
             highlighted={byCard.has(id)}
             hovered={hovered === id}
             exhausted={inst.exhausted && ["play", "enemy"].includes(inst.zone)}
-            dragOffset={dragging === id ? Math.max(0, dragDy) : 0}
             onHover={(over) => setHovered(over ? id : hovered === id ? null : hovered)}
-            onPointerDown={(e) => {
-              if (!inHand || !byCard.get(id)?.some((o) => /^Play/.test(o.label))) return;
-              e.stopPropagation();
-              dragStart.current = e.nativeEvent.clientY;
-              setDragging(id);
-            }}
             onClick={(e) => {
               e.stopPropagation();
-              if (dragDy > 0.5) return;
               click(id, e.nativeEvent.clientX, e.nativeEvent.clientY);
             }}
           />
@@ -210,7 +207,7 @@ function SceneInner({ game }: { game: GameState }) {
 export function Table() {
   return (
     <Canvas shadows={{ type: THREE.PCFShadowMap }} dpr={[1, 2]} onPointerMissed={() => useView.getState().closeMenu()}>
-      <color attach="background" args={["#0d1410"]} />
+      <color attach="background" args={["#1a120b"]} />
       <Scene />
     </Canvas>
   );

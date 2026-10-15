@@ -16,6 +16,8 @@ npm run build
 
 Card images are loaded from `https://cdn.arkham.build/optimized/<code>.webp`. That CDN sends no CORS headers, so the dev and preview servers proxy `/cards/*` to it (see `vite.config.ts`). In production, set up the same rewrite on your host, or set `VITE_CARD_IMAGE_BASE` to a CORS-enabled mirror. When an image cannot load, the card is drawn from its data instead.
 
+Icons and the parchment table come from `inspired/` and the Learn to Play booklet. `scripts/extract-assets.sh` copies them into `public/icons` and `public/table`; that script needs poppler and ImageMagick. The copies are committed, so builds never read `inspired/`.
+
 ## Layout
 
 ```

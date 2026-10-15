@@ -7,7 +7,10 @@ import { db, gameStore, useGame } from "../context";
 import { cardImage } from "../images";
 import { ANIMATED, viewerOf } from "../store";
 import { handVisible } from "../scene/Table";
-import { tokenLabel } from "../tokens";
+import { GLYPHS, ICON_LABELS, iconUrl, MARKUP_ICONS } from "../icons";
+import { Stat } from "../Icon";
+import { ChaosTokenIcon } from "./ChaosTokenIcon";
+import { PlayerPlaques, StatBar } from "./Stats";
 import { useView } from "../view";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
@@ -36,10 +39,17 @@ function EventPlayer() {
 
 function EventText({ e }: { e: GameEvent }) {
   if (e.type === "testResult") {
-    const d = e.data as { success: boolean };
-    return <div className={`result ${d.success ? "ok" : "bad"}`}>{e.text}</div>;
+    const d = e.data as { success: boolean; tokens: string[] };
+    return (
+      <div className={`result ${d.success ? "ok" : "bad"}`}>
+        {d.tokens.map((tk, k) => (
+          <ChaosTokenIcon key={k} token={tk} size={34} />
+        ))}{" "}
+        {e.text}
+      </div>
+    );
   }
-  if (e.type === "token") return <div className="result">Chaos token: <b>{tokenLabel(String(e.data?.token))}</b></div>;
+  if (e.type === "token") return <div className="result">Chaos token: <ChaosTokenIcon token={String(e.data?.token)} size={40} /></div>;
   return <div className="result">{e.text}</div>;
 }
 
@@ -57,24 +67,16 @@ function TopBar() {
         <b>{db.scenarios[game.scenarioId].name}</b> · {tr("hud.round", { round: game.round, phase: game.phase })}
       </div>
       {agenda && (
-        <div title={cardText(db, agenda.code, locale).name}>
-          Agenda: {cardText(db, agenda.code, locale).name} — doom {doomInPlay(g)}/{agenda.doom}
+        <div className="topbar-item" title={`Agenda: ${cardText(db, agenda.code, locale).name}`}>
+          {cardText(db, agenda.code, locale).name} <Stat icon="doom" value={doomInPlay(g)} max={agenda.doom} size={20} />
         </div>
       )}
-      {act && <div>Act: {cardText(db, act.code, locale).name}{Number.isFinite(actCost) ? ` — ${actCost} clues` : ""}</div>}
-      <div className="invs">
-        {game.order.map((i) => {
-          const st = game.invs[i];
-          const d = db.cards[i];
-          return (
-            <span key={i} className={`inv ${game.active === i ? "active" : ""} ${st.status}`}>
-              {cardText(db, i, locale).name}: ❤ {d.health! - st.damage} 🧠 {d.sanity! - st.horror} 🔍 {st.clues} 💰 {st.resources}
-              {game.active === i ? ` · ⏵${st.actionsLeft}` : ""}
-              {st.status !== "playing" ? ` (${st.status})` : ""}
-            </span>
-          );
-        })}
-      </div>
+      {act && (
+        <div className="topbar-item" title={`Act: ${cardText(db, act.code, locale).name}`}>
+          {cardText(db, act.code, locale).name} {Number.isFinite(actCost) && <Stat icon="clue" value={actCost} size={20} />}
+        </div>
+      )}
+      <PlayerPlaques />
       <div className="buttons">
         <button onClick={() => toggle("log")}>{tr("hud.log")}</button>
         <button onClick={() => toggle("debug")}>{tr("hud.debug")}</button>
@@ -149,7 +151,13 @@ function SkillTestPanel() {
       </div>
       <div className="st-calc">
         <span className="st-value">{value}</span> vs <span className="st-diff">{diff}</span>
-        {st.tokens.length > 0 && <span className="st-tokens"> · tokens: {st.tokens.map(tokenLabel).join(" ")}</span>}
+        {st.tokens.length > 0 && (
+          <span className="st-tokens">
+            {st.tokens.map((tk, k) => (
+              <ChaosTokenIcon key={k} token={tk} size={30} />
+            ))}
+          </span>
+        )}
       </div>
       {st.committed.length > 0 && <div className="st-committed">Committed: {st.committed.map((c) => cardText(db, game.cards[c].code, locale).name).join(", ")}</div>}
     </div>
@@ -190,13 +198,10 @@ function CardZoom() {
   const hovered = useView((s) => s.hovered);
   const game = useGame((s) => s.game)!;
   const locale = useGame((s) => s.locale);
-  const viewer = viewerOf(game);
-  const privacy = useGame((s) => s.privacy);
-  const revealedFor = useGame((s) => s.revealedFor);
   if (!hovered || !game.cards[hovered]) return null;
   const inst = game.cards[hovered];
-  // never reveal another player's hand through the zoom
-  if (inst.zone === "hand" && (inst.owner !== viewer || !handVisible(privacy, game.order.length, viewer, revealedFor))) return null;
+  // hand cards: the raised fan card is the zoom (and other players' hands are never revealed)
+  if (inst.zone === "hand") return null;
   const d = db.cards[inst.code];
   const tx = cardText(db, inst.code, locale);
   const unrevealed = d.type === "location" && !inst.revealed;
@@ -228,7 +233,11 @@ export function formatText(s: string): string {
   return esc
     .replace(/&lt;(\/?)(b|i)&gt;/g, "<$1$2>")
     .replace(/\[\[([^\]]+)\]\]/g, "<i>$1</i>")
-    .replace(/\[(\w+)\]/g, (_, k: string) => `<span class="icon icon-${k}">${ICON[k] ?? k}</span>`)
+    .replace(/\[(\w+)\]/g, (_, k: string) => {
+      const icon = MARKUP_ICONS[k];
+      if (icon) return `<img class="icon-inline" src="${iconUrl(icon)}" alt="${ICON_LABELS[icon]}" title="${k.replace("_", " ")}">`;
+      return `<span class="icon icon-${k}" title="${k.replace("_", " ")}">${GLYPHS[k] ?? ICON[k] ?? k}</span>`;
+    })
     .replace(/\n/g, "<br/>");
 }
 const ICON: Record<string, string> = { action: "➤", reaction: "↺", fast: "⚡", free: "⚡", elder_sign: "✶", skull: "☠", cultist: "☥", tablet: "⌘", elder_thing: "✵", auto_fail: "✖", willpower: "WIL", intellect: "INT", combat: "COM", agility: "AGI", per_investigator: "/inv" };
@@ -354,8 +363,11 @@ export function Hud() {
   return (
     <>
       <TopBar />
-      <SkillTestPanel />
-      <Prompt />
+      <StatBar />
+      <div className="right-col">
+        <SkillTestPanel />
+        <Prompt />
+      </div>
       <CardZoom />
       <PopupMenu />
       <LogPanel />

@@ -19,7 +19,7 @@ function canvas(landscape: boolean) {
 function finish(c: HTMLCanvasElement) {
   const t = new THREE.CanvasTexture(c);
   t.colorSpace = THREE.SRGBColorSpace;
-  t.anisotropy = 4;
+  t.anisotropy = 16;
   return t;
 }
 
@@ -129,7 +129,9 @@ export function useCardTexture(card: CardDef, side: "front" | "back", name: stri
       url,
       (t) => {
         t.colorSpace = THREE.SRGBColorSpace;
-        t.anisotropy = 8;
+        t.anisotropy = 16; // clamped to the GPU maximum by three.js
+        t.generateMipmaps = true;
+        t.minFilter = THREE.LinearMipmapLinearFilter;
         cache.set(url, t);
         if (alive) setTex(t);
       },

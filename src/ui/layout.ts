@@ -6,10 +6,14 @@ export const CARD_H = 1.4;
 
 export type Vec3 = [number, number, number];
 
+/** the parchment board, in world units (x right, z down the screen); aspect matches the booklet art */
+export const BOARD = { x0: -13, x1: 13, z0: -8.3, z1: 8.3 };
+/** flat orthographic view loses nothing to perspective, so cards are drawn a bit larger */
+const S = 1.4;
+
 export interface Placement {
   pos: Vec3;
-  /** extra tilt toward the camera (hand) and yaw (fan) */
-  tilt: number;
+  /** rotation in the table plane */
   yaw: number;
   faceUp: boolean;
   scale: number;
@@ -47,14 +51,15 @@ export interface TableLayout {
 }
 
 const LANDSCAPE = new Set(["investigator", "act", "agenda"]);
-const SCEN_Z = -7.4;
-const VIEWER = { x: 0, z: 4.7 };
-// the prompt panel covers the right edge of the screen, so other players sit in a left column
-const OTHER_SLOTS: [number, number][] = [[-10.8, -5.2], [-10.8, -1.5], [-10.8, 2.2]];
-const MAP_CENTER = { x: 0, z: -1.6 };
-const CELL = { x: 2.7, z: 2.5 };
+const SCEN_Z = -6.9;
+const VIEWER = { x: 0.8, z: 6.6 };
+// other players sit in a column on the left, under their stat plaques
+const OTHER_SLOTS: [number, number][] = [[-10.9, -5.6], [-10.9, -1.1], [-10.9, 3.4]];
+const MAP_CENTER = { x: 0.9, z: -1.2 };
+const CELL = { x: 3.3, z: 3.0 };
 
-export function layout(db: ContentDb, s: GameState, viewer: InvId | null, handVisible: boolean): TableLayout {
+/** board layout; the viewer's hand is not on the board (it is the HTML hand fan) */
+export function layout(db: ContentDb, s: GameState, viewer: InvId | null): TableLayout {
   const cards = new Map<InstId, Placement>();
   const piles: Pile[] = [];
   const minis: Mini[] = [];
@@ -62,21 +67,21 @@ export function layout(db: ContentDb, s: GameState, viewer: InvId | null, handVi
   const areas: TableLayout["areas"] = [];
   const def = (id: InstId) => db.cards[s.cards[id].code];
   const put = (id: InstId, pos: Vec3, group: string, o: Partial<Placement> = {}) => {
-    cards.set(id, { pos, tilt: 0, yaw: 0, faceUp: true, scale: 1, landscape: LANDSCAPE.has(def(id).type), group, from: pos, ...o });
+    cards.set(id, { pos, yaw: 0, faceUp: true, landscape: LANDSCAPE.has(def(id).type), group, from: pos, ...o, scale: S * (o.scale ?? 1) });
   };
 
   // ---------- scenario row ----------
-  const encDeckPos: Vec3 = [2.6, 0, SCEN_Z];
-  if (s.agenda) put(s.agenda, [-4.6, 0, SCEN_Z], "agenda");
-  if (s.act) put(s.act, [-2.8, 0, SCEN_Z], "act");
-  piles.push({ key: "encounterDeck", pos: encDeckPos, count: s.encounterDeck.length, kind: "encounter", top: s.encounterDeck[0] ?? null, faceUp: false, scale: 1, label: "Encounter deck" });
-  piles.push({ key: "encounterDiscard", pos: [4.3, 0, SCEN_Z], count: s.encounterDiscard.length, kind: "encounter", top: s.encounterDiscard.at(-1) ?? null, faceUp: true, scale: 1, label: "Discard" });
+  const encDeckPos: Vec3 = [3.6, 0, SCEN_Z];
+  if (s.agenda) put(s.agenda, [-4.4, 0, SCEN_Z], "agenda");
+  if (s.act) put(s.act, [-1.9, 0, SCEN_Z], "act");
+  piles.push({ key: "encounterDeck", pos: encDeckPos, count: s.encounterDeck.length, kind: "encounter", top: s.encounterDeck[0] ?? null, faceUp: false, scale: S, label: "Encounter" });
+  piles.push({ key: "encounterDiscard", pos: [5.4, 0, SCEN_Z], count: s.encounterDiscard.length, kind: "encounter", top: s.encounterDiscard.at(-1) ?? null, faceUp: true, scale: S, label: "Discard" });
   for (const [name, deck] of Object.entries(s.sideDecks)) {
-    piles.push({ key: `side:${name}`, pos: [6.0, 0, SCEN_Z], count: deck.length, kind: "encounter", top: deck[0] ?? null, faceUp: false, scale: 1, label: `${name[0].toUpperCase()}${name.slice(1)} deck` });
+    piles.push({ key: `side:${name}`, pos: [7.2, 0, SCEN_Z], count: deck.length, kind: "encounter", top: deck[0] ?? null, faceUp: false, scale: S, label: `${name[0].toUpperCase()}${name.slice(1)} deck` });
   }
   const victory = Object.values(s.cards).filter((c) => c.zone === "victory");
-  piles.push({ key: "victory", pos: [-6.6, 0, SCEN_Z], count: victory.length, kind: "encounter", top: victory.at(-1)?.id ?? null, faceUp: true, scale: 0.8, label: "Victory" });
-  const chaosBag: Vec3 = [8.0, 0, SCEN_Z];
+  piles.push({ key: "victory", pos: [-6.8, 0, SCEN_Z], count: victory.length, kind: "encounter", top: victory.at(-1)?.id ?? null, faceUp: true, scale: 0.8 * S, label: "Victory" });
+  const chaosBag: Vec3 = [9.2, 0, SCEN_Z];
 
   // ---------- locations ----------
   const scen = db.scenarios[s.scenarioId];
@@ -106,7 +111,7 @@ export function layout(db: ContentDb, s: GameState, viewer: InvId | null, handVi
     if (k === 0 && viewer) areaOf.set(i, { ...VIEWER, scale: 1, viewer: true });
     else {
       const [x, z] = OTHER_SLOTS[(viewer ? k - 1 : k) % OTHER_SLOTS.length];
-      areaOf.set(i, { x, z, scale: 0.55, viewer: false });
+      areaOf.set(i, { x, z, scale: 0.42, viewer: false });
     }
   });
   const deckPos = new Map<InvId, Vec3>();
@@ -115,18 +120,19 @@ export function layout(db: ContentDb, s: GameState, viewer: InvId | null, handVi
     const a = areaOf.get(i)!;
     areas.push({ inv: i, pos: [a.x, 0, a.z], scale: a.scale, viewer: a.viewer });
     const sc = a.scale;
-    const at = (dx: number, dz: number): Vec3 => [a.x + dx * sc, 0, a.z + dz * sc];
+    // offsets are in unscaled card units; S makes room for the larger cards
+    const at = (dx: number, dz: number): Vec3 => [a.x + dx * sc * S, 0, a.z + dz * sc * S];
     // viewer: wide row; others: compact block
     const wide = a.viewer;
-    const dpos = wide ? at(6.4, 0) : at(2.2, 1.6);
+    const dpos = wide ? at(5.3, 0) : at(2.2, 1.6);
     deckPos.set(i, dpos);
-    piles.push({ key: `deck:${i}`, pos: dpos, count: st.deck.length, kind: "player", top: st.deck[0] ?? null, faceUp: false, scale: sc, label: "Deck" });
-    piles.push({ key: `discard:${i}`, pos: wide ? at(8.0, 0) : at(3.8, 1.6), count: st.discard.length, kind: "player", top: st.discard.at(-1) ?? null, faceUp: true, scale: sc, label: "Discard" });
-    put(st.cardId, wide ? at(-6.6, 0) : at(-1.2, -1.6), `area:${i}`, { scale: sc });
+    piles.push({ key: `deck:${i}`, pos: dpos, count: st.deck.length, kind: "player", top: st.deck[0] ?? null, faceUp: false, scale: sc * S, label: "Deck" });
+    piles.push({ key: `discard:${i}`, pos: wide ? at(6.5, 0) : at(3.8, 1.6), count: st.discard.length, kind: "player", top: st.discard.at(-1) ?? null, faceUp: true, scale: sc * S, label: "Discard" });
+    put(st.cardId, wide ? at(-6.1, 0) : at(-1.2, -1.6), `area:${i}`, { scale: sc });
     const assets = Object.values(s.cards).filter((c) => c.zone === "play" && c.controller === i);
     assets.forEach((c, k) => {
       // spaced for exhausted (sideways) cards
-      const pos = wide ? at(-4.8 + k * 1.5, 0) : at(-1.9 + (k % 4) * 1.5, 0.15 + Math.floor(k / 4) * 1.5);
+      const pos = wide ? at(-4.5 + k * 1.2, 0) : at(-1.9 + (k % 4) * 1.5, 0.15 + Math.floor(k / 4) * 1.5);
       put(c.id, pos, `area:${i}`, { scale: sc, from: deckPos.get(i)! });
     });
     const threat = [
@@ -134,20 +140,12 @@ export function layout(db: ContentDb, s: GameState, viewer: InvId | null, handVi
       ...Object.values(s.cards).filter((c) => c.zone === "enemy" && c.engagedWith === i),
     ];
     threat.forEach((c, k) => {
-      const pos = wide ? at(-4.8 + k * 1.5, -1.75) : at(0.4 + k * 1.5, -1.6);
+      const pos = wide ? at(-4.5 + k * 1.2, -1.55) : at(0.4 + k * 1.5, -1.6);
       put(c.id, pos, `threat:${i}`, { scale: sc, from: encDeckPos });
     });
-    // hand
-    const hand = st.hand;
-    if (a.viewer && handVisible) {
-      const n = hand.length;
-      hand.forEach((id, k) => {
-        const off = k - (n - 1) / 2;
-        const spread = Math.min(1.05, 9 / Math.max(n, 1));
-        put(id, [off * spread, 1.6 + k * 0.01, 6.9 + Math.abs(off) * 0.05], "hand", { tilt: 0.9, yaw: -off * 0.04, scale: 1.15, from: dpos });
-      });
-    } else {
-      piles.push({ key: `hand:${i}`, pos: wide ? at(0, 2.9) : at(-1.2, 0.2 + 1.6), count: hand.length, kind: "player", top: null, faceUp: false, scale: sc * 0.8, label: "Hand" });
+    // hand: the viewer's is the HTML fan; others show a face-down count
+    if (!a.viewer) {
+      piles.push({ key: `hand:${i}`, pos: at(-1.2, 1.8), count: st.hand.length, kind: "player", top: null, faceUp: false, scale: sc * 0.8 * S, label: "Hand" });
     }
     if (st.location && st.status === "playing") minis.push({ inv: i, pos: locPos.get(st.location) ?? [0, 0, 0], index: s.order.indexOf(i) });
   }
@@ -158,21 +156,21 @@ export function layout(db: ContentDb, s: GameState, viewer: InvId | null, handVi
     const here = Object.values(s.cards).filter((c) => (c.zone === "enemy" && !c.engagedWith && c.location === l.id) || (c.zone === "attached" && c.location === l.id));
     here.forEach((c, k) => {
       const enemy = c.zone === "enemy";
-      put(c.id, [p[0] + (enemy ? 0.9 : -0.9), 0.02 + k * 0.02, p[2] + 0.35 + k * 0.28], `loc:${l.id}`, { scale: 0.62, from: encDeckPos });
+      put(c.id, [p[0] + (enemy ? 1.0 : -1.0), 0.02 + k * 0.02, p[2] + 0.35 + k * 0.28], `loc:${l.id}`, { scale: 0.6, from: encDeckPos });
     });
   }
 
   // ---------- skill test & resolving cards in the middle ----------
   const committed = Object.values(s.cards).filter((c) => c.zone === "commit");
-  committed.forEach((c, k) => put(c.id, [-1 + k * 1.1, 0.6, 2.2], "commit", { scale: 0.9, from: deckPos.get(c.owner!) ?? [0, 0, 0] }));
-  for (const c of Object.values(s.cards)) if (c.zone === "resolving") put(c.id, [0, 1.5, 0.8], "resolving", { scale: 1.4, from: c.owner ? deckPos.get(c.owner)! : encDeckPos });
+  committed.forEach((c, k) => put(c.id, [-1 + k * 1.2, 0.6, 2.4], "commit", { scale: 0.9, from: deckPos.get(c.owner!) ?? [0, 0, 0] }));
+  for (const c of Object.values(s.cards)) if (c.zone === "resolving") put(c.id, [0, 1.5, 0.6], "resolving", { scale: 1.4, from: c.owner ? deckPos.get(c.owner)! : encDeckPos });
 
   // investigator minis are offset so several fit on one location
   const base = minis.map((m) => m.pos);
   minis.forEach((m, j) => {
     const same = minis.filter((_, i) => base[i] === base[j]);
     const k = same.indexOf(m);
-    m.pos = [base[j][0] + (k - (same.length - 1) / 2) * 0.42, 0.15, base[j][2] - 0.55];
+    m.pos = [base[j][0] + (k - (same.length - 1) / 2) * 0.45, 0.15, base[j][2] - 0.6];
   });
   return { cards, piles, minis, links, areas, chaosBag };
 }

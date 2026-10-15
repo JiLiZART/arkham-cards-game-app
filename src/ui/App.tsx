@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { contentErrors } from "../content";
 import { gameStore, useGame } from "./context";
+import { HandFan } from "./hud/HandFan";
 import { Hud } from "./hud/Hud";
 import { CampaignLogScreen, MenuScreen } from "./Screens";
 import { Table } from "./scene/Table";
@@ -26,6 +27,7 @@ export function App() {
       <div className="game">
         <Table />
         <Hud />
+        <HandFan />
       </div>
     );
   }

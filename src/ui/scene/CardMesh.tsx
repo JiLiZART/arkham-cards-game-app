@@ -6,6 +6,8 @@ import { cardText } from "../../content/i18n";
 import type { CardInst } from "../../engine/types";
 import { db, useGame } from "../context";
 import { CARD_H, CARD_W, type Placement } from "../layout";
+import { Icon } from "../Icon";
+import { GLYPHS, type IconName } from "../icons";
 import { useCardTexture } from "./textures";
 
 const edge = new THREE.MeshStandardMaterial({ color: "#d8cfb5", roughness: 0.9 });
@@ -13,6 +15,7 @@ const glow = new THREE.MeshBasicMaterial({ color: "#ffcf5a", transparent: true, 
 const hoverGlow = new THREE.MeshBasicMaterial({ color: "#8fd3ff", transparent: true, opacity: 0.9 });
 
 const damp = THREE.MathUtils.damp;
+const TOKEN_ICONS: Record<string, IconName | undefined> = { damage: "damage", horror: "horror", clues: "clue", doom: "doom", resources: "resource" };
 
 export interface CardMeshProps {
   inst: CardInst;
@@ -20,14 +23,12 @@ export interface CardMeshProps {
   highlighted: boolean;
   hovered: boolean;
   exhausted: boolean;
-  dragOffset?: number;
-  onPointerDown?: (e: ThreeEvent<PointerEvent>) => void;
   onClick?: (e: ThreeEvent<MouseEvent>) => void;
   onHover?: (over: boolean) => void;
 }
 
 /** one card on the table: eases toward its layout target every frame */
-export function CardMesh({ inst, place, highlighted, hovered, exhausted, dragOffset = 0, onPointerDown, onClick, onHover }: CardMeshProps) {
+export function CardMesh({ inst, place, highlighted, hovered, exhausted, onClick, onHover }: CardMeshProps) {
   const locale = useGame((s) => s.locale);
   const card = db.cards[inst.code];
   const tr = cardText(db, inst.code, locale);
@@ -53,15 +54,14 @@ export function CardMesh({ inst, place, highlighted, hovered, exhausted, dragOff
       g.position.set(...place.from);
       started.current = true;
     }
-    const lift = (hovered ? 0.25 : 0) + (dragOffset ? 0.8 : 0);
+    // top-down orthographic view: height only orders overlapping cards, size comes from scale
     const [x, y, z] = place.pos;
     const k = 8;
     g.position.x = damp(g.position.x, x, k, dt);
-    g.position.y = damp(g.position.y, y + lift, k, dt);
-    g.position.z = damp(g.position.z, z - dragOffset, k, dt);
-    const s = place.scale * (hovered && place.group === "hand" ? 1.15 : 1);
-    g.scale.setScalar(damp(g.scale.x, s, k, dt));
-    g.rotation.x = damp(g.rotation.x, -Math.PI / 2 + place.tilt, k, dt);
+    g.position.y = damp(g.position.y, y + (hovered ? 0.3 : 0), k, dt);
+    g.position.z = damp(g.position.z, z, k, dt);
+    g.scale.setScalar(damp(g.scale.x, place.scale * (hovered ? 1.06 : 1), k, dt));
+    g.rotation.x = -Math.PI / 2;
     g.rotation.z = damp(g.rotation.z, place.yaw + (exhausted ? -Math.PI / 2 : 0), k, dt);
     flip.current.rotation.y = damp(flip.current.rotation.y, showFront ? 0 : Math.PI, k, dt);
   });
@@ -83,7 +83,6 @@ export function CardMesh({ inst, place, highlighted, hovered, exhausted, dragOff
           material={materials}
           castShadow
           onClick={onClick}
-          onPointerDown={onPointerDown}
           onPointerOver={(e) => {
             e.stopPropagation();
             onHover?.(true);
@@ -99,11 +98,19 @@ export function CardMesh({ inst, place, highlighted, hovered, exhausted, dragOff
       {tokens.length > 0 && (
         <Html position={[w / 2 - 0.05, h / 2 - 0.05, 0.02]} center zIndexRange={[20, 0]} style={{ pointerEvents: "none" }}>
           <div className="tokens">
-            {tokens.map(([k, n]) => (
-              <span key={k} className={`tok tok-${k}`} title={k}>
-                {n}
-              </span>
-            ))}
+            {tokens.map(([k, n]) =>
+              TOKEN_ICONS[k] ? (
+                <span key={k} className="tok-icon" title={k}>
+                  <Icon name={TOKEN_ICONS[k]!} size={26} />
+                  <b>{n}</b>
+                </span>
+              ) : (
+                <span key={k} className={`tok tok-${k}`} title={k}>
+                  {GLYPHS.uses}
+                  {n}
+                </span>
+              ),
+            )}
           </div>
         </Html>
       )}
