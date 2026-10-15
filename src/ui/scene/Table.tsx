@@ -4,10 +4,12 @@ import { Suspense, useMemo, useRef, type PointerEvent as ReactPointerEvent } fro
 import * as THREE from "three";
 import { t } from "../../content/i18n";
 import type { GameState, InstId } from "../../engine/types";
+import { domPlace, lastRects, originRect, takeArrival } from "../arrivals";
 import { useCardClick } from "../cardClick";
 import { iconUrl } from "../icons";
 import { Portrait } from "../Portrait";
-import { db, useGame } from "../context";
+import { db, gameStore, useGame } from "../context";
+import { RESOLVE_BOX } from "../hud/Reveal";
 import { CARD_H, CARD_W, footprint, layout, type Placement, type Vec3 } from "../layout";
 import { hitRect, type ScreenRect } from "../hit";
 import { viewerOf } from "../store";
@@ -161,6 +163,40 @@ function SceneInner({ game }: { game: GameState }) {
     const p = L.cards.get(id);
     return p ? projectRect(p, camera, gl.domElement.getBoundingClientRect()) : null;
   };
+  // cards that just arrived on the map glide in from where they came from (a shown encounter card, a pile, the act panel)
+  const known = useRef<Set<InstId> | null>(null);
+  const arrivals = useRef(new Map<InstId, { from: Vec3; scale: number; hold?: () => boolean }>());
+  // card ids repeat between games: a new game starts from scratch
+  const setup = useGame((st) => st.setup);
+  const forSetup = useRef(setup);
+  if (forSetup.current !== setup) {
+    forSetup.current = setup;
+    known.current = null;
+    arrivals.current = new Map();
+  }
+  if (!known.current) {
+    // first sight of the map (new or loaded game): everything is simply there
+    known.current = new Set(L.cards.keys());
+    for (const id of L.cards.keys()) takeArrival(id);
+  }
+  for (const [id, place] of L.cards) {
+    if (known.current.has(id)) continue;
+    known.current.add(id);
+    const a = takeArrival(id);
+    if (!a) continue;
+    const box = gl.domElement.getBoundingClientRect();
+    const o = originRect(a, viewer, (pl) => domPlace(pl, RESOLVE_BOX), (i) => lastRects.get(i) ?? null, innerWidth, innerHeight);
+    const v = new THREE.Vector3((((o.x + o.w / 2 - box.left) / box.width) * 2 - 1), -(((o.y + o.h / 2 - box.top) / box.height) * 2 - 1), 0).unproject(camera);
+    const r = projectRect(place, camera, box);
+    const held = (e: { type: string; card?: string | null } | null) => e?.type === "encounter" && e.card === id;
+    arrivals.current.set(id, {
+      from: [v.x, place.pos[1] + 0.5, v.z],
+      scale: place.scale * (o.h / Math.max(1, r.y1 - r.y0)),
+      // an enemy from an encounter card stays hidden until that card has been shown
+      hold: a.shown ? () => { const st = gameStore.getState(); return held(st.current) || st.queue.some(held); } : undefined,
+    });
+  }
+
   // dev-only: lets browser automation find a card on the map
   if (import.meta.env.DEV) (window as unknown as { __arkhamRects: unknown }).__arkhamRects = cardRects;
   const moveDrag = useView((st) => st.moveDrag);
@@ -202,11 +238,14 @@ function SceneInner({ game }: { game: GameState }) {
       ))}
       {[...L.cards.entries()].map(([id, place]) => {
         const inst = game.cards[id];
+        const arr = arrivals.current.get(id);
         return (
           <CardMesh
             key={id}
             inst={inst}
-            place={place}
+            place={arr ? { ...place, from: arr.from } : place}
+            fromScale={arr?.scale}
+            hold={arr?.hold}
             highlighted={moveDrag ? id in moveDrag.targets : byCard.has(id)}
             hovered={moveDrag ? moveDrag.over === id : hovered === id}
             exhausted={inst.exhausted && inst.zone === "enemy"}

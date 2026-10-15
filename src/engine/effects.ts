@@ -37,8 +37,8 @@ function invTargets(g: G, step: EffStep, t: InvTarget | undefined, ctx: EffCtx):
       if (!here.length) return [];
       const pick = ask<InvId>(g, step, you, "target", "Choose an investigator", here.map((i) => ({ id: i, label: invName(g, i), card: inv(g, i).cardId, value: i })), { auto: true, key: "chooseInvestigator" });
       if (pick === undefined) return undefined;
-      if (step.choice === undefined) return [pick]; // chosen automatically
-      // re-run with a fixed target so later choices of this effect get a fresh answer slot
+      // chosen (or auto-picked as the only one): re-run with a fixed target so later choices of this effect
+      // (e.g. Old Book of Lore's search) get a fresh answer slot instead of reading this one
       push(g, { ...step, choice: undefined, effect: { ...step.effect, target: "eventInvestigator" } as Effect, ctx: { ...ctx, inv: pick } });
       return undefined;
     }

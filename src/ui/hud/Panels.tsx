@@ -1,7 +1,8 @@
-import type { MouseEvent as ReactMouseEvent } from "react";
+import { useLayoutEffect, useRef, type MouseEvent as ReactMouseEvent } from "react";
 import { cardText, t } from "../../content/i18n";
 import { actClueCost, doomInPlay } from "../../engine/rules/scenario";
 import type { GameState, InstId } from "../../engine/types";
+import { rememberRect } from "../arrivals";
 import { CardFace } from "../CardFace";
 import { useCardClick } from "../cardClick";
 import { groupTokens } from "../chaos";
@@ -14,7 +15,9 @@ import { viewerOf } from "../store";
 import { TokenBadges } from "../TokenBadges";
 import { useView } from "../view";
 import { ChaosTokenIcon } from "./ChaosTokenIcon";
+import { useFlyIn } from "./flights";
 import { Modal } from "./Modals";
+import { RESOLVE_BOX } from "./Reveal";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
 const gOf = () => ({ s: gameStore.getState().game!, db, events: [] });
@@ -80,12 +83,12 @@ export function ScenarioPanel() {
   );
 }
 
-function Pile({ label, count, top, faceUp, kind }: { label: string; count: number; top: InstId | null; faceUp: boolean; kind: "player" | "encounter" }) {
+function Pile({ label, count, top, faceUp, kind, id }: { label: string; count: number; top: InstId | null; faceUp: boolean; kind: "player" | "encounter"; id?: string }) {
   const locale = useGame((s) => s.locale);
   const game = useGame((s) => s.game) as GameState;
   const showTop = faceUp && top && game.cards[top];
   return (
-    <div className="pile" title={`${label}: ${count}`}>
+    <div className="pile" data-pile={id} title={`${label}: ${count}`}>
       <button
         className={`pile-card ${count === 0 ? "empty" : ""}`}
         disabled={!showTop}
@@ -108,8 +111,8 @@ export function PileColumn() {
   const victory = Object.values(game.cards).filter((c) => c.zone === "victory");
   return (
     <div className="pile-column">
-      <Pile label={tr("pile.encounter")} count={game.encounterDeck.length} top={game.encounterDeck[0] ?? null} faceUp={false} kind="encounter" />
-      <Pile label={tr("pile.discard")} count={game.encounterDiscard.length} top={game.encounterDiscard.at(-1) ?? null} faceUp kind="encounter" />
+      <Pile label={tr("pile.encounter")} count={game.encounterDeck.length} top={game.encounterDeck[0] ?? null} faceUp={false} kind="encounter" id="encounter" />
+      <Pile label={tr("pile.discard")} count={game.encounterDiscard.length} id="encounterDiscard" top={game.encounterDiscard.at(-1) ?? null} faceUp kind="encounter" />
       <Pile label={tr("pile.victory")} count={victory.length} top={victory.at(-1)?.id ?? null} faceUp kind="encounter" />
       {Object.entries(game.sideDecks).map(([name, deck]) => (
         <Pile key={name} label={`${name[0].toUpperCase()}${name.slice(1)}`} count={deck.length} top={deck[0] ?? null} faceUp={false} kind="encounter" />
@@ -117,8 +120,8 @@ export function PileColumn() {
       {me && (
         <>
           <div className="pile-divider" />
-          <Pile label={tr("pile.deck")} count={me.deck.length} top={me.deck[0] ?? null} faceUp={false} kind="player" />
-          <Pile label={tr("pile.discard")} count={me.discard.length} top={me.discard.at(-1) ?? null} faceUp kind="player" />
+          <Pile label={tr("pile.deck")} id="deck" count={me.deck.length} top={me.deck[0] ?? null} faceUp={false} kind="player" />
+          <Pile label={tr("pile.discard")} id="discard" count={me.discard.length} top={me.discard.at(-1) ?? null} faceUp kind="player" />
         </>
       )}
     </div>
@@ -177,7 +180,16 @@ export function PlayStrip() {
   const revealedFor = useGame((s) => s.revealedFor);
   const { byCard, click } = useCardClick();
   const viewer = viewerOf(game);
-  if (!viewer || !handVisible(privacy, game.order.length, viewer, revealedFor)) return null;
+  const strip = useRef<HTMLDivElement>(null);
+  const setup = useGame((s) => s.setup);
+  const visible = !!viewer && handVisible(privacy, game.order.length, viewer, revealedFor);
+  // new strip cards fly in from where they came from (before their rects are remembered below)
+  useFlyIn(strip, visible, viewer, privacy && game.order.length > 1, RESOLVE_BOX, setup);
+  // remember where each strip card is, so a card leaving the strip (back to hand) flies from there
+  useLayoutEffect(() => {
+    strip.current?.querySelectorAll<HTMLElement>("[data-card]").forEach((el) => rememberRect(el.dataset.card!, el));
+  });
+  if (!visible) return null;
   const all = Object.values(game.cards);
   const assets = all.filter((c) => c.zone === "play" && c.controller === viewer);
   const threats = [...all.filter((c) => c.zone === "threat" && c.controller === viewer), ...all.filter((c) => c.zone === "enemy" && c.engagedWith === viewer)];
@@ -188,7 +200,7 @@ export function PlayStrip() {
     </div>
   );
   return (
-    <div className="play-strip">
+    <div className="play-strip" ref={strip}>
       {assets.map((c) => card(c.id, c.exhausted))}
       {threats.length > 0 && assets.length > 0 && <div className="strip-divider" />}
       {threats.map((c) => card(c.id, c.exhausted))}

@@ -5,6 +5,7 @@ import {
   applyScenarioEnd, currentScenarioId, scenarioSetup, startCampaign, type CampaignState, type NewCampaign,
 } from "../engine/campaign";
 import { createGame, dispatch, ENGINE_VERSION, replay } from "../engine/engine";
+import { quietNextGame } from "./arrivals";
 import type { Action, ContentDb, GameEvent, GameSetup, GameState, InvId } from "../engine/types";
 
 export const SAVE_KEY = "ah:save";
@@ -167,6 +168,7 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage())
         }
         try {
           const r = replay(db, save.setup, save.actions);
+          quietNextGame();
           set({ ...settings, campaign: save.campaign, setup: save.setup, actions: save.actions, game: r.state, screen: "game", queue: [], current: null, revealedFor: null });
         } catch {
           set({ ...settings, campaign: save.campaign, setup: null, actions: [], game: null, screen: "log", notice: "The saved scenario could not be restored; it will restart." });
@@ -225,6 +227,7 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage())
       importLog(json) {
         const data = JSON.parse(json) as { setup: GameSetup; actions: Action[]; campaign?: CampaignState };
         const r = replay(db, data.setup, data.actions);
+        quietNextGame();
         set({ setup: data.setup, actions: data.actions, game: r.state, campaign: data.campaign ?? get().campaign, screen: "game", queue: [], current: null });
         persist();
       },

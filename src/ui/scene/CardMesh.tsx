@@ -25,10 +25,14 @@ export interface CardMeshProps {
   exhausted: boolean;
   onClick?: (e: ThreeEvent<MouseEvent>) => void;
   onHover?: (over: boolean) => void;
+  /** size to start at when flying in (default: its own) */
+  fromScale?: number;
+  /** keep the card hidden at its start until this turns false (an enemy waits for its encounter card to be shown) */
+  hold?: () => boolean;
 }
 
 /** one card on the table: eases toward its layout target every frame */
-export function CardMesh({ inst, place, highlighted, hovered, exhausted, onClick, onHover }: CardMeshProps) {
+export function CardMesh({ inst, place, highlighted, hovered, exhausted, onClick, onHover, fromScale, hold }: CardMeshProps) {
   const locale = useGame((s) => s.locale);
   const card = db.cards[inst.code];
   const isLocation = card.type === "location" && inst.zone === "location";
@@ -52,8 +56,11 @@ export function CardMesh({ inst, place, highlighted, hovered, exhausted, onClick
     if (!g || !flip.current) return;
     if (!started.current) {
       g.position.set(...place.from);
+      if (fromScale) g.scale.setScalar(fromScale);
       started.current = true;
     }
+    g.visible = !hold?.();
+    if (!g.visible) return;
     // top-down orthographic view: height only orders overlapping cards, size comes from scale
     const [x, y, z] = place.pos;
     const k = 8;

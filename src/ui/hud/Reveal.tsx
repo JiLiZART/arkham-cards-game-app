@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { GameState } from "../../engine/types";
 import { CardFace } from "../CardFace";
 import { useGame } from "../context";
 import { backUrl } from "../images";
+import { viewerOf } from "../store";
+import { useFlyIn } from "./flights";
 import { ChaosTokenIcon } from "./ChaosTokenIcon";
 
 interface Box {
@@ -72,10 +74,14 @@ function TokenPop({ token }: { token: string }) {
 /** cards in the "resolving" zone (a treachery, an event being played) shown over the middle of the screen */
 function Resolving({ game, locale }: { game: GameState; locale: string }) {
   const cards = Object.values(game.cards).filter((c) => c.zone === "resolving");
+  // an event played from hand flies here from the fan
+  const ref = useRef<HTMLDivElement>(null);
+  const setup = useGame((s) => s.setup);
+  useFlyIn(ref, cards.length > 0, viewerOf(game), false, RESOLVE_BOX, setup);
   if (!cards.length) return null;
   const b = RESOLVE_BOX();
   return (
-    <div className="resolving" style={{ left: b.x, top: b.y, width: b.w, height: b.h }}>
+    <div className="resolving" ref={ref} data-card={cards.at(-1)!.id} style={{ left: b.x, top: b.y, width: b.w, height: b.h }}>
       <CardFace code={cards.at(-1)!.code} locale={locale} />
     </div>
   );

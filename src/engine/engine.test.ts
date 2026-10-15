@@ -426,3 +426,26 @@ describe("one-way connections", () => {
     expect(connections(g, b)).toEqual([]);
   });
 });
+
+describe("chosen investigators", () => {
+  // regression: with one investigator at the location the target was auto-picked, and the search that followed
+  // then read its own answer (a card) back as the investigator, which crashed and soft-locked the game
+  for (const invs of [["01002"], ["01002", "01001"]]) {
+    it(`Old Book of Lore searches and adds the picked card to hand (${invs.length} investigator${invs.length > 1 ? "s" : ""})`, () => {
+      let r = skipMulligans(start("the-gathering", invs, 3));
+      r = mutate(r, (g) => {
+        const book = Object.values(g.s.cards).find((c) => c.code === "01031")!;
+        for (const i of g.s.order) for (const p of ["deck", "hand"] as const) g.s.invs[i][p] = g.s.invs[i][p].filter((x) => x !== book.id);
+        Object.assign(book, { zone: "play", controller: "01002", owner: "01002" });
+      });
+      while (r.state.pending?.inv !== "01002" || r.state.pending.kind !== "turn") r = pick(r, r.state.pending!.options.at(-1)!.label);
+      r = pick(r, /Old Book/);
+      if (r.state.pending?.kind === "target") r = pick(r, "Daisy Walker");
+      expect(r.state.pending?.prompt).toMatch(/Search your deck/);
+      const wanted = r.state.pending!.options[0];
+      r = pick(r, wanted.label);
+      expect(r.state.invs["01002"].hand).toContain(wanted.value);
+      expect(r.state.pending?.kind).toBe("turn");
+    });
+  }
+});

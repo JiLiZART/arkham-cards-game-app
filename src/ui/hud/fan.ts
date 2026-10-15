@@ -63,3 +63,29 @@ export function dockRect(slot: FanSlot, w: number, k: number, raise: number, fan
   const cx = fanLeft + slot.x;
   return { x0: cx - (FAN_CARD_W * s) / 2, x1: cx + (FAN_CARD_W * s) / 2, y0: bottom - FAN_CARD_H * s, y1: bottom };
 }
+
+/** a screen box (x, y, w, h) */
+export interface Box {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+/**
+ * The transform that puts a fan card (untransformed box at slot x, pivot at its bottom centre) exactly over a screen box,
+ * scaled by the box height. Used as a keyframe for cards flying into the fan.
+ */
+export function boxTransform(b: Box, slotX: number, fanLeft: number, vh: number): string {
+  const pivotX = fanLeft + slotX;
+  const pivotY = vh + (FAN_CARD_H - FAN_REST_VISIBLE);
+  const s = b.h / FAN_CARD_H;
+  return `translate(${b.x + b.w / 2 - pivotX}px, ${b.y + b.h - pivotY}px) scale(${s})`;
+}
+
+/** where a drawn card is held for a moment: right of centre, above the hand, at about the hover size */
+export function showBox(vw: number, vh: number): Box {
+  const h = Math.min(FAN_CARD_H * HAND_HOVER_ZOOM, vh - 140);
+  const w = (h * FAN_CARD_W) / FAN_CARD_H;
+  return { x: vw * 0.6 - w / 2, y: Math.max(60, (vh - h) / 2 - 40), w, h };
+}

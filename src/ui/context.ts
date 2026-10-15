@@ -2,10 +2,12 @@ import { createContext, useContext } from "react";
 import type { StoreApi } from "zustand";
 import { useStore } from "zustand";
 import { content } from "../content";
+import { trackArrivals } from "./arrivals";
 import { createGameStore, type UiState } from "./store";
 
 export const db = content;
 export const gameStore = createGameStore(content);
+trackArrivals(gameStore);
 export const GameContext = createContext<StoreApi<UiState>>(gameStore);
 
 /** select from the game store (engine state + session) */

@@ -3,12 +3,16 @@ import { cardText } from "../../content/i18n";
 import type { ChoiceOption, GameState, InstId } from "../../engine/types";
 import { db, useGame } from "../context";
 import { CardFace as Face } from "../CardFace";
+import { backUrl } from "../images";
+import { domPlace, lastRects, originRect, rememberRect, takeArrival, type Arrival } from "../arrivals";
 import { placeDetails } from "../details";
 import { handVisible } from "../scene/Table";
 import { viewerOf } from "../store";
 import { useView } from "../view";
-import { dockRadius, dockRect, dockTransform, dockWeight, FAN_CARD_H, FAN_CARD_W, FAN_LEGAL_RAISE, FAN_REST_VISIBLE, fanLayout, fanWidth, hoverScale, STAT_BAR_W } from "./fan";
+import { boxTransform, dockRadius, dockRect, dockTransform, dockWeight, FAN_CARD_H, FAN_CARD_W, FAN_LEGAL_RAISE, FAN_REST_VISIBLE, fanLayout, fanWidth, hoverScale, showBox, STAT_BAR_W } from "./fan";
+import { flyDraw, flyIn, STAGGER_MS } from "./flights";
 import { DETAILS_W, HandDetails } from "./HandDetails";
+import { RESOLVE_BOX } from "./Reveal";
 
 const DRAG_TO_PLAY = 110;
 /** easing time constant of the Dock magnification (ms) */
@@ -120,10 +124,50 @@ export function HandFan() {
     },
     [],
   );
+  // cards that just arrived fly in from where they came from (a draw: Hearthstone-style, via the show spot)
+  const known = useRef<Set<InstId> | null>(null);
+  // card ids repeat between games: a new game starts from scratch
+  const setup = useGame((st) => st.setup);
+  const forSetup = useRef(setup);
+  if (forSetup.current !== setup) {
+    forSetup.current = setup;
+    known.current = null;
+  }
+  const launch = (el: HTMLElement, a: Arrival, i: number) => {
+    const from = originRect(a, viewer, (p) => domPlace(p, RESOLVE_BOX), (id) => lastRects.get(id) ?? null, innerWidth, innerHeight);
+    const at = (b: { x: number; y: number; w: number; h: number }) => boxTransform(b, slots[i].x, FAN_LEFT, innerHeight);
+    const flip = el.querySelector<HTMLElement>(".fan-flip");
+    const delay = a.batch * STAGGER_MS;
+    if (a.from === "deck" && !a.opening) flyDraw(el, flip, from, showBox(innerWidth, innerHeight), el.style.transform, at, delay);
+    else flyIn(el, flip, at(from), el.style.transform, delay, a.from === "deck", a.opening ? 400 : 450);
+  };
+
   // every render (hand, options, drag changed): put the cards where they belong now, then keep easing
   useLayoutEffect(() => {
     apply();
     start();
+    if (!visible) {
+      known.current = null;
+      return;
+    }
+    if (!known.current) {
+      // first sight of this hand: behind the hand-off screen it is just shown, otherwise (a new game) it flies in
+      known.current = new Set();
+      if (privacy && game.order.length > 1)
+        for (const id of hand) {
+          known.current.add(id);
+          takeArrival(id);
+        }
+    }
+    const seen = known.current;
+    hand.forEach((id, i) => {
+      if (seen.has(id)) return;
+      seen.add(id);
+      const a = takeArrival(id);
+      const el = els.current.get(id);
+      if (a && el) launch(el, a, i);
+    });
+    for (const id of seen) if (!hand.includes(id)) seen.delete(id);
   });
 
   const focusOn = (id: InstId | null) => {
@@ -151,6 +195,9 @@ export function HandFan() {
   };
 
   const act = (id: InstId, x: number, y: number, preferPlay = false) => {
+    // a card played from here flies to the table from where it is now
+    const el = els.current.get(id);
+    if (el) rememberRect(id, el);
     const opts = optionsFor(id);
     const play = opts.filter((o) => /^Play/.test(o.label));
     const list = preferPlay && play.length ? play : opts;
@@ -228,7 +275,12 @@ export function HandFan() {
               }}
               title={cardText(db, game.cards[id].code, locale).name}
             >
-              <Face code={game.cards[id].code} locale={locale} />
+              <span className="fan-flip">
+                <span className="ff-front">
+                  <Face code={game.cards[id].code} locale={locale} />
+                </span>
+                <img className="ff-back" src={backUrl("player")} alt="" draggable={false} />
+              </span>
             </button>
           );
         })}

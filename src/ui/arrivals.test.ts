@@ -1,0 +1,110 @@
+import { describe, expect, it } from "vitest";
+import { db, giveCard, mutate, pick, skipMulligans, start } from "../engine/testkit";
+import { createStore } from "zustand/vanilla";
+import { diffArrivals, originRect, quietNextGame, takeArrival, trackArrivals, type Arrival, type Place } from "./arrivals";
+import type { UiState } from "./store";
+
+describe("diffArrivals", () => {
+  const base = skipMulligans(start("the-gathering", ["01001"], 1));
+
+  it("a draw: deck → hand, owned by the drawer", () => {
+    const r = pick(base, /^Draw/);
+    const a = diffArrivals(base.state, r.state);
+    expect(a).toHaveLength(1);
+    expect(a[0]).toMatchObject({ from: "deck", to: "hand", owner: "01001", opening: false, batch: 0 });
+  });
+
+  it("playing an asset: hand → play", () => {
+    let id = "";
+    const r0 = mutate(base, (g) => {
+      id = giveCard(g, "01001", "01020");
+    });
+    const r = pick(r0, /^Play Machete/);
+    expect(diffArrivals(r0.state, r.state)).toContainEqual(expect.objectContaining({ id, from: "hand", to: "play", owner: "01001" }));
+  });
+
+  it("a spawn: encounter deck → enemy; staggered batch indexes", () => {
+    const ids: string[] = [];
+    const r = mutate(base, (g) => {
+      const enc = Object.values(g.s.cards).filter((c) => c.zone === "encounterDeck" && db.cards[c.code].type === "enemy").slice(0, 2);
+      for (const c of enc) {
+        c.zone = "enemy";
+        c.location = g.s.invs["01001"].location;
+        ids.push(c.id);
+      }
+    });
+    const a = diffArrivals(base.state, r.state).filter((x) => ids.includes(x.id));
+    expect(a.map((x) => [x.from, x.to, x.batch])).toEqual([["encounterDeck", "enemy", 0], ["encounterDeck", "enemy", 1]]);
+  });
+
+  it("a new scenario: the opening hand comes from the deck, flagged as opening", () => {
+    const s = start("the-gathering", ["01001"], 1).state;
+    const a = diffArrivals(null, s);
+    expect(a).toHaveLength(5);
+    expect(a.every((x) => x.from === "deck" && x.to === "hand" && x.opening)).toBe(true);
+    expect(a.map((x) => x.batch)).toEqual([0, 1, 2, 3, 4]);
+  });
+
+  it("nothing moved, nothing arrives", () => {
+    expect(diffArrivals(base.state, base.state)).toEqual([]);
+  });
+});
+
+describe("recording", () => {
+  const base = skipMulligans(start("the-gathering", ["01001"], 1));
+  const fresh = (restored: boolean) => {
+    const store = createStore<Pick<UiState, "game" | "setup" | "actions">>(() => ({ game: null, setup: null, actions: [] }));
+    trackArrivals(store as never);
+    if (restored) quietNextGame();
+    store.setState({ game: base.state, setup: {} as never });
+    return store;
+  };
+
+  it("a draw is taken once, and expires after 1.5 s", () => {
+    const store = fresh(true);
+    const r = pick(base, /^Draw/);
+    store.setState({ game: r.state });
+    const id = diffArrivals(base.state, r.state)[0].id;
+    expect(takeArrival(id)).toMatchObject({ from: "deck", to: "hand" });
+    expect(takeArrival(id)).toBeNull();
+    const r2 = pick(r, /^Draw/);
+    store.setState({ game: r2.state });
+    expect(takeArrival(diffArrivals(r.state, r2.state)[0].id, performance.now() + 2000)).toBeNull();
+  });
+
+  it("a restored game records nothing; a new scenario records its opening hand", () => {
+    fresh(true);
+    for (const id of base.state.invs["01001"].hand) expect(takeArrival(id)).toBeNull();
+    fresh(false);
+    for (const id of base.state.invs["01001"].hand) expect(takeArrival(id)).toMatchObject({ from: "deck", to: "hand" });
+  });
+});
+
+describe("originRect", () => {
+  const box = (n: number) => ({ x: n, y: n, w: 10, h: 14 });
+  const places: Record<Place, number> = { deck: 1, discard: 2, encounter: 3, encounterDiscard: 4, resolve: 5, actAgenda: 6, piles: 7, fan: 8, strip: 9 };
+  const find = (p: Place) => box(places[p]);
+  const none = () => null;
+  const arr = (o: Partial<Arrival>): Arrival => ({ id: "c1", from: "deck", to: "hand", owner: "01001", opening: false, batch: 0, log: 0, shown: false, ...o });
+  const at = (o: Partial<Arrival>, last: (id: string) => ReturnType<typeof box> | null = none) => originRect(arr(o), "01001", find, last, 1600, 900).x;
+
+  it("own deck and discard; another investigator's cards come from the pile column", () => {
+    expect(at({})).toBe(1);
+    expect(at({ from: "discard" })).toBe(2);
+    expect(at({ owner: "01002" })).toBe(7);
+  });
+  it("encounter pile, or the resolve spot when the card was just shown or was resolving", () => {
+    expect(at({ from: "encounterDeck", to: "enemy", owner: null })).toBe(3);
+    expect(at({ from: "encounterDeck", to: "enemy", owner: null, shown: true })).toBe(5);
+    expect(at({ from: "resolving", to: "threat" })).toBe(5);
+  });
+  it("hand and strip cards fly from where they last were, else the fan or strip", () => {
+    expect(at({ from: "hand", to: "play" }, () => box(42))).toBe(42);
+    expect(at({ from: "hand", to: "play" })).toBe(8);
+    expect(at({ from: "play", to: "hand" })).toBe(9);
+  });
+  it("locations from the act/agenda panel; anything else from a small box mid-screen", () => {
+    expect(at({ from: "setAside", to: "location", owner: null })).toBe(6);
+    expect(originRect(arr({ from: "limbo", to: "play" }), "01001", find, none, 1600, 900)).toEqual({ x: 760, y: 394, w: 80, h: 112 });
+  });
+});
