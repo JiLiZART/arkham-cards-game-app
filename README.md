@@ -20,11 +20,14 @@ Icons come from the ArkhamCards icon fonts in `inspired/ArkhamCards` (`arkhamico
 
 ## Deploying
 
-Every push to `main` deploys the game to GitHub Pages at **https://jilizart.github.io/arkham-cards-game-app/** (`.github/workflows/deploy.yml`). The workflow runs the tests, lint and content check, builds with `PAGES_BASE=/arkham-cards-game-app/` (Vite's base path; locally it stays `/`), and then publishes. A failing check publishes nothing and the site keeps the previous version. To deploy without a push, use Actions → "Deploy to GitHub Pages" → Run workflow.
+Every push to `main` deploys the game to GitHub Pages at **https://arkham.artkost.dev** (`.github/workflows/deploy.yml`). The workflow runs the tests, lint and content check, builds, and then publishes. A failing check publishes nothing and the site keeps the previous version. To deploy without a push, use Actions → "Deploy to GitHub Pages" → Run workflow.
 
-- **One-time setup:** in the repository, set Settings → Pages → Source to "GitHub Actions".
+- **One-time setup:**
+  - Settings → Pages: Source "GitHub Actions", custom domain `arkham.artkost.dev`, Enforce HTTPS.
+  - In Cloudflare DNS for `artkost.dev`: a `CNAME` record `arkham` → `jilizart.github.io`, proxy off (DNS only), so GitHub can issue the certificate.
+- **Why a subdomain:** the account's user site has the custom domain `artkost.dev`, so `jilizart.github.io/<repo>/` redirects to `artkost.dev/<repo>/`, which Cloudflare serves as the portfolio. Without a custom domain, the game would live at `/<repo>/`: build with `PAGES_BASE=/arkham-cards-game-app/`, and every asset path follows (see below).
 - **Card scans:** `npm run fetch:cards -- dist` downloads every scan the game uses (about 230 files, 46 MB) into `dist/cards`, so the map's WebGL cards load them from the same origin. They are cached in `.cache/cards` and never committed. A scan that can't be downloaded is listed in the log and that card shows its drawn face. The scans are publicly hosted on the Pages site.
-- **Trying a Pages build locally:** `PAGES_BASE=/arkham-cards-game-app/ npm run build && npm run fetch:cards -- dist && PAGES_BASE=/arkham-cards-game-app/ npx vite preview`, then open http://localhost:4173/arkham-cards-game-app/.
+- **Trying a deploy build locally:** `npm run build && npm run fetch:cards -- dist && npx vite preview`, then open http://localhost:4173/. Add `PAGES_BASE=/some-path/` to both commands to check a sub-path build.
 - In code, files under `public/` are referenced with `asset("…")` from `src/ui/images.ts`, never with a leading `/`; a test enforces this.
 
 ## Layout

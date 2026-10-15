@@ -24,7 +24,7 @@
 ## Decisions
 
 ### 1. Base path from an env var
-`vite.config.ts` sets `base: process.env.PAGES_BASE ?? "/"`. The workflow sets `PAGES_BASE=/arkham-cards-game-app/`.
+`vite.config.ts` sets `base: process.env.PAGES_BASE ?? "/"`. The workflow sets it (`/` for the custom domain, see §5).
 
 JS paths use `import.meta.env.BASE_URL`:
 - one helper `asset(path)` in `images.ts` returns `${BASE_URL}${path}`;
@@ -58,7 +58,7 @@ It reuses `cardImage` itself, so the list can't drift from what the game request
   2. `setup-node` with Node 22 and an npm cache;
   3. `npm ci`;
   4. `npm test`, `npm run lint`, `npm run check:content`;
-  5. `npm run build` with `PAGES_BASE`;
+  5. `npm run build` with `PAGES_BASE` (`/` for the custom domain, see §5);
   6. cache restore;
   7. `npm run fetch:cards -- dist`;
   8. `configure-pages`;
@@ -67,7 +67,18 @@ It reuses `cardImage` itself, so the list can't drift from what the game request
 
 Pinned major versions: checkout@v4, setup-node@v4, cache@v4, configure-pages@v5, upload-pages-artifact@v3, deploy-pages@v4.
 
-### 5. Enabling Pages
+### 5. Custom domain `arkham.artkost.dev`
+The account's user site (`jilizart.github.io`) has the custom domain `artkost.dev`. GitHub therefore redirects `jilizart.github.io/arkham-cards-game-app/` to `artkost.dev/arkham-cards-game-app/`, but Cloudflare serves `artkost.dev` (the portfolio) and answers every path itself. This was found after the first deploy.
+
+The repository's Pages site therefore gets its own custom domain, `arkham.artkost.dev`:
+- a `CNAME` record `arkham` → `jilizart.github.io` in Cloudflare, DNS only;
+- the domain set in the repository's Pages settings, then Enforce HTTPS.
+
+The site is served from its root, so the workflow builds with `PAGES_BASE: /`. The sub-path support (`asset()`, the guard test) stays, so a fork without a custom domain only changes that one value.
+
+*Alternatives:* proxying `/arkham-cards-game-app/*` from the portfolio's Cloudflare site (needs portfolio changes and fights GitHub's redirect), or deploying to Cloudflare Pages (different pipeline and secrets). The user chose the subdomain.
+
+### 6. Enabling Pages
 Pages must use "GitHub Actions" as its source. The README documents this (Settings → Pages → Source). The apply step does it with `gh api -X POST repos/JiLiZART/arkham-cards-game-app/pages -f build_type=workflow`, or `PUT` if a Pages site already exists, after asking the user, since it changes repository settings.
 
 ## Risks / Trade-offs

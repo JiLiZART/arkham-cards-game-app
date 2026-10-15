@@ -5,7 +5,7 @@ Publishes the game as a static site on GitHub Pages, so it can be played from a 
 ## ADDED Requirements
 
 ### Requirement: Automatic deploy to GitHub Pages
-Every push to `main` SHALL build the game and publish it to the repository's GitHub Pages site at `https://jilizart.github.io/arkham-cards-game-app/`. The deploy SHALL also be startable by hand from the Actions tab.
+Every push to `main` SHALL build the game and publish it to the repository's GitHub Pages site, served at its custom domain `https://arkham.artkost.dev`. (The account's user site has the custom domain `artkost.dev`, which Cloudflare serves as a portfolio, so the default `jilizart.github.io/<repo>/` address can't reach a project site.) The deploy SHALL also be startable by hand from the Actions tab.
 
 Before publishing, the deploy SHALL run the tests, the linter and the content check. If any of them, or the build, fails, nothing is published and the site keeps serving the previous version. Two deploys MUST NOT publish at the same time; a newer push replaces a deploy that hasn't started publishing yet.
 
@@ -21,18 +21,22 @@ Before publishing, the deploy SHALL run the tests, the linter and the content ch
 - **WHEN** the maintainer starts the deploy workflow from the Actions tab
 - **THEN** the current `main` is built and published the same way
 
-### Requirement: Works under the Pages sub-path
-The deployed game SHALL load and play correctly from `/arkham-cards-game-app/`. That covers:
+### Requirement: Works at the site root or under a sub-path
+The deployed game SHALL load and play correctly from `https://arkham.artkost.dev/`. That covers:
 - scripts and styles;
 - fonts and the table background;
 - icons, card backs and card scans;
 - the investigator portraits on the new-game screen.
 
-No request SHALL go to the site root (`https://jilizart.github.io/…` outside the sub-path). The dev server and local builds SHALL keep working at `/` without extra setup.
+The same build SHALL also work under a sub-path such as `/arkham-cards-game-app/` when it is built for one. Then no request goes outside that sub-path. The dev server and local builds SHALL keep working at `/` without extra setup.
 
 #### Scenario: Open the site
-- **WHEN** a player opens `https://jilizart.github.io/arkham-cards-game-app/` in a fresh browser
+- **WHEN** a player opens `https://arkham.artkost.dev/` in a fresh browser
 - **THEN** the menu shows with its fonts and investigator portraits, and no asset request fails
+
+#### Scenario: Sub-path build
+- **WHEN** the game is built with `PAGES_BASE=/arkham-cards-game-app/` and served there
+- **THEN** it loads and plays, and every request stays under `/arkham-cards-game-app/`
 
 #### Scenario: Local development unchanged
 - **WHEN** a developer runs `npm run dev`

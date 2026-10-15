@@ -1,4 +1,4 @@
-# Build the game and publish it to GitHub Pages (https://jilizart.github.io/arkham-cards-game-app/)
+# Build the game and publish it to GitHub Pages (https://arkham.artkost.dev, the repository's Pages custom domain)
 # on every push to main, or by hand from the Actions tab. Nothing is published unless every check passes.
 name: Deploy to GitHub Pages
 
@@ -36,10 +36,11 @@ jobs:
           npm run lint
           npm run check:content
 
-      - name: Build for the Pages sub-path
+      # the custom domain serves the game from its root; without one it would be /<repo>/ (set PAGES_BASE to that)
+      - name: Build
         run: npm run build
         env:
-          PAGES_BASE: /${{ github.event.repository.name }}/
+          PAGES_BASE: /
 
       # card scans are downloaded into the build (the CDN sends no CORS headers, WebGL needs them same-origin)
       - name: Restore card scans
