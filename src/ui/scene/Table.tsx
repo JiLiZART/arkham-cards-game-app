@@ -17,7 +17,11 @@ import { EventFx } from "./EventFx";
 import { camInput, MapCamera } from "./MapCamera";
 
 /** on-screen rect of a card on the map (set by the scene; the HTML hover overlay uses it) */
-export const mapProjector: { rect: (id: InstId) => Omit<ScreenRect, "id"> | null } = { rect: () => null };
+export const mapProjector: {
+  rect: (id: InstId) => Omit<ScreenRect, "id"> | null;
+  /** screen point of an investigator's portrait on the map */
+  mini: (inv: string) => { x: number; y: number } | null;
+} = { rect: () => null, mini: () => null };
 
 export function handVisible(privacy: boolean, players: number, viewer: string | null, revealedFor: string | null) {
   return !privacy || players <= 1 || (viewer !== null && revealedFor === viewer);
@@ -146,6 +150,13 @@ function SceneInner({ game }: { game: GameState }) {
     return [...L.cards.entries()].map(([id, p]) => ({ id, ...projectRect(p, camera, box) }));
   };
   const locationRects = () => cardRects().filter((r) => game.cards[r.id].zone === "location");
+  mapProjector.mini = (inv) => {
+    const m = L.minis.find((x) => x.inv === inv);
+    if (!m) return null;
+    const box = gl.domElement.getBoundingClientRect();
+    const v = new THREE.Vector3(m.pos[0], 0, m.pos[2]).project(camera);
+    return { x: box.left + ((v.x + 1) / 2) * box.width, y: box.top + ((1 - v.y) / 2) * box.height };
+  };
   mapProjector.rect = (id) => {
     const p = L.cards.get(id);
     return p ? projectRect(p, camera, gl.domElement.getBoundingClientRect()) : null;

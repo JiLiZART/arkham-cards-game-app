@@ -1,33 +1,33 @@
 ## Purpose
 
-Shows players what happens in the game as it happens — every investigator, enemy and game action as a styled, icon-rich sentence — in a live feed, a scrollable Journal and short centre-screen toasts.
+Shows players what happens in the game as it happens — every investigator, enemy and game action as a styled, icon-rich sentence — in a live feed, a scrollable Journal and short floats that rise from whoever acted, like the damage numbers.
 
 ## ADDED Requirements
 
 ### Requirement: Live action feed
 The UI SHALL show a feed of game events in a fixed column on the right side of the screen, below the chaos bag and the other investigators' tokens. It shows events for every investigator, every enemy and the game itself (phases, encounter draws, spawns, doom, act and agenda advances, resolutions).
 
-The live feed SHALL animate both ways:
-- **Appear:** a new entry slides up from below and fades in at the bottom of the list (about 300 ms). The entries above move up smoothly to make room.
-- **Fade from bottom to top:** older entries sit higher and grow fainter the higher they are (the newest is fully opaque, each older one more transparent). They leave at the top of the column, fading out while sliding upward, once they are older than about 12 seconds or beyond the newest 8.
+The live feed SHALL work like a shooter's kill feed:
+- **Appear at the top:** a new entry drops in at the top of the list, sliding down from above and fading in (about 300 ms). The entries below move down smoothly to make room.
+- **Fade toward the bottom:** older entries sit lower and grow fainter the lower they are (the newest, at the top, is fully opaque; each older one is more transparent). They leave at the bottom of the column, fading out while sliding down, once they are older than about 12 seconds or beyond the newest 8.
 
 An entry MUST NOT appear before the animation of its event has started, so the feed never runs ahead of the table. The feed SHALL be hidden behind the hand-off screen together with the hand.
 
 #### Scenario: A resource is taken
 - **WHEN** Roland takes the resource action
-- **THEN** a new entry fades in at the bottom of the feed reading "[Roland's portrait] Roland Banks took 1 [resource icon]"
+- **THEN** a new entry drops in at the top of the feed reading "[Roland's portrait] Roland Banks took 1 [resource icon]"
 
 #### Scenario: Enemy and game actions appear too
 - **WHEN** in the mythos phase doom is placed on the agenda and a Ghoul Minion spawns and attacks Daisy
-- **THEN** the feed shows, in order, the doom entry with the doom icon, the spawn entry with the Ghoul Minion's thumbnail, and the attack entry with damage and horror icons and Daisy's portrait
+- **THEN** the feed shows, newest at the top, the attack entry with damage and horror icons and Daisy's portrait, below it the spawn entry with the Ghoul Minion's thumbnail, and below that the doom entry with the doom icon
 
-#### Scenario: Entries appear at the bottom and fade out toward the top
+#### Scenario: Kill-feed order
 - **WHEN** three events happen one after another
-- **THEN** each new entry slides in and fades in at the bottom, the earlier ones move up and become fainter, and the oldest fades out upward at the top of the column
+- **THEN** each new entry drops in at the top, the earlier ones move down and become fainter, and the oldest fades out at the bottom of the column
 
 #### Scenario: The feed stays short
 - **WHEN** 15 events happen in a row
-- **THEN** at most the newest 8 entries are visible in the live feed, and older ones have faded out at the top
+- **THEN** at most the newest 8 entries are visible in the live feed, and older ones have faded out at the bottom
 
 ### Requirement: Styled entries
 Each entry SHALL be a translated sentence built from parts, never the engine's raw text. The parts are:
@@ -56,20 +56,37 @@ When an entry involves a specific card (drawn, played, committed, discarded, an 
 
 ### Requirement: Journal history
 The navbar SHALL have a **Journal** button in place of the Log button. Pressing it SHALL turn the feed column into the full history of the current scenario:
-- the same styled entries, oldest first;
-- scrollable, opened scrolled to the newest entry;
+- the same styled entries, newest at the top as in the live feed;
+- scrollable down to the start of the scenario, opened at the top;
 - no fading;
-- following new entries while scrolled to the bottom.
+- new entries keep appearing at the top while the player is scrolled to the top.
 
 Pressing Journal again, or pressing Escape, SHALL return to the live feed.
 
 #### Scenario: Look back
-- **WHEN** after three rounds the player presses Journal and scrolls up
+- **WHEN** after three rounds the player presses Journal and scrolls down
 - **THEN** they can read every entry since the scenario began, styled as in the feed, and pressing Journal again restores the live feed
 
-### Requirement: Centre-screen toasts
-As each new entry appears, the same styled sentence SHALL appear briefly in the middle of the screen. It is larger, floats upward and fades out over about 1.5 seconds, like the floating damage numbers. When several entries arrive together, their toasts SHALL be staggered and stacked so each stays readable. Toasts MUST NOT intercept the pointer. They replace the plain-text event banner.
+### Requirement: Action floats
+As each new entry appears, the same styled sentence SHALL float up from whoever did it and fade out over about 1.5 seconds, the way the floating damage numbers do:
+- an investigator's action starts at their portrait on the map;
+- an enemy's action starts at its card on the map;
+- an action with no actor on the map, or whose actor is off-screen (a phase change, doom, an encounter draw), starts at the centre of the screen.
 
-#### Scenario: Toast for an attack
-- **WHEN** a Ghoul Minion attacks Roland for 1 damage and 1 horror
-- **THEN** a toast with the Ghoul Minion thumbnail, Roland's portrait and the damage and horror icons floats up from the centre of the screen and fades, while the same entry appears in the feed
+A float SHALL follow its anchor while the camera pans or zooms. When several entries arrive together, their floats SHALL be staggered and stacked so each stays readable. Floats MUST NOT intercept the pointer. They replace the plain-text event banner.
+
+#### Scenario: Float from the investigator
+- **WHEN** Roland, whose portrait is on the Study, takes the resource action
+- **THEN** "[portrait] Roland Banks took 1 [resource icon]" rises from Roland's portrait on the Study and fades, while the same entry drops into the feed
+
+#### Scenario: Float from an enemy
+- **WHEN** a Ghoul Minion on the Cellar attacks Roland for 1 damage and 1 horror
+- **THEN** the styled attack entry rises from the Ghoul Minion's card and fades
+
+#### Scenario: No actor on screen
+- **WHEN** the mythos phase places 1 doom on the agenda
+- **THEN** the doom entry rises from the centre of the screen and fades
+
+#### Scenario: Burst
+- **WHEN** a scenario starts and many events arrive at once
+- **THEN** only the last three float, staggered, and the screen isn't flooded

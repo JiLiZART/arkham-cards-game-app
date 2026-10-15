@@ -5,7 +5,7 @@ export default {
   fns: {
     gainClues(g: G, ctx: EffCtx) {
       inv(g, ctx.you!).clues += 2;
-      emit(g, "clues", `${inv(g, ctx.you!).name} gains 2 clues`, { inv: ctx.you! });
+      emit(g, "clues", `${inv(g, ctx.you!).name} gains 2 clues`, { inv: ctx.you!, data: { n: 2 } });
     },
   },
 } satisfies CardScript;

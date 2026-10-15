@@ -35,8 +35,31 @@ export function fanLayout(n: number, width: number, cardW = FAN_CARD_W): FanSlot
   });
 }
 
-/** hover zoom for a hand card (1.6×, about 480×672 px), or as much as fits the window height */
-export const HAND_HOVER_ZOOM = 1.6;
+/** hover zoom for a hand card (1.28×, about 384×538 px), or as much as fits the window height */
+export const HAND_HOVER_ZOOM = 1.28;
 export const hoverScale = (viewportH: number) => Math.min(HAND_HOVER_ZOOM, (viewportH - 16 - 12) / FAN_CARD_H);
 /** lift that puts a hovered card's bottom 12 px above the screen edge */
 export const HOVER_LIFT = -(FAN_CARD_H - FAN_REST_VISIBLE + 12);
+
+/** how far (px) the Dock magnification reaches either side of the pointer, from the gap between card centres */
+export const dockRadius = (step: number) => Math.min(1.5 * FAN_CARD_W, Math.max(0.6 * FAN_CARD_W, 2.2 * step));
+
+/** macOS Dock falloff: 1 with the pointer on the card centre, easing to 0 at `radius` */
+export function dockWeight(cardX: number, pointerX: number, radius: number): number {
+  const d = Math.abs(cardX - pointerX);
+  return d >= radius ? 0 : Math.cos(((Math.PI / 2) * d) / radius) ** 2;
+}
+
+/** a card's transform at magnification weight w: from its resting arc place (w = 0) to unrotated, lifted and ×k (w = 1) */
+export function dockTransform(slot: FanSlot, w: number, k: number, raise = 0): string {
+  const y = (slot.y - raise) * (1 - w) + HOVER_LIFT * w;
+  return `translateY(${y}px) rotate(${slot.rotate * (1 - w)}deg) scale(${1 + (k - 1) * w})`;
+}
+
+/** screen rect of a card at weight w (ignoring its leftover tilt), for the details column; fanLeft is the fan's left edge */
+export function dockRect(slot: FanSlot, w: number, k: number, raise: number, fanLeft: number, vh: number) {
+  const s = 1 + (k - 1) * w;
+  const bottom = vh + (FAN_CARD_H - FAN_REST_VISIBLE) + (slot.y - raise) * (1 - w) + HOVER_LIFT * w;
+  const cx = fanLeft + slot.x;
+  return { x0: cx - (FAN_CARD_W * s) / 2, x1: cx + (FAN_CARD_W * s) / 2, y0: bottom - FAN_CARD_H * s, y1: bottom };
+}

@@ -7,6 +7,7 @@ import { placeHover } from "../hover";
 import { mapProjector } from "../scene/Table";
 import { TokenBadges } from "../TokenBadges";
 import { useView } from "../view";
+import { LocationDetails } from "./HandDetails";
 import { formatText } from "./Hud";
 
 /** height reserved for the details panel under the enlarged card */
@@ -35,8 +36,9 @@ export function HoverCard() {
   const locale = useGame((s) => s.locale);
   if (!hovered || blocked || !game.cards[hovered]) return null;
   const inst = game.cards[hovered];
-  // hand cards have their own hover (the fan raises and enlarges them); locations are read on the map itself
-  if (inst.zone === "hand" || inst.zone === "location") return null;
+  // hand cards have their own hover (the fan raises and enlarges them); locations get a details column, no copy
+  if (inst.zone === "hand") return null;
+  if (inst.zone === "location") return <LocationDetails id={hovered} />;
   const rect = hoverRect ?? mapProjector.rect(hovered);
   if (!rect) return null;
   const box = placeHover(rect, DETAILS_H, innerWidth, innerHeight);

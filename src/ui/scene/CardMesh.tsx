@@ -8,9 +8,10 @@ import { db, useGame } from "../context";
 import { CARD_H, CARD_W, type Placement } from "../layout";
 import { Portrait } from "../Portrait";
 import { TokenBadges } from "../TokenBadges";
+import { TokenPile } from "../TokenPile";
+import { cardFace, cardFrame } from "./cardShape";
 import { useCardTexture } from "./textures";
 
-const edge = new THREE.MeshStandardMaterial({ color: "#d8cfb5", roughness: 0.9 });
 const glow = new THREE.MeshBasicMaterial({ color: "#ffcf5a", transparent: true, opacity: 0.85 });
 const hoverGlow = new THREE.MeshBasicMaterial({ color: "#8fd3ff", transparent: true, opacity: 0.9 });
 
@@ -30,6 +31,7 @@ export interface CardMeshProps {
 export function CardMesh({ inst, place, highlighted, hovered, exhausted, onClick, onHover }: CardMeshProps) {
   const locale = useGame((s) => s.locale);
   const card = db.cards[inst.code];
+  const isLocation = card.type === "location" && inst.zone === "location";
   const tr = cardText(db, inst.code, locale);
   const w = place.landscape ? CARD_H : CARD_W;
   const h = place.landscape ? CARD_W : CARD_H;
@@ -37,11 +39,10 @@ export function CardMesh({ inst, place, highlighted, hovered, exhausted, onClick
   const showFront = card.type === "location" ? inst.revealed : place.faceUp;
   const front = useCardTexture(card, "front", tr.name, tr.text, place.landscape);
   const back = useCardTexture(card, "back", tr.backName ?? tr.name, tr.backText ?? "", place.landscape);
-  const geometry = useMemo(() => new THREE.BoxGeometry(w, h, 0.012), [w, h]);
-  const materials = useMemo(
-    () => [edge, edge, edge, edge, new THREE.MeshStandardMaterial({ map: front, roughness: 0.75 }), new THREE.MeshStandardMaterial({ map: back, roughness: 0.75 })],
-    [front, back],
-  );
+  // rounded like the printed cards: a face on each side (the back faces away until the card flips)
+  const face = cardFace(w, h);
+  const frontMat = useMemo(() => new THREE.MeshStandardMaterial({ map: front, roughness: 0.75 }), [front]);
+  const backMat = useMemo(() => new THREE.MeshStandardMaterial({ map: back, roughness: 0.75 }), [back]);
   const group = useRef<THREE.Group>(null);
   const flip = useRef<THREE.Group>(null);
   const started = useRef(false);
@@ -69,23 +70,23 @@ export function CardMesh({ inst, place, highlighted, hovered, exhausted, onClick
   return (
     <group ref={group}>
       <group ref={flip}>
-        <mesh
-          geometry={geometry}
-          material={materials}
-          castShadow
-          onClick={onClick}
-          onPointerOver={(e) => {
-            e.stopPropagation();
-            onHover?.(true);
-          }}
-          onPointerOut={() => onHover?.(false)}
-        />
+        {[0, Math.PI].map((ry) => (
+          <mesh
+            key={ry}
+            geometry={face}
+            material={ry ? backMat : frontMat}
+            position={[0, 0, ry ? -0.006 : 0.006]}
+            rotation={[0, ry, 0]}
+            onClick={onClick}
+            onPointerOver={(e) => {
+              e.stopPropagation();
+              onHover?.(true);
+            }}
+            onPointerOut={() => onHover?.(false)}
+          />
+        ))}
       </group>
-      {(highlighted || hovered) && (
-        <mesh position={[0, 0, -0.012]} material={hovered ? hoverGlow : glow}>
-          <planeGeometry args={[w + 0.12, h + 0.12]} />
-        </mesh>
-      )}
+      {(highlighted || hovered) && <mesh geometry={cardFrame(w, h)} position={[0, 0, 0.001]} material={hovered ? hoverGlow : glow} />}
       {place.badge && (
         <Html position={[-w / 2 + 0.1, h / 2 - 0.1, 0.03]} zIndexRange={[21, 0]} pointerEvents="none">
           <div className="engaged-badge">
@@ -94,8 +95,17 @@ export function CardMesh({ inst, place, highlighted, hovered, exhausted, onClick
         </Html>
       )}
       <Html position={[w / 2 - 0.05, h / 2 - 0.05, 0.02]} center zIndexRange={[20, 0]} pointerEvents="none">
-        <TokenBadges inst={inst} />
+        <TokenBadges inst={inst} skip={isLocation ? ["clues"] : []} />
       </Html>
+      {/* clues on a location: a pile of clue tokens with the total, like the stat bar */}
+      {isLocation && inst.clues > 0 && (
+        <Html position={[0, -h * 0.12, 0.03]} center zIndexRange={[20, 0]} pointerEvents="none">
+          <div className="loc-clues" title={`${t(db, locale, "stat.clues")} ${inst.clues}`}>
+            <TokenPile kind="clue" value={inst.clues} size={34} />
+            <b>{inst.clues}</b>
+          </div>
+        </Html>
+      )}
     </group>
   );
 }

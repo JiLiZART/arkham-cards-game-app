@@ -189,7 +189,7 @@ export const windowHandler: Handler<"Window"> = (g, step) => {
     ...mine.map((r) => ({ id: `${r.card}:${r.index}`, label: r.ability.label ?? `${def(g, r.card).name}${r.ability.fromHand ? " (play)" : ""}`, card: r.card, value: `${r.card}:${r.index}` })),
     { id: "pass", label: "Pass", value: "pass" },
   ];
-  const pick = ask<string>(g, step, who, "reaction", `${invName(g, who)}: use a reaction? (${step.trigger})`, opts);
+  const pick = ask<string>(g, step, who, "reaction", `${invName(g, who)}: use a reaction? (${step.trigger})`, opts, { key: "reaction" });
   if (pick === undefined) return;
   if (pick === "pass") {
     push(g, { ...step, choice: undefined, offered: [...offered, ...mine.map((r) => `${r.card}:${r.index}`)] });
@@ -217,7 +217,7 @@ export const useAbilityHandler: Handler<"UseAbility"> = (g, step) => {
     if (chosen.length < need) {
       const opts = inv(g, step.inv).hand.filter((h) => h !== step.card && !chosen.includes(h));
       const pick = ask<InstId>(g, step, step.inv, "generic", `Choose a card to discard (cost of ${def(g, step.card).name})`,
-        opts.map((h) => ({ id: h, label: def(g, h).name, card: h, value: h })));
+        opts.map((h) => ({ id: h, label: def(g, h).name, card: h, value: h })), { key: "discardForCost", vars: { card: step.card } });
       if (pick === undefined) return;
       push(g, { ...step, choice: undefined, discards: [...chosen, pick] });
       return;
@@ -341,7 +341,7 @@ export const slotCheckHandler: Handler<"SlotCheck"> = (g, step) => {
   if (!slot) return;
   const victims = controlled(g, step.inv).filter((c) => def(g, c.id).slots.includes(slot));
   const pick = ask<InstId>(g, step, step.inv, "generic", `Not enough ${slot} slots: choose an asset to discard`,
-    victims.map((v) => ({ id: v.id, label: def(g, v.id).name, card: v.id, value: v.id })), { auto: true });
+    victims.map((v) => ({ id: v.id, label: def(g, v.id).name, card: v.id, value: v.id })), { auto: true, key: "slots", vars: { slot } });
   if (pick === undefined) return;
   discard(g, pick);
   push(g, { ...step, choice: undefined });

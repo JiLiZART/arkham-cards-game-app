@@ -10,7 +10,7 @@
 ## Goals / Non-Goals
 
 **Goals:**
-- One pure function turns an event into styled parts. The feed, the Journal and the toasts all render those parts the same way.
+- One pure function turns an event into styled parts. The feed, the Journal, the action floats and the prompt banner all render those parts the same way.
 - The feed never shows an event before the table animates it.
 - Every event type has a template (enforced by a test), with a styled generic fallback.
 
@@ -66,25 +66,29 @@ export function feedEntry(e: GameEvent, game: GameState, locale: string): { part
 
   `HUD_INSETS.right` becomes 320.
 - **Live mode:**
-  - It renders the newest ≤ 8 shown entries, keyed by log index.
-  - **Appear:** a CSS `@keyframes feed-in` animation, from `translateY(16px); opacity: 0` to rest, over 300 ms. Entries above move up smoothly with a FLIP: measure each item's previous `offsetTop` in a layout effect and transition the difference.
-  - **Fade from bottom to top:** opacity by position from the bottom, `1 − 0.11·k` for k = 0..7.
-  - **Leaving:** an entry whose arrival time (kept in a ref keyed by log index) is more than 12 s ago, or which is the 9th or older, gets `.leaving` (`translateY(-14px); opacity: 0` over 400 ms) and is dropped after the transition.
+  - Kill-feed order: it renders the newest ≤ 8 shown entries newest-first (top to bottom), keyed by log index.
+  - **Appear at the top:** a CSS `@keyframes feed-in` animation, from `translateY(-16px); opacity: 0` to rest, over 300 ms. Entries below move down smoothly with a FLIP: measure each item's previous `offsetTop` in a layout effect and transition the difference.
+  - **Fade toward the bottom:** opacity by position from the top, `1 − 0.11·k` for k = 0..7.
+  - **Leaving:** an entry whose arrival time (kept in a ref keyed by log index) is more than 12 s ago, or which is the 9th or older, gets `.leaving` (`translateY(14px); opacity: 0` over 400 ms) and is dropped after the transition.
 - **Journal mode:**
-  - It is the same component with `mode = "journal"`: every shown entry, oldest first, in a scroll container with no fading.
-  - It opens scrolled to the bottom and keeps following new entries while the user is at the bottom.
+  - It is the same component with `mode = "journal"`: every shown entry, newest first, in a scroll container with no fading.
+  - It opens at the top; new entries keep appearing there, and the scroll position is kept while the user is reading further down.
   - Escape returns to live mode.
 - **Navbar:** the Log button becomes **Journal** (`hud.journal`) and toggles `useView.feedMode`. `LogPanel` is removed; the raw text stays in the Debug panel's state dump.
 - **Thumbnails:** a `card` part is a 28×39 `CardFace` button with the card name.
   - Click → `setModal({ card })`; hover → `setHover(id, rect)`.
   - A card no longer in the game (removed) is shown without the click.
 
-### 5. Centre-screen toasts (`hud/Toasts.tsx`)
-- When the shown count grows, the new entries' parts go into a toast queue.
-- Toasts are released 350 ms apart. Each lives 1.5 s and is positioned at about 38% of the screen height.
-  - Animation: `toast-rise`, from `translateY(0) scale(.9); opacity: 0` to `translateY(-60px); opacity: 0` with a fully visible middle.
-  - At most three are visible at once, stacked 44 px apart.
-- **Burst cap:** if more than 6 arrive at once (for example the start of a scenario), only the last 3 toast.
+### 5. Action floats (`hud/Floats.tsx`), anchored like the damage numbers
+- When the shown count grows, the new entries' parts go into a float queue, each with an anchor:
+  - the acting investigator's marker (`minis`), when the event's `inv` is on the map;
+  - else the event's card, when it is a map card (an enemy or location);
+  - else the screen centre.
+- Floats are released 350 ms apart and each lives 1.5 s.
+- **Position:** every frame, from `mapProjector`, the same projection the hover overlay uses (extended with `projectMini(inv)`), re-read on `camTick`. That way the float follows the camera, like `FloatingNumber`, which rises in world space. An anchor that projects off-screen falls back to the centre.
+- **Animation:** `float-rise`, rising 70 px with opacity 0 → 1 → 0 and a slight scale-in. Floats rising from the same anchor are offset 40 px so they don't overlap; at most three are visible at once.
+- The floats are DOM, not drei `Html`, so their text stays sharp and they never take the pointer. The existing WebGL `FloatingNumber` damage numbers stay as they are.
+- **Burst cap:** if more than 6 arrive at once (for example the start of a scenario), only the last 3 float.
 - `pointer-events: none`, z-index below modals.
 - The plain-text banner in `EventPlayer` is removed. The token draw and the test breakdown keep their own overlays.
 
@@ -92,10 +96,35 @@ export function feedEntry(e: GameEvent, game: GameState, locale: string): { part
 - `feed.*` templates go in `en/ui.json` and hand-written `ru/ui.json`: about 30 types plus `feed.outcome.ok` / `feed.outcome.fail`.
 - The test from Decision 2 checks that every English template has a Russian counterpart with the same placeholders.
 
+### 7. Prompt banner
+- **Engine:** `ask()` gets an optional `{ key, vars }`, stored on `PendingChoice` as `promptKey` and `promptVars`. All 23 call sites pass one, for example:
+  - `turn {inv, actions}`, `commit {inv, skill}`, `assign {inv, kind, left}`, `mulligan {inv, n}`, `discardDown {inv, n}`;
+  - `chooseEnemy`, `chooseLocation {purpose}`, `chooseInvestigator`, `nextTurn`, `chooseSkill`, `chooseOne`, `search {top}`, `spawnAt {card}`, …
+
+  The English text is kept as the fallback.
+- **UI:** `PromptBanner` renders through the same template parser as the feed (`prompt.<key>` templates in `ui.json`), so placeholders like `{inv}`, `{card}`, `{n:action}` and `{skill}` produce styled parts. The investigator part always leads (portrait plus class-coloured name).
+- **Look:** 22 px Alegreya with bold numbers, `.card-name` type for card names, a gold border, and more padding.
+- **Test:** every `promptKey` seen in bot playthroughs has `en` and `ru` templates with the same placeholders.
+
+### 8. Rounded map cards and thinner frames
+- `CardMesh` replaces the `BoxGeometry` with a rounded-rectangle `ShapeGeometry`, extruded to the same 0.012 depth: corner radius 4.5% of the width, which matches the printed corners. The UVs are mapped to the card's bounding box so the scan textures still fit.
+- The glow plane becomes a rounded frame: a ring shape (outer rounded rectangle minus inner) 0.03 units wide, half the current 0.06 per side, with the same corner radius plus the frame width.
+- Both geometries are memoised per (w, h).
+
+### 9. Hand card details
+- A pure `cardDetails(def, text, locale)` returns rows from the card data: name, subname, faction, type, `xp`, `cost`, traits, `slots`, `icons`, health and sanity, `uses`, and text. Missing fields are skipped. It is unit-tested with Machete (01020), a skill and an ally.
+- **`HandDetails`** is a fixed DOM column (`pointer-events: none`, about 280 px wide, 17 px Alegreya, with the name in card-name type). It renders the rows with `Icon` and `Glyph` (class, skills, slots, the resource icon for cost, XP as filled and empty pips) and `formatText` for the text.
+- **Position:**
+  - `HandFan` already knows the hovered or focused card (from `setHovered` and focus). On hover it measures the raised card's `getBoundingClientRect()` after the transition (`transitionend`, or about 200 ms) and places the column 12 px to its right, top-aligned.
+  - If `rect.right + 12 + 280 > innerWidth − 8`, the column goes to the left of the card instead.
+  - The vertical position is clamped to the window.
+- A pure `placeDetails(rect, width, viewport)` does this placement, with unit tests for the right side, the left fallback and the clamp.
+- It hides while dragging a card and behind the hand-off screen.
+
 ## Risks / Trade-offs
 
 - [A long Journal (hundreds of entries) re-renders a lot] → Parts are memoised by log index, since log entries never change once appended. Only the shown slice re-renders.
-- [Toasts in fast bot play] → Bot play and `skipEvents` advance the cursor in one jump; the burst cap shows only the last three.
+- [Floats in fast bot play] → Bot play and `skipEvents` advance the cursor in one jump; the burst cap shows only the last three.
 - [The extra event data grows saves slightly] → It is small numbers on log entries, which saves already store.
 - [Feed text overlapping the HUD on small windows] → The column sizes to the space left; below 800 px tall, the live feed shows at most 5 entries.
 

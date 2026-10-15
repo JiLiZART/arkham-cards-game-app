@@ -23,3 +23,12 @@ The text stays as an English fallback. Adding data MUST NOT change game rules, t
 #### Scenario: Replays unchanged
 - **WHEN** a saved action log from before this change is replayed
 - **THEN** the resulting game state matches the original except for the extra event data
+
+## ADDED Requirements
+
+### Requirement: Translatable prompts
+Every pending choice SHALL carry a prompt key and the values it needs (for example `turn` with `{ inv, actions }`, `commit` with `{ inv, skill }`, `assign` with `{ inv, kind, left }`), next to its English prompt text. The key and values MUST NOT affect rules or replays.
+
+#### Scenario: Turn prompt
+- **WHEN** Roland must choose an action with 3 actions left
+- **THEN** the pending choice has prompt key `turn` with `inv` Roland and `actions` 3, and English prompt text "Roland Banks: choose an action (3 left)"

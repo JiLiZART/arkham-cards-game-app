@@ -51,7 +51,7 @@ export const nextTurnHandler: Handler<"NextTurn"> = (g, step) => {
   const left = activeInvs(g).filter((i) => !inv(g, i).turnDone);
   if (left.length === 0) return;
   const who = ask<InvId>(g, step, g.s.lead, "generic", "Who takes the next turn?",
-    left.map((i) => ({ id: i, label: invName(g, i), card: inv(g, i).cardId, value: i })), { auto: true });
+    left.map((i) => ({ id: i, label: invName(g, i), card: inv(g, i).cardId, value: i })), { auto: true, key: "nextTurn" });
   if (who === undefined) return;
   const me = inv(g, who);
   g.s.active = who;
@@ -161,7 +161,7 @@ export const turnHandler: Handler<"Turn"> = (g, step) => {
   const me = inv(g, step.inv);
   if (me.status !== "playing" || g.s.phase === "ended" || me.turnDone) return;
   const opts = legalTurnActions(g, step.inv);
-  const a = ask<TurnAction>(g, step, step.inv, "turn", `${me.name}: choose an action (${me.actionsLeft} left)`, opts);
+  const a = ask<TurnAction>(g, step, step.inv, "turn", `${me.name}: choose an action (${me.actionsLeft} left)`, opts, { key: "turn", vars: { actions: me.actionsLeft } });
   if (a === undefined) return;
   if (a.kind === "endTurn") {
     push(g, { t: "EndTurn", inv: step.inv });
@@ -221,7 +221,7 @@ export const performActionHandler: Handler<"PerformAction"> = (g, step) => {
       break;
     case "resource":
       me.resources++;
-      emit(g, "resource", `${me.name} gains 1 resource`, { inv: i });
+      emit(g, "resource", `${me.name} gains 1 resource`, { inv: i, data: { n: 1 } });
       break;
     case "play":
       steps.push({ t: "PlayCard", inv: i, card: a.card });

@@ -19,7 +19,7 @@ export default {
       const yes = ask<boolean>(g, step!, g.s.lead, "generic", `The Barrier: spend ${need} clues (investigators in the Hallway) to advance?`, [
         { id: "yes", label: `Spend ${need} clues and advance`, value: true },
         { id: "no", label: "Not now", value: false },
-      ]);
+      ], { key: "barrier", vars: { n: need } });
       if (!yes) return;
       let n = need;
       for (const i of there) {

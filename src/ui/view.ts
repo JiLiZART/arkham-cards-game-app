@@ -20,8 +20,11 @@ export interface ViewState {
   setHover(id: InstId | null, rect?: DOMRect | null): void;
   menu: { x: number; y: number; options: ChoiceOption[] } | null;
   dragging: InstId | null;
-  panel: "none" | "log" | "debug";
+  panel: "none" | "debug";
   moveDrag: MoveDrag | null;
+  /** the right-hand feed: live kill feed or the full Journal */
+  feedMode: "live" | "journal";
+  setFeedMode(m: "live" | "journal"): void;
   /** a request from the HUD buttons to move the map camera */
   camCmd: { kind: "focus" | "fit"; n: number } | null;
   cameraCommand(kind: "focus" | "fit"): void;
@@ -36,7 +39,7 @@ export interface ViewState {
   openMenu(x: number, y: number, options: ChoiceOption[]): void;
   closeMenu(): void;
   setDragging(id: InstId | null): void;
-  toggle(panel: "log" | "debug"): void;
+  toggle(panel: "debug"): void;
 }
 
 export const useView = create<ViewState>((set, get) => ({
@@ -47,6 +50,8 @@ export const useView = create<ViewState>((set, get) => ({
   dragging: null,
   panel: "none",
   moveDrag: null,
+  feedMode: "live",
+  setFeedMode: (feedMode) => set({ feedMode }),
   camCmd: null,
   cameraCommand: (kind) => set({ camCmd: { kind, n: (get().camCmd?.n ?? 0) + 1 } }),
   camTick: 0,

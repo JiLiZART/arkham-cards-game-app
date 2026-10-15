@@ -5,15 +5,15 @@ import { maxHealth, maxSanity, skillValue } from "../../engine/core";
 import type { ChoiceOption, GameState, InvId } from "../../engine/types";
 import { db, gameStore, useGame } from "../context";
 import { Glyph, Icon, Stat } from "../Icon";
-import { isIcon, type IconName } from "../icons";
+import { isIcon } from "../icons";
 import { optionHome } from "../optionHome";
 import { Portrait } from "../Portrait";
+import { TokenPile } from "../TokenPile";
 import { viewerOf } from "../store";
 import { useView } from "../view";
 import { formatText } from "./Hud";
 import { OptionButtons, useCardOptions } from "./Modals";
 import { STAT_BAR_W } from "./fan";
-import { stackTokens } from "./tokenStack";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
 
@@ -51,31 +51,13 @@ export function invNumbers(game: GameState, i: InvId) {
   };
 }
 
-const STACKS: Record<"resource" | "clue", { denominations: number[]; art: Record<number, IconName> }> = {
-  resource: { denominations: [5, 3, 1], art: { 5: "resource-5", 3: "resource-3", 1: "resource" } },
-  clue: { denominations: [3, 1], art: { 3: "clue-3", 1: "clue" } },
-};
-
 /** resources or clues as a pile of physical tokens (fewest tokens), followed by the total */
 export function TokenStack({ kind, value, size = 40 }: { kind: "resource" | "clue"; value: number; size?: number }) {
   const flash = useFlash(value);
-  const { denominations, art } = STACKS[kind];
-  const tokens = stackTokens(value, denominations);
   const tip = `${tr(kind === "resource" ? "stat.resources" : "stat.clues")} ${value}`;
   return (
     <div className={`token-stack ${flash ? "flash" : ""}`} title={tip} aria-label={tip}>
-      <div className="token-pile" style={{ width: size + Math.max(0, tokens.length - 1) * size * 0.45, height: size }}>
-        {tokens.length === 0 && (
-          <span className="token-empty">
-            <Icon name={art[1]} size={size} title={tip} />
-          </span>
-        )}
-        {tokens.map((d, k) => (
-          <span key={k} style={{ left: k * size * 0.45, zIndex: tokens.length - k }}>
-            <Icon name={art[d]} size={size} title={tip} />
-          </span>
-        ))}
-      </div>
+      <TokenPile kind={kind} value={value} size={size} title={tip} />
       <b>{value}</b>
     </div>
   );

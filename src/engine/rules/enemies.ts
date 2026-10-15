@@ -47,14 +47,14 @@ export const spawnHandler: Handler<"Spawn"> = (g, step) => {
       const empty = locations(g).filter((l) => invsAt(g, l.id).length === 0 && !enemies(g).some((e) => e.location === l.id));
       if (empty.length) {
         const pick = ask<InstId>(g, step, g.s.lead, "target", `Choose an empty location to spawn ${d.name}`,
-          empty.map((l) => ({ id: l.id, label: def(g, l.id).name, card: l.id, value: l.id })), { auto: true });
+          empty.map((l) => ({ id: l.id, label: def(g, l.id).name, card: l.id, value: l.id })), { auto: true, key: "spawnAt", vars: { card: step.enemy } });
         if (pick === undefined) return;
         at = pick;
       }
     } else if (d.spawn === "Engaged with Prey") {
       const cands = preyCandidates(g, step.enemy, activeInvs(g));
       const pick = ask<InvId>(g, step, g.s.lead, "target", `${d.name} spawns engaged with:`,
-        cands.map((i) => ({ id: i, label: invName(g, i), card: inv(g, i).cardId, value: i })), { auto: true });
+        cands.map((i) => ({ id: i, label: invName(g, i), card: inv(g, i).cardId, value: i })), { auto: true, key: "spawnEngaged", vars: { card: step.enemy } });
       if (pick === undefined) return;
       engage = pick;
       at = inv(g, pick).location;
@@ -110,7 +110,7 @@ export const resolveAttackHandler: Handler<"ResolveAttack"> = (g, step) => {
   delete g.s.flags[`attackBonus:${step.key}`];
   const damage = enemyStat(g, step.enemy, "damage") + bonus;
   const horror = enemyStat(g, step.enemy, "horror") + bonus;
-  emit(g, "attack", `${def(g, step.enemy).name} attacks ${invName(g, step.inv)} (${damage} damage, ${horror} horror)`, { inv: step.inv, card: step.enemy });
+  emit(g, "attack", `${def(g, step.enemy).name} attacks ${invName(g, step.inv)} (${damage} damage, ${horror} horror)`, { inv: step.inv, card: step.enemy, data: { damage, horror } });
   push(
     g,
     { t: "AssignDamage", inv: step.inv, damage, horror, direct: false, source: step.enemy, enemy: step.enemy },
@@ -147,7 +147,7 @@ export const defeatEnemyHandler: Handler<"DefeatEnemy"> = (g, step) => {
     return;
   }
   const d = def(g, step.enemy);
-  emit(g, "enemyDefeated", `${d.name} is defeated${step.by ? ` by ${invName(g, step.by)}` : ""}`, { card: step.enemy, inv: step.by });
+  emit(g, "enemyDefeated", `${d.name} is defeated${step.by ? ` by ${invName(g, step.by)}` : ""}`, { card: step.enemy, inv: step.by, data: { by: step.by ?? null } });
   if (d.victory !== undefined) moveCard(g, step.enemy, "victory");
   else moveCard(g, step.enemy, e.owner ? "discard" : "encounterDiscard");
   g.s.flags[`defeated:${e.code}`] = true;
@@ -180,7 +180,7 @@ export const hunterMovesHandler: Handler<"HunterMoves"> = (g, step) => {
     if (toward.length) options = toward;
   }
   const to = ask<InstId>(g, step, g.s.lead, "target", `Where does ${def(g, e.id).name} move?`,
-    options.map((l) => ({ id: l, label: def(g, l).name, card: l, value: l })), { auto: true });
+    options.map((l) => ({ id: l, label: def(g, l).name, card: l, value: l })), { auto: true, key: "enemyMoveWhere", vars: { card: e.id } });
   if (to === undefined) return;
   e.location = to;
   emit(g, "enemyMove", `${def(g, e.id).name} moves to ${def(g, to).name}`, { card: e.id, data: { to } });
@@ -215,7 +215,7 @@ export const enemyEngageHandler: Handler<"EnemyEngage"> = (g, step) => {
   const e = card(g, step.enemy);
   e.engagedWith = step.inv;
   e.location = inv(g, step.inv).location;
-  emit(g, "engage", `${invName(g, step.inv)} engages ${def(g, step.enemy).name}`, { inv: step.inv, card: step.enemy });
+  emit(g, "engage", `${invName(g, step.inv)} engages ${def(g, step.enemy).name}`, { inv: step.inv, card: step.enemy, data: { byInv: true } });
   push(g, win("enemyEngages", { inv: step.inv, enemy: step.enemy }));
 };
 

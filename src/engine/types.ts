@@ -146,6 +146,9 @@ export interface PendingChoice {
   inv: InvId;
   kind: "turn" | "target" | "commit" | "reaction" | "generic" | "mulligan" | "assign" | "order";
   prompt: string;
+  /** translation key and values for the prompt (the English text above is the fallback); ids in the values are investigators or cards */
+  promptKey?: string;
+  promptVars?: Record<string, string | number | null>;
   options: ChoiceOption[];
   step: Step;
 }

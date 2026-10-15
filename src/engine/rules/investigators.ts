@@ -16,7 +16,7 @@ export const drawHandler: Handler<"Draw"> = (g, step) => {
     // empty deck: shuffle discard into deck, take 1 horror
     me.deck.push(...me.discard.splice(0));
     shuffle(g.s, me.deck);
-    emit(g, "reshuffle", `${me.name} shuffles their discard pile into their deck and takes 1 horror`, { inv: step.inv });
+    emit(g, "reshuffle", `${me.name} shuffles their discard pile into their deck and takes 1 horror`, { inv: step.inv, data: { horror: 1 } });
     push(g, { t: "AssignDamage", inv: step.inv, damage: 0, horror: 1, direct: true, source: null }, step);
     return;
   }
@@ -75,7 +75,7 @@ export const assignDamageHandler: Handler<"AssignDamage"> = (g, step) => {
       ...assets.map((a) => ({ id: a.id, label: def(g, a.id).name, card: a.id, value: a.id })),
     ];
     const next: Step = { ...step, damage, horror, assigned, choice: undefined };
-    ask(g, next, step.inv, "assign", `${me.name}: assign 1 ${label} (${kind === 0 ? damage : horror} left)`, opts);
+    ask(g, next, step.inv, "assign", `${me.name}: assign 1 ${label} (${kind === 0 ? damage : horror} left)`, opts, { key: kind === 0 ? "assignDamage" : "assignHorror", vars: { left: kind === 0 ? damage : horror } });
     return;
   }
   // apply
@@ -93,7 +93,7 @@ export const assignDamageHandler: Handler<"AssignDamage"> = (g, step) => {
       c.damage += d;
       c.horror += h;
       if (d > 0 || h > 0) touchedAssets.push(target);
-      emit(g, "assetDamage", `${def(g, target).name} takes ${d} damage, ${h} horror`, { card: target, inv: step.inv });
+      emit(g, "assetDamage", `${def(g, target).name} takes ${d} damage, ${h} horror`, { card: target, inv: step.inv, data: { damage: d, horror: h } });
     }
   }
   if (invDamage || invHorror) {
@@ -145,7 +145,7 @@ export const defeatedHandler: Handler<"Defeated"> = (g, step) => {
     if (step.by === "damage") me.physicalTrauma++;
     else me.mentalTrauma++;
   }
-  emit(g, step.by === "resign" ? "resign" : "defeated", step.by === "resign" ? `${me.name} resigns` : `${me.name} is defeated (${step.by === "damage" ? "physical" : "mental"} trauma)`, { inv: step.inv });
+  emit(g, step.by === "resign" ? "resign" : "defeated", step.by === "resign" ? `${me.name} resigns` : `${me.name} is defeated (${step.by === "damage" ? "physical" : "mental"} trauma)`, { inv: step.inv, data: { by: step.by } });
   // clues drop at location
   if (me.location && me.clues) card(g, me.location).clues += me.clues;
   me.clues = 0;
@@ -201,7 +201,7 @@ export function revealLocation(g: G, loc: InstId) {
   c.revealed = true;
   const d = def(g, loc);
   c.clues += (d.clues ?? 0) * (d.cluesPerInvestigator ? playerCount(g) : 1);
-  emit(g, "reveal", `${d.name} is revealed (${c.clues} clues)`, { card: loc });
+  emit(g, "reveal", `${d.name} is revealed (${c.clues} clues)`, { card: loc, data: { n: c.clues } });
 }
 
 /** ready unengaged non-aloof enemies at an investigator's location engage them */
@@ -243,7 +243,7 @@ export const mulliganHandler: Handler<"Mulligan"> = (g, step) => {
   const pick = ask<string>(g, step, step.inv, "mulligan", `${me.name}: mulligan — choose cards to redraw (${chosen.length} chosen)`, [
     { id: "done", label: chosen.length ? `Redraw ${chosen.length} card(s)` : "Keep hand", value: "done" },
     ...(chosen.length < 5 ? opts.map((h) => ({ id: h, label: def(g, h).name, card: h, value: h })) : []),
-  ]);
+  ], { key: "mulligan", vars: { n: chosen.length } });
   if (pick === undefined) return;
   if (pick !== "done") {
     push(g, { ...step, choice: undefined, chosen: [...chosen, pick] });
@@ -258,7 +258,7 @@ export const mulliganHandler: Handler<"Mulligan"> = (g, step) => {
   for (const h of aside) moveCard(g, h, "deck");
   if (aside.length) shuffle(g.s, me.deck);
   delete g.s.flags[`aside:${step.inv}`];
-  if (chosen.length) emit(g, "mulligan", `${me.name} redraws ${chosen.length} card(s)`, { inv: step.inv });
+  if (chosen.length) emit(g, "mulligan", `${me.name} redraws ${chosen.length} card(s)`, { inv: step.inv, data: { n: chosen.length } });
 };
 
 /** draw n opening cards, setting weaknesses aside and replacing them */
@@ -285,7 +285,7 @@ export const handSizeHandler: Handler<"HandSize"> = (g, step) => {
   const excess = me.hand.length - 8;
   if (excess <= 0) return;
   const pick = ask<InstId>(g, step, step.inv, "generic", `${me.name}: discard down to 8 cards (${excess} more)`,
-    me.hand.map((h) => ({ id: h, label: def(g, h).name, card: h, value: h })));
+    me.hand.map((h) => ({ id: h, label: def(g, h).name, card: h, value: h })), { key: "discardDown", vars: { n: excess } });
   if (pick === undefined) return;
   moveCard(g, pick, "discard");
   emit(g, "discard", `${me.name} discards ${def(g, pick).name}`, { inv: step.inv, card: pick });

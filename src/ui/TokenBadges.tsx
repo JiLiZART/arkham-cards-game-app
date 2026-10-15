@@ -5,7 +5,7 @@ import type { IconName } from "./icons";
 const TOKEN_ICONS: Record<string, IconName | undefined> = { damage: "damage", horror: "horror", clues: "clue", doom: "doom", resources: "resource" };
 
 /** tokens lying on a card (damage, horror, clues, doom, uses, resources) as icon + number badges */
-export function TokenBadges({ inst, size = 26 }: { inst: CardInst; size?: number }) {
+export function TokenBadges({ inst, size = 26, skip = [] }: { inst: CardInst; size?: number; skip?: string[] }) {
   const tokens = ([
     ["damage", inst.damage],
     ["horror", inst.horror],
@@ -13,7 +13,7 @@ export function TokenBadges({ inst, size = 26 }: { inst: CardInst; size?: number
     ["doom", inst.doom],
     ["uses", inst.uses],
     ["resources", inst.resources],
-  ] as const).filter(([, n]) => n > 0);
+  ] as const).filter(([k, n]) => n > 0 && !skip.includes(k));
   if (!tokens.length) return null;
   return (
     <div className="tokens">

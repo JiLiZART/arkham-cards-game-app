@@ -1,15 +1,16 @@
 import { useEffect, useMemo, useRef } from "react";
 import { cardText, scenarioText, t } from "../../content/i18n";
 import { difficultyOf, testValue } from "../../engine/rules/skillTest";
-import type { GameEvent } from "../../engine/types";
 import { db, gameStore, useGame } from "../context";
-import { ANIMATED, viewerOf } from "../store";
+import { viewerOf } from "../store";
 import { handVisible } from "../scene/Table";
 import { glyphHtml } from "../glyphs";
 import { iconSource, MARKUP_ICONS } from "../icons";
 import { ActionRail, CameraButtons, PromptBanner } from "./ActionRail";
 import { ChaosTokenIcon } from "./ChaosTokenIcon";
 import { HoverCard } from "./HoverCard";
+import { Feed } from "./Feed";
+import { ActionFloats } from "./Floats";
 import { Modals } from "./Modals";
 import { TestBreakdown, TokenDraw } from "./TokenDraw";
 import { RevealOverlay } from "./Reveal";
@@ -29,7 +30,6 @@ const DURATION: Record<string, number> = { token: 650, testResult: 1300, encount
 function EventPlayer() {
   const current = useGame((s) => s.current);
   const next = useGame((s) => s.nextEvent);
-  const skip = useGame((s) => s.skipEvents);
   const byHand = useGame((s) => s.drawByHand);
   // drawing by hand: the token draw and the result panel wait for the player instead of a timer
   const waits = byHand && (current?.type === "token" || current?.type === "testResult");
@@ -41,16 +41,18 @@ function EventPlayer() {
   if (!current) return null;
   if (current.type === "token" && byHand) return <TokenDraw key={`${current.text}:${current.data?.testId}`} e={current} />;
   if (current.type === "testResult") return <TestBreakdown e={current} />;
-  return (
-    <div className="event-banner" onClick={skip} title="Click to skip">
-      <EventText e={current} />
-    </div>
-  );
+  // other events are told by the action floats and the feed
+  return null;
 }
 
-function EventText({ e }: { e: GameEvent }) {
-  if (e.type === "token") return <div className="result">Chaos token: <ChaosTokenIcon token={String(e.data?.token)} size={40} /></div>;
-  return <div className="result">{e.text}</div>;
+/** navbar Journal button: switches the right-hand feed to the full scrollable history and back */
+function JournalButton() {
+  const mode = useView((s) => s.feedMode);
+  return (
+    <button className={mode === "journal" ? "primary" : ""} onClick={() => useView.getState().setFeedMode(mode === "journal" ? "live" : "journal")}>
+      {tr("hud.journal")}
+    </button>
+  );
 }
 
 function TopBar() {
@@ -63,7 +65,7 @@ function TopBar() {
         <b>{scenarioText(db, game.scenarioId, locale).name}</b> · {tr("hud.round", { round: game.round, phase: game.phase })}
       </div>
       <div className="buttons">
-        <button onClick={() => toggle("log")}>{tr("hud.log")}</button>
+        <JournalButton />
         <button onClick={() => toggle("debug")}>{tr("hud.debug")}</button>
         <button onClick={() => gameStore.setState({ screen: "menu" })}>{tr("hud.menu")}</button>
       </div>
@@ -176,23 +178,6 @@ function PopupMenu() {
   );
 }
 
-function LogPanel() {
-  const panel = useView((s) => s.panel);
-  const log = useGame((s) => s.game?.log ?? []);
-  const end = useRef<HTMLDivElement>(null);
-  useEffect(() => end.current?.scrollIntoView(), [log.length, panel]);
-  if (panel !== "log") return null;
-  return (
-    <div className="side-panel">
-      <h3>{tr("hud.log")}</h3>
-      {log.slice(-120).map((e, k) => (
-        <div key={k} className={`log-${e.type} ${ANIMATED.has(e.type) ? "log-key" : ""}`}>{e.text}</div>
-      ))}
-      <div ref={end} />
-    </div>
-  );
-}
-
 function DebugPanel() {
   const panel = useView((s) => s.panel);
   const game = useGame((s) => s.game)!;
@@ -277,9 +262,12 @@ export function Hud() {
       <TopBar />
       <ScenarioPanel />
       <PileColumn />
-      <ChaosBagButton />
+      <div className="right-col">
+        <ChaosBagButton />
+        <InvTokens />
+        <Feed />
+      </div>
       <StatBar />
-      <InvTokens />
       <PlayStrip />
       <div className="center-col">
         <PromptBanner />
@@ -292,9 +280,9 @@ export function Hud() {
       <HoverCard />
       <Modals />
       <PopupMenu />
-      <LogPanel />
       <DebugPanel />
       <RevealOverlay />
+      <ActionFloats />
       <EventPlayer />
       <HandOff />
       <ScenarioEnd />

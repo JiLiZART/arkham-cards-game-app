@@ -20,7 +20,7 @@ export default {
         const next = stepsToward(g, e.location, [parlor.id])[0];
         if (next) {
           e.location = next;
-          emit(g, "enemyMove", `${def(g, e.id).name} moves toward the Parlor`, { card: e.id });
+          emit(g, "enemyMove", `${def(g, e.id).name} moves toward the Parlor`, { card: e.id, data: { to: next } });
         }
       }
     },

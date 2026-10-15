@@ -7,7 +7,7 @@ export default {
     treat(g: G, ctx: EffCtx, _args: unknown, step?: Step) {
       const here = invsAt(g, inv(g, ctx.you!).location);
       const who = ask<InvId>(g, step!, ctx.you!, "target", "Medical Texts: choose an investigator",
-        here.map((i) => ({ id: i, label: invName(g, i), card: inv(g, i).cardId, value: i })), { auto: true });
+        here.map((i) => ({ id: i, label: invName(g, i), card: inv(g, i).cardId, value: i })), { auto: true, key: "cardChooseInvestigator", vars: { card: ctx.source ?? null } });
       if (who === undefined) return;
       startTest(g, {
         inv: ctx.you!, skill: "intellect", kind: "plain", difficulty: 2, source: ctx.source, ctx: { ...ctx, inv: who },

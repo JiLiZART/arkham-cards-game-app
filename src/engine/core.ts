@@ -56,12 +56,12 @@ export function push(g: G, ...steps: Step[]) {
  */
 export function ask<T = unknown>(
   g: G, step: Step, invId: InvId, kind: PendingChoice["kind"], prompt: string, options: ChoiceOption[],
-  opts: { auto?: boolean } = {},
+  opts: { auto?: boolean; key?: string; vars?: Record<string, string | number | null> } = {},
 ): T | undefined {
   if (step.choice !== undefined) return step.choice as T;
   if (options.length === 0) throw new Error(`no options for choice: ${prompt}`);
   if (opts.auto && options.length === 1) return options[0].value as T;
-  g.s.pending = { seq: ++g.s.seq, inv: invId, kind, prompt, options, step: { ...step } };
+  g.s.pending = { seq: ++g.s.seq, inv: invId, kind, prompt, ...(opts.key ? { promptKey: opts.key, promptVars: opts.vars ?? {} } : {}), options, step: { ...step } };
   return undefined;
 }
 
@@ -203,6 +203,9 @@ export function connections(g: G, loc: InstId): InstId[] {
   for (const [a, b] of scen.oneWay ?? []) if (a === code) codes.add(b);
   return locations(g).filter((l) => codes.has(l.code) && l.id !== loc).map((l) => l.id);
 }
+
+/** connections() for read-only callers (the UI) that hold a state rather than an engine context */
+export const connectionsOf = (db: ContentDb, s: GameState, loc: InstId): InstId[] => connections({ s, db, events: [] }, loc);
 
 /** BFS distances from a location */
 export function distances(g: G, from: InstId): Map<InstId, number> {

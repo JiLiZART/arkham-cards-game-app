@@ -132,6 +132,7 @@ function commitStage(g: G, step: Extract<Step, { t: "Test" }>) {
   ];
   const pick = ask<"done" | { commit: InstId } | { ability: { card: InstId; index: number } }>(
     g, step, who, "commit", `${me.name}: commit cards to ${invName(g, t.inv)}'s ${t.skill} test`, opts,
+    { key: who === t.inv ? "commit" : "commitOther", vars: { by: t.inv, skill: t.skill } },
   );
   if (pick === undefined) return;
   if (pick === "done") {

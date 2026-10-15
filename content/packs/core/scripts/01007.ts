@@ -11,7 +11,7 @@ export default {
       const n = Math.min(ctx.x ?? 1, c.clues);
       c.clues -= n;
       if (ctx.key) g.s.cancelled.push(ctx.key);
-      emit(g, "coverUp", `${n} clue(s) are discarded from Cover Up (${c.clues} left)`, { card: c.id });
+      emit(g, "coverUp", `${n} clue(s) are discarded from Cover Up (${c.clues} left)`, { card: c.id, data: { n } });
     },
   },
   hooks: {

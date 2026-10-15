@@ -1,10 +1,12 @@
-import { cardText, t } from "../../content/i18n";
+import { t } from "../../content/i18n";
 import type { ChoiceOption, GameState } from "../../engine/types";
 import { db, useGame } from "../context";
 import { Icon } from "../Icon";
 import type { IconName } from "../icons";
 import { backUrl } from "../images";
+import { promptParts } from "../feed";
 import { optionHome } from "../optionHome";
+import { Sentence } from "./Feed";
 import { handVisible } from "../scene/Table";
 import { viewerOf } from "../store";
 import { useView } from "../view";
@@ -40,7 +42,7 @@ export function railItem(o: ChoiceOption): RailItem {
   return { key: null, symbol: "•", primary: false };
 }
 
-/** who decides and what about, one line at the top */
+/** who decides and what about: portrait, class-coloured name and the translated, styled question */
 export function PromptBanner() {
   const game = useGame((s) => s.game) as GameState;
   const locale = useGame((s) => s.locale);
@@ -49,13 +51,13 @@ export function PromptBanner() {
   const p = game.pending;
   if (!p || game.phase === "ended") return null;
   if (!handVisible(privacy, game.order.length, viewerOf(game), revealedFor)) return null;
-  const name = cardText(db, p.inv, locale).name;
-  // engine prompts often start with the investigator's English name already
+  const parts = promptParts(p, game, db, locale);
+  // no translation for this prompt: the engine's English text, without the leading name (the banner shows it)
   const prefix = `${db.cards[p.inv].name}:`;
-  const text = p.prompt.startsWith(prefix) ? p.prompt.slice(prefix.length).trim() : p.prompt;
+  const fallback = p.prompt.startsWith(prefix) ? p.prompt.slice(prefix.length).trim() : p.prompt;
   return (
     <div className="prompt-banner">
-      <b className="card-name">{name}:</b> {text}
+      <Sentence parts={[{ t: "inv", id: p.inv }, { t: "text", s: ": " }, ...(parts ?? [{ t: "text", s: fallback }])]} size={30} />
     </div>
   );
 }

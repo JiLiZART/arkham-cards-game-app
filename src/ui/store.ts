@@ -12,6 +12,9 @@ export const SAVE_KEY = "ah:save";
 /** events worth a beat of animation; the rest update the table instantly */
 export const ANIMATED = new Set(["token", "testResult", "encounter", "attack", "spawn", "agendaAdvance", "actAdvance", "resolution", "enemyDefeated", "defeated", "damage", "enemyDamage", "clues", "doom"]);
 
+/** an animated event waiting to play, with its position in game.log (the feed never shows past the next one) */
+export type QueuedEvent = GameEvent & { logIndex: number };
+
 export interface Save {
   version: number;
   campaign: CampaignState;
@@ -31,8 +34,8 @@ export interface UiState {
   actions: Action[];
   game: GameState | null;
   /** events waiting to be animated */
-  queue: GameEvent[];
-  current: GameEvent | null;
+  queue: QueuedEvent[];
+  current: QueuedEvent | null;
   /** investigator whose hand was revealed after the last hand-off */
   revealedFor: InvId | null;
   notice: string | null;
@@ -96,7 +99,9 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage())
       }
     };
     const enqueue = (events: GameEvent[]) => {
-      const animated = events.filter((e) => ANIMATED.has(e.type));
+      // the dispatch's events are the tail of game.log
+      const base = (get().game?.log.length ?? events.length) - events.length;
+      const animated = events.map((e, k) => ({ ...e, logIndex: base + k })).filter((e) => ANIMATED.has(e.type));
       if (!animated.length) return;
       const queue = [...get().queue, ...animated];
       set({ queue, current: get().current ?? queue[0], ...(get().current ? {} : { queue: queue.slice(1) }) });
