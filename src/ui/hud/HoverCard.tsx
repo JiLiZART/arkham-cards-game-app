@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { cardText, encounterSetName } from "../../content/i18n";
 import type { GameState } from "../../engine/types";
 import { CardFace } from "../CardFace";
 import { db, useGame } from "../context";
@@ -7,15 +6,12 @@ import { placeHover } from "../hover";
 import { mapProjector } from "../scene/Table";
 import { TokenBadges } from "../TokenBadges";
 import { useView } from "../view";
-import { LocationDetails } from "./HandDetails";
-import { formatText } from "./Hud";
-
-/** height reserved for the details panel under the enlarged card */
-const DETAILS_H = 170;
+import { cardDetails } from "../details";
+import { DetailsColumn, LocationDetails } from "./HandDetails";
 
 /**
  * Hovering any card (map, HUD panels, play strip) shows a copy at twice its on-screen size on the spot,
- * with its name, traits, text and tokens underneath. It never takes the pointer.
+ * with its details column (name, type, stats, text) beside it. It never takes the pointer.
  */
 export function HoverCard() {
   const hovered = useView((s) => s.hovered);
@@ -38,26 +34,22 @@ export function HoverCard() {
   const inst = game.cards[hovered];
   // hand cards have their own hover (the fan raises and enlarges them); locations get a details column, no copy
   if (inst.zone === "hand") return null;
-  if (inst.zone === "location") return <LocationDetails id={hovered} />;
+  // a location on the map gets its details column beside it; an HTML copy of one (feed, chaos draw) gets the enlarged copy
+  if (inst.zone === "location" && !hoverRect) return <LocationDetails id={hovered} />;
   const rect = hoverRect ?? mapProjector.rect(hovered);
   if (!rect) return null;
-  const box = placeHover(rect, DETAILS_H, innerWidth, innerHeight);
-  const d = db.cards[inst.code];
-  const tx = cardText(db, inst.code, locale);
-  const back = d.type === "location" && !inst.revealed;
-  const set = d.encounterSet ? encounterSetName(db, d.encounterSet, locale) : null;
+  // the copy alone is kept fully on screen; the details column goes beside it, like for hand cards
+  const box = placeHover(rect, 0, innerWidth, innerHeight);
+  const back = db.cards[inst.code].type === "location" && !inst.revealed;
   return (
-    <div className="hover-card" style={{ left: box.x, top: box.y, width: Math.max(box.w, 260) }}>
-      <div className="hover-face" style={{ width: box.w, height: box.h }}>
-        <CardFace code={inst.code} locale={locale} side={back ? "back" : "front"} />
-        <TokenBadges inst={inst} size={28} />
+    <>
+      <div className="hover-card" style={{ left: box.x, top: box.y }}>
+        <div className="hover-face" style={{ width: box.w, height: box.h }}>
+          <CardFace code={inst.code} locale={locale} side={back ? "back" : "front"} />
+          <TokenBadges inst={inst} size={28} />
+        </div>
       </div>
-      <div className="hover-details" style={{ maxHeight: DETAILS_H }}>
-        <b className="card-name">{back ? tx.backName ?? tx.name : tx.name}</b>
-        {tx.subname && <i> — {tx.subname}</i>}
-        {(tx.traits?.length || set) && <div className="traits">{[tx.traits?.join(". "), set].filter(Boolean).join(" · ")}</div>}
-        <p dangerouslySetInnerHTML={{ __html: formatText(back ? tx.backText ?? "" : tx.text) }} />
-      </div>
-    </div>
+      <DetailsColumn rows={cardDetails(db, inst.code, locale, { inst, game })} rect={{ x0: box.x, y0: box.y, x1: box.x + box.w, y1: box.y + box.h }} />
+    </>
   );
 }

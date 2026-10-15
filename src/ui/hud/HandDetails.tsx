@@ -120,13 +120,55 @@ function Row({ r, locale }: { r: DetailRow; locale: string }) {
           {r.enemies.length > 0 && <b className="hd-enemy">{r.enemies.join(", ")}</b>}
         </div>
       );
+    case "enemy":
+      return (
+        <>
+          <div className="hd-icons">
+            <span className="hd-label">{r.labels.fight}</span>
+            <Icon name="combat" size={24} /> <b className="hd-num">{r.fight}</b>
+          </div>
+          <div className="hd-icons">
+            <span className="hd-label">{r.labels.health}</span>
+            <Icon name="health" size={24} /> <b className="hd-num">{r.health}</b>
+            {r.perInv && <Glyph name="per_investigator" size={18} title={r.labels.perInv} />}
+          </div>
+          <div className="hd-icons">
+            <span className="hd-label">{r.labels.evade}</span>
+            <Icon name="agility" size={24} /> <b className="hd-num">{r.evade}</b>
+          </div>
+        </>
+      );
+    case "attack":
+      return (
+        <div className="hd-icons">
+          {label("card.attack")}
+          {r.damage > 0 && (
+            <>
+              <Icon name="damage" size={26} /> <b className="hd-num">{r.damage}</b>
+            </>
+          )}
+          {r.horror > 0 && (
+            <>
+              <Icon name="horror" size={26} /> <b className="hd-num">{r.horror}</b>
+            </>
+          )}
+        </div>
+      );
+    case "wounds":
+      return (
+        <div>
+          <span className="hd-label">{r.label}</span>
+          <TokenPile kind="damage" value={r.n} size={26} />
+          <b className="hd-num">{r.n}</b>
+        </div>
+      );
     case "text":
       return <p className="hd-text" dangerouslySetInnerHTML={{ __html: formatText(r.s) }} />;
   }
 }
 
 /** a column of details rows beside a card (right, or left if no room; clamped to the window); never takes the pointer */
-function DetailsColumn({ rows, rect, boxRef }: { rows: DetailRow[]; rect: Rect; boxRef?: RefObject<HTMLDivElement> }) {
+export function DetailsColumn({ rows, rect, boxRef }: { rows: DetailRow[]; rect: Rect; boxRef?: RefObject<HTMLDivElement> }) {
   const locale = useGame((s) => s.locale);
   const own = useRef<HTMLDivElement>(null);
   const ref = boxRef ?? own;

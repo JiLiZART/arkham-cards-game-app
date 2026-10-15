@@ -1,11 +1,14 @@
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { cardText, scenarioText, t } from "../../content/i18n";
-import { difficultyOf, testValue } from "../../engine/rules/skillTest";
+import { testParts } from "../../engine/rules/skillTest";
+import { rememberRect, whenSettled } from "../arrivals";
+import { useOptionsByCard } from "../cardClick";
+import { Icon } from "../Icon";
 import { db, gameStore, useGame } from "../context";
 import { viewerOf } from "../store";
 import { handVisible } from "../scene/Table";
 import { glyphHtml } from "../glyphs";
-import { iconSource, MARKUP_ICONS } from "../icons";
+import { iconSource, isIcon, MARKUP_ICONS } from "../icons";
 import { ActionRail, CameraButtons, PromptBanner } from "./ActionRail";
 import { ChaosTokenIcon } from "./ChaosTokenIcon";
 import { HoverCard } from "./HoverCard";
@@ -14,8 +17,7 @@ import { ActionFloats } from "./Floats";
 import { Modals } from "./Modals";
 import { TestBreakdown, TokenDraw } from "./TokenDraw";
 import { RevealOverlay } from "./Reveal";
-import { CardFace } from "../CardFace";
-import { ChaosBagButton, PileColumn, PlayStrip, ScenarioPanel } from "./Panels";
+import { ChaosBagButton, MiniCard, PileColumn, PlayStrip, ScenarioPanel } from "./Panels";
 import { InvTokens } from "./Investigators";
 import { StatBar } from "./Stats";
 import { useView } from "../view";
@@ -31,18 +33,73 @@ function EventPlayer() {
   const current = useGame((s) => s.current);
   const next = useGame((s) => s.nextEvent);
   const byHand = useGame((s) => s.drawByHand);
+  // a chaos token draw waits until every card on screen has landed
+  const settledFor = useView((s) => s.settledFor);
+  const ready = current?.type !== "token" || settledFor === current;
+  useEffect(() => {
+    if (current?.type !== "token") return;
+    return whenSettled(() => useView.setState({ settledFor: current }));
+  }, [current]);
   // drawing by hand: the token draw and the result panel wait for the player instead of a timer
   const waits = byHand && (current?.type === "token" || current?.type === "testResult");
   useEffect(() => {
-    if (!current || waits) return;
+    if (!current || waits || !ready) return;
     const id = setTimeout(next, current.type === "testResult" ? 1800 : (DURATION[current.type] ?? 500));
     return () => clearTimeout(id);
-  }, [current, next, waits]);
-  if (!current) return null;
+  }, [current, next, waits, ready]);
+  if (!current || !ready) return null;
   if (current.type === "token" && byHand) return <TokenDraw key={`${current.text}:${current.data?.testId}`} e={current} />;
   if (current.type === "testResult") return <TestBreakdown e={current} />;
   // other events are told by the action floats and the feed
   return null;
+}
+
+/** events a phase title waits for (they own the middle of the screen) */
+const TITLE_WAITS = new Set(["token", "testResult", "encounter"]);
+/** phases that get a title */
+const TITLED = new Set(["mythos", "investigation", "enemy", "upkeep"]);
+
+/**
+ * A new phase shows like a film's chapter title: the phase name in large type across the middle, the round under it.
+ * Titles play one after another, wait for the chaos draw, test results and encounter reveals, and never take the pointer.
+ */
+function PhaseTitle() {
+  const game = useGame((s) => s.game)!;
+  const setup = useGame((s) => s.setup);
+  const current = useGame((s) => s.current);
+  const seen = useRef<{ setup: unknown; n: number }>({ setup, n: game.log.length });
+  const queue = useRef<{ phase: string; round: number; key: number }[]>([]);
+  const [showing, setShowing] = useState<{ phase: string; round: number; key: number } | null>(null);
+  // a new game (new or loaded) starts from its current log: nothing plays for phases already past
+  if (seen.current.setup !== setup) seen.current = { setup, n: game.log.length };
+  if (game.log.length > seen.current.n) {
+    for (let i = seen.current.n; i < game.log.length; i++) {
+      const e = game.log[i];
+      const phase = String(e.data?.phase ?? "");
+      if (e.type === "phase" && TITLED.has(phase)) queue.current.push({ phase, round: Number(e.data?.round ?? game.round), key: i });
+    }
+    seen.current.n = game.log.length;
+  }
+  const blocked = !!current && TITLE_WAITS.has(current.type);
+  const waiting = queue.current.length;
+  useEffect(() => {
+    if (showing || blocked || !waiting) return;
+    return whenSettled(() => setShowing(queue.current.shift() ?? null));
+  }, [showing, blocked, waiting]);
+  if (!showing) return null;
+  return (
+    <div
+      key={showing.key}
+      className="phase-title"
+      onAnimationEnd={(e) => {
+        if (e.target !== e.currentTarget) return;
+        setShowing(null);
+      }}
+    >
+      <div className="phase-title-name">{tr(`phase.title.${showing.phase}`)}</div>
+      <div className="phase-title-round">{tr("phase.round", { n: showing.round })}</div>
+    </div>
+  );
 }
 
 /** navbar Journal button: switches the right-hand feed to the full scrollable history and back */
@@ -73,25 +130,41 @@ function TopBar() {
   );
 }
 
-/** skill test in progress: value vs difficulty, committed cards */
+/** skill test in progress: who tests what, the value part by part vs difficulty, tokens, committed cards (a click takes one back) */
 function SkillTestPanel() {
   const game = useGame((s) => s.game)!;
   const locale = useGame((s) => s.locale);
+  const choose = useGame((s) => s.choose);
+  const byCard = useOptionsByCard();
+  const ref = useRef<HTMLDivElement>(null);
+  // remember where committed cards are, so one taken back flies from here into the fan
+  useLayoutEffect(() => {
+    ref.current?.querySelectorAll<HTMLElement>("[data-card]").forEach((el) => rememberRect(el.dataset.card!, el));
+  });
+  // tokens still waiting for their draw animation aren't shown yet (the state already holds them)
+  const unplayed = useGame((s) => [s.current, ...s.queue].filter((e) => e?.type === "token").length);
   const st = game.skillTest;
   if (!st) return null;
-  const g = gOf();
-  const value = testValue(g, st);
-  const diff = difficultyOf(g, st);
+  const p = testParts(gOf(), st);
+  const tokens = st.tokens.slice(0, Math.max(0, st.tokens.length - unplayed));
+  const sign = (n: number) => (n >= 0 ? ` + ${n}` : ` − ${-n}`);
   return (
-    <div className="skilltest">
+    <div className="skilltest" ref={ref}>
       <div className="st-title">
-        {cardText(db, st.inv, locale).name} · {st.skill} test · {st.sourceLabel}
+        {cardText(db, st.inv, locale).name} · {isIcon(st.skill) && <Icon name={st.skill} size={18} />} {tr(`stat.${st.skill}`)} · {st.sourceLabel}
       </div>
       <div className="st-calc">
-        <span className="st-value">{value}</span> vs <span className="st-diff">{diff}</span>
-        {st.tokens.length > 0 && (
+        {p.icons.length > 0 || p.mods !== 0 ? (
+          <span className="st-parts">
+            {p.base}
+            {p.icons.map((i) => sign(i.n)).join("")}
+            {p.mods !== 0 && sign(p.mods)} ={" "}
+          </span>
+        ) : null}
+        <span className="st-value">{p.total}</span> vs <span className="st-diff">{p.difficulty}</span>
+        {tokens.length > 0 && (
           <span className="st-tokens">
-            {st.tokens.map((tk, k) => (
+            {tokens.map((tk, k) => (
               <ChaosTokenIcon key={k} token={tk} size={30} />
             ))}
           </span>
@@ -99,11 +172,15 @@ function SkillTestPanel() {
       </div>
       {st.committed.length > 0 && (
         <div className="st-committed">
-          {st.committed.map((c) => (
-            <span key={c} className="st-commit-card" title={cardText(db, game.cards[c].code, locale).name}>
-              <CardFace code={game.cards[c].code} locale={locale} />
-            </span>
-          ))}
+          {st.committed.map((c) => {
+            const back = byCard.get(c)?.find((o) => o.id === `un:${c}`);
+            return (
+              <div key={c} className={`st-commit-slot ${back ? "removable" : ""}`} title={back ? back.label : undefined}>
+                <MiniCard id={c} w={86} h={120} legal={!!back} onClick={() => back && choose(back.id)} />
+                {back && <span className="st-takeback">↶</span>}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
@@ -284,6 +361,7 @@ export function Hud() {
       <RevealOverlay />
       <ActionFloats />
       <EventPlayer />
+      <PhaseTitle />
       <HandOff />
       <ScenarioEnd />
       <ErrorToast />

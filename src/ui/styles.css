@@ -255,10 +255,15 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 .modal-sides { display: flex; gap: 14px; }
 .modal-sides .modal-card.landscape img { width: min(42vw, 600px); }
 .card-modal.both .modal-side { width: auto; max-width: 900px; align-items: center; }
-.play-strip { position: fixed; bottom: 228px; left: 436px; right: 184px; display: flex; justify-content: center; align-items: flex-end; gap: 8px; z-index: 45; pointer-events: none; }
+.play-strip { --sw: 124px; position: fixed; bottom: 228px; left: 436px; right: 184px; display: flex; justify-content: center; align-items: flex-end; gap: 8px; z-index: 45; pointer-events: none; }
 .play-strip > * { pointer-events: auto; }
-.strip-slot { width: 96px; height: 134px; display: grid; place-items: center; }
-.strip-slot.exhausted { width: 134px; }
+.strip-slot { position: relative; width: var(--sw); height: calc(var(--sw) * 1.4); display: grid; place-items: center; }
+.strip-slot.exhausted { width: calc(var(--sw) * 1.4); }
+.strip-actions { position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; gap: 4px; align-items: stretch; z-index: 2; }
+.strip-action { display: flex; align-items: center; justify-content: center; gap: 5px; white-space: nowrap; padding: 4px 12px; border-radius: 16px; border: 1px solid #7fe08a; background: rgba(18, 30, 18, 0.92); color: #eaffea;
+  font: 17px/1.1 Alegreya, Georgia, serif; box-shadow: 0 2px 8px #000c; }
+.strip-action:hover { background: #2f5a30; }
+.mini-card.target { box-shadow: 0 0 0 3px var(--gold), 0 0 16px #e8c46acc; }
 .strip-slot.exhausted .mini-card { transform: rotate(90deg); }
 .strip-divider { width: 2px; align-self: stretch; background: #c9a95c66; margin: 0 6px; }
 
@@ -273,19 +278,18 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 @keyframes tokspin { from { transform: rotate(-200deg) scale(0.4); } }
 .resolving { position: fixed; z-index: 43; pointer-events: none; filter: drop-shadow(0 10px 24px #000c); }
 .resolving img, .resolving .text-face { width: 100%; height: 100%; border-radius: 12px; object-fit: cover; }
-.st-committed { display: flex; gap: 6px; justify-content: center; margin-top: 4px; }
-.st-commit-card { width: 54px; height: 76px; border-radius: 5px; overflow: hidden; display: inline-block; }
-.st-commit-card img, .st-commit-card .text-face { width: 100%; height: 100%; object-fit: cover; font-size: 6px; }
+.st-committed { display: flex; gap: 8px; justify-content: center; margin-top: 6px; }
+.st-commit-slot { position: relative; }
+.st-commit-slot.removable .mini-card { cursor: pointer; }
+.st-takeback { position: absolute; left: -6px; top: -8px; width: 26px; height: 26px; border-radius: 50%; background: #2f5a30; border: 1px solid #7fe08a; color: #fff; font-size: 17px; line-height: 24px; pointer-events: none; }
+.st-parts { color: #e6dcc3; }
+.st-title .icon, .st-title svg { vertical-align: middle; }
 
 /* hover: the card at 2× on the spot, details underneath */
-.hover-card { position: fixed; z-index: 70; pointer-events: none; display: flex; flex-direction: column; align-items: center; filter: drop-shadow(0 12px 28px #000e); }
+.hover-card { position: fixed; z-index: 80; pointer-events: none; display: flex; flex-direction: column; align-items: center; filter: drop-shadow(0 12px 28px #000e); }
 .hover-face { position: relative; }
 .hover-face > img, .hover-face > .text-face { width: 100%; height: 100%; object-fit: cover; border-radius: 14px; display: block; }
 .hover-face .tokens { position: absolute; right: -8px; top: -10px; transform: none; }
-.hover-details { width: 100%; margin-top: 6px; background: var(--panel); border: 1px solid #5a4a30; border-radius: 10px; padding: 8px 12px; font: 15px/1.35 Alegreya, Georgia, serif; overflow: hidden; }
-.hover-details b { color: var(--gold); font-size: 18px; }
-.hover-details .traits { font-style: italic; color: var(--muted); }
-.hover-details p { margin: 4px 0 0; }
 
 /* stat bar: portrait + name; health, sanity, actions; skills — every number at least 48 px */
 .stat-bar { background: var(--panel); border: 1px solid var(--gold); border-radius: 16px; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
@@ -314,6 +318,15 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 .token-draw-hint { position: absolute; top: 18%; width: 100%; text-align: center; font: 28px Teutonic, TeutonicRU, Georgia, serif; color: var(--gold); text-shadow: 0 2px 6px #000; }
 .token-draw-bag { position: absolute; transition: opacity 0.4s, transform 0.4s; filter: drop-shadow(0 10px 20px #000); }
 .token-draw.picked .token-draw-bag { opacity: 0; transform: scale(0.9); }
+/* what the token is drawn for, left of the bag */
+.test-subject { position: absolute; left: calc(50% - 520px); top: calc(50% - 210px); width: 340px; display: flex; flex-direction: column; align-items: center; gap: 10px; animation: popin 0.3s ease-out; }
+.test-subject-card { width: 180px; height: 252px; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px #000d, 0 0 0 2px var(--gold); }
+.test-subject-card img, .test-subject-card .text-face { width: 100%; height: 100%; object-fit: cover; display: block; }
+.test-subject-line { background: var(--panel); border: 1px solid var(--gold); border-radius: 16px; padding: 4px 12px; font: 20px/1.3 Alegreya, Georgia, serif; text-align: center; white-space: nowrap; }
+.test-subject-line .fe-num { color: #fff; font-size: 1.15em; }
+.token-auto-subject { position: fixed; inset: 0; z-index: 57; pointer-events: none; }
+.token-auto-subject .test-subject-card { pointer-events: auto; }
+@media (max-width: 1100px) { .test-subject { left: 16px; } }
 .token-circle { position: absolute; padding: 0; border-radius: 50%; border: 2px solid #d8cfb5; background: radial-gradient(circle at 35% 30%, #fff, #e6e1d3 60%, #b9b2a0); box-shadow: 0 3px 8px #000a; cursor: pointer; transition: left 0.7s cubic-bezier(.2,.8,.2,1), top 0.7s cubic-bezier(.2,.8,.2,1), width 0.7s, height 0.7s, transform 0.2s, opacity 0.3s; }
 .token-circle:hover:not(:disabled) { transform: scale(1.18); background: radial-gradient(circle at 35% 30%, #fff, #f3eedf 60%, #c9c1ad); border-color: var(--gold); }
 .token-draw.picked .token-circle:not(.chosen) { opacity: 0; pointer-events: none; }
@@ -370,15 +383,17 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 
 /* action floats: the styled sentence rises from whoever acted and fades, like the damage numbers */
 .action-float { position: fixed; z-index: 62; pointer-events: none; transform: translate(-50%, -100%); white-space: nowrap; font: 22px/1.3 Alegreya, Georgia, serif; color: #fff;
-  text-shadow: 0 2px 4px #000, 0 0 10px #000; animation: float-rise 1.5s ease-out forwards; }
+  text-shadow: 0 2px 4px #000, 0 0 10px #000; --life: 3500ms;
+  /* rises slowly for its whole life (long enough to read), fades out over its last 0.6 s */
+  animation: float-rise var(--life) ease-out forwards, float-fade 0.6s calc(var(--life) - 0.6s) ease-in forwards; }
 .action-float .sentence { background: rgba(10, 8, 6, 0.55); border-radius: 12px; padding: 3px 10px; }
 .action-float .card-name { color: #ffe9b8; }
 @keyframes float-rise {
   0% { opacity: 0; margin-top: 0; scale: 0.85; }
-  15% { opacity: 1; scale: 1; }
-  70% { opacity: 1; }
-  100% { opacity: 0; margin-top: -70px; }
+  8% { opacity: 1; scale: 1; }
+  100% { opacity: 1; margin-top: -50px; }
 }
+@keyframes float-fade { to { opacity: 0; } }
 
 /* ---------- hand card details (beside the raised hand card) ---------- */
 .hand-details { position: fixed; z-index: 151; pointer-events: none; display: flex; flex-direction: column; gap: 7px; background: var(--panel); border: 1px solid #5a4a30; border-radius: 12px;
@@ -401,3 +416,16 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 .hand-details .hd-enemy { color: var(--bad); }
 /* a face-down card flying to another investigator's token (their hand stays hidden) */
 .ghost-card { position: fixed; z-index: 58; pointer-events: none; border-radius: 6px; box-shadow: 0 6px 16px #000b; }
+
+/* ---------- phase title: a film's chapter card across the middle of the screen ---------- */
+.phase-title { position: fixed; left: 0; right: 0; top: 50%; z-index: 72; pointer-events: none; transform: translateY(-50%); padding: 26px 0 22px; text-align: center;
+  background: linear-gradient(90deg, transparent, rgba(6, 5, 4, 0.82) 22%, rgba(6, 5, 4, 0.82) 78%, transparent); animation: phase-band 2.6s ease-in-out forwards; }
+.phase-title-name { font: 76px/1.05 Teutonic, TeutonicRU, Georgia, serif; color: #f2dfae; text-shadow: 0 4px 18px #000, 0 0 30px #c9a95c55; animation: phase-name 2.6s cubic-bezier(.2,.7,.2,1) forwards; }
+.phase-title-round { margin-top: 8px; font: italic 26px Alegreya, Georgia, serif; color: var(--muted); letter-spacing: 0.3em; text-transform: uppercase; animation: phase-round 2.6s ease-out forwards; }
+@keyframes phase-band { 0% { opacity: 0; } 18% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes phase-name { 0% { opacity: 0; letter-spacing: 0; translate: 0 14px; } 22% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; letter-spacing: 0.12em; translate: 0 -6px; } }
+@keyframes phase-round { 0%, 15% { opacity: 0; } 35% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .phase-title-name { animation-name: phase-band; }
+  .phase-title-round { animation-name: phase-band; }
+}

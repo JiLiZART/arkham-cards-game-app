@@ -40,11 +40,14 @@ export interface ViewState {
   closeMenu(): void;
   setDragging(id: InstId | null): void;
   toggle(panel: "debug"): void;
+  /** the token event whose draw may start: the screen settled after it became current */
+  settledFor: unknown;
 }
 
 export const useView = create<ViewState>((set, get) => ({
   hovered: null,
   hoverRect: null,
+  settledFor: null,
   setHover: (hovered, rect) => set({ hovered, hoverRect: rect ? { x0: rect.left, y0: rect.top, x1: rect.right, y1: rect.bottom } : null }),
   menu: null,
   dragging: null,

@@ -42,6 +42,19 @@ export function railItem(o: ChoiceOption): RailItem {
   return { key: null, symbol: "•", primary: false };
 }
 
+/** a short label and icon for an option shown as a button on its card in the play strip */
+export function stripAction(o: ChoiceOption, cardName: string, locale: string): { label: string; icon?: IconName } {
+  const kind = (o.value as { kind?: string } | null)?.kind;
+  if (kind === "fight") return { label: t(db, locale, "strip.fight"), icon: "combat" };
+  if (kind === "evade") return { label: t(db, locale, "strip.evade"), icon: "agility" };
+  if (kind === "engage") return { label: t(db, locale, "strip.engage") };
+  // the engine label without the card's own name: "Use .45 Automatic" → "Use", "Machete: fight" → "fight"
+  const short = o.label.replace(cardName, "").replace(/^[\s:·-]+|[\s:·-]+$/g, "").replace(/\s{2,}/g, " ");
+  if (/^Use$/i.test(short)) return { label: t(db, locale, "strip.use") };
+  const label = short || o.label;
+  return { label: label[0].toUpperCase() + label.slice(1) };
+}
+
 /** who decides and what about: portrait, class-coloured name and the translated, styled question */
 export function PromptBanner() {
   const game = useGame((s) => s.game) as GameState;

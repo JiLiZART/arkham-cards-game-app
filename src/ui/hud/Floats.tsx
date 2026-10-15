@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import type { FeedEntry } from "../feed";
+import { floatLife, type FeedEntry } from "../feed";
 import { mapProjector } from "../scene/Table";
 import { useView } from "../view";
 import { Sentence, useFeedEntries } from "./Feed";
 
-const STAGGER_MS = 350;
-const LIFE_MS = 1500;
-const MAX_VISIBLE = 3;
+const STAGGER_MS = 900;
+const MAX_VISIBLE = 2;
 /** a burst bigger than this (e.g. a scenario starting) only floats its last few entries */
 const BURST = 6;
 
@@ -14,6 +13,7 @@ interface Float {
   key: number;
   entry: FeedEntry;
   born: number;
+  life: number;
 }
 
 /** where a float rises from: the actor's portrait or card on the map, or the screen centre if it isn't visible */
@@ -44,7 +44,8 @@ export function ActionFloats() {
     const fresh: Float[] = [];
     for (let i = seen.current.shown; i < shown; i++) {
       const e = entries.get(i);
-      if (e) fresh.push({ key: i, entry: e, born: 0 });
+      // phase changes get the chapter title instead
+      if (e && e.kind !== "phase") fresh.push({ key: i, entry: e, born: 0, life: floatLife(e.parts) });
     }
     seen.current.shown = shown;
     pending.current.push(...(fresh.length > BURST ? fresh.slice(-MAX_VISIBLE) : fresh));
@@ -55,7 +56,7 @@ export function ActionFloats() {
     const id = setInterval(() => {
       const now = performance.now();
       setActive((list) => {
-        let next = list.filter((f) => now - f.born < LIFE_MS);
+        let next = list.filter((f) => now - f.born < f.life);
         const last = next.at(-1)?.born ?? 0;
         if (pending.current.length && next.length < MAX_VISIBLE && now - last >= STAGGER_MS) next = [...next, { ...pending.current.shift()!, born: now }];
         return next.length === list.length && next.every((f, k) => f === list[k]) ? list : next;
@@ -74,7 +75,7 @@ export function ActionFloats() {
           return Math.abs(b.x - at.x) < 40 && Math.abs(b.y - at.y) < 40;
         }).length;
         return (
-          <div key={f.key} className="action-float" style={{ left: at.x, top: at.y - sameSpot * 44 }}>
+          <div key={f.key} className="action-float" style={{ left: at.x, top: at.y - sameSpot * 44, ["--life" as string]: `${f.life}ms` }}>
             <Sentence parts={f.entry.parts} size={30} />
           </div>
         );

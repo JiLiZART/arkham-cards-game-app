@@ -1,6 +1,6 @@
 import { Html } from "@react-three/drei";
 import { useFrame, type ThreeEvent } from "@react-three/fiber";
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { cardText, t } from "../../content/i18n";
 import type { CardInst } from "../../engine/types";
@@ -9,6 +9,7 @@ import { CARD_H, CARD_W, type Placement } from "../layout";
 import { Portrait } from "../Portrait";
 import { TokenBadges } from "../TokenBadges";
 import { TokenPile } from "../TokenPile";
+import { mapMoving } from "../arrivals";
 import { cardFace, cardFrame } from "./cardShape";
 import { useCardTexture } from "./textures";
 
@@ -50,6 +51,7 @@ export function CardMesh({ inst, place, highlighted, hovered, exhausted, onClick
   const group = useRef<THREE.Group>(null);
   const flip = useRef<THREE.Group>(null);
   const started = useRef(false);
+  useEffect(() => () => void mapMoving.delete(inst.id), [inst.id]);
 
   useFrame((_, dt) => {
     const g = group.current;
@@ -63,6 +65,8 @@ export function CardMesh({ inst, place, highlighted, hovered, exhausted, onClick
     if (!g.visible) return;
     // top-down orthographic view: height only orders overlapping cards, size comes from scale
     const [x, y, z] = place.pos;
+    if (Math.abs(g.position.x - x) + Math.abs(g.position.z - z) + Math.abs(g.scale.x - place.scale) > 0.03) mapMoving.add(inst.id);
+    else mapMoving.delete(inst.id);
     const k = 8;
     g.position.x = damp(g.position.x, x, k, dt);
     g.position.y = damp(g.position.y, y, k, dt);

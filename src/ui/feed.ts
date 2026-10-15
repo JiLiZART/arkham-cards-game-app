@@ -19,6 +19,8 @@ export type Part =
 export type Tone = "player" | "enemy" | "game";
 export interface FeedEntry {
   parts: Part[];
+  /** the engine event type ("phase", "attack"…) */
+  kind: string;
   tone: Tone;
   /** who did it, to anchor the float: an investigator or a map card */
   actor: { inv?: InvId; card?: InstId } | null;
@@ -103,8 +105,16 @@ export function feedEntry(e: GameEvent, game: GameState, db: ContentDb, locale: 
   const tone: Tone = ENEMY.has(e.type) ? "enemy" : e.inv ? "player" : "game";
   const mapCard = e.card && game.cards[e.card] && ["enemy", "location"].includes(game.cards[e.card].zone) ? e.card : undefined;
   const actor = tone === "enemy" ? { card: mapCard } : e.inv ? { inv: e.inv } : mapCard ? { card: mapCard } : null;
-  return { parts, tone, actor };
+  return { parts, tone, actor, kind: e.type };
 }
+
+/** about how many characters a styled sentence reads as (names and card titles count as a dozen) */
+export function readLength(parts: Part[]): number {
+  return parts.reduce((n, p) => n + (p.t === "text" || p.t === "strong" ? p.s.length : p.t === "inv" || p.t === "card" ? 12 : 2), 0);
+}
+
+/** how long an action float stays (ms): 3.5 s, plus 60 ms per character past 30, at most 6 s */
+export const floatLife = (parts: Part[]) => Math.min(6000, 3500 + 60 * Math.max(0, readLength(parts) - 30));
 
 /**
  * How many log entries the feed may show: everything before the next animated event that hasn't started playing.

@@ -32,6 +32,25 @@ describe("cardDetails", () => {
   });
 });
 
+describe("enemy details", () => {
+  it("Ghoul Minion: fight, health, evade, attack and the damage on it", () => {
+    let r = skipMulligans(start("the-gathering", ["01001"], 1));
+    let id = "";
+    r = mutate(r, (g) => {
+      const ghoul = Object.values(g.s.cards).find((c) => c.code === "01160")!;
+      Object.assign(ghoul, { zone: "enemy", damage: 1 });
+      id = ghoul.id;
+    });
+    const inst = r.state.cards[id];
+    const got = Object.fromEntries(cardDetails(db, "01160", "en", { inst, game: r.state }).map((x) => [x.k, x]));
+    expect(got.enemy).toMatchObject({ fight: 2, health: 2, evade: 2, perInv: false, labels: { fight: "Fight" } });
+    expect(got.attack).toEqual({ k: "attack", damage: 1, horror: 1, label: "Attack" });
+    expect(got.wounds).toEqual({ k: "wounds", n: 1, label: "Damage on it" });
+    expect(rows("01160").wounds).toBeUndefined();
+    expect(rows("01160", "ru").enemy).toMatchObject({ labels: { evade: "Уклонение" } });
+  });
+});
+
 describe("placeDetails", () => {
   const card = { x0: 500, y0: 300, x1: 980, y1: 880 };
   it("goes right of the card, top-aligned", () => {

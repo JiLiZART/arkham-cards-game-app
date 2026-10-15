@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { db, giveCard, mutate, pick, skipMulligans, start } from "../engine/testkit";
 import { createStore } from "zustand/vanilla";
-import { diffArrivals, originRect, quietNextGame, takeArrival, trackArrivals, type Arrival, type Place } from "./arrivals";
+import { diffArrivals, originRect, quietNextGame, takeArrival, trackArrivals, type Arrival, type Place, isSettled } from "./arrivals";
 import type { UiState } from "./store";
 
 describe("diffArrivals", () => {
@@ -82,7 +82,7 @@ describe("recording", () => {
 
 describe("originRect", () => {
   const box = (n: number) => ({ x: n, y: n, w: 10, h: 14 });
-  const places: Record<Place, number> = { deck: 1, discard: 2, encounter: 3, encounterDiscard: 4, resolve: 5, actAgenda: 6, piles: 7, fan: 8, strip: 9 };
+  const places: Record<Place, number> = { deck: 1, discard: 2, encounter: 3, encounterDiscard: 4, resolve: 5, actAgenda: 6, piles: 7, fan: 8, strip: 9, skilltest: 10 };
   const find = (p: Place) => box(places[p]);
   const none = () => null;
   const arr = (o: Partial<Arrival>): Arrival => ({ id: "c1", from: "deck", to: "hand", owner: "01001", opening: false, batch: 0, log: 0, shown: false, ...o });
@@ -103,8 +103,25 @@ describe("originRect", () => {
     expect(at({ from: "hand", to: "play" })).toBe(8);
     expect(at({ from: "play", to: "hand" })).toBe(9);
   });
+  it("a committed card taken back flies from its spot in the skill-test panel", () => {
+    expect(at({ from: "commit", to: "hand" }, () => box(43))).toBe(43);
+    expect(at({ from: "commit", to: "hand" })).toBe(10);
+  });
   it("locations from the act/agenda panel; anything else from a small box mid-screen", () => {
     expect(at({ from: "setAside", to: "location", owner: null })).toBe(6);
     expect(originRect(arr({ from: "limbo", to: "play" }), "01001", find, none, 1600, 900)).toEqual({ x: 760, y: 394, w: 80, h: 112 });
+  });
+});
+
+describe("settling before the chaos draw", () => {
+  it("waits for 400 ms of quiet after the last flight, but never more than 4 s in all", () => {
+    expect(isSettled(1000, 1000, 1000)).toBe(false);
+    expect(isSettled(1399, 1000, 1000)).toBe(false);
+    expect(isSettled(1400, 1000, 1000)).toBe(true);
+    // something flew at 2500: wait until 2900
+    expect(isSettled(2800, 1000, 2500)).toBe(false);
+    expect(isSettled(2900, 1000, 2500)).toBe(true);
+    // still flying at 5000: the cap lets the draw start
+    expect(isSettled(5000, 1000, 5000)).toBe(true);
   });
 });

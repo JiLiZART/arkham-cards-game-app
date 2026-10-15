@@ -9,10 +9,17 @@ OUT=public/icons
 mkdir -p "$OUT" public/table
 
 # target name  ←  source file
-# skills, classes, chaos tokens and slots come from the icon fonts; only physical token art is copied
+# skills, classes, chaos tokens and slots come from the icon fonts; only physical token art is copied.
+# Tokens and plaques come on an opaque white box; $SRC/transparent has them cut out by hand, but its cut also
+# cleared white inside the art (the heart, the 3s). Keep its outline, fill the holes: alpha = its alpha, or opaque
+# for anything not reachable from the border through fully transparent pixels (eroded 1px to keep its soft edge).
 rm -f "$OUT"/*.png
+TMP=$(mktemp -d)
 while read -r dst src; do
-  cp "$SRC/$src" "$OUT/$dst.png"
+  magick "$SRC/transparent/$src" -alpha extract -threshold 0 -bordercolor black -border 1 -fill gray50 -draw "color 0,0 floodfill" \
+    -fill white +opaque gray50 -fill black -opaque gray50 -shave 1x1 -morphology Erode Disk:1 "$TMP/inside.png"
+  magick "$SRC/transparent/$src" -alpha extract "$TMP/inside.png" -compose Lighten -composite "$TMP/alpha.png"
+  magick "$SRC/$src" -alpha off "$TMP/alpha.png" -compose CopyOpacity -composite "$OUT/$dst.png"
 done <<'MAP'
 damage damage-token-one.png
 damage-3 damage-token-three.png
@@ -29,11 +36,8 @@ lead token-lead-player.png
 connector-both connector-both-ways.png
 connector-one-way connector-one-way-from-left-to-right.png
 MAP
+rm -rf "$TMP"
 cp inspired/chaos-bag.png "$OUT/chaos-bag.png"
-# tokens and plaques come on an opaque white box: flood the corners transparent
-for c in connector-both connector-one-way damage damage-3 horror horror-3 clue clue-3 doom doom-3 resource resource-3 resource-5 lead; do
-  magick "$OUT/$c.png" -alpha set -fuzz 12% -fill none -draw "color 0,0 floodfill" -draw "color %[fx:w-1],0 floodfill" -draw "color 0,%[fx:h-1] floodfill" -draw "color %[fx:w-1],%[fx:h-1] floodfill" "$OUT/$c.png"
-done
 
 # card backs from ArkhamCards, mapped by their art: its file names are swapped relative to the printed game
 # (encounter-back.png is the sepia tentacle player back, player-back.png the blue eclipse encounter back)

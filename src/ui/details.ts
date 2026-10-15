@@ -1,4 +1,4 @@
-import { cardText, t } from "../content/i18n";
+import { cardText, encounterSetName, t } from "../content/i18n";
 import { connectionsOf } from "../engine/core";
 import type { CardInst, ContentDb, GameState, InvId } from "../engine/types";
 import type { Rect } from "./hover";
@@ -15,6 +15,10 @@ export type DetailRow =
   | { k: "icons"; icons: IconName[] }
   | { k: "stats"; health?: number; sanity?: number }
   | { k: "uses"; n: number; label: string }
+  // enemies
+  | { k: "enemy"; fight: number; health: number; perInv: boolean; evade: number; labels: { fight: string; health: string; evade: string; perInv: string } }
+  | { k: "attack"; damage: number; horror: number; label: string }
+  | { k: "wounds"; n: number; label: string }
   | { k: "text"; s: string }
   // locations on the map
   | { k: "shroud"; n: number; skill?: IconName; label: string }
@@ -67,13 +71,23 @@ export function cardDetails(db: ContentDb, code: string, locale: string, at?: { 
   rows.push({ k: "class", faction: d.faction, label: `${t(db, locale, `card.faction.${d.faction}`)} · ${type}` });
   if (d.xp !== undefined) rows.push({ k: "level", xp: d.xp, label: t(db, locale, "card.level", { n: d.xp }) });
   if (["asset", "event", "skill"].includes(d.type)) rows.push({ k: "cost", cost: d.cost === undefined || d.cost === null ? "—" : String(d.cost) });
-  if (tx.traits?.length) rows.push({ k: "traits", s: tx.traits.map((s) => `${s}.`).join(" ") });
+  // encounter cards also name their encounter set (it used to sit under the hover copy)
+  const set = d.encounterSet ? encounterSetName(db, d.encounterSet, locale) : null;
+  const traits = [tx.traits?.map((s) => `${s}.`).join(" "), set].filter(Boolean).join(" · ");
+  if (traits) rows.push({ k: "traits", s: traits });
   const slots = d.slots.map((s) => SLOT_ICONS[s]).filter(Boolean);
   if (slots.length) rows.push({ k: "slots", slots });
   const icons = SKILLS.flatMap((s) => Array<IconName>(d.icons[s] ?? 0).fill(s));
   if (icons.length) rows.push({ k: "icons", icons });
   if (d.type !== "investigator" && (d.health !== undefined || d.sanity !== undefined)) rows.push({ k: "stats", health: d.health, sanity: d.sanity });
   if (d.uses) rows.push({ k: "uses", n: d.uses.count, label: t(db, locale, `card.uses.${d.uses.type}`) });
+  if (d.enemy) {
+    const e = d.enemy;
+    const labels = { fight: t(db, locale, "card.fight"), health: t(db, locale, "card.health"), evade: t(db, locale, "card.evade"), perInv: t(db, locale, "card.perInvestigator") };
+    rows.push({ k: "enemy", fight: e.fight, health: e.health, perInv: e.healthPerInvestigator, evade: e.evade, labels });
+    rows.push({ k: "attack", damage: e.damage, horror: e.horror, label: t(db, locale, "card.attack") });
+    if (at?.inst.damage) rows.push({ k: "wounds", n: at.inst.damage, label: t(db, locale, "card.wounds") });
+  }
   if (tx.text) rows.push({ k: "text", s: tx.text });
   return rows;
 }

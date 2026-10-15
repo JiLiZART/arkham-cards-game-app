@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { card, connections, def, enemyStat, inv, invsAt, skillValue } from "./core";
+import { testParts, testValue } from "./rules/skillTest";
 import { deserialize, dispatch, getLegalActions, replay, serialize } from "./engine";
 import { commitDone, db, gOf, giveCard, locId, mutate, options, pick, putEnemy, setup, skipMulligans, start } from "./testkit";
 import type { Action } from "./types";
@@ -448,4 +449,63 @@ describe("chosen investigators", () => {
       expect(r.state.pending?.kind).toBe("turn");
     });
   }
+});
+
+describe("taking back committed cards", () => {
+  const fightSetup = (invs = [ROLAND]) => {
+    let r = gathering(invs, ["0"]);
+    // two investigators: Roland takes the first turn
+    if (r.state.pending?.options.some((o) => o.label === "Roland Banks")) r = pick(r, "Roland Banks");
+    r = mutate(r, (g) => {
+      giveCard(g, ROLAND, "01025"); // Vicious Blow: 1 combat icon
+      if (invs.includes(DAISY)) giveCard(g, DAISY, "01093"); // Unexpected Courage: 2 wild
+      putEnemy(g, "01160", locId(g, "01111"), ROLAND);
+    });
+    return pick(r, /^Fight Ghoul Minion/);
+  };
+  const value = (r: ReturnType<typeof gathering>) => testValue(gOf(r), r.state.skillTest!);
+
+  it("returns the card to hand, drops its icon and asks again", () => {
+    let r = fightSetup();
+    expect(value(r)).toBe(4);
+    r = pick(r, /^Commit Vicious Blow/);
+    expect(value(r)).toBe(5);
+    const blow = r.state.skillTest!.committed[0];
+    r = pick(r, "Take back Vicious Blow");
+    expect(r.state.invs[ROLAND].hand).toContain(blow);
+    expect(r.state.cards[blow].zone).toBe("hand");
+    expect(r.state.skillTest!.committed).toEqual([]);
+    expect(value(r)).toBe(4);
+    expect(r.state.pending?.kind).toBe("commit");
+    expect(r.state.pending?.options.some((o) => o.label.startsWith("Commit Vicious Blow"))).toBe(true);
+    expect(r.state.log.at(-1)?.type).toBe("uncommit");
+  });
+
+  it("the token event names the tested card, skill, value and difficulty", () => {
+    let r = fightSetup();
+    const ghoul = r.state.skillTest!.target;
+    r = pick(r, /^Commit Vicious Blow/);
+    r = commitDone(r);
+    const tok = r.state.log.find((e) => e.type === "token")!;
+    expect(tok.card).toBe(ghoul);
+    expect(tok.data).toMatchObject({ skill: "combat", kind: "fight", value: 5, difficulty: 2 });
+  });
+
+  it("the value breakdown adds up", () => {
+    let r = fightSetup();
+    r = pick(r, /^Commit Vicious Blow/);
+    const p = testParts(gOf(r), r.state.skillTest!);
+    expect(p).toMatchObject({ base: 4, mods: 0, total: 5, difficulty: 2 });
+    expect(p.icons).toEqual([{ card: r.state.skillTest!.committed[0], n: 1 }]);
+    expect(p.base + p.icons.reduce((n, i) => n + i.n, 0) + p.mods).toBe(value(r));
+  });
+
+  it("is not offered once Done is chosen, nor for another investigator's card", () => {
+    let r = fightSetup([ROLAND, DAISY]);
+    r = pick(r, /^Commit Vicious Blow/);
+    r = pick(r, "done");
+    expect(r.state.pending?.inv).toBe(DAISY);
+    expect(r.state.pending?.kind).toBe("commit");
+    expect(r.state.pending?.options.some((o) => o.id.startsWith("un:"))).toBe(false);
+  });
 });

@@ -4,8 +4,10 @@ import { CardFace } from "../CardFace";
 import { useGame } from "../context";
 import { backUrl } from "../images";
 import { viewerOf } from "../store";
+import { useView } from "../view";
 import { useFlyIn } from "./flights";
 import { ChaosTokenIcon } from "./ChaosTokenIcon";
+import { TestSubject } from "./TokenDraw";
 
 interface Box {
   x: number;
@@ -93,11 +95,21 @@ export function RevealOverlay() {
   const game = useGame((s) => s.game) as GameState;
   const locale = useGame((s) => s.locale);
   const drawByHand = useGame((s) => s.drawByHand);
+  // the automatic reveal waits for the screen to settle too (see EventPlayer)
+  const settledFor = useView((s) => s.settledFor);
   const key = current ? `${current.type}:${game.log.length}:${current.card ?? ""}` : "";
   if (current?.type === "encounter" && current.card && game.cards[current.card]) {
     return <EncounterFlight key={key} code={game.cards[current.card].code} locale={locale} />;
   }
   // the hand draw (TokenDraw) shows its own reveal
-  if (current?.type === "token" && !drawByHand) return <TokenPop key={key} token={String(current.data?.token)} />;
+  if (current?.type === "token" && !drawByHand && settledFor === current)
+    return (
+      <>
+        <div className="token-auto-subject">
+          <TestSubject e={current} />
+        </div>
+        <TokenPop key={key} token={String(current.data?.token)} />
+      </>
+    );
   return <Resolving game={game} locale={locale} />;
 }

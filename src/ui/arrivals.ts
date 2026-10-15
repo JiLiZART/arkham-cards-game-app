@@ -103,7 +103,7 @@ export const rememberRect = (id: InstId, el: Element) => {
 
 // ---------- where an arrival flies from ----------
 /** named HUD places an arrival can start from */
-export type Place = "deck" | "discard" | "encounter" | "encounterDiscard" | "resolve" | "actAgenda" | "piles" | "fan" | "strip";
+export type Place = "deck" | "discard" | "encounter" | "encounterDiscard" | "resolve" | "actAgenda" | "piles" | "fan" | "strip" | "skilltest";
 
 /** the screen box an arriving card starts from: its old HTML rect, the pile or panel it came from, or a small box mid-screen */
 export function originRect(a: Arrival, viewer: InvId | null, find: (p: Place) => ScreenBox | null, last: (id: InstId) => ScreenBox | null, vw: number, vh: number): ScreenBox {
@@ -116,6 +116,8 @@ export function originRect(a: Arrival, viewer: InvId | null, find: (p: Place) =>
       case "play":
       case "threat":
         return last(a.id) ?? find("strip");
+      case "commit":
+        return last(a.id) ?? find("skilltest");
       case "deck":
         return mine ? find("deck") : find("piles");
       case "discard":
@@ -141,6 +143,7 @@ const SELECTORS: Record<Place, string> = {
   piles: ".pile-column",
   fan: ".hand-fan",
   strip: ".play-strip",
+  skilltest: ".skilltest",
 };
 
 /** the real places on screen */
@@ -148,4 +151,40 @@ export function domPlace(p: Place, resolve: () => ScreenBox): ScreenBox | null {
   if (p === "resolve") return resolve();
   const r = document.querySelector(SELECTORS[p])?.getBoundingClientRect();
   return r && r.width ? { x: r.left, y: r.top, w: r.width, h: r.height } : null;
+}
+
+// ---------- is anything still flying? (the chaos draw and phase titles wait for cards to land) ----------
+/** map cards still gliding to their place (CardMesh keeps this up to date every frame) */
+export const mapMoving = new Set<InstId>();
+const FLYING = "[data-card], .flight, .ghost-card, .fan-card, .resolving";
+
+/** true while an HTML card flight or a map card glide is running */
+export function cardsFlying(): boolean {
+  if (mapMoving.size) return true;
+  if (typeof document === "undefined" || !document.getAnimations) return false;
+  return document.getAnimations().some((a) => {
+    const target = (a.effect as KeyframeEffect | null)?.target;
+    return a.playState === "running" && target instanceof Element && !!target.closest(FLYING);
+  });
+}
+
+/** quiet time after the last flight, and the longest wait, before the chaos draw starts (ms) */
+export const SETTLE_MS = 400;
+export const SETTLE_MAX_MS = 4000;
+/** has the screen settled: quiet for SETTLE_MS since anything last flew, or waited SETTLE_MAX_MS in all */
+export const isSettled = (now: number, start: number, lastFlying: number) => now - lastFlying >= SETTLE_MS || now - start >= SETTLE_MAX_MS;
+
+/** calls `done` once the screen has settled; returns a cancel function */
+export function whenSettled(done: () => void): () => void {
+  const start = performance.now();
+  let last = start;
+  let raf = 0;
+  const tick = () => {
+    const now = performance.now();
+    if (cardsFlying()) last = now;
+    if (isSettled(now, start, last)) done();
+    else raf = requestAnimationFrame(tick);
+  };
+  raf = requestAnimationFrame(tick);
+  return () => cancelAnimationFrame(raf);
 }

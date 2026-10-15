@@ -101,11 +101,16 @@ export function canCommit(g: G, who: InvId, cardId: InstId, t: SkillTestState): 
   return true;
 }
 
-/** current skill value without tokens */
-export function testValue(g: G, t: SkillTestState): number {
-  const icons = t.committed.reduce((n, c) => n + iconsFor(g, c, t.skill), 0);
-  return skillValue(g, t.inv, t.skill) + t.skillBonus + icons + modSum(g, t.inv, "testValue");
+/** the current skill value without tokens, part by part: base skill, each committed card's icons, other modifiers */
+export function testParts(g: G, t: SkillTestState) {
+  const base = skillValue(g, t.inv, t.skill);
+  const icons = t.committed.map((c) => ({ card: c, n: iconsFor(g, c, t.skill) }));
+  const mods = t.skillBonus + modSum(g, t.inv, "testValue");
+  return { base, icons, mods, total: base + icons.reduce((n, i) => n + i.n, 0) + mods, difficulty: difficultyOf(g, t) };
 }
+
+/** current skill value without tokens */
+export const testValue = (g: G, t: SkillTestState): number => testParts(g, t).total;
 
 function commitStage(g: G, step: Extract<Step, { t: "Test" }>) {
   const t = test(g);
@@ -121,7 +126,8 @@ function commitStage(g: G, step: Extract<Step, { t: "Test" }>) {
   const me = inv(g, who);
   const cards = me.hand.filter((h) => canCommit(g, who, h, t));
   const fast = activatable(g, who, ["fast"]).filter((r) => r.ability.effects?.some((e) => e.op === "modify") || r.ability.run);
-  if (cards.length === 0 && fast.length === 0) {
+  const mine = t.committed.filter((c, k) => t.committers[k] === who);
+  if (cards.length === 0 && fast.length === 0 && mine.length === 0) {
     push(g, { ...step, choice: undefined, asked: [...asked, who] });
     return;
   }
@@ -129,8 +135,10 @@ function commitStage(g: G, step: Extract<Step, { t: "Test" }>) {
     { id: "done", label: who === t.inv ? `Done (value ${testValue(g, t)} vs ${difficultyOf(g, t)})` : "Done", value: "done" },
     ...cards.map((h) => ({ id: h, label: `Commit ${def(g, h).name} (+${iconsFor(g, h, t.skill)})`, card: h, value: { commit: h } })),
     ...fast.map((r) => ({ id: `${r.card}:${r.index}`, label: r.ability.label ?? `Use ${def(g, r.card).name}`, card: r.card, value: { ability: r } })),
+    // cards committed in this window can be taken back until Done
+    ...mine.map((c) => ({ id: `un:${c}`, label: `Take back ${def(g, c).name}`, card: c, value: { uncommit: c } })),
   ];
-  const pick = ask<"done" | { commit: InstId } | { ability: { card: InstId; index: number } }>(
+  const pick = ask<"done" | { commit: InstId } | { uncommit: InstId } | { ability: { card: InstId; index: number } }>(
     g, step, who, "commit", `${me.name}: commit cards to ${invName(g, t.inv)}'s ${t.skill} test`, opts,
     { key: who === t.inv ? "commit" : "commitOther", vars: { by: t.inv, skill: t.skill } },
   );
@@ -145,6 +153,12 @@ function commitStage(g: G, step: Extract<Step, { t: "Test" }>) {
     t.committed.push(pick.commit);
     t.committers.push(who);
     emit(g, "commit", `${me.name} commits ${def(g, pick.commit).name}`, { inv: who, card: pick.commit });
+  } else if ("uncommit" in pick) {
+    const k = t.committed.indexOf(pick.uncommit);
+    t.committed.splice(k, 1);
+    t.committers.splice(k, 1);
+    moveCard(g, pick.uncommit, "hand");
+    emit(g, "uncommit", `${me.name} takes back ${def(g, pick.uncommit).name}`, { inv: who, card: pick.uncommit });
   } else push(g, { t: "UseAbility", inv: who, card: pick.ability.card, index: pick.ability.index });
   push(g, { ...step, choice: undefined });
 }
@@ -159,7 +173,13 @@ function revealStage(g: G) {
   if (g.s.chaosBag.length === 0) throw new Error("chaos bag is empty");
   const [token] = g.s.chaosBag.splice(randInt(g.s, g.s.chaosBag.length), 1);
   t.tokens.push(token);
-  emit(g, "token", `Revealed chaos token: ${token}`, { inv: t.inv, data: { token, testId: t.id } });
+  // what is being tested travels with the token, so the draw can show it after the test has already resolved
+  const p = testParts(g, t);
+  emit(g, "token", `Revealed chaos token: ${token}`, {
+    inv: t.inv,
+    card: t.target ?? t.source ?? null,
+    data: { token, testId: t.id, skill: t.skill, kind: t.kind, value: p.total, difficulty: p.difficulty },
+  });
   const key = `tok:${t.id}:${g.s.seq++}`;
   t.tokenKey = key;
   push(g, win("tokenRevealed", { inv: t.inv, token, key, testId: t.id }), { t: "Test", stage: "afterReveal" });

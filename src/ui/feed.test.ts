@@ -3,7 +3,7 @@ import { botChoice } from "../engine/bot";
 import { dispatch } from "../engine/engine";
 import { db, giveCard, mutate, pick, putEnemy, skipMulligans, start } from "../engine/testkit";
 import type { GameEvent } from "../engine/types";
-import { feedEntry, HIDDEN, promptParts, shownCount, templateKey } from "./feed";
+import { feedEntry, floatLife, HIDDEN, promptParts, shownCount, templateKey, type Part } from "./feed";
 
 const last = (log: GameEvent[], type: string) => [...log].reverse().find((e) => e.type === type)!;
 const placeholders = (s: string) => (s.match(/\{[\w:]+\}/g) ?? []).sort();
@@ -109,5 +109,17 @@ describe("feed cursor", () => {
     expect(shownCount(5, { logIndex: 3 }, [])).toBe(5);
     // nothing animating: the whole log
     expect(shownCount(5, null, [])).toBe(5);
+  });
+});
+
+describe("float life", () => {
+  const text = (n: number): Part[] => [{ t: "text", s: "x".repeat(n) }];
+  it("at least 3.5 s, longer for long sentences, at most 6 s", () => {
+    expect(floatLife(text(10))).toBe(3500);
+    expect(floatLife(text(30))).toBe(3500);
+    expect(floatLife(text(50))).toBe(4700);
+    expect(floatLife(text(500))).toBe(6000);
+    // a name counts as a dozen characters
+    expect(floatLife([{ t: "inv", id: "01001" }, ...text(28)])).toBe(4100);
   });
 });

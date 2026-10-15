@@ -18,6 +18,7 @@ import { ChaosTokenIcon } from "./ChaosTokenIcon";
 import { useFlyIn } from "./flights";
 import { Modal } from "./Modals";
 import { RESOLVE_BOX } from "./Reveal";
+import { stripAction } from "./ActionRail";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
 const gOf = () => ({ s: gameStore.getState().game!, db, events: [] });
@@ -29,7 +30,7 @@ const hoverProps = (id: InstId | null) => ({
 });
 
 /** a small HTML card: its scan (or the card back), tokens, highlight when it has options */
-export function MiniCard({ id, w, h, legal, exhausted, onClick, faceDown }: { id: InstId; w: number; h: number; legal?: boolean; exhausted?: boolean; faceDown?: boolean; onClick?: (e: ReactMouseEvent) => void }) {
+export function MiniCard({ id, w, h, legal, exhausted, target, onClick, faceDown }: { id: InstId; w: number | string; h: number | string; legal?: boolean; exhausted?: boolean; target?: boolean; faceDown?: boolean; onClick?: (e: ReactMouseEvent) => void }) {
   const game = useGame((s) => s.game) as GameState;
   const locale = useGame((s) => s.locale);
   const inst = game.cards[id];
@@ -37,7 +38,7 @@ export function MiniCard({ id, w, h, legal, exhausted, onClick, faceDown }: { id
   const d = db.cards[inst.code];
   return (
     <button
-      className={`mini-card ${legal ? "legal" : ""} ${exhausted ? "exhausted" : ""}`}
+      className={`mini-card ${legal ? "legal" : ""} ${exhausted ? "exhausted" : ""} ${target ? "target" : ""}`}
       data-card={id}
       style={{ width: w, height: h }}
       onClick={onClick}
@@ -173,32 +174,81 @@ export function ChaosBagModal() {
   );
 }
 
-/** the viewer's cards in play, then (after a separator) their threat area and engaged enemies, above the hand */
+/** strip card width: full size, smaller when the strip is crowded (px) */
+const STRIP_W = 124;
+const STRIP_MIN_W = 84;
+const STRIP_GAP = 8;
+
+/** the widest strip card that lets every slot (exhausted ones lie sideways) fit in `room` px */
+export function stripCardWidth(room: number, upright: number, sideways: number, dividers: number): number {
+  const units = upright + sideways * 1.4;
+  const gaps = (upright + sideways + dividers * 2 - 1) * STRIP_GAP + dividers * 14;
+  return Math.max(STRIP_MIN_W, Math.min(STRIP_W, Math.floor((room - gaps) / Math.max(units, 1))));
+}
+
+/**
+ * The viewer's cards in play, then (after a separator) their threat area and engaged enemies, above the hand.
+ * A card's pending options sit on it as buttons (Fight / Evade on an engaged enemy); the test's target is outlined.
+ */
 export function PlayStrip() {
   const game = useGame((s) => s.game) as GameState;
+  const locale = useGame((s) => s.locale);
   const privacy = useGame((s) => s.privacy);
   const revealedFor = useGame((s) => s.revealedFor);
-  const { byCard, click } = useCardClick();
+  const choose = useGame((s) => s.choose);
+  const { byCard } = useCardClick();
   const viewer = viewerOf(game);
   const strip = useRef<HTMLDivElement>(null);
   const setup = useGame((s) => s.setup);
   const visible = !!viewer && handVisible(privacy, game.order.length, viewer, revealedFor);
   // new strip cards fly in from where they came from (before their rects are remembered below)
   useFlyIn(strip, visible, viewer, privacy && game.order.length > 1, RESOLVE_BOX, setup);
-  // remember where each strip card is, so a card leaving the strip (back to hand) flies from there
-  useLayoutEffect(() => {
-    strip.current?.querySelectorAll<HTMLElement>("[data-card]").forEach((el) => rememberRect(el.dataset.card!, el));
-  });
-  if (!visible) return null;
   const all = Object.values(game.cards);
   const assets = all.filter((c) => c.zone === "play" && c.controller === viewer);
   const threats = [...all.filter((c) => c.zone === "threat" && c.controller === viewer), ...all.filter((c) => c.zone === "enemy" && c.engagedWith === viewer)];
-  if (!assets.length && !threats.length) return null;
-  const card = (id: InstId, exhausted: boolean) => (
-    <div key={id} className={`strip-slot ${exhausted ? "exhausted" : ""}`}>
-      <MiniCard id={id} w={96} h={134} legal={byCard.has(id)} exhausted={exhausted} onClick={(e) => click(id, e.clientX, e.clientY)} />
-    </div>
-  );
+  const shown = [...assets, ...threats];
+  // size the cards to the room the strip has, then remember where each card is (a card leaving flies from there)
+  useLayoutEffect(() => {
+    const el = strip.current;
+    if (!el) return;
+    const sideways = shown.filter((c) => c.exhausted).length;
+    const w = stripCardWidth(el.clientWidth, shown.length - sideways, sideways, assets.length && threats.length ? 1 : 0);
+    el.style.setProperty("--sw", `${w}px`);
+    el.querySelectorAll<HTMLElement>("[data-card]").forEach((c) => rememberRect(c.dataset.card!, c));
+  });
+  if (!visible || !shown.length) return null;
+  const target = game.skillTest?.target ?? null;
+  const card = (id: InstId, exhausted: boolean) => {
+    const opts = byCard.get(id) ?? [];
+    const name = cardText(db, game.cards[id].code, locale).name;
+    return (
+      <div key={id} className={`strip-slot ${exhausted ? "exhausted" : ""}`}>
+        {opts.length > 0 && (
+          <div className="strip-actions">
+            {opts.map((o) => {
+              const a = stripAction(o, name, locale);
+              return (
+                <button key={o.id} className="strip-action" onClick={() => choose(o.id)} title={o.label}>
+                  {a.icon && <Icon name={a.icon} size={22} />}
+                  <span>{a.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        )}
+        <MiniCard
+          id={id}
+          w="var(--sw)"
+          h="calc(var(--sw) * 1.4)"
+          legal={opts.length > 0}
+          exhausted={exhausted}
+          target={id === target}
+          // one option: the card itself chooses it; several: the buttons on it do
+          onClick={() => opts.length === 1 && choose(opts[0].id)}
+        />
+      </div>
+    );
+  };
   return (
     <div className="play-strip" ref={strip}>
       {assets.map((c) => card(c.id, c.exhausted))}

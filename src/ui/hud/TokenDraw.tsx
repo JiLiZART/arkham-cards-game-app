@@ -6,6 +6,10 @@ import { Icon } from "../Icon";
 import { iconUrl, isIcon } from "../icons";
 import { breakdownRows, CIRCLE_R, circleLayout, type TestResultData } from "../tokenDraw";
 import { ChaosTokenIcon } from "./ChaosTokenIcon";
+import { CardFace } from "../CardFace";
+import type { Part } from "../feed";
+import { useView } from "../view";
+import { Sentence } from "./Feed";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
 const BAG = 220;
@@ -19,6 +23,39 @@ function circlesFor(game: GameState, e: GameEvent): number {
   const thisTest = game.log.filter((l) => l.type === "token" && l.data?.testId === testId);
   const earlier = Math.max(0, thisTest.findIndex((l) => l.text === e.text && l.data?.token === e.data?.token));
   return Math.max(1, game.chaosBag.length + out - earlier);
+}
+
+/** what the token is drawn for: the tested card (enemy, location, treachery…) and "investigator · skill value vs difficulty" */
+export function TestSubject({ e }: { e: GameEvent }) {
+  const game = useGame((s) => s.game) as GameState;
+  const locale = useGame((s) => s.locale);
+  const d = (e.data ?? {}) as { skill?: string; value?: number; difficulty?: number };
+  const inst = e.card ? game.cards[e.card] : null;
+  const back = !!inst && db.cards[inst.code].type === "location" && !inst.revealed;
+  const parts: Part[] = [
+    ...(e.inv && game.invs[e.inv] ? [{ t: "inv", id: e.inv } as Part, { t: "text", s: " · " } as Part] : []),
+    ...(d.skill && isIcon(d.skill) ? [{ t: "icon", name: d.skill } as Part, { t: "text", s: ` ${tr(`stat.${d.skill}`)} ` } as Part] : []),
+    ...(d.value !== undefined ? [{ t: "num", n: d.value } as Part, { t: "text", s: ` ${tr("draw.vs")} ` } as Part, { t: "num", n: d.difficulty ?? 0 } as Part] : []),
+  ];
+  return (
+    <div className="test-subject">
+      {inst && (
+        <div
+          className="test-subject-card"
+          data-card={inst.id}
+          onMouseEnter={(ev) => useView.getState().setHover(inst.id, ev.currentTarget.getBoundingClientRect())}
+          onMouseLeave={() => useView.getState().setHover(null)}
+        >
+          <CardFace code={inst.code} locale={locale} side={back ? "back" : "front"} />
+        </div>
+      )}
+      {parts.length > 0 && (
+        <div className="test-subject-line">
+          <Sentence parts={parts} size={26} />
+        </div>
+      )}
+    </div>
+  );
 }
 
 /**
@@ -57,6 +94,7 @@ export function TokenDraw({ e }: { e: GameEvent }) {
   return (
     <div className={`token-draw ${picked !== null ? "picked" : ""}`}>
       <div className="token-draw-hint">{picked === null ? tr("draw.hint") : ""}</div>
+      <TestSubject e={e} />
       <img className="token-draw-bag" src={iconUrl("chaosBag")} alt="" draggable={false} style={{ left: bag.x - BAG / 2, top: bag.y - BAG * 0.42, width: BAG }} />
       {circles.map((c, k) => {
         const chosen = picked === k;
