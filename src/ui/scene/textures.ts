@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import * as THREE from "three";
 import type { CardDef } from "../../content/schema";
-import { iconUrl } from "../icons";
-import { cardImage, FACTION_COLORS, faceLines, isEncounterCard } from "../images";
+import { backUrl, cardImage, FACTION_COLORS, faceLines, isEncounterCard } from "../images";
 
 const W = 360;
 const H = 504;
@@ -74,44 +73,18 @@ function wrapFill(g: CanvasRenderingContext2D, s: string, x: number, y: number, 
   g.fillText(line, x, y);
 }
 
-/** generic card backs: the encounter back is the art from inspired/icons, the player back is drawn */
+/** generic card backs: the official player and encounter back art (public/table, from the ArkhamCards assets) */
 export function backTexture(kind: "player" | "encounter", landscape = false): THREE.Texture {
   const key = `back:${kind}:${landscape}`;
   const hit = cache.get(key);
   if (hit) return hit;
-  if (kind === "encounter") {
-    const t = loader.load(iconUrl("cardBack"));
-    t.colorSpace = THREE.SRGBColorSpace;
-    t.anisotropy = 16;
-    if (landscape) {
-      t.center.set(0.5, 0.5);
-      t.rotation = Math.PI / 2;
-    }
-    cache.set(key, t);
-    return t;
+  const t = loader.load(backUrl(kind));
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = 16;
+  if (landscape) {
+    t.center.set(0.5, 0.5);
+    t.rotation = Math.PI / 2;
   }
-  const c = canvas(landscape);
-  const g = c.getContext("2d")!;
-  const grad = g.createRadialGradient(c.width / 2, c.height / 2, 20, c.width / 2, c.height / 2, c.height * 0.7);
-  if (kind === "player") {
-    grad.addColorStop(0, "#3d5a3a");
-    grad.addColorStop(1, "#14200f");
-  } else {
-    grad.addColorStop(0, "#4a2f5c");
-    grad.addColorStop(1, "#140b1c");
-  }
-  g.fillStyle = grad;
-  g.fillRect(0, 0, c.width, c.height);
-  g.strokeStyle = "#c9a95c";
-  g.lineWidth = 6;
-  g.strokeRect(14, 14, c.width - 28, c.height - 28);
-  g.fillStyle = "#c9a95c";
-  g.font = "bold 34px Georgia, serif";
-  g.textAlign = "center";
-  g.fillText(kind === "player" ? "ARKHAM" : "MYTHOS", c.width / 2, c.height / 2);
-  g.font = "18px Georgia, serif";
-  g.fillText(kind === "player" ? "Horror" : "Encounter", c.width / 2, c.height / 2 + 30);
-  const t = finish(c);
   cache.set(key, t);
   return t;
 }

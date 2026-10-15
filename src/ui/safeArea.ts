@@ -1,2 +1,2 @@
-/** screen space (px) covered by HTML panels; the board is fitted into what's left */
-export const SAFE_INSETS = { top: 52, right: 150, bottom: 220, left: 8 };
+/** screen space (px) covered by fixed HUD panels around the map; the camera centres things in what's left */
+export const HUD_INSETS = { top: 60, right: 170, bottom: 380, left: 200 };

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { FAN_CARD_W, fanLayout, fanWidth } from "./fan";
+import { FAN_CARD_W, fanLayout, fanWidth, hoverScale } from "./fan";
 
 describe("hand fan", () => {
   it("is symmetric around the centre", () => {
@@ -18,11 +18,16 @@ describe("hand fan", () => {
     expect(Math.abs(fanLayout(12, 700)[0].rotate)).toBeLessThanOrEqual(18);
   });
 
-  it("keeps at least 40 px of each of 12 cards visible at a 1280 px viewport", () => {
+  it("keeps at least 32 px of each of 12 cards visible at a 1280 px viewport", () => {
     const f = fanLayout(12, fanWidth(1280));
-    for (let i = 1; i < f.length; i++) expect(f[i].x - f[i - 1].x).toBeGreaterThanOrEqual(40);
+    for (let i = 1; i < f.length; i++) expect(f[i].x - f[i - 1].x).toBeGreaterThanOrEqual(32);
     expect(f[0].x - FAN_CARD_W / 2).toBeGreaterThanOrEqual(0);
     expect(f[11].x + FAN_CARD_W / 2).toBeLessThanOrEqual(fanWidth(1280) + 0.001);
+  });
+
+  it("hover is 1.6× where the window is tall enough, otherwise as tall as fits", () => {
+    expect(hoverScale(1080)).toBe(1.6);
+    expect(hoverScale(600) * 420).toBe(600 - 28);
   });
 
   it("a single card sits in the middle, unrotated", () => {

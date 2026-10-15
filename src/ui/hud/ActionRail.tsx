@@ -3,15 +3,19 @@ import type { ChoiceOption, GameState } from "../../engine/types";
 import { db, useGame } from "../context";
 import { Icon } from "../Icon";
 import type { IconName } from "../icons";
+import { backUrl } from "../images";
 import { optionHome } from "../optionHome";
 import { handVisible } from "../scene/Table";
 import { viewerOf } from "../store";
+import { useView } from "../view";
 
 export interface RailItem {
   /** translation key, or null to show the engine's label */
   key: string | null;
   vars?: Record<string, string | number>;
   icon?: IconName;
+  /** an image instead of an icon (the card back for Draw) */
+  img?: string;
   symbol?: string;
   primary: boolean;
 }
@@ -21,7 +25,7 @@ const SKILLS = new Set(["willpower", "intellect", "combat", "agility"]);
 /** icon and label for an option that has no card */
 export function railItem(o: ChoiceOption): RailItem {
   const kind = (o.value as { kind?: string } | null)?.kind;
-  if (kind === "draw") return { key: "rail.draw", icon: "cardBack", primary: false };
+  if (kind === "draw") return { key: "rail.draw", img: backUrl("player"), primary: false };
   if (kind === "resource") return { key: "rail.resource", icon: "resource", primary: false };
   if (kind === "endTurn") return { key: "rail.endTurn", symbol: "⏎", primary: true };
   if (o.id === "done") {
@@ -78,11 +82,27 @@ export function ActionRail() {
         const label = it.key ? t(db, locale, it.key, it.vars) + (extra ? ` (${extra})` : "") : o.label;
         return (
           <button key={o.id} className={`rail-btn ${it.primary ? "primary" : ""}`} disabled={busy} onClick={() => choose(o.id)} title={o.label}>
-            <span className="rail-icon">{it.icon ? <Icon name={it.icon} size={30} /> : it.symbol}</span>
+            <span className="rail-icon">{it.img ? <img src={it.img} alt="" /> : it.icon ? <Icon name={it.icon} size={30} /> : it.symbol}</span>
             <span className="rail-label">{label}</span>
           </button>
         );
       })}
+    </div>
+  );
+}
+
+/** map camera shortcuts: back to the deciding investigator's location, or the whole map */
+export function CameraButtons() {
+  const locale = useGame((s) => s.locale);
+  const cmd = useView((s) => s.cameraCommand);
+  return (
+    <div className="camera-buttons">
+      <button onClick={() => cmd("focus")} title={t(db, locale, "cam.focusHint")}>
+        ◎ {t(db, locale, "cam.focus")}
+      </button>
+      <button onClick={() => cmd("fit")} title={t(db, locale, "cam.fitHint")}>
+        ⛶ {t(db, locale, "cam.fit")}
+      </button>
     </div>
   );
 }

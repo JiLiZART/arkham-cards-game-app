@@ -6,9 +6,8 @@ import { cardText, t } from "../../content/i18n";
 import type { CardInst } from "../../engine/types";
 import { db, useGame } from "../context";
 import { CARD_H, CARD_W, type Placement } from "../layout";
-import { Glyph, Icon } from "../Icon";
-import type { IconName } from "../icons";
 import { Portrait } from "../Portrait";
+import { TokenBadges } from "../TokenBadges";
 import { useCardTexture } from "./textures";
 
 const edge = new THREE.MeshStandardMaterial({ color: "#d8cfb5", roughness: 0.9 });
@@ -16,7 +15,6 @@ const glow = new THREE.MeshBasicMaterial({ color: "#ffcf5a", transparent: true, 
 const hoverGlow = new THREE.MeshBasicMaterial({ color: "#8fd3ff", transparent: true, opacity: 0.9 });
 
 const damp = THREE.MathUtils.damp;
-const TOKEN_ICONS: Record<string, IconName | undefined> = { damage: "damage", horror: "horror", clues: "clue", doom: "doom", resources: "resource" };
 
 export interface CardMeshProps {
   inst: CardInst;
@@ -59,22 +57,14 @@ export function CardMesh({ inst, place, highlighted, hovered, exhausted, onClick
     const [x, y, z] = place.pos;
     const k = 8;
     g.position.x = damp(g.position.x, x, k, dt);
-    g.position.y = damp(g.position.y, y + (hovered ? 0.3 : 0), k, dt);
+    g.position.y = damp(g.position.y, y, k, dt);
     g.position.z = damp(g.position.z, z, k, dt);
-    g.scale.setScalar(damp(g.scale.x, place.scale * (hovered ? 1.06 : 1), k, dt));
+    // hovering only highlights: the enlarged copy is the HTML hover overlay
+    g.scale.setScalar(damp(g.scale.x, place.scale, k, dt));
     g.rotation.x = -Math.PI / 2;
     g.rotation.z = damp(g.rotation.z, place.yaw + (exhausted ? -Math.PI / 2 : 0), k, dt);
     flip.current.rotation.y = damp(flip.current.rotation.y, showFront ? 0 : Math.PI, k, dt);
   });
-
-  const tokens = ([
-    ["damage", inst.damage],
-    ["horror", inst.horror],
-    ["clues", inst.clues],
-    ["doom", inst.doom],
-    ["uses", inst.uses],
-    ["resources", inst.resources],
-  ] as const).filter(([, n]) => n > 0);
 
   return (
     <group ref={group}>
@@ -97,31 +87,15 @@ export function CardMesh({ inst, place, highlighted, hovered, exhausted, onClick
         </mesh>
       )}
       {place.badge && (
-        <Html position={[-w / 2 + 0.1, h / 2 - 0.1, 0.03]} zIndexRange={[21, 0]} style={{ pointerEvents: "none" }}>
+        <Html position={[-w / 2 + 0.1, h / 2 - 0.1, 0.03]} zIndexRange={[21, 0]} pointerEvents="none">
           <div className="engaged-badge">
             <Portrait code={place.badge} size={30} title={t(db, locale, "hud.engaged", { name: cardText(db, place.badge, locale).name })} />
           </div>
         </Html>
       )}
-      {tokens.length > 0 && (
-        <Html position={[w / 2 - 0.05, h / 2 - 0.05, 0.02]} center zIndexRange={[20, 0]} style={{ pointerEvents: "none" }}>
-          <div className="tokens">
-            {tokens.map(([k, n]) =>
-              TOKEN_ICONS[k] ? (
-                <span key={k} className="tok-icon" title={k}>
-                  <Icon name={TOKEN_ICONS[k]!} size={26} />
-                  <b>{n}</b>
-                </span>
-              ) : (
-                <span key={k} className={`tok tok-${k}`} title={k}>
-                  <Glyph name="uses" size={12} />
-                  {n}
-                </span>
-              ),
-            )}
-          </div>
-        </Html>
-      )}
+      <Html position={[w / 2 - 0.05, h / 2 - 0.05, 0.02]} center zIndexRange={[20, 0]} pointerEvents="none">
+        <TokenBadges inst={inst} />
+      </Html>
     </group>
   );
 }

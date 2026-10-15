@@ -9,7 +9,10 @@ export function cardImage(card: Pick<CardDef, "code" | "doubleSided" | "image" |
   return card.doubleSided ? `${BASE}/${card.code}b.webp` : null;
 }
 
-/** cards that use the generic encounter back (art from inspired/icons); player cards use a drawn back */
+/** generic card back art by kind (player cards without their own back scan, encounter cards) */
+export const backUrl = (kind: "player" | "encounter") => (kind === "encounter" ? "/table/back-encounter.png" : "/table/back-player.png");
+
+/** cards that use the generic encounter back; the others use the player back */
 export const isEncounterCard = (c: Pick<CardDef, "faction" | "subtype">) => c.faction === "mythos" && !c.subtype;
 
 export const FACTION_COLORS: Record<string, string> = {

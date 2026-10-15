@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { cardText, t } from "../../content/i18n";
 import { SKILLS } from "../../content/schema";
 import { maxHealth, maxSanity, skillValue } from "../../engine/core";
-import type { GameState, InvId } from "../../engine/types";
+import type { ChoiceOption, GameState, InvId } from "../../engine/types";
 import { db, gameStore, useGame } from "../context";
 import { Glyph, Icon, Stat } from "../Icon";
 import { isIcon, type IconName } from "../icons";
@@ -10,7 +10,8 @@ import { optionHome } from "../optionHome";
 import { Portrait } from "../Portrait";
 import { viewerOf } from "../store";
 import { useView } from "../view";
-import { useCardOptions } from "./Modals";
+import { formatText } from "./Hud";
+import { OptionButtons, useCardOptions } from "./Modals";
 import { STAT_BAR_W } from "./fan";
 import { stackTokens } from "./tokenStack";
 
@@ -81,7 +82,7 @@ export function TokenStack({ kind, value, size = 40 }: { kind: "resource" | "clu
 }
 
 /** stats shared by the viewer's bar and the investigator modal */
-export function StatBody({ inv, onPortrait, legal }: { inv: InvId; onPortrait?: () => void; legal?: boolean }) {
+export function StatBody({ inv, onPortrait, legal, options }: { inv: InvId; onPortrait?: () => void; legal?: boolean; options?: ChoiceOption[] }) {
   const game = useGame((s) => s.game) as GameState;
   const locale = useGame((s) => s.locale);
   const n = invNumbers(game, inv);
@@ -94,29 +95,32 @@ export function StatBody({ inv, onPortrait, legal }: { inv: InvId; onPortrait?: 
         <TokenStack kind="clue" value={n.clues} />
       </div>
       <div className="stat-bar">
-        <button className={`portrait-btn ${legal ? "legal" : ""}`} onClick={onPortrait} title={tx.name} disabled={!onPortrait}>
-          <Portrait code={inv} size={120} active={game.active === inv} />
-        </button>
-        <div className="stat-main">
-          <div className="stat-name">
-            {isIcon(d.faction) && <Icon name={d.faction} size={24} />} {tx.name}
-          </div>
-          <div className="stat-row">
-            <FlashStat icon="health" value={n.health} max={n.maxHealth} size={44} label={tr("stat.health")} />
-            <FlashStat icon="sanity" value={n.sanity} max={n.maxSanity} size={44} label={tr("stat.sanity")} />
-          </div>
-          {n.actions !== null && (
-            <div className="stat-row actions" title={`${tr("stat.actions")} ${n.actions}`} aria-label={`${tr("stat.actions")} ${n.actions}`}>
-              {Array.from({ length: Math.max(n.actions, 0) }, (_, k) => (
-                <Glyph key={k} name="action" size={26} title={`${tr("stat.actions")} ${n.actions}`} />
-              ))}
-              {n.actions === 0 && <span className="muted">0</span>}
+        <div className="stat-head">
+          <button className={`portrait-btn ${legal ? "legal" : ""}`} onClick={onPortrait} title={tx.name} disabled={!onPortrait}>
+            <Portrait code={inv} size={120} active={game.active === inv} />
+          </button>
+          <div className="stat-who">
+            <div className="stat-name">
+              {isIcon(d.faction) && <Icon name={d.faction} size={36} />} {tx.name}
             </div>
+            {/* the investigator's ability, and its options when it can be used right now */}
+            <div className="stat-ability card-text" dangerouslySetInnerHTML={{ __html: formatText(tx.text) }} />
+            {options && options.length > 0 && <OptionButtons options={options} />}
+          </div>
+        </div>
+        <div className="stat-row vitals">
+          <FlashStat icon="health" value={n.health} max={n.maxHealth} size={44} label={tr("stat.health")} />
+          <FlashStat icon="sanity" value={n.sanity} max={n.maxSanity} size={44} label={tr("stat.sanity")} />
+          {n.actions !== null && (
+            <span className="stat actions" title={`${tr("stat.actions")} ${n.actions}`} aria-label={`${tr("stat.actions")} ${n.actions}`}>
+              <Glyph name="action" size={36} title={`${tr("stat.actions")} ${n.actions}`} />
+              <b>{n.actions}</b>
+            </span>
           )}
         </div>
         <div className="stat-row skills">
           {n.skills.map(([s, v]) => (
-            <FlashStat key={s} icon={s} value={v} size={36} label={tr(`stat.${s}`)} />
+            <FlashStat key={s} icon={s} value={v} size={40} label={tr(`stat.${s}`)} />
           ))}
         </div>
       </div>
@@ -134,7 +138,7 @@ export function StatBar() {
   const legal = options.some((o) => optionHome(o, game, viewer) === "portrait");
   return (
     <div className="stat-dock" style={{ width: STAT_BAR_W }}>
-      <StatBody inv={viewer} legal={legal} onPortrait={() => useView.getState().setModal({ card: cardId })} />
+      <StatBody inv={viewer} legal={legal} options={options.filter((o) => optionHome(o, game, viewer) === "portrait")} onPortrait={() => useView.getState().setModal({ card: cardId })} />
     </div>
   );
 }

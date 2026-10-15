@@ -80,7 +80,7 @@ Only legal interactions MUST be enabled and highlighted. When a card offers seve
 ### Requirement: Hand fan
 The viewing investigator's hand SHALL be shown as a fan of cards along the bottom edge of the screen, outside the WebGL viewport. Cards overlap, are rotated along an arc, and partly extend below the screen edge, like Hearthstone.
 
-Hand cards at rest SHALL be at least 300 px wide by 420 px tall at 1080p. Hovering or focusing a card SHALL show it unrotated at twice its resting size (about 600×840 px), fully on screen. When the window is too short for that, it SHALL show as large as fits the window height.
+Hand cards at rest SHALL be at least 300 px wide by 420 px tall at 1080p. Hovering or focusing a card SHALL show it unrotated at 1.6× its resting size (about 480×672 px), fully on screen. When the window is too short for that, it SHALL show as large as fits the window height.
 
 When a choice is pending, every hand card that has an option in it (play, commit and so on) SHALL rise above the fan and be highlighted. The other cards stay down.
 
@@ -88,7 +88,7 @@ The fan MUST stay usable with 1 to 12 cards by tightening the overlap as the han
 
 #### Scenario: Read a card in hand
 - **WHEN** the player hovers the third card of a 7-card hand at 1920×1080
-- **THEN** that card is shown unrotated at about 600×840 px, fully on screen, above everything else
+- **THEN** that card is shown unrotated at about 480×672 px, fully on screen, above everything else
 
 #### Scenario: Short window
 - **WHEN** the player hovers a hand card in an 800 px tall window
@@ -112,12 +112,13 @@ The fan MUST stay usable with 1 to 12 cards by tightening the overlap as the han
 
 ### Requirement: Stat bar
 The UI SHALL show a stat bar in the bottom-left corner for the viewing investigator, using the iconography. It shows:
-- a portrait of at least 120 px and the name;
+- a portrait of at least 120 px and the name (at least 36 px);
+- the investigator's ability text, with buttons for any pending option tied to the investigator card (the same options as the card modal);
 - health and sanity remaining, out of their maximum;
 - actions left;
 - the four skill values.
 
-Every number in the stat bar SHALL be at least 48 px tall. That covers health, sanity, actions, the skill values and the resource and clue totals. Stat icons SHALL be at least 44 px.
+Every number in the stat bar SHALL be at least 38 px tall. That covers health, sanity, actions, the skill values and the resource and clue totals. The resource and clue totals SHALL be vertically centred on their token stacks. Stat icons SHALL be at least 44 px.
 
 Resources and clues SHALL be shown in a row above the stat bar as stacks of token images, using the fewest tokens:
 - resources use the 5, 3 and 1 tokens;
@@ -128,7 +129,11 @@ Every stat item and token stack SHALL have a tooltip naming it with its value, e
 
 #### Scenario: Readable numbers
 - **WHEN** the stat bar is shown at 1600×900
-- **THEN** the health, sanity, action, skill, resource and clue numbers are each rendered at a font size of at least 48 px
+- **THEN** the health, sanity, action, skill, resource and clue numbers are each rendered at a font size of at least 38 px
+
+#### Scenario: Use the investigator's ability from the stat bar
+- **WHEN** a choice offers Roland's investigator card as an option (for example "Who takes the next turn?" or his reaction)
+- **THEN** a button for it appears under his ability text in the stat bar, and clicking it submits that option
 
 #### Scenario: Taking damage
 - **WHEN** the viewing investigator takes 2 damage
@@ -273,8 +278,7 @@ The chaos bag SHALL be shown in the top-right corner of the screen with its toke
 - **THEN** the modal lists +1 ×1, 0 ×2, −1 ×3, −2 ×2, −3 ×1, −4 ×1, skull ×2, cultist ×1, tablet ×1, auto-fail ×1 and elder sign ×1, next to The Gathering's reference card
 
 ### Requirement: Hover enlarge
-Hovering any card SHALL show an enlarged copy on the spot, with no side panel. That covers:
-- locations;
+Hovering a card SHALL show an enlarged copy on the spot, with no side panel. That covers:
 - enemies and attachments on locations;
 - the act and agenda;
 - face-up pile tops;
@@ -282,16 +286,18 @@ Hovering any card SHALL show an enlarged copy on the spot, with no side panel. T
 
 The copy SHALL be twice the card's on-screen size, centred on the card and moved just enough to stay inside the window. Directly below it, a details panel SHALL show the card's name, subtitle, traits, rules text with icons, and its tokens (damage, horror, clues, doom, resources, uses). The copy and panel MUST NOT intercept the pointer, and SHALL disappear when the pointer leaves the card. A location that is not yet revealed shows its unrevealed side.
 
+Location cards SHALL NOT get the enlarged copy; they are read on the map itself, zoomed in as needed.
+
 #### Scenario: Hover a location
-- **WHEN** the player hovers the Hallway shown 150 px tall
-- **THEN** a 300 px tall copy of the Hallway appears over it, with its name, traits, text and clue count below, and no panel appears in the top-right corner
+- **WHEN** the player hovers the Hallway
+- **THEN** no enlarged copy or side panel appears; the Hallway is only highlighted
 
 #### Scenario: Hover an enemy on a location
 - **WHEN** the player hovers a Ghoul Minion sitting on the Cellar
 - **THEN** the Ghoul Minion is shown at twice its size with its fight, health, evade and damage details below
 
 #### Scenario: Near the edge
-- **WHEN** the player hovers a card touching the right edge of the window
+- **WHEN** the player hovers a play-strip card touching the right edge of the window
 - **THEN** the enlarged copy and its details are shifted left so they are fully visible
 
 ### Requirement: Play area strip

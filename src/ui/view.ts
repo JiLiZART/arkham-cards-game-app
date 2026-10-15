@@ -15,13 +15,22 @@ export interface MoveDrag {
 
 export interface ViewState {
   hovered: InstId | null;
+  /** screen rect of the hovered card when it is an HTML card (map cards are projected instead) */
+  hoverRect: { x0: number; y0: number; x1: number; y1: number } | null;
+  setHover(id: InstId | null, rect?: DOMRect | null): void;
   menu: { x: number; y: number; options: ChoiceOption[] } | null;
   dragging: InstId | null;
   panel: "none" | "log" | "debug";
   moveDrag: MoveDrag | null;
+  /** a request from the HUD buttons to move the map camera */
+  camCmd: { kind: "focus" | "fit"; n: number } | null;
+  cameraCommand(kind: "focus" | "fit"): void;
+  /** bumps whenever the map camera moves, so screen-space overlays can re-project */
+  camTick: number;
+  bumpCamera(): void;
   /** full-size detail of a card, or an investigator's stats / hand / play area */
-  modal: { card: InstId } | { inv: InvId } | null;
-  setModal(m: { card: InstId } | { inv: InvId } | null): void;
+  modal: { card: InstId } | { inv: InvId } | { bag: true } | null;
+  setModal(m: { card: InstId } | { inv: InvId } | { bag: true } | null): void;
   setMoveDrag(d: MoveDrag | null): void;
   setHovered(id: InstId | null): void;
   openMenu(x: number, y: number, options: ChoiceOption[]): void;
@@ -32,14 +41,20 @@ export interface ViewState {
 
 export const useView = create<ViewState>((set, get) => ({
   hovered: null,
+  hoverRect: null,
+  setHover: (hovered, rect) => set({ hovered, hoverRect: rect ? { x0: rect.left, y0: rect.top, x1: rect.right, y1: rect.bottom } : null }),
   menu: null,
   dragging: null,
   panel: "none",
   moveDrag: null,
+  camCmd: null,
+  cameraCommand: (kind) => set({ camCmd: { kind, n: (get().camCmd?.n ?? 0) + 1 } }),
+  camTick: 0,
+  bumpCamera: () => set({ camTick: get().camTick + 1 }),
   modal: null,
   setModal: (modal) => set({ modal, menu: null }),
   setMoveDrag: (moveDrag) => set({ moveDrag }),
-  setHovered: (hovered) => set({ hovered }),
+  setHovered: (hovered) => set({ hovered, hoverRect: null }),
   openMenu: (x, y, options) => set({ menu: { x, y, options } }),
   closeMenu: () => set({ menu: null }),
   setDragging: (dragging) => set({ dragging }),

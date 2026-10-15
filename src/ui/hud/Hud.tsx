@@ -1,18 +1,20 @@
 import { useEffect, useMemo, useRef } from "react";
 import { cardText, scenarioText, t } from "../../content/i18n";
-import { actClueCost, doomInPlay } from "../../engine/rules/scenario";
 import { difficultyOf, testValue } from "../../engine/rules/skillTest";
 import type { GameEvent } from "../../engine/types";
 import { db, gameStore, useGame } from "../context";
-import { cardImage } from "../images";
 import { ANIMATED, viewerOf } from "../store";
 import { handVisible } from "../scene/Table";
 import { glyphHtml } from "../glyphs";
-import { ICON_LABELS, iconUrl, MARKUP_ICONS } from "../icons";
-import { Stat } from "../Icon";
-import { ActionRail, PromptBanner } from "./ActionRail";
+import { iconSource, MARKUP_ICONS } from "../icons";
+import { ActionRail, CameraButtons, PromptBanner } from "./ActionRail";
 import { ChaosTokenIcon } from "./ChaosTokenIcon";
+import { HoverCard } from "./HoverCard";
 import { Modals } from "./Modals";
+import { TestBreakdown, TokenDraw } from "./TokenDraw";
+import { RevealOverlay } from "./Reveal";
+import { CardFace } from "../CardFace";
+import { ChaosBagButton, PileColumn, PlayStrip, ScenarioPanel } from "./Panels";
 import { InvTokens } from "./Investigators";
 import { StatBar } from "./Stats";
 import { useView } from "../view";
@@ -28,12 +30,17 @@ function EventPlayer() {
   const current = useGame((s) => s.current);
   const next = useGame((s) => s.nextEvent);
   const skip = useGame((s) => s.skipEvents);
+  const byHand = useGame((s) => s.drawByHand);
+  // drawing by hand: the token draw and the result panel wait for the player instead of a timer
+  const waits = byHand && (current?.type === "token" || current?.type === "testResult");
   useEffect(() => {
-    if (!current) return;
-    const id = setTimeout(next, DURATION[current.type] ?? 500);
+    if (!current || waits) return;
+    const id = setTimeout(next, current.type === "testResult" ? 1800 : (DURATION[current.type] ?? 500));
     return () => clearTimeout(id);
-  }, [current, next]);
+  }, [current, next, waits]);
   if (!current) return null;
+  if (current.type === "token" && byHand) return <TokenDraw key={`${current.text}:${current.data?.testId}`} e={current} />;
+  if (current.type === "testResult") return <TestBreakdown e={current} />;
   return (
     <div className="event-banner" onClick={skip} title="Click to skip">
       <EventText e={current} />
@@ -42,17 +49,6 @@ function EventPlayer() {
 }
 
 function EventText({ e }: { e: GameEvent }) {
-  if (e.type === "testResult") {
-    const d = e.data as { success: boolean; tokens: string[] };
-    return (
-      <div className={`result ${d.success ? "ok" : "bad"}`}>
-        {d.tokens.map((tk, k) => (
-          <ChaosTokenIcon key={k} token={tk} size={34} />
-        ))}{" "}
-        {e.text}
-      </div>
-    );
-  }
   if (e.type === "token") return <div className="result">Chaos token: <ChaosTokenIcon token={String(e.data?.token)} size={40} /></div>;
   return <div className="result">{e.text}</div>;
 }
@@ -61,25 +57,11 @@ function TopBar() {
   const game = useGame((s) => s.game)!;
   const locale = useGame((s) => s.locale);
   const toggle = useView((s) => s.toggle);
-  const g = gOf();
-  const agenda = game.agenda ? db.cards[game.cards[game.agenda].code] : null;
-  const act = game.act ? db.cards[game.cards[game.act].code] : null;
-  const actCost = actClueCost(g);
   return (
     <div className="topbar">
       <div className="scen">
         <b>{scenarioText(db, game.scenarioId, locale).name}</b> · {tr("hud.round", { round: game.round, phase: game.phase })}
       </div>
-      {agenda && (
-        <div className="topbar-item" title={`Agenda: ${cardText(db, agenda.code, locale).name}`}>
-          {cardText(db, agenda.code, locale).name} <Stat icon="doom" value={doomInPlay(g)} max={agenda.doom} size={20} />
-        </div>
-      )}
-      {act && (
-        <div className="topbar-item" title={`Act: ${cardText(db, act.code, locale).name}`}>
-          {cardText(db, act.code, locale).name} {Number.isFinite(actCost) && <Stat icon="clue" value={actCost} size={20} />}
-        </div>
-      )}
       <div className="buttons">
         <button onClick={() => toggle("log")}>{tr("hud.log")}</button>
         <button onClick={() => toggle("debug")}>{tr("hud.debug")}</button>
@@ -113,7 +95,15 @@ function SkillTestPanel() {
           </span>
         )}
       </div>
-      {st.committed.length > 0 && <div className="st-committed">Committed: {st.committed.map((c) => cardText(db, game.cards[c].code, locale).name).join(", ")}</div>}
+      {st.committed.length > 0 && (
+        <div className="st-committed">
+          {st.committed.map((c) => (
+            <span key={c} className="st-commit-card" title={cardText(db, game.cards[c].code, locale).name}>
+              <CardFace code={game.cards[c].code} locale={locale} />
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -147,40 +137,6 @@ function HandOff() {
   );
 }
 
-/** large view of the hovered card */
-function CardZoom() {
-  const hovered = useView((s) => s.hovered);
-  const game = useGame((s) => s.game)!;
-  const locale = useGame((s) => s.locale);
-  if (!hovered || !game.cards[hovered]) return null;
-  const inst = game.cards[hovered];
-  // hand cards: the raised fan card is the zoom (and other players' hands are never revealed)
-  if (inst.zone === "hand") return null;
-  const d = db.cards[inst.code];
-  const tx = cardText(db, inst.code, locale);
-  const unrevealed = d.type === "location" && !inst.revealed;
-  const img = cardImage(d, unrevealed ? "back" : "front");
-  return (
-    <div className="zoom">
-      {img && <img src={img} alt={tx.name} onError={(e) => (e.currentTarget.style.display = "none")} />}
-      <div className="zoom-text">
-        <b>{unrevealed ? tx.backName ?? tx.name : tx.name}</b>
-        {tx.subname && <i> — {tx.subname}</i>}
-        <div className="traits">{tx.traits?.join(". ")}</div>
-        <p dangerouslySetInnerHTML={{ __html: formatText(unrevealed ? tx.backText ?? "" : tx.text) }} />
-        <div className="zoom-state">
-          {inst.damage > 0 && <span>Damage {inst.damage} </span>}
-          {inst.horror > 0 && <span>Horror {inst.horror} </span>}
-          {inst.clues > 0 && <span>Clues {inst.clues} </span>}
-          {inst.doom > 0 && <span>Doom {inst.doom} </span>}
-          {inst.uses > 0 && <span>{d.uses?.type ?? "uses"} {inst.uses} </span>}
-          {inst.exhausted && <span>Exhausted</span>}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 /** ArkhamDB markup → safe HTML (only tags we generate) */
 export function formatText(s: string): string {
   const esc = s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -188,9 +144,11 @@ export function formatText(s: string): string {
     .replace(/&lt;(\/?)(b|i)&gt;/g, "<$1$2>")
     .replace(/\[\[([^\]]+)\]\]/g, "<i>$1</i>")
     .replace(/\[(\w+)\]/g, (_, k: string) => {
+      // inline icons come from the slim icon font, coloured like the printed ones where they have a colour
       const icon = MARKUP_ICONS[k];
-      if (icon) return `<img class="icon-inline" src="${iconUrl(icon)}" alt="${ICON_LABELS[icon]}" title="${k.replace("_", " ")}">`;
-      return glyphHtml(k) ?? `<span class="icon icon-${k}" title="${k.replace("_", " ")}">${k.replace("_", " ")}</span>`;
+      const src = icon ? iconSource(icon) : null;
+      const color = src && "glyph" in src ? (src.under?.color ?? src.color) : undefined;
+      return glyphHtml(k, k.replace("_", " "), color) ?? `<span class="icon icon-${k}" title="${k.replace("_", " ")}">${k.replace("_", " ")}</span>`;
     })
     .replace(/\n/g, "<br/>");
 }
@@ -293,8 +251,8 @@ function ScenarioEnd() {
   const game = useGame((s) => s.game)!;
   const finish = useGame((s) => s.finishScenario);
   const busy = useGame((s) => !!s.current || s.queue.length > 0);
-  if (game.phase !== "ended" || busy) return null;
   const locale = useGame((s) => s.locale);
+  if (game.phase !== "ended" || busy) return null;
   const r = scenarioText(db, game.scenarioId, locale).resolution(game.resolution ?? "none");
   return (
     <div className="handoff">
@@ -317,18 +275,26 @@ export function Hud() {
   return (
     <>
       <TopBar />
+      <ScenarioPanel />
+      <PileColumn />
+      <ChaosBagButton />
       <StatBar />
       <InvTokens />
+      <PlayStrip />
       <div className="center-col">
         <PromptBanner />
         <SkillTestPanel />
       </div>
-      <ActionRail />
-      <CardZoom />
+      <div className="right-dock">
+        <CameraButtons />
+        <ActionRail />
+      </div>
+      <HoverCard />
       <Modals />
       <PopupMenu />
       <LogPanel />
       <DebugPanel />
+      <RevealOverlay />
       <EventPlayer />
       <HandOff />
       <ScenarioEnd />

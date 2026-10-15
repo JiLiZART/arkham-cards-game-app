@@ -6,7 +6,7 @@ import { CardFace as Face } from "../CardFace";
 import { handVisible } from "../scene/Table";
 import { viewerOf } from "../store";
 import { useView } from "../view";
-import { FAN_CARD_H, FAN_CARD_W, FAN_LEGAL_RAISE, FAN_REST_VISIBLE, fanLayout, fanWidth, STAT_BAR_W } from "./fan";
+import { FAN_CARD_H, FAN_CARD_W, FAN_LEGAL_RAISE, FAN_REST_VISIBLE, fanLayout, fanWidth, HOVER_LIFT, hoverScale, STAT_BAR_W } from "./fan";
 
 const DRAG_TO_PLAY = 110;
 
@@ -71,7 +71,7 @@ export function HandFan() {
   const width = fanWidth(vw);
   const slots = fanLayout(hand.length, width);
   return (
-    <div className="hand-fan" style={{ left: STAT_BAR_W + 12, width }} aria-label="Your hand">
+    <div className="hand-fan" style={{ left: STAT_BAR_W + 12, width, ["--hover-k" as string]: hoverScale(window.innerHeight), ["--hover-lift" as string]: `${HOVER_LIFT}px` }} aria-label="Your hand">
       {hand.map((id, i) => {
         const s = slots[i];
         const opts = optionsFor(id);

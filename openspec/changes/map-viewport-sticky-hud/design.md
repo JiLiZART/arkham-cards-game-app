@@ -51,7 +51,7 @@ The user chose a fixed play-area strip (not on the map) and a centred default vi
   - things at locations, as now, including other investigators' engaged enemies with a badge;
   - minis;
   - `bounds` (map extent plus margin).
-- The table background plane is sized to `bounds` plus a frame margin, so the framed art always wraps the map.
+- `bounds` drives the camera limits. (The table background was planned as a plane sized to `bounds`; it became a fixed full-screen CSS background, see below.)
 - The viewer's deck, discard, assets and threat area, the act, the agenda and the piles are no longer placed. `optionHome` still says "board" for assets, threats and engaged enemies; the play area strip renders them.
 - `layout.test` becomes: no overlaps between groups on the map, all inside `bounds`, and nothing of the viewer's except their minis on the map.
 
@@ -138,6 +138,21 @@ The user chose a fixed play-area strip (not on the map) and a centred default vi
   - the DOM piles in `PileColumn` use the same files;
   - `iconUrl("cardBack")` is retired in favour of `backUrl(kind)`;
   - an encounter card is still recognised by `isEncounterCard`.
+
+### Changed during implementation
+- **Zoom-out limit:** the far limit is "whole map in the free area" or half the default zoom, whichever is further out, so a one-room map can still zoom out.
+- **HUD insets:** `HUD_INSETS` is `{ top: 60, right: 170, bottom: 380, left: 200 }`.
+- **Hand fan stacking:** at rest the fan sits under the stat dock, and a hovered or focused card lifts the whole fan above everything. Otherwise a tilted edge card could cover the dock.
+- **Short windows:** below 1000 px tall, the pile column uses three smaller piles per row so it clears the stat dock.
+- **Stat numbers** use lining figures, because Alegreya's old-style 0 reads as an "o".
+- **Rail:** the Draw button shows the player card back.
+- **Encounter-set names** appear only when there is a translated name (no raw codes).
+- **Marker clicks:** drei `Html` wrappers on the map now use its `pointerEvents` prop, so markers that can't be dragged don't block panning or clicks.
+- **Hand hover** (user request): 1.6× instead of 2× (`HAND_HOVER_ZOOM`), about 480×672 px.
+- **Stat bar** (user request): numbers 38 px (20% below the planned 48), the name 36 px, and the investigator's ability text under it with buttons for options on the investigator card. Resource and clue totals are nudged down 0.08 em so Alegreya's figures sit centred on the tokens.
+- **Table background** (user request): the framed art is a fixed, full-screen CSS background behind a transparent canvas, not a WebGL plane, so it never pans or zooms. With no board edge to show where the map is, the pan clamp now keeps at least 320 px of the map (more than the act/agenda panel is wide) inside the free area between the HUD panels.
+- **No hover copy for locations** (user request): they are read on the map, zoomed in as needed.
+- **Hover:** a stale hover on an HTML card (one that re-rendered under the pointer) is cleared on the next pointer move outside it.
 
 ## Risks / Trade-offs
 

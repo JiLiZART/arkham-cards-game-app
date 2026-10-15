@@ -10,6 +10,7 @@ import { viewerOf } from "../store";
 import { useView } from "../view";
 import { formatText } from "./Hud";
 import { InvModal } from "./Investigators";
+import { ChaosBagModal } from "./Panels";
 
 /** a native modal dialog: Escape and focus trapping come from <dialog>; a click on the backdrop closes it */
 export function Modal({ onClose, className, children }: { onClose: () => void; className?: string; children: ReactNode }) {
@@ -84,15 +85,28 @@ export function CardModal({ id }: { id: InstId }) {
   const d = db.cards[inst.code];
   const tx = cardText(db, inst.code, locale);
   const back = d.type === "location" && !inst.revealed;
+  // act and agenda: both sides side by side (the back holds what happens when it advances)
+  const both = (d.type === "act" || d.type === "agenda") && d.doubleSided;
   return (
-    <Modal onClose={close} className="card-modal">
-      <div className={`modal-card ${["act", "agenda", "investigator"].includes(d.type) ? "landscape" : ""}`}>
-        <CardFace code={inst.code} locale={locale} side={back ? "back" : "front"} />
-      </div>
+    <Modal onClose={close} className={`card-modal ${both ? "both" : ""}`}>
+      {both ? (
+        <div className="modal-sides">
+          <div className="modal-card landscape">
+            <CardFace code={inst.code} locale={locale} side="front" />
+          </div>
+          <div className="modal-card landscape">
+            <CardFace code={inst.code} locale={locale} side="back" />
+          </div>
+        </div>
+      ) : (
+        <div className={`modal-card ${["act", "agenda", "investigator"].includes(d.type) ? "landscape" : ""}`}>
+          <CardFace code={inst.code} locale={locale} side={back ? "back" : "front"} />
+        </div>
+      )}
       <div className="modal-side">
         <h2 className="card-name">{back ? tx.backName ?? tx.name : tx.name}</h2>
         {tx.subname && <div className="muted">{tx.subname}</div>}
-        {d.encounterSet && <div className="muted">{encounterSetName(db, d.encounterSet, locale) ?? d.encounterSet}</div>}
+        {d.encounterSet && encounterSetName(db, d.encounterSet, locale) && <div className="muted">{encounterSetName(db, d.encounterSet, locale)}</div>}
         <div className="modal-tokens">
           {TOKENS.filter(([k]) => inst[k] > 0).map(([k, icon]) => (
             <span key={k} className="stat" title={`${t(db, locale, `stat.${k}`)} ${inst[k]}`}>
@@ -118,5 +132,6 @@ export function Modals() {
   // nothing is inspectable behind the hand-off screen
   if (!modal || !handVisible(privacy, game.order.length, viewerOf(game), revealedFor)) return null;
   if ("card" in modal) return <CardModal key={modal.card} id={modal.card} />;
+  if ("bag" in modal) return <ChaosBagModal />;
   return <InvModal key={modal.inv} inv={modal.inv} />;
 }

@@ -11,9 +11,10 @@ const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameSt
 export function MenuScreen() {
   const locale = useGame((s) => s.locale);
   const privacy = useGame((s) => s.privacy);
+  const drawByHand = useGame((s) => s.drawByHand);
   const campaign = useGame((s) => s.campaign);
   const game = useGame((s) => s.game);
-  const { newCampaign, resume, setLocale, setPrivacy, abandon } = gameStore.getState();
+  const { newCampaign, resume, setLocale, setPrivacy, setDrawByHand, abandon } = gameStore.getState();
   const hasSave = useMemo(() => !!safeStorage().getItem(SAVE_KEY), []);
   const campaigns = Object.values(db.campaigns);
   const [campaignId, setCampaignId] = useState(campaigns[0]?.id ?? "");
@@ -97,6 +98,9 @@ export function MenuScreen() {
         </label>
         <label>
           <input type="checkbox" checked={privacy} onChange={(e) => setPrivacy(e.target.checked)} /> {tr("menu.privacy")}
+        </label>
+        <label>
+          <input type="checkbox" checked={drawByHand} onChange={(e) => setDrawByHand(e.target.checked)} /> {tr("menu.drawByHand")}
         </label>
       </section>
       <footer>Card data from ArkhamDB · images from arkham.build. Arkham Horror: The Card Game is © Fantasy Flight Games; fan project for personal use.</footer>

@@ -20,8 +20,8 @@ The board is still hard to play on. One fixed camera has to fit the whole map, t
 - **BREAKING (UI): hover enlarges the card in place.** The top-right zoom panel goes away.
   - Hovering any card shows it at twice its on-screen size, on the spot, with its details below it: name, traits, text and tokens.
   - This covers locations, enemies and attachments on locations, HUD panel cards and play-strip cards.
-- **Hand:** hovering a hand card shows it at twice its resting size, about 600×840 px, kept within the window height.
-- **Stat bar:** every number in the bottom-left panel (health, sanity, actions, skills, resource and clue totals) is at least 48 px tall.
+- **Hand:** hovering a hand card shows it at 1.6× its resting size, about 480×672 px, kept within the window height.
+- **Stat bar:** every number in the bottom-left panel (health, sanity, actions, skills, resource and clue totals) is at least 38 px tall, the name larger, with the investigator's ability and its option buttons under it.
 - **Icons from the font.** Every concept the ArkhamCards `arkhamicons`, `arkhamslim` and `tokens` fonts cover is drawn as a font glyph instead of a PNG, coloured like the printed icons. That covers skills, classes, health, sanity, slots, action, reaction and fast symbols, and every chaos token, including skull, cultist and the others.
   - PNGs remain only for physical token art (damage, horror, clue, doom, resource 1/3/5), the lead token, the card back, the chaos bag and the connector plaques.
   - `arkhamslim` (the thinner variant) is used for small and inline icons, and `arkhamicons` for large ones.

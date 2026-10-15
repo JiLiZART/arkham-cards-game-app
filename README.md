@@ -16,7 +16,7 @@ npm run build
 
 Card images are loaded from `https://cdn.arkham.build/optimized/<code>.webp`. That CDN sends no CORS headers, so the dev and preview servers proxy `/cards/*` to it (see `vite.config.ts`). In production, set up the same rewrite on your host, or set `VITE_CARD_IMAGE_BASE` to a CORS-enabled mirror. When an image cannot load, the card is drawn from its data instead.
 
-Icons, token art, the chaos bag, connector plaques and the framed table background come from `inspired/icons`. The icon fonts (`arkhamicons`, `tokens`) and card fonts (Teutonic, Teutonic RU, Alegreya) come from the ArkhamCards app in `inspired/ArkhamCards`. `scripts/extract-assets.sh` copies them into `public/icons`, `public/table` and `public/fonts`, and writes the glyph map `src/ui/glyphs.generated.json` from the fonts' IcoMoon configs; it needs ImageMagick and node. The copies are committed, so builds never read `inspired/`. Like the card scans, the art, fonts and imported text are for personal use.
+Icons come from the ArkhamCards icon fonts in `inspired/ArkhamCards` (`arkhamicons`, `arkhamslim` for small and inline icons, `tokens` for chaos tokens, `blood` and `standalone` for later sets). Only art the fonts don't have is a PNG: the physical damage, horror, clue, doom and resource tokens, the lead token, the chaos bag and the connector plaques (from `inspired/icons`, with their white backgrounds made transparent). The card backs come from ArkhamCards too, and the framed table background from `inspired/icons`; the card fonts are Teutonic, Teutonic RU and Alegreya. `scripts/extract-assets.sh` copies all of these into `public/icons`, `public/table` and `public/fonts`, and writes the glyph map `src/ui/glyphs.generated.json` from the fonts' IcoMoon configs; it needs ImageMagick and node. The copies are committed, so builds never read `inspired/`. Like the card scans, the art, fonts and imported text are for personal use.
 
 ## Layout
 
@@ -68,6 +68,12 @@ Both write only `content/i18n/<locale>/*.generated.json`. Fix a string by puttin
 Create `content/campaigns/<id>/` with a `campaign.json`, one JSON file per scenario and, if needed, `scripts/<scenario>.ts`. Use Night of the Zealot as the template. The menu picks it up automatically.
 
 ArkhamDB has no location connection data, so each scenario file lists its `connections` as code pairs (and any one-way ones as `oneWay: [from, to]` pairs) and its `layout` as grid positions.
+
+## Playing
+
+- **The map:** drag empty table (or any card) to pan, scroll or pinch to zoom. The camera starts on the deciding investigator's location and follows the decision; **Focus** brings it back, **Whole map** zooms out to every location. On your turn, drag your portrait onto a highlighted location to move.
+- **Cards:** hover any card to see it twice as large with its details underneath; click it to use it (several options open a menu). Your assets and threat area are in the strip above your hand; the act and agenda (top left) open both sides when clicked; the chaos bag (top right) lists its tokens.
+- **Skill tests:** click a white circle above the bag to draw a chaos token, then read the calculation and press Continue. The token is decided by the game's seeded draw, so the circle you pick doesn't change it. Turn this off in the menu with "Draw chaos tokens by hand".
 
 ## Debugging
 

@@ -17,13 +17,15 @@ export interface Save {
   campaign: CampaignState;
   setup: GameSetup | null;
   actions: Action[];
-  settings: { locale: string; privacy: boolean };
+  settings: { locale: string; privacy: boolean; drawByHand?: boolean };
 }
 
 export interface UiState {
   screen: "menu" | "game" | "log";
   locale: string;
   privacy: boolean;
+  /** chaos tokens are revealed by clicking a circle above the bag (otherwise automatically) */
+  drawByHand: boolean;
   campaign: CampaignState | null;
   setup: GameSetup | null;
   actions: Action[];
@@ -43,6 +45,7 @@ export interface UiState {
   resume(): boolean;
   abandon(): void;
   setLocale(l: string): void;
+  setDrawByHand(on: boolean): void;
   setPrivacy(p: boolean): void;
   confirmHandoff(): void;
   nextEvent(): void;
@@ -83,9 +86,9 @@ export function viewerOf(s: GameState | null): InvId | null {
 export function createGameStore(db: ContentDb, storage: Storage = safeStorage()): StoreApi<UiState> {
   const store = createStore<UiState>((set, get) => {
     const persist = () => {
-      const { campaign, setup, actions, locale, privacy } = get();
+      const { campaign, setup, actions, locale, privacy, drawByHand } = get();
       if (!campaign) return;
-      const save: Save = { version: ENGINE_VERSION, campaign, setup, actions, settings: { locale, privacy } };
+      const save: Save = { version: ENGINE_VERSION, campaign, setup, actions, settings: { locale, privacy, drawByHand } };
       try {
         storage.setItem(SAVE_KEY, JSON.stringify(save));
       } catch {
@@ -99,7 +102,7 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage())
       set({ queue, current: get().current ?? queue[0], ...(get().current ? {} : { queue: queue.slice(1) }) });
     };
     return {
-      screen: "menu", locale: "en", privacy: true, campaign: null, setup: null, actions: [], game: null,
+      screen: "menu", locale: "en", privacy: true, drawByHand: true, campaign: null, setup: null, actions: [], game: null,
       queue: [], current: null, revealedFor: null, notice: null, error: null,
 
       newCampaign(opts) {
@@ -148,7 +151,7 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage())
         } catch {
           return false;
         }
-        const settings = { locale: save.settings?.locale ?? "en", privacy: save.settings?.privacy ?? true };
+        const settings = { locale: save.settings?.locale ?? "en", privacy: save.settings?.privacy ?? true, drawByHand: save.settings?.drawByHand ?? true };
         if (save.version !== ENGINE_VERSION || !save.setup) {
           // the rules changed since this save: keep the campaign, restart the scenario
           set({
@@ -177,6 +180,10 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage())
       },
       setPrivacy(privacy) {
         set({ privacy });
+        persist();
+      },
+      setDrawByHand(drawByHand) {
+        set({ drawByHand });
         persist();
       },
       confirmHandoff() {

@@ -1,32 +1,62 @@
-/** the one place that maps game concepts to icon art (public/icons, produced by scripts/extract-assets.sh) */
-export const ICON_FILES = {
-  willpower: "willpower", intellect: "intellect", combat: "combat", agility: "agility", wild: "wild",
-  guardian: "guardian", seeker: "seeker", rogue: "rogue", mystic: "mystic", survivor: "survivor",
-  health: "damage", sanity: "horror", damage: "damage", horror: "horror",
-  clue: "clue", doom: "doom", resource: "resource",
-  skull: "skull", cultist: "cultist", tablet: "tablet", elderThing: "elderThing", elderSign: "elderSign", autoFail: "autoFail",
-  "+1": "plus-one", "-1": "minus-one",
-  hand: "slot-hand", arcane: "slot-arcane", accessory: "slot-accessory", body: "slot-body", ally: "slot-ally",
-  "resource-3": "resource-3", "resource-5": "resource-5", "clue-3": "clue-3", "doom-3": "doom-3", "damage-3": "damage-3", "horror-3": "horror-3",
-  lead: "lead", cardBack: "card-back", chaosBag: "chaos-bag", connectorBoth: "connector-both", connectorOneWay: "connector-one-way",
-} as const;
-export type IconName = keyof typeof ICON_FILES;
+/**
+ * The one place that maps game concepts to icon sources. Icon-font glyphs come first (sharp at any size, coloured
+ * like the printed icons); PNG art (public/icons, from scripts/extract-assets.sh) only where the fonts have nothing:
+ * the physical token art, the lead token, the chaos bag and the connector plaques.
+ */
 
-/** readable text used when an icon image can't load */
+/** a glyph drawn in a colour, optionally over a silhouette layer (printed skill boxes, health and sanity) */
+export interface GlyphSource {
+  glyph: string;
+  color: string;
+  under?: { glyph: string; color: string };
+  /** width / height of the glyph when it isn't square (the sanity brain is wide) */
+  aspect?: number;
+}
+export type IconSource = { png: string } | GlyphSource | { token: string };
+
+/** printed colours (ArkhamCards' palette), brightened a little for the dark HUD */
+export const SKILL_COLORS = { willpower: "#2C7FC0", intellect: "#9a4a8a", combat: "#c0392b", agility: "#1f9d3a", wild: "#8a7a3a" } as const;
+export const CLASS_COLORS = { guardian: "#2b80c5", seeker: "#ec8426", rogue: "#1b9a2a", mystic: "#6f5ce0", survivor: "#cc3038", neutral: "#9a9a9a" } as const;
+
+const skill = (s: keyof typeof SKILL_COLORS): GlyphSource => ({ glyph: `skill_${s}_inverted`, color: "#fff", under: { glyph: `skill_${s}`, color: SKILL_COLORS[s] } });
+const klass = (c: keyof typeof CLASS_COLORS): GlyphSource => ({ glyph: c, color: CLASS_COLORS[c] });
+const ink = (glyph: string): GlyphSource => ({ glyph, color: "#e6dcc3" });
+
+export const ICON_SOURCES = {
+  willpower: skill("willpower"), intellect: skill("intellect"), combat: skill("combat"), agility: skill("agility"), wild: skill("wild"),
+  guardian: klass("guardian"), seeker: klass("seeker"), rogue: klass("rogue"), mystic: klass("mystic"), survivor: klass("survivor"), neutral: klass("neutral"),
+  health: { glyph: "health", color: "#ffe9e2", under: { glyph: "health_inverted", color: "#b3261e" } },
+  sanity: { glyph: "sanity", color: "#e6eeff", under: { glyph: "sanity_inverted", color: "#2f5fb3" }, aspect: 1.35 },
+  hand: ink("hand"), hands: ink("hand_x2"), arcane: ink("arcane"), arcane2: ink("arcane_x2"), accessory: ink("accessory"), body: ink("body"), ally: ink("ally"),
+  skull: { token: "skull" }, cultist: { token: "cultist" }, tablet: { token: "tablet" }, elderThing: { token: "elderThing" }, elderSign: { token: "elderSign" }, autoFail: { token: "autoFail" },
+  "+1": { token: "+1" }, "-1": { token: "-1" },
+  damage: { png: "damage" }, horror: { png: "horror" }, clue: { png: "clue" }, doom: { png: "doom" }, resource: { png: "resource" },
+  "resource-3": { png: "resource-3" }, "resource-5": { png: "resource-5" }, "clue-3": { png: "clue-3" }, "doom-3": { png: "doom-3" }, "damage-3": { png: "damage-3" }, "horror-3": { png: "horror-3" },
+  lead: { png: "lead" }, chaosBag: { png: "chaos-bag" }, connectorBoth: { png: "connector-both" }, connectorOneWay: { png: "connector-one-way" },
+} satisfies Record<string, IconSource>;
+export type IconName = keyof typeof ICON_SOURCES;
+
+/** readable text used when an icon can't be drawn */
 export const ICON_LABELS: Record<IconName, string> = {
   willpower: "Will", intellect: "Int", combat: "Com", agility: "Agi", wild: "?",
-  guardian: "Gua", seeker: "See", rogue: "Rog", mystic: "Mys", survivor: "Sur",
-  health: "HP", sanity: "San", damage: "Dmg", horror: "Hor", clue: "Clue", doom: "Doom", resource: "Res",
-  skull: "Skull", cultist: "Cult", tablet: "Tab", elderThing: "ElTh", elderSign: "ElSi", autoFail: "Fail",
-  "+1": "+1", "-1": "−1", hand: "Hand", arcane: "Arc", accessory: "Acc", body: "Body", ally: "Ally",
+  guardian: "Gua", seeker: "See", rogue: "Rog", mystic: "Mys", survivor: "Sur", neutral: "Neu",
+  health: "HP", sanity: "San", hand: "Hand", hands: "Hands", arcane: "Arc", arcane2: "Arc×2", accessory: "Acc", body: "Body", ally: "Ally",
+  skull: "Skull", cultist: "Cult", tablet: "Tab", elderThing: "ElTh", elderSign: "ElSi", autoFail: "Fail", "+1": "+1", "-1": "−1",
+  damage: "Dmg", horror: "Hor", clue: "Clue", doom: "Doom", resource: "Res",
   "resource-3": "3 Res", "resource-5": "5 Res", "clue-3": "3 Clue", "doom-3": "3 Doom", "damage-3": "3 Dmg", "horror-3": "3 Hor",
-  lead: "Lead", cardBack: "Back", chaosBag: "Bag", connectorBoth: "↔", connectorOneWay: "→",
+  lead: "Lead", chaosBag: "Bag", connectorBoth: "↔", connectorOneWay: "→",
 };
 
-export const iconUrl = (name: IconName) => `/icons/${ICON_FILES[name]}.png`;
-export const isIcon = (name: string): name is IconName => name in ICON_FILES;
+export const isIcon = (name: string): name is IconName => name in ICON_SOURCES;
+export const iconSource = (name: IconName): IconSource => ICON_SOURCES[name];
+/** URL of a PNG icon (only for the art the fonts don't have) */
+export const iconUrl = (name: IconName) => {
+  const s = ICON_SOURCES[name] as IconSource;
+  if (!("png" in s)) throw new Error(`${name} is drawn from the icon font, not a PNG`);
+  return `/icons/${s.png}.png`;
+};
 
-/** ArkhamDB markup keys → icon names */
+/** ArkhamDB markup keys → icon names (anything else falls through to a plain glyph, see glyphs.ts) */
 export const MARKUP_ICONS: Record<string, IconName> = {
   willpower: "willpower", intellect: "intellect", combat: "combat", agility: "agility", wild: "wild",
   skull: "skull", cultist: "cultist", tablet: "tablet", elder_thing: "elderThing", elder_sign: "elderSign", auto_fail: "autoFail",

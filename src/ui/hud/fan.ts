@@ -4,9 +4,9 @@ export const FAN_CARD_H = 420;
 /** at rest about 45% of a card shows above the bottom edge */
 export const FAN_REST_VISIBLE = 189;
 /** cards with an option in the pending choice rise this far above the others */
-export const FAN_LEGAL_RAISE = 70;
+export const FAN_LEGAL_RAISE = 36;
 /** room kept for the stat bar on the left of the hand and the action rail on the right */
-export const STAT_BAR_W = 336;
+export const STAT_BAR_W = 420;
 export const RAIL_W = 172;
 
 export interface FanSlot {
@@ -34,3 +34,9 @@ export function fanLayout(n: number, width: number, cardW = FAN_CARD_W): FanSlot
     return { x: width / 2 + off * step, y: (Math.abs(rotate) / 8) ** 2 * 26, rotate };
   });
 }
+
+/** hover zoom for a hand card (1.6×, about 480×672 px), or as much as fits the window height */
+export const HAND_HOVER_ZOOM = 1.6;
+export const hoverScale = (viewportH: number) => Math.min(HAND_HOVER_ZOOM, (viewportH - 16 - 12) / FAN_CARD_H);
+/** lift that puts a hovered card's bottom 12 px above the screen edge */
+export const HOVER_LIFT = -(FAN_CARD_H - FAN_REST_VISIBLE + 12);
