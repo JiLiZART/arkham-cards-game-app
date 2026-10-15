@@ -61,18 +61,23 @@ export function buildContent(files: Record<string, unknown>, scriptFiles: Record
   parseInto(/\/decks\/[^/]+\.json$/, DeckDef, (v) => (db.decks[v.id] = v));
   parseInto(/\/campaigns\/[^/]+\/campaign\.json$/, CampaignDef, (v) => (db.campaigns[v.id] = v));
   parseInto(/\/campaigns\/[^/]+\/scenarios\/[^/]+\.json$/, ScenarioDef, (v) => (db.scenarios[v.id] = v));
-  // translations: imported *.generated.json first, hand-written files merged over them (field by field)
+  // translations, merged field by field: imported *.generated.json, then *.print.json (the text printed on the
+  // imported Russian card images), then the hand-written files
+  const layer = (suffix?: string) => (suffix === ".generated" ? 0 : suffix === ".print" ? 1 : 2);
   const i18nFiles = entries
-    .map(([file, raw]) => ({ file, raw, m: file.match(/\/i18n\/([^/]+)\/(cards|ui|campaigns)(\.generated)?\.json$/) }))
+    .map(([file, raw]) => ({ file, raw, m: file.match(/\/i18n\/([^/]+)\/(cards|ui|campaigns)(\.generated|\.print)?\.json$/) }))
     .filter((f) => f.m)
-    .sort((a, b) => Number(!!b.m![3]) - Number(!!a.m![3]));
+    .sort((a, b) => layer(a.m![3]) - layer(b.m![3]));
   for (const { file, raw, m } of i18nFiles) {
     const [, locale, kind] = m!;
     const loc = (db.i18n[locale] ??= { cards: {}, ui: {}, campaigns: { campaigns: {}, scenarios: {}, encounterSets: {} } });
     if (kind === "cards") {
       const r = I18nCards.safeParse(raw);
       if (!r.success) errors.push(...zerr(file, r.error));
-      else for (const [code, tr] of Object.entries(r.data)) loc.cards[code] = { ...loc.cards[code], ...tr };
+      else {
+        for (const [code, tr] of Object.entries(r.data)) loc.cards[code] = { ...loc.cards[code], ...tr };
+        if (m![3] === ".print") errors.push(...checkPrintText(db, file, r.data));
+      }
     } else if (kind === "ui") {
       const r = I18nUi.safeParse(raw);
       if (!r.success) errors.push(...zerr(file, r.error));
@@ -89,6 +94,19 @@ export function buildContent(files: Record<string, unknown>, scriptFiles: Record
   }
   errors.push(...validateRefs(db, cardFile));
   return { db, errors };
+}
+
+/** printed card texts: known card codes, and only icon tokens that the cards' own texts use */
+export function checkPrintText(db: ContentDb, file: string, data: Record<string, { text?: string; backText?: string }>): ContentError[] {
+  const known = new Set<string>();
+  for (const c of Object.values(db.cards)) for (const t of [c.text, c.backText]) for (const m of (t ?? "").matchAll(/\[(\w+)\]/g)) known.add(m[1]);
+  const errors: ContentError[] = [];
+  for (const [code, tr] of Object.entries(data)) {
+    if (!db.cards[code]) errors.push({ file, path: code, message: "unknown card code" });
+    for (const field of ["text", "backText"] as const)
+      for (const m of (tr[field] ?? "").matchAll(/\[(\w+)\]/g)) if (!known.has(m[1])) errors.push({ file, path: `${code}.${field}`, message: `unknown icon [${m[1]}]` });
+  }
+  return errors;
 }
 
 /** dangling references between content files */

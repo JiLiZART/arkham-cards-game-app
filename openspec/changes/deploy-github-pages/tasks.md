@@ -12,4 +12,4 @@
 
 ## 4. Publish
 
-- [ ] 4.1 README: a "Deploying" section with the Pages URL (`https://arkham.artkost.dev`), the custom domain and its Cloudflare `CNAME` record, the one-time "Source: GitHub Actions" setting, manual runs, and that card scans are fetched at deploy time and publicly hosted. Ask the user before changing the repository's Pages settings (`gh api`) and before committing or pushing. Once they agree, push to `main` and watch the run (`gh run watch`). Verify the live site in the browser: the game starts, scans show on the map, and the console and network have no errors.
+- [x] 4.1 README: a "Deploying" section with the Pages URL (`https://arkham.artkost.dev`), the custom domain and its Cloudflare `CNAME` record, the one-time "Source: GitHub Actions" setting, manual runs, and that card scans are fetched at deploy time and publicly hosted. Ask the user before changing the repository's Pages settings (`gh api`) and before committing or pushing. Once they agree, push to `main` and watch the run (`gh run watch`). Verify the live site in the browser: the game starts, scans show on the map, and the console and network have no errors.

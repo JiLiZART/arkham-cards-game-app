@@ -6,7 +6,8 @@ import { defineConfig } from "vitest/config";
 // On GitHub Pages the scans are downloaded into the build instead (scripts/fetch-card-images.ts);
 // elsewhere, configure the same rewrite on the host or set VITE_CARD_IMAGE_BASE.
 const cardProxy = {
-  "/cards": {
+  // only /cards/… (a bare "/cards" prefix would also catch the Russian images in /cards-ru/)
+  "^/cards/": {
     target: "https://cdn.arkham.build",
     changeOrigin: true,
     rewrite: (p: string) => p.replace(/^\/cards/, "/optimized"),

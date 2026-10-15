@@ -63,6 +63,19 @@ src/ui/                          React HUD + R3F table
 3. If something can't be expressed this way, set `"script": true` and add `scripts/<code>.ts` exporting a `CardScript`. Copy any existing script as a starting point.
 4. Run `npm run check:content`.
 
+## Russian card images
+
+With the Russian interface, cards show Russian card images from `public/cards-ru` (378×531 WebP). Most are community-made cards from `inspired/CARDS_ru`; acts, agendas, scenario cards, investigators and the few cards the community set lacks come from the Russian print sheets in `inspired/PDF_ru`. The Russian card names and texts follow what is printed on those images (`content/i18n/ru/cards.print.json`, layered between the imported translation and hand-written `cards.json`). Like the English scans, these images are publicly hosted on the Pages site.
+
+To rebuild them, run `npm run import:ru-cards`. It needs `tesseract`, `pdfimages` (poppler), ImageMagick and `cwebp`, and downloads Tesseract's Russian data once into `.cache/tessdata`. The import:
+
+1. extracts the card images embedded in the PDFs;
+2. reads every image with OCR (about 15 minutes the first time, cached in `.cache/ru-import`);
+3. matches each one to a card code by name, text, orientation and level;
+4. writes the manifest `content/i18n/ru/images.json`, the WebP files and `src/ui/ruImages.generated.json`.
+
+Uncertain matches are left out and listed on `.cache/ru-import/review.html`, next to the English scans. Pin or reject a match in `content/i18n/ru/images.overrides.json` (`{"01111:back": "inspired/…/Кабинет.jpg"}`, or `null`) and rerun; the same inputs and overrides always give the same output. For new cards, add their printed text to `cards.print.json`; `npm run check:content` rejects unknown codes and icon tokens there.
+
 ## Translations
 
 Translations are imported, not typed in:

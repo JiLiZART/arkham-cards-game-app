@@ -8,7 +8,7 @@ export function CardFace({ code, locale, side = "front" }: { code: string; local
   const [broken, setBroken] = useState(false);
   const d = db.cards[code];
   const tx = cardText(db, code, locale);
-  const url = cardImage(d, side);
+  const url = cardImage(d, side, locale);
   if (url && !broken) return <img src={url} alt={tx.name} draggable={false} onError={() => setBroken(true)} />;
   const f = side === "back" ? faceLines(d, "back", tx.backName ?? tx.name, tx.backText ?? "") : faceLines(d, "front", tx.name, tx.text);
   return (

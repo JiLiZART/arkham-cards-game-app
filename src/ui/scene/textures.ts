@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import * as THREE from "three";
 import type { CardDef } from "../../content/schema";
+import { useGame } from "../context";
 import { backUrl, cardImage, FACTION_COLORS, faceLines, isEncounterCard } from "../images";
 
 const W = 360;
@@ -94,7 +95,9 @@ export function backTexture(kind: "player" | "encounter", landscape = false): TH
  * Failed images (offline, 404) keep the drawn face.
  */
 export function useCardTexture(card: CardDef, side: "front" | "back", name: string, text: string, landscape: boolean): THREE.Texture {
-  const url = cardImage(card, side);
+  // the cache is keyed by URL, so switching the language swaps in the other locale's image
+  const locale = useGame((s) => s.locale);
+  const url = cardImage(card, side, locale);
   const genericBack = () => backTexture(isEncounterCard(card) ? "encounter" : "player", landscape);
   const fallback = () => (side === "back" && !url ? genericBack() : drawnFace(card, side, name, text, landscape));
   const [tex, setTex] = useState<THREE.Texture>(() => (url && cache.get(url)) || fallback());

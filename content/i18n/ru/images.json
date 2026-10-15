@@ -1,0 +1,1632 @@
+{
+ "01001": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-003-011.jpg",
+   "source": "pdf",
+   "score": 0.844
+  },
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-004-020.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01002": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-003-010.jpg",
+   "source": "pdf",
+   "score": 0.871
+  },
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-004-018.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01003": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-003-012.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  },
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-004-019.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01004": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-003-016.jpg",
+   "source": "pdf",
+   "score": 0.826
+  },
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-004-021.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01005": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-003-014.jpg",
+   "source": "pdf",
+   "score": 0.971
+  },
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-004-023.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01006": {
+  "front": {
+   "src": "inspired/CARDS_ru/Револьвер роланда 38 калибра.jpg",
+   "source": "cards",
+   "score": 0.979
+  }
+ },
+ "01007": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-005-026.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01008": {
+  "front": {
+   "src": "inspired/CARDS_ru/Сумка Дэзи.jpg",
+   "source": "cards",
+   "score": 0.924
+  }
+ },
+ "01009": {
+  "front": {
+   "src": "inspired/CARDS_ru/Карты слабостей/Некрономикон.jpg",
+   "source": "cards",
+   "score": 1.078
+  }
+ },
+ "01010": {
+  "front": {
+   "src": "inspired/CARDS_ru/В бегах.JPG",
+   "source": "cards",
+   "score": 1.061
+  }
+ },
+ "01011": {
+  "front": {
+   "src": "inspired/CARDS_ru/Карты слабостей/Медицинские долги.JPG",
+   "source": "cards",
+   "score": 1.072
+  }
+ },
+ "01012": {
+  "front": {
+   "src": "inspired/CARDS_ru/Гиперборейская реликвия.JPG",
+   "source": "cards",
+   "score": 1.049
+  }
+ },
+ "01013": {
+  "front": {
+   "src": "inspired/CARDS_ru/Карты слабостей/Тёмные воспоминания.jpg",
+   "source": "cards",
+   "score": 1.052
+  }
+ },
+ "01014": {
+  "front": {
+   "src": "inspired/CARDS_ru/Амулет Венди.JPG",
+   "source": "cards",
+   "score": 1.069
+  }
+ },
+ "01015": {
+  "front": {
+   "src": "inspired/CARDS_ru/Карты слабостей/Брошенная и одинокая.jpg",
+   "source": "cards",
+   "score": 0.864
+  }
+ },
+ "01016": {
+  "front": {
+   "src": "inspired/CARDS_ru/Кольт 45-го калибра.jpg",
+   "source": "cards",
+   "score": 1.058
+  }
+ },
+ "01017": {
+  "front": {
+   "src": "inspired/CARDS_ru/Физическая тренировка 3.JPG",
+   "source": "cards",
+   "score": 1.076
+  }
+ },
+ "01018": {
+  "front": {
+   "src": "inspired/CARDS_ru/Патрульный офицер 0.jpg",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01019": {
+  "front": {
+   "src": "inspired/CARDS_ru/Первая помощь.jpg",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01020": {
+  "front": {
+   "src": "inspired/CARDS_ru/Мачете.jpg",
+   "source": "cards",
+   "score": 1.061
+  }
+ },
+ "01021": {
+  "front": {
+   "src": "inspired/CARDS_ru/Сторожевой пёс.jpg",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01022": {
+  "front": {
+   "src": "inspired/CARDS_ru/Зацепка.JPG",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01023": {
+  "front": {
+   "src": "inspired/CARDS_ru/Уклонение.jpg",
+   "source": "cards",
+   "score": 1.056
+  }
+ },
+ "01024": {
+  "front": {
+   "src": "inspired/CARDS_ru/Взрыв динамита.jpg",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01025": {
+  "front": {
+   "src": "inspired/CARDS_ru/Яростный удар.JPG",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01026": {
+  "front": {
+   "src": "inspired/CARDS_ru/Дополнительные боеприпасы.jpg",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01027": {
+  "front": {
+   "src": "inspired/CARDS_ru/Полицейский жетон.jpg",
+   "source": "cards",
+   "score": 1.078
+  }
+ },
+ "01028": {
+  "front": {
+   "src": "inspired/CARDS_ru/Патрульный офицер.jpg",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01029": {
+  "front": {
+   "src": "inspired/CARDS_ru/Дробовик.jpg",
+   "source": "cards",
+   "score": 1.073
+  }
+ },
+ "01030": {
+  "front": {
+   "src": "inspired/CARDS_ru/Увеличительное стекло.jpg",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01031": {
+  "front": {
+   "src": "inspired/CARDS_ru/Старая книга заклинаний.jpg",
+   "source": "cards",
+   "score": 1.079
+  }
+ },
+ "01032": {
+  "front": {
+   "src": "inspired/CARDS_ru/Библиотекарь-исследователь.jpg",
+   "source": "cards",
+   "score": 1.058
+  }
+ },
+ "01033": {
+  "front": {
+   "src": "inspired/CARDS_ru/Доктор кристофер милан.JPG",
+   "source": "cards",
+   "score": 1.066
+  }
+ },
+ "01034": {
+  "front": {
+   "src": "inspired/CARDS_ru/Сверхнастороженность.jpg",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01035": {
+  "front": {
+   "src": "inspired/CARDS_ru/Медицинские записи.jpg",
+   "source": "cards",
+   "score": 1.066
+  }
+ },
+ "01036": {
+  "front": {
+   "src": "inspired/CARDS_ru/Сознание и материя.jpg",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01037": {
+  "front": {
+   "src": "inspired/CARDS_ru/Сработавшее предчувствие.JPG",
+   "source": "cards",
+   "score": 1.058
+  }
+ },
+ "01038": {
+  "front": {
+   "src": "inspired/CARDS_ru/Баррикада.jpg",
+   "source": "cards",
+   "score": 1.054
+  }
+ },
+ "01039": {
+  "front": {
+   "src": "inspired/CARDS_ru/Дедукция.jpg",
+   "source": "cards",
+   "score": 1.069
+  }
+ },
+ "01040": {
+  "front": {
+   "src": "inspired/CARDS_ru/Увеличительное стекло 2.JPG",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01041": {
+  "front": {
+   "src": "inspired/CARDS_ru/Диск ицамны.jpg",
+   "source": "cards",
+   "score": 1.077
+  }
+ },
+ "01042": {
+  "front": {
+   "src": "inspired/CARDS_ru/Энциклопедия.jpg",
+   "source": "cards",
+   "score": 1.077
+  }
+ },
+ "01043": {
+  "front": {
+   "src": "inspired/CARDS_ru/Тайные исследования.jpg",
+   "source": "cards",
+   "score": 1.077
+  }
+ },
+ "01044": {
+  "front": {
+   "src": "inspired/CARDS_ru/Выкидной нож.jpg",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01045": {
+  "front": {
+   "src": "inspired/CARDS_ru/Кража со взломом.jpg",
+   "source": "cards",
+   "score": 1.077
+  }
+ },
+ "01046": {
+  "front": {
+   "src": "inspired/CARDS_ru/Карманная кража.JPG",
+   "source": "cards",
+   "score": 1.055
+  }
+ },
+ "01047": {
+  "front": {
+   "src": "inspired/CARDS_ru/Деренджир 41-го калибра.jpg",
+   "source": "cards",
+   "score": 0.899
+  }
+ },
+ "01048": {
+  "front": {
+   "src": "inspired/CARDS_ru/Лео Де Лука.jpg",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01049": {
+  "front": {
+   "src": "inspired/CARDS_ru/Школа улиц.JPG",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01050": {
+  "front": {
+   "src": "inspired/CARDS_ru/Неуловимый.jpg",
+   "source": "cards",
+   "score": 1.049
+  }
+ },
+ "01051": {
+  "front": {
+   "src": "inspired/CARDS_ru/Удар в спину.jpg",
+   "source": "cards",
+   "score": 1.069
+  }
+ },
+ "01052": {
+  "front": {
+   "src": "inspired/CARDS_ru/Внезапная атака.JPG",
+   "source": "cards",
+   "score": 1.044
+  }
+ },
+ "01053": {
+  "front": {
+   "src": "inspired/CARDS_ru/Воспользоваться моментом.jpg",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01054": {
+  "front": {
+   "src": "inspired/CARDS_ru/Лео Де лука 2.jpg",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01055": {
+  "front": {
+   "src": "inspired/CARDS_ru/Ловкий грабитель.jpg",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01056": {
+  "front": {
+   "src": "inspired/CARDS_ru/Ловкий трюк.jpg",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01057": {
+  "front": {
+   "src": "inspired/CARDS_ru/Выигрышная комбинация.JPG",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01058": {
+  "front": {
+   "src": "inspired/CARDS_ru/Запретное знание.jpg",
+   "source": "cards",
+   "score": 1.073
+  }
+ },
+ "01059": {
+  "front": {
+   "src": "inspired/CARDS_ru/Святые четки_2.jpg",
+   "source": "cards",
+   "score": 1.06
+  }
+ },
+ "01060": {
+  "front": {
+   "src": "inspired/CARDS_ru/Иссушение 2.jpg",
+   "source": "cards",
+   "score": 1.08
+  }
+ },
+ "01061": {
+  "front": {
+   "src": "inspired/CARDS_ru/Гадание.jpg",
+   "source": "cards",
+   "score": 1.073
+  }
+ },
+ "01062": {
+  "front": {
+   "src": "inspired/CARDS_ru/Магическая практика.jpg",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01063": {
+  "front": {
+   "src": "inspired/CARDS_ru/Посвящённая.jpg",
+   "source": "cards",
+   "score": 1.057
+  }
+ },
+ "01064": {
+  "front": {
+   "src": "inspired/CARDS_ru/Лететь на огонь.JPG",
+   "source": "cards",
+   "score": 1.059
+  }
+ },
+ "01065": {
+  "front": {
+   "src": "inspired/CARDS_ru/Защитный знак.jpg",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01066": {
+  "front": {
+   "src": "inspired/CARDS_ru/Ослепляющий свет.JPG",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01067": {
+  "front": {
+   "src": "inspired/CARDS_ru/Бесстрашие.JPG",
+   "source": "cards",
+   "score": 0.964
+  }
+ },
+ "01068": {
+  "front": {
+   "src": "inspired/CARDS_ru/Стирание разума.JPG",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01069": {
+  "front": {
+   "src": "inspired/CARDS_ru/Ослепляющий свет 2.jpg",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01070": {
+  "front": {
+   "src": "inspired/CARDS_ru/Книга теней 2.JPG",
+   "source": "cards",
+   "score": 1.076
+  }
+ },
+ "01071": {
+  "front": {
+   "src": "inspired/CARDS_ru/Причудливая статуя.JPG",
+   "source": "cards",
+   "score": 1.08
+  }
+ },
+ "01072": {
+  "front": {
+   "src": "inspired/CARDS_ru/Кожаное пальто.jpg",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01073": {
+  "front": {
+   "src": "inspired/CARDS_ru/Рытье в мусоре 2.jpg",
+   "source": "cards",
+   "score": 1.069
+  }
+ },
+ "01074": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-012-092.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01075": {
+  "front": {
+   "src": "inspired/CARDS_ru/Кроличья лапка.jpg",
+   "source": "cards",
+   "score": 1.06
+  }
+ },
+ "01076": {
+  "front": {
+   "src": "inspired/CARDS_ru/Бродячий кот.jpg",
+   "source": "cards",
+   "score": 1.015
+  }
+ },
+ "01077": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-012-093.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01078": {
+  "front": {
+   "src": "inspired/CARDS_ru/Отвлекающий маневр.JPG",
+   "source": "cards",
+   "score": 1.049
+  }
+ },
+ "01079": {
+  "front": {
+   "src": "inspired/CARDS_ru/Смотри, что я нашел.JPG",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01080": {
+  "front": {
+   "src": "inspired/CARDS_ru/Повезло.jpg",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01081": {
+  "front": {
+   "src": "inspired/CARDS_ru/Инстинкт выживания.jpg",
+   "source": "cards",
+   "score": 1.074
+  }
+ },
+ "01082": {
+  "front": {
+   "src": "inspired/CARDS_ru/Аквинна.JPG",
+   "source": "cards",
+   "score": 1.08
+  }
+ },
+ "01083": {
+  "front": {
+   "src": "inspired/CARDS_ru/В последний момент.jpg",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01084": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-013-106.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01085": {
+  "front": {
+   "src": "inspired/CARDS_ru/Желание выжить.JPG",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01086": {
+  "front": {
+   "src": "inspired/CARDS_ru/Нож.jpg",
+   "source": "cards",
+   "score": 1.079
+  }
+ },
+ "01087": {
+  "front": {
+   "src": "inspired/CARDS_ru/Фонарь 1.JPG",
+   "source": "cards",
+   "score": 1.061
+  }
+ },
+ "01088": {
+  "front": {
+   "src": "inspired/CARDS_ru/Неприкосновенный запас.jpg",
+   "source": "cards",
+   "score": 0.874
+  }
+ },
+ "01089": {
+  "front": {
+   "src": "inspired/CARDS_ru/Храбрость.jpg",
+   "source": "cards",
+   "score": 1.055
+  }
+ },
+ "01090": {
+  "front": {
+   "src": "inspired/CARDS_ru/Внимательность.jpg",
+   "source": "cards",
+   "score": 1.06
+  }
+ },
+ "01091": {
+  "front": {
+   "src": "inspired/CARDS_ru/Превозможение.jpg",
+   "source": "cards",
+   "score": 1.061
+  }
+ },
+ "01092": {
+  "front": {
+   "src": "inspired/CARDS_ru/Ловкость рук.jpg",
+   "source": "cards",
+   "score": 1.07
+  }
+ },
+ "01093": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-016-127.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01094": {
+  "front": {
+   "src": "inspired/CARDS_ru/Бронежилет.JPG",
+   "source": "cards",
+   "score": 0.743
+  }
+ },
+ "01095": {
+  "front": {
+   "src": "inspired/CARDS_ru/Амулет со знаком Старших богов.JPG",
+   "source": "cards",
+   "score": 0.665
+  }
+ },
+ "01096": {
+  "front": {
+   "src": "inspired/CARDS_ru/Карты слабостей/Амнезия.JPG",
+   "source": "cards",
+   "score": 1.013
+  }
+ },
+ "01097": {
+  "front": {
+   "src": "inspired/CARDS_ru/Карты слабостей/Паранойя.jpg",
+   "source": "cards",
+   "score": 1.02
+  }
+ },
+ "01098": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-017-136.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01099": {
+  "front": {
+   "src": "inspired/CARDS_ru/Карты слабостей/Психоз.jpg",
+   "source": "cards",
+   "score": 1.046
+  }
+ },
+ "01100": {
+  "front": {
+   "src": "inspired/CARDS_ru/Карты слабостей/Ипохондрия.jpg",
+   "source": "cards",
+   "score": 1.049
+  }
+ },
+ "01101": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-017-137.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01102": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-017-142.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01103": {
+  "front": {
+   "src": "inspired/CARDS_ru/Карты слабостей/Упрямый детектив.jpg",
+   "source": "cards",
+   "score": 0.55
+  }
+ },
+ "01104": {
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-004-025.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  },
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-003-013.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01105": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-034-284.jpg",
+   "source": "pdf",
+   "score": 0.68
+  },
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-035-294.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01106": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-034-283.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  },
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-035-292.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01107": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-034-285.jpg",
+   "source": "pdf",
+   "score": 0.595
+  },
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-035-293.jpg",
+   "source": "pdf",
+   "score": 0.782
+  }
+ },
+ "01108": {
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-035-295.jpg",
+   "source": "pdf",
+   "score": 0.718
+  },
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-034-290.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01109": {
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-035-297.jpg",
+   "source": "pdf",
+   "score": 0.754
+  },
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-034-288.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01110": {
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-035-299.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  },
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-034-286.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01111": {
+  "front": {
+   "src": "inspired/CARDS_ru/Локации/База/Кабинет 2.jpg",
+   "source": "cards",
+   "score": 0.828
+  },
+  "back": {
+   "src": "inspired/CARDS_ru/Локации/База/Кабинет.jpg",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01112": {
+  "front": {
+   "src": "inspired/CARDS_ru/Локации/База/Прихожая 3.jpg",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  },
+  "back": {
+   "src": "inspired/CARDS_ru/Локации/База/Прихожая (измен).jpg",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01113": {
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-028-231.jpg",
+   "source": "pdf",
+   "score": 0.68
+  },
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-029-239.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01114": {
+  "front": {
+   "src": "inspired/CARDS_ru/Локации/База/Подвал 2.jpg",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  },
+  "back": {
+   "src": "inspired/CARDS_ru/Локации/База/Подвал.jpg",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01115": {
+  "back": {
+   "src": "inspired/CARDS_ru/Локации/База/Гостиная 2.jpg",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  },
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-029-243.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01116": {
+  "front": {
+   "src": "inspired/CARDS_ru/Монстры/Упырь жрец.JPG",
+   "source": "cards",
+   "score": 0.55
+  }
+ },
+ "01117": {
+  "front": {
+   "src": "inspired/CARDS_ru/Лита Чантлер.jpg",
+   "source": "cards",
+   "score": 1.078
+  }
+ },
+ "01118": {
+  "front": {
+   "src": "inspired/CARDS_ru/Монстры/Пожиратель плоти.JPG",
+   "source": "cards",
+   "score": 0.605
+  }
+ },
+ "01119": {
+  "front": {
+   "src": "inspired/CARDS_ru/Монстры/Монстры с переводом от хоббиков/Ледяной упырь.jpg",
+   "source": "cards",
+   "score": 0.627
+  }
+ },
+ "01120": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-003-017.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  },
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-004-022.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01121a": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-034-291.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01121b": {
+  "front": {
+   "src": "inspired/CARDS_ru/Монстры/Охотник в маске.JPG",
+   "source": "cards",
+   "score": 0.569
+  }
+ },
+ "01122": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-034-289.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  },
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-035-298.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01123": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-034-287.jpg",
+   "source": "pdf",
+   "score": 0.675
+  },
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-035-300.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01124": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-029-245.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  },
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-028-232.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01125": {
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-028-237.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  },
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-029-242.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01126": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-029-244.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  },
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-028-233.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01127": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-029-246.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  },
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-028-235.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01128": {
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-030-248.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  },
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-031-258.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01129": {
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-030-247.jpg",
+   "source": "pdf",
+   "score": 0.68
+  },
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-031-256.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01130": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-031-257.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  },
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-030-249.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01131": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-031-259.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  },
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-030-254.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01132": {
+  "front": {
+   "src": "inspired/CARDS_ru/Локации/База/Исттаун 2.jpg",
+   "source": "cards",
+   "score": 1.048
+  },
+  "back": {
+   "src": "inspired/CARDS_ru/Локации/База/Исттаун.jpg",
+   "source": "cards",
+   "score": 0.8
+  }
+ },
+ "01133": {
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-030-250.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  },
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-031-263.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01134": {
+  "front": {
+   "src": "inspired/CARDS_ru/Локации/База/Нортсайд 2.jpg",
+   "source": "cards",
+   "score": 1.02
+  },
+  "back": {
+   "src": "inspired/CARDS_ru/Локации/База/Нортсайд.jpg",
+   "source": "cards",
+   "score": 0.8
+  }
+ },
+ "01135": {
+  "front": {
+   "src": "inspired/CARDS_ru/Карты напастей (опасностей)/Преследующая тень.jpg",
+   "source": "cards",
+   "score": 0.92
+  }
+ },
+ "01136": {
+  "front": {
+   "src": "inspired/CARDS_ru/Карты напастей (опасностей)/Ложный след.jpg",
+   "source": "cards",
+   "score": 1.05
+  }
+ },
+ "01137": {
+  "front": {
+   "src": "inspired/CARDS_ru/Монстры/Монстры с переводом от хоббиков/Оборотень дрю.jpg",
+   "source": "cards",
+   "score": 0.55
+  }
+ },
+ "01138": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-020-162.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01139": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-020-161.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01140": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-020-163.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01141": {
+  "front": {
+   "src": "inspired/CARDS_ru/Монстры/Монстры с переводом от хоббиков/Рут Тёрнер.jpg",
+   "source": "cards",
+   "score": 0.55
+  }
+ },
+ "01142": {
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-004-024.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  },
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-003-015.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01143": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-036-302.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  },
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-037-310.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01144": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-036-301.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  },
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-037-308.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01145": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-036-303.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  },
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-037-309.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01146": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-036-306.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  },
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-037-311.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01147": {
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-037-313.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  },
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-036-305.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01148": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-036-304.jpg",
+   "source": "pdf",
+   "score": 0.679
+  },
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-037-314.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01149": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-031-262.jpg",
+   "source": "pdf",
+   "score": 0.749
+  },
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-030-253.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01150": {
+  "front": {
+   "src": "inspired/CARDS_ru/Локации/База/Аркхэмский лес - скверная земля.jpg",
+   "source": "cards",
+   "score": 1.012
+  },
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-030-251.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01151": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-033-276.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  },
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-032-265.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01152": {
+  "front": {
+   "src": "inspired/CARDS_ru/Локации/База/Аркхэмский лес - старый дом.jpg",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  },
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-032-266.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01153": {
+  "front": {
+   "src": "inspired/CARDS_ru/Локации/База/Аркхэмский лес - утёс.jpg",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  },
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-032-267.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01154": {
+  "front": {
+   "src": "inspired/CARDS_ru/Локации/База/Аркхэмский лес - непроходимая чаща.jpg",
+   "source": "cards",
+   "score": 1,
+   "pinned": true
+  },
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-032-270.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01155": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-033-279.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  },
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-032-272.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01156": {
+  "back": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-032-268.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  },
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-033-281.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01157": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-020-166.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01158": {
+  "front": {
+   "src": "inspired/CARDS_ru/Карты напастей (опасностей)/Гнев умордхота.jpg",
+   "source": "cards",
+   "score": 1.038
+  }
+ },
+ "01159": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-020-165.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01160": {
+  "front": {
+   "src": "inspired/CARDS_ru/Монстры/Младший упырь.jpg",
+   "source": "cards",
+   "score": 0.568
+  }
+ },
+ "01161": {
+  "front": {
+   "src": "inspired/CARDS_ru/Монстры/Монстры с переводом от хоббиков/Изголодавшийся упырь.jpg",
+   "source": "cards",
+   "score": 0.578
+  }
+ },
+ "01162": {
+  "front": {
+   "src": "inspired/CARDS_ru/Карты напастей (опасностей)/Цепкие руки.jpg",
+   "source": "cards",
+   "score": 1.024
+  }
+ },
+ "01163": {
+  "front": {
+   "src": "inspired/CARDS_ru/Карты напастей (опасностей)/Гниющие останки.jpg",
+   "source": "cards",
+   "score": 1.003
+  }
+ },
+ "01164": {
+  "front": {
+   "src": "inspired/CARDS_ru/Карты напастей (опасностей)/Застыть от страха.jpg",
+   "source": "cards",
+   "score": 1.078
+  }
+ },
+ "01165": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-022-182.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01166": {
+  "front": {
+   "src": "inspired/CARDS_ru/Карты напастей (опасностей)/Древнее зло.jpg",
+   "source": "cards",
+   "score": 1.021
+  }
+ },
+ "01167": {
+  "front": {
+   "src": "inspired/CARDS_ru/Карты напастей (опасностей)/Могильный холод.jpg",
+   "source": "cards",
+   "score": 1.028
+  }
+ },
+ "01168": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-023-190.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01169": {
+  "front": {
+   "src": ".cache/ru-import/pdf/01_Coreset/img-023-191.jpg",
+   "source": "pdf",
+   "score": 1,
+   "pinned": true
+  }
+ },
+ "01170": {
+  "front": {
+   "src": "inspired/CARDS_ru/Монстры/Монстры с переводом от хоббиков/Орденский волшебник.jpg",
+   "source": "cards",
+   "score": 0.56
+  }
+ },
+ "01171": {
+  "front": {
+   "src": "inspired/CARDS_ru/Карты напастей (опасностей)/Загадочное бормотание.JPG",
+   "source": "cards",
+   "score": 1.053
+  }
+ },
+ "01172": {
+  "front": {
+   "src": "inspired/CARDS_ru/Монстры/Монстры с переводом от хоббиков/Охотящийся ночной призрак.JPG",
+   "source": "cards",
+   "score": 0.55
+  }
+ },
+ "01173": {
+  "front": {
+   "src": "inspired/CARDS_ru/Карты напастей (опасностей)/На крыльях тьмы.jpg",
+   "source": "cards",
+   "score": 1.022
+  }
+ },
+ "01174": {
+  "front": {
+   "src": "inspired/CARDS_ru/Карты напастей (опасностей)/Запертая дверь.JPG",
+   "source": "cards",
+   "score": 1.068
+  }
+ },
+ "01175": {
+  "front": {
+   "src": "inspired/CARDS_ru/Монстры/Визгливый бьякхи.jpg",
+   "source": "cards",
+   "score": 0.567
+  }
+ },
+ "01176": {
+  "front": {
+   "src": "inspired/CARDS_ru/Карты напастей (опасностей)/Желтый знак.jpg",
+   "source": "cards",
+   "score": 1.045
+  }
+ },
+ "01177": {
+  "front": {
+   "src": "inspired/CARDS_ru/Монстры/Монстры с переводом от хоббиков/Йитианский наблюдатель.jpg",
+   "source": "cards",
+   "score": 0.564
+  }
+ },
+ "01178": {
+  "front": {
+   "src": "inspired/CARDS_ru/Карты напастей (опасностей)/Предложение силы.jpg",
+   "source": "cards",
+   "score": 1.038
+  }
+ },
+ "01179": {
+  "front": {
+   "src": "inspired/CARDS_ru/Монстры/Монстры с переводом от хоббиков/Живучая темная молодь.JPG",
+   "source": "cards",
+   "score": 0.592
+  }
+ },
+ "01180": {
+  "front": {
+   "src": "inspired/CARDS_ru/Монстры/Козлиное отродье.jpg",
+   "source": "cards",
+   "score": 0.598
+  }
+ },
+ "01181": {
+  "front": {
+   "src": "inspired/CARDS_ru/Монстры/Молодой глубоководный.jpg",
+   "source": "cards",
+   "score": 0.55
+  }
+ },
+ "01182": {
+  "front": {
+   "src": "inspired/CARDS_ru/Карты напастей (опасностей)/Сны о рлехе.jpg",
+   "source": "cards",
+   "score": 0.878
+  }
+ }
+}
