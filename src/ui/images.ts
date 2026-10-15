@@ -9,7 +9,7 @@ export function cardImage(card: Pick<CardDef, "code" | "doubleSided" | "image" |
   return card.doubleSided ? `${BASE}/${card.code}b.webp` : null;
 }
 
-/** generic card backs (player / encounter) are drawn, not downloaded */
+/** cards that use the generic encounter back (art from inspired/icons); player cards use a drawn back */
 export const isEncounterCard = (c: Pick<CardDef, "faction" | "subtype">) => c.faction === "mythos" && !c.subtype;
 
 export const FACTION_COLORS: Record<string, string> = {

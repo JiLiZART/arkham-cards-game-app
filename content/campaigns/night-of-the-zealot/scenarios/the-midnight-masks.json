@@ -1,6 +1,7 @@
 {
   "id": "the-midnight-masks",
   "name": "The Midnight Masks",
+  "i18nId": "arkham",
   "card": "01120",
   "intro": "A cult that worships the master of the ghouls is hidden among Arkham's townsfolk. Before midnight you must find as many of its members as you can.",
   "encounterSets": ["arkham", "chilling_cold", "nightgaunts", "pentagram", "locked_doors"],

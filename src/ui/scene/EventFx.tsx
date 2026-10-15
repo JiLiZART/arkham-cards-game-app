@@ -8,7 +8,7 @@ import { CARD_H, CARD_W, type Vec3 } from "../layout";
 import { ChaosTokenIcon } from "../hud/ChaosTokenIcon";
 import { Icon } from "../Icon";
 import type { IconName } from "../icons";
-import { useCardTexture } from "./textures";
+import { backTexture, useCardTexture } from "./textures";
 
 /** an encounter card flies off the deck, flips and hovers over the table while it resolves */
 function EncounterFlight({ code, from, startedAt }: { code: string; from: Vec3; startedAt: number }) {
@@ -37,7 +37,7 @@ function EncounterFlight({ code, from, startedAt }: { code: string; from: Vec3; 
         </mesh>
         <mesh rotation={[0, Math.PI, 0]}>
           <planeGeometry args={[CARD_W, CARD_H]} />
-          <meshBasicMaterial color="#3a2448" />
+          <meshBasicMaterial map={backTexture("encounter")} />
         </mesh>
       </group>
     </group>
@@ -52,7 +52,7 @@ function TokenPop({ token, at, startedAt }: { token: string; at: Vec3; startedAt
     if (!g) return;
     const t = Math.min(1, (performance.now() - startedAt) / 500);
     const e = 1 - (1 - t) ** 3;
-    g.position.set(at[0] - e * 2.5, 6, at[2] + e * 2.5);
+    g.position.set(at[0] + e * 2.5, 6, at[2] + e * 1.5);
     g.rotation.set(0, e * Math.PI * 4, 0);
     g.scale.setScalar(1 + Math.sin(t * Math.PI) * 0.6 + e * 0.4);
   });
@@ -95,7 +95,7 @@ function FloatingNumber({ parts, at, startedAt, color }: { parts: [IconName | nu
   );
 }
 
-export function EventFx({ encounterDeck, cards }: { encounterDeck: Vec3; cards: Map<string, { pos: Vec3 }> }) {
+export function EventFx({ encounterDeck, chaosBag, cards, minis }: { encounterDeck: Vec3; chaosBag: Vec3; cards: Map<string, { pos: Vec3 }>; minis: { inv: string; pos: Vec3 }[] }) {
   const current = useGame((s) => s.current);
   const game = useGame((s) => s.game);
   const started = useRef<{ e: unknown; at: number }>({ e: null, at: 0 });
@@ -106,7 +106,8 @@ export function EventFx({ encounterDeck, cards }: { encounterDeck: Vec3; cards: 
     return <EncounterFlight key={at} code={game.cards[current.card].code} from={encounterDeck} startedAt={at} />;
   }
   if (current.type === "damage" && current.inv && game.invs[current.inv]) {
-    const p = cards.get(game.invs[current.inv].cardId)?.pos;
+    // investigators are not on the board: numbers float up from their portrait on the map
+    const p = minis.find((m) => m.inv === current.inv)?.pos;
     const d = current.data as { damage: number; horror: number };
     const parts: [IconName, number][] = [];
     if (d.damage) parts.push(["damage", d.damage]);
@@ -117,6 +118,6 @@ export function EventFx({ encounterDeck, cards }: { encounterDeck: Vec3; cards: 
     const p = cards.get(current.card)?.pos;
     if (p) return <FloatingNumber key={at} parts={[["damage", Number(current.data?.amount)]]} at={p} startedAt={at} color="#ffd27a" />;
   }
-  if (current.type === "token") return <TokenPop key={at} token={String(current.data?.token)} at={[8.4, 0, -6.6]} startedAt={at} />;
+  if (current.type === "token") return <TokenPop key={at} token={String(current.data?.token)} at={chaosBag} startedAt={at} />;
   return null;
 }

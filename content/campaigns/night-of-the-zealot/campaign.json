@@ -1,6 +1,7 @@
 {
   "id": "night-of-the-zealot",
   "name": "Night of the Zealot",
+  "i18nId": "core",
   "scenarios": ["the-gathering", "the-midnight-masks", "the-devourer-below"],
   "chaosBags": {
     "easy": ["+1", "+1", "0", "0", "0", "-1", "-1", "-1", "-2", "-2", "skull", "skull", "cultist", "tablet", "autoFail", "elderSign"],

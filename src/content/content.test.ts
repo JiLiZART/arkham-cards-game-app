@@ -69,7 +69,9 @@ describe("ArkhamDB import mapping", () => {
 describe("i18n", () => {
   it("falls back to English when a translation is missing", () => {
     expect(cardText(db, "01006", "ru").name).toBe("Револьвер Роланда");
-    expect(cardText(db, "01016", "ru").name).toBe(".45 Automatic");
+    // every core card is translated now: unknown locales and untranslated fields fall back
+    expect(cardText(db, "01016", "xx").name).toBe(".45 Automatic");
+    expect(cardText(db, "01111", "ru").text).toBe(db.cards["01111"].text);
     expect(t(db, "ru", "menu.start")).toBe("Начать");
     expect(t(db, "xx", "menu.start")).toBe("Start");
     expect(t(db, "en", "hud.passTo", { name: "Agnes" })).toBe("Pass to Agnes");

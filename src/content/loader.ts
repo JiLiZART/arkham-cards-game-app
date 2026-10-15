@@ -1,7 +1,7 @@
 import type { ZodError } from "zod";
 import type { CardScript, ContentDb } from "../engine/types";
 import {
-  CampaignDef, CardDef, CardOverride, DeckDef, Effect, I18nCards, I18nUi, InvestigatorDef, ScenarioDef, type Ability,
+  CampaignDef, CardDef, CardOverride, DeckDef, Effect, I18nCampaigns, I18nCards, I18nUi, InvestigatorDef, ScenarioDef, type Ability,
 } from "./schema";
 
 export interface ContentError {
@@ -61,14 +61,27 @@ export function buildContent(files: Record<string, unknown>, scriptFiles: Record
   parseInto(/\/decks\/[^/]+\.json$/, DeckDef, (v) => (db.decks[v.id] = v));
   parseInto(/\/campaigns\/[^/]+\/campaign\.json$/, CampaignDef, (v) => (db.campaigns[v.id] = v));
   parseInto(/\/campaigns\/[^/]+\/scenarios\/[^/]+\.json$/, ScenarioDef, (v) => (db.scenarios[v.id] = v));
-  for (const [file, raw] of entries) {
-    const m = file.match(/\/i18n\/([^/]+)\/(cards|ui)\.json$/);
-    if (!m) continue;
-    const loc = (db.i18n[m[1]] ??= { cards: {}, ui: {} });
-    const r = (m[2] === "cards" ? I18nCards : I18nUi).safeParse(raw);
-    if (!r.success) errors.push(...zerr(file, r.error));
-    else if (m[2] === "cards") loc.cards = r.data as Record<string, unknown>;
-    else loc.ui = r.data as Record<string, string>;
+  // translations: imported *.generated.json first, hand-written files merged over them (field by field)
+  const i18nFiles = entries
+    .map(([file, raw]) => ({ file, raw, m: file.match(/\/i18n\/([^/]+)\/(cards|ui|campaigns)(\.generated)?\.json$/) }))
+    .filter((f) => f.m)
+    .sort((a, b) => Number(!!b.m![3]) - Number(!!a.m![3]));
+  for (const { file, raw, m } of i18nFiles) {
+    const [, locale, kind] = m!;
+    const loc = (db.i18n[locale] ??= { cards: {}, ui: {}, campaigns: { campaigns: {}, scenarios: {}, encounterSets: {} } });
+    if (kind === "cards") {
+      const r = I18nCards.safeParse(raw);
+      if (!r.success) errors.push(...zerr(file, r.error));
+      else for (const [code, tr] of Object.entries(r.data)) loc.cards[code] = { ...loc.cards[code], ...tr };
+    } else if (kind === "ui") {
+      const r = I18nUi.safeParse(raw);
+      if (!r.success) errors.push(...zerr(file, r.error));
+      else Object.assign(loc.ui, r.data);
+    } else {
+      const r = I18nCampaigns.safeParse(raw);
+      if (!r.success) errors.push(...zerr(file, r.error));
+      else mergeCampaignText(loc.campaigns, r.data);
+    }
   }
   for (const [file, mod] of Object.entries(scriptFiles)) {
     const key = file.split("/").pop()!.replace(/\.ts$/, "");
@@ -149,4 +162,18 @@ export function validateRefs(db: ContentDb, cardFile: Record<string, string> = {
     });
   }
   return errors;
+}
+
+function mergeCampaignText(into: I18nCampaigns, from: I18nCampaigns) {
+  for (const [id, c] of Object.entries(from.campaigns)) {
+    const prev = into.campaigns[id];
+    into.campaigns[id] = { ...prev, ...c, logLabels: { ...prev?.logLabels, ...c.logLabels } };
+  }
+  for (const [id, sc] of Object.entries(from.scenarios)) {
+    const prev = into.scenarios[id];
+    const resolutions = { ...prev?.resolutions };
+    for (const [k, r] of Object.entries(sc.resolutions)) resolutions[k] = { ...resolutions[k], ...r };
+    into.scenarios[id] = { ...prev, ...sc, resolutions };
+  }
+  Object.assign(into.encounterSets, from.encounterSets);
 }

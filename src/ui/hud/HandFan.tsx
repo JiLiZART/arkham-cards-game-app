@@ -2,11 +2,11 @@ import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } f
 import { cardText } from "../../content/i18n";
 import type { ChoiceOption, GameState, InstId } from "../../engine/types";
 import { db, useGame } from "../context";
-import { cardImage, FACTION_COLORS, faceLines } from "../images";
+import { CardFace as Face } from "../CardFace";
 import { handVisible } from "../scene/Table";
 import { viewerOf } from "../store";
 import { useView } from "../view";
-import { FAN_CARD_H, FAN_CARD_W, fanLayout, fanWidth, STAT_BAR_W } from "./fan";
+import { FAN_CARD_H, FAN_CARD_W, FAN_LEGAL_RAISE, FAN_REST_VISIBLE, fanLayout, fanWidth, STAT_BAR_W } from "./fan";
 
 const DRAG_TO_PLAY = 110;
 
@@ -18,25 +18,6 @@ function useViewportWidth() {
     return () => window.removeEventListener("resize", on);
   }, []);
   return w;
-}
-
-/** card face: the scan, or a text face drawn from card data when the image can't load */
-function Face({ code, locale }: { code: string; locale: string }) {
-  const [broken, setBroken] = useState(false);
-  const d = db.cards[code];
-  const tx = cardText(db, code, locale);
-  const url = cardImage(d, "front");
-  if (url && !broken) return <img src={url} alt={tx.name} draggable={false} onError={() => setBroken(true)} />;
-  const f = faceLines(d, "front", tx.name, tx.text);
-  return (
-    <div className="text-face" style={{ borderTopColor: FACTION_COLORS[d.faction] }}>
-      <b>{f.title}</b>
-      <small>{f.stats}</small>
-      {f.body.map((l, k) => (
-        <span key={k}>{l}</span>
-      ))}
-    </div>
-  );
 }
 
 /** the viewing investigator's hand as a Hearthstone-style fan along the bottom edge */
@@ -97,12 +78,12 @@ export function HandFan() {
         const dragging = drag?.id === id;
         const transform = dragging
           ? `translate(${drag.dx}px, ${-Math.max(0, drag.dy)}px) scale(1.2)`
-          : `translateY(${s.y}px) rotate(${s.rotate}deg)`;
+          : `translateY(${s.y - (opts.length ? FAN_LEGAL_RAISE : 0)}px) rotate(${s.rotate}deg)`;
         return (
           <button
             key={id}
             className={`fan-card ${opts.length ? "legal" : ""} ${dragging ? "dragging" : ""}`}
-            style={{ left: s.x - FAN_CARD_W / 2, width: FAN_CARD_W, height: FAN_CARD_H, zIndex: dragging ? 200 : i + 1, transform }}
+            style={{ left: s.x - FAN_CARD_W / 2, bottom: FAN_REST_VISIBLE - FAN_CARD_H, width: FAN_CARD_W, height: FAN_CARD_H, zIndex: dragging ? 200 : i + 1, transform }}
             onPointerDown={(e: ReactPointerEvent) => {
               if (e.button !== 0) return;
               setDrag({ id, startX: e.clientX, startY: e.clientY, dx: 0, dy: 0 });

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import * as THREE from "three";
 import type { CardDef } from "../../content/schema";
-import { cardImage, FACTION_COLORS, faceLines } from "../images";
+import { iconUrl } from "../icons";
+import { cardImage, FACTION_COLORS, faceLines, isEncounterCard } from "../images";
 
 const W = 360;
 const H = 504;
@@ -73,11 +74,22 @@ function wrapFill(g: CanvasRenderingContext2D, s: string, x: number, y: number, 
   g.fillText(line, x, y);
 }
 
-/** generic card backs */
+/** generic card backs: the encounter back is the art from inspired/icons, the player back is drawn */
 export function backTexture(kind: "player" | "encounter", landscape = false): THREE.Texture {
   const key = `back:${kind}:${landscape}`;
   const hit = cache.get(key);
   if (hit) return hit;
+  if (kind === "encounter") {
+    const t = loader.load(iconUrl("cardBack"));
+    t.colorSpace = THREE.SRGBColorSpace;
+    t.anisotropy = 16;
+    if (landscape) {
+      t.center.set(0.5, 0.5);
+      t.rotation = Math.PI / 2;
+    }
+    cache.set(key, t);
+    return t;
+  }
   const c = canvas(landscape);
   const g = c.getContext("2d")!;
   const grad = g.createRadialGradient(c.width / 2, c.height / 2, 20, c.width / 2, c.height / 2, c.height * 0.7);
@@ -110,7 +122,8 @@ export function backTexture(kind: "player" | "encounter", landscape = false): TH
  */
 export function useCardTexture(card: CardDef, side: "front" | "back", name: string, text: string, landscape: boolean): THREE.Texture {
   const url = cardImage(card, side);
-  const fallback = () => (side === "back" && !url ? backTexture(card.faction === "mythos" && !card.subtype ? "encounter" : "player", landscape) : drawnFace(card, side, name, text, landscape));
+  const genericBack = () => backTexture(isEncounterCard(card) ? "encounter" : "player", landscape);
+  const fallback = () => (side === "back" && !url ? genericBack() : drawnFace(card, side, name, text, landscape));
   const [tex, setTex] = useState<THREE.Texture>(() => (url && cache.get(url)) || fallback());
   useEffect(() => {
     if (!url) {
@@ -122,7 +135,7 @@ export function useCardTexture(card: CardDef, side: "front" | "back", name: stri
       setTex(hit);
       return;
     }
-    setTex(fallback());
+    setTex(failed.has(url) && side === "back" ? genericBack() : fallback());
     if (failed.has(url)) return;
     let alive = true;
     loader.load(
@@ -136,7 +149,11 @@ export function useCardTexture(card: CardDef, side: "front" | "back", name: stri
         if (alive) setTex(t);
       },
       undefined,
-      () => failed.add(url),
+      () => {
+        failed.add(url);
+        // a back scan that can't load shows the generic card back
+        if (alive && side === "back") setTex(genericBack());
+      },
     );
     return () => {
       alive = false;

@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { cardText, locales, t } from "../content/i18n";
+import { campaignName, cardText, locales, logLabel, scenarioText, t } from "../content/i18n";
 import type { Difficulty } from "../content/schema";
 import { currentScenarioId } from "../engine/campaign";
 import { validateDeck } from "../engine/decks";
@@ -41,7 +41,7 @@ export function MenuScreen() {
           {tr("menu.campaign")}{" "}
           <select value={campaignId} onChange={(e) => setCampaignId(e.target.value)}>
             {campaigns.map((c) => (
-              <option key={c.id} value={c.id}>{c.name}</option>
+              <option key={c.id} value={c.id}>{campaignName(db, c.id, locale)}</option>
             ))}
           </select>
         </label>
@@ -111,17 +111,17 @@ export function CampaignLogScreen() {
   if (!campaign) return null;
   const def = db.campaigns[campaign.campaignId];
   const next = currentScenarioId(db, campaign);
-  const label = (k: string) => def.logLabels[k] ?? k;
+  const label = (k: string) => logLabel(db, def.id, k, locale);
   return (
     <div className="screen log">
-      <h1>{def.name} — {campaign.result ? tr("log.summary") : tr("log.title")}</h1>
+      <h1>{campaignName(db, def.id, locale)} — {campaign.result ? tr("log.summary") : tr("log.title")}</h1>
       {notice && <div className="notice">{notice}</div>}
       {campaign.result && <h2 className={`result-${campaign.result}`}>{tr(`result.${campaign.result}`)}</h2>}
       <section>
         <h3>Scenarios</h3>
         {campaign.history.map((h) => (
           <div key={h.scenarioId}>
-            {db.scenarios[h.scenarioId].name}: {db.scenarios[h.scenarioId].resolutions[h.resolution]?.title ?? h.resolution} · victory {h.victory} · +{h.xp} XP
+            {scenarioText(db, h.scenarioId, locale).name}: {scenarioText(db, h.scenarioId, locale).resolution(h.resolution)?.title ?? h.resolution} · victory {h.victory} · +{h.xp} XP
           </div>
         ))}
       </section>
@@ -161,7 +161,7 @@ export function CampaignLogScreen() {
       <div className="row">
         {!campaign.result && next && (
           <button className="primary big" onClick={() => gameStore.getState().startScenario()}>
-            {tr("log.next")}: {db.scenarios[next].name}
+            {tr("log.next")}: {scenarioText(db, next, locale).name}
           </button>
         )}
         <button onClick={() => gameStore.setState({ screen: "menu" })}>{tr("hud.menu")}</button>

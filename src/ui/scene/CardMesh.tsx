@@ -2,12 +2,13 @@ import { Html } from "@react-three/drei";
 import { useFrame, type ThreeEvent } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
-import { cardText } from "../../content/i18n";
+import { cardText, t } from "../../content/i18n";
 import type { CardInst } from "../../engine/types";
 import { db, useGame } from "../context";
 import { CARD_H, CARD_W, type Placement } from "../layout";
-import { Icon } from "../Icon";
-import { GLYPHS, type IconName } from "../icons";
+import { Glyph, Icon } from "../Icon";
+import type { IconName } from "../icons";
+import { Portrait } from "../Portrait";
 import { useCardTexture } from "./textures";
 
 const edge = new THREE.MeshStandardMaterial({ color: "#d8cfb5", roughness: 0.9 });
@@ -95,6 +96,13 @@ export function CardMesh({ inst, place, highlighted, hovered, exhausted, onClick
           <planeGeometry args={[w + 0.12, h + 0.12]} />
         </mesh>
       )}
+      {place.badge && (
+        <Html position={[-w / 2 + 0.1, h / 2 - 0.1, 0.03]} zIndexRange={[21, 0]} style={{ pointerEvents: "none" }}>
+          <div className="engaged-badge">
+            <Portrait code={place.badge} size={30} title={t(db, locale, "hud.engaged", { name: cardText(db, place.badge, locale).name })} />
+          </div>
+        </Html>
+      )}
       {tokens.length > 0 && (
         <Html position={[w / 2 - 0.05, h / 2 - 0.05, 0.02]} center zIndexRange={[20, 0]} style={{ pointerEvents: "none" }}>
           <div className="tokens">
@@ -106,7 +114,7 @@ export function CardMesh({ inst, place, highlighted, hovered, exhausted, onClick
                 </span>
               ) : (
                 <span key={k} className={`tok tok-${k}`} title={k}>
-                  {GLYPHS.uses}
+                  <Glyph name="uses" size={12} />
                   {n}
                 </span>
               ),

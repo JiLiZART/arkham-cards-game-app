@@ -1,16 +1,20 @@
 import { useEffect, useMemo, useRef } from "react";
-import { cardText, t } from "../../content/i18n";
+import { cardText, scenarioText, t } from "../../content/i18n";
 import { actClueCost, doomInPlay } from "../../engine/rules/scenario";
 import { difficultyOf, testValue } from "../../engine/rules/skillTest";
-import type { ChoiceOption, GameEvent } from "../../engine/types";
+import type { GameEvent } from "../../engine/types";
 import { db, gameStore, useGame } from "../context";
 import { cardImage } from "../images";
 import { ANIMATED, viewerOf } from "../store";
 import { handVisible } from "../scene/Table";
-import { GLYPHS, ICON_LABELS, iconUrl, MARKUP_ICONS } from "../icons";
+import { glyphHtml } from "../glyphs";
+import { ICON_LABELS, iconUrl, MARKUP_ICONS } from "../icons";
 import { Stat } from "../Icon";
+import { ActionRail, PromptBanner } from "./ActionRail";
 import { ChaosTokenIcon } from "./ChaosTokenIcon";
-import { PlayerPlaques, StatBar } from "./Stats";
+import { Modals } from "./Modals";
+import { InvTokens } from "./Investigators";
+import { StatBar } from "./Stats";
 import { useView } from "../view";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
@@ -64,7 +68,7 @@ function TopBar() {
   return (
     <div className="topbar">
       <div className="scen">
-        <b>{db.scenarios[game.scenarioId].name}</b> · {tr("hud.round", { round: game.round, phase: game.phase })}
+        <b>{scenarioText(db, game.scenarioId, locale).name}</b> · {tr("hud.round", { round: game.round, phase: game.phase })}
       </div>
       {agenda && (
         <div className="topbar-item" title={`Agenda: ${cardText(db, agenda.code, locale).name}`}>
@@ -76,7 +80,6 @@ function TopBar() {
           {cardText(db, act.code, locale).name} {Number.isFinite(actCost) && <Stat icon="clue" value={actCost} size={20} />}
         </div>
       )}
-      <PlayerPlaques />
       <div className="buttons">
         <button onClick={() => toggle("log")}>{tr("hud.log")}</button>
         <button onClick={() => toggle("debug")}>{tr("hud.debug")}</button>
@@ -84,55 +87,6 @@ function TopBar() {
       </div>
     </div>
   );
-}
-
-/** the pending choice as buttons (card-linked options are also clickable on the table) */
-function Prompt() {
-  const game = useGame((s) => s.game)!;
-  const choose = useGame((s) => s.choose);
-  const busy = useGame((s) => !!s.current || s.queue.length > 0);
-  const locale = useGame((s) => s.locale);
-  const privacy = useGame((s) => s.privacy);
-  const revealedFor = useGame((s) => s.revealedFor);
-  const p = game.pending;
-  if (!p || game.phase === "ended") return null;
-  // the options can name cards in hand: never show them before the hand-off is confirmed
-  if (!handVisible(privacy, game.order.length, viewerOf(game), revealedFor)) return null;
-  const who = cardText(db, p.inv, locale).name;
-  const groups = groupOptions(p.options);
-  return (
-    <div className={`prompt ${busy ? "busy" : ""}`}>
-      <div className="prompt-who">{who}</div>
-      <div className="prompt-text">{p.prompt}</div>
-      {groups.map(([title, opts]) => (
-        <div key={title} className="prompt-group">
-          {title && <div className="prompt-group-title">{title}</div>}
-          {opts.map((o) => (
-            <button
-              key={o.id}
-              disabled={busy}
-              className={o.id === "done" || o.label === "End turn" || o.id === "pass" ? "primary" : ""}
-              onMouseEnter={() => o.card && useView.getState().setHovered(o.card)}
-              onMouseLeave={() => useView.getState().setHovered(null)}
-              onClick={() => choose(o.id)}
-            >
-              {o.label}
-            </button>
-          ))}
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function groupOptions(options: ChoiceOption[]): [string, ChoiceOption[]][] {
-  const groups = new Map<string, ChoiceOption[]>();
-  for (const o of options) {
-    const k = /^(Move|Investigate)/.test(o.label) ? "Explore" : /^(Fight|Engage|Evade)/.test(o.label) ? "Enemies" : /^Play/.test(o.label) ? "Play" : /:/.test(o.label) && !/^Done/.test(o.label) ? "Abilities" : "";
-    groups.set(k, [...(groups.get(k) ?? []), o]);
-  }
-  const order = ["Explore", "Enemies", "Play", "Abilities", ""];
-  return order.filter((k) => groups.has(k)).map((k) => [k, groups.get(k)!]);
 }
 
 /** skill test in progress: value vs difficulty, committed cards */
@@ -236,11 +190,10 @@ export function formatText(s: string): string {
     .replace(/\[(\w+)\]/g, (_, k: string) => {
       const icon = MARKUP_ICONS[k];
       if (icon) return `<img class="icon-inline" src="${iconUrl(icon)}" alt="${ICON_LABELS[icon]}" title="${k.replace("_", " ")}">`;
-      return `<span class="icon icon-${k}" title="${k.replace("_", " ")}">${GLYPHS[k] ?? ICON[k] ?? k}</span>`;
+      return glyphHtml(k) ?? `<span class="icon icon-${k}" title="${k.replace("_", " ")}">${k.replace("_", " ")}</span>`;
     })
     .replace(/\n/g, "<br/>");
 }
-const ICON: Record<string, string> = { action: "➤", reaction: "↺", fast: "⚡", free: "⚡", elder_sign: "✶", skull: "☠", cultist: "☥", tablet: "⌘", elder_thing: "✵", auto_fail: "✖", willpower: "WIL", intellect: "INT", combat: "COM", agility: "AGI", per_investigator: "/inv" };
 
 /** options for a card with several possible actions */
 function PopupMenu() {
@@ -341,7 +294,8 @@ function ScenarioEnd() {
   const finish = useGame((s) => s.finishScenario);
   const busy = useGame((s) => !!s.current || s.queue.length > 0);
   if (game.phase !== "ended" || busy) return null;
-  const r = db.scenarios[game.scenarioId].resolutions[game.resolution ?? "none"];
+  const locale = useGame((s) => s.locale);
+  const r = scenarioText(db, game.scenarioId, locale).resolution(game.resolution ?? "none");
   return (
     <div className="handoff">
       <div className="handoff-box resolution">
@@ -364,11 +318,14 @@ export function Hud() {
     <>
       <TopBar />
       <StatBar />
-      <div className="right-col">
+      <InvTokens />
+      <div className="center-col">
+        <PromptBanner />
         <SkillTestPanel />
-        <Prompt />
       </div>
+      <ActionRail />
       <CardZoom />
+      <Modals />
       <PopupMenu />
       <LogPanel />
       <DebugPanel />

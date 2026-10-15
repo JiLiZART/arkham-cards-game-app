@@ -3,10 +3,16 @@
  * Hand-written behavior lives in content/packs/<pack>/cards.json and is never touched.
  *
  *   npm run import:cards -- --pack core [--source arkhamdb|arkham.build] [--file cached.json]
+ *
+ * With --locale <code>, it imports that language's card text from ArkhamDB's localized site instead and writes
+ * content/i18n/<code>/cards.generated.json (hand-written content/i18n/<code>/cards.json wins over it field by field).
+ * On a network error nothing is written and the old file is kept.
+ *
+ *   npm run import:cards -- --pack core --locale ru
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { CardDef, type CardDefInput } from "../src/content/schema";
+import { CardDef, I18nCards, type CardDefInput } from "../src/content/schema";
 
 const ARKHAMDB_URL = "https://arkhamdb.com/api/public/cards/?encounter=1";
 
@@ -129,10 +135,10 @@ export function mapCard(c: Raw): CardDefInput {
   return card;
 }
 
-export async function fetchCards(source: string, file?: string): Promise<Raw[]> {
+export async function fetchCards(source: string, file?: string, locale?: string): Promise<Raw[]> {
   if (file) return JSON.parse(readFileSync(file, "utf8"));
   if (source === "arkham.build") throw new Error("arkham.build source: pass --file with a downloaded cache (format differs)");
-  const res = await fetch(ARKHAMDB_URL);
+  const res = await fetch(locale ? ARKHAMDB_URL.replace("://arkhamdb.com", `://${locale}.arkhamdb.com`) : ARKHAMDB_URL);
   if (!res.ok) throw new Error(`ArkhamDB ${res.status}`);
   return res.json();
 }
@@ -144,11 +150,13 @@ async function main() {
     return i >= 0 ? args[i + 1] : d;
   };
   const pack = arg("pack", "core")!;
-  const raw = await fetchCards(arg("source", "arkhamdb")!, arg("file"));
+  const locale = arg("locale");
+  const raw = await fetchCards(arg("source", "arkhamdb")!, arg("file"), locale);
   // only the pack's own printing (ArkhamDB lists reprints like 98004 under core)
   const prefix = { core: "01" }[pack as "core"];
-  const cards = raw
-    .filter((c) => c.pack_code === pack && (!prefix || c.code.startsWith(prefix)) && c.code !== "01000")
+  const own = raw.filter((c) => c.pack_code === pack && (!prefix || c.code.startsWith(prefix)) && c.code !== "01000");
+  if (locale) return writeTranslations(locale, own);
+  const cards = own
     .map(mapCard)
     .sort((a, b) => a.code.localeCompare(b.code));
   for (const c of cards) CardDef.parse(c); // fail loudly on mapping bugs
@@ -158,6 +166,34 @@ async function main() {
   const overrides = join(dir, "cards.json");
   if (!existsSync(overrides)) writeFileSync(overrides, "{}\n");
   console.log(`wrote ${cards.length} cards to ${dir}/cards.generated.json (overrides untouched)`);
+}
+
+/** translated name/subname/traits/text per card; fields equal to English are left out so English stays the fallback */
+export function mapTranslation(c: Raw): Record<string, unknown> {
+  const out: Record<string, unknown> = {};
+  const put = (k: string, v: unknown, en: unknown) => {
+    if (v !== undefined && v !== null && v !== "" && v !== en) out[k] = v;
+  };
+  put("name", c.name, c.real_name);
+  put("subname", c.subname, c.real_subname);
+  put("backName", c.back_name, c.real_back_name);
+  put("text", c.text, c.real_text);
+  put("backText", c.back_text, c.real_back_text);
+  if (c.traits && c.traits !== c.real_traits) out.traits = (c.traits as string).split(".").map((t) => t.trim()).filter(Boolean);
+  return out;
+}
+
+function writeTranslations(locale: string, cards: Raw[]) {
+  const dir = join("content", "i18n", locale);
+  if (!existsSync(dir)) throw new Error(`${dir} does not exist`);
+  const out: Record<string, unknown> = {};
+  for (const c of [...cards].sort((a, b) => a.code.localeCompare(b.code))) {
+    const tr = mapTranslation(c);
+    if (Object.keys(tr).length) out[c.code] = tr;
+  }
+  I18nCards.parse(out);
+  writeFileSync(join(dir, "cards.generated.json"), JSON.stringify(out, null, 1) + "\n");
+  console.log(`wrote ${Object.keys(out).length} ${locale} card translations to ${dir}/cards.generated.json (cards.json untouched)`);
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) main().catch((e) => {

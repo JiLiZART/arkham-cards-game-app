@@ -1,14 +1,20 @@
 import { useEffect, useRef, useState } from "react";
-import { cardText } from "../../content/i18n";
+import { cardText, t } from "../../content/i18n";
 import { SKILLS } from "../../content/schema";
 import { maxHealth, maxSanity, skillValue } from "../../engine/core";
 import type { GameState, InvId } from "../../engine/types";
-import { db, useGame } from "../context";
-import { Icon, Stat } from "../Icon";
-import { GLYPHS, isIcon } from "../icons";
-import { cardImage } from "../images";
+import { db, gameStore, useGame } from "../context";
+import { Glyph, Icon, Stat } from "../Icon";
+import { isIcon, type IconName } from "../icons";
+import { optionHome } from "../optionHome";
+import { Portrait } from "../Portrait";
 import { viewerOf } from "../store";
+import { useView } from "../view";
+import { useCardOptions } from "./Modals";
 import { STAT_BAR_W } from "./fan";
+import { stackTokens } from "./tokenStack";
+
+const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
 
 /** true for a moment after the value changes */
 export function useFlash(value: unknown): boolean {
@@ -24,12 +30,12 @@ export function useFlash(value: unknown): boolean {
   return on;
 }
 
-function FlashStat(props: Parameters<typeof Stat>[0]) {
+export function FlashStat(props: Parameters<typeof Stat>[0]) {
   const flash = useFlash(props.value);
   return <Stat {...props} flash={flash} />;
 }
 
-function invNumbers(game: GameState, i: InvId) {
+export function invNumbers(game: GameState, i: InvId) {
   const g = { s: game, db, events: [] };
   const st = game.invs[i];
   return {
@@ -44,77 +50,91 @@ function invNumbers(game: GameState, i: InvId) {
   };
 }
 
-function Portrait({ code, size }: { code: string; size: number }) {
-  const url = cardImage(db.cards[code], "front");
-  return <div className="portrait" style={{ width: size, height: size, backgroundImage: url ? `url(${url})` : undefined }} />;
-}
+const STACKS: Record<"resource" | "clue", { denominations: number[]; art: Record<number, IconName> }> = {
+  resource: { denominations: [5, 3, 1], art: { 5: "resource-5", 3: "resource-3", 1: "resource" } },
+  clue: { denominations: [3, 1], art: { 3: "clue-3", 1: "clue" } },
+};
 
-/** the viewing investigator's stats, bottom-left next to the hand (Hearthstone hero area) */
-export function StatBar() {
-  const game = useGame((s) => s.game) as GameState;
-  const locale = useGame((s) => s.locale);
-  const viewer = viewerOf(game);
-  if (!viewer || !game.invs[viewer]) return null;
-  const n = invNumbers(game, viewer);
-  const d = db.cards[viewer];
-  const tx = cardText(db, viewer, locale);
+/** resources or clues as a pile of physical tokens (fewest tokens), followed by the total */
+export function TokenStack({ kind, value, size = 40 }: { kind: "resource" | "clue"; value: number; size?: number }) {
+  const flash = useFlash(value);
+  const { denominations, art } = STACKS[kind];
+  const tokens = stackTokens(value, denominations);
+  const tip = `${tr(kind === "resource" ? "stat.resources" : "stat.clues")} ${value}`;
   return (
-    <div className="stat-bar" style={{ width: STAT_BAR_W }}>
-      <div className="stat-head">
-        <Portrait code={viewer} size={64} />
-        <div>
-          <div className="stat-name">
-            {isIcon(d.faction) && <Icon name={d.faction} size={18} />} {tx.name}
-          </div>
-          <div className="stat-row">
-            <FlashStat icon="health" value={n.health} max={n.maxHealth} size={26} />
-            <FlashStat icon="sanity" value={n.sanity} max={n.maxSanity} size={26} />
-          </div>
-        </div>
-      </div>
-      <div className="stat-row">
-        <FlashStat icon="resource" value={n.resources} size={24} />
-        <FlashStat icon="clue" value={n.clues} size={24} />
-        {n.actions !== null && (
-          <span className="stat" title="Actions left">
-            <span className="glyph">{GLYPHS.actions}</span>
-            <b>{n.actions}</b>
+    <div className={`token-stack ${flash ? "flash" : ""}`} title={tip} aria-label={tip}>
+      <div className="token-pile" style={{ width: size + Math.max(0, tokens.length - 1) * size * 0.45, height: size }}>
+        {tokens.length === 0 && (
+          <span className="token-empty">
+            <Icon name={art[1]} size={size} title={tip} />
           </span>
         )}
-      </div>
-      <div className="stat-row skills">
-        {n.skills.map(([s, v]) => (
-          <FlashStat key={s} icon={s} value={v} size={22} />
+        {tokens.map((d, k) => (
+          <span key={k} style={{ left: k * size * 0.45, zIndex: tokens.length - k }}>
+            <Icon name={art[d]} size={size} title={tip} />
+          </span>
         ))}
       </div>
+      <b>{value}</b>
     </div>
   );
 }
 
-/** compact plaques for the other investigators (top bar) */
-export function PlayerPlaques() {
+/** stats shared by the viewer's bar and the investigator modal */
+export function StatBody({ inv, onPortrait, legal }: { inv: InvId; onPortrait?: () => void; legal?: boolean }) {
   const game = useGame((s) => s.game) as GameState;
   const locale = useGame((s) => s.locale);
-  const viewer = viewerOf(game);
+  const n = invNumbers(game, inv);
+  const d = db.cards[inv];
+  const tx = cardText(db, inv, locale);
   return (
-    <div className="plaques">
-      {game.order
-        .filter((i) => i !== viewer)
-        .map((i) => {
-          const n = invNumbers(game, i);
-          const st = game.invs[i];
-          return (
-            <div key={i} className={`plaque ${game.active === i ? "active" : ""} ${st.status}`} title={st.status !== "playing" ? st.status : undefined}>
-              <Portrait code={i} size={30} />
-              <span className="plaque-name">{cardText(db, i, locale).name}</span>
-              <FlashStat icon="health" value={n.health} size={18} />
-              <FlashStat icon="sanity" value={n.sanity} size={18} />
-              <FlashStat icon="resource" value={n.resources} size={18} />
-              <FlashStat icon="clue" value={n.clues} size={18} />
-              {game.active === i && <span className="glyph" title="Taking a turn">{GLYPHS.actions}{n.actions}</span>}
+    <>
+      <div className="token-row">
+        <TokenStack kind="resource" value={n.resources} />
+        <TokenStack kind="clue" value={n.clues} />
+      </div>
+      <div className="stat-bar">
+        <button className={`portrait-btn ${legal ? "legal" : ""}`} onClick={onPortrait} title={tx.name} disabled={!onPortrait}>
+          <Portrait code={inv} size={120} active={game.active === inv} />
+        </button>
+        <div className="stat-main">
+          <div className="stat-name">
+            {isIcon(d.faction) && <Icon name={d.faction} size={24} />} {tx.name}
+          </div>
+          <div className="stat-row">
+            <FlashStat icon="health" value={n.health} max={n.maxHealth} size={44} label={tr("stat.health")} />
+            <FlashStat icon="sanity" value={n.sanity} max={n.maxSanity} size={44} label={tr("stat.sanity")} />
+          </div>
+          {n.actions !== null && (
+            <div className="stat-row actions" title={`${tr("stat.actions")} ${n.actions}`} aria-label={`${tr("stat.actions")} ${n.actions}`}>
+              {Array.from({ length: Math.max(n.actions, 0) }, (_, k) => (
+                <Glyph key={k} name="action" size={26} title={`${tr("stat.actions")} ${n.actions}`} />
+              ))}
+              {n.actions === 0 && <span className="muted">0</span>}
             </div>
-          );
-        })}
+          )}
+        </div>
+        <div className="stat-row skills">
+          {n.skills.map(([s, v]) => (
+            <FlashStat key={s} icon={s} value={v} size={36} label={tr(`stat.${s}`)} />
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
+/** the viewing investigator, bottom-left: big portrait, health/sanity/actions, skills; resources and clues as token piles above */
+export function StatBar() {
+  const game = useGame((s) => s.game) as GameState;
+  const viewer = viewerOf(game);
+  const cardId = viewer ? game.invs[viewer]?.cardId : null;
+  const options = useCardOptions([cardId]);
+  if (!viewer || !game.invs[viewer] || !cardId) return null;
+  const legal = options.some((o) => optionHome(o, game, viewer) === "portrait");
+  return (
+    <div className="stat-dock" style={{ width: STAT_BAR_W }}>
+      <StatBody inv={viewer} legal={legal} onPortrait={() => useView.getState().setModal({ card: cardId })} />
     </div>
   );
 }

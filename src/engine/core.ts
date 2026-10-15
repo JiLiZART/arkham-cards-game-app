@@ -200,6 +200,7 @@ export function connections(g: G, loc: InstId): InstId[] {
     if (a === code) codes.add(b);
     if (b === code) codes.add(a);
   }
+  for (const [a, b] of scen.oneWay ?? []) if (a === code) codes.add(b);
   return locations(g).filter((l) => codes.has(l.code) && l.id !== loc).map((l) => l.id);
 }
 

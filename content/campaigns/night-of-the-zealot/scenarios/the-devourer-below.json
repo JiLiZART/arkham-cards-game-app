@@ -1,6 +1,7 @@
 {
   "id": "the-devourer-below",
   "name": "The Devourer Below",
+  "i18nId": "tentacles",
   "card": "01142",
   "intro": "The cult gathers deep in the Arkham woods to summon Umôrdhoth. You must stop the ritual — at any cost.",
   "encounterSets": ["tentacles", "ancient_evils", "striking_fear", "ghouls", "pentagram"],

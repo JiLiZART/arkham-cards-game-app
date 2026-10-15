@@ -16,7 +16,7 @@ npm run build
 
 Card images are loaded from `https://cdn.arkham.build/optimized/<code>.webp`. That CDN sends no CORS headers, so the dev and preview servers proxy `/cards/*` to it (see `vite.config.ts`). In production, set up the same rewrite on your host, or set `VITE_CARD_IMAGE_BASE` to a CORS-enabled mirror. When an image cannot load, the card is drawn from its data instead.
 
-Icons and the parchment table come from `inspired/` and the Learn to Play booklet. `scripts/extract-assets.sh` copies them into `public/icons` and `public/table`; that script needs poppler and ImageMagick. The copies are committed, so builds never read `inspired/`.
+Icons, token art, the chaos bag, connector plaques and the framed table background come from `inspired/icons`. The icon fonts (`arkhamicons`, `tokens`) and card fonts (Teutonic, Teutonic RU, Alegreya) come from the ArkhamCards app in `inspired/ArkhamCards`. `scripts/extract-assets.sh` copies them into `public/icons`, `public/table` and `public/fonts`, and writes the glyph map `src/ui/glyphs.generated.json` from the fonts' IcoMoon configs; it needs ImageMagick and node. The copies are committed, so builds never read `inspired/`. Like the card scans, the art, fonts and imported text are for personal use.
 
 ## Layout
 
@@ -30,7 +30,8 @@ content/                         game data — no engine changes needed to add m
   campaigns/<id>/campaign.json     scenario order, chaos bags, campaign-log labels
   campaigns/<id>/scenarios/*.json  setup, connections, map layout, chaos token effects, resolutions
   campaigns/<id>/scripts/<scenario>.ts  objectives and scenario-specific hooks
-  i18n/<locale>/{ui,cards}.json    translations (English is the fallback)
+  i18n/<locale>/{ui,cards,campaigns}.json            hand-written translations (English is the fallback)
+  i18n/<locale>/*.generated.json   imported translations; the hand-written files win field by field
 scripts/import-cards.ts          ArkhamDB → cards.generated.json
 src/engine/                      rules engine (no React/three imports — enforced by ESLint)
 src/content/                     zod schemas, loader, i18n
@@ -50,11 +51,23 @@ src/ui/                          React HUD + R3F table
 3. If something can't be expressed this way, set `"script": true` and add `scripts/<code>.ts` exporting a `CardScript`. Copy any existing script as a starting point.
 4. Run `npm run check:content`.
 
+## Translations
+
+Translations are imported, not typed in:
+
+```bash
+npm run import:i18n -- --locale ru               # campaign/scenario names, intros, resolutions, log labels,
+                                                 # encounter sets and matching UI labels from inspired/ArkhamCards
+npm run import:cards -- --pack core --locale ru  # card names, traits and text from ru.arkhamdb.com
+```
+
+Both write only `content/i18n/<locale>/*.generated.json`. Fix a string by putting it in the hand-written `ui.json`, `cards.json` or `campaigns.json` next to them; re-running an import never touches those. Campaigns and scenarios name their ArkhamCards counterpart with `i18nId`. If ArkhamDB is unreachable, the card import exits with an error and keeps the old file.
+
 ## Adding a campaign
 
 Create `content/campaigns/<id>/` with a `campaign.json`, one JSON file per scenario and, if needed, `scripts/<scenario>.ts`. Use Night of the Zealot as the template. The menu picks it up automatically.
 
-ArkhamDB has no location connection data, so each scenario file lists its `connections` as code pairs and its `layout` as grid positions.
+ArkhamDB has no location connection data, so each scenario file lists its `connections` as code pairs (and any one-way ones as `oneWay: [from, to]` pairs) and its `layout` as grid positions.
 
 ## Debugging
 

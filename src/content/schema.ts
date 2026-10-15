@@ -581,8 +581,12 @@ export const ScenarioDef = z
     tokens: z.record(z.enum(["easy", "standard", "hard", "expert"]), z.record(z.enum(["skull", "cultist", "tablet", "elderThing"]), TokenEffect)),
     /** id -> resolution; "none" for no resolution reached */
     resolutions: z.record(z.string(), Resolution),
+    /** the scenario's id in ArkhamCards' data, for imported translations */
+    i18nId: z.string().optional(),
     /** undirected location connections by card code */
     connections: z.array(z.tuple([z.string(), z.string()])),
+    /** one-way connections [from, to] by card code: only `from` → `to` is a move */
+    oneWay: z.array(z.tuple([z.string(), z.string()])).default([]),
     /** location layout for rendering: code -> [col,row] grid */
     layout: z.record(z.string(), z.tuple([z.number(), z.number()])).default({}),
     script: z.boolean().optional(),
@@ -595,6 +599,8 @@ export const CampaignDef = z
     id: z.string(),
     name: z.string(),
     scenarios: z.array(z.string()),
+    /** the campaign's id in ArkhamCards' data, for imported translations */
+    i18nId: z.string().optional(),
     chaosBags: z.record(Difficulty, z.array(ChaosToken)),
     /** human-readable labels for log keys */
     logLabels: z.record(z.string(), z.string()).default({}),
@@ -604,3 +610,23 @@ export type CampaignDef = z.infer<typeof CampaignDef>;
 
 export const I18nCards = z.record(z.string(), z.object({ name: z.string().optional(), text: z.string().optional(), backText: z.string().optional(), subname: z.string().optional(), backName: z.string().optional(), traits: z.array(z.string()).optional() }).strict());
 export const I18nUi = z.record(z.string(), z.string());
+/** campaign / scenario / encounter-set text for a locale */
+export const I18nCampaigns = z
+  .object({
+    campaigns: z.record(z.string(), z.object({ name: z.string().optional(), logLabels: z.record(z.string(), z.string()).default({}) }).strict()).default({}),
+    scenarios: z
+      .record(
+        z.string(),
+        z
+          .object({
+            name: z.string().optional(),
+            intro: z.string().optional(),
+            resolutions: z.record(z.string(), z.object({ title: z.string().optional(), text: z.string().optional() }).strict()).default({}),
+          })
+          .strict(),
+      )
+      .default({}),
+    encounterSets: z.record(z.string(), z.string()).default({}),
+  })
+  .strict();
+export type I18nCampaigns = z.infer<typeof I18nCampaigns>;

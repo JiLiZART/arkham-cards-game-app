@@ -10,7 +10,9 @@ describe("icons", () => {
   it("markup keys map to known icons", () => {
     for (const n of Object.values(MARKUP_ICONS)) expect(ICON_FILES[n]).toBeDefined();
   });
-  it("the table background exists", () => {
-    expect(existsSync("public/table/parchment.jpg")).toBe(true);
+  it("the table art and fonts exist", () => {
+    for (const f of ["table/table-bg.jpg", "icons/connector-both.png", "icons/connector-one-way.png", "fonts/arkhamicons.ttf", "fonts/tokens.ttf", "fonts/Teutonic.ttf", "fonts/Teutonic-RU.ttf", "fonts/Alegreya-Regular.ttf"]) {
+      expect(existsSync(`public/${f}`), f).toBe(true);
+    }
   });
 });

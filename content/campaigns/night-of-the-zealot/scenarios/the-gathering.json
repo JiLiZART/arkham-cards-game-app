@@ -1,6 +1,7 @@
 {
   "id": "the-gathering",
   "name": "The Gathering",
+  "i18nId": "torch",
   "card": "01104",
   "intro": "Strange events have been taking place in Arkham. Late one night you wake to find the door of your study has vanished — and something is moving in the walls.",
   "encounterSets": ["torch", "rats", "ghouls", "striking_fear", "ancient_evils", "chilling_cold"],

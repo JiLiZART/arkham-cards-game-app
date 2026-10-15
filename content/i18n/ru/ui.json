@@ -24,5 +24,17 @@
   "difficulty.standard": "Обычная",
   "result.win": "Сыщики победили!",
   "result.lose": "Сыщики проиграли.",
-  "result.survived": "Сыщики выжили."
+  "result.survived": "Сыщики выжили.",
+  "rail.endTurn": "Конец хода",
+  "rail.pass": "Пропустить",
+  "rail.keep": "Оставить руку",
+  "rail.redraw": "Сменить карты: {n}",
+  "rail.resign": "Сдаться",
+  "rail.nothing": "Ничего не брать",
+  "rail.test": "Проверка: {skill}",
+  "stat.doom": "Безысходность",
+  "hud.engaged": "Сражается с: {name}",
+  "hud.dragToMove": "Перетащите на подсвеченную локацию, чтобы переместиться",
+  "modal.inPlay": "В игре",
+  "modal.threat": "Зона угрозы"
 }

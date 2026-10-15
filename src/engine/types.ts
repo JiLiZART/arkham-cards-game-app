@@ -1,5 +1,5 @@
 import type {
-  Ability, CampaignDef, CardDef, ChaosToken, DeckDef, Difficulty, Effect, InvestigatorDef, Modifier, ScenarioDef, Skill, Trigger,
+  Ability, CampaignDef, CardDef, ChaosToken, DeckDef, Difficulty, Effect, I18nCampaigns, InvestigatorDef, Modifier, ScenarioDef, Skill, Trigger,
 } from "../content/schema";
 
 export type InstId = string;
@@ -313,7 +313,7 @@ export interface ContentDb {
   /** keyed by card code or scenario id */
   scripts: Record<string, CardScript>;
   encounterSets: Record<string, string[]>;
-  i18n: Record<string, { cards: Record<string, any>; ui: Record<string, string> }>;
+  i18n: Record<string, { cards: Record<string, any>; ui: Record<string, string>; campaigns: I18nCampaigns }>;
 }
 
 export interface GameSetup {

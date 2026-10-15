@@ -10,6 +10,7 @@
     "lint": "eslint src scripts content",
     "typecheck": "tsc --noEmit",
     "import:cards": "tsx scripts/import-cards.ts",
+    "import:i18n": "tsx scripts/import-i18n.ts",
     "check:content": "tsx scripts/check-content.ts"
   },
   "dependencies": {

@@ -25,3 +25,25 @@ export function t(db: ContentDb, locale: string, key: string, vars: Record<strin
 }
 
 export const locales = (db: ContentDb) => Object.keys(db.i18n);
+
+const campaignText = (db: ContentDb, locale: string) => db.i18n[locale]?.campaigns;
+
+/** campaign name in a locale (English from the campaign file as the fallback) */
+export const campaignName = (db: ContentDb, id: string, locale: string) => campaignText(db, locale)?.campaigns[id]?.name ?? db.campaigns[id].name;
+
+/** a campaign-log key as readable text */
+export const logLabel = (db: ContentDb, campaignId: string, key: string, locale: string) =>
+  campaignText(db, locale)?.campaigns[campaignId]?.logLabels[key] ?? db.campaigns[campaignId].logLabels[key] ?? key;
+
+/** scenario name, intro and resolutions in a locale, field by field over the English scenario file */
+export function scenarioText(db: ContentDb, id: string, locale: string) {
+  const base = db.scenarios[id];
+  const tr = campaignText(db, locale)?.scenarios[id];
+  const resolution = (key: string) => {
+    const r = base.resolutions[key];
+    return r ? { ...r, title: tr?.resolutions[key]?.title ?? r.title, text: tr?.resolutions[key]?.text ?? r.text } : undefined;
+  };
+  return { name: tr?.name ?? base.name, intro: tr?.intro ?? base.intro, resolution };
+}
+
+export const encounterSetName = (db: ContentDb, code: string, locale: string) => campaignText(db, locale)?.encounterSets[code] ?? null;

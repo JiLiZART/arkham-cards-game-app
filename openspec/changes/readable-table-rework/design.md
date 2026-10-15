@@ -75,6 +75,13 @@ New sources in `inspired/`:
   - Showing teammates' hands is allowed: the game is cooperative and players may share their hands. Hand-off privacy only covers the hand-off screen, so the modal is unavailable while that screen is up.
 - The viewer's area holds no investigator card: `layout()` skips `cardId` when `inv === viewer`. The engine still has the card. Options targeting it are routed to the stat-bar portrait (see 4).
 
+**Changed during implementation:**
+- The viewer's play area is a block to the right of the map, not a strip under it. The Gathering's map is three locations tall, which only fits at 2× when the map gets the board's full height.
+- The board is 32×16 units, with the framed art stretched to fit, so it uses the wide free area better.
+- Locations measure about 153 px tall at 1600×900.
+- Portrait markers let clicks pass through to the location unless they can be dragged. A tap on a draggable marker is a click on its location.
+- The table plane sits lower (y −0.3), because the highlight under a 2× card was dropping below the old one.
+
 *Alternative:* a board larger than the screen with panning. Rejected by the user in favour of shrinking the scenario cards.
 
 ### 2. Hand fan 2×

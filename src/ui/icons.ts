@@ -7,13 +7,10 @@ export const ICON_FILES = {
   skull: "skull", cultist: "cultist", tablet: "tablet", elderThing: "elderThing", elderSign: "elderSign", autoFail: "autoFail",
   "+1": "plus-one", "-1": "minus-one",
   hand: "slot-hand", arcane: "slot-arcane", accessory: "slot-accessory", body: "slot-body", ally: "slot-ally",
+  "resource-3": "resource-3", "resource-5": "resource-5", "clue-3": "clue-3", "doom-3": "doom-3", "damage-3": "damage-3", "horror-3": "horror-3",
+  lead: "lead", cardBack: "card-back", chaosBag: "chaos-bag", connectorBoth: "connector-both", connectorOneWay: "connector-one-way",
 } as const;
 export type IconName = keyof typeof ICON_FILES;
-
-/** concepts without art: shown as a styled glyph or label */
-export const GLYPHS: Record<string, string> = {
-  action: "➤", reaction: "↺", fast: "⚡", free: "⚡", actions: "➤", uses: "◆", per_investigator: "/inv",
-};
 
 /** readable text used when an icon image can't load */
 export const ICON_LABELS: Record<IconName, string> = {
@@ -22,6 +19,8 @@ export const ICON_LABELS: Record<IconName, string> = {
   health: "HP", sanity: "San", damage: "Dmg", horror: "Hor", clue: "Clue", doom: "Doom", resource: "Res",
   skull: "Skull", cultist: "Cult", tablet: "Tab", elderThing: "ElTh", elderSign: "ElSi", autoFail: "Fail",
   "+1": "+1", "-1": "−1", hand: "Hand", arcane: "Arc", accessory: "Acc", body: "Body", ally: "Ally",
+  "resource-3": "3 Res", "resource-5": "5 Res", "clue-3": "3 Clue", "doom-3": "3 Doom", "damage-3": "3 Dmg", "horror-3": "3 Hor",
+  lead: "Lead", cardBack: "Back", chaosBag: "Bag", connectorBoth: "↔", connectorOneWay: "→",
 };
 
 export const iconUrl = (name: IconName) => `/icons/${ICON_FILES[name]}.png`;

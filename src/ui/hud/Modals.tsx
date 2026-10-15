@@ -1,0 +1,122 @@
+import { useEffect, useRef, type ReactNode } from "react";
+import { cardText, encounterSetName, t } from "../../content/i18n";
+import type { ChoiceOption, GameState, InstId } from "../../engine/types";
+import { CardFace } from "../CardFace";
+import { db, useGame } from "../context";
+import { Icon } from "../Icon";
+import type { IconName } from "../icons";
+import { handVisible } from "../scene/Table";
+import { viewerOf } from "../store";
+import { useView } from "../view";
+import { formatText } from "./Hud";
+import { InvModal } from "./Investigators";
+
+/** a native modal dialog: Escape and focus trapping come from <dialog>; a click on the backdrop closes it */
+export function Modal({ onClose, className, children }: { onClose: () => void; className?: string; children: ReactNode }) {
+  const ref = useRef<HTMLDialogElement>(null);
+  useEffect(() => {
+    const d = ref.current;
+    if (d && !d.open) d.showModal();
+  }, []);
+  return (
+    <dialog
+      ref={ref}
+      className={`modal ${className ?? ""}`}
+      onClose={onClose}
+      onCancel={(e) => {
+        e.preventDefault();
+        onClose();
+      }}
+      onClick={(e) => e.target === e.currentTarget && onClose()}
+    >
+      {children}
+    </dialog>
+  );
+}
+
+/** pending options tied to some cards, when the hand is visible and nothing is animating */
+export function useCardOptions(ids: (InstId | null | undefined)[]): ChoiceOption[] {
+  const game = useGame((s) => s.game) as GameState;
+  const busy = useGame((s) => !!s.current || s.queue.length > 0);
+  const privacy = useGame((s) => s.privacy);
+  const revealedFor = useGame((s) => s.revealedFor);
+  if (busy || !game.pending || !handVisible(privacy, game.order.length, viewerOf(game), revealedFor)) return [];
+  return game.pending.options.filter((o) => o.card && ids.includes(o.card));
+}
+
+export function OptionButtons({ options, onChosen }: { options: ChoiceOption[]; onChosen?: () => void }) {
+  const choose = useGame((s) => s.choose);
+  if (!options.length) return null;
+  return (
+    <div className="modal-options">
+      {options.map((o) => (
+        <button
+          key={o.id}
+          className="primary"
+          onClick={() => {
+            onChosen?.();
+            choose(o.id);
+          }}
+        >
+          {o.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+const TOKENS: [keyof Pick<GameState["cards"][string], "damage" | "horror" | "clues" | "doom" | "resources">, IconName][] = [
+  ["damage", "damage"],
+  ["horror", "horror"],
+  ["clues", "clue"],
+  ["doom", "doom"],
+  ["resources", "resource"],
+];
+
+/** one card at full size with its tokens, its text and the options it offers */
+export function CardModal({ id }: { id: InstId }) {
+  const game = useGame((s) => s.game) as GameState;
+  const locale = useGame((s) => s.locale);
+  const close = () => useView.getState().setModal(null);
+  const options = useCardOptions([id]);
+  const inst = game.cards[id];
+  if (!inst) return null;
+  const d = db.cards[inst.code];
+  const tx = cardText(db, inst.code, locale);
+  const back = d.type === "location" && !inst.revealed;
+  return (
+    <Modal onClose={close} className="card-modal">
+      <div className={`modal-card ${["act", "agenda", "investigator"].includes(d.type) ? "landscape" : ""}`}>
+        <CardFace code={inst.code} locale={locale} side={back ? "back" : "front"} />
+      </div>
+      <div className="modal-side">
+        <h2 className="card-name">{back ? tx.backName ?? tx.name : tx.name}</h2>
+        {tx.subname && <div className="muted">{tx.subname}</div>}
+        {d.encounterSet && <div className="muted">{encounterSetName(db, d.encounterSet, locale) ?? d.encounterSet}</div>}
+        <div className="modal-tokens">
+          {TOKENS.filter(([k]) => inst[k] > 0).map(([k, icon]) => (
+            <span key={k} className="stat" title={`${t(db, locale, `stat.${k}`)} ${inst[k]}`}>
+              <Icon name={icon} size={34} />
+              <b>{inst[k]}</b>
+            </span>
+          ))}
+        </div>
+        <p className="card-text" dangerouslySetInnerHTML={{ __html: formatText(back ? tx.backText ?? "" : tx.text) }} />
+        <OptionButtons options={options} onChosen={close} />
+        <button className="modal-close" onClick={close}>{t(db, locale, "modal.close")}</button>
+      </div>
+    </Modal>
+  );
+}
+
+/** whichever modal is open */
+export function Modals() {
+  const modal = useView((s) => s.modal);
+  const game = useGame((s) => s.game) as GameState;
+  const privacy = useGame((s) => s.privacy);
+  const revealedFor = useGame((s) => s.revealedFor);
+  // nothing is inspectable behind the hand-off screen
+  if (!modal || !handVisible(privacy, game.order.length, viewerOf(game), revealedFor)) return null;
+  if ("card" in modal) return <CardModal key={modal.card} id={modal.card} />;
+  return <InvModal key={modal.inv} inv={modal.inv} />;
+}

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { card, def, enemyStat, inv, invsAt, skillValue } from "./core";
+import { card, connections, def, enemyStat, inv, invsAt, skillValue } from "./core";
 import { deserialize, dispatch, getLegalActions, replay, serialize } from "./engine";
 import { commitDone, db, gOf, giveCard, locId, mutate, options, pick, putEnemy, setup, skipMulligans, start } from "./testkit";
 import type { Action } from "./types";
@@ -411,5 +411,18 @@ describe("player cards", () => {
     expect([skillValue(g, ROLAND, "willpower"), skillValue(g, ROLAND, "intellect"), skillValue(g, ROLAND, "combat"), skillValue(g, ROLAND, "agility")]).toEqual([3, 3, 4, 2]);
     expect(db.cards[ROLAND].health).toBe(9);
     expect(db.cards[ROLAND].sanity).toBe(5);
+  });
+});
+
+describe("one-way connections", () => {
+  it("allow moving from → to but not back", () => {
+    const r = skipMulligans(start("the-midnight-masks", [ROLAND], 3));
+    const scen = db.scenarios["the-midnight-masks"];
+    // Your House (01124) → Rivertown (01125) one way; the scenario's own connections are dropped for the check
+    const g = { ...gOf(r), db: { ...db, scenarios: { ...db.scenarios, [scen.id]: { ...scen, connections: [], oneWay: [["01124", "01125"]] as [string, string][] } } } };
+    const a = locId(g, "01124");
+    const b = locId(g, "01125");
+    expect(connections(g, a)).toEqual([b]);
+    expect(connections(g, b)).toEqual([]);
   });
 });
