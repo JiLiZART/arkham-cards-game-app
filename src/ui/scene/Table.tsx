@@ -4,7 +4,7 @@ import { Suspense, useEffect, useMemo, useRef, type PointerEvent as ReactPointer
 import * as THREE from "three";
 import { t } from "../../content/i18n";
 import type { GameState, InstId } from "../../engine/types";
-import { domPlace, lastRects, mapDealing, mapMoving, originRect, takeArrival, type ScreenBox } from "../arrivals";
+import { domPlace, lastRects, mapDealing, mapMoving, originRect, reducedMotion, takeArrival, type ScreenBox } from "../arrivals";
 import { useCardClick } from "../cardClick";
 import { iconUrl } from "../icons";
 import { Portrait } from "../Portrait";
@@ -15,7 +15,7 @@ import { hitRect, type ScreenRect } from "../hit";
 import { introHides } from "../intro";
 import { viewerOf } from "../store";
 import { useView } from "../view";
-import { CardMesh } from "./CardMesh";
+import { CardMesh, SPOT_Y } from "./CardMesh";
 import { EventFx } from "./EventFx";
 import { camInput, MapCamera } from "./MapCamera";
 
@@ -50,7 +50,7 @@ export function projectRect(p: Placement, camera: THREE.Camera, box: DOMRect): O
 /** portrait marker: drawn MINI_PX wide in its own space, scaled with the map zoom to about a third of a location's width */
 const MINI_PX = 100;
 
-function Mini({ pos, code, at, hidden, active, worldSize, moves, rects, onTap }: { pos: Vec3; code: string; at: InstId | null; hidden: boolean; active: boolean; worldSize: number; moves: Record<InstId, string> | null; rects: () => ScreenRect[]; onTap: (x: number, y: number) => void }) {
+function Mini({ pos, code, at, hidden, active, dimmed, worldSize, moves, rects, onTap }: { pos: Vec3; code: string; at: InstId | null; hidden: boolean; active: boolean; dimmed: boolean; worldSize: number; moves: Record<InstId, string> | null; rects: () => ScreenRect[]; onTap: (x: number, y: number) => void }) {
   const camera = useThree((s) => s.camera);
   const ref = useRef<THREE.Group>(null);
   const el = useRef<HTMLDivElement>(null);
@@ -106,7 +106,7 @@ function Mini({ pos, code, at, hidden, active, worldSize, moves, rects, onTap }:
       <Html center zIndexRange={[drag ? 60 : 25, 0]} distanceFactor={worldSize / MINI_PX} pointerEvents={moves ? "auto" : "none"}>
         <div
           ref={el}
-          className={`mini ${moves ? "draggable" : ""} ${drag ? "dragging" : ""}`}
+          className={`mini ${moves ? "draggable" : ""} ${drag ? "dragging" : ""} ${dimmed ? "dimmed" : ""}`}
           style={drag ? { transform: `translate(${drag.dx}px, ${drag.dy}px) scale(1.15)` } : undefined}
           onPointerDown={start}
           title={moves ? t(db, locale, "hud.dragToMove") : undefined}
@@ -115,6 +115,26 @@ function Mini({ pos, code, at, hidden, active, worldSize, moves, rects, onTap }:
         </div>
       </Html>
     </group>
+  );
+}
+
+/** the dark veil over the map while an event spotlights some of it (fades in and out; never takes the pointer) */
+function DimPlane() {
+  const on = useView((s) => !!s.spotlight);
+  const mat = useRef<THREE.MeshBasicMaterial>(null);
+  useFrame((_, dt) => {
+    const m = mat.current;
+    if (!m) return;
+    const target = on && !reducedMotion() ? 0.55 : 0;
+    // about 150 ms from clear to full
+    m.opacity = target > m.opacity ? Math.min(target, m.opacity + dt * 3.7) : Math.max(target, m.opacity - dt * 3.7);
+    m.visible = m.opacity > 0.001;
+  });
+  return (
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, SPOT_Y, 0]} raycast={() => null}>
+      <planeGeometry args={[2000, 2000]} />
+      <meshBasicMaterial ref={mat} color="black" transparent opacity={0} depthWrite={false} toneMapped={false} />
+    </mesh>
   );
 }
 
@@ -238,6 +258,7 @@ function SceneInner({ game }: { game: GameState }) {
   // dev-only: lets browser automation find a card on the map
   if (import.meta.env.DEV) (window as unknown as { __arkhamRects: unknown }).__arkhamRects = cardRects;
   const moveDrag = useView((st) => st.moveDrag);
+  const spotlight = useView((st) => st.spotlight);
 
   // a press that panned the map is not a click
   const click = (id: InstId, x: number, y: number) => {
@@ -267,6 +288,7 @@ function SceneInner({ game }: { game: GameState }) {
           at={game.invs[m.inv].location}
           hidden={hides.map}
           active={game.active === m.inv}
+          dimmed={!!spotlight && !reducedMotion() && !spotlight.invs.includes(m.inv)}
           worldSize={CARD_W * L.locScale * 0.32}
           moves={m.inv === game.pending?.inv ? moveTargets : null}
           rects={locationRects}
@@ -288,6 +310,7 @@ function SceneInner({ game }: { game: GameState }) {
             fromScale={arr?.scale}
             hold={hides.map ? hiddenAll : arr?.hold}
             faceDown={arr?.faceDown}
+            spotlit={!!spotlight?.cards.includes(id)}
             highlighted={moveDrag ? id in moveDrag.targets : byCard.has(id)}
             hovered={moveDrag ? moveDrag.over === id : hovered === id}
             exhausted={inst.exhausted && inst.zone === "enemy"}
@@ -299,6 +322,7 @@ function SceneInner({ game }: { game: GameState }) {
           />
         );
       })}
+      <DimPlane />
       <EventFx cards={L.cards} minis={L.minis} />
     </>
   );

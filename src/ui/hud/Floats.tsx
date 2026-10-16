@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import type { GameEvent, InstId, InvId } from "../../engine/types";
 import { reducedMotion, whenSettled, type ScreenBox } from "../arrivals";
-import { floatLife, type FeedEntry } from "../feed";
+import { FLOAT_KINDS, floatLife, type FeedEntry } from "../feed";
 import { viewerOf } from "../store";
 import { mapProjector } from "../scene/Table";
-import { useView } from "../view";
+import { useView, whenStageFree } from "../view";
 import { Sentence, useFeedEntries } from "./Feed";
 import { useGame } from "../context";
 
@@ -54,8 +54,8 @@ export function ActionFloats() {
     const fresh: Float[] = [];
     for (let i = seen.current.shown; i < shown; i++) {
       const e = entries.get(i);
-      // phase changes get the chapter title instead
-      if (e && e.kind !== "phase") fresh.push({ key: i, entry: e, born: 0, life: floatLife(e.parts) });
+      // only the big moments float (phase changes get the chapter title)
+      if (e && FLOAT_KINDS.has(e.kind)) fresh.push({ key: i, entry: e, born: 0, life: floatLife(e.parts) });
     }
     seen.current.shown = shown;
     pending.current.push(...(fresh.length > BURST ? fresh.slice(-MAX_VISIBLE) : fresh));
@@ -65,10 +65,12 @@ export function ActionFloats() {
   useEffect(() => {
     const id = setInterval(() => {
       const now = performance.now();
+      // floats wait while something holds the middle of the screen
+      const free = useView.getState().stage.length === 0;
       setActive((list) => {
         let next = list.filter((f) => now - f.born < f.life);
         const last = next.at(-1)?.born ?? 0;
-        if (pending.current.length && next.length < MAX_VISIBLE && now - last >= STAGGER_MS) next = [...next, { ...pending.current.shift()!, born: now }];
+        if (free && pending.current.length && next.length < MAX_VISIBLE && now - last >= STAGGER_MS) next = [...next, { ...pending.current.shift()!, born: now }];
         return next.length === list.length && next.every((f, k) => f === list[k]) ? list : next;
       });
     }, 60);
@@ -177,20 +179,20 @@ export function HitFx() {
     if (h) queue.current.push(h);
   }
   seen.current.n = shown;
-  const settledFor = useView((s) => s.settledFor) as GameEvent | null;
+  const playing = useView((s) => s.playing) as GameEvent | null;
   const played = useRef<unknown>(null);
   useEffect(() => {
-    const h = settledFor?.type === "damage" ? hitOf(settledFor) : null;
-    if (!h || played.current === settledFor) return;
-    played.current = settledFor;
+    const h = playing?.type === "damage" ? hitOf(playing) : null;
+    if (!h || played.current === playing) return;
+    played.current = playing;
     playHit(h.source, h.inv, viewerOf(game));
-  }, [settledFor]);
+  }, [playing]);
   useEffect(() => {
     if (!queue.current.length) return;
     const fresh = queue.current.splice(0);
     const viewer = viewerOf(game);
-    // after the cards on screen have landed (a location revealed by the move flips first)
-    whenSettled(() => {
+    // after the cards on screen have landed (a location revealed by the move flips first) and the middle is free
+    whenStageFree(() => whenSettled(() => {
       let last: InstId | null = null;
       let at = Math.max(performance.now(), nextFree.current);
       for (const h of fresh) {
@@ -199,7 +201,7 @@ export function HitFx() {
         setTimeout(() => playHit(h.source, h.inv, viewer), Math.max(0, at - performance.now()));
       }
       nextFree.current = at + HIT_GAP_MS;
-    });
+    }));
   });
   return null;
 }

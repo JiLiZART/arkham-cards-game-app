@@ -28,6 +28,8 @@ export interface FeedEntry {
 
 /** events that would only be noise in the feed (they have their own display or say nothing new) */
 export const HIDDEN = new Set(["setup", "shuffle", "ready", "action", "token", "testStart", "noToken"]);
+/** the consequential events that also float up over the map; everything else is told by the feed alone */
+export const FLOAT_KINDS = new Set(["damage", "defeated", "attack", "enemyDamage", "enemyDefeated", "spawn", "clues", "doom", "agendaAdvance", "actAdvance"]);
 /** events done by enemies (or the encounter deck) rather than an investigator */
 const ENEMY = new Set(["attack", "spawn", "enemyMove", "attackCancelled", "spawnFail"]);
 const ICONS = new Set<string>(["resource", "clue", "damage", "horror", "doom", "health", "sanity", "willpower", "intellect", "combat", "agility", "wild"]);
@@ -71,6 +73,8 @@ export function fillTemplate(template: string, e: GameEvent, game: GameState, db
       } else parts.push({ t: "num", n });
     } else if (name === "skill") {
       if (typeof value === "string" && ICONS.has(value)) parts.push({ t: "icon", name: value as IconName });
+    } else if (name === "cards") {
+      for (const id of (value as InstId[] | undefined) ?? []) if (game.cards[id]) parts.push({ t: "card", id });
     } else if (name === "tokens") {
       for (const tok of (value as string[] | undefined) ?? []) parts.push({ t: "token", token: tok });
     } else if (name === "token") {
@@ -134,4 +138,82 @@ export function promptParts(p: { inv: InvId; prompt: string; promptKey?: string;
   const vars = p.promptVars ?? {};
   const e: GameEvent = { type: "prompt", text: p.prompt, inv: p.inv, card: typeof vars.card === "string" ? vars.card : null, data: vars };
   return fillTemplate(template, e, game, db, locale);
+}
+
+// ---------- the live feed merges a burst of routine entries into one line ----------
+
+/** a live feed line: one entry, or a run of routine entries merged (keyed by the run's first log index) */
+export interface FeedLine {
+  key: number;
+  entry: FeedEntry;
+}
+
+/** routine entries that merge with their neighbours from the same choice (enemy moves merge only with each other) */
+function routineKind(e: GameEvent): "draw" | "resource" | "enemyMove" | null {
+  if (e.type === "draw" && e.inv) return "draw";
+  if (e.type === "resource" && e.inv && !e.data?.lost) return "resource";
+  if (e.type === "enemyMove") return "enemyMove";
+  return null;
+}
+
+/** one sentence for a run of routine entries: "Each investigator drew a card and took 1 [resource]" */
+function mergedEntry(run: GameEvent[], game: GameState, db: ContentDb, locale: string): FeedEntry {
+  const fill = (key: string, data: Record<string, unknown>, inv: InvId | null = null) =>
+    fillTemplate(t(db, locale, key), { type: "merged", text: "", inv, card: null, data }, game, db, locale);
+  const text = (s: string): Part => ({ t: "text", s });
+  if (run[0].type === "enemyMove") {
+    const parts = run.flatMap((e, k) => [...(k ? [text("; ")] : []), ...(feedEntry(e, game, db, locale)?.parts ?? [])]);
+    return { parts, kind: "enemyMove", tone: "enemy", actor: null };
+  }
+  const byInv = new Map<InvId, { cards: InstId[]; res: number }>();
+  for (const e of run) {
+    if (!e.inv) continue;
+    const m = byInv.get(e.inv) ?? { cards: [], res: 0 };
+    if (e.type === "draw" && e.card) m.cards.push(e.card);
+    if (e.type === "resource") m.res += Number(e.data?.n ?? 0);
+    byInv.set(e.inv, m);
+  }
+  const all = [...byInv.values()];
+  const playing = game.order.filter((i) => game.invs[i].status === "playing");
+  const each = all.length >= 2 && all.length === playing.length && all.every((m) => m.cards.length === all[0].cards.length && m.res === all[0].res);
+  const clauses = (m: { cards: InstId[]; res: number }, inv: InvId | null): Part[][] => [
+    ...(m.cards.length ? [inv ? fill("feed.merged.draw", { cards: m.cards }, inv) : fill(m.cards.length === 1 ? "feed.merged.drawOne" : "feed.merged.drawN", { n: m.cards.length })] : []),
+    ...(m.res ? [fill("feed.merged.resource", { n: m.res }, inv)] : []),
+  ];
+  const and = text(t(db, locale, "feed.merged.and"));
+  const subjects = (each ? [[text(t(db, locale, "feed.merged.each")), text(" "), ...clauses(all[0], null).flatMap((c, k) => (k ? [and, ...c] : c))]] : [...byInv].map(([inv, m]) => [{ t: "inv", id: inv } as Part, text(" "), ...clauses(m, inv).flatMap((c, k) => (k ? [and, ...c] : c))]));
+  const parts = subjects.flatMap((s, k) => (k ? [text("; "), ...s] : s));
+  const one = byInv.size === 1 ? [...byInv.keys()][0] : null;
+  return { parts, kind: "merged", tone: one ? "player" : "game", actor: one ? { inv: one } : null };
+}
+
+/**
+ * The newest live feed lines, oldest first: entries before `shown` (at most `window` back), with each run of routine
+ * entries from one choice (see `marks`) merged into one line. A consequential entry breaks a run; hidden entries don't.
+ */
+export function mergeLive(game: GameState, entries: Map<number, FeedEntry | null>, shown: number, marks: number[], db: ContentDb, locale: string, window = 40): FeedLine[] {
+  const burstOf = (i: number) => marks.filter((m) => m <= i).length;
+  const out: FeedLine[] = [];
+  let run: { key: number; burst: number; kind: string; events: GameEvent[] } | null = null;
+  const flush = () => {
+    if (run) out.push({ key: run.key, entry: run.events.length > 1 ? mergedEntry(run.events, game, db, locale) : entries.get(run.key)! });
+    run = null;
+  };
+  for (let i = Math.max(0, shown - window); i < shown; i++) {
+    const entry = entries.get(i);
+    if (!entry) continue;
+    const e = game.log[i];
+    const kind = routineKind(e);
+    const group = kind === "enemyMove" ? "enemyMove" : "routine";
+    const burst = burstOf(i);
+    if (run && (!kind || run.burst !== burst || run.kind !== group)) flush();
+    if (!kind) {
+      out.push({ key: i, entry });
+      continue;
+    }
+    if (!run) run = { key: i, burst, kind: group, events: [] };
+    run.events.push(e);
+  }
+  flush();
+  return out;
 }

@@ -110,3 +110,19 @@ describe("undo", () => {
     expect(canUndo(reloaded.getState())).toBe(false);
   });
 });
+
+describe("log marks", () => {
+  it("mark where each choice's log entries begin; an undo drops the marks of what it took back", () => {
+    const s = start(mem());
+    begin(s);
+    s.getState().skipEvents();
+    const n0 = s.getState().game!.log.length;
+    s.getState().choose(JSON.stringify({ kind: "resource" }));
+    const n1 = s.getState().game!.log.length;
+    s.getState().choose(JSON.stringify({ kind: "resource" }));
+    expect(s.getState().logMarks.slice(-2)).toEqual([n0, n1]);
+    s.getState().skipEvents();
+    s.getState().undo();
+    expect(s.getState().logMarks.at(-1)).toBe(n0);
+  });
+});

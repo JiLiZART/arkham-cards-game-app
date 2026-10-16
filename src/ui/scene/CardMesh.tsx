@@ -17,6 +17,8 @@ const glow = new THREE.MeshBasicMaterial({ color: "#ffcf5a", transparent: true, 
 const hoverGlow = new THREE.MeshBasicMaterial({ color: "#8fd3ff", transparent: true, opacity: 0.9 });
 
 const damp = THREE.MathUtils.damp;
+/** height of the plane that dims the map around a spotlit card (above every card lying on the table) */
+export const SPOT_Y = 2;
 /** a card turning over: it lifts (grows a little, the camera looks straight down) and turns in 3D (ms) */
 export const FLIP_MS = 600;
 const easeInOut = (t: number) => (t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2);
@@ -37,10 +39,12 @@ export interface CardMeshProps {
   hold?: () => boolean;
   /** dealt face down: it glides showing its back, then turns to its side once it has landed */
   faceDown?: boolean;
+  /** what the playing event is about: raised above the dimmed map, a little larger, outlined */
+  spotlit?: boolean;
 }
 
 /** one card on the table: eases toward its layout target every frame */
-export function CardMesh({ inst, place, highlighted, hovered, exhausted, onClick, onHover, fromScale, hold, faceDown }: CardMeshProps) {
+export function CardMesh({ inst, place, highlighted, hovered, exhausted, onClick, onHover, fromScale, hold, faceDown, spotlit }: CardMeshProps) {
   const locale = useGame((s) => s.locale);
   const card = db.cards[inst.code];
   const isLocation = card.type === "location" && inst.zone === "location";
@@ -106,8 +110,11 @@ export function CardMesh({ inst, place, highlighted, hovered, exhausted, onClick
     }
     if (!g.visible) return;
     // top-down orthographic view: height only orders overlapping cards, size comes from scale
-    const [x, y, z] = place.pos;
-    const moving = Math.abs(g.position.x - x) + Math.abs(g.position.z - z) + Math.abs(g.scale.x - place.scale) > 0.03;
+    const [x, y0, z] = place.pos;
+    // spotlit: above the dim plane (see Table), and lifted a little unless motion is reduced
+    const y = spotlit ? y0 + SPOT_Y + 1 : y0;
+    const scale = spotlit && !reducedMotion() ? place.scale * 1.06 : place.scale;
+    const moving = Math.abs(g.position.x - x) + Math.abs(g.position.z - z) + Math.abs(g.scale.x - scale) > 0.03;
     if (moving) mapMoving.add(inst.id);
     else mapMoving.delete(inst.id);
     const k = 8;
@@ -115,7 +122,7 @@ export function CardMesh({ inst, place, highlighted, hovered, exhausted, onClick
     g.position.y = damp(g.position.y, y, k, dt);
     g.position.z = damp(g.position.z, z, k, dt);
     // hovering only highlights: the enlarged copy is the HTML hover overlay
-    g.scale.setScalar(damp(g.scale.x, place.scale, k, dt));
+    g.scale.setScalar(damp(g.scale.x, scale, k, dt));
     g.rotation.x = -Math.PI / 2;
     g.rotation.z = damp(g.rotation.z, place.yaw + (exhausted ? -Math.PI / 2 : 0), k, dt);
     // turning over: a timed lift-and-turn once the card has landed and any portrait moving in has arrived
@@ -159,7 +166,7 @@ export function CardMesh({ inst, place, highlighted, hovered, exhausted, onClick
           />
         ))}
       </group>
-      {(highlighted || hovered) && <mesh ref={frame} geometry={cardFrame(w, h)} position={[0, 0, 0.001]} material={hovered ? hoverGlow : glow} />}
+      {(highlighted || hovered || spotlit) && <mesh ref={frame} geometry={cardFrame(w, h)} position={[0, 0, 0.001]} material={hovered ? hoverGlow : glow} />}
       {place.badge && (
         <Html position={[-w / 2 + 0.1, h / 2 - 0.1, 0.03]} zIndexRange={[21, 0]} pointerEvents="none">
           <div className="engaged-badge" ref={overlay}>

@@ -24,7 +24,8 @@ import { MulliganRow } from "./MulliganRow";
 import { IntroOverlay } from "./IntroOverlay";
 import { Showcase } from "./Showcase";
 import { StatBar } from "./Stats";
-import { useView } from "../view";
+import { spotlightOf } from "../spotlight";
+import { useStage, useView } from "../view";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
 const gOf = () => ({ s: gameStore.getState().game!, db, events: [] });
@@ -35,6 +36,9 @@ const DURATION: Record<string, number> = { token: 650, testResult: 1300, encount
 /** events that start only once every card on screen has landed: the chaos draw, and a hit from a card */
 export const waitsForSettle = (e: GameEvent | null) => e?.type === "token" || (e?.type === "damage" && !!e.data?.source);
 
+/** events that take the middle of the screen (the rest play only while nothing holds it) */
+const CENTER = new Set(["token", "testResult", "encounter"]);
+
 /** plays queued events one by one; input is blocked meanwhile */
 function EventPlayer() {
   const current = useGame((s) => s.current);
@@ -43,7 +47,12 @@ function EventPlayer() {
   // a chaos token draw waits until every card on screen has landed
   const settledFor = useView((s) => s.settledFor);
   // so does a hit from a card (its streak and numbers follow a revealed location's flip)
-  const ready = !waitsForSettle(current) || settledFor === current;
+  const center = !!current && CENTER.has(current.type);
+  const holds = useStage(center ? `event:${current!.logIndex}` : null);
+  const stageFree = useView((s) => s.stage.length === 0);
+  const ready = !!current && (!waitsForSettle(current) || settledFor === current) && (center ? holds : stageFree);
+  // the event plays: everything else on the map dims around what it is about
+  useEffect(() => useView.setState({ playing: ready ? current : null, spotlight: ready ? spotlightOf(current, gameStore.getState().game!) : null }), [current, ready]);
   useEffect(() => {
     if (!waitsForSettle(current)) return;
     return whenSettled(() => useView.setState({ settledFor: current }));
@@ -64,8 +73,6 @@ function EventPlayer() {
   return null;
 }
 
-/** events a phase title waits for (they own the middle of the screen) */
-const TITLE_WAITS = new Set(["token", "testResult", "encounter"]);
 /** phases that get a title */
 const TITLED = new Set(["mythos", "investigation", "enemy", "upkeep"]);
 
@@ -92,21 +99,22 @@ function PhaseTitle() {
     }
     seen.current.n = game.log.length;
   }
-  // the scenario introduction plays before the first phase title
-  const intro = useView((s) => !!s.intro || s.showcase.length > 0);
-  const blocked = intro || (!!current && TITLE_WAITS.has(current.type));
+  // a title waits for the events before it to play, then for the middle of the screen (see useStage)
   const waiting = queue.current.length;
   useEffect(() => {
-    if (showing || blocked || !waiting) return;
+    if (showing || current || !waiting) return;
     return whenSettled(() => setShowing(queue.current.shift() ?? null));
-  }, [showing, blocked, waiting]);
+  }, [showing, current, waiting]);
   const pause = game.pending?.kind === "phase" ? game.pending : null;
   const [settled, setSettled] = useState<unknown>(null);
   useEffect(() => {
-    if (!pause || blocked || current) return;
+    if (!pause || current) return;
     return whenSettled(() => setSettled(pause));
-  }, [pause, blocked, current]);
-  if (pause && settled === pause && !blocked && !current) return <PhasePause key={pause.seq} />;
+  }, [pause, current]);
+  const paused = !!pause && settled === pause && !current;
+  const holds = useStage(paused ? `pause:${pause!.seq}` : showing ? `title:${showing.key}` : null);
+  if (!holds) return null;
+  if (paused) return <PhasePause key={pause!.seq} />;
   if (!showing) return null;
   return (
     <div
@@ -244,8 +252,8 @@ function HandOff() {
   const confirm = useGame((s) => s.confirmHandoff);
   const busy = useGame((s) => !!s.current || s.queue.length > 0);
   const locale = useGame((s) => s.locale);
-  // the hand-off waits for the introduction and for drawn cards still on show
-  const intro = useView((s) => !!s.intro || s.showcase.length > 0);
+  // the hand-off waits for whatever holds the middle of the screen (and drawn cards about to take it)
+  const intro = useView((s) => s.stage.length > 0 || !!s.intro || s.showcase.length > 0);
   const viewer = viewerOf(game);
   // the pause before a phase is for the whole table: no hand to hide
   if (busy || intro || !game.pending || game.pending.kind === "phase" || handVisible(privacy, game.order.length, viewer, revealedFor)) return null;

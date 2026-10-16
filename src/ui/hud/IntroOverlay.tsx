@@ -4,7 +4,7 @@ import { reducedMotion } from "../arrivals";
 import { CardFace } from "../CardFace";
 import { db, useGame } from "../context";
 import { whenDealt } from "../intro";
-import { useView } from "../view";
+import { useStage, useView } from "../view";
 import { centreTransform } from "./flights";
 
 const FLY_MS = 650;
@@ -27,6 +27,7 @@ export function IntroOverlay() {
   const [flying, setFlying] = useState(false);
   const busy = useRef(false);
   const step = intro?.step;
+  const holds = useStage(intro ? "intro" : null);
 
   // the deal: the introduction ends when the last location has landed and flipped
   useEffect(() => {
@@ -55,7 +56,7 @@ export function IntroOverlay() {
   const skip = () => useView.setState({ intro: null });
 
   useEffect(() => {
-    if (!id) return;
+    if (!id || !holds) return;
     const key = (e: KeyboardEvent) => {
       if (e.key !== " " && e.key !== "Enter") return;
       e.preventDefault();
@@ -65,7 +66,7 @@ export function IntroOverlay() {
     return () => window.removeEventListener("keydown", key);
   });
 
-  if (!id) return null;
+  if (!id || !holds) return null;
   const sc = scenarioText(db, game.scenarioId, locale);
   return (
     <div className={`intro-overlay ${flying ? "flying" : ""}`} key={step}>

@@ -40,10 +40,9 @@ export function EventFx({ cards, minis }: { cards: Map<string, { pos: Vec3 }>; m
   const current = useGame((s) => s.current);
   const game = useGame((s) => s.game);
   const started = useRef<{ e: unknown; at: number }>({ e: null, at: 0 });
-  // a hit from a card waits for the table to settle (see the HUD's event player), then its streak, then the numbers
-  const settledFor = useView((s) => s.settledFor);
-  if (!current || !game) return null;
-  if (current.type === "damage" && current.data?.source && settledFor !== current) return null;
+  // an event plays once the HUD's event player lets it start (a hit from a card: settled, then its streak, then the numbers)
+  const playing = useView((s) => s.playing);
+  if (!current || !game || playing !== current) return null;
   if (started.current.e !== current) started.current = { e: current, at: performance.now() };
   const at = started.current.at;
   if (current.type === "damage" && current.inv && game.invs[current.inv]) {

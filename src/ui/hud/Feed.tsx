@@ -4,7 +4,7 @@ import type { GameState } from "../../engine/types";
 import { CardFace } from "../CardFace";
 import { ChaosToken } from "../ChaosToken";
 import { db, gameStore, useGame } from "../context";
-import { feedEntry, shownCount, type FeedEntry, type Part } from "../feed";
+import { feedEntry, mergeLive, shownCount, type FeedEntry, type Part } from "../feed";
 import { Glyph, Icon } from "../Icon";
 import { CLASS_COLORS } from "../icons";
 import { Portrait } from "../Portrait";
@@ -12,7 +12,7 @@ import { handVisible } from "../scene/Table";
 import { viewerOf } from "../store";
 import { useView } from "../view";
 
-const LIVE_MAX = 8;
+const LIVE_MAX = 4;
 const LIVE_MS = 12000;
 const LEAVE_MS = 400;
 
@@ -123,6 +123,8 @@ export function Feed() {
   const privacy = useGame((s) => s.privacy);
   const revealedFor = useGame((s) => s.revealedFor);
   const mode = useView((s) => s.feedMode);
+  const locale = useGame((s) => s.locale);
+  const marks = useGame((s) => s.logMarks);
   const tops = useRef(new Map<number, number>());
   const { shown, entries } = useFeedEntries();
   const arrived = useRef(new Map<number, number>());
@@ -136,17 +138,19 @@ export function Feed() {
   const [, tick] = useReducer((n: number) => n + 1, 0);
   const listRef = useRef<HTMLDivElement>(null);
 
-  // every visible log index, newest first
+  // the Journal: every visible log index, newest first; live: the newest lines, a choice's routine entries merged
   const visible = useMemo(() => {
     const out: number[] = [];
     for (let i = shown - 1; i >= 0; i--) if (entries.get(i)) out.push(i);
     return out;
   }, [shown, entries]);
+  const lines = useMemo(() => new Map(mergeLive(game, entries, shown, marks, db, locale).map((l) => [l.key, l.entry])), [game, entries, shown, marks, locale]);
+  const newest = useMemo(() => [...lines.keys()].reverse(), [lines]);
 
   const now = performance.now();
-  for (const i of visible.slice(0, LIVE_MAX + 1)) if (!arrived.current.has(i)) arrived.current.set(i, now);
+  for (const i of newest.slice(0, LIVE_MAX + 1)) if (!arrived.current.has(i)) arrived.current.set(i, now);
   // live: the newest few, plus the ones still fading out
-  const live = visible.slice(0, LIVE_MAX + 1).filter((i) => now - (arrived.current.get(i) ?? now) < LIVE_MS + LEAVE_MS);
+  const live = newest.slice(0, LIVE_MAX + 1).filter((i) => now - (arrived.current.get(i) ?? now) < LIVE_MS + LEAVE_MS);
   const items = mode === "journal" ? visible : live;
 
   // age the live feed out
@@ -190,7 +194,7 @@ export function Feed() {
     <div className={`feed ${mode}`} ref={listRef} aria-live="polite">
       {mode === "journal" && <div className="feed-title card-name">{t(db, gameStore.getState().locale, "hud.journal")}</div>}
       {items.map((i, k) => {
-        const e = entries.get(i)!;
+        const e = (mode === "live" ? lines.get(i) : entries.get(i))!;
         const age = now - (arrived.current.get(i) ?? now);
         const leaving = mode === "live" && (age > LIVE_MS || k >= LIVE_MAX);
         const style = mode === "live" ? { opacity: leaving ? 0 : Math.max(0.25, 1 - 0.11 * k), borderLeftColor: toneColor(e) } : { borderLeftColor: toneColor(e) };

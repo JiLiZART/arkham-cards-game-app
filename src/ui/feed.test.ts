@@ -3,7 +3,7 @@ import { botChoice } from "../engine/bot";
 import { dispatch } from "../engine/engine";
 import { db, giveCard, mutate, pick, putEnemy, skipMulligans, start } from "../engine/testkit";
 import type { GameEvent } from "../engine/types";
-import { feedEntry, floatLife, HIDDEN, promptParts, shownCount, templateKey, type Part } from "./feed";
+import { feedEntry, FLOAT_KINDS, floatLife, HIDDEN, mergeLive, promptParts, shownCount, templateKey, type Part } from "./feed";
 
 const last = (log: GameEvent[], type: string) => [...log].reverse().find((e) => e.type === type)!;
 const placeholders = (s: string) => (s.match(/\{[\w:]+\}/g) ?? []).sort();
@@ -121,5 +121,46 @@ describe("float life", () => {
     expect(floatLife(text(500))).toBe(6000);
     // a name counts as a dozen characters
     expect(floatLife([{ t: "inv", id: "01001" }, ...text(28)])).toBe(4100);
+  });
+});
+
+describe("float kinds", () => {
+  it("float only the big moments", () => {
+    for (const k of ["attack", "damage", "enemyDefeated", "clues", "doom"]) expect(FLOAT_KINDS.has(k)).toBe(true);
+    for (const k of ["resource", "draw", "move", "play", "engage", "phase"]) expect(FLOAT_KINDS.has(k)).toBe(false);
+  });
+});
+
+describe("merged live feed", () => {
+  const game = skipMulligans(start("the-gathering", ["01001", "01002"], 1)).state;
+  const [R, D] = game.order;
+  const [r1, r2, r3] = game.invs[R].hand;
+  const d1 = game.invs[D].hand[0];
+  const ev = (type: string, inv: string | null, card: string | null = null, data: Record<string, unknown> = {}): GameEvent => ({ type, text: type, inv, card, data });
+  /** the live lines for a crafted log, as plain words (cards as [card]) */
+  const lines = (log: GameEvent[], marks: number[]) => {
+    const g = { ...game, log };
+    const entries = new Map(log.map((e, i) => [i, feedEntry(e, g, db, "en")]));
+    return mergeLive(g, entries, log.length, marks, db, "en").map((l) =>
+      l.entry.parts.map((p) => (p.t === "text" || p.t === "strong" ? p.s : p.t === "inv" ? p.id : p.t === "card" ? "[card]" : p.t === "amount" ? `${p.n}${p.icon}` : "")).join(""),
+    );
+  };
+
+  it("upkeep with two investigators is one line", () => {
+    const log = [ev("ready", null), ev("draw", R, r1), ev("resource", R, null, { n: 1 }), ev("draw", D, d1), ev("resource", D, null, { n: 1 })];
+    expect(lines(log, [0])).toEqual(["Each investigator drew a card and took 1resource"]);
+  });
+
+  it("three draws by one investigator name the cards", () => {
+    expect(lines([ev("draw", R, r1), ev("draw", R, r2), ev("draw", R, r3)], [0])).toEqual([`${R} drew [card][card][card]`]);
+  });
+
+  it("an attack breaks the run", () => {
+    const log = [ev("draw", R, r1), ev("attack", R, null, { damage: 1, horror: 0 }), ev("draw", R, r2)];
+    expect(lines(log, [0])).toHaveLength(3);
+  });
+
+  it("two choices stay two lines", () => {
+    expect(lines([ev("draw", R, r1), ev("draw", R, r2)], [0, 1])).toHaveLength(2);
   });
 });

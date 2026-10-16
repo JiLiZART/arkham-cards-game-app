@@ -100,14 +100,16 @@ export function RevealOverlay() {
   const game = useGame((s) => s.game) as GameState;
   const locale = useGame((s) => s.locale);
   const drawByHand = useGame((s) => s.drawByHand);
-  // the automatic reveal waits for the screen to settle too (see EventPlayer)
-  const settledFor = useView((s) => s.settledFor);
+  // these play when the event player lets the event start (settled, holding the middle of the screen)
+  const playing = useView((s) => s.playing) === current && !!current;
+  const stageFree = useView((s) => s.stage.length === 0);
   const key = current ? `${current.type}:${game.log.length}:${current.card ?? ""}` : "";
   if (current?.type === "encounter" && current.card && game.cards[current.card]) {
+    if (!playing) return null;
     return <EncounterFlight key={key} code={game.cards[current.card].code} locale={locale} />;
   }
   // the hand draw (TokenDraw) shows its own reveal
-  if (current?.type === "token" && !drawByHand && settledFor === current)
+  if (current?.type === "token" && !drawByHand && playing)
     return (
       <>
         <div className="token-auto-subject">
@@ -116,5 +118,6 @@ export function RevealOverlay() {
         <TokenPop key={key} token={String(current.data?.token)} />
       </>
     );
-  return <Resolving game={game} locale={locale} />;
+  // a card being resolved shows only while nothing else holds the middle (it may wait there for a choice)
+  return stageFree ? <Resolving game={game} locale={locale} /> : null;
 }

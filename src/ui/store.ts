@@ -42,6 +42,8 @@ export interface UiState {
   revealedFor: InvId | null;
   /** how many of `actions` Undo can never take back: up to the last one that revealed hidden information or ended a mulligan */
   undoFloor: number;
+  /** game.log length before each choice of this session: the feed merges routine entries of one choice only (not saved) */
+  logMarks: number[];
   notice: string | null;
   error: string | null;
 
@@ -133,7 +135,7 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage())
     };
     return {
       screen: "menu", locale: "en", privacy: true, drawByHand: true, campaign: null, setup: null, actions: [], game: null,
-      queue: [], current: null, revealedFor: null, undoFloor: 0, notice: null, error: null,
+      queue: [], current: null, revealedFor: null, undoFloor: 0, logMarks: [], notice: null, error: null,
 
       newCampaign(opts) {
         const campaign = startCampaign(db, opts);
@@ -146,7 +148,7 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage())
         if (!c || !currentScenarioId(db, c)) return;
         const setup: GameSetup = { ...scenarioSetup(db, c, seed ?? (Date.now() >>> 0)), pacePhases: true };
         const r = createGame(db, setup);
-        set({ setup, actions: [], undoFloor: 0, game: r.state, screen: "game", queue: [], current: null, revealedFor: null, error: null });
+        set({ setup, actions: [], undoFloor: 0, logMarks: [r.state.log.length], game: r.state, screen: "game", queue: [], current: null, revealedFor: null, error: null });
         persist();
       },
 
@@ -160,7 +162,7 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage())
           set({ error: r.error });
           return;
         }
-        set({ game: r.state, actions: [...actions, action], error: null, ...(pastUndo(game, r.state) ? { undoFloor: actions.length + 1 } : {}) });
+        set({ game: r.state, actions: [...actions, action], logMarks: [...get().logMarks, game.log.length], error: null, ...(pastUndo(game, r.state) ? { undoFloor: actions.length + 1 } : {}) });
         enqueue(r.events);
         persist();
       },
@@ -170,7 +172,8 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage())
         if (!setup || !canUndo(get()) || useView.getState().intro) return;
         const rest = actions.slice(0, -1);
         // the shortened list replays to exactly the game before the last choice; animations still waiting are dropped
-        set({ game: replay(db, setup, rest).state, actions: rest, queue: [], current: null, error: null });
+        const game = replay(db, setup, rest).state;
+        set({ game, actions: rest, logMarks: get().logMarks.filter((m) => m < game.log.length), queue: [], current: null, error: null });
         persist();
       },
 
@@ -203,7 +206,7 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage())
         try {
           const r = replayWithFloor(db, save.setup, save.actions);
           quietNextGame();
-          set({ ...settings, campaign: save.campaign, setup: save.setup, actions: save.actions, game: r.state, undoFloor: r.undoFloor, screen: "game", queue: [], current: null, revealedFor: null });
+          set({ ...settings, campaign: save.campaign, setup: save.setup, actions: save.actions, game: r.state, undoFloor: r.undoFloor, logMarks: [r.state.log.length], screen: "game", queue: [], current: null, revealedFor: null });
         } catch {
           set({ ...settings, campaign: save.campaign, setup: null, actions: [], game: null, screen: "log", notice: "The saved scenario could not be restored; it will restart." });
         }
@@ -252,7 +255,7 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage())
           added.push(a);
           if (pastUndo(prev, r.state)) undoFloor = actions.length + added.length;
         }
-        set({ game: r.state, actions: [...actions, ...added], undoFloor, queue: [], current: null });
+        set({ game: r.state, actions: [...actions, ...added], undoFloor, logMarks: [...get().logMarks, game.log.length], queue: [], current: null });
         persist();
       },
 
@@ -265,7 +268,7 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage())
         const data = JSON.parse(json) as { setup: GameSetup; actions: Action[]; campaign?: CampaignState };
         const r = replayWithFloor(db, data.setup, data.actions);
         quietNextGame();
-        set({ setup: data.setup, actions: data.actions, game: r.state, undoFloor: r.undoFloor, campaign: data.campaign ?? get().campaign, screen: "game", queue: [], current: null });
+        set({ setup: data.setup, actions: data.actions, game: r.state, undoFloor: r.undoFloor, logMarks: [r.state.log.length], campaign: data.campaign ?? get().campaign, screen: "game", queue: [], current: null });
         persist();
       },
     };

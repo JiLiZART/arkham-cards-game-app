@@ -7,7 +7,7 @@ import { db, useGame } from "../context";
 import { backUrl } from "../images";
 import { viewerOf } from "../store";
 import { deckPick } from "../optionHome";
-import { useView } from "../view";
+import { useStage, useView } from "../view";
 import { centreTransform } from "./flights";
 import { RESOLVE_BOX } from "./Reveal";
 
@@ -30,6 +30,8 @@ export function Showcase() {
   const choose = useGame((s) => s.choose);
   const pick = drawn.length || intro ? [] : deckPick(game, viewerOf(game));
   const ids = drawn.length ? drawn : pick;
+  // the middle of the screen is asked for once the events before these cards have played
+  const holds = useStage(ids.length && !busy ? "showcase" : null);
   const root = useRef<HTMLDivElement>(null);
   const flown = useRef(new Set<InstId>());
 
@@ -65,7 +67,7 @@ export function Showcase() {
   };
 
   useEffect(() => {
-    if (!drawn.length) return;
+    if (!drawn.length || !holds) return;
     const key = (e: KeyboardEvent) => {
       if (e.key !== " " && e.key !== "Enter") return;
       e.preventDefault();
@@ -73,9 +75,9 @@ export function Showcase() {
     };
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
-  }, [drawn.length]);
+  }, [drawn.length, holds]);
 
-  if (!ids.length) return null;
+  if (!ids.length || !holds) return null;
   const others = pick.length ? (game.pending?.options ?? []).filter((o) => !o.card) : [];
   return (
     <div className={`showcase ${pick.length ? "picking" : ""}`} ref={root} style={{ ["--n" as string]: Math.min(ids.length, 6) }}>
