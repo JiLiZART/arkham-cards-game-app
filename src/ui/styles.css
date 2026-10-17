@@ -350,7 +350,8 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 .st-stage { position: relative; flex: 1; width: 100%; min-height: 0; }
 .st-draw { position: absolute; inset: 0; }
 .st-hint { position: absolute; top: 0; width: 100%; text-align: center; font: 26px Teutonic, TeutonicRU, Georgia, serif; color: var(--gold); text-shadow: 0 2px 6px #000; }
-.st-bag { position: absolute; filter: drop-shadow(0 10px 20px #000); }
+.st-bag { position: absolute; }
+.st-bag-icon { display: block; filter: drop-shadow(0 10px 20px #000); }
 .token-circle { position: absolute; padding: 0; border: 0; border-radius: 50%; background: none; perspective: 500px; cursor: pointer; transition: opacity 0.3s, transform 0.2s; }
 .token-circle:hover:not(.chosen) { transform: scale(1.15); }
 .token-circle.auto { cursor: default; pointer-events: none; }

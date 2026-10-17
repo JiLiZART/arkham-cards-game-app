@@ -16,7 +16,7 @@
 ## 4. The result stage
 
 - [x] 4.1 Replace `Breakdown` with the screen's result stage on the `testResult` event: the big total, Success or Fail in big text (green or red), a Continue button (`.breakdown button` kept as an alias class for the scripts), and bottom-centre the arithmetic as icons (skill icon and base, each token with its art and modifier, each placed card's icon, "= total vs difficulty"). Continue dismisses by hand and at the Tap pace; otherwise the existing timer. Add `result.success`, `result.fail` strings if missing in en and ru. Verify in the browser: a success shows "5", "Success", Continue, and "[combat] 4 + [token −1] + [card] 1 = 4 vs 2" at the bottom; a failure reads red.
-- [ ] 4.2 Tips and sound: move the token tip's anchor to the bag inside the draw stage and keep the test tip on the strip; confirm `check-tips.js` and `check-sounds.js` pass (rattle on the spill, clink on the flip, chime or thud on the result).
+- [x] 4.2 Tips and sound: move the token tip's anchor to the bag inside the draw stage and keep the test tip on the strip; confirm `check-tips.js` and `check-sounds.js` pass (rattle on the spill, clink on the flip, chime or thud on the result).
 
 ## 5. Verification and docs
 

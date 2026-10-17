@@ -41,7 +41,7 @@ export const TIPS: Tip[] = [
   { id: "mulligan", when: (g) => g.pending?.kind === "mulligan", anchor: () => ({ tip: "hand" }) },
   { id: "mythos", when: (g) => pause(g, "mythos"), anchor: () => ({ tip: "agenda" }), everyone: true },
   { id: "upkeep", when: (g) => pause(g, "upkeep"), anchor: () => ({ tip: "deck" }), everyone: true },
-  { id: "token", when: (_, c) => c.drawing, anchor: () => ({ tip: "bag" }), duringDraw: true },
+  { id: "token", when: (_, c) => c.drawing, anchor: () => ({ tip: "drawbag" }), duringDraw: true },
   { id: "test", when: (g, c) => g.pending?.kind === "commit" && g.skillTest?.inv === c.viewer, anchor: () => ({ tip: "skilltest" }) },
   { id: "start", when: (g) => turn(g) && g.round === 1, anchor: () => ({ tip: "act" }) },
   { id: "turn", when: turn, anchor: () => ({ tip: "bar" }) },

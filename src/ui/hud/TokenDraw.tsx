@@ -119,8 +119,11 @@ export function DrawStage({ e, byHand }: { e: GameEvent; byHand: boolean }) {
       {area && (
         <>
           <div className="st-hint">{picked === null && byHand ? tr("draw.hint") : ""}</div>
-          <span ref={bag} className="st-bag" data-tip="bag" style={{ left: area.w / 2 - BAG / 2, top: area.h - BAG * 0.85, width: BAG }}>
-            <Icon name="chaosBag" size={BAG} />
+          {/* the wrapper stays where the bag ends up (the tip points at it); the bag inside grows out of its button */}
+          <span className="st-bag" data-tip="drawbag" style={{ left: area.w / 2 - BAG / 2, top: area.h - BAG * 0.85, width: BAG, height: BAG }}>
+            <span ref={bag} className="st-bag-icon">
+              <Icon name="chaosBag" size={BAG} />
+            </span>
           </span>
           {arrived &&
             spill?.points.map((p, k) => (
