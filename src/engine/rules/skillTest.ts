@@ -159,7 +159,11 @@ function commitStage(g: G, step: Extract<Step, { t: "Test" }>) {
     t.committers.splice(k, 1);
     moveCard(g, pick.uncommit, "hand");
     emit(g, "uncommit", `${me.name} takes back ${def(g, pick.uncommit).name}`, { inv: who, card: pick.uncommit });
-  } else push(g, { t: "UseAbility", inv: who, card: pick.ability.card, index: pick.ability.index });
+  } else {
+    // the ability resolves first (its bonus and cost), then the window asks again
+    push(g, { t: "UseAbility", inv: who, card: pick.ability.card, index: pick.ability.index }, { ...step, choice: undefined });
+    return;
+  }
   push(g, { ...step, choice: undefined });
 }
 
@@ -271,7 +275,7 @@ function resultStage(g: G) {
   emit(
     g, "testResult",
     `${invName(g, t.inv)}: ${base}${icons ? ` + ${icons} (committed)` : ""} ${tokens >= 0 ? "+" : "−"} ${Math.abs(tokens)} (${tokText}) = ${total} vs ${diff} → ${success ? "Success" : "Fail"}${t.autoFail ? " (auto-fail)" : ""}${t.autoSucceed ? " (auto-success)" : ""}`,
-    { inv: t.inv, data: { skill: t.skill, base, icons, value, tokens: t.tokens, tokenTotal: tokens, total, difficulty: diff, success, testId: t.id } },
+    { inv: t.inv, data: { skill: t.skill, base, icons, value, tokens: t.tokens, tokenMods: [...t.tokenMods], tokenTotal: tokens, total, difficulty: diff, success, testId: t.id } },
   );
   push(g, { t: "Test", stage: "apply" });
 }

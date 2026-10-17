@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { card, connections, def, enemyStat, findByCode, inv, invsAt, moveCard, skillValue } from "./core";
+import { card, connections, createCard, def, enemyStat, findByCode, inv, invsAt, moveCard, skillValue } from "./core";
 import { testParts, testValue } from "./rules/skillTest";
 import { deserialize, dispatch, getLegalActions, replay, serialize } from "./engine";
 import { commitDone, db, gOf, giveCard, locId, mutate, options, pick, putEnemy, setup, skipMulligans, start } from "./testkit";
@@ -283,6 +283,7 @@ describe("skill tests", () => {
     // combat 4, skull -2 (two ghouls) → 2 vs fight 2 → success
     const res = r.state.log.find((e) => e.type === "testResult")!;
     expect(res.data?.tokenTotal).toBe(-2);
+    expect(res.data?.tokenMods).toEqual([-2]);
   });
 });
 
@@ -576,6 +577,25 @@ describe("chosen investigators", () => {
       expect(r.state.pending?.kind).toBe("turn");
     });
   }
+});
+
+describe("fast abilities during the commit window", () => {
+  it("Physical Training adds its bonus and spends its resource before the commit prompt asks again", () => {
+    let r = gathering([ROLAND], ["0"]);
+    r = mutate(r, (g) => {
+      const pt = createCard(g, "01017", "limbo", ROLAND);
+      moveCard(g, pt, "play");
+      g.s.cards[pt].controller = ROLAND;
+      putEnemy(g, "01160", locId(g, "01111"), ROLAND);
+    });
+    r = pick(r, /^Fight Ghoul Minion/);
+    const resources = r.state.invs[ROLAND].resources;
+    expect(testValue(gOf(r), r.state.skillTest!)).toBe(4);
+    r = pick(r, /Physical Training: \+1 combat/);
+    expect(testValue(gOf(r), r.state.skillTest!)).toBe(5);
+    expect(r.state.invs[ROLAND].resources).toBe(resources - 1);
+    expect(r.state.pending?.kind).toBe("commit");
+  });
 });
 
 describe("taking back committed cards", () => {
