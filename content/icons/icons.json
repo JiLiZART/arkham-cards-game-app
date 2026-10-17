@@ -2,6 +2,7 @@
  "source": "ArkhamCards icon set (github.com/zzorba/ArkhamCards: its IcoMoon fonts and their SVG sources). Fan-drawn Fantasy Flight Games symbols, not CC0.",
  "extra": {
   "arkham": "midnight_masks",
+  "card": "card-outline",
   "cultists": "cult_of_umordoth",
   "pentagram": "dark_cult",
   "tentacles": "the_devourer_below",
@@ -196,6 +197,10 @@
   "by_the_book": {
    "file": "by_the_book.svg",
    "set": "standalone"
+  },
+  "card": {
+   "file": "card-outline.svg",
+   "set": "extra"
   },
   "carnevale": {
    "file": "carnevale.svg",

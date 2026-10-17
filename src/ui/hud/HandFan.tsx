@@ -10,6 +10,7 @@ import { handVisible } from "../scene/Table";
 import { viewerOf } from "../store";
 import { outsideSpotlight, useView } from "../view";
 import { moment } from "./SoundLayer";
+import { GlanceBadge } from "./GlanceBadge";
 import { boxTransform, dockRadius, dockRect, dockTransform, dockWeight, FAN_CARD_H, FAN_CARD_W, FAN_LEGAL_RAISE, FAN_REST_VISIBLE, fanLayout, fanWidth, hoverScale, showBox, STAT_BAR_W } from "./fan";
 import { flyDraw, flyIn, STAGGER_MS } from "./flights";
 import { DETAILS_W, HandDetails } from "./HandDetails";
@@ -290,6 +291,7 @@ export function HandFan() {
               <span className="fan-flip">
                 <span className="ff-front">
                   <Face code={game.cards[id].code} locale={locale} />
+                  <GlanceBadge card={db.cards[game.cards[id].code]} />
                 </span>
                 <img className="ff-back" src={backUrl("player")} alt="" draggable={false} />
               </span>
