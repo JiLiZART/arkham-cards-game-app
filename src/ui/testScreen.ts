@@ -1,0 +1,107 @@
+/** the skill-test screen's pure parts: what is tested, what is placed, the calculation strip, where the discs spill */
+import type { G } from "../engine/core";
+import { testParts, tokenTotal } from "../engine/rules/skillTest";
+import type { ContentDb, GameState, InstId, InvId, PendingChoice, SkillTestState } from "../engine/types";
+
+const gOf = (game: GameState, db: ContentDb): G => ({ s: game, db, events: [] });
+
+export type Subject = { kind: "card"; id: InstId } | { kind: "portrait"; inv: InvId };
+
+/** what the test is about: the card it is against (enemy, location), else the card that called for it, else the investigator */
+export function subjectOf(test: SkillTestState, game: Pick<GameState, "cards">): Subject {
+  const id = [test.target, test.source].find((c): c is InstId => !!c && !!game.cards[c]);
+  return id ? { kind: "card", id } : { kind: "portrait", inv: test.inv };
+}
+
+export interface PlacedCard {
+  card: InstId;
+  owner: InvId;
+  /** icons it adds to this test's skill */
+  icons: number;
+  /** the deciding player may take it back now */
+  removable: boolean;
+}
+
+/** the committed cards in placement order; removable when their owner is the one deciding and a take-back option is offered */
+export function placedCards(test: SkillTestState, game: GameState, db: ContentDb, pending: PendingChoice | null): PlacedCard[] {
+  const icons = new Map(testParts(gOf(game, db), test).icons.map((i) => [i.card, i.n]));
+  return test.committed.map((card, k) => {
+    const owner = test.committers[k];
+    return { card, owner, icons: icons.get(card) ?? 0, removable: !!pending && pending.kind === "commit" && pending.inv === owner && pending.options.some((o) => o.id === `un:${card}`) };
+  });
+}
+
+export interface CalcParts {
+  skill: string;
+  base: number;
+  /** each placed card's icons */
+  icons: number[];
+  mods: number;
+  /** the tokens revealed so far with their resolved modifiers */
+  tokens: { token: string; mod: number }[];
+  autoFail: boolean;
+  total: number;
+  difficulty: number;
+}
+
+/** the strip: skill, placed icons, modifiers and the first `revealed` tokens, summed against the difficulty */
+export function calcParts(test: SkillTestState, game: GameState, db: ContentDb, revealed: number): CalcParts {
+  const g = gOf(game, db);
+  const p = testParts(g, test);
+  const shown = { ...test, tokens: test.tokens.slice(0, revealed), tokenMods: test.tokenMods.slice(0, revealed) };
+  const autoFail = shown.tokens.includes("autoFail");
+  return {
+    skill: test.skill,
+    base: p.base,
+    icons: p.icons.map((i) => i.n),
+    mods: p.mods,
+    tokens: shown.tokens.map((token, k) => ({ token, mod: shown.tokenMods[k] ?? 0 })),
+    autoFail,
+    total: autoFail ? 0 : Math.max(0, p.total + tokenTotal(g, shown)),
+    difficulty: p.difficulty,
+  };
+}
+
+export interface Area {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+/** small deterministic generator (mulberry32) */
+function rng(seed: number) {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/**
+ * Disc centres for a spill of n discs of diameter `size` inside `area`: a grid of cells with each disc nudged inside
+ * its own cell (so none overlap), the cells picked in seeded random order. When the area is too small the discs shrink.
+ */
+export function spillLayout(n: number, seed: number, area: Area, size: number): { size: number; points: { x: number; y: number }[] } {
+  const cols = Math.max(1, Math.min(n, Math.ceil(Math.sqrt((n * area.w) / area.h))));
+  const rows = Math.ceil(n / cols);
+  const cell = Math.min(area.w / cols, area.h / rows);
+  const d = Math.min(size, cell);
+  const slack = (cell - d) / 2;
+  const rand = rng(seed);
+  const cells = Array.from({ length: cols * rows }, (_, k) => k);
+  for (let k = cells.length - 1; k > 0; k--) {
+    const j = Math.floor(rand() * (k + 1));
+    [cells[k], cells[j]] = [cells[j], cells[k]];
+  }
+  const x0 = area.x + (area.w - cols * cell) / 2;
+  const y0 = area.y + (area.h - rows * cell) / 2;
+  const points = cells.slice(0, n).map((c) => ({
+    x: x0 + (c % cols) * cell + cell / 2 + (rand() * 2 - 1) * slack,
+    y: y0 + Math.floor(c / cols) * cell + cell / 2 + (rand() * 2 - 1) * slack,
+  }));
+  return { size: d, points };
+}
