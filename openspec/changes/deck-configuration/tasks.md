@@ -9,5 +9,5 @@
 
 ## 3. Verification and docs
 
-- [ ] 3.1 Run `npm test`, `npm run lint`, `npm run build`, `npm run check:content`, all clean; `drive-calm.js` to round 3 with 0 errors; `check-deck-editor.js` passes.
-- [ ] 3.2 README play notes: editing a deck, the swap limit, choosing the weakness, custom decks. Run `openspec validate deck-configuration --type change --strict`.
+- [x] 3.1 Run `npm test`, `npm run lint`, `npm run build`, `npm run check:content`, all clean; `drive-calm.js` to round 3 with 0 errors; `check-deck-editor.js` passes.
+- [x] 3.2 README play notes: editing a deck, the swap limit, choosing the weakness, custom decks. Run `openspec validate deck-configuration --type change --strict`.
