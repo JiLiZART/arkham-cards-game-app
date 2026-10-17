@@ -5,7 +5,7 @@
 
 ## 2. The editor
 
-- [ ] 2.1 Add `src/ui/menu/DeckEditor.tsx` on the wizard's deck step: grouped list with cost, copies and glance chips (when available), remove/add with the budget shown, the pool as a searchable list, the weakness picker (random by default), live validation messages in plain words (`deck.*` strings in en and ru), Save (name field, disabled while invalid), Cancel. The deck step lists custom decks with rename and delete and marks invalid ones. Verify in the browser with a new `check-deck-editor.js`: swap Flashlight ×2 for Physical Training ×2, save as "Roland · test", start a campaign with it and confirm the deck in play; a sixth removal is refused; a third Machete shows the message and disables Save; the saved deck appears in a second new game.
+- [x] 2.1 Add `src/ui/menu/DeckEditor.tsx` on the wizard's deck step: grouped list with cost, copies and glance chips (when available), remove/add with the budget shown, the pool as a searchable list, the weakness picker (random by default), live validation messages in plain words (`deck.*` strings in en and ru), Save (name field, disabled while invalid), Cancel. The deck step lists custom decks with rename and delete and marks invalid ones. Verify in the browser with a new `check-deck-editor.js`: swap Flashlight ×2 for Physical Training ×2, save as "Roland · test", start a campaign with it and confirm the deck in play; a sixth removal is refused; a third Machete shows the message and disables Save; the saved deck appears in a second new game.
 
 ## 3. Verification and docs
 
