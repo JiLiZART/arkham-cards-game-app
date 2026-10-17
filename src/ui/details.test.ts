@@ -59,6 +59,10 @@ describe("placeDetails", () => {
   it("falls back to the left near the right edge", () => {
     expect(placeDetails({ x0: 1100, y0: 300, x1: 1580, y1: 880 }, 280, 400, 1600, 900)).toEqual({ x: 808, y: 300 });
   });
+  it("can prefer the left (the rightmost showcased card), and still falls back to the right", () => {
+    expect(placeDetails(card, 280, 400, 1600, 900, "left")).toEqual({ x: 208, y: 300 });
+    expect(placeDetails({ x0: 100, y0: 300, x1: 300, y1: 880 }, 280, 400, 1600, 900, "left")).toEqual({ x: 312, y: 300 });
+  });
   it("is clamped vertically to the window", () => {
     expect(placeDetails(card, 280, 700, 1600, 900).y).toBe(192);
     expect(placeDetails({ ...card, y0: -20 }, 280, 300, 1600, 900).y).toBe(8);

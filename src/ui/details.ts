@@ -95,9 +95,11 @@ export function cardDetails(db: ContentDb, code: string, locale: string, at?: { 
 const GAP = 12;
 const PAD = 8;
 
-/** the details column: right of the card, or left when it doesn't fit there; top-aligned, clamped to the window */
-export function placeDetails(r: Rect, w: number, h: number, vw: number, vh: number): { x: number; y: number } {
-  const x = r.x1 + GAP + w <= vw - PAD ? r.x1 + GAP : Math.max(PAD, r.x0 - GAP - w);
+/** the details column: right of the card (or left when asked to), the other side when it doesn't fit; top-aligned, clamped to the window */
+export function placeDetails(r: Rect, w: number, h: number, vw: number, vh: number, prefer: "right" | "left" = "right"): { x: number; y: number } {
+  const right = r.x1 + GAP + w <= vw - PAD ? r.x1 + GAP : null;
+  const left = r.x0 - GAP - w >= PAD ? r.x0 - GAP - w : null;
+  const x = (prefer === "left" ? (left ?? right) : (right ?? left)) ?? (prefer === "left" ? PAD : Math.max(PAD, r.x0 - GAP - w));
   const y = Math.min(Math.max(PAD, r.y0), Math.max(PAD, vh - PAD - h));
   return { x, y };
 }

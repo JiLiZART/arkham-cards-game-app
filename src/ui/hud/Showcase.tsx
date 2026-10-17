@@ -10,6 +10,8 @@ import { deckPick } from "../optionHome";
 import { useStage, useView } from "../view";
 import { riseAndArc, riseDelay } from "./flights";
 import { showcaseLayout } from "./showcaseLayout";
+import { cardDetails } from "../details";
+import { DetailsColumn } from "./HandDetails";
 import { RESOLVE_BOX } from "./Reveal";
 import { moment } from "./SoundLayer";
 
@@ -38,6 +40,9 @@ export function Showcase() {
     return () => window.removeEventListener("resize", on);
   }, []);
   const flown = useRef(new Set<InstId>());
+  // the details column beside a hovered, focused or long-pressed card (no enlarged copy: the card is already large)
+  const [detail, setDetail] = useState<{ id: InstId; rect: DOMRect; left: boolean } | null>(null);
+  const press = useRef<ReturnType<typeof setTimeout>>();
   // the drawn cards turn face up on their way in
   useEffect(() => {
     if (holds && drawn.length) moment("flip");
@@ -61,14 +66,14 @@ export function Showcase() {
   // the drawn cards go on to the fan, which flies each one from where it stands here
   const toHand = () => {
     root.current?.querySelectorAll<HTMLElement>(".sc-card[data-card]").forEach((el) => noteLocalMove(el.dataset.card!, el));
-    useView.getState().setHover(null);
+    setDetail(null);
     useView.setState({ showcase: [] });
   };
   const choosePick = (id: InstId, el: HTMLElement) => {
     const o = game.pending?.options.find((x) => x.card === id);
     if (!o || busy) return;
     noteLocalMove(id, el);
-    useView.getState().setHover(null);
+    setDetail(null);
     choose(o.id);
   };
 
@@ -85,6 +90,8 @@ export function Showcase() {
 
   if (!ids.length || !holds) return null;
   const layout = showcaseLayout(ids.length, screen.w, screen.h);
+  // the rightmost column's details go to its left, so they don't run off the screen
+  const show = (id: InstId, i: number, el: HTMLElement) => setDetail({ id, rect: el.getBoundingClientRect(), left: layout.cols > 1 && i % layout.cols === layout.cols - 1 });
   // under drawn cards: how to take them; under a pick: choose one, with the options that aren't cards as links in the line
   const others = pick.length ? (game.pending?.options ?? []).filter((o) => !o.card) : [];
   const none = others.find((o) => o.id === "none");
@@ -114,15 +121,28 @@ export function Showcase() {
   return (
     <div className={`showcase ${pick.length ? "picking" : ""}`} ref={root} onClick={(e) => drawn.length > 0 && !(e.target as Element).closest(".sc-help") && toHand()}>
       <div className="sc-cards" style={{ ["--cols" as string]: layout.cols, ["--w" as string]: `${layout.width}px` }}>
-        {ids.map((id) => (
+        {ids.map((id, i) => (
           <button
             key={id}
             className="sc-card"
             data-card={id}
             disabled={!!pick.length && busy}
             onClick={(e) => pick.length && choosePick(id, e.currentTarget)}
-            onMouseEnter={(e) => useView.getState().setHover(id, e.currentTarget.getBoundingClientRect())}
-            onMouseLeave={() => useView.getState().setHover(null)}
+            onMouseEnter={(e) => show(id, i, e.currentTarget)}
+            onMouseLeave={() => setDetail(null)}
+            onFocus={(e) => show(id, i, e.currentTarget)}
+            onBlur={() => setDetail(null)}
+            onPointerDown={(e) => {
+              // a long press on a touch screen shows the details until the finger lifts
+              if (e.pointerType !== "touch") return;
+              const el = e.currentTarget;
+              press.current = setTimeout(() => show(id, i, el), 350);
+            }}
+            onPointerUp={() => {
+              clearTimeout(press.current);
+              setDetail(null);
+            }}
+            onPointerCancel={() => clearTimeout(press.current)}
           >
             <span className="sc-flip">
               <span className="sc-front">
@@ -134,6 +154,7 @@ export function Showcase() {
         ))}
       </div>
       <div className="sc-help">{help}</div>
+      {detail && game.cards[detail.id] && <DetailsColumn rows={cardDetails(db, game.cards[detail.id].code, locale)} rect={{ x0: detail.rect.left, y0: detail.rect.top, x1: detail.rect.right, y1: detail.rect.bottom }} prefer={detail.left ? "left" : "right"} />}
     </div>
   );
 }

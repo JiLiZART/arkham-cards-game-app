@@ -168,14 +168,14 @@ function Row({ r, locale }: { r: DetailRow; locale: string }) {
 }
 
 /** a column of details rows beside a card (right, or left if no room; clamped to the window); never takes the pointer */
-export function DetailsColumn({ rows, rect, boxRef }: { rows: DetailRow[]; rect: Rect; boxRef?: RefObject<HTMLDivElement> }) {
+export function DetailsColumn({ rows, rect, boxRef, prefer }: { rows: DetailRow[]; rect: Rect; boxRef?: RefObject<HTMLDivElement>; prefer?: "right" | "left" }) {
   const locale = useGame((s) => s.locale);
   const own = useRef<HTMLDivElement>(null);
   const ref = boxRef ?? own;
   useLayoutEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const p = placeDetails(rect, DETAILS_W, el.offsetHeight, innerWidth, innerHeight);
+    const p = placeDetails(rect, DETAILS_W, el.offsetHeight, innerWidth, innerHeight, prefer);
     el.style.left = `${p.x}px`;
     el.style.top = `${p.y}px`;
   });

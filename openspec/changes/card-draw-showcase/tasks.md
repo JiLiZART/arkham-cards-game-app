@@ -6,7 +6,7 @@
 
 - [x] 2.1 Layout: `.sc-cards` as a grid with the count rule (up to 4 per row at 340 px, 5 to 8 in two rows, more shrinking, never scrolling); one shadow on `.sc-card`, none on the faces. Verify in the browser at 1600 and 1366 px wide with 1, 2, 4, 6 and 10 cards: all visible, no scrollbar, no dark box during the flip.
 - [x] 2.2 Dismissal and help line: remove the "To hand" button and `showcase.toHand`; add `showcase.take`, `showcase.choose`, `showcase.chooseOrNone` in en and ru; the backdrop tap sends drawn cards to the fan; picks show their non-card options as text links in the help line. Keep Space/Enter. Verify in the browser: a tap on the backdrop sends the drawn card to the fan; a search with a none option shows "Choose one, or take nothing" and the link works.
-- [ ] 2.3 Details on hover: render `DetailsColumn` beside a hovered or focused showcased card (right, or left for the last column), long press on touch; no enlarged copy. Verify in the browser: hovering a showcased Machete shows its details column to the right; the rightmost of four shows it to the left; the `.hover-card` overlay does not appear.
+- [x] 2.3 Details on hover: render `DetailsColumn` beside a hovered or focused showcased card (right, or left for the last column), long press on touch; no enlarged copy. Verify in the browser: hovering a showcased Machete shows its details column to the right; the rightmost of four shows it to the left; the `.hover-card` overlay does not appear.
 
 ## 3. Verification and docs
 
