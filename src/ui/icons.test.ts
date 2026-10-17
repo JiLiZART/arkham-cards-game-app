@@ -2,6 +2,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { hasTokenArt } from "./ChaosToken";
 import { findGlyph, glyphChar, setIcon } from "./glyphs";
+import { spriteIds } from "../../scripts/import-icons";
 import { ICON_SOURCES, MARKUP_ICONS, type IconSource } from "./icons";
 
 /** PNG colour type (IHDR byte 25): 4 = grey + alpha, 6 = RGBA */
@@ -28,8 +29,9 @@ describe("icons", () => {
     for (const src of Object.values(ICON_SOURCES) as IconSource[]) if ("png" in src) expect(hasAlpha(`public/icons/${src.png}.png`), src.png).toBe(true);
   });
 
-  it("markup keys map to known icons", () => {
-    for (const n of Object.values(MARKUP_ICONS)) expect(ICON_SOURCES[n]).toBeDefined();
+  it("every rules-text markup key names a symbol in the sprite", () => {
+    const ids = new Set(spriteIds(readFileSync("public/icons/sprite.svg", "utf8")));
+    for (const [k, id] of Object.entries(MARKUP_ICONS)) expect(ids.has(id), k).toBe(true);
   });
 
   it("lookups fall through the fonts: shared glyphs from arkhamicons, set icons from blood / standalone", () => {

@@ -13,6 +13,7 @@
     "import:i18n": "tsx scripts/import-i18n.ts",
     "check:content": "tsx scripts/check-content.ts",
     "import:sounds": "tsx scripts/import-sounds.ts",
+    "import:icons": "tsx scripts/import-icons.ts",
     "fetch:cards": "tsx scripts/fetch-card-images.ts",
     "import:ru-cards": "tsx scripts/import-ru-cards.ts"
   },

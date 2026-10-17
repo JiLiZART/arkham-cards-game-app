@@ -13,7 +13,11 @@ const SYMBOL = (name: string, fill: string, fillGlyph = `token_${name}_fill`): L
   [`token_${name}_highlight`, "#FFFBF2"],
 ];
 
-function layersFor(token: string): Layers | null {
+/** every chaos token the game draws */
+export const CHAOS_TOKENS = ["+1", "0", "-1", "-2", "-3", "-4", "-5", "-6", "-7", "-8", "skull", "cultist", "tablet", "elderThing", "elderSign", "autoFail", "bless", "curse", "frost", "blood"];
+
+/** a token's layers, bottom to top: [symbol, colour] */
+export function layersFor(token: string): Layers | null {
   if (token === "+1") return NUMBER("1", "#ECBA59");
   if (/^(0|-[1-8])$/.test(token)) return NUMBER(token);
   switch (token) {

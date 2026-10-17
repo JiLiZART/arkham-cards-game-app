@@ -9,7 +9,7 @@ import { db, gameStore, useGame } from "../context";
 import { holdsForTap, viewerOf } from "../store";
 import { handVisible } from "../scene/Table";
 import { glyphHtml } from "../glyphs";
-import { iconSource, isIcon, MARKUP_ICONS } from "../icons";
+import { isIcon, markupColor } from "../icons";
 import { ActionRail, CameraButtons, InstructionBar, UndoButton } from "./ActionRail";
 import { moment, SoundLayer } from "./SoundLayer";
 import { TipLayer } from "./TipLayer";
@@ -379,9 +379,7 @@ export function formatText(s: string): string {
     .replace(/\[\[([^\]]+)\]\]/g, "<i>$1</i>")
     .replace(/\[(\w+)\]/g, (_, k: string) => {
       // inline icons come from the slim icon font, coloured like the printed ones where they have a colour
-      const icon = MARKUP_ICONS[k];
-      const src = icon ? iconSource(icon) : null;
-      const color = src && "glyph" in src ? (src.under?.color ?? src.color) : undefined;
+      const color = markupColor(k);
       return glyphHtml(k, k.replace("_", " "), color) ?? `<span class="icon icon-${k}" title="${k.replace("_", " ")}">${k.replace("_", " ")}</span>`;
     })
     .replace(/\n/g, "<br/>");

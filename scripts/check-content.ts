@@ -1,8 +1,9 @@
 /** validate all content files: schema + cross references. Exit code 1 on errors. */
-import { statSync } from "node:fs";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import { loadContentFromDisk } from "../src/content/node";
 import { checkSounds } from "../src/content/soundChecks";
 import { ANIMATED } from "../src/ui/store";
+import { checkIcons, MANIFEST, SPRITE, spriteIds } from "./import-icons";
 
 const { db, errors } = await loadContentFromDisk();
 // the sound files are converted and committed; an event sound must be one the UI animates; sizes within budget
@@ -14,6 +15,11 @@ const fileSize = (path: string) => {
   }
 };
 errors.push(...checkSounds(db.sounds, fileSize, ANIMATED));
+// every encounter set and scenario has an icon in the sprite; the manifest lists exactly the sprite's symbols
+const read = (f: string) => (existsSync(f) ? readFileSync(f, "utf8") : null);
+const manifest = read(MANIFEST);
+const sprite = read(SPRITE);
+errors.push(...checkIcons(db, manifest === null ? null : JSON.parse(manifest), sprite === null ? null : spriteIds(sprite)));
 // every prompt has an instruction for the bar, and the tips and How to play are written, in every language
 const en = db.i18n.en?.ui ?? {};
 const needed = Object.keys(en).flatMap((k) => (k.startsWith("prompt.") ? [k, `instruction.${k.slice(7)}`] : k.startsWith("tip.") || k.startsWith("howto.") ? [k] : []));

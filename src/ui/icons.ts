@@ -58,9 +58,16 @@ export const iconUrl = (name: IconName) => {
   return asset(`icons/${s.png}.png`);
 };
 
-/** ArkhamDB markup keys → icon names (anything else falls through to a plain glyph, see glyphs.ts) */
-export const MARKUP_ICONS: Record<string, IconName> = {
-  willpower: "willpower", intellect: "intellect", combat: "combat", agility: "agility", wild: "wild",
-  skull: "skull", cultist: "cultist", tablet: "tablet", elder_thing: "elderThing", elder_sign: "elderSign", auto_fail: "autoFail",
-  guardian: "guardian", seeker: "seeker", rogue: "rogue", mystic: "mystic", survivor: "survivor",
+/** ArkhamDB rules-text markup key → sprite symbol; markup not listed here shows as text */
+export const MARKUP_ICONS: Record<string, string> = {
+  ...Object.fromEntries(
+    ["willpower", "intellect", "combat", "agility", "wild", "skull", "cultist", "tablet", "elder_thing", "elder_sign", "auto_fail", "bless", "curse", "frost",
+      "guardian", "seeker", "rogue", "mystic", "survivor", "action", "reaction", "free", "per_investigator", "unique", "weakness"].map((k) => [k, k]),
+  ),
+  fast: "free",
 };
+/** the printed colour of a markup icon (skills and classes), else none: it takes the text colour */
+export const markupColor = (key: string): string | undefined => (SKILL_COLORS as Record<string, string>)[key] ?? (CLASS_COLORS as Record<string, string>)[key];
+
+/** a scenario's icon: the scenario id spelled like the icon set ("the-gathering" → "the_gathering") */
+export const scenarioIcon = (scenarioId: string) => scenarioId.replace(/-/g, "_");

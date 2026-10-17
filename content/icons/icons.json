@@ -1,0 +1,1377 @@
+{
+ "source": "ArkhamCards icon set (github.com/zzorba/ArkhamCards: its IcoMoon fonts and their SVG sources). Fan-drawn Fantasy Flight Games symbols, not CC0.",
+ "extra": {
+  "arkham": "midnight_masks",
+  "cultists": "cult_of_umordoth",
+  "pentagram": "dark_cult",
+  "tentacles": "the_devourer_below",
+  "the_midnight_masks": "midnight_masks",
+  "torch": "the_gathering"
+ },
+ "symbols": {
+  "abominable_contessa": {
+   "file": "abominable_contessa.svg",
+   "set": "standalone"
+  },
+  "abyssal_gifts": {
+   "file": "abyssal_gifts.svg",
+   "set": "standalone"
+  },
+  "abyssal_tribute": {
+   "file": "abyssal_tribute.svg",
+   "set": "standalone"
+  },
+  "accessory": {
+   "file": "accessory.svg",
+   "set": "arkhamicons"
+  },
+  "accessory_inverted": {
+   "file": "accessory_inverted.svg",
+   "set": "arkhamicons"
+  },
+  "action": {
+   "file": "action.svg",
+   "set": "arkhamicons"
+  },
+  "afflicted": {
+   "file": "afflicted.svg",
+   "set": "blood"
+  },
+  "agents_of_cthulhu": {
+   "file": "agents_of_cthulhu.svg",
+   "set": "extra"
+  },
+  "agents_of_hastur": {
+   "file": "agents_of_hastur.svg",
+   "set": "extra"
+  },
+  "agents_of_shub": {
+   "file": "agents_of_shub.svg",
+   "set": "extra"
+  },
+  "agents_of_yog": {
+   "file": "agents_of_yog.svg",
+   "set": "extra"
+  },
+  "agents_of_zburamoarte": {
+   "file": "agents_of_zburamoarte.svg",
+   "set": "blood"
+  },
+  "agility": {
+   "file": "agility.svg",
+   "set": "arkhamicons"
+  },
+  "alien_interference": {
+   "file": "alien_interference.svg",
+   "set": "standalone"
+  },
+  "all_or_nothing": {
+   "file": "all_or_nothing.svg",
+   "set": "standalone"
+  },
+  "ally": {
+   "file": "ally.svg",
+   "set": "arkhamicons"
+  },
+  "ally_inverted": {
+   "file": "ally_inverted.svg",
+   "set": "arkhamicons"
+  },
+  "ancient_evils": {
+   "file": "ancient_evils.svg",
+   "set": "extra"
+  },
+  "ancient_hunger": {
+   "file": "ancient_hunger.svg",
+   "set": "standalone"
+  },
+  "anything_once": {
+   "file": "anything_once.svg",
+   "set": "standalone"
+  },
+  "arcane": {
+   "file": "arcane.svg",
+   "set": "arkhamicons"
+  },
+  "arcane_inverted": {
+   "file": "arcane_inverted.svg",
+   "set": "arkhamicons"
+  },
+  "arcane_x2": {
+   "file": "arcane_x2.svg",
+   "set": "arkhamicons"
+  },
+  "arcane_x2_inverted": {
+   "file": "arcane_x2_inverted.svg",
+   "set": "arkhamicons"
+  },
+  "arkham": {
+   "file": "midnight_masks.svg",
+   "set": "extra"
+  },
+  "arkham_incidents": {
+   "file": "arkham_incidents.svg",
+   "set": "standalone"
+  },
+  "assimilating_swarm": {
+   "file": "assimilating_swarm.svg",
+   "set": "standalone"
+  },
+  "auto_fail": {
+   "file": "auto_fail.svg",
+   "set": "arkhamicons"
+  },
+  "bad_blood": {
+   "file": "bad_blood.svg",
+   "set": "standalone"
+  },
+  "barkham_horror": {
+   "file": "barkham_horror.svg",
+   "set": "standalone"
+  },
+  "beta": {
+   "file": "beta.svg",
+   "set": "standalone"
+  },
+  "blbe": {
+   "file": "blbe.svg",
+   "set": "standalone"
+  },
+  "bless": {
+   "file": "bless.svg",
+   "set": "arkhamicons"
+  },
+  "blob": {
+   "file": "blob.svg",
+   "set": "standalone"
+  },
+  "blob_set": {
+   "file": "blob_set.svg",
+   "set": "standalone"
+  },
+  "blob_that_ate_everything_else": {
+   "file": "blob_that_ate_everything_else.svg",
+   "set": "standalone"
+  },
+  "blood": {
+   "file": "blood.svg",
+   "set": "arkhamicons"
+  },
+  "blood1": {
+   "file": "blood.json#blood1",
+   "set": "blood"
+  },
+  "blood_blight": {
+   "file": "blood_blight.svg",
+   "set": "blood"
+  },
+  "blood_money": {
+   "file": "blood_money.svg",
+   "set": "blood"
+  },
+  "blood_moon": {
+   "file": "blood_moon.svg",
+   "set": "blood"
+  },
+  "bloodthirst": {
+   "file": "bloodthirst.svg",
+   "set": "blood"
+  },
+  "body": {
+   "file": "body.svg",
+   "set": "arkhamicons"
+  },
+  "body_inverted": {
+   "file": "body_inverted.svg",
+   "set": "arkhamicons"
+  },
+  "brotherhood_of_the_beast": {
+   "file": "brotherhood_of_the_beast.svg",
+   "set": "standalone"
+  },
+  "bullet": {
+   "file": "bullet.svg",
+   "set": "arkhamicons"
+  },
+  "by_the_book": {
+   "file": "by_the_book.svg",
+   "set": "standalone"
+  },
+  "carnevale": {
+   "file": "carnevale.svg",
+   "set": "standalone"
+  },
+  "children_of_blood": {
+   "file": "children_of_blood.svg",
+   "set": "blood"
+  },
+  "children_of_paradise": {
+   "file": "children_of_paradise.svg",
+   "set": "standalone"
+  },
+  "chilling_cold": {
+   "file": "chilling_cold.svg",
+   "set": "extra"
+  },
+  "cob": {
+   "file": "cob.svg",
+   "set": "blood"
+  },
+  "codex": {
+   "file": "codex.svg",
+   "set": "arkhamicons"
+  },
+  "combat": {
+   "file": "combat.svg",
+   "set": "arkhamicons"
+  },
+  "consternation_on_the_constellation": {
+   "file": "consternation_on_the_constellation.svg",
+   "set": "standalone"
+  },
+  "cosmic_journey": {
+   "file": "cosmic_journey.svg",
+   "set": "standalone"
+  },
+  "cultist": {
+   "file": "cultist.svg",
+   "set": "arkhamicons"
+  },
+  "cultists": {
+   "file": "cult_of_umordoth.svg",
+   "set": "extra"
+  },
+  "curse": {
+   "file": "curse.svg",
+   "set": "arkhamicons"
+  },
+  "curse_of_the_rougarou": {
+   "file": "curse_of_the_rougarou.svg",
+   "set": "standalone"
+  },
+  "dark_rituals": {
+   "file": "dark_rituals.svg",
+   "set": "standalone"
+  },
+  "darkham": {
+   "file": "darkham.svg",
+   "set": "standalone"
+  },
+  "day": {
+   "file": "day.svg",
+   "set": "arkhamicons"
+  },
+  "death_of_the_stars": {
+   "file": "death_of_the_stars.svg",
+   "set": "standalone"
+  },
+  "deep_ones": {
+   "file": "deep_ones.svg",
+   "set": "standalone"
+  },
+  "depraved_legions": {
+   "file": "depraved_legions.svg",
+   "set": "standalone"
+  },
+  "elder_sign": {
+   "file": "elder_sign.svg",
+   "set": "arkhamicons"
+  },
+  "elder_thing": {
+   "file": "elder_thing.svg",
+   "set": "arkhamicons"
+  },
+  "enthralling_encore": {
+   "file": "enthralling_encore.svg",
+   "set": "standalone"
+  },
+  "epic_multiplayer": {
+   "file": "epic_multiplayer.svg",
+   "set": "standalone"
+  },
+  "eternal_slumber": {
+   "file": "eternal_slumber.svg",
+   "set": "standalone"
+  },
+  "excelsior": {
+   "file": "excelsior.svg",
+   "set": "standalone"
+  },
+  "excelsior_management": {
+   "file": "excelsior_management.svg",
+   "set": "standalone"
+  },
+  "film_fatale": {
+   "file": "film_fatale.svg",
+   "set": "standalone"
+  },
+  "film_fatale_encounter": {
+   "file": "film_fatale_encounter.svg",
+   "set": "standalone"
+  },
+  "final_annihilation": {
+   "file": "final_annihilation.svg",
+   "set": "standalone"
+  },
+  "forgotten_island": {
+   "file": "forgotten_island.svg",
+   "set": "standalone"
+  },
+  "fortune": {
+   "file": "fortune.svg",
+   "set": "standalone"
+  },
+  "fortune_and_folly": {
+   "file": "fortune_and_folly.svg",
+   "set": "standalone"
+  },
+  "fortunes_chosen": {
+   "file": "fortunes_chosen.svg",
+   "set": "standalone"
+  },
+  "free": {
+   "file": "free.svg",
+   "set": "arkhamicons"
+  },
+  "friends_in_low_places": {
+   "file": "friends_in_low_places.svg",
+   "set": "blood"
+  },
+  "frost": {
+   "file": "frost.svg",
+   "set": "arkhamicons"
+  },
+  "gala": {
+   "file": "gala.svg",
+   "set": "standalone"
+  },
+  "ghouls": {
+   "file": "ghouls.svg",
+   "set": "extra"
+  },
+  "guardian": {
+   "file": "guardian.svg",
+   "set": "arkhamicons"
+  },
+  "guardians": {
+   "file": "guardians.svg",
+   "set": "standalone"
+  },
+  "guide_bullet": {
+   "file": "guide_bullet.svg",
+   "set": "arkhamicons"
+  },
+  "hand": {
+   "file": "hand.svg",
+   "set": "arkhamicons"
+  },
+  "hand_inverted": {
+   "file": "hand_inverted.svg",
+   "set": "arkhamicons"
+  },
+  "hand_x2": {
+   "file": "hand_x2.svg",
+   "set": "arkhamicons"
+  },
+  "hand_x2_inverted": {
+   "file": "hand_x2_inverted.svg",
+   "set": "arkhamicons"
+  },
+  "hannihah_valley": {
+   "file": "hannihah_valley.svg",
+   "set": "standalone"
+  },
+  "harvey": {
+   "file": "harvey.svg",
+   "set": "standalone"
+  },
+  "head": {
+   "file": "head.svg",
+   "set": "arkhamicons"
+  },
+  "head_inverted": {
+   "file": "head_inverted.svg",
+   "set": "arkhamicons"
+  },
+  "health": {
+   "file": "health.svg",
+   "set": "arkhamicons"
+  },
+  "health_inverted": {
+   "file": "health_inverted.svg",
+   "set": "arkhamicons"
+  },
+  "hunted": {
+   "file": "hunted.svg",
+   "set": "blood"
+  },
+  "in_the_labyrinths_of_lunacy": {
+   "file": "in_the_labyrinths_of_lunacy.svg",
+   "set": "standalone"
+  },
+  "infected": {
+   "file": "infected.svg",
+   "set": "blood"
+  },
+  "inhospitable_locality": {
+   "file": "inhospitable_locality.svg",
+   "set": "standalone"
+  },
+  "intellect": {
+   "file": "intellect.svg",
+   "set": "arkhamicons"
+  },
+  "jacqueline": {
+   "file": "jacqueline.svg",
+   "set": "standalone"
+  },
+  "laid_to_rest": {
+   "file": "laid_to_rest.svg",
+   "set": "standalone"
+  },
+  "legendary": {
+   "file": "legendary.svg",
+   "set": "standalone"
+  },
+  "legions_of_fire": {
+   "file": "legions_of_fire.svg",
+   "set": "standalone"
+  },
+  "locked_doors": {
+   "file": "locked_doors.svg",
+   "set": "extra"
+  },
+  "lol": {
+   "file": "lol.svg",
+   "set": "standalone"
+  },
+  "lost_cathedral": {
+   "file": "lost_cathedral.svg",
+   "set": "standalone"
+  },
+  "machinations_through_time": {
+   "file": "machinations_through_time.svg",
+   "set": "standalone"
+  },
+  "made_flesh": {
+   "file": "made_flesh.svg",
+   "set": "standalone"
+  },
+  "magyar": {
+   "file": "magyar.svg",
+   "set": "standalone"
+  },
+  "malevolent_ritual": {
+   "file": "malevolent_ritual.svg",
+   "set": "standalone"
+  },
+  "meddling": {
+   "file": "meddling.svg",
+   "set": "standalone"
+  },
+  "meteoric_phenomenon": {
+   "file": "meteoric_phenomenon.svg",
+   "set": "standalone"
+  },
+  "migo": {
+   "file": "migo.svg",
+   "set": "standalone"
+  },
+  "migo_incursion_2": {
+   "file": "migo_incursion_2.svg",
+   "set": "standalone"
+  },
+  "misinformation": {
+   "file": "misinformation.svg",
+   "set": "blood"
+  },
+  "mongrels": {
+   "file": "mongrels.svg",
+   "set": "blood"
+  },
+  "moon": {
+   "file": "moon.svg",
+   "set": "arkhamslim"
+  },
+  "mtt": {
+   "file": "mtt.svg",
+   "set": "standalone"
+  },
+  "murder_at_the_excelsior_hotel": {
+   "file": "murder_at_the_excelsior_hotel.svg",
+   "set": "standalone"
+  },
+  "mysterious_benefits": {
+   "file": "mysterious_benefits.svg",
+   "set": "standalone"
+  },
+  "mystic": {
+   "file": "mystic.svg",
+   "set": "arkhamicons"
+  },
+  "nate": {
+   "file": "nate.svg",
+   "set": "standalone"
+  },
+  "natural_hazards": {
+   "file": "natural_hazards.svg",
+   "set": "standalone"
+  },
+  "neutral": {
+   "file": "neutral.svg",
+   "set": "arkhamicons"
+  },
+  "new_horizons": {
+   "file": "new_horizons.svg",
+   "set": "blood"
+  },
+  "night": {
+   "file": "night.svg",
+   "set": "arkhamicons"
+  },
+  "nightgaunts": {
+   "file": "nightgaunts.svg",
+   "set": "extra"
+  },
+  "nights_usurper": {
+   "file": "nights_usurper.svg",
+   "set": "standalone"
+  },
+  "novella": {
+   "file": "novella.svg",
+   "set": "standalone"
+  },
+  "num0": {
+   "file": "num0.svg",
+   "set": "arkhamicons"
+  },
+  "num0-fill": {
+   "file": "num0-fill.svg",
+   "set": "arkhamicons"
+  },
+  "num0-outline": {
+   "file": "num0-outline.svg",
+   "set": "arkhamicons"
+  },
+  "num1": {
+   "file": "num1.svg",
+   "set": "arkhamicons"
+  },
+  "num1-fill": {
+   "file": "num1-fill.svg",
+   "set": "arkhamicons"
+  },
+  "num1-outline": {
+   "file": "num1-outline.svg",
+   "set": "arkhamicons"
+  },
+  "num2": {
+   "file": "num2.svg",
+   "set": "arkhamicons"
+  },
+  "num2-fill": {
+   "file": "num2-fill.svg",
+   "set": "arkhamicons"
+  },
+  "num2-outline": {
+   "file": "num2-outline.svg",
+   "set": "arkhamicons"
+  },
+  "num3": {
+   "file": "num3.svg",
+   "set": "arkhamicons"
+  },
+  "num3-fill": {
+   "file": "num3-fill.svg",
+   "set": "arkhamicons"
+  },
+  "num3-outline": {
+   "file": "num3-outline.svg",
+   "set": "arkhamicons"
+  },
+  "num4": {
+   "file": "num4.svg",
+   "set": "arkhamicons"
+  },
+  "num4-fill": {
+   "file": "num4-fill.svg",
+   "set": "arkhamicons"
+  },
+  "num4-outline": {
+   "file": "num4-outline.svg",
+   "set": "arkhamicons"
+  },
+  "num5": {
+   "file": "num5.svg",
+   "set": "arkhamicons"
+  },
+  "num5-fill": {
+   "file": "num5-fill.svg",
+   "set": "arkhamicons"
+  },
+  "num5-outline": {
+   "file": "num5-outline.svg",
+   "set": "arkhamicons"
+  },
+  "num6": {
+   "file": "num6.svg",
+   "set": "arkhamicons"
+  },
+  "num6-fill": {
+   "file": "num6-fill.svg",
+   "set": "arkhamicons"
+  },
+  "num6-outline": {
+   "file": "num6-outline.svg",
+   "set": "arkhamicons"
+  },
+  "num7": {
+   "file": "num7.svg",
+   "set": "arkhamicons"
+  },
+  "num7-fill": {
+   "file": "num7-fill.svg",
+   "set": "arkhamicons"
+  },
+  "num7-outline": {
+   "file": "num7-outline.svg",
+   "set": "arkhamicons"
+  },
+  "num8": {
+   "file": "num8.svg",
+   "set": "arkhamicons"
+  },
+  "num8-fill": {
+   "file": "num8-fill.svg",
+   "set": "arkhamicons"
+  },
+  "num8-outline": {
+   "file": "num8-outline.svg",
+   "set": "arkhamicons"
+  },
+  "num9": {
+   "file": "num9.svg",
+   "set": "arkhamicons"
+  },
+  "num9-fill": {
+   "file": "num9-fill.svg",
+   "set": "arkhamicons"
+  },
+  "num9-outline": {
+   "file": "num9-outline.svg",
+   "set": "arkhamicons"
+  },
+  "numNull": {
+   "file": "numNull.svg",
+   "set": "arkhamicons"
+  },
+  "numNull-fill": {
+   "file": "numNull-fill.svg",
+   "set": "arkhamicons"
+  },
+  "numNull-outline": {
+   "file": "numNull-outline.svg",
+   "set": "arkhamicons"
+  },
+  "occultism": {
+   "file": "occultism.svg",
+   "set": "standalone"
+  },
+  "onigawa": {
+   "file": "onigawa.svg",
+   "set": "standalone"
+  },
+  "parallel": {
+   "file": "parallel.svg",
+   "set": "arkhamicons"
+  },
+  "pentagram": {
+   "file": "dark_cult.svg",
+   "set": "extra"
+  },
+  "per_investigator": {
+   "file": "per_investigator.svg",
+   "set": "arkhamicons"
+  },
+  "plan_in_shambles": {
+   "file": "plan_in_shambles.svg",
+   "set": "standalone"
+  },
+  "preyed_upon": {
+   "file": "preyed_upon.svg",
+   "set": "blood"
+  },
+  "rats": {
+   "file": "rats.svg",
+   "set": "extra"
+  },
+  "reaction": {
+   "file": "reaction.svg",
+   "set": "arkhamicons"
+  },
+  "read_or_die": {
+   "file": "read_or_die.svg",
+   "set": "standalone"
+  },
+  "red_tide_rising": {
+   "file": "red_tide_rising.svg",
+   "set": "standalone"
+  },
+  "river_of_blood": {
+   "file": "river_of_blood.svg",
+   "set": "blood"
+  },
+  "rogue": {
+   "file": "rogue.svg",
+   "set": "arkhamicons"
+  },
+  "rop": {
+   "file": "rop.svg",
+   "set": "standalone"
+  },
+  "rougerauo2": {
+   "file": "rougerauo2.svg",
+   "set": "standalone"
+  },
+  "roulette": {
+   "file": "roulette.svg",
+   "set": "standalone"
+  },
+  "sands_of_egypt": {
+   "file": "sands_of_egypt.svg",
+   "set": "standalone"
+  },
+  "sanguine_secrets": {
+   "file": "sanguine_secrets.svg",
+   "set": "blood"
+  },
+  "sanity": {
+   "file": "sanity.svg",
+   "set": "arkhamicons"
+  },
+  "sanity_inverted": {
+   "file": "sanity_inverted.svg",
+   "set": "arkhamicons"
+  },
+  "scorched_wasteland": {
+   "file": "scorched_wasteland.svg",
+   "set": "standalone"
+  },
+  "seal_a": {
+   "file": "seal_a.svg",
+   "set": "arkhamicons"
+  },
+  "seal_b": {
+   "file": "seal_b.svg",
+   "set": "arkhamicons"
+  },
+  "seal_c": {
+   "file": "seal_c.svg",
+   "set": "arkhamicons"
+  },
+  "seal_d": {
+   "file": "seal_d.svg",
+   "set": "arkhamicons"
+  },
+  "seal_e": {
+   "file": "seal_e.svg",
+   "set": "arkhamicons"
+  },
+  "seeker": {
+   "file": "seeker.svg",
+   "set": "arkhamicons"
+  },
+  "single_group": {
+   "file": "single_group.svg",
+   "set": "standalone"
+  },
+  "sinking_ship": {
+   "file": "sinking_ship.svg",
+   "set": "standalone"
+  },
+  "sins_of_the_past": {
+   "file": "sins_of_the_past.svg",
+   "set": "standalone"
+  },
+  "skill_agility": {
+   "file": "skill_agility.svg",
+   "set": "arkhamicons"
+  },
+  "skill_agility_inverted": {
+   "file": "skill_agility_inverted.svg",
+   "set": "arkhamicons"
+  },
+  "skill_combat": {
+   "file": "skill_combat.svg",
+   "set": "arkhamicons"
+  },
+  "skill_combat_inverted": {
+   "file": "skill_combat_inverted.svg",
+   "set": "arkhamicons"
+  },
+  "skill_intellect": {
+   "file": "skill_intellect.svg",
+   "set": "arkhamicons"
+  },
+  "skill_intellect_inverted": {
+   "file": "skill_intellect_inverted.svg",
+   "set": "arkhamicons"
+  },
+  "skill_wild": {
+   "file": "skill_wild.svg",
+   "set": "arkhamicons"
+  },
+  "skill_wild_inverted": {
+   "file": "skill_wild_inverted.svg",
+   "set": "arkhamicons"
+  },
+  "skill_willpower": {
+   "file": "skill_willpower.svg",
+   "set": "arkhamicons"
+  },
+  "skill_willpower_inverted": {
+   "file": "skill_willpower_inverted.svg",
+   "set": "arkhamicons"
+  },
+  "skull": {
+   "file": "skull.svg",
+   "set": "arkhamicons"
+  },
+  "something_big": {
+   "file": "something_big.svg",
+   "set": "standalone"
+  },
+  "spiraling_inferno": {
+   "file": "spiraling_inferno.svg",
+   "set": "standalone"
+  },
+  "stalked": {
+   "file": "stalked.svg",
+   "set": "blood"
+  },
+  "star": {
+   "file": "star.svg",
+   "set": "arkhamicons"
+  },
+  "star-fill": {
+   "file": "star-fill.svg",
+   "set": "arkhamicons"
+  },
+  "star-outline": {
+   "file": "star-outline.svg",
+   "set": "arkhamicons"
+  },
+  "stella": {
+   "file": "stella.svg",
+   "set": "standalone"
+  },
+  "striking_fear": {
+   "file": "striking_fear.svg",
+   "set": "extra"
+  },
+  "survivor": {
+   "file": "survivor.svg",
+   "set": "arkhamicons"
+  },
+  "tablet": {
+   "file": "tablet.svg",
+   "set": "arkhamicons"
+  },
+  "tap_circle": {
+   "file": "tap_circle.svg",
+   "set": "tokens"
+  },
+  "tarot": {
+   "file": "tarot.svg",
+   "set": "arkhamicons"
+  },
+  "tarot_inverted": {
+   "file": "tarot_inverted.svg",
+   "set": "arkhamicons"
+  },
+  "tdc_rune_a": {
+   "file": "tdc_rune_a.svg",
+   "set": "arkhamslim"
+  },
+  "tdc_rune_b": {
+   "file": "tdc_rune_b.svg",
+   "set": "arkhamslim"
+  },
+  "tdc_rune_c": {
+   "file": "tdc_rune_c.svg",
+   "set": "arkhamslim"
+  },
+  "tdc_rune_d": {
+   "file": "tdc_rune_d.svg",
+   "set": "arkhamslim"
+  },
+  "tdc_rune_e": {
+   "file": "tdc_rune_e.svg",
+   "set": "arkhamslim"
+  },
+  "tdc_rune_f": {
+   "file": "tdc_rune_f.svg",
+   "set": "arkhamslim"
+  },
+  "tdc_rune_g": {
+   "file": "tdc_rune_g.svg",
+   "set": "arkhamslim"
+  },
+  "tdc_rune_h": {
+   "file": "tdc_rune_h.svg",
+   "set": "arkhamslim"
+  },
+  "tdc_rune_i": {
+   "file": "tdc_rune_i.svg",
+   "set": "arkhamslim"
+  },
+  "tdc_rune_j": {
+   "file": "tdc_rune_j.svg",
+   "set": "arkhamslim"
+  },
+  "tdc_rune_k": {
+   "file": "tdc_rune_k.svg",
+   "set": "arkhamslim"
+  },
+  "tdc_rune_l": {
+   "file": "tdc_rune_l.svg",
+   "set": "arkhamslim"
+  },
+  "tdc_rune_m": {
+   "file": "tdc_rune_m.svg",
+   "set": "arkhamslim"
+  },
+  "tdc_rune_n": {
+   "file": "tdc_rune_n.svg",
+   "set": "arkhamslim"
+  },
+  "tdc_rune_o": {
+   "file": "tdc_rune_o.svg",
+   "set": "arkhamslim"
+  },
+  "tdc_rune_p": {
+   "file": "tdc_rune_p.svg",
+   "set": "arkhamslim"
+  },
+  "tdc_rune_q": {
+   "file": "tdc_rune_q.svg",
+   "set": "arkhamslim"
+  },
+  "tdc_rune_r": {
+   "file": "tdc_rune_r.svg",
+   "set": "arkhamslim"
+  },
+  "tdc_rune_s": {
+   "file": "tdc_rune_s.svg",
+   "set": "arkhamslim"
+  },
+  "tdc_rune_t": {
+   "file": "tdc_rune_t.svg",
+   "set": "arkhamslim"
+  },
+  "tdc_rune_u": {
+   "file": "tdc_rune_u.svg",
+   "set": "arkhamslim"
+  },
+  "tdc_rune_v": {
+   "file": "tdc_rune_v.svg",
+   "set": "arkhamslim"
+  },
+  "tdc_rune_w": {
+   "file": "tdc_rune_w.svg",
+   "set": "arkhamslim"
+  },
+  "tdc_rune_x": {
+   "file": "tdc_rune_x.svg",
+   "set": "arkhamslim"
+  },
+  "tdc_rune_y": {
+   "file": "tdc_rune_y.svg",
+   "set": "arkhamslim"
+  },
+  "tdc_rune_z": {
+   "file": "tdc_rune_z.svg",
+   "set": "arkhamslim"
+  },
+  "tentacles": {
+   "file": "the_devourer_below.svg",
+   "set": "extra"
+  },
+  "the_bayou": {
+   "file": "the_bayou.svg",
+   "set": "standalone"
+  },
+  "the_black_stone": {
+   "file": "the_black_stone.svg",
+   "set": "standalone"
+  },
+  "the_blob_that_ate_everything": {
+   "file": "the_blob_that_ate_everything.svg",
+   "set": "standalone"
+  },
+  "the_devourer_below": {
+   "file": "the_devourer_below.svg",
+   "set": "extra"
+  },
+  "the_fall_of_the_house_of_usher": {
+   "file": "the_fall_of_the_house_of_usher.svg",
+   "set": "standalone"
+  },
+  "the_gathering": {
+   "file": "the_gathering.svg",
+   "set": "extra"
+  },
+  "the_midnight_masks": {
+   "file": "midnight_masks.svg",
+   "set": "extra"
+  },
+  "token_-1_highlight": {
+   "file": "token_-1_highlight.svg",
+   "set": "tokens"
+  },
+  "token_-1_sealed": {
+   "file": "token_-1_sealed.svg",
+   "set": "tokens"
+  },
+  "token_-2_highlight": {
+   "file": "token_-2_highlight.svg",
+   "set": "tokens"
+  },
+  "token_-2_sealed": {
+   "file": "token_-2_sealed.svg",
+   "set": "tokens"
+  },
+  "token_-3_highlight": {
+   "file": "token_-3_highlight.svg",
+   "set": "tokens"
+  },
+  "token_-3_sealed": {
+   "file": "token_-3_sealed.svg",
+   "set": "tokens"
+  },
+  "token_-4_highlight": {
+   "file": "token_-4_highlight.svg",
+   "set": "tokens"
+  },
+  "token_-4_sealed": {
+   "file": "token_-4_sealed.svg",
+   "set": "tokens"
+  },
+  "token_-5_highlight": {
+   "file": "token_-5_highlight.svg",
+   "set": "tokens"
+  },
+  "token_-5_sealed": {
+   "file": "token_-5_sealed.svg",
+   "set": "tokens"
+  },
+  "token_-6_highlight": {
+   "file": "token_-6_highlight.svg",
+   "set": "tokens"
+  },
+  "token_-6_sealed": {
+   "file": "token_-6_sealed.svg",
+   "set": "tokens"
+  },
+  "token_-7_highlight": {
+   "file": "token_-7_highlight.svg",
+   "set": "tokens"
+  },
+  "token_-7_sealed": {
+   "file": "token_-7_sealed.svg",
+   "set": "tokens"
+  },
+  "token_-8_highlight": {
+   "file": "token_-8_highlight.svg",
+   "set": "tokens"
+  },
+  "token_-8_sealed": {
+   "file": "token_-8_sealed.svg",
+   "set": "tokens"
+  },
+  "token_0_highlight": {
+   "file": "token_0_highlight.svg",
+   "set": "tokens"
+  },
+  "token_0_sealed": {
+   "file": "token_0_sealed.svg",
+   "set": "tokens"
+  },
+  "token_1_highlight": {
+   "file": "token_1_highlight.svg",
+   "set": "tokens"
+  },
+  "token_1_sealed": {
+   "file": "token_1_sealed.svg",
+   "set": "tokens"
+  },
+  "token_auto_fail_highlight": {
+   "file": "token_auto_fail_highlight.svg",
+   "set": "tokens"
+  },
+  "token_auto_fail_overlay": {
+   "file": "token_auto_fail_overlay.svg",
+   "set": "tokens"
+  },
+  "token_auto_fail_sealed": {
+   "file": "token_auto_fail_sealed.svg",
+   "set": "tokens"
+  },
+  "token_bless_fill": {
+   "file": "token_bless_fill.svg",
+   "set": "tokens"
+  },
+  "token_bless_overlay": {
+   "file": "token_bless_overlay.svg",
+   "set": "tokens"
+  },
+  "token_bless_sealed": {
+   "file": "token_bless_sealed.svg",
+   "set": "tokens"
+  },
+  "token_blood_fill": {
+   "file": "token_blood_fill.svg",
+   "set": "tokens"
+  },
+  "token_blood_highlight": {
+   "file": "token_blood_highlight.svg",
+   "set": "tokens"
+  },
+  "token_blood_overlay": {
+   "file": "token_blood_overlay.svg",
+   "set": "tokens"
+  },
+  "token_blood_sealed": {
+   "file": "token_blood_sealed.svg",
+   "set": "tokens"
+  },
+  "token_cultist_fill": {
+   "file": "token_cultist_fill.svg",
+   "set": "tokens"
+  },
+  "token_cultist_highlight": {
+   "file": "token_cultist_highlight.svg",
+   "set": "tokens"
+  },
+  "token_cultist_overlay": {
+   "file": "token_cultist_overlay.svg",
+   "set": "tokens"
+  },
+  "token_cultist_sealed": {
+   "file": "token_cultist_sealed.svg",
+   "set": "tokens"
+  },
+  "token_curse_fill": {
+   "file": "token_curse_fill.svg",
+   "set": "tokens"
+  },
+  "token_curse_overlay": {
+   "file": "token_curse_overlay.svg",
+   "set": "tokens"
+  },
+  "token_curse_sealed": {
+   "file": "token_curse_sealed.svg",
+   "set": "tokens"
+  },
+  "token_dismiss_highlight": {
+   "file": "token_dismiss_highlight.svg",
+   "set": "tokens"
+  },
+  "token_elder_sign_fill": {
+   "file": "token_elder_sign_fill.svg",
+   "set": "tokens"
+  },
+  "token_elder_sign_highlight": {
+   "file": "token_elder_sign_highlight.svg",
+   "set": "tokens"
+  },
+  "token_elder_sign_overlay": {
+   "file": "token_elder_sign_overlay.svg",
+   "set": "tokens"
+  },
+  "token_elder_sign_sealed": {
+   "file": "token_elder_sign_sealed.svg",
+   "set": "tokens"
+  },
+  "token_elder_thing_fill": {
+   "file": "token_elder_thing_fill.svg",
+   "set": "tokens"
+  },
+  "token_elder_thing_highlight": {
+   "file": "token_elder_thing_highlight.svg",
+   "set": "tokens"
+  },
+  "token_elder_thing_overlay": {
+   "file": "token_elder_thing_overlay.svg",
+   "set": "tokens"
+  },
+  "token_elder_thing_sealed": {
+   "file": "token_elder_thing_sealed.svg",
+   "set": "tokens"
+  },
+  "token_frost_highlight": {
+   "file": "token_frost_highlight.svg",
+   "set": "tokens"
+  },
+  "token_frost_overlay": {
+   "file": "token_frost_overlay.svg",
+   "set": "tokens"
+  },
+  "token_frost_sealed": {
+   "file": "token_frost_sealed.svg",
+   "set": "tokens"
+  },
+  "token_number_fill": {
+   "file": "token_number_fill.svg",
+   "set": "tokens"
+  },
+  "token_number_overlay": {
+   "file": "token_number_overlay.svg",
+   "set": "tokens"
+  },
+  "token_plus_highlight": {
+   "file": "token_plus_highlight.svg",
+   "set": "tokens"
+  },
+  "token_sealed_outline": {
+   "file": "token_sealed_outline.svg",
+   "set": "tokens"
+  },
+  "token_sealed_outline_no_border": {
+   "file": "token_sealed_outline_no_border.svg",
+   "set": "tokens"
+  },
+  "token_skull_highlight": {
+   "file": "token_skull_highlight.svg",
+   "set": "tokens"
+  },
+  "token_skull_overlay": {
+   "file": "token_skull_overlay.svg",
+   "set": "tokens"
+  },
+  "token_skull_sealed": {
+   "file": "token_skull_sealed.svg",
+   "set": "tokens"
+  },
+  "token_symbol_fill": {
+   "file": "token_symbol_fill.svg",
+   "set": "tokens"
+  },
+  "token_tablet_fill": {
+   "file": "token_tablet_fill.svg",
+   "set": "tokens"
+  },
+  "token_tablet_highlight": {
+   "file": "token_tablet_highlight.svg",
+   "set": "tokens"
+  },
+  "token_tablet_overlay": {
+   "file": "token_tablet_overlay.svg",
+   "set": "tokens"
+  },
+  "token_tablet_sealed": {
+   "file": "token_tablet_sealed.svg",
+   "set": "tokens"
+  },
+  "tomes": {
+   "file": "tomes.svg",
+   "set": "standalone"
+  },
+  "too_noble": {
+   "file": "too_noble.svg",
+   "set": "standalone"
+  },
+  "torch": {
+   "file": "the_gathering.svg",
+   "set": "extra"
+  },
+  "unique": {
+   "file": "unique.svg",
+   "set": "extra"
+  },
+  "unnatural_disturbances": {
+   "file": "unnatural_disturbances.svg",
+   "set": "standalone"
+  },
+  "unscrupulous_investments": {
+   "file": "unscrupulous_investments.svg",
+   "set": "standalone"
+  },
+  "venice": {
+   "file": "venice.svg",
+   "set": "standalone"
+  },
+  "vermin": {
+   "file": "vermin.svg",
+   "set": "blood"
+  },
+  "vile_experiments": {
+   "file": "vile_experiments.svg",
+   "set": "standalone"
+  },
+  "war_of_the_outer_gods": {
+   "file": "war_of_the_outer_gods.svg",
+   "set": "standalone"
+  },
+  "weakness": {
+   "file": "weakness.svg",
+   "set": "arkhamicons"
+  },
+  "wendigo": {
+   "file": "wendigo.svg",
+   "set": "standalone"
+  },
+  "wendigos_myth": {
+   "file": "wendigos_myth.svg",
+   "set": "standalone"
+  },
+  "when_the_world_screamed": {
+   "file": "when_the_world_screamed.svg",
+   "set": "standalone"
+  },
+  "wild": {
+   "file": "wild.svg",
+   "set": "arkhamicons"
+  },
+  "wild_beasts": {
+   "file": "wild_beasts.svg",
+   "set": "standalone"
+  },
+  "willpower": {
+   "file": "willpower.svg",
+   "set": "arkhamicons"
+  },
+  "winifred": {
+   "file": "winifred.svg",
+   "set": "standalone"
+  },
+  "witch_cult": {
+   "file": "witch_cult.svg",
+   "set": "standalone"
+  },
+  "wotog": {
+   "file": "wotog.svg",
+   "set": "standalone"
+  },
+  "x": {
+   "file": "x.svg",
+   "set": "arkhamicons"
+  },
+  "x-fill": {
+   "file": "x-fill.svg",
+   "set": "arkhamicons"
+  },
+  "x-outline": {
+   "file": "x-outline.svg",
+   "set": "arkhamicons"
+  },
+  "zez": {
+   "file": "zez.svg",
+   "set": "standalone"
+  },
+  "zoc": {
+   "file": "zoc.svg",
+   "set": "standalone"
+  }
+ }
+}
