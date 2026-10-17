@@ -6,7 +6,7 @@
 
 ## 2. Helpers
 
-- [ ] 2.1 Helpers' commits on the same screen: the deciding player follows `pending.inv`; placed cards show the owner's portrait when more than one investigator has placed; only the deciding player's own cards are removable. Verify with a two-player script (privacy on): after Roland's Done the hand-off box appears over the screen, Daisy's fan comes in, her placed card shows her portrait, Roland's stays and is not removable, the strip counts both.
+- [x] 2.1 Helpers' commits on the same screen: the deciding player follows `pending.inv`; placed cards show the owner's portrait when more than one investigator has placed; only the deciding player's own cards are removable. Verify with a two-player script (privacy on): after Roland's Done the hand-off box appears over the screen, Daisy's fan comes in, her placed card shows her portrait, Roland's stays and is not removable, the strip counts both.
 
 ## 3. The draw stage
 
