@@ -12,7 +12,7 @@
 ## 3. New icons on screen
 
 - [x] 3.1 Rules text: `[unique]`, `[weakness]`, `[per_investigator]`, `[action]`, `[reaction]`, `[free]`/`[fast]`, `[bless]`, `[curse]`, `[frost]` map to sprite symbols in `MARKUP_ICONS`; the text badge only for names the sprite lacks. Add cases to `formatText.test.ts`. Verify in the browser on Roland's card modal and a card with `[per_investigator]`.
-- [ ] 3.2 Ability buttons: `stripAction` and the card modal's option buttons show the action, reaction or free symbol before the label, from the ability's cost kind. Verify in the browser on the .45 Automatic's fight button and a reaction ability.
+- [x] 3.2 Ability buttons: `stripAction` and the card modal's option buttons show the action, reaction or free symbol before the label, from the ability's cost kind. Verify in the browser on the .45 Automatic's fight button and a reaction ability.
 - [ ] 3.3 Encounter set and scenario icons: a `set` part in `feed.ts` for entries that draw or reveal an encounter card (the card's `encounterSet`), rendered by `Sentence`; the encounter deck pile's badge (top card's set, else the scenario); the scenario's icon in `Ribbon.tsx` before its name. Add `feed.test.ts` cases. Verify in the browser: the Journal shows the Striking Fear icon before Rotting Remains, the pile and the ribbon show their icons, and a Russian Journal shows the same icons.
 
 ## 4. Verification and docs

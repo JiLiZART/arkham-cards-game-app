@@ -59,6 +59,17 @@ export function stripAction(o: ChoiceOption, cardName: string, locale: string): 
   return { label: label[0].toUpperCase() + label.slice(1) };
 }
 
+/** the action, reaction or free symbol of an option that uses a card ability (from the ability's kind), else null */
+export function abilitySymbol(o: ChoiceOption, game: Pick<GameState, "cards">): "action" | "reaction" | "free" | null {
+  const v = o.value as { kind?: string; card?: string; index?: number; ability?: { ability: { kind: string } } } | string | null;
+  // a reaction choice is "card:index"; a turn option { kind: "ability", card, index }; a fast ability during a test carries its ability
+  const m = typeof v === "string" ? /^(.+):(\d+)$/.exec(v) : null;
+  const ref = m ? { card: m[1], index: +m[2] } : typeof v === "object" && v?.kind === "ability" ? { card: v.card!, index: v.index! } : null;
+  const code = ref && game.cards[ref.card]?.code;
+  const kind = typeof v === "object" && v?.ability ? v.ability.ability.kind : code ? [...(db.cards[code]?.abilities ?? []), ...(db.scripts[code]?.abilities ?? [])][ref!.index]?.kind : null;
+  return kind === "action" ? "action" : kind === "reaction" ? "reaction" : kind === "fast" ? "free" : null;
+}
+
 /** rail and bar buttons the tips point at */
 const TIP_OF: Record<string, string> = { "rail.investigate": "investigate", "rail.endTurn": "endTurn" };
 

@@ -3,11 +3,12 @@ import { cardText, encounterSetName, t } from "../../content/i18n";
 import type { ChoiceOption, GameState, InstId } from "../../engine/types";
 import { CardFace } from "../CardFace";
 import { db, useGame } from "../context";
-import { Icon } from "../Icon";
+import { Glyph, Icon } from "../Icon";
 import type { IconName } from "../icons";
 import { handVisible } from "../scene/Table";
 import { viewerOf } from "../store";
 import { useView } from "../view";
+import { abilitySymbol } from "./ActionRail";
 import { formatText } from "./Hud";
 import { InvModal } from "./Investigators";
 import { ChaosBagModal } from "./Panels";
@@ -48,21 +49,25 @@ export function useCardOptions(ids: (InstId | null | undefined)[]): ChoiceOption
 
 export function OptionButtons({ options, onChosen }: { options: ChoiceOption[]; onChosen?: () => void }) {
   const choose = useGame((s) => s.choose);
+  const game = useGame((s) => s.game) as GameState;
   if (!options.length) return null;
   return (
     <div className="modal-options">
-      {options.map((o) => (
-        <button
-          key={o.id}
-          className="primary"
-          onClick={() => {
-            onChosen?.();
-            choose(o.id);
-          }}
-        >
-          {o.label}
-        </button>
-      ))}
+      {options.map((o) => {
+        const sym = abilitySymbol(o, game);
+        return (
+          <button
+            key={o.id}
+            className="primary"
+            onClick={() => {
+              onChosen?.();
+              choose(o.id);
+            }}
+          >
+            {sym && <Glyph name={sym} size={18} />} {o.label}
+          </button>
+        );
+      })}
     </div>
   );
 }

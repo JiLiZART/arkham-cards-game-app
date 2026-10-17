@@ -7,7 +7,7 @@ import { CardFace } from "../CardFace";
 import { useCardClick } from "../cardClick";
 import { groupTokens } from "../chaos";
 import { db, gameStore, useGame } from "../context";
-import { Icon } from "../Icon";
+import { Glyph, Icon } from "../Icon";
 import { introHides } from "../intro";
 import { backUrl, isEncounterCard } from "../images";
 import { handVisible } from "../scene/Table";
@@ -20,7 +20,7 @@ import { referenceSide } from "./DeckViewer";
 import { useFlyIn } from "./flights";
 import { Modal, useCardOptions } from "./Modals";
 import { RESOLVE_BOX } from "./Reveal";
-import { stripAction } from "./ActionRail";
+import { abilitySymbol, stripAction } from "./ActionRail";
 import { moment } from "./SoundLayer";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
@@ -287,8 +287,10 @@ export function PlayStrip() {
           <div className="strip-actions">
             {opts.map((o) => {
               const a = stripAction(o, name, locale);
+              const sym = abilitySymbol(o, game);
               return (
                 <button key={o.id} className="strip-action" onClick={() => choose(o.id)} title={o.label}>
+                  {sym && <Glyph name={sym} size={18} />}
                   {a.icon && <Icon name={a.icon} size={22} />}
                   <span>{a.label}</span>
                 </button>
