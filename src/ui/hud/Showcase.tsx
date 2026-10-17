@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { t } from "../../content/i18n";
 import type { GameState, InstId } from "../../engine/types";
 import { domPlace, noteLocalMove, reducedMotion } from "../arrivals";
@@ -9,6 +9,7 @@ import { viewerOf } from "../store";
 import { deckPick } from "../optionHome";
 import { useStage, useView } from "../view";
 import { riseAndArc, riseDelay } from "./flights";
+import { showcaseLayout } from "./showcaseLayout";
 import { RESOLVE_BOX } from "./Reveal";
 import { moment } from "./SoundLayer";
 
@@ -29,6 +30,13 @@ export function Showcase() {
   // the middle of the screen is asked for once the events before these cards have played
   const holds = useStage(ids.length && !busy ? "showcase" : null);
   const root = useRef<HTMLDivElement>(null);
+  // the cards' size follows the window
+  const [screen, setScreen] = useState({ w: innerWidth, h: innerHeight });
+  useEffect(() => {
+    const on = () => setScreen({ w: innerWidth, h: innerHeight });
+    window.addEventListener("resize", on);
+    return () => window.removeEventListener("resize", on);
+  }, []);
   const flown = useRef(new Set<InstId>());
   // the drawn cards turn face up on their way in
   useEffect(() => {
@@ -77,10 +85,11 @@ export function Showcase() {
   }, [drawn.length, holds]);
 
   if (!ids.length || !holds) return null;
+  const layout = showcaseLayout(ids.length, screen.w, screen.h);
   const others = pick.length ? (game.pending?.options ?? []).filter((o) => !o.card) : [];
   return (
-    <div className={`showcase ${pick.length ? "picking" : ""}`} ref={root} style={{ ["--n" as string]: Math.min(ids.length, 6) }}>
-      <div className="sc-cards">
+    <div className={`showcase ${pick.length ? "picking" : ""}`} ref={root} >
+      <div className="sc-cards" style={{ ["--cols" as string]: layout.cols, ["--w" as string]: `${layout.width}px` }}>
         {ids.map((id) => (
           <button
             key={id}
