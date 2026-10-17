@@ -8,8 +8,7 @@ import { Icon } from "../Icon";
 import { db, gameStore, useGame } from "../context";
 import { holdsForTap, viewerOf } from "../store";
 import { handVisible } from "../scene/Table";
-import { glyphHtml } from "../glyphs";
-import { isIcon, markupColor } from "../icons";
+import { hasSymbol, isIcon, MARKUP_ICONS, markupColor } from "../icons";
 import { ActionRail, CameraButtons, InstructionBar, UndoButton } from "./ActionRail";
 import { moment, SoundLayer } from "./SoundLayer";
 import { TipLayer } from "./TipLayer";
@@ -378,9 +377,11 @@ export function formatText(s: string): string {
     .replace(/&lt;(\/?)(b|i)&gt;/g, "<$1$2>")
     .replace(/\[\[([^\]]+)\]\]/g, "<i>$1</i>")
     .replace(/\[(\w+)\]/g, (_, k: string) => {
-      // inline icons come from the slim icon font, coloured like the printed ones where they have a colour
-      const color = markupColor(k);
-      return glyphHtml(k, k.replace("_", " "), color) ?? `<span class="icon icon-${k}" title="${k.replace("_", " ")}">${k.replace("_", " ")}</span>`;
+      // inline icons from the sprite, coloured like the printed ones where they have a colour; unknown markup as text
+      const id = MARKUP_ICONS[k] ?? k;
+      const title = k.replace(/_/g, " ");
+      if (!hasSymbol(id)) return `<span class="icon icon-${k}" title="${title}">${title}</span>`;
+      return `<svg class="svg-icon gl" width="1em" height="1em" role="img" aria-label="${title}"><title>${title}</title><use href="#${id}" fill="${markupColor(k) ?? "currentColor"}"/></svg>`;
     })
     .replace(/\n/g, "<br/>");
 }

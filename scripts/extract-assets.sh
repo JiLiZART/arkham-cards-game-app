@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Copy the cardboard token art and table art from inspired/ into public/ (run once; outputs are committed).
 # Every other icon is a symbol of the sprite built by scripts/import-icons.ts.
-# Needs: ImageMagick (magick), node.
+# Needs: ImageMagick (magick).
 set -euo pipefail
 cd "$(dirname "$0")/.."
 SRC=inspired/icons
@@ -39,30 +39,10 @@ cp "$AC_ASSETS/player-back.png" public/table/back-encounter.png
 # the play-area background with its green frame
 magick inspired/icons/table-bg.png -quality 82 public/table/table-bg.jpg
 
-# ArkhamCards fonts. Icon fonts (IcoMoon): name, ttf, glyph config. Card fonts are copied as they are.
+# ArkhamCards card fonts, copied as they are (icons come from the sprite, scripts/import-icons.ts)
 AC=inspired/ArkhamCards/assets
 mkdir -p public/fonts
-FONTS="arkhamicons:arkhamicons.ttf:arkhamicons-config.json
-arkhamslim:arkhamslim.ttf:arkhamslim.json
-tokens:tokens.ttf:tokens.json
-blood:blood.ttf:blood.json
-standalone:standalone.ttf:standalone.json"
-args=()
-while IFS=: read -r name ttf cfg; do
-  cp "$AC/$ttf" "public/fonts/$name.ttf"
-  args+=("$name=$AC/$cfg")
-done <<<"$FONTS"
 for f in Teutonic.ttf "Teutonic RU.ttf" Alegreya-Regular.ttf Alegreya-Bold.ttf Alegreya-Italic.ttf; do
   cp "$AC/$f" "public/fonts/${f// /-}"
 done
-# glyph name → code point per font, from the IcoMoon configs (components never hard-code code points)
-node -e '
-const fs = require("fs");
-const out = {};
-for (const a of process.argv.slice(1)) {
-  const [name, file] = a.split("=");
-  out[name] = Object.fromEntries(JSON.parse(fs.readFileSync(file, "utf8")).icons.map((i) => [i.properties.name, i.properties.code]));
-}
-fs.writeFileSync("src/ui/glyphs.generated.json", JSON.stringify(out, null, 1) + "\n");
-' "${args[@]}"
 echo "icons: $(ls $OUT | wc -l | tr -d ' ') files; fonts: $(ls public/fonts | wc -l | tr -d ' '); background: public/table/table-bg.jpg"

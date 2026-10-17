@@ -171,18 +171,12 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 .engaged-badge { transform: translate(-50%, -50%); }
 .stat-name { font-weight: bold; color: var(--gold); display: flex; align-items: center; gap: 4px; }
 
-/* ArkhamCards fonts: icon fonts (IcoMoon, glyphs on ASCII code points → block until loaded) and card fonts */
-@font-face { font-family: arkhamicons; src: url(/fonts/arkhamicons.ttf) format("truetype"); font-display: block; }
-@font-face { font-family: arkhamtokens; src: url(/fonts/tokens.ttf) format("truetype"); font-display: block; }
-@font-face { font-family: arkhamslim; src: url(/fonts/arkhamslim.ttf) format("truetype"); font-display: block; }
-@font-face { font-family: arkhamblood; src: url(/fonts/blood.ttf) format("truetype"); font-display: block; }
-@font-face { font-family: arkhamstandalone; src: url(/fonts/standalone.ttf) format("truetype"); font-display: block; }
+/* ArkhamCards card fonts */
 @font-face { font-family: Teutonic; src: url(/fonts/Teutonic.ttf) format("truetype"); font-display: swap; }
 @font-face { font-family: TeutonicRU; src: url(/fonts/Teutonic-RU.ttf) format("truetype"); font-display: swap; }
 @font-face { font-family: Alegreya; src: url(/fonts/Alegreya-Regular.ttf) format("truetype"); font-display: swap; }
 @font-face { font-family: Alegreya; src: url(/fonts/Alegreya-Bold.ttf) format("truetype"); font-weight: bold; font-display: swap; }
 @font-face { font-family: Alegreya; src: url(/fonts/Alegreya-Italic.ttf) format("truetype"); font-style: italic; font-display: swap; }
-.gl-i { font-family: arkhamicons; font-style: normal; font-weight: normal; }
 /* icons from the sprite (public/icons/sprite.svg): stacked <use> layers in one box, each layer filled in its colour */
 .svg-icon { display: inline-block; vertical-align: middle; flex: none; overflow: visible; }
 .svg-icon.gl { vertical-align: -0.12em; }

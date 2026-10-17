@@ -1,7 +1,6 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { CHAOS_TOKENS, hasTokenArt, layersFor } from "./ChaosToken";
-import { findGlyph, glyphChar, setIcon } from "./glyphs";
 import { spriteIds } from "../../scripts/import-icons";
 import { hasSymbol, ICON_SOURCES, MARKUP_ICONS, registerSymbols, type IconSource } from "./icons";
 
@@ -50,18 +49,8 @@ describe("icons", () => {
     for (const [k, id] of Object.entries(MARKUP_ICONS)) expect(ids.has(id), k).toBe(true);
   });
 
-  it("lookups fall through the fonts: shared glyphs from arkhamicons, set icons from blood / standalone", () => {
-    expect(findGlyph("skull")?.font).toBe("arkhamicons");
-    expect(findGlyph("skull", "arkhamslim")?.font).toBe("arkhamslim");
-    // arkhamslim has no slots: falls back to arkhamicons
-    expect(findGlyph("hand", "arkhamslim")?.font).toBe("arkhamicons");
-    expect(setIcon("curse_of_the_rougarou")?.font).toBe("standalone");
-    expect(setIcon("bloodthirst")?.font).toBe("blood");
-    expect(glyphChar("token_-3_highlight", "tokens")).not.toBeNull();
-  });
-
-  it("the table art, card backs and fonts exist", () => {
-    for (const f of ["table/table-bg.jpg", "table/back-player.png", "table/back-encounter.png", "fonts/arkhamicons.ttf", "fonts/arkhamslim.ttf", "fonts/tokens.ttf", "fonts/blood.ttf", "fonts/standalone.ttf", "fonts/Teutonic.ttf", "fonts/Teutonic-RU.ttf", "fonts/Alegreya-Regular.ttf"]) {
+  it("the sprite, table art, card backs and card fonts exist", () => {
+    for (const f of ["table/table-bg.jpg", "table/back-player.png", "table/back-encounter.png", "icons/sprite.svg", "fonts/Teutonic.ttf", "fonts/Teutonic-RU.ttf", "fonts/Alegreya-Regular.ttf"]) {
       expect(existsSync(`public/${f}`), f).toBe(true);
     }
     expect(hasAlpha("public/table/back-player.png")).toBe(true);

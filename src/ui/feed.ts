@@ -13,7 +13,7 @@ export type Part =
   | { t: "icon"; name: IconName }
   | { t: "token"; token: string }
   | { t: "outcome"; ok: boolean }
-  /** n copies of a font glyph (e.g. the action symbol) and the number */
+  /** n copies of a sprite symbol (e.g. the action symbol) and the number */
   | { t: "glyphs"; name: string; n: number };
 
 export type Tone = "player" | "enemy" | "game";
