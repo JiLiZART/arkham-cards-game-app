@@ -17,6 +17,7 @@ import { CARD_H, CARD_W, footprint, layout, type Placement, type Vec3 } from "..
 import { hitRect, type ScreenRect } from "../hit";
 import { introHides } from "../intro";
 import { viewerOf } from "../store";
+import { useShown } from "../usePlayers";
 import { useView } from "../view";
 import { CardMesh, SPOT_Y } from "./CardMesh";
 import { EventFx } from "./EventFx";
@@ -169,13 +170,14 @@ function Scene() {
 function SceneInner({ game }: { game: GameState }) {
   const hovered = useView((st) => st.hovered);
   const setHovered = useView((st) => st.setHovered);
-  const viewer = viewerOf(game);
+  // the table is drawn for the investigator being looked at (ADR-0004)
+  const viewer = useShown();
   const L = useMemo(() => layout(db, game, viewer), [game, viewer]);
   const { byCard, click: clickCard } = useCardClick();
   const locH = CARD_H * L.locScale;
 
   // the camera follows the deciding investigator's location
-  const decider = game.pending?.inv ?? game.active ?? viewer;
+  const decider = game.pending?.inv ?? game.active ?? viewerOf(game);
   const deciderLoc = decider ? game.invs[decider]?.location : null;
   // while an event plays, the camera looks at what it is about (the hunter that moves, the enemy that attacks)
   const playing = useView((st) => st.playing) as QueuedEvent | null;

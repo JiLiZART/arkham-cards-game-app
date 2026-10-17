@@ -7,7 +7,7 @@ import { backUrl } from "../images";
 import { domPlace, lastRects, noteLocalMove, originRect, rememberRect, takeArrival, takeLocalMove, type Arrival } from "../arrivals";
 import { placeDetails } from "../details";
 import { handVisible } from "../scene/Table";
-import { viewerOf } from "../store";
+import { useChoicesOffered, useShown } from "../usePlayers";
 import { outsideSpotlight, useView } from "../view";
 import { moment } from "./SoundLayer";
 import { GlanceBadge } from "./GlanceBadge";
@@ -53,14 +53,16 @@ export function HandFan() {
   // the card the Dock is centred on (nearest the pointer, or keyboard-focused): it gets the details column
   const [focus, setFocus] = useState<InstId | null>(null);
 
-  const viewer = viewerOf(game);
+  // the investigator being looked at (ADR-0004): their hand only when it isn't private; options only for the decider
+  const viewer = useShown();
+  const offered = useChoicesOffered();
   const visible = handVisible(privacy, game.order.length, viewer, revealedFor);
   // cards picked for the mulligan sit on the "to redraw" row instead
   const picks = mulliganPicks(game, viewer);
   // cards just drawn wait in the showcase until sent on
   const showcase = useView((s) => s.showcase);
   const hand = viewer && visible ? game.invs[viewer].hand.filter((h) => !picks.includes(h) && !showcase.includes(h)) : [];
-  const optionsFor = (id: InstId): ChoiceOption[] => (!busy && game.pending?.options.filter((o) => o.card === id)) || [];
+  const optionsFor = (id: InstId): ChoiceOption[] => (!busy && offered && game.pending?.options.filter((o) => o.card === id)) || [];
 
   const width = fanWidth(vw);
   const slots = fanLayout(hand.length, width);

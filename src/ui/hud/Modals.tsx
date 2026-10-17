@@ -7,6 +7,7 @@ import { Glyph, Icon } from "../Icon";
 import type { IconName } from "../icons";
 import { handVisible } from "../scene/Table";
 import { viewerOf } from "../store";
+import { useChoicesOffered } from "../usePlayers";
 import { useView } from "../view";
 import { abilitySymbol } from "./ActionRail";
 import { formatText } from "./Hud";
@@ -43,7 +44,8 @@ export function useCardOptions(ids: (InstId | null | undefined)[]): ChoiceOption
   const busy = useGame((s) => !!s.current || s.queue.length > 0);
   const privacy = useGame((s) => s.privacy);
   const revealedFor = useGame((s) => s.revealedFor);
-  if (busy || !game.pending || !handVisible(privacy, game.order.length, viewerOf(game), revealedFor)) return [];
+  const offered = useChoicesOffered();
+  if (busy || !offered || !game.pending || !handVisible(privacy, game.order.length, viewerOf(game), revealedFor)) return [];
   return game.pending.options.filter((o) => o.card && ids.includes(o.card));
 }
 

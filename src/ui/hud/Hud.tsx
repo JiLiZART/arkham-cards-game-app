@@ -4,6 +4,8 @@ import type { GameEvent } from "../../engine/types";
 import { whenSettled } from "../arrivals";
 import { db, gameStore, useGame } from "../context";
 import { holdsForTap, viewerOf } from "../store";
+import { landingView } from "../players";
+import { useShown } from "../usePlayers";
 import { handVisible } from "../scene/Table";
 import { hasSymbol, MARKUP_ICONS, markupColor } from "../icons";
 import { ActionRail, CameraButtons, InstructionBar, UndoButton } from "./ActionRail";
@@ -278,8 +280,10 @@ function HandOff() {
   // the hand-off waits for whatever holds the middle of the screen (and drawn cards about to take it)
   const intro = useView((s) => s.stage.some((k) => !k.startsWith("test:")) || !!s.intro || s.showcase.length > 0);
   const viewer = viewerOf(game);
+  // the hand-off is for the deciding player's table; looking at a teammate (or waiting for a tap on whoever can act) shows no box
+  const looking = useShown() !== viewer;
   // the pause before a phase is for the whole table: no hand to hide
-  const hidden = busy || intro || !game.pending || game.pending.kind === "phase" || handVisible(privacy, game.order.length, viewer, revealedFor);
+  const hidden = busy || intro || looking || !game.pending || game.pending.kind === "phase" || handVisible(privacy, game.order.length, viewer, revealedFor);
   useEffect(() => {
     if (!hidden) moment("handoff");
   }, [hidden]);
@@ -420,7 +424,18 @@ function ErrorToast() {
   return <div className="error" onClick={() => gameStore.setState({ error: null })}>{error}</div>;
 }
 
+/** the view returns to the deciding player's table (or stays on the active one while another can act) whenever the decision passes */
+function useViewReset() {
+  const game = useGame((s) => s.game);
+  const decider = game ? viewerOf(game) : null;
+  useEffect(() => {
+    const g = gameStore.getState().game;
+    useView.getState().setViewing(g ? landingView(g) : null);
+  }, [decider]);
+}
+
 export function Hud() {
+  useViewReset();
   return (
     <>
       <TopBar />

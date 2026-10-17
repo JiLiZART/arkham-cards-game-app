@@ -13,6 +13,7 @@ import { introHides } from "../intro";
 import { backUrl, isEncounterCard } from "../images";
 import { handVisible } from "../scene/Table";
 import { viewerOf } from "../store";
+import { useShown } from "../usePlayers";
 import { IntentBadge, TokenBadges } from "../TokenBadges";
 import { useDimmed, useView } from "../view";
 import { heldGame } from "../spotlight";
@@ -254,7 +255,7 @@ export function PlayStrip() {
   const revealedFor = useGame((s) => s.revealedFor);
   const choose = useGame((s) => s.choose);
   const { byCard } = useCardClick();
-  const viewer = viewerOf(game);
+  const viewer = useShown();
   const strip = useRef<HTMLDivElement>(null);
   const setup = useGame((s) => s.setup);
   const queue = useGame((s) => s.queue);

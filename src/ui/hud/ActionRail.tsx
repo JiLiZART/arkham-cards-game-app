@@ -10,6 +10,7 @@ import { onRail, optionHome } from "../optionHome";
 import { Sentence } from "./Feed";
 import { handVisible } from "../scene/Table";
 import { canUndo, viewerOf } from "../store";
+import { useChoicesOffered } from "../usePlayers";
 import { useView } from "../view";
 import { moment } from "./SoundLayer";
 import { useCaption, useHeld } from "./StepCaption";
@@ -108,13 +109,15 @@ export function InstructionBar() {
   const locale = useGame((s) => s.locale);
   const busy = useGame((s) => !!s.current || s.queue.length > 0);
   const p = useOwnChoice();
+  const offered = useChoicesOffered();
   // while a phase step plays out, its caption has this place
   const caption = useCaption();
   const held = useHeld();
   // the pause before a phase speaks for itself (the phase title); while events play the bar shows no choice
   if (busy || caption !== null || held || !p || p.kind === "phase") return null;
   const viewer = viewerOf(game);
-  const buttons = p.options.filter((o) => optionHome(o, game, viewer) === "bar");
+  // the decider's instruction stays while looking at a teammate; its buttons come back with the decider's table
+  const buttons = offered ? p.options.filter((o) => optionHome(o, game, viewer) === "bar") : [];
   return (
     <div className="instruction-bar" data-tip="bar">
       <Sentence parts={[{ t: "inv", id: p.inv }, { t: "text", s: ": " }, ...instructionParts(p, game, db, locale)]} size={30} />
@@ -134,7 +137,8 @@ export function ActionRail() {
   const game = useGame((s) => s.game) as GameState;
   const busy = useGame((s) => !!s.current || s.queue.length > 0);
   const p = useOwnChoice();
-  if (!p) return null;
+  const offered = useChoicesOffered();
+  if (!p || !offered) return null;
   const items = p.options.filter((o) => onRail(o, game, viewerOf(game)));
   if (!items.length) return null;
   return (
