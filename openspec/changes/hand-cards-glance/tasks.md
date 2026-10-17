@@ -9,7 +9,7 @@
 
 ## 3. Hand count
 
-- [ ] 3.1 Add `HandCount` to the token row after the clue stack: card-back icon, the hand's size, tooltip from `stat.hand` / `stat.handLimit` (en and ru), red over 8, `FlashStat` on change; add `hand` to `invNumbers`. Verify in the browser: 7 cards show "7" with the tooltip; drawing to 9 shows red; Russian tooltip renders.
+- [x] 3.1 Add `HandCount` to the token row after the clue stack: card-back icon, the hand's size, tooltip from `stat.hand` / `stat.handLimit` (en and ru), red over 8, `FlashStat` on change; add `hand` to `invNumbers`. Verify in the browser: 7 cards show "7" with the tooltip; drawing to 9 shows red; Russian tooltip renders.
 
 ## 4. Verification and docs
 

@@ -285,13 +285,16 @@ export function drawOpeningCards(g: G, i: InvId, n: number) {
   g.s.flags[`aside:${i}`] = aside;
 }
 
+/** most cards an investigator keeps at the end of upkeep */
+export const HAND_LIMIT = 8;
+
 export const handSizeHandler: Handler<"HandSize"> = (g, step) => {
   const me = inv(g, step.inv);
   if (me.status !== "playing") return;
-  const excess = me.hand.length - 8;
+  const excess = me.hand.length - HAND_LIMIT;
   if (excess <= 0) return;
   if (!step.stepped && step.choice === undefined) logStep(g, "handSize", step.inv);
-  const pick = ask<InstId>(g, step, step.inv, "generic", `${me.name}: discard down to 8 cards (${excess} more)`,
+  const pick = ask<InstId>(g, step, step.inv, "generic", `${me.name}: discard down to ${HAND_LIMIT} cards (${excess} more)`,
     me.hand.map((h) => ({ id: h, label: def(g, h).name, card: h, value: h })), { key: "discardDown", vars: { n: excess } });
   if (pick === undefined) return;
   moveCard(g, pick, "discard");

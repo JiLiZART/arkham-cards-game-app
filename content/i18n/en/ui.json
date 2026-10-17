@@ -46,6 +46,7 @@
   "stat.sanity": "Sanity",
   "stat.resources": "Resources",
   "stat.clues": "Clues",
+  "stat.hand": "Cards in hand: {n} (hand limit {max})",
   "glance.willpower": "Willpower",
   "glance.intellect": "Intellect",
   "glance.combat": "Combat",

@@ -2,9 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { cardText, t } from "../../content/i18n";
 import { SKILLS } from "../../content/schema";
 import { maxHealth, maxSanity, skillValue } from "../../engine/core";
+import { HAND_LIMIT } from "../../engine/rules/investigators";
 import type { ChoiceOption, GameState, InvId } from "../../engine/types";
 import { db, gameStore, useGame } from "../context";
-import { Icon, Stat } from "../Icon";
+import { Glyph, Icon, Stat } from "../Icon";
 import { isIcon } from "../icons";
 import { optionHome } from "../optionHome";
 import { Portrait } from "../Portrait";
@@ -46,6 +47,8 @@ export function invNumbers(game: GameState, i: InvId) {
     maxSanity: maxSanity(g, i),
     resources: st.resources,
     clues: st.clues,
+    hand: st.hand.length,
+    handLimit: HAND_LIMIT,
     skills: SKILLS.map((s) => [s, skillValue(g, i, s)] as const),
   };
 }
@@ -57,6 +60,18 @@ export function TokenStack({ kind, value, size = 40 }: { kind: "resource" | "clu
   return (
     <div className={`token-stack ${flash ? "flash" : ""}`} title={tip} aria-label={tip}>
       <TokenPile kind={kind} value={value} size={size} title={tip} />
+      <b>{value}</b>
+    </div>
+  );
+}
+
+/** the number of cards in hand beside the token stacks: a card-back icon, red over the hand limit */
+export function HandCount({ value, limit }: { value: number; limit: number }) {
+  const flash = useFlash(value);
+  const tip = tr("stat.hand", { n: value, max: limit });
+  return (
+    <div className={`token-stack hand-count ${flash ? "flash" : ""} ${value > limit ? "over" : ""}`} title={tip} aria-label={tip}>
+      <Glyph name="card" size={40} title={tip} />
       <b>{value}</b>
     </div>
   );
@@ -74,6 +89,7 @@ export function StatBody({ inv, onPortrait, legal, options, dimmed }: { inv: Inv
       <div className="token-row">
         <TokenStack kind="resource" value={n.resources} />
         <TokenStack kind="clue" value={n.clues} />
+        <HandCount value={n.hand} limit={n.handLimit} />
       </div>
       <div className="stat-bar">
         <div className="stat-head">
