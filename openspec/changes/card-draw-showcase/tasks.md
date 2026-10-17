@@ -11,4 +11,4 @@
 ## 3. Verification and docs
 
 - [x] 3.1 Update `drive-calm.js` (no `.sc-buttons .primary`: tap a card the first time, Enter the second) and any script that reads `showcase.toHand`; run `npm test`, `npm run lint`, `npm run build`, `npm run check:content`, all clean; `drive-calm.js` to round 3 with 0 errors and `maxCenter` 1; `check-sounds.js` still passes (the draw moment plays as cards land in the fan, no button click).
-- [ ] 3.2 README play notes for the draw and the showcase (rise and arc, tap to take, choose one, details on hover). Run `openspec validate card-draw-showcase --type change --strict`.
+- [x] 3.2 README play notes for the draw and the showcase (rise and arc, tap to take, choose one, details on hover). Run `openspec validate card-draw-showcase --type change --strict`.
