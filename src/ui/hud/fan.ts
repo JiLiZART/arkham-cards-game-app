@@ -1,10 +1,10 @@
-/** hand cards are drawn at a readable size: 300×420 px */
-export const FAN_CARD_W = 300;
-export const FAN_CARD_H = 420;
+/** hand cards at rest: 225×315 px (a quarter smaller than before; the glance badge says what each is for) */
+export const FAN_CARD_W = 225;
+export const FAN_CARD_H = 315;
 /** at rest about 45% of a card shows above the bottom edge */
-export const FAN_REST_VISIBLE = 189;
+export const FAN_REST_VISIBLE = 142;
 /** cards with an option in the pending choice rise this far above the others */
-export const FAN_LEGAL_RAISE = 36;
+export const FAN_LEGAL_RAISE = 27;
 /** room kept for the stat bar on the left of the hand and the action rail on the right */
 export const STAT_BAR_W = 420;
 export const RAIL_W = 172;
@@ -35,7 +35,7 @@ export function fanLayout(n: number, width: number, cardW = FAN_CARD_W): FanSlot
   });
 }
 
-/** hover zoom for a hand card (1.28×, about 384×538 px), or as much as fits the window height */
+/** hover zoom for a hand card (1.28×, about 288×403 px), or as much as fits the window height */
 export const HAND_HOVER_ZOOM = 1.28;
 export const hoverScale = (viewportH: number) => Math.min(HAND_HOVER_ZOOM, (viewportH - 16 - 12) / FAN_CARD_H);
 /** lift that puts a hovered card's bottom 12 px above the screen edge */

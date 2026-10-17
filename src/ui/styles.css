@@ -126,7 +126,7 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 
 /* ---------- hand fan (Hearthstone-style) ---------- */
 /* at rest the fan sits under the stat dock (a tilted edge card tucks under it); a hovered or focused card lifts the fan above everything */
-.hand-fan { position: fixed; bottom: 0; height: 170px; z-index: 46; pointer-events: none; }
+.hand-fan { position: fixed; bottom: 0; height: 142px; z-index: 46; pointer-events: none; }
 .hand-fan:has(.fan-card:hover), .hand-fan:focus-within, .hand-fan:has(.dragging), .hand-fan:has(.focused) { z-index: 60; }
 /* transforms come from the Dock frame loop in HandFan (pivot at the bottom centre so cards grow upward) */
 .fan-card { position: absolute; padding: 0; border: 0; border-radius: 14px; background: transparent; cursor: pointer; pointer-events: auto;

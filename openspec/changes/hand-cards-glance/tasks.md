@@ -1,6 +1,6 @@
 ## 1. Smaller fan
 
-- [ ] 1.1 Set `FAN_CARD_W = 225`, `FAN_CARD_H = 315` and the derived constants in `src/ui/hud/fan.ts`; lower `HUD_INSETS.bottom` in `safeArea.ts` to match; update `fan.test.ts` expectations (slots, dock radius, hover scale at 800 px tall). Verify in the browser at 1600×900: a 7-card hand rests at 225×315, the hovered card is about 288×403 and fully on screen, 12 cards stay reachable, the map's focus framing sits above the fan.
+- [x] 1.1 Set `FAN_CARD_W = 225`, `FAN_CARD_H = 315` and the derived constants in `src/ui/hud/fan.ts`; lower `HUD_INSETS.bottom` in `safeArea.ts` to match; update `fan.test.ts` expectations (slots, dock radius, hover scale at 800 px tall). Verify in the browser at 1600×900: a 7-card hand rests at 225×315, the hovered card is about 288×403 and fully on screen, 12 cards stay reachable, the map's focus framing sits above the fan.
 
 ## 2. Glance badge
 

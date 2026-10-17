@@ -1,5 +1,17 @@
 import { describe, expect, it } from "vitest";
-import { boxTransform, dockRadius, dockRect, dockTransform, dockWeight, FAN_CARD_W, fanLayout, fanWidth, HOVER_LIFT, hoverScale, showBox } from "./fan";
+import { boxTransform, dockRadius, dockRect, dockTransform, dockWeight, FAN_CARD_H, FAN_CARD_W, fanLayout, fanWidth, HOVER_LIFT, hoverScale, showBox } from "./fan";
+
+describe("hand fan size", () => {
+  it("rests at 225×315 and hovers at 1.28× (about 288×403)", () => {
+    expect([FAN_CARD_W, FAN_CARD_H]).toEqual([225, 315]);
+    expect(FAN_CARD_W * hoverScale(1080)).toBeCloseTo(288);
+    expect(FAN_CARD_H * hoverScale(1080)).toBeCloseTo(403.2);
+  });
+  it("the hovered card fits an 800 px tall window at the full zoom, and a short one as tall as it can", () => {
+    expect(hoverScale(800)).toBe(1.28);
+    expect(hoverScale(300) * FAN_CARD_H).toBeCloseTo(300 - 28);
+  });
+});
 
 describe("hand fan", () => {
   it("is symmetric around the centre", () => {
@@ -27,7 +39,7 @@ describe("hand fan", () => {
 
   it("hover is 1.28× where the window is tall enough, otherwise as tall as fits", () => {
     expect(hoverScale(1080)).toBe(1.28);
-    expect(hoverScale(500) * 420).toBeCloseTo(500 - 28);
+    expect(hoverScale(380) * FAN_CARD_H).toBeCloseTo(380 - 28);
   });
 
   it("a single card sits in the middle, unrotated", () => {
@@ -67,21 +79,21 @@ describe("dockRect", () => {
   it("at full weight the card is k× its size with its bottom 12 px above the screen edge", () => {
     const r = dockRect({ x: 200, y: 10, rotate: 5 }, 1, 1.28, 36, 432, 900);
     expect(r.y1).toBeCloseTo(888);
-    expect(r.x1 - r.x0).toBeCloseTo(384);
-    expect(r.y1 - r.y0).toBeCloseTo(537.6);
+    expect(r.x1 - r.x0).toBeCloseTo(288);
+    expect(r.y1 - r.y0).toBeCloseTo(403.2);
     expect((r.x0 + r.x1) / 2).toBe(632);
   });
 });
 
 describe("flight keyframes", () => {
   it("boxTransform maps the card's untransformed box onto a screen box (identity for its own box)", () => {
-    // untransformed card at slot x 200 in a fan starting at 432, window 900 tall: box 482..782 x 711..1131
-    expect(boxTransform({ x: 482, y: 711, w: 300, h: 420 }, 200, 432, 900)).toBe("translate(0px, 0px) scale(1)");
-    expect(boxTransform({ x: 20, y: 300, w: 60, h: 84 }, 200, 432, 900)).toBe("translate(-582px, -747px) scale(0.2)");
+    // untransformed card at slot x 200 in a fan starting at 432, window 900 tall: box 519.5..744.5 x 758..1073
+    expect(boxTransform({ x: 519.5, y: 758, w: 225, h: 315 }, 200, 432, 900)).toBe("translate(0px, 0px) scale(1)");
+    expect(boxTransform({ x: 20, y: 300, w: 45, h: 63 }, 200, 432, 900)).toBe("translate(-589.5px, -710px) scale(0.2)");
   });
   it("showBox sits above the hand at about the hover size, inside the window", () => {
     const b = showBox(1600, 900);
-    expect(b.h).toBeCloseTo(537.6);
+    expect(b.h).toBeCloseTo(403.2);
     expect(b.y).toBeGreaterThanOrEqual(60);
     expect(b.y + b.h).toBeLessThan(900);
   });
