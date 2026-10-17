@@ -49,6 +49,43 @@ export function flyIn(el: HTMLElement, flip: HTMLElement | null, from: string, r
   untilLanded(el, turn ? [card, turn] : [card]);
 }
 
+/** the rise out of the pile and the arc to the card's place, in ms */
+export const RISE_MS = 220;
+export const ARC_MS = 500;
+/** a card's start delay when several leave the pile one after another */
+export const riseDelay = (k: number) => k * STAGGER_MS;
+
+/**
+ * Keyframes for a card leaving a pile: it rises one pile-card height face down, then arcs to its place growing from the
+ * pile's size, the turn to face up finishing in the arc's first half. `own` is the card's box at rest.
+ */
+export function riseAndArcFrames(own: Box, pile: Box) {
+  const duration = RISE_MS + ARC_MS;
+  const riseEnd = RISE_MS / duration;
+  const turned = (RISE_MS + ARC_MS / 2) / duration;
+  const card: Keyframe[] = [
+    { offset: 0, transform: centreTransform(own, pile), easing: "ease-out" },
+    { offset: riseEnd, transform: centreTransform(own, { ...pile, y: pile.y - pile.h }), easing: EASE },
+    { offset: 1, transform: "none" },
+  ];
+  const flip: Keyframe[] = [
+    { offset: 0, transform: "rotateY(180deg)" },
+    { offset: riseEnd, transform: "rotateY(180deg)", easing: "ease-in-out" },
+    { offset: turned, transform: "rotateY(0deg)" },
+    { offset: 1, transform: "rotateY(0deg)" },
+  ];
+  return { card, flip, duration };
+}
+
+/** a card (`el`, with an optional `flip` element inside) rises out of the pile at `from` and arcs to its place */
+export function riseAndArc(el: HTMLElement, flip: HTMLElement | null, from: Box, delay: number) {
+  const r = el.getBoundingClientRect();
+  const { card, flip: turn, duration } = riseAndArcFrames({ x: r.left, y: r.top, w: r.width, h: r.height }, from);
+  const timing = { duration, delay, fill: "backwards" as const };
+  el.animate(card, timing);
+  flip?.animate(turn, timing);
+}
+
 /** transform that puts an element (untransformed box `own`, pivot at its centre) over a screen box */
 export function centreTransform(own: Box, b: Box): string {
   return `translate(${b.x + b.w / 2 - (own.x + own.w / 2)}px, ${b.y + b.h / 2 - (own.y + own.h / 2)}px) scale(${b.w / own.w}, ${b.h / own.h})`;

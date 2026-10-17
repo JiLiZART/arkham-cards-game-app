@@ -1,26 +1,21 @@
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { t } from "../../content/i18n";
 import type { GameState, InstId } from "../../engine/types";
-import { domPlace, noteLocalMove, reducedMotion, type ScreenBox } from "../arrivals";
+import { domPlace, noteLocalMove, reducedMotion } from "../arrivals";
 import { CardFace } from "../CardFace";
 import { db, useGame } from "../context";
 import { backUrl } from "../images";
 import { viewerOf } from "../store";
 import { deckPick } from "../optionHome";
 import { useStage, useView } from "../view";
-import { centreTransform } from "./flights";
+import { riseAndArc, riseDelay } from "./flights";
 import { RESOLVE_BOX } from "./Reveal";
 import { moment } from "./SoundLayer";
 
-const boxOf = (el: Element): ScreenBox => {
-  const r = el.getBoundingClientRect();
-  return { x: r.left, y: r.top, w: r.width, h: r.height };
-};
-
 /**
- * The showcase in the middle of the screen: cards just drawn into the on-screen hand fly here from the deck face up and
+ * The showcase in the middle of the screen: cards just drawn into the on-screen hand rise out of the deck and arc here, face up, and
  * wait until the player sends them to the hand (a click, "To hand", Space or Enter); choices wait meanwhile.
- * A choice that picks one of the viewer's deck or discard cards shows those cards here too: a click picks one.
+ * A choice that picks one of the viewer's deck or discard cards shows those cards here too, out of the same pile: a click picks one.
  */
 export function Showcase() {
   const drawn = useView((s) => s.showcase);
@@ -40,19 +35,17 @@ export function Showcase() {
     if (holds && drawn.length) moment("flip");
   }, [holds, drawn.length]);
 
-  // drawn cards fly in from the deck pile, turning face up on the way; picks from a deck just appear
+  // new cards rise face down out of their pile (the deck; a pick from the discard comes from the discard) and arc to their place
   useLayoutEffect(() => {
     const els = [...(root.current?.querySelectorAll<HTMLElement>(".sc-card[data-card]") ?? [])];
-    const deck = domPlace("deck", RESOLVE_BOX);
     let k = 0;
     for (const el of els) {
       const id = el.dataset.card!;
       if (flown.current.has(id)) continue;
       flown.current.add(id);
-      if (!drawn.includes(id) || !deck || reducedMotion()) continue;
-      const timing = { duration: 600, delay: k++ * 150, easing: "cubic-bezier(.2,.8,.2,1)", fill: "backwards" as const };
-      el.animate([{ transform: centreTransform(boxOf(el), deck) }, { transform: "none" }], timing);
-      el.querySelector(".sc-flip")?.animate([{ transform: "rotateY(180deg)" }, { transform: "rotateY(0deg)" }], { ...timing, easing: "ease-in-out" });
+      const pile = domPlace(!drawn.includes(id) && game.cards[id]?.zone === "discard" ? "discard" : "deck", RESOLVE_BOX);
+      if (!pile || reducedMotion()) continue;
+      riseAndArc(el, el.querySelector<HTMLElement>(".sc-flip"), pile, riseDelay(k++));
     }
     for (const id of flown.current) if (!ids.includes(id)) flown.current.delete(id);
   });

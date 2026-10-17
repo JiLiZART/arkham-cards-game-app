@@ -1,6 +1,6 @@
 ## 1. The flight
 
-- [ ] 1.1 Add `riseAndArc(el, flip, from, rest, delay)` to `src/ui/hud/flights.ts` with a test in `flights.test.ts` (new; the keyframe builder is pure): the rise keyframes lift one card height from the pile's box face down, the arc ends at `rest` with the flip finishing in the arc's first half, delays step by 150 ms. Use it in `Showcase.tsx` for drawn cards and for deck picks (replacing the single flight and the "just appear"). Verify in the browser with `drive-calm.js`'s showcase screenshots and a two-card draw: each card rises from the pile, arcs and lands in turn; reduced motion shows them in place.
+- [x] 1.1 Add `riseAndArc(el, flip, from, rest, delay)` to `src/ui/hud/flights.ts` with a test in `flights.test.ts` (new; the keyframe builder is pure): the rise keyframes lift one card height from the pile's box face down, the arc ends at `rest` with the flip finishing in the arc's first half, delays step by 150 ms. Use it in `Showcase.tsx` for drawn cards and for deck picks (replacing the single flight and the "just appear"). Verify in the browser with `drive-calm.js`'s showcase screenshots and a two-card draw: each card rises from the pile, arcs and lands in turn; reduced motion shows them in place.
 
 ## 2. The showcase
 
