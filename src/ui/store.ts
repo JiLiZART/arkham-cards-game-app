@@ -36,7 +36,7 @@ export interface Save {
 export type Pace = "normal" | "slow" | "tap";
 
 export interface UiState {
-  screen: "menu" | "game" | "log" | "howto";
+  screen: "title" | "wizard" | "settings" | "game" | "log" | "howto";
   locale: string;
   privacy: boolean;
   /** chaos tokens are revealed by clicking a circle above the bag (otherwise automatically) */
@@ -155,7 +155,7 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage())
       set({ queue, current: get().current ?? queue[0], ...(get().current ? {} : { queue: queue.slice(1) }) });
     };
     return {
-      screen: "menu", locale: "en", privacy: true, drawByHand: true, pace: "normal", tipsOn: true, musicVolume: 50, sfxVolume: 80, muted: false, campaign: null, setup: null, actions: [], game: null,
+      screen: "title", locale: "en", privacy: true, drawByHand: true, pace: "normal", tipsOn: true, musicVolume: 50, sfxVolume: 80, muted: false, campaign: null, setup: null, actions: [], game: null,
       queue: [], current: null, revealedFor: null, undoFloor: 0, logMarks: [], notice: null, error: null,
 
       newCampaign(opts) {
@@ -236,7 +236,7 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage())
 
       abandon() {
         storage.removeItem(SAVE_KEY);
-        set({ campaign: null, setup: null, actions: [], game: null, screen: "menu", queue: [], current: null });
+        set({ campaign: null, setup: null, actions: [], game: null, screen: "title", queue: [], current: null });
       },
 
       setLocale(locale) {

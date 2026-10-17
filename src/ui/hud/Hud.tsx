@@ -263,7 +263,7 @@ function TopBar() {
         </button>
         <JournalButton />
         <button onClick={() => toggle("debug")}>{tr("hud.debug")}</button>
-        <button onClick={() => gameStore.setState({ screen: "menu" })}>{tr("hud.menu")}</button>
+        <button onClick={() => gameStore.setState({ screen: "title" })}>{tr("hud.menu")}</button>
       </div>
     </div>
   );
