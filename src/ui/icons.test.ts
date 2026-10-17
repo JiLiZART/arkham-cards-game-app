@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { CHAOS_TOKENS, hasTokenArt, layersFor } from "./ChaosToken";
 import { findGlyph, glyphChar, setIcon } from "./glyphs";
@@ -34,9 +34,11 @@ describe("icons", () => {
     expect(hasSymbol("made_up_icon")).toBe(false);
   });
 
-  it("no PNG is used for something the icon fonts have", () => {
-    const fontConcepts = ["willpower", "intellect", "combat", "agility", "wild", "guardian", "seeker", "rogue", "mystic", "survivor", "health", "sanity", "hand", "arcane", "accessory", "body", "ally", "skull", "cultist", "tablet", "elderThing", "elderSign", "autoFail", "+1", "-1"];
-    for (const n of fontConcepts) expect("png" in (ICON_SOURCES as Record<string, IconSource>)[n], n).toBe(false);
+  it("PNG art only for the cardboard tokens the sprite doesn't draw; no stacked token art", () => {
+    const pngs = Object.entries(ICON_SOURCES as Record<string, IconSource>).filter(([, src]) => "png" in src).map(([n]) => n);
+    expect(pngs.sort()).toEqual(["connectorBoth", "connectorOneWay", "damage", "doom", "horror", "lead"]);
+    for (const n of ["resource", "clue", "chaosBag", "health", "sanity"]) expect("glyph" in (ICON_SOURCES as Record<string, IconSource>)[n], n).toBe(true);
+    expect(readdirSync("public/icons").filter((f) => f.endsWith(".png")).sort()).toEqual(["connector-both.png", "connector-one-way.png", "damage.png", "doom.png", "horror.png", "lead.png"]);
   });
 
   it("every remaining PNG icon has a transparent background", () => {

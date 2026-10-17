@@ -9,7 +9,6 @@ import { groupTokens } from "../chaos";
 import { db, gameStore, useGame } from "../context";
 import { Icon } from "../Icon";
 import { introHides } from "../intro";
-import { iconUrl } from "../icons";
 import { backUrl, isEncounterCard } from "../images";
 import { handVisible } from "../scene/Table";
 import { viewerOf } from "../store";
@@ -180,7 +179,7 @@ export function ChaosBagButton() {
   const count = useGame((s) => s.game?.chaosBag.length ?? 0);
   return (
     <button className="chaos-bag" id="chaos-bag" data-tip="bag" onClick={() => useView.getState().setModal({ bag: true })} title={`${tr("bag.title")}: ${count}`}>
-      <img src={iconUrl("chaosBag")} alt="" draggable={false} />
+      <Icon name="chaosBag" size={96} title={tr("bag.title")} />
       <span className="pile-count">{count}</span>
     </button>
   );

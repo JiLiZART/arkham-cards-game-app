@@ -5,7 +5,7 @@ import { t } from "../../content/i18n";
 import type { GameEvent, GameState } from "../../engine/types";
 import { db, gameStore, useGame } from "../context";
 import { Icon } from "../Icon";
-import { iconUrl, isIcon } from "../icons";
+import { isIcon } from "../icons";
 import { breakdownRows, CIRCLE_R, circleLayout, type TestResultData } from "../tokenDraw";
 import { ChaosTokenIcon } from "./ChaosTokenIcon";
 import { CardFace } from "../CardFace";
@@ -75,7 +75,7 @@ export function TokenDraw({ e }: { e: GameEvent }) {
   const token = String(e.data?.token);
   const bag = { x: innerWidth / 2, y: innerHeight / 2 + 60 };
   // the bag grows out of the chaos-bag button into the middle; the circles appear once it is there
-  const bagRef = useRef<HTMLImageElement>(null);
+  const bagRef = useRef<HTMLSpanElement>(null);
   const [arrived, setArrived] = useState(false);
   const button = () => document.getElementById("chaos-bag")?.getBoundingClientRect();
   const boxOf = (r: DOMRect) => ({ x: r.left, y: r.top, w: r.width, h: r.height });
@@ -119,7 +119,9 @@ export function TokenDraw({ e }: { e: GameEvent }) {
     <div className={`token-draw ${picked !== null ? "picked" : ""}`}>
       <div className="token-draw-hint">{picked === null ? tr("draw.hint") : ""}</div>
       <TestSubject e={e} />
-      <img ref={bagRef} className="token-draw-bag" src={iconUrl("chaosBag")} alt="" draggable={false} style={{ left: bag.x - BAG / 2, top: bag.y - BAG * 0.42, width: BAG }} />
+      <span ref={bagRef} className="token-draw-bag" style={{ left: bag.x - BAG / 2, top: bag.y - BAG * 0.42, width: BAG }}>
+        <Icon name="chaosBag" size={BAG} />
+      </span>
       {arrived && circles.map((c, k) => {
         const chosen = picked === k;
         const at = chosen && landed ? { left: land.x - 40, top: land.y - 40, size: 80 } : { left: bag.x + c.x - CIRCLE_R, top: bag.y - BAG * 0.42 + c.y - CIRCLE_R, size: CIRCLE_R * 2 };

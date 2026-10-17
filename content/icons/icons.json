@@ -201,6 +201,10 @@
    "file": "carnevale.svg",
    "set": "standalone"
   },
+  "chaos_bag": {
+   "file": "chaos_bag.svg",
+   "set": "extra"
+  },
   "children_of_blood": {
    "file": "children_of_blood.svg",
    "set": "blood"
@@ -211,6 +215,10 @@
   },
   "chilling_cold": {
    "file": "chilling_cold.svg",
+   "set": "extra"
+  },
+  "clue": {
+   "file": "clue.svg",
    "set": "extra"
   },
   "cob": {
@@ -716,6 +724,10 @@
   "red_tide_rising": {
    "file": "red_tide_rising.svg",
    "set": "standalone"
+  },
+  "resource": {
+   "file": "resource.svg",
+   "set": "extra"
   },
   "river_of_blood": {
    "file": "river_of_blood.svg",
