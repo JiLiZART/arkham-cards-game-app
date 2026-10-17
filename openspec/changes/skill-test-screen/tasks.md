@@ -21,4 +21,4 @@
 ## 5. Verification and docs
 
 - [x] 5.1 Update `drive-calm.js`, `check-sounds.js` and `check-bar.js` for the new selectors; run `npm test`, `npm run lint`, `npm run build`, `npm run check:content`, all clean; `drive-calm.js` to round 3 with 0 errors and `maxCenter` 1 (add `.skill-test-screen` to its centre sampler so the screen counts as the one thing in the middle).
-- [ ] 5.2 README play notes: the skill-test screen (subject, placed cards, strip, spill and flip, result), helpers on the same screen, the strip usable during a test. Run `openspec validate skill-test-screen --type change --strict`.
+- [x] 5.2 README play notes: the skill-test screen (subject, placed cards, strip, spill and flip, result), helpers on the same screen, the strip usable during a test. Run `openspec validate skill-test-screen --type change --strict`.
