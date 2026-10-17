@@ -651,3 +651,10 @@ button.bag-card { cursor: pointer; }
 .wz-ready .bag-card { width: min(420px, 100%); }
 .wz-first { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 20px; }
 .wz-first small { color: var(--muted); }
+.log-investigators { display: flex; flex-wrap: wrap; gap: 14px; }
+.log-inv { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border: 1px solid #3a2f1f; border-radius: 14px; background: #15110c; min-width: 260px; }
+.log-inv.out { opacity: 0.55; filter: grayscale(0.8); }
+.log-inv-text { display: flex; flex-direction: column; gap: 4px; }
+.log-stats { display: flex; flex-wrap: wrap; gap: 4px 12px; color: var(--muted); font-size: 15px; }
+.log-status { color: var(--bad); text-transform: capitalize; }
+.screen.log .wz-body section { margin: 14px 0; }
