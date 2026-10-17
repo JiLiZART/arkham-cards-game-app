@@ -12,7 +12,7 @@ import { hasSymbol, scenarioIcon } from "../icons";
 import { introHides } from "../intro";
 import { backUrl, isEncounterCard } from "../images";
 import { handVisible } from "../scene/Table";
-import { viewerOf } from "../store";
+import { heldCards, viewerOf } from "../store";
 import { useShown } from "../usePlayers";
 import { IntentBadge, TokenBadges } from "../TokenBadges";
 import { useDimmed, useView } from "../view";
@@ -262,8 +262,10 @@ export function PlayStrip() {
   const visible = !!viewer && handVisible(privacy, game.order.length, viewer, revealedFor);
   // new strip cards fly in from where they came from (before their rects are remembered below)
   useFlyIn(strip, visible, viewer, privacy && game.order.length > 1, RESOLVE_BOX, setup);
-  // an enemy whose move hasn't played yet isn't engaged on screen yet
-  const all = Object.values(heldGame(game, queue).cards);
+  const current = useGame((s) => s.current);
+  // an enemy whose move hasn't played yet isn't engaged on screen yet; a card still in (or waiting for) the showcase isn't here yet
+  const waiting = heldCards({ current, queue });
+  const all = Object.values(heldGame(game, queue).cards).filter((c) => !waiting.has(c.id));
   const assets = all.filter((c) => c.zone === "play" && c.controller === viewer);
   const threats = [...all.filter((c) => c.zone === "threat" && c.controller === viewer), ...all.filter((c) => c.zone === "enemy" && c.engagedWith === viewer)];
   const shown = [...assets, ...threats];

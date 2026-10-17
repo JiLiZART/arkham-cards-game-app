@@ -13,6 +13,10 @@ describe("spotlight", () => {
     expect(spotlightOf(ev("damage", "01001", study), game)).toEqual({ cards: [study], invs: ["01001"] });
   });
 
+  it("a drawn weakness lights the investigator who drew it", () => {
+    expect(spotlightOf(ev("weakness", "01001", inHand), game)).toEqual({ cards: [], invs: ["01001"] });
+  });
+
   it("drops what isn't on the map; nothing on the map means no spotlight", () => {
     expect(spotlightOf(ev("doom", null, inHand), game)).toBeNull();
     expect(spotlightOf(ev("agendaAdvance", null, null), game)).toBeNull();

@@ -197,6 +197,7 @@
   "undo.hint": "Take back your last choice (Ctrl/Cmd+Z)",
   "undo.blocked": "Nothing to undo: hidden information was revealed since (a card, a chaos token, a search)",
   "showcase.take": "Tap a card to take it to your hand",
+  "encounter.take": "Read the card, then tap it to continue",
   "showcase.choose": "Choose one",
   "showcase.chooseOrNone": "Choose one, or {none}",
   "act.advance": "Advance",

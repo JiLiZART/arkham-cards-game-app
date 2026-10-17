@@ -659,3 +659,5 @@ button.bag-card { cursor: pointer; }
 .log-stats { display: flex; flex-wrap: wrap; gap: 4px 12px; color: var(--muted); font-size: 15px; }
 .log-status { color: var(--bad); text-transform: capitalize; }
 .screen.log .wz-body section { margin: 14px 0; }
+.encounter-showcase .sc-help { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; justify-content: center; }
+.encounter-showcase .sc-help .primary { min-height: 44px; padding: 8px 20px; font-size: 20px; }

@@ -3,7 +3,7 @@ import { cardText, scenarioText, t } from "../../content/i18n";
 import type { GameEvent } from "../../engine/types";
 import { whenSettled } from "../arrivals";
 import { db, gameStore, useGame } from "../context";
-import { holdsForTap, viewerOf } from "../store";
+import { HELD, holdsForTap, viewerOf } from "../store";
 import { landingView } from "../players";
 import { useShown } from "../usePlayers";
 import { handVisible } from "../scene/Table";
@@ -41,7 +41,7 @@ const SLOW = 1.6;
 export const waitsForSettle = (e: GameEvent | null) => e?.type === "token" || (e?.type === "damage" && !!e.data?.source);
 
 /** events that take the middle of the screen (the rest play only while nothing holds it) */
-const CENTER = new Set(["token", "testResult", "encounter"]);
+const CENTER = new Set(["token", "testResult", "encounter", "weakness"]);
 
 /** plays queued events one by one; input is blocked meanwhile */
 function EventPlayer() {
@@ -75,7 +75,8 @@ function EventPlayer() {
   }, [current]);
   // a token draw advances itself when its token has landed in the strip (by hand it waits for the tap first);
   // drawing by hand also waits for Continue on the result; at the Tap pace every big event waits for Next
-  const waits = !!testKey && current?.type === "token" ? true : (byHand && current?.type === "testResult") || holdsForTap(current, pace);
+  // a drawn encounter card or weakness waits in the showcase for the player's tap at every pace
+  const waits = !!testKey && current?.type === "token" ? true : (byHand && current?.type === "testResult") || holdsForTap(current, pace) || (!!current && HELD.has(current.type));
   useEffect(() => {
     if (!current || waits || !ready) return;
     // a hit from a card plays its streak first, then the numbers

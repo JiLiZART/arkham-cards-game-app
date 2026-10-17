@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { db } from "../engine/testkit";
-import { canUndo, createGameStore, SAVE_KEY, type Storage } from "./store";
+import { ANIMATED, canUndo, createGameStore, HELD, heldCards, holdsForTap, needsNext, SAVE_KEY, type Storage } from "./store";
 
 const mem = (): Storage & { data: Map<string, string> } => {
   const data = new Map<string, string>();
@@ -177,5 +177,29 @@ describe("log marks", () => {
     s.getState().skipEvents();
     s.getState().undo();
     expect(s.getState().logMarks.at(-1)).toBe(n0);
+  });
+});
+
+describe("pace and held events", () => {
+  const ev = (type: string) => ({ type, text: type, inv: null, card: null, data: {} });
+
+  it("a drawn encounter card or weakness is held at every pace, with no caption Next (the showcase has its own)", () => {
+    for (const type of ["encounter", "weakness"]) {
+      expect(HELD.has(type), type).toBe(true);
+      expect(ANIMATED.has(type), type).toBe(true);
+      for (const pace of ["normal", "slow", "tap"] as const) expect(needsNext(ev(type), pace, false), `${type} ${pace}`).toBe(false);
+    }
+  });
+
+  it("the cards still waiting in (or for) the showcase: the playing one and the queued ones", () => {
+    const e = (type: string, card: string | null) => ({ type, text: type, inv: null, card, data: {}, logIndex: 0 });
+    expect([...heldCards({ current: e("encounter", "c1"), queue: [e("damage", "c9"), e("weakness", "c2"), e("encounter", null)] })]).toEqual(["c1", "c2"]);
+    expect(heldCards({ current: null, queue: [] }).size).toBe(0);
+  });
+
+  it("other big events still wait for Next only at the Tap pace", () => {
+    expect(needsNext(ev("attack"), "tap", false)).toBe(true);
+    expect(needsNext(ev("attack"), "normal", false)).toBe(false);
+    expect(holdsForTap(ev("attack"), "slow")).toBe(false);
   });
 });

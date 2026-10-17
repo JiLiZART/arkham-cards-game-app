@@ -37,6 +37,19 @@ describe("diffArrivals", () => {
     expect(a.map((x) => [x.from, x.to, x.batch])).toEqual([["encounterDeck", "enemy", 0], ["encounterDeck", "enemy", 1]]);
   });
 
+  it("a drawn weakness was shown in the showcase: it arrives from there", () => {
+    const r0 = mutate(base, (g) => {
+      const cover = Object.values(g.s.cards).find((c) => c.code === "01007")!;
+      const me = g.s.invs["01001"];
+      for (const z of ["deck", "hand", "discard"] as const) me[z] = me[z].filter((x) => x !== cover.id);
+      me.deck.unshift(cover.id);
+      cover.zone = "deck";
+    });
+    const r = pick(r0, /^Draw/);
+    const a = diffArrivals(r0.state, r.state).find((x) => r.state.cards[x.id].code === "01007");
+    expect(a).toMatchObject({ from: "deck", to: "threat", shown: true });
+  });
+
   it("a new scenario: the opening hand comes from the deck, flagged as opening", () => {
     const s = start("the-gathering", ["01001"], 1).state;
     const a = diffArrivals(null, s);
@@ -77,9 +90,26 @@ describe("recording", () => {
     const id = diffArrivals(base.state, r.state)[0].id;
     expect(takeArrival(id)).toMatchObject({ from: "deck", to: "hand" });
     expect(takeArrival(id)).toBeNull();
-    const r2 = pick(r, /^Draw/);
-    store.setState({ game: r2.state });
-    expect(takeArrival(diffArrivals(r.state, r2.state)[0].id, performance.now() + 2000)).toBeNull();
+    // an ordinary draw (seed 1's next card is the weakness Cover Up, which is shown and kept): the same draw, untaken, expires
+    const again = fresh(true);
+    again.setState({ game: r.state });
+    expect(takeArrival(id, performance.now() + 2000)).toBeNull();
+  });
+
+  it("a card shown in the showcase keeps its arrival until it leaves there, however long the player reads", () => {
+    const store = fresh(true);
+    const r0 = mutate(base, (g) => {
+      const cover = Object.values(g.s.cards).find((c) => c.code === "01007")!;
+      const me = g.s.invs["01001"];
+      for (const z of ["deck", "hand", "discard"] as const) me[z] = me[z].filter((x) => x !== cover.id);
+      me.deck.unshift(cover.id);
+      cover.zone = "deck";
+    });
+    store.setState({ game: r0.state });
+    const r = pick(r0, /^Draw/);
+    store.setState({ game: r.state });
+    const id = Object.values(r.state.cards).find((c) => c.code === "01007")!.id;
+    expect(takeArrival(id, performance.now() + 30_000)).toMatchObject({ to: "threat", shown: true });
   });
 
   it("a restored game records nothing; a new scenario records its opening hand", () => {
@@ -92,7 +122,7 @@ describe("recording", () => {
 
 describe("originRect", () => {
   const box = (n: number) => ({ x: n, y: n, w: 10, h: 14 });
-  const places: Record<Place, number> = { deck: 1, discard: 2, encounter: 3, encounterDiscard: 4, resolve: 5, actAgenda: 6, piles: 7, fan: 8, strip: 9, skilltest: 10 };
+  const places: Record<Place, number> = { deck: 1, discard: 2, encounter: 3, encounterDiscard: 4, resolve: 5, actAgenda: 6, piles: 7, fan: 8, strip: 9, skilltest: 10, showcase: 11 };
   const find = (p: Place) => box(places[p]);
   const none = () => null;
   const arr = (o: Partial<Arrival>): Arrival => ({ id: "c1", from: "deck", to: "hand", owner: "01001", opening: false, batch: 0, log: 0, shown: false, ...o });
@@ -103,10 +133,15 @@ describe("originRect", () => {
     expect(at({ from: "discard" })).toBe(2);
     expect(at({ owner: "01002" })).toBe(7);
   });
-  it("encounter pile, or the resolve spot when the card was just shown or was resolving", () => {
+  it("encounter pile, the showcase when the card was just shown there, the resolve spot when it was resolving", () => {
     expect(at({ from: "encounterDeck", to: "enemy", owner: null })).toBe(3);
-    expect(at({ from: "encounterDeck", to: "enemy", owner: null, shown: true })).toBe(5);
+    expect(at({ from: "encounterDeck", to: "enemy", owner: null, shown: true })).toBe(11);
     expect(at({ from: "resolving", to: "threat" })).toBe(5);
+  });
+  it("a shown card leaves from where the showcase last drew it, when known", () => {
+    const shownAt = (id: string) => (id === "c1" ? box(42) : null);
+    expect(at({ from: "encounterDeck", to: "enemy", owner: null, shown: true }, shownAt)).toBe(42);
+    expect(at({ from: "deck", to: "threat", shown: true }, shownAt)).toBe(42);
   });
   it("hand and strip cards fly from where they last were, else the fan or strip", () => {
     expect(at({ from: "hand", to: "play" }, () => box(42))).toBe(42);

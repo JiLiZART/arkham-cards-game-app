@@ -1,3 +1,4 @@
+import { showcaseLayout } from "./hud/showcaseLayout";
 import type { StoreApi } from "zustand";
 import type { GameState, InstId, InvId, Zone } from "../engine/types";
 import type { UiState } from "./store";
@@ -26,9 +27,9 @@ export function diffArrivals(prev: GameState | null, next: GameState): Arrival[]
   const out: Arrival[] = [];
   const seen = new Set<InstId>();
   const count = new Map<string, number>();
-  // encounter cards drawn since the previous state are shown in the middle before they go anywhere
+  // encounter cards and weaknesses drawn since the previous state are shown in the showcase before they go anywhere
   const recent = next.log.slice(prev ? Math.max(0, Math.min(prev.log.length, next.log.length) - 1) : 0);
-  const shownCards = new Set(recent.filter((e) => e.type === "encounter" && e.card).map((e) => e.card!));
+  const shownCards = new Set(recent.filter((e) => (e.type === "encounter" || e.type === "weakness") && e.card).map((e) => e.card!));
   const add = (id: InstId, from: Zone, owner: InvId | null) => {
     const to = next.cards[id].zone;
     const k = `${to}:${owner}`;
@@ -60,7 +61,8 @@ export function takeArrival(id: InstId, now = performance.now()): Arrival | null
   const a = record.get(id);
   if (!a) return null;
   record.delete(id);
-  if (now - a.at > MAX_AGE || reducedMotion()) return null;
+  // a card shown in the showcase leaves only when the player taps it, however long that takes
+  if ((!a.shown && now - a.at > MAX_AGE) || reducedMotion()) return null;
   return a;
 }
 
@@ -118,13 +120,15 @@ export function takeLocalMove(id: InstId, now = performance.now()): ScreenBox | 
 
 // ---------- where an arrival flies from ----------
 /** named HUD places an arrival can start from */
-export type Place = "deck" | "discard" | "encounter" | "encounterDiscard" | "resolve" | "actAgenda" | "piles" | "fan" | "strip" | "skilltest";
+export type Place = "deck" | "discard" | "encounter" | "encounterDiscard" | "resolve" | "actAgenda" | "piles" | "fan" | "strip" | "skilltest" | "showcase";
 
 /** the screen box an arriving card starts from: its old HTML rect, the pile or panel it came from, or a small box mid-screen */
 export function originRect(a: Arrival, viewer: InvId | null, find: (p: Place) => ScreenBox | null, last: (id: InstId) => ScreenBox | null, vw: number, vh: number): ScreenBox {
   const mine = a.owner === viewer;
   const place = (): ScreenBox | null => {
-    if (a.shown || a.from === "resolving") return find("resolve");
+    // a card just shown in the showcase leaves from where it stood there
+    if (a.shown) return last(a.id) ?? find("showcase");
+    if (a.from === "resolving") return find("resolve");
     switch (a.from) {
       case "hand":
         return last(a.id) ?? find("fan");
@@ -159,13 +163,16 @@ const SELECTORS: Record<Place, string> = {
   fan: ".hand-fan",
   strip: ".play-strip",
   skilltest: ".st-placed",
+  showcase: ".encounter-showcase .sc-card",
 };
 
 /** the real places on screen */
 export function domPlace(p: Place, resolve: () => ScreenBox): ScreenBox | null {
   if (p === "resolve") return resolve();
   const r = document.querySelector(SELECTORS[p])?.getBoundingClientRect();
-  return r && r.width ? { x: r.left, y: r.top, w: r.width, h: r.height } : null;
+  if (r && r.width) return { x: r.left, y: r.top, w: r.width, h: r.height };
+  // the encounter showcase isn't up yet when its cards are first laid out: where its one card will stand
+  return p === "showcase" ? showcaseBox(innerWidth, innerHeight) : null;
 }
 
 // ---------- is anything still flying? (the chaos draw and phase titles wait for cards to land) ----------
@@ -206,4 +213,11 @@ export function whenSettled(done: () => void): () => void {
   };
   raf = requestAnimationFrame(tick);
   return () => cancelAnimationFrame(raf);
+}
+
+/** where the encounter showcase's one card stands: centred, at the showcase size, a little above the middle (its help line is below) */
+export function showcaseBox(vw: number, vh: number): ScreenBox {
+  const w = showcaseLayout(1, vw, vh).width;
+  const h = w * 1.4;
+  return { x: (vw - w) / 2, y: (vh - h) / 2 - 36, w, h };
 }

@@ -3,7 +3,7 @@ import { deckPick } from "./optionHome";
 import type { Spotlight } from "./view";
 
 /** animated events that spotlight what they are about (the chaos draw and test results don't) */
-const SPOT = new Set(["enemyMove", "attack", "spawn", "enemyDamage", "enemyDefeated", "defeated", "damage", "clues", "doom", "encounter", "agendaAdvance", "actAdvance"]);
+const SPOT = new Set(["enemyMove", "attack", "spawn", "enemyDamage", "enemyDefeated", "defeated", "damage", "clues", "doom", "encounter", "weakness", "agendaAdvance", "actAdvance"]);
 const ON_MAP = new Set(["location", "enemy"]);
 
 /** the map cards and investigator portraits an event is about, or null when none of them is on the map */

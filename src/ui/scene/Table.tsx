@@ -3,7 +3,7 @@ import { Canvas, useFrame, useLoader, useThree } from "@react-three/fiber";
 import { Suspense, useEffect, useMemo, useRef, type PointerEvent as ReactPointerEvent } from "react";
 import { heldGame } from "../spotlight";
 import { eventFocus } from "../camera";
-import { needsNext, type QueuedEvent } from "../store";
+import { heldCards, needsNext, type QueuedEvent } from "../store";
 import * as THREE from "three";
 import { t } from "../../content/i18n";
 import type { GameState, InstId } from "../../engine/types";
@@ -241,10 +241,9 @@ function SceneInner({ game }: { game: GameState }) {
     const a = takeArrival(id);
     if (!a) continue;
     const o = originRect(a, viewer, (pl) => domPlace(pl, RESOLVE_BOX), (i) => lastRects.get(i) ?? null, innerWidth, innerHeight);
-    const held = (e: { type: string; card?: string | null } | null) => e?.type === "encounter" && e.card === id;
     // locations put into play are dealt face down one after another, then turn over if they came in revealed
     const dealt = a.to === "location";
-    const shown = a.shown ? () => { const st = gameStore.getState(); return held(st.current) || st.queue.some(held); } : null;
+    const shown = a.shown ? () => heldCards(gameStore.getState()).has(id) : null;
     arrivals.current.set(id, {
       ...glideFrom(o, place),
       // an enemy from an encounter card stays hidden until that card has been shown

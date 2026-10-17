@@ -12,14 +12,20 @@ import type { Action, ContentDb, GameEvent, GameSetup, GameState, InvId } from "
 export const SAVE_KEY = "ah:save";
 
 /** events worth a beat of animation; the rest update the table instantly */
-export const ANIMATED = new Set(["enemyMove", "token", "testResult", "encounter", "attack", "spawn", "agendaAdvance", "actAdvance", "resolution", "enemyDefeated", "defeated", "damage", "enemyDamage", "clues", "doom"]);
+export const ANIMATED = new Set(["enemyMove", "token", "testResult", "encounter", "weakness", "attack", "spawn", "agendaAdvance", "actAdvance", "resolution", "enemyDefeated", "defeated", "damage", "enemyDamage", "clues", "doom"]);
 
+/** a drawn encounter card or weakness waits in the showcase for the player's tap at every pace (its Continue is its own) */
+export const HELD = new Set(["encounter", "weakness"]);
+/** cards drawn but not yet sent on from the showcase (the playing event's and the queued ones'): the table doesn't show them yet */
+export function heldCards(s: { current: GameEvent | null; queue: GameEvent[] }): Set<string> {
+  return new Set([s.current, ...s.queue].filter((e) => !!e && HELD.has(e.type) && !!e.card).map((e) => e!.card!));
+}
 /** in Tap mode these hold until the player continues; follow-on events (damage, clues, doom) play on their timers */
-const TAP = new Set(["encounter", "token", "testResult", "attack", "spawn", "enemyMove", "enemyDefeated", "defeated", "agendaAdvance", "actAdvance", "resolution"]);
+const TAP = new Set(["token", "testResult", "attack", "spawn", "enemyMove", "enemyDefeated", "defeated", "agendaAdvance", "actAdvance", "resolution"]);
 /** does this event wait for the player instead of a timer at this pace */
 export const holdsForTap = (e: GameEvent | null, pace: Pace) => pace === "tap" && !!e && TAP.has(e.type);
 /** a held event that needs the caption's Next (the token drawn by hand and the result panel have their own buttons) */
-export const needsNext = (e: GameEvent | null, pace: Pace, byHand: boolean) => holdsForTap(e, pace) && e!.type !== "testResult" && !(byHand && e!.type === "token");
+export const needsNext = (e: GameEvent | null, pace: Pace, byHand: boolean) => holdsForTap(e, pace) && e!.type !== "testResult" && !(byHand && e!.type === "token") && !HELD.has(e!.type);
 
 /** an animated event waiting to play, with its position in game.log (the feed never shows past the next one) */
 export type QueuedEvent = GameEvent & { logIndex: number };
