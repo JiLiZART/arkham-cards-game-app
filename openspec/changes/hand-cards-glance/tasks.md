@@ -4,7 +4,7 @@
 
 ## 2. Glance badge
 
-- [ ] 2.1 Add `src/ui/glance.ts` with `chipsFor(card)` (effects first, then committed icons, cut to three) and `GLANCE_OVERRIDES`, with `glance.test.ts` covering: Machete ([combat], [damage] +1, [combat] 1), Vicious Blow ([damage] +1, [combat] 1), Flashlight ([intellect] …), Emergency Cache ([resource] 3), Dynamite Blast ([damage] 3), a skill card with only icons, a card with nothing (no badge), an override winning over the derivation, a weakness (the weakness icon alone), and the three-chip cut.
+- [x] 2.1 Add `src/ui/glance.ts` with `chipsFor(card)` (effects first, then committed icons, cut to three) and `GLANCE_OVERRIDES`, with `glance.test.ts` covering: Machete ([combat], [damage] +1, [combat] 1), Vicious Blow ([damage] +1, [combat] 1), Flashlight ([intellect] …), Emergency Cache ([resource] 3), Dynamite Blast ([damage] 3), a skill card with only icons, a card with nothing (no badge), an override winning over the derivation, a weakness (the weakness icon alone), and the three-chip cut.
 - [ ] 2.2 Render `GlanceBadge` along the top edge of every `.fan-card` (icons at 18 px with numbers, tooltips naming each chip, `pointer-events: none`), scaled with the card. Verify in the browser: Roland's hand shows the chips on each card at rest and hovered, three fit without overlapping the card's title, and a card with no chips shows nothing.
 
 ## 3. Hand count
