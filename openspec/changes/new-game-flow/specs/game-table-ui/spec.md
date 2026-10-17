@@ -20,7 +20,7 @@ The difficulty step SHALL show every difficulty the campaign defines (easy, stan
 
 #### Scenario: Standard bag
 - **WHEN** the difficulty step shows Night of the Zealot
-- **THEN** the standard card shows +1, 0 ×2, −1 ×3, −2 ×2, −3, −4, skull ×2, cultist, tablet, auto-fail and elder sign as token icons, and "average −1.0"
+- **THEN** the standard card shows +1, 0 ×2, −1 ×3, −2 ×2, −3, −4, skull ×2, cultist, tablet, auto-fail and elder sign as token icons, and "average −1.3"
 
 #### Scenario: Expert available
 - **WHEN** the difficulty step is shown

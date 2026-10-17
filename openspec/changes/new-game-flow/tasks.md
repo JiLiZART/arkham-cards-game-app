@@ -1,7 +1,7 @@
 ## 1. Wizard state
 
-- [ ] 1.1 Add `src/ui/menu/wizard.ts` (state and reducers: campaign, investigators in tap order capped at four with toggle-off, deck per investigator, difficulty, step with `canContinue`, `next`, `back` keeping picks) with `wizard.test.ts`: tap order becomes P1..P4, a fifth tap is ignored, toggling off reorders, back keeps picks, the ready step's `toSetup()` matches what `newCampaign` takes today.
-- [ ] 1.2 Add `averageModifier(tokens)` to `src/ui/chaos.ts` with tests (numeric tokens only; the four Night of the Zealot bags give −0.4, −1.0, −1.6, −2.9 or the exact values the data yields).
+- [x] 1.1 Add `src/ui/menu/wizard.ts` (state and reducers: campaign, investigators in tap order capped at four with toggle-off, deck per investigator, difficulty, step with `canContinue`, `next`, `back` keeping picks) with `wizard.test.ts`: tap order becomes P1..P4, a fifth tap is ignored, toggling off reorders, back keeps picks, the ready step's `toSetup()` matches what `newCampaign` takes today.
+- [x] 1.2 Add `averageModifier(tokens)` to `src/ui/chaos.ts` with tests (numeric tokens only; the four Night of the Zealot bags give −0.4, −1.0, −1.6, −2.9 or the exact values the data yields).
 
 ## 2. Screens
 

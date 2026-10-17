@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { db, start } from "../engine/testkit";
-import { groupTokens } from "./chaos";
+import { averageModifier, groupTokens } from "./chaos";
 
 describe("chaos bag grouping", () => {
   it("The Gathering on Standard", () => {
@@ -13,5 +13,20 @@ describe("chaos bag grouping", () => {
   });
   it("unknown tokens go last", () => {
     expect(groupTokens(["frost", "-1", "skull", "-1"])).toEqual([["-1", 2], ["skull", 1], ["frost", 1]]);
+  });
+});
+
+describe("average modifier", () => {
+  it("averages the numeric tokens and leaves the symbols out", () => {
+    expect(averageModifier(["+1", "-1", "skull", "autoFail"])).toBe(0);
+    expect(averageModifier(["-2", "-4", "elderSign"])).toBe(-3);
+  });
+  it("is 0 for a bag with no numbers", () => {
+    expect(averageModifier(["skull", "cultist"])).toBe(0);
+    expect(averageModifier([])).toBe(0);
+  });
+  it("the four Night of the Zealot bags, as the data gives them", () => {
+    const bags = db.campaigns["night-of-the-zealot"].chaosBags;
+    expect((["easy", "standard", "hard", "expert"] as const).map((d) => averageModifier(bags[d] ?? []).toFixed(1))).toEqual(["-0.5", "-1.3", "-1.9", "-3.3"]);
   });
 });
