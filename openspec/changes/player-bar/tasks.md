@@ -1,6 +1,6 @@
 ## 1. The model
 
-- [ ] 1.1 Add `src/ui/players.ts` with `players.test.ts`: `shownInv(game, view)` (viewing override, cleared on a new decider), `barModel(game, view)` (avatars in turn order with health, sanity, pips from `ribbonModel`, active, shown, greyed), `canAct(game)` (a commit or reaction pending for someone other than the active investigator, with its label key), `choicesOffered(game, view)` (only on the decider's view). Cover: looking at Daisy during Roland's turn, snap-back when the decision passes, a commit window for Daisy during Roland's test, a reaction, four players with one defeated.
+- [x] 1.1 Add `src/ui/players.ts` with `players.test.ts`: `shownInv(game, view)` (viewing override, cleared on a new decider), `barModel(game, view)` (avatars in turn order with health, sanity, pips from `ribbonModel`, active, shown, greyed), `canAct(game)` (a commit or reaction pending for someone other than the active investigator, with its label key), `choicesOffered(game, view)` (only on the decider's view). Cover: looking at Daisy during Roland's turn, snap-back when the decision passes, a commit window for Daisy during Roland's test, a reaction, four players with one defeated.
 - [ ] 1.2 Add `viewing` to `view.ts` with `setViewing`; clear it in `Hud` when `pending.inv` changes. `HandFan`, `PlayStrip`, the map markers and `useCardClick` read `shownInv`; options are built only when `choicesOffered`.
 
 ## 2. The bar
