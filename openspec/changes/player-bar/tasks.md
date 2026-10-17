@@ -1,0 +1,14 @@
+## 1. The model
+
+- [ ] 1.1 Add `src/ui/players.ts` with `players.test.ts`: `shownInv(game, view)` (viewing override, cleared on a new decider), `barModel(game, view)` (avatars in turn order with health, sanity, pips from `ribbonModel`, active, shown, greyed), `canAct(game)` (a commit or reaction pending for someone other than the active investigator, with its label key), `choicesOffered(game, view)` (only on the decider's view). Cover: looking at Daisy during Roland's turn, snap-back when the decision passes, a commit window for Daisy during Roland's test, a reaction, four players with one defeated.
+- [ ] 1.2 Add `viewing` to `view.ts` with `setViewing`; clear it in `Hud` when `pending.inv` changes. `HandFan`, `PlayStrip`, the map markers and `useCardClick` read `shownInv`; options are built only when `choicesOffered`.
+
+## 2. The bar
+
+- [ ] 2.1 Add `src/ui/hud/PlayerBar.tsx`: avatars with counts, pips, rings, grey, flash on change; tap another → `setViewing`; a "back to <decider>" control while viewing; the can-act pulse with its label and tap → hand-off (`setViewing(null)`, then the existing `HandOff` for private hands); avatars highlighted and tappable for investigator-card options (`optionHome` → `bar`). Replace the ribbon's turn portraits with phases only. Verify in the browser with a new `check-players.js` (two players, privacy on): tapping Daisy's avatar shows her strip and marker and no hand, Roland's options vanish and "back to Roland" returns them; a commit window for Daisy pulses her avatar with "Daisy can commit cards", tapping it shows "Pass to Daisy" then her options; choosing an investigator highlights avatars and a tap answers.
+- [ ] 2.2 The sheet: tapping the viewer's own avatar opens `StatBody` content (card, ability with its options, skills, resources, clues, hand count) anchored under the avatar; Escape, outside tap or the avatar closes it. Remove `StatBar` from the HUD and `InvTokens` from the right column; keep the investigator modal reachable from a teammate's sheet when hands are not private. Move the `portrait` tip anchor to the viewer's avatar and the `hand` count from `hand-cards-glance` (if applied) into the sheet. Verify in the browser: no dock bottom-left, no tokens on the right, the sheet opens and closes, the ability's option button works from the sheet.
+
+## 3. Verification and docs
+
+- [ ] 3.1 Update `drive-calm.js` (tap the pulsing avatar before the hand-off box; the portrait options now in the sheet) and `check-tips.js`; run `npm test`, `npm run lint`, `npm run build`, `npm run check:content`, all clean; `drive-calm.js` to round 3 with 0 errors; `check-players.js` passes.
+- [ ] 3.2 README play notes: the player bar, looking at a teammate, "someone can act", the sheet. Run `openspec validate player-bar --type change --strict`.
