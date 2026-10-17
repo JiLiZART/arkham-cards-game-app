@@ -1,5 +1,6 @@
+import { skipMulligans, start } from "../engine/testkit";
 import { describe, expect, it } from "vitest";
-import { clampCam, fitCam, focusCam, panBy, zoomAt, zoomLimits } from "./camera";
+import { clampCam, eventFocus, fitCam, focusCam, panBy, zoomAt, zoomLimits } from "./camera";
 
 const bounds = { x0: -10, x1: 10, z0: -5, z1: 5 };
 const view = { w: 1000, h: 500 };
@@ -66,5 +67,25 @@ describe("map camera", () => {
     const big = { x0: -20, x1: 20, z0: -12, z1: 12 };
     const fit = fitCam(big, { w: 1920, h: 1080 }, hud);
     expect(clampCam(fit, big, { w: 1920, h: 1080 }, 4, hud).zoom).toBeCloseTo(fit.zoom);
+  });
+});
+
+describe("eventFocus", () => {
+  const game = skipMulligans(start("the-gathering", ["01001"], 1)).state;
+  const study = game.invs["01001"].location!;
+  const ghoul = "g1";
+  const withGhoul = { ...game, cards: { ...game.cards, [ghoul]: { ...game.cards[study], id: ghoul, code: "01160", zone: "enemy" as const, location: study } } };
+  const ev = (type: string, extra: object) => ({ type, text: "", ...extra });
+
+  it("an enemy's event looks at the enemy's location", () => {
+    expect(eventFocus(ev("attack", { card: ghoul, inv: "01001" }), withGhoul)).toBe(study);
+  });
+  it("a spawn looks where it spawns; an investigator's event at their location", () => {
+    expect(eventFocus(ev("spawn", { card: "nowhere", data: { at: study } }), game)).toBe(study);
+    expect(eventFocus(ev("damage", { inv: "01001" }), game)).toBe(study);
+  });
+  it("nothing on the map: stays on the decider", () => {
+    expect(eventFocus(ev("agendaAdvance", { card: game.agenda }), game)).toBeNull();
+    expect(eventFocus(null, game)).toBeNull();
   });
 });

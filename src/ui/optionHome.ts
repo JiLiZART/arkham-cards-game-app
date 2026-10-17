@@ -1,7 +1,11 @@
 import type { ChoiceOption, GameState, InstId, InvId } from "../engine/types";
 
 /** where an option of the pending choice is offered on screen (there is no option sidebar) */
-export type OptionHome = "hand" | "board" | "strip" | "portrait" | "invModal" | "rail" | "skilltest" | "mulligan" | "phase" | "showcase";
+export type OptionHome = "hand" | "board" | "strip" | "portrait" | "invModal" | "rail" | "bar" | "skilltest" | "mulligan" | "phase" | "showcase";
+
+/** the options of no card that are something to do on the turn; every other option of no card answers the question in the bar */
+const RAIL_KINDS = new Set(["draw", "resource", "investigate"]);
+const kindOf = (o: ChoiceOption) => (o.value as { kind?: string } | null)?.kind;
 
 const STRIP_ZONES = new Set(["act", "agenda", "victory", "encounterDiscard", "encounterDeck", "sideDeck"]);
 const BOARD_ZONES = new Set(["location", "enemy", "attached", "play", "threat", "resolving"]);
@@ -14,7 +18,7 @@ export function optionHome(o: ChoiceOption, s: GameState, viewer: InvId | null):
   if (s.pending?.kind === "phase") return "phase";
   // picking one of the viewer's deck or discard cards: the cards (and "none") in the showcase
   if (deckPick(s, viewer).length) return "showcase";
-  if (!o.card || !s.cards[o.card]) return "rail";
+  if (!o.card || !s.cards[o.card]) return RAIL_KINDS.has(kindOf(o) ?? "") ? "rail" : "bar";
   // taking back a card picked for the mulligan: the "to redraw" row on the table
   if (s.pending?.kind === "mulligan" && o.id.startsWith("un:")) return "mulligan";
   const c = s.cards[o.card];
@@ -29,12 +33,12 @@ export function optionHome(o: ChoiceOption, s: GameState, viewer: InvId | null):
   if (STRIP_ZONES.has(c.zone)) return "strip";
   // an enemy engaged with the viewer is in their threat area; others' engaged enemies stay at their location on the map
   if (BOARD_ZONES.has(c.zone)) return "board";
-  return "rail";
+  return "bar";
 }
 
-/** the action rail's buttons: options of no card, plus Investigate beside Draw and Gain resource (its location takes it too) */
+/** the action rail's buttons: Draw and Gain resource, plus Investigate beside them (its location takes it too) */
 export const onRail = (o: ChoiceOption, s: GameState, viewer: InvId | null) =>
-  optionHome(o, s, viewer) === "rail" || (s.pending?.kind === "turn" && (o.value as { kind?: string } | null)?.kind === "investigate");
+  optionHome(o, s, viewer) === "rail" || (s.pending?.kind === "turn" && kindOf(o) === "investigate");
 
 /** the investigator whose modal shows an "invModal" option */
 export function optionOwner(o: ChoiceOption, s: GameState): InvId | null {

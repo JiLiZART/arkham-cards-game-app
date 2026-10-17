@@ -30,6 +30,8 @@ export interface FeedEntry {
 export const HIDDEN = new Set(["setup", "shuffle", "ready", "action", "token", "testStart", "noToken"]);
 /** the consequential events that also float up over the map; everything else is told by the feed alone */
 export const FLOAT_KINDS = new Set(["damage", "defeated", "attack", "enemyDamage", "enemyDefeated", "spawn", "clues", "doom", "agendaAdvance", "actAdvance"]);
+/** a phase's automated step: the caption tells it live; the Journal shows it as a section line */
+export const STEP = "step";
 /** events done by enemies (or the encounter deck) rather than an investigator */
 const ENEMY = new Set(["attack", "spawn", "enemyMove", "attackCancelled", "spawnFail"]);
 const ICONS = new Set<string>(["resource", "clue", "damage", "horror", "doom", "health", "sanity", "willpower", "intellect", "combat", "agility", "wild"]);
@@ -42,6 +44,8 @@ export function templateKey(e: GameEvent): string {
   if (e.type === "clues" && !e.card) return "feed.cluesGained";
   if (e.type === "engage" && e.data?.byInv) return "feed.engageBy";
   if (e.type === "heal" && !e.inv) return "feed.healCard";
+  // a phase's automated step: the caption's words, also the Journal's section line
+  if (e.type === "step") return `caption.step.${String(e.data?.step)}`;
   return `feed.${e.type}`;
 }
 
@@ -129,10 +133,24 @@ export function shownCount(logLength: number, current: { logIndex: number } | nu
   return current ? Math.max(current.logIndex + 1, logLength) : logLength;
 }
 
-/** the prompt of a pending choice as styled parts (after the deciding investigator), or null when it has no template */
-export function promptParts(p: { inv: InvId; prompt: string; promptKey?: string; promptVars?: Record<string, string | number | null> }, game: GameState, db: ContentDb, locale: string): Part[] | null {
+/**
+ * The log index of the step to caption now, or null: the latest step of the current phase at or before the playing
+ * event (a step goes on across the choices inside it, such as a reaction to an attack), while events play or are
+ * queued, or while something else holds the middle (drawn cards in the showcase), except during a phase pause,
+ * which has its own title.
+ */
+export function captionIndex(log: GameEvent[], current: { logIndex: number } | null, queue: { logIndex: number }[], shown: number, stageBusy: boolean, pendingKind: string | null): number | null {
+  const playing = !!current || queue.length > 0;
+  if (!playing && (!stageBusy || pendingKind === "phase")) return null;
+  const upTo = current ? current.logIndex : shown - 1;
+  for (let i = Math.min(upTo, log.length - 1); i >= 0 && log[i].type !== "phase"; i--) if (log[i].type === STEP) return i;
+  return null;
+}
+
+/** the prompt of a pending choice as styled parts (after the deciding investigator), or null when it has no template; `prefix` "instruction" for the bar's wording */
+export function promptParts(p: { inv: InvId; prompt: string; promptKey?: string; promptVars?: Record<string, string | number | null> }, game: GameState, db: ContentDb, locale: string, prefix = "prompt"): Part[] | null {
   if (!p.promptKey) return null;
-  const key = `prompt.${p.promptKey}`;
+  const key = `${prefix}.${p.promptKey}`;
   const template = t(db, locale, key);
   if (template === key) return null;
   const vars = p.promptVars ?? {};
@@ -201,7 +219,8 @@ export function mergeLive(game: GameState, entries: Map<number, FeedEntry | null
   };
   for (let i = Math.max(0, shown - window); i < shown; i++) {
     const entry = entries.get(i);
-    if (!entry) continue;
+    // steps are told by the caption, not the live feed (and don't break a run)
+    if (!entry || entry.kind === STEP) continue;
     const e = game.log[i];
     const kind = routineKind(e);
     const group = kind === "enemyMove" ? "enemyMove" : "routine";

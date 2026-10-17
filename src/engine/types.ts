@@ -180,10 +180,10 @@ export type Step = { choice?: any } & (
   | { t: "EndTurn"; inv: InvId }
   | { t: "PerformAction"; inv: InvId; action: TurnAction; free?: boolean }
   | { t: "EnemyPhase" }
-  | { t: "HunterMoves"; done?: InstId[] }
+  | { t: "HunterMoves"; done?: InstId[]; stepped?: boolean }
   | { t: "EnemyAttacks"; inv?: InvId; done?: InstId[] }
   | { t: "UpkeepPhase" }
-  | { t: "HandSize"; inv: InvId }
+  | { t: "HandSize"; inv: InvId; stepped?: boolean }
   | { t: "EndRound" }
   | { t: "Window"; trigger: Trigger; data: EventData; offered?: string[]; forcedDone?: boolean }
   | { t: "Effects"; effects: Effect[]; ctx: EffCtx }

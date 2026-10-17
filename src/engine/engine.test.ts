@@ -136,6 +136,65 @@ describe("round structure", () => {
   });
 });
 
+describe("step events", () => {
+  const steps = (log: { type: string; inv?: string | null; data?: Record<string, unknown> }[]) => log.filter((e) => e.type === "step").map((e) => (e.inv ? `${e.data!.step}:${e.inv}` : e.data!.step));
+
+  it("enemy phase: hunters, then attacks, each once and before their events", () => {
+    let r = skipMulligans(start("the-midnight-masks", [ROLAND], 3, { chaosBag: ["0"] as never }));
+    r = mutate(r, (g) => {
+      const downtown = Object.values(g.s.cards).find((c) => c.zone === "location" && def(g, c.id).name === "Downtown")!.id;
+      putEnemy(g, "01159", downtown);
+      putEnemy(g, "01159", inv(g, ROLAND).location!, ROLAND);
+    });
+    const from = r.state.log.length;
+    r = pick(r, "End turn");
+    // a reaction (Dodge) may be offered before the attack: pass it
+    while (r.state.pending && !r.state.log.slice(from).some((e) => e.type === "attack")) r = pick(r, r.state.pending.options.some((o) => o.id === "pass") ? "pass" : /./);
+    const log = r.state.log.slice(from);
+    const types = log.filter((e) => ["enemyMove", "attack"].includes(e.type) || (e.type === "step" && e.data!.phase === "enemy")).map((e) => (e.type === "step" ? `step:${e.data!.step}` : e.type));
+    expect(types).toEqual(["step:hunters", "enemyMove", "step:attacks", "attack"]);
+  });
+
+  it("enemy phase with nothing to do logs no step", () => {
+    let r = gathering();
+    const from = r.state.log.length;
+    r = pick(r, "End turn");
+    const s = steps(r.state.log.slice(from));
+    expect(s).not.toContain("hunters");
+    expect(s).not.toContain("attacks");
+  });
+
+  it("mythos: doom, then an encounter step per investigator before their card", () => {
+    let r = gathering([ROLAND, DAISY]);
+    while ((r.state.round < 2 || r.state.phase === "mythos") && r.state.pending) r = pick(r, /End turn|Roland|Daisy|./);
+    const start2 = r.state.log.findIndex((e) => e.type === "phase" && e.data?.phase === "mythos");
+    const log = r.state.log.slice(start2);
+    const seq = log.filter((e) => ["step", "doom", "encounter"].includes(e.type)).slice(0, 6).map((e) => (e.type === "step" ? `step:${e.data!.step}${e.inv ? `:${e.inv}` : ""}` : e.type));
+    expect(seq).toEqual(["step:doom", "doom", `step:encounter:${ROLAND}`, "encounter", `step:encounter:${DAISY}`, "encounter"]);
+  });
+
+  it("hand size: logged once, only for the investigator over the limit", () => {
+    let r = gathering([ROLAND, DAISY]);
+    r = mutate(r, (g) => {
+      while (inv(g, ROLAND).hand.length < 10) giveCard(g, ROLAND, "01086");
+    });
+    const from = r.state.log.length;
+    while (r.state.pending && !/discard down to 8/.test(r.state.pending.prompt)) r = pick(r, /End turn|Roland|Daisy/);
+    while (r.state.pending && /discard down to 8/.test(r.state.pending.prompt)) r = pick(r, /./);
+    const hs = steps(r.state.log.slice(from)).filter((x) => String(x).startsWith("handSize"));
+    expect(hs).toEqual([`handSize:${ROLAND}`]);
+  });
+
+  it("upkeep is logged after the ready", () => {
+    let r = gathering();
+    const from = r.state.log.length;
+    r = pick(r, "End turn");
+    const log = r.state.log.slice(from);
+    const ready = log.findIndex((e) => e.type === "ready");
+    expect(log[ready + 1]).toMatchObject({ type: "step", data: { step: "upkeep" } });
+  });
+});
+
 describe("phase pacing", () => {
   const paced = () => skipMulligans(start("the-gathering", [ROLAND, DAISY], 1, { pacePhases: true, chaosBag: ["0"] as never }));
 

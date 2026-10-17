@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
 ### Requirement: Phase ribbon
-The top of the screen SHALL show a ribbon with the round number and the four phases of a round in order: Mythos, Investigation, Enemy, Upkeep. The current phase is lit; the ones already played this round are marked done; the ones to come are plain. Round 1 has no mythos phase and the ribbon shows its Mythos segment as skipped. During setup and the mulligan the ribbon shows "Setup". When the scenario has ended it shows "End". The ribbon is a single row and never covers the map's middle.
+The top of the screen SHALL show a ribbon with the round number and the four phases of a round in order: Mythos, Investigation, Enemy, Upkeep. The current phase is lit (during the lead investigator's pause before a phase, that coming phase); the ones already played this round are marked done; the ones to come are plain. Round 1 has no mythos phase and the ribbon shows its Mythos segment as skipped. During setup and the mulligan the ribbon shows "Setup". When the scenario has ended it shows "End". The ribbon is a single row and never covers the map's middle.
 
 #### Scenario: Enemy phase
 - **WHEN** the enemy phase of round 2 begins
@@ -23,11 +23,11 @@ During the investigation phase the ribbon's Investigation segment SHALL list the
 - **THEN** Roland is dimmed with empty pips and Daisy is lit with three filled pips
 
 ### Requirement: End turn stands out when nothing is left
-When the active investigator has no actions left, the End turn button SHALL glow and the rail's actions that cost an action SHALL be dimmed, while free actions and cards that cost no action stay as they are. The glow goes when an action is regained.
+When the active investigator has no actions left (counting extra actions restricted to some cards), the End turn button SHALL glow; actions that cost an action are no longer offered, while free actions and cards that cost no action stay as they are. The glow goes when an action is regained.
 
 #### Scenario: Three actions spent
 - **WHEN** Roland has spent his three actions
-- **THEN** End turn glows and Draw, Resource and Investigate are dimmed, while a fast event in his hand still glows as playable
+- **THEN** End turn glows and Draw, Resource and Investigate are gone from the rail, while a fast event in his hand still glows as playable
 
 ### Requirement: Enemy intents
 Every enemy in play SHALL carry an intent badge, on the map and in the play strip, telling what it will do in the coming enemy phase:
@@ -45,7 +45,7 @@ The badge reflects the current state at once: evading an enemy turns its badge t
 - **THEN** its badge shows rest
 
 #### Scenario: Hunter afar
-- **WHEN** a ready Ghoul Minion stands in the Attic with nobody there
+- **WHEN** a ready Swarm of Rats stands at Downtown with nobody there
 - **THEN** its badge shows hunt
 
 ### Requirement: Turn title

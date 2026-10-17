@@ -1,6 +1,7 @@
 import { useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
+import { reducedMotion } from "../arrivals";
 import { clampCam, fitCam, focusCam, panBy, zoomAt, type Cam } from "../camera";
 import type { Bounds, Vec3 } from "../layout";
 import { HUD_INSETS } from "../safeArea";
@@ -116,7 +117,8 @@ export function MapCamera({ bounds, locH, focus, focusKey }: { bounds: Bounds; l
     const t = clamp(target.current);
     target.current = t;
     const c = cur.current!;
-    const k = 7;
+    // reduced motion: the camera jumps instead of panning
+    const k = reducedMotion() ? Infinity : 7;
     const next = { cx: THREE.MathUtils.damp(c.cx, t.cx, k, dt), cz: THREE.MathUtils.damp(c.cz, t.cz, k, dt), zoom: THREE.MathUtils.damp(c.zoom, t.zoom, k, dt) };
     cur.current = next;
     if (camera.zoom !== next.zoom || camera.position.x !== next.cx || camera.position.z !== next.cz) {

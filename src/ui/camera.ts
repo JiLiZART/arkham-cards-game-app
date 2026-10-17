@@ -1,3 +1,4 @@
+import type { GameEvent, GameState, InstId } from "../engine/types";
 import type { Bounds } from "./layout";
 
 /** camera centre (world x/z) and zoom (screen px per world unit) */
@@ -95,4 +96,19 @@ export function fitCam(bounds: Bounds, view: View, insets: Insets): Cam {
   const h = Math.max(100, view.h - insets.top - insets.bottom);
   const zoom = Math.min(w / (bounds.x1 - bounds.x0), h / (bounds.z1 - bounds.z0));
   return centreIn((bounds.x0 + bounds.x1) / 2, (bounds.z0 + bounds.z1) / 2, zoom, view, insets);
+}
+
+/**
+ * The location the camera looks at while an event plays, or null to stay on the deciding investigator: where a card
+ * spawns, where the enemy is (a moving enemy: where it goes), the location itself, or the investigator's location.
+ */
+export function eventFocus(e: GameEvent | null, game: GameState): InstId | null {
+  if (!e) return null;
+  const isLoc = (id: unknown): id is InstId => typeof id === "string" && game.cards[id]?.zone === "location";
+  if (e.type === "spawn" && isLoc(e.data?.at)) return e.data.at;
+  const c = e.card ? game.cards[e.card] : null;
+  if (c?.zone === "enemy" && isLoc(c.location)) return c.location;
+  if (c?.zone === "location") return c.id;
+  const at = e.inv ? game.invs[e.inv]?.location : null;
+  return isLoc(at) ? at : null;
 }

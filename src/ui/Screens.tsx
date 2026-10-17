@@ -5,7 +5,8 @@ import { currentScenarioId } from "../engine/campaign";
 import { validateDeck } from "../engine/decks";
 import { db, gameStore, useGame } from "./context";
 import { cardImage } from "./images";
-import { SAVE_KEY, safeStorage } from "./store";
+import { SAVE_KEY, safeStorage, type Pace } from "./store";
+import { TIPS_KEY } from "./tips";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
 
@@ -13,9 +14,12 @@ export function MenuScreen() {
   const locale = useGame((s) => s.locale);
   const privacy = useGame((s) => s.privacy);
   const drawByHand = useGame((s) => s.drawByHand);
+  const pace = useGame((s) => s.pace);
+  const tipsOn = useGame((s) => s.tipsOn);
+  const [tipsReset, setTipsReset] = useState(false);
   const campaign = useGame((s) => s.campaign);
   const game = useGame((s) => s.game);
-  const { newCampaign, resume, setLocale, setPrivacy, setDrawByHand, abandon } = gameStore.getState();
+  const { newCampaign, resume, setLocale, setPrivacy, setDrawByHand, setPace, setTipsOn, abandon } = gameStore.getState();
   const hasSave = useMemo(() => !!safeStorage().getItem(SAVE_KEY), []);
   const campaigns = Object.values(db.campaigns);
   const [campaignId, setCampaignId] = useState(campaigns[0]?.id ?? "");
@@ -36,6 +40,7 @@ export function MenuScreen() {
         {(game || campaign) && <button className="primary big" onClick={() => gameStore.setState({ screen: game ? "game" : "log" })}>{tr("menu.continue")}</button>}
         {!game && !campaign && hasSave && <button className="primary big" onClick={() => resume()}>{tr("menu.continue")}</button>}
         {campaign && <button onClick={abandon}>{tr("menu.abandon")}</button>}
+        <button onClick={() => gameStore.setState({ screen: "howto" })}>{tr("menu.howto")}</button>
       </div>
       <section>
         <h2>{tr("menu.newCampaign")}</h2>
@@ -103,8 +108,49 @@ export function MenuScreen() {
         <label>
           <input type="checkbox" checked={drawByHand} onChange={(e) => setDrawByHand(e.target.checked)} /> {tr("menu.drawByHand")}
         </label>
+        <label title={tr(`pace.${pace}.hint`)}>
+          {tr("menu.pace")}{" "}
+          <select value={pace} onChange={(e) => setPace(e.target.value as Pace)}>
+            {(["normal", "slow", "tap"] as const).map((p) => (
+              <option key={p} value={p}>{tr(`pace.${p}`)}</option>
+            ))}
+          </select>
+        </label>
+        <label>
+          <input type="checkbox" checked={tipsOn} onChange={(e) => setTipsOn(e.target.checked)} /> {tr("menu.tips")}
+        </label>
+        <button
+          disabled={tipsReset}
+          onClick={() => {
+            safeStorage().removeItem(TIPS_KEY);
+            setTipsReset(true);
+          }}
+        >
+          {tr("menu.resetTips")}{tipsReset ? " ✔" : ""}
+        </button>
       </section>
       <footer>Card data from ArkhamDB · images from arkham.build. Arkham Horror: The Card Game is © Fantasy Flight Games; fan project for personal use.</footer>
+    </div>
+  );
+}
+
+/** the five-part summary for reading before the first game: the same plain words as the tips */
+export function HowToScreen() {
+  useGame((s) => s.locale);
+  return (
+    <div className="screen howto">
+      <h1>{tr("howto.title")}</h1>
+      {(["goal", "round", "turn", "tests", "enemies"] as const).map((part, k) => (
+        <section key={part}>
+          <h2>
+            {k + 1}. {tr(`howto.${part}.title`)}
+          </h2>
+          <p>{tr(`howto.${part}.text`)}</p>
+        </section>
+      ))}
+      <button className="primary" onClick={() => gameStore.setState({ screen: "menu" })}>
+        {tr("howto.back")}
+      </button>
     </div>
   );
 }

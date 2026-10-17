@@ -21,7 +21,7 @@ describe("every pending option is reachable without a sidebar", () => {
           seen.add(home);
           const c = o.card ? s.cards[o.card] : null;
           const ok =
-            home === "rail" ? !o.card :
+            home === "rail" || home === "bar" ? !o.card :
             home === "hand" ? !!viewer && s.invs[viewer].hand.includes(o.card!) :
             // "board": on the map, or the viewer's play area strip (assets, threat area, engaged enemies)
             home === "board" ? L.cards.has(o.card!) || (!!c && !!viewer && (((c.zone === "play" || c.zone === "threat") && c.controller === viewer) || (c.zone === "enemy" && c.engagedWith === viewer))) :
@@ -36,7 +36,7 @@ describe("every pending option is reachable without a sidebar", () => {
         r = next;
       }
       expect([...new Set(problems)]).toEqual([]);
-      expect(seen.has("board") && seen.has("hand") && seen.has("rail")).toBe(true);
+      expect(seen.has("board") && seen.has("hand") && seen.has("rail") && seen.has("bar")).toBe(true);
     });
   }
 });
@@ -48,7 +48,7 @@ describe("mulligan options", () => {
     r = dispatch(db, r.state, { type: "choose", inv: "01001", option: h });
     const homes = Object.fromEntries(r.state.pending!.options.map((o) => [o.id, optionHome(o, r.state, "01001")]));
     expect(homes[`un:${h}`]).toBe("mulligan");
-    expect(homes.done).toBe("rail");
+    expect(homes.done).toBe("bar");
     expect(Object.entries(homes).filter(([id]) => id !== "done" && !id.startsWith("un:")).every(([, home]) => home === "hand")).toBe(true);
   });
 });
@@ -58,6 +58,20 @@ describe("phase pause", () => {
     const r = skipMulligans(start("the-gathering", ["01001", "01002"], 5, { pacePhases: true }));
     expect(r.state.pending!.kind).toBe("phase");
     expect(optionHome(r.state.pending!.options[0], r.state, "01002")).toBe("phase");
+  });
+});
+
+describe("the bar and the rail", () => {
+  it("Done, Pass and End turn answer in the bar; Draw, Resource and Investigate stay on the rail", () => {
+    const r = skipMulligans(start("the-gathering", ["01001"], 5));
+    const home = (label: RegExp) => {
+      const o = r.state.pending!.options.find((o) => label.test(o.label))!;
+      return onRail(o, r.state, "01001") ? "rail" : optionHome(o, r.state, "01001");
+    };
+    expect([/^End turn/, /^Draw/, /^Gain 1 resource/, /^Investigate/].map(home)).toEqual(["bar", "rail", "rail", "rail"]);
+    const done = { id: "done", label: "Done", value: "done" };
+    const pass = { id: "pass", label: "Pass", value: "pass" };
+    expect([done, pass].map((o) => optionHome(o, r.state, "01001"))).toEqual(["bar", "bar"]);
   });
 });
 

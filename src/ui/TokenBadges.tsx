@@ -1,4 +1,7 @@
+import { t } from "../content/i18n";
 import type { CardInst } from "../engine/types";
+import { db, useGame } from "./context";
+import { intentOf } from "./intent";
 import { Glyph, Icon } from "./Icon";
 import type { IconName } from "./icons";
 
@@ -31,5 +34,28 @@ export function TokenBadges({ inst, size = 26, skip = [] }: { inst: CardInst; si
         ),
       )}
     </div>
+  );
+}
+
+const INTENT_MARK = { attack: "⚔", hunt: "»", rest: "z", wait: "…" } as const;
+
+/** an enemy's intent for the coming enemy phase: attack (damage, horror), hunt, rest or wait; `words` spells it out (the hover copy) */
+export function IntentBadge({ inst, words }: { inst: CardInst; words?: boolean }) {
+  const game = useGame((s) => s.game);
+  const locale = useGame((s) => s.locale);
+  if (inst.zone !== "enemy" || !game?.cards[inst.id] || game.phase === "ended") return null;
+  const it = intentOf(game, inst.id);
+  const tip = t(db, locale, `intent.${it.kind}`, it.kind === "attack" ? { damage: it.damage, horror: it.horror } : undefined);
+  return (
+    <span className={`intent ${it.kind} ${words ? "words" : ""}`} title={tip} aria-label={tip}>
+      <span>{INTENT_MARK[it.kind]}</span>
+      {it.kind === "attack" && (
+        <>
+          {it.damage > 0 && <><Icon name="damage" size={14} /><b>{it.damage}</b></>}
+          {it.horror > 0 && <><Icon name="horror" size={14} /><b>{it.horror}</b></>}
+        </>
+      )}
+      {words && <span className="intent-words">{tip}</span>}
+    </span>
   );
 }

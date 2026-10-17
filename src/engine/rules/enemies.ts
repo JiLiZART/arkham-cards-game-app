@@ -1,4 +1,5 @@
 import {
+  logStep,
   activeInvs, ask, card, def, distances, emit, enemies, enemyStat, engagedWith, hasFlag, inv, invName, invsAt, isElite,
   isMassive, locationByName, locations, moveCard, push, remainingHealth, remainingSanity, skillValue, stepsToward, type G,
 } from "../core";
@@ -167,11 +168,13 @@ export const hunterMovesHandler: Handler<"HunterMoves"> = (g, step) => {
   const nearest = Math.min(...targets.map((t) => dist.get(t) ?? Infinity));
   const goals = targets.filter((t) => dist.get(t) === nearest);
   let options = stepsToward(g, e.location!, goals).filter((l) => !(hasFlag(g, l, "nonEliteCannotMoveInto") && !isElite(g, e.id)) && !hasFlag(g, l, "cannotMoveInto"));
-  const next: Step = { ...step, choice: undefined, done: [...done, e.id] };
   if (options.length === 0 || nearest === Infinity) {
-    push(g, next);
+    push(g, { ...step, choice: undefined, done: [...done, e.id] });
     return;
   }
+  // the first hunter that actually moves this phase opens the step
+  if (!step.stepped && step.choice === undefined) logStep(g, "hunters");
+  const next: Step = { ...step, choice: undefined, done: [...done, e.id], stepped: true };
   if (options.length > 1) {
     // prefer the path toward prey
     const preyInvs = preyCandidates(g, e.id, activeInvs(g).filter((i) => goals.includes(inv(g, i).location!)));
@@ -182,8 +185,9 @@ export const hunterMovesHandler: Handler<"HunterMoves"> = (g, step) => {
   const to = ask<InstId>(g, step, g.s.lead, "target", `Where does ${def(g, e.id).name} move?`,
     options.map((l) => ({ id: l, label: def(g, l).name, card: l, value: l })), { auto: true, key: "enemyMoveWhere", vars: { card: e.id } });
   if (to === undefined) return;
+  const from = e.location;
   e.location = to;
-  emit(g, "enemyMove", `${def(g, e.id).name} moves to ${def(g, to).name}`, { card: e.id, data: { to } });
+  emit(g, "enemyMove", `${def(g, e.id).name} moves to ${def(g, to).name}`, { card: e.id, data: { from, to } });
   const here = invsAt(g, to);
   if (here.length && !def(g, e.id).keywords.includes("aloof") && !isMassive(g, e.id)) {
     const p = preyCandidates(g, e.id, here)[0];
@@ -200,6 +204,7 @@ export const enemyAttacksHandler: Handler<"EnemyAttacks"> = (g, step) => {
     for (const e of engagedWith(g, i)) {
       const key = `${i}|${e.id}`;
       if (done.includes(key) || e.exhausted) continue;
+      if (!done.length) logStep(g, "attacks");
       push(g, { t: "EnemyAttack", enemy: e.id, inv: i, aoo: false, key: attackKey(g) }, { ...step, choice: undefined, done: [...done, key] });
       return;
     }

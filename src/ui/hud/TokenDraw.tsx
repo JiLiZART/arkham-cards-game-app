@@ -142,7 +142,8 @@ export function TokenDraw({ e }: { e: GameEvent }) {
 /** the calculation line by line; stays until Continue (or closes by itself when drawing by hand is off) */
 export function TestBreakdown({ e }: { e: GameEvent }) {
   const next = useGame((s) => s.nextEvent);
-  const byHand = useGame((s) => s.drawByHand);
+  // drawing by hand, or at the Tap pace, the result waits for Continue
+  const byHand = useGame((s) => s.drawByHand || s.pace === "tap");
   const d = e.data as unknown as TestResultData;
   const rows = breakdownRows(d);
   const sign = (v: number) => (v >= 0 ? `+${v}` : `−${Math.abs(v)}`);

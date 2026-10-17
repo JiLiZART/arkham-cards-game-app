@@ -1,6 +1,6 @@
 import type { Ability, Effect, OnTokens, Skill } from "../../content/schema";
 import {
-  abilitiesOf as abilitiesOfCard, activeInvs, allMods, ask, controlled, card, cardsIn, def, emit, enemiesAt, engagedWith, expireMods, hasFlag, inv, invName,
+  abilitiesOf as abilitiesOfCard, activeInvs, allMods, ask, controlled, card, cardsIn, def, emit, enemiesAt, engagedWith, expireMods, hasFlag, inv, invName, logStep,
   isMassive, modSum, push, threatArea, type G,
 } from "../core";
 import type { ChoiceOption, InvId, Step, TurnAction } from "../types";
@@ -40,14 +40,19 @@ export const phasePauseHandler: Handler<"PhasePause"> = (g, step) => {
 export const mythosHandler: Handler<"MythosPhase"> = (g) => {
   beginPhase(g, "mythos");
   const steps: Step[] = [win("phaseBegins", { phase: "mythos" })];
-  if (g.s.agenda) steps.push({ t: "PlaceDoom", card: g.s.agenda, n: 1 }, { t: "CheckDoom" });
+  if (g.s.agenda) {
+    logStep(g, "doom");
+    steps.push({ t: "PlaceDoom", card: g.s.agenda, n: 1 }, { t: "CheckDoom" });
+  }
   for (const i of g.s.order) steps.push({ t: "MythosDraw", inv: i });
   steps.push(win("mythosEnds", {}));
   push(g, ...steps);
 };
 
 export const mythosDrawHandler: Handler<"MythosDraw"> = (g, step) => {
-  if (inv(g, step.inv).status === "playing") push(g, { t: "DrawEncounter", inv: step.inv });
+  if (inv(g, step.inv).status !== "playing") return;
+  logStep(g, "encounter", step.inv);
+  push(g, { t: "DrawEncounter", inv: step.inv });
 };
 
 export const investigationHandler: Handler<"InvestigationPhase"> = (g) => {
@@ -278,6 +283,7 @@ export const upkeepHandler: Handler<"UpkeepPhase"> = (g) => {
   beginPhase(g, "upkeep");
   for (const c of Object.values(g.s.cards)) if (["play", "enemy", "location", "attached", "investigator", "threat"].includes(c.zone)) c.exhausted = false;
   emit(g, "ready", "All exhausted cards are readied");
+  logStep(g, "upkeep");
   const steps: Step[] = [win("phaseBegins", { phase: "upkeep" })];
   // readied enemies at an investigator's location engage
   for (const i of activeInvs(g)) steps.push({ t: "Script", code: "__engine", fn: "checkEngagement", ctx: { inv: i } });

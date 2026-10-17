@@ -13,8 +13,9 @@ import { iconUrl } from "../icons";
 import { backUrl, isEncounterCard } from "../images";
 import { handVisible } from "../scene/Table";
 import { viewerOf } from "../store";
-import { TokenBadges } from "../TokenBadges";
-import { useView } from "../view";
+import { IntentBadge, TokenBadges } from "../TokenBadges";
+import { useDimmed, useView } from "../view";
+import { heldGame } from "../spotlight";
 import { ChaosTokenIcon } from "./ChaosTokenIcon";
 import { referenceSide } from "./DeckViewer";
 import { useFlyIn } from "./flights";
@@ -35,12 +36,13 @@ const hoverProps = (id: InstId | null) => ({
 export function MiniCard({ id, w, h, legal, exhausted, target, onClick, faceDown }: { id: InstId; w: number | string; h: number | string; legal?: boolean; exhausted?: boolean; target?: boolean; faceDown?: boolean; onClick?: (e: ReactMouseEvent) => void }) {
   const game = useGame((s) => s.game) as GameState;
   const locale = useGame((s) => s.locale);
+  const dimmed = useDimmed(id);
   const inst = game.cards[id];
   if (!inst) return null;
   const d = db.cards[inst.code];
   return (
     <button
-      className={`mini-card ${legal ? "legal" : ""} ${exhausted ? "exhausted" : ""} ${target ? "target" : ""}`}
+      className={`mini-card ${legal ? "legal" : ""} ${exhausted ? "exhausted" : ""} ${target ? "target" : ""} ${dimmed ? "dimmed" : ""}`}
       data-card={id}
       style={{ width: w, height: h }}
       onClick={onClick}
@@ -49,6 +51,7 @@ export function MiniCard({ id, w, h, legal, exhausted, target, onClick, faceDown
     >
       {faceDown ? <img src={backUrl(isEncounterCard(d) ? "encounter" : "player")} alt="" draggable={false} /> : <CardFace code={inst.code} locale={locale} />}
       <TokenBadges inst={inst} size={20} />
+      <IntentBadge inst={inst} />
     </button>
   );
 }
@@ -86,6 +89,7 @@ export function ScenarioPanel() {
   const g = gOf();
   const open = (deck: "act" | "agenda" | "reference") => useView.getState().setModal({ deck });
   const ref = db.scenarios[game.scenarioId].card;
+  const refDimmed = useDimmed("reference");
   const agendaDef = game.agenda ? db.cards[game.cards[game.agenda].code] : null;
   const cost = actClueCost(g);
   // during the mulligan and the introduction the cards keep their place (the introduction flies them there) but hide
@@ -93,7 +97,7 @@ export function ScenarioPanel() {
   return (
     <div className="scenario-panel">
       {game.agenda && (
-        <div className={`scenario-card ${hides.agenda ? "intro-hidden" : ""}`}>
+        <div className={`scenario-card ${hides.agenda ? "intro-hidden" : ""}`} data-tip="agenda">
           <MiniCard id={game.agenda} w={170} h={122} legal={byCard.has(game.agenda)} onClick={() => open("agenda")} />
           <CardOptions id={game.agenda} />
           <span className="scenario-badge" title={`${tr("stat.doom")} ${doomInPlay(g)} / ${agendaDef?.doom ?? "?"}`}>
@@ -103,7 +107,7 @@ export function ScenarioPanel() {
         </div>
       )}
       {game.act && (
-        <div className={`scenario-card ${hides.act ? "intro-hidden" : ""}`}>
+        <div className={`scenario-card ${hides.act ? "intro-hidden" : ""}`} data-tip="act">
           <MiniCard id={game.act} w={170} h={122} legal={byCard.has(game.act)} onClick={() => open("act")} />
           <CardOptions id={game.act} />
           {Number.isFinite(cost) && (
@@ -115,7 +119,7 @@ export function ScenarioPanel() {
       )}
       {ref && db.cards[ref] && (
         <div className={`scenario-card ${hides.act ? "intro-hidden" : ""}`}>
-          <button className="mini-card scenario-ref" style={{ width: 86, height: 122 }} onClick={() => open("reference")} title={tr("viewer.reference")}>
+          <button className={`mini-card scenario-ref ${refDimmed ? "dimmed" : ""}`} style={{ width: 86, height: 122 }} onClick={() => open("reference")} title={tr("viewer.reference")}>
             <CardFace code={ref} locale={locale} side={referenceSide(game)} />
           </button>
         </div>
@@ -128,10 +132,11 @@ function Pile({ label, count, top, faceUp, kind, id }: { label: string; count: n
   const locale = useGame((s) => s.locale);
   const game = useGame((s) => s.game) as GameState;
   const showTop = faceUp && top && game.cards[top];
+  const dimmed = useDimmed(top ?? "");
   return (
-    <div className="pile" data-pile={id} title={`${label}: ${count}`}>
+    <div className="pile" data-pile={id} data-tip={id === "deck" ? "deck" : undefined} title={`${label}: ${count}`}>
       <button
-        className={`pile-card ${count === 0 ? "empty" : ""}`}
+        className={`pile-card ${count === 0 ? "empty" : ""} ${dimmed ? "dimmed" : ""}`}
         disabled={!showTop}
         onClick={() => showTop && useView.getState().setModal({ card: top! })}
         {...(showTop ? hoverProps(top) : {})}
@@ -173,7 +178,7 @@ export function PileColumn() {
 export function ChaosBagButton() {
   const count = useGame((s) => s.game?.chaosBag.length ?? 0);
   return (
-    <button className="chaos-bag" id="chaos-bag" onClick={() => useView.getState().setModal({ bag: true })} title={`${tr("bag.title")}: ${count}`}>
+    <button className="chaos-bag" id="chaos-bag" data-tip="bag" onClick={() => useView.getState().setModal({ bag: true })} title={`${tr("bag.title")}: ${count}`}>
       <img src={iconUrl("chaosBag")} alt="" draggable={false} />
       <span className="pile-count">{count}</span>
     </button>
@@ -240,10 +245,12 @@ export function PlayStrip() {
   const viewer = viewerOf(game);
   const strip = useRef<HTMLDivElement>(null);
   const setup = useGame((s) => s.setup);
+  const queue = useGame((s) => s.queue);
   const visible = !!viewer && handVisible(privacy, game.order.length, viewer, revealedFor);
   // new strip cards fly in from where they came from (before their rects are remembered below)
   useFlyIn(strip, visible, viewer, privacy && game.order.length > 1, RESOLVE_BOX, setup);
-  const all = Object.values(game.cards);
+  // an enemy whose move hasn't played yet isn't engaged on screen yet
+  const all = Object.values(heldGame(game, queue).cards);
   const assets = all.filter((c) => c.zone === "play" && c.controller === viewer);
   const threats = [...all.filter((c) => c.zone === "threat" && c.controller === viewer), ...all.filter((c) => c.zone === "enemy" && c.engagedWith === viewer)];
   const shown = [...assets, ...threats];

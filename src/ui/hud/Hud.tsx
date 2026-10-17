@@ -6,11 +6,12 @@ import { rememberRect, whenSettled } from "../arrivals";
 import { useOptionsByCard } from "../cardClick";
 import { Icon } from "../Icon";
 import { db, gameStore, useGame } from "../context";
-import { viewerOf } from "../store";
+import { holdsForTap, viewerOf } from "../store";
 import { handVisible } from "../scene/Table";
 import { glyphHtml } from "../glyphs";
 import { iconSource, isIcon, MARKUP_ICONS } from "../icons";
-import { ActionRail, CameraButtons, PromptBanner, UndoButton } from "./ActionRail";
+import { ActionRail, CameraButtons, InstructionBar, UndoButton } from "./ActionRail";
+import { TipLayer } from "./TipLayer";
 import { ChaosTokenIcon } from "./ChaosTokenIcon";
 import { HoverCard } from "./HoverCard";
 import { Feed } from "./Feed";
@@ -24,14 +25,20 @@ import { MulliganRow } from "./MulliganRow";
 import { IntroOverlay } from "./IntroOverlay";
 import { Showcase } from "./Showcase";
 import { StatBar } from "./Stats";
-import { spotlightOf } from "../spotlight";
+import { StepCaption } from "./StepCaption";
+import { Ribbon } from "./Ribbon";
+import { Portrait } from "../Portrait";
+import { spotlightNow } from "../spotlight";
 import { useStage, useView } from "../view";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
 const gOf = () => ({ s: gameStore.getState().game!, db, events: [] });
 
 /** how long each animated event holds the screen (ms) */
-const DURATION: Record<string, number> = { token: 650, testResult: 1300, encounter: 1400, attack: 700, spawn: 500, agendaAdvance: 1500, actAdvance: 1500, resolution: 800, enemyDefeated: 600, defeated: 1200, damage: 750, enemyDamage: 650, clues: 450, doom: 450 };
+const DURATION: Record<string, number> = { enemyMove: 800, token: 650, testResult: 1300, encounter: 1400, attack: 700, spawn: 500, agendaAdvance: 1500, actAdvance: 1500, resolution: 800, enemyDefeated: 600, defeated: 1200, damage: 750, enemyDamage: 650, clues: 450, doom: 450 };
+
+/** the Slow pace holds every event this many times as long */
+const SLOW = 1.6;
 
 /** events that start only once every card on screen has landed: the chaos draw, and a hit from a card */
 export const waitsForSettle = (e: GameEvent | null) => e?.type === "token" || (e?.type === "damage" && !!e.data?.source);
@@ -44,6 +51,7 @@ function EventPlayer() {
   const current = useGame((s) => s.current);
   const next = useGame((s) => s.nextEvent);
   const byHand = useGame((s) => s.drawByHand);
+  const pace = useGame((s) => s.pace);
   // a chaos token draw waits until every card on screen has landed
   const settledFor = useView((s) => s.settledFor);
   // so does a hit from a card (its streak and numbers follow a revealed location's flip)
@@ -51,21 +59,29 @@ function EventPlayer() {
   const holds = useStage(center ? `event:${current!.logIndex}` : null);
   const stageFree = useView((s) => s.stage.length === 0);
   const ready = !!current && (!waitsForSettle(current) || settledFor === current) && (center ? holds : stageFree);
-  // the event plays: everything else on the map dims around what it is about
-  useEffect(() => useView.setState({ playing: ready ? current : null, spotlight: ready ? spotlightOf(current, gameStore.getState().game!) : null }), [current, ready]);
+  // the event plays: everything else on the map dims around what it is about; once all is played, around the choice's options
+  const game = useGame((s) => s.game);
+  const queued = useGame((s) => s.queue.length > 0);
+  const idle = !current && !queued && stageFree;
+  useEffect(() => {
+    const playing = ready ? current : null;
+    useView.setState({ playing, spotlight: game ? spotlightNow(game, viewerOf(game), playing, idle) : null });
+  }, [current, ready, game, idle]);
   useEffect(() => {
     if (!waitsForSettle(current)) return;
     return whenSettled(() => useView.setState({ settledFor: current }));
   }, [current]);
   // drawing by hand: the token draw and the result panel wait for the player instead of a timer
-  const waits = byHand && (current?.type === "token" || current?.type === "testResult");
+  // and at the Tap pace every big event waits for Next
+  const waits = (byHand && (current?.type === "token" || current?.type === "testResult")) || holdsForTap(current, pace);
   useEffect(() => {
     if (!current || waits || !ready) return;
     // a hit from a card plays its streak first, then the numbers
     const hit = current.type === "damage" && current.data?.source ? HIT_MS + 300 : 0;
-    const id = setTimeout(next, current.type === "testResult" ? 1800 : (DURATION[current.type] ?? 500) + hit);
+    const slow = pace === "slow" ? SLOW : 1;
+    const id = setTimeout(next, (current.type === "testResult" ? 1800 : (DURATION[current.type] ?? 500) + hit) * slow);
     return () => clearTimeout(id);
-  }, [current, next, waits, ready]);
+  }, [current, next, waits, ready, pace]);
   if (!current || !ready) return null;
   if (current.type === "token" && byHand) return <TokenDraw key={`${current.text}:${current.data?.testId}`} e={current} />;
   if (current.type === "testResult") return <TestBreakdown e={current} />;
@@ -131,6 +147,60 @@ function PhaseTitle() {
   );
 }
 
+/**
+ * A new investigator's turn gets a short title ("Daisy's turn") in the phase title's style, so a second turn in the same phase has a beginning.
+ * None when the hand-off screen begins the turn (private hands), nor for the lead's first turn right after the investigation phase's title.
+ */
+function TurnTitle() {
+  const game = useGame((s) => s.game)!;
+  const setup = useGame((s) => s.setup);
+  const current = useGame((s) => s.current);
+  const locale = useGame((s) => s.locale);
+  const seen = useRef<{ setup: unknown; n: number }>({ setup, n: game.log.length });
+  const queue = useRef<{ inv: string; key: number }[]>([]);
+  const [showing, setShowing] = useState<{ inv: string; key: number } | null>(null);
+  if (seen.current.setup !== setup || game.log.length < seen.current.n) seen.current = { setup, n: game.log.length };
+  if (game.log.length > seen.current.n) {
+    const { privacy, revealedFor } = gameStore.getState();
+    for (let i = seen.current.n; i < game.log.length; i++) {
+      const e = game.log[i];
+      if (e.type !== "turn" || !e.inv) continue;
+      // the first turn of the phase (no turn since the phase entry) belongs to the lead who just saw the phase title
+      let first = true;
+      for (let k = i - 1; k >= 0 && game.log[k].type !== "phase"; k--) if (game.log[k].type === "turn") first = false;
+      if (first && e.inv === game.lead) continue;
+      if (!handVisible(privacy, game.order.length, e.inv, revealedFor)) continue;
+      queue.current.push({ inv: e.inv, key: i });
+    }
+    seen.current.n = game.log.length;
+  }
+  const waiting = queue.current.length;
+  useEffect(() => {
+    if (showing || current || !waiting) return;
+    return whenSettled(() => {
+      // a turn already over (the player was quicker than the screen) gets no title
+      const active = gameStore.getState().game?.active;
+      while (queue.current.length && queue.current[0].inv !== active) queue.current.shift();
+      setShowing(queue.current.shift() ?? null);
+    });
+  }, [showing, current, waiting]);
+  const holds = useStage(showing ? `turn:${showing.key}` : null);
+  if (!holds || !showing) return null;
+  return (
+    <div
+      key={showing.key}
+      className="phase-title turn-title"
+      onAnimationEnd={(e) => {
+        if (e.target !== e.currentTarget) return;
+        setShowing(null);
+      }}
+    >
+      <Portrait code={showing.inv} size={72} />
+      <div className="phase-title-name">{tr("turn.title", { name: cardText(db, showing.inv, locale).name })}</div>
+    </div>
+  );
+}
+
 /** the paced pause: the coming phase's title stays until the lead investigator continues (button, Space or Enter) */
 function PhasePause() {
   const game = useGame((s) => s.game)!;
@@ -170,14 +240,12 @@ function JournalButton() {
 }
 
 function TopBar() {
-  const game = useGame((s) => s.game)!;
-  const locale = useGame((s) => s.locale);
+  // the button labels follow the language
+  useGame((s) => s.locale);
   const toggle = useView((s) => s.toggle);
   return (
     <div className="topbar">
-      <div className="scen">
-        <b>{scenarioText(db, game.scenarioId, locale).name}</b> · {tr("hud.round", { round: game.round, phase: game.phase })}
-      </div>
+      <Ribbon />
       <div className="buttons">
         <JournalButton />
         <button onClick={() => toggle("debug")}>{tr("hud.debug")}</button>
@@ -206,7 +274,7 @@ function SkillTestPanel() {
   const tokens = st.tokens.slice(0, Math.max(0, st.tokens.length - unplayed));
   const sign = (n: number) => (n >= 0 ? ` + ${n}` : ` − ${-n}`);
   return (
-    <div className="skilltest" ref={ref}>
+    <div className="skilltest" ref={ref} data-tip="skilltest">
       <div className="st-title">
         {cardText(db, st.inv, locale).name} · {isIcon(st.skill) && <Icon name={st.skill} size={18} />} {tr(`stat.${st.skill}`)} · {st.sourceLabel}
       </div>
@@ -408,7 +476,8 @@ export function Hud() {
       <PlayStrip />
       <MulliganRow />
       <div className="center-col">
-        <PromptBanner />
+        <StepCaption />
+        <InstructionBar />
         <SkillTestPanel />
       </div>
       <div className="right-dock">
@@ -425,6 +494,8 @@ export function Hud() {
       <HitFx />
       <EventPlayer />
       <PhaseTitle />
+      <TurnTitle />
+      <TipLayer />
       <Showcase />
       <IntroOverlay />
       <HandOff />

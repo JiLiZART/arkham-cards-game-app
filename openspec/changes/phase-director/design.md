@@ -31,13 +31,17 @@
 
 *Why log entries, not steps or state:* the UI already derives everything from the log and the queue; a step entry needs no new state, is replay-safe, and the Journal gets its section lines for free. *Alternative:* a `view.step` set by the UI from event shapes (an `attack` event implies "Enemies attack"). It can't tell an enemy-phase attack from an attack of opportunity, and it would have to guess the hunters step from an `enemyMove`.
 
-### 2. The caption is derived from the shown log
-`StepCaption` reads the feed's `shown` count (entries up to the next unplayed animated event) and shows the latest `step` entry at or below it, provided an event is playing or queued, or the entry is the last thing in the log and no choice is pending yet. It clears when a choice is pending and nothing plays. No timers: the caption changes exactly when the events it introduces start playing, because `shown` moves with `current`.
+### 2. The caption is derived from the log and the playing event
+`captionIndex` (pure, in `feed.ts`) picks the latest `step` entry at or before the playing event (or before the feed's `shown` count when nothing is current), looking back no further than the current phase's `phase` entry. It shows while events play or are queued, or while something else holds the stage (drawn cards after upkeep), but not during a phase pause. The prompt banner gives way while a caption shows. No timers.
+
+*Why the playing event, not `shown`:* `shown` runs ahead to the next queued event, so a caption from it would name the next step while the previous event still plays. *Why the phase, not the last choice:* a step goes on across choices inside it (a reaction to an attack), so bounding by the last burst cut "Enemies attack" off after a Dodge window.
 
 The `step` type joins `HIDDEN` for the live feed. The Journal renders it as a `feed-step` divider.
 
-### 3. Enemy moves join `ANIMATED`
-`enemyMove` gets a 800 ms `DURATION` and is a stage-free event (not `CENTER`). `spotlightOf` already picks `e.card`, so the dim and lift work. The mesh's travel is the existing position tween; the event only gives it time. `FLOAT_KINDS` doesn't include it.
+### 3. Enemy moves join `ANIMATED`, and wait for their beat on the table
+`enemyMove` gets a 800 ms `DURATION`, is a stage-free event (not `CENTER`), joins the spotlight's event set and stays out of `FLOAT_KINDS`.
+
+The table lays cards out from the final state, so a hunter would slide at dispatch, before its event. The engine now logs the move's origin (`data.from`, log-only). `heldGame(game, queue)` shows an enemy whose move is still queued at its origin and unengaged; `Table` and `PlayStrip` render from it. When the move plays, the existing position tween carries the card to its destination during the event.
 
 ### 4. The camera focus comes from the playing event
 `SceneInner` computes `focus` as today, then overrides it while `view.playing` is set: the location of `playing.card` if it is an enemy or a location, the location of `playing.inv`, or `data.at` for a spawn. `focusKey` includes the event's `logIndex` so `MapCamera` eases once per event. A drag sets a `view.camHeld` flag that the next event clears, so the player wins while the event lasts. Reduced motion: `MapCamera` already jumps when motion is reduced (confirm; otherwise add the branch).
@@ -48,9 +52,9 @@ The `step` type joins `HIDDEN` for the live feed. The Journal renders it as a `f
 `pace: "normal" | "slow" | "tap"` in `UiState`, persisted in `settings` beside `drawByHand`. In `EventPlayer`:
 - duration = `DURATION[type] * (pace === "slow" ? 1.6 : 1)`;
 - `waits` becomes `byHand && (token || testResult) || pace === "tap" && TAP.has(type)`, where `TAP` = encounter, token, testResult, attack, spawn, enemyMove, enemyDefeated, defeated, agendaAdvance, actAdvance, resolution.
-`StepCaption` shows a Next button while `waits` holds, and a window keydown for Space/Enter calls `nextEvent` (guarded so the showcase and phase pause keep their own handling: only when `view.playing` is a held event). Clicking the spotlit card also continues.
+`needsNext(event, pace, byHand)` decides whether the caption shows Next: a held event without a button of its own. The caption renders for a held event even when no step applies (an attack of opportunity in the investigation phase), so a held event always has Next, and the prompt banner gives way meanwhile. Space/Enter (not auto-repeat) calls `nextEvent` only while `view.playing` needs Next, so the showcase and the phase pause keep their own keys. Clicking the spotlit map card also continues.
 
-Tap mode and `drawByHand`: the token draw already waits for the circle click; in Tap mode it keeps that, and the result panel's Continue serves as Next.
+Tap mode and `drawByHand`: the token draw keeps its circle click. The result panel shows its Continue at the Tap pace even when drawing by hand is off, and that Continue serves as Next.
 
 ## Risks / Trade-offs
 

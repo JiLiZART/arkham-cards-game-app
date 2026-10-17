@@ -1,5 +1,6 @@
 import { shuffle } from "../rng";
 import {
+  logStep,
   activeInvs, ask, card, cardsIn, connections, controlled, def, emit, engagedWith, enemies, hasFlag, inv, invName,
   isMassive, maxHealth, maxSanity, moveCard, playerCount, push, type G,
 } from "../core";
@@ -289,12 +290,13 @@ export const handSizeHandler: Handler<"HandSize"> = (g, step) => {
   if (me.status !== "playing") return;
   const excess = me.hand.length - 8;
   if (excess <= 0) return;
+  if (!step.stepped && step.choice === undefined) logStep(g, "handSize", step.inv);
   const pick = ask<InstId>(g, step, step.inv, "generic", `${me.name}: discard down to 8 cards (${excess} more)`,
     me.hand.map((h) => ({ id: h, label: def(g, h).name, card: h, value: h })), { key: "discardDown", vars: { n: excess } });
   if (pick === undefined) return;
   moveCard(g, pick, "discard");
   emit(g, "discard", `${me.name} discards ${def(g, pick).name}`, { inv: step.inv, card: pick });
-  push(g, { ...step, choice: undefined });
+  push(g, { ...step, choice: undefined, stepped: true });
 };
 
 export { cardsIn, engagedWith };

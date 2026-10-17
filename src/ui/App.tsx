@@ -3,7 +3,7 @@ import { contentErrors } from "../content";
 import { gameStore, useGame } from "./context";
 import { HandFan } from "./hud/HandFan";
 import { Hud } from "./hud/Hud";
-import { CampaignLogScreen, MenuScreen } from "./Screens";
+import { CampaignLogScreen, HowToScreen, MenuScreen } from "./Screens";
 import { Table } from "./scene/Table";
 
 export function App() {
@@ -32,5 +32,6 @@ export function App() {
     );
   }
   if (screen === "log") return <CampaignLogScreen />;
+  if (screen === "howto") return <HowToScreen />;
   return <MenuScreen />;
 }

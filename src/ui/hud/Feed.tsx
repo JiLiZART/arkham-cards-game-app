@@ -4,7 +4,7 @@ import type { GameState } from "../../engine/types";
 import { CardFace } from "../CardFace";
 import { ChaosToken } from "../ChaosToken";
 import { db, gameStore, useGame } from "../context";
-import { feedEntry, mergeLive, shownCount, type FeedEntry, type Part } from "../feed";
+import { feedEntry, mergeLive, shownCount, STEP, type FeedEntry, type Part } from "../feed";
 import { Glyph, Icon } from "../Icon";
 import { CLASS_COLORS } from "../icons";
 import { Portrait } from "../Portrait";
@@ -195,6 +195,13 @@ export function Feed() {
       {mode === "journal" && <div className="feed-title card-name">{t(db, gameStore.getState().locale, "hud.journal")}</div>}
       {items.map((i, k) => {
         const e = (mode === "live" ? lines.get(i) : entries.get(i))!;
+        // the Journal: a phase's step is a section line between the entries it introduces
+        if (e.kind === STEP)
+          return (
+            <div key={i} data-log={i} className="feed-step">
+              <Sentence parts={e.parts} size={20} />
+            </div>
+          );
         const age = now - (arrived.current.get(i) ?? now);
         const leaving = mode === "live" && (age > LIVE_MS || k >= LIVE_MAX);
         const style = mode === "live" ? { opacity: leaving ? 0 : Math.max(0.25, 1 - 0.11 * k), borderLeftColor: toneColor(e) } : { borderLeftColor: toneColor(e) };

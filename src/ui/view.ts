@@ -2,6 +2,7 @@
 import { useEffect } from "react";
 import { create } from "zustand";
 import type { ChoiceOption, InstId, InvId } from "../engine/types";
+import { reducedMotion } from "./arrivals";
 import type { ScreenRect } from "./hit";
 
 /** an investigator portrait being dragged to a location: legal targets map location → Move option id */
@@ -63,7 +64,13 @@ export type Modal = { card: InstId } | { inv: InvId } | { bag: true } | { deck: 
 export interface Spotlight {
   cards: InstId[];
   invs: InvId[];
+  /** a pending choice's: the HUD's cards and portraits dim too, not only the map */
+  choice?: true;
 }
+
+/** a HUD card or portrait outside a choice's spotlight: shown dimmed (not while motion is reduced, like the map's dim) */
+export const outsideSpotlight = (s: Spotlight | null, id: string) => !!s?.choice && !reducedMotion() && !s.cards.includes(id) && !s.invs.includes(id);
+export const useDimmed = (id: string) => useView((s) => outsideSpotlight(s.spotlight, id));
 
 export type IntroStep = "agenda" | "act" | "deal";
 

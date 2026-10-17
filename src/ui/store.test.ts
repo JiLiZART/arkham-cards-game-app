@@ -56,6 +56,39 @@ describe("ui store", () => {
     expect(reloaded.getState().screen).toBe("game");
   });
 
+  it("the pace is saved with the settings; old saves play at the normal pace", () => {
+    const storage = mem();
+    const s = start(storage);
+    expect(s.getState().pace).toBe("normal");
+    s.getState().setPace("tap");
+    const reloaded = createGameStore(db, storage);
+    reloaded.getState().resume();
+    expect(reloaded.getState().pace).toBe("tap");
+    // a save written before the setting existed
+    const save = JSON.parse(storage.getItem(SAVE_KEY)!);
+    delete save.settings.pace;
+    storage.setItem(SAVE_KEY, JSON.stringify(save));
+    const old = createGameStore(db, storage);
+    old.getState().resume();
+    expect(old.getState().pace).toBe("normal");
+  });
+
+  it("tips are on by default, saved with the settings, and on for old saves", () => {
+    const storage = mem();
+    const s = start(storage);
+    expect(s.getState().tipsOn).toBe(true);
+    s.getState().setTipsOn(false);
+    const reloaded = createGameStore(db, storage);
+    reloaded.getState().resume();
+    expect(reloaded.getState().tipsOn).toBe(false);
+    const save = JSON.parse(storage.getItem(SAVE_KEY)!);
+    delete save.settings.tipsOn;
+    storage.setItem(SAVE_KEY, JSON.stringify(save));
+    const old = createGameStore(db, storage);
+    old.getState().resume();
+    expect(old.getState().tipsOn).toBe(true);
+  });
+
   it("a save from another engine version keeps the campaign and restarts the scenario", () => {
     const storage = mem();
     start(storage);

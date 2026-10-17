@@ -1,6 +1,9 @@
 import { Html, Line, OrthographicCamera } from "@react-three/drei";
 import { Canvas, useFrame, useLoader, useThree } from "@react-three/fiber";
 import { Suspense, useEffect, useMemo, useRef, type PointerEvent as ReactPointerEvent } from "react";
+import { heldGame } from "../spotlight";
+import { eventFocus } from "../camera";
+import { needsNext, type QueuedEvent } from "../store";
 import * as THREE from "three";
 import { t } from "../../content/i18n";
 import type { GameState, InstId } from "../../engine/types";
@@ -109,6 +112,7 @@ function Mini({ pos, code, at, hidden, active, dimmed, worldSize, moves, rects, 
           className={`mini ${moves ? "draggable" : ""} ${drag ? "dragging" : ""} ${dimmed ? "dimmed" : ""}`}
           style={drag ? { transform: `translate(${drag.dx}px, ${drag.dy}px) scale(1.15)` } : undefined}
           onPointerDown={start}
+          data-tip={moves ? "move" : undefined}
           title={moves ? t(db, locale, "hud.dragToMove") : undefined}
         >
           <Portrait code={code} size={MINI_PX} active={active} />
@@ -155,7 +159,10 @@ function Connector({ a, b, oneWay, size }: { a: Vec3; b: Vec3; oneWay: boolean; 
 
 /** the canvas has its own React root: it can render once more after the game is cleared */
 function Scene() {
-  const game = useGame((s) => s.game);
+  const real = useGame((s) => s.game);
+  const queue = useGame((s) => s.queue);
+  // an enemy whose move hasn't played yet stays where it was
+  const game = useMemo(() => (real ? heldGame(real, queue) : null), [real, queue]);
   return game ? <SceneInner game={game} /> : null;
 }
 
@@ -170,7 +177,12 @@ function SceneInner({ game }: { game: GameState }) {
   // the camera follows the deciding investigator's location
   const decider = game.pending?.inv ?? game.active ?? viewer;
   const deciderLoc = decider ? game.invs[decider]?.location : null;
-  const focus = deciderLoc ? (L.cards.get(deciderLoc)?.pos ?? null) : null;
+  // while an event plays, the camera looks at what it is about (the hunter that moves, the enemy that attacks)
+  const playing = useView((st) => st.playing) as QueuedEvent | null;
+  const eventLoc = eventFocus(playing, game);
+  const focusLoc = (eventLoc && L.cards.get(eventLoc) ? eventLoc : null) ?? deciderLoc;
+  const focus = focusLoc ? (L.cards.get(focusLoc)?.pos ?? null) : null;
+  const focusKey = focusLoc === eventLoc && playing ? `ev:${playing.logIndex}:${eventLoc}` : `${decider}:${deciderLoc}`;
 
   // Move options of the pending choice (by destination), for dragging the portrait
   const moveTargets = useMemo(() => {
@@ -263,13 +275,16 @@ function SceneInner({ game }: { game: GameState }) {
   // a press that panned the map is not a click
   const click = (id: InstId, x: number, y: number) => {
     if (camInput.panned || hides.map) return;
+    // at the Tap pace, clicking the card a held event is about continues it
+    const g = gameStore.getState();
+    if (spotlight?.cards.includes(id) && needsNext(g.current, g.pace, g.drawByHand)) return g.nextEvent();
     clickCard(id, x, y);
   };
 
   return (
     <>
       <OrthographicCamera makeDefault position={[0, 50, 0]} near={0.1} far={200} />
-      <MapCamera bounds={L.bounds} locH={locH} focus={focus} focusKey={`${decider}:${deciderLoc}`} />
+      <MapCamera bounds={L.bounds} locH={locH} focus={focus} focusKey={focusKey} />
       <ambientLight intensity={1.6} />
       <directionalLight position={[4, 20, 6]} intensity={0.6} />
       {!hides.map && L.links.map(({ a, b }, k) => (

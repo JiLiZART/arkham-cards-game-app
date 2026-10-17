@@ -5,12 +5,13 @@ import { db, useGame } from "../context";
 import { Icon } from "../Icon";
 import type { IconName } from "../icons";
 import { backUrl } from "../images";
-import { promptParts } from "../feed";
-import { onRail } from "../optionHome";
+import { instructionParts } from "../instruction";
+import { onRail, optionHome } from "../optionHome";
 import { Sentence } from "./Feed";
 import { handVisible } from "../scene/Table";
 import { canUndo, viewerOf } from "../store";
 import { useView } from "../view";
+import { useCaption, useHeld } from "./StepCaption";
 
 export interface RailItem {
   /** translation key, or null to show the engine's label */
@@ -57,54 +58,78 @@ export function stripAction(o: ChoiceOption, cardName: string, locale: string): 
   return { label: label[0].toUpperCase() + label.slice(1) };
 }
 
-/** who decides and what about: portrait, class-coloured name and the translated, styled question */
-export function PromptBanner() {
-  const game = useGame((s) => s.game) as GameState;
+/** rail and bar buttons the tips point at */
+const TIP_OF: Record<string, string> = { "rail.investigate": "investigate", "rail.endTurn": "endTurn" };
+
+/** a no-card option as an icon button; End turn glows when nothing is left to spend */
+function OptionButton({ o, game, busy }: { o: ChoiceOption; game: GameState; busy: boolean }) {
   const locale = useGame((s) => s.locale);
+  const choose = useGame((s) => s.choose);
+  const it = railItem(o);
+  // costs and extra detail stay visible: "[2 actions]" suffixes come from the engine label
+  const extra = /\[(\d+ actions)\]$/.exec(o.label)?.[1];
+  const label = it.key ? t(db, locale, it.key, it.vars) + (extra ? ` (${extra})` : "") : o.label;
+  // no actions left: End turn is the thing to do (paid actions are no longer offered, free ones stay)
+  const me = game.pending?.kind === "turn" ? game.invs[game.pending.inv] : null;
+  const spent = !!me && me.actionsLeft + me.restrictedActions.reduce((n, r) => n + r.left, 0) === 0;
+  return (
+    <button className={`rail-btn ${it.primary ? "primary" : ""} ${spent && it.key === "rail.endTurn" ? "glow" : ""}`} disabled={busy} onClick={() => choose(o.id)} title={o.label} data-tip={TIP_OF[it.key ?? ""]}>
+      <span className="rail-icon">{it.img ? <img src={it.img} alt="" /> : it.icon ? <Icon name={it.icon} size={30} /> : it.symbol}</span>
+      <span className="rail-label">{label}</span>
+    </button>
+  );
+}
+
+/** the pending choice of the investigator whose hand is on screen, or null (none, the phase pause, the end, a hidden hand) */
+function useOwnChoice() {
+  const game = useGame((s) => s.game) as GameState;
   const privacy = useGame((s) => s.privacy);
   const revealedFor = useGame((s) => s.revealedFor);
   const p = game.pending;
-  // the pause before a phase speaks for itself (the phase title)
-  if (!p || game.phase === "ended" || p.kind === "phase") return null;
-  if (!handVisible(privacy, game.order.length, viewerOf(game), revealedFor)) return null;
-  const parts = promptParts(p, game, db, locale);
-  // no translation for this prompt: the engine's English text, without the leading name (the banner shows it)
-  const prefix = `${db.cards[p.inv].name}:`;
-  const fallback = p.prompt.startsWith(prefix) ? p.prompt.slice(prefix.length).trim() : p.prompt;
+  if (!p || game.phase === "ended" || !handVisible(privacy, game.order.length, viewerOf(game), revealedFor)) return null;
+  return p;
+}
+
+/** who decides, what to tap in plain words, and the buttons that answer the question (Done, Pass, End turn…) */
+export function InstructionBar() {
+  const game = useGame((s) => s.game) as GameState;
+  const locale = useGame((s) => s.locale);
+  const busy = useGame((s) => !!s.current || s.queue.length > 0);
+  const p = useOwnChoice();
+  // while a phase step plays out, its caption has this place
+  const caption = useCaption();
+  const held = useHeld();
+  // the pause before a phase speaks for itself (the phase title); while events play the bar shows no choice
+  if (busy || caption !== null || held || !p || p.kind === "phase") return null;
+  const viewer = viewerOf(game);
+  const buttons = p.options.filter((o) => optionHome(o, game, viewer) === "bar");
   return (
-    <div className="prompt-banner">
-      <Sentence parts={[{ t: "inv", id: p.inv }, { t: "text", s: ": " }, ...(parts ?? [{ t: "text", s: fallback }])]} size={30} />
+    <div className="instruction-bar" data-tip="bar">
+      <Sentence parts={[{ t: "inv", id: p.inv }, { t: "text", s: ": " }, ...instructionParts(p, game, db, locale)]} size={30} />
+      {buttons.length > 0 && (
+        <div className="bar-buttons">
+          {buttons.map((o) => (
+            <OptionButton key={o.id} o={o} game={game} busy={busy} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
 
-/** options that belong to no card, as icon buttons on the right side next to the hand */
+/** the actions that stand for something to do (Draw, Gain resource, Investigate), as icon buttons next to the hand */
 export function ActionRail() {
   const game = useGame((s) => s.game) as GameState;
-  const locale = useGame((s) => s.locale);
-  const privacy = useGame((s) => s.privacy);
-  const revealedFor = useGame((s) => s.revealedFor);
   const busy = useGame((s) => !!s.current || s.queue.length > 0);
-  const choose = useGame((s) => s.choose);
-  const p = game.pending;
-  const viewer = viewerOf(game);
-  if (!p || game.phase === "ended" || !handVisible(privacy, game.order.length, viewer, revealedFor)) return null;
-  const items = p.options.filter((o) => onRail(o, game, viewer));
+  const p = useOwnChoice();
+  if (!p) return null;
+  const items = p.options.filter((o) => onRail(o, game, viewerOf(game)));
   if (!items.length) return null;
   return (
     <div className={`action-rail ${busy ? "busy" : ""}`}>
-      {items.map((o) => {
-        const it = railItem(o);
-        // costs and extra detail stay visible: "[2 actions]" suffixes come from the engine label
-        const extra = /\[(\d+ actions)\]$/.exec(o.label)?.[1];
-        const label = it.key ? t(db, locale, it.key, it.vars) + (extra ? ` (${extra})` : "") : o.label;
-        return (
-          <button key={o.id} className={`rail-btn ${it.primary ? "primary" : ""}`} disabled={busy} onClick={() => choose(o.id)} title={o.label}>
-            <span className="rail-icon">{it.img ? <img src={it.img} alt="" /> : it.icon ? <Icon name={it.icon} size={30} /> : it.symbol}</span>
-            <span className="rail-label">{label}</span>
-          </button>
-        );
-      })}
+      {items.map((o) => (
+        <OptionButton key={o.id} o={o} game={game} busy={busy} />
+      ))}
     </div>
   );
 }
@@ -128,7 +153,7 @@ export function UndoButton() {
   }, [undo]);
   if (ended) return null;
   return (
-    <button className="undo-btn" disabled={!able || intro} onClick={undo} title={t(db, locale, able ? "undo.hint" : "undo.blocked")}>
+    <button className="undo-btn" data-tip="undo" disabled={!able || intro} onClick={undo} title={t(db, locale, able ? "undo.hint" : "undo.blocked")}>
       ↶ {t(db, locale, "undo.label")}
     </button>
   );

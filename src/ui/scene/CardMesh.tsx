@@ -7,7 +7,7 @@ import type { CardInst } from "../../engine/types";
 import { db, useGame } from "../context";
 import { CARD_H, CARD_W, type Placement } from "../layout";
 import { Portrait } from "../Portrait";
-import { TokenBadges } from "../TokenBadges";
+import { IntentBadge, TokenBadges } from "../TokenBadges";
 import { TokenPile } from "../TokenPile";
 import { mapDealing, mapMoving, mapPending, reducedMotion } from "../arrivals";
 import { cardFace, cardFrame } from "./cardShape";
@@ -179,6 +179,13 @@ export function CardMesh({ inst, place, highlighted, hovered, exhausted, onClick
           <TokenBadges inst={inst} skip={isLocation ? ["clues"] : []} />
         </div>
       </Html>
+      {inst.zone === "enemy" && (
+        <Html position={[-w / 2 + 0.05, -h / 2 + 0.05, 0.02]} zIndexRange={[20, 0]}>
+          <div className="map-intent" ref={overlay}>
+            <IntentBadge inst={inst} />
+          </div>
+        </Html>
+      )}
       {/* clues on a location: a pile of clue tokens with the total, like the stat bar */}
       {isLocation && inst.clues > 0 && (
         <Html position={[0, -h * 0.12, 0.03]} center zIndexRange={[20, 0]} pointerEvents="none">

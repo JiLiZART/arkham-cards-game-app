@@ -21,6 +21,40 @@ select { font: inherit; background: #221c14; color: var(--ink); border: 1px soli
 .game { position: fixed; inset: 0; background: #1a120b url(/table/table-bg.jpg) center / 100% 100% no-repeat; }
 .topbar { position: absolute; top: 0; left: 0; right: 0; display: flex; flex-wrap: wrap; gap: 6px 18px; align-items: center; padding: 6px 12px; background: var(--panel); border-bottom: 1px solid #4a3b22; font-size: 14px; z-index: 50; }
 .topbar .buttons { margin-left: auto; display: flex; gap: 6px; }
+/* the round tracker: scenario and round, the four phases, and in the investigation phase the turns with their action pips */
+.ribbon { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; min-width: 0; }
+.ribbon-scen { display: flex; align-items: baseline; gap: 8px; margin-right: 10px; }
+.ribbon-round { color: var(--gold); font-variant: small-caps; }
+.ribbon-seg { display: flex; align-items: center; gap: 4px; }
+.ribbon-seg + .ribbon-seg::before { content: "›"; color: #6a5a3a; margin-right: 2px; }
+.ribbon-phase { padding: 3px 10px; border-radius: 12px; border: 1px solid transparent; color: var(--muted); white-space: nowrap; }
+.ribbon-phase.done { color: #7d725c; }
+.ribbon-phase.skipped { color: #5d5444; text-decoration: line-through; }
+.ribbon-phase.current { color: #1a120b; background: var(--gold); border-color: #ffd27a; font-weight: bold; box-shadow: 0 0 10px #c9a95c88; }
+.ribbon-phase .short { display: none; }
+.ribbon-turns { display: flex; gap: 8px; margin: 0 6px; }
+.ribbon-turn { display: flex; align-items: center; gap: 4px; }
+.ribbon-turn .portrait { border-width: 2px; }
+.ribbon-turn.done { opacity: 0.45; filter: grayscale(0.7); }
+.pips { display: flex; gap: 3px; }
+.pip { width: 10px; height: 10px; border-radius: 50%; border: 1px solid var(--gold); background: transparent; transform: scale(0.7); transition: transform 0.3s ease-out, background-color 0.3s ease-out; }
+.pip.filled { background: #ffd27a; transform: scale(1); box-shadow: 0 0 4px #ffd27a99; }
+@media (prefers-reduced-motion: reduce) { .pip { transition: none; } }
+@media (max-width: 700px) {
+  .ribbon-scen b, .ribbon-phase .full { display: none; }
+  .ribbon-phase .short { display: inline; }
+  .ribbon-phase { padding: 3px 7px; }
+}
+/* enemy intents: what the enemy does in the coming enemy phase */
+.intent { display: inline-flex; align-items: center; gap: 2px; padding: 1px 5px; border-radius: 10px; font: bold 12px sans-serif; color: #fff; background: #3a3022; border: 1px solid #6a5a3a; box-shadow: 0 1px 3px #000c; pointer-events: auto; }
+.intent.attack { background: #7a1e14; border-color: #e0573f; }
+.intent.hunt { background: #5a3a10; border-color: #e0a03f; }
+.intent.rest { background: #2a2a2a; color: #aaa; }
+.intent b { font-weight: bold; }
+.mini-card > .intent { position: absolute; left: -6px; top: -8px; }
+.map-intent { transform: translate(-30%, -70%); }
+.hover-face > .intent { position: absolute; left: 6px; bottom: 6px; right: 6px; font-size: 14px; padding: 4px 8px; }
+.intent-words { font-weight: normal; margin-left: 4px; }
 
 
 .skilltest { background: var(--panel); border: 1px solid var(--gold); border-radius: 10px; padding: 8px 16px; text-align: center; flex: none; }
@@ -98,7 +132,7 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 .hand-fan:has(.fan-card:hover), .hand-fan:focus-within, .hand-fan:has(.dragging), .hand-fan:has(.focused) { z-index: 60; }
 /* transforms come from the Dock frame loop in HandFan (pivot at the bottom centre so cards grow upward) */
 .fan-card { position: absolute; padding: 0; border: 0; border-radius: 14px; background: transparent; cursor: pointer; pointer-events: auto;
-  transform-origin: 50% 100%; transition: box-shadow 0.18s, left 0.3s ease-out; box-shadow: 0 4px 14px #000a; touch-action: none; perspective: 1400px; }
+  transform-origin: 50% 100%; transition: box-shadow 0.18s, left 0.3s ease-out, filter 0.15s; box-shadow: 0 4px 14px #000a; touch-action: none; perspective: 1400px; }
 /* face and back for the draw flip (the back only shows while a drawn card is turning over) */
 .fan-flip { position: absolute; inset: 0; display: block; transform-style: preserve-3d; }
 .ff-front, .ff-back { position: absolute; inset: 0; display: block; backface-visibility: hidden; border-radius: 14px; }
@@ -126,6 +160,10 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 /* markers only take the pointer when they can be dragged; otherwise clicks reach the location card */
 .mini { pointer-events: none; transition: filter 0.15s; }
 .mini.dimmed { filter: brightness(0.45); }
+/* outside a choice's spotlight: dimmed, still readable on hover */
+.mini-card.dimmed, .fan-card.dimmed, .pile-card.dimmed, .portrait-btn.dimmed, .inv-token.dimmed { filter: brightness(0.45); }
+.mini-card, .pile-card, .portrait-btn, .inv-token { transition: filter 0.15s; }
+.fan-card.dimmed:hover, .fan-card.dimmed.focused, .mini-card.dimmed:hover { filter: brightness(0.8); }
 .mini.draggable { cursor: grab; pointer-events: auto; }
 .engaged-badge { transform: translate(-50%, -50%); }
 .stat-name { font-weight: bold; color: var(--gold); display: flex; align-items: center; gap: 4px; }
@@ -158,12 +196,17 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 /* prompt banner + skill test, top centre; non-card options on the right rail next to the hand */
 .center-col { position: absolute; top: 58px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 6px; z-index: 46; pointer-events: none; max-width: 60vw; }
 .center-col > * { pointer-events: auto; }
-.prompt-banner { background: var(--panel); border: 1px solid var(--gold); border-radius: 22px; padding: 6px 20px 6px 8px; font: 22px/1.3 Alegreya, Georgia, serif; text-align: center; box-shadow: 0 3px 12px #000c; }
-.prompt-banner .fe-num { font-size: 1.15em; color: #fff; }
-.prompt-banner .fe-inv b { font-family: Teutonic, TeutonicRU, Georgia, serif; font-weight: normal; font-size: 1.05em; }
+.step-caption { background: rgba(18, 14, 10, 0.9); border: 1px solid #6a5634; border-radius: 22px; padding: 6px 22px; font: italic 22px/1.3 Alegreya, Georgia, serif; color: var(--gold); text-align: center; box-shadow: 0 3px 12px #000c; animation: caption-in 0.25s ease-out; pointer-events: none; }
+.step-caption.held { display: flex; align-items: center; gap: 14px; }
+.step-caption .caption-next { pointer-events: auto; font: 18px Alegreya, Georgia, serif; font-style: normal; padding: 4px 14px; }
+@keyframes caption-in { from { opacity: 0; transform: translateY(-8px); } }
+@media (prefers-reduced-motion: reduce) { .step-caption { animation: none; } }
+.instruction-bar { display: flex; align-items: center; gap: 14px; background: var(--panel); border: 1px solid var(--gold); border-radius: 22px; padding: 6px 14px 6px 8px; font: 22px/1.3 Alegreya, Georgia, serif; text-align: center; box-shadow: 0 3px 12px #000c; }
+.instruction-bar .fe-num { font-size: 1.15em; color: #fff; }
+.instruction-bar .fe-inv b { font-family: Teutonic, TeutonicRU, Georgia, serif; font-weight: normal; font-size: 1.05em; }
 .fe-glyphs { display: inline-flex; align-items: center; gap: 1px; color: var(--gold); vertical-align: middle; margin: 0 3px; }
 .fe-glyphs .fe-num { margin-left: 4px; color: #fff; }
-.prompt-banner b { color: var(--gold); }
+.instruction-bar b { color: var(--gold); }
 .right-dock { position: fixed; right: 12px; bottom: 14px; width: 160px; display: flex; flex-direction: column; gap: 8px; z-index: 48; }
 .action-rail { display: flex; flex-direction: column; gap: 6px; }
 .camera-buttons { display: flex; gap: 6px; }
@@ -171,8 +214,15 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 .undo-btn:disabled { opacity: 0.45; cursor: default; }
 .camera-buttons button { flex: 1; font-size: 13px; padding: 4px 6px; background: var(--panel); }
 .action-rail.busy { opacity: 0.6; }
+.bar-buttons { display: flex; gap: 6px; flex: none; }
+.bar-buttons .rail-btn { font: 16px Alegreya, Georgia, serif; padding: 4px 12px 4px 6px; border-radius: 16px; }
+.bar-buttons .rail-icon { width: 26px; height: 26px; font-size: 18px; }
 .rail-btn { display: flex; align-items: center; gap: 8px; text-align: left; padding: 6px 10px; font-size: 15px; background: var(--panel); border-radius: 10px; }
 .rail-btn.primary { background: #5a4520; }
+/* nothing left to spend: End turn calls for the click */
+.rail-btn.glow { border-color: #ffd27a; box-shadow: 0 0 0 1px #ffd27a, 0 0 16px 4px #ffd27a99; animation: rail-glow 1.6s ease-in-out infinite alternate; }
+@keyframes rail-glow { from { box-shadow: 0 0 0 1px #ffd27a, 0 0 8px 2px #ffd27a66; } to { box-shadow: 0 0 0 1px #ffd27a, 0 0 18px 6px #ffd27aaa; } }
+@media (prefers-reduced-motion: reduce) { .rail-btn.glow { animation: none; } }
 .rail-icon { width: 32px; height: 32px; display: grid; place-items: center; font-size: 22px; color: var(--gold); flex: none; }
 .rail-icon .icon-img { object-fit: contain; }
 .rail-icon > img { height: 32px; border-radius: 3px; }
@@ -305,7 +355,6 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 .stat-row { display: flex; gap: 14px; align-items: center; }
 .stat-bar .stat b { font-size: 38px; line-height: 1; }
 .stat-bar .stat small { font-size: 22px; }
-.stat-row.vitals .stat.actions { color: var(--gold); gap: 4px; }
 .stat-row.skills { border-top: 1px solid #4a3b22; padding-top: 8px; justify-content: space-between; }
 /* big numbers use lining figures (Alegreya's old-style 0 reads as an "o") */
 .stat-dock b, .inv-token b, .scenario-badge b, .pile-count { font-variant-numeric: lining-nums; }
@@ -368,6 +417,7 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 .feed { width: 100%; flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 6px; overflow: hidden; pointer-events: none; }
 .feed > * { pointer-events: auto; }
 .feed.journal { overflow-y: auto; background: var(--panel); border: 1px solid #5a4a30; border-radius: 12px; padding: 8px; pointer-events: auto; }
+.feed-step { align-self: stretch; border-top: 1px solid #6a5634; color: var(--gold); padding: 4px 6px 0; font: italic 15px/1.3 Alegreya, Georgia, serif; text-align: center; }
 .feed-title { color: var(--gold); font-size: 22px; padding: 0 4px 4px; }
 .feed-item { background: rgba(18, 14, 10, 0.86); border: 1px solid #4a3b22; border-left: 4px solid var(--gold); border-radius: 10px; padding: 5px 9px; font: 15px/1.35 Alegreya, Georgia, serif; color: var(--ink); box-shadow: 0 3px 10px #0008;
   transition: transform 0.35s cubic-bezier(.2,.8,.2,1), opacity 0.4s ease; animation: feed-in 0.3s ease-out; }
@@ -426,6 +476,10 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
   background: linear-gradient(90deg, transparent, rgba(6, 5, 4, 0.82) 22%, rgba(6, 5, 4, 0.82) 78%, transparent); animation: phase-band 2.6s ease-in-out forwards; }
 .phase-title-name { font: 76px/1.05 Teutonic, TeutonicRU, Georgia, serif; color: #f2dfae; text-shadow: 0 4px 18px #000, 0 0 30px #c9a95c55; animation: phase-name 2.6s cubic-bezier(.2,.7,.2,1) forwards; }
 .phase-title-round { margin-top: 8px; font: italic 26px Alegreya, Georgia, serif; color: var(--muted); letter-spacing: 0.3em; text-transform: uppercase; animation: phase-round 2.6s ease-out forwards; }
+/* the turn title: a shorter band with the investigator's portrait */
+.turn-title, .turn-title .phase-title-name { animation-duration: 1.2s; }
+.turn-title { display: flex; align-items: center; justify-content: center; gap: 18px; padding: 16px 0; }
+.turn-title .phase-title-name { font-size: 54px; }
 @keyframes phase-band { 0% { opacity: 0; } 18% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; } }
 @keyframes phase-name { 0% { opacity: 0; letter-spacing: 0; translate: 0 14px; } 22% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; letter-spacing: 0.12em; translate: 0 -6px; } }
 @keyframes phase-round { 0%, 15% { opacity: 0; } 35% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; } }
@@ -513,3 +567,17 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 .dv-front .card-options { left: 12%; right: 12%; bottom: 14px; }
 .dv-front .card-options button { font-size: 18px; padding: 8px 14px; }
 @keyframes card-option-in { from { opacity: 0; translate: 0 6px; } }
+
+/* a first-time player's tip: beside what it is about, never taking the pointer but its button; above the phase title and the chaos draw, which it may accompany */
+.tip-card { position: fixed; z-index: 77; pointer-events: none; padding: 12px 14px 10px; background: #f3e6c4; color: #2a1f12; border: 2px solid var(--gold); border-radius: 12px; box-shadow: 0 8px 24px #000c; font: 17px/1.35 Alegreya, Georgia, serif; animation: tip-in 0.2s ease-out; }
+.tip-card.above { transform: translateY(-100%); }
+.tip-card p { margin: 0 0 8px; }
+.tip-card button { pointer-events: auto; float: right; padding: 3px 14px; font: 15px Alegreya, Georgia, serif; background: #5a4520; color: #f3e6c4; border-radius: 12px; }
+.tip-arrow { position: absolute; width: 14px; height: 14px; margin-left: -7px; background: #f3e6c4; border: 2px solid var(--gold); transform: rotate(45deg); }
+.tip-card.below .tip-arrow { top: -9px; border-right: 0; border-bottom: 0; }
+.tip-card.above .tip-arrow { bottom: -9px; border-left: 0; border-top: 0; }
+.tip-card.right .tip-arrow { left: -9px; margin: -7px 0 0 0; border-top: 0; border-right: 0; }
+.tip-card.left .tip-arrow { right: -9px; margin: -7px 0 0 0; border-left: 0; border-bottom: 0; }
+@keyframes tip-in { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .tip-card { animation: none; } }
+.screen.howto p { font: 19px/1.5 Alegreya, Georgia, serif; max-width: 62ch; margin: 6px 0 0; }

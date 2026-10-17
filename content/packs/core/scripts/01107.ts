@@ -19,8 +19,9 @@ export default {
         if (e.engagedWith || !e.location) continue;
         const next = stepsToward(g, e.location, [parlor.id])[0];
         if (next) {
+          const from = e.location;
           e.location = next;
-          emit(g, "enemyMove", `${def(g, e.id).name} moves toward the Parlor`, { card: e.id, data: { to: next } });
+          emit(g, "enemyMove", `${def(g, e.id).name} moves toward the Parlor`, { card: e.id, data: { from, to: next } });
         }
       }
     },

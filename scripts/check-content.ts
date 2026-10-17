@@ -2,6 +2,11 @@
 import { loadContentFromDisk } from "../src/content/node";
 
 const { db, errors } = await loadContentFromDisk();
+// every prompt has an instruction for the bar, and the tips and How to play are written, in every language
+const en = db.i18n.en?.ui ?? {};
+const needed = Object.keys(en).flatMap((k) => (k.startsWith("prompt.") ? [k, `instruction.${k.slice(7)}`] : k.startsWith("tip.") || k.startsWith("howto.") ? [k] : []));
+for (const [locale, { ui }] of Object.entries(db.i18n))
+  for (const key of needed) if (!(key in ui)) errors.push({ file: `content/i18n/${locale}/ui.json`, path: key, message: "missing string" });
 for (const e of errors) console.error(`✗ ${e.file} ${e.path}: ${e.message}`);
 console.log(
   `${Object.keys(db.cards).length} cards, ${Object.keys(db.investigators).length} investigators, ${Object.keys(db.decks).length} decks, ` +

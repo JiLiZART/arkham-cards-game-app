@@ -43,6 +43,11 @@ export function emit(g: G, type: string, text: string, extra: Partial<GameEvent>
   if (g.s.log.length > LOG_LIMIT) g.s.log.splice(0, g.s.log.length - LOG_LIMIT);
 }
 
+/** marks the start of an automated step of a phase in the log (the UI's captions); never a choice */
+export function logStep(g: G, step: string, who?: string) {
+  emit(g, "step", who ? `${invName(g, who)}: ${step}` : step, { ...(who ? { inv: who } : {}), data: { step, phase: g.s.phase } });
+}
+
 // ---------- queue ----------
 /** push steps so that steps[0] resolves first */
 export function push(g: G, ...steps: Step[]) {

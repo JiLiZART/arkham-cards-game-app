@@ -41,3 +41,9 @@
 - **Instruction strings drift from the prompts.** `check:content` enforces key parity, not meaning. The tutorial change reviews the wording once more.
 - **Commit spotlight dims cards the player may still want to read.** Dimmed hand cards remain hoverable and readable; dim is brightness, not opacity.
 - **End turn moving off the rail** changes a habit for current players. One-time; the README notes it.
+
+## As built
+
+- **Decision 1:** the bar takes every option of no card except Draw, Resource and Investigate, not only those `railItem` marks primary, so Take nothing, Resign and a card script's unnamed choices answer in the bar too, as the spec lists. `railItem` is unchanged; one `OptionButton` renders both the bar's and the rail's buttons.
+- **Decision 2:** `instructionParts` reuses `promptParts` with an `"instruction"` prefix. `check:content` now fails when a locale lacks a `prompt.*` key or its `instruction.*` sibling, and the feed test checks their placeholders match between English and Russian. The turn instruction leaves out "then End turn" because the button sits beside it and the longer sentence wrapped.
+- **Decision 3:** `spotlightNow(game, viewer, playing, idle)` picks the source: the playing event's spotlight (even when it lights nothing), else the choice's once nothing plays, waits or holds the stage. A commit's spotlight also keeps the tested location or enemy and the tester bright. Choice spotlights carry `choice: true`, and only they dim the HUD's cards and portraits; an event's still dims the map alone, so short events don't flash the whole screen. Like the map's dim, the HUD dim is off under reduced motion.

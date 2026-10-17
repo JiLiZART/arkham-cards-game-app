@@ -3,7 +3,7 @@ import { botChoice } from "../engine/bot";
 import { dispatch } from "../engine/engine";
 import { db, giveCard, mutate, pick, putEnemy, skipMulligans, start } from "../engine/testkit";
 import type { GameEvent } from "../engine/types";
-import { feedEntry, FLOAT_KINDS, floatLife, HIDDEN, mergeLive, promptParts, shownCount, templateKey, type Part } from "./feed";
+import { captionIndex, feedEntry, FLOAT_KINDS, floatLife, HIDDEN, mergeLive, promptParts, shownCount, templateKey, type Part } from "./feed";
 
 const last = (log: GameEvent[], type: string) => [...log].reverse().find((e) => e.type === type)!;
 const placeholders = (s: string) => (s.match(/\{[\w:]+\}/g) ?? []).sort();
@@ -94,7 +94,7 @@ describe("feed entries", () => {
   it("every English feed, phase and prompt template has a Russian one with the same placeholders", () => {
     const en = db.i18n.en.ui;
     const ru = db.i18n.ru.ui;
-    for (const k of Object.keys(en).filter((k) => k.startsWith("feed.") || k.startsWith("phase.") || k.startsWith("prompt."))) {
+    for (const k of Object.keys(en).filter((k) => k.startsWith("feed.") || k.startsWith("phase.") || k.startsWith("prompt.") || k.startsWith("instruction."))) {
       expect(ru[k], k).toBeDefined();
       expect(placeholders(ru[k]), k).toEqual(placeholders(en[k]));
     }
@@ -162,5 +162,37 @@ describe("merged live feed", () => {
 
   it("two choices stay two lines", () => {
     expect(lines([ev("draw", R, r1), ev("draw", R, r2)], [0, 1])).toHaveLength(2);
+  });
+  it("phase steps: hidden from the live feed (without breaking a run), kept for the Journal", () => {
+    const g = start("the-gathering", ["01001", "01002"], 1).state;
+    const [a, b] = g.order;
+    const log = [
+      { type: "step", text: "upkeep", data: { step: "upkeep" } },
+      { type: "draw", text: "", inv: a, card: g.invs[a].hand[0] },
+      { type: "step", text: "x", data: { step: "hunters" } },
+      { type: "draw", text: "", inv: b, card: g.invs[b].hand[0] },
+    ];
+    const state = { ...g, log };
+    const entries = new Map(log.map((e, i) => [i, feedEntry(e, state, db, "en")]));
+    expect(entries.get(0)).toMatchObject({ kind: "step" });
+    expect(entries.get(0)!.parts.map((p) => (p.t === "text" ? p.s : "")).join("")).toMatch(/Upkeep/);
+    const lines = mergeLive(state, entries, log.length, [0], db, "en");
+    expect(lines.map((l) => l.entry.kind)).toEqual(["merged"]);
+    expect(FLOAT_KINDS.has("step")).toBe(false);
+  });
+  it("caption: the latest step of the phase at or before the playing event", () => {
+    const ev = (type: string, step?: string): GameEvent => ({ type, text: "", data: step ? { step } : {} });
+    const log = [ev("step", "upkeep"), ev("draw"), ev("phase"), ev("step", "hunters"), ev("enemyMove"), ev("step", "attacks"), ev("attack"), ev("damage"), ev("phase"), ev("turn"), ev("attack")];
+    // the hunter's move plays: "Hunters move", even though the feed already shows up to the attack
+    expect(captionIndex(log, { logIndex: 4 }, [{ logIndex: 6 }], 6, false, "turn")).toBe(3);
+    // the attack plays (also after a reaction choice inside the step)
+    expect(captionIndex(log, { logIndex: 6 }, [{ logIndex: 7 }], 7, false, "turn")).toBe(5);
+    // nothing plays and the choice is offered: the prompt has the slot
+    expect(captionIndex(log, null, [], 8, false, "turn")).toBe(null);
+    // an attack of opportunity in the next phase: an earlier phase's step is never shown
+    expect(captionIndex(log, { logIndex: 10 }, [], 11, false, "turn")).toBe(null);
+    // drawn cards in the showcase after upkeep: still captioned; a phase pause: not
+    expect(captionIndex(log.slice(0, 2), null, [], 2, true, "turn")).toBe(0);
+    expect(captionIndex(log.slice(0, 2), null, [], 2, true, "phase")).toBe(null);
   });
 });

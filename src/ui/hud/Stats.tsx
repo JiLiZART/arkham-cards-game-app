@@ -4,13 +4,13 @@ import { SKILLS } from "../../content/schema";
 import { maxHealth, maxSanity, skillValue } from "../../engine/core";
 import type { ChoiceOption, GameState, InvId } from "../../engine/types";
 import { db, gameStore, useGame } from "../context";
-import { Glyph, Icon, Stat } from "../Icon";
+import { Icon, Stat } from "../Icon";
 import { isIcon } from "../icons";
 import { optionHome } from "../optionHome";
 import { Portrait } from "../Portrait";
 import { TokenPile } from "../TokenPile";
 import { viewerOf } from "../store";
-import { useView } from "../view";
+import { useDimmed, useView } from "../view";
 import { formatText } from "./Hud";
 import { OptionButtons, useCardOptions } from "./Modals";
 import { STAT_BAR_W } from "./fan";
@@ -46,7 +46,6 @@ export function invNumbers(game: GameState, i: InvId) {
     maxSanity: maxSanity(g, i),
     resources: st.resources,
     clues: st.clues,
-    actions: game.active === i ? st.actionsLeft : null,
     skills: SKILLS.map((s) => [s, skillValue(g, i, s)] as const),
   };
 }
@@ -64,7 +63,7 @@ export function TokenStack({ kind, value, size = 40 }: { kind: "resource" | "clu
 }
 
 /** stats shared by the viewer's bar and the investigator modal */
-export function StatBody({ inv, onPortrait, legal, options }: { inv: InvId; onPortrait?: () => void; legal?: boolean; options?: ChoiceOption[] }) {
+export function StatBody({ inv, onPortrait, legal, options, dimmed }: { inv: InvId; onPortrait?: () => void; legal?: boolean; options?: ChoiceOption[]; dimmed?: boolean }) {
   const game = useGame((s) => s.game) as GameState;
   const locale = useGame((s) => s.locale);
   const n = invNumbers(game, inv);
@@ -78,7 +77,7 @@ export function StatBody({ inv, onPortrait, legal, options }: { inv: InvId; onPo
       </div>
       <div className="stat-bar">
         <div className="stat-head">
-          <button className={`portrait-btn ${legal ? "legal" : ""}`} onClick={onPortrait} title={tx.name} disabled={!onPortrait}>
+          <button data-tip="portrait" className={`portrait-btn ${legal ? "legal" : ""} ${dimmed ? "dimmed" : ""}`} onClick={onPortrait} title={tx.name} disabled={!onPortrait}>
             <Portrait code={inv} size={120} active={game.active === inv} />
           </button>
           <div className="stat-who">
@@ -93,12 +92,6 @@ export function StatBody({ inv, onPortrait, legal, options }: { inv: InvId; onPo
         <div className="stat-row vitals">
           <FlashStat icon="health" value={n.health} max={n.maxHealth} size={44} label={tr("stat.health")} />
           <FlashStat icon="sanity" value={n.sanity} max={n.maxSanity} size={44} label={tr("stat.sanity")} />
-          {n.actions !== null && (
-            <span className="stat actions" title={`${tr("stat.actions")} ${n.actions}`} aria-label={`${tr("stat.actions")} ${n.actions}`}>
-              <Glyph name="action" size={36} title={`${tr("stat.actions")} ${n.actions}`} />
-              <b>{n.actions}</b>
-            </span>
-          )}
         </div>
         <div className="stat-row skills">
           {n.skills.map(([s, v]) => (
@@ -110,17 +103,18 @@ export function StatBody({ inv, onPortrait, legal, options }: { inv: InvId; onPo
   );
 }
 
-/** the viewing investigator, bottom-left: big portrait, health/sanity/actions, skills; resources and clues as token piles above */
+/** the viewing investigator, bottom-left: big portrait, health and sanity, skills; resources and clues as token piles above */
 export function StatBar() {
   const game = useGame((s) => s.game) as GameState;
   const viewer = viewerOf(game);
   const cardId = viewer ? game.invs[viewer]?.cardId : null;
   const options = useCardOptions([cardId]);
+  const dimmed = useDimmed(viewer ?? "");
   if (!viewer || !game.invs[viewer] || !cardId) return null;
   const legal = options.some((o) => optionHome(o, game, viewer) === "portrait");
   return (
     <div className="stat-dock" style={{ width: STAT_BAR_W }}>
-      <StatBody inv={viewer} legal={legal} options={options.filter((o) => optionHome(o, game, viewer) === "portrait")} onPortrait={() => useView.getState().setModal({ card: cardId })} />
+      <StatBody inv={viewer} legal={legal} dimmed={dimmed} options={options.filter((o) => optionHome(o, game, viewer) === "portrait")} onPortrait={() => useView.getState().setModal({ card: cardId })} />
     </div>
   );
 }

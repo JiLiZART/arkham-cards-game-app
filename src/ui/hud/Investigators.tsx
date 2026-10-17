@@ -8,7 +8,7 @@ import { db, gameStore, useGame } from "../context";
 import { optionHome, optionOwner } from "../optionHome";
 import { Portrait } from "../Portrait";
 import { viewerOf } from "../store";
-import { useView } from "../view";
+import { useDimmed, useView } from "../view";
 import { flyGhost, STAGGER_MS } from "./flights";
 import { Modal, OptionButtons, useCardOptions } from "./Modals";
 import { RESOLVE_BOX } from "./Reveal";
@@ -75,6 +75,7 @@ function InvToken({ inv }: { inv: InvId }) {
     for (const id of known.current.ids) if (!hand.includes(id)) known.current.ids.delete(id);
   });
   const options = useInvOptions(inv);
+  const dimmed = useDimmed(inv);
   const n = invNumbers(game, inv);
   const st = game.invs[inv];
   const name = cardText(db, inv, locale).name;
@@ -82,7 +83,7 @@ function InvToken({ inv }: { inv: InvId }) {
     <button
       ref={ref}
       data-inv={inv}
-      className={`inv-token ${game.active === inv ? "active" : ""} ${options.length ? "legal" : ""} ${st.status}`}
+      className={`inv-token ${game.active === inv ? "active" : ""} ${options.length ? "legal" : ""} ${st.status} ${dimmed ? "dimmed" : ""}`}
       onClick={() => useView.getState().setModal({ inv })}
       title={st.status !== "playing" ? `${name} (${st.status})` : name}
     >

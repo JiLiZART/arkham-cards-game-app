@@ -8,7 +8,7 @@ import { domPlace, lastRects, noteLocalMove, originRect, rememberRect, takeArriv
 import { placeDetails } from "../details";
 import { handVisible } from "../scene/Table";
 import { viewerOf } from "../store";
-import { useView } from "../view";
+import { outsideSpotlight, useView } from "../view";
 import { boxTransform, dockRadius, dockRect, dockTransform, dockWeight, FAN_CARD_H, FAN_CARD_W, FAN_LEGAL_RAISE, FAN_REST_VISIBLE, fanLayout, fanWidth, hoverScale, showBox, STAT_BAR_W } from "./fan";
 import { flyDraw, flyIn, STAGGER_MS } from "./flights";
 import { DETAILS_W, HandDetails } from "./HandDetails";
@@ -43,6 +43,7 @@ export function HandFan() {
   const choose = useGame((s) => s.choose);
   const openMenu = useView((s) => s.openMenu);
   const setHovered = useView((s) => s.setHovered);
+  const spotlight = useView((s) => s.spotlight);
   const vw = useViewportWidth();
   const [drag, setDrag] = useState<{ id: InstId; startX: number; startY: number; dx: number; dy: number } | null>(null);
   const dragRef = useRef(drag);
@@ -238,7 +239,7 @@ export function HandFan() {
   return (
     <>
       {fi >= 0 && <HandDetails code={game.cards[hand[fi]].code} rect={dockRect(slots[fi], weights.current.get(hand[fi]) ?? 0, k, raiseOf(hand[fi]), FAN_LEFT, innerHeight)} boxRef={detailsBox} />}
-      <div className="hand-fan" style={{ left: FAN_LEFT, width }} aria-label="Your hand" onPointerMove={onMove} onPointerLeave={onLeave}>
+      <div className="hand-fan" data-tip="hand" style={{ left: FAN_LEFT, width }} aria-label="Your hand" onPointerMove={onMove} onPointerLeave={onLeave}>
         {hand.map((id, i) => {
           const s = slots[i];
           const opts = optionsFor(id);
@@ -250,7 +251,7 @@ export function HandFan() {
                 if (el) els.current.set(id, el);
                 else els.current.delete(id);
               }}
-              className={`fan-card ${opts.length ? "legal" : ""} ${dragging ? "dragging" : ""} ${focus === id ? "focused" : ""}`}
+              className={`fan-card ${opts.length ? "legal" : ""} ${dragging ? "dragging" : ""} ${focus === id ? "focused" : ""} ${outsideSpotlight(spotlight, id) ? "dimmed" : ""}`}
               // transform and z-index come from the frame loop, except while dragging
               style={{
                 left: s.x - FAN_CARD_W / 2,

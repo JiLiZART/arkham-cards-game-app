@@ -4,7 +4,7 @@ import { CardFace } from "../CardFace";
 import { db, useGame } from "../context";
 import { placeHover } from "../hover";
 import { mapProjector } from "../scene/Table";
-import { TokenBadges } from "../TokenBadges";
+import { IntentBadge, TokenBadges } from "../TokenBadges";
 import { useView } from "../view";
 import { cardDetails } from "../details";
 import { DetailsColumn, LocationDetails } from "./HandDetails";
@@ -47,6 +47,7 @@ export function HoverCard() {
         <div className="hover-face" style={{ width: box.w, height: box.h }}>
           <CardFace code={inst.code} locale={locale} side={back ? "back" : "front"} />
           <TokenBadges inst={inst} size={28} />
+          <IntentBadge inst={inst} words />
         </div>
       </div>
       <DetailsColumn rows={cardDetails(db, inst.code, locale, { inst, game })} rect={{ x0: box.x, y0: box.y, x1: box.x + box.w, y1: box.y + box.h }} />

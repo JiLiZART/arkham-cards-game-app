@@ -12,7 +12,14 @@ import type { Action, ContentDb, GameEvent, GameSetup, GameState, InvId } from "
 export const SAVE_KEY = "ah:save";
 
 /** events worth a beat of animation; the rest update the table instantly */
-export const ANIMATED = new Set(["token", "testResult", "encounter", "attack", "spawn", "agendaAdvance", "actAdvance", "resolution", "enemyDefeated", "defeated", "damage", "enemyDamage", "clues", "doom"]);
+export const ANIMATED = new Set(["enemyMove", "token", "testResult", "encounter", "attack", "spawn", "agendaAdvance", "actAdvance", "resolution", "enemyDefeated", "defeated", "damage", "enemyDamage", "clues", "doom"]);
+
+/** in Tap mode these hold until the player continues; follow-on events (damage, clues, doom) play on their timers */
+const TAP = new Set(["encounter", "token", "testResult", "attack", "spawn", "enemyMove", "enemyDefeated", "defeated", "agendaAdvance", "actAdvance", "resolution"]);
+/** does this event wait for the player instead of a timer at this pace */
+export const holdsForTap = (e: GameEvent | null, pace: Pace) => pace === "tap" && !!e && TAP.has(e.type);
+/** a held event that needs the caption's Next (the token drawn by hand and the result panel have their own buttons) */
+export const needsNext = (e: GameEvent | null, pace: Pace, byHand: boolean) => holdsForTap(e, pace) && e!.type !== "testResult" && !(byHand && e!.type === "token");
 
 /** an animated event waiting to play, with its position in game.log (the feed never shows past the next one) */
 export type QueuedEvent = GameEvent & { logIndex: number };
@@ -22,15 +29,21 @@ export interface Save {
   campaign: CampaignState;
   setup: GameSetup | null;
   actions: Action[];
-  settings: { locale: string; privacy: boolean; drawByHand?: boolean };
+  settings: { locale: string; privacy: boolean; drawByHand?: boolean; pace?: Pace; tipsOn?: boolean };
 }
 
+/** how fast events play: today's timings, 1.6 times longer, or each big event waits for a tap */
+export type Pace = "normal" | "slow" | "tap";
+
 export interface UiState {
-  screen: "menu" | "game" | "log";
+  screen: "menu" | "game" | "log" | "howto";
   locale: string;
   privacy: boolean;
   /** chaos tokens are revealed by clicking a circle above the bag (otherwise automatically) */
   drawByHand: boolean;
+  pace: Pace;
+  /** a first-time player's tips are shown (see tips.ts) */
+  tipsOn: boolean;
   campaign: CampaignState | null;
   setup: GameSetup | null;
   actions: Action[];
@@ -57,6 +70,8 @@ export interface UiState {
   abandon(): void;
   setLocale(l: string): void;
   setDrawByHand(on: boolean): void;
+  setPace(p: Pace): void;
+  setTipsOn(on: boolean): void;
   setPrivacy(p: boolean): void;
   confirmHandoff(): void;
   nextEvent(): void;
@@ -116,9 +131,9 @@ export function replayWithFloor(db: ContentDb, setup: GameSetup, actions: Action
 export function createGameStore(db: ContentDb, storage: Storage = safeStorage()): StoreApi<UiState> {
   const store = createStore<UiState>((set, get) => {
     const persist = () => {
-      const { campaign, setup, actions, locale, privacy, drawByHand } = get();
+      const { campaign, setup, actions, locale, privacy, drawByHand, pace, tipsOn } = get();
       if (!campaign) return;
-      const save: Save = { version: ENGINE_VERSION, campaign, setup, actions, settings: { locale, privacy, drawByHand } };
+      const save: Save = { version: ENGINE_VERSION, campaign, setup, actions, settings: { locale, privacy, drawByHand, pace, tipsOn } };
       try {
         storage.setItem(SAVE_KEY, JSON.stringify(save));
       } catch {
@@ -134,7 +149,7 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage())
       set({ queue, current: get().current ?? queue[0], ...(get().current ? {} : { queue: queue.slice(1) }) });
     };
     return {
-      screen: "menu", locale: "en", privacy: true, drawByHand: true, campaign: null, setup: null, actions: [], game: null,
+      screen: "menu", locale: "en", privacy: true, drawByHand: true, pace: "normal", tipsOn: true, campaign: null, setup: null, actions: [], game: null,
       queue: [], current: null, revealedFor: null, undoFloor: 0, logMarks: [], notice: null, error: null,
 
       newCampaign(opts) {
@@ -194,7 +209,7 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage())
         } catch {
           return false;
         }
-        const settings = { locale: save.settings?.locale ?? "en", privacy: save.settings?.privacy ?? true, drawByHand: save.settings?.drawByHand ?? true };
+        const settings = { locale: save.settings?.locale ?? "en", privacy: save.settings?.privacy ?? true, drawByHand: save.settings?.drawByHand ?? true, pace: save.settings?.pace ?? "normal", tipsOn: save.settings?.tipsOn ?? true };
         if (save.version !== ENGINE_VERSION || !save.setup) {
           // the rules changed since this save: keep the campaign, restart the scenario
           set({
@@ -228,6 +243,14 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage())
       },
       setDrawByHand(drawByHand) {
         set({ drawByHand });
+        persist();
+      },
+      setPace(pace) {
+        set({ pace });
+        persist();
+      },
+      setTipsOn(tipsOn) {
+        set({ tipsOn });
         persist();
       },
       confirmHandoff() {
