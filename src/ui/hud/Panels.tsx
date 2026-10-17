@@ -8,6 +8,7 @@ import { useCardClick } from "../cardClick";
 import { groupTokens } from "../chaos";
 import { db, gameStore, useGame } from "../context";
 import { Glyph, Icon } from "../Icon";
+import { hasSymbol, scenarioIcon } from "../icons";
 import { introHides } from "../intro";
 import { backUrl, isEncounterCard } from "../images";
 import { handVisible } from "../scene/Table";
@@ -128,6 +129,12 @@ export function ScenarioPanel() {
   );
 }
 
+/** an encounter pile's icon: its top card's set when the top is face up, else the scenario's (a face-down top stays secret) */
+export function pileIcon(top: InstId | null, faceUp: boolean, game: Pick<GameState, "scenarioId" | "cards">): string {
+  const set = faceUp && top ? db.cards[game.cards[top]?.code]?.encounterSet : undefined;
+  return set ?? scenarioIcon(game.scenarioId);
+}
+
 function Pile({ label, count, top, faceUp, kind, id }: { label: string; count: number; top: InstId | null; faceUp: boolean; kind: "player" | "encounter"; id?: string }) {
   const locale = useGame((s) => s.locale);
   const game = useGame((s) => s.game) as GameState;
@@ -143,6 +150,11 @@ function Pile({ label, count, top, faceUp, kind, id }: { label: string; count: n
       >
         {count > 0 && (showTop ? <CardFace code={game.cards[top!].code} locale={locale} /> : <img src={backUrl(kind)} alt="" draggable={false} />)}
         <span className="pile-count">{count}</span>
+        {kind === "encounter" && count > 0 && hasSymbol(pileIcon(top, faceUp, game)) && (
+          <span className="pile-set">
+            <Glyph name={pileIcon(top, faceUp, game)} size={18} />
+          </span>
+        )}
       </button>
       <span className="pile-name">{label}</span>
     </div>

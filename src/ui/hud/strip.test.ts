@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { ChoiceOption } from "../../engine/types";
 import { abilitySymbol, stripAction } from "./ActionRail";
-import { stripCardWidth } from "./Panels";
+import { pileIcon, stripCardWidth } from "./Panels";
 
 describe("strip card width", () => {
   it("full size when there is room, smaller when crowded, never below the minimum", () => {
@@ -35,5 +35,15 @@ describe("ability symbols", () => {
     expect(abilitySymbol(o({ kind: "fight", enemy: "e1" }), game)).toBeNull();
     expect(abilitySymbol(o("pass"), game)).toBeNull();
     expect(abilitySymbol(o({ kind: "ability", card: "gone", index: 0 }), game)).toBeNull();
+  });
+});
+
+describe("encounter pile badges", () => {
+  const game = { scenarioId: "the-gathering", cards: { r: { code: "01163" } } } as never;
+  it("a face-down pile shows the scenario's icon; a face-up one its top card's set", () => {
+    expect(pileIcon(null, false, game)).toBe("the_gathering");
+    expect(pileIcon("r", false, game)).toBe("the_gathering");
+    expect(pileIcon("r", true, game)).toBe("striking_fear");
+    expect(pileIcon(null, true, game)).toBe("the_gathering");
   });
 });

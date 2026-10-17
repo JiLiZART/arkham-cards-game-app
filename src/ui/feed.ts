@@ -13,6 +13,8 @@ export type Part =
   | { t: "icon"; name: IconName }
   | { t: "token"; token: string }
   | { t: "outcome"; ok: boolean }
+  /** an encounter set's icon (its code is the sprite symbol) */
+  | { t: "set"; code: string }
   /** n copies of a sprite symbol (e.g. the action symbol) and the number */
   | { t: "glyphs"; name: string; n: number };
 
@@ -35,6 +37,8 @@ export const STEP = "step";
 /** events done by enemies (or the encounter deck) rather than an investigator */
 const ENEMY = new Set(["attack", "spawn", "enemyMove", "attackCancelled", "spawnFail"]);
 const ICONS = new Set<string>(["resource", "clue", "damage", "horror", "doom", "health", "sanity", "willpower", "intellect", "combat", "agility", "wild"]);
+/** entries that draw or reveal an encounter card: its set's icon goes before the card */
+const SET_ICON = new Set(["encounter", "reveal"]);
 const NUMERIC = new Set(["n", "damage", "horror", "total", "difficulty", "round", "amount", "actions", "left"]);
 
 /** template key for an event (some types have variants) */
@@ -105,11 +109,13 @@ export function feedEntry(e: GameEvent, game: GameState, db: ContentDb, locale: 
   if (HIDDEN.has(e.type)) return null;
   const key = templateKey(e);
   const template = t(db, locale, key);
-  const parts =
+  let parts =
     template === key
       ? // no template: a styled generic entry (who or what, then the engine's text)
         [...(e.inv && game.invs[e.inv] ? [{ t: "inv", id: e.inv } as Part] : e.card && game.cards[e.card] ? [{ t: "card", id: e.card } as Part] : []), { t: "text", s: ` ${e.text}` } as Part]
       : fillTemplate(template, e, game, db, locale);
+  const set = SET_ICON.has(e.type) && e.card && game.cards[e.card] ? db.cards[game.cards[e.card].code]?.encounterSet : undefined;
+  if (set) parts = parts.flatMap((p) => (p.t === "card" && p.id === e.card ? [{ t: "set", code: set } as Part, p] : [p]));
   const tone: Tone = ENEMY.has(e.type) ? "enemy" : e.inv ? "player" : "game";
   const mapCard = e.card && game.cards[e.card] && ["enemy", "location"].includes(game.cards[e.card].zone) ? e.card : undefined;
   const actor = tone === "enemy" ? { card: mapCard } : e.inv ? { inv: e.inv } : mapCard ? { card: mapCard } : null;

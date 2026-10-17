@@ -1,12 +1,12 @@
 import { useEffect, useLayoutEffect, useMemo, useReducer, useRef } from "react";
-import { cardText, t } from "../../content/i18n";
+import { cardText, encounterSetName, t } from "../../content/i18n";
 import type { GameState } from "../../engine/types";
 import { CardFace } from "../CardFace";
 import { ChaosToken } from "../ChaosToken";
 import { db, gameStore, useGame } from "../context";
 import { feedEntry, mergeLive, shownCount, STEP, type FeedEntry, type Part } from "../feed";
 import { Glyph, Icon } from "../Icon";
-import { CLASS_COLORS } from "../icons";
+import { CLASS_COLORS, hasSymbol } from "../icons";
 import { Portrait } from "../Portrait";
 import { handVisible } from "../scene/Table";
 import { viewerOf } from "../store";
@@ -77,6 +77,8 @@ function PartView({ p, size }: { p: Part; size: number }) {
           <b className="fe-num">{p.n}</b>
         </span>
       );
+    case "set":
+      return hasSymbol(p.code) ? <Glyph name={p.code} size={size * 0.8} title={encounterSetName(db, p.code, locale) ?? p.code.replace(/_/g, " ")} /> : null;
     case "outcome":
       return <b className={p.ok ? "fe-ok" : "fe-fail"}>{t(db, gameStore.getState().locale, p.ok ? "feed.outcome.ok" : "feed.outcome.fail")}</b>;
   }

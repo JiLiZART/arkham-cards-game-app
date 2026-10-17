@@ -1,5 +1,7 @@
 import { cardText, scenarioText, t } from "../../content/i18n";
 import { db, gameStore, useGame } from "../context";
+import { Glyph } from "../Icon";
+import { hasSymbol, scenarioIcon } from "../icons";
 import { Portrait } from "../Portrait";
 import { ribbonModel } from "../ribbon";
 
@@ -33,6 +35,7 @@ export function Ribbon() {
   return (
     <div className="ribbon">
       <span className="ribbon-scen">
+        {hasSymbol(scenarioIcon(game.scenarioId)) && <Glyph name={scenarioIcon(game.scenarioId)} size={20} title={scenarioText(db, game.scenarioId, locale).name} />}
         <b>{scenarioText(db, game.scenarioId, locale).name}</b>
         <span className="ribbon-round">{tr("phase.round", { n: m.round })}</span>
       </span>

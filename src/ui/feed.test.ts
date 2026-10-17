@@ -196,3 +196,29 @@ describe("merged live feed", () => {
     expect(captionIndex(log.slice(0, 2), null, [], 2, true, "phase")).toBe(null);
   });
 });
+
+describe("encounter set icons", () => {
+  /** play with the bot until an encounter card has been drawn */
+  const untilEncounter = () => {
+    let r = skipMulligans(start("the-gathering", ["01001"], 1));
+    for (let k = 0; k < 200 && !r.state.log.some((e) => e.type === "encounter"); k++) r = dispatch(db, r.state, { type: "choose", inv: r.state.pending!.inv, option: botChoice(db, r) });
+    return r;
+  };
+
+  it("an encounter draw shows the card's set icon right before the card, in every language", () => {
+    const r = untilEncounter();
+    const e = last(r.state.log, "encounter");
+    const set = db.cards[r.state.cards[e.card!].code].encounterSet!;
+    for (const locale of ["en", "ru"]) {
+      const parts = feedEntry(e, r.state, db, locale)!.parts;
+      const at = parts.findIndex((p) => p.t === "card");
+      expect(parts[at - 1], locale).toEqual({ t: "set", code: set });
+    }
+  });
+
+  it("entries that don't draw or reveal an encounter card have no set icon", () => {
+    let r = skipMulligans(start("the-gathering", ["01001"], 1));
+    r = pick(r, /^Gain 1 resource/);
+    expect(feedEntry(last(r.state.log, "resource"), r.state, db, "en")!.parts.some((p) => p.t === "set")).toBe(false);
+  });
+});
