@@ -60,7 +60,6 @@ export function Showcase() {
 
   // the drawn cards go on to the fan, which flies each one from where it stands here
   const toHand = () => {
-    moment("button");
     root.current?.querySelectorAll<HTMLElement>(".sc-card[data-card]").forEach((el) => noteLocalMove(el.dataset.card!, el));
     useView.getState().setHover(null);
     useView.setState({ showcase: [] });
@@ -86,9 +85,34 @@ export function Showcase() {
 
   if (!ids.length || !holds) return null;
   const layout = showcaseLayout(ids.length, screen.w, screen.h);
+  // under drawn cards: how to take them; under a pick: choose one, with the options that aren't cards as links in the line
   const others = pick.length ? (game.pending?.options ?? []).filter((o) => !o.card) : [];
+  const none = others.find((o) => o.id === "none");
+  const links = others.filter((o) => o !== none);
+  const link = (o: (typeof others)[number], label: string) => (
+    <button key={o.id} className="link" disabled={busy} onClick={() => choose(o.id)}>
+      {label}
+    </button>
+  );
+  const SPLIT = "\u0000";
+  const [before, after] = t(db, locale, none ? "showcase.chooseOrNone" : "showcase.choose", { none: SPLIT }).split(SPLIT);
+  const help = drawn.length ? (
+    t(db, locale, "showcase.take")
+  ) : (
+    <>
+      {before}
+      {none && link(none, t(db, locale, "rail.nothing").toLocaleLowerCase(locale))}
+      {after}
+      {links.map((o) => (
+        <span key={o.id}>
+          {" · "}
+          {link(o, o.label)}
+        </span>
+      ))}
+    </>
+  );
   return (
-    <div className={`showcase ${pick.length ? "picking" : ""}`} ref={root} >
+    <div className={`showcase ${pick.length ? "picking" : ""}`} ref={root} onClick={(e) => drawn.length > 0 && !(e.target as Element).closest(".sc-help") && toHand()}>
       <div className="sc-cards" style={{ ["--cols" as string]: layout.cols, ["--w" as string]: `${layout.width}px` }}>
         {ids.map((id) => (
           <button
@@ -96,7 +120,7 @@ export function Showcase() {
             className="sc-card"
             data-card={id}
             disabled={!!pick.length && busy}
-            onClick={(e) => (pick.length ? choosePick(id, e.currentTarget) : toHand())}
+            onClick={(e) => pick.length && choosePick(id, e.currentTarget)}
             onMouseEnter={(e) => useView.getState().setHover(id, e.currentTarget.getBoundingClientRect())}
             onMouseLeave={() => useView.getState().setHover(null)}
           >
@@ -109,19 +133,7 @@ export function Showcase() {
           </button>
         ))}
       </div>
-      <div className="sc-buttons">
-        {drawn.length > 0 ? (
-          <button className="primary big" onClick={toHand} autoFocus>
-            {t(db, locale, "showcase.toHand")}
-          </button>
-        ) : (
-          others.map((o) => (
-            <button key={o.id} className="big" disabled={busy} onClick={() => choose(o.id)}>
-              {o.id === "none" ? t(db, locale, "rail.nothing") : o.label}
-            </button>
-          ))
-        )}
-      </div>
+      <div className="sc-help">{help}</div>
     </div>
   );
 }
