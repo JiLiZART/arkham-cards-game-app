@@ -17,5 +17,5 @@
 
 ## 4. Verification and docs
 
-- [ ] 4.1 Run `npm test`, `npm run lint`, `npm run build`, `npm run check:content`, all clean; `drive-calm.js` to round 3 with 0 errors (update any `.glyph-icon` selector); `perf-devourer.js` shows no frame-time regression from the injected sprite.
-- [ ] 4.2 README: the icon sprite, the import script, the provenance manifest and a credits line for the ArkhamCards icon set; remove the icon-font notes. Run `openspec validate svg-icons --type change --strict`.
+- [x] 4.1 Run `npm test`, `npm run lint`, `npm run build`, `npm run check:content`, all clean; `drive-calm.js` to round 3 with 0 errors (update any `.glyph-icon` selector); `perf-devourer.js` shows no frame-time regression from the injected sprite.
+- [x] 4.2 README: the icon sprite, the import script, the provenance manifest and a credits line for the ArkhamCards icon set; remove the icon-font notes. Run `openspec validate svg-icons --type change --strict`.
