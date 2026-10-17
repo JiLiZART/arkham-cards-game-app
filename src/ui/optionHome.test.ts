@@ -27,7 +27,7 @@ describe("every pending option is reachable without a sidebar", () => {
             home === "board" ? L.cards.has(o.card!) || (!!c && !!viewer && (((c.zone === "play" || c.zone === "threat") && c.controller === viewer) || (c.zone === "enemy" && c.engagedWith === viewer))) :
             home === "strip" ? !!c && (o.card === s.act || o.card === s.agenda || ["victory", "encounterDiscard", "encounterDeck", "sideDeck"].includes(c.zone)) :
             home === "skilltest" ? c?.zone === "commit" && !!s.skillTest?.committed.includes(o.card!) :
-            home === "portrait" ? !!viewer && s.invs[viewer].cardId === o.card :
+            home === "avatar" ? s.order.some((i) => s.invs[i].cardId === o.card) :
             /* invModal */ (() => { const w = optionOwner(o, s); return !!w && w !== viewer && !!s.invs[w]; })();
           if (!ok) problems.push(`${s.pending!.kind}: "${o.label}" → ${home} (${c?.zone ?? "no card"})`);
         }

@@ -1,7 +1,7 @@
 import type { ChoiceOption, GameState, InstId, InvId } from "../engine/types";
 
 /** where an option of the pending choice is offered on screen (there is no option sidebar) */
-export type OptionHome = "hand" | "board" | "strip" | "portrait" | "invModal" | "rail" | "bar" | "skilltest" | "mulligan" | "phase" | "showcase";
+export type OptionHome = "hand" | "board" | "strip" | "avatar" | "invModal" | "rail" | "bar" | "skilltest" | "mulligan" | "phase" | "showcase";
 
 /** the options of no card that are something to do on the turn; every other option of no card answers the question in the bar */
 const RAIL_KINDS = new Set(["draw", "resource", "investigate"]);
@@ -23,7 +23,8 @@ export function optionHome(o: ChoiceOption, s: GameState, viewer: InvId | null):
   if (s.pending?.kind === "mulligan" && o.id.startsWith("un:")) return "mulligan";
   const c = s.cards[o.card];
   const inv = investigatorOf(s, o.card);
-  if (inv) return inv === viewer ? "portrait" : "invModal";
+  // an investigator card (a choice among investigators, or an ability on their card): the avatars in the player bar
+  if (inv) return "avatar";
   // whose card it is: hand cards by owner, cards in play / threat area by controller
   const holder = c.zone === "hand" ? c.owner : c.zone === "play" || c.zone === "threat" ? c.controller : null;
   if (holder && holder !== viewer) return "invModal";

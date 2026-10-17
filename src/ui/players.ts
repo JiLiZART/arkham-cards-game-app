@@ -1,6 +1,6 @@
 /** the player bar's pure parts: who is shown, who can act, what each avatar says (ADR-0004: viewing is view state) */
 import { maxHealth, maxSanity } from "../engine/core";
-import type { GameState, InvId } from "../engine/types";
+import type { ChoiceOption, GameState, InvId } from "../engine/types";
 import { db } from "./context";
 import { ribbonModel } from "./ribbon";
 import { viewerOf } from "./store";
@@ -81,4 +81,22 @@ export function barModel(game: GameState, view: Looking): Avatar[] {
       canAct: can?.inv === inv ? can.key : null,
     };
   });
+}
+
+/**
+ * The pending options tied to investigator cards, split by where they are answered: among several (who takes the next
+ * turn, the damage, a card's target) or for any investigator but the decider, the avatar answers on a tap; the decider's
+ * own card alone is an ability, offered in their sheet.
+ */
+export function investigatorOptions(game: GameState): { answers: Map<InvId, ChoiceOption>; abilities: ChoiceOption[] } {
+  const own = new Map(game.order.map((i) => [game.invs[i].cardId, i]));
+  const mine = (game.pending?.options ?? []).filter((o) => o.card && own.has(o.card));
+  const answers = new Map<InvId, ChoiceOption>();
+  const abilities: ChoiceOption[] = [];
+  for (const o of mine) {
+    const inv = own.get(o.card!)!;
+    if (mine.length > 1 || inv !== game.pending!.inv) answers.set(inv, o);
+    else abilities.push(o);
+  }
+  return { answers, abilities };
 }

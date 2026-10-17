@@ -7,14 +7,10 @@ import type { ChoiceOption, GameState, InvId } from "../../engine/types";
 import { db, gameStore, useGame } from "../context";
 import { Glyph, Icon, Stat } from "../Icon";
 import { isIcon } from "../icons";
-import { optionHome } from "../optionHome";
 import { Portrait } from "../Portrait";
 import { TokenPile } from "../TokenPile";
-import { viewerOf } from "../store";
-import { useDimmed, useView } from "../view";
 import { formatText } from "./Hud";
-import { OptionButtons, useCardOptions } from "./Modals";
-import { STAT_BAR_W } from "./fan";
+import { OptionButtons } from "./Modals";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
 
@@ -116,21 +112,5 @@ export function StatBody({ inv, onPortrait, legal, options, dimmed }: { inv: Inv
         </div>
       </div>
     </>
-  );
-}
-
-/** the viewing investigator, bottom-left: big portrait, health and sanity, skills; resources and clues as token piles above */
-export function StatBar() {
-  const game = useGame((s) => s.game) as GameState;
-  const viewer = viewerOf(game);
-  const cardId = viewer ? game.invs[viewer]?.cardId : null;
-  const options = useCardOptions([cardId]);
-  const dimmed = useDimmed(viewer ?? "");
-  if (!viewer || !game.invs[viewer] || !cardId) return null;
-  const legal = options.some((o) => optionHome(o, game, viewer) === "portrait");
-  return (
-    <div className="stat-dock" style={{ width: STAT_BAR_W }}>
-      <StatBody inv={viewer} legal={legal} dimmed={dimmed} options={options.filter((o) => optionHome(o, game, viewer) === "portrait")} onPortrait={() => useView.getState().setModal({ card: cardId })} />
-    </div>
   );
 }

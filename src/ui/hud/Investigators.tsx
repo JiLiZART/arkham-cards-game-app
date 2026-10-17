@@ -1,18 +1,12 @@
-import { useLayoutEffect, useRef } from "react";
 import { cardText, t } from "../../content/i18n";
 import type { GameState, InstId, InvId } from "../../engine/types";
-import { domPlace, lastRects, originRect, takeArrival } from "../arrivals";
 import { CardFace } from "../CardFace";
-import { backUrl } from "../images";
 import { db, gameStore, useGame } from "../context";
 import { optionHome, optionOwner } from "../optionHome";
-import { Portrait } from "../Portrait";
 import { viewerOf } from "../store";
-import { useDimmed, useView } from "../view";
-import { flyGhost, STAGGER_MS } from "./flights";
+import { useView } from "../view";
 import { Modal, OptionButtons, useCardOptions } from "./Modals";
-import { RESOLVE_BOX } from "./Reveal";
-import { FlashStat, invNumbers, StatBody } from "./Stats";
+import { StatBody } from "./Stats";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
 
@@ -35,67 +29,6 @@ function useInvOptions(i: InvId) {
   const c = cardsOf(game, i);
   const viewer = viewerOf(game);
   return useCardOptions([game.invs[i].cardId, ...c.hand, ...c.play, ...c.threat]).filter((o) => optionHome(o, game, viewer) === "invModal" && optionOwner(o, game) === i);
-}
-
-/** the other investigators, down the right edge: portrait with clue, resource, health and sanity counts */
-export function InvTokens() {
-  const game = useGame((s) => s.game) as GameState;
-  const viewer = viewerOf(game);
-  const others = game.order.filter((i) => i !== viewer);
-  if (!others.length) return null;
-  return (
-    <div className="inv-tokens">
-      {others.map((i) => (
-        <InvToken key={i} inv={i} />
-      ))}
-    </div>
-  );
-}
-
-function InvToken({ inv }: { inv: InvId }) {
-  const game = useGame((s) => s.game) as GameState;
-  const locale = useGame((s) => s.locale);
-  const setup = useGame((s) => s.setup);
-  const ref = useRef<HTMLButtonElement>(null);
-  // cards arriving in this (hidden) hand: a face-down card flies to the token; the face is never shown
-  const known = useRef<{ setup: unknown; ids: Set<InstId> }>({ setup, ids: new Set(game.invs[inv].hand) });
-  useLayoutEffect(() => {
-    if (known.current.setup !== setup) known.current = { setup, ids: new Set() };
-    const el = ref.current;
-    const hand = game.invs[inv].hand;
-    for (const id of hand) {
-      if (known.current.ids.has(id)) continue;
-      known.current.ids.add(id);
-      const a = takeArrival(id);
-      if (!a || !el) continue;
-      const r = el.getBoundingClientRect();
-      const from = originRect(a, viewerOf(game), (p) => domPlace(p, RESOLVE_BOX), (i) => lastRects.get(i) ?? null, innerWidth, innerHeight);
-      flyGhost(backUrl("player"), from, { x: r.left, y: r.top, w: r.width, h: r.height }, a.batch * STAGGER_MS);
-    }
-    for (const id of known.current.ids) if (!hand.includes(id)) known.current.ids.delete(id);
-  });
-  const options = useInvOptions(inv);
-  const dimmed = useDimmed(inv);
-  const n = invNumbers(game, inv);
-  const st = game.invs[inv];
-  const name = cardText(db, inv, locale).name;
-  return (
-    <button
-      ref={ref}
-      data-inv={inv}
-      className={`inv-token ${game.active === inv ? "active" : ""} ${options.length ? "legal" : ""} ${st.status} ${dimmed ? "dimmed" : ""}`}
-      onClick={() => useView.getState().setModal({ inv })}
-      title={st.status !== "playing" ? `${name} (${st.status})` : name}
-    >
-      <Portrait code={inv} size={64} active={game.active === inv} />
-      <span className="inv-counts">
-        <FlashStat icon="clue" value={n.clues} size={22} label={tr("stat.clues")} />
-        <FlashStat icon="resource" value={n.resources} size={22} label={tr("stat.resources")} />
-        <FlashStat icon="health" value={n.health} max={n.maxHealth} size={22} label={tr("stat.health")} />
-        <FlashStat icon="sanity" value={n.sanity} max={n.maxSanity} size={22} label={tr("stat.sanity")} />
-      </span>
-    </button>
-  );
 }
 
 function CardRow({ title, ids }: { title: string; ids: InstId[] }) {

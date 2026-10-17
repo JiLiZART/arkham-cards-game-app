@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import type { GameEvent, InstId, InvId } from "../../engine/types";
 import { reducedMotion, whenSettled, type ScreenBox } from "../arrivals";
 import { FLOAT_KINDS, floatLife, type FeedEntry } from "../feed";
-import { viewerOf } from "../store";
 import { mapProjector } from "../scene/Table";
 import { useView, whenStageFree } from "../view";
 import { Sentence, useFeedEntries } from "./Feed";
@@ -123,15 +122,15 @@ function sourceBox(id: InstId): ScreenBox | null {
   return r ? { x: r.x0, y: r.y0, w: r.x1 - r.x0, h: r.y1 - r.y0 } : null;
 }
 
-/** the investigator's portrait: the stat bar for the one on screen, their row in the list, else their portrait on the map */
-function targetEl(inv: InvId, viewer: InvId | null): { el: HTMLElement | null; box: ScreenBox | null } {
-  const el = (inv === viewer ? document.querySelector<HTMLElement>(".stat-dock .portrait-btn") : null) ?? document.querySelector<HTMLElement>(`.inv-token[data-inv="${inv}"]`);
+/** the investigator's avatar in the player bar, else their portrait on the map */
+function targetEl(inv: InvId): { el: HTMLElement | null; box: ScreenBox | null } {
+  const el = document.querySelector<HTMLElement>(`.pb-avatar[data-inv="${inv}"]`);
   if (el) return { el, box: boxOfEl(el) };
   const p = mapProjector.mini(inv);
   return { el: null, box: p ? { x: p.x - 30, y: p.y - 30, w: 60, h: 60 } : null };
 }
 
-function playHit(source: InstId, inv: InvId, viewer: InvId | null) {
+function playHit(source: InstId, inv: InvId) {
   const from = sourceBox(source);
   if (!from) return;
   const pulse = document.createElement("div");
@@ -141,7 +140,7 @@ function playHit(source: InstId, inv: InvId, viewer: InvId | null) {
   pulse.animate([{ opacity: 0, transform: "scale(1)" }, { opacity: 1, transform: "scale(1.04)", offset: 0.3 }, { opacity: 0, transform: "scale(1)" }], { duration: 700, easing: "ease-out" })
     .finished.catch(() => undefined).finally(() => pulse.remove());
   if (reducedMotion()) return;
-  const to = targetEl(inv, viewer);
+  const to = targetEl(inv);
   if (!to.box) return;
   const c0 = { x: from.x + from.w / 2, y: from.y + from.h / 2 };
   const c1 = { x: to.box.x + to.box.w / 2, y: to.box.y + to.box.h / 2 };
@@ -185,12 +184,11 @@ export function HitFx() {
     const h = playing?.type === "damage" ? hitOf(playing) : null;
     if (!h || played.current === playing) return;
     played.current = playing;
-    playHit(h.source, h.inv, viewerOf(game));
+    playHit(h.source, h.inv);
   }, [playing]);
   useEffect(() => {
     if (!queue.current.length) return;
     const fresh = queue.current.splice(0);
-    const viewer = viewerOf(game);
     // after the cards on screen have landed (a location revealed by the move flips first) and the middle is free
     whenStageFree(() => whenSettled(() => {
       let last: InstId | null = null;
@@ -198,7 +196,7 @@ export function HitFx() {
       for (const h of fresh) {
         if (last && h.source !== last) at += HIT_GAP_MS;
         last = h.source;
-        setTimeout(() => playHit(h.source, h.inv, viewer), Math.max(0, at - performance.now()));
+        setTimeout(() => playHit(h.source, h.inv), Math.max(0, at - performance.now()));
       }
       nextFree.current = at + HIT_GAP_MS;
     }));

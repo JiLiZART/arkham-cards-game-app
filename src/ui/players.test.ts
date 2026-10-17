@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { commitDone, giveCard, locId, mutate, pick, putEnemy, skipMulligans, start } from "../engine/testkit";
 import type { GameState } from "../engine/types";
-import { barModel, canAct, choicesOffered, landingView, shownInv } from "./players";
+import { barModel, canAct, choicesOffered, investigatorOptions, landingView, shownInv } from "./players";
 
 const ROLAND = "01001";
 const DAISY = "01002";
@@ -108,5 +108,40 @@ describe("barModel", () => {
     expect(bar.map((a) => a.inv)).toEqual(s.order);
     expect(bar.find((a) => a.inv === SKIDS)).toMatchObject({ grey: true, pips: 0, filled: 0 });
     expect(bar.filter((a) => !a.grey)).toHaveLength(3);
+  });
+});
+
+describe("investigatorOptions", () => {
+  const card = (state: GameState, inv: string) => state.invs[inv].cardId;
+  const withOptions = (state: GameState, inv: string, options: { id: string; card?: string }[]) =>
+    ({ ...state, pending: { ...state.pending!, inv, kind: "generic", options: options.map((o) => ({ ...o, label: o.id, value: o.id })) } }) as GameState;
+
+  it("choosing among investigators: each is answered by tapping its avatar", () => {
+    const { state } = turn();
+    const s = withOptions(state, ROLAND, [{ id: ROLAND, card: card(state, ROLAND) }, { id: DAISY, card: card(state, DAISY) }]);
+    const o = investigatorOptions(s);
+    expect([...o.answers.keys()]).toEqual([ROLAND, DAISY]);
+    expect(o.answers.get(DAISY)?.id).toBe(DAISY);
+    expect(o.abilities).toEqual([]);
+  });
+
+  it("the decider's own investigator card alone (an ability like Roland's reaction) belongs in the sheet", () => {
+    const { state } = turn();
+    const s = withOptions(state, ROLAND, [{ id: "r", card: card(state, ROLAND) }, { id: "pass" }]);
+    const o = investigatorOptions(s);
+    expect(o.answers.size).toBe(0);
+    expect(o.abilities.map((x) => x.id)).toEqual(["r"]);
+  });
+
+  it("another investigator's card, even alone, is a target to tap", () => {
+    const { state } = turn();
+    const o = investigatorOptions(withOptions(state, ROLAND, [{ id: DAISY, card: card(state, DAISY) }]));
+    expect([...o.answers.keys()]).toEqual([DAISY]);
+  });
+
+  it("no investigator cards: nothing for the avatars", () => {
+    const { state } = turn();
+    const o = investigatorOptions(withOptions(state, ROLAND, [{ id: "pass" }]));
+    expect(o.answers.size + o.abilities.length).toBe(0);
   });
 });

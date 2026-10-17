@@ -17,11 +17,10 @@ import { ActionFloats, HitFx, HIT_MS } from "./Floats";
 import { Modals } from "./Modals";
 import { RevealOverlay } from "./Reveal";
 import { ChaosBagButton, PileColumn, PlayStrip, ScenarioPanel } from "./Panels";
-import { InvTokens } from "./Investigators";
+import { PlayerBar } from "./PlayerBar";
 import { MulliganRow } from "./MulliganRow";
 import { IntroOverlay } from "./IntroOverlay";
 import { Showcase } from "./Showcase";
-import { StatBar } from "./Stats";
 import { StepCaption } from "./StepCaption";
 import { Ribbon } from "./Ribbon";
 import { SkillTestScreen } from "./SkillTestScreen";
@@ -257,6 +256,7 @@ function TopBar() {
   return (
     <div className="topbar">
       <Ribbon />
+      <PlayerBar />
       <div className="buttons">
         <button className={`mute-btn ${muted ? "muted" : ""}`} onClick={() => setMuted(!muted)} title={tr(muted ? "hud.unmute" : "hud.mute")} aria-pressed={muted}>
           {muted ? "🔇" : "🔊"}
@@ -443,10 +443,8 @@ export function Hud() {
       <PileColumn />
       <div className="right-col">
         <ChaosBagButton />
-        <InvTokens />
         <Feed />
       </div>
-      <StatBar />
       <PlayStrip />
       <MulliganRow />
       <div className="center-col">
