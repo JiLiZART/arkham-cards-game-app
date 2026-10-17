@@ -70,6 +70,32 @@ export function addTokens(calc: CalcParts, tokens: { token: string; mod: number 
   return { ...calc, tokens: [...calc.tokens, ...tokens], autoFail, total: autoFail ? 0 : (exact ?? Math.max(0, calc.total + sum)) };
 }
 
+/** an animated event that belongs to a skill test's draw or result */
+export const isTestEvent = (e: { type: string; data?: Record<string, unknown> } | null | undefined) =>
+  !!e && (e.type === "token" || e.type === "testResult") && typeof e.data?.testId === "number";
+
+/**
+ * Which test's screen is up now, or null. The events of a test (its draw and result) keep it open after the state has
+ * moved on; a live test opens it at its commit prompt and keeps it through later prompts until its result is in.
+ * Events that come before the test (an attack of opportunity, an encounter card) play first: the screen opens after them.
+ */
+export function sessionId(p: {
+  /** token and result events still to play, in order */
+  events: { type: string; data?: Record<string, unknown> }[];
+  /** the event playing now, else the next in the queue */
+  lead: { type: string } | null;
+  live: number | null;
+  /** the live test's result is already in the log */
+  resolved: boolean;
+  commitPending: boolean;
+  /** the test whose screen was up on the previous render */
+  started: number | null;
+}): number | null {
+  const id = p.events[0] ? (p.events[0].data!.testId as number) : p.live !== null && !p.resolved && (p.commitPending || p.started === p.live) ? p.live : null;
+  if (id !== null && p.started !== id && p.lead && p.lead.type !== "token" && p.lead.type !== "testResult") return null;
+  return id;
+}
+
 export interface Area {
   x: number;
   y: number;

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { commitDone, db, giveCard, locId, mutate, pick, putEnemy, skipMulligans, start } from "../engine/testkit";
-import { addTokens, calcParts, placedCards, spillLayout, subjectOf } from "./testScreen";
+import { addTokens, calcParts, placedCards, sessionId, spillLayout, subjectOf } from "./testScreen";
 
 const ROLAND = "01001";
 const DAISY = "01002";
@@ -131,5 +131,38 @@ describe("addTokens", () => {
 
   it("no tokens leaves the strip as it was", () => {
     expect(addTokens(base, [])).toEqual(base);
+  });
+});
+
+describe("sessionId", () => {
+  const ev = (type: string, testId?: number) => ({ type, data: testId === undefined ? undefined : { testId } }) as never;
+  const base = { events: [] as never[], lead: null, live: null, resolved: false, commitPending: false, started: null };
+
+  it("a commit prompt opens the screen for the live test", () => {
+    expect(sessionId({ ...base, live: 4, commitPending: true })).toBe(4);
+  });
+
+  it("stays open through later prompts of the same test, but not before its commit prompt", () => {
+    expect(sessionId({ ...base, live: 4, started: 4 })).toBe(4);
+    expect(sessionId({ ...base, live: 4 })).toBeNull();
+  });
+
+  it("closes with the result: reactions after it are not part of the screen", () => {
+    expect(sessionId({ ...base, live: 4, started: 4, resolved: true })).toBeNull();
+  });
+
+  it("events of the test keep it open even after the state has moved on", () => {
+    expect(sessionId({ ...base, events: [ev("token", 7)], lead: ev("token", 7) })).toBe(7);
+  });
+
+  it("waits for events that come before the test (an attack of opportunity), then opens", () => {
+    const attack = ev("attack");
+    expect(sessionId({ ...base, live: 4, commitPending: true, lead: attack })).toBeNull();
+    expect(sessionId({ ...base, events: [ev("token", 7)], lead: attack })).toBeNull();
+    expect(sessionId({ ...base, live: 4, commitPending: true, lead: null })).toBe(4);
+  });
+
+  it("an open screen is not closed by an event that plays during the test", () => {
+    expect(sessionId({ ...base, live: 4, started: 4, lead: ev("enemyDamage") })).toBe(4);
   });
 });

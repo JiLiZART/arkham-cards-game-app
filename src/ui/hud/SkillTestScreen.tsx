@@ -10,7 +10,7 @@ import { isIcon } from "../icons";
 import { Portrait } from "../Portrait";
 import { handVisible } from "../scene/Table";
 import { viewerOf } from "../store";
-import { addTokens, calcParts, placedCards, subjectOf, type CalcParts, type PlacedCard, type Subject } from "../testScreen";
+import { addTokens, calcParts, isTestEvent, placedCards, sessionId, subjectOf, type CalcParts, type PlacedCard, type Subject } from "../testScreen";
 import { useStage, useView } from "../view";
 import { ChaosTokenIcon } from "./ChaosTokenIcon";
 import { useFlyIn } from "./flights";
@@ -91,10 +91,10 @@ export function useTestView(): TestView | null {
   const live = game.skillTest;
   const mine = useMemo(() => (live ? snapOf(live, game) : null), [live, game]);
   if (live && mine) snaps.current.set(live.id, mine);
-  const events: GameEvent[] = [current, ...queue].flatMap((e) => (e && (e.type === "token" || e.type === "testResult") && typeof e.data?.testId === "number" ? [e] : []));
+  const events: GameEvent[] = [current, ...queue].flatMap((e) => (isTestEvent(e) ? [e!] : []));
   // the screen ends with the result: reactions and effects after it (the test is still live in the state) play on the table
   const resolved = !!live && game.log.some((e) => e.type === "testResult" && e.data?.testId === live.id);
-  const id = events[0] ? (events[0].data!.testId as number) : live && !resolved && (game.pending?.kind === "commit" || started.current === live.id) ? live.id : null;
+  const id = sessionId({ events, lead: current ?? queue[0] ?? null, live: live?.id ?? null, resolved, commitPending: game.pending?.kind === "commit", started: started.current });
   started.current = id;
   if (id === null) return null;
   const snap = snaps.current.get(id) ?? (events[0] ? snapFromEvent(events[0], game) : null);

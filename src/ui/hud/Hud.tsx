@@ -55,14 +55,14 @@ function EventPlayer() {
   const center = !!current && !testKey && CENTER.has(current.type);
   const holdsEvent = useStage(center ? `event:${current!.logIndex}` : null);
   const holds = useView((s) => (testKey ? s.stage[0] === testKey : holdsEvent));
-  const stageFree = useView((s) => s.stage.length === 0);
+  // other events play when nothing holds the middle, or only the test screen does (a fast ability's damage mid-test)
+  const stageFree = useView((s) => s.stage.every((k) => k.startsWith("test:")));
   const ready = !!current && (!waitsForSettle(current) || settledFor === current) && (testKey || center ? holds : stageFree);
   // the event plays: everything else on the map dims around what it is about; once all is played, around the choice's options
   const game = useGame((s) => s.game);
   const queued = useGame((s) => s.queue.length > 0);
   // the choice behind a skill test (its committable cards) is spotlit while the test screen holds the stage
-  const onlyTest = useView((s) => s.stage.every((k) => k.startsWith("test:")));
-  const idle = !current && !queued && onlyTest;
+  const idle = !current && !queued && stageFree;
   useEffect(() => {
     const playing = ready ? current : null;
     useView.setState({ playing, spotlight: game ? spotlightNow(game, viewerOf(game), playing, idle) : null });
