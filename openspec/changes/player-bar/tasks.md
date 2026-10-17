@@ -10,5 +10,5 @@
 
 ## 3. Verification and docs
 
-- [ ] 3.1 Update `drive-calm.js` (tap the pulsing avatar before the hand-off box; the portrait options now in the sheet) and `check-tips.js`; run `npm test`, `npm run lint`, `npm run build`, `npm run check:content`, all clean; `drive-calm.js` to round 3 with 0 errors; `check-players.js` passes.
+- [x] 3.1 Update `drive-calm.js` (tap the pulsing avatar before the hand-off box; the portrait options now in the sheet) and `check-tips.js`; run `npm test`, `npm run lint`, `npm run build`, `npm run check:content`, all clean; `drive-calm.js` to round 3 with 0 errors; `check-players.js` passes.
 - [ ] 3.2 README play notes: the player bar, looking at a teammate, "someone can act", the sheet. Run `openspec validate player-bar --type change --strict`.
