@@ -14,4 +14,4 @@
 ## 4. Verification and docs
 
 - [x] 4.1 Update `drive-calm.js` (derive the fan hover and click rows from the card's box instead of 880/700); run `npm test`, `npm run lint`, `npm run build`, `npm run check:content`, all clean; `drive-calm.js` to round 3 with 0 errors; `check-tips.js` passes (the hand tip anchors to the fan).
-- [ ] 4.2 README play notes: the smaller fan, the glance badge and what its chips mean, the hand count and limit colour. Run `openspec validate hand-cards-glance --type change --strict`.
+- [x] 4.2 README play notes: the smaller fan, the glance badge and what its chips mean, the hand count and limit colour. Run `openspec validate hand-cards-glance --type change --strict`.
