@@ -19,13 +19,14 @@ export function shownInv(game: GameState, view: Looking): InvId | null {
 export const choicesOffered = (game: GameState, view: Looking): boolean => !!game.pending && shownInv(game, view) === viewerOf(game);
 
 /**
- * A decision that belongs to someone other than the investigator whose turn it is (a commit to another's test, a
- * reaction): who, and the string that says what they can do. Null otherwise.
+ * A decision that belongs to someone other than the investigator whose turn it is and helps another's play: a commit to
+ * another investigator's test, or a reaction. Who, and the string that says what they can do. Null otherwise; a commit
+ * window of the decider's own test (a treachery drawn in the mythos phase) is theirs to answer like any decision.
  */
 export function canAct(game: GameState): { inv: InvId; key: "players.canCommit" | "players.mayReact" } | null {
   const p = game.pending;
   if (!p || game.active === null || p.inv === game.active) return null;
-  if (p.kind === "commit") return { inv: p.inv, key: "players.canCommit" };
+  if (p.kind === "commit") return game.skillTest && game.skillTest.inv !== p.inv ? { inv: p.inv, key: "players.canCommit" } : null;
   if (p.kind === "reaction") return { inv: p.inv, key: "players.mayReact" };
   return null;
 }
@@ -35,6 +36,18 @@ export function canAct(game: GameState): { inv: InvId; key: "players.canCommit" 
  * another can act (the avatar pulses until it is tapped), otherwise nothing (the decider's table).
  */
 export const landingView = (game: GameState): InvId | null => (canAct(game) ? game.active : null);
+
+/**
+ * What the instruction bar asks: the decider's choice (with its buttons only on their table), or, while someone else
+ * can act and their table is not on screen, who can act and a switch to them. Never an instruction nobody can answer.
+ */
+export type BarAsk = { kind: "choice"; buttons: boolean } | { kind: "handoff"; inv: InvId; key: "players.canCommit" | "players.mayReact" };
+export function barAsk(game: GameState, view: Looking): BarAsk {
+  const offered = choicesOffered(game, view);
+  const can = canAct(game);
+  if (!offered && can) return { kind: "handoff", inv: can.inv, key: can.key };
+  return { kind: "choice", buttons: offered };
+}
 
 export interface Avatar {
   inv: InvId;

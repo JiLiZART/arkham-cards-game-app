@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { commitDone, giveCard, locId, mutate, pick, putEnemy, skipMulligans, start } from "../engine/testkit";
+import { createCard, type G } from "../engine/core";
+import { run } from "../engine/engine";
+import { commitDone, db, giveCard, locId, mutate, pick, putEnemy, skipMulligans, start } from "../engine/testkit";
 import type { GameState } from "../engine/types";
-import { barModel, canAct, choicesOffered, investigatorOptions, landingView, shownInv } from "./players";
+import { barAsk, barModel, canAct, choicesOffered, investigatorOptions, landingView, shownInv } from "./players";
 
 const ROLAND = "01001";
 const DAISY = "01002";
@@ -59,6 +61,25 @@ describe("canAct", () => {
     expect(canAct(r.state)).toEqual({ inv: DAISY, key: "players.canCommit" });
   });
 
+  it("Daisy's own treachery test during Roland's turn: no hand-off signal, the table goes to her", () => {
+    const { state } = turn();
+    const s = structuredClone(state);
+    const g: G = { s, db, events: [] };
+    const guts = Object.keys(db.cards).find((c) => db.cards[c].name === "Guts")!;
+    giveCard(g, DAISY, guts);
+    // Rotting Remains (willpower 3) revealed for Daisy while Roland is the active investigator
+    const rr = createCard(g, "01163", "limbo", null);
+    const step = s.pending!.step;
+    s.pending = null;
+    s.queue.push({ ...step, choice: undefined }, { t: "Revelation", inv: DAISY, card: rr });
+    run(g);
+    expect(s.active).toBe(ROLAND);
+    expect(s.pending).toMatchObject({ inv: DAISY, kind: "commit" });
+    expect(canAct(s)).toBeNull();
+    expect(landingView(s)).toBeNull();
+    expect(choicesOffered(s, none)).toBe(true);
+  });
+
   it("a reaction for someone other than the active investigator: they may react", () => {
     const { state } = turn();
     expect(canAct(withPending(state, DAISY, "reaction"))).toEqual({ inv: DAISY, key: "players.mayReact" });
@@ -96,7 +117,8 @@ describe("barModel", () => {
 
   it("flags the investigator who can act", () => {
     const { state } = turn();
-    const daisy = { ...state, pending: { ...state.pending!, inv: DAISY, kind: "commit" } } as GameState;
+    // Daisy helping Roland's test
+    const daisy = { ...state, skillTest: { inv: ROLAND }, pending: { ...state.pending!, inv: DAISY, kind: "commit" } } as unknown as GameState;
     expect(barModel(daisy, { viewing: ROLAND }).map((a) => a.canAct)).toEqual([null, "players.canCommit"]);
   });
 
@@ -143,5 +165,25 @@ describe("investigatorOptions", () => {
     const { state } = turn();
     const o = investigatorOptions(withOptions(state, ROLAND, [{ id: "pass" }]));
     expect(o.answers.size + o.abilities.length).toBe(0);
+  });
+});
+
+describe("barAsk", () => {
+  const helping = (state: GameState) => ({ ...state, skillTest: { inv: ROLAND }, pending: { ...state.pending!, inv: DAISY, kind: "commit" } }) as unknown as GameState;
+
+  it("the decider's own table: their choice, with its buttons", () => {
+    expect(barAsk(turn().state, none)).toEqual({ kind: "choice", buttons: true });
+  });
+
+  it("looking at a teammate during your own decision: the instruction stays, its buttons wait", () => {
+    expect(barAsk(turn().state, { viewing: DAISY })).toEqual({ kind: "choice", buttons: false });
+  });
+
+  it("someone else can act and their table is not on screen: who, and the switch to them", () => {
+    expect(barAsk(helping(turn().state), { viewing: ROLAND })).toEqual({ kind: "handoff", inv: DAISY, key: "players.canCommit" });
+  });
+
+  it("once their table is on screen, it is their choice", () => {
+    expect(barAsk(helping(turn().state), none)).toEqual({ kind: "choice", buttons: true });
   });
 });

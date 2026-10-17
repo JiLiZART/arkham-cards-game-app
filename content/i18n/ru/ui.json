@@ -66,6 +66,7 @@
   "players.canCommit": "{name} может добавить карты",
   "players.mayReact": "{name} может отреагировать",
   "players.back": "Назад к {name}",
+  "players.switchTo": "Передать: {name}",
   "players.details": "Подробнее",
   "stat.hand": "Карт в руке: {n} (максимум {max})",
   "glance.willpower": "Воля",

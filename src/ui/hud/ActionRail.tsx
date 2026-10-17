@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { t } from "../../content/i18n";
+import { cardText, t } from "../../content/i18n";
 import type { ChoiceOption, GameState } from "../../engine/types";
 import { db, useGame } from "../context";
 import { Icon } from "../Icon";
@@ -10,6 +10,7 @@ import { onRail, optionHome } from "../optionHome";
 import { Sentence } from "./Feed";
 import { handVisible } from "../scene/Table";
 import { canUndo, viewerOf } from "../store";
+import { barAsk } from "../players";
 import { useChoicesOffered } from "../usePlayers";
 import { useView } from "../view";
 import { moment } from "./SoundLayer";
@@ -109,15 +110,30 @@ export function InstructionBar() {
   const locale = useGame((s) => s.locale);
   const busy = useGame((s) => !!s.current || s.queue.length > 0);
   const p = useOwnChoice();
-  const offered = useChoicesOffered();
+  const viewing = useView((s) => s.viewing);
   // while a phase step plays out, its caption has this place
   const caption = useCaption();
   const held = useHeld();
   // the pause before a phase speaks for itself (the phase title); while events play the bar shows no choice
   if (busy || caption !== null || held || !p || p.kind === "phase") return null;
   const viewer = viewerOf(game);
+  const ask = barAsk(game, { viewing });
+  // someone else can act and their table isn't on screen: who, and the switch to them (the avatar's tap)
+  if (ask.kind === "handoff") {
+    const name = cardText(db, ask.inv, locale).name;
+    return (
+      <div className="instruction-bar" data-tip="bar">
+        <Sentence parts={[{ t: "inv", id: ask.inv }, { t: "text", s: " " }, { t: "text", s: t(db, locale, ask.key, { name }).replace(name, "").trim() }]} size={30} />
+        <div className="bar-buttons">
+          <button className="primary" onClick={() => { moment("button"); useView.getState().setViewing(null); }}>
+            {t(db, locale, "players.switchTo", { name })}
+          </button>
+        </div>
+      </div>
+    );
+  }
   // the decider's instruction stays while looking at a teammate; its buttons come back with the decider's table
-  const buttons = offered ? p.options.filter((o) => optionHome(o, game, viewer) === "bar") : [];
+  const buttons = ask.buttons ? p.options.filter((o) => optionHome(o, game, viewer) === "bar") : [];
   return (
     <div className="instruction-bar" data-tip="bar">
       <Sentence parts={[{ t: "inv", id: p.inv }, { t: "text", s: ": " }, ...instructionParts(p, game, db, locale)]} size={30} />

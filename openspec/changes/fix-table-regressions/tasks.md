@@ -5,9 +5,9 @@
 
 ## 2. Players and the instruction bar
 
-- [ ] 2.1 `src/ui/players.test.ts`: `canAct` is null for a commit window of the decider's own test when they are not active; non-null for a commit to another's test and for a reaction; `landingView` follows. Fail first, then narrow `canAct` in `src/ui/players.ts`.
-- [ ] 2.2 `InstructionBar` (`src/ui/hud/ActionRail.tsx`): when choices are not offered and `canAct` names someone, show the can-act label with one button that calls `setViewing(null)` (the avatar's tap). Strings reuse `players.canCommit` / `players.mayReact`; a button label in en and ru ("To Daisy Walker").
-- [ ] 2.3 Browser: a new `.playwright-mcp/check-treachery-test.js` gives Daisy a Rotting Remains revelation while Roland is active (public hands, then private): the skill-test screen opens on Daisy's table with Done in the bar (after "Pass to Daisy" with private hands), no avatar pulses; then Roland's own test with Daisy able to help: the bar shows "Daisy Walker can commit cards" with the button, which lands on her table with Done. `check-players.js` still passes.
+- [x] 2.1 `src/ui/players.test.ts`: `canAct` is null for a commit window of the decider's own test when they are not active; non-null for a commit to another's test and for a reaction; `landingView` follows. Fail first, then narrow `canAct` in `src/ui/players.ts`.
+- [x] 2.2 `InstructionBar` (`src/ui/hud/ActionRail.tsx`): when choices are not offered and `canAct` names someone, show the can-act label with one button that calls `setViewing(null)` (the avatar's tap). Strings reuse `players.canCommit` / `players.mayReact`; a button label in en and ru ("To Daisy Walker").
+- [x] 2.3 Browser: a new `.playwright-mcp/check-treachery-test.js` gives Daisy a Rotting Remains revelation while Roland is active (public hands, then private): the skill-test screen opens on Daisy's table with Done in the bar (after "Pass to Daisy" with private hands), no avatar pulses; then Roland's own test with Daisy able to help: the bar shows "Daisy Walker can commit cards" with the button, which lands on her table with Done. `check-players.js` still passes.
 
 ## 3. Stat bar, hand count, token art
 
