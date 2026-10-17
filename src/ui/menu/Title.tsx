@@ -1,4 +1,3 @@
-import { useMemo } from "react";
 import { t } from "../../content/i18n";
 import { db, gameStore, useGame } from "../context";
 import { SAVE_KEY, safeStorage } from "../store";
@@ -11,7 +10,8 @@ export function Title() {
   const campaign = useGame((s) => s.campaign);
   const game = useGame((s) => s.game);
   const { resume, abandon } = gameStore.getState();
-  const hasSave = useMemo(() => !!safeStorage().getItem(SAVE_KEY), []);
+  // read on every render: Abandon clears the save while this screen stays mounted
+  const hasSave = !!safeStorage().getItem(SAVE_KEY);
   const go = (screen: "wizard" | "howto" | "settings") => gameStore.setState({ screen });
   return (
     <div className="screen title">

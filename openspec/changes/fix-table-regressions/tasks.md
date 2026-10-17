@@ -17,9 +17,9 @@
 
 ## 4. Title
 
-- [ ] 4.1 `Title.tsx`: `hasSave` read on every render; Continue only while a game, a campaign or a save exists. Extend `check-wizard.js`: after Begin, back to the title, Abandon campaign → no Continue, New campaign opens the wizard; a reload shows no Continue.
+- [x] 4.1 `Title.tsx`: `hasSave` read on every render; Continue only while a game, a campaign or a save exists. Extend `check-wizard.js`: after Begin, back to the title, Abandon campaign → no Continue, New campaign opens the wizard; a reload shows no Continue.
 
 ## 5. Verification and docs
 
-- [ ] 5.1 `npm test`, `npm run lint`, `npm run build`, `npm run check:content` all clean; `drive-calm.js` to round 3 with 0 errors; `check-wizard.js`, `check-players.js`, `check-treachery-test.js` pass.
-- [ ] 5.2 README play notes: the stat bar is back (smaller) with the token stacks and hand count, cardboard clue and resource tokens, the automatic discard of used-up assets (a deviation from the printed rules), the bar's button when a teammate can act. Run `openspec validate fix-table-regressions --type change --strict`.
+- [x] 5.1 `npm test`, `npm run lint`, `npm run build`, `npm run check:content` all clean; `drive-calm.js` to round 3 with 0 errors; `check-wizard.js`, `check-players.js`, `check-treachery-test.js` pass.
+- [x] 5.2 README play notes: the stat bar is back (smaller) with the token stacks and hand count, cardboard clue and resource tokens, the automatic discard of used-up assets (a deviation from the printed rules), the bar's button when a teammate can act. Run `openspec validate fix-table-regressions --type change --strict`.
