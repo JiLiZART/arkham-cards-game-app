@@ -10,8 +10,8 @@
 
 ## 3. The draw stage
 
-- [ ] 3.1 Rework `TokenDraw.tsx` into the screen's draw stage: on the `token` event (same settle gate and pacing), the bag in the middle, discs rendered as face-down `ChaosToken`s at the token's size, spilled to `spillLayout` positions with a transform transition (no motion when reduced); tap, Space or Enter picks; the chosen disc flips in place (3D rotation to the face) while the others fade; the token then slides into the calc strip. `EventPlayer`'s hold for `token` becomes "the test screen holds". Keep the `.token-circle` class on the discs. Verify in the browser: 16 discs spill, the tapped one flips and lands in the strip, the same token comes out whichever disc is tapped on a replayed save.
-- [ ] 3.2 Auto mode: with "Draw by hand" off, no spill; one face-down token flips out of the bag and slides into the strip after the settle. Verify in the browser with the setting off: no discs appear, the token lands in the strip, the result closes by itself.
+- [x] 3.1 Rework `TokenDraw.tsx` into the screen's draw stage: on the `token` event (same settle gate and pacing), the bag in the middle, discs rendered as face-down `ChaosToken`s at the token's size, spilled to `spillLayout` positions with a transform transition (no motion when reduced); tap, Space or Enter picks; the chosen disc flips in place (3D rotation to the face) while the others fade; the token then slides into the calc strip. `EventPlayer`'s hold for `token` becomes "the test screen holds". Keep the `.token-circle` class on the discs. Verify in the browser: 16 discs spill, the tapped one flips and lands in the strip, the same token comes out whichever disc is tapped on a replayed save.
+- [x] 3.2 Auto mode: with "Draw by hand" off, no spill; one face-down token flips out of the bag and slides into the strip after the settle. Verify in the browser with the setting off: no discs appear, the token lands in the strip, the result closes by itself.
 
 ## 4. The result stage
 

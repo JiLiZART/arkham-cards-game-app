@@ -3,12 +3,9 @@ import type { GameState } from "../../engine/types";
 import { CardFace } from "../CardFace";
 import { useGame } from "../context";
 import { backUrl } from "../images";
-import { Icon } from "../Icon";
 import { viewerOf } from "../store";
 import { useView } from "../view";
 import { useFlyIn } from "./flights";
-import { ChaosTokenIcon } from "./ChaosTokenIcon";
-import { TestSubject } from "./TokenDraw";
 
 interface Box {
   x: number;
@@ -58,28 +55,6 @@ function EncounterFlight({ code, locale }: { code: string; locale: string }) {
   );
 }
 
-/** automatic token reveal: the token pops out of the bag toward the skill-test panel */
-function TokenPop({ token }: { token: string }) {
-  const box = useFlight(
-    () => {
-      const b = rectOf("#chaos-bag");
-      return { x: b.x + b.w / 2 - 40, y: b.y + b.h / 2 - 40, w: 80, h: 80 };
-    },
-    () => ({ x: innerWidth / 2 + 170, y: 64, w: 80, h: 80 }),
-  );
-  const b = rectOf("#chaos-bag");
-  return (
-    <>
-      <span className="token-pop-bag" style={{ left: b.x + b.w / 2 - 50, top: b.y + b.h / 2 - 50 }}>
-        <Icon name="chaosBag" size={100} />
-      </span>
-      <div className="flight token-flight" style={{ left: box.x, top: box.y, width: box.w, height: box.h }}>
-        <ChaosTokenIcon token={token} size={80} />
-      </div>
-    </>
-  );
-}
-
 /** cards in the "resolving" zone (a treachery, an event being played) shown over the middle of the screen */
 function Resolving({ game, locale }: { game: GameState; locale: string }) {
   const cards = Object.values(game.cards).filter((c) => c.zone === "resolving");
@@ -101,7 +76,6 @@ export function RevealOverlay() {
   const current = useGame((s) => s.current);
   const game = useGame((s) => s.game) as GameState;
   const locale = useGame((s) => s.locale);
-  const drawByHand = useGame((s) => s.drawByHand);
   // these play when the event player lets the event start (settled, holding the middle of the screen)
   const playing = useView((s) => s.playing) === current && !!current;
   const stageFree = useView((s) => s.stage.length === 0);
@@ -110,16 +84,6 @@ export function RevealOverlay() {
     if (!playing) return null;
     return <EncounterFlight key={key} code={game.cards[current.card].code} locale={locale} />;
   }
-  // the hand draw (TokenDraw) shows its own reveal
-  if (current?.type === "token" && !drawByHand && playing)
-    return (
-      <>
-        <div className="token-auto-subject">
-          <TestSubject e={current} />
-        </div>
-        <TokenPop key={key} token={String(current.data?.token)} />
-      </>
-    );
   // a card being resolved shows only while nothing else holds the middle (it may wait there for a choice)
   return stageFree ? <Resolving game={game} locale={locale} /> : null;
 }

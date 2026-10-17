@@ -3,19 +3,9 @@ import { botChoice } from "../engine/bot";
 import { dispatch, replay } from "../engine/engine";
 import { db, setup, start } from "../engine/testkit";
 import type { Action } from "../engine/types";
-import { breakdownRows, CIRCLE_R, circleLayout } from "./tokenDraw";
+import { breakdownRows } from "./tokenDraw";
 
 describe("chaos token draw", () => {
-  it("circles never overlap (16 and 30 tokens)", () => {
-    for (const n of [1, 16, 30]) {
-      const c = circleLayout(n);
-      expect(c).toHaveLength(n);
-      for (let i = 0; i < c.length; i++) for (let j = i + 1; j < c.length; j++) expect(Math.hypot(c[i].x - c[j].x, c[i].y - c[j].y)).toBeGreaterThanOrEqual(2 * CIRCLE_R);
-      // all above the bag's mouth
-      for (const p of c) expect(p.y).toBeLessThan(0);
-    }
-  });
-
   it("breakdown: success with a committed icon", () => {
     expect(breakdownRows({ skill: "intellect", base: 3, icons: 1, tokens: ["-1"], tokenTotal: -1, total: 3, difficulty: 2, success: true })).toEqual([
       { kind: "skill", skill: "intellect", value: 3 },

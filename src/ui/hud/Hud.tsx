@@ -13,7 +13,7 @@ import { HoverCard } from "./HoverCard";
 import { Feed } from "./Feed";
 import { ActionFloats, HitFx, HIT_MS } from "./Floats";
 import { Modals } from "./Modals";
-import { TestBreakdown, TokenDraw } from "./TokenDraw";
+import { TestBreakdown } from "./TokenDraw";
 import { RevealOverlay } from "./Reveal";
 import { ChaosBagButton, PileColumn, PlayStrip, ScenarioPanel } from "./Panels";
 import { InvTokens } from "./Investigators";
@@ -72,9 +72,9 @@ function EventPlayer() {
     if (!waitsForSettle(current)) return;
     return whenSettled(() => useView.setState({ settledFor: current }));
   }, [current]);
-  // drawing by hand: the token draw and the result panel wait for the player instead of a timer
-  // and at the Tap pace every big event waits for Next
-  const waits = (byHand && (current?.type === "token" || current?.type === "testResult")) || holdsForTap(current, pace);
+  // a token draw advances itself when its token has landed in the strip (by hand it waits for the tap first);
+  // drawing by hand also waits for Continue on the result; at the Tap pace every big event waits for Next
+  const waits = !!testKey && current?.type === "token" ? true : (byHand && current?.type === "testResult") || holdsForTap(current, pace);
   useEffect(() => {
     if (!current || waits || !ready) return;
     // a hit from a card plays its streak first, then the numbers
@@ -84,7 +84,6 @@ function EventPlayer() {
     return () => clearTimeout(id);
   }, [current, next, waits, ready, pace]);
   if (!current || !ready) return null;
-  if (current.type === "token" && byHand) return <TokenDraw key={`${current.text}:${current.data?.testId}`} e={current} />;
   if (current.type === "testResult") return <TestBreakdown e={current} />;
   // other events are told by the action floats and the feed
   return null;

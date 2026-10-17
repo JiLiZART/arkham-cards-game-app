@@ -16,6 +16,7 @@ import { ChaosTokenIcon } from "./ChaosTokenIcon";
 import { useFlyIn } from "./flights";
 import { RESOLVE_BOX } from "./Reveal";
 import { MiniCard } from "./Panels";
+import { DrawStage } from "./TokenDraw";
 import { moment } from "./SoundLayer";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
@@ -220,6 +221,8 @@ function PlacedCards({ placed, skill, viewerCanAct }: { placed: PlacedCard[]; sk
 export function SkillTestScreen() {
   const view = useTestView();
   const game = useGame((s) => s.game) as GameState;
+  const playing = useView((s) => s.playing) as GameEvent | null;
+  const byHand = useGame((s) => s.drawByHand);
   const locale = useGame((s) => s.locale);
   const holds = useStage(view ? `test:${view.snap.id}` : null);
   const shown = holds && !!view;
@@ -243,6 +246,9 @@ export function SkillTestScreen() {
       <SubjectView subject={snap.subject} />
       <div className="st-middle">
         <div className="st-line">{lineOf(snap, view.calc, game, locale)}</div>
+        <div className="st-stage">
+          {playing?.type === "token" && playing.data?.testId === snap.id && <DrawStage key={(playing as GameEvent & { logIndex?: number }).logIndex} e={playing} byHand={byHand} />}
+        </div>
       </div>
       <PlacedCards skill={snap.skill} placed={view.live ? placedCards(view.live, game, db, game.pending) : snap.placed.map((p) => ({ ...p, removable: false }))} viewerCanAct={!!view.live} />
       <CalcStrip calc={calc} />
