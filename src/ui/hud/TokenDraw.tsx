@@ -5,11 +5,8 @@ import { t } from "../../content/i18n";
 import type { GameEvent, GameState } from "../../engine/types";
 import { db, gameStore, useGame } from "../context";
 import { Icon } from "../Icon";
-import { isIcon } from "../icons";
 import { spillLayout, type Area } from "../testScreen";
-import { breakdownRows, type TestResultData } from "../tokenDraw";
 import { ChaosToken } from "../ChaosToken";
-import { ChaosTokenIcon } from "./ChaosTokenIcon";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
 /** the bag in the draw stage, and a disc (a token's size on screen) */
@@ -149,64 +146,6 @@ export function DrawStage({ e, byHand }: { e: GameEvent; byHand: boolean }) {
             ))}
         </>
       )}
-    </div>
-  );
-}
-
-/** the calculation line by line; stays until Continue (or closes by itself when drawing by hand is off) */
-export function TestBreakdown({ e }: { e: GameEvent }) {
-  const next = useGame((s) => s.nextEvent);
-  // drawing by hand, or at the Tap pace, the result waits for Continue
-  const byHand = useGame((s) => s.drawByHand || s.pace === "tap");
-  const d = e.data as unknown as TestResultData;
-  const rows = breakdownRows(d);
-  const sign = (v: number) => (v >= 0 ? `+${v}` : `−${Math.abs(v)}`);
-  return (
-    <div className="breakdown-wrap" onClick={(ev) => ev.stopPropagation()}>
-      <div className={`breakdown ${d.success ? "ok" : "bad"}`}>
-        {rows.map((r, k) => {
-          switch (r.kind) {
-            case "skill":
-              return (
-                <div key={k} className="bd-row">
-                  {isIcon(r.skill) && <Icon name={r.skill} size={30} />} <span>{tr(`stat.${r.skill}`)}</span> <b>{r.value}</b>
-                </div>
-              );
-            case "committed":
-              return (
-                <div key={k} className="bd-row">
-                  <span>{tr("draw.committed")}</span> <b>{sign(r.value)}</b>
-                </div>
-              );
-            case "tokens":
-              return (
-                <div key={k} className="bd-row">
-                  {r.tokens.map((tok, j) => (
-                    <ChaosTokenIcon key={j} token={tok} size={34} />
-                  ))}
-                  <span>{tr("draw.token")}</span> <b>{r.autoFail ? tr("draw.autoFail") : sign(r.value)}</b>
-                </div>
-              );
-            case "total":
-              return (
-                <div key={k} className="bd-row total">
-                  <b>= {r.value}</b> <span>vs</span> <b>{r.difficulty}</b>
-                </div>
-              );
-            case "result":
-              return (
-                <div key={k} className="bd-result">
-                  {r.success ? tr("draw.success") : tr("draw.fail")}
-                </div>
-              );
-          }
-        })}
-        {byHand && (
-          <button className="primary big" onClick={next} autoFocus>
-            {tr("draw.continue")}
-          </button>
-        )}
-      </div>
     </div>
   );
 }

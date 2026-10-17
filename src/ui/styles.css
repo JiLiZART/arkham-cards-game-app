@@ -363,18 +363,7 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 .st-draw.picked .token-circle:not(.chosen) { opacity: 0; pointer-events: none; }
 .token-circle.chosen { z-index: 2; pointer-events: none; }
 @media (prefers-reduced-motion: reduce) { .disc-flip { transition: none; } }
-.breakdown-wrap { position: fixed; inset: 0; z-index: 75; display: grid; place-items: center; background: rgba(5, 4, 3, 0.45); }
-.breakdown { min-width: 320px; background: var(--panel); border: 2px solid var(--gold); border-radius: 16px; padding: 18px 26px; display: flex; flex-direction: column; gap: 8px; font: 22px Alegreya, Georgia, serif; box-shadow: 0 12px 40px #000; animation: popin 0.25s ease-out; }
 @keyframes popin { from { transform: scale(0.8); opacity: 0; } }
-.breakdown.ok { border-color: var(--ok); }
-.breakdown.bad { border-color: var(--bad); }
-.bd-row { display: flex; align-items: center; gap: 10px; }
-.bd-row b { margin-left: auto; font-size: 30px; font-variant-numeric: lining-nums; }
-.bd-row.total { border-top: 1px solid #5a4a30; padding-top: 8px; justify-content: center; gap: 14px; }
-.bd-row.total b { margin-left: 0; }
-.bd-result { text-align: center; font: 34px Teutonic, TeutonicRU, Georgia, serif; }
-.breakdown.ok .bd-result { color: var(--ok); }
-.breakdown.bad .bd-result { color: var(--bad); }
 
 /* the table is light parchment now: labels and the token row get dark backing */
 .pile-name { background: var(--panel); color: var(--ink); padding: 0 7px; border-radius: 8px; }
@@ -577,3 +566,11 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 .game.testing .play-strip { bottom: 300px; }
 .game.testing .play-strip, .game.testing .center-col, .game.testing .hand-fan, .game.testing .stat-dock, .game.testing .right-dock, .game.testing .mulligan-row { z-index: 52; }
 .game.testing .hand-fan:has(.fan-card:hover), .game.testing .hand-fan:focus-within, .game.testing .hand-fan:has(.dragging), .game.testing .hand-fan:has(.focused) { z-index: 60; }
+
+/* the result stage: the big total, the verdict, Continue */
+.st-result { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; animation: popin 0.25s ease-out; }
+.st-result-total { font: 110px/1 Teutonic, TeutonicRU, Georgia, serif; font-variant-numeric: lining-nums; color: #fff; text-shadow: 0 4px 16px #000; }
+.bd-result { font: 54px Teutonic, TeutonicRU, Georgia, serif; text-shadow: 0 3px 10px #000; }
+.breakdown.ok .bd-result { color: var(--ok); }
+.breakdown.bad .bd-result { color: var(--bad); }
+.st-result button { margin-top: 10px; z-index: 53; position: relative; }

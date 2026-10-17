@@ -92,7 +92,9 @@ export function useTestView(): TestView | null {
   const mine = useMemo(() => (live ? snapOf(live, game) : null), [live, game]);
   if (live && mine) snaps.current.set(live.id, mine);
   const events: GameEvent[] = [current, ...queue].flatMap((e) => (e && (e.type === "token" || e.type === "testResult") && typeof e.data?.testId === "number" ? [e] : []));
-  const id = events[0] ? (events[0].data!.testId as number) : live && (game.pending?.kind === "commit" || started.current === live.id) ? live.id : null;
+  // the screen ends with the result: reactions and effects after it (the test is still live in the state) play on the table
+  const resolved = !!live && game.log.some((e) => e.type === "testResult" && e.data?.testId === live.id);
+  const id = events[0] ? (events[0].data!.testId as number) : live && !resolved && (game.pending?.kind === "commit" || started.current === live.id) ? live.id : null;
   started.current = id;
   if (id === null) return null;
   const snap = snaps.current.get(id) ?? (events[0] ? snapFromEvent(events[0], game) : null);
@@ -214,6 +216,23 @@ function PlacedCards({ placed, skill, viewerCanAct }: { placed: PlacedCard[]; sk
   );
 }
 
+/** the result stage: the big total, Success or Fail, and Continue (by hand or at the Tap pace; otherwise it closes by itself) */
+function ResultStage({ e, waits }: { e: GameEvent; waits: boolean }) {
+  const next = useGame((s) => s.nextEvent);
+  const ok = !!e.data?.success;
+  return (
+    <div className={`breakdown st-result ${ok ? "ok" : "bad"}`} onClick={(ev) => ev.stopPropagation()}>
+      <div className="st-result-total">{String(e.data?.total ?? 0)}</div>
+      <div className="bd-result">{tr(ok ? "draw.success" : "draw.fail")}</div>
+      {waits && (
+        <button className="primary big" onClick={next} autoFocus>
+          {tr("draw.continue")}
+        </button>
+      )}
+    </div>
+  );
+}
+
 /**
  * The skill-test screen: one overlay from the commit prompt through the chaos draw to the result. It holds the stage
  * for the whole test, so the draw and the result (which play inside it) wait for it and nothing else takes the middle.
@@ -223,6 +242,8 @@ export function SkillTestScreen() {
   const game = useGame((s) => s.game) as GameState;
   const playing = useView((s) => s.playing) as GameEvent | null;
   const byHand = useGame((s) => s.drawByHand);
+  // drawing by hand, or at the Tap pace, the result waits for Continue
+  const waits = useGame((s) => s.drawByHand || s.pace === "tap");
   const locale = useGame((s) => s.locale);
   const holds = useStage(view ? `test:${view.snap.id}` : null);
   const shown = holds && !!view;
@@ -247,6 +268,7 @@ export function SkillTestScreen() {
       <div className="st-middle">
         <div className="st-line">{lineOf(snap, view.calc, game, locale)}</div>
         <div className="st-stage">
+          {playing?.type === "testResult" && playing.data?.testId === snap.id && <ResultStage key={(playing as GameEvent & { logIndex?: number }).logIndex} e={playing} waits={waits} />}
           {playing?.type === "token" && playing.data?.testId === snap.id && <DrawStage key={(playing as GameEvent & { logIndex?: number }).logIndex} e={playing} byHand={byHand} />}
         </div>
       </div>

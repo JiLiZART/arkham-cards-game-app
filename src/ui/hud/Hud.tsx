@@ -13,7 +13,6 @@ import { HoverCard } from "./HoverCard";
 import { Feed } from "./Feed";
 import { ActionFloats, HitFx, HIT_MS } from "./Floats";
 import { Modals } from "./Modals";
-import { TestBreakdown } from "./TokenDraw";
 import { RevealOverlay } from "./Reveal";
 import { ChaosBagButton, PileColumn, PlayStrip, ScenarioPanel } from "./Panels";
 import { InvTokens } from "./Investigators";
@@ -84,7 +83,6 @@ function EventPlayer() {
     return () => clearTimeout(id);
   }, [current, next, waits, ready, pace]);
   if (!current || !ready) return null;
-  if (current.type === "testResult") return <TestBreakdown e={current} />;
   // other events are told by the action floats and the feed
   return null;
 }
