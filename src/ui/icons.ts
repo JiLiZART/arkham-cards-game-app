@@ -3,8 +3,8 @@ import { asset } from "./images";
 /**
  * The one place that maps game concepts to icon sources. Sprite symbols come first (public/icons/sprite.svg, from
  * scripts/import-icons.ts: sharp at any size, coloured like the printed icons); PNG art (public/icons, from
- * scripts/extract-assets.sh) only for what the icon set doesn't draw: the damage, horror and doom tokens, the lead
- * token and the connector plaques.
+ * scripts/extract-assets.sh) for the cardboard tokens: damage, horror, doom, clues and resources (with their 3 and 5
+ * stacks), the lead token and the connector plaques.
  */
 
 /** a sprite symbol drawn in a colour, optionally over a silhouette layer (printed skill boxes, health and sanity) */
@@ -33,8 +33,9 @@ export const ICON_SOURCES = {
   hand: ink("hand"), hands: ink("hand_x2"), arcane: ink("arcane"), arcane2: ink("arcane_x2"), accessory: ink("accessory"), body: ink("body"), ally: ink("ally"),
   skull: { token: "skull" }, cultist: { token: "cultist" }, tablet: { token: "tablet" }, elderThing: { token: "elderThing" }, elderSign: { token: "elderSign" }, autoFail: { token: "autoFail" },
   "+1": { token: "+1" }, "-1": { token: "-1" },
-  resource: { glyph: "resource", color: "#d99a3a" }, clue: { glyph: "clue", color: "#3aa39b" }, chaosBag: { glyph: "chaos_bag", color: "#7a5230" },
+  chaosBag: { glyph: "chaos_bag", color: "#7a5230" },
   damage: { png: "damage" }, horror: { png: "horror" }, doom: { png: "doom" },
+  resource: { png: "resource" }, "resource-3": { png: "resource-3" }, "resource-5": { png: "resource-5" }, clue: { png: "clue" }, "clue-3": { png: "clue-3" },
   lead: { png: "lead" }, connectorBoth: { png: "connector-both" }, connectorOneWay: { png: "connector-one-way" },
 } satisfies Record<string, IconSource>;
 export type IconName = keyof typeof ICON_SOURCES;
@@ -46,6 +47,7 @@ export const ICON_LABELS: Record<IconName, string> = {
   health: "HP", sanity: "San", hand: "Hand", hands: "Hands", arcane: "Arc", arcane2: "Arc×2", accessory: "Acc", body: "Body", ally: "Ally",
   skull: "Skull", cultist: "Cult", tablet: "Tab", elderThing: "ElTh", elderSign: "ElSi", autoFail: "Fail", "+1": "+1", "-1": "−1",
   damage: "Dmg", horror: "Hor", clue: "Clue", doom: "Doom", resource: "Res",
+  "resource-3": "3 Res", "resource-5": "5 Res", "clue-3": "3 Clue",
   lead: "Lead", chaosBag: "Bag", connectorBoth: "↔", connectorOneWay: "→",
 };
 

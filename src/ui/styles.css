@@ -234,12 +234,13 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 .stat-dock { position: fixed; left: 8px; bottom: 8px; z-index: 47; display: flex; flex-direction: column; gap: 6px; }
 .token-row { display: flex; gap: 18px; align-items: center; padding-left: 8px; }
 .token-stack { display: flex; align-items: center; gap: 6px; font-size: 38px; line-height: 1; font-weight: bold; text-shadow: 0 1px 3px #000; }
-.hand-count .svg-icon { color: var(--ink); }
+.hand-count-back { height: 40px; width: auto; border-radius: 3px; box-shadow: 0 1px 3px #000c; }
 .hand-count.over b { color: var(--bad); }
 .token-stack.flash b { animation: flash 0.6s ease-out; }
 .pile-set { position: absolute; left: 4px; top: 4px; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--panel); color: var(--ink); border: 1px solid #5a4a30; }
 .ribbon-scen .svg-icon { margin-right: 4px; color: var(--gold); }
-.token-pile { display: inline-flex; filter: drop-shadow(0 2px 3px #000c); }
+.token-pile { position: relative; }
+.token-pile > span { position: absolute; top: 0; filter: drop-shadow(0 2px 3px #000c); }
 .token-empty { opacity: 0.35; }
 .portrait-btn { padding: 0; border: 0; background: transparent; border-radius: 50%; }
 .portrait-btn:hover:not(:disabled) { background: transparent; }

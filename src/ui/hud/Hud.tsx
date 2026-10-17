@@ -18,6 +18,7 @@ import { Modals } from "./Modals";
 import { RevealOverlay } from "./Reveal";
 import { ChaosBagButton, PileColumn, PlayStrip, ScenarioPanel } from "./Panels";
 import { PlayerBar } from "./PlayerBar";
+import { StatBar } from "./Stats";
 import { MulliganRow } from "./MulliganRow";
 import { IntroOverlay } from "./IntroOverlay";
 import { Showcase } from "./Showcase";
@@ -445,6 +446,7 @@ export function Hud() {
         <ChaosBagButton />
         <Feed />
       </div>
+      <StatBar />
       <PlayStrip />
       <MulliganRow />
       <div className="center-col">

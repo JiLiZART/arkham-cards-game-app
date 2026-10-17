@@ -35,9 +35,10 @@ describe("icons", () => {
 
   it("PNG art only for the cardboard tokens the sprite doesn't draw; no stacked token art", () => {
     const pngs = Object.entries(ICON_SOURCES as Record<string, IconSource>).filter(([, src]) => "png" in src).map(([n]) => n);
-    expect(pngs.sort()).toEqual(["connectorBoth", "connectorOneWay", "damage", "doom", "horror", "lead"]);
-    for (const n of ["resource", "clue", "chaosBag", "health", "sanity"]) expect("glyph" in (ICON_SOURCES as Record<string, IconSource>)[n], n).toBe(true);
-    expect(readdirSync("public/icons").filter((f) => f.endsWith(".png")).sort()).toEqual(["connector-both.png", "connector-one-way.png", "damage.png", "doom.png", "horror.png", "lead.png"]);
+    // cardboard tokens are PNG art, clue and resource stacks included; everything drawn comes from the sprite
+    expect(pngs.sort()).toEqual(["clue", "clue-3", "connectorBoth", "connectorOneWay", "damage", "doom", "horror", "lead", "resource", "resource-3", "resource-5"]);
+    for (const n of ["chaosBag", "health", "sanity"]) expect("glyph" in (ICON_SOURCES as Record<string, IconSource>)[n], n).toBe(true);
+    expect(readdirSync("public/icons").filter((f) => f.endsWith(".png")).sort()).toEqual(["clue-3.png", "clue.png", "connector-both.png", "connector-one-way.png", "damage.png", "doom.png", "horror.png", "lead.png", "resource-3.png", "resource-5.png", "resource.png"]);
   });
 
   it("every remaining PNG icon has a transparent background", () => {

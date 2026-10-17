@@ -10,7 +10,7 @@ OUT=public/icons
 mkdir -p "$OUT" public/table
 
 # target name  ←  source file
-# only the cardboard tokens the icon set doesn't draw are copied: damage, horror, doom, lead, the connector plaques.
+# only the cardboard tokens are copied: damage, horror, doom, clues and resources (with their 3 and 5 stacks), lead, the connector plaques.
 # Tokens and plaques come on an opaque white box; $SRC/transparent has them cut out by hand, but its cut also
 # cleared white inside the art (the heart, the 3s). Keep its outline, fill the holes: alpha = its alpha, or opaque
 # for anything not reachable from the border through fully transparent pixels (eroded 1px to keep its soft edge).
@@ -25,6 +25,11 @@ done <<'MAP'
 damage damage-token-one.png
 horror horror-token.png
 doom doom-token.png
+clue evidence-coin.png
+clue-3 token-clue-trhee.png
+resource resource-one.png
+resource-3 token-resource-3.png
+resource-5 token-resource-5.png
 lead token-lead-player.png
 connector-both connector-both-ways.png
 connector-one-way connector-one-way-from-left-to-right.png

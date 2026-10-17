@@ -6,7 +6,9 @@ export const FAN_REST_VISIBLE = 142;
 /** cards with an option in the pending choice rise this far above the others */
 export const FAN_LEGAL_RAISE = 27;
 /** room kept for the stat bar on the left of the hand and the action rail on the right */
-export const STAT_BAR_W = 420;
+/** the bottom-left stat bar is drawn at 75 % (CSS zoom) of its 420 px layout width */
+export const STAT_BAR_ZOOM = 0.75;
+export const STAT_BAR_W = 420 * STAT_BAR_ZOOM;
 export const RAIL_W = 172;
 
 export interface FanSlot {

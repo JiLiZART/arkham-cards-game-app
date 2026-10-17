@@ -11,9 +11,9 @@
 
 ## 3. Stat bar, hand count, token art
 
-- [ ] 3.1 Restore the five PNGs, `tokenStack.ts` and its test from `537e529^`; map `clue`, `resource`, `clue-3`, `resource-3`, `resource-5` to PNG in `src/ui/icons.ts` (labels too); `TokenPile` stacks again; `scripts/extract-assets.sh` map lines back; update `src/ui/icons.test.ts` and `check:content` expectations (write the failing expectation first). `npm run check:content` clean.
-- [ ] 3.2 `HandCount` renders the player card back image (`backUrl("player")`, 40 px tall) and the number; a test (`Stats.test.tsx` or `glance`-style pure test of the markup) asserts no `gl-fb` text node appears when the sprite registry is empty.
-- [ ] 3.3 Restore `StatBar` in `src/ui/hud/Stats.tsx` for `useShown()`, mount it in `Hud.tsx`, `STAT_BAR_W = 315` in `fan.ts`, `.stat-dock { zoom: 0.75 }`, hidden in the phone layout mode; portrait click opens the card modal. Verify in the browser at 1600×900 and 1280×720: the dock's width, the token stacks (9 resources → 5+3+1), the hand count, looking at Daisy switches the dock, the fan does not overlap the dock; the sheet unchanged. Screenshot.
+- [x] 3.1 Restore the five PNGs, `tokenStack.ts` and its test from `537e529^`; map `clue`, `resource`, `clue-3`, `resource-3`, `resource-5` to PNG in `src/ui/icons.ts` (labels too); `TokenPile` stacks again; `scripts/extract-assets.sh` map lines back; update `src/ui/icons.test.ts` and `check:content` expectations (write the failing expectation first). `npm run check:content` clean.
+- [x] 3.2 `HandCount` renders the player card back image (`backUrl("player")`, 40 px tall) and the number; a test (`Stats.test.tsx` or `glance`-style pure test of the markup) asserts no `gl-fb` text node appears when the sprite registry is empty.
+- [x] 3.3 Restore `StatBar` in `src/ui/hud/Stats.tsx` for `useShown()`, mount it in `Hud.tsx`, `STAT_BAR_W = 315` in `fan.ts`, `.stat-dock { zoom: 0.75 }`, hidden in the phone layout mode; portrait click opens the card modal. Verify in the browser at 1600×900 and 1280×720: the dock's width, the token stacks (9 resources → 5+3+1), the hand count, looking at Daisy switches the dock, the fan does not overlap the dock; the sheet unchanged. Screenshot. (Note: no layout mode exists yet, ADR-0005's hook arrives with phone-landscape; the dock is drawn at every size until then.)
 
 ## 4. Title
 

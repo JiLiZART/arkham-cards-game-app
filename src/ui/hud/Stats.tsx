@@ -5,11 +5,15 @@ import { maxHealth, maxSanity, skillValue } from "../../engine/core";
 import { HAND_LIMIT } from "../../engine/rules/investigators";
 import type { ChoiceOption, GameState, InvId } from "../../engine/types";
 import { db, gameStore, useGame } from "../context";
-import { Glyph, Icon, Stat } from "../Icon";
+import { Icon, Stat } from "../Icon";
 import { isIcon } from "../icons";
+import { backUrl } from "../images";
 import { Portrait } from "../Portrait";
 import { TokenPile } from "../TokenPile";
+import { useShown } from "../usePlayers";
+import { useDimmed, useView } from "../view";
 import { formatText } from "./Hud";
+import { STAT_BAR_W, STAT_BAR_ZOOM } from "./fan";
 import { OptionButtons } from "./Modals";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
@@ -61,13 +65,13 @@ export function TokenStack({ kind, value, size = 40 }: { kind: "resource" | "clu
   );
 }
 
-/** the number of cards in hand beside the token stacks: a card-back icon, red over the hand limit */
+/** the number of cards in hand beside the token stacks: the player card back (an image, not a sprite symbol, so it can never fall back to a word) and the number, red over the hand limit */
 export function HandCount({ value, limit }: { value: number; limit: number }) {
   const flash = useFlash(value);
   const tip = tr("stat.hand", { n: value, max: limit });
   return (
     <div className={`token-stack hand-count ${flash ? "flash" : ""} ${value > limit ? "over" : ""}`} title={tip} aria-label={tip}>
-      <Glyph name="card" size={40} title={tip} />
+      <img className="hand-count-back" src={backUrl("player")} alt="" draggable={false} />
       <b>{value}</b>
     </div>
   );
@@ -112,5 +116,23 @@ export function StatBody({ inv, onPortrait, legal, options, dimmed }: { inv: Inv
         </div>
       </div>
     </>
+  );
+}
+
+/**
+ * The investigator on screen (the one being looked at, else the decider), bottom-left at 75 %: portrait, ability, health
+ * and sanity, skills; resources and clues as token stacks and the hand count above. Investigator-card options stay on
+ * the avatars and their sheet; the portrait opens the card.
+ */
+export function StatBar() {
+  const game = useGame((s) => s.game) as GameState;
+  const shown = useShown();
+  const cardId = shown ? game.invs[shown]?.cardId : null;
+  const dimmed = useDimmed(shown ?? "");
+  if (!shown || !game.invs[shown] || !cardId) return null;
+  return (
+    <div className="stat-dock" style={{ width: STAT_BAR_W / STAT_BAR_ZOOM, zoom: STAT_BAR_ZOOM }}>
+      <StatBody inv={shown} dimmed={dimmed} onPortrait={() => useView.getState().setModal({ card: cardId })} />
+    </div>
   );
 }
