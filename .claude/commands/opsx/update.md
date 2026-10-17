@@ -1,5 +1,6 @@
 ---
 name: "OPSX: Update"
+model: claude-fable-5-1
 description: "Update a change - revise existing planning artifacts and keep them coherent (Experimental)"
 allowed-tools: Bash(openspec:*)
 category: "Workflow"

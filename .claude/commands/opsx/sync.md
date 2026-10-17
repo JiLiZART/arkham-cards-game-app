@@ -1,5 +1,6 @@
 ---
 name: "OPSX: Sync"
+model: claude-haiku-5-5
 description: "Sync delta specs from a change to main specs"
 allowed-tools: Bash(openspec:*)
 category: "Workflow"

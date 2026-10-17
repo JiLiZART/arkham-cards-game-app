@@ -1,5 +1,6 @@
 ---
 name: "OPSX: Propose"
+model: claude-fable-5-1
 description: "Propose a new change - create it and generate all artifacts in one step"
 allowed-tools: Bash(openspec:*)
 category: "Workflow"

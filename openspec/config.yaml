@@ -7,6 +7,9 @@ context: |
 #     Use senior-dev sub-agent for all src related work and senior-qa for acceptance tests.
 #     Do not optimize the batch the tasks for senior-dev and senior-qa, call them as many times as necessary in smaller batches as dev and qa work may be interleaved.
 
+# Models per step are set in .claude/commands/opsx/<step>.md frontmatter (model:):
+#   explore, propose, update -> claude-fable-5-1; apply -> claude-sonnet-5-5; archive, sync -> claude-haiku-5-5
+
 rules:
   proposal:
     - Must use grill-me skill

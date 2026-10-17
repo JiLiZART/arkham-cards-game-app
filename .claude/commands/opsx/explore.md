@@ -1,5 +1,6 @@
 ---
 name: "OPSX: Explore"
+model: claude-fable-5-1
 description: "Enter explore mode - think through ideas, investigate problems, clarify requirements"
 allowed-tools: Bash(openspec:*)
 category: "Workflow"

@@ -1,5 +1,6 @@
 ---
 name: "OPSX: Apply"
+model: claude-sonnet-5-5
 description: "Implement tasks from an OpenSpec change (Experimental)"
 allowed-tools: Bash(openspec:*)
 category: "Workflow"
