@@ -373,5 +373,14 @@
   "intent.hunt": "Hunter: will move toward the nearest investigator in the enemy phase",
   "intent.rest": "Exhausted: will not attack this round",
   "intent.wait": "Will stay where it is",
-  "turn.title": "{name}'s turn"
+  "turn.title": "{name}'s turn",
+  "deck.unknown": "Unknown card {card}",
+  "deck.cannot": "{card} can't be in a deck",
+  "deck.copies": "{n} copies of {card}; the limit is {limit}",
+  "deck.foreign": "{card} belongs to another investigator's deck",
+  "deck.notAllowed": "{card} ({faction}, level {level}) isn't allowed for {inv}",
+  "deck.missing": "Missing required card {card}",
+  "deck.size": "The deck has {n} cards; it needs {size} (not counting signatures and weaknesses)",
+  "deck.noWeakness": "The deck needs a basic weakness, or leave it random",
+  "deck.investigator": "Unknown investigator {inv}"
 }

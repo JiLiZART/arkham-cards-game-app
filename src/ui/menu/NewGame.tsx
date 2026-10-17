@@ -136,7 +136,7 @@ export function Wizard() {
           {tr("wizard.back")}
         </button>
         {last ? (
-          <button className="primary big" onClick={() => gameStore.getState().newCampaign(toSetup(s, Date.now() >>> 0))}>
+          <button className="primary big" onClick={() => gameStore.getState().newCampaign(toSetup(s, Date.now() >>> 0, db))}>
             {tr("wizard.begin")}
           </button>
         ) : (

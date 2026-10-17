@@ -21,6 +21,35 @@ describe("campaign", () => {
     expect(agnes).toHaveLength(1);
   });
 
+  it("a custom deck is used as given: its chosen weakness is the deck's, and no random one is drawn", () => {
+    const base = db.decks["roland-starter"];
+    const other = Object.values(db.cards).find((c) => c.subtype === "basicweakness" && c.type !== "investigator" && c.code !== "01097")!.code;
+    const cards = { ...base.cards };
+    delete cards["01097"];
+    cards[other] = 1;
+    const custom = { ...base, id: "custom:t1", name: "Roland · test", cards };
+    const c = startCampaign(db, { campaignId: "night-of-the-zealot", difficulty: "standard", seed: 5, investigators: [{ code: ROLAND, deckId: custom.id, deck: custom }] });
+    const deck = c.investigators[0].deck;
+    expect(c.investigators[0].deckId).toBe("custom:t1");
+    expect(deck.filter((x) => x === other)).toHaveLength(1);
+    expect(deck).not.toContain("01097");
+    expect(deck).toHaveLength(Object.values(cards).reduce((n, k) => n + k, 0));
+    // no random weakness was drawn, so the campaign's rng is where the seed left it
+    expect(c.rng).toBe(5);
+    // a random-weakness deck does draw one
+    const random = { ...custom, cards: Object.fromEntries(Object.entries(cards).filter(([k]) => k !== other)), randomBasicWeakness: true };
+    const r = startCampaign(db, { campaignId: "night-of-the-zealot", difficulty: "standard", seed: 5, investigators: [{ code: ROLAND, deckId: random.id, deck: random }] });
+    expect(r.investigators[0].deck).toHaveLength(deck.length);
+    expect(r.rng).not.toBe(5);
+  });
+
+  it("a custom deck that is invalid, or someone else's, is refused", () => {
+    const base = db.decks["roland-starter"];
+    const bad = { ...base, id: "custom:bad", cards: { ...base.cards, "01020": 3 } };
+    expect(() => startCampaign(db, { campaignId: "night-of-the-zealot", difficulty: "standard", seed: 1, investigators: [{ code: ROLAND, deckId: bad.id, deck: bad }] })).toThrow(/invalid deck/i);
+    expect(() => startCampaign(db, { campaignId: "night-of-the-zealot", difficulty: "standard", seed: 1, investigators: [{ code: AGNES, deckId: base.id, deck: base }] })).toThrow(/not a 01004 deck/);
+  });
+
   it("The Gathering setup", () => {
     const r = skipMulligans(start("the-gathering", [ROLAND, AGNES], 1));
     const g = gOf(r);

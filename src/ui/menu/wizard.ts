@@ -2,6 +2,8 @@
 import type { DeckDef, Difficulty } from "../../content/schema";
 import { validateDeck } from "../../engine/decks";
 import type { ContentDb } from "../../engine/types";
+import { customDecks, type SavedDeck } from "../decks";
+import type { Storage } from "../store";
 
 export const STEPS = ["campaign", "investigators", "decks", "difficulty", "ready"] as const;
 export type Step = (typeof STEPS)[number];
@@ -18,14 +20,14 @@ export interface WizardState {
   difficulty: Difficulty;
 }
 
-/** saved custom decks for an investigator; none until the deck configuration change provides them */
-export function customDecks(code: string): DeckDef[] {
-  void code;
-  return [];
-}
+/** the decks an investigator can bring: the starter decks, then the saved custom ones that still validate */
+export const decksFor = (db: ContentDb, code: string, storage?: Storage): DeckDef[] => [
+  ...Object.values(db.decks).filter((d) => d.investigator === code),
+  ...customDecks(db, code, storage).filter((d) => d.problems.length === 0).map((d) => d.deck),
+];
 
-/** the decks an investigator can bring: the starter decks, then any saved custom ones */
-export const decksFor = (db: ContentDb, code: string): DeckDef[] => [...Object.values(db.decks).filter((d) => d.investigator === code), ...customDecks(code)];
+/** saved decks that no longer validate (a pack is gone): shown with the reason, not selectable */
+export const invalidDecksFor = (db: ContentDb, code: string, storage?: Storage): SavedDeck[] => customDecks(db, code, storage).filter((d) => d.problems.length > 0);
 
 export function initialWizard(db: ContentDb): WizardState {
   return { step: "campaign", campaignId: Object.keys(db.campaigns)[0] ?? "", picks: [], decks: {}, difficulty: "standard" };
@@ -87,6 +89,14 @@ export function back(s: WizardState): WizardState {
 }
 
 /** what `newCampaign` takes */
-export function toSetup(s: WizardState, seed: number) {
-  return { campaignId: s.campaignId, difficulty: s.difficulty, seed, investigators: s.picks.map((code) => ({ code, deckId: s.decks[code] })) };
+export function toSetup(s: WizardState, seed: number, db?: ContentDb, storage?: Storage) {
+  return {
+    campaignId: s.campaignId, difficulty: s.difficulty, seed,
+    // a custom deck goes along as the deck itself (the content knows only the starter decks)
+    investigators: s.picks.map((code) => {
+      const deckId = s.decks[code];
+      const custom = db && !db.decks[deckId] ? decksFor(db, code, storage).find((d) => d.id === deckId) : undefined;
+      return custom ? { code, deckId, deck: custom } : { code, deckId };
+    }),
+  };
 }

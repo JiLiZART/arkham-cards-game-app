@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { db } from "../../engine/testkit";
-import { back, canContinue, initialWizard, next, setCampaign, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type WizardState } from "./wizard";
+import { saveCustomDeck } from "../decks";
+import type { Storage } from "../store";
+import { back, canContinue, decksFor, initialWizard, invalidDecksFor, next, setCampaign, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type WizardState } from "./wizard";
 
 const ROLAND = "01001";
 const DAISY = "01002";
@@ -95,5 +97,36 @@ describe("toSetup", () => {
       seed: 42,
       investigators: [{ code: DAISY, deckId: "daisy-starter" }, { code: ROLAND, deckId: "roland-starter" }],
     });
+  });
+});
+
+describe("custom decks in the wizard", () => {
+  const memory = (): Storage & { data: Map<string, string> } => {
+    const data = new Map<string, string>();
+    return { data, getItem: (k) => data.get(k) ?? null, setItem: (k, v) => void data.set(k, v), removeItem: (k) => void data.delete(k) };
+  };
+
+  it("a saved deck is offered after the starter deck, and a pick of it goes to the campaign as the deck itself", () => {
+    const store = memory();
+    const saved = saveCustomDeck(db, store, { name: "Roland · test", investigator: ROLAND, base: "roland-starter", ops: [{ op: "remove", code: "01087" }, { op: "add", code: "01087" }] });
+    expect(decksFor(db, ROLAND, store).map((d) => d.id)).toEqual(["roland-starter", saved.id]);
+    let s = tap(initialWizard(db), ROLAND);
+    s = setDeck(s, ROLAND, saved.id);
+    const setup = toSetup(s, 7, db, store);
+    expect(setup.investigators).toEqual([{ code: ROLAND, deckId: saved.id, deck: expect.objectContaining({ id: saved.id, investigator: ROLAND }) }]);
+  });
+
+  it("a starter deck goes by its id alone", () => {
+    expect(toSetup(tap(initialWizard(db), ROLAND), 1, db, memory()).investigators).toEqual([{ code: ROLAND, deckId: "roland-starter" }]);
+  });
+
+  it("a saved deck that no longer validates is listed apart with its reasons and can't be picked", () => {
+    const store = memory();
+    const saved = saveCustomDeck(db, store, { name: "Old", investigator: ROLAND, base: "roland-starter", ops: [] });
+    const raw = JSON.parse(store.getItem("ah:decks")!);
+    raw[0].deck.cards["99999"] = 1;
+    store.setItem("ah:decks", JSON.stringify(raw));
+    expect(decksFor(db, ROLAND, store).map((d) => d.id)).toEqual(["roland-starter"]);
+    expect(invalidDecksFor(db, ROLAND, store).map((d) => [d.id, d.problems.length > 0])).toEqual([[saved.id, true]]);
   });
 });

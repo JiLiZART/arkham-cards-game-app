@@ -1,5 +1,5 @@
-import type { CampaignEffect, ChaosToken, Difficulty } from "../content/schema";
-import { expandDeck } from "./decks";
+import type { CampaignEffect, ChaosToken, DeckDef, Difficulty } from "../content/schema";
+import { expandDeck, validateDeck } from "./decks";
 import { ENGINE_VERSION } from "./engine";
 import { randInt } from "./rng";
 import type { ContentDb, GameSetup, GameState, InvId } from "./types";
@@ -41,7 +41,8 @@ export interface NewCampaign {
   campaignId: string;
   difficulty: Difficulty;
   seed: number;
-  investigators: { code: InvId; deckId: string }[];
+  /** `deck` is a custom deck (saved on the device) used as given instead of the content's deck `deckId` */
+  investigators: { code: InvId; deckId: string; deck?: DeckDef }[];
 }
 
 const basicWeaknesses = (db: ContentDb, trait?: string) =>
@@ -55,9 +56,13 @@ export function startCampaign(db: ContentDb, opts: NewCampaign): CampaignState {
   if (opts.investigators.length < 1 || opts.investigators.length > 4) throw new Error("1–4 investigators");
   const rng = { rng: opts.seed >>> 0 };
   const pool = basicWeaknesses(db);
-  const investigators = opts.investigators.map(({ code, deckId }) => {
-    const d = db.decks[deckId];
+  const investigators = opts.investigators.map(({ code, deckId, deck: custom }) => {
+    const d = custom ?? db.decks[deckId];
     if (!d || d.investigator !== code) throw new Error(`deck ${deckId} is not a ${code} deck`);
+    if (custom) {
+      const problems = validateDeck(db, custom);
+      if (problems.length) throw new Error(`invalid deck ${deckId}: ${problems.map((p) => p.message).join("; ")}`);
+    }
     const deck = expandDeck(d);
     // the random basic weakness is chosen once, at campaign start
     if (d.randomBasicWeakness) deck.push(pool[randInt(rng, pool.length)].code);

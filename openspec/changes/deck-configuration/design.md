@@ -47,8 +47,8 @@ A custom deck stores its base deck id and a list of ops (`remove code`, `add cod
 ### 3. Storage
 `ah:decks` holds `{ id: "custom:<uuid>", name, investigator, base, ops, cards }[]` through `safeStorage()`; `customDecks()` validates each against the loaded packs and marks invalid ones with the reason.
 
-### 4. Weakness choice flows through `GameSetup`
-`GameSetup.investigators[].weakness?: code`; `scenarioSetup` uses it instead of drawing a random basic weakness. A small engine-adjacent change in `campaign.ts`, covered by `campaign.test.ts`.
+### 4. The chosen weakness is a card in the resolved deck; `NewCampaign` carries the custom deck
+The random basic weakness is drawn in `startCampaign` (campaign start), not in `scenarioSetup`, which only copies the stored deck. So a chosen weakness is simply the card in the resolved `DeckDef` (`randomBasicWeakness: false`, no random draw); "random" is the flag with no weakness listed. `NewCampaign.investigators[]` gains an optional `deck: DeckDef` (a custom deck used as given, validated by `startCampaign`), and the campaign stores the full deck codes as it always did. `GameSetup` is unchanged. Covered by `campaign.test.ts`.
 
 ## Risks / Trade-offs
 

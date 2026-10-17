@@ -1,7 +1,7 @@
 ## 1. The model
 
-- [ ] 1.1 Add `src/ui/decks.ts` with `decks.test.ts`: `poolFor(inv)` (level 0, allowed classes and neutral, no signatures or weaknesses, loaded packs), `applySwaps(base, ops)` → resolved `DeckDef`, `swapBudget(ops)` (5 removals), `basicWeaknesses()`, custom-deck storage (`customDecks`, `saveCustomDeck`, `renameCustomDeck`, `deleteCustomDeck`) over `safeStorage()` with validation and reasons. Cover: Roland's pool excludes Mystic cards and signatures, a sixth removal is refused, a third copy fails validation with the card named, a saved deck round-trips and is invalid when a card's pack is missing.
-- [ ] 1.2 Add `weakness` to `GameSetup.investigators[]` and use it in `scenarioSetup` instead of the random draw when set; `campaign.test.ts` case. Verify `npm test`.
+- [x] 1.1 Add `src/ui/decks.ts` with `decks.test.ts`: `poolFor(inv)` (level 0, allowed classes and neutral, no signatures or weaknesses, loaded packs), `applySwaps(base, ops)` → resolved `DeckDef`, `swapBudget(ops)` (5 removals), `basicWeaknesses()`, custom-deck storage (`customDecks`, `saveCustomDeck`, `renameCustomDeck`, `deleteCustomDeck`) over `safeStorage()` with validation and reasons. Cover: Roland's pool excludes Mystic cards and signatures, a sixth removal is refused, a third copy fails validation with the card named, a saved deck round-trips and is invalid when a card's pack is missing.
+- [x] 1.2 Let `NewCampaign.investigators[]` carry a custom `deck` (validated, used as given) so a chosen weakness, being a card in the resolved deck, replaces the random draw; `campaign.test.ts` cases (chosen weakness, no random draw, invalid or foreign deck refused). The wizard offers saved decks (`decksFor`, `invalidDecksFor`) and `toSetup` passes the custom deck. (Corrected from "weakness on GameSetup": the random draw happens in `startCampaign`; see design decision 4.) Verify `npm test`.
 
 ## 2. The editor
 

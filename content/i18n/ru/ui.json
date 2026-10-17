@@ -357,5 +357,14 @@
   "intent.hunt": "Охотник: в фазе врагов пойдёт к ближайшему сыщику",
   "intent.rest": "Истощён: в этом раунде не атакует",
   "intent.wait": "Останется на месте",
-  "turn.title": "Ход: {name}"
+  "turn.title": "Ход: {name}",
+  "deck.unknown": "Неизвестная карта {card}",
+  "deck.cannot": "{card} нельзя включить в колоду",
+  "deck.copies": "Копий {card}: {n}; максимум {limit}",
+  "deck.foreign": "{card} относится к колоде другого сыщика",
+  "deck.notAllowed": "{card} ({faction}, уровень {level}) не разрешена для {inv}",
+  "deck.missing": "Нет обязательной карты {card}",
+  "deck.size": "В колоде {n} карт, нужно {size} (без особых карт и слабостей)",
+  "deck.noWeakness": "Нужна базовая слабость или оставьте случайную",
+  "deck.investigator": "Неизвестный сыщик {inv}"
 }
