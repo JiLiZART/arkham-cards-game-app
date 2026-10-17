@@ -1,0 +1,24 @@
+## 1. The frame and the commit stage
+
+- [ ] 1.1 Add `src/ui/testScreen.ts` with the pure parts and tests (`testScreen.test.ts`): `subjectOf(test, game)` (target, else source, else the tester's portrait), `placedCards(test, game, pending)` (card, owner, icons, removable when the owner is the deciding player and an `un:` option exists), `calcParts(test, game, revealedTokens)` (the strip's parts from `testParts` plus the tokens), and `spillLayout(n, seed, area)` (deterministic, non-overlapping disc positions). Cover: a fight (enemy subject), an investigate (location), a treachery test (the card), a plain test (portrait), a helper's placed card not removable by the tester, the strip before and after a token.
+- [ ] 1.2 Add `src/ui/hud/SkillTestScreen.tsx`: mounts while `game.skillTest` is in its commit stage or its token / result plays; claims the stage `test:<id>`; renders the overlay with the subject block (moved from `TokenDraw.tsx`), the middle line, the placed cards (`MiniCard` with icons and owner portrait, tap to take back through the `un:` option, `rememberRect` so the card flies back), the calc strip (`data-tip="skilltest"`). Add `.game.testing` on the root while it is up. Verify in the browser with `setup-fight.js`: the screen opens on the fight, Vicious Blow flies to the placed cards on tap, the strip reads "4 + 1 = 5 vs 2", tapping the placed card flies it back and the strip reads "4 vs 2".
+- [ ] 1.3 Strip and bar above the overlay: under `.game.testing` raise the play strip and the instruction bar above the overlay; dim strip cards with no option for the current prompt. Remove `SkillTestPanel` from `Hud.tsx`. Verify in the browser: during the test Done is clickable in the bar, the strip's Machete is dimmed while Physical Training (given in play, during a willpower test) is bright and usable, and nothing renders at the top centre besides the bar.
+
+## 2. Helpers
+
+- [ ] 2.1 Helpers' commits on the same screen: the deciding player follows `pending.inv`; placed cards show the owner's portrait when more than one investigator has placed; only the deciding player's own cards are removable. Verify with a two-player script (privacy on): after Roland's Done the hand-off box appears over the screen, Daisy's fan comes in, her placed card shows her portrait, Roland's stays and is not removable, the strip counts both.
+
+## 3. The draw stage
+
+- [ ] 3.1 Rework `TokenDraw.tsx` into the screen's draw stage: on the `token` event (same settle gate and pacing), the bag in the middle, discs rendered as face-down `ChaosToken`s at the token's size, spilled to `spillLayout` positions with a transform transition (no motion when reduced); tap, Space or Enter picks; the chosen disc flips in place (3D rotation to the face) while the others fade; the token then slides into the calc strip. `EventPlayer`'s hold for `token` becomes "the test screen holds". Keep the `.token-circle` class on the discs. Verify in the browser: 16 discs spill, the tapped one flips and lands in the strip, the same token comes out whichever disc is tapped on a replayed save.
+- [ ] 3.2 Auto mode: with "Draw by hand" off, no spill; one face-down token flips out of the bag and slides into the strip after the settle. Verify in the browser with the setting off: no discs appear, the token lands in the strip, the result closes by itself.
+
+## 4. The result stage
+
+- [ ] 4.1 Replace `Breakdown` with the screen's result stage on the `testResult` event: the big total, Success or Fail in big text (green or red), a Continue button (`.breakdown button` kept as an alias class for the scripts), and bottom-centre the arithmetic as icons (skill icon and base, each token with its art and modifier, each placed card's icon, "= total vs difficulty"). Continue dismisses by hand and at the Tap pace; otherwise the existing timer. Add `result.success`, `result.fail` strings if missing in en and ru. Verify in the browser: a success shows "5", "Success", Continue, and "[combat] 4 + [token −1] + [card] 1 = 4 vs 2" at the bottom; a failure reads red.
+- [ ] 4.2 Tips and sound: move the token tip's anchor to the bag inside the draw stage and keep the test tip on the strip; confirm `check-tips.js` and `check-sounds.js` pass (rattle on the spill, clink on the flip, chime or thud on the result).
+
+## 5. Verification and docs
+
+- [ ] 5.1 Update `drive-calm.js`, `check-sounds.js` and `check-bar.js` for the new selectors; run `npm test`, `npm run lint`, `npm run build`, `npm run check:content`, all clean; `drive-calm.js` to round 3 with 0 errors and `maxCenter` 1 (add `.skill-test-screen` to its centre sampler so the screen counts as the one thing in the middle).
+- [ ] 5.2 README play notes: the skill-test screen (subject, placed cards, strip, spill and flip, result), helpers on the same screen, the strip usable during a test. Run `openspec validate skill-test-screen --type change --strict`.
