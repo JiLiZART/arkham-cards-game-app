@@ -182,16 +182,13 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 @font-face { font-family: Alegreya; src: url(/fonts/Alegreya-Regular.ttf) format("truetype"); font-display: swap; }
 @font-face { font-family: Alegreya; src: url(/fonts/Alegreya-Bold.ttf) format("truetype"); font-weight: bold; font-display: swap; }
 @font-face { font-family: Alegreya; src: url(/fonts/Alegreya-Italic.ttf) format("truetype"); font-style: italic; font-display: swap; }
-.gl { display: inline-block; line-height: 1; vertical-align: -0.12em; color: inherit; }
 .gl-i { font-family: arkhamicons; font-style: normal; font-weight: normal; }
-.gl-fb { display: none; font-weight: bold; }
-.no-icon-font .gl-i, .no-icon-font .tok-font { display: none; }
-.no-icon-font .gl-fb { display: inline; }
-.no-icon-font .token-face.font-backed { display: grid; }
-.tok-wrap { position: relative; display: inline-block; vertical-align: middle; }
-.tok-font { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle, #FFFBF2 60%, #D6CFB9 100%); font-family: arkhamtokens; line-height: 1; }
-.tok-font > span { position: absolute; inset: 0; }
-.tok-wrap .token-face.font-backed { display: none; position: absolute; inset: 0; }
+/* icons from the sprite (public/icons/sprite.svg): stacked <use> layers in one box, each layer filled in its colour */
+.svg-icon { display: inline-block; vertical-align: middle; flex: none; overflow: visible; }
+.svg-icon.gl { vertical-align: -0.12em; }
+.gl-fb { font-weight: bold; }
+.tok-wrap { position: relative; display: inline-block; vertical-align: middle; border-radius: 50%; flex: none; }
+.tok-wrap > .svg-icon { display: block; }
 /* card fonts: Teutonic for names (Cyrillic falls through to Teutonic RU), Alegreya for rules text */
 .card-name, .stat-name, .zoom-text > b { font-family: Teutonic, TeutonicRU, Georgia, serif; font-weight: normal; letter-spacing: 0.02em; }
 .zoom-text, .card-text, .stat-dock { font-family: Alegreya, Georgia, serif; }
@@ -402,11 +399,6 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 .breakdown.ok .bd-result { color: var(--ok); }
 .breakdown.bad .bd-result { color: var(--bad); }
 
-/* font icons sized like image icons: layers stacked in one box */
-.glyph-icon { position: relative; display: inline-block; vertical-align: middle; line-height: 1; flex: none; }
-.glyph-icon > .gl-i { position: absolute; inset: 0; display: grid; place-items: center; font-style: normal; font-weight: normal; }
-.glyph-icon > .gl-fb { position: absolute; inset: 0; display: none; place-items: center; }
-.no-icon-font .glyph-icon > .gl-fb { display: grid; }
 /* the table is light parchment now: labels and the token row get dark backing */
 .pile-name { background: var(--panel); color: var(--ink); padding: 0 7px; border-radius: 8px; }
 .token-row { align-self: flex-start; background: var(--panel); border: 1px solid #5a4a30; border-radius: 14px; padding: 4px 12px 4px 8px; }

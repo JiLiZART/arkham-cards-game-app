@@ -1,6 +1,7 @@
-import { FONT_FAMILY, glyphChar } from "./glyphs";
+import { hasSymbol } from "./icons";
+import { Symbols } from "./Icon";
 
-/** layers of the tokens font, bottom to top, with the colours ArkhamCards paints them in */
+/** the sprite's token layers (from the tokens font), bottom to top, with the colours ArkhamCards paints them in */
 type Layers = [string, string][];
 const NUMBER = (n: string, overlay = "#E6E1D3"): Layers => [
   ["token_symbol_fill", "#394852"],
@@ -56,32 +57,23 @@ const GRADIENT: Record<string, string> = {
 };
 const DEFAULT_GRADIENT = "radial-gradient(circle, #FFFBF2 60%, #D6CFB9 100%)";
 
-/** true if the tokens font can draw this token */
-export const hasTokenArt = (token: string) => !!layersFor(token)?.every(([g]) => glyphChar(g, "tokens"));
+/** true if the sprite has every layer of this token */
+export const hasTokenArt = (token: string) => !!layersFor(token)?.every(([id]) => hasSymbol(id));
 
-/**
- * A chaos token drawn from the tokens font's layered glyphs. If the font can't load, CSS swaps in
- * a plain token face with the token's label (same size, no layout shift).
- */
+/** a chaos token: the sprite's layers on the token disc; a plain disc with the token's label if they're missing */
 export function ChaosToken({ token, size = 28, title }: { token: string; size?: number; title?: string }) {
   const label = token.replace("-", "−");
   const layers = layersFor(token);
-  const face = (
-    <span className={`token-face ${layers ? "font-backed" : ""}`} style={{ width: size, height: size, fontSize: size * 0.38 }} title={title ?? token}>
-      {label}
-    </span>
-  );
-  if (!layers || !hasTokenArt(token)) return face;
-  return (
-    <span className="tok-wrap" style={{ width: size, height: size }} title={title ?? token} role="img" aria-label={title ?? label}>
-      <span className="tok-font" style={{ fontSize: size, fontFamily: FONT_FAMILY.tokens, background: GRADIENT[token] ?? DEFAULT_GRADIENT }} aria-hidden="true">
-        {layers.map(([g, color]) => (
-          <span key={g} style={{ color }}>
-            {glyphChar(g, "tokens")}
-          </span>
-        ))}
+  if (!layers || !hasTokenArt(token)) {
+    return (
+      <span className="token-face" style={{ width: size, height: size, fontSize: size * 0.38 }} title={title ?? token}>
+        {label}
       </span>
-      {face}
+    );
+  }
+  return (
+    <span className="tok-wrap" style={{ width: size, height: size, background: GRADIENT[token] ?? DEFAULT_GRADIENT }} title={title ?? token} role="img" aria-label={title ?? label}>
+      <Symbols layers={layers.map(([id, color]) => ({ id, color }))} width={size} height={size} />
     </span>
   );
 }

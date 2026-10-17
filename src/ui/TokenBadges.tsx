@@ -28,7 +28,7 @@ export function TokenBadges({ inst, size = 26, skip = [] }: { inst: CardInst; si
           </span>
         ) : (
           <span key={k} className={`tok tok-${k}`} title={`${k} ${n}`}>
-            <Glyph name="uses" size={12} />
+            <Glyph name="bullet" size={12} title="uses" />
             {n}
           </span>
         ),

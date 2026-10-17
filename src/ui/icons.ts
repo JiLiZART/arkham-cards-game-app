@@ -71,3 +71,27 @@ export const markupColor = (key: string): string | undefined => (SKILL_COLORS as
 
 /** a scenario's icon: the scenario id spelled like the icon set ("the-gathering" → "the_gathering") */
 export const scenarioIcon = (scenarioId: string) => scenarioId.replace(/-/g, "_");
+
+/** ids of the sprite's symbols, known once the sprite is loaded */
+const symbols = new Set<string>();
+export const hasSymbol = (id: string) => symbols.has(id);
+export const registerSymbols = (ids: Iterable<string>) => {
+  for (const id of ids) symbols.add(id);
+};
+
+/**
+ * Fetch the icon sprite (the browser caches it) and inject it as a hidden <svg>, so every `<use href="#id">` is
+ * same-document. main.tsx waits for it before the first screen renders: no icon is ever drawn blank.
+ */
+export async function loadSprite() {
+  const res = await fetch(asset("icons/sprite.svg"));
+  if (!res.ok) throw new Error(`icon sprite: HTTP ${res.status}`);
+  const host = document.createElement("div");
+  host.innerHTML = await res.text();
+  const svg = host.querySelector("svg");
+  if (!svg) throw new Error("icon sprite: no <svg>");
+  svg.setAttribute("aria-hidden", "true");
+  svg.style.cssText = "position:absolute;width:0;height:0;overflow:hidden";
+  document.body.prepend(svg);
+  registerSymbols([...svg.querySelectorAll("symbol")].map((s) => s.id));
+}
