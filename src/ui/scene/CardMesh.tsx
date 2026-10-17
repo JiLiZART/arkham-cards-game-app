@@ -12,6 +12,7 @@ import { TokenPile } from "../TokenPile";
 import { mapDealing, mapMoving, mapPending, reducedMotion } from "../arrivals";
 import { cardFace, cardFrame } from "./cardShape";
 import { useCardTexture } from "./textures";
+import { moment } from "../hud/SoundLayer";
 
 const glow = new THREE.MeshBasicMaterial({ color: "#ffcf5a", transparent: true, opacity: 0.85 });
 const hoverGlow = new THREE.MeshBasicMaterial({ color: "#8fd3ff", transparent: true, opacity: 0.9 });
@@ -140,7 +141,10 @@ export function CardMesh({ inst, place, highlighted, hovered, exhausted, onClick
       }
     } else if (shown.current !== showFront && !moving && !miniMoving()) {
       if (reducedMotion()) shown.current = showFront;
-      else tween.current = { t0: performance.now(), to: showFront };
+      else {
+        tween.current = { t0: performance.now(), to: showFront };
+        moment("flip", inst.id);
+      }
     }
     if (!tween.current) f.rotation.y = shown.current ? 0 : Math.PI;
     // the highlight frame doesn't turn: it waits for the flip to end

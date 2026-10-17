@@ -16,10 +16,12 @@ export function MenuScreen() {
   const drawByHand = useGame((s) => s.drawByHand);
   const pace = useGame((s) => s.pace);
   const tipsOn = useGame((s) => s.tipsOn);
+  const musicVolume = useGame((s) => s.musicVolume);
+  const sfxVolume = useGame((s) => s.sfxVolume);
   const [tipsReset, setTipsReset] = useState(false);
   const campaign = useGame((s) => s.campaign);
   const game = useGame((s) => s.game);
-  const { newCampaign, resume, setLocale, setPrivacy, setDrawByHand, setPace, setTipsOn, abandon } = gameStore.getState();
+  const { newCampaign, resume, setLocale, setPrivacy, setDrawByHand, setPace, setTipsOn, setVolume, abandon } = gameStore.getState();
   const hasSave = useMemo(() => !!safeStorage().getItem(SAVE_KEY), []);
   const campaigns = Object.values(db.campaigns);
   const [campaignId, setCampaignId] = useState(campaigns[0]?.id ?? "");
@@ -118,6 +120,12 @@ export function MenuScreen() {
         </label>
         <label>
           <input type="checkbox" checked={tipsOn} onChange={(e) => setTipsOn(e.target.checked)} /> {tr("menu.tips")}
+        </label>
+        <label className="slider">
+          {tr("menu.music")} <input type="range" min={0} max={100} value={musicVolume} onChange={(e) => setVolume("music", Number(e.target.value))} /> <span>{musicVolume}</span>
+        </label>
+        <label className="slider">
+          {tr("menu.effects")} <input type="range" min={0} max={100} value={sfxVolume} onChange={(e) => setVolume("effects", Number(e.target.value))} /> <span>{sfxVolume}</span>
         </label>
         <button
           disabled={tipsReset}

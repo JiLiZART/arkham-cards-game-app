@@ -6,6 +6,7 @@ import { handVisible, mapProjector } from "../scene/Table";
 import { canUndo, safeStorage, viewerOf } from "../store";
 import { pickTip, TIPS_KEY, type TipAnchor, type TipContext } from "../tips";
 import { useView } from "../view";
+import { moment } from "./SoundLayer";
 
 const W = 300;
 const GAP = 14;
@@ -103,6 +104,7 @@ export function TipLayer() {
       showing.current = null;
       markSeen(was.id);
     }
+    if (visible && showing.current?.id !== tip!.id) moment("tip");
     if (visible) showing.current = { id: tip!.id, seq: game.pending?.seq, viewer };
   });
 

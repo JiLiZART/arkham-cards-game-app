@@ -10,6 +10,7 @@ import { deckPick } from "../optionHome";
 import { useStage, useView } from "../view";
 import { centreTransform } from "./flights";
 import { RESOLVE_BOX } from "./Reveal";
+import { moment } from "./SoundLayer";
 
 const boxOf = (el: Element): ScreenBox => {
   const r = el.getBoundingClientRect();
@@ -34,6 +35,10 @@ export function Showcase() {
   const holds = useStage(ids.length && !busy ? "showcase" : null);
   const root = useRef<HTMLDivElement>(null);
   const flown = useRef(new Set<InstId>());
+  // the drawn cards turn face up on their way in
+  useEffect(() => {
+    if (holds && drawn.length) moment("flip");
+  }, [holds, drawn.length]);
 
   // drawn cards fly in from the deck pile, turning face up on the way; picks from a deck just appear
   useLayoutEffect(() => {
@@ -54,6 +59,7 @@ export function Showcase() {
 
   // the drawn cards go on to the fan, which flies each one from where it stands here
   const toHand = () => {
+    moment("button");
     root.current?.querySelectorAll<HTMLElement>(".sc-card[data-card]").forEach((el) => noteLocalMove(el.dataset.card!, el));
     useView.getState().setHover(null);
     useView.setState({ showcase: [] });

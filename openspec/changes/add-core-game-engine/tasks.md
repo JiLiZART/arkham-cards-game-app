@@ -70,7 +70,7 @@
 
 - [x] 9.1 Play The Gathering end to end with 2 investigators in the browser; record any rules gaps as tasks
 - [x] 9.2 Play full Night of the Zealot campaign with 1 and 4 investigators; verify campaign summary shows log, XP, trauma
-- [ ] 9.3 Profile 4-player Devourer Below table; verify ≥50 fps on integrated GPU (Chrome DevTools performance trace)
+- [x] 9.3 Profile 4-player Devourer Below table; verify ≥50 fps on integrated GPU (Chrome DevTools performance trace) — verified 2026-10-17 with `.playwright-mcp/perf-devourer.js` on an Apple M3 Max: 120 fps (display-capped), p95 frame 9.3 ms idle, whole map and while events animate; with DevTools 4× CPU throttling 113 fps worst second. A 2020-era integrated GPU was not available; rerun the script there when one is.
 
 ## Known gaps found while playtesting (follow-ups, not part of this change)
 

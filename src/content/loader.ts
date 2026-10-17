@@ -1,7 +1,7 @@
 import type { ZodError } from "zod";
 import type { CardScript, ContentDb } from "../engine/types";
 import {
-  CampaignDef, CardDef, CardOverride, DeckDef, Effect, I18nCampaigns, I18nCards, I18nUi, InvestigatorDef, ScenarioDef, type Ability,
+  CampaignDef, CardDef, CardOverride, DeckDef, Effect, EMPTY_SOUNDS, I18nCampaigns, I18nCards, I18nUi, InvestigatorDef, ScenarioDef, SoundManifest, type Ability,
 } from "./schema";
 
 export interface ContentError {
@@ -20,7 +20,7 @@ const zerr = (file: string, e: ZodError, prefix = ""): ContentError[] =>
  */
 export function buildContent(files: Record<string, unknown>, scriptFiles: Record<string, CardScript>): { db: ContentDb; errors: ContentError[] } {
   const errors: ContentError[] = [];
-  const db: ContentDb = { cards: {}, investigators: {}, decks: {}, scenarios: {}, campaigns: {}, scripts: {}, encounterSets: {}, i18n: {} };
+  const db: ContentDb = { cards: {}, investigators: {}, decks: {}, scenarios: {}, campaigns: {}, scripts: {}, encounterSets: {}, i18n: {}, sounds: EMPTY_SOUNDS };
   const cardFile: Record<string, string> = {};
   const entries = Object.entries(files).sort(([a], [b]) => a.localeCompare(b));
 
@@ -61,6 +61,14 @@ export function buildContent(files: Record<string, unknown>, scriptFiles: Record
   parseInto(/\/decks\/[^/]+\.json$/, DeckDef, (v) => (db.decks[v.id] = v));
   parseInto(/\/campaigns\/[^/]+\/campaign\.json$/, CampaignDef, (v) => (db.campaigns[v.id] = v));
   parseInto(/\/campaigns\/[^/]+\/scenarios\/[^/]+\.json$/, ScenarioDef, (v) => (db.scenarios[v.id] = v));
+  parseInto(/\/sounds\/sounds\.json$/, SoundManifest, (v, file) => {
+    db.sounds = v;
+    // a bed names a scenario that exists
+    for (const key of Object.keys(v.music)) {
+      const id = key.startsWith("bed:") ? key.slice(4) : null;
+      if (id !== null && !db.scenarios[id]) errors.push({ file, path: `music.${key}`, message: `unknown scenario ${id}` });
+    }
+  });
   // translations, merged field by field: imported *.generated.json, then *.print.json (the text printed on the
   // imported Russian card images), then the hand-written files
   const layer = (suffix?: string) => (suffix === ".generated" ? 0 : suffix === ".print" ? 1 : 2);

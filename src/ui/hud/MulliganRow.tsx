@@ -9,6 +9,7 @@ import { viewerOf } from "../store";
 import { centreTransform, flyGhost, flyIn, STAGGER_MS } from "./flights";
 import { MiniCard } from "./Panels";
 import { RESOLVE_BOX } from "./Reveal";
+import { moment } from "./SoundLayer";
 
 /** the cards the viewer has picked for their mulligan redraw (they stay in the hand zone until confirmed) */
 export function mulliganPicks(game: GameState, viewer: InvId | null): InstId[] {
@@ -46,6 +47,7 @@ export function MulliganRow() {
     for (const [id, from] of rects.current) {
       if (els.has(id)) continue;
       rects.current.delete(id);
+      if (game.cards[id]?.zone === "deck" && !k) moment("shuffle");
       const to = domPlace("deck", RESOLVE_BOX);
       if (game.cards[id]?.zone === "deck" && to && !reducedMotion()) flyGhost(backUrl("player"), from, to, k++ * STAGGER_MS);
     }

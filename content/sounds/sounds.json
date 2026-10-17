@@ -1,0 +1,417 @@
+{
+  "effects": {
+    "slide": {
+      "file": "slide.mp3",
+      "gain": 0.6,
+      "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+      "author": "Kenney",
+      "license": "CC0",
+      "original": "kenney-casino/Audio/card-slide-1.ogg"
+    },
+    "snap": {
+      "file": "snap.mp3",
+      "gain": 0.9,
+      "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+      "author": "Kenney",
+      "license": "CC0",
+      "original": "kenney-casino/Audio/card-place-1.ogg"
+    },
+    "snap-soft": {
+      "file": "snap-soft.mp3",
+      "gain": 0.6,
+      "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+      "author": "Kenney",
+      "license": "CC0",
+      "original": "kenney-casino/Audio/card-place-3.ogg"
+    },
+    "flip": {
+      "file": "flip.mp3",
+      "gain": 0.7,
+      "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+      "author": "Kenney",
+      "license": "CC0",
+      "original": "kenney-casino/Audio/card-shove-1.ogg"
+    },
+    "shuffle": {
+      "file": "shuffle.mp3",
+      "gain": 0.7,
+      "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+      "author": "Kenney",
+      "license": "CC0",
+      "original": "kenney-casino/Audio/card-shuffle.ogg"
+    },
+    "rattle": {
+      "file": "rattle.mp3",
+      "gain": 0.8,
+      "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+      "author": "Kenney",
+      "license": "CC0",
+      "original": "kenney-casino/Audio/dice-shake-1.ogg"
+    },
+    "clink": {
+      "file": "clink.mp3",
+      "gain": 0.8,
+      "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+      "author": "Kenney",
+      "license": "CC0",
+      "original": "kenney-casino/Audio/chip-lay-1.ogg"
+    },
+    "chime": {
+      "file": "chime.mp3",
+      "gain": 0.8,
+      "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+      "author": "rubberduck",
+      "license": "CC0",
+      "original": "rpg/item_gem_02.ogg"
+    },
+    "thud": {
+      "file": "thud.mp3",
+      "gain": 0.9,
+      "source": "https://opengameart.org/content/100-cc0-sfx-2",
+      "author": "rubberduck",
+      "license": "CC0",
+      "original": "sfx100/sfx100v2_hit_01.ogg"
+    },
+    "sting-low": {
+      "file": "sting-low.mp3",
+      "gain": 0.8,
+      "source": "https://opengameart.org/content/100-cc0-sfx-2",
+      "author": "rubberduck",
+      "license": "CC0",
+      "original": "sfx100/sfx100v2_thunder_01.ogg",
+      "trim": [
+        0,
+        1.6
+      ]
+    },
+    "sting-long": {
+      "file": "sting-long.mp3",
+      "gain": 0.9,
+      "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+      "author": "rubberduck",
+      "license": "CC0",
+      "original": "rpg/creature_die_01.ogg"
+    },
+    "sting-end": {
+      "file": "sting-end.mp3",
+      "gain": 0.9,
+      "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+      "author": "SRG774",
+      "license": "CC0",
+      "original": "victory.mp3"
+    },
+    "strike": {
+      "file": "strike.mp3",
+      "gain": 0.9,
+      "source": "https://opengameart.org/content/20-sword-sound-effects-attacks-and-clashes",
+      "author": "StarNinjas",
+      "license": "CC0",
+      "original": "sword/sword - StarNinjas/sword.3.ogg"
+    },
+    "growl": {
+      "file": "growl.mp3",
+      "gain": 0.8,
+      "source": "https://opengameart.org/content/80-cc0-creature-sfx",
+      "author": "rubberduck",
+      "license": "CC0",
+      "original": "creature/roar_01.ogg"
+    },
+    "growl-ghoul": {
+      "file": "growl-ghoul.mp3",
+      "gain": 0.8,
+      "source": "https://opengameart.org/content/zombie-moans",
+      "author": "Darsycho",
+      "license": "CC0",
+      "original": "zombie.ogg",
+      "trim": [
+        0,
+        1.8
+      ]
+    },
+    "growl-monster": {
+      "file": "growl-monster.mp3",
+      "gain": 0.8,
+      "source": "https://opengameart.org/content/cc0-deep-monster-roar",
+      "author": "trazzz123",
+      "license": "CC0",
+      "original": "monster-roar.wav",
+      "trim": [
+        0,
+        2.2
+      ]
+    },
+    "steps": {
+      "file": "steps.mp3",
+      "gain": 0.6,
+      "source": "https://opengameart.org/content/100-cc0-sfx-2",
+      "author": "rubberduck",
+      "license": "CC0",
+      "original": "sfx100/sfx100v2_footstep_wood_01.ogg"
+    },
+    "hit": {
+      "file": "hit.mp3",
+      "gain": 0.9,
+      "source": "https://opengameart.org/content/100-cc0-sfx-2",
+      "author": "rubberduck",
+      "license": "CC0",
+      "original": "sfx100/sfx100v2_hit_02.ogg"
+    },
+    "breath": {
+      "file": "breath.mp3",
+      "gain": 0.8,
+      "source": "https://opengameart.org/content/ghost-breath",
+      "author": "qubodup",
+      "license": "CC0",
+      "original": "ghostbreath.flac",
+      "trim": [
+        0,
+        2.2
+      ]
+    },
+    "glint": {
+      "file": "glint.mp3",
+      "gain": 0.7,
+      "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+      "author": "rubberduck",
+      "license": "CC0",
+      "original": "rpg/item_gem_04.ogg"
+    },
+    "bell": {
+      "file": "bell.mp3",
+      "gain": 0.8,
+      "source": "https://opengameart.org/content/bell-dingschimes",
+      "author": "PWL",
+      "license": "CC0",
+      "original": "bell3.wav"
+    },
+    "page": {
+      "file": "page.mp3",
+      "gain": 0.8,
+      "source": "https://opengameart.org/content/10-book-page-flips",
+      "author": "StarNinjas",
+      "license": "CC0",
+      "original": "pageflips/book_flip.1.ogg"
+    },
+    "swell": {
+      "file": "swell.mp3",
+      "gain": 0.7,
+      "source": "https://opengameart.org/content/droning-sound-effects",
+      "author": "bretbernhoft",
+      "license": "CC0",
+      "original": "drone57.wav",
+      "trim": [
+        0,
+        2.5
+      ]
+    },
+    "click": {
+      "file": "click.mp3",
+      "gain": 0.5,
+      "source": "https://opengameart.org/content/87-clickety-clips",
+      "author": "OwlishMedia",
+      "license": "CC0",
+      "original": "clicks/click1.wav"
+    },
+    "pop": {
+      "file": "pop.mp3",
+      "gain": 0.5,
+      "source": "https://opengameart.org/content/3-pop-sounds",
+      "author": "wubitog",
+      "license": "CC0",
+      "original": "pops/3pops/pop1.ogg"
+    },
+    "two-note": {
+      "file": "two-note.mp3",
+      "gain": 0.7,
+      "source": "https://opengameart.org/content/rpg-sound-pack",
+      "author": "artisticdude",
+      "license": "CC0",
+      "original": "rpg-pack/RPG Sound Pack/interface/interface1.wav"
+    },
+    "rewind": {
+      "file": "rewind.mp3",
+      "gain": 0.6,
+      "source": "https://opengameart.org/content/rpg-sound-pack",
+      "author": "artisticdude",
+      "license": "CC0",
+      "original": "rpg-pack/RPG Sound Pack/interface/interface4.wav"
+    },
+    "gunshot": {
+      "file": "gunshot.mp3",
+      "gain": 0.9,
+      "source": "https://opengameart.org/content/gunshot-sounds",
+      "author": "Tabasco",
+      "license": "CC0",
+      "original": "gunshots/sounds/sks.wav",
+      "trim": [
+        0,
+        0.9
+      ]
+    },
+    "gunshot-45": {
+      "file": "gunshot-45.mp3",
+      "gain": 0.9,
+      "source": "https://opengameart.org/content/gunshot-sounds",
+      "author": "Tabasco",
+      "license": "CC0",
+      "original": "gunshots/sounds/cz.wav",
+      "trim": [
+        0,
+        0.9
+      ]
+    },
+    "gun-ready": {
+      "file": "gun-ready.mp3",
+      "gain": 0.7,
+      "source": "https://opengameart.org/content/rpg-sound-pack",
+      "author": "artisticdude",
+      "license": "CC0",
+      "original": "rpg-pack/RPG Sound Pack/inventory/metal-small1.wav"
+    },
+    "blade": {
+      "file": "blade.mp3",
+      "gain": 0.8,
+      "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+      "author": "rubberduck",
+      "license": "CC0",
+      "original": "rpg/blade_02.ogg"
+    },
+    "arcane": {
+      "file": "arcane.mp3",
+      "gain": 0.8,
+      "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+      "author": "rubberduck",
+      "license": "CC0",
+      "original": "rpg/spell_01.ogg"
+    },
+    "tome": {
+      "file": "tome.mp3",
+      "gain": 0.7,
+      "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+      "author": "rubberduck",
+      "license": "CC0",
+      "original": "rpg/book_01.ogg"
+    },
+    "footstep": {
+      "file": "footstep.mp3",
+      "gain": 0.6,
+      "source": "https://opengameart.org/content/100-cc0-sfx-2",
+      "author": "rubberduck",
+      "license": "CC0",
+      "original": "sfx100/sfx100v2_footstep_wood_02.ogg"
+    },
+    "item": {
+      "file": "item.mp3",
+      "gain": 0.6,
+      "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+      "author": "rubberduck",
+      "license": "CC0",
+      "original": "rpg/item_misc_01.ogg"
+    }
+  },
+  "music": {
+    "bed:the-gathering": {
+      "file": "bed-gathering",
+      "gain": 0.8,
+      "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+      "author": "SRG774",
+      "license": "CC0",
+      "loop": true,
+      "original": "sector.mp3"
+    },
+    "bed:the-midnight-masks": {
+      "file": "bed-midnight-masks",
+      "gain": 0.8,
+      "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+      "author": "SRG774",
+      "license": "CC0",
+      "loop": true,
+      "original": "airy.mp3"
+    },
+    "bed:the-devourer-below": {
+      "file": "bed-devourer-below",
+      "gain": 0.8,
+      "source": "https://opengameart.org/content/cathedral-in-the-forest-ambient-loop",
+      "author": "congusbongus",
+      "license": "CC0",
+      "loop": true,
+      "original": "cathedral.ogg"
+    },
+    "fight": {
+      "file": "fight",
+      "gain": 0.9,
+      "source": "https://opengameart.org/content/horde-war-drums-loop",
+      "author": "William Hector",
+      "license": "CC0",
+      "loop": true,
+      "original": "war-drums.wav"
+    },
+    "tension": {
+      "file": "tension",
+      "gain": 0.85,
+      "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+      "author": "SRG774",
+      "license": "CC0",
+      "loop": true,
+      "original": "urgent.mp3"
+    }
+  },
+  "events": {
+    "token": [
+      "rattle",
+      "clink"
+    ],
+    "testResult": "chime",
+    "testResult:fail": "thud",
+    "encounter": "sting-low",
+    "attack": "strike",
+    "spawn": "growl",
+    "enemyMove": "steps",
+    "damage": "hit",
+    "damage:horror": "breath",
+    "clues": "glint",
+    "doom": "bell",
+    "agendaAdvance": "page",
+    "actAdvance": "page",
+    "enemyDefeated": "thud",
+    "defeated": "sting-long",
+    "resolution": "sting-end"
+  },
+  "moments": {
+    "draw": "slide",
+    "play": "snap",
+    "flip": "flip",
+    "commit": "snap-soft",
+    "shuffle": "shuffle",
+    "phase": "swell",
+    "button": "click",
+    "tip": "pop",
+    "handoff": "two-note",
+    "undo": "rewind"
+  },
+  "traits": {
+    "play": {
+      "Firearm": "gun-ready",
+      "Melee": "blade",
+      "Spell": "arcane",
+      "Tome": "tome",
+      "Ally": "footstep",
+      "Item": "item"
+    },
+    "fight": {
+      "Firearm": "gunshot",
+      "Melee": "blade",
+      "Spell": "arcane"
+    },
+    "spawn": {
+      "Ghoul": "growl-ghoul",
+      "Monster": "growl-monster",
+      "Humanoid": "footstep"
+    }
+  },
+  "cards": {
+    "01016": {
+      "fight": "gunshot-45"
+    }
+  }
+}

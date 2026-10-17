@@ -608,6 +608,57 @@ export const CampaignDef = z
   .strict();
 export type CampaignDef = z.infer<typeof CampaignDef>;
 
+// ---------- sounds ----------
+
+/** one audio file with its provenance; every clip in the game is CC0 */
+const SoundClip = z
+  .object({
+    /** file name under public/sounds (effects: .mp3; music: the stem, served as .m4a and .webm) */
+    file: z.string().min(1),
+    gain: z.number().min(0).max(2).default(1),
+    source: z.string().url(),
+    author: z.string().min(1),
+    license: z.literal("CC0"),
+    /** the original's path under sounds-src/, for the import script */
+    original: z.string().optional(),
+    /** seconds to keep of the original [start, end] */
+    trim: z.tuple([z.number().min(0), z.number().min(0)]).optional(),
+  })
+  .strict();
+const SoundTrack = SoundClip.extend({ loop: z.boolean().default(true), loopStart: z.number().min(0).optional(), loopEnd: z.number().min(0).optional() }).strict();
+/** when a card's own sound replaces the generic one */
+export const CARD_SOUND_WHEN = ["play", "fight", "spawn"] as const;
+export const CardSoundWhen = z.enum(CARD_SOUND_WHEN);
+export type CardSoundWhen = z.infer<typeof CardSoundWhen>;
+
+/**
+ * content/sounds/sounds.json: the clips and tracks, and what each serves. `events` keys are engine event types, with
+ * an optional ":variant" (damage:horror); `moments` keys are UI moments; `traits` and `cards` pick a card's own clip
+ * by trait or by code. Every reference must name a clip in `effects`.
+ */
+export const SoundManifest = z
+  .object({
+    effects: z.record(z.string(), SoundClip),
+    /** "bed:<scenarioId>", "fight", "tension" */
+    music: z.record(z.string(), SoundTrack),
+    events: z.record(z.string(), z.union([z.string(), z.array(z.string())])),
+    moments: z.record(z.string(), z.string()),
+    traits: z.record(CardSoundWhen, z.record(z.string(), z.string())).default({}),
+    cards: z.record(z.string(), z.record(CardSoundWhen, z.string())).default({}),
+  })
+  .strict()
+  .superRefine((m, ctx) => {
+    const need = (path: (string | number)[], id: string) => {
+      if (!m.effects[id]) ctx.addIssue({ code: z.ZodIssueCode.custom, path, message: `unknown clip ${id}` });
+    };
+    for (const [k, v] of Object.entries(m.events)) (Array.isArray(v) ? v : [v]).forEach((id, n) => need(["events", k, ...(Array.isArray(v) ? [n] : [])], id));
+    for (const [k, id] of Object.entries(m.moments)) need(["moments", k], id);
+    for (const [when, byTrait] of Object.entries(m.traits)) for (const [trait, id] of Object.entries(byTrait)) need(["traits", when, trait], id);
+    for (const [code, byWhen] of Object.entries(m.cards)) for (const [when, id] of Object.entries(byWhen)) need(["cards", code, when], id);
+  });
+export type SoundManifest = z.infer<typeof SoundManifest>;
+export const EMPTY_SOUNDS: SoundManifest = { effects: {}, music: {}, events: {}, moments: {}, traits: {}, cards: {} };
+
 export const I18nCards = z.record(z.string(), z.object({ name: z.string().optional(), text: z.string().optional(), backText: z.string().optional(), subname: z.string().optional(), backName: z.string().optional(), traits: z.array(z.string()).optional() }).strict());
 export const I18nUi = z.record(z.string(), z.string());
 /** campaign / scenario / encounter-set text for a locale */

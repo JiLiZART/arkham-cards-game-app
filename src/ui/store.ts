@@ -29,7 +29,7 @@ export interface Save {
   campaign: CampaignState;
   setup: GameSetup | null;
   actions: Action[];
-  settings: { locale: string; privacy: boolean; drawByHand?: boolean; pace?: Pace; tipsOn?: boolean };
+  settings: { locale: string; privacy: boolean; drawByHand?: boolean; pace?: Pace; tipsOn?: boolean; musicVolume?: number; sfxVolume?: number; muted?: boolean };
 }
 
 /** how fast events play: today's timings, 1.6 times longer, or each big event waits for a tap */
@@ -44,6 +44,10 @@ export interface UiState {
   pace: Pace;
   /** a first-time player's tips are shown (see tips.ts) */
   tipsOn: boolean;
+  /** music and effects levels, 0 to 100, and the mute that silences both while keeping them */
+  musicVolume: number;
+  sfxVolume: number;
+  muted: boolean;
   campaign: CampaignState | null;
   setup: GameSetup | null;
   actions: Action[];
@@ -72,6 +76,8 @@ export interface UiState {
   setDrawByHand(on: boolean): void;
   setPace(p: Pace): void;
   setTipsOn(on: boolean): void;
+  setVolume(category: "music" | "effects", level: number): void;
+  setMuted(muted: boolean): void;
   setPrivacy(p: boolean): void;
   confirmHandoff(): void;
   nextEvent(): void;
@@ -131,9 +137,9 @@ export function replayWithFloor(db: ContentDb, setup: GameSetup, actions: Action
 export function createGameStore(db: ContentDb, storage: Storage = safeStorage()): StoreApi<UiState> {
   const store = createStore<UiState>((set, get) => {
     const persist = () => {
-      const { campaign, setup, actions, locale, privacy, drawByHand, pace, tipsOn } = get();
+      const { campaign, setup, actions, locale, privacy, drawByHand, pace, tipsOn, musicVolume, sfxVolume, muted } = get();
       if (!campaign) return;
-      const save: Save = { version: ENGINE_VERSION, campaign, setup, actions, settings: { locale, privacy, drawByHand, pace, tipsOn } };
+      const save: Save = { version: ENGINE_VERSION, campaign, setup, actions, settings: { locale, privacy, drawByHand, pace, tipsOn, musicVolume, sfxVolume, muted } };
       try {
         storage.setItem(SAVE_KEY, JSON.stringify(save));
       } catch {
@@ -149,7 +155,7 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage())
       set({ queue, current: get().current ?? queue[0], ...(get().current ? {} : { queue: queue.slice(1) }) });
     };
     return {
-      screen: "menu", locale: "en", privacy: true, drawByHand: true, pace: "normal", tipsOn: true, campaign: null, setup: null, actions: [], game: null,
+      screen: "menu", locale: "en", privacy: true, drawByHand: true, pace: "normal", tipsOn: true, musicVolume: 50, sfxVolume: 80, muted: false, campaign: null, setup: null, actions: [], game: null,
       queue: [], current: null, revealedFor: null, undoFloor: 0, logMarks: [], notice: null, error: null,
 
       newCampaign(opts) {
@@ -209,7 +215,7 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage())
         } catch {
           return false;
         }
-        const settings = { locale: save.settings?.locale ?? "en", privacy: save.settings?.privacy ?? true, drawByHand: save.settings?.drawByHand ?? true, pace: save.settings?.pace ?? "normal", tipsOn: save.settings?.tipsOn ?? true };
+        const settings = { locale: save.settings?.locale ?? "en", privacy: save.settings?.privacy ?? true, drawByHand: save.settings?.drawByHand ?? true, pace: save.settings?.pace ?? "normal", tipsOn: save.settings?.tipsOn ?? true, musicVolume: save.settings?.musicVolume ?? 50, sfxVolume: save.settings?.sfxVolume ?? 80, muted: save.settings?.muted ?? false };
         if (save.version !== ENGINE_VERSION || !save.setup) {
           // the rules changed since this save: keep the campaign, restart the scenario
           set({
@@ -251,6 +257,14 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage())
       },
       setTipsOn(tipsOn) {
         set({ tipsOn });
+        persist();
+      },
+      setVolume(category, level) {
+        set(category === "music" ? { musicVolume: level } : { sfxVolume: level });
+        persist();
+      },
+      setMuted(muted) {
+        set({ muted });
         persist();
       },
       confirmHandoff() {

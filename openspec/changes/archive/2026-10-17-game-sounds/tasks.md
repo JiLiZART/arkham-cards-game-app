@@ -1,0 +1,23 @@
+## 1. Manifest and assets
+
+- [x] 1.1 Add the `sounds.json` zod schema to `src/content/schema.ts` and load `content/sounds/sounds.json` into the content db (effects, music, events, moments, traits, cards per design decision 5). Verify with a schema test that a bad licence value and an unknown clip reference are rejected.
+- [x] 1.2 Extend `scripts/check-content.ts`: every manifest entry's converted file exists under `public/sounds/`, licence is `CC0`, every `events` key is in `ANIMATED`, every referenced clip id exists, effects ≤ 1 MB and music ≤ 10 MB in total. Verify `npm run check:content` fails on a deliberately broken manifest and passes on the real one.
+- [x] 1.3 Write `scripts/import-sounds.ts`: reads the manifest's `original` paths from an untracked `sounds-src/` folder, encodes effects to mono MP3 80 kbps and music to AAC 96 kbps `.m4a` plus Opus 80 kbps `.webm` with ffmpeg, applies trim points, fails loudly without `libopus`. Verify by running it on two clips and checking the outputs play in Chrome and Safari.
+- [x] 1.4 Collect the clips: about 25 effects (list in the proposal), trait clips (Firearm, Melee, Spell, Tome, Ally, Item; spawn growls for Ghoul, Humanoid, Monster), one override for the .45 Automatic, three scenario beds, one fight track, one tension track, all CC0 from Kenney, Freesound (CC0 filter), OpenGameArt (CC0 filter) or FreePD, each recorded in the manifest with source URL, author and licence. Run the import, commit `public/sounds/`. Verify `check:content` passes and the sizes are within budget.
+
+## 2. Decisions and audio engine
+
+- [x] 2.1 Add `src/ui/sounds.ts` with `effectFor`, `momentClip` (code → traits → generic), `musicFor` (fight > tension > bed by `scenarioId`; fight = an enemy with `engagedWith`, tension = enemy phase or agenda doom at threshold minus 1) and `gainOf(settings)`, with `sounds.test.ts`: the trait order, the override, the unknown-trait fallback, the music priority through a Ghoul engaging and being defeated, muted and zero-volume gains.
+- [x] 2.2 Add `src/ui/audio.ts`: lazy `AudioContext` created inside the first `pointerdown`/`keydown`, two gain nodes, buffer cache with `canPlayType` pick for music, `play(clip, gain)`, `music(trackId)` idempotent with a 1.5 s crossfade and gapless looping, `setGains`, `visibilitychange` pause and resume, and the dev hook `window.__arkhamAudio` (log of plays with timestamps, current track, unlocked flag). Verify in the browser that nothing plays before the first gesture and that the hook logs a play after it.
+
+## 3. Wiring
+
+- [x] 3.1 Add `musicVolume`, `sfxVolume`, `muted` to `UiState`, the save's `settings` and `resume` defaults (50, 80, false), with setters that persist. Verify with a `store.test.ts` case that an old save resumes with the defaults and new values survive a reload.
+- [x] 3.2 Add `src/ui/hud/SoundLayer.tsx`: subscribes to `view.playing` (effect on each new event start), to the game (music track), to the settings (gains), and exposes `moment(name, cardId?)` for the UI moments. Mount it in `Hud`. Verify with `check-sounds.js` on the fight setup: strike at the attack, hit at the damage, rattle when the token circles appear, clink at the reveal, fight track on while the Ghoul is engaged and the bed back after it dies, no plays while events are skipped.
+- [x] 3.3 Call `moment()` at the UI moments: fan landing and showcase to hand (`HandFan`, `Showcase`), strip landing (`Panels`), map and showcase flips (`CardMesh`, `Showcase`), commit (`Hud` skill test panel), mulligan redraw (`MulliganRow`), phase title (`Hud`), rail and bar buttons (`ActionRail`), tip (`TipLayer`), hand-off (`Hud`), undo (`ActionRail`). Verify in `drive-calm.js` with the audio log that each moment logs once and that no moment doubles an event's effect.
+- [x] 3.4 Menu sliders (Music, Effects) in `Screens.tsx` and a mute button in the top bar's right cluster, with `menu.music`, `menu.effects`, `hud.mute`, `hud.unmute` strings in en and ru. Verify in the browser: moving a slider changes the gain live, mute silences both and restores the levels, Russian labels render.
+
+## 4. Verification and docs
+
+- [x] 4.1 Run `npm test`, `npm run lint`, `npm run build`, `npm run check:content`, all clean; `drive-calm.js` to round 3 with 0 errors; `check-sounds.js` passes; listen on a phone (iOS Safari and Android Chrome) for the unlock, the loop seam and the hidden-tab pause.
+- [x] 4.2 README: play notes for the sliders and mute, a Credits section listing every source from the manifest; mention `check:content`'s sound checks. Run `openspec validate game-sounds --type change --strict`.

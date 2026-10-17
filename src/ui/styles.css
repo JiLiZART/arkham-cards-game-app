@@ -105,6 +105,9 @@ select { font: inherit; background: #221c14; color: var(--ink); border: 1px soli
 .screen h1 { color: var(--gold); }
 .screen section { margin: 18px 0; padding: 14px; border: 1px solid #3a2f1f; border-radius: 10px; background: #15110c; }
 .screen label { display: inline-block; margin: 6px 16px 6px 0; }
+.screen label.slider input[type="range"] { width: 160px; vertical-align: middle; accent-color: var(--gold); }
+.screen label.slider span { display: inline-block; min-width: 2.2em; text-align: right; color: var(--muted); }
+.mute-btn.muted { opacity: 0.6; }
 .inv-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; margin: 10px 0; }
 .inv-card { display: flex; gap: 10px; align-items: center; padding: 8px; border: 1px solid #3a2f1f; border-radius: 8px; cursor: pointer; }
 .inv-card.selected { border-color: var(--gold); background: #261e12; }

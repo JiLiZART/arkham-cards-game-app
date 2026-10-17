@@ -11,6 +11,7 @@ import { handVisible } from "../scene/Table";
 import { glyphHtml } from "../glyphs";
 import { iconSource, isIcon, MARKUP_ICONS } from "../icons";
 import { ActionRail, CameraButtons, InstructionBar, UndoButton } from "./ActionRail";
+import { moment, SoundLayer } from "./SoundLayer";
 import { TipLayer } from "./TipLayer";
 import { ChaosTokenIcon } from "./ChaosTokenIcon";
 import { HoverCard } from "./HoverCard";
@@ -129,6 +130,11 @@ function PhaseTitle() {
   }, [pause, current]);
   const paused = !!pause && settled === pause && !current;
   const holds = useStage(paused ? `pause:${pause!.seq}` : showing ? `title:${showing.key}` : null);
+  // the title appears (held at the pause, or passing): its swell
+  const titled = holds && (paused || !!showing);
+  useEffect(() => {
+    if (titled) moment("phase");
+  }, [titled]);
   if (!holds) return null;
   if (paused) return <PhasePause key={pause!.seq} />;
   if (!showing) return null;
@@ -208,12 +214,16 @@ function PhasePause() {
   const choose = useGame((s) => s.choose);
   const p = game.pending!;
   const phase = (p.step as { phase?: string }).phase ?? "";
+  const go = () => {
+    moment("button");
+    choose("continue");
+  };
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
       if (e.key !== " " && e.key !== "Enter") return;
       if ((e.target as HTMLElement | null)?.closest?.("button, input, textarea")) return;
       e.preventDefault();
-      choose("continue");
+      go();
     };
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
@@ -222,7 +232,7 @@ function PhasePause() {
     <div className="phase-title held">
       <div className="phase-title-name">{tr(`phase.title.${phase}`)}</div>
       <div className="phase-title-round">{tr("phase.round", { n: game.round })}</div>
-      <button className="primary big phase-continue" onClick={() => choose("continue")} autoFocus>
+      <button className="primary big phase-continue" onClick={go} autoFocus>
         {tr("phase.continue", { name: cardText(db, p.inv, locale).name })}
       </button>
     </div>
@@ -243,10 +253,15 @@ function TopBar() {
   // the button labels follow the language
   useGame((s) => s.locale);
   const toggle = useView((s) => s.toggle);
+  const muted = useGame((s) => s.muted);
+  const setMuted = useGame((s) => s.setMuted);
   return (
     <div className="topbar">
       <Ribbon />
       <div className="buttons">
+        <button className={`mute-btn ${muted ? "muted" : ""}`} onClick={() => setMuted(!muted)} title={tr(muted ? "hud.unmute" : "hud.mute")} aria-pressed={muted}>
+          {muted ? "🔇" : "🔊"}
+        </button>
         <JournalButton />
         <button onClick={() => toggle("debug")}>{tr("hud.debug")}</button>
         <button onClick={() => gameStore.setState({ screen: "menu" })}>{tr("hud.menu")}</button>
@@ -269,6 +284,14 @@ function SkillTestPanel() {
   // tokens still waiting for their draw animation aren't shown yet (the state already holds them)
   const unplayed = useGame((s) => [s.current, ...s.queue].filter((e) => e?.type === "token").length);
   const st = game.skillTest;
+  // a card committed: its sound (one taken back makes none)
+  const committed = st?.committed.length ?? 0;
+  const lastCommitted = st?.committed.at(-1) ?? null;
+  const wasCommitted = useRef(committed);
+  useEffect(() => {
+    if (committed > wasCommitted.current) moment("commit", lastCommitted);
+    wasCommitted.current = committed;
+  }, [committed, lastCommitted]);
   if (!st) return null;
   const p = testParts(gOf(), st);
   const tokens = st.tokens.slice(0, Math.max(0, st.tokens.length - unplayed));
@@ -324,7 +347,11 @@ function HandOff() {
   const intro = useView((s) => s.stage.length > 0 || !!s.intro || s.showcase.length > 0);
   const viewer = viewerOf(game);
   // the pause before a phase is for the whole table: no hand to hide
-  if (busy || intro || !game.pending || game.pending.kind === "phase" || handVisible(privacy, game.order.length, viewer, revealedFor)) return null;
+  const hidden = busy || intro || !game.pending || game.pending.kind === "phase" || handVisible(privacy, game.order.length, viewer, revealedFor);
+  useEffect(() => {
+    if (!hidden) moment("handoff");
+  }, [hidden]);
+  if (hidden) return null;
   const name = cardText(db, viewer!, locale).name;
   return (
     <div className="handoff">
@@ -496,6 +523,7 @@ export function Hud() {
       <PhaseTitle />
       <TurnTitle />
       <TipLayer />
+      <SoundLayer />
       <Showcase />
       <IntroOverlay />
       <HandOff />

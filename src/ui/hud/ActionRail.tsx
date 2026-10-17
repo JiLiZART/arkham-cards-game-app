@@ -11,6 +11,7 @@ import { Sentence } from "./Feed";
 import { handVisible } from "../scene/Table";
 import { canUndo, viewerOf } from "../store";
 import { useView } from "../view";
+import { moment } from "./SoundLayer";
 import { useCaption, useHeld } from "./StepCaption";
 
 export interface RailItem {
@@ -73,7 +74,7 @@ function OptionButton({ o, game, busy }: { o: ChoiceOption; game: GameState; bus
   const me = game.pending?.kind === "turn" ? game.invs[game.pending.inv] : null;
   const spent = !!me && me.actionsLeft + me.restrictedActions.reduce((n, r) => n + r.left, 0) === 0;
   return (
-    <button className={`rail-btn ${it.primary ? "primary" : ""} ${spent && it.key === "rail.endTurn" ? "glow" : ""}`} disabled={busy} onClick={() => choose(o.id)} title={o.label} data-tip={TIP_OF[it.key ?? ""]}>
+    <button className={`rail-btn ${it.primary ? "primary" : ""} ${spent && it.key === "rail.endTurn" ? "glow" : ""}`} disabled={busy} onClick={() => { moment("button"); choose(o.id); }} title={o.label} data-tip={TIP_OF[it.key ?? ""]}>
       <span className="rail-icon">{it.img ? <img src={it.img} alt="" /> : it.icon ? <Icon name={it.icon} size={30} /> : it.symbol}</span>
       <span className="rail-label">{label}</span>
     </button>
@@ -139,18 +140,23 @@ export function UndoButton() {
   const locale = useGame((s) => s.locale);
   const able = useGame(canUndo);
   const ended = useGame((s) => s.game?.phase === "ended");
-  const undo = useGame((s) => s.undo);
+  const undoStore = useGame((s) => s.undo);
+  const undo = () => {
+    moment("undo");
+    undoStore();
+  };
   const intro = useView((s) => !!s.intro);
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
       if (e.key.toLowerCase() !== "z" || !(e.ctrlKey || e.metaKey) || e.shiftKey) return;
       if ((e.target as HTMLElement | null)?.closest?.("input, textarea")) return;
       e.preventDefault();
-      undo();
+      moment("undo");
+      undoStore();
     };
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
-  }, [undo]);
+  }, [undoStore]);
   if (ended) return null;
   return (
     <button className="undo-btn" data-tip="undo" disabled={!able || intro} onClick={undo} title={t(db, locale, able ? "undo.hint" : "undo.blocked")}>

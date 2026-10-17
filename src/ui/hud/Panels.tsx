@@ -22,6 +22,7 @@ import { useFlyIn } from "./flights";
 import { Modal, useCardOptions } from "./Modals";
 import { RESOLVE_BOX } from "./Reveal";
 import { stripAction } from "./ActionRail";
+import { moment } from "./SoundLayer";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
 const gOf = () => ({ s: gameStore.getState().game!, db, events: [] });
@@ -254,6 +255,19 @@ export function PlayStrip() {
   const assets = all.filter((c) => c.zone === "play" && c.controller === viewer);
   const threats = [...all.filter((c) => c.zone === "threat" && c.controller === viewer), ...all.filter((c) => c.zone === "enemy" && c.engagedWith === viewer)];
   const shown = [...assets, ...threats];
+  // an asset new to the strip has just been played: its sound (enemies arriving have their own events)
+  const seenAssets = useRef<{ setup: unknown; ids: Set<InstId> } | null>(null);
+  useLayoutEffect(() => {
+    if (!seenAssets.current || seenAssets.current.setup !== setup) {
+      seenAssets.current = { setup, ids: new Set(assets.map((c) => c.id)) };
+      return;
+    }
+    for (const c of assets)
+      if (!seenAssets.current.ids.has(c.id)) {
+        seenAssets.current.ids.add(c.id);
+        moment("play", c.id);
+      }
+  });
   // size the cards to the room the strip has, then remember where each card is (a card leaving flies from there)
   useLayoutEffect(() => {
     const el = strip.current;

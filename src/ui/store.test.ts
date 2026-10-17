@@ -89,6 +89,26 @@ describe("ui store", () => {
     expect(old.getState().tipsOn).toBe(true);
   });
 
+  it("volumes and mute are saved with the settings; old saves get the defaults", () => {
+    const storage = mem();
+    const s = start(storage);
+    expect([s.getState().musicVolume, s.getState().sfxVolume, s.getState().muted]).toEqual([50, 80, false]);
+    s.getState().setVolume("music", 20);
+    s.getState().setVolume("effects", 100);
+    s.getState().setMuted(true);
+    const reloaded = createGameStore(db, storage);
+    reloaded.getState().resume();
+    expect([reloaded.getState().musicVolume, reloaded.getState().sfxVolume, reloaded.getState().muted]).toEqual([20, 100, true]);
+    const save = JSON.parse(storage.getItem(SAVE_KEY)!);
+    delete save.settings.musicVolume;
+    delete save.settings.sfxVolume;
+    delete save.settings.muted;
+    storage.setItem(SAVE_KEY, JSON.stringify(save));
+    const old = createGameStore(db, storage);
+    old.getState().resume();
+    expect([old.getState().musicVolume, old.getState().sfxVolume, old.getState().muted]).toEqual([50, 80, false]);
+  });
+
   it("a save from another engine version keeps the campaign and restarts the scenario", () => {
     const storage = mem();
     start(storage);

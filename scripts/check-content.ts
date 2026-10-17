@@ -1,7 +1,19 @@
 /** validate all content files: schema + cross references. Exit code 1 on errors. */
+import { statSync } from "node:fs";
 import { loadContentFromDisk } from "../src/content/node";
+import { checkSounds } from "../src/content/soundChecks";
+import { ANIMATED } from "../src/ui/store";
 
 const { db, errors } = await loadContentFromDisk();
+// the sound files are converted and committed; an event sound must be one the UI animates; sizes within budget
+const fileSize = (path: string) => {
+  try {
+    return statSync(`public/sounds/${path}`).size;
+  } catch {
+    return null;
+  }
+};
+errors.push(...checkSounds(db.sounds, fileSize, ANIMATED));
 // every prompt has an instruction for the bar, and the tips and How to play are written, in every language
 const en = db.i18n.en?.ui ?? {};
 const needed = Object.keys(en).flatMap((k) => (k.startsWith("prompt.") ? [k, `instruction.${k.slice(7)}`] : k.startsWith("tip.") || k.startsWith("howto.") ? [k] : []));

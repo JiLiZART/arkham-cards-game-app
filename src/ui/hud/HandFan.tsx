@@ -9,6 +9,7 @@ import { placeDetails } from "../details";
 import { handVisible } from "../scene/Table";
 import { viewerOf } from "../store";
 import { outsideSpotlight, useView } from "../view";
+import { moment } from "./SoundLayer";
 import { boxTransform, dockRadius, dockRect, dockTransform, dockWeight, FAN_CARD_H, FAN_CARD_W, FAN_LEGAL_RAISE, FAN_REST_VISIBLE, fanLayout, fanWidth, hoverScale, showBox, STAT_BAR_W } from "./fan";
 import { flyDraw, flyIn, STAGGER_MS } from "./flights";
 import { DETAILS_W, HandDetails } from "./HandDetails";
@@ -173,6 +174,7 @@ export function HandFan() {
       const from = takeLocalMove(id);
       const a = takeArrival(id);
       const el = els.current.get(id);
+      if ((from || a) && el && !a?.opening) moment("draw", id);
       if (from && el) flyIn(el, null, boxTransform(from, slots[i].x, FAN_LEFT, innerHeight), el.style.transform, 0, false, 500);
       else if (a && el) launch(el, a, i);
     });
