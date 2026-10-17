@@ -486,6 +486,27 @@ describe("player cards", () => {
     expect(r.state.invs[ROLAND].hand.length).toBe(hand);
   });
 
+  it("a drawn weakness is announced as a weakness, before its revelation; an ordinary draw stays a draw", () => {
+    let r = gathering([ROLAND], ["0"]);
+    r = mutate(r, (g) => {
+      const para = Object.values(g.s.cards).find((c) => c.code === "01097")!;
+      const me = inv(g, ROLAND);
+      for (const z of ["deck", "hand", "discard"] as const) me[z] = me[z].filter((x) => x !== para.id);
+      me.deck.unshift(para.id);
+      para.zone = "deck";
+    });
+    const from = r.state.log.length;
+    r = pick(r, "Draw 1 card");
+    const types = r.state.log.slice(from).map((e) => e.type);
+    expect(types).toContain("weakness");
+    expect(types).not.toContain("draw");
+    const w = r.state.log.slice(from).find((e) => e.type === "weakness")!;
+    expect(r.state.cards[w.card!].code).toBe("01097");
+    const n = r.state.log.length;
+    r = pick(r, "Draw 1 card");
+    expect(r.state.log.slice(n).map((e) => e.type)).toContain("draw");
+  });
+
   it("data-declared effect: Emergency Cache gains 3 resources", () => {
     let r = gathering([ROLAND], ["0"]);
     r = mutate(r, (g) => giveCard(g, ROLAND, "01088"));

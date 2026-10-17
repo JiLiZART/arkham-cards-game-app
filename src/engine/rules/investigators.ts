@@ -24,9 +24,12 @@ export const drawHandler: Handler<"Draw"> = (g, step) => {
   const id = me.deck[0];
   const d = def(g, id);
   moveCard(g, id, "hand");
-  emit(g, "draw", `${me.name} draws ${d.subtype ? d.name : "a card"}`, { inv: step.inv, card: id });
+  const weakness = !!d.subtype && (d.type === "treachery" || d.type === "enemy");
+  // a weakness that resolves on draw is public and announced as such (the table shows it before it resolves)
+  if (weakness) emit(g, "weakness", `${me.name} draws the weakness ${d.name}`, { inv: step.inv, card: id });
+  else emit(g, "draw", `${me.name} draws ${d.subtype ? d.name : "a card"}`, { inv: step.inv, card: id });
   const rest: Step[] = step.n > 1 ? [{ t: "Draw", inv: step.inv, n: step.n - 1 }] : [];
-  if (d.subtype && (d.type === "treachery" || d.type === "enemy")) {
+  if (weakness) {
     // weaknesses resolve immediately
     if (d.type === "enemy") push(g, { t: "Spawn", enemy: id, inv: step.inv }, ...rest);
     else push(g, { t: "Revelation", inv: step.inv, card: id }, ...rest);

@@ -149,6 +149,7 @@
   "feed.enemyDefeated": "{by} побеждает {card}",
   "feed.enemyMove": "{card} перемещается: {to}",
   "feed.draw": "{inv} берёт {card}",
+  "feed.weakness": "{inv} берёт слабость {card}",
   "feed.merged.each": "Каждый сыщик",
   "feed.merged.draw": "берёт {cards}",
   "feed.merged.drawOne": "берёт карту",

@@ -165,6 +165,7 @@
   "feed.enemyDefeated": "{by} defeated {card}",
   "feed.enemyMove": "{card} moved to {to}",
   "feed.draw": "{inv} drew {card}",
+  "feed.weakness": "{inv} drew the weakness {card}",
   "feed.merged.each": "Each investigator",
   "feed.merged.draw": "drew {cards}",
   "feed.merged.drawOne": "drew a card",
