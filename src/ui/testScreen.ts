@@ -62,6 +62,14 @@ export function calcParts(test: SkillTestState, game: GameState, db: ContentDb, 
   };
 }
 
+/** a strip with these tokens added (`exact`: the engine's own total once known); the tokens already in it stay */
+export function addTokens(calc: CalcParts, tokens: { token: string; mod: number }[], exact?: number): CalcParts {
+  if (!tokens.length) return calc;
+  const autoFail = calc.autoFail || tokens.some((t) => t.token === "autoFail");
+  const sum = tokens.reduce((n, t) => n + t.mod, 0);
+  return { ...calc, tokens: [...calc.tokens, ...tokens], autoFail, total: autoFail ? 0 : (exact ?? Math.max(0, calc.total + sum)) };
+}
+
 export interface Area {
   x: number;
   y: number;

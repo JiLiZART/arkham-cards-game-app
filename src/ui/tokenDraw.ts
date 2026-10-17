@@ -32,6 +32,8 @@ export interface TestResultData {
   base: number;
   icons: number;
   tokens: string[];
+  /** each token's resolved modifier */
+  tokenMods?: number[];
   tokenTotal: number;
   total: number;
   difficulty: number;

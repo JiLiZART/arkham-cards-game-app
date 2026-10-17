@@ -76,7 +76,7 @@ export function TipLayer() {
   const playing = useGame((s) => s.current);
   const queued = useGame((s) => s.queue.length > 0);
   const byHand = useGame((s) => s.drawByHand);
-  const stageFree = useView((s) => s.stage.every((k) => k.startsWith("pause:")));
+  const stageFree = useView((s) => s.stage.every((k) => k.startsWith("pause:") || k.startsWith("test:")));
   const quiet = useView((s) => !s.modal && !s.intro && !s.moveDrag);
   // re-placed as the map camera moves
   useView((s) => s.camTick);

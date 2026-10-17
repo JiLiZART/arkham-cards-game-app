@@ -19,7 +19,7 @@ export interface Arrival {
   shown: boolean;
 }
 
-const SHOWN = new Set<Zone>(["hand", "play", "threat", "enemy", "location", "attached", "resolving"]);
+const SHOWN = new Set<Zone>(["hand", "play", "threat", "enemy", "location", "attached", "resolving", "commit"]);
 
 /** every card that changed into a shown zone between two states (hand cards in hand order first) */
 export function diffArrivals(prev: GameState | null, next: GameState): Arrival[] {
@@ -158,7 +158,7 @@ const SELECTORS: Record<Place, string> = {
   piles: ".pile-column",
   fan: ".hand-fan",
   strip: ".play-strip",
-  skilltest: ".skilltest",
+  skilltest: ".st-placed",
 };
 
 /** the real places on screen */

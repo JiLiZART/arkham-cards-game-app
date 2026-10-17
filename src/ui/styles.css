@@ -57,11 +57,6 @@ select { font: inherit; background: #221c14; color: var(--ink); border: 1px soli
 .intent-words { font-weight: normal; margin-left: 4px; }
 
 
-.skilltest { background: var(--panel); border: 1px solid var(--gold); border-radius: 10px; padding: 8px 16px; text-align: center; flex: none; }
-.st-calc { font-size: 22px; }
-.st-value { color: var(--ok); font-weight: bold; }
-.st-diff { color: var(--bad); font-weight: bold; }
-.st-committed, .st-title { font-size: 13px; color: var(--muted); }
 
 .event-banner { position: absolute; left: 50%; top: 42%; transform: translate(-50%, -50%); z-index: 60; cursor: pointer; pointer-events: auto; animation: pop 0.25s ease-out; }
 .event-banner .result { background: var(--panel); border: 1px solid var(--gold); border-radius: 12px; padding: 12px 22px; font-size: 20px; max-width: 70vw; text-align: center; }
@@ -153,7 +148,6 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 .tok-icon { position: relative; display: inline-grid; place-items: center; filter: drop-shadow(0 1px 2px #000c); }
 .tok-icon b { position: absolute; inset: 0; display: grid; place-items: center; font: bold 13px sans-serif; color: #fff; text-shadow: 0 0 3px #000, 0 0 2px #000; }
 .token-face { display: inline-grid; place-items: center; border-radius: 50%; background: radial-gradient(#e8dcc0, #b8a67e); color: #2a1d10; font-weight: bold; font-family: sans-serif; border: 2px solid #5a4a30; vertical-align: middle; }
-.st-tokens { display: inline-flex; gap: 4px; margin-left: 8px; vertical-align: middle; }
 .event-banner .result { display: flex; align-items: center; gap: 8px; justify-content: center; }
 .glyph { color: var(--gold); font-weight: bold; }
 .topbar-item { display: flex; align-items: center; gap: 6px; }
@@ -326,12 +320,6 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 @keyframes tokspin { from { transform: rotate(-200deg) scale(0.4); } }
 .resolving { position: fixed; z-index: 43; pointer-events: none; filter: drop-shadow(0 10px 24px #000c); }
 .resolving img, .resolving .text-face { width: 100%; height: 100%; border-radius: 12px; object-fit: cover; }
-.st-committed { display: flex; gap: 8px; justify-content: center; margin-top: 6px; }
-.st-commit-slot { position: relative; }
-.st-commit-slot.removable .mini-card { cursor: pointer; }
-.st-takeback { position: absolute; left: -6px; top: -8px; width: 26px; height: 26px; border-radius: 50%; background: #2f5a30; border: 1px solid #7fe08a; color: #fff; font-size: 17px; line-height: 24px; pointer-events: none; }
-.st-parts { color: #e6dcc3; }
-.st-title .icon, .st-title svg { vertical-align: middle; }
 
 /* hover: the card at 2× on the spot, details underneath */
 .hover-card { position: fixed; z-index: 80; pointer-events: none; display: flex; flex-direction: column; align-items: center; filter: drop-shadow(0 12px 28px #000e); }
@@ -571,3 +559,30 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 @keyframes tip-in { from { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .tip-card { animation: none; } }
 .screen.howto p { font: 19px/1.5 Alegreya, Georgia, serif; max-width: 62ch; margin: 6px 0 0; }
+
+/* the skill-test screen: subject left, placed cards right, the draw in the middle, the calculation along the bottom */
+.skill-test-screen { position: fixed; inset: 0; z-index: 49; background: radial-gradient(circle at 50% 50%, rgba(10, 8, 6, 0.6), rgba(5, 4, 3, 0.88)); animation: st-in 0.3s ease-out; }
+@keyframes st-in { from { opacity: 0; } to { opacity: 1; } }
+.st-subject { position: absolute; left: 230px; top: 122px; display: flex; flex-direction: column; align-items: center; animation: popin 0.3s ease-out; }
+.st-subject-card { width: 180px; height: 252px; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px #000d, 0 0 0 2px var(--gold); }
+.st-subject-card img, .st-subject-card .text-face { width: 100%; height: 100%; object-fit: cover; display: block; }
+.st-subject-portrait { padding: 12px; border-radius: 50%; background: var(--panel); box-shadow: 0 10px 30px #000d, 0 0 0 2px var(--gold); }
+.st-middle { position: absolute; left: 470px; right: 660px; top: 112px; bottom: 480px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.st-line { background: var(--panel); border: 1px solid var(--gold); border-radius: 16px; padding: 4px 16px; font: 22px/1.3 Alegreya, Georgia, serif; text-align: center; white-space: nowrap; }
+.st-placed { position: absolute; right: 360px; top: 122px; width: 290px; display: flex; flex-wrap: wrap; gap: 14px 10px; justify-content: flex-start; align-content: flex-start; }
+.st-placed-slot { position: relative; padding-bottom: 22px; }
+.st-placed-slot.removable .mini-card { cursor: pointer; }
+.st-takeback { position: absolute; left: -6px; top: -8px; width: 26px; height: 26px; border-radius: 50%; background: #2f5a30; border: 1px solid #7fe08a; color: #fff; font-size: 17px; line-height: 24px; text-align: center; pointer-events: none; }
+.st-owner { position: absolute; right: -8px; top: -10px; border-radius: 50%; box-shadow: 0 2px 6px #000c; }
+.st-icons { position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: center; gap: 3px; font: bold 16px Alegreya, Georgia, serif; color: #e6dcc3; }
+.st-strip { position: fixed; left: 50%; bottom: 236px; transform: translateX(-50%); z-index: 50; display: flex; align-items: center; gap: 10px; padding: 6px 20px; background: var(--panel); border: 1px solid var(--gold); border-radius: 30px; font: 28px Alegreya, Georgia, serif; box-shadow: 0 4px 16px #000c; }
+.st-num { font-size: 36px; font-variant-numeric: lining-nums; }
+.st-total.ok { color: var(--ok); }
+.st-total.low { color: var(--bad); }
+.st-diff { color: var(--bad); }
+.st-term { display: inline-flex; align-items: center; gap: 4px; color: #e6dcc3; }
+.st-vs, .st-eq { color: var(--muted); }
+/* under the test screen the strip, the bar, the fan and the docks stay above it; the strip makes room for the calculation */
+.game.testing .play-strip { bottom: 300px; }
+.game.testing .play-strip, .game.testing .center-col, .game.testing .hand-fan, .game.testing .stat-dock, .game.testing .right-dock, .game.testing .mulligan-row { z-index: 52; }
+.game.testing .hand-fan:has(.fan-card:hover), .game.testing .hand-fan:focus-within, .game.testing .hand-fan:has(.dragging), .game.testing .hand-fan:has(.focused) { z-index: 60; }

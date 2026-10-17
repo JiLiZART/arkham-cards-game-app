@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { commitDone, db, giveCard, locId, mutate, pick, putEnemy, skipMulligans, start } from "../engine/testkit";
-import { calcParts, placedCards, spillLayout, subjectOf } from "./testScreen";
+import { addTokens, calcParts, placedCards, spillLayout, subjectOf } from "./testScreen";
 
 const ROLAND = "01001";
 const DAISY = "01002";
@@ -110,5 +110,26 @@ describe("spillLayout", () => {
   it("keeps the full size when there is room and shrinks the discs when there is not", () => {
     expect(spillLayout(16, 1, area, 64).size).toBe(64);
     expect(spillLayout(60, 1, { x: 0, y: 0, w: 200, h: 150 }, 64).size).toBeLessThan(64);
+  });
+});
+
+describe("addTokens", () => {
+  const base = { skill: "combat", base: 4, icons: [1], mods: 0, tokens: [], autoFail: false, total: 5, difficulty: 2 };
+
+  it("adds the revealed tokens' modifiers to the total", () => {
+    expect(addTokens(base, [{ token: "-1", mod: -1 }])).toMatchObject({ tokens: [{ token: "-1", mod: -1 }], total: 4, autoFail: false });
+  });
+
+  it("never goes below 0, and an auto-fail is 0", () => {
+    expect(addTokens({ ...base, total: 1 }, [{ token: "-3", mod: -3 }]).total).toBe(0);
+    expect(addTokens(base, [{ token: "autoFail", mod: 0 }])).toMatchObject({ autoFail: true, total: 0 });
+  });
+
+  it("an exact total from the result event wins (doubled negatives, flipped tokens)", () => {
+    expect(addTokens(base, [{ token: "-1", mod: -1 }], 3).total).toBe(3);
+  });
+
+  it("no tokens leaves the strip as it was", () => {
+    expect(addTokens(base, [])).toEqual(base);
   });
 });

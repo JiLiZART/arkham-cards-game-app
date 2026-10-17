@@ -52,6 +52,8 @@ export interface ViewState {
   showcase: InstId[];
   /** who wants the middle of the screen, in the order they asked: the first holds it, the rest wait their turn */
   stage: string[];
+  /** the skill-test screen is up: the strip, the bar and the fan sit above it */
+  testing: boolean;
   claimStage(key: string): void;
   releaseStage(key: string): void;
   /** what the current animated event is about on the map: the rest of the map dims */
@@ -82,6 +84,7 @@ export const useView = create<ViewState>((set, get) => ({
   intro: null,
   showcase: [],
   stage: [],
+  testing: false,
   claimStage: (key) => !get().stage.includes(key) && set({ stage: [...get().stage, key] }),
   releaseStage: (key) => get().stage.includes(key) && set({ stage: get().stage.filter((k) => k !== key) }),
   spotlight: null,

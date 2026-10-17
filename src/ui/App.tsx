@@ -5,10 +5,12 @@ import { HandFan } from "./hud/HandFan";
 import { Hud } from "./hud/Hud";
 import { CampaignLogScreen, HowToScreen, MenuScreen } from "./Screens";
 import { Table } from "./scene/Table";
+import { useView } from "./view";
 
 export function App() {
   const screen = useGame((s) => s.screen);
   const game = useGame((s) => s.game);
+  const testing = useView((s) => s.testing);
   useEffect(() => {
     gameStore.getState().resume();
   }, []);
@@ -24,7 +26,7 @@ export function App() {
   }
   if (screen === "game" && game) {
     return (
-      <div className="game">
+      <div className={`game ${testing ? "testing" : ""}`}>
         <Table />
         <Hud />
         <HandFan />

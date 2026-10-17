@@ -1,25 +1,21 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { cardText, scenarioText, t } from "../../content/i18n";
-import { testParts } from "../../engine/rules/skillTest";
 import type { GameEvent } from "../../engine/types";
-import { rememberRect, whenSettled } from "../arrivals";
-import { useOptionsByCard } from "../cardClick";
-import { Icon } from "../Icon";
+import { whenSettled } from "../arrivals";
 import { db, gameStore, useGame } from "../context";
 import { holdsForTap, viewerOf } from "../store";
 import { handVisible } from "../scene/Table";
-import { hasSymbol, isIcon, MARKUP_ICONS, markupColor } from "../icons";
+import { hasSymbol, MARKUP_ICONS, markupColor } from "../icons";
 import { ActionRail, CameraButtons, InstructionBar, UndoButton } from "./ActionRail";
 import { moment, SoundLayer } from "./SoundLayer";
 import { TipLayer } from "./TipLayer";
-import { ChaosTokenIcon } from "./ChaosTokenIcon";
 import { HoverCard } from "./HoverCard";
 import { Feed } from "./Feed";
 import { ActionFloats, HitFx, HIT_MS } from "./Floats";
 import { Modals } from "./Modals";
 import { TestBreakdown, TokenDraw } from "./TokenDraw";
 import { RevealOverlay } from "./Reveal";
-import { ChaosBagButton, MiniCard, PileColumn, PlayStrip, ScenarioPanel } from "./Panels";
+import { ChaosBagButton, PileColumn, PlayStrip, ScenarioPanel } from "./Panels";
 import { InvTokens } from "./Investigators";
 import { MulliganRow } from "./MulliganRow";
 import { IntroOverlay } from "./IntroOverlay";
@@ -27,12 +23,12 @@ import { Showcase } from "./Showcase";
 import { StatBar } from "./Stats";
 import { StepCaption } from "./StepCaption";
 import { Ribbon } from "./Ribbon";
+import { SkillTestScreen } from "./SkillTestScreen";
 import { Portrait } from "../Portrait";
 import { spotlightNow } from "../spotlight";
 import { useStage, useView } from "../view";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
-const gOf = () => ({ s: gameStore.getState().game!, db, events: [] });
 
 /** how long each animated event holds the screen (ms) */
 const DURATION: Record<string, number> = { enemyMove: 800, token: 650, testResult: 1300, encounter: 1400, attack: 700, spawn: 500, agendaAdvance: 1500, actAdvance: 1500, resolution: 800, enemyDefeated: 600, defeated: 1200, damage: 750, enemyDamage: 650, clues: 450, doom: 450 };
@@ -55,14 +51,19 @@ function EventPlayer() {
   // a chaos token draw waits until every card on screen has landed
   const settledFor = useView((s) => s.settledFor);
   // so does a hit from a card (its streak and numbers follow a revealed location's flip)
-  const center = !!current && CENTER.has(current.type);
-  const holds = useStage(center ? `event:${current!.logIndex}` : null);
+  // a test's draw and result play inside the skill-test screen, which holds the stage for the whole test
+  const testKey = current && (current.type === "token" || current.type === "testResult") && typeof current.data?.testId === "number" ? `test:${current.data.testId}` : null;
+  const center = !!current && !testKey && CENTER.has(current.type);
+  const holdsEvent = useStage(center ? `event:${current!.logIndex}` : null);
+  const holds = useView((s) => (testKey ? s.stage[0] === testKey : holdsEvent));
   const stageFree = useView((s) => s.stage.length === 0);
-  const ready = !!current && (!waitsForSettle(current) || settledFor === current) && (center ? holds : stageFree);
+  const ready = !!current && (!waitsForSettle(current) || settledFor === current) && (testKey || center ? holds : stageFree);
   // the event plays: everything else on the map dims around what it is about; once all is played, around the choice's options
   const game = useGame((s) => s.game);
   const queued = useGame((s) => s.queue.length > 0);
-  const idle = !current && !queued && stageFree;
+  // the choice behind a skill test (its committable cards) is spotlit while the test screen holds the stage
+  const onlyTest = useView((s) => s.stage.every((k) => k.startsWith("test:")));
+  const idle = !current && !queued && onlyTest;
   useEffect(() => {
     const playing = ready ? current : null;
     useView.setState({ playing, spotlight: game ? spotlightNow(game, viewerOf(game), playing, idle) : null });
@@ -269,71 +270,6 @@ function TopBar() {
   );
 }
 
-/** skill test in progress: who tests what, the value part by part vs difficulty, tokens, committed cards (a click takes one back) */
-function SkillTestPanel() {
-  const game = useGame((s) => s.game)!;
-  const locale = useGame((s) => s.locale);
-  const choose = useGame((s) => s.choose);
-  const byCard = useOptionsByCard();
-  const ref = useRef<HTMLDivElement>(null);
-  // remember where committed cards are, so one taken back flies from here into the fan
-  useLayoutEffect(() => {
-    ref.current?.querySelectorAll<HTMLElement>("[data-card]").forEach((el) => rememberRect(el.dataset.card!, el));
-  });
-  // tokens still waiting for their draw animation aren't shown yet (the state already holds them)
-  const unplayed = useGame((s) => [s.current, ...s.queue].filter((e) => e?.type === "token").length);
-  const st = game.skillTest;
-  // a card committed: its sound (one taken back makes none)
-  const committed = st?.committed.length ?? 0;
-  const lastCommitted = st?.committed.at(-1) ?? null;
-  const wasCommitted = useRef(committed);
-  useEffect(() => {
-    if (committed > wasCommitted.current) moment("commit", lastCommitted);
-    wasCommitted.current = committed;
-  }, [committed, lastCommitted]);
-  if (!st) return null;
-  const p = testParts(gOf(), st);
-  const tokens = st.tokens.slice(0, Math.max(0, st.tokens.length - unplayed));
-  const sign = (n: number) => (n >= 0 ? ` + ${n}` : ` − ${-n}`);
-  return (
-    <div className="skilltest" ref={ref} data-tip="skilltest">
-      <div className="st-title">
-        {cardText(db, st.inv, locale).name} · {isIcon(st.skill) && <Icon name={st.skill} size={18} />} {tr(`stat.${st.skill}`)} · {st.sourceLabel}
-      </div>
-      <div className="st-calc">
-        {p.icons.length > 0 || p.mods !== 0 ? (
-          <span className="st-parts">
-            {p.base}
-            {p.icons.map((i) => sign(i.n)).join("")}
-            {p.mods !== 0 && sign(p.mods)} ={" "}
-          </span>
-        ) : null}
-        <span className="st-value">{p.total}</span> vs <span className="st-diff">{p.difficulty}</span>
-        {tokens.length > 0 && (
-          <span className="st-tokens">
-            {tokens.map((tk, k) => (
-              <ChaosTokenIcon key={k} token={tk} size={30} />
-            ))}
-          </span>
-        )}
-      </div>
-      {st.committed.length > 0 && (
-        <div className="st-committed">
-          {st.committed.map((c) => {
-            const back = byCard.get(c)?.find((o) => o.id === `un:${c}`);
-            return (
-              <div key={c} className={`st-commit-slot ${back ? "removable" : ""}`} title={back ? back.label : undefined}>
-                <MiniCard id={c} w={86} h={120} legal={!!back} onClick={() => back && choose(back.id)} />
-                {back && <span className="st-takeback">↶</span>}
-              </div>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
-}
-
 /** "pass the device" screen between players when hands are private */
 function HandOff() {
   const game = useGame((s) => s.game)!;
@@ -343,7 +279,7 @@ function HandOff() {
   const busy = useGame((s) => !!s.current || s.queue.length > 0);
   const locale = useGame((s) => s.locale);
   // the hand-off waits for whatever holds the middle of the screen (and drawn cards about to take it)
-  const intro = useView((s) => s.stage.length > 0 || !!s.intro || s.showcase.length > 0);
+  const intro = useView((s) => s.stage.some((k) => !k.startsWith("test:")) || !!s.intro || s.showcase.length > 0);
   const viewer = viewerOf(game);
   // the pause before a phase is for the whole table: no hand to hide
   const hidden = busy || intro || !game.pending || game.pending.kind === "phase" || handVisible(privacy, game.order.length, viewer, revealedFor);
@@ -504,7 +440,6 @@ export function Hud() {
       <div className="center-col">
         <StepCaption />
         <InstructionBar />
-        <SkillTestPanel />
       </div>
       <div className="right-dock">
         <CameraButtons />
@@ -518,6 +453,7 @@ export function Hud() {
       <RevealOverlay />
       <ActionFloats />
       <HitFx />
+      <SkillTestScreen />
       <EventPlayer />
       <PhaseTitle />
       <TurnTitle />
