@@ -11,9 +11,9 @@
 
 - [x] 3.1 `src/ui/hud/Reveal.tsx`: `EncounterShowcase` replaces `EncounterFlight`: `.showcase` backdrop and `showcaseLayout(1)` size, `riseAndArc` from the encounter pile or the drawer's deck pile (fallback `RESOLVE_BOX`), face up after the arc, `DetailsColumn` on hover/focus/long press, help line `encounter.take` and a Continue button; tap, Continue, Space and Enter call `noteLocalMove` then `nextEvent`. Reduced motion: the card appears and waits. Strings in en and ru. Styles in `styles.css`.
 - [x] 3.2 Browser: new `.playwright-mcp/check-encounter-showcase.js` (two investigators, Normal pace): inject a Ghoul Minion draw → the card waits, the Ghoul is not on the map, no timer closes it in 3 s; tap → it glides to its location. Rotting Remains → waits; Space → the skill-test screen opens with it as subject. Offer of Power → tap → the card sits at the resolving spot with the choice offered. Cover Up from Roland's deck → waits, tap → threat area. At the Tap pace the caption shows no Next while the showcase holds. Screenshots.
-- [ ] 3.3 `drive-calm.js`: `settle()` taps the encounter showcase; run to round 3 with 0 errors. `check-treachery-test.js` and `check-players.js` updated for the hold where they inject a revelation (tap first), and pass.
+- [x] 3.3 `drive-calm.js`: `settle()` taps the encounter showcase; run to round 3 with 0 errors. `check-treachery-test.js` and `check-players.js` updated for the hold where they inject a revelation (tap first), and pass.
 
 ## 4. Verification and docs
 
-- [ ] 4.1 `npm test`, `npm run lint`, `npm run build`, `npm run check:content` clean.
-- [ ] 4.2 README play notes: drawn encounter cards and weaknesses stop in the showcase until tapped at every pace; the pace note updated. Run `openspec validate encounter-card-showcase --type change --strict`.
+- [x] 4.1 `npm test`, `npm run lint`, `npm run build`, `npm run check:content` clean.
+- [x] 4.2 README play notes: drawn encounter cards and weaknesses stop in the showcase until tapped at every pace; the pace note updated. Run `openspec validate encounter-card-showcase --type change --strict`.
