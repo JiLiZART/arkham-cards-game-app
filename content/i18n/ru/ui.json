@@ -136,6 +136,7 @@
   "feed.uncommit": "{inv} забирает {card} обратно",
   "feed.tokenCancelled": "{token} отменён",
   "feed.ability": "{inv} использует {card}",
+  "feed.usedUp": "Запас карты {card} исчерпан, она сбрасывается",
   "feed.play": "{inv} разыгрывает {card}",
   "feed.spawnFail": "{card}: нет места появления",
   "feed.spawn": "{card} появляется: {at}",

@@ -152,6 +152,7 @@
   "feed.uncommit": "{inv} took back {card}",
   "feed.tokenCancelled": "{token} was cancelled",
   "feed.ability": "{inv} used {card}",
+  "feed.usedUp": "{card} is used up and discarded",
   "feed.play": "{inv} played {card}",
   "feed.spawnFail": "{card} had nowhere to spawn",
   "feed.spawn": "{card} spawned at {at}",

@@ -1,4 +1,4 @@
-import type { Ability, Cost, Slot, Trigger } from "../../content/schema";
+import type { Ability, CardDef, Cost, Slot, Trigger } from "../../content/schema";
 import {
   abilitiesOf, activeInvs, allMods, ask, blankedCards, card, checkCondition, controlled, def, discard, emit, hasFlag, inv, invName, invsAt,
   matchesFilter, modSum, moveCard, playerCount, push, type G,
@@ -52,7 +52,6 @@ function payCost(g: G, i: InvId, cardId: InstId, cost: Cost | undefined) {
   if (cost.uses) c.uses -= cost.uses;
   if (cost.resources) me.resources -= cost.resources;
   if (cost.clues) me.clues -= cost.clues;
-  if (cost.uses && c.uses <= 0 && def(g, cardId).discardWhenEmpty) discard(g, cardId);
   if (cost.cluesPerInvestigator) spendGroupClues(g, cost.cluesPerInvestigator * playerCount(g));
   if (cost.takeHorror) push(g, { t: "AssignDamage", inv: i, damage: 0, horror: cost.takeHorror, direct: true, source: cardId });
   if (cost.horrorOnSelf) c.horror += cost.horrorOnSelf;
@@ -230,8 +229,30 @@ export const useAbilityHandler: Handler<"UseAbility"> = (g, step) => {
   const ctx: EffCtx = { ...(step.ctx ?? {}), source: step.card, you: step.ctx?.you ?? step.inv };
   if (c && c.zone === "location") ctx.location ??= c.id;
   emit(g, "ability", `${invName(g, step.inv)} uses ${a.label ?? def(g, step.card).name}`, { inv: step.inv, card: step.card });
-  if (a.run) push(g, { t: "Script", code: card(g, step.card).code, fn: a.run, ctx });
-  else if (a.effects) push(g, { t: "Effects", effects: a.effects, ctx });
+  // an asset whose last use this spent leaves play once the ability has resolved (its own modifiers still apply)
+  const after: Step[] = !step.paid && a.cost?.uses ? [{ t: "DiscardIfEmpty", card: step.card }] : [];
+  if (a.run) push(g, { t: "Script", code: card(g, step.card).code, fn: a.run, ctx }, ...after);
+  else if (a.effects) push(g, { t: "Effects", effects: a.effects, ctx }, ...after);
+  else push(g, ...after);
+};
+
+/** every ability of the card spends its uses and it has no constant ability: with no uses left it can do nothing */
+export function spendsOnlyUses(d: CardDef): boolean {
+  const abilities = d.abilities ?? [];
+  return abilities.length > 0 && abilities.every((a) => a.kind !== "constant" && (a.cost?.uses ?? 0) > 0);
+}
+
+/**
+ * Deliberate deviation from the printed rules: a used-up asset that can do nothing more is discarded (Flashlight,
+ * .45 Automatic, Shrivelling), as are cards marked discardWhenEmpty.
+ */
+export const discardIfEmptyHandler: Handler<"DiscardIfEmpty"> = (g, step) => {
+  const c = g.s.cards[step.card];
+  if (!c || c.zone !== "play" || c.uses > 0) return;
+  const d = def(g, step.card);
+  if (!d.discardWhenEmpty && !spendsOnlyUses(d)) return;
+  emit(g, "usedUp", `${d.name} is used up`, { inv: c.controller ?? undefined, card: step.card });
+  discard(g, step.card);
 };
 
 // ---------- playing cards ----------
@@ -352,6 +373,7 @@ export { modSum };
 export const handlers = {
   Window: windowHandler,
   UseAbility: useAbilityHandler,
+  DiscardIfEmpty: discardIfEmptyHandler,
   PlayCard: playCardHandler,
   EnterPlay: enterPlayHandler,
   SlotCheck: slotCheckHandler,

@@ -193,6 +193,7 @@ export type Step = { choice?: any } & (
   | { t: "EnterPlay"; inv: InvId; card: InstId }
   | { t: "ChooseTurnOrder" }
   | { t: "Script"; code: string; fn: string; ctx: EffCtx; args?: any }
+  | { t: "DiscardIfEmpty"; card: InstId }
   | { t: "UseAbility"; inv: InvId; card: InstId; index: number; ctx?: EffCtx; paid?: boolean; discards?: InstId[] }
   | { t: "PlayCard"; inv: InvId; card: InstId; ctx?: EffCtx; free?: boolean; viaTrigger?: boolean }
   | { t: "Draw"; inv: InvId; n: number }
