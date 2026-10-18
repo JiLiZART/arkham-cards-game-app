@@ -122,11 +122,33 @@ npm run import:cards -- --pack core --locale ru  # card names, traits and text f
 
 Both write only generated files: `content/i18n/<locale>/*.generated.json`, plus `content/i18n/<locale>/packs/<pack>.generated.json` for every pack but core, loaded with its pack. `check:content` prints, per pack, how many cards have text in each locale; for Russian it is 5,544 of 5,859, and flavour text is not imported. Fix a string by putting it in the hand-written `ui.json`, `cards.json` or `campaigns.json` next to them; re-running an import never touches those. Campaigns and scenarios name their ArkhamCards counterpart with `i18nId`. If ArkhamDB is unreachable, the card import exits with an error and keeps the old file.
 
-## Adding a campaign
+## Campaigns
 
-Create `content/campaigns/<id>/` with a `campaign.json`, one JSON file per scenario and, if needed, `scripts/<scenario>.ts`. Use Night of the Zealot as the template. The menu picks it up automatically.
+Night of the Zealot is written by hand: every card it uses has its behaviour in data or a script, so it plays by the rules. Every other official campaign is **generated** from ArkhamCards' campaign guides (ADR-0007):
 
-ArkhamDB has no location connection data, so each scenario file lists its `connections` as code pairs (and any one-way ones as `oneWay: [from, to]` pairs) and its `layout` as grid positions.
+```bash
+npm run import:campaigns              # content/campaigns-generated/<id>/, from inspired/ArkhamCards/assets/generated/all_campaigns.txt
+npm run import:i18n -- --locale ru    # then their Russian names, intros, resolutions and log labels
+npm run import:icons                  # then the icons of their encounter sets (a second sprite)
+```
+
+The import writes 36 campaigns with 149 scenarios: The Dunwich Legacy, The Path to Carcosa, The Forgotten Age, The Circle Undone, The Dream-Quest and The Web of Dreams, The Innsmouth Conspiracy, Edge of the Earth, The Scarlet Keys, The Feast of Hemlock Vale, The Drowned City, Children of Blood, the five Return-to boxes, Guardians of the Abyss, Fortune and Folly, and 17 side scenarios as one-scenario campaigns. For each scenario it takes the reference card, the encounter sets, the acts and agendas in stage order, the locations put into play and the starting location, the cards set aside, the layout, the chaos-token values per difficulty, and the resolutions with the log entries, cards, trauma and experience they give. Per campaign it takes the chaos bag of each difficulty and the packs its cards come from. A rerun writes identical files. A campaign folder of the same id in `content/campaigns` is a hand-written replacement and is never generated.
+
+What "generated" means in play, and what the import approximates (its notes are in `.cache/import-campaigns.log`):
+
+- **Rules are partial.** A card without written behaviour shows its text and has no effect: treacheries are drawn and discarded, acts and agendas advance by their clue and doom values, and scenario mechanics (supplies, vengeance, keys, the exploration deck, Frost) are missing. The new-game screen says so under each generated campaign.
+- **Endings.** When the last act or agenda advances and no script ended the game, the scenario ends with the resolution its back names ("→R2"), else the first resolution for an act and no resolution for an agenda.
+- **Connections** are not in any source: locations next to each other on the guide's layout are connected, and locations without a place on it are connected to every location.
+- **Chaos tokens:** each symbol token's value is read from the reference card; a value of X or one it can't read is −2 (215 of them). The engine has no frost or blood tokens, so they are left out of the Edge of the Earth and Children of Blood bags.
+- **Setup:** a choice in the guide's setup takes its first option; 31 scenarios name no location the import could find and start at their first location; 7 scenarios with no usable setup and 9 fan-made side scenarios are skipped, and the fan-made campaigns are not imported.
+- **Order:** the guide's listed order is played; campaigns that let the players choose the order or insert interludes don't.
+- **Music:** generated scenarios play the default ambient bed.
+
+Only the list of campaigns is in the first download. A generated campaign's scenarios, its text and its icons (`public/icons/sprite-campaigns.svg`, 2 MB) load when it is picked, and its card packs when it starts or a saved game of it is restored. With them the main JS chunk is 1,874 KB (493 KB gzipped), against 1,742 KB (464 KB) before.
+
+To write a campaign by hand, create `content/campaigns/<id>/` with a `campaign.json`, one JSON file per scenario and, if needed, `scripts/<scenario>.ts`; use Night of the Zealot as the template. ArkhamDB has no location connection data, so each scenario file lists its `connections` as code pairs (and any one-way ones as `oneWay: [from, to]` pairs) and its `layout` as grid positions.
+
+**Keywords:** the card details and the card modal explain each keyword a card has (Hunter, Retaliate, Alert, Aloof, Massive, Surge, Peril, Fast, Patrol, Elusive, Swarming, Concealed, Exceptional, Myriad, Bonded, Permanent, Seal, Uses, Victory) in a sentence or two, worded after the rules reference (the English rulebook in `inspired/`, and `inspired/Arkham_Horror_LCG/документы/Rules_Reference.pdf` for Russian, with the names Russian cards print). The texts are the `kw.*` strings in each locale's `ui.json`.
 
 ## Playing
 
