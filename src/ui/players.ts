@@ -198,3 +198,10 @@ export function deckOptions(game: GameState, viewer: InvId | null): DeckOptions 
   }
   return none;
 }
+
+/** how long the mouse rests on an avatar before its investigator's sheet opens, and how long the sheet stays after the pointer leaves */
+export const HOVER_SHEET_MS = 500;
+export const SHEET_GRACE_MS = 150;
+
+/** the investigator whose sheet a resting mouse opens: the one hovered, once long enough, unless they are the one on screen */
+export const sheetFor = (hovered: InvId | null, shown: InvId | null, elapsed: number): InvId | null => (hovered && hovered !== shown && elapsed >= HOVER_SHEET_MS ? hovered : null);

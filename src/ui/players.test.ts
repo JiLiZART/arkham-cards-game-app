@@ -3,7 +3,7 @@ import { createCard, type G } from "../engine/core";
 import { run } from "../engine/engine";
 import { commitDone, db, giveCard, locId, mutate, pick, putEnemy, skipMulligans, start } from "../engine/testkit";
 import type { GameState } from "../engine/types";
-import { abilityOptionsOf, autoSwitchTarget, barAsk, deckOptions, barModel, canAct, choicesOffered, delayed, investigatorChoice, investigatorOptions, landingView, ownDecisionTitle, shownInv } from "./players";
+import { abilityOptionsOf, autoSwitchTarget, barAsk, deckOptions, HOVER_SHEET_MS, sheetFor, barModel, canAct, choicesOffered, delayed, investigatorChoice, investigatorOptions, landingView, ownDecisionTitle, shownInv } from "./players";
 
 const ROLAND = "01001";
 const DAISY = "01002";
@@ -388,5 +388,19 @@ describe("deckOptions", () => {
     const other = state.order.find((i) => i !== state.pending!.inv)!;
     expect(deckOptions(state, other)).toEqual({ player: null, encounter: null, waiting: false });
     expect(deckOptions({ ...state, pending: null } as GameState, ROLAND)).toEqual({ player: null, encounter: null, waiting: false });
+  });
+});
+
+describe("sheetFor", () => {
+  it("opens the sheet of an investigator who isn't on screen once the mouse has rested on their avatar for 500 ms", () => {
+    expect(HOVER_SHEET_MS).toBe(500);
+    expect(sheetFor(DAISY, ROLAND, 499)).toBeNull();
+    expect(sheetFor(DAISY, ROLAND, 500)).toBe(DAISY);
+    expect(sheetFor(DAISY, ROLAND, 2000)).toBe(DAISY);
+  });
+
+  it("never for the investigator on screen, and not at all when nobody is hovered", () => {
+    expect(sheetFor(ROLAND, ROLAND, 5000)).toBeNull();
+    expect(sheetFor(null, ROLAND, 5000)).toBeNull();
   });
 });

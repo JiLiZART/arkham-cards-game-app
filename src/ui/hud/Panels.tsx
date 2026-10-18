@@ -37,7 +37,8 @@ const hoverProps = (id: InstId | null) => ({
 });
 
 /** a small HTML card: its scan (or the card back), tokens, highlight when it has options */
-export function MiniCard({ id, w, h, legal, exhausted, target, onClick, faceDown }: { id: InstId; w: number | string; h: number | string; legal?: boolean; exhausted?: boolean; target?: boolean; faceDown?: boolean; onClick?: (e: ReactMouseEvent) => void }) {
+/** `hover: false`: no enlarged copy and details column on hover (the scenario panel's cards: a tap opens the viewer) */
+export function MiniCard({ id, w, h, legal, exhausted, target, onClick, faceDown, hover = true }: { id: InstId; w: number | string; h: number | string; legal?: boolean; exhausted?: boolean; target?: boolean; faceDown?: boolean; hover?: boolean; onClick?: (e: ReactMouseEvent) => void }) {
   const game = useGame((s) => s.game) as GameState;
   const locale = useGame((s) => s.locale);
   const dimmed = useDimmed(id);
@@ -51,7 +52,8 @@ export function MiniCard({ id, w, h, legal, exhausted, target, onClick, faceDown
       style={{ width: w, height: h }}
       onClick={onClick}
       title={faceDown ? undefined : cardText(db, inst.code, locale).name}
-      {...(faceDown ? {} : hoverProps(id))}
+      data-hover={hover ? undefined : "off"}
+      {...(faceDown || !hover ? {} : hoverProps(id))}
     >
       {faceDown ? <img src={backUrl(isEncounterCard(d) ? "encounter" : "player")} alt="" draggable={false} /> : <CardFace code={inst.code} locale={locale} />}
       <TokenBadges inst={inst} size={20} />
@@ -102,7 +104,7 @@ export function ScenarioPanel() {
     <div className="scenario-panel">
       {game.agenda && (
         <div className={`scenario-card ${hides.agenda ? "intro-hidden" : ""}`} data-tip="agenda">
-          <MiniCard id={game.agenda} w={170} h={122} legal={byCard.has(game.agenda)} onClick={() => open("agenda")} />
+          <MiniCard id={game.agenda} w={170} h={122} hover={false} legal={byCard.has(game.agenda)} onClick={() => open("agenda")} />
           <CardOptions id={game.agenda} />
           <span className="scenario-badge" title={`${tr("stat.doom")} ${doomInPlay(g)} / ${agendaDef?.doom ?? "?"}`}>
             <Icon name="doom" size={22} /> <b>{doomInPlay(g)}</b>
@@ -112,7 +114,7 @@ export function ScenarioPanel() {
       )}
       {game.act && (
         <div className={`scenario-card ${hides.act ? "intro-hidden" : ""}`} data-tip="act">
-          <MiniCard id={game.act} w={170} h={122} legal={byCard.has(game.act)} onClick={() => open("act")} />
+          <MiniCard id={game.act} w={170} h={122} hover={false} legal={byCard.has(game.act)} onClick={() => open("act")} />
           <CardOptions id={game.act} />
           {Number.isFinite(cost) && (
             <span className="scenario-badge" title={`${tr("stat.clues")} ${cost}`}>
