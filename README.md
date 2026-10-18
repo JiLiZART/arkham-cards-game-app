@@ -124,6 +124,8 @@ The **Debug** panel shows the seed and state, and has these buttons:
 - **Bot** answers choices automatically.
 - **Download** saves the action log.
 - **Load** replays a saved log; games are deterministic, so a log reproduces a game exactly, which makes it useful for bug reports.
+- **Copy report** puts one JSON on the clipboard: the replay log, the campaign, the settings, which investigator was being looked at, the pending prompt and the build version. When something locks up, press it and paste the result into the bug report. If the browser refuses the clipboard, the report appears selected in a text box to copy by hand.
+- **Paste report…** opens a box where a pasted report is loaded with **Load**: it replays the game and shows exactly that table, with the report's settings. A text that isn't a report gets a plain message.
 
 In dev builds, the store is also available as `window.__arkham`.
 

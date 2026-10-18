@@ -14,5 +14,5 @@
 
 ## 4. Verification and docs
 
-- [ ] 4.1 `npm test`, `npm run lint`, `npm run build`, `npm run check:content` clean; `drive-calm.js` to round 3 with 0 errors.
-- [ ] 4.2 README: the Debug panel's Copy report / Paste report in the Debugging section. Run `openspec validate fix-mythos-test-lock --type change --strict`.
+- [x] 4.1 `npm test`, `npm run lint`, `npm run build`, `npm run check:content` clean; `drive-calm.js` to round 3 with 0 errors.
+- [x] 4.2 README: the Debug panel's Copy report / Paste report in the Debugging section. Run `openspec validate fix-mythos-test-lock --type change --strict`.
