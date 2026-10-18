@@ -101,7 +101,24 @@ export function nextAgenda(g: G, prev: InstId) {
   if (next) {
     moveCard(g, next, "agenda");
     emit(g, "agenda", `New agenda: ${def(g, next).name}`, { card: next });
-  }
+  } else endUnscripted(g, prev, "agenda");
+}
+
+/**
+ * The resolution an unscripted last act or agenda leads to (generated scenarios, ADR-0007): the "(→R2)" its back
+ * names when the scenario has it, else the first numbered resolution for an act and no resolution for an agenda.
+ */
+export function finalResolution(backText: string | undefined, ids: string[], kind: "act" | "agenda"): string {
+  const named = /→\s*(R\d+)/.exec((backText ?? "").replace(/<[^>]+>/g, ""))?.[1];
+  if (named && ids.includes(named)) return named;
+  if (kind === "agenda") return "none";
+  return ids.filter((i) => /^R\d+$/.test(i)).sort((a, b) => Number(a.slice(1)) - Number(b.slice(1)))[0] ?? "none";
+}
+
+/** the deck ran out and the card's back did nothing (no written behaviour): the scenario ends rather than stalls */
+function endUnscripted(g: G, prev: InstId, kind: "act" | "agenda") {
+  if (backSide(g, prev).length) return;
+  push(g, { t: "Resolution", id: finalResolution(def(g, prev).backText, Object.keys(g.db.scenarios[g.s.scenarioId].resolutions), kind) });
 }
 
 export function actClueCost(g: G): number {
@@ -135,7 +152,7 @@ export function nextAct(g: G, prev: InstId) {
   if (next) {
     moveCard(g, next, "act");
     emit(g, "act", `New act: ${def(g, next).name}`, { card: next });
-  }
+  } else endUnscripted(g, prev, "act");
 }
 
 export const checkObjectivesHandler: Handler<"CheckObjectives"> = (g) => {
