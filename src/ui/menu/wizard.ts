@@ -88,6 +88,31 @@ export function pickerList(db: ContentDb, locale: string, f: PickerFilter) {
     .sort((a, b) => a.code.localeCompare(b.code));
 }
 
+export const SORTS = ["release", "name", "class", "health", "sanity", "willpower", "intellect", "combat", "agility"] as const;
+export type SortBy = (typeof SORTS)[number];
+const CLASS_ORDER = ["guardian", "seeker", "rogue", "mystic", "survivor", "neutral"];
+
+/** the picker's order: release (code), name, class, or a stat highest first (investigators whose card isn't loaded last) */
+export function sortPicker<T extends { code: string; name: string; faction: string }>(db: ContentDb, list: T[], by: SortBy): T[] {
+  const stat = (i: T): number | null => {
+    const c = db.cards[i.code];
+    if (!c) return null;
+    if (by === "health") return c.health ?? null;
+    if (by === "sanity") return c.sanity ?? null;
+    return c.skills?.[by as "willpower"] ?? null;
+  };
+  const byCode = (a: T, b: T) => a.code.localeCompare(b.code);
+  return [...list].sort((a, b) => {
+    if (by === "release") return byCode(a, b);
+    if (by === "name") return a.name.localeCompare(b.name) || byCode(a, b);
+    if (by === "class") return CLASS_ORDER.indexOf(a.faction) - CLASS_ORDER.indexOf(b.faction) || byCode(a, b);
+    const x = stat(a);
+    const y = stat(b);
+    if (x === null || y === null) return x === y ? byCode(a, b) : x === null ? 1 : -1;
+    return y - x || byCode(a, b);
+  });
+}
+
 /** the packs the investigators come from, in code order: the cycle filter's choices */
 export function cyclesOf(db: ContentDb): string[] {
   const first = new Map<string, string>();

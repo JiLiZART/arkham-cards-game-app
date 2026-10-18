@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
-import { campaignLoaded, loadCampaign, loadPacksFor } from "../../content";
-import { campaignBlurb, campaignName, scenarioText, t } from "../../content/i18n";
+import { campaignLoaded, loadAllPacks, loadCampaign, loadPacksFor } from "../../content";
+import { campaignBlurb, campaignName, cardText, scenarioText, t } from "../../content/i18n";
 import type { DeckDef, Difficulty } from "../../content/schema";
 import { db, gameStore, useGame } from "../context";
-import { Glyph } from "../Icon";
+import { Glyph, Icon, Stat } from "../Icon";
+import { CardFace } from "../CardFace";
+import { formatText } from "../hud/Hud";
 import { cardImage } from "../images";
-import { hasSymbol, scenarioIcon } from "../icons";
+import { hasSymbol, isIcon, scenarioIcon } from "../icons";
 import { Avatar } from "./Avatar";
 import { BagCard } from "./BagCard";
 import { customDecks, deleteCustomDeck, emptyDeck, problemText, renameCustomDeck } from "../decks";
 import { safeStorage } from "../store";
 import { DeckBuilder } from "./DeckBuilder";
 import { blurb } from "./blurb";
-import { back, campaignOrder, canContinue, cardsOfPicks, cycleName, picksReady, cyclesOf, deckProblems, decksFor, initialWizard, invalidDecksFor, next, pickerList, setCampaign, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type PickerFilter, type WizardState } from "./wizard";
+import { back, campaignOrder, canContinue, cardsOfPicks, cycleName, picksReady, cyclesOf, deckProblems, decksFor, initialWizard, invalidDecksFor, investigatorInfo, next, pickerList, setCampaign, sortPicker, SORTS, type SortBy, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type PickerFilter, type WizardState } from "./wizard";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
 const DIFFICULTIES: Difficulty[] = ["easy", "standard", "hard", "expert"];
@@ -61,59 +63,144 @@ function CampaignStep({ s, set }: { s: WizardState; set: (w: WizardState) => voi
   );
 }
 
-const CLASSES = ["guardian", "seeker", "rogue", "mystic", "survivor", "neutral"];
+const CLASSES = ["guardian", "seeker", "rogue", "mystic", "survivor", "neutral"] as const;
+
+/** the investigator in the sidebar: the full card, the starting stats, the ability and the deckbuilding rules */
+function InvestigatorSheet({ code }: { code: string }) {
+  const locale = useGame((s) => s.locale);
+  const info = investigatorInfo(db, code, locale);
+  const card = db.cards[code];
+  const inv = db.investigators[code];
+  const tx = card ? cardText(db, code, locale) : null;
+  return (
+    <div className="wz-sheet">
+      <div className="wz-sheet-head">
+        {isIcon(info.faction) && <Icon name={info.faction} size={30} />}
+        <div>
+          <b>{info.name}</b>
+          {info.subname && <i>{info.subname}</i>}
+        </div>
+      </div>
+      <div className="wz-sheet-card">
+        <CardFace code={code} locale={locale} remote />
+      </div>
+      {card ? (
+        <>
+          <div className="wz-sheet-stats">
+            <Stat icon="health" value={card.health ?? "–"} size={30} label={tr("stat.health")} />
+            <Stat icon="sanity" value={card.sanity ?? "–"} size={30} label={tr("stat.sanity")} />
+            {(["willpower", "intellect", "combat", "agility"] as const).map((k) => (
+              <Stat key={k} icon={k} value={card.skills?.[k] ?? "–"} size={28} label={tr(`stat.${k}`)} />
+            ))}
+          </div>
+          {tx?.traits?.length ? <div className="wz-sheet-traits">{tx.traits.map((t) => `${t}.`).join(" ")}</div> : null}
+          {tx?.text && <p className="wz-sheet-text" dangerouslySetInnerHTML={{ __html: formatText(tx.text) }} />}
+          {tx?.backText && <p className="wz-sheet-text wz-sheet-back" dangerouslySetInnerHTML={{ __html: formatText(tx.backText) }} />}
+        </>
+      ) : (
+        <p className="wz-hint">{tr("wizard.loading")}</p>
+      )}
+      <small className="wz-sheet-meta">
+        {cycleName(db, locale, info.pack || "core")}
+        {inv ? ` · ${tr("wizard.deckSize", { n: inv.deckSize })}` : ""}
+      </small>
+    </div>
+  );
+}
 
 function InvestigatorsStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }) {
   const locale = useGame((s) => s.locale);
-  // filters are view state (ADR-0004): they are not part of the picks
+  // filters, the order and the investigator in the sidebar are view state (ADR-0004): they are not part of the picks
   const [filter, setFilter] = useState<PickerFilter>({ faction: null, cycle: null, query: "" });
-  const list = pickerList(db, locale, filter);
+  const [sort, setSort] = useState<SortBy>("release");
+  const [focus, setFocus] = useState<string | null>(null);
+  // every investigator's card (stats, ability, the language's text) comes with the packs: all of them, once
+  const [, loaded] = useState(0);
+  useEffect(() => {
+    let live = true;
+    loadAllPacks()
+      .then(() => live && loaded((n) => n + 1))
+      .catch((e) => console.error(e));
+    return () => {
+      live = false;
+    };
+  }, []);
+  const list = sortPicker(db, pickerList(db, locale, filter), sort);
+  const shown = focus ?? s.picks.at(-1) ?? list[0]?.code ?? null;
   return (
-    <>
-      <p className="wz-hint">{tr("wizard.investigators.hint")}</p>
-      <div className="wz-filters">
-        <div className="wz-chips" role="group" aria-label={tr("wizard.filter.class")}>
-          {CLASSES.map((c) => (
-            <button key={c} className={`wz-chip ${filter.faction === c ? "on" : ""}`} aria-pressed={filter.faction === c} onClick={() => setFilter({ ...filter, faction: filter.faction === c ? null : c })}>
-              {tr(`card.faction.${c}`)}
-            </button>
-          ))}
+    <div className="wz-inv">
+      <div className="wz-inv-main">
+        <p className="wz-hint">{tr("wizard.investigators.hint")}</p>
+        <div className="wz-filters">
+          <div className="wz-chips" role="group" aria-label={tr("wizard.filter.class")}>
+            {CLASSES.map((c) => (
+              <button
+                key={c}
+                className={`wz-chip wz-class ${filter.faction === c ? "on" : ""}`}
+                aria-pressed={filter.faction === c}
+                title={tr(`card.faction.${c}`)}
+                onClick={() => setFilter({ ...filter, faction: filter.faction === c ? null : c })}
+              >
+                <Icon name={c} size={24} title={tr(`card.faction.${c}`)} />
+              </button>
+            ))}
+          </div>
+          <select aria-label={tr("wizard.filter.cycle")} value={filter.cycle ?? ""} onChange={(e) => setFilter({ ...filter, cycle: e.target.value || null })}>
+            <option value="">{tr("wizard.filter.allCycles")}</option>
+            {cyclesOf(db).map((p) => (
+              <option key={p} value={p}>
+                {cycleName(db, locale, p)}
+              </option>
+            ))}
+          </select>
+          <label className="wz-sort">
+            <span>{tr("wizard.sort")}</span>
+            <select value={sort} onChange={(e) => setSort(e.target.value as SortBy)}>
+              {SORTS.map((k) => (
+                <option key={k} value={k}>
+                  {tr(`wizard.sort.${k}`)}
+                </option>
+              ))}
+            </select>
+          </label>
+          <input type="search" placeholder={tr("wizard.filter.search")} aria-label={tr("wizard.filter.search")} value={filter.query} onChange={(e) => setFilter({ ...filter, query: e.target.value })} />
         </div>
-        <select aria-label={tr("wizard.filter.cycle")} value={filter.cycle ?? ""} onChange={(e) => setFilter({ ...filter, cycle: e.target.value || null })}>
-          <option value="">{tr("wizard.filter.all")}</option>
-          {cyclesOf(db).map((p) => (
-            <option key={p} value={p}>
-              {cycleName(db, locale, p)}
-            </option>
-          ))}
-        </select>
-        <input type="search" placeholder={tr("wizard.filter.search")} aria-label={tr("wizard.filter.search")} value={filter.query} onChange={(e) => setFilter({ ...filter, query: e.target.value })} />
+        {!list.length && <p className="wz-hint">{tr("wizard.noMatch")}</p>}
+        <div className="wz-tiles">
+          {list.map((i) => {
+            const k = s.picks.indexOf(i.code);
+            return (
+              <button
+                key={i.code}
+                className={`wz-tile ${k >= 0 ? "selected" : ""} ${i.needsDeck ? "needs-deck" : ""} ${shown === i.code ? "focused" : ""}`}
+                aria-pressed={k >= 0}
+                disabled={i.needsDeck && k < 0}
+                onMouseEnter={() => setFocus(i.code)}
+                onFocus={() => setFocus(i.code)}
+                onClick={() => {
+                  setFocus(i.code);
+                  set(toggleInvestigator(db, s, i.code));
+                }}
+              >
+                <Avatar code={i.code} badge={k >= 0 ? `P${k + 1}` : undefined}>
+                  {i.needsDeck && <small className="wz-note">{tr("wizard.needsDeck")}</small>}
+                  {i.partlyImplemented && !i.needsDeck && (
+                    <small className="wz-note" title={tr("wizard.partly")}>
+                      ◐ {tr("wizard.partlyShort")}
+                    </small>
+                  )}
+                </Avatar>
+              </button>
+            );
+          })}
+        </div>
       </div>
-      {!list.length && <p className="wz-hint">{tr("wizard.noMatch")}</p>}
-      <div className="wz-tiles">
-        {list.map((i) => {
-          const k = s.picks.indexOf(i.code);
-          return (
-            <button
-              key={i.code}
-              className={`wz-tile ${k >= 0 ? "selected" : ""} ${i.needsDeck ? "needs-deck" : ""}`}
-              aria-pressed={k >= 0}
-              disabled={i.needsDeck && k < 0}
-              onClick={() => set(toggleInvestigator(db, s, i.code))}
-            >
-              <Avatar code={i.code} badge={k >= 0 ? `P${k + 1}` : undefined}>
-                {i.needsDeck && <small className="wz-note">{tr("wizard.needsDeck")}</small>}
-                {i.partlyImplemented && !i.needsDeck && (
-                  <small className="wz-note" title={tr("wizard.partly")}>
-                    ◐ {tr("wizard.partlyShort")}
-                  </small>
-                )}
-              </Avatar>
-            </button>
-          );
-        })}
-      </div>
-    </>
+      {shown && (
+        <aside className="wz-inv-side" aria-live="polite">
+          <InvestigatorSheet key={shown} code={shown} />
+        </aside>
+      )}
+    </div>
   );
 }
 

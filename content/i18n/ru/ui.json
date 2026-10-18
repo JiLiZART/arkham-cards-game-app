@@ -516,5 +516,16 @@
   "instruction.tapDeck.player": "Нажмите на свою колоду, чтобы взять карту",
   "instruction.tapDeck.player.many": "Нажмите на свою колоду, чтобы взять карт: {n}",
   "instruction.tapDeck.encounter": "Нажмите на колоду встреч, чтобы взять карту",
-  "pile.tapToDraw": "Нажмите, чтобы взять"
+  "pile.tapToDraw": "Нажмите, чтобы взять",
+  "wizard.filter.allCycles": "Все циклы",
+  "wizard.sort": "Порядок",
+  "wizard.sort.release": "По выходу",
+  "wizard.sort.name": "По имени",
+  "wizard.sort.class": "По классу",
+  "wizard.sort.health": "Здоровье",
+  "wizard.sort.sanity": "Рассудок",
+  "wizard.sort.willpower": "Воля",
+  "wizard.sort.intellect": "Интеллект",
+  "wizard.sort.combat": "Сила",
+  "wizard.sort.agility": "Ловкость"
 }

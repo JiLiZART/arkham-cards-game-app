@@ -532,5 +532,16 @@
   "instruction.tapDeck.player": "Tap your deck to draw a card",
   "instruction.tapDeck.player.many": "Tap your deck to draw {n} cards",
   "instruction.tapDeck.encounter": "Tap the encounter deck to draw",
-  "pile.tapToDraw": "Tap to draw"
+  "pile.tapToDraw": "Tap to draw",
+  "wizard.filter.allCycles": "All cycles",
+  "wizard.sort": "Sort",
+  "wizard.sort.release": "Release",
+  "wizard.sort.name": "Name",
+  "wizard.sort.class": "Class",
+  "wizard.sort.health": "Health",
+  "wizard.sort.sanity": "Sanity",
+  "wizard.sort.willpower": "Willpower",
+  "wizard.sort.intellect": "Intellect",
+  "wizard.sort.combat": "Combat",
+  "wizard.sort.agility": "Agility"
 }

@@ -3,7 +3,7 @@ import { loadPacksFor } from "../../content";
 import { db } from "../../engine/testkit";
 import { saveCustomDeck } from "../decks";
 import type { Storage } from "../store";
-import { back, canContinue, cardsOfPicks, deckProblems, cycleName, picksReady, cyclesOf, decksFor, investigatorInfo, pickerList, campaignOrder, initialWizard, invalidDecksFor, next, setCampaign, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type WizardState } from "./wizard";
+import { back, canContinue, cardsOfPicks, sortPicker, SORTS, deckProblems, cycleName, picksReady, cyclesOf, decksFor, investigatorInfo, pickerList, campaignOrder, initialWizard, invalidDecksFor, next, setCampaign, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type WizardState } from "./wizard";
 
 const ROLAND = "01001";
 const DAISY = "01002";
@@ -217,5 +217,30 @@ describe("the decks of investigators from other cycles", () => {
     expect(picksReady(db, s)).toBe(true);
     expect(deckProblems(db, s, "02001")).toEqual([]);
     expect(canContinue(db, s)).toBe(true);
+  });
+});
+
+describe("sorting the investigators", () => {
+  const all = { faction: null, cycle: null, query: "" };
+  const list = () => pickerList(db, "en", all).filter((i) => i.pack === "core" || !i.pack);
+  it("by release (the default), by name, by class", () => {
+    expect(SORTS[0]).toBe("release");
+    expect(sortPicker(db, list(), "release").map((i) => i.code).slice(0, 2)).toEqual(["01001", "01002"]);
+    const names = sortPicker(db, list(), "name").map((i) => i.name);
+    expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b)));
+    const classes = sortPicker(db, list(), "class").map((i) => i.faction);
+    expect(classes.indexOf("guardian")).toBeLessThan(classes.indexOf("survivor"));
+  });
+  it("by a stat, highest first: Roland's 9 health before Daisy's 5", () => {
+    const byHealth = sortPicker(db, list(), "health").map((i) => i.code);
+    expect(byHealth.indexOf("01001")).toBeLessThan(byHealth.indexOf("01002"));
+    const byIntellect = sortPicker(db, list(), "intellect").map((i) => i.code);
+    expect(byIntellect[0]).toBe("01002");
+  });
+  it("an investigator whose card is not loaded goes last when sorting by a stat", () => {
+    const zoey = pickerList(db, "en", { ...all, query: "zoey" });
+    const mixed = [...zoey, ...list()];
+    const s = sortPicker({ ...db, cards: { ...db.cards, "02001": undefined as never } }, mixed, "combat");
+    expect(s.at(-1)!.code).toBe("02001");
   });
 });
