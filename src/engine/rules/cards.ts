@@ -325,8 +325,8 @@ export const enterPlayHandler: Handler<"EnterPlay"> = (g, step) => {
 };
 
 // ---------- slots ----------
-const SLOT_BASE: Record<Slot, number> = { hand: 2, arcane: 2, accessory: 1, body: 1, ally: 1, tarot: 1 };
-const SLOT_MOD = { hand: "handSlots", arcane: "arcaneSlots", ally: "allySlots", accessory: "accessorySlots", body: "bodySlots", tarot: null } as const;
+const SLOT_BASE: Record<Slot, number> = { hand: 2, arcane: 2, accessory: 1, body: 1, ally: 1, tarot: 1, head: 1 };
+const SLOT_MOD = { hand: "handSlots", arcane: "arcaneSlots", ally: "allySlots", accessory: "accessorySlots", body: "bodySlots", tarot: null, head: null } as const;
 
 /** returns a slot type that is over capacity, if any */
 export function overfullSlot(g: G, i: InvId, incoming: InstId | null): Slot | null {

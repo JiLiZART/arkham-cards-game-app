@@ -1,0 +1,7208 @@
+[
+ {
+  "code": "60101",
+  "name": "Nathaniel Cho",
+  "type": "investigator",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 1,
+  "traits": [
+   "Criminal",
+   "Warden"
+  ],
+  "text": "[reaction] When you deal damage to an enemy by an event or a fight ability on an event: Deal 1 additional damage. (Limit once per phase.)\n[elder_sign] effect: +1. If this skill test is successful during an attack, return an event from your discard pile to your hand.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Boxer",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Guardian cards ([guardian]) level 0-5, Neutral cards level 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Randall Cho, Tommy Malloy, 1 random basic weakness.",
+  "flavor": "\"I must fight on.\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 3,
+   "intellect": 2,
+   "combat": 5,
+   "agility": 2
+  },
+  "health": 9,
+  "sanity": 6
+ },
+ {
+  "code": "60102",
+  "name": "Randall Cho",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 1,
+  "traits": [
+   "Ally",
+   "Medic"
+  ],
+  "text": "Nathaniel Cho deck only.\n[reaction] After Randall Cho enters play: Heal 3 damage or search your deck and discard pile for a [[Weapon]] asset, play it <i>(paying its cost)</i>, and shuffle your deck.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1,
+   "wild": 1
+  },
+  "subname": "Concerned Brother",
+  "flavor": "\"You gotta give this up, Nathaniel. Sooner or later, you're gonna get yourself killed.\"",
+  "deckLimit": 1,
+  "cost": 2,
+  "health": 1,
+  "sanity": 3
+ },
+ {
+  "code": "60103",
+  "name": "Tommy Malloy",
+  "type": "enemy",
+  "faction": "neutral",
+  "pack": "nat",
+  "quantity": 1,
+  "traits": [
+   "Humanoid",
+   "Criminal",
+   "Syndicate"
+  ],
+  "text": "<b>Prey</b> - Nathaniel Cho only.\nHunter.\n<b>Forced</b> - When Tommy Malloy would take any amount of damage: Reduce that amount to 1.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [
+   "hunter"
+  ],
+  "slots": [],
+  "icons": {},
+  "flavor": "They call him \"The Big Palooka.\"\nNathaniel calls him scum.",
+  "subtype": "weakness",
+  "deckLimit": 1,
+  "enemy": {
+   "fight": 2,
+   "health": 3,
+   "healthPerInvestigator": false,
+   "evade": 3,
+   "damage": 2,
+   "horror": 0
+  }
+ },
+ {
+  "code": "60104",
+  "name": "Self-Destructive",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "nat",
+  "quantity": 1,
+  "traits": [
+   "Flaw"
+  ],
+  "text": "<b>Revelation</b> - Put Self-Destructive into play in your threat area.\n<b>Forced</b> - When you deal 1 or more damage to an enemy: Take 1 damage.\n[action][action]: Discard Self-Destructive.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "basicweakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "60105",
+  "name": "Boxing Gloves",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Weapon"
+  ],
+  "text": "You get +1 [combat] while fighting.\n[reaction] After you defeat an enemy, exhaust Boxing Gloves: Search the top 6 cards of your deck for a [[Spirit]] event and add it to your hand. Shuffle your deck.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand",
+   "hand"
+  ],
+  "icons": {
+   "combat": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3
+ },
+ {
+  "code": "60106",
+  "name": "Flesh Ward",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Ritual"
+  ],
+  "text": "Uses (4 charges).\n[reaction] When you are dealt damage and/or horror from an enemy attack, exhaust Flesh Ward and spend 1 charge: Cancel 1 damage or horror just dealt from that attack.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "arcane"
+  ],
+  "icons": {
+   "willpower": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "health": 1,
+  "sanity": 1,
+  "uses": {
+   "type": "charges",
+   "count": 4
+  }
+ },
+ {
+  "code": "60107",
+  "name": "Grete Wagner",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Hunter"
+  ],
+  "text": "You get +1 [combat].\n[reaction] After you defeat an enemy, exhaust Grete Wagner and deal 1 damage to her: Discover 1 clue at your location.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "intellect": 1,
+   "combat": 1
+  },
+  "subname": "The Purifier",
+  "flavor": "\"With Iron and Salt. With Water and Fire.\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 5,
+  "health": 3,
+  "sanity": 2
+ },
+ {
+  "code": "60109",
+  "name": "Relentless",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "[reaction] When you deal excess damage to an enemy, exhaust Relentless: Place that excess damage on Relentless.\n[fast] Discard Relentless: Gain resources equal to the amount of damage on it.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 0
+ },
+ {
+  "code": "60110",
+  "name": "Safeguard",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "[reaction] After another investigator moves from your location to a connecting location, exhaust Safeguard: Move to that location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1
+  },
+  "flavor": "Keep an eye out for any trouble, she told me. I rolled my eyes. There was always trouble.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60111",
+  "name": "Clean Them Out",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Spirit",
+   "Tactic"
+  ],
+  "text": "<b>Fight.</b> When this action begins, gain 2 resources.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "combat": 1
+  },
+  "flavor": "Time to tighten some screws.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 0
+ },
+ {
+  "code": "60112",
+  "name": "Counterpunch",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Spirit",
+   "Tactic"
+  ],
+  "text": "Fast. Play after an enemy attacks you, even if that attack was canceled.\n<b>Fight.</b> This attack targets the attacking enemy.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 0
+ },
+ {
+  "code": "60114",
+  "name": "\"Get over here!\"",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Spirit",
+   "Tactic"
+  ],
+  "text": "<b>Engage.</b> <b>Fight.</b> Choose a non-[[Elite]] enemy at your location or a connecting location. Move that enemy to your location, engage it, and attack it.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "combat": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60115",
+  "name": "Glory",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Spirit"
+  ],
+  "text": "Fast. Play after you defeat an enemy.\nDraw 2 cards.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "intellect": 2
+  },
+  "flavor": "Ding, ding, ding!",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1
+ },
+ {
+  "code": "60116",
+  "name": "Monster Slayer",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Spirit"
+  ],
+  "text": "<b>Fight.</b> This attack deals +1 damage.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 0
+ },
+ {
+  "code": "60117",
+  "name": "One-Two Punch",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Spirit",
+   "Tactic"
+  ],
+  "text": "<b>Fight.</b> You get +1 [combat] for this attack. If you succeed, you may fight that enemy again. You get +2 [combat] and deal +1 damage for that attack.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1
+  },
+  "flavor": "Nathaniel is renowned for his rapid left jab and right cross signature move.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60118",
+  "name": "Stand Together",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Spirit"
+  ],
+  "text": "Choose another investigator at your location. Both you and that investigator gain 2 resources.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1
+  },
+  "flavor": "They won't take us down that easily!",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 0
+ },
+ {
+  "code": "60120",
+  "name": "Evidence!",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Insight"
+  ],
+  "text": "Fast. Play after you defeat an enemy.\nDiscover 1 clue at your location (2 clues instead if you defeated enemies with a combined total of at least 4 printed health this turn).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "intellect": 2
+  },
+  "flavor": "Just as I suspected!",
+  "deckLimit": 2,
+  "xp": 1,
+  "cost": 1
+ },
+ {
+  "code": "60121",
+  "name": "Galvanize",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Spirit"
+  ],
+  "text": "Fast. Play only during your turn.\nReady a [guardian] asset you control. You may take an additional action during your turn, which can only be used to fight.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "willpower": 2
+  },
+  "deckLimit": 2,
+  "xp": 1,
+  "cost": 2
+ },
+ {
+  "code": "60122",
+  "name": "Counterpunch",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Spirit",
+   "Tactic"
+  ],
+  "text": "Fast. Play when an enemy attacks you <i>(before resolving that attack)</i>.\n<b>Fight.</b> This attack targets the attacking enemy. You get +2 [combat] and deal +1 damage for this attack.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "combat": 2,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 0
+ },
+ {
+  "code": "60123",
+  "name": "\"Get over here!\"",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Spirit",
+   "Tactic"
+  ],
+  "text": "Fast. Play during any [fast] window.\n<b>Engage. Fight.</b> Choose a non-[[Elite]] enemy up to 2 locations away. Move that enemy to your location, engage it, and attack it.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "willpower": 2,
+   "combat": 1
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2
+ },
+ {
+  "code": "60124",
+  "name": "Lesson Learned",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Insight",
+   "Spirit"
+  ],
+  "text": "Fast. Play after you take damage from an enemy attack.\nDiscover 2 clues at your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "intellect": 2
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 1
+ },
+ {
+  "code": "60125",
+  "name": "Mano a Mano",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Spirit",
+   "Bold"
+  ],
+  "text": "Play only as your first action.\nDeal 2 damage to an enemy engaged with you. This action does not provoke attacks of opportunity.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "combat": 1
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 0
+ },
+ {
+  "code": "60126",
+  "name": "Overpower",
+  "type": "skill",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Practiced",
+   "Expert"
+  ],
+  "text": "Max 1 committed per skill test.\nIf this test is successful, draw 1 card (2 cards instead if it succeeds by 2 or more).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 3
+  },
+  "flavor": "Die, you beast!",
+  "deckLimit": 2,
+  "xp": 2
+ },
+ {
+  "code": "60127",
+  "name": "Boxing Gloves",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Weapon"
+  ],
+  "text": "You get +2 [combat] while fighting.\n[reaction] After you defeat an enemy, exhaust Boxing Gloves: Search the top 9 cards of your deck for a [[Spirit]] event and add it to your hand. Shuffle your deck.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand",
+   "hand"
+  ],
+  "icons": {
+   "combat": 2
+  },
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 2
+ },
+ {
+  "code": "60128",
+  "name": "Grete Wagner",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Hunter"
+  ],
+  "text": "You get +1 [combat] and +1 [intellect].\n[reaction] After you defeat an enemy, exhaust Grete Wagner and deal 1 damage to her: Discover 1 clue at your location or a connecting location.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "intellect": 1,
+   "combat": 1,
+   "wild": 1
+  },
+  "subname": "The Purifier",
+  "flavor": "\"With Iron and Salt. With Water and Fire.\"",
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 5,
+  "health": 4,
+  "sanity": 2
+ },
+ {
+  "code": "60129",
+  "name": "Dynamite Blast",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Tactic"
+  ],
+  "text": "Fast. Play during any [fast] window.\nChoose either your location or a connecting location. Deal 3 damage to each enemy and investigator at the chosen location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "willpower": 2,
+   "combat": 2
+  },
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 4
+ },
+ {
+  "code": "60130",
+  "name": "Taunt",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Tactic"
+  ],
+  "text": "Fast. Play during any [fast] window.\nEngage any number of enemies at your location. For each enemy engaged this way, deal it 1 damage and draw 1 card.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "willpower": 2,
+   "combat": 1,
+   "agility": 1
+  },
+  "flavor": "You steel your nerves and shout into the darkness. \"Come and get me!\"",
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 1
+ },
+ {
+  "code": "60131",
+  "name": "Physical Training",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "Uses (2 resources). Replenish these resources at the start of each round.\n[fast] Spend 1 resource from your resource pool or from Physical Training: You get +1 [willpower] or +1 [combat] for this skill test.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 2,
+   "combat": 2
+  },
+  "deckLimit": 2,
+  "xp": 4,
+  "cost": 2,
+  "uses": {
+   "type": "resources",
+   "count": 2
+  }
+ },
+ {
+  "code": "60132",
+  "name": "One-Two Punch",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Spirit",
+   "Tactic"
+  ],
+  "text": "<b>Fight.</b> You automatically succeed and deal +1 damage for this attack. You may fight again. You get +3 [combat] and deal +2 damage for that attack.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 4
+  },
+  "flavor": "Nathaniel is renowned for his rapid left jab and right cross signature move.",
+  "deckLimit": 2,
+  "xp": 5,
+  "cost": 2
+ },
+ {
+  "code": "60151",
+  "name": "Tommy Muldoon",
+  "type": "investigator",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 1,
+  "traits": [
+   "Police"
+  ],
+  "text": "[action] Spend 1 resource, or discard a [[Firearm]] asset you control from play: Play a [[Firearm]] asset from your hand, paying its cost. It enters play with 2 additional ammo on it.\n[elder_sign] effect: +1. Place 1 ammo on an asset you control with uses (ammo).",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Officer",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Guardian cards ([guardian]) level 0-5, Neutral cards level 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Becky, Loose Cannon, 1 random basic weakness.",
+  "flavor": "\"This uniform means something. I'm reminded of that every time I put it on.\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 3,
+   "intellect": 3,
+   "combat": 4,
+   "agility": 2
+  },
+  "health": 9,
+  "sanity": 6
+ },
+ {
+  "code": "60152",
+  "name": "Becky",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 1,
+  "traits": [
+   "Item",
+   "Weapon",
+   "Firearm"
+  ],
+  "text": "Tommy Muldoon deck only. Uses (2 ammo).\n[action] Spend 1 ammo: <b>Fight</b> ([combat]). You get +2 [combat] and deal +1 damage for this attack.\n[reaction] When you trigger the above [action] ability, exhaust Becky: This attack ignores the aloof and retaliate keywords.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand",
+   "hand"
+  ],
+  "icons": {
+   "willpower": 1,
+   "combat": 1,
+   "wild": 1
+  },
+  "subname": "Custom Marlin Model 1894",
+  "deckLimit": 1,
+  "cost": 2,
+  "uses": {
+   "type": "ammo",
+   "count": 2
+  }
+ },
+ {
+  "code": "60153",
+  "name": "Loose Cannon",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "tom",
+  "quantity": 1,
+  "traits": [
+   "Flaw"
+  ],
+  "text": "<b>Revelation</b> - You must either discard each [[Firearm]] asset you control or lose 5 resources.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "\"You're outta line, Muldoon!\"",
+  "subtype": "weakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "60154",
+  "name": "Overconfident",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "tom",
+  "quantity": 1,
+  "traits": [
+   "Flaw"
+  ],
+  "text": "<b>Revelation</b> - Put Overconfident into play in your threat area.\n<b>Forced</b> - After you fail a skill test: Take 1 damage.\n[action][action]: Discard Overconfident.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "basicweakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "60156",
+  "name": "Police Dog",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Creature",
+   "Police"
+  ],
+  "text": "[fast] During an attack or investigation at your location, exhaust Police Dog: The performing investigator gets +1 skill value for this test.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "agility": 1
+  },
+  "flavor": "\"Good boy, Saxon.\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "health": 1,
+  "sanity": 1
+ },
+ {
+  "code": "60157",
+  "name": "Rookie Cop",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Police"
+  ],
+  "text": "Rookie Cop may be assigned damage and/or horror dealt to other investigators at your location.\n[reaction] When Rookie Cop is defeated: Discover 1 clue at your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "willpower": 1
+  },
+  "flavor": "Too eager to be cautious, too naive to know better.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "health": 2,
+  "sanity": 2
+ },
+ {
+  "code": "60158",
+  "name": "Service Revolver",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Weapon",
+   "Firearm",
+   "Police"
+  ],
+  "text": "Uses (3 ammo).\n[reaction] After an enemy attacks you, spend 1 ammo: <b>Fight</b> ([combat]). This attack targets that enemy. You get +1 [combat] and deal +1 damage for this attack.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "agility": 1
+  },
+  "flavor": "It's mostly for show, but handy when you need it.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2,
+  "uses": {
+   "type": "ammo",
+   "count": 3
+  }
+ },
+ {
+  "code": "60159",
+  "name": "Protective Vest",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Armor"
+  ],
+  "text": "[reaction] After you play Protective Vest: Search the top 6 cards of your deck for a [[Firearm]] or [[Upgrade]] card and add it to your hand. Shuffle your deck.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "body"
+  ],
+  "icons": {
+   "willpower": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "health": 2
+ },
+ {
+  "code": "60160",
+  "name": "\"Make 'em sing\"",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Tactic"
+  ],
+  "text": "<b>Parley.</b> Choose an enemy at your location and test [combat] (X), where X is that enemy's remaining health. If you succeed, automatically evade that enemy and discover 1 clue at your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "combat": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60161",
+  "name": "Bounty",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Fortune"
+  ],
+  "text": "Fast. Play after an enemy at your location is defeated.\nInvestigators at your location gain a total of X resources, distributed as your wish. X is that enemy's printed health (to a maximum of 6).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "combat": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 0
+ },
+ {
+  "code": "60162",
+  "name": "Custom Grip",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Upgrade"
+  ],
+  "text": "Fast. Play only during your turn.\nAttach to a [[Firearm]] asset you control.\n[fast] During your turn, except during an action, discard Custom Grip: Return attached asset to your hand. You may play a [[Firearm]] asset from your hand <i>(paying its cost)</i>.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "intellect": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1
+ },
+ {
+  "code": "60163",
+  "name": "Iron Sights",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Upgrade"
+  ],
+  "text": "Fast. Play only during your turn.\nAttach to a [[Firearm]] asset you control.\n[action] Exhaust Iron Sights: You get +3 skill value the next time you fight using attached asset this turn. This action does not provoke attacks of opportunity.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1
+ },
+ {
+  "code": "60164",
+  "name": "Physical Fitness",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Spirit"
+  ],
+  "text": "<b>Move.</b> After this move, heal 2 damage.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "flavor": "At your peak.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60165",
+  "name": "Restrained",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Tactic"
+  ],
+  "text": "Fast. Play after a non-[[Elite]] enemy attacks you.\nAutomatically evade that enemy and attach Restrained to it. Attached enemy cannot ready.\n<b>Forced</b> - When the round ends, if attached enemy is not a [[Humanoid]]: Discard Restrained.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1
+ },
+ {
+  "code": "60166",
+  "name": "Stakeout",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Tactic"
+  ],
+  "text": "<b>Investigate</b> ([intellect]). You get +2 [intellect] for this investigation. If you succeed, heal 1 horror.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 2
+  },
+  "flavor": "\"Well, look at that. Who do we have here?\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60167",
+  "name": "Adapt and Overcome",
+  "type": "skill",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Practiced"
+  ],
+  "text": "Commit only to a skill test during an attack or evasion.\nThe performing investigator ignores the alert and retaliate keywords during this test.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 0
+ },
+ {
+  "code": "60168",
+  "name": "Armed to the Teeth",
+  "type": "skill",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Practiced"
+  ],
+  "text": "While it is committed to a skill test on an [[Item]] asset you control, Armed to the Teeth gains [wild] [wild].",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "combat": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0
+ },
+ {
+  "code": "60170",
+  "name": "Police Dog",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Creature",
+   "Police"
+  ],
+  "text": "[fast] During an attack or investigation at your location, exhaust Police Dog: The performing investigator gets +2 skill value for this test.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "agility": 1
+  },
+  "flavor": "\"Good boy, Saxon.\"",
+  "deckLimit": 2,
+  "xp": 1,
+  "cost": 3,
+  "health": 1,
+  "sanity": 1
+ },
+ {
+  "code": "60171",
+  "name": "M1911",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Weapon",
+   "Firearm"
+  ],
+  "text": "Uses (4 ammo).\n[action] Spend 1 ammo: <b>Fight</b> ([combat]). You get +2 [combat] and deal +1 damage for this attack. Ignore the retaliate keyword for this attack.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 3,
+  "uses": {
+   "type": "ammo",
+   "count": 4
+  }
+ },
+ {
+  "code": "60172",
+  "name": "Extended Barrel",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Upgrade"
+  ],
+  "text": "Fast. Play only during your turn.\nAttach to a [[Firearm]] asset you control.\nYou get +1 skill value while attacking with attached asset.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "intellect": 1
+  },
+  "deckLimit": 2,
+  "xp": 1,
+  "cost": 1
+ },
+ {
+  "code": "60173",
+  "name": "On the Beat",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Tactic",
+   "Police"
+  ],
+  "text": "Fast. Play when your turn begins.\nUntil the end of your turn, you get +3 skill value while investigating or parleying.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1,
+   "wild": 1
+  },
+  "flavor": "\"Police work isn't about catching people. It's about protecting your community.\"",
+  "deckLimit": 2,
+  "xp": 1,
+  "cost": 2
+ },
+ {
+  "code": "60174",
+  "name": "Physical Fitness",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Spirit"
+  ],
+  "text": "<b>Move.</b> After this move, heal 3 damage.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "flavor": "At your peak.",
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 1
+ },
+ {
+  "code": "60175",
+  "name": "Stock Ammo Reload",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Supply"
+  ],
+  "text": "Place 5 ammo, divided as you choose, among [[Firearm]] assets you control.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1
+  },
+  "flavor": "More bullets than you know what to do with.",
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2
+ },
+ {
+  "code": "60177",
+  "name": "Detective Sherman",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Detective",
+   "Police"
+  ],
+  "text": "You get +1 [combat].\nDetective Sherman may be assigned damage and/or horror dealt to other investigators at your location.\n[reaction] After damage is placed on Detective Sherman, exhaust him: Discover 1 clue at your location.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "intellect": 1,
+   "combat": 1,
+   "wild": 1
+  },
+  "subname": "Eagle Eye",
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 4,
+  "health": 3,
+  "sanity": 2
+ },
+ {
+  "code": "60178",
+  "name": "Endurance",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "Starting. <i>(You may begin the game with 1 copy of a starting card in your opening hand.)</i>\n[fast] Spend 1 resource: You get +1 [combat] for this skill test (+2 [combat] instead if this is an attack or evasion).\n[fast] Spend 1 resource: You get +1 [agility] for this skill test (+2 [agility] instead if this is an attack or evasion).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 2
+ },
+ {
+  "code": "60179",
+  "name": "Stakeout",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Tactic"
+  ],
+  "text": "<b>Investigate</b> ([intellect]). You get +3 [intellect] for this investigation. If you succeed, discover 1 additional clue at your location and heal 2 horror.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "agility": 1
+  },
+  "flavor": "\"Well, look at that. Who do we have here?\"",
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 2
+ },
+ {
+  "code": "60180",
+  "name": "Indomitable",
+  "type": "skill",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Innate",
+   "Developed"
+  ],
+  "text": "If an enemy has attacked an investigator at this location this round, Indomitable gains [wild] [wild] [wild].",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "combat": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 3
+ },
+ {
+  "code": "60181",
+  "name": "Protective Vest",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Armor",
+   "Police"
+  ],
+  "text": "You have 1 additional hand slot, which may only be used to hold a [[Firearm]] asset.\n[reaction] After you play Protective Vest: Search the top 9 cards of your deck for a [[Firearm]] or [[Upgrade]] card and add it to your hand. Shuffle your deck.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "body"
+  ],
+  "icons": {
+   "willpower": 1,
+   "combat": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 4,
+  "cost": 3,
+  "health": 3
+ },
+ {
+  "code": "60182",
+  "name": "Thompson Submachine Gun",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Weapon",
+   "Firearm"
+  ],
+  "text": "Uses (6 ammo).\n[action] Spend 1 ammo: <b>Fight</b> ([combat]). You get +3 [combat] and deal +1 damage for this attack.\n[reaction] After you resolve the above [action] ability, spend 1 ammo: <b>Fight</b> ([combat]). This attack deals +1 damage.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand",
+   "hand"
+  ],
+  "icons": {
+   "combat": 2
+  },
+  "deckLimit": 2,
+  "xp": 5,
+  "cost": 6,
+  "uses": {
+   "type": "ammo",
+   "count": 6
+  }
+ },
+ {
+  "code": "60201",
+  "name": "Harvey Walters",
+  "type": "investigator",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 1,
+  "traits": [
+   "Miskatonic"
+  ],
+  "text": "[reaction] After an investigator at your location draws 1 or more cards from their deck during the investigation phase: That investigator draws 1 card. (Limit once per round.)\n[elder_sign] effect: +1. Draw 1 card.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Professor",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Seeker cards ([seeker]) level 0-5, Neutral cards level 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Vault of Knowledge, Thrice-Damned Curiosity, 1 random basic weakness.",
+  "flavor": "\"I have experience dealing with these sorts of horrors.\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 4,
+   "intellect": 5,
+   "combat": 1,
+   "agility": 2
+  },
+  "health": 7,
+  "sanity": 8
+ },
+ {
+  "code": "60202",
+  "name": "Vault of Knowledge",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 1,
+  "traits": [
+   "Talent"
+  ],
+  "text": "Harvey Walters deck only.\nYour maximum hand size is increased by 2.\n[reaction] After you successfully investigate, exhaust Vault of Knowledge and choose an investigator at your location: That investigator draws 1 card.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "deckLimit": 1,
+  "cost": 3
+ },
+ {
+  "code": "60203",
+  "name": "Thrice-Damned Curiosity",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "har",
+  "quantity": 1,
+  "traits": [
+   "Flaw"
+  ],
+  "text": "<b>Revelation</b> - For every 3 cards in your hand: Take 1 damage.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "\"... I can only hope that my account will not arouse a curiosity greater than sane caution on the part of those who believe me at all.\"\n- H. P. Lovecraft, \"At the Mountains of Madness\"",
+  "subtype": "weakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "60204",
+  "name": "Obsessive",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "har",
+  "quantity": 1,
+  "traits": [
+   "Flaw"
+  ],
+  "text": "<b>Revelation</b> - Put Obsessive into play in your threat area.\n<b>Forced</b> - When your turn begins: Discard 1 non-weakness card at random from your hand.\n[action][action]: Discard Obsessive.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "basicweakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "60205",
+  "name": "Arcane Enlightenment",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Ritual"
+  ],
+  "text": "Your maximum hand size is increased by 1.\nYou have 1 additional hand slot, which can only be used to hold a [[Tome]] asset.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "arcane"
+  ],
+  "icons": {
+   "willpower": 2
+  },
+  "flavor": "An augmented mind can memorize entire volumes of books.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60206",
+  "name": "Celaeno Fragments",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Tome"
+  ],
+  "text": "While you have...\n- ...5 or more cards in hand, you get +1 [intellect].\n- ...10 or more cards in hand, you get +1 [willpower].\n- ...15 or more cards in hand, you get +1 [intellect].",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "intellect": 1
+  },
+  "subname": "Book of Books",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1
+ },
+ {
+  "code": "60207",
+  "name": "Disc of Itzamna",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Relic"
+  ],
+  "text": "[reaction] When a non-[[Elite]] enemy spawns at your location, discard Disc of Itzamna: Automatically evade that enemy or deal it 2 damage.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "accessory"
+  ],
+  "icons": {
+   "willpower": 1
+  },
+  "subname": "Protective Amulet",
+  "flavor": "Do they fear it because of what it will do to them? Or, do they fear it because of what it will do to you?",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3
+ },
+ {
+  "code": "60208",
+  "name": "Encyclopedia",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Tome"
+  ],
+  "text": "Uses (5 secrets).\n[action] Exhaust Encyclopedia and spend 1 secret: Choose an investigator at your location. That investigator gets +2 to a skill of your choice until the end of the phase.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2,
+  "uses": {
+   "type": "secrets",
+   "count": 5
+  }
+ },
+ {
+  "code": "60209",
+  "name": "Feed the Mind",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Spell"
+  ],
+  "text": "Uses (3 secrets).\n[action] Exhaust Feed the Mind and spend 1 secret: Test [intellect] (1). For each point you succeed by (to a maximum of 3), draw 1 card.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "arcane"
+  ],
+  "icons": {
+   "intellect": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "uses": {
+   "type": "secrets",
+   "count": 3
+  }
+ },
+ {
+  "code": "60210",
+  "name": "Forbidden Tome",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Relic",
+   "Tome"
+  ],
+  "text": "Uses (5 secrets).\n[action] Exhaust Forbidden Tome and spend 1 secret: Draw 1 card. Then, if you have 10 or more cards in your hand and there are no secrets on Forbidden Tome, you may discard it to record in your Campaign Log that \"you have translated the tome.\"",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "wild": 1
+  },
+  "subname": "Untranslated",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1,
+  "uses": {
+   "type": "secrets",
+   "count": 5
+  }
+ },
+ {
+  "code": "60211",
+  "name": "Higher Education",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "While you have 5 or more cards in your hand, Higher Education gains:\n\"[fast] Spend 1 resource: You get +1 [willpower] for this skill test.\n[fast] Spend 1 resource: You get +1 [intellect] for this skill test.\"",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 0
+ },
+ {
+  "code": "60213",
+  "name": "Whitton Greene",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Miskatonic"
+  ],
+  "text": "While you control a [[Tome]] or [[Relic]] asset, you get +1 [intellect].\n[reaction] After you reveal a location or put a new location into play, exhaust Whitton Greene: Search the top 6 cards of your deck for a [[Tome]] or [[Relic]] asset and draw it. Shuffle your deck.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "intellect": 1
+  },
+  "subname": "Hunter of Rare Books",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 4,
+  "health": 2,
+  "sanity": 2
+ },
+ {
+  "code": "60214",
+  "name": "Burning the Midnight Oil",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Insight"
+  ],
+  "text": "<b>Investigate.</b> When this action begins, gain 2 resources.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "agility": 1
+  },
+  "flavor": "You'll sleep when you're dead.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 0
+ },
+ {
+  "code": "60215",
+  "name": "Cryptic Writings",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Insight"
+  ],
+  "text": "Gain 2 resources.\n[reaction] After you draw Cryptic Writings during your turn: Play it.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 2
+  },
+  "flavor": "\"...these are few as compared with those in languages I cannot understand.\" - H. P. Lovecraft, \"The Statement of Randolph Carter\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 0
+ },
+ {
+  "code": "60216",
+  "name": "Extensive Research",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Insight"
+  ],
+  "text": "Reduce the cost to play Extensive Research by 1 for each other card in your hand.\nDiscover 2 clues at your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 2
+  },
+  "flavor": "\"Nothing in here, either. How many do we have left?\"\n\"...See the wall behind you?\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 12
+ },
+ {
+  "code": "60217",
+  "name": "Occult Invocation",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Spell"
+  ],
+  "text": "As an additional cost to play Occult Invocation, discard up to 2 cards from your hand.\n<b>Fight.</b> This attack uses [intellect] instead of [combat]. You get +1 [intellect] and deal +1 damage for this attack for each card discarded as part of this card's cost.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "combat": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60220",
+  "name": "Library Docent",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Miskatonic"
+  ],
+  "text": "[reaction] After Library Docent enters play, return a [[Tome]] asset you control to its owner's hand: Play a different [[Tome]] asset (by title) from your hand, reducing its cost by 2.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "intellect": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 1,
+  "cost": 1,
+  "health": 1,
+  "sanity": 2
+ },
+ {
+  "code": "60221",
+  "name": "Glimpse the Unthinkable",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Insight"
+  ],
+  "text": "Draw 1 card. Shuffle any number of non-weakness cards from your hand into your deck. Then, draw that many cards.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 2
+  },
+  "flavor": "Ignorance is a bliss you cannot afford.",
+  "deckLimit": 2,
+  "xp": 1,
+  "cost": 0
+ },
+ {
+  "code": "60222",
+  "name": "Esoteric Atlas",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Tome"
+  ],
+  "text": "Uses (4 secrets).\n[action] Spend 1 secret: Choose a revealed location up to 3 connections away from your location. Move to that location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "willpower": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 3,
+  "uses": {
+   "type": "secrets",
+   "count": 4
+  }
+ },
+ {
+  "code": "60223",
+  "name": "Whitton Greene",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Miskatonic"
+  ],
+  "text": "While you control a [[Tome]] or [[Relic]] asset, you get +1 [willpower] and +1 [intellect].\n[reaction] After you reveal a location or put a new location into play, exhaust Whitton Greene: Search the top 9 cards of your deck for a [[Tome]] or [[Relic]] asset and draw it. Shuffle your deck.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1
+  },
+  "subname": "Hunter of Rare Books",
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 4,
+  "health": 2,
+  "sanity": 3
+ },
+ {
+  "code": "60224",
+  "name": "Cryptic Writings",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Insight"
+  ],
+  "text": "Gain 3 resources (4 resources instead if you have 10 or more other cards in hand).\n[reaction] After you draw Cryptic Writings during your turn: Play it.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "wild": 1
+  },
+  "flavor": "\"...these are few as compared with those in the languages I cannot understand.\" - H. P. Lovecraft, \"The Statement of Randolph Carter\"",
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 0
+ },
+ {
+  "code": "60225",
+  "name": "\"I've got a plan!\"",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Insight",
+   "Tactic"
+  ],
+  "text": "<b>Fight.</b> This attack uses [intellect] instead of [combat]. You get +2 [intellect] for this test. You deal +1 damage for this attack for each clue you have (max +3 damage).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 2,
+   "combat": 1
+  },
+  "flavor": "\"That's the worst plan I've ever heard. Well, what are we waiting for?\"",
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2
+ },
+ {
+  "code": "60226",
+  "name": "Mind over Matter",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Insight"
+  ],
+  "text": "Fast. Play during your turn.\nUntil the end of the round, add your [intellect] to your [combat] and [agility]. Draw 1 card.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 1
+ },
+ {
+  "code": "60227",
+  "name": "Seeking Answers",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Insight"
+  ],
+  "text": "<b>Investigate.</b> If you succeed, instead of discovering a clue at your location, discover 2 total clues from among your location and connecting locations.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "agility": 2
+  },
+  "flavor": "Some people need to know the truth at any cost. Some truths can cut like knives.",
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 1
+ },
+ {
+  "code": "60228",
+  "name": "Perception",
+  "type": "skill",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Practiced",
+   "Expert"
+  ],
+  "text": "Max 1 committed per skill test.\nIf this test is successful, draw 1 card (2 cards instead if it succeeds by 2 or more).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 3
+  },
+  "flavor": "At last, I've found it!",
+  "deckLimit": 2,
+  "xp": 2
+ },
+ {
+  "code": "60229",
+  "name": "Forbidden Tome",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Relic",
+   "Tome"
+  ],
+  "text": "Researched.\n[action][action][action][action] Exhaust Forbidden Tome: Move 1 damage from a player card at your location to an enemy at your location. Reduce this ability's cost by 1 action for every 4 cards in your hand (to a minimum of [action]).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "willpower": 1,
+   "combat": 1,
+   "wild": 1
+  },
+  "subname": "Dark Knowledge",
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 1
+ },
+ {
+  "code": "60230",
+  "name": "Forbidden Tome",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Relic",
+   "Tome"
+  ],
+  "text": "Researched.\n[action][action][action][action] Exhaust Forbidden Tome: You may move to a connecting location. Discover 1 clue at your location. Reduce this ability's cost by 1 action for every 4 cards in your hand (to a minimum of [action]).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "intellect": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "subname": "Secrets Revealed",
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 1
+ },
+ {
+  "code": "60231",
+  "name": "Farsight",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Ritual"
+  ],
+  "text": "[fast] During your turn, if you have 8 or more cards in your hand, exhaust Farsight: Play an event from your hand <i>(paying its cost)</i>.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "arcane"
+  ],
+  "icons": {
+   "willpower": 1,
+   "wild": 1
+  },
+  "flavor": "Beyond all points in time. Beyond all angles of space. Beyond the curves of reality.",
+  "deckLimit": 2,
+  "xp": 4,
+  "cost": 2
+ },
+ {
+  "code": "60232",
+  "name": "Miskatonic Archaeology Funding",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 1,
+  "traits": [
+   "Grant"
+  ],
+  "text": "Permanent. Limit 1 per deck.\nYou have 2 additional ally slots, which can only be used to hold [[Miskatonic]] assets.\n<b>Forced</b> - When you take damage or horror: No more than 1 of that damage/horror can be assigned to a [[Miskatonic]] asset.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "deckLimit": 1,
+  "xp": 4,
+  "cost": null
+ },
+ {
+  "code": "60233",
+  "name": "The Necronomicon",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 1,
+  "traits": [
+   "Item",
+   "Tome"
+  ],
+  "text": "Uses (6 secrets). Limit 1 per deck.\n[fast] Spend 1 secret: You get +2 skill value for this skill test.\n[fast] Spend 2 secrets: Draw 2 cards.\n[fast] Spend 3 secrets: Discover 1 clue at any location.\n[fast] Spend 4 secrets: Deal 3 damage to an enemy engaged with you.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "intellect": 5
+  },
+  "subname": "Petrus de Dacia Translation",
+  "deckLimit": 1,
+  "xp": 5,
+  "cost": 3,
+  "uses": {
+   "type": "secrets",
+   "count": 6
+  }
+ },
+ {
+  "code": "60251",
+  "name": "Carolyn Fern",
+  "type": "investigator",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 1,
+  "traits": [
+   "Medic",
+   "Scholar"
+  ],
+  "text": "[reaction] After you heal 1 or more horror from an investigator or [[Ally]] asset: Discover 1 clue at your location. (Limit once per round.)\n[elder_sign] effect: +1. Heal 1 horror from an investigator at your location.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Psychologist",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Seeker cards ([seeker]) level 0-5, Neutral cards level 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Experimental Psychology, Unbroken Web, 1 random basic weakness.",
+  "flavor": "\"Our dreams are a window into the hidden truths of not just our minds, but of the universe.\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 3,
+   "intellect": 5,
+   "combat": 1,
+   "agility": 3
+  },
+  "health": 6,
+  "sanity": 9
+ },
+ {
+  "code": "60252",
+  "name": "Experimental Psychology",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 1,
+  "traits": [
+   "Item",
+   "Tome",
+   "Science"
+  ],
+  "text": "Carolyn Fern deck only.\n[action]: Test [intellect] (2). If you succeed, heal 1 horror from an investigator or [[Ally]] asset at your location.\n[reaction] After you heal horror from an investigator, exhaust Experimental Psychology: That investigator gets +2 skill value to their next skill test this round.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1,
+   "wild": 1
+  },
+  "subname": "From Mind to Behavior",
+  "deckLimit": 1,
+  "cost": 2
+ },
+ {
+  "code": "60253",
+  "name": "Unbroken Web",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "car",
+  "quantity": 1,
+  "traits": [
+   "Terror",
+   "Dreamlands"
+  ],
+  "text": "<b>Revelation</b> - Put this card into play in your threat area.\n[reaction] When you would discover any number of clues: Place that much horror on Unbroken Web, instead. Then, discard this card if there is 4 or more horror on it.\n<b>Forced</b> - When the game ends or you are eliminated: You earn 2 fewer experience.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "weakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "60254",
+  "name": "Lethal Curiosity",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "car",
+  "quantity": 1,
+  "traits": [
+   "Flaw"
+  ],
+  "text": "<b>Revelation</b> - Test [willpower] (4). For each point you fail by, you must either take 1 damage or place 1 of your clues on your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "If only you could get a closer look.",
+  "subtype": "basicweakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "60255",
+  "name": "Dreamer's Chronicle",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Tome"
+  ],
+  "text": "Uses (4 secrets).\n[action] Spend 1 secret: <b>Investigate</b> ([intellect]). The first card you commit to this investigation gains [wild]. If you succeed, you may take 1 horror to discover 1 additional clue at your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "intellect": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 4,
+  "uses": {
+   "type": "secrets",
+   "count": 4
+  }
+ },
+ {
+  "code": "60256",
+  "name": "Occult Records",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Tome",
+   "Occult"
+  ],
+  "text": "Uses (3 secrets).\n[fast] During your turn, spend 1 secret and exhaust Occult Records: Heal 2 horror from an investigator at your location. Then, test [willpower] (2). If you fail, discard 1 card at random from your hand.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "willpower": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "uses": {
+   "type": "secrets",
+   "count": 3
+  }
+ },
+ {
+  "code": "60257",
+  "name": "Private Practice",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Profession"
+  ],
+  "text": "Limit 1 per investigator.\n[reaction] After you heal 1 or more horror, exhaust Private Practice: Gain 1 resource.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1
+  },
+  "flavor": "\"Do you want to tell me about it?\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1
+ },
+ {
+  "code": "60258",
+  "name": "Psychology Student",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Miskatonic"
+  ],
+  "text": "[reaction] After you play Psychology Student: Heal 2 horror from an investigator or [[Ally]] asset at your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "willpower": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2,
+  "health": 1,
+  "sanity": 1
+ },
+ {
+  "code": "60259",
+  "name": "Scroll of the Pharaohs",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Relic",
+   "Tome"
+  ],
+  "text": "Uses (4 secrets).\n[action] Spend 1 secret and exhaust Scroll of the Pharaohs: Deal 1 horror to an investigator or [[Ally]] asset at your location. Then, if there are no secrets on Scroll of the Pharaohs, discard it, draw 3 cards, and record \"you have unearthed the secrets of the Pharaohs\" in your campaign log.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "intellect": 1
+  },
+  "subname": "Untranslated",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "uses": {
+   "type": "secrets",
+   "count": 4
+  }
+ },
+ {
+  "code": "60260",
+  "name": "University Archivist",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Miskatonic"
+  ],
+  "text": "You have 1 additional hand slot, which can only be used to hold a [[Tome]] asset.\n[reaction] After University Archivist enters play: Search the top 6 cards of your deck for a [[Tome]] asset and add it to your hand. Shuffle your deck.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2,
+  "health": 1,
+  "sanity": 1
+ },
+ {
+  "code": "60261",
+  "name": "Caustic Reaction",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Tactic",
+   "Science"
+  ],
+  "text": "<b>Fight</b> ([intellect]). You get +1 [intellect] for this attack. If you control 2 or more clues, this attack deals +1 damage.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "combat": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60262",
+  "name": "Unflappable",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Insight"
+  ],
+  "text": "<b>Evade</b> ([agility]). You get +2 [agility] for this evasion. If you succeed and you control 2 or more clues, heal 1 horror.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "agility": 1
+  },
+  "flavor": "\"Stay calm! We'll get out of this, yet.\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60264",
+  "name": "Psychoanalysis",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Insight",
+   "Science"
+  ],
+  "text": "Choose an investigator at your location and reveal the top 3 cards of their deck. That investigator may choose to either draw 1 revealed card and shuffle the rest into their deck, or heal 2 horror and return the revealed cards to the top of their owner's deck in any order.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60265",
+  "name": "De-Escalate",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Insight"
+  ],
+  "text": "<b>Parley.</b> Choose an enemy at your location. Heal horror equal to that enemy's horror value.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 2
+  },
+  "flavor": "\"Hold on, now. Let's stop and think about this.\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1
+ },
+ {
+  "code": "60266",
+  "name": "Insidious Truths",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Insight",
+   "Cursed"
+  ],
+  "text": "As an additional cost to play Insidious Truths, you may discard up to 2 cards from hand.\n<b>Fight</b> ([combat]). For each card discarded as part of this card's cost, you get +2 [combat] and deal +1 damage for this attack.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60268",
+  "name": "Establish Motive",
+  "type": "skill",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Practiced"
+  ],
+  "text": "If this skill test is successful, the performing investigator searches the top 6 cards of their deck for an [[Insight]] event, draws it, and shuffles their deck.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 0
+ },
+ {
+  "code": "60269",
+  "name": "Literary Analysis",
+  "type": "skill",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Practiced"
+  ],
+  "text": "If this skill test is successful, replenish 1 secret on a [[Tome]] asset at your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 2
+  },
+  "deckLimit": 2,
+  "xp": 0
+ },
+ {
+  "code": "60271",
+  "name": "Unflappable",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Insight"
+  ],
+  "text": "<b>Evade</b> ([agility]). You get +3 [agility] for this evasion. If you succeed, heal 2 horror from among cards you control.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "flavor": "\"Stay calm! We'll get out of this, yet.\"",
+  "deckLimit": 2,
+  "xp": 1,
+  "cost": 2
+ },
+ {
+  "code": "60272",
+  "name": "Typewriter",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Tool"
+  ],
+  "text": "Uses (3 secrets). If there are no secrets on Typewriter, discard it.\nSecrets on Typewriter may be spent as if they were on [[Tome]] assets you control.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1
+  },
+  "flavor": "You must record your findings, even if nobody believes you.",
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2,
+  "uses": {
+   "type": "secrets",
+   "count": 3
+  }
+ },
+ {
+  "code": "60273",
+  "name": "Caustic Reaction",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Tactic",
+   "Science"
+  ],
+  "text": "<b>Fight</b> ([intellect]). You get +2 [intellect] and deal +1 damage for this attack. If you succeed and you control 2 or more clues, this attack deals +2 damage instead.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "combat": 2
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2
+ },
+ {
+  "code": "60274",
+  "name": "Hypnotize",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Science"
+  ],
+  "text": "<b>Parley</b> ([intellect]). You get +2 [intellect] for this parley. Choose a non-[[Elite]] enemy at your location. This test's difficulty is equal to that enemy's remaining health. If you succeed, shuffle that enemy into the encounter deck.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2
+ },
+ {
+  "code": "60276",
+  "name": "Autopsy Report",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Tome",
+   "Science"
+  ],
+  "text": "[reaction] After an enemy at your location is defeated, exhaust Autopsy Report: <b>Investigate</b> ([intellect]). You get +X [intellect] for this investigation, where X is the defeated enemy's printed health (to a maximum of +5).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "combat": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 3
+ },
+ {
+  "code": "60277",
+  "name": "Sharp Rhetoric",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "Starting. <i>(You may begin the game with 1 copy of a starting card in your opening hand.)</i>\n[fast] Spend 1 resource: You get +1 [intellect] for this skill test (+2 [intellect] instead if this is an investigation or parley).\n[fast] Spend 1 resource: You get +1 [willpower] for this skill test (+2 [willpower] instead if this is an investigation or parley).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 2
+ },
+ {
+  "code": "60278",
+  "name": "Psychoanalysis",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Insight",
+   "Science"
+  ],
+  "text": "One at a time, each investigator at your location reveals the top 3 cards of their deck, draws 1 of those cards, shuffles the remaining cards into their deck, and heals 2 horror.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 2
+ },
+ {
+  "code": "60279",
+  "name": "Scroll of the Pharaohs",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Relic",
+   "Tome"
+  ],
+  "text": "Researched. Uses (4 secrets).\n[action] Take 1 horror and spend 1 or 2 secrets: For each secret you spent as part of this ability's cost, reveal 3 cards from the top of the encounter deck. Choose and discard 1 non-peril, non-[[Elite]] card among them, then return the rest to the top of the encounter deck in any order.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "willpower": 1,
+   "wild": 2
+  },
+  "subname": "Words of Bast",
+  "deckLimit": 2,
+  "xp": 4,
+  "cost": 3,
+  "uses": {
+   "type": "secrets",
+   "count": 4
+  }
+ },
+ {
+  "code": "60280",
+  "name": "Scroll of the Pharaohs",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Relic",
+   "Tome"
+  ],
+  "text": "Researched. Uses (4 secrets).\n[action] Take 1 horror and spend 1 or 2 secrets: <b>Fight</b> ([intellect]). You get +3 [intellect] for this attack. If you succeed, this attack deals +1 damage for each secret you spent as part of this ability's cost.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "intellect": 1,
+   "wild": 2
+  },
+  "subname": "Words of Ra",
+  "deckLimit": 2,
+  "xp": 4,
+  "cost": 3,
+  "uses": {
+   "type": "secrets",
+   "count": 4
+  }
+ },
+ {
+  "code": "60281",
+  "name": "Scroll of the Pharaohs",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Relic",
+   "Tome"
+  ],
+  "text": "Researched. Uses (4 secrets).\n[action] Take 1 horror and spend 1 or 2 secrets: <b>Investigate</b> ([intellect]). You get +3 [intellect] for this investigation. If you succeed, discover 1 additional clue at your location for each secret you spent as part of this ability's cost.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "intellect": 1,
+   "wild": 2
+  },
+  "subname": "Words of Set",
+  "deckLimit": 2,
+  "xp": 4,
+  "cost": 3,
+  "uses": {
+   "type": "secrets",
+   "count": 4
+  }
+ },
+ {
+  "code": "60282",
+  "name": "Commune with the Cosmos",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Spell"
+  ],
+  "text": "When you play Commune with the Cosmos, you may take up to 3 horror.\n<b>Investigate</b> ([intellect]). You get +2 [intellect] for this investigation. If you succeed, discover X additional clues at your location, where X is the amount of horror on you (to a maximum of 4 additional clues).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 2,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 5,
+  "cost": 2
+ },
+ {
+  "code": "60301",
+  "name": "Winifred Habbamock",
+  "type": "investigator",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 1,
+  "traits": [
+   "Criminal"
+  ],
+  "text": "[fast] If 2 different non-weakness cards you control are committed to this skill test: Draw 1 card. (Limit once per test.)\n[elder_sign] effect: +1. After this test ends, for every 2 points you succeeded by, return a card you committed to this test to your hand.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Aviatrix",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Rogue cards ([rogue]) level 0-5, Neutral cards level 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Anything You Can Do, Better; Arrogance; 1 random basic weakness.",
+  "flavor": "\"I can top that.\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 1,
+   "intellect": 3,
+   "combat": 3,
+   "agility": 5
+  },
+  "health": 8,
+  "sanity": 7
+ },
+ {
+  "code": "60302",
+  "name": "Anything You Can Do, Better",
+  "type": "skill",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 1,
+  "traits": [
+   "Innate",
+   "Developed"
+  ],
+  "text": "Winifred Habbamock deck only.\nCommit only to a skill test you are performing.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 6
+  },
+  "flavor": "\"Told you.\"",
+  "deckLimit": 1
+ },
+ {
+  "code": "60303",
+  "name": "Arrogance",
+  "type": "skill",
+  "faction": "neutral",
+  "pack": "win",
+  "quantity": 1,
+  "traits": [
+   "Flaw"
+  ],
+  "text": "You must commit Arrogance to each eligible skill test you perform.\nThis skill's icons subtract from your skill value instead of adding to it.\nIf this test succeeds, return this skill to your hand.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "subtype": "weakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "60304",
+  "name": "Reckless",
+  "type": "skill",
+  "faction": "neutral",
+  "pack": "win",
+  "quantity": 1,
+  "traits": [
+   "Flaw"
+  ],
+  "text": "Commit only to a skill test you are performing (of any type) that has no other cards committed to it. Other cards cannot be committed to this skill test.\nIf this test fails, return this skill to your hand.\n<b>Forced</b> - If Reckless is in your hand at the end of your turn: Reveal it and lose 2 resources.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "basicweakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "60305",
+  "name": "Lockpicks",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Tool",
+   "Illicit"
+  ],
+  "text": "[action] Exhaust Lockpicks: <b>Investigate.</b> Add your [agility] value to your skill value for this investigation. If you do not succeed by at least 2, discard Lockpicks.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "intellect": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3
+ },
+ {
+  "code": "60306",
+  "name": "Mauser C96",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Weapon",
+   "Firearm",
+   "Illicit"
+  ],
+  "text": "Uses (5 ammo).\n[action] Exhaust Mauser C96 and spend 1 ammo: <b>Fight.</b> You get +1 [combat] and deal +1 damage for this attack. If you succeed by 2 or more, either ready Mauser C96 or gain 1 resource.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 4,
+  "uses": {
+   "type": "ammo",
+   "count": 5
+  }
+ },
+ {
+  "code": "60309",
+  "name": "Lonnie Ritter",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Ally"
+  ],
+  "text": "You get +1 [combat].\n[fast] Exhaust Lonnie Ritter and spend 1 resource: Choose an [[Item]] asset controlled by an investigator at your location. Heal 1 damage from that asset and 1 horror from Lonnie Ritter.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "combat": 1
+  },
+  "subname": "Feisty Mechanic",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 4,
+  "health": 2,
+  "sanity": 3
+ },
+ {
+  "code": "60310",
+  "name": "Leather Jacket",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Armor"
+  ],
+  "text": "Fast.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [
+   "body"
+  ],
+  "icons": {
+   "combat": 1
+  },
+  "flavor": "\"You think wearing that makes you look like the cat's meow?\"\n\"Nah, I already know I'm the cat's meow. This just lets everyone else know.\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2,
+  "health": 2
+ },
+ {
+  "code": "60311",
+  "name": "Streetwise",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "[fast] Spend 2 resources: You get +2 [intellect] for this skill test.\n[fast] Spend 2 resources: You get +2 [agility] for this skill test.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 0
+ },
+ {
+  "code": "60315",
+  "name": "Pilfer",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Trick"
+  ],
+  "text": "<b>Investigate.</b> This investigation uses [agility] instead of [intellect]. If you succeed, discover 2 additional clues at your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 4
+ },
+ {
+  "code": "60316",
+  "name": "Sneak By",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Trick"
+  ],
+  "text": "<b>Evade.</b> When this action begins, gain 2 resources.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "agility": 2
+  },
+  "flavor": "Being told not to do something was generally Winifred's cue to proceed as planned.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 0
+ },
+ {
+  "code": "60317",
+  "name": "Nimble",
+  "type": "skill",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Innate"
+  ],
+  "text": "For each point this skill test succeeds by, after it resolves, you may immediately move to a connecting location (to a maximum of 3 times).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0
+ },
+ {
+  "code": "60318",
+  "name": "Daredevil",
+  "type": "skill",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Fortune",
+   "Practiced"
+  ],
+  "text": "After you commit Daredevil to a skill test, discard cards from the top of your deck until you discard a [rogue] skill you can commit to this test. Commit it. Shuffle each weakness that was discarded by this effect back into your deck.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "flavor": "\"You're a maniac, Wini!\"\n\"I know! Isn't it wonderful?\"",
+  "deckLimit": 2,
+  "xp": 0
+ },
+ {
+  "code": "60320",
+  "name": "Liquid Courage",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Illicit"
+  ],
+  "text": "Uses (4 supplies).\n[action] Spend 1 supply: Choose an investigator at your location to heal 1 horror. Then, that investigator tests [willpower] (2). If the test succeeds, they draw 1 card. If the test fails, they heal 1 additional horror and discard 1 card at random from their hand.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 2
+  },
+  "deckLimit": 2,
+  "xp": 1,
+  "cost": 1,
+  "uses": {
+   "type": "supplies",
+   "count": 4
+  }
+ },
+ {
+  "code": "60321",
+  "name": "Mauser C96",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Weapon",
+   "Firearm",
+   "Illicit"
+  ],
+  "text": "Uses (5 ammo).\n[action] Exhaust Mauser C96 and spend 1 ammo: <b>Fight.</b> You get +2 [combat] and deal +1 damage for this attack. If you succeed by 2 or more, either ready Mauser C96 or gain 1 resource (if you succeed by 4 or more, do both).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 3,
+  "uses": {
+   "type": "ammo",
+   "count": 5
+  }
+ },
+ {
+  "code": "60322",
+  "name": "Daring Maneuver",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Gambit"
+  ],
+  "text": "Fast. Play when you would succeed at a skill test.\nYou get +3 skill value for this test. Draw 1 card.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "flavor": "\"McGlen, are you tryin' to get us both killed?\"\n\"Not this time, pal. Not this time.\"",
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 0
+ },
+ {
+  "code": "60323",
+  "name": "Cheap Shot",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Trick"
+  ],
+  "text": "<b>Fight.</b> Add your [agility] value to your skill value for this attack. If you succeed by 1 or more, automatically evade the attacked enemy. If you succeed by 3 or more, return Cheap Shot to your hand at the end of your turn.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "flavor": "\"Aim for the eyes,\" they told me.",
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2
+ },
+ {
+  "code": "60324",
+  "name": "Slip Away",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Trick"
+  ],
+  "text": "<b>Evade.</b> Add your [intellect] to your skill value for this evasion attempt. If you succeed by 1 or more and the evaded enemy is non-[[Elite]], it does not ready during the next upkeep phase. If you succeed by 3 or more, return Slip Away to your hand at the end of your turn.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2
+ },
+ {
+  "code": "60325",
+  "name": "Manual Dexterity",
+  "type": "skill",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Innate",
+   "Developed"
+  ],
+  "text": "Max 1 committed per skill test.\nIf this test is successful, draw 1 card (2 cards instead if it succeeds by 2 or more).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "agility": 3
+  },
+  "flavor": "Too easy.",
+  "deckLimit": 2,
+  "xp": 2
+ },
+ {
+  "code": "60326",
+  "name": "Lucky Cigarette Case",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Charm"
+  ],
+  "text": "[reaction] After you succeed at a skill test by 1 or more, exhaust Lucky Cigarette Case: Search the top X cards of your deck for a card, draw it, and shuffle the remaining cards into your deck. X is the amount you succeeded by.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "accessory"
+  ],
+  "icons": {
+   "willpower": 2
+  },
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 2
+ },
+ {
+  "code": "60327",
+  "name": "Sharpshooter",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "[reaction] When you use a fight ability on a [[Firearm]] asset, exhaust Sharpshooter: Choose one, or both - \n- This attack uses [agility] instead of [combat]. All modifiers to your [combat] for this attack modify your [agility] instead.\n- Use the attacked enemy's evade value for this attack, instead of their fight value.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 2
+ },
+ {
+  "code": "60328",
+  "name": "Pilfer",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Trick"
+  ],
+  "text": "<b>Investigate.</b> This investigation uses [agility] instead of [intellect]. If you succeed, discover 2 additional clues at your location. If you succeed by 2 or more, return Pilfer to your hand at the end of your turn.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 4
+ },
+ {
+  "code": "60329",
+  "name": "Backstab",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Tactic"
+  ],
+  "text": "<b>Fight.</b> This attack uses [agility] instead of [combat]. This attack deals +2 damage. If you succeed by 2 or more, return Backstab to your hand at the end of your turn.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 3
+ },
+ {
+  "code": "60330",
+  "name": "Copycat",
+  "type": "skill",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Gambit"
+  ],
+  "text": "After you commit Copycat to a skill test, search the discard pile of another investigator for a skill you can commit to this test, and commit it. After this test ends, place that card on the bottom of its owner's deck.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 3
+ },
+ {
+  "code": "60331",
+  "name": "Beretta M1918",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Weapon",
+   "Firearm",
+   "Illicit"
+  ],
+  "text": "Uses (4 ammo).\n[action] Exhaust Beretta M1918 and spend 1 ammo: <b>Fight.</b> You get +4 [combat] and deal +1 damage for this attack. If you succeed by 2 or more, either ready Beretta M1918, or this attack deals an additional +1 damage (if you succeed by 4 or more, do both).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand",
+   "hand"
+  ],
+  "icons": {
+   "combat": 2,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 4,
+  "cost": 4,
+  "uses": {
+   "type": "ammo",
+   "count": 4
+  }
+ },
+ {
+  "code": "60332",
+  "name": "Chuck Fergus",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Criminal"
+  ],
+  "text": "[reaction] When you play a [[Tactic]] or [[Trick]] event, exhaust Chuck Fergus: Choose two -\n- That event gains fast.\n- That event costs 2 fewer resources to play.\n- You get +2 skill value while performing a skill test during the resolution of that event.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "combat": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "subname": "O'Bannion Driver",
+  "deckLimit": 2,
+  "xp": 5,
+  "cost": 3,
+  "health": 2,
+  "sanity": 2
+ },
+ {
+  "code": "60351",
+  "name": "André Patel",
+  "type": "investigator",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 1,
+  "traits": [
+   "Performer"
+  ],
+  "text": "[reaction] After you succeed at a skill test by 2 or more during your turn: You may take an additional action this turn. (Limit once per round.)\n[elder_sign] effect: +2. Gain 1 resource.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Film Star",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Rogue cards ([rogue]) level 0-5, Neutral cards level 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Know the Exit, Know the Line, Know the Scene, Weight of the World, 1 random basic weakness.",
+  "flavor": "\"All the world's my stage.\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 2,
+   "intellect": 3,
+   "combat": 2,
+   "agility": 5
+  },
+  "health": 7,
+  "sanity": 8
+ },
+ {
+  "code": "60352",
+  "name": "Know the Exit",
+  "type": "skill",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 1,
+  "traits": [
+   "Practiced"
+  ],
+  "text": "André Patel deck only.\nWhile this card is committed to an attack or an evasion, it gains [wild] [wild].",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "deckLimit": 1
+ },
+ {
+  "code": "60353",
+  "name": "Know the Line",
+  "type": "skill",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 1,
+  "traits": [
+   "Practiced"
+  ],
+  "text": "André Patel deck only.\nWhile this card is committed to a skill test on a scenario card, it gains [wild] [wild].",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "deckLimit": 1
+ },
+ {
+  "code": "60354",
+  "name": "Know the Scene",
+  "type": "skill",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 1,
+  "traits": [
+   "Practiced"
+  ],
+  "text": "André Patel deck only.\nWhile this card is committed to an investigation or parley, it gains [wild] [wild].",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "deckLimit": 1
+ },
+ {
+  "code": "60355",
+  "name": "Weight of the World",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "and",
+  "quantity": 1,
+  "traits": [
+   "Terror"
+  ],
+  "text": "<b>Revelation</b> - Put Weight of the World into play in your threat area.\n<b>Forced</b> - When you fail a skill test while Weight of the World is in play, take 1 horror and shuffle it back into your deck.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "All eyes are on you.",
+  "subtype": "weakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "60356",
+  "name": "Unaware",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "and",
+  "quantity": 1,
+  "traits": [
+   "Flaw"
+  ],
+  "text": "<b>Revelation</b> - Put Unaware into play in your threat area.\n<b>Forced</b> - The first time you fail a skill test during your turn: Draw the top card of the encounter deck. If that card is an enemy, discard Unaware.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "basicweakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "60357",
+  "name": "Center Stage",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "Limit 1 per investigator. Uses (3 renown). If there is no renown on Center Stage, discard it.\n[fast] During a skill test, spend 1 renown and exhaust Center Stage: You get +1 skill value for each action you have spent this round <i>(including this one, if this is triggered during one of your actions)</i>.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "uses": {
+   "type": "renown",
+   "count": 3
+  }
+ },
+ {
+  "code": "60358",
+  "name": "Fame",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Condition"
+  ],
+  "text": "Uses (4 renown). If there is no renown on Fame, discard it.\n[action] If there is an enemy at your location, spend 1 renown: <b>Parley.</b> Gain 2 resources.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1,
+  "uses": {
+   "type": "renown",
+   "count": 4
+  }
+ },
+ {
+  "code": "60359",
+  "name": "The Grapevine",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Connection"
+  ],
+  "text": "Uses (3 rumors). If there are no rumors on The Grapevine, discard it.\n[action] Spend 1 rumor and exhaust The Grapevine: <b>Parley.</b> Choose an enemy at a revealed location up to 2 connections away. Move (one location at a time) along the shortest path to that enemy's location and engage it.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2,
+  "uses": {
+   "type": "rumors",
+   "count": 3
+  }
+ },
+ {
+  "code": "60360",
+  "name": "Extravagant Ring",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Charm"
+  ],
+  "text": "Uses (3 renown).\n[reaction] When you would succeed at a skill test, spend 1 renown and exhaust Extravagant Ring: You get +2 skill value for this test.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "accessory"
+  ],
+  "icons": {
+   "intellect": 1
+  },
+  "flavor": "Lina always wanted the attention.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1,
+  "uses": {
+   "type": "renown",
+   "count": 3
+  }
+ },
+ {
+  "code": "60362",
+  "name": "Marcus Sengstacke",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Patron"
+  ],
+  "text": "You gain 1 additional resource during the upkeep phase.\n<b>Forced</b> - After you fail a skill test: Deal 1 horror to Marcus Sengstacke.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1
+  },
+  "subname": "Wealthy Benefactor",
+  "flavor": "\"I am certain this city will know of your accomplishments.\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "health": 1,
+  "sanity": 2
+ },
+ {
+  "code": "60363",
+  "name": "Polished Cane",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Weapon",
+   "Melee"
+  ],
+  "text": "[action]: <b>Fight</b> ([combat]). Add your [agility] to your [combat] for this attack. If this attack succeeds by 2 or more against a non-[[Elite]] enemy, you may exhaust Polished Cane to automatically evade that enemy.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3
+ },
+ {
+  "code": "60364",
+  "name": "Clean Sweep",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Tactic",
+   "Trick"
+  ],
+  "text": "<b>Investigate</b> ([intellect]). You get +2 [intellect] for this investigation. If you discover the last clue at your location, you may move to a connecting location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "agility": 1
+  },
+  "flavor": "\"Better luck next time, love.\"\n- R. S.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60365",
+  "name": "Pay Your Dues",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Favor"
+  ],
+  "text": "<b>Parley.</b> Choose a non-[[Elite]] enemy at your location with X remaining health. That enemy disengages from each investigator and gains aloof until the end of the round. Discover 1 clue at your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": -2
+ },
+ {
+  "code": "60366",
+  "name": "Quick Exit",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Tactic",
+   "Trick"
+  ],
+  "text": "<b>Evade</b> ([agility]). You get +2 [agility] for this evasion. If you succeed by 2 or more and the evaded enemy is non-[[Elite]], that enemy does not ready during the next upkeep phase.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60367",
+  "name": "A Sudden Fall",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Tactic",
+   "Trick"
+  ],
+  "text": "<b>Fight</b> ([combat]). You get +2 [combat] for this attack. If the targeted enemy is exhausted, this attack deals +1 damage.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "flavor": "What an unfortunate \"accident.\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60368",
+  "name": "Right Under Their Noses",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Trick",
+   "Illicit"
+  ],
+  "text": "Fast. Play after you successfully evade an enemy.\nDiscover 1 clue at your location (if you succeeded by 2 or more, you may discover 1 clue at a connecting location, instead).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60369",
+  "name": "Easy Street",
+  "type": "skill",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Favor"
+  ],
+  "text": "Commit only to a skill test you are performing. Max 1 committed per skill test.\nEasy Street gains [wild] for every 3 resources you have (to a maximum of [wild] [wild] [wild]).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 0
+ },
+ {
+  "code": "60370",
+  "name": "Out the Door",
+  "type": "skill",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Gambit"
+  ],
+  "text": "After Out the Door is committed to a skill test, the performing investigator gains 2 resources. If this skill test fails, that investigator loses 2 resources.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "agility": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 0
+ },
+ {
+  "code": "60373",
+  "name": "Out the Door",
+  "type": "skill",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Gambit"
+  ],
+  "text": "After Out the Door is committed to a skill test, the performing investigator gains 4 resources. If this skill test fails, that investigator loses 4 resources.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "agility": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 1
+ },
+ {
+  "code": "60374",
+  "name": "The Grapevine",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Connection"
+  ],
+  "text": "Uses (3 rumors). If there are no rumors on The Grapevine, discard it.\n[action] Spend 1 rumor and exhaust The Grapevine: <b>Parley.</b> Choose an enemy at a revealed location up to 3 connections away. Move (one location at a time) along the shortest path to that enemy's location and engage it. Draw 1 card.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2,
+  "uses": {
+   "type": "rumors",
+   "count": 3
+  }
+ },
+ {
+  "code": "60375",
+  "name": "Marcus Sengstacke",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Patron"
+  ],
+  "text": "You gain 1 additional resource during the upkeep phase.\n<b>Forced</b> - After you fail a skill test: Deal 1 horror to Marcus Sengstacke.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1
+  },
+  "subname": "Wealthy Benefactor",
+  "flavor": "\"I am certain this city will know of your accomplishments.\"",
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2,
+  "health": 1,
+  "sanity": 3
+ },
+ {
+  "code": "60376",
+  "name": "Clean Sweep",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Tactic",
+   "Trick"
+  ],
+  "text": "<b>Investigate</b> ([agility]). Add your [intellect] to your [agility] for this test. After this test resolves, you may move to a connecting location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 2,
+   "wild": 1
+  },
+  "flavor": "\"Better luck next time, love.\"\n- R. S.",
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2
+ },
+ {
+  "code": "60377",
+  "name": "Quick Exit",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Tactic",
+   "Trick"
+  ],
+  "text": "<b>Evade</b> ([agility]). Add your [willpower] to your [agility] for this test. If you succeed and the evaded enemy is non-[[Elite]], that enemy does not ready during the next upkeep phase.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 2,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2
+ },
+ {
+  "code": "60378",
+  "name": "A Sudden Fall",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Tactic",
+   "Trick"
+  ],
+  "text": "<b>Fight</b> ([agility]). Add your [combat] to your [agility] for this test. If the targeted enemy is exhausted, this attack deals +2 damage.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 2,
+   "wild": 1
+  },
+  "flavor": "What an unfortunate \"accident.\"",
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2
+ },
+ {
+  "code": "60380",
+  "name": "Silver Tongue",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "Starting. <i>(You may begin the game with 1 copy of a starting card in your opening hand.)</i>\n[fast] Spend 1 resource: You get +1 [intellect] for this skill test (+2 [intellect] instead if this is an evasion or parley).\n[fast] Spend 1 resource: You get +1 [agility] for this skill test (+2 [agility] instead if this is an evasion or parley).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 2
+ },
+ {
+  "code": "60382",
+  "name": "Right Under Their Noses",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Trick",
+   "Illicit"
+  ],
+  "text": "Fast. Play after you successfully evade an enemy.\nDiscover 1 clue at your location (if you succeeded by 2 or more, you may discover 1 clue at a connecting location, as well).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 2
+ },
+ {
+  "code": "60383",
+  "name": "Contingency",
+  "type": "skill",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Practiced",
+   "Expert"
+  ],
+  "text": "While Contingency is committed to a skill test targeting an enemy, after revealing chaos tokens, you may spend 3 resources to cancel a revealed token, return it to the chaos bag, and reveal a new one. <i>(You may do this any number of times.)</i>",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 2
+  },
+  "deckLimit": 2,
+  "xp": 3
+ },
+ {
+  "code": "60401",
+  "name": "Jacqueline Fine",
+  "type": "investigator",
+  "faction": "mystic",
+  "pack": "jac",
+  "quantity": 1,
+  "traits": [
+   "Clairvoyant"
+  ],
+  "text": "[reaction] When an investigator at your location would reveal any number of chaos tokens: Reveal 2 additional tokens. Of the revealed tokens, choose and cancel 2 non-[auto_fail] tokens, or 1 [auto_fail] token. (Limit once per round.)\n[elder_sign] effect: +1. If this effect is canceled or ignored, draw 1 card.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Psychic",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Mystic cards ([mystic]) level 0-5, Neutral cards level 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Arbiter of Fates, Dark Future, 1 random basic weakness.",
+  "flavor": "\"The future can be rewritten.\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 5,
+   "intellect": 3,
+   "combat": 2,
+   "agility": 2
+  },
+  "health": 6,
+  "sanity": 9
+ },
+ {
+  "code": "60402",
+  "name": "Arbiter of Fates",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "jac",
+  "quantity": 1,
+  "traits": [
+   "Talent"
+  ],
+  "text": "Jacqueline Fine deck only.\n[reaction] When you use Jacqueline Fine's [reaction] ability, exhaust Arbiter of Fates: This use of her ability does not count towards its limit.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "flavor": "I can see the threads. I know when they will snap.",
+  "deckLimit": 1,
+  "cost": 3
+ },
+ {
+  "code": "60403",
+  "name": "Dark Future",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "jac",
+  "quantity": 1,
+  "traits": [
+   "Omen",
+   "Endtimes"
+  ],
+  "text": "<b>Revelation</b> - Put Dark Future into play in your threat area.\nYou cannot cancel or ignore [elder_sign], [skull], [cultist], [tablet], [elder_thing], and [auto_fail] tokens.\n<b>Forced</b> - At the end of your turn: Reveal 5 random tokens from the chaos bag. If an [elder_sign] symbol is revealed, discard Dark Future.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "weakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "60404",
+  "name": "Nihilism",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "jac",
+  "quantity": 1,
+  "traits": [
+   "Madness"
+  ],
+  "text": "<b>Revelation</b> - Put Nihilism into play in your threat area.\n<b>Forced</b> - After you reveal, cancel, or ignore an [auto_fail] token: Take 1 damage and 1 horror.\n[action][action]: Discard Nihilism.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "basicweakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "60406",
+  "name": "Scrying Mirror",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "jac",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Charm"
+  ],
+  "text": "Uses (4 secrets).\n[reaction] After a skill test at your location begins, exhaust Scrying Mirror and spend 1 secret: Perform the \"reveal chaos token\" step of the test now <i>(before committing cards)</i>, instead of after committing cards.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "intellect": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "uses": {
+   "type": "secrets",
+   "count": 4
+  }
+ },
+ {
+  "code": "60407",
+  "name": "Azure Flame",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "jac",
+  "quantity": 2,
+  "traits": [
+   "Spell"
+  ],
+  "text": "Uses (4 charges).\n[action] Spend 1 charge: <b>Fight.</b> This attack uses [willpower] instead of [combat] and deals +1 damage. If an [elder_sign], \"+1,\" or \"0\" token is revealed during this attack, take 1 damage.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "arcane"
+  ],
+  "icons": {
+   "combat": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "uses": {
+   "type": "charges",
+   "count": 4
+  }
+ },
+ {
+  "code": "60408",
+  "name": "Clairvoyance",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "jac",
+  "quantity": 2,
+  "traits": [
+   "Spell"
+  ],
+  "text": "Uses (3 charges).\n[action] Spend 1 charge: <b>Investigate.</b> Investigate using [willpower] instead of [intellect]. If you succeed, discover 1 additional clue at this location. If an [elder_sign], \"+1,\" or \"0\" token is revealed during this investigation, take 1 horror.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "arcane"
+  ],
+  "icons": {
+   "intellect": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 4,
+  "uses": {
+   "type": "charges",
+   "count": 3
+  }
+ },
+ {
+  "code": "60409",
+  "name": "Ineffable Truth",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "jac",
+  "quantity": 2,
+  "traits": [
+   "Spell"
+  ],
+  "text": "Uses (3 charges).\n[action] Spend 1 charge: <b>Evade.</b> This evasion attempt uses [willpower] instead of [agility]. If you succeed, deal 1 damage to the evaded enemy. If an [elder_sign], \"+1,\" or \"0\" token is revealed during this evasion attempt, lose 1 resource.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "arcane"
+  ],
+  "icons": {
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "uses": {
+   "type": "charges",
+   "count": 3
+  }
+ },
+ {
+  "code": "60410",
+  "name": "Familiar Spirit",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "jac",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Creature",
+   "Summon"
+  ],
+  "text": "You have 1 additional arcane slot, which can only be used to hold a [[Spell]] asset.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "willpower": 1
+  },
+  "flavor": "\"Thou art wholly unworthy. But I shall serve thee for now.\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1,
+  "health": 1,
+  "sanity": 1
+ },
+ {
+  "code": "60411",
+  "name": "Crystal Pendulum",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "jac",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Charm"
+  ],
+  "text": "You get +1 [willpower].\n[reaction] After a skill test at your location begins, exhaust Crystal Pendulum: Name a number. If this test succeeds by that number or fails by that number, draw 1 card.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "accessory"
+  ],
+  "icons": {
+   "willpower": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60412",
+  "name": "Robes of Endless Night",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "jac",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Clothing"
+  ],
+  "text": "[reaction] When you play a [[Spell]] card, exhaust Robes of Endless Night: Reduce the cost of that card by 1.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "body"
+  ],
+  "icons": {
+   "agility": 1
+  },
+  "flavor": "Dark is the abyss without. Bright is the abyss within.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "health": 2
+ },
+ {
+  "code": "60415",
+  "name": "Parallel Fates",
+  "type": "event",
+  "faction": "mystic",
+  "pack": "jac",
+  "quantity": 2,
+  "traits": [
+   "Augury"
+  ],
+  "text": "Look at the top 4 cards of the encounter deck. Reveal a random token from the chaos bag. If it has a [skull], [cultist], [tablet], [elder_thing], or [auto_fail] symbol, shuffle those cards into the encounter deck. Otherwise, return them to the top of the encounter deck in any order.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "flavor": "\"If I said that I could tell you when you were going to die, would you want to know?\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 0
+ },
+ {
+  "code": "60416",
+  "name": "Voice of Ra",
+  "type": "event",
+  "faction": "mystic",
+  "pack": "jac",
+  "quantity": 2,
+  "traits": [
+   "Spell"
+  ],
+  "text": "Gain 1 resource. Reveal 3 random tokens from the chaos bag. For each [skull], [cultist], [tablet], [elder_thing], or [auto_fail] symbol revealed, gain an additional 2 resources.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 0
+ },
+ {
+  "code": "60419",
+  "name": "Prescient",
+  "type": "skill",
+  "faction": "mystic",
+  "pack": "jac",
+  "quantity": 2,
+  "traits": [
+   "Practiced",
+   "Augury"
+  ],
+  "text": "Max 1 committed per skill test.\nAfter you commit Prescient to a skill test, name \"even,\" \"odd,\" or \"symbol.\" After this test ends, if a chaos token of the named type was revealed during this test, you may return a [[Spell]] card from your discard pile to your hand.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1
+  },
+  "deckLimit": 2,
+  "xp": 0
+ },
+ {
+  "code": "60420",
+  "name": "Eldritch Inspiration",
+  "type": "event",
+  "faction": "mystic",
+  "pack": "jac",
+  "quantity": 2,
+  "traits": [
+   "Spell",
+   "Spirit"
+  ],
+  "text": "Fast. Play when you would resolve an effect on a [mystic] card that triggers \"when,\" \"if,\" or \"after\" a chaos token is revealed.\nEither cancel that effect, or resolve it an additional time.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "intellect": 2
+  },
+  "deckLimit": 2,
+  "xp": 1,
+  "cost": 0
+ },
+ {
+  "code": "60421",
+  "name": "Grotesque Statue",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "jac",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Relic"
+  ],
+  "text": "Uses (3 charges). If Grotesque Statue has no charges, discard it.\n[reaction] When you would reveal a chaos token, spend 1 charge: Reveal 2 chaos tokens instead of 1. Choose one of those tokens to resolve, and ignore the other.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "willpower": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 3,
+  "uses": {
+   "type": "charges",
+   "count": 3
+  }
+ },
+ {
+  "code": "60422",
+  "name": "Robes of Endless Night",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "jac",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Clothing"
+  ],
+  "text": "[reaction] When you play a [[Spell]] card, exhaust Robes of Endless Night: Reduce the cost of that card by 1. Playing that card does not provoke attacks of opportunity.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "body"
+  ],
+  "icons": {
+   "willpower": 1,
+   "agility": 1
+  },
+  "flavor": "Dark is the abyss without. Bright is the abyss within.",
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2,
+  "health": 2
+ },
+ {
+  "code": "60423",
+  "name": "Hypnotic Gaze",
+  "type": "event",
+  "faction": "mystic",
+  "pack": "jac",
+  "quantity": 2,
+  "traits": [
+   "Spell"
+  ],
+  "text": "Fast. Play when an enemy attacks an investigator at your location.\nCancel that attack. Then, reveal a random token from the chaos bag. If it has a [skull], [cultist], [tablet], [elder_thing], or [auto_fail] symbol, deal damage to the attacking enemy equal to its damage or horror.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 2
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2
+ },
+ {
+  "code": "60424",
+  "name": "Guts",
+  "type": "skill",
+  "faction": "mystic",
+  "pack": "jac",
+  "quantity": 2,
+  "traits": [
+   "Innate",
+   "Developed"
+  ],
+  "text": "Max 1 committed per skill test.\nIf this test is successful, draw 1 card (2 cards instead if it succeeds by 2 or more).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 3
+  },
+  "flavor": "Stay back! I'll handle this.",
+  "deckLimit": 2,
+  "xp": 2
+ },
+ {
+  "code": "60425",
+  "name": "Azure Flame",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "jac",
+  "quantity": 2,
+  "traits": [
+   "Spell"
+  ],
+  "text": "Uses (4 charges).\n[action] Spend 1 charge: <b>Fight.</b> This attack uses [willpower] instead of [combat]. You get +2 [willpower] and deal +1 damage for this attack. If an [elder_sign], \"+1,\" or \"0\" token is revealed during this attack, take 1 damage.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "arcane"
+  ],
+  "icons": {
+   "willpower": 1,
+   "combat": 1
+  },
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 3,
+  "uses": {
+   "type": "charges",
+   "count": 4
+  }
+ },
+ {
+  "code": "60426",
+  "name": "Clairvoyance",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "jac",
+  "quantity": 2,
+  "traits": [
+   "Spell"
+  ],
+  "text": "Uses (3 charges).\n[action] Spend 1 charge: <b>Investigate.</b> Investigate using [willpower] instead of [intellect]. You get +2 [willpower] for this investigation. If you succeed, discover 1 additional clue at this location. If an [elder_sign], \"+1,\" or \"0\" token is revealed during this investigation, take 1 horror.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "arcane"
+  ],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1
+  },
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 4,
+  "uses": {
+   "type": "charges",
+   "count": 3
+  }
+ },
+ {
+  "code": "60427",
+  "name": "Ineffable Truth",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "jac",
+  "quantity": 2,
+  "traits": [
+   "Spell"
+  ],
+  "text": "Uses (3 charges).\n[action] Spend 1 charge: <b>Evade.</b> This evasion attempt uses [willpower] instead of [agility]. You get +2 [willpower] for this evasion attempt. If you succeed, deal 1 damage to the evaded enemy. If an [elder_sign], \"+1,\" or \"0\" token is revealed during this evasion attempt, lose 1 resource.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "arcane"
+  ],
+  "icons": {
+   "willpower": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 3,
+  "uses": {
+   "type": "charges",
+   "count": 3
+  }
+ },
+ {
+  "code": "60428",
+  "name": "Arcane Studies",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "jac",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "Uses (2 resources). Replenish these resources at the start of each round.\n[fast] Spend 1 resource from your resource pool or from Arcane Studies: You get +1 [willpower] or +1 [intellect] for this skill test.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 2,
+   "intellect": 2
+  },
+  "deckLimit": 2,
+  "xp": 4,
+  "cost": 2,
+  "uses": {
+   "type": "resources",
+   "count": 2
+  }
+ },
+ {
+  "code": "60429",
+  "name": "Recharge",
+  "type": "event",
+  "faction": "mystic",
+  "pack": "jac",
+  "quantity": 2,
+  "traits": [
+   "Spell"
+  ],
+  "text": "Choose a [[Spell]] or [[Relic]] asset controlled by an investigator at your location and reveal a random chaos token from the chaos bag. If you reveal a [skull], [cultist], [tablet], [elder_thing], or [auto_fail] symbol, add 1 charge to the chosen asset. Otherwise, add 4 charges to the chosen asset.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 3
+  },
+  "deckLimit": 2,
+  "xp": 4,
+  "cost": 0
+ },
+ {
+  "code": "60430",
+  "name": "Azure Flame",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "jac",
+  "quantity": 2,
+  "traits": [
+   "Spell"
+  ],
+  "text": "Uses (4 charges).\n[action] Spend 1 charge: <b>Fight.</b> This attack uses [willpower] instead of [combat]. You get +3 [willpower] and deal +2 damage for this attack. If an [elder_sign], \"+1,\" or \"0\" token is revealed during this attack, take 2 damage.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "arcane"
+  ],
+  "icons": {
+   "willpower": 1,
+   "combat": 2
+  },
+  "deckLimit": 2,
+  "xp": 5,
+  "cost": 3,
+  "uses": {
+   "type": "charges",
+   "count": 4
+  }
+ },
+ {
+  "code": "60431",
+  "name": "Clairvoyance",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "jac",
+  "quantity": 2,
+  "traits": [
+   "Spell"
+  ],
+  "text": "Uses (3 charges).\n[action] Spend 1 charge: <b>Investigate.</b> Investigate using [willpower] instead of [intellect]. You get +3 [willpower] for this investigation. If you succeed, discover 2 additional clues at this location. If an [elder_sign], \"+1,\" or \"0\" token is revealed during this investigation, take 2 horror.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "arcane"
+  ],
+  "icons": {
+   "willpower": 1,
+   "intellect": 2
+  },
+  "deckLimit": 2,
+  "xp": 5,
+  "cost": 4,
+  "uses": {
+   "type": "charges",
+   "count": 3
+  }
+ },
+ {
+  "code": "60432",
+  "name": "Ineffable Truth",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "jac",
+  "quantity": 2,
+  "traits": [
+   "Spell"
+  ],
+  "text": "Uses (3 charges).\n[action] Spend 1 charge: <b>Evade.</b> This evasion attempt uses [willpower] instead of [agility]. You get +3 [willpower] for this evasion attempt. If you succeed, deal 2 damage to the evaded enemy. If an [elder_sign], \"+1,\" or \"0\" token is revealed during this evasion attempt, lose 2 resources.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "arcane"
+  ],
+  "icons": {
+   "willpower": 1,
+   "agility": 2
+  },
+  "deckLimit": 2,
+  "xp": 5,
+  "cost": 3,
+  "uses": {
+   "type": "charges",
+   "count": 3
+  }
+ },
+ {
+  "code": "60451",
+  "name": "Marie Lambeau",
+  "type": "investigator",
+  "faction": "mystic",
+  "pack": "mar",
+  "quantity": 1,
+  "traits": [
+   "Performer",
+   "Witch"
+  ],
+  "text": "[reaction] After damage is placed on Marie Lambeau: Draw 2 cards and discard 1 of them. (Limit once per phase.)\n[elder_sign] effect: +0. If you succeed, heal 1 damage.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Entertainer",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Mystic cards ([mystic]) level 0-5, Neutral cards level 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Grand-Mère's Charm, Called to Guinée, 1 random basic weakness.",
+  "flavor": "\"I've got one hell of a showstopper in store for you tonight.\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 4,
+   "intellect": 4,
+   "combat": 1,
+   "agility": 3
+  },
+  "health": 8,
+  "sanity": 7
+ },
+ {
+  "code": "60452",
+  "name": "Grand-Mère's Charm",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "mar",
+  "quantity": 1,
+  "traits": [
+   "Item",
+   "Charm",
+   "Occult",
+   "Blessed"
+  ],
+  "text": "Marie Lambeau deck only.\n[fast] Take 1 direct damage and exhaust Grand-Mère's Charm: Replenish 1 charge on an asset at your location.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "accessory"
+  ],
+  "icons": {
+   "willpower": 2,
+   "wild": 1
+  },
+  "deckLimit": 1,
+  "cost": 2,
+  "health": 3
+ },
+ {
+  "code": "60453",
+  "name": "Called to Guinée",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "mar",
+  "quantity": 1,
+  "traits": [
+   "Curse",
+   "Pact"
+  ],
+  "text": "<b>Revelation</b> - Put Called to Guinée into play in your threat area.\nYou cannot heal damage.\n[action] Choose and discard 3 cards from your hand: Discard Called to Guinée.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "weakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "60454",
+  "name": "Hemophobia",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "mar",
+  "quantity": 1,
+  "traits": [
+   "Terror"
+  ],
+  "text": "<b>Revelation</b> - Put Hemophobia into play in your threat area.\n<b>Forced</b> - The first time each round an investigator at your location takes damage: Take 1 horror.\n[action][action]: Discard Hemophobia.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "basicweakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "60456",
+  "name": "Offering Bowl",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "mar",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Occult"
+  ],
+  "text": "Uses (3 offerings). If there are no offerings on Offering Bowl, discard it.\n[fast] Spend 1 offering and exhaust Offering Bowl: Take 1 damage and gain 2 resources.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "flavor": "Everything has its price, but how it is paid is up for negotiation.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1,
+  "uses": {
+   "type": "offerings",
+   "count": 3
+  }
+ },
+ {
+  "code": "60457",
+  "name": "Bloodstone",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "mar",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Charm",
+   "Cursed"
+  ],
+  "text": "You get +1 [willpower].",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "accessory"
+  ],
+  "icons": {
+   "willpower": 1
+  },
+  "flavor": "A symbol for vitality and courage in ancient times, wearing the heliotrope has you wondering if there wasn't some measure of truth to the old stories.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2,
+  "health": 2
+ },
+ {
+  "code": "60458",
+  "name": "Sacrificial Doll",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "mar",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Charm",
+   "Occult"
+  ],
+  "text": "While you have 3 or fewer remaining health, Sacrificial Doll does not take up a hand slot.\n[reaction] After you reveal a non-[auto_fail] chaos token during a skill test, take 1 damage and exhaust Sacrificial Doll: Cancel that token and reveal tokens from the chaos bag until a symbol token is revealed. Resolve that token and ignore the rest.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "willpower": 1,
+   "combat": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "health": 1
+ },
+ {
+  "code": "60461",
+  "name": "Shadowmeld",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "mar",
+  "quantity": 2,
+  "traits": [
+   "Spell"
+  ],
+  "text": "Uses (4 charges).\n[action]: <b>Evade</b> ([willpower]). If you succeed, you may spend 1 charge to move to a connecting location. If you reveal a [tablet] token during this test, remove 1 charge from Shadowmeld (if you cannot, lose 1 action and discard this card).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "arcane"
+  ],
+  "icons": {
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2,
+  "uses": {
+   "type": "charges",
+   "count": 4
+  }
+ },
+ {
+  "code": "60462",
+  "name": "Consume Life",
+  "type": "event",
+  "faction": "mystic",
+  "pack": "mar",
+  "quantity": 2,
+  "traits": [
+   "Spell"
+  ],
+  "text": "<b>Fight</b> ([willpower]). This attack deals +1 damage. If this attack defeats an enemy, heal 1 damage from an investigator or [[Ally]] asset at your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "combat": 1
+  },
+  "flavor": "True power is in the blood.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3
+ },
+ {
+  "code": "60463",
+  "name": "Favor of Baalshandor",
+  "type": "event",
+  "faction": "mystic",
+  "pack": "mar",
+  "quantity": 2,
+  "traits": [
+   "Ritual"
+  ],
+  "text": "As an additional cost to play Favor of Baalshandor, take 1 damage.\nPlay a [[Spell]] or [[Ritual]] asset from your hand, reducing its cost by 3. Playing this card does not provoke attacks of opportunity.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 0
+ },
+ {
+  "code": "60464",
+  "name": "Infuse Life",
+  "type": "event",
+  "faction": "mystic",
+  "pack": "mar",
+  "quantity": 2,
+  "traits": [
+   "Spell"
+  ],
+  "text": "Heal 3 damage from among investigators and/or [[Ally]] assets at your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "flavor": "My life for yours.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 4
+ },
+ {
+  "code": "60465",
+  "name": "Mirror Form",
+  "type": "event",
+  "faction": "mystic",
+  "pack": "mar",
+  "quantity": 2,
+  "traits": [
+   "Spell"
+  ],
+  "text": "Fast. Play only during your turn.\nChoose a [[Spell]] or [[Charm]] asset in your hand and put it into play under your control. When the round ends, shuffle that asset into your deck if it is still in play.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1
+ },
+ {
+  "code": "60466",
+  "name": "Spiritual Charm",
+  "type": "event",
+  "faction": "mystic",
+  "pack": "mar",
+  "quantity": 2,
+  "traits": [
+   "Spell",
+   "Trick"
+  ],
+  "text": "<b>Parley</b>. Choose a non-[[Elite]] enemy at your location or at a connecting location. Move that enemy to your location, engage it, and gain resources equal to its combined damage/horror values.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 0
+ },
+ {
+  "code": "60467",
+  "name": "Blood Curse",
+  "type": "skill",
+  "faction": "mystic",
+  "pack": "mar",
+  "quantity": 2,
+  "traits": [
+   "Spell",
+   "Cursed"
+  ],
+  "text": "Max 1 committed per skill test.\nIf this skill test is successful, take 1 direct damage.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 4
+  },
+  "flavor": "What wouldn't you give for a taste of true power?",
+  "deckLimit": 2,
+  "xp": 0
+ },
+ {
+  "code": "60468",
+  "name": "Cosmic Guidance",
+  "type": "skill",
+  "faction": "mystic",
+  "pack": "mar",
+  "quantity": 2,
+  "traits": [
+   "Augury"
+  ],
+  "text": "If this skill test is successful, heal 1 damage from the performing investigator.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1
+  },
+  "flavor": "\"From time to time people... [shuddered] at the small dark speck that paraded by day and the glimmering will-o'-the-wisp that danced by night.\"\n<i>- H.P. Lovecraft, \"The Mound\"</i>",
+  "deckLimit": 2,
+  "xp": 0
+ },
+ {
+  "code": "60470",
+  "name": "Ceremonial Robes",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "mar",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Clothing"
+  ],
+  "text": "Reduce the cost of the first [[Spell]] or [[Ritual]] card you play each round by 1.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "body"
+  ],
+  "icons": {
+   "wild": 1
+  },
+  "flavor": "\"They worshipped, so they said, the Great Old Ones who lived ages before there were any men, and who came to the young world out of the sky.\"\n<i>-H. P. Lovecraft, </i>The Call of Cthulhu",
+  "deckLimit": 2,
+  "xp": 1,
+  "cost": 1,
+  "health": 1,
+  "sanity": 1
+ },
+ {
+  "code": "60471",
+  "name": "Eldritch Whispers",
+  "type": "skill",
+  "faction": "mystic",
+  "pack": "mar",
+  "quantity": 2,
+  "traits": [
+   "Innate"
+  ],
+  "text": "Max 1 committed per skill test.\nIf a symbol token is revealed during this test, place up to 2 charges or 2 secrets among assets you control.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 2
+  },
+  "deckLimit": 2,
+  "xp": 1
+ },
+ {
+  "code": "60472",
+  "name": "Blood Ward",
+  "type": "event",
+  "faction": "mystic",
+  "pack": "mar",
+  "quantity": 2,
+  "traits": [
+   "Spell"
+  ],
+  "text": "Fast. Play when a non-[[Elite]] enemy attacks an investigator at your location.\nCancel that attack and heal 2 damage from the targeted investigator.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 1
+ },
+ {
+  "code": "60473",
+  "name": "Retribution",
+  "type": "event",
+  "faction": "mystic",
+  "pack": "mar",
+  "quantity": 2,
+  "traits": [
+   "Spell",
+   "Spirit"
+  ],
+  "text": "Fast. Play when an enemy attacks an investigator at your location.\nYou take all damage and horror from this attack. For each point of damage/horror taken, deal 1 damage to an enemy at your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2
+ },
+ {
+  "code": "60474",
+  "name": "Dread Curse of Azathoth",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "mar",
+  "quantity": 1,
+  "traits": [
+   "Spell",
+   "Cursed"
+  ],
+  "text": "Exceptional.\n[action] Place 1 doom on Dread Curse of Azathoth: <b>Fight</b> ([willpower]). You get +2 [willpower] and deal +1 damage for this attack. If this attack defeats an enemy, remove 1 doom from Dread Curse of Azathoth. If a [skull] or [elder_thing] token is revealed during this test, remove all doom from this card.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "arcane"
+  ],
+  "icons": {
+   "willpower": 1,
+   "combat": 1
+  },
+  "deckLimit": 1,
+  "xp": 3,
+  "cost": 2
+ },
+ {
+  "code": "60475",
+  "name": "Ritual Dagger",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "mar",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Weapon",
+   "Melee",
+   "Cursed"
+  ],
+  "text": "[action]: <b>Fight</b> ([combat]). Add your [willpower] to your [combat] for this attack.\n[reaction] After you play a [[Spell]] event, take 1 damage and exhaust Ritual Dagger: Shuffle that event into your deck instead of discarding it.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "willpower": 1,
+   "combat": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 3
+ },
+ {
+  "code": "60476",
+  "name": "Spiritual Intuition",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "mar",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "Starting. <i>(You may begin the game with 1 copy of a starting card in your opening hand.)</i>\n[fast] Spend 1 resource: You get +1 [willpower] for this skill test (+2 [willpower] instead if this test is on a [[Spell]] or [[Ritual]] card).\n[fast] Spend 1 resource: You get +1 [combat] for this skill test (+2 [combat] instead if this test is on a [[Spell]] or [[Ritual]] card).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "combat": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 2
+ },
+ {
+  "code": "60477",
+  "name": "Blood Curse",
+  "type": "skill",
+  "faction": "mystic",
+  "pack": "mar",
+  "quantity": 2,
+  "traits": [
+   "Spell",
+   "Cursed"
+  ],
+  "text": "Max 1 committed per skill test.\nIf this test is successful, deal 1 damage to a card with health at your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 5
+  },
+  "flavor": "What wouldn't you give for a taste of true power?",
+  "deckLimit": 2,
+  "xp": 3
+ },
+ {
+  "code": "60478",
+  "name": "Arcane Experience",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "mar",
+  "quantity": 1,
+  "traits": [
+   "Condition"
+  ],
+  "text": "Permanent. Limit 1 per deck.\nYou have 1 additional arcane slot.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "\"The hidden cults to which these witches belonged often guarded and handed down surprising secrets from elder, forgotten aeons.\"\n<i>-H. P. Lovecraft, \"Dreams in the Witch House\"</i>",
+  "deckLimit": 1,
+  "xp": 4,
+  "cost": null
+ },
+ {
+  "code": "60479",
+  "name": "Jim Culver",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "mar",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Performer"
+  ],
+  "text": "You get +1 [willpower].\n[reaction] After you take damage and/or horror, exhaust Jim Culver: Draw 1 card and gain 1 resource.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "willpower": 2
+  },
+  "subname": "Haunted Musician",
+  "flavor": "\"You see these folks too? You never really get used to them.\"",
+  "deckLimit": 2,
+  "xp": 4,
+  "cost": 4,
+  "health": 3,
+  "sanity": 3
+ },
+ {
+  "code": "60480",
+  "name": "Ultimate Sacrifice",
+  "type": "event",
+  "faction": "mystic",
+  "pack": "mar",
+  "quantity": 2,
+  "traits": [
+   "Spell",
+   "Spirit"
+  ],
+  "text": "Fast. Play when the investigation phase ends.\nRepeat the investigation phase. At the end of that phase, you are defeated and suffer 1 physical trauma. Max once per game.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 4,
+  "cost": 0
+ },
+ {
+  "code": "60481",
+  "name": "Second Sight",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "mar",
+  "quantity": 2,
+  "traits": [
+   "Spell"
+  ],
+  "text": "Uses (4 charges).\n[action]: <b>Investigate</b> ([willpower]). You get +2 [willpower] for this investigation. If you succeed, you may spend 1 charge to discover 1 additional clue at your location or 1 clue at a connecting location. If you reveal a [cultist] token during this test, remove 1 charge from Second Sight (if you cannot, take 1 horror and discard this card).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "arcane"
+  ],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 5,
+  "cost": 4,
+  "uses": {
+   "type": "charges",
+   "count": 4
+  }
+ },
+ {
+  "code": "60482",
+  "name": "Shadowmeld",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "mar",
+  "quantity": 2,
+  "traits": [
+   "Spell"
+  ],
+  "text": "Uses (5 charges).\n[action]: <b>Evade</b> ([willpower]). You get +2 [willpower] for this evasion. If you succeed, you may spend 1 charge to move to a location up to 2 connections away. If you reveal a [tablet] token during this test, remove 1 charge from Shadowmeld (if you cannot, lose 1 action and discard this card).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "arcane"
+  ],
+  "icons": {
+   "willpower": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 5,
+  "cost": 2,
+  "uses": {
+   "type": "charges",
+   "count": 5
+  }
+ },
+ {
+  "code": "60483",
+  "name": "Bend Blood",
+  "type": "event",
+  "faction": "mystic",
+  "pack": "mar",
+  "quantity": 2,
+  "traits": [
+   "Spell",
+   "Cursed"
+  ],
+  "text": "<b>Fight</b> ([willpower]). You get +3 [willpower] and deal +1 damage for this attack. If you succeed, deal 1 damage to each other enemy at your location. Each enemy dealt damage by Bend Blood cannot attack you for the remainder of the round.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 2,
+   "combat": 2
+  },
+  "deckLimit": 2,
+  "xp": 5,
+  "cost": 2
+ },
+ {
+  "code": "60501",
+  "name": "Stella Clark",
+  "type": "investigator",
+  "faction": "survivor",
+  "pack": "ste",
+  "quantity": 1,
+  "traits": [
+   "Chosen",
+   "Civic"
+  ],
+  "text": "[reaction] After you fail a skill test: You may take an additional action during your turn this round. (Limit once per round.)\n[elder_sign] effect: +1. You may instead choose to automatically fail this skill test to heal 1 damage and 1 horror.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Letter Carrier",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Survivor cards ([survivor]) level 0-5, Neutral cards level 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): 3 copies of Neither Rain nor Snow, 1 copy of Called by the Mists, 1 random basic weakness.",
+  "flavor": "\"I can hear it. Can it hear me?\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 3,
+   "intellect": 2,
+   "combat": 3,
+   "agility": 4
+  },
+  "health": 8,
+  "sanity": 8
+ },
+ {
+  "code": "60502",
+  "name": "Neither Rain nor Snow",
+  "type": "skill",
+  "faction": "survivor",
+  "pack": "ste",
+  "quantity": 3,
+  "traits": [
+   "Innate",
+   "Developed"
+  ],
+  "text": "Stella Clark deck only.\nIf this skill test fails, cancel all effects of the failed test.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 3
+  },
+  "flavor": "...nor gloom of night stays these couriers from the swift completion of their appointed rounds.",
+  "deckLimit": 3
+ },
+ {
+  "code": "60503",
+  "name": "Called by the Mists",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "ste",
+  "quantity": 1,
+  "traits": [
+   "Curse"
+  ],
+  "text": "<b>Revelation</b> - Put Called by the Mists into play in your threat area.\n<b>Forced</b> - After you initiate a skill test with a difficulty of 4 or higher: Take 1 damage.\n[action][action]: Discard Called by the Mists.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "weakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "60504",
+  "name": "Atychiphobia",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "ste",
+  "quantity": 1,
+  "traits": [
+   "Madness"
+  ],
+  "text": "<b>Revelation</b> - Put Atychiphobia into play in your threat area.\n<b>Forced</b> - After you fail a skill test: Take 1 horror.\n[action][action]: Discard Atychiphobia.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "basicweakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "60505",
+  "name": ".18 Derringer",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "ste",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Weapon",
+   "Firearm",
+   "Illicit"
+  ],
+  "text": "Uses (2 ammo).\n[action] Spend 1 ammo: <b>Fight.</b> You get +2 [combat] and deal +1 damage for this attack. If you fail, place 1 ammo on .18 Derringer.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "combat": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "uses": {
+   "type": "ammo",
+   "count": 2
+  }
+ },
+ {
+  "code": "60506",
+  "name": "Grimm's Fairy Tales",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "ste",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Tome"
+  ],
+  "text": "Uses (4 secrets).\n[reaction] After an investigator at your location fails a skill test by 2 or more, exhaust Grimm's Fairy Tales and spend 1 secret: Heal 1 horror from that investigator.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "willpower": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2,
+  "uses": {
+   "type": "secrets",
+   "count": 4
+  }
+ },
+ {
+  "code": "60507",
+  "name": "Old Keyring",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "ste",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Tool"
+  ],
+  "text": "Uses (2 keys). If there are no keys on Old Keyring, discard it.\n[action]: <b>Investigate.</b> Your location gets -2 shroud for this investigation. If you succeed, remove 1 key from Old Keyring.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "intellect": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1,
+  "uses": {
+   "type": "keys",
+   "count": 2
+  }
+ },
+ {
+  "code": "60508",
+  "name": "Granny Orne",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "ste",
+  "quantity": 2,
+  "traits": [
+   "Ally"
+  ],
+  "text": "You get +1 [willpower].\n[reaction] When an investigator at your location would fail a skill test, exhaust Granny Orne: That investigator fails by either 1 less or 1 more.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "willpower": 1
+  },
+  "subname": "Tough Old Bird",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 4,
+  "health": 1,
+  "sanity": 3
+ },
+ {
+  "code": "60509",
+  "name": "Mysterious Raven",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "ste",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Creature"
+  ],
+  "text": "[fast] Discard Mysterious Raven and take 1 horror: Discover 1 clue at your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "intellect": 1
+  },
+  "flavor": "\"And his eyes have all the seeming\nof a demon's that is dreaming...\"\n- Edgar Allan Poe, \"The Raven\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1,
+  "sanity": 1
+ },
+ {
+  "code": "60511",
+  "name": "Scrapper",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "ste",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "[fast] Spend 1 resource: You get +1 [combat] for this skill test.\n[fast] Spend 1 resource: You get +1 [agility] for this skill test.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60512",
+  "name": "Will to Survive",
+  "type": "event",
+  "faction": "survivor",
+  "pack": "ste",
+  "quantity": 2,
+  "traits": [
+   "Spirit"
+  ],
+  "text": "Fast. Play only during your turn.\nDo not reveal chaos tokens for the next skill test you perform this turn.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 4
+ },
+ {
+  "code": "60513",
+  "name": "A Test of Will",
+  "type": "event",
+  "faction": "survivor",
+  "pack": "ste",
+  "quantity": 2,
+  "traits": [
+   "Spirit"
+  ],
+  "text": "Fast. Play when an investigator at your location draws a non-weakness treachery card.\nTest [willpower] (3). If you succeed, cancel that card's revelation effect.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "willpower": 1
+  },
+  "flavor": "With or without hope, all you can do is resist.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1
+ },
+ {
+  "code": "60515",
+  "name": "Grit Your Teeth",
+  "type": "event",
+  "faction": "survivor",
+  "pack": "ste",
+  "quantity": 2,
+  "traits": [
+   "Spirit"
+  ],
+  "text": "Fast. Play after you fail a skill test.\nYou get +1 to each of your skills for the remainder of the round.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1
+ },
+ {
+  "code": "60520",
+  "name": "Cherished Keepsake",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "ste",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Charm"
+  ],
+  "text": "<b>Forced</b> - When Cherished Keepsake is defeated by horror: Exile it.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "accessory"
+  ],
+  "icons": {
+   "willpower": 1
+  },
+  "flavor": "Mr. Pawterson always told Wendy things would turn out okay. But then again, Mr. Pawterson was a teddy bear, and he didn't know any better.",
+  "deckLimit": 2,
+  "xp": 1,
+  "cost": 0,
+  "sanity": 4
+ },
+ {
+  "code": "60521",
+  "name": "Leather Coat",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "ste",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Armor"
+  ],
+  "text": "<b>Forced</b> - When Leather Coat is defeated by damage: Exile it.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "body"
+  ],
+  "icons": {
+   "combat": 1
+  },
+  "flavor": "The coat was not the most fashionable choice, but it did feel warm and reassuring in its bulk.",
+  "deckLimit": 2,
+  "xp": 1,
+  "cost": 0,
+  "health": 4
+ },
+ {
+  "code": "60522",
+  "name": ".18 Derringer",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "ste",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Weapon",
+   "Firearm",
+   "Illicit"
+  ],
+  "text": "Uses (3 ammo).\n[action] Spend 1 ammo: <b>Fight.</b> You get +2 [combat] and deal +1 damage for this attack. If you fail, place 1 ammo on .18 Derringer and the next time you trigger this ability this round, you get an additional +1 [combat] for that attack.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2,
+  "uses": {
+   "type": "ammo",
+   "count": 3
+  }
+ },
+ {
+  "code": "60523",
+  "name": "A Test of Will",
+  "type": "event",
+  "faction": "survivor",
+  "pack": "ste",
+  "quantity": 2,
+  "traits": [
+   "Spirit"
+  ],
+  "text": "Fast. Play when an investigator at your location draws a non-weakness treachery card.\nCancel that card's revelation effect. Then, test [willpower] (3). If you fail, exile A Test of Will.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "willpower": 1
+  },
+  "flavor": "With or without hope, all you can do is resist.",
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 0
+ },
+ {
+  "code": "60524",
+  "name": "\"Look what I found!\"",
+  "type": "event",
+  "faction": "survivor",
+  "pack": "ste",
+  "quantity": 2,
+  "traits": [
+   "Fortune"
+  ],
+  "text": "Fast. Play after you fail a skill test by 3 or less while investigating.\nDiscover 2 total clues from among your location and connecting locations.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "intellect": 2,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2
+ },
+ {
+  "code": "60525",
+  "name": "Dumb Luck",
+  "type": "event",
+  "faction": "survivor",
+  "pack": "ste",
+  "quantity": 2,
+  "traits": [
+   "Fortune"
+  ],
+  "text": "Fast. Play after you fail a skill test by 3 or less during an evasion attempt against a non-[[Elite]] enemy.\nPlace that enemy on the bottom of the encounter deck.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "agility": 2
+  },
+  "flavor": "Fortune favors the oblivious.",
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2
+ },
+ {
+  "code": "60526",
+  "name": "Unexpected Courage",
+  "type": "skill",
+  "faction": "survivor",
+  "pack": "ste",
+  "quantity": 2,
+  "traits": [
+   "Innate",
+   "Developed"
+  ],
+  "text": "Max 1 committed per skill test.\nIf this test fails, return Unexpected Courage to your hand.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 2
+  },
+  "deckLimit": 2,
+  "xp": 2
+ },
+ {
+  "code": "60527",
+  "name": "Granny Orne",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "ste",
+  "quantity": 2,
+  "traits": [
+   "Ally"
+  ],
+  "text": "You get +1 [willpower] and +1 [intellect].\n[reaction] When an investigator at your location would fail a skill test, exhaust Granny Orne: That investigator either gets +1 skill value or -1 skill value for that test.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1
+  },
+  "subname": "Tough Old Bird",
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 4,
+  "health": 1,
+  "sanity": 3
+ },
+ {
+  "code": "60528",
+  "name": "Lucky!",
+  "type": "event",
+  "faction": "survivor",
+  "pack": "ste",
+  "quantity": 2,
+  "traits": [
+   "Fortune"
+  ],
+  "text": "Fast. Play when an investigator at your location would fail a skill test.\nThey get +3 to their skill value for that test. That investigator draws 1 card.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {},
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 0
+ },
+ {
+  "code": "60529",
+  "name": "Chainsaw",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "ste",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Tool",
+   "Weapon",
+   "Melee"
+  ],
+  "text": "Uses (3 supplies).\n[action] Spend 1 supply: <b>Fight.</b> You get +2 [combat] and deal +2 damage for this attack. If this attack fails, either place 1 supply on Chainsaw or deal 1 damage to the attacked enemy.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand",
+   "hand"
+  ],
+  "icons": {
+   "combat": 3
+  },
+  "deckLimit": 2,
+  "xp": 4,
+  "cost": 4,
+  "uses": {
+   "type": "supplies",
+   "count": 3
+  }
+ },
+ {
+  "code": "60530",
+  "name": "Quick Learner",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "ste",
+  "quantity": 2,
+  "traits": [
+   "Condition"
+  ],
+  "text": "Permanent.\nDuring or before your first action of each of your turns, each skill test you perform gets +1 difficulty.\nDuring or after your third action of each of your turns, each skill test you perform gets -1 difficulty.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "deckLimit": 2,
+  "xp": 4,
+  "cost": null
+ },
+ {
+  "code": "60531",
+  "name": "Déjà Vu",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "ste",
+  "quantity": 2,
+  "traits": [
+   "Talent",
+   "Cursed"
+  ],
+  "text": "Permanent.\nIn between two scenarios of a campaign, reduce the experience cost to repurchase up to 3 cards that you exiled during the last scenario by 1 each.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "Haven't you seen this before?",
+  "deckLimit": 2,
+  "xp": 5,
+  "cost": null
+ },
+ {
+  "code": "60551",
+  "name": "Miguel de la Cruz",
+  "type": "investigator",
+  "faction": "survivor",
+  "pack": "mig",
+  "quantity": 1,
+  "traits": [
+   "Hunter",
+   "Warden"
+  ],
+  "text": "You may take an additional action during your turn, which may only be used to play an event.\n[elder_sign] effect: +1. You may add a [[Trick]] or [[Trap]] card in your discard pile to your hand.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Rancher",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Survivor cards ([survivor]) level 0-5, Neutral cards level 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Miguel's Knapsack, Feline Hybrid, 1 random basic weakness.",
+  "flavor": "\"I'm more at home out in the wild than anywhere else.\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 3,
+   "intellect": 2,
+   "combat": 3,
+   "agility": 4
+  },
+  "health": 8,
+  "sanity": 8
+ },
+ {
+  "code": "60552",
+  "name": "Miguel's Knapsack",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "mig",
+  "quantity": 1,
+  "traits": [
+   "Item"
+  ],
+  "text": "Miguel de la Cruz deck only.\n[reaction] When you play an event, exhaust Miguel's Knapsack: Either play that event at a connecting location as if you were at that location, or draw 1 card.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "body"
+  ],
+  "icons": {
+   "wild": 2
+  },
+  "deckLimit": 1,
+  "cost": 2,
+  "health": 2
+ },
+ {
+  "code": "60553",
+  "name": "Feline Hybrid",
+  "type": "enemy",
+  "faction": "neutral",
+  "pack": "mig",
+  "quantity": 1,
+  "traits": [
+   "Creature",
+   "Mutated"
+  ],
+  "text": "Elusive. Hunter. Prey (Miguel de la Cruz only).\nFeline Hybrid is immune to player card effects.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "hunter"
+  ],
+  "slots": [],
+  "icons": {},
+  "flavor": "It kills for sport, not for sustenance.",
+  "subtype": "weakness",
+  "deckLimit": 1,
+  "enemy": {
+   "fight": 3,
+   "health": 2,
+   "healthPerInvestigator": false,
+   "evade": 3,
+   "damage": 1,
+   "horror": 1
+  }
+ },
+ {
+  "code": "60554",
+  "name": "Blood Drinker",
+  "type": "enemy",
+  "faction": "neutral",
+  "pack": "mig",
+  "quantity": 1,
+  "traits": [
+   "Humanoid",
+   "Monster"
+  ],
+  "text": "Hunter. Retaliate.\n<b>Forced</b> - After Blood Drinker attacks: Heal 1 damage from it.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "hunter",
+   "retaliate"
+  ],
+  "slots": [],
+  "icons": {},
+  "subtype": "basicweakness",
+  "deckLimit": 1,
+  "enemy": {
+   "fight": 2,
+   "health": 3,
+   "healthPerInvestigator": false,
+   "evade": 4,
+   "damage": 1,
+   "horror": 1
+  }
+ },
+ {
+  "code": "60555",
+  "name": "Daniel Jameson",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "mig",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Hunter"
+  ],
+  "text": "You get +1 [agility].\n[reaction] After you fail an attack or evasion, exhaust Daniel Jameson: Attempt that skill test again, with +1 skill value.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "agility": 1
+  },
+  "subname": "Seasoned Hunter",
+  "flavor": "\"This isn't normal animal fur, I'll tell you that much.\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "health": 2,
+  "sanity": 2
+ },
+ {
+  "code": "60556",
+  "name": "Hunting Dog",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "mig",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Creature"
+  ],
+  "text": "[reaction] When an enemy enters play, exhaust Hunting Dog: Move once toward that enemy's location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "combat": 1
+  },
+  "flavor": "She'll stay by your side, no matter what.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2,
+  "health": 1,
+  "sanity": 1
+ },
+ {
+  "code": "60557",
+  "name": "Loner",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "mig",
+  "quantity": 2,
+  "traits": [
+   "Condition"
+  ],
+  "text": "Limit 1 per investigator.\n[fast] During your turn, exhaust Loner: Move to an empty connecting location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1
+  },
+  "flavor": "\"I know always that I am an outsider; a stranger in this century and among those who are still men.\"\n<i>-H. P. Lovecraft, \"The Outsider\"</i>",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60558",
+  "name": "Old Compass",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "mig",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Tool"
+  ],
+  "text": "[action]: <b>Investigate</b> ([intellect]). Your location gets -1 shroud for this investigation. If you fail, you may exhaust Old Compass to attempt this skill test again.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "intellect": 1
+  },
+  "flavor": "\"That thing is bulky, it's cracked, and it's filthy.\"\n\"Yeah, but it still points north!\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60559",
+  "name": "Pocketknife",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "mig",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Tool",
+   "Weapon",
+   "Melee"
+  ],
+  "text": "[action]: <b>Fight</b> ([combat] or [agility]). You get +1 skill value for this test. If this attack defeats an enemy, you may exhaust Pocketknife to gain 1 resource.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "agility": 1
+  },
+  "flavor": "Good for skinning, whittling, and stabbing eldritch abominations in the eye.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60561",
+  "name": "Same Old Thing",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "mig",
+  "quantity": 2,
+  "traits": [
+   "Condition"
+  ],
+  "text": "Uses (5 supplies). If there are no supplies on Same Old Thing, discard it.\nYou may spend supplies on Same Old Thing as resources to pay for events played by any investigator at your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1
+  },
+  "flavor": "\"Just me, a cup of joe, and last night's snuff. I call that a good morning.\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2,
+  "uses": {
+   "type": "supplies",
+   "count": 5
+  }
+ },
+ {
+  "code": "60562",
+  "name": "Decoy Trap",
+  "type": "event",
+  "faction": "survivor",
+  "pack": "mig",
+  "quantity": 2,
+  "traits": [
+   "Trap",
+   "Trick"
+  ],
+  "text": "Fast. Attach to your location. Limit 1 [[Trap]] per location.\n[reaction] After an enemy enters attached location, exhaust Decoy Trap: <b>Evade</b> ([intellect] or [agility]). Evade that enemy. You get +1 skill value for this evasion. If this test succeeds, you may discard Decoy Trap to move to this location. <i>(You may trigger this ability from any location.)</i>",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60563",
+  "name": "Glassing",
+  "type": "event",
+  "faction": "survivor",
+  "pack": "mig",
+  "quantity": 2,
+  "traits": [
+   "Insight",
+   "Trap"
+  ],
+  "text": "Fast. Attach to your location. Limit 1 [[Trap]] per location.\n[reaction] After an enemy enters attached location, exhaust Glassing: <b>Investigate</b> ([intellect] or [agility]). Investigate attached location. You get +1 skill value for this investigation. If you succeed, you may discard Glassing to discover 1 additional clue at this location. <i>(You may trigger this ability from any location.)</i>",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60564",
+  "name": "Guerrilla Tactics",
+  "type": "event",
+  "faction": "survivor",
+  "pack": "mig",
+  "quantity": 2,
+  "traits": [
+   "Tactic"
+  ],
+  "text": "<b>Fight</b> ([combat]) or <b>Evade</b> ([agility]). You get +1 skill value for this test and you may target an enemy at a connecting location as if you were engaged with that enemy.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1
+ },
+ {
+  "code": "60565",
+  "name": "Hidden Shelter",
+  "type": "event",
+  "faction": "survivor",
+  "pack": "mig",
+  "quantity": 2,
+  "traits": [
+   "Supply",
+   "Trick"
+  ],
+  "text": "Attach to your location. Limit 1 per location.\n[reaction] When the round ends, each investigator at this location may choose one of the following: Draw 1 card, gain 1 resource, heal 1 damage, or heal 1 horror.\n<b>Forced</b> - After an enemy enters this location: Discard Hidden Shelter.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1
+ },
+ {
+  "code": "60566",
+  "name": "Lie in Wait",
+  "type": "event",
+  "faction": "survivor",
+  "pack": "mig",
+  "quantity": 2,
+  "traits": [
+   "Tactic",
+   "Trap"
+  ],
+  "text": "Fast. Attach to your location. Limit 1 [[Trap]] per location.\n[reaction] After an enemy enters this location, exhaust Lie in Wait: <b>Fight</b> ([combat] or [agility]). Fight that enemy. You get +1 skill value for this attack. If you succeed, you may discard Lie in Wait for this attack to deal +1 damage. <i>(You may trigger this ability from any location.)</i>",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "combat": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60567",
+  "name": "Stalk Prey",
+  "type": "event",
+  "faction": "survivor",
+  "pack": "mig",
+  "quantity": 2,
+  "traits": [
+   "Tactic"
+  ],
+  "text": "Search the top 9 cards of the encounter deck for an enemy, draw it, and shuffle the encounter deck. Then, draw 1 card and discover 1 clue at your location. If that enemy is not at your location, you may move once toward its location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1
+ },
+ {
+  "code": "60568",
+  "name": "Do-or-Die",
+  "type": "skill",
+  "faction": "survivor",
+  "pack": "mig",
+  "quantity": 2,
+  "traits": [
+   "Fortune"
+  ],
+  "text": "If this skill test is successful, choose a [survivor] asset or event in your discard pile and add it to your hand.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1,
+   "agility": 1
+  },
+  "flavor": "It's now or never!",
+  "deckLimit": 2,
+  "xp": 0
+ },
+ {
+  "code": "60569",
+  "name": "On the Brink",
+  "type": "skill",
+  "faction": "survivor",
+  "pack": "mig",
+  "quantity": 2,
+  "traits": [
+   "Gambit",
+   "Desperate"
+  ],
+  "text": "Max 1 committed per skill test.\nIf this test fails, return each other card committed to this test to its owner's hand.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "flavor": "Nobody knows what you'll do if you're pushed past your limits.",
+  "deckLimit": 2,
+  "xp": 0
+ },
+ {
+  "code": "60570",
+  "name": "Extra Rations",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "mig",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Supply"
+  ],
+  "text": "Uses (4 supplies). If there are no supplies on Extra Rations, discard it.\n[fast] Spend 1 supply and exhaust Extra Rations: Heal 1 damage from your investigator or an [[Ally]] asset you control.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "flavor": "It's not much, but it's enough to keep you going.",
+  "deckLimit": 2,
+  "xp": 1,
+  "cost": 2,
+  "uses": {
+   "type": "supplies",
+   "count": 4
+  }
+ },
+ {
+  "code": "60571",
+  "name": "Field Dressing",
+  "type": "event",
+  "faction": "survivor",
+  "pack": "mig",
+  "quantity": 2,
+  "traits": [
+   "Spirit"
+  ],
+  "text": "Fast. Play after a [[Creature]] or [[Monster]] enemy at your location is defeated.\nHeal up to 3 damage from among investigators and/or [[Ally]] assets at your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "willpower": 1
+  },
+  "deckLimit": 2,
+  "xp": 1,
+  "cost": 2
+ },
+ {
+  "code": "60572",
+  "name": "Rough",
+  "type": "skill",
+  "faction": "survivor",
+  "pack": "mig",
+  "quantity": 2,
+  "traits": [
+   "Innate"
+  ],
+  "text": "For every 2 damage on you (rounded up), Rough gains [wild].",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "wild": 1
+  },
+  "flavor": "Bouncers. Fish people. Monsters. If it's got a pulse, you can sure as hell punch it.",
+  "deckLimit": 2,
+  "xp": 1
+ },
+ {
+  "code": "60573",
+  "name": "Canteen",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "mig",
+  "quantity": 2,
+  "traits": [
+   "Item"
+  ],
+  "text": "Uses (3 supplies).\n[fast] Spend 1 supply and exhaust Canteen: Heal 2 horror.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "accessory"
+  ],
+  "icons": {
+   "willpower": 1
+  },
+  "flavor": "No matter what you put in it, there's always a faintly bitter taste.",
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 1,
+  "uses": {
+   "type": "supplies",
+   "count": 3
+  }
+ },
+ {
+  "code": "60574",
+  "name": "Hunter's Instinct",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "mig",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "Limit 1 per investigator. Uses (3 supplies). If there are no supplies on Hunter's Instinct, discard it.\n[reaction] After you engage an enemy, spend 1 supply and exhaust Hunter's Instinct: Add a level 0-2 event in your discard pile to your hand.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2,
+  "uses": {
+   "type": "supplies",
+   "count": 3
+  }
+ },
+ {
+  "code": "60575",
+  "name": "Winchester Model 52",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "mig",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Weapon",
+   "Firearm"
+  ],
+  "text": "Uses (2 ammo).\n[action] Spend 1 ammo: <b>Fight</b> ([combat]). You get +3 [combat] and deal +1 damage for this attack.\n[action] Discard Winchester Model 52: <b>Fight</b> ([combat]). You get +3 [combat] for this attack. If you succeed, automatically evade the targeted enemy.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand",
+   "hand"
+  ],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "flavor": "\"Shoot it! Don't swing it!\"",
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 3,
+  "uses": {
+   "type": "ammo",
+   "count": 2
+  }
+ },
+ {
+  "code": "60576",
+  "name": "Guerrilla Tactics",
+  "type": "event",
+  "faction": "survivor",
+  "pack": "mig",
+  "quantity": 2,
+  "traits": [
+   "Tactic"
+  ],
+  "text": "<b>Fight</b> ([combat]) or <b>Evade</b> ([agility]). You get +2 skill value for this test and you may target an enemy at a connecting location as if you were engaged with that enemy. If you succeed, deal 1 damage to that enemy <i>(in addition to its standard damage)</i>.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 1
+ },
+ {
+  "code": "60577",
+  "name": "Respite",
+  "type": "event",
+  "faction": "survivor",
+  "pack": "mig",
+  "quantity": 2,
+  "traits": [
+   "Spirit"
+  ],
+  "text": "Play only if there are no enemies at your location.\nChoose up to 3 level 0 event and/or skill cards in your discard pile and shuffle them into your deck. Draw 1 card.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 2
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 1
+ },
+ {
+  "code": "60578",
+  "name": "Rope Trap",
+  "type": "event",
+  "faction": "survivor",
+  "pack": "mig",
+  "quantity": 2,
+  "traits": [
+   "Trap",
+   "Trick"
+  ],
+  "text": "Attach to your location. Limit 1 [[Trap]] attached.\n[reaction] When an enemy enters attached location, exhaust Rope Trap: Deal 1 damage to that enemy. Reveal a random token from the chaos bag. If a [skull] or [auto_fail] token is revealed, discard Rope Trap. <i>(You may trigger this ability from any location.)</i>",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "combat": 1
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2
+ },
+ {
+  "code": "60579",
+  "name": "Levelheaded",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "mig",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "Starting. <i>(You may begin the game with 1 copy of a starting card in your opening hand.)</i>\n[fast] Spend 1 resource: You get +1 [willpower] for this skill test (+2 [willpower] instead if this test is on a scenario card).\n[fast] Spend 1 resource: You get +1 [agility] for this skill test (+2 [agility] instead if this test is on a scenario card).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 2
+ },
+ {
+  "code": "60580",
+  "name": "Longbow",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "mig",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Weapon",
+   "Ranged"
+  ],
+  "text": "Uses (1 arrow).\n[action] Spend 1 arrow: <b>Fight</b> ([agility]). You get +2 [agility] and deal +2 damage for this attack. This attack ignores the aloof keyword.\n[action]: Replenish 1 arrow on Longbow.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand",
+   "hand"
+  ],
+  "icons": {
+   "combat": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 3,
+  "uses": {
+   "type": "arrow",
+   "count": 1
+  }
+ },
+ {
+  "code": "60581",
+  "name": "Makeshift Bomb",
+  "type": "event",
+  "faction": "survivor",
+  "pack": "mig",
+  "quantity": 2,
+  "traits": [
+   "Trap"
+  ],
+  "text": "Attach to your location. Limit 1 [[Trap]] attached.\n[reaction] After an enemy or investigator enters attached location, discard Makeshift Bomb: Deal 3 damage to each enemy and investigator at that location. <i>(You may trigger this ability from any location.)</i>",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 3
+ },
+ {
+  "code": "60582",
+  "name": "Timely Intervention",
+  "type": "skill",
+  "faction": "survivor",
+  "pack": "mig",
+  "quantity": 2,
+  "traits": [
+   "Fortune"
+  ],
+  "text": "Max 1 committed per skill test.\nYou may commit Timely Intervention from your hand after revealing chaos tokens during a skill test you are performing.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 3
+  },
+  "deckLimit": 2,
+  "xp": 3
+ }
+]

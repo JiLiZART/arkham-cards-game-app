@@ -1,0 +1,4060 @@
+[
+ {
+  "code": "12001",
+  "name": "Daniela Reyes",
+  "type": "investigator",
+  "faction": "guardian",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Warden",
+   "Worker"
+  ],
+  "text": "[reaction] After an enemy attacks an investigator at your location: Fight that enemy <i>(using either a basic fight action or a </i><b>Fight</b><i> ability on a card)</i>. (Limit once per round.)\n[elder_sign] effect: +1. Deal 1 damage to an enemy at your location.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Mechanic",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Guardian cards ([guardian]) level 0-5, Survivor cards ([survivor]) level 0-2, Neutral cards level 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Daniela's Wrench, In Harm's Way, 1 random basic weakness.",
+  "flavor": "\"Those creatures are <i>definitely</i> gonna know what hit 'em.\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 3,
+   "intellect": 2,
+   "combat": 5,
+   "agility": 2
+  },
+  "health": 9,
+  "sanity": 5
+ },
+ {
+  "code": "12002",
+  "name": "Daniela's Wrench",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Item",
+   "Tool",
+   "Weapon",
+   "Melee"
+  ],
+  "text": "Daniela Reyes deck only.\n[fast] Exhaust Daniela's Wrench: Choose an enemy at your location. That enemy engages you and makes an immediate attack.\n[action]: <b>Fight</b> ([combat]). You get +2 [combat] for this attack. If this enemy attacked you this round, this attack deals +1 damage.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "combat": 1,
+   "wild": 1
+  },
+  "subname": "New and Improved",
+  "deckLimit": 1,
+  "cost": 2
+ },
+ {
+  "code": "12003",
+  "name": "In Harm's Way",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Flaw"
+  ],
+  "text": "<b>Revelation</b> - Put In Harm's Way into play in your threat area.\n<b>Forced</b> - After you deal damage to an enemy: Take 1 damage and place 1 damage on In Harm's Way. If there is 3 or more damage on this card, discard it.\n<b>Forced</b> - When the game ends: Suffer 1 physical trauma.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "weakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "12004",
+  "name": "Joe Diamond",
+  "type": "investigator",
+  "faction": "seeker",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Detective"
+  ],
+  "text": "[reaction] After you successfully investigate: Draw 1 card. (Limit once per round.)\n[elder_sign] effect: +1. If you succeed, draw 1 card and gain 1 resource.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Private Investigator",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Seeker cards ([seeker]) level 0-5, Guardian cards ([guardian]) level 0-2, Neutral cards level 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Detective's Intuition, Dead Ends, 1 random basic weakness.",
+  "flavor": "\"I can't stop now. Not when I'm so close to the truth.\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 2,
+   "intellect": 4,
+   "combat": 4,
+   "agility": 2
+  },
+  "health": 7,
+  "sanity": 7
+ },
+ {
+  "code": "12005",
+  "name": "Detective's Intuition",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Insight"
+  ],
+  "text": "Joe Diamond deck only.\nGain 2 resources and heal 1 damage or 1 horror.\n[reaction] After you draw Detective's Intuition during your turn: Reveal it and draw 2 additional cards.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1,
+   "wild": 1
+  },
+  "flavor": "\"I don't know how you do it, Mr. Diamond. Your insight never ceases to impress.\"",
+  "deckLimit": 1,
+  "cost": 0
+ },
+ {
+  "code": "12006",
+  "name": "Dead Ends",
+  "type": "event",
+  "faction": "neutral",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Blunder"
+  ],
+  "text": "<b>Forced</b> - When you search your deck and Dead Ends is among the searched cards: Draw it, cancel the effects of the search, and shuffle your deck.\n<b>Forced</b> - When the game ends or you are eliminated, if this card is in your hand: You earn 2 fewer experience.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "weakness",
+  "deckLimit": 1,
+  "cost": 5
+ },
+ {
+  "code": "12007",
+  "name": "Trish Scarborough",
+  "type": "investigator",
+  "faction": "rogue",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Agency",
+   "Criminal"
+  ],
+  "text": "You may take an additional action during your turn, which can only be used to evade.\n[elder_sign] effect: +0. After this test resolves, you may disengage from each enemy and move to a connecting location.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Former Spy",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Rogue cards ([rogue]) level 0-5, Seeker cards ([seeker]) level 0-2, Neutral cards level 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Covert Ops, Black Chamber Operative, 1 random basic weakness.",
+  "flavor": "\"You're quite good, but nobody can catch me.\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 2,
+   "intellect": 4,
+   "combat": 2,
+   "agility": 4
+  },
+  "health": 8,
+  "sanity": 6
+ },
+ {
+  "code": "12008",
+  "name": "Covert Ops",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Talent",
+   "Illicit"
+  ],
+  "text": "Trish Scarborough deck only.\n[reaction] After you evade an enemy, exhaust Covert Ops: Either draw 1 card, or move to a connecting location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "subname": "In the Shadows",
+  "flavor": "There are alley cats more conspicuous than you.",
+  "deckLimit": 1,
+  "cost": 2
+ },
+ {
+  "code": "12009",
+  "name": "Black Chamber Operative",
+  "type": "enemy",
+  "faction": "neutral",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Humanoid",
+   "Coterie"
+  ],
+  "text": "Hunter. Prey (Trish Scarborough only).\n<b>Forced</b> - After you evade Black Chamber Operative: Place 1 of your clues on your location. If you cannot, this enemy readies, engages you, and makes an immediate attack.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "hunter"
+  ],
+  "slots": [],
+  "icons": {},
+  "flavor": "\"There is nowhere to run, Ms. Scarborough.\"",
+  "subtype": "weakness",
+  "deckLimit": 1,
+  "enemy": {
+   "fight": 4,
+   "health": 2,
+   "healthPerInvestigator": false,
+   "evade": 4,
+   "damage": 1,
+   "horror": 1
+  }
+ },
+ {
+  "code": "12010",
+  "name": "Dexter Drake",
+  "type": "investigator",
+  "faction": "mystic",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Performer",
+   "Sorcerer"
+  ],
+  "text": "[reaction] After you play an asset: Either return another non-story asset you control to your hand, or play a different asset from your hand <i>(paying its cost)</i>. (Limit once per round.)\n[elder_sign] effect: +1. You may return a non-story asset at your location to its owner's hand.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Magician",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Mystic cards ([mystic]) level 0-5, Rogue cards ([rogue]) level 0-2, Neutral cards level 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): \"For my next trick...\", The Necronomicon <i>(Drake Translation)</i>, 1 random basic weakness.",
+  "flavor": "\"I'll show you <i>real</i> magic.\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 5,
+   "intellect": 2,
+   "combat": 2,
+   "agility": 3
+  },
+  "health": 6,
+  "sanity": 8
+ },
+ {
+  "code": "12011",
+  "name": "\"For my next trick...\"",
+  "type": "event",
+  "faction": "mystic",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Spell",
+   "Trick"
+  ],
+  "text": "Dexter Drake deck only.\nSearch your deck for a [[Spell]] or [[Item]] asset and play it, reducing its cost by 2 <i>(shuffle your deck)</i>. This action does not provoke attacks of opportunity.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "deckLimit": 1,
+  "cost": 0
+ },
+ {
+  "code": "12012",
+  "name": "The Necronomicon",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Item",
+   "Tome",
+   "Cursed"
+  ],
+  "text": "<b>Revelation</b> - Put The Necronomicon into play in your threat area. It cannot leave play except by the [action] ability below.\nYou cannot play assets or trigger abilities on other assets you control.\n[action]: Test [willpower] (5). If you succeed, discard The Necronomicon. If you fail, shuffle it into your deck and take 1 horror.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "arcane"
+  ],
+  "icons": {},
+  "subname": "Drake Translation",
+  "subtype": "weakness",
+  "deckLimit": 1,
+  "cost": null
+ },
+ {
+  "code": "12013",
+  "name": "Isabelle Barnes",
+  "type": "investigator",
+  "faction": "survivor",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Chosen",
+   "Hunter"
+  ],
+  "text": "[fast] During a skill test you are performing, take 1 direct horror: Commit an eligible skill from your discard pile to this test. After this test resolves, shuffle that card into your deck. (Limit once per round.)\n[elder_sign] effect: +1. If you succeed, heal 1 horror.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Returned",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Survivor cards ([survivor]) level 0-5, Mystic cards ([mystic]) level 0-2, Neutral cards level 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Isabelle's Twin .45s, Breaking Point, 1 random basic weakness.",
+  "flavor": "\"My sister's sacrifice won't be in vain.\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 4,
+   "intellect": 2,
+   "combat": 3,
+   "agility": 3
+  },
+  "health": 5,
+  "sanity": 9
+ },
+ {
+  "code": "12014",
+  "name": "Isabelle's Twin .45s",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Item",
+   "Weapon",
+   "Firearm"
+  ],
+  "text": "Isabelle Barnes deck only. Uses (6 ammo).\n[action] Spend 1 ammo: <b>Fight</b> ([combat]). You get +1 [combat] and deal +1 damage for this attack.\n[reaction] After you resolve the above ability, spend 1 ammo and exhaust Isabelle's Twin .45s: <b>Fight</b> ([agility]). You get +1 [agility] and deal +1 damage for this attack.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand",
+   "hand"
+  ],
+  "icons": {
+   "combat": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "subname": "Loaded with Vengeance",
+  "deckLimit": 1,
+  "cost": 4,
+  "uses": {
+   "type": "ammo",
+   "count": 6
+  }
+ },
+ {
+  "code": "12015",
+  "name": "Breaking Point",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Hardship"
+  ],
+  "text": "<b>Revelation</b> - Take 1 direct damage. Then, if you have 6 or fewer remaining sanity, take 1 direct damage. Then, if you have 3 or fewer remaining sanity, take 1 direct damage.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "weakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "12016",
+  "name": "Bodyguard",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Ally"
+  ],
+  "text": "Bodyguard may be assigned damage dealt to other investigators at your location.\n[reaction] When Bodyguard is defeated: Deal 1 damage to an enemy at your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "combat": 1
+  },
+  "flavor": "\"I'm not here to help you shop; I'm here to keep you alive.\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "health": 2,
+  "sanity": 1
+ },
+ {
+  "code": "12017",
+  "name": "Endurance",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "[fast] Spend 1 resource: You get +1 [combat] for this skill test (+2 [combat] instead if this is an attack or evasion).\n[fast] Spend 1 resource: You get +1 [agility] for this skill test (+2 [agility] instead if this is an attack or evasion).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "12018",
+  "name": "Logan Hastings",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Hunter"
+  ],
+  "text": "You get +1 [combat].\n[reaction] After you defeat an enemy, exhaust Logan Hastings: Gain 1 resource.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "combat": 1
+  },
+  "subname": "Bounty Hunter",
+  "flavor": "\"Preparing for Armageddon seems insane until it's the end of the world!\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 4,
+  "health": 2,
+  "sanity": 1
+ },
+ {
+  "code": "12019",
+  "name": "M1911",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Weapon",
+   "Firearm"
+  ],
+  "text": "Uses (4 ammo).\n[action] Spend 1 ammo: <b>Fight</b> ([combat]). You get +1 [combat] and deal +1 damage for this attack.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "uses": {
+   "type": "ammo",
+   "count": 4
+  }
+ },
+ {
+  "code": "12021",
+  "name": "Resilience",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1
+  },
+  "flavor": "Nothing's gonna keep you down.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "health": 2,
+  "sanity": 2
+ },
+ {
+  "code": "12022",
+  "name": "Lesson Learned",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Insight",
+   "Spirit"
+  ],
+  "text": "Fast. Play after an enemy attacks you.\nDiscover 1 clue at your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "combat": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1
+ },
+ {
+  "code": "12023",
+  "name": "Right Tool for the Job",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Insight"
+  ],
+  "text": "Search the top 9 cards of your deck for a [[Tool]] or [[Weapon]] asset and add it to your hand. Shuffle your deck.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1
+  },
+  "flavor": "\"Keep digging. You'll find something you need in there.\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1
+ },
+ {
+  "code": "12026",
+  "name": "Counterattack",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Spirit",
+   "Tactic"
+  ],
+  "text": "Fast. Play when an enemy attacks an investigator at your location <i>(before resolving that attack)</i>.\nCancel that attack. Deal 1 damage to that enemy.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 1,
+  "cost": 1
+ },
+ {
+  "code": "12027",
+  "name": "Bodyguard",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Ally"
+  ],
+  "text": "Bodyguard may be assigned damage dealt to other investigators at your location.\n[reaction] When Bodyguard is defeated: Deal 2 damage to an enemy at your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "combat": 1,
+   "wild": 1
+  },
+  "flavor": "\"I'm not here to help you shop; I'm here to keep you alive.\"",
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 3,
+  "health": 3,
+  "sanity": 2
+ },
+ {
+  "code": "12028",
+  "name": "Sledgehammer",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Tool",
+   "Weapon",
+   "Melee"
+  ],
+  "text": "[action]: <b>Fight</b> ([combat]). This attack deals + 1 damage.\n[action][action]: <b>Fight</b> ([combat]). You get +3 [combat] for this attack. If you succeed, you may exhaust Sledgehammer for this attack to deal +2 damage.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand",
+   "hand"
+  ],
+  "icons": {
+   "combat": 2
+  },
+  "flavor": "Twenty-two and a half pounds of steel vengeance.",
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 3
+ },
+ {
+  "code": "12029",
+  "name": "Winchester Model 12",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Weapon",
+   "Firearm"
+  ],
+  "text": "Uses (3 ammo).\n[action] Spend 1 ammo: <b>Fight</b> ([combat]). You get +3 [combat] for this attack. If you succeed, this attack deals +1 damage for each point you succeed by (to a maximum of +4). If you fail and would deal damage to another investigator, this attack deals 1 damage for each point you fail by (to a maximum of 5 damage).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand",
+   "hand"
+  ],
+  "icons": {
+   "combat": 2
+  },
+  "deckLimit": 2,
+  "xp": 5,
+  "cost": 4,
+  "uses": {
+   "type": "ammo",
+   "count": 3
+  }
+ },
+ {
+  "code": "12030",
+  "name": "Dorothy Simmons",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Miskatonic"
+  ],
+  "text": "You get +1 [intellect].\n[reaction] After you successfully investigate by exactly 1 or 3, exhaust Dorothy Simmons: Gain 1 resource.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "intellect": 1
+  },
+  "subname": "Straight-A Student",
+  "flavor": "\"I've taken every class that Dr. Christopher offers!\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "health": 1,
+  "sanity": 1
+ },
+ {
+  "code": "12033",
+  "name": "Local Map",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Item"
+  ],
+  "text": "Uses (4 secrets).\n[action] Spend 1 secret: <b>Investigate</b> ([intellect]). Investigate a revealed connecting location. You get +1 [intellect] for this investigation. If you succeed, you may exhaust Local Map to move to that location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "agility": 1
+  },
+  "flavor": "\"I could swear we've been here before...\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "uses": {
+   "type": "secrets",
+   "count": 4
+  }
+ },
+ {
+  "code": "12035",
+  "name": "Sharp Rhetoric",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "[fast] Spend 1 resource: You get +1 [intellect] for this skill test (+2 [intellect] instead if this is an investigation or parley).\n[fast] Spend 1 resource: You get +1 [willpower] for this skill test (+2 [willpower] instead if this is an investigation or parley).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "12036",
+  "name": "Gather Intel",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Insight"
+  ],
+  "text": "Fast. Play when an enemy enters your location.\nDraw 2 cards.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "agility": 1
+  },
+  "flavor": "You learn so much more by getting up-close and personal.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1
+ },
+ {
+  "code": "12037",
+  "name": "Through the Cracks",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Insight",
+   "Trick"
+  ],
+  "text": "<b>Evade</b> ([agility]). You get +1 [agility] for this evasion for each clue you control (to a maximum of +3). If you succeed, you may disengage from each enemy engaged with you and move to a revealed connecting location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3
+ },
+ {
+  "code": "12040",
+  "name": "Mysterious Grimoire",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Tome"
+  ],
+  "text": "Uses (4 secrets).\n[fast] During your turn, spend 1 or 2 secrets and exhaust Mysterious Grimoire: Search the top 3 cards (or 6 cards instead if you spent 2 secrets) of your deck for a card and draw it. If 1 or more weaknesses are among the searched cards, draw them as well. Shuffle your deck.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "intellect": 2
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 3,
+  "uses": {
+   "type": "secrets",
+   "count": 4
+  }
+ },
+ {
+  "code": "12041",
+  "name": "Through the Cracks",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Insight",
+   "Trick"
+  ],
+  "text": "<b>Evade</b> ([agility]). You get +2 [agility] for this evasion for each clue you control (to a maximum of +6). If you succeed, you may disengage from each enemy engaged with you and move to a revealed connecting location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "agility": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2
+ },
+ {
+  "code": "12043",
+  "name": "Unbridled Knowledge",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Insight"
+  ],
+  "text": "Reveal the top 5 cards of your deck (8 cards instead if you control 2 or more clues). Draw 3 of them and place the rest of those cards on the top and/or bottom of your deck in any order.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 2,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 5,
+  "cost": 1
+ },
+ {
+  "code": "12045",
+  "name": "M1903 Hammerless",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Weapon",
+   "Firearm"
+  ],
+  "text": "Uses (4 ammo).\n[action] Spend 1 ammo: <b>Fight</b> ([agility]). If the targeted enemy is exhausted, this attack deals +1 damage.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "uses": {
+   "type": "ammo",
+   "count": 4
+  }
+ },
+ {
+  "code": "12046",
+  "name": "Olivier Bishop",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Criminal",
+   "Socialite"
+  ],
+  "text": "You get +1 [agility].\n[fast] During your turn, exhaust Olivier Bishop: Move to a connecting location.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "agility": 1
+  },
+  "subname": "Haughty Art \"Collector\"",
+  "flavor": "\"I suppose I'll help you... for now.\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 4,
+  "health": 2,
+  "sanity": 1
+ },
+ {
+  "code": "12047",
+  "name": "Silver Tongue",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "[fast] Spend 1 resource: You get +1 [intellect] for this skill test (+2 [intellect] instead if this is an evasion or parley).\n[fast] Spend 1 resource: You get +1 [agility] for this skill test (+2 [agility] instead if this is an evasion or parley).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "12048",
+  "name": "Sticky Fingers",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "Limit 1 per investigator.\n[reaction] After you successfully evade an enemy, exhaust Sticky Fingers: Gain 1 resource.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "agility": 1
+  },
+  "flavor": "Worse than a kid in a candy shop.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1
+ },
+ {
+  "code": "12051",
+  "name": "Paint the Town Red",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Fortune",
+   "Gambit"
+  ],
+  "text": "<b>Parley.</b> Search the top 9 cards of the encounter deck for a non-[[Elite]] enemy, draw it, and gain resources equal to that enemy's printed health. Shuffle the encounter deck.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "agility": 1
+  },
+  "flavor": "You can't put a price on fame.\nOr can you?",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 0
+ },
+ {
+  "code": "12052",
+  "name": "Prestidigitation",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Trick"
+  ],
+  "text": "Fast. Play only during your turn.\nPlay an [[Item]] asset from your hand, reducing its cost by 2. When your turn ends, return an [[Item]] asset you control to your hand.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "agility": 1
+  },
+  "flavor": "Now you see it. Now you don't.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1
+ },
+ {
+  "code": "12053",
+  "name": "Out of Sight",
+  "type": "skill",
+  "faction": "rogue",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Practiced"
+  ],
+  "text": "Max 1 committed per skill test.\nIf this test is successful by 2 or more, the performing investigator may disengage from each enemy and move to a revealed connecting location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0
+ },
+ {
+  "code": "12054",
+  "name": "Sticky Fingers",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "Fast. Limit 1 per investigator.\n[reaction] After you successfully evade an enemy, exhaust Sticky Fingers: Gain 1 resource.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "agility": 2
+  },
+  "flavor": "Worse than a kid in a candy shop.",
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 1
+ },
+ {
+  "code": "12055",
+  "name": "Decisive Strike",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Tactic",
+   "Gambit"
+  ],
+  "text": "<b>Fight</b> ([combat]). You get +2 [combat] and deal +1 damage for this attack. If this attack defeats an enemy, gain 5 resources.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "flavor": "Don't forget to check the pockets.",
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2
+ },
+ {
+  "code": "12057",
+  "name": "Out of Sight",
+  "type": "skill",
+  "faction": "rogue",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Practiced",
+   "Expert"
+  ],
+  "text": "Max 1 committed per skill test.\nIf this test is successful by 1 or more, the performing investigator may disengage from each enemy and move to a revealed location up to 2 connections away.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "agility": 3
+  },
+  "deckLimit": 2,
+  "xp": 3
+ },
+ {
+  "code": "12058",
+  "name": "Cloak of Resonance",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Clothing",
+   "Alchemy"
+  ],
+  "text": "[reaction] When horror is placed on Cloak of Resonance, exhaust it: Deal 1 damage to an enemy at your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "body"
+  ],
+  "icons": {
+   "willpower": 1
+  },
+  "flavor": "\"To be createde of 3 partes aether, 2 cinnabar, and at least 3 pounds ophe rokket gatherede from ain hevenful mountain.\" -Alchemical Formula No VIII ca. 1660",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "sanity": 3
+ },
+ {
+  "code": "12059",
+  "name": "Cosmic Flame",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Spell"
+  ],
+  "text": "Uses (3 charges).\n[action]: <b>Fight</b> ([willpower]). If you succeed, you may spend 1 charge to deal +1 damage for this attack. If you reveal a [skull] token during this test, remove 1 charge from Cosmic Flame (if you cannot, take 1 damage and discard this card).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "arcane"
+  ],
+  "icons": {
+   "combat": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "uses": {
+   "type": "charges",
+   "count": 3
+  }
+ },
+ {
+  "code": "12060",
+  "name": "Jim Culver",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Performer"
+  ],
+  "text": "You get +1 [willpower].\n[reaction] After you take damage and/or horror, exhaust Jim Culver: Draw 1 card.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "willpower": 1
+  },
+  "subname": "Haunted Musician",
+  "flavor": "\"You see these folks too? You never really get used to them.\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 4,
+  "health": 2,
+  "sanity": 2
+ },
+ {
+  "code": "12061",
+  "name": "Lucky Charm",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Charm",
+   "Blessed"
+  ],
+  "text": "Uses (4 charges).\n[fast] Spend 1 charge and exhaust Lucky Charm: Move 1 damage or 1 horror from a card at your location to a card you control <i>(with a health or sanity value)</i>.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "accessory"
+  ],
+  "icons": {
+   "willpower": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2,
+  "sanity": 2,
+  "uses": {
+   "type": "charges",
+   "count": 4
+  }
+ },
+ {
+  "code": "12062",
+  "name": "Second Sight",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Spell"
+  ],
+  "text": "Uses (3 charges).\n[action]: <b>Investigate</b> ([willpower]). If you succeed, you may spend 1 charge to discover 1 additional clue at your location. If you reveal a [cultist] token during this test, remove 1 charge from Second Sight (if you cannot, take 1 horror and discard this card).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "arcane"
+  ],
+  "icons": {
+   "intellect": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 4,
+  "uses": {
+   "type": "charges",
+   "count": 3
+  }
+ },
+ {
+  "code": "12063",
+  "name": "Spiritual Intuition",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "[fast] Spend 1 resource: You get +1 [willpower] for this skill test (+2 [willpower] instead if this test is on a [[Spell]] or [[Ritual]] card).\n[fast] Spend 1 resource: You get +1 [combat] for this skill test (+2 [combat] instead if this test is on a [[Spell]] or [[Ritual]] card).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "combat": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "12066",
+  "name": "Will of the Cosmos",
+  "type": "event",
+  "faction": "mystic",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Insight",
+   "Augury"
+  ],
+  "text": "Place 1 doom on a player card you control. Then, discover 1 clue at your location and 1 clue at another revealed location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1
+  },
+  "flavor": "In the cosmos, all are one. In the void, all is none.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 0
+ },
+ {
+  "code": "12067",
+  "name": "Soul Link",
+  "type": "skill",
+  "faction": "mystic",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Innate",
+   "Spell"
+  ],
+  "text": "As an additional cost to commit Soul Link, take 1 horror.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 3
+  },
+  "flavor": "By the power of the ancients am I reborn anew.",
+  "deckLimit": 2,
+  "xp": 0
+ },
+ {
+  "code": "12068",
+  "name": "Mask of Silenus",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Mask",
+   "Relic",
+   "Cursed"
+  ],
+  "text": "Uses (3 charges).\n[reaction] When you would reveal a chaos token, spend 1 charge: Reveal 1 additional token. Choose 1 of those tokens to resolve and ignore the other. If you resolved a token with a symbol, take 1 horror.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "head"
+  ],
+  "icons": {
+   "wild": 1
+  },
+  "subname": "Face of the Void",
+  "deckLimit": 2,
+  "xp": 1,
+  "cost": 3,
+  "uses": {
+   "type": "charges",
+   "count": 3
+  }
+ },
+ {
+  "code": "12070",
+  "name": "Augur of Elokoss",
+  "type": "event",
+  "faction": "mystic",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Spell",
+   "Augury"
+  ],
+  "text": "<b>Investigate</b> ([intellect]). Add your [willpower] to your [intellect] for this investigation. If you succeed, discover 1 additional clue at your location. If you succeed and a token with a symbol was revealed during this test, you may discard a [[Terror]] or [[Hex]] treachery from any investigator's threat area.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 2
+ },
+ {
+  "code": "12071",
+  "name": "Cosmic Flame",
+  "type": "asset",
+  "faction": "mystic",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Spell"
+  ],
+  "text": "Uses (4 charges).\n[action]: <b>Fight</b> ([willpower]). You get +2 [willpower] and deal +1 damage for this attack. If you succeed, you may spend 1 charge to deal 1 damage to an enemy at your location. If you reveal a [skull] token during this test, remove 1 charge from Cosmic Flame (if you cannot, take 1 damage and discard this card).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "arcane"
+  ],
+  "icons": {
+   "willpower": 1,
+   "combat": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 5,
+  "cost": 3,
+  "uses": {
+   "type": "charges",
+   "count": 4
+  }
+ },
+ {
+  "code": "12072",
+  "name": "Aleksey Saburov",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Ally"
+  ],
+  "text": "[reaction] When your turn begins: Heal 1 damage or 1 horror from Aleksey Saburov.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "willpower": 1
+  },
+  "subname": "Always on the Mend",
+  "flavor": "\"I've had way worse, pal.\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "health": 2,
+  "sanity": 2
+ },
+ {
+  "code": "12074",
+  "name": "Hunter's Instinct",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "Limit 1 per investigator. Uses (3 supplies). If there are no supplies on Hunter's Instinct, discard it.\n[reaction] After you engage an enemy, spend 1 supply and exhaust Hunter's Instinct: Add a level 0 event in your discard pile to your hand.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2,
+  "uses": {
+   "type": "supplies",
+   "count": 3
+  }
+ },
+ {
+  "code": "12075",
+  "name": "Jumpsuit",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Clothing"
+  ],
+  "text": "[fast] During your turn, discard Jumpsuit: Choose a [[Tool]] or [[Weapon]] asset in your discard pile and add it to your hand.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "body"
+  ],
+  "icons": {
+   "combat": 1
+  },
+  "flavor": "You keep finding things you thought you'd lost in those deep pockets.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1,
+  "health": 2
+ },
+ {
+  "code": "12076",
+  "name": "Levelheaded",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "[fast] Spend 1 resource: You get +1 [willpower] for this skill test (+2 [willpower] instead if this test is on a scenario card).\n[fast] Spend 1 resource: You get +1 [agility] for this skill test (+2 [agility] instead if this test is on a scenario card).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "12079",
+  "name": "\"Shove off!\"",
+  "type": "event",
+  "faction": "survivor",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Tactic"
+  ],
+  "text": "<b>Evade</b> ([agility]). If you succeed, deal 1 damage to the evaded enemy. If you fail, return \"Shove off!\" to your hand at the end of your turn.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1
+ },
+ {
+  "code": "12080",
+  "name": "Slippery",
+  "type": "skill",
+  "faction": "survivor",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Practiced"
+  ],
+  "text": "If this skill test is successful while evading a non-[[Elite]] enemy, that enemy does not ready during the next upkeep phase.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0
+ },
+ {
+  "code": "12081",
+  "name": "Timely Intervention",
+  "type": "skill",
+  "faction": "survivor",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Fortune"
+  ],
+  "text": "Max 1 committed per skill test.\nYou may commit Timely Intervention from your hand after revealing chaos tokens during a skill test you are performing.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 0
+ },
+ {
+  "code": "12082",
+  "name": "Scrape By",
+  "type": "event",
+  "faction": "survivor",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Fortune"
+  ],
+  "text": "Fast. Play when you would fail a skill test during which a non-[auto_fail] token was revealed.\nYou succeed at that skill test by 0 instead. If a token with a symbol was revealed during that skill test, take 1 horror.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 1,
+  "cost": 1
+ },
+ {
+  "code": "12083",
+  "name": "Old Compass",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Tool"
+  ],
+  "text": "[action]: <b>Investigate</b> ([intellect]). Your location gets -1 shroud for this investigation. If you fail, you may exhaust Old Compass to attempt this test again. If you do, your location gets -2 shroud for this investigation, instead.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "intellect": 2
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2
+ },
+ {
+  "code": "12084",
+  "name": "On the Brink",
+  "type": "skill",
+  "faction": "survivor",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Gambit",
+   "Desperate"
+  ],
+  "text": "Max 1 committed per skill test.\nIf this test fails, return each other card committed to this test to its owner's hand and draw 1 card.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 2
+  },
+  "flavor": "Nobody knows what you'll do if you're pushed past your limits.",
+  "deckLimit": 2,
+  "xp": 2
+ },
+ {
+  "code": "12085",
+  "name": "Meat Cleaver",
+  "type": "asset",
+  "faction": "survivor",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Weapon",
+   "Melee"
+  ],
+  "text": "[action]: <b>Fight</b> ([combat]). You get +2 [combat] for this attack (+3 [combat] instead if you have 3 or fewer remaining sanity). If this attack defeats an enemy, you may heal 1 horror.\n[reaction] When you trigger the above [action] ability, take 1 horror: This attack deals +1 damage.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "willpower": 1,
+   "combat": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 2
+ },
+ {
+  "code": "12086",
+  "name": "Broken Bottle",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "core_2026",
+  "quantity": 8,
+  "traits": [
+   "Item",
+   "Weapon",
+   "Melee",
+   "Improvised"
+  ],
+  "text": "[action]: <b>Fight</b> ([combat]). You get +1 [combat] for this attack. If you succeed, you may discard Broken Bottle to deal +1 damage for this attack.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "combat": 1
+  },
+  "flavor": "It was cheap whiskey, anyway.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1
+ },
+ {
+  "code": "12087",
+  "name": "Fedora",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Apparel",
+   "Headwear"
+  ],
+  "text": "",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "head"
+  ],
+  "icons": {
+   "agility": 1
+  },
+  "flavor": "A little style goes a long way.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2,
+  "health": 1,
+  "sanity": 1
+ },
+ {
+  "code": "12088",
+  "name": "Hand-Crank Flashlight",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "core_2026",
+  "quantity": 10,
+  "traits": [
+   "Item",
+   "Tool"
+  ],
+  "text": "[action]: <b>Investigate</b> ([intellect]). You get +1 [intellect] for this test. If you succeed, you may discard Hand-Crank Flashlight for your location to get -1 shroud until the end of the round.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "intellect": 1
+  },
+  "flavor": "Works in any situation, and the batteries never run out!\n- Schoffner's Catalogue, Spring 1927 ed.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1
+ },
+ {
+  "code": "12098",
+  "name": "The Gold Bug",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Item",
+   "Relic",
+   "Alchemy",
+   "Cursed"
+  ],
+  "text": "<b>Revelation</b> - Put The Gold Bug into play in your threat area. It cannot leave play except by the [action] ability below.\nYou get -1 health and -1 sanity.\n[action]: Shuffle the Gold Bug into your deck.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "accessory"
+  ],
+  "icons": {},
+  "subtype": "basicweakness",
+  "deckLimit": 1,
+  "cost": null
+ },
+ {
+  "code": "12099",
+  "name": "The Nameless Lurker",
+  "type": "enemy",
+  "faction": "neutral",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Humanoid",
+   "Monster"
+  ],
+  "text": "Aloof.\n<b>Spawn</b> - Farthest empty location.\n<b>Forced</b> - When the investigation phase ends, if The Nameless Lurker is ready and has no doom on it: Place 1 doom on it.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [
+   "aloof"
+  ],
+  "slots": [],
+  "icons": {},
+  "subtype": "basicweakness",
+  "deckLimit": 1,
+  "enemy": {
+   "fight": 2,
+   "health": 1,
+   "healthPerInvestigator": false,
+   "evade": 2,
+   "damage": 0,
+   "horror": 2
+  },
+  "spawn": "Farthest empty location"
+ },
+ {
+  "code": "12102",
+  "name": "Pursued",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Terror"
+  ],
+  "text": "<b>Revelation</b> - Put Pursued into play in your threat area.\n<b>Forced</b> - After an enemy enters <i>(moves into or spawns at)</i> your location: Take 1 horror.\n[action][action]: Discard Pursued.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "basicweakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "12103",
+  "name": "Syndicate Obligations",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Pact",
+   "Syndicate"
+  ],
+  "text": "<b>Revelation</b> - Put Syndicate Obligations into play in your threat area.\n<b>Forced</b> - After you spend 1 or more resources: Take 1 damage.\n[action][action]: Discard Syndicate Obligations.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "basicweakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "12104",
+  "name": "Wounded",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Injury"
+  ],
+  "text": "<b>Revelation</b> - Put Wounded into play in your threat area.\n<b>Forced</b> - The first time you move each turn: Take 1 damage.\n[action][action]: Discard Wounded.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "basicweakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "12105",
+  "name": "Spreading Flames",
+  "type": "scenario",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [],
+  "text": "Easy / Standard\n[skull] -X. X is the current act number.\n[tablet] -1. Reveal another token. If you fail, take 1 damage.\n[elder_thing] -3. If you fail by 2 or more, draw the topmost copy of Fire! in the encounter discard pile, if able.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backText": "Hard / Expert\n[skull] -X. X is 1 more than the current act number.\n[tablet] -2. Reveal another token. If you fail, take 1 damage.\n[elder_thing] -4. If you fail, draw the topmost copy of Fire! in the encounter discard pile, if able.",
+  "encounterSet": "spreading_flames"
+ },
+ {
+  "code": "12106",
+  "name": "Past Curfew",
+  "type": "agenda",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [],
+  "text": "[action]: <b>Parley.</b> Test [intellect] (2). If you succeed, discard a Bystander enemy at your location.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "Smoke on the Wind",
+  "backText": "In player order, each investigator tests [willpower] (3). Each investigator who fails takes 1 horror.",
+  "flavor": "The campus is strangely quiet, and there is no sign of your friend. Hooded figures cross the quad as nervous students scurry under painfully bright streetlamps.",
+  "encounterSet": "spreading_flames",
+  "stage": 1,
+  "doom": 3
+ },
+ {
+  "code": "12107",
+  "name": "Lit Up",
+  "type": "agenda",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [],
+  "text": "[action]: <b>Parley.</b> Test [intellect] (2). If you succeed, discard a Bystander enemy at your location.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "Uncontrollable Fire",
+  "backText": "If they are still set aside, place 4 set-aside copies of Fire! in the encounter discard pile.\nIn player order, each investigator tests [agility] (3). Each investigator who fails takes 1 damage.",
+  "flavor": "The sky glows a faint orange as the flames spread.",
+  "encounterSet": "spreading_flames",
+  "stage": 2,
+  "doom": 5
+ },
+ {
+  "code": "12108",
+  "name": "Wild Flames",
+  "type": "agenda",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [],
+  "text": "[action]: <b>Parley.</b> Test [intellect] (2). If you succeed, discard a Bystander enemy at your location.\n<b>Forced</b> - After doom is placed on the agenda: The lead investigator draws the topmost copy of Fire! in the encounter discard pile.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "Up in Flames",
+  "backText": "Each surviving investigator who has not resigned is defeated and suffers 1 physical trauma.",
+  "flavor": "The campus is ablaze!",
+  "encounterSet": "spreading_flames",
+  "stage": 3,
+  "doom": 10
+ },
+ {
+  "code": "12109",
+  "name": "Where There's Smoke...",
+  "type": "act",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [],
+  "text": "<b>Objective</b> - At the end of the round, investigators may spend the requisite clues, as a group, to advance.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "...There's Fire",
+  "backText": "Discard each enemy in play.\nPut the set-aside Dormitories and Miskatonic Quad locations into play. Spawn the set-aside Servant of Flame enemy at the Dormitories.\nAttach 1 set-aside copy of Fire! to Your Friend's Room. Place each other set-aside copy of Fire! in the encounter discard pile.",
+  "flavor": "You are searching the dormitories for any sign of your friend.",
+  "encounterSet": "spreading_flames",
+  "stage": 1,
+  "actClues": 2,
+  "actCluesPerInvestigator": true
+ },
+ {
+  "code": "12110",
+  "name": "Escape the Dorms",
+  "type": "act",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [],
+  "text": "<b>Objective</b> - If each undefeated investigator is at Miskatonic Quad, advance. <i>(Hint: Somcetimes it's better to run than to fight!)</i>",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "In the Open",
+  "backText": "Search all in-play and all out-of-play areas for the Servant of Flame, heal all damage from them, and set them aside, out of play.\nDiscard each enemy in play.\nDiscard all tokens and attachments from Your Friend's Room and remove it from the game. Put each remaining set-aside location <i>(Orne Library, Science Hall, Warren Observatory)</i> into play.",
+  "flavor": "A burning apparition stands between you and the exit. You must escape the dormitories!",
+  "encounterSet": "spreading_flames",
+  "stage": 2
+ },
+ {
+  "code": "12111",
+  "name": "Searching for Dr. Armitage",
+  "type": "act",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [],
+  "text": "<b>Objective</b> - At the end of the round, investigators at Orne Library may spend the requisite clues, as a group, to advance.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "The Servant Unleashed",
+  "backText": "Put the set-aside Dr. Henry Armitage story asset into play under any investigator's control. He does not take up an ally slot during this scenario.\nPut the set-aside Servant of Flame enemy into play at Miskatonic Quad. Place 3 [per_investigator] clues on Miskatonic Quad.\nThe lead investigator must search the encounter deck and discard pile for 1 [per_investigator] copies of Fire! and draw them. <i>(Shuffle the encounter deck if it was searched.)</i>",
+  "flavor": "Your friend had mentioned visiting the head librarian, Dr. Henry Armitage. With more and more strange figures arriving, you must scour the campus for his whereabouts.",
+  "encounterSet": "spreading_flames",
+  "stage": 3,
+  "actClues": 3,
+  "actCluesPerInvestigator": true
+ },
+ {
+  "code": "12112",
+  "name": "Blaze of Glory",
+  "type": "act",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [],
+  "text": "[fast] Spend 1 [per_investigator] clues, as a group: Deal 1 [per_investigator] damage to an enemy at your location.\n[action]: <b>Resign.</b> You flee the burning campus. <i>(This does not provoke attacks of opportunity.)</i>\n<b>Objective</b> - If the Servant of Flame is defeated: Advance.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "A Flame, Doused",
+  "backText": "<b>(→R1)</b> <i>(page 4)</i>",
+  "flavor": "Your fiery nemesis can't be allowed to hurt more innocents! With Dr. Armitage's help, perhaps you can stop them.",
+  "encounterSet": "spreading_flames",
+  "stage": 4
+ },
+ {
+  "code": "12113",
+  "name": "Your Friend's Room",
+  "type": "location",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Miskatonic"
+  ],
+  "text": "[action]: <b>Engage.</b> Choose an enemy at a connecting location. That enemy moves to this location and engages you. This action does not provoke attacks of opportunity.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "Your Friend's Room",
+  "flavor": "The dorm is quickly filling with smoke.",
+  "encounterSet": "spreading_flames",
+  "shroud": 2,
+  "clues": 2,
+  "cluesPerInvestigator": true
+ },
+ {
+  "code": "12114",
+  "name": "Servant of Flame",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Humanoid",
+   "Elite"
+  ],
+  "text": "Hunter. Prey (lowest [agility]). Retaliate.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [
+   "hunter",
+   "retaliate"
+  ],
+  "slots": [],
+  "icons": {},
+  "subname": "Raging Fury",
+  "encounterSet": "spreading_flames",
+  "victory": 2,
+  "enemy": {
+   "fight": 4,
+   "health": 5,
+   "healthPerInvestigator": true,
+   "evade": 4,
+   "damage": 2,
+   "horror": 2
+  }
+ },
+ {
+  "code": "12115",
+  "name": "Dr. Henry Armitage",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Ally",
+   "Miskatonic"
+  ],
+  "text": "You get +1 [willpower] and +1 [intellect].\nThe first action you perform each round does not provoke attacks of opportunity.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1,
+   "wild": 1
+  },
+  "subname": "Head Librarian",
+  "flavor": "\"I've seen more than my share of strange occurrences.\"",
+  "encounterSet": "spreading_flames",
+  "deckLimit": 1,
+  "cost": 3,
+  "health": 3,
+  "sanity": 3
+ },
+ {
+  "code": "12116",
+  "name": "Miskatonic Quad",
+  "type": "location",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Miskatonic",
+   "Central"
+  ],
+  "text": "[fast] During your turn, if there are exactly 1 or 2 investigators in the game: Move to a connecting location. (Group limit once per round.)",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "miskatonic_university",
+  "shroud": 1,
+  "clues": 0,
+  "cluesPerInvestigator": false
+ },
+ {
+  "code": "12117",
+  "name": "Dormitories",
+  "type": "location",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Miskatonic"
+  ],
+  "text": "[action]: Heal 1 damage and 1 horror. (Limit once per game.)",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "There's never a dull moment in the university dorms.",
+  "encounterSet": "miskatonic_university",
+  "shroud": 3,
+  "clues": 1,
+  "cluesPerInvestigator": true
+ },
+ {
+  "code": "12118",
+  "name": "Science Hall",
+  "type": "location",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Miskatonic"
+  ],
+  "text": "<b>Forced</b> - After you discover 1 or more clues at Science Hall: Choose and discard 1 card from your hand.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "The students are never exactly sure what will be under the microscope each day.",
+  "encounterSet": "miskatonic_university",
+  "victory": 1,
+  "shroud": 2,
+  "clues": 1,
+  "cluesPerInvestigator": true
+ },
+ {
+  "code": "12119",
+  "name": "Warren Observatory",
+  "type": "location",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Miskatonic"
+  ],
+  "text": "[reaction] After you discover 1 or more clues at this location: Draw 1 card. (Limit once per round.)",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "To date, Miskatonic astronomers have identified at least 15 separate stars that appear to have gone missing from the Northern Hemisphere.",
+  "encounterSet": "miskatonic_university",
+  "shroud": 3,
+  "clues": 1,
+  "cluesPerInvestigator": true
+ },
+ {
+  "code": "12120",
+  "name": "Orne Library",
+  "type": "location",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Miskatonic"
+  ],
+  "text": "[action][action]: Draw 3 cards. (Limit once per game.)",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "Students have reported strange sounds coming from the empty archives at night...",
+  "encounterSet": "miskatonic_university",
+  "victory": 1,
+  "shroud": 4,
+  "clues": 1,
+  "cluesPerInvestigator": true
+ },
+ {
+  "code": "12121",
+  "name": "Cantor of Flame",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Humanoid",
+   "Cultist"
+  ],
+  "text": "Retaliate.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "retaliate"
+  ],
+  "slots": [],
+  "icons": {},
+  "flavor": "\"By flame and blade, in shade and blood\nOur queen reborn after the flood.\"\n-Edict of Ash, Vol XIX",
+  "encounterSet": "ashen_pilgrims",
+  "enemy": {
+   "fight": 2,
+   "health": 2,
+   "healthPerInvestigator": false,
+   "evade": 2,
+   "damage": 1,
+   "horror": 0
+  }
+ },
+ {
+  "code": "12122",
+  "name": "Hellhound",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Creature",
+   "Monster"
+  ],
+  "text": "Hunter.\n<b>Forced</b> - After Hellhound attacks you during the enemy phase: Choose and discard 1 asset you control.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "hunter"
+  ],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "ashen_pilgrims",
+  "enemy": {
+   "fight": 2,
+   "health": 3,
+   "healthPerInvestigator": false,
+   "evade": 4,
+   "damage": 1,
+   "horror": 1
+  }
+ },
+ {
+  "code": "12123",
+  "name": "Bystander",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 3,
+  "traits": [
+   "Humanoid",
+   "Civilian"
+  ],
+  "text": "Doomed. <i>(When this enemy is defeated, place 1 doom on the current agenda. This effect can cause the current agenda to advance.)</i>",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "They're always in the exact wrong place at the exact wrong time.",
+  "encounterSet": "bystanders",
+  "enemy": {
+   "fight": 1,
+   "health": 1,
+   "healthPerInvestigator": false,
+   "evade": 1,
+   "damage": 1,
+   "horror": 0
+  }
+ },
+ {
+  "code": "12124",
+  "name": "Cosmic Evils",
+  "type": "treachery",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 3,
+  "traits": [
+   "Omen"
+  ],
+  "text": "Peril.\n<b>Revelation</b> - You must either (choose one):\n- Place 1 doom on the current agenda. This effect can cause the agenda to advance.\n- Take 1 direct damage and 1 direct horror. Cosmic Evils gains surge.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "peril"
+  ],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "cosmic_evils"
+ },
+ {
+  "code": "12125",
+  "name": "Unspeakable Truths",
+  "type": "treachery",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Terror"
+  ],
+  "text": "<b>Revelation</b> - Put Unspeakable Truths into play in your threat area. Limit 1 per investigator.\n<b>Forced</b> - After you discover 1 or more clues: Take 1 horror.\n[action][action]: Discard Unspeakable Truths.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "eldritch_lore"
+ },
+ {
+  "code": "12126",
+  "name": "Forbidden Secrets",
+  "type": "treachery",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Pact"
+  ],
+  "text": "<b>Revelation</b> - If you have no clues, Forbidden Secrets gains surge. Otherwise, test [intellect] (3). For each point you fail by, you must either place 1 of your clues on your location, or take 1 horror.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "They say curiosity killed the cat. But will it kill you, too?",
+  "encounterSet": "eldritch_lore"
+ },
+ {
+  "code": "12127",
+  "name": "Extraplanar Visions",
+  "type": "treachery",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Power"
+  ],
+  "text": "<b>Revelation</b> - Test [willpower] or [intellect] (X), where X is the number of cards in your hand. If you fail, take 1 damage and discard 1 card at random from your hand.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "hallucinations"
+ },
+ {
+  "code": "12128",
+  "name": "Wild Compulsion",
+  "type": "treachery",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Madness",
+   "Bane"
+  ],
+  "text": "<b>Revelation</b> - Test [willpower] (3). For each point you fail by, you must either discard 1 card at random from your hand, or lose 1 resource.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "\"God help the dreamer whose mad visions shew Those did eyes set in crystal gulfs below!\"\n<i>-H.P. Lovecraft, \"Fungi from Yuggoth\"</i>",
+  "encounterSet": "hallucinations"
+ },
+ {
+  "code": "12129",
+  "name": "Fire!",
+  "type": "treachery",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 5,
+  "traits": [
+   "Hazard"
+  ],
+  "text": "<b>Revelation</b> - Attach Fire! to the nearest location without Fire! attached.\n<b>Forced</b> - When the investigation phase ends: Each non-[[Elite]] card with health at this location takes 1 direct damage.\n[action]: Test [agility] (3). If you succeed, discard Fire!",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "fire_ch2"
+ },
+ {
+  "code": "12130",
+  "name": "Noxious Smoke",
+  "type": "treachery",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Hazard"
+  ],
+  "text": "<b>Revelation</b> - Test [willpower] or [agility] (3). Take 1 damage for each point you fail by.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "Where there's smoke, there's almost definitely fire.",
+  "encounterSet": "fire_ch2"
+ },
+ {
+  "code": "12131",
+  "name": "Mutated!",
+  "type": "treachery",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Mutation"
+  ],
+  "text": "<b>Revelation</b> - Test [willpower] (2). This test gets +2 difficulty if there is an enemy at your location. If you fail, you must either take 2 damage, or each investigator at your location takes 1 horror.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "mad_science"
+ },
+ {
+  "code": "12132",
+  "name": "Mutated Experiment",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Creature",
+   "Mutated"
+  ],
+  "text": "<b>Forced</b> - When this enemy is defeated: Each investigator at its location takes 1 horror.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "mad_science",
+  "enemy": {
+   "fight": 3,
+   "health": 3,
+   "healthPerInvestigator": false,
+   "evade": 3,
+   "damage": 1,
+   "horror": 1
+  }
+ },
+ {
+  "code": "12133",
+  "name": "Smoke and Mirrors",
+  "type": "scenario",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [],
+  "text": "Easy / Standard\n[skull] -X. X is the total number of [[Elite]] enemies in the victory display and under the act.\n[cultist] -1. If this is a test targeting an [[Elite]] enemy, reveal another token.\n[tablet] -3. If you fail, place 1 of your clues on your location.\n[elder_thing] -1 for each clue you control.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backText": "Hard / Expert\n[skull] -X. X is 2 more than the total number of [[Elite]] enemies in the victory display and under the act.\n[cultist] -3. If this is a test targeting an [[Elite]] enemy, reveal another token.\n[tablet] -4. If you fail, place 1 of your clues on your location.\n[elder_thing] -2 for each clue you control.",
+  "encounterSet": "smoke_and_mirrors"
+ },
+ {
+  "code": "12134",
+  "name": "Arkham Alive",
+  "type": "agenda",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [],
+  "text": "[action]: <b>Resign.</b> You return to compare notes with Dr. Armitage on your friend's whereabouts.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "Growing Flames",
+  "backText": "One at a time, each investigator draws 1 copy of the set-aside Mark of Elokoss weakness. Each investigator is now the bearer of that weakness. <i>(Add that card to that investigator's deck, ignoring deckbuilding restrictions. It does not count toward that investigator's deck size.)</i>",
+  "flavor": "An unnatural haze fills the streets of Arkham. Some of the locals say the hills west of Arkham are burning. Despite the cool autumn weather, the city streets feel unnaturally warm as evening falls.",
+  "encounterSet": "smoke_and_mirrors",
+  "stage": 1,
+  "doom": 10
+ },
+ {
+  "code": "12135",
+  "name": "Emergent Evils",
+  "type": "agenda",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [],
+  "text": "[action]: <b>Resign.</b> You return to compare notes with Dr. Armitage on your friend's whereabouts.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "Outta Time",
+  "backText": "Each investigator immediately resigns.",
+  "flavor": "Steam rises off of the wet pavement, as though the ground beneath it were actually burning.",
+  "encounterSet": "smoke_and_mirrors",
+  "stage": 2,
+  "doom": 8
+ },
+ {
+  "code": "12136",
+  "name": "Augurs of Flame",
+  "type": "act",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [],
+  "text": "[action] Spend 2 [per_investigator] clues, as a group: Draw the facedown card beneath your location.\n<b>Objective</b> - If there are a total of 6 [[Elite]] enemies in the victory display and/or under the act, advance. <i>(Hint: Either defeat the suspects by force or resolve their codex entries to generate leads for your investigation!)</i>",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "Back to Velma's",
+  "backText": "<b>(→R1)</b> <i>(page 10)</i>",
+  "flavor": "You must find the whereabouts of the suspects on your friend's list.",
+  "encounterSet": "smoke_and_mirrors",
+  "stage": 1
+ },
+ {
+  "code": "12137",
+  "name": "Mark of Elokoss",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "core_2026",
+  "quantity": 4,
+  "traits": [
+   "Curse"
+  ],
+  "text": "<b>Revelation</b> - Put Mark of Elokoss into play in your threat area.\n<b>Forced</b> - When your turn ends: Take 1 damage. Assign that damage to an asset you control, if able.\n[action][action]: Discard Mark of Elokoss.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "smoke_and_mirrors",
+  "subtype": "weakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "12138",
+  "name": "Servant of Flame",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Humanoid",
+   "Cultist",
+   "Elite"
+  ],
+  "text": "Elusive. Hunter. Retaliate.\n<b>Forced</b> - When Servant of Flame is defeated: <b>([codex] Φ)</b>",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [
+   "hunter",
+   "retaliate"
+  ],
+  "slots": [],
+  "icons": {},
+  "subname": "On the Run",
+  "encounterSet": "smoke_and_mirrors",
+  "victory": 1,
+  "enemy": {
+   "fight": 4,
+   "health": 5,
+   "healthPerInvestigator": true,
+   "evade": 4,
+   "damage": 2,
+   "horror": 2
+  }
+ },
+ {
+  "code": "12139",
+  "name": "David Renfield",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Humanoid",
+   "Silver Twilight",
+   "Elite"
+  ],
+  "text": "Aloof. <i>(This enemy does not automatically engage investigators at its location.)</i>\n[reaction] After you successfully investigate David Renfield's location: ([codex] 1).",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [
+   "aloof"
+  ],
+  "slots": [],
+  "icons": {},
+  "subname": "Disillusioned Eschatologist",
+  "encounterSet": "people_of_arkham",
+  "victory": 1,
+  "enemy": {
+   "fight": 1,
+   "health": 5,
+   "healthPerInvestigator": false,
+   "evade": 4,
+   "damage": 0,
+   "horror": 1
+  }
+ },
+ {
+  "code": "12140",
+  "name": "Cornelia Akely",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Humanoid",
+   "Worker",
+   "Elite"
+  ],
+  "text": "Alert. <i>(After you fail a skill test while evading this enemy, it attacks you.)</i>\n[reaction] After you successfully evade Cornelia Akely: Ready her. ([codex] 2).",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [
+   "alert"
+  ],
+  "slots": [],
+  "icons": {},
+  "subname": "Exhausted Supervisor",
+  "encounterSet": "people_of_arkham",
+  "victory": 1,
+  "enemy": {
+   "fight": 3,
+   "health": 4,
+   "healthPerInvestigator": false,
+   "evade": 3,
+   "damage": 1,
+   "horror": 0
+  }
+ },
+ {
+  "code": "12141",
+  "name": "Naomi O'Bannion",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Humanoid",
+   "Syndicate",
+   "Elite"
+  ],
+  "text": "Retaliate. <i>(After you fail a skill test while fighting this enemy, it attacks you.)</i>\n[action] Spend 1 [per_investigator] resources: <b>Parley.</b> ([codex] 3).",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [
+   "retaliate"
+  ],
+  "slots": [],
+  "icons": {},
+  "subname": "Runs This Town",
+  "encounterSet": "people_of_arkham",
+  "victory": 1,
+  "enemy": {
+   "fight": 4,
+   "health": 5,
+   "healthPerInvestigator": false,
+   "evade": 2,
+   "damage": 1,
+   "horror": 1
+  }
+ },
+ {
+  "code": "12142",
+  "name": "Sgt. Earl Monroe",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Humanoid",
+   "Police",
+   "Elite"
+  ],
+  "text": "Elusive. <i>(After this enemy attacks or is attacked while it is ready, it moves to a connecting location with no investigators and exhausts.)</i>\n[action]: <b>Parley.</b> Test [combat] (4). Decrease the difficulty for this test by 1 for each damage on Sgt. Earl Monroe. If you succeed, ([codex] 4).",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "Dirty Cop",
+  "encounterSet": "people_of_arkham",
+  "victory": 1,
+  "enemy": {
+   "fight": 3,
+   "health": 4,
+   "healthPerInvestigator": false,
+   "evade": 3,
+   "damage": 1,
+   "horror": 1
+  }
+ },
+ {
+  "code": "12143",
+  "name": "Abigail Foreman",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Humanoid",
+   "Miskatonic",
+   "Elite"
+  ],
+  "text": "Aloof. <i>(This enemy does not automatically engage investigators at its location.)</i>\n[action]: <b>Parley.</b> Test [intellect] (X), where X is the number of clues on Abigail Foreman's location. If you succeed, place 1 clue <i>(from the token pool)</i> on Abigail Foreman's location. ([codex] 5).",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [
+   "aloof"
+  ],
+  "slots": [],
+  "icons": {},
+  "subname": "Wary Librarian",
+  "encounterSet": "people_of_arkham",
+  "victory": 1,
+  "enemy": {
+   "fight": 2,
+   "health": 4,
+   "healthPerInvestigator": false,
+   "evade": 4,
+   "damage": 0,
+   "horror": 1
+  }
+ },
+ {
+  "code": "12144",
+  "name": "Margaret Liu",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Humanoid",
+   "Socialite",
+   "Elite"
+  ],
+  "text": "Aloof. <i>(This enemy does not automatically engage investigators at its location.)</i>\n[reaction] After you succeed at a skill test by 2 or more at Margaret Liu's location: ([codex] 6).",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [
+   "aloof"
+  ],
+  "slots": [],
+  "icons": {},
+  "subname": "Beguiling Lounge Singer",
+  "encounterSet": "people_of_arkham",
+  "victory": 1,
+  "enemy": {
+   "fight": 1,
+   "health": 3,
+   "healthPerInvestigator": false,
+   "evade": 5,
+   "damage": 0,
+   "horror": 1
+  }
+ },
+ {
+  "code": "12145",
+  "name": "Downtown",
+  "type": "location",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Arkham"
+  ],
+  "text": "[reaction] After you discover 1 or more clues at this location: Gain 1 resource.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "First Bank of Arkham",
+  "flavor": "It's fairly easy to take out a loan from the First Bank of Arkham, but don't forget to read the fine print...",
+  "encounterSet": "arkham_ch2",
+  "victory": 1,
+  "shroud": 4,
+  "clues": 2,
+  "cluesPerInvestigator": true
+ },
+ {
+  "code": "12146",
+  "name": "Downtown",
+  "type": "location",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Arkham"
+  ],
+  "text": "[reaction] After you discover 1 or more clues at this location: Heal 1 horror from an investigator or [[Ally]] asset at this location.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "Arkham Sanatorium",
+  "flavor": "Of course, nobody mentions the sanatorium.",
+  "encounterSet": "arkham_ch2",
+  "victory": 1,
+  "shroud": 4,
+  "clues": 2,
+  "cluesPerInvestigator": true
+ },
+ {
+  "code": "12147",
+  "name": "Uptown",
+  "type": "location",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Arkham"
+  ],
+  "text": "[action]: Heal up to 2 damage from among investigators and/or [[Ally]] assets at this location. (Limit once per game.)",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "St. Mary's Hospital",
+  "flavor": "Arkham's only hospital is flush with patients and put-upon nurses.",
+  "encounterSet": "arkham_ch2",
+  "shroud": 2,
+  "clues": 2,
+  "cluesPerInvestigator": true
+ },
+ {
+  "code": "12148",
+  "name": "Uptown",
+  "type": "location",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Arkham"
+  ],
+  "text": "[action]: Search the top 9 cards of your deck for a [[Spell]] or [[Ritual]] asset and add it to your hand. Shuffle your deck. If no card was added in this way, draw 1 card.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "Ye Olde Magick Shoppe",
+  "flavor": "\"Come to Ye Olde Magick Shoppe to discover the wonders of REAL magic. Stage magicians will not be served.\"\n-Local Advertisement",
+  "encounterSet": "arkham_ch2",
+  "shroud": 3,
+  "clues": 2,
+  "cluesPerInvestigator": true
+ },
+ {
+  "code": "12149",
+  "name": "Northside",
+  "type": "location",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Arkham"
+  ],
+  "text": "[action] Spend 5 resources: Discover 1 clue from any revealed [[Arkham]] location. (Limit once per round.)",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "arkham_ch2",
+  "shroud": 3,
+  "clues": 2,
+  "cluesPerInvestigator": true
+ },
+ {
+  "code": "12150",
+  "name": "Easttown",
+  "type": "location",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Arkham"
+  ],
+  "text": "[reaction] After you discover the last clue from Easttown: Search your deck for an [[Ally]] asset and play it <i>(paying its cost)</i>. Shuffle your deck. (Limit once per game.)",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "arkham_ch2",
+  "shroud": 2,
+  "clues": 1,
+  "cluesPerInvestigator": true
+ },
+ {
+  "code": "12151",
+  "name": "Merchant District",
+  "type": "location",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Arkham",
+   "Central"
+  ],
+  "text": "[fast] During your turn, if there are exactly 1 or 2 investigators in the game: Move to a connecting location. (Limit once per round.)",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "arkham_ch2",
+  "shroud": 3,
+  "clues": 1,
+  "cluesPerInvestigator": true
+ },
+ {
+  "code": "12152",
+  "name": "Waterfront District",
+  "type": "location",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Arkham"
+  ],
+  "text": "As an additional cost to investigate Waterfront District, you must spend 1 action.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "Anyone who doesn't want to walk in waist-high water needs to hitch a ride from one of the locals.",
+  "encounterSet": "arkham_ch2",
+  "victory": 1,
+  "shroud": 1,
+  "clues": 1,
+  "cluesPerInvestigator": true
+ },
+ {
+  "code": "12153",
+  "name": "Southside",
+  "type": "location",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Arkham"
+  ],
+  "text": "[action][action]: Investigators at this location draw a combined total of 3 cards, divided as they choose. (Group limit once per round.)",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "arkham_ch2",
+  "shroud": 2,
+  "clues": 2,
+  "cluesPerInvestigator": true
+ },
+ {
+  "code": "12154",
+  "name": "French Hill",
+  "type": "location",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Arkham"
+  ],
+  "text": "[action] Choose and discard 1 card from your hand: Place 1 charge or secret on an asset you control. (Limit once per round.)",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "arkham_ch2",
+  "victory": 1,
+  "shroud": 4,
+  "clues": 2,
+  "cluesPerInvestigator": true
+ },
+ {
+  "code": "12155",
+  "name": "Miskatonic University",
+  "type": "location",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Arkham"
+  ],
+  "text": "<b>Forced</b> - When the investigation phase ends: Deal 1 direct damage to each player card with health at Miskatonic University.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "In Flames",
+  "encounterSet": "arkham_ch2",
+  "victory": 1,
+  "shroud": 4,
+  "clues": 1,
+  "cluesPerInvestigator": true
+ },
+ {
+  "code": "12156",
+  "name": "Miskatonic University",
+  "type": "location",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Arkham"
+  ],
+  "text": "[action]: Play a [[Tome]] or [[Spell]] asset from your discard pile, reducing its cost by 2. (Limit once per game.)",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "Quiet Campus",
+  "encounterSet": "arkham_ch2",
+  "victory": 1,
+  "shroud": 2,
+  "clues": 1,
+  "cluesPerInvestigator": true
+ },
+ {
+  "code": "12157",
+  "name": "Arcane Lock",
+  "type": "treachery",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Hex",
+   "Obstacle"
+  ],
+  "text": "<b>Revelation</b> - Attach Arcane Lock to your location. Limit 1 per location.\nAs an additional cost to enter or leave attached location, you must spend 1 action.\n[action]: Test [willpower] or [intellect] (4). If you succeed, discard Arcane Lock.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "arcane_lock"
+ },
+ {
+  "code": "12158",
+  "name": "Downpour",
+  "type": "treachery",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Hazard"
+  ],
+  "text": "<b>Revelation</b> - Test [agility] (3). For each point you fail by, you must either lose 1 action or place 1 of your clues on your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "\"... there descended such a blinding sheet of torrential rain that shelter became imperative.\"\n<i>-H.P. Lovecraft, \"The Lurking Fear\"</i>",
+  "encounterSet": "bad_weather"
+ },
+ {
+  "code": "12159",
+  "name": "Flash Flood",
+  "type": "treachery",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Hazard"
+  ],
+  "text": "<b>Revelation</b> - Attach Flash Flood to your location.\nAttached location gets +4 shroud.\n<b>Forced</b> - When the round ends: Discard Flash Flood.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "bad_weather"
+ },
+ {
+  "code": "12160",
+  "name": "Raising Suspicions",
+  "type": "treachery",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Blunder"
+  ],
+  "text": "<b>Revelation</b> - Place 1 doom on the nearest enemy with no doom on it. If no doom was placed by this effect, Raising Suspicions gains surge.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "At least you tried to keep a low profile.",
+  "encounterSet": "dead_ends"
+ },
+ {
+  "code": "12161",
+  "name": "Red Herring",
+  "type": "treachery",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Scheme"
+  ],
+  "text": "<b>Revelation</b> - Test [intellect] (2). This test gets +2 difficulty if you control 2 or more clues. If you fail, take 1 horror and place 1 of your clues on your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "dead_ends"
+ },
+ {
+  "code": "12162",
+  "name": "Bat Horror",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Monster"
+  ],
+  "text": "Elusive. Hunter.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "hunter"
+  ],
+  "slots": [],
+  "icons": {},
+  "flavor": "\"...there flopped rhythmically a horde of tame, trained, hybrid winged things that no sound eye could ever wholly grasp, or sound brain ever wholly remember.\"\n<i>-H.P. Lovecraft, \"The Festival\"</i>",
+  "encounterSet": "flying_terrors",
+  "enemy": {
+   "fight": 3,
+   "health": 4,
+   "healthPerInvestigator": false,
+   "evade": 4,
+   "damage": 1,
+   "horror": 1
+  }
+ },
+ {
+  "code": "12163",
+  "name": "Aerial Pursuit",
+  "type": "treachery",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Scheme"
+  ],
+  "text": "Surge.\n<b>Revelation</b> - The nearest non-[[Elite]] enemy moves once toward your location. If it engages an investigator, it makes an immediate attack.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "surge"
+  ],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "flying_terrors"
+ },
+ {
+  "code": "12164",
+  "name": "Rogue Gangster",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Humanoid",
+   "Syndicate"
+  ],
+  "text": "Hunter. Prey (most resources). Retaliate.\n<b>Forced</b> - After Rogue Gangster engages you: Lose 1 resource. If you cannot, this enemy attacks you.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "hunter",
+   "retaliate"
+  ],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "gangs_of_arkham",
+  "enemy": {
+   "fight": 3,
+   "health": 3,
+   "healthPerInvestigator": false,
+   "evade": 3,
+   "damage": 1,
+   "horror": 0
+  }
+ },
+ {
+  "code": "12165",
+  "name": "Crossfire",
+  "type": "treachery",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Hazard"
+  ],
+  "text": "<b>Revelation</b> - Test [agility] (3). If you fail, each investigator at your location takes 1 damage.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "\"Get down!\"",
+  "encounterSet": "gangs_of_arkham"
+ },
+ {
+  "code": "12166",
+  "name": "Whippoorwill",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 3,
+  "traits": [
+   "Creature"
+  ],
+  "text": "Aloof. Hunter.\nEach investigator at Whippoorwill's location gets -1 [willpower], -1 [intellect], -1 [combat], and -1 [agility].",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "aloof",
+   "hunter"
+  ],
+  "slots": [],
+  "icons": {},
+  "flavor": "\"It is vowed that the birds are psychopomps lying in wait for the souls of the dying...\"\n<i>-H.P. Lovecraft, \"The Dunwich Horror\"</i>",
+  "encounterSet": "whippoorwills_ch2",
+  "enemy": {
+   "fight": 2,
+   "health": 1,
+   "healthPerInvestigator": false,
+   "evade": 4,
+   "damage": 0,
+   "horror": 1
+  }
+ },
+ {
+  "code": "12167",
+  "name": "Eager for Death",
+  "type": "treachery",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Omen"
+  ],
+  "text": "<b>Revelation</b> - Test [willpower] (2). Increase this skill test's difficulty by 1 for each damage on you. If you fail, take 2 horror.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "\"If they can catch the fleeing soul when it leaves the body, they instantly flutter away chittering in daemonic laughter.\"\n<i>-H.P. Lovecraft, \"The Dunwich Horror\"</i>",
+  "encounterSet": "whippoorwills_ch2"
+ },
+ {
+  "code": "12168",
+  "name": "Queen of Ash",
+  "type": "scenario",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [],
+  "text": "Easy / Standard\n[skull] -X. X is the number of Fire! treacheries in play.\n[cultist] -2. If this is an attack or evasion targeting a [[Cultist]] enemy, reveal another token.\n[tablet] -2 (-4 instead if you are at a [[Ritual Site]] location).\n[elder_thing] -3. If you fail, draw the topmost copy of Fire! in the encounter discard pile.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backText": "Hard / Expert\n[skull] -X. X is twice the number of Fire! treacheries in play.\n[cultist] -3. If this is an attack or evasion targeting a [[Cultist]] enemy, reveal another token.\n[tablet] -4. If you are at a [[Ritual Site]] location, you automatically fail instead.\n[elder_thing] -5. If you fail, draw the topmost copy of Fire! in the encounter discard pile.",
+  "encounterSet": "queen_of_ash"
+ },
+ {
+  "code": "12169",
+  "name": "A Gathering",
+  "type": "agenda",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [],
+  "text": "Each enemy at a location with a copy of Fire! attached cannot be damaged.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "Flame in the Dark",
+  "backText": "If the Servant of Flame enemy is set aside, spawn it at Underground Cistern.\nEach investigator must test [willpower] (4). Each investigator who fails takes 1 direct horror.",
+  "flavor": "Chanting echoes through the fetid tunnels. The cult's rebirth is at hand!",
+  "encounterSet": "queen_of_ash",
+  "stage": 1,
+  "doom": 6
+ },
+ {
+  "code": "12170",
+  "name": "A Ritual",
+  "type": "agenda",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [],
+  "text": "Each enemy at a location with a copy of Fire! attached cannot be damaged.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "The Mother Arrives",
+  "backText": "<b>If it is act 1:</b>\n<blockquote><i>Hungry flames spread through the tunnels, and the chants below intensify. You were too late to stop the summoning.</i></blockquote>\nReveal Underground Cistern and spawn Elokoss at it, <i>(Mother of Flame)</i> side faceup. Replace the current act and agenda with special agenda 3a: Brethren of Ash. It is both the current act and the current agenda.\n<hr>\n<b>Otherwise:</b>\n<blockquote><i>The ancient queen of ash awakens with a horrific wail.</i></blockquote>\nFlip Elokoss to her <i>(Mother of Flame)</i> side, keeping all damage and attachments on her.\nReplace the current act and agenda with special agenda 3a: Brethren of Ash. It is both the current act and the current agenda.",
+  "flavor": "The air is choked with noxious smoke as the sounds of chanting grow louder.",
+  "encounterSet": "queen_of_ash",
+  "stage": 2,
+  "doom": 10
+ },
+ {
+  "code": "12171",
+  "name": "Brethren of Ash",
+  "type": "agenda",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [],
+  "text": "<b>Forced</b> - When doom would be placed on a card: Each investigator takes 1 direct damage, instead.\n<b>Forced</b> - If each remaining investigator is defeated: Advance.\n<b>Objective</b> - If Elokoss is defeated, <b>(→R1)</b> <i>(page 13)</i>.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "Out Like a Light",
+  "backText": "Each investigator is <b>killed</b>.",
+  "encounterSet": "queen_of_ash",
+  "stage": 3
+ },
+ {
+  "code": "12172",
+  "name": "Search the Sewers",
+  "type": "act",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [],
+  "text": "<b>Objective</b> - When an investigator enters Underground Cistern, advance.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "The Ritual Site",
+  "backText": "Spawn the set-aside Elokoss enemy at Underground Cistern, <i>(Faint Embers)</i> side faceup.\nThe investigator at Underground Cistern draws one of the set-aside Fire! treacheries.\nShuffle each other copy of Fire! into the encounter deck, along with the set-aside Queen's Knight and Herald of Flame enemies.\nPut the set-aside Sluice Control location into play.",
+  "flavor": "The Brethren of Ash could be anywhere. You must search the sewers for the cult's ritual site if you hope to save your friend.",
+  "encounterSet": "queen_of_ash",
+  "stage": 1
+ },
+ {
+  "code": "12173",
+  "name": "Stop the Rite",
+  "type": "act",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [],
+  "text": "[fast] Spend 1 [per_investigator] clues, as a group: Discard a copy of Fire! at your location.\n<b>Forced</b> - When the round ends: Each [[Cultist]] enemy moves once toward Underground Cistern.\n<b>Objective</b> - If Elokoss is defeated, advance.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "Crisis Averted",
+  "backText": "<b>(→R1)</b> <i>(page 13)</i>.",
+  "flavor": "You must stop the rite at any cost. You could scour the cistern for a means to stop the cult, or you could try to chop their profane idol to tinder!",
+  "encounterSet": "queen_of_ash",
+  "stage": 2
+ },
+ {
+  "code": "12174",
+  "name": "Underground Cistern",
+  "type": "location",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Ritual Site"
+  ],
+  "text": "<b>Forced</b> - If there are no clues on Underground Cistern: Place clues <i>(from the token pool)</i> on it up to its clue value.\n<b>Forced</b> - When the investigation phase ends: Discard each ready non-[[Elite]] [[Cultist]] enemy at this location. Place 1 doom on the agenda for each enemy discarded in this way.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "Underground Cistern",
+  "backText": "As an additional cost to enter Underground Cistern, investigators must spend 3 [per_investigator] clues, as a group.",
+  "encounterSet": "queen_of_ash",
+  "shroud": 4,
+  "clues": 2,
+  "cluesPerInvestigator": true
+ },
+ {
+  "code": "12175",
+  "name": "Sluice Control",
+  "type": "location",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Sewer"
+  ],
+  "text": "[action]: <i>\"Stop them at all costs!\"</i> You try to open the sluice valve. Test [agility] or [combat] (5). If you succeed, each enemy is defeated and each investigator who has not resigned is <b>killed (→R3)</b> <i>(page 14)</i>",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "Sluice Control",
+  "backText": "As an additional cost to enter Sluice Control, investigators must spend 1 [per_investigator] clues, as a group.",
+  "flavor": "There's no better time to be a hero.",
+  "encounterSet": "queen_of_ash",
+  "shroud": 4,
+  "clues": 2,
+  "cluesPerInvestigator": true
+ },
+ {
+  "code": "12176",
+  "name": "Ashen Rebirth",
+  "type": "treachery",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Power"
+  ],
+  "text": "<b>Revelation</b> - Test [willpower] (4). If you fail, you must either take 2 direct damage or 2 direct horror (whichever you have more of).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "\"And so shall ye be remade: a burnt offering to her glory and a symbol of the ecstasy that awaits us all.\"\n- Edict of Ash, Vol III",
+  "encounterSet": "queen_of_ash"
+ },
+ {
+  "code": "12177",
+  "name": "Queen's Knight",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Humanoid",
+   "Cultist"
+  ],
+  "text": "Hunter.\n<b>Forced</b> - When Queen's Knight takes 1 or more damage: Deal 1 damage to Elokoss.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [
+   "hunter"
+  ],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "queen_of_ash",
+  "victory": 1,
+  "enemy": {
+   "fight": 2,
+   "health": 5,
+   "healthPerInvestigator": false,
+   "evade": 2,
+   "damage": 2,
+   "horror": 0
+  }
+ },
+ {
+  "code": "12178",
+  "name": "Herald of Flame",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Monster"
+  ],
+  "text": "Hunter.\n<b>Forced</b> - After this enemy attacks: Heal 1 damage from each enemy at its location.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [
+   "hunter"
+  ],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "queen_of_ash",
+  "victory": 1,
+  "enemy": {
+   "fight": 4,
+   "health": 5,
+   "healthPerInvestigator": false,
+   "evade": 2,
+   "damage": 0,
+   "horror": 2
+  }
+ },
+ {
+  "code": "12179",
+  "name": "Elokoss",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Ancient One",
+   "Flora",
+   "Elite"
+  ],
+  "text": "Massive. Retaliate.\nElokoss gets +5 [per_investigator] health, cannot move, and cannot make attacks of opportunity.\n[fast] Spend 1 [per_investigator] clues: Place 1 clue on Elokoss. If Elokoss has 5 clues on her, <b>(→R2)</b> <i>(page 14)</i>.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [
+   "massive",
+   "retaliate"
+  ],
+  "slots": [],
+  "icons": {},
+  "subname": "Faint Embers",
+  "encounterSet": "queen_of_ash",
+  "victory": 5,
+  "enemy": {
+   "fight": 5,
+   "health": 5,
+   "healthPerInvestigator": false,
+   "evade": 5,
+   "damage": 3,
+   "horror": 3
+  }
+ },
+ {
+  "code": "12179b",
+  "name": "Elokoss",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Ancient One",
+   "Flora",
+   "Elite"
+  ],
+  "text": "Hunter. Massive. Retaliate.\nElokoss gets +5 [per_investigator] health.\n<b>Forced</b> - After you evade Elokoss: Ready her. She cannot attack you for the remainder of the round.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [
+   "hunter",
+   "massive",
+   "retaliate"
+  ],
+  "slots": [],
+  "icons": {},
+  "subname": "Mother of Flame",
+  "encounterSet": "queen_of_ash",
+  "victory": 5,
+  "enemy": {
+   "fight": 5,
+   "health": 5,
+   "healthPerInvestigator": false,
+   "evade": 5,
+   "damage": 3,
+   "horror": 3
+  }
+ },
+ {
+  "code": "12180",
+  "name": "Servant of Flame",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Humanoid",
+   "Cultist",
+   "Elite"
+  ],
+  "text": "Hunter. Retaliate.\n<b>Forced</b> - When Servant of Flame is defeated: <b>([codex] Φ)</b>",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [
+   "hunter",
+   "retaliate"
+  ],
+  "slots": [],
+  "icons": {},
+  "subname": "A Willing Sacrifice",
+  "encounterSet": "queen_of_ash",
+  "victory": 2,
+  "enemy": {
+   "fight": 4,
+   "health": 5,
+   "healthPerInvestigator": true,
+   "evade": 4,
+   "damage": 2,
+   "horror": 2
+  }
+ },
+ {
+  "code": "12181",
+  "name": "Collector",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "Permanent. Reward. Limit 1 per deck. Purchase only at deck creation.\nYou get +5 deck size.\nYour investigator's Deckbuilding Options gains: \"one other [[Relic]] or [[Charm]] asset of any class ([guardian], [seeker], [rogue], [mystic], [survivor]) level 0-3.\"",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "queen_of_ash",
+  "deckLimit": 1,
+  "xp": 0,
+  "cost": null
+ },
+ {
+  "code": "12182",
+  "name": "Sewer Culvert",
+  "type": "location",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Sewer",
+   "Central"
+  ],
+  "text": "Sewer Culvert is connected to each Sewer Tunnels location, and vice versa.\n[action]: <b>Resign.</b> <i>\"I can't take it any more!\"</i> You flee the sewers.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backText": "Sewer Culvert is connected to each Sewer Tunnels location, and vice versa.",
+  "encounterSet": "arkham_sewers",
+  "shroud": 1,
+  "clues": 0,
+  "cluesPerInvestigator": false
+ },
+ {
+  "code": "12183",
+  "name": "Sewer Tunnels",
+  "type": "location",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Sewer"
+  ],
+  "text": "<b>Forced</b> - After you enter this location: Discard cards from the top of the encounter deck until an enemy is discarded and draw it.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "Infested Pipes",
+  "flavor": "Whatever is here is worse than rats.",
+  "encounterSet": "arkham_sewers",
+  "shroud": 1,
+  "clues": 1,
+  "cluesPerInvestigator": true
+ },
+ {
+  "code": "12184",
+  "name": "Sewer Tunnels",
+  "type": "location",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Sewer"
+  ],
+  "text": "<b>Forced</b> - After you enter this location: Lose 1 action.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "Overgrown Tunnels",
+  "flavor": "Gnarled roots have reclaimed the network of tunnels, making them difficult to navigate.",
+  "encounterSet": "arkham_sewers",
+  "shroud": 2,
+  "clues": 1,
+  "cluesPerInvestigator": true
+ },
+ {
+  "code": "12185",
+  "name": "Sewer Tunnels",
+  "type": "location",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Sewer"
+  ],
+  "text": "<b>Forced</b> - When you end your turn at this location: Take 1 horror.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "Flooded Crypt",
+  "flavor": "Whatever tore through the wall sure wasn't trying to get <i>into</i> the crypt.",
+  "encounterSet": "arkham_sewers",
+  "victory": 1,
+  "shroud": 4,
+  "clues": 1,
+  "cluesPerInvestigator": true
+ },
+ {
+  "code": "12186",
+  "name": "Sewer Tunnels",
+  "type": "location",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Sewer"
+  ],
+  "text": "[reaction] When you end your turn at this location: Gain 1 resource.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "Smuggler's Cache",
+  "flavor": "Judging by the quality of the hooch and contraband, this stash was put here by the Sheldon gang. You can help yourself, so long as they don't find out.",
+  "encounterSet": "arkham_sewers",
+  "shroud": 3,
+  "clues": 0,
+  "cluesPerInvestigator": false
+ },
+ {
+  "code": "12187",
+  "name": "Sewer Tunnels",
+  "type": "location",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Sewer"
+  ],
+  "text": "<b>Forced</b> - When you end your turn at this location: Choose and discard 1 card from your hand.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "Toxic Waste Pit",
+  "flavor": "What is that floating just beneath the surface?",
+  "encounterSet": "arkham_sewers",
+  "victory": 1,
+  "shroud": 3,
+  "clues": 1,
+  "cluesPerInvestigator": true
+ },
+ {
+  "code": "12188",
+  "name": "Zealot",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 3,
+  "traits": [
+   "Humanoid",
+   "Cultist"
+  ],
+  "text": "Aloof.\n<b>Forced</b> - After this enemy enters play: Place 1 doom on it.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "aloof"
+  ],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "cultists_ch2",
+  "enemy": {
+   "fight": 2,
+   "health": 1,
+   "healthPerInvestigator": false,
+   "evade": 2,
+   "damage": 1,
+   "horror": 0
+  }
+ },
+ {
+  "code": "12189",
+  "name": "Dark Magician",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 1,
+  "traits": [
+   "Humanoid",
+   "Cultist"
+  ],
+  "text": "Hunter. Retaliate.\n<b>Forced</b> - When the round ends: Place 1 doom on the enemy with no doom on it nearest to Dark Magician.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "hunter",
+   "retaliate"
+  ],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "cultists_ch2",
+  "victory": 1,
+  "enemy": {
+   "fight": 4,
+   "health": 4,
+   "healthPerInvestigator": false,
+   "evade": 2,
+   "damage": 1,
+   "horror": 1
+  }
+ },
+ {
+  "code": "12190",
+  "name": "Blasphemous Invocation",
+  "type": "treachery",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Hex"
+  ],
+  "text": "<b>Revelation</b> - Test [willpower] (3). For each point you fail by, place 1 doom on a [[Cultist]] enemy with no doom on it. If you fail and no doom was placed, search the encounter deck and discard pile for a [[Cultist]] enemy and draw it. <i>(Shuffle the encounter deck if it was searched.)</i>",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "cultists_ch2"
+ },
+ {
+  "code": "12191",
+  "name": "Unnatural Decay",
+  "type": "treachery",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Curse"
+  ],
+  "text": "<b>Revelation</b> - Test [willpower] (4). If you fail, you must either place 1 doom on an asset you control, or take 2 damage.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "You've never seen something rust so quickly.",
+  "encounterSet": "reeking_decay"
+ },
+ {
+  "code": "12192",
+  "name": "Putrid Vapors",
+  "type": "treachery",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Hazard"
+  ],
+  "text": "<b>Revelation</b> - Test [agility] (3). If you fail, take 1 horror and discard a non-story asset you control.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "\"The removal of the slab revealed a black aperture, from which rushed an effluence of miasmal gases so nauseous that we started back in horror.\"\n<i>-H.P. Lovecraft, \"The Statement of Randolph Carter\"</i>",
+  "encounterSet": "reeking_decay"
+ },
+ {
+  "code": "12193",
+  "name": "Langour",
+  "type": "treachery",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Hex",
+   "Bane"
+  ],
+  "text": "<b>Revelation</b> - Put Languor into play in your threat area. Limit 1 per investigator.\n<b>Forced</b> - After your turn begins: Discard the top card of your deck. If it is a weakness, draw it. Otherwise, you cannot play or commit cards of that type <i>(asset, event, or skill)</i> this round.\n[action][action]: Discard Languor.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "torment"
+ },
+ {
+  "code": "12194",
+  "name": "Dissonance",
+  "type": "treachery",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Curse",
+   "Bane"
+  ],
+  "text": "<b>Revelation</b> - Test [willpower] (3). If you fail, lose 1 action and choose a cardtype <i>(asset, event, or skill)</i>. Discard all non-weakness cards of the chosen type from your hand.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "torment"
+ },
+ {
+  "code": "12195",
+  "name": "Torment",
+  "type": "treachery",
+  "faction": "mythos",
+  "pack": "core_2026",
+  "quantity": 2,
+  "traits": [
+   "Power",
+   "Bane"
+  ],
+  "text": "Peril.\n<b>Revelation</b> - Test [willpower] (3). If you fail, name a cardtype <i>(asset, event, or skill)</i>. Each investigator discards 1 card of the named type from their hand.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "peril"
+  ],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "torment"
+ }
+]

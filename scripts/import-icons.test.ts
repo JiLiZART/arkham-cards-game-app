@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildSymbols, checkIcons, codeIconNames, spriteIds, spriteSvg, stripSvg, symbolSet } from "./import-icons";
+import { buildSymbols, checkIcons, codeIconNames, contentIconNames, setsWithoutIcon, spriteIds, spriteSvg, stripSvg, symbolSet } from "./import-icons";
 
 describe("stripSvg", () => {
   it("keeps the viewBox and every path, drops size, fill, ids and editor metadata", () => {
@@ -68,5 +68,23 @@ describe("checkIcons", () => {
   it("fails when the manifest and the sprite disagree, or either is missing", () => {
     expect(checkIcons(db([]), manifest(["the_gathering", "skull"]), ["the_gathering", "curse"]).map((e) => e.path)).toEqual(["curse", "skull"]);
     expect(checkIcons(db([]), null, null)).toHaveLength(1);
+  });
+});
+
+describe("which encounter sets need an icon", () => {
+  /** a core card in set "rats", a Dunwich card in set "dealings", a scenario that uses "torch" */
+  const db = {
+    cards: { "01159": { pack: "core", encounterSet: "rats" }, "02200": { pack: "dwl", encounterSet: "dealings" } },
+    encounterSets: { rats: ["01159"], dealings: ["02200"], torch: [] },
+    scenarios: { "the-gathering": { encounterSets: ["torch"], sideDecks: {} } },
+  } as never;
+
+  it("the sets scenarios use, the scenarios themselves and the core pack's sets; not every set of every pack", () => {
+    expect(contentIconNames(db).sort()).toEqual(["rats", "the_gathering", "torch"]);
+  });
+
+  it("the other sets are listed by name for the report, once the sprite is known", () => {
+    expect(setsWithoutIcon(db, ["torch", "rats"])).toEqual(["dealings"]);
+    expect(setsWithoutIcon(db, ["dealings", "torch", "rats"])).toEqual([]);
   });
 });

@@ -3,6 +3,8 @@
  * Hand-written behavior lives in content/packs/<pack>/cards.json and is never touched.
  *
  *   npm run import:cards -- --pack core [--source arkhamdb|arkham.build] [--file cached.json]
+ *   npm run import:cards -- --source arkhamdb-json-data (--all | --cycle dwl) [--root inspired/arkhamdb-json-data]
+ *     reads the local ArkhamDB snapshot: one pack per folder under pack/, the core folder's reprints (rcore, core_2026) as packs of their own
  *
  * With --locale <code>, it imports that language's card text from ArkhamDB's localized site instead and writes
  * content/i18n/<code>/cards.generated.json (hand-written content/i18n/<code>/cards.json wins over it field by field).
@@ -10,7 +12,7 @@
  *
  *   npm run import:cards -- --pack core --locale ru
  */
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { CardDef, I18nCards, type CardDefInput } from "../src/content/schema";
 
@@ -143,12 +145,84 @@ export async function fetchCards(source: string, file?: string, locale?: string)
   return res.json();
 }
 
+// ---------- the local ArkhamDB snapshot (inspired/arkhamdb-json-data) ----------
+export const SNAPSHOT = "inspired/arkhamdb-json-data";
+
+/**
+ * The pack a snapshot record goes to: its folder under `pack/`, except in the core folder, whose reprints (the revised
+ * core and the 2026 core) are packs of their own, so the core pack stays the original set the scenarios are written for.
+ */
+export function snapshotTarget(folder: string, packCode: string): string {
+  return folder === "core" ? packCode : folder;
+}
+
+/**
+ * Every pack of the snapshot (one folder = one pack; `cycle` limits it to one), records sorted by code. Left out: the
+ * bare reprint stubs (a code pointing at the original, no name or type) and ArkhamDB's "Random Basic Weakness" placeholder.
+ */
+export function readSnapshot(root: string, cycle?: string): Map<string, Raw[]> {
+  const dir = join(root, "pack");
+  const folders = readdirSync(dir).sort();
+  if (cycle && !folders.includes(cycle)) throw new Error(`no cycle ${cycle} in ${dir}; there are: ${folders.join(", ")}`);
+  const packs = new Map<string, Raw[]>();
+  for (const folder of cycle ? [cycle] : folders) {
+    for (const file of readdirSync(join(dir, folder)).filter((f) => f.endsWith(".json")).sort()) {
+      for (const c of JSON.parse(readFileSync(join(dir, folder, file), "utf8")) as Raw[]) {
+        if (!c.type_code || c.code === "01000") continue;
+        const target = snapshotTarget(folder, c.pack_code);
+        if (!packs.has(target)) packs.set(target, []);
+        packs.get(target)!.push(c);
+      }
+    }
+  }
+  for (const list of packs.values()) list.sort((a, b) => a.code.localeCompare(b.code));
+  return packs;
+}
+
+/** map a pack's records; the ones that fail the schema are reported with their codes instead of stopping the import */
+export function mapSnapshotPack(raw: Raw[]): { cards: CardDefInput[]; problems: { code: string; message: string }[] } {
+  const cards: CardDefInput[] = [];
+  const problems: { code: string; message: string }[] = [];
+  for (const r of raw) {
+    const card = mapCard(r);
+    const parsed = CardDef.safeParse(card);
+    if (parsed.success) cards.push(card);
+    else problems.push({ code: r.code, message: parsed.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; ") });
+  }
+  return { cards, problems };
+}
+
+function writePack(pack: string, cards: CardDefInput[]) {
+  const dir = join("content", "packs", pack);
+  mkdirSync(dir, { recursive: true });
+  writeFileSync(join(dir, "cards.generated.json"), JSON.stringify(cards, null, 1) + "\n");
+  const overrides = join(dir, "cards.json");
+  if (!existsSync(overrides)) writeFileSync(overrides, "{}\n");
+  return dir;
+}
+
+function importSnapshot(root: string, cycle: string | undefined) {
+  const packs = readSnapshot(root, cycle);
+  let failed = 0;
+  for (const [pack, raw] of packs) {
+    const { cards, problems } = mapSnapshotPack(raw);
+    writePack(pack, cards);
+    console.log(`${pack}: ${cards.length} cards${problems.length ? `, ${problems.length} failed the schema` : ""}`);
+    for (const p of problems) console.error(`  ${pack} ${p.code}: ${p.message}`);
+    failed += problems.length;
+  }
+  console.log(`${packs.size} packs, ${[...packs.values()].reduce((n, l) => n + l.length, 0)} records from ${root} (overrides untouched)`);
+  if (failed) process.exitCode = 1;
+}
+
 async function main() {
   const args = process.argv.slice(2);
   const arg = (n: string, d?: string) => {
     const i = args.indexOf(`--${n}`);
     return i >= 0 ? args[i + 1] : d;
   };
+  // the local snapshot: --source arkhamdb-json-data with --all or --cycle <folder>
+  if (arg("source") === "arkhamdb-json-data") return importSnapshot(arg("root", SNAPSHOT)!, args.includes("--all") ? undefined : arg("cycle"));
   const pack = arg("pack", "core")!;
   const locale = arg("locale");
   const raw = await fetchCards(arg("source", "arkhamdb")!, arg("file"), locale);

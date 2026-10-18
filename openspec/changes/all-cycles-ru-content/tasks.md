@@ -1,7 +1,7 @@
 ## 1. Card data for every cycle
 
-- [ ] 1.1 `scripts/import-cards.ts`: add `--source arkhamdb-json-data` reading `inspired/arkhamdb-json-data/pack/<cycle>/*.json` (with `packs.json` and `encounters.json` for pack and set names), `--cycle <code>` and `--all`; one pack folder per cycle; `cards.json` untouched. Tests in `import-cards.test.ts`: a snapshot record maps like an API record; `--all` enumerates every cycle in `cycles.json`; a record failing the schema is reported with its code.
-- [ ] 1.2 Run `--all`; commit `content/packs/<cycle>/cards.generated.json` for all 17 cycles; `check:content` passes with every pack validated and the per-cycle report (task 3.1 adds the report; here it must at least pass).
+- [x] 1.1 `scripts/import-cards.ts`: add `--source arkhamdb-json-data` reading `inspired/arkhamdb-json-data/pack/<cycle>/*.json` (with `packs.json` and `encounters.json` for pack and set names), `--cycle <folder>` and `--all`; one pack per snapshot folder (the core folder's reprints, `core_2026`, as a pack of their own; bare duplicate stubs and the 01000 placeholder left out); `cards.json` untouched. Tests in `import-cards.test.ts`: a snapshot record maps like an API record; `--all` enumerates every cycle in `cycles.json`; a record failing the schema is reported with its code.
+- [x] 1.2 Run `--all`; commit `content/packs/<cycle>/cards.generated.json` for all 17 cycles; `check:content` passes with every pack validated and the per-cycle report (task 3.1 adds the report; here it must at least pass).
 
 ## 2. Loading
 

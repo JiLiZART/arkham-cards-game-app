@@ -3,7 +3,7 @@ import { db } from "../engine/testkit";
 import type { CardDef } from "../content/schema";
 import { chipsFor, GLANCE_OVERRIDES, type Chip } from "./glance";
 
-const by = (name: string) => Object.values(db.cards).find((c) => c.name === name && c.faction !== "mythos")!;
+const by = (name: string) => Object.values(db.cards).find((c) => c.pack === "core" && c.name === name && c.faction !== "mythos")!;
 const chips = (name: string) => chipsFor(by(name));
 const c = (icon: string, n?: number, plus?: true): Chip => ({ icon, ...(n !== undefined ? { n } : {}), ...(plus ? { plus } : {}) });
 

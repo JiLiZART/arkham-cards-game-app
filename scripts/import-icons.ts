@@ -62,7 +62,15 @@ export function codeIconNames(): string[] {
 /** every encounter set and scenario icon content needs */
 export function contentIconNames(db: ContentDb): string[] {
   const sets = Object.values(db.scenarios).flatMap((s) => [...s.encounterSets, ...(s.randomEncounterSet ?? []), ...Object.values(s.sideDecks).flat()]);
-  return [...new Set([...Object.keys(db.encounterSets), ...sets, ...Object.keys(db.scenarios).map(scenarioIcon)])];
+  // the core pack's sets too (their cards are drawn and shown); the other cycles' sets get an icon when a scenario uses them
+  const core = Object.entries(db.encounterSets).filter(([, codes]) => codes.some((c) => db.cards[c]?.pack === "core")).map(([name]) => name);
+  return [...new Set([...core, ...sets, ...Object.keys(db.scenarios).map(scenarioIcon)])];
+}
+
+/** encounter sets of cards in the content that the sprite has no icon for (not an error: only the sets scenarios use need one) */
+export function setsWithoutIcon(db: ContentDb, sprite: string[]): string[] {
+  const ids = new Set(sprite);
+  return Object.keys(db.encounterSets).filter((n) => !ids.has(n)).sort();
 }
 
 /** symbol id → source file name (no extension) and the set it comes from: a font's name, or "extra" */

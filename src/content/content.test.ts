@@ -61,7 +61,7 @@ describe("ArkhamDB import mapping", () => {
   });
 
   it("generated file holds every imported core card and overrides stay separate", () => {
-    expect(Object.keys(db.cards).length).toBe(183);
+    expect(Object.values(db.cards).filter((c) => c.pack === "core").length).toBe(183);
     expect(db.cards["01006"].abilities.length).toBeGreaterThan(0); // from cards.json
   });
 });

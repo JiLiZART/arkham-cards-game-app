@@ -1,0 +1,2419 @@
+[
+ {
+  "code": "90001",
+  "name": "Daisy Walker",
+  "type": "investigator",
+  "faction": "seeker",
+  "pack": "rod",
+  "quantity": 1,
+  "traits": [
+   "Miskatonic"
+  ],
+  "text": "You get +1 [willpower] and +1 sanity for each [[Tome]] asset you control.\n[fast]: One at a time, resolve an [action] ability on each [[Tome]] asset you control, ignoring their [action] cost. (Limit once per game.)\n[elder_sign] effect: +1. You may return a [[Tome]] asset from your discard pile to your hand.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Librarian",
+  "backText": "<b>Deck size</b>: 30.\n<b>Deckbuilding Options</b>: [[Tome]] cards level 0-5, Seeker cards ([seeker]) level 0-3, Neutral cards level 0-5, up to five other level 0 Guardian and/or Mystic cards ([guardian] and/or [mystic]).\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Daisy’s Tote Bag, The Necronomicon (John Dee Translation), 1 random basic weakness.",
+  "flavor": "\"I can shut the book, but I can never unread its words.\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 1,
+   "intellect": 5,
+   "combat": 2,
+   "agility": 2
+  },
+  "health": 5,
+  "sanity": 7
+ },
+ {
+  "code": "90002",
+  "name": "Daisy's Tote Bag",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "rod",
+  "quantity": 1,
+  "traits": [
+   "Item"
+  ],
+  "text": "Daisy Walker deck only. Advanced.\nYou have 2 additional hand slots, which can only be used to hold [[Tome]] assets.\n[reaction] When you play a [[Tome]] asset during your turn, exhaust Daisy's Tote Bag: That asset gains fast.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1,
+   "wild": 2
+  },
+  "deckLimit": 1,
+  "cost": 2
+ },
+ {
+  "code": "90003",
+  "name": "The Necronomicon",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "rod",
+  "quantity": 1,
+  "traits": [
+   "Item",
+   "Tome"
+  ],
+  "text": "Advanced.\n<b>Revelation</b> - Put this card into play in your threat area, with 3 horror on it. It cannot leave play while it has 1 or more horror on it.\nWhile it is in play, treat each [elder_sign] you reveal on a chaos token as a [cultist], [tablet], and [elder_thing] <i>(resolve all three)</i>.\n[action]: Move 1 horror from this card to Daisy Walker. Then, if The Necronomicon has no horror on it, discard it.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {},
+  "subname": "John Dee Translation",
+  "subtype": "weakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "90004",
+  "name": "Read or Die",
+  "type": "scenario",
+  "faction": "mythos",
+  "pack": "rod",
+  "quantity": 1,
+  "traits": [],
+  "text": "Easy / Standard\n[skull]: -X. X is the number of [[Tome]] assets Daisy Walker controls.\n[cultist]: Reveal another token. If you fail, discard the top 2 cards of your deck.\n[tablet]: -2. If this is an attack or evasion attempt against Namer of the Dead and you do not succeed by at least 2, it attacks you.\n[elder_thing]: -3. If you fail, Daisy Walker takes 1 horror.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backText": "Hard / Expert\n[skull]: -X. X is 1 more than the number of [[Tome]] assets Daisy Walker controls.\n[cultist]: Reveal another token. If you fail, discard the top 3 cards of your deck.\n[tablet]: -3. If this is an attack or evasion attempt against Namer of the Dead and you do not succeed by at least 3, it attacks you.\n[elder_thing]: -5. If you fail, Daisy Walker takes 1 horror.",
+  "encounterSet": "read_or_die"
+ },
+ {
+  "code": "90005",
+  "name": "Mortal Inquiry",
+  "type": "agenda",
+  "faction": "mythos",
+  "pack": "rod",
+  "quantity": 1,
+  "traits": [],
+  "text": "Dr. Henry Armitage does not take up an ally slot and gains: \"You have 2 additional hand slots, which can only be used to hold [[Tome]] assets.\"\n\"Jazz\" Mulligan gains: \"[action]: Move to a [[Miskatonic]] location up to 3 connections away.\"",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "Reading Can Be Deadly",
+  "backText": "<b>(→R2)</b>",
+  "flavor": "Whatever entity has been unleashed from within the Necronomicon, it is spreading across the campus like a deadly shadow. You must put a stop to it before it grows too powerful to be contained.",
+  "encounterSet": "read_or_die",
+  "stage": 1,
+  "doom": 12
+ },
+ {
+  "code": "90006",
+  "name": "Speed Reading",
+  "type": "act",
+  "faction": "mythos",
+  "pack": "rod",
+  "quantity": 1,
+  "traits": [],
+  "text": "Ignore all <b>Objectives</b> on locations.\n[fast] If you are Daisy Walker, investigators at your location spend 1 [per_investigator] clues: Shuffle 1 facedown player card beneath this location into your deck.\n<b>Objective</b> - Find a way to banish the Namer of the Dead before it is too late.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "Page-turner",
+  "backText": "<b>(→R1)</b>",
+  "flavor": "The way to seal this being away must be recorded in one of the many tomes around campus...",
+  "encounterSet": "read_or_die",
+  "stage": 1
+ },
+ {
+  "code": "90007",
+  "name": "Namer of the Dead",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "rod",
+  "quantity": 1,
+  "traits": [
+   "Monster",
+   "Geist",
+   "Elite"
+  ],
+  "text": "Hunter.\n<b>Prey</b> - Daisy Walker only.\n<b>Forced</b> - When Namer of the Dead would be defeated: Instead, fully heal it, exhaust it, and move it to Orne Library.\n[action] If you are Daisy Walker and you control at least 4 non-weakness [[Tome]] assets: <b>Parley.</b> Test [willpower] (18). This test gets -2 difficulty for each [[Tome]] asset you control. If you succeed, advance the act.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "hunter"
+  ],
+  "slots": [],
+  "icons": {},
+  "subname": "Presence Within the Grimoire",
+  "encounterSet": "read_or_die",
+  "enemy": {
+   "fight": 2,
+   "health": 3,
+   "healthPerInvestigator": false,
+   "evade": 2,
+   "damage": 1,
+   "horror": 1
+  }
+ },
+ {
+  "code": "90008",
+  "name": "\"Skids\" O'Toole",
+  "type": "investigator",
+  "faction": "rogue",
+  "pack": "aon",
+  "quantity": 1,
+  "traits": [
+   "Criminal"
+  ],
+  "text": "[fast] Spend up to 3 resources: Test a base skill value of 3 against a difficulty equal to the amount of resources just spent. If you succeed, gain twice the number of spent resources. Only [agility] and [wild] skill icons may be committed to this test. (Limit once per round.)\n[elder_sign] effect: +1. Choose a level 2 or less card in your discard pile. Add the chosen card to your hand.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Ex-Con",
+  "backText": "<b>Deck size</b>: 25.\n<b>Deckbuilding Options</b>: Rogue cards ([rogue]) level 0-5, [[Fortune]] cards level 0-3, [[Gambit]] cards level 0-3, Neutral cards level 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): On the Lam, Hospital Debts, 1 random basic weakness.\n<b>Additional Options</b>: When you upgrade a [[Fortune]] or [[Gambit]] card, you may instead pay the full experience cost of the higher level version and leave the lower level version in your deck (it does not count towards your deck size or the number of copies of that card in your deck).",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 2,
+   "intellect": 3,
+   "combat": 3,
+   "agility": 4
+  },
+  "health": 8,
+  "sanity": 6
+ },
+ {
+  "code": "90009",
+  "name": "On the Lam",
+  "type": "event",
+  "faction": "neutral",
+  "pack": "aon",
+  "quantity": 1,
+  "traits": [
+   "Tactic"
+  ],
+  "text": "\"Skids\" O'Toole deck only. Advanced.\nFast. Play during any [fast] window.\nUntil the end of the round, non-[[Elite]] enemies cannot attack you. At the end of the round, you may disengage from each engaged enemy and move up to 2 locations away.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "agility": 1,
+   "wild": 2
+  },
+  "deckLimit": 1,
+  "cost": 0
+ },
+ {
+  "code": "90010",
+  "name": "Hospital Debts",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "aon",
+  "quantity": 1,
+  "traits": [
+   "Task"
+  ],
+  "text": "Advanced. <b>Revelation</b> - Put Hospital Debts into play in your threat area.\n[fast]: Move 1 resource from your resource pool to Hospital Debts. (Limit three times per round.)\n<b>Forced</b> - When the game ends, if Hospital Debts has fewer than 9 resources on it: You earn 2 fewer experience for this scenario.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "weakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "90011",
+  "name": "All or Nothing",
+  "type": "scenario",
+  "faction": "mythos",
+  "pack": "aon",
+  "quantity": 1,
+  "traits": [],
+  "text": "Easy / Standard\n[skull]: -1 for each clue you have.\n[cultist]: -2 (-4 instead if you have 10 or more resources).\n[tablet]: -2. If you fail, lose 3 resources.\n[elder_thing]: -3. If you fail, \"Skids\" O'Toole takes 1 horror.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backText": "Hard / Expert\n[skull]: -2 for each clue you have.\n[cultist]: -4 (-8 instead if you have 10 or more resources).\n[tablet]: -3. Lose 3 resources.\n[elder_thing]: -5. If you fail, \"Skids\" O'Toole takes 1 horror.",
+  "encounterSet": "all_or_nothing"
+ },
+ {
+  "code": "90012",
+  "name": "Eyes All Around You",
+  "type": "agenda",
+  "faction": "mythos",
+  "pack": "aon",
+  "quantity": 1,
+  "traits": [],
+  "text": "[action] If you are in the Clover Club Cardroom, spend any number of clues: You cash in your chips. Gain 5 resources for each clue just spent.\n<b>Forced</b> - If \"Skids\" O'Toole is defeated: <b>(→R2)</b>",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "The Mob Always Wins",
+  "backText": "Each investigator who has not resigned is defeated and suffers 1 physical trauma.\nIf \"Skids\" O'Toole has resigned, proceed to <b>(→R1)</b>. Otherwise, proceed to <b>(→R2)</b>",
+  "flavor": "The Clover Club is filled with mobsters and gamblers from all walks of life. Winning big without causing alarm may not be as easy as you thought.",
+  "encounterSet": "all_or_nothing",
+  "stage": 1,
+  "doom": 11
+ },
+ {
+  "code": "90013",
+  "name": "Playing Cards",
+  "type": "act",
+  "faction": "mythos",
+  "pack": "aon",
+  "quantity": 1,
+  "traits": [],
+  "text": "Investigators cannot resign.\nClover Club Pit Boss gains aloof.\n<b>Forced</b> - After a [[Criminal]] enemy is defeated: Place 1 doom on the agenda.\n<b>Objective</b> - At the end of the round: If an investigator has 15 or more resources, advance.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "Feeling the Heat",
+  "backText": "Spawn the set-aside Siobhan Riley enemy in La Bella Luna. Each investigator spawns 1 set-aside Clover Club Bouncer enemy engaged with them.",
+  "flavor": "You don't want trouble, so it's best not to cause it. Try not to go all in too soon, or you'll likely take the bounce.",
+  "encounterSet": "all_or_nothing",
+  "stage": 1
+ },
+ {
+  "code": "90014",
+  "name": "Hot on Your Tail",
+  "type": "act",
+  "faction": "mythos",
+  "pack": "aon",
+  "quantity": 1,
+  "traits": [],
+  "text": "Each [[Criminal]] enemy gains hunter and gets +1 health.\n<b>Forced</b> - When an investigator resigns: Place each of that investigator's resources on this act.\n<b>Objective</b> - Collect as many resources as you can and get out. When each undefeated investigator has resigned, advance.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "The Thrill of Victory",
+  "backText": "<b>(→R1)</b>",
+  "flavor": "Collect your winnings and escape!",
+  "encounterSet": "all_or_nothing",
+  "stage": 2
+ },
+ {
+  "code": "90015",
+  "name": "Siobhan Riley",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "aon",
+  "quantity": 1,
+  "traits": [
+   "Humanoid",
+   "Criminal",
+   "Elite"
+  ],
+  "text": "<b>Forced</b> - After Siobhan Riley engages you: For every 5 resources you have, lose 1 resource.\n<b>Forced</b> - After an investigator at Siobhan Riley's location gains 1 or more resources during the investigation phase: Siobhan Riley readies, engages that investigator, and makes an attack.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "O'Bannion Enforcer",
+  "encounterSet": "all_or_nothing",
+  "victory": 1,
+  "enemy": {
+   "fight": 5,
+   "health": 6,
+   "healthPerInvestigator": false,
+   "evade": 2,
+   "damage": 1,
+   "horror": 1
+  }
+ },
+ {
+  "code": "90016",
+  "name": "Clover Club Bouncer",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "aon",
+  "quantity": 4,
+  "traits": [
+   "Humanoid",
+   "Criminal"
+  ],
+  "text": "When Clover Club Bouncer is engaged with you, it gets +1 fight and +1 evade for every 5 resources you have.\n[action] Spend 3 resources: <b>Parley.</b> Test [intellect] (2). If you succeed, disengage from Clover Club Bouncer and exhaust it. It does not ready during the next upkeep phase.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "all_or_nothing",
+  "victory": 0,
+  "enemy": {
+   "fight": 1,
+   "health": 3,
+   "healthPerInvestigator": false,
+   "evade": 1,
+   "damage": 2,
+   "horror": 0
+  }
+ },
+ {
+  "code": "90017",
+  "name": "Agnes Baker",
+  "type": "investigator",
+  "faction": "mystic",
+  "pack": "bad",
+  "quantity": 1,
+  "traits": [
+   "Sorcerer"
+  ],
+  "text": "As an additional cost to play a [[Spell]] event, you may take 1 damage. If you do, reduce the cost to play that event by 2, and you may shuffle that event back into your deck instead of discarding it.\n[elder_sign] effect: +1. You may heal 1 damage.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Waitress",
+  "backText": "<b>Deck size</b>: 25.\n<b>Deckbuilding Options</b>: Mystic cards ([mystic]) level 0-5, [[Spell]] cards level 0-3, [[Occult]] cards level 0-3, Neutral cards level 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Heirloom of Hyperborea, Dark Memory, 1 random basic weakness.\n<b>Additional Options</b>: When you upgrade a [[Spell]] card, you may instead pay the full experience cost of the higher level version and leave the lower level version in your deck (it does not count towards your deck size or the number of copies of that card in your deck).",
+  "flavor": "\"The magic is in my blood.\nCoursing through my veins.\nPumping through my heart.\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 5,
+   "intellect": 2,
+   "combat": 2,
+   "agility": 3
+  },
+  "health": 8,
+  "sanity": 6
+ },
+ {
+  "code": "90018",
+  "name": "Heirloom of Hyperborea",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "bad",
+  "quantity": 1,
+  "traits": [
+   "Item",
+   "Relic"
+  ],
+  "text": "Agnes Baker deck only. Advanced.\nOnly damage and/or horror from player card effects can be assigned to Heirloom of Hyperborea.\n[reaction] After you play a [[Spell]] card: Draw 1 card.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "accessory"
+  ],
+  "icons": {
+   "willpower": 1,
+   "combat": 1,
+   "wild": 2
+  },
+  "subname": "Artifact from Another Life",
+  "deckLimit": 1,
+  "cost": 3,
+  "health": 3,
+  "sanity": 3
+ },
+ {
+  "code": "90019",
+  "name": "Dark Memory",
+  "type": "event",
+  "faction": "neutral",
+  "pack": "bad",
+  "quantity": 1,
+  "traits": [
+   "Spell"
+  ],
+  "text": "Advanced.\nPlace 1 doom on the current agenda. This effect can cause the current agenda to advance.\n<b>Forced</b> - If Dark Memory is in your hand at the end of your turn, reveal it and take 2 horror.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "weakness",
+  "deckLimit": 1,
+  "cost": 4
+ },
+ {
+  "code": "90020",
+  "name": "Bad Blood",
+  "type": "scenario",
+  "faction": "mythos",
+  "pack": "bad",
+  "quantity": 1,
+  "traits": [],
+  "text": "Easy / Standard\n[skull]: -X. X is the number of memories Agnes Baker has collected.\n[cultist]: -2. Ready Elspeth Baudin and resolve her patrol keyword.\n[tablet]: -3. If you fail and there is a memory at Elspeth Baudin's location, place this token on that location.\n[elder_thing]: -6. Agnes Baker may take up to 3 damage to increase your skill value by 2 for each damage taken.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backText": "Hard / Expert\n[skull]: -X. X is 1 more than the number of memories Agnes Baker has collected.\n[cultist]: -3. Ready Elspeth Baudin and resolve her patrol keyword. If she is engaged with an investigator, she makes an attack.\n[tablet]: -5. If you fail and there is a memory at Elspeth Baudin's location, place this token on that location.\n[elder_thing]: -8. Agnes Baker may take up to 3 damage to increase your skill value by 2 for each damage taken.",
+  "encounterSet": "bad_blood"
+ },
+ {
+  "code": "90021",
+  "name": "Hyperborean Blood",
+  "type": "agenda",
+  "faction": "mythos",
+  "pack": "bad",
+  "quantity": 1,
+  "traits": [],
+  "text": "<b>Forced</b> - At the end of the enemy phase, if Elspeth Baudin is ready and there is a memory at her location: Reveal a random token from the chaos bag and place it on that location.\n<b>Forced</b> - If there are 1 or more chaos tokens on a location without a memory: Return them to the chaos bag.\n<b>Forced</b> - If there are chaos tokens on a location with a memory that have a combined value of 6 or more (ignoring +/- and treating each [auto_fail] and [elder_sign] as a -6): Return them to the chaos bag, and Elspeth Baudin collects that memory.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "Out For Blood",
+  "backText": "Elspeth Baudin attacks each investigator in player order, regardless of their current location <i>(even if she is exhausted)</i>.\nFlip this agenda back over.",
+  "encounterSet": "bad_blood",
+  "stage": 1,
+  "doom": 8
+ },
+ {
+  "code": "90022",
+  "name": "A Walk Down Memory Lane",
+  "type": "act",
+  "faction": "mythos",
+  "pack": "bad",
+  "quantity": 1,
+  "traits": [],
+  "text": "[fast] Investigators at Agnes Baker's location spend 2 [per_investigator] clues, as a group: Agnes Baker collects the memory at her location.\n<b>Forced</b> - If Agnes Baker is defeated, proceed to <b>(→R2)</b>.\n<b>Objective</b> - Collect more memories than Elspeth. If all 9 memories have been collected <i>(by either party)</i>, advance.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "Memory of Eternal Conquest",
+  "backText": "<b>If Agnes collected more memories than Elspeth:</b>\n<blockquote><i>Elspeth falls before you, pain coursing through her body. \"Go on, then. Finish it,\" she hisses through her teeth, glaring up at you with seething hatred. Arcane power crackles in your hand. She is your enemy. Your conquest. Her life, her memories, they are in your hands. You should take what is rightfully yours.</i></blockquote>\n<b>(→R1)</b>\n<hr><b>If Elspeth collected more memories than Agnes:</b>\n<blockquote><i>You fall to your knees, overcome by pain. Elspeth looms over you, her hands crackling with arcane energy. \"You are weak,\" she taunts. \"You are not deserving of this power. But I...\" she grins. \"I will be so much better.\"</i></blockquote>\n<b>(→R2)</b>",
+  "flavor": "You must recover the lost memories of your previous life before Elspeth does!",
+  "encounterSet": "bad_blood",
+  "stage": 1
+ },
+ {
+  "code": "90023",
+  "name": "Elspeth Baudin",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "bad",
+  "quantity": 1,
+  "traits": [
+   "Humanoid",
+   "Sorcerer",
+   "Elite"
+  ],
+  "text": "Alert. Patrol (nearest location with at least 1 memory). Retaliate.\nElspeth Baudin cannot be automatically evaded and gets -1 fight and -1 evade for each memory she has collected.\n<b>Forced</b> - When Elspeth Baudin would be defeated: Instead, heal all damage from her, flip her over, and resolve the text on her other side.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [
+   "alert",
+   "retaliate"
+  ],
+  "slots": [],
+  "icons": {},
+  "subname": "Hyperborean Sorceress",
+  "encounterSet": "bad_blood",
+  "enemy": {
+   "fight": 8,
+   "health": 4,
+   "healthPerInvestigator": true,
+   "evade": 8,
+   "damage": 2,
+   "horror": 2
+  }
+ },
+ {
+  "code": "90023b",
+  "name": "Triumph and Subjugation",
+  "type": "story",
+  "faction": "mythos",
+  "pack": "bad",
+  "quantity": 1,
+  "traits": [],
+  "text": "Agnes Baker must decide (choose one):\n- Agnes Baker collects 1 memory from Elspeth Baudin.\n- Agnes Baker gains 2 [per_investigator] clues from the token bank.\nThen, flip this card over, exhausted and unengaged.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "Light crashes against the night sky as your magic and Elspeth's intersect. A blaring peal - like an otherworldly siren, calling for judgment - sends you and Elspeth both to your knees. She reels in pain, digging her nails into her temples. You reach out with your power, grasp at her memories, and pull with all your strength.",
+  "encounterSet": "bad_blood"
+ },
+ {
+  "code": "90024",
+  "name": "Roland Banks",
+  "type": "investigator",
+  "faction": "guardian",
+  "pack": "btb",
+  "quantity": 1,
+  "traits": [
+   "Agency",
+   "Detective"
+  ],
+  "text": "At deck creation, choose 3 different Directive assets to add to your deck.\n[fast]: Flip a Directive asset facedown <i>(ignoring its permanent keyword)</i>. (Limit once per game.)\n[elder_sign] effect: +2. Choose a Directive asset. You may ignore its regulation ability this round.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Fed",
+  "backText": "<b>Deck size</b>: 30.\n<b>Deckbuilding Options</b>: Guardian cards ([guardian]) level 0-3, [[Insight]] cards level 0-3, [[Tactic]] cards level 0-3, Neutral cards level 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Roland's .38 Special, Cover Up, 1 random basic weakness.\n<b>Bonus Experience</b>: You begin the campaign with 5 additional experience (does not affect the number of weakneses you must take in Standalone Mode).",
+  "flavor": "\"If I stir up trouble, Sheriff, it will be because there's trouble to stir up.\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 3,
+   "intellect": 3,
+   "combat": 4,
+   "agility": 2
+  },
+  "health": 9,
+  "sanity": 5
+ },
+ {
+  "code": "90025",
+  "name": "Directive",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "btb",
+  "quantity": 1,
+  "traits": [],
+  "text": "Roland Banks deck only. Permanent.\n<i>Regulation</i> - You cannot fight more than twice each round.\n[fast] During a skill test while investigating, evading, or parleying, exhaust this Directive: You get +2 skill value for this test for each enemy engaged with you.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "Due Diligence",
+  "deckLimit": 1,
+  "cost": null
+ },
+ {
+  "code": "90026",
+  "name": "Directive",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "btb",
+  "quantity": 1,
+  "traits": [],
+  "text": "Roland Banks deck only. Permanent.\n<i>Regulation</i> - You cannot play more than 2 cards each round.\n[reaction] When you play an [[Insight]] or [[Tactic]] event, exhaust this Directive: That event gains fast.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "Red Tape",
+  "deckLimit": 1,
+  "cost": null
+ },
+ {
+  "code": "90027",
+  "name": "Directive",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "btb",
+  "quantity": 1,
+  "traits": [],
+  "text": "Roland Banks deck only. Permanent.\n<i>Regulation</i> - You cannot voluntarily assign damage or horror to [[Ally]] assets.\nYou have 1 additional ally slot.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "Consult Experts",
+  "deckLimit": 1,
+  "cost": null
+ },
+ {
+  "code": "90028",
+  "name": "Directive",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "btb",
+  "quantity": 1,
+  "traits": [],
+  "text": "Roland Banks deck only. Permanent.\n<i>Regulation</i> - When your location has 1 or more clues, you cannot commit cards to skill tests unless you have discovered a clue this round.\n[reaction] After you discover a clue, if an enemy is at your location, exhaust this Directive: Draw 1 card.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "Seek the Truth",
+  "deckLimit": 1,
+  "cost": null
+ },
+ {
+  "code": "90029",
+  "name": "Directive",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "btb",
+  "quantity": 1,
+  "traits": [],
+  "text": "Roland Banks deck only. Permanent.\n<i>Regulation</i> - You cannot move more than twice each round.\nYou get +3 sanity.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "Leave No Doubt",
+  "deckLimit": 1,
+  "cost": null
+ },
+ {
+  "code": "90030",
+  "name": "Roland's .38 Special",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "btb",
+  "quantity": 1,
+  "traits": [
+   "Item",
+   "Weapon",
+   "Firearm"
+  ],
+  "text": "Roland Banks deck only. Advanced. Uses (4 ammo).\n[action] Spend 1 ammo: <b>Fight.</b> You get +2 [combat] for this attack (if there are 1 or more clues on your location, you get +4 [combat], instead). This attack deals +1 damage. If this attack defeats an enemy and there are no clues on your location, place 1 ammo on Roland's .38 Special",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "intellect": 1,
+   "combat": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "deckLimit": 1,
+  "cost": 3,
+  "uses": {
+   "type": "ammo",
+   "count": 4
+  }
+ },
+ {
+  "code": "90031",
+  "name": "Cover Up",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "btb",
+  "quantity": 1,
+  "traits": [
+   "Task"
+  ],
+  "text": "Advanced.\n<b>Revelation</b> - Put Cover Up into play in your threat area, with 4 clues on it.\n[reaction] When you would discover 1 or more clues at your location: Discard that many clues from Cover Up instead.\n<b>Forced</b> - When the game ends, if there are any clues on Cover Up: You suffer 1 mental trauma.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "weakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "90032",
+  "name": "By the Book",
+  "type": "scenario",
+  "faction": "mythos",
+  "pack": "btb",
+  "quantity": 1,
+  "traits": [],
+  "text": "Easy / Standard\n[skull]: -X. X is the number of [[Cultist]] enemies in the victory display, to a maximum of 5.\n[cultist]: -2. If a [[Cultist]] enemy is engaged with you, reveal an additional chaos token.\n[tablet]: -3. Ready each [[Cultist]] enemy engaged with you.\n[elder_thing]: -4. If you fail, Roland Banks takes 1 damage.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backText": "Hard / Expert\n[skull]: -X. X is 1 plus the number of [[Cultist]] enemies in the victory display.\n[cultist]: -3. If a [[Cultist]] enemy is engaged with you, reveal an additional chaos token.\n[tablet]: -4. Ready each [[Cultist]] enemy engaged with you.\n[elder_thing]: -5. If you fail, Roland Banks takes 1 damage.",
+  "encounterSet": "by_the_book"
+ },
+ {
+  "code": "90033a",
+  "name": "A Covert Conspiracy",
+  "type": "agenda",
+  "faction": "mythos",
+  "pack": "btb",
+  "quantity": 1,
+  "traits": [],
+  "text": "<b>Forced</b> - When a non-weakness [[Cultist]] enemy would be defeated: Heal damage from that enemy until it has 1 remaining health, instead.\n<b>Forced</b> - If Roland Banks is defeated: Proceed to <b>(→R2)</b>\n[action]: <b>Resign.</b> You don't want to miss your deadline, so you close the case.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "Mr. Grey is a powerful man with a lot of friends. Getting him behind bars is going to be tricky.",
+  "encounterSet": "by_the_book",
+  "stage": 1,
+  "doom": 6
+ },
+ {
+  "code": "90033b",
+  "name": "Mr. Grey",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "btb",
+  "quantity": 1,
+  "traits": [
+   "Humanoid",
+   "Cultist",
+   "Elite"
+  ],
+  "text": "<b>Spawn</b> - Engaged with Roland Banks.\nHunter. Mr. Grey gets +2 [per_investigator] health.\n<b>Forced</b> - After Mr. Grey attacks an investigator: That investigator draws the top card of the encounter deck.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [
+   "hunter"
+  ],
+  "slots": [],
+  "icons": {},
+  "subname": "Corrupt Politician",
+  "flavor": "\"Take comfort in the idea that your death serves a much greater purpose.\"",
+  "encounterSet": "by_the_book",
+  "victory": 1,
+  "enemy": {
+   "fight": 3,
+   "health": 3,
+   "healthPerInvestigator": false,
+   "evade": 2,
+   "damage": 1,
+   "horror": 1
+  },
+  "spawn": "Engaged with Roland Banks"
+ },
+ {
+  "code": "90034",
+  "name": "Your Deadline Nears",
+  "type": "agenda",
+  "faction": "mythos",
+  "pack": "btb",
+  "quantity": 1,
+  "traits": [],
+  "text": "<b>Forced</b> - When a non-weakness [[Cultist]] enemy would be defeated: Heal damage from that enemy until it has 1 remaining health, instead.\n<b>Forced</b> - If Roland Banks is defeated: Proceed to <b>(→R2)</b>\n[action]: <b>Resign.</b> You don't want to miss your deadline, so you close the case.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "Time Has Run Out",
+  "backText": "Remove a [[Cultist]] enemy in the victory display from the game (Mr. Grey, if able).\n<b>(→R1)</b>.",
+  "flavor": "Your superiors are pressuring you to drop your investigation. Mr. Grey's influence, no doubt. Meanwhile, he and his lackies are doing everything in their power to quietly remove you from the equation, once and for all.",
+  "encounterSet": "by_the_book",
+  "stage": 2,
+  "doom": 8
+ },
+ {
+  "code": "90035",
+  "name": "Capture the Conspirators",
+  "type": "act",
+  "faction": "mythos",
+  "pack": "btb",
+  "quantity": 1,
+  "traits": [],
+  "text": "[fast] The investigators spend 1 [per_investigator] clues, as a group: Flip over a facedown conspirator at your location and put it into play engaged with you.\n[fast] Spend 1 resource: Exhaust a [[Cultist]] enemy engaged with you <i>(it remains engaged)</i>. Only Roland Banks may trigger this ability.]\n<b>Objective</b> - Parley with as many conspirators as you can. If 10 [[Cultist]] enemies are in the victory display, advance.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "Secrets Uncovered",
+  "backText": "<b>(→R1)</b>",
+  "flavor": "Taking down the culprits behind the sacrifices can only be done with proof, in a court of law. You'll have to do this fair and square.",
+  "encounterSet": "by_the_book",
+  "stage": 1
+ },
+ {
+  "code": "90036",
+  "name": "Arkham Police Station",
+  "type": "location",
+  "faction": "mythos",
+  "pack": "btb",
+  "quantity": 1,
+  "traits": [
+   "Arkham"
+  ],
+  "text": "Arkham Police Station is connected to Rivertown, Downtown, and Easttown, and vice versa.\n[fast]: Move to a connecting location.\n[fast] Choose a non-weakness [[Cultist]] enemy at this location and spend clues equal to its remaining health: <b>Parley.</b> Add that enemy to the victory display.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backText": "Arkham Police Station is connected to Rivertown, Downtown, and Easttown, and vice versa.",
+  "encounterSet": "by_the_book",
+  "shroud": 4,
+  "clues": 2,
+  "cluesPerInvestigator": false
+ },
+ {
+  "code": "90037",
+  "name": "Wendy Adams",
+  "type": "investigator",
+  "faction": "survivor",
+  "pack": "rtr",
+  "quantity": 1,
+  "traits": [
+   "Drifter",
+   "Blessed",
+   "Cursed"
+  ],
+  "text": "Add Tidal Memento to your deck.\n[reaction] After you successfully evade a non-[[Elite]] enemy: Seal either 1 [bless] or [curse] token from the chaos bag, or any [bless] or [curse] tokens revealed from the chaos bag during this test, on that enemy.\n[elder_sign] effect: +2. Search the chaos bag for up to 2 [bless] and/or [curse] tokens and reveal them, ignoring their effects.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Urchin",
+  "backText": "<b>Deck Size</b>: 30.\n<b>[[Trait]] Choice</b>: At deck creation, choose [[Blessed]] or [[Cursed]], or choose both and gain +5 Deck Size.\n<b>Deckbuilding Options</b>: Survivor cards ([survivor]) level 0-5, Neutral cards level 0-5, cards of your chosen trait(s) 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Wendy's Amulet, Abandoned and Alone, 1 random basic weakness.",
+  "flavor": "\"The little things are important. Grown-ups don't see that.\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 4,
+   "intellect": 3,
+   "combat": 1,
+   "agility": 4
+  },
+  "health": 7,
+  "sanity": 7
+ },
+ {
+  "code": "90038",
+  "name": "Tidal Memento",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "rtr",
+  "quantity": 1,
+  "traits": [
+   "Item",
+   "Charm"
+  ],
+  "text": "Wendy Adams deck only. Permanent.\n[reaction] When an enemy would ready or doom would be placed on it, release a [bless] or [curse] token sealed on that enemy: Cancel that effect.\n[reaction] During a skill test you are performing, when a chaos token would be revealed from the chaos bag: Resolve a [bless] or [curse] token sealed on an enemy instead.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "deckLimit": 1,
+  "cost": null
+ },
+ {
+  "code": "90039",
+  "name": "Wendy's Amulet",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "rtr",
+  "quantity": 1,
+  "traits": [
+   "Item",
+   "Relic"
+  ],
+  "text": "Wendy Adams deck only. Advanced.\nYou may play any event in your discard pile as if it were in your hand.\n<b>Forced</b> - After you play an event or discard an event from play: Place it on the bottom of your deck instead of in your discard pile.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "accessory"
+  ],
+  "icons": {
+   "willpower": 1,
+   "wild": 2
+  },
+  "deckLimit": 1,
+  "cost": 2
+ },
+ {
+  "code": "90040",
+  "name": "Abandoned and Alone",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "rtr",
+  "quantity": 1,
+  "traits": [
+   "Madness"
+  ],
+  "text": "Advanced.\n<b>Revelation</b> - Remove all non-weakness cards in your discard pile from the game. If no cards were removed by this effect, shuffle this card back into your deck. Otherwise, take 3 direct horror.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "I don't need them. I don't need anyone.",
+  "subtype": "weakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "90041",
+  "name": "Red Tide Rising",
+  "type": "scenario",
+  "faction": "mythos",
+  "pack": "rtr",
+  "quantity": 1,
+  "traits": [],
+  "text": "Easy / Standard\n[skull]: -X. X is half the number of [[Suspect]] and [[Hideout]] cards in the victory display (rounded up).\n[cultist]: -2. (-4 instead if you are parleying with a [[Suspect]] enemy or investigating a [[Hideout]] location).\n[tablet]: -3. If you succeed, look at the top card of the Leads deck. You may choose to shuffle the Leads deck.\n[elder_thing]: -1. If you fail, shuffle the top card of the encounter deck into the Leads deck.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backText": "Hard / Expert\n[skull]: -X. X is the number of [[Suspect]] and [[Hideout]] cards in the victory display.\n[cultist]: -3. (-5 instead if you are parleying with a [[Suspect]] enemy or investigating a [[Hideout]] location).\n[tablet]: -4. If you succeed, look at the top card of the Leads deck. You may choose to shuffle the Leads deck.\n[elder_thing]: -2. If you fail, shuffle the top card of the encounter deck into the Leads deck.",
+  "encounterSet": "red_tide_rising"
+ },
+ {
+  "code": "90042",
+  "name": "The New Girl",
+  "type": "agenda",
+  "faction": "mythos",
+  "pack": "rtr",
+  "quantity": 1,
+  "traits": [],
+  "text": "<b>Forced</b> - When this agenda would advance by reaching its doom threshold: Instead, remove all doom in play and shuffle a random set-aside [[Monster]] enemy into the [[Leads]] deck. Then, if there are no set-aside [[Monster]] enemies, advance to agenda 1b.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "Too Many Questions",
+  "backText": "Spawn the set-aside Angry Mob enemy at Innsmouth Square, exhausted.\nPlace 1 [per_investigator] clues on each [[Suspect]] enemy and [[Hideout]] location in play.",
+  "flavor": "You arrive in Innsmouth and immediately set to work asking the townspeople if they’ve seen your Dad, the place in the photograph, or the man in the derby who dropped off the photo.",
+  "encounterSet": "red_tide_rising",
+  "stage": 1,
+  "doom": 3
+ },
+ {
+  "code": "90043",
+  "name": "Trail Goes Cold",
+  "type": "agenda",
+  "faction": "mythos",
+  "pack": "rtr",
+  "quantity": 1,
+  "traits": [],
+  "text": "Angry Mob cannot be defeated.\n[reaction] After Wendy Adams evades Angry Mob: She may discover 1 clue from its location.\nEach [[Suspect]] enemy loses aloof and enters play with +1 [per_investigator] clues.\nEach [[Hideout]] location gets +1 [per_investigator] clue value.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "Out of Time",
+  "backText": "<b>(→R2)</b>",
+  "flavor": "The longer you stick around and the more questions you ask, the more danger seeks you out. The locals eye you with anger and suspicion, and worse: strange winged creatures prowl about the rooftops, searching for prey...",
+  "encounterSet": "red_tide_rising",
+  "stage": 2,
+  "doom": 9
+ },
+ {
+  "code": "90044",
+  "name": "Searching for Dad",
+  "type": "act",
+  "faction": "mythos",
+  "pack": "rtr",
+  "quantity": 1,
+  "traits": [],
+  "text": "[[Suspect]] and [[Hideout]] cards cannot be added to the victory display except using Mysterious Photo.\n<b>Forced</b> – If there are no [[Suspect]] or [[Hideout]] cards in play: Wendy Adams must draw cards from the top of the Leads deck until she draws a [[Suspect]] or [[Hideout]] card.\n<b>Objective</b> – Search for Dad using Mysterious Photo. The fewer cards that remain in the Leads deck, the better. If it is empty, advance.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "It's Him!",
+  "backText": "<b>(→R1)</b>",
+  "flavor": "To say that this town is less friendly than even Arkham would be an understatement.",
+  "encounterSet": "red_tide_rising",
+  "stage": 1
+ },
+ {
+  "code": "90045a",
+  "name": "Mysterious Photo",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "rtr",
+  "quantity": 1,
+  "traits": [
+   "Item"
+  ],
+  "text": "[fast] Exhaust Mysterious Photo: Either take a parley action on a [[Suspect]] enemy or flip Mysterious Photo over.\n[fast] If there is a [[Suspect]] enemy with no clues on it at your location, investigators at your location spend 1 [per_investigator] clues, as a group (2 [per_investigator] clues instead if it is agenda 2): <i>“Have you seen my dad?”</i> Add that enemy to the victory display.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "All I Have Left of Him",
+  "encounterSet": "red_tide_rising",
+  "cost": null
+ },
+ {
+  "code": "90045b",
+  "name": "Mysterious Photo",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "rtr",
+  "quantity": 1,
+  "traits": [
+   "Item"
+  ],
+  "text": "[fast] Exhaust Mysterious Photo: Either take an investigate action at a [[Hideout]] location or flip Mysterious Photo over. [fast] If you are at a [[Hideout]] location with no clues on it, investigators at that location spend clues, as a group, equal to its clue value: <i>“Where is Dad now?”</i> Add that location to the victory display, moving each enemy and investigator there to a connecting location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "All I Have Left of Him",
+  "encounterSet": "red_tide_rising",
+  "cost": null
+ },
+ {
+  "code": "90046",
+  "name": "\"Ashcan\" Pete",
+  "type": "investigator",
+  "faction": "survivor",
+  "pack": "otr",
+  "quantity": 1,
+  "traits": [
+   "Drifter"
+  ],
+  "text": "You begin the game with Pete's Guitar in play.\n[reaction] When a card you own that is attached to a scenario card would be discarded: Add it to your hand instead. (Limit once per round.)\n[elder_sign] effect: +1. Choose a card you own attached to a scenario card. You may return the chosen card to your hand.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Drifter",
+  "backText": "<b>Deck size</b>: 30.\n<b>Deckbuilding Options</b>: Survivor cards ([survivor]) level 0-3, [[Improvised]] and [[Tactic]] cards level 0-4, Neutral cards level 0-5, up to 5 other Guardian cards ([guardian]) level 0.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Duke, Wracked by Nightmares, 1 random basic weakness.",
+  "flavor": "\"C'mere, boy... We got work to do.\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 4,
+   "intellect": 2,
+   "combat": 3,
+   "agility": 3
+  },
+  "health": 7,
+  "sanity": 7
+ },
+ {
+  "code": "90047",
+  "name": "Pete's Guitar",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "otr",
+  "quantity": 1,
+  "traits": [
+   "Item",
+   "Instrument"
+  ],
+  "text": "\"Ashcan\" Pete deck only. Replacement.\n[fast] Exhaust Pete's Guitar: Choose a non-[[Elite]] enemy at your location or a connecting location. Move that enemy once in a direction of your choice. Then, if there are no enemies at your location, either heal 1 horror or gain 1 resource.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "Still Holdin' Up",
+  "deckLimit": 1,
+  "cost": 2
+ },
+ {
+  "code": "90048",
+  "name": "Hard Times",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "otr",
+  "quantity": 1,
+  "traits": [
+   "Hardship"
+  ],
+  "text": "Replacement.\n<b>Revelation</b> - Put Hard Times into play in your threat area.\n<b>Forced</b> - After you draw 1 or more cards: Choose and discard that many cards from hand.\n[action][action]: Discard Hard Times.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "weakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "90049",
+  "name": "Jim Culver",
+  "type": "investigator",
+  "faction": "mystic",
+  "pack": "ltr",
+  "quantity": 1,
+  "traits": [
+   "Performer",
+   "Cursed"
+  ],
+  "text": "[reaction] After you reveal 1 or more [skull] or [curse] tokens during a skill test you are performing: Replenish 1 charge on an asset you control. (Limit once per round.)\n[elder_sign] effect: +2. You may treat this token as if it were a [skull] or [curse] token instead.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Musician",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Mystic cards ([mystic]) level 0-3, [[Spell]] and [[Cursed]] cards level 0-4, Neutral cards level 0-5, up to five other Survivor cards ([survivor]) level 0.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Jim's Trumpet, Final Rhapsody, The Beyond, 1 random basic weakness.\n<b>Spirit Deck Size</b>: 10.\n<b>Spirit Deckbuilding Options</b>: 9 different [[Ally]] assets from any class level 0–2, Vengeful Shade.\n<b>Spirit Deck Instructions</b>: Shuffle the “spirit deck” separately from your deck and place it next to The Beyond asset, facedown. This deck may be upgraded separately using your unspent experience.",
+  "flavor": "“I know I can make the dead dance.”",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 4,
+   "intellect": 3,
+   "combat": 3,
+   "agility": 2
+  },
+  "health": 7,
+  "sanity": 8
+ },
+ {
+  "code": "90050",
+  "name": "Jim's Trumpet",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "ltr",
+  "quantity": 1,
+  "traits": [
+   "Item",
+   "Instrument",
+   "Relic"
+  ],
+  "text": "Jim Culver deck only. Advanced.\n[reaction] When a [skull] or [curse] token is revealed during a skill test you are performing, exhaust Jim's Trumpet: Heal 1 horror from each investigator and [[Ally]] asset at your location or a connecting location.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "willpower": 2,
+   "wild": 2
+  },
+  "subname": "The Dead Speak",
+  "deckLimit": 1,
+  "cost": 2
+ },
+ {
+  "code": "90051",
+  "name": "Final Rhapsody",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "ltr",
+  "quantity": 1,
+  "traits": [
+   "Endtimes"
+  ],
+  "text": "Advanced.\n<b>Revelation</b> - Reveal 5 chaos tokens from the chaos bag. For each non-[elder_sign], non-[bless] symbol token revealed, take 1 damage and 1 horror.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "When the dead start talking about what scares them, that's when it's time to listen.",
+  "subtype": "weakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "90052",
+  "name": "The Beyond",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "ltr",
+  "quantity": 1,
+  "traits": [
+   "Sanctum",
+   "Spectral"
+  ],
+  "text": "Jim Culver deck only. Permanent.\nEach attached spirit loses all printed traits and gains the [[Geist]] trait. When damage/horror would be placed on an attached spirit, it must be placed on Jim Culver, instead.\n<b>Forced</b> – When your turn begins: Attach the top card of the spirit deck to The Beyond, as a spirit. If 4 or more spirits are attached, flip this card and resolve its text.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "Bleak Netherworld",
+  "deckLimit": 1,
+  "cost": null
+ },
+ {
+  "code": "90052b",
+  "name": "The Beyond",
+  "type": "story",
+  "faction": "neutral",
+  "pack": "ltr",
+  "quantity": 1,
+  "traits": [],
+  "text": "<b>Forced</b> – One at a time, choose each non-weakness spirit attached to The Beyond and reveal a random token from the chaos bag. If it is...\n- ... an [elder_sign] token: You may either heal 1 horror, or attach the top card of the spirit deck to The Beyond, as a spirit. <i>(Do not reveal tokens for the spirit you attach after resolving this effect.)</i>\n- ... an [auto_fail] token: Discard this spirit. Take 1 direct damage/horror.\n- ...a [skull] token: Discard this spirit. Heal 1 horror.\n- ...a [cultist], [elder_thing], [tablet], or [curse] token: You must either discard this spirit or take 1 direct damage.\n- ...any other token: Discard this spirit.\nFlip this card back to its asset side.\n<hr><b>Reminder:</b> <i>Spirits attached to The Beyond are in play but only retain their names and text boxes. Spirits do not take up slots and do not have health or sanity values. When a unique spirit is attached to The Beyond, any other asset that shares its name and is already in play is discarded. Spirits are always discarded to the</i> <b>bottom</b> <i>of the spirit deck.</i>",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {}
+ },
+ {
+  "code": "90053",
+  "name": "Vengeful Shade",
+  "type": "enemy",
+  "faction": "neutral",
+  "pack": "ltr",
+  "quantity": 1,
+  "traits": [
+   "Monster",
+   "Geist"
+  ],
+  "text": "Hunter. <b>Prey</b> – Jim Culver only.\nYou may fight or evade this enemy while it is attached to The Beyond (as if it were engaged with you). If you succeed, discard it. If you fail, spawn it engaged with you.\n<b>Forced</b> – When you attach a spirit to The Beyond via its forced effect: Vengeful Shade attacks you <i>(even if it is not at your location)</i>.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "hunter"
+  ],
+  "slots": [],
+  "icons": {},
+  "subtype": "weakness",
+  "deckLimit": 1,
+  "enemy": {
+   "fight": 5,
+   "health": 2,
+   "healthPerInvestigator": false,
+   "evade": 5,
+   "damage": 0,
+   "horror": 2
+  }
+ },
+ {
+  "code": "90054",
+  "name": "Laid to Rest",
+  "type": "scenario",
+  "faction": "mythos",
+  "pack": "ltr",
+  "quantity": 1,
+  "traits": [],
+  "text": "Easy / Standard\n[skull]: -X. X is 1 more than the number of copies of Unfinished Business in the victory display.\n[cultist]: -X. X is the number of cards attached to The Beyond.\n[tablet]: -X. X is the number of [[Spectral]] locations in play.\n[elder_thing]: -2. If there is a [[Geist]] enemy at your location, reveal another token.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backText": "Hard / Expert\n[skull]: -X. X is 2 more than the number of copies of Unfinished Business in the victory display.\n[cultist]: -X. X is twice the number of cards attached to The Beyond.\n[tablet]: -X. X is twice the number of [[Spectral]] locations in play.\n[elder_thing]: -3. If there is a [[Geist]] enemy at your location, you automatically fail.",
+  "encounterSet": "laid_to_rest"
+ },
+ {
+  "code": "90055",
+  "name": "Gathering Mists",
+  "type": "agenda",
+  "faction": "mythos",
+  "pack": "ltr",
+  "quantity": 1,
+  "traits": [],
+  "text": "<b>Forced</b> – When the enemy phase begins: Deal 1 damage to Jean Devereux for each ready Ravenous Spirit at his location.\n<b>Forced</b> – If Jim Culver is defeated: Advance the act.\n[action] Spend 2 [per_investigator] clues, as a group: <b>Parley.</b> You banish a spirit. Discard the top card of the Spirit deck. <i>(Hint: Draw Heretics out of the Beyond and summon them with Jean’s help!)</i>",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "The Hour Grows Late...",
+  "backText": "Place 1 horror on the scenario reference card under Spiritual Disturbance. If there is 4 horror on the scenario reference card, each investigator who has not been eliminated is defeated and suffers 1 mental trauma. <b>(→R2)</b>\nOtherwise <i>(if there is 3 or fewer horror on the scenario reference card)</i>, perform the following:\n- Place clues on each location until it has 1 [per_investigator] clues on it.\n- Flip each location except for Jean Devereux’s location to its non-[[Spectral]] side.\nFlip this agenda back over.",
+  "flavor": "Hangman’s Hill is crawling with specters.",
+  "encounterSet": "laid_to_rest",
+  "stage": 1,
+  "doom": 4
+ },
+ {
+  "code": "90056",
+  "name": "Laid to Rest",
+  "type": "act",
+  "faction": "mythos",
+  "pack": "ltr",
+  "quantity": 1,
+  "traits": [],
+  "text": "[fast] Either exhaust Jim’s Trumpet, or spend 1 [per_investigator] clues, as a group: Choose an enemy to move once toward Jim Culver’s location.\n[fast] Spend 1 [per_investigator] clues, as a group: Flip your location. (Group limit once per round per location.)\n<b>Objective</b> – If there are 4 copies of Unfinished Business in the victory display, advance.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "The Spectral Storm",
+  "backText": "<b>If this act advanced via its objective:</b>\n<blockquote><i>“Wait,” says Jean, steadying himself. His eyes roll back in his head and he collapses into your arms, shaking. The spiritual energy around you seems to still.</i></blockquote>\nFind each Ravenous Spirit in play and place it in the victory display. <b>(→R1)</b>\n<hr><b>Otherwise:</b>\n<blockquote><i>“It’s too much!” Jean screams as he holds his hands to his bleeding ears. A cacophanous cry echoes across the wind-swept hill as you both flee the scene.</i></blockquote>\nJim Culver suffers 1 mental trauma for each Heretic enemy still in The Beyond (to a minimum of 1 mental trauma). Each other investigator who was not eliminated is defeated and suffers 1 mental trauma. <b>(→R2)</b>",
+  "flavor": "If you help these ghosts, they'll help you.",
+  "encounterSet": "laid_to_rest",
+  "stage": 1
+ },
+ {
+  "code": "90057a",
+  "name": "Jean Devereux",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "ltr",
+  "quantity": 1,
+  "traits": [
+   "Humanoid",
+   "Sorcerer",
+   "Elite"
+  ],
+  "text": "Aloof. Patrol (Nearest location with a Ravenous Spirit enemy beneath it). Cannot be engaged.\n[action] Draw a facedown card beneath Jean Devereux’s location and choose a Heretic attached to The Beyond: <b>Parley.</b> Jim Culver draws the chosen Heretic, flips it, and resolves its text.\n<b>Forced</b> – When Jean Devereux would be defeated: Instead, heal all damage from him and flip him.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [
+   "aloof"
+  ],
+  "slots": [],
+  "icons": {},
+  "subname": "Seeking Closure",
+  "encounterSet": "laid_to_rest",
+  "enemy": {
+   "fight": 3,
+   "health": 3,
+   "healthPerInvestigator": true,
+   "evade": 3,
+   "damage": 1,
+   "horror": 0
+  }
+ },
+ {
+  "code": "90057b",
+  "name": "Jean Devereux",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "ltr",
+  "quantity": 1,
+  "traits": [
+   "Humanoid",
+   "Sorcerer",
+   "Elite"
+  ],
+  "text": "Hunter. Prey – Jim Culver only.\n[action]: <b>Parley.</b> Test [willpower] (3). This test gets +1 difficulty for each copy of Unfinished Business in the victory display. If you succeed, heal all damage from Jean Devereux and flip him <i>(he is no longer engaged)</i>.\n<b>Forced</b> – If Jean Devereux is defeated: Advance the act.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [
+   "hunter"
+  ],
+  "slots": [],
+  "icons": {},
+  "subname": "Possessed",
+  "encounterSet": "laid_to_rest",
+  "enemy": {
+   "fight": 4,
+   "health": 3,
+   "healthPerInvestigator": true,
+   "evade": 2,
+   "damage": 1,
+   "horror": 1
+  }
+ },
+ {
+  "code": "90058",
+  "name": "Ravenous Spirit",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "ltr",
+  "quantity": 4,
+  "traits": [
+   "Monster",
+   "Geist",
+   "Spectral",
+   "Elite"
+  ],
+  "text": "Aloof. Patrol (Jean Devereux’s location). Retaliate.\nRavenous Spirit gets +2 [per_investigator] health.\n<b>Forced</b> – When this enemy enters a location: Flip that location to its [[Spectral]] side. One at a time, each investigator at that location resolves each haunted ability on it.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "aloof",
+   "retaliate"
+  ],
+  "slots": [],
+  "icons": {},
+  "subname": "Possessed",
+  "encounterSet": "laid_to_rest",
+  "victory": 1,
+  "enemy": {
+   "fight": 4,
+   "health": 4,
+   "healthPerInvestigator": false,
+   "evade": 4,
+   "damage": 1,
+   "horror": 1
+  }
+ },
+ {
+  "code": "90059",
+  "name": "Zoey Samaras",
+  "type": "investigator",
+  "faction": "guardian",
+  "pack": "ptr",
+  "quantity": 1,
+  "traits": [
+   "Believer",
+   "Hunter"
+  ],
+  "text": "[reaction] After you deal 1 or more damage to an enemy: Add 1 [bless] token to the chaos bag. (Limit once per phase.)\n[fast] Before you reveal chaos tokens during an attack, remove 3 [bless] tokens from the chaos bag: This attack deals +1 damage. (Limit once per round.)\n[elder_sign] effect: +1 for each [bless] token in the chaos bag.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Chef",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Guardian cards ([guardian]) level 0-3, [[Blessed]] and [[Charm]] cards level 0-4, Neutral cards level 0-5, up to five other Mystic cards ([mystic]) level 0.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Zoey's Cross, Smite the Wicked, 1 random basic weakness.",
+  "flavor": "\"His work is not yet done.\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 4,
+   "intellect": 2,
+   "combat": 4,
+   "agility": 2
+  },
+  "health": 8,
+  "sanity": 6
+ },
+ {
+  "code": "90060",
+  "name": "Zoey's Cross",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "ptr",
+  "quantity": 1,
+  "traits": [
+   "Item",
+   "Charm"
+  ],
+  "text": "Zoey Samaras deck only. Advanced.\n[reaction] After you engage an enemy, exhaust Zoey’s Cross and spend 1 resource: Deal 1 damage to that enemy.\n[fast] Remove 2 [bless] tokens from the chaos bag: Engage an enemy at your location.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "accessory"
+  ],
+  "icons": {
+   "combat": 2,
+   "wild": 1
+  },
+  "subname": "Symbol of Righteousness",
+  "deckLimit": 1,
+  "cost": 1
+ },
+ {
+  "code": "90061",
+  "name": "Smite the Wicked",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "ptr",
+  "quantity": 1,
+  "traits": [
+   "Task"
+  ],
+  "text": "Advanced. Attached enemy gets +2 fight and +2 health.\n<b>Revelation</b> - Discard cards from the top of the encounter deck until an enemy is discarded. Attach Smite the Wicked to that enemy and spawn it at the location farthest from you.\n<b>Forced</b> - When the game ends, if attached enemy is in play: Zoey Samaras suffers 1 mental trauma.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "weakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "90062",
+  "name": "Monterey Jack",
+  "type": "investigator",
+  "faction": "rogue",
+  "pack": "rop",
+  "quantity": 1,
+  "traits": [
+   "Wayfarer"
+  ],
+  "text": "[reaction] After you discover the last clue at your location: Search the top X cards of your deck for a [[Charm]] or [[Relic]] asset and play it, reducing its cost by X. X is the printed shroud of your location. Shuffle your deck. (Limit once per round.)\n[elder_sign] effect: +1. Gain 1 resource for each [[Charm]] asset and each [[Relic]] asset you control.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Archaeologist",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Rogue cards ([rogue]) level 0-3, [[Charm]] and [[Relic]] cards level 0-4, Neutral cards level 0-5, up to 5 other Seeker cards ([seeker]) level 0.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Trusty Bullwhip, Buried Secrets, 1 random basic weakness.",
+  "flavor": "\"You call this archaeology?\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 1,
+   "intellect": 4,
+   "combat": 2,
+   "agility": 5
+  },
+  "health": 8,
+  "sanity": 6
+ },
+ {
+  "code": "90063",
+  "name": "Trusty Bullwhip",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "rop",
+  "quantity": 1,
+  "traits": [
+   "Item",
+   "Weapon",
+   "Melee"
+  ],
+  "text": "Fast. Monterey Jack deck only. Advanced.\n[action]: <b>Fight.</b> This attack uses [agility] instead of [combat]. You get +2 skill value for this attack. If this attack succeeds, you may exhaust Trusty Bullwhip to deal +1 damage for this attack and automatically evade the attacked enemy.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "intellect": 1,
+   "agility": 2,
+   "wild": 1
+  },
+  "deckLimit": 1,
+  "cost": 1
+ },
+ {
+  "code": "90064",
+  "name": "Buried Secrets",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "rop",
+  "quantity": 1,
+  "traits": [
+   "Mystery"
+  ],
+  "text": "Advanced.\n<b>Revelation</b> - Put Buried Secrets into play in your threat area.\nIf your location can be investigated, you cannot move except by scenario card effects.\n[action][action]: <b>Investigate.</b> If you succeed, instead of discovering clues, discard Buried Secrets.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "weakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "90065",
+  "name": "Relics of the Past",
+  "type": "scenario",
+  "faction": "mythos",
+  "pack": "rop",
+  "quantity": 1,
+  "traits": [],
+  "text": "Easy / Standard\n[skull]: -X. X is the number of locations with 1 or more doom on them.\n[cultist]: -1. If you are poisoned, reveal another token.\n[tablet]: -3. If you fail, place 1 doom on your location.\n[elder_thing]: -3. If you fail, the nearest ready unengaged [[Serpent]] enemy moves once toward your location.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backText": "Hard / Expert\n[skull]: -X. X is 1 more than the number of locations with 1 or more doom on them.\n[cultist]: -2. If you are poisoned, reveal another token.\n[tablet]: -4. Place 1 doom on your location.\n[elder_thing]: -5. After this test resolves, the nearest ready unengaged [[Serpent]] enemy moves once toward your location.",
+  "encounterSet": "relics_of_the_past"
+ },
+ {
+  "code": "90066a",
+  "name": "Something Else Stirs...",
+  "type": "agenda",
+  "faction": "mythos",
+  "pack": "rop",
+  "quantity": 1,
+  "traits": [],
+  "text": "*This agenda gets +1 [per_investigator] doom threshold.\n<b>Forced</b> - When this agenda advances: Do not remove doom from locations in play.\n<b>Forced</b> - When an investigator is defeated: That investigator shuffles each [[Ancient]] story asset they control into the exploration deck.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "You've made your way to the Eztli ruins in search of ancient artifacts.",
+  "encounterSet": "relics_of_the_past",
+  "stage": 1,
+  "doom": 4
+ },
+ {
+  "code": "90066b",
+  "name": "Dweller in the Pit",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "rop",
+  "quantity": 1,
+  "traits": [
+   "Creature",
+   "Elite"
+  ],
+  "text": "Hunter. Retaliate. <b>Spawn</b> - Engaged with Monterey Jack.\nDweller in the Pit gets +1 [per_investigator] health and +1 fight for each vengeance point in the victory display (max +3 fight).\n<b>Forced</b> - After Dweller in the Pit deals damage to you, check your supplies: If you do not have the satchel, shuffle each [[Ancient]] asset you control into the exploration deck.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [
+   "hunter",
+   "retaliate"
+  ],
+  "slots": [],
+  "icons": {},
+  "subname": "Guardian of the Past",
+  "encounterSet": "relics_of_the_past",
+  "victory": 1,
+  "enemy": {
+   "fight": 3,
+   "health": 6,
+   "healthPerInvestigator": false,
+   "evade": 3,
+   "damage": 2,
+   "horror": 1
+  },
+  "spawn": "Engaged with Monterey Jack"
+ },
+ {
+  "code": "90067",
+  "name": "Guardian of the Relics",
+  "type": "agenda",
+  "faction": "mythos",
+  "pack": "rop",
+  "quantity": 1,
+  "traits": [],
+  "text": "*This agenda gets +1 [per_investigator] doom threshold.\n<b>Forced</b> - When an investigator is defeated: That investigator shuffles each [[Ancient]] story asset they control into the exploration deck.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "Catastrophic Ruin",
+  "backText": "Each investigator who has not been eliminated is defeated and suffers 1 physical trauma.",
+  "flavor": "From the darkness of the tunnel before you, the creature lumbers forward with a reptilian hiss.",
+  "encounterSet": "relics_of_the_past",
+  "stage": 2,
+  "doom": 12
+ },
+ {
+  "code": "90068",
+  "name": "Crumbling Ruin",
+  "type": "act",
+  "faction": "mythos",
+  "pack": "rop",
+  "quantity": 1,
+  "traits": [],
+  "text": "[action]  If there are no clues on your location: <b>Explore</b>. Draw the top card of the exploration deck. If it is a connecting location, put it into play and move to it.\n<b>Objective</b> - When each surviving investigator is at Inner Chamber, they may spend the requisite number of clues, as a group, to advance.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "Trapped in the Tombs",
+  "backText": "Move each unengaged [[Elite]] enemy directly to Inner Chamber.\nShuffle each of the following cards into the exploration deck: Each of the set-aside [[Ancient]] story assets, the set-aside Vengeant Past treachery, each single-sided location in play, and 1 copy of the set-aside Brood of Yig enemy for each vengeance point in the victory display.\nPlace 1 [per_investigator] clues on each revealed location (up to a maximum of its clue threshold).",
+  "flavor": "As you traverse the tight corridors of the ruin, you feel a deep rumbling beneath your feet.",
+  "encounterSet": "relics_of_the_past",
+  "stage": 1,
+  "actClues": 4,
+  "actCluesPerInvestigator": true
+ },
+ {
+  "code": "90069",
+  "name": "Find the Way Out!",
+  "type": "act",
+  "faction": "mythos",
+  "pack": "rop",
+  "quantity": 1,
+  "traits": [],
+  "text": "[action]  If there are no clues on your location: <b>Explore</b>. Draw the top card of the exploration deck. If it is a connecting location, put it into play and move to it.\n<b>Objective</b> - Get out with as many [[Ancient]] relics as you can! If each surviving investigator has resigned, advance.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "Escape at Last",
+  "backText": "<b>(→R1)</b>",
+  "encounterSet": "relics_of_the_past",
+  "stage": 2
+ },
+ {
+  "code": "90070",
+  "name": "Secret Passage",
+  "type": "location",
+  "faction": "mythos",
+  "pack": "rop",
+  "quantity": 1,
+  "traits": [
+   "Ancient",
+   "Ruins"
+  ],
+  "text": "<b>Revelation</b> - If Secret Passage is connected to your location, put it and the set-aside Inner Chamber into play. Otherwise, shuffle it into the exploration deck.\n<b>Forced</b> - After you enter Secret Passage: Check your supplies. If you have the compass, discover 1 clue from Secret Passage.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "relics_of_the_past",
+  "victory": 1,
+  "shroud": 5,
+  "clues": 1,
+  "cluesPerInvestigator": true
+ },
+ {
+  "code": "90071",
+  "name": "Inner Chamber",
+  "type": "location",
+  "faction": "mythos",
+  "pack": "rop",
+  "quantity": 1,
+  "traits": [
+   "Forgotten",
+   "Ruins"
+  ],
+  "text": "[action] Spend X clues: Reveal the top X cards of the exploration deck. Draw 1 non-location card revealed in this way and check your supplies. If you have chalk, you may choose 1 additional non-location card revealed and draw it. Shuffle the remaining cards into the exploration deck.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "relics_of_the_past",
+  "victory": 1,
+  "shroud": 4,
+  "clues": 2,
+  "cluesPerInvestigator": true
+ },
+ {
+  "code": "90072",
+  "name": "Ancient Hall",
+  "type": "location",
+  "faction": "mythos",
+  "pack": "rop",
+  "quantity": 1,
+  "traits": [
+   "Ancient",
+   "Ruins"
+  ],
+  "text": "<b>Forced</b> - After doom is placed on Ancient Hall: Shuffle the top card of the encounter deck into the exploration deck. Any investigator at Ancient Hall may spend 3 resources to cancel this effect.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "The crumbling hall dares you to venture deeper.",
+  "encounterSet": "relics_of_the_past",
+  "shroud": 3,
+  "clues": 2,
+  "cluesPerInvestigator": true
+ },
+ {
+  "code": "90073",
+  "name": "Jade Crocodile",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "rop",
+  "quantity": 1,
+  "traits": [
+   "Item",
+   "Relic",
+   "Ancient"
+  ],
+  "text": "<b>Revelation</b> - Put Jade Crocodile into play under your control. You must either place 1 doom on your location, or take 2 damage.\n<b>Forced</b> - When you resign: Add Jade Crocodile to the victory display.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "Effigy of the Guardian",
+  "encounterSet": "relics_of_the_past",
+  "cost": null,
+  "victory": 1
+ },
+ {
+  "code": "90074",
+  "name": "Obsidian Jaguar",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "rop",
+  "quantity": 1,
+  "traits": [
+   "Item",
+   "Relic",
+   "Ancient"
+  ],
+  "text": "<b>Revelation</b> - Put Obsidian Jaguar into play under your control. You must either place 1 doom on your location, or the nearest enemy attacks you.\n<b>Forced</b> - When you resign: Add Obsidian Jaguar to the victory display.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "Effigy of the Huntress",
+  "encounterSet": "relics_of_the_past",
+  "cost": null,
+  "victory": 1
+ },
+ {
+  "code": "90075",
+  "name": "Citrine Snake",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "rop",
+  "quantity": 1,
+  "traits": [
+   "Item",
+   "Relic",
+   "Ancient"
+  ],
+  "text": "<b>Revelation</b> - Put Citrine Snake into play under your control. If you are poisoned, take 1 direct damage. If you are not poisoned, put a set-aside Poisoned weakness into play in your threat area.\n<b>Forced</b> - When you resign: Add Citrine Snake to the victory display.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "Effigy of the Child",
+  "encounterSet": "relics_of_the_past",
+  "cost": null,
+  "victory": 1
+ },
+ {
+  "code": "90076",
+  "name": "Turquoise Eagle",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "rop",
+  "quantity": 1,
+  "traits": [
+   "Item",
+   "Relic",
+   "Ancient"
+  ],
+  "text": "<b>Revelation</b> - Put Turquoise Eagle into play under your control. You must either place 1 doom on your location, or take 2 horror.\n<b>Forced</b> - When you resign: Add Turquoise Eagle to the victory display.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "Effigy of the Watcher",
+  "encounterSet": "relics_of_the_past",
+  "cost": null,
+  "victory": 1
+ },
+ {
+  "code": "90077",
+  "name": "Vengeant Past",
+  "type": "treachery",
+  "faction": "mythos",
+  "pack": "rop",
+  "quantity": 1,
+  "traits": [
+   "Power"
+  ],
+  "text": "Peril.\n<b>Revelation</b> - For each [[Ancient]] story asset controlled by an investigator, you must either <i>(choose one)</i>:\n- Deal 1 damage or horror to that asset's controller.\n- Shuffle that asset into the exploration deck.\nAfter this effect resolves, shuffle Vengeant Past into the exploration deck.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "peril"
+  ],
+  "slots": [],
+  "icons": {},
+  "encounterSet": "relics_of_the_past"
+ },
+ {
+  "code": "90078",
+  "name": "Rex Murphy",
+  "type": "investigator",
+  "faction": "seeker",
+  "pack": "hfa",
+  "quantity": 1,
+  "traits": [
+   "Reporter",
+   "Cursed"
+  ],
+  "text": "[reaction] When you would either place 1 of your clues on your location, or add 2 [curse] tokens to the chaos bag: Do the other instead. (This can still satisfy the cost of an ability.)\n[elder_sign] effect: +2 for each [curse] token revealed during this test. Draw 1 card for each [curse] token revealed during this test.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Reporter",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Seeker cards ([seeker]) level 0-3, [[Cursed]] and [[Gambit]] cards level 0-4, Neutral cards level 0-5, up to five other Rogue cards ([rogue]) level 0.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Search for the Truth, Rex's Curse, 1 random basic weakness.\n<b>Deckbuilding Restrictions</b>: No [[Fortune]] or [[Blessed]] cards (unless they are also [[Cursed]]).",
+  "flavor": "\"Oh, come on, not <u>again</u>!\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 3,
+   "intellect": 4,
+   "combat": 2,
+   "agility": 3
+  },
+  "health": 6,
+  "sanity": 9
+ },
+ {
+  "code": "90079",
+  "name": "Search for the Truth",
+  "type": "event",
+  "faction": "neutral",
+  "pack": "hfa",
+  "quantity": 1,
+  "traits": [
+   "Insight"
+  ],
+  "text": "Rex Murphy deck only. Advanced.\nFor each clue on Rex Murphy (to a maximum of 5) you may either:\n- Draw 1 card.\n- Place that clue on your location and return any card from your discard pile to your hand.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 2,
+   "wild": 1
+  },
+  "deckLimit": 1,
+  "cost": 1
+ },
+ {
+  "code": "90080",
+  "name": "Rex's Curse",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "hfa",
+  "quantity": 1,
+  "traits": [
+   "Curse"
+  ],
+  "text": "Advanced.\n<b>Revelation</b> - Put Rex's Curse into play in your threat area.\n<b>Forced</b> - When you would succeed at a skill test: Reveal an additional chaos token. If this effect causes you to fail the test, shuffle Rex's Curse into your deck. (Limit once per test.)",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "weakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "90081",
+  "name": "Father Mateo",
+  "type": "investigator",
+  "faction": "mystic",
+  "pack": "aof",
+  "quantity": 1,
+  "traits": [
+   "Believer",
+   "Warden"
+  ],
+  "text": "[fast] During your turn: Seal a [bless] token on an investigator at your location with no [bless] token sealed on them. (Limit once per round.)\n[reaction] When an investigator would reveal a chaos token: Resolve the [bless] token sealed on them instead. Release that token.\n[elder_sign] effect: +1. Resolve Father Mateo's [fast] ability, ignoring its limit.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Priest",
+  "backText": "<b>Deck Size:</b> 30.\n<b>Deckbuilding Options:</b> Mystic cards ([mystic]) level 0-3, [[Blessed]] cards level 0-5, Neutral cards level 0-5, up to 5 other cards with \"seal\" level 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): The Codex of Ages, Serpents of Yig, 1 random basic weakness.\n",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 4,
+   "intellect": 3,
+   "combat": 2,
+   "agility": 3
+  },
+  "health": 6,
+  "sanity": 8
+ },
+ {
+  "code": "90082",
+  "name": "The Codex of Ages",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "aof",
+  "quantity": 1,
+  "traits": [
+   "Item",
+   "Relic",
+   "Tome",
+   "Blessed"
+  ],
+  "text": "Father Mateo deck only. Advanced. Seal ([elder_sign] or up to 3 [bless]).\nYou get +1 to each of your skills while there is a token sealed here.\n[reaction] When an investigator at your location would reveal a chaos token from the chaos bag: That investigator resolves a token sealed here instead, then releases that token. (Limit once per test.)",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1,
+   "wild": 1
+  },
+  "subname": "finis omnium nunc est",
+  "deckLimit": 1,
+  "cost": 2
+ },
+ {
+  "code": "90083",
+  "name": "Serpents of Yig",
+  "type": "enemy",
+  "faction": "neutral",
+  "pack": "aof",
+  "quantity": 1,
+  "traits": [
+   "Humanoid",
+   "Monster",
+   "Serpent"
+  ],
+  "text": "Advanced. <b>Prey</b> - Father Mateo only. Hunter.\n<b>Revelation</b> - Search the chaos bag and all play areas for the [elder_sign] token and each [bless] token and seal them on Serpents of Yig.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "hunter"
+  ],
+  "slots": [],
+  "icons": {},
+  "subtype": "weakness",
+  "deckLimit": 1,
+  "enemy": {
+   "fight": 3,
+   "health": 4,
+   "healthPerInvestigator": false,
+   "evade": 3,
+   "damage": 1,
+   "horror": 1
+  }
+ },
+ {
+  "code": "90084",
+  "name": "Jenny Barnes",
+  "type": "investigator",
+  "faction": "rogue",
+  "pack": "pap",
+  "quantity": 1,
+  "traits": [
+   "Drifter",
+   "Socialite"
+  ],
+  "text": "[reaction] After your turn begins: Play a [[Talent]] asset, reducing its cost by 1.\n[fast] Discard a [[Talent]] asset you control: Gain resources equal to that asset's printed cost. (Limit 5 resources per round.)\n[elder_sign] effect: +0. If you succeed, gain 3 resources.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Dilettante",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Rogue cards ([rogue]) level 0-3, Neutral cards level 0-5, up to 10 other non-permanent [[Talent]] cards level 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Jenny's Twin .45s, Searching for Izzie, 1 random basic weakness.",
+  "flavor": "\"Oh honey, I'm making this up as I go along.\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 3,
+   "intellect": 3,
+   "combat": 3,
+   "agility": 3
+  },
+  "health": 8,
+  "sanity": 7
+ },
+ {
+  "code": "90085",
+  "name": "Jenny's Twin .45s",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "pap",
+  "quantity": 1,
+  "traits": [
+   "Item",
+   "Weapon",
+   "Firearm"
+  ],
+  "text": "Jenny Barnes deck only. Advanced. Uses (X ammo).\n[action] Spend 1 ammo: <b>Fight.</b> You get +2 [combat] for this attack. This attack deals +1 damage.\n[reaction] After you defeat an enemy using the above ability, exhaust Jenny's Twin .45s: Gain resources equal to that enemy's printed health.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand",
+   "hand"
+  ],
+  "icons": {
+   "agility": 1,
+   "wild": 2
+  },
+  "subname": "A Perfect Fit",
+  "deckLimit": 1,
+  "cost": -2
+ },
+ {
+  "code": "90086",
+  "name": "Searching for Izzie",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "pap",
+  "quantity": 1,
+  "traits": [
+   "Task"
+  ],
+  "text": "Advanced.\n<b>Revelation</b> - Attach Searching for Izzie to the location farthest from you. Attached location gets +2 shroud.\n[action][action]: <b>Investigate.</b> If you succeed, instead of discovering clues, discard Searching for Izzie.\n<b>Forced</b> - When the game ends, if Searching for Izzie is in play: You suffer 1 mental trauma.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "weakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "90087",
+  "name": "Lola Hayes",
+  "type": "investigator",
+  "faction": "neutral",
+  "pack": "enc",
+  "quantity": 1,
+  "traits": [
+   "Performer"
+  ],
+  "text": "You begin the game in the Neutral role.\nYou can only play or commit Neutral cards or cards of your current role.\n<b>Forced</b> - When your turn begins: Switch your role ([guardian], [seeker], [rogue], [mystic], [survivor], or Neutral).\n[elder_sign] effect: +2. You may switch roles.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Actress",
+  "backText": "<b>Deck size</b>: 40.\n<b>Class Choices</b>: At deck creation, choose 2 classes ([guardian], [seeker], [rogue], [mystic], or [survivor]).\n<b>Deckbuilding Options</b>: Neutral cards level 0-5, cards from your chosen classes level 0-4, cards from other classes level 0-1.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): 2 copies of Improvisation, 2 copies of Crisis of Identity, 1 random basic weakness.\n<b>Additional Requirements</b>: Your deck must include at least 6 cards from each class ([guardian], [seeker], [rogue], [mystic], and [survivor]).",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 3,
+   "intellect": 3,
+   "combat": 3,
+   "agility": 3
+  },
+  "health": 6,
+  "sanity": 6
+ },
+ {
+  "code": "90088",
+  "name": "Leading Lady (Heroine)",
+  "type": "event",
+  "faction": "neutral",
+  "pack": "enc",
+  "quantity": 1,
+  "traits": [
+   "Tactic",
+   "Improvised"
+  ],
+  "text": "Lola Hayes deck only. Replacement.\nFast. Play only during your turn.\nPlay a card from your hand, regardless of your current role <i>(paying its cost)</i>. If that card was a Guardian ([guardian]) card, you may either draw 1 card or immediately take a fight action.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "wild": 1
+  },
+  "flavor": "\"I'm done waiting in the wings.\"",
+  "deckLimit": 1,
+  "cost": 1
+ },
+ {
+  "code": "90089",
+  "name": "Leading Lady (Mentor)",
+  "type": "event",
+  "faction": "neutral",
+  "pack": "enc",
+  "quantity": 1,
+  "traits": [
+   "Insight",
+   "Improvised"
+  ],
+  "text": "Lola Hayes deck only. Replacement.\nFast. Play only during your turn.\nPlay a card from your hand, regardless of your current role <i>(paying its cost)</i>. If that card was a Seeker ([seeker]) card, you may either draw 1 card or immediately take an investigate action.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "wild": 1
+  },
+  "flavor": "\"I've learned a thing or two on stage.\"",
+  "deckLimit": 1,
+  "cost": 1
+ },
+ {
+  "code": "90090",
+  "name": "Leading Lady (Femme Fatale)",
+  "type": "event",
+  "faction": "neutral",
+  "pack": "enc",
+  "quantity": 1,
+  "traits": [
+   "Trick",
+   "Improvised"
+  ],
+  "text": "Lola Hayes deck only. Replacement.\nFast. Play only during your turn.\nPlay a card from your hand, regardless of your current role <i>(paying its cost)</i>. If that card was a Rogue ([rogue]) card, you may either draw 1 card or immediately take an evade action.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "agility": 1,
+   "wild": 1
+  },
+  "flavor": "\"Trust me, honey, I'm lead material.\"",
+  "deckLimit": 1,
+  "cost": 1
+ },
+ {
+  "code": "90091",
+  "name": "Leading Lady (Enchantress)",
+  "type": "event",
+  "faction": "neutral",
+  "pack": "enc",
+  "quantity": 1,
+  "traits": [
+   "Ritual",
+   "Improvised"
+  ],
+  "text": "Lola Hayes deck only. Replacement.\nFast. Play only during your turn.\nPlay a card from your hand, regardless of your current role <i>(paying its cost)</i>. If that card was a Mystic ([mystic]) card, you may either draw 1 card or remove 1 doom from a player card at your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "wild": 1
+  },
+  "flavor": "\"The trick is to only show them what you want them to see.\"",
+  "deckLimit": 1,
+  "cost": 1
+ },
+ {
+  "code": "90092",
+  "name": "Leading Lady (Final Girl)",
+  "type": "event",
+  "faction": "neutral",
+  "pack": "enc",
+  "quantity": 1,
+  "traits": [
+   "Spirit",
+   "Improvised"
+  ],
+  "text": "Lola Hayes deck only. Replacement.\nFast. Play only during your turn.\nPlay a card from your hand, regardless of your current role <i>(paying its cost)</i>. If that card was a Survivor ([survivor]) card, you may either draw 1 card or heal 1 damage/horror.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "wild": 2
+  },
+  "flavor": "\"Come on, Lola, just make it to the final bow.\"",
+  "deckLimit": 1,
+  "cost": 1
+ },
+ {
+  "code": "90093",
+  "name": "Samuel Blake",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "enc",
+  "quantity": 1,
+  "traits": [
+   "Humanoid",
+   "Cultist"
+  ],
+  "text": "Lola Hayes deck only. Replacement. Peril. Hidden.\nWhile Samuel Blake is in your hand, you cannot switch roles or play cards belonging to another role.\nWhile Samuel Blake is in play, as an additional cost for you to switch your role, you must take 1 horror.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [
+   "peril"
+  ],
+  "slots": [
+   "ally"
+  ],
+  "icons": {},
+  "subname": "Obsessive Producer",
+  "subtype": "weakness",
+  "deckLimit": 1,
+  "cost": 3,
+  "health": 3
+ },
+ {
+  "code": "90094",
+  "name": "Enthralling Encore",
+  "type": "scenario",
+  "faction": "mythos",
+  "pack": "enc",
+  "quantity": 1,
+  "traits": [],
+  "text": "Easy / Standard\n[skull]: -X. X is the number of measures.\n[cultist]: -2. If you fail, you must either spend 1 clue or take 1 damage.\n[tablet]: -3 (-5 instead if there are 3 or more classes among cards you control).\n[elder_thing]: -2. If Sinister Soloist is at your location, reveal another token.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backText": "Hard / Expert\n[skull]: -X. X is 1 more than the number of measures.\n[cultist]: -3. If you fail, you must spend 1 clue and take 1 damage.\n[tablet]: -4 (-6 instead if there are 3 or more classes among cards you control).\n[elder_thing]: -3. If Sinister Soloist is at your location, you automatically fail instead.",
+  "encounterSet": "enthralling_encore"
+ },
+ {
+  "code": "90095",
+  "name": "The Haunting of the Ward Theatre",
+  "type": "agenda",
+  "faction": "mythos",
+  "pack": "enc",
+  "quantity": 1,
+  "traits": [],
+  "text": "[fast] While at Sinister Soloist's location, discard 1 card of each class from your hand ([guardian], [seeker], [rogue], [mystic], and [survivor]): <b>Parley.</b> Automatically evade Sinister Soloist. Treat Sinister Soloist's text box as if it were blank (except for [[Traits]]) for the remainder of the round.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "Dirge of Dim Carcosa",
+  "backText": "Place 1 resource on the scenario reference card, as a measure. Then if there are 5 or more measures, each investigator is defeated and suffers 1 mental trauma.\nOtherwise, each investigator must test [willpower](3). Each investigator who fails takes 1 horror and sets aside 1 non-permanent, non-weakness asset they control. Then, shuffle each asset set aside by this effect into the Props deck. If all investigators fail this test, remove 1[per_investigator] damage from Sinister Soloist.\nPlace clues on each revealed location, up to its clue value.\nShuffle the encounter discard pile into the encounter deck. Reset this agenda to agenda 1a.",
+  "flavor": "The theatre is closed and quiet, as it has been since those days during the phantom production of <i>The King in Yellow</i>. As you take in your surroundings, you hear it again - the haunting violin. Someone is here, and they are keeping the memory of that production alive.",
+  "encounterSet": "enthralling_encore",
+  "stage": 1,
+  "doom": 4
+ },
+ {
+  "code": "90096",
+  "name": "Break Free from the Past",
+  "type": "act",
+  "faction": "mythos",
+  "pack": "enc",
+  "quantity": 1,
+  "traits": [],
+  "text": "[fast] Investigators at the same [[Private]] location spend 1 [per_investigator] clues, as a group: <b>Parley.</b> Reveal the top 3 cards of the Props deck and choose an investigator to draw 1 of them. Shuffle the remaining cards together and place them on the bottom of the Props deck.\n<b>Objective</b> - When Sinister Soloist is in the victory display, advance.",
+  "unique": false,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "backName": "Final Bow",
+  "backText": "<b>(→R1)</b>",
+  "flavor": "The soloist stands on stage, their gangly arms moving with mechanical precision as they play the violin. Their face is shrouded in shadow, but their song follows you throughout the theatre.",
+  "encounterSet": "enthralling_encore",
+  "stage": 1
+ },
+ {
+  "code": "90097",
+  "name": "Sinister Soloist",
+  "type": "enemy",
+  "faction": "mythos",
+  "pack": "enc",
+  "quantity": 1,
+  "traits": [
+   "Monster",
+   "Elite"
+  ],
+  "text": "Alert. Aloof. Elusive. Hunter.\nAs an additional cost to play a non-Neutral card at Sinister Soloist's location, you must take 1 horror.\n<b>Forced</b> - When the enemy phase ends, if Sinister Soloist is ready: Each investigator at Sinister Soloist's location and each connecting location takes 1 direct horror.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [
+   "alert",
+   "aloof",
+   "hunter"
+  ],
+  "slots": [],
+  "icons": {},
+  "subname": "Minstrel of Carcosa",
+  "encounterSet": "enthralling_encore",
+  "victory": 2,
+  "enemy": {
+   "fight": 4,
+   "health": 6,
+   "healthPerInvestigator": true,
+   "evade": 5,
+   "damage": 2,
+   "horror": 2
+  }
+ }
+]

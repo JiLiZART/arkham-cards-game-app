@@ -16,10 +16,12 @@ export type SymbolToken = (typeof SYMBOL_TOKENS)[number];
 
 export const CardType = z.enum([
   "investigator", "asset", "event", "skill", "treachery", "enemy", "location", "act", "agenda", "scenario",
+  // later cycles: story cards, keys and enemy-locations
+  "story", "key", "enemy_location",
 ]);
 export type CardType = z.infer<typeof CardType>;
 
-export const Slot = z.enum(["hand", "arcane", "accessory", "body", "ally", "tarot"]);
+export const Slot = z.enum(["hand", "arcane", "accessory", "body", "ally", "tarot", "head"]);
 export type Slot = z.infer<typeof Slot>;
 
 /** a number, or something computed from the effect context */

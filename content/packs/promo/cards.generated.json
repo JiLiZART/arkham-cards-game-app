@@ -1,0 +1,625 @@
+[
+ {
+  "code": "98001",
+  "name": "Jenny Barnes",
+  "type": "investigator",
+  "faction": "rogue",
+  "pack": "hoth",
+  "quantity": 1,
+  "traits": [
+   "Drifter"
+  ],
+  "text": "You collect 1 additional resource during each upkeep phase.\n[elder_sign] effect: +1 for each resource you have.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Dilettante",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Rogue cards ([rogue]) level 0-5, Neutral cards level 0-5, up to five other level 0 cards from any other class.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Jenny's Twin .45s, Searching for Izzie, 1 random basic weakness.",
+  "flavor": "\"No more 'Miss Barnes' from you. My friends call me Jenny.\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 3,
+   "intellect": 3,
+   "combat": 3,
+   "agility": 3
+  },
+  "health": 8,
+  "sanity": 7
+ },
+ {
+  "code": "98002",
+  "name": "Green Man Medallion",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "hoth",
+  "quantity": 1,
+  "traits": [
+   "Item",
+   "Relic"
+  ],
+  "text": "Jenny Barnes deck only. Replacement.\n[fast] Spend up to 3 resources and exhaust Green Man Medallion: Place those resources on it, as offerings.\n[reaction] When you resign or the game ends: For every 6 offerings on Green Man Medallion, reduce the experience cost of the next card you purchase before the next scenario by 1.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "accessory"
+  ],
+  "icons": {
+   "wild": 2
+  },
+  "subname": "Hour of the Huntress",
+  "deckLimit": 1,
+  "cost": 1
+ },
+ {
+  "code": "98003",
+  "name": "Sacrificial Beast",
+  "type": "enemy",
+  "faction": "neutral",
+  "pack": "hoth",
+  "quantity": 1,
+  "traits": [
+   "Monster",
+   "Dark Young"
+  ],
+  "text": "Jenny Barnes deck only. Replacement.\n<b>Spawn</b> - Location farthest from you.\nJenny Barnes cannot gain resources via card effects.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "Thick limbs like wet branches yearned skyward, high above the platform. They swayed, whether in agony or exaltation Jenny could not tell. - Dave Gross, Hour of the Huntress",
+  "subtype": "weakness",
+  "deckLimit": 1,
+  "enemy": {
+   "fight": 4,
+   "health": 3,
+   "healthPerInvestigator": false,
+   "evade": 2,
+   "damage": 1,
+   "horror": 1
+  },
+  "spawn": "Location farthest from you"
+ },
+ {
+  "code": "98004",
+  "name": "Roland Banks",
+  "type": "investigator",
+  "faction": "guardian",
+  "pack": "tdor",
+  "quantity": 1,
+  "traits": [
+   "Agency",
+   "Detective"
+  ],
+  "text": "[reaction] After you defeat an enemy: Discover 1 clue at your location. (Limit once per round.)\n[elder_sign] effect: +1 for each clue on your location.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Fed",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Guardian cards ([guardian]) level 0-5, Seeker cards ([seeker]) level 0-2, Neutral cards level 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Roland's .38 Special, Cover Up, 1 random basic weakness.",
+  "flavor": "Everything by the book: every \"i\" dotted, every \"t\" crossed. It has worked, until now.",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 3,
+   "intellect": 3,
+   "combat": 4,
+   "agility": 2
+  },
+  "health": 9,
+  "sanity": 5
+ },
+ {
+  "code": "98005",
+  "name": "Mysteries Remain",
+  "type": "event",
+  "faction": "neutral",
+  "pack": "tdor",
+  "quantity": 1,
+  "traits": [
+   "Insight"
+  ],
+  "text": "Roland Banks deck only. Replacement.\nFast. Play only during your turn.\nEither place 1 clue <i>(from the token bank)</i> on your location, or discover 1 clue at your location. Remove Mysteries Remain from the game.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "combat": 1,
+   "wild": 1
+  },
+  "deckLimit": 1,
+  "cost": 0
+ },
+ {
+  "code": "98006",
+  "name": "The Dirge of Reason",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "tdor",
+  "quantity": 1,
+  "traits": [
+   "Madness"
+  ],
+  "text": "Roland Banks deck only. Replacement.\n<b>Revelation</b> - Place 2 of your clues on your location. If you cannot, place all of your clues on your location, take 1 horror, and shuffle The Dirge of Reason back into your deck.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "...was the music a part of the dream, or the dream a part of the music? - Graeme Davis, The Dirge of Reason",
+  "subtype": "weakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "98007",
+  "name": "Norman Withers",
+  "type": "investigator",
+  "faction": "seeker",
+  "pack": "iotv",
+  "quantity": 1,
+  "traits": [
+   "Miskatonic"
+  ],
+  "text": "Play with the top card of your deck revealed.\nOnce per round, you may play the top card of your deck as if it were in your hand, at -1 resource cost.\n<b>Forced</b> - After a weakness is revealed while on top of your deck: Draw it.\n[elder_sign] effect: +X. You may swap the top card of your deck with a card in your hand. X is the resource cost of the top card of your deck.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Astronomer",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Seeker cards ([seeker]) level 0, Mystic cards ([mystic]) level 1-5, Neutral cards level 0-5, up to 5 other Mystic cards ([mystic]) level 0.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Livre d'Eibon, The Harbinger, 1 random basic weakness.",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 4,
+   "intellect": 5,
+   "combat": 2,
+   "agility": 1
+  },
+  "health": 6,
+  "sanity": 8
+ },
+ {
+  "code": "98008",
+  "name": "Split the Angle",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "iotv",
+  "quantity": 1,
+  "traits": [
+   "Spell"
+  ],
+  "text": "Norman Withers deck only. Replacement.\n[action]: Reveal the top card of the encounter deck.\n[fast] Exhaust Split the Angle and discard the top card of your deck: Discard the top card of the encounter deck.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1,
+   "wild": 1
+  },
+  "subname": "Ire of the Void",
+  "flavor": "...another spell, likewise rendered phonetically, for \"splitting the angle\" and walking through time in the flesh.",
+  "deckLimit": 1,
+  "cost": 2
+ },
+ {
+  "code": "98009",
+  "name": "Vengeful Hound",
+  "type": "enemy",
+  "faction": "neutral",
+  "pack": "iotv",
+  "quantity": 1,
+  "traits": [
+   "Monster",
+   "Extradimensional",
+   "Tindalos"
+  ],
+  "text": "Norman Withers deck only. Replacement.\n<b>Prey</b> - Norman Withers.\nWhile Vengeful Hounds is engaged with you, you cannot draw or reveal cards via player card effects.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "\"On those rare occasions when a man escapes the Hounds, he doesn't always stay escaped. Sooner or later, they're apt to come after him.\" - Richard Lee Byers, Ire of the Void",
+  "subtype": "weakness",
+  "deckLimit": 1,
+  "enemy": {
+   "fight": 2,
+   "health": 2,
+   "healthPerInvestigator": false,
+   "evade": 3,
+   "damage": 1,
+   "horror": 1
+  }
+ },
+ {
+  "code": "98010",
+  "name": "Carolyn Fern",
+  "type": "investigator",
+  "faction": "guardian",
+  "pack": "tftbw",
+  "quantity": 1,
+  "traits": [
+   "Medic"
+  ],
+  "text": "[reaction] After one of your card effects heals horror from an investigator or [[Ally]] asset: The healed card's controller gains 1 resource.\n[elder_sign] effect: +1. You may heal 1 horror from an investigator or [[Ally]] asset at your location.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Psychologist",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Guardian cards ([guardian]) level 0-3, Neutral cards level 0-5, cards that \"heal horror\" level 0-5, up to 15 other Seeker and/or Mystic cards level 0-1 ([seeker] and/or [mystic]).\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Hypnotic Therapy, Rational Thought, 1 random basic weakness.\n<b>Additional Restrictions</b>: No [[Weapon]] cards level 1-5.",
+  "flavor": "The mind is fragile, but through understanding, we can protect it.",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 3,
+   "intellect": 4,
+   "combat": 2,
+   "agility": 2
+  },
+  "health": 6,
+  "sanity": 9
+ },
+ {
+  "code": "98011",
+  "name": "Foolishness",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "tftbw",
+  "quantity": 1,
+  "traits": [
+   "Ally",
+   "Creature",
+   "Dreamlands"
+  ],
+  "text": "Carolyn Fern deck only. Replacement.\nFoolishness enters play with 3 horror on him. Horror on him may be healed as if it were on Carolyn Fern. While Foolishness has no horror on him, you get +1 to all skills.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "wild": 2
+  },
+  "subname": "Foolish Cat of Ulthar",
+  "flavor": "\"Will we need to save you again?\" Foolishness flicked his tail back and forth. \"Perhaps. Perhaps I'll do the saving.\"",
+  "deckLimit": 1,
+  "cost": 4,
+  "health": 1,
+  "sanity": 4
+ },
+ {
+  "code": "98012",
+  "name": "To Fight the Black Wind",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "tftbw",
+  "quantity": 1,
+  "traits": [
+   "Task",
+   "Dreamlands"
+  ],
+  "text": "Carolyn Fern deck only. Replacement.\n<b>Revelation</b> - Attach To Fight the Black Wind to the current agenda. Carolyn Fern takes 1 direct horror.\n<b>Forced</b> - At the end of the round, if any amount of horror was assigned to an investigator this round and it was not healed: Place 1 doom on attached agenda.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "weakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "98013",
+  "name": "Silas Marsh",
+  "type": "investigator",
+  "faction": "survivor",
+  "pack": "tdg",
+  "quantity": 1,
+  "traits": [
+   "Drifter"
+  ],
+  "text": "[reaction] After you reveal a chaos token during a skill test you are performing. Return a skill you committed to this test to your hand. (Limit once per round.)\n[elder_sign] effect: +0. You may commit a skill from your discard pile to this test. After this test ends, return that skill to your hand instead of discarding it.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Sailor",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Survivor cards ([survivor]) level 0-5, Neutral cards level 0-5, [[Innate]] skills level 0-2.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Sea Change Harpoon, Silas's Net, Siren Call, 1 random basic weakness.",
+  "flavor": "\"Leave your fears on the docks, lads.\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 2,
+   "intellect": 2,
+   "combat": 4,
+   "agility": 4
+  },
+  "health": 9,
+  "sanity": 5
+ },
+ {
+  "code": "98014",
+  "name": "Nautical Prowess",
+  "type": "skill",
+  "faction": "neutral",
+  "pack": "tdg",
+  "quantity": 1,
+  "traits": [
+   "Innate",
+   "Developed"
+  ],
+  "text": "Silas Marsh deck only. Replacement.\nIf a chaos token with a negative modifier is revealed during this test, either draw 1 card or Nautical Prowess gains [wild][wild].",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1,
+   "wild": 1
+  },
+  "deckLimit": 1
+ },
+ {
+  "code": "98015",
+  "name": "Dreams of the Deep",
+  "type": "skill",
+  "faction": "neutral",
+  "pack": "tdg",
+  "quantity": 1,
+  "traits": [
+   "Curse"
+  ],
+  "text": "Silas Marsh deck only. Replacement.\nThis skill's icons subtract from your skill value instead of adding to it.\nIf this skill test fails, return this skill to your hand.\n<b>Forced</b> - If Dreams of the Deep is in your hand at the end of your turn: Reveal it and take 2 damage.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 2
+  },
+  "subname": "The Deep Gate",
+  "subtype": "weakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "98016",
+  "name": "Dexter Drake",
+  "type": "investigator",
+  "faction": "mystic",
+  "pack": "bob",
+  "quantity": 1,
+  "traits": [
+   "Sorcerer",
+   "Veteran"
+  ],
+  "text": "[fast] During your turn, discard an asset you control: Play an asset with a different title from your hand, reducing its cost by 1. (Limit once per round.)\n[elder_sign] effect: +2. You may return an asset from your play area to your hand. Then, draw 1 card.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Magician",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Mystic cards ([mystic]) level 0-5, Rogue cards ([rogue]) level 0-2, Neutral cards level 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Showmanship, Occult Scraps, 1 random basic weakness.",
+  "flavor": "\"Do you want to see true magic?\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 5,
+   "intellect": 2,
+   "combat": 3,
+   "agility": 2
+  },
+  "health": 6,
+  "sanity": 8
+ },
+ {
+  "code": "98017",
+  "name": "Molly Maxwell",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "bob",
+  "quantity": 1,
+  "traits": [
+   "Ally",
+   "Assistant"
+  ],
+  "text": "Dexter Drake deck only. Replacement.\n[fast] Exhaust Molly Maxwell and deal her 1 horror: Name any trait. One at a time, reveal cards from the top of your deck until an asset with the named trait is revealed. Draw that asset. Shuffle each other revealed card back into your deck.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "willpower": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "subname": "The Exotic Morgana",
+  "deckLimit": 1,
+  "cost": 3,
+  "health": 2,
+  "sanity": 4
+ },
+ {
+  "code": "98018",
+  "name": "Yaztaroth",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "bob",
+  "quantity": 1,
+  "traits": [
+   "Curse",
+   "Pact"
+  ],
+  "text": "Dexter Drake deck only. Replacement.\n<b>Revelation</b> - Put Yaztaroth into play in your threat area.\nYou cannot play assets or put assets into play.\n[action][action]: Discard Yaztaroth.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "weakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "98019",
+  "name": "Gloria Goldberg",
+  "type": "investigator",
+  "faction": "mystic",
+  "pack": "dre",
+  "quantity": 1,
+  "traits": [
+   "Clairvoyant"
+  ],
+  "text": "You choose the investigator order during the mythos phase.\n[reaction] When you look at 1 or more cards from the encounter deck: Look at 1 additional card and choose 1 non-[[Elite]] card among them. Either discard it, put it on top of the encounter deck, or place it facedown beneath Gloria Goldberg (max 3 cards beneath her).\n[elder_sign] effect: +1. Look at the top card of the encounter deck.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Writer",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Secondary Class Choice</b>: At deck creation, choose Guardian ([guardian]), Seeker ([seeker]), or Rogue ([rogue]).\n<b>Deckbuilding Options</b>: Mystic cards ([mystic]) level 0-5, Neutral cards level 0-5, up to 10 level 0-1 events and/or skills of your chosen secondary class.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): 3 copies of Psychic Sensitivity, 3 copies of Prophecy of the End (shuffled into the encounter deck), 1 random basic weakness.",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 5,
+   "intellect": 4,
+   "combat": 2,
+   "agility": 1
+  },
+  "health": 5,
+  "sanity": 9
+ },
+ {
+  "code": "98020",
+  "name": "Ruth Westmacott",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "dre",
+  "quantity": 1,
+  "traits": [
+   "Ally",
+   "Artist"
+  ],
+  "text": "Gloria Goldberg deck only. Replacement.\n[reaction] When an investigator fights, attempts to evade, or initiates a skill test on an encounter card, discard an encounter card that shares a [[Trait]] with that encounter card from beneath Gloria Goldberg: Reduce the difficulty of this skill test by 2.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "intellect": 2,
+   "wild": 1
+  },
+  "subname": "Dark Revelations",
+  "deckLimit": 1,
+  "cost": 3,
+  "health": 2,
+  "sanity": 3
+ },
+ {
+  "code": "98021",
+  "name": "Liber Omnium Finium",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "dre",
+  "quantity": 1,
+  "traits": [
+   "Endtimes"
+  ],
+  "text": "Gloria Goldberg deck only. Replacement.\n<b>Revelation</b> - Draw a random non-weakness encounter card from beneath Gloria Goldberg. That card gains peril, its effects cannot be canceled, and you get -2 to all skills while resolving its effects. If that card is an enemy, it immediately attacks you. If no card is drawn by this effect, shuffle this card back into your deck.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "weakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "99001",
+  "name": "Marie Lambeau",
+  "type": "investigator",
+  "faction": "mystic",
+  "pack": "promo",
+  "quantity": 1,
+  "traits": [
+   "Performer",
+   "Sorcerer"
+  ],
+  "text": "While you have 1 or more doom among cards you control, you may take an additional action during your turn, which can only be used to play [[Spell]] cards or activate [[Spell]] [action] abilities.\n[elder_sign] effect: +1. You may add 1 doom to or remove 1 doom from a card you control.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Entertainer",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: [[Spell]] cards level 0-5, Mystic cards ([mystic]) level 0-3, Neutral cards level 0-5, [[Occult]] cards level 0, up to five other level 0 Seeker and/or Survivor cards ([seeker] and/or [survivor]).\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Mystifying Song, Baron Samedi, 1 random basic weakness.",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 4,
+   "intellect": 4,
+   "combat": 1,
+   "agility": 3
+  },
+  "health": 6,
+  "sanity": 8
+ },
+ {
+  "code": "99002",
+  "name": "Mystifying Song",
+  "type": "event",
+  "faction": "neutral",
+  "pack": "promo",
+  "quantity": 1,
+  "traits": [
+   "Spell",
+   "Song"
+  ],
+  "text": "Marie Lambeau deck only.\nFast. Play when the agenda would advance by reaching its doom threshold.\nUntil the end of the phase, the agenda cannot advance by reaching its doom threshold. Remove Mystifying Song from the game.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "wild": 2
+  },
+  "deckLimit": 1,
+  "cost": 3
+ },
+ {
+  "code": "99003",
+  "name": "Baron Samedi",
+  "type": "asset",
+  "faction": "neutral",
+  "pack": "promo",
+  "quantity": 1,
+  "traits": [
+   "Avatar"
+  ],
+  "text": "<b>Revelation</b> - Put Baron Samedi into play. He cannot leave play while he has less than 3 doom on him.\n<b>Forced</b> - When any amount of damage is placed on an investigator in Baron Samedi's location: Place 1 additional damage on that investigator.\n[fast] Exhaust Baron Samedi: Place 1 doom on Baron Samedi. If he has 3 or more doom on him, discard him.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {},
+  "subname": "Lord of the Cemetery",
+  "subtype": "weakness",
+  "deckLimit": 1
+ }
+]
