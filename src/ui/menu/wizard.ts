@@ -1,5 +1,5 @@
 /** the new-game wizard's state: pure, so the order and back rules are tested without React */
-import type { DeckDef, Difficulty } from "../../content/schema";
+import type { CampaignDef, DeckDef, Difficulty } from "../../content/schema";
 import { validateDeck } from "../../engine/decks";
 import type { ContentDb } from "../../engine/types";
 import { customDecks, type SavedDeck } from "../decks";
@@ -29,8 +29,19 @@ export const decksFor = (db: ContentDb, code: string, storage?: Storage): DeckDe
 /** saved decks that no longer validate (a pack is gone): shown with the reason, not selectable */
 export const invalidDecksFor = (db: ContentDb, code: string, storage?: Storage): SavedDeck[] => customDecks(db, code, storage).filter((d) => d.problems.length > 0);
 
+/**
+ * The campaigns as the new-game screen lists them: the hand-written ones first (fully implemented), then the
+ * generated ones (ADR-0007) by cycle, read from their first scenario's reference card, then the Return-to boxes in the
+ * same order, and the side scenarios last.
+ */
+export function campaignOrder(db: ContentDb): CampaignDef[] {
+  const group = (c: CampaignDef) => (!c.generated ? 0 : c.id.startsWith("side-") ? 3 : c.id.startsWith("return-to-") ? 2 : 1);
+  const card = (c: CampaignDef) => db.scenarios[c.scenarios[0]]?.card ?? c.card ?? "";
+  return Object.values(db.campaigns).sort((a, b) => group(a) - group(b) || (card(a) < card(b) ? -1 : card(a) > card(b) ? 1 : a.id < b.id ? -1 : 1));
+}
+
 export function initialWizard(db: ContentDb): WizardState {
-  return { step: "campaign", campaignId: Object.keys(db.campaigns)[0] ?? "", picks: [], decks: {}, difficulty: "standard" };
+  return { step: "campaign", campaignId: campaignOrder(db)[0]?.id ?? "", picks: [], decks: {}, difficulty: "standard" };
 }
 
 export function setCampaign(s: WizardState, id: string, db?: ContentDb): WizardState {

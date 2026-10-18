@@ -1,0 +1,56 @@
+{
+  "id": "fortune-and-folly",
+  "name": "Fortune and Folly",
+  "scenarios": [
+    "fortune-and-folly-part-1",
+    "fortune-and-folly-part-2"
+  ],
+  "i18nId": "fof",
+  "chaosBags": {
+    "standard": [
+      "+1",
+      "0",
+      "0",
+      "-1",
+      "-2",
+      "-2",
+      "-3",
+      "-3",
+      "-4",
+      "-5",
+      "skull",
+      "skull",
+      "cultist",
+      "tablet",
+      "elderThing",
+      "autoFail",
+      "elderSign"
+    ],
+    "hard": [
+      "0",
+      "0",
+      "-1",
+      "-1",
+      "-2",
+      "-2",
+      "-3",
+      "-3",
+      "-6",
+      "-7",
+      "skull",
+      "skull",
+      "cultist",
+      "tablet",
+      "elderThing",
+      "autoFail",
+      "elderSign"
+    ]
+  },
+  "logLabels": {},
+  "packs": [
+    "core",
+    "side"
+  ],
+  "generated": true,
+  "card": "88001"
+}

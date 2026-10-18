@@ -1,0 +1,218 @@
+{
+  "id": "anchorage",
+  "name": "On Thin Ice",
+  "card": "09609",
+  "intro": "You have only just checked into your lodge in Anchorage when you receive an unmarked package:\n<typewriter>\tAgents,</typewriter>\n<typewriter>\tWe have lost contact with several operatives in central Alaska in recent weeks, likely due to Coterie activity. One operative was looking into a possible lead: a lens with apparent paradimensional capabilities. Enclosed is the journal of prospector Rhett Landry, currently institutionalized at Morningside Sanatorium in Oregon.</typewriter>\n<typewriter>\tIf the lens is a Key, acquire it at all costs.</typewriter>\n<right><fancy>~Q. Taylor</fancy></right>\nYou spend a full day poring over the prospector’s journal, which is mostly comprised of wildlife sketches and notes on mining. However, the final entry is chilling:\n<blockquote>“October the 4th, 1923:\nTonight, I bury that accursed lens where I found it.\nI dared not commit my thoughts to the page after finding it, but I have nothing to lose now. While surveying the new branch in the mine, I found a curious lens buried in the rock. It was opaque and emanated a beguiling light. Holding it made me feel special. As if I had been chosen. Looking through it, I saw incredible plants, creatures, people, structures, in a strange otherworldly landscape. A world beyond our own. A world that should exist. A dark reflection of our own: a haven for lost objects, lost memories. The lens—the Sable Glass—is the mirror that shows the truth of this other world.\nHow foolish was I to think I could use the lens for my own gain! The more I looked at the other world, the more the other world looked back. By peering into the glass, I must have called something—some awful, nameless creature—through. More and more of my fellow prospectors went missing in the woods and erased from memory. My companions, my possessions, my home: all were swallowed by the strange creature I glimpsed in the Sable Glass. And now when I look through it, I can see them, there, in that other place.\nThe creature that stalks the woods is made of nothing, and yet it is many things: constantly shifting, ever-changing. It has the traits of many animals, like a chimera from old myths. I tried to hunt it using the Sable Glass, but looking at it made my head spin. After surveying the area, I set a trap and thought I killed one of its forms: a great lupine thing that howled and dissipated into nothingness. But when I returned to camp the next day, it had struck the camp. My companions have vanished from memory and space.\nThe authorities say I should be locked up. My only hope is to set things right, to put the Sable Glass back where I found it. Perhaps then everything will be right again.”\n</blockquote>\nNext to the journal entry is an array of dark scratches, which you had assumed were nervous scribbles. However, given Landry’s account, you wonder if it isn’t his attempt to sketch the creature. The next day, you launch a search for any record of Mr. Landry’s gold mine, starting with prospecting permissions in Anchorage City Hall and the local library. After a day of fruitless research, you still cannot find an official permit or record of a mine connected to Rhett Landry. As you return to the lodge that evening, you spot a tall, willowy figure with a distinctive red cravat standing next to a packed sledge.\n“Well met,” the figure greets you with a self-satisfied smile. “You must be the troublemakers everyone is talking about. Pleased to make your acquaintance. I’m Thorne.” They extend a confident hand to shake yours. “If you’re here, I can only assume it is for the same reason as I. Keep a weather eye out: it’s supposed to be quite cold near Fairbanks! May the best one win.” Thorne winks at you, then mounts the sled.\nYou wonder if Thorne’s reference to Fairbanks was clever misdirection or a friendly hint. After asking around the lodge, an attendant opens up about your rival’s preparations: “I was confused at first, until it became clear they were asking about something in tribal territory. You don’t need a permit to prospect out there.” After some more questioning, you have a good sense of Thorne’s direction and the location of the mine.",
+  "encounterSets": [
+    "on_thin_ice",
+    "agents_of_the_outside",
+    "agents_of_yuggoth",
+    "crimson_conspiracy",
+    "dark_veiling",
+    "outsiders",
+    "spatial_anomaly",
+    "chilling_cold"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "09613",
+    "09614",
+    "09615a",
+    "09616"
+  ],
+  "agendas": [
+    "09610",
+    "09611",
+    "09612"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "09617",
+        "09618"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "09634a",
+        "09634b",
+        "09625a",
+        "09625b",
+        "09626",
+        "09627",
+        "09628",
+        "09629",
+        "09630"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "09617"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -4
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -4
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -5
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -5
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "Your encounter with the paradimensional threat leaves you drained and disheartened, but still alive. As you make preparations to leave Alaska, you find the prospector’s journal amongst your possessions. With a sigh, you stow it in the bedside table of your lodge room for the next guest. Perhaps they will do what you could not.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "record",
+          "key": "void_chimera_escaped",
+          "value": true
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "A scent of ozone hisses out of the closing tear in reality as your surroundings come back into view. You are back in Alaska where the chimeric entity pulled you into its lair. As you stand up, Thorne pulls out a handkerchief to wipe slick extradimensional blood off of their sleeve. They cock an eyebrow at you. “Perhaps I was wrong about you Foundation types. If nothing else, you know how to hold your own in a fight. Though I would recommend you reconsider your stance on my fellow Coterie brethren and myself. I do not believe I am the only member of the Coterie who is willing to put aside petty differences in the face of such—” they pause, and in that moment, you sense Thorne’s age and gravity. “Such a monumental crisis.” With that, Thorne smiles and swiftly turns on their heel. “Pleasure doing business with you. And rest assured, I will not forget our agreement.” They pat the Sable Glass in their breast pocket and stride away into the wilderness.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "A scent of ozone hisses out of the closing tear in reality as your surroundings come back into view. You are back in Alaska where the chimeric entity pulled you into its lair. As you struggle to stand, Thorne arrives and helps you to your feet. “Given that you are, well, alive, I suppose you have properly dispatched the beast. Well fought!” Thorne grins and winks at you. Instinctively, you put your hand on the Sable Glass. “Bah, do not take me for a boor,” says Thorne. “The Key is yours, fair and square. The game is up. I am not one to contest a proper victory. In truth, had you been more cooperative, I would have put in a word with the Coterie to recruit you.” They sigh, and in that moment, you sense Thorne’s age and gravity. “Not all of us are as good-natured as I, mind you. But do not take good nature for weakness, kitten. One bad turn begets another.” They wink, then stride away into the wilderness.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "record",
+          "key": "have_not_seen_the_last_of_thorne",
+          "value": true
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "A scent of ozone hisses out of the closing tear in reality as your surroundings come back into view. You are back in Alaska where the chimeric entity pulled you into its lair. The forest around you is deafeningly silent, save for the trickle of a nearby mountain stream. With no corpse or trail left behind, you wonder if you truly defeated the paradimensional beast for good, or if you simply struck down one of its myriad forms. The glare of the sun on the snow blinds you as you pick your way through the wilderness back to safety. After cresting a hill, you turn back to see another figure standing, silent, against the wide blue sky. As you squint, you see Thorne’s distinct red cravat, their platinum blonde hair and fluttering jacket. They are staring back at you, smiling widely.\nThe skin on the back of your neck prickles. Your head begins to pound as you stare at Thorne, standing silently, unmoving. You raise one hand to wave. They raise their hand in a mirror motion and wave back, and abruptly lower their hand when you lower yours. Something about how they look at you fills you with a deep sense of foreboding. Doing your best to banish the thought, you turn away from Thorne and continue your walk home. As you look back at the crest of another hill, you see the figure still standing, unmoving.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "record",
+          "key": "thorne_disappeared",
+          "value": true
+        }
+      ]
+    },
+    "R4": {
+      "title": "Resolution 4",
+      "text": "You wake up in your lodge room in Anchorage from what you think was a very bad dream, though you struggle to remember the details. As you walk around town, you can’t even remember why you came here. When you relay this to the Foundation via telegram, you receive a strongly-worded missive warning you against wasting official resources. You still can’t shake the feeling that you are missing something, though.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "nothing_of_note_in_anchorage",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "cell_made_a_deal_with_thorne",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "anchorage",
+  "connections": [
+    [
+      "09617",
+      "09618"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "09617": [
+      0,
+      0
+    ],
+    "09618": [
+      1,
+      0
+    ]
+  }
+}

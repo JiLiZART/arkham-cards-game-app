@@ -1,0 +1,194 @@
+{
+  "id": "to-the-forbidden-peaks",
+  "name": "To the Forbidden Peaks",
+  "card": "08596",
+  "intro": "The wind howls as your party prepares for the long journey ahead. There is very little conversation. Even if you could hear each other's muffled voices through your earmuffs and scarves, what would you say? The silence of your shared terror is loud enough.\nYour destination is many miles ahead of you. The jagged peaks loom far on the horizon, taunting you. You run a mental checklist of your situation…",
+  "encounterSets": [
+    "to_the_forbidden_peaks",
+    "deadly_weather",
+    "elder_things",
+    "hazards_of_antarctica",
+    "nameless_horrors"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "08599"
+  ],
+  "agendas": [
+    "08597",
+    "08598"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "08607",
+        "08600"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "08608"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "08607"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "The remainder of your journey across the peaks is a whirlwind of snow and fear. You climb higher and higher, pushing yourself to extremes you never thought possible. Still the summit remains ever out of reach. As nightfalls and the weather grows even deadlier, desperation forces you to look elsewhere to survive.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "The view from the summit is breathtaking, but you are in no mood to enjoy the spectacle. Sprawled before you, on the other side of these accursed peaks, lies the city described in Dyer's report. Its haunting visage is unmistakable. Dozens of conical and pyramidal buildings of dark slate and sandstone are honeycombed throughout the region like a labyrinth of perfect geometric shapes. Though weathered by the ages, the city still stands, hidden by the jagged peaks and the heavy snow.\nFor a while, you stand in silence and take in the wondrous sight. If it weren't for the many trials you faced along the way, it would be a moment of triumph . But after the sacrifices made to get here, the victory rings hollow.\nA freezing wind blows across the peaks. The air is too thin for you to linger here. After a moment's rest, you begin the long trek down into the alien city. You will have to make camp before you reach the bottom. With any luck, you'll be hidden from the dreadful creatures that dwell there…",
+      "effects": [
+        {
+          "do": "record",
+          "key": "team_climbed_to_the_summit",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "Just as you are beginning to lose hope, you find a dark cave embedded in the mountainside. The wind howls outside the cave entrance, bringing with it a sudden deluge of snow. You're not sure what would be worse—a slow death trapped inside an icy cavern, or an equally slow one failing to reach the summit. But when one of your companions switches on their flashlight, you realize there may be a third option.\nThe walls of this narrow tunnel are covered in strange hieroglyphs, the likes of which you've never seen. The ancient writings of an alien language, you presume. Possibly even that of the Elder Things who once called this region home. More importantly, the cavern continues deeper and deeper into the side of the mountain, far beyond the reach of your light.\nYou take a vote and decide to press onward, hoping beyond hope that the tunnel might take you to another exit. To your surprise, the journey is smooth, although the ever-present darkness, the frightening echoes of uncanny groans, and the muffled voices of something deep below wear upon your sanity. For hours you continue on, until finally, mercifully, you see light in the distance.\nYou emerge once more onto the side of the mountain, this time to a breathtaking vista. Sprawled before you lies the city described in Dyer's report. Its haunting visage is unmistakable. Dozens of conical and pyramidal buildings of dark slate and sandstone are honeycombed throughout the region like a labyrinth of perfect geometric shapes. Though weathered by the ages, the city still stands, hidden by the jagged peaks and the heavy snow.\nFor a while, you stand in silence and take in the wondrous sight. Somehow, you have managed to find a way through the mountain. If it weren't for the many trials you faced along the way, it would be a moment of triumph. But after the sacrifices made to get here, the victory rings hollow. After a moment's rest, you begin the long trek down into the alien city. You will have to make camp before you reach the bottom. With any luck, you'll be hidden from the dreadful creatures that dwell there…",
+      "effects": [
+        {
+          "do": "record",
+          "key": "team_found_another_way_through_the_mountains",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "record",
+          "key": "green_soapstone",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "wooden_sledge",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "dynamite",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "miasmic_crystal",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "mineral_specimen",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "small_radio",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "spare_parts",
+          "value": true
+        }
+      ]
+    }
+  },
+  "i18nId": "to_the_forbidden_peaks",
+  "connections": [],
+  "oneWay": [],
+  "layout": {
+    "08607": [
+      5,
+      0
+    ],
+    "08600": [
+      4,
+      1
+    ]
+  }
+}

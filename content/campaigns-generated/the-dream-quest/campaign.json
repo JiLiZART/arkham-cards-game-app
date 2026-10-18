@@ -1,0 +1,87 @@
+{
+  "id": "the-dream-quest",
+  "name": "The Dream-Quest",
+  "scenarios": [
+    "beyond-the-gates-of-sleep",
+    "the-search-for-kadath",
+    "dark-side-of-the-moon",
+    "where-gods-dwell"
+  ],
+  "i18nId": "tdea",
+  "chaosBags": {
+    "easy": [
+      "+1",
+      "+1",
+      "0",
+      "0",
+      "0",
+      "-1",
+      "-1",
+      "-2",
+      "-2",
+      "cultist",
+      "tablet",
+      "tablet",
+      "autoFail",
+      "elderSign"
+    ],
+    "standard": [
+      "+1",
+      "0",
+      "0",
+      "-1",
+      "-1",
+      "-2",
+      "-2",
+      "-3",
+      "-4",
+      "cultist",
+      "tablet",
+      "tablet",
+      "autoFail",
+      "elderSign"
+    ],
+    "hard": [
+      "0",
+      "0",
+      "-1",
+      "-1",
+      "-2",
+      "-2",
+      "-3",
+      "-3",
+      "-4",
+      "-5",
+      "cultist",
+      "tablet",
+      "tablet",
+      "autoFail",
+      "elderSign"
+    ],
+    "expert": [
+      "0",
+      "-1",
+      "-1",
+      "-2",
+      "-2",
+      "-3",
+      "-4",
+      "-4",
+      "-5",
+      "-6",
+      "-8",
+      "cultist",
+      "tablet",
+      "tablet",
+      "autoFail",
+      "elderSign"
+    ]
+  },
+  "logLabels": {},
+  "packs": [
+    "core",
+    "tde"
+  ],
+  "generated": true,
+  "card": "06039"
+}

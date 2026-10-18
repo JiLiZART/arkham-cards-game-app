@@ -1,0 +1,248 @@
+{
+  "id": "the-lair-of-dagon",
+  "name": "The Lair of Dagon",
+  "card": "07274",
+  "intro": "<center><game>THURSDAY, SEPTEMBER 15, 1927</game></center>\n<center><game>ONE WEEK EARLIER</game></center>\nYou stand outside the cracked marble steps leading up to the masonic hall of the Esoteric Order of Dagon. All of the evidence has lead you here. Whatever is going on in this town, this Order is behind it. You're sure of it… though their ultimate goal remains a mystery.\nThe town is eerily quiet as you stand before the building's entrance. Once, this place might have been impressive and opulent. Years of disrepair and flood damage have reduced it to a near-ruin. Its once-white paint is gray and peeling, and many of the pillars outside the entryway are beginning to crumble. Still, it is one of the more intimidating places in Innsmouth, projecting authority despite its decrepitude. No, not authority—something darker. A looming, unspoken threat.\n\"Are you ready?\" Agent Dawson asks. His usually calm demeanor has vanished, replaced with a humorless gravity that throws you off guard. \"This is it. This is where we'll find answers.\"\nYou're not so sure. Every other lead you've followed has led to only more questions.",
+  "encounterSets": [
+    "the_lair_of_dagon",
+    "agents_of_dagon",
+    "flooded_caverns",
+    "syzygy",
+    "pentagram",
+    "locked_doors"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "07280",
+    "07281",
+    "07282"
+  ],
+  "agendas": [
+    "07275",
+    "07277",
+    "07279"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "07289",
+        "07287",
+        "07286",
+        "07284",
+        "07283"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "07101",
+        "07100",
+        "07300",
+        "07300b",
+        "07293",
+        "07292a",
+        "07292b"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "07289"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -1
+      },
+      "cultist": {
+        "modifier": 0
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -1
+      },
+      "cultist": {
+        "modifier": 0
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "This place is more dangerous than you could have possibly imagined. You stumble as you flee through the dark, flooded corridors, retracing your steps as quickly as you can to reach the entrance. Your heart races in your chest as you see the exit at last. You gasp in relief as you crash through the doors, to safety—\n—Only you are not safe. Standing at the bottom of the steps is an angry throng of citizens, far too many for you to fight your way through. \"There! Get 'em!\" a wrinkled women at the head of the mob shouts. You are surrounded and grabbed within moments. You struggle and fight for your life, but it's no use. The last thing you remember is being dragged back through the halls of the Order to some unknown fate…",
+      "effects": [
+        {
+          "do": "record",
+          "key": "dagon_has_awakened",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "You're somewhere else now, lying on your stomach on cold, damp stone. Your arms are held tight behind your back. You have no idea how you got here. As consciousness returns, your vision comes into focus. You crane your neck up to view your surroundings, but it's too dark to see anything inside your stone cell.\n\"I'll ask you one last time. Who sent you here?\" a voice asks. It is deep and husky, like the croaking of a frog.\nYou hear the familiar, cool baritone of Agent Dawson reply: \"Your breath smells awful. Ever heard of brushing your teeth?\" Despite the sarcasm dripping from his words, his voice wavers ever so slightly.\n\"Your mockery only masks the fear that hides within,\" the voice replies. \"Very well. If you are of no use to us, you will be the first to be sacrificed.\"\nYour vision continues to adjust. You can just barely make out Dawson's silhouette on the other side of the cell. He is kneeling before a metal hatch in the stone floor. An elderly robed figure presses a curved knife against Dawson's throat. Someone lifts the hatch, and Dawson's eyes go wide. He gives you one last despairing look, shakes his head slowly and deliberately, and quietly slides something across the stone floor. Then the hooded figure pushes him in. In the scuffle and the low light, nobody notices the car key that skitters to a halt directly next to you.\nYou grab the key and stuff it into your pocket just before you are shoved forward. Two more sets of cold, clammy hands grasp your shoulders, and the hooded figure slides his knife up to your neck. All you can see of his face are his wide, unblinking eyes.\n\"Oceiros, these ones were found in Dagon's lair as well,\" another voice explains to the elderly figure in the robes. \"We believe they were the ones snooping around Devil Reef.\"\nThe man with the knife to your throat nods. \"Your turn,\" he declares. \"Tell us why you have come and perhaps we will let you go. Who sent you? What have you seen?\"",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "You remember the slow, gentle shaking of Agent Dawson's head and known what he meant by the gesture. You look up into the man's unblinking eyes, set your jaw, and say nothing. A moment of silent understanding passes between you and your interrogator. \"Very well. Your defiance has earned you naught but a slow, agonizing death.\" The metal hatch opens again. Inside, you see nothing but darkness. You glare long and hard at your captor.\n\"Take what they have stolen to the lighthouse at once,\" Oceiros commands one of the other robed figures. \"It is time to begin our great work. None will disrupt the Order's business ever again. Soon, all will understand the natural order of life.\" Then he nods to your captors, and you are shoved forward. The clammy hands release you and suddenly you are tumbling into darkness. The last thing you feel is your head striking cold stone, and then—",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "You can think of only one way out of this situation. The Order believes that you are poking around their business, so you will have to convince them that you don't know or care what they are up to. You lie as best you can, spinning a story that might convince them you were simply in the wrong place at the wrong time. \"And what of your unfortunate friend?\" your interrogator asks. You tell him that you have never met that man before in your life. \"Perhaps you speak the truth,\" the man says, and you breathe a short-lived sigh of relief before he dashes your hopes: \"…but it matters not. You have seen too much, and for that, you must be silenced. Worry not. You will be joining our kindred soon.\" The metal hatch opens again. Inside, you see nothing but darkness.\n\"Take what they have stolen to the lighthouse at once,\" Oceiros commands one of the other robed figures. \"It is time to begin our great work. None will disrupt the Order's business ever again. Soon, all will understand the natural order of life.\" Then he nods to your captors, and you are shoved forward. The clammy hands release you and suddenly you are tumbling into darkness. The last thing you feel is your head striking cold stone, and then—",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R4": {
+      "title": "Resolution 4",
+      "text": "None of this is what you signed up for. Hoping to avoid Dawson's fate, you have no choice but to tell your interrogator everything. You explain you were hired by Dawson to find his missing agent, and go on to describe the events that followed over the past few weeks, including your exploration of Devil Reef and your investigation into the Order. A slow smile crawls across the man's face as you divulge everything you know. \"I thank you for your candor. Sadly, there is only one way I can repay you. You have seen too much, and for that, you must be silenced.\" Your heart goes cold as you realize what he means. The metal hatch opens again. Inside, you see nothing but darkness.\n\"Take what they have stolen to the lighthouse at once,\" Oceiros commands one of the other robed figures. \"It is time to begin our great work. None will disrupt the Order's business ever again. Soon, all will understand the natural order of life.\" Then he nods to your captors, and you are shoved forward. The clammy hands release you and suddenly you are tumbling into darkness. The last thing you feel is your head striking cold stone, and then—",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "the_lair_of_dagon",
+  "connections": [
+    [
+      "07289",
+      "07286"
+    ],
+    [
+      "07287",
+      "07286"
+    ],
+    [
+      "07287",
+      "07284"
+    ],
+    [
+      "07287",
+      "07284"
+    ],
+    [
+      "07286",
+      "07287"
+    ],
+    [
+      "07286",
+      "07283"
+    ],
+    [
+      "07284",
+      "07283"
+    ],
+    [
+      "07283",
+      "07284"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "07289": [
+      1,
+      0
+    ],
+    "07287": [
+      0,
+      1
+    ],
+    "07286": [
+      1,
+      1
+    ],
+    "07284": [
+      0,
+      2
+    ],
+    "07283": [
+      1,
+      2
+    ]
+  }
+}

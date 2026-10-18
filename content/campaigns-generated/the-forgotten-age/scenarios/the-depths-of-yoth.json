@@ -1,0 +1,172 @@
+{
+  "id": "the-depths-of-yoth",
+  "name": "The Depths of Yoth",
+  "card": "04277",
+  "intro": "Several hours after you wake, your laborious descent pays dividends. The red glow emanating from the bottom of the steps grows brighter with each step. The stone floor finally levels off, and the choking tunnel walls open to reveal a labyrinthine network of immense, far-reaching caverns. Littered throughout the caverns are the ruins of a vast city, the likes of which you have never seen. The elaborate stone architecture has been worn away by ages of abandonment, but you sense that there is a history here that runs deeper than you can even fathom. When you turn around to question Ichtaca, you notice a faint yellow glow in her eyes, her pupils narrowed and contracted. “Yoth…the last refuge of Valusia…” she quietly intones.\nJust then, a terrifying roar echoes throughout the cavern. The walls and floor shake with tremendous force, and the red glow that permeates the area brightens. A flood of hisses emerges from the tunnels all around you. Ichtaca walks to the edge of a nearby precipice and looks out over the vast depths. “He is here. I feel his presence. The Father of the Serpents…Yig.”",
+  "encounterSets": [
+    "the_depths_of_yoth",
+    "agents_of_yig",
+    "venom",
+    "expedition",
+    "ruins",
+    "poison"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "04285"
+  ],
+  "agendas": [
+    "04278",
+    "04279",
+    "04280",
+    "04281",
+    "04282",
+    "04283",
+    "04284"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "04287"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "04296",
+        "04286",
+        "04303",
+        "04102"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "04287"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -2
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -2
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "Each investigator resigned or was defeated",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "After hours and hours of travel, you’ve only just scratched the surface of this boundless subterranean world. Humanity could spend centuries mapping out these tunnels and never complete the task. No matter how quickly you plumb the depths, the serpents chasing you are hot on your tail. You are intruders in their home, and they know these hellish tunnels better than you. With your wounds slowing you down and panic seeping into every one of your decisions, your death at the hands of these creatures is inevitable. Despair worms its way into your mind. When the serpents inevitably catch up to you, you are crossing one of the cavern’s many long bridges of stone that span a wide, dark chasm. Serpent creatures on both sides of the chasm flank you, spear tips corralling you against the precarious edge of the bridge. A small hunk of stone cracks at your heel and detaches, falling into the inky void below. You do not hear it strike the floor of the chasm. There is no hope to escape or flee this time—you have no choice but to accept your fate. The spear tips press you closer to the edge. You close your eyes and fall.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "fell_into_depths",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "Somehow, despite the odds stacked against you, you’ve reached your destination. The telltale red glow that has enveloped you since you entered Yoth recedes, replaced with an unpierceable inky darkness. The Nexus must be close… You can feel it.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "nexus_is_near",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 5,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "the_depths_of_yoth",
+  "connections": [
+    [
+      "04287",
+      "04286"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "04287": [
+      0,
+      0
+    ],
+    "04286": [
+      1,
+      0
+    ]
+  }
+}

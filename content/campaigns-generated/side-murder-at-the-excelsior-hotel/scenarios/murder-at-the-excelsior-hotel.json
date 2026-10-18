@@ -1,0 +1,205 @@
+{
+  "id": "murder-at-the-excelsior-hotel",
+  "name": "Murder at the Excelsior Hotel",
+  "card": "84001",
+  "intro": "There have been reports of strange occurrences at Arkham’s Excelsior Hotel for over a month now. Disappearances. Bizarre sightings. Sudden closures, sometimes for days at a time, seemingly without warning. It’s like something out of a ghost story, but you know better than to simply dismiss these rumors. Too many people have whispered about the Excelsior…and to make matters worse, it seems the stories have only grown more unsettling in the last week. It’s time somebody looked into it all.\nYou’ve tried going to the police, but the grizzled and world‑weary Sergeant Monroe has dismissed you every time. You’ve been left to investigate on your own. Asking around at all the local hot-spots yields no leads. Velma’s Diner, Hibb’s Roadhouse, La Bella Luna; Each visit leaves you with only more questions. That is, until today.\nWhile walking down Central Avenue in Downtown, minding your own business, you bump into a man in a long trench coat. You begin to apologize, but he simply continues walking briskly away from you. It isn’t until you return home that you find the note in your pocket—one that wasn’t there before.\n<center><fancy>I have answers</fancy></center>\n<center><fancy>Room 225. Tonight. Come alone.</fancy></center>\n<center><fancy>They’re watching!</fancy></center>\nUncertain of what else you can do at this point, you begin making preparations to meet this mystery person.",
+  "encounterSets": [
+    "murder_at_the_excelsior_hotel"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "84004",
+    "84005"
+  ],
+  "agendas": [
+    "84002",
+    "84003",
+    "84043"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "84012",
+        "84010",
+        "84011",
+        "84014",
+        "84013"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "84009",
+        "84008",
+        "84007"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "84012"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -5
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -5
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "With no hope of solving this mystery, you fled the hotel. Unfortunately, your flight did not do much to prove your innocence. It wasn’t long before the bulls tracked you down and the dreaded knock on your door arrived: “Open up! Arkham Police!”",
+      "effects": [
+        {
+          "do": "record",
+          "key": "meh_fled_scene_of_the_crime",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "Nobody will ever believe what you witnessed at the Excelsior. Not three days later, the hotel was open again, like nothing had ever happened. You know better, though. You witnessed it all firsthand. The events continue to haunt your dreams and your waking thoughts. Even now you go out of your way to avoid the Excelsior, though weeks have passed and there has been no sign of any other nefarious schemes within its accursed walls. The only thing that can quiet the echoing memories of that horrible experience is a visit to the local speakeasy. But all the booze in the world can’t keep the grisly visions from your nightmares, waking you in the dead of night with a violent start, soaked in sweat. That’s when you notice the person asking around town about the Excelsior. Innocent questions, at first, but more prodding with each passing day. Surely they will believe you. Somebody has to. You may have broken free of the Excelsior’s grasp, but there will be other victims, of that you are sure. You grab a piece of paper and hastily scribble a note.\n<center><fancy>It’s all a facade.</fancy></center>\n<center><fancy>Room 225. Tonight.</fancy></center>\n<center><fancy>It’s not over.</fancy></center>\nIf they can see past the veil of the Excelsior’s operations, then maybe others can too. It may not be too late to stop it all from happening again!",
+      "effects": [
+        {
+          "do": "record",
+          "key": "meh_excelsior_is_quiet_for_now",
+          "value": true
+        },
+        {
+          "do": "earnCard",
+          "code": "84006",
+          "who": "lead"
+        },
+        {
+          "do": "earnCard",
+          "code": "84007",
+          "who": "lead"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "“Sit there any longer and I’ll have to charge you rent.” You blink rapidly, as if coming out of a deep dream. Looking up, you see a waiter giving you an annoyed look. He is carrying a stack of dirty dishes. In your hand is a glass of water. You don’t remember ordering it, nor do you remember how long you’ve been here. And where is here, exactly? You spin around in your chair and realize you’re in the restaurant of the Excelsior Hotel. A few other diners are present, catching an early dinner and minding their own business. The soft light of an autumn afternoon filters in through the windows, and the general din of activity can be heard from the lobby. You turn and briefly glance back at the waiter before reaching in your pocket and dropping a quarter on the table, heading for the lobby. Your legs feel like jelly. As you stumble out of the restaurant, other guests view you with concern. The security guard in the corner watches you like a hawk. You head over to the front desk, steadying yourself against it. The concierge approaches, but you recoil at the recognition of his face. The hotel is operating as if nothing happened. But that can’t be. Everything you saw was true, right? You dash out the front door before he can reach you. You have to put some distance between yourself and this accursed place.\nWeeks pass. Nothing helps to quell the feeling in your mind that you have missed something important. This business with the Excelsior is not done, not by a long shot. You begin your investigation anew, asking around town for the latest rumors regarding the hotel. More missing staff. More sudden closures. Guests who never arrived. Guests who never left. It’s all too much.\nStanding on a lonely street corner in Northside, you consider your options. Streetlamps flicker to life around you as evening creeps in. Just then, a stranger bumps into you, muttering a half-hearted apology. You take a step after them before you feel something tugging at the back of your mind. No. Could it be? You stick your hands into your coat pocket. Stuffed inside is a small, folded note. You look up, but the pedestrian is nowhere in sight. You unfold the note slowly, fingers shaking from anxiety and fear.\n<center><fancy>It’s all a facade.</fancy></center>\n<center><fancy>Room 225. Tonight.</fancy></center>\n<center><fancy>This isn't over.</fancy></center>",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "You sit in a cold, dank holding cell awaiting your arraignment. You have no doubt that with the evidence the police gathered, you’ll be spending the rest of your life behind bars. You have sworn high and low that you had nothing to do with the murder, but doubt lingers in your mind. Could it have been you, somehow? What really happened in the Excelsior that night?\nJust then, you hear rapping on the bars of your cell. An officer stands just outside, looking away from you. He slips a folded note between the bars of your cell. Knowing better than to ask his intentions out loud, you slowly walk over and unfold the note, your fingers shaking with trepidation.\n<center><fancy>It’s all a facade.</fancy></center>\n<center><fancy>Room 225. Tonight.</fancy></center>\n<center><fancy>This isn't over.</fancy></center>\nJust as you finish reading the note, you hear the click of the cell’s latch unlocking. The officer is gone, and the door to your cell swings open.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "murder_at_the_excelsior_hotel",
+  "connections": [
+    [
+      "84012",
+      "84010"
+    ],
+    [
+      "84010",
+      "84011"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "84010": [
+      2,
+      0
+    ],
+    "84011": [
+      3,
+      0
+    ],
+    "84012": [
+      1,
+      0
+    ],
+    "84013": [
+      1,
+      2
+    ],
+    "84014": [
+      0,
+      1
+    ]
+  }
+}

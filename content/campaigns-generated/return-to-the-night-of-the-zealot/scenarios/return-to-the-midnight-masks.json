@@ -1,0 +1,222 @@
+{
+  "id": "return-to-the-midnight-masks",
+  "name": "Return to The Midnight Masks",
+  "card": "01120",
+  "intro": "The woman came to you in a panic, raving about monsters emerging from the ground in a home near Rivertown. “I managed to trap them,” she explains, “but there are others. Other pits. Other domains.” Only last week, you would have thought she was a lunatic. Recent events, however, have challenged your preconceptions of normality. You decide to hear her out. She introduces herself as Lita Chantler and lays out a tale that strains the limits of your belief. “The creatures I speak of ,” she claims, “are called ghouls—cruel beings who plague the crypts, caverns, and tunnels beneath the city of Arkham…”",
+  "encounterSets": [
+    "arkham",
+    "return_to_the_midnight_masks",
+    "chilling_cold",
+    "nightgaunts",
+    "the_devourers_cult",
+    "locked_doors",
+    "cultists",
+    "return_cult"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "01123"
+  ],
+  "agendas": [
+    "50026a"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "01134",
+        "01131",
+        "01132",
+        "01129",
+        "01125",
+        "01133",
+        "01128",
+        "01126",
+        "01124"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "01125"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -4
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -4
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "Read Resolution 1",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "You’ve managed to obtain some useful information about the cult and its plans. You can only hope it’s enough.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "Twelve bells ring out, signaling midnight. You’re out of time; the cult’s ritual will begin shortly. You’ve managed to obtain some useful information about the cult and its plans. You can only hope it’s enough.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "past_midnight",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "return_to_the_midnight_masks",
+  "connections": [
+    [
+      "01134",
+      "01131"
+    ],
+    [
+      "01134",
+      "01129"
+    ],
+    [
+      "01131",
+      "01132"
+    ],
+    [
+      "01131",
+      "01125"
+    ],
+    [
+      "01132",
+      "01133"
+    ],
+    [
+      "01129",
+      "01125"
+    ],
+    [
+      "01129",
+      "01128"
+    ],
+    [
+      "01125",
+      "01133"
+    ],
+    [
+      "01125",
+      "01126"
+    ],
+    [
+      "01133",
+      "01124"
+    ],
+    [
+      "01128",
+      "01126"
+    ],
+    [
+      "01126",
+      "01124"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "01134": [
+      0,
+      0
+    ],
+    "01131": [
+      1,
+      0
+    ],
+    "01132": [
+      2,
+      0
+    ],
+    "01129": [
+      0,
+      1
+    ],
+    "01125": [
+      1,
+      1
+    ],
+    "01133": [
+      2,
+      1
+    ],
+    "01128": [
+      0,
+      2
+    ],
+    "01126": [
+      1,
+      2
+    ],
+    "01124": [
+      2,
+      2
+    ]
+  }
+}

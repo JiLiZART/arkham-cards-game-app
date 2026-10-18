@@ -41,7 +41,10 @@ describe("sound manifest in the content db", () => {
   it("loads content/sounds/sounds.json with every event, moment and music key the game uses", () => {
     expect(db.sounds.events.attack).toBeDefined();
     expect(db.sounds.moments.play).toBeDefined();
-    for (const id of Object.keys(db.scenarios)) expect(db.sounds.music[`bed:${id}`], id).toBeDefined();
+    // the hand-written scenarios have their own bed; the generated ones (ADR-0007) play the default bed
+    const generated = new Set(Object.values(db.campaigns).filter((c) => c.generated).flatMap((c) => c.scenarios));
+    for (const id of Object.keys(db.scenarios).filter((x) => !generated.has(x))) expect(db.sounds.music[`bed:${id}`], id).toBeDefined();
+    expect(db.sounds.music["bed:default"]).toBeDefined();
     expect(db.sounds.music.fight).toBeDefined();
     expect(db.sounds.music.tension).toBeDefined();
   });

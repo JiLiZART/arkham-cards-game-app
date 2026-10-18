@@ -1,0 +1,200 @@
+{
+  "id": "blood-money",
+  "name": "Blood Money",
+  "card": "13068",
+  "intro": "Howard Wilkes’s party is at his fancy new penthouse at the top of one of the rebuilt buildings in Northside, overlooking the dark and industrious district of Arkham. You ride the elevator up to the fourth floor, and follow the short, clean hallway to the door of the penthouse. Rapping on the door, you’re greeted by a tall man in a tuxedo who checks your name and allows you entrance. It would seem Charlie is as good as his word.\nDetective Reynolds, also dressed in formalwear, makes his way over to you as soon as you step into the foyer. “Good, you’re here,” he says. “Problem is that Wilkes isn’t around, and nobody has seen him. I suggest we deal with Miss Thomas. Get her to rethink her business decision. Then we can chat up the rest of the party and see what else we can learn.” He glances around nervously at the other guests nearby, all of whom are looking at him and at you with suspicion. “And let’s be quick about it.”",
+  "encounterSets": [
+    "blood_money",
+    "agents_of_zburamoarte",
+    "blood_blight",
+    "bloodthirst",
+    "children_of_blood",
+    "hunted",
+    "sanguine_secrets",
+    "arcane_lock",
+    "afflicted"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "13073",
+    "13074",
+    "13075"
+  ],
+  "agendas": [
+    "13069",
+    "13070",
+    "13072"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "13081",
+        "13078",
+        "13077",
+        "13080",
+        "13076"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "13082",
+        "13091",
+        "13103",
+        "13097",
+        "13092",
+        "13093a",
+        "13093b",
+        "13084",
+        "13085",
+        "13086"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "13076"
+    }
+  ],
+  "tokens": {
+    "easy": {},
+    "standard": {},
+    "hard": {},
+    "expert": {}
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "Unable to bear the chaos of the party, you flee into the streets. You only hope that the problems of the New Horizons meat and the blighted blood will solve themselves.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "failed_to_stop_the_children_of_blood",
+          "value": true
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 1,
+          "mental": 1
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "You walk out of the penthouse, leaving the defeated Howard Wilkes and the shattered remains of his cult behind. Arkham’s finest arrive as you head out into the street, and you let Detective Reynolds handle their questions. You head back out into Arkham as the first rays of the morning sun peek out over the Miskatonic River.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "stopped_the_children_of_blood",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "You and the few guests you saved flee the penthouse as the Arkham police arrive. You watch as they rush into the penthouse, but you don’t stick around, heading out into Arkham just as the first rays of the morning sun peek out over the Miskatonic River.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "failed_to_stop_the_children_of_blood",
+          "value": true
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 1,
+          "mental": 1
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "blood_money",
+  "connections": [
+    [
+      "13081",
+      "13078"
+    ],
+    [
+      "13077",
+      "13080"
+    ],
+    [
+      "13082",
+      "13076"
+    ],
+    [
+      "13082",
+      "13077"
+    ],
+    [
+      "13082",
+      "13078"
+    ],
+    [
+      "13082",
+      "13080"
+    ],
+    [
+      "13082",
+      "13081"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "13076": [
+      2,
+      1
+    ],
+    "13077": [
+      3,
+      0
+    ],
+    "13078": [
+      1,
+      0
+    ],
+    "13080": [
+      4,
+      0
+    ],
+    "13081": [
+      0,
+      0
+    ],
+    "13082": [
+      0,
+      2
+    ]
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "id": "the-feast-of-hemlock-vale",
+  "name": "The Feast of Hemlock Vale",
+  "scenarios": [
+    "written-in-rock",
+    "hemlock-house",
+    "the-silent-heath",
+    "the-lost-sister",
+    "the-thing-in-the-depths",
+    "the-twisted-hollow",
+    "the-longest-night",
+    "dawn-of-the-final-day",
+    "the-final-evening",
+    "fate-of-the-vale"
+  ],
+  "i18nId": "fhv",
+  "chaosBags": {
+    "easy": [
+      "+1",
+      "+1",
+      "0",
+      "0",
+      "0",
+      "-1",
+      "-1",
+      "-1",
+      "-2",
+      "-2",
+      "-3",
+      "skull",
+      "skull",
+      "elderSign"
+    ],
+    "standard": [
+      "+1",
+      "0",
+      "0",
+      "-1",
+      "-1",
+      "-1",
+      "-2",
+      "-2",
+      "-3",
+      "-3",
+      "-4",
+      "skull",
+      "skull",
+      "elderSign"
+    ],
+    "hard": [
+      "0",
+      "0",
+      "0",
+      "-1",
+      "-1",
+      "-2",
+      "-2",
+      "-3",
+      "-3",
+      "-5",
+      "-5",
+      "-7",
+      "skull",
+      "skull",
+      "elderSign"
+    ],
+    "expert": [
+      "0",
+      "-1",
+      "-1",
+      "-2",
+      "-2",
+      "-3",
+      "-3",
+      "-4",
+      "-5",
+      "-5",
+      "-6",
+      "-7",
+      "-8",
+      "skull",
+      "skull",
+      "elderSign"
+    ]
+  },
+  "logLabels": {},
+  "packs": [
+    "core",
+    "fhv"
+  ],
+  "generated": true,
+  "card": "10501"
+}

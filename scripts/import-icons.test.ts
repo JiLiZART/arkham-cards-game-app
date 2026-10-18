@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { buildSymbols, checkIcons, codeIconNames, contentIconNames, setsWithoutIcon, spriteIds, spriteSvg, stripSvg, symbolSet } from "./import-icons";
+import { buildSymbols, checkIcons, codeIconNames, contentIconNames, generatedIconNames, iconAlias, setsWithoutIcon, spriteIds, spriteSvg, stripSvg, symbolSet } from "./import-icons";
 
 describe("stripSvg", () => {
   it("keeps the viewBox and every path, drops size, fill, ids and editor metadata", () => {
@@ -69,6 +69,11 @@ describe("checkIcons", () => {
     expect(checkIcons(db([]), manifest(["the_gathering", "skull"]), ["the_gathering", "curse"]).map((e) => e.path)).toEqual(["curse", "skull"]);
     expect(checkIcons(db([]), null, null)).toHaveLength(1);
   });
+
+  it("the generated campaigns' sprite counts for the manifest, not for the icons hand-written scenarios require", () => {
+    expect(checkIcons(db(["torch"]), manifest(["torch", "the_gathering", "sorcery"]), ["the_gathering", "torch"], ["sorcery"])).toEqual([]);
+    expect(checkIcons(db(["torch", "sorcery"]), manifest(["torch", "the_gathering", "sorcery"]), ["the_gathering", "torch"], ["sorcery"]).map((e) => e.path)).toEqual(["sorcery"]);
+  });
 });
 
 describe("which encounter sets need an icon", () => {
@@ -81,6 +86,24 @@ describe("which encounter sets need an icon", () => {
 
   it("the sets scenarios use, the scenarios themselves and the core pack's sets; not every set of every pack", () => {
     expect(contentIconNames(db).sort()).toEqual(["rats", "the_gathering", "torch"]);
+  });
+
+  it("a generated campaign's scenarios and sets are wanted, not required", () => {
+    const withGenerated = {
+      ...(db as object),
+      scenarios: { "the-gathering": { encounterSets: ["torch"], sideDecks: {} }, "extracurricular-activity": { encounterSets: ["torch", "sorcery"], sideDecks: {} } },
+      campaigns: { notz: { scenarios: ["the-gathering"] }, dwl: { scenarios: ["extracurricular-activity"], generated: true } },
+    } as never;
+    expect(contentIconNames(withGenerated).sort()).toEqual(["rats", "the_gathering", "torch"]);
+    expect(generatedIconNames(withGenerated).sort()).toEqual(["extracurricular_activity", "sorcery"]);
+  });
+
+  it("a wanted name without a glyph borrows the glyph of its base name", () => {
+    const has = (n: string) => ["essex_county_express", "heart_of_the_elders", "ice_and_death"].includes(n);
+    expect(iconAlias("return_to_essex_county_express", has)).toBe("essex_county_express");
+    expect(iconAlias("return_to_heart_of_the_elders_part_2", has)).toBe("heart_of_the_elders");
+    expect(iconAlias("ice_and_death_part_3", has)).toBe("ice_and_death");
+    expect(iconAlias("istanbul", has)).toBeNull();
   });
 
   it("the other sets are listed by name for the report, once the sprite is known", () => {

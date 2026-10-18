@@ -53,8 +53,9 @@ export function momentClip(name: string, cardId: InstId | null, game: GameState,
 /** which music track should play: fight while an enemy is engaged, tension in the enemy phase or one doom from the agenda advancing, else the scenario's bed; null when the scenario has ended or has no bed */
 export function musicFor(game: GameState, m: SoundManifest, content: ContentDb = db): string | null {
   if (game.phase === "ended") return null;
-  const bed = `bed:${game.scenarioId}`;
-  if (!m.music[bed]) return null;
+  // a scenario without a bed of its own (a generated one, ADR-0007) plays the default bed
+  const bed = m.music[`bed:${game.scenarioId}`] ? `bed:${game.scenarioId}` : m.music["bed:default"] ? "bed:default" : null;
+  if (!bed) return null;
   if (m.music.fight && Object.values(game.cards).some((c) => c.zone === "enemy" && c.engagedWith)) return "fight";
   if (m.music.tension) {
     if (game.phase === "enemy") return "tension";

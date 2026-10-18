@@ -1,0 +1,151 @@
+{
+  "id": "city-of-the-elder-things",
+  "name": "City of the Elder Things",
+  "card": "08621",
+  "intro": "Even with the knowledge afforded to you by Dyer's report, you find yourself wholly unprepared for the terrible vastness of the blasphemous city at the heart of Antarctica, and its alien inscrutability. Massive towers, temples, bridges, and pyramids dot the broad landscape. In the ineluctable light of dawn, the nameless maze of cyclopean structures and angular blocks extends for miles in every direction, unmistakably real and yet impossible to believe. It is truly a wonder of the world.",
+  "encounterSets": [
+    "city_of_the_elder_things",
+    "elder_things",
+    "miasma",
+    "nameless_horrors",
+    "penguins",
+    "shoggoths",
+    "locked_doors"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "08624",
+    "08627"
+  ],
+  "agendas": [
+    "08622",
+    "08623"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "08630"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "08630"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "Injured and weary, you hole up in the relative safety of one of the city's towering structures. Your only hope is to take shelter within the alien city and hope your presence goes unnoticed by the denizens that still prowl its streets and ancient halls.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "A quiet, unearthly stillness welcomes you as your party delves into the secret passageway. You expected to be greeted by sound and fury, but this eerie silence is almost worse. Not a word is spoken as you slink deeper and deeper into the secret shaft, making note of the peculiar smoothness of the walls, the bizarre markings along the floor, the muted drip, drip, drip of water in the distance.\nFor hours you continue into the deep dark, questioning your judgment with each step. What kind of people walk willingly into the jaws of such horror? You risked your reputation going on this expedition to begin with. Then you risked your life not turning back the moment things turned dire. Now you risk your very sanity unearthing secrets no human was ever meant to find.\nIs this bravery? Or the final mistake of a herd of fools, too stubborn to see that their own deaths lie at the end of this road? It matters not. You've come too far to turn back now. One way or another, you will get the answers you seek. The only question is whether you'll live to tell the world what you found.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "team_found_the_hidden_tunnel",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "Hours pass. You dare not venture outside, but you explore every crevice of your sanctuary, hoping to find something to make this endeavor worthwhile. What you find instead is even harder to believe. In the icy sub-level of the structure, a sacred chamber houses a churning pool of kaleidoscopic miasma. Gray, swirling mist evaporates from its surface Familiar shapes and strange hallucinations materializing and vanishing within.\nAs if sensing your approach, the pool stops whirling and rises on its own, almost as if in greeting. Then, it coalesces into a shimmering glob of prismatic color and crawls along the floor, stopping when you stop, continuing along as you follow. It beckons you closer, guiding you. You glance at one another with trepidation. Is it trying to show you something? To take you somewhere? And if so… is it truly wise to follow?\nEventually, you come to an agreement. There is no use dawdling here, and the weather grows fouler with each passing minute. You decide to follow with caution, hoping perhaps it will lead you to answers. For hours you continue into the deep dark, questioning your judgment with each step. The ancient structure gives way to icy tunnels, walls smooth and slick with dark ichor, floor covered in bizarre markings of unknowable origin. Finally, the glob of miasma seeps back into the walls and disappears, leaving you alone with your doubts, your fears, and the impossibly long shaft breaching through the icy heart of Antarctica and into the depths beyond…",
+      "effects": [
+        {
+          "do": "record",
+          "key": "team_was_guided_to_the_hidden_tunnel",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "city_of_the_elder_things",
+  "connections": [],
+  "oneWay": [],
+  "layout": {
+    "08630": [
+      0,
+      0
+    ]
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "id": "the-circle-undone",
+  "name": "The Circle Undone",
+  "scenarios": [
+    "the-witching-hour",
+    "at-deaths-doorstep",
+    "the-secret-name",
+    "the-wages-of-sin",
+    "for-the-greater-good",
+    "union-and-disillusion",
+    "in-the-clutches-of-chaos",
+    "before-the-black-throne"
+  ],
+  "i18nId": "tcu",
+  "chaosBags": {
+    "easy": [
+      "+1",
+      "+1",
+      "0",
+      "0",
+      "0",
+      "-1",
+      "-1",
+      "-2",
+      "-3",
+      "skull",
+      "skull",
+      "autoFail",
+      "elderSign"
+    ],
+    "standard": [
+      "+1",
+      "0",
+      "0",
+      "-1",
+      "-1",
+      "-2",
+      "-2",
+      "-3",
+      "-4",
+      "skull",
+      "skull",
+      "autoFail",
+      "elderSign"
+    ],
+    "hard": [
+      "0",
+      "0",
+      "-1",
+      "-1",
+      "-2",
+      "-2",
+      "-3",
+      "-4",
+      "-5",
+      "skull",
+      "skull",
+      "autoFail",
+      "elderSign"
+    ],
+    "expert": [
+      "0",
+      "-1",
+      "-1",
+      "-2",
+      "-2",
+      "-3",
+      "-4",
+      "-6",
+      "-8",
+      "skull",
+      "skull",
+      "autoFail",
+      "elderSign"
+    ]
+  },
+  "logLabels": {},
+  "packs": [
+    "core",
+    "tcu"
+  ],
+  "generated": true,
+  "card": "05050"
+}

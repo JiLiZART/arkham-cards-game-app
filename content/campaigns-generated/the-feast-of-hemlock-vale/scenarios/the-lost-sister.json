@@ -1,0 +1,140 @@
+{
+  "id": "the-lost-sister",
+  "name": "The Lost Sister",
+  "card": "10528",
+  "intro": "You are sitting in the small kitchen of the Peters family home in Akwan, on the north shore of Hemlock Isle. Cold Atlantic seawater laps at the stilts below the house as Helen Peters sets her steaming mug on the table. “The north shore caverns are a death trap,” she says firmly. “I don’t think you know what you’re getting into.”\nYou tell her you are well aware of the danger. According to local rumors, some folks have gone missing recently. The most recent disappearance was Helen’s sister, so you paid a visit to the Peters home to offer your help.\nHelen looks you over, as if sizing you up, and finally nods. “Alright then. You’re either brave, or you’re stupid. Or you’re both, like my little brother.” She rubs her brow in frustration. “I last saw Lizzie—Elizabeth—taking a walk with our dog Bruce along the coastline. I told her to stay away from those caves, but she never listens. It’s easy to get lost in ‘em and there are things in there that’d haunt your nightmares.” She sets a flashlight on the table. “But that’s where we’re going to start.”",
+  "encounterSets": [
+    "the_lost_sister",
+    "blight",
+    "horrors_in_the_rock",
+    "mutations",
+    "myconids",
+    "residents"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "10572",
+    "10573",
+    "10574"
+  ],
+  "agendas": [
+    "10570",
+    "10571"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "10575"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "10721"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "10575"
+    }
+  ],
+  "tokens": {
+    "easy": {},
+    "standard": {},
+    "hard": {},
+    "expert": {}
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "Your efforts have reached their limit. The unnatural fungus and aggressive wildlife are too much for you to handle. You have no choice but to abandon the search.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 1,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "You return to Akwan with Helen and Lizzie. The younger sister thanks you as she stares back at the caves. Helen takes the frayed dog leash from her. “Bruce was a good dog,” she says. The ocean wind blows the youngest Peters’ dark brown hair across her round face as Helen wraps an arm around her shoulder. You ask what their plan is now.\n“We can’t stay here,” Helen says, more to Elizabeth than to you. Before her sister can protest, Helen goes on. “Remember the story Nokemes told us? The one about Gluskab turning a man into a tree. Everything on this island is wrong. It’s transformed into something deadly. Maybe it’s time we pay a visit to Uncle George in Portland.”",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "After returning from his truck, Theo asks his sister why she wandered off. Lizzie brushes tears from her eyes and holds up the torn dog leash. “Bruce wanted to go for one last walk. Like we used to.” Theo looks crestfallen as his two sisters look out to sea, past the rolling waves and the silver clouds. Theo hesitates, searching for what to say as his sisters face the crashing surf.\n“Come here, Theo,” Helen beckons him over. The three siblings stand together, looking out to the sea in silence.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 2,
+          "who": "each"
+        },
+        {
+          "do": "record",
+          "key": "the_peters_family_was_reunited",
+          "value": true
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "“I’ll start making preparations soon and hopefully we’ll be off the island in a few more days,” Helen tells you. “I suggest you leave soon, as well.” You tell her the survey is far from over, and there’s still more you have to do. Helen scoffs. “Your funeral,” she says, then after a brief silence she looks at you again. “Sorry. I don’t know why I said that,” she says. “Thank you for your help. Nobody from the Vale would have helped.” She looks down the black sanded shore toward Akwan. “Gideon used to fish here often, but not anymore. The Vale took him from us. Now they’ve taken Theo.”\nShe looks back to you. “I have another favor to ask. Please. Look after Theo. He means well, even if he’s a little thick in the head. Make sure he’s okay. No matter what he thinks, he’s still family.”",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 2,
+          "who": "each"
+        },
+        {
+          "do": "record",
+          "key": "elizabeth_peters_was_saved",
+          "value": true
+        }
+      ]
+    },
+    "R4": {
+      "title": "Resolution 4",
+      "text": "“Miskatonic Survey, June 1926. Members Marquez, Musgrave, et alii. Northern shore and coastal caves extremely dangerous. Identified dozens of hitherto undocumented species of bioluminescent fungus. An exceedingly hostile ecosystem with extreme sensitivity to light. <strike>Further analysis and observation recommended. Future expeditions should come prepared with appropriate gear and extreme caution.</strike> Avoid the Akwan caves, if at all possible.”",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "record",
+          "key": "akwan_shoreline",
+          "value": true
+        }
+      ]
+    }
+  },
+  "i18nId": "the_lost_sister",
+  "connections": [],
+  "oneWay": [],
+  "layout": {
+    "10575": [
+      0,
+      0
+    ]
+  }
+}

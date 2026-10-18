@@ -326,6 +326,8 @@ export interface ContentDb {
   sounds: SoundManifest;
   /** every pack of cards (a folder under content/packs): whether it is loaded, and its card codes once it is */
   packs: Record<string, { loaded: boolean; cards: string[] }>;
+  /** generated campaigns whose scenarios the browser loads when chosen (loadCampaign): false until loaded */
+  campaignsLoaded?: Record<string, boolean>;
 }
 
 export interface GameSetup {

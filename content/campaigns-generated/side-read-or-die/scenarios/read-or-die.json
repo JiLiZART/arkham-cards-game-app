@@ -1,0 +1,187 @@
+{
+  "id": "read-or-die",
+  "name": "Read or Die",
+  "card": "90004",
+  "intro": "You’ve spent your entire life reading. As a child, it was but a simple interest in harmless stories. Grisly stories, to be sure, but harmless nonetheless. Your fascination with horror and the macabre earned you the nickname “Spooks” among your friends and classmates. But as you grew, so too did this fascination, until it bordered on obsession. Your appetite for horror evolved from mystery and make-believe to something more. Something real.\nWhen you discovered John Dee’s translation of The Necronomicon, you knew you’d finally found the true horror you had been secretly yearning for. If only you’d known what would be in store for you once you’d read that dreadful tome. You would have locked it back up in Henry Armitage’s restricted collection in the Orne Library and never opened it again.\nOr so you like to think. But even you cannot doubt the allure of the Kitab al-Azif. The Book of the Dead. That is why, when Dr. Armitage summoned you to the Orne Library, the dread in your bones predicted precisely what had occurred.\n“I don’t understand how this could have happened,” Dr. Armitage says as he surveys the destruction. The entire restricted collection is in tattered disarray. The Necronomicon lies open on a nearby table, its metal clasps broken apart. You run your fingers along its leathery, skin-like pages. Your eyes flit along the words in a familiar dance:\n<center>“They walk unseen and foul in lonely places where the Words have been spoken and the Rites howled through at their Seasons. The wind gibbers with Their voices, and the earth mutters with Their consciousness.”</center>\nYour throat tightens as you realize what must have occurred. Something has been unleashed, and you are the only one who can figure out how to stop it…",
+  "encounterSets": [
+    "read_or_die",
+    "extracurricular_activity",
+    "sorcery",
+    "the_beyond",
+    "bishops_thralls",
+    "whippoorwills",
+    "ancient_evils",
+    "locked_doors",
+    "agents_of_yog",
+    "armitages_fate"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "90006"
+  ],
+  "agendas": [
+    "90005"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "02056",
+        "02049",
+        "02053",
+        "02054",
+        "02051",
+        "02052"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "02048",
+        "02050"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "02056"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "Each investigator was defeated",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "When you wake, the floor of the library is a mess of scattered paper and torn books. The Necronomicon lies in front of you, its metal clasp sealing it shut once more. Hopefully, whatever presence had been unleashed is safely stored within. But you can’t risk the grimoire staying here—it is far too dangerous to be left alone. You stuff the tome into your tote bag, knowing only you can keep it safe…or keep others safe from it.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "You stuff the tome back into your tote bag. You can only hope that the entity that was unleashed won’t cause further harm…",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "read_or_die",
+  "connections": [
+    [
+      "02053",
+      "02054"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "02050": [
+      0,
+      0
+    ],
+    "02056": [
+      2,
+      0
+    ],
+    "02048": [
+      1,
+      1
+    ],
+    "02049": [
+      0,
+      2
+    ],
+    "02053": [
+      2,
+      2
+    ],
+    "02054": [
+      3,
+      2
+    ],
+    "02051": [
+      1,
+      3
+    ],
+    "02052": [
+      1,
+      5
+    ]
+  }
+}

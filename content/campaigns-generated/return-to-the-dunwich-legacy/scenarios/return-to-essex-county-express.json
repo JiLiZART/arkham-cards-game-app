@@ -1,0 +1,165 @@
+{
+  "id": "return-to-essex-county-express",
+  "name": "Return to The Essex County Express",
+  "card": "02159",
+  "intro": "Recent events in the Museum have forced you to re-evaluate Armitage’s tale about Dunwich. It cannot be a coincidence—Wilbur Whateley, the Necronomicon, the creature from Dunwich, and the people and creatures who attacked here in Arkham—everything must be connected. You’re certain now where you must head: the lonely and dismal town of Dunwich Village.\nYou consider telling the Massachusetts State Police what you know, but the negative consequences outweigh the potential gain. Given the nature of your story, they would likely write your stories off as an absurd hoax. Worse, they could lock you up. After all, you were present in an illegal speakeasy, and you also trespassed in the museum. Instead, you decide to head to Dunwich yourself, in order to investigate further.\nYou pack everything you think you might need and manage to get some rest for the night. In the morning, you head to the train station in Northside and purchase a last-minute express ticket. Dunwich is several hours by train northwest along the Miskatonic River Valley. There is no train station in Dunwich, but you manage to phone one of Armitage’s acquaintances in the small village: a man by the name of Zebulon Whateley who was present during the events several months ago.\nArmitage’s notes indicate that the Whateley family is spread across many branches, some decadent and unscrupulous, others “undecayed” or otherwise untouched by nefarious and diabolic rites. According to Armitage, Zebulon’s branch of the family lay somewhere between the decayed and undecayed Whateleys, who knew of the traditions of his ancestors, but was not corrupted by them. He agrees to pick you up at the closest station and drive you into town\nAs the train departs from Arkham, you feel the events of the previous night catching up to you, and exhaustion sets in. But before you can safely reach your destination, the train car suddenly rumbles and shakes, startling you out of your reverie. The train loudly skids to a violent halt, and you hear a rattling noise behind you…",
+  "encounterSets": [
+    "essex_county_express",
+    "return_to_the_essex_county_express",
+    "beyond_the_threshold",
+    "erratic_fear",
+    "resurgent_evils",
+    "pentagram"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "02165",
+    "02166"
+  ],
+  "agendas": [
+    "02160",
+    "02161",
+    "02162",
+    "02163",
+    "02164"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "02167",
+        "02177"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "51031",
+        "02178"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "02167"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "Each investigator was defeated",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "You breathe a sigh of relief as the gate behind the train collapses harmlessly upon itself. The few passengers who survived the ordeal seem unable to comprehend what just happened. One passenger mentions “a pipe bursting in the rear car,” and that quickly becomes the explanation for the innocent and ignorant, those who either cannot or choose not to delve further into the mystery. You, on the other hand, know better… although in hindsight, you wish you didn’t.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "Rattled, you begin walking alongside the train tracks, making your way towards Dunwich.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "investigators_delayed",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "return_to_essex_county_express",
+  "connections": [
+    [
+      "02167",
+      "02177"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "02167": [
+      0,
+      0
+    ],
+    "02177": [
+      6,
+      0
+    ]
+  }
+}

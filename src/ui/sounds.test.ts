@@ -57,6 +57,16 @@ describe("musicFor", () => {
     expect(musicFor(fresh, m)).toBe("bed:the-gathering");
   });
 
+  it("a scenario without a bed of its own (a generated one) plays the default bed, and fight and tension as usual", () => {
+    const generated = with_((s) => (s.scenarioId = "extracurricular-activity"));
+    expect(musicFor(generated, m)).toBe("bed:default");
+    const ghoul = codeOf("01160");
+    expect(musicFor(with_((s) => {
+      s.scenarioId = "extracurricular-activity";
+      s.cards[ghoul] = { ...s.cards[ghoul], zone: "enemy", location: s.invs[R].location, engagedWith: R };
+    }), m)).toBe("fight");
+  });
+
   it("fight while an enemy is engaged, the bed again once it is gone", () => {
     const ghoul = codeOf("01160");
     const engaged = with_((s) => (s.cards[ghoul] = { ...s.cards[ghoul], zone: "enemy", location: s.invs[R].location, engagedWith: R }));
@@ -78,9 +88,10 @@ describe("musicFor", () => {
     expect(musicFor(both, m)).toBe("fight");
   });
 
-  it("silent once the scenario has ended, and for a scenario with no bed", () => {
+  it("silent once the scenario has ended, and for a scenario with no bed when there is no default bed either", () => {
     expect(musicFor(with_((s) => (s.phase = "ended")), m)).toBeNull();
-    expect(musicFor(with_((s) => (s.scenarioId = "nowhere")), m)).toBeNull();
+    const music = Object.fromEntries(Object.entries(m.music).filter(([k]) => k !== "bed:default"));
+    expect(musicFor(with_((s) => (s.scenarioId = "nowhere")), { ...m, music })).toBeNull();
   });
 });
 

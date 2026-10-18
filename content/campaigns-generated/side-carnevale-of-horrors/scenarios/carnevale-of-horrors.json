@@ -1,0 +1,162 @@
+{
+  "id": "carnevale-of-horrors",
+  "name": "Carnevale of Horrors",
+  "card": "82001",
+  "intro": "\"Look,\" Sheriff Engel insists, \"I know it sounds crazy, but that's really all there is to it.\" He sighs and sits back down, pouring a cup of joe for you and one for himself. \"A dame in Uptown spotted a cracked egg wearing this mask and holdin' a bloody butcher's cleaver,\" he says, motioning to the black leather mask sitting on his desk. It has a comically long nose and a strange symbol scrawled in yellow on its forehead. \"So, she calls it in. My boys and I picked him up on the corner of Saltonstall & Garrison.\" The sheriff's jaw clenches and his brows furrow as he recounts the story. \"Fella did nothing but laugh as we slapped the bracelets on him. Called himself Zanni. Said nothing except the 'carnival is coming'; whatever the hell that meant. Wasn't until the next day we found the victim's body. Defense wanted him in a straitjacket. We were happy to oblige.\"\nThere isn't much time to spare. If your research is right, there is more to this case than meets the eye. This \"Zanni\" wasn't talking about Darke's Carnival, but rather the Carnevale of Venice, which begins just before the next full moon.",
+  "encounterSets": [
+    "venice"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "82005",
+    "82006",
+    "82007"
+  ],
+  "agendas": [
+    "82002",
+    "82003",
+    "82004"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "82008"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "82027",
+        "82025",
+        "82024",
+        "82023",
+        "82026"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "82008"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -6
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -6
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "You sputter awake as an oar gently taps your shoulder. \"Tutto bene?\" The gondolier holding the oars says with a concerned expression. You nod and drag yourself onto the docks from his gondola, drenched and aching all over. The city is devastated. Most of the boats in the canal are wrecked. The streets are covered not in confetti, but in blood.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "coh_many_were_sacrificed_to_cnidathqua",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "The city is still recovering from the events during the eclipse. With nearly all evidence of the creature melted away by the hot sun, many attribute the violence during the Carnevale to local crime lord Cascio Di Boerio and his crew. Those that know the truth know better than to speak of the elder creature that lives in Laguna Veneta. With any luck, its name will never be spoken again.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "coh_sun_banished_cnidathqua",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "The creature recoils as globules of its jelly-like flesh rip and tear from its body, splashing into the lagoon. It makes no sound as its torn body sinks into the depths. The chanting in the city plunges into mournful silence. As you return to the canal-side streets, black feathers fall from the sky where bright confetti once fluttered. You can only wonder how long it will take for the creature to recover.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "coh_cnidathqua_retreated",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "carnevale_of_horrors",
+  "connections": [],
+  "oneWay": [],
+  "layout": {
+    "82008": [
+      0,
+      0
+    ]
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "id": "fatal-mirage",
+  "name": "Fatal Mirage",
+  "card": "08549",
+  "intro": "Upon entering the doorway, you find yourself in a web of icy tunnels, swathed in miasma and dripping with prismatic ichor. Your reflection peers back at you in myriad peculiar angles. Your voice echoes throughout this infinite hall of mirrors. You turn around to discover that your entryway has vanished behind you. Then, in the corner of your eye, you spot a familiar figure traversing the same mists—but, no, that can't be possible. Can it?",
+  "encounterSets": [
+    "fatal_mirage",
+    "agents_of_the_unknown",
+    "left_behind",
+    "miasma",
+    "nameless_horrors",
+    "silence_and_mystery",
+    "chilling_cold"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "08553",
+    "08554",
+    "08555"
+  ],
+  "agendas": [
+    "08550",
+    "08551",
+    "08552"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "08556"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "08556"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "You stumble wearily to your feet. A dream? You grip your temples, your mind aching. It feels as though a pneumatic drill has been taken to the inside of your skull. If this is what sleep is to be in this hellish place, you want no part of it.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "You tumble through the doorway, and onto your sleeping mat, flailing within your tangle of warm blankets. No door shuts behind you. Did you only imagine all of that? Or was it all real?",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "fatal_mirage",
+  "connections": [],
+  "oneWay": [],
+  "layout": {
+    "08556": [
+      0,
+      0
+    ]
+  }
+}

@@ -2,6 +2,7 @@ import { cardText, encounterSetName, t } from "../content/i18n";
 import { connectionsOf } from "../engine/core";
 import type { CardInst, ContentDb, GameState, InvId } from "../engine/types";
 import type { Rect } from "./hover";
+import { keywordsOf } from "./glossary";
 import type { IconName } from "./icons";
 
 /** one line of the hand card details column */
@@ -25,7 +26,15 @@ export type DetailRow =
   | { k: "clues"; now: number; printed: number | null; perInv: boolean; label: string; perInvLabel: string }
   | { k: "victory"; label: string }
   | { k: "connections"; names: string[]; label: string }
-  | { k: "here"; invs: InvId[]; enemies: string[]; label: string };
+  | { k: "here"; invs: InvId[]; enemies: string[]; label: string }
+  // the card's keywords, each explained (glossary.ts)
+  | { k: "keywords"; label: string; items: { name: string; text: string }[] };
+
+/** the glossary row: each keyword the card has, by its name in the locale, with its explanation */
+function glossary(db: ContentDb, code: string, locale: string): DetailRow[] {
+  const items = keywordsOf(db.cards[code]).map((k) => ({ name: t(db, locale, `kw.${k}.name`), text: t(db, locale, `kw.${k}`) }));
+  return items.length ? [{ k: "keywords", label: t(db, locale, "card.keywords"), items }] : [];
+}
 
 const SLOT_ICONS: Record<string, IconName> = { hand: "hand", arcane: "arcane", accessory: "accessory", body: "body", ally: "ally" };
 const SKILLS = ["willpower", "intellect", "combat", "agility", "wild"] as const;
@@ -58,6 +67,7 @@ function locationDetails(db: ContentDb, inst: CardInst, game: GameState, locale:
   if (names.length) rows.push({ k: "connections", names, label: t(db, locale, "card.connections") });
   rows.push(...here);
   if (tx.text) rows.push({ k: "text", s: tx.text });
+  rows.push(...glossary(db, inst.code, locale));
   return rows;
 }
 
@@ -89,6 +99,7 @@ export function cardDetails(db: ContentDb, code: string, locale: string, at?: { 
     if (at?.inst.damage) rows.push({ k: "wounds", n: at.inst.damage, label: t(db, locale, "card.wounds") });
   }
   if (tx.text) rows.push({ k: "text", s: tx.text });
+  rows.push(...glossary(db, code, locale));
   return rows;
 }
 

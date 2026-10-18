@@ -1,0 +1,204 @@
+{
+  "id": "river-of-blood",
+  "name": "River of Blood",
+  "card": "13001",
+  "intro": "\"Whatever you have to do to stop her, to stop that thing,\" Christopher says to you as you prepare to set out in search of Julia. \"Just do it.\"\nYou spend the night searching frantically through the Waterfront District, but are unable to locate anything conclusive. You retire for a restless night, and hope to have better luck in the morning.",
+  "encounterSets": [
+    "river_of_blood",
+    "blood_blight",
+    "blood_moon",
+    "children_of_blood",
+    "hunted",
+    "infected",
+    "misinformation",
+    "agents_of_zburamoarte",
+    "mongrels",
+    "dead_ends",
+    "flying_terrors",
+    "afflicted"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "13006",
+    "13007"
+  ],
+  "agendas": [
+    "13002",
+    "13003",
+    "13004",
+    "13005"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "13020",
+        "13008",
+        "13018",
+        "13016",
+        "13012",
+        "13014",
+        "13022"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "13024",
+        "13025",
+        "13026",
+        "13027",
+        "13029",
+        "13030"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "13008"
+    }
+  ],
+  "tokens": {
+    "easy": {},
+    "standard": {},
+    "hard": {},
+    "expert": {}
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "It doesn’t take long before it becomes clear that there are more creatures stalking the night than simply the monster that was Julia Stern. Their unending hunt proved too much for you. The last thing you remember is the creatures looming over you before you mercifully lost consciousness.\nYou awaken to the burning yellow light of dawn. Collecting yourself, you meet up with Detective Reynolds once more.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "failed_to_stop_julia_stern",
+          "value": true
+        },
+        {
+          "do": "earnCard",
+          "code": "13118",
+          "who": "choice"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 3,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "After a grueling conflict, you finally subdue your quarry. Rather than take her life, you knock Julia unconscious and prepare to regroup with Detective Reynolds, holding out hope that there may be some way to save her. When you return to collect her, however, you discover that she has disappeared into the shadows once more. You hope you made the right choice. For now, however, the only path forward for you is to reconnect with Detective Reynolds and get to the bottom of what caused all of this bloodshed in the first place.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "spared_julia_stern",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "At long last, your hunt comes to an end. Ending Julia’s life, and the lives of her victims, is a regrettable course of action, but it had to be done to make the Waterfront District safe again. After three bloody nights on the banks of the Miskatonic River, you’re hoping that you can reconnect with Detective Reynolds and get to the bottom of what caused all of this in the first place.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "killed_julia_stern",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "The hunt through the night is long and arduous, but Julia proves too crafty and too swift for your efforts. By the morning of the third day of your search, you worry that you’ll have to wait until she strikes again. For now, however, the only path forward for you is to reconnect with Detective Reynolds and get to the bottom of what caused all of this bloodshed in the first place.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "failed_to_stop_julia_stern",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 2,
+          "who": "each"
+        }
+      ]
+    },
+    "R4": {
+      "title": "Resolution 4",
+      "text": "Back at Detective Reynolds’ office, you explain what you’ve learned. He tells you that his leads also pointed towards the New Horizons meat packing facility, and a suspicious group that had been seen around the building, dressed in robes instead of the more standard aprons and coveralls of the workers. “The same place where Julia worked,” Reynolds says. “Seems like that place is worth a visit.”",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "13029",
+          "who": "choice"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "river_of_blood",
+  "connections": [
+    [
+      "13018",
+      "13016"
+    ],
+    [
+      "13012",
+      "13014"
+    ],
+    [
+      "13012",
+      "13022"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "13008": [
+      2,
+      1
+    ],
+    "13012": [
+      1,
+      5
+    ],
+    "13014": [
+      2,
+      5
+    ],
+    "13016": [
+      1,
+      3
+    ],
+    "13018": [
+      0,
+      3
+    ],
+    "13020": [
+      1,
+      0
+    ],
+    "13022": [
+      1,
+      6
+    ]
+  }
+}

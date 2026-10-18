@@ -1,0 +1,182 @@
+{
+  "id": "tunguska",
+  "name": "Congress of the Keys",
+  "card": "09694",
+  "intro": "You awaken in darkness. A sack is removed from your head and cast aside, and your cheek is squeezed and struck once or twice for good measure. “Wake up,” a sinister voice commands. You blink unconsciousness away and realize, with some panic, that you and your partners are bound to chairs. A gag prevents you from making any noise louder than a muffled cry.\nAs your eyes adjust to the dim light, you realize you must be underground. The large, windowless chamber is made of clean, worked stone, lit faintly by mercury vapor lamps. Scarlet tapestries line the walls, along with several glass cases and shelves containing old relics and historical artifacts. Dominating the room is an enormous central table, an elaborate pattern of lines and rings carved meticulously along its surface. Standing around this central table are a host of figures, some familiar to you, others unrecognizable. All of them bear red. Your heart surges in your throat. “You have been brought here to account for your crimes against the Coterie,” the voice states, “or to be commended, if that is the will of the Congress. We will now entertain any who wish to speak on your behalf, or against you.”",
+  "encounterSets": [
+    "congress_of_the_keys",
+    "red_coterie",
+    "scarlet_sorcery",
+    "spatial_anomaly",
+    "spreading_corruption",
+    "locked_doors",
+    "red_coterie",
+    "agents_of_the_outside",
+    "beyond_the_beyond",
+    "outsiders",
+    "secret_war",
+    "ancient_evils",
+    "striking_fear"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "09698",
+    "09701",
+    "09702",
+    "09703"
+  ],
+  "agendas": [
+    "09695",
+    "09696",
+    "09697"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "09704",
+        "09705"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "09715"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "09704"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -5
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -5
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -7
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -7
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "Each investigator was defeated",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "The feeling of being flung across worlds does not cease until you strike solid ground. Though your weary body protests, you scamper to your feet and scan your surroundings, ready for anything. But when you realize where you are, you are shocked to find…",
+      "effects": [
+        {
+          "do": "record",
+          "key": "outsiders_were_stopped",
+          "value": true
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 2,
+          "mental": 2
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 5,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "“There, that is the last of them,” Agent Hudson says as he slams his stamp down onto the expense report. “I understand the need for secrecy, but I must once again request we hire assistants for this secretarial work, Commissioner.” He hands the bundle of documents to Taylor, who sits behind her stark black desk, wearing a grave expression.\n“More eyes means more leaks. We keep this crew tight for a reason, Hudson. Do not lose sight of what is important.” She flips through the documents for a moment, furrowing her brows. “Where is the report on asset 32–J’s cell?”\n“32–J?” the man pulls a small notebook from his back pocket and flips to a page near the middle. “No such designation exists.”\nTaylor grimaces. “No, that’s not right. There was… we met them in London. You were there…” After a moment, she shakes her head in utter confusion. “Hm. Strange. I don’t remember who they were.”\n“You have been working too hard,” the agent replies with a small grin. “Take some time off, Commissioner. We can handle things without you for a week or so.”",
+      "effects": [
+        {
+          "do": "record",
+          "key": "cell_was_hollowed",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "tunguska",
+  "connections": [
+    [
+      "09704",
+      "09705"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "09704": [
+      0,
+      0
+    ],
+    "09705": [
+      1,
+      0
+    ]
+  }
+}

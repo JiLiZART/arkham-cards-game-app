@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { content, loadPack } from "./index";
+import { campaignLoaded, content, contentErrors, loadCampaign, loadPack } from "./index";
 import { cardText } from "./i18n";
 import { addCardText, addPack, buildContent, cardsOf, packLoaded } from "./loader";
 import { loadContentFromDisk } from "./node";
@@ -43,6 +43,33 @@ describe("packs in the content database", () => {
     addCardText(db, "ru", "/content/i18n/ru/packs/x.generated.json", { "1": { name: "Импорт", text: "Текст" }, "2": { name: "Два" } }, 0, true);
     expect(db.i18n.ru.cards["1"]).toEqual({ name: "Напечатано", text: "Текст" });
     expect(db.i18n.ru.cards["2"]).toEqual({ name: "Два" });
+  });
+
+  it("the browser's content has no errors although the generated campaigns' scenarios and cards are not loaded yet", () => {
+    expect(content.campaigns["the-dunwich-legacy"]).toMatchObject({ generated: true, packs: ["core", "dwl"], card: "02041" });
+    expect(content.scenarios["extracurricular-activity"]).toBeUndefined();
+    expect(campaignLoaded("the-dunwich-legacy")).toBe(false);
+    expect(campaignLoaded("night-of-the-zealot")).toBe(true);
+    expect(contentErrors).toEqual([]);
+  });
+
+  it("loadCampaign brings a generated campaign's scenarios and Russian text in", async () => {
+    expect(await loadCampaign("the-dunwich-legacy")).toEqual([]);
+    expect(campaignLoaded("the-dunwich-legacy")).toBe(true);
+    expect(content.scenarios["extracurricular-activity"].card).toBe("02041");
+    expect(content.i18n.ru.campaigns.scenarios["extracurricular-activity"].name).toMatch(/[а-я]/i);
+    await expect(loadCampaign("nowhere")).rejects.toThrow(/unknown campaign nowhere/);
+  });
+
+  it("a scenario's references are checked once its campaign's packs are loaded", () => {
+    const scenario = { id: "s", name: "S", card: "9", encounterSets: [], acts: ["8"], agendas: ["7"], setup: [], tokens: {}, resolutions: { none: { title: "", text: "", effects: [] } }, connections: [] };
+    const files = {
+      "/content/campaigns/c/campaign.json": { id: "c", name: "C", scenarios: ["s"], chaosBags: { standard: ["0"] }, packs: ["x"], generated: true },
+      "/content/campaigns/c/scenarios/s.json": scenario,
+    };
+    expect(buildContent(files, {}, ["x"]).errors).toEqual([]);
+    const loaded = buildContent({ ...files, "/content/packs/x/cards.generated.json": [card("1", { pack: "x" })] }, {}, []);
+    expect(loaded.errors.map((e) => e.message)).toEqual(expect.arrayContaining(["missing card 9", "missing card 8", "missing card 7"]));
   });
 
   it("an unknown pack is refused in plain words", async () => {

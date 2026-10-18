@@ -83,12 +83,41 @@ export function addPack(
 export const textLayer = (suffix?: string): 0 | 1 | 2 => (suffix === ".generated" ? 0 : suffix === ".print" ? 1 : 2);
 export const TEXT_FILE = /\/i18n\/([^/]+)\/(?:(cards|ui|campaigns)|packs\/([^/]+?))(\.generated|\.print)?\.json$/;
 
-export function buildContent(files: Record<string, unknown>, scriptFiles: Record<string, CardScript>, lazyPacks: string[] = []): { db: ContentDb; errors: ContentError[] } {
+/** a generated campaign's text in one locale, loaded with its scenarios: i18n/<locale>/campaign-texts/<campaign>.json */
+export const CAMPAIGN_TEXT = /\/i18n\/([^/]+)\/campaign-texts\/([^/]+)\.json$/;
+const CAMPAIGN_FILE = /\/campaigns(?:-generated)?\/[^/]+\/campaign\.json$/;
+const SCENARIO_FILE = /\/campaigns(?:-generated)?\/[^/]+\/scenarios\/[^/]+\.json$/;
+
+/** a generated campaign's scenario files and text files, added to the content (in the browser, when it is chosen) */
+export function addCampaignFiles(db: ContentDb, files: Record<string, unknown>): ContentError[] {
+  const errors: ContentError[] = [];
+  for (const [file, raw] of Object.entries(files).sort(([a], [b]) => a.localeCompare(b))) {
+    if (SCENARIO_FILE.test(file)) {
+      const r = ScenarioDef.safeParse(raw);
+      if (r.success) db.scenarios[r.data.id] = r.data;
+      else errors.push(...zerr(file, r.error));
+      continue;
+    }
+    const m = file.match(CAMPAIGN_TEXT);
+    if (!m) continue;
+    const r = I18nCampaigns.safeParse(raw);
+    if (!r.success) {
+      errors.push(...zerr(file, r.error));
+      continue;
+    }
+    const loc = (db.i18n[m[1]] ??= { cards: {}, ui: {}, campaigns: { campaigns: {}, scenarios: {}, encounterSets: {} } });
+    mergeCampaignText(loc.campaigns, r.data);
+  }
+  return errors;
+}
+
+export function buildContent(files: Record<string, unknown>, scriptFiles: Record<string, CardScript>, lazyPacks: string[] = [], lazyCampaigns: string[] = []): { db: ContentDb; errors: ContentError[] } {
   const errors: ContentError[] = [];
   const db: ContentDb = { cards: {}, investigators: {}, decks: {}, scenarios: {}, campaigns: {}, scripts: {}, encounterSets: {}, i18n: {}, sounds: EMPTY_SOUNDS, packs: {} };
   const cardFile: Record<string, string> = {};
   const entries = Object.entries(files).sort(([a], [b]) => a.localeCompare(b));
   for (const pack of lazyPacks) db.packs[pack] = { loaded: false, cards: [] };
+  if (lazyCampaigns.length) db.campaignsLoaded = Object.fromEntries(lazyCampaigns.map((c) => [c, false]));
 
   // cards: generated + overrides per pack (the packs the browser loads later are only named in `lazyPacks`)
   const generated = entries.filter(([p]) => /\/packs\/[^/]+\/cards\.generated\.json$/.test(p));
@@ -107,13 +136,13 @@ export function buildContent(files: Record<string, unknown>, scriptFiles: Record
   };
   parseInto(/\/investigators\/[^/]+\.json$/, InvestigatorDef, (v) => (db.investigators[v.code] = v));
   parseInto(/\/decks\/[^/]+\.json$/, DeckDef, (v) => (db.decks[v.id] = v));
-  parseInto(/\/campaigns\/[^/]+\/campaign\.json$/, CampaignDef, (v) => (db.campaigns[v.id] = v));
-  parseInto(/\/campaigns\/[^/]+\/scenarios\/[^/]+\.json$/, ScenarioDef, (v) => (db.scenarios[v.id] = v));
+  parseInto(CAMPAIGN_FILE, CampaignDef, (v) => (db.campaigns[v.id] = v));
+  parseInto(SCENARIO_FILE, ScenarioDef, (v) => (db.scenarios[v.id] = v));
   parseInto(/\/sounds\/sounds\.json$/, SoundManifest, (v, file) => {
     db.sounds = v;
-    // a bed names a scenario that exists
+    // a bed names a scenario that exists ("bed:default" plays for the scenarios without one of their own)
     for (const key of Object.keys(v.music)) {
-      const id = key.startsWith("bed:") ? key.slice(4) : null;
+      const id = key.startsWith("bed:") && key !== "bed:default" ? key.slice(4) : null;
       if (id !== null && !db.scenarios[id]) errors.push({ file, path: `music.${key}`, message: `unknown scenario ${id}` });
     }
   });
@@ -140,6 +169,8 @@ export function buildContent(files: Record<string, unknown>, scriptFiles: Record
       else mergeCampaignText(loc.campaigns, r.data);
     }
   }
+  // generated campaigns' text, when the files are here (check:content and tests; the browser adds them with loadCampaign)
+  errors.push(...addCampaignFiles(db, Object.fromEntries(entries.filter(([f]) => CAMPAIGN_TEXT.test(f)))));
   for (const [file, mod] of Object.entries(scriptFiles)) {
     const key = file.split("/").pop()!.replace(/\.ts$/, "");
     db.scripts[key] = mod;
@@ -203,7 +234,10 @@ export function validateRefs(db: ContentDb, cardFile: Record<string, string> = {
     if (!db.investigators[d.investigator]) errors.push({ file, path: "investigator", message: `missing investigator definition ${d.investigator}` });
     for (const code of Object.keys(d.cards)) need(file, `cards.${code}`, code);
   }
+  // a campaign whose packs the browser hasn't loaded yet names cards it doesn't have: checked by check:content, which loads all
+  const waiting = new Set(Object.values(db.campaigns).filter((c) => c.packs.some((p) => db.packs[p] && !db.packs[p].loaded)).flatMap((c) => c.scenarios));
   for (const s of Object.values(db.scenarios)) {
+    if (waiting.has(s.id)) continue;
     const file = `scenarios/${s.id}.json`;
     need(file, "card", s.card);
     s.acts.forEach((c, k) => need(file, `acts.${k}`, c));
@@ -227,6 +261,8 @@ export function validateRefs(db: ContentDb, cardFile: Record<string, string> = {
     if (!s.resolutions.none) errors.push({ file, path: "resolutions", message: `scenario needs a "none" resolution` });
   }
   for (const c of Object.values(db.campaigns)) {
+    // a generated campaign's scenarios come later in the browser (loadCampaign)
+    if (db.campaignsLoaded?.[c.id] === false) continue;
     c.scenarios.forEach((id, k) => {
       if (!db.scenarios[id]) errors.push({ file: `campaigns/${c.id}/campaign.json`, path: `scenarios.${k}`, message: `missing scenario ${id}` });
     });

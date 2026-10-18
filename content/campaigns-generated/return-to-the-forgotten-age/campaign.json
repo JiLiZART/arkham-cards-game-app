@@ -1,0 +1,91 @@
+{
+  "id": "return-to-the-forgotten-age",
+  "name": "Return to The Forgotten Age",
+  "scenarios": [
+    "return-to-the-untamed-wilds",
+    "return-to-the-doom-of-eztli",
+    "return-to-threads-of-fate",
+    "return-to-the-boundary-beyond",
+    "return-to-heart-of-the-elders-part-1",
+    "return-to-heart-of-the-elders-part-2",
+    "return-to-the-city-of-archives",
+    "return-to-shattered-aeons",
+    "return-to-turn-back-time"
+  ],
+  "i18nId": "rttfa",
+  "chaosBags": {
+    "easy": [
+      "+1",
+      "+1",
+      "0",
+      "0",
+      "0",
+      "-1",
+      "-1",
+      "-2",
+      "-3",
+      "skull",
+      "skull",
+      "elderThing",
+      "autoFail",
+      "elderSign"
+    ],
+    "standard": [
+      "+1",
+      "0",
+      "0",
+      "0",
+      "-1",
+      "-2",
+      "-2",
+      "-3",
+      "-5",
+      "skull",
+      "skull",
+      "elderThing",
+      "autoFail",
+      "elderSign"
+    ],
+    "hard": [
+      "+1",
+      "0",
+      "0",
+      "-1",
+      "-2",
+      "-3",
+      "-3",
+      "-4",
+      "-6",
+      "skull",
+      "skull",
+      "elderThing",
+      "autoFail",
+      "elderSign"
+    ],
+    "expert": [
+      "0",
+      "-1",
+      "-2",
+      "-2",
+      "-3",
+      "-3",
+      "-4",
+      "-4",
+      "-6",
+      "-8",
+      "skull",
+      "skull",
+      "elderThing",
+      "autoFail",
+      "elderSign"
+    ]
+  },
+  "logLabels": {},
+  "packs": [
+    "core",
+    "return",
+    "tfa"
+  ],
+  "generated": true,
+  "card": "04043"
+}

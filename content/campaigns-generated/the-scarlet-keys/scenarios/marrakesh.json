@@ -1,0 +1,221 @@
+{
+  "id": "marrakesh",
+  "name": "Dead Heat",
+  "card": "09520",
+  "intro": "You are jolted awake by the sound of screeching wheels as your train shudders to a stop. Although it is barely morning, the heat from the sun rises in shimmering waves from the sweltering pavement to veil Marrakesh in an otherworldly glimmer. Your head pounds. The city wavers like a mirage in the middle of the Moroccan desert.",
+  "encounterSets": [
+    "dead_heat",
+    "scarlet_sorcery",
+    "spreading_corruption",
+    "ghouls",
+    "striking_fear"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "09523",
+    "09524",
+    "09525"
+  ],
+  "agendas": [
+    "09521",
+    "09522"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "09526"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "09537",
+        "09537b",
+        "09538",
+        "09541",
+        "09540",
+        "09544a",
+        "09544b",
+        "09536",
+        "09536b"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "09526"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -1
+      },
+      "cultist": {
+        "modifier": -4
+      },
+      "tablet": {
+        "modifier": -1
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -1
+      },
+      "cultist": {
+        "modifier": -4
+      },
+      "tablet": {
+        "modifier": -1
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -6
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -6
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "You watch in horror as the remnants of the city are overtaken by the insidious vines. The remaining civilians are devoured by Amaranth’s servants. As you watch the devastation unfold, you wish you could have done more.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "Realizing the peril of your situation, you make for the outskirts of town and knock on every door you see. Pleading for your life, you offer money or whatever you have on hand, only to be turned away at every stop. Eventually, a wrinkled old woman takes pity on you and welcomes you inside. You spend the night trembling in fear and trepidation, and when you emerge in the morning, the city is in ruins. Awful black vines envelop everything. This devastation was apparently a worthwhile price to pay for true love.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "record",
+          "key": "lovers_are_reunited",
+          "value": true
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "Realizing the peril of your situation, you make for the outskirts of town and knock on every door you see. Pleading for your life, you offer money or whatever you have on hand, only to be turned away at every stop. Eventually, a wrinkled old woman takes pity on you and welcomes you inside. You spend the night trembling in fear and trepidation, and when you emerge in the morning, the city is in ruins. Awful black vines envelop everything. You wonder what was so important to Amaranth that she would cause such devastation.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "record",
+          "key": "have_not_seen_the_last_of_amaranth",
+          "value": true
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "Looking down at the woman who called herself Amaranth, you call her by her true name. “Eryn… Cochwyn?” She holds her hand to her cheek as her cheeks flush. You see her eyes dilate as she begins to remember her former life. As her gaze passes over the Last Blossom writhing in your hand, she lets out a cry of horror. “I had the most terrible dream,” she says. “I dreamt I was a great and terrible queen, and that I ruled over a kingdom of silent subjects.” Realizing what she has done, the change in Eryn’s demeanor is jarring. The woman who seemed so heartless and cruel now lies before you, weeping.\nIt is clear to you that Eryn’s actions were not her own. You console her and lead her to safety along with the rest of the survivors, telling her that you will keep the blossom safe and prevent ‘Amaranth’ from taking another host ever again. “Never again,” she echoes your words. “Never again.” As you depart, the blossom furls and unfurls, as if searching for another host.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "record",
+          "key": "amaranth_has_left_the_coterie",
+          "value": true
+        }
+      ]
+    },
+    "R4": {
+      "title": "Resolution 4",
+      "text": "As you hold the Last Blossom in your hand, Amaranth convulses on the ground before you. Spitting black ichor, the beautiful young woman claws at you like a frightened animal, then bolts away down a narrow street. Although you try to follow her, you eventually lose her trail in the confusion of fleeing civilians and shriveling overgrowth.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "record",
+          "key": "have_not_seen_the_last_of_amaranth",
+          "value": true
+        }
+      ]
+    },
+    "R5": {
+      "title": "Resolution 5",
+      "text": "You find many “Latif”s listed among the innumerable dead as the city reckons with its losses. Rather than try to find your contact, you take stock of the situation and read over the dossier. You have little doubt that this was the work of the Coterie. What Amaranth did here claimed thousands of lives and wreaked havoc on a scale you could have scarcely foreseen. Whatever her reasons, she apparently has the ability to bring calamity on an apocalyptic scale.\nAs the people of Marrakesh carry out the grim arithmetic of counting survivors, you use what time you have to help the civilians rebuild. Over the course of many days, the awful vines dessicate and blow away as ash, and the dead are cleansed and wrapped for burial. Despite the devastation, there is hope for the city to become what it once was, if not even better. With a heavy heart, you prepare to leave.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "have_not_seen_the_last_of_amaranth",
+          "value": true
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 0,
+          "mental": 1
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 3,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "marrakesh",
+  "connections": [],
+  "oneWay": [],
+  "layout": {
+    "09526": [
+      0,
+      0
+    ]
+  }
+}

@@ -71,6 +71,8 @@ export interface UiState {
   logMarks: number[];
   notice: string | null;
   error: string | null;
+  /** a campaign's card packs are loading before it starts or restores */
+  loading: boolean;
 
   newCampaign(opts: NewCampaign): void;
   startScenario(seed?: number): void;
@@ -146,7 +148,13 @@ export function replayWithFloor(db: ContentDb, setup: GameSetup, actions: Action
   return { state, undoFloor };
 }
 
-export function createGameStore(db: ContentDb, storage: Storage = safeStorage()): StoreApi<UiState> {
+/**
+ * What must be in place before a campaign starts or restores (its card packs, its icons): a promise while something
+ * loads, nothing when all is there, so a ready campaign starts in the same call.
+ */
+export type Prepare = (campaignId: string) => Promise<void> | void;
+
+export function createGameStore(db: ContentDb, storage: Storage = safeStorage(), prepare: Prepare = () => undefined): StoreApi<UiState> {
   const store = createStore<UiState>((set, get) => {
     const persist = () => {
       const { campaign, setup, actions, locale, privacy, drawByHand, pace, tipsOn, musicVolume, sfxVolume, muted } = get();
@@ -158,6 +166,24 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage())
         // quota/full private mode: the game keeps running, it just won't survive a reload
       }
     };
+    /** run `then` once the campaign's packs and icons are in: at once when they already are */
+    const whenReady = (campaignId: string, then: () => void) => {
+      let pending: Promise<void> | void;
+      try {
+        pending = prepare(campaignId);
+      } catch (e) {
+        pending = Promise.reject(e);
+      }
+      if (!pending) return then();
+      set({ loading: true, error: null });
+      pending.then(
+        () => {
+          set({ loading: false });
+          then();
+        },
+        (e: unknown) => set({ loading: false, error: `The campaign's cards could not be loaded: ${e instanceof Error ? e.message : String(e)}` }),
+      );
+    };
     const enqueue = (events: GameEvent[]) => {
       // the dispatch's events are the tail of game.log
       const base = (get().game?.log.length ?? events.length) - events.length;
@@ -168,12 +194,14 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage())
     };
     return {
       screen: "title", locale: "en", privacy: true, drawByHand: true, pace: "normal", tipsOn: true, musicVolume: 50, sfxVolume: 80, muted: false, campaign: null, setup: null, actions: [], game: null,
-      queue: [], current: null, revealedFor: null, undoFloor: 0, logMarks: [], notice: null, error: null,
+      queue: [], current: null, revealedFor: null, undoFloor: 0, logMarks: [], notice: null, error: null, loading: false,
 
       newCampaign(opts) {
-        const campaign = startCampaign(db, opts);
-        set({ campaign, setup: null, actions: [], game: null, error: null, notice: null });
-        get().startScenario(opts.seed);
+        whenReady(opts.campaignId, () => {
+          const campaign = startCampaign(db, opts);
+          set({ campaign, setup: null, actions: [], game: null, error: null, notice: null });
+          get().startScenario(opts.seed);
+        });
       },
 
       startScenario(seed) {
@@ -228,21 +256,27 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage())
           return false;
         }
         const settings = { locale: save.settings?.locale ?? "en", privacy: save.settings?.privacy ?? true, drawByHand: save.settings?.drawByHand ?? true, pace: save.settings?.pace ?? "normal", tipsOn: save.settings?.tipsOn ?? true, musicVolume: save.settings?.musicVolume ?? 50, sfxVolume: save.settings?.sfxVolume ?? 80, muted: save.settings?.muted ?? false };
-        if (save.version !== ENGINE_VERSION || !save.setup) {
-          // the rules changed since this save: keep the campaign, restart the scenario
-          set({
-            ...settings, campaign: save.campaign, setup: null, actions: [], game: null, screen: "log",
-            notice: save.setup ? "The game was updated: the current scenario will restart (your campaign log is kept)." : null,
-          });
-          return true;
-        }
-        try {
-          const r = replayWithFloor(db, save.setup, save.actions);
-          quietNextGame();
-          set({ ...settings, campaign: save.campaign, setup: save.setup, actions: save.actions, game: r.state, undoFloor: r.undoFloor, logMarks: [r.state.log.length], screen: "game", queue: [], current: null, revealedFor: null });
-        } catch {
-          set({ ...settings, campaign: save.campaign, setup: null, actions: [], game: null, screen: "log", notice: "The saved scenario could not be restored; it will restart." });
-        }
+        set(settings);
+        const restore = () => {
+          if (save.version !== ENGINE_VERSION || !save.setup) {
+            // the rules changed since this save: keep the campaign, restart the scenario
+            set({
+              campaign: save.campaign, setup: null, actions: [], game: null, screen: "log",
+              notice: save.setup ? "The game was updated: the current scenario will restart (your campaign log is kept)." : null,
+            });
+            return;
+          }
+          try {
+            const r = replayWithFloor(db, save.setup, save.actions);
+            quietNextGame();
+            set({ campaign: save.campaign, setup: save.setup, actions: save.actions, game: r.state, undoFloor: r.undoFloor, logMarks: [r.state.log.length], screen: "game", queue: [], current: null, revealedFor: null });
+          } catch {
+            set({ campaign: save.campaign, setup: null, actions: [], game: null, screen: "log", notice: "The saved scenario could not be restored; it will restart." });
+          }
+        };
+        // the campaign's cards first (a pack loaded on demand), then the replay
+        if (save.campaign?.campaignId) whenReady(save.campaign.campaignId, restore);
+        else restore();
         return true;
       },
 

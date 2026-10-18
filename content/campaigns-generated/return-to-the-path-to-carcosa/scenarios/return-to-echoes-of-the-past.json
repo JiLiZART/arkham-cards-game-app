@@ -1,0 +1,821 @@
+{
+  "id": "return-to-echoes-of-the-past",
+  "name": "Return to Echoes of the Past",
+  "card": "03120",
+  "intro": "Your head throbs with a dull ache as you drive through the rainy streets of Arkham toward your next destination. The threat of the Stranger looms in your mind, and you find yourself glancing often at your rear-view mirror, expecting to see the expressionless visage of his mask haunting you. Instead, you see nothing but the misty, starless night, and the deserted road behind you.\nYour thoughts once again wander, as they have often in the past few hours, to The King in Yellow and to the city of Carcosa and its inhabitants. What was the message hidden inside that awful play, the meaning within its madness? A lone detail worms its way to the forefront of your thoughts, one made apparent by the discussions you’d overheard at Ms. Dumaine’s estate—that tonight’s performance of The King in Yellow was not the first Arkham had seen of the foul play. There had been at least one other performance, directed by the same man: Nigel Engram.\nThere is one place in Arkham where records are often kept of important events occuring within the city: the Historical Society’s manor house in Southside. If there are any records of the previous show of The King in Yellow, the Historical Society may have held onto them. Perhaps there you will find answers to the questions that burn in your mind.",
+  "encounterSets": [
+    "echoes_of_the_past",
+    "return_to_echoes_of_the_past",
+    "cult_of_the_yellow_sign",
+    "maddening_delusions",
+    "arkham",
+    "locked_doors",
+    "pentagram"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "03124",
+    "03125",
+    "03126"
+  ],
+  "agendas": [
+    "03121",
+    "03122",
+    "03123"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "03135",
+        "03131",
+        "03127",
+        "52029"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "03139",
+        "03140",
+        "52033",
+        "03128",
+        "03129",
+        "03130",
+        "03132",
+        "03133",
+        "03134",
+        "03136",
+        "03137",
+        "03138",
+        "52030",
+        "52031",
+        "52032"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "03127"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -2
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -2
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -4
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -4
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "You barely escape the building with your body and mind intact, and flee to safety.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "There are no coincidences when it comes to The King in Yellow. There is no doubt in your mind that the object you’ve found is important. You decide to take it with you before continuing your investigation. The last record you find related to the original production of The King in Yellow is a psychiatric evaluation of one Daniel Chesterfield, a stagehand who lost his wits after the final show. It seems he was admitted to the asylum after the production ended. Perhaps he’s still there…",
+      "effects": [
+        {
+          "do": "record",
+          "key": "took_onyx_clasp",
+          "value": true
+        },
+        {
+          "do": "earnCard",
+          "code": "03142",
+          "who": "choice"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "This investigation would make anybody paranoid. Attributing some greater meaning to everything you find can be a dangerous proposition. You’re sure that this clasp is meaningless, perhaps even a prop from the original play. You leave it behind and continue your investigation. The last record you find related to the original production of The King in Yellow is a psychiatric evaluation of one Daniel Chesterfield, a stagehand who lost his wits after the final show. It seems he was admitted to the asylum after the production ended. Perhaps he’s still there…",
+      "effects": [
+        {
+          "do": "record",
+          "key": "left_onyx_clasp",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "The figure collapses to the ground, its warped, melting body writhing in agony. It wheezes and cries out, a yellow glow emanating from inside its mouth and behind its eyes. “Daniel,” the thing says in its cracking voice. “Seek Daniel… Daniel Chesterfield, the stagehand, he remembers!” Deep inside the man’s words, there is another voice behind it, whispering faintly in a melodic language. “Find him… He too has spoken the oath… The oath that doomed us all…!” With those final words, the skin melts off the man’s bones, and he rattles to the floor.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "destroyed_the_oathspeaker",
+          "value": true
+        },
+        {
+          "do": "earnCard",
+          "code": "03143",
+          "who": "choice"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        }
+      ]
+    },
+    "R4": {
+      "title": "Resolution 4",
+      "text": "The night’s events have left you exhausted. You were unable to learn anything at the Historical Society’s manor that could drive your investigation forward. Whoever those intruders were, they must have been looking for the same information you were. Distraught, you find your way to the closest bed you can find—in Ma’s Boarding House, not too far from the Historical Society. Dawn breaks as you reach the boarding house, the front doorknob and ferns on the porch covered in dew. You are lucky enough to get a vacant room for the day, and soon you are fast asleep.\nSuddenly, you are falling. Above and all around you, a blinding radiance flares like an inferno. Your head twinges with pain and your vision swims with brilliant colors. Your skin is singed by the flames. Below you, the abyss opens and swallows you whole. You then find yourself in a dank, windowless cell, filled with a putrid stench. A man is huddled in a corner of the room, shivering from the cold, or from the hopelessness of his situation, or perhaps both. “No mask,” he mutters over and over, “no mask, no mask…” You take a few tentative steps forward, but before you can reach him, the metal slot on his cell door slides open, and you hear an orderly call to him. “Daniel, it’s time,” he says. “Daniel, wake up. Wake up, Daniel.” Then, you awaken.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "followers_of_sign_found_way",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 1,
+          "who": "each"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        }
+      ]
+    }
+  },
+  "i18nId": "return_to_echoes_of_the_past",
+  "connections": [
+    [
+      "03136",
+      "03135"
+    ],
+    [
+      "03136",
+      "03132"
+    ],
+    [
+      "03136",
+      "03132"
+    ],
+    [
+      "03135",
+      "03136"
+    ],
+    [
+      "03135",
+      "03131"
+    ],
+    [
+      "03132",
+      "03131"
+    ],
+    [
+      "03132",
+      "03128"
+    ],
+    [
+      "03132",
+      "03128"
+    ],
+    [
+      "03131",
+      "03132"
+    ],
+    [
+      "03131",
+      "03127"
+    ],
+    [
+      "03128",
+      "03127"
+    ],
+    [
+      "03128",
+      "52030"
+    ],
+    [
+      "03128",
+      "52030"
+    ],
+    [
+      "03127",
+      "03128"
+    ],
+    [
+      "03127",
+      "52029"
+    ],
+    [
+      "52030",
+      "52029"
+    ],
+    [
+      "52029",
+      "52030"
+    ],
+    [
+      "03139",
+      "52029"
+    ],
+    [
+      "03139",
+      "52030"
+    ],
+    [
+      "03139",
+      "52031"
+    ],
+    [
+      "03139",
+      "52032"
+    ],
+    [
+      "03139",
+      "03136"
+    ],
+    [
+      "03139",
+      "03135"
+    ],
+    [
+      "03139",
+      "03132"
+    ],
+    [
+      "03139",
+      "03131"
+    ],
+    [
+      "03139",
+      "03128"
+    ],
+    [
+      "03139",
+      "03127"
+    ],
+    [
+      "03139",
+      "03129"
+    ],
+    [
+      "03139",
+      "03130"
+    ],
+    [
+      "03139",
+      "03133"
+    ],
+    [
+      "03139",
+      "03134"
+    ],
+    [
+      "03139",
+      "03137"
+    ],
+    [
+      "03139",
+      "03138"
+    ],
+    [
+      "03129",
+      "52029"
+    ],
+    [
+      "03129",
+      "52030"
+    ],
+    [
+      "03129",
+      "52031"
+    ],
+    [
+      "03129",
+      "52032"
+    ],
+    [
+      "03129",
+      "03136"
+    ],
+    [
+      "03129",
+      "03135"
+    ],
+    [
+      "03129",
+      "03132"
+    ],
+    [
+      "03129",
+      "03131"
+    ],
+    [
+      "03129",
+      "03128"
+    ],
+    [
+      "03129",
+      "03127"
+    ],
+    [
+      "03129",
+      "03130"
+    ],
+    [
+      "03129",
+      "03133"
+    ],
+    [
+      "03129",
+      "03134"
+    ],
+    [
+      "03129",
+      "03137"
+    ],
+    [
+      "03129",
+      "03138"
+    ],
+    [
+      "03130",
+      "52029"
+    ],
+    [
+      "03130",
+      "52030"
+    ],
+    [
+      "03130",
+      "52031"
+    ],
+    [
+      "03130",
+      "52032"
+    ],
+    [
+      "03130",
+      "03136"
+    ],
+    [
+      "03130",
+      "03135"
+    ],
+    [
+      "03130",
+      "03132"
+    ],
+    [
+      "03130",
+      "03131"
+    ],
+    [
+      "03130",
+      "03128"
+    ],
+    [
+      "03130",
+      "03127"
+    ],
+    [
+      "03130",
+      "03133"
+    ],
+    [
+      "03130",
+      "03134"
+    ],
+    [
+      "03130",
+      "03137"
+    ],
+    [
+      "03130",
+      "03138"
+    ],
+    [
+      "03133",
+      "52029"
+    ],
+    [
+      "03133",
+      "52030"
+    ],
+    [
+      "03133",
+      "52031"
+    ],
+    [
+      "03133",
+      "52032"
+    ],
+    [
+      "03133",
+      "03136"
+    ],
+    [
+      "03133",
+      "03135"
+    ],
+    [
+      "03133",
+      "03132"
+    ],
+    [
+      "03133",
+      "03131"
+    ],
+    [
+      "03133",
+      "03128"
+    ],
+    [
+      "03133",
+      "03127"
+    ],
+    [
+      "03133",
+      "03134"
+    ],
+    [
+      "03133",
+      "03137"
+    ],
+    [
+      "03133",
+      "03138"
+    ],
+    [
+      "03134",
+      "52029"
+    ],
+    [
+      "03134",
+      "52030"
+    ],
+    [
+      "03134",
+      "52031"
+    ],
+    [
+      "03134",
+      "52032"
+    ],
+    [
+      "03134",
+      "03136"
+    ],
+    [
+      "03134",
+      "03135"
+    ],
+    [
+      "03134",
+      "03132"
+    ],
+    [
+      "03134",
+      "03131"
+    ],
+    [
+      "03134",
+      "03128"
+    ],
+    [
+      "03134",
+      "03127"
+    ],
+    [
+      "03134",
+      "03137"
+    ],
+    [
+      "03134",
+      "03138"
+    ],
+    [
+      "03137",
+      "52029"
+    ],
+    [
+      "03137",
+      "52030"
+    ],
+    [
+      "03137",
+      "52031"
+    ],
+    [
+      "03137",
+      "52032"
+    ],
+    [
+      "03137",
+      "03136"
+    ],
+    [
+      "03137",
+      "03135"
+    ],
+    [
+      "03137",
+      "03132"
+    ],
+    [
+      "03137",
+      "03131"
+    ],
+    [
+      "03137",
+      "03128"
+    ],
+    [
+      "03137",
+      "03127"
+    ],
+    [
+      "03137",
+      "03138"
+    ],
+    [
+      "03138",
+      "52029"
+    ],
+    [
+      "03138",
+      "52030"
+    ],
+    [
+      "03138",
+      "52031"
+    ],
+    [
+      "03138",
+      "52032"
+    ],
+    [
+      "03138",
+      "03136"
+    ],
+    [
+      "03138",
+      "03135"
+    ],
+    [
+      "03138",
+      "03132"
+    ],
+    [
+      "03138",
+      "03131"
+    ],
+    [
+      "03138",
+      "03128"
+    ],
+    [
+      "03138",
+      "03127"
+    ],
+    [
+      "52031",
+      "52029"
+    ],
+    [
+      "52031",
+      "52030"
+    ],
+    [
+      "52031",
+      "52032"
+    ],
+    [
+      "52031",
+      "03136"
+    ],
+    [
+      "52031",
+      "03135"
+    ],
+    [
+      "52031",
+      "03132"
+    ],
+    [
+      "52031",
+      "03131"
+    ],
+    [
+      "52031",
+      "03128"
+    ],
+    [
+      "52031",
+      "03127"
+    ],
+    [
+      "52032",
+      "52029"
+    ],
+    [
+      "52032",
+      "52030"
+    ],
+    [
+      "52032",
+      "03136"
+    ],
+    [
+      "52032",
+      "03135"
+    ],
+    [
+      "52032",
+      "03132"
+    ],
+    [
+      "52032",
+      "03131"
+    ],
+    [
+      "52032",
+      "03128"
+    ],
+    [
+      "52032",
+      "03127"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "52029": [
+      1,
+      3
+    ],
+    "52030": [
+      0,
+      3
+    ],
+    "52031": [
+      7,
+      4
+    ],
+    "52032": [
+      8,
+      4
+    ],
+    "03136": [
+      0,
+      0
+    ],
+    "03135": [
+      1,
+      0
+    ],
+    "03132": [
+      0,
+      1
+    ],
+    "03131": [
+      1,
+      1
+    ],
+    "03128": [
+      0,
+      2
+    ],
+    "03127": [
+      1,
+      2
+    ],
+    "03139": [
+      0,
+      4
+    ],
+    "03129": [
+      1,
+      4
+    ],
+    "03130": [
+      2,
+      4
+    ],
+    "03133": [
+      3,
+      4
+    ],
+    "03134": [
+      4,
+      4
+    ],
+    "03137": [
+      5,
+      4
+    ],
+    "03138": [
+      6,
+      4
+    ]
+  }
+}

@@ -1,0 +1,221 @@
+{
+  "id": "in-the-clutches-of-chaos",
+  "name": "In the Clutches of Chaos",
+  "card": "05284",
+  "intro": "After what you saw at the Unvisited Isle, your faith in humanity is on thin ice. You feel like a wayward spirit, wandering the streets with no destination in mind. You wish you could just return home and forget everything that has happened in the last few weeks, but you know that is just a pipe dream. After hours of aimless meandering, you snap back to reality when you realize you have wandered into Independence Square. A soft breeze carries a trail of brittle leaves across the grass of the clearing, drawing your eyes upward. There, sitting amidst a circle of autumn-colored leaves, sits Anna Kaslow. Her eyes are closed in a deep trance, her fingers pressed against the temples of her head. Laid out on the grass in front of her is a wool blanket, and on top of that, a circle of overlapping facedown tarot cards. You approach and take a seat in front of the fortune teller. It’s only now that you realize just how sore and tired you are. Every one of your muscles aches with pain, and it takes a significant amount of effort for you to not immediately pass out.",
+  "encounterSets": [
+    "in_the_clutches_of_chaos",
+    "agents_of_azathoth",
+    "nightgaunts",
+    "music_of_the_damned",
+    "anettes_coven",
+    "city_of_sins",
+    "witchcraft",
+    "secrets_of_the_universe"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "05286a",
+    "05287"
+  ],
+  "agendas": [
+    "05285"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "05300",
+        "05292",
+        "05302",
+        "05296",
+        "05294",
+        "05290",
+        "05303",
+        "05298"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "05088"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "05294"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "Each investigator resigned or was defeated",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "The spirit cackles as she hears your words, but her laughter is soon cut short. Emerging from the trees, the remainder of Anette’s coven–led by the red-haired witch Erynn–surround Anette wordlessly. Erynn gives you a solemn nod, her conviction showing through her stern demeanor. Understanding why they have come, you step aside and allow them to do their work.\nOne of the witches draws a circle in the dirt around Anette, while the rest bind her with tendrils of searing energy. The revenant shrieks and wails in agony, but the witches dare not cease. Finally, as their chants rise to a crescendo, Erynn pierces the sanctity of the circle with her knife, pressing firmly against the air and straining as though she were attempting to pierce solid stone. Keziah’s ghost departs in a whirl of spectral mist, dissipating into thin air with a final cry. Anette’s body, unsupported, collapses to the ground. “It’s over,” you say, placing a hand on Erynn’s shoulder.\n“No,” she replies harshly, gesturing to the sky above. The storm clouds have all disappeared, yet you count not a single star in the night sky. The borders of the horizon frame the empty void above you, a breach so enormous you had not even realized it was there. How long had it loomed over the city while you spent your time warding against lesser incursions?\nYou ask what can be done to close a breach of such size. She clenches her jaw. “I don’t know. But I know who does.” She kneels over Anette, raises her hand, and slaps her hard across the face. Anette jerks awake, startled out of her catatonic state.\n“Is this what you wanted, sister?” Erynn drags her to her feet, forcing her to look up at the catastrophe she has wrought.\n“You know it isn’t,” Anette replies, her voice ragged. “I only wanted us all to have some semblance of the strength she possessed. I had no desire to use it in the same way she did. But the spirit took control, and I could not resist.” She lowers her head in resignation. “I’m sorry, sisters. I failed us all. I was not strong enough.”",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "You wouldn’t put it past the president of the Silver Twilight Lodge to lie about the consequences of your actions – after all, he has already deceived you more than once before. You ask him what he means when he says you will all be extinct. He grimaces and tells you to look outside.\nThe storm clouds have all disappeared, yet you count not a single star in the night sky. The borders of the horizon frame the empty void above you, a breach so enormous you had not even realized it was there. How long had it loomed over the city while you spent your time warding against lesser incursions?\nSanford limps after you, peering up at the night sky. You ask what can be done to close a breach of such size, but before he can respond, coils of darkness emerge from the shadows, twisting into dark cloaks. In seconds you are surrounded by the witches of Anette’s coven. The high priestess steps forward, glaring at Carl Sanford with all of the intensity of hell itself.\n“Do not trust the word of this sinister worm,” she warns you. “Everything he has done, he has done to further his own agenda. He would gladly hold the world hostage if it meant one last chance at power.”\nDespite his wounds, Sanford rises to his feet and bellows back at her: “What hypocrisy! Do you forget that it was you and your misguided sect who started all of this? Summoning the dead, asking them for power?” He scoffs. “We would have elevated all of humanity. You sought only to elevate yourselves.” Sanford turns to appeal to your judgment one last time. “Do not be a fool,” he says quietly. “This outcome is not what the Lodge desires. Allow me to help, and together maybe we can return things to normal.”",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "Anette stands at the center of her circle of witches, her eyes aglow with boundless power. Above, hundreds of phantasmal shapes reach out, a web of power linking the witches and their deceased brethren. The wraiths descend, each claiming a body for themselves, manipulating it to their own ends. The witches’ only show of resistance is the blood that drips from their eyes as their unwilling spell reaches its culmination.\n“It is time!” The disembodied voice of Keziah declares through Anette’s lips. “The Primal Chaos awaits! Hear us, Daemon Sultan!” Her voice rises into the night, and a breach greater than the sky itself opens. The borders of the horizon frame the empty void above. It reaches into infinity, beyond the confines of three-dimensional space. “I have done as you commanded of me,” she says to a being who is not present, but can hear her every word. “Now reap this world of the living, and let them suffer for their mistakes.” With that, the spectral figures vanish one by one, whisked away by the emptiness above. Anette and her sisters collapse to the ground unceremoniously. A thin, discordant flute warbles throughout the fabric of the world…",
+      "effects": [
+        {
+          "do": "record",
+          "key": "doom_draws_ever_closer",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R4": {
+      "title": "Resolution 4",
+      "text": "Carl Sanford stands at the podium of the Lodge’s Inner Sanctum, clad in silver-and-blue robes. Before him, his subjects kneel in subjugation, ready to receive the power promised to them and claim their rightful place in the new world that they will create. The tome Sanford reads from glows with witch-light. “The bonds of mortality have held us back for too long!” He declares as the ceremony reaches its climax. “We will break these bonds and ascend to a higher plane!”\nAbove the very building they stand in, a breach greater than the sky itself opens. The borders of the horizon frame the empty void above. It reaches into infinity, beyond the confines of three-dimensional space. Then all of the candles in the Lodge’s sanctum are snuffed out at once, and the chanting ceases, followed by quiet, nervous murmuring. “What is going on?” Sanford demands, trying desperately to read from the tome in front of him. But it is too late. The Lodge has succeeded only in accelerating their doom. True immortality can only be achieved by those who are worthy. A thin, discordant flute warbles throughout the fabric of the world…",
+      "effects": [
+        {
+          "do": "record",
+          "key": "doom_draws_ever_closer",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "in_the_clutches_of_chaos",
+  "connections": [
+    [
+      "05294",
+      "05298"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "05300": [
+      3,
+      0
+    ],
+    "05292": [
+      5,
+      0
+    ],
+    "05302": [
+      0,
+      1
+    ],
+    "05296": [
+      2,
+      1
+    ],
+    "05294": [
+      4,
+      1
+    ],
+    "05290": [
+      6,
+      1
+    ],
+    "05303": [
+      8,
+      1
+    ],
+    "05298": [
+      4,
+      2
+    ]
+  }
+}

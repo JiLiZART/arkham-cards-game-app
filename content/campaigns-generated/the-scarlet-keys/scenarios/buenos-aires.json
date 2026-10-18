@@ -1,0 +1,224 @@
+{
+  "id": "buenos-aires",
+  "name": "Sanguine Shadows",
+  "card": "09545",
+  "intro": "As soon as you arrive in Buenos Aires, you set your meeting with Oficial Bolívar at a café overlooking the harbor. Seagulls cry out over the many shipping and fishing boats in the distance. Even after Bolívar arrives, you continue to keep an eye out for others listening in—for anyone wearing red, especially. The officer meets you in uniform instead of casual clothes—whether by protocol or due to being overworked, you are unsure. His response to your letter seemed overly eager. Perhaps he is as starved for information regarding his target as you are? “Your letter suggested we may be able to aid one another,” he says casually, after calling out for a café chico. “You have information regarding La Chica Roja?”\nYou clarify that you are the one seeking information from Bolívar, not the other way around. “Well, scratch my back and I’ll scratch yours,” he says, his expression turning serious. “What do you know?”",
+  "encounterSets": [
+    "sanguine_shadows",
+    "dark_veiling",
+    "mysteries_abound",
+    "shadow_of_a_doubt",
+    "strange_happenings",
+    "locked_doors",
+    "nightgaunts"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "09547",
+    "09548"
+  ],
+  "agendas": [
+    "09562",
+    "09546"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "09551",
+        "09550",
+        "09552",
+        "09549",
+        "09553",
+        "09554",
+        "09556"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "09563",
+        "09564",
+        "09565a",
+        "09565b"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "09551"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -5
+      },
+      "tablet": {
+        "modifier": -1
+      },
+      "elderThing": {
+        "modifier": -2
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -5
+      },
+      "tablet": {
+        "modifier": -1
+      },
+      "elderThing": {
+        "modifier": -2
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -7
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -7
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "You rush to apprehend your quarry, but with a twirl of shadows, she has vanished. It is as if she was a trick of the light all along—the same kind of mischief mirrored in Oficial Bolívar’s reports. Thankfully, you now possess enough of what she was after to put it together yourself. It takes some time and research, but eventually you are able to slot the various pieces of what you originally assumed to be art together. To your surprise, the result is an ornate figurine of a woman in robes. Tears, carved as thin lines like bloody scars, trail down the figure’s cheeks. With your new prize in tow, you report back to Oficial Bolívar the next day. He is more than a little miffed that his enemy escaped his grasp, but relieved that her campaign of thievery is finally at an end. “I warned you she would get away,” he says between sips of his espresso. “As far as my superiors are concerned, the book is closed on this one. Won’t look good on my record, but as long as she’s fled the city like you say, I am content with that.” You thank him again for his help and prepare to leave Buenos Aires behind.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "record",
+          "key": "have_not_seen_the_last_of_la_chica_roja",
+          "value": true
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "Your erstwhile adversary watches in grim silence as her rival is safely borne aloft on wings of darkness. “Damned things,” she spits. “They’ll follow whoever whistles loudest, I guess.” You ponder aloud what this means for the two of you. With the Sanguine Watcher out of the way, you wonder if she will keep her word. To your relief, she smirks and hands you the remaining pieces of the Key you’d both been competing for. “This is what you’re really after, isn’t it? Here. My main goal was only making sure that ojete en una nube de pedos didn’t get his hands on it. I trust it in your hands.” She then shows you how to fit the various pieces together and, to your surprise, the result is an ornate figurine of a woman in robes. Tears, carved as thin lines like bloody scars, trail down the figure’s cheeks. “The Rubicund Statuette,” she reveals, “also known as the Weeping Lady.” You ask what she will do now, and she responds with a tip of her hat. “Oh, I’ll be around. You helped me out back there. Don’t worry. I’ll pay you back.” With a twirl of her coat, she is gone.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 3,
+          "who": "each"
+        },
+        {
+          "do": "record",
+          "key": "have_not_seen_the_last_of_the_sanguine_watcher",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "chica_roja_is_on_your_side",
+          "value": true
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "Oficial Bolívar was right: the Girl in the Carmine Coat chewed your investigation up and spat you out. You meet with him the next day, and the air is one of deadened frustration. “I warned you, did I not?” He says between sips of an espresso that looks and smells about as dark and bitter as his mood. “This puts me in a precarious position. La Chica Roja has gone to ground, from what we can tell. As far as my superiors are concerned, the book is closed on this one. I cannot help you any further.” He groans. “If I even still have a job when this is all over.” You give Oficial Bolívar your assurances that you did all you could to catch the thief, but he waves you off. “Oh, I am sure. Does not matter now, does it? What is done is done. I give up. She wins.” You thank him again and prepare to leave Buenos Aires behind.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "record",
+          "key": "have_not_seen_the_last_of_la_chica_roja",
+          "value": true
+        }
+      ]
+    }
+  },
+  "i18nId": "buenos_aires",
+  "connections": [],
+  "oneWay": [],
+  "layout": {
+    "09551": [
+      2,
+      0
+    ],
+    "09550": [
+      4,
+      0
+    ],
+    "09552": [
+      0,
+      2
+    ],
+    "09549": [
+      3,
+      3
+    ],
+    "09553": [
+      0,
+      4
+    ],
+    "09554": [
+      6,
+      4
+    ],
+    "09556": [
+      3,
+      5
+    ]
+  }
+}

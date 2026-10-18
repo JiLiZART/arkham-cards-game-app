@@ -1,0 +1,210 @@
+{
+  "id": "bermuda-triangle",
+  "name": "Without a Trace",
+  "card": "09681",
+  "intro": "Even with the Foundation’s resources at your beck and call, it takes some finagling to charter a ship across the Devil’s Triangle, especially given you have no cargo to speak of and refuse to allow any other passengers on board, for their safety. After all, if your theory is correct, this ship’s destination does not exist on any map, and for all you know, it might be a one-way journey. Agent Quinn has convinced one of her colleagues to helm the ship, so as to not endanger a civilian, and together you set off for the center of the triangle, hearts in throats.\n“The commissioner will have gotten word by now,” Quinn says, standing with you at the helm of the ship. “Probably the end of my career, I would wager.” She stares off at the horizon as the sun dips just below the waves. Despite her words, her expression is steadfast, without even a hint of regret. “I just hope we find answers.” You concede, with a bit of trepidation, that you almost hope you don’t. The idea of ending up just like the people who have been snatched—it chills you to the core. “Well, no turning back now. Care to do the honors?” she asks, motioning toward the white raven whistle which hangs from a cord around your neck. You pull it off and clutch it in your palm, considering your options.",
+  "encounterSets": [
+    "without_a_trace",
+    "agents_of_the_outside",
+    "beyond_the_beyond",
+    "outsiders",
+    "secret_war",
+    "spreading_corruption"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "09685",
+    "09686",
+    "09687"
+  ],
+  "agendas": [
+    "09682",
+    "09683",
+    "09684"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "09688"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "09692",
+        "09690",
+        "09691",
+        "09732"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "09688"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -4
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -4
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -6
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -6
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "“There, that is the last of them,” Agent Hudson says as he slams his stamp down onto the expense report. “I understand the need for secrecy, but I must once again request we hire assistants for this secretarial work, Commissioner.” He hands the bundle of documents to Taylor, who sits behind her stark black desk, wearing a grave expression.\n“More eyes means more leaks. We keep this crew tight for a reason, Hudson. Do not lose sight of what is important.” She flips through the documents for a moment, furrowing her brows. “Where is the report on asset 32–J’s cell?”\n“32–J?” the man pulls a small notebook from his back pocket and flips to a page near the middle. “No such designation exists.”\nTaylor grimaces. “No, that’s not right. There was… we met them in London. You were there…” After a moment, she shakes her head in utter confusion. “Hm. Strange. I don’t remember who they were.”\n“You have been working too hard,” the agent replies with a small grin. “Take some time off, Commissioner. We can handle things without you for a week or so.”",
+      "effects": [
+        {
+          "do": "record",
+          "key": "cell_was_hollowed",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "You awaken on the ship’s deck, dreamlike memories and otherworldly visions swimming in your mind. The only sign that what you saw was real and not a mere nightmare is a red-gloved grip as a man pulls you to your feet and dusts off your shoulders. Nearby, Aliki watches wordlessly, her expression blank. Agent Quinn rises steadily to her feet as well. The world wobbles as your vision settles over a new dimension. “Stay with us,” the man says, his voice smoother and more natural than you remember.\nYou demand answers: what was he doing in London, what was that hellish place, and why was he there? “London?” He scoffs. “I haven’t been to London lately. I don’t even know who you are.” You reel. This is for sure the same man you saw in London—isn’t it? “As for that place, I have only a vague sense, but I have no idea what brought me there or how long I have been gone. That thing…” He lifts the brim of his fedora and clutches his forehead so hard his hands shake. “It was… prying. Searching. Learning.”\nAliki finally speaks, with Quinn once again translating. “She says that the creatures are not just taking things, they are… what would be the right word…” she struggles to retain her composure as Aliki once again switches languages. “…adapting. Mimicking.”\nCold realization washes over you. This is what Aliki had been afraid of—why she had come to you for help. The man you saw in London was not the same as the man before you now. It was an imposter. It was one of them.”It seems I am in your debt,” the man says, extending a red-gloved hand. “But unfortunately, I have much to do. If these creatures have infiltrated the Coterie, none can be trusted, myself most especially. If you see me again, assume it is not me. In the meantime, I will get to the bottom of this and confront the others with my findings when the time is right.” You nod and shake his hand. There is more at stake here than you ever realized, and you can only get to the heart of it by working together.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 1,
+          "who": "each"
+        },
+        {
+          "do": "record",
+          "key": "cell_knows_the_true_nature_of_the_coterie",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "aliki_is_on_your_side",
+          "value": true
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "You awaken on the ship’s deck, dreamlike memories and otherworldly visions swimming in your mind. The only sign that what you saw was real and not a mere nightmare is a red-gloved grip as a man pulls you to your feet and dusts off your shoulders. Agent Quinn rises steadily to her feet as well. The world wobbles as your vision settles over a new dimension. “Stay with us,” the man says, his voice smoother and more natural than you remember.\nYou demand answers: what was he doing in London, what was that hellish place, and why was he there? “London?” He scoffs. “I haven’t been to London lately. I don’t even know who you are.” You reel. This is for sure the same man you saw in London—isn’t it? “As for that place, I have only a vague sense, but I have no idea what brought me there or how long I have been gone. That thing…” He lifts the brim of his fedora and clutches his forehead so hard his hands shake. “It was… prying. Searching. Learning.”\nIs this even the same man you saw in London? You wonder what purpose the entity had in kidnapping him. What kind of information was it looking for? “In any event, I am in your debt,” the man says, extending a red-gloved hand. “But unfortunately, I have much to do. If you claim to have seen me in London, then there must be an imposter afoot. If you see me again, assume it is not me. In the meantime, I will get to the bottom of this and confront the others with my findings when the time is right.” You nod and shake his hand. “By the way…I am curious. How did you know where to find me?”\n“One of your own,” Agent Quinn replies. “Uperetria. She had a hunch. Seems she was right.”\n“I see,” he says with a scowl. “Well then… it appears I have two favors to repay, then. And rest assured… I always pay my debts.”",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 1,
+          "who": "each"
+        },
+        {
+          "do": "record",
+          "key": "cell_knows_the_true_nature_of_the_coterie",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "have_not_seen_the_last_of_aliki_zoni_uperetria",
+          "value": true
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "You awaken on the ship’s deck, dreamlike memories and otherworldly visions swimming in your mind. The only sign that what you saw was real and not a mere nightmare is the gentle grip of Aliki as she pulls you to your feet, her expression blank. The world wobbles to and fro as your vision settles over a new dimension. Agent Quinn rises steadily to her feet as well, pounding her fist against the door to the cabin. “Dammit. We were so close!” she exclaims.\nYou struggle in vain to comprehend what you experienced in that other world. Answers may have eluded you, but it’s a relief to stand once more in a place that feels familiar to you. “That place… it is just as you thought,” Quinn says to Aliki, her eyes wide with both awe and horror. “Everything that is missing. Everything that is forgotten. It’s all there. Is that what they are doing? Stealing our world?”\nAliki finally speaks, with Quinn once again translating. “She says that the creatures are not just stealing things, they are… what would be the right word…” she struggles to retain her composure as Aliki once again switches languages. “…adapting. Mimicking.”\nYou ponder what all of this could mean in silence as night falls over the Atlantic. This is what Aliki had been afraid of—why she had come to you for help. But you are still uncertain what the entities from that reality truly want with yours, and what it might mean for the Red Coterie. “She thanks us for helping her, even if we were unable to learn the truth,” Quinn translates as Aliki speaks up once more. “And she says she will repay the favor when the time comes.”",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "record",
+          "key": "aliki_is_on_your_side",
+          "value": true
+        }
+      ]
+    },
+    "R4": {
+      "title": "Resolution 4",
+      "text": "You awaken on the ship’s deck, dreamlike memories and otherworldly visions swimming in your mind. The only sign that what you saw was real and not a mere nightmare is the pained groans of Agent Quinn as she rises steadily to her feet and pulls you up. The world wobbles as your vision settles over a new dimension.\n“What the hell,” Quinn utters under her breath. “What the hell.” You struggle in vain to comprehend what you experienced in that other world. Answers may have eluded you, but it’s a relief to stand once more in a place that feels familiar to you. “That place… it is just as Aliki thought,” Quinn says aloud, her eyes wide with both awe and horror. “Everything that is missing. Everything that is forgotten. It’s all there. Is that what they are doing? Stealing our world?”\nYou ponder what all of this could mean in silence as night falls over the Atlantic. This is what Aliki had been afraid of—why she had come to you for help. But you are still uncertain what the entities from that reality truly want with yours, and what it might mean for the Red Coterie. “What do we do now? I don’t even know how I would report this to the Commissioner. Even for us, it’s almost too far-fetched to believe. And we have nothing to show for it…”\nYou shake your head and ponder the horizon. How much of the emptiness around you is but the remnants of these creatures’ contact with Earth? How much will be left if their secret war is not stopped? At least now, you know the true scale of this threat…",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "record",
+          "key": "have_not_seen_the_last_of_aliki_zoni_uperetria",
+          "value": true
+        }
+      ]
+    }
+  },
+  "i18nId": "bermuda_triangle",
+  "connections": [],
+  "oneWay": [],
+  "layout": {
+    "09688": [
+      1,
+      1
+    ]
+  }
+}

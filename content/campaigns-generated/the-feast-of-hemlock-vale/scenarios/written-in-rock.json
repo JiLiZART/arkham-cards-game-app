@@ -1,0 +1,239 @@
+{
+  "id": "written-in-rock",
+  "name": "Written in Rock",
+  "card": "10501",
+  "intro": "The path to North Point Mine runs through a narrow ravine in the heart of Pearl Ridge. With little to go on, you asked around the Vale for more information about the mine, but all you could gather were several conflicting accounts. People have gone missing in the mines recently, although the mining operation is purportedly shut down. The lichens and moss are supposedly nutritious, but some are lethal? Nobody explained why the mine shut down in the first place, either.\nThe path ends at the mouth of a yawning cave. Following an old rail track in, you find heaps of abandoned equipment overgrown with bright yellow fungi. The fungus looks far from edible, and emits a putrescent stench. Eventually, the tunnel opens into a massive cavern filled with luminescent mushrooms and towering crystal formations. The ground shifts with a slight tremor, followed by an echoing cry from deeper in the mine. Steeling yourself, you trek deeper into the cave. At the very least, Dr. Marquez will want samples of the strange overgrowth on the rusted equipment.",
+  "encounterSets": [
+    "written_in_rock",
+    "horrors_in_the_rock",
+    "refractions",
+    "chilling_cold",
+    "ghouls",
+    "residents"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "10505",
+    "10506"
+  ],
+  "agendas": [
+    "10503",
+    "10504"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "10508"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "10695",
+        "10695b",
+        "10694",
+        "10694b",
+        "10721"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "10508"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "The last thing you remember before you are knocked unconscious is the cart careening into a canyon of light. Your head pounds as you awaken surrounded by glowing blue fungus and extravegant crystal formations. There is a path up the rock, but it will take hours to trek back even to the beginning of the rail tunnels. You sigh, exhausted, and wade through the underground river.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "Simeon steps out of the mine cart looking dazed. “What a ride!” he shouts, troublingly unfazed. “No matter what, you are definitely going in the Miner’s Secret Order of Mischief ’s Hall of Fame! You’re in good company with George Washington Carver and my mom.” He nearly trips as the rail line slopes upward, toward the brilliant sky. You help him to his feet and lead him outside, into the clear fresh air.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "simeon_survived",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 2,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "Leah grips the side of the cart as you disembark. She bites her lip as she holds back tears, unseeing. As you lead her back up the tunnel, the sound of soft weeping echoes off the stone walls. As you emerge outside into the clean, fresh air, you work up the courage to ask Leah what she saw.\n“He’s gone. Simeon’s gone,” she replies.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "leah_saw_something_in_the_mine",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 2,
+          "who": "each"
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "You could swear you hear Simeon Atwood’s voice calling through the empty tunnels as you disembark. Unable to shake the sound, you double back through the tunnels in hopes of finding the young man. You eventually come to a shining abyss filled with crystals. A dark humanoid shape sits hunched over the carcass of a small animal. It skitters into the dark when you call. You shout Simeon’s name until your voice is hoarse, then retrace your steps to the exit with an awful lump in your throat.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "simeon_disappeared",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "simeon_plan_is_underway",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R4": {
+      "title": "Resolution 4",
+      "text": "You could swear you hear Leah Atwood’s voice calling through the empty tunnels as you disembark. Unable to shake the sound, you double back through the tunnels in hopes of finding the Vale cook. You eventually come to a shining abyss filled with crystals. A dark humanoid shape sits hunched over Leah’s body at the bottom. It skitters into the dark when you call. You take one last look at Leah’s lifeless body, then retrace your steps to the exit with an awful lump in your throat.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "leah_and_simeon_were_reunited",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R5": {
+      "title": "Resolution 5",
+      "text": "You hear a familiar chittering staccato as you disembark, followed by a scent of rot. More howls and shouts echo through the twisted cavern, prompting you to run to the exit. Once you emerge into the clear night air, you turn back and wonder what other terrors are written in rock beneath the island.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "survived_the_horrors_in_the_rock",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R6": {
+      "title": "Resolution 6",
+      "text": "“Miskatonic Survey, June 1926. Members Marquez, Musgrave, et alii. We were lucky to escape from North Point Mine with our lives. Extreme instability and seismic tremors. Findings include asymmetrical crystal formations, rodents of unusual size, and an unusually aggressive insect population.”",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "record",
+          "key": "north_point_mine",
+          "value": true
+        }
+      ]
+    }
+  },
+  "i18nId": "written_in_rock",
+  "connections": [],
+  "oneWay": [],
+  "layout": {
+    "10508": [
+      0,
+      0
+    ]
+  }
+}

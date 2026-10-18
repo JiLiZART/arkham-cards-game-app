@@ -1,0 +1,246 @@
+{
+  "id": "film-fatale",
+  "name": "Film Fatale",
+  "card": "72001",
+  "intro": "You have arrived in Hollywood at the request of your contact, the silent film actor André Patel. According to André, something strange is happening on Lot C. Cameras and props have gone missing, and a series of accidents nearly halted production. Rumors have spread between the cast members that the films are “cursed.” None of it was taken seriously until one of the cast members was found dead.\nThe late afternoon sun beats down on the hot pavement as you scan the crowd for signs of André. Half a dozen extras in alien masks whisk past you, followed by a stagehand dragging a large dinosaur foot by wagon. Across the lot, you finally spot him standing with a trio of werewolves. His eyes light up, and he strides briskly through the busy lot once he sees you.\n“Finally!” he takes a bow. “I thought you’d never arrive. And just in time, too! Please, follow me.” As the silent film star leads you across the lot, you catch glimpses of the various sets. A Cosmic Journey features a cheap-looking rocket, a robed wizard, and alien “Saturnites.” Meanwhile, The Forgotten Island is filled with crudely painted pyramids and gargantuan paper mache dinosaurs. A bloodcurdling scream echoes out of the gothic horror set for The Abominable Contessa as you walk past.\n“I don’t think the mishaps lately are just bad luck,” André says gravely. “Unfortunately, my reputation has made it difficult to get a straight answer out of the cast and crew. Nobody wants to tell their star actor that something’s going wrong on set. Which is why I need you to ask around the film sets. See what they think is really going on.”\nAndré’s demeanor brightens. “This could be quite fun, actually. I hope you’re up to the task.”",
+  "encounterSets": [
+    "film_fatale"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "72004"
+  ],
+  "agendas": [
+    "72002",
+    "72003"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "72008",
+        "72008b",
+        "72009",
+        "72010",
+        "72011"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "72024"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "72008"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -3
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -3
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -4
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -4
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "Whatever madness has gripped Lot C, it has taken you as well. You find difficulty in remembering who you were before today’s events. Are you yourself? Are you just playing a part? As you try to find the truth, the end credits begin to roll.",
+      "effects": [
+        {
+          "do": "addWeakness",
+          "trait": "Madness"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "Furious, the Monarch fires the Helios Telescope wildly at set pieces and extras alike. As you flee the scene, you look behind you to see André disappear in the path of a kaleidoscopic beam. Once outside, all you can hear is an insidious clicking from Lot C. It almost sounds like laughter.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "film_fatale_no_andre",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "André pats you on the back, then rubs his eyes with a sigh. “Bien joué, mon ami. I could not have survived this without you.” You hold the telescope, now inert, in your hands as your mind wanders to the amazing things you’ve just seen. Saturn, the alien creatures, and the vastness of space. You won’t need to see A Cosmic Journey when it releases; you’ve already lived it.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "“Those giant creatures!” André exclaims. “I never thought it would be possible to witness such things. And you, you were absolutely brilliant. I cannot thank you enough, dear friend.” The film star does not seem rattled in the least at the strange and wondrous horrors you encountered. The remains of the staff’s gem lie shattered at your feet. Maybe you’re not cut out for Hollywood, you think to yourself.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R4": {
+      "title": "Resolution 4",
+      "text": "André brushes a heavy dusting of grave dirt off his vest and begins fidgeting with his cane. “I’m not certain, but The Abominable Contessa may have just lost its leading lady. I’m still not sure quite what happened, or why, but I’m glad you were here to help.”",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R5": {
+      "title": "Resolution 5",
+      "text": "Some hours later, you find André standing over Erika Strand, the producer. She sits against the wall, head held between her hands. “Rough day, my friend?” André leans down and puts a steaming cup of tea next to her. After a tentative sip, Erika looks to André. “What happened? And why do I feel like I just lost a wrestling match with a train?” she asks.\nAndré looks over her as his apprehension gives way to curiosity. “I’m not certain, but you definitely weren’t yourself. I suppose we have much to discuss.” Erika nods along as the film star relays the strange and fantastical events of the day. After finishing the tale, André snatches his hat and cane from a nearby table. “I must go. It appears the mystery is not yet fully unraveled, but I bid you all adieu.” The actor turns just as he walks out the door and smiles mischievously. “Nous nous reverrons, mon ami.”",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "film_fatale",
+  "connections": [
+    [
+      "72008",
+      "72009"
+    ],
+    [
+      "72008",
+      "72010"
+    ],
+    [
+      "72008",
+      "72011"
+    ],
+    [
+      "72008",
+      "72008b"
+    ],
+    [
+      "72008b",
+      "72009"
+    ],
+    [
+      "72008b",
+      "72010"
+    ],
+    [
+      "72008b",
+      "72011"
+    ],
+    [
+      "72009",
+      "72010"
+    ],
+    [
+      "72009",
+      "72011"
+    ],
+    [
+      "72010",
+      "72011"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "72008": [
+      0,
+      0
+    ],
+    "72009": [
+      2,
+      0
+    ],
+    "72010": [
+      3,
+      0
+    ],
+    "72011": [
+      4,
+      0
+    ],
+    "72008b": [
+      1,
+      0
+    ]
+  }
+}

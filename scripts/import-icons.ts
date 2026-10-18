@@ -16,6 +16,8 @@ import { ICON_SOURCES, MARKUP_ICONS, scenarioIcon, type IconSource } from "../sr
 const SVG_DIR = "inspired/svg-icons";
 const AC = "inspired/ArkhamCards/assets";
 export const SPRITE = "public/icons/sprite.svg";
+/** the generated campaigns' icons (ADR-0007), loaded with those campaigns */
+export const SPRITE_CAMPAIGNS = "public/icons/sprite-campaigns.svg";
 export const MANIFEST = "content/icons/icons.json";
 /** the IcoMoon fonts the sprite replaces: name → glyph config */
 const FONTS: Record<string, string> = { arkhamicons: "arkhamicons-config.json", arkhamslim: "arkhamslim.json", tokens: "tokens.json", blood: "blood.json", standalone: "standalone.json" };
@@ -60,11 +62,32 @@ export function codeIconNames(): string[] {
 }
 
 /** every encounter set and scenario icon content needs */
+/** the scenarios of generated campaigns (ADR-0007): their icons are wanted, not required */
+const generatedScenarios = (db: ContentDb) => new Set(Object.values(db.campaigns ?? {}).filter((c) => c.generated).flatMap((c) => c.scenarios));
+const scenarioNames = (db: ContentDb, ids: string[]) =>
+  ids.flatMap((id) => {
+    const s = db.scenarios[id];
+    return [...s.encounterSets, ...(s.randomEncounterSet ?? []), ...Object.values(s.sideDecks).flat(), scenarioIcon(id)];
+  });
+
 export function contentIconNames(db: ContentDb): string[] {
-  const sets = Object.values(db.scenarios).flatMap((s) => [...s.encounterSets, ...(s.randomEncounterSet ?? []), ...Object.values(s.sideDecks).flat()]);
+  const generated = generatedScenarios(db);
   // the core pack's sets too (their cards are drawn and shown); the other cycles' sets get an icon when a scenario uses them
   const core = Object.entries(db.encounterSets).filter(([, codes]) => codes.some((c) => db.cards[c]?.pack === "core")).map(([name]) => name);
-  return [...new Set([...core, ...sets, ...Object.keys(db.scenarios).map(scenarioIcon)])];
+  return [...new Set([...core, ...scenarioNames(db, Object.keys(db.scenarios).filter((id) => !generated.has(id)))])];
+}
+
+/** icons the generated campaigns would like: their scenarios and sets, the ones no hand-written scenario requires */
+export function generatedIconNames(db: ContentDb): string[] {
+  const required = new Set(contentIconNames(db));
+  return [...new Set(scenarioNames(db, [...generatedScenarios(db)]))].filter((n) => !required.has(n));
+}
+
+/** a name without a glyph of its own borrows its base name's: Return-to boxes and the parts of a scenario */
+export function iconAlias(name: string, has: (n: string) => boolean): string | null {
+  const base = name.replace(/^return_to_/, "");
+  for (const n of [base, base.replace(/_part_\d+$/, ""), base.replace(/_\d+$/, "")]) if (n !== name && has(n)) return n;
+  return null;
 }
 
 /** encounter sets of cards in the content that the sprite has no icon for (not an error: only the sets scenarios use need one) */
@@ -107,13 +130,15 @@ export const spriteSvg = (symbols: IconSymbol[]) =>
 export const spriteIds = (svg: string) => [...svg.matchAll(/<symbol id="([^"]+)"/g)].map((m) => m[1]);
 
 /** content ↔ sprite: every encounter set and scenario has a symbol; the manifest and the sprite list the same ids */
-export function checkIcons(db: ContentDb, manifest: Manifest | null, sprite: string[] | null): ContentError[] {
+export function checkIcons(db: ContentDb, manifest: Manifest | null, sprite: string[] | null, campaignSprite: string[] = []): ContentError[] {
   if (!manifest || !sprite) return [{ file: MANIFEST, path: "", message: "icon sprite or manifest missing (npm run import:icons)" }];
-  const ids = new Set(sprite);
+  // the icons hand-written scenarios need are in the main sprite, drawn from the first screen on
+  const main = new Set(sprite);
   const errors: ContentError[] = contentIconNames(db)
-    .filter((n) => !ids.has(n))
+    .filter((n) => !main.has(n))
     .map((n) => ({ file: SPRITE, path: n, message: `no icon for encounter set or scenario ${n}` }));
-  for (const id of sprite) if (!manifest.symbols[id]) errors.push({ file: MANIFEST, path: id, message: "symbol in the sprite but not in the manifest" });
+  const ids = new Set([...sprite, ...campaignSprite]);
+  for (const id of ids) if (!manifest.symbols[id]) errors.push({ file: MANIFEST, path: id, message: "symbol in the sprite but not in the manifest" });
   for (const id of Object.keys(manifest.symbols)) if (!ids.has(id)) errors.push({ file: SPRITE, path: id, message: "symbol in the manifest but not in the sprite" });
   return errors;
 }
@@ -130,24 +155,38 @@ async function main() {
   const old: Partial<Manifest> = existsSync(MANIFEST) ? JSON.parse(readFileSync(MANIFEST, "utf8")) : {};
   const extra = old.extra ?? {};
   const { db } = await loadContentFromDisk();
-  const set = symbolSet({ fonts, referenced: [...codeIconNames(), ...contentIconNames(db)], extra });
   const svgFile = (file: string) => `${SVG_DIR}/${file}.svg`;
-  const symbols = buildSymbols(set, (file) => (existsSync(svgFile(file)) ? readFileSync(svgFile(file), "utf8") : fontSvg[file]?.svg ?? null));
+  const glyph = (n: string) => existsSync(svgFile(n)) || !!fontSvg[n];
+  // generated campaigns: a glyph when one exists under the name or its base name, else none (check:content notes it)
+  const wanted = generatedIconNames(db);
+  const aliases: Record<string, string> = {};
+  for (const n of wanted.filter((n) => !glyph(n))) {
+    const a = iconAlias(n, glyph);
+    if (a) aliases[n] = a;
+  }
+  const read = (file: string) => (existsSync(svgFile(file)) ? readFileSync(svgFile(file), "utf8") : fontSvg[file]?.svg ?? null);
+  const set = symbolSet({ fonts, referenced: [...codeIconNames(), ...contentIconNames(db)], extra });
+  const symbols = buildSymbols(set, read);
+  // the generated campaigns' icons go in a second sprite, fetched when such a campaign is played: the first load stays as it was
+  const moreSet = symbolSet({ fonts: {}, referenced: wanted.filter((n) => glyph(n) && !set.has(n)), extra: Object.fromEntries(Object.entries(aliases).filter(([n]) => !set.has(n))) });
+  const more = buildSymbols(moreSet, read);
   const sprite = spriteSvg(symbols);
   mkdirSync("content/icons", { recursive: true });
   writeFileSync(SPRITE, sprite);
+  writeFileSync(SPRITE_CAMPAIGNS, spriteSvg(more));
+  const entry = (from: Map<string, { file: string; set: string }>, id: string) => {
+    const { file, set: font } = from.get(id)!;
+    return existsSync(svgFile(file)) ? { file: `${file}.svg`, set: font } : { file: `${FONTS[fontSvg[file].set]}#${file}`, set: font };
+  };
   const manifest: Manifest = {
     source: SOURCE,
     extra,
-    symbols: Object.fromEntries(
-      symbols.map(({ id }) => {
-        const { file, set: from } = set.get(id)!;
-        return [id, existsSync(svgFile(file)) ? { file: `${file}.svg`, set: from } : { file: `${FONTS[fontSvg[file].set]}#${file}`, set: from }];
-      }),
-    ),
+    symbols: Object.fromEntries([...symbols.map(({ id }) => [id, entry(set, id)]), ...more.map(({ id }) => [id, entry(moreSet, id)])].sort((a, b) => (a[0] < b[0] ? -1 : 1))),
   };
   writeFileSync(MANIFEST, JSON.stringify(manifest, null, 1) + "\n");
-  console.log(`${symbols.length} symbols, ${(sprite.length / 1024).toFixed(0)} KB → ${SPRITE}; manifest → ${MANIFEST}`);
+  console.log(`${symbols.length} symbols, ${(sprite.length / 1024).toFixed(0)} KB → ${SPRITE}; ${more.length} for the generated campaigns → ${SPRITE_CAMPAIGNS}; manifest → ${MANIFEST}`);
+  const none = wanted.filter((n) => !glyph(n) && !aliases[n]);
+  if (none.length) console.log(`no glyph for ${none.length} names of the generated campaigns: ${none.join(", ")}`);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) await main();

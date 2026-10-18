@@ -1,0 +1,536 @@
+{
+  "id": "return-to-the-devourer-below",
+  "name": "Return to The Devourer Below",
+  "card": "01142",
+  "intro": "After a frantic nighttime search throughout Arkham, you have tracked down and questioned several members of the cult. Your findings are disturbing: they claim to worship a being known as Umôrdhoth, a monstrous entity from another realm.\nYou are able to confirm much of Lita’s story: the cult is agitated over the destruction of a ghoul lair. However, a surprising detail also turns up: the one who invaded the lair and set this night’s events in motion was none other than Lita Chantler herself! You are not sure why this important detail was omitted from Lita’s story—did she tell you only as much as was necessary to draw you into her conflict? But in another light, she seems to be fighting to protect the city of Arkham from a terrible menace.\nThe final piece of the puzzle was found written in a journal possessed by one of the cultists. It describes a dark ritual to be performed deep within the woods south of Arkham, this very night. According to the journal, the ritual’s completion will open a gate and bring forth the cult’s dark master into this world. “If the cult is not stopped,” Lita warns, “there is a possibility that Umôrdhoth’s vengeance will consume all in its path.” Frightened but determined to stop the ritual, you head into the woods…",
+  "encounterSets": [
+    "tentacles",
+    "return_to_the_devourer_below",
+    "ancient_evils",
+    "striking_fear",
+    "ghouls_of_umôrdhoth",
+    "the_devourers_cult",
+    "agents_of_yog",
+    "agents_of_shub",
+    "agents_of_cthulhu",
+    "agents_of_hastur"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "01146",
+    "01147",
+    "01148"
+  ],
+  "agendas": [
+    "01143",
+    "01144",
+    "01145"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "01149",
+        "01150",
+        "01151",
+        "01152",
+        "01153",
+        "01154",
+        "01155",
+        "50033",
+        "50034",
+        "50035",
+        "50036"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "01156",
+        "01157"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "01149"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -3
+      },
+      "cultist": {
+        "modifier": -4
+      },
+      "tablet": {
+        "modifier": -5
+      },
+      "elderThing": {
+        "modifier": -7
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -3
+      },
+      "cultist": {
+        "modifier": -4
+      },
+      "tablet": {
+        "modifier": -5
+      },
+      "elderThing": {
+        "modifier": -7
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "Too frightened to face her fate, Lita flees into the night. She realizes that she has failed and Umôrdhoth’s vengeance will pursue her wherever she goes. The creature’s tendrils spread throughout the city of Arkham, searching for her. It lurks in the darkness of every corner, tugging at the seams of reality. But Lita is nowhere to be found, so the creature dwells in the shadows to this day, searching… killing.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "arkham_succumbed",
+          "value": true
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 0,
+          "mental": 0
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "You have managed to prevent the cult from summoning its master. Although you’re unsure what would have happened had the cult succeeded, you’re relieved that—at least for the time being—Arkham is safe. You capture as many cultists as you can find, but very few townspeople believe your tale. Perhaps it was all in your head, after all.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "ritual_broken",
+          "value": true
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 0,
+          "mental": 2
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 5,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "Through force of arms and strength of will, you are somehow able to harm Umôrdhoth enough to send it reeling back to the dimension from which it emerged. Warmth and light return to the woods as the void-like mass is sucked in upon itself, vanishing in an instant. You aren’t sure if a being such as this can be killed, but for the time being it seems to have retreated. As their master vanishes, the ghouls nearby climb into the open pit below, fleeing with terrible cries and shrieks. You have stopped an evil plot, but the fight has taken its toll on your body and mind. Worse, you can’t help but feel insignificant in the face of the world’s mysteries. What other terrors exist in the deep, dark corners of reality?",
+      "effects": [
+        {
+          "do": "record",
+          "key": "umordhoth_repelled",
+          "value": true
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 2,
+          "mental": 2
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 10,
+          "who": "each"
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "In the face of this horror, you don’t believe there is anything you can do to stop it. You have but one hope if you are to survive. You turn on Lita and throw her at the terrible monstrosity, watching in dread as its swirling void-like mass consumes her. She cries out in torment as the life is sucked from her body. “Umôrdhoth…Umôrdhoth…” the cultists chant. Lita Chantler vanishes without a trace. For a moment, you fear that the creature will now turn on you, but you hear one of the cultists say, “Umôrdhoth is a just god who claims only the guilty and the dead. Go, and you shall be spared.” The swirling mass vanishes, and warmth and light return to the woods. The cultists slink away, leaving you alive. Lita’s last moments are forever etched upon your memory.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "lita_sacrificed",
+          "value": true
+        },
+        {
+          "do": "removeCard",
+          "code": "01117"
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 2,
+          "mental": 2
+        },
+        {
+          "do": "addWeakness",
+          "trait": "Madness"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "return_to_the_devourer_below",
+  "connections": [
+    [
+      "01149",
+      "50033"
+    ],
+    [
+      "01149",
+      "50034"
+    ],
+    [
+      "01149",
+      "50035"
+    ],
+    [
+      "01149",
+      "50036"
+    ],
+    [
+      "01149",
+      "01150"
+    ],
+    [
+      "01149",
+      "01151"
+    ],
+    [
+      "01149",
+      "01152"
+    ],
+    [
+      "01149",
+      "01153"
+    ],
+    [
+      "01149",
+      "01154"
+    ],
+    [
+      "01149",
+      "01155"
+    ],
+    [
+      "01149",
+      "01156"
+    ],
+    [
+      "01150",
+      "50033"
+    ],
+    [
+      "01150",
+      "50034"
+    ],
+    [
+      "01150",
+      "50035"
+    ],
+    [
+      "01150",
+      "50036"
+    ],
+    [
+      "01150",
+      "01151"
+    ],
+    [
+      "01150",
+      "01152"
+    ],
+    [
+      "01150",
+      "01153"
+    ],
+    [
+      "01150",
+      "01154"
+    ],
+    [
+      "01150",
+      "01155"
+    ],
+    [
+      "01150",
+      "01156"
+    ],
+    [
+      "01151",
+      "50033"
+    ],
+    [
+      "01151",
+      "50034"
+    ],
+    [
+      "01151",
+      "50035"
+    ],
+    [
+      "01151",
+      "50036"
+    ],
+    [
+      "01151",
+      "01152"
+    ],
+    [
+      "01151",
+      "01153"
+    ],
+    [
+      "01151",
+      "01154"
+    ],
+    [
+      "01151",
+      "01155"
+    ],
+    [
+      "01151",
+      "01156"
+    ],
+    [
+      "01152",
+      "50033"
+    ],
+    [
+      "01152",
+      "50034"
+    ],
+    [
+      "01152",
+      "50035"
+    ],
+    [
+      "01152",
+      "50036"
+    ],
+    [
+      "01152",
+      "01153"
+    ],
+    [
+      "01152",
+      "01154"
+    ],
+    [
+      "01152",
+      "01155"
+    ],
+    [
+      "01152",
+      "01156"
+    ],
+    [
+      "01153",
+      "50033"
+    ],
+    [
+      "01153",
+      "50034"
+    ],
+    [
+      "01153",
+      "50035"
+    ],
+    [
+      "01153",
+      "50036"
+    ],
+    [
+      "01153",
+      "01154"
+    ],
+    [
+      "01153",
+      "01155"
+    ],
+    [
+      "01153",
+      "01156"
+    ],
+    [
+      "01154",
+      "50033"
+    ],
+    [
+      "01154",
+      "50034"
+    ],
+    [
+      "01154",
+      "50035"
+    ],
+    [
+      "01154",
+      "50036"
+    ],
+    [
+      "01154",
+      "01155"
+    ],
+    [
+      "01154",
+      "01156"
+    ],
+    [
+      "01155",
+      "50033"
+    ],
+    [
+      "01155",
+      "50034"
+    ],
+    [
+      "01155",
+      "50035"
+    ],
+    [
+      "01155",
+      "50036"
+    ],
+    [
+      "01155",
+      "01156"
+    ],
+    [
+      "50033",
+      "50034"
+    ],
+    [
+      "50033",
+      "50035"
+    ],
+    [
+      "50033",
+      "50036"
+    ],
+    [
+      "50033",
+      "01156"
+    ],
+    [
+      "50034",
+      "50035"
+    ],
+    [
+      "50034",
+      "50036"
+    ],
+    [
+      "50034",
+      "01156"
+    ],
+    [
+      "50035",
+      "50036"
+    ],
+    [
+      "50035",
+      "01156"
+    ],
+    [
+      "50036",
+      "01156"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "50033": [
+      7,
+      0
+    ],
+    "50034": [
+      8,
+      0
+    ],
+    "50035": [
+      9,
+      0
+    ],
+    "50036": [
+      10,
+      0
+    ],
+    "01149": [
+      0,
+      0
+    ],
+    "01150": [
+      1,
+      0
+    ],
+    "01151": [
+      2,
+      0
+    ],
+    "01152": [
+      3,
+      0
+    ],
+    "01153": [
+      4,
+      0
+    ],
+    "01154": [
+      5,
+      0
+    ],
+    "01155": [
+      6,
+      0
+    ],
+    "01156": [
+      11,
+      0
+    ]
+  }
+}

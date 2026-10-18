@@ -2,6 +2,7 @@ import { useEffect, useRef, type ReactNode } from "react";
 import { cardText, encounterSetName, t } from "../../content/i18n";
 import type { ChoiceOption, GameState, InstId } from "../../engine/types";
 import { CardFace } from "../CardFace";
+import { cardDetails } from "../details";
 import { db, useGame } from "../context";
 import { Glyph, Icon } from "../Icon";
 import type { IconName } from "../icons";
@@ -83,6 +84,22 @@ const TOKENS: [keyof Pick<GameState["cards"][string], "damage" | "horror" | "clu
 ];
 
 /** one card at full size with its tokens, its text and the options it offers */
+/** the card's keywords explained, as in the details column */
+function Keywords({ code, locale }: { code: string; locale: string }) {
+  const row = cardDetails(db, code, locale).find((r) => r.k === "keywords");
+  if (row?.k !== "keywords") return null;
+  return (
+    <dl className="hd-keywords" aria-label={row.label}>
+      {row.items.map((k) => (
+        <div key={k.name}>
+          <dt>{k.name}</dt>
+          <dd>{k.text}</dd>
+        </div>
+      ))}
+    </dl>
+  );
+}
+
 export function CardModal({ id }: { id: InstId }) {
   const game = useGame((s) => s.game) as GameState;
   const locale = useGame((s) => s.locale);
@@ -124,6 +141,7 @@ export function CardModal({ id }: { id: InstId }) {
           ))}
         </div>
         <p className="card-text" dangerouslySetInnerHTML={{ __html: formatText(back ? tx.backText ?? "" : tx.text) }} />
+        {!back && <Keywords code={inst.code} locale={locale} />}
         <OptionButtons options={options} onChosen={close} />
         <button className="modal-close" onClick={close}>{t(db, locale, "modal.close")}</button>
       </div>

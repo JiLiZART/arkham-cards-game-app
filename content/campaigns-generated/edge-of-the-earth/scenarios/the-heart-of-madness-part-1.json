@@ -1,0 +1,171 @@
+{
+  "id": "the-heart-of-madness-part-1",
+  "name": "The Heart of Madness, Part I",
+  "card": "08648",
+  "intro": "You decide to study the doorway and the many paths that diverge from this vast tunnel in the hope that you can discover a way to stop the entity on the other side from escaping. You believe that the technology used to seal this door is somehow related to these five glyphs. Perhaps if you explore the surrounding area, you can find the missing pieces.",
+  "encounterSets": [
+    "the_heart_of_madness",
+    "the_great_seal",
+    "miasma",
+    "nameless_horrors",
+    "penguins",
+    "shoggoths",
+    "ancient_evils",
+    "locked_doors"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "08662",
+    "08663"
+  ],
+  "agendas": [
+    "08659",
+    "08660",
+    "08661"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "08650",
+        "08649"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "08650"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -1
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -1
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "Try as you might, you are unable to find and place all five seals. These dark, dormant halls are home to much more than just giant penguins. The creatures that dwell within are the same that Dyer and Danforth described from their journey—shapeless monstrosities composed of viscous, bubbling jelly and covered in lidless eyes. You flee back to the gateway to rest and lick your wounds, but before you can decide what to do next, something slams against the ancient, massive doorway, scaring you nearly to death. It reverberates through the facility. Then another, and another. You try to flee, but it's too late.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "With the massive door glowing and droning with some kind of alien electricity, you strain against it to open the way forward. Somewhere inside this place lie the answers to all of your questions. The reason you came here. You press onward not for the sake of your career, but for the sake of your very sanity. You must know the truth. Even if it breaks you.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "With a final hiss of air and a primordial screech, the immense gateway bursts open. Tendrils of prismatic color reach forth, slithering along the floor and walls. The chaos is over in mere seconds. The miasma grips you with impossible strength, clawing and tugging at your limbs. Terrible shapes, familiar sights, and untold nightmares play out along the surface of the entity as it pulls you screaming through the gateway and into the other side.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "The pulse of energy induced by your catastrophic mistake wipes all organic life from the face of the Earth.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "the_seal_was_used_improperly",
+          "value": true
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 0,
+          "mental": 0
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "the_heart_of_madness_part_1",
+  "connections": [],
+  "oneWay": [],
+  "layout": {
+    "08650": [
+      6,
+      0
+    ],
+    "08649": [
+      6,
+      7
+    ]
+  }
+}

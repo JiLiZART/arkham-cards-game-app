@@ -1,0 +1,223 @@
+{
+  "id": "the-midwinter-gala",
+  "name": "The Midwinter Gala",
+  "card": "71001",
+  "intro": "\"It was the Yuletide, that men call Christmas though they know in their hearts it is older than Bethlehem and Babylon, older than Memphis and mankind. It was the Yuletide, and I had come at last to the ancient sea town where my people had dwelt and kept festival in the elder time when festival was forbidden; where also they had commanded their sons to keep festival once every century, that the memory of primal secrets might not be forgotten.\"\n - H.P. Lovecraft, \"The Festival\"",
+  "encounterSets": [
+    "the_midwinter_gala"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "71005",
+    "71006"
+  ],
+  "agendas": [
+    "71002",
+    "71003",
+    "71004"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "71007",
+        "71009",
+        "71008"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "71050",
+        "71051",
+        "71052"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "71007"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "You wake up, freezing cold, facedown in the snow outside the Lantern Club's stately manor. The house is deserted, the cheery windows dark and foreboding, like the empty eye sockets of a grinning skull. You can't remember how you escaped the mayhem, but you will never forget what happened at Kingsport's first — and hopefully last — Midwinter Gala.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "You look up from the Jewel to see your contact standing in front of the manor, silhouetted in the moonlight.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "Agent Antonova turns and strides toward you, her left cheek spattered with viscous ichor. \"I did not like this party at first, but it became much more interesting once they locked the doors,\" she grins, then lays a hand on your shoulder. \"I have reported the strange effects of this Jewel' to my superiors. They want it brought to our offices for safekeeping, but I have several other obligations to attend to before I can deliver it. I suppose there is little harm in letting you hold onto it for now. Know that I will be back later to collect it.\" After seeing the chaos the Jewel brought to the Gala, you wonder if you are being used more as a \"case study\" than a recipient of its power.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "After calming down a very flustered Dean Caldwell, the academic grabs the Jewel from your hand and holds it up to the light. \"Truly remarkable. The legends hardly do it justice. Miraculous! Breathtaking!\" The astute gentleman eventually runs out of descriptors, then thanks you for your assistance. \"Given what happened here tonight, I would prefer we not house the Jewel on campus grounds. We only just rebuilt the student dormitories. But if you could bring it by my office next week, I would relish the chance to study it further.\"",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R4": {
+      "title": "Resolution 4",
+      "text": "\"Not too shabby,\" says Johnny Valone, lit cigar in his mouth. \"You have light hands. Could always use another pair for a job or two.\" He winks as he blows smoke out the side of his mouth. \"I figured we could pawn the thing on the black market for a fair price, but after seeing what happened in there-\" his tough exterior softens. \"I wouldn't wish that on anyone. What were those things anyway? Elephants? Sick gorillas?\" He takes one last puff of his cigar. \"I guess I'll never know. All I knows is, there's no way I'm hauling that rock back to Arkham. Consider the Jewel a party favor: And this is for savin' my ass.\" He hands out a wad of bills to you and melts into the shadows with a Cheshire grin.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R5": {
+      "title": "Resolution 5",
+      "text": "\"I don't care what it takes: I want that Jewel and I want it now!\" Carl Sanford seethes at his lackeys. As you listen to the patriarch excoriate his associates, you think back to the events of the evening. Although you had resolved to help the Lodge, is the world truly safer with the Jewel in their possession? Rather than return it to Sanford, you pocket the Jewel and slip away into the evening. You are the only one who can temper its power. What you are doing truly is for the greater good. Hopefully Sanford will never find out.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R6": {
+      "title": "Resolution 6",
+      "text": "\"You've done a great thing this evening,\" Captain Bain claps you on the back. \"Given tales of the Jewel, this evening could have gone far worse. It is said that the Jewel brings the greatest dreams and worst nightmares of its bearer to life. Perhaps it is fitting, what happened to the Lantern Club..\" Bain looks up at the darkened windows and snow stained with blood, then presses the Jewel back in your hand. \"Something tells me, however, that with you as its bearer, the Jewel may do some good.\"\nYou lose yourself looking into the cloudy, smoky heart of the gem. When you look up, the Captain has vanished.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R7": {
+      "title": "Resolution 7",
+      "text": "Your skin prickles as you sit in the back seat of your cab, and you have the feeling of being watched. You turn to look back at the manor's facade to see the nightmarish face of the Bloodless Man staring down at you from the window. As the manor disappears from view, you think back to Kingsport, a city shrouded in mystery and folklore. The city beckons with its name alone, conjuring up images of misty sea cliffs, shadowy coves, and ancient, brooding mansions. For generations, stories of inexplicable phenomena, strange dreams, and haunting legends have plagued Kingsport. After tonight's events, you finally understand why.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "the_midwinter_gala",
+  "connections": [
+    [
+      "71007",
+      "71009"
+    ],
+    [
+      "71007",
+      "71008"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "71007": [
+      0,
+      0
+    ],
+    "71008": [
+      0,
+      1
+    ],
+    "71009": [
+      1,
+      0
+    ]
+  }
+}

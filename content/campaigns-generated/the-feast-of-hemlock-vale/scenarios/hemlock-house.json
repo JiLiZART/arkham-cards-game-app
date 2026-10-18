@@ -1,0 +1,224 @@
+{
+  "id": "hemlock-house",
+  "name": "Hemlock House",
+  "card": "10523",
+  "intro": "“Oh, please, it’s not haunted.” Theo smiles nonchalantly as he pulls his truck to a stop in front of the towering, shingle style manor. “Old Gideon says a lot of things about this place. But old Gideon also believes in underwater kingdoms filled with fish people,” he laughs. “I’m sure there’s something to it. Rumor is, there’s some kinda infestation in there. Rats, probably. Maybe even some wild animals taking refuge from the woods. It’s an old house, y’know? Lots of nooks in the walls, places for them to hide. Brother William asked Ms. Park to find and repair ‘em, clear out whatever’s hiding in the walls, but she hasn’t gotten around to it yet. I still got all those supplies in my truck, if you feel like helping out.”\nYou unload several planks of wood, a box of tools, and a bucket of some foul- smelling chemical mixture from the back of Theo’s truck. As he drives off, you stare up at the crumbling manor. There is something crooked and unsettling in the arrangement of its windows, the slant of its gambrel roofs. The house’s previous grandeur has not set right with the landscape, perhaps by some crack in its foundation—or, if the rumors are right, whatever lives within its walls.",
+  "encounterSets": [
+    "hemlock_house",
+    "agents_of_the_colour",
+    "blight",
+    "fire",
+    "transfiguration",
+    "locked_doors",
+    "rats",
+    "residents"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "10529",
+    "10530"
+  ],
+  "agendas": [
+    "10525",
+    "10526",
+    "10528"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "10536"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "10547",
+        "10532",
+        "10533",
+        "10534",
+        "10535",
+        "10524",
+        "10545",
+        "10546"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "10536"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "An awful clamor resounds through the house as the walls close in, threatening to collapse—to consume you like prey. Terrified, you burst througth the front door and flee.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "At long last, the horrors of Hemlock House are behind you. You can only hope the house’s “infestation” is gone.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "“Miskatonic Survey, June 1926. Members Marquez, Musgrave, et alii. Survey of Hemlock House complete. Organism defies comprehension. Colony of octopodial and gastropodial species infested the entire house. Creature(s) appear to have evolved in the house proper. Further observation needed.”",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "record",
+          "key": "hemlock_harbor",
+          "value": true
+        }
+      ]
+    }
+  },
+  "i18nId": "hemlock_house",
+  "connections": [
+    [
+      "10536",
+      "10532"
+    ],
+    [
+      "10536",
+      "10533"
+    ],
+    [
+      "10536",
+      "10534"
+    ],
+    [
+      "10536",
+      "10535"
+    ],
+    [
+      "10532",
+      "10533"
+    ],
+    [
+      "10532",
+      "10534"
+    ],
+    [
+      "10532",
+      "10535"
+    ],
+    [
+      "10533",
+      "10534"
+    ],
+    [
+      "10533",
+      "10535"
+    ],
+    [
+      "10534",
+      "10535"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "10532": [
+      1,
+      0
+    ],
+    "10533": [
+      2,
+      0
+    ],
+    "10534": [
+      3,
+      0
+    ],
+    "10535": [
+      4,
+      0
+    ],
+    "10536": [
+      0,
+      0
+    ]
+  }
+}

@@ -1,0 +1,177 @@
+{
+  "id": "the-western-wall",
+  "name": "The Western Wall",
+  "card": "11517",
+  "intro": "It becomes increasingly clear as you proceed westward that the beach you are walking along is the top of an ancient ring wall. Fathoms below, the wall forms a sheer drop to a round plaza on the ocean floor. With some planning, you could descend safely to the ocean floor by moving from pocket to pocket of trapped air in the old ruins. If you’re careful, you may just be able to reach the sea floor alive.",
+  "encounterSets": [
+    "the_western_wall",
+    "cosmic_legacy",
+    "deep_ones",
+    "tdc_flood",
+    "rlyeh",
+    "star_spawn",
+    "the_inescapable",
+    "undersea_creatures",
+    "agents_of_cthulhu"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "11519"
+  ],
+  "agendas": [
+    "11518"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "11521"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "11535",
+        "11531",
+        "11531b",
+        "11727"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "11521"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -3
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -3
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -5
+      },
+      "tablet": {
+        "modifier": -5
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -5
+      },
+      "tablet": {
+        "modifier": -5
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "With the rest of the expedition’s help, you limp to your destination, taking refuge in intermittent pockets of air in the crumbling ruins. Nightmarish shapes flit to and fro in the dark ocean beyond the wall. The creatures that live in and around R’lyeh’s foundation are warped and strange; you have a feeling you will be seeing them again soon, in your own nightmares.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "the_western_wall",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "The ocean floor is a dreamlike phantasmagoria of sinister flora and nightmarish creatures. A mutated lanternfish that could only be described as antediluvian swims placidly through a forest of deep water seagrass. Another deep sea creature with glowing eyes and a jagged maw swims straight at you, but turns away at the last moment from the shimmering field that keeps the water at bay.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "the_western_wall",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "A tremor shakes the ancient city, knocking you down. Ruby curses as you steady yourself on a fallen pillar. The city of R’lyeh continues to rise. Eventually, the tremors subside. Ruby stands next to you and looks out at the perfect circle of the black water bay. “Damn,” she says. “I made a bet with Andy we’d get back first. But that softie wouldn’t dare collect if I pretend I broke my leg, don’t you think?” You sigh and lead the way back to the Cassandra, leaving Ruby to bandage her right calf. It will be good to return.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "the_western_wall",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "An ancient dome shimmers enticingly on the sea floor. As you marvel at the strange sights, a chunk of obsidian loosens and falls from up above onto the seafloor dome. Rather than shatter, the dome ripples, pliant, as the rock falls through with a thunderous crash. Something in the center projects a barrier that repels water, but allows solid things to pass through.\nWhatever strange technology is in the dome, Tillinghast will likely be interested in it. However, you could also proceed into R’lyeh: a round door in the base of the wall, contained under the same shimmering field as the dome, beckons you into the city.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "the_western_wall",
+  "connections": [],
+  "oneWay": [],
+  "layout": {
+    "11521": [
+      0,
+      0
+    ]
+  }
+}

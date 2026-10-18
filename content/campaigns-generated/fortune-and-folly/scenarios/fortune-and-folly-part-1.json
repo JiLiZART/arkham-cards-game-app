@@ -1,0 +1,138 @@
+{
+  "id": "fortune-and-folly-part-1",
+  "name": "The Stakeout",
+  "card": "88001",
+  "intro": "MAN STRUCK BY LIGHTNING TWICE MINUTES AFTER WINNING BIG! This sensational headline is what first grabbed your attention. You might have written it off as just an extraordinary and unlikely event exaggerated to sell papers, if it weren't for the other stories that followed, all centering around the same place: a casino in Monte Carlo called Défis de la Roulette. In addition to the unlucky patron being struck down mere moments after leaving the casino with his winnings, others have also met grisly yet improbable fates either within or nearby. Upon inquiring further, it seems that this casino appeared quickly and unexpectedly, and the authorities in Monaco have been suspiciously tight-lipped about where exactly it came from and who owns it. Since its opening, the casino has been a magnet for the unnatural and implausible. The more you learn, the more it seems worth at least taking a look to determine whether these events are simply coincidence, or the result of something much more sinister.",
+  "encounterSets": [
+    "fortune_and_folly"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "88006",
+    "88007",
+    "88008"
+  ],
+  "agendas": [
+    "88002",
+    "88003",
+    "88004",
+    "88005"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "88009"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "88009"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -6
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -6
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "Each investigator was defeated",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "You find yourself forcefully removed from the casino after attracting far too much attention. It is certain that soon your description will circulate among the staff. This will undoubtedly make matters much more difficult when the heist begins.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "You hope that what you were able to learn and accomplish tonight will be enough. You can at least rest a little easier knowing that the staff did not seem to take any special interest in you. That will make it easier to keep a low profile when the heist begins in earnest.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "fortune_and_folly_part_1",
+  "connections": [],
+  "oneWay": [],
+  "layout": {
+    "88009": [
+      0,
+      0
+    ]
+  }
+}

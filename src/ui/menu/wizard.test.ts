@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { db } from "../../engine/testkit";
 import { saveCustomDeck } from "../decks";
 import type { Storage } from "../store";
-import { back, canContinue, decksFor, initialWizard, invalidDecksFor, next, setCampaign, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type WizardState } from "./wizard";
+import { back, canContinue, decksFor, campaignOrder, initialWizard, invalidDecksFor, next, setCampaign, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type WizardState } from "./wizard";
 
 const ROLAND = "01001";
 const DAISY = "01002";
@@ -128,5 +128,20 @@ describe("custom decks in the wizard", () => {
     store.setItem("ah:decks", JSON.stringify(raw));
     expect(decksFor(db, ROLAND, store).map((d) => d.id)).toEqual(["roland-starter"]);
     expect(invalidDecksFor(db, ROLAND, store).map((d) => [d.id, d.problems.length > 0])).toEqual([[saved.id, true]]);
+  });
+});
+
+describe("the campaign list", () => {
+  it("Night of the Zealot first, then the generated campaigns in cycle order, the side scenarios last", () => {
+    const ids = campaignOrder(db).map((c) => c.id);
+    expect(ids[0]).toBe("night-of-the-zealot");
+    expect(ids.indexOf("the-dunwich-legacy")).toBeLessThan(ids.indexOf("the-path-to-carcosa"));
+    expect(ids.indexOf("the-path-to-carcosa")).toBeLessThan(ids.indexOf("the-scarlet-keys"));
+    // the Return-to boxes after every cycle, in the same cycle order
+    expect(ids.indexOf("the-drowned-city")).toBeLessThan(ids.indexOf("return-to-the-night-of-the-zealot"));
+    expect(ids.indexOf("return-to-the-night-of-the-zealot")).toBeLessThan(ids.indexOf("return-to-the-dunwich-legacy"));
+    const firstSide = ids.findIndex((id) => id.startsWith("side-"));
+    expect(ids.slice(firstSide).every((id) => id.startsWith("side-"))).toBe(true);
+    expect(initialWizard(db).campaignId).toBe("night-of-the-zealot");
   });
 });

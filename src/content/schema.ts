@@ -606,6 +606,12 @@ export const CampaignDef = z
     chaosBags: z.record(Difficulty, z.array(ChaosToken)),
     /** human-readable labels for log keys */
     logLabels: z.record(z.string(), z.string()).default({}),
+    /** the card packs its scenarios use; loaded before the campaign starts or restores */
+    packs: z.array(z.string()).default(["core"]),
+    /** generated from the campaign guides (ADR-0007): cards without written behaviour have no effect */
+    generated: z.boolean().default(false),
+    /** the first scenario's reference card: its art on the new-game screen before the scenarios are loaded */
+    card: z.string().optional(),
   })
   .strict();
 export type CampaignDef = z.infer<typeof CampaignDef>;

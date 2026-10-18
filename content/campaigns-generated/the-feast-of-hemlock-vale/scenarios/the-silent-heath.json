@@ -1,0 +1,242 @@
+{
+  "id": "the-silent-heath",
+  "name": "The Silent Heath",
+  "card": "10549",
+  "intro": "You step out of Theo’s truck accompanied by Leah Atwood and look up at Hemlock Isle’s highest point. The narrow winding road gives way to the soft, sand-like ash that blankets the heath. The black rocks at the top of the hill look like jagged teeth. A dread silence pervades everything as you walk up the hill with the Vale’s cook. “There’s a reason folks don’t live here anymore. Watch yourself up here. I don’t know what lives in the caves, and I don’t intend to find out,” she says. As if in response, a strong wind blows up clouds of white ash.",
+  "encounterSets": [
+    "the_silent_heath",
+    "agents_of_the_colour",
+    "blight",
+    "horrors_in_the_rock",
+    "refractions",
+    "transfiguration",
+    "striking_fear",
+    "residents"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "10553",
+    "10554"
+  ],
+  "agendas": [
+    "10550",
+    "10551"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "10555"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "10565",
+        "10721",
+        "10558",
+        "10559",
+        "10560",
+        "10566",
+        "10567",
+        "10568"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "10555"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -2
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -2
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -3
+      },
+      "tablet": {
+        "modifier": -5
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -3
+      },
+      "tablet": {
+        "modifier": -5
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "As you walk down the slope, utterly exhausted, you hear the sound of a hundred beating wings. Pale, translucent insects cover the black rocks atop the hill, whirring incessantly. What are they saying to each other in their own alien language? Do they know about the world beyond the heath? You shudder when you wonder how many more lurk in the caverns below.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "You lay the three desiccated corpses in the bed of the truck. The buildup of minerals makes them simultaneously heavy and incredibly brittle. The belly of the son is swollen with crystals the size of a basketball, and the mother’s skin is leathery with salt. You don’t know what warped the bodies of the Pearl Family, but it surely wasn’t quick; they must have been horribly deformed when they died. You document the remains and a few samples of the crystal growths. The Pearl family deserved better than this. With a shovel from the back of Theo’s truck, you set to digging the three corpses a proper grave.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "laid_the_pearl_family_to_rest",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "You lay the remains you could recover in the bed of Theo’s sky blue truck. The buildup of minerals makes them simultaneously heavy and incredibly brittle. You don’t know what warped the bodies of the Pearl Family, but it surely wasn’t quick; they must have been horribly deformed when they died. You document the remains and a few samples of the crystal growths, then bury the remains in a shallow grave at the base of Pearl Ridge.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "remains_were_partially_recovered",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "Once you have left Pearl Ridge behind, you study Susan Pearl’s diary. The account chronicles the rise and fall of Susan Pearl’s investments in agriculture and mining on Hemlock Isle in the decade leading up to 1906. The business entries are interspersed with prayers, illustrations of birds, and occasional details on the strange “Warrens” underneath Pearl Ridge. Other entries mention spreading sickness in the orchard workers and the Pearl family, along with repeated hardship in their mining efforts. The last entry, written in a long, erratic scrawl, catches your attention:\n<blockquote>I am still not certain if what I experienced was a dream or vision. At midnight, I awoke to the uncanny feeling of being watched, and when I opened my eyes, I saw a pale sphere of watery light in the corner of my room, dancing like something in a faery story. As soon as I laid eyes on it, the thing flew out the window, and I followed it out into the orchard. What I saw is something I can only describe as a miracle: A hundred more faery lights danced in the orchard. As I watched the lights, they grew brighter, and I felt almost as though I was flying. A heady bliss took over my mind, and I felt different, somehow. As if there were another me—five other me’s—beating within my chest. And as I looked out at the trees, I saw myself in them, too. In all of this. Strong and thick with knotted skin and branches for arms. I saw myself, my place, in all of creation. And all of my fears—for Ezra, for the mine, for our health—melted away. I knew only joy. Such joy!\nI am the eyes. All eyes that see. I am the brilliance.\n<right><fancy>Susan Pearl. June 22, 1906</fancy></right>\n</blockquote>",
+      "effects": [
+        {
+          "do": "record",
+          "key": "madame_pearls_diary_was_recovered",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R4": {
+      "title": "Resolution 4",
+      "text": "“Miskatonic Survey, June 1926. Members Marquez, Musgrave, et alii. Surveyed Pearl Ridge. Northern hills were devastated in an unknown event. Persistent contamination has led to mineralization and crystallization of organic life. Local caverns overrun by a massive insect colony. Insects exhibited vespid and termitid behaviors and physiology. Further study needed.”",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "record",
+          "key": "pearl_ridge",
+          "value": true
+        }
+      ]
+    }
+  },
+  "i18nId": "the_silent_heath",
+  "connections": [
+    [
+      "10555",
+      "10558"
+    ],
+    [
+      "10555",
+      "10559"
+    ],
+    [
+      "10555",
+      "10560"
+    ],
+    [
+      "10558",
+      "10559"
+    ],
+    [
+      "10558",
+      "10560"
+    ],
+    [
+      "10559",
+      "10560"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "10555": [
+      0,
+      0
+    ],
+    "10558": [
+      1,
+      0
+    ],
+    "10559": [
+      2,
+      0
+    ],
+    "10560": [
+      3,
+      0
+    ]
+  }
+}

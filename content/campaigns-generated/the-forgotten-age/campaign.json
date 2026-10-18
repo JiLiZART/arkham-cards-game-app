@@ -1,0 +1,91 @@
+{
+  "id": "the-forgotten-age",
+  "name": "The Forgotten Age",
+  "scenarios": [
+    "wilds",
+    "eztli",
+    "threads-of-fate",
+    "the-boundary-beyond",
+    "heart-of-the-elders-part-1",
+    "heart-of-the-elders-part-2",
+    "the-city-of-archives",
+    "the-depths-of-yoth",
+    "shattered-aeons",
+    "turn-back-time"
+  ],
+  "i18nId": "tfa",
+  "chaosBags": {
+    "easy": [
+      "+1",
+      "+1",
+      "0",
+      "0",
+      "0",
+      "-1",
+      "-1",
+      "-2",
+      "-3",
+      "skull",
+      "skull",
+      "elderThing",
+      "autoFail",
+      "elderSign"
+    ],
+    "standard": [
+      "+1",
+      "0",
+      "0",
+      "0",
+      "-1",
+      "-2",
+      "-2",
+      "-3",
+      "-5",
+      "skull",
+      "skull",
+      "elderThing",
+      "autoFail",
+      "elderSign"
+    ],
+    "hard": [
+      "+1",
+      "0",
+      "0",
+      "-1",
+      "-2",
+      "-3",
+      "-3",
+      "-4",
+      "-6",
+      "skull",
+      "skull",
+      "elderThing",
+      "autoFail",
+      "elderSign"
+    ],
+    "expert": [
+      "0",
+      "-1",
+      "-2",
+      "-2",
+      "-3",
+      "-3",
+      "-4",
+      "-4",
+      "-6",
+      "-8",
+      "skull",
+      "skull",
+      "elderThing",
+      "autoFail",
+      "elderSign"
+    ]
+  },
+  "logLabels": {},
+  "packs": [
+    "core",
+    "tfa"
+  ],
+  "generated": true,
+  "card": "04043"
+}

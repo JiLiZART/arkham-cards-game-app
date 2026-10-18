@@ -40,10 +40,11 @@ export function scenarioText(db: ContentDb, id: string, locale: string) {
   const base = db.scenarios[id];
   const tr = campaignText(db, locale)?.scenarios[id];
   const resolution = (key: string) => {
-    const r = base.resolutions[key];
+    const r = base?.resolutions[key];
     return r ? { ...r, title: tr?.resolutions[key]?.title ?? r.title, text: tr?.resolutions[key]?.text ?? r.text } : undefined;
   };
-  return { name: tr?.name ?? base.name, intro: tr?.intro ?? base.intro, resolution };
+  // a generated campaign's scenario not loaded yet (loadCampaign) goes by its id until it is
+  return { name: tr?.name ?? base?.name ?? id, intro: tr?.intro ?? base?.intro, resolution };
 }
 
 export const encounterSetName = (db: ContentDb, code: string, locale: string) => campaignText(db, locale)?.encounterSets[code] ?? null;

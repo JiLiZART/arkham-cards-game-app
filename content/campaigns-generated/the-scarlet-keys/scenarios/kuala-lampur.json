@@ -1,0 +1,240 @@
+{
+  "id": "kuala-lampur",
+  "name": "Shades of Suffering",
+  "card": "09660",
+  "intro": "You and Flint meet at the Royal Selangor Club: a sharp-angled complex situated on the edge of a meticulously groomed lawn. A cricket match unfolds for the club members on the turf below as you and Flint discuss the Coterie’s interests and Tzu San Niang’s possible aims. “Hold on a moment,” Flint stops mid-sip and stares into the throng of wealthy expatriates. You turn your head and watch the crowd. A woman with a pale complexion and jet-black hair turns away from you, twirling a bright red parasol.\n“Well, that was easy,” laughs Flint. You can hear a steely edge in his voice as he stands, gingerly, and leaves a generous tip for the staff. “Let’s see what she’s up to, shall we?”",
+  "encounterSets": [
+    "globetrotting",
+    "shades_of_suffering",
+    "dark_veiling",
+    "mysteries_abound",
+    "scarlet_sorcery",
+    "spreading_corruption",
+    "striking_fear"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "09664",
+    "09665",
+    "09666"
+  ],
+  "agendas": [
+    "09661",
+    "09662",
+    "09663"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "09667",
+        "09668",
+        "09669",
+        "09670"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "09674a",
+        "09674c",
+        "09675a",
+        "09675c",
+        "09676a",
+        "09676c",
+        "09679a",
+        "09679b"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "09669"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -4
+      },
+      "tablet": {
+        "modifier": -1
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -4
+      },
+      "tablet": {
+        "modifier": -1
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -5
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -6
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -5
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -6
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "Overwhelmed, you flee Kuala Lumpur. Whatever sway Tzu San Niang held over the city begins to infect your own mind and intrudes into your dreams. In the following nights, you wake up in a cold sweat, imagining yourself bowing before her, fixated on her mysterious red parasol. In idle moments, you catch yourself humming the soft, lilting song she sang as she followed you in Kuala Lumpur. You wonder if you will ever be able to truly leave her behind…",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "record",
+          "key": "have_not_seen_the_last_of_tzu_san_niang",
+          "value": true
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "A crack of energy ripples through the air between you. Power—terrible, intoxicating power—courses through your arm. Tzu San Niang wails as she collapses to the ground, convulsing with pain.\n“Go,” you say in a voice not entirely your own. “Go somewhere far away and never return.”\nYou look down at her as the terrible energy dissipates. Tzu San Niang’s face is streaked with tears, and her hands shake as she stands up. She gives you a fleeting, baleful look, then turns and walks away into the fog.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 1,
+          "who": "each"
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 1,
+          "mental": 0
+        },
+        {
+          "do": "record",
+          "key": "tzu_san_niang_is_under_your_sway",
+          "value": true
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "You brandish The Shade Reaper at Tzu San Niang even as you feel your grip on the parasol falter. “Go,” you tell her firmly. “Go somewhere far away and never return.” But your voice is drowned out by her mocking laughter.\n“How pathetic,” she spits at you, then turns her gaze to the parasol. “Don’t worry. I’ll be back for you,” she coos in a lilting, singsong voice. As she walks away, you realize she wasn’t addressing you. In your hands, The Shade Reaper pulses with power. You wonder how much pain and misery is stored within it, and how many souls remain in torment elsewhere…",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "record",
+          "key": "have_not_seen_the_last_of_tzu_san_niang",
+          "value": true
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "You awaken in a dark room. The air is thick with incense and the shelves are lit with brightly-burning candles. For a fleeting moment, you wonder if the intense pain you felt at Tzu San Niang’s hands was a dream, before you see her sitting in a chair at the far end of the room, a cruel smile spread across her lips.\n“Rise,” she says. Dutifully, you stand up.\n“Come,” she beckons. Compelled by an awful, inexorable force, you walk through the darkness to stand before her.\n“Kneel.” You do as your lady commands. Out of the corner of your eye, you see Melati standing, also under her sway, her own face pinched in concentration as she watches this awful scene unfold.\n“Sometimes we make mistakes,” Tzu San Niang says. She leans forward and pats you gently. “And you have made a grave mistake. You have hurt me. You have taken something I need. But, also, all you were doing was proving your worth to me. I can sense your devotion. Are you not devoted to me?” Your mouth forms the word, but your mind resists as you say: “Yes.” Tzu San Niang nods, smiling. “This is the beginning of a wonderful partnership, I think.”\nSuddenly, you see Melati dart forward, brandishing a ceremonial knife. As she strikes the lady with the red parasol, you feel Tzu San Niang’s grip on your will weaken. “Get out of here!” shouts the bomoh. As the pair struggle, you flee for your life.\nWalking the streets of Kuala Lumpur in a haze, you feel a deep, thrumming pain. Even as you return to your hotel, you wonder if you will ever shake this strange desire to serve the lady with the red parasol. You hope you never meet her again.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "record",
+          "key": "tzu_san_niang_has_you_under_her_sway",
+          "value": true
+        }
+      ]
+    }
+  },
+  "i18nId": "kuala_lampur",
+  "connections": [
+    [
+      "09667",
+      "09668"
+    ],
+    [
+      "09667",
+      "09669"
+    ],
+    [
+      "09667",
+      "09670"
+    ],
+    [
+      "09668",
+      "09669"
+    ],
+    [
+      "09668",
+      "09670"
+    ],
+    [
+      "09669",
+      "09670"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "09667": [
+      0,
+      0
+    ],
+    "09668": [
+      1,
+      0
+    ],
+    "09669": [
+      2,
+      0
+    ],
+    "09670": [
+      3,
+      0
+    ]
+  }
+}

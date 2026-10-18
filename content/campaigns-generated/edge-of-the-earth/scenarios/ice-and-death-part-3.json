@@ -1,0 +1,205 @@
+{
+  "id": "ice-and-death-part-3",
+  "name": "Ice and Death, Part III",
+  "card": "08501",
+  "intro": "\"There—see it?\" one of the team members hands you their binoculars and points into the distance. You've ventured just outside camp to find a defensible position where you hope can see the creatures approaching… but what you find instead is even worse. Not only are they encroaching on the campsite as you expected, but more are emerging from the ice by the minute.\nYou watch the ice shelf split open, and a geyser of multicolored miasma seeps from the cracks. Your companion clutches your arm and points you in another direction, where you see another geyser spill forth. Then, another. \"There has to be an end to them, right?\"\nYou lower the binoculars and tell the rest of the team to prepare for a fight. You don't know if you can hold off these strange creatures or not, but there's only one way to find out.",
+  "encounterSets": [
+    "seeping_nightmares",
+    "creatures_in_the_ice",
+    "the_crash",
+    "lost_in_the_night",
+    "left_behind"
+  ],
+  "sideDecks": {
+    "_setAside": [
+      "ice_and_death"
+    ]
+  },
+  "acts": [
+    "08546"
+  ],
+  "agendas": [
+    "08544",
+    "08545"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "08510",
+        "08511",
+        "08512",
+        "08507",
+        "08508",
+        "08505",
+        "08504",
+        "08502",
+        "08513",
+        "08514",
+        "08503",
+        "08506",
+        "08509"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "08510"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -4
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -4
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "Through a whirlwind of snow and ice, you barely manage to escape with your life. You traipse across the snowy plains for miles, exhausted, terrified, and unsure whether the phantasms hunting you are real or merely figments of your rattled imagination.\nIn cruel, bitter silence, you and your remaining companions trudge onward. The sun drifts to the horizon but never sets. You have seen no sign of danger for hours, and yet you dare not tarry. Dread compels you on.\nOnly when you are too tired to walk any longer do you finally stop to get your bearings and decide how to proceed. After all, is this even a research expedition any longer?",
+      "effects": [
+        {
+          "do": "record",
+          "key": "team_barely_escaped_the_ice_shelf",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "In cruel, bitter silence, you and your remaining companions trudge onward. The sun drifts to the horizon but never sets. You have seen no sign of danger for hours, and yet you dare not tarry. Dread compels you on.\nOnly when you are too tired to walk any longer do you finally stop to get your bearings and decide how to proceed. After all, is this even a research expedition any longer?",
+      "effects": [
+        {
+          "do": "record",
+          "key": "team_defeated_the_hunting_creatures",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 5,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "In cruel, bitter silence, you and your remaining companions trudge onward. The sun drifts to the horizon but never sets. You have seen no sign of danger for hours, and yet you dare not tarry. Dread compels you on.\nOnly when you are too tired to walk any longer do you finally stop to get your bearings and decide how to proceed. After all, is this even a research expedition any longer?",
+      "effects": [
+        {
+          "do": "record",
+          "key": "team_fled_to_the_mountains",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "ice_and_death_part_3",
+  "connections": [],
+  "oneWay": [],
+  "layout": {
+    "08510": [
+      0,
+      0
+    ],
+    "08511": [
+      6,
+      0
+    ],
+    "08512": [
+      3,
+      1
+    ],
+    "08507": [
+      1,
+      2
+    ],
+    "08508": [
+      5,
+      2
+    ],
+    "08505": [
+      2,
+      4
+    ],
+    "08504": [
+      4,
+      4
+    ],
+    "08502": [
+      3,
+      6
+    ],
+    "08513": [
+      1,
+      7
+    ],
+    "08514": [
+      5,
+      7
+    ],
+    "08503": [
+      3,
+      8
+    ],
+    "08506": [
+      3,
+      10
+    ],
+    "08509": [
+      3,
+      12
+    ]
+  }
+}

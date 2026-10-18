@@ -1,0 +1,200 @@
+{
+  "id": "new-horizons",
+  "name": "New Horizons",
+  "card": "13031",
+  "intro": "With Detective Reynolds at your side, you head to the New Horizons facility in the Waterfront District. “Well, the way I see it we’ve got two options,” Reynolds says. “We can go in now and conduct our search. I’ve got the warrant, and it’ll be more official, but there’s also people who are working. People complicate things. Or…” He produces a set of lockpicks. “We wait until after dark.”",
+  "encounterSets": [
+    "new_horizons",
+    "afflicted",
+    "blood_blight",
+    "bloodthirst",
+    "hunted",
+    "sanguine_secrets",
+    "vermin",
+    "flying_terrors"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "13036",
+    "13037",
+    "13038"
+  ],
+  "agendas": [
+    "13032",
+    "13034"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "13039",
+        "13040",
+        "13041",
+        "13042",
+        "13043"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "13058",
+        "13059",
+        "13060",
+        "13061",
+        "13064",
+        "13065",
+        "13067",
+        "13066"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "13039"
+    }
+  ],
+  "tokens": {
+    "easy": {},
+    "standard": {},
+    "hard": {},
+    "expert": {}
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "“Things got pretty rough in there.”\n You awaken to the voice of Detective Reynolds. Blinking in the light of the morning, you sit up, waves of pain shooting through your stiff joints. Reynolds puts a hand on your shoulder. “Let’s not push it,” he says. “Besides, I’ve been watching the back of the factory, to see whether anyone—or anything—is going to follow us out.”",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "At long last you emerge from the meat packing facility, feeling no better than the cattle flanks that hung from hooks within. You hope that what you were able to accomplish will prove to be useful enough, even if you didn’t get to the bottom of what the cult was doing in the warehouse. At the very least, you have a name to go off of—Howard Wilkes, the owner of New Horizons, and the leader of the cult that was dwelling in its depths.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "did_not_complete_their_search",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "left_zburamoarte_alive",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "You have gotten to the bottom of the cult’s activities in the warehouse, and while you chose to leave whatever monsters lurked in the depths of the tunnels alive, you can only hope that your efforts will prove enough to put all of this to rest. At the very least, you have a name to go off of—Howard Wilkes, the owner of New Horizons, and the leader of the cult that was dwelling in its depths.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "completed_their_search",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "left_zburamoarte_alive",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "After a grueling fight against the truly massive foe, you finally put the abomination down. This beast, this Zburamoarte, was the source of the infected blood used in the cult’s rituals, spreading the blood blight throughout all of Arkham via the tainted meat. With the source of the blood blight defeated, you hope that no others can fall to the same fate as Julia Stern and others within the New Horizons factory. The case isn’t over, however, as you learned that a man named Howard Wilkes, the owner of New Horizons, was also leading of the cult of Zburamoarte. It’s time to make him answer for his crimes.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "completed_their_search",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "defeated_zburamoarte",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R4": {
+      "title": "Resolution 4",
+      "text": "You are quickly overwhelmed by the cult, dragging you down into the caves while repeating the name “Zburamoarte, Zburamoarte, Zburamoarte…” Mercifully, you black out during the course of the cult’s rituals, and when you come to again, you are alone on the floor of the factory, the first light of morning peeking through the windows. You pick yourself up, stretch your aching joints, and make a swift exit.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "left_to_the_cults_mercy",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "defeated_zburamoarte",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R5": {
+      "title": "Resolution 5",
+      "text": "You regroup with Detective Reynolds, ready to investigate this Howard Wilkes, and make him answer for what’s been happening at his facility.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "new_horizons",
+  "connections": [],
+  "oneWay": [],
+  "layout": {
+    "13039": [
+      1,
+      0
+    ],
+    "13040": [
+      3,
+      0
+    ],
+    "13041": [
+      0,
+      1
+    ],
+    "13042": [
+      2,
+      1
+    ],
+    "13043": [
+      4,
+      1
+    ]
+  }
+}

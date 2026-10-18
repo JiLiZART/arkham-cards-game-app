@@ -1,0 +1,178 @@
+{
+  "id": "the-drowned-quarter",
+  "name": "The Drowned Quarter",
+  "card": "11536",
+  "intro": "The sound of crackling electricity greets you as you enter the undersea dome. Flooded trenches and crumbling ruins cover the round plaza on the seafloor. Try as you might, your eyes keep drifting to the ocean beyond the alien barrier. A bloom of jellyfish floats dreamily through the tenebrous depths. If the energy field were to disappear for any reason, the expedition would surely be swept away.",
+  "encounterSets": [
+    "the_drowned_quarter",
+    "alien_machinery",
+    "cosmic_legacy",
+    "deep_ones",
+    "elder_mist",
+    "tdc_flood",
+    "rlyeh",
+    "undersea_creatures"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "11539"
+  ],
+  "agendas": [
+    "11537",
+    "11538"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "11540"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "11552",
+        "11549",
+        "11549b",
+        "11550",
+        "11550b"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "11540"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -3
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -3
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "On the other side of the dome entrance, you look through the gossamer barrier to the ocean floor. The ocean reclaimed the alien dome in mere seconds. It is a minor miracle that you weren’t swept away.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "The strange node pulses in your hand, projecting a soft bubble of light that repels the falling debris. You make it to the entrance as the dome bursts like a bubble. The expedition looks on in a mixture of awe and fear as a torrent of seawater reclaims the alien structure. A small prick of pain shoots through your palm, and you look down to see the node bury itself in your palm, sending spidery black hairs radiating out under your skin. They retract painlessly when you pull the node away. Tillinghast will certainly be pleased with this find.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "barrier_node",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "The reactivated core makes quick work of the flooded dome, draining the water in mere minutes. You survey the perimeter of the sunken ruin with the expedition, marveling at its ancient grandeur. The feeling of walking on a dry ocean floor, with fish flitting beyond the flickering bubble, is like something out of a dream. After several hours, the expedition presses on.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "the_power_was_diverted",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 2,
+          "who": "each"
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "The energy field protecting the tunnel back to the city continues to hold strong. The jagged foundations of R’lyeh continue to break off in pieces as the city rises. It is time to move on.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "the_drowned_quarter",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "the_drowned_quarter",
+  "connections": [],
+  "oneWay": [],
+  "layout": {
+    "11540": [
+      0,
+      0
+    ]
+  }
+}

@@ -1,0 +1,264 @@
+{
+  "id": "the-apiary",
+  "name": "The Apiary",
+  "card": "11553",
+  "intro": "The dank tunnels beneath R’lyeh branch and thread endlessly like the capillaries of some giant beast. Shining nodules are stationed at intervals in the walls, pulsing with soft light. After making camp on the third evening, you sit across the tunnel from Andy as he scribbles furiously in his notebook. The conversation soon turns to the events that led you both into Tillinghast’s employ.",
+  "encounterSets": [
+    "the_apiary",
+    "cosmic_legacy",
+    "elder_mist",
+    "the_inescapable",
+    "pilgrims",
+    "pentagram",
+    "striking_fear"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "11556",
+    "11557"
+  ],
+  "agendas": [
+    "11554",
+    "11555"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "11559",
+        "11559b"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "11574",
+        "11580",
+        "11580b",
+        "11568",
+        "11581",
+        "11581b",
+        "11582",
+        "11744",
+        "11583",
+        "11562",
+        "11560"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "11559"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -3
+      },
+      "tablet": {
+        "modifier": -5
+      },
+      "elderThing": {
+        "modifier": -6
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -3
+      },
+      "tablet": {
+        "modifier": -5
+      },
+      "elderThing": {
+        "modifier": -6
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "You pull a flailing worm from your neck as you escape the putrid tunnels. Hopefully you aren’t infected…",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "11583",
+          "who": "choice"
+        },
+        {
+          "do": "record",
+          "key": "the_apiary",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "The last of the survivors emerges from the fetid tunnels. After thanking you, the pilgrims show you the tunnel they took from the “heart of the city.” As you leave, Andy wipes ichor off of his camera lens. “There’s another roll of worthless film. One shot could’ve made my career. I might as well have thrown all my film overboard on the way here.”",
+      "effects": [
+        {
+          "do": "record",
+          "key": "pilgrims_were_saved",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "the_apiary",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 2,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "Shell-shocked, you emerge from the tunnels to find the vast antechamber where you began. If any pilgrims survived, they did not linger. After a long silence, the expedition prepares to move on. Andy narrows his eyes at a trail of blood on the floor, noting that if a pilgrim had been dragged away, it would be much messier. Their trail may lead to “the city core” as Maria put it.",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "11583",
+          "who": "choice"
+        },
+        {
+          "do": "record",
+          "key": "pilgrims_were_devoured",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "the_apiary",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "The expedition treks back to the apiary entrance, covered in gore. You scratch a persistent itch on the back of your neck, hoping you weren’t infected. Splintered memories from your brief moment as part of the hive mind continue to encroach on your thoughts. You doubt you will ever feel quite the same again.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "exterminated_the_alien_parasites",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "the_apiary",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R4": {
+      "title": "Resolution 4",
+      "text": "You eventually find your old route. Several more days’ journey brings you to a large round door the size of a bank vault. After pressing several alien glyphs in turn, the door rolls back to reveal a dry path winding along the seafloor toward a softly glowing dome. A shimmering, gossamer energy field holds back the weight of the ocean. As you marvel at the miraculous path and dome, a chunk of obsidian loosens and falls from above onto the dome. Rather than shatter, the dome ripples, pliant, as the rock falls through with a thunderous crash.\n“This is impossible,” gasps Ruby. “Something in that dome is powering the barrier. Looks like it holds back water, but lets other things pass through. Whatever’s doing it could be a good find for Randall.” She looks up the sheer wall leading to the surface.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "the_apiary",
+  "connections": [
+    [
+      "11559",
+      "11560"
+    ],
+    [
+      "11559",
+      "11562"
+    ],
+    [
+      "11559",
+      "11559b"
+    ],
+    [
+      "11559b",
+      "11560"
+    ],
+    [
+      "11559b",
+      "11562"
+    ],
+    [
+      "11562",
+      "11560"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "11559": [
+      0,
+      0
+    ],
+    "11560": [
+      3,
+      0
+    ],
+    "11562": [
+      2,
+      0
+    ],
+    "11559b": [
+      1,
+      0
+    ]
+  }
+}

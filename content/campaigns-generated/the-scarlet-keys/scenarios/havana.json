@@ -1,0 +1,206 @@
+{
+  "id": "havana",
+  "name": "Dancing Mad",
+  "card": "09591",
+  "intro": "As it turns out, finding the Red Coterie operating out of Havana is the easiest part of your trip to Cuba. According to your intel, Mr. Álvarez can often be seen spending his nights at Café Luna—a hot spot among the locals and American tourists looking to escape the iron jaws of Prohibition. Open at nearly all hours of the night and serving a variety of liquors that would make even the most seasoned bootlegger’s eyes bulge, the bar has become one of the most popular in all of Havana.\nYou arrive at peak hours, hoping to use the crowd to blend in. For all you know, Mr. Álvarez may have been warned of your approach. As soon as you arrive, you are greeted by an array of bright lights and a crowd almost too thick to squeeze past. Live jazz resounds from within the club, and many are dancing and reveling—some before they even get inside. A bouncer in a black pinstripe suit greets you at the door, giving you the once-over but not bothering to pat you down, ask for a password, or any of the usual hoops you might have to jump through back in the speakeasies hidden throughout the States.\nOnce inside, you head straight for the bartender and struggle to get his attention. You order a drink as a cover, but his expression changes the moment you say that you’re looking for a Mr. Desiderio Álvarez. Eyes narrow with suspicion, he nonetheless nods in the direction of a roped-off hallway in the back corner of the room, guarded by two more suits. Both of them flank you as you approach, and follow you into what you can only assume to be the club’s VIP section. There, in a dim, smoky back room, sits none other than the “man in the blood-soaked suit,” so named for the red accents adorning his otherwise black suit—or perhaps it is simply a metaphor. He inhales slowly from a cigarette hanging loosely from his lips as he appraises you. Across from him sit two others, an elderly Cuban gent in a red suit vest, puffing on a thick cigar, and a dangerous-looking woman in a red dress who sips from a martini glass. All three of them have murder in their eyes.\n“Who are these idiotas?” Mr. Álvarez asks one of the guards escorting you.\n“They asked to speak with you, Desi,” the man stammers.\n“Oh. Well, pour ‘em something hard, will you? Don’t just stand there.” After a quick nod, your escort jaunts out of the room, leaving you with the three apparent Coterie agents. “Come, sit.” You politely turn down a variety of smokes and take a seat at the table. “So you were looking for me?”\nYou nod and inform Mr. Álvarez that he is a person of interest in your investigation, that you knew he often frequented this very bar, and that you were hoping to simply ask him a few questions. Without hesitation, the woman in red pulls a long knife from out of seemingly nowhere. But the man in the suit holds out his hand, and she slides the blade back into her garter belt, covering it with the fabric of her dress.",
+  "encounterSets": [
+    "dancing_mad",
+    "agents_of_the_outside",
+    "cleanup_crew",
+    "crimson_conspiracy",
+    "secret_war",
+    "shadow_of_a_doubt"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "09595",
+    "09596",
+    "09599"
+  ],
+  "agendas": [
+    "09592",
+    "09593",
+    "09594"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "09601",
+        "09604",
+        "09600b",
+        "09605",
+        "09602",
+        "09603"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "09601"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -4
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -1
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -4
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -1
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -6
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -1
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -6
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -1
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "Deal or not, you can’t stay in Havana any longer. Your escape from the city is a blur of gunfire and fractured space, of pounding rain and roiling clouds, of imposters in familiar skin and eyes on every street corner. Eventually, somehow, you make it off the streets, commandeering a boat moored in Havana Harbor and setting off at once.\nAs your heart finally settles and your mind sets to work deciphering the things you’ve seen, you worry that your escape, while prudent, might have consequences for you in the future. And you have no new Keys or leads to show for it, either. But, despite the close call, you survived and are remembered—that must count for something.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "record",
+          "key": "cell_did_not_discover_the_truth_in_havana",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "have_not_seen_the_last_of_desi",
+          "value": true
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "You recap the night’s events in your head as Desi calls an impromptu meeting with the rest of his crew. “I have to sort through this,” he mutters to you in frustration. “The fact that any of them could be… y’know… well, it puts things into perspective. Not sure who to trust.” He certainly seems to be back to normal. You must have made the right choice. Then again… your mind wanders to the version of Desi who stalked you through the rainy Havana streets, to gunshots and distortions in the sky. You can’t help but continue to scan Desi’s eyes for any sign—any at all—that he is not who he claims to be. You find none. Or perhaps the mimic simply knows how to act now that it has been in his skin for so long? “Well,” he interrupts your thoughts, “I guess I owe you my end of the bargain. ‘Blackbird Solitaire.’”\nYou blink in confusion. “‘Blackbird Solitaire,’” he repeats. “It’s one of the passphrases for my hideout in Ybor City. We rotate passphrases whenever I grant someone in my crew access, which is… rare. Not even the rest of the Coterie knows how to get in. They think it’s just a front, anyway. I think most of ‘em don’t understand what I’m really up to most nights.” As if sensing your next question, a smile crawls along his lips. “Cleaning up the city, that is.” He flicks his cigarette into a wet puddle, not seeming to understand the irony in the act. “Anyway—7th Avenue. Old condemned cigar factory. You can’t miss it. Got at least one of those things you’re after stored inside. Just give it a week or two before they get the message about the new passphrase. Then it’s all yours.” Then Desi loads a new magazine into his Thompson and turns to address his crew. “Now if you’ll excuse me, I have some imposters to root out.” You decide to leave before you’re forced to know exactly how he plans to do that.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "record",
+          "key": "desi_is_in_your_debt",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "know_the_passphrase",
+          "value": true
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "Though the danger seems to have receded, your worry only grows with each passing minute and each lost memory. Who did you come here with…? Who did you meet…? It all seems to blur together in your mind. You recall enough to know the fate that must have befallen those lost. No, not just the people—the distorted cloud chasing you throughout the city—the breathing walls, the shifting pavement, eyes in the lights, ears in the music—\nYou gasp for air as though choked by the night itself. It sounds impossible, but it must be: They took everything. Stole the walls, the sky, the city itself. Mind reeling, you flee through the rainy streets as though chased by horrors unimaginable. You push your way onto the first boat leaving the harbor and never look back. You don’t breathe easy until you know for sure the sky itself cannot devour you.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "record",
+          "key": "cell_did_not_discover_the_truth_in_havana",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "have_not_seen_the_last_of_desi",
+          "value": true
+        }
+      ]
+    }
+  },
+  "i18nId": "havana",
+  "connections": [
+    [
+      "09601",
+      "09604"
+    ],
+    [
+      "09602",
+      "09603"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "09601": [
+      1,
+      0
+    ],
+    "09604": [
+      2,
+      0
+    ],
+    "09600b": [
+      0,
+      1
+    ],
+    "09605": [
+      3,
+      1
+    ],
+    "09602": [
+      1,
+      2
+    ],
+    "09603": [
+      2,
+      2
+    ]
+  }
+}

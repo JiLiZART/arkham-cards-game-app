@@ -1,0 +1,186 @@
+{
+  "id": "the-pit-of-despair",
+  "name": "The Pit of Despair",
+  "card": "07041",
+  "intro": "Your eyes flutter open with the languor of one who has slept for days on end. Your senses are in no hurry to return. You blink and struggle to see through the inky black surrounding you. Every inch of you aches with dull, throbbing pain. Your skin is cold and numb, and your clothes are waterlogged. Your mind swims with half-articulated thoughts and tangled memories. You have no idea where you are or how you got here.\nYou snap to attention, heart racing in your chest. You lie on a jagged stone floor in a shallow pool of dark, ice-cold water. Knowing panic will only make the situation worse, you take a series of deep, meditative breaths. you try to remember something—anything—that might allow you to retrace your steps, but your mind is blank. You remember who you are, but nothing whatsoever from the recent past. You steady yourself and examine your surroundings.\nThe chamber appears to be a natural cave formation. Kelp dangles from the ceiling. The stone walls and floor are wet and slimy. A rhythmic drip, drip, drip echoes throughout the otherwise silent cave. This cavern has been underwater, and not too long ago. A result of the tides, perhaps? You swallow your fear like a lump of cold iron. If it is low tide now… A cold shudder ripples up your spine. You examine the ceiling and are surprised to see a slab of metal set into the rough stone overhead. Its polished surface is alien to the rest of the natural cavern. You call out for help, hoping somebody can hear.\nYour dread deepens at the reply: an awful croaking and gurgling that permeates the tunnels—a sound no human could make.",
+  "encounterSets": [
+    "the_pit_of_despair",
+    "creatures_of_the_deep",
+    "flooded_caverns",
+    "rising_tide",
+    "shattered_memories",
+    "agents_of_cthulhu",
+    "rats"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "07045",
+    "07046"
+  ],
+  "agendas": [
+    "07042",
+    "07043",
+    "07044"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "07047"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "07051",
+        "07050",
+        "07052",
+        "07053",
+        "07054",
+        "07055"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "07047"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -1
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -1
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    }
+  },
+  "resolutions": {
+    "R1": {
+      "title": "Resolution 1",
+      "text": "In the distance, the sky is a dark crimson, and the full moon hangs just below the blackened sun. You are about to close your eyes and surrender to unconsciousness when a stranger's voice startles you back to your feet. \"Oh! You are alive?\" Even through her strained voice, you can hear a rhythmic Indian accent and the unwavering confidence of a trained professional. Standing in front of you is a woman with long, raven-black hair. Her tattered trench coat has seen better days, and bruises splash across her dirt-covered skin. \"You seem confused. Why are you looking at me like that?\" the stranger asks.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "none": {
+      "title": "No resolution was reached",
+      "text": "",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "the_pit_of_despair",
+  "connections": [
+    [
+      "07052",
+      "07047"
+    ],
+    [
+      "07047",
+      "07052"
+    ],
+    [
+      "07047",
+      "07052"
+    ],
+    [
+      "07051",
+      "07052"
+    ],
+    [
+      "07051",
+      "07047"
+    ],
+    [
+      "07051",
+      "07050"
+    ],
+    [
+      "07050",
+      "07052"
+    ],
+    [
+      "07050",
+      "07047"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "07052": [
+      0,
+      0
+    ],
+    "07047": [
+      1,
+      0
+    ],
+    "07051": [
+      0,
+      1
+    ],
+    "07050": [
+      1,
+      1
+    ]
+  }
+}

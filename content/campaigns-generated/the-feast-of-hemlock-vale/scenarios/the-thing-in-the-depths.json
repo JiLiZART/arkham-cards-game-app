@@ -1,0 +1,220 @@
+{
+  "id": "the-thing-in-the-depths",
+  "name": "The Thing in the Depths",
+  "card": "10588",
+  "intro": "The road to Eastwick Bog branches sharply off from the same road you took in from Akwan. The landscape is incredibly vibrant, almost tropical, with rainbow-patterned tree trunks standing guard at the edge of black mirrored ponds. Dr. Marquez and Judith trade friendly barbs in the truckbed, occasionally swatting away gnats. As the conversation turns sour, you attempt to break the tension by asking Judith for a hunting story.",
+  "encounterSets": [
+    "the_thing_in_the_depths",
+    "blight",
+    "the_forest",
+    "mutations",
+    "residents"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "10591",
+    "10592"
+  ],
+  "agendas": [
+    "10589",
+    "10590"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "10593a"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "10600",
+        "10601",
+        "10602"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "10593a"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -3
+      },
+      "tablet": {
+        "modifier": -5
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -3
+      },
+      "tablet": {
+        "modifier": -5
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "You awaken in a glade near the bog shore with Theo sitting nearby. Before you can say anything, the young man shushes you and points to a break in the trees. Silhouetted against a sliver of light is a magnificent stag. Its long, looping antlers are covered in moss and fungal growths and it glows with a pale incandescence. Theo grins. “Isn’t it beautiful? I mean, I’m sure it’d kill us if it saw us. But, well,” he waves his hand. “I’m glad I found you. There was something moving down on the shore, but I didn’t bother checking. I’m just glad you’re okay.”",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 1,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "You can tell from the moment your clippers cut the stem that something is wrong. The reptile moans as you lift the glowing gray blossom from its back, then opens its mouth to expose rows of serrated teeth as it snaps at you. Arsenic white fluid spurts from the hollow stem, coating you with a stinking secretion that burns your skin. You nearly drop the blossom as you stumble back, realizing your mistake. The vapors from the fluid make you dizzy and lend the forest an exaggerated fluorescence. The poor reptilian creature flails in pain and sinks, leaving swirls of milky blood on the surface. A sharp pain forces you to drop the alkaloid blossom, and you examine your hand to find a sharp cut on your palm. The shape of the wound suggests the stem had begun to penetrate the flesh. You put the sample in a specimen jar and head for the southern shore.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "chelydran_hybrid_perished",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 1,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "A gun clicks behind you. “Hold back,” Judith says emerging from the undergrowth. She takes aim at the reptilian hybrid. “Keep clear of that thing.”\nDr. Marquez steps between Judith and the creature. “With all due respect, that ‘thing’ is completely harmless.” As if to underscore her point, the creature chews a flowering branch.\n“Nothing on this island is harmless,” Judith retorts. “Everything, even the sweet turtles and the cute deer and the damn rabbits are deadly. I don’t know why the villagers aren’t more afraid. I can guarantee you this turtle...thing doesn’t just munch flowers.”\n“If you shoot the thing I came here to survey, you will not be paid,” Dr. Marquez says coldly. The professor pulls out a notebook and begins sketching the creature. A hush falls over the group as a pair of frogs swim across the pond in front of the creature. In an instant, the chelydran hybrid opens its mouth to expose 4 separate rows of teeth lining the back of its throat, then snaps up both frogs.\nDr. Marquez puts down her sketchbook. “What in the hell—”",
+      "effects": [
+        {
+          "do": "record",
+          "key": "chelydran_hybrid_lived",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 3,
+          "who": "each"
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "You find the blossoming reptile in a black mirrored pond. Before you can so much as move, a spined tentacle raises the hybrid into the air over a charnel maw. The creature lets out one last pitiful groan as it is dropped into the fanged mouth. Your stomach turns when you hear its shell crack between the abomination’s powerful jaws. A low, satisfied rumble follows as the Thing sinks beneath the bog.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "chelydran_hybrid_devoured",
+          "value": true
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 0,
+          "mental": 1
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 1,
+          "who": "each"
+        }
+      ]
+    },
+    "R4": {
+      "title": "Resolution 4",
+      "text": "The Thing roars in pain as it flails its many limbs. Shockwaves ripple through the soft, wet ground, reducing groves of trees to tinder. You scramble for purchase as two sharp pops punctuate the air. The monstrous creature gurgles as its deflating air bladders struggle to buoy it up. Its last roar is cut short as the Thing sinks below the fetid marsh.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "thing_in_the_depths_was_defeated",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R5": {
+      "title": "Resolution 5",
+      "text": "“Miskatonic Survey, June 1926. Members Marquez, Musgrave, et alii. Area surveyed: Eastwick Bog. Numerous abnormally sized flora, parasitic variety capable of controlling its host. Oppressively abundant ecosystem. Aggressive water life. More jungle than forest. Not your average bog. Will need to return with more funding.”",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "record",
+          "key": "eastwick_bog",
+          "value": true
+        }
+      ]
+    }
+  },
+  "i18nId": "the_thing_in_the_depths",
+  "connections": [],
+  "oneWay": [],
+  "layout": {
+    "10593a": [
+      0,
+      0
+    ]
+  }
+}

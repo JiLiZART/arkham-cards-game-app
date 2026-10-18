@@ -1,7 +1,9 @@
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
+import { loadCampaign, loadPack } from "../content";
 import { applyScenarioEnd, scenarioSetup, startCampaign } from "./campaign";
 import { card, createCard, def, enemyStat, findByCode, inv, locationByName, moveCard } from "./core";
 import { createGame, type Result } from "./engine";
+import { finalResolution } from "./rules/scenario";
 import { commitDone, db, gOf, mutate, pick, skipMulligans, start } from "./testkit";
 
 const ROLAND = "01001";
@@ -195,5 +197,46 @@ describe("The Devourer Below", () => {
     r = pick(r, /^Throw Lita/);
     r = settle(r); // Umôrdhoth is massive: the action provokes an attack of opportunity first
     expect(r.state.resolution).toBe("R3");
+  });
+});
+
+describe("a generated scenario ends at its last act or agenda", () => {
+  beforeAll(async () => {
+    await loadPack("dwl");
+    await loadCampaign("the-dunwich-legacy");
+  });
+  const dunwich = (seed = 3) => skipMulligans(start("extracurricular-activity", [ROLAND], seed, { campaignId: "the-dunwich-legacy", chaosBag: ["+1"] as never }));
+
+  it("advancing the act when no act is left ends the scenario: After Hours, made the last, names none and gives Resolution 1", () => {
+    let r = dunwich();
+    r = mutate(r, (g) => {
+      for (const id of g.s.actDeck.splice(0)) moveCard(g, id, "removed");
+      inv(g, g.s.lead).clues = 20;
+    });
+    expect(act(r)).toBe("After Hours");
+    r = pick(r, /^Advance act/);
+    r = settle(r);
+    expect(r.state.phase).toBe("ended");
+    expect(r.state.resolution).toBe("R1");
+  });
+
+  it("the last agenda's back names the resolution: The Beast Unleashed gives Resolution 4", () => {
+    let r = dunwich();
+    r = mutate(r, (g) => {
+      const last = g.s.agendaDeck.pop()!;
+      for (const id of [...g.s.agendaDeck.splice(0), g.s.agenda!]) moveCard(g, id, "removed");
+      moveCard(g, last, "agenda");
+      card(g, g.s.agenda!).doom = 20;
+    });
+    r = pick(r, "End turn");
+    r = settle(r);
+    expect(r.state.resolution).toBe("R4");
+  });
+
+  it("without a marker the last act gives the first numbered resolution, the last agenda none", () => {
+    expect(finalResolution("Proceed to <b>(→R2)</b>.", ["none", "R1", "R2"], "act")).toBe("R2");
+    expect(finalResolution("The campus is quiet again.", ["none", "R2", "R1"], "act")).toBe("R1");
+    expect(finalResolution("Each investigator is defeated.", ["none", "R1"], "agenda")).toBe("none");
+    expect(finalResolution("(→R5)", ["none", "R1"], "act")).toBe("R1");
   });
 });

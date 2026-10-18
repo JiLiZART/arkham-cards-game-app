@@ -1,0 +1,178 @@
+{
+  "id": "ice-and-death-part-2",
+  "name": "Ice and Death, Part II",
+  "card": "08501",
+  "intro": "Your team scrambles in preparation to search for those who went missing in the night. You hate the idea of venturing back out into the freezing cold so soon after taking refuge, but you have no choice if you are to find your companions.",
+  "encounterSets": [
+    "lost_in_the_night",
+    "left_behind",
+    "the_crash",
+    "creatures_in_the_ice"
+  ],
+  "sideDecks": {
+    "_setAside": [
+      "ice_and_death"
+    ]
+  },
+  "acts": [
+    "08526"
+  ],
+  "agendas": [
+    "08523",
+    "08524",
+    "08525"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "08510",
+        "08511",
+        "08512",
+        "08507",
+        "08508",
+        "08505",
+        "08504",
+        "08502",
+        "08513",
+        "08514",
+        "08503",
+        "08506",
+        "08509"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "08510"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -4
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -4
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "As the night ends, the storm arrives in its full ferocity. Raging, icy winds and dense snowfall make your task impossible. You'll never find the remaining team members in these conditions, and even if you did…\nA hard lump of guilt and despair forms in your throat. There's no way they would survive in this storm, not without supplies or shelter. That you are forced to choose between your life and theirs is a burden you will surely carry with you for the rest of your life. And you'll be lucky if that's more than a couple of days.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "It is clear that something compelled your teammates to venture away from the safety of your camp. Something alien and mysterious. Something that defies your understanding of Antarctica. None of those who wandered off remember why they did so or what they were doing. It is almost as if their memories were wiped clean. Or perhaps their consciousness was supplanted by another…\nIn any event, they seem to have recovered. You mourn those you've lost and prepare for the day ahead. Rest or no rest, you have only one chance if you are to survive.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "ice_and_death_part_2",
+  "connections": [],
+  "oneWay": [],
+  "layout": {
+    "08510": [
+      0,
+      0
+    ],
+    "08511": [
+      6,
+      0
+    ],
+    "08512": [
+      3,
+      1
+    ],
+    "08507": [
+      1,
+      2
+    ],
+    "08508": [
+      5,
+      2
+    ],
+    "08505": [
+      2,
+      4
+    ],
+    "08504": [
+      4,
+      4
+    ],
+    "08502": [
+      3,
+      6
+    ],
+    "08513": [
+      1,
+      7
+    ],
+    "08514": [
+      5,
+      7
+    ],
+    "08503": [
+      3,
+      8
+    ],
+    "08506": [
+      3,
+      10
+    ],
+    "08509": [
+      3,
+      12
+    ]
+  }
+}

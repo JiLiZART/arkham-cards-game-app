@@ -3,7 +3,7 @@ import { existsSync, readFileSync, statSync } from "node:fs";
 import { loadContentFromDisk } from "../src/content/node";
 import { checkSounds } from "../src/content/soundChecks";
 import { ANIMATED } from "../src/ui/store";
-import { checkIcons, MANIFEST, SPRITE, setsWithoutIcon, spriteIds } from "./import-icons";
+import { checkIcons, MANIFEST, SPRITE, SPRITE_CAMPAIGNS, setsWithoutIcon, spriteIds } from "./import-icons";
 import { cycleCoverage } from "./snapshotText";
 
 const { db, errors } = await loadContentFromDisk();
@@ -20,9 +20,10 @@ errors.push(...checkSounds(db.sounds, fileSize, ANIMATED));
 const read = (f: string) => (existsSync(f) ? readFileSync(f, "utf8") : null);
 const manifest = read(MANIFEST);
 const sprite = read(SPRITE);
-errors.push(...checkIcons(db, manifest === null ? null : JSON.parse(manifest), sprite === null ? null : spriteIds(sprite)));
+const campaignSprite = read(SPRITE_CAMPAIGNS) ?? "";
+errors.push(...checkIcons(db, manifest === null ? null : JSON.parse(manifest), sprite === null ? null : spriteIds(sprite), spriteIds(campaignSprite)));
 // sets of the other cycles' cards that have no icon yet are only listed: a scenario that uses one needs it (npm run import:icons)
-const noIcon = sprite === null ? [] : setsWithoutIcon(db, spriteIds(sprite));
+const noIcon = sprite === null ? [] : setsWithoutIcon(db, [...spriteIds(sprite), ...spriteIds(campaignSprite)]);
 if (noIcon.length) console.log(`note: ${noIcon.length} encounter sets of the other cycles have no icon in the sprite yet (${noIcon.slice(0, 4).join(", ")}…)`);
 // every prompt has an instruction for the bar, and the tips and How to play are written, in every language
 const en = db.i18n.en?.ui ?? {};

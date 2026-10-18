@@ -1,0 +1,221 @@
+{
+  "id": "blob-that-ate-everything-else",
+  "name": "The Blob That Ate Everything Else",
+  "card": "85001",
+  "intro": "<blockquote>Incident Report: 8L-08\nThursday, 07/05/1928\nBlackwater, MA\n\n0312 hours - Impact event just outside of Blackwater. Intercepted police call, agents sent to investigate. Interviewed local farmer, Ron Graham; claims meteor was several feet wide, greenish hue. Crater roughly 100 yards in diameter. Radiation detected in outlying area. Recommend immediate quarantine and further observation by research team. Situation under control.</blockquote>",
+  "encounterSets": [
+    "blob",
+    "blob_single_group",
+    "blob_that_ate_everything_else"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "85007"
+  ],
+  "agendas": [
+    "85002",
+    "85003",
+    "85004"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "85014",
+        "85012",
+        "85010",
+        "85013",
+        "85011"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "85043",
+        "85040",
+        "85041",
+        "85042"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "85014"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -1
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -1
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -1
+      },
+      "cultist": {
+        "modifier": -3
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -7
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -1
+      },
+      "cultist": {
+        "modifier": -3
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -7
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "Each investigator was defeated",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "Nothing is left of Blackwater now. The quarantine is broken. The anomaly cannot be contained. First it will spread throughout the countryside, devouring all in its path. Soon all of Massachusetts will be devoured. Then the entirety of New England. It has burrowed beneath the ground and cannot be stopped even by the oceans. No continent is safe. Every living organism on the planet will be devoured. And then, so too will the Earth.\n…but that won't be the end.\nNot even the void of space can stop the creature's growth. In time, it will continue to expand and devour until there is nothing left but the cold emptiness of space and the blob that ate everything.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "blob_devoured_universe",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "<blockquote>Incident Report: 8L-08, continued\nWednesday, 07/11/1928\nBlackwater, MA\n0742 hours - Contact made with ████████████ subject. Subject ███████████ meteor; researchers are unsure whether meteor served as an avenue for ██████████ or as some kind of ██████████████. Initiated immediate emergency response procedures. At roughly 0500 hours, subject was eliminated by third party. As per operational protocol, samples have been collected and sent to ██████ for further study. Agents are currently scrubbing remainder of subject's presence from quarantine zone. Strongly recommend immediate expunging of previous conflicting incident report.\nCitizens of Blackwater have been informed ██████████ quarantine ████████ contagion of airborne virus. ███████ several infections ████████; medical teams en route to confirm.\nAgents are attempting to meet with unlicensed combatants for debriefing. Due to sensitive nature of incident, recommend release followed by close observation. Story must be kept ████████████. ████████████████████████████████████████████.\nDestroy the incident report immediately. Additional instructions to follow.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "blob_contained",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 3,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "blob_that_ate_everything_else",
+  "connections": [
+    [
+      "85014",
+      "85012"
+    ],
+    [
+      "85014",
+      "85010"
+    ],
+    [
+      "85014",
+      "85012"
+    ],
+    [
+      "85014",
+      "85013"
+    ],
+    [
+      "85014",
+      "85011"
+    ],
+    [
+      "85012",
+      "85010"
+    ],
+    [
+      "85012",
+      "85014"
+    ],
+    [
+      "85010",
+      "85014"
+    ],
+    [
+      "85010",
+      "85011"
+    ],
+    [
+      "85011",
+      "85014"
+    ],
+    [
+      "85011",
+      "85014"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "85010": [
+      2,
+      2
+    ],
+    "85011": [
+      2,
+      3
+    ],
+    "85012": [
+      1,
+      2
+    ],
+    "85013": [
+      4,
+      2
+    ],
+    "85014": [
+      2,
+      0
+    ]
+  }
+}

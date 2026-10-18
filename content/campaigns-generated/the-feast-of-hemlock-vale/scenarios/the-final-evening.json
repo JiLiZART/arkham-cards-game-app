@@ -1,0 +1,315 @@
+{
+  "id": "the-final-evening",
+  "name": "The Final Evening",
+  "card": "10704",
+  "intro": "A flowering procession filled with riotous, gaudy colors files through the village toward the Crossroads. There must be several hundred people here tonight, if not more. You keep pace with Dr. Marquez toward the ghoulish effigy, spinning with reflected lights. Mother Rachel stands at the center of the crowd, holding her arms out like branches before the mirrored tree.",
+  "encounterSets": [
+    "the_final_day",
+    "day_of_the_feast",
+    "residents",
+    "the_vale"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "10687"
+  ],
+  "agendas": [
+    "10686",
+    "10689"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "10690a",
+        "10690b",
+        "10706a",
+        "10706b",
+        "10691a",
+        "10691b",
+        "10708a",
+        "10708b"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "10690a"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": 1
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -1
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": 1
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -1
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "You awaken to a crowd of smiling faces and silent animal masks staring at you, swaying in the evening air. You are tied to the effigy by barbed wire. Mother Rachel wipes blood from a long sharp knife and stands before you, smiling warmly. “I’m so glad you’re awake.”",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "Mother Rachel staggers back, clutching her side. “Don’t you see our true purpose? We are light coiled in flesh. And the flesh longs to join an even greater light: an infinite and eternal brilliance.” The matron casts off her cloak, flecked with blood, to bare her shoulder. Her skin is knotted like bark with glowing nodes and alien patterns. Suddenly, the moon darkens in a total lunar eclipse, casting everything in crimson.\n“My children, the hour is at hand,” Mother Rachel says rapturously. She raises her arms up to mimic the many-faced effigy. A hush falls over the crowd as each of the revelers mimics her pose in turn.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "You stammer an apology, but Mother Rachel holds one hand up to silence you and says dispassionately, “You failed me. But I suppose I was wrong to ask so much of you. All things move toward their end. You were called to witness the final miracle. The heavenly ascendance. And witness it you shall.”",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "Mother Rachel stands before the effigy in the crossroads, her arms unfurled like branches toward the sky. The ground around her is littered with the bones and the corpses of her followers. The crowd sighs in unison as a rush of euphoria spreads through the room. “It is here!” the matron shouts. The moon darkens in a total lunar eclipse, casting everything in crimson.\nThe earth around the effigy cracks as it collapses into a sinkhole. Your bliss gives way to nausea and acute pain as your skin sloughs off in patches. As you freefall into a crystalline abyss, you are accompanied by Mother Rachel’s voice singing a reverent hymn, accompanied by a rush of joy, of anger and emptiness—sorrow—curiosity—longing—despair.\nYour breath stops as you feel yourself transfigured into a hundred other versions of yourself: human and inhuman, alive and dead, young and old. As you stare upward at a roiling, miasmic cloud, you see Mother Rachel tranfigured into an effulgent, glassy shape wreathed in mist. This is your place. Your purpose. As your flesh hardens into gray rock, then glassy crystal, you reach up, straining to touch her divine shape.\nAnd then, a cold and quiet emptiness.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R4": {
+      "title": "Resolution 4",
+      "text": "“That’s enough,” Dr. Marquez strides past the grinning revelers and strikes Mother Rachel with her cane. She turns to exhort the crowd. “It’s not too late! We can still leave!” You shout your support. Mother Rachel lurches to her feet, drunkenly holding the ceremonial knife, and swings weakly at the professor. Marquez pushes her away with a well-timed kick.\nThe earth around the effigy cracks with prismatic light, then turns blindingly bright as the pillar collapses into crystalline shards. A blinding pillar of light shoots out of the nearby well. All you hear as the crossroads collapse is Mother Rachel’s empty laughter.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "the_final_evening",
+  "connections": [
+    [
+      "10690a",
+      "10690b"
+    ],
+    [
+      "10690a",
+      "10706a"
+    ],
+    [
+      "10690a",
+      "10706b"
+    ],
+    [
+      "10690a",
+      "10691a"
+    ],
+    [
+      "10690a",
+      "10691b"
+    ],
+    [
+      "10690a",
+      "10708a"
+    ],
+    [
+      "10690a",
+      "10708b"
+    ],
+    [
+      "10690b",
+      "10706a"
+    ],
+    [
+      "10690b",
+      "10706b"
+    ],
+    [
+      "10690b",
+      "10691a"
+    ],
+    [
+      "10690b",
+      "10691b"
+    ],
+    [
+      "10690b",
+      "10708a"
+    ],
+    [
+      "10690b",
+      "10708b"
+    ],
+    [
+      "10706a",
+      "10706b"
+    ],
+    [
+      "10706a",
+      "10691a"
+    ],
+    [
+      "10706a",
+      "10691b"
+    ],
+    [
+      "10706a",
+      "10708a"
+    ],
+    [
+      "10706a",
+      "10708b"
+    ],
+    [
+      "10706b",
+      "10691a"
+    ],
+    [
+      "10706b",
+      "10691b"
+    ],
+    [
+      "10706b",
+      "10708a"
+    ],
+    [
+      "10706b",
+      "10708b"
+    ],
+    [
+      "10691a",
+      "10691b"
+    ],
+    [
+      "10691a",
+      "10708a"
+    ],
+    [
+      "10691a",
+      "10708b"
+    ],
+    [
+      "10691b",
+      "10708a"
+    ],
+    [
+      "10691b",
+      "10708b"
+    ],
+    [
+      "10708a",
+      "10708b"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "10690a": [
+      0,
+      0
+    ],
+    "10690b": [
+      1,
+      0
+    ],
+    "10706a": [
+      2,
+      0
+    ],
+    "10706b": [
+      3,
+      0
+    ],
+    "10691a": [
+      4,
+      0
+    ],
+    "10691b": [
+      5,
+      0
+    ],
+    "10708a": [
+      6,
+      0
+    ],
+    "10708b": [
+      7,
+      0
+    ]
+  }
+}

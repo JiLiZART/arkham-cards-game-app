@@ -175,7 +175,8 @@ export function PileColumn() {
       <Pile label={tr("pile.encounter")} count={game.encounterDeck.length} top={game.encounterDeck[0] ?? null} faceUp={false} kind="encounter" id="encounter" />
       <Pile label={tr("pile.discard")} count={game.encounterDiscard.length} id="encounterDiscard" top={game.encounterDiscard.at(-1) ?? null} faceUp kind="encounter" />
       <Pile label={tr("pile.victory")} count={victory.length} top={victory.at(-1)?.id ?? null} faceUp kind="encounter" />
-      {Object.entries(game.sideDecks).map(([name, deck]) => (
+      {/* a side deck named "_…" only holds cards for the setup to take (generated scenarios): not a pile */}
+      {Object.entries(game.sideDecks).filter(([name]) => !name.startsWith("_")).map(([name, deck]) => (
         <Pile key={name} label={`${name[0].toUpperCase()}${name.slice(1)}`} count={deck.length} top={deck[0] ?? null} faceUp={false} kind="encounter" />
       ))}
       {me && (

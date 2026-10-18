@@ -1,0 +1,512 @@
+{
+  "id": "the-eternal-slumber",
+  "name": "The Eternal Slumber",
+  "card": "83001",
+  "intro": "<fancy>Greetings,</fancy>\n<fancy>I'm sorry. I know it has been some time since my last correspondence. I am writing to you now because there is nobody I can trust here in Cairo. I don't even know if this letter will make it to you safely. I can only hope it does, for all our sakes.</fancy>\n<fancy>There's something wrong in this city. It started a few weeks ago. The head curator of the Museum of Egyptian Antiquities fell asleep and simply never awoke. I thought nothing of it at first; just a medical curiosity, a mystery the doctors would solve in due time. But then it happened again. And again. More and more, people all across the city started falling into comas. Now it's happening every night. . . And as I write to you, they are taking my husband John to the hospital.</fancy>\n<fancy>I'm scared. I don't want to fall asleep and never wake up again. But more than that, I'm worried that there are people purposely inflicting this curse on others. And if so, why?</fancy>\n<fancy>Please, I am begging you. I need your help.</fancy>\n<fancy>Yours sincerely,</fancy>\n<fancy>Jessie Burk</fancy>",
+  "encounterSets": [
+    "the_eternal_slumber",
+    "sands_of_egypt",
+    "brotherhood_of_the_beast",
+    "abyssal_tribute"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "83005",
+    "83006",
+    "83007"
+  ],
+  "agendas": [
+    "83002",
+    "83003",
+    "83004"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "83012",
+        "83009",
+        "83008",
+        "83011",
+        "83037",
+        "83010"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "83013",
+        "83055",
+        "83056",
+        "83045",
+        "83038",
+        "83039",
+        "83040",
+        "83041",
+        "83042",
+        "83043",
+        "83044"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "83008"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": 0
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": 0
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -6
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -6
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "The city of Cairo sleeps and will never wake. In the west, the Brotherhood rejoices, for their prophecy is about to be fulfilled. And deep in the land of dreams, their Chosen grips his weapon for the first time.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "record",
+          "key": "tes_brotherhood_schemes_continue",
+          "value": true
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "Jessie Burke cries with joy as her husband opens his eyes for the first time in weeks. “J… Jessie?” John trembles as he tries and fails to stand. His wife places a hand on his shoulder to steady him. “I thought you would never wake,” she admits, wiping tears from her eyes. “If it weren’t for our friends here, you’d still be under.” John turns to you, his expression dire. “Then you’re the only ones who can stop what is coming,” he says cryptically. “In my dreams, I saw him. The one they called Xzharah.” He swallows hard. “And he is like nothing we’ve ever seen before.”",
+      "effects": [
+        {
+          "do": "record",
+          "key": "tes_curse_of_slumber_lifted",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "tes_taken_by_the_abyss",
+          "value": true
+        },
+        {
+          "do": "earnCard",
+          "code": "83055",
+          "who": "choice"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "Neith rises to her feet. Most of her power has been drained, but the strength of several dreamers still sustains her. “They have planned for centuries. Their day of reckoning is coming. Nothing can stop that. Not I. Certainly not you.” You notice she speaks as if she were a third party, and you press further. “Do you think I had a choice?” She scoffs. “None can withstand Xzharah. You will see. He will bend your will just as he did mine.” Her shadow grows and warps , misshapen. “It is the Abyss he wants. If you wish to stop him, head west. Xzharah awaits beyond the Gate.” Neith’s shadow consumes her body whole, and she vanishes from sight. Only her amulet remains.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "tes_aware_of_xzharahs_plan",
+          "value": true
+        },
+        {
+          "do": "earnCard",
+          "code": "83056",
+          "who": "choice"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "the_eternal_slumber",
+  "connections": [
+    [
+      "83012",
+      "83008"
+    ],
+    [
+      "83009",
+      "83008"
+    ],
+    [
+      "83008",
+      "83011"
+    ],
+    [
+      "83008",
+      "83010"
+    ],
+    [
+      "83011",
+      "83037"
+    ],
+    [
+      "83038",
+      "83008"
+    ],
+    [
+      "83038",
+      "83009"
+    ],
+    [
+      "83038",
+      "83010"
+    ],
+    [
+      "83038",
+      "83011"
+    ],
+    [
+      "83038",
+      "83012"
+    ],
+    [
+      "83038",
+      "83037"
+    ],
+    [
+      "83038",
+      "83039"
+    ],
+    [
+      "83038",
+      "83040"
+    ],
+    [
+      "83038",
+      "83041"
+    ],
+    [
+      "83038",
+      "83042"
+    ],
+    [
+      "83038",
+      "83043"
+    ],
+    [
+      "83038",
+      "83044"
+    ],
+    [
+      "83039",
+      "83008"
+    ],
+    [
+      "83039",
+      "83009"
+    ],
+    [
+      "83039",
+      "83010"
+    ],
+    [
+      "83039",
+      "83011"
+    ],
+    [
+      "83039",
+      "83012"
+    ],
+    [
+      "83039",
+      "83037"
+    ],
+    [
+      "83039",
+      "83040"
+    ],
+    [
+      "83039",
+      "83041"
+    ],
+    [
+      "83039",
+      "83042"
+    ],
+    [
+      "83039",
+      "83043"
+    ],
+    [
+      "83039",
+      "83044"
+    ],
+    [
+      "83040",
+      "83008"
+    ],
+    [
+      "83040",
+      "83009"
+    ],
+    [
+      "83040",
+      "83010"
+    ],
+    [
+      "83040",
+      "83011"
+    ],
+    [
+      "83040",
+      "83012"
+    ],
+    [
+      "83040",
+      "83037"
+    ],
+    [
+      "83040",
+      "83041"
+    ],
+    [
+      "83040",
+      "83042"
+    ],
+    [
+      "83040",
+      "83043"
+    ],
+    [
+      "83040",
+      "83044"
+    ],
+    [
+      "83041",
+      "83008"
+    ],
+    [
+      "83041",
+      "83009"
+    ],
+    [
+      "83041",
+      "83010"
+    ],
+    [
+      "83041",
+      "83011"
+    ],
+    [
+      "83041",
+      "83012"
+    ],
+    [
+      "83041",
+      "83037"
+    ],
+    [
+      "83041",
+      "83042"
+    ],
+    [
+      "83041",
+      "83043"
+    ],
+    [
+      "83041",
+      "83044"
+    ],
+    [
+      "83042",
+      "83008"
+    ],
+    [
+      "83042",
+      "83009"
+    ],
+    [
+      "83042",
+      "83010"
+    ],
+    [
+      "83042",
+      "83011"
+    ],
+    [
+      "83042",
+      "83012"
+    ],
+    [
+      "83042",
+      "83037"
+    ],
+    [
+      "83042",
+      "83043"
+    ],
+    [
+      "83042",
+      "83044"
+    ],
+    [
+      "83043",
+      "83008"
+    ],
+    [
+      "83043",
+      "83009"
+    ],
+    [
+      "83043",
+      "83010"
+    ],
+    [
+      "83043",
+      "83011"
+    ],
+    [
+      "83043",
+      "83012"
+    ],
+    [
+      "83043",
+      "83037"
+    ],
+    [
+      "83043",
+      "83044"
+    ],
+    [
+      "83044",
+      "83008"
+    ],
+    [
+      "83044",
+      "83009"
+    ],
+    [
+      "83044",
+      "83010"
+    ],
+    [
+      "83044",
+      "83011"
+    ],
+    [
+      "83044",
+      "83012"
+    ],
+    [
+      "83044",
+      "83037"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "83008": [
+      1,
+      1
+    ],
+    "83009": [
+      0,
+      1
+    ],
+    "83010": [
+      1,
+      2
+    ],
+    "83011": [
+      2,
+      1
+    ],
+    "83012": [
+      1,
+      0
+    ],
+    "83037": [
+      3,
+      1
+    ],
+    "83038": [
+      0,
+      3
+    ],
+    "83039": [
+      1,
+      3
+    ],
+    "83040": [
+      2,
+      3
+    ],
+    "83041": [
+      3,
+      3
+    ],
+    "83042": [
+      4,
+      3
+    ],
+    "83043": [
+      5,
+      3
+    ],
+    "83044": [
+      6,
+      3
+    ]
+  }
+}

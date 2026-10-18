@@ -1,0 +1,315 @@
+{
+  "id": "into-the-maelstrom",
+  "name": "Into the Maelstrom",
+  "card": "07311",
+  "intro": "Your plan is simple. Foolish, but simple. The knowledge you've gathered leads you to conclude that the Esoteric Order of Dagon is the cause of both the rising tides and the appearance of the horrific \"Deep Ones.\" Not only that, but over the course of the last few decades, the Order has transformed the townsfolk into more of the horrific creatures, using them to infiltrate Innsmouth from within. But worst of all, the entity the cult worships-Dagon-is just one of two. His mate, Hydra, still slumbers in the depths below Innsmouth, waiting to awaken and stake her claim over an endless ocean.\nThese are the conclusions that have led to your plan: Travel once more to Devil Reef, descend into the city of the Deep Ones that lies hidden at the bottom of the ocean, and put a stop to the Deep Ones' plans once and for all. Agent Harper helps you prepare, loading your possessions onto the boat you managed to steal from what remained of Innsmouth's docks. \"We only have one shot at this,\" Harper says. \"I don't think I need to remind you what might happen if we fail.\" She looks pointedly at the flooded ruins of Innsmouth. \"Are you ready?\"",
+  "encounterSets": [
+    "into_the_maelstrom",
+    "agents_of_hydra",
+    "creatures_of_the_deep",
+    "flooded_caverns",
+    "shattered_memories",
+    "syzygy",
+    "ancient_evils"
+  ],
+  "sideDecks": {
+    "_setAside": [
+      "the_pit_of_despair"
+    ]
+  },
+  "acts": [
+    "07315",
+    "07316"
+  ],
+  "agendas": [
+    "07312",
+    "07313",
+    "07314"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "07052",
+        "07320"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "07086",
+        "07332",
+        "07331a",
+        "07331b",
+        "07330a",
+        "07330b"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "07052"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -1
+      },
+      "cultist": {
+        "modifier": -3
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -1
+      },
+      "cultist": {
+        "modifier": -3
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -4
+      },
+      "tablet": {
+        "modifier": -5
+      },
+      "elderThing": {
+        "modifier": -6
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -4
+      },
+      "tablet": {
+        "modifier": -5
+      },
+      "elderThing": {
+        "modifier": -6
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "The chanting of the Deep Ones rises to a crescendo. The alien walls of Y'ha-nthlei twist and contort before your eyes, like lungs desperately clawing for breath. The air becomes thin. Water seeps through the walls. Nothing can stop the pull of the tide now. Nothing can stop the great flood. A triumphant roar sounds throughout the city, and the citizens of the deep rise to meet the cry in their jubilance. You collapse in exhaustion and resignation. Your part is over, now. The part of humanity will be soon to follow.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "You frantically make your way back to the entrance to the undersea city, hoping desperately to escape alive. You feel the familiar tugging of the currents all around you as you emerge on the other side of the otherworldly threshold. Your heart does not stop racing until you finally break the surface of the water and collapse on an outcropping of rock.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "escaped_yhanthlei",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 2,
+          "mental": 0
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "As you emerge from the caverns of Devil Reef and look up into the sky, you are relieved to see the sun and moon no longer in alignment. The tide appears to be retreating, as well. The seas seem to have finally calmed.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "plot_of_the_deep_ones_was_thwarted",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "As you emerge from the caverns of Devil Reef and look up into the sky, your throat clenches tight. The sun and moon are still locked in unholy alignment, and the sea still swallows most of the coast.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "flood_has_begun",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R4": {
+      "title": "Resolution 4",
+      "text": "Agent Harper is the first to speak. \"We did it. I can't believe we did it.\" You nod. Not only were you able to stop the Deep Ones, but you helped Agent Harper accomplish her mission as well. She digs through her belongings for a bright orange firearm with a large barrel, loads a flare into it, and launches the bright light into the sky with a victorious smirk. \"They'll be coming for us any minute now. I'm sure you'll be rewarded handsomely for your help. So long as you agree to speak to nobody about any of this, of course,\" she says. You nod. It's not like anyone would believe you, anyway.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "agent_harpers_mission_is_complete",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 3,
+          "who": "each"
+        }
+      ]
+    },
+    "R5": {
+      "title": "Resolution 5",
+      "text": "There is no sign of Agent Harper anywhere. Perhaps she never made it out of the city alive. You hold out hope that she is out there, somewhere. Still, you are relieved that at the very least, nobody will ever be able to use the riches of Y'ha-nthlei to manipulate humanity ever again. Not the government, not the Deep Ones-nobody.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "riches_of_the_deep_are_lost_forever",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 3,
+          "who": "each"
+        }
+      ]
+    },
+    "R6": {
+      "title": "Resolution 6",
+      "text": "Agent Harper is the first to speak. \"Well. Mission accomplished, I suppose.\" You bite your lip. She may have accomplished her mission, but the toll of the Deep Ones' ritual on the world will never fade. She digs through her belongings for a bright orange firearm with a large barrel, loads a flare into it, and launches the bright light into the sky with a victorious smirk. \"They'll be coming for us any minute now. Then we'll blow that city apart, and hopefully, this will all be over,\" she says. You aren't so sure. Much of the damage has already been done. Will it ever truly end? Or are you just delaying the inevitable?",
+      "effects": [
+        {
+          "do": "record",
+          "key": "agent_harpers_mission_is_complete_at_what_cost",
+          "value": true
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 0,
+          "mental": 2
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R7": {
+      "title": "Resolution 7",
+      "text": "There is no sign of Agent Harper anywhere. Perhaps she never made it out of the city alive. You hold out hope that she is out there, somewhere. Still, you are relieved that at the very least, nobody will ever be able to use the riches of Y'ha-nthlei to manipulate humanity ever again. Not the government, not the Deep Ones-nobody. You peer out once more to the waves thrashing across the horizon. The flood seems to have halted. Perhaps you have harmed the Deep Ones and their masters enough that their ritual has been foiled. Or perhaps they are merely biding their time, waiting until they can emerge once more. Is this truly over? Or did you merely delay the inevitable?",
+      "effects": [
+        {
+          "do": "record",
+          "key": "riches_of_the_deep_are_destroyed_at_what_cost",
+          "value": true
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 0,
+          "mental": 2
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R8": {
+      "title": "Resolution 8",
+      "text": "As the ritual concludes, the eastern seaboard becomes the first coastline drowned by the rising sea. The rest of the continent is swift to follow. The icecaps melt, consuming the remainder of the Earth. Cities fall. Humanity is no longer. All that is left is the ocean and the ever-static alignment of celestial bodies that looms overhead. And of course, the inheritors of this new Earth: Hydra, Dagon, and their children.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "deep_ones_have_flooded_the_earth",
+          "value": true
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 0,
+          "mental": 0
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "into_the_maelstrom",
+  "connections": [
+    [
+      "07052",
+      "07320"
+    ],
+    [
+      "07052",
+      "07320"
+    ],
+    [
+      "07320",
+      "07052"
+    ],
+    [
+      "07320",
+      "07052"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "07052": [
+      0,
+      0
+    ],
+    "07320": [
+      1,
+      1
+    ]
+  }
+}

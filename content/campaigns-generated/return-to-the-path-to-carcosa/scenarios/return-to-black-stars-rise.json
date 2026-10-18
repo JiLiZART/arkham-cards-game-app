@@ -1,0 +1,484 @@
+{
+  "id": "return-to-black-stars-rise",
+  "name": "Return to Black Stars Rise",
+  "card": "03274",
+  "intro": "The island commune of Mont Saint-Michel lies off the northwestern coast of France. It is beautiful, elegant, and enigmatic—a place out of a fairy tale. Only this tale is one of horrors and madness. During low tide, you would be able to reach the island on foot by crossing the tidal causeway that emerges from the sea. However, by the time you reach the coast, the tide is much higher than you’d anticipated. Dark clouds cover the sky, and a distant crash of thunder signals the start of the oncoming storm. You find a boat whose captain is willing to take you to the island, and prepare for the ritual to come.",
+  "encounterSets": [
+    "black_stars_rise",
+    "return_to_black_stars_rise",
+    "evil_portents",
+    "byakhee",
+    "inhabitants_of_carcosa",
+    "stranger",
+    "pentagram",
+    "delusory_evils",
+    "flood",
+    "vortex"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "03281"
+  ],
+  "agendas": [
+    "03275",
+    "03277"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "03287",
+        "03291",
+        "03289",
+        "03285",
+        "03284",
+        "03283"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "03088",
+        "03300",
+        "03301",
+        "03294",
+        "52055",
+        "03295",
+        "52056",
+        "03299",
+        "03298"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "03283"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -2
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -2
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "Each investigator was defeated",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "You hold your breath as you swim through freezing water toward the spires below. As you get closer, you see ripples throughout the water, as though you are peering into a reflection upon the sea’s surface. You break through the surface and gasp as air fills your lungs.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "opened_path_below",
+          "value": true
+        },
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "You marvel at the cloud-waves encircling you and fly toward the spires above. The desolate and inscrutable city of Carcosa towers before you. You suddenly realize you are falling—not floating—and a pulling force takes hold of your body.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "opened_path_above",
+          "value": true
+        },
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "When you awaken, you are sitting in the choeur gothique of Mont Saint-Michel’s abbey. No rain pelts the glass of the windows above, and you hear no thunder, nor the screeching of winged horrors overhead. Somehow, you had escaped the island’s certain doom. You creep to the door of the abbey and open it with trepidation. A dazzling light sears your eyes, and you lift your hand to block the glare of two suns. You stand overlooking the Lake of Hali. Black stars hang in the heavens above. Beyond, over leagues of tossing cloud- waves, the towers of Carcosa rise behind the shattered moon.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "carcosa_merged",
+          "value": true
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 0,
+          "mental": 0
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "return_to_black_stars_rise",
+  "connections": [
+    [
+      "03291",
+      "03289"
+    ],
+    [
+      "03284",
+      "03283"
+    ],
+    [
+      "03294",
+      "52055"
+    ],
+    [
+      "03294",
+      "52056"
+    ],
+    [
+      "03294",
+      "03287"
+    ],
+    [
+      "03294",
+      "03291"
+    ],
+    [
+      "03294",
+      "03289"
+    ],
+    [
+      "03294",
+      "03285"
+    ],
+    [
+      "03294",
+      "03284"
+    ],
+    [
+      "03294",
+      "03283"
+    ],
+    [
+      "03294",
+      "03295"
+    ],
+    [
+      "03294",
+      "03299"
+    ],
+    [
+      "03294",
+      "03298"
+    ],
+    [
+      "52055",
+      "52056"
+    ],
+    [
+      "52055",
+      "03287"
+    ],
+    [
+      "52055",
+      "03291"
+    ],
+    [
+      "52055",
+      "03289"
+    ],
+    [
+      "52055",
+      "03285"
+    ],
+    [
+      "52055",
+      "03284"
+    ],
+    [
+      "52055",
+      "03283"
+    ],
+    [
+      "52055",
+      "03295"
+    ],
+    [
+      "52055",
+      "03299"
+    ],
+    [
+      "52055",
+      "03298"
+    ],
+    [
+      "03295",
+      "52056"
+    ],
+    [
+      "03295",
+      "03287"
+    ],
+    [
+      "03295",
+      "03291"
+    ],
+    [
+      "03295",
+      "03289"
+    ],
+    [
+      "03295",
+      "03285"
+    ],
+    [
+      "03295",
+      "03284"
+    ],
+    [
+      "03295",
+      "03283"
+    ],
+    [
+      "03295",
+      "03299"
+    ],
+    [
+      "03295",
+      "03298"
+    ],
+    [
+      "52056",
+      "03287"
+    ],
+    [
+      "52056",
+      "03291"
+    ],
+    [
+      "52056",
+      "03289"
+    ],
+    [
+      "52056",
+      "03285"
+    ],
+    [
+      "52056",
+      "03284"
+    ],
+    [
+      "52056",
+      "03283"
+    ],
+    [
+      "52056",
+      "03299"
+    ],
+    [
+      "52056",
+      "03298"
+    ],
+    [
+      "03299",
+      "03287"
+    ],
+    [
+      "03299",
+      "03291"
+    ],
+    [
+      "03299",
+      "03289"
+    ],
+    [
+      "03299",
+      "03285"
+    ],
+    [
+      "03299",
+      "03284"
+    ],
+    [
+      "03299",
+      "03283"
+    ],
+    [
+      "03299",
+      "03298"
+    ],
+    [
+      "03298",
+      "03287"
+    ],
+    [
+      "03298",
+      "03291"
+    ],
+    [
+      "03298",
+      "03289"
+    ],
+    [
+      "03298",
+      "03285"
+    ],
+    [
+      "03298",
+      "03284"
+    ],
+    [
+      "03298",
+      "03283"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "52055": [
+      1,
+      4
+    ],
+    "52056": [
+      3,
+      4
+    ],
+    "03287": [
+      2,
+      0
+    ],
+    "03291": [
+      0,
+      1
+    ],
+    "03289": [
+      1,
+      1
+    ],
+    "03285": [
+      3,
+      1
+    ],
+    "03284": [
+      2,
+      2
+    ],
+    "03283": [
+      2,
+      3
+    ],
+    "03294": [
+      0,
+      4
+    ],
+    "03295": [
+      2,
+      4
+    ],
+    "03299": [
+      4,
+      4
+    ],
+    "03298": [
+      5,
+      4
+    ]
+  }
+}

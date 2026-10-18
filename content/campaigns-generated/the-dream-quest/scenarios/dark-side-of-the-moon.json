@@ -1,0 +1,209 @@
+{
+  "id": "dark-side-of-the-moon",
+  "name": "Dark Side of the Moon",
+  "card": "06206",
+  "intro": "Over the next few days, you learn more about your captors, but nothing about the black galley’s destination. It seems the Corsairs who hunted you down and captured you were only agents—or perhaps slaves—of a much greater evil: a race of greyish-white toad-like creatures with no eyes and slippery skin concealed beneath a loose disguise of silken clothing. You notice the creatures tend to stay below deck, and none of them deign to interact with you at all. Despite their disguises, the mere sight of one makes you retch. If they are indeed the masters of the Corsairs, this cannot bode well for you. You are kept apart from Virgil, and suspect he is on a different ship entirely.\nMore days pass. You have no way of telling how long it’s been since your capture. You have been kept well fed—that is, if being forced to eat bitter porridge from a dirty clay bowl counts as “well fed.” What concerns you most is the ship itself. Though you are sure it’s still moving, you no longer feel it rock back and forth as the waves push it from side to side, nor do you hear the sounds of the ocean or of gulls cawing over the coast. In fact, you hear very little at all now: only the occasional commands of one of the beasts from below deck, and the shouting of Corsairs in reply. No churning sea. No wind in the sails. Nothing at all.\nPanic seizes your mind. What if you are destined for some strange port from which there can be no return? Could they have have sailed off the face of the planet itself? You have to do something. Escape, somehow. You try desperately to come up with a plan of action, but in vain. Corsairs relentlessly patrol the brig, and even if you managed to slip your bonds and sneak past them, where would you go?\nJust as you begin to lose hope, a familiar face descends from the top deck. It is the ship captain you hired in Dylath-Leen: a chubby, middleaged fellow with a bushy beard and long hair pulled into a bun atop his head. He peeks around, realizes he is alone with you, and runs to your side. “I am so sorry, my friends,” he stammers quietly. “I had no idea who I was dealing with. I was tricked, I swear. I did not know that they were…I did not know…” he trails off, red-faced with guilt. You aren’t entirely sure what he means, but obviously he had something to do with your capture. Regardless, he is your only chance at escape. You tell him all will be forgiven if he helps you. He ponders for a moment, looks around, then finally nods and slices through your bonds with a curved knife.\nFreedom has never tasted so sweet. You stretch your aching muscles and search nearby for your belongings, but there is little time to waste. Keeping a lookout, your rescuer whispers, “There may be a rowboat you can use on the top deck, but we’ll have to be quiet as mice. If they spot—” his voice suddenly catches in his throat, along with a sharp, jagged blade. He makes a dreadful gurgle as blood wells in his mouth, and he collapses. Behind him, a Corsair flashes a sadistic grin at his next victims: you.",
+  "encounterSets": [
+    "dark_side_of_the_moon",
+    "corsairs",
+    "dreamers_curse",
+    "ancient_evils"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "06210",
+    "06211",
+    "06212",
+    "06213"
+  ],
+  "agendas": [
+    "06207",
+    "06208",
+    "06209"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "06215",
+        "06217",
+        "06218",
+        "06216"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "06214",
+        "06226",
+        "06224",
+        "06225",
+        "06233"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "06215"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -1
+      },
+      "elderThing": {
+        "modifier": 1
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -1
+      },
+      "elderThing": {
+        "modifier": 1
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": 0
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": 0
+      }
+    }
+  },
+  "resolutions": {
+    "R1": {
+      "title": "Resolution 1",
+      "text": "As the white galley glides silently back toward the Earth, its captain sings a soft, melodic shanty, which the ship’s oarsmen repeat. You seem to know the language well, despite having never heard it before. You ask after your course, but the bearded man does not reply other than to continue his harmonious song. You plead with him to aid you in your search for unknown Kadath, believing it to be of the utmost importance. “You should not seek to disturb the gods,” the man warns, his song interrupted. “They are far greater than you or I. Do you not see the folly in your ambition?” You beseech him once more, telling him you must bring back proof of the Dreamlands, and cannot return home without the aid of the gods. “Would that be so dire a fate? Look around you.”\nYou do as the captain requests, and are met with a scene of such serene beauty that it leaves you breathless. The seas below glitter in the moonlight like an ocean of diamonds. Along the horizon, you see crystalline coastlines, blissful countrysides, lush mountain vistas, and emerald-green gardens. The air is crisp and cool as you descend below the clouds. Your heart swells with the sweet fragrance of flowers from the nearby coast. Never in all your years in “reality” have you experienced a beauty so real.\nMaybe staying wouldn’t be so bad. You’ve already spent weeks—no, months—in this land. There have been hardships, yes, but could you really return to your mundane reality after everything you’ve seen and experienced in this wondrous land?\nThen, far to the north, you see it. Looming just over the horizon, or perhaps beyond the dreams of Earth itself. A white peak, atop which sits an azure beacon of refracted moonlight. The bearded man follows your gaze. “So be it,” he sighs. He changes course, following now behind a celestial bird whose plumage matches the vibrant sky. “We sail to the abode of the gods themselves.”",
+      "effects": [
+        {
+          "do": "record",
+          "key": "travelled_to_the_cold_wastes",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "randolph_survived_the_voyage",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "none": {
+      "title": "No resolution was reached",
+      "text": "",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "dark_side_of_the_moon",
+  "connections": [
+    [
+      "06215",
+      "06217"
+    ],
+    [
+      "06215",
+      "06218"
+    ],
+    [
+      "06215",
+      "06216"
+    ],
+    [
+      "06215",
+      "06214"
+    ],
+    [
+      "06217",
+      "06218"
+    ],
+    [
+      "06217",
+      "06216"
+    ],
+    [
+      "06217",
+      "06214"
+    ],
+    [
+      "06218",
+      "06216"
+    ],
+    [
+      "06218",
+      "06214"
+    ],
+    [
+      "06216",
+      "06214"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "06215": [
+      0,
+      0
+    ],
+    "06217": [
+      1,
+      0
+    ],
+    "06218": [
+      2,
+      0
+    ],
+    "06216": [
+      3,
+      0
+    ],
+    "06214": [
+      4,
+      0
+    ]
+  }
+}

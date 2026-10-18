@@ -1,0 +1,244 @@
+{
+  "id": "blood-on-the-altar",
+  "name": "Blood on the Altar",
+  "card": "02195",
+  "intro": "When you finally reach Dunwich, you are greeted by Zebulon Whateley and Earl Sawyer, another man from the village who had met with Dr. Armitage during the incident several months ago. “Things ain’t lookin’ too good here,” Earl tells you. “Some folk up and went missin’ a few nights ago. ‘Dem whippoorwills won’ shut up. Dunno what yer doin’ here, but last time you Arkham folk came ‘round it was bad news. Very bad news.” His eyes blink rapidly, and he coughs and looks away.\n“Look, why don’t you rest fer the night an’ look fer whatever it is yer looking fer t’morra,” Zebulon chimes in, putting a wrinkled hand on your shoulder. You begin to protest, but your aching muscles and weary mind won’t allow you to refuse. The elderly man offers to take you in for the night, and drives you to his home at the outskirts of Dunwich village. The town is disheveled and eerie, and you find yourself wishing you hadn’t come here at all. You fall asleep on the ride over and scarcely remember anything else from that night.\nWhen you awaken, you find that Zebulon’s house is abandoned, and there is no sign of the elderly man, or of Mr. Sawyer. Fearing the worst, you head into the village of Dunwich to investigate, hoping to find answers.",
+  "encounterSets": [
+    "blood_on_the_altar",
+    "dunwich",
+    "whippoorwills",
+    "nightgaunts",
+    "ancient_evils",
+    "naomis_crew"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "02199",
+    "02200"
+  ],
+  "agendas": [
+    "02196",
+    "02197",
+    "02198"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "02210",
+        "02212",
+        "02208",
+        "02201",
+        "02206",
+        "02204",
+        "02202"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "02216",
+        "02214",
+        "02215"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "02201"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -1
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -1
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -1
+      },
+      "cultist": {
+        "modifier": -4
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -1
+      },
+      "cultist": {
+        "modifier": -4
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "The cries of the whippoorwills fade into the distance, and the town of Dunwich is filled with an eerie silence. All that can be heard is the dry whistle of the chill wind and the slow rustling of dead leaves. There is no sign of the missing townsfolk, nor will there be ever again.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "ritual_completed",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 2,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "As you land the finishing blow, the creature’s body explodes into hundreds of squirming ropelike appendages, wriggling across the ground and climbing up the walls. You’re so startled that you aren’t fast enough to prevent them from escaping the room. Even so, whatever that creature was, you’re glad it’s now dead.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "killed_silas_bishop",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 2,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "With the creature that once was Silas lashing out at you from its chains, you have little time to react. Knowing that the Necronomicon might have a spell or incantation that could subdue Silas, you fend off the abomination long enough to find a passage that can help. With no time to spare, you recite the Latin incantation, and find that the words come effortlessly to your tongue, as though recalled from an earlier memory. The creature’s body begins to shrink and melt away as the incantation builds, its cries terrifying and haunting. In the end, all that is left is the disfigured corpse of a man—Silas Bishop. You find a silver pendant emblazoned with an odd constellation tucked into his shirt. You take it with you, hoping to find a use for it.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "restored_silas_bishop",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 2,
+          "who": "each"
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "With the creature that once was Silas lashing out at you from its chains, you have little time to react. Hoping there is something in the chamber you can use to your advantage, you fend off the abomination long enough to find a journal; many of its passages are written in Latin. It appears to be a handwritten excerpt from the Necronomicon, its purpose unknown. With no time to spare, you recite the incantation, stumbling over the words and feeling your throat tighten with each sentence. The creature’s body begins to shrink and melt away as the incantation continues, its cries terrifying and haunting. In the end, all that is left is a pile of wet and sticky ichor, and a rotten stench.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "banished_silas_bishop",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 2,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "blood_on_the_altar",
+  "connections": [
+    [
+      "02214",
+      "02210"
+    ],
+    [
+      "02214",
+      "02212"
+    ],
+    [
+      "02214",
+      "02208"
+    ],
+    [
+      "02214",
+      "02201"
+    ],
+    [
+      "02214",
+      "02206"
+    ],
+    [
+      "02214",
+      "02204"
+    ],
+    [
+      "02214",
+      "02202"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "02210": [
+      1,
+      0
+    ],
+    "02212": [
+      3,
+      0
+    ],
+    "02208": [
+      0,
+      1
+    ],
+    "02201": [
+      2,
+      1
+    ],
+    "02206": [
+      4,
+      1
+    ],
+    "02204": [
+      1,
+      2
+    ],
+    "02202": [
+      3,
+      2
+    ],
+    "02214": [
+      0,
+      3
+    ]
+  }
+}

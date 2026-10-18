@@ -1,0 +1,164 @@
+{
+  "id": "court-of-the-ancients",
+  "name": "Court of the Ancients",
+  "card": "11612",
+  "intro": "Time seems to slip away as you follow the dark tunnels out of the heart of the city. Eventually the constant churn and thrum of machinery melts away, replaced by an ominous silence. Andy has only just proposed that you turn around to find another route when the endless stairs come to a stop. An intricately carved door is set in the ceiling above you. Pressing a panel in its center reveals a vast, airy structure that vaguely resembles the nave of some ancient alien cathedral. A towering lift dominates the center, surrounded by spiraling ringed floors. The walls are covered in countless alien glyphs, pulsing with green light. You wonder if the great archive might hold anything valuable.",
+  "encounterSets": [
+    "court_of_the_ancients",
+    "domination",
+    "dreams",
+    "elder_mist",
+    "rlyeh",
+    "star_spawn",
+    "stowaways"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "11616",
+    "11617"
+  ],
+  "agendas": [
+    "11613",
+    "11615"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "11619"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "11728",
+        "11638",
+        "11635"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "11619"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -3
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -3
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "The rest of the expedition tell you they found you standing at the edge of the towering climb as if sleepwalking. You rub your eyes. You have no memory of the alien court. And, given that it has almost entirely collapsed, you never will.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "court_of_the_ancients",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "Steeling yourself for another climb, you put one hand above the other, moving from handhold to handhold as the tower threatens to collapse under you. Eventually you pull yourself to the lip of the shattered dome and out to safety. Andy clambers out of the ancient court, followed by the rest of the expedition. You all look down at the dazzling skyline of R’lyeh, which seems to shift and sway strangely in the strong sea winds.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "court_of_the_ancients",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "After prodding and twisting at every ridge of the dais, it finally slides open. Below, a spiral stairway descending into deep darkness below. Another chunk of rock shatters on the floor of the ancient building. “We have to get out of here!” Ruby shouts. Wasting no time, you descend the stairs, leaving the crumbling tower and its ancient secrets behind.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "court_of_the_ancients",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "court_of_the_ancients",
+  "connections": [],
+  "oneWay": [],
+  "layout": {
+    "11619": [
+      0,
+      0
+    ]
+  }
+}

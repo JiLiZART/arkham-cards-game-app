@@ -10,6 +10,18 @@
   "torch": "the_gathering"
  },
  "symbols": {
+  "a_light_in_the_fog": {
+   "file": "a_light_in_the_fog.svg",
+   "set": "extra"
+  },
+  "a_phantom_of_truth": {
+   "file": "a_phantom_of_truth.svg",
+   "set": "extra"
+  },
+  "a_thousand_shapes_of_horror": {
+   "file": "a_thousand_shapes_of_horror.svg",
+   "set": "extra"
+  },
   "abominable_contessa": {
    "file": "abominable_contessa.svg",
    "set": "standalone"
@@ -38,20 +50,60 @@
    "file": "afflicted.svg",
    "set": "blood"
   },
+  "agents_of_atlach_nacha": {
+   "file": "agents_of_atlach_nacha.svg",
+   "set": "extra"
+  },
+  "agents_of_azathoth": {
+   "file": "agents_of_azathoth.svg",
+   "set": "extra"
+  },
   "agents_of_cthulhu": {
    "file": "agents_of_cthulhu.svg",
+   "set": "extra"
+  },
+  "agents_of_dagon": {
+   "file": "agents_of_dagon.svg",
    "set": "extra"
   },
   "agents_of_hastur": {
    "file": "agents_of_hastur.svg",
    "set": "extra"
   },
+  "agents_of_hydra": {
+   "file": "agents_of_hydra.svg",
+   "set": "extra"
+  },
+  "agents_of_nyarlathotep": {
+   "file": "agents_of_nyarlathotep.svg",
+   "set": "extra"
+  },
   "agents_of_shub": {
    "file": "agents_of_shub.svg",
    "set": "extra"
   },
+  "agents_of_the_colour": {
+   "file": "agents_of_the_colour.svg",
+   "set": "extra"
+  },
+  "agents_of_the_outside": {
+   "file": "agents_of_the_outside.svg",
+   "set": "extra"
+  },
+  "agents_of_the_unknown": {
+   "file": "agents_of_the_unknown.svg",
+   "set": "extra"
+  },
+  "agents_of_yig": {
+   "file": "agents_of_yig.svg",
+   "set": "extra"
+  },
   "agents_of_yog": {
    "file": "agents_of_yog.svg",
+   "set": "extra"
+  },
+  "agents_of_yuggoth": {
+   "file": "agents_of_yuggoth.svg",
    "set": "extra"
   },
   "agents_of_zburamoarte": {
@@ -62,9 +114,17 @@
    "file": "agility.svg",
    "set": "arkhamicons"
   },
+  "alexandria": {
+   "file": "alexandria.svg",
+   "set": "extra"
+  },
   "alien_interference": {
    "file": "alien_interference.svg",
    "set": "standalone"
+  },
+  "alien_machinery": {
+   "file": "alien_machinery.svg",
+   "set": "extra"
   },
   "all_or_nothing": {
    "file": "all_or_nothing.svg",
@@ -78,6 +138,10 @@
    "file": "ally_inverted.svg",
    "set": "arkhamicons"
   },
+  "anchorage": {
+   "file": "anchorage.svg",
+   "set": "extra"
+  },
   "ancient_evils": {
    "file": "ancient_evils.svg",
    "set": "extra"
@@ -85,6 +149,10 @@
   "ancient_hunger": {
    "file": "ancient_hunger.svg",
    "set": "standalone"
+  },
+  "anettes_coven": {
+   "file": "anettes_coven.svg",
+   "set": "extra"
   },
   "anything_once": {
    "file": "anything_once.svg",
@@ -97,6 +165,10 @@
   "arcane_inverted": {
    "file": "arcane_inverted.svg",
    "set": "arkhamicons"
+  },
+  "arcane_lock": {
+   "file": "arcane_lock.svg",
+   "set": "extra"
   },
   "arcane_x2": {
    "file": "arcane_x2.svg",
@@ -114,9 +186,17 @@
    "file": "arkham_incidents.svg",
    "set": "standalone"
   },
+  "armitages_fate": {
+   "file": "armitages_fate.svg",
+   "set": "extra"
+  },
   "assimilating_swarm": {
    "file": "assimilating_swarm.svg",
    "set": "standalone"
+  },
+  "at_deaths_doorstep": {
+   "file": "at_deaths_doorstep.svg",
+   "set": "extra"
   },
   "auto_fail": {
    "file": "auto_fail.svg",
@@ -126,13 +206,45 @@
    "file": "bad_blood.svg",
    "set": "standalone"
   },
+  "bad_luck": {
+   "file": "bad_luck.svg",
+   "set": "extra"
+  },
   "barkham_horror": {
    "file": "barkham_horror.svg",
    "set": "standalone"
   },
+  "beast_thralls": {
+   "file": "beast_thralls.svg",
+   "set": "extra"
+  },
+  "before_the_black_throne": {
+   "file": "before_the_black_throne.svg",
+   "set": "extra"
+  },
   "beta": {
    "file": "beta.svg",
    "set": "standalone"
+  },
+  "beyond_the_beyond": {
+   "file": "beyond_the_beyond.svg",
+   "set": "extra"
+  },
+  "beyond_the_gates_of_sleep": {
+   "file": "beyond_the_gates_of_sleep.svg",
+   "set": "extra"
+  },
+  "beyond_the_threshold": {
+   "file": "beyond_the_threshold.svg",
+   "set": "extra"
+  },
+  "bishops_thralls": {
+   "file": "bishops_thralls.svg",
+   "set": "extra"
+  },
+  "black_stars_rise": {
+   "file": "black_stars_rise.svg",
+   "set": "extra"
   },
   "blbe": {
    "file": "blbe.svg",
@@ -141,6 +253,10 @@
   "bless": {
    "file": "bless.svg",
    "set": "arkhamicons"
+  },
+  "blight": {
+   "file": "blight.svg",
+   "set": "extra"
   },
   "blob": {
    "file": "blob.svg",
@@ -174,9 +290,17 @@
    "file": "blood_moon.svg",
    "set": "blood"
   },
+  "blood_on_the_altar": {
+   "file": "blood_on_the_altar.svg",
+   "set": "extra"
+  },
   "bloodthirst": {
    "file": "bloodthirst.svg",
    "set": "blood"
+  },
+  "bloodthirsty_spirits": {
+   "file": "bloodthirsty_spirits.svg",
+   "set": "extra"
   },
   "body": {
    "file": "body.svg",
@@ -190,6 +314,10 @@
    "file": "brotherhood_of_the_beast.svg",
    "set": "standalone"
   },
+  "buenos_aires": {
+   "file": "buenos_aires.svg",
+   "set": "extra"
+  },
   "bullet": {
    "file": "bullet.svg",
    "set": "arkhamicons"
@@ -197,6 +325,10 @@
   "by_the_book": {
    "file": "by_the_book.svg",
    "set": "standalone"
+  },
+  "byakhee": {
+   "file": "byakhee.svg",
+   "set": "extra"
   },
   "card": {
    "file": "card-outline.svg",
@@ -222,8 +354,20 @@
    "file": "chilling_cold.svg",
    "set": "extra"
   },
-  "clue": {
-   "file": "clue.svg",
+  "city_of_sins": {
+   "file": "city_of_sins.svg",
+   "set": "extra"
+  },
+  "city_of_the_damned": {
+   "file": "city_of_the_damned.svg",
+   "set": "extra"
+  },
+  "city_of_the_elder_things": {
+   "file": "city_of_the_elder_things.svg",
+   "set": "extra"
+  },
+  "cleanup_crew": {
+   "file": "cleanup_crew.svg",
    "set": "extra"
   },
   "cob": {
@@ -238,13 +382,53 @@
    "file": "combat.svg",
    "set": "arkhamicons"
   },
+  "congress_of_the_keys": {
+   "file": "congress_of_the_keys.svg",
+   "set": "extra"
+  },
   "consternation_on_the_constellation": {
    "file": "consternation_on_the_constellation.svg",
    "set": "standalone"
   },
+  "corsairs": {
+   "file": "corsairs.svg",
+   "set": "extra"
+  },
   "cosmic_journey": {
    "file": "cosmic_journey.svg",
    "set": "standalone"
+  },
+  "cosmic_legacy": {
+   "file": "cosmic_legacy.svg",
+   "set": "extra"
+  },
+  "court_of_the_ancients": {
+   "file": "court_of_the_ancients.svg",
+   "set": "extra"
+  },
+  "creatures_in_the_ice": {
+   "file": "creatures_in_the_ice.svg",
+   "set": "extra"
+  },
+  "creatures_of_the_underworld": {
+   "file": "creatures_of_the_underworld.svg",
+   "set": "extra"
+  },
+  "creeping_cold": {
+   "file": "creeping_cold.svg",
+   "set": "extra"
+  },
+  "crimson_conspiracy": {
+   "file": "crimson_conspiracy.svg",
+   "set": "extra"
+  },
+  "cult_of_pnakotus": {
+   "file": "cult_of_pnakotus.svg",
+   "set": "extra"
+  },
+  "cult_of_the_yellow_sign": {
+   "file": "cult_of_the_yellow_sign.svg",
+   "set": "extra"
   },
   "cultist": {
    "file": "cultist.svg",
@@ -262,9 +446,25 @@
    "file": "curse_of_the_rougarou.svg",
    "set": "standalone"
   },
+  "curtain_call": {
+   "file": "curtain_call.svg",
+   "set": "extra"
+  },
+  "dancing_mad": {
+   "file": "dancing_mad.svg",
+   "set": "extra"
+  },
   "dark_rituals": {
    "file": "dark_rituals.svg",
    "set": "standalone"
+  },
+  "dark_side_of_the_moon": {
+   "file": "dark_side_of_the_moon.svg",
+   "set": "extra"
+  },
+  "dark_veiling": {
+   "file": "dark_veiling.svg",
+   "set": "extra"
   },
   "darkham": {
    "file": "darkham.svg",
@@ -274,17 +474,93 @@
    "file": "day.svg",
    "set": "arkhamicons"
   },
+  "day_of_the_feast": {
+   "file": "day_of_the_feast.svg",
+   "set": "extra"
+  },
+  "dead_ends": {
+   "file": "dead_ends.svg",
+   "set": "extra"
+  },
+  "dead_heat": {
+   "file": "dead_heat.svg",
+   "set": "extra"
+  },
+  "deadly_weather": {
+   "file": "deadly_weather.svg",
+   "set": "extra"
+  },
+  "dealings_in_the_dark": {
+   "file": "dealings_in_the_dark.svg",
+   "set": "extra"
+  },
   "death_of_the_stars": {
    "file": "death_of_the_stars.svg",
    "set": "standalone"
+  },
+  "decaying_reality": {
+   "file": "decaying_reality.svg",
+   "set": "extra"
   },
   "deep_ones": {
    "file": "deep_ones.svg",
    "set": "standalone"
   },
+  "delusions": {
+   "file": "delusions.svg",
+   "set": "extra"
+  },
+  "delusory_evils": {
+   "file": "delusory_evils.svg",
+   "set": "extra"
+  },
   "depraved_legions": {
    "file": "depraved_legions.svg",
    "set": "standalone"
+  },
+  "devil_reef": {
+   "file": "devil_reef.svg",
+   "set": "extra"
+  },
+  "dim_carcosa": {
+   "file": "dim_carcosa.svg",
+   "set": "extra"
+  },
+  "dogs_of_war": {
+   "file": "dogs_of_war.svg",
+   "set": "extra"
+  },
+  "domination": {
+   "file": "domination.svg",
+   "set": "extra"
+  },
+  "doomed_expedition": {
+   "file": "doomed_expedition.svg",
+   "set": "extra"
+  },
+  "dreamers_curse": {
+   "file": "dreamers_curse.svg",
+   "set": "extra"
+  },
+  "dreamlands": {
+   "file": "dreamlands.svg",
+   "set": "extra"
+  },
+  "dreams": {
+   "file": "dreams.svg",
+   "set": "extra"
+  },
+  "dunwich": {
+   "file": "dunwich.svg",
+   "set": "extra"
+  },
+  "echoes_of_the_past": {
+   "file": "echoes_of_the_past.svg",
+   "set": "extra"
+  },
+  "elder_mist": {
+   "file": "elder_mist.svg",
+   "set": "extra"
   },
   "elder_sign": {
    "file": "elder_sign.svg",
@@ -294,6 +570,10 @@
    "file": "elder_thing.svg",
    "set": "arkhamicons"
   },
+  "elder_things": {
+   "file": "elder_things.svg",
+   "set": "extra"
+  },
   "enthralling_encore": {
    "file": "enthralling_encore.svg",
    "set": "standalone"
@@ -302,9 +582,17 @@
    "file": "epic_multiplayer.svg",
    "set": "standalone"
   },
+  "erratic_fear": {
+   "file": "erratic_fear.svg",
+   "set": "extra"
+  },
   "eternal_slumber": {
    "file": "eternal_slumber.svg",
    "set": "standalone"
+  },
+  "evil_portents": {
+   "file": "evil_portents.svg",
+   "set": "extra"
   },
   "excelsior": {
    "file": "excelsior.svg",
@@ -313,6 +601,30 @@
   "excelsior_management": {
    "file": "excelsior_management.svg",
    "set": "standalone"
+  },
+  "expedition": {
+   "file": "expedition.svg",
+   "set": "extra"
+  },
+  "extracurricular_activity": {
+   "file": "extracurricular_activity.svg",
+   "set": "extra"
+  },
+  "fatal_mirage": {
+   "file": "fatal_mirage.svg",
+   "set": "extra"
+  },
+  "fatal_mirage_2": {
+   "file": "fatal_mirage.svg",
+   "set": "extra"
+  },
+  "fatal_mirage_3": {
+   "file": "fatal_mirage.svg",
+   "set": "extra"
+  },
+  "fate_of_the_vale": {
+   "file": "fate_of_the_vale.svg",
+   "set": "extra"
   },
   "film_fatale": {
    "file": "film_fatale.svg",
@@ -326,6 +638,22 @@
    "file": "final_annihilation.svg",
    "set": "standalone"
   },
+  "fire": {
+   "file": "fire.svg",
+   "set": "extra"
+  },
+  "flying_terrors": {
+   "file": "flying_terrors.svg",
+   "set": "extra"
+  },
+  "fog_over_innsmouth": {
+   "file": "fog_over_innsmouth.svg",
+   "set": "extra"
+  },
+  "for_the_greater_good": {
+   "file": "for_the_greater_good.svg",
+   "set": "extra"
+  },
   "forgotten_island": {
    "file": "forgotten_island.svg",
    "set": "standalone"
@@ -337,6 +665,14 @@
   "fortune_and_folly": {
    "file": "fortune_and_folly.svg",
    "set": "standalone"
+  },
+  "fortune_and_folly_part_1": {
+   "file": "fortune_and_folly.svg",
+   "set": "extra"
+  },
+  "fortune_and_folly_part_2": {
+   "file": "fortune_and_folly.svg",
+   "set": "extra"
   },
   "fortunes_chosen": {
    "file": "fortunes_chosen.svg",
@@ -362,6 +698,10 @@
    "file": "ghouls.svg",
    "set": "extra"
   },
+  "globetrotting": {
+   "file": "globetrotting.svg",
+   "set": "extra"
+  },
   "guardian": {
    "file": "guardian.svg",
    "set": "arkhamicons"
@@ -369,6 +709,10 @@
   "guardians": {
    "file": "guardians.svg",
    "set": "standalone"
+  },
+  "guardians_of_time": {
+   "file": "guardians_of_time.svg",
+   "set": "extra"
   },
   "guide_bullet": {
    "file": "guide_bullet.svg",
@@ -398,6 +742,26 @@
    "file": "harvey.svg",
    "set": "standalone"
   },
+  "hasturs_envoys": {
+   "file": "hasturs_envoys.svg",
+   "set": "extra"
+  },
+  "hasturs_gift": {
+   "file": "hasturs_gift.svg",
+   "set": "extra"
+  },
+  "hauntings": {
+   "file": "hauntings.svg",
+   "set": "extra"
+  },
+  "havana": {
+   "file": "havana.svg",
+   "set": "extra"
+  },
+  "hazards_of_antarctica": {
+   "file": "hazards_of_antarctica.svg",
+   "set": "extra"
+  },
   "head": {
    "file": "head.svg",
    "set": "arkhamicons"
@@ -414,17 +778,77 @@
    "file": "health_inverted.svg",
    "set": "arkhamicons"
   },
+  "heart_of_the_elders": {
+   "file": "heart_of_the_elders.svg",
+   "set": "extra"
+  },
+  "heart_of_the_elders_part_1": {
+   "file": "heart_of_the_elders.svg",
+   "set": "extra"
+  },
+  "heart_of_the_elders_part_2": {
+   "file": "heart_of_the_elders.svg",
+   "set": "extra"
+  },
+  "hemlock_house": {
+   "file": "hemlock_house.svg",
+   "set": "extra"
+  },
+  "hideous_abominations": {
+   "file": "hideous_abominations.svg",
+   "set": "extra"
+  },
+  "horror_in_high_gear": {
+   "file": "horror_in_high_gear.svg",
+   "set": "extra"
+  },
+  "horrors_in_the_rock": {
+   "file": "horrors_in_the_rock.svg",
+   "set": "extra"
+  },
   "hunted": {
    "file": "hunted.svg",
    "set": "blood"
+  },
+  "ice_and_death": {
+   "file": "ice_and_death.svg",
+   "set": "extra"
+  },
+  "ice_and_death_part_1": {
+   "file": "ice_and_death.svg",
+   "set": "extra"
+  },
+  "ice_and_death_part_2": {
+   "file": "ice_and_death.svg",
+   "set": "extra"
+  },
+  "ice_and_death_part_3": {
+   "file": "ice_and_death.svg",
+   "set": "extra"
+  },
+  "in_the_clutches_of_chaos": {
+   "file": "in_the_clutches_of_chaos.svg",
+   "set": "extra"
   },
   "in_the_labyrinths_of_lunacy": {
    "file": "in_the_labyrinths_of_lunacy.svg",
    "set": "standalone"
   },
+  "in_too_deep": {
+   "file": "in_too_deep.svg",
+   "set": "extra"
+  },
+  "inexorable_fate": {
+   "file": "inexorable_fate.svg",
+   "set": "extra"
+  },
   "infected": {
    "file": "infected.svg",
    "set": "blood"
+  },
+  "inhabitants_of_carcosa": {
+   "file": "inhabitants_of_carcosa.svg",
+   "set": "extra"
   },
   "inhospitable_locality": {
    "file": "inhospitable_locality.svg",
@@ -434,13 +858,29 @@
    "file": "intellect.svg",
    "set": "arkhamicons"
   },
+  "into_the_maelstrom": {
+   "file": "into_the_maelstrom.svg",
+   "set": "extra"
+  },
   "jacqueline": {
    "file": "jacqueline.svg",
    "set": "standalone"
   },
+  "knyan": {
+   "file": "knyan.svg",
+   "set": "extra"
+  },
+  "kuala_lampur": {
+   "file": "kuala_lampur.svg",
+   "set": "extra"
+  },
   "laid_to_rest": {
    "file": "laid_to_rest.svg",
    "set": "standalone"
+  },
+  "left_behind": {
+   "file": "left_behind.svg",
+   "set": "extra"
   },
   "legendary": {
    "file": "legendary.svg",
@@ -462,9 +902,21 @@
    "file": "lost_cathedral.svg",
    "set": "standalone"
   },
+  "lost_in_the_night": {
+   "file": "lost_in_the_night.svg",
+   "set": "extra"
+  },
+  "lost_in_time_and_space": {
+   "file": "lost_in_time_and_space.svg",
+   "set": "extra"
+  },
   "machinations_through_time": {
    "file": "machinations_through_time.svg",
    "set": "standalone"
+  },
+  "maddening_delusions": {
+   "file": "maddening_delusions.svg",
+   "set": "extra"
   },
   "made_flesh": {
    "file": "made_flesh.svg",
@@ -478,13 +930,29 @@
    "file": "malevolent_ritual.svg",
    "set": "standalone"
   },
+  "malfunction": {
+   "file": "malfunction.svg",
+   "set": "extra"
+  },
+  "marrakesh": {
+   "file": "marrakesh.svg",
+   "set": "extra"
+  },
   "meddling": {
    "file": "meddling.svg",
    "set": "standalone"
   },
+  "merging_realities": {
+   "file": "merging_realities.svg",
+   "set": "extra"
+  },
   "meteoric_phenomenon": {
    "file": "meteoric_phenomenon.svg",
    "set": "standalone"
+  },
+  "miasma": {
+   "file": "miasma.svg",
+   "set": "extra"
   },
   "migo": {
    "file": "migo.svg",
@@ -514,6 +982,22 @@
    "file": "murder_at_the_excelsior_hotel.svg",
    "set": "standalone"
   },
+  "music_of_the_damned": {
+   "file": "music_of_the_damned.svg",
+   "set": "extra"
+  },
+  "mutations": {
+   "file": "mutations.svg",
+   "set": "extra"
+  },
+  "myconids": {
+   "file": "myconids.svg",
+   "set": "extra"
+  },
+  "mysteries_abound": {
+   "file": "mysteries_abound.svg",
+   "set": "extra"
+  },
   "mysterious_benefits": {
    "file": "mysterious_benefits.svg",
    "set": "standalone"
@@ -522,6 +1006,14 @@
    "file": "mystic.svg",
    "set": "arkhamicons"
   },
+  "nameless_horrors": {
+   "file": "nameless_horrors.svg",
+   "set": "extra"
+  },
+  "naomis_crew": {
+   "file": "naomis_crew.svg",
+   "set": "extra"
+  },
   "nate": {
    "file": "nate.svg",
    "set": "standalone"
@@ -529,6 +1021,10 @@
   "natural_hazards": {
    "file": "natural_hazards.svg",
    "set": "standalone"
+  },
+  "neurotic_fear": {
+   "file": "neurotic_fear.svg",
+   "set": "extra"
   },
   "neutral": {
    "file": "neutral.svg",
@@ -686,17 +1182,37 @@
    "file": "numNull-outline.svg",
    "set": "arkhamicons"
   },
+  "obsidian_canyons": {
+   "file": "obsidian_canyons.svg",
+   "set": "extra"
+  },
   "occultism": {
    "file": "occultism.svg",
    "set": "standalone"
+  },
+  "on_thin_ice": {
+   "file": "on_thin_ice.svg",
+   "set": "extra"
+  },
+  "one_last_job": {
+   "file": "one_last_job.svg",
+   "set": "extra"
   },
   "onigawa": {
    "file": "onigawa.svg",
    "set": "standalone"
   },
+  "outsiders": {
+   "file": "outsiders.svg",
+   "set": "extra"
+  },
   "parallel": {
    "file": "parallel.svg",
    "set": "arkhamicons"
+  },
+  "penguins": {
+   "file": "penguins.svg",
+   "set": "extra"
   },
   "pentagram": {
    "file": "dark_cult.svg",
@@ -706,13 +1222,33 @@
    "file": "per_investigator.svg",
    "set": "arkhamicons"
   },
+  "pilgrims": {
+   "file": "pilgrims.svg",
+   "set": "extra"
+  },
   "plan_in_shambles": {
    "file": "plan_in_shambles.svg",
    "set": "standalone"
   },
+  "pnakotic_brotherhood": {
+   "file": "pnakotic_brotherhood.svg",
+   "set": "extra"
+  },
+  "point_of_no_return": {
+   "file": "point_of_no_return.svg",
+   "set": "extra"
+  },
+  "poison": {
+   "file": "poison.svg",
+   "set": "extra"
+  },
   "preyed_upon": {
    "file": "preyed_upon.svg",
    "set": "blood"
+  },
+  "rainforest": {
+   "file": "rainforest.svg",
+   "set": "extra"
   },
   "rats": {
    "file": "rats.svg",
@@ -726,17 +1262,201 @@
    "file": "read_or_die.svg",
    "set": "standalone"
   },
+  "realm_of_death": {
+   "file": "realm_of_death.svg",
+   "set": "extra"
+  },
+  "red_coterie": {
+   "file": "red_coterie.svg",
+   "set": "extra"
+  },
   "red_tide_rising": {
    "file": "red_tide_rising.svg",
    "set": "standalone"
   },
-  "resource": {
-   "file": "resource.svg",
+  "refractions": {
+   "file": "refractions.svg",
+   "set": "extra"
+  },
+  "residents": {
+   "file": "residents.svg",
+   "set": "extra"
+  },
+  "resurgent_evils": {
+   "file": "resurgent_evils.svg",
+   "set": "extra"
+  },
+  "return_cult": {
+   "file": "return_cult.svg",
+   "set": "extra"
+  },
+  "return_to_a_phantom_of_truth": {
+   "file": "a_phantom_of_truth.svg",
+   "set": "extra"
+  },
+  "return_to_at_deaths_doorstep": {
+   "file": "return_to_at_deaths_doorstep.svg",
+   "set": "extra"
+  },
+  "return_to_before_the_black_throne": {
+   "file": "return_to_before_the_black_throne.svg",
+   "set": "extra"
+  },
+  "return_to_black_stars_rise": {
+   "file": "return_to_black_stars_rise.svg",
+   "set": "extra"
+  },
+  "return_to_blood_on_the_altar": {
+   "file": "return_to_blood_on_the_altar.svg",
+   "set": "extra"
+  },
+  "return_to_curtain_call": {
+   "file": "return_to_curtain_call.svg",
+   "set": "extra"
+  },
+  "return_to_dim_carcosa": {
+   "file": "return_to_dim_carcosa.svg",
+   "set": "extra"
+  },
+  "return_to_echoes_of_the_past": {
+   "file": "return_to_echoes_of_the_past.svg",
+   "set": "extra"
+  },
+  "return_to_extracurricular_activities": {
+   "file": "return_to_extracurricular_activities.svg",
+   "set": "extra"
+  },
+  "return_to_extracurricular_activity": {
+   "file": "extracurricular_activity.svg",
+   "set": "extra"
+  },
+  "return_to_for_the_greater_good": {
+   "file": "return_to_for_the_greater_good.svg",
+   "set": "extra"
+  },
+  "return_to_heart_of_the_elders_part_1": {
+   "file": "heart_of_the_elders.svg",
+   "set": "extra"
+  },
+  "return_to_heart_of_the_elders_part_2": {
+   "file": "heart_of_the_elders.svg",
+   "set": "extra"
+  },
+  "return_to_in_the_clutches_of_chaos": {
+   "file": "return_to_in_the_clutches_of_chaos.svg",
+   "set": "extra"
+  },
+  "return_to_knyan": {
+   "file": "return_to_knyan.svg",
+   "set": "extra"
+  },
+  "return_to_lost_in_time_and_space": {
+   "file": "return_to_lost_in_time_and_space.svg",
+   "set": "extra"
+  },
+  "return_to_shattered_aeons": {
+   "file": "return_to_shattered_aeons.svg",
+   "set": "extra"
+  },
+  "return_to_the_boundary_beyond": {
+   "file": "return_to_the_boundary_beyond.svg",
+   "set": "extra"
+  },
+  "return_to_the_devourer_below": {
+   "file": "return_to_the_devourer_below.svg",
+   "set": "extra"
+  },
+  "return_to_the_doom_of_eztli": {
+   "file": "return_to_the_doom_of_eztli.svg",
+   "set": "extra"
+  },
+  "return_to_the_essex_county_express": {
+   "file": "return_to_the_essex_county_express.svg",
+   "set": "extra"
+  },
+  "return_to_the_gathering": {
+   "file": "return_to_the_gathering.svg",
+   "set": "extra"
+  },
+  "return_to_the_house_always_wins": {
+   "file": "return_to_the_house_always_wins.svg",
+   "set": "extra"
+  },
+  "return_to_the_last_king": {
+   "file": "return_to_the_last_king.svg",
+   "set": "extra"
+  },
+  "return_to_the_midnight_masks": {
+   "file": "return_to_the_midnight_masks.svg",
+   "set": "extra"
+  },
+  "return_to_the_miskatonic_museum": {
+   "file": "return_to_the_miskatonic_museum.svg",
+   "set": "extra"
+  },
+  "return_to_the_pallid_mask": {
+   "file": "return_to_the_pallid_mask.svg",
+   "set": "extra"
+  },
+  "return_to_the_rainforest": {
+   "file": "return_to_the_rainforest.svg",
+   "set": "extra"
+  },
+  "return_to_the_secret_name": {
+   "file": "return_to_the_secret_name.svg",
+   "set": "extra"
+  },
+  "return_to_the_unspeakable_oath": {
+   "file": "return_to_the_unspeakable_oath.svg",
+   "set": "extra"
+  },
+  "return_to_the_untamed_wilds": {
+   "file": "return_to_the_untamed_wilds.svg",
+   "set": "extra"
+  },
+  "return_to_the_wages_of_sin": {
+   "file": "return_to_the_wages_of_sin.svg",
+   "set": "extra"
+  },
+  "return_to_the_witching_hour": {
+   "file": "return_to_the_witching_hour.svg",
+   "set": "extra"
+  },
+  "return_to_threads_of_fate": {
+   "file": "return_to_threads_of_fate.svg",
+   "set": "extra"
+  },
+  "return_to_turn_back_time": {
+   "file": "return_to_turn_back_time.svg",
+   "set": "extra"
+  },
+  "return_to_undimensioned_and_unseen": {
+   "file": "return_to_undimensioned_and_unseen.svg",
+   "set": "extra"
+  },
+  "return_to_union_and_disillusion": {
+   "file": "return_to_union_and_disillusion.svg",
+   "set": "extra"
+  },
+  "return_to_where_doom_awaits": {
+   "file": "return_to_where_doom_awaits.svg",
+   "set": "extra"
+  },
+  "riddles_and_rain": {
+   "file": "riddles_and_rain.svg",
+   "set": "extra"
+  },
+  "rising_tide": {
+   "file": "rising_tide.svg",
    "set": "extra"
   },
   "river_of_blood": {
    "file": "river_of_blood.svg",
    "set": "blood"
+  },
+  "rlyeh": {
+   "file": "rlyeh.svg",
+   "set": "extra"
   },
   "rogue": {
    "file": "rogue.svg",
@@ -762,6 +1482,10 @@
    "file": "sanguine_secrets.svg",
    "set": "blood"
   },
+  "sanguine_shadows": {
+   "file": "sanguine_shadows.svg",
+   "set": "extra"
+  },
   "sanity": {
    "file": "sanity.svg",
    "set": "arkhamicons"
@@ -769,6 +1493,10 @@
   "sanity_inverted": {
    "file": "sanity_inverted.svg",
    "set": "arkhamicons"
+  },
+  "scarlet_sorcery": {
+   "file": "scarlet_sorcery.svg",
+   "set": "extra"
   },
   "scorched_wasteland": {
    "file": "scorched_wasteland.svg",
@@ -794,9 +1522,49 @@
    "file": "seal_e.svg",
    "set": "arkhamicons"
   },
+  "secret_doors": {
+   "file": "secret_doors.svg",
+   "set": "extra"
+  },
+  "secret_war": {
+   "file": "secret_war.svg",
+   "set": "extra"
+  },
+  "secrets_of_the_universe": {
+   "file": "secrets_of_the_universe.svg",
+   "set": "extra"
+  },
   "seeker": {
    "file": "seeker.svg",
    "set": "arkhamicons"
+  },
+  "serpents": {
+   "file": "serpents.svg",
+   "set": "extra"
+  },
+  "shadow_of_a_doubt": {
+   "file": "shadow_of_a_doubt.svg",
+   "set": "extra"
+  },
+  "shattered_aeons": {
+   "file": "shattered_aeons.svg",
+   "set": "extra"
+  },
+  "shattered_memories": {
+   "file": "shattered_memories.svg",
+   "set": "extra"
+  },
+  "shoggoths": {
+   "file": "shoggoths.svg",
+   "set": "extra"
+  },
+  "silence_and_mystery": {
+   "file": "silence_and_mystery.svg",
+   "set": "extra"
+  },
+  "silver_twilight_lodge": {
+   "file": "silver_twilight_lodge.svg",
+   "set": "extra"
   },
   "single_group": {
    "file": "single_group.svg",
@@ -858,9 +1626,29 @@
    "file": "something_big.svg",
    "set": "standalone"
   },
+  "sorcery": {
+   "file": "sorcery.svg",
+   "set": "extra"
+  },
+  "spatial_anomaly": {
+   "file": "spatial_anomaly.svg",
+   "set": "extra"
+  },
+  "spectral_predators": {
+   "file": "spectral_predators.svg",
+   "set": "extra"
+  },
+  "spiders": {
+   "file": "spiders.svg",
+   "set": "extra"
+  },
   "spiraling_inferno": {
    "file": "spiraling_inferno.svg",
    "set": "standalone"
+  },
+  "spreading_corruption": {
+   "file": "spreading_corruption.svg",
+   "set": "extra"
   },
   "stalked": {
    "file": "stalked.svg",
@@ -878,9 +1666,25 @@
    "file": "star-outline.svg",
    "set": "arkhamicons"
   },
+  "star_spawn": {
+   "file": "star_spawn.svg",
+   "set": "extra"
+  },
   "stella": {
    "file": "stella.svg",
    "set": "standalone"
+  },
+  "stirring_in_the_deep": {
+   "file": "stirring_in_the_deep.svg",
+   "set": "extra"
+  },
+  "stowaways": {
+   "file": "stowaways.svg",
+   "set": "extra"
+  },
+  "strange_happenings": {
+   "file": "strange_happenings.svg",
+   "set": "extra"
   },
   "striking_fear": {
    "file": "striking_fear.svg",
@@ -889,6 +1693,10 @@
   "survivor": {
    "file": "survivor.svg",
    "set": "arkhamicons"
+  },
+  "syzygy": {
+   "file": "syzygy.svg",
+   "set": "extra"
   },
   "tablet": {
    "file": "tablet.svg",
@@ -905,6 +1713,10 @@
   "tarot_inverted": {
    "file": "tarot_inverted.svg",
    "set": "arkhamicons"
+  },
+  "tdc_flood": {
+   "file": "tdc_flood.svg",
+   "set": "extra"
   },
   "tdc_rune_a": {
    "file": "tdc_rune_a.svg",
@@ -1010,13 +1822,25 @@
    "file": "tdc_rune_z.svg",
    "set": "arkhamslim"
   },
+  "temporal_hunters": {
+   "file": "temporal_hunters.svg",
+   "set": "extra"
+  },
   "tentacles": {
    "file": "the_devourer_below.svg",
+   "set": "extra"
+  },
+  "the_apiary": {
+   "file": "the_apiary.svg",
    "set": "extra"
   },
   "the_bayou": {
    "file": "the_bayou.svg",
    "set": "standalone"
+  },
+  "the_beyond": {
+   "file": "the_beyond.svg",
+   "set": "extra"
   },
   "the_black_stone": {
    "file": "the_black_stone.svg",
@@ -1026,20 +1850,160 @@
    "file": "the_blob_that_ate_everything.svg",
    "set": "standalone"
   },
+  "the_boundary_beyond": {
+   "file": "the_boundary_beyond.svg",
+   "set": "extra"
+  },
+  "the_crash": {
+   "file": "the_crash.svg",
+   "set": "extra"
+  },
+  "the_depths_of_yoth": {
+   "file": "the_depths_of_yoth.svg",
+   "set": "extra"
+  },
   "the_devourer_below": {
    "file": "the_devourer_below.svg",
+   "set": "extra"
+  },
+  "the_devourers_cult": {
+   "file": "the_devourers_cult.svg",
+   "set": "extra"
+  },
+  "the_doom_of_arkham_part_1": {
+   "file": "the_doom_of_arkham_part_1.svg",
+   "set": "extra"
+  },
+  "the_doom_of_arkham_part_2": {
+   "file": "the_doom_of_arkham_part_2.svg",
+   "set": "extra"
+  },
+  "the_drowned_quarter": {
+   "file": "the_drowned_quarter.svg",
    "set": "extra"
   },
   "the_fall_of_the_house_of_usher": {
    "file": "the_fall_of_the_house_of_usher.svg",
    "set": "standalone"
   },
+  "the_final_day": {
+   "file": "the_final_day.svg",
+   "set": "extra"
+  },
+  "the_first_day": {
+   "file": "the_first_day.svg",
+   "set": "extra"
+  },
+  "the_forest": {
+   "file": "the_forest.svg",
+   "set": "extra"
+  },
   "the_gathering": {
    "file": "the_gathering.svg",
    "set": "extra"
   },
+  "the_grand_vault": {
+   "file": "the_grand_vault.svg",
+   "set": "extra"
+  },
+  "the_great_seal": {
+   "file": "the_great_seal.svg",
+   "set": "extra"
+  },
+  "the_heart_of_madness": {
+   "file": "the_heart_of_madness.svg",
+   "set": "extra"
+  },
+  "the_heart_of_madness_part_1": {
+   "file": "the_heart_of_madness.svg",
+   "set": "extra"
+  },
+  "the_heart_of_madness_part_2": {
+   "file": "the_heart_of_madness.svg",
+   "set": "extra"
+  },
+  "the_house_always_wins": {
+   "file": "the_house_always_wins.svg",
+   "set": "extra"
+  },
+  "the_inescapable": {
+   "file": "the_inescapable.svg",
+   "set": "extra"
+  },
+  "the_last_king": {
+   "file": "the_last_king.svg",
+   "set": "extra"
+  },
+  "the_longest_night": {
+   "file": "the_longest_night.svg",
+   "set": "extra"
+  },
+  "the_lost_sister": {
+   "file": "the_lost_sister.svg",
+   "set": "extra"
+  },
   "the_midnight_masks": {
    "file": "midnight_masks.svg",
+   "set": "extra"
+  },
+  "the_miskatonic_museum": {
+   "file": "the_miskatonic_museum.svg",
+   "set": "extra"
+  },
+  "the_pallid_mask": {
+   "file": "the_pallid_mask.svg",
+   "set": "extra"
+  },
+  "the_search_for_kadath": {
+   "file": "the_search_for_kadath.svg",
+   "set": "extra"
+  },
+  "the_second_day": {
+   "file": "the_second_day.svg",
+   "set": "extra"
+  },
+  "the_secret_name": {
+   "file": "the_secret_name.svg",
+   "set": "extra"
+  },
+  "the_silent_heath": {
+   "file": "the_silent_heath.svg",
+   "set": "extra"
+  },
+  "the_thing_in_the_depths": {
+   "file": "the_thing_in_the_depths.svg",
+   "set": "extra"
+  },
+  "the_twisted_hollow": {
+   "file": "the_twisted_hollow.svg",
+   "set": "extra"
+  },
+  "the_unspeakable_oath": {
+   "file": "the_unspeakable_oath.svg",
+   "set": "extra"
+  },
+  "the_vale": {
+   "file": "the_vale.svg",
+   "set": "extra"
+  },
+  "the_wages_of_sin": {
+   "file": "the_wages_of_sin.svg",
+   "set": "extra"
+  },
+  "the_western_wall": {
+   "file": "the_western_wall.svg",
+   "set": "extra"
+  },
+  "the_witching_hour": {
+   "file": "the_witching_hour.svg",
+   "set": "extra"
+  },
+  "threads_of_fate": {
+   "file": "threads_of_fate.svg",
+   "set": "extra"
+  },
+  "to_the_forbidden_peaks": {
+   "file": "to_the_forbidden_peaks.svg",
    "set": "extra"
   },
   "token_-1_highlight": {
@@ -1302,6 +2266,34 @@
    "file": "the_gathering.svg",
    "set": "extra"
   },
+  "transfiguration": {
+   "file": "transfiguration.svg",
+   "set": "extra"
+  },
+  "trapped_spirits": {
+   "file": "trapped_spirits.svg",
+   "set": "extra"
+  },
+  "tunguska": {
+   "file": "tunguska.svg",
+   "set": "extra"
+  },
+  "turn_back_time": {
+   "file": "turn_back_time.svg",
+   "set": "extra"
+  },
+  "undersea_creatures": {
+   "file": "undersea_creatures.svg",
+   "set": "extra"
+  },
+  "undimensioned_and_unseen": {
+   "file": "undimensioned_and_unseen.svg",
+   "set": "extra"
+  },
+  "union_and_disillusion": {
+   "file": "union_and_disillusion.svg",
+   "set": "extra"
+  },
   "unique": {
    "file": "unique.svg",
    "set": "extra"
@@ -1314,9 +2306,17 @@
    "file": "unscrupulous_investments.svg",
    "set": "standalone"
   },
+  "unspeakable_fate": {
+   "file": "unspeakable_fate.svg",
+   "set": "extra"
+  },
   "venice": {
    "file": "venice.svg",
    "set": "standalone"
+  },
+  "venomous_hate": {
+   "file": "venomous_hate.svg",
+   "set": "extra"
   },
   "vermin": {
    "file": "vermin.svg",
@@ -1326,6 +2326,10 @@
    "file": "vile_experiments.svg",
    "set": "standalone"
   },
+  "waking_nightmare": {
+   "file": "waking_nightmare.svg",
+   "set": "extra"
+  },
   "war_of_the_outer_gods": {
    "file": "war_of_the_outer_gods.svg",
    "set": "standalone"
@@ -1333,6 +2337,10 @@
   "weakness": {
    "file": "weakness.svg",
    "set": "arkhamicons"
+  },
+  "weaver_of_the_cosmos": {
+   "file": "weaver_of_the_cosmos.svg",
+   "set": "extra"
   },
   "wendigo": {
    "file": "wendigo.svg",
@@ -1345,6 +2353,22 @@
   "when_the_world_screamed": {
    "file": "when_the_world_screamed.svg",
    "set": "standalone"
+  },
+  "where_doom_awaits": {
+   "file": "where_doom_awaits.svg",
+   "set": "extra"
+  },
+  "where_gods_dwell": {
+   "file": "where_gods_dwell.svg",
+   "set": "extra"
+  },
+  "whippoorwills": {
+   "file": "whippoorwills.svg",
+   "set": "extra"
+  },
+  "whispers_of_hypnos": {
+   "file": "whispers_of_hypnos.svg",
+   "set": "extra"
   },
   "wild": {
    "file": "wild.svg",
@@ -1366,9 +2390,21 @@
    "file": "witch_cult.svg",
    "set": "standalone"
   },
+  "witchcraft": {
+   "file": "witchcraft.svg",
+   "set": "extra"
+  },
+  "without_a_trace": {
+   "file": "without_a_trace.svg",
+   "set": "extra"
+  },
   "wotog": {
    "file": "wotog.svg",
    "set": "standalone"
+  },
+  "written_in_rock": {
+   "file": "written_in_rock.svg",
+   "set": "extra"
   },
   "x": {
    "file": "x.svg",
@@ -1382,6 +2418,10 @@
    "file": "x-outline.svg",
    "set": "arkhamicons"
   },
+  "yog_sothoths_emissaries": {
+   "file": "yog_sothoths_emissaries.svg",
+   "set": "extra"
+  },
   "zez": {
    "file": "zez.svg",
    "set": "standalone"
@@ -1389,6 +2429,10 @@
   "zoc": {
    "file": "zoc.svg",
    "set": "standalone"
+  },
+  "zoogs": {
+   "file": "zoogs.svg",
+   "set": "extra"
   }
  }
 }

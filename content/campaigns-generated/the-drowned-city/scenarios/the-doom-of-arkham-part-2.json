@@ -1,0 +1,242 @@
+{
+  "id": "the-doom-of-arkham-part-2",
+  "name": "The Doom of Arkham: Part II",
+  "card": "11688a",
+  "intro": "You and the others watch helplessly as Cthulhu levels the rest of Rivertown. Black water floods the streets and ruins in his wake. \"Randall's behind this. I don't know how or why, but I think he wanted us to wake that thing up!\" says Ruby. Hungry flames begin to lick at the wreckage as ruptured gas lines ignite, illuminating the legions of Cthulhu's spawn as they descend on the city. \"If that's true, then we had better find a way to stop it,\" Andy says. They look to you for direction.",
+  "encounterSets": [
+    "the_doom_of_arkham_part_2",
+    "domination",
+    "elder_mist",
+    "tdc_flood",
+    "star_spawn",
+    "agents_of_cthulhu",
+    "arkham"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "11690"
+  ],
+  "agendas": [
+    "11689",
+    "11691b"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "01134",
+        "01130",
+        "01132",
+        "01129",
+        "01128",
+        "01126"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "01134"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -3
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -1
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -3
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -1
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -5
+      },
+      "tablet": {
+        "modifier": -5
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -5
+      },
+      "tablet": {
+        "modifier": -5
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "You struggle to rise as the ground rocks with another tremor. Mighty Cthulhu looks down on you with five dispassionate red eyes. You’ve dreamed this moment before. His hulking form blots out the stars above, shimmering with an otherworldly radiance. His rotten breath washes over you, stirring the water. For a moment, the clamor fades away as you meet the ancient one’s gaze. You feel him in your mind. There is no anger or rage, only cold indifference.\nThis is no reckoning, no judgment, no destruction. You and your kind are nothing more than an annoyance. The thick, squamous tentacles sprouting from Cthulhu’s face snake across the water, searching for you, for the things you and your kind took from him. You are powerless to resist. Why should you? Your fate and the fate of all your pathetic kind was written in the stars. Doom has come to Arkham.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "cthulhu_annihilated_the_city_of_arkham",
+          "value": true
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 0,
+          "mental": 0
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "After hours of struggle, you stand before mighty Cthulhu, who looks down on you with five dispassionate red eyes. You’ve dreamed this moment before. His hulking form blots out the stars above, shimmering with an otherworldly radiance. His rotten breath washes over you, stirring the water. For a moment, the clamor fades away as you meet the ancient one’s gaze. You feel him in your mind. There is no anger or rage, only cold indifference.\nA shot rings out, followed by a dozen more. Behind you, from the nearby rooftops, and elsewhere in the vicinity, a volley of firearms and explosives pelt the ancient one’s sagging, fetid flesh. Inspector Legrasse shouts to his fellow officers, goading them to not let up. Great Cthulhu moans in pain as the sheer firepower chews through his armored flesh, flooding the streets with oily black blood. At long last, the tide seems to have turned in your favor. Cowed by the relentless assault, the ancient one turns back to the Miskatonic and lurches into the water, followed by a cadre of monstrous creatures.\nYou can feel the others hold their breath, waiting for some reprisal, but nothing comes. Then, a cheer breaks the silence, followed by dozens more. Arkham is safe… for now.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "cthulhu_was_driven_away",
+          "value": true
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 3,
+          "mental": 3
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "Just as Cthulhu prepares to strike, the sigils on his body grow blindingly bright, and his limbs suddenly stiffen. Andy steps boldly out onto the street, stumbling through two more guttural stanzas. You and Ruby join him in reciting the chants as the ritual takes form. The ancient one roars again and falls prone, as if bound by invisible cords. A corona of eerie green and golden light cuts through the clouds, then peels back to reveal the night sky above. Nestled in the heart of an emerald and gold nebula is a bright, shining star.\nThe starlight intensifies. Before your eyes, the ancient one’s body twists and bends like a broken reflection. For just a moment, you see the spires of R’lyeh shimmering within the broken skyline of Arkham, looking both alien and familiar at once. With a final roar, Cthulhu disappears into the aether.\nThe corona of distant stars shrinks, then collapses with a thunderclap. In its wake is a dreadful silence.\nYou, Ruby, and Andy climb up to the roof of a nearby building and sit on the edge looking out at the ruined city. Rivertown and much of the Merchant District are entirely underwater, but most of Arkham remains intact. The three of you stare at the apocalyptics landscape as the storm clouds dissipate, bathing the city in pale moonlight. A lone siren blares across the swollen banks of the Miskatonic River. Andy stands up and extends a hand to you.\n“There’s no time to rest. The people of Arkham still need us, more than ever.”",
+      "effects": [
+        {
+          "do": "record",
+          "key": "cthulhu_was_banished",
+          "value": true
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 1,
+          "mental": 1
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "Just as Cthulhu prepares to strike, the sigils on his body grow blindingly bright, and his limbs suddenly stiffen. Andy steps boldly out onto the street, stumbling through two more guttural stanzas. You and Ruby join him in reciting the chants as the ritual takes form. The ancient one roars again and falls prone, as if bound by invisible cords. A corona of eerie green and golden light cuts through the clouds, then peels back to reveal the night sky above. Nestled in the heart of an emerald and gold nebula is a bright shining star.\nThe starlight intensifies. Before your eyes, the ancient one’s body twists and bends like a broken reflection. For just a moment, you see the spires of R’lyeh shimmering within the broken skyline of Arkham, looking both alien and familiar at once. With a final roar, Cthulhu disappears into the aether.\nThe corona of distant stars shrinks, then collapses with a thunderclap. In its wake is a dreadful silence.\nYou, Ruby, and Andy climb up to the roof of a nearby building and sit on the edge looking out at the ruined city. The city of Arkham is a portrait of ruin. Rivertown is entirely underwater. Independence Square and the town hall are little more than rubble, and little remains of the city’s other neighbourhoods. You can only imagine the death toll. The three of you stare in stricken silence as the storm clouds dissipate, bathing the city in pale moonlight. You look to Ruby and see her in tears.\n“I didn’t think I have a damn for this city, but here I am, crying like a baby,” she sobs. “What else could we have done?”",
+      "effects": [
+        {
+          "do": "record",
+          "key": "cthulhu_was_banished_but_arkham_was_destroyed",
+          "value": true
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 2,
+          "mental": 2
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 5,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "the_doom_of_arkham_part_2",
+  "connections": [
+    [
+      "01134",
+      "01130"
+    ],
+    [
+      "01134",
+      "01129"
+    ],
+    [
+      "01130",
+      "01132"
+    ],
+    [
+      "01129",
+      "01128"
+    ],
+    [
+      "01128",
+      "01126"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "01134": [
+      1,
+      0
+    ],
+    "01130": [
+      2,
+      0
+    ],
+    "01132": [
+      3,
+      0
+    ],
+    "01129": [
+      1,
+      1
+    ],
+    "01128": [
+      1,
+      2
+    ],
+    "01126": [
+      2,
+      2
+    ]
+  }
+}

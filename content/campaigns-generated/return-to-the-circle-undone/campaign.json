@@ -1,0 +1,85 @@
+{
+  "id": "return-to-the-circle-undone",
+  "name": "Return to The Circle Undone",
+  "scenarios": [
+    "return-to-the-witching-hour",
+    "return-to-at-deaths-doorstep",
+    "return-to-the-secret-name",
+    "return-to-the-wages-of-sin",
+    "return-to-for-the-greater-good",
+    "return-to-union-and-disillusion",
+    "return-to-in-the-clutches-of-chaos",
+    "return-to-before-the-black-throne"
+  ],
+  "i18nId": "rttcu",
+  "chaosBags": {
+    "easy": [
+      "+1",
+      "+1",
+      "0",
+      "0",
+      "0",
+      "-1",
+      "-1",
+      "-2",
+      "-3",
+      "skull",
+      "skull",
+      "autoFail",
+      "elderSign"
+    ],
+    "standard": [
+      "+1",
+      "0",
+      "0",
+      "-1",
+      "-1",
+      "-2",
+      "-2",
+      "-3",
+      "-4",
+      "skull",
+      "skull",
+      "autoFail",
+      "elderSign"
+    ],
+    "hard": [
+      "0",
+      "0",
+      "-1",
+      "-1",
+      "-2",
+      "-2",
+      "-3",
+      "-4",
+      "-5",
+      "skull",
+      "skull",
+      "autoFail",
+      "elderSign"
+    ],
+    "expert": [
+      "0",
+      "-1",
+      "-1",
+      "-2",
+      "-2",
+      "-3",
+      "-4",
+      "-6",
+      "-8",
+      "skull",
+      "skull",
+      "autoFail",
+      "elderSign"
+    ]
+  },
+  "logLabels": {},
+  "packs": [
+    "core",
+    "return",
+    "tcu"
+  ],
+  "generated": true,
+  "card": "05050"
+}

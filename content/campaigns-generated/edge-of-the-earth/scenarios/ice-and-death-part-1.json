@@ -1,0 +1,184 @@
+{
+  "id": "ice-and-death-part-1",
+  "name": "Ice and Death, Part I",
+  "card": "08501",
+  "intro": "After two weeks and many hours of hard work, the expedition is ready to make its first foray into the cold, dead continent of Antarctica. Ms. Takada, along with two other mechanics, have fully assembled three aeroplanes along the flat ice shelf—a perfect place for takeoffs and landings. Your team congregates by the aeroplanes, along with several days' worth of camping equipment. The plan is to fly two of the planes over the vast jagged peaks, taking aerial photographs of the stone city mentioned in Dyer's account… that is, if such a thing really exists.\n\"If we can find a safe landing zone, we will set up a temporary outpost,\" Dr. Kensler explains. \"Dyer, Danforth, Fredericks, and Claypool will stick around while the rest of us head back to base camp. We can use the sledges to ferry supplies to and from the camps. Otherwise, we'll simply scout out the area and head back to base camp.\" The team nods in agreement and begins boarding the planes.",
+  "encounterSets": [
+    "ice_and_death",
+    "the_crash",
+    "creatures_in_the_ice",
+    "deadly_weather",
+    "hazards_of_antarctica",
+    "silence_and_mystery",
+    "ancient_evils"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "08521"
+  ],
+  "agendas": [
+    "08518",
+    "08519",
+    "08520"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "08510",
+        "08511",
+        "08512",
+        "08507",
+        "08508",
+        "08505",
+        "08504",
+        "08502",
+        "08513",
+        "08514",
+        "08503",
+        "08506",
+        "08509"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "08515",
+        "08522"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "08510"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -4
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -4
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "No amount of preparation could have made your journey through the ice and cold any easier. Your months of training before the expedition kicked in the moment you became stranded, and you were even able to scavenge some supplies while you searched for a safe place to rest for the night… but your thoughts keep returning to the sight of the thing that made your plane crash, the horrifying abominations that pursued you through the snowy wastes, and the sound—that awful sound, that cry! You almost wish you could have been robbed of your senses altogether so as to spare you from the cry that now haunts your every waking moment. As exhaustion settles in and you drift off to sleep, still that sound echoes in your thoughts, over and over again: Tekeli-li! Tekeli-li!",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "As you make camp, you are haunted by memories of the creatures you encountered in the icy wilds. Such entities should not exist. Not even Dyer's report mentions anything of the kind. Grim silence settles over the expedition team as you set up shelter. No one speaks of what they saw in the frozen wilderness. No one speaks of the awful sounds those monsters made. You can only hope that this camp is secluded enough to avoid the attention of those things- whatever they may be…",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "ice_and_death_part_1",
+  "connections": [],
+  "oneWay": [],
+  "layout": {
+    "08510": [
+      0,
+      0
+    ],
+    "08511": [
+      6,
+      0
+    ],
+    "08512": [
+      3,
+      1
+    ],
+    "08507": [
+      1,
+      2
+    ],
+    "08508": [
+      5,
+      2
+    ],
+    "08505": [
+      2,
+      4
+    ],
+    "08504": [
+      4,
+      4
+    ],
+    "08502": [
+      3,
+      6
+    ],
+    "08513": [
+      1,
+      7
+    ],
+    "08514": [
+      5,
+      7
+    ],
+    "08503": [
+      3,
+      8
+    ],
+    "08506": [
+      3,
+      10
+    ],
+    "08509": [
+      3,
+      12
+    ]
+  }
+}

@@ -1,0 +1,298 @@
+{
+  "id": "in-too-deep",
+  "name": "In Too Deep",
+  "card": "07123",
+  "intro": "The sea rises steadily as you make your way along the coast toward the town of Innsmouth. The sun and moon align over the distant horizon, threatening a grim, uncertain future.\nYou remember the layout of the town and several strange faces you met during your first few days there, but nothing that transpired between then and waking up in that waterlogged pit. Agent Harper has been trying to fill you in, but with so many gaps in your memory, each explanation only perplexes you further.\n\"Ever since you came to Innsmouth, things have only gotten worse. It began with the locals. Each day, they got rowdier and more hostile, especially to outsiders like you and me. Do you remember how nauseating some of them looked? Slimy, grayish skin? Wide lips, bulging eyes, that sort of thing?\"\nYou nod. Now that you've remembered, you almost wish you hadn't. It wasn't just the way they looked, either. Their hoarse voices croaked syllables barely resembling human speech, and they reeked of rotting fish.\n\"They're the ones who've been stirring up trouble recently. And that's not all. There are other creatures skulking around Innsmouth of late. I'm sure you've seen them, too.\" She shudders. \"There's some kind of connection between the Esoteric Order of Dagon and those… things. Not sure what yet, but we'll get to the bottom of it if—\"\nAgent Harper's voice trails off as she climbs to the top of the headland. Whatever has her staring agape can't be good. You reach the top, haul yourself over the ridge, and see the same devastation she does.\nInnsmouth has been invaded. The same creatures you encountered in that sacrificial pit prowl the street—foul things from the depths of the sea, or perhaps beyond. They patrol the alleys and intersections, searching for something. Hunting. Makeshift barricades block the various pathways through the town as water from the Manuxet River spills out onto the streets.\n\"No, this can't be…\" Agent Harper intones. A moment of silent gloom hangs between you. It is clear that Innsmouth is no longer safe. You inform Agent Harper that Agent Dawson left his vehicle near hers, at the abandoned railway station on the western edge of Innsmouth. She nods, understanding. \"Right. We have to get to the other side of town, and fast.\"\nThe sky above you is bathed in hues of violent crimson. With any luck, no more of that color will be spilled today.",
+  "encounterSets": [
+    "in_too_deep",
+    "creatures_of_the_deep",
+    "rising_tide",
+    "syzygy",
+    "the_locals",
+    "agents_of_cthulhu"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "07128"
+  ],
+  "agendas": [
+    "07124",
+    "07125",
+    "07126",
+    "07127"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "07142",
+        "07129",
+        "07134",
+        "07141",
+        "07132",
+        "07135",
+        "07137",
+        "07139",
+        "07136",
+        "07138",
+        "07130",
+        "07140",
+        "07133",
+        "07131",
+        "07143"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "07145",
+        "01181",
+        "07150",
+        "07151",
+        "07144"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "07142"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -1
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -2
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -1
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -2
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -4
+      },
+      "tablet": {
+        "modifier": -5
+      },
+      "elderThing": {
+        "modifier": -2
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -4
+      },
+      "tablet": {
+        "modifier": -5
+      },
+      "elderThing": {
+        "modifier": -2
+      }
+    }
+  },
+  "resolutions": {
+    "R1": {
+      "title": "Resolution 1",
+      "text": "You rush to safety, elated to be free of this hellish ordeal. But as you reach the vehicles, uncertainty swims in your mind. When you turn to face Agent Harper, she instantly recognizes your expression.\nYou understand now that you were hired to rescue her, and that something went awry. You and Agent Dawson were captured, and he was sacrificed to that… thing in the tidal caverns. Now you and Agent Harper are safe and free to return to Boston. And yet…\n\"We can't just leave,\" Harper says aloud what you are thinking. Her brows are knit in frustration. \"I mean, look at all of this. This devastation. These… these creatures.\" She motions to what remains of the flooded town of Innsmouth. \"We have to figure out what's really going on here, or…\" she trails off.\nYou understand her meaning. If the tide is rising this quickly here, it could be happening along the eastern seaboard. Arkham, Boston, no city is safe. Worse yet, nobody would believe such a tall tale until it was too late.\nWhatever these creatures are, they are scheming something that could put the entire world in jeopardy. You cannot allow that to happen.\n\"I don't suppose you have Dawson's key, do you?\" Harper asks. You can't imagine you would, yet when you check your belongings, you find a polished silver key among them. Dawson must have given it to you before his untimely end. You try the key on the driver's side door of his automobile, and it turns with an audible click. \"Well, would you look at that.\"\nEager to be away, she starts her car. At the engine's shuddering ignition, your mind reels with sudden pain. A bright spot, like the incandescent sun, flares within your sight. \"Okay, so… where to now?\" she asks, but you're barely able to register her words. The blinding flare grows larger and brighter. The rumbling of the engine drowns out all other sound. The world spins. You fall to the ground, clutching your temples. Your entire head is on fire. You can hear Harper calling to you, but her voice is muffled, like she is deep underwater. Or perhaps you are.\nYour vision fades. All that is left is the roaring of the engine and the crashing of tumultuous sea waves, and then—",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "none": {
+      "title": "No resolution was reached",
+      "text": "",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "in_too_deep",
+  "connections": [
+    [
+      "07142",
+      "07129"
+    ],
+    [
+      "07142",
+      "07135"
+    ],
+    [
+      "07129",
+      "07134"
+    ],
+    [
+      "07129",
+      "07137"
+    ],
+    [
+      "07134",
+      "07141"
+    ],
+    [
+      "07134",
+      "07139"
+    ],
+    [
+      "07141",
+      "07132"
+    ],
+    [
+      "07141",
+      "07136"
+    ],
+    [
+      "07132",
+      "07138"
+    ],
+    [
+      "07135",
+      "07137"
+    ],
+    [
+      "07135",
+      "07130"
+    ],
+    [
+      "07137",
+      "07139"
+    ],
+    [
+      "07137",
+      "07140"
+    ],
+    [
+      "07139",
+      "07136"
+    ],
+    [
+      "07139",
+      "07133"
+    ],
+    [
+      "07136",
+      "07138"
+    ],
+    [
+      "07136",
+      "07131"
+    ],
+    [
+      "07138",
+      "07143"
+    ],
+    [
+      "07130",
+      "07140"
+    ],
+    [
+      "07140",
+      "07133"
+    ],
+    [
+      "07133",
+      "07131"
+    ],
+    [
+      "07131",
+      "07143"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "07142": [
+      0,
+      0
+    ],
+    "07129": [
+      1,
+      0
+    ],
+    "07134": [
+      2,
+      0
+    ],
+    "07141": [
+      3,
+      0
+    ],
+    "07132": [
+      4,
+      0
+    ],
+    "07135": [
+      0,
+      1
+    ],
+    "07137": [
+      1,
+      1
+    ],
+    "07139": [
+      2,
+      1
+    ],
+    "07136": [
+      3,
+      1
+    ],
+    "07138": [
+      4,
+      1
+    ],
+    "07130": [
+      0,
+      2
+    ],
+    "07140": [
+      1,
+      2
+    ],
+    "07133": [
+      2,
+      2
+    ],
+    "07131": [
+      3,
+      2
+    ],
+    "07143": [
+      4,
+      2
+    ]
+  }
+}

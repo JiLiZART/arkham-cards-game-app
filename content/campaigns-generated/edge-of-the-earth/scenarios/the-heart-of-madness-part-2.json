@@ -1,0 +1,327 @@
+{
+  "id": "the-heart-of-madness-part-2",
+  "name": "The Heart of Madness, Part II",
+  "card": "08648",
+  "intro": "The facility is even older—and stranger—beyond the threshold of the ancient gateway. Who knows how many eons this place has slept undisturbed while the Earth changed and developed on the other side? Perhaps it would have remained so forever, had the site not been disturbed. But it's too late to change the past. All you can do now is work to prevent a terrible future.\nDim luminescence fills the eerie halls, powered by some form of advanced energy, like electricity. Behind you, a kaleidoscopic wall of miasma stitches itself together to block your escape. You are trapped here, perhaps forever. A web of expansive halls extends outward from the gateway, carved from smooth stone and covered in ancient murals and alien heiroglyphs. The air here feels thinner. The light bends and oscillates, distorting your vision like an optical illusion. Is this reality… or a mirage?\nYour party studies the murals along the walls for many hours. They depict an ancient, unfamiliar history. An alternative history of the Earth. A very different history than any you could have possibly imagined.",
+  "encounterSets": [
+    "stirring_in_the_deep",
+    "agents_of_the_unknown",
+    "chilling_cold",
+    "striking_fear",
+    "the_great_seal",
+    "shoggoths",
+    "locked_doors"
+  ],
+  "sideDecks": {
+    "_setAside": [
+      "the_heart_of_madness"
+    ]
+  },
+  "acts": [
+    "08673",
+    "08681"
+  ],
+  "agendas": [
+    "08671",
+    "08672"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "08650",
+        "08649"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "08679",
+        "08682",
+        "08683",
+        "08684",
+        "08685",
+        "08686"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "08650"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -1
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -1
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "When you awaken, the facility is dark and quiet once more. You pull your companions to their feet and retreat back to the surface, wondering if you are too late to stop the entity beyond the gate from escaping.It is quiet. Peaceful. There are no more signs of icy phantasms, eerie mirages, or alien entities.\nBack in the city nestled within the mountains, you take notes, photographs, and rubbings. The trip back to the ice shelf is swift and easy. Not even the cold weather fights you as you make your way back to the barrier camp. It is as if the entire continent of Antarctica has given itself over to you. You consider taking this time to continue studying the environment, but in the end, you decide to head back with your extensive findings. The sky is clear and beautiful as your ship departs from the ice shelf, heading north.\nStill, you are troubled. The entity that was once sealed beyond the Elder Thing's gateway was gone. There was almost no trace of it when you fled. Which can only mean it escaped, and could be anywhere. Or everywhere. Your thoughts turn dreadful. You remind yourself of the strange, vivid mirages the creature seemed to control. The lifelike hallucinations. You examine your palms and wonder if they are the same shape they always were, or a close facsimile. The air around you shimmers.\n…Is any of this real?",
+      "effects": [
+        {
+          "do": "record",
+          "key": "nameless_madness_escaped",
+          "value": true
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 0,
+          "mental": 0
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "Suddenly, there is blast of warm air, and a sound like a tremendous exhalation. The air shimmers with the distortion of a mirage, and you watch in shock as the rushing miasma suddenly recoils. It collapses upon itself and retreats back into the mountainside just as the avalanche begins. Bright blue cracks spread rapidly along the walls. Without the pylons, the integrity of not just the facility within the mountain, but the entire city, is compromised. The icy floor cracks open. The cyclopean architecture of the alien city begins to sink into the snow.\nThen you hear it: the roaring engine of an aeroplane overhead. The last of Takada's three planes soars over the city, and familiar shouts echo throughout the ancient, ruinous streets. \"There they are! By that tunnel! Quickly!\" Two sledges slide into view, pulled by the remainder of the dogs Eliyah left at the barrier camp, and manned by several members of the crew of the Theodosia. You cannot hold back your surprise or joy at the sight. They motion frantically for you to join them, their gazes fixed on the collapsing mountain.\nAt the last possible second, you hear another voice emanating from within the tunnel. \"Wait!\" Dr. Kensler emerges from the darkness, waving and hollering. \"Wait for me!\" She hops onto the sledge, and together, you race off into the foothills as the city collapses into the ice behind you.\nOne of the crewmates explains that they fixed up the last of the aeroplanes and decided to use it to look for you, even knowing the risks. \"When we spotted you entering that huge cavern without most of your gear, we thought you might need a rescue. Didn't expect that to be quite this literal,\" he says. You tell him his timing couldn't be more perfect.\nThe moment you make it back to the ice shelf, Dr. Kensler instructs the crew to prepare for departure. You barely even break down the barrier camp. It doesn't matter anymore. All that matters is getting out of this place with your lives intact—and with all the evidence you have found, of course.\nBut still, you have questions. Once safely aboard the Theodosia, you confront Dr. Kensler and ask her what she did back in the facility. The entity was chasing you, and then, suddenly… \"I told you, it is not a living creature,\" she explains. \"As such, it cannot be killed. At least, not by our standards. But it has some semblance of sentience, yes? It knows our desires. Our hopes. Our fears.\" You note aloud that Dr. Kensler is using the present tense. She clenches her jaw. The slightest hint of distortion wavers in the air around her. \"I… I made a deal,\" she whispers. \"It was the only way.\"",
+      "effects": [
+        {
+          "do": "record",
+          "key": "nameless_madness_is_contained_safely_within_its_host_for_now",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "surviving_members_header",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 10,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "Suddenly, a droning hum emerges from the tunnel, and hope renews in your heart. You take flight from beneath the archway as bright blue cracks spread rapidly along the walls. Without the pylons, the integrity of not just the facility within the mountain, but the entire city, is compromised. The icy floor cracks open. The cyclopean architecture of the alien city begins to sink into the snow. This might be your burial place, but at least you will take this entity and the rest of this damnable city with you.\nThen you hear it: the roaring engine of an aeroplane overhead. The last of Takada's three planes soars over the city, and familiar shouts echo throughout the ancient, ruinous streets. \"There they are! By that tunnel! Quickly!\" Two sledges slide into view, pulled by the remainder of the dogs Eliyah left at the barrier camp, and manned by several members of the crew of the Theodosia. You cannot hold back your surprise or joy at the sight. They motion frantically for you to join them, their gazes fixed on the collapsing mountain.\nOne of the crewmates explains that they fixed up the last of the aeroplanes and decided to use it to look for you, even knowing the risks. \"When we spotted you entering that huge cavern without most of your gear, we thought you might need a rescue. Didn't expect that to be quite this literal,\" he says. You tell him his timing couldn't be more perfect. Together, you race off into the foothills as the city collapses into the ice behind you.\nThe moment you make it back to the ice shelf, you tell the crew to prepare for departure. You barely even break down the barrier camp. It doesn't matter anymore. All that matters is getting out of this place with your lives intact—and with all the evidence you have found, of course.\nThe voyage home is quiet and peaceful, but your thoughts are anything but. To this day, you wonder about the true nature of the entity you encountered within the ancient Elder Thing facility. You have no idea what you are going to tell the greater academic community when you return. Your actions have ensured none can study or explore that nightmarish city ever again. But what of the Elder Things? Will those that survived remain in hiding? Or will they—like you—choose to learn more about this new age they find themselves in?\nOnly time will tell. Until then, you can rest easy knowing that the creature that dwelled beneath the ice cannot possibly have survived. The air shimmers around your pen hand as you put the final touches on your notes regarding the expedition. Yes—it is finally over.\n…Right?",
+      "effects": [
+        {
+          "do": "record",
+          "key": "facility_was_destroyed",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "surviving_members_header",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 10,
+          "who": "each"
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 1,
+          "mental": 1
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "You take flight from beneath the archway as the mountain begins to groan and rumble. You managed to collapse enough pylons to threaten the structural integrity of the facility deep beneath the city, but it is not enough. You are going to die here, and worse, you have only aided in the entity's escape.\nThen you hear it: the roaring engine of an aeroplane overhead. The last of Takada's three planes soars over the city, and familiar shouts echo throughout the ancient, ruinous streets. \"There they are! By that tunnel! Quickly!\" Two sledges slide into view, pulled by the remainder of the dogs Eliyah left at the barrier camp, and manned by several members of the crew of the Theodosia. You cannot hold back your relief at the sight. They motion frantically for you to join them, their gazes fixed on the encroaching miasmic horror. \"What in the hell is that thing? One of them shouts. But there is no time for explanations. The moment you are on board one of the sledges, you instruct him to flee.\nYour escape from the city is a frenzied blur. You have vague recollections of weaving through ancient snow-covered streets, dodging the creeping mist around buildings of smooth, slate gray, of narrowly avoiding a deluge of kaleidoscopic ooze as you make your way through the mountains.\nOnce the creature is out of sight, one of the crewmates explains that they fixed up the last of the aeroplanes and decided to use it to look for you, even knowing the risks. \"When we spotted you entering that huge cavern without most of your gear, we thought you might need a rescue. Didn't expect that to be quite this literal,\" he says.\nYou are relieved to see that the pilot has landed the last aeroplane just on the other side of the mountain range. With haste, you and your rescuers board the plane as soon as you reach it, along with the remaining dogs. In the distance, you can see the entity looming, climbing up the jagged peaks, reaching into the sky.\nYou leave the sledge and all of your supplies behind. The engine roars to life, and together you leave the mountains of madness behind. You dare not turn and glimpse that which has haunted Danforth these many months, but still you hear it to this day: echoing shrieks and fathomless cries, winds too shrill and piercing to be natural, and whispers that beckon you to return.\nIt has been years since that fateful day. You have not told the greater scientific community anything of your journey. And yet, still, there is no sign of the escaped entity. Is its reach limited to that cryptic,frozen continent? Is it simply biding its time?\nOr is it already here, in the very air you breathe? Inside your mind? Showing you a false reality? A mirage?",
+      "effects": [
+        {
+          "do": "record",
+          "key": "team_escaped_the_facility",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "surviving_members_header",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 5,
+          "who": "each"
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 2,
+          "mental": 2
+        }
+      ]
+    }
+  },
+  "i18nId": "the_heart_of_madness_part_2",
+  "connections": [
+    [
+      "08682",
+      "08650"
+    ],
+    [
+      "08682",
+      "08649"
+    ],
+    [
+      "08682",
+      "08683"
+    ],
+    [
+      "08682",
+      "08684"
+    ],
+    [
+      "08682",
+      "08685"
+    ],
+    [
+      "08682",
+      "08686"
+    ],
+    [
+      "08683",
+      "08650"
+    ],
+    [
+      "08683",
+      "08649"
+    ],
+    [
+      "08683",
+      "08684"
+    ],
+    [
+      "08683",
+      "08685"
+    ],
+    [
+      "08683",
+      "08686"
+    ],
+    [
+      "08684",
+      "08650"
+    ],
+    [
+      "08684",
+      "08649"
+    ],
+    [
+      "08684",
+      "08685"
+    ],
+    [
+      "08684",
+      "08686"
+    ],
+    [
+      "08685",
+      "08650"
+    ],
+    [
+      "08685",
+      "08649"
+    ],
+    [
+      "08685",
+      "08686"
+    ],
+    [
+      "08686",
+      "08650"
+    ],
+    [
+      "08686",
+      "08649"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "08650": [
+      6,
+      0
+    ],
+    "08649": [
+      6,
+      7
+    ],
+    "08682": [
+      0,
+      8
+    ],
+    "08683": [
+      1,
+      8
+    ],
+    "08684": [
+      2,
+      8
+    ],
+    "08685": [
+      3,
+      8
+    ],
+    "08686": [
+      4,
+      8
+    ]
+  }
+}

@@ -1,5 +1,5 @@
 import type { CardScript, ContentDb } from "../engine/types";
-import { addCardText, addPack, buildContent, TEXT_FILE, textLayer, type ContentError } from "./loader";
+import { addCampaignFiles, addCardText, addPack, buildContent, TEXT_FILE, textLayer, type ContentError } from "./loader";
 
 /**
  * Content bundled by Vite: every JSON and script under /content is picked up automatically, except the card packs other
@@ -9,15 +9,21 @@ import { addCardText, addPack, buildContent, TEXT_FILE, textLayer, type ContentE
  */
 const PACK_FILE = /^\/content\/packs\/([^/]+)\/cards(\.generated)?\.json$/;
 // the Russian image import's manifest and review overrides and the icon manifest are tooling data, not game content
-const files = import.meta.glob(["/content/**/*.json", "!/content/i18n/*/images*.json", "!/content/icons/*.json", "!/content/packs/*/cards*.json", "!/content/i18n/*/packs/*.json"], { eager: true, import: "default" }) as Record<string, unknown>;
+const files = import.meta.glob(
+  ["/content/**/*.json", "!/content/i18n/*/images*.json", "!/content/icons/*.json", "!/content/packs/*/cards*.json", "!/content/i18n/*/packs/*.json", "!/content/campaigns-generated/*/scenarios/*.json", "!/content/i18n/*/campaign-texts/*.json"],
+  { eager: true, import: "default" },
+) as Record<string, unknown>;
 const eagerPacks = import.meta.glob("/content/packs/core/cards*.json", { eager: true, import: "default" }) as Record<string, unknown>;
 const lazyPacks = import.meta.glob(["/content/packs/*/cards*.json", "!/content/packs/core/cards*.json"], { import: "default" }) as Record<string, () => Promise<unknown>>;
 // the other packs' card text in each locale: loaded with the pack
 const lazyText = import.meta.glob("/content/i18n/*/packs/*.json", { import: "default" }) as Record<string, () => Promise<unknown>>;
+// the generated campaigns' scenarios and text (ADR-0007): loaded when one is chosen
+const lazyCampaignFiles = import.meta.glob(["/content/campaigns-generated/*/scenarios/*.json", "/content/i18n/*/campaign-texts/*.json"], { import: "default" }) as Record<string, () => Promise<unknown>>;
 const scripts = import.meta.glob("/content/**/scripts/*.ts", { eager: true, import: "default" }) as Record<string, CardScript>;
 
 const lazyNames = [...new Set(Object.keys(lazyPacks).map((f) => f.match(PACK_FILE)![1]))].sort();
-const built = buildContent({ ...files, ...eagerPacks }, scripts, lazyNames);
+const lazyCampaigns = Object.keys(files).flatMap((f) => f.match(/^\/content\/campaigns-generated\/([^/]+)\/campaign\.json$/)?.[1] ?? []);
+const built = buildContent({ ...files, ...eagerPacks }, scripts, lazyNames, lazyCampaigns);
 
 export const content: ContentDb = built.db;
 export const contentErrors: ContentError[] = built.errors;
@@ -42,3 +48,26 @@ export function loadPack(pack: string): Promise<ContentError[]> {
   }
   return p;
 }
+
+const loadingCampaigns = new Map<string, Promise<ContentError[]>>();
+/** bring a generated campaign's scenarios and text into the content; a hand-written or loaded campaign resolves at once */
+export function loadCampaign(id: string): Promise<ContentError[]> {
+  if (!content.campaigns[id]) return Promise.reject(new Error(`unknown campaign ${id}`));
+  if (content.campaignsLoaded?.[id] !== false) return Promise.resolve([]);
+  let p = loadingCampaigns.get(id);
+  if (!p) {
+    p = (async () => {
+      const mine = Object.entries(lazyCampaignFiles).filter(([f]) => f.startsWith(`/content/campaigns-generated/${id}/`) || f.endsWith(`/campaign-texts/${id}.json`));
+      const loaded = Object.fromEntries(await Promise.all(mine.map(async ([f, load]) => [f, await load()] as const)));
+      const errors = addCampaignFiles(content, loaded);
+      content.campaignsLoaded![id] = true;
+      return errors;
+    })().finally(() => loadingCampaigns.delete(id));
+    loadingCampaigns.set(id, p);
+  }
+  return p;
+}
+
+/** whether a campaign's scenarios are in the content */
+export const campaignLoaded = (id: string) => content.campaignsLoaded?.[id] !== false;
+

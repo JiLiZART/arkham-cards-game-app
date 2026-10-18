@@ -1,0 +1,244 @@
+{
+  "id": "return-to-threads-of-fate",
+  "name": "Return to Threads of Fate",
+  "card": "04113",
+  "intro": "The night passes with Ichtaca resting in your living room. You get no sleep for the remainder of the night, your thoughts drifting between concern and disbelief. Her story is preposterous, but you feel compelled to believe it nonetheless. You’ve known that the relic from the Eztli ruins had some deeper purpose ever since you first laid eyes on it. When you emerge from your bedroom the next morning, your uninvited guest is sitting at your dining-room table, arms crossed tightly across her chest. Her piercing eyes trace your every move like a bird watching its prey. No pleasantries are exchanged. “Where is the relic now?” Ichtaca asks impatiently. “Where have you brought it?” You explain that it is safe, in good hands. She shakes her head, her knuckles white with frustration. “I assure you it is not.”",
+  "encounterSets": [
+    "threads_of_fate",
+    "return_to_threads_of_fate",
+    "pnakotic_brotherhood",
+    "arkham",
+    "locked_doors",
+    "nightgaunts",
+    "cult_of_pnakotus"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "53029",
+    "53031",
+    "53035"
+  ],
+  "agendas": [
+    "04114",
+    "04115",
+    "04116"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "04142",
+        "01134",
+        "01130",
+        "01132",
+        "04141",
+        "01125"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "01129",
+        "53037",
+        "04143",
+        "04147",
+        "04148"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "01125"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -2
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -2
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "Each investigator resigned or was defeated",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "You arrive back at your house and take stock of the situation. Your investigation throughout the city has uncovered the existence of a secret cabal within Arkham. From what you can tell, they call themselves the Brotherhood, and they seem to know more about the Eztli relic and Alejandro’s previous expedition than even you do. Their methods are secret and furtive, and their motives elude you still. However, one piece of vital information has come to light.\n“They seek a place known as the Nexus of N’kai,” Ichtaca claims. A map of Central America lies on the table before you, marked with the previous expedition’s trail. “I have heard of this place, but its exact location is not known to me.” Once again, your mysterious guide appears to know more than she lets on.\nWith no other leads to follow, you are left with no choice. Once more you must journey into uncharted territory in search of answers…but will anyone return this time?",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "04148",
+          "who": "lead"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 0,
+          "mental": 0
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 0,
+          "mental": 0
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "return_to_threads_of_fate",
+  "connections": [
+    [
+      "04143",
+      "04142"
+    ],
+    [
+      "04143",
+      "01134"
+    ],
+    [
+      "04143",
+      "01130"
+    ],
+    [
+      "04143",
+      "01132"
+    ],
+    [
+      "04143",
+      "04141"
+    ],
+    [
+      "04143",
+      "01129"
+    ],
+    [
+      "04143",
+      "01125"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "04142": [
+      0,
+      0
+    ],
+    "01134": [
+      2,
+      0
+    ],
+    "01130": [
+      4,
+      0
+    ],
+    "01132": [
+      6,
+      0
+    ],
+    "04141": [
+      8,
+      0
+    ],
+    "01129": [
+      3,
+      1
+    ],
+    "01125": [
+      5,
+      1
+    ],
+    "04143": [
+      0,
+      2
+    ]
+  }
+}

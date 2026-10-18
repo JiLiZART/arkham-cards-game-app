@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { campaignLoaded, loadCampaign } from "../../content";
 import { campaignName, scenarioText, t } from "../../content/i18n";
 import type { Difficulty } from "../../content/schema";
 import { db, gameStore, useGame } from "../context";
@@ -10,23 +11,26 @@ import { BagCard } from "./BagCard";
 import { customDecks, deleteCustomDeck, problemText, renameCustomDeck, type DeckOp } from "../decks";
 import { safeStorage } from "../store";
 import { DeckEditor } from "./DeckEditor";
-import { back, canContinue, deckProblems, decksFor, initialWizard, invalidDecksFor, next, setCampaign, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type WizardState } from "./wizard";
+import { back, campaignOrder, canContinue, deckProblems, decksFor, initialWizard, invalidDecksFor, next, setCampaign, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type WizardState } from "./wizard";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
 const DIFFICULTIES: Difficulty[] = ["easy", "standard", "hard", "expert"];
 
 function CampaignStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }) {
   const locale = useGame((s) => s.locale);
-  const campaigns = Object.values(db.campaigns);
+  const campaigns = campaignOrder(db);
   return (
     <div className="wz-campaigns">
       {campaigns.map((c) => {
         const first = db.scenarios[c.scenarios[0]];
-        const art = first ? db.cards[first.card] : null;
+        // a generated campaign's scenarios and cards load when it is chosen: its reference card's scan is found by code
+        const card = first?.card ?? c.card;
+        const art = card ? (db.cards[card] ?? { code: card }) : null;
         return (
           <button key={c.id} className={`wz-campaign ${s.campaignId === c.id ? "selected" : ""}`} aria-pressed={s.campaignId === c.id} onClick={() => set(setCampaign(s, c.id, db))}>
             {art && <img src={cardImage(art, "front", locale) ?? ""} alt="" draggable={false} onError={(e) => (e.currentTarget.style.display = "none")} />}
             <b>{campaignName(db, c.id, locale)}</b>
+            {c.generated && <small className="wz-generated">{tr("wizard.generated")}</small>}
             <small>{first ? scenarioText(db, first.id, locale).intro : ""}</small>
           </button>
         );
@@ -218,7 +222,17 @@ function ReadyStep({ s }: { s: WizardState }) {
 /** the new-campaign wizard: one decision a screen, Back on every step, the picks kept */
 export function Wizard() {
   useGame((s) => s.locale);
+  const loading = useGame((s) => s.loading);
+  const error = useGame((s) => s.error);
   const [s, set] = useState<WizardState>(() => initialWizard(db));
+  // a generated campaign's scenarios come in when it is picked (its first scenario's name and intro, the ready step)
+  const [, loaded] = useState(0);
+  useEffect(() => {
+    if (!campaignLoaded(s.campaignId))
+      loadCampaign(s.campaignId)
+        .then(() => loaded((n) => n + 1))
+        .catch((e) => console.error(e));
+  }, [s.campaignId]);
   const at = STEPS.indexOf(s.step);
   const last = at === STEPS.length - 1;
   return (
@@ -242,9 +256,10 @@ export function Wizard() {
         <button className="big" onClick={() => (at === 0 ? gameStore.setState({ screen: "title" }) : set(back(s)))}>
           {tr("wizard.back")}
         </button>
+        {error && <span className="wz-error">{error}</span>}
         {last ? (
-          <button className="primary big" onClick={() => gameStore.getState().newCampaign(toSetup(s, Date.now() >>> 0, db))}>
-            {tr("wizard.begin")}
+          <button className="primary big" disabled={loading} onClick={() => gameStore.getState().newCampaign(toSetup(s, Date.now() >>> 0, db))}>
+            {tr(loading ? "wizard.loading" : "wizard.begin")}
           </button>
         ) : (
           <button className="primary big" disabled={!canContinue(db, s)} onClick={() => set(next(db, s))}>

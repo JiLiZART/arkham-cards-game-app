@@ -37,8 +37,14 @@ const campaignsOut: { campaigns: Raw; scenarios: Raw; encounterSets: Record<stri
 const acCampaigns: Raw[] = read(join(AC, `generated/all_campaigns_${locale}.txt`));
 const encounterNames: Record<string, string> = read(join(AC, `generated/encounter_sets_${locale}.txt`));
 
-for (const dir of readdirSync("content/campaigns")) {
-  const campaign = read(join("content/campaigns", dir, "campaign.json"));
+// the generated campaigns' scenario text and log labels go to one file each, loaded with the campaign (ADR-0007)
+const perCampaign: Record<string, { campaigns: Raw; scenarios: Raw; encounterSets: Record<string, string> }> = {};
+const campaignDirs = ["content/campaigns", "content/campaigns-generated"].flatMap((root) => (existsSync(root) ? readdirSync(root).map((d) => join(root, d)) : []));
+for (const dirPath of campaignDirs) {
+  const campaign = read(join(dirPath, "campaign.json"));
+  // a generated campaign keeps its (English) log labels with its text, not in campaign.json
+  const enText = join("content/i18n/en/campaign-texts", `${campaign.id}.json`);
+  if (campaign.generated && existsSync(enText)) campaign.logLabels = read(enText).campaigns[campaign.id].logLabels;
   const ac = acCampaigns.find((c) => c.campaign.id === campaign.i18nId);
   if (!ac) {
     console.warn(`${campaign.id}: no ArkhamCards campaign "${campaign.i18nId}"`);
@@ -46,16 +52,18 @@ for (const dir of readdirSync("content/campaigns")) {
   }
   const logLabels: Record<string, string> = {};
   const addLog = (id: string, text: string) => {
-    const key = LOG_ALIASES[id] ?? camel(id);
+    // hand-written campaigns name their log keys in camelCase; generated ones keep the guide's ids
+    const key = LOG_ALIASES[id] ?? (id in campaign.logLabels ? id : camel(id));
     if (key in campaign.logLabels && text) logLabels[key] = sentence(clean(text));
   };
   for (const section of ac.campaign.campaign_log ?? []) addLog(section.id, section.title);
   const scenarios = new Map<string, Raw>(ac.scenarios.map((s: Raw) => [s.id, s]));
   for (const s of ac.scenarios) for (const step of s.steps ?? []) for (const e of step.effects ?? []) if (e.type === "campaign_log" && e.id && e.text) addLog(e.id, e.text);
-  campaignsOut.campaigns[campaign.id] = { name: ac.campaign.name, logLabels };
+  const out = campaign.generated ? (perCampaign[campaign.id] = { campaigns: { [campaign.id]: { logLabels } }, scenarios: {}, encounterSets: {} }) : campaignsOut;
+  campaignsOut.campaigns[campaign.id] = campaign.generated ? { name: ac.campaign.name } : { name: ac.campaign.name, logLabels };
 
   for (const id of campaign.scenarios) {
-    const ours = read(join("content/campaigns", dir, "scenarios", `${id}.json`));
+    const ours = read(join(dirPath, "scenarios", `${id}.json`));
     const theirs = scenarios.get(ours.i18nId);
     if (!theirs) {
       console.warn(`${id}: no ArkhamCards scenario "${ours.i18nId}"`);
@@ -68,7 +76,7 @@ for (const dir of readdirSync("content/campaigns")) {
       const key = r.id === "no_resolution" ? "none" : r.id;
       if (key in ours.resolutions) resolutions[key] = { title: r.title, ...(r.text ? { text: clean(r.text) } : {}) };
     }
-    campaignsOut.scenarios[id] = { name: theirs.scenario_name, ...(intro ? { intro: clean(intro) } : {}), resolutions };
+    out.scenarios[id] = { name: theirs.scenario_name, ...(intro ? { intro: clean(intro) } : {}), resolutions };
     for (const set of ours.encounterSets ?? []) if (encounterNames[set]) campaignsOut.encounterSets[set] = encounterNames[set];
   }
 }
@@ -87,6 +95,10 @@ const dir = join("content/i18n", locale);
 if (!existsSync(dir)) throw new Error(`${dir} does not exist`);
 const write = (name: string, data: unknown) => writeFileSync(join(dir, name), JSON.stringify(data, null, name.startsWith("packs") ? 0 : name === "cards.generated.json" ? 1 : 2) + "\n");
 write("campaigns.generated.json", campaignsOut);
+const textDir = join(dir, "campaign-texts");
+rmSync(textDir, { recursive: true, force: true });
+mkdirSync(textDir, { recursive: true });
+for (const [id, text] of Object.entries(perCampaign)) writeFileSync(join(textDir, `${id}.json`), JSON.stringify(text) + "\n");
 write("ui.generated.json", ui);
 
 // card text for every cycle, from the snapshot

@@ -88,5 +88,20 @@
   "deckEditor.delete": "Удалить",
   "deckEditor.cancel": "Отмена",
   "deckEditor.name": "Название колоды",
-  "deckEditor.weakness": "Базовая слабость"
+  "deckEditor.weakness": "Базовая слабость",
+  "kw.hunter.name": "Охотник",
+  "kw.retaliate.name": "Мститель",
+  "kw.alert.name": "Бдительный",
+  "kw.aloof.name": "Осторожный",
+  "kw.massive.name": "Огромный",
+  "kw.fast.name": "Быстрый",
+  "kw.patrol.name": "Стремление",
+  "kw.concealed.name": "Сокрытый",
+  "kw.exceptional.name": "Исключительный",
+  "kw.myriad.name": "Мириада",
+  "kw.bonded.name": "Зависимые",
+  "kw.permanent.name": "Постоянный",
+  "kw.seal.name": "Печать",
+  "kw.uses.name": "Многоразовый",
+  "kw.victory.name": "Победа"
 }

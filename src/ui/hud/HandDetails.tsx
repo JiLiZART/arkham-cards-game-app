@@ -164,6 +164,17 @@ function Row({ r, locale }: { r: DetailRow; locale: string }) {
       );
     case "text":
       return <p className="hd-text" dangerouslySetInnerHTML={{ __html: formatText(r.s) }} />;
+    case "keywords":
+      return (
+        <dl className="hd-keywords" aria-label={r.label}>
+          {r.items.map((k) => (
+            <div key={k.name}>
+              <dt>{k.name}</dt>
+              <dd>{k.text}</dd>
+            </div>
+          ))}
+        </dl>
+      );
   }
 }
 

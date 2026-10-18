@@ -1,0 +1,164 @@
+{
+  "id": "horror-in-high-gear",
+  "name": "Horror in High Gear",
+  "card": "07198",
+  "intro": "Trees whizz by as you rumble along the old dirt road just outside of Innsmouth. The sun has set over the western horizon, leaving only the full moon to bathe the dusty roads in its brilliant, eerie glow.\n\"Here,\" Agent Harper shouts from the passenger seat over the rumbling of the automobile engine. She points to a spot on the map she has spread across her lap, tapping it repeatedly. \"Falcon Point Lighthouse. That's where Oceiros should be.\"\nA shudder courses up your spine. If your memories are to be believed, Oceiros is the man who left you to die in those tidal tunnels. You ask Harper how far Falcon Point is from Innsmouth, hoping to arrive before the Order realizes you've escaped.\nShe sighs. \"It's not that far, but these roads are meandering. They could be difficult to navigate. One wrong turn and—\" both you and Harper see the lights in your rearview mirror at the same time. Headlights. And they're growing larger and brighter by the second. Harper curses under her breath. \"I don't suppose those are friends of yours?\"\nYou shake your head and tighten your grip on the wheel. It seems the Order has already caught wind of your flight from Innsmouth. You tell Agent Harper to hold on and slam your foot on the accelerator.",
+  "encounterSets": [
+    "horror_in_high_gear",
+    "fog_over_innsmouth",
+    "malfunction",
+    "shattered_memories",
+    "ancient_evils"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "07202"
+  ],
+  "agendas": [
+    "07199",
+    "07201"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "07205a",
+        "07205b"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "07210"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "07205a"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -1
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -1
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "Your drive to Falcon Point is no joyride. Between the cultists on your tail and the creatures that dwell in the woods outside Innsmouth, your vehicle is harried at every turn. With no way to escape unharmed, you are forced to abandon your vehicle and sneak through the woods on foot. By the time you see the distant lighthouse beacon, dawn already bathes the sky in orange radiance. \"Finally,\" Agent Harper groans. With no time to rest, you continue the trek to the Falcon Point lighthouse, exhausted but resolute.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "reached_falcon_point_after_sunrise",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "You breathe a sigh of relief as you see the distant lighthouse beacon pierce the fog. \"Let's pull over here and make the rest of the trip on foot,\" Harper suggests. \"If there's anybody still in that lighthouse, it would be best if they didn't hear us approach.\" Her advice is sound. You're not sure what to expect once you reach Falcon Point, but all signs point to it being another outpost for the Order. You double-check to make sure you aren't being followed, then pull over by the side of the road. Gathering your belongings from the car's trunk, you begin the trek to the Falcon Point lighthouse…",
+      "effects": [
+        {
+          "do": "record",
+          "key": "reached_falcon_point_before_sunrise",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "horror_in_high_gear",
+  "connections": [
+    [
+      "07205a",
+      "07205b"
+    ],
+    [
+      "07210",
+      "07205a"
+    ],
+    [
+      "07210",
+      "07205b"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "07205a": [
+      0,
+      0
+    ],
+    "07205b": [
+      3,
+      0
+    ],
+    "07210": [
+      0,
+      1
+    ]
+  }
+}

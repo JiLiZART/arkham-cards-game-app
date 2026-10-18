@@ -1,0 +1,443 @@
+{
+  "id": "the-unspeakable-oath",
+  "name": "The Unspeakable Oath",
+  "card": "03159",
+  "intro": "“Wake up, Daniel.” The words echo in your thoughts as you pace through the disheveled room, trying to make sense of what you’d just experienced. You had awoken that afternoon with a violent startle, your body shaking, bedsheets soaked with sweat. Although you’d slept a healthy eight-and-a-half hours, you feel even more exhausted than you had the previous night. You catch a glimpse of your dark, bloodshot eyes in the mirror next to the dresser, and wonder if you’ve gotten any real sleep at all.\nWho is Daniel, you wonder? The chamber from your dream looked like a prison, but the man—Daniel—he seemed unhinged, as though he wasn’t in control of his mind. This led to only one conclusion: An asylum. Knowing you’ll get little rest here, you head towards Arkham Asylum, hoping your hunch is correct.",
+  "encounterSets": [
+    "the_unspeakable_oath",
+    "hasturs_gift",
+    "inhabitants_of_carcosa",
+    "delusions",
+    "decay",
+    "agents_of_hastur"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "03163",
+    "03164",
+    "03166",
+    "03167"
+  ],
+  "agendas": [
+    "03160",
+    "03161",
+    "03162"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "03176",
+        "03175",
+        "03172",
+        "03173",
+        "03168",
+        "03170",
+        "03174",
+        "03177"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "03182a",
+        "03182b",
+        "03178",
+        "03179",
+        "03180",
+        "03181"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "03168"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -1
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": 0
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -1
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": 0
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": 0
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": 0
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "Each investigator was defeated",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "…And so ended the madness of The King in Yellow.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "king_claimed_victims",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "You are confronted by a number of orderlies and security guards, who bar your escape. Feeling cornered and trapped, you have no choice but to fight your way through them. As you struggle to escape, several of the patients nearby see their opportunity, and attack the guards with a crazed fury. Nurse Heather shrieks and retreats, and in the ruckus you are able to escape, bruised and battered but free once more. It will take some time for your wounds to heal, but you have no time for that yet.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "attacked_as_you_escaped_arkham",
+          "value": true
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 1,
+          "mental": 0
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "With the asylum staff distracted and patients running amok, you are able to slip away without being noticed. You escape deeper into the garden behind the asylum, where a two-story tall fence topped with barbed wire is all that separates you from the outside world. You have little time, and need to make it far away from the asylum before the guards return and spot you. Using a straitjacket you’d found inside to cover the barbed wire, you scale the fence quickly, breaking into a run as you make it to the other side.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "escaped_the_asylum",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        }
+      ]
+    }
+  },
+  "i18nId": "the_unspeakable_oath",
+  "connections": [
+    [
+      "03176",
+      "03175"
+    ],
+    [
+      "03175",
+      "03168"
+    ],
+    [
+      "03172",
+      "03173"
+    ],
+    [
+      "03173",
+      "03168"
+    ],
+    [
+      "03168",
+      "03170"
+    ],
+    [
+      "03170",
+      "03174"
+    ],
+    [
+      "03170",
+      "03177"
+    ],
+    [
+      "03178",
+      "03176"
+    ],
+    [
+      "03178",
+      "03175"
+    ],
+    [
+      "03178",
+      "03172"
+    ],
+    [
+      "03178",
+      "03173"
+    ],
+    [
+      "03178",
+      "03168"
+    ],
+    [
+      "03178",
+      "03170"
+    ],
+    [
+      "03178",
+      "03174"
+    ],
+    [
+      "03178",
+      "03177"
+    ],
+    [
+      "03178",
+      "03179"
+    ],
+    [
+      "03178",
+      "03180"
+    ],
+    [
+      "03178",
+      "03181"
+    ],
+    [
+      "03179",
+      "03176"
+    ],
+    [
+      "03179",
+      "03175"
+    ],
+    [
+      "03179",
+      "03172"
+    ],
+    [
+      "03179",
+      "03173"
+    ],
+    [
+      "03179",
+      "03168"
+    ],
+    [
+      "03179",
+      "03170"
+    ],
+    [
+      "03179",
+      "03174"
+    ],
+    [
+      "03179",
+      "03177"
+    ],
+    [
+      "03179",
+      "03180"
+    ],
+    [
+      "03179",
+      "03181"
+    ],
+    [
+      "03180",
+      "03176"
+    ],
+    [
+      "03180",
+      "03175"
+    ],
+    [
+      "03180",
+      "03172"
+    ],
+    [
+      "03180",
+      "03173"
+    ],
+    [
+      "03180",
+      "03168"
+    ],
+    [
+      "03180",
+      "03170"
+    ],
+    [
+      "03180",
+      "03174"
+    ],
+    [
+      "03180",
+      "03177"
+    ],
+    [
+      "03180",
+      "03181"
+    ],
+    [
+      "03181",
+      "03176"
+    ],
+    [
+      "03181",
+      "03175"
+    ],
+    [
+      "03181",
+      "03172"
+    ],
+    [
+      "03181",
+      "03173"
+    ],
+    [
+      "03181",
+      "03168"
+    ],
+    [
+      "03181",
+      "03170"
+    ],
+    [
+      "03181",
+      "03174"
+    ],
+    [
+      "03181",
+      "03177"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "03176": [
+      2,
+      0
+    ],
+    "03175": [
+      2,
+      1
+    ],
+    "03172": [
+      0,
+      2
+    ],
+    "03173": [
+      1,
+      2
+    ],
+    "03168": [
+      2,
+      2
+    ],
+    "03170": [
+      3,
+      2
+    ],
+    "03174": [
+      4,
+      2
+    ],
+    "03177": [
+      3,
+      3
+    ],
+    "03178": [
+      0,
+      4
+    ],
+    "03179": [
+      1,
+      4
+    ],
+    "03180": [
+      2,
+      4
+    ],
+    "03181": [
+      3,
+      4
+    ]
+  }
+}

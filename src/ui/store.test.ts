@@ -262,3 +262,66 @@ describe("game report", () => {
     expect(b.getState().game).toBeNull();
   });
 });
+
+describe("campaigns whose cards load first", () => {
+  /** a prepare step that holds until released, like loading a pack */
+  const gate = () => {
+    let release!: () => void;
+    let fail!: (e: Error) => void;
+    const asked: string[] = [];
+    const prepare = (id: string) => {
+      asked.push(id);
+      return new Promise<void>((res, rej) => {
+        release = res;
+        fail = rej;
+      });
+    };
+    return { prepare, asked, release: () => release(), fail: (e: Error) => fail(e) };
+  };
+  const opts = { campaignId: "night-of-the-zealot", difficulty: "standard" as const, seed: 9, investigators: [{ code: "01001", deckId: "roland-starter" }] };
+
+  it("a new campaign starts once its cards are loaded, and says it is loading meanwhile", async () => {
+    const g = gate();
+    const s = createGameStore(db, mem(), g.prepare);
+    s.getState().newCampaign(opts);
+    expect(g.asked).toEqual(["night-of-the-zealot"]);
+    expect(s.getState()).toMatchObject({ loading: true, game: null });
+    g.release();
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(s.getState().loading).toBe(false);
+    expect(s.getState().game?.pending?.kind).toBe("mulligan");
+  });
+
+  it("a load that fails leaves no half-started game and says why", async () => {
+    const g = gate();
+    const s = createGameStore(db, mem(), g.prepare);
+    s.getState().newCampaign(opts);
+    g.fail(new Error("unknown pack dwl"));
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(s.getState()).toMatchObject({ loading: false, game: null, campaign: null });
+    expect(s.getState().error).toMatch(/unknown pack dwl/);
+  });
+
+  it("a saved game is restored once its campaign's cards are loaded", async () => {
+    const storage = mem();
+    const first = start(storage);
+    begin(first);
+    first.getState().skipEvents();
+    const g = gate();
+    const reloaded = createGameStore(db, storage, g.prepare);
+    expect(reloaded.getState().resume()).toBe(true);
+    expect(reloaded.getState().game).toBeNull();
+    g.release();
+    await Promise.resolve();
+    await Promise.resolve();
+    expect(reloaded.getState().game).toEqual(first.getState().game);
+  });
+
+  it("with nothing to load the campaign starts at once, as before", () => {
+    const s = createGameStore(db, mem(), () => undefined);
+    s.getState().newCampaign(opts);
+    expect(s.getState().game).not.toBeNull();
+  });
+});

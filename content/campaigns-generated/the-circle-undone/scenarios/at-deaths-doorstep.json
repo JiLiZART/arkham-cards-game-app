@@ -1,0 +1,223 @@
+{
+  "id": "at-deaths-doorstep",
+  "name": "At Death's Doorstep",
+  "card": "05065",
+  "intro": "You fold up the newspaper and shove it aside on your desk, examining the other files you’ve collected over the last few days concerning the missing persons. It has been several days since your experience in the woods. You have tried to put it all out of mind, but it is impossible. Every night, you dream of a nameless place in the void of space, a faint discordant melody of hypnotizing flutes pulling you forward. Now there are others disappearing from the town without a trace. The disappearances dance along the edges of your thoughts. No reason to worry, you ponder, turning the man’s words over in your head. You think of the card reader and her warning, and you wonder if you are simply imagining devils where there are none. Regardless, there is only one way to know for sure. You pick up the invitation, examining the silver-embossed stationary and perfect calligraphy.\n<center><fancy>The Silver Twilight Lodge</fancy></center>\n<center>requests the pleasure of your company on the evening of November the twenty-ninth at eight o’clock at the estate of Josef Ekhard Meiger, Esq. for the benefit of The Fairchild Foundation</center>\nAs you prepare for the night ahead, you cannot help but wonder: Are you taking action to remedy your fate, as the soothsayer advised? Or are you walking willingly into the jaws of a grim destiny?",
+  "encounterSets": [
+    "at_deaths_doorstep",
+    "silver_twilight_lodge",
+    "spectral_predators",
+    "trapped_spirits",
+    "inexorable_fate",
+    "chilling_cold"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "05068",
+    "05069",
+    "05070"
+  ],
+  "agendas": [
+    "05066",
+    "05067"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "05077",
+        "05074",
+        "05073",
+        "05072",
+        "05075",
+        "05076",
+        "05071"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "05085"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "05071"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -2
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -2
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -3
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "Each investigator resigned or was defeated",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "As soon as you emerge onto the patio, you are surrounded by grim men in trench coats. Several of them reach into their coat pockets: a warning not to do anything too hasty. Before any threats can be fulfilled, the silence is broken by an icy voice. “Now gentlemen, there is no need for that.” The men withdraw to reveal an elderly man you recognize as Carl Sanford, the president of the Silver Twilight Lodge. Despite the dangerous situation, his expression is almost too casual. The complete lack of fear in his posture and his actions suggests a confidence backed by substantial power. His bodyguards take several steps back, allowing you to speak with Mr. Sanford in private.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "investigators_escaped_the_spectral_realm",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "You head out of the manor and are embraced by the brisk evening air. Your investigation has left you exhausted and strangely paranoid. Something about that event felt peculiar to you, though you aren’t sure why. Although the guests seemed oblivious, you noticed that the staff was sweaty and jittery, and the Lodge members seemed tense as well. More than once, you noticed their gaze drawn to you, watching your every move. If you didn’t know any better, you’d think the Silver Twilight Lodge was having you tailed for some reason. Regardless, you weren’t able to find much information about the four disappearances, and you doubt you ever will. Perhaps it was nothing, after all.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "learned_nothing_of_the_lodges_schemes",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "You flee toward the manor’s entry hall, but the wall of spectral mist still blocks your way. Emerging from the mist are several ghostly faces and arms, writhing and screaming in torment. You turn and are confronted by the empty visage of the hooded Watcher. Before you even realize your doom, the creature’s ethereal body is swirling and swooping through the air as though composed of mist itself. The creature reconstitutes before you, and its charred hand grips your throat, holding you aloft with tremendous strength. You kick and dig your nails into the creature’s hand, struggling with the ferocity of a cornered animal, but it is no use. The last thing you see is the red glare of the thing’s eyes as it drills into your mind.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "never_seen_again",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 0,
+          "mental": 0
+        }
+      ]
+    }
+  },
+  "i18nId": "at_deaths_doorstep",
+  "connections": [
+    [
+      "05077",
+      "05072"
+    ],
+    [
+      "05074",
+      "05073"
+    ],
+    [
+      "05073",
+      "05072"
+    ],
+    [
+      "05072",
+      "05075"
+    ],
+    [
+      "05072",
+      "05071"
+    ],
+    [
+      "05075",
+      "05076"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "05077": [
+      2,
+      0
+    ],
+    "05074": [
+      0,
+      1
+    ],
+    "05073": [
+      1,
+      1
+    ],
+    "05072": [
+      2,
+      1
+    ],
+    "05075": [
+      3,
+      1
+    ],
+    "05076": [
+      4,
+      1
+    ],
+    "05071": [
+      2,
+      2
+    ]
+  }
+}

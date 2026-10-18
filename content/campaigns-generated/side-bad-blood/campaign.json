@@ -1,0 +1,93 @@
+{
+  "id": "side-bad-blood",
+  "name": "Bad Blood",
+  "scenarios": [
+    "bad-blood"
+  ],
+  "i18nId": "side",
+  "chaosBags": {
+    "easy": [
+      "+1",
+      "+1",
+      "0",
+      "0",
+      "0",
+      "-1",
+      "-1",
+      "-1",
+      "-2",
+      "-2",
+      "skull",
+      "skull",
+      "cultist",
+      "tablet",
+      "autoFail",
+      "elderSign"
+    ],
+    "standard": [
+      "+1",
+      "0",
+      "0",
+      "-1",
+      "-1",
+      "-1",
+      "-2",
+      "-2",
+      "-3",
+      "-4",
+      "skull",
+      "skull",
+      "cultist",
+      "tablet",
+      "autoFail",
+      "elderSign"
+    ],
+    "hard": [
+      "0",
+      "0",
+      "0",
+      "-1",
+      "-1",
+      "-2",
+      "-2",
+      "-3",
+      "-3",
+      "-4",
+      "-5",
+      "skull",
+      "skull",
+      "cultist",
+      "tablet",
+      "autoFail",
+      "elderSign"
+    ],
+    "expert": [
+      "0",
+      "-1",
+      "-1",
+      "-2",
+      "-2",
+      "-3",
+      "-3",
+      "-4",
+      "-4",
+      "-5",
+      "-6",
+      "-8",
+      "skull",
+      "skull",
+      "cultist",
+      "tablet",
+      "autoFail",
+      "elderSign"
+    ]
+  },
+  "logLabels": {},
+  "packs": [
+    "core",
+    "parallel",
+    "tfa"
+  ],
+  "generated": true,
+  "card": "90020"
+}

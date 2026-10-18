@@ -85,8 +85,8 @@ export const registerSymbols = (ids: Iterable<string>) => {
  * Fetch the icon sprite (the browser caches it) and inject it as a hidden <svg>, so every `<use href="#id">` is
  * same-document. main.tsx waits for it before the first screen renders: no icon is ever drawn blank.
  */
-export async function loadSprite() {
-  const res = await fetch(asset("icons/sprite.svg"));
+export async function loadSprite(file = "icons/sprite.svg") {
+  const res = await fetch(asset(file));
   if (!res.ok) throw new Error(`icon sprite: HTTP ${res.status}`);
   const host = document.createElement("div");
   host.innerHTML = await res.text();
@@ -97,3 +97,8 @@ export async function loadSprite() {
   document.body.prepend(svg);
   registerSymbols([...svg.querySelectorAll("symbol")].map((s) => s.id));
 }
+
+let campaignSprite: Promise<void> | null = null;
+/** the generated campaigns' icons (ADR-0007): a second sprite, fetched once, the first time such a campaign is played */
+export const loadCampaignSprite = () => (campaignSprite ??= loadSprite("icons/sprite-campaigns.svg"));
+export const campaignSpriteLoaded = () => campaignSprite !== null;

@@ -328,6 +328,15 @@
       "loop": true,
       "original": "airy.mp3"
     },
+    "bed:default": {
+      "file": "bed-midnight-masks",
+      "gain": 0.8,
+      "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+      "author": "SRG774",
+      "license": "CC0",
+      "loop": true,
+      "original": "airy.mp3"
+    },
     "bed:the-devourer-below": {
       "file": "bed-devourer-below",
       "gain": 0.8,

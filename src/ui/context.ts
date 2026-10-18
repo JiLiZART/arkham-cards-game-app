@@ -1,14 +1,40 @@
 import { createContext, useContext } from "react";
 import type { StoreApi } from "zustand";
 import { useStore } from "zustand";
-import { content } from "../content";
+import { campaignLoaded, content, loadCampaign, loadPack } from "../content";
+import { packLoaded } from "../content/loader";
+import { campaignSpriteLoaded, loadCampaignSprite } from "./icons";
 import { trackArrivals } from "./arrivals";
 import { trackIntro } from "./intro";
 import { trackShowcase } from "./showcase";
 import { createGameStore, type UiState } from "./store";
 
 export const db = content;
-export const gameStore = createGameStore(content);
+/** a campaign's scenarios, card packs and icons (generated campaigns) before it starts or restores; nothing when all are in */
+const prepare = (campaignId: string) => {
+  const c = content.campaigns[campaignId];
+  if (!c) return;
+  const packs = c.packs.filter((p) => content.packs[p] && !packLoaded(content, p));
+  const icons = c.generated && !campaignSpriteLoaded();
+  const scenarios = !campaignLoaded(campaignId);
+  if (!packs.length && !icons && !scenarios) return;
+  return Promise.all([
+    scenarios
+      ? loadCampaign(campaignId).then((errors) => {
+          if (errors.length) throw new Error(`${campaignId}: ${errors[0].path} ${errors[0].message}`);
+        })
+      : null,
+    ...packs.map((p) =>
+      loadPack(p).then((errors) => {
+        if (errors.length) throw new Error(`${p}: ${errors[0].path} ${errors[0].message}`);
+      }),
+    ),
+    // icons are cosmetic: a sprite that fails to load is logged, not a reason to refuse the campaign
+    icons ? loadCampaignSprite().catch((e) => console.error(e)) : null,
+  ]).then(() => undefined);
+};
+
+export const gameStore = createGameStore(content, undefined, prepare);
 trackArrivals(gameStore);
 trackIntro(gameStore);
 trackShowcase(gameStore);

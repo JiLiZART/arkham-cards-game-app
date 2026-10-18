@@ -1,0 +1,211 @@
+{
+  "id": "the-longest-night",
+  "name": "The Longest Night",
+  "card": "10626",
+  "intro": "As you approach Atwood Farm, the clouds recede to reveal a blood-red sunset that casts the landscape in hazy shadows. You follow Dr. Marquez past a neglected coop and barn to the back porch of the derelict farmhouse. As the professor jams a crowbar under a boarded window, you notice the revolver in her back pocket. “Just some insurance,” she says.\nIt takes some time to pry the boards off the windows. As you climb in after the professor, your senses sting with the scent of rot and sick. Once your eyes adjust to the murk, you see a harrowing scene. Dirty cots line the walls, and the floor is streaked with refuse. A dozen sickly people lay on cots and sit, slumped against the walls. Their skin is knotted and hard, riddled with sharp spurs and sinewy growths. Several of them have limp flaps of loose flesh that you soon realize are vestigial limbs. Others look up at you with glassy eyes, while others with gray, powdery skin lay, inert, staring up at the ceiling.\n“You shouldn’t be here,” says a voice. A balding man in a tattered Vale cloak steps toward you with a halting gait. Dr. Marquez squints in the dim. “Tad? From the general store?” Before he can answer, you hear voices from the front porch. You and Dr. Marquez dash behind a pile of broken furniture just as the front door clicks and swings open. Mother Rachel enters alongside a half dozen cloaked figures and several more sickly locals.\nThe matron addresses the room, beaming. “My Star Children. Your time has come at last. You will prepare the way.” She leans down and holds a wheelchair-bound woman’s hand. “All of you have been made whole. And now you will join your other selves in eternity.”",
+  "encounterSets": [
+    "the_second_day",
+    "the_longest_night",
+    "blight",
+    "transfiguration",
+    "fire",
+    "chilling_cold",
+    "arkham",
+    "striking_fear",
+    "residents"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "10629"
+  ],
+  "agendas": [
+    "10628"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "10630"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "10642"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "10630"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -1
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -2
+      },
+      "tablet": {
+        "modifier": -1
+      },
+      "elderThing": {
+        "modifier": -4
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -3
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -3
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "Each investigator resigned or was defeated",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "“Please, listen,” Dr. Marquez implores the captives. “Each of you deserves to live a full life. We can help! You can receive care on the mainland.” Tad spits in response. “You’ve robbed us of a great privilege. We were chosen.” Dr. Marquez hardly answers before a jagged plank of wood swings out from behind her, striking her on the shoulder. One of the captives holds it overhead, while several others gather round. Tad looks balefully at the professor and growls, “Leave now.” Dr. Marquez rises gingerly and walks out of the farmhouse. You follow her. “Idiots. We saved their lives,” she scoffs. As you leave, a young girl wearing a rabbit mask peers out from under some debris. You recognize her as Rebecca, Mother Rachel’s daughter.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "captives_were_saved",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "Tad stands in the center of the farmhouse, his white- gold Vale cloak stained crimson. Surrounding him, the half-eaten corpses of the slain captives are arranged in a kind of circle. When you approach, the middle-aged man laughs bitterly. “Why was I spared, and so many others taken?” He raises both hands to his face and laughs hysterically. “Why is everything so bright?!” he giggles, clawing at his own eyes. You turn away and join Dr. Marquez outside, hunched over a pile of wreckage. A young girl wearing a rabbit mask scrambles out from underneath the debris. You recognize her as Rebecca, Mother Rachel’s daughter.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "many_captives_were_lost",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "“We can’t stay!” Dr. Marquez shouts. Utterly overwhelmed, you dash out of the fray and into the cornfields. Nightmarish shadows charge past you, braying and howling. You think of the captives in the farmhouse, staring their deaths head-on. At the far edge of the field, you find Dr. Marquez holding a young girl wearing a rabbit mask. You recognize her as Rebecca, Mother Rachel’s daughter.",
+      "effects": [
+        {
+          "do": "addWeakness",
+          "trait": "Madness"
+        },
+        {
+          "do": "record",
+          "key": "all_the_captives_were_lost",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R4": {
+      "title": "Resolution 4",
+      "text": "The morning sun beats down, blindingly bright, as you cut through the fields back to the Vale. Flecks of slick, dark liquid drip from the withered stalks as you push through. Dr. Marquez stops and runs a hand under the brittle leaves. “The fields are painted with blood. But why?” She wipes the blood on a handkerchief and surveys the dripping field. “What kind of monster would do this? Sentencing her followers—her own daughter—to death. It’s almost biblical.”\nRebecca pulls back her mask and shakes her head. “Mother says it’s our way. And she doesn’t want me to die. She told me to hide. She said we were playing a game. ‘Make yourself very small and hide near the barrels of kerosene. The animals won’t smell you there’.”\n“But why bring you here at all?” the professor asks.\n“Some people didn’t want to come to the barn. But when mama told them I would be there too, they said it was okay.”\nThe group falls silent as you pass from one field and back into view of the Vale, veiled in gold under the radiant dawn. Suddenly, Dr. Marquez stops and takes you aside. “We may be able to use this as leverage. Rebecca is living proof of Mother Rachel’s hypocrisy, as horrible as that sounds. Everyone on Hemlock Isle will be at the Feast tonight. If we ask Rebecca to tell them what Mother Rachel said to her, we may be able to sway at least some of them to leave. And if that doesn’t work, we can high-tail it back to the mainland and get the law involved.”\nThe professor turns to Rebecca. “Can we play a game? Like last night? Your mother told me she wants you to hide until the Feast.” The young girl nods. Dr. Marquez lets out a manic giggle: strangely out of character for her usual controlled affect. You can’t help but suppress a grin, too, despite the horrors you just witnessed.",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "10702",
+          "who": "choice"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        },
+        {
+          "do": "record",
+          "key": "dr_marquez_has_a_plan",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "southern_fields",
+          "value": true
+        }
+      ]
+    }
+  },
+  "i18nId": "the_longest_night",
+  "connections": [],
+  "oneWay": [],
+  "layout": {
+    "10630": [
+      0,
+      0
+    ]
+  }
+}

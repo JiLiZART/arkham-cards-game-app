@@ -1,0 +1,293 @@
+{
+  "id": "fate-of-the-vale",
+  "name": "Fate of the Vale",
+  "card": "10651",
+  "intro": "Head spinning, you stand up in an iridescent cavern. Smooth polished walls flicker with cool blue light, reflecting nightmarish images. Twisted stalagmites furl and unfurl into spirals, reaching up toward the ceiling like the stalks of some antediluvian flora. Screams fill the air: the cavern floor is covered in revelers clutching their limbs or heads. Cracks of shining light form on their skin and grow in intensity. Everything in the shining chamber is distorted by a gelid phosphorescence. You feel as though you are breathing heavy smoke in the thick warm air.\nEphemeral forms whorl around an empyrean brilliance at the center of the chamber. Silhouetted in front of the core of pure white light is Mother Rachel, her hair unbound and floating as if in deep water. Your head pounds as you stare into the brilliance, and you look down at the cavern floor. The injured revelers have stopped moving, and have gone gray and powdery. A few are clear as glass, refracting the clear light of the abyss into prismatic arrays. Others stand, petrified, holding their arms out toward the brilliance, each face frozen in a ghoulish smile.\nThe sound of Mother Rachel’s laughter echoes through the chamber as the matron stares into the abyss, holding her arms up overhead. Smoke gathers around her as her body dissolves into gas. Unsure of what is happening, you run up a hill of petrified human forms toward Mother Rachel and the abyss. Bones and dessicated corpses crack underfoot as you clamber to the top. Mother Rachel looks at you, exultant, before her body sublimates into pale fire.\nAn all-too-familiar euphoria floods your senses as the alien light pulses and bends the chamber around it. You feel an invisible hand on your shoulder; you brush it away. Something feels different. You hold up one hand to see a small, spidery crack of light form on your palm. The fissure lengthens to creep up your wrist, then your arm. The accompanying pain sends you into a dead faint.\nYou wake up and you see yo urs e lfst an d in ga ttheed geo fab road chasms ta rin g dOwn yoU sEe y our sel Fin the bod yof abl ack ca Tan dAsaq UeEnaswim Mi nGth Inga CrAwlIngchA otIc dA rkNes Sw Hoare youaNdWHYaRe yOuhEre?",
+  "encounterSets": [
+    "the_final_day",
+    "fate_of_the_vale",
+    "day_of_the_feast",
+    "agents_of_the_colour",
+    "fire",
+    "horrors_in_the_rock",
+    "refractions",
+    "residents",
+    "transfiguration",
+    "the_vale"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "10655",
+    "10656",
+    "10657"
+  ],
+  "agendas": [
+    "10652",
+    "10653",
+    "10654"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "10666"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "10670",
+        "10670b",
+        "10743"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "10666"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -4
+      },
+      "tablet": {
+        "modifier": -5
+      },
+      "elderThing": {
+        "modifier": -2
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -4
+      },
+      "tablet": {
+        "modifier": -5
+      },
+      "elderThing": {
+        "modifier": -2
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -6
+      },
+      "tablet": {
+        "modifier": -8
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -6
+      },
+      "tablet": {
+        "modifier": -8
+      },
+      "elderThing": {
+        "modifier": -5
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "Your surroundings are swallowed by an unspeakable brilliance. A familiar euphoria grips you as reality itself shatters around you, and you catch a fleeting glimpse of other faces: human, alien, animal. The bliss turns to excruciating pain as your body sublimates into red gas. As you scream, the thousand other faces scream with you in your mind: you realize each of them is another you in other times, other realities. The other faces refract, split in two, and fracture like a broken mirror again, as every version of you is remade into something new. And then, a warmth. A wholeness. There is no you anymore. Only color and light.\nAt last, you have found your place.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "became_the_true_feast_of_hemlock_vale",
+          "value": true
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 0,
+          "mental": 0
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "“Don’t forget me.” Dr. Marquez climbs up to the cusp of the brilliant void and looks down at you with measured resolve before she flings herself into the corona of light. The smoky human shape within the brilliant ring wavers, then merges into an undimensioned rainbow that shoots upward out of the dying fluorescence. A small shockwave knocks you prone.\nIn darkness, the massive undergound chamber feels like a grave. You clamber to the top of the mound and look up through the sinkhole at a sky full of stars. The silver light spirals weakly off into the distance. Your heart is heavy as you clutch Dr. Marquez’s satchel: all that is left of the professor, as far as you know.\n“Is anyone down there?” calls a shaky voice. You look up to see the silhouette of one of the Vale residents, wearing a tattered white-gold cloak. They have the look of someone who has awoken from a bad dream. You hesitate, but then call back. After a minute, a thick rope drops down, and you are hauled up to stand in the splintered wreckage of Hemlock Vale. The survivors gather around you. “Please, if you can find it in your heart, forgive us,” one says. Another sheds their mask and tattered cloak. Past the edge of the crowd, you think you see a familiar rabbit mask peeking out from the shadows, but when you turn your head to look, it has already vanished.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "dr_marquez_sacrificed_herself_for_the_vale",
+          "value": true
+        },
+        {
+          "do": "removeCard",
+          "code": "10702"
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 1,
+          "mental": 1
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 5,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "Realizing the professor’s intention, you press her satchel back into her arms clamber up the petrified pile of bodies to stand before the blinding abyss. You clutch the prismatic shard in your hand and look back one last time. The professor stares up at you with a look of utter disbelief. She shouts your name as you turn to face the brilliant spiraling maw. Holding the prismatic shard to your chest, you fling yourself into the infinite void.\nA feeling of intense euphoria greets you. Folded into the spiraling light are faces: human, animal, alien. You smile, and a thousand mouths smile along with you: each of them a reflection of you in another time, another place, another reality. You feel a warm kinship with these other selves as you sink deeper into the void. The bliss gives way to calm, then to numbness. The other faces refract, split in two, and refract again, as your very being is sundered.\nA wordless scream registers in your splintered mind, accompanied by excruciating pain. You feel yourself dissolve, along with the abyss.\nAnd then, oblivion.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "investigators_sacrificed_themselves_for_the_vale",
+          "value": true
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 0,
+          "mental": 0
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "You nearly collapse from exhaustion as soon as you enter the derelict lighthouse. Your motley crew of survivors is composed of many dazed locals, mariners from Akwan, and confused tourists. As you dress their wounds, they look at you helplessly. Outside, the sun colors the sky in vivid hues.\nYou step out into the clean morning light and draw your first easy breath in days. The entirety of Hemlock Isle is buried under white snowy ash, giving it the look of early winter. All that remains of the fecund western woods is the great, knotted hollow of an ancient tree, its tangled branches clawing at the sky.\n“We have plenty to tell the board at Miskatonic University,” Dr. Marquez sidles up next to you, then lets out a weary sigh. “But I doubt they’ll understand what really happened here.” You nod, distracted. Across the bay, a brief, gossamer wisp of cloud catches the sunlight. When you blink, it has vanished.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "the_vale_was_saved",
+          "value": true
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 2,
+          "mental": 2
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 3,
+          "who": "each"
+        }
+      ]
+    },
+    "R4": {
+      "title": "Resolution 4",
+      "text": "The lighthouse is wreathed in a murky gray smoke. You and the remaining survivors try to sleep through the night, but you are plagued by nightmares. A burning tree. A falling star. The ghostly outline of Mother Rachel, pointing accusingly at you with a long ceremonial knife.\nIn the morning, you step out into the gray, featureless landscape. Nothing was spared from the blaze. The island is covered in fine gray ash, broken only by a few bent trees.\n“We have plenty to tell the board at Miskatonic University,” Dr. Marquez sidles up next to you, then lets out a weary sigh. “But I doubt they’ll understand what really happened here.” You nod, distracted. Across the bay, a brief, gossamer wisp of cloud catches the sunlight. When you blink, it has vanished.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "the_vale_burned",
+          "value": true
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 2,
+          "mental": 2
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 3,
+          "who": "each"
+        }
+      ]
+    },
+    "R5": {
+      "title": "Resolution 5",
+      "text": "Dr. Marquez shakes you awake. “You were talking in your sleep. It didn’t sound like you, though. It wasn’t any language I’ve ever heard.” Your mind is flooded with unfamiliar memories. You, in a smoky speakeasy, speaking in someone else’s voice. Skirting the shadows of a street corner as a tabby cat. Drinking in sunlight as a lilac blossom. Weeping into your hands in a chapel.\nRather than share, you follow the professor outside into the painful mid-morning sun. The light itself reminds you of the spiraling abyss deep below the Vale, and makes you queasy. The entirety of Hemlock Isle is buried under white snowy ash, giving it the look of early winter.\n“We have plenty to tell the board at Miskatonic University,” Dr. Marquez sidles up next to you, then lets out a weary sigh. “But I doubt they’ll understand what really happened here.” You nod along, your vision swirling. Even when you close your eyes, you can still see the impossible brilliance.\n“Are you alright?” Dr. Marquez repeats your name. The more you hear it, the more absurd it sounds. You say it back to her, giggling. The world around you shines with a horrible incandescence.\nTry as you might, you can’t stop laughing.",
+      "effects": [
+        {
+          "do": "record",
+          "key": "barely_survived",
+          "value": true
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 3,
+          "mental": 3
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 2,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "fate_of_the_vale",
+  "connections": [
+    [
+      "10666",
+      "10670"
+    ],
+    [
+      "10666",
+      "10662a"
+    ],
+    [
+      "10666",
+      "10665a"
+    ],
+    [
+      "10670",
+      "10662a"
+    ],
+    [
+      "10670",
+      "10665a"
+    ]
+  ],
+  "oneWay": [],
+  "layout": {
+    "10666": [
+      0,
+      4
+    ],
+    "10670": [
+      1,
+      4
+    ],
+    "10662a": [
+      3,
+      2
+    ],
+    "10665a": [
+      2,
+      3
+    ]
+  }
+}
