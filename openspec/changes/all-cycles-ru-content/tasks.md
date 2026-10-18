@@ -5,7 +5,7 @@
 
 ## 2. Loading
 
-- [ ] 2.1 Lazy packs: `src/content/index.ts` loads `core` and the scenarios' cycles eagerly and the rest through `loadPack(cycle)`; `buildContent` gains `loadPack`, `packLoaded`, `cardsOf(cycle)`; references in eager content are validated against the eager set plus named packs; `check:content` loads everything. Tests: the eager db has core and not Dunwich; after `loadPack("dwl")` Zoey exists; the bundle's first-load JSON is measured and recorded in the README (before and after).
+- [x] 2.1 Lazy packs: `src/content/index.ts` loads `core` eagerly (a scenario of another cycle adds its pack to the two literal patterns in `index.ts`) and the rest through `loadPack(cycle)`; `buildContent` gains `loadPack`, `packLoaded`, `cardsOf(cycle)`; references in eager content are validated against the eager set plus named packs; `check:content` loads everything. Tests: the eager db has core and not Dunwich; after `loadPack("dwl")` Zoey exists; the bundle's first-load JSON is measured and recorded in the README (before and after). Measured 2026-10-18 (main JS chunk, gzip in brackets): core only 1,736 KB (462 KB); every pack eager 5,469 KB (1,151 KB); lazy packs 1,742 KB (464 KB), the 18 packs as separate chunks fetched on demand.
 
 ## 3. Russian text
 

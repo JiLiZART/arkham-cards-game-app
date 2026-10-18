@@ -13,42 +13,72 @@ export interface ContentError {
 const zerr = (file: string, e: ZodError, prefix = ""): ContentError[] =>
   e.issues.map((i) => ({ file, path: [prefix, ...i.path].filter((x) => x !== "").join("."), message: i.message }));
 
+/** a pack's cards (empty until it is loaded) */
+export const cardsOf = (db: ContentDb, pack: string): CardDef[] => (db.packs[pack]?.cards ?? []).map((code) => db.cards[code]).filter(Boolean);
+export const packLoaded = (db: ContentDb, pack: string) => !!db.packs[pack]?.loaded;
+
+/**
+ * Validate one pack's generated cards with its hand-written overrides and merge the good ones into the database, with
+ * their encounter sets; the bad ones are reported with their codes. Used for every pack at build time and for a lazy
+ * pack when it is loaded.
+ */
+export function addPack(
+  db: ContentDb,
+  pack: string,
+  raw: unknown,
+  overridesRaw: unknown,
+  files: { generated: string; overrides: string } = { generated: `/content/packs/${pack}/cards.generated.json`, overrides: `/content/packs/${pack}/cards.json` },
+  cardFile: Record<string, string> = {},
+): ContentError[] {
+  const errors: ContentError[] = [];
+  const overrides = (overridesRaw ?? {}) as Record<string, unknown>;
+  const list = raw as { code: string }[];
+  for (const [code, o] of Object.entries(overrides)) {
+    const r = CardOverride.safeParse(o);
+    if (!r.success) errors.push(...zerr(files.overrides, r.error, code));
+  }
+  const codes: string[] = [];
+  for (const base of list) {
+    const merged = { ...base, ...((overrides[base.code] as object) ?? {}) };
+    const r = CardDef.safeParse(merged);
+    if (!r.success) {
+      errors.push(...zerr(overrides[base.code] ? files.overrides : files.generated, r.error, base.code));
+      continue;
+    }
+    db.cards[r.data.code] = r.data;
+    cardFile[r.data.code] = overrides[base.code] ? files.overrides : files.generated;
+    codes.push(r.data.code);
+  }
+  for (const code of Object.keys(overrides)) {
+    if (!list.some((c) => c.code === code)) errors.push({ file: files.overrides, path: code, message: `override for unknown card ${code}` });
+  }
+  db.packs[pack] = { loaded: true, cards: codes };
+  for (const code of codes) {
+    const set = db.cards[code].encounterSet;
+    if (set && !(db.encounterSets[set] ??= []).includes(code)) db.encounterSets[set].push(code);
+  }
+  return errors;
+}
+
 /**
  * Build the content database from raw files.
  * `files`: path (relative to repo root, e.g. "/content/packs/core/cards.json") -> parsed JSON
  * `scripts`: path -> module default export
  */
-export function buildContent(files: Record<string, unknown>, scriptFiles: Record<string, CardScript>): { db: ContentDb; errors: ContentError[] } {
+export function buildContent(files: Record<string, unknown>, scriptFiles: Record<string, CardScript>, lazyPacks: string[] = []): { db: ContentDb; errors: ContentError[] } {
   const errors: ContentError[] = [];
-  const db: ContentDb = { cards: {}, investigators: {}, decks: {}, scenarios: {}, campaigns: {}, scripts: {}, encounterSets: {}, i18n: {}, sounds: EMPTY_SOUNDS };
+  const db: ContentDb = { cards: {}, investigators: {}, decks: {}, scenarios: {}, campaigns: {}, scripts: {}, encounterSets: {}, i18n: {}, sounds: EMPTY_SOUNDS, packs: {} };
   const cardFile: Record<string, string> = {};
   const entries = Object.entries(files).sort(([a], [b]) => a.localeCompare(b));
+  for (const pack of lazyPacks) db.packs[pack] = { loaded: false, cards: [] };
 
-  // cards: generated + overrides per pack
+  // cards: generated + overrides per pack (the packs the browser loads later are only named in `lazyPacks`)
   const generated = entries.filter(([p]) => /\/packs\/[^/]+\/cards\.generated\.json$/.test(p));
   for (const [file, raw] of generated) {
+    const pack = file.match(/\/packs\/([^/]+)\//)![1];
     const overridesPath = file.replace("cards.generated.json", "cards.json");
-    const overrides = (files[overridesPath] ?? {}) as Record<string, unknown>;
-    for (const [code, o] of Object.entries(overrides)) {
-      const r = CardOverride.safeParse(o);
-      if (!r.success) errors.push(...zerr(overridesPath, r.error, code));
-    }
-    for (const base of raw as { code: string }[]) {
-      const merged = { ...base, ...((overrides[base.code] as object) ?? {}) };
-      const r = CardDef.safeParse(merged);
-      if (!r.success) {
-        errors.push(...zerr(overrides[base.code] ? overridesPath : file, r.error, base.code));
-        continue;
-      }
-      db.cards[r.data.code] = r.data;
-      cardFile[r.data.code] = overrides[base.code] ? overridesPath : file;
-    }
-    for (const code of Object.keys(overrides)) {
-      if (!(raw as { code: string }[]).some((c) => c.code === code)) errors.push({ file: overridesPath, path: code, message: `override for unknown card ${code}` });
-    }
+    errors.push(...addPack(db, pack, raw, files[overridesPath] ?? {}, { generated: file, overrides: overridesPath }, cardFile));
   }
-  for (const c of Object.values(db.cards)) if (c.encounterSet) (db.encounterSets[c.encounterSet] ??= []).push(c.code);
-
   const parseInto = <T,>(re: RegExp, schema: { safeParse(v: unknown): { success: true; data: T } | { success: false; error: ZodError } }, put: (v: T, file: string) => void) => {
     for (const [file, raw] of entries) {
       if (!re.test(file)) continue;

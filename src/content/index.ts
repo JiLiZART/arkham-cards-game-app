@@ -1,12 +1,38 @@
 import type { CardScript, ContentDb } from "../engine/types";
-import { buildContent, type ContentError } from "./loader";
+import { addPack, buildContent, type ContentError } from "./loader";
 
-/** content bundled by Vite: every JSON and script under /content is picked up automatically */
+/**
+ * Content bundled by Vite: every JSON and script under /content is picked up automatically, except the card packs other
+ * than the core one: those are named at build time and fetched when something asks for them (`loadPack`), so the first
+ * load doesn't grow with the number of cycles. A scenario of another cycle needs its pack eager: add it to the two
+ * patterns below (Vite wants them literal).
+ */
+const PACK_FILE = /^\/content\/packs\/([^/]+)\/cards(\.generated)?\.json$/;
 // the Russian image import's manifest and review overrides and the icon manifest are tooling data, not game content
-const files = import.meta.glob(["/content/**/*.json", "!/content/i18n/*/images*.json", "!/content/icons/*.json"], { eager: true, import: "default" }) as Record<string, unknown>;
+const files = import.meta.glob(["/content/**/*.json", "!/content/i18n/*/images*.json", "!/content/icons/*.json", "!/content/packs/*/cards*.json"], { eager: true, import: "default" }) as Record<string, unknown>;
+const eagerPacks = import.meta.glob("/content/packs/core/cards*.json", { eager: true, import: "default" }) as Record<string, unknown>;
+const lazyPacks = import.meta.glob(["/content/packs/*/cards*.json", "!/content/packs/core/cards*.json"], { import: "default" }) as Record<string, () => Promise<unknown>>;
 const scripts = import.meta.glob("/content/**/scripts/*.ts", { eager: true, import: "default" }) as Record<string, CardScript>;
 
-const built = buildContent(files, scripts);
+const lazyNames = [...new Set(Object.keys(lazyPacks).map((f) => f.match(PACK_FILE)![1]))].sort();
+const built = buildContent({ ...files, ...eagerPacks }, scripts, lazyNames);
 
 export const content: ContentDb = built.db;
 export const contentErrors: ContentError[] = built.errors;
+
+const loading = new Map<string, Promise<ContentError[]>>();
+/** bring a pack of cards into the content (deck editing, card lookup); loading it twice does nothing. Resolves with its content errors. */
+export function loadPack(pack: string): Promise<ContentError[]> {
+  const info = content.packs[pack];
+  if (!info) return Promise.reject(new Error(`unknown pack ${pack}`));
+  if (info.loaded) return Promise.resolve([]);
+  let p = loading.get(pack);
+  if (!p) {
+    p = (async () => {
+      const [generated, overrides] = await Promise.all([lazyPacks[`/content/packs/${pack}/cards.generated.json`]?.(), lazyPacks[`/content/packs/${pack}/cards.json`]?.()]);
+      return addPack(content, pack, generated ?? [], overrides ?? {});
+    })().finally(() => loading.delete(pack));
+    loading.set(pack, p);
+  }
+  return p;
+}

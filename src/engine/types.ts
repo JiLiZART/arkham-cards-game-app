@@ -324,6 +324,8 @@ export interface ContentDb {
   i18n: Record<string, { cards: Record<string, any>; ui: Record<string, string>; campaigns: I18nCampaigns }>;
   /** the sound clips and tracks and what they serve (content/sounds/sounds.json) */
   sounds: SoundManifest;
+  /** every pack of cards (a folder under content/packs): whether it is loaded, and its card codes once it is */
+  packs: Record<string, { loaded: boolean; cards: string[] }>;
 }
 
 export interface GameSetup {
