@@ -1,3 +1,4 @@
+import { useLayoutMode } from "../layoutMode";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { t } from "../../content/i18n";
 import type { GameState } from "../../engine/types";
@@ -82,7 +83,8 @@ export function TipLayer() {
   useView((s) => s.camTick);
   const [seen, setSeen] = useState(readSeen);
   const viewer = viewerOf(game);
-  const c: TipContext = { viewer, shown: handVisible(privacy, game.order.length, viewer, revealedFor), canUndo: able, drawing: playing?.type === "token" && byHand };
+  const phone = useLayoutMode() === "phone";
+  const c: TipContext = { viewer, shown: handVisible(privacy, game.order.length, viewer, revealedFor), canUndo: able, drawing: playing?.type === "token" && byHand, phone };
   const tip = pickTip(game, c, seen, on);
   const visible = !!tip && quiet && ((!playing && !queued && stageFree) || (!!tip.duringDraw && c.drawing));
 

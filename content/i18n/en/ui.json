@@ -273,6 +273,7 @@
   "instruction.barrier": "Spend {n:clue} to advance? Tap your answer",
   "instruction.defendingHome": "Defending the Home: tap your choice",
   "tip.start": "Your goal is on the act card: do what it says to move the story on. The agenda is the clock: when doom fills it, things get worse.",
+  "tip.phoneTap": "On a phone, tap a card or a room to look at it, and tap it again to choose it. Hold your finger on a card to see it full size.",
   "tip.mulligan": "This is your starting hand. Tap the cards you don't want to swap them for new ones, or keep the hand as it is.",
   "tip.turn": "Your turn: you have 3 actions. Search, move, draw, take a resource or play a card, each costs one. The bar shows how many are left.",
   "tip.investigate": "Clues are hidden in rooms. Tap Investigate, or your room, to search for one. The room's shroud, how hard it is to search, is the number to beat.",

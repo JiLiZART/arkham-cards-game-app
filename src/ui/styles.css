@@ -791,3 +791,5 @@ button.danger { border-color: var(--bad); color: var(--bad); }
 .game.phone dialog.modal .modal-close { position: sticky; bottom: 0; }
 .game.phone .phase-title-name { font-size: 44px; }
 .game.phone .phase-title-round { font-size: 18px; }
+/* touch: the browser must not turn a press on the map, a marker or a drawer handle into a scroll or a zoom */
+.game canvas, .game .mini, .drawer-handle, .hand-drawer { touch-action: none; }

@@ -12,6 +12,7 @@ import { Wizard } from "./menu/NewGame";
 import { Table } from "./scene/Table";
 import { useView } from "./view";
 import { useLayout } from "./layoutMode";
+import { installTouch } from "./touch";
 
 export function App() {
   const screen = useGame((s) => s.screen);
@@ -21,6 +22,8 @@ export function App() {
   useEffect(() => {
     gameStore.getState().resume();
   }, []);
+  // touch: tap to peek, tap again to choose, long press for the card (mouse unchanged)
+  useEffect(() => installTouch(), []);
   if (contentErrors.length) {
     return (
       <div className="screen">

@@ -9,6 +9,7 @@ import { t } from "../../content/i18n";
 import type { GameState, InstId } from "../../engine/types";
 import { domPlace, lastRects, mapDealing, mapMoving, originRect, reducedMotion, takeArrival, type ScreenBox } from "../arrivals";
 import { useCardClick } from "../cardClick";
+import { clearPeek, setMapCardAt, tapCard } from "../touch";
 import { iconUrl } from "../icons";
 import { Portrait } from "../Portrait";
 import { db, gameStore, useGame } from "../context";
@@ -270,6 +271,11 @@ function SceneInner({ game }: { game: GameState }) {
 
   // dev-only: lets browser automation find a card on the map
   if (import.meta.env.DEV) (window as unknown as { __arkhamRects: unknown }).__arkhamRects = cardRects;
+  // a long press finds the card under the finger here (enemies and attachments over the location they sit on)
+  setMapCardAt((x, y) => {
+    const hit = cardRects().filter((r) => x >= r.x0 && x <= r.x1 && y >= r.y0 && y <= r.y1);
+    return (hit.find((r) => game.cards[r.id].zone !== "location") ?? hit[0])?.id ?? null;
+  });
   const moveDrag = useView((st) => st.moveDrag);
   const spotlight = useView((st) => st.spotlight);
 
@@ -310,7 +316,8 @@ function SceneInner({ game }: { game: GameState }) {
           rects={locationRects}
           onTap={(x, y) => {
             const at = game.invs[m.inv].location;
-            if (at) click(at, x, y);
+            // a finger peeks the marker's location first; a second tap chooses
+            if (at) tapCard(at, () => click(at, x, y));
           }}
         />
       ))}
@@ -333,7 +340,8 @@ function SceneInner({ game }: { game: GameState }) {
             onHover={(over) => !hides.map && setHovered(over ? id : useView.getState().hovered === id ? null : useView.getState().hovered)}
             onClick={(e) => {
               e.stopPropagation();
-              click(id, e.nativeEvent.clientX, e.nativeEvent.clientY);
+              const { clientX, clientY } = e.nativeEvent;
+              tapCard(id, () => click(id, clientX, clientY));
             }}
           />
         );
@@ -347,7 +355,7 @@ function SceneInner({ game }: { game: GameState }) {
 export function Table() {
   return (
     // transparent canvas: the table background is the page's fixed, full-screen CSS background (it doesn't pan or zoom)
-    <Canvas dpr={[1, 2]} gl={{ alpha: true }} onPointerMissed={() => !camInput.panned && useView.getState().closeMenu()}>
+    <Canvas dpr={[1, 2]} gl={{ alpha: true }} onPointerMissed={() => { if (camInput.panned) return; useView.getState().closeMenu(); clearPeek(); }}>
       <Scene />
     </Canvas>
   );

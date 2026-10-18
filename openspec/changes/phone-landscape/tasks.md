@@ -10,7 +10,7 @@
 
 ## 3. Touch
 
-- [ ] 3.1 Add `src/ui/touch.ts` (tap = peek via the hover state, second tap on the same id within 1.5 s = choose, long press 450 ms = modal; mouse unchanged) and gate `useCardClick` and the marker/strip/fan handlers through it for touch pointers; add the first-turn phone tip wording. Verify in `check-phone.js` with touch emulation: first tap on the Hallway shows its details and chooses nothing; second tap moves; long press on a strip card opens the modal; a marker drag still moves.
+- [x] 3.1 Add `src/ui/touch.ts` (tap = peek via the hover state, second tap on the same id within 1.5 s = choose, long press 450 ms = modal; mouse unchanged) and gate `useCardClick` and the marker/strip/fan handlers through it for touch pointers; add the first-turn phone tip wording. Verify in `check-phone.js` with touch emulation: first tap on the Hallway shows its details and chooses nothing; second tap moves; long press on a strip card opens the modal; a marker drag still moves.
 - [ ] 3.2 `RotateCard` for portrait on phones, with strings in en and ru. Verify at 393×852: the card shows; at 852×393 it is gone and the game state is unchanged.
 
 ## 4. Verification and docs

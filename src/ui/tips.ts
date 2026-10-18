@@ -12,6 +12,8 @@ export interface TipContext {
   canUndo: boolean;
   /** a chaos token draw waits for the viewer's tap */
   drawing: boolean;
+  /** the phone layout (ADR-0005): taps peek before they choose */
+  phone: boolean;
 }
 
 export interface Tip {
@@ -43,6 +45,8 @@ export const TIPS: Tip[] = [
   { id: "upkeep", when: (g) => pause(g, "upkeep"), anchor: () => ({ tip: "deck" }), everyone: true },
   { id: "token", when: (_, c) => c.drawing, anchor: () => ({ tip: "drawbag" }), duringDraw: true },
   { id: "test", when: (g, c) => g.pending?.kind === "commit" && g.skillTest?.inv === c.viewer, anchor: () => ({ tip: "skilltest" }) },
+  // on a phone, before anything else on the first turn: how a tap works there
+  { id: "phoneTap", when: (g, c) => c.phone && turn(g) && g.round === 1, anchor: () => ({ tip: "bar" }) },
   { id: "start", when: (g) => turn(g) && g.round === 1, anchor: () => ({ tip: "act" }) },
   { id: "turn", when: turn, anchor: () => ({ tip: "bar" }) },
   { id: "enemy", when: (g, c) => turn(g) && !!enemyNear(g, c), anchor: (g, c) => ({ card: enemyNear(g, c)! }) },

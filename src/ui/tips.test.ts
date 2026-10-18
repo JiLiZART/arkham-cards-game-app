@@ -5,7 +5,7 @@ import type { GameState } from "../engine/types";
 import { pickTip, type TipContext } from "./tips";
 
 const R = "01001";
-const ctx = (patch: Partial<TipContext> = {}): TipContext => ({ viewer: R, shown: true, canUndo: false, drawing: false, ...patch });
+const ctx = (patch: Partial<TipContext> = {}): TipContext => ({ viewer: R, shown: true, canUndo: false, drawing: false, phone: false, ...patch });
 const pick = (g: GameState, seen: string[] = [], c = ctx(), on = true) => pickTip(g, c, new Set(seen), on)?.id ?? null;
 const choose = (g: GameState, label: RegExp) => {
   const r = dispatch(db, g, { type: "choose", inv: g.pending!.inv, option: g.pending!.options.find((o) => label.test(o.label))!.id });
@@ -19,6 +19,12 @@ describe("pickTip", () => {
   it("the mulligan, then the scenario start on the first turn", () => {
     expect(pick(start("the-gathering", [R], 1).state)).toBe("mulligan");
     expect(fresh.pending!.kind).toBe("turn");
+    expect(pick(fresh)).toBe("start");
+  });
+
+  it("on a phone the first turn opens with how to tap: look, then choose", () => {
+    expect(pick(fresh, [], ctx({ phone: true }))).toBe("phoneTap");
+    expect(pick(fresh, ["phoneTap"], ctx({ phone: true }))).toBe("start");
     expect(pick(fresh)).toBe("start");
   });
 

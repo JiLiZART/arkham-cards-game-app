@@ -1,5 +1,6 @@
 import { useLayoutEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
 import { useLayoutMode } from "../layoutMode";
+import { tapCard } from "../touch";
 import { cardText, t } from "../../content/i18n";
 import { actClueCost, doomInPlay } from "../../engine/rules/scenario";
 import type { GameState, InstId } from "../../engine/types";
@@ -325,7 +326,7 @@ export function PlayStrip() {
           exhausted={exhausted}
           target={id === target}
           // one option: the card itself chooses it; several: the buttons on it do
-          onClick={() => opts.length === 1 && choose(opts[0].id)}
+          onClick={(e) => tapCard(id, () => opts.length === 1 && choose(opts[0].id), e.currentTarget.getBoundingClientRect())}
         />
       </div>
     );
