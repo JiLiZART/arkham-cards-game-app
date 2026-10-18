@@ -7,9 +7,14 @@
  * - campaigns.generated.json: campaign/scenario names, intro narrative, resolutions, campaign log labels, encounter set names
  *   (our campaigns and scenarios name their ArkhamCards counterpart with `i18nId`)
  * - ui.generated.json: our English UI strings matched by msgid in ArkhamCards' <locale>.po (msgctxt "action" preferred)
+ * - card text for every cycle from the local ArkhamDB snapshot (inspired/arkhamdb-json-data/translations/<locale>): the core
+ *   pack's in cards.generated.json, every other pack's in packs/<pack>.generated.json (loaded with the pack in the browser).
+ *   The hand-written cards.json and the print-matched cards.print.json still win over them, field by field.
  */
-import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { I18nCards } from "../src/content/schema";
+import { SNAPSHOT, translationsByPack } from "./snapshotText";
 
 const AC = "inspired/ArkhamCards/assets";
 const locale = process.argv[process.argv.indexOf("--locale") + 1];
@@ -80,9 +85,25 @@ for (const [key, text] of Object.entries(en)) {
 
 const dir = join("content/i18n", locale);
 if (!existsSync(dir)) throw new Error(`${dir} does not exist`);
-const write = (name: string, data: unknown) => writeFileSync(join(dir, name), JSON.stringify(data, null, 2) + "\n");
+const write = (name: string, data: unknown) => writeFileSync(join(dir, name), JSON.stringify(data, null, name.startsWith("packs") ? 0 : name === "cards.generated.json" ? 1 : 2) + "\n");
 write("campaigns.generated.json", campaignsOut);
 write("ui.generated.json", ui);
+
+// card text for every cycle, from the snapshot
+const root = process.argv.includes("--root") ? process.argv[process.argv.indexOf("--root") + 1] : SNAPSHOT;
+const byPack = translationsByPack(root, locale);
+const packsDir = join(dir, "packs");
+rmSync(packsDir, { recursive: true, force: true });
+let cardTotal = 0;
+for (const [pack, cards] of byPack) {
+  I18nCards.parse(cards);
+  if (pack === "core") write("cards.generated.json", cards);
+  else {
+    mkdirSync(packsDir, { recursive: true });
+    write(join("packs", `${pack}.generated.json`), cards);
+  }
+  cardTotal += Object.keys(cards).length;
+}
 console.log(
-  `${locale}: ${Object.keys(campaignsOut.campaigns).length} campaigns, ${Object.keys(campaignsOut.scenarios).length} scenarios, ${Object.keys(campaignsOut.encounterSets).length} encounter sets, ${Object.keys(ui).length} UI strings`,
+  `${locale}: ${Object.keys(campaignsOut.campaigns).length} campaigns, ${Object.keys(campaignsOut.scenarios).length} scenarios, ${Object.keys(campaignsOut.encounterSets).length} encounter sets, ${Object.keys(ui).length} UI strings, ${cardTotal} card texts in ${byPack.size} packs`,
 );

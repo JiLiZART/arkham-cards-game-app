@@ -9,7 +9,7 @@
 
 ## 3. Russian text
 
-- [ ] 3.1 `scripts/import-i18n.ts`: card text for every cycle from `translations/<locale>/pack/…`; campaign text from ArkhamCards as before; `check:content` prints per-cycle counts of cards and Russian-translated cards. Run for `ru`; commit `content/i18n/ru/cards.generated.json`. Verify: Zoey Samaras shows Russian name and text in the Russian locale; the core cards keep their print-matched texts (the layering is unchanged, `i18n.test.ts` case).
+- [x] 3.1 `scripts/import-i18n.ts`: card text for every cycle from `translations/<locale>/pack/…`; campaign text from ArkhamCards as before; `check:content` prints per-cycle counts of cards and Russian-translated cards. Run for `ru`; commit `content/i18n/ru/cards.generated.json` (the core pack's text, unchanged) and `content/i18n/ru/packs/<pack>.generated.json` for the other 16 packs, 3.3 MB, loaded with their pack so the first load doesn't grow. Result: 5,544 of 5,859 cards have Russian text; flavour text is not imported (the game never shows it). Verify: Zoey Samaras shows Russian name and text in the Russian locale; the core cards keep their print-matched texts (the layering is unchanged, `i18n.test.ts` case).
 
 ## 4. Russian images
 

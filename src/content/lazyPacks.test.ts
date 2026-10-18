@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { content, loadPack } from "./index";
-import { addPack, buildContent, cardsOf, packLoaded } from "./loader";
+import { cardText } from "./i18n";
+import { addCardText, addPack, buildContent, cardsOf, packLoaded } from "./loader";
 import { loadContentFromDisk } from "./node";
 
 const card = (code: string, extra: object = {}) => ({ code, name: `Card ${code}`, type: "asset", faction: "neutral", pack: "x", quantity: 1, traits: [], text: "", ...extra });
@@ -25,6 +26,23 @@ describe("packs in the content database", () => {
     expect(Object.keys(content.cards)).toHaveLength(n);
     // its encounter sets joined the database too
     expect(Object.keys(content.encounterSets).some((s) => content.encounterSets[s].some((c) => c.startsWith("021")))).toBe(true);
+  });
+
+  it("a pack's Russian text comes with it: Zoey's name and text are the snapshot's, English until then and for anything untranslated", async () => {
+    await loadPack("dwl");
+    expect(cardText(content, "02001", "ru")).toMatchObject({ name: "Зои Самарас", subname: "Повар" });
+    expect(cardText(content, "02001", "ru").text).toMatch(/Получите 1 ресурс/);
+    expect(cardText(content, "02001", "en").name).toBe("Zoey Samaras");
+    // the core pack keeps its layers: print-matched text over imported text
+    expect(cardText(content, "01006", "ru").name).toBe("Револьвер Роланда");
+  });
+
+  it("text loaded late never overwrites a higher layer already there (print-matched or hand-written)", () => {
+    const db = buildContent({}, {}, []).db;
+    addCardText(db, "ru", "/content/i18n/ru/cards.print.json", { "1": { name: "Напечатано" } }, 1, false);
+    addCardText(db, "ru", "/content/i18n/ru/packs/x.generated.json", { "1": { name: "Импорт", text: "Текст" }, "2": { name: "Два" } }, 0, true);
+    expect(db.i18n.ru.cards["1"]).toEqual({ name: "Напечатано", text: "Текст" });
+    expect(db.i18n.ru.cards["2"]).toEqual({ name: "Два" });
   });
 
   it("an unknown pack is refused in plain words", async () => {
@@ -53,5 +71,6 @@ describe("packs in the content database", () => {
     expect(Object.values(db.packs).every((p) => p.loaded)).toBe(true);
     expect(Object.keys(db.cards).length).toBeGreaterThan(5800);
     expect(db.cards["02001"].name).toBe("Zoey Samaras");
+    expect(db.i18n.ru.cards["02001"].name).toBe("Зои Самарас");
   });
 });

@@ -13,6 +13,19 @@ export interface ContentError {
 const zerr = (file: string, e: ZodError, prefix = ""): ContentError[] =>
   e.issues.map((i) => ({ file, path: [prefix, ...i.path].filter((x) => x !== "").join("."), message: i.message }));
 
+/**
+ * Merge one card-text file into a locale. At build time the files arrive lowest layer first (imported, then print-matched,
+ * then hand-written) and each wins over the one before; a pack's text loaded later (`existingWins`) never overwrites a
+ * higher layer that is already there.
+ */
+export function addCardText(db: ContentDb, locale: string, file: string, raw: unknown, layer: 0 | 1 | 2, existingWins: boolean): ContentError[] {
+  const loc = (db.i18n[locale] ??= { cards: {}, ui: {}, campaigns: { campaigns: {}, scenarios: {}, encounterSets: {} } });
+  const r = I18nCards.safeParse(raw);
+  if (!r.success) return zerr(file, r.error);
+  for (const [code, tr] of Object.entries(r.data)) loc.cards[code] = existingWins ? { ...tr, ...loc.cards[code] } : { ...loc.cards[code], ...tr };
+  return layer === 1 ? checkPrintText(db, file, r.data) : [];
+}
+
 /** a pack's cards (empty until it is loaded) */
 export const cardsOf = (db: ContentDb, pack: string): CardDef[] => (db.packs[pack]?.cards ?? []).map((code) => db.cards[code]).filter(Boolean);
 export const packLoaded = (db: ContentDb, pack: string) => !!db.packs[pack]?.loaded;
@@ -65,6 +78,11 @@ export function addPack(
  * `files`: path (relative to repo root, e.g. "/content/packs/core/cards.json") -> parsed JSON
  * `scripts`: path -> module default export
  */
+/** a locale's text file: [1] locale, [2] cards | ui | campaigns (undefined for a pack's file), [3] pack, [4] layer suffix */
+/** the layer of a text file by its suffix: imported (0), print-matched (1), hand-written (2) */
+export const textLayer = (suffix?: string): 0 | 1 | 2 => (suffix === ".generated" ? 0 : suffix === ".print" ? 1 : 2);
+export const TEXT_FILE = /\/i18n\/([^/]+)\/(?:(cards|ui|campaigns)|packs\/([^/]+?))(\.generated|\.print)?\.json$/;
+
 export function buildContent(files: Record<string, unknown>, scriptFiles: Record<string, CardScript>, lazyPacks: string[] = []): { db: ContentDb; errors: ContentError[] } {
   const errors: ContentError[] = [];
   const db: ContentDb = { cards: {}, investigators: {}, decks: {}, scenarios: {}, campaigns: {}, scripts: {}, encounterSets: {}, i18n: {}, sounds: EMPTY_SOUNDS, packs: {} };
@@ -101,21 +119,17 @@ export function buildContent(files: Record<string, unknown>, scriptFiles: Record
   });
   // translations, merged field by field: imported *.generated.json, then *.print.json (the text printed on the
   // imported Russian card images), then the hand-written files
-  const layer = (suffix?: string) => (suffix === ".generated" ? 0 : suffix === ".print" ? 1 : 2);
+  // card text is one file for the core pack (cards*.json) and one per other pack (packs/<pack>*.json, loaded with the pack in the browser)
   const i18nFiles = entries
-    .map(([file, raw]) => ({ file, raw, m: file.match(/\/i18n\/([^/]+)\/(cards|ui|campaigns)(\.generated|\.print)?\.json$/) }))
+    .map(([file, raw]) => ({ file, raw, m: file.match(TEXT_FILE) }))
     .filter((f) => f.m)
-    .sort((a, b) => layer(a.m![3]) - layer(b.m![3]));
+    .sort((a, b) => textLayer(a.m![4]) - textLayer(b.m![4]));
   for (const { file, raw, m } of i18nFiles) {
-    const [, locale, kind] = m!;
+    const locale = m![1];
+    const kind = m![2] ?? "cards";
     const loc = (db.i18n[locale] ??= { cards: {}, ui: {}, campaigns: { campaigns: {}, scenarios: {}, encounterSets: {} } });
     if (kind === "cards") {
-      const r = I18nCards.safeParse(raw);
-      if (!r.success) errors.push(...zerr(file, r.error));
-      else {
-        for (const [code, tr] of Object.entries(r.data)) loc.cards[code] = { ...loc.cards[code], ...tr };
-        if (m![3] === ".print") errors.push(...checkPrintText(db, file, r.data));
-      }
+      errors.push(...addCardText(db, locale, file, raw, textLayer(m![4]), false));
     } else if (kind === "ui") {
       const r = I18nUi.safeParse(raw);
       if (!r.success) errors.push(...zerr(file, r.error));

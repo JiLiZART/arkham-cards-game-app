@@ -4,6 +4,7 @@ import { loadContentFromDisk } from "../src/content/node";
 import { checkSounds } from "../src/content/soundChecks";
 import { ANIMATED } from "../src/ui/store";
 import { checkIcons, MANIFEST, SPRITE, setsWithoutIcon, spriteIds } from "./import-icons";
+import { cycleCoverage } from "./snapshotText";
 
 const { db, errors } = await loadContentFromDisk();
 // the sound files are converted and committed; an event sound must be one the UI animates; sizes within budget
@@ -29,6 +30,9 @@ const needed = Object.keys(en).flatMap((k) => (k.startsWith("prompt.") ? [k, `in
 for (const [locale, { ui }] of Object.entries(db.i18n))
   for (const key of needed) if (!(key in ui)) errors.push({ file: `content/i18n/${locale}/ui.json`, path: key, message: "missing string" });
 for (const e of errors) console.error(`✗ ${e.file} ${e.path}: ${e.message}`);
+// per pack: how many cards, and how many have Russian text (a card without it falls back to English)
+const ru = cycleCoverage(db, "ru");
+if (ru.length) console.log(ru.map((c) => `${c.pack} ${c.cards} cards, ${c.translated} in Russian`).join("\n"));
 console.log(
   `${Object.keys(db.cards).length} cards, ${Object.keys(db.investigators).length} investigators, ${Object.keys(db.decks).length} decks, ` +
     `${Object.keys(db.scenarios).length} scenarios, ${Object.keys(db.campaigns).length} campaigns, ${Object.keys(db.scripts).length} scripts`,
