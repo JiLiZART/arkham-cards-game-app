@@ -5,7 +5,7 @@
 
 ## 2. The line and the strip
 
-- [ ] 2.1 `.st-middle` centred on the screen (`left: 50%`, fixed width, `translate: -50% 0`); in `check-mythos-test.js` measure the line's and the strip's centres at 1600×900 and 1280×720 (within 2 px of each other and of the centre). Screenshot.
+- [x] 2.1 `.st-middle` centred on the screen (`left: 50%`, fixed width, `translate: -50% 0`); in `check-mythos-test.js` measure the line's and the strip's centres at 1600×900 and 1280×720 (within 2 px of each other and of the centre). Screenshot.
 
 ## 3. The game report
 
