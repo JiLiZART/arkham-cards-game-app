@@ -78,4 +78,13 @@ describe("matching Russian card images", () => {
     expect(pinned["01111"]).toBeUndefined();
     expect(pinned["01112"].back?.pinned).toBe(true);
   });
+
+  it("a card side named by its folder file beats any OCR match; an override still wins", () => {
+    const ranked = [{ img: img("inspired/CARDS_ru/Физическая тренировка.jpg", "", ""), scores: [{ code: "01017", side: "front" as const, score: 0.99 }] }];
+    const fixed = { "01017": { front: { src: "folder/17.png", source: "folder" as const, score: 1 } } };
+    const src = () => "cards" as const;
+    expect(choose(ranked, {}, src, fixed)["01017"].front?.src).toBe("folder/17.png");
+    expect(choose(ranked, { "01017:front": "x.jpg" }, src, fixed)["01017"].front).toMatchObject({ src: "x.jpg", pinned: true });
+    expect(choose(ranked, { "01017:front": null }, src, fixed)["01017"]).toBeUndefined();
+  });
 });

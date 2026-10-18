@@ -1,6 +1,8 @@
 /**
- * Import Russian card images from inspired/CARDS_ru (community cards, preferred) and the card images embedded in
- * inspired/PDF_ru (print sheets, fallback). Stages, each cached under .cache/ru-import and skipped when done:
+ * Import Russian card images. Sources, best first: the per-card folders of inspired/Arkham_Horror_LCG (named by card
+ * number, so exact), inspired/CARDS_ru (community cards), and the card images embedded in the PDFs of
+ * inspired/Arkham_Horror_LCG (print sheets, matched only against their own cycle's cards). Stages, each cached under
+ * .cache/ru-import and skipped when done:
  *   1. extract  — the PDFs' embedded card images (pdfimages), Russian Tesseract data
  *   2. ocr      — title and full-card text of every candidate image
  *   3. match    — score each image against the content's cards (see ruMatch.ts)
@@ -17,12 +19,15 @@ import { promisify } from "node:util";
 import { loadContentFromDisk } from "../src/content/node";
 import type { ContentDb } from "../src/engine/types";
 import { draftName, draftText, type PrintDraft } from "./ruText";
+import { pdfScope, resolveFolder, type CodeInfo } from "./ruFolders";
 import { accepted, ACCEPT, norm, rank, type CardInfo, type ImageInfo, type Score, type Side } from "./ruMatch";
 
 const run = promisify(execFile);
 const ROOT = process.cwd();
 const CARDS_DIR = "inspired/CARDS_ru";
-const PDF_DIR = "inspired/PDF_ru";
+const PDF_DIR = "inspired/Arkham_Horror_LCG";
+/** one image per card side, named by the card's number: no OCR needed (ruFolders.ts) */
+const FOLDERS_DIR = join(PDF_DIR, "покарточная сборка");
 const CACHE = ".cache/ru-import";
 const TESSDATA = ".cache/tessdata";
 const PARALLEL = 8;
@@ -31,6 +36,8 @@ export interface Candidate {
   /** path relative to the repo root */
   file: string;
   source: "cards" | "pdf";
+  /** a PDF's cards can only be those whose codes start with one of these (see pdfScope); "all" when unknown */
+  scope?: string[] | "all";
   w: number;
   h: number;
 }
@@ -71,8 +78,11 @@ async function tessdata() {
   }
 }
 
+/** the PDFs in the source folder that hold cards (not tokens or the playmat) */
+const cardPdfs = () => readdirSync(PDF_DIR).filter((f) => f.endsWith(".pdf") && pdfScope(f) !== null);
+
 async function extractPdfs() {
-  for (const pdf of readdirSync(PDF_DIR).filter((f) => f.endsWith(".pdf"))) {
+  for (const pdf of cardPdfs()) {
     const out = join(CACHE, "pdf", basename(pdf, ".pdf"));
     if (existsSync(out) && readdirSync(out).length) continue;
     mkdirSync(out, { recursive: true });
@@ -90,12 +100,15 @@ async function size(file: string): Promise<{ w: number; h: number }> {
 
 /** every image that may be a card: CARDS_ru (not the card backs) and the PDFs' card-sized images */
 async function candidates(): Promise<Candidate[]> {
-  const cache = join(CACHE, "candidates.json");
+  const cache = join(CACHE, "candidates-v2.json");
   if (existsSync(cache)) return JSON.parse(readFileSync(cache, "utf8"));
   const img = (f: string) => /\.(jpe?g|png|ppm)$/i.test(f);
   const files = [
     ...walk(CARDS_DIR).filter((f) => img(f) && !f.includes("/Рубашки/")).map((file) => ({ file, source: "cards" as const })),
-    ...walk(join(CACHE, "pdf")).filter(img).map((file) => ({ file, source: "pdf" as const })),
+    ...cardPdfs().flatMap((pdf) => {
+      const dir = join(CACHE, "pdf", basename(pdf, ".pdf"));
+      return existsSync(dir) ? walk(dir).filter(img).map((file) => ({ file, source: "pdf" as const, scope: pdfScope(pdf)! })) : [];
+    }),
   ];
   const sized = await pool(files, PARALLEL, async (c) => ({ ...c, ...(await size(c.file)) }));
   // portrait card scans are ~756×1063; smaller images on the sheets are investigator portraits and decorations
@@ -167,20 +180,21 @@ function cardInfos(db: ContentDb): CardInfo[] {
 
 export interface Pick {
   src: string;
-  source: "cards" | "pdf";
+  source: "folder" | "cards" | "pdf";
   score: number;
   /** pinned by a review override */
   pinned?: boolean;
 }
 export type Manifest = Record<string, Partial<Record<Side, Pick>>>;
 
-/** per code and side: the best accepted CARDS_ru image, else the best accepted PDF image; overrides on top */
-export function choose(ranked: { img: ImageInfo; scores: Score[] }[], overrides: Record<string, string | null>, sourceOf: (file: string) => "cards" | "pdf"): Manifest {
-  const out: Manifest = {};
+/** per code and side: the file the folders name (`fixed`), else the best accepted CARDS_ru image, else the best accepted PDF image; overrides on top */
+export function choose(ranked: { img: ImageInfo; scores: Score[] }[], overrides: Record<string, string | null>, sourceOf: (file: string) => "folder" | "cards" | "pdf", fixed: Manifest = {}): Manifest {
+  const out: Manifest = structuredClone(fixed);
   for (const { img, scores } of ranked) {
     const best = accepted(scores);
     if (!best) continue;
     const cur = out[best.code]?.[best.side];
+    if (cur?.source === "folder") continue;
     const better = !cur || (img.source === "cards" && cur.source === "pdf") || (img.source === cur.source && best.score > cur.score);
     if (better) (out[best.code] ??= {})[best.side] = { src: img.file, source: img.source, score: Math.round(best.score * 1000) / 1000 };
   }
@@ -238,12 +252,24 @@ tr.none td:first-child{background:#622} tr.weak td:first-child{background:#663} 
 async function matchAndOutput(cands: Candidate[]) {
   const { db } = await loadContentFromDisk();
   const cards = cardInfos(db);
+  // the per-card folders name their cards: those sides need no matching
+  const codes = new Map<string, CodeInfo>(Object.values(db.cards).map((d) => [d.code, { quantity: d.quantity ?? 1, doubleSided: !!d.doubleSided }]));
+  const fixed: Manifest = {};
+  const folderLog: string[] = [];
+  for (const dir of readdirSync(FOLDERS_DIR, { withFileTypes: true }).filter((e) => e.isDirectory()).map((e) => e.name).sort()) {
+    const r = resolveFolder(dir, readdirSync(join(FOLDERS_DIR, dir)), codes);
+    for (const p of r.picks) (fixed[p.code] ??= {})[p.side] = { src: join(FOLDERS_DIR, dir, p.file), source: "folder", score: 1 };
+    folderLog.push(`${dir}: ${r.picks.length} sides, ${r.rejected.length} rejected, ${r.unparsed.length} unparsed, ${r.extra.length} extra`);
+  }
+  writeFileSync(join(CACHE, "folders.log"), folderLog.join("\n") + "\n");
+  const scopeOf = new Map(cands.map((c) => [c.file, c.scope]));
   const imgs: ImageInfo[] = await pool(cands, PARALLEL, async (c) => ({ file: c.file, source: c.source, landscape: c.w > c.h, ...(await ocrOf(c)) }));
-  const ranked = imgs.map((img) => ({ img, scores: rank(img, cards) }));
+  const scoped = (scope: string[] | "all" | undefined) => (!scope || scope === "all" ? cards : cards.filter((c) => scope.includes(c.code.slice(0, 2))));
+  const ranked = imgs.map((img) => ({ img, scores: rank(img, scoped(scopeOf.get(img.file))) }));
   // every image's best guesses, for reviewing cards that got no image
   writeFileSync(join(CACHE, "ranked.json"), JSON.stringify(ranked.filter((r) => r.scores[0]?.score >= 0.3).map((r) => ({ file: r.img.file, title: r.img.title, scores: r.scores.slice(0, 3) }))));
   const overrides: Record<string, string | null> = existsSync(OVERRIDES) ? JSON.parse(readFileSync(OVERRIDES, "utf8")) : {};
-  const manifest = choose(ranked, overrides, (f) => (f.startsWith(CARDS_DIR) ? "cards" : "pdf"));
+  const manifest = choose(ranked, overrides, (f) => (f.startsWith(CARDS_DIR) ? "cards" : f.startsWith(FOLDERS_DIR) ? "folder" : "pdf"), fixed);
   const sorted = Object.fromEntries(Object.keys(manifest).sort().map((k) => [k, manifest[k]]));
   writeFileSync(MANIFEST, JSON.stringify(sorted, null, 1) + "\n");
   writeFileSync(join(CACHE, "review.html"), reviewPage(db, cards, manifest, ranked));
@@ -279,13 +305,23 @@ async function matchAndOutput(cands: Candidate[]) {
   // report
   const sides = cards.flatMap((c) => (c.doubleSided ? [`${c.code}:front`, `${c.code}:back`] : [`${c.code}:front`]));
   const have = sides.filter((k) => { const [code, side] = k.split(":"); return manifest[code]?.[side as Side]; });
-  const fromCards = Object.values(manifest).flatMap((m) => Object.values(m)).filter((p) => p!.source === "cards").length;
+  const picks = Object.values(manifest).flatMap((m) => Object.values(m));
+  const fromCards = picks.filter((p) => p!.source === "cards").length;
+  const fromFolders = picks.filter((p) => p!.source === "folder").length;
   const missing = sides.filter((k) => !have.includes(k));
   const byType: Record<string, number> = {};
   for (const k of missing) byType[db.cards[k.split(":")[0]].type] = (byType[db.cards[k.split(":")[0]].type] ?? 0) + 1;
   const bytes = readdirSync(OUT_DIR).reduce((n, f) => n + statSync(join(OUT_DIR, f)).size, 0);
-  console.log(`card sides: ${have.length}/${sides.length} have a Russian image (${fromCards} from CARDS_ru, ${have.length - fromCards} from the PDFs); ${(bytes / 1e6).toFixed(1)} MB in ${OUT_DIR}`);
+  console.log(`card sides: ${have.length}/${sides.length} have a Russian image (${fromFolders} from the card folders, ${fromCards} from CARDS_ru, ${have.length - fromFolders - fromCards} from the PDFs); ${(bytes / 1e6).toFixed(1)} MB in ${OUT_DIR}`);
   console.log(`missing by type: ${JSON.stringify(byType)}`);
+  // per code range (the cycle number, or the Return-to / standalone range): sides with an image of all sides
+  const perRange: Record<string, [number, number]> = {};
+  for (const k of sides) {
+    const r = (perRange[k.slice(0, 2)] ??= [0, 0]);
+    r[1]++;
+    if (have.includes(k)) r[0]++;
+  }
+  console.log(`by code range: ${Object.entries(perRange).sort().map(([r, [h, n]]) => `${r} ${h}/${n}`).join(", ")}`);
   console.log(`unmatched images: ${ranked.filter((r) => !accepted(r.scores)).length}; review: ${join(CACHE, "review.html")}`);
 }
 
