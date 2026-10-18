@@ -26,6 +26,7 @@ import { MulliganRow } from "./MulliganRow";
 import { IntroOverlay } from "./IntroOverlay";
 import { Showcase } from "./Showcase";
 import { StepCaption } from "./StepCaption";
+import { guideHtml } from "../guideText";
 import { Ribbon } from "./Ribbon";
 import { SkillTestScreen } from "./SkillTestScreen";
 import { Portrait } from "../Portrait";
@@ -482,7 +483,7 @@ function ScenarioEnd() {
     <div className="handoff">
       <div className="handoff-box resolution">
         <h2>{r?.title ?? game.resolution}</h2>
-        <p>{r?.text}</p>
+        <div className="resolution-text" dangerouslySetInnerHTML={{ __html: guideHtml(r?.text ?? "") }} />
         <button className="primary big" onClick={finish}>{tr("log.title")} →</button>
       </div>
     </div>

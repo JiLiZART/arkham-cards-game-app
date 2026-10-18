@@ -3,6 +3,7 @@ import { scenarioText, t } from "../../content/i18n";
 import { reducedMotion } from "../arrivals";
 import { CardFace } from "../CardFace";
 import { db, useGame } from "../context";
+import { guideHtml, moreBelow } from "../guideText";
 import { whenDealt } from "../intro";
 import { useStage, useView } from "../view";
 import { centreTransform } from "./flights";
@@ -25,6 +26,8 @@ export function IntroOverlay() {
   const locale = useGame((s) => s.locale);
   const card = useRef<HTMLDivElement>(null);
   const [flying, setFlying] = useState(false);
+  const text = useRef<HTMLDivElement>(null);
+  const [more, setMore] = useState(false);
   const busy = useRef(false);
   const step = intro?.step;
   const holds = useStage(intro ? "intro" : null);
@@ -34,6 +37,23 @@ export function IntroOverlay() {
     if (step !== "deal") return;
     return whenDealt(() => useView.setState({ intro: null }));
   }, [step, intro]);
+
+  // a fade at the bottom of the intro text while more of it is below (it scrolls inside the box)
+  useEffect(() => {
+    const el = text.current;
+    if (!el) return setMore(false);
+    const update = () => setMore(moreBelow(el));
+    update();
+    el.addEventListener("scroll", update);
+    const ro = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(update);
+    ro?.observe(el);
+    window.addEventListener("resize", update);
+    return () => {
+      el.removeEventListener("scroll", update);
+      ro?.disconnect();
+      window.removeEventListener("resize", update);
+    };
+  });
 
   const id = step === "agenda" ? game.agenda : step === "act" ? game.act : null;
   const next = () => useView.setState((s) => (s.intro ? { intro: { ...s.intro, step: s.intro.step === "agenda" ? "act" : "deal" } } : {}));
@@ -76,7 +96,7 @@ export function IntroOverlay() {
           <div className="intro-card" ref={card} data-intro={step}>
             <CardFace code={game.cards[id].code} locale={locale} />
           </div>
-          {step === "agenda" && sc.intro && <p className="intro-text">{sc.intro}</p>}
+          {step === "agenda" && sc.intro && <div className={`intro-text ${more ? "more" : ""}`} ref={text} tabIndex={0} dangerouslySetInnerHTML={{ __html: guideHtml(sc.intro) }} />}
         </div>
         <div className="intro-buttons">
           <button className="primary big" onClick={proceed} autoFocus>

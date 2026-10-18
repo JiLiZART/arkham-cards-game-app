@@ -66,7 +66,7 @@ select { font: inherit; background: #221c14; color: var(--ink); border: 1px soli
 
 .handoff { position: absolute; inset: 0; background: rgba(5, 5, 5, 0.93); display: grid; place-items: center; z-index: 80; }
 .handoff-box { text-align: center; max-width: 520px; padding: 24px; border: 1px solid var(--gold); border-radius: 14px; background: #17120c; }
-.handoff-box.resolution p { white-space: pre-wrap; line-height: 1.5; }
+.handoff-box.resolution .resolution-text { line-height: 1.5; text-align: left; max-height: 60dvh; overflow-y: auto; }
 
 .zoom { position: absolute; right: 162px; top: 88px; width: 300px; background: var(--panel); border: 1px solid #5a4a30; border-radius: 10px; padding: 8px; z-index: 45; pointer-events: none; }
 .zoom img { width: 100%; border-radius: 8px; display: block; }
@@ -167,6 +167,8 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 /* ArkhamCards card fonts */
 @font-face { font-family: Teutonic; src: url(/fonts/Teutonic.ttf) format("truetype"); font-display: swap; }
 @font-face { font-family: TeutonicRU; src: url(/fonts/Teutonic-RU.ttf) format("truetype"); font-display: swap; }
+@font-face { font-family: Caveat; src: url(/fonts/Caveat.ttf) format("truetype"); font-display: swap; }
+@font-face { font-family: TT2020; src: url(/fonts/TT2020StyleE-Regular.ttf) format("truetype"); font-display: swap; }
 @font-face { font-family: Alegreya; src: url(/fonts/Alegreya-Regular.ttf) format("truetype"); font-display: swap; }
 @font-face { font-family: Alegreya; src: url(/fonts/Alegreya-Bold.ttf) format("truetype"); font-weight: bold; font-display: swap; }
 @font-face { font-family: Alegreya; src: url(/fonts/Alegreya-Italic.ttf) format("truetype"); font-style: italic; font-display: swap; }
@@ -475,16 +477,31 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 .intro-overlay.flying { background: transparent; transition: background 0.5s; pointer-events: none; }
 .intro-overlay.flying .intro-title, .intro-overlay.flying .intro-text, .intro-overlay.flying .intro-buttons { opacity: 0; transition: opacity 0.2s; }
 @keyframes intro-in { from { opacity: 0; } }
-.intro-box { display: flex; flex-direction: column; align-items: center; gap: 18px; max-width: min(1200px, 92vw); padding: 16px; }
-.intro-title { margin: 0; font: 46px/1.1 Teutonic, TeutonicRU, Georgia, serif; color: var(--gold); text-shadow: 0 2px 10px #000; }
-.intro-body { display: flex; align-items: center; gap: 28px; }
+.intro-box { display: flex; flex-direction: column; align-items: center; gap: 18px; max-width: min(1200px, 92vw); max-height: 100dvh; box-sizing: border-box; padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom)); }
+.intro-title { margin: 0; font: 46px/1.1 Teutonic, TeutonicRU, Georgia, serif; color: var(--gold); text-shadow: 0 2px 10px #000; flex: none; }
+.intro-body { display: flex; align-items: center; gap: 28px; min-height: 0; flex: 1 1 auto; }
 .intro-card { flex: none; width: clamp(300px, 34vw, 620px); aspect-ratio: 88 / 63; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 40px #000; }
 .intro-card > * { width: 100%; height: 100%; }
-.intro-text { margin: 0; max-width: 460px; font: 20px/1.45 Alegreya, Georgia, serif; font-style: italic; color: #eadfc8; text-shadow: 0 1px 4px #000; white-space: pre-line; }
-.intro-buttons { display: flex; align-items: center; gap: 18px; }
+/* the text takes what is left of the screen and scrolls; a fade at its bottom edge says there is more */
+.intro-text { margin: 0; max-width: 460px; max-height: calc(100dvh - 200px); overflow-y: auto; overscroll-behavior: contain; font: 20px/1.45 Alegreya, Georgia, serif; font-style: italic; color: #eadfc8; text-shadow: 0 1px 4px #000; padding-right: 8px; }
+.intro-text.more { -webkit-mask-image: linear-gradient(#000 calc(100% - 56px), transparent); mask-image: linear-gradient(#000 calc(100% - 56px), transparent); }
+@media (max-height: 500px) { .intro-card { width: min(34vw, calc(48dvh * 88 / 63)); } .intro-title { font-size: 28px; } .intro-box { gap: 8px; } .intro-text { font-size: 16px; max-height: calc(100dvh - 120px); } }
+/* the campaign guides' markup (src/ui/guideText.ts) */
+.g-fancy { font: 1.25em/1.2 Caveat, "Segoe Script", cursive; font-style: normal; }
+.g-typewriter { font: 0.9em/1.35 TT2020, "Courier New", monospace; font-style: normal; }
+.g-innsmouth { font-family: Teutonic, TeutonicRU, Georgia, serif; font-style: normal; letter-spacing: 0.03em; }
+.g-game { font-family: Teutonic, TeutonicRU, Georgia, serif; font-style: normal; color: var(--gold); }
+.g-smallcaps { font-variant: small-caps; letter-spacing: 0.04em; }
+.g-center { text-align: center; }
+.g-right { text-align: right; }
+.g-blockquote { margin: 0.3em 0 0.3em 1.2em; padding-left: 0.8em; border-left: 2px solid #8a7a5a; }
+.intro-buttons { display: flex; align-items: center; gap: 18px; flex: none; }
 .intro-buttons .link { background: none; border: 0; color: var(--muted); text-decoration: underline; cursor: pointer; font-size: 15px; }
 .scenario-card.intro-hidden { visibility: hidden; }
 @media (max-width: 900px) { .intro-body { flex-direction: column; } }
+@media (max-width: 900px) and (min-height: 501px) { .intro-text { max-height: 36dvh; } }
+/* a phone held sideways has the width for card and text side by side, and no height to spare */
+@media (max-height: 500px) { .intro-body { flex-direction: row; align-items: center; } .intro-text { max-width: min(460px, 56vw); } }
 
 /* act / agenda / reference viewer: every card of the deck in order, the hovered one's text beside */
 .deck-viewer[open] { display: flex; gap: 22px; align-items: flex-start; }

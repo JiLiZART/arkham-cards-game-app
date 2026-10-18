@@ -47,7 +47,9 @@ magick inspired/icons/table-bg.png -quality 82 public/table/table-bg.jpg
 # ArkhamCards card fonts, copied as they are (icons come from the sprite, scripts/import-icons.ts)
 AC=inspired/ArkhamCards/assets
 mkdir -p public/fonts
-for f in Teutonic.ttf "Teutonic RU.ttf" Alegreya-Regular.ttf Alegreya-Bold.ttf Alegreya-Italic.ttf; do
+# plus the fonts the campaign guides' markup asks for: Caveat (<fancy>) and TT2020 Style E (<typewriter>), both SIL OFL; see public/fonts/LICENSES.md
+# (About Dead, which ArkhamCards uses for <innsmouth>, is "all rights reserved": not copied, Teutonic stands in)
+for f in Teutonic.ttf "Teutonic RU.ttf" Alegreya-Regular.ttf Alegreya-Bold.ttf Alegreya-Italic.ttf Caveat.ttf TT2020StyleE-Regular.ttf; do
   cp "$AC/$f" "public/fonts/${f// /-}"
 done
 echo "icons: $(ls $OUT | wc -l | tr -d ' ') files; fonts: $(ls public/fonts | wc -l | tr -d ' '); background: public/table/table-bg.jpg"
