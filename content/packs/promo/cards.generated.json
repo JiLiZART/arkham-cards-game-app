@@ -261,6 +261,9 @@
   "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Guardian cards ([guardian]) level 0-3, Neutral cards level 0-5, cards that \"heal horror\" level 0-5, up to 15 other Seeker and/or Mystic cards level 0-1 ([seeker] and/or [mystic]).\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Hypnotic Therapy, Rational Thought, 1 random basic weakness.\n<b>Additional Restrictions</b>: No [[Weapon]] cards level 1-5.",
   "flavor": "The mind is fragile, but through understanding, we can protect it.",
   "deckLimit": 1,
+  "tags": [
+   "hh"
+  ],
   "skills": {
    "willpower": 3,
    "intellect": 4,

@@ -424,6 +424,9 @@
    "willpower": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
   "xp": 0,
   "cost": 3,
   "uses": {
@@ -480,6 +483,9 @@
    "intellect": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "se"
+  ],
   "xp": 0,
   "cost": 0
  },
@@ -665,6 +671,9 @@
    "intellect": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "se"
+  ],
   "xp": 0,
   "cost": 1
  },
@@ -1013,7 +1022,10 @@
   "slots": [],
   "icons": {},
   "subtype": "basicweakness",
-  "deckLimit": 1
+  "deckLimit": 1,
+  "tags": [
+   "se"
+  ]
  },
  {
   "code": "07041",
@@ -3648,6 +3660,9 @@
    "combat": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "se"
+  ],
   "xp": 1,
   "cost": 1
  },
@@ -3871,6 +3886,9 @@
    "wild": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "hd"
+  ],
   "xp": 2,
   "cost": 1
  },
@@ -4811,6 +4829,9 @@
    "wild": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "se"
+  ],
   "xp": 1
  },
  {
@@ -5622,6 +5643,9 @@
    "willpower": 2
   },
   "deckLimit": 2,
+  "tags": [
+   "se"
+  ],
   "xp": 2,
   "cost": 2
  },
@@ -5847,6 +5871,10 @@
    "willpower": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "hd",
+   "hh"
+  ],
   "xp": 2,
   "cost": 2
  },
@@ -6603,6 +6631,9 @@
   },
   "subname": "Huntress of Bast",
   "deckLimit": 2,
+  "tags": [
+   "se"
+  ],
   "xp": 4,
   "cost": 3,
   "health": 2,
@@ -6762,6 +6793,9 @@
    "agility": 1
   },
   "deckLimit": 1,
+  "tags": [
+   "se"
+  ],
   "xp": 4,
   "cost": -2
  },
@@ -6840,6 +6874,9 @@
    "combat": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "se"
+  ],
   "xp": 1,
   "cost": 1
  },
@@ -6866,6 +6903,9 @@
    "agility": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "se"
+  ],
   "xp": 1,
   "cost": 2
  },
@@ -6890,6 +6930,10 @@
    "wild": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "hd",
+   "hh"
+  ],
   "xp": 4,
   "cost": 4
  },
@@ -7552,6 +7596,9 @@
   },
   "flavor": "Even in the deepest darkness, light can still bloom.",
   "deckLimit": 2,
+  "tags": [
+   "se"
+  ],
   "xp": 3,
   "cost": 3
  },
@@ -7581,6 +7628,9 @@
    "combat": 2
   },
   "deckLimit": 2,
+  "tags": [
+   "se"
+  ],
   "xp": 5,
   "cost": 4
  },
@@ -7734,6 +7784,9 @@
    "wild": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
   "xp": 5,
   "cost": 0
  },

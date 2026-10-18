@@ -127,6 +127,10 @@
   },
   "flavor": "\"I don't know how you do it, Mr. Diamond. Your insight never ceases to impress.\"",
   "deckLimit": 1,
+  "tags": [
+   "hd",
+   "hh"
+  ],
   "cost": 0
  },
  {
@@ -772,6 +776,9 @@
    "intellect": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "pa"
+  ],
   "xp": 0,
   "cost": 2
  },
@@ -980,6 +987,9 @@
    "agility": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "pa"
+  ],
   "xp": 0,
   "cost": 2
  },
@@ -1028,6 +1038,9 @@
   },
   "flavor": "You can't put a price on fame.\nOr can you?",
   "deckLimit": 2,
+  "tags": [
+   "pa"
+  ],
   "xp": 0,
   "cost": 0
  },
@@ -1474,6 +1487,10 @@
   "subname": "Always on the Mend",
   "flavor": "\"I've had way worse, pal.\"",
   "deckLimit": 2,
+  "tags": [
+   "hd",
+   "hh"
+  ],
   "xp": 0,
   "cost": 3,
   "health": 2,
@@ -1720,6 +1737,9 @@
    "wild": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
   "xp": 3,
   "cost": 2
  },

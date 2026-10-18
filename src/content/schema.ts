@@ -388,6 +388,8 @@ export const CardDef = z
     icons: Icons.default({}),
     slots: z.array(Slot).default([]),
     unique: z.boolean().default(false),
+    /** ArkhamDB's tags (heals horror, heals damage, ...): what some deckbuilding options name */
+    tags: z.array(z.string()).optional(),
     text: z.string().default(""),
     backText: z.string().optional(),
     flavor: z.string().optional(),

@@ -91,6 +91,7 @@ export function mapCard(c: Raw): CardDefInput {
   opt("encounterSet", c.encounter_code);
   opt("subtype", c.subtype_code);
   opt("deckLimit", c.deck_limit);
+  if (typeof c.tags === "string" && c.tags) card.tags = c.tags.split(".").filter(Boolean);
   opt("xp", c.xp);
   if ("cost" in c) card.cost = c.cost;
   opt("victory", c.victory);

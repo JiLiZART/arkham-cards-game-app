@@ -15589,6 +15589,10 @@
    "wild": 1
   },
   "deckLimit": 3,
+  "tags": [
+   "hd",
+   "hh"
+  ],
   "cost": 0
  },
  {

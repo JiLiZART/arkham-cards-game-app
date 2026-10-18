@@ -1327,6 +1327,9 @@
   },
   "flavor": "From the unreal lead me to the real\nFrom the darkness lead me to the light\nFrom the dead lead me to the immortal",
   "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
   "xp": 3,
   "cost": 2,
   "uses": {
@@ -2817,6 +2820,9 @@
    "agility": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "fa"
+  ],
   "xp": 0,
   "cost": 1
  },
@@ -2840,6 +2846,9 @@
   },
   "flavor": "\"I am the wisest man alive, for I know one thing, and that is that I know nothing.\"\n- Plato, <u>The Republic</u>",
   "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
   "xp": 4,
   "cost": 2
  },
@@ -4825,6 +4834,9 @@
   },
   "subname": "Stygian Waymark",
   "deckLimit": 2,
+  "tags": [
+   "se"
+  ],
   "xp": 3,
   "cost": 2,
   "uses": {

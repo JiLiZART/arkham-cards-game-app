@@ -283,6 +283,10 @@
   "icons": {},
   "subname": "Alignment of Spirit",
   "deckLimit": 1,
+  "tags": [
+   "hd",
+   "hh"
+  ],
   "cost": null
  },
  {
@@ -1012,6 +1016,9 @@
    "combat": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "hd"
+  ],
   "xp": 2,
   "cost": 2
  },
@@ -1179,6 +1186,10 @@
   },
   "subname": "Gateway to Paradise",
   "deckLimit": 1,
+  "tags": [
+   "hd",
+   "hh"
+  ],
   "xp": 4,
   "cost": 4,
   "uses": {
@@ -1612,6 +1623,10 @@
   },
   "flavor": "You let your mind drift into cold, meaningless oblivion. The emptiness feels like home.",
   "deckLimit": 2,
+  "tags": [
+   "hd",
+   "hh"
+  ],
   "xp": 0,
   "cost": 2
  },
@@ -1781,6 +1796,9 @@
   },
   "flavor": "You don't necessarily trust the occult words, but you have no other choice.",
   "deckLimit": 2,
+  "tags": [
+   "hd"
+  ],
   "xp": 3,
   "cost": 2,
   "uses": {
@@ -1915,6 +1933,9 @@
    "agility": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "hd"
+  ],
   "xp": 0,
   "cost": 2,
   "uses": {
@@ -2175,6 +2196,10 @@
   },
   "flavor": "\"Can I get course credit for this?\"",
   "deckLimit": 2,
+  "tags": [
+   "hd",
+   "hh"
+  ],
   "xp": 0,
   "cost": 2,
   "health": 1,
@@ -2281,6 +2306,9 @@
    "agility": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "fa"
+  ],
   "xp": 1,
   "cost": 0
  },
@@ -2339,6 +2367,9 @@
    "agility": 2
   },
   "deckLimit": 2,
+  "tags": [
+   "fa"
+  ],
   "xp": 4,
   "cost": 4
  },
@@ -3041,6 +3072,10 @@
   },
   "subname": "From a Former Life",
   "deckLimit": 1,
+  "tags": [
+   "hd",
+   "hh"
+  ],
   "xp": 4,
   "cost": 3,
   "health": 3,
@@ -3070,6 +3105,10 @@
   },
   "subname": "From a Future Life",
   "deckLimit": 1,
+  "tags": [
+   "hd",
+   "hh"
+  ],
   "xp": 4,
   "cost": 3,
   "health": 3,
@@ -3123,6 +3162,10 @@
    "willpower": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "hd",
+   "hh"
+  ],
   "xp": 1,
   "cost": 2,
   "uses": {
@@ -3185,6 +3228,10 @@
    "willpower": 2
   },
   "deckLimit": 2,
+  "tags": [
+   "hd",
+   "hh"
+  ],
   "xp": 4,
   "cost": 2,
   "uses": {
@@ -3263,6 +3310,9 @@
    "combat": 2
   },
   "deckLimit": 2,
+  "tags": [
+   "fa"
+  ],
   "xp": 3,
   "cost": 3,
   "uses": {
@@ -3440,6 +3490,10 @@
    "wild": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "hd",
+   "hh"
+  ],
   "xp": 2,
   "cost": 1
  },
@@ -3517,7 +3571,10 @@
   "slots": [],
   "icons": {},
   "subtype": "basicweakness",
-  "deckLimit": 1
+  "deckLimit": 1,
+  "tags": [
+   "pa"
+  ]
  },
  {
   "code": "08501",

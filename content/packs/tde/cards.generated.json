@@ -2868,6 +2868,9 @@
   "subname": "Wrong Place, Wrong Time",
   "flavor": "I warned you to stay away from me. Now we're both in this together.",
   "deckLimit": 2,
+  "tags": [
+   "hd"
+  ],
   "xp": 1,
   "cost": 3,
   "health": 3,
@@ -4190,6 +4193,9 @@
    "agility": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "fa"
+  ],
   "xp": 2,
   "cost": 3
  },
@@ -4249,6 +4255,9 @@
   },
   "flavor": "You don't necessarily trust the occult words, but you have no other choice.",
   "deckLimit": 2,
+  "tags": [
+   "hd"
+  ],
   "xp": 0,
   "cost": 2,
   "uses": {
@@ -7047,7 +7056,11 @@
   ],
   "icons": {},
   "subname": "Jewel of the Gods",
-  "deckLimit": 0
+  "deckLimit": 0,
+  "tags": [
+   "hd",
+   "hh"
+  ]
  },
  {
   "code": "06278",
@@ -7263,6 +7276,10 @@
   },
   "subname": "A Liar, or a Prophet, or Both",
   "deckLimit": 2,
+  "tags": [
+   "hd",
+   "hh"
+  ],
   "xp": 5,
   "cost": 2,
   "health": 3,
@@ -8156,6 +8173,10 @@
    "willpower": 1
   },
   "deckLimit": 3,
+  "tags": [
+   "hd",
+   "hh"
+  ],
   "xp": 5,
   "cost": 3,
   "health": 3,

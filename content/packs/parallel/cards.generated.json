@@ -601,6 +601,9 @@
   "icons": {},
   "subname": "Due Diligence",
   "deckLimit": 1,
+  "tags": [
+   "pa"
+  ],
   "cost": null
  },
  {
@@ -881,6 +884,9 @@
   "backText": "<b>Deck Size</b>: 30.\n<b>[[Trait]] Choice</b>: At deck creation, choose [[Blessed]] or [[Cursed]], or choose both and gain +5 Deck Size.\n<b>Deckbuilding Options</b>: Survivor cards ([survivor]) level 0-5, Neutral cards level 0-5, cards of your chosen trait(s) 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Wendy's Amulet, Abandoned and Alone, 1 random basic weakness.",
   "flavor": "\"The little things are important. Grown-ups don't see that.\"",
   "deckLimit": 1,
+  "tags": [
+   "se"
+  ],
   "skills": {
    "willpower": 4,
    "intellect": 3,
@@ -908,6 +914,9 @@
   "slots": [],
   "icons": {},
   "deckLimit": 1,
+  "tags": [
+   "se"
+  ],
   "cost": null
  },
  {
@@ -1122,6 +1131,9 @@
   "icons": {},
   "subname": "Still Holdin' Up",
   "deckLimit": 1,
+  "tags": [
+   "hh"
+  ],
   "cost": 2
  },
  {
@@ -1198,6 +1210,9 @@
   },
   "subname": "The Dead Speak",
   "deckLimit": 1,
+  "tags": [
+   "hh"
+  ],
   "cost": 2
  },
  {
@@ -1254,7 +1269,10 @@
   "doubleSided": false,
   "keywords": [],
   "slots": [],
-  "icons": {}
+  "icons": {},
+  "tags": [
+   "hh"
+  ]
  },
  {
   "code": "90053",
@@ -2031,6 +2049,9 @@
   },
   "subname": "finis omnium nunc est",
   "deckLimit": 1,
+  "tags": [
+   "se"
+  ],
   "cost": 2
  },
  {
@@ -2055,6 +2076,9 @@
   "icons": {},
   "subtype": "weakness",
   "deckLimit": 1,
+  "tags": [
+   "se"
+  ],
   "enemy": {
    "fight": 3,
    "health": 4,

@@ -165,6 +165,9 @@
   "subname": "The Parapsychologist",
   "backText": "<b>Deck Size</b>: 35.\n<b>Deckbuilding Options</b>: Seeker cards ([seeker]) level 0-5, Neutral cards level 0-5, [[Insight]] events level 0-3, up to 10 other level 0 Mystic cards ([mystic]).\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Ocula Obscura, Glimpse the Void, 1 random basic weakness.",
   "deckLimit": 1,
+  "tags": [
+   "se"
+  ],
   "skills": {
    "willpower": 4,
    "intellect": 4,
@@ -194,6 +197,9 @@
   "subname": "The Parapsychologist",
   "backText": "<b>Deck Size</b>: 35.\n<b>Deckbuilding Options</b>: Mystic cards ([mystic]) level 0-5, Neutral cards level 0-5, [[Spell]] events level 0-3, up to 10 other level 0 Seeker cards ([seeker]).\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Ocula Obscura, Glimpse the Void, 1 random basic weakness.",
   "deckLimit": 1,
+  "tags": [
+   "se"
+  ],
   "skills": {
    "willpower": 4,
    "intellect": 4,
@@ -229,6 +235,9 @@
   },
   "subname": "Esoteric Eyepiece",
   "deckLimit": 1,
+  "tags": [
+   "se"
+  ],
   "cost": 3
  },
  {
@@ -272,6 +281,9 @@
   "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Rogue cards ([rogue]) level 0-3, Neutral cards level 0-5, cards with [[Firearm]] either as their <b><i>Trait</i></b> or in their text box level 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): \"Viola\" Case, Confiscation, 1 random basic weakness.",
   "flavor": "\"Don't care if it's a god. If it crosses me, it's gonna regret it.\"",
   "deckLimit": 1,
+  "tags": [
+   "fa"
+  ],
   "skills": {
    "willpower": 3,
    "intellect": 1,
@@ -306,6 +318,9 @@
    "wild": 1
   },
   "deckLimit": 1,
+  "tags": [
+   "fa"
+  ],
   "cost": 2
  },
  {
@@ -326,7 +341,10 @@
   "icons": {},
   "flavor": "\"You, uh... going hunting, Mr. McGlen?\"",
   "subtype": "weakness",
-  "deckLimit": 1
+  "deckLimit": 1,
+  "tags": [
+   "fa"
+  ]
  },
  {
   "code": "11014",
@@ -582,6 +600,9 @@
    "agility": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "fa"
+  ],
   "xp": 0,
   "cost": 0
  },
@@ -605,6 +626,9 @@
    "willpower": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
   "xp": 0,
   "cost": 1
  },
@@ -707,6 +731,9 @@
    "wild": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "se"
+  ],
   "xp": 2,
   "cost": 2
  },
@@ -734,6 +761,10 @@
   },
   "flavor": "\"Anderson's a hard-ass, sure. Always locking up the rum and waking us up at the crack of dawn. But out here in the middle of nowhere, he's definitely the one I want taking point.\"",
   "deckLimit": 2,
+  "tags": [
+   "hd",
+   "hh"
+  ],
   "xp": 2
  },
  {
@@ -754,6 +785,9 @@
   "icons": {},
   "flavor": "\"Millimeters don't make no difference, bullets just kinda kill you.\"",
   "deckLimit": 1,
+  "tags": [
+   "fa"
+  ],
   "xp": 3
  },
  {
@@ -922,6 +956,9 @@
    "agility": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
   "xp": 0,
   "cost": 3,
   "uses": {
@@ -978,6 +1015,9 @@
   ],
   "icons": {},
   "deckLimit": 2,
+  "tags": [
+   "se"
+  ],
   "xp": 0,
   "cost": 3,
   "uses": {
@@ -1100,6 +1140,9 @@
    "wild": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "se"
+  ],
   "xp": 2,
   "cost": 2
  },
@@ -1175,6 +1218,9 @@
   },
   "subname": "Signs of Cataclysm",
   "deckLimit": 1,
+  "tags": [
+   "se"
+  ],
   "xp": 4,
   "cost": 3,
   "uses": {
@@ -1328,6 +1374,9 @@
   },
   "subname": "Has Your Back",
   "deckLimit": 2,
+  "tags": [
+   "fa"
+  ],
   "xp": 0,
   "cost": 4,
   "health": 2,
@@ -1376,6 +1425,9 @@
    "agility": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "pa"
+  ],
   "xp": 0,
   "cost": 0
  },
@@ -1449,6 +1501,9 @@
   },
   "flavor": "\"You're in the wrong neighborhood, kid.\"",
   "deckLimit": 2,
+  "tags": [
+   "pa"
+  ],
   "xp": 0,
   "cost": 3
  },
@@ -1471,6 +1526,9 @@
    "wild": 3
   },
   "deckLimit": 2,
+  "tags": [
+   "fa"
+  ],
   "xp": 0
  },
  {
@@ -1541,6 +1599,9 @@
    "wild": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "se"
+  ],
   "xp": 2,
   "cost": 2
  },
@@ -1591,6 +1652,9 @@
   },
   "subname": "Still Has Your Back",
   "deckLimit": 2,
+  "tags": [
+   "fa"
+  ],
   "xp": 4,
   "cost": 3,
   "health": 2,
@@ -1838,6 +1902,9 @@
   },
   "subname": "Symbol of Protection",
   "deckLimit": 3,
+  "tags": [
+   "se"
+  ],
   "xp": 0,
   "cost": 3,
   "uses": {
@@ -1891,6 +1958,9 @@
    "combat": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "pa"
+  ],
   "xp": 0,
   "cost": 3
  },
@@ -2294,6 +2364,9 @@
   "slots": [],
   "icons": {},
   "deckLimit": 2,
+  "tags": [
+   "pa"
+  ],
   "xp": 0
  },
  {
@@ -2473,6 +2546,10 @@
    "willpower": 1
   },
   "deckLimit": 3,
+  "tags": [
+   "hd",
+   "hh"
+  ],
   "xp": 0,
   "cost": 1
  },
@@ -2658,6 +2735,9 @@
   },
   "subname": "Playing Both Sides",
   "deckLimit": 2,
+  "tags": [
+   "pa"
+  ],
   "xp": 2,
   "cost": 3,
   "health": 2,
@@ -2684,6 +2764,9 @@
   },
   "flavor": "\"I can bring em in warm, or I can bring 'em in cold.\"",
   "deckLimit": 2,
+  "tags": [
+   "pa"
+  ],
   "xp": 2,
   "cost": 20
  },
@@ -2707,6 +2790,10 @@
    "wild": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "hd",
+   "hh"
+  ],
   "xp": 2,
   "cost": 0
  },
@@ -2853,6 +2940,10 @@
    "willpower": 2
   },
   "deckLimit": 2,
+  "tags": [
+   "hd",
+   "hh"
+  ],
   "xp": 3,
   "cost": 2,
   "health": 2,
@@ -2958,6 +3049,9 @@
   },
   "flavor": "\"Yeah, they definitely bought it.\"",
   "deckLimit": 2,
+  "tags": [
+   "pa"
+  ],
   "xp": 4,
   "cost": 0
  },

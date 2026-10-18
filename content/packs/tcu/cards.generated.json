@@ -194,6 +194,9 @@
    "wild": 1
   },
   "deckLimit": 1,
+  "tags": [
+   "hh"
+  ],
   "cost": 2
  },
  {
@@ -502,6 +505,9 @@
   },
   "flavor": "He was hiding something… but why?",
   "deckLimit": 2,
+  "tags": [
+   "pa"
+  ],
   "xp": 0,
   "cost": 2
  },
@@ -2734,6 +2740,9 @@
    "willpower": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
   "xp": 0,
   "cost": 3
  },
@@ -5074,6 +5083,9 @@
    "combat": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
   "xp": 3,
   "cost": 3,
   "uses": {
@@ -6009,6 +6021,9 @@
   },
   "flavor": "\"Stay back!\"",
   "deckLimit": 2,
+  "tags": [
+   "fa"
+  ],
   "xp": 0,
   "cost": 2
  },
@@ -6036,6 +6051,9 @@
    "agility": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "fa"
+  ],
   "xp": 3,
   "cost": 3
  },
@@ -7325,6 +7343,10 @@
    "wild": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "hd",
+   "hh"
+  ],
   "xp": 5,
   "cost": 0
  },
@@ -8142,6 +8164,10 @@
   },
   "flavor": "...Et leur chanson se mêle au clair de lune,\nAu calme clair de lune triste et beau...\n- Paul Verlaine, \"Clair de Lune\"",
   "deckLimit": 0,
+  "tags": [
+   "hd",
+   "hh"
+  ],
   "cost": 0
  },
  {

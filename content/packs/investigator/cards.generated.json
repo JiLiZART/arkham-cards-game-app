@@ -55,6 +55,9 @@
   "subname": "Concerned Brother",
   "flavor": "\"You gotta give this up, Nathaniel. Sooner or later, you're gonna get yourself killed.\"",
   "deckLimit": 1,
+  "tags": [
+   "hd"
+  ],
   "cost": 2,
   "health": 1,
   "sanity": 3
@@ -825,7 +828,10 @@
   "icons": {},
   "flavor": "\"You're outta line, Muldoon!\"",
   "subtype": "weakness",
-  "deckLimit": 1
+  "deckLimit": 1,
+  "tags": [
+   "fa"
+  ]
  },
  {
   "code": "60154",
@@ -957,6 +963,9 @@
    "willpower": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "fa"
+  ],
   "xp": 0,
   "cost": 3,
   "health": 2
@@ -981,6 +990,9 @@
    "combat": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "pa"
+  ],
   "xp": 0,
   "cost": 2
  },
@@ -1029,6 +1041,9 @@
    "intellect": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "fa"
+  ],
   "xp": 0,
   "cost": 1
  },
@@ -1054,6 +1069,9 @@
    "wild": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "fa"
+  ],
   "xp": 0,
   "cost": 1
  },
@@ -1078,6 +1096,9 @@
   },
   "flavor": "At your peak.",
   "deckLimit": 2,
+  "tags": [
+   "hd"
+  ],
   "xp": 0,
   "cost": 2
  },
@@ -1126,6 +1147,9 @@
   },
   "flavor": "\"Well, look at that. Who do we have here?\"",
   "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
   "xp": 0,
   "cost": 2
  },
@@ -1257,6 +1281,9 @@
    "intellect": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "fa"
+  ],
   "xp": 1,
   "cost": 1
  },
@@ -1285,6 +1312,9 @@
   },
   "flavor": "\"Police work isn't about catching people. It's about protecting your community.\"",
   "deckLimit": 2,
+  "tags": [
+   "pa"
+  ],
   "xp": 1,
   "cost": 2
  },
@@ -1309,6 +1339,9 @@
   },
   "flavor": "At your peak.",
   "deckLimit": 2,
+  "tags": [
+   "hd"
+  ],
   "xp": 2,
   "cost": 1
  },
@@ -1332,6 +1365,9 @@
   },
   "flavor": "More bullets than you know what to do with.",
   "deckLimit": 2,
+  "tags": [
+   "fa"
+  ],
   "xp": 2,
   "cost": 2
  },
@@ -1411,6 +1447,9 @@
   },
   "flavor": "\"Well, look at that. Who do we have here?\"",
   "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
   "xp": 3,
   "cost": 2
  },
@@ -1463,6 +1502,9 @@
    "wild": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "fa"
+  ],
   "xp": 4,
   "cost": 3,
   "health": 3
@@ -2321,6 +2363,9 @@
   },
   "subname": "From Mind to Behavior",
   "deckLimit": 1,
+  "tags": [
+   "hh"
+  ],
   "cost": 2
  },
  {
@@ -2415,6 +2460,9 @@
    "willpower": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
   "xp": 0,
   "cost": 3,
   "uses": {
@@ -2467,6 +2515,9 @@
    "willpower": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
   "xp": 0,
   "cost": 2,
   "health": 1,
@@ -2575,6 +2626,9 @@
   },
   "flavor": "\"Stay calm! We'll get out of this, yet.\"",
   "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
   "xp": 0,
   "cost": 2
  },
@@ -2599,6 +2653,9 @@
    "wild": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
   "xp": 0,
   "cost": 2
  },
@@ -2622,6 +2679,10 @@
   },
   "flavor": "\"Hold on, now. Let's stop and think about this.\"",
   "deckLimit": 2,
+  "tags": [
+   "hh",
+   "pa"
+  ],
   "xp": 0,
   "cost": 1
  },
@@ -2713,6 +2774,9 @@
   },
   "flavor": "\"Stay calm! We'll get out of this, yet.\"",
   "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
   "xp": 1,
   "cost": 2
  },
@@ -2790,6 +2854,9 @@
    "wild": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "pa"
+  ],
   "xp": 2,
   "cost": 2
  },
@@ -2842,6 +2909,9 @@
    "wild": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "pa"
+  ],
   "xp": 3,
   "cost": 2
  },
@@ -2867,6 +2937,9 @@
    "wild": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
   "xp": 3,
   "cost": 2
  },
@@ -3159,6 +3232,10 @@
   },
   "subname": "Feisty Mechanic",
   "deckLimit": 2,
+  "tags": [
+   "hd",
+   "hh"
+  ],
   "xp": 0,
   "cost": 4,
   "health": 2,
@@ -3326,6 +3403,9 @@
    "willpower": 2
   },
   "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
   "xp": 1,
   "cost": 1,
   "uses": {
@@ -3505,6 +3585,9 @@
    "agility": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "fa"
+  ],
   "xp": 3,
   "cost": 2
  },
@@ -3725,7 +3808,10 @@
   "icons": {
    "wild": 1
   },
-  "deckLimit": 1
+  "deckLimit": 1,
+  "tags": [
+   "pa"
+  ]
  },
  {
   "code": "60355",
@@ -3809,6 +3895,9 @@
    "agility": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "pa"
+  ],
   "xp": 0,
   "cost": 1,
   "uses": {
@@ -3835,6 +3924,9 @@
    "agility": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "pa"
+  ],
   "xp": 0,
   "cost": 2,
   "uses": {
@@ -3973,6 +4065,9 @@
    "intellect": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "pa"
+  ],
   "xp": 0,
   "cost": -2
  },
@@ -4136,6 +4231,9 @@
    "agility": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "pa"
+  ],
   "xp": 2,
   "cost": 2,
   "uses": {
@@ -4268,6 +4366,9 @@
    "wild": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "pa"
+  ],
   "xp": 3,
   "cost": 2
  },
@@ -5258,6 +5359,9 @@
   },
   "flavor": "True power is in the blood.",
   "deckLimit": 2,
+  "tags": [
+   "hd"
+  ],
   "xp": 0,
   "cost": 3
  },
@@ -5301,6 +5405,9 @@
   },
   "flavor": "My life for yours.",
   "deckLimit": 2,
+  "tags": [
+   "hd"
+  ],
   "xp": 0,
   "cost": 4
  },
@@ -5350,6 +5457,9 @@
    "agility": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "pa"
+  ],
   "xp": 0,
   "cost": 0
  },
@@ -5396,6 +5506,9 @@
   },
   "flavor": "\"From time to time people... [shuddered] at the small dark speck that paraded by day and the glimmering will-o'-the-wisp that danced by night.\"\n<i>- H.P. Lovecraft, \"The Mound\"</i>",
   "deckLimit": 2,
+  "tags": [
+   "hd"
+  ],
   "xp": 0
  },
  {
@@ -5469,6 +5582,9 @@
    "wild": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "hd"
+  ],
   "xp": 2,
   "cost": 1
  },
@@ -5901,6 +6017,9 @@
    "willpower": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
   "xp": 0,
   "cost": 2,
   "uses": {
@@ -6768,6 +6887,10 @@
   "slots": [],
   "icons": {},
   "deckLimit": 2,
+  "tags": [
+   "hd",
+   "hh"
+  ],
   "xp": 0,
   "cost": 1
  },
@@ -6889,6 +7012,9 @@
   },
   "flavor": "It's not much, but it's enough to keep you going.",
   "deckLimit": 2,
+  "tags": [
+   "hd"
+  ],
   "xp": 1,
   "cost": 2,
   "uses": {
@@ -6917,6 +7043,9 @@
    "willpower": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "hd"
+  ],
   "xp": 1,
   "cost": 2
  },
@@ -6965,6 +7094,9 @@
   },
   "flavor": "No matter what you put in it, there's always a faintly bitter taste.",
   "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
   "xp": 2,
   "cost": 1,
   "uses": {

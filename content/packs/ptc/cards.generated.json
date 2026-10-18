@@ -4839,6 +4839,9 @@
   },
   "flavor": "\"I am the wisest man alive, for I know one thing, and that is that I know nothing.\"\n- Plato, <u>The Republic</u>",
   "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
   "xp": 0,
   "cost": 2
  },
@@ -5718,6 +5721,10 @@
   },
   "flavor": "\"Anderson's a hard-ass, sure. Always locking up the rum and waking us up at the crack of dawn. But out here in the middle of nowhere, he's definitely the one I want taking point.\"",
   "deckLimit": 2,
+  "tags": [
+   "hd",
+   "hh"
+  ],
   "xp": 0
  },
  {
@@ -5764,6 +5771,10 @@
    "willpower": 2
   },
   "deckLimit": 2,
+  "tags": [
+   "hd",
+   "hh"
+  ],
   "xp": 3,
   "cost": 2,
   "uses": {
@@ -6692,6 +6703,9 @@
   },
   "subname": "Cleansing Fire",
   "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
   "xp": 0,
   "cost": 4
  },
@@ -7482,6 +7496,9 @@
    "agility": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "fa"
+  ],
   "xp": 2,
   "cost": 0
  },
@@ -7636,6 +7653,10 @@
    "wild": 1
   },
   "deckLimit": 2,
+  "tags": [
+   "hd",
+   "hh"
+  ],
   "xp": 5,
   "cost": 1
  },

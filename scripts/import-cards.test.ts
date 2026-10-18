@@ -82,3 +82,10 @@ describe("mapSnapshotPack", () => {
     expect(problems[0].message).toMatch(/slots/);
   });
 });
+
+describe("tags", () => {
+  it("keeps the ArkhamDB tags of a card for the deckbuilding options that name them", () => {
+    expect(mapCard({ ...roland, code: "09999", type_code: "asset", tags: "hd.hh." }).tags).toEqual(["hd", "hh"]);
+    expect(mapCard({ ...roland, code: "09998", type_code: "asset" }).tags).toBeUndefined();
+  });
+});
