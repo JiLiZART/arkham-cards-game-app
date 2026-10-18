@@ -17,7 +17,7 @@
 ## Risks / Trade-offs
 
 - [Hover sheets can feel jumpy when crossing the bar] → the 500 ms delay and the leave grace; the sheet never opens for the avatar on screen.
-- [The own ability button on the phone] → unchanged: the tap on the shown avatar opens the sheet on touch.
+- [The own ability button] → with a mouse it lives in the stat bar (change `stat-bar-ability`, which should land with or before this one); on the phone the tap on the shown avatar opens the sheet on touch.
 
 ## Migration Plan
 
