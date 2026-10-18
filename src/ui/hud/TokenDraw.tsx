@@ -5,7 +5,7 @@ import { t } from "../../content/i18n";
 import type { GameEvent, GameState } from "../../engine/types";
 import { db, gameStore, useGame } from "../context";
 import { Icon } from "../Icon";
-import { spillLayout, type Area } from "../testScreen";
+import { bagLanding, spillLayout, type Area } from "../testScreen";
 import { ChaosToken } from "../ChaosToken";
 import { useLayoutMode } from "../layoutMode";
 import { bagFrames, shadowFrames, tokenFrames, tokenPath, tossTiming } from "../toss";
@@ -40,16 +40,20 @@ export function DrawStage({ e, byHand }: { e: GameEvent; byHand: boolean }) {
   const token = String(e.data?.token);
   const stage = useRef<HTMLDivElement>(null);
   const [area, setArea] = useState<Area | null>(null);
+  // the subject card the bag lands on, in the stage's own coordinates (the stage reaches past the card on every side)
+  const [subject, setSubject] = useState<Area | null>(null);
   useLayoutEffect(() => {
     const r = stage.current!.getBoundingClientRect();
     setArea({ x: 0, y: 0, w: r.width, h: r.height });
+    const card = document.querySelector(".st-subject-card, .st-subject-portrait")?.getBoundingClientRect();
+    setSubject(card ? { x: card.left - r.left, y: card.top - r.top, w: card.width, h: card.height } : null);
   }, []);
   // the same test spills the same way after a reload: seeded by the test and the token's place in it
   const seed = Number(e.data?.testId ?? 0) * 31 + game.log.filter((l) => l.type === "token" && l.data?.testId === e.data?.testId).findIndex((l) => l.text === e.text);
   const spill = useMemo(() => {
     if (!area) return null;
-    // the top rows of the stage hold the hint
-    return byHand ? spillLayout(n, seed, { ...area, y: HINT_H, h: area.h - HINT_H }, DISC) : { size: DISC * 1.4, points: [{ x: area.w / 2, y: area.h * 0.38 }] };
+    // the bottom rows of the stage hold the hint
+    return byHand ? spillLayout(n, seed, { ...area, y: 0, h: area.h - HINT_H }, DISC) : { size: DISC * 1.4, points: [{ x: area.w / 2, y: area.h * 0.38 }] };
   }, [area, n, seed, byHand]);
   const [picked, setPicked] = useState<number | null>(null);
   const [arrived, setArrived] = useState(false);
@@ -70,7 +74,8 @@ export function DrawStage({ e, byHand }: { e: GameEvent; byHand: boolean }) {
     return () => a.cancel();
   }, [!!area]);
   // the tokens tumble out of the bag's mouth in a stream, each on its own seeded path; the pick waits for the last to come to rest
-  const mouth = area ? { x: area.w / 2 + BAG * 0.17, y: area.h - BAG * 0.85 + BAG / 2 - BAG * 0.36 } : null;
+  const land = area ? (subject ? bagLanding(subject) : { x: area.w / 2, y: area.h - BAG * 0.35 }) : null;
+  const mouth = land ? { x: land.x + BAG * 0.17, y: land.y - BAG * 0.36 } : null;
   useLayoutEffect(() => {
     if (!spill || !area || !mouth) return;
     if (reducedMotion()) return setArrived(true);
@@ -140,7 +145,7 @@ export function DrawStage({ e, byHand }: { e: GameEvent; byHand: boolean }) {
         <>
           <div className="st-hint">{picked === null && byHand ? tr("draw.hint") : ""}</div>
           {/* the wrapper stays where the bag ends up (the tip points at it); the bag inside grows out of its button */}
-          <span className="st-bag" data-tip="drawbag" style={{ left: area.w / 2 - BAG / 2, top: area.h - BAG * 0.85, width: BAG, height: BAG }}>
+          <span className="st-bag" data-tip="drawbag" style={{ left: land!.x - BAG / 2, top: land!.y - BAG / 2, width: BAG, height: BAG }}>
             <span ref={bag} className="st-bag-icon">
               <Icon name="chaosBag" size={BAG} />
             </span>

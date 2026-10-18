@@ -1,7 +1,8 @@
 /** the skill-test screen's pure parts: what is tested, what is placed, the calculation strip, where the discs spill */
 import type { G } from "../engine/core";
 import { testParts, tokenTotal } from "../engine/rules/skillTest";
-import type { ContentDb, GameState, InstId, InvId, PendingChoice, SkillTestState } from "../engine/types";
+import type { ChoiceOption, ContentDb, GameState, InstId, InvId, PendingChoice, SkillTestState } from "../engine/types";
+import { choicesOffered, type Looking } from "./players";
 
 const gOf = (game: GameState, db: ContentDb): G => ({ s: game, db, events: [] });
 
@@ -139,3 +140,13 @@ export function spillLayout(n: number, seed: number, area: Area, size: number): 
   }));
   return { size: d, points };
 }
+
+/** the option that finishes committing, while the viewer's commit window is open on screen: tapping the subject chooses it (Done) */
+export function finishOption(game: GameState, view: Looking): ChoiceOption | null {
+  const p = game.pending;
+  if (!p || p.kind !== "commit" || !choicesOffered(game, view)) return null;
+  return p.options.find((o) => o.id === "done") ?? null;
+}
+
+/** where the tossed bag lands on the stage: the middle of the subject's lower part, so the tokens spill over the card */
+export const bagLanding = (subject: Area): { x: number; y: number } => ({ x: subject.x + subject.w / 2, y: subject.y + subject.h * 0.72 });

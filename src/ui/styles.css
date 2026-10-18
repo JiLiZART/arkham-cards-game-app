@@ -353,9 +353,11 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 }
 
 /* the draw stage inside the skill-test screen: the bag, a face-down disc per token, the flip */
-.st-stage { position: relative; flex: 1; width: 100%; min-height: 0; }
+/* the stage reaches past the subject card on every side so tokens can rest around it; it takes no pointer but its discs and buttons */
+.st-stage { position: absolute; left: -100px; right: -100px; top: -60px; bottom: -60px; pointer-events: none; }
+.st-stage .token-circle, .st-stage .st-result button { pointer-events: auto; }
 .st-draw { position: absolute; inset: 0; }
-.st-hint { position: absolute; top: 0; width: 100%; text-align: center; font: 26px Teutonic, TeutonicRU, Georgia, serif; color: var(--gold); text-shadow: 0 2px 6px #000; }
+.st-hint { position: absolute; bottom: 2px; width: 100%; text-align: center; font: 26px Teutonic, TeutonicRU, Georgia, serif; color: var(--gold); text-shadow: 0 2px 6px #000; }
 .st-bag { position: absolute; }
 .st-bag-icon { display: block; filter: drop-shadow(0 10px 20px #000); }
 .token-circle { position: absolute; padding: 0; border: 0; border-radius: 50%; background: none; perspective: 500px; cursor: pointer; transition: opacity 0.3s, transform 0.2s; }
@@ -574,14 +576,17 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 /* the skill-test screen: subject left, placed cards right, the draw in the middle, the calculation along the bottom */
 .skill-test-screen { position: fixed; inset: 0; z-index: 49; background: radial-gradient(circle at 50% 45%, rgba(10, 8, 6, 0.86), rgba(5, 4, 3, 0.94)); animation: st-in 0.3s ease-out; }
 @keyframes st-in { from { opacity: 0; } to { opacity: 1; } }
-.st-subject { position: absolute; left: 230px; top: 172px; display: flex; flex-direction: column; align-items: center; animation: popin 0.3s ease-out; }
-.st-subject-card { width: 180px; height: 252px; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px #000d, 0 0 0 2px var(--gold); }
+.st-subject { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; animation: popin 0.3s ease-out; }
+.st-subject-card { width: 100%; height: 100%; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px #000d, 0 0 0 2px var(--gold); }
+/* the viewer's commit window is open: the card is lit like any card with an option, and a tap finishes committing */
+.st-subject-card.legal, .st-subject-portrait.legal { cursor: pointer; box-shadow: 0 10px 30px #000d, 0 0 0 3px #7fe08a, 0 0 22px #7fe08acc; }
 .st-subject-card img, .st-subject-card .text-face { width: 100%; height: 100%; object-fit: cover; display: block; }
 .st-subject-portrait { padding: 12px; border-radius: 50%; background: var(--panel); box-shadow: 0 10px 30px #000d, 0 0 0 2px var(--gold); }
 /* centred on the screen, the same axis as the calculation strip (the subject and the placed cards sit either side) */
-.st-middle { position: absolute; left: 50%; width: 440px; translate: -50% 0; top: 150px; bottom: 480px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.st-middle { position: absolute; left: 50%; translate: -50% 0; top: 140px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.st-center { position: relative; width: 240px; height: 336px; margin-top: 8px; }
 .st-line { background: var(--panel); border: 1px solid var(--gold); border-radius: 16px; padding: 4px 16px; font: 22px/1.3 Alegreya, Georgia, serif; text-align: center; white-space: nowrap; }
-.st-placed { position: absolute; right: 360px; top: 172px; width: 290px; display: flex; flex-wrap: wrap; gap: 14px 10px; justify-content: flex-start; align-content: flex-start; }
+.st-placed { position: absolute; left: calc(50% + 230px); top: 196px; width: 290px; display: flex; flex-wrap: wrap; gap: 14px 10px; justify-content: flex-start; align-content: flex-start; }
 .st-placed-slot { position: relative; padding-bottom: 22px; }
 .st-placed-slot.removable .mini-card { cursor: pointer; }
 .st-takeback { position: absolute; left: -6px; top: -8px; width: 26px; height: 26px; border-radius: 50%; background: #2f5a30; border: 1px solid #7fe08a; color: #fff; font-size: 17px; line-height: 24px; text-align: center; pointer-events: none; }
@@ -600,7 +605,7 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 .game.testing .hand-fan:has(.fan-card:hover), .game.testing .hand-fan:focus-within, .game.testing .hand-fan:has(.dragging), .game.testing .hand-fan:has(.focused) { z-index: 60; }
 
 /* the result stage: the big total, the verdict, Continue */
-.st-result { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; animation: popin 0.25s ease-out; }
+.st-result { position: absolute; inset: 0; isolation: isolate; pointer-events: none; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; animation: popin 0.25s ease-out; }
 .st-result-total { font: 110px/1 Teutonic, TeutonicRU, Georgia, serif; font-variant-numeric: lining-nums; color: #fff; text-shadow: 0 4px 16px #000; }
 .bd-result { font: 54px Teutonic, TeutonicRU, Georgia, serif; text-shadow: 0 3px 10px #000; }
 .breakdown.ok .bd-result { color: var(--ok); }
@@ -822,12 +827,13 @@ button.danger { border-color: var(--bad); color: var(--bad); }
 
 /* the skill-test screen on the phone: subject left, placed cards in a column right, the line and the draw in the middle,
    the calculation on one line just above the instruction bar */
-.game.phone .st-subject { left: calc(56px + var(--safe-l)); top: 44px; }
-.game.phone .st-subject-card { width: 120px; height: 168px; }
+.game.phone .st-center { width: 108px; height: 151px; margin-top: 2px; }
+.game.phone .st-stage { left: -60px; right: -60px; top: -30px; bottom: -30px; }
 .game.phone .st-subject-portrait { padding: 6px; }
-.game.phone .st-middle { top: 40px; bottom: 200px; width: min(420px, calc(100vw - 380px)); gap: 4px; }
+.game.phone .st-subject-portrait .portrait { width: 96px !important; height: 96px !important; }
+.game.phone .st-middle { top: 38px; gap: 2px; }
 .game.phone .st-line { font-size: 16px; padding: 2px 12px; }
-.game.phone .st-placed { right: calc(64px + var(--safe-r)); top: 44px; width: auto; max-height: 170px; flex-direction: column; flex-wrap: nowrap; overflow-y: auto; zoom: 0.62; }
+.game.phone .st-placed { left: calc(50% + 100px); right: auto; top: 44px; width: auto; max-height: 170px; flex-direction: column; flex-wrap: nowrap; overflow-y: auto; zoom: 0.62; }
 .game.phone .st-strip { bottom: calc(140px + var(--safe-b)); gap: 6px; padding: 2px 12px; font-size: 18px; white-space: nowrap; }
 .game.phone .st-strip .st-num { font-size: 24px; }
 .game.phone .st-strip .svg-icon, .game.phone .st-strip img, .game.phone .st-strip .chaos-token { width: 24px; height: 24px; }
@@ -918,3 +924,6 @@ button.danger { border-color: var(--bad); color: var(--bad); }
 .drawer-handle.glow { border-color: #7fe08a; box-shadow: 0 0 12px #7fe08acc; animation: handle-glow 1.2s ease-in-out infinite; }
 @keyframes handle-glow { 50% { box-shadow: 0 0 20px #7fe08a; } }
 @media (prefers-reduced-motion: reduce) { .drawer-handle.glow { animation: none; } }
+
+/* the result over the subject: a dark disc behind the number keeps it readable on the card */
+.st-result::before { content: ""; position: absolute; z-index: -1; width: 300px; height: 300px; left: 50%; top: 50%; translate: -50% -50%; border-radius: 50%; background: radial-gradient(#000d 0, #000b 55%, transparent 72%); }

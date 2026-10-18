@@ -1,6 +1,6 @@
-import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { cardText, t } from "../../content/i18n";
-import type { GameEvent, GameState, InvId, SkillTestState } from "../../engine/types";
+import type { ChoiceOption, GameEvent, GameState, InvId, SkillTestState } from "../../engine/types";
 import { rememberRect } from "../arrivals";
 import { useOptionsByCard } from "../cardClick";
 import { CardFace } from "../CardFace";
@@ -9,11 +9,13 @@ import { Icon } from "../Icon";
 import { isIcon } from "../icons";
 import { Portrait } from "../Portrait";
 import { viewerOf } from "../store";
-import { addTokens, calcParts, isTestEvent, placedCards, sessionId, subjectOf, type CalcParts, type PlacedCard, type Subject } from "../testScreen";
+import { cardDetails } from "../details";
+import { addTokens, calcParts, finishOption, isTestEvent, placedCards, sessionId, subjectOf, type CalcParts, type PlacedCard, type Subject } from "../testScreen";
 import { useStage, useView } from "../view";
 import { ChaosTokenIcon } from "./ChaosTokenIcon";
 import { useFlyIn } from "./flights";
 import { RESOLVE_BOX } from "./Reveal";
+import { DetailsColumn } from "./HandDetails";
 import { MiniCard } from "./Panels";
 import { DrawStage } from "./TokenDraw";
 import { moment } from "./SoundLayer";
@@ -108,14 +110,22 @@ export function useTestView(): TestView | null {
   return { snap, calc: addTokens(snap.calc, drawn, done), result: result && pending === 0 ? result : null, live: live && live.id === id ? live : null };
 }
 
-/** the card (or investigator) the test is about, large; hovering enlarges it */
-function SubjectView({ subject }: { subject: Subject }) {
+/**
+ * The card (or investigator) the test is about, large, in the centre; hovering shows its details column (no enlarged copy,
+ * it is large already). While the viewer's commit window is open it is lit like any card with an option, and tapping it
+ * finishes committing, as the bar's Done does.
+ */
+function SubjectView({ subject, finish }: { subject: Subject; finish: ChoiceOption | null }) {
   const game = useGame((s) => s.game) as GameState;
   const locale = useGame((s) => s.locale);
+  const choose = useGame((s) => s.choose);
+  const [hover, setHover] = useState<DOMRect | null>(null);
+  const tap = finish ? () => choose(finish.id) : undefined;
+  const lit = finish ? "legal" : "";
   if (subject.kind === "portrait") {
     return (
       <div className="st-subject">
-        <div className="st-subject-portrait">
+        <div className={`st-subject-portrait ${lit}`} onClick={tap} role={tap ? "button" : undefined}>
           <Portrait code={subject.inv} size={150} />
         </div>
       </div>
@@ -127,13 +137,16 @@ function SubjectView({ subject }: { subject: Subject }) {
   return (
     <div className="st-subject">
       <div
-        className="st-subject-card"
+        className={`st-subject-card ${lit}`}
         data-card={inst.id}
-        onMouseEnter={(ev) => useView.getState().setHover(inst.id, ev.currentTarget.getBoundingClientRect())}
-        onMouseLeave={() => useView.getState().setHover(null)}
+        onClick={tap}
+        role={tap ? "button" : undefined}
+        onMouseEnter={(ev) => setHover(ev.currentTarget.getBoundingClientRect())}
+        onMouseLeave={() => setHover(null)}
       >
         <CardFace code={inst.code} locale={locale} side={back ? "back" : "front"} />
       </div>
+      {hover && <DetailsColumn rows={cardDetails(db, inst.code, locale, { inst, game })} rect={{ x0: hover.left, y0: hover.top, x1: hover.right, y1: hover.bottom }} />}
     </div>
   );
 }
@@ -257,16 +270,34 @@ export function SkillTestScreen() {
     if (committed > was.current) moment("commit", lastCommitted);
     was.current = committed;
   }, [committed, lastCommitted]);
+  // the viewer's commit window: the subject finishes it (tap, Space or Enter). Not while the draw or the result holds the stage: they have their own keys
+  const viewing = useView((s) => s.viewing);
+  const stageBusy = playing?.type === "token" || playing?.type === "testResult";
+  const finish = shown && !stageBusy ? finishOption(game, { viewing }) : null;
+  useEffect(() => {
+    if (!finish) return;
+    const key = (e: KeyboardEvent) => {
+      if ((e.key !== " " && e.key !== "Enter") || e.repeat || e.defaultPrevented) return;
+      // a focused button or field answers its own Enter and Space
+      if ((e.target as Element | null)?.closest("button, a, input, select, textarea")) return;
+      e.preventDefault();
+      gameStore.getState().choose(finish.id);
+    };
+    window.addEventListener("keydown", key);
+    return () => window.removeEventListener("keydown", key);
+  }, [finish]);
   if (!shown || !view) return null;
   const { snap, calc } = view;
   return (
     <div className="skill-test-screen">
-      <SubjectView subject={snap.subject} />
       <div className="st-middle">
         <div className="st-line">{lineOf(snap, view.calc, game, locale)}</div>
-        <div className="st-stage">
-          {playing?.type === "testResult" && playing.data?.testId === snap.id && <ResultStage key={(playing as GameEvent & { logIndex?: number }).logIndex} e={playing} waits={waits} />}
-          {playing?.type === "token" && playing.data?.testId === snap.id && <DrawStage key={(playing as GameEvent & { logIndex?: number }).logIndex} e={playing} byHand={byHand} />}
+        <div className="st-center">
+          <SubjectView subject={snap.subject} finish={finish} />
+          <div className="st-stage">
+            {playing?.type === "testResult" && playing.data?.testId === snap.id && <ResultStage key={(playing as GameEvent & { logIndex?: number }).logIndex} e={playing} waits={waits} />}
+            {playing?.type === "token" && playing.data?.testId === snap.id && <DrawStage key={(playing as GameEvent & { logIndex?: number }).logIndex} e={playing} byHand={byHand} />}
+          </div>
         </div>
       </div>
       <PlacedCards skill={snap.skill} placed={view.live ? placedCards(view.live, game, db, game.pending) : snap.placed.map((p) => ({ ...p, removable: false }))} viewerCanAct={!!view.live} />

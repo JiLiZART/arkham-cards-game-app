@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { commitDone, db, giveCard, locId, mutate, pick, putEnemy, skipMulligans, start } from "../engine/testkit";
-import { addTokens, calcParts, placedCards, sessionId, spillLayout, subjectOf } from "./testScreen";
+import { addTokens, bagLanding, calcParts, finishOption, placedCards, sessionId, spillLayout, subjectOf } from "./testScreen";
 
 const ROLAND = "01001";
 const DAISY = "01002";
@@ -164,5 +164,43 @@ describe("sessionId", () => {
 
   it("an open screen is not closed by an event that plays during the test", () => {
     expect(sessionId({ ...base, live: 4, started: 4, lead: ev("enemyDamage") })).toBe(4);
+  });
+});
+
+describe("finishOption", () => {
+  it("in the viewer's commit window: the Done option, which tapping the subject chooses", () => {
+    const r = fight();
+    expect(r.state.pending?.kind).toBe("commit");
+    expect(finishOption(r.state, { viewing: null })?.id).toBe("done");
+  });
+
+  it("nothing at other times: another table on screen, or a choice that is not a commit window", () => {
+    const r = fight([ROLAND, DAISY]);
+    expect(finishOption(r.state, { viewing: DAISY })).toBeNull();
+    const turn = begin();
+    expect(finishOption(turn.state, { viewing: null })).toBeNull();
+  });
+
+  it("a helper's commit window, when their table is on screen, finishes theirs", () => {
+    let r = fight([ROLAND, DAISY]);
+    r = pick(r, "done");
+    expect(r.state.pending).toMatchObject({ inv: DAISY, kind: "commit" });
+    expect(finishOption(r.state, { viewing: null })?.id).toBe("done");
+    expect(finishOption(r.state, { viewing: ROLAND })).toBeNull();
+  });
+
+  it("no Done option in the commit window, nothing to tap", () => {
+    const r = fight();
+    const p = { ...r.state.pending!, options: r.state.pending!.options.filter((o) => o.id !== "done") };
+    expect(finishOption({ ...r.state, pending: p }, { viewing: null })).toBeNull();
+  });
+});
+
+describe("bagLanding", () => {
+  it("is the lower third of the subject, centred on it, in the stage's own coordinates", () => {
+    const c = bagLanding({ x: 120, y: 60, w: 240, h: 336 });
+    expect(c.x).toBe(240);
+    expect(c.y).toBeCloseTo(60 + 336 * 0.72, 5);
+    expect(c.y).toBeGreaterThan(60 + (336 * 2) / 3);
   });
 });
