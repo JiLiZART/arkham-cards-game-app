@@ -290,7 +290,7 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 .pile-divider { grid-column: 1 / -1; border-top: 1px solid #4a3b22; }
 .chaos-bag { flex: none; width: 110px; height: 96px; padding: 0; border: 0; background: transparent; z-index: 47; filter: drop-shadow(0 4px 8px #000c); }
 .chaos-bag:hover:not(:disabled) { background: transparent; transform: scale(1.05); }
-.chaos-bag .svg-icon { display: block; margin: 0 auto; }
+.chaos-bag .icon-img { display: block; margin: 0 auto; object-fit: contain; }
 .bag-modal[open] { display: flex; gap: 24px; align-items: flex-start; }
 .bag-tokens { width: 380px; display: flex; flex-direction: column; gap: 12px; }
 .bag-tokens h2 { margin: 0; color: var(--gold); }
@@ -762,7 +762,7 @@ button.danger { border-color: var(--bad); color: var(--bad); }
 /* the avatars are drawn at 72 %: their tap reaches 44 px the same way (in their zoomed units) */
 .game.phone .pb-avatar::after { content: ""; position: absolute; inset: -12px 0; }
 .game.phone .topbar .chaos-bag { width: 44px; height: 36px; filter: none; }
-.game.phone .topbar .chaos-bag .svg-icon { width: 30px; height: 30px; }
+.game.phone .topbar .chaos-bag .icon-img { width: 36px; height: 30px; }
 .game.phone .topbar .chaos-bag .pile-count { font-size: 11px; right: 0; bottom: 0; }
 .drawer { position: fixed; top: 0; bottom: 0; z-index: 70; width: min(320px, 72vw); background: var(--panel); border: 1px solid #5a4a30; box-shadow: 0 0 30px #000c; overflow-y: auto; transition: transform 0.22s ease-out; display: flex; flex-direction: column; gap: 10px; padding: 10px; }
 .drawer.left { left: 0; padding-left: calc(10px + var(--safe-l)); transform: translateX(-102%); border-radius: 0 14px 14px 0; }

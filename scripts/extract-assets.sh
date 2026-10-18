@@ -36,6 +36,9 @@ connector-one-way connector-one-way-from-left-to-right.png
 MAP
 rm -rf "$TMP"
 
+# the painted chaos bag (already on a transparent background)
+cp inspired/icons/no_bg_chaos-bag.png "$OUT/chaos-bag.png"
+
 # card backs from ArkhamCards, mapped by their art: its file names are swapped relative to the printed game
 # (encounter-back.png is the sepia tentacle player back, player-back.png the blue eclipse encounter back)
 magick "$AC_ASSETS/encounter-back.png" \( +clone -alpha extract -fill black -colorize 100 -fill white -draw "roundrectangle 0,0 %[fx:w-1],%[fx:h-1] 34,34" \) -alpha off -compose CopyOpacity -composite public/table/back-player.png

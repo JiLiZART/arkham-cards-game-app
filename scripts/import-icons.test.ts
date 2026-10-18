@@ -23,6 +23,8 @@ describe("stripSvg", () => {
 describe("symbol set", () => {
   it("names every layer of the layered icons the code draws", () => {
     const names = codeIconNames();
+    // the painted bag is a PNG now, but its glyph stays in the sprite
+    expect(names).toContain("chaos_bag");
     for (const n of ["skill_willpower", "skill_willpower_inverted", "health", "health_inverted", "token_symbol_fill", "token_skull_overlay", "token_skull_highlight", "token_number_overlay", "token_-3_highlight", "per_investigator", "unique"]) {
       expect(names, n).toContain(n);
     }

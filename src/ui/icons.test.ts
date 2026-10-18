@@ -33,12 +33,12 @@ describe("icons", () => {
     expect(hasSymbol("made_up_icon")).toBe(false);
   });
 
-  it("PNG art only for the cardboard tokens the sprite doesn't draw; no stacked token art", () => {
+  it("PNG art only for the cardboard tokens the sprite doesn't draw and the painted chaos bag; no stacked token art", () => {
     const pngs = Object.entries(ICON_SOURCES as Record<string, IconSource>).filter(([, src]) => "png" in src).map(([n]) => n);
     // cardboard tokens are PNG art, clue and resource stacks included; everything drawn comes from the sprite
-    expect(pngs.sort()).toEqual(["clue", "clue-3", "connectorBoth", "connectorOneWay", "damage", "doom", "horror", "lead", "resource", "resource-3", "resource-5"]);
-    for (const n of ["chaosBag", "health", "sanity"]) expect("glyph" in (ICON_SOURCES as Record<string, IconSource>)[n], n).toBe(true);
-    expect(readdirSync("public/icons").filter((f) => f.endsWith(".png")).sort()).toEqual(["clue-3.png", "clue.png", "connector-both.png", "connector-one-way.png", "damage.png", "doom.png", "horror.png", "lead.png", "resource-3.png", "resource-5.png", "resource.png"]);
+    expect(pngs.sort()).toEqual(["chaosBag", "clue", "clue-3", "connectorBoth", "connectorOneWay", "damage", "doom", "horror", "lead", "resource", "resource-3", "resource-5"]);
+    for (const n of ["health", "sanity"]) expect("glyph" in (ICON_SOURCES as Record<string, IconSource>)[n], n).toBe(true);
+    expect(readdirSync("public/icons").filter((f) => f.endsWith(".png")).sort()).toEqual(["chaos-bag.png", "clue-3.png", "clue.png", "connector-both.png", "connector-one-way.png", "damage.png", "doom.png", "horror.png", "lead.png", "resource-3.png", "resource-5.png", "resource.png"]);
   });
 
   it("every remaining PNG icon has a transparent background", () => {

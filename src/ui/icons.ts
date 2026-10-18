@@ -4,7 +4,7 @@ import { asset } from "./images";
  * The one place that maps game concepts to icon sources. Sprite symbols come first (public/icons/sprite.svg, from
  * scripts/import-icons.ts: sharp at any size, coloured like the printed icons); PNG art (public/icons, from
  * scripts/extract-assets.sh) for the cardboard tokens: damage, horror, doom, clues and resources (with their 3 and 5
- * stacks), the lead token and the connector plaques.
+ * stacks), the lead token, the connector plaques and the painted chaos bag.
  */
 
 /** a sprite symbol drawn in a colour, optionally over a silhouette layer (printed skill boxes, health and sanity) */
@@ -33,7 +33,7 @@ export const ICON_SOURCES = {
   hand: ink("hand"), hands: ink("hand_x2"), arcane: ink("arcane"), arcane2: ink("arcane_x2"), accessory: ink("accessory"), body: ink("body"), ally: ink("ally"),
   skull: { token: "skull" }, cultist: { token: "cultist" }, tablet: { token: "tablet" }, elderThing: { token: "elderThing" }, elderSign: { token: "elderSign" }, autoFail: { token: "autoFail" },
   "+1": { token: "+1" }, "-1": { token: "-1" },
-  chaosBag: { glyph: "chaos_bag", color: "#7a5230" },
+  chaosBag: { png: "chaos-bag" },
   damage: { png: "damage" }, horror: { png: "horror" }, doom: { png: "doom" },
   resource: { png: "resource" }, "resource-3": { png: "resource-3" }, "resource-5": { png: "resource-5" }, clue: { png: "clue" }, "clue-3": { png: "clue-3" },
   lead: { png: "lead" }, connectorBoth: { png: "connector-both" }, connectorOneWay: { png: "connector-one-way" },

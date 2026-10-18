@@ -58,7 +58,8 @@ export function stripSvg(svg: string): { viewBox: string; body: string } {
 export function codeIconNames(): string[] {
   const layers = (Object.values(ICON_SOURCES) as IconSource[]).flatMap((s) => ("glyph" in s ? [s.glyph, ...(s.under ? [s.under.glyph] : [])] : []));
   const tokens = CHAOS_TOKENS.flatMap((t) => layersFor(t)?.map(([g]) => g) ?? []);
-  return [...new Set([...layers, ...tokens, ...Object.values(MARKUP_ICONS)])];
+  // the chaos bag is painted art now (a PNG), but its glyph stays in the sprite
+  return [...new Set([...layers, ...tokens, ...Object.values(MARKUP_ICONS), "chaos_bag"])];
 }
 
 /** every encounter set and scenario icon content needs */
