@@ -793,3 +793,9 @@ button.danger { border-color: var(--bad); color: var(--bad); }
 .game.phone .phase-title-round { font-size: 18px; }
 /* touch: the browser must not turn a press on the map, a marker or a drawer handle into a scroll or a zoom */
 .game canvas, .game .mini, .drawer-handle, .hand-drawer { touch-action: none; }
+.rotate-card { position: fixed; inset: 0; z-index: 200; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 24px calc(24px + env(safe-area-inset-right, 0px)) 24px calc(24px + env(safe-area-inset-left, 0px)); background: var(--bg); color: var(--ink); text-align: center; font-family: Alegreya, Georgia, serif; }
+.rotate-card h2 { margin: 0; color: var(--gold); font: 30px Teutonic, TeutonicRU, Georgia, serif; }
+.rotate-card p { margin: 0; color: var(--muted); max-width: 320px; }
+.rotate-icon { font-size: 56px; animation: rotate-hint 2.4s ease-in-out infinite; }
+@keyframes rotate-hint { 0%, 30% { transform: rotate(0deg); } 60%, 100% { transform: rotate(-90deg); } }
+@media (prefers-reduced-motion: reduce) { .rotate-icon { animation: none; } }

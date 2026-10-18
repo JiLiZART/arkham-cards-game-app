@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { contentErrors } from "../content";
-import { gameStore, useGame } from "./context";
+import { t } from "../content/i18n";
+import { db, gameStore, useGame } from "./context";
 import { HandFan } from "./hud/HandFan";
 import { HandDrawer } from "./hud/HandDrawer";
 import { Hud } from "./hud/Hud";
@@ -14,11 +15,24 @@ import { useView } from "./view";
 import { useLayout } from "./layoutMode";
 import { installTouch } from "./touch";
 
+/** a phone held upright: the table needs it sideways (nothing about the game changes while this shows) */
+function RotateCard() {
+  const locale = useGame((s) => s.locale);
+  return (
+    <div className="rotate-card" role="alert">
+      <div className="rotate-icon" aria-hidden>📱↻</div>
+      <h2>{t(db, locale, "phone.rotate")}</h2>
+      <p>{t(db, locale, "phone.rotateWhy")}</p>
+    </div>
+  );
+}
+
 export function App() {
   const screen = useGame((s) => s.screen);
   const game = useGame((s) => s.game);
   const testing = useView((s) => s.testing);
-  const { mode } = useLayout();
+  const { mode, portrait } = useLayout();
+  const rotate = mode === "phone" && portrait;
   useEffect(() => {
     gameStore.getState().resume();
   }, []);
@@ -37,15 +51,18 @@ export function App() {
   if (screen === "game" && game) {
     return (
       <div className={`game ${mode} ${testing ? "testing" : ""}`}>
+        {rotate && <RotateCard />}
         <Table />
         <Hud />
         {mode === "phone" ? <HandDrawer /> : <HandFan />}
       </div>
     );
   }
-  if (screen === "log") return <CampaignLog />;
-  if (screen === "howto") return <HowTo />;
-  if (screen === "wizard") return <Wizard />;
-  if (screen === "settings") return <Settings />;
-  return <Title />;
+  const page = screen === "log" ? <CampaignLog /> : screen === "howto" ? <HowTo /> : screen === "wizard" ? <Wizard /> : screen === "settings" ? <Settings /> : <Title />;
+  return (
+    <>
+      {rotate && <RotateCard />}
+      {page}
+    </>
+  );
 }

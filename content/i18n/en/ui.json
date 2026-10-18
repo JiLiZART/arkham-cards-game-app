@@ -416,5 +416,7 @@
   "debug.load": "Load",
   "phone.panels": "Act, agenda and piles",
   "phone.strip": "Your cards in play",
-  "phone.hand": "Your hand: tap to open"
+  "phone.hand": "Your hand: tap to open",
+  "phone.rotate": "Turn your phone sideways",
+  "phone.rotateWhy": "The table is laid out for a phone held in landscape. Your game is waiting just as you left it."
 }
