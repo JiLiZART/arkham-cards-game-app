@@ -5,6 +5,12 @@
  "faction": "guardian",
  "pack": "ptc",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Марк Хэрриган",
+   "subname": "Солдат"
+  }
+ },
  "signatures": [
   "03007",
   "03009"

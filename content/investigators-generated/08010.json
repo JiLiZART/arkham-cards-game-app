@@ -5,6 +5,12 @@
  "faction": "mystic",
  "pack": "eoe",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Лили Чен",
+   "subname": "Мастер боевых искусств"
+  }
+ },
  "signatures": [],
  "weaknesses": [
   "08015"

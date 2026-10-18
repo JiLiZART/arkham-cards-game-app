@@ -5,6 +5,12 @@
  "faction": "mystic",
  "pack": "tic",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Декстер Дрейк",
+   "subname": "Иллюзионист"
+  }
+ },
  "signatures": [
   "07012"
  ],

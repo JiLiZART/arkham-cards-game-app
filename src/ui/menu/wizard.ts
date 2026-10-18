@@ -1,4 +1,5 @@
 /** the new-game wizard's state: pure, so the order and back rules are tested without React */
+import { campaignName, cardText, t } from "../../content/i18n";
 import type { CampaignDef, DeckDef, Difficulty } from "../../content/schema";
 import { validateDeck } from "../../engine/decks";
 import type { ContentDb } from "../../engine/types";
@@ -48,8 +49,64 @@ export function setCampaign(s: WizardState, id: string, db?: ContentDb): WizardS
   return db && !db.campaigns[id] ? s : { ...s, campaignId: id };
 }
 
-/** tap an investigator: added at the end (up to four, a fifth is ignored) with their first deck, or removed and the rest close up */
+/** what the picker shows of an investigator: from the card when its pack is loaded, from the definition (with the other languages' names) until then */
+export function investigatorInfo(db: ContentDb, code: string, locale: string): { name: string; subname?: string; faction: string; pack: string } {
+  const def = db.investigators[code];
+  const card = db.cards[code];
+  if (card) {
+    const text = cardText(db, code, locale);
+    return { name: text.name, subname: text.subname, faction: card.faction, pack: def?.pack ?? card.pack };
+  }
+  const tr = def?.names?.[locale];
+  return { name: tr?.name ?? def?.name ?? code, subname: tr ? tr.subname : def?.subname, faction: def?.faction ?? "neutral", pack: def?.pack ?? "" };
+}
+
+export interface PickerFilter {
+  faction: string | null;
+  cycle: string | null;
+  query: string;
+}
+
+/** every investigator for the picker, filtered by class and cycle and by a search of the name (in the game's language and in English) */
+export function pickerList(db: ContentDb, locale: string, f: PickerFilter) {
+  const words = f.query.toLowerCase().split(/\s+/).filter(Boolean);
+  return Object.values(db.investigators)
+    .map((def) => {
+      const info = investigatorInfo(db, def.code, locale);
+      const en = investigatorInfo(db, def.code, "en");
+      return {
+        code: def.code, ...info,
+        // the ability is written behaviour only when the card is here and carries abilities; the others show their text and do nothing
+        partlyImplemented: !db.cards[def.code]?.abilities.length,
+        needsDeck: decksFor(db, def.code).length === 0,
+        haystack: [info.name, info.subname, en.name, en.subname].join(" ").toLowerCase(),
+      };
+    })
+    .filter((i) => (!f.faction || i.faction === f.faction) && (!f.cycle || i.pack === f.cycle) && words.every((w) => i.haystack.includes(w)))
+    .sort((a, b) => a.code.localeCompare(b.code));
+}
+
+/** the packs the investigators come from, in code order: the cycle filter's choices */
+export function cyclesOf(db: ContentDb): string[] {
+  const first = new Map<string, string>();
+  for (const i of Object.values(db.investigators)) {
+    const pack = investigatorInfo(db, i.code, "en").pack;
+    if (pack && (!first.has(pack) || i.code < first.get(pack)!)) first.set(pack, i.code);
+  }
+  return [...first.keys()].sort((a, b) => first.get(a)!.localeCompare(first.get(b)!));
+}
+
+/** a cycle's name: the packs without a campaign of their own have a string, the others take their campaign's name */
+export function cycleName(db: ContentDb, locale: string, pack: string): string {
+  const key = `cycle.${pack}`;
+  if (db.i18n.en?.ui[key]) return t(db, locale, key);
+  const own = Object.values(db.campaigns).find((c) => !/^(side|return-to)-/.test(c.id) && (pack === "core" ? c.id === "night-of-the-zealot" : c.packs.includes(pack)));
+  return own ? campaignName(db, own.id, locale) : pack;
+}
+
+/** tap an investigator: added at the end (up to four, a fifth is ignored) with their first deck, or removed and the rest close up; one with no deck cannot be picked */
 export function toggleInvestigator(db: ContentDb, s: WizardState, code: string): WizardState {
+  if (!s.picks.includes(code) && !decksFor(db, code).length) return s;
   if (s.picks.includes(code)) {
     const decks = { ...s.decks };
     delete decks[code];

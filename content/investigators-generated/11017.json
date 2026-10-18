@@ -5,6 +5,12 @@
  "faction": "survivor",
  "pack": "tdc",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Джордж Барнаби",
+   "subname": "Юрист"
+  }
+ },
  "signatures": [
   "11018"
  ],

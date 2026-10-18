@@ -5,6 +5,12 @@
  "faction": "mystic",
  "pack": "tcu",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Диана Стэнли",
+   "subname": "Культистка-отступница"
+  }
+ },
  "signatures": [
   "05013",
   "05014"

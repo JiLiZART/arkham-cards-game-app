@@ -5,6 +5,12 @@
  "faction": "rogue",
  "pack": "tfa",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Финн Эдвардс",
+   "subname": "Бутлегер"
+  }
+ },
  "signatures": [
   "04010",
   "04011"

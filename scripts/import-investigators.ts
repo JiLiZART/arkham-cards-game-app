@@ -37,7 +37,7 @@ export function mapOption(o: Raw): DeckOption {
 }
 
 /** `subtypeOf` tells weaknesses (fixed ones are in the requirements) from signature cards */
-export function mapInvestigator(c: Raw, subtypeOf: (code: string) => string | undefined): InvestigatorDef {
+export function mapInvestigator(c: Raw, subtypeOf: (code: string) => string | undefined, names?: NonNullable<InvestigatorDef["names"]>): InvestigatorDef {
   const req = parseRequirements(c.deck_requirements);
   const signatures: string[] = [];
   const weaknesses: string[] = [];
@@ -53,6 +53,7 @@ export function mapInvestigator(c: Raw, subtypeOf: (code: string) => string | un
     faction: c.faction_code,
     pack: c._pack ?? c.pack_code, // the content pack (the snapshot's folder), which loadPack takes
     generated: true,
+    ...(names && Object.keys(names).length ? { names } : {}),
     signatures,
     weaknesses,
     ...(Object.keys(alternatives).length ? { alternatives } : {}),
@@ -71,13 +72,29 @@ export function readRecords(root: string): Raw[] {
 }
 
 /** the regular investigators of the snapshot: not parallel fronts, not hidden, with deckbuilding requirements; `skip` are hand-written codes */
-export function readInvestigators(root: string, skip: Set<string> = new Set()): InvestigatorDef[] {
+export function readInvestigators(root: string, skip: Set<string> = new Set(), names: Record<string, InvestigatorDef["names"]> = {}): InvestigatorDef[] {
   const records = readRecords(root);
   const subtype = new Map(records.map((r) => [r.code as string, r.subtype_code as string | undefined]));
   return records
     .filter((r) => r.type_code === "investigator" && !r.alternate_of && !r.hidden && r.deck_requirements && !skip.has(r.code))
     .sort((a, b) => a.code.localeCompare(b.code))
-    .map((r) => mapInvestigator(r, (code) => subtype.get(code)));
+    .map((r) => mapInvestigator(r, (code) => subtype.get(code), names[r.code]));
+}
+
+/** the imported name and subname of each investigator in every language that has pack text: i18n/<locale>/packs/<pack>.generated.json */
+export function readNames(i18nRoot: string, codes: Set<string>): Record<string, NonNullable<InvestigatorDef["names"]>> {
+  const out: Record<string, NonNullable<InvestigatorDef["names"]>> = {};
+  if (!existsSync(i18nRoot)) return out;
+  for (const locale of readdirSync(i18nRoot).sort()) {
+    const dir = join(i18nRoot, locale, "packs");
+    if (!existsSync(dir)) continue;
+    for (const file of readdirSync(dir).filter((f) => f.endsWith(".generated.json")).sort()) {
+      const text = JSON.parse(readFileSync(join(dir, file), "utf8")) as Record<string, { name?: string; subname?: string }>;
+      for (const [code, tr] of Object.entries(text))
+        if (codes.has(code) && tr.name) (out[code] ??= {})[locale] = { name: tr.name, ...(tr.subname ? { subname: tr.subname } : {}) };
+    }
+  }
+  return out;
 }
 
 /** the object of investigator code -> slots in ArkhamCards' file (the `meta` entries have no numeric slots and are skipped) */
@@ -88,6 +105,17 @@ export function parseStarterDecks(source: string): Record<string, Record<string,
     if (Object.keys(slots).length) out[code] = slots;
   }
   return out;
+}
+
+/** [first code, last code, pack] runs in code order: which pack a card comes from, without loading any (a few hundred bytes for all of them) */
+export function buildPackIndex(records: Raw[]): [string, string, string][] {
+  const runs: [string, string, string][] = [];
+  for (const r of records.filter((r) => r.type_code).sort((a, b) => a.code.localeCompare(b.code))) {
+    const last = runs[runs.length - 1];
+    if (last && last[2] === r._pack) last[1] = r.code;
+    else runs.push([r.code, r.code, r._pack]);
+  }
+  return runs;
 }
 
 /** `01000` is ArkhamDB's "random basic weakness" placeholder */
@@ -115,7 +143,9 @@ function main() {
   const args = process.argv.slice(2);
   const arg = (n: string, d: string) => (args.includes(`--${n}`) ? args[args.indexOf(`--${n}`) + 1] : d);
   const mine = handWritten("content/investigators", (j) => j.code);
-  const investigators = readInvestigators(arg("root", SNAPSHOT), mine);
+  // the translations come from `import:cards -- --locale` / `import:ru-cards`: run those first to have the names
+  const wanted = new Set(readInvestigators(arg("root", SNAPSHOT), mine).map((i) => i.code));
+  const investigators = readInvestigators(arg("root", SNAPSHOT), mine, readNames("content/i18n", wanted));
   writeAll("content/investigators-generated", Object.fromEntries(investigators.map((i) => [i.code, i])));
   const hasDeck = handWritten("content/decks", (j) => j.investigator);
   const names = new Map(investigators.map((i) => [i.code, i.name!]));
@@ -129,6 +159,7 @@ function main() {
   const decks = completeDecks(all, known);
   if (decks.length < all.length) console.log(`left out ${all.length - decks.length} starter decks with cards the snapshot does not have: ${all.filter((d) => !decks.includes(d)).map((d) => d.investigator).join(", ")}`);
   writeAll("content/decks-generated", Object.fromEntries(decks.map((d) => [d.id, d])));
+  writeFileSync("content/pack-index.json", JSON.stringify(buildPackIndex(records)) + "\n");
   console.log(`${investigators.length} investigators, ${decks.length} starter decks (hand-written ones untouched)`);
 }
 

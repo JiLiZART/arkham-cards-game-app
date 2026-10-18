@@ -5,6 +5,12 @@
  "faction": "seeker",
  "pack": "ptc",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Минь Тхи Фан",
+   "subname": "Секретарша"
+  }
+ },
  "signatures": [
   "03010"
  ],

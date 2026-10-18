@@ -5,6 +5,12 @@
  "faction": "seeker",
  "pack": "core_2026",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Джо Даймонд",
+   "subname": "Частный детектив"
+  }
+ },
  "signatures": [
   "12005"
  ],

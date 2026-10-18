@@ -37,8 +37,11 @@ content/                         game data — no engine changes needed to add m
   packs/core/cards.generated.json  imported from ArkhamDB (never edit by hand)
   packs/core/cards.json            hand-written behavior & fixes, merged over the generated data by card code
   packs/core/scripts/<code>.ts     TS for cards the data format can't express
-  investigators/<code>.json        deckbuilding rules, signature cards
+  investigators/<code>.json        hand-written deckbuilding rules, signature cards (replaces a generated one)
+  investigators-generated/<code>.json  every regular investigator of the snapshot (npm run import:investigators)
   decks/<id>.json                  deck lists
+  decks-generated/<code>-starter.json  the official starter decks from ArkhamCards
+  pack-index.json                  which pack a card code comes from, so a deck's packs load before the cards are known
   campaigns/<id>/campaign.json     scenario order, chaos bags, campaign-log labels
   campaigns/<id>/scenarios/*.json  setup, connections, map layout, chaos token effects, resolutions
   campaigns/<id>/scripts/<scenario>.ts  objectives and scenario-specific hooks
@@ -125,6 +128,10 @@ Both write only generated files: `content/i18n/<locale>/*.generated.json`, plus 
 ## Menu art
 
 `npm run import:art` extracts the menu backgrounds from the core rulebook (`inspired/ahc100_rulebook-web.pdf`, needs `pdfimages` and ImageMagick) into `public/art/` (760 KB) and lists their source pages in `content/art/art.json`: the cover painting for the title (the rulebook's cut-out of it, with its soft mask, fading into the dark), a portrait and a landscape parchment page with the vine border, and five pages with the class emblems (kept for the investigator and catalog screens). A tile's description comes from the campaign guides (`prologue` and `scenarioNames` in each `campaign.json` and in each locale's campaign text); the Russian campaign guide PDFs in `документы` open the same way, with the epigraph and a list of scenarios. The text adds about 105 KB to the main JS chunk (1,979 KB, 531 KB gzipped).
+
+## Investigators
+
+The five core investigators are written by hand. The rest are **generated** from the snapshot (`npm run import:investigators`, run after `import:cards` and `import:i18n`): an `InvestigatorDef` for every regular investigator (73 besides the core five; parallel fronts and story investigators are left out) with the name and class, the pack, signatures, fixed weaknesses, deck size and the deckbuilding options in ArkhamDB's full grammar (faction, level, trait, tag, type, name, text, uses, limit, at least, not; a key the importer doesn't know is kept under `raw`). Names in other languages come from the imported pack text, so the picker can show them before a pack loads. The official starter decks come from ArkhamCards' `starterDecks.ts` (a list naming a card the snapshot lacks is left out, the 2026 core's reprint stubs are mapped to the original card). A file in `content/investigators` or `content/decks` with the same code wins. The deck validator checks the options it understands (faction, level) and passes what it can't judge until the deck builder (change `deck-builder`) knows more. ArkhamCards' starter lists for Tommy Muldoon (29 cards) and Dexter Drake (32) don't add up to 30 and are kept as published; the deck step says so. The new-game wizard lists every investigator with class and cycle filters and a search by name (in the game's language, and English); an investigator whose card has no written abilities carries a "partly implemented" note, and one with no deck is greyed as needing one. Starting a campaign loads the packs of the investigators and of every card in their decks (found by `pack-index.json`) before it begins; a saved game asks for them again when it is restored.
 
 ## Campaigns
 

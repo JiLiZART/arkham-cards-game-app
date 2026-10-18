@@ -5,6 +5,12 @@
  "faction": "seeker",
  "pack": "tde",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Мэнди Томпсон",
+   "subname": "Изыскатель"
+  }
+ },
  "signatures": [
   "06008"
  ],

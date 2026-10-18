@@ -12,7 +12,7 @@ import { customDecks, deleteCustomDeck, problemText, renameCustomDeck, type Deck
 import { safeStorage } from "../store";
 import { DeckEditor } from "./DeckEditor";
 import { blurb } from "./blurb";
-import { back, campaignOrder, canContinue, deckProblems, decksFor, initialWizard, invalidDecksFor, next, setCampaign, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type WizardState } from "./wizard";
+import { back, campaignOrder, canContinue, cycleName, cyclesOf, deckProblems, decksFor, initialWizard, invalidDecksFor, next, pickerList, setCampaign, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type PickerFilter, type WizardState } from "./wizard";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
 const DIFFICULTIES: Difficulty[] = ["easy", "standard", "hard", "expert"];
@@ -61,16 +61,54 @@ function CampaignStep({ s, set }: { s: WizardState; set: (w: WizardState) => voi
   );
 }
 
+const CLASSES = ["guardian", "seeker", "rogue", "mystic", "survivor", "neutral"];
+
 function InvestigatorsStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }) {
+  const locale = useGame((s) => s.locale);
+  // filters are view state (ADR-0004): they are not part of the picks
+  const [filter, setFilter] = useState<PickerFilter>({ faction: null, cycle: null, query: "" });
+  const list = pickerList(db, locale, filter);
   return (
     <>
       <p className="wz-hint">{tr("wizard.investigators.hint")}</p>
+      <div className="wz-filters">
+        <div className="wz-chips" role="group" aria-label={tr("wizard.filter.class")}>
+          {CLASSES.map((c) => (
+            <button key={c} className={`wz-chip ${filter.faction === c ? "on" : ""}`} aria-pressed={filter.faction === c} onClick={() => setFilter({ ...filter, faction: filter.faction === c ? null : c })}>
+              {tr(`card.faction.${c}`)}
+            </button>
+          ))}
+        </div>
+        <select aria-label={tr("wizard.filter.cycle")} value={filter.cycle ?? ""} onChange={(e) => setFilter({ ...filter, cycle: e.target.value || null })}>
+          <option value="">{tr("wizard.filter.all")}</option>
+          {cyclesOf(db).map((p) => (
+            <option key={p} value={p}>
+              {cycleName(db, locale, p)}
+            </option>
+          ))}
+        </select>
+        <input type="search" placeholder={tr("wizard.filter.search")} aria-label={tr("wizard.filter.search")} value={filter.query} onChange={(e) => setFilter({ ...filter, query: e.target.value })} />
+      </div>
+      {!list.length && <p className="wz-hint">{tr("wizard.noMatch")}</p>}
       <div className="wz-tiles">
-        {Object.values(db.investigators).map((i) => {
+        {list.map((i) => {
           const k = s.picks.indexOf(i.code);
           return (
-            <button key={i.code} className={`wz-tile ${k >= 0 ? "selected" : ""}`} aria-pressed={k >= 0} onClick={() => set(toggleInvestigator(db, s, i.code))}>
-              <Avatar code={i.code} badge={k >= 0 ? `P${k + 1}` : undefined} />
+            <button
+              key={i.code}
+              className={`wz-tile ${k >= 0 ? "selected" : ""} ${i.needsDeck ? "needs-deck" : ""}`}
+              aria-pressed={k >= 0}
+              disabled={i.needsDeck && k < 0}
+              onClick={() => set(toggleInvestigator(db, s, i.code))}
+            >
+              <Avatar code={i.code} badge={k >= 0 ? `P${k + 1}` : undefined}>
+                {i.needsDeck && <small className="wz-note">{tr("wizard.needsDeck")}</small>}
+                {i.partlyImplemented && !i.needsDeck && (
+                  <small className="wz-note" title={tr("wizard.partly")}>
+                    ◐ {tr("wizard.partlyShort")}
+                  </small>
+                )}
+              </Avatar>
             </button>
           );
         })}

@@ -5,6 +5,12 @@
  "faction": "seeker",
  "pack": "tsk",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Винсент Ли",
+   "subname": "Доктор"
+  }
+ },
  "signatures": [
   "09005",
   "09006"

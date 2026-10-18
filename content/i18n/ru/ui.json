@@ -445,5 +445,17 @@
   "kw.victory": "Покинув игру от действий сыщиков, карта уходит в победный запас; в конце сценария её победные очки становятся опытом.",
   "wizard.scenarios": "Сценариев: {n}",
   "wizard.more": "Подробнее",
-  "wizard.less": "Свернуть"
+  "wizard.less": "Свернуть",
+  "cycle.investigator": "Дополнения с сыщиками",
+  "cycle.promo": "Промо",
+  "cycle.side": "Побочные истории",
+  "cycle.core_2026": "Базовый набор (2026)",
+  "wizard.filter.all": "Все",
+  "wizard.filter.search": "Поиск по имени",
+  "wizard.filter.cycle": "Цикл",
+  "wizard.filter.class": "Класс",
+  "wizard.partly": "Реализован частично: способность показана, но пока не действует.",
+  "wizard.needsDeck": "Нужна колода",
+  "wizard.noMatch": "Сыщиков не найдено.",
+  "wizard.partlyShort": "Реализован частично"
 }

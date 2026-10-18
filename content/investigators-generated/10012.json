@@ -5,6 +5,12 @@
  "faction": "mystic",
  "pack": "fhv",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Кохаку Наруками",
+   "subname": "Фольклорист"
+  }
+ },
  "signatures": [
   "10013"
  ],

@@ -5,6 +5,12 @@
  "faction": "survivor",
  "pack": "investigator",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Стелла Кларк",
+   "subname": "Почтальон"
+  }
+ },
  "signatures": [
   "60502"
  ],

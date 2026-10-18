@@ -5,6 +5,12 @@
  "faction": "seeker",
  "pack": "tcu",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Джо Даймонд",
+   "subname": "Частный детектив"
+  }
+ },
  "signatures": [
   "05009"
  ],

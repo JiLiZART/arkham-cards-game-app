@@ -149,10 +149,11 @@ export function replayWithFloor(db: ContentDb, setup: GameSetup, actions: Action
 }
 
 /**
- * What must be in place before a campaign starts or restores (its card packs, its icons): a promise while something
- * loads, nothing when all is there, so a ready campaign starts in the same call.
+ * What must be in place before a campaign starts or restores (its card packs, its icons, the packs of the investigators
+ * and of the cards in their decks, given as `codes`): a promise while something loads, nothing when all is there, so a
+ * ready campaign starts in the same call.
  */
-export type Prepare = (campaignId: string) => Promise<void> | void;
+export type Prepare = (campaignId: string, codes?: string[]) => Promise<void> | void;
 
 export function createGameStore(db: ContentDb, storage: Storage = safeStorage(), prepare: Prepare = () => undefined): StoreApi<UiState> {
   const store = createStore<UiState>((set, get) => {
@@ -167,10 +168,10 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage(),
       }
     };
     /** run `then` once the campaign's packs and icons are in: at once when they already are */
-    const whenReady = (campaignId: string, then: () => void) => {
+    const whenReady = (campaignId: string, codes: string[], then: () => void) => {
       let pending: Promise<void> | void;
       try {
-        pending = prepare(campaignId);
+        pending = prepare(campaignId, codes);
       } catch (e) {
         pending = Promise.reject(e);
       }
@@ -197,7 +198,8 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage(),
       queue: [], current: null, revealedFor: null, undoFloor: 0, logMarks: [], notice: null, error: null, loading: false,
 
       newCampaign(opts) {
-        whenReady(opts.campaignId, () => {
+        const codes = [...new Set(opts.investigators.flatMap((i) => [i.code, ...Object.keys((i.deck ?? db.decks[i.deckId])?.cards ?? {})]))];
+        whenReady(opts.campaignId, codes, () => {
           const campaign = startCampaign(db, opts);
           set({ campaign, setup: null, actions: [], game: null, error: null, notice: null });
           get().startScenario(opts.seed);
@@ -275,7 +277,7 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage(),
           }
         };
         // the campaign's cards first (a pack loaded on demand), then the replay
-        if (save.campaign?.campaignId) whenReady(save.campaign.campaignId, restore);
+        if (save.campaign?.campaignId) whenReady(save.campaign.campaignId, [...new Set((save.campaign.investigators ?? []).flatMap((i) => [i.code, ...i.deck]))], restore);
         else restore();
         return true;
       },

@@ -5,6 +5,12 @@
  "faction": "survivor",
  "pack": "tfa",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Кальвин Райт",
+   "subname": "Беглец"
+  }
+ },
  "signatures": [
   "04015"
  ],

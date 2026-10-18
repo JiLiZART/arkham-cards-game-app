@@ -5,6 +5,12 @@
  "faction": "rogue",
  "pack": "tdc",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Майкл Макглен",
+   "subname": "Гангстер"
+  }
+ },
  "signatures": [
   "11012"
  ],

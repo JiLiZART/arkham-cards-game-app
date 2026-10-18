@@ -5,6 +5,12 @@
  "faction": "mystic",
  "pack": "dwl",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Джим Кальвер",
+   "subname": "Музыкант"
+  }
+ },
  "signatures": [
   "02012"
  ],

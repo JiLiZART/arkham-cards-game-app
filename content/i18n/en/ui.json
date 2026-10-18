@@ -461,5 +461,17 @@
   "kw.victory": "When this card leaves play through the investigators' actions it goes to the victory display; at the end of the scenario its victory points are experience.",
   "wizard.scenarios": "{n} scenarios",
   "wizard.more": "More",
-  "wizard.less": "Less"
+  "wizard.less": "Less",
+  "cycle.investigator": "Investigator Expansions",
+  "cycle.promo": "Promotional",
+  "cycle.side": "Side Stories",
+  "cycle.core_2026": "Core Set (2026)",
+  "wizard.filter.all": "All",
+  "wizard.filter.search": "Search by name",
+  "wizard.filter.cycle": "Cycle",
+  "wizard.filter.class": "Class",
+  "wizard.partly": "Partly implemented: the ability is shown but has no effect yet.",
+  "wizard.needsDeck": "Needs a deck",
+  "wizard.noMatch": "No investigator matches.",
+  "wizard.partlyShort": "Partly implemented"
 }

@@ -5,6 +5,12 @@
  "faction": "rogue",
  "pack": "ptc",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Зефина Руссо",
+   "subname": "Живописец"
+  }
+ },
  "signatures": [
   "03012"
  ],

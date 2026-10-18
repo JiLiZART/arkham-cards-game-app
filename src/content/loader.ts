@@ -26,6 +26,11 @@ export function addCardText(db: ContentDb, locale: string, file: string, raw: un
   return layer === 1 ? checkPrintText(db, file, r.data) : [];
 }
 
+/** the pack a card comes from, read off the [first code, last code, pack] runs of content/pack-index.json */
+export function packOfCode(index: [string, string, string][], code: string): string | undefined {
+  return index.find(([first, last]) => code >= first && code <= last)?.[2];
+}
+
 /** a pack's cards (empty until it is loaded) */
 export const cardsOf = (db: ContentDb, pack: string): CardDef[] => (db.packs[pack]?.cards ?? []).map((code) => db.cards[code]).filter(Boolean);
 export const packLoaded = (db: ContentDb, pack: string) => !!db.packs[pack]?.loaded;

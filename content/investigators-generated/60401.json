@@ -5,6 +5,12 @@
  "faction": "mystic",
  "pack": "investigator",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Жаклин Файн",
+   "subname": "Экстрасенс"
+  }
+ },
  "signatures": [
   "60402"
  ],

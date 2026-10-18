@@ -487,6 +487,8 @@ export const InvestigatorDef = z
     faction: z.string().optional(),
     pack: z.string().optional(),
     generated: z.boolean().optional(),
+    /** the name in each other language, for the picker before the investigator's pack (and its text) is loaded */
+    names: z.record(z.string(), z.object({ name: z.string(), subname: z.string().optional() }).strict()).optional(),
     signatures: z.array(z.string()),
     weaknesses: z.array(z.string()),
     /** a required card and the alternative codes that can stand in for it */

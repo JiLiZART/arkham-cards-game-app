@@ -5,6 +5,12 @@
  "faction": "seeker",
  "pack": "dwl",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Рекс Мерфи",
+   "subname": "Репортёр"
+  }
+ },
  "signatures": [
   "02008"
  ],

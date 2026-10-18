@@ -5,6 +5,12 @@
  "faction": "mystic",
  "pack": "ptc",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Акачи Оньеле",
+   "subname": "Шаманка"
+  }
+ },
  "signatures": [
   "03014"
  ],

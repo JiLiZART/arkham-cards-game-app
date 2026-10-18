@@ -5,6 +5,12 @@
  "faction": "mystic",
  "pack": "tde",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Люк Робинсон",
+   "subname": "Сновидец"
+  }
+ },
  "signatures": [
   "06013"
  ],

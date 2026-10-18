@@ -5,6 +5,12 @@
  "faction": "survivor",
  "pack": "tcu",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Рита Янг",
+   "subname": "Спортсменка"
+  }
+ },
  "signatures": [
   "05016"
  ],

@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { InvestigatorDef } from "../src/content/schema";
-import { mapInvestigator, mapOption, completeDecks, mapStarterDeck, parseRequirements, parseStarterDecks, readInvestigators } from "./import-investigators";
+import { mapInvestigator, mapOption, buildPackIndex, completeDecks, readNames, mapStarterDeck, parseRequirements, parseStarterDecks, readInvestigators } from "./import-investigators";
 
 const zoey = {
   code: "02001", name: "Zoey Samaras", subname: "The Chef", type_code: "investigator", faction_code: "guardian", pack_code: "dwl",
@@ -101,5 +101,38 @@ describe("completeDecks", () => {
     const a = mapStarterDeck("1", "A", { "10": 1 });
     const b = mapStarterDeck("2", "B", { "10": 1, "99": 2 });
     expect(completeDecks([a, b], new Set(["10"]))).toEqual([a]);
+  });
+});
+
+describe("buildPackIndex", () => {
+  it("lists a run of codes per pack, in code order, with the core reprints in packs of their own", () => {
+    const rec = (code: string, _pack: string, type_code: string | null = "asset") => ({ code, _pack, type_code });
+    expect(buildPackIndex([rec("02002", "dwl"), rec("01001", "core"), rec("02001", "dwl"), rec("12001", "core_2026"), rec("12020", "core_2026", null), rec("03001", "ptc")])).toEqual([
+      ["01001", "01001", "core"],
+      ["02001", "02002", "dwl"],
+      ["03001", "03001", "ptc"],
+      ["12001", "12001", "core_2026"],
+    ]);
+  });
+});
+
+describe("readNames", () => {
+  it("collects each locale's imported name and subname of the investigators", () => {
+    const root = mkdtempSync(join(tmpdir(), "arkham-i18n-"));
+    mkdirSync(join(root, "ru", "packs"), { recursive: true });
+    mkdirSync(join(root, "de", "packs"), { recursive: true });
+    writeFileSync(join(root, "ru", "packs", "dwl.generated.json"), JSON.stringify({ "02001": { name: "Зои Самарас", subname: "Повар", text: "x" }, "02006": { name: "Крест Зои" } }));
+    writeFileSync(join(root, "de", "packs", "dwl.generated.json"), JSON.stringify({ "02001": { name: "Zoey" } }));
+    expect(readNames(root, new Set(["02001"]))).toEqual({ "02001": { ru: { name: "Зои Самарас", subname: "Повар" }, de: { name: "Zoey" } } });
+  });
+  it("is empty without translations", () => {
+    expect(readNames(join(tmpdir(), "no-such-i18n-folder"), new Set(["02001"]))).toEqual({});
+  });
+});
+
+describe("investigator names", () => {
+  it("go onto the definition", () => {
+    const def = mapInvestigator(zoey, (c) => subtypes[c], { ru: { name: "Зои Самарас" } });
+    expect(InvestigatorDef.parse(def).names).toEqual({ ru: { name: "Зои Самарас" } });
   });
 });

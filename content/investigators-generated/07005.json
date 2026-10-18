@@ -5,6 +5,12 @@
  "faction": "survivor",
  "pack": "tic",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Сайлас Марш",
+   "subname": "Моряк"
+  }
+ },
  "signatures": [
   "07014",
   "07015"

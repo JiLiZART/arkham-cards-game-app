@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { cardText } from "../content/i18n";
 import { db, useGame } from "./context";
 import { cardImage, FACTION_COLORS } from "./images";
+import { investigatorInfo } from "./menu/wizard";
 
 const broken = new Set<string>();
 
@@ -17,9 +17,9 @@ export const initials = (name: string) =>
 /** round investigator portrait cropped from the card art, ringed in the class colour; initials if the art can't load */
 export function Portrait({ code, size, active, title }: { code: string; size: number; active?: boolean; title?: string }) {
   const locale = useGame((s) => s.locale);
-  const d = db.cards[code];
-  const name = cardText(db, code, locale).name;
-  const url = cardImage(d, "front");
+  // the card may not be loaded yet (the picker lists investigators of packs still to come): the scan is found by its code
+  const { name, faction } = investigatorInfo(db, code, locale);
+  const url = cardImage(db.cards[code] ?? { code }, "front");
   const [ok, setOk] = useState(!!url && !broken.has(url));
   useEffect(() => {
     if (!url || broken.has(url)) return setOk(false);
@@ -32,7 +32,7 @@ export function Portrait({ code, size, active, title }: { code: string; size: nu
     };
     img.src = url;
   }, [url]);
-  const ring = FACTION_COLORS[d.faction] ?? "#c9a95c";
+  const ring = FACTION_COLORS[faction] ?? "#c9a95c";
   return (
     <div
       className={`portrait ${active ? "active" : ""}`}

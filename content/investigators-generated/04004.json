@@ -5,6 +5,12 @@
  "faction": "mystic",
  "pack": "tfa",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Отец Матео",
+   "subname": "Священник"
+  }
+ },
  "signatures": [
   "04013"
  ],

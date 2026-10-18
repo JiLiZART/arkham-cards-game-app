@@ -5,6 +5,12 @@
  "faction": "survivor",
  "pack": "tsk",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Даррелл Симмонс",
+   "subname": "Фотограф"
+  }
+ },
  "signatures": [
   "09016"
  ],

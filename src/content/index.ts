@@ -1,5 +1,5 @@
 import type { CardScript, ContentDb } from "../engine/types";
-import { addCampaignFiles, addCardText, addPack, buildContent, TEXT_FILE, textLayer, type ContentError } from "./loader";
+import { addCampaignFiles, addCardText, addPack, buildContent, packOfCode, TEXT_FILE, textLayer, type ContentError } from "./loader";
 
 /**
  * Content bundled by Vite: every JSON and script under /content is picked up automatically, except the card packs other
@@ -27,6 +27,11 @@ const built = buildContent({ ...files, ...eagerPacks }, scripts, lazyNames, lazy
 
 export const content: ContentDb = built.db;
 export const contentErrors: ContentError[] = built.errors;
+
+// which pack a card comes from (generated with the investigators): how a deck's packs are found before any is loaded
+const packIndex = (files["/content/pack-index.json"] ?? []) as [string, string, string][];
+/** the packs some card codes come from, once each, in the order first met */
+export const packsOf = (codes: string[]): string[] => [...new Set(codes.flatMap((c) => packOfCode(packIndex, c) ?? []))];
 
 const loading = new Map<string, Promise<ContentError[]>>();
 /** bring a pack of cards into the content (deck editing, card lookup); loading it twice does nothing. Resolves with its content errors. */

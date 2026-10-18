@@ -5,6 +5,12 @@
  "faction": "mystic",
  "pack": "tdc",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Глория Голдберг",
+   "subname": "Писательница"
+  }
+ },
  "signatures": [
   "11015"
  ],

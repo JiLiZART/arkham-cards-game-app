@@ -5,6 +5,12 @@
  "faction": "survivor",
  "pack": "eoe",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Боб Дженкинс",
+   "subname": "Коммивояжёр"
+  }
+ },
  "signatures": [
   "08017"
  ],

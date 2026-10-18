@@ -5,6 +5,12 @@
  "faction": "seeker",
  "pack": "eoe",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Норман Уизерс",
+   "subname": "Астроном"
+  }
+ },
  "signatures": [
   "08005"
  ],

@@ -5,6 +5,12 @@
  "faction": "survivor",
  "pack": "ptc",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Уильям Йорик",
+   "subname": "Могильщик"
+  }
+ },
  "signatures": [
   "03016"
  ],

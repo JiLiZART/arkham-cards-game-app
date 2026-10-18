@@ -5,6 +5,12 @@
  "faction": "guardian",
  "pack": "tde",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Томми Малдун",
+   "subname": "Коп-новобранец"
+  }
+ },
  "signatures": [
   "06006"
  ],

@@ -5,6 +5,12 @@
  "faction": "mystic",
  "pack": "tsk",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Амина Зидан",
+   "subname": "Телефонистка"
+  }
+ },
  "signatures": [
   "09012",
   "09013"

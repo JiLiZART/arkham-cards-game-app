@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { campaignLoaded, content, contentErrors, loadCampaign, loadPack } from "./index";
+import { campaignLoaded, content, contentErrors, loadCampaign, loadPack, packsOf } from "./index";
 import { cardText } from "./i18n";
-import { addCardText, addPack, buildContent, cardsOf, packLoaded } from "./loader";
+import { addCardText, addPack, buildContent, cardsOf, packLoaded, packOfCode } from "./loader";
 import { loadContentFromDisk } from "./node";
 
 const card = (code: string, extra: object = {}) => ({ code, name: `Card ${code}`, type: "asset", faction: "neutral", pack: "x", quantity: 1, traits: [], text: "", ...extra });
@@ -70,6 +70,20 @@ describe("packs in the content database", () => {
     expect(buildContent(files, {}, ["x"]).errors).toEqual([]);
     const loaded = buildContent({ ...files, "/content/packs/x/cards.generated.json": [card("1", { pack: "x" })] }, {}, []);
     expect(loaded.errors.map((e) => e.message)).toEqual(expect.arrayContaining(["missing card 9", "missing card 8", "missing card 7"]));
+  });
+
+  it("the pack of a card is known from its code alone", () => {
+    const index: [string, string, string][] = [["01000", "01182", "core"], ["02001", "02333", "dwl"], ["09001", "09770b", "tsk"]];
+    expect(packOfCode(index, "01006")).toBe("core");
+    expect(packOfCode(index, "02001")).toBe("dwl");
+    expect(packOfCode(index, "09770b")).toBe("tsk");
+    expect(packOfCode(index, "05001")).toBeUndefined();
+    expect(packOfCode(index, "00999")).toBeUndefined();
+  });
+
+  it("packsOf names the packs of some cards, once each, as the bundled index has them", () => {
+    expect(packsOf(["02001", "02006", "01006", "02007"])).toEqual(["dwl", "core"]);
+    expect(packsOf(["02001", "nonsense"])).toEqual(["dwl"]);
   });
 
   it("an unknown pack is refused in plain words", async () => {

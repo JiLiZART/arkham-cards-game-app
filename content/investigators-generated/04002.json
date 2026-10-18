@@ -5,6 +5,12 @@
  "faction": "seeker",
  "pack": "tfa",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Урсула Даунс",
+   "subname": "Исследователь"
+  }
+ },
  "signatures": [
   "04008"
  ],

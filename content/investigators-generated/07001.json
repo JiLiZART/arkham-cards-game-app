@@ -5,6 +5,12 @@
  "faction": "guardian",
  "pack": "tic",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Сестра Мэри",
+   "subname": "Монахиня"
+  }
+ },
  "signatures": [
   "07006"
  ],

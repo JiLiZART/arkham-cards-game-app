@@ -5,6 +5,12 @@
  "faction": "guardian",
  "pack": "core_2026",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Даниэла Рейес",
+   "subname": "Механик"
+  }
+ },
  "signatures": [
   "12002"
  ],

@@ -5,6 +5,12 @@
  "faction": "seeker",
  "pack": "fhv",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Кейт Уинтроп",
+   "subname": "Учёный"
+  }
+ },
  "signatures": [
   "10005"
  ],

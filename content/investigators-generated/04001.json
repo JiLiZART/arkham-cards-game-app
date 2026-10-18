@@ -5,6 +5,12 @@
  "faction": "guardian",
  "pack": "tfa",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Лео Андерсон",
+   "subname": "Лидер экспедиции"
+  }
+ },
  "signatures": [
   "04006"
  ],

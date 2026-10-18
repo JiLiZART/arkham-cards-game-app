@@ -5,6 +5,12 @@
  "faction": "guardian",
  "pack": "promo",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Кэролин Ферн",
+   "subname": "Психолог"
+  }
+ },
  "signatures": [
   "05007"
  ],

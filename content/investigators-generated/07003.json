@@ -5,6 +5,12 @@
  "faction": "rogue",
  "pack": "tic",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Триш Скарборо",
+   "subname": "Шпионка"
+  }
+ },
  "signatures": [
   "07010"
  ],

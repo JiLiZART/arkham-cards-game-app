@@ -5,6 +5,12 @@
  "faction": "seeker",
  "pack": "tdc",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Агата Крейн",
+   "subname": "Парапсихолог"
+  }
+ },
  "signatures": [
   "11009"
  ],

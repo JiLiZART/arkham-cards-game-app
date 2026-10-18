@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { db } from "../../engine/testkit";
 import { saveCustomDeck } from "../decks";
 import type { Storage } from "../store";
-import { back, canContinue, decksFor, campaignOrder, initialWizard, invalidDecksFor, next, setCampaign, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type WizardState } from "./wizard";
+import { back, canContinue, cycleName, cyclesOf, decksFor, investigatorInfo, pickerList, campaignOrder, initialWizard, invalidDecksFor, next, setCampaign, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type WizardState } from "./wizard";
 
 const ROLAND = "01001";
 const DAISY = "01002";
@@ -143,5 +143,63 @@ describe("the campaign list", () => {
     const firstSide = ids.findIndex((id) => id.startsWith("side-"));
     expect(ids.slice(firstSide).every((id) => id.startsWith("side-"))).toBe(true);
     expect(initialWizard(db).campaignId).toBe("night-of-the-zealot");
+  });
+});
+
+
+describe("choosing among all investigators", () => {
+  const codes = (list: { code: string }[]) => list.map((i) => i.code);
+  const all = { faction: null, cycle: null, query: "" };
+
+  it("lists every defined investigator, the packs' cards loaded or not", () => {
+    expect(codes(pickerList(db, "en", all))).toEqual(expect.arrayContaining(["01001", "02001", "02002"]));
+    expect(pickerList(db, "en", all).length).toBe(Object.keys(db.investigators).length);
+  });
+
+  it("filters by class and by cycle: Seekers of The Dunwich Legacy are Rex Murphy and not Roland Banks", () => {
+    const list = codes(pickerList(db, "en", { ...all, faction: "seeker", cycle: "dwl" }));
+    expect(list).toContain("02002");
+    expect(list).not.toContain("01001");
+    expect(list.every((c) => db.investigators[c].faction === "seeker" && db.investigators[c].pack === "dwl")).toBe(true);
+  });
+
+  it("searches the name in the game's language: Зои finds Zoey Samaras in Russian although her pack is not loaded", () => {
+    expect(codes(pickerList(db, "ru", { ...all, query: "зои" }))).toContain("02001");
+    expect(codes(pickerList(db, "en", { ...all, query: "zoey" }))).toEqual(["02001"]);
+    // the English name still finds them in Russian
+    expect(codes(pickerList(db, "ru", { ...all, query: "zoey" }))).toContain("02001");
+    expect(codes(pickerList(db, "en", { ...all, query: "Samaras the chef" }))).toEqual(["02001"]);
+  });
+
+  it("shows a name and class before the pack is loaded", () => {
+    expect(investigatorInfo(db, "02001", "en")).toMatchObject({ name: "Zoey Samaras", faction: "guardian", pack: "dwl" });
+    expect(investigatorInfo(db, "02001", "ru").name).toBe("Зои Самарас");
+    expect(investigatorInfo(db, "01001", "ru").name).toBe("Роланд Бэнкс");
+  });
+
+  it("notes the investigators whose ability has no written behaviour, and those with no deck", () => {
+    const byCode = Object.fromEntries(pickerList(db, "en", all).map((i) => [i.code, i]));
+    expect(byCode["01001"]).toMatchObject({ partlyImplemented: false, needsDeck: false });
+    expect(byCode["02001"]).toMatchObject({ partlyImplemented: true, needsDeck: false });
+    const without = Object.values(byCode).find((i) => i.needsDeck);
+    expect(without).toBeDefined();
+  });
+
+  it("an investigator without a deck cannot be picked", () => {
+    const code = pickerList(db, "en", all).find((i) => i.needsDeck)!.code;
+    expect(toggleInvestigator(db, initialWizard(db), code).picks).toEqual([]);
+  });
+
+  it("Zoey is picked with her starter deck", () => {
+    expect(toggleInvestigator(db, initialWizard(db), "02001")).toMatchObject({ picks: ["02001"], decks: { "02001": "02001-starter" } });
+  });
+
+  it("the cycles to filter by are those of the investigators, named after their campaign", () => {
+    const cycles = cyclesOf(db);
+    expect(cycles).toContain("core");
+    expect(cycles).toContain("dwl");
+    expect(cycleName(db, "en", "dwl")).toBe("The Dunwich Legacy");
+    expect(cycleName(db, "en", "core")).toBe("Night of the Zealot");
+    expect(cycleName(db, "en", "investigator")).toBe("Investigator Expansions");
   });
 });

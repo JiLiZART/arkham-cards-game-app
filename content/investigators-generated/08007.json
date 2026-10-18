@@ -5,6 +5,12 @@
  "faction": "rogue",
  "pack": "eoe",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Монтерей Джек",
+   "subname": "Археолог"
+  }
+ },
  "signatures": [
   "08008"
  ],

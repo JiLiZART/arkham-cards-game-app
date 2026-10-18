@@ -5,6 +5,12 @@
  "faction": "rogue",
  "pack": "fhv",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Алессандра Дзордзи",
+   "subname": "Графиня"
+  }
+ },
  "signatures": [
   "10010"
  ],

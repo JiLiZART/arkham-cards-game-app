@@ -1,7 +1,7 @@
 import { createContext, useContext } from "react";
 import type { StoreApi } from "zustand";
 import { useStore } from "zustand";
-import { campaignLoaded, content, loadCampaign, loadPack } from "../content";
+import { campaignLoaded, content, loadCampaign, loadPack, packsOf } from "../content";
 import { packLoaded } from "../content/loader";
 import { campaignSpriteLoaded, loadCampaignSprite } from "./icons";
 import { trackArrivals } from "./arrivals";
@@ -10,11 +10,14 @@ import { trackShowcase } from "./showcase";
 import { createGameStore, type UiState } from "./store";
 
 export const db = content;
-/** a campaign's scenarios, card packs and icons (generated campaigns) before it starts or restores; nothing when all are in */
-const prepare = (campaignId: string) => {
+/**
+ * A campaign's scenarios, card packs and icons (generated campaigns) before it starts or restores, and the packs of the
+ * investigators and of the cards in their decks (`codes`); nothing when all are in
+ */
+const prepare = (campaignId: string, codes: string[] = []) => {
   const c = content.campaigns[campaignId];
   if (!c) return;
-  const packs = c.packs.filter((p) => content.packs[p] && !packLoaded(content, p));
+  const packs = [...new Set([...c.packs, ...packsOf(codes)])].filter((p) => content.packs[p] && !packLoaded(content, p));
   const icons = c.generated && !campaignSpriteLoaded();
   const scenarios = !campaignLoaded(campaignId);
   if (!packs.length && !icons && !scenarios) return;

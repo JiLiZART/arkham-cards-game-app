@@ -5,6 +5,12 @@
  "faction": "guardian",
  "pack": "dwl",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Зои Самарас",
+   "subname": "Повар"
+  }
+ },
  "signatures": [
   "02006"
  ],

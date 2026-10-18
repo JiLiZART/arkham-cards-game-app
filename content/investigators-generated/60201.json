@@ -5,6 +5,12 @@
  "faction": "seeker",
  "pack": "investigator",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Харви Уолтерс",
+   "subname": "Профессор"
+  }
+ },
  "signatures": [
   "60202"
  ],

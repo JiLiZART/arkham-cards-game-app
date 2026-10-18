@@ -5,6 +5,12 @@
  "faction": "guardian",
  "pack": "investigator",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Натаниэль Чо",
+   "subname": "Боксёр"
+  }
+ },
  "signatures": [
   "60102"
  ],

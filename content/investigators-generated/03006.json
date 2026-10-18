@@ -5,6 +5,12 @@
  "faction": "neutral",
  "pack": "ptc",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Лола Хейз",
+   "subname": "Актриса"
+  }
+ },
  "signatures": [
   "03018",
   "03018",

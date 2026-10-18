@@ -5,6 +5,12 @@
  "faction": "guardian",
  "pack": "fhv",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Уилсон Ричардс",
+   "subname": "Умелец"
+  }
+ },
  "signatures": [
   "10002"
  ],

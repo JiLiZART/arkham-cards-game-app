@@ -5,6 +5,12 @@
  "faction": "guardian",
  "pack": "tsk",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Карсон Синклер",
+   "subname": "Дворецкий"
+  }
+ },
  "signatures": [
   "09002"
  ],

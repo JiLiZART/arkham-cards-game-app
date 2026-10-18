@@ -5,6 +5,12 @@
  "faction": "survivor",
  "pack": "fhv",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Хэнк Сэмсон",
+   "subname": "Работник"
+  }
+ },
  "signatures": [
   "10017"
  ],

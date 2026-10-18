@@ -5,6 +5,12 @@
  "faction": "rogue",
  "pack": "core_2026",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Триш Скарборо",
+   "subname": "Бывшая шпионка"
+  }
+ },
  "signatures": [
   "12008"
  ],

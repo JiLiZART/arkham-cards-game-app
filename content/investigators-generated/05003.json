@@ -5,6 +5,12 @@
  "faction": "rogue",
  "pack": "tcu",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Престон Фэрмонт",
+   "subname": "Миллионер"
+  }
+ },
  "signatures": [
   "05011"
  ],

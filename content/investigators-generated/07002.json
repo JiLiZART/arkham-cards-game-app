@@ -5,6 +5,12 @@
  "faction": "seeker",
  "pack": "tic",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Аманда Шарп",
+   "subname": "Студентка"
+  }
+ },
  "signatures": [
   "07008"
  ],

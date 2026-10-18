@@ -5,6 +5,12 @@
  "faction": "survivor",
  "pack": "core_2026",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Изабель Барнс",
+   "subname": "Вернувшаяся"
+  }
+ },
  "signatures": [
   "12014"
  ],

@@ -5,6 +5,12 @@
  "faction": "guardian",
  "pack": "tdc",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Марион Таварес",
+   "subname": "Тралмейстер"
+  }
+ },
  "signatures": [
   "11002"
  ],

@@ -319,6 +319,30 @@ describe("campaigns whose cards load first", () => {
     expect(reloaded.getState().game).toEqual(first.getState().game);
   });
 
+  it("prepare is told the investigators and every card of their decks, so their packs load too", () => {
+    const seen: (string[] | undefined)[] = [];
+    const s = createGameStore(db, mem(), (_id, codes) => void seen.push(codes));
+    s.getState().newCampaign(opts);
+    expect(seen[0]).toContain("01001");
+    expect(seen[0]).toContain("01086");
+    expect(seen[0]).toHaveLength(new Set(seen[0]).size);
+    // a custom deck is read from the deck itself
+    const custom = { ...db.decks["roland-starter"], id: "mine", cards: { "01006": 1, "01007": 1, "99999": 1 } };
+    // (the deck is not a legal one, so the start itself is refused: only what prepare was asked matters here)
+    expect(() => s.getState().newCampaign({ ...opts, investigators: [{ code: "01001", deckId: "mine", deck: custom }] })).toThrow();
+    expect(seen[1]).toContain("99999");
+  });
+
+  it("a saved game's cards are asked for again when it is restored", () => {
+    const storage = mem();
+    const first = start(storage);
+    begin(first);
+    const seen: (string[] | undefined)[] = [];
+    createGameStore(db, storage, (_id, codes) => void seen.push(codes)).getState().resume();
+    expect(seen[0]).toContain("01001");
+    expect(seen[0]).toContain("01086");
+  });
+
   it("with nothing to load the campaign starts at once, as before", () => {
     const s = createGameStore(db, mem(), () => undefined);
     s.getState().newCampaign(opts);

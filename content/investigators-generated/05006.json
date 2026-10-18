@@ -5,6 +5,12 @@
  "faction": "mystic",
  "pack": "tcu",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Мари Ламбо",
+   "subname": "Певица"
+  }
+ },
  "signatures": [
   "05018"
  ],

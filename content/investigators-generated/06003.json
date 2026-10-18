@@ -5,6 +5,12 @@
  "faction": "rogue",
  "pack": "tde",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Тони Морган",
+   "subname": "Охотник за головами"
+  }
+ },
  "signatures": [
   "06010",
   "06011"

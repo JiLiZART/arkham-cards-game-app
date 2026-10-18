@@ -5,6 +5,12 @@
  "faction": "mystic",
  "pack": "promo",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Мари Ламбо",
+   "subname": "Певица"
+  }
+ },
  "signatures": [
   "99002"
  ],

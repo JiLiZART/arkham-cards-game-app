@@ -5,6 +5,12 @@
  "faction": "rogue",
  "pack": "tsk",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Каймани Джонс",
+   "subname": "Эксперт по безопасности"
+  }
+ },
  "signatures": [
   "09009"
  ],

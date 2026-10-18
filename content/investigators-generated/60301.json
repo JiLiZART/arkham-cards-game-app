@@ -5,6 +5,12 @@
  "faction": "rogue",
  "pack": "investigator",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Уинифред Хаббамок",
+   "subname": "Авиатриса"
+  }
+ },
  "signatures": [
   "60302"
  ],

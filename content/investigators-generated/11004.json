@@ -5,6 +5,12 @@
  "faction": "seeker",
  "pack": "tdc",
  "generated": true,
+ "names": {
+  "ru": {
+   "name": "Люциус Галлоуэй",
+   "subname": "Поэт"
+  }
+ },
  "signatures": [
   "11005"
  ],
