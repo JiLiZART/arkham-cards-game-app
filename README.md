@@ -52,7 +52,16 @@ src/ui/                          React HUD + R3F table
 
 ## Adding cards
 
-1. Import a pack: `npm run import:cards -- --pack <pack_code>` (add the code prefix in `scripts/import-cards.ts` if needed). This only rewrites `cards.generated.json`.
+1. Import the card data. Every cycle comes from the local ArkhamDB snapshot in `inspired/arkhamdb-json-data` (commit `bd8d30e6de8236ad6f6973850a62875245abcd45`), one pack per snapshot folder:
+
+   ```bash
+   npm run import:cards -- --source arkhamdb-json-data --all          # every folder of the snapshot
+   npm run import:cards -- --source arkhamdb-json-data --cycle dwl    # one folder; --root <dir> for another snapshot
+   ```
+
+   `--all` lists the snapshot's folders, not `cycles.json`, so the core folder's 2026 reprints are a pack of their own (`core_2026`) and the Return-to boxes share one (`return`). Bare duplicate stubs and the `01000` placeholder are left out. A record that fails the schema is reported with its code. The older `--pack <pack_code>` form still reads the ArkhamDB API. Either form only rewrites `cards.generated.json`.
+
+   Only the core pack is in the first download. The other packs are separate chunks that `loadPack(pack)` fetches when a game needs them, together with that pack's translated text. Measured on 2026-10-18, the main JS chunk is 1,736 KB with the core pack alone, 5,469 KB with every pack eager, and 1,742 KB with lazy packs. Gzipped, those are 462 KB, 1,151 KB and 464 KB.
 2. Describe behavior in `content/packs/<pack>/cards.json`:
 
    ```json
@@ -65,28 +74,53 @@ src/ui/                          React HUD + R3F table
 
 ## Russian card images
 
-With the Russian interface, cards show Russian card images from `public/cards-ru` (378×531 WebP). Most are community-made cards from `inspired/CARDS_ru`; acts, agendas, scenario cards, investigators and the few cards the community set lacks come from the Russian print sheets in `inspired/PDF_ru`. The Russian card names and texts follow what is printed on those images (`content/i18n/ru/cards.print.json`, layered between the imported translation and hand-written `cards.json`). Like the English scans, these images are publicly hosted on the Pages site.
+With the Russian interface, cards show Russian card images from `public/cards-ru` (WebP at half the scan size). The import takes them from three sources, best first:
+
+1. **The per-card folders** in `inspired/Arkham_Horror_LCG/покарточная сборка`. Each file is named by the card's number in its cycle (`06_1.png` is card 6 with one copy, `104a`/`104b` the two sides of card 104), so the match is exact and needs no OCR. `scripts/ruFolders.ts` holds the naming rules and the folder-to-code table: `02_…` is cycle 02, `0xR_…` a Return-to box (codes 50 on), `SD_0k_…` a starter deck (60k), `SA_…` a standalone. Names outside the rules, such as minis and act sides, fall through to the next sources.
+2. **Community cards** in `inspired/CARDS_ru`, matched by OCR.
+3. **The print sheets**, the PDFs in `inspired/Arkham_Horror_LCG`, matched by OCR against their own cycle's cards only. Tokens, the playmat and the superseded starter-deck sheet are skipped. The Russian card names and texts follow what is printed on those images (`content/i18n/ru/cards.print.json`, layered between the imported translation and hand-written `cards.json`). Like the English scans, these images are publicly hosted on the Pages site.
 
 To rebuild them, run `npm run import:ru-cards`. It needs `tesseract`, `pdfimages` (poppler), ImageMagick and `cwebp`, and downloads Tesseract's Russian data once into `.cache/tessdata`. The import:
 
 1. extracts the card images embedded in the PDFs;
-2. reads every image with OCR (about 15 minutes the first time, cached in `.cache/ru-import`);
-3. matches each one to a card code by name, text, orientation and level;
+2. reads every candidate image with OCR (about 25 minutes the first time for some 10,900 images, cached in `.cache/ru-import`);
+3. maps the folder files by number, and matches the other images to a card code by name, text, orientation and level;
 4. writes the manifest `content/i18n/ru/images.json`, the WebP files and `src/ui/ruImages.generated.json`.
 
-Uncertain matches are left out and listed on `.cache/ru-import/review.html`, next to the English scans. Pin or reject a match in `content/i18n/ru/images.overrides.json` (`{"01111:back": "inspired/…/Кабинет.jpg"}`, or `null`) and rerun; the same inputs and overrides always give the same output. For new cards, add their printed text to `cards.print.json`; `npm run check:content` rejects unknown codes and icon tokens there.
+Uncertain matches are left out and listed on one contact sheet per code range, `.cache/ru-import/review-<range>.html` (`01` core, `02` Dunwich, `52` Return to Carcosa…), next to the English scans. Pin or reject a match in `content/i18n/ru/images.overrides.json` (`{"01111:back": "inspired/…/Кабинет.jpg"}`, or `null`) and rerun; the same inputs and overrides always give the same output. For new cards, add their printed text to `cards.print.json`; `npm run check:content` rejects unknown codes and icon tokens there.
+
+The run of 2026-10-18 gave 3,833 of 7,812 card sides a Russian image: 3,382 from the folders, 374 from the community cards and 77 from the print sheets. Of the OCR matches, every one scoring under 0.65 was checked by eye and 7 were rejected. About 7,500 candidate images match no card side; most are copies, encounter backs or sides the folders already cover.
+
+| Code range | Sides with a Russian image |
+| --- | --- |
+| 01 core | 229 / 229 |
+| 02 Dunwich | 475 / 478 |
+| 03 Carcosa | 481 / 534 |
+| 04 Forgotten Age | 450 / 466 |
+| 05 Circle Undone | 495 / 526 |
+| 06 Dream-Eaters | 450 / 512 |
+| 07 Innsmouth | 226 / 510 |
+| 08–11 later cycles, community cards only | 316 / 2,222 |
+| 12–13 | 0 / 399 |
+| 50–54 Return to… | 271 / 512 |
+| 60 starter decks | 141 / 292 |
+| 70–72, 81–82 standalones | 255 / 387 |
+| other ranges | 44 / 745 |
+
+The images take about 184 MB in the repository. A rerun with the same inputs writes identical files, so only changed picks add history. Moving them to Git LFS or external storage later only changes the base path in `src/ui/images.ts`.
 
 ## Translations
 
 Translations are imported, not typed in:
 
 ```bash
-npm run import:i18n -- --locale ru               # campaign/scenario names, intros, resolutions, log labels,
-                                                 # encounter sets and matching UI labels from inspired/ArkhamCards
-npm run import:cards -- --pack core --locale ru  # card names, traits and text from ru.arkhamdb.com
+npm run import:i18n -- --locale ru               # card names, traits and text for every pack from the snapshot's
+                                                 # translations; campaign/scenario names, intros, resolutions, log
+                                                 # labels, encounter sets and matching UI labels from inspired/ArkhamCards
+npm run import:cards -- --pack core --locale ru  # card names, traits and text from ru.arkhamdb.com (older path)
 ```
 
-Both write only `content/i18n/<locale>/*.generated.json`. Fix a string by putting it in the hand-written `ui.json`, `cards.json` or `campaigns.json` next to them; re-running an import never touches those. Campaigns and scenarios name their ArkhamCards counterpart with `i18nId`. If ArkhamDB is unreachable, the card import exits with an error and keeps the old file.
+Both write only generated files: `content/i18n/<locale>/*.generated.json`, plus `content/i18n/<locale>/packs/<pack>.generated.json` for every pack but core, loaded with its pack. `check:content` prints, per pack, how many cards have text in each locale; for Russian it is 5,544 of 5,859, and flavour text is not imported. Fix a string by putting it in the hand-written `ui.json`, `cards.json` or `campaigns.json` next to them; re-running an import never touches those. Campaigns and scenarios name their ArkhamCards counterpart with `i18nId`. If ArkhamDB is unreachable, the card import exits with an error and keeps the old file.
 
 ## Adding a campaign
 
