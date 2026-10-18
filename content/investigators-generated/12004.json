@@ -1,0 +1,36 @@
+{
+ "code": "12004",
+ "name": "Joe Diamond",
+ "subname": "The Private Investigator",
+ "faction": "seeker",
+ "pack": "core_2026",
+ "generated": true,
+ "signatures": [
+  "12005"
+ ],
+ "weaknesses": [
+  "12006"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "seeker",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "faction": [
+    "guardian"
+   ],
+   "level": {
+    "min": 0,
+    "max": 2
+   }
+  }
+ ]
+}

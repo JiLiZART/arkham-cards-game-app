@@ -451,20 +451,48 @@ export const CardOverride = CardDef.partial().omit({ code: true }).strict();
 export type CardOverride = z.infer<typeof CardOverride>;
 
 // ---------- investigators & decks ----------
+/** one deckbuilding option in the snapshot's grammar; a key the importer does not know is kept under `raw` */
+export const DeckOption = z
+  .object({
+    faction: z.array(z.string()).optional(),
+    level: z.object({ min: z.number(), max: z.number() }).optional(),
+    base_level: z.object({ min: z.number(), max: z.number() }).optional(),
+    trait: z.array(z.string()).optional(),
+    tag: z.array(z.string()).optional(),
+    type: z.array(z.string()).optional(),
+    name: z.string().optional(),
+    text: z.array(z.string()).optional(),
+    uses: z.array(z.string()).optional(),
+    limit: z.number().optional(),
+    atleast: z.object({ factions: z.number(), min: z.number() }).optional(),
+    not: z.boolean().optional(),
+    permanent: z.boolean().optional(),
+    ignore_match: z.boolean().optional(),
+    error: z.string().optional(),
+    id: z.string().optional(),
+    faction_select: z.array(z.string()).optional(),
+    option_select: z.array(z.record(z.string(), z.unknown())).optional(),
+    deck_size_select: z.array(z.string()).optional(),
+    raw: z.record(z.string(), z.unknown()).optional(),
+  })
+  .strict();
+export type DeckOption = z.infer<typeof DeckOption>;
+
 export const InvestigatorDef = z
   .object({
     code: z.string(),
+    /** shown by the picker before the investigator's pack is loaded (generated definitions) */
+    name: z.string().optional(),
+    subname: z.string().optional(),
+    faction: z.string().optional(),
+    pack: z.string().optional(),
+    generated: z.boolean().optional(),
     signatures: z.array(z.string()),
     weaknesses: z.array(z.string()),
+    /** a required card and the alternative codes that can stand in for it */
+    alternatives: z.record(z.string(), z.array(z.string())).optional(),
     deckSize: z.number(),
-    deckOptions: z.array(
-      z
-        .object({
-          faction: z.array(z.string()).optional(),
-          level: z.object({ min: z.number(), max: z.number() }).optional(),
-        })
-        .strict(),
-    ),
+    deckOptions: z.array(DeckOption),
     portrait: z.string().optional(),
   })
   .strict();

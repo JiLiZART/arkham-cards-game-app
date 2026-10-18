@@ -1,0 +1,36 @@
+{
+ "code": "04005",
+ "name": "Calvin Wright",
+ "subname": "The Haunted",
+ "faction": "survivor",
+ "pack": "tfa",
+ "generated": true,
+ "signatures": [
+  "04015"
+ ],
+ "weaknesses": [
+  "04016"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "survivor",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "level": {
+    "min": 0,
+    "max": 3
+   },
+   "trait": [
+    "spirit"
+   ]
+  }
+ ]
+}

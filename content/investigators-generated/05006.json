@@ -1,0 +1,74 @@
+{
+ "code": "05006",
+ "name": "Marie Lambeau",
+ "subname": "The Entertainer",
+ "faction": "mystic",
+ "pack": "tcu",
+ "generated": true,
+ "signatures": [
+  "05018"
+ ],
+ "weaknesses": [
+  "05019"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "level": {
+    "min": 0,
+    "max": 5
+   },
+   "trait": [
+    "spell"
+   ]
+  },
+  {
+   "level": {
+    "min": 0,
+    "max": 5
+   },
+   "tag": [
+    "st"
+   ]
+  },
+  {
+   "faction": [
+    "mystic"
+   ],
+   "level": {
+    "min": 0,
+    "max": 3
+   }
+  },
+  {
+   "faction": [
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "level": {
+    "min": 0,
+    "max": 0
+   },
+   "trait": [
+    "occult"
+   ]
+  },
+  {
+   "faction": [
+    "seeker",
+    "survivor"
+   ],
+   "level": {
+    "min": 0,
+    "max": 0
+   },
+   "limit": 5,
+   "error": "You cannot have more than 5 Seeker and/or Survivor cards"
+  }
+ ]
+}

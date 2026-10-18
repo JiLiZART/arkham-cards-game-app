@@ -1,0 +1,49 @@
+{
+ "code": "02002",
+ "name": "Rex Murphy",
+ "subname": "The Reporter",
+ "faction": "seeker",
+ "pack": "dwl",
+ "generated": true,
+ "signatures": [
+  "02008"
+ ],
+ "weaknesses": [
+  "02009"
+ ],
+ "alternatives": {
+  "02008": [
+   "90079"
+  ],
+  "02009": [
+   "90080"
+  ]
+ },
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "trait": [
+    "fortune"
+   ],
+   "not": true
+  },
+  {
+   "faction": [
+    "seeker",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "level": {
+    "min": 0,
+    "max": 0
+   },
+   "limit": 5,
+   "error": "You cannot have more than 5 cards that are not Seeker or Neutral"
+  }
+ ]
+}

@@ -1,0 +1,36 @@
+{
+ "code": "07001",
+ "name": "Sister Mary",
+ "subname": "The Nun",
+ "faction": "guardian",
+ "pack": "tic",
+ "generated": true,
+ "signatures": [
+  "07006"
+ ],
+ "weaknesses": [
+  "07007"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "guardian",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "faction": [
+    "mystic"
+   ],
+   "level": {
+    "min": 0,
+    "max": 2
+   }
+  }
+ ]
+}

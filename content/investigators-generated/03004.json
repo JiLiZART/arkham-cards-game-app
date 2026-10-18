@@ -1,0 +1,55 @@
+{
+ "code": "03004",
+ "name": "Akachi Onyele",
+ "subname": "The Shaman",
+ "faction": "mystic",
+ "pack": "ptc",
+ "generated": true,
+ "signatures": [
+  "03014"
+ ],
+ "weaknesses": [
+  "03015"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "mystic",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "level": {
+    "min": 0,
+    "max": 4
+   },
+   "tag": [
+    "uc"
+   ]
+  },
+  {
+   "level": {
+    "min": 0,
+    "max": 4
+   },
+   "uses": [
+    "charges",
+    "charge"
+   ]
+  },
+  {
+   "level": {
+    "min": 0,
+    "max": 0
+   },
+   "trait": [
+    "occult"
+   ]
+  }
+ ]
+}

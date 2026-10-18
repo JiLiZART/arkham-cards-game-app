@@ -1,0 +1,77 @@
+{
+ "code": "98010",
+ "name": "Carolyn Fern",
+ "subname": "The Psychologist",
+ "faction": "guardian",
+ "pack": "promo",
+ "generated": true,
+ "signatures": [
+  "05007"
+ ],
+ "weaknesses": [
+  "05008"
+ ],
+ "alternatives": {
+  "05007": [
+   "98011"
+  ],
+  "05008": [
+   "98012"
+  ]
+ },
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "level": {
+    "min": 1,
+    "max": 5
+   },
+   "trait": [
+    "weapon"
+   ],
+   "not": true
+  },
+  {
+   "faction": [
+    "guardian"
+   ],
+   "level": {
+    "min": 0,
+    "max": 3
+   }
+  },
+  {
+   "faction": [
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "level": {
+    "min": 0,
+    "max": 5
+   },
+   "tag": [
+    "hh"
+   ],
+   "text": [
+    "[Hh]eals? (that much )?(((\\d+|all|(X total)) )?damage (from that asset )?(and|or) )?((\\d+|all|(X total)) )?horror"
+   ]
+  },
+  {
+   "faction": [
+    "seeker",
+    "mystic"
+   ],
+   "level": {
+    "min": 0,
+    "max": 1
+   },
+   "limit": 15,
+   "error": "You cannot have more than 15 level 0-1 Seeker and/or Mystic cards"
+  }
+ ]
+}

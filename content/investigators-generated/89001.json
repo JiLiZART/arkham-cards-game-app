@@ -1,0 +1,61 @@
+{
+ "code": "89001",
+ "name": "Subject 5U-21",
+ "subname": "The Anomaly",
+ "faction": "neutral",
+ "pack": "side",
+ "generated": true,
+ "signatures": [
+  "89002",
+  "89003"
+ ],
+ "weaknesses": [
+  "89004"
+ ],
+ "deckSize": 50,
+ "deckOptions": [
+  {
+   "level": {
+    "min": 0,
+    "max": 5
+   },
+   "text": [
+    "Permanent\\."
+   ],
+   "not": true,
+   "permanent": true,
+   "error": "No permanents except story and signature permanents"
+  },
+  {
+   "faction": [
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "faction": [
+    "guardian",
+    "seeker",
+    "rogue",
+    "mystic",
+    "survivor"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   },
+   "base_level": {
+    "min": 0,
+    "max": 0
+   },
+   "atleast": {
+    "factions": 5,
+    "min": 7
+   },
+   "error": "You must have at least 7 cards from each class"
+  }
+ ]
+}

@@ -1,0 +1,37 @@
+{
+ "code": "05004",
+ "name": "Diana Stanley",
+ "subname": "The Redeemed Cultist",
+ "faction": "mystic",
+ "pack": "tcu",
+ "generated": true,
+ "signatures": [
+  "05013",
+  "05014"
+ ],
+ "weaknesses": [
+  "05015"
+ ],
+ "deckSize": 35,
+ "deckOptions": [
+  {
+   "faction": [
+    "mystic",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "faction": [
+    "guardian"
+   ],
+   "level": {
+    "min": 0,
+    "max": 2
+   }
+  }
+ ]
+}

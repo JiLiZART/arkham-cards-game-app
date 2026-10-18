@@ -1,0 +1,36 @@
+{
+ "code": "12013",
+ "name": "Isabelle Barnes",
+ "subname": "The Returned",
+ "faction": "survivor",
+ "pack": "core_2026",
+ "generated": true,
+ "signatures": [
+  "12014"
+ ],
+ "weaknesses": [
+  "12015"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "survivor",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "faction": [
+    "mystic"
+   ],
+   "level": {
+    "min": 0,
+    "max": 2
+   }
+  }
+ ]
+}

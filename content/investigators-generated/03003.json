@@ -1,0 +1,36 @@
+{
+ "code": "03003",
+ "name": "Sefina Rousseau",
+ "subname": "The Painter",
+ "faction": "rogue",
+ "pack": "ptc",
+ "generated": true,
+ "signatures": [
+  "03012"
+ ],
+ "weaknesses": [
+  "03013"
+ ],
+ "deckSize": 33,
+ "deckOptions": [
+  {
+   "faction": [
+    "rogue",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "faction": [
+    "mystic"
+   ],
+   "level": {
+    "min": 0,
+    "max": 2
+   }
+  }
+ ]
+}

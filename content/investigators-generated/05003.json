@@ -1,0 +1,42 @@
+{
+ "code": "05003",
+ "name": "Preston Fairmont",
+ "subname": "The Millionaire",
+ "faction": "rogue",
+ "pack": "tcu",
+ "generated": true,
+ "signatures": [
+  "05011"
+ ],
+ "weaknesses": [
+  "05012"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "trait": [
+    "illicit"
+   ],
+   "not": true
+  },
+  {
+   "faction": [
+    "rogue",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "faction": [
+    "survivor"
+   ],
+   "level": {
+    "min": 0,
+    "max": 2
+   }
+  }
+ ]
+}

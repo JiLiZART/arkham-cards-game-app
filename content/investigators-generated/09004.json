@@ -1,0 +1,60 @@
+{
+ "code": "09004",
+ "name": "Vincent Lee",
+ "subname": "The Doctor",
+ "faction": "seeker",
+ "pack": "tsk",
+ "generated": true,
+ "signatures": [
+  "09005",
+  "09006"
+ ],
+ "weaknesses": [
+  "09007"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "seeker"
+   ],
+   "level": {
+    "min": 0,
+    "max": 3
+   }
+  },
+  {
+   "faction": [
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "level": {
+    "min": 0,
+    "max": 5
+   },
+   "tag": [
+    "hd"
+   ],
+   "text": [
+    "[Hh]eals? (that much )?((((\\d+)|(all)|(X total)) )?horror (from that asset )?(and|or) )?(((\\d+)|(all)|(X total)) )?damage"
+   ]
+  },
+  {
+   "faction": [
+    "guardian",
+    "survivor"
+   ],
+   "level": {
+    "min": 0,
+    "max": 1
+   },
+   "limit": 15,
+   "error": "You cannot have more than 15 level 0-1 Guardian and/or Survivor cards"
+  }
+ ]
+}

@@ -1,0 +1,36 @@
+{
+ "code": "05002",
+ "name": "Joe Diamond",
+ "subname": "The Private Investigator",
+ "faction": "seeker",
+ "pack": "tcu",
+ "generated": true,
+ "signatures": [
+  "05009"
+ ],
+ "weaknesses": [
+  "05010"
+ ],
+ "deckSize": 40,
+ "deckOptions": [
+  {
+   "faction": [
+    "seeker",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "faction": [
+    "guardian"
+   ],
+   "level": {
+    "min": 0,
+    "max": 2
+   }
+  }
+ ]
+}

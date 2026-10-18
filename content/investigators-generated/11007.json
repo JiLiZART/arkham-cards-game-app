@@ -1,0 +1,49 @@
+{
+ "code": "11007",
+ "name": "Agatha Crane",
+ "subname": "The Parapsychologist",
+ "faction": "seeker",
+ "pack": "tdc",
+ "generated": true,
+ "signatures": [
+  "11009"
+ ],
+ "weaknesses": [
+  "11010"
+ ],
+ "deckSize": 35,
+ "deckOptions": [
+  {
+   "faction": [
+    "seeker",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "level": {
+    "min": 0,
+    "max": 3
+   },
+   "trait": [
+    "insight"
+   ],
+   "type": [
+    "event"
+   ]
+  },
+  {
+   "faction": [
+    "mystic"
+   ],
+   "level": {
+    "min": 0,
+    "max": 0
+   },
+   "limit": 10
+  }
+ ]
+}

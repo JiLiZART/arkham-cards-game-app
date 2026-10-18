@@ -1,0 +1,38 @@
+{
+ "code": "11017",
+ "name": "George Barnaby",
+ "subname": "The Lawyer",
+ "faction": "survivor",
+ "pack": "tdc",
+ "generated": true,
+ "signatures": [
+  "11018"
+ ],
+ "weaknesses": [
+  "11019"
+ ],
+ "deckSize": 35,
+ "deckOptions": [
+  {
+   "faction": [
+    "survivor",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "faction": [
+    "seeker",
+    "rogue"
+   ],
+   "level": {
+    "min": 0,
+    "max": 0
+   },
+   "limit": 10
+  }
+ ]
+}

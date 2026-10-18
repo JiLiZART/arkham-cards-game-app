@@ -1,0 +1,65 @@
+{
+ "code": "09018",
+ "name": "Charlie Kane",
+ "subname": "The Politician",
+ "faction": "neutral",
+ "pack": "tsk",
+ "generated": true,
+ "signatures": [
+  "09019"
+ ],
+ "weaknesses": [
+  "09020"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "level": {
+    "min": 0,
+    "max": 5
+   },
+   "trait": [
+    "ally"
+   ]
+  },
+  {
+   "level": {
+    "min": 0,
+    "max": 2
+   },
+   "name": "Class Choice",
+   "id": "faction_1",
+   "faction_select": [
+    "guardian",
+    "seeker",
+    "rogue",
+    "mystic",
+    "survivor"
+   ]
+  },
+  {
+   "level": {
+    "min": 0,
+    "max": 2
+   },
+   "name": "Class Choice",
+   "id": "faction_2",
+   "faction_select": [
+    "guardian",
+    "seeker",
+    "rogue",
+    "mystic",
+    "survivor"
+   ]
+  }
+ ]
+}

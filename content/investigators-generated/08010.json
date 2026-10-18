@@ -1,0 +1,59 @@
+{
+ "code": "08010",
+ "name": "Lily Chen",
+ "subname": "The Martial Artist",
+ "faction": "mystic",
+ "pack": "eoe",
+ "generated": true,
+ "signatures": [],
+ "weaknesses": [
+  "08015"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "trait": [
+    "firearm"
+   ],
+   "not": true
+  },
+  {
+   "faction": [
+    "mystic"
+   ],
+   "level": {
+    "min": 0,
+    "max": 0
+   }
+  },
+  {
+   "faction": [
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "faction": [
+    "guardian"
+   ],
+   "level": {
+    "min": 1,
+    "max": 5
+   }
+  },
+  {
+   "faction": [
+    "guardian"
+   ],
+   "level": {
+    "min": 0,
+    "max": 0
+   },
+   "limit": 5,
+   "error": "You cannot have more than 5 level 0 Guardian cards"
+  }
+ ]
+}

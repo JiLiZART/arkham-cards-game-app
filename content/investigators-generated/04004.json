@@ -1,0 +1,44 @@
+{
+ "code": "04004",
+ "name": "Father Mateo",
+ "subname": "The Priest",
+ "faction": "mystic",
+ "pack": "tfa",
+ "generated": true,
+ "signatures": [
+  "04013"
+ ],
+ "weaknesses": [
+  "04014"
+ ],
+ "alternatives": {
+  "04013": [
+   "90082"
+  ],
+  "04014": [
+   "90083"
+  ]
+ },
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "mystic",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "level": {
+    "min": 0,
+    "max": 3
+   },
+   "trait": [
+    "blessed"
+   ]
+  }
+ ]
+}

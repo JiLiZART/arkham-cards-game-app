@@ -1,10 +1,15 @@
 import { describe, expect, it } from "vitest";
 import { fromArkhamDb, validateDeck } from "./decks";
+import { loadContentFromDisk } from "../content/node";
 import { db } from "./testkit";
 
 describe("decks", () => {
-  it("all starter decks are valid", () => {
-    for (const d of Object.values(db.decks)) expect(validateDeck(db, d), d.id).toEqual([]);
+  it("all starter decks are valid", async () => {
+    // every pack loaded: the browser's content holds the other packs' cards only when something asks for them
+    const all = (await loadContentFromDisk()).db;
+    // ArkhamCards' lists for Tommy Muldoon (29 cards) and Dexter Drake (32) do not add up to 30: kept as published, and the wizard says so
+    const upstream: Record<string, string> = { "06001-starter": "deck.size", "07004-starter": "deck.size" };
+    for (const d of Object.values(all.decks)) expect(validateDeck(all, d).map((p) => p.reason?.key), d.id).toEqual(upstream[d.id] ? [upstream[d.id]] : []);
   });
 
   it("rejects too many copies", () => {
@@ -20,6 +25,16 @@ describe("decks", () => {
     const msgs = validateDeck(db, d).map((p) => p.message);
     expect(msgs).toContainEqual(expect.stringMatching(/missing required card Roland's .38 Special/));
     expect(msgs).toContainEqual(expect.stringMatching(/Shrivelling .* not allowed/));
+  });
+
+  it("passes what it cannot judge: with trait or exclusion options present a card is not refused, with only faction and level options it is", () => {
+    const rex = structuredClone(db.investigators["01001"]);
+    const mk = (deckOptions: typeof rex.deckOptions) => ({ ...db, investigators: { ...db.investigators, "01001": { ...rex, deckOptions } } });
+    const d = structuredClone(db.decks["roland-starter"]);
+    d.cards["01060"] = 1; // Shrivelling (mystic)
+    const notAllowed = (x: typeof db) => validateDeck(x, d).some((p) => p.reason?.key === "deck.notAllowed" && p.code === "01060");
+    expect(notAllowed(mk([{ faction: ["guardian", "neutral"], level: { min: 0, max: 5 }, }, { not: true, trait: ["spell"] }, { trait: ["tool"], level: { min: 0, max: 5 } }]))).toBe(false);
+    expect(notAllowed(mk([{ faction: ["guardian", "neutral"], level: { min: 0, max: 5 } }]))).toBe(true);
   });
 
   it("imports an ArkhamDB deck export", () => {

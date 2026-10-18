@@ -1,0 +1,57 @@
+{
+ "code": "04003",
+ "name": "Finn Edwards",
+ "subname": "The Bootlegger",
+ "faction": "rogue",
+ "pack": "tfa",
+ "generated": true,
+ "signatures": [
+  "04010",
+  "04011"
+ ],
+ "weaknesses": [
+  "04012"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "level": {
+    "min": 0,
+    "max": 5
+   },
+   "trait": [
+    "illicit"
+   ]
+  },
+  {
+   "faction": [
+    "rogue"
+   ],
+   "level": {
+    "min": 0,
+    "max": 3
+   }
+  },
+  {
+   "faction": [
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "faction": [
+    "seeker",
+    "survivor"
+   ],
+   "level": {
+    "min": 0,
+    "max": 0
+   },
+   "limit": 5,
+   "error": "You cannot have more than 5 Seeker and/or Survivor cards"
+  }
+ ]
+}

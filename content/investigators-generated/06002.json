@@ -1,0 +1,53 @@
+{
+ "code": "06002",
+ "name": "Mandy Thompson",
+ "subname": "The Researcher",
+ "faction": "seeker",
+ "pack": "tde",
+ "generated": true,
+ "signatures": [
+  "06008"
+ ],
+ "weaknesses": [
+  "06009"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [],
+   "name": "Deck Size",
+   "deck_size_select": [
+    "30",
+    "40",
+    "50"
+   ]
+  },
+  {
+   "faction": [
+    "seeker",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "level": {
+    "min": 0,
+    "max": 1
+   },
+   "type": [
+    "event",
+    "skill"
+   ],
+   "name": "Secondary Class",
+   "limit": 10,
+   "faction_select": [
+    "mystic",
+    "rogue",
+    "survivor"
+   ]
+  }
+ ]
+}

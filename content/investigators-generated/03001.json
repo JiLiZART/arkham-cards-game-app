@@ -1,0 +1,37 @@
+{
+ "code": "03001",
+ "name": "Mark Harrigan",
+ "subname": "The Soldier",
+ "faction": "guardian",
+ "pack": "ptc",
+ "generated": true,
+ "signatures": [
+  "03007",
+  "03009"
+ ],
+ "weaknesses": [
+  "03008"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "guardian",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "level": {
+    "min": 0,
+    "max": 0
+   },
+   "trait": [
+    "tactic"
+   ]
+  }
+ ]
+}

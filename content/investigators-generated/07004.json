@@ -1,0 +1,44 @@
+{
+ "code": "07004",
+ "name": "Dexter Drake",
+ "subname": "The Magician",
+ "faction": "mystic",
+ "pack": "tic",
+ "generated": true,
+ "signatures": [
+  "07012"
+ ],
+ "weaknesses": [
+  "07013"
+ ],
+ "alternatives": {
+  "07012": [
+   "98017"
+  ],
+  "07013": [
+   "98018"
+  ]
+ },
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "mystic",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "faction": [
+    "rogue"
+   ],
+   "level": {
+    "min": 0,
+    "max": 2
+   }
+  }
+ ]
+}

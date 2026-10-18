@@ -1,0 +1,36 @@
+{
+ "code": "09015",
+ "name": "Darrell Simmons",
+ "subname": "The Photographer",
+ "faction": "survivor",
+ "pack": "tsk",
+ "generated": true,
+ "signatures": [
+  "09016"
+ ],
+ "weaknesses": [
+  "09017"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "survivor",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "faction": [
+    "seeker"
+   ],
+   "level": {
+    "min": 0,
+    "max": 2
+   }
+  }
+ ]
+}

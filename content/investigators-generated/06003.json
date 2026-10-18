@@ -1,0 +1,45 @@
+{
+ "code": "06003",
+ "name": "Tony Morgan",
+ "subname": "The Bounty Hunter",
+ "faction": "rogue",
+ "pack": "tde",
+ "generated": true,
+ "signatures": [
+  "06010",
+  "06011"
+ ],
+ "weaknesses": [
+  "06012"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "rogue",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "level": {
+    "min": 0,
+    "max": 1
+   },
+   "type": [
+    "event",
+    "skill"
+   ],
+   "name": "Secondary Class",
+   "limit": 10,
+   "faction_select": [
+    "guardian",
+    "seeker",
+    "survivor"
+   ]
+  }
+ ]
+}

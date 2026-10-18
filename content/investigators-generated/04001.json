@@ -1,0 +1,36 @@
+{
+ "code": "04001",
+ "name": "Leo Anderson",
+ "subname": "The Expedition Leader",
+ "faction": "guardian",
+ "pack": "tfa",
+ "generated": true,
+ "signatures": [
+  "04006"
+ ],
+ "weaknesses": [
+  "04007"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "guardian",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "faction": [
+    "rogue"
+   ],
+   "level": {
+    "min": 0,
+    "max": 2
+   }
+  }
+ ]
+}

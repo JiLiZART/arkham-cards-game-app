@@ -1,0 +1,44 @@
+{
+ "code": "09001",
+ "name": "Carson Sinclair",
+ "subname": "The Butler",
+ "faction": "guardian",
+ "pack": "tsk",
+ "generated": true,
+ "signatures": [
+  "09002"
+ ],
+ "weaknesses": [
+  "09003"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "guardian",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "level": {
+    "min": 0,
+    "max": 1
+   },
+   "type": [
+    "event",
+    "skill"
+   ],
+   "name": "Secondary Class",
+   "limit": 10,
+   "faction_select": [
+    "seeker",
+    "mystic",
+    "survivor"
+   ]
+  }
+ ]
+}

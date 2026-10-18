@@ -1,0 +1,43 @@
+{
+ "code": "02001",
+ "name": "Zoey Samaras",
+ "subname": "The Chef",
+ "faction": "guardian",
+ "pack": "dwl",
+ "generated": true,
+ "signatures": [
+  "02006"
+ ],
+ "weaknesses": [
+  "02007"
+ ],
+ "alternatives": {
+  "02006": [
+   "90060"
+  ],
+  "02007": [
+   "90061"
+  ]
+ },
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "guardian",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "level": {
+    "min": 0,
+    "max": 0
+   },
+   "limit": 5,
+   "error": "You cannot have more than 5 cards that are not Guardian or Neutral"
+  }
+ ]
+}

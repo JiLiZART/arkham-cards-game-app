@@ -1,0 +1,38 @@
+{
+ "code": "10015",
+ "name": "Hank Samson",
+ "subname": "The Farmhand",
+ "faction": "survivor",
+ "pack": "fhv",
+ "generated": true,
+ "signatures": [
+  "10017"
+ ],
+ "weaknesses": [
+  "10018"
+ ],
+ "deckSize": 35,
+ "deckOptions": [
+  {
+   "faction": [
+    "survivor",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "level": {
+    "min": 0,
+    "max": 2
+   },
+   "trait": [
+    "spirit",
+    "innate"
+   ],
+   "limit": 10
+  }
+ ]
+}

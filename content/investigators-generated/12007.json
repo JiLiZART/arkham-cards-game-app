@@ -1,0 +1,36 @@
+{
+ "code": "12007",
+ "name": "Trish Scarborough",
+ "subname": "The Former Spy",
+ "faction": "rogue",
+ "pack": "core_2026",
+ "generated": true,
+ "signatures": [
+  "12008"
+ ],
+ "weaknesses": [
+  "12009"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "rogue",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "faction": [
+    "seeker"
+   ],
+   "level": {
+    "min": 0,
+    "max": 2
+   }
+  }
+ ]
+}

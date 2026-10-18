@@ -1,0 +1,54 @@
+{
+ "code": "10012",
+ "name": "Kōhaku Narukami",
+ "subname": "The Folklorist",
+ "faction": "mystic",
+ "pack": "fhv",
+ "generated": true,
+ "signatures": [
+  "10013"
+ ],
+ "weaknesses": [
+  "10014"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "level": {
+    "min": 0,
+    "max": 5
+   },
+   "trait": [
+    "blessed",
+    "cursed"
+   ]
+  },
+  {
+   "faction": [
+    "mystic"
+   ],
+   "level": {
+    "min": 0,
+    "max": 3
+   }
+  },
+  {
+   "faction": [
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "level": {
+    "min": 0,
+    "max": 0
+   },
+   "trait": [
+    "occult"
+   ]
+  }
+ ]
+}

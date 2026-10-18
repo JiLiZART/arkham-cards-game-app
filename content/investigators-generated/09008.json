@@ -1,0 +1,36 @@
+{
+ "code": "09008",
+ "name": "Kymani Jones",
+ "subname": "The Security Consultant",
+ "faction": "rogue",
+ "pack": "tsk",
+ "generated": true,
+ "signatures": [
+  "09009"
+ ],
+ "weaknesses": [
+  "09010"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "neutral",
+    "rogue"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "level": {
+    "min": 0,
+    "max": 4
+   },
+   "trait": [
+    "tool"
+   ]
+  }
+ ]
+}

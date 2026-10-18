@@ -1,0 +1,36 @@
+{
+ "code": "11004",
+ "name": "Lucius Galloway",
+ "subname": "The Poet",
+ "faction": "seeker",
+ "pack": "tdc",
+ "generated": true,
+ "signatures": [
+  "11005"
+ ],
+ "weaknesses": [
+  "11006"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "seeker",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "faction": [
+    "rogue"
+   ],
+   "level": {
+    "min": 0,
+    "max": 2
+   }
+  }
+ ]
+}

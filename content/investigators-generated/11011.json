@@ -1,0 +1,53 @@
+{
+ "code": "11011",
+ "name": "Michael McGlen",
+ "subname": "The Gangster",
+ "faction": "rogue",
+ "pack": "tdc",
+ "generated": true,
+ "signatures": [
+  "11012"
+ ],
+ "weaknesses": [
+  "11013"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "rogue"
+   ],
+   "level": {
+    "min": 0,
+    "max": 3
+   }
+  },
+  {
+   "faction": [
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "level": {
+    "min": 0,
+    "max": 5
+   },
+   "trait": [
+    "firearm"
+   ]
+  },
+  {
+   "level": {
+    "min": 0,
+    "max": 5
+   },
+   "tag": [
+    "fa"
+   ]
+  }
+ ]
+}

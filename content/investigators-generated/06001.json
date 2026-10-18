@@ -1,0 +1,36 @@
+{
+ "code": "06001",
+ "name": "Tommy Muldoon",
+ "subname": "The Rookie Cop",
+ "faction": "guardian",
+ "pack": "tde",
+ "generated": true,
+ "signatures": [
+  "06006"
+ ],
+ "weaknesses": [
+  "06007"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "guardian",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "faction": [
+    "survivor"
+   ],
+   "level": {
+    "min": 0,
+    "max": 2
+   }
+  }
+ ]
+}

@@ -1,0 +1,63 @@
+{
+ "code": "08007",
+ "name": "Monterey Jack",
+ "subname": "The Archaeologist",
+ "faction": "rogue",
+ "pack": "eoe",
+ "generated": true,
+ "signatures": [
+  "08008"
+ ],
+ "weaknesses": [
+  "08009"
+ ],
+ "alternatives": {
+  "08008": [
+   "90063"
+  ],
+  "08009": [
+   "90064"
+  ]
+ },
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "rogue"
+   ],
+   "level": {
+    "min": 0,
+    "max": 0
+   }
+  },
+  {
+   "faction": [
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "faction": [
+    "seeker"
+   ],
+   "level": {
+    "min": 1,
+    "max": 5
+   }
+  },
+  {
+   "faction": [
+    "seeker"
+   ],
+   "level": {
+    "min": 0,
+    "max": 0
+   },
+   "limit": 5,
+   "error": "You cannot have more than 5 level 0 Seeker cards"
+  }
+ ]
+}

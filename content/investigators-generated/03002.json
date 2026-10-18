@@ -1,0 +1,36 @@
+{
+ "code": "03002",
+ "name": "Minh Thi Phan",
+ "subname": "The Secretary",
+ "faction": "seeker",
+ "pack": "ptc",
+ "generated": true,
+ "signatures": [
+  "03010"
+ ],
+ "weaknesses": [
+  "03011"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "seeker",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "faction": [
+    "survivor"
+   ],
+   "level": {
+    "min": 0,
+    "max": 2
+   }
+  }
+ ]
+}

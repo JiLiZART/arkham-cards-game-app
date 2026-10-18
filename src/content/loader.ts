@@ -134,8 +134,9 @@ export function buildContent(files: Record<string, unknown>, scriptFiles: Record
       else errors.push(...zerr(file, r.error));
     }
   };
-  parseInto(/\/investigators\/[^/]+\.json$/, InvestigatorDef, (v) => (db.investigators[v.code] = v));
-  parseInto(/\/decks\/[^/]+\.json$/, DeckDef, (v) => (db.decks[v.id] = v));
+  // the generated folders sort before the hand-written ones, which therefore replace a generated definition with the same code
+  parseInto(/\/investigators(?:-generated)?\/[^/]+\.json$/, InvestigatorDef, (v) => (db.investigators[v.code] = v));
+  parseInto(/\/decks(?:-generated)?\/[^/]+\.json$/, DeckDef, (v) => (db.decks[v.id] = v));
   parseInto(CAMPAIGN_FILE, CampaignDef, (v) => (db.campaigns[v.id] = v));
   parseInto(SCENARIO_FILE, ScenarioDef, (v) => (db.scenarios[v.id] = v));
   parseInto(/\/sounds\/sounds\.json$/, SoundManifest, (v, file) => {
@@ -222,7 +223,10 @@ export function validateRefs(db: ContentDb, cardFile: Record<string, string> = {
       checkEffects(file, `${c.code}.abilities.${k}`, c.code, a.effects);
     });
   }
+  // a generated investigator's pack (and its decks') may not be loaded yet: check its cards only once they are here
+  const waitingFor = (pack: string | undefined) => !!pack && !!db.packs[pack] && !db.packs[pack].loaded;
   for (const inv of Object.values(db.investigators)) {
+    if (waitingFor(inv.pack)) continue;
     const file = `investigators/${inv.code}.json`;
     need(file, "code", inv.code);
     inv.signatures.forEach((s, k) => need(file, `signatures.${k}`, s));
@@ -230,8 +234,9 @@ export function validateRefs(db: ContentDb, cardFile: Record<string, string> = {
   }
   for (const d of Object.values(db.decks)) {
     const file = `decks/${d.id}.json`;
-    need(file, "investigator", d.investigator, "investigator");
     if (!db.investigators[d.investigator]) errors.push({ file, path: "investigator", message: `missing investigator definition ${d.investigator}` });
+    if (waitingFor(db.investigators[d.investigator]?.pack)) continue;
+    need(file, "investigator", d.investigator, "investigator");
     for (const code of Object.keys(d.cards)) need(file, `cards.${code}`, code);
   }
   // a campaign whose packs the browser hasn't loaded yet names cards it doesn't have: checked by check:content, which loads all

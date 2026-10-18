@@ -1,0 +1,37 @@
+{
+ "code": "09011",
+ "name": "Amina Zidane",
+ "subname": "The Operator",
+ "faction": "mystic",
+ "pack": "tsk",
+ "generated": true,
+ "signatures": [
+  "09012",
+  "09013"
+ ],
+ "weaknesses": [
+  "09014"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "mystic",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "level": {
+    "min": 0,
+    "max": 4
+   },
+   "trait": [
+    "charm"
+   ]
+  }
+ ]
+}

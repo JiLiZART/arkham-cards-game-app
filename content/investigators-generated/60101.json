@@ -1,0 +1,27 @@
+{
+ "code": "60101",
+ "name": "Nathaniel Cho",
+ "subname": "The Boxer",
+ "faction": "guardian",
+ "pack": "investigator",
+ "generated": true,
+ "signatures": [
+  "60102"
+ ],
+ "weaknesses": [
+  "60103"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "guardian",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  }
+ ]
+}

@@ -1,0 +1,63 @@
+{
+ "code": "08004",
+ "name": "Norman Withers",
+ "subname": "The Astronomer",
+ "faction": "seeker",
+ "pack": "eoe",
+ "generated": true,
+ "signatures": [
+  "08005"
+ ],
+ "weaknesses": [
+  "08006"
+ ],
+ "alternatives": {
+  "08005": [
+   "98008"
+  ],
+  "08006": [
+   "98009"
+  ]
+ },
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "seeker"
+   ],
+   "level": {
+    "min": 0,
+    "max": 0
+   }
+  },
+  {
+   "faction": [
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "faction": [
+    "mystic"
+   ],
+   "level": {
+    "min": 1,
+    "max": 5
+   }
+  },
+  {
+   "faction": [
+    "mystic"
+   ],
+   "level": {
+    "min": 0,
+    "max": 0
+   },
+   "limit": 5,
+   "error": "You cannot have more than 5 level 0 Mystic cards"
+  }
+ ]
+}

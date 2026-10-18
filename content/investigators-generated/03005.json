@@ -1,0 +1,36 @@
+{
+ "code": "03005",
+ "name": "William Yorick",
+ "subname": "The Gravedigger",
+ "faction": "survivor",
+ "pack": "ptc",
+ "generated": true,
+ "signatures": [
+  "03016"
+ ],
+ "weaknesses": [
+  "03017"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "survivor",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "faction": [
+    "guardian"
+   ],
+   "level": {
+    "min": 0,
+    "max": 2
+   }
+  }
+ ]
+}

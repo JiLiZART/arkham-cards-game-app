@@ -1,0 +1,45 @@
+{
+ "code": "02003",
+ "name": "Jenny Barnes",
+ "subname": "The Dilettante",
+ "faction": "rogue",
+ "pack": "dwl",
+ "generated": true,
+ "signatures": [
+  "02010"
+ ],
+ "weaknesses": [
+  "02011"
+ ],
+ "alternatives": {
+  "02010": [
+   "98002",
+   "90085"
+  ],
+  "02011": [
+   "98003",
+   "90086"
+  ]
+ },
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "rogue",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "level": {
+    "min": 0,
+    "max": 0
+   },
+   "limit": 5,
+   "error": "You cannot have more than 5 cards that are not Rogue or Neutral"
+  }
+ ]
+}

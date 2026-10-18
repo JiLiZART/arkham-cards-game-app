@@ -1,0 +1,36 @@
+{
+ "code": "06005",
+ "name": "Patrice Hathaway",
+ "subname": "The Violinist",
+ "faction": "survivor",
+ "pack": "tde",
+ "generated": true,
+ "signatures": [
+  "06016"
+ ],
+ "weaknesses": [
+  "06017"
+ ],
+ "deckSize": 42,
+ "deckOptions": [
+  {
+   "faction": [
+    "survivor",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "faction": [
+    "mystic"
+   ],
+   "level": {
+    "min": 0,
+    "max": 2
+   }
+  }
+ ]
+}

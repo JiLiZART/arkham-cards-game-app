@@ -1,0 +1,27 @@
+{
+ "code": "60151",
+ "name": "Tommy Muldoon",
+ "subname": "The Officer",
+ "faction": "guardian",
+ "pack": "investigator",
+ "generated": true,
+ "signatures": [
+  "60152"
+ ],
+ "weaknesses": [
+  "60153"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "guardian",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  }
+ ]
+}

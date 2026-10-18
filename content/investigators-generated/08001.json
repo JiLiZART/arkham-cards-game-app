@@ -1,0 +1,55 @@
+{
+ "code": "08001",
+ "name": "Daniela Reyes",
+ "subname": "The Mechanic",
+ "faction": "guardian",
+ "pack": "eoe",
+ "generated": true,
+ "signatures": [
+  "08002"
+ ],
+ "weaknesses": [
+  "08003"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "guardian"
+   ],
+   "level": {
+    "min": 0,
+    "max": 0
+   }
+  },
+  {
+   "faction": [
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "faction": [
+    "survivor"
+   ],
+   "level": {
+    "min": 1,
+    "max": 5
+   }
+  },
+  {
+   "faction": [
+    "survivor"
+   ],
+   "level": {
+    "min": 0,
+    "max": 0
+   },
+   "limit": 5,
+   "error": "You cannot have more than 5 level 0 Survivor cards"
+  }
+ ]
+}

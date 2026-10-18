@@ -1,0 +1,39 @@
+{
+ "code": "07002",
+ "name": "Amanda Sharpe",
+ "subname": "The Student",
+ "faction": "seeker",
+ "pack": "tic",
+ "generated": true,
+ "signatures": [
+  "07008"
+ ],
+ "weaknesses": [
+  "07009"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "seeker",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "level": {
+    "min": 0,
+    "max": 3
+   },
+   "trait": [
+    "practiced"
+   ],
+   "type": [
+    "skill"
+   ]
+  }
+ ]
+}

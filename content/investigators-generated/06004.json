@@ -1,0 +1,36 @@
+{
+ "code": "06004",
+ "name": "Luke Robinson",
+ "subname": "The Dreamer",
+ "faction": "mystic",
+ "pack": "tde",
+ "generated": true,
+ "signatures": [
+  "06013"
+ ],
+ "weaknesses": [
+  "06014"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "mystic",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "faction": [
+    "seeker"
+   ],
+   "level": {
+    "min": 0,
+    "max": 2
+   }
+  }
+ ]
+}

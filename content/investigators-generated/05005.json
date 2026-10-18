@@ -1,0 +1,36 @@
+{
+ "code": "05005",
+ "name": "Rita Young",
+ "subname": "The Athlete",
+ "faction": "survivor",
+ "pack": "tcu",
+ "generated": true,
+ "signatures": [
+  "05016"
+ ],
+ "weaknesses": [
+  "05017"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "level": {
+    "min": 0,
+    "max": 3
+   },
+   "trait": [
+    "trick"
+   ]
+  },
+  {
+   "faction": [
+    "survivor",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  }
+ ]
+}

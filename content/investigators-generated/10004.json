@@ -1,0 +1,45 @@
+{
+ "code": "10004",
+ "name": "Kate Winthrop",
+ "subname": "The Scientist",
+ "faction": "seeker",
+ "pack": "fhv",
+ "generated": true,
+ "signatures": [
+  "10005"
+ ],
+ "weaknesses": [
+  "10008"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "seeker",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "level": {
+    "min": 0,
+    "max": 4
+   },
+   "trait": [
+    "science"
+   ]
+  },
+  {
+   "level": {
+    "min": 0,
+    "max": 1
+   },
+   "trait": [
+    "insight"
+   ]
+  }
+ ]
+}

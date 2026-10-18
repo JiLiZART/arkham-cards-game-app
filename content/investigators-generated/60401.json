@@ -1,0 +1,27 @@
+{
+ "code": "60401",
+ "name": "Jacqueline Fine",
+ "subname": "The Psychic",
+ "faction": "mystic",
+ "pack": "investigator",
+ "generated": true,
+ "signatures": [
+  "60402"
+ ],
+ "weaknesses": [
+  "60403"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "mystic",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  }
+ ]
+}

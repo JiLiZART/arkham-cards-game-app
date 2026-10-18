@@ -1,0 +1,84 @@
+{
+ "code": "11001",
+ "name": "Marion Tavares",
+ "subname": "The Trawler",
+ "faction": "guardian",
+ "pack": "tdc",
+ "generated": true,
+ "signatures": [
+  "11002"
+ ],
+ "weaknesses": [
+  "11003"
+ ],
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "guardian",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "name": "Trait Choice",
+   "option_select": [
+    {
+     "id": "improvised",
+     "name": "Improvised",
+     "trait": [
+      "improvised"
+     ],
+     "type": [
+      "event"
+     ],
+     "level": {
+      "min": 0,
+      "max": 2
+     }
+    },
+    {
+     "id": "gambit",
+     "name": "Gambit",
+     "trait": [
+      "gambit"
+     ],
+     "type": [
+      "event"
+     ],
+     "level": {
+      "min": 0,
+      "max": 2
+     }
+    },
+    {
+     "id": "fortune",
+     "name": "Fortune",
+     "trait": [
+      "fortune"
+     ],
+     "type": [
+      "event"
+     ],
+     "level": {
+      "min": 0,
+      "max": 2
+     }
+    }
+   ]
+  },
+  {
+   "faction": [
+    "survivor"
+   ],
+   "level": {
+    "min": 0,
+    "max": 0
+   },
+   "limit": 5
+  }
+ ]
+}

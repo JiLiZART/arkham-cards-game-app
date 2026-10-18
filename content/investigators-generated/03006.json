@@ -1,0 +1,56 @@
+{
+ "code": "03006",
+ "name": "Lola Hayes",
+ "subname": "The Actress",
+ "faction": "neutral",
+ "pack": "ptc",
+ "generated": true,
+ "signatures": [
+  "03018",
+  "03018",
+  "03018",
+  "03018",
+  "03018"
+ ],
+ "weaknesses": [
+  "03019"
+ ],
+ "alternatives": {
+  "03018": [
+   "90092"
+  ],
+  "03019": [
+   "90093"
+  ]
+ },
+ "deckSize": 35,
+ "deckOptions": [
+  {
+   "faction": [
+    "survivor",
+    "guardian",
+    "seeker",
+    "rogue",
+    "mystic"
+   ],
+   "level": {
+    "min": 0,
+    "max": 3
+   },
+   "atleast": {
+    "factions": 3,
+    "min": 7
+   },
+   "error": "You must have at least 7 cards from 3 different factions"
+  },
+  {
+   "faction": [
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  }
+ ]
+}

@@ -47,6 +47,33 @@ describe("loader", () => {
   });
 });
 
+describe("generated investigators", () => {
+  const inv = (extra: object = {}) => ({ code: "X1", signatures: [], weaknesses: [], deckSize: 30, deckOptions: [], ...extra });
+  const base = { "/content/packs/x/cards.generated.json": [{ code: "X1", name: "Thing", type: "investigator", faction: "neutral", pack: "x" }] };
+  it("a hand-written definition replaces the generated one with the same code", () => {
+    const files = { ...base, "/content/investigators-generated/X1.json": inv({ deckSize: 40, generated: true }), "/content/investigators/X1.json": inv({ deckSize: 30 }) };
+    const { db: d, errors } = buildContent(files, {});
+    expect(errors).toEqual([]);
+    expect(d.investigators.X1.deckSize).toBe(30);
+  });
+  it("reads generated decks too", () => {
+    const files = { ...base, "/content/investigators-generated/X1.json": inv(), "/content/decks-generated/X1-starter.json": { id: "X1-starter", name: "S", investigator: "X1", cards: {} } };
+    expect(buildContent(files, {}).db.decks["X1-starter"]).toBeDefined();
+  });
+  it("does not look for the cards of a pack that is not loaded yet", () => {
+    const files = { "/content/investigators-generated/X1.json": inv({ pack: "lazy", signatures: ["L1"] }), "/content/decks-generated/X1-starter.json": { id: "X1-starter", name: "S", investigator: "X1", cards: { L2: 1 } } };
+    expect(buildContent(files, {}, ["lazy"]).errors).toEqual([]);
+  });
+  it("defines Zoey Samaras with her signatures, weakness, options and starter deck", () => {
+    expect(db.investigators["02001"]).toMatchObject({ deckSize: 30, signatures: ["02006"], weaknesses: ["02007"], generated: true });
+    expect(db.investigators["02001"].deckOptions).toHaveLength(2);
+    expect(db.decks["02001-starter"]).toMatchObject({ investigator: "02001", randomBasicWeakness: true });
+  });
+  it("leaves the five core investigators hand-written", () => {
+    for (const code of ["01001", "01002", "01003", "01004", "01005"]) expect(db.investigators[code].generated).toBeUndefined();
+  });
+});
+
 describe("ArkhamDB import mapping", () => {
   it("parses keywords, uses and slots", () => {
     expect(parseKeywords("<b>Prey</b> - Highest [combat].\nHunter. Retaliate.", "enemy")).toEqual(["hunter", "retaliate"]);

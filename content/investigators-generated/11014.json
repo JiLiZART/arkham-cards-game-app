@@ -1,0 +1,52 @@
+{
+ "code": "11014",
+ "name": "Gloria Goldberg",
+ "subname": "The Writer",
+ "faction": "mystic",
+ "pack": "tdc",
+ "generated": true,
+ "signatures": [
+  "11015"
+ ],
+ "weaknesses": [
+  "11016"
+ ],
+ "alternatives": {
+  "11015": [
+   "98020"
+  ],
+  "11016": [
+   "98021"
+  ]
+ },
+ "deckSize": 30,
+ "deckOptions": [
+  {
+   "faction": [
+    "mystic",
+    "neutral"
+   ],
+   "level": {
+    "min": 0,
+    "max": 5
+   }
+  },
+  {
+   "level": {
+    "min": 0,
+    "max": 1
+   },
+   "type": [
+    "event",
+    "skill"
+   ],
+   "name": "Secondary Class",
+   "limit": 10,
+   "faction_select": [
+    "guardian",
+    "seeker",
+    "rogue"
+   ]
+  }
+ ]
+}
