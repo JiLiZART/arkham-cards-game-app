@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { db } from "../engine/testkit";
+import { ENGINE_VERSION } from "../engine/engine";
 import { ANIMATED, canUndo, createGameStore, HELD, heldCards, holdsForTap, needsNext, SAVE_KEY, type Storage } from "./store";
 
 const mem = (): Storage & { data: Map<string, string> } => {
@@ -201,5 +202,63 @@ describe("pace and held events", () => {
     expect(needsNext(ev("attack"), "tap", false)).toBe(true);
     expect(needsNext(ev("attack"), "normal", false)).toBe(false);
     expect(holdsForTap(ev("attack"), "slow")).toBe(false);
+  });
+});
+
+describe("game report", () => {
+  it("holds the replay log, the campaign, the settings, the view and the pending prompt, and the build", () => {
+    const s = start(mem());
+    begin(s);
+    s.getState().skipEvents();
+    s.getState().setPrivacy(false);
+    s.getState().setPace("slow");
+    s.getState().setDrawByHand(false);
+    const r = JSON.parse(s.getState().exportReport());
+    const g = s.getState().game!;
+    expect(r.version).toBe(ENGINE_VERSION);
+    expect(typeof r.app).toBe("string");
+    expect(r.setup).toEqual(s.getState().setup);
+    expect(r.actions).toEqual(s.getState().actions);
+    expect(r.campaign.campaignId).toBe("night-of-the-zealot");
+    expect(r.settings).toEqual({ locale: "en", privacy: false, drawByHand: false, pace: "slow" });
+    expect(r.view).toEqual({ viewing: null });
+    expect(r.pending).toEqual({ inv: g.pending!.inv, kind: g.pending!.kind, prompt: g.pending!.prompt });
+    expect(r.where).toEqual({ scenario: g.scenarioId, round: g.round, phase: g.phase });
+  });
+
+  it("a pasted report gives the same table in a fresh store: game, settings, campaign, pending", () => {
+    const a = start(mem());
+    begin(a);
+    a.getState().skipEvents();
+    a.getState().choose(JSON.stringify({ kind: "draw" }));
+    a.getState().skipEvents();
+    a.getState().setPrivacy(false);
+    a.getState().setPace("tap");
+    const report = a.getState().exportReport();
+    const b = createGameStore(db, mem());
+    b.getState().importReport(report);
+    expect(b.getState().game).toEqual(a.getState().game);
+    expect(b.getState().actions).toEqual(a.getState().actions);
+    expect(b.getState().campaign).toEqual(a.getState().campaign);
+    expect(b.getState().screen).toBe("game");
+    expect([b.getState().privacy, b.getState().pace]).toEqual([false, "tap"]);
+    expect(b.getState().game!.pending).toEqual(a.getState().game!.pending);
+  });
+
+  it("a plain action log still loads as a report, with the settings left alone", () => {
+    const a = start(mem());
+    begin(a);
+    const b = createGameStore(db, mem());
+    b.getState().setPace("slow");
+    b.getState().importReport(a.getState().exportLog());
+    expect(b.getState().game).toEqual(a.getState().game);
+    expect(b.getState().pace).toBe("slow");
+  });
+
+  it("text that isn't a report is refused in plain words", () => {
+    const b = createGameStore(db, mem());
+    expect(() => b.getState().importReport("{nope")).toThrow(/not valid JSON/i);
+    expect(() => b.getState().importReport(JSON.stringify({ hello: 1 }))).toThrow(/not a game report/i);
+    expect(b.getState().game).toBeNull();
   });
 });

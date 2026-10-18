@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vitest/config";
 
@@ -14,7 +15,11 @@ const cardProxy = {
   },
 };
 
+// the build's version, shown in bug reports (the Debug panel's Copy report)
+const appVersion = (JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf8")) as { version: string }).version;
+
 export default defineConfig({
+  define: { "import.meta.env.VITE_APP_VERSION": JSON.stringify(appVersion) },
   // GitHub Pages serves the site under /<repo>/ (the deploy workflow sets PAGES_BASE); locally it is /
   base: process.env.PAGES_BASE ?? "/",
   plugins: [react()],

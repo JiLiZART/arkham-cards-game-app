@@ -9,8 +9,8 @@
 
 ## 3. The game report
 
-- [ ] 3.1 `store.test.ts` first: `exportReport()` JSON holds version, app, setup, actions, campaign, settings, view and pending; `importReport` of it (on a fresh store) gives the same game state, settings and pending. Then `exportReport`/`importReport` in `src/ui/store.ts`; `VITE_APP_VERSION` via `define` in `vite.config.ts` from `package.json`.
-- [ ] 3.2 DebugPanel (`src/ui/hud/Hud.tsx`): **Copy report** (clipboard, fallback to the selected text box) and **Paste report…** (textarea + Load, errors in the panel), strings in en and ru. Browser (in `check-mythos-test.js`): Copy report in the stuck state (clipboard permission granted), reload, Paste report… → the same round, phase, pending and hands.
+- [x] 3.1 `store.test.ts` first: `exportReport()` JSON holds version, app, setup, actions, campaign, settings, view and pending; `importReport` of it (on a fresh store) gives the same game state, settings and pending. Then `exportReport`/`importReport` in `src/ui/store.ts`; `VITE_APP_VERSION` via `define` in `vite.config.ts` from `package.json`.
+- [x] 3.2 DebugPanel (`src/ui/hud/Hud.tsx`): **Copy report** (clipboard, fallback to the selected text box) and **Paste report…** (textarea + Load, errors in the panel), strings in en and ru. Browser (in `check-mythos-test.js`): Copy report in the stuck state (clipboard permission granted), reload, Paste report… → the same round, phase, pending and hands.
 
 ## 4. Verification and docs
 

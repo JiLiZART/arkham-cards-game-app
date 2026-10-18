@@ -406,5 +406,11 @@
   "deckEditor.event": "Events",
   "deckEditor.skill": "Skills",
   "deckEditor.remove": "Remove {card}",
-  "deckEditor.add": "Add {card}"
+  "deckEditor.add": "Add {card}",
+  "debug.copyReport": "Copy report",
+  "debug.pasteReport": "Paste report…",
+  "debug.copied": "Copied: paste it into your message",
+  "debug.copyRefused": "The browser refused the clipboard: copy the selected text by hand",
+  "debug.pastePlaceholder": "Paste a game report here",
+  "debug.load": "Load"
 }

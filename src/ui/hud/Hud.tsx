@@ -357,6 +357,15 @@ function DebugPanel() {
   const exportLog = useGame((s) => s.exportLog);
   const importLog = useGame((s) => s.importLog);
   const file = useRef<HTMLInputElement>(null);
+  const exportReport = useGame((s) => s.exportReport);
+  const importReport = useGame((s) => s.importReport);
+  // the bug report: copied to the clipboard (or shown selected when the browser refuses), or pasted back in to recreate a table
+  const [copied, setCopied] = useState<"ok" | "manual" | null>(null);
+  const [manual, setManual] = useState("");
+  const [pasting, setPasting] = useState(false);
+  const [pasted, setPasted] = useState("");
+  const [pasteError, setPasteError] = useState<string | null>(null);
+  const manualBox = useRef<HTMLTextAreaElement>(null);
   const json = useMemo(() => (panel === "debug" ? JSON.stringify({ ...game, log: `(${game.log.length} entries)` }, null, 1) : ""), [game, panel]);
   if (panel !== "debug") return null;
   const download = () => {
@@ -366,6 +375,29 @@ function DebugPanel() {
     a.download = `arkham-${game.scenarioId}-${setup?.seed}.json`;
     a.click();
     URL.revokeObjectURL(a.href);
+  };
+  const copyReport = async () => {
+    const text = exportReport();
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied("ok");
+      setManual("");
+    } catch {
+      // clipboard refused (an insecure page, a blocked permission): show it selected, ready to copy by hand
+      setManual(text);
+      setCopied("manual");
+      setTimeout(() => manualBox.current?.select(), 0);
+    }
+  };
+  const loadReport = () => {
+    try {
+      importReport(pasted);
+      setPasteError(null);
+      setPasting(false);
+      setPasted("");
+    } catch (err) {
+      setPasteError((err as Error).message);
+    }
   };
   return (
     <div className="side-panel debug">
@@ -397,6 +429,26 @@ function DebugPanel() {
           }}
         />
       </div>
+      <div className="row">
+        <button className="primary" onClick={copyReport}>{tr("debug.copyReport")}</button>
+        <button onClick={() => { setPasting(!pasting); setPasteError(null); }}>{tr("debug.pasteReport")}</button>
+        {copied === "ok" && <span className="report-ok">{tr("debug.copied")}</span>}
+      </div>
+      {copied === "manual" && (
+        <div className="report-copy">
+          <div className="problems">{tr("debug.copyRefused")}</div>
+          <textarea ref={manualBox} readOnly value={manual} onFocus={(e) => e.currentTarget.select()} aria-label={tr("debug.copyReport")} />
+        </div>
+      )}
+      {pasting && (
+        <div className="report-paste">
+          <textarea value={pasted} placeholder={tr("debug.pastePlaceholder")} onChange={(e) => setPasted(e.target.value)} aria-label={tr("debug.pasteReport")} />
+          <div className="row">
+            <button className="primary" disabled={!pasted.trim()} onClick={loadReport}>{tr("debug.load")}</button>
+          </div>
+          {pasteError && <div className="problems">{pasteError}</div>}
+        </div>
+      )}
       <textarea readOnly value={json} />
     </div>
   );

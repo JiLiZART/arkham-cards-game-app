@@ -10,6 +10,8 @@ import { useView } from "./view";
 import type { Action, ContentDb, GameEvent, GameSetup, GameState, InvId } from "../engine/types";
 
 export const SAVE_KEY = "ah:save";
+/** the build, for bug reports (set from package.json by vite.config.ts) */
+export const APP_VERSION = (import.meta.env?.VITE_APP_VERSION as string | undefined) ?? "dev";
 
 /** events worth a beat of animation; the rest update the table instantly */
 export const ANIMATED = new Set(["enemyMove", "token", "testResult", "encounter", "weakness", "attack", "spawn", "agendaAdvance", "actAdvance", "resolution", "enemyDefeated", "defeated", "damage", "enemyDamage", "clues", "doom"]);
@@ -91,6 +93,10 @@ export interface UiState {
   autoStep(n?: number): void;
   exportLog(): string;
   importLog(json: string): void;
+  /** the replay log with what a bug report needs around it (settings, view, pending prompt, build) */
+  exportReport(): string;
+  /** load a pasted report (or a plain action log) and show its table; throws a plain message when it isn't one */
+  importReport(text: string): void;
 }
 
 export interface Storage {
@@ -305,6 +311,38 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage())
       exportLog() {
         const { setup, actions, campaign } = get();
         return JSON.stringify({ version: ENGINE_VERSION, setup, actions, campaign }, null, 1);
+      },
+
+      exportReport() {
+        const { setup, actions, campaign, game, locale, privacy, drawByHand, pace } = get();
+        return JSON.stringify(
+          {
+            version: ENGINE_VERSION,
+            app: APP_VERSION,
+            setup, actions, campaign,
+            settings: { locale, privacy, drawByHand, pace },
+            view: { viewing: useView.getState().viewing },
+            pending: game?.pending ? { inv: game.pending.inv, kind: game.pending.kind, prompt: game.pending.prompt } : null,
+            where: game ? { scenario: game.scenarioId, round: game.round, phase: game.phase } : null,
+          },
+          null,
+          1,
+        );
+      },
+
+      importReport(text) {
+        let data: { setup?: GameSetup; actions?: Action[]; settings?: Partial<Save["settings"]>; view?: { viewing?: InvId | null } };
+        try {
+          data = JSON.parse(text);
+        } catch {
+          throw new Error("This text is not valid JSON; paste the whole report.");
+        }
+        if (!data || typeof data !== "object" || !data.setup || !Array.isArray(data.actions)) throw new Error("This is not a game report (it has no setup and actions).");
+        const st = data.settings;
+        if (st) set({ ...(typeof st.locale === "string" ? { locale: st.locale } : {}), ...(typeof st.privacy === "boolean" ? { privacy: st.privacy } : {}), ...(typeof st.drawByHand === "boolean" ? { drawByHand: st.drawByHand } : {}), ...(st.pace ? { pace: st.pace } : {}) });
+        get().importLog(text);
+        const viewing = data.view?.viewing ?? null;
+        useView.setState({ viewing: viewing && get().game?.invs[viewing] ? viewing : null });
       },
 
       importLog(json) {

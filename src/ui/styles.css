@@ -696,3 +696,6 @@ button.danger { border-color: var(--bad); color: var(--bad); }
 .de-foot .de-name-input { flex: 1; min-width: 160px; max-width: 320px; }
 .de-foot button { min-height: 48px; min-width: 110px; }
 @media (max-width: 760px) { .de-cols { grid-template-columns: 1fr; } }
+.side-panel.debug .report-paste textarea, .side-panel.debug .report-copy textarea { height: 110px; }
+.side-panel.debug .row button { min-height: 44px; }
+.report-ok { color: #7fe08a; align-self: center; }

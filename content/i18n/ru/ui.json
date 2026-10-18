@@ -390,5 +390,11 @@
   "deckEditor.event": "События",
   "deckEditor.skill": "Навыки",
   "deckEditor.remove": "Убрать {card}",
-  "deckEditor.add": "Добавить {card}"
+  "deckEditor.add": "Добавить {card}",
+  "debug.copyReport": "Копировать отчёт",
+  "debug.pasteReport": "Вставить отчёт…",
+  "debug.copied": "Скопировано: вставьте в сообщение",
+  "debug.copyRefused": "Браузер не дал доступ к буферу обмена: скопируйте выделенный текст вручную",
+  "debug.pastePlaceholder": "Вставьте сюда отчёт об игре",
+  "debug.load": "Загрузить"
 }
