@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { t } from "../../content/i18n";
 import type { GameEvent } from "../../engine/types";
-import { captionIndex } from "../feed";
+import { captionIndex, captionStageBusy } from "../feed";
 import { db, useGame } from "../context";
 import { needsNext } from "../store";
 import { useView } from "../view";
@@ -12,7 +12,7 @@ export function useCaption(): number | null {
   const { shown, game } = useFeedEntries();
   const current = useGame((s) => s.current);
   const queue = useGame((s) => s.queue);
-  const stageBusy = useView((s) => s.stage.length > 0);
+  const stageBusy = useView((s) => captionStageBusy(s.stage));
   return captionIndex(game.log, current, queue, shown, stageBusy, game.pending?.kind ?? null);
 }
 

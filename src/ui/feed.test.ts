@@ -3,7 +3,7 @@ import { botChoice } from "../engine/bot";
 import { dispatch } from "../engine/engine";
 import { db, giveCard, mutate, pick, putEnemy, skipMulligans, start } from "../engine/testkit";
 import type { GameEvent } from "../engine/types";
-import { captionIndex, feedEntry, FLOAT_KINDS, floatLife, HIDDEN, mergeLive, promptParts, shownCount, templateKey, type Part } from "./feed";
+import { captionIndex, captionStageBusy, feedEntry, FLOAT_KINDS, floatLife, HIDDEN, mergeLive, promptParts, shownCount, templateKey, type Part } from "./feed";
 
 const last = (log: GameEvent[], type: string) => [...log].reverse().find((e) => e.type === type)!;
 const placeholders = (s: string) => (s.match(/\{[\w:]+\}/g) ?? []).sort();
@@ -194,6 +194,25 @@ describe("merged live feed", () => {
     // drawn cards in the showcase after upkeep: still captioned; a phase pause: not
     expect(captionIndex(log.slice(0, 2), null, [], 2, true, "turn")).toBe(0);
     expect(captionIndex(log.slice(0, 2), null, [], 2, true, "phase")).toBe(null);
+  });
+});
+
+describe("captionStageBusy", () => {
+  const ev = (type: string, step?: string): GameEvent => ({ type, text: "", inv: null, card: null, data: step ? { step } : {} });
+  it("the skill-test screen's hold doesn't keep the caption; anything else on the stage does", () => {
+    expect(captionStageBusy([])).toBe(false);
+    expect(captionStageBusy(["test:1"])).toBe(false);
+    expect(captionStageBusy(["showcase"])).toBe(true);
+    expect(captionStageBusy(["event:4", "test:1"])).toBe(true);
+    expect(captionStageBusy(["pause:7"])).toBe(true);
+  });
+
+  it("a mythos treachery test: once its commit window is offered the caption gives way to the bar (Done)", () => {
+    // the log of a mythos draw: step caption, then the draw; the test screen holds the stage while the window waits
+    const log = [ev("phase"), ev("step", "mythos"), ev("encounter")];
+    expect(captionIndex(log, null, [], 3, captionStageBusy(["test:1"]), "commit")).toBe(null);
+    // the same stage with the hand showcase still up keeps its caption
+    expect(captionIndex(log, null, [], 3, captionStageBusy(["showcase"]), "turn")).toBe(1);
   });
 });
 

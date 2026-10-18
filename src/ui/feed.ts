@@ -140,6 +140,12 @@ export function shownCount(logLength: number, current: { logIndex: number } | nu
 }
 
 /**
+ * Does the stage hold the middle of the screen with something the caption should stay for? The skill-test screen is the
+ * player's interaction surface (its commit window needs the instruction bar's Done), so its hold doesn't count.
+ */
+export const captionStageBusy = (stage: string[]) => stage.some((k) => !k.startsWith("test:"));
+
+/**
  * The log index of the step to caption now, or null: the latest step of the current phase at or before the playing
  * event (a step goes on across the choices inside it, such as a reaction to an attack), while events play or are
  * queued, or while something else holds the middle (drawn cards in the showcase), except during a phase pause,
