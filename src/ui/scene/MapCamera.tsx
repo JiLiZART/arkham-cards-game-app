@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { reducedMotion } from "../arrivals";
 import { clampCam, fitCam, focusCam, panBy, zoomAt, type Cam } from "../camera";
 import type { Bounds, Vec3 } from "../layout";
-import { HUD_INSETS } from "../safeArea";
+import { insetsFor, safeAreaInsets, useLayoutMode } from "../layoutMode";
 import { useView } from "../view";
 
 /** pointer state shared with the scene: a press that panned must not count as a click */
@@ -24,10 +24,14 @@ export function MapCamera({ bounds, locH, focus, focusKey }: { bounds: Bounds; l
   const view = { w: size.width, h: size.height };
   const viewRef = useRef(view);
   viewRef.current = view;
+  // the HUD around the map depends on the layout (ADR-0005): the phone's thin bar and drawers leave most of it free
+  const mode = useLayoutMode();
+  const insets = useRef(insetsFor(mode));
+  insets.current = insetsFor(mode, mode === "phone" ? safeAreaInsets() : undefined);
   const geo = useRef({ bounds, locH });
   geo.current = { bounds, locH };
-  const home = (): Cam => (focus ? focusCam(focus[0], focus[2], locH, viewRef.current, HUD_INSETS) : fitCam(bounds, viewRef.current, HUD_INSETS));
-  const clamp = (c: Cam) => clampCam(c, geo.current.bounds, viewRef.current, geo.current.locH, HUD_INSETS);
+  const home = (): Cam => (focus ? focusCam(focus[0], focus[2], locH, viewRef.current, insets.current) : fitCam(bounds, viewRef.current, insets.current));
+  const clamp = (c: Cam) => clampCam(c, geo.current.bounds, viewRef.current, geo.current.locH, insets.current);
   const cur = useRef<Cam | null>(null);
   const target = useRef<Cam>(home());
   if (!cur.current) cur.current = clamp(target.current);
@@ -44,7 +48,7 @@ export function MapCamera({ bounds, locH, focus, focusKey }: { bounds: Bounds; l
   const cmd = useView((s) => s.camCmd);
   useEffect(() => {
     if (!cmd) return;
-    target.current = cmd.kind === "focus" ? focusRef.current() : fitCam(geo.current.bounds, viewRef.current, HUD_INSETS);
+    target.current = cmd.kind === "focus" ? focusRef.current() : fitCam(geo.current.bounds, viewRef.current, insets.current);
   }, [cmd]);
 
   useEffect(() => {

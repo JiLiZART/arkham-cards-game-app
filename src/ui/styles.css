@@ -699,3 +699,75 @@ button.danger { border-color: var(--bad); color: var(--bad); }
 .side-panel.debug .report-paste textarea, .side-panel.debug .report-copy textarea { height: 110px; }
 .side-panel.debug .row button { min-height: 44px; }
 .report-ok { color: #7fe08a; align-self: center; }
+
+/* ---------- the phone layout (ADR-0005): every rule below hangs off .game.phone ---------- */
+.game.phone { --safe-l: env(safe-area-inset-left, 0px); --safe-r: env(safe-area-inset-right, 0px); --safe-b: env(safe-area-inset-bottom, 0px); }
+.game.phone .topbar { height: 36px; flex-wrap: nowrap; gap: 8px; padding: 0 calc(6px + var(--safe-r)) 0 calc(6px + var(--safe-l)); overflow: visible; }
+.game.phone .ribbon { flex-wrap: nowrap; gap: 2px; font-size: 14px; }
+.game.phone .ribbon-scen { margin-right: 4px; gap: 4px; }
+.game.phone .ribbon-scen b, .game.phone .ribbon-phase .full { display: none; }
+.game.phone .ribbon-phase .short { display: inline; }
+.game.phone .ribbon-phase { padding: 1px 6px; }
+.game.phone .ribbon-seg + .ribbon-seg::before { margin-right: 0; }
+.game.phone .player-bar { gap: 2px; }
+.game.phone .pb-avatar { flex-direction: row; gap: 4px; padding: 0 4px; zoom: 0.72; }
+.game.phone .pb-back { padding: 2px 8px; font-size: 13px; }
+.game.phone .topbar .buttons { gap: 2px; }
+.game.phone .topbar .buttons > button { position: relative; height: 36px; min-width: 44px; padding: 0 6px; font-size: 16px; display: inline-flex; align-items: center; justify-content: center; }
+/* the bar is 36 px tall; its buttons still take a 44 px tap */
+.game.phone .topbar .buttons > button::after { content: ""; position: absolute; inset: -5px 0; }
+/* the avatars are drawn at 72 %: their tap reaches 44 px the same way (in their zoomed units) */
+.game.phone .pb-avatar::after { content: ""; position: absolute; inset: -12px 0; }
+.game.phone .topbar .chaos-bag { width: 44px; height: 36px; filter: none; }
+.game.phone .topbar .chaos-bag .svg-icon { width: 30px; height: 30px; }
+.game.phone .topbar .chaos-bag .pile-count { font-size: 11px; right: 0; bottom: 0; }
+.drawer { position: fixed; top: 0; bottom: 0; z-index: 70; width: min(320px, 72vw); background: var(--panel); border: 1px solid #5a4a30; box-shadow: 0 0 30px #000c; overflow-y: auto; transition: transform 0.22s ease-out; display: flex; flex-direction: column; gap: 10px; padding: 10px; }
+.drawer.left { left: 0; padding-left: calc(10px + var(--safe-l)); transform: translateX(-102%); border-radius: 0 14px 14px 0; }
+.drawer.right { right: 0; padding-right: calc(10px + var(--safe-r)); transform: translateX(102%); border-radius: 14px 0 0 14px; width: min(360px, 78vw); }
+.drawer.open { transform: none; }
+@media (prefers-reduced-motion: reduce) { .drawer { transition: none; } }
+.drawer-shade { position: fixed; inset: 0; z-index: 69; background: #0008; }
+.drawer-handle { position: fixed; z-index: 48; width: 44px; height: 64px; padding: 0; font-size: 26px; background: rgba(30, 24, 16, 0.85); border: 1px solid #5a4a30; color: var(--gold); }
+.drawer-handle.left { left: var(--safe-l); top: 40px; height: 44px; border-radius: 0 12px 12px 0; border-left: 0; }
+.drawer-handle.right { right: var(--safe-r); top: 40px; height: 44px; border-radius: 12px 0 0 12px; border-right: 0; }
+.drawer .scenario-panel, .drawer .pile-column { position: static; }
+.drawer .scenario-panel { flex-wrap: wrap; }
+.drawer .pile-column { width: auto; }
+.drawer .feed.journal { flex: 1; min-height: 0; }
+.game.phone .play-strip.column { --sw: 44px; top: 88px; bottom: 132px; left: auto; right: calc(2px + var(--safe-r)); width: calc(var(--sw) + 10px); flex-direction: column; justify-content: flex-start; align-items: center; gap: 6px; padding: 4px; overflow-y: auto; overflow-x: hidden; background: rgba(12, 9, 6, 0.7); border: 1px solid #4a3b22; border-radius: 12px; pointer-events: auto; z-index: 47; }
+.game.phone .play-strip.column.open { width: calc(var(--sw) + 24px); }
+.game.phone .play-strip.column .strip-divider { width: 70%; height: 2px; align-self: center; margin: 2px 0; }
+.game.phone .play-strip.column .strip-actions { display: none; }
+.game.phone .play-strip.column.open .strip-slot { height: auto; display: flex; flex-direction: column; gap: 4px; align-items: center; }
+.game.phone .play-strip.column.open .strip-actions { display: flex; position: static; transform: none; }
+.game.phone .play-strip.column.open .strip-action { min-height: 44px; padding: 2px 8px; font-size: 13px; }
+.strip-handle { flex: none; width: 44px; height: 44px; padding: 0; font-size: 15px; }
+/* spans between the left tools and the strip column (a box at left: 50% could only grow to half the screen) */
+.game.phone .center-col { top: auto; bottom: calc(84px + var(--safe-b)); left: calc(56px + var(--safe-l)); right: calc(64px + var(--safe-r)); transform: none; max-width: none; gap: 4px; }
+.game.phone .instruction-bar { font-size: 15px; gap: 8px; padding: 2px 6px 2px 4px; border-radius: 16px; flex-wrap: wrap; justify-content: center; }
+.game.phone .instruction-bar .bar-buttons { flex-wrap: wrap; gap: 4px; }
+.game.phone .instruction-bar .rail-btn { min-height: 44px; min-width: 44px; padding: 2px 10px; font-size: 14px; justify-content: center; }
+/* one line on a phone: the actions as icons (their names in the tooltip), the answer (Done, End turn…) keeps its word */
+.game.phone .instruction-bar .rail-btn:not(.primary) .rail-label { display: none; }
+.game.phone .instruction-bar { flex-wrap: nowrap; }
+.game.phone .instruction-bar .fe-sentence, .game.phone .instruction-bar > :first-child { min-width: 0; }
+.game.phone .instruction-bar .rail-icon img, .game.phone .instruction-bar .rail-icon .svg-icon { width: 22px; height: 22px; }
+.game.phone .step-caption { font-size: 15px; padding: 4px 12px; }
+.game.phone .right-dock { left: calc(4px + var(--safe-l)); right: auto; bottom: calc(84px + var(--safe-b)); width: auto; gap: 4px; }
+.game.phone .right-dock .camera-buttons { flex-direction: column; gap: 4px; }
+.game.phone .right-dock button { min-width: 44px; min-height: 44px; padding: 0 8px; font-size: 18px; }
+.game.phone .right-dock .btn-word { display: none; }
+.game.phone .mulligan-row { left: 50%; bottom: calc(70px + var(--safe-b)); }
+.hand-drawer { position: fixed; left: 0; right: 0; bottom: 0; z-index: 46; padding: 0; border: 0; background: transparent; cursor: pointer; }
+.hand-drawer:not(.open) { height: calc(80px + var(--safe-b, 0px)); overflow: hidden; }
+.game.testing .hand-drawer:not(.open) { z-index: 52; }
+.peek-card { position: absolute; border-radius: 8px; overflow: hidden; box-shadow: 0 -2px 8px #000c; pointer-events: none; transition: bottom 0.2s ease-out; }
+.peek-card > *, .hand-card > .text-face, .hand-card > img { width: 100%; height: 100%; display: block; object-fit: cover; }
+.peek-card.legal { box-shadow: 0 0 0 2px #7fe08a, 0 0 12px #7fe08acc; }
+.hand-drawer.open { top: 36px; z-index: 66; cursor: default; pointer-events: none; }
+.hand-drawer.open .hand-card { pointer-events: auto; }
+.hand-shade { z-index: 65; }
+.hand-card { position: absolute; bottom: calc(8px + var(--safe-b, 0px)); padding: 0; border: 0; border-radius: 12px; overflow: visible; background: transparent; transform-origin: 50% 100%; box-shadow: 0 8px 24px #000c; }
+.hand-card > * { border-radius: 12px; }
+.hand-card.legal { box-shadow: 0 0 0 3px #7fe08a, 0 0 18px #7fe08acc; }
+.hand-card.dimmed, .peek-card.dimmed { filter: brightness(0.45); }

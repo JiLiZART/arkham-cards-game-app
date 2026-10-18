@@ -18,6 +18,9 @@ import { Modals } from "./Modals";
 import { RevealOverlay } from "./Reveal";
 import { ChaosBagButton, PileColumn, PlayStrip, ScenarioPanel } from "./Panels";
 import { PlayerBar } from "./PlayerBar";
+import { Drawer } from "./Drawer";
+import { Glyph } from "../Icon";
+import { useLayoutMode } from "../layoutMode";
 import { StatBar } from "./Stats";
 import { MulliganRow } from "./MulliganRow";
 import { IntroOverlay } from "./IntroOverlay";
@@ -249,12 +252,13 @@ function JournalButton() {
   );
 }
 
-function TopBar() {
+function TopBar({ phone }: { phone: boolean }) {
   // the button labels follow the language
   useGame((s) => s.locale);
   const toggle = useView((s) => s.toggle);
   const muted = useGame((s) => s.muted);
   const setMuted = useGame((s) => s.setMuted);
+  const journal = useView((s) => s.drawer === "right");
   return (
     <div className="topbar">
       <Ribbon />
@@ -263,9 +267,22 @@ function TopBar() {
         <button className={`mute-btn ${muted ? "muted" : ""}`} onClick={() => setMuted(!muted)} title={tr(muted ? "hud.unmute" : "hud.mute")} aria-pressed={muted}>
           {muted ? "🔇" : "🔊"}
         </button>
-        <JournalButton />
-        <button onClick={() => toggle("debug")}>{tr("hud.debug")}</button>
-        <button onClick={() => gameStore.setState({ screen: "title" })}>{tr("hud.menu")}</button>
+        {phone ? (
+          <>
+            <button className={`icon-btn ${journal ? "primary" : ""}`} onClick={() => useView.getState().setDrawer(journal ? null : "right")} title={tr("hud.journal")} aria-label={tr("hud.journal")} aria-pressed={journal}>
+              <Glyph name="tomes" size={22} title="" />
+            </button>
+            <ChaosBagButton />
+          </>
+        ) : (
+          <JournalButton />
+        )}
+        <button className={phone ? "icon-btn" : ""} onClick={() => toggle("debug")} title={tr("hud.debug")} aria-label={tr("hud.debug")}>
+          {phone ? "{ }" : tr("hud.debug")}
+        </button>
+        <button className={phone ? "icon-btn" : ""} onClick={() => gameStore.setState({ screen: "title" })} title={tr("hud.menu")} aria-label={tr("hud.menu")}>
+          {phone ? "☰" : tr("hud.menu")}
+        </button>
       </div>
     </div>
   );
@@ -490,16 +507,24 @@ function useViewReset() {
 
 export function Hud() {
   useViewReset();
+  // the phone layout (ADR-0005): one thin bar, the panels and the Journal in drawers, the rail's actions in the bar
+  const phone = useLayoutMode() === "phone";
   return (
     <>
-      <TopBar />
-      <ScenarioPanel />
-      <PileColumn />
-      <div className="right-col">
-        <ChaosBagButton />
-        <Feed />
-      </div>
-      <StatBar />
+      <TopBar phone={phone} />
+      {phone ? (
+        <PhoneDrawers />
+      ) : (
+        <>
+          <ScenarioPanel />
+          <PileColumn />
+          <div className="right-col">
+            <ChaosBagButton />
+            <Feed />
+          </div>
+          <StatBar />
+        </>
+      )}
       <PlayStrip />
       <MulliganRow />
       <div className="center-col">
@@ -509,7 +534,7 @@ export function Hud() {
       <div className="right-dock">
         <CameraButtons />
         <UndoButton />
-        <ActionRail />
+        {!phone && <ActionRail />}
       </div>
       <HoverCard />
       <Modals />
@@ -529,6 +554,27 @@ export function Hud() {
       <HandOff />
       <ScenarioEnd />
       <ErrorToast />
+    </>
+  );
+}
+
+/** the phone's drawers: the act, agenda and piles on the left, the Journal on the right (opened from its icon in the bar too) */
+function PhoneDrawers() {
+  useGame((s) => s.locale);
+  const right = useView((s) => s.drawer === "right");
+  // the right drawer is the Journal: the full history while it is open
+  useEffect(() => {
+    useView.getState().setFeedMode(right ? "journal" : "live");
+  }, [right]);
+  return (
+    <>
+      <Drawer edge="left" handle="›" label={tr("phone.panels")}>
+        <ScenarioPanel />
+        <PileColumn />
+      </Drawer>
+      <Drawer edge="right" handle="‹" label={tr("hud.journal")}>
+        {right && <Feed />}
+      </Drawer>
     </>
   );
 }

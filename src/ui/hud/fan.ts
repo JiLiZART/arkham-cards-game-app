@@ -91,3 +91,28 @@ export function showBox(vw: number, vh: number): Box {
   const w = (h * FAN_CARD_W) / FAN_CARD_H;
   return { x: vw * 0.6 - w / 2, y: Math.max(60, (vh - h) / 2 - 40), w, h };
 }
+
+// ---------- the phone's hand drawer (ADR-0005) ----------
+/** collapsed, the top of each card peeks this far above the bottom edge; playable cards this much higher */
+export const PEEK = 60;
+export const PEEK_RAISE = 20;
+/** the peeking cards' size */
+const PEEK_W = 86;
+
+/** the collapsed drawer's row: each card's left edge and width, and how much of it shows */
+export function peekLayout(n: number, vw: number, legal: boolean[]): { x: number; w: number; visible: number }[] {
+  if (n <= 0) return [];
+  const room = vw - 24;
+  const step = n > 1 ? Math.min(PEEK_W + 6, (room - PEEK_W) / (n - 1)) : 0;
+  const total = PEEK_W + step * (n - 1);
+  const left = (vw - total) / 2;
+  return Array.from({ length: n }, (_, i) => ({ x: left + i * step, w: PEEK_W, visible: PEEK + (legal[i] ? PEEK_RAISE : 0) }));
+}
+
+/** the open drawer's fan: cards as tall as the short screen allows (at least 220 px), spread over the width */
+export function openHandLayout(n: number, vw: number, vh: number): { w: number; h: number; slots: FanSlot[] } {
+  const h = Math.max(220, Math.min(300, vh - 36 - 48));
+  const w = h * (FAN_CARD_W / FAN_CARD_H);
+  const slots = fanLayout(n, vw - 24, w).map((s) => ({ ...s, x: s.x + 12 }));
+  return { w, h, slots };
+}

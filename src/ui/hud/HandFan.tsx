@@ -33,6 +33,27 @@ function useViewportWidth() {
 }
 
 /**
+ * The hand on screen (shared by the desktop fan and the phone's hand drawer): the investigator being looked at
+ * (ADR-0004), their cards when the hand isn't private, and each card's options when that investigator decides.
+ */
+export function useHand() {
+  const game = useGame((s) => s.game) as GameState;
+  const privacy = useGame((s) => s.privacy);
+  const revealedFor = useGame((s) => s.revealedFor);
+  const busy = useGame((s) => !!s.current || s.queue.length > 0);
+  const viewer = useShown();
+  const offered = useChoicesOffered();
+  const visible = handVisible(privacy, game.order.length, viewer, revealedFor);
+  // cards picked for the mulligan sit on the "to redraw" row instead
+  const picks = mulliganPicks(game, viewer);
+  // cards just drawn wait in the showcase until sent on
+  const showcase = useView((s) => s.showcase);
+  const hand = viewer && visible ? game.invs[viewer].hand.filter((h) => !picks.includes(h) && !showcase.includes(h)) : [];
+  const optionsFor = (id: InstId): ChoiceOption[] => (!busy && offered && game.pending?.options.filter((o) => o.card === id)) || [];
+  return { viewer, visible, hand, optionsFor };
+}
+
+/**
  * The viewing investigator's hand as a Hearthstone-style fan along the bottom edge. Moving the pointer along it
  * magnifies like the macOS Dock: the card under the pointer grows most, its neighbours a little, all eased per frame.
  */
@@ -40,8 +61,6 @@ export function HandFan() {
   const game = useGame((s) => s.game) as GameState;
   const locale = useGame((s) => s.locale);
   const privacy = useGame((s) => s.privacy);
-  const revealedFor = useGame((s) => s.revealedFor);
-  const busy = useGame((s) => !!s.current || s.queue.length > 0);
   const choose = useGame((s) => s.choose);
   const openMenu = useView((s) => s.openMenu);
   const setHovered = useView((s) => s.setHovered);
@@ -53,16 +72,7 @@ export function HandFan() {
   // the card the Dock is centred on (nearest the pointer, or keyboard-focused): it gets the details column
   const [focus, setFocus] = useState<InstId | null>(null);
 
-  // the investigator being looked at (ADR-0004): their hand only when it isn't private; options only for the decider
-  const viewer = useShown();
-  const offered = useChoicesOffered();
-  const visible = handVisible(privacy, game.order.length, viewer, revealedFor);
-  // cards picked for the mulligan sit on the "to redraw" row instead
-  const picks = mulliganPicks(game, viewer);
-  // cards just drawn wait in the showcase until sent on
-  const showcase = useView((s) => s.showcase);
-  const hand = viewer && visible ? game.invs[viewer].hand.filter((h) => !picks.includes(h) && !showcase.includes(h)) : [];
-  const optionsFor = (id: InstId): ChoiceOption[] => (!busy && offered && game.pending?.options.filter((o) => o.card === id)) || [];
+  const { viewer, visible, hand, optionsFor } = useHand();
 
   const width = fanWidth(vw);
   const slots = fanLayout(hand.length, width);

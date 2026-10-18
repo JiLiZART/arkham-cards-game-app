@@ -62,3 +62,14 @@ export function deckPick(game: GameState, viewer: InvId | null): InstId[] {
   };
   return cards.length && cards.every(own) ? cards : [];
 }
+
+/**
+ * The instruction bar's buttons. On the desktop: the options that answer the question (Done, Pass, End turn…). On the
+ * phone (ADR-0005) the bar also takes the rail's actions (no rail there) and the act's and agenda's options (their
+ * cards sit in the closed left drawer).
+ */
+export function inBar(o: ChoiceOption, s: GameState, viewer: InvId | null, mode: "desktop" | "phone"): boolean {
+  const home = optionHome(o, s, viewer);
+  if (home === "bar") return true;
+  return mode === "phone" && (home === "strip" || onRail(o, s, viewer));
+}

@@ -54,6 +54,9 @@ export interface ViewState {
   stage: string[];
   /** the investigator whose table is on screen when it isn't the deciding one (ADR-0004); null: the decider's */
   viewing: InvId | null;
+  /** the phone layout's open drawer (ADR-0005): the act, agenda and piles on the left, the Journal on the right, the hand at the bottom */
+  drawer: "left" | "right" | "hand" | null;
+  setDrawer(d: "left" | "right" | "hand" | null): void;
   setViewing(inv: InvId | null): void;
   /** the skill-test screen is up: the strip, the bar and the fan sit above it */
   testing: boolean;
@@ -89,6 +92,8 @@ export const useView = create<ViewState>((set, get) => ({
   stage: [],
   viewing: null,
   setViewing: (viewing) => set({ viewing }),
+  drawer: null,
+  setDrawer: (drawer) => set({ drawer }),
   testing: false,
   claimStage: (key) => !get().stage.includes(key) && set({ stage: [...get().stage, key] }),
   releaseStage: (key) => get().stage.includes(key) && set({ stage: get().stage.filter((k) => k !== key) }),

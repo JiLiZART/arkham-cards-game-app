@@ -1,4 +1,5 @@
-import { useLayoutEffect, useRef, type MouseEvent as ReactMouseEvent } from "react";
+import { useLayoutEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
+import { useLayoutMode } from "../layoutMode";
 import { cardText, t } from "../../content/i18n";
 import { actClueCost, doomInPlay } from "../../engine/rules/scenario";
 import type { GameState, InstId } from "../../engine/types";
@@ -260,6 +261,9 @@ export function PlayStrip() {
   const setup = useGame((s) => s.setup);
   const queue = useGame((s) => s.queue);
   const visible = !!viewer && handVisible(privacy, game.order.length, viewer, revealedFor);
+  // the phone (ADR-0005): a column of thumbnails on the right edge; a tap on its handle widens it to readable cards
+  const phone = useLayoutMode() === "phone";
+  const [open, setOpen] = useState(false);
   // new strip cards fly in from where they came from (before their rects are remembered below)
   useFlyIn(strip, visible, viewer, privacy && game.order.length > 1, RESOLVE_BOX, setup);
   const current = useGame((s) => s.current);
@@ -287,7 +291,7 @@ export function PlayStrip() {
     const el = strip.current;
     if (!el) return;
     const sideways = shown.filter((c) => c.exhausted).length;
-    const w = stripCardWidth(el.clientWidth, shown.length - sideways, sideways, assets.length && threats.length ? 1 : 0);
+    const w = phone ? (open ? 104 : 44) : stripCardWidth(el.clientWidth, shown.length - sideways, sideways, assets.length && threats.length ? 1 : 0);
     el.style.setProperty("--sw", `${w}px`);
     el.querySelectorAll<HTMLElement>("[data-card]").forEach((c) => rememberRect(c.dataset.card!, c));
   });
@@ -327,7 +331,12 @@ export function PlayStrip() {
     );
   };
   return (
-    <div className="play-strip" ref={strip}>
+    <div className={`play-strip ${phone ? `column ${open ? "open" : ""}` : ""}`} ref={strip}>
+      {phone && (
+        <button className="strip-handle" onClick={() => setOpen(!open)} aria-expanded={open} aria-label={tr("phone.strip")} title={tr("phone.strip")}>
+          {open ? "›" : "‹"} {shown.length}
+        </button>
+      )}
       {assets.map((c) => card(c.id, c.exhausted))}
       {threats.length > 0 && assets.length > 0 && <div className="strip-divider" />}
       {threats.map((c) => card(c.id, c.exhausted))}

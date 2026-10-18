@@ -98,3 +98,25 @@ describe("flight keyframes", () => {
     expect(b.y + b.h).toBeLessThan(900);
   });
 });
+
+describe("the phone's hand drawer", () => {
+  it("collapsed: the top 60 px of each card peeks, playable cards 20 px higher, within the screen", async () => {
+    const { peekLayout, PEEK, PEEK_RAISE } = await import("./fan");
+    const p = peekLayout(6, 852, [false, true, false, true, false, false]);
+    expect(p.map((c) => c.visible)).toEqual([PEEK, PEEK + PEEK_RAISE, PEEK, PEEK + PEEK_RAISE, PEEK, PEEK]);
+    expect(PEEK).toBe(60);
+    expect(PEEK_RAISE).toBe(20);
+    for (const c of p) expect(c.x).toBeGreaterThanOrEqual(0);
+    expect(p.at(-1)!.x + p.at(-1)!.w).toBeLessThanOrEqual(852);
+  });
+
+  it("open: cards at least 220 px tall, as tall as the short screen allows, and the row fits the width", async () => {
+    const { openHandLayout } = await import("./fan");
+    const o = openHandLayout(7, 852, 393);
+    expect(o.h).toBeGreaterThanOrEqual(220);
+    expect(o.h).toBeLessThanOrEqual(393 - 36 - 40);
+    expect(o.slots).toHaveLength(7);
+    expect(o.slots[0].x - o.w / 2).toBeGreaterThanOrEqual(0);
+    expect(o.slots.at(-1)!.x + o.w / 2).toBeLessThanOrEqual(852);
+  });
+});

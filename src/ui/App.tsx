@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { contentErrors } from "../content";
 import { gameStore, useGame } from "./context";
 import { HandFan } from "./hud/HandFan";
+import { HandDrawer } from "./hud/HandDrawer";
 import { Hud } from "./hud/Hud";
 import { CampaignLog } from "./menu/CampaignLog";
 import { HowTo } from "./menu/HowTo";
@@ -10,11 +11,13 @@ import { Title } from "./menu/Title";
 import { Wizard } from "./menu/NewGame";
 import { Table } from "./scene/Table";
 import { useView } from "./view";
+import { useLayout } from "./layoutMode";
 
 export function App() {
   const screen = useGame((s) => s.screen);
   const game = useGame((s) => s.game);
   const testing = useView((s) => s.testing);
+  const { mode } = useLayout();
   useEffect(() => {
     gameStore.getState().resume();
   }, []);
@@ -30,10 +33,10 @@ export function App() {
   }
   if (screen === "game" && game) {
     return (
-      <div className={`game ${testing ? "testing" : ""}`}>
+      <div className={`game ${mode} ${testing ? "testing" : ""}`}>
         <Table />
         <Hud />
-        <HandFan />
+        {mode === "phone" ? <HandDrawer /> : <HandFan />}
       </div>
     );
   }

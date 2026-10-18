@@ -412,5 +412,8 @@
   "debug.copied": "Copied: paste it into your message",
   "debug.copyRefused": "The browser refused the clipboard: copy the selected text by hand",
   "debug.pastePlaceholder": "Paste a game report here",
-  "debug.load": "Load"
+  "debug.load": "Load",
+  "phone.panels": "Act, agenda and piles",
+  "phone.strip": "Your cards in play",
+  "phone.hand": "Your hand: tap to open"
 }

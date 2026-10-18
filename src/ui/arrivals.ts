@@ -160,7 +160,7 @@ const SELECTORS: Record<Place, string> = {
   resolve: "",
   actAgenda: ".scenario-panel",
   piles: ".pile-column",
-  fan: ".hand-fan",
+  fan: ".hand-fan, .hand-drawer",
   strip: ".play-strip",
   skilltest: ".st-placed",
   showcase: ".encounter-showcase .sc-card",

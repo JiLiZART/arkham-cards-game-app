@@ -6,7 +6,8 @@ import { Icon } from "../Icon";
 import type { IconName } from "../icons";
 import { backUrl } from "../images";
 import { instructionParts } from "../instruction";
-import { onRail, optionHome } from "../optionHome";
+import { inBar, onRail } from "../optionHome";
+import { useLayoutMode } from "../layoutMode";
 import { Sentence } from "./Feed";
 import { handVisible } from "../scene/Table";
 import { canUndo, viewerOf } from "../store";
@@ -87,7 +88,7 @@ function OptionButton({ o, game, busy }: { o: ChoiceOption; game: GameState; bus
   const me = game.pending?.kind === "turn" ? game.invs[game.pending.inv] : null;
   const spent = !!me && me.actionsLeft + me.restrictedActions.reduce((n, r) => n + r.left, 0) === 0;
   return (
-    <button className={`rail-btn ${it.primary ? "primary" : ""} ${spent && it.key === "rail.endTurn" ? "glow" : ""}`} disabled={busy} onClick={() => { moment("button"); choose(o.id); }} title={o.label} data-tip={TIP_OF[it.key ?? ""]}>
+    <button className={`rail-btn ${it.primary ? "primary" : ""} ${spent && it.key === "rail.endTurn" ? "glow" : ""}`} disabled={busy} onClick={() => { moment("button"); choose(o.id); }} title={o.label} aria-label={label} data-tip={TIP_OF[it.key ?? ""]}>
       <span className="rail-icon">{it.img ? <img src={it.img} alt="" /> : it.icon ? <Icon name={it.icon} size={30} /> : it.symbol}</span>
       <span className="rail-label">{label}</span>
     </button>
@@ -111,6 +112,7 @@ export function InstructionBar() {
   const busy = useGame((s) => !!s.current || s.queue.length > 0);
   const p = useOwnChoice();
   const viewing = useView((s) => s.viewing);
+  const mode = useLayoutMode();
   // while a phase step plays out, its caption has this place
   const caption = useCaption();
   const held = useHeld();
@@ -133,7 +135,8 @@ export function InstructionBar() {
     );
   }
   // the decider's instruction stays while looking at a teammate; its buttons come back with the decider's table
-  const buttons = ask.buttons ? p.options.filter((o) => optionHome(o, game, viewer) === "bar") : [];
+  // the phone's bar also takes the rail's actions and the act's and agenda's options (ADR-0005)
+  const buttons = ask.buttons ? p.options.filter((o) => inBar(o, game, viewer, mode)) : [];
   return (
     <div className="instruction-bar" data-tip="bar">
       <Sentence parts={[{ t: "inv", id: p.inv }, { t: "text", s: ": " }, ...instructionParts(p, game, db, locale)]} size={30} />
@@ -191,7 +194,7 @@ export function UndoButton() {
   if (ended) return null;
   return (
     <button className="undo-btn" data-tip="undo" disabled={!able || intro} onClick={undo} title={t(db, locale, able ? "undo.hint" : "undo.blocked")}>
-      ↶ {t(db, locale, "undo.label")}
+      ↶ <span className="btn-word">{t(db, locale, "undo.label")}</span>
     </button>
   );
 }
@@ -203,10 +206,10 @@ export function CameraButtons() {
   return (
     <div className="camera-buttons">
       <button onClick={() => cmd("focus")} title={t(db, locale, "cam.focusHint")}>
-        ◎ {t(db, locale, "cam.focus")}
+        ◎ <span className="btn-word">{t(db, locale, "cam.focus")}</span>
       </button>
       <button onClick={() => cmd("fit")} title={t(db, locale, "cam.fitHint")}>
-        ⛶ {t(db, locale, "cam.fit")}
+        ⛶ <span className="btn-word">{t(db, locale, "cam.fit")}</span>
       </button>
     </div>
   );

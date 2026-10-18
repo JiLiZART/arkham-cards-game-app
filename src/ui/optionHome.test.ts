@@ -84,3 +84,30 @@ describe("investigate on the rail", () => {
     expect(optionHome(inv, r.state, "01001")).toBe("board");
   });
 });
+
+describe("the phone's instruction bar", () => {
+  it("holds the bar's own options, the rail's (Draw, Resource, Investigate) and the act and agenda's, which sit in a closed drawer", async () => {
+    const { inBar } = await import("./optionHome");
+    const { mutate, pick } = await import("../engine/testkit");
+    let r = skipMulligans(start("the-gathering", ["01001"], 1));
+    if (r.state.pending?.kind === "phase") r = pick(r, "continue");
+    const s = r.state;
+    const v = viewerOf(s);
+    const labels = (mode: "phone" | "desktop") => s.pending!.options.filter((o) => inBar(o, s, v, mode)).map((o) => o.label);
+    expect(labels("desktop")).toEqual(expect.arrayContaining(["End turn"]));
+    expect(labels("desktop").some((l) => /^Draw/.test(l))).toBe(false);
+    expect(labels("phone")).toEqual(expect.arrayContaining(["End turn"]));
+    expect(labels("phone").some((l) => /^Draw/.test(l))).toBe(true);
+    expect(labels("phone").some((l) => /^Gain/.test(l))).toBe(true);
+    expect(labels("phone").some((l) => /^Investigate/.test(l))).toBe(true);
+    // hand cards stay in the hand drawer, not the bar
+    expect(s.pending!.options.filter((o) => o.card && s.cards[o.card].zone === "hand").every((o) => !inBar(o, s, v, "phone"))).toBe(true);
+    // with clues enough, the act's Advance is in the phone's bar (the act sits in the closed left drawer)
+    const r2 = mutate(r, (g) => (g.s.invs["01001"].clues = 9));
+    const s2 = r2.state;
+    const adv = s2.pending!.options.find((o) => o.card === s2.act);
+    expect(adv).toBeTruthy();
+    expect(inBar(adv!, s2, v, "phone")).toBe(true);
+    expect(inBar(adv!, s2, v, "desktop")).toBe(false);
+  });
+});
