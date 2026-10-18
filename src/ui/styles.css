@@ -771,3 +771,23 @@ button.danger { border-color: var(--bad); color: var(--bad); }
 .hand-card > * { border-radius: 12px; }
 .hand-card.legal { box-shadow: 0 0 0 3px #7fe08a, 0 0 18px #7fe08acc; }
 .hand-card.dimmed, .peek-card.dimmed { filter: brightness(0.45); }
+
+/* the skill-test screen on the phone: subject left, placed cards in a column right, the line and the draw in the middle,
+   the calculation on one line just above the instruction bar */
+.game.phone .st-subject { left: calc(56px + var(--safe-l)); top: 44px; }
+.game.phone .st-subject-card { width: 120px; height: 168px; }
+.game.phone .st-subject-portrait { padding: 6px; }
+.game.phone .st-middle { top: 40px; bottom: 200px; width: min(420px, calc(100vw - 380px)); gap: 4px; }
+.game.phone .st-line { font-size: 16px; padding: 2px 12px; }
+.game.phone .st-placed { right: calc(64px + var(--safe-r)); top: 44px; width: auto; max-height: 170px; flex-direction: column; flex-wrap: nowrap; overflow-y: auto; zoom: 0.62; }
+.game.phone .st-strip { bottom: calc(140px + var(--safe-b)); gap: 6px; padding: 2px 12px; font-size: 18px; white-space: nowrap; }
+.game.phone .st-strip .st-num { font-size: 24px; }
+.game.phone .st-strip .svg-icon, .game.phone .st-strip img, .game.phone .st-strip .chaos-token { width: 24px; height: 24px; }
+.game.phone .st-result-total { font-size: 56px; }
+.game.phone .bd-result { font-size: 30px; }
+/* every overlay's buttons take a 44 px tap on the phone; modals take the whole screen with their Close */
+.game.phone .modal button, .game.phone .tip-card button, .game.phone .handoff-box button, .game.phone .phase-continue, .game.phone .st-result button, .game.phone .caption-next, .game.phone .sc-help button { min-height: 44px; min-width: 44px; }
+.game.phone dialog.modal { width: 100vw; height: 100dvh; max-width: none; max-height: none; margin: 0; border-radius: 0; padding: 8px calc(8px + var(--safe-r)) calc(8px + var(--safe-b)) calc(8px + var(--safe-l)); }
+.game.phone dialog.modal .modal-close { position: sticky; bottom: 0; }
+.game.phone .phase-title-name { font-size: 44px; }
+.game.phone .phase-title-round { font-size: 18px; }

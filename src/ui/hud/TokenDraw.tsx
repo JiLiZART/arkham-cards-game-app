@@ -7,12 +7,11 @@ import { db, gameStore, useGame } from "../context";
 import { Icon } from "../Icon";
 import { spillLayout, type Area } from "../testScreen";
 import { ChaosToken } from "../ChaosToken";
+import { useLayoutMode } from "../layoutMode";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
-/** the bag in the draw stage, and a disc (a token's size on screen) */
-const BAG = 150;
-const DISC = 56;
-const HINT_H = 38;
+/** the bag in the draw stage, and a disc (a token's size on screen); smaller on the phone's short screen (ADR-0005) */
+const SIZES = { desktop: { BAG: 150, DISC: 56, HINT_H: 38 }, phone: { BAG: 84, DISC: 44, HINT_H: 26 } };
 const FLIP_MS = 550;
 const SLIDE_MS = 450;
 
@@ -33,6 +32,7 @@ function circlesFor(game: GameState, e: GameEvent): number {
 export function DrawStage({ e, byHand }: { e: GameEvent; byHand: boolean }) {
   const game = useGame((s) => s.game) as GameState;
   const next = useGame((s) => s.nextEvent);
+  const { BAG, DISC, HINT_H } = SIZES[useLayoutMode()];
   // by hand: a disc per token in the bag; automatic: one token flips straight out of the bag
   const n = useMemo(() => (byHand ? circlesFor(game, e) : 1), [e, byHand]);
   const token = String(e.data?.token);
