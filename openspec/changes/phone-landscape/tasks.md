@@ -16,4 +16,7 @@
 ## 4. Verification and docs
 
 - [ ] 4.1 Run `npm test`, `npm run lint`, `npm run build`, `npm run check:content`, all clean; `drive-calm.js` at 1600×900 to round 3 with 0 errors (desktop untouched); `check-phone.js` passes; `perf-devourer.js` at 852×393 with 4× CPU throttle reports its numbers; a run on a real phone (iOS Safari and Android Chrome) noted in the tasks with what was seen.
-- [ ] 4.2 README: the phone layout, drawers, the hand drawer, tap to peek and choose, long press, rotate. Run `openspec validate phone-landscape --type change --strict`.
+  - Done 2026-10-18: `npm test` (437), `npm run lint`, `npm run build`, `npm run check:content` clean; `drive-calm.js` at 1600×900 to round 3 with 0 errors; `check-phone.js`, `check-phone-overlays.js`, `check-phone-touch.js` pass; `perf-devourer-phone.js` (852×393, 4× CPU throttle, four investigators in The Devourer Below): 120 fps idle, on the whole map and while animating, p95 ≈ 10 ms, worst frame 16.8 ms (the desktop GPU isn't throttled).
+  - Open: the run on a real phone (iOS Safari and Android Chrome) has not been done; it needs a device.
+
+- [x] 4.2 README: the phone layout, drawers, the hand drawer, tap to peek and choose, long press, rotate. Run `openspec validate phone-landscape --type change --strict`.
