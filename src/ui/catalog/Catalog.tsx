@@ -67,15 +67,15 @@ function Filters({ tabCards, locale }: { tabCards: CardDef[]; locale: string }) 
     <div className="cat-filters">
       <input type="search" placeholder={tr("catalog.search")} aria-label={tr("catalog.search")} value={f.query} onChange={(e) => set({ query: e.target.value })} />
       {f.tab !== "encounter" && (
-        <Chips label={tr("catalog.class")} on={f.factions} set={(factions) => set({ factions })} options={CLASSES.map((c) => ({ value: c, label: tr(`card.faction.${c}`) }))} />
+        <Chips label={tr("catalog.class")} on={f.factions} set={(factions) => set({ factions })} options={CLASSES.map((c) => ({ value: c, label: isIcon(c) ? <Icon name={c} size={24} title={tr(`card.faction.${c}`)} /> : tr(`card.faction.${c}`) }))} />
       )}
       <Chips label={tr("catalog.type")} on={f.types} set={(v) => set({ types: v })} options={types.map((x) => ({ value: x, label: tr(`card.type.${x}`) }))} />
       <Pick label={tr("catalog.cycle")} value={f.cycles[0] ?? ""} set={(v) => set({ cycles: one(v), packs: [] })} options={cycles.map((c) => ({ value: c, label: cycleName(db, locale, c) }))} />
       <Pick label={tr("catalog.pack")} value={f.packs[0] ?? ""} set={(v) => set({ packs: one(v) })} options={packsOfCards(inCycle).map((p) => ({ value: p, label: p.toUpperCase() }))} />
       {player && <Chips label={tr("catalog.level")} on={f.levels} set={(levels) => set({ levels })} options={[0, 1, 2, 3, 4, 5].map((n) => ({ value: n, label: String(n) }))} />}
       {player && <Chips label={tr("catalog.cost")} on={f.costs} set={(costs) => set({ costs })} options={[0, 1, 2, 3, 4, 5, 6].map((n) => ({ value: n, label: String(n) }))} />}
-      {player && <Chips label={tr("catalog.icons")} on={f.icons} set={(icons) => set({ icons })} options={SKILLS.map((s) => ({ value: s, label: isIcon(s) ? <Icon name={s} size={22} /> : s }))} />}
-      {player && <Chips label={tr("catalog.slot")} on={f.slots} set={(slots) => set({ slots })} options={SLOTS.map((s) => ({ value: s, label: s }))} />}
+      {player && <Chips label={tr("catalog.icons")} on={f.icons} set={(icons) => set({ icons })} options={SKILLS.map((s) => ({ value: s, label: isIcon(s) ? <Icon name={s} size={24} title={tr(`stat.${s}`)} /> : s }))} />}
+      {player && <Chips label={tr("catalog.slot")} on={f.slots} set={(slots) => set({ slots })} options={SLOTS.map((s) => ({ value: s, label: isIcon(s) ? <Icon name={s} size={24} title={tr(`card.slot.${s}`)} /> : tr(`card.slot.${s}`) }))} />}
       <Pick label={tr("catalog.trait")} value={f.traits[0] ?? ""} set={(v) => set({ traits: one(v) })} options={traitsOf(db, locale, tabCards).map((x) => ({ value: x, label: x }))} />
       {f.tab === "encounter" && <Pick label={tr("catalog.set")} value={f.sets[0] ?? ""} set={(v) => set({ sets: one(v) })} options={sets.map((x) => ({ value: x, label: encounterSetName(db, x, locale) ?? x }))} />}
       <Pick label={tr("catalog.status")} value={f.works === "any" ? "" : f.works} set={(v) => set({ works: (v || "any") as CatalogFilters["works"] })} options={[{ value: "yes", label: tr("catalog.works") }, { value: "no", label: tr("catalog.textOnly") }]} />

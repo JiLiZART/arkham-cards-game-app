@@ -859,18 +859,19 @@ button.danger { border-color: var(--bad); color: var(--bad); }
 .parchment .screen { color: var(--ink); }
 
 /* ---- the card catalog ---- */
-.catalog { display: flex; flex-direction: column; min-height: 100%; }
+/* the catalog fills the window: the header, the tabs and the footer stay, only the list and the page scroll */
+.screen.catalog { display: flex; flex-direction: column; height: 100dvh; max-width: min(1720px, 100%); padding: 14px 16px; }
 .cat-tabs { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 12px; }
 .cat-count { margin-left: auto; color: var(--muted); }
-.cat-main { display: flex; gap: 16px; align-items: flex-start; flex: 1; }
-.cat-aside { flex: 0 0 280px; position: sticky; top: 0; max-height: 80vh; overflow-y: auto; padding-right: 6px; }
+.cat-main { display: flex; gap: 16px; align-items: flex-start; flex: 1; min-height: 0; overflow-y: auto; }
+.cat-aside { flex: 0 0 300px; position: sticky; top: 0; max-height: 100%; overflow-y: auto; padding-right: 6px; }
 .cat-aside.drawer { position: static; flex: 1 1 100%; max-height: none; }
 .catalog.phone .cat-main { flex-direction: column; }
 .cat-filters { display: flex; flex-direction: column; gap: 10px; }
 .cat-filters input, .cat-filter select { min-height: 44px; padding: 0 10px; border: 2px solid #3a2f1f; border-radius: 10px; background: #15110c; color: var(--ink); font: inherit; width: 100%; box-sizing: border-box; }
 .cat-filter { display: flex; flex-direction: column; gap: 4px; }
 .cat-results { flex: 1; min-width: 0; display: grid; gap: 12px; }
-.cat-results.grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); align-items: start; }
+.cat-results.grid { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); align-items: start; }
 .cat-results.list { grid-template-columns: 1fr; gap: 6px; }
 .cat-entry { display: flex; flex-direction: column; gap: 6px; padding: 6px; border: 2px solid #3a2f1f; border-radius: 12px; background: #15110c; color: var(--ink); cursor: pointer; text-align: left; min-height: 44px; }
 .cat-entry.list { flex-direction: row; align-items: center; justify-content: space-between; gap: 10px; }
@@ -882,7 +883,7 @@ button.danger { border-color: var(--bad); color: var(--bad); }
 .cat-badge.works { color: #8fd18f; border-color: #3f7a3f; }
 .cat-badge.text-only { color: var(--gold); border-color: #7a5a1f; }
 .cat-sentinel { height: 1px; grid-column: 1 / -1; }
-.cat-page { display: flex; flex-direction: column; gap: 14px; flex: 1; }
+.cat-page { display: flex; flex-direction: column; gap: 14px; flex: 1; min-height: 0; overflow-y: auto; }
 .cat-page-body { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; }
 .cat-images { display: flex; flex-wrap: wrap; gap: 12px; }
 .cat-images figure { margin: 0; width: 280px; max-width: 100%; }
@@ -893,7 +894,7 @@ button.danger { border-color: var(--bad); color: var(--bad); }
 .cat-details h3 { margin: 6px 0 4px; font-size: 16px; color: var(--gold); font-weight: normal; }
 .cat-link { display: inline-block; margin-right: 12px; min-height: 36px; }
 .cat-deck { display: flex; flex-wrap: wrap; gap: 0 12px; }
-.catalog .wz-foot { margin-top: 16px; }
+.catalog .wz-foot { margin-top: 10px; flex: none; }
 
 .parchment .screen section, .parchment .cat-entry, .parchment .cat-filters input, .parchment .cat-filter select, .parchment .wz-campaign, .parchment .wz-tile, .parchment .wz-chip, .parchment .wz-filters select, .parchment .wz-filters input, .parchment .wz-deck, .parchment .bag-card, .parchment .log-inv { background: #f6edd6cc; border-color: #b69c6a; color: var(--ink); }
 .parchment .wz-campaign.selected, .parchment .wz-tile.selected, .parchment .wz-deck.selected, .parchment .bag-card.selected { background: #fff6d8; border-color: #7a5410; box-shadow: 0 0 14px #7a541066; }
@@ -949,3 +950,9 @@ button.danger { border-color: var(--bad); color: var(--bad); }
 .wz-sheet-back { border-top: 1px solid #b69c6a; padding-top: 6px; font-size: 14px; }
 .wz-sheet-meta { color: #6b5a3a; }
 @media (max-width: 900px) { .wz-inv-side { display: none; } }
+
+/* headings on the parchment screens: the game's display face in dark ink, not gold on cream */
+.parchment h1, .parchment h2, .parchment h3 { color: #3a2410; font-family: Teutonic, TeutonicRU, Georgia, serif; font-weight: normal; letter-spacing: 0.01em; text-shadow: 0 1px 0 #fff8e6b0; }
+.parchment .wz-head h1 { font-size: clamp(28px, 4vw, 44px); }
+.parchment h3 { font-size: 22px; }
+.parchment .cat-details h3 { color: #c9a95c; text-shadow: none; font-size: 18px; }

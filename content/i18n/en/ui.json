@@ -543,5 +543,16 @@
   "wizard.sort.willpower": "Willpower",
   "wizard.sort.intellect": "Intellect",
   "wizard.sort.combat": "Combat",
-  "wizard.sort.agility": "Agility"
+  "wizard.sort.agility": "Agility",
+  "card.type.story": "Story",
+  "card.type.key": "Key",
+  "card.slot.hand": "Hand",
+  "card.slot.arcane": "Arcane",
+  "card.slot.accessory": "Accessory",
+  "card.slot.body": "Body",
+  "card.slot.ally": "Ally",
+  "card.slot.tarot": "Tarot",
+  "card.slot.head": "Head",
+  "card.type.enemy_location": "Enemy-location",
+  "stat.wild": "Wild"
 }

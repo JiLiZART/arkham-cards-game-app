@@ -527,5 +527,16 @@
   "wizard.sort.willpower": "Воля",
   "wizard.sort.intellect": "Интеллект",
   "wizard.sort.combat": "Сила",
-  "wizard.sort.agility": "Ловкость"
+  "wizard.sort.agility": "Ловкость",
+  "card.type.story": "Сюжет",
+  "card.type.key": "Ключ",
+  "card.slot.hand": "Рука",
+  "card.slot.arcane": "Магия",
+  "card.slot.accessory": "Аксессуар",
+  "card.slot.body": "Тело",
+  "card.slot.ally": "Союзник",
+  "card.slot.tarot": "Таро",
+  "card.slot.head": "Голова",
+  "card.type.enemy_location": "Враг-локация",
+  "stat.wild": "Любой"
 }
