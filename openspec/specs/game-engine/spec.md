@@ -20,6 +20,7 @@ The choice is recorded like any other, so replaying the same setup and choices g
 - **WHEN** a save made without pacing is loaded
 - **THEN** its choices replay to the same state as before, with no pauses
 
+
 ### Requirement: Reveal counter
 The game state SHALL count every point at which hidden information enters the game:
 - a chaos token is drawn;
@@ -42,6 +43,7 @@ A choice whose resolution leaves the counter unchanged revealed nothing, so the 
 - **WHEN** the commit window closes and the chaos token is drawn
 - **THEN** the counter has gone up
 
+
 ### Requirement: Event sources
 Log events for an investigator taking damage or horror, or losing resources, clues or actions because of a card's effect SHALL name that card as their source, in `data.source`. Damage from an enemy attack names the enemy. Events with no card behind them, such as a chaos token's effect, have no source.
 
@@ -52,6 +54,7 @@ Log events for an investigator taking damage or horror, or losing resources, clu
 #### Scenario: Enemy attack
 - **WHEN** an engaged Ghoul attacks Roland in the enemy phase
 - **THEN** the damage event's source is the Ghoul
+
 
 ### Requirement: Deterministic, serializable game state
 The engine SHALL represent the whole game as a plain serializable state object. Applying the same sequence of actions to the same initial state and seed MUST produce an identical state. All randomness (shuffles, chaos token draws) MUST come from a seeded RNG stored in the state.
@@ -64,6 +67,7 @@ The engine SHALL represent the whole game as a plain serializable state object. 
 - **WHEN** the state is serialized to JSON and later deserialized
 - **THEN** play continues from the exact same point with the same pending choices
 
+
 ### Requirement: Action validation
 The engine SHALL reject any action that is not legal in the current state (wrong player, wrong phase, insufficient actions/resources, unmet play conditions) without mutating state, and SHALL expose the list of currently legal actions for the active player.
 
@@ -75,12 +79,14 @@ The engine SHALL reject any action that is not legal in the current state (wrong
 - **WHEN** the UI asks for legal actions during the investigation phase
 - **THEN** the engine returns every currently legal basic action, playable card and activatable ability for the active investigator
 
+
 ### Requirement: Pending choices
 When resolution requires a decision (choose target, choose order of simultaneous effects, choose to commit cards, choose a location, optional triggers), the engine SHALL pause and expose a pending choice naming the deciding player and the valid options, and SHALL resume only when a valid answer is submitted.
 
 #### Scenario: Choose enemy to fight
 - **WHEN** an investigator takes Fight while two enemies are engaged with them
 - **THEN** the engine exposes a choice of the two enemies to that investigator and waits
+
 
 ### Requirement: Round structure
 The engine SHALL run rounds in order Mythos → Investigation → Enemy → Upkeep, skipping the Mythos phase in the first round. Mythos: place 1 doom on the agenda, check doom threshold, each investigator draws an encounter card. Investigation: investigators take turns in an order chosen by the players, each with 3 actions. Enemy: hunter enemies move, then each engaged enemy attacks. Upkeep: ready exhausted cards, each investigator draws 1 card and gains 1 resource, discard down to 8 cards in hand.
@@ -93,6 +99,7 @@ The engine SHALL run rounds in order Mythos → Investigation → Enemy → Upke
 - **WHEN** an investigator has 10 cards in hand at end of upkeep
 - **THEN** they must choose and discard 2 cards
 
+
 ### Requirement: Basic actions
 The engine SHALL implement the basic actions: Investigate, Move, Draw, Resource, Play, Activate, Fight, Engage, Evade (and Parley/Resign when granted by cards). Each costs 1 action unless a card says otherwise. Taking any action other than Fight, Evade, Parley or Resign while engaged with a ready non-aloof enemy MUST trigger an attack of opportunity from each such enemy.
 
@@ -103,6 +110,7 @@ The engine SHALL implement the basic actions: Investigate, Move, Draw, Resource,
 #### Scenario: Move to connected location
 - **WHEN** an investigator moves to a location connected to their current one
 - **THEN** they are placed there, unengaged enemies do not follow, engaged enemies move with them, and an unrevealed destination is revealed
+
 
 ### Requirement: Skill tests
 The engine SHALL resolve skill tests as: determine skill value and difficulty → commit cards from hand (matching icons, wild icons) → reveal a chaos token → apply token modifier and effects → compare total to difficulty (success if ≥) → apply results and committed cards' effects → discard committed cards. An auto-fail token MUST fail regardless of total; total skill MUST NOT drop below 0. The Elder Sign MUST trigger the investigator's Elder Sign ability.
@@ -133,6 +141,7 @@ While an investigator's commit window is open, the engine SHALL offer, for each 
 - **WHEN** Roland commits Vicious Blow to his test and chooses Done, and Daisy, at his location, is then asked to commit
 - **THEN** Daisy is not offered to take back Roland's Vicious Blow
 
+
 ### Requirement: Chaos bag
 The engine SHALL hold a chaos bag of tokens defined by the scenario/campaign difficulty, draw tokens at random from the seeded RNG, return revealed tokens after the test, and support adding, removing and sealing tokens. Symbol tokens (skull, cultist, tablet, elder thing) MUST resolve using the current scenario's reference card values for the chosen difficulty.
 
@@ -140,12 +149,14 @@ The engine SHALL hold a chaos bag of tokens defined by the scenario/campaign dif
 - **WHEN** a skull is revealed in The Gathering on Standard
 - **THEN** the modifier equals −X where X is the number of Ghoul enemies at the investigator's location, per the scenario reference card
 
+
 ### Requirement: Damage, horror and defeat
 The engine SHALL assign damage and horror to investigators and their assets with health/sanity (player chooses assignment), defeat an investigator whose damage ≥ health or horror ≥ sanity, record physical/mental trauma, and remove the investigator from the scenario. If all investigators are defeated or resign the scenario MUST end with the matching resolution.
 
 #### Scenario: Investigator defeated
 - **WHEN** Daisy (sanity 9) takes her 9th horror
 - **THEN** she is defeated, her cards leave play, her clues drop at her location, and she gains 1 mental trauma
+
 
 ### Requirement: Enemies
 The engine SHALL implement enemy spawning (at named location or engaging the drawing investigator), engagement, exhaustion on evade, damage and defeat (victory points to victory display), and keywords: Hunter, Retaliate, Aloof, Alert, Massive, Prey. Ready unengaged enemies at an investigator's location MUST engage that investigator.
@@ -158,12 +169,14 @@ The engine SHALL implement enemy spawning (at named location or engaging the dra
 - **WHEN** an investigator fails a Fight test against a ready Retaliate enemy
 - **THEN** the enemy attacks that investigator
 
+
 ### Requirement: Locations
 The engine SHALL track locations with shroud, clue value (per-investigator values multiplied by player count), revealed/unrevealed state, connections (symbols) and victory points. Revealing a location MUST place its clues.
 
 #### Scenario: Per-investigator clues
 - **WHEN** a location with clue value "2 per investigator" is revealed in a 3-player game
 - **THEN** 6 clues are placed on it
+
 
 ### Requirement: Act and agenda decks
 The engine SHALL advance the agenda when doom in play ≥ the current agenda's threshold (removing all doom) and SHALL let investigators advance the act by spending the required clues as a group (at end of turn / as a free action per the act's text) or when the act's objective is met. Advancing resolves the back side's text.
@@ -176,12 +189,14 @@ The engine SHALL advance the agenda when doom in play ≥ the current agenda's t
 - **WHEN** investigators together hold enough clues for the act and choose to advance
 - **THEN** the required clues are spent from any combination of investigators and the act advances
 
+
 ### Requirement: Encounter deck and treacheries
 The engine SHALL build the encounter deck from the scenario's encounter sets, draw/resolve treacheries (revelation effects, including Surge and Peril), shuffle the discard back when the deck is empty, and place persistent treacheries in threat areas or on locations.
 
 #### Scenario: Empty encounter deck
 - **WHEN** an encounter card must be drawn and the encounter deck is empty
 - **THEN** the encounter discard is shuffled into a new encounter deck first
+
 
 ### Requirement: Player cards in play
 The engine SHALL support assets (slots: hand×2, arcane×2, accessory, body, ally, tarot; uses such as ammo/charges/secrets/supplies), events, skills, weaknesses (basic random and signature), exhaust/ready, fast cards, and triggered abilities (reaction, forced, free) with timing windows.
@@ -193,6 +208,7 @@ The engine SHALL support assets (slots: hand×2, arcane×2, accessory, body, all
 #### Scenario: Weakness drawn
 - **WHEN** an investigator draws a weakness with a revelation effect
 - **THEN** its revelation resolves immediately and it does not count toward hand size
+
 
 ### Requirement: Event log
 The engine SHALL emit an ordered log of game events (card drawn, token revealed, damage dealt, phase change, etc.) that the UI can animate. Each event SHALL carry structured data that describes it without parsing its text:
@@ -218,12 +234,14 @@ The text stays as an English fallback. Adding data MUST NOT change game rules, t
 - **WHEN** a saved action log from before this change is replayed
 - **THEN** the resulting game state matches the original except for the extra event data
 
+
 ### Requirement: Translatable prompts
 Every pending choice SHALL carry a prompt key and the values it needs (for example `turn` with `{ inv, actions }`, `commit` with `{ inv, skill }`, `assign` with `{ inv, kind, left }`), next to its English prompt text. The key and values MUST NOT affect rules or replays.
 
 #### Scenario: Turn prompt
 - **WHEN** Roland must choose an action with 3 actions left
 - **THEN** the pending choice has prompt key `turn` with `inv` Roland and `actions` 3, and English prompt text "Roland Banks: choose an action (3 left)"
+
 
 ### Requirement: Step events
 The engine SHALL log a `step` event at the start of each automated step of a phase, before the step's own events, naming the step and, where one applies, the investigator:
@@ -255,3 +273,23 @@ A step is logged only when it does something: no `hunters` step when no hunter m
 #### Scenario: Old save
 - **WHEN** a save made without step events is loaded
 - **THEN** its choices replay to the same cards, counters and pending choice as before
+
+
+### Requirement: Assets with uses leave play when empty
+When an ability's cost spends the last use of an asset (supplies, ammo, charges, secrets) and the asset has no other way to matter in play, the asset SHALL be discarded once the ability has resolved. An asset has no other way to matter when every ability it has is one that spends its uses and it has no constant ability. A card marked `discardWhenEmpty` in its data is discarded the same way. The discard is an engine step, so it is deterministic, replayable and undoable like any other, and the ability's own effects (a Flashlight's shroud modifier for its investigation) resolve with the card still in play. This is a deliberate deviation from the printed rules, which leave the empty card in play.
+
+#### Scenario: Flashlight's last supply
+- **WHEN** Roland's Flashlight has 1 supply and he investigates with it
+- **THEN** the investigation resolves with the −2 shroud, and afterwards Flashlight is in his discard pile and no longer in his play area
+
+#### Scenario: Uses left
+- **WHEN** Roland's .45 Automatic has 2 ammo and he fights with it
+- **THEN** it stays in play with 1 ammo
+
+#### Scenario: A card with a constant ability
+- **WHEN** an asset with uses also has a constant ability and its last use is spent
+- **THEN** it stays in play
+
+#### Scenario: Undo
+- **WHEN** the player undoes the investigation that emptied Flashlight
+- **THEN** Flashlight is back in play with 1 supply
