@@ -52,5 +52,10 @@
     "side"
   ],
   "generated": true,
-  "card": "88001"
+  "card": "88001",
+  "prologue": "A casino in Monte Carlo is using probability-manipulating powers to accumulate wealth at the cost of endangering the populace. In Fortune and Folly, a unique scenario for Arkham Horror: The Card Game, 1-4 investigators must plan and execute a daring heist in order to capture the source of this cult's power and put a stop to their nefarious work. But will their meddling turn fortune in their favor? Or will their luck run out?",
+  "scenarioNames": [
+    "The Stakeout",
+    "The Heist"
+  ]
 }

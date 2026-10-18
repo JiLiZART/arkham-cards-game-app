@@ -62,5 +62,10 @@
     "side"
   ],
   "generated": true,
-  "card": "83001"
+  "card": "83001",
+  "prologue": "While not an official variant, some people like to play the two scenarios included in the Guardians of the Abyss expansion as a two scenario mini-campaign. Because this is an unofficial variant, note that you might want to utilize standalone deckbuilding rules, since the product was intended to be played with decks with some amount of XP.",
+  "scenarioNames": [
+    "The Eternal Slumber",
+    "The Night's Usurper"
+  ]
 }

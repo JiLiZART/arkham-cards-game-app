@@ -81,5 +81,16 @@
     "tcu"
   ],
   "generated": true,
-  "card": "05050"
+  "card": "05050",
+  "prologue": "“The hidden cults to which these witches belonged often guarded and handed down surprising secrets from elder, forgotten aeons; and it was by no means impossible that Keziah had actually mastered the art of passing through dimensional gates.”\n– H. P. Lovecraft, The Dreams in the Witch House",
+  "scenarioNames": [
+    "Return to The Witching Hour",
+    "Return to At Death's Doorstep",
+    "Return to The Secret Name",
+    "Return to The Wages of Sin",
+    "Return to For the Greater Good",
+    "Return to Union and Disillusion",
+    "Return to In the Clutches of Chaos",
+    "Return to Before the Black Throne"
+  ]
 }

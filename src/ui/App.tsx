@@ -59,10 +59,11 @@ export function App() {
     );
   }
   const page = screen === "log" ? <CampaignLog /> : screen === "howto" ? <HowTo /> : screen === "wizard" ? <Wizard /> : screen === "settings" ? <Settings /> : <Title />;
+  // every menu screen but the title sits on the rulebook's parchment (public/art)
   return (
     <>
       {rotate && <RotateCard />}
-      {page}
+      {screen === "title" ? page : <div className="parchment">{page}</div>}
     </>
   );
 }

@@ -4,7 +4,7 @@ import { SAVE_KEY, safeStorage } from "../store";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
 
-/** the first screen: Continue (with a game or a save), New campaign, How to play, and the gear for settings */
+/** the first screen, over the cover painting: Continue (with a game or a save), New campaign, How to play and Settings */
 export function Title() {
   useGame((s) => s.locale);
   const campaign = useGame((s) => s.campaign);
@@ -15,9 +15,6 @@ export function Title() {
   const go = (screen: "wizard" | "howto" | "settings") => gameStore.setState({ screen });
   return (
     <div className="screen title">
-      <button className="gear" aria-label={tr("settings.title")} title={tr("settings.title")} onClick={() => go("settings")}>
-        ⚙
-      </button>
       <div className="title-body">
         <h1>{tr("app.title")}</h1>
         <div className="title-buttons">
@@ -36,6 +33,9 @@ export function Title() {
           </button>
           <button className="big" onClick={() => go("howto")}>
             {tr("menu.howto")}
+          </button>
+          <button className="big" onClick={() => go("settings")}>
+            {tr("settings.title")}
           </button>
           {campaign && (
             <button className="link-btn" onClick={abandon}>

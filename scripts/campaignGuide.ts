@@ -157,6 +157,19 @@ export function resolutionEffects(stepIds: string[], steps: Record<string, Raw>)
   return { effects, labels };
 }
 
+/** a campaign's opening text for its tile: the first story step of its setup (an epigraph for most), markup removed */
+export function prologueOf(campaign: Raw): string | undefined {
+  const steps: Record<string, Raw> = Object.fromEntries((campaign.steps ?? []).map((s: Raw) => [s.id, s]));
+  for (const id of campaign.setup ?? []) {
+    const st = steps[id];
+    if (st?.type === "story" && st.text) return String(st.text).replace(/<\/?[a-z][^>]*>/gi, "").trim();
+  }
+  return undefined;
+}
+
+/** a side scenario's tile text: the first paragraph of its intro (the whole intro is read in the game), markup removed */
+export const introLead = (intro: string | undefined): string | undefined => intro?.replace(/<\/?[a-z][^>]*>/gi, "").split(/\n\s*\n/)[0].trim() || undefined;
+
 /** official campaigns only: the fan-made ones start with z, and the Return to Innsmouth in the guides is unofficial */
 export const isOfficial = (id: string) => !id.startsWith("z") && id !== "rttic";
 

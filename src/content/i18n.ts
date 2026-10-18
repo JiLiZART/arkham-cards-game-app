@@ -29,6 +29,13 @@ export const locales = (db: ContentDb) => Object.keys(db.i18n);
 const campaignText = (db: ContentDb, locale: string) => db.i18n[locale]?.campaigns;
 
 /** campaign name in a locale (English from the campaign file as the fallback) */
+/** what a campaign's tile says before its scenarios are loaded: the guide's opening text and the scenarios' names, in the locale */
+export function campaignBlurb(db: ContentDb, id: string, locale: string): { prologue: string | undefined; scenarios: string[] } {
+  const tr = campaignText(db, locale)?.campaigns[id];
+  const base = db.campaigns[id];
+  return { prologue: tr?.prologue ?? base?.prologue, scenarios: tr?.scenarioNames ?? base?.scenarioNames ?? [] };
+}
+
 export const campaignName = (db: ContentDb, id: string, locale: string) => campaignText(db, locale)?.campaigns[id]?.name ?? db.campaigns[id].name;
 
 /** a campaign-log key as readable text */

@@ -88,5 +88,9 @@
     "side"
   ],
   "generated": true,
-  "card": "85001"
+  "card": "85001",
+  "prologue": "Incident Report: 8L-08\nThursday, 07/05/1928\nBlackwater, MA",
+  "scenarioNames": [
+    "The Blob That Ate Everything Else"
+  ]
 }

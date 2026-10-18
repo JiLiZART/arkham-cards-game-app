@@ -16,7 +16,8 @@
     "import:icons": "tsx scripts/import-icons.ts",
     "fetch:cards": "tsx scripts/fetch-card-images.ts",
     "import:ru-cards": "tsx scripts/import-ru-cards.ts",
-    "import:campaigns": "tsx scripts/import-campaigns.ts"
+    "import:campaigns": "tsx scripts/import-campaigns.ts",
+    "import:art": "tsx scripts/import-art.ts"
   },
   "dependencies": {
     "@react-three/drei": "^9.122.0",

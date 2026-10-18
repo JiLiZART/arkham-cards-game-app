@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { campaignLoaded, loadCampaign } from "../../content";
-import { campaignName, scenarioText, t } from "../../content/i18n";
+import { campaignBlurb, campaignName, scenarioText, t } from "../../content/i18n";
 import type { Difficulty } from "../../content/schema";
 import { db, gameStore, useGame } from "../context";
 import { Glyph } from "../Icon";
@@ -11,6 +11,7 @@ import { BagCard } from "./BagCard";
 import { customDecks, deleteCustomDeck, problemText, renameCustomDeck, type DeckOp } from "../decks";
 import { safeStorage } from "../store";
 import { DeckEditor } from "./DeckEditor";
+import { blurb } from "./blurb";
 import { back, campaignOrder, canContinue, deckProblems, decksFor, initialWizard, invalidDecksFor, next, setCampaign, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type WizardState } from "./wizard";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
@@ -19,6 +20,8 @@ const DIFFICULTIES: Difficulty[] = ["easy", "standard", "hard", "expert"];
 function CampaignStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }) {
   const locale = useGame((s) => s.locale);
   const campaigns = campaignOrder(db);
+  // the tile whose whole prologue is open ("More"); a tap there never picks the campaign
+  const [open, setOpen] = useState<string | null>(null);
   return (
     <div className="wz-campaigns">
       {campaigns.map((c) => {
@@ -26,13 +29,32 @@ function CampaignStep({ s, set }: { s: WizardState; set: (w: WizardState) => voi
         // a generated campaign's scenarios and cards load when it is chosen: its reference card's scan is found by code
         const card = first?.card ?? c.card;
         const art = card ? (db.cards[card] ?? { code: card }) : null;
+        const { prologue, scenarios } = campaignBlurb(db, c.id, locale);
+        const { lead, more } = blurb(prologue);
+        const picked = s.campaignId === c.id;
+        // an epigraph is set in italics: it opens with a quotation mark
+        const quote = /^[“"«„]/.test(lead);
         return (
-          <button key={c.id} className={`wz-campaign ${s.campaignId === c.id ? "selected" : ""}`} aria-pressed={s.campaignId === c.id} onClick={() => set(setCampaign(s, c.id, db))}>
-            {art && <img src={cardImage(art, "front", locale) ?? ""} alt="" draggable={false} onError={(e) => (e.currentTarget.style.display = "none")} />}
-            <b>{campaignName(db, c.id, locale)}</b>
-            {c.generated && <small className="wz-generated">{tr("wizard.generated")}</small>}
-            <small>{first ? scenarioText(db, first.id, locale).intro : ""}</small>
-          </button>
+          <div key={c.id} className={`wz-campaign ${picked ? "selected" : ""}`}>
+            <button className="wz-pick" aria-pressed={picked} onClick={() => set(setCampaign(s, c.id, db))}>
+              {art && <img src={cardImage(art, "front", locale) ?? ""} alt="" draggable={false} onError={(e) => (e.currentTarget.style.display = "none")} />}
+              <span className="wz-text">
+                <b>{campaignName(db, c.id, locale)}</b>
+                <small className="wz-count">{tr("wizard.scenarios", { n: c.scenarios.length })}</small>
+                {c.generated && <small className="wz-generated">{tr("wizard.generated")}</small>}
+                {lead && <small className={`wz-lead ${quote ? "quote" : ""}`}>{lead}</small>}
+                {scenarios.length > 1 && <small className="wz-scenarios">{scenarios.join(" · ")}</small>}
+              </span>
+            </button>
+            {more && (
+              <>
+                {open === c.id && <small className="wz-more-text">{more}</small>}
+                <button className="link-btn wz-more" aria-expanded={open === c.id} onClick={() => setOpen(open === c.id ? null : c.id)}>
+                  {tr(open === c.id ? "wizard.less" : "wizard.more")}
+                </button>
+              </>
+            )}
+          </div>
         );
       })}
     </div>

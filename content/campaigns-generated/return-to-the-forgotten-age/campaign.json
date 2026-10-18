@@ -87,5 +87,17 @@
     "tfa"
   ],
   "generated": true,
-  "card": "04043"
+  "card": "04043",
+  "prologue": "“Primal myth and modern delusion joined in their assumption that mankind is only one—perhaps the least—of the highly evolved and dominant races of this planet’s long and largely unknown career.” – H. P. Lovecraft, “The Shadow out of Time”",
+  "scenarioNames": [
+    "Return to The Untamed Wilds",
+    "Return to The Doom of Eztli",
+    "Return to Threads of Fate",
+    "Return to The Boundary Beyond",
+    "Return to Heart of the Elders, Part 1",
+    "Return to Heart of the Elders, Part 2",
+    "Return to The City of Archives",
+    "Return to Shattered Aeons",
+    "Return to Turn Back Time"
+  ]
 }

@@ -7,7 +7,7 @@
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { CampaignDef, ChaosToken, Difficulty, Resolution, ScenarioDef, SetupStep, SymbolToken, TokenEffect } from "../src/content/schema";
-import { actsAndAgendas, chaosBag, codesByName, isOfficial, kebab, layoutOf, resolutionEffects, tokenEffects, type Raw } from "./campaignGuide";
+import { actsAndAgendas, chaosBag, codesByName, isOfficial, kebab, layoutOf, introLead, prologueOf, resolutionEffects, tokenEffects, type Raw } from "./campaignGuide";
 import { readSnapshot, SNAPSHOT } from "./import-cards";
 
 const GUIDES = "inspired/ArkhamCards/assets/generated/all_campaigns.txt";
@@ -240,6 +240,9 @@ export function main() {
         packs: [...new Set(["core", ...defs.flatMap((d) => packsOf(d, cards, bySet))])].sort(),
         generated: true,
         card: defs[0].card,
+        // a side scenario has no campaign prologue: its tile shows the scenario's own intro
+        ...((c.id === "side" ? introLead(defs[0].intro) : prologueOf(c)) ? { prologue: c.id === "side" ? introLead(defs[0].intro) : prologueOf(c) } : {}),
+        scenarioNames: defs.map((d) => d.name),
       };
       write(join(OUT, grp.id, "campaign.json"), campaign);
       mkdirSync(EN_TEXT, { recursive: true });

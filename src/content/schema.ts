@@ -612,6 +612,9 @@ export const CampaignDef = z
     generated: z.boolean().default(false),
     /** the first scenario's reference card: its art on the new-game screen before the scenarios are loaded */
     card: z.string().optional(),
+    /** the campaign guide's opening text (an epigraph, or a story) and its scenarios' names, for the new-game tile */
+    prologue: z.string().optional(),
+    scenarioNames: z.array(z.string()).optional(),
   })
   .strict();
 export type CampaignDef = z.infer<typeof CampaignDef>;
@@ -672,7 +675,7 @@ export const I18nUi = z.record(z.string(), z.string());
 /** campaign / scenario / encounter-set text for a locale */
 export const I18nCampaigns = z
   .object({
-    campaigns: z.record(z.string(), z.object({ name: z.string().optional(), logLabels: z.record(z.string(), z.string()).default({}) }).strict()).default({}),
+    campaigns: z.record(z.string(), z.object({ name: z.string().optional(), prologue: z.string().optional(), scenarioNames: z.array(z.string()).optional(), logLabels: z.record(z.string(), z.string()).default({}) }).strict()).default({}),
     scenarios: z
       .record(
         z.string(),

@@ -88,5 +88,9 @@
     "side"
   ],
   "generated": true,
-  "card": "71001"
+  "card": "71001",
+  "prologue": "\"It was the Yuletide, that men call Christmas though they know in their hearts it is older than Bethlehem and Babylon, older than Memphis and mankind. It was the Yuletide, and I had come at last to the ancient sea town where my people had dwelt and kept festival in the elder time when festival was forbidden; where also they had commanded their sons to keep festival once every century, that the memory of primal secrets might not be forgotten.\"\n - H.P. Lovecraft, \"The Festival\"",
+  "scenarioNames": [
+    "The Midwinter Gala"
+  ]
 }

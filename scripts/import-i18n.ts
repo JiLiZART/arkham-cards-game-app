@@ -14,6 +14,7 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { I18nCards } from "../src/content/schema";
+import { introLead, prologueOf } from "./campaignGuide";
 import { SNAPSHOT, translationsByPack } from "./snapshotText";
 
 const AC = "inspired/ArkhamCards/assets";
@@ -60,7 +61,9 @@ for (const dirPath of campaignDirs) {
   const scenarios = new Map<string, Raw>(ac.scenarios.map((s: Raw) => [s.id, s]));
   for (const s of ac.scenarios) for (const step of s.steps ?? []) for (const e of step.effects ?? []) if (e.type === "campaign_log" && e.id && e.text) addLog(e.id, e.text);
   const out = campaign.generated ? (perCampaign[campaign.id] = { campaigns: { [campaign.id]: { logLabels } }, scenarios: {}, encounterSets: {} }) : campaignsOut;
-  campaignsOut.campaigns[campaign.id] = campaign.generated ? { name: ac.campaign.name } : { name: ac.campaign.name, logLabels };
+  // the tile's text before the scenarios are loaded: the campaign's opening text and its scenarios' names
+  const blurb = { ...(prologueOf(ac.campaign) ? { prologue: prologueOf(ac.campaign) } : {}), scenarioNames: campaign.scenarios.map((id: string) => scenarios.get(read(join(dirPath, "scenarios", `${id}.json`)).i18nId)?.scenario_name).filter(Boolean) };
+  campaignsOut.campaigns[campaign.id] = campaign.generated ? { name: ac.campaign.name, ...blurb } : { name: ac.campaign.name, ...blurb, logLabels };
 
   for (const id of campaign.scenarios) {
     const ours = read(join(dirPath, "scenarios", `${id}.json`));
@@ -78,6 +81,8 @@ for (const dirPath of campaignDirs) {
     }
     out.scenarios[id] = { name: theirs.scenario_name, ...(intro ? { intro: clean(intro) } : {}), resolutions };
     for (const set of ours.encounterSets ?? []) if (encounterNames[set]) campaignsOut.encounterSets[set] = encounterNames[set];
+    // a side scenario's tile shows its intro
+    if (campaign.id.startsWith("side-") && out.scenarios[id].intro) campaignsOut.campaigns[campaign.id].prologue = introLead(out.scenarios[id].intro);
   }
 }
 

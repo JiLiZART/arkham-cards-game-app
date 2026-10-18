@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { actsAndAgendas, chaosBag, codesByName, isOfficial, kebab, layoutOf, resolutionEffects, tokenEffects } from "./campaignGuide";
+import { actsAndAgendas, chaosBag, introLead, prologueOf, codesByName, isOfficial, kebab, layoutOf, resolutionEffects, tokenEffects } from "./campaignGuide";
 
 describe("chaosBag", () => {
   it("renames the guide's tokens and drops the ones the engine doesn't know", () => {
@@ -93,6 +93,32 @@ describe("resolutionEffects", () => {
   });
   it("a resolution without an experience step still gives the victory display's experience", () => {
     expect(resolutionEffects([], {}).effects).toEqual([{ do: "xp", victory: true, bonus: 0, who: "each" }]);
+  });
+});
+
+describe("prologueOf", () => {
+  const campaign = {
+    setup: ["prologue", "choose_investigators"],
+    steps: [
+      { id: "prologue", type: "story", text: "“I’m going to burn his accursed diary…”\n–H. P. Lovecraft" },
+      { id: "choose_investigators", type: "input", text: "Choose investigators" },
+    ],
+  };
+  it("is the campaign's first story step, its markup removed", () => {
+    expect(prologueOf(campaign)).toBe("“I’m going to burn his accursed diary…”\n–H. P. Lovecraft");
+    expect(prologueOf({ ...campaign, steps: [{ id: "prologue", type: "story", text: "<i>Friday</i>, September 18." }] })).toBe("Friday, September 18.");
+  });
+  it("is nothing when the campaign has no story step", () => {
+    expect(prologueOf({ setup: ["a"], steps: [{ id: "a", type: "input", text: "x" }] })).toBeUndefined();
+    expect(prologueOf({})).toBeUndefined();
+  });
+});
+
+describe("introLead", () => {
+  it("is the first paragraph, markup removed; nothing for no intro", () => {
+    expect(introLead("<fancy>April 15</fancy> Something.\n\nSecond paragraph.")).toBe("April 15 Something.");
+    expect(introLead(undefined)).toBeUndefined();
+    expect(introLead("  ")).toBeUndefined();
   });
 });
 

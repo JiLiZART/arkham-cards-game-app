@@ -458,5 +458,8 @@
   "kw.uses.name": "Uses",
   "kw.uses": "Enters play with that many tokens of the named kind (ammo, supplies, charges, secrets…), spent to pay for its abilities.",
   "kw.victory.name": "Victory",
-  "kw.victory": "When this card leaves play through the investigators' actions it goes to the victory display; at the end of the scenario its victory points are experience."
+  "kw.victory": "When this card leaves play through the investigators' actions it goes to the victory display; at the end of the scenario its victory points are experience.",
+  "wizard.scenarios": "{n} scenarios",
+  "wizard.more": "More",
+  "wizard.less": "Less"
 }

@@ -1,0 +1,53 @@
+{
+ "source": "inspired/ahc100_rulebook-web.pdf",
+ "files": {
+  "class-guardian": {
+   "file": "class-guardian.webp",
+   "page": 25,
+   "object": "025-925",
+   "note": "a page with the Guardian emblem"
+  },
+  "class-mystic": {
+   "file": "class-mystic.webp",
+   "page": 28,
+   "object": "028-937",
+   "note": "a page with the Mystic emblem"
+  },
+  "class-rogue": {
+   "file": "class-rogue.webp",
+   "page": 27,
+   "object": "027-933",
+   "note": "a page with the Rogue emblem"
+  },
+  "class-seeker": {
+   "file": "class-seeker.webp",
+   "page": 26,
+   "object": "026-929",
+   "note": "a page with the Seeker emblem"
+  },
+  "class-survivor": {
+   "file": "class-survivor.webp",
+   "page": 29,
+   "object": "029-941",
+   "note": "a page with the Survivor emblem"
+  },
+  "parchment": {
+   "file": "parchment.webp",
+   "page": 6,
+   "object": "006-354",
+   "note": "a portrait page with the vine border"
+  },
+  "parchment-wide": {
+   "file": "parchment-wide.webp",
+   "page": 2,
+   "object": "002-003",
+   "note": "a landscape page with the vine border"
+  },
+  "title": {
+   "file": "title.webp",
+   "page": 24,
+   "object": "024-922",
+   "note": "the cover painting without the logo, fading into the dark"
+  }
+ }
+}

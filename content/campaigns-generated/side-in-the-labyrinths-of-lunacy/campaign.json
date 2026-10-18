@@ -88,5 +88,8 @@
     "side"
   ],
   "generated": true,
-  "card": "70001"
+  "card": "70001",
+  "scenarioNames": [
+    "The Labyrinths of Lunacy"
+  ]
 }
