@@ -21,8 +21,15 @@ describe("parseImageName", () => {
     expect(parseImageName("231 (2).png")).toEqual({ from: 231, to: 231, side: "front", copies: 2 });
   });
 
+  it("drops a short letter prefix and an underscore before the side letter", () => {
+    expect(parseImageName("RPC 36_1.png")).toEqual({ from: 36, to: 36, side: "front", copies: 1 });
+    expect(parseImageName("RPC 15b_1.png")).toEqual({ from: 15, to: 15, side: "back" });
+    expect(parseImageName("NC_01_a.png")).toEqual({ from: 1, to: 1, side: "front" });
+    expect(parseImageName("NC_09_2.png")).toEqual({ from: 9, to: 9, side: "front", copies: 2 });
+  });
+
   it("leaves everything else alone: minis, helps, act sides, variants", () => {
-    for (const n of ["01mini_a.png", "Help1.png", "68 Act 2 A.jpg", "178b-5.png", "RPC 36_1.png", "NC_09_2.png", "notes.txt"]) expect(parseImageName(n)).toBeNull();
+    for (const n of ["01mini_a.png", "Help1.png", "68 Act 2 A.jpg", "178b-5.png", "NC-back.png", "notes.txt"]) expect(parseImageName(n)).toBeNull();
   });
 });
 
@@ -36,9 +43,14 @@ describe("codePrefix", () => {
     expect(codePrefix("SA_03_Лабиринты_безумия")).toBe("70");
   });
 
+  it("starter decks are numbered inside the 60 range, a hundred per deck", () => {
+    expect(codePrefix("SD_01_Nathaniel_Cho")).toBe("601");
+    expect(codePrefix("SD_05_Stella_Clark")).toBe("605");
+  });
+
   it("returns null for folders without a known code range", () => {
     expect(codePrefix("books")).toBeNull();
-    expect(codePrefix("SD_01_Nathaniel_Cho")).toBeNull();
+    expect(codePrefix("PI_03_Кровная_Вражда")).toBeNull();
   });
 });
 
@@ -76,6 +88,13 @@ describe("resolveFolder", () => {
     const r = at(["118a.png", "118 a.png"]);
     expect(r.picks).toHaveLength(1);
     expect(r.extra).toHaveLength(1);
+  });
+});
+
+describe("resolveFolder in a starter deck", () => {
+  it("NC_09_2 in the first starter deck is card 60109", () => {
+    const codes = new Map<string, CodeInfo>([["60109", { quantity: 2, doubleSided: false }]]);
+    expect(resolveFolder("SD_01_Nathaniel_Cho", ["NC_09_2.png"], codes).picks).toEqual([{ code: "60109", side: "front", file: "NC_09_2.png" }]);
   });
 });
 

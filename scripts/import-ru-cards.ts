@@ -6,8 +6,8 @@
  *   1. extract  — the PDFs' embedded card images (pdfimages), Russian Tesseract data
  *   2. ocr      — title and full-card text of every candidate image
  *   3. match    — score each image against the content's cards (see ruMatch.ts)
- *   4. choose   — per code and side: the best CARDS_ru image, else the best PDF image; review overrides on top
- *   5. review   — .cache/ru-import/review.html for uncertain picks
+ *   4. choose   — per code and side: the folder file, else the best CARDS_ru image, else the best PDF image; overrides on top
+ *   5. review   — .cache/ru-import/review-<range>.html, one contact sheet per code range (01 core, 02 Dunwich, 50 Return to…)
  *   6. output   — content/i18n/ru/images.json, public/cards-ru/*.webp (content cards, 50%), src/ui/ruImages.generated.json
  * Needs tesseract, pdfimages (poppler), ImageMagick and cwebp.   npm run import:ru-cards [-- --stage ocr]
  */
@@ -272,7 +272,10 @@ async function matchAndOutput(cands: Candidate[]) {
   const manifest = choose(ranked, overrides, (f) => (f.startsWith(CARDS_DIR) ? "cards" : f.startsWith(FOLDERS_DIR) ? "folder" : "pdf"), fixed);
   const sorted = Object.fromEntries(Object.keys(manifest).sort().map((k) => [k, manifest[k]]));
   writeFileSync(MANIFEST, JSON.stringify(sorted, null, 1) + "\n");
-  writeFileSync(join(CACHE, "review.html"), reviewPage(db, cards, manifest, ranked));
+  // one contact sheet per code range (a cycle, a Return-to box, a standalone), so a review is a page at a time
+  for (const f of readdirSync(CACHE)) if (/^review(-\d\d)?\.html$/.test(f)) rmSync(join(CACHE, f));
+  for (const range of [...new Set(cards.map((c) => c.code.slice(0, 2)))].sort())
+    writeFileSync(join(CACHE, `review-${range}.html`), reviewPage(db, cards.filter((c) => c.code.startsWith(range)), manifest, ranked));
   // outputs: 50% WebP for every chosen side, and the list the game reads
   mkdirSync(OUT_DIR, { recursive: true });
   const outputs: string[] = [];
@@ -322,7 +325,7 @@ async function matchAndOutput(cands: Candidate[]) {
     if (have.includes(k)) r[0]++;
   }
   console.log(`by code range: ${Object.entries(perRange).sort().map(([r, [h, n]]) => `${r} ${h}/${n}`).join(", ")}`);
-  console.log(`unmatched images: ${ranked.filter((r) => !accepted(r.scores)).length}; review: ${join(CACHE, "review.html")}`);
+  console.log(`unmatched images: ${ranked.filter((r) => !accepted(r.scores)).length}; review: ${join(CACHE, "review-<range>.html")}`);
 }
 
 async function main() {

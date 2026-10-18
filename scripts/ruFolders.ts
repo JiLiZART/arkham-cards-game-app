@@ -28,12 +28,13 @@ export interface FolderPick {
 
 const IMAGE = /\.(png|jpe?g|webp)$/i;
 // number, optional run end, optional side letter (Latin or Cyrillic look-alikes), optional copies
-const NAME = /^(\d{1,3})(?:-(\d{1,3}))?(?:\s*([aAаАbBбБ]))?(?:_(\d{1,2})|\s*\((\d{1,2})\)|_)?$/;
+const NAME = /^(\d{1,3})(?:-(\d{1,3}))?(?:[\s_]*([aAаАbBбБ]))?(?:_(\d{1,2})|\s*\((\d{1,2})\)|_)?$/;
 const FRONT = /[aAаА]/;
 
 /** what an image file name says, or null when the grammar does not cover it */
 export function parseImageName(name: string): ImageName | null {
-  const m = NAME.exec(name.replace(IMAGE, ""));
+  // some folders put the deck's or box's initials first: "RPC 36_1", "NC_09_2"
+  const m = NAME.exec(name.replace(IMAGE, "").replace(/^[A-Za-z]{2,3}[ _]/, ""));
   if (!m) return null;
   const from = Number(m[1]);
   const letter = m[3];
@@ -50,8 +51,13 @@ export function parseImageName(name: string): ImageName | null {
 /** standalone scenarios have their own code ranges */
 const STANDALONE: Record<string, string> = { sa_01: "81", sa_02: "82", sa_03: "70", sa_04: "71", sa_05: "72" };
 
-/** the two leading digits of the codes a folder holds: `02_…` is cycle 2, `0xR_…` a Return-to box (50 on) */
+/**
+ * The leading digits of the codes a folder holds: `02_…` is cycle 2, `0xR_…` a Return-to box (50 on), `SD_0k_…` the
+ * k-th starter deck (60k). A file's number fills the rest of the five digits.
+ */
 export function codePrefix(folder: string): string | null {
+  const deck = /^SD_0(\d)_/.exec(folder);
+  if (deck) return `60${deck[1]}`;
   const ret = /^(\d{2})R_/.exec(folder);
   if (ret) return String(49 + Number(ret[1])).padStart(2, "0");
   const cycle = /^(\d{2})_/.exec(folder);
@@ -83,7 +89,7 @@ export function resolveFolder(folder: string, files: string[], codes: Map<string
     }
     const hits: FolderPick[] = [];
     for (let i = n.from; i <= n.to; i++) {
-      const code = prefix + String(i).padStart(3, "0");
+      const code = prefix + String(i).padStart(5 - prefix.length, "0");
       const info = codes.get(code);
       if (!info) continue;
       if (n.side === "back" && !info.doubleSided) continue;
