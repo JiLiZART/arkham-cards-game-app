@@ -3,7 +3,7 @@ import { createCard, type G } from "../engine/core";
 import { run } from "../engine/engine";
 import { commitDone, db, giveCard, locId, mutate, pick, putEnemy, skipMulligans, start } from "../engine/testkit";
 import type { GameState } from "../engine/types";
-import { autoSwitchTarget, barAsk, deckOptions, barModel, canAct, choicesOffered, delayed, investigatorChoice, investigatorOptions, landingView, ownDecisionTitle, shownInv } from "./players";
+import { abilityOptionsOf, autoSwitchTarget, barAsk, deckOptions, barModel, canAct, choicesOffered, delayed, investigatorChoice, investigatorOptions, landingView, ownDecisionTitle, shownInv } from "./players";
 
 const ROLAND = "01001";
 const DAISY = "01002";
@@ -165,6 +165,30 @@ describe("investigatorOptions", () => {
     const { state } = turn();
     const o = investigatorOptions(withOptions(state, ROLAND, [{ id: "pass" }]));
     expect(o.answers.size + o.abilities.length).toBe(0);
+  });
+});
+
+describe("abilityOptionsOf", () => {
+  const withOptions = (state: GameState, options: { id: string; card?: string }[]) =>
+    ({ ...state, pending: { ...state.pending!, inv: ROLAND, kind: "reaction", options: options.map((o) => ({ ...o, label: o.id, value: o.id })) } }) as GameState;
+  const cardOf = (state: GameState, i: string) => state.invs[i].cardId;
+
+  it("the investigator's own ability on their card is offered on their stat bar, and a pass is not", () => {
+    const { state } = turn();
+    const s = withOptions(state, [{ id: "r", card: cardOf(state, ROLAND) }, { id: "pass" }]);
+    expect(abilityOptionsOf(s, ROLAND).map((o) => o.id)).toEqual(["r"]);
+    expect(abilityOptionsOf(s, DAISY)).toEqual([]);
+  });
+
+  it("answers among investigators stay on the avatars: none for the stat bar", () => {
+    const { state } = turn();
+    const s = withOptions(state, [{ id: ROLAND, card: cardOf(state, ROLAND) }, { id: DAISY, card: cardOf(state, DAISY) }]);
+    expect(abilityOptionsOf(s, ROLAND)).toEqual([]);
+    expect(abilityOptionsOf(s, DAISY)).toEqual([]);
+  });
+
+  it("nothing pending, nothing offered", () => {
+    expect(abilityOptionsOf({ ...turn().state, pending: null } as GameState, ROLAND)).toEqual([]);
   });
 });
 

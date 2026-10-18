@@ -49,6 +49,12 @@ export function barAsk(game: GameState, view: Looking): BarAsk {
   return { kind: "choice", buttons: offered };
 }
 
+/** the pending options that are an investigator's own ability (on their card, not an answer among investigators): the stat bar's and the sheet's buttons */
+export function abilityOptionsOf(game: GameState, inv: InvId): ChoiceOption[] {
+  const card = game.invs[inv]?.cardId;
+  return investigatorOptions(game).abilities.filter((o) => o.card === card);
+}
+
 export interface Avatar {
   inv: InvId;
   health: number;

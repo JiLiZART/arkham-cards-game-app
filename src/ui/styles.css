@@ -337,6 +337,8 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 .stat-head .stat-name { font-size: 36px; line-height: 1.05; }
 .stat-ability { font: 14px/1.3 Alegreya, Georgia, serif; color: var(--ink); }
 .stat-who .modal-options button { padding: 4px 10px; font-size: 14px; }
+/* the bar is drawn at 75 %: its buttons are at least 44 px on screen, lit like the rail's */
+.stat-dock .stat-who .modal-options button { min-height: 59px; min-width: 59px; box-shadow: 0 0 0 2px var(--gold), 0 0 14px #c9a95c88; }
 .stat-row { display: flex; gap: 14px; align-items: center; }
 .stat-bar .stat b { font-size: 38px; line-height: 1; }
 .stat-bar .stat small { font-size: 22px; }

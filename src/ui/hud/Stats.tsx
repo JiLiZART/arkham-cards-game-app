@@ -10,11 +10,12 @@ import { isIcon } from "../icons";
 import { backUrl } from "../images";
 import { Portrait } from "../Portrait";
 import { TokenPile } from "../TokenPile";
+import { abilityOptionsOf } from "../players";
 import { useShown } from "../usePlayers";
 import { useDimmed, useView } from "../view";
 import { formatText } from "./Hud";
 import { STAT_BAR_W, STAT_BAR_ZOOM } from "./fan";
-import { OptionButtons } from "./Modals";
+import { OptionButtons, useCardOptions } from "./Modals";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
 
@@ -121,18 +122,22 @@ export function StatBody({ inv, onPortrait, legal, options, dimmed }: { inv: Inv
 
 /**
  * The investigator on screen (the one being looked at, else the decider), bottom-left at 75 %: portrait, ability, health
- * and sanity, skills; resources and clues as token stacks and the hand count above. Investigator-card options stay on
- * the avatars and their sheet; the portrait opens the card.
+ * and sanity, skills; resources and clues as token stacks and the hand count above. The investigator's own ability options
+ * are buttons under the ability text (and in the avatar sheet, which the phone uses); answers among investigators stay on
+ * the avatars. The portrait opens the card.
  */
 export function StatBar() {
   const game = useGame((s) => s.game) as GameState;
   const shown = useShown();
   const cardId = shown ? game.invs[shown]?.cardId : null;
   const dimmed = useDimmed(shown ?? "");
+  // the investigator's own ability, when the pending choice offers it (the sheet keeps the same buttons for the phone)
+  const abilities = abilityOptionsOf(game, shown ?? "");
+  const options = useCardOptions([cardId]).filter((o) => abilities.some((x) => x.id === o.id));
   if (!shown || !game.invs[shown] || !cardId) return null;
   return (
     <div className="stat-dock" style={{ width: STAT_BAR_W / STAT_BAR_ZOOM, zoom: STAT_BAR_ZOOM }}>
-      <StatBody inv={shown} dimmed={dimmed} onPortrait={() => useView.getState().setModal({ card: cardId })} />
+      <StatBody inv={shown} dimmed={dimmed} legal={options.length > 0} options={options} onPortrait={() => useView.getState().setModal({ card: cardId })} />
     </div>
   );
 }
