@@ -63,6 +63,12 @@ export async function loadAllPacks(onProgress?: (done: number, total: number) =>
   return errors.flat();
 }
 
+/** the packs some cards come from, those not loaded yet, loaded in parallel; resolves with their content errors */
+export async function loadPacksFor(codes: string[]): Promise<ContentError[]> {
+  const packs = packsOf(codes).filter((p) => content.packs[p] && !content.packs[p].loaded);
+  return (await Promise.all(packs.map(loadPack))).flat();
+}
+
 const loadingCampaigns = new Map<string, Promise<ContentError[]>>();
 /** bring a generated campaign's scenarios and text into the content; a hand-written or loaded campaign resolves at once */
 export function loadCampaign(id: string): Promise<ContentError[]> {

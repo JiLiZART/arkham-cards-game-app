@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
+import { loadPacksFor } from "../../content";
 import { db } from "../../engine/testkit";
 import { saveCustomDeck } from "../decks";
 import type { Storage } from "../store";
-import { back, canContinue, cycleName, cyclesOf, decksFor, investigatorInfo, pickerList, campaignOrder, initialWizard, invalidDecksFor, next, setCampaign, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type WizardState } from "./wizard";
+import { back, canContinue, cardsOfPicks, deckProblems, cycleName, picksReady, cyclesOf, decksFor, investigatorInfo, pickerList, campaignOrder, initialWizard, invalidDecksFor, next, setCampaign, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type WizardState } from "./wizard";
 
 const ROLAND = "01001";
 const DAISY = "01002";
@@ -201,5 +202,20 @@ describe("choosing among all investigators", () => {
     expect(cycleName(db, "en", "dwl")).toBe("The Dunwich Legacy");
     expect(cycleName(db, "en", "core")).toBe("Night of the Zealot");
     expect(cycleName(db, "en", "investigator")).toBe("Investigator Expansions");
+  });
+});
+
+describe("the decks of investigators from other cycles", () => {
+  it("wait for their packs: not refused as unknown cards, and Continue waits until they are loaded", async () => {
+    let s = tap(initialWizard(db), "02001");
+    s = { ...s, step: "decks" };
+    expect(cardsOfPicks(db, s)).toEqual(expect.arrayContaining(["02001", "02006", "02007"]));
+    expect(picksReady(db, s)).toBe(false);
+    expect(deckProblems(db, s, "02001")).toEqual([]);
+    expect(canContinue(db, s)).toBe(false);
+    await loadPacksFor(cardsOfPicks(db, s));
+    expect(picksReady(db, s)).toBe(true);
+    expect(deckProblems(db, s, "02001")).toEqual([]);
+    expect(canContinue(db, s)).toBe(true);
   });
 });

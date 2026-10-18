@@ -1,6 +1,8 @@
 /** the new-game wizard's state: pure, so the order and back rules are tested without React */
 import { campaignName, cardText, t } from "../../content/i18n";
 import type { CampaignDef, DeckDef, Difficulty } from "../../content/schema";
+import { packsOf } from "../../content";
+import { packLoaded } from "../../content/loader";
 import { validateDeck } from "../../engine/decks";
 import type { ContentDb } from "../../engine/types";
 import { customDecks, type SavedDeck } from "../decks";
@@ -124,8 +126,15 @@ export function setDifficulty(s: WizardState, d: Difficulty, db?: ContentDb): Wi
   return known ? { ...s, difficulty: d } : s;
 }
 
-/** problems with a picked investigator's deck (an empty list is fine) */
+/** every card the picked investigators may bring: their own cards and every card of the decks on offer to them */
+export const cardsOfPicks = (db: ContentDb, s: WizardState): string[] => [...new Set(s.picks.flatMap((code) => [code, ...decksFor(db, code).flatMap((d) => Object.keys(d.cards))]))];
+
+/** whether the packs of those cards are in the content: a deck of a later cycle can only be checked once they are */
+export const picksReady = (db: ContentDb, s: WizardState) => packsOf(cardsOfPicks(db, s)).every((p) => !db.packs[p] || packLoaded(db, p));
+
+/** problems with a picked investigator's deck (an empty list is fine; none are told while its cards are still loading) */
 export function deckProblems(db: ContentDb, s: WizardState, code: string): string[] {
+  if (!picksReady(db, s)) return [];
   const deck = decksFor(db, code).find((d) => d.id === s.decks[code]);
   return deck ? validateDeck(db, deck).map((p) => p.message) : ["no deck chosen"];
 }
@@ -138,7 +147,7 @@ export function canContinue(db: ContentDb, s: WizardState): boolean {
     case "investigators":
       return s.picks.length >= 1;
     case "decks":
-      return s.picks.length >= 1 && s.picks.every((c) => deckProblems(db, s, c).length === 0);
+      return s.picks.length >= 1 && picksReady(db, s) && s.picks.every((c) => deckProblems(db, s, c).length === 0);
     case "difficulty":
       return s.difficulty in (db.campaigns[s.campaignId]?.chaosBags ?? {});
     case "ready":

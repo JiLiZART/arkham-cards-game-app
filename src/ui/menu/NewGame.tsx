@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { campaignLoaded, loadCampaign } from "../../content";
+import { campaignLoaded, loadCampaign, loadPacksFor } from "../../content";
 import { campaignBlurb, campaignName, scenarioText, t } from "../../content/i18n";
 import type { DeckDef, Difficulty } from "../../content/schema";
 import { db, gameStore, useGame } from "../context";
@@ -12,7 +12,7 @@ import { customDecks, deleteCustomDeck, emptyDeck, problemText, renameCustomDeck
 import { safeStorage } from "../store";
 import { DeckBuilder } from "./DeckBuilder";
 import { blurb } from "./blurb";
-import { back, campaignOrder, canContinue, cycleName, cyclesOf, deckProblems, decksFor, initialWizard, invalidDecksFor, next, pickerList, setCampaign, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type PickerFilter, type WizardState } from "./wizard";
+import { back, campaignOrder, canContinue, cardsOfPicks, cycleName, picksReady, cyclesOf, deckProblems, decksFor, initialWizard, invalidDecksFor, next, pickerList, setCampaign, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type PickerFilter, type WizardState } from "./wizard";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
 const DIFFICULTIES: Difficulty[] = ["easy", "standard", "hard", "expert"];
@@ -141,6 +141,7 @@ function DecksStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }
         onCancel={() => setEditing(null)}
       />
     );
+  if (!picksReady(db, s)) return <p className="wz-hint" role="status">{tr("wizard.loading")}</p>;
   return (
     <div className="wz-decks">
       {s.picks.map((code, k) => {
@@ -302,6 +303,18 @@ export function Wizard() {
         .then(() => loaded((n) => n + 1))
         .catch((e) => console.error(e));
   }, [s.campaignId]);
+  // the picked investigators' decks of later cycles: their packs load as soon as they are picked, so the deck step can check them
+  const picks = s.picks.join(",");
+  useEffect(() => {
+    if (picksReady(db, s)) return;
+    let live = true;
+    loadPacksFor(cardsOfPicks(db, s))
+      .then(() => live && loaded((n) => n + 1))
+      .catch((e) => console.error(e));
+    return () => {
+      live = false;
+    };
+  }, [picks]);
   const at = STEPS.indexOf(s.step);
   const last = at === STEPS.length - 1;
   return (
