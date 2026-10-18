@@ -394,8 +394,6 @@
   "deckEditor.name": "Deck name",
   "deckEditor.valid": "The deck is valid",
   "deckEditor.size": "{n} of {size} cards",
-  "deckEditor.swaps": "Swaps: {used} of {limit}",
-  "deckEditor.limit": "You can swap at most {limit} cards from the starter deck",
   "deckEditor.deck": "The deck",
   "deckEditor.always": "Always in the deck",
   "deckEditor.pool": "Cards you can add ({n})",
@@ -521,5 +519,13 @@
   "deck.choice.class": "{inv}'s deck needs a class chosen when it is made, which the builder doesn't offer yet",
   "deck.choice.option": "{inv}'s deck needs an option chosen when it is made, which the builder doesn't offer yet",
   "deck.choice.size": "{inv}'s deck needs a deck size chosen when it is made, which the builder doesn't offer yet",
-  "deck.choice.role": "{inv}'s deck needs a role choice the builder doesn't offer yet"
+  "deck.choice.role": "{inv}'s deck needs a role choice the builder doesn't offer yet",
+  "deckEditor.new": "New empty deck",
+  "upgrade.title": "Upgrade decks",
+  "upgrade.button": "Upgrade deck",
+  "upgrade.xp": "{left} of {have} experience left (this costs {cost})",
+  "upgrade.cost": "{need} experience needed; {have} available",
+  "upgrade.save": "Spend {n} XP and save",
+  "upgrade.invalid": "The deck can't be saved: {message}",
+  "upgrade.noCampaign": "There is no campaign to spend experience in"
 }

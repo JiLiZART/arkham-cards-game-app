@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { validateDeck } from "../engine/decks";
 import { db } from "../engine/testkit";
-import { addOp, applySwaps, basicWeaknesses, customDecks, defaultDeckName, deleteCustomDeck, poolFor, renameCustomDeck, saveCustomDeck, swapBudget, type DeckOp } from "./decks";
+import { basicWeaknesses, builderPool, changeCopies, customDecks, defaultDeckName, deleteCustomDeck, emptyDeck, renameCustomDeck, saveCustomDeck, withWeakness } from "./decks";
 import type { Storage } from "./store";
 
 const ROLAND = "01001";
@@ -14,127 +14,89 @@ const memory = (): Storage & { data: Map<string, string> } => {
   const data = new Map<string, string>();
   return { data, getItem: (k) => data.get(k) ?? null, setItem: (k, v) => void data.set(k, v), removeItem: (k) => void data.delete(k) };
 };
-const nameOf = (code: string) => db.cards[code].name;
 
-/** a card the deck could take two more of: in the pool, absent from the deck, with room for two copies */
-const spare = () => poolFor(db, ROLAND).find((c) => !base.cards[c.code] && (c.deckLimit ?? 2) >= 2)!.code;
-
-describe("poolFor", () => {
-  const pool = poolFor(db, ROLAND);
-  const codes = new Set(pool.map((c) => c.code));
-
-  it("is level 0 assets, events and skills of the investigator's classes and neutral", () => {
-    expect(pool.length).toBeGreaterThan(20);
-    for (const c of pool) {
-      expect(c.xp ?? 0, c.name).toBe(0);
-      expect(["asset", "event", "skill"], c.name).toContain(c.type);
-      expect(["guardian", "seeker", "neutral"], c.name).toContain(c.faction);
-    }
+describe("building a deck", () => {
+  it("an empty deck holds the signature cards and the weakness slot, with a random basic weakness", () => {
+    const d = emptyDeck(db, ROLAND);
+    expect(Object.keys(d.cards).sort()).toEqual(["01006", "01007"]);
+    expect(d.randomBasicWeakness).toBe(true);
+    expect(validateDeck(db, d).map((p) => p.reason?.key)).toEqual(["deck.size"]);
   });
 
-  it("leaves out other classes, signatures, weaknesses and other investigators' signatures", () => {
-    expect([...codes].some((c) => db.cards[c].faction === "mystic")).toBe(false);
-    expect(codes.has("01006")).toBe(false); // Roland's .38 Special
-    expect(codes.has("01007")).toBe(false); // Cover Up
-    expect(codes.has(PARANOIA)).toBe(false);
-    expect([...codes].some((c) => db.cards[c].subtype)).toBe(false);
+  it("changeCopies adds and takes away one copy at a time, never below none, and never changes its input", () => {
+    const before = { ...base.cards };
+    const more = changeCopies(base.cards, FLASHLIGHT, 1);
+    expect(more[FLASHLIGHT]).toBe(base.cards[FLASHLIGHT] + 1);
+    expect(base.cards).toEqual(before);
+    expect(changeCopies({ a: 1 }, "a", -1)).toEqual({});
+    expect(changeCopies({}, "a", -1)).toEqual({});
   });
 
-  it("holds the starter deck's own cards, so removed copies can be restored", () => {
-    for (const c of [FLASHLIGHT, MACHETE, "01017"]) expect(codes.has(c), nameOf(c)).toBe(true);
-  });
-});
-
-describe("applySwaps and the swap budget", () => {
-  const remove = (code: string): DeckOp => ({ op: "remove", code });
-  const add = (code: string): DeckOp => ({ op: "add", code });
-
-  it("swapping two Flashlights for two other cards keeps the deck valid and the same size", () => {
-    const ops = [remove(FLASHLIGHT), remove(FLASHLIGHT), add(spare()), add(spare())];
-    const deck = applySwaps(db, base, ops);
-    expect(deck.cards[FLASHLIGHT]).toBeUndefined();
-    expect(deck.cards[spare()]).toBe(2);
-    expect(validateDeck(db, deck)).toEqual([]);
-    expect(swapBudget(db, base, ops)).toEqual({ used: 2, limit: 5, left: 3 });
-  });
-
-  it("the starter deck itself is never changed", () => {
-    const before = structuredClone(base);
-    applySwaps(db, base, [remove(FLASHLIGHT), add(spare())]);
-    expect(base).toEqual(before);
-  });
-
-  it("a sixth removal is refused, naming the limit", () => {
-    const five = [...Object.keys(base.cards).filter((c) => c !== "01006" && c !== "01007" && c !== PARANOIA).slice(0, 5).map(remove)];
-    let ops: DeckOp[] = [];
-    for (const o of five) {
-      const r = addOp(db, base, ops, o);
-      expect(r.ok).toBe(true);
-      if (r.ok) ops = r.ops;
-    }
-    expect(swapBudget(db, base, ops).left).toBe(0);
-    const sixth = addOp(db, base, ops, remove(Object.keys(base.cards).filter((c) => c !== "01006" && c !== "01007" && c !== PARANOIA)[5]));
-    expect(sixth).toEqual({ ok: false, reason: "limit" });
-  });
-
-  it("taking back an added card does not spend the budget, and re-adding a removed card gives it back", () => {
-    const ops = [add(spare()), remove(spare())];
-    expect(swapBudget(db, base, ops).used).toBe(0);
-    expect(applySwaps(db, base, ops).cards).toEqual(base.cards);
-    expect(swapBudget(db, base, [remove(FLASHLIGHT), add(FLASHLIGHT)]).used).toBe(0);
-  });
-
-  it("a third copy fails validation with the card named", () => {
-    const deck = applySwaps(db, base, [add(MACHETE), add(MACHETE)]);
-    expect(deck.cards[MACHETE]).toBe(3);
-    const problem = validateDeck(db, deck).find((p) => p.reason?.key === "deck.copies");
-    expect(problem).toMatchObject({ code: MACHETE, reason: { key: "deck.copies", vars: { card: MACHETE, n: 3, limit: 2 } } });
-  });
-});
-
-describe("the basic weakness", () => {
-  it("lists the loaded basic weaknesses", () => {
-    expect(basicWeaknesses(db).map((c) => c.code)).toContain(PARANOIA);
-  });
-
-  it("a chosen weakness replaces the deck's, a random one is the flag with none listed", () => {
+  it("the basic weakness: a chosen one replaces the deck's, a random one is the flag with none listed", () => {
     const other = basicWeaknesses(db).find((c) => c.code !== PARANOIA)!.code;
-    const chosen = applySwaps(db, base, [{ op: "weakness", code: other }]);
+    const chosen = withWeakness(db, base, other);
     expect(chosen.cards[other]).toBe(1);
     expect(chosen.cards[PARANOIA]).toBeUndefined();
     expect(chosen.randomBasicWeakness).toBe(false);
     expect(validateDeck(db, chosen)).toEqual([]);
-    const random = applySwaps(db, base, [{ op: "weakness", code: null }]);
+    const random = withWeakness(db, base, null);
     expect(random.cards[PARANOIA]).toBeUndefined();
     expect(random.randomBasicWeakness).toBe(true);
     expect(validateDeck(db, random)).toEqual([]);
   });
+
+  it("the pool of a builder: player cards the investigator may take, with the reason for the others, the signatures left out", () => {
+    const rows = builderPool(db, "en", ROLAND, { query: "", factions: [], types: [], levels: [] });
+    const codes = new Set(rows.map((c) => c.code));
+    expect(codes.has(MACHETE)).toBe(true);
+    expect(codes.has("01006")).toBe(false); // Roland's .38 Special
+    expect(codes.has("01007")).toBe(false); // Cover Up
+    expect(rows.every((c) => !c.subtype && c.faction !== "mythos" && c.type !== "investigator")).toBe(true);
+    // preset to the classes of the investigator's options
+    expect(new Set(rows.map((c) => c.faction))).toEqual(new Set(["guardian", "seeker", "neutral"]));
+  });
 });
 
 describe("saved custom decks", () => {
-  const input = () => ({ name: "Roland · test", investigator: ROLAND, base: base.id, ops: [{ op: "remove", code: FLASHLIGHT }, { op: "remove", code: FLASHLIGHT }, { op: "add", code: spare() }, { op: "add", code: spare() }] as DeckOp[] });
+  function poolRows() {
+    return builderPool(db, "en", ROLAND, { query: "", factions: [], types: [], levels: [0] }).filter((c) => !c.keywords.includes("exceptional") && (c.deckLimit ?? 2) >= 2 && !Object.keys(base.cards).some((k) => db.cards[k].name === c.name));
+  }
+  const six = () => {
+    const swapped = { ...base.cards };
+    const out = Object.keys(swapped).filter((k) => k !== "01006" && k !== "01007" && k !== PARANOIA && swapped[k] === 2).slice(0, 3);
+    for (const k of out) delete swapped[k];
+    for (const c of poolRows().slice(0, 3)) swapped[c.code] = 2;
+    return { name: "Roland · test", investigator: ROLAND, base: base.id, cards: swapped, randomBasicWeakness: base.randomBasicWeakness };
+  };
 
   it("round-trips through storage and is offered for its investigator only", () => {
     const store = memory();
-    const saved = saveCustomDeck(db, store, input());
+    const saved = saveCustomDeck(db, store, six());
     expect(saved.id).toMatch(/^custom:/);
     expect(saved.problems).toEqual([]);
     const back = customDecks(db, ROLAND, store);
     expect(back.map((d) => [d.id, d.name])).toEqual([[saved.id, "Roland · test"]]);
-    expect(back[0].deck.cards).toEqual(applySwaps(db, base, input().ops).cards);
+    expect(back[0].deck.cards).toEqual(six().cards);
     expect(back[0].deck.id).toBe(saved.id);
     expect(customDecks(db, "01002", store)).toEqual([]);
   });
 
+  it("six cards swapped out is fine: there is no swap limit, only the deckbuilding rules", () => {
+    const store = memory();
+    const saved = saveCustomDeck(db, store, six());
+    expect(saved.problems).toEqual([]);
+    expect(Object.keys(saved.deck.cards).filter((c) => !base.cards[c]).length).toBe(3);
+  });
+
   it("refuses to save an invalid deck", () => {
-    const bad = { ...input(), ops: [{ op: "add", code: MACHETE }, { op: "add", code: MACHETE }] as DeckOp[] };
+    const bad = { ...six(), cards: changeCopies(changeCopies(base.cards, MACHETE, 1), MACHETE, 1) };
     expect(() => saveCustomDeck(db, memory(), bad)).toThrow(/invalid/i);
   });
 
   it("renames and deletes", () => {
     const store = memory();
-    const a = saveCustomDeck(db, store, input());
-    const b = saveCustomDeck(db, store, { ...input(), name: "Second" });
+    const a = saveCustomDeck(db, store, six());
+    const b = saveCustomDeck(db, store, { ...six(), name: "Second" });
     renameCustomDeck(store, a.id, "Renamed");
     expect(customDecks(db, ROLAND, store).map((d) => d.name)).toEqual(["Renamed", "Second"]);
     deleteCustomDeck(store, b.id);
@@ -143,7 +105,7 @@ describe("saved custom decks", () => {
 
   it("a deck that no longer validates (a card's pack is gone) is returned with its reason", () => {
     const store = memory();
-    const saved = saveCustomDeck(db, store, input());
+    const saved = saveCustomDeck(db, store, six());
     const raw = JSON.parse(store.getItem("ah:decks")!);
     raw[0].deck.cards["99999"] = 1;
     store.setItem("ah:decks", JSON.stringify(raw));

@@ -5,6 +5,7 @@ import {
   applyScenarioEnd, currentScenarioId, scenarioSetup, startCampaign, type CampaignState, type NewCampaign,
 } from "../engine/campaign";
 import { createGame, dispatch, ENGINE_VERSION, replay } from "../engine/engine";
+import { upgradeDeck, type UpgradeResult } from "../engine/upgrade";
 import { quietNextGame } from "./arrivals";
 import { useView } from "./view";
 import type { Action, ContentDb, GameEvent, GameSetup, GameState, InvId } from "../engine/types";
@@ -75,6 +76,8 @@ export interface UiState {
   loading: boolean;
 
   newCampaign(opts: NewCampaign): void;
+  /** spend an investigator's experience on a new deck (between scenarios): the campaign keeps it, the result says what was refused */
+  upgradeDeck(investigator: InvId, cards: Record<string, number>): UpgradeResult;
   startScenario(seed?: number): void;
   choose(optionId: string): void;
   /** take back the last choice: replay without it (only down to `undoFloor`) */
@@ -204,6 +207,17 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage(),
           set({ campaign, setup: null, actions: [], game: null, error: null, notice: null });
           get().startScenario(opts.seed);
         });
+      },
+
+      upgradeDeck(investigator, cards) {
+        const c = get().campaign;
+        if (!c) return { ok: false, reason: { key: "upgrade.noCampaign" } };
+        const r = upgradeDeck(db, c, investigator, cards);
+        if (r.ok) {
+          set({ campaign: r.campaign });
+          persist();
+        }
+        return r;
       },
 
       startScenario(seed) {

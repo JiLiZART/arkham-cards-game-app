@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { campaignName, cardText, logLabel, scenarioText, t } from "../../content/i18n";
 import { currentScenarioId } from "../../engine/campaign";
 import { db, gameStore, useGame } from "../context";
 import { Portrait } from "../Portrait";
+import { DeckBuilder } from "./DeckBuilder";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
 
@@ -10,7 +12,40 @@ export function CampaignLog() {
   const campaign = useGame((s) => s.campaign);
   const notice = useGame((s) => s.notice);
   const locale = useGame((s) => s.locale);
+  const [upgrading, setUpgrading] = useState<string | null>(null);
   if (!campaign) return null;
+  const who = upgrading ? campaign.investigators.find((i) => i.code === upgrading) : undefined;
+  if (who) {
+    const before: Record<string, number> = {};
+    for (const c of who.deck) before[c] = (before[c] ?? 0) + 1;
+    return (
+      <div className="screen wizard log">
+        <header className="wz-head">
+          <h1>{tr("upgrade.title")}</h1>
+        </header>
+        <div className="wz-body">
+          <DeckBuilder
+            investigator={who.code}
+            initial={{ id: `campaign:${who.code}`, name: cardText(db, who.code, locale).name, investigator: who.code, cards: before, randomBasicWeakness: false }}
+            mode={{
+              kind: "upgrade",
+              xp: who.xp,
+              before,
+              onSave: (cards) => {
+                const r = gameStore.getState().upgradeDeck(who.code, cards);
+                if (r.ok) {
+                  setUpgrading(null);
+                  return null;
+                }
+                return t(db, locale, r.reason.key, r.reason.vars);
+              },
+            }}
+            onCancel={() => setUpgrading(null)}
+          />
+        </div>
+      </div>
+    );
+  }
   const def = db.campaigns[campaign.campaignId];
   const next = currentScenarioId(db, campaign);
   const label = (k: string) => logLabel(db, def.id, k, locale);
@@ -36,6 +71,11 @@ export function CampaignLog() {
                   <span>{tr("log.mental")} {i.mentalTrauma}</span>
                   {i.status !== "active" && <span className="log-status">{i.status}</span>}
                 </span>
+                {i.status === "active" && !campaign.result && next && (
+                  <button className="link-btn" onClick={() => setUpgrading(i.code)}>
+                    {tr("upgrade.button")}
+                  </button>
+                )}
               </div>
             </div>
           ))}

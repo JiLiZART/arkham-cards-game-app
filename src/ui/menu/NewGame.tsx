@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { campaignLoaded, loadCampaign } from "../../content";
 import { campaignBlurb, campaignName, scenarioText, t } from "../../content/i18n";
-import type { Difficulty } from "../../content/schema";
+import type { DeckDef, Difficulty } from "../../content/schema";
 import { db, gameStore, useGame } from "../context";
 import { Glyph } from "../Icon";
 import { cardImage } from "../images";
 import { hasSymbol, scenarioIcon } from "../icons";
 import { Avatar } from "./Avatar";
 import { BagCard } from "./BagCard";
-import { customDecks, deleteCustomDeck, problemText, renameCustomDeck, type DeckOp } from "../decks";
+import { customDecks, deleteCustomDeck, emptyDeck, problemText, renameCustomDeck } from "../decks";
 import { safeStorage } from "../store";
-import { DeckEditor } from "./DeckEditor";
+import { DeckBuilder } from "./DeckBuilder";
 import { blurb } from "./blurb";
 import { back, campaignOrder, canContinue, cycleName, cyclesOf, deckProblems, decksFor, initialWizard, invalidDecksFor, next, pickerList, setCampaign, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type PickerFilter, type WizardState } from "./wizard";
 
@@ -119,23 +119,26 @@ function InvestigatorsStep({ s, set }: { s: WizardState; set: (w: WizardState) =
 
 function DecksStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }) {
   const locale = useGame((s) => s.locale);
-  const [editing, setEditing] = useState<{ code: string; base: string; ops: DeckOp[]; name?: string } | null>(null);
+  const [editing, setEditing] = useState<{ code: string; base: string; initial: DeckDef; name?: string } | null>(null);
   const [renaming, setRenaming] = useState<{ id: string; name: string } | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
   // saved decks change under us (rename, delete, save): re-read them on every render
   const [, bump] = useState(0);
   if (editing)
     return (
-      <DeckEditor
+      <DeckBuilder
         investigator={editing.code}
-        baseId={editing.base}
-        initialOps={editing.ops}
+        initial={editing.initial}
         initialName={editing.name}
-        onCancel={() => setEditing(null)}
-        onSave={(d) => {
-          setEditing(null);
-          set(setDeck(s, editing.code, d.id));
+        mode={{
+          kind: "new",
+          base: editing.base,
+          onSave: (d) => {
+            setEditing(null);
+            set(setDeck(s, editing.code, d.id));
+          },
         }}
+        onCancel={() => setEditing(null)}
       />
     );
   return (
@@ -231,10 +234,16 @@ function DecksStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }
               ))}
               <button
                 className="wz-edit"
-                onClick={() => setEditing({ code, base: mine?.base ?? chosen, ops: mine?.ops ?? [], name: mine?.name })}
-                disabled={!chosen || !(mine ? db.decks[mine.base] : db.decks[chosen])}
+                onClick={() => {
+                  const current = decksFor(db, code).find((d) => d.id === chosen);
+                  if (current) setEditing({ code, base: mine?.base ?? chosen, initial: structuredClone(current), name: mine?.name });
+                }}
+                disabled={!chosen || !decksFor(db, code).some((d) => d.id === chosen)}
               >
                 {tr("deckEditor.edit")}
+              </button>
+              <button className="wz-edit" onClick={() => setEditing({ code, base: `empty:${code}`, initial: emptyDeck(db, code) })}>
+                {tr("deckEditor.new")}
               </button>
               {problems.length > 0 && <div className="problems">{problems.join(" · ")}</div>}
             </div>

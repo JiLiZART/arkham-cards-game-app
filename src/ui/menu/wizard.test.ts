@@ -108,7 +108,7 @@ describe("custom decks in the wizard", () => {
 
   it("a saved deck is offered after the starter deck, and a pick of it goes to the campaign as the deck itself", () => {
     const store = memory();
-    const saved = saveCustomDeck(db, store, { name: "Roland · test", investigator: ROLAND, base: "roland-starter", ops: [{ op: "remove", code: "01087" }, { op: "add", code: "01087" }] });
+    const saved = saveCustomDeck(db, store, { name: "Roland · test", investigator: ROLAND, base: "roland-starter", cards: { ...db.decks["roland-starter"].cards }, randomBasicWeakness: false });
     expect(decksFor(db, ROLAND, store).map((d) => d.id)).toEqual(["roland-starter", saved.id]);
     let s = tap(initialWizard(db), ROLAND);
     s = setDeck(s, ROLAND, saved.id);
@@ -122,7 +122,7 @@ describe("custom decks in the wizard", () => {
 
   it("a saved deck that no longer validates is listed apart with its reasons and can't be picked", () => {
     const store = memory();
-    const saved = saveCustomDeck(db, store, { name: "Old", investigator: ROLAND, base: "roland-starter", ops: [] });
+    const saved = saveCustomDeck(db, store, { name: "Old", investigator: ROLAND, base: "roland-starter", cards: { ...db.decks["roland-starter"].cards }, randomBasicWeakness: false });
     const raw = JSON.parse(store.getItem("ah:decks")!);
     raw[0].deck.cards["99999"] = 1;
     store.setItem("ah:decks", JSON.stringify(raw));

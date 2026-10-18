@@ -21,7 +21,7 @@ const PAGE = 60;
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
 
 /** a row of toggle chips: the chosen values are `on` */
-function Chips<T extends string | number>({ label, options, on, set }: { label: string; options: { value: T; label: ReactNode }[]; on: T[]; set(v: T[]): void }) {
+export function Chips<T extends string | number>({ label, options, on, set }: { label: string; options: { value: T; label: ReactNode }[]; on: T[]; set(v: T[]): void }) {
   if (!options.length) return null;
   return (
     <div className="cat-filter" role="group" aria-label={label}>

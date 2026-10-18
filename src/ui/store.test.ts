@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { db } from "../engine/testkit";
+import { scenarioSetup } from "../engine/campaign";
 import { ENGINE_VERSION } from "../engine/engine";
 import { ANIMATED, canUndo, createGameStore, HELD, heldCards, holdsForTap, needsNext, SAVE_KEY, type Storage } from "./store";
 
@@ -260,6 +261,39 @@ describe("game report", () => {
     expect(() => b.getState().importReport("{nope")).toThrow(/not valid JSON/i);
     expect(() => b.getState().importReport(JSON.stringify({ hello: 1 }))).toThrow(/not a game report/i);
     expect(b.getState().game).toBeNull();
+  });
+});
+
+describe("spending experience on the campaign's deck", () => {
+  const swap = () => {
+    // Flashlight (two copies) out, two copies of another level 0 card in: 2 experience
+    const cards = { ...db.decks["roland-starter"].cards };
+    delete cards["01087"];
+    const other = Object.values(db.cards).find((c) => ["guardian", "seeker", "neutral"].includes(c.faction) && ["asset", "event", "skill"].includes(c.type) && (c.xp ?? 0) === 0 && !cards[c.code] && !c.subtype && (c.deckLimit ?? 2) >= 2 && !Object.keys(db.decks["roland-starter"].cards).some((k) => db.cards[k].name === c.name) && !c.encounterSet)!;
+    cards[other.code] = 2;
+    return { cards, other: other.code };
+  };
+
+  it("takes the experience, keeps the new deck in the campaign and saves it; the next scenario uses it", () => {
+    const storage = mem();
+    const s = start(storage);
+    s.setState({ campaign: { ...s.getState().campaign!, investigators: [{ ...s.getState().campaign!.investigators[0], xp: 5 }] } });
+    const { cards, other } = swap();
+    const r = s.getState().upgradeDeck("01001", cards);
+    expect(r).toMatchObject({ ok: true, cost: 2 });
+    const inv = s.getState().campaign!.investigators[0];
+    expect(inv.xp).toBe(3);
+    expect(inv.deck).toContain(other);
+    expect(JSON.parse(storage.getItem(SAVE_KEY)!).campaign.investigators[0].deck).toContain(other);
+    expect(scenarioSetup(db, s.getState().campaign!, 1).investigators[0].deck).toContain(other);
+  });
+
+  it("refuses what the experience can't pay and leaves the campaign alone", () => {
+    const s = start(mem());
+    const before = structuredClone(s.getState().campaign);
+    const r = s.getState().upgradeDeck("01001", swap().cards);
+    expect(r).toEqual({ ok: false, reason: { key: "upgrade.cost", vars: { need: 2, have: 0 } } });
+    expect(s.getState().campaign).toEqual(before);
   });
 });
 
