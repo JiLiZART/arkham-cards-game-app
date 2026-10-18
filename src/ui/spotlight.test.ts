@@ -82,3 +82,10 @@ describe("choice spotlight", () => {
     expect(spotlightOfChoice(asking("commit", [done, opt(hand[0])], { skillTest }), R)).toEqual({ cards: [hand[0], study], invs: [R], choice: true });
   });
 });
+
+describe("a waiting draw", () => {
+  it("dims the rest of the table, as any choice does, with nothing of its own lit on the map", () => {
+    const game = { cards: {}, invs: {}, order: [], pending: { kind: "draw", inv: "01001", options: [{ id: "draw", label: "Draw", value: "draw" }] } } as never;
+    expect(spotlightOfChoice(game, "01001")).toEqual({ cards: [], invs: [], choice: true });
+  });
+});

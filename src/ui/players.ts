@@ -163,3 +163,32 @@ export function delayed(ms: number, still: () => boolean, then: () => void): () 
   }, ms);
   return () => clearTimeout(timer);
 }
+
+export interface DeckOptions {
+  /** the option that draws from the viewer's own deck: a waiting draw, or the turn's Draw action */
+  player: ChoiceOption | null;
+  /** the option that draws from the encounter deck (a waiting draw) */
+  encounter: ChoiceOption | null;
+  /** a draw is waiting for a tap (not just the Draw action being available) */
+  waiting: boolean;
+}
+
+/**
+ * The decks a tap can answer now: the viewer's deck for a waiting draw of theirs or for the turn's Draw action, the
+ * encounter deck for a waiting encounter draw. Only the deciding investigator's table gets them (the pile column shows
+ * the viewer's decks). `waiting` is for the highlights that would otherwise glow all turn (the phone drawer's handle).
+ */
+export function deckOptions(game: GameState, viewer: InvId | null): DeckOptions {
+  const none: DeckOptions = { player: null, encounter: null, waiting: false };
+  const p = game.pending;
+  if (!p || !viewer || p.inv !== viewer) return none;
+  if (p.kind === "draw") {
+    const o = p.options[0] ?? null;
+    return p.promptVars?.deck === "encounter" ? { player: null, encounter: o, waiting: true } : { player: o, encounter: null, waiting: true };
+  }
+  if (p.kind === "turn") {
+    const draw = p.options.find((o) => (o.value as { kind?: string } | null)?.kind === "draw") ?? null;
+    return { player: draw, encounter: null, waiting: false };
+  }
+  return none;
+}

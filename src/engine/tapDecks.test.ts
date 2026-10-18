@@ -38,7 +38,7 @@ describe("tapped draws", () => {
   it("the upkeep draw waits for the drawing investigator, then draws one card", () => {
     const r = until(tapped([ROLAND]), draws("player"));
     const p = r.state.pending!;
-    expect(p).toMatchObject({ kind: "draw", inv: ROLAND, promptKey: "tapDeck", promptVars: { deck: "player", n: 1 } });
+    expect(p).toMatchObject({ kind: "draw", inv: ROLAND, promptKey: "tapDeck.player", promptVars: { deck: "player", n: 1 } });
     expect(p.options.map((o) => o.label)).toEqual(["Draw"]);
     const before = handSize(r.state, ROLAND);
     const deck = r.state.invs[ROLAND].deck.length;
@@ -73,7 +73,7 @@ describe("tapped draws", () => {
     s.pending = null;
     s.queue.push({ ...step, choice: undefined }, { t: "Draw", inv: DAISY, n: 2 });
     run(g);
-    expect(s.pending).toMatchObject({ kind: "draw", inv: DAISY, promptVars: { deck: "player", n: 2 } });
+    expect(s.pending).toMatchObject({ kind: "draw", inv: DAISY, promptKey: "tapDeck.player.many", promptVars: { deck: "player", n: 2 } });
     const hand = handSize(s, DAISY);
     const r = pick({ state: s, events: [] }, "draw");
     expect(handSize(r.state, DAISY)).toBe(hand + 2);

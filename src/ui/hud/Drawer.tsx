@@ -9,9 +9,9 @@ const SWIPE = 40;
 
 /**
  * A drawer on the phone layout (ADR-0005): a handle on its edge, a swipe in from that edge or a tap on the handle opens
- * it over the map, a tap outside (on the shade) closes it. Its content stays inside the safe-area insets.
+ * it over the map, a tap outside (on the shade) closes it. `glow` makes the handle pulse (something inside waits for a tap). Its content stays inside the safe-area insets.
  */
-export function Drawer({ edge, handle, label, children }: { edge: Edge; handle: ReactNode; label: string; children: ReactNode }) {
+export function Drawer({ edge, handle, label, glow, children }: { edge: Edge; handle: ReactNode; label: string; glow?: boolean; children: ReactNode }) {
   const open = useView((s) => s.drawer === edge);
   const setDrawer = useView((s) => s.setDrawer);
   const start = useRef<{ x: number; y: number } | null>(null);
@@ -50,7 +50,7 @@ export function Drawer({ edge, handle, label, children }: { edge: Edge; handle: 
   return (
     <>
       {!open && (
-        <button className={`drawer-handle ${edge}`} aria-label={label} title={label} onClick={() => setDrawer(edge)}>
+        <button className={`drawer-handle ${edge} ${glow ? "glow" : ""}`} aria-label={label} title={label} onClick={() => setDrawer(edge)}>
           {handle}
         </button>
       )}

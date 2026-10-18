@@ -3,7 +3,7 @@ import { useLayoutMode } from "../layoutMode";
 import { tapCard } from "../touch";
 import { cardText, t } from "../../content/i18n";
 import { actClueCost, doomInPlay } from "../../engine/rules/scenario";
-import type { GameState, InstId } from "../../engine/types";
+import type { ChoiceOption, GameState, InstId } from "../../engine/types";
 import { rememberRect } from "../arrivals";
 import { CardFace } from "../CardFace";
 import { useCardClick } from "../cardClick";
@@ -14,7 +14,8 @@ import { hasSymbol, scenarioIcon } from "../icons";
 import { introHides } from "../intro";
 import { backUrl, isEncounterCard } from "../images";
 import { heldCards, viewerOf } from "../store";
-import { useShown } from "../usePlayers";
+import { deckOptions } from "../players";
+import { useChoicesOffered, useShown } from "../usePlayers";
 import { IntentBadge, TokenBadges } from "../TokenBadges";
 import { useDimmed, useView } from "../view";
 import { heldGame } from "../spotlight";
@@ -137,17 +138,23 @@ export function pileIcon(top: InstId | null, faceUp: boolean, game: Pick<GameSta
   return set ?? scenarioIcon(game.scenarioId);
 }
 
-function Pile({ label, count, top, faceUp, kind, id }: { label: string; count: number; top: InstId | null; faceUp: boolean; kind: "player" | "encounter"; id?: string }) {
+/** `option`: a tap on this deck answers the pending choice (a waiting draw, or the turn's Draw action): lit like a legal card */
+function Pile({ label, count, top, faceUp, kind, id, option }: { label: string; count: number; top: InstId | null; faceUp: boolean; kind: "player" | "encounter"; id?: string; option?: ChoiceOption | null }) {
   const locale = useGame((s) => s.locale);
   const game = useGame((s) => s.game) as GameState;
   const showTop = faceUp && top && game.cards[top];
-  const dimmed = useDimmed(top ?? "");
+  const dimmed = useDimmed(top ?? "") && !option;
+  const choose = useGame((s) => s.choose);
   return (
     <div className="pile" data-pile={id} data-tip={id === "deck" ? "deck" : undefined} title={`${label}: ${count}`}>
       <button
-        className={`pile-card ${count === 0 ? "empty" : ""} ${dimmed ? "dimmed" : ""}`}
-        disabled={!showTop}
-        onClick={() => showTop && useView.getState().setModal({ card: top! })}
+        className={`pile-card ${count === 0 ? "empty" : ""} ${dimmed ? "dimmed" : ""} ${option ? "legal" : ""}`}
+        disabled={!showTop && !option}
+        aria-label={option ? `${label}: ${tr("pile.tapToDraw")}` : undefined}
+        onClick={() => {
+          if (option) return choose(option.id);
+          if (showTop) useView.getState().setModal({ card: top! });
+        }}
         {...(showTop ? hoverProps(top) : {})}
       >
         {count > 0 && (showTop ? <CardFace code={game.cards[top!].code} locale={locale} /> : <img src={backUrl(kind)} alt="" draggable={false} />)}
@@ -168,10 +175,13 @@ export function PileColumn() {
   const game = useGame((s) => s.game) as GameState;
   const viewer = viewerOf(game);
   const me = viewer ? game.invs[viewer] : null;
+  // a tap on a lit deck answers the pending choice, while the decider's table is on screen
+  const offered = useChoicesOffered();
+  const decks = offered ? deckOptions(game, viewer) : { player: null, encounter: null, waiting: false };
   const victory = Object.values(game.cards).filter((c) => c.zone === "victory");
   return (
     <div className="pile-column">
-      <Pile label={tr("pile.encounter")} count={game.encounterDeck.length} top={game.encounterDeck[0] ?? null} faceUp={false} kind="encounter" id="encounter" />
+      <Pile label={tr("pile.encounter")} count={game.encounterDeck.length} top={game.encounterDeck[0] ?? null} faceUp={false} kind="encounter" id="encounter" option={decks.encounter} />
       <Pile label={tr("pile.discard")} count={game.encounterDiscard.length} id="encounterDiscard" top={game.encounterDiscard.at(-1) ?? null} faceUp kind="encounter" />
       <Pile label={tr("pile.victory")} count={victory.length} top={victory.at(-1)?.id ?? null} faceUp kind="encounter" />
       {/* a side deck named "_…" only holds cards for the setup to take (generated scenarios): not a pile */}
@@ -181,7 +191,7 @@ export function PileColumn() {
       {me && (
         <>
           <div className="pile-divider" />
-          <Pile label={tr("pile.deck")} id="deck" count={me.deck.length} top={me.deck[0] ?? null} faceUp={false} kind="player" />
+          <Pile label={tr("pile.deck")} id="deck" count={me.deck.length} top={me.deck[0] ?? null} faceUp={false} kind="player" option={decks.player} />
           <Pile label={tr("pile.discard")} id="discard" count={me.discard.length} top={me.discard.at(-1) ?? null} faceUp kind="player" />
         </>
       )}

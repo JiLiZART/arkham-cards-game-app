@@ -78,7 +78,7 @@ export function ask<T = unknown>(
 export function tapToDraw(g: G, step: Step, invId: InvId, deck: "player" | "encounter", n: number): boolean {
   if (!g.s.tapDecks || g.s.phase === "setup" || g.s.phase === "ended") return true;
   const label = deck === "player" ? "Tap your deck to draw" : "Tap the encounter deck to draw";
-  return ask(g, step, invId, "draw", label, [{ id: "draw", label: "Draw", value: "draw" }], { key: "tapDeck", vars: { deck, n } }) !== undefined;
+  return ask(g, step, invId, "draw", label, [{ id: "draw", label: "Draw", value: "draw" }], { key: `tapDeck.${deck}${n > 1 ? ".many" : ""}`, vars: { deck, n } }) !== undefined;
 }
 
 export function nextId(g: G) {

@@ -508,5 +508,13 @@
   "upgrade.cost": "Нужно опыта: {need}; есть {have}",
   "upgrade.save": "Потратить {n} опыта и сохранить",
   "upgrade.invalid": "Колоду нельзя сохранить: {message}",
-  "upgrade.noCampaign": "Нет кампании, в которой можно тратить опыт"
+  "upgrade.noCampaign": "Нет кампании, в которой можно тратить опыт",
+  "menu.tapDecks": "Брать карты нажатием на колоду",
+  "prompt.tapDeck.player": "взять карту",
+  "prompt.tapDeck.player.many": "взять карт: {n}",
+  "prompt.tapDeck.encounter": "взять карту встреч",
+  "instruction.tapDeck.player": "Нажмите на свою колоду, чтобы взять карту",
+  "instruction.tapDeck.player.many": "Нажмите на свою колоду, чтобы взять карт: {n}",
+  "instruction.tapDeck.encounter": "Нажмите на колоду встреч, чтобы взять карту",
+  "pile.tapToDraw": "Нажмите, чтобы взять"
 }

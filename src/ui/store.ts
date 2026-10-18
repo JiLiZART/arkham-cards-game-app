@@ -38,7 +38,7 @@ export interface Save {
   campaign: CampaignState;
   setup: GameSetup | null;
   actions: Action[];
-  settings: { locale: string; privacy?: boolean; drawByHand?: boolean; pace?: Pace; tipsOn?: boolean; musicVolume?: number; sfxVolume?: number; muted?: boolean };
+  settings: { locale: string; privacy?: boolean; tapDecks?: boolean; drawByHand?: boolean; pace?: Pace; tipsOn?: boolean; musicVolume?: number; sfxVolume?: number; muted?: boolean };
 }
 
 /** how fast events play: today's timings, 1.6 times longer, or each big event waits for a tap */
@@ -49,6 +49,8 @@ export interface UiState {
   locale: string;
   /** chaos tokens are revealed by clicking a circle above the bag (otherwise automatically) */
   drawByHand: boolean;
+  /** every draw in play waits for a tap on the deck */
+  tapDecks: boolean;
   pace: Pace;
   /** a first-time player's tips are shown (see tips.ts) */
   tipsOn: boolean;
@@ -84,6 +86,7 @@ export interface UiState {
   abandon(): void;
   setLocale(l: string): void;
   setDrawByHand(on: boolean): void;
+  setTapDecks(on: boolean): void;
   setPace(p: Pace): void;
   setTipsOn(on: boolean): void;
   setVolume(category: "music" | "effects", level: number): void;
@@ -156,9 +159,9 @@ export type Prepare = (campaignId: string, codes?: string[]) => Promise<void> | 
 export function createGameStore(db: ContentDb, storage: Storage = safeStorage(), prepare: Prepare = () => undefined): StoreApi<UiState> {
   const store = createStore<UiState>((set, get) => {
     const persist = () => {
-      const { campaign, setup, actions, locale, drawByHand, pace, tipsOn, musicVolume, sfxVolume, muted } = get();
+      const { campaign, setup, actions, locale, drawByHand, tapDecks, pace, tipsOn, musicVolume, sfxVolume, muted } = get();
       if (!campaign) return;
-      const save: Save = { version: ENGINE_VERSION, campaign, setup, actions, settings: { locale, drawByHand, pace, tipsOn, musicVolume, sfxVolume, muted } };
+      const save: Save = { version: ENGINE_VERSION, campaign, setup, actions, settings: { locale, drawByHand, tapDecks, pace, tipsOn, musicVolume, sfxVolume, muted } };
       try {
         storage.setItem(SAVE_KEY, JSON.stringify(save));
       } catch {
@@ -192,7 +195,7 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage(),
       set({ queue, current: get().current ?? queue[0], ...(get().current ? {} : { queue: queue.slice(1) }) });
     };
     return {
-      screen: "title", locale: "en", drawByHand: true, pace: "normal", tipsOn: true, musicVolume: 50, sfxVolume: 80, muted: false, campaign: null, setup: null, actions: [], game: null,
+      screen: "title", locale: "en", drawByHand: true, tapDecks: true, pace: "normal", tipsOn: true, musicVolume: 50, sfxVolume: 80, muted: false, campaign: null, setup: null, actions: [], game: null,
       queue: [], current: null, undoFloor: 0, logMarks: [], notice: null, error: null, loading: false,
 
       newCampaign(opts) {
@@ -218,7 +221,7 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage(),
       startScenario(seed) {
         const c = get().campaign;
         if (!c || !currentScenarioId(db, c)) return;
-        const setup: GameSetup = { ...scenarioSetup(db, c, seed ?? (Date.now() >>> 0)), pacePhases: true };
+        const setup: GameSetup = { ...scenarioSetup(db, c, seed ?? (Date.now() >>> 0)), pacePhases: true, ...(get().tapDecks ? { tapDecks: true } : {}) };
         const r = createGame(db, setup);
         set({ setup, actions: [], undoFloor: 0, logMarks: [r.state.log.length], game: r.state, screen: "game", queue: [], current: null, error: null });
         persist();
@@ -266,7 +269,7 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage(),
         } catch {
           return false;
         }
-        const settings = { locale: save.settings?.locale ?? "en", drawByHand: save.settings?.drawByHand ?? true, pace: save.settings?.pace ?? "normal", tipsOn: save.settings?.tipsOn ?? true, musicVolume: save.settings?.musicVolume ?? 50, sfxVolume: save.settings?.sfxVolume ?? 80, muted: save.settings?.muted ?? false };
+        const settings = { locale: save.settings?.locale ?? "en", drawByHand: save.settings?.drawByHand ?? true, tapDecks: save.settings?.tapDecks ?? true, pace: save.settings?.pace ?? "normal", tipsOn: save.settings?.tipsOn ?? true, musicVolume: save.settings?.musicVolume ?? 50, sfxVolume: save.settings?.sfxVolume ?? 80, muted: save.settings?.muted ?? false };
         set(settings);
         const restore = () => {
           if (save.version !== ENGINE_VERSION || !save.setup) {
@@ -302,6 +305,10 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage(),
       },
       setDrawByHand(drawByHand) {
         set({ drawByHand });
+        persist();
+      },
+      setTapDecks(tapDecks) {
+        set({ tapDecks });
         persist();
       },
       setPace(pace) {

@@ -4,7 +4,8 @@ import type { GameEvent, GameState } from "../../engine/types";
 import { whenSettled } from "../arrivals";
 import { db, gameStore, useGame } from "../context";
 import { HELD, holdsForTap, viewerOf } from "../store";
-import { autoSwitchTarget, delayed, landingView, ownDecisionTitle } from "../players";
+import { autoSwitchTarget, deckOptions, delayed, landingView, ownDecisionTitle } from "../players";
+import { useChoicesOffered } from "../usePlayers";
 import { hasSymbol, MARKUP_ICONS, markupColor } from "../icons";
 import { ActionRail, CameraButtons, InstructionBar, UndoButton } from "./ActionRail";
 import { moment, SoundLayer } from "./SoundLayer";
@@ -559,6 +560,10 @@ export function Hud() {
 /** the phone's drawers: the act, agenda and piles on the left, the Journal on the right (opened from its icon in the bar too) */
 function PhoneDrawers() {
   useGame((s) => s.locale);
+  const game = useGame((s) => s.game)!;
+  const offered = useChoicesOffered();
+  // a deck waiting for a tap sits in the closed left drawer: its handle glows (the bar's Draw button answers too)
+  const deckWaits = offered && deckOptions(game, viewerOf(game)).waiting;
   const right = useView((s) => s.drawer === "right");
   // the right drawer is the Journal: the full history while it is open
   useEffect(() => {
@@ -566,7 +571,7 @@ function PhoneDrawers() {
   }, [right]);
   return (
     <>
-      <Drawer edge="left" handle="›" label={tr("phone.panels")}>
+      <Drawer edge="left" handle="›" label={tr("phone.panels")} glow={deckWaits}>
         <ScenarioPanel />
         <PileColumn />
       </Drawer>

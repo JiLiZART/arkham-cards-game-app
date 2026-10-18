@@ -25,6 +25,8 @@ const NO_SPOT = new Set(["turn", "mulligan", "phase"]);
  */
 export function spotlightOfChoice(game: GameState, viewer: InvId | null): Spotlight | null {
   const p = game.pending;
+  // a draw waiting for a tap on a deck: the piles are what to tap, everything else dims (the piles lift their own dim)
+  if (p?.kind === "draw") return { cards: [], invs: [], choice: true };
   if (!p || NO_SPOT.has(p.kind) || deckPick(game, viewer).length) return null;
   const ids = p.options.map((o) => o.card).filter((id): id is string => !!id && !!game.cards[id]);
   const test = p.kind === "commit" ? game.skillTest : null;

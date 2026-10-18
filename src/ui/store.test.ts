@@ -206,6 +206,39 @@ describe("pace and held events", () => {
   });
 });
 
+describe("the tap decks setting", () => {
+  it("is on by default and a new scenario's setup asks for tapped decks", () => {
+    const s = start(mem());
+    expect(s.getState().tapDecks).toBe(true);
+    expect(s.getState().setup?.tapDecks).toBe(true);
+    expect(s.getState().game?.tapDecks).toBe(true);
+  });
+
+  it("off: the setup doesn't ask, and the draws happen without waiting", () => {
+    const s = createGameStore(db, mem());
+    s.getState().setTapDecks(false);
+    s.getState().newCampaign({ campaignId: "night-of-the-zealot", difficulty: "standard", seed: 9, investigators: [{ code: "01001", deckId: "roland-starter" }] });
+    expect(s.getState().setup?.tapDecks).toBeUndefined();
+    expect(s.getState().game?.tapDecks).toBeUndefined();
+  });
+
+  it("is saved with the other settings, and a save from before it reads as on", () => {
+    const storage = mem();
+    const a = start(storage);
+    a.getState().setTapDecks(false);
+    expect(JSON.parse(storage.getItem(SAVE_KEY)!).settings.tapDecks).toBe(false);
+    const b = createGameStore(db, storage);
+    b.getState().resume();
+    expect(b.getState().tapDecks).toBe(false);
+    const raw = JSON.parse(storage.getItem(SAVE_KEY)!);
+    delete raw.settings.tapDecks;
+    storage.setItem(SAVE_KEY, JSON.stringify(raw));
+    const c = createGameStore(db, storage);
+    c.getState().resume();
+    expect(c.getState().tapDecks).toBe(true);
+  });
+});
+
 describe("saves from before the pass screen went", () => {
   it("a save with settings.privacy loads, and the setting is gone from the state and from the next save", () => {
     const storage = mem();

@@ -524,5 +524,13 @@
   "upgrade.cost": "{need} experience needed; {have} available",
   "upgrade.save": "Spend {n} XP and save",
   "upgrade.invalid": "The deck can't be saved: {message}",
-  "upgrade.noCampaign": "There is no campaign to spend experience in"
+  "upgrade.noCampaign": "There is no campaign to spend experience in",
+  "menu.tapDecks": "Tap decks to draw",
+  "prompt.tapDeck.player": "draw a card",
+  "prompt.tapDeck.player.many": "draw {n} cards",
+  "prompt.tapDeck.encounter": "draw an encounter card",
+  "instruction.tapDeck.player": "Tap your deck to draw a card",
+  "instruction.tapDeck.player.many": "Tap your deck to draw {n} cards",
+  "instruction.tapDeck.encounter": "Tap the encounter deck to draw",
+  "pile.tapToDraw": "Tap to draw"
 }

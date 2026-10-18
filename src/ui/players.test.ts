@@ -3,7 +3,7 @@ import { createCard, type G } from "../engine/core";
 import { run } from "../engine/engine";
 import { commitDone, db, giveCard, locId, mutate, pick, putEnemy, skipMulligans, start } from "../engine/testkit";
 import type { GameState } from "../engine/types";
-import { autoSwitchTarget, barAsk, barModel, canAct, choicesOffered, delayed, investigatorChoice, investigatorOptions, landingView, ownDecisionTitle, shownInv } from "./players";
+import { autoSwitchTarget, barAsk, deckOptions, barModel, canAct, choicesOffered, delayed, investigatorChoice, investigatorOptions, landingView, ownDecisionTitle, shownInv } from "./players";
 
 const ROLAND = "01001";
 const DAISY = "01002";
@@ -316,5 +316,53 @@ describe("delayed", () => {
     vi.advanceTimersByTime(1500);
     expect(then).not.toHaveBeenCalled();
     vi.useRealTimers();
+  });
+});
+
+describe("deckOptions", () => {
+  const tappedGame = () => {
+    let r = skipMulligans(start("the-gathering", [ROLAND, DAISY], 1, { chaosBag: ["0"] as never, tapDecks: true }));
+    if (r.state.pending?.options.some((o) => o.label === "Roland Banks")) r = pick(r, "Roland Banks");
+    return r;
+  };
+  const untilDraw = (deck: string) => {
+    let r = tappedGame();
+    for (let k = 0; k < 600; k++) {
+      const p = r.state.pending!;
+      if (p.kind === "draw" && p.promptVars?.deck === deck) return r.state;
+      r = pick(r, p.kind === "turn" ? /^End turn/ : /./);
+    }
+    throw new Error("no draw");
+  };
+
+  it("on a turn with an action left, the deck pile offers the Draw action", () => {
+    const { state } = tappedGame();
+    const d = deckOptions(state, state.pending!.inv);
+    expect(d.player?.label).toMatch(/^Draw/);
+    expect(d.encounter).toBeNull();
+    expect(d.waiting).toBe(false);
+  });
+
+  it("a waiting upkeep draw lights the investigator's deck", () => {
+    const state = untilDraw("player");
+    const d = deckOptions(state, state.pending!.inv);
+    expect(d.player).toMatchObject({ id: "draw" });
+    expect(d.encounter).toBeNull();
+    expect(d.waiting).toBe(true);
+  });
+
+  it("a waiting mythos draw lights the encounter deck", () => {
+    const state = untilDraw("encounter");
+    const d = deckOptions(state, state.pending!.inv);
+    expect(d.encounter).toMatchObject({ id: "draw" });
+    expect(d.player).toBeNull();
+    expect(d.waiting).toBe(true);
+  });
+
+  it("nothing is offered to someone else's table, or when nothing waits", () => {
+    const state = untilDraw("encounter");
+    const other = state.order.find((i) => i !== state.pending!.inv)!;
+    expect(deckOptions(state, other)).toEqual({ player: null, encounter: null, waiting: false });
+    expect(deckOptions({ ...state, pending: null } as GameState, ROLAND)).toEqual({ player: null, encounter: null, waiting: false });
   });
 });
