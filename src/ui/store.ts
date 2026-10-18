@@ -44,7 +44,7 @@ export interface Save {
 export type Pace = "normal" | "slow" | "tap";
 
 export interface UiState {
-  screen: "title" | "wizard" | "settings" | "game" | "log" | "howto";
+  screen: "title" | "wizard" | "settings" | "game" | "log" | "howto" | "catalog";
   locale: string;
   privacy: boolean;
   /** chaos tokens are revealed by clicking a circle above the bag (otherwise automatically) */

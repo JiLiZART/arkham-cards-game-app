@@ -14,7 +14,7 @@ import { formatText } from "./Hud";
 
 export const DETAILS_W = 280;
 
-function Row({ r, locale }: { r: DetailRow; locale: string }) {
+export function Row({ r, locale }: { r: DetailRow; locale: string }) {
   const label = (k: string) => <span className="hd-label">{t(db, locale, k)}</span>;
   switch (r.k) {
     case "name":

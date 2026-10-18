@@ -54,6 +54,15 @@ export function loadPack(pack: string): Promise<ContentError[]> {
   return p;
 }
 
+/** every pack, in parallel (the catalog); `onProgress` hears how many are in. Resolves with the content errors of all of them */
+export async function loadAllPacks(onProgress?: (done: number, total: number) => void): Promise<ContentError[]> {
+  const names = Object.keys(content.packs);
+  let done = 0;
+  onProgress?.(0, names.length);
+  const errors = await Promise.all(names.map((p) => loadPack(p).then((e) => (onProgress?.(++done, names.length), e))));
+  return errors.flat();
+}
+
 const loadingCampaigns = new Map<string, Promise<ContentError[]>>();
 /** bring a generated campaign's scenarios and text into the content; a hand-written or loaded campaign resolves at once */
 export function loadCampaign(id: string): Promise<ContentError[]> {

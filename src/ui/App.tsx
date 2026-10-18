@@ -5,6 +5,7 @@ import { db, gameStore, useGame } from "./context";
 import { HandFan } from "./hud/HandFan";
 import { HandDrawer } from "./hud/HandDrawer";
 import { Hud } from "./hud/Hud";
+import { Catalog } from "./catalog/Catalog";
 import { CampaignLog } from "./menu/CampaignLog";
 import { HowTo } from "./menu/HowTo";
 import { Settings } from "./menu/Settings";
@@ -58,7 +59,7 @@ export function App() {
       </div>
     );
   }
-  const page = screen === "log" ? <CampaignLog /> : screen === "howto" ? <HowTo /> : screen === "wizard" ? <Wizard /> : screen === "settings" ? <Settings /> : <Title />;
+  const page = screen === "log" ? <CampaignLog /> : screen === "howto" ? <HowTo /> : screen === "wizard" ? <Wizard /> : screen === "settings" ? <Settings /> : screen === "catalog" ? <Catalog /> : <Title />;
   // every menu screen but the title sits on the rulebook's parchment (public/art)
   return (
     <>

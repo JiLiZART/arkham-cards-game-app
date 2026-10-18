@@ -12,7 +12,7 @@ export function Title() {
   const { resume, abandon } = gameStore.getState();
   // read on every render: Abandon clears the save while this screen stays mounted
   const hasSave = !!safeStorage().getItem(SAVE_KEY);
-  const go = (screen: "wizard" | "howto" | "settings") => gameStore.setState({ screen });
+  const go = (screen: "wizard" | "howto" | "settings" | "catalog") => gameStore.setState({ screen });
   return (
     <div className="screen title">
       <div className="title-body">
@@ -33,6 +33,9 @@ export function Title() {
           </button>
           <button className="big" onClick={() => go("howto")}>
             {tr("menu.howto")}
+          </button>
+          <button className="big" onClick={() => go("catalog")}>
+            {tr("menu.cards")}
           </button>
           <button className="big" onClick={() => go("settings")}>
             {tr("settings.title")}

@@ -4,6 +4,9 @@ import ruImages from "./ruImages.generated.json";
 /** a file under public/, at the site's base path ("/" locally, "/arkham-cards-game-app/" on GitHub Pages) */
 export const asset = (path: string) => `${(import.meta.env?.BASE_URL as string | undefined) ?? "/"}${path}`;
 
+/** arkham.build's image CDN: every scan, no CORS headers */
+export const CDN = "https://cdn.arkham.build/optimized";
+
 const BASE = (import.meta.env?.VITE_CARD_IMAGE_BASE as string | undefined) ?? asset("cards");
 
 /** card sides with an imported Russian image ("01020", "01111b"), from scripts/import-ru-cards.ts */
@@ -11,11 +14,17 @@ const RU = new Set<string>(ruImages);
 
 /**
  * front/back image URLs for a card; double-sided cards use the "<code>b" image for their back.
+ * With `remote` the scans of the sets the game does not host (every pack but the core) come from the CDN.
  * With the Russian locale, a side that has an imported Russian image uses it (public/cards-ru); otherwise the English scan.
  */
-export function cardImage(card: Pick<CardDef, "code" | "doubleSided" | "image" | "backImage">, side: "front" | "back", locale = "en"): string | null {
+export function cardImage(card: Pick<CardDef, "code" | "doubleSided" | "image" | "backImage"> & { pack?: string }, side: "front" | "back", locale = "en", opts: { remote?: boolean } = {}): string | null {
   const key = side === "back" ? `${card.code}b` : card.code;
   if (locale === "ru" && RU.has(key)) return asset(`cards-ru/${key}.webp`);
+  // an HTML view (the catalog) links the scans of the other sets from the CDN; the WebGL table cannot (no CORS headers, ADR-0008)
+  if (opts.remote && card.pack !== undefined && card.pack !== "core" && !(side === "front" ? card.image : card.backImage)) {
+    if (side === "front" || card.doubleSided) return `${CDN}/${key}.webp`;
+    return null;
+  }
   if (side === "front") return card.image ?? `${BASE}/${card.code}.webp`;
   if (card.backImage) return card.backImage;
   return card.doubleSided ? `${BASE}/${card.code}b.webp` : null;
