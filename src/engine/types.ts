@@ -144,7 +144,7 @@ export interface ChoiceOption {
 export interface PendingChoice {
   seq: number;
   inv: InvId;
-  kind: "turn" | "target" | "commit" | "reaction" | "generic" | "mulligan" | "assign" | "order" | "phase";
+  kind: "turn" | "target" | "commit" | "reaction" | "generic" | "mulligan" | "assign" | "order" | "phase" | "draw";
   prompt: string;
   /** translation key and values for the prompt (the English text above is the fallback); ids in the values are investigators or cards */
   promptKey?: string;
@@ -196,7 +196,8 @@ export type Step = { choice?: any } & (
   | { t: "DiscardIfEmpty"; card: InstId }
   | { t: "UseAbility"; inv: InvId; card: InstId; index: number; ctx?: EffCtx; paid?: boolean; discards?: InstId[] }
   | { t: "PlayCard"; inv: InvId; card: InstId; ctx?: EffCtx; free?: boolean; viaTrigger?: boolean }
-  | { t: "Draw"; inv: InvId; n: number }
+  /** `tapped`: the draw was asked for by tapping the deck already (the Draw action, or the second card of a draw of several) */
+  | { t: "Draw"; inv: InvId; n: number; tapped?: boolean }
   | { t: "DrawEncounter"; inv: InvId }
   | { t: "Revelation"; inv: InvId; card: InstId }
   | { t: "Spawn"; enemy: InstId; inv: InvId | null; at?: InstId | null }
@@ -265,6 +266,8 @@ export interface GameState {
   active: InvId | null;
   /** set from the setup: each phase waits for the lead investigator */
   pacePhases?: boolean;
+  /** set from the setup: every draw in play waits for the drawing investigator to tap the deck */
+  tapDecks?: boolean;
   encounterDeck: InstId[];
   encounterDiscard: InstId[];
   sideDecks: Record<string, InstId[]>;
@@ -346,4 +349,6 @@ export interface GameSetup {
   chaosBag?: ChaosToken[];
   /** wait for the lead investigator before each phase (the UI's games; engine tests and old saves don't) */
   pacePhases?: boolean;
+  /** wait for the drawing investigator to tap the deck before each draw in play (the UI's games; engine tests and old saves don't) */
+  tapDecks?: boolean;
 }

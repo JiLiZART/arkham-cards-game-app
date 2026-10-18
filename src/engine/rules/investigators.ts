@@ -2,7 +2,7 @@ import { shuffle } from "../rng";
 import {
   logStep,
   activeInvs, ask, card, cardsIn, connections, controlled, def, emit, engagedWith, enemies, hasFlag, inv, invName,
-  isMassive, maxHealth, maxSanity, moveCard, playerCount, push, type G,
+  isMassive, maxHealth, maxSanity, moveCard, playerCount, push, tapToDraw, type G,
 } from "../core";
 import type { InstId, InvId, Step } from "../types";
 import { win } from "./cards";
@@ -13,6 +13,8 @@ type Handler<T extends Step["t"]> = (g: G, step: Extract<Step, { t: T }>) => voi
 export const drawHandler: Handler<"Draw"> = (g, step) => {
   const me = inv(g, step.inv);
   if (me.status !== "playing" || step.n <= 0) return;
+  // one tap covers a draw of several cards: the cards after the first go on without asking again
+  if (!step.tapped && !tapToDraw(g, step, step.inv, "player", step.n)) return;
   if (me.deck.length === 0) {
     // empty deck: shuffle discard into deck, take 1 horror
     me.deck.push(...me.discard.splice(0));
@@ -28,7 +30,7 @@ export const drawHandler: Handler<"Draw"> = (g, step) => {
   // a weakness that resolves on draw is public and announced as such (the table shows it before it resolves)
   if (weakness) emit(g, "weakness", `${me.name} draws the weakness ${d.name}`, { inv: step.inv, card: id });
   else emit(g, "draw", `${me.name} draws ${d.subtype ? d.name : "a card"}`, { inv: step.inv, card: id });
-  const rest: Step[] = step.n > 1 ? [{ t: "Draw", inv: step.inv, n: step.n - 1 }] : [];
+  const rest: Step[] = step.n > 1 ? [{ t: "Draw", inv: step.inv, n: step.n - 1, tapped: true }] : [];
   if (weakness) {
     // weaknesses resolve immediately
     if (d.type === "enemy") push(g, { t: "Spawn", enemy: id, inv: step.inv }, ...rest);

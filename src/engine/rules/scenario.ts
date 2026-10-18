@@ -1,5 +1,5 @@
 import { shuffle } from "../rng";
-import { abilitiesOf, activeInvs, card, def, emit, hasFlag, inv, invName, moveCard, push, type G } from "../core";
+import { abilitiesOf, activeInvs, card, def, emit, hasFlag, inv, invName, moveCard, push, tapToDraw, type G } from "../core";
 import type { InstId, Step } from "../types";
 import { win } from "./cards";
 
@@ -8,6 +8,7 @@ type Handler<T extends Step["t"]> = (g: G, step: Extract<Step, { t: T }>) => voi
 // ---------- encounter deck ----------
 export const drawEncounterHandler: Handler<"DrawEncounter"> = (g, step) => {
   if (inv(g, step.inv).status !== "playing") return;
+  if (!tapToDraw(g, step, step.inv, "encounter", 1)) return;
   if (g.s.encounterDeck.length === 0) {
     g.s.encounterDeck.push(...g.s.encounterDiscard.splice(0));
     for (const id of g.s.encounterDeck) g.s.cards[id].zone = "encounterDeck";

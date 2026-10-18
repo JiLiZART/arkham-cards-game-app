@@ -232,7 +232,8 @@ export const performActionHandler: Handler<"PerformAction"> = (g, step) => {
       break;
     case "draw":
       emit(g, "action", `${me.name} takes the draw action`, { inv: i });
-      steps.push({ t: "Draw", inv: i, n: 1 });
+      // choosing the Draw action is the tap on the deck: no second wait
+      steps.push({ t: "Draw", inv: i, n: 1, tapped: true });
       break;
     case "resource":
       me.resources++;

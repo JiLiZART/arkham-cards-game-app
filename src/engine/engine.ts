@@ -99,6 +99,7 @@ function emptyState(setup: GameSetup): GameState {
     chaosBag: [], skillTest: null, testStack: [], tempMods: [], usage: {}, queue: [], pending: null, cancelled: [],
     log: [], flags: {}, campaignLog: setup.campaignLog ?? {}, resolution: null, nextId: 1,
     ...(setup.pacePhases ? { pacePhases: true } : {}),
+    ...(setup.tapDecks ? { tapDecks: true } : {}),
   };
 }
 

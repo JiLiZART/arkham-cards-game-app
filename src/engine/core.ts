@@ -70,6 +70,17 @@ export function ask<T = unknown>(
   return undefined;
 }
 
+/**
+ * A tapped-decks game waits, before a draw from a deck during play, for the drawing investigator to tap it: a pending
+ * `draw` choice with the one option "draw" (a recorded choice, so replays stay exact). True when the draw may go ahead:
+ * the game doesn't ask for taps, it is setup (the opening hands) or the scenario has ended, or the tap has come.
+ */
+export function tapToDraw(g: G, step: Step, invId: InvId, deck: "player" | "encounter", n: number): boolean {
+  if (!g.s.tapDecks || g.s.phase === "setup" || g.s.phase === "ended") return true;
+  const label = deck === "player" ? "Tap your deck to draw" : "Tap the encounter deck to draw";
+  return ask(g, step, invId, "draw", label, [{ id: "draw", label: "Draw", value: "draw" }], { key: "tapDeck", vars: { deck, n } }) !== undefined;
+}
+
 export function nextId(g: G) {
   return `c${g.s.nextId++}`;
 }
