@@ -9,7 +9,6 @@ import { instructionParts } from "../instruction";
 import { inBar, onRail } from "../optionHome";
 import { useLayoutMode } from "../layoutMode";
 import { Sentence } from "./Feed";
-import { handVisible } from "../scene/Table";
 import { canUndo, viewerOf } from "../store";
 import { barAsk } from "../players";
 import { useChoicesOffered } from "../usePlayers";
@@ -95,13 +94,11 @@ function OptionButton({ o, game, busy }: { o: ChoiceOption; game: GameState; bus
   );
 }
 
-/** the pending choice of the investigator whose hand is on screen, or null (none, the phase pause, the end, a hidden hand) */
+/** the pending choice of the investigator whose hand is on screen, or null (none, the phase pause, the end) */
 function useOwnChoice() {
   const game = useGame((s) => s.game) as GameState;
-  const privacy = useGame((s) => s.privacy);
-  const revealedFor = useGame((s) => s.revealedFor);
   const p = game.pending;
-  if (!p || game.phase === "ended" || !handVisible(privacy, game.order.length, viewerOf(game), revealedFor)) return null;
+  if (!p || game.phase === "ended") return null;
   return p;
 }
 

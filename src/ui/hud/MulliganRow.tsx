@@ -4,7 +4,6 @@ import type { GameState, InstId, InvId } from "../../engine/types";
 import { domPlace, noteLocalMove, reducedMotion, takeLocalMove, type ScreenBox } from "../arrivals";
 import { db, useGame } from "../context";
 import { backUrl } from "../images";
-import { handVisible } from "../scene/Table";
 import { viewerOf } from "../store";
 import { centreTransform, flyGhost, flyIn, STAGGER_MS } from "./flights";
 import { MiniCard } from "./Panels";
@@ -30,12 +29,10 @@ const boxOf = (el: Element): ScreenBox => {
 export function MulliganRow() {
   const game = useGame((s) => s.game) as GameState;
   const locale = useGame((s) => s.locale);
-  const privacy = useGame((s) => s.privacy);
-  const revealedFor = useGame((s) => s.revealedFor);
   const busy = useGame((s) => !!s.current || s.queue.length > 0);
   const choose = useGame((s) => s.choose);
   const viewer = viewerOf(game);
-  const picks = handVisible(privacy, game.order.length, viewer, revealedFor) ? mulliganPicks(game, viewer) : [];
+  const picks = mulliganPicks(game, viewer);
   const ref = useRef<HTMLDivElement>(null);
   // where each card in the row was last drawn: a confirmed redraw flies the cards from there into the deck
   const rects = useRef(new Map<InstId, ScreenBox>());

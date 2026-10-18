@@ -6,8 +6,6 @@ import { cardDetails } from "../details";
 import { db, useGame } from "../context";
 import { Glyph, Icon } from "../Icon";
 import type { IconName } from "../icons";
-import { handVisible } from "../scene/Table";
-import { viewerOf } from "../store";
 import { useChoicesOffered } from "../usePlayers";
 import { useView } from "../view";
 import { abilitySymbol } from "./ActionRail";
@@ -39,14 +37,12 @@ export function Modal({ onClose, className, children }: { onClose: () => void; c
   );
 }
 
-/** pending options tied to some cards, when the hand is visible and nothing is animating */
+/** pending options tied to some cards, when nothing is animating */
 export function useCardOptions(ids: (InstId | null | undefined)[]): ChoiceOption[] {
   const game = useGame((s) => s.game) as GameState;
   const busy = useGame((s) => !!s.current || s.queue.length > 0);
-  const privacy = useGame((s) => s.privacy);
-  const revealedFor = useGame((s) => s.revealedFor);
   const offered = useChoicesOffered();
-  if (busy || !offered || !game.pending || !handVisible(privacy, game.order.length, viewerOf(game), revealedFor)) return [];
+  if (busy || !offered || !game.pending) return [];
   return game.pending.options.filter((o) => o.card && ids.includes(o.card));
 }
 
@@ -152,11 +148,7 @@ export function CardModal({ id }: { id: InstId }) {
 /** whichever modal is open */
 export function Modals() {
   const modal = useView((s) => s.modal);
-  const game = useGame((s) => s.game) as GameState;
-  const privacy = useGame((s) => s.privacy);
-  const revealedFor = useGame((s) => s.revealedFor);
-  // nothing is inspectable behind the hand-off screen
-  if (!modal || !handVisible(privacy, game.order.length, viewerOf(game), revealedFor)) return null;
+  if (!modal) return null;
   if ("card" in modal) return <CardModal key={modal.card} id={modal.card} />;
   if ("bag" in modal) return <ChaosBagModal />;
   if ("deck" in modal) return <DeckViewer key={modal.deck} kind={modal.deck} />;

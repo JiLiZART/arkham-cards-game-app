@@ -13,7 +13,6 @@ import { Glyph, Icon } from "../Icon";
 import { hasSymbol, scenarioIcon } from "../icons";
 import { introHides } from "../intro";
 import { backUrl, isEncounterCard } from "../images";
-import { handVisible } from "../scene/Table";
 import { heldCards, viewerOf } from "../store";
 import { useShown } from "../usePlayers";
 import { IntentBadge, TokenBadges } from "../TokenBadges";
@@ -254,20 +253,18 @@ export function stripCardWidth(room: number, upright: number, sideways: number, 
 export function PlayStrip() {
   const game = useGame((s) => s.game) as GameState;
   const locale = useGame((s) => s.locale);
-  const privacy = useGame((s) => s.privacy);
-  const revealedFor = useGame((s) => s.revealedFor);
   const choose = useGame((s) => s.choose);
   const { byCard } = useCardClick();
   const viewer = useShown();
   const strip = useRef<HTMLDivElement>(null);
   const setup = useGame((s) => s.setup);
   const queue = useGame((s) => s.queue);
-  const visible = !!viewer && handVisible(privacy, game.order.length, viewer, revealedFor);
+  const visible = !!viewer;
   // the phone (ADR-0005): a column of thumbnails on the right edge; a tap on its handle widens it to readable cards
   const phone = useLayoutMode() === "phone";
   const [open, setOpen] = useState(false);
   // new strip cards fly in from where they came from (before their rects are remembered below)
-  useFlyIn(strip, visible, viewer, privacy && game.order.length > 1, RESOLVE_BOX, setup);
+  useFlyIn(strip, visible, viewer, RESOLVE_BOX, setup);
   const current = useGame((s) => s.current);
   // an enemy whose move hasn't played yet isn't engaged on screen yet; a card still in (or waiting for) the showcase isn't here yet
   const waiting = heldCards({ current, queue });

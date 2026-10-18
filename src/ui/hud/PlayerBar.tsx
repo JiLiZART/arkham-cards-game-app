@@ -87,7 +87,6 @@ function AvatarButton({ a, legal, onTap }: { a: AvatarModel; legal: boolean; onT
 /** the details of the investigator on screen, opened from their avatar: card, ability and its options, skills, resources, clues, hand count */
 function Sheet({ inv, anchor, onClose }: { inv: InvId; anchor: DOMRect | null; onClose: () => void }) {
   const game = useGame((s) => s.game) as GameState;
-  const privacy = useGame((s) => s.privacy);
   const cardId = game.invs[inv].cardId;
   const byCard = useOptionsByCard();
   const { abilities } = investigatorOptions(game);
@@ -108,7 +107,7 @@ function Sheet({ inv, anchor, onClose }: { inv: InvId; anchor: DOMRect | null; o
   return (
     <div className="pb-sheet" style={{ left: Math.max(8, Math.min((anchor?.left ?? 8), innerWidth - 440)), top: (anchor?.bottom ?? 60) + 6 }}>
       <StatBody inv={inv} legal={options.length > 0} dimmed={dimmed} options={options} onPortrait={() => useView.getState().setModal({ card: cardId })} />
-      {inv !== decider && !(privacy && game.order.length > 1) && (
+      {inv !== decider && (
         <button className="pb-details" onClick={() => { onClose(); useView.getState().setModal({ inv }); }}>
           {tr("players.details")}
         </button>

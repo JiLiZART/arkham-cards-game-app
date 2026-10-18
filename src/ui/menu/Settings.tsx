@@ -6,17 +6,16 @@ import { TIPS_KEY } from "../tips";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
 
-/** language, privacy, draw by hand, pace, tips, reset tips, music and effects, behind the gear */
+/** language, draw by hand, pace, tips, reset tips, music and effects, behind the gear */
 export function Settings() {
   const locale = useGame((s) => s.locale);
-  const privacy = useGame((s) => s.privacy);
   const drawByHand = useGame((s) => s.drawByHand);
   const pace = useGame((s) => s.pace);
   const tipsOn = useGame((s) => s.tipsOn);
   const musicVolume = useGame((s) => s.musicVolume);
   const sfxVolume = useGame((s) => s.sfxVolume);
   const [tipsReset, setTipsReset] = useState(false);
-  const { setLocale, setPrivacy, setDrawByHand, setPace, setTipsOn, setVolume } = gameStore.getState();
+  const { setLocale, setDrawByHand, setPace, setTipsOn, setVolume } = gameStore.getState();
   return (
     <div className="screen settings-screen">
       <h1>{tr("settings.title")}</h1>
@@ -28,9 +27,6 @@ export function Settings() {
               <option key={l} value={l}>{l.toUpperCase()}</option>
             ))}
           </select>
-        </label>
-        <label>
-          <input type="checkbox" checked={privacy} onChange={(e) => setPrivacy(e.target.checked)} /> {tr("menu.privacy")}
         </label>
         <label>
           <input type="checkbox" checked={drawByHand} onChange={(e) => setDrawByHand(e.target.checked)} /> {tr("menu.drawByHand")}

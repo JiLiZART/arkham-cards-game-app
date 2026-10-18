@@ -101,7 +101,7 @@ describe("i18n", () => {
     expect(cardText(db, "01111", "ru").text).toBe(db.cards["01111"].text);
     expect(t(db, "ru", "menu.start")).toBe("Начать");
     expect(t(db, "xx", "menu.start")).toBe("Start");
-    expect(t(db, "en", "hud.passTo", { name: "Agnes" })).toBe("Pass to Agnes");
+    expect(t(db, "en", "players.canCommit", { name: "Agnes" })).toBe("Agnes can commit cards");
   });
 });
 

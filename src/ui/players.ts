@@ -113,3 +113,53 @@ export function investigatorOptions(game: GameState): { answers: Map<InvId, Choi
   }
   return { answers, abilities };
 }
+
+/**
+ * The investigator whose own decision just began, when it deserves a title ("Daisy's turn"): the decider changed to
+ * someone who isn't the active investigator (their own test or choice, in any phase, e.g. a treachery's test in the
+ * mythos phase). A help to another's test, a reaction, the mulligan and the phase pause play none; the active
+ * investigator's turns have their own title.
+ */
+export function ownDecisionTitle(prev: GameState | null, game: GameState): InvId | null {
+  const p = game.pending;
+  if (!prev || !p || p.kind === "mulligan" || p.kind === "phase") return null;
+  if (prev.pending?.inv === p.inv) return null;
+  if (canAct(game) || p.inv === game.active) return null;
+  return p.inv;
+}
+
+/** the investigator the table should switch to by itself: someone who can act now while their table is not on screen */
+export function autoSwitchTarget(game: GameState, view: Looking): InvId | null {
+  const can = canAct(game);
+  return can && shownInv(game, view) !== can.inv ? can.inv : null;
+}
+
+export interface InvestigatorChoice {
+  prompt: string;
+  options: { inv: InvId; id: string; label: string }[];
+  /** exactly one investigator is eligible: the choice is made by itself after a moment */
+  single: boolean;
+}
+
+/**
+ * A pending choice whose options are all investigators (who takes the damage, who a card affects): the avatars to tap in
+ * the middle of the screen. Null for anything else, including a reaction (an investigator's own ability beside "pass").
+ */
+export function investigatorChoice(game: GameState): InvestigatorChoice | null {
+  const p = game.pending;
+  if (!p || p.kind === "reaction" || p.kind === "commit" || !p.options.length) return null;
+  const own = new Map(game.order.map((i) => [game.invs[i].cardId, i]));
+  if (!p.options.every((o) => o.card && own.has(o.card))) return null;
+  return { prompt: p.prompt, options: p.options.map((o) => ({ inv: own.get(o.card!)!, id: o.id, label: o.label })), single: p.options.length === 1 };
+}
+
+/**
+ * Run `then` after `ms` if `still` holds by then; the returned function cancels it. View state, not game state
+ * (ADR-0004): what it does is dispatch an ordinary choice or set the view.
+ */
+export function delayed(ms: number, still: () => boolean, then: () => void): () => void {
+  const timer = setTimeout(() => {
+    if (still()) then();
+  }, ms);
+  return () => clearTimeout(timer);
+}

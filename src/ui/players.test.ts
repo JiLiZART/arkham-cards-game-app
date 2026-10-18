@@ -1,9 +1,9 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { createCard, type G } from "../engine/core";
 import { run } from "../engine/engine";
 import { commitDone, db, giveCard, locId, mutate, pick, putEnemy, skipMulligans, start } from "../engine/testkit";
 import type { GameState } from "../engine/types";
-import { barAsk, barModel, canAct, choicesOffered, investigatorOptions, landingView, shownInv } from "./players";
+import { autoSwitchTarget, barAsk, barModel, canAct, choicesOffered, delayed, investigatorChoice, investigatorOptions, landingView, ownDecisionTitle, shownInv } from "./players";
 
 const ROLAND = "01001";
 const DAISY = "01002";
@@ -185,5 +185,136 @@ describe("barAsk", () => {
 
   it("once their table is on screen, it is their choice", () => {
     expect(barAsk(helping(turn().state), none)).toEqual({ kind: "choice", buttons: true });
+  });
+});
+
+
+/** Daisy's own treachery test (Rotting Remains) opens while Roland is the active investigator */
+const daisysTest = (base: GameState): GameState => {
+  const s = structuredClone(base);
+  const g: G = { s, db, events: [] };
+  const guts = Object.keys(db.cards).find((c) => db.cards[c].name === "Guts")!;
+  giveCard(g, DAISY, guts);
+  const rr = createCard(g, "01163", "limbo", null);
+  const step = s.pending!.step;
+  s.pending = null;
+  s.queue.push({ ...step, choice: undefined }, { t: "Revelation", inv: DAISY, card: rr });
+  run(g);
+  return s;
+};
+
+describe("ownDecisionTitle", () => {
+  it("an investigator who wasn't deciding gets a decision of their own while someone else is active: a title for them", () => {
+    const { state } = turn();
+    const test = daisysTest(state);
+    expect(state.pending!.inv).toBe(ROLAND);
+    expect(test.pending).toMatchObject({ inv: DAISY, kind: "commit" });
+    expect(ownDecisionTitle(state, test)).toBe(DAISY);
+  });
+
+  it("no title when the decider didn't change, or when the decision is the active investigator's own", () => {
+    const { state } = turn();
+    expect(ownDecisionTitle(state, state)).toBeNull();
+    expect(ownDecisionTitle(daisysTest(state), state)).toBeNull(); // back to Roland, whose turn it is
+  });
+
+  it("a help (a commit to a teammate's test, a reaction) plays no title", () => {
+    const { state } = turn();
+    const help = (kind: string) => ({ ...state, pending: { ...state.pending!, inv: DAISY, kind } }) as GameState;
+    expect(ownDecisionTitle(state, help("reaction"))).toBeNull();
+    let r = turn();
+    r = mutate(r, (g) => {
+      giveCard(g, ROLAND, "01025");
+      giveCard(g, DAISY, "01093");
+      putEnemy(g, "01160", locId(g, "01111"), ROLAND);
+    });
+    const before = pick(r, /^Fight Ghoul Minion/).state;
+    const after = commitDone(pick(r, /^Fight Ghoul Minion/)).state;
+    expect(after.pending).toMatchObject({ inv: DAISY, kind: "commit" });
+    expect(ownDecisionTitle(before, after)).toBeNull();
+  });
+
+  it("no title for the mulligan or the phase pause", () => {
+    const { state } = turn();
+    const p = (kind: string) => ({ ...state, active: null, pending: { ...state.pending!, inv: DAISY, kind } }) as GameState;
+    expect(ownDecisionTitle(state, p("mulligan"))).toBeNull();
+    expect(ownDecisionTitle(state, p("phase"))).toBeNull();
+  });
+
+  it("nothing from nothing", () => {
+    expect(ownDecisionTitle(null, turn().state)).toBeNull();
+  });
+});
+
+describe("autoSwitchTarget", () => {
+  it("while someone else can act and their table isn't on screen: them", () => {
+    let r = turn();
+    r = mutate(r, (g) => {
+      giveCard(g, ROLAND, "01025");
+      giveCard(g, DAISY, "01093");
+      putEnemy(g, "01160", locId(g, "01111"), ROLAND);
+    });
+    const { state } = commitDone(pick(r, /^Fight Ghoul Minion/));
+    expect(autoSwitchTarget(state, { viewing: ROLAND })).toBe(DAISY);
+    expect(autoSwitchTarget(state, { viewing: DAISY })).toBeNull();
+    expect(autoSwitchTarget(state, { viewing: null })).toBeNull(); // the decider's table is the default view
+  });
+
+  it("nothing when nobody is waiting on someone else", () => {
+    const { state } = turn();
+    expect(autoSwitchTarget(state, { viewing: DAISY })).toBeNull();
+  });
+});
+
+describe("investigatorChoice", () => {
+  it("every option an investigator: their avatars, to tap", () => {
+    const { state } = turn([ROLAND, DAISY, SKIDS]);
+    const own = new Map(state.order.map((i) => [state.invs[i].cardId, i]));
+    const pending = { ...state.pending!, options: [...own].map(([card, inv]) => ({ id: `pick:${inv}`, label: inv, card })) };
+    const c = investigatorChoice({ ...state, pending } as GameState);
+    expect(c?.options.map((o) => o.inv)).toEqual([ROLAND, DAISY, SKIDS]);
+    expect(c?.single).toBe(false);
+  });
+
+  it("exactly one option: it is the single choice to make by itself", () => {
+    const { state } = turn();
+    const card = state.invs[DAISY].cardId;
+    const c = investigatorChoice({ ...state, pending: { ...state.pending!, options: [{ id: "only", label: "Daisy", card }] } } as GameState);
+    expect(c).toMatchObject({ single: true, options: [{ inv: DAISY, id: "only" }] });
+  });
+
+  it("any other option beside the investigators, or none at all: not an investigator choice", () => {
+    const { state } = turn();
+    expect(investigatorChoice(state)).toBeNull();
+    const card = state.invs[DAISY].cardId;
+    expect(investigatorChoice({ ...state, pending: { ...state.pending!, options: [{ id: "a", label: "Daisy", card }, { id: "b", label: "Nobody" }] } } as GameState)).toBeNull();
+    expect(investigatorChoice({ ...state, pending: null } as GameState)).toBeNull();
+  });
+});
+
+describe("delayed", () => {
+  it("runs once after the delay while the guard still holds", () => {
+    vi.useFakeTimers();
+    const then = vi.fn();
+    delayed(1000, () => true, then);
+    vi.advanceTimersByTime(999);
+    expect(then).not.toHaveBeenCalled();
+    vi.advanceTimersByTime(2);
+    expect(then).toHaveBeenCalledTimes(1);
+    vi.useRealTimers();
+  });
+  it("does nothing when the guard no longer holds, or when cancelled", () => {
+    vi.useFakeTimers();
+    const then = vi.fn();
+    let ok = true;
+    delayed(1000, () => ok, then);
+    ok = false;
+    vi.advanceTimersByTime(1500);
+    expect(then).not.toHaveBeenCalled();
+    const cancel = delayed(1000, () => true, then);
+    cancel();
+    vi.advanceTimersByTime(1500);
+    expect(then).not.toHaveBeenCalled();
+    vi.useRealTimers();
   });
 });

@@ -3,7 +3,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { t } from "../../content/i18n";
 import type { GameState } from "../../engine/types";
 import { db, useGame } from "../context";
-import { handVisible, mapProjector } from "../scene/Table";
+import { mapProjector } from "../scene/Table";
 import { canUndo, safeStorage, viewerOf } from "../store";
 import { pickTip, TIPS_KEY, type TipAnchor, type TipContext } from "../tips";
 import { useView } from "../view";
@@ -70,8 +70,6 @@ function place(r: Rect | null): { left: number; top: number; side: Side; arrow: 
 export function TipLayer() {
   const game = useGame((s) => s.game) as GameState;
   const locale = useGame((s) => s.locale);
-  const privacy = useGame((s) => s.privacy);
-  const revealedFor = useGame((s) => s.revealedFor);
   const on = useGame((s) => s.tipsOn);
   const able = useGame(canUndo);
   const playing = useGame((s) => s.current);
@@ -84,7 +82,7 @@ export function TipLayer() {
   const [seen, setSeen] = useState(readSeen);
   const viewer = viewerOf(game);
   const phone = useLayoutMode() === "phone";
-  const c: TipContext = { viewer, shown: handVisible(privacy, game.order.length, viewer, revealedFor), canUndo: able, drawing: playing?.type === "token" && byHand, phone };
+  const c: TipContext = { viewer, shown: true, canUndo: able, drawing: playing?.type === "token" && byHand, phone };
   const tip = pickTip(game, c, seen, on);
   const visible = !!tip && quiet && ((!playing && !queued && stageFree) || (!!tip.duringDraw && c.drawing));
 

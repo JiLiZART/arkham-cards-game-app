@@ -8,7 +8,6 @@ import { db, gameStore, useGame } from "../context";
 import { Icon } from "../Icon";
 import { isIcon } from "../icons";
 import { Portrait } from "../Portrait";
-import { handVisible } from "../scene/Table";
 import { viewerOf } from "../store";
 import { addTokens, calcParts, isTestEvent, placedCards, sessionId, subjectOf, type CalcParts, type PlacedCard, type Subject } from "../testScreen";
 import { useStage, useView } from "../view";
@@ -185,11 +184,9 @@ function PlacedCards({ placed, skill, viewerCanAct }: { placed: PlacedCard[]; sk
   useLayoutEffect(() => {
     ref.current?.querySelectorAll<HTMLElement>("[data-card]").forEach((el) => rememberRect(el.dataset.card!, el));
   });
-  const privacy = useGame((s) => s.privacy);
-  const revealedFor = useGame((s) => s.revealedFor);
   const setup = useGame((s) => s.setup);
   const viewer = viewerOf(game);
-  useFlyIn(ref, !!viewer && handVisible(privacy, game.order.length, viewer, revealedFor), viewer, privacy && game.order.length > 1, RESOLVE_BOX, setup);
+  useFlyIn(ref, !!viewer, viewer, RESOLVE_BOX, setup);
   const owners = new Set(placed.map((p) => p.owner));
   return (
     <div className="st-placed" ref={ref}>

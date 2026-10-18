@@ -35,10 +35,6 @@ export const mapProjector: {
 const DEAL_MS = 250;
 const hiddenAll = () => true;
 
-export function handVisible(privacy: boolean, players: number, viewer: string | null, revealedFor: string | null) {
-  return !privacy || players <= 1 || (viewer !== null && revealedFor === viewer);
-}
-
 /** on-screen rectangle of a placement through the current camera */
 export function projectRect(p: Placement, camera: THREE.Camera, box: DOMRect): Omit<ScreenRect, "id"> {
   const f = footprint(p);

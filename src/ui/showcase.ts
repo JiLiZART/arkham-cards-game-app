@@ -1,7 +1,6 @@
 import type { StoreApi } from "zustand";
 import { diffArrivals, takeArrival } from "./arrivals";
 import { deckPick } from "./optionHome";
-import { handVisible } from "./scene/Table";
 import { viewerOf, type UiState } from "./store";
 import { useView } from "./view";
 
@@ -17,7 +16,6 @@ export function trackShowcase(store: StoreApi<UiState>) {
     }
     if (!s.game || !prev.game || s.game === prev.game || s.actions.length <= prev.actions.length) return;
     const viewer = viewerOf(s.game);
-    if (!handVisible(s.privacy, s.game.order.length, viewer, s.revealedFor)) return;
     const picked = new Set(deckPick(prev.game, viewerOf(prev.game)));
     const drawn = diffArrivals(prev.game, s.game).filter((a) => a.to === "hand" && a.from === "deck" && !a.opening && a.owner === viewer && !picked.has(a.id));
     if (!drawn.length) return;

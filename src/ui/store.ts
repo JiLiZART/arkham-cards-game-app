@@ -38,7 +38,7 @@ export interface Save {
   campaign: CampaignState;
   setup: GameSetup | null;
   actions: Action[];
-  settings: { locale: string; privacy: boolean; drawByHand?: boolean; pace?: Pace; tipsOn?: boolean; musicVolume?: number; sfxVolume?: number; muted?: boolean };
+  settings: { locale: string; privacy?: boolean; drawByHand?: boolean; pace?: Pace; tipsOn?: boolean; musicVolume?: number; sfxVolume?: number; muted?: boolean };
 }
 
 /** how fast events play: today's timings, 1.6 times longer, or each big event waits for a tap */
@@ -47,7 +47,6 @@ export type Pace = "normal" | "slow" | "tap";
 export interface UiState {
   screen: "title" | "wizard" | "settings" | "game" | "log" | "howto" | "catalog";
   locale: string;
-  privacy: boolean;
   /** chaos tokens are revealed by clicking a circle above the bag (otherwise automatically) */
   drawByHand: boolean;
   pace: Pace;
@@ -64,8 +63,6 @@ export interface UiState {
   /** events waiting to be animated */
   queue: QueuedEvent[];
   current: QueuedEvent | null;
-  /** investigator whose hand was revealed after the last hand-off */
-  revealedFor: InvId | null;
   /** how many of `actions` Undo can never take back: up to the last one that revealed hidden information or ended a mulligan */
   undoFloor: number;
   /** game.log length before each choice of this session: the feed merges routine entries of one choice only (not saved) */
@@ -91,8 +88,6 @@ export interface UiState {
   setTipsOn(on: boolean): void;
   setVolume(category: "music" | "effects", level: number): void;
   setMuted(muted: boolean): void;
-  setPrivacy(p: boolean): void;
-  confirmHandoff(): void;
   nextEvent(): void;
   skipEvents(): void;
   autoStep(n?: number): void;
@@ -161,9 +156,9 @@ export type Prepare = (campaignId: string, codes?: string[]) => Promise<void> | 
 export function createGameStore(db: ContentDb, storage: Storage = safeStorage(), prepare: Prepare = () => undefined): StoreApi<UiState> {
   const store = createStore<UiState>((set, get) => {
     const persist = () => {
-      const { campaign, setup, actions, locale, privacy, drawByHand, pace, tipsOn, musicVolume, sfxVolume, muted } = get();
+      const { campaign, setup, actions, locale, drawByHand, pace, tipsOn, musicVolume, sfxVolume, muted } = get();
       if (!campaign) return;
-      const save: Save = { version: ENGINE_VERSION, campaign, setup, actions, settings: { locale, privacy, drawByHand, pace, tipsOn, musicVolume, sfxVolume, muted } };
+      const save: Save = { version: ENGINE_VERSION, campaign, setup, actions, settings: { locale, drawByHand, pace, tipsOn, musicVolume, sfxVolume, muted } };
       try {
         storage.setItem(SAVE_KEY, JSON.stringify(save));
       } catch {
@@ -197,8 +192,8 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage(),
       set({ queue, current: get().current ?? queue[0], ...(get().current ? {} : { queue: queue.slice(1) }) });
     };
     return {
-      screen: "title", locale: "en", privacy: true, drawByHand: true, pace: "normal", tipsOn: true, musicVolume: 50, sfxVolume: 80, muted: false, campaign: null, setup: null, actions: [], game: null,
-      queue: [], current: null, revealedFor: null, undoFloor: 0, logMarks: [], notice: null, error: null, loading: false,
+      screen: "title", locale: "en", drawByHand: true, pace: "normal", tipsOn: true, musicVolume: 50, sfxVolume: 80, muted: false, campaign: null, setup: null, actions: [], game: null,
+      queue: [], current: null, undoFloor: 0, logMarks: [], notice: null, error: null, loading: false,
 
       newCampaign(opts) {
         const codes = [...new Set(opts.investigators.flatMap((i) => [i.code, ...Object.keys((i.deck ?? db.decks[i.deckId])?.cards ?? {})]))];
@@ -225,7 +220,7 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage(),
         if (!c || !currentScenarioId(db, c)) return;
         const setup: GameSetup = { ...scenarioSetup(db, c, seed ?? (Date.now() >>> 0)), pacePhases: true };
         const r = createGame(db, setup);
-        set({ setup, actions: [], undoFloor: 0, logMarks: [r.state.log.length], game: r.state, screen: "game", queue: [], current: null, revealedFor: null, error: null });
+        set({ setup, actions: [], undoFloor: 0, logMarks: [r.state.log.length], game: r.state, screen: "game", queue: [], current: null, error: null });
         persist();
       },
 
@@ -271,7 +266,7 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage(),
         } catch {
           return false;
         }
-        const settings = { locale: save.settings?.locale ?? "en", privacy: save.settings?.privacy ?? true, drawByHand: save.settings?.drawByHand ?? true, pace: save.settings?.pace ?? "normal", tipsOn: save.settings?.tipsOn ?? true, musicVolume: save.settings?.musicVolume ?? 50, sfxVolume: save.settings?.sfxVolume ?? 80, muted: save.settings?.muted ?? false };
+        const settings = { locale: save.settings?.locale ?? "en", drawByHand: save.settings?.drawByHand ?? true, pace: save.settings?.pace ?? "normal", tipsOn: save.settings?.tipsOn ?? true, musicVolume: save.settings?.musicVolume ?? 50, sfxVolume: save.settings?.sfxVolume ?? 80, muted: save.settings?.muted ?? false };
         set(settings);
         const restore = () => {
           if (save.version !== ENGINE_VERSION || !save.setup) {
@@ -285,7 +280,7 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage(),
           try {
             const r = replayWithFloor(db, save.setup, save.actions);
             quietNextGame();
-            set({ campaign: save.campaign, setup: save.setup, actions: save.actions, game: r.state, undoFloor: r.undoFloor, logMarks: [r.state.log.length], screen: "game", queue: [], current: null, revealedFor: null });
+            set({ campaign: save.campaign, setup: save.setup, actions: save.actions, game: r.state, undoFloor: r.undoFloor, logMarks: [r.state.log.length], screen: "game", queue: [], current: null });
           } catch {
             set({ campaign: save.campaign, setup: null, actions: [], game: null, screen: "log", notice: "The saved scenario could not be restored; it will restart." });
           }
@@ -303,10 +298,6 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage(),
 
       setLocale(locale) {
         set({ locale });
-        persist();
-      },
-      setPrivacy(privacy) {
-        set({ privacy });
         persist();
       },
       setDrawByHand(drawByHand) {
@@ -328,9 +319,6 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage(),
       setMuted(muted) {
         set({ muted });
         persist();
-      },
-      confirmHandoff() {
-        set({ revealedFor: viewerOf(get().game) });
       },
       nextEvent() {
         const [head, ...rest] = get().queue;
@@ -364,13 +352,13 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage(),
       },
 
       exportReport() {
-        const { setup, actions, campaign, game, locale, privacy, drawByHand, pace } = get();
+        const { setup, actions, campaign, game, locale, drawByHand, pace } = get();
         return JSON.stringify(
           {
             version: ENGINE_VERSION,
             app: APP_VERSION,
             setup, actions, campaign,
-            settings: { locale, privacy, drawByHand, pace },
+            settings: { locale, drawByHand, pace },
             view: { viewing: useView.getState().viewing },
             pending: game?.pending ? { inv: game.pending.inv, kind: game.pending.kind, prompt: game.pending.prompt } : null,
             where: game ? { scenario: game.scenarioId, round: game.round, phase: game.phase } : null,
@@ -389,7 +377,7 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage(),
         }
         if (!data || typeof data !== "object" || !data.setup || !Array.isArray(data.actions)) throw new Error("This is not a game report (it has no setup and actions).");
         const st = data.settings;
-        if (st) set({ ...(typeof st.locale === "string" ? { locale: st.locale } : {}), ...(typeof st.privacy === "boolean" ? { privacy: st.privacy } : {}), ...(typeof st.drawByHand === "boolean" ? { drawByHand: st.drawByHand } : {}), ...(st.pace ? { pace: st.pace } : {}) });
+        if (st) set({ ...(typeof st.locale === "string" ? { locale: st.locale } : {}), ...(typeof st.drawByHand === "boolean" ? { drawByHand: st.drawByHand } : {}), ...(st.pace ? { pace: st.pace } : {}) });
         get().importLog(text);
         const viewing = data.view?.viewing ?? null;
         useView.setState({ viewing: viewing && get().game?.invs[viewing] ? viewing : null });

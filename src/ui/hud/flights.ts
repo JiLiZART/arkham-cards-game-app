@@ -93,9 +93,8 @@ export function centreTransform(own: Box, b: Box): string {
 
 /**
  * HTML cards (`[data-card]` inside `ref`) that just arrived fly in from where they came from.
- * The first time the container shows after being hidden (the hand-off screen) nothing flies.
  */
-export function useFlyIn(ref: RefObject<HTMLElement>, visible: boolean, viewer: InvId | null, quietFirst: boolean, resolve: () => Box, game: unknown) {
+export function useFlyIn(ref: RefObject<HTMLElement>, visible: boolean, viewer: InvId | null, resolve: () => Box, game: unknown) {
   const known = useRef<Set<InstId> | null>(null);
   // card ids repeat between games: a new game (new setup) starts from scratch
   const forGame = useRef(game);
@@ -112,11 +111,6 @@ export function useFlyIn(ref: RefObject<HTMLElement>, visible: boolean, viewer: 
     const els = [...(root.matches("[data-card]") ? [root] : []), ...root.querySelectorAll<HTMLElement>("[data-card]")];
     if (!known.current) {
       known.current = new Set();
-      if (quietFirst)
-        for (const el of els) {
-          known.current.add(el.dataset.card!);
-          takeArrival(el.dataset.card!);
-        }
     }
     const seen = known.current;
     const ids = new Set<InstId>();

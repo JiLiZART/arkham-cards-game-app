@@ -8,8 +8,6 @@ import { feedEntry, mergeLive, shownCount, STEP, type FeedEntry, type Part } fro
 import { Glyph, Icon } from "../Icon";
 import { CLASS_COLORS, hasSymbol } from "../icons";
 import { Portrait } from "../Portrait";
-import { handVisible } from "../scene/Table";
-import { viewerOf } from "../store";
 import { useView } from "../view";
 
 const LIVE_MAX = 4;
@@ -122,8 +120,6 @@ function toneColor(e: FeedEntry): string {
 /** the live kill feed (newest at the top, fading toward the bottom) or the full Journal */
 export function Feed() {
   const game = useGame((s) => s.game) as GameState;
-  const privacy = useGame((s) => s.privacy);
-  const revealedFor = useGame((s) => s.revealedFor);
   const mode = useView((s) => s.feedMode);
   const locale = useGame((s) => s.locale);
   const marks = useGame((s) => s.logMarks);
@@ -191,7 +187,6 @@ export function Feed() {
     return () => window.removeEventListener("keydown", key);
   }, [mode]);
 
-  if (!handVisible(privacy, game.order.length, viewerOf(game), revealedFor)) return null;
   return (
     <div className={`feed ${mode}`} ref={listRef} aria-live="polite">
       {mode === "journal" && <div className="feed-title card-name">{t(db, gameStore.getState().locale, "hud.journal")}</div>}

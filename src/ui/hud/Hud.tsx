@@ -1,12 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { cardText, scenarioText, t } from "../../content/i18n";
-import type { GameEvent } from "../../engine/types";
+import type { GameEvent, GameState } from "../../engine/types";
 import { whenSettled } from "../arrivals";
 import { db, gameStore, useGame } from "../context";
 import { HELD, holdsForTap, viewerOf } from "../store";
-import { landingView } from "../players";
-import { useShown } from "../usePlayers";
-import { handVisible } from "../scene/Table";
+import { autoSwitchTarget, delayed, landingView, ownDecisionTitle } from "../players";
 import { hasSymbol, MARKUP_ICONS, markupColor } from "../icons";
 import { ActionRail, CameraButtons, InstructionBar, UndoButton } from "./ActionRail";
 import { moment, SoundLayer } from "./SoundLayer";
@@ -27,6 +25,7 @@ import { IntroOverlay } from "./IntroOverlay";
 import { Showcase } from "./Showcase";
 import { StepCaption } from "./StepCaption";
 import { guideHtml } from "../guideText";
+import { InvestigatorChoiceOverlay } from "./InvestigatorChoice";
 import { Ribbon } from "./Ribbon";
 import { SkillTestScreen } from "./SkillTestScreen";
 import { Portrait } from "../Portrait";
@@ -158,20 +157,28 @@ function PhaseTitle() {
 }
 
 /**
- * A new investigator's turn gets a short title ("Daisy's turn") in the phase title's style, so a second turn in the same phase has a beginning.
- * None when the hand-off screen begins the turn (private hands), nor for the lead's first turn right after the investigation phase's title.
+ * A new investigator's turn, or a decision of their own when someone else is active (their own test in the mythos phase),
+ * gets a short title ("Daisy's turn") in the phase title's style, so a second turn in the same phase has a beginning.
+ * None for the lead's first turn right after the investigation phase's title, nor for a help to a teammate (a commit
+ * window, a reaction): the table switches quietly (see AutoSwitch).
  */
 function TurnTitle() {
   const game = useGame((s) => s.game)!;
   const setup = useGame((s) => s.setup);
   const current = useGame((s) => s.current);
   const locale = useGame((s) => s.locale);
-  const seen = useRef<{ setup: unknown; n: number }>({ setup, n: game.log.length });
-  const queue = useRef<{ inv: string; key: number }[]>([]);
-  const [showing, setShowing] = useState<{ inv: string; key: number } | null>(null);
-  if (seen.current.setup !== setup || game.log.length < seen.current.n) seen.current = { setup, n: game.log.length };
+  const seen = useRef<{ setup: unknown; n: number; prev: GameState | null }>({ setup, n: game.log.length, prev: game });
+  // a turn title waits for its turn to still be the active one; a decision's for its investigator to still be deciding
+  type Title = { inv: string; key: number; decision?: boolean };
+  const queue = useRef<Title[]>([]);
+  const [showing, setShowing] = useState<Title | null>(null);
+  if (seen.current.setup !== setup || game.log.length < seen.current.n) seen.current = { setup, n: game.log.length, prev: game };
+  if (seen.current.prev !== game) {
+    const own = ownDecisionTitle(seen.current.prev, game);
+    if (own) queue.current.push({ inv: own, key: -game.seq, decision: true });
+    seen.current.prev = game;
+  }
   if (game.log.length > seen.current.n) {
-    const { privacy, revealedFor } = gameStore.getState();
     for (let i = seen.current.n; i < game.log.length; i++) {
       const e = game.log[i];
       if (e.type !== "turn" || !e.inv) continue;
@@ -179,7 +186,6 @@ function TurnTitle() {
       let first = true;
       for (let k = i - 1; k >= 0 && game.log[k].type !== "phase"; k--) if (game.log[k].type === "turn") first = false;
       if (first && e.inv === game.lead) continue;
-      if (!handVisible(privacy, game.order.length, e.inv, revealedFor)) continue;
       queue.current.push({ inv: e.inv, key: i });
     }
     seen.current.n = game.log.length;
@@ -189,8 +195,8 @@ function TurnTitle() {
     if (showing || current || !waiting) return;
     return whenSettled(() => {
       // a turn already over (the player was quicker than the screen) gets no title
-      const active = gameStore.getState().game?.active;
-      while (queue.current.length && queue.current[0].inv !== active) queue.current.shift();
+      const g = gameStore.getState().game;
+      while (queue.current.length && queue.current[0].inv !== (queue.current[0].decision ? g?.pending?.inv : g?.active)) queue.current.shift();
       setShowing(queue.current.shift() ?? null);
     });
   }, [showing, current, waiting]);
@@ -209,6 +215,34 @@ function TurnTitle() {
       <div className="phase-title-name">{tr("turn.title", { name: cardText(db, showing.inv, locale).name })}</div>
     </div>
   );
+}
+
+/** how long a teammate who can act waits before the table switches to them by itself */
+export const AUTO_SWITCH_MS = 1000;
+
+/**
+ * When someone else can act (a commit to a teammate's test, a reaction) and their table isn't on screen, the table
+ * switches to them by itself after about a second with nothing holding the middle of the screen; their avatar pulses
+ * and the bar's button switch sooner. View state only (ADR-0004).
+ */
+function AutoSwitch() {
+  const game = useGame((s) => s.game)!;
+  const viewing = useView((s) => s.viewing);
+  const busy = useGame((s) => !!s.current || s.queue.length > 0);
+  const free = useView((s) => s.stage.every((k) => k.startsWith("test:") || k.startsWith("pause:")) && !s.intro && s.showcase.length === 0);
+  const target = autoSwitchTarget(game, { viewing });
+  useEffect(() => {
+    if (!target || busy || !free) return;
+    return delayed(
+      AUTO_SWITCH_MS,
+      () => {
+        const g = gameStore.getState().game;
+        return !!g && autoSwitchTarget(g, { viewing: useView.getState().viewing }) === target;
+      },
+      () => useView.getState().setViewing(null),
+    );
+  }, [target, busy, free]);
+  return null;
 }
 
 /** the paced pause: the coming phase's title stays until the lead investigator continues (button, Space or Enter) */
@@ -283,44 +317,6 @@ function TopBar({ phone }: { phone: boolean }) {
         </button>
         <button className={phone ? "icon-btn" : ""} onClick={() => gameStore.setState({ screen: "title" })} title={tr("hud.menu")} aria-label={tr("hud.menu")}>
           {phone ? "☰" : tr("hud.menu")}
-        </button>
-      </div>
-    </div>
-  );
-}
-
-/** "pass the device" screen between players when hands are private */
-function HandOff() {
-  const game = useGame((s) => s.game)!;
-  const privacy = useGame((s) => s.privacy);
-  const revealedFor = useGame((s) => s.revealedFor);
-  const confirm = useGame((s) => s.confirmHandoff);
-  const busy = useGame((s) => !!s.current || s.queue.length > 0);
-  const locale = useGame((s) => s.locale);
-  // the hand-off waits for whatever holds the middle of the screen (and drawn cards about to take it)
-  const intro = useView((s) => s.stage.some((k) => !k.startsWith("test:")) || !!s.intro || s.showcase.length > 0);
-  const viewer = viewerOf(game);
-  // the hand-off is for the deciding player's table; looking at a teammate (or waiting for a tap on whoever can act) shows no box
-  const looking = useShown() !== viewer;
-  // the pause before a phase is for the whole table: no hand to hide
-  const hidden = busy || intro || looking || !game.pending || game.pending.kind === "phase" || handVisible(privacy, game.order.length, viewer, revealedFor);
-  useEffect(() => {
-    if (!hidden) moment("handoff");
-  }, [hidden]);
-  if (hidden) return null;
-  const name = cardText(db, viewer!, locale).name;
-  return (
-    <div className="handoff">
-      <div className="handoff-box">
-        <h2>{tr("hud.passTo", { name })}</h2>
-        <button
-          className="primary big"
-          onClick={() => {
-            useView.getState().setHovered(null);
-            confirm();
-          }}
-        >
-          {tr("hud.ready", { name })}
         </button>
       </div>
     </div>
@@ -548,11 +544,12 @@ export function Hud() {
       <EventPlayer />
       <PhaseTitle />
       <TurnTitle />
+      <InvestigatorChoiceOverlay />
+      <AutoSwitch />
       <TipLayer />
       <SoundLayer />
       <Showcase />
       <IntroOverlay />
-      <HandOff />
       <ScenarioEnd />
       <ErrorToast />
     </>

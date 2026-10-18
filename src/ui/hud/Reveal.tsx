@@ -113,7 +113,7 @@ function Resolving({ game, locale }: { game: GameState; locale: string }) {
   // an event played from hand flies here from the fan
   const ref = useRef<HTMLDivElement>(null);
   const setup = useGame((s) => s.setup);
-  useFlyIn(ref, cards.length > 0, viewerOf(game), false, RESOLVE_BOX, setup);
+  useFlyIn(ref, cards.length > 0, viewerOf(game), RESOLVE_BOX, setup);
   if (!cards.length) return null;
   const b = RESOLVE_BOX();
   return (

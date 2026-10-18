@@ -206,12 +206,28 @@ describe("pace and held events", () => {
   });
 });
 
+describe("saves from before the pass screen went", () => {
+  it("a save with settings.privacy loads, and the setting is gone from the state and from the next save", () => {
+    const storage = mem();
+    const first = start(storage);
+    begin(first);
+    const raw = JSON.parse(storage.getItem(SAVE_KEY)!);
+    raw.settings.privacy = true;
+    storage.setItem(SAVE_KEY, JSON.stringify(raw));
+    const again = createGameStore(db, storage);
+    expect(again.getState().resume()).toBe(true);
+    expect(again.getState().game).toEqual(first.getState().game);
+    expect("privacy" in again.getState()).toBe(false);
+    again.getState().setPace("slow");
+    expect("privacy" in JSON.parse(storage.getItem(SAVE_KEY)!).settings).toBe(false);
+  });
+});
+
 describe("game report", () => {
   it("holds the replay log, the campaign, the settings, the view and the pending prompt, and the build", () => {
     const s = start(mem());
     begin(s);
     s.getState().skipEvents();
-    s.getState().setPrivacy(false);
     s.getState().setPace("slow");
     s.getState().setDrawByHand(false);
     const r = JSON.parse(s.getState().exportReport());
@@ -221,7 +237,7 @@ describe("game report", () => {
     expect(r.setup).toEqual(s.getState().setup);
     expect(r.actions).toEqual(s.getState().actions);
     expect(r.campaign.campaignId).toBe("night-of-the-zealot");
-    expect(r.settings).toEqual({ locale: "en", privacy: false, drawByHand: false, pace: "slow" });
+    expect(r.settings).toEqual({ locale: "en", drawByHand: false, pace: "slow" });
     expect(r.view).toEqual({ viewing: null });
     expect(r.pending).toEqual({ inv: g.pending!.inv, kind: g.pending!.kind, prompt: g.pending!.prompt });
     expect(r.where).toEqual({ scenario: g.scenarioId, round: g.round, phase: g.phase });
@@ -233,7 +249,6 @@ describe("game report", () => {
     a.getState().skipEvents();
     a.getState().choose(JSON.stringify({ kind: "draw" }));
     a.getState().skipEvents();
-    a.getState().setPrivacy(false);
     a.getState().setPace("tap");
     const report = a.getState().exportReport();
     const b = createGameStore(db, mem());
@@ -242,7 +257,7 @@ describe("game report", () => {
     expect(b.getState().actions).toEqual(a.getState().actions);
     expect(b.getState().campaign).toEqual(a.getState().campaign);
     expect(b.getState().screen).toBe("game");
-    expect([b.getState().privacy, b.getState().pace]).toEqual([false, "tap"]);
+    expect(b.getState().pace).toBe("tap");
     expect(b.getState().game!.pending).toEqual(a.getState().game!.pending);
   });
 

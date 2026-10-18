@@ -6,7 +6,6 @@ import { CardFace as Face } from "../CardFace";
 import { backUrl } from "../images";
 import { domPlace, lastRects, noteLocalMove, originRect, rememberRect, takeArrival, takeLocalMove, type Arrival } from "../arrivals";
 import { placeDetails } from "../details";
-import { handVisible } from "../scene/Table";
 import { useChoicesOffered, useShown } from "../usePlayers";
 import { outsideSpotlight, useView } from "../view";
 import { moment } from "./SoundLayer";
@@ -34,16 +33,14 @@ function useViewportWidth() {
 
 /**
  * The hand on screen (shared by the desktop fan and the phone's hand drawer): the investigator being looked at
- * (ADR-0004), their cards when the hand isn't private, and each card's options when that investigator decides.
+ * (ADR-0004), their cards, and each card's options when that investigator decides.
  */
 export function useHand() {
   const game = useGame((s) => s.game) as GameState;
-  const privacy = useGame((s) => s.privacy);
-  const revealedFor = useGame((s) => s.revealedFor);
   const busy = useGame((s) => !!s.current || s.queue.length > 0);
   const viewer = useShown();
   const offered = useChoicesOffered();
-  const visible = handVisible(privacy, game.order.length, viewer, revealedFor);
+  const visible = !!viewer;
   // cards picked for the mulligan sit on the "to redraw" row instead
   const picks = mulliganPicks(game, viewer);
   // cards just drawn wait in the showcase until sent on
@@ -60,7 +57,6 @@ export function useHand() {
 export function HandFan() {
   const game = useGame((s) => s.game) as GameState;
   const locale = useGame((s) => s.locale);
-  const privacy = useGame((s) => s.privacy);
   const choose = useGame((s) => s.choose);
   const openMenu = useView((s) => s.openMenu);
   const setHovered = useView((s) => s.setHovered);
@@ -171,13 +167,8 @@ export function HandFan() {
       return;
     }
     if (!known.current) {
-      // first sight of this hand: behind the hand-off screen it is just shown, otherwise (a new game) it flies in
+      // first sight of this hand (a new game): it flies in
       known.current = new Set();
-      if (privacy && game.order.length > 1)
-        for (const id of hand) {
-          known.current.add(id);
-          takeArrival(id);
-        }
     }
     const seen = known.current;
     hand.forEach((id, i) => {
