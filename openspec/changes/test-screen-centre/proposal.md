@@ -6,6 +6,7 @@ The skill-test screen puts the card being tested in the left corner, the draw in
 
 - The subject card moves to the centre of the screen and grows (at least 240×336 px at 1080p); the test's line sits above it; the placed cards sit in a wrapping row to its right; the calculation strip stays along the bottom.
 - The chaos draw plays over the subject: the bag lands on the card and the tokens tumble over and around it, leaving the card visible between them; the result's big total appears over the card too.
+- While the deciding investigator is committing, the subject card is highlighted and tapping it finishes committing, the same as the Done button (Space and Enter too).
 - The subject no longer enlarges on hover (it is large already); its details column still appears.
 - The phone layout keeps the same arrangement at smaller sizes.
 

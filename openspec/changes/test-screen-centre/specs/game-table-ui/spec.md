@@ -7,6 +7,8 @@ When a skill test begins (the commit prompt is offered), the UI SHALL open a ski
 - to the right of the subject, the placed cards in a row that wraps, each at least 86×120 px, with the icons it contributes to the test and, when several investigators have placed cards, the owner's portrait on each;
 - along the bottom, above the hand fan, a calculation strip: the skill with its icon and base value, each placed card with its icons, other modifiers, and the total against the difficulty, updated as cards are placed and taken back.
 
+While the deciding investigator's commit window is open, the subject card SHALL be highlighted like any card with an option, and tapping it SHALL finish committing, exactly as the instruction bar's Done does; Space or Enter does the same. It is not highlighted and does nothing at other times (another investigator's window not on screen, the draw, the result).
+
 The chaos draw and the result play over the subject card: the bag lands on it and the tokens tumble over and around it, and the big total appears over it (see Chaos token draw). The subject stays in place and visible between the tokens.
 
 The hand fan SHALL stay live under the strip: the cards that can be committed are bright and the rest dimmed (the choice spotlight), and a tap commits a card, which flies to the placed cards. A placed card of the deciding investigator SHALL be highlighted as removable while their commit window is open; tapping it returns it to their hand and updates the strip. Cards placed by another investigator, or after the window has closed, can't be taken back.
@@ -34,6 +36,10 @@ After the tester's Done, each other investigator at the location who may commit 
 #### Scenario: A test with no card
 - **WHEN** a scenario effect calls for a plain willpower test
 - **THEN** the subject is Roland's portrait and the line reads "Willpower test · 3 vs 3"
+
+#### Scenario: Tap the subject to finish
+- **WHEN** Roland has placed Vicious Blow in his fight against the Ghoul Minion
+- **THEN** the Ghoul Minion card in the centre is highlighted, and tapping it ends his commit window as Done does, and the draw begins
 
 #### Scenario: Subject in the centre
 - **WHEN** Roland investigates the Study at 1600×900
