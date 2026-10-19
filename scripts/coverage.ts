@@ -3,7 +3,9 @@ import { writeFileSync } from "node:fs";
 import { coverageJson } from "../src/content/coverage";
 import { loadContentFromDisk } from "../src/content/node";
 
-const { db, errors } = await loadContentFromDisk();
+const { db, errors: all } = await loadContentFromDisk();
+// the file being rewritten may be stale or in an older shape: its errors are not a reason to stop
+const errors = all.filter((e) => !e.file.endsWith("content/coverage.json"));
 if (errors.length) {
   for (const e of errors) console.error(`✗ ${e.file} ${e.path}: ${e.message}`);
   process.exit(1);

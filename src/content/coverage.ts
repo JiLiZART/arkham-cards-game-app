@@ -25,17 +25,29 @@ export function packCoverage(db: ContentDb): ContentCoverage["packs"] {
   );
 }
 
-/** the cards a campaign's scenarios use (encounter sets, side decks, acts, agendas), how many work, which scenarios have no script */
+/** the cards a scenario uses: its encounter sets, side decks, acts, agendas and reference card */
+function usedBy(db: ContentDb, s: ContentDb["scenarios"][string]): string[] {
+  const used = new Set<string>();
+  for (const set of [...s.encounterSets, ...Object.values(s.sideDecks).flat()]) for (const c of db.encounterSets[set] ?? []) used.add(c);
+  for (const c of [s.card, ...s.acts, ...s.agendas]) if (db.cards[c]) used.add(c);
+  return [...used].sort();
+}
+
+/** a scenario: the cards it uses and how many work, whether its tokens are real (its reference card works), whether it has a script */
+export function scenarioCoverage(db: ContentDb, id: string): ContentCoverage["scenarios"][string] {
+  const s = db.scenarios[id];
+  const cards = count(db, usedBy(db, s));
+  const tokens = implemented(db, s.card);
+  const scripted = !!db.scripts[id];
+  return { campaign: Object.values(db.campaigns).find((c) => c.scenarios.includes(id))?.id ?? "", cards, tokens, scripted, complete: cards.works === cards.total && tokens && scripted };
+}
+
+/** the cards a campaign's scenarios use, how many work, which scenarios have no script; complete when all its scenarios are */
 export function campaignCoverage(db: ContentDb, id: string): ContentCoverage["campaigns"][string] {
   const scenarios = db.campaigns[id].scenarios.flatMap((s) => db.scenarios[s] ?? []);
-  const used = new Set<string>();
-  for (const s of scenarios) {
-    for (const set of [...s.encounterSets, ...Object.values(s.sideDecks).flat()]) for (const c of db.encounterSets[set] ?? []) if (db.cards[c].type !== "scenario") used.add(c);
-    for (const c of [...s.acts, ...s.agendas]) if (db.cards[c]) used.add(c);
-  }
-  const cards = count(db, [...used].sort());
+  const cards = count(db, [...new Set(scenarios.flatMap((s) => usedBy(db, s)))].sort());
   const unscripted = scenarios.filter((s) => !db.scripts[s.id]).map((s) => s.id);
-  return { cards, unscripted, complete: cards.works === cards.total && !unscripted.length };
+  return { cards, unscripted, complete: scenarios.every((s) => scenarioCoverage(db, s.id).complete) };
 }
 
 /** an investigator works when their card and their signature cards do */
@@ -51,6 +63,7 @@ export function contentCoverage(db: ContentDb): ContentCoverage {
   return {
     packs: packCoverage(db),
     campaigns: Object.fromEntries(Object.keys(db.campaigns).sort().map((id) => [id, campaignCoverage(db, id)])),
+    scenarios: Object.fromEntries(Object.keys(db.scenarios).sort().map((id) => [id, scenarioCoverage(db, id)])),
     investigators: investigatorCoverage(db),
   };
 }

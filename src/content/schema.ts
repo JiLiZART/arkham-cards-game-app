@@ -942,6 +942,8 @@ export const ContentCoverage = z
   .object({
     packs: z.record(z.string(), z.object({ encounter: CardCount, player: CardCount }).strict()),
     campaigns: z.record(z.string(), z.object({ cards: CardCount, unscripted: z.array(z.string()), complete: z.boolean() }).strict()),
+    /** per scenario: the cards it uses (its reference card too), whether its token effects are real, whether it has a script (ADR-0013) */
+    scenarios: z.record(z.string(), z.object({ campaign: z.string(), cards: CardCount, tokens: z.boolean(), scripted: z.boolean(), complete: z.boolean() }).strict()),
     /** whether the investigator's card and their signature cards work */
     investigators: z.record(z.string(), z.boolean()),
   })

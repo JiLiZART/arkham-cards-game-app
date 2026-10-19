@@ -9,7 +9,7 @@
 
 ## 2. Per-scenario coverage
 
-- [ ] 2.1 `scenarioCoverage(db, id)` (campaign, cards with the reference card, `tokens`, `scripted`, `complete`); `campaignCoverage` counts reference cards and is complete when all its scenarios are; schema `ContentCoverage.scenarios`; tests: a shared set counts in each scenario and once in the campaign, Extracurricular Activity is not complete with tokens not real.
+- [x] 2.1 `scenarioCoverage(db, id)` (campaign, cards with the reference card, `tokens`, `scripted`, `complete`); `campaignCoverage` counts reference cards and is complete when all its scenarios are; schema `ContentCoverage.scenarios`; tests: a shared set counts in each scenario and once in the campaign, Extracurricular Activity is not complete with tokens not real.
 
 ## 3. Token effects the engine lacks
 
