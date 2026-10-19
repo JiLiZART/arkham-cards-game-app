@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { SoundManifest } from "./schema";
-import { checkLoudness, checkSounds, EFFECTS_BUDGET, MUSIC_BUDGET, type SoundProbe } from "./soundChecks";
+import { SoundCandidates, SoundManifest } from "./schema";
+import { checkCandidates, checkLoudness, checkSounds, EFFECTS_BUDGET, MUSIC_BUDGET, type SoundProbe } from "./soundChecks";
 
 const clip = { file: "snap.mp3", source: "https://kenney.nl/assets/casino-audio", author: "Kenney", license: "CC0" };
 const manifest = SoundManifest.parse({
@@ -71,5 +71,26 @@ describe("checkLoudness", () => {
 
   it("skips a file the probe cannot read (the missing-file check reports it)", () => {
     expect(checkLoudness(manifest, probe({ loudness: () => null, seam: () => null }))).toEqual([]);
+  });
+});
+
+describe("checkCandidates", () => {
+  const entry = (n: number) => ({ original: `kenney/a${n}.ogg`, preview: `x/${n}.mp3`, source: "https://kenney.nl/assets/x", author: "Kenney", license: "CC0", description: `a${n}`, sha256: "a".repeat(64) });
+  const slot = { kind: "effect" as const, where: "w", candidates: [1, 2, 3, 4, 5].map(entry) };
+  const all = SoundCandidates.parse({ slots: { "event:attack": slot, "moment:play": slot, "music:fight": { ...slot, kind: "music" } } });
+
+  it("passes when every slot of the manifest has candidates", () => {
+    expect(checkCandidates(manifest, all)).toEqual([]);
+  });
+
+  it("reports a slot of the manifest with no candidates, and a required slot the manifest lacks", () => {
+    const some = SoundCandidates.parse({ slots: { "event:attack": slot } });
+    expect(checkCandidates(manifest, some).map((e) => e.path)).toEqual(["moment:play", "music:fight"]);
+    expect(checkCandidates(manifest, all, ["moment:newOne"]).map((e) => e.path)).toEqual(["moment:newOne"]);
+  });
+
+  it("is a schema error to have other than five candidates or a licence other than CC0", () => {
+    expect(SoundCandidates.safeParse({ slots: { a: { ...slot, candidates: [entry(1)] } } }).success).toBe(false);
+    expect(SoundCandidates.safeParse({ slots: { a: { ...slot, candidates: slot.candidates.map((c) => ({ ...c, license: "CC-BY" })) } } }).success).toBe(false);
   });
 });

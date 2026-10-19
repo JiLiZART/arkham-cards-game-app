@@ -1,0 +1,3604 @@
+{
+  "slots": {
+    "event:token.0": {
+      "kind": "effect",
+      "where": "a chaos token leaves the bag: the rattle",
+      "candidates": [
+        {
+          "original": "kenney-casino/Audio/dice-shake-3.ogg",
+          "preview": "event-token-0/b902b352.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "dice-shake-3.ogg · kenney-casino",
+          "sha256": "aecd1dd0de6e42ebb510d1f9bfe91a580a8af238dd73bdfda368b90b894b5c09"
+        },
+        {
+          "original": "kenney-casino/Audio/dice-throw-3.ogg",
+          "preview": "event-token-0/625a8573.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "dice-throw-3.ogg · kenney-casino",
+          "sha256": "09c13d35a9a30bfce31a5e9bca94adc5be189ddecd0b4500237d54c7fd05227c"
+        },
+        {
+          "original": "kenney-casino/Audio/chips-handle-3.ogg",
+          "preview": "event-token-0/f1cbe08f.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "chips-handle-3.ogg · kenney-casino",
+          "sha256": "7c5a86e27b2bef839ae096dd655506cf46a82494bd01cc28f51bed6ab26cc342"
+        },
+        {
+          "original": "sfx100/sfx100v2_stones_01.ogg",
+          "preview": "event-token-0/1678ef64.mp3",
+          "source": "https://opengameart.org/content/100-cc0-sfx-2",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "sfx100v2_stones_01.ogg · sfx100",
+          "sha256": "20d293a892e1fa6330da2569065aa260a822198bddce2b183f8c11642e7deb4d"
+        },
+        {
+          "original": "rpg-pack/RPG Sound Pack/inventory/beads.wav",
+          "preview": "event-token-0/c70ae039.mp3",
+          "source": "https://opengameart.org/content/rpg-sound-pack",
+          "author": "artisticdude",
+          "license": "CC0",
+          "description": "beads.wav · rpg-pack",
+          "sha256": "dd8ae313bcb28b50725050780fe0d312d248e3aad15f33d7bea2ba58cbb2093b"
+        }
+      ]
+    },
+    "event:token.1": {
+      "kind": "effect",
+      "where": "a chaos token leaves the bag: the clink",
+      "candidates": [
+        {
+          "original": "kenney-impact-sounds/Audio/impactMetal_light_001.ogg",
+          "preview": "event-token-1/00c520a5.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactMetal_light_001.ogg · kenney-impact-sounds",
+          "sha256": "fba69c467ddd85da7b1d82e259f936b876d9ba6a3d6f1b24bdd10468e46bfe08"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/impactTin_medium_001.ogg",
+          "preview": "event-token-1/5020471d.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactTin_medium_001.ogg · kenney-impact-sounds",
+          "sha256": "84253095543c094d83cd749f42ecfbc96e356b60385f18a192c18eafb25b3cc6"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/handleCoins.ogg",
+          "preview": "event-token-1/edbee43e.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "handleCoins.ogg · kenney-rpg-audio",
+          "sha256": "8a91f969e932df709df80ee124d86a51389eed9b67f22e5e716bc2bbf60d8dab"
+        },
+        {
+          "original": "kenney-casino/Audio/chips-collide-2.ogg",
+          "preview": "event-token-1/fcdbe12f.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "chips-collide-2.ogg · kenney-casino",
+          "sha256": "2a10c5ff4b2fbaa55a317fc258ddce3fec85bd26db2d3c2ad298b3b33ce23bc6"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/impactMetal_light_002.ogg",
+          "preview": "event-token-1/20954961.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactMetal_light_002.ogg · kenney-impact-sounds",
+          "sha256": "25a96f90a9a1f88a531e824e126f0519504625e5635e65a72e4f31611428db29"
+        }
+      ]
+    },
+    "event:testResult": {
+      "kind": "effect",
+      "where": "a skill test is won",
+      "candidates": [
+        {
+          "original": "bell3.wav",
+          "preview": "event-testResult/1d557bb7.mp3",
+          "source": "https://opengameart.org/content/bell-dingschimes",
+          "author": "PWL",
+          "license": "CC0",
+          "description": "bell3.wav · bell3.wav",
+          "sha256": "99b9cdb7b9536c97c6738f1e0762cc40a3e7ef81bc774b0b6e0322aa70c96434"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/confirmation_003.ogg",
+          "preview": "event-testResult/c38a8ddb.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "confirmation_003.ogg · kenney-interface-sounds",
+          "sha256": "3091bf0be0497f825769ee0733ca7bdc3bcd59bd6c6e8f2ba8f93d580ff38022"
+        },
+        {
+          "original": "kenney-music-jingles/Audio/Hit jingles/jingles_HIT14.ogg",
+          "preview": "event-testResult/478b3fa8.mp3",
+          "source": "https://kenney.nl/assets/music-jingles",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "jingles_HIT14.ogg · kenney-music-jingles",
+          "sha256": "1ae8616ed3df0c9c0f154fb65f688f8f45eea165d50f37fdc0b086955270b35f"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/handleCoins.ogg",
+          "preview": "event-testResult/edbee43e.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "handleCoins.ogg · kenney-rpg-audio",
+          "sha256": "8a91f969e932df709df80ee124d86a51389eed9b67f22e5e716bc2bbf60d8dab"
+        },
+        {
+          "original": "rpg/item_gem_03.ogg",
+          "preview": "event-testResult/ccf1ebfe.mp3",
+          "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "item_gem_03.ogg · rpg",
+          "sha256": "7b29674b7c8fb0069814623d86fa56a3f370eedcde73d5ce1ecc7339be3a3cba"
+        }
+      ]
+    },
+    "event:testResult:fail": {
+      "kind": "effect",
+      "where": "a skill test is lost",
+      "candidates": [
+        {
+          "original": "kenney-interface-sounds/Audio/error_003.ogg",
+          "preview": "event-testResult-fail/dd91fd9e.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "error_003.ogg · kenney-interface-sounds",
+          "sha256": "885b28175c7b511118bcffab95675b48bbac9005cf6514656ebdad979276b3ab"
+        },
+        {
+          "original": "sfx100/sfx100v2_hit_03.ogg",
+          "preview": "event-testResult-fail/0d3dbc0d.mp3",
+          "source": "https://opengameart.org/content/100-cc0-sfx-2",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "sfx100v2_hit_03.ogg · sfx100",
+          "sha256": "f44a40884dd13df80ef6bad1b8ca91a2566daaf9e03c25420ff018e4ba11e632"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/impactPlate_heavy_002.ogg",
+          "preview": "event-testResult-fail/9926d4bf.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactPlate_heavy_002.ogg · kenney-impact-sounds",
+          "sha256": "b0cab75d1befa32b4cf215d8ee7e1c400a39182e8b105963b8e310f825b198a1"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/impactWood_heavy_002.ogg",
+          "preview": "event-testResult-fail/521880fb.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactWood_heavy_002.ogg · kenney-impact-sounds",
+          "sha256": "ce1e06f2a05f2634c645cb72f6a1623e64bc2d92be34917430a61031fb6597d4"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/impactSoft_heavy_002.ogg",
+          "preview": "event-testResult-fail/cfcfcffb.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactSoft_heavy_002.ogg · kenney-impact-sounds",
+          "sha256": "d130ae541951243d3f6ed963d0057450a445ffe117fbf9a084d34eb1635cb563"
+        }
+      ]
+    },
+    "event:encounter": {
+      "kind": "effect",
+      "where": "an encounter card is revealed",
+      "candidates": [
+        {
+          "original": "sfx100/sfx100v2_thunder_01.ogg",
+          "preview": "event-encounter/acd4679f.mp3",
+          "source": "https://opengameart.org/content/100-cc0-sfx-2",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "sfx100v2_thunder_01.ogg · sfx100",
+          "sha256": "8a4f1dee999546b363f989eff92174375eeae7c241dc9beaa0892fb131ef12a9"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/impactBell_heavy_000.ogg",
+          "preview": "event-encounter/e4ce33ea.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactBell_heavy_000.ogg · kenney-impact-sounds",
+          "sha256": "94b8bb5f2d43ab65e4bcc32b28562416e9bc2c51d9fd4be1e333660ee52f977f"
+        },
+        {
+          "original": "kenney-sci-fi-sounds/Audio/lowFrequency_explosion_000.ogg",
+          "preview": "event-encounter/82dda62e.mp3",
+          "source": "https://kenney.nl/assets/sci-fi-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "lowFrequency_explosion_000.ogg · kenney-sci-fi-sounds",
+          "sha256": "3cb48d86dab63140cfb9aaeea4d4a6846abaca5831d157d8adbec0490da26343"
+        },
+        {
+          "original": "creature/monster_01.ogg",
+          "preview": "event-encounter/b9c0cc99.mp3",
+          "source": "https://opengameart.org/content/80-cc0-creature-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "monster_01.ogg · creature",
+          "sha256": "e8bb5c9d3d25172666c60ed302d354144b67e66170bdf039ec88f4b6b0cd879f"
+        },
+        {
+          "original": "kenney-sci-fi-sounds/Audio/forceField_000.ogg",
+          "preview": "event-encounter/880a8835.mp3",
+          "source": "https://kenney.nl/assets/sci-fi-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "forceField_000.ogg · kenney-sci-fi-sounds",
+          "sha256": "c2916f2a062c8ddd1aca2826d134fe90847037db31342726ffb0f9097afe339c"
+        }
+      ]
+    },
+    "event:attack": {
+      "kind": "effect",
+      "where": "an investigator attacks",
+      "candidates": [
+        {
+          "original": "sword-clash/sword_clash.10.ogg",
+          "preview": "event-attack/c9d84024.mp3",
+          "source": "https://opengameart.org/content/20-sword-sound-effects-attacks-and-clashes",
+          "author": "StarNinjas",
+          "license": "CC0",
+          "description": "sword_clash.10.ogg · sword-clash",
+          "sha256": "61d40c241c5df7722249983938109564a8470245116fe34d23d2a35324d3a4f1"
+        },
+        {
+          "original": "rpg-pack/RPG Sound Pack/battle/swing2.wav",
+          "preview": "event-attack/76b86ddb.mp3",
+          "source": "https://opengameart.org/content/rpg-sound-pack",
+          "author": "artisticdude",
+          "license": "CC0",
+          "description": "swing2.wav · rpg-pack",
+          "sha256": "2e4064e294d136e06c40cc562df969493907e6873f39895ca86b4a6b2e034c6e"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/knifeSlice2.ogg",
+          "preview": "event-attack/12f4a4ef.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "knifeSlice2.ogg · kenney-rpg-audio",
+          "sha256": "6c2064d0ef988d1ec3d56868e823ea8823a5cac00f2742560052633529407def"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/impactPunch_medium_001.ogg",
+          "preview": "event-attack/98d40a92.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactPunch_medium_001.ogg · kenney-impact-sounds",
+          "sha256": "e71d23abcc3f10d9d6bc9615b2a431fff70b12333a5fcdd9964457564ace4349"
+        },
+        {
+          "original": "sword/sword - StarNinjas/sword.10.ogg",
+          "preview": "event-attack/00d6b43c.mp3",
+          "source": "https://opengameart.org/content/20-sword-sound-effects-attacks-and-clashes",
+          "author": "StarNinjas",
+          "license": "CC0",
+          "description": "sword.10.ogg · sword",
+          "sha256": "530bf3daac9e21ba7f8414291820bc8c26f3522ecbda8f00e6454b1cef74cd07"
+        }
+      ]
+    },
+    "event:spawn": {
+      "kind": "effect",
+      "where": "an enemy spawns",
+      "candidates": [
+        {
+          "original": "rpg-pack/RPG Sound Pack/NPC/slime/slime2.wav",
+          "preview": "event-spawn/1bc48696.mp3",
+          "source": "https://opengameart.org/content/rpg-sound-pack",
+          "author": "artisticdude",
+          "license": "CC0",
+          "description": "slime2.wav · rpg-pack",
+          "sha256": "decdb2ac4c3dcc8db1a1b24a12bf4af2f599f993ed6aff0b180efeb3f192a3c2"
+        },
+        {
+          "original": "creature/roar_03.ogg",
+          "preview": "event-spawn/4f7e17be.mp3",
+          "source": "https://opengameart.org/content/80-cc0-creature-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "roar_03.ogg · creature",
+          "sha256": "983396c808eb658ed3bd223ffaf9ea7f756dba7bc45ecc3fde117083026a4556"
+        },
+        {
+          "original": "creature/troll_03.ogg",
+          "preview": "event-spawn/b78452d5.mp3",
+          "source": "https://opengameart.org/content/80-cc0-creature-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "troll_03.ogg · creature",
+          "sha256": "993b97ae0ca7755b6254f02242e6da4fe9895fc06ab2e092771927caab689660"
+        },
+        {
+          "original": "rpg/creature_roar_03.ogg",
+          "preview": "event-spawn/dbfb2468.mp3",
+          "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "creature_roar_03.ogg · rpg",
+          "sha256": "3571f6372012fdebb2a38ef89e18a6137b3f17d519f1259aafeb166dbdd94195"
+        },
+        {
+          "original": "creature/monster_06.ogg",
+          "preview": "event-spawn/9b1d61c7.mp3",
+          "source": "https://opengameart.org/content/80-cc0-creature-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "monster_06.ogg · creature",
+          "sha256": "6b8df01eb7821fb0fcf66b4683a8eb997ca728fded26b6937734b84ff05852f9"
+        }
+      ]
+    },
+    "event:enemyMove": {
+      "kind": "effect",
+      "where": "an enemy moves",
+      "candidates": [
+        {
+          "original": "kenney-impact-sounds/Audio/footstep_wood_003.ogg",
+          "preview": "event-enemyMove/ce10b0af.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "footstep_wood_003.ogg · kenney-impact-sounds",
+          "sha256": "2a68a083daa9eda08fed0ea5da5280dfbe0de226196c576be02f95259dd139d9"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/footstep_concrete_000.ogg",
+          "preview": "event-enemyMove/759c5962.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "footstep_concrete_000.ogg · kenney-impact-sounds",
+          "sha256": "d7267e183067757c92c169de2a379abea592cfca6b39bb2e8feea15221ad79fe"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/footstep00.ogg",
+          "preview": "event-enemyMove/d61da1e1.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "footstep00.ogg · kenney-rpg-audio",
+          "sha256": "6fe61ef1fc3bcf0e253bf2eb64759db6cb69e2fe452f4d88cc597ecf78a3d601"
+        },
+        {
+          "original": "sfx100/sfx100v2_footstep_wet_02.ogg",
+          "preview": "event-enemyMove/00ed7342.mp3",
+          "source": "https://opengameart.org/content/100-cc0-sfx-2",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "sfx100v2_footstep_wet_02.ogg · sfx100",
+          "sha256": "b2cfbdd75ee970dcb68cc157fec818eda2f5802989b0da684aa67817cb914b52"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/footstep_snow_000.ogg",
+          "preview": "event-enemyMove/83239588.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "footstep_snow_000.ogg · kenney-impact-sounds",
+          "sha256": "c05fa4a9dc9a7aabc04996466fb589537e49af76de9998d8f9e6270ec92dcef7"
+        }
+      ]
+    },
+    "event:damage": {
+      "kind": "effect",
+      "where": "an investigator takes damage",
+      "candidates": [
+        {
+          "original": "creature/hurt_02.ogg",
+          "preview": "event-damage/aec30045.mp3",
+          "source": "https://opengameart.org/content/80-cc0-creature-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "hurt_02.ogg · creature",
+          "sha256": "b90ca3a0f5f48e1141ec6326f08ebf9f597efb6b2ca4ceeccc285b203c1ccbe1"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/impactSoft_medium_001.ogg",
+          "preview": "event-damage/74866263.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactSoft_medium_001.ogg · kenney-impact-sounds",
+          "sha256": "7642a4fd43e547afe4f7adfadb3dabb681c0ff512f52c1674bae30a726841faf"
+        },
+        {
+          "original": "sfx100/sfx100v2_hit_01.ogg",
+          "preview": "event-damage/c660b07c.mp3",
+          "source": "https://opengameart.org/content/100-cc0-sfx-2",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "sfx100v2_hit_01.ogg · sfx100",
+          "sha256": "61b8b2a790e2c8dcf315886933aaefc89a8e4053d81c6869c264e40aa80f8233"
+        },
+        {
+          "original": "rpg/creature_hurt_01.ogg",
+          "preview": "event-damage/aca2f181.mp3",
+          "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "creature_hurt_01.ogg · rpg",
+          "sha256": "9948f9ce067e1aae7bd780e974d51ceae03f2611a52afffb0e092ba47e9dc8e1"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/impactPunch_medium_001.ogg",
+          "preview": "event-damage/98d40a92.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactPunch_medium_001.ogg · kenney-impact-sounds",
+          "sha256": "e71d23abcc3f10d9d6bc9615b2a431fff70b12333a5fcdd9964457564ace4349"
+        }
+      ]
+    },
+    "event:damage:horror": {
+      "kind": "effect",
+      "where": "an investigator takes horror",
+      "candidates": [
+        {
+          "original": "creature/alien_03.ogg",
+          "preview": "event-damage-horror/46b2140d.mp3",
+          "source": "https://opengameart.org/content/80-cc0-creature-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "alien_03.ogg · creature",
+          "sha256": "8e417706c6ca3f7eb99d9500d17bf74ef977d16c540dfa9d695db4721cc30003"
+        },
+        {
+          "original": "ghostbreath.flac",
+          "preview": "event-damage-horror/85cd68ea.mp3",
+          "source": "https://opengameart.org/content/ghost-breath",
+          "author": "qubodup",
+          "license": "CC0",
+          "description": "ghostbreath.flac · ghostbreath.flac",
+          "sha256": "f371839853a5dff7dbd5a8c81368f5cfab587f567df5ba962e981d4392c530bc"
+        },
+        {
+          "original": "creature/breath.ogg",
+          "preview": "event-damage-horror/3f9e6ab7.mp3",
+          "source": "https://opengameart.org/content/80-cc0-creature-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "breath.ogg · creature",
+          "sha256": "d6ecfd092c261059701fe81581957ce6e67c1737978449bbd98ec6d4f30abb7f"
+        },
+        {
+          "original": "creature/weird_05.ogg",
+          "preview": "event-damage-horror/d5b8a834.mp3",
+          "source": "https://opengameart.org/content/80-cc0-creature-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "weird_05.ogg · creature",
+          "sha256": "475f387457f9fc336c60097418dac8b1a4d4ac7c89b0eabad50086238f248e58"
+        },
+        {
+          "original": "creature/scream_01.ogg",
+          "preview": "event-damage-horror/ef5ee197.mp3",
+          "source": "https://opengameart.org/content/80-cc0-creature-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "scream_01.ogg · creature",
+          "sha256": "54da7bba4c4272b0b77dc3fe26a91d0a26d9280797fecb8197d716b47745eb85"
+        }
+      ]
+    },
+    "event:clues": {
+      "kind": "effect",
+      "where": "clues are gained",
+      "candidates": [
+        {
+          "original": "rpg/item_gem_04.ogg",
+          "preview": "event-clues/4dc08b13.mp3",
+          "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "item_gem_04.ogg · rpg",
+          "sha256": "e12eb95d0458675c2692831454ed09c7a680de966e7c705ce67a7e12560aa73a"
+        },
+        {
+          "original": "kenney-sci-fi-sounds/Audio/forceField_001.ogg",
+          "preview": "event-clues/130ace13.mp3",
+          "source": "https://kenney.nl/assets/sci-fi-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "forceField_001.ogg · kenney-sci-fi-sounds",
+          "sha256": "5574e69dd04e5f59322c5ddffde5978f077b09170ae5e29cec0bd9901828cd90"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/pluck_002.ogg",
+          "preview": "event-clues/a6dae377.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "pluck_002.ogg · kenney-interface-sounds",
+          "sha256": "c977fe249ff42d1c93a552b33abc13a8399df3879fa510475426e5c4bbac1da9"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/handleCoins2.ogg",
+          "preview": "event-clues/bda5cd6f.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "handleCoins2.ogg · kenney-rpg-audio",
+          "sha256": "4b857968d64f9ac9336a10ffac6694d7547e1f01566ad6857b30bc8db3ee6c32"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/glass_002.ogg",
+          "preview": "event-clues/fb646d2f.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "glass_002.ogg · kenney-interface-sounds",
+          "sha256": "08e972c73e53c91d6d310e107e80db60edce78ae47225889a028e628a6f3da49"
+        }
+      ]
+    },
+    "event:doom": {
+      "kind": "effect",
+      "where": "doom is placed",
+      "candidates": [
+        {
+          "original": "bell1.wav",
+          "preview": "event-doom/503663b3.mp3",
+          "source": "https://opengameart.org/content/bell-dingschimes",
+          "author": "PWL",
+          "license": "CC0",
+          "description": "bell1.wav · bell1.wav",
+          "sha256": "8ce40f49cd211125303df59db0da4fe911e8b2f34d3847011b15137c6b5850de"
+        },
+        {
+          "original": "bell3.wav",
+          "preview": "event-doom/1d557bb7.mp3",
+          "source": "https://opengameart.org/content/bell-dingschimes",
+          "author": "PWL",
+          "license": "CC0",
+          "description": "bell3.wav · bell3.wav",
+          "sha256": "99b9cdb7b9536c97c6738f1e0762cc40a3e7ef81bc774b0b6e0322aa70c96434"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/bong_001.ogg",
+          "preview": "event-doom/3e24fd47.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "bong_001.ogg · kenney-interface-sounds",
+          "sha256": "d21d0f0b782445db579d11e2506b24cd1ac9d664ee33aeaf807761aa7b6fd710"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/impactBell_heavy_001.ogg",
+          "preview": "event-doom/1c9f7af6.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactBell_heavy_001.ogg · kenney-impact-sounds",
+          "sha256": "9df61e3ae9a83dc65e5a1fd3ed19d480876f3b22b963a1b9ef6fa293592dcec4"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/impactBell_heavy_002.ogg",
+          "preview": "event-doom/6634fde7.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactBell_heavy_002.ogg · kenney-impact-sounds",
+          "sha256": "a4171ed1a4a17fb858a38de1c59b5b42e50d8f046c525706c0e3ac8671f189f5"
+        }
+      ]
+    },
+    "event:agendaAdvance": {
+      "kind": "effect",
+      "where": "the agenda advances",
+      "candidates": [
+        {
+          "original": "kenney-rpg-audio/Audio/bookFlip1.ogg",
+          "preview": "event-agendaAdvance/5a9e17ae.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "bookFlip1.ogg · kenney-rpg-audio",
+          "sha256": "fa81ac2fedc8c641661b87e349630a36c9800e795e0c800e029214efdbe26a7d"
+        },
+        {
+          "original": "pageflips/book_flip.5.ogg",
+          "preview": "event-agendaAdvance/805f23de.mp3",
+          "source": "https://opengameart.org/content/10-book-page-flips",
+          "author": "StarNinjas",
+          "license": "CC0",
+          "description": "book_flip.5.ogg · pageflips",
+          "sha256": "3fd510b29e52ea6f47a87472707d1e159b09dfeada5ae9e25a3525071ecc2a6a"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/bookOpen.ogg",
+          "preview": "event-agendaAdvance/8931016c.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "bookOpen.ogg · kenney-rpg-audio",
+          "sha256": "953390534377222bee89ac8cd9e60a58fdc037c71a4d7c18c43cd647c7f34ba8"
+        },
+        {
+          "original": "sfx100/sfx100v2_door_01.ogg",
+          "preview": "event-agendaAdvance/a8726f94.mp3",
+          "source": "https://opengameart.org/content/100-cc0-sfx-2",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "sfx100v2_door_01.ogg · sfx100",
+          "sha256": "3fffeef28d3c1662814c33411fe5e76cbb1f74fe58c9ed0cab796c57ca9846b7"
+        },
+        {
+          "original": "sfx100/sfx100v2_thunder_01.ogg",
+          "preview": "event-agendaAdvance/acd4679f.mp3",
+          "source": "https://opengameart.org/content/100-cc0-sfx-2",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "sfx100v2_thunder_01.ogg · sfx100",
+          "sha256": "8a4f1dee999546b363f989eff92174375eeae7c241dc9beaa0892fb131ef12a9"
+        }
+      ]
+    },
+    "event:actAdvance": {
+      "kind": "effect",
+      "where": "the act advances",
+      "candidates": [
+        {
+          "original": "kenney-sci-fi-sounds/Audio/doorOpen_001.ogg",
+          "preview": "event-actAdvance/a808b562.mp3",
+          "source": "https://kenney.nl/assets/sci-fi-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "doorOpen_001.ogg · kenney-sci-fi-sounds",
+          "sha256": "8c204ca94eb722d3af95f29221f4551938ca3c217fda32c14dabe2cf6a9c782b"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/creak3.ogg",
+          "preview": "event-actAdvance/fe5acda1.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "creak3.ogg · kenney-rpg-audio",
+          "sha256": "f9638787f95004b9d2d06f8eff8e99d4e594c21b51947daf562856fbcec905d1"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/bookClose.ogg",
+          "preview": "event-actAdvance/956cff98.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "bookClose.ogg · kenney-rpg-audio",
+          "sha256": "81e976532565f4372abd14e83d2684195fa548d0a28d345de221e56052454f32"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/bookPlace3.ogg",
+          "preview": "event-actAdvance/eb1e2411.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "bookPlace3.ogg · kenney-rpg-audio",
+          "sha256": "b1afa711e1cabfe5b2c56e20e20e0f9d82142d067727447fa992ddc43dbdb06e"
+        },
+        {
+          "original": "rpg/book_04.ogg",
+          "preview": "event-actAdvance/c99183b9.mp3",
+          "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "book_04.ogg · rpg",
+          "sha256": "0696632485ed31406f22e97dd38e7f46826739c0ad792878969a44a6e38a260f"
+        }
+      ]
+    },
+    "event:enemyDefeated": {
+      "kind": "effect",
+      "where": "an enemy is defeated",
+      "candidates": [
+        {
+          "original": "creature/monster_06.ogg",
+          "preview": "event-enemyDefeated/9b1d61c7.mp3",
+          "source": "https://opengameart.org/content/80-cc0-creature-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "monster_06.ogg · creature",
+          "sha256": "6b8df01eb7821fb0fcf66b4683a8eb997ca728fded26b6937734b84ff05852f9"
+        },
+        {
+          "original": "rpg/creature_die_01.ogg",
+          "preview": "event-enemyDefeated/ec15899b.mp3",
+          "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "creature_die_01.ogg · rpg",
+          "sha256": "b34a816a401c5d80c77a61dabbedef7d1918a01320bbb67286c70f22db4acd43"
+        },
+        {
+          "original": "creature/scream_02.ogg",
+          "preview": "event-enemyDefeated/3b252a55.mp3",
+          "source": "https://opengameart.org/content/80-cc0-creature-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "scream_02.ogg · creature",
+          "sha256": "73aedfbcc7e5b3004507d5a79e95ae53954026036bf8d6f65aa0a4ca298dd372"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/impactMetal_heavy_003.ogg",
+          "preview": "event-enemyDefeated/cbfd1e70.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactMetal_heavy_003.ogg · kenney-impact-sounds",
+          "sha256": "b0f2ba4dabde9a87eb9c188a19d31e0c2300fd321adeba08d3b9b8aa011d7037"
+        },
+        {
+          "original": "creature/monster_07.ogg",
+          "preview": "event-enemyDefeated/aa8e62b3.mp3",
+          "source": "https://opengameart.org/content/80-cc0-creature-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "monster_07.ogg · creature",
+          "sha256": "5f7d40c4899f2e2e146fe8a0207597d4daf4d304a644ad2e8629057bc49a87e9"
+        }
+      ]
+    },
+    "event:defeated": {
+      "kind": "effect",
+      "where": "an investigator is defeated",
+      "candidates": [
+        {
+          "original": "kenney-sci-fi-sounds/Audio/explosionCrunch_004.ogg",
+          "preview": "event-defeated/2b60f863.mp3",
+          "source": "https://kenney.nl/assets/sci-fi-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "explosionCrunch_004.ogg · kenney-sci-fi-sounds",
+          "sha256": "9c3a1c73cadf0de5d5a578b31a264f20b1ac7cb6ec9bbd34a203f58402ea5390"
+        },
+        {
+          "original": "sfx100/sfx100v2_thunder_01.ogg",
+          "preview": "event-defeated/acd4679f.mp3",
+          "source": "https://opengameart.org/content/100-cc0-sfx-2",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "sfx100v2_thunder_01.ogg · sfx100",
+          "sha256": "8a4f1dee999546b363f989eff92174375eeae7c241dc9beaa0892fb131ef12a9"
+        },
+        {
+          "original": "kenney-sci-fi-sounds/Audio/lowFrequency_explosion_001.ogg",
+          "preview": "event-defeated/b16d398f.mp3",
+          "source": "https://kenney.nl/assets/sci-fi-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "lowFrequency_explosion_001.ogg · kenney-sci-fi-sounds",
+          "sha256": "cdda50600a4928f2f1b8371224d53c171ac799c1cf2c30b11999508985250b3b"
+        },
+        {
+          "original": "monster-roar.wav",
+          "preview": "event-defeated/c159bc25.mp3",
+          "source": "https://opengameart.org/content/cc0-deep-monster-roar",
+          "author": "trazzz123",
+          "license": "CC0",
+          "description": "monster-roar.wav · monster-roar.wav",
+          "sha256": "040d2841619c732098c30a638731317d13d7647e5ce1a75a3246219ce4b162ff"
+        },
+        {
+          "original": "kenney-sci-fi-sounds/Audio/explosionCrunch_000.ogg",
+          "preview": "event-defeated/02adf926.mp3",
+          "source": "https://kenney.nl/assets/sci-fi-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "explosionCrunch_000.ogg · kenney-sci-fi-sounds",
+          "sha256": "4b597d658d0ae101f0a030fbeea5fc3a4292ab85f017470a8254a8e7959cbd69"
+        }
+      ]
+    },
+    "event:resolution": {
+      "kind": "effect",
+      "where": "the scenario ends",
+      "candidates": [
+        {
+          "original": "kenney-music-jingles/Audio/Hit jingles/jingles_HIT01.ogg",
+          "preview": "event-resolution/21261b21.mp3",
+          "source": "https://kenney.nl/assets/music-jingles",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "jingles_HIT01.ogg · kenney-music-jingles",
+          "sha256": "ddca9df332d7cdab525bbbe62ca26e9d61aa64bfa626d9516d5c53eb91c45322"
+        },
+        {
+          "original": "victory.mp3",
+          "preview": "event-resolution/fcb60bd9.mp3",
+          "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+          "author": "SRG774",
+          "license": "CC0",
+          "description": "victory.mp3 · victory.mp3",
+          "sha256": "208916af7b2b26ee70171a964595ace1ccaf4534abfbfa816d340179e13fe289"
+        },
+        {
+          "original": "bell3.wav",
+          "preview": "event-resolution/1d557bb7.mp3",
+          "source": "https://opengameart.org/content/bell-dingschimes",
+          "author": "PWL",
+          "license": "CC0",
+          "description": "bell3.wav · bell3.wav",
+          "sha256": "99b9cdb7b9536c97c6738f1e0762cc40a3e7ef81bc774b0b6e0322aa70c96434"
+        },
+        {
+          "original": "kenney-music-jingles/Audio/Steel jingles/jingles_STEEL01.ogg",
+          "preview": "event-resolution/f8655879.mp3",
+          "source": "https://kenney.nl/assets/music-jingles",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "jingles_STEEL01.ogg · kenney-music-jingles",
+          "sha256": "099b192f120f7eb7c24613be277428628b9ec9c81e1f8420254abce336fbe7e5"
+        },
+        {
+          "original": "kenney-music-jingles/Audio/Sax jingles/jingles_SAX01.ogg",
+          "preview": "event-resolution/61d9d88d.mp3",
+          "source": "https://kenney.nl/assets/music-jingles",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "jingles_SAX01.ogg · kenney-music-jingles",
+          "sha256": "272b8160616d0f924f447df3f8543ab83440c5e41168107bd5abe1140894122b"
+        }
+      ]
+    },
+    "event:enemyDamage": {
+      "kind": "effect",
+      "where": "an enemy takes damage",
+      "candidates": [
+        {
+          "original": "kenney-impact-sounds/Audio/impactPunch_heavy_001.ogg",
+          "preview": "event-enemyDamage/068888c1.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactPunch_heavy_001.ogg · kenney-impact-sounds",
+          "sha256": "f92f5cb6ba4ff2766497292ffd90865654317eeca976f5652e0708dbdcdc0dd9"
+        },
+        {
+          "original": "sfx100/sfx100v2_hit_02.ogg",
+          "preview": "event-enemyDamage/58b54dbd.mp3",
+          "source": "https://opengameart.org/content/100-cc0-sfx-2",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "sfx100v2_hit_02.ogg · sfx100",
+          "sha256": "f75eaee9a0cea0f99e5d173a924c4ac72c865450c494794f9bfe48315461baea"
+        },
+        {
+          "original": "rpg/blade_02.ogg",
+          "preview": "event-enemyDamage/a33edf5b.mp3",
+          "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "blade_02.ogg · rpg",
+          "sha256": "c770afec8f62f14d3d082d5437c5cec28e2751d393df645ddd938eabc2588abd"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/chop.ogg",
+          "preview": "event-enemyDamage/ec9e4754.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "chop.ogg · kenney-rpg-audio",
+          "sha256": "d00c2b3c9fff07e376145c8c8c45c90e5084ec192f6ce0387db233f7b86f1486"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/impactMetal_medium_001.ogg",
+          "preview": "event-enemyDamage/9b1caed7.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactMetal_medium_001.ogg · kenney-impact-sounds",
+          "sha256": "e8a9eaba7c4d27422e4eeb3e6c7100d5d7dc0f83e005efc98c960adcc5265337"
+        }
+      ]
+    },
+    "event:weakness": {
+      "kind": "effect",
+      "where": "a weakness is drawn",
+      "candidates": [
+        {
+          "original": "creature/weird_05.ogg",
+          "preview": "event-weakness/d5b8a834.mp3",
+          "source": "https://opengameart.org/content/80-cc0-creature-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "weird_05.ogg · creature",
+          "sha256": "475f387457f9fc336c60097418dac8b1a4d4ac7c89b0eabad50086238f248e58"
+        },
+        {
+          "original": "sfx100/sfx100v2_thunder_01.ogg",
+          "preview": "event-weakness/acd4679f.mp3",
+          "source": "https://opengameart.org/content/100-cc0-sfx-2",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "sfx100v2_thunder_01.ogg · sfx100",
+          "sha256": "8a4f1dee999546b363f989eff92174375eeae7c241dc9beaa0892fb131ef12a9"
+        },
+        {
+          "original": "ghostbreath.flac",
+          "preview": "event-weakness/85cd68ea.mp3",
+          "source": "https://opengameart.org/content/ghost-breath",
+          "author": "qubodup",
+          "license": "CC0",
+          "description": "ghostbreath.flac · ghostbreath.flac",
+          "sha256": "f371839853a5dff7dbd5a8c81368f5cfab587f567df5ba962e981d4392c530bc"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/creak2.ogg",
+          "preview": "event-weakness/54cc65e6.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "creak2.ogg · kenney-rpg-audio",
+          "sha256": "8a990afdc03aebb91d528f5385e2f95582dbfa8e2c12c71098ab01be9142294a"
+        },
+        {
+          "original": "creature/weird_01.ogg",
+          "preview": "event-weakness/e18fe759.mp3",
+          "source": "https://opengameart.org/content/80-cc0-creature-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "weird_01.ogg · creature",
+          "sha256": "f4a67e07911836cb90479e01c5a32e31627038e3227ecec7c6e029b3aa2d81ad"
+        }
+      ]
+    },
+    "moment:draw": {
+      "kind": "effect",
+      "where": "drawing a card",
+      "candidates": [
+        {
+          "original": "kenney-casino/Audio/cards-pack-take-out-2.ogg",
+          "preview": "moment-draw/0da39720.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "cards-pack-take-out-2.ogg · kenney-casino",
+          "sha256": "d991829eeaf7e5a6f8462594e5be0d91535309ffd6249278f34eec70470395a4"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/cloth4.ogg",
+          "preview": "moment-draw/2c155d10.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "cloth4.ogg · kenney-rpg-audio",
+          "sha256": "e7ab9a6c4466dea874196c61f59bf1da05cfe58748f42fadd695d441a154a99b"
+        },
+        {
+          "original": "pageflips/book_flip.10.ogg",
+          "preview": "moment-draw/e2109dbc.mp3",
+          "source": "https://opengameart.org/content/10-book-page-flips",
+          "author": "StarNinjas",
+          "license": "CC0",
+          "description": "book_flip.10.ogg · pageflips",
+          "sha256": "f9244aafcdc55cdb094927acc12839d33b47798e91c4d208a5ac1eab457daecd"
+        },
+        {
+          "original": "kenney-casino/Audio/card-shove-4.ogg",
+          "preview": "moment-draw/dce85678.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "card-shove-4.ogg · kenney-casino",
+          "sha256": "0a1ad3a2f16bd2ed73349e6342426ca7a59a6e26b7e26e36d51d51c2c2349d6f"
+        },
+        {
+          "original": "kenney-casino/Audio/card-slide-8.ogg",
+          "preview": "moment-draw/6c067586.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "card-slide-8.ogg · kenney-casino",
+          "sha256": "95d9aa26f8c63af9934f27a8e3b7e9b583f177640f0bbd6982f12dba52b9ae6b"
+        }
+      ]
+    },
+    "moment:play": {
+      "kind": "effect",
+      "where": "playing a card",
+      "candidates": [
+        {
+          "original": "kenney-casino/Audio/chip-lay-3.ogg",
+          "preview": "moment-play/edf648de.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "chip-lay-3.ogg · kenney-casino",
+          "sha256": "bf24ebb417b6279568800dffdb0205d3ec8854c7efe179e8964755a6341727aa"
+        },
+        {
+          "original": "kenney-casino/Audio/card-place-4.ogg",
+          "preview": "moment-play/a127ba0b.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "card-place-4.ogg · kenney-casino",
+          "sha256": "18e3ba713b7259605fd27cdc048085ed56cf86b32403f070b6cb125019f77183"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/impactSoft_medium_004.ogg",
+          "preview": "moment-play/6f7f30c0.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactSoft_medium_004.ogg · kenney-impact-sounds",
+          "sha256": "b0a4dea90eed47accf50b768beff1166f2f1486fb139e4d025b2427637624bca"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/impactWood_medium_004.ogg",
+          "preview": "moment-play/60ff7782.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactWood_medium_004.ogg · kenney-impact-sounds",
+          "sha256": "7ba48f2f99c91c71be420841a91f1e69c0cbc4fe887fcd7213144d67bb87b13a"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/bookPlace3.ogg",
+          "preview": "moment-play/eb1e2411.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "bookPlace3.ogg · kenney-rpg-audio",
+          "sha256": "b1afa711e1cabfe5b2c56e20e20e0f9d82142d067727447fa992ddc43dbdb06e"
+        }
+      ]
+    },
+    "moment:flip": {
+      "kind": "effect",
+      "where": "flipping a card",
+      "candidates": [
+        {
+          "original": "kenney-rpg-audio/Audio/cloth1.ogg",
+          "preview": "moment-flip/f59197a2.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "cloth1.ogg · kenney-rpg-audio",
+          "sha256": "ddb93a3671233f95da0e0b10367f082f7eb42fa6caaddcf776410aa8833c747d"
+        },
+        {
+          "original": "kenney-casino/Audio/card-slide-1.ogg",
+          "preview": "moment-flip/9d676423.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "card-slide-1.ogg · kenney-casino",
+          "sha256": "006cf9822d15d7063f8899e56041f41646df30adb6fbd8b974ee5d5420012690"
+        },
+        {
+          "original": "kenney-casino/Audio/card-fan-1.ogg",
+          "preview": "moment-flip/c6e7746f.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "card-fan-1.ogg · kenney-casino",
+          "sha256": "7a9758ccad8899baef1b9f60b4064e4baa724a548293832fdaea07e6e07e638d"
+        },
+        {
+          "original": "kenney-casino/Audio/card-shove-1.ogg",
+          "preview": "moment-flip/a16bebba.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "card-shove-1.ogg · kenney-casino",
+          "sha256": "1ea667aa6795d5f14239192116ebcbd8f3f47eb1c7faaf2ec56844b9067b8b06"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/bookFlip1.ogg",
+          "preview": "moment-flip/5a9e17ae.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "bookFlip1.ogg · kenney-rpg-audio",
+          "sha256": "fa81ac2fedc8c641661b87e349630a36c9800e795e0c800e029214efdbe26a7d"
+        }
+      ]
+    },
+    "moment:commit": {
+      "kind": "effect",
+      "where": "committing a card to a test",
+      "candidates": [
+        {
+          "original": "kenney-interface-sounds/Audio/tick_004.ogg",
+          "preview": "moment-commit/5d0a633f.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "tick_004.ogg · kenney-interface-sounds",
+          "sha256": "0253d5f7d8d2afbbc370eac2a4539bb844239f0c98343e516d376b137c06d27c"
+        },
+        {
+          "original": "kenney-casino/Audio/card-place-3.ogg",
+          "preview": "moment-commit/709638c9.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "card-place-3.ogg · kenney-casino",
+          "sha256": "1d988631a6e5201ed1bb0d728f2e43a3ec79401258426858793598044ac95841"
+        },
+        {
+          "original": "kenney-casino/Audio/chip-lay-3.ogg",
+          "preview": "moment-commit/edf648de.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "chip-lay-3.ogg · kenney-casino",
+          "sha256": "bf24ebb417b6279568800dffdb0205d3ec8854c7efe179e8964755a6341727aa"
+        },
+        {
+          "original": "kenney-casino/Audio/chips-stack-3.ogg",
+          "preview": "moment-commit/2981322c.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "chips-stack-3.ogg · kenney-casino",
+          "sha256": "48cc0f01e2b62be7677f2e8c02177906cab80e96fa8176fa05b3ced35bc2a9c2"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/select_003.ogg",
+          "preview": "moment-commit/1130a20c.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "select_003.ogg · kenney-interface-sounds",
+          "sha256": "9a612fd2f513d52a296906b41071c990f75defe56be3bee60d2d4e2423b51b8b"
+        }
+      ]
+    },
+    "moment:shuffle": {
+      "kind": "effect",
+      "where": "shuffling a deck",
+      "candidates": [
+        {
+          "original": "kenney-casino/Audio/card-fan-1.ogg",
+          "preview": "moment-shuffle/c6e7746f.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "card-fan-1.ogg · kenney-casino",
+          "sha256": "7a9758ccad8899baef1b9f60b4064e4baa724a548293832fdaea07e6e07e638d"
+        },
+        {
+          "original": "kenney-casino/Audio/dice-grab-1.ogg",
+          "preview": "moment-shuffle/fb7acced.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "dice-grab-1.ogg · kenney-casino",
+          "sha256": "1952cf1987b2c1ebb035b30b5f0caf23604b6ce4c88b6a226fe6e6257ce730f3"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/cloth1.ogg",
+          "preview": "moment-shuffle/f59197a2.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "cloth1.ogg · kenney-rpg-audio",
+          "sha256": "ddb93a3671233f95da0e0b10367f082f7eb42fa6caaddcf776410aa8833c747d"
+        },
+        {
+          "original": "kenney-casino/Audio/card-shuffle.ogg",
+          "preview": "moment-shuffle/cb61a2f1.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "card-shuffle.ogg · kenney-casino",
+          "sha256": "96c84883a30845ede723a4cf2e8369e9837e7dd4e0d4eb0212b0a7ed21b0f544"
+        },
+        {
+          "original": "kenney-casino/Audio/cards-pack-open-1.ogg",
+          "preview": "moment-shuffle/5480d13f.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "cards-pack-open-1.ogg · kenney-casino",
+          "sha256": "1214059fdfbf1c396c0702244fc833739cc346d326a71e450b731f456e54d6fb"
+        }
+      ]
+    },
+    "moment:phase": {
+      "kind": "effect",
+      "where": "a phase begins",
+      "candidates": [
+        {
+          "original": "kenney-interface-sounds/Audio/bong_001.ogg",
+          "preview": "moment-phase/3e24fd47.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "bong_001.ogg · kenney-interface-sounds",
+          "sha256": "d21d0f0b782445db579d11e2506b24cd1ac9d664ee33aeaf807761aa7b6fd710"
+        },
+        {
+          "original": "kenney-music-jingles/Audio/Steel jingles/jingles_STEEL03.ogg",
+          "preview": "moment-phase/e4a7c307.mp3",
+          "source": "https://kenney.nl/assets/music-jingles",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "jingles_STEEL03.ogg · kenney-music-jingles",
+          "sha256": "21233e95b5e2c167293484c9906264c632a5f1fe45744d1d5b52ba1dfb0a18fb"
+        },
+        {
+          "original": "kenney-sci-fi-sounds/Audio/forceField_001.ogg",
+          "preview": "moment-phase/130ace13.mp3",
+          "source": "https://kenney.nl/assets/sci-fi-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "forceField_001.ogg · kenney-sci-fi-sounds",
+          "sha256": "5574e69dd04e5f59322c5ddffde5978f077b09170ae5e29cec0bd9901828cd90"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/creak3.ogg",
+          "preview": "moment-phase/fe5acda1.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "creak3.ogg · kenney-rpg-audio",
+          "sha256": "f9638787f95004b9d2d06f8eff8e99d4e594c21b51947daf562856fbcec905d1"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/impactBell_heavy_001.ogg",
+          "preview": "moment-phase/1c9f7af6.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactBell_heavy_001.ogg · kenney-impact-sounds",
+          "sha256": "9df61e3ae9a83dc65e5a1fd3ed19d480876f3b22b963a1b9ef6fa293592dcec4"
+        }
+      ]
+    },
+    "moment:button": {
+      "kind": "effect",
+      "where": "pressing a button",
+      "candidates": [
+        {
+          "original": "kenney-ui-audio/Audio/switch32.ogg",
+          "preview": "moment-button/0330e13a.mp3",
+          "source": "https://kenney.nl/assets/ui-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "switch32.ogg · kenney-ui-audio",
+          "sha256": "b740f507ad386a1d09bb5ca69a75231656a71375df11348fcd2d5e323b8d6727"
+        },
+        {
+          "original": "kenney-ui-audio/Audio/click4.ogg",
+          "preview": "moment-button/914b6674.mp3",
+          "source": "https://kenney.nl/assets/ui-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "click4.ogg · kenney-ui-audio",
+          "sha256": "9c02bbfc872b50eb8750adf4b7c343120f19f5d2f04ab06a7a8948368a77b872"
+        },
+        {
+          "original": "kenney-ui-audio/Audio/mouseclick1.ogg",
+          "preview": "moment-button/4e2c43ea.mp3",
+          "source": "https://kenney.nl/assets/ui-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "mouseclick1.ogg · kenney-ui-audio",
+          "sha256": "ece1210c62ccae6c9ea4f4c59466d9d453d6b357c7d4b1a6c31196e5e6fea1bf"
+        },
+        {
+          "original": "kenney-ui-audio/Audio/switch33.ogg",
+          "preview": "moment-button/f58c601a.mp3",
+          "source": "https://kenney.nl/assets/ui-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "switch33.ogg · kenney-ui-audio",
+          "sha256": "977ecead4b27cf9801aed433bfa4bdfcf49444c15990d27d2e472401a1fb2742"
+        },
+        {
+          "original": "kenney-ui-audio/Audio/click5.ogg",
+          "preview": "moment-button/9b7a0f54.mp3",
+          "source": "https://kenney.nl/assets/ui-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "click5.ogg · kenney-ui-audio",
+          "sha256": "52d41e0bb012731bf2a391d53ffb52265ef21589c7701e66b391d5e36a65b293"
+        }
+      ]
+    },
+    "moment:tip": {
+      "kind": "effect",
+      "where": "a tip appears",
+      "candidates": [
+        {
+          "original": "kenney-interface-sounds/Audio/pluck_001.ogg",
+          "preview": "moment-tip/b1e4a843.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "pluck_001.ogg · kenney-interface-sounds",
+          "sha256": "be97ec4893a02d6eccfb678daa76c83e34cb2583b834ec2593d2641def739fa4"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/bong_001.ogg",
+          "preview": "moment-tip/3e24fd47.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "bong_001.ogg · kenney-interface-sounds",
+          "sha256": "d21d0f0b782445db579d11e2506b24cd1ac9d664ee33aeaf807761aa7b6fd710"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/glass_001.ogg",
+          "preview": "moment-tip/6de79c2d.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "glass_001.ogg · kenney-interface-sounds",
+          "sha256": "183eebee20eb0a532b0b85104d139cbf2673eb66d95c3cc733ac9ea98362e7e8"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/select_001.ogg",
+          "preview": "moment-tip/40497c53.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "select_001.ogg · kenney-interface-sounds",
+          "sha256": "aec0c31ea934a35936ae0d2ab8fac8123c93aa5647f935853a58dbaf90278b7a"
+        },
+        {
+          "original": "pops/3pops/3pops.ogg",
+          "preview": "moment-tip/8e14d8b0.mp3",
+          "source": "https://opengameart.org/content/3-pop-sounds",
+          "author": "wubitog",
+          "license": "CC0",
+          "description": "3pops.ogg · pops",
+          "sha256": "8154634905b6a83132594df3dc47bb5ed8b12a4db099b07b7bb8d80b0dce4cfb"
+        }
+      ]
+    },
+    "moment:undo": {
+      "kind": "effect",
+      "where": "taking back an action",
+      "candidates": [
+        {
+          "original": "kenney-interface-sounds/Audio/back_004.ogg",
+          "preview": "moment-undo/9d7d5fdb.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "back_004.ogg · kenney-interface-sounds",
+          "sha256": "c22e3c49f42c2a5ba6748e91283efe124f32822469c1258c3e5d7b3d7ab9361c"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/scratch_005.ogg",
+          "preview": "moment-undo/a7bb1996.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "scratch_005.ogg · kenney-interface-sounds",
+          "sha256": "65742c15dca9853611e1c9e83bd04ac0d693f79896715cafa90bad39745d7a62"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/minimize_003.ogg",
+          "preview": "moment-undo/66cb3603.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "minimize_003.ogg · kenney-interface-sounds",
+          "sha256": "400e1041499de85ec8b5529a35ff36787288175c4696cf2018ecff24a3a3fd29"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/drop_004.ogg",
+          "preview": "moment-undo/43faa029.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "drop_004.ogg · kenney-interface-sounds",
+          "sha256": "10738707f9300f9b963ceba46d5da2ed4a221faf7d39484a643c2d3bc151c5f2"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/back_001.ogg",
+          "preview": "moment-undo/b85171a2.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "back_001.ogg · kenney-interface-sounds",
+          "sha256": "07db973f79f6ae0f2edc34561e7592e24d0577455919fb602cb8ecc0da991dcf"
+        }
+      ]
+    },
+    "moment:move": {
+      "kind": "effect",
+      "where": "an investigator's marker lands",
+      "candidates": [
+        {
+          "original": "kenney-impact-sounds/Audio/footstep_carpet_002.ogg",
+          "preview": "moment-move/9df0fe67.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "footstep_carpet_002.ogg · kenney-impact-sounds",
+          "sha256": "9af3c3f76705107339e72036e4053bdca3eaa50ad31c8c929f42ce8d40e5d781"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/impactSoft_medium_000.ogg",
+          "preview": "moment-move/e129e60f.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactSoft_medium_000.ogg · kenney-impact-sounds",
+          "sha256": "7d3ba0bb5e60a11b5d3e558c141303dcf494256675fbf753c0d252d2cf0481e3"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/drop_001.ogg",
+          "preview": "moment-move/7dc2c7b7.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "drop_001.ogg · kenney-interface-sounds",
+          "sha256": "692ee3a6f1821402ca649ff735bee9591dc4846c8098fc7d6a90fd15fa57c1af"
+        },
+        {
+          "original": "kenney-casino/Audio/chip-lay-1.ogg",
+          "preview": "moment-move/a15aa2f9.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "chip-lay-1.ogg · kenney-casino",
+          "sha256": "4b2111252ccb64eed67f171e061053849cfbb29873536c03948646f244a3905c"
+        },
+        {
+          "original": "rpg/wood_02.ogg",
+          "preview": "moment-move/80ecd6c3.mp3",
+          "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "wood_02.ogg · rpg",
+          "sha256": "e64b95a1ec7675f28f8837ee4e4e81aa8e5b28e272159a0b3ed124fed037fc4f"
+        }
+      ]
+    },
+    "moment:reveal": {
+      "kind": "effect",
+      "where": "a card is revealed",
+      "candidates": [
+        {
+          "original": "kenney-interface-sounds/Audio/scratch_005.ogg",
+          "preview": "moment-reveal/a7bb1996.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "scratch_005.ogg · kenney-interface-sounds",
+          "sha256": "65742c15dca9853611e1c9e83bd04ac0d693f79896715cafa90bad39745d7a62"
+        },
+        {
+          "original": "kenney-casino/Audio/card-fan-1.ogg",
+          "preview": "moment-reveal/c6e7746f.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "card-fan-1.ogg · kenney-casino",
+          "sha256": "7a9758ccad8899baef1b9f60b4064e4baa724a548293832fdaea07e6e07e638d"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/glass_005.ogg",
+          "preview": "moment-reveal/7ba90354.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "glass_005.ogg · kenney-interface-sounds",
+          "sha256": "1f6c88008d0d9fe449197512811785e1d4638daf408a96a4a02756530e019172"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/question_001.ogg",
+          "preview": "moment-reveal/fa2ad91f.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "question_001.ogg · kenney-interface-sounds",
+          "sha256": "abb8f9e4eb2071491b0b15f84ee302386b1847609310c1b000ae174639a6cc5a"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/pluck_001.ogg",
+          "preview": "moment-reveal/b1e4a843.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "pluck_001.ogg · kenney-interface-sounds",
+          "sha256": "be97ec4893a02d6eccfb678daa76c83e34cb2583b834ec2593d2641def739fa4"
+        }
+      ]
+    },
+    "moment:deckTap": {
+      "kind": "effect",
+      "where": "tapping a deck",
+      "candidates": [
+        {
+          "original": "kenney-casino/Audio/card-shove-4.ogg",
+          "preview": "moment-deckTap/dce85678.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "card-shove-4.ogg · kenney-casino",
+          "sha256": "0a1ad3a2f16bd2ed73349e6342426ca7a59a6e26b7e26e36d51d51c2c2349d6f"
+        },
+        {
+          "original": "kenney-ui-audio/Audio/switch2.ogg",
+          "preview": "moment-deckTap/c2b7fade.mp3",
+          "source": "https://kenney.nl/assets/ui-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "switch2.ogg · kenney-ui-audio",
+          "sha256": "aa8ad6e4745e87c84c24a0335e0e0f8629ccbbc474ccfd544fe07d7f3a1b2280"
+        },
+        {
+          "original": "kenney-ui-audio/Audio/rollover6.ogg",
+          "preview": "moment-deckTap/169fa8b3.mp3",
+          "source": "https://kenney.nl/assets/ui-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "rollover6.ogg · kenney-ui-audio",
+          "sha256": "18f6f69f5fdbf55c175ca4eca8447d4ad5d8a315efd985038424f922dadefad8"
+        },
+        {
+          "original": "kenney-casino/Audio/cards-pack-take-out-2.ogg",
+          "preview": "moment-deckTap/0da39720.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "cards-pack-take-out-2.ogg · kenney-casino",
+          "sha256": "d991829eeaf7e5a6f8462594e5be0d91535309ffd6249278f34eec70470395a4"
+        },
+        {
+          "original": "kenney-casino/Audio/card-slide-8.ogg",
+          "preview": "moment-deckTap/6c067586.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "card-slide-8.ogg · kenney-casino",
+          "sha256": "95d9aa26f8c63af9934f27a8e3b7e9b583f177640f0bbd6982f12dba52b9ae6b"
+        }
+      ]
+    },
+    "moment:bagLand": {
+      "kind": "effect",
+      "where": "the token bag lands on the table",
+      "candidates": [
+        {
+          "original": "kenney-rpg-audio/Audio/beltHandle1.ogg",
+          "preview": "moment-bagLand/12b06377.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "beltHandle1.ogg · kenney-rpg-audio",
+          "sha256": "2ef665bd8b65dbe669f4560be38a6d8f04a162e618b15a49e3e71b58e558aab0"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/impactSoft_heavy_003.ogg",
+          "preview": "moment-bagLand/00f07dda.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactSoft_heavy_003.ogg · kenney-impact-sounds",
+          "sha256": "d00286a2dc62ee5cb4d42bf56120e7050a855f69e655fc1294410aadd337eba3"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/cloth3.ogg",
+          "preview": "moment-bagLand/630ad3cf.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "cloth3.ogg · kenney-rpg-audio",
+          "sha256": "a48632d17a4f1416541d261a32a31612e01267144c407fa3ecab3ff410f0085b"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/handleSmallLeather.ogg",
+          "preview": "moment-bagLand/87103b18.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "handleSmallLeather.ogg · kenney-rpg-audio",
+          "sha256": "ae3cbf695aa0a8b98b5a80a835be5a3ccbd5446a24db2235cd4c3cd6fc92ed96"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/dropLeather.ogg",
+          "preview": "moment-bagLand/9e1773b3.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "dropLeather.ogg · kenney-rpg-audio",
+          "sha256": "097e1d3b74949b0145fda0519d40b7e0773ab82ec4858727f95be830927e1a45"
+        }
+      ]
+    },
+    "moment:tokenClatter": {
+      "kind": "effect",
+      "where": "the tokens clatter out of the bag",
+      "candidates": [
+        {
+          "original": "kenney-casino/Audio/dice-throw-3.ogg",
+          "preview": "moment-tokenClatter/625a8573.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "dice-throw-3.ogg · kenney-casino",
+          "sha256": "09c13d35a9a30bfce31a5e9bca94adc5be189ddecd0b4500237d54c7fd05227c"
+        },
+        {
+          "original": "kenney-casino/Audio/chips-collide-4.ogg",
+          "preview": "moment-tokenClatter/4d3eebee.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "chips-collide-4.ogg · kenney-casino",
+          "sha256": "1ffa34af64adc62fce583c5aa9a3c98287b1673ef191576a5571f1ffd39529dd"
+        },
+        {
+          "original": "kenney-casino/Audio/chips-stack-6.ogg",
+          "preview": "moment-tokenClatter/57fb304f.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "chips-stack-6.ogg · kenney-casino",
+          "sha256": "5ec35171aa65bf5edd977e293523a649227accf36e682bf1ac9a84286f04c682"
+        },
+        {
+          "original": "sfx100/sfx100v2_stones_03.ogg",
+          "preview": "moment-tokenClatter/6b5ccade.mp3",
+          "source": "https://opengameart.org/content/100-cc0-sfx-2",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "sfx100v2_stones_03.ogg · sfx100",
+          "sha256": "94d7e0978fd90621d2d24e8ea33eefbae2933a434bb14c643cc12ea5175cefa9"
+        },
+        {
+          "original": "rpg-pack/RPG Sound Pack/inventory/beads.wav",
+          "preview": "moment-tokenClatter/c70ae039.mp3",
+          "source": "https://opengameart.org/content/rpg-sound-pack",
+          "author": "artisticdude",
+          "license": "CC0",
+          "description": "beads.wav · rpg-pack",
+          "sha256": "dd8ae313bcb28b50725050780fe0d312d248e3aad15f33d7bea2ba58cbb2093b"
+        }
+      ]
+    },
+    "moment:tokenPick": {
+      "kind": "effect",
+      "where": "picking a token",
+      "candidates": [
+        {
+          "original": "kenney-casino/Audio/dice-grab-2.ogg",
+          "preview": "moment-tokenPick/50a49979.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "dice-grab-2.ogg · kenney-casino",
+          "sha256": "4eb4940d1e71aa3f6ac5f865b6b47748a492adf6a83d622c8efe6284dbebbd2c"
+        },
+        {
+          "original": "kenney-ui-audio/Audio/switch23.ogg",
+          "preview": "moment-tokenPick/758012b7.mp3",
+          "source": "https://kenney.nl/assets/ui-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "switch23.ogg · kenney-ui-audio",
+          "sha256": "148d91722dd819b450d8b50e65686d9b1d39d38ca05b361caa387bcbd2a90d81"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/impactTin_medium_001.ogg",
+          "preview": "moment-tokenPick/5020471d.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactTin_medium_001.ogg · kenney-impact-sounds",
+          "sha256": "84253095543c094d83cd749f42ecfbc96e356b60385f18a192c18eafb25b3cc6"
+        },
+        {
+          "original": "kenney-casino/Audio/chips-handle-4.ogg",
+          "preview": "moment-tokenPick/de7fda70.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "chips-handle-4.ogg · kenney-casino",
+          "sha256": "0d171ea00224709cbe31ef95a111eabaf1382606a4836c5717043b339cbed8e9"
+        },
+        {
+          "original": "kenney-casino/Audio/dice-grab-1.ogg",
+          "preview": "moment-tokenPick/fb7acced.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "dice-grab-1.ogg · kenney-casino",
+          "sha256": "1952cf1987b2c1ebb035b30b5f0caf23604b6ce4c88b6a226fe6e6257ce730f3"
+        }
+      ]
+    },
+    "moment:avatarChoice": {
+      "kind": "effect",
+      "where": "choosing an investigator",
+      "candidates": [
+        {
+          "original": "kenney-ui-audio/Audio/switch5.ogg",
+          "preview": "moment-avatarChoice/29815b55.mp3",
+          "source": "https://kenney.nl/assets/ui-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "switch5.ogg · kenney-ui-audio",
+          "sha256": "8a5c85c0009cfd985634e8fdb4e0350690be5d85fd49f43a90b35c7de0bef7c0"
+        },
+        {
+          "original": "kenney-ui-audio/Audio/rollover2.ogg",
+          "preview": "moment-avatarChoice/57f784b1.mp3",
+          "source": "https://kenney.nl/assets/ui-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "rollover2.ogg · kenney-ui-audio",
+          "sha256": "d0bc0fcba496d73df1da8c145e5330df75f87ab5a4f33a9b71461b006b5c338e"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/select_006.ogg",
+          "preview": "moment-avatarChoice/5cbcbfb3.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "select_006.ogg · kenney-interface-sounds",
+          "sha256": "b44550fa8d3276c072ce7c3c1315d949f7a28a95bc22b3618ad4eea62eac8abe"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/confirmation_002.ogg",
+          "preview": "moment-avatarChoice/3c2e2acc.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "confirmation_002.ogg · kenney-interface-sounds",
+          "sha256": "33b17a9a9a2397c62b285c52c33a907fdffb476909c99e42dde603f6a7a8b12c"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/toggle_002.ogg",
+          "preview": "moment-avatarChoice/36b1dabc.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "toggle_002.ogg · kenney-interface-sounds",
+          "sha256": "1f564f5520cfa0764028ce245ad97599d3ece8f0ab504554c403af92ac72b900"
+        }
+      ]
+    },
+    "moment:countdown": {
+      "kind": "effect",
+      "where": "the countdown closes",
+      "candidates": [
+        {
+          "original": "kenney-interface-sounds/Audio/bong_001.ogg",
+          "preview": "moment-countdown/3e24fd47.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "bong_001.ogg · kenney-interface-sounds",
+          "sha256": "d21d0f0b782445db579d11e2506b24cd1ac9d664ee33aeaf807761aa7b6fd710"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/drop_003.ogg",
+          "preview": "moment-countdown/99b2bd14.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "drop_003.ogg · kenney-interface-sounds",
+          "sha256": "43d086d50f90493a98cd2e09aa6dbf150d164f1578e1ec768d21cb185571ad87"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/maximize_006.ogg",
+          "preview": "moment-countdown/ff9a04f8.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "maximize_006.ogg · kenney-interface-sounds",
+          "sha256": "f050b3bb77cb0b901bc8df43d2cc1872c353aebae10b4030cf8ae681726ad343"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/tick_004.ogg",
+          "preview": "moment-countdown/5d0a633f.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "tick_004.ogg · kenney-interface-sounds",
+          "sha256": "0253d5f7d8d2afbbc370eac2a4539bb844239f0c98343e516d376b137c06d27c"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/confirmation_003.ogg",
+          "preview": "moment-countdown/c38a8ddb.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "confirmation_003.ogg · kenney-interface-sounds",
+          "sha256": "3091bf0be0497f825769ee0733ca7bdc3bcd59bd6c6e8f2ba8f93d580ff38022"
+        }
+      ]
+    },
+    "moment:cancel": {
+      "kind": "effect",
+      "where": "calling a skill test off",
+      "candidates": [
+        {
+          "original": "kenney-sci-fi-sounds/Audio/doorClose_002.ogg",
+          "preview": "moment-cancel/deda0253.mp3",
+          "source": "https://kenney.nl/assets/sci-fi-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "doorClose_002.ogg · kenney-sci-fi-sounds",
+          "sha256": "01c7d15e90ae1b218812597d04c20e3df872367ebf22cd99d66dddd5fdb542a4"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/back_002.ogg",
+          "preview": "moment-cancel/455f8cf2.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "back_002.ogg · kenney-interface-sounds",
+          "sha256": "61581c58194e3f19f531072edabbc344204c7e0a2887b8ededce4357bcf09195"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/minimize_004.ogg",
+          "preview": "moment-cancel/c82d2afe.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "minimize_004.ogg · kenney-interface-sounds",
+          "sha256": "fcfe6fbb03a728e90b907f34d2ec7bf3ea1857397c3e47ee01990c1be059e4f6"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/error_006.ogg",
+          "preview": "moment-cancel/e7a2da31.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "error_006.ogg · kenney-interface-sounds",
+          "sha256": "a97513d7fd2b12b1210c423be943b4c1ab0e899b11db95855e9b74836e646ae0"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/scratch_005.ogg",
+          "preview": "moment-cancel/a7bb1996.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "scratch_005.ogg · kenney-interface-sounds",
+          "sha256": "65742c15dca9853611e1c9e83bd04ac0d693f79896715cafa90bad39745d7a62"
+        }
+      ]
+    },
+    "moment:builderAdd": {
+      "kind": "effect",
+      "where": "adding a card to the deck",
+      "candidates": [
+        {
+          "original": "kenney-interface-sounds/Audio/drop_002.ogg",
+          "preview": "moment-builderAdd/fba8fc87.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "drop_002.ogg · kenney-interface-sounds",
+          "sha256": "4ac4d1cef7e936965cbf795852ca2020300b9e2ba7daa59f2bf4f1f7bf416218"
+        },
+        {
+          "original": "kenney-casino/Audio/chip-lay-1.ogg",
+          "preview": "moment-builderAdd/a15aa2f9.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "chip-lay-1.ogg · kenney-casino",
+          "sha256": "4b2111252ccb64eed67f171e061053849cfbb29873536c03948646f244a3905c"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/select_002.ogg",
+          "preview": "moment-builderAdd/124765d3.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "select_002.ogg · kenney-interface-sounds",
+          "sha256": "4cc6ac5341b9b2c86fef80c347de028e9ab9f2e037586ac7d9fa59a403a1c012"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/pluck_002.ogg",
+          "preview": "moment-builderAdd/a6dae377.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "pluck_002.ogg · kenney-interface-sounds",
+          "sha256": "c977fe249ff42d1c93a552b33abc13a8399df3879fa510475426e5c4bbac1da9"
+        },
+        {
+          "original": "kenney-casino/Audio/card-place-2.ogg",
+          "preview": "moment-builderAdd/5508877e.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "card-place-2.ogg · kenney-casino",
+          "sha256": "903d5050718595e87864dd755643b476ab1a5533080dcc2dddc72570d33ba9f8"
+        }
+      ]
+    },
+    "moment:builderRemove": {
+      "kind": "effect",
+      "where": "removing a card from the deck",
+      "candidates": [
+        {
+          "original": "kenney-interface-sounds/Audio/back_001.ogg",
+          "preview": "moment-builderRemove/b85171a2.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "back_001.ogg · kenney-interface-sounds",
+          "sha256": "07db973f79f6ae0f2edc34561e7592e24d0577455919fb602cb8ecc0da991dcf"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/minimize_009.ogg",
+          "preview": "moment-builderRemove/003e9da5.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "minimize_009.ogg · kenney-interface-sounds",
+          "sha256": "885c20fc8b5b52226288794842a403821cd16e9800ec1d76be7a2f1655542eb8"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/cloth3.ogg",
+          "preview": "moment-builderRemove/630ad3cf.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "cloth3.ogg · kenney-rpg-audio",
+          "sha256": "a48632d17a4f1416541d261a32a31612e01267144c407fa3ecab3ff410f0085b"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/scratch_002.ogg",
+          "preview": "moment-builderRemove/4d05c610.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "scratch_002.ogg · kenney-interface-sounds",
+          "sha256": "2b07edafc1f3f49c4813f2b0ae9481c566c1f9962a22d5f5b79da7111e058e56"
+        },
+        {
+          "original": "kenney-casino/Audio/card-slide-5.ogg",
+          "preview": "moment-builderRemove/172a763d.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "card-slide-5.ogg · kenney-casino",
+          "sha256": "8638ab0c17f029aded0e27a4f9b9bb9f8c621b19a6e9975e855cb40ea63e2201"
+        }
+      ]
+    },
+    "moment:builderReplace": {
+      "kind": "effect",
+      "where": "replacing a card in the deck",
+      "candidates": [
+        {
+          "original": "kenney-casino/Audio/card-shove-1.ogg",
+          "preview": "moment-builderReplace/a16bebba.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "card-shove-1.ogg · kenney-casino",
+          "sha256": "1ea667aa6795d5f14239192116ebcbd8f3f47eb1c7faaf2ec56844b9067b8b06"
+        },
+        {
+          "original": "kenney-ui-audio/Audio/switch4.ogg",
+          "preview": "moment-builderReplace/ceddd382.mp3",
+          "source": "https://kenney.nl/assets/ui-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "switch4.ogg · kenney-ui-audio",
+          "sha256": "687a42c24e5d25be1a256f35a439fe858548fe76d43ccfb17db546618b0d36db"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/toggle_001.ogg",
+          "preview": "moment-builderReplace/957a7d34.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "toggle_001.ogg · kenney-interface-sounds",
+          "sha256": "ca1d2dde5f0b286abac4f070e23edab8f30927c8a533665cdf2ac6492a415e49"
+        },
+        {
+          "original": "kenney-casino/Audio/card-fan-1.ogg",
+          "preview": "moment-builderReplace/c6e7746f.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "card-fan-1.ogg · kenney-casino",
+          "sha256": "7a9758ccad8899baef1b9f60b4064e4baa724a548293832fdaea07e6e07e638d"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/cloth1.ogg",
+          "preview": "moment-builderReplace/f59197a2.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "cloth1.ogg · kenney-rpg-audio",
+          "sha256": "ddb93a3671233f95da0e0b10367f082f7eb42fa6caaddcf776410aa8833c747d"
+        }
+      ]
+    },
+    "moment:tab": {
+      "kind": "effect",
+      "where": "switching a tab",
+      "candidates": [
+        {
+          "original": "kenney-interface-sounds/Audio/tick_004.ogg",
+          "preview": "moment-tab/5d0a633f.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "tick_004.ogg · kenney-interface-sounds",
+          "sha256": "0253d5f7d8d2afbbc370eac2a4539bb844239f0c98343e516d376b137c06d27c"
+        },
+        {
+          "original": "kenney-ui-audio/Audio/switch37.ogg",
+          "preview": "moment-tab/8f40b9bd.mp3",
+          "source": "https://kenney.nl/assets/ui-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "switch37.ogg · kenney-ui-audio",
+          "sha256": "25faa57a3e819a3e3a2191934226e540467fcd11680131a7a77b47271048327e"
+        },
+        {
+          "original": "kenney-ui-audio/Audio/rollover3.ogg",
+          "preview": "moment-tab/8ab46842.mp3",
+          "source": "https://kenney.nl/assets/ui-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "rollover3.ogg · kenney-ui-audio",
+          "sha256": "641df2c95468f1f035ff0ae964129da10543b4ea8ff6c13f66bcbd899dcfc113"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/toggle_003.ogg",
+          "preview": "moment-tab/ca1d4fdc.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "toggle_003.ogg · kenney-interface-sounds",
+          "sha256": "7e69aba356d590826cce291bbd9dc6a85d7c53858b0e3712fcad30e1ad080b23"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/click_001.ogg",
+          "preview": "moment-tab/45880bf8.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "click_001.ogg · kenney-interface-sounds",
+          "sha256": "ccfb7fa0cccdd9faec0eb16033c732b1e308d139d80f799161495d58f7adcdb9"
+        }
+      ]
+    },
+    "moment:open": {
+      "kind": "effect",
+      "where": "a dialog or drawer opens",
+      "candidates": [
+        {
+          "original": "kenney-rpg-audio/Audio/doorOpen_2.ogg",
+          "preview": "moment-open/241533f7.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "doorOpen_2.ogg · kenney-rpg-audio",
+          "sha256": "68962fb0458c9bac59dec3adefa9849703c7c89d34712de03dd0075d095e79e9"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/maximize_005.ogg",
+          "preview": "moment-open/fa441efd.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "maximize_005.ogg · kenney-interface-sounds",
+          "sha256": "0ee06fc3ee494723fc95b2224f9dc0af857f2903e7f94d5d33d8e67f454b3cf7"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/doorOpen_1.ogg",
+          "preview": "moment-open/20da4648.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "doorOpen_1.ogg · kenney-rpg-audio",
+          "sha256": "4ab93bab96522d8eb109ff96dc57cb6765deb02448fe14c10472084be5bb2a0b"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/bookOpen.ogg",
+          "preview": "moment-open/8931016c.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "bookOpen.ogg · kenney-rpg-audio",
+          "sha256": "953390534377222bee89ac8cd9e60a58fdc037c71a4d7c18c43cd647c7f34ba8"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/creak2.ogg",
+          "preview": "moment-open/54cc65e6.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "creak2.ogg · kenney-rpg-audio",
+          "sha256": "8a990afdc03aebb91d528f5385e2f95582dbfa8e2c12c71098ab01be9142294a"
+        }
+      ]
+    },
+    "moment:close": {
+      "kind": "effect",
+      "where": "a dialog or drawer closes",
+      "candidates": [
+        {
+          "original": "kenney-interface-sounds/Audio/minimize_005.ogg",
+          "preview": "moment-close/2a0cdc13.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "minimize_005.ogg · kenney-interface-sounds",
+          "sha256": "4e6792a98c75d3ff187c0c55561c38c569e02c64757ebebb98831cfe84e3e172"
+        },
+        {
+          "original": "kenney-sci-fi-sounds/Audio/doorClose_001.ogg",
+          "preview": "moment-close/890d0bc4.mp3",
+          "source": "https://kenney.nl/assets/sci-fi-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "doorClose_001.ogg · kenney-sci-fi-sounds",
+          "sha256": "2153e83ff9880c78f9539aa5dcce80fc9e3b39c6fa0f8dec9325ec6d7ea2c9d5"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/bookClose.ogg",
+          "preview": "moment-close/956cff98.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "bookClose.ogg · kenney-rpg-audio",
+          "sha256": "81e976532565f4372abd14e83d2684195fa548d0a28d345de221e56052454f32"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/back_002.ogg",
+          "preview": "moment-close/455f8cf2.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "back_002.ogg · kenney-interface-sounds",
+          "sha256": "61581c58194e3f19f531072edabbc344204c7e0a2887b8ededce4357bcf09195"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/close_001.ogg",
+          "preview": "moment-close/9de58949.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "close_001.ogg · kenney-interface-sounds",
+          "sha256": "44af8249b933e0fd35ec957a638bb1a0b01f85b53fbe9674bf77bd3ca3168ef4"
+        }
+      ]
+    },
+    "moment:screen": {
+      "kind": "effect",
+      "where": "the screen changes",
+      "candidates": [
+        {
+          "original": "kenney-interface-sounds/Audio/scroll_001.ogg",
+          "preview": "moment-screen/d6e15383.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "scroll_001.ogg · kenney-interface-sounds",
+          "sha256": "320c6aafb2c7a503eae508dc443b72d7f7c0a317bfd16813157ed400cd04cf16"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/bong_001.ogg",
+          "preview": "moment-screen/3e24fd47.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "bong_001.ogg · kenney-interface-sounds",
+          "sha256": "d21d0f0b782445db579d11e2506b24cd1ac9d664ee33aeaf807761aa7b6fd710"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/impactBell_heavy_000.ogg",
+          "preview": "moment-screen/e4ce33ea.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactBell_heavy_000.ogg · kenney-impact-sounds",
+          "sha256": "94b8bb5f2d43ab65e4bcc32b28562416e9bc2c51d9fd4be1e333660ee52f977f"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/doorOpen_1.ogg",
+          "preview": "moment-screen/20da4648.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "doorOpen_1.ogg · kenney-rpg-audio",
+          "sha256": "4ab93bab96522d8eb109ff96dc57cb6765deb02448fe14c10472084be5bb2a0b"
+        },
+        {
+          "original": "kenney-sci-fi-sounds/Audio/forceField_000.ogg",
+          "preview": "moment-screen/880a8835.mp3",
+          "source": "https://kenney.nl/assets/sci-fi-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "forceField_000.ogg · kenney-sci-fi-sounds",
+          "sha256": "c2916f2a062c8ddd1aca2826d134fe90847037db31342726ffb0f9097afe339c"
+        }
+      ]
+    },
+    "moment:turn": {
+      "kind": "effect",
+      "where": "a turn's title appears",
+      "candidates": [
+        {
+          "original": "kenney-impact-sounds/Audio/impactBell_heavy_003.ogg",
+          "preview": "moment-turn/7e0027da.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactBell_heavy_003.ogg · kenney-impact-sounds",
+          "sha256": "5572ccdeb3b62373b86fa955355b3a222c36e815f0636ba16165189a21cf2514"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/bong_001.ogg",
+          "preview": "moment-turn/3e24fd47.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "bong_001.ogg · kenney-interface-sounds",
+          "sha256": "d21d0f0b782445db579d11e2506b24cd1ac9d664ee33aeaf807761aa7b6fd710"
+        },
+        {
+          "original": "kenney-music-jingles/Audio/Steel jingles/jingles_STEEL07.ogg",
+          "preview": "moment-turn/e41cb289.mp3",
+          "source": "https://kenney.nl/assets/music-jingles",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "jingles_STEEL07.ogg · kenney-music-jingles",
+          "sha256": "206b5cb18870c1faa393047cb857eda28441b9682380c9eb5910119ea04c2ece"
+        },
+        {
+          "original": "sfx100/sfx100v2_loop_ambient_02.ogg",
+          "preview": "moment-turn/f0a20902.mp3",
+          "source": "https://opengameart.org/content/100-cc0-sfx-2",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "sfx100v2_loop_ambient_02.ogg · sfx100",
+          "sha256": "e0ff913ddca018d6f97f1bb4d5f8e0b5ab913e4421d1e5f7ccbd4ffadd908573"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/impactBell_heavy_004.ogg",
+          "preview": "moment-turn/b7a91329.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactBell_heavy_004.ogg · kenney-impact-sounds",
+          "sha256": "49fe4fafa2001bd0d312976796824571ca8429851f285997e1327d17bb34fd00"
+        }
+      ]
+    },
+    "moment:victory": {
+      "kind": "effect",
+      "where": "the scenario is won",
+      "candidates": [
+        {
+          "original": "kenney-music-jingles/Audio/Sax jingles/jingles_SAX15.ogg",
+          "preview": "moment-victory/1f8d0bc2.mp3",
+          "source": "https://kenney.nl/assets/music-jingles",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "jingles_SAX15.ogg · kenney-music-jingles",
+          "sha256": "9bf90fa491bd9aa868ba735f76f3ffb8bf15e1b9d4a0bd5236cb91cd770dd38a"
+        },
+        {
+          "original": "victory.mp3",
+          "preview": "moment-victory/fcb60bd9.mp3",
+          "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+          "author": "SRG774",
+          "license": "CC0",
+          "description": "victory.mp3 · victory.mp3",
+          "sha256": "208916af7b2b26ee70171a964595ace1ccaf4534abfbfa816d340179e13fe289"
+        },
+        {
+          "original": "bell3.wav",
+          "preview": "moment-victory/1d557bb7.mp3",
+          "source": "https://opengameart.org/content/bell-dingschimes",
+          "author": "PWL",
+          "license": "CC0",
+          "description": "bell3.wav · bell3.wav",
+          "sha256": "99b9cdb7b9536c97c6738f1e0762cc40a3e7ef81bc774b0b6e0322aa70c96434"
+        },
+        {
+          "original": "kenney-music-jingles/Audio/Hit jingles/jingles_HIT15.ogg",
+          "preview": "moment-victory/d81ce0e5.mp3",
+          "source": "https://kenney.nl/assets/music-jingles",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "jingles_HIT15.ogg · kenney-music-jingles",
+          "sha256": "e2929ad1acb0ff929f2367eb06d4a57d3c543be9f5a8b6a7fad7e44e440474e1"
+        },
+        {
+          "original": "kenney-music-jingles/Audio/Steel jingles/jingles_STEEL15.ogg",
+          "preview": "moment-victory/2b3a7a71.mp3",
+          "source": "https://kenney.nl/assets/music-jingles",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "jingles_STEEL15.ogg · kenney-music-jingles",
+          "sha256": "764db253add93d5824a9329faceeb4247e10cf49a4e4e1653a46fa366d5b2138"
+        }
+      ]
+    },
+    "moment:resource": {
+      "kind": "effect",
+      "where": "a resource is gained",
+      "candidates": [
+        {
+          "original": "kenney-rpg-audio/Audio/handleCoins2.ogg",
+          "preview": "moment-resource/bda5cd6f.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "handleCoins2.ogg · kenney-rpg-audio",
+          "sha256": "4b857968d64f9ac9336a10ffac6694d7547e1f01566ad6857b30bc8db3ee6c32"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/handleCoins.ogg",
+          "preview": "moment-resource/edbee43e.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "handleCoins.ogg · kenney-rpg-audio",
+          "sha256": "8a91f969e932df709df80ee124d86a51389eed9b67f22e5e716bc2bbf60d8dab"
+        },
+        {
+          "original": "rpg/item_coins_02.ogg",
+          "preview": "moment-resource/cc8e0849.mp3",
+          "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "item_coins_02.ogg · rpg",
+          "sha256": "c1124868c928ef06e9b95fd9bd314eb3aa9a2869cbfde7f5aadcc341fe3edca0"
+        },
+        {
+          "original": "kenney-casino/Audio/chips-handle-4.ogg",
+          "preview": "moment-resource/de7fda70.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "chips-handle-4.ogg · kenney-casino",
+          "sha256": "0d171ea00224709cbe31ef95a111eabaf1382606a4836c5717043b339cbed8e9"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/impactTin_medium_000.ogg",
+          "preview": "moment-resource/e8a84687.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactTin_medium_000.ogg · kenney-impact-sounds",
+          "sha256": "f4bbee66ca191ec744b84fc07ac9ed2a6fda955d51cfed8360f12b62815d3cbd"
+        }
+      ]
+    },
+    "moment:heal": {
+      "kind": "effect",
+      "where": "damage or horror is healed",
+      "candidates": [
+        {
+          "original": "kenney-sci-fi-sounds/Audio/forceField_001.ogg",
+          "preview": "moment-heal/130ace13.mp3",
+          "source": "https://kenney.nl/assets/sci-fi-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "forceField_001.ogg · kenney-sci-fi-sounds",
+          "sha256": "5574e69dd04e5f59322c5ddffde5978f077b09170ae5e29cec0bd9901828cd90"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/confirmation_004.ogg",
+          "preview": "moment-heal/8db48fe4.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "confirmation_004.ogg · kenney-interface-sounds",
+          "sha256": "568967a3d9f8a8f6af54ea01729c4882284308f2a27d78c07ffd7ee0d6951661"
+        },
+        {
+          "original": "rpg/spell_02.ogg",
+          "preview": "moment-heal/2c4e1271.mp3",
+          "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "spell_02.ogg · rpg",
+          "sha256": "bf9c48b76921e56aa266172d969a2c08215d6ce0ffae7c3584f23fa05d3f8bd4"
+        },
+        {
+          "original": "rpg-pack/RPG Sound Pack/inventory/bubble2.wav",
+          "preview": "moment-heal/76641166.mp3",
+          "source": "https://opengameart.org/content/rpg-sound-pack",
+          "author": "artisticdude",
+          "license": "CC0",
+          "description": "bubble2.wav · rpg-pack",
+          "sha256": "fea5d8f0049a71b0a73b3086271fc18d0b5d733965b53fbfe550b6de26b1bef9"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/pluck_002.ogg",
+          "preview": "moment-heal/a6dae377.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "pluck_002.ogg · kenney-interface-sounds",
+          "sha256": "c977fe249ff42d1c93a552b33abc13a8399df3879fa510475426e5c4bbac1da9"
+        }
+      ]
+    },
+    "moment:evade": {
+      "kind": "effect",
+      "where": "an enemy is evaded",
+      "candidates": [
+        {
+          "original": "kenney-casino/Audio/card-slide-7.ogg",
+          "preview": "moment-evade/a51f05f7.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "card-slide-7.ogg · kenney-casino",
+          "sha256": "bda2040194f43484d03ee3c65ed6fff57251882ea7227abce4214bfa30bf2705"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/cloth3.ogg",
+          "preview": "moment-evade/630ad3cf.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "cloth3.ogg · kenney-rpg-audio",
+          "sha256": "a48632d17a4f1416541d261a32a31612e01267144c407fa3ecab3ff410f0085b"
+        },
+        {
+          "original": "rpg-pack/RPG Sound Pack/battle/swing3.wav",
+          "preview": "moment-evade/d4071042.mp3",
+          "source": "https://opengameart.org/content/rpg-sound-pack",
+          "author": "artisticdude",
+          "license": "CC0",
+          "description": "swing3.wav · rpg-pack",
+          "sha256": "d725421956c9958de6d7a17c4fca299abe583a1800c59eaec358ec2e82d79bae"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/scroll_005.ogg",
+          "preview": "moment-evade/45a8f735.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "scroll_005.ogg · kenney-interface-sounds",
+          "sha256": "e39d059462225efa31f758fb2e01871cc96781972b5062873a24a55c88174e02"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/footstep_grass_004.ogg",
+          "preview": "moment-evade/713df6f4.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "footstep_grass_004.ogg · kenney-impact-sounds",
+          "sha256": "086fd4ab3546a507ea5f5c759a9a10e535c95ade13705c238bc0eeffd7d4e8ba"
+        }
+      ]
+    },
+    "moment:engage": {
+      "kind": "effect",
+      "where": "an enemy engages",
+      "candidates": [
+        {
+          "original": "sword-clash/sword_clash.1.ogg",
+          "preview": "moment-engage/b8478f2e.mp3",
+          "source": "https://opengameart.org/content/20-sword-sound-effects-attacks-and-clashes",
+          "author": "StarNinjas",
+          "license": "CC0",
+          "description": "sword_clash.1.ogg · sword-clash",
+          "sha256": "5c5e78e466ba78fe2414f2b7a2a6eb674822ccfc8a8bc9fda32be22f5dde5e69"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/impactMetal_medium_000.ogg",
+          "preview": "moment-engage/ea8ffc19.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactMetal_medium_000.ogg · kenney-impact-sounds",
+          "sha256": "a96f879fec0864a8938e0c745b6996a6c5679c16a234ce31a01cc995e8401003"
+        },
+        {
+          "original": "rpg-pack/RPG Sound Pack/inventory/chainmail1.wav",
+          "preview": "moment-engage/8688363f.mp3",
+          "source": "https://opengameart.org/content/rpg-sound-pack",
+          "author": "artisticdude",
+          "license": "CC0",
+          "description": "chainmail1.wav · rpg-pack",
+          "sha256": "44d4d6b0cda8138c9d5545ba4f434f53b7817ba32d98ddfdf5bff6ae7acdefdf"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/metalLatch.ogg",
+          "preview": "moment-engage/a95c1b13.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "metalLatch.ogg · kenney-rpg-audio",
+          "sha256": "ba9ba60b172b3ebc131a940f25793cd2e207aca7af73dc80d637277f060f1708"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/metalClick.ogg",
+          "preview": "moment-engage/d322198d.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "metalClick.ogg · kenney-rpg-audio",
+          "sha256": "9851a69d0c613e13bceef08060ecc4148f098ef487927cbebe270d642398a3b3"
+        }
+      ]
+    },
+    "moment:discard": {
+      "kind": "effect",
+      "where": "a card is discarded",
+      "candidates": [
+        {
+          "original": "kenney-rpg-audio/Audio/dropLeather.ogg",
+          "preview": "moment-discard/9e1773b3.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "dropLeather.ogg · kenney-rpg-audio",
+          "sha256": "097e1d3b74949b0145fda0519d40b7e0773ab82ec4858727f95be830927e1a45"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/clothBelt2.ogg",
+          "preview": "moment-discard/723727c6.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "clothBelt2.ogg · kenney-rpg-audio",
+          "sha256": "d545b1d9f20e6188140aaf551a96f1e82fe0d15f7ca066fac8b065e1231e0038"
+        },
+        {
+          "original": "kenney-interface-sounds/Audio/scratch_002.ogg",
+          "preview": "moment-discard/4d05c610.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "scratch_002.ogg · kenney-interface-sounds",
+          "sha256": "2b07edafc1f3f49c4813f2b0ae9481c566c1f9962a22d5f5b79da7111e058e56"
+        },
+        {
+          "original": "kenney-casino/Audio/card-shove-4.ogg",
+          "preview": "moment-discard/dce85678.mp3",
+          "source": "https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "card-shove-4.ogg · kenney-casino",
+          "sha256": "0a1ad3a2f16bd2ed73349e6342426ca7a59a6e26b7e26e36d51d51c2c2349d6f"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/cloth1.ogg",
+          "preview": "moment-discard/f59197a2.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "cloth1.ogg · kenney-rpg-audio",
+          "sha256": "ddb93a3671233f95da0e0b10367f082f7eb42fa6caaddcf776410aa8833c747d"
+        }
+      ]
+    },
+    "trait:play:Firearm": {
+      "kind": "effect",
+      "where": "playing a Firearm",
+      "candidates": [
+        {
+          "original": "kenney-rpg-audio/Audio/metalLatch.ogg",
+          "preview": "trait-play-Firearm/a95c1b13.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "metalLatch.ogg · kenney-rpg-audio",
+          "sha256": "ba9ba60b172b3ebc131a940f25793cd2e207aca7af73dc80d637277f060f1708"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/metalClick.ogg",
+          "preview": "trait-play-Firearm/d322198d.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "metalClick.ogg · kenney-rpg-audio",
+          "sha256": "9851a69d0c613e13bceef08060ecc4148f098ef487927cbebe270d642398a3b3"
+        },
+        {
+          "original": "kenney-ui-audio/Audio/switch30.ogg",
+          "preview": "trait-play-Firearm/0b0dc116.mp3",
+          "source": "https://kenney.nl/assets/ui-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "switch30.ogg · kenney-ui-audio",
+          "sha256": "d220abb5218fccc6d37649e17e7cce2a4e253f474332d9ea2b0f0518264aff5a"
+        },
+        {
+          "original": "sfx100/sfx100v2_metal_04.ogg",
+          "preview": "trait-play-Firearm/c69b50ea.mp3",
+          "source": "https://opengameart.org/content/100-cc0-sfx-2",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "sfx100v2_metal_04.ogg · sfx100",
+          "sha256": "33c7d65086795882b8ffaaa215be3b38695dcca5e2112e5d9e3fe6e67328dae7"
+        },
+        {
+          "original": "sfx100/sfx100v2_switch_02.ogg",
+          "preview": "trait-play-Firearm/6b5eaeea.mp3",
+          "source": "https://opengameart.org/content/100-cc0-sfx-2",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "sfx100v2_switch_02.ogg · sfx100",
+          "sha256": "4ea2e80d7b9bee89dcb878233ae6bd3a18c1cf960885ec844b3d43dfbf8d700b"
+        }
+      ]
+    },
+    "trait:play:Melee": {
+      "kind": "effect",
+      "where": "playing a Melee weapon",
+      "candidates": [
+        {
+          "original": "rpg-pack/RPG Sound Pack/battle/sword-unsheathe.wav",
+          "preview": "trait-play-Melee/2e6df783.mp3",
+          "source": "https://opengameart.org/content/rpg-sound-pack",
+          "author": "artisticdude",
+          "license": "CC0",
+          "description": "sword-unsheathe.wav · rpg-pack",
+          "sha256": "2cc0518b65d3a11b4f7cf22a5be6700d36fa1e681491dfb71b87ae5bce2296f6"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/drawKnife2.ogg",
+          "preview": "trait-play-Melee/bdad2051.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "drawKnife2.ogg · kenney-rpg-audio",
+          "sha256": "d5df6a4130cbb016f97b4883769a418917b9629cb4c21717030b186e0c73281a"
+        },
+        {
+          "original": "sword/sword - StarNinjas/sword.5.ogg",
+          "preview": "trait-play-Melee/fb24e5e8.mp3",
+          "source": "https://opengameart.org/content/20-sword-sound-effects-attacks-and-clashes",
+          "author": "StarNinjas",
+          "license": "CC0",
+          "description": "sword.5.ogg · sword",
+          "sha256": "135d1b26aad8d2f2205e56c14cd0162755a883e9419d6fd955cb978126a77452"
+        },
+        {
+          "original": "rpg-pack/RPG Sound Pack/battle/swing2.wav",
+          "preview": "trait-play-Melee/76b86ddb.mp3",
+          "source": "https://opengameart.org/content/rpg-sound-pack",
+          "author": "artisticdude",
+          "license": "CC0",
+          "description": "swing2.wav · rpg-pack",
+          "sha256": "2e4064e294d136e06c40cc562df969493907e6873f39895ca86b4a6b2e034c6e"
+        },
+        {
+          "original": "rpg-pack/RPG Sound Pack/inventory/chainmail2.wav",
+          "preview": "trait-play-Melee/9ad9bfd5.mp3",
+          "source": "https://opengameart.org/content/rpg-sound-pack",
+          "author": "artisticdude",
+          "license": "CC0",
+          "description": "chainmail2.wav · rpg-pack",
+          "sha256": "74b5e34233ea69fd76b6f016bae74f3432d7ca1921fa403c32f6c45cab2fdfa8"
+        }
+      ]
+    },
+    "trait:play:Spell": {
+      "kind": "effect",
+      "where": "playing a Spell",
+      "candidates": [
+        {
+          "original": "kenney-interface-sounds/Audio/pluck_002.ogg",
+          "preview": "trait-play-Spell/a6dae377.mp3",
+          "source": "https://kenney.nl/assets/interface-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "pluck_002.ogg · kenney-interface-sounds",
+          "sha256": "c977fe249ff42d1c93a552b33abc13a8399df3879fa510475426e5c4bbac1da9"
+        },
+        {
+          "original": "rpg/spell_02.ogg",
+          "preview": "trait-play-Spell/2c4e1271.mp3",
+          "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "spell_02.ogg · rpg",
+          "sha256": "bf9c48b76921e56aa266172d969a2c08215d6ce0ffae7c3584f23fa05d3f8bd4"
+        },
+        {
+          "original": "rpg-pack/RPG Sound Pack/battle/magic1.wav",
+          "preview": "trait-play-Spell/1a4e8993.mp3",
+          "source": "https://opengameart.org/content/rpg-sound-pack",
+          "author": "artisticdude",
+          "license": "CC0",
+          "description": "magic1.wav · rpg-pack",
+          "sha256": "cadea162f3fe91c27666ab2a0516fa3bf156997d92d4f8145919126bca7b1e8a"
+        },
+        {
+          "original": "kenney-sci-fi-sounds/Audio/forceField_004.ogg",
+          "preview": "trait-play-Spell/b9a29d86.mp3",
+          "source": "https://kenney.nl/assets/sci-fi-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "forceField_004.ogg · kenney-sci-fi-sounds",
+          "sha256": "05609bb296cbc287ae95ac8924c89809d69c89d7bb357cc6a117ec1b1ef65e09"
+        },
+        {
+          "original": "rpg/spell_fire_01.ogg",
+          "preview": "trait-play-Spell/9dc572b3.mp3",
+          "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "spell_fire_01.ogg · rpg",
+          "sha256": "02fa3a2c6e79e868e546802f45127c5cdda69aba6d5a24ac997ea66f81a816cb"
+        }
+      ]
+    },
+    "trait:play:Tome": {
+      "kind": "effect",
+      "where": "playing a Tome",
+      "candidates": [
+        {
+          "original": "kenney-rpg-audio/Audio/bookPlace2.ogg",
+          "preview": "trait-play-Tome/4a6cb9e6.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "bookPlace2.ogg · kenney-rpg-audio",
+          "sha256": "831874e8fd142d4d0a03ff009f1f83966338a7878c0f6f38c613ae5b80dd731e"
+        },
+        {
+          "original": "pageflips/book_flip.8.ogg",
+          "preview": "trait-play-Tome/6992960c.mp3",
+          "source": "https://opengameart.org/content/10-book-page-flips",
+          "author": "StarNinjas",
+          "license": "CC0",
+          "description": "book_flip.8.ogg · pageflips",
+          "sha256": "0a39301fbbd9cf422148bebab3c1c8b5bd9eaf08dd780d98832d0ebacbefb35e"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/bookOpen.ogg",
+          "preview": "trait-play-Tome/8931016c.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "bookOpen.ogg · kenney-rpg-audio",
+          "sha256": "953390534377222bee89ac8cd9e60a58fdc037c71a4d7c18c43cd647c7f34ba8"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/bookFlip2.ogg",
+          "preview": "trait-play-Tome/daa13755.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "bookFlip2.ogg · kenney-rpg-audio",
+          "sha256": "3409042acbfaebc24c1a6327dc073e36f9250841712e96c5040da566a97df73c"
+        },
+        {
+          "original": "rpg/book_03.ogg",
+          "preview": "trait-play-Tome/904ca225.mp3",
+          "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "book_03.ogg · rpg",
+          "sha256": "f72e4af8172ae98eaa350892072120e79eb87f91448b99aeaaf1febe070fbb2e"
+        }
+      ]
+    },
+    "trait:play:Ally": {
+      "kind": "effect",
+      "where": "playing an Ally",
+      "candidates": [
+        {
+          "original": "kenney-rpg-audio/Audio/footstep05.ogg",
+          "preview": "trait-play-Ally/06699850.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "footstep05.ogg · kenney-rpg-audio",
+          "sha256": "817957e1f95d97fd36870064c41673895575cde17bccb245f50364c86ed10198"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/cloth2.ogg",
+          "preview": "trait-play-Ally/fab02a85.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "cloth2.ogg · kenney-rpg-audio",
+          "sha256": "8a7451193c38bc05483aec25dd193e163a15d44cf7fff04ac7912573231b0201"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/handleSmallLeather2.ogg",
+          "preview": "trait-play-Ally/f9f8b779.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "handleSmallLeather2.ogg · kenney-rpg-audio",
+          "sha256": "a66f6db5918ad016c28a9f2768f127a7f39b5fa04481e5a3b4e78ebe2a1c282d"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/doorOpen_1.ogg",
+          "preview": "trait-play-Ally/20da4648.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "doorOpen_1.ogg · kenney-rpg-audio",
+          "sha256": "4ab93bab96522d8eb109ff96dc57cb6765deb02448fe14c10472084be5bb2a0b"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/cloth4.ogg",
+          "preview": "trait-play-Ally/2c155d10.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "cloth4.ogg · kenney-rpg-audio",
+          "sha256": "e7ab9a6c4466dea874196c61f59bf1da05cfe58748f42fadd695d441a154a99b"
+        }
+      ]
+    },
+    "trait:play:Item": {
+      "kind": "effect",
+      "where": "playing an Item",
+      "candidates": [
+        {
+          "original": "rpg-pack/RPG Sound Pack/inventory/bottle.wav",
+          "preview": "trait-play-Item/5cf6492f.mp3",
+          "source": "https://opengameart.org/content/rpg-sound-pack",
+          "author": "artisticdude",
+          "license": "CC0",
+          "description": "bottle.wav · rpg-pack",
+          "sha256": "b80e52ce602f0e8f75b3a80516771a759b815416f749888f72cadcd9448ecea0"
+        },
+        {
+          "original": "rpg-pack/RPG Sound Pack/inventory/metal-small2.wav",
+          "preview": "trait-play-Item/beb76824.mp3",
+          "source": "https://opengameart.org/content/rpg-sound-pack",
+          "author": "artisticdude",
+          "license": "CC0",
+          "description": "metal-small2.wav · rpg-pack",
+          "sha256": "19c13a87e0f241cf05417506760d32eb1e2a61dc77c7798ea86b22fa9260f596"
+        },
+        {
+          "original": "rpg/item_wood_02.ogg",
+          "preview": "trait-play-Item/9710cc0c.mp3",
+          "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "item_wood_02.ogg · rpg",
+          "sha256": "2de39fd5be0ab8a6089bad92847fa725b3afa2195a5f6220c9b4c5424777cefd"
+        },
+        {
+          "original": "rpg/item_misc_05.ogg",
+          "preview": "trait-play-Item/dc1532fb.mp3",
+          "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "item_misc_05.ogg · rpg",
+          "sha256": "8cfab891c2867fa2177d18350107068a962b92045af72043e9bc0ea167b9c0db"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/handleCoins.ogg",
+          "preview": "trait-play-Item/edbee43e.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "handleCoins.ogg · kenney-rpg-audio",
+          "sha256": "8a91f969e932df709df80ee124d86a51389eed9b67f22e5e716bc2bbf60d8dab"
+        }
+      ]
+    },
+    "trait:fight:Firearm": {
+      "kind": "effect",
+      "where": "a Firearm is used in a fight",
+      "candidates": [
+        {
+          "original": "kenney-impact-sounds/Audio/impactMetal_heavy_001.ogg",
+          "preview": "trait-fight-Firearm/581a8090.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactMetal_heavy_001.ogg · kenney-impact-sounds",
+          "sha256": "83554049f81f4db9209379e103c30bfa63f65c42189a03f300b045c2c82e23ae"
+        },
+        {
+          "original": "kenney-sci-fi-sounds/Audio/lowFrequency_explosion_001.ogg",
+          "preview": "trait-fight-Firearm/b16d398f.mp3",
+          "source": "https://kenney.nl/assets/sci-fi-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "lowFrequency_explosion_001.ogg · kenney-sci-fi-sounds",
+          "sha256": "cdda50600a4928f2f1b8371224d53c171ac799c1cf2c30b11999508985250b3b"
+        },
+        {
+          "original": "kenney-sci-fi-sounds/Audio/explosionCrunch_001.ogg",
+          "preview": "trait-fight-Firearm/60d23ad6.mp3",
+          "source": "https://kenney.nl/assets/sci-fi-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "explosionCrunch_001.ogg · kenney-sci-fi-sounds",
+          "sha256": "fdd04d6f0032d4d57c134ad37f3587d2d00e58c9572715275bd8cf4f43593576"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/impactPlate_heavy_001.ogg",
+          "preview": "trait-fight-Firearm/edec870e.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactPlate_heavy_001.ogg · kenney-impact-sounds",
+          "sha256": "142fd6c77f13d25f318265901163f70f8dfe12f87829169a570025be43de7011"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/impactMetal_heavy_002.ogg",
+          "preview": "trait-fight-Firearm/f91764e9.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactMetal_heavy_002.ogg · kenney-impact-sounds",
+          "sha256": "b914c8f1eb7c0f34bb165d7c77f4be0351f6be0660c13c53e65424e262e2c093"
+        }
+      ]
+    },
+    "trait:fight:Melee": {
+      "kind": "effect",
+      "where": "a Melee weapon is used in a fight",
+      "candidates": [
+        {
+          "original": "kenney-rpg-audio/Audio/knifeSlice2.ogg",
+          "preview": "trait-fight-Melee/12f4a4ef.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "knifeSlice2.ogg · kenney-rpg-audio",
+          "sha256": "6c2064d0ef988d1ec3d56868e823ea8823a5cac00f2742560052633529407def"
+        },
+        {
+          "original": "sword-clash/sword_clash.9.ogg",
+          "preview": "trait-fight-Melee/0dc56755.mp3",
+          "source": "https://opengameart.org/content/20-sword-sound-effects-attacks-and-clashes",
+          "author": "StarNinjas",
+          "license": "CC0",
+          "description": "sword_clash.9.ogg · sword-clash",
+          "sha256": "aabd55ad99a1d171b50d741923077488a1021460fab35adf4fb7f36def49adc0"
+        },
+        {
+          "original": "sword/sword - StarNinjas/sword.9.ogg",
+          "preview": "trait-fight-Melee/15759d7e.mp3",
+          "source": "https://opengameart.org/content/20-sword-sound-effects-attacks-and-clashes",
+          "author": "StarNinjas",
+          "license": "CC0",
+          "description": "sword.9.ogg · sword",
+          "sha256": "11d11e060c3172cf0573620e9c6f57855eca017c7ab4a995a1aa276f176eb4b7"
+        },
+        {
+          "original": "rpg-pack/RPG Sound Pack/battle/swing.wav",
+          "preview": "trait-fight-Melee/aa04ebb9.mp3",
+          "source": "https://opengameart.org/content/rpg-sound-pack",
+          "author": "artisticdude",
+          "license": "CC0",
+          "description": "swing.wav · rpg-pack",
+          "sha256": "c7d50b9cb20ccda5aee6c023f4450915594061e36f3f9e78af241ca9fde0f817"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/impactMetal_medium_004.ogg",
+          "preview": "trait-fight-Melee/5f891f8d.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactMetal_medium_004.ogg · kenney-impact-sounds",
+          "sha256": "03e10f800199c7166208e41c11cf4acfac6cc265467f02357da71972bc967295"
+        }
+      ]
+    },
+    "trait:fight:Spell": {
+      "kind": "effect",
+      "where": "a Spell is used in a fight",
+      "candidates": [
+        {
+          "original": "kenney-sci-fi-sounds/Audio/forceField_003.ogg",
+          "preview": "trait-fight-Spell/e3b6af2e.mp3",
+          "source": "https://kenney.nl/assets/sci-fi-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "forceField_003.ogg · kenney-sci-fi-sounds",
+          "sha256": "15e3fe971ffd3415e5ab641d3a4d043fb31f6712b0956315b524ba29c3889cda"
+        },
+        {
+          "original": "kenney-sci-fi-sounds/Audio/lowFrequency_explosion_001.ogg",
+          "preview": "trait-fight-Spell/b16d398f.mp3",
+          "source": "https://kenney.nl/assets/sci-fi-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "lowFrequency_explosion_001.ogg · kenney-sci-fi-sounds",
+          "sha256": "cdda50600a4928f2f1b8371224d53c171ac799c1cf2c30b11999508985250b3b"
+        },
+        {
+          "original": "rpg/spell_fire_06.ogg",
+          "preview": "trait-fight-Spell/a9c9b388.mp3",
+          "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "spell_fire_06.ogg · rpg",
+          "sha256": "66fa753e8033d08f3837d6ef1706b0450297db68c0d4b21782a03fd9ae960d63"
+        },
+        {
+          "original": "rpg-pack/RPG Sound Pack/battle/magic1.wav",
+          "preview": "trait-fight-Spell/1a4e8993.mp3",
+          "source": "https://opengameart.org/content/rpg-sound-pack",
+          "author": "artisticdude",
+          "license": "CC0",
+          "description": "magic1.wav · rpg-pack",
+          "sha256": "cadea162f3fe91c27666ab2a0516fa3bf156997d92d4f8145919126bca7b1e8a"
+        },
+        {
+          "original": "kenney-sci-fi-sounds/Audio/laserLarge_003.ogg",
+          "preview": "trait-fight-Spell/6a2222da.mp3",
+          "source": "https://kenney.nl/assets/sci-fi-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "laserLarge_003.ogg · kenney-sci-fi-sounds",
+          "sha256": "3c7b3c9d856ee31fa1b92d29322f6ee472446627381595baeaba2af35c07135f"
+        }
+      ]
+    },
+    "trait:spawn:Ghoul": {
+      "kind": "effect",
+      "where": "a Ghoul spawns",
+      "candidates": [
+        {
+          "original": "creature/monster_03.ogg",
+          "preview": "trait-spawn-Ghoul/f4b69cf1.mp3",
+          "source": "https://opengameart.org/content/80-cc0-creature-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "monster_03.ogg · creature",
+          "sha256": "1208729886f3f66e7d8018e8880dff073275fd37b30e1016dd5b164161482df1"
+        },
+        {
+          "original": "creature/troll_01.ogg",
+          "preview": "trait-spawn-Ghoul/0ce9d7c6.mp3",
+          "source": "https://opengameart.org/content/80-cc0-creature-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "troll_01.ogg · creature",
+          "sha256": "d61a6ea6ab0263406de93002ee7378abac7b33486eafc04a91eeb625938e0df1"
+        },
+        {
+          "original": "rpg/creature_monster_04.ogg",
+          "preview": "trait-spawn-Ghoul/55a915f8.mp3",
+          "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "creature_monster_04.ogg · rpg",
+          "sha256": "b78ef6dd16f74c7627c4d58c73ad60465b7729bff2cca6bbe3aa84db24bed448"
+        },
+        {
+          "original": "rpg-pack/RPG Sound Pack/NPC/slime/slime10.wav",
+          "preview": "trait-spawn-Ghoul/8cf25f1a.mp3",
+          "source": "https://opengameart.org/content/rpg-sound-pack",
+          "author": "artisticdude",
+          "license": "CC0",
+          "description": "slime10.wav · rpg-pack",
+          "sha256": "d1fb3c56e73d9739e71123f5ece3d9ba1b4a06af2c08e85d0d61b86f2658031d"
+        },
+        {
+          "original": "creature/monster_04.ogg",
+          "preview": "trait-spawn-Ghoul/09d5ac2e.mp3",
+          "source": "https://opengameart.org/content/80-cc0-creature-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "monster_04.ogg · creature",
+          "sha256": "04b556b93bf3f99255ac362ebe7f905f750a8bcbb653f78ef7191adb91e71f49"
+        }
+      ]
+    },
+    "trait:spawn:Monster": {
+      "kind": "effect",
+      "where": "a Monster spawns",
+      "candidates": [
+        {
+          "original": "kenney-sci-fi-sounds/Audio/spaceEngineLow_004.ogg",
+          "preview": "trait-spawn-Monster/195c92a3.mp3",
+          "source": "https://kenney.nl/assets/sci-fi-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "spaceEngineLow_004.ogg · kenney-sci-fi-sounds",
+          "sha256": "c489079d9e8d577ceae4b1ea71fbe282ea1bce8b873dfa9166f9c962f7df81d3"
+        },
+        {
+          "original": "monster-roar.wav",
+          "preview": "trait-spawn-Monster/c159bc25.mp3",
+          "source": "https://opengameart.org/content/cc0-deep-monster-roar",
+          "author": "trazzz123",
+          "license": "CC0",
+          "description": "monster-roar.wav · monster-roar.wav",
+          "sha256": "040d2841619c732098c30a638731317d13d7647e5ce1a75a3246219ce4b162ff"
+        },
+        {
+          "original": "creature/roar_03.ogg",
+          "preview": "trait-spawn-Monster/4f7e17be.mp3",
+          "source": "https://opengameart.org/content/80-cc0-creature-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "roar_03.ogg · creature",
+          "sha256": "983396c808eb658ed3bd223ffaf9ea7f756dba7bc45ecc3fde117083026a4556"
+        },
+        {
+          "original": "rpg/creature_roar_03.ogg",
+          "preview": "trait-spawn-Monster/dbfb2468.mp3",
+          "source": "https://opengameart.org/content/80-cc0-rpg-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "creature_roar_03.ogg · rpg",
+          "sha256": "3571f6372012fdebb2a38ef89e18a6137b3f17d519f1259aafeb166dbdd94195"
+        },
+        {
+          "original": "creature/troll_03.ogg",
+          "preview": "trait-spawn-Monster/b78452d5.mp3",
+          "source": "https://opengameart.org/content/80-cc0-creature-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "troll_03.ogg · creature",
+          "sha256": "993b97ae0ca7755b6254f02242e6da4fe9895fc06ab2e092771927caab689660"
+        }
+      ]
+    },
+    "trait:spawn:Humanoid": {
+      "kind": "effect",
+      "where": "a Humanoid spawns",
+      "candidates": [
+        {
+          "original": "kenney-sci-fi-sounds/Audio/doorOpen_002.ogg",
+          "preview": "trait-spawn-Humanoid/f8e6b146.mp3",
+          "source": "https://kenney.nl/assets/sci-fi-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "doorOpen_002.ogg · kenney-sci-fi-sounds",
+          "sha256": "84473b70b0b2f69bd325fffee5790f030ff6597d178efddc7e4c201933a6c6c1"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/footstep09.ogg",
+          "preview": "trait-spawn-Humanoid/05c1b183.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "footstep09.ogg · kenney-rpg-audio",
+          "sha256": "9324ebb9b2c5bcd078dcb523c6518d38a9f34081069d511602c2efb14ce06ce2"
+        },
+        {
+          "original": "creature/grunt_05.ogg",
+          "preview": "trait-spawn-Humanoid/8b9ad7de.mp3",
+          "source": "https://opengameart.org/content/80-cc0-creature-sfx",
+          "author": "rubberduck",
+          "license": "CC0",
+          "description": "grunt_05.ogg · creature",
+          "sha256": "164059a171a8a7d8f1a2fcfdb195a9d50da3ab67bed0b52f4c2c3409fe5df049"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/cloth2.ogg",
+          "preview": "trait-spawn-Humanoid/fab02a85.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "cloth2.ogg · kenney-rpg-audio",
+          "sha256": "8a7451193c38bc05483aec25dd193e163a15d44cf7fff04ac7912573231b0201"
+        },
+        {
+          "original": "kenney-rpg-audio/Audio/creak2.ogg",
+          "preview": "trait-spawn-Humanoid/54cc65e6.mp3",
+          "source": "https://kenney.nl/assets/rpg-audio",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "creak2.ogg · kenney-rpg-audio",
+          "sha256": "8a990afdc03aebb91d528f5385e2f95582dbfa8e2c12c71098ab01be9142294a"
+        }
+      ]
+    },
+    "card:01016:fight": {
+      "kind": "effect",
+      "where": "the .45 Automatic is used in a fight",
+      "candidates": [
+        {
+          "original": "kenney-impact-sounds/Audio/impactPlate_heavy_003.ogg",
+          "preview": "card-01016-fight/94d3356b.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactPlate_heavy_003.ogg · kenney-impact-sounds",
+          "sha256": "59775f8979a396c8a793b0a1db206d5bdc651eae808d858e9acaee8ebda5bc6d"
+        },
+        {
+          "original": "kenney-sci-fi-sounds/Audio/explosionCrunch_003.ogg",
+          "preview": "card-01016-fight/53c69120.mp3",
+          "source": "https://kenney.nl/assets/sci-fi-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "explosionCrunch_003.ogg · kenney-sci-fi-sounds",
+          "sha256": "8c7197bb3a1c504690319c3abe0e62a5423ee246dd70caab57963d0b7aa8144f"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/impactMetal_heavy_003.ogg",
+          "preview": "card-01016-fight/cbfd1e70.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactMetal_heavy_003.ogg · kenney-impact-sounds",
+          "sha256": "b0f2ba4dabde9a87eb9c188a19d31e0c2300fd321adeba08d3b9b8aa011d7037"
+        },
+        {
+          "original": "kenney-sci-fi-sounds/Audio/lowFrequency_explosion_001.ogg",
+          "preview": "card-01016-fight/b16d398f.mp3",
+          "source": "https://kenney.nl/assets/sci-fi-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "lowFrequency_explosion_001.ogg · kenney-sci-fi-sounds",
+          "sha256": "cdda50600a4928f2f1b8371224d53c171ac799c1cf2c30b11999508985250b3b"
+        },
+        {
+          "original": "kenney-impact-sounds/Audio/impactPlate_heavy_004.ogg",
+          "preview": "card-01016-fight/32076776.mp3",
+          "source": "https://kenney.nl/assets/impact-sounds",
+          "author": "Kenney",
+          "license": "CC0",
+          "description": "impactPlate_heavy_004.ogg · kenney-impact-sounds",
+          "sha256": "e31bfec90630155bcc6af541d1d14ae8202c435c52b42e6b6183fdb6ffb248b0"
+        }
+      ]
+    },
+    "music:bed:the-gathering": {
+      "kind": "music",
+      "where": "the bed of The Gathering",
+      "candidates": [
+        {
+          "original": "transmission.mp3",
+          "preview": "music-bed-the-gathering/bba4919f.m4a",
+          "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+          "author": "SRG774",
+          "license": "CC0",
+          "description": "transmission.mp3 · transmission.mp3",
+          "sha256": "ad4fee95b89809905a7a8c010759577d99cd2eb1332b339e34768d234981f857",
+          "seam": 9.4
+        },
+        {
+          "original": "drone57.wav",
+          "preview": "music-bed-the-gathering/088a88db.m4a",
+          "source": "https://opengameart.org/content/droning-sound-effects",
+          "author": "bretbernhoft",
+          "license": "CC0",
+          "description": "drone57.wav · drone57.wav",
+          "sha256": "414443b3716845e4b1133bbfbbdb429a7f464976ae70f6c2b6e6a1656945cb66",
+          "seam": 2.7
+        },
+        {
+          "original": "pulse.mp3",
+          "preview": "music-bed-the-gathering/0724f69f.m4a",
+          "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+          "author": "SRG774",
+          "license": "CC0",
+          "description": "pulse.mp3 · pulse.mp3",
+          "sha256": "8d53270befde7be6f2e836599e8895fc22dfb76c3d851138bb17c0974794fa98",
+          "seam": 1.2
+        },
+        {
+          "original": "sector.mp3",
+          "preview": "music-bed-the-gathering/2235c64e.m4a",
+          "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+          "author": "SRG774",
+          "license": "CC0",
+          "description": "sector.mp3 · sector.mp3",
+          "sha256": "4f5e7f035dad8ce32d8c04393ec11470da52383dce0ffd421220c2de0ee2bf5d",
+          "seam": 3
+        },
+        {
+          "original": "airy.mp3",
+          "preview": "music-bed-the-gathering/cbafabac.m4a",
+          "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+          "author": "SRG774",
+          "license": "CC0",
+          "description": "airy.mp3 · airy.mp3",
+          "sha256": "2880297bb0bace79448ea47732aa7db78ea526663ce2791d733e353b6f8adf87",
+          "seam": 10.4
+        }
+      ]
+    },
+    "music:bed:the-midnight-masks": {
+      "kind": "music",
+      "where": "the bed of The Midnight Masks",
+      "candidates": [
+        {
+          "original": "cathedral.ogg",
+          "preview": "music-bed-the-midnight-masks/7bfc2872.m4a",
+          "source": "https://opengameart.org/content/cathedral-in-the-forest-ambient-loop",
+          "author": "congusbongus",
+          "license": "CC0",
+          "description": "cathedral.ogg · cathedral.ogg",
+          "sha256": "b9e05a1fcd5869b63193515e2a9c1bd578906a78e628e307f19527d387262593",
+          "seam": 0.2
+        },
+        {
+          "original": "music-dark-cavern.ogg",
+          "preview": "music-bed-the-midnight-masks/99222041.m4a",
+          "source": "https://opengameart.org/content/dark-cavern-ambient",
+          "author": "Paul Wortmann",
+          "license": "CC0",
+          "description": "music-dark-cavern.ogg · music-dark-cavern.ogg",
+          "sha256": "3e364b94dc1fceff13d8d067af9f034f297cfa5d15ff9cecfbe02fd857801dce",
+          "seam": 2.4
+        },
+        {
+          "original": "music-ancient-caverns.ogg",
+          "preview": "music-bed-the-midnight-masks/1f0c5ae5.m4a",
+          "source": "https://opengameart.org/content/ancient-caverns-horror-ambient-loop",
+          "author": "congusbongus",
+          "license": "CC0",
+          "description": "music-ancient-caverns.ogg · music-ancient-caverns.ogg",
+          "sha256": "5c841ef1a7bacd2a038801ecee0741e200d1cf1cd08f36a6a89cce95bcfb6a8a",
+          "seam": 3.1
+        },
+        {
+          "original": "music-ambient-horror.ogg",
+          "preview": "music-bed-the-midnight-masks/dfd0da29.m4a",
+          "source": "https://opengameart.org/content/ambient-horror-track-01",
+          "author": "Nerdzmasterz",
+          "license": "CC0",
+          "description": "music-ambient-horror.ogg · music-ambient-horror.ogg",
+          "sha256": "0c7ac65060abfedc63ab6cdf04ecb2fb012948b6a7dff5436e96926eeabc4785",
+          "seam": 12.3
+        },
+        {
+          "original": "music-end-of-hope.mp3",
+          "preview": "music-bed-the-midnight-masks/30b1fb89.m4a",
+          "source": "https://opengameart.org/content/at-the-end-of-hope",
+          "author": "Chasersgaming",
+          "license": "CC0",
+          "description": "music-end-of-hope.mp3 · music-end-of-hope.mp3",
+          "sha256": "c5c9a612ff8650b62b4be6c9276263b7c21ec4bcf6f28d1ba73d0b29034ae12a",
+          "seam": 2.8
+        }
+      ]
+    },
+    "music:bed:default": {
+      "kind": "music",
+      "where": "the bed of a scenario without its own",
+      "candidates": [
+        {
+          "original": "sector.mp3",
+          "preview": "music-bed-default/2235c64e.m4a",
+          "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+          "author": "SRG774",
+          "license": "CC0",
+          "description": "sector.mp3 · sector.mp3",
+          "sha256": "4f5e7f035dad8ce32d8c04393ec11470da52383dce0ffd421220c2de0ee2bf5d",
+          "seam": 3
+        },
+        {
+          "original": "airy.mp3",
+          "preview": "music-bed-default/cbafabac.m4a",
+          "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+          "author": "SRG774",
+          "license": "CC0",
+          "description": "airy.mp3 · airy.mp3",
+          "sha256": "2880297bb0bace79448ea47732aa7db78ea526663ce2791d733e353b6f8adf87",
+          "seam": 10.4
+        },
+        {
+          "original": "cathedral.ogg",
+          "preview": "music-bed-default/7bfc2872.m4a",
+          "source": "https://opengameart.org/content/cathedral-in-the-forest-ambient-loop",
+          "author": "congusbongus",
+          "license": "CC0",
+          "description": "cathedral.ogg · cathedral.ogg",
+          "sha256": "b9e05a1fcd5869b63193515e2a9c1bd578906a78e628e307f19527d387262593",
+          "seam": 0.2
+        },
+        {
+          "original": "music-dark-cavern.ogg",
+          "preview": "music-bed-default/99222041.m4a",
+          "source": "https://opengameart.org/content/dark-cavern-ambient",
+          "author": "Paul Wortmann",
+          "license": "CC0",
+          "description": "music-dark-cavern.ogg · music-dark-cavern.ogg",
+          "sha256": "3e364b94dc1fceff13d8d067af9f034f297cfa5d15ff9cecfbe02fd857801dce",
+          "seam": 2.4
+        },
+        {
+          "original": "music-ancient-caverns.ogg",
+          "preview": "music-bed-default/1f0c5ae5.m4a",
+          "source": "https://opengameart.org/content/ancient-caverns-horror-ambient-loop",
+          "author": "congusbongus",
+          "license": "CC0",
+          "description": "music-ancient-caverns.ogg · music-ancient-caverns.ogg",
+          "sha256": "5c841ef1a7bacd2a038801ecee0741e200d1cf1cd08f36a6a89cce95bcfb6a8a",
+          "seam": 3.1
+        }
+      ]
+    },
+    "music:bed:the-devourer-below": {
+      "kind": "music",
+      "where": "the bed of The Devourer Below",
+      "candidates": [
+        {
+          "original": "music-echoes-of-the-past.wav",
+          "preview": "music-bed-the-devourer-below/e2cfa743.m4a",
+          "source": "https://opengameart.org/content/echoes-of-the-past",
+          "author": "glitchart",
+          "license": "CC0",
+          "description": "music-echoes-of-the-past.wav · music-echoes-of-the-past.wav",
+          "sha256": "ec149d7daceb8d0d5f20816ae401d8e04ea8e5960fc558d378c2c27139835292",
+          "seam": 1.7
+        },
+        {
+          "original": "music-hallway.ogg",
+          "preview": "music-bed-the-devourer-below/ca6029f8.m4a",
+          "source": "https://opengameart.org/content/hallway",
+          "author": "thenewkgb",
+          "license": "CC0",
+          "description": "music-hallway.ogg · music-hallway.ogg",
+          "sha256": "f38b088fc7d05dc3154a6a763540eeaccab683155fe93aac44b0153ee9fb4335",
+          "seam": 17.3
+        },
+        {
+          "original": "music-orien.ogg",
+          "preview": "music-bed-the-devourer-below/285cbb5b.m4a",
+          "source": "https://opengameart.org/content/orien",
+          "author": "Snabisch",
+          "license": "CC0",
+          "description": "music-orien.ogg · music-orien.ogg",
+          "sha256": "7e9a6f28b131ddb6c19f8f0ece0eb5e391d3657007e2156de6efabd6816ed58c",
+          "seam": 2.3
+        },
+        {
+          "original": "transmission.mp3",
+          "preview": "music-bed-the-devourer-below/bba4919f.m4a",
+          "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+          "author": "SRG774",
+          "license": "CC0",
+          "description": "transmission.mp3 · transmission.mp3",
+          "sha256": "ad4fee95b89809905a7a8c010759577d99cd2eb1332b339e34768d234981f857",
+          "seam": 9.4
+        },
+        {
+          "original": "drone57.wav",
+          "preview": "music-bed-the-devourer-below/088a88db.m4a",
+          "source": "https://opengameart.org/content/droning-sound-effects",
+          "author": "bretbernhoft",
+          "license": "CC0",
+          "description": "drone57.wav · drone57.wav",
+          "sha256": "414443b3716845e4b1133bbfbbdb429a7f464976ae70f6c2b6e6a1656945cb66",
+          "seam": 2.7
+        }
+      ]
+    },
+    "music:fight": {
+      "kind": "music",
+      "where": "while an enemy is engaged",
+      "candidates": [
+        {
+          "original": "urgent.mp3",
+          "preview": "music-fight/da7048f0.m4a",
+          "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+          "author": "SRG774",
+          "license": "CC0",
+          "description": "urgent.mp3 · urgent.mp3",
+          "sha256": "4aba1f1a01f328e0337a3764eb89d8d69e13ea2a86929840c787f4d736565b82",
+          "seam": 2.9
+        },
+        {
+          "original": "pulse.mp3",
+          "preview": "music-fight/0724f69f.m4a",
+          "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+          "author": "SRG774",
+          "license": "CC0",
+          "description": "pulse.mp3 · pulse.mp3",
+          "sha256": "8d53270befde7be6f2e836599e8895fc22dfb76c3d851138bb17c0974794fa98",
+          "seam": 1.2
+        },
+        {
+          "original": "music-empty-city.ogg",
+          "preview": "music-fight/90d32c6a.m4a",
+          "source": "https://opengameart.org/content/emptycity-background-music",
+          "author": "TinyWorlds",
+          "license": "CC0",
+          "description": "music-empty-city.ogg · music-empty-city.ogg",
+          "sha256": "10cdeb8e7ede29f8afeedaec23f16297752a89aac36c37b06a0262b5190efaad",
+          "seam": 21.3
+        },
+        {
+          "original": "sector.mp3",
+          "preview": "music-fight/2235c64e.m4a",
+          "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+          "author": "SRG774",
+          "license": "CC0",
+          "description": "sector.mp3 · sector.mp3",
+          "sha256": "4f5e7f035dad8ce32d8c04393ec11470da52383dce0ffd421220c2de0ee2bf5d",
+          "seam": 3
+        },
+        {
+          "original": "music-action-loop.ogg",
+          "preview": "music-fight/0c2b6b18.m4a",
+          "source": "https://opengameart.org/content/action-music-loop",
+          "author": "AppPro",
+          "license": "CC0",
+          "description": "music-action-loop.ogg · music-action-loop.ogg",
+          "sha256": "809ce77a8034bd951d92ab275b1f931bfd19de3e2fe5110a7e469a6024f82e92",
+          "seam": 5.9
+        }
+      ]
+    },
+    "music:tension": {
+      "kind": "music",
+      "where": "in the enemy phase and one doom from the agenda advancing",
+      "candidates": [
+        {
+          "original": "music-ambient-horror.ogg",
+          "preview": "music-tension/dfd0da29.m4a",
+          "source": "https://opengameart.org/content/ambient-horror-track-01",
+          "author": "Nerdzmasterz",
+          "license": "CC0",
+          "description": "music-ambient-horror.ogg · music-ambient-horror.ogg",
+          "sha256": "0c7ac65060abfedc63ab6cdf04ecb2fb012948b6a7dff5436e96926eeabc4785",
+          "seam": 12.3
+        },
+        {
+          "original": "airy.mp3",
+          "preview": "music-tension/cbafabac.m4a",
+          "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+          "author": "SRG774",
+          "license": "CC0",
+          "description": "airy.mp3 · airy.mp3",
+          "sha256": "2880297bb0bace79448ea47732aa7db78ea526663ce2791d733e353b6f8adf87",
+          "seam": 10.4
+        },
+        {
+          "original": "urgent.mp3",
+          "preview": "music-tension/da7048f0.m4a",
+          "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+          "author": "SRG774",
+          "license": "CC0",
+          "description": "urgent.mp3 · urgent.mp3",
+          "sha256": "4aba1f1a01f328e0337a3764eb89d8d69e13ea2a86929840c787f4d736565b82",
+          "seam": 2.9
+        },
+        {
+          "original": "pulse.mp3",
+          "preview": "music-tension/0724f69f.m4a",
+          "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+          "author": "SRG774",
+          "license": "CC0",
+          "description": "pulse.mp3 · pulse.mp3",
+          "sha256": "8d53270befde7be6f2e836599e8895fc22dfb76c3d851138bb17c0974794fa98",
+          "seam": 1.2
+        },
+        {
+          "original": "music-hallway.ogg",
+          "preview": "music-tension/ca6029f8.m4a",
+          "source": "https://opengameart.org/content/hallway",
+          "author": "thenewkgb",
+          "license": "CC0",
+          "description": "music-hallway.ogg · music-hallway.ogg",
+          "sha256": "f38b088fc7d05dc3154a6a763540eeaccab683155fe93aac44b0153ee9fb4335",
+          "seam": 17.3
+        }
+      ]
+    }
+  }
+}

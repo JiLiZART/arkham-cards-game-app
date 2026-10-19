@@ -1,7 +1,9 @@
 /** validate all content files: schema + cross references. Exit code 1 on errors. */
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { loadContentFromDisk } from "../src/content/node";
-import { checkLoudness, checkSounds } from "../src/content/soundChecks";
+import { SoundCandidates } from "../src/content/schema";
+import { checkCandidates, checkLoudness, checkSounds } from "../src/content/soundChecks";
+import { SLOTS } from "./sound-candidates";
 import { ANIMATED } from "../src/ui/store";
 import { ffmpegAvailable, ffmpegProbe } from "./sound-probe";
 import { checkIcons, MANIFEST, SPRITE, SPRITE_CAMPAIGNS, setsWithoutIcon, spriteIds } from "./import-icons";
@@ -17,6 +19,10 @@ const fileSize = (path: string) => {
   }
 };
 errors.push(...checkSounds(db.sounds, fileSize, ANIMATED));
+// every sound slot has its five candidates listed (the audio itself is untracked); the slots the game can play are in SLOTS
+const candidates = SoundCandidates.safeParse(JSON.parse(readFileSync("content/sounds/candidates.json", "utf8")));
+if (candidates.success) errors.push(...checkCandidates(db.sounds, candidates.data, SLOTS.map((s) => s.id)));
+else errors.push({ file: "content/sounds/candidates.json", path: "", message: candidates.error.message });
 // loudness and loop seams need ffmpeg; without it they are skipped with a warning, not failed
 if (ffmpegAvailable()) errors.push(...checkLoudness(db.sounds, ffmpegProbe()));
 else console.warn("warning: ffmpeg not found, sound loudness and loop seam checks skipped");

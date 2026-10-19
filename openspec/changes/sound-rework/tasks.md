@@ -6,8 +6,8 @@
 
 ## 2. Candidates
 
-- [ ] 2.1 `scripts/sound-candidates.ts`: the slot list (every event and variant, moment, trait and card sound, music role) and five CC0 sources each with pack URL, file (or freesound id), author, description; `import:sounds -- --candidates` downloads packs once into `sounds-src/packs/`, extracts to `sounds-src/candidates/<slot>/`, renders normalised previews, writes `content/sounds/candidates.json` with provenance and sha256; a missing source is reported and the slot filled from the packs; tests for the list's shape (five per slot, CC0 only) and the download's idempotence on a fixture.
-- [ ] 2.2 Schema for `candidates.json` and its checks (every slot of the manifest present, five entries, CC0, originals listed); `candidates.json` committed, `sounds-src/` stays ignored.
+- [x] 2.1 `scripts/sound-candidates.ts`: the slot list (every event and variant, moment, trait and card sound, music role) and five CC0 sources each with pack URL, file (or freesound id), author, description; `import:sounds -- --candidates` downloads packs once into `sounds-src/packs/`, extracts to `sounds-src/candidates/<slot>/`, renders normalised previews, writes `content/sounds/candidates.json` with provenance and sha256; a missing source is reported and the slot filled from the packs; tests for the list's shape (five per slot, CC0 only) and the download's idempotence on a fixture.
+- [x] 2.2 Schema for `candidates.json` and its checks (every slot of the manifest present, five entries, CC0, originals listed); `candidates.json` committed, `sounds-src/` stays ignored.
 
 ## 3. Picker
 

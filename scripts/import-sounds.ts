@@ -2,7 +2,7 @@
  * Converts the sounds named in content/sounds/sounds.json into the files the game ships (public/sounds): effects as
  * mono MP3, music as AAC (.m4a) and Opus (.webm), each loudness-normalised in two passes (ADR-0009). Originals are read from sounds-src/<original> (untracked); a clip
  * with no original gets a synthesised placeholder, so the game is never silent while CC0 recordings are still being
- * chosen. Usage: npm run import:sounds [-- clipId ...]
+ * chosen. Usage: npm run import:sounds [-- clipId ...]; with --candidates, builds the five candidates per slot instead (build-candidates.ts)
  */
 import { execFileSync, spawnSync } from "node:child_process";
 import { existsSync, mkdirSync } from "node:fs";
@@ -51,7 +51,7 @@ export function levelFilter(category: keyof typeof TARGETS, measured: Measured):
 }
 
 /** measure the (trimmed) clip; clips under 400 ms are padded with silence for the measurement only */
-function measure(category: keyof typeof TARGETS, input: string[], trim?: [number, number]): Measured {
+export function measure(category: keyof typeof TARGETS, input: string[], trim?: [number, number]): Measured {
   const cut = trim ? ["-ss", String(trim[0]), "-to", String(trim[1])] : [];
   const r = spawnSync("ffmpeg", ["-hide_banner", "-nostats", "-y", ...input, ...cut, "-af", measureFilter(category), "-f", "null", "-"], { encoding: "utf8" });
   if (r.status !== 0) throw new Error(`ffmpeg failed measuring loudness:\n${r.stderr}`);
@@ -76,13 +76,18 @@ export function placeholderInput(id: string, kind: "effect" | "music"): string[]
     : ["-f", "lavfi", "-i", `sine=frequency=${f}:duration=${d},afade=t=out:st=0:d=${d},volume=0.6`];
 }
 
-function run(args: string[]) {
+export function run(args: string[]) {
   execFileSync("ffmpeg", ["-hide_banner", "-loglevel", "error", ...args], {
     stdio: "inherit",
   });
 }
 
 async function main() {
+  if (process.argv.includes("--candidates")) {
+    const { buildCandidates } = await import("./build-candidates");
+    await buildCandidates();
+    return;
+  }
   const encoders = execFileSync("ffmpeg", ["-hide_banner", "-encoders"]).toString();
   for (const enc of ["libopus", "aac", "libmp3lame"]) if (!encoders.includes(` ${enc} `)) throw new Error(`ffmpeg lacks the ${enc} encoder; install one built with it (brew install ffmpeg)`);
   const m = SoundManifest.parse((await import("../content/sounds/sounds.json", { with: { type: "json" } })).default);

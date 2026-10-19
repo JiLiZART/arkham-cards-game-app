@@ -1,5 +1,6 @@
 import type { ContentError } from "./loader";
-import type { SoundManifest } from "./schema";
+import type { SoundCandidates, SoundManifest } from "./schema";
+import { slotsOf } from "./soundSlots";
 
 /** bytes: effects stay small enough to ship with the first load; music loads after the game starts */
 export const EFFECTS_BUDGET = 1_500_000;
@@ -68,4 +69,9 @@ export function checkLoudness(m: SoundManifest, probe: SoundProbe): ContentError
     if (d !== null && Math.abs(d) > LOUDNESS.seam) errors.push({ file: FILE, path: `music.${id}`, message: `loop seam of ${track.file} is ${Math.abs(d).toFixed(1)} dB, over ${LOUDNESS.seam} dB: the loop will pump` });
   }
   return errors;
+}
+
+/** Every slot of the manifest (and any `required` slot) has its five candidates listed in candidates.json. */
+export function checkCandidates(m: SoundManifest, c: SoundCandidates, required: readonly string[] = []): ContentError[] {
+  return [...new Set([...slotsOf(m), ...required])].filter((slot) => !c.slots[slot]).map((slot) => ({ file: "content/sounds/candidates.json", path: slot, message: "no candidates for this slot (npm run import:sounds -- --candidates)" }));
 }

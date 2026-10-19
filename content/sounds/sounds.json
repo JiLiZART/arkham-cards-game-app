@@ -195,13 +195,6 @@
       "license": "CC0",
       "original": "pops/3pops/pop1.ogg"
     },
-    "two-note": {
-      "file": "two-note.mp3",
-      "source": "https://opengameart.org/content/rpg-sound-pack",
-      "author": "artisticdude",
-      "license": "CC0",
-      "original": "rpg-pack/RPG Sound Pack/interface/interface1.wav"
-    },
     "rewind": {
       "file": "rewind.mp3",
       "source": "https://opengameart.org/content/rpg-sound-pack",
@@ -356,7 +349,6 @@
     "phase": "swell",
     "button": "click",
     "tip": "pop",
-    "handoff": "two-note",
     "undo": "rewind"
   },
   "traits": {

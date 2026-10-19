@@ -701,6 +701,35 @@ export const SoundManifest = z
     for (const [code, byWhen] of Object.entries(m.cards)) for (const [when, id] of Object.entries(byWhen)) need(["cards", code, when], id);
   });
 export type SoundManifest = z.infer<typeof SoundManifest>;
+/**
+ * content/sounds/candidates.json: five CC0 candidates for every sound slot, drawn by `import:sounds -- --candidates`.
+ * The audio itself stays in the untracked sounds-src/candidates; this file is the provenance and what the picker lists.
+ */
+export const SoundCandidate = z
+  .object({
+    /** the original's path under sounds-src */
+    original: z.string().min(1),
+    /** the normalised preview's path under sounds-src/candidates */
+    preview: z.string().min(1),
+    source: z.string().url(),
+    author: z.string().min(1),
+    license: z.literal("CC0"),
+    /** the file's name and pack, for the picker */
+    description: z.string().min(1),
+    sha256: z.string().regex(/^[0-9a-f]{64}$/),
+    /** a track's loop seam in dB (start against end) */
+    seam: z.number().optional(),
+  })
+  .strict();
+export type SoundCandidate = z.infer<typeof SoundCandidate>;
+export const CANDIDATES_PER_SLOT = 5;
+export const SoundCandidates = z
+  .object({
+    slots: z.record(z.string(), z.object({ kind: z.enum(["effect", "music"]), where: z.string().min(1), candidates: z.array(SoundCandidate).length(CANDIDATES_PER_SLOT) }).strict()),
+  })
+  .strict();
+export type SoundCandidates = z.infer<typeof SoundCandidates>;
+
 export const EMPTY_SOUNDS: SoundManifest = { effects: {}, music: {}, events: {}, moments: {}, traits: {}, cards: {} };
 
 export const I18nCards = z.record(z.string(), z.object({ name: z.string().optional(), text: z.string().optional(), backText: z.string().optional(), subname: z.string().optional(), backName: z.string().optional(), traits: z.array(z.string()).optional() }).strict());
