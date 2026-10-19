@@ -442,6 +442,18 @@ export const effHandler = (g: G, step: EffStep) => {
       emit(g, "search", `${me.name} returns ${def(g, pick).name} to their hand`, { inv: you, card: pick });
       return;
     }
+    case "searchEncounterDraw": {
+      // the encounter deck first, then its discard pile; the investigator resolving the effect draws the card
+      const id = [...g.s.encounterDeck, ...g.s.encounterDiscard].find((c) => matchesFilter(g, card(g, c).code, e.filter));
+      if (id) {
+        moveCard(g, id, "limbo");
+        emit(g, "encounter", `${invName(g, you)} finds and draws ${def(g, id).name}`, { inv: you, card: id });
+        push(g, { t: "Spawn", enemy: id, inv: you });
+      }
+      shuffle(g.s, g.s.encounterDeck);
+      emit(g, "shuffle", `${invName(g, you)} shuffles the encounter deck`, { inv: you });
+      return;
+    }
     case "discardEncounterUntil": {
       if (e.shuffleDiscardFirst) {
         for (const id of g.s.encounterDiscard.splice(0)) {

@@ -233,6 +233,7 @@ export type Effect =
   | { op: "resolution"; id: string }
   | { op: "resign" }
   | { op: "takeFromDiscard"; filter: CardFilter }
+  | { op: "searchEncounterDraw"; filter: CardFilter }
   | { op: "discardEncounterUntil"; filter: CardFilter; count?: number; countIfPlayersAtLeast?: [number, number]; then: "leadDraws" | "spawnAt"; at?: string; doom?: number; shuffleDiscardFirst?: boolean }
   | { op: "dropClues"; amount: Amount }
   | { op: "spendClues"; amount: Amount }
@@ -289,6 +290,7 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
     z.object({ op: z.literal("resolution"), id: z.string() }).strict(),
     z.object({ op: z.literal("resign") }).strict(),
     z.object({ op: z.literal("takeFromDiscard"), filter: CardFilter }).strict(),
+    z.object({ op: z.literal("searchEncounterDraw"), filter: CardFilter }).strict(),
     z.object({ op: z.literal("discardEncounterUntil"), filter: CardFilter, count: z.number().optional(), countIfPlayersAtLeast: z.tuple([z.number(), z.number()]).optional(), then: z.enum(["leadDraws", "spawnAt"]), at: z.string().optional(), doom: z.number().optional(), shuffleDiscardFirst: z.boolean().optional() }).strict(),
     z.object({ op: z.literal("dropClues"), amount: Amount }).strict(),
     z.object({ op: z.literal("spendClues"), amount: Amount }).strict(),
@@ -305,7 +307,7 @@ export const EFFECT_OPS = [
   "discardAllButOneFromHand", "removeDiscardFromGame", "drawEncounterCard", "gainActions", "cancel", "disengageAll",
   "moveTo", "searchDeck", "lookAtTop", "addUses", "surge", "drawCultistOrSearch", "spawnSetAside",
   "putSetAsideIntoPlay", "shuffleIntoEncounterDeck", "takeControl", "resolution", "resign", "checkDoom",
-  "takeFromDiscard", "discardEncounterUntil", "dropClues", "spendClues", "healEnemy",
+  "takeFromDiscard", "searchEncounterDraw", "discardEncounterUntil", "dropClues", "spendClues", "healEnemy",
   "returnSelfToHand", "script",
 ] as const;
 
