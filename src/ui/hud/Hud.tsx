@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { cardText, scenarioText, t } from "../../content/i18n";
 import type { GameEvent, GameState } from "../../engine/types";
 import { whenSettled } from "../arrivals";
@@ -389,6 +389,9 @@ function PopupMenu() {
   );
 }
 
+// the dev-only sound picker (ADR-0010): not in the production build, where DEV is false and the import is dropped
+const SoundPicker = import.meta.env.DEV ? lazy(() => import("../dev/SoundPicker")) : null;
+
 function DebugPanel() {
   const panel = useView((s) => s.panel);
   const game = useGame((s) => s.game)!;
@@ -406,6 +409,7 @@ function DebugPanel() {
   const [pasting, setPasting] = useState(false);
   const [pasted, setPasted] = useState("");
   const [pasteError, setPasteError] = useState<string | null>(null);
+  const [picking, setPicking] = useState(false);
   const manualBox = useRef<HTMLTextAreaElement>(null);
   const json = useMemo(() => (panel === "debug" ? JSON.stringify({ ...game, log: `(${game.log.length} entries)` }, null, 1) : ""), [game, panel]);
   if (panel !== "debug") return null;
@@ -474,7 +478,13 @@ function DebugPanel() {
         <button className="primary" onClick={copyReport}>{tr("debug.copyReport")}</button>
         <button onClick={() => { setPasting(!pasting); setPasteError(null); }}>{tr("debug.pasteReport")}</button>
         {copied === "ok" && <span className="report-ok">{tr("debug.copied")}</span>}
+        {SoundPicker && <button onClick={() => setPicking(true)}>Sounds</button>}
       </div>
+      {SoundPicker && picking && (
+        <Suspense fallback={null}>
+          <SoundPicker onClose={() => setPicking(false)} />
+        </Suspense>
+      )}
       {copied === "manual" && (
         <div className="report-copy">
           <div className="problems">{tr("debug.copyRefused")}</div>

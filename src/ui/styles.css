@@ -1013,3 +1013,19 @@ button.danger { border-color: var(--bad); color: var(--bad); }
 .dk-replace-bar { display: flex; align-items: center; gap: 10px; padding: 6px 10px; border: 2px solid #2f9a3a; border-radius: 10px; background: #e7f4e1; }
 .dk-more { align-self: center; }
 @media (max-width: 900px) { .dk-area { grid-template-columns: 1fr; } }
+
+/* dev-only sound picker (src/ui/dev/SoundPicker.tsx) */
+.sound-picker { position: fixed; inset: 0; z-index: 900; background: #120e09; color: var(--ink); display: flex; flex-direction: column; padding: 14px 18px; gap: 10px; font-family: system-ui, sans-serif; }
+.sp-head { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.sp-head h2 { margin: 0; color: var(--gold); font-size: 22px; }
+.sp-head input { padding: 6px 10px; min-width: 200px; }
+.sp-tabs { display: flex; gap: 6px; }
+.sp-count { opacity: 0.7; font-size: 13px; flex: 1; }
+.sp-list { overflow: auto; display: flex; flex-direction: column; gap: 8px; }
+.sp-slot { display: grid; grid-template-columns: 260px 1fr; gap: 12px; align-items: center; border: 1px solid #3a2e1c; border-radius: 8px; padding: 8px 10px; }
+.sp-name { display: flex; flex-direction: column; gap: 2px; font-size: 13px; }
+.sp-name code { color: var(--gold); }
+.sp-name span { opacity: 0.75; }
+.sp-options { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.sp-note { font-size: 12px; opacity: 0.85; }
+.sp-bad { color: #e0795a; }

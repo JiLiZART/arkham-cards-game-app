@@ -43,6 +43,10 @@ describe("momentClip", () => {
     expect(momentClip("nope", null, fresh, m)).toBeNull();
   });
 
+  it("a moment set to none is silent", () => {
+    expect(momentClip("draw", null, fresh, { ...m, moments: { ...m.moments, draw: "none" } })).toBeNull();
+  });
+
   it("a card's own clip: code first, then the first matching trait, then the generic one", () => {
     expect(momentClip("fight", codeOf("01016"), fresh, m)).toBe("gunshot-45"); // the .45 override
     expect(momentClip("play", codeOf("01016"), fresh, m)).toBe("gun-ready"); // Firearm by trait

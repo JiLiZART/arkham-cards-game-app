@@ -1,6 +1,6 @@
 import { doomInPlay } from "../engine/rules/scenario";
 import type { ContentDb, GameEvent, GameState, InstId } from "../engine/types";
-import type { CardSoundWhen, SoundManifest } from "../content/schema";
+import { type CardSoundWhen, NO_SOUND, type SoundManifest } from "../content/schema";
 import { db } from "./context";
 
 /** the settings the gains depend on (a slice of UiState) */
@@ -47,7 +47,8 @@ export function effectFor(e: GameEvent, game: GameState, m: SoundManifest, conte
 /** the clip for a UI moment: for play, fight and spawn the card's own clip first; else the moment's generic clip; null for none */
 export function momentClip(name: string, cardId: InstId | null, game: GameState, m: SoundManifest, content: ContentDb = db): string | null {
   const own = isWhen(name) ? cardClip(name, cardId, game, m, content) : null;
-  return own ?? m.moments[name] ?? null;
+  const generic = m.moments[name];
+  return own ?? (generic === NO_SOUND ? null : (generic ?? null));
 }
 
 /** which music track should play: fight while an enemy is engaged, tension in the enemy phase or one doom from the agenda advancing, else the scenario's bed; null when the scenario has ended or has no bed */

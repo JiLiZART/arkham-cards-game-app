@@ -23,6 +23,16 @@ describe("sound manifest schema", () => {
     expect(r.success).toBe(false);
   });
 
+  it("accepts none for a moment, to silence it without removing the slot", () => {
+    expect(SoundManifest.safeParse({ ...sample, moments: { play: "none" } }).success).toBe(true);
+    expect(SoundManifest.safeParse({ ...sample, events: { damage: "none" } }).success).toBe(false);
+  });
+
+  it("keeps a clip's gain a small mix offset", () => {
+    expect(SoundManifest.safeParse({ ...sample, effects: { ...sample.effects, snap: { ...clip, gain: 1.6 } } }).success).toBe(false);
+    expect(SoundManifest.safeParse({ ...sample, effects: { ...sample.effects, snap: { ...clip, gain: 0.4 } } }).success).toBe(false);
+  });
+
   it("rejects a reference to an unknown clip", () => {
     for (const bad of [
       { ...sample, events: { damage: "nope" } },

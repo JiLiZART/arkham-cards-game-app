@@ -33,6 +33,9 @@ class AudioEngine {
   private ctx: AudioContext | null = null;
   private bus: Record<Category, GainNode> | null = null;
   private buffers = new Map<string, Promise<AudioBuffer | null>>();
+  /** urls to fetch past the HTTP cache next time (a file the dev picker has just rewritten) */
+  private stale = new Set<string>();
+  private audition_: { source: AudioBufferSourceNode; gain: GainNode } | null = null;
   private levels: Record<Category, number> = { music: 0.5, effects: 0.8 };
   private current: Playing | null = null;
   private wanted: { id: string; files: MusicFiles; gain: number } | null = null;
@@ -103,7 +106,7 @@ class AudioEngine {
     if (!p) {
       p = (async () => {
         try {
-          const res = await fetch(url);
+          const res = await fetch(url, this.stale.delete(url) ? { cache: "reload" } : undefined);
           if (!res.ok) return null;
           const data = await res.arrayBuffer();
           return this.ctx ? await this.ctx.decodeAudioData(data) : null;
@@ -137,6 +140,45 @@ class AudioEngine {
     src.connect(g).connect(this.bus.effects);
     src.start();
     this.note("effect", id);
+  }
+
+  /**
+   * Dev picker: play any file once on a category's bus, stopping the previous audition. `from` and `length` (seconds)
+   * pick an excerpt, for a music track. Returns once playback has started (false when it could not).
+   */
+  async audition(url: string, category: Category, gain: number, from = 0, length?: number): Promise<boolean> {
+    this.stopAudition();
+    const buf = await this.buffer(url);
+    if (!buf || !this.ctx || !this.bus) return false;
+    const src = this.ctx.createBufferSource();
+    src.buffer = buf;
+    const g = this.ctx.createGain();
+    g.gain.value = gain;
+    src.connect(g).connect(this.bus[category]);
+    const t = this.ctx.currentTime;
+    src.start(t, from);
+    if (length !== undefined) {
+      g.gain.setValueAtTime(gain, t + Math.max(0, length - 0.4));
+      g.gain.linearRampToValueAtTime(0, t + length);
+      src.stop(t + length + 0.05);
+    }
+    this.audition_ = { source: src, gain: g };
+    this.note("effect", `audition:${url}`);
+    return true;
+  }
+
+  stopAudition() {
+    this.audition_?.source.stop();
+    this.audition_ = null;
+  }
+
+  /** drop the decoded copies of files that were rewritten on disk (effects as files; music as stems) */
+  forget(files: string[], stems: string[] = []) {
+    const urls = [...files.map((f) => asset(`sounds/${f}`)), ...stems.flatMap((t) => [asset(`sounds/${t}.m4a`), asset(`sounds/${t}.webm`)])];
+    for (const u of urls) {
+      this.buffers.delete(u);
+      this.stale.add(u);
+    }
   }
 
   /** the track that should be playing now (null for silence); idempotent, crossfading on a change */

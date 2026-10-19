@@ -670,6 +670,8 @@ const SoundClip = z
   })
   .strict();
 const SoundTrack = SoundClip.extend({ loop: z.boolean().default(true), loopStart: z.number().min(0).optional(), loopEnd: z.number().min(0).optional() }).strict();
+/** a moment's value that silences it while keeping its slot */
+export const NO_SOUND = "none";
 /** when a card's own sound replaces the generic one */
 export const CARD_SOUND_WHEN = ["play", "fight", "spawn"] as const;
 export const CardSoundWhen = z.enum(CARD_SOUND_WHEN);
@@ -696,7 +698,7 @@ export const SoundManifest = z
       if (!m.effects[id]) ctx.addIssue({ code: z.ZodIssueCode.custom, path, message: `unknown clip ${id}` });
     };
     for (const [k, v] of Object.entries(m.events)) (Array.isArray(v) ? v : [v]).forEach((id, n) => need(["events", k, ...(Array.isArray(v) ? [n] : [])], id));
-    for (const [k, id] of Object.entries(m.moments)) need(["moments", k], id);
+    for (const [k, id] of Object.entries(m.moments)) if (id !== NO_SOUND) need(["moments", k], id);
     for (const [when, byTrait] of Object.entries(m.traits)) for (const [trait, id] of Object.entries(byTrait)) need(["traits", when, trait], id);
     for (const [code, byWhen] of Object.entries(m.cards)) for (const [when, id] of Object.entries(byWhen)) need(["cards", code, when], id);
   });
