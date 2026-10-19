@@ -9,6 +9,15 @@ const last = (log: GameEvent[], type: string) => [...log].reverse().find((e) => 
 const placeholders = (s: string) => (s.match(/\{[\w:]+\}/g) ?? []).sort();
 
 describe("feed entries", () => {
+  it("prevent: the investigator, the words and what was prevented, in the game's language", () => {
+    const ev = { type: "prevent", text: "Roland Banks prevents 1 horror", inv: "01001", data: { damage: 0, horror: 1 } } as unknown as GameEvent;
+    const r = skipMulligans(start("the-gathering", ["01001"], 1));
+    const f = feedEntry(ev, r.state, db, "en")!;
+    expect(f.parts.some((p) => p.t === "inv")).toBe(true);
+    expect(JSON.stringify(f.parts)).toMatch(/prevented/);
+    expect(JSON.stringify(feedEntry(ev, r.state, db, "ru")!.parts)).toMatch(/предотвращ/);
+  });
+
   it("resource: portrait, words, amount with the resource icon", () => {
     let r = skipMulligans(start("the-gathering", ["01001"], 1));
     r = pick(r, /^Gain 1 resource/);

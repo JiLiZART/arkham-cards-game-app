@@ -114,6 +114,7 @@
   "feed.resourceLost": "{inv} теряет {n:resource}",
   "feed.heal": "{inv} лечит {damage:damage} {horror:horror}",
   "feed.healCard": "{card} лечит {damage:damage} {horror:horror}",
+  "feed.prevent": "{inv} предотвращает {damage:damage} {horror:horror}",
   "feed.threat": "{card} в зоне угрозы: {inv}",
   "feed.attach": "{card} прикреплена",
   "feed.victory": "{card} в зоне победы",

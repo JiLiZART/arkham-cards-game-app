@@ -13,5 +13,5 @@
 
 ## 3. Verification
 
-- [ ] 3.1 Browser: Nathaniel Cho with Flesh Ward fights a Ghoul Minion and is attacked: Flesh Ward is offered before assignment, using it leaves 3 charges and cancels the chosen point; then an attack with Flesh Ward exhausted shows "Assign 1 damage to Flesh Ward (defeated)"; in English and Russian; 0 console errors.
-- [ ] 3.2 `npm test`, lint, typecheck, build, `check:content` by exit code; `openspec validate uses-cards-heal-and-ward --type change --strict`.
+- [x] 3.1 Browser: Nathaniel Cho with Flesh Ward fights a Ghoul Minion and is attacked: Flesh Ward is offered before assignment, using it leaves 3 charges and cancels the chosen point; then an attack with Flesh Ward exhausted shows "Assign 1 damage to Flesh Ward (defeated)"; in English and Russian; 0 console errors.
+- [x] 3.2 `npm test`, lint, typecheck, build, `check:content` by exit code; `openspec validate uses-cards-heal-and-ward --type change --strict`.

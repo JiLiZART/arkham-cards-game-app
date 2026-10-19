@@ -484,7 +484,7 @@ export const effHandler = (g: G, step: EffStep) => {
       const next: [number, number] = [...done];
       next[k] += n;
       g.s.flags[flag] = next;
-      emit(g, "prevent", `${invName(g, you)} prevents ${n} ${kind}`, { inv: you, card: ctx.source ?? null, data: { n, kind } });
+      emit(g, "prevent", `${invName(g, you)} prevents ${n} ${kind}`, { inv: you, card: ctx.source ?? null, data: { damage: kind === "damage" ? n : 0, horror: kind === "horror" ? n : 0 } });
       return;
     }
     case "searchEncounterDraw": {
