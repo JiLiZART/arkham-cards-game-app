@@ -14,7 +14,8 @@ import { abilityOptionsOf } from "../players";
 import { useShown } from "../usePlayers";
 import { useDimmed, useView } from "../view";
 import { formatText } from "./Hud";
-import { STAT_BAR_W, STAT_BAR_ZOOM } from "./fan";
+import { statBarZoom } from "./fan";
+import { useViewport } from "../layoutMode";
 import { OptionButtons, useCardOptions } from "./Modals";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
@@ -134,9 +135,11 @@ export function StatBar() {
   // the investigator's own ability, when the pending choice offers it (the sheet keeps the same buttons for the phone)
   const abilities = abilityOptionsOf(game, shown ?? "");
   const options = useCardOptions([cardId]).filter((o) => abilities.some((x) => x.id === o.id));
+  const { width, height } = useViewport();
   if (!shown || !game.invs[shown] || !cardId) return null;
+  // full size at 1080p and up, smaller on a smaller window (the fan makes room for it at the same size)
   return (
-    <div className="stat-dock" style={{ width: STAT_BAR_W / STAT_BAR_ZOOM, zoom: STAT_BAR_ZOOM }}>
+    <div className="stat-dock" style={{ width: 420, zoom: statBarZoom(width, height) }}>
       <StatBody inv={shown} dimmed={dimmed} legal={options.length > 0} options={options} onPortrait={() => useView.getState().setModal({ card: cardId })} />
     </div>
   );

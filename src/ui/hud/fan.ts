@@ -9,6 +9,10 @@ export const FAN_LEGAL_RAISE = 27;
 /** the bottom-left stat bar is drawn at 75 % (CSS zoom) of its 420 px layout width */
 export const STAT_BAR_ZOOM = 0.75;
 export const STAT_BAR_W = 420 * STAT_BAR_ZOOM;
+/** the stat bar's zoom for a window: full size at 1080p (the window's smaller ratio to it), between 0.75 and 1.15 */
+export const statBarZoom = (vw: number, vh: number) => Math.min(1.15, Math.max(0.75, Math.min(vw / 1920, vh / 1080)));
+/** the stat bar's width on screen at that zoom */
+export const statBarW = (vw: number, vh: number) => 420 * statBarZoom(vw, vh);
 export const RAIL_W = 172;
 
 export interface FanSlot {
@@ -21,7 +25,7 @@ export interface FanSlot {
 }
 
 /** width available to the hand fan for a viewport width */
-export const fanWidth = (viewportW: number) => Math.max(FAN_CARD_W, viewportW - RAIL_W - STAT_BAR_W - 24);
+export const fanWidth = (viewportW: number, statW = STAT_BAR_W) => Math.max(FAN_CARD_W, viewportW - RAIL_W - statW - 24);
 
 /** Hearthstone-style fan: cards on an arc, overlap tightening as the hand grows */
 export function fanLayout(n: number, width: number, cardW = FAN_CARD_W): FanSlot[] {

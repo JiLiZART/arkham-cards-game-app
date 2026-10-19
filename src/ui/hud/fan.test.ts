@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { boxTransform, dockRadius, dockRect, dockTransform, dockWeight, FAN_CARD_H, FAN_CARD_W, fanLayout, fanWidth, HOVER_LIFT, hoverScale, showBox } from "./fan";
+import { boxTransform, dockRadius, dockRect, dockTransform, dockWeight, FAN_CARD_H, FAN_CARD_W, fanLayout, fanWidth, HOVER_LIFT, hoverScale, showBox, statBarW, statBarZoom } from "./fan";
 
 describe("hand fan size", () => {
   it("rests at 225×315 and hovers at 1.28× (about 288×403)", () => {
@@ -118,5 +118,19 @@ describe("the phone's hand drawer", () => {
     expect(o.slots).toHaveLength(7);
     expect(o.slots[0].x - o.w / 2).toBeGreaterThanOrEqual(0);
     expect(o.slots.at(-1)!.x + o.w / 2).toBeLessThanOrEqual(852);
+  });
+});
+
+describe("statBarZoom", () => {
+  it("is full size from a 1080p window up, a little more on a larger one, never under three quarters", () => {
+    expect(statBarZoom(1920, 1080)).toBe(1);
+    expect(statBarZoom(2056, 1198)).toBeGreaterThanOrEqual(1);
+    expect(statBarZoom(1600, 900)).toBeCloseTo(900 / 1080, 5);
+    expect(statBarZoom(1024, 600)).toBe(0.75);
+    expect(statBarZoom(4000, 3000)).toBe(1.15);
+  });
+  it("the fan starts after the bar at that size", () => {
+    expect(statBarW(1920, 1080)).toBe(420);
+    expect(fanWidth(1920, statBarW(1920, 1080))).toBeLessThan(fanWidth(1920, statBarW(1600, 900)));
   });
 });

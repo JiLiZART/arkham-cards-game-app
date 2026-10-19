@@ -26,6 +26,7 @@ import { Modal, useCardOptions } from "./Modals";
 import { RESOLVE_BOX } from "./Reveal";
 import { abilitySymbol, stripAction } from "./ActionRail";
 import { moment } from "./SoundLayer";
+import { optionLabel } from "../optionText";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
 const gOf = () => ({ s: gameStore.getState().game!, db, events: [] });
@@ -65,6 +66,8 @@ export function MiniCard({ id, w, h, legal, exhausted, target, onClick, faceDown
 /** options on the act or agenda (Advance act…) as buttons laid over the card; the rest of the card still opens the viewer */
 export function CardOptions({ id }: { id: InstId | null }) {
   const choose = useGame((s) => s.choose);
+  const game = useGame((s) => s.game) as GameState;
+  const locale = useGame((s) => s.locale);
   const options = useCardOptions([id]);
   if (!options.length) return null;
   return (
@@ -80,7 +83,7 @@ export function CardOptions({ id }: { id: InstId | null }) {
             choose(o.id);
           }}
         >
-          {(o.value as { kind?: string } | null)?.kind === "advanceAct" ? tr("act.advance") : o.label}
+          {(o.value as { kind?: string } | null)?.kind === "advanceAct" ? tr("act.advance") : optionLabel(o, game, locale)}
         </button>
       ))}
     </div>
@@ -318,7 +321,7 @@ export function PlayStrip() {
         {opts.length > 0 && (
           <div className="strip-actions">
             {opts.map((o) => {
-              const a = stripAction(o, name, locale);
+              const a = stripAction({ ...o, label: optionLabel(o, game, locale) }, name, locale);
               const sym = abilitySymbol(o, game);
               return (
                 <button key={o.id} className="strip-action" onClick={() => choose(o.id)} title={o.label}>

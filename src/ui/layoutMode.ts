@@ -1,4 +1,4 @@
-import { useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import type { Insets } from "./camera";
 
 /**
@@ -68,3 +68,14 @@ export const useLayoutMode = (): LayoutMode => useLayout().mode;
 
 /** the current mode, outside React */
 export const layoutModeNow = (): LayoutMode => (typeof window === "undefined" ? "desktop" : layoutModeOf(window.innerWidth, window.innerHeight).mode);
+
+/** the window's size, updated as it changes */
+export function useViewport(): { width: number; height: number } {
+  const [v, setV] = useState(() => viewportOf(window));
+  useEffect(() => {
+    const on = () => setV(viewportOf(window));
+    window.addEventListener("resize", on);
+    return () => window.removeEventListener("resize", on);
+  }, []);
+  return v;
+}

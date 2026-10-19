@@ -7,6 +7,7 @@ import { db, useGame } from "../context";
 import { Glyph, Icon } from "../Icon";
 import type { IconName } from "../icons";
 import { useChoicesOffered } from "../usePlayers";
+import { optionLabel } from "../optionText";
 import { useView } from "../view";
 import { abilitySymbol } from "./ActionRail";
 import { formatText } from "./Hud";
@@ -49,6 +50,7 @@ export function useCardOptions(ids: (InstId | null | undefined)[]): ChoiceOption
 export function OptionButtons({ options, onChosen }: { options: ChoiceOption[]; onChosen?: () => void }) {
   const choose = useGame((s) => s.choose);
   const game = useGame((s) => s.game) as GameState;
+  const locale = useGame((s) => s.locale);
   if (!options.length) return null;
   return (
     <div className="modal-options">
@@ -63,7 +65,7 @@ export function OptionButtons({ options, onChosen }: { options: ChoiceOption[]; 
               choose(o.id);
             }}
           >
-            {sym && <Glyph name={sym} size={18} />} {o.label}
+            <Glyph name={sym ?? "action"} size={22} title="" /> <span>{optionLabel(o, game, locale)}</span>
           </button>
         );
       })}

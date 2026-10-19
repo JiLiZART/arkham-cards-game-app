@@ -10,7 +10,8 @@ import { useChoicesOffered, useShown } from "../usePlayers";
 import { outsideSpotlight, useView } from "../view";
 import { moment } from "./SoundLayer";
 import { GlanceBadge } from "./GlanceBadge";
-import { boxTransform, dockRadius, dockRect, dockTransform, dockWeight, FAN_CARD_H, FAN_CARD_W, FAN_LEGAL_RAISE, FAN_REST_VISIBLE, fanLayout, fanWidth, hoverScale, showBox, STAT_BAR_W } from "./fan";
+import { useViewport } from "../layoutMode";
+import { boxTransform, dockRadius, dockRect, dockTransform, dockWeight, FAN_CARD_H, FAN_CARD_W, FAN_LEGAL_RAISE, FAN_REST_VISIBLE, fanLayout, fanWidth, hoverScale, showBox, statBarW } from "./fan";
 import { flyDraw, flyIn, STAGGER_MS } from "./flights";
 import { DETAILS_W, HandDetails } from "./HandDetails";
 import { mulliganPicks } from "./MulliganRow";
@@ -19,17 +20,6 @@ import { RESOLVE_BOX } from "./Reveal";
 const DRAG_TO_PLAY = 110;
 /** easing time constant of the Dock magnification (ms) */
 const EASE_MS = 70;
-const FAN_LEFT = STAT_BAR_W + 12;
-
-function useViewportWidth() {
-  const [w, setW] = useState(() => window.innerWidth);
-  useEffect(() => {
-    const on = () => setW(window.innerWidth);
-    window.addEventListener("resize", on);
-    return () => window.removeEventListener("resize", on);
-  }, []);
-  return w;
-}
 
 /**
  * The hand on screen (shared by the desktop fan and the phone's hand drawer): the investigator being looked at
@@ -61,7 +51,9 @@ export function HandFan() {
   const openMenu = useView((s) => s.openMenu);
   const setHovered = useView((s) => s.setHovered);
   const spotlight = useView((s) => s.spotlight);
-  const vw = useViewportWidth();
+  const { width: vw, height: vh } = useViewport();
+  // the fan starts after the stat bar, whose size follows the window
+  const FAN_LEFT = statBarW(vw, vh) + 12;
   const [drag, setDrag] = useState<{ id: InstId; startX: number; startY: number; dx: number; dy: number } | null>(null);
   const dragRef = useRef(drag);
   dragRef.current = drag;
@@ -70,7 +62,7 @@ export function HandFan() {
 
   const { viewer, visible, hand, optionsFor } = useHand();
 
-  const width = fanWidth(vw);
+  const width = fanWidth(vw, statBarW(vw, vh));
   const slots = fanLayout(hand.length, width);
   const k = hoverScale(window.innerHeight);
   const raiseOf = (id: InstId) => (optionsFor(id).length ? FAN_LEGAL_RAISE : 0);

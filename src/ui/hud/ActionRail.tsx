@@ -11,6 +11,7 @@ import { useLayoutMode } from "../layoutMode";
 import { Sentence } from "./Feed";
 import { canUndo, viewerOf } from "../store";
 import { barAsk } from "../players";
+import { optionLabel } from "../optionText";
 import { useChoicesOffered } from "../usePlayers";
 import { useView } from "../view";
 import { moment } from "./SoundLayer";
@@ -85,7 +86,7 @@ function OptionButton({ o, game, busy }: { o: ChoiceOption; game: GameState; bus
   const it = railItem(o);
   // costs and extra detail stay visible: "[2 actions]" suffixes come from the engine label
   const extra = /\[(\d+ actions)\]$/.exec(o.label)?.[1];
-  const label = it.key ? t(db, locale, it.key, it.vars) + (extra ? ` (${extra})` : "") : o.label;
+  const label = it.key ? t(db, locale, it.key, it.vars) + (extra ? ` (${extra})` : "") : optionLabel(o, game, locale);
   // no actions left: End turn is the thing to do (paid actions are no longer offered, free ones stay)
   const me = game.pending?.kind === "turn" ? game.invs[game.pending.inv] : null;
   const spent = !!me && me.actionsLeft + me.restrictedActions.reduce((n, r) => n + r.left, 0) === 0;

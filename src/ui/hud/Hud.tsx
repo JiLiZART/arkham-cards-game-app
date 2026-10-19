@@ -27,6 +27,7 @@ import { IntroOverlay } from "./IntroOverlay";
 import { Showcase } from "./Showcase";
 import { StepCaption } from "./StepCaption";
 import { guideHtml } from "../guideText";
+import { optionLabel } from "../optionText";
 import { InvestigatorChoiceOverlay } from "./InvestigatorChoice";
 import { Ribbon } from "./Ribbon";
 import { SkillTestScreen } from "./SkillTestScreen";
@@ -368,6 +369,8 @@ function PopupMenu() {
   const menu = useView((s) => s.menu);
   const close = useView((s) => s.closeMenu);
   const choose = useGame((s) => s.choose);
+  const game = useGame((s) => s.game)!;
+  const locale = useGame((s) => s.locale);
   if (!menu) return null;
   return (
     <div className="popup" style={{ left: menu.x, top: menu.y }}>
@@ -379,7 +382,7 @@ function PopupMenu() {
             choose(o.id);
           }}
         >
-          {o.label}
+          {optionLabel(o, game, locale)}
         </button>
       ))}
     </div>
