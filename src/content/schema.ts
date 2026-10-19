@@ -236,6 +236,7 @@ export type Effect =
   | { op: "resign" }
   | { op: "takeFromDiscard"; filter: CardFilter }
   | { op: "searchEncounterDraw"; filter: CardFilter }
+  | { op: "preventDamage"; amount: number; kind: "damage" | "horror" | "either" } // in an attackDealsDamage window: cancel points of what the attack just dealt
   | { op: "discardEncounterUntil"; filter: CardFilter; count?: number; countIfPlayersAtLeast?: [number, number]; then: "leadDraws" | "spawnAt"; at?: string; doom?: number; shuffleDiscardFirst?: boolean }
   | { op: "dropClues"; amount: Amount }
   | { op: "spendClues"; amount: Amount }
@@ -293,6 +294,7 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
     z.object({ op: z.literal("resign") }).strict(),
     z.object({ op: z.literal("takeFromDiscard"), filter: CardFilter }).strict(),
     z.object({ op: z.literal("searchEncounterDraw"), filter: CardFilter }).strict(),
+    z.object({ op: z.literal("preventDamage"), amount: z.number(), kind: z.enum(["damage", "horror", "either"]) }).strict(),
     z.object({ op: z.literal("discardEncounterUntil"), filter: CardFilter, count: z.number().optional(), countIfPlayersAtLeast: z.tuple([z.number(), z.number()]).optional(), then: z.enum(["leadDraws", "spawnAt"]), at: z.string().optional(), doom: z.number().optional(), shuffleDiscardFirst: z.boolean().optional() }).strict(),
     z.object({ op: z.literal("dropClues"), amount: Amount }).strict(),
     z.object({ op: z.literal("spendClues"), amount: Amount }).strict(),
@@ -309,7 +311,7 @@ export const EFFECT_OPS = [
   "discardAllButOneFromHand", "removeDiscardFromGame", "drawEncounterCard", "gainActions", "cancel", "disengageAll",
   "moveTo", "searchDeck", "lookAtTop", "addUses", "surge", "drawCultistOrSearch", "spawnSetAside",
   "putSetAsideIntoPlay", "shuffleIntoEncounterDeck", "takeControl", "resolution", "resign", "checkDoom",
-  "takeFromDiscard", "searchEncounterDraw", "discardEncounterUntil", "dropClues", "spendClues", "healEnemy",
+  "takeFromDiscard", "searchEncounterDraw", "preventDamage", "discardEncounterUntil", "dropClues", "spendClues", "healEnemy",
   "returnSelfToHand", "script",
 ] as const;
 
@@ -319,7 +321,7 @@ export const TRIGGERS = [
   "enemyDefeated", "successfulInvestigate", "successfulAttack", "skillTestFailed", "skillTestSucceeded", "wouldFailSkillTest",
   "tokenRevealed", "enemyAttacks", "enemyAttacked", "enemyEvaded", "horrorPlaced", "damageTaken", "horrorTaken",
   "enterPlay", "cardPlayed", "treacheryDrawn", "enemySpawns", "phaseBegins", "turnBegins", "turnEnds", "roundEnds",
-  "mythosEnds", "enemyPhaseEnds", "enterLocation", "leaveLocation", "locationInvestigated", "assetDamaged", "enemyEngages",
+  "attackDealsDamage", "mythosEnds", "enemyPhaseEnds", "enterLocation", "leaveLocation", "locationInvestigated", "assetDamaged", "enemyEngages",
   "enemyDefeatedSelf", "wouldMoveOut", "agendaAdvances", "wouldDiscoverClues", "skillTestEnds",
 ] as const;
 export const Trigger = z.enum(TRIGGERS);

@@ -57,6 +57,14 @@ export const assignDamageHandler: Handler<"AssignDamage"> = (g, step) => {
   if (me.status !== "playing") return;
   const assigned = { ...(step.assigned ?? {}) };
   let { damage, horror } = step;
+  // what the attack's window prevented comes off once, before the first point is placed
+  const prevented = step.key ? (g.s.flags[`prevented:${step.key}`] as [number, number] | undefined) : undefined;
+  if (prevented) {
+    delete g.s.flags[`prevented:${step.key}`];
+    damage = Math.max(0, damage - prevented[0]);
+    horror = Math.max(0, horror - prevented[1]);
+    if (!damage && !horror) return;
+  }
   // pending answer: assign one point
   if (step.choice !== undefined) {
     const kind = damage > 0 ? 0 : 1;

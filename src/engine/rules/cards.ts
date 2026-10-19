@@ -136,6 +136,7 @@ export function ctxFor(data: EventData, source: InstId, you: InvId | null): EffC
     source, you, inv: data.inv ?? null, enemy: data.enemy ?? null, location: data.location ?? null, key: data.key, card: data.card ?? null,
     token: data.token, testId: data.testId, failBy: data.margin !== undefined && data.margin < 0 ? -data.margin : undefined,
     succeedBy: data.margin !== undefined && data.margin >= 0 ? data.margin : undefined, x: data.amount,
+    dealt: data.damage !== undefined || data.horror !== undefined ? [data.damage ?? 0, data.horror ?? 0] : undefined,
   };
 }
 

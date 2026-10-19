@@ -131,6 +131,8 @@ export interface EffCtx {
   /** test id the effect belongs to */
   testId?: number;
   x?: number;
+  /** [damage, horror] an attack just dealt, in its attackDealsDamage window */
+  dealt?: [number, number];
 }
 
 export interface ChoiceOption {
@@ -203,7 +205,7 @@ export type Step = { choice?: any } & (
   | { t: "Spawn"; enemy: InstId; inv: InvId | null; at?: InstId | null }
   | { t: "EnemyAttack"; enemy: InstId; inv: InvId; aoo: boolean; key: string }
   | { t: "ResolveAttack"; enemy: InstId; inv: InvId; key: string }
-  | { t: "AssignDamage"; inv: InvId; damage: number; horror: number; direct: boolean; source: InstId | null; enemy?: InstId | null; assigned?: Record<string, [number, number]> }
+  | { t: "AssignDamage"; inv: InvId; damage: number; horror: number; direct: boolean; source: InstId | null; enemy?: InstId | null; /** the attack's key: what its window prevented waits under it */ key?: string; assigned?: Record<string, [number, number]> }
   | { t: "AfterDamage"; inv: InvId; damage: number; horror: number; assets: InstId[]; enemy: InstId | null }
   | { t: "DamageEnemy"; enemy: InstId; amount: number; by: InvId | null; attack?: boolean }
   | { t: "DefeatEnemy"; enemy: InstId; by: InvId | null; fired?: boolean }
@@ -237,6 +239,9 @@ export interface EventData {
   /** the test this event belongs to */
   testId?: number;
   amount?: number;
+  /** what an attack just dealt (the attackDealsDamage window) */
+  damage?: number;
+  horror?: number;
 }
 
 export interface GameEvent {

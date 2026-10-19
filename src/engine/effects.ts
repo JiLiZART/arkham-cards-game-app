@@ -442,6 +442,31 @@ export const effHandler = (g: G, step: EffStep) => {
       emit(g, "search", `${me.name} returns ${def(g, pick).name} to their hand`, { inv: you, card: pick });
       return;
     }
+    case "preventDamage": {
+      if (!ctx.key || !ctx.dealt) return;
+      const flag = `prevented:${ctx.key}`;
+      const done = (g.s.flags[flag] as [number, number] | undefined) ?? [0, 0];
+      const left: [number, number] = [ctx.dealt[0] - done[0], ctx.dealt[1] - done[1]];
+      let kind = e.kind;
+      if (kind === "either") {
+        if (left[0] > 0 && left[1] > 0) {
+          const pick = ask<"damage" | "horror">(g, step, you, "generic", "Prevent damage or horror?", [
+            { id: "damage", label: "Prevent damage", value: "damage" },
+            { id: "horror", label: "Prevent horror", value: "horror" },
+          ], { key: "preventWhich" });
+          if (pick === undefined) return;
+          kind = pick;
+        } else kind = left[0] > 0 ? "damage" : "horror";
+      }
+      const k = kind === "damage" ? 0 : 1;
+      const n = Math.min(e.amount, left[k]);
+      if (n <= 0) return;
+      const next: [number, number] = [...done];
+      next[k] += n;
+      g.s.flags[flag] = next;
+      emit(g, "prevent", `${invName(g, you)} prevents ${n} ${kind}`, { inv: you, card: ctx.source ?? null, data: { n, kind } });
+      return;
+    }
     case "searchEncounterDraw": {
       // the encounter deck first, then its discard pile; the investigator resolving the effect draws the card
       const id = [...g.s.encounterDeck, ...g.s.encounterDiscard].find((c) => matchesFilter(g, card(g, c).code, e.filter));

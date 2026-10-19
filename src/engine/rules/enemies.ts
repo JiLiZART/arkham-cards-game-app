@@ -114,7 +114,9 @@ export const resolveAttackHandler: Handler<"ResolveAttack"> = (g, step) => {
   emit(g, "attack", `${def(g, step.enemy).name} attacks ${invName(g, step.inv)} (${damage} damage, ${horror} horror)`, { inv: step.inv, card: step.enemy, data: { damage, horror } });
   push(
     g,
-    { t: "AssignDamage", inv: step.inv, damage, horror, direct: false, source: step.enemy, enemy: step.enemy },
+    // what the attack deals can be prevented before it is assigned (Flesh Ward); the window names what was dealt
+    win("attackDealsDamage", { inv: step.inv, enemy: step.enemy, key: step.key, damage, horror }),
+    { t: "AssignDamage", inv: step.inv, damage, horror, direct: false, source: step.enemy, enemy: step.enemy, key: step.key },
     win("enemyAttacked", { inv: step.inv, enemy: step.enemy }),
   );
 };
