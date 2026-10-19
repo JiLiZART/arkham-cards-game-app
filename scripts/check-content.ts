@@ -2,6 +2,7 @@
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { loadContentFromDisk } from "../src/content/node";
 import { SoundCandidates } from "../src/content/schema";
+import { checkCampaignCards, checkCoverage } from "../src/content/coverage";
 import { checkFlows } from "../src/content/flowChecks";
 import { checkCandidates, checkLoudness, checkMoments, checkSounds } from "../src/content/soundChecks";
 import { MOMENTS } from "../src/content/soundSlots";
@@ -24,6 +25,8 @@ const fileSize = (path: string) => {
 errors.push(...checkSounds(db.sounds, fileSize, ANIMATED), ...checkMoments(db.sounds, MOMENTS));
 // every campaign flow: steps reached, scenarios, log sections and cards named exist
 errors.push(...checkFlows(db));
+// the committed coverage report is what the content gives, and every campaign's chapters match its scenarios
+errors.push(...checkCoverage(db), ...checkCampaignCards(db));
 // every sound slot has its five candidates listed (the audio itself is untracked); the slots the game can play are in SLOTS
 const candidates = SoundCandidates.safeParse(JSON.parse(readFileSync("content/sounds/candidates.json", "utf8")));
 if (candidates.success) errors.push(...checkCandidates(db.sounds, candidates.data, SLOTS.map((s) => s.id)));

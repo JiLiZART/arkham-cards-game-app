@@ -1,5 +1,5 @@
 import type {
-  Ability, CampaignDef, CampaignFlow, CardDef, ChaosToken, DeckDef, Difficulty, Effect, I18nCampaigns, InvestigatorDef, Modifier, ScenarioDef, Skill, SoundManifest, Trigger,
+  Ability, CampaignDef, CampaignFlow, CardDef, ChaosToken, ContentCoverage, DeckDef, Difficulty, Effect, I18nCampaigns, InvestigatorDef, Modifier, ScenarioDef, Skill, SoundManifest, Trigger,
 } from "../content/schema";
 
 export type InstId = string;
@@ -333,6 +333,8 @@ export interface ContentDb {
   packs: Record<string, { loaded: boolean; cards: string[] }>;
   /** generated campaigns whose scenarios the browser loads when chosen (loadCampaign): false until loaded */
   campaignsLoaded?: Record<string, boolean>;
+  /** content/coverage.json: how much of the content works (eager, so the new-game screen has it before any pack loads) */
+  coverage?: ContentCoverage;
 }
 
 export interface GameSetup {

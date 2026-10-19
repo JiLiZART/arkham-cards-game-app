@@ -4,9 +4,9 @@
 
 ## 1. Coverage
 
-- [ ] 1.1 `src/content/coverage.ts`: `packCoverage(db)` (per pack: encounter cards, player cards, how many of each work by `implemented()`, the rest by type) and `campaignCoverage(db, id)` (the cards its scenarios use: encounter sets, side decks, acts, agendas; how many work; the rest by type; the scenarios with and without a scenario script; `complete`), and `investigatorCoverage(db)` (their card and signature cards work); move `implemented()` to `src/content/` so content and UI share it; tests on fixtures and on Night of the Zealot's real numbers.
-- [ ] 1.2 Schema `ContentCoverage`; `scripts/coverage.ts` (`npm run coverage`) loads all content from disk and writes `content/coverage.json`, sorted, identical on rerun; the loader reads it eagerly; a test that a rerun is identical.
-- [ ] 1.3 `check:content` computes the report and fails when the committed file differs ("content/coverage.json is behind the content (npm run coverage)"); and checks every campaign's `cards` against its scenarios' reference cards, first agendas and first acts.
+- [x] 1.1 `src/content/coverage.ts`: `packCoverage(db)` (per pack: encounter cards, player cards, how many of each work by `implemented()`, the rest by type) and `campaignCoverage(db, id)` (the cards its scenarios use: encounter sets, side decks, acts, agendas; how many work; the rest by type; the scenarios with and without a scenario script; `complete`), and `investigatorCoverage(db)` (their card and signature cards work); move `implemented()` to `src/content/` so content and UI share it; tests on fixtures and on Night of the Zealot's real numbers.
+- [x] 1.2 Schema `ContentCoverage`; `scripts/coverage.ts` (`npm run coverage`) loads all content from disk and writes `content/coverage.json`, sorted, identical on rerun; the loader reads it eagerly; a test that a rerun is identical.
+- [x] 1.3 `check:content` computes the report and fails when the committed file differs ("content/coverage.json is behind the content (npm run coverage)"); and checks every campaign's `cards` against its scenarios' reference cards, first agendas and first acts.
 
 ## 2. One campaign shape
 

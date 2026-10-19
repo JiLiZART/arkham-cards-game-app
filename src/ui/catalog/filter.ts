@@ -1,7 +1,7 @@
 import { cardText } from "../../content/i18n";
 import type { CardDef } from "../../content/schema";
 import type { ContentDb } from "../../engine/types";
-import { implemented } from "./implemented";
+import { implemented } from "../../content/implemented";
 
 export type Tab = "investigators" | "player" | "encounter";
 

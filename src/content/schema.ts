@@ -932,3 +932,18 @@ export const I18nCampaigns = z
   })
   .strict();
 export type I18nCampaigns = z.infer<typeof I18nCampaigns>;
+
+// ---------- coverage (ADR-0012) ----------
+/** how many of some cards work in the game, and the ones that don't counted by card type */
+export const CardCount = z.object({ total: z.number().int(), works: z.number().int(), rest: z.record(z.string(), z.number().int()) }).strict();
+export type CardCount = z.infer<typeof CardCount>;
+/** content/coverage.json (npm run coverage): per pack, per campaign and per investigator, read by the new-game screen before any pack loads */
+export const ContentCoverage = z
+  .object({
+    packs: z.record(z.string(), z.object({ encounter: CardCount, player: CardCount }).strict()),
+    campaigns: z.record(z.string(), z.object({ cards: CardCount, unscripted: z.array(z.string()), complete: z.boolean() }).strict()),
+    /** whether the investigator's card and their signature cards work */
+    investigators: z.record(z.string(), z.boolean()),
+  })
+  .strict();
+export type ContentCoverage = z.infer<typeof ContentCoverage>;

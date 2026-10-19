@@ -6,7 +6,7 @@ import { Row } from "../hud/HandDetails";
 import { Icon } from "../Icon";
 import { cycleName } from "../menu/wizard";
 import { cycleOf } from "./filter";
-import { implemented } from "./implemented";
+import { implemented } from "../../content/implemented";
 import { useCatalog } from "./state";
 import { formatText } from "../hud/Hud";
 

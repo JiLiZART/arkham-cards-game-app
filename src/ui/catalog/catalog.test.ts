@@ -3,7 +3,7 @@ import { cardText } from "../../content/i18n";
 import { loadContentFromDisk } from "../../content/node";
 import type { ContentDb } from "../../engine/types";
 import { catalogCards, cyclesOfCards, emptyFilters, normalise, packsOfCards, tabOf, traitsOf, type CatalogFilters } from "./filter";
-import { implemented } from "./implemented";
+import { implemented } from "../../content/implemented";
 
 let db: ContentDb;
 beforeAll(async () => {

@@ -1,0 +1,1323 @@
+{
+ "packs": {
+  "cob": {
+   "encounter": {
+    "total": 111,
+    "works": 6,
+    "rest": {
+     "act": 8,
+     "agenda": 6,
+     "enemy": 27,
+     "location": 42,
+     "scenario": 3,
+     "treachery": 19
+    }
+   },
+   "player": {
+    "total": 8,
+    "works": 0,
+    "rest": {
+     "asset": 7,
+     "treachery": 1
+    }
+   }
+  },
+  "core": {
+   "encounter": {
+    "total": 79,
+    "works": 71,
+    "rest": {
+     "enemy": 2,
+     "location": 3,
+     "scenario": 3
+    }
+   },
+   "player": {
+    "total": 99,
+    "works": 78,
+    "rest": {
+     "asset": 11,
+     "event": 9,
+     "skill": 1
+    }
+   }
+  },
+  "core_2026": {
+   "encounter": {
+    "total": 89,
+    "works": 1,
+    "rest": {
+     "act": 7,
+     "agenda": 8,
+     "enemy": 21,
+     "location": 26,
+     "scenario": 3,
+     "treachery": 23
+    }
+   },
+   "player": {
+    "total": 72,
+    "works": 2,
+    "rest": {
+     "asset": 39,
+     "enemy": 2,
+     "event": 17,
+     "skill": 6,
+     "treachery": 6
+    }
+   }
+  },
+  "dwl": {
+   "encounter": {
+    "total": 205,
+    "works": 17,
+    "rest": {
+     "act": 24,
+     "agenda": 14,
+     "enemy": 21,
+     "location": 85,
+     "scenario": 8,
+     "treachery": 36
+    }
+   },
+   "player": {
+    "total": 123,
+    "works": 0,
+    "rest": {
+     "asset": 70,
+     "event": 32,
+     "skill": 12,
+     "treachery": 9
+    }
+   }
+  },
+  "eoe": {
+   "encounter": {
+    "total": 223,
+    "works": 5,
+    "rest": {
+     "act": 17,
+     "agenda": 15,
+     "enemy": 40,
+     "location": 74,
+     "scenario": 5,
+     "story": 36,
+     "treachery": 31
+    }
+   },
+   "player": {
+    "total": 175,
+    "works": 0,
+    "rest": {
+     "asset": 116,
+     "enemy": 1,
+     "event": 35,
+     "skill": 6,
+     "treachery": 17
+    }
+   }
+  },
+  "fhv": {
+   "encounter": {
+    "total": 272,
+    "works": 2,
+    "rest": {
+     "act": 24,
+     "agenda": 23,
+     "enemy": 55,
+     "enemy_location": 13,
+     "location": 101,
+     "scenario": 10,
+     "story": 7,
+     "treachery": 37
+    }
+   },
+   "player": {
+    "total": 161,
+    "works": 0,
+    "rest": {
+     "asset": 90,
+     "enemy": 3,
+     "event": 52,
+     "skill": 13,
+     "treachery": 3
+    }
+   }
+  },
+  "investigator": {
+   "encounter": {
+    "total": 0,
+    "works": 0,
+    "rest": {}
+   },
+   "player": {
+    "total": 272,
+    "works": 1,
+    "rest": {
+     "asset": 125,
+     "enemy": 3,
+     "event": 95,
+     "skill": 33,
+     "treachery": 15
+    }
+   }
+  },
+  "parallel": {
+   "encounter": {
+    "total": 45,
+    "works": 0,
+    "rest": {
+     "act": 10,
+     "agenda": 11,
+     "enemy": 10,
+     "location": 4,
+     "scenario": 8,
+     "story": 1,
+     "treachery": 1
+    }
+   },
+   "player": {
+    "total": 45,
+    "works": 0,
+    "rest": {
+     "asset": 25,
+     "enemy": 2,
+     "event": 8,
+     "story": 1,
+     "treachery": 9
+    }
+   }
+  },
+  "promo": {
+   "encounter": {
+    "total": 0,
+    "works": 0,
+    "rest": {}
+   },
+   "player": {
+    "total": 16,
+    "works": 0,
+    "rest": {
+     "asset": 6,
+     "enemy": 2,
+     "event": 2,
+     "skill": 2,
+     "treachery": 4
+    }
+   }
+  },
+  "ptc": {
+   "encounter": {
+    "total": 252,
+    "works": 15,
+    "rest": {
+     "act": 25,
+     "agenda": 22,
+     "enemy": 32,
+     "location": 92,
+     "scenario": 8,
+     "story": 19,
+     "treachery": 39
+    }
+   },
+   "player": {
+    "total": 125,
+    "works": 1,
+    "rest": {
+     "asset": 55,
+     "enemy": 3,
+     "event": 43,
+     "skill": 12,
+     "story": 4,
+     "treachery": 7
+    }
+   }
+  },
+  "return": {
+   "encounter": {
+    "total": 295,
+    "works": 11,
+    "rest": {
+     "act": 22,
+     "agenda": 2,
+     "enemy": 34,
+     "location": 118,
+     "scenario": 38,
+     "story": 8,
+     "treachery": 62
+    }
+   },
+   "player": {
+    "total": 73,
+    "works": 0,
+    "rest": {
+     "asset": 49,
+     "event": 15,
+     "skill": 1,
+     "treachery": 8
+    }
+   }
+  },
+  "side": {
+   "encounter": {
+    "total": 602,
+    "works": 13,
+    "rest": {
+     "act": 43,
+     "agenda": 47,
+     "asset": 9,
+     "enemy": 140,
+     "key": 2,
+     "location": 155,
+     "scenario": 12,
+     "story": 64,
+     "treachery": 117
+    }
+   },
+   "player": {
+    "total": 100,
+    "works": 0,
+    "rest": {
+     "asset": 93,
+     "event": 1,
+     "story": 3,
+     "treachery": 3
+    }
+   }
+  },
+  "tcu": {
+   "encounter": {
+    "total": 259,
+    "works": 9,
+    "rest": {
+     "act": 29,
+     "agenda": 15,
+     "enemy": 40,
+     "location": 104,
+     "scenario": 9,
+     "story": 11,
+     "treachery": 42
+    }
+   },
+   "player": {
+    "total": 108,
+    "works": 0,
+    "rest": {
+     "asset": 64,
+     "enemy": 1,
+     "event": 35,
+     "skill": 5,
+     "treachery": 3
+    }
+   }
+  },
+  "tdc": {
+   "encounter": {
+    "total": 259,
+    "works": 3,
+    "rest": {
+     "act": 24,
+     "agenda": 18,
+     "enemy": 41,
+     "location": 93,
+     "scenario": 10,
+     "story": 26,
+     "treachery": 44
+    }
+   },
+   "player": {
+    "total": 158,
+    "works": 0,
+    "rest": {
+     "asset": 101,
+     "enemy": 1,
+     "event": 30,
+     "skill": 15,
+     "treachery": 11
+    }
+   }
+  },
+  "tde": {
+   "encounter": {
+    "total": 273,
+    "works": 10,
+    "rest": {
+     "act": 28,
+     "agenda": 12,
+     "enemy": 46,
+     "location": 91,
+     "scenario": 8,
+     "story": 33,
+     "treachery": 45
+    }
+   },
+   "player": {
+    "total": 110,
+    "works": 0,
+    "rest": {
+     "asset": 59,
+     "enemy": 5,
+     "event": 23,
+     "location": 2,
+     "skill": 13,
+     "treachery": 8
+    }
+   }
+  },
+  "tfa": {
+   "encounter": {
+    "total": 240,
+    "works": 10,
+    "rest": {
+     "act": 49,
+     "agenda": 20,
+     "enemy": 27,
+     "location": 83,
+     "scenario": 9,
+     "story": 2,
+     "treachery": 40
+    }
+   },
+   "player": {
+    "total": 115,
+    "works": 1,
+    "rest": {
+     "asset": 62,
+     "enemy": 1,
+     "event": 31,
+     "skill": 10,
+     "treachery": 10
+    }
+   }
+  },
+  "tic": {
+   "encounter": {
+    "total": 237,
+    "works": 2,
+    "rest": {
+     "act": 16,
+     "agenda": 28,
+     "enemy": 40,
+     "location": 100,
+     "scenario": 8,
+     "story": 2,
+     "treachery": 41
+    }
+   },
+   "player": {
+    "total": 119,
+    "works": 0,
+    "rest": {
+     "asset": 76,
+     "enemy": 2,
+     "event": 27,
+     "skill": 10,
+     "treachery": 4
+    }
+   }
+  },
+  "tsk": {
+   "encounter": {
+    "total": 277,
+    "works": 9,
+    "rest": {
+     "act": 35,
+     "agenda": 20,
+     "asset": 1,
+     "enemy": 63,
+     "location": 92,
+     "scenario": 10,
+     "story": 10,
+     "treachery": 37
+    }
+   },
+   "player": {
+    "total": 156,
+    "works": 0,
+    "rest": {
+     "asset": 72,
+     "enemy": 3,
+     "event": 47,
+     "key": 20,
+     "skill": 9,
+     "treachery": 5
+    }
+   }
+  }
+ },
+ "campaigns": {
+  "children-of-blood": {
+   "cards": {
+    "total": 116,
+    "works": 6,
+    "rest": {
+     "act": 8,
+     "agenda": 6,
+     "asset": 6,
+     "enemy": 27,
+     "location": 42,
+     "treachery": 21
+    }
+   },
+   "unscripted": [
+    "river-of-blood",
+    "new-horizons",
+    "blood-money"
+   ],
+   "complete": false
+  },
+  "edge-of-the-earth": {
+   "cards": {
+    "total": 243,
+    "works": 12,
+    "rest": {
+     "act": 17,
+     "agenda": 15,
+     "asset": 16,
+     "enemy": 40,
+     "location": 74,
+     "story": 36,
+     "treachery": 33
+    }
+   },
+   "unscripted": [
+    "ice-and-death-part-1",
+    "ice-and-death-part-2",
+    "ice-and-death-part-3",
+    "to-the-forbidden-peaks",
+    "city-of-the-elder-things",
+    "the-heart-of-madness-part-1",
+    "the-heart-of-madness-part-2",
+    "fatal-mirage-2",
+    "fatal-mirage-3",
+    "fatal-mirage"
+   ],
+   "complete": false
+  },
+  "fortune-and-folly": {
+   "cards": {
+    "total": 71,
+    "works": 0,
+    "rest": {
+     "act": 3,
+     "agenda": 4,
+     "asset": 13,
+     "enemy": 10,
+     "key": 2,
+     "location": 17,
+     "story": 6,
+     "treachery": 16
+    }
+   },
+   "unscripted": [
+    "fortune-and-folly-part-1",
+    "fortune-and-folly-part-2"
+   ],
+   "complete": false
+  },
+  "guardians-of-the-abyss": {
+   "cards": {
+    "total": 68,
+    "works": 2,
+    "rest": {
+     "act": 6,
+     "agenda": 4,
+     "asset": 4,
+     "enemy": 14,
+     "location": 18,
+     "story": 12,
+     "treachery": 8
+    }
+   },
+   "unscripted": [
+    "the-eternal-slumber",
+    "the-nights-usurper"
+   ],
+   "complete": false
+  },
+  "night-of-the-zealot": {
+   "cards": {
+    "total": 69,
+    "works": 64,
+    "rest": {
+     "enemy": 2,
+     "location": 3
+    }
+   },
+   "unscripted": [],
+   "complete": false
+  },
+  "return-to-the-circle-undone": {
+   "cards": {
+    "total": 325,
+    "works": 34,
+    "rest": {
+     "act": 33,
+     "agenda": 14,
+     "asset": 10,
+     "enemy": 43,
+     "location": 132,
+     "story": 13,
+     "treachery": 46
+    }
+   },
+   "unscripted": [
+    "return-to-the-witching-hour",
+    "return-to-at-deaths-doorstep",
+    "return-to-the-secret-name",
+    "return-to-the-wages-of-sin",
+    "return-to-for-the-greater-good",
+    "return-to-union-and-disillusion",
+    "return-to-in-the-clutches-of-chaos",
+    "return-to-before-the-black-throne"
+   ],
+   "complete": false
+  },
+  "return-to-the-dunwich-legacy": {
+   "cards": {
+    "total": 269,
+    "works": 25,
+    "rest": {
+     "act": 25,
+     "agenda": 15,
+     "asset": 16,
+     "enemy": 30,
+     "location": 108,
+     "treachery": 50
+    }
+   },
+   "unscripted": [
+    "return-to-extracurricular-activity",
+    "return-to-the-house-always-wins",
+    "return-to-the-miskatonic-museum",
+    "return-to-essex-county-express",
+    "return-to-blood-on-the-altar",
+    "return-to-undimensioned-and-unseen",
+    "return-to-where-doom-awaits",
+    "return-to-lost-in-time-and-space"
+   ],
+   "complete": false
+  },
+  "return-to-the-forgotten-age": {
+   "cards": {
+    "total": 299,
+    "works": 34,
+    "rest": {
+     "act": 58,
+     "agenda": 17,
+     "asset": 12,
+     "enemy": 33,
+     "investigator": 1,
+     "location": 104,
+     "story": 2,
+     "treachery": 38
+    }
+   },
+   "unscripted": [
+    "return-to-the-untamed-wilds",
+    "return-to-the-doom-of-eztli",
+    "return-to-threads-of-fate",
+    "return-to-the-boundary-beyond",
+    "return-to-heart-of-the-elders-part-1",
+    "return-to-heart-of-the-elders-part-2",
+    "return-to-the-city-of-archives",
+    "return-to-shattered-aeons",
+    "return-to-turn-back-time"
+   ],
+   "complete": false
+  },
+  "return-to-the-night-of-the-zealot": {
+   "cards": {
+    "total": 106,
+    "works": 75,
+    "rest": {
+     "act": 1,
+     "agenda": 1,
+     "enemy": 3,
+     "location": 20,
+     "treachery": 6
+    }
+   },
+   "unscripted": [
+    "return-to-the-gathering",
+    "return-to-the-midnight-masks",
+    "return-to-the-devourer-below"
+   ],
+   "complete": false
+  },
+  "return-to-the-path-to-carcosa": {
+   "cards": {
+    "total": 342,
+    "works": 42,
+    "rest": {
+     "act": 30,
+     "agenda": 22,
+     "asset": 12,
+     "enemy": 42,
+     "location": 114,
+     "story": 29,
+     "treachery": 51
+    }
+   },
+   "unscripted": [
+    "return-to-curtain-call",
+    "return-to-the-last-king",
+    "return-to-a-phantom-of-truth",
+    "return-to-black-stars-rise",
+    "return-to-dim-carcosa",
+    "return-to-echoes-of-the-past",
+    "return-to-the-pallid-mask",
+    "return-to-the-unspeakable-oath"
+   ],
+   "complete": false
+  },
+  "side-all-or-nothing": {
+   "cards": {
+    "total": 52,
+    "works": 19,
+    "rest": {
+     "act": 6,
+     "agenda": 3,
+     "asset": 2,
+     "enemy": 5,
+     "location": 10,
+     "treachery": 7
+    }
+   },
+   "unscripted": [
+    "all-or-nothing"
+   ],
+   "complete": false
+  },
+  "side-bad-blood": {
+   "cards": {
+    "total": 75,
+    "works": 23,
+    "rest": {
+     "act": 25,
+     "agenda": 4,
+     "asset": 5,
+     "enemy": 5,
+     "location": 7,
+     "story": 1,
+     "treachery": 5
+    }
+   },
+   "unscripted": [
+    "bad-blood"
+   ],
+   "complete": false
+  },
+  "side-blob-that-ate-everything": {
+   "cards": {
+    "total": 33,
+    "works": 0,
+    "rest": {
+     "act": 3,
+     "agenda": 3,
+     "enemy": 6,
+     "location": 11,
+     "treachery": 10
+    }
+   },
+   "unscripted": [
+    "blob-that-ate-everything"
+   ],
+   "complete": false
+  },
+  "side-blob-that-ate-everything-else": {
+   "cards": {
+    "total": 46,
+    "works": 0,
+    "rest": {
+     "act": 3,
+     "agenda": 3,
+     "enemy": 15,
+     "location": 15,
+     "treachery": 10
+    }
+   },
+   "unscripted": [
+    "blob-that-ate-everything-else"
+   ],
+   "complete": false
+  },
+  "side-by-the-book": {
+   "cards": {
+    "total": 42,
+    "works": 37,
+    "rest": {
+     "act": 1,
+     "agenda": 2,
+     "enemy": 1,
+     "location": 1
+    }
+   },
+   "unscripted": [
+    "by-the-book"
+   ],
+   "complete": false
+  },
+  "side-carnevale-of-horrors": {
+   "cards": {
+    "total": 39,
+    "works": 2,
+    "rest": {
+     "act": 3,
+     "agenda": 1,
+     "asset": 7,
+     "enemy": 9,
+     "location": 10,
+     "treachery": 7
+    }
+   },
+   "unscripted": [
+    "carnevale-of-horrors"
+   ],
+   "complete": false
+  },
+  "side-enthralling-encore": {
+   "cards": {
+    "total": 39,
+    "works": 9,
+    "rest": {
+     "act": 5,
+     "agenda": 2,
+     "enemy": 6,
+     "location": 9,
+     "treachery": 8
+    }
+   },
+   "unscripted": [
+    "enthralling-encore"
+   ],
+   "complete": false
+  },
+  "side-film-fatale": {
+   "cards": {
+    "total": 24,
+    "works": 3,
+    "rest": {
+     "act": 1,
+     "agenda": 2,
+     "asset": 4,
+     "enemy": 2,
+     "location": 5,
+     "treachery": 7
+    }
+   },
+   "unscripted": [
+    "film-fatale"
+   ],
+   "complete": false
+  },
+  "side-in-the-labyrinths-of-lunacy": {
+   "cards": {
+    "total": 31,
+    "works": 1,
+    "rest": {
+     "act": 5,
+     "agenda": 1,
+     "asset": 3,
+     "enemy": 4,
+     "location": 12,
+     "treachery": 5
+    }
+   },
+   "unscripted": [
+    "in-the-labyrinths-of-lunacy"
+   ],
+   "complete": false
+  },
+  "side-laid-to-rest": {
+   "cards": {
+    "total": 64,
+    "works": 1,
+    "rest": {
+     "act": 3,
+     "agenda": 2,
+     "asset": 1,
+     "enemy": 14,
+     "location": 22,
+     "story": 6,
+     "treachery": 15
+    }
+   },
+   "unscripted": [
+    "laid-to-rest"
+   ],
+   "complete": false
+  },
+  "side-machinations-through-time": {
+   "cards": {
+    "total": 65,
+    "works": 0,
+    "rest": {
+     "act": 1,
+     "agenda": 2,
+     "asset": 10,
+     "enemy": 8,
+     "location": 16,
+     "story": 18,
+     "treachery": 10
+    }
+   },
+   "unscripted": [
+    "machinations-through-time"
+   ],
+   "complete": false
+  },
+  "side-murder-at-the-excelsior-hotel": {
+   "cards": {
+    "total": 36,
+    "works": 0,
+    "rest": {
+     "act": 2,
+     "agenda": 12,
+     "asset": 2,
+     "enemy": 4,
+     "location": 10,
+     "treachery": 6
+    }
+   },
+   "unscripted": [
+    "murder-at-the-excelsior-hotel"
+   ],
+   "complete": false
+  },
+  "side-read-or-die": {
+   "cards": {
+    "total": 38,
+    "works": 8,
+    "rest": {
+     "act": 3,
+     "agenda": 3,
+     "asset": 4,
+     "enemy": 4,
+     "location": 9,
+     "treachery": 7
+    }
+   },
+   "unscripted": [
+    "read-or-die"
+   ],
+   "complete": false
+  },
+  "side-red-tide-rising": {
+   "cards": {
+    "total": 62,
+    "works": 22,
+    "rest": {
+     "act": 3,
+     "agenda": 5,
+     "asset": 4,
+     "enemy": 11,
+     "location": 13,
+     "story": 1,
+     "treachery": 3
+    }
+   },
+   "unscripted": [
+    "red-tide-rising"
+   ],
+   "complete": false
+  },
+  "side-relics-of-the-past": {
+   "cards": {
+    "total": 63,
+    "works": 21,
+    "rest": {
+     "act": 5,
+     "agenda": 4,
+     "asset": 4,
+     "enemy": 7,
+     "location": 10,
+     "treachery": 12
+    }
+   },
+   "unscripted": [
+    "relics-of-the-past"
+   ],
+   "complete": false
+  },
+  "side-the-midwinter-gala": {
+   "cards": {
+    "total": 73,
+    "works": 0,
+    "rest": {
+     "act": 2,
+     "agenda": 3,
+     "asset": 23,
+     "enemy": 13,
+     "location": 8,
+     "story": 10,
+     "treachery": 14
+    }
+   },
+   "unscripted": [
+    "the-midwinter-gala"
+   ],
+   "complete": false
+  },
+  "side-war-of-the-outer-gods": {
+   "cards": {
+    "total": 57,
+    "works": 0,
+    "rest": {
+     "act": 3,
+     "agenda": 12,
+     "asset": 5,
+     "enemy": 17,
+     "location": 11,
+     "treachery": 9
+    }
+   },
+   "unscripted": [
+    "war-of-the-outer-gods"
+   ],
+   "complete": false
+  },
+  "the-circle-undone": {
+   "cards": {
+    "total": 285,
+    "works": 37,
+    "rest": {
+     "act": 28,
+     "agenda": 14,
+     "asset": 8,
+     "enemy": 39,
+     "location": 107,
+     "story": 11,
+     "treachery": 41
+    }
+   },
+   "unscripted": [
+    "the-witching-hour",
+    "at-deaths-doorstep",
+    "the-secret-name",
+    "the-wages-of-sin",
+    "for-the-greater-good",
+    "union-and-disillusion",
+    "in-the-clutches-of-chaos",
+    "before-the-black-throne"
+   ],
+   "complete": false
+  },
+  "the-dream-quest": {
+   "cards": {
+    "total": 163,
+    "works": 12,
+    "rest": {
+     "act": 17,
+     "agenda": 4,
+     "asset": 4,
+     "enemy": 29,
+     "location": 50,
+     "story": 20,
+     "treachery": 27
+    }
+   },
+   "unscripted": [
+    "beyond-the-gates-of-sleep",
+    "the-search-for-kadath",
+    "dark-side-of-the-moon",
+    "where-gods-dwell"
+   ],
+   "complete": false
+  },
+  "the-drowned-city": {
+   "cards": {
+    "total": 286,
+    "works": 35,
+    "rest": {
+     "act": 24,
+     "agenda": 16,
+     "asset": 12,
+     "enemy": 41,
+     "location": 87,
+     "story": 26,
+     "treachery": 45
+    }
+   },
+   "unscripted": [
+    "one-last-job",
+    "the-western-wall",
+    "the-drowned-quarter",
+    "the-apiary",
+    "the-grand-vault",
+    "court-of-the-ancients",
+    "obsidian-canyons",
+    "the-doom-of-arkham-part-1",
+    "the-doom-of-arkham-part-2"
+   ],
+   "complete": false
+  },
+  "the-dunwich-legacy": {
+   "cards": {
+    "total": 227,
+    "works": 32,
+    "rest": {
+     "act": 24,
+     "agenda": 14,
+     "asset": 14,
+     "enemy": 21,
+     "location": 85,
+     "treachery": 37
+    }
+   },
+   "unscripted": [
+    "extracurricular-activity",
+    "the-house-always-wins",
+    "the-miskatonic-museum",
+    "essex-county-express",
+    "blood-on-the-altar",
+    "undimensioned-and-unseen",
+    "where-doom-awaits",
+    "lost-in-time-and-space"
+   ],
+   "complete": false
+  },
+  "the-feast-of-hemlock-vale": {
+   "cards": {
+    "total": 310,
+    "works": 28,
+    "rest": {
+     "act": 22,
+     "agenda": 21,
+     "asset": 24,
+     "enemy": 56,
+     "enemy_location": 13,
+     "investigator": 1,
+     "location": 101,
+     "story": 7,
+     "treachery": 37
+    }
+   },
+   "unscripted": [
+    "written-in-rock",
+    "hemlock-house",
+    "the-silent-heath",
+    "the-lost-sister",
+    "the-thing-in-the-depths",
+    "the-twisted-hollow",
+    "the-longest-night",
+    "dawn-of-the-final-day",
+    "the-final-evening",
+    "fate-of-the-vale"
+   ],
+   "complete": false
+  },
+  "the-forgotten-age": {
+   "cards": {
+    "total": 276,
+    "works": 42,
+    "rest": {
+     "act": 49,
+     "agenda": 20,
+     "asset": 10,
+     "enemy": 27,
+     "investigator": 1,
+     "location": 83,
+     "story": 2,
+     "treachery": 42
+    }
+   },
+   "unscripted": [
+    "wilds",
+    "eztli",
+    "threads-of-fate",
+    "the-boundary-beyond",
+    "heart-of-the-elders-part-1",
+    "heart-of-the-elders-part-2",
+    "the-city-of-archives",
+    "the-depths-of-yoth",
+    "shattered-aeons",
+    "turn-back-time"
+   ],
+   "complete": false
+  },
+  "the-innsmouth-conspiracy": {
+   "cards": {
+    "total": 276,
+    "works": 34,
+    "rest": {
+     "act": 16,
+     "agenda": 28,
+     "asset": 15,
+     "enemy": 40,
+     "location": 100,
+     "story": 2,
+     "treachery": 41
+    }
+   },
+   "unscripted": [
+    "the-pit-of-despair",
+    "the-vanishing-of-elina-harper",
+    "in-too-deep",
+    "devil-reef",
+    "horror-in-high-gear",
+    "a-light-in-the-fog",
+    "the-lair-of-dagon",
+    "into-the-maelstrom"
+   ],
+   "complete": false
+  },
+  "the-path-to-carcosa": {
+   "cards": {
+    "total": 293,
+    "works": 47,
+    "rest": {
+     "act": 25,
+     "agenda": 22,
+     "asset": 10,
+     "enemy": 34,
+     "location": 92,
+     "story": 23,
+     "treachery": 40
+    }
+   },
+   "unscripted": [
+    "curtain-call",
+    "the-last-king",
+    "a-phantom-of-truth",
+    "black-stars-rise",
+    "dim-carcosa",
+    "echoes-of-the-past",
+    "the-pallid-mask",
+    "the-unspeakable-oath"
+   ],
+   "complete": false
+  },
+  "the-scarlet-keys": {
+   "cards": {
+    "total": 333,
+    "works": 40,
+    "rest": {
+     "act": 35,
+     "agenda": 20,
+     "asset": 14,
+     "enemy": 64,
+     "key": 20,
+     "location": 92,
+     "story": 10,
+     "treachery": 38
+    }
+   },
+   "unscripted": [
+    "riddles-and-rain",
+    "marrakesh",
+    "buenos-aires",
+    "istanbul",
+    "havana",
+    "anchorage",
+    "alexandria",
+    "kuala-lampur",
+    "bermuda-triangle",
+    "tunguska"
+   ],
+   "complete": false
+  },
+  "the-web-of-dreams": {
+   "cards": {
+    "total": 126,
+    "works": 14,
+    "rest": {
+     "act": 11,
+     "agenda": 8,
+     "asset": 4,
+     "enemy": 16,
+     "location": 41,
+     "story": 13,
+     "treachery": 19
+    }
+   },
+   "unscripted": [
+    "waking-nightmare",
+    "a-thousand-shapes-of-horror",
+    "point-of-no-return",
+    "weaver-of-the-cosmos"
+   ],
+   "complete": false
+  }
+ },
+ "investigators": {
+  "10001": false,
+  "10004": false,
+  "10009": false,
+  "10012": false,
+  "10015": false,
+  "11001": false,
+  "11004": false,
+  "11007": false,
+  "11008": false,
+  "11011": false,
+  "11014": false,
+  "11017": false,
+  "12001": false,
+  "12004": false,
+  "12007": false,
+  "12010": false,
+  "12013": false,
+  "60101": false,
+  "60151": false,
+  "60201": false,
+  "60251": false,
+  "60301": false,
+  "60351": false,
+  "60401": false,
+  "60451": false,
+  "60501": false,
+  "60551": false,
+  "89001": false,
+  "98010": false,
+  "99001": false,
+  "01001": true,
+  "01002": true,
+  "01003": true,
+  "01004": true,
+  "01005": true,
+  "02001": false,
+  "02002": false,
+  "02003": false,
+  "02004": false,
+  "02005": false,
+  "03001": false,
+  "03002": false,
+  "03003": false,
+  "03004": false,
+  "03005": false,
+  "03006": false,
+  "04001": false,
+  "04002": false,
+  "04003": false,
+  "04004": false,
+  "04005": false,
+  "05001": false,
+  "05002": false,
+  "05003": false,
+  "05004": false,
+  "05005": false,
+  "05006": false,
+  "06001": false,
+  "06002": false,
+  "06003": false,
+  "06004": false,
+  "06005": false,
+  "07001": false,
+  "07002": false,
+  "07003": false,
+  "07004": false,
+  "07005": false,
+  "08001": false,
+  "08004": false,
+  "08007": false,
+  "08010": false,
+  "08016": false,
+  "09001": false,
+  "09004": false,
+  "09008": false,
+  "09011": false,
+  "09015": false,
+  "09018": false
+ }
+}

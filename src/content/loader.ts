@@ -1,7 +1,7 @@
 import type { ZodError } from "zod";
 import type { CardScript, ContentDb } from "../engine/types";
 import {
-  CampaignDef, CampaignFlow, CardDef, CardOverride, DeckDef, Effect, EMPTY_SOUNDS, I18nCampaigns, I18nCards, I18nUi, InvestigatorDef, ScenarioDef, SoundManifest, type Ability,
+  CampaignDef, CampaignFlow, CardDef, CardOverride, ContentCoverage, DeckDef, Effect, EMPTY_SOUNDS, I18nCampaigns, I18nCards, I18nUi, InvestigatorDef, ScenarioDef, SoundManifest, type Ability,
 } from "./schema";
 
 export interface ContentError {
@@ -153,6 +153,7 @@ export function buildContent(files: Record<string, unknown>, scriptFiles: Record
   parseInto(CAMPAIGN_FILE, CampaignDef, (v) => (db.campaigns[v.id] = v));
   parseInto(SCENARIO_FILE, ScenarioDef, (v) => (db.scenarios[v.id] = v));
   errors.push(...addCampaignFiles(db, Object.fromEntries(entries.filter(([f]) => FLOW_FILE.test(f)))));
+  parseInto(/\/content\/coverage\.json$/, ContentCoverage, (v) => (db.coverage = v));
   parseInto(/\/sounds\/sounds\.json$/, SoundManifest, (v, file) => {
     db.sounds = v;
     // a bed names a scenario that exists ("bed:default" plays for the scenarios without one of their own)
