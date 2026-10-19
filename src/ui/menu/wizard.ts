@@ -45,6 +45,12 @@ export function campaignOrder(db: ContentDb): CampaignDef[] {
 /** whether a campaign is complete, as the content's coverage reports it (a campaign without a report counts as complete when it is not generated) */
 export const campaignComplete = (db: ContentDb, id: string): boolean => db.coverage?.campaigns[id]?.complete ?? !db.campaigns[id]?.generated;
 
+/** how far a campaign is, for its note: the cards its scenarios use that work, out of how many, and how many scenarios have no scenario script */
+export function campaignProgress(db: ContentDb, id: string): { works: number; total: number; unscripted: number } | undefined {
+  const c = db.coverage?.campaigns[id];
+  return c && { works: c.cards.works, total: c.cards.total, unscripted: c.unscripted.length };
+}
+
 /** the filters over the campaign list: what kind, how complete, how long, and a name to look for */
 export interface CampaignFilter {
   kind: "all" | "campaign" | "return" | "side";

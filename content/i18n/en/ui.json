@@ -414,6 +414,8 @@
   "phone.rotate": "Turn your phone sideways",
   "phone.rotateWhy": "The table is laid out for a phone held in landscape. Your game is waiting just as you left it.",
   "wizard.generated": "Generated from the campaign guide: its interludes, choices and log are played, but cards without written rules show their text and have no effect.",
+  "wizard.progress": "{works} of {total} cards its scenarios use work.",
+  "wizard.unscripted": "{n} of {total} scenarios have no scenario script yet.",
   "wizard.loading": "Loading the cards…",
   "card.keywords": "Keywords",
   "kw.hunter.name": "Hunter",

@@ -4,7 +4,7 @@ import { campaignName } from "../../content/i18n";
 import { db } from "../../engine/testkit";
 import { saveCustomDeck } from "../decks";
 import type { Storage } from "../store";
-import { back, canContinue, cardsOfPicks, sortPicker, SORTS, deckProblems, cycleName, picksReady, cyclesOf, decksFor, investigatorInfo, pickerList, campaignOrder, campaignComplete, filterCampaigns, tileName, initialWizard, NO_CAMPAIGN_FILTER, type CampaignFilter, invalidDecksFor, next, setCampaign, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type WizardState } from "./wizard";
+import { back, canContinue, cardsOfPicks, sortPicker, SORTS, deckProblems, cycleName, picksReady, cyclesOf, decksFor, investigatorInfo, pickerList, campaignOrder, campaignComplete, campaignProgress, filterCampaigns, tileName, initialWizard, NO_CAMPAIGN_FILTER, type CampaignFilter, invalidDecksFor, next, setCampaign, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type WizardState } from "./wizard";
 
 const ROLAND = "01001";
 const DAISY = "01002";
@@ -176,6 +176,13 @@ describe("filtering the campaign list", () => {
     expect(campaignComplete(db, "night-of-the-zealot")).toBe(zealot.cards.works === zealot.cards.total && !zealot.unscripted.length);
     expect(campaignComplete(db, "the-dunwich-legacy")).toBe(false);
     expect(ids({ rules: "partial" })).toContain("the-dunwich-legacy");
+  });
+
+  it("says how far a campaign is: the cards that work, and the scenarios without a script", () => {
+    const dunwich = db.coverage!.campaigns["the-dunwich-legacy"];
+    expect(campaignProgress(db, "the-dunwich-legacy")).toEqual({ works: dunwich.cards.works, total: dunwich.cards.total, unscripted: 8 });
+    expect(campaignProgress(db, "night-of-the-zealot")?.unscripted).toBe(0);
+    expect(campaignProgress({ ...db, coverage: undefined }, "the-dunwich-legacy")).toBeUndefined();
   });
 
   it("a generated campaign whose coverage is full is complete, and a hand-written one with cards left is not", () => {

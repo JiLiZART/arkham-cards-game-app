@@ -6,7 +6,7 @@ import { formatText } from "../hud/Hud";
 import { Modal } from "../hud/Modals";
 import { cardImage } from "../images";
 import { blurb } from "./blurb";
-import { tileName } from "./wizard";
+import { campaignComplete, campaignProgress, tileName } from "./wizard";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
 
@@ -66,6 +66,7 @@ export function CampaignSheet({ campaign, onClose }: { campaign: CampaignDef; on
   const quote = /^[“"«„]/.test(lead);
   // the chapters: the guide's order with the interludes in it, from the campaign's file
   const chapters = campaign.cards;
+  const progress = campaignProgress(db, campaign.id);
   let n = 0;
   return (
     <aside className="wz-camp-sheet" aria-label={tileName(db, campaign, locale)}>
@@ -78,7 +79,18 @@ export function CampaignSheet({ campaign, onClose }: { campaign: CampaignDef; on
           ×
         </button>
       </div>
-      {campaign.generated && <small className="wz-generated">{tr("wizard.generated")}</small>}
+      {!campaignComplete(db, campaign.id) && (
+        <small className="wz-generated">
+          {tr("wizard.generated")}
+          {progress && (
+            <>
+              {" "}
+              {tr("wizard.progress", { works: progress.works, total: progress.total })}
+              {progress.unscripted > 0 && ` ${tr("wizard.unscripted", { n: progress.unscripted, total: campaign.scenarios.length })}`}
+            </>
+          )}
+        </small>
+      )}
       {lead && <p className={`wz-sheet-text ${quote ? "wz-quote" : ""}`}>{lead}</p>}
       {rest && (
         <>

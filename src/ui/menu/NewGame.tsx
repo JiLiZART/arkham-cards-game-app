@@ -15,7 +15,7 @@ import { deckTabs, deleteCustomDeck, editDeck, emptyDeck, problemText, renameCus
 import { safeStorage } from "../store";
 import { DeckEditArea } from "./DeckEditArea";
 import { CampaignSheet, scenarioCount } from "./CampaignSheet";
-import { back, canContinue, cardsOfPicks, cycleName, picksReady, cyclesOf, deckProblems, initialWizard, investigatorInfo, next, pickerList, setCampaign, filterCampaigns, tileName, NO_CAMPAIGN_FILTER, type CampaignFilter, sortPicker, SORTS, type SortBy, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type PickerFilter, type WizardState } from "./wizard";
+import { back, canContinue, cardsOfPicks, cycleName, picksReady, cyclesOf, deckProblems, initialWizard, investigatorInfo, next, pickerList, setCampaign, filterCampaigns, tileName, NO_CAMPAIGN_FILTER, type CampaignFilter, sortPicker, SORTS, type SortBy, setDeck, setDifficulty, STEPS, campaignComplete, toggleInvestigator, toSetup, type PickerFilter, type WizardState } from "./wizard";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
 const DIFFICULTIES: Difficulty[] = ["easy", "standard", "hard", "expert"];
@@ -79,7 +79,7 @@ function CampaignStep({ s, set }: { s: WizardState; set: (w: WizardState) => voi
                 <b>{tileName(db, c, locale)}</b>
                 <small>
                   {scenarioCount(c.scenarios.length)}
-                  {c.generated && <span title={tr("wizard.generated")}> ◐</span>}
+                  {!campaignComplete(db, c.id) && <span title={tr("wizard.generated")}> ◐</span>}
                 </small>
               </button>
             );
