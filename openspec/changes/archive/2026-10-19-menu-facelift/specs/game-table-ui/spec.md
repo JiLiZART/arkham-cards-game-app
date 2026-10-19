@@ -12,7 +12,7 @@ The title screen SHALL show the core rulebook's cover painting, without its prin
 - **THEN** its steps sit on the parchment art
 
 ### Requirement: Settings in the menu
-The title screen SHALL list Settings as a menu item after How to play, styled like the other items; no settings gear SHALL remain in the corner.
+The title screen SHALL list Settings as a menu item after How to play and Cards, styled like the other items; no settings gear SHALL remain in the corner.
 
 #### Scenario: Open settings
 - **WHEN** the player taps Settings on the title screen

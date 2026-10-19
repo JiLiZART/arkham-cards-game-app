@@ -11,12 +11,14 @@ All game content SHALL be stored as files under a single `content/` directory, o
 #### Scenario: Add a new campaign
 - **WHEN** a developer adds a new campaign folder with valid campaign, scenario and card files
 - **THEN** the campaign appears in the campaign selection without any engine code change (except optional per-card effect scripts)
+
 ### Requirement: Card record format
 Each card SHALL be identified by its ArkhamDB code and SHALL carry the fields needed by the rules: type, faction(s), cost, skill icons, traits, slots, health/sanity, uses, XP level, deck limit, text, and type-specific stats (enemy fight/health/evade/damage/horror/keywords, location shroud/clues/connections, act/agenda thresholds, treachery keywords), plus image reference and encounter set.
 
 #### Scenario: Enemy record
 - **WHEN** the Ghoul Priest record is loaded
 - **THEN** it exposes fight, health (per investigator), evade, damage, horror, keywords Hunter and Retaliate, and victory 2
+
 ### Requirement: Data-driven card effects
 Card behavior SHALL be declared in data using a fixed vocabulary of triggers (e.g. on play, on reveal, after successful investigate, forced at end of round), conditions and effects (e.g. deal damage, discover clue, gain resources, draw cards, modify skill, spawn enemy, place doom, add/remove token). Cards whose behavior cannot be expressed this way SHALL be able to reference a code script keyed by card code. Unknown effect names MUST fail validation.
 
@@ -27,12 +29,14 @@ Card behavior SHALL be declared in data using a fixed vocabulary of triggers (e.
 #### Scenario: Scripted card
 - **WHEN** a card declares `script: true` and a script file for its code exists
 - **THEN** the engine runs that script for the card's ability
+
 ### Requirement: Content validation
 Content SHALL be validated against a schema at load time and by a standalone check command. Validation MUST report file path and field for every error, and MUST detect references to missing card codes, encounter sets, locations or scenarios.
 
 #### Scenario: Missing card reference
 - **WHEN** a deck lists card code `01999` that does not exist
 - **THEN** validation fails naming the deck file and the missing code
+
 ### Requirement: Import from public card databases
 A command SHALL build card data for a given cycle, or every cycle, from the local ArkhamDB JSON snapshot in `inspired/arkhamdb-json-data` (packs, encounters, cycles), and write/merge it into `content/packs/<cycle>/cards.generated.json`, preserving hand-written effect definitions and overrides already present in `cards.json`. Fetching from ArkhamDB's API or the arkham.build cache SHALL remain available as an alternative source for one pack.
 
@@ -43,6 +47,7 @@ A command SHALL build card data for a given cycle, or every cycle, from the loca
 #### Scenario: Import every cycle
 - **WHEN** the import runs with `--all`
 - **THEN** every cycle in the snapshot gets its pack folder, and a cycle whose data fails the schema is reported with the card codes at fault
+
 ### Requirement: Localization
 User-visible card text, names and UI strings SHALL resolve through locale files with English as the default and fallback. Adding a locale MUST only require adding translation files; the import command SHALL produce a locale's card translations for every cycle from the snapshot's `translations/<locale>` folder, and campaign text (scenario intros, resolutions, encounter-set names) from ArkhamCards' data.
 
@@ -63,6 +68,7 @@ Russian card text SHALL be layered field by field: imported translations, then t
 #### Scenario: Russian text for a later cycle
 - **WHEN** the locale is Russian and Zoey Samaras' card is looked up
 - **THEN** her name, traits and text are the snapshot's Russian ones
+
 ### Requirement: Card images
 Each card SHALL resolve to a front (and back, if double-sided) image URL derived from its code and the current locale. When an image fails to load, the UI MUST render a text-based card face from the card data instead.
 
@@ -83,6 +89,7 @@ With the Russian locale, a card SHALL use its Russian image when one was importe
 #### Scenario: Switch language
 - **WHEN** the player switches from Russian to English during a game
 - **THEN** the hand, the strip, the map and the act/agenda panel show the English scans
+
 ### Requirement: Reused translations
 Translations SHALL be imported from existing community sources into our locale files, not written by hand:
 - from the ArkhamCards data, campaign names, scenario names, encounter set names, campaign log section titles, campaign narrative text, and UI labels that match a `ru.po` entry;
@@ -101,6 +108,7 @@ The import SHALL be a repeatable script that only writes files under `content/i1
 #### Scenario: Re-run keeps manual fixes
 - **WHEN** a translator has hand-edited a string and the import script runs again
 - **THEN** the hand-edited string is unchanged
+
 ### Requirement: Russian card import
 A local import tool SHALL build the Russian images and print texts from `inspired/CARDS_ru` (preferred) and the card images embedded in the Russian print PDFs in `inspired/Arkham_Horror_LCG` (fallback), every PDF tagged with the cycle it prints so that OCR matching is scoped to that cycle's cards. It SHALL:
 - identify each image's card code by OCR of its name and text, checked against the card's type and printed stats, within the PDF's cycle;
@@ -130,6 +138,7 @@ The import is reproducible: rerunning it on the same inputs and overrides produc
 #### Scenario: A Dunwich PDF
 - **WHEN** the import reads "02_01_Мескатонский_музей.pdf"
 - **THEN** its images are matched only against the Dunwich Legacy cycle's cards, and the Miskatonic Museum's cards get Russian images under their codes
+
 ### Requirement: Every cycle's cards as data
 The content SHALL hold every cycle of the card game that the local ArkhamDB snapshot (`inspired/arkhamdb-json-data`) describes, one pack folder per cycle under `content/packs/<cycle>/`, generated by the import command and never edited by hand (hand-written behaviour stays in each pack's `cards.json`). The game SHALL load the core pack and the packs the loaded scenarios need before the first screen, and the other packs on demand (deck editing, card lookup), so the first load does not grow with the number of packs. `check:content` SHALL validate every pack and report, per cycle, the card count and the Russian text coverage.
 
@@ -144,3 +153,18 @@ The content SHALL hold every cycle of the card game that the local ArkhamDB snap
 #### Scenario: Coverage report
 - **WHEN** `check:content` runs
 - **THEN** it prints, for each cycle, the number of cards and how many have Russian text, and fails on any schema or reference error in any pack
+
+### Requirement: Campaigns imported from the campaign guides
+A command SHALL generate `content/campaigns/<id>/campaign.json` and its `scenarios/*.json` from ArkhamCards' campaign guides (`inspired/ArkhamCards/assets/generated/all_campaigns.txt`) for every official campaign whose scenarios' encounter sets and cards exist in the snapshot; fan-made campaigns and scenarios with unknown sets are skipped and listed. Per scenario it SHALL take the scenario reference card, the encounter sets, the acts and agendas of the scenario's sets in stage order, the locations put into play and the starting location (from the location layout, or from the setup text by card name), the cards set aside (by name), the layout, the chaos-token modifiers per difficulty (read from the scenario reference card; a value it cannot read becomes −2 and is listed), and the resolutions with the campaign log records and experience they grant. Location connections are not in any source: neighbouring locations in the guide's layout are connected, and a scenario without a layout connects every location in play. Per campaign it SHALL take the chaos bag of each difficulty (tokens the engine does not know, such as frost, are left out and listed), the scenario order, the log labels and the packs its cards come from. Generated files carry `"generated": true`; a hand-written campaign with the same id is never overwritten. Reruns give identical files.
+
+#### Scenario: Extracurricular Activity
+- **WHEN** the import runs
+- **THEN** `extracurricular-activity.json` names the reference card 02041, the Extracurricular Activity, Sorcery, The Beyond, Bishop's Thralls, Whippoorwills, Ancient Evils, Locked Doors and Agents of Yog-Sothoth sets, puts the six campus locations into play, starts at the Miskatonic Quad, and sets aside the Dormitories and the Alchemy Labs
+
+#### Scenario: Fan-made campaigns skipped
+- **WHEN** the import runs
+- **THEN** no campaign is written for Alice in Wonderland, and the summary lists it as skipped
+
+#### Scenario: Night of the Zealot kept
+- **WHEN** the import runs
+- **THEN** `content/campaigns/night-of-the-zealot/` is unchanged
