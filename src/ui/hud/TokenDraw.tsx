@@ -165,6 +165,8 @@ export function DrawStage({ e, byHand }: { e: GameEvent; byHand: boolean }) {
                 aria-label={tr("draw.circle")}
               >
                 <span className="disc-flip">
+                  {/* the token's cardboard edge, a few px behind its face: it shows when the token tilts */}
+                  <span className="disc-edge" />
                   <span className="disc-face disc-back" />
                   {picked === k && (
                     <span className="disc-face disc-front">

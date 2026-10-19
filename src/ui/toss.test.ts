@@ -56,13 +56,35 @@ describe("tokenPath", () => {
     expect(path(5, 1).samples).not.toEqual(path(5, 2).samples);
   });
 
-  it("is sampled into 10 to 14 keyframes with increasing offsets, spins as it flies and settles flat", () => {
+  it("is sampled into 16 to 32 keyframes with increasing offsets, spins as it flies and settles flat", () => {
     for (let seed = 0; seed < 20; seed++) {
       const p = path(seed, seed);
-      expect(p.samples.length).toBeGreaterThanOrEqual(10);
-      expect(p.samples.length).toBeLessThanOrEqual(14);
+      expect(p.samples.length).toBeGreaterThanOrEqual(16);
+      expect(p.samples.length).toBeLessThanOrEqual(32);
       for (let i = 1; i < p.samples.length; i++) expect(p.samples[i].offset).toBeGreaterThan(p.samples[i - 1].offset);
       expect(Math.abs(p.samples[0].spin - p.samples[p.samples.length - 1].spin)).toBeGreaterThan(90);
+    }
+  });
+
+  it("ends upright: its spin a whole number of turns, so the revealed token isn't turned", () => {
+    for (let seed = 0; seed < 20; seed++) expect(Math.abs(path(seed, seed).samples.at(-1)!.spin % 360)).toBeLessThan(1e-9);
+  });
+
+  it("moves like a thrown token: it keeps going in the air, slides on the table to a stop, then wobbles flat", () => {
+    for (let seed = 0; seed < 20; seed++) {
+      const p = path(seed, seed).samples;
+      // the last part is on the table: no height, still sliding toward the rest point, then still
+      const onTable = p.filter((s) => s.offset > 0.75);
+      expect(onTable.every((s) => s.z === 0)).toBe(true);
+      // the wobble: tilts of both signs that die away before the end
+      const tilts = onTable.map((s) => s.tilt).filter((t) => t !== 0);
+      expect(tilts.some((t) => t > 0) && tilts.some((t) => t < 0)).toBe(true);
+      expect(Math.abs(onTable.at(-2)!.tilt)).toBeLessThan(Math.max(...tilts.map(Math.abs)));
+      // in the air its sideways speed doesn't die away the way an ease would: the first flight covers real ground
+      const first = p.findIndex((s, i) => i > 0 && s.z === 0);
+      const d = (a: { x: number; y: number }, b: { x: number; y: number }) => Math.hypot(a.x - b.x, a.y - b.y);
+      const total = d(p[0], p.at(-1)!);
+      if (total > 80) expect(d(p[0], p[first])).toBeGreaterThan(total * 0.25);
     }
   });
 

@@ -361,7 +361,10 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 .st-bag { position: absolute; }
 .st-bag-icon { display: block; filter: drop-shadow(0 10px 20px #000); }
 .token-circle { position: absolute; padding: 0; border: 0; border-radius: 50%; background: none; perspective: 500px; cursor: pointer; transition: opacity 0.3s, transform 0.2s; }
-.token-circle:hover:not(.chosen) { transform: scale(1.15); }
+.token-circle { transform-style: preserve-3d; }
+.token-circle:hover:not(.chosen) { transform: translateY(-4px); }
+.disc-edge { position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(#a49672, #7d7052); transform: translateZ(-5px); box-shadow: 0 0 0 1px #6a5f45; }
+.token-circle.chosen .disc-edge { opacity: 0; transition: opacity 0.2s; }
 .token-circle.auto { cursor: default; pointer-events: none; }
 .disc-flip { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform 0.55s ease-in-out; }
 .token-circle.chosen .disc-flip { transform: rotateY(180deg); }
