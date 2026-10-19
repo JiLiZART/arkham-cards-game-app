@@ -8,9 +8,9 @@ import { addCampaignFiles, addCardText, addPack, buildContent, packOfCode, TEXT_
  * patterns below (Vite wants them literal).
  */
 const PACK_FILE = /^\/content\/packs\/([^/]+)\/cards(\.generated)?\.json$/;
-// the Russian image import's manifest and review overrides and the icon manifest are tooling data, not game content
+// the Russian image import's manifest and review overrides the icon manifest and the sound candidates are tooling data, not game content
 const files = import.meta.glob(
-  ["/content/**/*.json", "!/content/i18n/*/images*.json", "!/content/icons/*.json", "!/content/packs/*/cards*.json", "!/content/i18n/*/packs/*.json", "!/content/campaigns-generated/*/scenarios/*.json", "!/content/i18n/*/campaign-texts/*.json"],
+  ["/content/**/*.json", "!/content/i18n/*/images*.json", "!/content/icons/*.json", "!/content/sounds/candidates.json", "!/content/packs/*/cards*.json", "!/content/i18n/*/packs/*.json", "!/content/campaigns-generated/*/scenarios/*.json", "!/content/i18n/*/campaign-texts/*.json"],
   { eager: true, import: "default" },
 ) as Record<string, unknown>;
 const eagerPacks = import.meta.glob("/content/packs/core/cards*.json", { eager: true, import: "default" }) as Record<string, unknown>;
