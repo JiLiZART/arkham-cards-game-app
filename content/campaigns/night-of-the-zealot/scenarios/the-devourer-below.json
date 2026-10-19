@@ -39,6 +39,18 @@
       "cultist": { "modifier": -2, "onReveal": [{ "op": "placeDoom", "amount": 1, "on": "nearestEnemy" }] },
       "tablet": { "modifier": -3, "condition": { "enemyAtYourLocation": { "trait": "Monster" } }, "onReveal": [{ "op": "takeDamage", "amount": 1 }] },
       "elderThing": { "modifier": -5, "revealAnother": "ifAncientOneInPlay" }
+    },
+    "hard": {
+      "skull": { "modifier": -3, "onFail": [{ "op": "searchEncounterDraw", "filter": { "type": "enemy", "trait": "Monster" } }] },
+      "cultist": { "modifier": -4, "onReveal": [{ "op": "placeDoom", "amount": 2, "on": "nearestEnemy" }] },
+      "tablet": { "modifier": -5, "condition": { "enemyAtYourLocation": { "trait": "Monster" } }, "onReveal": [{ "op": "takeDamage", "amount": 1 }, { "op": "takeHorror", "amount": 1 }] },
+      "elderThing": { "modifier": -7, "revealAnother": "ifAncientOneInPlay" }
+    },
+    "expert": {
+      "skull": { "modifier": -3, "onFail": [{ "op": "searchEncounterDraw", "filter": { "type": "enemy", "trait": "Monster" } }] },
+      "cultist": { "modifier": -4, "onReveal": [{ "op": "placeDoom", "amount": 2, "on": "nearestEnemy" }] },
+      "tablet": { "modifier": -5, "condition": { "enemyAtYourLocation": { "trait": "Monster" } }, "onReveal": [{ "op": "takeDamage", "amount": 1 }, { "op": "takeHorror", "amount": 1 }] },
+      "elderThing": { "modifier": -7, "revealAnother": "ifAncientOneInPlay" }
     }
   },
   "resolutions": {

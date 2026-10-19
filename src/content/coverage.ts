@@ -1,16 +1,17 @@
 import type { ContentDb } from "../engine/types";
-import { implemented } from "./implemented";
+import { implemented, tokensReal } from "./implemented";
 import type { CardCount, ContentCoverage } from "./schema";
 import type { ContentError } from "./loader";
 
-const count = (db: ContentDb, codes: string[]): CardCount => {
+/** how many of some cards work; `works` decides a card (a scenario's own reference card is judged by that scenario's tokens) */
+const count = (db: ContentDb, codes: string[], works: (code: string) => boolean = (code) => implemented(db, code)): CardCount => {
   const rest: Record<string, number> = {};
-  let works = 0;
+  let n = 0;
   for (const code of codes) {
-    if (implemented(db, code)) works++;
+    if (works(code)) n++;
     else rest[db.cards[code].type] = (rest[db.cards[code].type] ?? 0) + 1;
   }
-  return { total: codes.length, works, rest: Object.fromEntries(Object.entries(rest).sort(([a], [b]) => a.localeCompare(b))) };
+  return { total: codes.length, works: n, rest: Object.fromEntries(Object.entries(rest).sort(([a], [b]) => a.localeCompare(b))) };
 };
 
 /** per card pack (the deluxe box, each mythos pack, a Return-to box...): its encounter cards and its player cards (weaknesses included), how many of each work */
@@ -36,8 +37,8 @@ function usedBy(db: ContentDb, s: ContentDb["scenarios"][string]): string[] {
 /** a scenario: the cards it uses and how many work, whether its tokens are real (its reference card works), whether it has a script */
 export function scenarioCoverage(db: ContentDb, id: string): ContentCoverage["scenarios"][string] {
   const s = db.scenarios[id];
-  const cards = count(db, usedBy(db, s));
-  const tokens = implemented(db, s.card);
+  const tokens = tokensReal(db, id);
+  const cards = count(db, usedBy(db, s), (code) => (code === s.card ? tokens : implemented(db, code)));
   const scripted = !!db.scripts[id];
   return { campaign: Object.values(db.campaigns).find((c) => c.scenarios.includes(id))?.id ?? "", cards, tokens, scripted, complete: cards.works === cards.total && tokens && scripted };
 }
@@ -45,7 +46,11 @@ export function scenarioCoverage(db: ContentDb, id: string): ContentCoverage["sc
 /** the cards a campaign's scenarios use, how many work, which scenarios have no script; complete when all its scenarios are */
 export function campaignCoverage(db: ContentDb, id: string): ContentCoverage["campaigns"][string] {
   const scenarios = db.campaigns[id].scenarios.flatMap((s) => db.scenarios[s] ?? []);
-  const cards = count(db, [...new Set(scenarios.flatMap((s) => usedBy(db, s)))].sort());
+  // a reference card is real for the campaign when it is real for each of the campaign's scenarios that plays with it
+  const cards = count(db, [...new Set(scenarios.flatMap((s) => usedBy(db, s)))].sort(), (code) => {
+    const mine = scenarios.filter((s) => s.card === code);
+    return mine.length ? mine.every((s) => tokensReal(db, s.id)) : implemented(db, code);
+  });
   const unscripted = scenarios.filter((s) => !db.scripts[s.id]).map((s) => s.id);
   return { cards, unscripted, complete: scenarios.every((s) => scenarioCoverage(db, s.id).complete) };
 }

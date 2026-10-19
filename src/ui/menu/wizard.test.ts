@@ -171,6 +171,11 @@ describe("filtering the campaign list", () => {
     expect(ids({ rules: "complete" }).length + ids({ rules: "partial" }).length).toBe(ids().length);
   });
 
+  it("Night of the Zealot is the one campaign the Complete filter shows", () => {
+    expect(ids({ rules: "complete" })).toEqual(["night-of-the-zealot"]);
+    expect(campaignComplete(db, "night-of-the-zealot")).toBe(true);
+  });
+
   it("the mark follows the numbers: Night of the Zealot until its cards all work, Dunwich is partial", () => {
     const zealot = db.coverage!.campaigns["night-of-the-zealot"];
     expect(campaignComplete(db, "night-of-the-zealot")).toBe(zealot.cards.works === zealot.cards.total && !zealot.unscripted.length);

@@ -43,6 +43,16 @@
       "skull": { "modifier": "X", "x": "highestDoomOnCultist" },
       "cultist": { "modifier": -2, "onReveal": [{ "op": "placeDoom", "amount": 1, "on": "nearestCultist" }] },
       "tablet": { "modifier": -3, "onFail": [{ "op": "dropClues", "amount": 1 }] }
+    },
+    "hard": {
+      "skull": { "modifier": "X", "x": "totalDoomInPlay" },
+      "cultist": { "modifier": -2, "onReveal": [{ "op": "placeDoom", "amount": 1, "on": "eachCultist" }], "revealAnother": { "if": { "not": { "enemyInPlay": { "trait": "Cultist" } } } } },
+      "tablet": { "modifier": -4, "onFail": [{ "op": "dropClues", "amount": "all" }] }
+    },
+    "expert": {
+      "skull": { "modifier": "X", "x": "totalDoomInPlay" },
+      "cultist": { "modifier": -2, "onReveal": [{ "op": "placeDoom", "amount": 1, "on": "eachCultist" }], "revealAnother": { "if": { "not": { "enemyInPlay": { "trait": "Cultist" } } } } },
+      "tablet": { "modifier": -4, "onFail": [{ "op": "dropClues", "amount": "all" }] }
     }
   },
   "resolutions": {

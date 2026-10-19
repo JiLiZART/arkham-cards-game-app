@@ -2210,13 +2210,11 @@
   "night-of-the-zealot": {
    "cards": {
     "total": 72,
-    "works": 69,
-    "rest": {
-     "scenario": 3
-    }
+    "works": 72,
+    "rest": {}
    },
    "unscripted": [],
-   "complete": false
+   "complete": true
   },
   "return-to-the-circle-undone": {
    "cards": {
@@ -4992,14 +4990,12 @@
    "campaign": "night-of-the-zealot",
    "cards": {
     "total": 27,
-    "works": 26,
-    "rest": {
-     "scenario": 1
-    }
+    "works": 27,
+    "rest": {}
    },
-   "tokens": false,
+   "tokens": true,
    "scripted": true,
-   "complete": false
+   "complete": true
   },
   "the-doom-of-arkham-part-1": {
    "campaign": "the-drowned-city",
@@ -5103,14 +5099,12 @@
    "campaign": "night-of-the-zealot",
    "cards": {
     "total": 26,
-    "works": 25,
-    "rest": {
-     "scenario": 1
-    }
+    "works": 26,
+    "rest": {}
    },
-   "tokens": false,
+   "tokens": true,
    "scripted": true,
-   "complete": false
+   "complete": true
   },
   "the-grand-vault": {
    "campaign": "the-drowned-city",
@@ -5269,14 +5263,12 @@
    "campaign": "night-of-the-zealot",
    "cards": {
     "total": 31,
-    "works": 30,
-    "rest": {
-     "scenario": 1
-    }
+    "works": 31,
+    "rest": {}
    },
-   "tokens": false,
+   "tokens": true,
    "scripted": true,
-   "complete": false
+   "complete": true
   },
   "the-midwinter-gala": {
    "campaign": "side-the-midwinter-gala",

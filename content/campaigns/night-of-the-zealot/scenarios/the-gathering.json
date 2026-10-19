@@ -24,6 +24,16 @@
       "skull": { "modifier": "X", "x": "ghoulsAtYourLocation" },
       "cultist": { "modifier": -1, "onFail": [{ "op": "takeHorror", "amount": 1 }] },
       "tablet": { "modifier": -2, "condition": { "enemyAtYourLocation": { "trait": "Ghoul" } }, "onReveal": [{ "op": "takeDamage", "amount": 1 }] }
+    },
+    "hard": {
+      "skull": { "modifier": -2, "onFail": [{ "op": "searchEncounterDraw", "filter": { "type": "enemy", "trait": "Ghoul" } }] },
+      "cultist": { "modifier": 0, "revealAnother": true, "onFail": [{ "op": "takeHorror", "amount": 2 }] },
+      "tablet": { "modifier": -4, "condition": { "enemyAtYourLocation": { "trait": "Ghoul" } }, "onReveal": [{ "op": "takeDamage", "amount": 1 }, { "op": "takeHorror", "amount": 1 }] }
+    },
+    "expert": {
+      "skull": { "modifier": -2, "onFail": [{ "op": "searchEncounterDraw", "filter": { "type": "enemy", "trait": "Ghoul" } }] },
+      "cultist": { "modifier": 0, "revealAnother": true, "onFail": [{ "op": "takeHorror", "amount": 2 }] },
+      "tablet": { "modifier": -4, "condition": { "enemyAtYourLocation": { "trait": "Ghoul" } }, "onReveal": [{ "op": "takeDamage", "amount": 1 }, { "op": "takeHorror", "amount": 1 }] }
     }
   },
   "resolutions": {

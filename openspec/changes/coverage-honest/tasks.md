@@ -18,8 +18,8 @@
 
 ## 4. Night of the Zealot's Hard and Expert tokens
 
-- [ ] 4.1 Hard and Expert token effects for The Gathering, The Midnight Masks and The Devourer Below from the backs of 01104, 01120 and 01142; engine tests for the spec's scenarios (The Gathering skull on Hard draws a Ghoul from the discard pile; The Midnight Masks cultist on Expert with no Cultist reveals another); a test that each hand-written scenario defines all four difficulties.
-- [ ] 4.2 `npm run coverage`: Night of the Zealot, its scenarios and its reference cards complete; the picker's Complete filter shows it (wizard tests updated to the new numbers).
+- [x] 4.1 Hard and Expert token effects for The Gathering, The Midnight Masks and The Devourer Below from the backs of 01104, 01120 and 01142; engine tests for the spec's scenarios (The Gathering skull on Hard draws a Ghoul from the discard pile; The Midnight Masks cultist on Expert with no Cultist reveals another); a test that each hand-written scenario defines all four difficulties.
+- [x] 4.2 `npm run coverage`: Night of the Zealot, its scenarios and its reference cards complete; the picker's Complete filter shows it (wizard tests updated to the new numbers).
 
 ## 5. The program
 

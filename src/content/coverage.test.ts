@@ -115,6 +115,19 @@ describe("scenario coverage", () => {
     expect(campaignCoverage(db, "camp").cards.total).toBe(5);
   });
 
+  it("a scenario sharing its reference card with a Return-to scenario is judged by its own tokens", () => {
+    const db = fixture(true);
+    db.cards.e2.text = "";
+    db.cards.c1.text = "";
+    db.scenarios.rt = { id: "rt", card: "r1", encounterSets: [], sideDecks: {}, acts: [], agendas: [], tokens: { easy: {}, standard: {}, hard: {}, expert: {} } } as never;
+    db.campaigns.ret = { id: "ret", scenarios: ["rt"], generated: true } as never;
+    expect(scenarioCoverage(db, "s")).toMatchObject({ tokens: true, complete: true });
+    expect(campaignCoverage(db, "camp").complete).toBe(true);
+    expect(scenarioCoverage(db, "rt")).toMatchObject({ tokens: false, complete: false });
+    expect(campaignCoverage(db, "ret").complete).toBe(false);
+    expect(packCoverage(db).p.encounter.rest).toEqual({ scenario: 1 }); // the shared card is not real for rt
+  });
+
   it("a campaign is complete when all its scenarios are", () => {
     const db = fixture(true);
     db.cards.e2.text = "";
@@ -147,6 +160,11 @@ describe("the real content", () => {
     expect(Object.keys(db.coverage!.scenarios).length).toBe(Object.values(db.campaigns).flatMap((c) => c.scenarios).length);
     expect(db.coverage!.scenarios["the-gathering"].campaign).toBe("night-of-the-zealot");
     expect(db.coverage!.scenarios["extracurricular-activity"]).toMatchObject({ campaign: "the-dunwich-legacy", tokens: false, scripted: false, complete: false });
+  });
+
+  it("Night of the Zealot is complete: its scenarios scripted, every card working, its tokens real on all four difficulties", () => {
+    expect(campaignCoverage(db, "night-of-the-zealot")).toMatchObject({ complete: true, unscripted: [] });
+    for (const id of ["the-gathering", "the-midnight-masks", "the-devourer-below"]) expect(scenarioCoverage(db, id), id).toMatchObject({ tokens: true, scripted: true, complete: true });
   });
 
   it("Night of the Zealot has its three scenarios scripted and a few cards left", () => {

@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import type { ContentDb } from "../engine/types";
-import { implemented } from "./implemented";
+import { implemented, tokensReal } from "./implemented";
 import { loadContentFromDisk } from "./node";
 
 /** a one-card content: the card's text and whatever behaviour fields the test sets */
@@ -46,7 +46,7 @@ const scenario = (front: string, back: string | undefined, tokens: object): Cont
     scripts: {},
   }) as unknown as ContentDb;
 const FRONT = "Easy / Standard\n[skull] -X. X is the number of [[Ghoul]] enemies at your location.\n[cultist] -1. If you fail, take 1 horror.\n[tablet] -2. If there is a [[Ghoul]] enemy at your location, take 1 damage.";
-const BACK = "Hard / Expert\n[skull] -2. If you fail, after this skill test, search the encounter deck for a [[Ghoul]] enemy, and draw it.\n[cultist] Reveal another token. If you fail, take 2 horror.\n[tablet] -4. If there is a [[Ghoul]] enemy at your location, take 1 damage and 1 horror.";
+const BACK = "Hard / Expert\n[skull] -2. If you fail, after this skill test, search the encounter deck for a [[Ghoul]] enemy, and draw it. Shuffle the encounter deck.\n[cultist] Reveal another token. If you fail, take 2 horror.\n[tablet] -4. If there is a [[Ghoul]] enemy at your location, take 1 damage and 1 horror.";
 const easyStd = { skull: { modifier: "X", x: "ghoulsAtYourLocation" }, cultist: { modifier: -1, onFail: [{}] }, tablet: { modifier: -2, condition: {}, onReveal: [{}] } };
 const hardExp = { skull: { modifier: -2, onFail: [{}] }, cultist: { modifier: 0, revealAnother: true, onFail: [{}] }, tablet: { modifier: -4, condition: {}, onReveal: [{}] } };
 const all = { easy: easyStd, standard: easyStd, hard: hardExp, expert: hardExp };
@@ -79,6 +79,14 @@ describe("a scenario reference card works when its token lines are real", () => 
     expect(implemented(scenario("Perform the setup as in the Campaign Guide.", undefined, { easy: {}, standard: {}, hard: {}, expert: {} }), "r")).toBe(false);
   });
 
+  it("a reference card two scenarios share works only when it is real for both; each scenario is judged by its own tokens", () => {
+    const d = scenario(FRONT, BACK, all);
+    d.scenarios.t = { id: "t", card: "r", tokens: { easy: {}, standard: {}, hard: {}, expert: {} } } as never; // a Return-to scenario, tokens not written yet
+    expect(implemented(d, "r")).toBe(false);
+    expect(tokensReal(d, "s")).toBe(true);
+    expect(tokensReal(d, "t")).toBe(false);
+  });
+
   it("a reference card no scenario uses does not work", () => {
     const d = scenario(FRONT, BACK, all);
     d.scenarios = {};
@@ -96,9 +104,13 @@ describe("on the real content", () => {
     for (const code of ["01116", "01161", "01152", "01153", "01154"]) expect(implemented(real, code), code).toBe(true);
   });
 
-  it("Night of the Zealot's reference cards are not yet real on Hard and Expert, a generated one is a placeholder", () => {
-    expect(implemented(real, "01104")).toBe(false);
-    expect(implemented(real, "02041")).toBe(false); // Extracurricular Activity
+  it("Night of the Zealot's scenarios are real on all four difficulties; the card they share with Return to is not, until Return to's are", () => {
+    for (const id of ["the-gathering", "the-midnight-masks", "the-devourer-below"]) expect(tokensReal(real, id), id).toBe(true);
+    expect(implemented(real, "01104")).toBe(false); // return-to-the-gathering plays with it and has no tokens yet
+  });
+
+  it("a generated scenario's tokens are placeholders", () => {
+    expect(tokensReal(real, "extracurricular-activity")).toBe(false);
   });
 
   it("a card with a Forced line and no behaviour does not work", () => {

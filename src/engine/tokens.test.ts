@@ -108,3 +108,51 @@ describe("revealAnother with a condition", () => {
     expect(TokenEffect.safeParse({ modifier: -1, revealAnother: { if: { enemyInPlay: { trait: "Cultist" } } } }).success).toBe(true);
   });
 });
+
+describe("Night of the Zealot on Hard and Expert, from the backs of the reference cards", () => {
+  it("every hand-written scenario defines all four difficulties", () => {
+    for (const id of ["the-gathering", "the-midnight-masks", "the-devourer-below"])
+      for (const d of ["easy", "standard", "hard", "expert"] as const) expect(Object.keys(db.scenarios[id].tokens[d] ?? {}), `${id} ${d}`).not.toEqual([]);
+  });
+
+  it("The Gathering, Hard: a failed skull draws a Ghoul from the discard pile", () => {
+    let r = skipMulligans(start("the-gathering", [ROLAND], 1, { difficulty: "hard", chaosBag: ["skull"] as never }));
+    let ghoul = "";
+    r = mutate(r, (g) => {
+      noGhouls(g);
+      ghoul = createCard(g, GHOUL, "limbo");
+      moveCard(g, ghoul, "encounterDiscard");
+    });
+    r = commitDone(pick(r, "Investigate Study"));
+    expect(r.state.log.some((e) => e.type === "token" && /skull/.test(e.text))).toBe(true);
+    const g = gOf(r);
+    expect(card(g, ghoul).zone).toBe("enemy");
+    expect(card(g, ghoul).engagedWith).toBe(ROLAND);
+  });
+
+  it("The Gathering, Expert: a cultist reveals another token, and a failed test costs 2 horror", () => {
+    const runs = Array.from({ length: 30 }, (_, k) => {
+      let r = skipMulligans(start("the-gathering", [ROLAND], k + 1, { difficulty: "expert", chaosBag: ["cultist", "-4"] as never }));
+      r = commitDone(pick(r, "Investigate Study"));
+      const tokens = r.state.log.filter((e) => e.type === "token");
+      return { first: /cultist/.test(tokens[0].text), count: tokens.length, horror: r.state.invs[ROLAND].horror };
+    });
+    expect(runs.some((x) => x.first)).toBe(true);
+    for (const x of runs) {
+      expect(x.count).toBe(x.first ? 2 : 1);
+      if (x.first) expect(x.horror).toBe(2); // the -4 that follows fails the test
+    }
+  });
+
+  it("The Midnight Masks, Expert: a cultist with no Cultist enemy in play places no doom and reveals another token", () => {
+    const runs = Array.from({ length: 30 }, (_, k) => {
+      let r = skipMulligans(start("the-midnight-masks", [ROLAND], k + 1, { difficulty: "expert", chaosBag: ["cultist", "0"] as never }));
+      expect(Object.values(r.state.cards).filter((c) => c.zone === "enemy" && db.cards[c.code].traits.includes("Cultist"))).toEqual([]);
+      r = commitDone(pick(r, /^Investigate/));
+      const tokens = r.state.log.filter((e) => e.type === "token");
+      return { first: /cultist/.test(tokens[0].text), count: tokens.length };
+    });
+    expect(runs.some((x) => x.first)).toBe(true);
+    for (const x of runs) expect(x.count).toBe(x.first ? 2 : 1);
+  });
+});

@@ -21,11 +21,15 @@ const SYMBOLS: Record<string, string> = { skull: "skull", cultist: "cultist", ta
 /** what a printed token line needs from the scenario's token entry, read off its sentences */
 function tokenNeeds(rest: string): ("x" | "onFail" | "revealAnother" | "effect")[] {
   const needs = new Set<"x" | "onFail" | "revealAnother" | "effect">();
+  let failing = false; // the sentences after "If you fail, …" that don't start a new condition go on being the failure effect
   for (const sentence of rest.split(/\.\s+|\.$/).map((p) => p.trim()).filter(Boolean)) {
     if (/^[-+]?\d+$/.test(sentence)) continue; // the modifier
     if (/^-X$/.test(sentence)) needs.add("x");
     else if (/^X is /.test(sentence)) continue;
-    else if (/^If you fail/i.test(sentence)) needs.add("onFail");
+    else if (/^If you fail/i.test(sentence)) {
+      needs.add("onFail");
+      failing = true;
+    } else if (failing && !/^(If |Reveal )/.test(sentence) && !/reveal another token/i.test(sentence)) continue;
     else if (/reveal another token/i.test(sentence)) needs.add("revealAnother");
     else needs.add("effect");
   }
@@ -33,12 +37,13 @@ function tokenNeeds(rest: string): ("x" | "onFail" | "revealAnother" | "effect")
 }
 
 /**
- * A scenario's reference card works when every symbol token line on its front (Easy, Standard) and back (Hard, Expert) is
- * covered by that difficulty's token entry, and all four difficulties are written (ADR-0013).
+ * A scenario's token effects are real when every symbol token line on its reference card's front (Easy, Standard) and back
+ * (Hard, Expert) is covered by that difficulty's token entry, and all four difficulties are written (ADR-0013).
  */
-function referenceCardWorks(db: ContentDb, c: CardDef): boolean {
-  const scenario = Object.values(db.scenarios).find((s) => s.card === c.code);
-  if (!scenario) return false;
+export function tokensReal(db: ContentDb, scenarioId: string): boolean {
+  const scenario = db.scenarios[scenarioId];
+  const c = scenario && db.cards[scenario.card];
+  if (!c) return false;
   if (!(["easy", "standard", "hard", "expert"] as const).every((d) => Object.keys(scenario.tokens[d] ?? {}).length)) return false;
   for (const side of ["front", "back"] as const) {
     const text = side === "front" ? c.text : c.backText ?? "";
@@ -56,6 +61,12 @@ function referenceCardWorks(db: ContentDb, c: CardDef): boolean {
     }
   }
   return true;
+}
+
+/** a reference card works when it is real for every scenario that plays with it (a Return-to scenario plays with its base scenario's card) */
+function referenceCardWorks(db: ContentDb, c: CardDef): boolean {
+  const users = Object.values(db.scenarios).filter((s) => s.card === c.code);
+  return users.length > 0 && users.every((s) => tokensReal(db, s.id));
 }
 
 /**
