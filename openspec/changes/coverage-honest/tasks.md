@@ -28,5 +28,5 @@
 
 ## 6. Verification
 
-- [ ] 6.1 Browser: Night of the Zealot's tile has no partly-implemented mark and is in the Complete filter, Dunwich's sidebar numbers follow the new report, in English and Russian; 0 console errors.
-- [ ] 6.2 `npm test`, lint, typecheck, build, `check:content` by exit code; `openspec validate coverage-honest --type change --strict`.
+- [x] 6.1 Browser: Night of the Zealot's tile has no partly-implemented mark and is in the Complete filter, Dunwich's sidebar numbers follow the new report, in English and Russian; 0 console errors.
+- [x] 6.2 `npm test`, lint, typecheck, build, `check:content` by exit code; `openspec validate coverage-honest --type change --strict`.
