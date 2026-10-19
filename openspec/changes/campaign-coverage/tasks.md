@@ -24,5 +24,5 @@
 
 ## 5. Verification
 
-- [ ] 5.1 Browser: the picker's Complete filter shows the campaigns coverage reports complete, Dunwich's sidebar says how far it is, the investigator marks follow coverage, in English and Russian; 0 console errors.
-- [ ] 5.2 `npm test`, lint, typecheck, build, `check:content` by exit code; `openspec validate campaign-coverage --type change --strict`.
+- [x] 5.1 Browser: the picker's Complete filter shows the campaigns coverage reports complete, Dunwich's sidebar says how far it is, the investigator marks follow coverage, in English and Russian; 0 console errors.
+- [x] 5.2 `npm test`, lint, typecheck, build, `check:content` by exit code; `openspec validate campaign-coverage --type change --strict`.

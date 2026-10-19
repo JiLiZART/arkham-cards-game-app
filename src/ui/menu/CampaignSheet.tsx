@@ -81,7 +81,7 @@ export function CampaignSheet({ campaign, onClose }: { campaign: CampaignDef; on
       </div>
       {!campaignComplete(db, campaign.id) && (
         <small className="wz-generated">
-          {tr("wizard.generated")}
+          {campaign.generated && tr("wizard.generated")}
           {progress && (
             <>
               {" "}
