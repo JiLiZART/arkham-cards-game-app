@@ -308,7 +308,7 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 .play-strip { transition: translate 0.2s ease-out, opacity 0.2s ease-out; }
 .play-strip.aside, .play-strip.aside > * { pointer-events: none; }
 .play-strip.aside { translate: 0 130%; opacity: 0; }
-.game.phone .play-strip.column.aside { translate: 130% 0; }
+.game.phone .play-strip.column.aside { translate: 130% 0; pointer-events: none; }
 @media (prefers-reduced-motion: reduce) { .play-strip { transition: none; } }
 .strip-slot { position: relative; width: var(--sw); height: calc(var(--sw) * 1.4); display: grid; place-items: center; }
 .strip-slot.exhausted { width: calc(var(--sw) * 1.4); }
@@ -601,8 +601,8 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 .st-subject-card img, .st-subject-card .text-face { width: 100%; height: 100%; object-fit: cover; display: block; }
 .st-subject-portrait { padding: 12px; border-radius: 50%; background: var(--panel); box-shadow: 0 10px 30px #000d, 0 0 0 2px var(--gold); }
 /* centred on the screen, the same axis as the calculation strip (the subject and the placed cards sit either side) */
-/* the subject follows the window's height: 240x336 from 1080 px up, smaller and higher below it, so it clears the compact play strip */
-.game { --st-h: clamp(200px, calc(100vh - 614px), 336px); --st-top: clamp(96px, calc((100vh - 900px) * 0.44 + 96px), 140px); }
+/* the subject follows the window's height: 240x336 from 1080 px up, smaller and higher below it, so it ends above the compact play strip's two stacked ability buttons (top = 100vh - 495px) */
+.game { --st-top: clamp(96px, calc((100vh - 900px) * 0.44 + 96px), 140px); --st-h: clamp(200px, calc(100vh - 554px - var(--st-top)), 336px); }
 .st-middle { position: absolute; left: 50%; translate: -50% 0; top: var(--st-top); display: flex; flex-direction: column; align-items: center; gap: 12px; }
 .st-center { position: relative; width: calc(var(--st-h) * 5 / 7); height: var(--st-h); margin-top: 8px; }
 /* calling the test off: beside the line, small, out of the way of the card */

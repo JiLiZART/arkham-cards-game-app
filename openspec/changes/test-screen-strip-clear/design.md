@@ -41,7 +41,7 @@ In-force ADRs: 0001 to 0013. ADR-0004 (viewing is view state, deciding is game s
 
 3. **Compact is the strip's minimum card width.** In `compact` the width passed as `--sw` is `STRIP_MIN_W` (84 px) instead of `stripCardWidth`'s result. The strip stays at `bottom: 300px`; its top, with one option button, is about 158 px above that.
 
-4. **The subject follows the window's height.** In `styles.css` (desktop rules only): `.st-center` height `clamp(200px, calc(100vh - 614px), 336px)` with the width at 5/7 of it; `.st-middle` top `clamp(96px, calc((100vh - 900px) * 0.44 + 96px), 140px)`. At 1080 and above: 140 px and 240×336, as now. At 900: 96 px and 204×286, the card's lower edge at 442 px, level with the compact strip's buttons. The placed cards (`.st-placed`) take the same top. *Why:* CSS alone, read by the one layout mode (ADR-0005); the numbers come from the compact strip's height, so they move together. *Alternative:* shrinking the strip further: rejected, 84 px is the strip's readable minimum.
+4. **The subject follows the window's height.** In `styles.css` (desktop rules only): `.st-middle` top `--st-top: clamp(96px, calc((100vh - 900px) * 0.44 + 96px), 140px)`; `.st-center` height `--st-h: clamp(200px, calc(100vh - 554px - var(--st-top)), 336px)`, width 5/7 of it; `.st-placed` top is `--st-top + 56px`. The numbers come from the compact strip: its cards 118 px tall at 300 px from the bottom, and above them two stacked ability buttons (61 px) with a 6 px gap and a 10 px margin, so the buttons start at `100vh - 495px`, and the subject's lower edge (`--st-top` + 58.6 for the line, gap and margin, + `--st-h`) is kept at or above that. At 1080 and above: 140 px and 240×336, as now; at 900: 96 px and 179×250. *Why:* CSS alone, read by the one layout mode (ADR-0005). Found in the browser: Physical Training offers two abilities (+1 willpower, +1 combat), so one button's height was not enough. *Alternative:* shrinking the strip further: rejected, 84 px is the strip's readable minimum.
 
 5. **The phone steps aside by the same rule.** Its right-edge column (`.play-strip.column`) already sits clear of the centre; the `aside` class applies to it too, so the column doesn't sit over the token area on a narrow screen.
 
@@ -50,7 +50,7 @@ In-force ADRs: 0001 to 0013. ADR-0004 (viewing is view state, deciding is game s
 ## Risks / Trade-offs
 
 - [An ability offered during the draw in a future change would bring the strip back over the discs] → the rule then shows it compact, which is the intent; the browser check at 1600×900 covers the draw with the strip aside, and a test asserts `aside` when `byCard` is empty.
-- [Below about 814 px tall a compact strip can still meet the subject (the subject stops at 200 px tall)] → only while an ability is offered in the commit window; the desktop layout starts above 500 px tall, so this is a narrow band, recorded here; the discs are never affected (the strip is aside during the draw).
+- [Below about 850 px tall the subject stops shrinking at 200 px and a compact strip with two buttons can still meet it] → only while an ability is offered in the commit window; recorded here; the discs are never affected (the strip is aside during the draw). A card offering three or more abilities would also need more room.
 - [The player may not notice the strip went away] → it slides down rather than vanishing, and returns the same way when the screen closes.
 
 ## Migration Plan
