@@ -3,7 +3,16 @@
   "order": [
     "read-or-die"
   ],
-  "interludes": {},
+  "interludes": {
+    "fortune-and-folly-checkpoint": {
+      "kind": "interlude",
+      "name": "Checkpoint: The Plan",
+      "steps": [
+        "fortune-and-folly-checkpoint:checkpoint",
+        "fortune-and-folly-checkpoint:ask_continue_now"
+      ]
+    }
+  },
   "resolutions": {
     "read-or-die": {
       "none": [],
@@ -24,6 +33,399 @@
     }
   },
   "steps": {
+    "fortune-and-folly-checkpoint:checkpoint": {
+      "kind": "story",
+      "text": "With the stakeout completed, the time has come to plan out the actual heist. There are only a few days until Saturday night at Défis de la Roulette, the busiest night of the week and the perfect time to get lost in a crowd. The plan for the heist is simple, at least in theory. With the casino staff and security occupied by the Saturday crowd, you will first enter the public areas, just as you did last time. There, you will try to avoid notice as much as you can while completing any needed tasks. Once that's done, you will slip into the restricted areas in the back of the casino that are reserved for staff. This area holds the vault itself, where the Wellspring of Fortune is located. According to Isamara, the vault door is not only secured by solid steel, but also held shut by some kind of energy. If that wasn't enough, it is constantly monitored by guards, patrols, and the cultists of the Fortune's Chosen. It will take a carefully executed plan, and some improvisation, to succeed against all odds. With only a short time to gather supplies and practice the approach, there may not be enough time to rest and recuperate from your first tangle with the casino.",
+      "bullets": []
+    },
+    "fortune-and-folly-checkpoint:plan_2": {
+      "kind": "story",
+      "text": "With a deep breath, you make your final preparations...",
+      "bullets": []
+    },
+    "fortune-and-folly-checkpoint:ask_completed_tasks": {
+      "kind": "checklist",
+      "text": "Completed Tasks",
+      "min": 0,
+      "choices": [
+        {
+          "id": "found_a_vent",
+          "text": "Found a vent",
+          "effects": [
+            {
+              "do": "record",
+              "key": "fof_found_a_vent",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "impersonated_a_high_roller",
+          "text": "Impersonated a high roller",
+          "effects": [
+            {
+              "do": "record",
+              "key": "fof_impersonated_a_high_roller",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "convinced_isamara",
+          "text": "Convinced Isamara to participate in the heist",
+          "effects": [
+            {
+              "do": "record",
+              "key": "fof_convinced_isamara",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "obtained_an_uniform",
+          "text": "Obtained an employee uniform",
+          "effects": [
+            {
+              "do": "record",
+              "key": "fof_obtained_an_uniform",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "stole_keys",
+          "text": "Stole Abarran's keys",
+          "effects": [
+            {
+              "do": "record",
+              "key": "fof_stole_keys",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "cleaned_out_the_house",
+          "text": "Cleaned out the house",
+          "effects": [
+            {
+              "do": "record",
+              "key": "fof_cleaned_out_the_house",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "fortune-and-folly-checkpoint:remember_need_time_to_rest:text": {
+      "kind": "story",
+      "text": "Remember that \"the investigators need time to rest.\"",
+      "bullets": []
+    },
+    "fortune-and-folly-checkpoint:ask_damage_and_horror": {
+      "kind": "chooseOne",
+      "text": "Check the total amount of damage and horror on each investigator.",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Does any investigator have 6 or more combined damage and horror?",
+          "effects": [
+            {
+              "do": "record",
+              "key": "fof_need_time_to_rest",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": [
+            "fortune-and-folly-checkpoint:remember_need_time_to_rest:text"
+          ]
+        }
+      ]
+    },
+    "fortune-and-folly-checkpoint:tell_clue_choices:text": {
+      "kind": "story",
+      "text": "For every 1 [per_investigator] clues on The Stakeout story card at the conclusion of part I, the investigators, as a group, choose one of the following options:",
+      "bullets": []
+    },
+    "fortune-and-folly-checkpoint:gather_stashed_assets:text": {
+      "kind": "story",
+      "text": "Gather the facedown assets from beneath Casino Floor that are part of the \"stash for the heist.\" Each investigator takes the stashed assets that they own and sets them aside.",
+      "bullets": []
+    },
+    "fortune-and-folly-checkpoint:do_not_remove_locations:text": {
+      "kind": "story",
+      "text": "Do not remove any locations from play. (All tokens on these locations are removed and all cards at these locations, except The Wellspring of Fortune, Isamara Ordoñez, and Abarran Arrigorriagakoa, are discarded as normal.)",
+      "bullets": []
+    },
+    "fortune-and-folly-checkpoint:reset_decks:text": {
+      "kind": "story",
+      "text": "Reset each investigator's deck and the encounter deck.",
+      "bullets": []
+    },
+    "fortune-and-folly-checkpoint:record_completed_tasks": {
+      "kind": "checklist",
+      "text": "In your Campaign Log, record each line of text that you were instructed to remember during this scenario. <i>(You will have to remember these for Part II, as well.)</i>",
+      "min": 0,
+      "choices": [
+        {
+          "id": "found_a_vent",
+          "text": "Found a vent",
+          "effects": [
+            {
+              "do": "record",
+              "key": "fof_found_a_vent",
+              "section": "campaign_notes",
+              "value": true
+            },
+            {
+              "do": "record",
+              "key": "fof_found_a_vent",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "impersonated_a_high_roller",
+          "text": "Impersonated a high roller",
+          "effects": [
+            {
+              "do": "record",
+              "key": "fof_impersonated_a_high_roller",
+              "section": "campaign_notes",
+              "value": true
+            },
+            {
+              "do": "record",
+              "key": "fof_impersonated_a_high_roller",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "convinced_isamara",
+          "text": "Convinced Isamara to participate in the heist",
+          "effects": [
+            {
+              "do": "record",
+              "key": "fof_convinced_isamara",
+              "section": "campaign_notes",
+              "value": true
+            },
+            {
+              "do": "record",
+              "key": "fof_convinced_isamara",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "obtained_an_uniform",
+          "text": "Obtained an employee uniform",
+          "effects": [
+            {
+              "do": "record",
+              "key": "fof_obtained_an_uniform",
+              "section": "campaign_notes",
+              "value": true
+            },
+            {
+              "do": "record",
+              "key": "fof_obtained_an_uniform",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "stole_keys",
+          "text": "Stole Abarran's keys",
+          "effects": [
+            {
+              "do": "record",
+              "key": "fof_stole_keys",
+              "section": "campaign_notes",
+              "value": true
+            },
+            {
+              "do": "record",
+              "key": "fof_stole_keys",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "cleaned_out_the_house",
+          "text": "Cleaned out the house",
+          "effects": [
+            {
+              "do": "record",
+              "key": "fof_cleaned_out_the_house",
+              "section": "campaign_notes",
+              "value": true
+            },
+            {
+              "do": "record",
+              "key": "fof_cleaned_out_the_house",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "fortune-and-folly-checkpoint:record_need_time_to_rest": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "fof_need_time_to_rest",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "fortune-and-folly-checkpoint:ask_damage_and_horror_campaign_log": {
+      "kind": "chooseOne",
+      "text": "Check the total amount of damage and horror on each investigator.",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Does any investigator have 6 or more combined damage and horror?",
+          "effects": [
+            {
+              "do": "record",
+              "key": "fof_need_time_to_rest",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": [
+            "fortune-and-folly-checkpoint:record_need_time_to_rest"
+          ]
+        }
+      ]
+    },
+    "fortune-and-folly-checkpoint:explain_record_roles:text": {
+      "kind": "story",
+      "text": "Record the name of each [[Role]] card under an investigator's control when the game ended. If you chose to flip any to their [[Practiced]] side, be sure to choose the appropriate option.",
+      "bullets": []
+    },
+    "fortune-and-folly-checkpoint:record_roles": {
+      "kind": "unsupported",
+      "name": "investigator_choice",
+      "text": "Record each [[Role]]:",
+      "effects": [],
+      "steps": []
+    },
+    "fortune-and-folly-checkpoint:ask_alarm_level": {
+      "kind": "unsupported",
+      "name": "investigator_counter",
+      "text": "Record each investigator's alarm level in your Campaign Log.",
+      "effects": [],
+      "steps": []
+    },
+    "fortune-and-folly-checkpoint:record_wellspring_of_fortune_clues": {
+      "kind": "counter",
+      "text": "Record the number of clues on The Wellspring of Fortune in your Campaign Log",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "fof_wellspring_clues",
+          "section": "campaign_notes",
+          "op": "set",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "fortune-and-folly-checkpoint:record_stashed_assets": {
+      "kind": "cardChoice",
+      "text": "Gather the facedown assets from beneath Casino Floor that are part of the \"stash for the heist.\" In your Campaign Log, record \"Stashed:\" and next to this, the names of each gathered asset.",
+      "codes": [],
+      "min": 1,
+      "max": 1,
+      "effects": [
+        {
+          "do": "record",
+          "key": "fof_stashed",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ],
+      "steps": []
+    },
+    "fortune-and-folly-checkpoint:clean_up_game:text": {
+      "kind": "story",
+      "text": "Clean up the game as normal.",
+      "bullets": []
+    },
+    "fortune-and-folly-checkpoint:ask_continue_now": {
+      "kind": "chooseOne",
+      "text": "Do you wish to proceed to <b>Fortune and Folly, Part II</b> immediately, or take a break?",
+      "choices": [
+        {
+          "id": "now",
+          "text": "Play immediately.",
+          "effects": [
+            {
+              "do": "record",
+              "key": "continue_fortune_and_folly_part_2",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": [
+            "fortune-and-folly-checkpoint:plan_2",
+            "fortune-and-folly-checkpoint:ask_completed_tasks",
+            "fortune-and-folly-checkpoint:ask_damage_and_horror",
+            "fortune-and-folly-checkpoint:tell_clue_choices:text",
+            "fortune-and-folly-checkpoint:gather_stashed_assets:text",
+            "fortune-and-folly-checkpoint:do_not_remove_locations:text",
+            "fortune-and-folly-checkpoint:reset_decks:text"
+          ]
+        },
+        {
+          "id": "later",
+          "text": "Take a break.",
+          "effects": [],
+          "steps": [
+            "fortune-and-folly-checkpoint:plan_2",
+            "fortune-and-folly-checkpoint:record_completed_tasks",
+            "fortune-and-folly-checkpoint:ask_damage_and_horror_campaign_log",
+            "fortune-and-folly-checkpoint:tell_clue_choices:text",
+            "fortune-and-folly-checkpoint:explain_record_roles:text",
+            "fortune-and-folly-checkpoint:record_roles",
+            "fortune-and-folly-checkpoint:ask_alarm_level",
+            "fortune-and-folly-checkpoint:record_wellspring_of_fortune_clues",
+            "fortune-and-folly-checkpoint:record_stashed_assets",
+            "fortune-and-folly-checkpoint:clean_up_game:text"
+          ]
+        }
+      ]
+    },
     "read-or-die:ask_daisy_tomes": {
       "kind": "counter",
       "text": "How many [[Tome]] assets did Daisy Walker have in play at the end of the scenario?",

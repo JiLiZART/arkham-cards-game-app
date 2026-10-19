@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { CampaignFlow } from "../src/content/schema";
-import { compileFlow, type FlowSource } from "./campaignFlow";
+import { compileFlow, stepTexts, type FlowSource } from "./campaignFlow";
 
 const ids = new Map([
   ["extracurricular_activity", "extracurricular-activity"],
@@ -285,5 +285,20 @@ describe("compileFlow: effects", () => {
       { do: "crossOut", key: "b", section: "s", erase: true },
       { do: "record", key: "c", section: "hidden", value: true },
     ]);
+  });
+});
+
+describe("stepTexts", () => {
+  it("collects the words of every step by id: titles, texts, the buttons' texts and the interludes' names", () => {
+    const flow = compiled().flow;
+    const t = stepTexts(flow);
+    expect(t.steps["armitages-fate:fate_1"]).toEqual({ title: "Armitage's Fate 1", text: "You are more than a little rattled." });
+    expect(t.steps["dwl-prologue:scenario_choice"]).toEqual({ choices: { "1a": "Search for Rice", "1b": "Talk to Morgan" } });
+    expect(t.interludes).toEqual({ "armitages-fate": "Armitage's Fate", "dwl-prologue": "Prologue" });
+  });
+
+  it("leaves out steps with no words", () => {
+    const t = stepTexts(compiled().flow);
+    expect(Object.keys(t.steps)).not.toContain("armitages-fate:kidnapped");
   });
 });

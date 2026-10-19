@@ -7,8 +7,8 @@
 
 - [x] 2.1 `scripts/campaignGuide.ts` `compileFlow(campaign, scenarios, cards)`: steps by id, the campaign setup, scenarios in order with interludes and epilogues as `playScenario` and story steps, resolutions' steps with branches and inputs, conditions and effects mapped, variables (`$input_value`, `lead_investigator`, `all`, `choice`) carried, unsupported kinds compiled to text with the guide's default; unit tests on Dunwich fixtures (Armitage's Fate branch, the Survivors' choices, Extracurricular Activity's Resolution 4 effects in order) and Carcosa's doubt/conviction counters.
 - [x] 2.2 `import-campaigns.ts`: writes `flow.json`, `logSections` and `cards` (codes and names, interludes marked) into `campaign.json`; prints the unsupported steps per campaign and the cards it couldn't find by name (to look up in the Russian PDFs or Hall of Arkham); the census test fixes 22 flows and the count of unsupported kinds; a rerun is identical.
-- [ ] 2.3 `import-i18n.ts`: step texts (title, text, bullets, choice texts) from `all_campaigns_ru.txt` by step id into `campaign-texts/<id>.json`; `i18n.ts` `stepText(db, campaignId, stepId, locale)` with the English fallback; the missing Russian steps listed.
-- [ ] 2.4 `check:content` `checkFlow`: every step reachable from `setup`, every reference resolving (steps, scenarios, sections, cards), every path reaching `end`; run on the hand-written and all generated flows.
+- [x] 2.3 `import-i18n.ts`: step texts (title, text, bullets, choice texts) from `all_campaigns_ru.txt` by step id into `campaign-texts/<id>.json`; `i18n.ts` `stepText(db, campaignId, stepId, locale)` with the English fallback; the missing Russian steps listed.
+- [x] 2.4 `check:content` `checkFlow`: every step reachable from `setup`, every reference resolving (steps, scenarios, sections, cards), (every path reaching `end` is not checked: a list of steps that runs out simply goes on to the next item of the order, which the interpreter handles; a scenario outside the guide's order that no step names is played after the listed ones, in the guide's file order, as before); run on the hand-written and all generated flows.
 
 ## 3. The interpreter
 

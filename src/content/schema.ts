@@ -882,7 +882,23 @@ export const I18nUi = z.record(z.string(), z.string());
 /** campaign / scenario / encounter-set text for a locale */
 export const I18nCampaigns = z
   .object({
-    campaigns: z.record(z.string(), z.object({ name: z.string().optional(), prologue: z.string().optional(), scenarioNames: z.array(z.string()).optional(), logLabels: z.record(z.string(), z.string()).default({}) }).strict()).default({}),
+    campaigns: z
+      .record(
+        z.string(),
+        z
+          .object({
+            name: z.string().optional(),
+            prologue: z.string().optional(),
+            scenarioNames: z.array(z.string()).optional(),
+            logLabels: z.record(z.string(), z.string()).default({}),
+            /** a campaign flow's words by step id: the title and text of a story or prompt, the text of each choice by its id */
+            steps: z.record(z.string(), z.object({ title: z.string().optional(), text: z.string().optional(), choices: z.record(z.string(), z.string()).optional() }).strict()).default({}),
+            /** the interludes' and epilogues' names by id */
+            interludeNames: z.record(z.string(), z.string()).default({}),
+          })
+          .strict(),
+      )
+      .default({}),
     scenarios: z
       .record(
         z.string(),

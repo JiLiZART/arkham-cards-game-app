@@ -151,6 +151,36 @@
       "scenario": "return-to-the-last-king",
       "name": "Return to The Last King",
       "code": "03061"
+    },
+    {
+      "scenario": "return-to-a-phantom-of-truth",
+      "name": "Return to A Phantom of Truth",
+      "code": "03200"
+    },
+    {
+      "scenario": "return-to-black-stars-rise",
+      "name": "Return to Black Stars Rise",
+      "code": "03274"
+    },
+    {
+      "scenario": "return-to-dim-carcosa",
+      "name": "Return to Dim Carcosa",
+      "code": "03316"
+    },
+    {
+      "scenario": "return-to-echoes-of-the-past",
+      "name": "Return to Echoes of the Past",
+      "code": "03120"
+    },
+    {
+      "scenario": "return-to-the-pallid-mask",
+      "name": "Return to The Pallid Mask",
+      "code": "03240"
+    },
+    {
+      "scenario": "return-to-the-unspeakable-oath",
+      "name": "Return to The Unspeakable Oath",
+      "code": "03159"
     }
   ]
 }

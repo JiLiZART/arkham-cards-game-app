@@ -19,11 +19,11 @@ describe("the generated flows", () => {
 
   it("hold the interludes, the resolutions and the prompts the guides give, and as many as can't be offered as the census says", () => {
     const steps = flows.flatMap((f) => Object.values(f.flow.steps));
-    expect(flows.reduce((n, f) => n + Object.keys(f.flow.interludes).length, 0)).toBe(65);
-    expect(flows.reduce((n, f) => n + Object.values(f.flow.resolutions).reduce((m, r) => m + Object.keys(r).length, 0), 0)).toBe(399);
-    expect(steps.filter((s) => s.kind === "unsupported").length).toBe(129);
-    expect(steps.reduce((n, s) => n + (s.kind === "branch" ? unsupportedTests(s.condition) : 0), 0)).toBe(112);
-    expect(steps.filter((s) => s.kind === "upgradeDecks").length).toBe(111);
+    expect(flows.reduce((n, f) => n + Object.keys(f.flow.interludes).length, 0)).toBe(123);
+    expect(flows.reduce((n, f) => n + Object.values(f.flow.resolutions).reduce((m, r) => m + Object.keys(r).length, 0), 0)).toBe(590);
+    expect(steps.filter((s) => s.kind === "unsupported").length).toBe(173);
+    expect(steps.reduce((n, s) => n + (s.kind === "branch" ? unsupportedTests(s.condition) : 0), 0)).toBe(199);
+    expect(steps.filter((s) => s.kind === "upgradeDecks").length).toBe(164);
   });
 
   it("list their scenario reference cards in the campaign's order, the interludes marked, as the picker needs", () => {
@@ -52,6 +52,17 @@ describe("the generated flows", () => {
     const effects = flow.resolutions["extracurricular-activity"].R4.map((s) => flow.steps[s]).flatMap((s) => (s.kind === "effects" ? s.effects : []));
     expect(effects.map((e) => e.do)).toEqual(expect.arrayContaining(["record", "xp", "addChaosToken"]));
     expect(effects.filter((e) => e.do === "record").map((e) => (e as { key: string }).key)).toEqual(expect.arrayContaining(["unconscious_for_several_hours", "warren_rice_kidnapped", "failed_to_save_students"]));
+  });
+
+  it("play Carcosa's scenarios the guide leaves to the players in the file's order after the listed ones", () => {
+    const { flow } = flows.find((f) => f.id === "the-path-to-carcosa")!;
+    expect(flow.order.slice(0, 3)).toEqual(["ptc-prologue", "curtain-call", "the-last-king"]);
+    expect(flow.order).toEqual(expect.arrayContaining(["echoes-of-the-past", "the-unspeakable-oath", "the-pallid-mask", "dim-carcosa"]));
+  });
+
+  it("send Fortune and Folly's checkpoint to a scenario that exists", () => {
+    const { flow } = flows.find((f) => f.id === "fortune-and-folly")!;
+    expect(Object.keys(flow.interludes)).toContain("fortune-and-folly-checkpoint");
   });
 
   it("count Carcosa's doubt and conviction in sections of their own", () => {

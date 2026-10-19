@@ -1,4 +1,4 @@
-import type { CampaignFlow, CampaignStep } from "./schema";
+import type { CampaignFlow, CampaignStep, FlowEffect } from "./schema";
 import type { ContentDb } from "../engine/types";
 
 /**
@@ -25,4 +25,19 @@ export function resolutionSteps(db: ContentDb, campaignId: string, scenarioId: s
   if (own) return { ids: own, steps: flow.steps };
   const key = `res:${scenarioId}:${id}`;
   return { ids: [key], steps: { ...flow.steps, [key]: { kind: "effects", effects: sc.resolutions[id].effects } } };
+}
+
+/** the effects a step applies itself (not those of the steps it leads to) */
+export function stepEffects(st: CampaignStep): FlowEffect[] {
+  return st.kind === "effects" ? st.effects : st.kind === "chooseOne" || st.kind === "checklist" ? st.choices.flatMap((c) => c.effects) : "effects" in st ? st.effects : [];
+}
+
+/** the scenarios some step sends play to (a next or replayed scenario, a side scenario on offer) */
+export function namedScenarios(flow: CampaignFlow): Set<string> {
+  const named = new Set<string>();
+  for (const st of Object.values(flow.steps)) {
+    for (const e of stepEffects(st)) if (e.do === "nextScenario" || e.do === "replayScenario") named.add(e.scenario);
+    if (st.kind === "sideScenario") for (const x of st.scenarios) named.add(x.scenario);
+  }
+  return named;
 }

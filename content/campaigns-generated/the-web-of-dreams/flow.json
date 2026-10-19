@@ -15,13 +15,6 @@
     "tde-epilogue"
   ],
   "interludes": {
-    "tde-prologue": {
-      "kind": "interlude",
-      "name": "Prologue",
-      "steps": [
-        "tde-prologue:intro"
-      ]
-    },
     "the-black-cat": {
       "kind": "interlude",
       "name": "The Black Cat",
@@ -31,14 +24,12 @@
         "the-black-cat:connect_campaign_branch"
       ]
     },
-    "the-oneironauts": {
-      "kind": "interlude",
-      "name": "The Oneironauts",
+    "tde-epilogue": {
+      "kind": "epilogue",
+      "name": "Epilogue",
       "steps": [
-        "the-oneironauts:check_the_search_for_kadath",
-        "the-oneironauts:oneironauts_1",
-        "the-oneironauts:check_randolph_did_not_survive_descent",
-        "the-oneironauts:check_you_asked_for_it"
+        "tde-epilogue:check_where_the_gods_dwell",
+        "tde-epilogue:check_bridge_was_completed"
       ]
     },
     "the-great-ones": {
@@ -52,53 +43,25 @@
         "the-great-ones:upgradeDecks"
       ]
     },
-    "tde-epilogue": {
-      "kind": "epilogue",
-      "name": "Epilogue",
+    "the-oneironauts": {
+      "kind": "interlude",
+      "name": "The Oneironauts",
       "steps": [
-        "tde-epilogue:check_where_the_gods_dwell",
-        "tde-epilogue:check_bridge_was_completed"
+        "the-oneironauts:check_the_search_for_kadath",
+        "the-oneironauts:oneironauts_1",
+        "the-oneironauts:check_randolph_did_not_survive_descent",
+        "the-oneironauts:check_you_asked_for_it"
+      ]
+    },
+    "tde-prologue": {
+      "kind": "interlude",
+      "name": "Prologue",
+      "steps": [
+        "tde-prologue:intro"
       ]
     }
   },
   "resolutions": {
-    "waking-nightmare": {
-      "R1": [
-        "waking-nightmare:doctor_is_alive",
-        "waking-nightmare:dreamers_grow_weaker:text",
-        "waking-nightmare:maybe_send_dreamers_grow_weaker",
-        "waking-nightmare:randolph_escaped_hospital_with_investigators:text",
-        "waking-nightmare:randolph_escaped_hospital_with_investigators"
-      ],
-      "R2": [
-        "waking-nightmare:doctor_is_missing:text",
-        "waking-nightmare:doctor_is_missing",
-        "waking-nightmare:dreamers_grow_weaker:text",
-        "waking-nightmare:maybe_send_dreamers_grow_weaker",
-        "waking-nightmare:randolph_escaped_hospital_with_investigators:text",
-        "waking-nightmare:randolph_escaped_hospital_with_investigators"
-      ],
-      "R3": [
-        "waking-nightmare:doctor_is_alive",
-        "waking-nightmare:maybe_send_dreamers_are_strong",
-        "waking-nightmare:randolph_escaped_hospital_with_investigators:text",
-        "waking-nightmare:randolph_escaped_hospital_with_investigators"
-      ],
-      "R4": [
-        "waking-nightmare:doctor_is_missing:text",
-        "waking-nightmare:doctor_is_missing",
-        "waking-nightmare:maybe_send_dreamers_are_strong",
-        "waking-nightmare:randolph_escaped_hospital_alone:text",
-        "waking-nightmare:randolph_escaped_hospital_alone"
-      ],
-      "R5": [
-        "waking-nightmare:earn_xp",
-        "waking-nightmare:remove_infestation_bag:text",
-        "waking-nightmare:upgradeDecks",
-        "waking-nightmare:send_waking_nightmare_done",
-        "waking-nightmare:maybe_proceed_campaign_a"
-      ]
-    },
     "a-thousand-shapes-of-horror": {
       "R1": [
         "a-thousand-shapes-of-horror:randolph_survived_descent",
@@ -143,6 +106,43 @@
         "point-of-no-return:earn_xp",
         "point-of-no-return:maybe_upgrade_decks",
         "point-of-no-return:maybe_skip_interlude"
+      ]
+    },
+    "waking-nightmare": {
+      "R1": [
+        "waking-nightmare:doctor_is_alive",
+        "waking-nightmare:dreamers_grow_weaker:text",
+        "waking-nightmare:maybe_send_dreamers_grow_weaker",
+        "waking-nightmare:randolph_escaped_hospital_with_investigators:text",
+        "waking-nightmare:randolph_escaped_hospital_with_investigators"
+      ],
+      "R2": [
+        "waking-nightmare:doctor_is_missing:text",
+        "waking-nightmare:doctor_is_missing",
+        "waking-nightmare:dreamers_grow_weaker:text",
+        "waking-nightmare:maybe_send_dreamers_grow_weaker",
+        "waking-nightmare:randolph_escaped_hospital_with_investigators:text",
+        "waking-nightmare:randolph_escaped_hospital_with_investigators"
+      ],
+      "R3": [
+        "waking-nightmare:doctor_is_alive",
+        "waking-nightmare:maybe_send_dreamers_are_strong",
+        "waking-nightmare:randolph_escaped_hospital_with_investigators:text",
+        "waking-nightmare:randolph_escaped_hospital_with_investigators"
+      ],
+      "R4": [
+        "waking-nightmare:doctor_is_missing:text",
+        "waking-nightmare:doctor_is_missing",
+        "waking-nightmare:maybe_send_dreamers_are_strong",
+        "waking-nightmare:randolph_escaped_hospital_alone:text",
+        "waking-nightmare:randolph_escaped_hospital_alone"
+      ],
+      "R5": [
+        "waking-nightmare:earn_xp",
+        "waking-nightmare:remove_infestation_bag:text",
+        "waking-nightmare:upgradeDecks",
+        "waking-nightmare:send_waking_nightmare_done",
+        "waking-nightmare:maybe_proceed_campaign_a"
       ]
     },
     "weaver-of-the-cosmos": {
@@ -263,245 +263,6 @@
       ],
       "else": [
         "campaign:ask_8_part_campaign"
-      ]
-    },
-    "tde-prologue:intro": {
-      "kind": "story",
-      "text": "<fancy>Friday, February 13th, 1925</fancy>\nSomething odd was happening in Arkham, Massachusetts.\nTypically, this would not be a surprise to the residents of the dreary New England town. Indeed, Arkham has always been well-known for its strange—some would say supernatural—occurrences. The nature of this particular circumstance, however, was anything but typical.\nIt all began in the latest issue of <i>Tales from Nevermore</i>. A writer by the name of Virgil Gray described a journey he had taken in his dreams—a journey he claimed was not a work of fiction on his part. He wrote of a long, spiraling staircase, an unbearably hot pillar of sentient fire, a tree that came from the moon, and a curious talking cat…among other things equally difficult to believe. But it wasn’t this extraordinary tale that first drew your attention. Soon after Virgil’s tale was published, <i>Tales from Nevermore</i> began to receive and publish letter after letter from those who had read Virgil’s story and claimed to have experienced the same exact dream. Before long, the Arkham Advertiser picked up the story, and news of this strange phenomenon reached the ears of experts.\nVirgil Gray was convinced to undergo therapy at the local asylum, and many more who shared in the writer’s psychosis were committed as well. The prevailing theory among academics is that Virgil’s dream felt so real that he could not separate fact from fiction, and his writings spread his delusions to others like a form of shared hysteria. You remain unconvinced. After all, there is much that is not known about the simple act of dreaming. Medical experts have wildly differing theories on the state of one’s brain during sleep. Recently, experts like Sigmund Freud have proposed that dreams are manifestations of one’s subconscious desires, fears, or obsessions. Fortune tellers, for their part, have long believed that dreams can be sifted and interpreted in order to tell the dreamer’s past or future. But if these theories are true, how could multiple parties—all from very different walks of life—have the same shared experiences in their dreams? What if our modern understanding of sleep is all wrong? What if there really is a place our consciousness travels to when we sleep—a land of dreams that exists beyond our waking world?\nYou and your companions have gathered together to get to the bottom of this strange phenomenon. If others in town can travel to another world in their dreams, perhaps you can, too. You’ve re-created the circumstances of Virgil’s journey perfectly. If all goes well, half of you will take the trip to this “dreamland” and back. The rest will stay in the waking world, studying your companions’ sleep patterns to ensure nothing goes wrong…",
-      "bullets": []
-    },
-    "waking-nightmare:doctor_is_alive": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "doctor_is_alive",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "waking-nightmare:dreamers_grow_weaker:text": {
-      "kind": "story",
-      "text": "Your companions’ condition has worsened.",
-      "bullets": []
-    },
-    "waking-nightmare:send_dreamers_grow_weaker": {
-      "kind": "unsupported",
-      "name": "send_campaign_link",
-      "text": "Record in Campaign A’s Campaign Log <i>the dreamers grow weaker</i>.",
-      "effects": [],
-      "steps": []
-    },
-    "waking-nightmare:maybe_send_dreamers_grow_weaker": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "interconnected_campaign",
-        "section": "hidden"
-      },
-      "then": [
-        "waking-nightmare:send_dreamers_grow_weaker"
-      ],
-      "else": []
-    },
-    "waking-nightmare:randolph_escaped_hospital_with_investigators:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, record <i>Randolph escaped the hospital with the investigators</i>. Any one investigator may choose to add Randolph Carter <i>(Chained to the Waking World)</i> (The Dream-Eaters card #79) to their deck. This card does not count toward that investigator’s deck size.",
-      "bullets": []
-    },
-    "waking-nightmare:randolph_escaped_hospital_with_investigators": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "randolph_escaped_hospital_with_investigators",
-          "section": "campaign_notes",
-          "value": true
-        },
-        {
-          "do": "earnCard",
-          "code": "06079",
-          "who": "choice"
-        }
-      ]
-    },
-    "waking-nightmare:doctor_is_missing:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, record <i>Dr. Maheswaran is missing</i>. Perhaps you could have saved her. The lead investigator suffers 1 mental trauma.",
-      "bullets": []
-    },
-    "waking-nightmare:doctor_is_missing": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "doctor_is_missing",
-          "section": "campaign_notes",
-          "value": true
-        },
-        {
-          "do": "trauma",
-          "who": "lead",
-          "physical": 0,
-          "mental": 1
-        }
-      ]
-    },
-    "waking-nightmare:send_dreamers_are_strong": {
-      "kind": "unsupported",
-      "name": "send_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "waking-nightmare:maybe_send_dreamers_are_strong": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "interconnected_campaign",
-        "section": "hidden"
-      },
-      "then": [
-        "waking-nightmare:send_dreamers_are_strong"
-      ],
-      "else": []
-    },
-    "waking-nightmare:randolph_escaped_hospital_alone:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, record <i>Randolph escaped the hospital on his own</i>. Any one investigator may choose to add Randolph Carter <i>(Chained to the Waking World)</i> (The Dream-Eaters card #79) to their deck. This card does not count toward that investigator’s deck size.",
-      "bullets": []
-    },
-    "waking-nightmare:randolph_escaped_hospital_alone": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "randolph_escaped_hospital_alone",
-          "section": "campaign_notes",
-          "value": true
-        },
-        {
-          "do": "earnCard",
-          "code": "06079",
-          "who": "choice"
-        }
-      ]
-    },
-    "waking-nightmare:earn_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 0,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "waking-nightmare:remove_infestation_bag:text": {
-      "kind": "story",
-      "text": "Remove the infestation bag and all infestation tokens from the game. <i>(There is no need to keep or record them.)</i>",
-      "bullets": []
-    },
-    "waking-nightmare:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "waking-nightmare:send_waking_nightmare_done": {
-      "kind": "unsupported",
-      "name": "send_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "waking-nightmare:proceed_campaign_a": {
-      "kind": "unsupported",
-      "name": "receive_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "waking-nightmare:maybe_proceed_campaign_a": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "campaign_data",
-        "take": false
-      },
-      "then": [
-        "waking-nightmare:proceed_campaign_a"
-      ],
-      "else": []
-    },
-    "the-black-cat:check_beyond_the_gates_of_sleep": {
-      "kind": "unsupported",
-      "name": "receive_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "the-black-cat:check_black_cat_decision": {
-      "kind": "unsupported",
-      "name": "receive_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "the-black-cat:check_interconnected_campaign": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "interconnected_campaign",
-        "section": "hidden"
-      },
-      "then": [
-        "the-black-cat:check_beyond_the_gates_of_sleep",
-        "the-black-cat:check_black_cat_decision"
-      ],
-      "else": []
-    },
-    "the-black-cat:black_cat_3": {
-      "kind": "story",
-      "text": "<i>Following scenario 1–B, the investigators are confronted outside St. Mary’s Hospital…</i>\n“…You must be their friends,” the enigmatic voice says from above. To your surprise, the quiet voice belongs not to a person, but to a black cat that lounges lazily across a tree branch hanging over the path outside the hospital. “Oh, pick your jaws up off the ground and listen.” The cat rises and leaps onto the top of a nearby fence, walking along it with the kind of grace only cats possess.\n“It is one of the cats of Earth’s Dreamlands,” Randolph proclaims, his voice tinged with merriment, like he was meeting an old friend for the first time in ages. “How long it has been since I have spoken with one of your kind!”\nThe cat’s piercing yellow eyes glare at Randolph for a moment before it returns its gaze to you. “…Sure. In any event, I bear a message from your dreaming friends.”",
-      "bullets": []
-    },
-    "the-black-cat:4_part_campaign": {
-      "kind": "story",
-      "text": "“Your friends are not the only ones in trouble,” the black cat explains. “There’s a grand conspiracy at work here, and your friends are…well, let’s just say they’re a bit preoccupied with their own problems at the moment. You’re the only ones who can destroy the great web. Forget about your companions and descend into the pitch. It’s the only way. I’ll try to keep your friends safe while you fulfill your task. Do you understand?”",
-      "bullets": []
-    },
-    "the-black-cat:on_your_own": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "on_your_own",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-black-cat:campaign_link_branch": {
-      "kind": "unsupported",
-      "name": "receive_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "the-black-cat:interlude_done": {
-      "kind": "unsupported",
-      "name": "send_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "the-black-cat:connect_campaign_branch": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "half_campaign",
-        "section": "hidden"
-      },
-      "then": [
-        "the-black-cat:4_part_campaign",
-        "the-black-cat:on_your_own"
-      ],
-      "else": [
-        "the-black-cat:campaign_link_branch",
-        "the-black-cat:interlude_done"
       ]
     },
     "a-thousand-shapes-of-horror:randolph_survived_descent": {
@@ -643,6 +404,331 @@
           "code": "06079"
         }
       ]
+    },
+    "the-black-cat:check_beyond_the_gates_of_sleep": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-black-cat:check_black_cat_decision": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-black-cat:check_interconnected_campaign": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "interconnected_campaign",
+        "section": "hidden"
+      },
+      "then": [
+        "the-black-cat:check_beyond_the_gates_of_sleep",
+        "the-black-cat:check_black_cat_decision"
+      ],
+      "else": []
+    },
+    "the-black-cat:black_cat_3": {
+      "kind": "story",
+      "text": "<i>Following scenario 1–B, the investigators are confronted outside St. Mary’s Hospital…</i>\n“…You must be their friends,” the enigmatic voice says from above. To your surprise, the quiet voice belongs not to a person, but to a black cat that lounges lazily across a tree branch hanging over the path outside the hospital. “Oh, pick your jaws up off the ground and listen.” The cat rises and leaps onto the top of a nearby fence, walking along it with the kind of grace only cats possess.\n“It is one of the cats of Earth’s Dreamlands,” Randolph proclaims, his voice tinged with merriment, like he was meeting an old friend for the first time in ages. “How long it has been since I have spoken with one of your kind!”\nThe cat’s piercing yellow eyes glare at Randolph for a moment before it returns its gaze to you. “…Sure. In any event, I bear a message from your dreaming friends.”",
+      "bullets": []
+    },
+    "the-black-cat:4_part_campaign": {
+      "kind": "story",
+      "text": "“Your friends are not the only ones in trouble,” the black cat explains. “There’s a grand conspiracy at work here, and your friends are…well, let’s just say they’re a bit preoccupied with their own problems at the moment. You’re the only ones who can destroy the great web. Forget about your companions and descend into the pitch. It’s the only way. I’ll try to keep your friends safe while you fulfill your task. Do you understand?”",
+      "bullets": []
+    },
+    "the-black-cat:on_your_own": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "on_your_own",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-black-cat:campaign_link_branch": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-black-cat:interlude_done": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-black-cat:connect_campaign_branch": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "half_campaign",
+        "section": "hidden"
+      },
+      "then": [
+        "the-black-cat:4_part_campaign",
+        "the-black-cat:on_your_own"
+      ],
+      "else": [
+        "the-black-cat:campaign_link_branch",
+        "the-black-cat:interlude_done"
+      ]
+    },
+    "tde-epilogue:check_where_the_gods_dwell": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "tde-epilogue:bridge_was_completed_column": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "tde-epilogue:returned_to_reality_column": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "tde-epilogue:never_escaped_column": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "tde-epilogue:still_in_the_dreamlands_column": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "tde-epilogue:check_still_in_the_dreamlands": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "still_in_the_dreamlands",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tde-epilogue:still_in_the_dreamlands_column"
+      ],
+      "else": []
+    },
+    "tde-epilogue:check_never_escaped": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "never_escaped",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tde-epilogue:never_escaped_column"
+      ],
+      "else": [
+        "tde-epilogue:check_still_in_the_dreamlands"
+      ]
+    },
+    "tde-epilogue:check_returned_to_reality": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "returned_to_reality",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tde-epilogue:returned_to_reality_column"
+      ],
+      "else": [
+        "tde-epilogue:check_never_escaped"
+      ]
+    },
+    "tde-epilogue:check_bridge_was_completed": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "bridge_was_completed",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tde-epilogue:bridge_was_completed_column"
+      ],
+      "else": [
+        "tde-epilogue:check_returned_to_reality"
+      ]
+    },
+    "the-great-ones:check_dark_side_of_the_moon": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-great-ones:wait_great_ones_decision": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-great-ones:check_great_ones_black_cat_is_searching_for_the_truth": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-great-ones:check_black_is_searching_for_the_truth": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "black_cat_is_searching_for_the_truth",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-great-ones:check_great_ones_black_cat_is_searching_for_the_truth"
+      ],
+      "else": []
+    },
+    "the-great-ones:skip_rest_of_interlude_cat_mad:text": {
+      "kind": "story",
+      "text": "Skip the rest of this interlude.",
+      "bullets": []
+    },
+    "the-great-ones:great_ones_2": {
+      "kind": "story",
+      "text": "<i>Following scenario 3–B, the investigators have reached a cosmic penumbra between worlds…</i>\nA cat’s low-pitched wail draws your attention to a nearby web. When you arrive, you find the black cat stuck on a patch of particularly sticky web, wriggling back and forth in a vain attempt to free itself. Even with its sharp claws, it seems to be in trouble. You lean over and pull the cat free, and it leaps from your arms to a rocky platform below, the only thing between the cat and an endless void. It hisses for a moment, then stands tall. “Did I ask for your help?” it scolds. “Well, you made it below the Sea of Pitch after all. Now look around you. See all this webbing?” You couldn’t miss it even if you tried; you are surrounded on all sides by webs, treacherous pathways across the aether. “It is a bridge between your world and the Dreamlands. If it is completed, the two will merge. Understand? Unless you want everything to look like that hospital where your friends are sleeping, you have to stop this at all costs. Nothing else matters. <i>Nothing.</i>”",
+      "bullets": []
+    },
+    "the-great-ones:transfer_key_story": {
+      "kind": "story",
+      "text": "“Hey, you still have that key?” the black cat asks. You scrounge through your belongings for the key you found in the Unnamable and show it to the cat. “Gimme that,” it demands, jumping and biting it out of your hands before you can protest. “Don’t look at me like that. Your other friends need it more than you.”",
+      "bullets": []
+    },
+    "the-great-ones:transfer_silver_key:text": {
+      "kind": "story",
+      "text": "In the Campaign Log for <i>The Web of Dreams</i> (Campaign B), cross off <i>the investigators possess the Silver Key</i>. Record this in the Campaign Log for <i>The Dream-Quest</i> (Campaign A) instead.",
+      "bullets": []
+    },
+    "the-great-ones:transfer_silver_key_card:text": {
+      "kind": "story",
+      "text": "If The Silver Key is currently in an investigator’s deck, remove it. Any one investigator in <i>The Dream-Quest</i> (Campaign A) may choose to add The Silver Key to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "the-great-ones:check_possess_silver_key:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "possess_silver_key",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "removeCard",
+          "code": "06189"
+        }
+      ]
+    },
+    "the-great-ones:send_great_ones_silver_key": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-great-ones:send_great_ones_no_key": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-great-ones:check_possess_silver_key": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "possess_silver_key",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-great-ones:transfer_key_story",
+        "the-great-ones:transfer_silver_key:text",
+        "the-great-ones:transfer_silver_key_card:text",
+        "the-great-ones:check_possess_silver_key:yes:fx",
+        "the-great-ones:send_great_ones_silver_key"
+      ],
+      "else": [
+        "the-great-ones:send_great_ones_no_key"
+      ]
+    },
+    "the-great-ones:black_cat_searching_for_truth_story": {
+      "kind": "story",
+      "text": "The black cat stops talking as it spots Randolph for the first time. It circles around the man a few times, agitated. For his part, Randolph looks uncharacteristically perturbed by the cat’s presence, even taking a step backward as it closes in. “What is the matter? I’ve not harmed any of your kind,” he says matter-of-factly. “Have I done something to offend you?”\n“Your mere existence offends me,” the cat replies with a hiss. It strolls back toward you, keeping a wary eye on Randolph. “I think I know what is going on now. It all makes sense. I know who is interfering with my sight. Do not trust that <i>thing</i>,” it warns, circling to keep an eye on the blond man behind it. “I have to prepare. I’ll return when the time is right.”",
+      "bullets": []
+    },
+    "the-great-ones:black_cat_knows_the_truth:text": {
+      "kind": "story",
+      "text": "Skip the rest of this interlude. In both Campaign Logs, record <i>the black cat knows the truth</i>.",
+      "bullets": []
+    },
+    "the-great-ones:check_black_cat_is_searching_for_the_truth:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "black_cat_knows_the_truth",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-great-ones:resume_interlude_decision": {
+      "kind": "story",
+      "text": "“Oh, before I forget: your friends have almost made it to their destination. If everything happens as I have foreseen, they’ll be able to free themselves. In the meantime, they wanted me to let you know…”",
+      "bullets": []
+    },
+    "the-great-ones:check_great_ones_decision": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-great-ones:check_black_cat_is_searching_for_the_truth": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "black_cat_is_searching_for_the_truth",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-great-ones:black_cat_searching_for_truth_story",
+        "the-great-ones:black_cat_knows_the_truth:text",
+        "the-great-ones:check_black_cat_is_searching_for_the_truth:yes:fx"
+      ],
+      "else": [
+        "the-great-ones:resume_interlude_decision",
+        "the-great-ones:check_great_ones_decision"
+      ]
+    },
+    "the-great-ones:check_you_asked_for_it": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "you_asked_for_it",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-great-ones:skip_rest_of_interlude_cat_mad:text"
+      ],
+      "else": [
+        "the-great-ones:great_ones_2",
+        "the-great-ones:check_possess_silver_key",
+        "the-great-ones:check_black_cat_is_searching_for_the_truth"
+      ]
+    },
+    "the-great-ones:upgradeDecks": {
+      "kind": "upgradeDecks"
     },
     "the-oneironauts:check_the_search_for_kadath": {
       "kind": "unsupported",
@@ -1015,172 +1101,170 @@
         }
       ]
     },
-    "the-great-ones:check_dark_side_of_the_moon": {
-      "kind": "unsupported",
-      "name": "receive_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "the-great-ones:wait_great_ones_decision": {
-      "kind": "unsupported",
-      "name": "receive_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "the-great-ones:check_great_ones_black_cat_is_searching_for_the_truth": {
-      "kind": "unsupported",
-      "name": "receive_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "the-great-ones:check_black_is_searching_for_the_truth": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "black_cat_is_searching_for_the_truth",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "the-great-ones:check_great_ones_black_cat_is_searching_for_the_truth"
-      ],
-      "else": []
-    },
-    "the-great-ones:skip_rest_of_interlude_cat_mad:text": {
+    "tde-prologue:intro": {
       "kind": "story",
-      "text": "Skip the rest of this interlude.",
+      "text": "<fancy>Friday, February 13th, 1925</fancy>\nSomething odd was happening in Arkham, Massachusetts.\nTypically, this would not be a surprise to the residents of the dreary New England town. Indeed, Arkham has always been well-known for its strange—some would say supernatural—occurrences. The nature of this particular circumstance, however, was anything but typical.\nIt all began in the latest issue of <i>Tales from Nevermore</i>. A writer by the name of Virgil Gray described a journey he had taken in his dreams—a journey he claimed was not a work of fiction on his part. He wrote of a long, spiraling staircase, an unbearably hot pillar of sentient fire, a tree that came from the moon, and a curious talking cat…among other things equally difficult to believe. But it wasn’t this extraordinary tale that first drew your attention. Soon after Virgil’s tale was published, <i>Tales from Nevermore</i> began to receive and publish letter after letter from those who had read Virgil’s story and claimed to have experienced the same exact dream. Before long, the Arkham Advertiser picked up the story, and news of this strange phenomenon reached the ears of experts.\nVirgil Gray was convinced to undergo therapy at the local asylum, and many more who shared in the writer’s psychosis were committed as well. The prevailing theory among academics is that Virgil’s dream felt so real that he could not separate fact from fiction, and his writings spread his delusions to others like a form of shared hysteria. You remain unconvinced. After all, there is much that is not known about the simple act of dreaming. Medical experts have wildly differing theories on the state of one’s brain during sleep. Recently, experts like Sigmund Freud have proposed that dreams are manifestations of one’s subconscious desires, fears, or obsessions. Fortune tellers, for their part, have long believed that dreams can be sifted and interpreted in order to tell the dreamer’s past or future. But if these theories are true, how could multiple parties—all from very different walks of life—have the same shared experiences in their dreams? What if our modern understanding of sleep is all wrong? What if there really is a place our consciousness travels to when we sleep—a land of dreams that exists beyond our waking world?\nYou and your companions have gathered together to get to the bottom of this strange phenomenon. If others in town can travel to another world in their dreams, perhaps you can, too. You’ve re-created the circumstances of Virgil’s journey perfectly. If all goes well, half of you will take the trip to this “dreamland” and back. The rest will stay in the waking world, studying your companions’ sleep patterns to ensure nothing goes wrong…",
       "bullets": []
     },
-    "the-great-ones:great_ones_2": {
-      "kind": "story",
-      "text": "<i>Following scenario 3–B, the investigators have reached a cosmic penumbra between worlds…</i>\nA cat’s low-pitched wail draws your attention to a nearby web. When you arrive, you find the black cat stuck on a patch of particularly sticky web, wriggling back and forth in a vain attempt to free itself. Even with its sharp claws, it seems to be in trouble. You lean over and pull the cat free, and it leaps from your arms to a rocky platform below, the only thing between the cat and an endless void. It hisses for a moment, then stands tall. “Did I ask for your help?” it scolds. “Well, you made it below the Sea of Pitch after all. Now look around you. See all this webbing?” You couldn’t miss it even if you tried; you are surrounded on all sides by webs, treacherous pathways across the aether. “It is a bridge between your world and the Dreamlands. If it is completed, the two will merge. Understand? Unless you want everything to look like that hospital where your friends are sleeping, you have to stop this at all costs. Nothing else matters. <i>Nothing.</i>”",
-      "bullets": []
-    },
-    "the-great-ones:transfer_key_story": {
-      "kind": "story",
-      "text": "“Hey, you still have that key?” the black cat asks. You scrounge through your belongings for the key you found in the Unnamable and show it to the cat. “Gimme that,” it demands, jumping and biting it out of your hands before you can protest. “Don’t look at me like that. Your other friends need it more than you.”",
-      "bullets": []
-    },
-    "the-great-ones:transfer_silver_key:text": {
-      "kind": "story",
-      "text": "In the Campaign Log for <i>The Web of Dreams</i> (Campaign B), cross off <i>the investigators possess the Silver Key</i>. Record this in the Campaign Log for <i>The Dream-Quest</i> (Campaign A) instead.",
-      "bullets": []
-    },
-    "the-great-ones:transfer_silver_key_card:text": {
-      "kind": "story",
-      "text": "If The Silver Key is currently in an investigator’s deck, remove it. Any one investigator in <i>The Dream-Quest</i> (Campaign A) may choose to add The Silver Key to their deck. This card does not count toward that investigator’s deck size.",
-      "bullets": []
-    },
-    "the-great-ones:check_possess_silver_key:yes:fx": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "crossOut",
-          "key": "possess_silver_key",
-          "section": "campaign_notes"
-        },
-        {
-          "do": "removeCard",
-          "code": "06189"
-        }
-      ]
-    },
-    "the-great-ones:send_great_ones_silver_key": {
-      "kind": "unsupported",
-      "name": "send_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "the-great-ones:send_great_ones_no_key": {
-      "kind": "unsupported",
-      "name": "send_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "the-great-ones:check_possess_silver_key": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "possess_silver_key",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "the-great-ones:transfer_key_story",
-        "the-great-ones:transfer_silver_key:text",
-        "the-great-ones:transfer_silver_key_card:text",
-        "the-great-ones:check_possess_silver_key:yes:fx",
-        "the-great-ones:send_great_ones_silver_key"
-      ],
-      "else": [
-        "the-great-ones:send_great_ones_no_key"
-      ]
-    },
-    "the-great-ones:black_cat_searching_for_truth_story": {
-      "kind": "story",
-      "text": "The black cat stops talking as it spots Randolph for the first time. It circles around the man a few times, agitated. For his part, Randolph looks uncharacteristically perturbed by the cat’s presence, even taking a step backward as it closes in. “What is the matter? I’ve not harmed any of your kind,” he says matter-of-factly. “Have I done something to offend you?”\n“Your mere existence offends me,” the cat replies with a hiss. It strolls back toward you, keeping a wary eye on Randolph. “I think I know what is going on now. It all makes sense. I know who is interfering with my sight. Do not trust that <i>thing</i>,” it warns, circling to keep an eye on the blond man behind it. “I have to prepare. I’ll return when the time is right.”",
-      "bullets": []
-    },
-    "the-great-ones:black_cat_knows_the_truth:text": {
-      "kind": "story",
-      "text": "Skip the rest of this interlude. In both Campaign Logs, record <i>the black cat knows the truth</i>.",
-      "bullets": []
-    },
-    "the-great-ones:check_black_cat_is_searching_for_the_truth:yes:fx": {
+    "waking-nightmare:doctor_is_alive": {
       "kind": "effects",
       "effects": [
         {
           "do": "record",
-          "key": "black_cat_knows_the_truth",
+          "key": "doctor_is_alive",
           "section": "campaign_notes",
           "value": true
         }
       ]
     },
-    "the-great-ones:resume_interlude_decision": {
+    "waking-nightmare:dreamers_grow_weaker:text": {
       "kind": "story",
-      "text": "“Oh, before I forget: your friends have almost made it to their destination. If everything happens as I have foreseen, they’ll be able to free themselves. In the meantime, they wanted me to let you know…”",
+      "text": "Your companions’ condition has worsened.",
       "bullets": []
     },
-    "the-great-ones:check_great_ones_decision": {
+    "waking-nightmare:send_dreamers_grow_weaker": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "text": "Record in Campaign A’s Campaign Log <i>the dreamers grow weaker</i>.",
+      "effects": [],
+      "steps": []
+    },
+    "waking-nightmare:maybe_send_dreamers_grow_weaker": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "interconnected_campaign",
+        "section": "hidden"
+      },
+      "then": [
+        "waking-nightmare:send_dreamers_grow_weaker"
+      ],
+      "else": []
+    },
+    "waking-nightmare:randolph_escaped_hospital_with_investigators:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record <i>Randolph escaped the hospital with the investigators</i>. Any one investigator may choose to add Randolph Carter <i>(Chained to the Waking World)</i> (The Dream-Eaters card #79) to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "waking-nightmare:randolph_escaped_hospital_with_investigators": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "randolph_escaped_hospital_with_investigators",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "earnCard",
+          "code": "06079",
+          "who": "choice"
+        }
+      ]
+    },
+    "waking-nightmare:doctor_is_missing:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record <i>Dr. Maheswaran is missing</i>. Perhaps you could have saved her. The lead investigator suffers 1 mental trauma.",
+      "bullets": []
+    },
+    "waking-nightmare:doctor_is_missing": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "doctor_is_missing",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "trauma",
+          "who": "lead",
+          "physical": 0,
+          "mental": 1
+        }
+      ]
+    },
+    "waking-nightmare:send_dreamers_are_strong": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "waking-nightmare:maybe_send_dreamers_are_strong": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "interconnected_campaign",
+        "section": "hidden"
+      },
+      "then": [
+        "waking-nightmare:send_dreamers_are_strong"
+      ],
+      "else": []
+    },
+    "waking-nightmare:randolph_escaped_hospital_alone:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record <i>Randolph escaped the hospital on his own</i>. Any one investigator may choose to add Randolph Carter <i>(Chained to the Waking World)</i> (The Dream-Eaters card #79) to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "waking-nightmare:randolph_escaped_hospital_alone": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "randolph_escaped_hospital_alone",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "earnCard",
+          "code": "06079",
+          "who": "choice"
+        }
+      ]
+    },
+    "waking-nightmare:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "waking-nightmare:remove_infestation_bag:text": {
+      "kind": "story",
+      "text": "Remove the infestation bag and all infestation tokens from the game. <i>(There is no need to keep or record them.)</i>",
+      "bullets": []
+    },
+    "waking-nightmare:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "waking-nightmare:send_waking_nightmare_done": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "waking-nightmare:proceed_campaign_a": {
       "kind": "unsupported",
       "name": "receive_campaign_link",
       "effects": [],
       "steps": []
     },
-    "the-great-ones:check_black_cat_is_searching_for_the_truth": {
+    "waking-nightmare:maybe_proceed_campaign_a": {
       "kind": "branch",
       "condition": {
-        "kind": "logHas",
-        "id": "black_cat_is_searching_for_the_truth",
-        "section": "campaign_notes"
+        "kind": "unsupported",
+        "name": "campaign_data",
+        "take": false
       },
       "then": [
-        "the-great-ones:black_cat_searching_for_truth_story",
-        "the-great-ones:black_cat_knows_the_truth:text",
-        "the-great-ones:check_black_cat_is_searching_for_the_truth:yes:fx"
+        "waking-nightmare:proceed_campaign_a"
       ],
-      "else": [
-        "the-great-ones:resume_interlude_decision",
-        "the-great-ones:check_great_ones_decision"
-      ]
-    },
-    "the-great-ones:check_you_asked_for_it": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "you_asked_for_it",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "the-great-ones:skip_rest_of_interlude_cat_mad:text"
-      ],
-      "else": [
-        "the-great-ones:great_ones_2",
-        "the-great-ones:check_possess_silver_key",
-        "the-great-ones:check_black_cat_is_searching_for_the_truth"
-      ]
-    },
-    "the-great-ones:upgradeDecks": {
-      "kind": "upgradeDecks"
+      "else": []
     },
     "weaver-of-the-cosmos:bridge_was_completed": {
       "kind": "effects",
@@ -1455,90 +1539,6 @@
       "name": "send_campaign_link",
       "effects": [],
       "steps": []
-    },
-    "tde-epilogue:check_where_the_gods_dwell": {
-      "kind": "unsupported",
-      "name": "receive_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "tde-epilogue:bridge_was_completed_column": {
-      "kind": "unsupported",
-      "name": "receive_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "tde-epilogue:returned_to_reality_column": {
-      "kind": "unsupported",
-      "name": "receive_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "tde-epilogue:never_escaped_column": {
-      "kind": "unsupported",
-      "name": "receive_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "tde-epilogue:still_in_the_dreamlands_column": {
-      "kind": "unsupported",
-      "name": "receive_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "tde-epilogue:check_still_in_the_dreamlands": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "still_in_the_dreamlands",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "tde-epilogue:still_in_the_dreamlands_column"
-      ],
-      "else": []
-    },
-    "tde-epilogue:check_never_escaped": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "never_escaped",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "tde-epilogue:never_escaped_column"
-      ],
-      "else": [
-        "tde-epilogue:check_still_in_the_dreamlands"
-      ]
-    },
-    "tde-epilogue:check_returned_to_reality": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "returned_to_reality",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "tde-epilogue:returned_to_reality_column"
-      ],
-      "else": [
-        "tde-epilogue:check_never_escaped"
-      ]
-    },
-    "tde-epilogue:check_bridge_was_completed": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "bridge_was_completed",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "tde-epilogue:bridge_was_completed_column"
-      ],
-      "else": [
-        "tde-epilogue:check_returned_to_reality"
-      ]
     }
   }
 }

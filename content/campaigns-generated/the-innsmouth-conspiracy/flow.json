@@ -20,32 +20,6 @@
     "tic-epilogue"
   ],
   "interludes": {
-    "puzzle-pieces": {
-      "kind": "interlude",
-      "name": "Puzzle Pieces",
-      "steps": [
-        "puzzle-pieces:intro",
-        "puzzle-pieces:check_memories_recovered:text",
-        "puzzle-pieces:check_meeting_with_thomas_dawson",
-        "puzzle-pieces:check_no_memories_recovered",
-        "puzzle-pieces:check_battle_with_a_horrifying_devil",
-        "puzzle-pieces:check_decision_to_stick_together",
-        "puzzle-pieces:check_encounter_with_a_secret_cult",
-        "puzzle-pieces:outro"
-      ]
-    },
-    "the-syzygy": {
-      "kind": "interlude",
-      "name": "The Syzygy",
-      "steps": [
-        "the-syzygy:syzygy_1",
-        "the-syzygy:check_mission_failed",
-        "the-syzygy:syzygy_4",
-        "the-syzygy:spend_xp:text",
-        "the-syzygy:spend_xp",
-        "the-syzygy:upgradeDecks"
-      ]
-    },
     "beneath-the-waves": {
       "kind": "interlude",
       "name": "Beneath the Waves",
@@ -76,6 +50,32 @@
         "hidden-truths:upgradeDecks"
       ]
     },
+    "puzzle-pieces": {
+      "kind": "interlude",
+      "name": "Puzzle Pieces",
+      "steps": [
+        "puzzle-pieces:intro",
+        "puzzle-pieces:check_memories_recovered:text",
+        "puzzle-pieces:check_meeting_with_thomas_dawson",
+        "puzzle-pieces:check_no_memories_recovered",
+        "puzzle-pieces:check_battle_with_a_horrifying_devil",
+        "puzzle-pieces:check_decision_to_stick_together",
+        "puzzle-pieces:check_encounter_with_a_secret_cult",
+        "puzzle-pieces:outro"
+      ]
+    },
+    "the-syzygy": {
+      "kind": "interlude",
+      "name": "The Syzygy",
+      "steps": [
+        "the-syzygy:syzygy_1",
+        "the-syzygy:check_mission_failed",
+        "the-syzygy:syzygy_4",
+        "the-syzygy:spend_xp:text",
+        "the-syzygy:spend_xp",
+        "the-syzygy:upgradeDecks"
+      ]
+    },
     "tic-epilogue": {
       "kind": "epilogue",
       "name": "Epilogue",
@@ -87,69 +87,6 @@
     }
   },
   "resolutions": {
-    "the-pit-of-despair": {
-      "R1": [
-        "the-pit-of-despair:maybe_upgrade_decks"
-      ]
-    },
-    "the-vanishing-of-elina-harper": {
-      "none": [],
-      "R1": [
-        "the-vanishing-of-elina-harper:maybe_return_xp:text",
-        "the-vanishing-of-elina-harper:mission_failed"
-      ],
-      "R2": [
-        "the-vanishing-of-elina-harper:maybe_return_xp:text",
-        "the-vanishing-of-elina-harper:mission_succeeded"
-      ],
-      "R3": [
-        "the-vanishing-of-elina-harper:maybe_return_xp:text",
-        "the-vanishing-of-elina-harper:mission_succeeded"
-      ],
-      "R4": [
-        "the-vanishing-of-elina-harper:maybe_return_xp:text",
-        "the-vanishing-of-elina-harper:mission_succeeded"
-      ],
-      "R5": [
-        "the-vanishing-of-elina-harper:maybe_return_xp:text",
-        "the-vanishing-of-elina-harper:mission_succeeded"
-      ],
-      "R6": [
-        "the-vanishing-of-elina-harper:maybe_return_xp:text",
-        "the-vanishing-of-elina-harper:mission_succeeded"
-      ],
-      "R7": [
-        "the-vanishing-of-elina-harper:maybe_return_xp:text",
-        "the-vanishing-of-elina-harper:mission_succeeded"
-      ]
-    },
-    "in-too-deep": {
-      "R1": [
-        "in-too-deep:maybe_ask_consumed_by_rising_tide",
-        "in-too-deep:check_made_it_safely_to_their_vehicles",
-        "in-too-deep:maybe_upgrade_decks"
-      ]
-    },
-    "devil-reef": {
-      "none": [],
-      "R1": [
-        "devil-reef:maybe_ask_tide_has_grown_stronger",
-        "devil-reef:ask_terror_of_devil_reef",
-        "devil-reef:proceed_keys:text"
-      ]
-    },
-    "horror-in-high-gear": {
-      "none": [
-        "horror-in-high-gear:reached_falcon_point_after_sunrise",
-        "horror-in-high-gear:earn_xp",
-        "horror-in-high-gear:upgradeDecks"
-      ],
-      "R1": [
-        "horror-in-high-gear:reached_falcon_point_before_sunrise",
-        "horror-in-high-gear:earn_xp",
-        "horror-in-high-gear:upgradeDecks"
-      ]
-    },
     "a-light-in-the-fog": {
       "R1": [
         "a-light-in-the-fog:maybe_return_deep_one:text",
@@ -189,25 +126,31 @@
         "a-light-in-the-fog:maybe_upgrade_decks"
       ]
     },
-    "the-lair-of-dagon": {
+    "devil-reef": {
+      "none": [],
+      "R1": [
+        "devil-reef:maybe_ask_tide_has_grown_stronger",
+        "devil-reef:ask_terror_of_devil_reef",
+        "devil-reef:proceed_keys:text"
+      ]
+    },
+    "horror-in-high-gear": {
       "none": [
-        "the-lair-of-dagon:dagon_has_awakened"
+        "horror-in-high-gear:reached_falcon_point_after_sunrise",
+        "horror-in-high-gear:earn_xp",
+        "horror-in-high-gear:upgradeDecks"
       ],
       "R1": [
-        "the-lair-of-dagon:maybe_ask_suspect_defeated",
-        "the-lair-of-dagon:ask_oceiros"
-      ],
-      "R2": [
-        "the-lair-of-dagon:add_elder_thing:text",
-        "the-lair-of-dagon:add_elder_thing"
-      ],
-      "R3": [
-        "the-lair-of-dagon:add_tablet:text",
-        "the-lair-of-dagon:add_tablet"
-      ],
-      "R4": [
-        "the-lair-of-dagon:add_cultist:text",
-        "the-lair-of-dagon:add_cultist"
+        "horror-in-high-gear:reached_falcon_point_before_sunrise",
+        "horror-in-high-gear:earn_xp",
+        "horror-in-high-gear:upgradeDecks"
+      ]
+    },
+    "in-too-deep": {
+      "R1": [
+        "in-too-deep:maybe_ask_consumed_by_rising_tide",
+        "in-too-deep:check_made_it_safely_to_their_vehicles",
+        "in-too-deep:maybe_upgrade_decks"
       ]
     },
     "into-the-maelstrom": {
@@ -267,6 +210,63 @@
         "into-the-maelstrom:skip_epilogue",
         "into-the-maelstrom:lose:text",
         "into-the-maelstrom:lose"
+      ]
+    },
+    "the-lair-of-dagon": {
+      "none": [
+        "the-lair-of-dagon:dagon_has_awakened"
+      ],
+      "R1": [
+        "the-lair-of-dagon:maybe_ask_suspect_defeated",
+        "the-lair-of-dagon:ask_oceiros"
+      ],
+      "R2": [
+        "the-lair-of-dagon:add_elder_thing:text",
+        "the-lair-of-dagon:add_elder_thing"
+      ],
+      "R3": [
+        "the-lair-of-dagon:add_tablet:text",
+        "the-lair-of-dagon:add_tablet"
+      ],
+      "R4": [
+        "the-lair-of-dagon:add_cultist:text",
+        "the-lair-of-dagon:add_cultist"
+      ]
+    },
+    "the-pit-of-despair": {
+      "R1": [
+        "the-pit-of-despair:maybe_upgrade_decks"
+      ]
+    },
+    "the-vanishing-of-elina-harper": {
+      "none": [],
+      "R1": [
+        "the-vanishing-of-elina-harper:maybe_return_xp:text",
+        "the-vanishing-of-elina-harper:mission_failed"
+      ],
+      "R2": [
+        "the-vanishing-of-elina-harper:maybe_return_xp:text",
+        "the-vanishing-of-elina-harper:mission_succeeded"
+      ],
+      "R3": [
+        "the-vanishing-of-elina-harper:maybe_return_xp:text",
+        "the-vanishing-of-elina-harper:mission_succeeded"
+      ],
+      "R4": [
+        "the-vanishing-of-elina-harper:maybe_return_xp:text",
+        "the-vanishing-of-elina-harper:mission_succeeded"
+      ],
+      "R5": [
+        "the-vanishing-of-elina-harper:maybe_return_xp:text",
+        "the-vanishing-of-elina-harper:mission_succeeded"
+      ],
+      "R6": [
+        "the-vanishing-of-elina-harper:maybe_return_xp:text",
+        "the-vanishing-of-elina-harper:mission_succeeded"
+      ],
+      "R7": [
+        "the-vanishing-of-elina-harper:maybe_return_xp:text",
+        "the-vanishing-of-elina-harper:mission_succeeded"
       ]
     }
   },
@@ -359,264 +359,28 @@
       "text": "“It was a town of wide extent and dense construction, yet one with a portentous dearth of visible life.”\n–H. P. Lovecraft, “The Shadow Over Innsmouth”",
       "bullets": []
     },
-    "the-pit-of-despair:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "the-pit-of-despair:maybe_upgrade_decks": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "campaign_data",
-        "take": true
-      },
-      "then": [
-        "the-pit-of-despair:upgradeDecks"
-      ],
-      "else": []
-    },
-    "puzzle-pieces:intro": {
-      "kind": "story",
-      "text": "You have no idea who this woman is or how she knows you, yet she seems comfortable and familiar with you. You strain your memory trying to think of how you might have met, but it's no use. You're certain she is a complete stranger. Having woken up in a cold, wet prison with no memories, you aren't feeling very sociable. Your fear and distrust must show, because the woman backs off and narrows her eyes. \"What is it? What's wrong?\"\nYou respond by asking the woman if you know her. \"You truly don't remember? Well, that's going to complicate things. What do you recall? Do you remember anything?\"\nYou relate to the woman the flashes of recollection that you experienced earlier…",
-      "bullets": []
-    },
-    "puzzle-pieces:check_memories_recovered:text": {
-      "kind": "story",
-      "text": "Check the \"Memories Recovered\" section of the Campaign Log. Read each of the sections below that apply to your situation.",
-      "bullets": []
-    },
-    "puzzle-pieces:thomas_dawson_story": {
-      "kind": "story",
-      "text": "You put two and two together and ask if the woman is Miss Harper. \"Ah, so you do remember me?\" she asks with a playful smirk, but you shake your head in response and explain that you only remember being hired by a man named Thomas Dawson to find her. \"But that was… oh. You have forgotten a lot, haven't you? Speaking of Dawson, where is he? Did you see him down there?\"\nYour thoughts turn to the twisted, mangled face that triggered your flashback. Agent Harper's expression turns dour as she watches your eyes. \"…I see. I wish he hadn't come to this forsaken town. Those brutes are going to pay for this.\" You ask who she thinks is responsible for Dawson's death, and she raises her eyebrows in response. \"Right, you don't remember. As far as I know, the last time anybody saw either of you was just before you visited the Esoteric Order of Dagon. Draw your own conclusions.\"",
-      "bullets": []
-    },
-    "puzzle-pieces:thomas_dawson_effects:text": {
-      "kind": "story",
-      "text": "The conspiracy deepens. Every investigator records 1 additional experience under \"Unspent Experience.\"",
-      "bullets": []
-    },
-    "puzzle-pieces:check_meeting_with_thomas_dawson": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "meeting_with_thomas_dawson",
-        "section": "memories_recovered"
-      },
-      "then": [
-        "puzzle-pieces:thomas_dawson_story",
-        "puzzle-pieces:thomas_dawson_effects:text"
-      ],
-      "else": []
-    },
-    "puzzle-pieces:no_memories_recovered_story": {
-      "kind": "story",
-      "text": "You shake your head. You remember nothing. \"That's going to make this difficult,\" the woman says with a sigh. \"All right. Well, I'll tell you what I know. I am Agent Elina Harper. My understanding is that you were hired by my boss, Agent Thomas Dawson, thanks to your deeper understanding of… well, of things that don't really make sense to the rest of us.\" You ask what task you were hired to perform, and the woman smirks. \"You were hired to find me, actually. The Order wasn't too happy about that. It's a bit of a long story. Let's get out of here first, and then I can catch you up on all of that.\"",
-      "bullets": []
-    },
-    "puzzle-pieces:check_no_memories_recovered": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "multi",
-        "take": false
-      },
-      "then": [
-        "puzzle-pieces:no_memories_recovered_story"
-      ],
-      "else": []
-    },
-    "puzzle-pieces:devil_fight_story": {
-      "kind": "story",
-      "text": "You tell Agent Harper about your battle with some kind of aquatic creature. \"Devil Reef,\" she says, shuddering. \"Whatever is going on in this town, Devil Reef is at the heart of it. Let's hope we don't have to head back that way anytime soon… and let's hope that <i>thing</i> stays dead.\"",
-      "bullets": []
-    },
-    "puzzle-pieces:devil_fight_effects:text": {
-      "kind": "story",
-      "text": "The conspiracy deepens. Every investigator records 1 additional experience under \"Unspent Experience.\"",
-      "bullets": []
-    },
-    "puzzle-pieces:check_battle_with_a_horrifying_devil": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "battle_with_a_horrifying_devil",
-        "section": "memories_recovered"
-      },
-      "then": [
-        "puzzle-pieces:devil_fight_story",
-        "puzzle-pieces:devil_fight_effects:text"
-      ],
-      "else": []
-    },
-    "puzzle-pieces:stayed_together_story": {
-      "kind": "story",
-      "text": "\"So you and Dawson were looking for me together, then? Interesting.\" She considers this for a moment. \"I guess even the extraordinary Captain Dawson can be rattled from time to time. It's somewhat gratifying to know he cared that much about finding me. Still…\" her gaze wanders towards the horizon. \"All right, Dawson. I'll make sure you didn't die in vain. I'll burn this whole town to the ground if I have to.\"",
-      "bullets": []
-    },
-    "puzzle-pieces:stayed_together_effects:text": {
-      "kind": "story",
-      "text": "The conspiracy deepens. Every investigator records 1 additional experience under \"Unspent Experience.\"",
-      "bullets": []
-    },
-    "puzzle-pieces:check_decision_to_stick_together": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "decision_to_stick_together",
-        "section": "memories_recovered"
-      },
-      "then": [
-        "puzzle-pieces:stayed_together_story",
-        "puzzle-pieces:stayed_together_effects:text"
-      ],
-      "else": []
-    },
-    "puzzle-pieces:encounter_with_a_secret_cult_story": {
-      "kind": "story",
-      "text": "You describe your memory from inside some kind of cult headquarters. \"Sounds like that must have taken place inside the Esoteric Order of Dagon building on the north side of town,\" Agent Harper reasons. \"That organization is vile: I just know it. I have no evidence to bring back, though, and it sounds like you've forgotten everything you learned.\" She curses under her breath.",
-      "bullets": []
-    },
-    "puzzle-pieces:encounter_with_a_secret_cult_effects:text": {
-      "kind": "story",
-      "text": "The conspiracy deepens. Every investigator records 1 additional experience under \"Unspent Experience.\"",
-      "bullets": []
-    },
-    "puzzle-pieces:check_encounter_with_a_secret_cult": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "encounter_with_a_secret_cult",
-        "section": "memories_recovered"
-      },
-      "then": [
-        "puzzle-pieces:encounter_with_a_secret_cult_story",
-        "puzzle-pieces:encounter_with_a_secret_cult_effects:text"
-      ],
-      "else": []
-    },
-    "puzzle-pieces:outro": {
-      "kind": "story",
-      "text": "You point to the strange, crimson horizon behind Agent Harper and note aloud the alignment of the sun and the moon. \"That began just after you and Agent Dawson entered the Order's headquarters,\" she explains. \"That was almost three days ago. I have no idea what it means, but I can't imagine it is anything good. All of Innsmouth's been locked tight lately. Not a soul in sight. You're lucky I figured out where to look for you.\"\nYour mind reels. The last thing you remember before waking up in that dank pit was enjoying a pleasant late-summer's eve in Arkham. Now you're in another town altogether, and your memory is filled with gaping holes. You wonder aloud what the date is, and Agent Harper replies: \"It's the twenty-fourth of September. I don't know when exactly you arrived in Innsmouth or how much of your memory is missing. Isn't there anything else you remember? Anything at all?\"\nThe water sloshes against your feet as you struggle to remember. In minutes, the tide has risen several inches, and there's no sign of it slowing down. You fix your gaze on the woman who stands before you—her weary eyes, her disheveled clothes, the red marks on her wrists—and something triggers in your recollection.\n\"Wake up. We're almost there.\" The memory lurks at the precipice of your consciousness, threatening to draw you into the darkness. \"Hey. Wake up, I said.\" You clutch your forehead as searing pain bounces throughout your skull. \"Wake up, dammit!\"\nDarkness pulls at the edges of your vision. More memories come flooding back…",
-      "bullets": []
-    },
-    "the-vanishing-of-elina-harper:maybe_return_xp:text": {
+    "a-light-in-the-fog:maybe_return_deep_one:text": {
       "kind": "story",
       "text": "dummy",
       "bullets": []
     },
-    "the-vanishing-of-elina-harper:mission_failed": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "mission_failed",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
+    "a-light-in-the-fog:ask_moon_room_resigned": {
+      "kind": "unsupported",
+      "name": "investigator_choice",
+      "text": "Which location did each investigator resign at?",
+      "effects": [],
+      "steps": []
     },
-    "the-vanishing-of-elina-harper:mission_succeeded": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "mission_succeeded",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-syzygy:syzygy_1": {
-      "kind": "story",
-      "text": "Light flashes in your mind. Shadows drown your thoughts as the memory fades. You are lying once again on the rocky beach off the coast, your skull pounding in agony. Agent Harper leans over you with worry etched in her brow. \"Hey! Hey, you finally awake?\"\nYou sit up, your muscles aching. It looks like the tide rose several more inches while you were out. The cold water laps at your ankles and soaks into your shoes. \"What happened?\" she says. \"What did you see?\"",
-      "bullets": []
-    },
-    "the-syzygy:syzygy_2": {
-      "kind": "story",
-      "text": "You tell Harper you remember your mission to find her, but that after a week of searching, you hadn't been able to do so. The last thing you remember was somebody slipping a notebook under your hotel room door with some information regarding an organization called the \"Esoteric Order of Dagon.\"\n\"Oh. Yeah, that was me. Sorry I couldn't stick around and chat, but I had some other business to attend to,\" she explains. She tells you that after several days in captivity, she finally managed to get the upper hand against her captor and free herself, but she was injured in the process. As if to prove her story, she opens her trenchcoat, and you see dark bloodstains seeping through her button-up shirt. Several bandages peek out beneath the fabric. \"Just barely missed my kidney. Lucky me, eh?\"\nYou complain that you were wasting your time searching high and low for her, and she scoffs. \"Hardly! You learned more in one week than I did in two. I knew that you were onto something, and I wanted to help out, but I was still being followed. So I dropped off the one solid bit of research I'd found and laid low for a while. It was you who did the rest really.\" Sadly, you remember nothing of \"the rest.\"",
-      "bullets": []
-    },
-    "the-syzygy:syzygy_3": {
-      "kind": "story",
-      "text": "You tell Harper you remember your mission to find her and the interrogation of her kidnapper. She grins. \"Thanks again for that, by the way. I really did have things under control, though,\" she jokes. \"Do you remember anything after that?\"\nYou shake your head. The last thing you remember was the mention of an organization called the \"Esoteric Order of Dagon.\"\nHarper mutters a curse under her breath. \"That's unfortunate. But amnesia or not, at least I know I can trust you. Whether you remember it or not, you've come through for me in the past.\"",
-      "bullets": []
-    },
-    "the-syzygy:earn_elina_harper:text": {
-      "kind": "story",
-      "text": "Any one investigator may add the Elina Harper story asset to their deck. This card does not count against the investigators deck size.",
-      "bullets": []
-    },
-    "the-syzygy:earn_elina_harper": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "earnCard",
-          "code": "07083",
-          "who": "choice"
-        }
-      ]
-    },
-    "the-syzygy:check_mission_succeeded": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "mission_succeeded",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "the-syzygy:syzygy_3",
-        "the-syzygy:earn_elina_harper:text",
-        "the-syzygy:earn_elina_harper"
-      ],
-      "else": []
-    },
-    "the-syzygy:check_mission_failed": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "mission_failed",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "the-syzygy:syzygy_2"
-      ],
-      "else": [
-        "the-syzygy:check_mission_succeeded"
-      ]
-    },
-    "the-syzygy:syzygy_4": {
-      "kind": "story",
-      "text": "\"Don't worry,\" she says, \"I'll catch you up. There's a lot you still don't remember.\" Just then, a resounding crash of thunder echoes on the eastern horizon, and a powerful wave smashes against the jetties. The sky is a deep crimson red behind blackening storm clouds that swirl around the sun and the moon. The celestial bodies hang together in perfect alignment. \"That can't be good.\" Harper's lips turn rigid with concern. \"Okay, new plan. Let's get back to Innsmouth. I'll explain what I know along the way.\"",
-      "bullets": []
-    },
-    "the-syzygy:spend_xp:text": {
-      "kind": "story",
-      "text": "With a fragment of your memories returned to you, past events have become clearer. Each investigator may now spend the experience recorded under \"Unspent Experience\" in your Campaign Log.",
-      "bullets": []
-    },
-    "the-syzygy:spend_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 0,
-          "who": "each",
-          "victory": false
-        }
-      ]
-    },
-    "the-syzygy:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "in-too-deep:ask_consumed_by_rising_tide": {
+    "a-light-in-the-fog:ask_black_key_on_act": {
       "kind": "chooseOne",
       "choices": [
         {
-          "id": "yes",
-          "text": "Was <i>Innsmouth consumed by the rising tide</i>?",
+          "id": "red",
+          "text": "Was the black key on the current act when the game ended?",
           "effects": [
             {
               "do": "record",
-              "key": "innsmouth_was_consumed_by_the_rising_tide",
+              "key": "possess_a_map_of_yhanthlei",
               "section": "campaign_notes",
               "value": true
             }
@@ -625,39 +389,120 @@
         }
       ]
     },
-    "in-too-deep:maybe_ask_consumed_by_rising_tide": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "campaign_data",
-        "take": true
-      },
-      "then": [
-        "in-too-deep:ask_consumed_by_rising_tide"
-      ],
-      "else": []
+    "a-light-in-the-fog:ask_red_key_on_act": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "red",
+          "text": "Was the red key on the current act when the game ended?",
+          "effects": [
+            {
+              "do": "record",
+              "key": "possess_the_key_to_yhanthlei",
+              "section": "campaign_notes",
+              "value": true
+            }
+          ],
+          "steps": []
+        }
+      ]
     },
-    "in-too-deep:vehicle_xp:text": {
+    "a-light-in-the-fog:ask_story_relics:text": {
       "kind": "story",
-      "text": "Each investigator records 2 additional experience under \"Unspent Experience.\"",
+      "text": "For each set-aside [[Relic]] story asset that was added to an investigator's hand during this scenario, any investigator may choose to add that story asset to their deck. It does not count toward that investigator's deck size.",
       "bullets": []
     },
-    "in-too-deep:check_made_it_safely_to_their_vehicles": {
+    "a-light-in-the-fog:ask_idol": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "earn_idol",
+          "text": "Was Waveworn Idol added to an investigator's hand during this scenario?",
+          "effects": [
+            {
+              "do": "earnCard",
+              "code": "07179",
+              "who": "choice"
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "a-light-in-the-fog:maybe_ask_idol": {
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "made_it_safely_to_their_vehicles",
+        "id": "idol_brought_to_the_lighthouse",
         "section": "campaign_notes"
       },
       "then": [
-        "in-too-deep:vehicle_xp:text"
+        "a-light-in-the-fog:ask_idol"
       ],
       "else": []
     },
-    "in-too-deep:upgradeDecks": {
+    "a-light-in-the-fog:ask_mantle": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "earn_idol",
+          "text": "Was Awakened Mantle added to an investigator's hand during this scenario?",
+          "effects": [
+            {
+              "do": "earnCard",
+              "code": "07180",
+              "who": "choice"
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "a-light-in-the-fog:maybe_ask_mantle": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "mantle_brought_to_the_lighthouse",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "a-light-in-the-fog:ask_mantle"
+      ],
+      "else": []
+    },
+    "a-light-in-the-fog:ask_headdress": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "earn_idol",
+          "text": "Was Headdress of Y'ha-nthlei added to an investigator's hand during this scenario?",
+          "effects": [
+            {
+              "do": "earnCard",
+              "code": "07181",
+              "who": "choice"
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "a-light-in-the-fog:maybe_ask_headdress": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "headdress_brought_to_the_lighthouse",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "a-light-in-the-fog:ask_headdress"
+      ],
+      "else": []
+    },
+    "a-light-in-the-fog:upgradeDecks": {
       "kind": "upgradeDecks"
     },
-    "in-too-deep:maybe_upgrade_decks": {
+    "a-light-in-the-fog:maybe_upgrade_decks": {
       "kind": "branch",
       "condition": {
         "kind": "unsupported",
@@ -665,102 +510,41 @@
         "take": true
       },
       "then": [
-        "in-too-deep:upgradeDecks"
+        "a-light-in-the-fog:upgradeDecks"
       ],
       "else": []
     },
-    "devil-reef:record_tide_has_grown_stronger": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "tide_has_grown_stronger",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "devil-reef:ask_tide_has_grown_stronger": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "cheat",
-          "text": "Did you reach <b>Resolution 1</b> by advancing Agenda 2b?",
-          "effects": [],
-          "steps": [
-            "devil-reef:record_tide_has_grown_stronger"
-          ]
-        }
-      ]
-    },
-    "devil-reef:maybe_ask_tide_has_grown_stronger": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "multi",
-        "take": false
-      },
-      "then": [
-        "devil-reef:ask_tide_has_grown_stronger"
-      ],
-      "else": []
-    },
-    "devil-reef:terror_of_devil_reef_is_still_alive": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "terror_of_devil_reef_is_still_alive",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "devil-reef:terror_of_devil_reef_is_dead": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "terror_of_devil_reef_is_dead",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "devil-reef:ask_terror_of_devil_reef": {
-      "kind": "chooseOne",
-      "text": "Find the Terror of Devil Reef. Then choose one of the following options:",
-      "choices": [
-        {
-          "id": "agenda_1",
-          "text": "It was agenda 1a when the game ended.",
-          "effects": [],
-          "steps": [
-            "devil-reef:terror_of_devil_reef_is_still_alive"
-          ]
-        },
-        {
-          "id": "in_play",
-          "text": "The Terror of Devil Reef is in play.",
-          "effects": [],
-          "steps": [
-            "devil-reef:terror_of_devil_reef_is_still_alive"
-          ]
-        },
-        {
-          "id": "victory_display",
-          "text": "The Terror of Devil Reef is in the victory display.",
-          "effects": [],
-          "steps": [
-            "devil-reef:terror_of_devil_reef_is_dead"
-          ]
-        }
-      ]
-    },
-    "devil-reef:proceed_keys:text": {
+    "a-light-in-the-fog:all_killed:text": {
       "kind": "story",
-      "text": "Do not move the purple, black, or white keys from their current position just yet—the location of each of these keys will be important during <b>Interlude III: Beneath the Waves</b>.",
+      "text": "Each investigator is <b>killed</b>.",
       "bullets": []
+    },
+    "a-light-in-the-fog:all_killed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "kill",
+          "who": "each"
+        }
+      ]
+    },
+    "a-light-in-the-fog:lose_campaign:text": {
+      "kind": "story",
+      "text": "The investigators lose the campaign.",
+      "bullets": []
+    },
+    "a-light-in-the-fog:lose_campaign": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "tic-epilogue"
+        },
+        {
+          "do": "end",
+          "result": "lose"
+        }
+      ]
     },
     "beneath-the-waves:intro": {
       "kind": "story",
@@ -1002,341 +786,98 @@
     "beneath-the-waves:upgradeDecks": {
       "kind": "upgradeDecks"
     },
-    "horror-in-high-gear:reached_falcon_point_after_sunrise": {
+    "devil-reef:record_tide_has_grown_stronger": {
       "kind": "effects",
       "effects": [
         {
           "do": "record",
-          "key": "reached_falcon_point_after_sunrise",
+          "key": "tide_has_grown_stronger",
           "section": "campaign_notes",
           "value": true
         }
       ]
     },
-    "horror-in-high-gear:earn_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 0,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "horror-in-high-gear:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "horror-in-high-gear:reached_falcon_point_before_sunrise": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "reached_falcon_point_before_sunrise",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "a-light-in-the-fog:maybe_return_deep_one:text": {
-      "kind": "story",
-      "text": "dummy",
-      "bullets": []
-    },
-    "a-light-in-the-fog:ask_moon_room_resigned": {
-      "kind": "unsupported",
-      "name": "investigator_choice",
-      "text": "Which location did each investigator resign at?",
-      "effects": [],
-      "steps": []
-    },
-    "a-light-in-the-fog:ask_black_key_on_act": {
+    "devil-reef:ask_tide_has_grown_stronger": {
       "kind": "chooseOne",
       "choices": [
         {
-          "id": "red",
-          "text": "Was the black key on the current act when the game ended?",
-          "effects": [
-            {
-              "do": "record",
-              "key": "possess_a_map_of_yhanthlei",
-              "section": "campaign_notes",
-              "value": true
-            }
-          ],
-          "steps": []
-        }
-      ]
-    },
-    "a-light-in-the-fog:ask_red_key_on_act": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "red",
-          "text": "Was the red key on the current act when the game ended?",
-          "effects": [
-            {
-              "do": "record",
-              "key": "possess_the_key_to_yhanthlei",
-              "section": "campaign_notes",
-              "value": true
-            }
-          ],
-          "steps": []
-        }
-      ]
-    },
-    "a-light-in-the-fog:ask_story_relics:text": {
-      "kind": "story",
-      "text": "For each set-aside [[Relic]] story asset that was added to an investigator's hand during this scenario, any investigator may choose to add that story asset to their deck. It does not count toward that investigator's deck size.",
-      "bullets": []
-    },
-    "a-light-in-the-fog:ask_idol": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "earn_idol",
-          "text": "Was Waveworn Idol added to an investigator's hand during this scenario?",
-          "effects": [
-            {
-              "do": "earnCard",
-              "code": "07179",
-              "who": "choice"
-            }
-          ],
-          "steps": []
-        }
-      ]
-    },
-    "a-light-in-the-fog:maybe_ask_idol": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "idol_brought_to_the_lighthouse",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "a-light-in-the-fog:ask_idol"
-      ],
-      "else": []
-    },
-    "a-light-in-the-fog:ask_mantle": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "earn_idol",
-          "text": "Was Awakened Mantle added to an investigator's hand during this scenario?",
-          "effects": [
-            {
-              "do": "earnCard",
-              "code": "07180",
-              "who": "choice"
-            }
-          ],
-          "steps": []
-        }
-      ]
-    },
-    "a-light-in-the-fog:maybe_ask_mantle": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "mantle_brought_to_the_lighthouse",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "a-light-in-the-fog:ask_mantle"
-      ],
-      "else": []
-    },
-    "a-light-in-the-fog:ask_headdress": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "earn_idol",
-          "text": "Was Headdress of Y'ha-nthlei added to an investigator's hand during this scenario?",
-          "effects": [
-            {
-              "do": "earnCard",
-              "code": "07181",
-              "who": "choice"
-            }
-          ],
-          "steps": []
-        }
-      ]
-    },
-    "a-light-in-the-fog:maybe_ask_headdress": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "headdress_brought_to_the_lighthouse",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "a-light-in-the-fog:ask_headdress"
-      ],
-      "else": []
-    },
-    "a-light-in-the-fog:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "a-light-in-the-fog:maybe_upgrade_decks": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "campaign_data",
-        "take": true
-      },
-      "then": [
-        "a-light-in-the-fog:upgradeDecks"
-      ],
-      "else": []
-    },
-    "a-light-in-the-fog:all_killed:text": {
-      "kind": "story",
-      "text": "Each investigator is <b>killed</b>.",
-      "bullets": []
-    },
-    "a-light-in-the-fog:all_killed": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "kill",
-          "who": "each"
-        }
-      ]
-    },
-    "a-light-in-the-fog:lose_campaign:text": {
-      "kind": "story",
-      "text": "The investigators lose the campaign.",
-      "bullets": []
-    },
-    "a-light-in-the-fog:lose_campaign": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "skipScenario",
-          "scenario": "tic-epilogue"
-        },
-        {
-          "do": "end",
-          "result": "lose"
-        }
-      ]
-    },
-    "the-lair-of-dagon:dagon_has_awakened": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "dagon_has_awakened",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-lair-of-dagon:gatekeeper_has_been_defeated": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "gatekeeper_has_been_defeated",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-lair-of-dagon:ask_suspect_defeated": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "suspect_defeated",
-          "text": "Is a [[Suspect]] enemy in the victory display?",
+          "id": "cheat",
+          "text": "Did you reach <b>Resolution 1</b> by advancing Agenda 2b?",
           "effects": [],
           "steps": [
-            "the-lair-of-dagon:gatekeeper_has_been_defeated"
+            "devil-reef:record_tide_has_grown_stronger"
           ]
         }
       ]
     },
-    "the-lair-of-dagon:maybe_ask_suspect_defeated": {
+    "devil-reef:maybe_ask_tide_has_grown_stronger": {
       "kind": "branch",
       "condition": {
-        "kind": "logHas",
-        "id": "a_jailbreak",
-        "section": "memories_recovered"
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
       },
       "then": [
-        "the-lair-of-dagon:ask_suspect_defeated"
+        "devil-reef:ask_tide_has_grown_stronger"
       ],
       "else": []
     },
-    "the-lair-of-dagon:ask_oceiros": {
+    "devil-reef:terror_of_devil_reef_is_still_alive": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "terror_of_devil_reef_is_still_alive",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "devil-reef:terror_of_devil_reef_is_dead": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "terror_of_devil_reef_is_dead",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "devil-reef:ask_terror_of_devil_reef": {
       "kind": "chooseOne",
-      "text": "The lead investigator must decide:",
+      "text": "Find the Terror of Devil Reef. Then choose one of the following options:",
       "choices": [
         {
-          "id": "nothing",
-          "text": "Tell Oceiros nothing.",
+          "id": "agenda_1",
+          "text": "It was agenda 1a when the game ended.",
           "effects": [],
-          "steps": []
+          "steps": [
+            "devil-reef:terror_of_devil_reef_is_still_alive"
+          ]
         },
         {
-          "id": "lying",
-          "text": "Lie to Oceiros.",
+          "id": "in_play",
+          "text": "The Terror of Devil Reef is in play.",
           "effects": [],
-          "steps": []
+          "steps": [
+            "devil-reef:terror_of_devil_reef_is_still_alive"
+          ]
         },
         {
-          "id": "truth",
-          "text": "Tell Oceiros everything.",
+          "id": "victory_display",
+          "text": "The Terror of Devil Reef is in the victory display.",
           "effects": [],
-          "steps": []
+          "steps": [
+            "devil-reef:terror_of_devil_reef_is_dead"
+          ]
         }
       ]
     },
-    "the-lair-of-dagon:add_elder_thing:text": {
+    "devil-reef:proceed_keys:text": {
       "kind": "story",
-      "text": "Add 1 [elder_thing] token to the chaos bag for the remainder of the campaign.",
+      "text": "Do not move the purple, black, or white keys from their current position just yet—the location of each of these keys will be important during <b>Interlude III: Beneath the Waves</b>.",
       "bullets": []
-    },
-    "the-lair-of-dagon:add_elder_thing": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "addChaosToken",
-          "token": "elderThing"
-        }
-      ]
-    },
-    "the-lair-of-dagon:add_tablet:text": {
-      "kind": "story",
-      "text": "Add 1 [tablet] token to the chaos bag for the remainder of the campaign.",
-      "bullets": []
-    },
-    "the-lair-of-dagon:add_tablet": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "addChaosToken",
-          "token": "tablet"
-        }
-      ]
-    },
-    "the-lair-of-dagon:add_cultist:text": {
-      "kind": "story",
-      "text": "Add 1 [cultist] token to the chaos bag for the remainder of the campaign.",
-      "bullets": []
-    },
-    "the-lair-of-dagon:add_cultist": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "addChaosToken",
-          "token": "cultist"
-        }
-      ]
     },
     "hidden-truths:intro": {
       "kind": "story",
@@ -1499,6 +1040,104 @@
     },
     "hidden-truths:upgradeDecks": {
       "kind": "upgradeDecks"
+    },
+    "horror-in-high-gear:reached_falcon_point_after_sunrise": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "reached_falcon_point_after_sunrise",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "horror-in-high-gear:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "horror-in-high-gear:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "horror-in-high-gear:reached_falcon_point_before_sunrise": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "reached_falcon_point_before_sunrise",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "in-too-deep:ask_consumed_by_rising_tide": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Was <i>Innsmouth consumed by the rising tide</i>?",
+          "effects": [
+            {
+              "do": "record",
+              "key": "innsmouth_was_consumed_by_the_rising_tide",
+              "section": "campaign_notes",
+              "value": true
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "in-too-deep:maybe_ask_consumed_by_rising_tide": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_data",
+        "take": true
+      },
+      "then": [
+        "in-too-deep:ask_consumed_by_rising_tide"
+      ],
+      "else": []
+    },
+    "in-too-deep:vehicle_xp:text": {
+      "kind": "story",
+      "text": "Each investigator records 2 additional experience under \"Unspent Experience.\"",
+      "bullets": []
+    },
+    "in-too-deep:check_made_it_safely_to_their_vehicles": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "made_it_safely_to_their_vehicles",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "in-too-deep:vehicle_xp:text"
+      ],
+      "else": []
+    },
+    "in-too-deep:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "in-too-deep:maybe_upgrade_decks": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_data",
+        "take": true
+      },
+      "then": [
+        "in-too-deep:upgradeDecks"
+      ],
+      "else": []
     },
     "into-the-maelstrom:escaped_yhanthlei": {
       "kind": "effects",
@@ -1774,6 +1413,367 @@
         {
           "do": "end",
           "result": "lose"
+        }
+      ]
+    },
+    "puzzle-pieces:intro": {
+      "kind": "story",
+      "text": "You have no idea who this woman is or how she knows you, yet she seems comfortable and familiar with you. You strain your memory trying to think of how you might have met, but it's no use. You're certain she is a complete stranger. Having woken up in a cold, wet prison with no memories, you aren't feeling very sociable. Your fear and distrust must show, because the woman backs off and narrows her eyes. \"What is it? What's wrong?\"\nYou respond by asking the woman if you know her. \"You truly don't remember? Well, that's going to complicate things. What do you recall? Do you remember anything?\"\nYou relate to the woman the flashes of recollection that you experienced earlier…",
+      "bullets": []
+    },
+    "puzzle-pieces:check_memories_recovered:text": {
+      "kind": "story",
+      "text": "Check the \"Memories Recovered\" section of the Campaign Log. Read each of the sections below that apply to your situation.",
+      "bullets": []
+    },
+    "puzzle-pieces:thomas_dawson_story": {
+      "kind": "story",
+      "text": "You put two and two together and ask if the woman is Miss Harper. \"Ah, so you do remember me?\" she asks with a playful smirk, but you shake your head in response and explain that you only remember being hired by a man named Thomas Dawson to find her. \"But that was… oh. You have forgotten a lot, haven't you? Speaking of Dawson, where is he? Did you see him down there?\"\nYour thoughts turn to the twisted, mangled face that triggered your flashback. Agent Harper's expression turns dour as she watches your eyes. \"…I see. I wish he hadn't come to this forsaken town. Those brutes are going to pay for this.\" You ask who she thinks is responsible for Dawson's death, and she raises her eyebrows in response. \"Right, you don't remember. As far as I know, the last time anybody saw either of you was just before you visited the Esoteric Order of Dagon. Draw your own conclusions.\"",
+      "bullets": []
+    },
+    "puzzle-pieces:thomas_dawson_effects:text": {
+      "kind": "story",
+      "text": "The conspiracy deepens. Every investigator records 1 additional experience under \"Unspent Experience.\"",
+      "bullets": []
+    },
+    "puzzle-pieces:check_meeting_with_thomas_dawson": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "meeting_with_thomas_dawson",
+        "section": "memories_recovered"
+      },
+      "then": [
+        "puzzle-pieces:thomas_dawson_story",
+        "puzzle-pieces:thomas_dawson_effects:text"
+      ],
+      "else": []
+    },
+    "puzzle-pieces:no_memories_recovered_story": {
+      "kind": "story",
+      "text": "You shake your head. You remember nothing. \"That's going to make this difficult,\" the woman says with a sigh. \"All right. Well, I'll tell you what I know. I am Agent Elina Harper. My understanding is that you were hired by my boss, Agent Thomas Dawson, thanks to your deeper understanding of… well, of things that don't really make sense to the rest of us.\" You ask what task you were hired to perform, and the woman smirks. \"You were hired to find me, actually. The Order wasn't too happy about that. It's a bit of a long story. Let's get out of here first, and then I can catch you up on all of that.\"",
+      "bullets": []
+    },
+    "puzzle-pieces:check_no_memories_recovered": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "puzzle-pieces:no_memories_recovered_story"
+      ],
+      "else": []
+    },
+    "puzzle-pieces:devil_fight_story": {
+      "kind": "story",
+      "text": "You tell Agent Harper about your battle with some kind of aquatic creature. \"Devil Reef,\" she says, shuddering. \"Whatever is going on in this town, Devil Reef is at the heart of it. Let's hope we don't have to head back that way anytime soon… and let's hope that <i>thing</i> stays dead.\"",
+      "bullets": []
+    },
+    "puzzle-pieces:devil_fight_effects:text": {
+      "kind": "story",
+      "text": "The conspiracy deepens. Every investigator records 1 additional experience under \"Unspent Experience.\"",
+      "bullets": []
+    },
+    "puzzle-pieces:check_battle_with_a_horrifying_devil": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "battle_with_a_horrifying_devil",
+        "section": "memories_recovered"
+      },
+      "then": [
+        "puzzle-pieces:devil_fight_story",
+        "puzzle-pieces:devil_fight_effects:text"
+      ],
+      "else": []
+    },
+    "puzzle-pieces:stayed_together_story": {
+      "kind": "story",
+      "text": "\"So you and Dawson were looking for me together, then? Interesting.\" She considers this for a moment. \"I guess even the extraordinary Captain Dawson can be rattled from time to time. It's somewhat gratifying to know he cared that much about finding me. Still…\" her gaze wanders towards the horizon. \"All right, Dawson. I'll make sure you didn't die in vain. I'll burn this whole town to the ground if I have to.\"",
+      "bullets": []
+    },
+    "puzzle-pieces:stayed_together_effects:text": {
+      "kind": "story",
+      "text": "The conspiracy deepens. Every investigator records 1 additional experience under \"Unspent Experience.\"",
+      "bullets": []
+    },
+    "puzzle-pieces:check_decision_to_stick_together": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "decision_to_stick_together",
+        "section": "memories_recovered"
+      },
+      "then": [
+        "puzzle-pieces:stayed_together_story",
+        "puzzle-pieces:stayed_together_effects:text"
+      ],
+      "else": []
+    },
+    "puzzle-pieces:encounter_with_a_secret_cult_story": {
+      "kind": "story",
+      "text": "You describe your memory from inside some kind of cult headquarters. \"Sounds like that must have taken place inside the Esoteric Order of Dagon building on the north side of town,\" Agent Harper reasons. \"That organization is vile: I just know it. I have no evidence to bring back, though, and it sounds like you've forgotten everything you learned.\" She curses under her breath.",
+      "bullets": []
+    },
+    "puzzle-pieces:encounter_with_a_secret_cult_effects:text": {
+      "kind": "story",
+      "text": "The conspiracy deepens. Every investigator records 1 additional experience under \"Unspent Experience.\"",
+      "bullets": []
+    },
+    "puzzle-pieces:check_encounter_with_a_secret_cult": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "encounter_with_a_secret_cult",
+        "section": "memories_recovered"
+      },
+      "then": [
+        "puzzle-pieces:encounter_with_a_secret_cult_story",
+        "puzzle-pieces:encounter_with_a_secret_cult_effects:text"
+      ],
+      "else": []
+    },
+    "puzzle-pieces:outro": {
+      "kind": "story",
+      "text": "You point to the strange, crimson horizon behind Agent Harper and note aloud the alignment of the sun and the moon. \"That began just after you and Agent Dawson entered the Order's headquarters,\" she explains. \"That was almost three days ago. I have no idea what it means, but I can't imagine it is anything good. All of Innsmouth's been locked tight lately. Not a soul in sight. You're lucky I figured out where to look for you.\"\nYour mind reels. The last thing you remember before waking up in that dank pit was enjoying a pleasant late-summer's eve in Arkham. Now you're in another town altogether, and your memory is filled with gaping holes. You wonder aloud what the date is, and Agent Harper replies: \"It's the twenty-fourth of September. I don't know when exactly you arrived in Innsmouth or how much of your memory is missing. Isn't there anything else you remember? Anything at all?\"\nThe water sloshes against your feet as you struggle to remember. In minutes, the tide has risen several inches, and there's no sign of it slowing down. You fix your gaze on the woman who stands before you—her weary eyes, her disheveled clothes, the red marks on her wrists—and something triggers in your recollection.\n\"Wake up. We're almost there.\" The memory lurks at the precipice of your consciousness, threatening to draw you into the darkness. \"Hey. Wake up, I said.\" You clutch your forehead as searing pain bounces throughout your skull. \"Wake up, dammit!\"\nDarkness pulls at the edges of your vision. More memories come flooding back…",
+      "bullets": []
+    },
+    "the-lair-of-dagon:dagon_has_awakened": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "dagon_has_awakened",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-lair-of-dagon:gatekeeper_has_been_defeated": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "gatekeeper_has_been_defeated",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-lair-of-dagon:ask_suspect_defeated": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "suspect_defeated",
+          "text": "Is a [[Suspect]] enemy in the victory display?",
+          "effects": [],
+          "steps": [
+            "the-lair-of-dagon:gatekeeper_has_been_defeated"
+          ]
+        }
+      ]
+    },
+    "the-lair-of-dagon:maybe_ask_suspect_defeated": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "a_jailbreak",
+        "section": "memories_recovered"
+      },
+      "then": [
+        "the-lair-of-dagon:ask_suspect_defeated"
+      ],
+      "else": []
+    },
+    "the-lair-of-dagon:ask_oceiros": {
+      "kind": "chooseOne",
+      "text": "The lead investigator must decide:",
+      "choices": [
+        {
+          "id": "nothing",
+          "text": "Tell Oceiros nothing.",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "lying",
+          "text": "Lie to Oceiros.",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "truth",
+          "text": "Tell Oceiros everything.",
+          "effects": [],
+          "steps": []
+        }
+      ]
+    },
+    "the-lair-of-dagon:add_elder_thing:text": {
+      "kind": "story",
+      "text": "Add 1 [elder_thing] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-lair-of-dagon:add_elder_thing": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        }
+      ]
+    },
+    "the-lair-of-dagon:add_tablet:text": {
+      "kind": "story",
+      "text": "Add 1 [tablet] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-lair-of-dagon:add_tablet": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        }
+      ]
+    },
+    "the-lair-of-dagon:add_cultist:text": {
+      "kind": "story",
+      "text": "Add 1 [cultist] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-lair-of-dagon:add_cultist": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        }
+      ]
+    },
+    "the-pit-of-despair:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "the-pit-of-despair:maybe_upgrade_decks": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_data",
+        "take": true
+      },
+      "then": [
+        "the-pit-of-despair:upgradeDecks"
+      ],
+      "else": []
+    },
+    "the-syzygy:syzygy_1": {
+      "kind": "story",
+      "text": "Light flashes in your mind. Shadows drown your thoughts as the memory fades. You are lying once again on the rocky beach off the coast, your skull pounding in agony. Agent Harper leans over you with worry etched in her brow. \"Hey! Hey, you finally awake?\"\nYou sit up, your muscles aching. It looks like the tide rose several more inches while you were out. The cold water laps at your ankles and soaks into your shoes. \"What happened?\" she says. \"What did you see?\"",
+      "bullets": []
+    },
+    "the-syzygy:syzygy_2": {
+      "kind": "story",
+      "text": "You tell Harper you remember your mission to find her, but that after a week of searching, you hadn't been able to do so. The last thing you remember was somebody slipping a notebook under your hotel room door with some information regarding an organization called the \"Esoteric Order of Dagon.\"\n\"Oh. Yeah, that was me. Sorry I couldn't stick around and chat, but I had some other business to attend to,\" she explains. She tells you that after several days in captivity, she finally managed to get the upper hand against her captor and free herself, but she was injured in the process. As if to prove her story, she opens her trenchcoat, and you see dark bloodstains seeping through her button-up shirt. Several bandages peek out beneath the fabric. \"Just barely missed my kidney. Lucky me, eh?\"\nYou complain that you were wasting your time searching high and low for her, and she scoffs. \"Hardly! You learned more in one week than I did in two. I knew that you were onto something, and I wanted to help out, but I was still being followed. So I dropped off the one solid bit of research I'd found and laid low for a while. It was you who did the rest really.\" Sadly, you remember nothing of \"the rest.\"",
+      "bullets": []
+    },
+    "the-syzygy:syzygy_3": {
+      "kind": "story",
+      "text": "You tell Harper you remember your mission to find her and the interrogation of her kidnapper. She grins. \"Thanks again for that, by the way. I really did have things under control, though,\" she jokes. \"Do you remember anything after that?\"\nYou shake your head. The last thing you remember was the mention of an organization called the \"Esoteric Order of Dagon.\"\nHarper mutters a curse under her breath. \"That's unfortunate. But amnesia or not, at least I know I can trust you. Whether you remember it or not, you've come through for me in the past.\"",
+      "bullets": []
+    },
+    "the-syzygy:earn_elina_harper:text": {
+      "kind": "story",
+      "text": "Any one investigator may add the Elina Harper story asset to their deck. This card does not count against the investigators deck size.",
+      "bullets": []
+    },
+    "the-syzygy:earn_elina_harper": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "07083",
+          "who": "choice"
+        }
+      ]
+    },
+    "the-syzygy:check_mission_succeeded": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "mission_succeeded",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-syzygy:syzygy_3",
+        "the-syzygy:earn_elina_harper:text",
+        "the-syzygy:earn_elina_harper"
+      ],
+      "else": []
+    },
+    "the-syzygy:check_mission_failed": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "mission_failed",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-syzygy:syzygy_2"
+      ],
+      "else": [
+        "the-syzygy:check_mission_succeeded"
+      ]
+    },
+    "the-syzygy:syzygy_4": {
+      "kind": "story",
+      "text": "\"Don't worry,\" she says, \"I'll catch you up. There's a lot you still don't remember.\" Just then, a resounding crash of thunder echoes on the eastern horizon, and a powerful wave smashes against the jetties. The sky is a deep crimson red behind blackening storm clouds that swirl around the sun and the moon. The celestial bodies hang together in perfect alignment. \"That can't be good.\" Harper's lips turn rigid with concern. \"Okay, new plan. Let's get back to Innsmouth. I'll explain what I know along the way.\"",
+      "bullets": []
+    },
+    "the-syzygy:spend_xp:text": {
+      "kind": "story",
+      "text": "With a fragment of your memories returned to you, past events have become clearer. Each investigator may now spend the experience recorded under \"Unspent Experience\" in your Campaign Log.",
+      "bullets": []
+    },
+    "the-syzygy:spend_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-syzygy:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "the-vanishing-of-elina-harper:maybe_return_xp:text": {
+      "kind": "story",
+      "text": "dummy",
+      "bullets": []
+    },
+    "the-vanishing-of-elina-harper:mission_failed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "mission_failed",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-vanishing-of-elina-harper:mission_succeeded": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "mission_succeeded",
+          "section": "campaign_notes",
+          "value": true
         }
       ]
     },

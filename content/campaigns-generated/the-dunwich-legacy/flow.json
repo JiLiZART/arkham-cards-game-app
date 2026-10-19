@@ -17,6 +17,14 @@
     "dwl-epilogue"
   ],
   "interludes": {
+    "armitages-fate": {
+      "kind": "interlude",
+      "name": "Armitage's Fate",
+      "steps": [
+        "armitages-fate:check_unconscious",
+        "armitages-fate:upgradeDecks"
+      ]
+    },
     "dwl-prologue": {
       "kind": "interlude",
       "name": "Prologue",
@@ -25,12 +33,11 @@
         "dwl-prologue:scenario_choice"
       ]
     },
-    "armitages-fate": {
-      "kind": "interlude",
-      "name": "Armitage's Fate",
+    "dwl-epilogue": {
+      "kind": "epilogue",
+      "name": "Epilogue",
       "steps": [
-        "armitages-fate:check_unconscious",
-        "armitages-fate:upgradeDecks"
+        "dwl-epilogue:check_calmed_townsfolk"
       ]
     },
     "dwl-interlude2": {
@@ -45,16 +52,52 @@
         "dwl-interlude2:check_earl_sawyer",
         "dwl-interlude2:upgradeDecks"
       ]
-    },
-    "dwl-epilogue": {
-      "kind": "epilogue",
-      "name": "Epilogue",
-      "steps": [
-        "dwl-epilogue:check_calmed_townsfolk"
-      ]
     }
   },
   "resolutions": {
+    "blood-on-the-altar": {
+      "none": [
+        "blood-on-the-altar:ritual_completed",
+        "blood-on-the-altar:sacrifice_all:text",
+        "blood-on-the-altar:record_sacrificed",
+        "blood-on-the-altar:check_henry_armitage",
+        "blood-on-the-altar:lose_necronomicon",
+        "blood-on-the-altar:earn_2_xp",
+        "blood-on-the-altar:upgradeDecks",
+        "blood-on-the-altar:skip_survivors"
+      ],
+      "R1": [
+        "blood-on-the-altar:killed_silas_bishop",
+        "blood-on-the-altar:record_sacrificed",
+        "blood-on-the-altar:lose_necronomicon",
+        "blood-on-the-altar:earn_2_xp"
+      ],
+      "R2": [
+        "blood-on-the-altar:restored_silas_bishop",
+        "blood-on-the-altar:record_sacrificed",
+        "blood-on-the-altar:earn_2_xp"
+      ],
+      "R3": [
+        "blood-on-the-altar:banished_silas_bishop",
+        "blood-on-the-altar:record_sacrificed",
+        "blood-on-the-altar:lose_necronomicon",
+        "blood-on-the-altar:earn_2_xp"
+      ]
+    },
+    "essex-county-express": {
+      "none": [
+        "essex-county-express:upgradeDecks"
+      ],
+      "R1": [
+        "essex-county-express:earn_xp",
+        "essex-county-express:upgradeDecks"
+      ],
+      "R2": [
+        "essex-county-express:investigators_delayed",
+        "essex-county-express:earn_xp",
+        "essex-county-express:upgradeDecks"
+      ]
+    },
     "extracurricular-activity": {
       "none": [
         "extracurricular-activity:warren_rice_kidnapped",
@@ -91,6 +134,37 @@
         "extracurricular-activity:failed_to_save_students:text",
         "extracurricular-activity:failed_to_save_students",
         "extracurricular-activity:proceed_either"
+      ]
+    },
+    "lost-in-time-and-space": {
+      "none": [
+        "lost-in-time-and-space:check_final_act"
+      ],
+      "R1": [
+        "lost-in-time-and-space:closed_tear",
+        "lost-in-time-and-space:trauma:text",
+        "lost-in-time-and-space:trauma",
+        "lost-in-time-and-space:earn_xp",
+        "lost-in-time-and-space:upgradeDecks",
+        "lost-in-time-and-space:win_campaign:text",
+        "lost-in-time-and-space:win_campaign"
+      ],
+      "R2": [
+        "lost-in-time-and-space:win_and_lost_forever:text",
+        "lost-in-time-and-space:win_and_lost_forever"
+      ],
+      "R3": [
+        "lost-in-time-and-space:yog_sothoth_fled",
+        "lost-in-time-and-space:all_killed:text",
+        "lost-in-time-and-space:all_killed",
+        "lost-in-time-and-space:win_and_lost_forever:text",
+        "lost-in-time-and-space:win_and_lost_forever"
+      ],
+      "R4": [
+        "lost-in-time-and-space:yog_sothoth_became_one_with_reality",
+        "lost-in-time-and-space:all_insane:text",
+        "lost-in-time-and-space:lose_campaign:text",
+        "lost-in-time-and-space:lose_campaign"
       ]
     },
     "the-house-always-wins": {
@@ -152,49 +226,6 @@
         "the-miskatonic-museum:upgradeDecks"
       ]
     },
-    "essex-county-express": {
-      "none": [
-        "essex-county-express:upgradeDecks"
-      ],
-      "R1": [
-        "essex-county-express:earn_xp",
-        "essex-county-express:upgradeDecks"
-      ],
-      "R2": [
-        "essex-county-express:investigators_delayed",
-        "essex-county-express:earn_xp",
-        "essex-county-express:upgradeDecks"
-      ]
-    },
-    "blood-on-the-altar": {
-      "none": [
-        "blood-on-the-altar:ritual_completed",
-        "blood-on-the-altar:sacrifice_all:text",
-        "blood-on-the-altar:record_sacrificed",
-        "blood-on-the-altar:check_henry_armitage",
-        "blood-on-the-altar:lose_necronomicon",
-        "blood-on-the-altar:earn_2_xp",
-        "blood-on-the-altar:upgradeDecks",
-        "blood-on-the-altar:skip_survivors"
-      ],
-      "R1": [
-        "blood-on-the-altar:killed_silas_bishop",
-        "blood-on-the-altar:record_sacrificed",
-        "blood-on-the-altar:lose_necronomicon",
-        "blood-on-the-altar:earn_2_xp"
-      ],
-      "R2": [
-        "blood-on-the-altar:restored_silas_bishop",
-        "blood-on-the-altar:record_sacrificed",
-        "blood-on-the-altar:earn_2_xp"
-      ],
-      "R3": [
-        "blood-on-the-altar:banished_silas_bishop",
-        "blood-on-the-altar:record_sacrificed",
-        "blood-on-the-altar:lose_necronomicon",
-        "blood-on-the-altar:earn_2_xp"
-      ]
-    },
     "undimensioned-and-unseen": {
       "none": [],
       "R1": [
@@ -225,37 +256,6 @@
         "where-doom-awaits:lose_campaign:text",
         "where-doom-awaits:lose_campaign"
       ]
-    },
-    "lost-in-time-and-space": {
-      "none": [
-        "lost-in-time-and-space:check_final_act"
-      ],
-      "R1": [
-        "lost-in-time-and-space:closed_tear",
-        "lost-in-time-and-space:trauma:text",
-        "lost-in-time-and-space:trauma",
-        "lost-in-time-and-space:earn_xp",
-        "lost-in-time-and-space:upgradeDecks",
-        "lost-in-time-and-space:win_campaign:text",
-        "lost-in-time-and-space:win_campaign"
-      ],
-      "R2": [
-        "lost-in-time-and-space:win_and_lost_forever:text",
-        "lost-in-time-and-space:win_and_lost_forever"
-      ],
-      "R3": [
-        "lost-in-time-and-space:yog_sothoth_fled",
-        "lost-in-time-and-space:all_killed:text",
-        "lost-in-time-and-space:all_killed",
-        "lost-in-time-and-space:win_and_lost_forever:text",
-        "lost-in-time-and-space:win_and_lost_forever"
-      ],
-      "R4": [
-        "lost-in-time-and-space:yog_sothoth_became_one_with_reality",
-        "lost-in-time-and-space:all_insane:text",
-        "lost-in-time-and-space:lose_campaign:text",
-        "lost-in-time-and-space:lose_campaign"
-      ]
     }
   },
   "steps": {
@@ -264,340 +264,6 @@
       "title": "Their hand is at your throats, yet ye see Them not…",
       "text": "“I’m going to burn his accursed diary, and if you men are wise you’ll dynamite that altar-stone up there, and pull down all the rings of standing stones on the other hills. Things like that brought down the beings those Whateleys were so fond of…”\n–H. P. Lovecraft, “The Dunwich Horror”",
       "bullets": []
-    },
-    "dwl-prologue:intro": {
-      "kind": "story",
-      "text": "Dr. Henry Armitage pours himself a glass of pinot and sits down at his desk, gesturing for you to sit across from him. “I apologize for the short notice,” he begins. His face is pale, his forehead sweaty and wrinkled with worry.\nArmitage—the head librarian of Miskatonic University, and a former mentor of yours—privately contacted you in the hopes of gaining your assistance. Eager to help, you made your way to his home in Southside. Upon entering, you were surprised to find his home in disarray. Books and notes litter his desk, and an empty bottle of wine has tipped over onto the ground by the fireplace. You’d always known Armitage to be neat and well-organized.\nThe elderly man takes a moment to collect his thoughts. “I am looking for two of my colleagues—Dr. Francis Morgan, professor of archaeology, and Warren Rice, professor of languages. Warren was supposed to meet up with me over supper earlier today to discuss several important findings, but he has since gone missing. At first I thought nothing of it, but I have a nagging feeling something else is going on. A very… <b>familiar</b> feeling.” You’ve never seen Armitage quite this worried before. His hands tremble as he reaches for the glass on his desk, and he sips from it nervously. “I tried to find Francis, hoping he knew where Warren was, but he too is out of touch. Francis has been spending a lot of time in some gambling den, or so I am told.\n“I sent for you because I am worried Warren might be in trouble. I would appreciate it greatly if you could find him for me. You may also wish to ask Francis for help, if you can reach him.”",
-      "bullets": []
-    },
-    "dwl-prologue:scenario_choice": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "1a",
-          "text": "<i>Professor Warren Rice was last seen working late at night in the humanities department of Miskatonic University. Let’s search for him there.</i>",
-          "effects": [
-            {
-              "do": "nextScenario",
-              "scenario": "extracurricular-activity"
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "1b",
-          "text": "<i>Dr. Francis Morgan was last seen gambling at the Clover Club, an upscale speakeasy and gambling joint located downtown. Let’s go talk to him.</i>",
-          "effects": [
-            {
-              "do": "nextScenario",
-              "scenario": "the-house-always-wins"
-            }
-          ],
-          "steps": []
-        }
-      ]
-    },
-    "extracurricular-activity:warren_rice_kidnapped": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "warren_rice_kidnapped",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "extracurricular-activity:failed_to_save_students:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, record that <i>the investigators failed to save the students</i>. You are haunted by guilt. Add 1 [tablet] token to the chaos bag for the remainder of the campaign.",
-      "bullets": []
-    },
-    "extracurricular-activity:failed_to_save_students": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "failed_to_save_students",
-          "section": "campaign_notes",
-          "value": true
-        },
-        {
-          "do": "addChaosToken",
-          "token": "tablet"
-        }
-      ]
-    },
-    "extracurricular-activity:earn_1_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 1,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "extracurricular-activity:proceed_either:yes:fx": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "nextScenario",
-          "scenario": "armitages-fate"
-        }
-      ]
-    },
-    "extracurricular-activity:proceed_either:no:fx": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "nextScenario",
-          "scenario": "the-house-always-wins"
-        }
-      ]
-    },
-    "extracurricular-activity:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "extracurricular-activity:proceed_either": {
-      "kind": "branch",
-      "condition": {
-        "kind": "scenarioCompleted",
-        "scenario": "the-house-always-wins"
-      },
-      "then": [
-        "extracurricular-activity:proceed_either:yes:fx"
-      ],
-      "else": [
-        "extracurricular-activity:proceed_either:no:fx",
-        "extracurricular-activity:upgradeDecks"
-      ]
-    },
-    "extracurricular-activity:warren_rice_rescued": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "warren_rice_rescued",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "extracurricular-activity:earn_warren_rice:text": {
-      "kind": "story",
-      "text": "Any one investigator may choose to add Professor Warren Rice to their deck. This card does not count toward that investigator’s deck size.",
-      "bullets": []
-    },
-    "extracurricular-activity:earn_warren_rice": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "earnCard",
-          "code": "02061",
-          "who": "choice"
-        }
-      ]
-    },
-    "extracurricular-activity:earn_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 0,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "extracurricular-activity:students_rescued": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "students_rescued",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "extracurricular-activity:experiment_defeated": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "experiment_defeated",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "extracurricular-activity:unconscious_for_several_hours": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "unconscious_for_several_hours",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-house-always-wins:bone_to_pick": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "bone_to_pick",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-house-always-wins:francis_morgan_kidnapped": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "francis_morgan_kidnapped",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-house-always-wins:add_elder_thing:text": {
-      "kind": "story",
-      "text": "Add 1 [elder_thing] chaos token to the chaos bag for the remainder of the campaign.",
-      "bullets": []
-    },
-    "the-house-always-wins:add_elder_thing": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "addChaosToken",
-          "token": "elderThing"
-        }
-      ]
-    },
-    "the-house-always-wins:cheated": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "cheat",
-          "text": "Did any player “cheat”?",
-          "effects": [],
-          "steps": [
-            "the-house-always-wins:add_elder_thing:text",
-            "the-house-always-wins:add_elder_thing"
-          ]
-        }
-      ]
-    },
-    "the-house-always-wins:earn_1_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 1,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "the-house-always-wins:proceed_either:no:fx": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "nextScenario",
-          "scenario": "extracurricular-activity"
-        }
-      ]
-    },
-    "the-house-always-wins:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "the-house-always-wins:proceed_either": {
-      "kind": "branch",
-      "condition": {
-        "kind": "scenarioCompleted",
-        "scenario": "extracurricular-activity"
-      },
-      "then": [],
-      "else": [
-        "the-house-always-wins:proceed_either:no:fx",
-        "the-house-always-wins:upgradeDecks"
-      ]
-    },
-    "the-house-always-wins:francis_morgan_rescued:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, record that <i>the investigators rescued Dr. Francis Morgan</i>. Any one investigator may choose to add Dr. Francis Morgan to their deck. This card does not count toward that investigator’s deck size.",
-      "bullets": []
-    },
-    "the-house-always-wins:francis_morgan_rescued": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "francis_morgan_rescued",
-          "section": "campaign_notes",
-          "value": true
-        },
-        {
-          "do": "earnCard",
-          "code": "02080",
-          "who": "choice"
-        }
-      ]
-    },
-    "the-house-always-wins:earn_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 0,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "the-house-always-wins:naomi_has_back": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "naomi_has_back",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-house-always-wins:physical_trauma:text": {
-      "kind": "story",
-      "text": "Each investigator suffers 1 physical trauma.",
-      "bullets": []
-    },
-    "the-house-always-wins:physical_trauma": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "trauma",
-          "who": "each",
-          "physical": 1,
-          "mental": 0
-        }
-      ]
-    },
-    "the-house-always-wins:unconscious_for_several_hours": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "unconscious_for_several_hours",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
     },
     "armitages-fate:fate_1": {
       "kind": "story",
@@ -684,124 +350,6 @@
     },
     "armitages-fate:upgradeDecks": {
       "kind": "upgradeDecks"
-    },
-    "the-miskatonic-museum:note_about_chaos_token:text": {
-      "kind": "story",
-      "text": "If you need to add a [tablet] token to the chaos bag, use \"undo\" and select \"Adjust chaos bag\".",
-      "bullets": []
-    },
-    "the-miskatonic-museum:maybe_note_about_chaos_token": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "tmm_add_chaos_token",
-        "section": "hidden"
-      },
-      "then": [],
-      "else": [
-        "the-miskatonic-museum:note_about_chaos_token:text"
-      ]
-    },
-    "the-miskatonic-museum:failed_to_recover_necronomicon": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "failed_to_recover_necronomicon",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-miskatonic-museum:earn_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 0,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "the-miskatonic-museum:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "the-miskatonic-museum:destroyed_necronomicon": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "destroyed_necronomicon",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-miskatonic-museum:took_necronomicon": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "took_necronomicon",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-miskatonic-museum:earned_necronomicon:text": {
-      "kind": "story",
-      "text": "The investigators have earned The Necronomicon <i>(Olaus Wormius Translation)</i> card. Any one investigator may choose to add The Necronomicon <i>(Olaus Wormius Translation)</i> to their deck. This card does not count towards that investigator’s deck size.",
-      "bullets": []
-    },
-    "the-miskatonic-museum:earned_necronomicon": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "earnCard",
-          "code": "02140",
-          "who": "choice"
-        }
-      ]
-    },
-    "the-miskatonic-museum:add_elder_thing:text": {
-      "kind": "story",
-      "text": "You have given in to the temptation of power. Add 1 [elder_thing] chaos token to the chaos bag for the remainder of the campaign.",
-      "bullets": []
-    },
-    "the-miskatonic-museum:add_elder_thing": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "addChaosToken",
-          "token": "elderThing"
-        }
-      ]
-    },
-    "essex-county-express:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "essex-county-express:earn_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 0,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "essex-county-express:investigators_delayed": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "investigators_delayed",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
     },
     "blood-on-the-altar:ritual_completed": {
       "kind": "effects",
@@ -963,6 +511,392 @@
           "key": "banished_silas_bishop",
           "section": "campaign_notes",
           "value": true
+        }
+      ]
+    },
+    "dwl-prologue:intro": {
+      "kind": "story",
+      "text": "Dr. Henry Armitage pours himself a glass of pinot and sits down at his desk, gesturing for you to sit across from him. “I apologize for the short notice,” he begins. His face is pale, his forehead sweaty and wrinkled with worry.\nArmitage—the head librarian of Miskatonic University, and a former mentor of yours—privately contacted you in the hopes of gaining your assistance. Eager to help, you made your way to his home in Southside. Upon entering, you were surprised to find his home in disarray. Books and notes litter his desk, and an empty bottle of wine has tipped over onto the ground by the fireplace. You’d always known Armitage to be neat and well-organized.\nThe elderly man takes a moment to collect his thoughts. “I am looking for two of my colleagues—Dr. Francis Morgan, professor of archaeology, and Warren Rice, professor of languages. Warren was supposed to meet up with me over supper earlier today to discuss several important findings, but he has since gone missing. At first I thought nothing of it, but I have a nagging feeling something else is going on. A very… <b>familiar</b> feeling.” You’ve never seen Armitage quite this worried before. His hands tremble as he reaches for the glass on his desk, and he sips from it nervously. “I tried to find Francis, hoping he knew where Warren was, but he too is out of touch. Francis has been spending a lot of time in some gambling den, or so I am told.\n“I sent for you because I am worried Warren might be in trouble. I would appreciate it greatly if you could find him for me. You may also wish to ask Francis for help, if you can reach him.”",
+      "bullets": []
+    },
+    "dwl-prologue:scenario_choice": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "1a",
+          "text": "<i>Professor Warren Rice was last seen working late at night in the humanities department of Miskatonic University. Let’s search for him there.</i>",
+          "effects": [
+            {
+              "do": "nextScenario",
+              "scenario": "extracurricular-activity"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "1b",
+          "text": "<i>Dr. Francis Morgan was last seen gambling at the Clover Club, an upscale speakeasy and gambling joint located downtown. Let’s go talk to him.</i>",
+          "effects": [
+            {
+              "do": "nextScenario",
+              "scenario": "the-house-always-wins"
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "dwl-epilogue:epilogue_1": {
+      "kind": "story",
+      "text": "Six months had passed, and life for Curtis Whateley was finally returning to normal. Since they’d hushed up the incident and the authorities kept their distance from these parts, Mr. Osborn had auctioned off the Ericks and Bishop families’ belongings. Joe took a few trinkets for himself, of course, but Curtis wanted nothing to do with it. Folk already didn’t trust him on account of his family’s sins, even though he’d been attending church on the regular and had stayed far away from anything resembling the arcane.\nEven so, Curtis could not shake a sense of foreboding. He’d seen the devastation that befell the Ericks, Bishop, and Frye homes. He’d even seen firsthand the creature the folks from Arkham had banished. Some days, his thoughts led him to Wilbur Whateley’s farm, where he would stand outside and stare for hours, too scared to enter, but too curious to leave. Maybe there was something in there that could make these terrible visions depart. Something that could give him strength enough to resist the nightmares. Curtis decided he would find it.",
+      "bullets": []
+    },
+    "dwl-epilogue:epilogue_2": {
+      "kind": "story",
+      "text": "Gené knelt closer to the ground to examine the sign in the dirt. The shape of the sign was foreign to her, and the tracks that had led to it were unlike any she’d ever seen. Coupled with the report from the university…she wasn’t sure what to think. “Ms. Beauregard,” her assistant called out to her, “have you found something?”\nGené stood and turned to face the freshman who’d been assigned to her. He was a good kid and a bit callow, but a hard worker and eager to prove himself. “This place was supposed to be cordoned off,” Gené responded. “Nobody’s lived here for months. And yet, see for yourself: their primitive rites continue to this day.”\nThe student approached and joined Gené in examining the sign, flipping through the pages of his journal to reference its symbols. “What do you think it means?” he asked. She shook her head. Outsiders rarely traveled to Dunwich, and all the signposts leading to the village had been taken down. But these days, even the townsfolk who had called this place home had abandoned it.\n“I don’t know,” Gené admitted. “But somebody is here, and this isn’t the first sign we’ve seen like this. Stories say there’s an altar where the townsfolk would conduct pagan rituals atop that hill. Maybe we’ll find more up there.”",
+      "bullets": []
+    },
+    "dwl-epilogue:check_calmed_townsfolk": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "calmed_townsfolk",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "dwl-epilogue:epilogue_1"
+      ],
+      "else": [
+        "dwl-epilogue:epilogue_2"
+      ]
+    },
+    "essex-county-express:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "essex-county-express:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "essex-county-express:investigators_delayed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "investigators_delayed",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "extracurricular-activity:warren_rice_kidnapped": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "warren_rice_kidnapped",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "extracurricular-activity:failed_to_save_students:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>the investigators failed to save the students</i>. You are haunted by guilt. Add 1 [tablet] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "extracurricular-activity:failed_to_save_students": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "failed_to_save_students",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        }
+      ]
+    },
+    "extracurricular-activity:earn_1_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "extracurricular-activity:proceed_either:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "armitages-fate"
+        }
+      ]
+    },
+    "extracurricular-activity:proceed_either:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "the-house-always-wins"
+        }
+      ]
+    },
+    "extracurricular-activity:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "extracurricular-activity:proceed_either": {
+      "kind": "branch",
+      "condition": {
+        "kind": "scenarioCompleted",
+        "scenario": "the-house-always-wins"
+      },
+      "then": [
+        "extracurricular-activity:proceed_either:yes:fx"
+      ],
+      "else": [
+        "extracurricular-activity:proceed_either:no:fx",
+        "extracurricular-activity:upgradeDecks"
+      ]
+    },
+    "extracurricular-activity:warren_rice_rescued": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "warren_rice_rescued",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "extracurricular-activity:earn_warren_rice:text": {
+      "kind": "story",
+      "text": "Any one investigator may choose to add Professor Warren Rice to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "extracurricular-activity:earn_warren_rice": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "02061",
+          "who": "choice"
+        }
+      ]
+    },
+    "extracurricular-activity:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "extracurricular-activity:students_rescued": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "students_rescued",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "extracurricular-activity:experiment_defeated": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "experiment_defeated",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "extracurricular-activity:unconscious_for_several_hours": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "unconscious_for_several_hours",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "lost-in-time-and-space:check_final_act": {
+      "kind": "chooseOne",
+      "text": "What act were the investigators on when the scenario ended?",
+      "choices": [
+        {
+          "id": "act_1",
+          "text": "Act 1",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "act_2",
+          "text": "Act 2",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "act_3",
+          "text": "Act 3",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "act_4",
+          "text": "Act 4",
+          "effects": [],
+          "steps": []
+        }
+      ]
+    },
+    "lost-in-time-and-space:closed_tear": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "closed_tear",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "lost-in-time-and-space:trauma:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 2 physical trauma and 2 mental trauma, as they never fully recover from their time spent outside the realm of reality.",
+      "bullets": []
+    },
+    "lost-in-time-and-space:trauma": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 2,
+          "mental": 2
+        }
+      ]
+    },
+    "lost-in-time-and-space:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 5,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "lost-in-time-and-space:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "lost-in-time-and-space:win_campaign:text": {
+      "kind": "story",
+      "text": "The investigators win the campaign!",
+      "bullets": []
+    },
+    "lost-in-time-and-space:win_campaign": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "win"
+        }
+      ]
+    },
+    "lost-in-time-and-space:win_and_lost_forever:text": {
+      "kind": "story",
+      "text": "The investigators win the campaign… and are never seen or heard from again.",
+      "bullets": []
+    },
+    "lost-in-time-and-space:win_and_lost_forever": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "win"
+        }
+      ]
+    },
+    "lost-in-time-and-space:yog_sothoth_fled": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "yog_sothoth_fled",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "lost-in-time-and-space:all_killed:text": {
+      "kind": "story",
+      "text": "Each surviving investigator is <b>killed</b>.",
+      "bullets": []
+    },
+    "lost-in-time-and-space:all_killed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "kill",
+          "who": "each"
+        }
+      ]
+    },
+    "lost-in-time-and-space:yog_sothoth_became_one_with_reality": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "yog_sothoth_became_one_with_reality",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "lost-in-time-and-space:all_insane:text": {
+      "kind": "story",
+      "text": "Each surviving investigator is driven <b>insane</b>.",
+      "bullets": []
+    },
+    "lost-in-time-and-space:lose_campaign:text": {
+      "kind": "story",
+      "text": "The investigators lose the campaign.",
+      "bullets": []
+    },
+    "lost-in-time-and-space:lose_campaign": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "dwl-epilogue"
+        },
+        {
+          "do": "end",
+          "result": "lose"
         }
       ]
     },
@@ -1271,6 +1205,254 @@
     "dwl-interlude2:upgradeDecks": {
       "kind": "upgradeDecks"
     },
+    "the-house-always-wins:bone_to_pick": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "bone_to_pick",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-house-always-wins:francis_morgan_kidnapped": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "francis_morgan_kidnapped",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-house-always-wins:add_elder_thing:text": {
+      "kind": "story",
+      "text": "Add 1 [elder_thing] chaos token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-house-always-wins:add_elder_thing": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        }
+      ]
+    },
+    "the-house-always-wins:cheated": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "cheat",
+          "text": "Did any player “cheat”?",
+          "effects": [],
+          "steps": [
+            "the-house-always-wins:add_elder_thing:text",
+            "the-house-always-wins:add_elder_thing"
+          ]
+        }
+      ]
+    },
+    "the-house-always-wins:earn_1_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "the-house-always-wins:proceed_either:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "extracurricular-activity"
+        }
+      ]
+    },
+    "the-house-always-wins:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "the-house-always-wins:proceed_either": {
+      "kind": "branch",
+      "condition": {
+        "kind": "scenarioCompleted",
+        "scenario": "extracurricular-activity"
+      },
+      "then": [],
+      "else": [
+        "the-house-always-wins:proceed_either:no:fx",
+        "the-house-always-wins:upgradeDecks"
+      ]
+    },
+    "the-house-always-wins:francis_morgan_rescued:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>the investigators rescued Dr. Francis Morgan</i>. Any one investigator may choose to add Dr. Francis Morgan to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "the-house-always-wins:francis_morgan_rescued": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "francis_morgan_rescued",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "earnCard",
+          "code": "02080",
+          "who": "choice"
+        }
+      ]
+    },
+    "the-house-always-wins:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "the-house-always-wins:naomi_has_back": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "naomi_has_back",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-house-always-wins:physical_trauma:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 1 physical trauma.",
+      "bullets": []
+    },
+    "the-house-always-wins:physical_trauma": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 1,
+          "mental": 0
+        }
+      ]
+    },
+    "the-house-always-wins:unconscious_for_several_hours": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "unconscious_for_several_hours",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-miskatonic-museum:note_about_chaos_token:text": {
+      "kind": "story",
+      "text": "If you need to add a [tablet] token to the chaos bag, use \"undo\" and select \"Adjust chaos bag\".",
+      "bullets": []
+    },
+    "the-miskatonic-museum:maybe_note_about_chaos_token": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "tmm_add_chaos_token",
+        "section": "hidden"
+      },
+      "then": [],
+      "else": [
+        "the-miskatonic-museum:note_about_chaos_token:text"
+      ]
+    },
+    "the-miskatonic-museum:failed_to_recover_necronomicon": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "failed_to_recover_necronomicon",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-miskatonic-museum:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "the-miskatonic-museum:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "the-miskatonic-museum:destroyed_necronomicon": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "destroyed_necronomicon",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-miskatonic-museum:took_necronomicon": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "took_necronomicon",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-miskatonic-museum:earned_necronomicon:text": {
+      "kind": "story",
+      "text": "The investigators have earned The Necronomicon <i>(Olaus Wormius Translation)</i> card. Any one investigator may choose to add The Necronomicon <i>(Olaus Wormius Translation)</i> to their deck. This card does not count towards that investigator’s deck size.",
+      "bullets": []
+    },
+    "the-miskatonic-museum:earned_necronomicon": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "02140",
+          "who": "choice"
+        }
+      ]
+    },
+    "the-miskatonic-museum:add_elder_thing:text": {
+      "kind": "story",
+      "text": "You have given in to the temptation of power. Add 1 [elder_thing] chaos token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-miskatonic-museum:add_elder_thing": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        }
+      ]
+    },
     "undimensioned-and-unseen:brood_escaped": {
       "kind": "counter",
       "text": "In your Campaign Log, record that <i>X brood escaped into the wild</i>. X is the total number of Brood of Yog‐Sothoth still in play or set aside.",
@@ -1382,188 +1564,6 @@
           "do": "end",
           "result": "lose"
         }
-      ]
-    },
-    "lost-in-time-and-space:check_final_act": {
-      "kind": "chooseOne",
-      "text": "What act were the investigators on when the scenario ended?",
-      "choices": [
-        {
-          "id": "act_1",
-          "text": "Act 1",
-          "effects": [],
-          "steps": []
-        },
-        {
-          "id": "act_2",
-          "text": "Act 2",
-          "effects": [],
-          "steps": []
-        },
-        {
-          "id": "act_3",
-          "text": "Act 3",
-          "effects": [],
-          "steps": []
-        },
-        {
-          "id": "act_4",
-          "text": "Act 4",
-          "effects": [],
-          "steps": []
-        }
-      ]
-    },
-    "lost-in-time-and-space:closed_tear": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "closed_tear",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "lost-in-time-and-space:trauma:text": {
-      "kind": "story",
-      "text": "Each investigator suffers 2 physical trauma and 2 mental trauma, as they never fully recover from their time spent outside the realm of reality.",
-      "bullets": []
-    },
-    "lost-in-time-and-space:trauma": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "trauma",
-          "who": "each",
-          "physical": 2,
-          "mental": 2
-        }
-      ]
-    },
-    "lost-in-time-and-space:earn_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 5,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "lost-in-time-and-space:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "lost-in-time-and-space:win_campaign:text": {
-      "kind": "story",
-      "text": "The investigators win the campaign!",
-      "bullets": []
-    },
-    "lost-in-time-and-space:win_campaign": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "end",
-          "result": "win"
-        }
-      ]
-    },
-    "lost-in-time-and-space:win_and_lost_forever:text": {
-      "kind": "story",
-      "text": "The investigators win the campaign… and are never seen or heard from again.",
-      "bullets": []
-    },
-    "lost-in-time-and-space:win_and_lost_forever": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "end",
-          "result": "win"
-        }
-      ]
-    },
-    "lost-in-time-and-space:yog_sothoth_fled": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "yog_sothoth_fled",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "lost-in-time-and-space:all_killed:text": {
-      "kind": "story",
-      "text": "Each surviving investigator is <b>killed</b>.",
-      "bullets": []
-    },
-    "lost-in-time-and-space:all_killed": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "kill",
-          "who": "each"
-        }
-      ]
-    },
-    "lost-in-time-and-space:yog_sothoth_became_one_with_reality": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "yog_sothoth_became_one_with_reality",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "lost-in-time-and-space:all_insane:text": {
-      "kind": "story",
-      "text": "Each surviving investigator is driven <b>insane</b>.",
-      "bullets": []
-    },
-    "lost-in-time-and-space:lose_campaign:text": {
-      "kind": "story",
-      "text": "The investigators lose the campaign.",
-      "bullets": []
-    },
-    "lost-in-time-and-space:lose_campaign": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "skipScenario",
-          "scenario": "dwl-epilogue"
-        },
-        {
-          "do": "end",
-          "result": "lose"
-        }
-      ]
-    },
-    "dwl-epilogue:epilogue_1": {
-      "kind": "story",
-      "text": "Six months had passed, and life for Curtis Whateley was finally returning to normal. Since they’d hushed up the incident and the authorities kept their distance from these parts, Mr. Osborn had auctioned off the Ericks and Bishop families’ belongings. Joe took a few trinkets for himself, of course, but Curtis wanted nothing to do with it. Folk already didn’t trust him on account of his family’s sins, even though he’d been attending church on the regular and had stayed far away from anything resembling the arcane.\nEven so, Curtis could not shake a sense of foreboding. He’d seen the devastation that befell the Ericks, Bishop, and Frye homes. He’d even seen firsthand the creature the folks from Arkham had banished. Some days, his thoughts led him to Wilbur Whateley’s farm, where he would stand outside and stare for hours, too scared to enter, but too curious to leave. Maybe there was something in there that could make these terrible visions depart. Something that could give him strength enough to resist the nightmares. Curtis decided he would find it.",
-      "bullets": []
-    },
-    "dwl-epilogue:epilogue_2": {
-      "kind": "story",
-      "text": "Gené knelt closer to the ground to examine the sign in the dirt. The shape of the sign was foreign to her, and the tracks that had led to it were unlike any she’d ever seen. Coupled with the report from the university…she wasn’t sure what to think. “Ms. Beauregard,” her assistant called out to her, “have you found something?”\nGené stood and turned to face the freshman who’d been assigned to her. He was a good kid and a bit callow, but a hard worker and eager to prove himself. “This place was supposed to be cordoned off,” Gené responded. “Nobody’s lived here for months. And yet, see for yourself: their primitive rites continue to this day.”\nThe student approached and joined Gené in examining the sign, flipping through the pages of his journal to reference its symbols. “What do you think it means?” he asked. She shook her head. Outsiders rarely traveled to Dunwich, and all the signposts leading to the village had been taken down. But these days, even the townsfolk who had called this place home had abandoned it.\n“I don’t know,” Gené admitted. “But somebody is here, and this isn’t the first sign we’ve seen like this. Stories say there’s an altar where the townsfolk would conduct pagan rituals atop that hill. Maybe we’ll find more up there.”",
-      "bullets": []
-    },
-    "dwl-epilogue:check_calmed_townsfolk": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "calmed_townsfolk",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "dwl-epilogue:epilogue_1"
-      ],
-      "else": [
-        "dwl-epilogue:epilogue_2"
       ]
     }
   }

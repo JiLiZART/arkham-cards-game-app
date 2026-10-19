@@ -36,6 +36,29 @@ export function campaignBlurb(db: ContentDb, id: string, locale: string): { prol
   return { prologue: tr?.prologue ?? base?.prologue, scenarios: tr?.scenarioNames ?? base?.scenarioNames ?? [] };
 }
 
+export interface StepText {
+  title?: string;
+  text?: string;
+  choices?: Record<string, string>;
+}
+
+/** the words of a campaign flow's step in a locale, field by field over the flow's own (English) text; {} for a step with none */
+export function stepText(db: ContentDb, campaignId: string, stepId: string, locale: string): StepText {
+  const st = db.flows[campaignId]?.steps[stepId];
+  if (!st) return {};
+  const tr = campaignText(db, locale)?.campaigns[campaignId]?.steps?.[stepId];
+  const own: StepText = {
+    ...("title" in st && st.title ? { title: st.title } : {}),
+    ...("text" in st && st.text ? { text: st.text } : {}),
+    ...("choices" in st ? { choices: Object.fromEntries(st.choices.map((c) => [c.id, c.text])) } : {}),
+  };
+  return { ...own, ...(tr?.title ? { title: tr.title } : {}), ...(tr?.text ? { text: tr.text } : {}), ...(own.choices ? { choices: { ...own.choices, ...tr?.choices } } : {}) };
+}
+
+/** an interlude's or epilogue's name in a locale */
+export const interludeName = (db: ContentDb, campaignId: string, id: string, locale: string): string | undefined =>
+  campaignText(db, locale)?.campaigns[campaignId]?.interludeNames?.[id] ?? db.flows[campaignId]?.interludes[id]?.name;
+
 export const campaignName = (db: ContentDb, id: string, locale: string) => campaignText(db, locale)?.campaigns[id]?.name ?? db.campaigns[id].name;
 
 /** a campaign-log key as readable text */

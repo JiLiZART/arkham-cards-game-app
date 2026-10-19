@@ -5,6 +5,7 @@
  * by kind in `unsupported`, so the import can list them.
  */
 import type { CampaignEffect, CampaignFlow, CampaignStep, FlowCondition, FlowEffect } from "../src/content/schema";
+import { namedScenarios } from "../src/content/flow";
 import { kebab, tokenName, type Raw } from "./campaignGuide";
 
 export interface FlowSource {
@@ -43,6 +44,11 @@ class Compiler {
 
   private skip(kind: string) {
     this.unsupported[kind] = (this.unsupported[kind] ?? 0) + 1;
+  }
+
+  /** whether the game has a scenario or an interlude for a guide id (one the import skipped has neither) */
+  private known(guide: string): boolean {
+    return this.src.ids.has(guide) || this.src.scenarios.some((s) => s.id === guide && (s.type === "interlude" || s.type === "epilogue"));
   }
 
   /** the id a guide scenario has in the game (a playable one) or as an interlude */
@@ -146,6 +152,7 @@ class Compiler {
       }
       case "campaign_data": {
         const scenario = e.scenario ? this.scenarioId(e.scenario) : "";
+        if (["next_scenario", "skip_scenario", "replay_scenario"].includes(e.setting) && !this.known(e.scenario)) return this.skipEffect({ type: `${e.setting}:missing-scenario` });
         switch (e.setting) {
           case "next_scenario":
             return [{ do: "nextScenario", scenario }];
@@ -388,14 +395,11 @@ class Compiler {
     const flow: CampaignFlow = { setup: [], order: [], interludes: {}, resolutions: {}, steps: this.steps };
     const campaignSteps = new Map<string, Raw>((campaign.steps ?? []).map((s: Raw) => [s.id, s]));
     flow.setup = this.expand("campaign", campaignSteps, campaign.setup ?? []);
-    const byGuide = new Map<string, Raw>(scenarios.map((s) => [s.id, s]));
-    for (const gid of campaign.scenarios ?? []) {
-      const s = byGuide.get(gid);
-      if (!s) continue;
-      const id = this.scenarioId(gid);
-      if (ids.has(gid)) {
-        flow.order.push(id);
-        const byId = new Map<string, Raw>((s.steps ?? []).map((x: Raw) => [x.id, x]));
+    // what follows each scenario's resolutions, and what each interlude or epilogue is (all of them, listed in the order or not)
+    for (const s of scenarios) {
+      const id = this.scenarioId(s.id);
+      const byId = new Map<string, Raw>((s.steps ?? []).map((x: Raw) => [x.id, x]));
+      if (ids.has(s.id)) {
         const res: Record<string, string[]> = {};
         for (const r of s.resolutions ?? []) {
           const k = r.id === "no_resolution" ? "none" : /^R\d+$/.test(r.id) ? r.id : null;
@@ -403,10 +407,17 @@ class Compiler {
         }
         if (Object.keys(res).length) flow.resolutions[id] = res;
       } else if (s.type === "interlude" || s.type === "epilogue") {
-        flow.order.push(id);
-        const byId = new Map<string, Raw>((s.steps ?? []).map((x: Raw) => [x.id, x]));
         flow.interludes[id] = { kind: s.type, ...(s.scenario_name ? { name: s.scenario_name } : {}), steps: this.expand(id, byId, s.setup ?? []) };
       }
+    }
+    // the order of play: the guide's, then the scenarios it doesn't list and no step names (the players choose their
+    // order, as in Carcosa) in the guide's file order
+    const byGuide = new Set(scenarios.map((s) => s.id));
+    for (const gid of campaign.scenarios ?? []) if (byGuide.has(gid) && (ids.has(gid) || flow.interludes[this.scenarioId(gid)])) flow.order.push(this.scenarioId(gid));
+    const named = namedScenarios(flow);
+    for (const s of scenarios) {
+      const id = this.scenarioId(s.id);
+      if (ids.has(s.id) && !flow.order.includes(id) && !named.has(id)) flow.order.push(id);
     }
     return flow;
   }
@@ -416,4 +427,23 @@ export function compileFlow(src: FlowSource): FlowResult {
   const c = new Compiler(src);
   const flow = c.compile();
   return { flow, unsupported: c.unsupported, logLabels: c.logLabels };
+}
+
+export interface StepTexts {
+  steps: Record<string, { title?: string; text?: string; choices?: Record<string, string> }>;
+  interludes: Record<string, string>;
+}
+
+/** the words of a flow by step id, for the translations (the same compile of another language's guide gives the same ids) */
+export function stepTexts(flow: CampaignFlow): StepTexts {
+  const steps: StepTexts["steps"] = {};
+  for (const [id, st] of Object.entries(flow.steps)) {
+    const t = {
+      ...("title" in st && st.title ? { title: st.title } : {}),
+      ...("text" in st && st.text ? { text: st.text } : {}),
+      ...("choices" in st ? { choices: Object.fromEntries(st.choices.map((c) => [c.id, c.text])) } : {}),
+    };
+    if (Object.keys(t).length) steps[id] = t;
+  }
+  return { steps, interludes: Object.fromEntries(Object.entries(flow.interludes).flatMap(([id, i]) => (i.name ? [[id, i.name]] : []))) };
 }

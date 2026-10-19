@@ -3,9 +3,325 @@
     "campaign:prologue",
     "campaign:set_current_day"
   ],
-  "order": [],
-  "interludes": {},
-  "resolutions": {},
+  "order": [
+    "written-in-rock",
+    "hemlock-house",
+    "the-silent-heath",
+    "the-lost-sister",
+    "the-thing-in-the-depths",
+    "the-twisted-hollow",
+    "the-longest-night"
+  ],
+  "interludes": {
+    "the-first-evening": {
+      "kind": "interlude",
+      "name": "The First Evening",
+      "steps": [
+        "the-first-evening:intro",
+        "the-first-evening:choose_feast_prompt:text",
+        "the-first-evening:choose_feast",
+        "the-first-evening:conversation_explanation:text",
+        "the-first-evening:choose_conversation_count"
+      ]
+    },
+    "the-second-evening": {
+      "kind": "interlude",
+      "name": "The Second Evening",
+      "steps": [
+        "the-second-evening:intro_1",
+        "the-second-evening:check_simeon_survived",
+        "the-second-evening:intro_4",
+        "the-second-evening:dance_explanation:text",
+        "the-second-evening:choose_dance_count"
+      ]
+    },
+    "fhv-epilogue": {
+      "kind": "epilogue",
+      "name": "Epilogue",
+      "steps": [
+        "fhv-epilogue:check_dr_marquez_sacrificed_herself_for_the_vale",
+        "fhv-epilogue:check_any_survived"
+      ]
+    }
+  },
+  "resolutions": {
+    "written-in-rock": {
+      "none": [
+        "written-in-rock:check_no_resolution_day"
+      ],
+      "R1": [
+        "written-in-rock:simeon_survived:text",
+        "written-in-rock:simeon_survived"
+      ],
+      "R2": [
+        "written-in-rock:leah_saw_something:text",
+        "written-in-rock:leah_saw_something"
+      ],
+      "R3": [
+        "written-in-rock:simeon_disappeared:text",
+        "written-in-rock:simeon_disappeared"
+      ],
+      "R4": [
+        "written-in-rock:leah_and_simeon_reunited:text",
+        "written-in-rock:leah_and_simeon_reunited"
+      ],
+      "R5": [
+        "written-in-rock:survived_the_horrors_in_the_rock"
+      ],
+      "R6": [
+        "written-in-rock:ask_prismatic_shard",
+        "written-in-rock:check_helped_river",
+        "written-in-rock:earn_xp",
+        "written-in-rock:transfer_xp",
+        "written-in-rock:upgradeDecks",
+        "written-in-rock:update_areas_surveyed:text",
+        "written-in-rock:update_areas_surveyed"
+      ]
+    },
+    "hemlock-house": {
+      "none": [],
+      "R1": [],
+      "R2": [
+        "hemlock-house:predation_bag_stuff:text",
+        "hemlock-house:check_earn_little_sylvie",
+        "hemlock-house:check_victory_display_intro:text",
+        "hemlock-house:ask_seals_in_play",
+        "hemlock-house:check_seals_in_play",
+        "hemlock-house:ask_enemy_locations_in_victory_display",
+        "hemlock-house:check_enemy_locations_in_victory_display",
+        "hemlock-house:maybe_ask_judith_remodeling",
+        "hemlock-house:earn_xp",
+        "hemlock-house:transfer_xp",
+        "hemlock-house:upgradeDecks",
+        "hemlock-house:update_areas_surveyed:text",
+        "hemlock-house:update_areas_surveyed"
+      ]
+    },
+    "the-silent-heath": {
+      "none": [
+        "the-silent-heath:ask_crystal_remains"
+      ],
+      "R1": [
+        "the-silent-heath:laid_the_pearl_family_to_rest"
+      ],
+      "R2": [
+        "the-silent-heath:remains_were_partially_recovered"
+      ],
+      "R3": [
+        "the-silent-heath:madame_pearls_diary_was_recovered"
+      ],
+      "R4": [
+        "the-silent-heath:earn_xp",
+        "the-silent-heath:transfer_xp",
+        "the-silent-heath:upgradeDecks",
+        "the-silent-heath:update_areas_surveyed:text",
+        "the-silent-heath:update_areas_surveyed"
+      ]
+    },
+    "the-lost-sister": {
+      "none": [
+        "the-lost-sister:no_resolution_bonus_xp:text",
+        "the-lost-sister:no_resolution_bonus_xp"
+      ],
+      "R1": [],
+      "R2": [
+        "the-lost-sister:two_bonus_xp_saving_sister:text",
+        "the-lost-sister:two_bonus_xp_saving_sister",
+        "the-lost-sister:the_peters_family_was_reunited"
+      ],
+      "R3": [
+        "the-lost-sister:two_bonus_xp_saving_sister:text",
+        "the-lost-sister:two_bonus_xp_saving_sister",
+        "the-lost-sister:elizabeth_peters_was_saved"
+      ],
+      "R4": [
+        "the-lost-sister:check_gideon_searching_for_an_heirloom",
+        "the-lost-sister:earn_xp",
+        "the-lost-sister:transfer_xp",
+        "the-lost-sister:upgradeDecks",
+        "the-lost-sister:update_areas_surveyed:text",
+        "the-lost-sister:update_areas_surveyed"
+      ]
+    },
+    "the-thing-in-the-depths": {
+      "none": [
+        "the-thing-in-the-depths:no_resolution_bonus_xp:text",
+        "the-thing-in-the-depths:no_resolution_bonus_xp"
+      ],
+      "R1": [
+        "the-thing-in-the-depths:chelydran_hybrid_perished",
+        "the-thing-in-the-depths:study_bonus_xp:text",
+        "the-thing-in-the-depths:study_bonus_xp"
+      ],
+      "R2": [
+        "the-thing-in-the-depths:chelydran_hybrid_lived",
+        "the-thing-in-the-depths:lived_bonus_xp:text",
+        "the-thing-in-the-depths:lived_bonus_xp"
+      ],
+      "R3": [
+        "the-thing-in-the-depths:chelydran_hybrid_devoured",
+        "the-thing-in-the-depths:mental_trauma:text",
+        "the-thing-in-the-depths:mental_trauma",
+        "the-thing-in-the-depths:devoured_bonus_xp:text",
+        "the-thing-in-the-depths:devoured_bonus_xp"
+      ],
+      "R4": [
+        "the-thing-in-the-depths:thing_in_the_depths_was_defeated"
+      ],
+      "R5": [
+        "the-thing-in-the-depths:check_river_asked_for_help",
+        "the-thing-in-the-depths:check_judith_shared_a_grudge_resolution",
+        "the-thing-in-the-depths:earn_xp",
+        "the-thing-in-the-depths:transfer_xp",
+        "the-thing-in-the-depths:upgradeDecks",
+        "the-thing-in-the-depths:update_areas_surveyed:text",
+        "the-thing-in-the-depths:update_areas_surveyed"
+      ]
+    },
+    "the-twisted-hollow": {
+      "none": [
+        "the-twisted-hollow:bertie_was_lost_in_the_woods"
+      ],
+      "R1": [
+        "the-twisted-hollow:bertie_was_rescued"
+      ],
+      "R2": [
+        "the-twisted-hollow:bertie_was_lost_in_the_woods"
+      ],
+      "R3": [
+        "the-twisted-hollow:bonus_xp:text",
+        "the-twisted-hollow:bonus_xp",
+        "the-twisted-hollow:check_bertie_resigned",
+        "the-twisted-hollow:ask_ursine_hybrid_in_victory_display",
+        "the-twisted-hollow:earn_xp",
+        "the-twisted-hollow:transfer_xp",
+        "the-twisted-hollow:upgradeDecks",
+        "the-twisted-hollow:update_areas_surveyed:text",
+        "the-twisted-hollow:update_areas_surveyed"
+      ]
+    },
+    "the-longest-night": {
+      "none": [],
+      "R1": [
+        "the-longest-night:maybe_ask_agenda_flip",
+        "the-longest-night:ask_damage_on_captives",
+        "the-longest-night:check_damage_on_captives",
+        "the-longest-night:captives_were_saved"
+      ],
+      "R2": [
+        "the-longest-night:maybe_ask_agenda_flip",
+        "the-longest-night:ask_damage_on_captives_bad",
+        "the-longest-night:check_damage_on_captives",
+        "the-longest-night:many_captives_were_lost"
+      ],
+      "R3": [
+        "the-longest-night:guilt_madness_weakness:text",
+        "the-longest-night:guilt_madness_weakness",
+        "the-longest-night:all_the_captives_were_lost"
+      ],
+      "R4": [
+        "the-longest-night:maybe_check_ajax",
+        "the-longest-night:earn_marquez:text",
+        "the-longest-night:earn_marquez",
+        "the-longest-night:earn_xp",
+        "the-longest-night:transfer_xp",
+        "the-longest-night:upgradeDecks",
+        "the-longest-night:update_areas_surveyed:text",
+        "the-longest-night:update_areas_surveyed",
+        "the-longest-night:set_next_scenario"
+      ]
+    },
+    "dawn-of-the-final-day": {
+      "none": [
+        "dawn-of-the-final-day:doon_lead_investigator:text"
+      ],
+      "R1": [
+        "dawn-of-the-final-day:dr_marquez_has_a_hunch",
+        "dawn-of-the-final-day:hidden_check_dr_marquez_has_a_plan"
+      ],
+      "R2": [
+        "dawn-of-the-final-day:check_simeon_fireworks",
+        "dawn-of-the-final-day:earn_xp:text",
+        "dawn-of-the-final-day:survey_preparations:text",
+        "dawn-of-the-final-day:next_scenario:text"
+      ]
+    },
+    "the-final-evening": {
+      "none": [],
+      "R1": [],
+      "R2": [],
+      "R3": [
+        "the-final-evening:devoured_by_colour:text",
+        "the-final-evening:explain_replay:text",
+        "the-final-evening:ask_replay",
+        "the-final-evening:check_replay"
+      ],
+      "R4": [
+        "the-final-evening:earn_xp",
+        "the-final-evening:transfer_xp",
+        "the-final-evening:upgradeDecks",
+        "the-final-evening:set_next_scenario"
+      ]
+    },
+    "fate-of-the-vale": {
+      "none": [
+        "fate-of-the-vale:became_the_true_feast_of_hemlock_vale",
+        "fate-of-the-vale:all_devoured:text",
+        "fate-of-the-vale:all_devoured",
+        "fate-of-the-vale:lose_campaign:text",
+        "fate-of-the-vale:lose_campaign"
+      ],
+      "R1": [
+        "fate-of-the-vale:ask_residents_lost",
+        "fate-of-the-vale:dr_marquez_sacrificed_herself_for_the_vale",
+        "fate-of-the-vale:remove_dr_marquez_from_decks:text",
+        "fate-of-the-vale:remove_dr_marquez_from_decks",
+        "fate-of-the-vale:grieve_trauma:text",
+        "fate-of-the-vale:grieve_trauma",
+        "fate-of-the-vale:five_bonus_xp",
+        "fate-of-the-vale:win_campaign:text",
+        "fate-of-the-vale:upgradeDecks",
+        "fate-of-the-vale:actually_win_campaign"
+      ],
+      "R2": [
+        "fate-of-the-vale:investigators_sacrificed_themselves_for_the_vale",
+        "fate-of-the-vale:all_devoured:text",
+        "fate-of-the-vale:all_devoured",
+        "fate-of-the-vale:win_but_annihilated:text",
+        "fate-of-the-vale:actually_win_campaign"
+      ],
+      "R3": [
+        "fate-of-the-vale:ask_residents_killed",
+        "fate-of-the-vale:the_vale_was_saved",
+        "fate-of-the-vale:profound_trauma:text",
+        "fate-of-the-vale:profound_trauma",
+        "fate-of-the-vale:three_bonus_xp",
+        "fate-of-the-vale:win_campaign:text",
+        "fate-of-the-vale:upgradeDecks",
+        "fate-of-the-vale:actually_win_campaign"
+      ],
+      "R4": [
+        "fate-of-the-vale:ask_residents_lost",
+        "fate-of-the-vale:the_vale_burned",
+        "fate-of-the-vale:profound_trauma:text",
+        "fate-of-the-vale:profound_trauma",
+        "fate-of-the-vale:three_bonus_xp_ambiguous",
+        "fate-of-the-vale:win_campaign:text",
+        "fate-of-the-vale:upgradeDecks",
+        "fate-of-the-vale:actually_win_campaign"
+      ],
+      "R5": [
+        "fate-of-the-vale:ask_residents_lost",
+        "fate-of-the-vale:barely_survived",
+        "fate-of-the-vale:super_trauma:text",
+        "fate-of-the-vale:super_trauma",
+        "fate-of-the-vale:two_bonus_xp",
+        "fate-of-the-vale:win_campaign_bad:text",
+        "fate-of-the-vale:upgradeDecks",
+        "fate-of-the-vale:actually_win_campaign"
+      ]
+    }
+  },
   "steps": {
     "campaign:prologue": {
       "kind": "story",
@@ -36,6 +352,3017 @@
           "value": true
         }
       ]
+    },
+    "written-in-rock:no_resolution_day_1_or_2:text": {
+      "kind": "story",
+      "text": "Check your Campaign Log. Because it is <b>Day 1</b> or <b>Day 2</b>:",
+      "bullets": []
+    },
+    "written-in-rock:no_resolution_night:text": {
+      "kind": "story",
+      "text": "Check your Campaign Log. Because it is <b>Night 1</b> or <b>Night 2</b>:",
+      "bullets": []
+    },
+    "written-in-rock:cross_out_simeon:text": {
+      "kind": "story",
+      "text": "Cross out Simeon Atwood’s name.",
+      "bullets": []
+    },
+    "written-in-rock:cross_out_simeon": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "simeon_plan_is_underway",
+          "section": "hidden"
+        }
+      ]
+    },
+    "written-in-rock:no_resolution_day_3:text": {
+      "kind": "story",
+      "text": "Check your Campaign Log. Because it is <b>Day 3</b>:",
+      "bullets": []
+    },
+    "written-in-rock:check_no_resolution_day#4": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 5,
+        "max": 5
+      },
+      "then": [
+        "written-in-rock:no_resolution_day_3:text"
+      ],
+      "else": []
+    },
+    "written-in-rock:check_no_resolution_day#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "written-in-rock:no_resolution_night:text",
+        "written-in-rock:cross_out_simeon:text",
+        "written-in-rock:cross_out_simeon"
+      ],
+      "else": [
+        "written-in-rock:check_no_resolution_day#4"
+      ]
+    },
+    "written-in-rock:check_no_resolution_day#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "written-in-rock:no_resolution_day_1_or_2:text"
+      ],
+      "else": [
+        "written-in-rock:check_no_resolution_day#3"
+      ]
+    },
+    "written-in-rock:check_no_resolution_day#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "written-in-rock:no_resolution_night:text",
+        "written-in-rock:cross_out_simeon:text",
+        "written-in-rock:cross_out_simeon"
+      ],
+      "else": [
+        "written-in-rock:check_no_resolution_day#2"
+      ]
+    },
+    "written-in-rock:check_no_resolution_day": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 1,
+        "max": 1
+      },
+      "then": [
+        "written-in-rock:no_resolution_day_1_or_2:text"
+      ],
+      "else": [
+        "written-in-rock:check_no_resolution_day#1"
+      ]
+    },
+    "written-in-rock:simeon_survived:text": {
+      "kind": "story",
+      "text": "Update your Campaign Log.",
+      "bullets": []
+    },
+    "written-in-rock:simeon_survived": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "simeon_survived",
+          "section": "simeon",
+          "value": true
+        },
+        {
+          "do": "count",
+          "id": "$relationship",
+          "section": "simeon",
+          "op": "add",
+          "value": 2
+        },
+        {
+          "do": "xp",
+          "bonus": 2,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "written-in-rock:leah_saw_something:text": {
+      "kind": "story",
+      "text": "Update your Campaign Log.",
+      "bullets": []
+    },
+    "written-in-rock:leah_saw_something": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "leah_saw_something_in_the_mine",
+          "section": "leah",
+          "value": true
+        },
+        {
+          "do": "count",
+          "id": "$relationship",
+          "section": "leah",
+          "op": "add",
+          "value": 1
+        },
+        {
+          "do": "xp",
+          "bonus": 2,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "written-in-rock:simeon_disappeared:text": {
+      "kind": "story",
+      "text": "Update your Campaign Log.",
+      "bullets": []
+    },
+    "written-in-rock:simeon_disappeared": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "simeon_disappeared",
+          "section": "simeon",
+          "value": true
+        },
+        {
+          "do": "crossOut",
+          "key": "simeon_plan_is_underway",
+          "section": "hidden"
+        }
+      ]
+    },
+    "written-in-rock:leah_and_simeon_reunited:text": {
+      "kind": "story",
+      "text": "Update your Campaign Log.",
+      "bullets": []
+    },
+    "written-in-rock:leah_and_simeon_reunited": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "leah_and_simeon_were_reunited",
+          "section": "leah",
+          "value": true
+        }
+      ]
+    },
+    "written-in-rock:survived_the_horrors_in_the_rock": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "survived_the_horrors_in_the_rock",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "written-in-rock:earn_prismastic_shard:text": {
+      "kind": "story",
+      "text": "Choose an investigator to add Prismatic Shard to their deck. It does not count toward their deck size.",
+      "bullets": []
+    },
+    "written-in-rock:earn_prismastic_shard": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "10522",
+          "who": "choice"
+        }
+      ]
+    },
+    "written-in-rock:ask_prismatic_shard": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Was the Prismatic Shard story asset was under the control of an investigator when the scenario ended?",
+          "effects": [],
+          "steps": [
+            "written-in-rock:earn_prismastic_shard:text",
+            "written-in-rock:earn_prismastic_shard"
+          ]
+        }
+      ]
+    },
+    "written-in-rock:helped_river_reminder:text": {
+      "kind": "story",
+      "text": "Remember that “you helped River.”",
+      "bullets": []
+    },
+    "written-in-rock:ask_has_help_river_clues": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Did the investigators control at least 2[per_investigator] clues at the end of the scenario?",
+          "effects": [
+            {
+              "do": "record",
+              "key": "wir_helped_river",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": [
+            "written-in-rock:helped_river_reminder:text"
+          ]
+        }
+      ]
+    },
+    "written-in-rock:helped_river_effects:text": {
+      "kind": "story",
+      "text": "Increase River Hawthorne’s Relationship Level. Each investigator earns 1 bonus experience.",
+      "bullets": []
+    },
+    "written-in-rock:helped_river_effects": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "$relationship",
+          "section": "river",
+          "op": "add",
+          "value": 1
+        },
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "written-in-rock:decrease_river_relationship:text": {
+      "kind": "story",
+      "text": "Decrease River Hawthorne’s Relationship Level.",
+      "bullets": []
+    },
+    "written-in-rock:decrease_river_relationship": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "$relationship",
+          "section": "river",
+          "op": "add",
+          "value": -1
+        }
+      ]
+    },
+    "written-in-rock:check_helped_river_clues": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "wir_helped_river",
+        "section": "hidden"
+      },
+      "then": [
+        "written-in-rock:helped_river_effects:text",
+        "written-in-rock:helped_river_effects"
+      ],
+      "else": [
+        "written-in-rock:decrease_river_relationship:text",
+        "written-in-rock:decrease_river_relationship"
+      ]
+    },
+    "written-in-rock:ask_control_river": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Did the scenario end with River Hawthorne under an investigator's control?",
+          "effects": [],
+          "steps": [
+            "written-in-rock:ask_has_help_river_clues",
+            "written-in-rock:check_helped_river_clues"
+          ]
+        }
+      ]
+    },
+    "written-in-rock:check_helped_river": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "written_in_rock_codex_5",
+        "section": "hidden"
+      },
+      "then": [
+        "written-in-rock:ask_control_river"
+      ],
+      "else": []
+    },
+    "written-in-rock:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "written-in-rock:transfer_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "written-in-rock:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "written-in-rock:update_areas_surveyed:text": {
+      "kind": "story",
+      "text": "In the “Areas Surveyed” section of your Campaign Log, check off <i>North Point Mine</i>.",
+      "bullets": []
+    },
+    "written-in-rock:update_areas_surveyed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "north_point_mine",
+          "section": "areas_surveyed",
+          "value": true
+        }
+      ]
+    },
+    "hemlock-house:predation_bag_stuff:text": {
+      "kind": "story",
+      "text": "Remove 1 [elder_thing] token from the predation bag. Return any remaining [elder_thing] tokens in the predation bag to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "hemlock-house:earn_little_sylvie:text": {
+      "kind": "story",
+      "text": "An investigator may add the Little Sylvie story asset to their deck. It does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "hemlock-house:earn_little_sylvie": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "10548",
+          "who": "choice"
+        }
+      ]
+    },
+    "hemlock-house:check_earn_little_sylvie": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "found_little_sylvie",
+        "section": "hidden"
+      },
+      "then": [
+        "hemlock-house:earn_little_sylvie:text",
+        "hemlock-house:earn_little_sylvie"
+      ],
+      "else": []
+    },
+    "hemlock-house:check_victory_display_intro:text": {
+      "kind": "story",
+      "text": "Check the victory display and the number of seals in play when the scenario ended:",
+      "bullets": []
+    },
+    "hemlock-house:ask_seals_in_play": {
+      "kind": "counter",
+      "text": "How many seals were in play?",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "hemlock_house_seals",
+          "section": "hidden",
+          "op": "set",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "hemlock-house:earn_1_bonus_xp:text": {
+      "kind": "story",
+      "text": "Each investigator earns 1 bonus experience.",
+      "bullets": []
+    },
+    "hemlock-house:earn_1_bonus_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "hemlock-house:earn_1_additional_xp:text": {
+      "kind": "story",
+      "text": "Each investigator earns 1 additional experience.",
+      "bullets": []
+    },
+    "hemlock-house:earn_1_additional_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "hemlock-house:check_10_seals": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "hemlock-house:earn_1_additional_xp:text",
+        "hemlock-house:earn_1_additional_xp"
+      ],
+      "else": []
+    },
+    "hemlock-house:check_seals_in_play": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "hemlock-house:earn_1_bonus_xp:text",
+        "hemlock-house:earn_1_bonus_xp",
+        "hemlock-house:check_10_seals"
+      ],
+      "else": []
+    },
+    "hemlock-house:ask_enemy_locations_in_victory_display": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "hemlock_house_enemy_locations",
+          "section": "hidden",
+          "op": "set",
+          "value": "input"
+        }
+      ]
+    },
+    "hemlock-house:check_10_locations": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "hemlock-house:earn_1_additional_xp:text",
+        "hemlock-house:earn_1_additional_xp"
+      ],
+      "else": []
+    },
+    "hemlock-house:check_enemy_locations_in_victory_display": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "hemlock-house:earn_1_bonus_xp:text",
+        "hemlock-house:earn_1_bonus_xp",
+        "hemlock-house:check_10_locations"
+      ],
+      "else": []
+    },
+    "hemlock-house:ask_control_judith_at_end": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Is Judith Park is under the control of an investigator?",
+          "effects": [
+            {
+              "do": "record",
+              "key": "hemlock_house_control_judith",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "hemlock-house:good_judith_remodel:text": {
+      "kind": "story",
+      "text": "Increase Judith Park’s Relationship Level. Each investigator earns 1 bonus experience.",
+      "bullets": []
+    },
+    "hemlock-house:good_judith_remodel": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "$relationship",
+          "section": "judith",
+          "op": "add",
+          "value": 1
+        },
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "hemlock-house:check_control_judith_at_end": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "hemlock_house_control_judith",
+        "section": "hidden"
+      },
+      "then": [
+        "hemlock-house:good_judith_remodel:text",
+        "hemlock-house:good_judith_remodel"
+      ],
+      "else": []
+    },
+    "hemlock-house:maybe_ask_judith_remodeling": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "hemlock-house:ask_control_judith_at_end",
+        "hemlock-house:check_control_judith_at_end"
+      ],
+      "else": []
+    },
+    "hemlock-house:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "hemlock-house:transfer_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "hemlock-house:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "hemlock-house:update_areas_surveyed:text": {
+      "kind": "story",
+      "text": "In the “Areas Surveyed” section of your Campaign Log, check off <i>Hemlock Harbor</i>.",
+      "bullets": []
+    },
+    "hemlock-house:update_areas_surveyed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "hemlock_harbor",
+          "section": "areas_surveyed",
+          "value": true
+        }
+      ]
+    },
+    "the-silent-heath:ask_crystal_remains": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "silent_heath_crystal_remains",
+          "section": "hidden",
+          "op": "set",
+          "value": "input"
+        }
+      ]
+    },
+    "the-silent-heath:laid_the_pearl_family_to_rest": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "laid_the_pearl_family_to_rest",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-silent-heath:remains_were_partially_recovered": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "remains_were_partially_recovered",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-silent-heath:madame_pearls_diary_was_recovered": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "madame_pearls_diary_was_recovered",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-silent-heath:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "the-silent-heath:transfer_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-silent-heath:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "the-silent-heath:update_areas_surveyed:text": {
+      "kind": "story",
+      "text": "In the “Areas Surveyed” section of your Campaign Log, check off <i>Pearl Ridge</i>.",
+      "bullets": []
+    },
+    "the-silent-heath:update_areas_surveyed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "pearl_ridge",
+          "section": "areas_surveyed",
+          "value": true
+        }
+      ]
+    },
+    "the-lost-sister:no_resolution_bonus_xp:text": {
+      "kind": "story",
+      "text": "Each investigator earns 1 bonus experience for coming face to face with the horrors of the coastal caves.",
+      "bullets": []
+    },
+    "the-lost-sister:no_resolution_bonus_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-lost-sister:two_bonus_xp_saving_sister:text": {
+      "kind": "story",
+      "text": "Each investigator earns 2 bonus experience for helping Helen save her sister.",
+      "bullets": []
+    },
+    "the-lost-sister:two_bonus_xp_saving_sister": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 2,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-lost-sister:the_peters_family_was_reunited": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "the_peters_family_was_reunited",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-lost-sister:elizabeth_peters_was_saved": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "elizabeth_peters_was_saved",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-lost-sister:gideon_relationship:text": {
+      "kind": "story",
+      "text": "Increase Gideon Mizrah’s Relationship Level. Each investigator earns 1 bonus experience. In Gideon Mizrah’s notes, record <i>Gideon found his treasure</i>.",
+      "bullets": []
+    },
+    "the-lost-sister:gideon_relationship": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "$relationship",
+          "section": "gideon",
+          "op": "add",
+          "value": 1
+        },
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        },
+        {
+          "do": "record",
+          "key": "gideon_found_his_treasure",
+          "section": "gideon",
+          "value": true
+        }
+      ]
+    },
+    "the-lost-sister:ask_2_clues": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Do the investigators possess 2 [per_investigator] clues?",
+          "effects": [],
+          "steps": [
+            "the-lost-sister:gideon_relationship:text",
+            "the-lost-sister:gideon_relationship"
+          ]
+        }
+      ]
+    },
+    "the-lost-sister:check_gideon_searching_for_an_heirloom": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "lost_sister_gideon_is_searching_for_an_heirloom",
+        "section": "hidden"
+      },
+      "then": [
+        "the-lost-sister:ask_2_clues"
+      ],
+      "else": []
+    },
+    "the-lost-sister:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "the-lost-sister:transfer_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-lost-sister:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "the-lost-sister:update_areas_surveyed:text": {
+      "kind": "story",
+      "text": "In the “Areas Surveyed” section of your Campaign Log, check off <i>Akwan Shoreline</i>.",
+      "bullets": []
+    },
+    "the-lost-sister:update_areas_surveyed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "akwan_shoreline",
+          "section": "areas_surveyed",
+          "value": true
+        }
+      ]
+    },
+    "the-thing-in-the-depths:no_resolution_bonus_xp:text": {
+      "kind": "story",
+      "text": "Each investigator earns 1 bonus experience as they gain insight into the unique ecosystem of Hemlock Isle.",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:no_resolution_bonus_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-thing-in-the-depths:chelydran_hybrid_perished": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "chelydran_hybrid_perished",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-thing-in-the-depths:study_bonus_xp:text": {
+      "kind": "story",
+      "text": "Each investigator earns 1 bonus experience as they study a part of Eastwick Bog’s unique flora and fauna.",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:study_bonus_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-thing-in-the-depths:chelydran_hybrid_lived": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "chelydran_hybrid_lived",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-thing-in-the-depths:lived_bonus_xp:text": {
+      "kind": "story",
+      "text": "Each investigator earns 3 bonus experience, as they witness a part of Eastwick Bog’s unique flora and fauna.",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:lived_bonus_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 3,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-thing-in-the-depths:chelydran_hybrid_devoured": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "chelydran_hybrid_devoured",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-thing-in-the-depths:mental_trauma:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 1 mental trauma.",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:mental_trauma": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 0,
+          "mental": 1
+        }
+      ]
+    },
+    "the-thing-in-the-depths:devoured_bonus_xp:text": {
+      "kind": "story",
+      "text": "Each investigator earns 1 bonus experience, as they gain insight into the unique ecosystem of Hemlock Isle.",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:devoured_bonus_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-thing-in-the-depths:thing_in_the_depths_was_defeated": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "thing_in_the_depths_was_defeated",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-thing-in-the-depths:ask_controlled_river": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Did an investigator control River Hawthorne when they were defeated or the scenario ended?",
+          "effects": [
+            {
+              "do": "record",
+              "key": "thing_depths_controlled_river",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "the-thing-in-the-depths:decrease_river_relationship:text": {
+      "kind": "story",
+      "text": "Decrease River Hawthorne’s Relationship Level.",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:decrease_river_relationship": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "$relationship",
+          "section": "river",
+          "op": "add",
+          "value": -1
+        }
+      ]
+    },
+    "the-thing-in-the-depths:check_controlled_river": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "thing_depths_controlled_river",
+        "section": "hidden"
+      },
+      "then": [
+        "the-thing-in-the-depths:decrease_river_relationship:text",
+        "the-thing-in-the-depths:decrease_river_relationship"
+      ],
+      "else": []
+    },
+    "the-thing-in-the-depths:check_river_asked_for_help": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "thing_depths_river_asked_for_help",
+        "section": "hidden"
+      },
+      "then": [
+        "the-thing-in-the-depths:ask_controlled_river",
+        "the-thing-in-the-depths:check_controlled_river"
+      ],
+      "else": []
+    },
+    "the-thing-in-the-depths:ask_thing_victory_display": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Is The Thing in the Depths enemy in the victory display?",
+          "effects": [
+            {
+              "do": "record",
+              "key": "thing_depths_in_victory",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "the-thing-in-the-depths:increase_judith_relationship_small:text": {
+      "kind": "story",
+      "text": "Increase Judith Park’s Relationship Level. Each investigator earns 1 bonus experience.",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:increase_judith_relationship_small": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "$relationship",
+          "section": "judith",
+          "op": "add",
+          "value": 1
+        },
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-thing-in-the-depths:check_thing_victory_display": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "thing_depths_in_victory",
+        "section": "hidden"
+      },
+      "then": [
+        "the-thing-in-the-depths:increase_judith_relationship_small:text",
+        "the-thing-in-the-depths:increase_judith_relationship_small"
+      ],
+      "else": []
+    },
+    "the-thing-in-the-depths:check_judith_shared_a_grudge_resolution": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "judith_shared_a_grudge",
+        "section": "judith"
+      },
+      "then": [
+        "the-thing-in-the-depths:ask_thing_victory_display",
+        "the-thing-in-the-depths:check_thing_victory_display"
+      ],
+      "else": []
+    },
+    "the-thing-in-the-depths:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "the-thing-in-the-depths:transfer_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-thing-in-the-depths:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "the-thing-in-the-depths:update_areas_surveyed:text": {
+      "kind": "story",
+      "text": "In the “Areas Surveyed” section of your Campaign Log, check off <i>Eastwick Bog</i>.",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:update_areas_surveyed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "eastwick_bog",
+          "section": "areas_surveyed",
+          "value": true
+        }
+      ]
+    },
+    "the-first-evening:intro": {
+      "kind": "story",
+      "text": "As you return to Hemlock Vale, a young red-headed girl in a rabbit mask introduces herself as Rebecca, Mother Rachel’s daughter, and leads you by the hand to dinner in the Commons. The long building’s large barn doors are open to let out the rich scent of roasted vegetables and savory meat. The people of the Vale sit and eat in lively conversation, each of them in their white-gold cloaks. At the head of the room, Mother Rachel stands up and calls for attention. Rebecca leads you to the now-picked-over dinner spread as the room falls silent.\n“<i>Meine lieben Freunde.</i> What a blessing that all of us have come here, on the threshold of infinity. And what a greater blessing still that pilgrims have come here, so full of light and curiosity!” Mother Rachel gestures to Dr. Marquez to her right, and to you. “We have waited for the right moment to open our community. Our community which is truly the ‘Sanctuary of Transfiguration’ we long dreamed of. For each of us yearns to be remade as we wait to join our light with the light of the cosmos.”\nThe room bursts into applause as Leah Atwood and several locals place trays of honeyed cakes topped with robust red fruit in the center of each table. Your stomach grumbles as you take a bite of shriveled greens. It has a faint bitter taste, and a sharp smell.",
+      "bullets": []
+    },
+    "the-first-evening:choose_feast_prompt:text": {
+      "kind": "story",
+      "text": "One at a time, each investigator must decide individually:",
+      "bullets": []
+    },
+    "the-first-evening:choose_feast": {
+      "kind": "unsupported",
+      "name": "investigator_choice",
+      "effects": [],
+      "steps": []
+    },
+    "the-first-evening:conversation_explanation:text": {
+      "kind": "story",
+      "text": "You may choose where to sit for the community meal. One at a time, each investigator may choose a different codex entry from the following. (If there is only one investigator, you may choose two to resolve instead).",
+      "bullets": []
+    },
+    "the-first-evening:choose_conversation_solo": {
+      "kind": "unsupported",
+      "name": "investigator_choice",
+      "text": "Choose where to sit:",
+      "effects": [],
+      "steps": []
+    },
+    "the-first-evening:choose_conversation": {
+      "kind": "unsupported",
+      "name": "investigator_choice",
+      "text": "Choose where to sit:",
+      "effects": [],
+      "steps": []
+    },
+    "the-first-evening:choose_conversation_count#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "the-first-evening:choose_conversation"
+      ],
+      "else": []
+    },
+    "the-first-evening:choose_conversation_count#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "the-first-evening:choose_conversation"
+      ],
+      "else": [
+        "the-first-evening:choose_conversation_count#3"
+      ]
+    },
+    "the-first-evening:choose_conversation_count#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "the-first-evening:choose_conversation"
+      ],
+      "else": [
+        "the-first-evening:choose_conversation_count#2"
+      ]
+    },
+    "the-first-evening:choose_conversation_count": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 1,
+        "max": 1
+      },
+      "then": [
+        "the-first-evening:choose_conversation_solo",
+        "the-first-evening:choose_conversation"
+      ],
+      "else": [
+        "the-first-evening:choose_conversation_count#1"
+      ]
+    },
+    "the-twisted-hollow:bertie_was_lost_in_the_woods": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "bertie_was_lost_in_the_woods",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-twisted-hollow:bertie_was_rescued": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "bertie_was_rescued",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-twisted-hollow:bonus_xp:text": {
+      "kind": "story",
+      "text": "Each investigator earns 1 bonus experience as they gain insight into Hemlock Isle’s unique ecosystem.",
+      "bullets": []
+    },
+    "the-twisted-hollow:bonus_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-twisted-hollow:bertie_xp:text": {
+      "kind": "story",
+      "text": "Each investigator earns 1 additional experience.",
+      "bullets": []
+    },
+    "the-twisted-hollow:bertie_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-twisted-hollow:check_bertie_resigned": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Did an investigator resign with Bertie Musgrave under their control?",
+          "effects": [],
+          "steps": [
+            "the-twisted-hollow:bertie_xp:text",
+            "the-twisted-hollow:bertie_xp"
+          ]
+        }
+      ]
+    },
+    "the-twisted-hollow:the_bear_was_wounded": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "the_bear_was_wounded",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-twisted-hollow:ask_ursine_hybrid_in_victory_display": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Is Ursine Hybrid in the victory display?",
+          "effects": [],
+          "steps": [
+            "the-twisted-hollow:the_bear_was_wounded"
+          ]
+        }
+      ]
+    },
+    "the-twisted-hollow:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "the-twisted-hollow:transfer_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-twisted-hollow:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "the-twisted-hollow:update_areas_surveyed:text": {
+      "kind": "story",
+      "text": "In the “Areas Surveyed” section of your Campaign Log, check off <i>Western Woods</i>.",
+      "bullets": []
+    },
+    "the-twisted-hollow:update_areas_surveyed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "western_woods",
+          "section": "areas_surveyed",
+          "value": true
+        }
+      ]
+    },
+    "the-second-evening:intro_1": {
+      "kind": "story",
+      "text": "The rain continues through the day. When you arrive at the Commons for dinner, the tables have been pushed to the sides of the room and warm lamps are hung from colorful ribbons. Dozens of new faces peer out from the crowd of cloaked locals: visitors from the mainland. A large sculpture looms in the center of the room, festooned with violet and white blossoms that seem to palpitate in the soft light. The room goes silent as Mother Rachel addresses the assembly. “Friends. Brethren. Each of you is a miracle of time and light. You are the promise of your true self—” The matron stops mid-sentence.",
+      "bullets": []
+    },
+    "the-second-evening:intro_2": {
+      "kind": "story",
+      "text": "A shadow passes over the matron’s face as she sways, looking for a moment as though she might faint. The air in the room swirls thickly. Oily patterns dance in the light as you feel a now-familiar light-headedness. Someone steps forward to help Mother Rachel, but she holds up one hand and steadies herself.",
+      "bullets": []
+    },
+    "the-second-evening:intro_3": {
+      "kind": "story",
+      "text": "A sturdy figure cuts through the crowd. “Has anyone seen Simeon?” Leah Atwood asks in a trembling voice. She looks at the assembly with wide, searching eyes. “Please. Simeon. Now’s not the time for pranks,” she addresses her son, but to no response. The air in the room swirls thickly. “Enough,” Mother Rachel shoos her sister away. Oily patterns dance in the light as you feel a now-familiar light-headedness.",
+      "bullets": []
+    },
+    "the-second-evening:leah_is_searching_for_simeon:text": {
+      "kind": "story",
+      "text": "Update your Campaign Log.",
+      "bullets": []
+    },
+    "the-second-evening:leah_is_searching_for_simeon": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "leah_is_searching_for_simeon",
+          "section": "leah",
+          "value": true
+        },
+        {
+          "do": "crossOut",
+          "key": "simeon_plan_is_underway",
+          "section": "hidden"
+        }
+      ]
+    },
+    "the-second-evening:check_simeon_survived": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "simeon_survived",
+        "section": "simeon"
+      },
+      "then": [
+        "the-second-evening:intro_2"
+      ],
+      "else": [
+        "the-second-evening:intro_3",
+        "the-second-evening:leah_is_searching_for_simeon:text",
+        "the-second-evening:leah_is_searching_for_simeon"
+      ]
+    },
+    "the-second-evening:intro_4": {
+      "kind": "story",
+      "text": "Mother Rachel regains her composure. “Tonight is the shortest night of the year. And tomorrow is the beginning of eternity. So on this night, let us dance.” The assembly bursts into rapturous applause. A ragtag band in the corner starts playing as the dance begins. Several friendly faces beckon you to join.",
+      "bullets": []
+    },
+    "the-second-evening:dance_explanation:text": {
+      "kind": "story",
+      "text": "You may choose whom you would like to dance with. One at a time, each investigator may choose a different codex entry from the following (if there is only one investigator, you may choose two to resolve instead). If a resident’s name is crossed out, you cannot choose their codex.",
+      "bullets": []
+    },
+    "the-second-evening:choose_dance_solo": {
+      "kind": "unsupported",
+      "name": "investigator_choice",
+      "text": "Choose dance:",
+      "effects": [],
+      "steps": []
+    },
+    "the-second-evening:choose_dance": {
+      "kind": "unsupported",
+      "name": "investigator_choice",
+      "text": "Choose dance:",
+      "effects": [],
+      "steps": []
+    },
+    "the-second-evening:choose_dance_count#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "the-second-evening:choose_dance"
+      ],
+      "else": []
+    },
+    "the-second-evening:choose_dance_count#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "the-second-evening:choose_dance"
+      ],
+      "else": [
+        "the-second-evening:choose_dance_count#3"
+      ]
+    },
+    "the-second-evening:choose_dance_count#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "the-second-evening:choose_dance"
+      ],
+      "else": [
+        "the-second-evening:choose_dance_count#2"
+      ]
+    },
+    "the-second-evening:choose_dance_count": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 1,
+        "max": 1
+      },
+      "then": [
+        "the-second-evening:choose_dance_solo",
+        "the-second-evening:choose_dance"
+      ],
+      "else": [
+        "the-second-evening:choose_dance_count#1"
+      ]
+    },
+    "the-longest-night:leah_sacrificed:text": {
+      "kind": "story",
+      "text": "Cross out Leah Atwood's name. In her notes, record <i>Leah Atwood sacrificed herself for the investigators.</i>",
+      "bullets": []
+    },
+    "the-longest-night:leah_sacrificed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "leah_sacrificed_himself",
+          "section": "leah",
+          "value": true
+        }
+      ]
+    },
+    "the-longest-night:simeon_sacrificed:text": {
+      "kind": "story",
+      "text": "Cross out Simeon Atwood's name. In his notes, record <i>Simeon Atwood sacrificed himself for the investigators.</i>",
+      "bullets": []
+    },
+    "the-longest-night:simeon_sacrificed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "simeon_sacrificed_himself",
+          "section": "simeon",
+          "value": true
+        }
+      ]
+    },
+    "the-longest-night:william_sacrificed:text": {
+      "kind": "story",
+      "text": "Cross out William Hemlock's name. In his notes, record <i>William Hemlock sacrificed himself for the investigators.</i>",
+      "bullets": []
+    },
+    "the-longest-night:william_sacrificed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "william_sacrificed_himself",
+          "section": "william",
+          "value": true
+        }
+      ]
+    },
+    "the-longest-night:river_sacrificed:text": {
+      "kind": "story",
+      "text": "Cross out River Hawthorne's name. In their notes, record <i>River Hawthorne sacrificed themself for the investigators.</i>",
+      "bullets": []
+    },
+    "the-longest-night:river_sacrificed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "river_sacrificed_himself",
+          "section": "river",
+          "value": true
+        }
+      ]
+    },
+    "the-longest-night:gideon_sacrificed:text": {
+      "kind": "story",
+      "text": "Cross out Gideon Mizrah's name. In his notes, record <i>Gideon Mizrah sacrificed himself for the investigators.</i>",
+      "bullets": []
+    },
+    "the-longest-night:gideon_sacrificed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "gideon_sacrificed_himself",
+          "section": "gideon",
+          "value": true
+        }
+      ]
+    },
+    "the-longest-night:judith_sacrificed:text": {
+      "kind": "story",
+      "text": "Cross out Judith Parks' name. In her notes, record <i>Judith Park sacrificed herself for the investigators.</i>",
+      "bullets": []
+    },
+    "the-longest-night:judith_sacrificed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "judith_sacrificed_himself",
+          "section": "judith",
+          "value": true
+        }
+      ]
+    },
+    "the-longest-night:theo_sacrificed:text": {
+      "kind": "story",
+      "text": "Cross out Theo Peters' name. In his notes, record <i>Theo Peters sacrificed himself for the investigators.</i>",
+      "bullets": []
+    },
+    "the-longest-night:theo_sacrificed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "theo_sacrificed_himself",
+          "section": "theo",
+          "value": true
+        }
+      ]
+    },
+    "the-longest-night:ask_sacrificed_resident": {
+      "kind": "chooseOne",
+      "text": "Which resident sacrifice themselves to save you?",
+      "choices": [
+        {
+          "id": "leah",
+          "text": "Leah Atwood",
+          "effects": [],
+          "steps": [
+            "the-longest-night:leah_sacrificed:text",
+            "the-longest-night:leah_sacrificed"
+          ],
+          "when": {
+            "kind": "logHas",
+            "id": "leah_shared_a_dance",
+            "section": "leah"
+          }
+        },
+        {
+          "id": "simeon",
+          "text": "Simeon Atwood",
+          "effects": [],
+          "steps": [
+            "the-longest-night:simeon_sacrificed:text",
+            "the-longest-night:simeon_sacrificed"
+          ],
+          "when": {
+            "kind": "logHas",
+            "id": "simeon_shared_a_dance",
+            "section": "simeon"
+          }
+        },
+        {
+          "id": "william",
+          "text": "William Hemlock",
+          "effects": [],
+          "steps": [
+            "the-longest-night:william_sacrificed:text",
+            "the-longest-night:william_sacrificed"
+          ],
+          "when": {
+            "kind": "logHas",
+            "id": "william_shared_a_dance",
+            "section": "william"
+          }
+        },
+        {
+          "id": "river",
+          "text": "River Hawhtorne",
+          "effects": [],
+          "steps": [
+            "the-longest-night:river_sacrificed:text",
+            "the-longest-night:river_sacrificed"
+          ],
+          "when": {
+            "kind": "logHas",
+            "id": "river_shared_a_dance",
+            "section": "river"
+          }
+        },
+        {
+          "id": "gideon",
+          "text": "Gideon Mizrah",
+          "effects": [],
+          "steps": [
+            "the-longest-night:gideon_sacrificed:text",
+            "the-longest-night:gideon_sacrificed"
+          ],
+          "when": {
+            "kind": "logHas",
+            "id": "gideon_shared_a_dance",
+            "section": "gideon"
+          }
+        },
+        {
+          "id": "judith",
+          "text": "Judith Park",
+          "effects": [],
+          "steps": [
+            "the-longest-night:judith_sacrificed:text",
+            "the-longest-night:judith_sacrificed"
+          ],
+          "when": {
+            "kind": "logHas",
+            "id": "judith_shared_a_dance",
+            "section": "judith"
+          }
+        },
+        {
+          "id": "theo",
+          "text": "Theo Peters",
+          "effects": [],
+          "steps": [
+            "the-longest-night:theo_sacrificed:text",
+            "the-longest-night:theo_sacrificed"
+          ],
+          "when": {
+            "kind": "logHas",
+            "id": "theo_shared_a_dance",
+            "section": "theo"
+          }
+        }
+      ]
+    },
+    "the-longest-night:ask_agenda_flip": {
+      "kind": "chooseOne",
+      "text": "Which choice from agenda 1b did you take?",
+      "choices": [
+        {
+          "id": "trauma",
+          "text": "Each undefeated investigator takes 1 mental trauma.",
+          "effects": [
+            {
+              "do": "trauma",
+              "who": "each",
+              "physical": 0,
+              "mental": 1
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "kill",
+          "text": "A resident sacrificed themselves to save you.",
+          "effects": [],
+          "steps": [
+            "the-longest-night:ask_sacrificed_resident"
+          ],
+          "when": {
+            "kind": "any",
+            "conditions": [
+              {
+                "kind": "logHas",
+                "id": "leah_shared_a_dance",
+                "section": "leah"
+              },
+              {
+                "kind": "logHas",
+                "id": "simeon_shared_a_dance",
+                "section": "simeon"
+              },
+              {
+                "kind": "logHas",
+                "id": "william_shared_a_dance",
+                "section": "william"
+              },
+              {
+                "kind": "logHas",
+                "id": "river_shared_a_dance",
+                "section": "river"
+              },
+              {
+                "kind": "logHas",
+                "id": "gideon_shared_a_dance",
+                "section": "gideon"
+              },
+              {
+                "kind": "logHas",
+                "id": "judith_shared_a_dance",
+                "section": "judith"
+              },
+              {
+                "kind": "logHas",
+                "id": "theo_shared_a_dance",
+                "section": "theo"
+              },
+              {
+                "kind": "logHas",
+                "id": "helen_shared_a_dance",
+                "section": "campaign_notes"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "the-longest-night:maybe_ask_agenda_flip": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "the-longest-night:ask_agenda_flip"
+      ],
+      "else": []
+    },
+    "the-longest-night:ask_damage_on_captives": {
+      "kind": "counter",
+      "text": "How much damage is on The Captives story asset?",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "damage_on_captives",
+          "section": "hidden",
+          "op": "set",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "the-longest-night:no_damage:text": {
+      "kind": "story",
+      "text": "Because there is 0 damage on The Captives, each investigator earns 5 bonus experience.",
+      "bullets": []
+    },
+    "the-longest-night:no_damage": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 5,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-longest-night:1_or_2_damage:text": {
+      "kind": "story",
+      "text": "Because there is 1 or 2 damage on The Captives, each investigator earns 4 bonus experience.",
+      "bullets": []
+    },
+    "the-longest-night:1_or_2_damage": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 4,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-longest-night:3_or_4_damage:text": {
+      "kind": "story",
+      "text": "Because there is 3 or 4 damage on The Captives, each investigator earns 3 bonus experience.",
+      "bullets": []
+    },
+    "the-longest-night:3_or_4_damage": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 3,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-longest-night:5_or_6_damage:text": {
+      "kind": "story",
+      "text": "Because there is 5 or 6 damage on The Captives, each investigator earns 3 bonus experience.",
+      "bullets": []
+    },
+    "the-longest-night:5_or_6_damage": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 3,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-longest-night:7_or_8_damage:text": {
+      "kind": "story",
+      "text": "Because there is 7 or 8 damage on The Captives, each investigator earns 2 bonus experience.",
+      "bullets": []
+    },
+    "the-longest-night:7_or_8_damage": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 2,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-longest-night:9_damage:text": {
+      "kind": "story",
+      "text": "Because there is 9 damage on The Captives, each investigator earns 1 bonus experience.",
+      "bullets": []
+    },
+    "the-longest-night:9_damage": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-longest-night:check_damage_on_captives#9": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "damage_on_captives",
+        "section": "hidden",
+        "min": 9,
+        "max": 9
+      },
+      "then": [
+        "the-longest-night:9_damage:text",
+        "the-longest-night:9_damage"
+      ],
+      "else": []
+    },
+    "the-longest-night:check_damage_on_captives#8": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "damage_on_captives",
+        "section": "hidden",
+        "min": 8,
+        "max": 8
+      },
+      "then": [
+        "the-longest-night:7_or_8_damage:text",
+        "the-longest-night:7_or_8_damage"
+      ],
+      "else": [
+        "the-longest-night:check_damage_on_captives#9"
+      ]
+    },
+    "the-longest-night:check_damage_on_captives#7": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "damage_on_captives",
+        "section": "hidden",
+        "min": 7,
+        "max": 7
+      },
+      "then": [
+        "the-longest-night:7_or_8_damage:text",
+        "the-longest-night:7_or_8_damage"
+      ],
+      "else": [
+        "the-longest-night:check_damage_on_captives#8"
+      ]
+    },
+    "the-longest-night:check_damage_on_captives#6": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "damage_on_captives",
+        "section": "hidden",
+        "min": 6,
+        "max": 6
+      },
+      "then": [
+        "the-longest-night:5_or_6_damage:text",
+        "the-longest-night:5_or_6_damage"
+      ],
+      "else": [
+        "the-longest-night:check_damage_on_captives#7"
+      ]
+    },
+    "the-longest-night:check_damage_on_captives#5": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "damage_on_captives",
+        "section": "hidden",
+        "min": 5,
+        "max": 5
+      },
+      "then": [
+        "the-longest-night:5_or_6_damage:text",
+        "the-longest-night:5_or_6_damage"
+      ],
+      "else": [
+        "the-longest-night:check_damage_on_captives#6"
+      ]
+    },
+    "the-longest-night:check_damage_on_captives#4": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "damage_on_captives",
+        "section": "hidden",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "the-longest-night:3_or_4_damage:text",
+        "the-longest-night:3_or_4_damage"
+      ],
+      "else": [
+        "the-longest-night:check_damage_on_captives#5"
+      ]
+    },
+    "the-longest-night:check_damage_on_captives#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "damage_on_captives",
+        "section": "hidden",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "the-longest-night:3_or_4_damage:text",
+        "the-longest-night:3_or_4_damage"
+      ],
+      "else": [
+        "the-longest-night:check_damage_on_captives#4"
+      ]
+    },
+    "the-longest-night:check_damage_on_captives#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "damage_on_captives",
+        "section": "hidden",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "the-longest-night:1_or_2_damage:text",
+        "the-longest-night:1_or_2_damage"
+      ],
+      "else": [
+        "the-longest-night:check_damage_on_captives#3"
+      ]
+    },
+    "the-longest-night:check_damage_on_captives#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "damage_on_captives",
+        "section": "hidden",
+        "min": 1,
+        "max": 1
+      },
+      "then": [
+        "the-longest-night:1_or_2_damage:text",
+        "the-longest-night:1_or_2_damage"
+      ],
+      "else": [
+        "the-longest-night:check_damage_on_captives#2"
+      ]
+    },
+    "the-longest-night:check_damage_on_captives": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "damage_on_captives",
+        "section": "hidden",
+        "min": 0,
+        "max": 0
+      },
+      "then": [
+        "the-longest-night:no_damage:text",
+        "the-longest-night:no_damage"
+      ],
+      "else": [
+        "the-longest-night:check_damage_on_captives#1"
+      ]
+    },
+    "the-longest-night:captives_were_saved": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "captives_were_saved",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-longest-night:ask_damage_on_captives_bad": {
+      "kind": "counter",
+      "text": "How much damage is on The Captives story asset?",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "damage_on_captives",
+          "section": "hidden",
+          "op": "set",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "the-longest-night:many_captives_were_lost": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "many_captives_were_lost",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-longest-night:guilt_madness_weakness:text": {
+      "kind": "story",
+      "text": "The guilt from failing to help those in need haunts you forever. Each investigator must search the collection for a random basic [[Madness]] weakness and add it to their deck.",
+      "bullets": []
+    },
+    "the-longest-night:guilt_madness_weakness": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addWeakness",
+          "trait": "Madness"
+        }
+      ]
+    },
+    "the-longest-night:all_the_captives_were_lost": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "all_the_captives_were_lost",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-longest-night:earn_ajax:text": {
+      "kind": "story",
+      "text": "Choose an investigator to add it to their deck for the remainder of the campaign. It does not count toward their deck size.",
+      "bullets": []
+    },
+    "the-longest-night:earn_ajax": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "10642",
+          "who": "choice"
+        }
+      ]
+    },
+    "the-longest-night:ask_ajax": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Was the Ajax story asset under the control of an investigator at the end of this scenario?",
+          "effects": [],
+          "steps": [
+            "the-longest-night:earn_ajax:text",
+            "the-longest-night:earn_ajax"
+          ]
+        }
+      ]
+    },
+    "the-longest-night:maybe_check_ajax": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "took_ajax",
+        "section": "hidden"
+      },
+      "then": [
+        "the-longest-night:ask_ajax"
+      ],
+      "else": []
+    },
+    "the-longest-night:earn_marquez:text": {
+      "kind": "story",
+      "text": "Choose an investigator to add the Dr. Rosa Marquez story asset to their deck for the remainder of the campaign. It does not count toward their deck size.",
+      "bullets": []
+    },
+    "the-longest-night:earn_marquez": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "10702",
+          "who": "choice"
+        }
+      ]
+    },
+    "the-longest-night:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "the-longest-night:transfer_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-longest-night:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "the-longest-night:update_areas_surveyed:text": {
+      "kind": "story",
+      "text": "Update your Campaign Log.",
+      "bullets": []
+    },
+    "the-longest-night:update_areas_surveyed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "dr_marquez_has_a_plan",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "southern_fields",
+          "section": "areas_surveyed",
+          "value": true
+        }
+      ]
+    },
+    "the-longest-night:set_next_scenario": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "dawn-of-the-final-day"
+        }
+      ]
+    },
+    "dawn-of-the-final-day:doon_lead_investigator:text": {
+      "kind": "story",
+      "text": "Place 1 doom on the lead investigator’s investigator card.",
+      "bullets": []
+    },
+    "dawn-of-the-final-day:dr_marquez_has_a_hunch": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "dr_marquez_has_a_hunch",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "dawn-of-the-final-day:hidden_check_dr_marquez_has_a_plan:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "dr_marquez_ready_for_fate_of_vale",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "dawn-of-the-final-day:hidden_check_dr_marquez_has_a_plan": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "dr_marquez_has_a_plan",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "dawn-of-the-final-day:hidden_check_dr_marquez_has_a_plan:yes:fx"
+      ],
+      "else": []
+    },
+    "dawn-of-the-final-day:the_vale_is_full_of_fireworks": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "the_vale_is_full_of_fireworks",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "dawn-of-the-final-day:check_simeon_fireworks": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "dawn-of-the-final-day:the_vale_is_full_of_fireworks"
+      ],
+      "else": []
+    },
+    "dawn-of-the-final-day:earn_xp:text": {
+      "kind": "story",
+      "text": "Each investigator earns the bonus experience awarded during this prelude. Record each bonus experience earned under “Unspent Experience” in your Campaign Log, <b>but do not spend any of it until the end of the next scenario.</b>",
+      "bullets": []
+    },
+    "dawn-of-the-final-day:survey_preparations:text": {
+      "kind": "story",
+      "text": "Make preparations for your final survey.",
+      "bullets": []
+    },
+    "dawn-of-the-final-day:next_scenario:text": {
+      "kind": "story",
+      "text": "When setting up the next scenario, skip steps 1-8 of ‘Setting Up the Game” on page 27 of the Rules Reference.",
+      "bullets": []
+    },
+    "the-final-evening:devoured_by_colour:text": {
+      "kind": "story",
+      "text": "Each investigator is <b>devoured</b> by the Colour Out of Space.",
+      "bullets": []
+    },
+    "the-final-evening:explain_replay:text": {
+      "kind": "story",
+      "text": "Or at least, this version of each investigator is devoured. As you ascend, you see other versions of yourself.",
+      "bullets": []
+    },
+    "the-final-evening:ask_replay": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Would you like to replay the prelude to try for a different outcome?",
+          "effects": [
+            {
+              "do": "record",
+              "key": "replay_final_evening",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "the-final-evening:check_replay:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "replayScenario",
+          "scenario": "the-final-evening"
+        }
+      ]
+    },
+    "the-final-evening:cross_out_investigators_believed:text": {
+      "kind": "story",
+      "text": "Cross out <i>The investigators believed</i> in your campaign guide.",
+      "bullets": []
+    },
+    "the-final-evening:cross_out_investigators_believed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "believed",
+          "section": "campaign_notes"
+        }
+      ]
+    },
+    "the-final-evening:lose_campaign:text": {
+      "kind": "story",
+      "text": "The investigators lose the campaign.",
+      "bullets": []
+    },
+    "the-final-evening:lose_campaign": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "lose"
+        }
+      ]
+    },
+    "the-final-evening:check_replay": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "replay_final_evening",
+        "section": "hidden"
+      },
+      "then": [
+        "the-final-evening:check_replay:yes:fx",
+        "the-final-evening:cross_out_investigators_believed:text",
+        "the-final-evening:cross_out_investigators_believed"
+      ],
+      "else": [
+        "the-final-evening:lose_campaign:text",
+        "the-final-evening:lose_campaign"
+      ]
+    },
+    "the-final-evening:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "the-final-evening:transfer_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-final-evening:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "the-final-evening:set_next_scenario": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "fate-of-the-vale"
+        }
+      ]
+    },
+    "fate-of-the-vale:became_the_true_feast_of_hemlock_vale": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "became_the_true_feast_of_hemlock_vale",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "fate-of-the-vale:all_devoured:text": {
+      "kind": "story",
+      "text": "The investigators are <b>devoured</b> <i>(each investigator is</i> <b>killed</b><i>)</i>.",
+      "bullets": []
+    },
+    "fate-of-the-vale:all_devoured": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "kill",
+          "who": "each"
+        }
+      ]
+    },
+    "fate-of-the-vale:lose_campaign:text": {
+      "kind": "story",
+      "text": "The investigators lose the campaign.",
+      "bullets": []
+    },
+    "fate-of-the-vale:lose_campaign": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "lose"
+        }
+      ]
+    },
+    "fate-of-the-vale:ask_residents_lost": {
+      "kind": "checklist",
+      "text": "Update your Campaign Log. Cross out the name of each resident that was not under control of an investigator at the end of the game.",
+      "min": 0,
+      "choices": [
+        {
+          "id": "rachel",
+          "text": "Mother Rachel",
+          "effects": [
+            {
+              "do": "record",
+              "key": "fate_of_the_vale_saved_rachel",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "leah",
+          "text": "Leah Atwood",
+          "effects": [
+            {
+              "do": "record",
+              "key": "fate_of_the_vale_saved_leah",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "simeon",
+          "text": "Simeon Atwood",
+          "effects": [
+            {
+              "do": "record",
+              "key": "fate_of_the_vale_saved_simeon",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "william",
+          "text": "William Hemlock",
+          "effects": [
+            {
+              "do": "record",
+              "key": "fate_of_the_vale_saved_william",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "river",
+          "text": "River Hawthorne",
+          "effects": [
+            {
+              "do": "record",
+              "key": "fate_of_the_vale_saved_river",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "gideon",
+          "text": "Gideon Mizrah",
+          "effects": [
+            {
+              "do": "record",
+              "key": "fate_of_the_vale_saved_gideon",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "judith",
+          "text": "Judith Park",
+          "effects": [
+            {
+              "do": "record",
+              "key": "fate_of_the_vale_saved_judith",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "theo",
+          "text": "Theo Peters",
+          "effects": [
+            {
+              "do": "record",
+              "key": "fate_of_the_vale_saved_theo",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "fate-of-the-vale:dr_marquez_sacrificed_herself_for_the_vale": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "dr_marquez_sacrificed_herself_for_the_vale",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "fate-of-the-vale:remove_dr_marquez_from_decks:text": {
+      "kind": "story",
+      "text": "If Dr. Rosa Marquez is part of an investigator’s deck, remove her from that investigator’s deck.",
+      "bullets": []
+    },
+    "fate-of-the-vale:remove_dr_marquez_from_decks": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "10702"
+        }
+      ]
+    },
+    "fate-of-the-vale:grieve_trauma:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 1 physical trauma and 1 mental trauma as they grieve the loss of Dr. Marquez and recover from the degenerative effects of the Colour.",
+      "bullets": []
+    },
+    "fate-of-the-vale:grieve_trauma": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 1,
+          "mental": 1
+        }
+      ]
+    },
+    "fate-of-the-vale:five_bonus_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 5,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "fate-of-the-vale:win_campaign:text": {
+      "kind": "story",
+      "text": "The investigators win the campaign!",
+      "bullets": []
+    },
+    "fate-of-the-vale:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "fate-of-the-vale:actually_win_campaign": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "fhv-epilogue"
+        },
+        {
+          "do": "end",
+          "result": "win"
+        }
+      ]
+    },
+    "fate-of-the-vale:investigators_sacrificed_themselves_for_the_vale": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "investigators_sacrificed_themselves_for_the_vale",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "fate-of-the-vale:win_but_annihilated:text": {
+      "kind": "story",
+      "text": "The investigators win the campaign, but are annihilated.",
+      "bullets": []
+    },
+    "fate-of-the-vale:ask_residents_killed": {
+      "kind": "checklist",
+      "text": "Update your Campaign Log. Cross out the name of each resident that was in the victory display at the end of the game.",
+      "min": 0,
+      "choices": [
+        {
+          "id": "rachel",
+          "text": "Mother Rachel",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "leah",
+          "text": "Leah Atwood",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "simeon",
+          "text": "Simeon Atwood",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "william",
+          "text": "William Hemlock",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "river",
+          "text": "River Hawthorne",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "gideon",
+          "text": "Gideon Mizrah",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "judith",
+          "text": "Judith Park",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "theo",
+          "text": "Theo Peters",
+          "effects": [],
+          "steps": []
+        }
+      ]
+    },
+    "fate-of-the-vale:the_vale_was_saved": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "the_vale_was_saved",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "fate-of-the-vale:profound_trauma:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 2 physical trauma and 2 mental trauma as they grapple with the profound loss of life and the terror that still lives beneath Hemlock Isle.",
+      "bullets": []
+    },
+    "fate-of-the-vale:profound_trauma": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 2,
+          "mental": 2
+        }
+      ]
+    },
+    "fate-of-the-vale:three_bonus_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 3,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "fate-of-the-vale:the_vale_burned": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "the_vale_burned",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "fate-of-the-vale:three_bonus_xp_ambiguous": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 3,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "fate-of-the-vale:barely_survived": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "barely_survived",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "fate-of-the-vale:super_trauma:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 3 physical trauma and 3 mental trauma as they are haunted by the brilliant, maddening effects of the Colour Out of Space.",
+      "bullets": []
+    },
+    "fate-of-the-vale:super_trauma": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 3,
+          "mental": 3
+        }
+      ]
+    },
+    "fate-of-the-vale:two_bonus_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 2,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "fate-of-the-vale:win_campaign_bad:text": {
+      "kind": "story",
+      "text": "The investigators win the campaign...but nobody else did.",
+      "bullets": []
+    },
+    "fhv-epilogue:epilogue_1": {
+      "kind": "story",
+      "text": "<fancy>June 1926</fancy>\nTo the office of Dr. Henry Armitage,\nThe survey of Hemlock Isle has concluded without Dr. Marquez. What we found there on that desolate island defies reason. An alien presence dominated the local ecosystem, warping the physical and mental wellbeing of every living thing in its proximity. We witnessed species that have never been documented before, and likely never will be again. The locals coexisted with this presence for decades, seemingly or intentionally unaware of its degenerative effects. Some even worshiped it. We count ourselves lucky to have survived.\nDr. Marquez, unfortunately, was not so lucky. Enclosed with this letter is a comprehensive account detailing her observations of this unique ecosystem. What it does not contain is the story of how—and how bravely—she gave her life. That is a story we wish to share with you in person. We ask, out of respect for her memory, that you not dismiss these records as mere fantasy. Faithfully yours,\n<right><fancy>The Miskatonic Survey</fancy></right>",
+      "bullets": []
+    },
+    "fhv-epilogue:epilogue_2": {
+      "kind": "story",
+      "text": "<fancy>June 1926</fancy>\nTo the office of Dr. Henry Armitage,\nThe survey of Hemlock Isle has concluded at great cost. Over the course of our three day excursion, we witnessed horrors and wonders that defy all reason. A parasitic life form unlike any other fed on the local ecosystem, warping the biology of every living thing around it. I have enclosed a comprehensive account of the phenomena we witnessed, along with samples, notes, and sketches.\nAlthough I was initially wary of your contacts, they provided invaluable support throughout the survey. Ultimately, the strange gaseous entity we discovered took their lives. Without their sacrifice, I would have perished, along with most of Hemlock Isle.\nI will explain everything in further detail upon my return.\n<right><fancy>Dr. Rosa Marquez</fancy></right>",
+      "bullets": []
+    },
+    "fhv-epilogue:epilogue_3": {
+      "kind": "story",
+      "text": "<fancy>June 1926</fancy>\nTo the office of Dr. Henry Armitage,\nThe survey of Hemlock Isle has concluded. Over the course of our three day excursion, we witnessed horrors and wonders that defy all reason. A parasitic life form unlike any other fed on the local ecosystem, warping the biology of every living thing around it. I have enclosed a comprehensive account of the phenomena we witnessed, along with samples, notes, and sketches.\nAlthough I was initially wary of your contacts, they proved to be an incredible asset throughout the survey. Without their help, I have no doubt I would have perished, along with many others. I’ve half a mind to invite them along on my next survey.\nI will explain everything in further detail upon my return. Until then, the survey team and I plan to take a long-deserved rest.\n<right><fancy>Dr. Rosa Marquez</fancy></right>",
+      "bullets": []
+    },
+    "fhv-epilogue:check_sacrificed_themselves": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "investigators_sacrificed_themselves_for_the_vale",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "fhv-epilogue:epilogue_2"
+      ],
+      "else": [
+        "fhv-epilogue:epilogue_3"
+      ]
+    },
+    "fhv-epilogue:check_dr_marquez_sacrificed_herself_for_the_vale": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "dr_marquez_sacrificed_herself_for_the_vale",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "fhv-epilogue:epilogue_1"
+      ],
+      "else": [
+        "fhv-epilogue:check_sacrificed_themselves"
+      ]
+    },
+    "fhv-epilogue:codex_2": {
+      "kind": "story",
+      "title": "[codex] Codex 2 & 3: The Atwoods",
+      "text": "Simeon and Leah are bent over studying a tense game of marbles. “Stop cheating,” Leah slaps her son’s hand. Simeon protests, and the pair look up to you. “Thank you for all your help,” the former Vale cook says. “We’re headed to Kingsport. I hear it’s nice in the winter.” Simeon flicks a marble into the ring and looks up at you. “I changed the name of my club. We’re the Botanists’ Secret Order of Mischief now!”",
+      "bullets": []
+    },
+    "fhv-epilogue:check_codex_2_3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "fhv-epilogue:codex_2"
+      ],
+      "else": []
+    },
+    "fhv-epilogue:codex_4": {
+      "kind": "story",
+      "title": "[codex] Codex 4 & 5: The Hemlocks",
+      "text": "The two cousins sit on the shoreline, staring out across the causeway toward the mainland. Gulls fly low over the choppy gray waves. “Hemlock Isle would have made an awful getaway. My friends in New York are already whispering about my fall from grace,” River says bitterly. William regards his cousin. “I think it’s time I returned to society. I’m sure I can set your friends right.” River pauses, then smirks as an idea comes to them. “Oh, William. My friends will love you. All you need to do is share one of your poems. I’m sure they’ll find it utterly captivating.”",
+      "bullets": []
+    },
+    "fhv-epilogue:check_codex_4_5": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "fhv-epilogue:codex_4"
+      ],
+      "else": []
+    },
+    "fhv-epilogue:codex_7": {
+      "kind": "story",
+      "title": "[codex] Codex 7: Judith Park",
+      "text": "Judith’s hunting jacket is splattered with blood and her hair is a mess as she approaches you, rifle slung over her shoulder. She looks down at her jacket when she sees your concern. “Oh, don’t worry. You should see the other guy,” she winks. You ask if she’s still going to Boston, and she shrugs. “Maybe, maybe not. I was gonna ask where you’re headed next.”\nYou tell her you’re headed to Arkham, and she suppresses a snort of disbelief. “Arkham, huh? The city that’s in the news with weird shit every other week? You’re really headed back there?” She goes quiet for a moment as if considering something. “You’re going to need someone to watch your back,” she ventures. You tell her you plan to take a long rest, and she smirks. “I’ve got a buddy who runs a speakeasy somewhere in Easttown. After everything we’ve been through, I’d say I owe you a drink.”",
+      "bullets": []
+    },
+    "fhv-epilogue:check_codex_7": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "fhv-epilogue:codex_7"
+      ],
+      "else": []
+    },
+    "fhv-epilogue:codex_8": {
+      "kind": "story",
+      "title": "[codex] Codex 8: Theo Peters",
+      "text": "Theo grins sheepishly as you approach, then wraps you in a bear hug. As he pulls away, you see he is crying. When you ask him why, he looks down. “I really don’t know why.” He pauses to think, then goes on. “I always wanted a place that...that felt like home again. After mom and pop passed, Helen got—she got tough. And then I started to help out around the Vale, and they didn’t care how tough I was. It felt like home. And now that’s gone too.” He blinks tears from his eyes. “I guess home is what you make it. You should come visit us in Portland some time. I know you’ll love it,” he smiles.",
+      "bullets": []
+    },
+    "fhv-epilogue:check_codex_8": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "fhv-epilogue:codex_8"
+      ],
+      "else": []
+    },
+    "fhv-epilogue:check_any_survived": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_data",
+        "take": false
+      },
+      "then": [
+        "fhv-epilogue:check_codex_2_3",
+        "fhv-epilogue:check_codex_4_5",
+        "fhv-epilogue:check_codex_7",
+        "fhv-epilogue:check_codex_8"
+      ],
+      "else": []
     }
   }
 }

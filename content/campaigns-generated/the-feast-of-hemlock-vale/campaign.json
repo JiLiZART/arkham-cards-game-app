@@ -160,5 +160,41 @@
       "label": "Day / Time"
     }
   ],
-  "cards": []
+  "cards": [
+    {
+      "scenario": "written-in-rock",
+      "name": "Written in Rock",
+      "code": "10501"
+    },
+    {
+      "scenario": "hemlock-house",
+      "name": "Hemlock House",
+      "code": "10523"
+    },
+    {
+      "scenario": "the-silent-heath",
+      "name": "The Silent Heath",
+      "code": "10549"
+    },
+    {
+      "scenario": "the-lost-sister",
+      "name": "The Lost Sister",
+      "code": "10528"
+    },
+    {
+      "scenario": "the-thing-in-the-depths",
+      "name": "The Thing in the Depths",
+      "code": "10588"
+    },
+    {
+      "scenario": "the-twisted-hollow",
+      "name": "The Twisted Hollow",
+      "code": "10605"
+    },
+    {
+      "scenario": "the-longest-night",
+      "name": "The Longest Night",
+      "code": "10626"
+    }
+  ]
 }

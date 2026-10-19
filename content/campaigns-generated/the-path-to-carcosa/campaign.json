@@ -150,6 +150,36 @@
       "scenario": "the-last-king",
       "name": "The Last King",
       "code": "03061"
+    },
+    {
+      "scenario": "a-phantom-of-truth",
+      "name": "A Phantom of Truth",
+      "code": "03200"
+    },
+    {
+      "scenario": "black-stars-rise",
+      "name": "Black Stars Rise",
+      "code": "03274"
+    },
+    {
+      "scenario": "dim-carcosa",
+      "name": "Dim Carcosa",
+      "code": "03316"
+    },
+    {
+      "scenario": "echoes-of-the-past",
+      "name": "Echoes of the Past",
+      "code": "03120"
+    },
+    {
+      "scenario": "the-pallid-mask",
+      "name": "The Pallid Mask",
+      "code": "03240"
+    },
+    {
+      "scenario": "the-unspeakable-oath",
+      "name": "The Unspeakable Oath",
+      "code": "03159"
     }
   ]
 }

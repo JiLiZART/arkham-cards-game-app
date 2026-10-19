@@ -28,6 +28,60 @@
         "an-offer-you-cant-refuse:choice",
         "an-offer-you-cant-refuse:activate_tasks"
       ]
+    },
+    "expedition-to-ryleh": {
+      "kind": "interlude",
+      "name": "Expedition to R'lyeh",
+      "steps": [
+        "expedition-to-ryleh:intro",
+        "expedition-to-ryleh:choose_direction",
+        "expedition-to-ryleh:setup_locations"
+      ]
+    },
+    "the-awakening": {
+      "kind": "interlude",
+      "name": "The Awakening",
+      "steps": [
+        "the-awakening:intro_1",
+        "the-awakening:check_at_least_one_artifact",
+        "the-awakening:intro_4",
+        "the-awakening:next_scenario"
+      ]
+    },
+    "return-to-arkham": {
+      "kind": "interlude",
+      "name": "Return to Arkham",
+      "steps": [
+        "return-to-arkham:check_at_least_one_artifact",
+        "return-to-arkham:gain_task_xp:text",
+        "return-to-arkham:explain_check_tasks:text",
+        "return-to-arkham:check_walk_in_faith",
+        "return-to-arkham:check_good_money",
+        "return-to-arkham:check_dreams_of_destruction",
+        "return-to-arkham:check_no_place_like_home",
+        "return-to-arkham:check_do_no_harm",
+        "return-to-arkham:check_toe_the_line",
+        "return-to-arkham:check_prove_your_worth",
+        "return-to-arkham:check_plumb_the_depths",
+        "return-to-arkham:tasks_done",
+        "return-to-arkham:upgradeDecks",
+        "return-to-arkham:next_scenario"
+      ]
+    },
+    "the-doom-of-arkham": {
+      "kind": "interlude",
+      "name": "The Doom of Arkham",
+      "steps": [
+        "the-doom-of-arkham:intro",
+        "the-doom-of-arkham:next_scenario"
+      ]
+    },
+    "tdc-epilogue": {
+      "kind": "epilogue",
+      "name": "Epilogue",
+      "steps": [
+        "tdc-epilogue:check_cthulhu_annihilated_the_city_of_arkham"
+      ]
     }
   },
   "resolutions": {
@@ -43,6 +97,254 @@
         "one-last-job:earn_xp",
         "one-last-job:branch_discovered_an_alien_language",
         "one-last-job:upgradeDecks"
+      ]
+    },
+    "the-western-wall": {
+      "none": [
+        "the-western-wall:cross_out_western_wall:text",
+        "the-western-wall:cross_out_western_wall",
+        "the-western-wall:check_do_no_harm_resolution",
+        "the-western-wall:earn_xp",
+        "the-western-wall:upgradeDecks"
+      ],
+      "R1": [
+        "the-western-wall:cross_out_western_wall:text",
+        "the-western-wall:cross_out_western_wall",
+        "the-western-wall:check_do_no_harm_resolution",
+        "the-western-wall:earn_xp",
+        "the-western-wall:upgradeDecks"
+      ],
+      "R2": [
+        "the-western-wall:cross_out_western_wall:text",
+        "the-western-wall:cross_out_western_wall",
+        "the-western-wall:check_do_no_harm_resolution",
+        "the-western-wall:earn_xp",
+        "the-western-wall:upgradeDecks"
+      ],
+      "R3": [
+        "the-western-wall:choose_west_path"
+      ]
+    },
+    "the-drowned-quarter": {
+      "none": [
+        "the-drowned-quarter:clear_one_progress:text",
+        "the-drowned-quarter:clear_one_progress"
+      ],
+      "R1": [
+        "the-drowned-quarter:barrier_node_artifact:text",
+        "the-drowned-quarter:barrier_node_artifact"
+      ],
+      "R2": [
+        "the-drowned-quarter:the_power_was_diverted",
+        "the-drowned-quarter:earn_2_bonus_xp:text",
+        "the-drowned-quarter:earn_2_bonus_xp"
+      ],
+      "R3": [
+        "the-drowned-quarter:cross_out_sunken_quarter:text",
+        "the-drowned-quarter:cross_out_sunken_quarter",
+        "the-drowned-quarter:earn_xp",
+        "the-drowned-quarter:upgradeDecks",
+        "the-drowned-quarter:check_resolution_west"
+      ]
+    },
+    "the-apiary": {
+      "none": [
+        "the-apiary:maybe_ask_ancient_relic",
+        "the-apiary:earn_parasitic_transformation:text",
+        "the-apiary:earn_parasitic_transformation",
+        "the-apiary:cross_out_apiary:text",
+        "the-apiary:cross_out_apiary",
+        "the-apiary:ask_grisly_mask",
+        "the-apiary:earn_xp",
+        "the-apiary:upgradeDecks",
+        "the-apiary:check_resolution_west"
+      ],
+      "R1": [
+        "the-apiary:maybe_ask_ancient_relic",
+        "the-apiary:pilgrims_were_saved",
+        "the-apiary:cross_out_apiary:text",
+        "the-apiary:cross_out_apiary",
+        "the-apiary:ask_grisly_mask",
+        "the-apiary:earn_xp_pilgrims",
+        "the-apiary:upgradeDecks",
+        "the-apiary:next_grand_vault"
+      ],
+      "R2": [
+        "the-apiary:maybe_ask_ancient_relic",
+        "the-apiary:earn_parasitic_transformation:text",
+        "the-apiary:earn_parasitic_transformation",
+        "the-apiary:pilgrims_were_devoured",
+        "the-apiary:cross_out_apiary:text",
+        "the-apiary:cross_out_apiary",
+        "the-apiary:ask_grisly_mask",
+        "the-apiary:earn_xp",
+        "the-apiary:upgradeDecks",
+        "the-apiary:next_grand_vault"
+      ],
+      "R3": [
+        "the-apiary:maybe_ask_ancient_relic",
+        "the-apiary:exterminated_the_alien_parasites",
+        "the-apiary:cross_out_apiary:text",
+        "the-apiary:cross_out_apiary",
+        "the-apiary:ask_grisly_mask",
+        "the-apiary:earn_xp",
+        "the-apiary:upgradeDecks"
+      ],
+      "R4": [
+        "the-apiary:choose_east_path"
+      ]
+    },
+    "the-grand-vault": {
+      "none": [
+        "the-grand-vault:cross_out_grand_vault:text",
+        "the-grand-vault:cross_out_grand_vault",
+        "the-grand-vault:ask_tidal_tablet",
+        "the-grand-vault:check_good_money_task",
+        "the-grand-vault:earn_xp",
+        "the-grand-vault:upgradeDecks",
+        "the-grand-vault:check_resolution_west"
+      ],
+      "R1": [
+        "the-grand-vault:cross_out_grand_vault:text",
+        "the-grand-vault:cross_out_grand_vault",
+        "the-grand-vault:ask_tidal_tablet",
+        "the-grand-vault:check_good_money_task",
+        "the-grand-vault:earn_xp",
+        "the-grand-vault:upgradeDecks",
+        "the-grand-vault:next_court_of_the_ancients"
+      ],
+      "R2": [
+        "the-grand-vault:cross_out_grand_vault:text",
+        "the-grand-vault:cross_out_grand_vault",
+        "the-grand-vault:ask_tidal_tablet",
+        "the-grand-vault:check_good_money_task",
+        "the-grand-vault:earn_xp",
+        "the-grand-vault:upgradeDecks",
+        "the-grand-vault:next_apiary"
+      ]
+    },
+    "court-of-the-ancients": {
+      "none": [
+        "court-of-the-ancients:cross_out_court_of_the_ancients:text",
+        "court-of-the-ancients:cross_out_court_of_the_ancients",
+        "court-of-the-ancients:ask_shard",
+        "court-of-the-ancients:earn_xp",
+        "court-of-the-ancients:upgradeDecks",
+        "court-of-the-ancients:check_resolution_west"
+      ],
+      "R1": [
+        "court-of-the-ancients:cross_out_court_of_the_ancients:text",
+        "court-of-the-ancients:cross_out_court_of_the_ancients",
+        "court-of-the-ancients:ask_shard",
+        "court-of-the-ancients:earn_xp",
+        "court-of-the-ancients:upgradeDecks",
+        "court-of-the-ancients:next_obsidian_canyons"
+      ],
+      "R2": [
+        "court-of-the-ancients:cross_out_court_of_the_ancients:text",
+        "court-of-the-ancients:cross_out_court_of_the_ancients",
+        "court-of-the-ancients:ask_shard",
+        "court-of-the-ancients:earn_xp",
+        "court-of-the-ancients:upgradeDecks",
+        "court-of-the-ancients:next_grand_vault"
+      ]
+    },
+    "obsidian-canyons": {
+      "none": [
+        "obsidian-canyons:cross_out_obsidian_canyons:text",
+        "obsidian-canyons:cross_out_obsidian_canyons",
+        "obsidian-canyons:earn_random_weakness:text",
+        "obsidian-canyons:earn_random_weakness",
+        "obsidian-canyons:check_prove_your_worth_resolution",
+        "obsidian-canyons:earn_xp",
+        "obsidian-canyons:upgradeDecks",
+        "obsidian-canyons:check_resolution_west"
+      ],
+      "R1": [
+        "obsidian-canyons:ask_obsidian_claw",
+        "obsidian-canyons:cross_out_obsidian_canyons:text",
+        "obsidian-canyons:cross_out_obsidian_canyons",
+        "obsidian-canyons:check_prove_your_worth_resolution",
+        "obsidian-canyons:earn_xp",
+        "obsidian-canyons:upgradeDecks"
+      ],
+      "R2": [
+        "obsidian-canyons:ask_obsidian_claw",
+        "obsidian-canyons:cross_out_obsidian_canyons:text",
+        "obsidian-canyons:cross_out_obsidian_canyons",
+        "obsidian-canyons:check_prove_your_worth_resolution",
+        "obsidian-canyons:earn_xp",
+        "obsidian-canyons:upgradeDecks",
+        "obsidian-canyons:next_court_of_the_ancients"
+      ]
+    },
+    "the-doom-of-arkham-part-1": {
+      "none": [
+        "the-doom-of-arkham-part-1:earn_random_weakness:text",
+        "the-doom-of-arkham-part-1:earn_random_weakness"
+      ],
+      "R1": [
+        "the-doom-of-arkham-part-1:ask_controlled_artifacts",
+        "the-doom-of-arkham-part-1:cross_out_uncontrolled:text",
+        "the-doom-of-arkham-part-1:maybe_cross_out_barrier_node",
+        "the-doom-of-arkham-part-1:maybe_cross_out_obsidian_claw",
+        "the-doom-of-arkham-part-1:maybe_cross_out_shard",
+        "the-doom-of-arkham-part-1:maybe_cross_out_tablet",
+        "the-doom-of-arkham-part-1:maybe_cross_out_mask",
+        "the-doom-of-arkham-part-1:explain_flooded_locations:text",
+        "the-doom-of-arkham-part-1:ask_flooded_locations",
+        "the-doom-of-arkham-part-1:earn_xp_version",
+        "the-doom-of-arkham-part-1:upgradeDecks",
+        "the-doom-of-arkham-part-1:ask_continue"
+      ],
+      "R2": [
+        "the-doom-of-arkham-part-1:put_away_game:text",
+        "the-doom-of-arkham-part-1:next_scenario"
+      ],
+      "R3": [
+        "the-doom-of-arkham-part-1:put_away_game:text",
+        "the-doom-of-arkham-part-1:next_scenario"
+      ]
+    },
+    "the-doom-of-arkham-part-2": {
+      "none": [
+        "the-doom-of-arkham-part-2:cthulhu_annihilated_the_city_of_arkham",
+        "the-doom-of-arkham-part-2:all_killed:text",
+        "the-doom-of-arkham-part-2:all_killed",
+        "the-doom-of-arkham-part-2:setup_epilogue",
+        "the-doom-of-arkham-part-2:lose_campaign:text",
+        "the-doom-of-arkham-part-2:lose_campaign"
+      ],
+      "R1": [
+        "the-doom-of-arkham-part-2:cthulhu_was_driven_away",
+        "the-doom-of-arkham-part-2:trauma_3:text",
+        "the-doom-of-arkham-part-2:trauma_3",
+        "the-doom-of-arkham-part-2:earn_xp",
+        "the-doom-of-arkham-part-2:upgradeDecks",
+        "the-doom-of-arkham-part-2:setup_epilogue",
+        "the-doom-of-arkham-part-2:win_campaign_maybe:text",
+        "the-doom-of-arkham-part-2:win_campaign_maybe"
+      ],
+      "R2": [
+        "the-doom-of-arkham-part-2:cthulhu_was_banished",
+        "the-doom-of-arkham-part-2:trauma_1:text",
+        "the-doom-of-arkham-part-2:trauma_1",
+        "the-doom-of-arkham-part-2:earn_xp",
+        "the-doom-of-arkham-part-2:remove_weakness:text",
+        "the-doom-of-arkham-part-2:upgradeDecks",
+        "the-doom-of-arkham-part-2:setup_epilogue",
+        "the-doom-of-arkham-part-2:win_campaign:text",
+        "the-doom-of-arkham-part-2:win_campaign"
+      ],
+      "R3": [
+        "the-doom-of-arkham-part-2:cthulhu_was_banished_but_arkham_was_destroyed",
+        "the-doom-of-arkham-part-2:trauma_2:text",
+        "the-doom-of-arkham-part-2:trauma_2",
+        "the-doom-of-arkham-part-2:earn_xp_plus_5",
+        "the-doom-of-arkham-part-2:upgradeDecks",
+        "the-doom-of-arkham-part-2:setup_epilogue",
+        "the-doom-of-arkham-part-2:win_campaign_in_ruins:text",
+        "the-doom-of-arkham-part-2:win_campaign_in_ruins"
       ]
     }
   },
@@ -267,6 +569,3540 @@
           "section": "hidden",
           "value": true
         }
+      ]
+    },
+    "expedition-to-ryleh:intro": {
+      "kind": "story",
+      "text": "It is early evening when you first see the ancient city. You emerge from your cabin to see Andy and Ruby staring out at a jagged, bleak skyline off the starboard bow. The ancient city is a tangle of collapsed towers, labyrinthine boroughs, and jagged paths that loop in on themselves like a rat’s nest. Andy nearly drops his camera as a choppy wave lifts and then drops the nose of the ship with a sharp crash.\n“You’re seeing this. It’s real. Tell me it’s real,” Andy says, furiously loading more film into his scuffed camera. You and the rest of the crew marvel at the mind-bending skyline with a mixture of awe and dread. Seawater pours from the mouths of alien effigies and ancient sepulchres. Strange ephemeral shapes flit in and out of the obsidian canyons of R’lyeh. It is unlike anything built by human hands.\nYou catch yourself saying the city’s name under your breath. Even the unflappable Ruby seems dumbstruck as the ship sails past a ring of rocky shoals into a broad cove. After making landfall, the expedition camps on the black-sanded beach, at the foot of a towering obsidian spire. Menacing, gargantuan doors set in the tower’s base loom like silent sentinels. There is hardly a word between the expedition members on the first night; Andy spends the evening poring over an obsidian stone set with glowing glyphs, while Ruby lovingly reorganizes her tool bag.\nIn the morning, you discuss which route to take. Tillinghast has provided enough diving equipment, climbing gear, and rations to explore inland for at least two weeks before you would need to return to the beach. Andy and Ruby are at odds, however. Andy wants to follow the coastline to the ruined western wall near the mouth of the cove. Ruby, perennially comfortable with heights, wants to take to the skyline to map the city. She points excitedly at a distant, cathedral-like structure further inland.",
+      "bullets": []
+    },
+    "expedition-to-ryleh:west_story": {
+      "kind": "story",
+      "text": "Something about the distant, ruined wall and submerged spires calls to you. After agreeing to accompany Andy westward, he sighs with relief. “I can handle myself, of course, but if we have to go diving, I’d…”  he looks blankly into the distance for a moment. “I don’t want to worry you, but I could swear I saw something human-shaped swimming below. I’ll be glad for the company.” You look past the black water to the edge of the cove, suddenly apprehensive. Something crests the waves for a moment, then disappears. You have the feeling of being watched.\n“Two weeks, then,” says Ruby, hefting a coil of rope over one shoulder. “We’ll meet back here in two weeks. Don’t forget the diving suits. And don’t get yourself killed. I would hate to lose my favorite rival.”",
+      "bullets": []
+    },
+    "expedition-to-ryleh:expedition_headed_west": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "expedition_headed_west",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "expedition-to-ryleh:west_tokens:text": {
+      "kind": "story",
+      "text": "Remove 1 [tablet] token from the chaos bag. Add 1 [cultist] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "expedition-to-ryleh:west_tokens": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "tablet"
+        }
+      ]
+    },
+    "expedition-to-ryleh:west_scenario": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "the-western-wall"
+        }
+      ]
+    },
+    "expedition-to-ryleh:east_story": {
+      "kind": "story",
+      "text": "Since you landed, you haven’t been able to take your eyes off of the phantasmagoric skyline. After agreeing to accompany her eastward, you catch the faintest hint of a smile from Ruby. “Fine, you can come along. As long as you don’t hold me back,” she smirks. A fell wind whistles through the perilous canyons, smelling of ancient decay and another, sweeter smell. Storm clouds churn in the distance threateningly.\n“Let’s return here in two weeks,” Andy says, carefully reloading his camera for the dozenth time since you’ve arrived. Before parting ways, the young reporter passes you the obsidian tablet he found last evening, stammering that he isn’t much of a linguist. “I’m not sure what any of it means, but those glyphs are all over the city. Maybe you’ll have better luck with it.”",
+      "bullets": []
+    },
+    "expedition-to-ryleh:expedition_headed_east": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "expedition_headed_east",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "expedition-to-ryleh:east_scenario": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "obsidian-canyons"
+        }
+      ]
+    },
+    "expedition-to-ryleh:choose_direction": {
+      "kind": "chooseOne",
+      "text": "Depending on which character you want to follow, you will either explore the ancient city from west to east, or east to west. You must decide, as a group:",
+      "choices": [
+        {
+          "id": "west",
+          "text": "Follow Andy along the shoreline to the Western Wall.",
+          "effects": [],
+          "steps": [
+            "expedition-to-ryleh:west_story",
+            "expedition-to-ryleh:expedition_headed_west",
+            "expedition-to-ryleh:west_tokens:text",
+            "expedition-to-ryleh:west_tokens",
+            "expedition-to-ryleh:west_scenario"
+          ]
+        },
+        {
+          "id": "east",
+          "text": "Accompany Ruby through the Obsidian Canyons toward a massive inland structure.",
+          "effects": [],
+          "steps": [
+            "expedition-to-ryleh:east_story",
+            "expedition-to-ryleh:expedition_headed_east",
+            "expedition-to-ryleh:east_scenario"
+          ]
+        }
+      ]
+    },
+    "expedition-to-ryleh:setup_locations": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "the_western_wall",
+          "section": "hidden",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "the_drowned_quarter",
+          "section": "hidden",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "the_apiary",
+          "section": "hidden",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "the_grand_vault",
+          "section": "hidden",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "court_of_the_ancients",
+          "section": "hidden",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "obsidian_canyons",
+          "section": "hidden",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "sepulchre_of_the_sleeper",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-western-wall:cross_out_western_wall:text": {
+      "kind": "story",
+      "text": "Cross out \"The Western Wall\" on the R'lyeh map.",
+      "bullets": []
+    },
+    "the-western-wall:cross_out_western_wall": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "the_western_wall",
+          "section": "locations"
+        }
+      ]
+    },
+    "the-western-wall:helped_pilgrim_resolution": {
+      "kind": "story",
+      "text": "The man's condition swiftly deteriorates. By the end of your dangerous trek, he is coughing up rancid yellow phlegm. Just as you clear the treacherous paths, he doubles over with a scream and claws at his chest and face. Small holes appear in the skin around his neck and shoulder, then split open like rotten fruit as a torrent of wriggling worm-like parasites pour out. Each worm's mouth is filled with small serrated teeth that drip the same vile yellow bile issuing from the victim's body. Whatever remained of the man slowly rises to stand, like a vile puppet, to stretch one gory hand out toward you. A rubbery worm slithers out of his arm and trembles, as if tasting the air.",
+      "bullets": []
+    },
+    "the-western-wall:add_parasite_weakness:text": {
+      "kind": "story",
+      "text": "Find the set-aside Hunting Parasite weakness and permanently add it to your deck. This card does not count toward your investigator's deck size",
+      "bullets": []
+    },
+    "the-western-wall:actually_add_parasite:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "11535",
+          "who": "input"
+        },
+        {
+          "do": "investigatorCount",
+          "id": "$count",
+          "section": "task_progress",
+          "who": "input",
+          "op": "add",
+          "value": 2
+        }
+      ]
+    },
+    "the-western-wall:actually_add_parasite": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "the-western-wall:actually_add_parasite:yes:fx"
+      ],
+      "else": []
+    },
+    "the-western-wall:mark_2_do_no_harm_progress:text": {
+      "kind": "story",
+      "text": "You tried your best to help the victim. Mark 2 progress under \"Do No Harm\" in your Campaign Log",
+      "bullets": []
+    },
+    "the-western-wall:abandoned_pilgrim_resolution": {
+      "kind": "story",
+      "text": "Even after clearing the wall, you can't stop thinking about the man you abandoned. The memory of his pleading eyes, his wheezing cough, will forever haunt your dreams. Could you have saved him? Or at least provided his passing some dignity?",
+      "bullets": []
+    },
+    "the-western-wall:mental_trauma:text": {
+      "kind": "story",
+      "text": "You abandoned someone in need. Suffer 1 mental trauma.",
+      "bullets": []
+    },
+    "the-western-wall:actually_mental_trauma:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "input",
+          "physical": 0,
+          "mental": 1
+        },
+        {
+          "do": "investigatorCount",
+          "id": "$count",
+          "section": "task_progress",
+          "who": "input",
+          "op": "add",
+          "value": -1
+        }
+      ]
+    },
+    "the-western-wall:actually_mental_trauma": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "the-western-wall:actually_mental_trauma:yes:fx"
+      ],
+      "else": []
+    },
+    "the-western-wall:erase_1_progress:text": {
+      "kind": "story",
+      "text": "Erase 1 progress under \"Do No Harm\" in your Campaign Log.",
+      "bullets": []
+    },
+    "the-western-wall:check_helped_the_pilgrim": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "expedition_helped_pilgrim",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-western-wall:helped_pilgrim_resolution",
+        "the-western-wall:add_parasite_weakness:text",
+        "the-western-wall:actually_add_parasite",
+        "the-western-wall:mark_2_do_no_harm_progress:text"
+      ],
+      "else": [
+        "the-western-wall:abandoned_pilgrim_resolution",
+        "the-western-wall:mental_trauma:text",
+        "the-western-wall:actually_mental_trauma",
+        "the-western-wall:erase_1_progress:text"
+      ]
+    },
+    "the-western-wall:check_do_no_harm_resolution": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "the-western-wall:check_helped_the_pilgrim"
+      ],
+      "else": []
+    },
+    "the-western-wall:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "the-western-wall:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "the-western-wall:next_the_drowned_quarter": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "the-drowned-quarter"
+        }
+      ]
+    },
+    "the-western-wall:next_the_apiary": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "the-apiary"
+        }
+      ]
+    },
+    "the-western-wall:choose_west_path": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "submerged_quarter",
+          "text": "To uncover the secrets of the seafloor dome, proceed to <b>The Drowned Quarter</b>.",
+          "effects": [],
+          "steps": [
+            "the-western-wall:next_the_drowned_quarter"
+          ]
+        },
+        {
+          "id": "apiary",
+          "text": "To continue into R'lyeh's underground, proceed to <b>The Apiary</b>.",
+          "effects": [],
+          "steps": [
+            "the-western-wall:next_the_apiary"
+          ]
+        }
+      ]
+    },
+    "the-drowned-quarter:clear_one_progress:text": {
+      "kind": "story",
+      "text": "Your failure has distracted you from your goals. Each investigator must erase 1 progress under their Task, if able.",
+      "bullets": []
+    },
+    "the-drowned-quarter:clear_one_progress": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "investigatorCount",
+          "id": "$count",
+          "section": "task_progress",
+          "who": "each",
+          "op": "add",
+          "value": -1
+        }
+      ]
+    },
+    "the-drowned-quarter:barrier_node_artifact:text": {
+      "kind": "story",
+      "text": "Check the box next to \"Barrier Node\" under \"Artifacts Earned.\"",
+      "bullets": []
+    },
+    "the-drowned-quarter:barrier_node_artifact": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "barrier_node",
+          "section": "artifacts_earned",
+          "value": true
+        }
+      ]
+    },
+    "the-drowned-quarter:the_power_was_diverted": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "the_power_was_diverted",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-drowned-quarter:earn_2_bonus_xp:text": {
+      "kind": "story",
+      "text": "Each investigator earns 2 bonus experience from studying the Drowned Quarter at length.",
+      "bullets": []
+    },
+    "the-drowned-quarter:earn_2_bonus_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 2,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-drowned-quarter:cross_out_sunken_quarter:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, cross out \"The Drowned Quarter\" on the R'lyeh map.",
+      "bullets": []
+    },
+    "the-drowned-quarter:cross_out_sunken_quarter": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "the_drowned_quarter",
+          "section": "locations"
+        }
+      ]
+    },
+    "the-drowned-quarter:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "the-drowned-quarter:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "the-drowned-quarter:check_resolution_west:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "the-apiary"
+        }
+      ]
+    },
+    "the-drowned-quarter:check_resolution_east:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "the-western-wall"
+        }
+      ]
+    },
+    "the-drowned-quarter:check_resolution_east": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "expedition_headed_east",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-drowned-quarter:check_resolution_east:yes:fx"
+      ],
+      "else": []
+    },
+    "the-drowned-quarter:check_resolution_west": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "expedition_headed_west",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-drowned-quarter:check_resolution_west:yes:fx"
+      ],
+      "else": [
+        "the-drowned-quarter:check_resolution_east"
+      ]
+    },
+    "the-apiary:record_tdc_rune_s:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record \"Machine\" under [tdc_rune_s] on the glyph record.",
+      "bullets": []
+    },
+    "the-apiary:record_tdc_rune_s": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "tdc_rune_s",
+          "section": "glyphs",
+          "value": true
+        }
+      ]
+    },
+    "the-apiary:ask_ancient_relic": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Did an investigator end the game with Ancient Relic under their control?",
+          "effects": [],
+          "steps": [
+            "the-apiary:record_tdc_rune_s:text",
+            "the-apiary:record_tdc_rune_s"
+          ]
+        }
+      ]
+    },
+    "the-apiary:maybe_ask_ancient_relic": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "the-apiary:ask_ancient_relic"
+      ],
+      "else": []
+    },
+    "the-apiary:earn_parasitic_transformation:text": {
+      "kind": "story",
+      "text": "Each investigator must search <i>The Apiary</i> encounter set for a copy of Parasitic Transformation and add it to their deck. This card does not count toward their deck size.",
+      "bullets": []
+    },
+    "the-apiary:earn_parasitic_transformation": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "11583",
+          "who": "each"
+        }
+      ]
+    },
+    "the-apiary:cross_out_apiary:text": {
+      "kind": "story",
+      "text": "Cross out \"The Apiary\" on the R'lyeh map.",
+      "bullets": []
+    },
+    "the-apiary:cross_out_apiary": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "the_apiary",
+          "section": "locations"
+        }
+      ]
+    },
+    "the-apiary:earn_grisly_mask:text": {
+      "kind": "story",
+      "text": "Check the box next to Grisly \"Mask\" under \"Artifacts Earned.\"",
+      "bullets": []
+    },
+    "the-apiary:earn_grisly_mask": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "grisly_mask",
+          "section": "artifacts_earned",
+          "value": true
+        }
+      ]
+    },
+    "the-apiary:ask_grisly_mask": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Was the Grisly \"Mask\" under the control of an investigator when the scenario ended?",
+          "effects": [],
+          "steps": [
+            "the-apiary:earn_grisly_mask:text",
+            "the-apiary:earn_grisly_mask"
+          ]
+        }
+      ]
+    },
+    "the-apiary:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "the-apiary:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "the-apiary:next_grand_vault": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "the-grand-vault"
+        }
+      ]
+    },
+    "the-apiary:check_resolution_west": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "expedition_headed_west",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-apiary:next_grand_vault"
+      ],
+      "else": []
+    },
+    "the-apiary:pilgrims_were_saved": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "pilgrims_were_saved",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-apiary:earn_xp_pilgrims": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 2,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "the-apiary:pilgrims_were_devoured": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "pilgrims_were_devoured",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-apiary:exterminated_the_alien_parasites": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "exterminated_the_alien_parasites",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-apiary:choose_east_path": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "submerged_quarter",
+          "text": "<i>\"We came this far. We're not leaving any stone unturned.\"</i>",
+          "effects": [
+            {
+              "do": "nextScenario",
+              "scenario": "the-drowned-quarter"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "western_wall",
+          "text": "<i>\"Are you crazy? We need to get out of here!\"</i>",
+          "effects": [
+            {
+              "do": "nextScenario",
+              "scenario": "the-western-wall"
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "the-grand-vault:cross_out_grand_vault:text": {
+      "kind": "story",
+      "text": "Cross out \"The Grand Vault\" on the R'lyeh map.",
+      "bullets": []
+    },
+    "the-grand-vault:cross_out_grand_vault": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "the_grand_vault",
+          "section": "locations"
+        }
+      ]
+    },
+    "the-grand-vault:earn_tidal_tablet:text": {
+      "kind": "story",
+      "text": "Check the box next to \"Tidal Tablet\" under \"Artifacts Earned.\"",
+      "bullets": []
+    },
+    "the-grand-vault:earn_tidal_tablet": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "tidal_tablet",
+          "section": "artifacts_earned",
+          "value": true
+        }
+      ]
+    },
+    "the-grand-vault:ask_tidal_tablet": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Was the Tidal Tablet under the control of an investigator when the scenario ended?",
+          "effects": [],
+          "steps": [
+            "the-grand-vault:earn_tidal_tablet:text",
+            "the-grand-vault:earn_tidal_tablet"
+          ]
+        }
+      ]
+    },
+    "the-grand-vault:good_money_story": {
+      "kind": "story",
+      "title": "Good Money",
+      "text": "You lie awake in the dark for several hours, mulling over your last conversation in Arkham. Carl Sanford, head of the Silver Twilight Lodge, told you he had a deal for you. A better deal than anything Tillinghast would ever give you. All you have to do is present your findings to him instead of Randall. If you skim a few extra relics on the side, maybe swipe some notes and photos of the ancient city, he promised double what Tillinghast would pay, maybe even more.\nYou didn’t want to get involved in whatever petty feud is unfolding between the two old men. There is certainly risk in playing both sides. That said, you didn’t get the impression Sanford thought he was giving you a choice. If you play your cards right, you could collect from both Sanford and Tillinghast and walk away with triple the reward. Whatever you do, you’ll need to be resolved to see it through.",
+      "bullets": []
+    },
+    "the-grand-vault:good_money_safe:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "investigatorCount",
+          "id": "$count",
+          "section": "task_progress",
+          "who": "input",
+          "op": "add",
+          "value": -1
+        },
+        {
+          "do": "record",
+          "key": "tdc_good_money_extra_resources",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-grand-vault:good_money_safe": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "the-grand-vault:good_money_safe:yes:fx"
+      ],
+      "else": []
+    },
+    "the-grand-vault:good_money_squeeze:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "investigatorCount",
+          "id": "$count",
+          "section": "task_progress",
+          "who": "input",
+          "op": "add",
+          "value": 2
+        },
+        {
+          "do": "record",
+          "key": "tdc_good_money_no_upkeep",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-grand-vault:good_money_squeeze": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "the-grand-vault:good_money_squeeze:yes:fx"
+      ],
+      "else": []
+    },
+    "the-grand-vault:good_money_choice": {
+      "kind": "chooseOne",
+      "text": "You must decide <i>(choose one)</i>:",
+      "choices": [
+        {
+          "id": "safe",
+          "text": "<i>Play it safe.</i>",
+          "effects": [],
+          "steps": [
+            "the-grand-vault:good_money_safe"
+          ]
+        },
+        {
+          "id": "squeeze",
+          "text": "<i>Play both sides for all they're worth.</i>",
+          "effects": [],
+          "steps": [
+            "the-grand-vault:good_money_squeeze"
+          ]
+        }
+      ]
+    },
+    "the-grand-vault:check_good_money_task": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "the-grand-vault:good_money_story",
+        "the-grand-vault:good_money_choice"
+      ],
+      "else": []
+    },
+    "the-grand-vault:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "the-grand-vault:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "the-grand-vault:next_court_of_the_ancients": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "court-of-the-ancients"
+        }
+      ]
+    },
+    "the-grand-vault:next_apiary": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "the-apiary"
+        }
+      ]
+    },
+    "the-grand-vault:check_resolution_east": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "expedition_headed_east",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-grand-vault:next_apiary"
+      ],
+      "else": []
+    },
+    "the-grand-vault:check_resolution_west": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "expedition_headed_west",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-grand-vault:next_court_of_the_ancients"
+      ],
+      "else": [
+        "the-grand-vault:check_resolution_east"
+      ]
+    },
+    "court-of-the-ancients:cross_out_court_of_the_ancients:text": {
+      "kind": "story",
+      "text": "Cross out \"Court of the Ancients\" on the R'lyeh map.",
+      "bullets": []
+    },
+    "court-of-the-ancients:cross_out_court_of_the_ancients": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "court_of_the_ancients",
+          "section": "locations"
+        }
+      ]
+    },
+    "court-of-the-ancients:earn_shard:text": {
+      "kind": "story",
+      "text": "Check the box next to \"Shard of Y'ch'lecht\" under \"Artifacts Earned.\"",
+      "bullets": []
+    },
+    "court-of-the-ancients:earn_shard": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "shard",
+          "section": "artifacts_earned",
+          "value": true
+        }
+      ]
+    },
+    "court-of-the-ancients:ask_shard": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Was the Shard of Y'ch'lecht under the control of an investigator when the scenario ended?",
+          "effects": [],
+          "steps": [
+            "court-of-the-ancients:earn_shard:text",
+            "court-of-the-ancients:earn_shard"
+          ]
+        }
+      ]
+    },
+    "court-of-the-ancients:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "court-of-the-ancients:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "court-of-the-ancients:next_obsidian_canyons": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "obsidian-canyons"
+        }
+      ]
+    },
+    "court-of-the-ancients:next_grand_vault": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "the-grand-vault"
+        }
+      ]
+    },
+    "court-of-the-ancients:check_resolution_east": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "expedition_headed_east",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "court-of-the-ancients:next_grand_vault"
+      ],
+      "else": []
+    },
+    "court-of-the-ancients:check_resolution_west": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "expedition_headed_west",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "court-of-the-ancients:next_obsidian_canyons"
+      ],
+      "else": [
+        "court-of-the-ancients:check_resolution_east"
+      ]
+    },
+    "obsidian-canyons:cross_out_obsidian_canyons:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, cross out \"Obsidian Canyons\" on the R'lyeh map.",
+      "bullets": []
+    },
+    "obsidian-canyons:cross_out_obsidian_canyons": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "obsidian_canyons",
+          "section": "locations"
+        }
+      ]
+    },
+    "obsidian-canyons:earn_random_weakness:text": {
+      "kind": "story",
+      "text": "Each investigator must search the collection for a random [[Madness]] or [[Omen]] basic weakness and add it to their deck for the remainder of the campaign.",
+      "bullets": []
+    },
+    "obsidian-canyons:earn_random_weakness": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addWeakness",
+          "trait": "Madness"
+        }
+      ]
+    },
+    "obsidian-canyons:helping_story": {
+      "kind": "story",
+      "text": "You should be proud of what you've done. The rest of the expedition was so impressed by your work that you heard one of them chanting your name while you were climbing. They may have been screaming it; you aren't certain. Whatever it was that happened, they don't seem inclined to discuss it any further. Sadly, your work with the ropes wasn't much help. Several of them snapped during the climb, and one of the other expedition members has a broken leg now. What a shame. It must have been some fault of the manufacturer.",
+      "bullets": []
+    },
+    "obsidian-canyons:helping_trauma:text": {
+      "kind": "story",
+      "text": "The investigator you chose to help earlier suffers 1 physical trauma and gains 2 bonus experience.",
+      "bullets": []
+    },
+    "obsidian-canyons:ask_who_you_helped": {
+      "kind": "investigatorChoice",
+      "optional": false,
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "input",
+          "physical": 1,
+          "mental": 0
+        },
+        {
+          "do": "xp",
+          "bonus": 2,
+          "who": "input",
+          "victory": false
+        }
+      ],
+      "steps": []
+    },
+    "obsidian-canyons:helping_consequences:text": {
+      "kind": "story",
+      "text": "You are quite pleased with yourself, aren't you? Mark 2 progress under \"Prove Your Worth\" in your Campaign Log.",
+      "bullets": []
+    },
+    "obsidian-canyons:record_prove_your_worth_progress:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "investigatorCount",
+          "id": "$count",
+          "section": "task_progress",
+          "who": "input",
+          "op": "add",
+          "value": 2
+        }
+      ]
+    },
+    "obsidian-canyons:record_prove_your_worth_progress": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "obsidian-canyons:record_prove_your_worth_progress:yes:fx"
+      ],
+      "else": []
+    },
+    "obsidian-canyons:check_helped_with_ropes:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "obsidian-canyons:not_helping_story": {
+      "kind": "story",
+      "text": "\"No, not like that!\" Another member of the expedition steps in to assist yet again. You bite back your response. They have no idea how rude they are. Not that they care. Why bother trying to prove yourself to these ingrates? They're not worth the trouble.",
+      "bullets": []
+    },
+    "obsidian-canyons:erase_progress:text": {
+      "kind": "story",
+      "text": "It's true: you'll never measure up. Erase 1 progress under \"Prove Your Worth\" and suffer I mental trauma.",
+      "bullets": []
+    },
+    "obsidian-canyons:everyone_else_xp:text": {
+      "kind": "story",
+      "text": "Each of the other investigators (except you) gains 1 additional experience point.",
+      "bullets": []
+    },
+    "obsidian-canyons:record_prove_your_worth_loss:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "investigatorCount",
+          "id": "$count",
+          "section": "task_progress",
+          "who": "input",
+          "op": "add",
+          "value": -1
+        },
+        {
+          "do": "trauma",
+          "who": "input",
+          "physical": 0,
+          "mental": 1
+        }
+      ]
+    },
+    "obsidian-canyons:record_prove_your_worth_loss": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "obsidian-canyons:record_prove_your_worth_loss:yes:fx"
+      ],
+      "else": []
+    },
+    "obsidian-canyons:check_helped_with_ropes": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "tdc_helped_with_the_ropes",
+        "section": "hidden"
+      },
+      "then": [
+        "obsidian-canyons:helping_story",
+        "obsidian-canyons:helping_trauma:text",
+        "obsidian-canyons:ask_who_you_helped",
+        "obsidian-canyons:helping_consequences:text",
+        "obsidian-canyons:record_prove_your_worth_progress"
+      ],
+      "else": [
+        "obsidian-canyons:check_helped_with_ropes:no:fx",
+        "obsidian-canyons:not_helping_story",
+        "obsidian-canyons:erase_progress:text",
+        "obsidian-canyons:everyone_else_xp:text",
+        "obsidian-canyons:record_prove_your_worth_loss"
+      ]
+    },
+    "obsidian-canyons:check_prove_your_worth_resolution": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "obsidian-canyons:check_helped_with_ropes"
+      ],
+      "else": []
+    },
+    "obsidian-canyons:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "obsidian-canyons:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "obsidian-canyons:next_court_of_the_ancients": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "court-of-the-ancients"
+        }
+      ]
+    },
+    "obsidian-canyons:check_resolution_east": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "expedition_headed_east",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "obsidian-canyons:next_court_of_the_ancients"
+      ],
+      "else": []
+    },
+    "obsidian-canyons:check_resolution_west": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "expedition_headed_west",
+        "section": "campaign_notes"
+      },
+      "then": [],
+      "else": [
+        "obsidian-canyons:check_resolution_east"
+      ]
+    },
+    "obsidian-canyons:earn_obsidian_claw:text": {
+      "kind": "story",
+      "text": "Check the box next to \"Obsidian Claw\" in the \"Artifacts Earned\" section of your Campaign Log.",
+      "bullets": []
+    },
+    "obsidian-canyons:earn_obsidian_claw": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "obsidian_claw",
+          "section": "artifacts_earned",
+          "value": true
+        }
+      ]
+    },
+    "obsidian-canyons:ask_obsidian_claw": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Was the Obsidian Claw under the control of an investigator when the scenario ended?",
+          "effects": [],
+          "steps": [
+            "obsidian-canyons:earn_obsidian_claw:text",
+            "obsidian-canyons:earn_obsidian_claw"
+          ]
+        }
+      ]
+    },
+    "the-awakening:intro_1": {
+      "kind": "story",
+      "text": "A violent tremor knocks you prone. As you clamber to your feet, Ruby suppresses a gasp. A heavy shadow appears, veiled in the sepulchral darkness within the gates. A steady pulse—like a heartbeat—ripples through the city's nightmarish skyline. The ancient monstrosity drags himself on his belly through the gate.\nThe gargantuan beast sways unsteadily. He is easily the size of a small mountain, with sickly green skin, an octopoid head and face, and a set of limp, tattered wings. Your vision doubles as you look at him, as if the creature were both here and elsewhere, both metaphysical and physical. The stench of his ancient rotten flesh is almost enough to make you retch.\nThe thing's red eyes glow as he gazes down on you. A steady, insistent weight presses down on your shoulders, forcing you to kneel. You hear yourself speaking in a voice not quite your own: \"[tdc_rune_u][tdc_rune_c][tdc_rune_b][tdc_rune_n][tdc_rune_p][tdc_rune_b][tdc_rune_n] [tdc_rune_a][tdc_rune_b][tdc_rune_c][tdc_rune_d][tdc_rune_e][tdc_rune_f]!\"",
+      "bullets": []
+    },
+    "the-awakening:intro_2": {
+      "kind": "story",
+      "text": "\"Look away!\" shouts Ruby. You turn to see your companions also kneeling before the awful dead dreaming god. A warmth spreads through your body as he delves deep into your mind, your memories. The warm feeling gives way to something cold, hateful. Looking up, you see him staring back at you, his fifth eye open.\nYou feel his rage. You have taken part of his domain. You must perish.",
+      "bullets": []
+    },
+    "the-awakening:change_symbol_tokens_bad:text": {
+      "kind": "story",
+      "text": "Remove all [cultist], [tablet], and [elder_thing] tokens form the chaos bag. Then add 2 [cultist], 2 [tablet] and 2 [elder_thing] tokens for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-awakening:change_symbol_tokens_bad": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "elderThing"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "elderThing"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "elderThing"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "elderThing"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        }
+      ]
+    },
+    "the-awakening:intro_3": {
+      "kind": "story",
+      "text": "\"Look away!\" shouts Ruby. You turn to see your companions also kneeling before the awful dead dreaming god. A warmth spreads through your body as he delves deep into your mind, your memories. Great Cthulhu turns his gaze away from you, northward. In your mind, you see the image of the small green idol on Randall's desk in Arkham. The warm feeling gives way to something cold, hateful. Looking up, you see Great Cthulhu staring back at you, his fifth dreaming eye open.\nYou feel his rage at the one who stole part of his domain. They must perish.",
+      "bullets": []
+    },
+    "the-awakening:change_symbol_tokens_okay:text": {
+      "kind": "story",
+      "text": "Remove all [cultist], [tablet], and [elder_thing] tokens form the chaos bag. Then add [cultist], [tablet] and 2 [elder_thing] tokens for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-awakening:change_symbol_tokens_okay": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "elderThing"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "elderThing"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "elderThing"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "elderThing"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        }
+      ]
+    },
+    "the-awakening:check_at_least_one_artifact": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "the-awakening:intro_2",
+        "the-awakening:change_symbol_tokens_bad:text",
+        "the-awakening:change_symbol_tokens_bad"
+      ],
+      "else": [
+        "the-awakening:intro_3",
+        "the-awakening:change_symbol_tokens_okay:text",
+        "the-awakening:change_symbol_tokens_okay"
+      ]
+    },
+    "the-awakening:intro_4": {
+      "kind": "story",
+      "text": "Struggling against the ancient one's terrible will, you rise and help the others to their feet. Great Cthulhu grasps at you with sinewy tentacles as you flee to the water's edge and paddle furiously toward the <i>Cassandra.</i> Once aboard, the ship threads a narrow strait through a gauntlet of risen spires and deadly shoals to reach the open ocean.\nAn ear splitting roar echoes across the water. You turn to see the colossal abomination slip greasily into the black water and out of view. You stare down into the fathomless deep, waiting to see five angry red eyes emerge to capsize the ship. The nightmarish skyline of R'lyeh glimmers with pale green fire as it fades into the distance. A minute passes, then ten, then thirty. There is no movement, no stirring in the depths. The abomination may have lost interest, or perhaps gotten tangled in the shoals. Or, at least, so you hope.",
+      "bullets": []
+    },
+    "the-awakening:next_scenario": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "return-to-arkham"
+        }
+      ]
+    },
+    "return-to-arkham:intro_1": {
+      "kind": "story",
+      "text": "Your sleep on the voyage home is fraught with nightmares. Upon returning to Arkham, you and the others bring the expedition's findings back to an elated Tillinghast. As you relay the events of the expedition to the collector, he turns each piece in hand, marveling at the ancient technology. \"You've done all I asked and more,\" he grins. \"Consider your debts annulled. And, of course, I'm more than happy to honor our original agreement.\"",
+      "bullets": []
+    },
+    "return-to-arkham:intro_2": {
+      "kind": "story",
+      "text": "Your sleep on the voyage home is fraught with nightmares. Upon returning to Arkham, you and the others lay your few findings before Tillinghast. The antiquarian is furious when he sees you returned empty handed until Andy lays the obsidian slab he found in R'lyeh on his desk. Randall surveys it with a cold stare. \"I suppose this is… adequate. Consider your debts annulled. And, despite the fact that you have brought almost <i>nothing</i> of value, I am obliged to honor our original agreement.\"",
+      "bullets": []
+    },
+    "return-to-arkham:check_at_least_one_artifact": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:intro_1"
+      ],
+      "else": [
+        "return-to-arkham:intro_2"
+      ]
+    },
+    "return-to-arkham:gain_task_xp:text": {
+      "kind": "story",
+      "text": "For each progress you have marked on your task, you (and only you) gain 1 additional experience point.",
+      "bullets": []
+    },
+    "return-to-arkham:explain_check_tasks:text": {
+      "kind": "story",
+      "text": "Each investigator resolves his or her corresponding task:",
+      "bullets": []
+    },
+    "return-to-arkham:passed_walk_in_faith_story": {
+      "kind": "story",
+      "text": "Upon returning, you are hailed as a prophet amongst your fellow believers. The dreams that led you to R'lyeh are the same visions shared by your brothers and sisters in the faith. Now, more and more of them are singing in strange tongues and stitching patchwork cloaks. Your purpose in traveling to R'lyeh, in witnessing those lost pilgrims, was not to shake your faith, but to restore it. You have glimpsed the face of the ancients. Only you are fit to lead your people out of darkness and into the light. You need only continue to follow your path with the same unshakeable devotion that delivered you from R'lyeh.",
+      "bullets": []
+    },
+    "return-to-arkham:passed_walk_in_faith_effect:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "walk_in_faith_succeed",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "removeCard",
+          "code": "11754a",
+          "who": "input"
+        },
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "input",
+          "victory": false
+        },
+        {
+          "do": "earnCard",
+          "code": "11754b",
+          "who": "input"
+        }
+      ]
+    },
+    "return-to-arkham:passed_walk_in_faith_effect": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:passed_walk_in_faith_effect:yes:fx"
+      ],
+      "else": []
+    },
+    "return-to-arkham:task_completed:text": {
+      "kind": "story",
+      "text": "This task is complete <i>(it enters play with its <b>Completed</b> side faceup)</i>.",
+      "bullets": []
+    },
+    "return-to-arkham:failed_walk_in_faith_story": {
+      "kind": "story",
+      "text": "You stand on a bridge overlooking the Miskatonic River, watching the waters below dance and glimmer. Upon returning, you felt something was different. Something changed. Your fellow believers say that outsiders wearing patchwork cloaks recently arrived, uttering miraculous prophecies and enticing promises. Now your place of worship is covered in profane symbols: a hand with a flaming eye; a chalice overflowing with blood. What you once thought holy was ruined.\nNow, as you stand overlooking the water, you hold your token of faith in one hand. You cannot help but feel that you were led astray. Taking a deep breath, you throw the token into the water below. As it sinks, you feel some part of yourself sink with it. There is no turning back now.",
+      "bullets": []
+    },
+    "return-to-arkham:remove_walk_in_faith:text": {
+      "kind": "story",
+      "text": "Permanently remove the \"Walk in Faith\" Task from your deck and suffer 1 mental trauma. For the remainder of the campaign, you must treat the [elder_thing] token as if it were an [auto_fail] token, instead.",
+      "bullets": []
+    },
+    "return-to-arkham:actually_remove_walk_in_faith:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "11754a",
+          "who": "input"
+        },
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "input",
+          "victory": false
+        },
+        {
+          "do": "trauma",
+          "who": "input",
+          "physical": 0,
+          "mental": 1
+        }
+      ]
+    },
+    "return-to-arkham:actually_remove_walk_in_faith": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:actually_remove_walk_in_faith:yes:fx"
+      ],
+      "else": []
+    },
+    "return-to-arkham:check_walk_in_faith_progress": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:passed_walk_in_faith_story",
+        "return-to-arkham:passed_walk_in_faith_effect",
+        "return-to-arkham:task_completed:text"
+      ],
+      "else": [
+        "return-to-arkham:failed_walk_in_faith_story",
+        "return-to-arkham:remove_walk_in_faith:text",
+        "return-to-arkham:actually_remove_walk_in_faith"
+      ]
+    },
+    "return-to-arkham:check_walk_in_faith": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:check_walk_in_faith_progress"
+      ],
+      "else": []
+    },
+    "return-to-arkham:passed_good_money_story": {
+      "kind": "story",
+      "text": "Smirking, you walk away from your rendezvous with Sanford with a briefcase stuffed with bills. You skimmed enough ancient knick knacks and research notes to satisfy both Tillinghast and that old bat Sanford. With the payout from each of them, you have enough cash to go wherever you want, to be whomever you want to be. It sounds like Sanford and his lackeys are going under anyway.",
+      "bullets": []
+    },
+    "return-to-arkham:passed_good_money_effect:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "good_money_succeed",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "removeCard",
+          "code": "11756a",
+          "who": "input"
+        },
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "input",
+          "victory": false
+        },
+        {
+          "do": "earnCard",
+          "code": "11756b",
+          "who": "input"
+        }
+      ]
+    },
+    "return-to-arkham:passed_good_money_effect": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:passed_good_money_effect:yes:fx"
+      ],
+      "else": []
+    },
+    "return-to-arkham:failed_good_money_story": {
+      "kind": "story",
+      "text": "Smirking, you walk away from your rendezvous with Sanford with a full briefcase. You turn a corner to find yourself surrounded by thugs.\n\"Tillinghast told us you were well overdue. Thankfully, I think you're ready to pay up,\" one of them says. Apparently, it was tougher to play both sides than you thought. Raising your fists, you brace yourself for what's about to come next. Hell, if you're going down, you're gonna go down swinging.",
+      "bullets": []
+    },
+    "return-to-arkham:remove_good_money:text": {
+      "kind": "story",
+      "text": "Permanently remove the \"Good Money\" Task from your deck and suffer 1 physical trauma. Search the collection for an [[Injury]] or [[Criminal]] basic weakness and add it to your deck. This card does not count toward your investigator's deck size.",
+      "bullets": []
+    },
+    "return-to-arkham:actually_remove_good_money:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "11756a",
+          "who": "input"
+        },
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "input",
+          "victory": false
+        },
+        {
+          "do": "trauma",
+          "who": "input",
+          "physical": 1,
+          "mental": 0
+        },
+        {
+          "do": "addWeakness",
+          "trait": "Injury",
+          "who": "input"
+        }
+      ]
+    },
+    "return-to-arkham:actually_remove_good_money": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:actually_remove_good_money:yes:fx"
+      ],
+      "else": []
+    },
+    "return-to-arkham:check_good_money_progress": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:passed_good_money_story",
+        "return-to-arkham:passed_good_money_effect",
+        "return-to-arkham:task_completed:text"
+      ],
+      "else": [
+        "return-to-arkham:failed_good_money_story",
+        "return-to-arkham:remove_good_money:text",
+        "return-to-arkham:actually_remove_good_money"
+      ]
+    },
+    "return-to-arkham:check_good_money": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:check_good_money_progress"
+      ],
+      "else": []
+    },
+    "return-to-arkham:passed_dreams_of_destruction_story": {
+      "kind": "story",
+      "text": "You leaf through Randall's reward for all your efforts: a tattered stack of Blavatsky and Crowley books. They might satisfy some fledgling seer, but not you. The fact that he offered them as a reward is almost insulting. Closing the book, you hear a faint whisper of the same voices you heard in R'lyeh. Your nightmares were not heralds of destruction: they were warnings from vagrant spirits. The coming calamity may be unavoidable, they tell you, but that doesn't mean you can't fight it.",
+      "bullets": []
+    },
+    "return-to-arkham:passed_dreams_of_destruction_effect:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "dreams_of_destruction_succeed",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "removeCard",
+          "code": "11759a",
+          "who": "input"
+        },
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "input",
+          "victory": false
+        },
+        {
+          "do": "earnCard",
+          "code": "11759b",
+          "who": "input"
+        }
+      ]
+    },
+    "return-to-arkham:passed_dreams_of_destruction_effect": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:passed_dreams_of_destruction_effect:yes:fx"
+      ],
+      "else": []
+    },
+    "return-to-arkham:add_plus_1_token:text": {
+      "kind": "story",
+      "text": "Add a +1 token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "return-to-arkham:add_plus_1_token": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "+1"
+        }
+      ]
+    },
+    "return-to-arkham:failed_dreams_of_destruction_story": {
+      "kind": "story",
+      "text": "The whispers that plagued you in R'lyeh have finally stopped. Since returning from R'lyeh, you wake up every morning to complete silence. Rather than console you, however, the lack of whispers fills you with even more dread. It is as if your link to the beyond has been severed. Or perhaps the spirits that wanted to warn you of the coming calamity have abandoned you.",
+      "bullets": []
+    },
+    "return-to-arkham:remove_dreams_of_destruction:text": {
+      "kind": "story",
+      "text": "Permanently remove the \"Dreams of Destruction\" Task from your deck and suffer 1 mental trauma.",
+      "bullets": []
+    },
+    "return-to-arkham:actually_remove_dreams_of_destruction:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "11759a",
+          "who": "input"
+        },
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "input",
+          "victory": false
+        },
+        {
+          "do": "trauma",
+          "who": "input",
+          "physical": 0,
+          "mental": 1
+        }
+      ]
+    },
+    "return-to-arkham:actually_remove_dreams_of_destruction": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:actually_remove_dreams_of_destruction:yes:fx"
+      ],
+      "else": []
+    },
+    "return-to-arkham:remove_elder_sign_token:text": {
+      "kind": "story",
+      "text": "Remove the [elder_sign] token from the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "return-to-arkham:remove_elder_sign_token": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeChaosToken",
+          "token": "elderSign"
+        }
+      ]
+    },
+    "return-to-arkham:check_dreams_of_destruction_progress": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:passed_dreams_of_destruction_story",
+        "return-to-arkham:passed_dreams_of_destruction_effect",
+        "return-to-arkham:task_completed:text",
+        "return-to-arkham:add_plus_1_token:text",
+        "return-to-arkham:add_plus_1_token"
+      ],
+      "else": [
+        "return-to-arkham:failed_dreams_of_destruction_story",
+        "return-to-arkham:remove_dreams_of_destruction:text",
+        "return-to-arkham:actually_remove_dreams_of_destruction",
+        "return-to-arkham:remove_elder_sign_token:text",
+        "return-to-arkham:remove_elder_sign_token"
+      ]
+    },
+    "return-to-arkham:check_dreams_of_destruction": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:check_dreams_of_destruction_progress"
+      ],
+      "else": []
+    },
+    "return-to-arkham:passed_no_place_like_home_story": {
+      "kind": "story",
+      "text": "You storm out of Tillinghast Esoterica, your head ringing with Randall's honeyed promises. Your debt was forgiven, but there is still the matter of your room and board to settle. \"Just a few more months, and we can finally settle up,\" he cooed. Rather than answer, you grabbed your reward and walked out. It was never about the money. He wanted to keep you on retainer. He'll surely be after you for the money eventually, but that doesn't matter now. You never needed him in the first place. Home is what you make it, not where you make it, there's nothing Tillinghast can do to take that from you now.",
+      "bullets": []
+    },
+    "return-to-arkham:passed_no_place_like_home_effect:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "no_place_like_home_succeed",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "removeCard",
+          "code": "11753a",
+          "who": "input"
+        },
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "input",
+          "victory": false
+        },
+        {
+          "do": "earnCard",
+          "code": "11753b",
+          "who": "input"
+        }
+      ]
+    },
+    "return-to-arkham:passed_no_place_like_home_effect": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:passed_no_place_like_home_effect:yes:fx"
+      ],
+      "else": []
+    },
+    "return-to-arkham:failed_no_place_like_home_story": {
+      "kind": "story",
+      "text": "You walk through Southside, reflecting on Randall's last words to you. Your debt was forgiven, but there is still the matter of your room and board to settle. \"Just a few more months, and we can finally settle up,\" he cooed. You thanked him. It's an entirely reasonable request. And after all, he's the only reason you're not living on the streets.\nWalking past Ma's Boarding House, you catch the scent of a home-cooked meal: fresh-baked bread, green beans, and sliced ham. Your stomach rumbles. You feel an old yearning, something more than hunger. Just a lttle more work, and Tillinghast will help you get your feet under you. Someday soon, you'll have a home of your own.",
+      "bullets": []
+    },
+    "return-to-arkham:remove_no_place_like_home:text": {
+      "kind": "story",
+      "text": "Permanently remove the \"No Place Like Home\" Task from your deck and suffer 1 physical or 1 mental trauma.",
+      "bullets": []
+    },
+    "return-to-arkham:add_cultist_token:text": {
+      "kind": "story",
+      "text": "Add 1 [cultist] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "return-to-arkham:add_cultist_token": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        }
+      ]
+    },
+    "return-to-arkham:actually_remove_no_place_like_home:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "11753a",
+          "who": "input"
+        },
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "input",
+          "victory": false
+        }
+      ]
+    },
+    "return-to-arkham:actually_remove_no_place_like_home": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:actually_remove_no_place_like_home:yes:fx"
+      ],
+      "else": []
+    },
+    "return-to-arkham:check_no_place_like_home_progress": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:passed_no_place_like_home_story",
+        "return-to-arkham:passed_no_place_like_home_effect",
+        "return-to-arkham:task_completed:text"
+      ],
+      "else": [
+        "return-to-arkham:failed_no_place_like_home_story",
+        "return-to-arkham:remove_no_place_like_home:text",
+        "return-to-arkham:add_cultist_token:text",
+        "return-to-arkham:add_cultist_token",
+        "return-to-arkham:actually_remove_no_place_like_home"
+      ]
+    },
+    "return-to-arkham:check_no_place_like_home": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:check_no_place_like_home_progress"
+      ],
+      "else": []
+    },
+    "return-to-arkham:passed_do_no_harm_story": {
+      "kind": "story",
+      "text": "Walking through Independence Square, you round a corner to see a figure slumped on the ground. You break into a sprint toward them as your mind floods with memories of the pilgrim in R'lyeh. Your stomach turns as you approach, hoping for a much less gruesome experience. She's still breathing. You can help her. Whatever trouble people find themselves in, you know you'll always be there to help.",
+      "bullets": []
+    },
+    "return-to-arkham:passed_do_no_harm_effect:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "do_no_harm_succeed",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "removeCard",
+          "code": "11758a",
+          "who": "input"
+        },
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "input",
+          "victory": false
+        },
+        {
+          "do": "earnCard",
+          "code": "11758b",
+          "who": "input"
+        }
+      ]
+    },
+    "return-to-arkham:passed_do_no_harm_effect": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:passed_do_no_harm_effect:yes:fx"
+      ],
+      "else": []
+    },
+    "return-to-arkham:failed_do_no_harm_story": {
+      "kind": "story",
+      "text": "You wake up suddenly in the middle of your first night back in Arkham. The cat perched on the end of your bed flees in surprise as you wipe cold sweat from your forehead. Echoes of the faces you left behind slowly fade, but you can't stop thinking about the dying man's last words: \"Mother.\" Your heartbeat slows as you stare out the window. Thoughts of what you could have done differently envelop you. You will never be able to save everyone. Is it even worth it to try?",
+      "bullets": []
+    },
+    "return-to-arkham:remove_do_no_harm:text": {
+      "kind": "story",
+      "text": "Permanently remove the \"Do No Harm\" Task from your deck and suffer 1 mental trauma.",
+      "bullets": []
+    },
+    "return-to-arkham:add_tablet_token:text": {
+      "kind": "story",
+      "text": "Add 1 [tablet] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "return-to-arkham:add_tablet_token": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        }
+      ]
+    },
+    "return-to-arkham:actually_remove_do_no_harm:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "11758a",
+          "who": "input"
+        },
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "input",
+          "victory": false
+        },
+        {
+          "do": "trauma",
+          "who": "input",
+          "physical": 0,
+          "mental": 1
+        }
+      ]
+    },
+    "return-to-arkham:actually_remove_do_no_harm": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:actually_remove_do_no_harm:yes:fx"
+      ],
+      "else": []
+    },
+    "return-to-arkham:check_do_no_harm_progress": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:passed_do_no_harm_story",
+        "return-to-arkham:passed_do_no_harm_effect",
+        "return-to-arkham:task_completed:text"
+      ],
+      "else": [
+        "return-to-arkham:failed_do_no_harm_story",
+        "return-to-arkham:remove_do_no_harm:text",
+        "return-to-arkham:add_tablet_token:text",
+        "return-to-arkham:add_tablet_token",
+        "return-to-arkham:actually_remove_do_no_harm"
+      ]
+    },
+    "return-to-arkham:check_do_no_harm": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:check_do_no_harm_progress"
+      ],
+      "else": []
+    },
+    "return-to-arkham:passed_toe_the_line_story": {
+      "kind": "story",
+      "text": "\"You'll be in charge of overseeing the construction and eventual management of the new factory.\" Your new employer beams, sliding a crisp contract across the table. As you look out the window of your new office, you feel your heart swell. After your success with the expedition, Tillinghast mentioned his connections with the budding New Horizons Industries. Even though the meat-packing magnate has yet to break ground in Arkham, Randall has assured you that you will be well taken care of. All you need to do is sign on the dotted line.",
+      "bullets": []
+    },
+    "return-to-arkham:passed_toe_the_line_effect:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "toe_the_line_succeed",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "removeCard",
+          "code": "11755a",
+          "who": "input"
+        },
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "input",
+          "victory": false
+        },
+        {
+          "do": "earnCard",
+          "code": "11755b",
+          "who": "input"
+        }
+      ]
+    },
+    "return-to-arkham:passed_toe_the_line_effect": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:passed_toe_the_line_effect:yes:fx"
+      ],
+      "else": []
+    },
+    "return-to-arkham:failed_toe_the_line_story": {
+      "kind": "story",
+      "text": "The room goes silent when you enter. When you asked for your old job back, Tillinghast was more than happy to oblige. As your old supervisor chats away like you never left, you catch your old colleagues' nervous stares. Whatever small favors the shady businessman pulled must have worked. As you take your seat, you look out at the nervous colleagues you once called friends. You got everything you wanted, even your old desk. Why do you still feel so empty?",
+      "bullets": []
+    },
+    "return-to-arkham:remove_toe_the_line:text": {
+      "kind": "story",
+      "text": "Permanently remove the \"Toe the Line\" Task from your deck and suffer 1 physical trauma.",
+      "bullets": []
+    },
+    "return-to-arkham:explain_token_swap:text": {
+      "kind": "story",
+      "text": "Draw tokens from the chaos bag at random until you have 2 non symbol tokens. Replace each of these tokens with a chaos token of a value 2 lower for the remainder of the campaign. (If you are unable to replace a token, repeat this process until a total of 2 chaos tokens have been replaced.)",
+      "bullets": []
+    },
+    "return-to-arkham:ask_first_token": {
+      "kind": "chooseOne",
+      "text": "First token:",
+      "choices": [
+        {
+          "id": "+1",
+          "text": "+1",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "+1"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-1"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "0",
+          "text": "0",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "0"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-2"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-1",
+          "text": "−1",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-1"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-3"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-2",
+          "text": "−2",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-2"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-4"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-3",
+          "text": "−3",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-3"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-5"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-4",
+          "text": "−4",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-4"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-6"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-5",
+          "text": "−5",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-5"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-7"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-6",
+          "text": "−6",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-6"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-8"
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "return-to-arkham:ask_second_token": {
+      "kind": "chooseOne",
+      "text": "Second token:",
+      "choices": [
+        {
+          "id": "+1",
+          "text": "+1",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "+1"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-1"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "0",
+          "text": "0",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "0"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-2"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-1",
+          "text": "−1",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-1"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-3"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-2",
+          "text": "−2",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-2"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-4"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-3",
+          "text": "−3",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-3"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-5"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-4",
+          "text": "−4",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-4"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-6"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-5",
+          "text": "−5",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-5"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-7"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-6",
+          "text": "−6",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-6"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-8"
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "return-to-arkham:actually_remove_toe_the_line:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "11755a",
+          "who": "input"
+        },
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "input",
+          "victory": false
+        },
+        {
+          "do": "trauma",
+          "who": "input",
+          "physical": 1,
+          "mental": 0
+        }
+      ]
+    },
+    "return-to-arkham:actually_remove_toe_the_line": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:actually_remove_toe_the_line:yes:fx"
+      ],
+      "else": []
+    },
+    "return-to-arkham:check_toe_the_line_progress": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:passed_toe_the_line_story",
+        "return-to-arkham:passed_toe_the_line_effect",
+        "return-to-arkham:task_completed:text"
+      ],
+      "else": [
+        "return-to-arkham:failed_toe_the_line_story",
+        "return-to-arkham:remove_toe_the_line:text",
+        "return-to-arkham:explain_token_swap:text",
+        "return-to-arkham:ask_first_token",
+        "return-to-arkham:ask_second_token",
+        "return-to-arkham:actually_remove_toe_the_line"
+      ]
+    },
+    "return-to-arkham:check_toe_the_line": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:check_toe_the_line_progress"
+      ],
+      "else": []
+    },
+    "return-to-arkham:passed_prove_your_worth_story": {
+      "kind": "story",
+      "text": "It is several nights after your return to Arkham, and you are looking down on an adoring crowd. It's no surprise the expedition was a success. It's all because of you. And after promising Tillinghast a few paltry favors, you're getting the recognition you so richly deserve. Soon, you'll see to it that anyone who ever doubted you gets what they deserve, as well. Whoever said humility was a good thing?",
+      "bullets": []
+    },
+    "return-to-arkham:passed_prove_your_worth_effect:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "prove_your_worth_succeed",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "removeCard",
+          "code": "11757a",
+          "who": "input"
+        },
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "input",
+          "victory": false
+        },
+        {
+          "do": "earnCard",
+          "code": "11757b",
+          "who": "input"
+        }
+      ]
+    },
+    "return-to-arkham:passed_prove_your_worth_effect": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:passed_prove_your_worth_effect:yes:fx"
+      ],
+      "else": []
+    },
+    "return-to-arkham:failed_prove_your_worth_story": {
+      "kind": "story",
+      "text": "On the night of your return, you find yourself ignominiously shut out of your old crowd. Tillinghast himself spread the worst kinds of rumors about you. What's worse is that they were all true. You were nothing but a burden on the expedition. You are the laughing stock of your circle. Nothing you've achieved was ever on your own merits. You're as worthless as they said you are.",
+      "bullets": []
+    },
+    "return-to-arkham:remove_prove_your_worth:text": {
+      "kind": "story",
+      "text": "Permanently remove the \"Prove Your Worth\" Task from your deck and suffer 1 mental trauma. Remove cards of level 1-5 from your deck worth a total of 10 or more experience <i>(remember to purchase new cards to maintain a legal deck size)</i>. You cannot purchase those cards again.",
+      "bullets": []
+    },
+    "return-to-arkham:actually_remove_prove_your_worth:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "11757a",
+          "who": "input"
+        },
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "input",
+          "victory": false
+        },
+        {
+          "do": "trauma",
+          "who": "input",
+          "physical": 0,
+          "mental": 1
+        }
+      ]
+    },
+    "return-to-arkham:actually_remove_prove_your_worth": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:actually_remove_prove_your_worth:yes:fx"
+      ],
+      "else": []
+    },
+    "return-to-arkham:check_prove_your_worth_progress": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:passed_prove_your_worth_story",
+        "return-to-arkham:passed_prove_your_worth_effect",
+        "return-to-arkham:task_completed:text"
+      ],
+      "else": [
+        "return-to-arkham:failed_prove_your_worth_story",
+        "return-to-arkham:remove_prove_your_worth:text",
+        "return-to-arkham:actually_remove_prove_your_worth"
+      ]
+    },
+    "return-to-arkham:check_prove_your_worth": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:check_prove_your_worth_progress"
+      ],
+      "else": []
+    },
+    "return-to-arkham:passed_plumb_the_depths_story": {
+      "kind": "story",
+      "text": "Barely a week after returning, you receive a request from Miskatonic University to formally present your findings. The word 'tenure' has reached your ears more than once. Despite the incredible acclaim your studies have brought you, the prestige feels empty. The academic song and dance is little more than shadowplay. And it is nothing compared to the horrific truths you learned in R'lyeh. On more than one occasion, you find yourself awake in the dark, breathing heavily, with memories of a time and a world not your own. You know the horrible truth: Humanity is nothing more than a weak echo of far greater civilizations.\nPerhaps it is true. Perhaps you are nothing but a speck, and all your strivings are for naught. But you've also heard great things about Miskatonic's tenure package. You've earned it, damn it all. You may as well enjoy it.",
+      "bullets": []
+    },
+    "return-to-arkham:passed_plumb_the_depths_effect:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "plumb_the_depths_succeed",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "removeCard",
+          "code": "11760a",
+          "who": "input"
+        },
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "input",
+          "victory": false
+        },
+        {
+          "do": "earnCard",
+          "code": "11760b",
+          "who": "input"
+        }
+      ]
+    },
+    "return-to-arkham:passed_plumb_the_depths_effect": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:passed_plumb_the_depths_effect:yes:fx"
+      ],
+      "else": []
+    },
+    "return-to-arkham:failed_plumb_the_depths_story": {
+      "kind": "story",
+      "text": "It is several nights after your return, and you are sitting in one of the many reading rooms in Miskatoni's Orne Library, staring at a roaring fire. Your findings were received as mere fantasy, and the ancient writings you translated were dismissed out of hand. You would be lucky to teach children, let alone lecture in the grand halls of a university. You pause your reading to look at a strange codex scrawled in the margins of your book, strangely familiar. For a moment, you feel a famihar pang of curiosity, the same as you felt in R'lyeh.\nYou close the textbook. If no one will listen to you, why bother?",
+      "bullets": []
+    },
+    "return-to-arkham:remove_plumb_the_depths:text": {
+      "kind": "story",
+      "text": "Permanently remove the \"Plumb the Depths\" Task from your deck and suffer 1 mental trauma.",
+      "bullets": []
+    },
+    "return-to-arkham:add_skull_token:text": {
+      "kind": "story",
+      "text": "Add 1 [skull] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "return-to-arkham:add_skull_token": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "skull"
+        }
+      ]
+    },
+    "return-to-arkham:actually_remove_plumb_the_depths:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "11760a",
+          "who": "input"
+        },
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "input",
+          "victory": false
+        },
+        {
+          "do": "trauma",
+          "who": "input",
+          "physical": 0,
+          "mental": 1
+        }
+      ]
+    },
+    "return-to-arkham:actually_remove_plumb_the_depths": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:actually_remove_plumb_the_depths:yes:fx"
+      ],
+      "else": []
+    },
+    "return-to-arkham:check_plumb_the_depths_progress": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:passed_plumb_the_depths_story",
+        "return-to-arkham:passed_plumb_the_depths_effect",
+        "return-to-arkham:task_completed:text"
+      ],
+      "else": [
+        "return-to-arkham:failed_plumb_the_depths_story",
+        "return-to-arkham:remove_plumb_the_depths:text",
+        "return-to-arkham:add_skull_token:text",
+        "return-to-arkham:add_skull_token",
+        "return-to-arkham:actually_remove_plumb_the_depths"
+      ]
+    },
+    "return-to-arkham:check_plumb_the_depths": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "return-to-arkham:check_plumb_the_depths_progress"
+      ],
+      "else": []
+    },
+    "return-to-arkham:tasks_done": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "tasks_done",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "return-to-arkham:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "return-to-arkham:next_scenario": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "the-doom-of-arkham"
+        }
+      ]
+    },
+    "the-doom-of-arkham:intro": {
+      "kind": "story",
+      "text": "The month after your return to Arkham passes like a dream. Something still feels <i>wrong.</i> The concerns of your former life are nothing compared to the austere grandeur and menace of the ancient city. In your dreams, you wander the ancient city, hunted by something you dare not describe. If you were to tell anyone the truth of what you've seen, you could be committed to a sanatorium, or worse. You attempt to track down both Ruby and Andy to ask about their dreams, but can find no trace of them.\nThe Arkham Advertiser has begun to report the spread of an unusual \"sleeping sickness\" in the city's population. There is no known cause, no sign of disease, no common thread to the victims. People seem to simply be falling asleep each night, never to awaken. Rumors abound of sleepwalkers wandering the streets at night. Rather than induce a panic, however, the populace seems to accept what would be alarming news with dull indifference. The city of Arkham is, itself, sinking into a deep slumber.\nIn your restless dreams, you still see the drowned city and the hulking behemoth that once slept within it. You know, beyond a doubt, that you will see him again.",
+      "bullets": []
+    },
+    "the-doom-of-arkham:next_scenario": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "the-doom-of-arkham-part-1"
+        }
+      ]
+    },
+    "the-doom-of-arkham-part-1:earn_random_weakness:text": {
+      "kind": "story",
+      "text": "Each investigator searches the collection for a random basic [[Injury]] or [[Madness]] weakness and adds it to their deck. This card does not count toward that investigator's deck size.",
+      "bullets": []
+    },
+    "the-doom-of-arkham-part-1:earn_random_weakness": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addWeakness",
+          "trait": "Injury"
+        }
+      ]
+    },
+    "the-doom-of-arkham-part-1:earn_clay_horror:text": {
+      "kind": "story",
+      "text": "Update campaign log. Record \"Horror in Clay\" under \"Artifacts Earned.\"",
+      "bullets": []
+    },
+    "the-doom-of-arkham-part-1:earn_clay_horror": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "clah_horror",
+          "section": "artifacts_earned",
+          "value": true
+        }
+      ]
+    },
+    "the-doom-of-arkham-part-1:ask_controlled_artifacts": {
+      "kind": "checklist",
+      "text": "Which artifacts were controlled by investigators when the scenario ended?",
+      "min": 0,
+      "choices": [
+        {
+          "id": "barrier_node",
+          "text": "Barrier Node",
+          "effects": [
+            {
+              "do": "record",
+              "key": "kept_barrier_node",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": [],
+          "when": {
+            "kind": "logHas",
+            "id": "barrier_node",
+            "section": "artifacts_earned"
+          }
+        },
+        {
+          "id": "obsidian_jar",
+          "text": "Obsidian Claw",
+          "effects": [
+            {
+              "do": "record",
+              "key": "kept_obsidian_claw",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": [],
+          "when": {
+            "kind": "logHas",
+            "id": "obsidian_claw",
+            "section": "artifacts_earned"
+          }
+        },
+        {
+          "id": "fragment",
+          "text": "Shard ofY'chlecht",
+          "effects": [
+            {
+              "do": "record",
+              "key": "kept_shard",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": [],
+          "when": {
+            "kind": "logHas",
+            "id": "shard",
+            "section": "artifacts_earned"
+          }
+        },
+        {
+          "id": "tablet",
+          "text": "Tidal Tablet",
+          "effects": [
+            {
+              "do": "record",
+              "key": "kept_tidal_tablet",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": [],
+          "when": {
+            "kind": "logHas",
+            "id": "tidal_tablet",
+            "section": "artifacts_earned"
+          }
+        },
+        {
+          "id": "mask",
+          "text": "Grisly Mask",
+          "effects": [
+            {
+              "do": "record",
+              "key": "kept_grisly_mask",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": [],
+          "when": {
+            "kind": "logHas",
+            "id": "grisly_mask",
+            "section": "artifacts_earned"
+          }
+        },
+        {
+          "id": "clay",
+          "text": "Horror in Clay",
+          "effects": [],
+          "steps": [
+            "the-doom-of-arkham-part-1:earn_clay_horror:text",
+            "the-doom-of-arkham-part-1:earn_clay_horror"
+          ]
+        }
+      ]
+    },
+    "the-doom-of-arkham-part-1:cross_out_uncontrolled:text": {
+      "kind": "story",
+      "text": "Cross out the name of each [[Artifact]] asset that was not under any investigator's control when the scenario ended.",
+      "bullets": []
+    },
+    "the-doom-of-arkham-part-1:cross_out_barrier_node:text": {
+      "kind": "story",
+      "text": "Cross out Barrier Node.",
+      "bullets": []
+    },
+    "the-doom-of-arkham-part-1:cross_out_barrier_node": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "barrier_node",
+          "section": "artifacts_earned"
+        }
+      ]
+    },
+    "the-doom-of-arkham-part-1:maybe_cross_out_barrier_node": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "kept_barrier_node",
+        "section": "hidden"
+      },
+      "then": [],
+      "else": [
+        "the-doom-of-arkham-part-1:cross_out_barrier_node:text",
+        "the-doom-of-arkham-part-1:cross_out_barrier_node"
+      ]
+    },
+    "the-doom-of-arkham-part-1:cross_out_obsidian_claw:text": {
+      "kind": "story",
+      "text": "Cross out Obsidian Claw.",
+      "bullets": []
+    },
+    "the-doom-of-arkham-part-1:cross_out_obsidian_claw": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "obsidian_claw",
+          "section": "artifacts_earned"
+        }
+      ]
+    },
+    "the-doom-of-arkham-part-1:maybe_cross_out_obsidian_claw": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "kept_obsidian_claw",
+        "section": "hidden"
+      },
+      "then": [],
+      "else": [
+        "the-doom-of-arkham-part-1:cross_out_obsidian_claw:text",
+        "the-doom-of-arkham-part-1:cross_out_obsidian_claw"
+      ]
+    },
+    "the-doom-of-arkham-part-1:cross_out_shard:text": {
+      "kind": "story",
+      "text": "Cross out Shard of Y'ch'lecht.",
+      "bullets": []
+    },
+    "the-doom-of-arkham-part-1:cross_out_shard": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "shard",
+          "section": "artifacts_earned"
+        }
+      ]
+    },
+    "the-doom-of-arkham-part-1:maybe_cross_out_shard": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "kept_shard",
+        "section": "hidden"
+      },
+      "then": [],
+      "else": [
+        "the-doom-of-arkham-part-1:cross_out_shard:text",
+        "the-doom-of-arkham-part-1:cross_out_shard"
+      ]
+    },
+    "the-doom-of-arkham-part-1:cross_out_tablet:text": {
+      "kind": "story",
+      "text": "Cross out Tidal Tablet.",
+      "bullets": []
+    },
+    "the-doom-of-arkham-part-1:cross_out_tablet": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "tidal_tablet",
+          "section": "artifacts_earned"
+        }
+      ]
+    },
+    "the-doom-of-arkham-part-1:maybe_cross_out_tablet": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "kept_tidal_tablet",
+        "section": "hidden"
+      },
+      "then": [],
+      "else": [
+        "the-doom-of-arkham-part-1:cross_out_tablet:text",
+        "the-doom-of-arkham-part-1:cross_out_tablet"
+      ]
+    },
+    "the-doom-of-arkham-part-1:cross_out_mask:text": {
+      "kind": "story",
+      "text": "Cross out Grisly Mask.",
+      "bullets": []
+    },
+    "the-doom-of-arkham-part-1:cross_out_mask": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "grisly_mask",
+          "section": "artifacts_earned"
+        }
+      ]
+    },
+    "the-doom-of-arkham-part-1:maybe_cross_out_mask": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "kept_grisly_mask",
+        "section": "hidden"
+      },
+      "then": [],
+      "else": [
+        "the-doom-of-arkham-part-1:cross_out_mask:text",
+        "the-doom-of-arkham-part-1:cross_out_mask"
+      ]
+    },
+    "the-doom-of-arkham-part-1:explain_flooded_locations:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record \"Flooded Neighborhoods:\" along with a list of each flooded location",
+      "bullets": []
+    },
+    "the-doom-of-arkham-part-1:ask_flooded_locations": {
+      "kind": "checklist",
+      "text": "Which locations are flooded?",
+      "min": 0,
+      "choices": [
+        {
+          "id": "downtown",
+          "text": "Downtown",
+          "effects": [
+            {
+              "do": "record",
+              "key": "downtown",
+              "section": "flooded_neighborhoods",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "easttown",
+          "text": "Easttown",
+          "effects": [
+            {
+              "do": "record",
+              "key": "easttown",
+              "section": "flooded_neighborhoods",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "university",
+          "text": "Miskatonic University",
+          "effects": [
+            {
+              "do": "record",
+              "key": "miskatonic_university",
+              "section": "flooded_neighborhoods",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "northside",
+          "text": "Northside",
+          "effects": [
+            {
+              "do": "record",
+              "key": "northside",
+              "section": "flooded_neighborhoods",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "rivertown",
+          "text": "Rivertown",
+          "effects": [
+            {
+              "do": "record",
+              "key": "rivertown",
+              "section": "flooded_neighborhoods",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "southside",
+          "text": "Southside",
+          "effects": [
+            {
+              "do": "record",
+              "key": "southside",
+              "section": "flooded_neighborhoods",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "st_mary",
+          "text": "St. Mary's Hospital",
+          "effects": [
+            {
+              "do": "record",
+              "key": "st_marys_hospital",
+              "section": "flooded_neighborhoods",
+              "value": true
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "the-doom-of-arkham-part-1:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "the-doom-of-arkham-part-1:earn_xp_version": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_data",
+        "take": true
+      },
+      "then": [],
+      "else": [
+        "the-doom-of-arkham-part-1:earn_xp"
+      ]
+    },
+    "the-doom-of-arkham-part-1:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "the-doom-of-arkham-part-1:ask_continue": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "continue",
+          "text": "<i>\"We're ready to fight.\"</i>",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "pause",
+          "text": "<i>\"We need more time.\"</i>",
+          "effects": [],
+          "steps": []
+        }
+      ]
+    },
+    "the-doom-of-arkham-part-1:put_away_game:text": {
+      "kind": "story",
+      "text": "Put away the game as normal.",
+      "bullets": []
+    },
+    "the-doom-of-arkham-part-1:next_scenario": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "the-doom-of-arkham-part-2"
+        }
+      ]
+    },
+    "the-doom-of-arkham-part-2:cthulhu_annihilated_the_city_of_arkham": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "cthulhu_annihilated_the_city_of_arkham",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-doom-of-arkham-part-2:all_killed:text": {
+      "kind": "story",
+      "text": "The investigators, along with everyone else in Arkham, are <b>killed.</b>",
+      "bullets": []
+    },
+    "the-doom-of-arkham-part-2:all_killed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "kill",
+          "who": "each"
+        }
+      ]
+    },
+    "the-doom-of-arkham-part-2:setup_epilogue": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "tdc-epilogue"
+        }
+      ]
+    },
+    "the-doom-of-arkham-part-2:lose_campaign:text": {
+      "kind": "story",
+      "text": "The investigators lose the campaign.",
+      "bullets": []
+    },
+    "the-doom-of-arkham-part-2:lose_campaign": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "lose"
+        }
+      ]
+    },
+    "the-doom-of-arkham-part-2:cthulhu_was_driven_away": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "cthulhu_was_driven_away",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-doom-of-arkham-part-2:trauma_3:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 3 physical trauma and 3 mental trauma from their battle with Cthulhu.",
+      "bullets": []
+    },
+    "the-doom-of-arkham-part-2:trauma_3": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 3,
+          "mental": 3
+        }
+      ]
+    },
+    "the-doom-of-arkham-part-2:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "the-doom-of-arkham-part-2:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "the-doom-of-arkham-part-2:win_campaign_maybe:text": {
+      "kind": "story",
+      "text": "The investigators win the campaign! But how long will it be before Cthulhu’s eventual return?",
+      "bullets": []
+    },
+    "the-doom-of-arkham-part-2:win_campaign_maybe": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "win"
+        }
+      ]
+    },
+    "the-doom-of-arkham-part-2:cthulhu_was_banished": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "cthulhu_was_banished",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-doom-of-arkham-part-2:trauma_1:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 1 physical trauma and 1 mental trauma from their battle with Cthulhu.",
+      "bullets": []
+    },
+    "the-doom-of-arkham-part-2:trauma_1": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 1,
+          "mental": 1
+        }
+      ]
+    },
+    "the-doom-of-arkham-part-2:remove_weakness:text": {
+      "kind": "story",
+      "text": "Each investigator may remove 1 random basic weakness from their deck (ignoring deckbuilding requirements) for saving Arkham from an ancient evil.",
+      "bullets": []
+    },
+    "the-doom-of-arkham-part-2:win_campaign:text": {
+      "kind": "story",
+      "text": "The investigators win the campaign!",
+      "bullets": []
+    },
+    "the-doom-of-arkham-part-2:win_campaign": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "win"
+        }
+      ]
+    },
+    "the-doom-of-arkham-part-2:cthulhu_was_banished_but_arkham_was_destroyed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "cthulhu_was_banished_but_arkham_was_destroyed",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-doom-of-arkham-part-2:trauma_2:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 2 physical trauma and 2 mental trauma from their battle with Cthulhu.",
+      "bullets": []
+    },
+    "the-doom-of-arkham-part-2:trauma_2": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 2,
+          "mental": 2
+        }
+      ]
+    },
+    "the-doom-of-arkham-part-2:earn_xp_plus_5": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 5,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "the-doom-of-arkham-part-2:win_campaign_in_ruins:text": {
+      "kind": "story",
+      "text": "The investigators win the campaign, although Arkham is completely in ruins.",
+      "bullets": []
+    },
+    "the-doom-of-arkham-part-2:win_campaign_in_ruins": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "win"
+        }
+      ]
+    },
+    "tdc-epilogue:intro_1": {
+      "kind": "story",
+      "text": "<fancy>August 20</fancy>\nIt has been nearly two months since the destruction of Arkham. According to reports, most of the survivors have been committed to a sanatorium upstate. The remainder were bedridden with the infectious coma that has plagued the city for the past month, and have no clue what really happened. The few accounts we do have attribute the destruction to “a massive behemoth” that rampaged the city, destroying everything in its wake. A dozen other cities along the eastern seaboard and the coast of South America have reported similar phenomena. The locals have taken to calling it a silent rampage, though popular opinion holds that it was an exceptionally strong storm.\nThe future is uncertain for Arkham. With few homes and infrastructure to return to, the surviving residents have dispersed to nearby villages in Dunwich, Kingsport, Innsmouth, and Providence. Discussions about whether to salvage what little remains of Miskatonic University are ongoing, but not likely. Arkham is little more than a ghost town.\n<right><fancy>Minnie Klein</fancy></right>",
+      "bullets": []
+    },
+    "tdc-epilogue:intro_2": {
+      "kind": "story",
+      "text": "<fancy>September 18</fancy>\n<i>To Ruby Standish, ██ Rue ███ no 3, Paris France:</i>\nUnfortunately, I don’t have time to visit at the moment. I still have too much to do in Arkham. The city is limping along as best it can, but it will take time before anything feels “normal” again. If “normal” is even possible after what happened. Nobody seems to remember much about what happened that night. They’re claiming a severe storm system swept through, I guess a few other cities along the coast were hit, too, so everyone latched onto the idea that it was some kind of hurricane.\nThe few of us who do remember it are hesitant to share anything. Arkham Asylum still hasn’t been restored, but there are plenty of sanatoriums nearby. Anyone who mentions what really happened is labeled a victim of the dreaming sickness and committed.\nSomewhere, deep down, I’m sure He will return. The old dreams haven’t stopped. He’s still in there, somewhere deep in my mind, biding his time.\nWhen he does come back, no amount of explosives or firepower will stop him. If he returns, it’ll be for revenge.\nYou were probably wise to leave. I’m sure France is beautiful.\n<right><fancy>Andy Van Nortwick</fancy></right>",
+      "bullets": []
+    },
+    "tdc-epilogue:intro_3": {
+      "kind": "story",
+      "text": "<fancy>September 18</fancy><i>To Ruby Standish, ██ Rue ███ no 3, Paris France:</i>\nUnfortunately, I don’t have time to visit at the moment. I still have too much to do in Arkham. The city is limping along as best it can, but it will take time before anything feels ‘normal’ again. If ‘normal’ is even possible after what happened. That said, the restoration project has gone surprisingly well. With some backing from New Horizons Industries, shiny new buildings have started to pop up all around town. We’ve even got a new theater! Oh, and you’ll be excited to hear that the Arkham Advertiser has offered me a full time position. I won’t be able to actually work it until the office is rebuilt, but it’s a nice thought, at least.\nBarely anyone seems to remember that night. They claim a “severe storm system” caused the destruction—even after I pointed out the massive footprints in the rubble. I guess a few other cities along the coast were hit, too, so everyone latched onto the idea that it was some kind of hurricane. Any other accounts are dismissed as products of the strange sleeping sickness that swept through town before the attack.\nI wanted to thank you for, well, everything. I’d be dead if it weren’t for you and Randall’s associates. Along with most of Arkham. I’m not sure if He will ever return, but if that ever happens, I know who to call.\n<right><fancy>Andy Van Nortwick</fancy></right>",
+      "bullets": []
+    },
+    "tdc-epilogue:intro_4": {
+      "kind": "story",
+      "text": "<fancy>May 30</fancy>\nIt was a long journey back from R’lyeh. When we returned to Arkham, Tillinghast Esoterica—and presumably Randall himself—had vanished into thin air. Ruby considers all of our debts repaid, although I worry he might be around to collect someday.\nSpring is in full swing in Arkham. The blooming flowers and fresh air are a far cry from the dank halls of the drowned city. No matter how much time passes, I’ll never forget the face of that thing in the depths of the ancient city. Was it the ancient one that caused it to rise? Or the dreams of his thousands of followers? There’s no telling what set those infernal gears into motion, nor when they might rise again.\n<right><fancy>-Your Journal</fancy></right>",
+      "bullets": []
+    },
+    "tdc-epilogue:check_halted_cthulhus_awakening": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "halted_cthulhus_awakening",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tdc-epilogue:intro_4"
+      ],
+      "else": []
+    },
+    "tdc-epilogue:check_cthulhu_was_banished": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "cthulhu_was_banished",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tdc-epilogue:intro_3"
+      ],
+      "else": [
+        "tdc-epilogue:check_halted_cthulhus_awakening"
+      ]
+    },
+    "tdc-epilogue:check_cthulhu_was_banished_but_arkham_was_destroyed": {
+      "kind": "branch",
+      "condition": {
+        "kind": "any",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "cthulhu_was_driven_away",
+            "section": "campaign_notes"
+          },
+          {
+            "kind": "logHas",
+            "id": "cthulhu_was_banished_but_arkham_was_destroyed",
+            "section": "campaign_notes"
+          }
+        ]
+      },
+      "then": [
+        "tdc-epilogue:intro_2"
+      ],
+      "else": [
+        "tdc-epilogue:check_cthulhu_was_banished"
+      ]
+    },
+    "tdc-epilogue:check_cthulhu_annihilated_the_city_of_arkham": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "cthulhu_annihilated_the_city_of_arkham",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tdc-epilogue:intro_1"
+      ],
+      "else": [
+        "tdc-epilogue:check_cthulhu_was_banished_but_arkham_was_destroyed"
       ]
     }
   }

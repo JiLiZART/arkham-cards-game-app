@@ -138,6 +138,51 @@
       "scenario": "the-foundation",
       "name": "The Foundation",
       "interlude": true
+    },
+    {
+      "scenario": "marrakesh",
+      "name": "Dead Heat",
+      "code": "09520"
+    },
+    {
+      "scenario": "buenos-aires",
+      "name": "Sanguine Shadows",
+      "code": "09545"
+    },
+    {
+      "scenario": "istanbul",
+      "name": "Dealings in the Dark",
+      "code": "09566"
+    },
+    {
+      "scenario": "havana",
+      "name": "Dancing Mad",
+      "code": "09591"
+    },
+    {
+      "scenario": "anchorage",
+      "name": "On Thin Ice",
+      "code": "09609"
+    },
+    {
+      "scenario": "alexandria",
+      "name": "Dogs of War",
+      "code": "09635"
+    },
+    {
+      "scenario": "kuala-lampur",
+      "name": "Shades of Suffering",
+      "code": "09660"
+    },
+    {
+      "scenario": "bermuda-triangle",
+      "name": "Without a Trace",
+      "code": "09681"
+    },
+    {
+      "scenario": "tunguska",
+      "name": "Congress of the Keys",
+      "code": "09694"
     }
   ]
 }
