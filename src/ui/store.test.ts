@@ -206,6 +206,45 @@ describe("pace and held events", () => {
   });
 });
 
+describe("cancelling a skill test before the draw", () => {
+  const investigating = () => {
+    const s = start(mem());
+    begin(s);
+    s.getState().skipEvents();
+    s.getState().choose(JSON.stringify({ kind: "investigate" }));
+    return s;
+  };
+
+  it("takes back the action and every card committed to it: the turn is as it was before", () => {
+    const s = investigating();
+    expect(s.getState().game!.pending!.kind).toBe("commit");
+    const before = s.getState().actions.length;
+    const card = s.getState().game!.pending!.options.find((o) => /^Commit/.test(o.label));
+    if (card) s.getState().choose(card.id);
+    expect(s.getState().testCancellable()).toBe(true);
+    expect(s.getState().cancelTest()).toBe(true);
+    const g = s.getState().game!;
+    expect(g.pending!.kind).toBe("turn");
+    expect(g.skillTest).toBeNull();
+    expect(s.getState().actions.length).toBe(before - 1);
+    expect(g.invs["01001"].actionsLeft).toBe(3);
+  });
+
+  it("not once the test is past its commit window, nor when something hidden came out since it began", () => {
+    const s = investigating();
+    s.setState({ undoFloor: s.getState().actions.length });
+    expect(s.getState().testCancellable()).toBe(false);
+    expect(s.getState().cancelTest()).toBe(false);
+    expect(s.getState().game!.pending!.kind).toBe("commit");
+  });
+
+  it("nothing to cancel outside a test", () => {
+    const s = start(mem());
+    begin(s);
+    expect(s.getState().testCancellable()).toBe(false);
+  });
+});
+
 describe("the tap decks setting", () => {
   it("is on by default and a new scenario's setup asks for tapped decks", () => {
     const s = start(mem());

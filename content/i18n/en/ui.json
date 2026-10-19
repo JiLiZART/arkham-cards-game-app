@@ -632,5 +632,7 @@
   "ability.01155.0": "heal 1 damage or 1 horror",
   "ability.01157.2": "Throw Lita to Umôrdhoth",
   "ability.01174.2": "break down or pick the lock",
-  "ability.01182.2": "test willpower (3) to discard"
+  "ability.01182.2": "test willpower (3) to discard",
+  "test.cancel": "Cancel the test",
+  "test.cancelHint": "Take the action back and every card placed (Esc), to do something else first"
 }

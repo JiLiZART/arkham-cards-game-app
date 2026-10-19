@@ -81,6 +81,10 @@ export interface UiState {
   choose(optionId: string): void;
   /** take back the last choice: replay without it (only down to `undoFloor`) */
   undo(): void;
+  /** whether the live skill test can be called off: the tester's commit window, with nothing hidden revealed since it began */
+  testCancellable(): boolean;
+  /** call the live skill test off: every choice since it began is taken back (the action that started it too); false when it can't be */
+  cancelTest(): boolean;
   finishScenario(): void;
   resume(): boolean;
   abandon(): void;
@@ -135,6 +139,22 @@ export const pastUndo = (prev: GameState, next: GameState) => next.counters.reve
 
 /** whether Undo can take back the last choice now */
 export const canUndo = (s: Pick<UiState, "actions" | "undoFloor" | "game">) => !!s.game && s.game.phase !== "ended" && s.actions.length > s.undoFloor;
+
+/**
+ * How many of the actions to keep to be back before the live skill test began, at the turn's choice; null when the test
+ * can't be called off: it isn't in the tester's commit window, it didn't start from a turn's choice (a treachery), or
+ * something hidden came out since it began (Undo's floor).
+ */
+export function testStartIndex(db: ContentDb, s: Pick<UiState, "setup" | "actions" | "undoFloor" | "game">): number | null {
+  const g = s.game;
+  const test = g?.skillTest;
+  if (!s.setup || !g || !test || g.phase === "ended" || g.pending?.kind !== "commit" || g.pending.inv !== test.inv) return null;
+  for (let k = s.actions.length - 1; k >= s.undoFloor; k--) {
+    const st = replay(db, s.setup, s.actions.slice(0, k)).state;
+    if (st.skillTest?.id !== test.id) return st.pending?.kind === "turn" ? k : null;
+  }
+  return null;
+}
 
 /** replay a recorded game, noting how far back Undo may go */
 export function replayWithFloor(db: ContentDb, setup: GameSetup, actions: Action[]): { state: GameState; undoFloor: number } {
@@ -240,6 +260,21 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage(),
         set({ game: r.state, actions: [...actions, action], logMarks: [...get().logMarks, game.log.length], error: null, ...(pastUndo(game, r.state) ? { undoFloor: actions.length + 1 } : {}) });
         enqueue(r.events);
         persist();
+      },
+
+      testCancellable() {
+        return testStartIndex(db, get()) !== null;
+      },
+
+      cancelTest() {
+        const { setup } = get();
+        const k = testStartIndex(db, get());
+        if (k === null || !setup || useView.getState().intro) return false;
+        const actions = get().actions.slice(0, k);
+        const game = replay(db, setup, actions).state;
+        set({ game, actions, logMarks: get().logMarks.filter((m) => m < game.log.length), queue: [], current: null, error: null });
+        persist();
+        return true;
       },
 
       undo() {
