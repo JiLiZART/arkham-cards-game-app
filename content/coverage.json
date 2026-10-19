@@ -305,20 +305,17 @@
   "core": {
    "encounter": {
     "total": 79,
-    "works": 71,
+    "works": 76,
     "rest": {
-     "enemy": 2,
-     "location": 3,
      "scenario": 3
     }
    },
    "player": {
     "total": 99,
-    "works": 78,
+    "works": 79,
     "rest": {
      "asset": 11,
-     "event": 9,
-     "skill": 1
+     "event": 9
     }
    }
   },
@@ -1462,9 +1459,9 @@
    },
    "player": {
     "total": 13,
-    "works": 0,
+    "works": 1,
     "rest": {
-     "asset": 7,
+     "asset": 6,
      "event": 2,
      "skill": 4
     }
@@ -2209,25 +2206,22 @@
   "night-of-the-zealot": {
    "cards": {
     "total": 69,
-    "works": 64,
-    "rest": {
-     "enemy": 2,
-     "location": 3
-    }
+    "works": 69,
+    "rest": {}
    },
    "unscripted": [],
-   "complete": false
+   "complete": true
   },
   "return-to-the-circle-undone": {
    "cards": {
     "total": 325,
-    "works": 34,
+    "works": 37,
     "rest": {
      "act": 33,
      "agenda": 14,
      "asset": 10,
      "enemy": 43,
-     "location": 132,
+     "location": 129,
      "story": 13,
      "treachery": 46
     }
@@ -2300,12 +2294,12 @@
   "return-to-the-night-of-the-zealot": {
    "cards": {
     "total": 106,
-    "works": 75,
+    "works": 79,
     "rest": {
      "act": 1,
      "agenda": 1,
-     "enemy": 3,
-     "location": 20,
+     "enemy": 2,
+     "location": 17,
      "treachery": 6
     }
    },
@@ -2319,12 +2313,12 @@
   "return-to-the-path-to-carcosa": {
    "cards": {
     "total": 342,
-    "works": 42,
+    "works": 43,
     "rest": {
      "act": 30,
      "agenda": 22,
      "asset": 12,
-     "enemy": 42,
+     "enemy": 41,
      "location": 114,
      "story": 29,
      "treachery": 51
@@ -2450,11 +2444,11 @@
   "side-enthralling-encore": {
    "cards": {
     "total": 39,
-    "works": 9,
+    "works": 10,
     "rest": {
      "act": 5,
      "agenda": 2,
-     "enemy": 6,
+     "enemy": 5,
      "location": 9,
      "treachery": 8
     }
@@ -2651,13 +2645,13 @@
   "the-circle-undone": {
    "cards": {
     "total": 285,
-    "works": 37,
+    "works": 40,
     "rest": {
      "act": 28,
      "agenda": 14,
      "asset": 8,
      "enemy": 39,
-     "location": 107,
+     "location": 104,
      "story": 11,
      "treachery": 41
     }
@@ -2751,12 +2745,12 @@
   "the-feast-of-hemlock-vale": {
    "cards": {
     "total": 310,
-    "works": 28,
+    "works": 29,
     "rest": {
      "act": 22,
      "agenda": 21,
      "asset": 24,
-     "enemy": 56,
+     "enemy": 55,
      "enemy_location": 13,
      "investigator": 1,
      "location": 101,
@@ -2836,12 +2830,12 @@
   "the-path-to-carcosa": {
    "cards": {
     "total": 293,
-    "works": 47,
+    "works": 48,
     "rest": {
      "act": 25,
      "agenda": 22,
      "asset": 10,
-     "enemy": 34,
+     "enemy": 33,
      "location": 92,
      "story": 23,
      "treachery": 40
@@ -2862,12 +2856,12 @@
   "the-scarlet-keys": {
    "cards": {
     "total": 333,
-    "works": 40,
+    "works": 41,
     "rest": {
      "act": 35,
      "agenda": 20,
      "asset": 14,
-     "enemy": 64,
+     "enemy": 63,
      "key": 20,
      "location": 92,
      "story": 10,
@@ -2891,12 +2885,12 @@
   "the-web-of-dreams": {
    "cards": {
     "total": 126,
-    "works": 14,
+    "works": 15,
     "rest": {
      "act": 11,
      "agenda": 8,
      "asset": 4,
-     "enemy": 16,
+     "enemy": 15,
      "location": 41,
      "story": 13,
      "treachery": 19
