@@ -779,8 +779,10 @@ export const CampaignDef = z
     packs: z.array(z.string()).default(["core"]),
     /** generated from the campaign guides (ADR-0007): cards without written behaviour have no effect */
     generated: z.boolean().default(false),
-    /** the first scenario's reference card: its art on the new-game screen before the scenarios are loaded */
+    /** the first scenario's reference card (the scenarios' chapters in the picker's sidebar start from it) */
     card: z.string().optional(),
+    /** the first chapter's art, the campaign's tile in the picker: its first scenario's first agenda */
+    cover: z.string().optional(),
     /** the campaign guide's opening text (an epigraph, or a story) and its scenarios' names, for the new-game tile */
     prologue: z.string().optional(),
     scenarioNames: z.array(z.string()).optional(),

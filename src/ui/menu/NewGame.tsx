@@ -60,8 +60,8 @@ function CampaignStep({ s, set }: { s: WizardState; set: (w: WizardState) => voi
         {list.length === 0 && <p className="wz-hint">{tr("wizard.noCampaigns")}</p>}
         <div className="wz-ctiles">
           {list.map((c) => {
-            // a generated campaign's scenarios and cards load when it is chosen: its reference card's scan is found by code
-            const card = db.scenarios[c.scenarios[0]]?.card ?? c.card;
+            // the first chapter's art (the first agenda), found by code: a generated campaign's cards load only when it is chosen
+            const card = c.cover ?? db.scenarios[c.scenarios[0]]?.agendas[0] ?? c.card;
             const art = card ? (db.cards[card] ?? { code: card }) : null;
             const on = s.campaignId === c.id;
             return (

@@ -34,6 +34,15 @@ describe("the generated flows", () => {
     expect(dwl.logSections.map((s) => s.id)).toEqual(["campaign_notes", "sacrificed"]);
   });
 
+  it("give every campaign a cover: the first agenda of the first scenario played", () => {
+    for (const { id, flow } of flows) {
+      const c = CampaignDef.parse(read(id, "campaign.json"));
+      const first = flow.order.find((x) => c.scenarios.includes(x))!;
+      expect(c.cover, id).toBe(read(id, `scenarios/${first}.json`).agendas[0]);
+    }
+    expect(CampaignDef.parse(read("the-dunwich-legacy", "campaign.json")).cover).toBe("02042");
+  });
+
   it("start Dunwich with its prologue, which names the first scenario to play", () => {
     const { flow } = flows.find((f) => f.id === "the-dunwich-legacy")!;
     expect(flow.order[0]).toBe("dwl-prologue");

@@ -260,6 +260,11 @@ export function main() {
         packs: [...new Set(["core", ...defs.flatMap((d) => packsOf(d, cards, bySet))])].sort(),
         generated: true,
         card: defs[0].card,
+        // the tile's art: the first agenda of the first scenario the players play (the order may open with an interlude)
+        ...(() => {
+          const first = flow.order.map((id) => byDef.get(id)).find(Boolean) ?? defs[0];
+          return first.agendas[0] ? { cover: first.agendas[0] } : {};
+        })(),
         // a side scenario has no campaign prologue: its tile shows the scenario's own intro
         ...((c.id === "side" ? introLead(defs[0].intro) : prologueOf(c)) ? { prologue: c.id === "side" ? introLead(defs[0].intro) : prologueOf(c) } : {}),
         scenarioNames: defs.map((d) => d.name),

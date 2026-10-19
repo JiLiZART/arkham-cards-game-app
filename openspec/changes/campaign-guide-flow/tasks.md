@@ -29,5 +29,6 @@
 
 ## 6. Verification
 
+- [x] 5.4 (asked for after the first pass) The tile's preview is the first chapter's art, `cover` in `campaign.json` (the first agenda of the first scenario played; written by the import, 01105 by hand for Night of the Zealot), shown landscape; the grid and the sidebar are two panes that each scroll, the wizard's body no longer scrolling around them.
 - [x] 6.1 Browser: Dunwich from the picker (filter to campaigns, search "dun", the sidebar's eight cards and two interludes in English and Russian) through the prologue choice, a scenario, its resolution with a choice, Armitage's Fate and the upgrade screen to the next scenario; Night of the Zealot unchanged through The Gathering's resolution; a version-2 save restored; the audio moments on the new screen; 0 console errors.
 - [x] 6.2 `npm test`, lint, typecheck, build, `check:content` by exit code; `openspec validate campaign-guide-flow --type change --strict`.

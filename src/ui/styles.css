@@ -1067,9 +1067,9 @@ button.danger { border-color: var(--bad); color: var(--bad); }
 
 /* the campaign picker: filters, a grid of tiles with the first scenario's card, the chapters in the sidebar */
 .screen.wizard:has(.wz-camp) { max-width: 1440px; }
-.wz-ctiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.wz-ctiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
 .wz-ctile { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 8px; border: 2px solid #3a2f1f; border-radius: 14px; background: #15110c; color: var(--ink); cursor: pointer; min-height: 44px; text-align: center; }
-.wz-ctile img { width: 100%; aspect-ratio: 63 / 88; object-fit: cover; border-radius: 8px; background: #0003; }
+.wz-ctile img { width: 100%; aspect-ratio: 88 / 63; object-fit: cover; border-radius: 8px; background: #0003; }
 .wz-ctile b { font: 18px/1.15 Teutonic, TeutonicRU, Georgia, serif; font-weight: normal; color: var(--gold); }
 .wz-ctile small { color: var(--muted); font: 14px Alegreya, Georgia, serif; }
 .wz-ctile.selected { border-color: var(--gold); background: #261e12; box-shadow: 0 0 14px #c9a95c55; }
@@ -1078,6 +1078,11 @@ button.danger { border-color: var(--bad); color: var(--bad); }
 .parchment .wz-ctile.selected { background: #fff6d8; border-color: #7a5410; box-shadow: 0 0 14px #7a541066; }
 .wz-camp .wz-filters input[type="search"] { flex: 1 1 200px; }
 .wz-camp-side { flex-basis: 420px; }
+/* one scroll area per pane: the grid and the sidebar each scroll on their own, the wizard's body doesn't scroll around them */
+.wz-body:has(> .wz-camp) { overflow: hidden; display: flex; }
+.wz-camp { flex: 1; min-height: 0; align-items: stretch; }
+.wz-camp .wz-inv-main { overflow-y: auto; padding-right: 6px; }
+.wz-camp .wz-camp-side { position: static; max-height: none; overflow-y: auto; }
 .wz-camp-sheet { display: flex; flex-direction: column; gap: 8px; padding: 12px; border: 2px solid #b69c6a; border-radius: 14px; background: #f6edd6e6; color: var(--ink); }
 .wz-camp-sheet .wz-sheet-head { justify-content: space-between; align-items: flex-start; }
 .wz-camp-close { display: none; width: 44px; height: 44px; font-size: 24px; padding: 0; }
