@@ -10,7 +10,7 @@
 
 ## 2. One campaign shape
 
-- [ ] 2.1 Night of the Zealot's `campaign.json`: `packs`, `card`, `cards` (three chapters with reference card, agenda, act); `CampaignSheet` reads `cards` only (the run-time fallback removed); the import's output unchanged.
+- [x] 2.1 Night of the Zealot's `campaign.json`: `packs`, `card`, `cards` (three chapters with reference card, agenda, act); `CampaignSheet` reads `cards` only (the run-time fallback removed); the import's output unchanged.
 
 ## 3. The label from coverage
 

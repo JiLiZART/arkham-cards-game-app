@@ -64,16 +64,8 @@ export function CampaignSheet({ campaign, onClose }: { campaign: CampaignDef; on
   const { lead, more: rest } = blurb(prologue);
   // an epigraph is set in italics: it opens with a quotation mark
   const quote = /^[“"«„]/.test(lead);
-  // the chapters: the guide's order with the interludes in it; a campaign with no list shows its scenarios
-  const chapters = campaign.cards.length
-    ? campaign.cards
-    : campaign.scenarios.map((scenario, k) => ({
-        scenario,
-        name: campaign.scenarioNames?.[k],
-        code: db.scenarios[scenario]?.card,
-        agenda: db.scenarios[scenario]?.agendas[0],
-        act: db.scenarios[scenario]?.acts[0],
-      }));
+  // the chapters: the guide's order with the interludes in it, from the campaign's file
+  const chapters = campaign.cards;
   let n = 0;
   return (
     <aside className="wz-camp-sheet" aria-label={tileName(db, campaign, locale)}>

@@ -91,6 +91,15 @@ describe("the real content", () => {
     expect(c.complete).toBe(c.cards.works === c.cards.total);
   });
 
+  it("Night of the Zealot carries the fields a generated campaign does, a chapter for each scenario", () => {
+    const c = db.campaigns["night-of-the-zealot"];
+    expect(c.packs).toEqual(["core"]);
+    expect(c.card).toBe("01104");
+    expect(c.cards.map((ch) => [ch.scenario, ch.code, ch.agenda, ch.act])).toEqual(
+      c.scenarios.map((id) => [id, db.scenarios[id].card, db.scenarios[id].agendas[0], db.scenarios[id].acts[0]]),
+    );
+  });
+
   it("The Dunwich Legacy is partial with no scenario scripted", () => {
     const c = campaignCoverage(db, "the-dunwich-legacy");
     expect(c.complete).toBe(false);
