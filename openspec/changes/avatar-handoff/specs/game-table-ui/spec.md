@@ -73,6 +73,27 @@ When the decision belongs to another investigator who can act (a commit to anoth
 - **WHEN** Roland's test opens Daisy's commit window while Roland's table is on screen
 - **THEN** the bar reads "Daisy Walker can commit cards" with a button that switches to Daisy's table, where the bar shows her commit instruction with Done
 
+### Requirement: Phase pacing on screen
+When a phase begins in a paced game, its title SHALL stay across the middle of the screen with the round under it and the lead investigator's avatar ringed by a countdown. When the ring closes (3 seconds) the phase begins by itself; a tap on the avatar, or Space or Enter, begins it sooner. A phase with nothing to show SHALL begin at once, with no title and no avatar: an enemy phase in which no enemy in play is ready and either engaged or a hunter. The pause is an ordinary choice of the lead investigator, made by itself when it isn't made sooner, so saves, replays and Undo see it like any other.
+
+Titles never stack: the next phase's title can appear only after the previous phase has begun and resolved, and after the chaos draws, test results and encounter reveals it waits for.
+
+Games that aren't paced, such as old saves or imported logs that have no pauses, keep the timed title that fades by itself.
+
+#### Scenario: End of the investigation phase
+- **WHEN** the last investigator ends their turn in round 1 with an enemy engaged with them
+- **THEN** "Enemy phase · Round 1" stays on screen with Roland's avatar and its countdown, and no enemy attacks yet
+- **WHEN** the countdown closes, or Roland's avatar is tapped
+- **THEN** the title goes and the enemy phase resolves
+
+#### Scenario: Private hands
+- **WHEN** Daisy's hand was last on screen while Roland is the lead investigator
+- **THEN** the phase title with Roland's avatar shows without any hand-off screen
+
+#### Scenario: Nothing in the enemy phase
+- **WHEN** the investigation phase ends with no enemy in play
+- **THEN** no enemy phase title shows and the upkeep phase's title follows at once
+
 ## ADDED Requirements
 
 ### Requirement: Investigator choices as avatars

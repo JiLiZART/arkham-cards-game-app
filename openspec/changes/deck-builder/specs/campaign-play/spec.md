@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
 ### Requirement: Deck upgrades between scenarios
-Between scenarios the campaign log SHALL offer Upgrade decks for each investigator: the builder opens on the campaign's deck with the investigator's unspent experience, and adding cards costs experience by the rules: a new card costs its level (at least 1), replacing a card with a higher-level version of the same title costs the level difference, an Exceptional card costs double, and Myriad copies come together for one price. The builder SHALL show the experience left, refuse what can't be paid, and keep the deck size and rules. Saving SHALL update the campaign's deck and experience; the next scenario uses the new deck.
+Between scenarios the campaign log SHALL offer Upgrade decks for each investigator: the deck area of the deck step (Deck configuration) opens on the campaign's deck with the investigator's unspent experience above it, and adding cards costs experience by the rules: a new card costs its level (at least 1), replacing a card with a higher-level version of the same title costs the level difference, an Exceptional card costs double, and Myriad copies come together for one price. The builder SHALL show the experience left, refuse what can't be paid, and keep the deck size and rules. Saving SHALL update the campaign's deck and experience; the next scenario uses the new deck.
 
 #### Scenario: Upgrade a card
 - **GIVEN** Roland has 5 experience after The Gathering

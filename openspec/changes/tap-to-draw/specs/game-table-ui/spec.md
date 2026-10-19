@@ -31,7 +31,7 @@ Piles SHALL stay at their size and position while the map moves. Cards with a pe
 ## ADDED Requirements
 
 ### Requirement: Tap decks to draw setting
-The settings SHALL offer "Tap decks to draw", on by default and saved with the other settings; a new scenario starts with tapped decks when it is on. On the phone layout, where the piles are in the left drawer, the drawer's handle SHALL glow while a deck waits for a tap and the instruction bar SHALL offer a Draw button that chooses the same option, so the drawer needn't be opened.
+The settings SHALL offer "Tap decks to draw", on by default and saved with the other settings; a new scenario starts with tapped decks when it is on. On the phone layout, where the piles are in the left drawer, the drawer's handle SHALL glow while a deck waits for a tap and the instruction bar SHALL offer a Draw button that chooses the same option, so the drawer needn't be opened. The bar's instruction, its Draw button ("Draw" or "Draw an encounter card") and the piles' names are in the player's language.
 
 #### Scenario: Setting off
 - **WHEN** "Tap decks to draw" is off and a scenario starts

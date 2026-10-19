@@ -12,11 +12,23 @@ The content SHALL define every regular investigator of the snapshot (not the par
 - **THEN** the five hand-written core investigators are not overwritten
 
 ### Requirement: Choosing among all investigators
-The investigator step SHALL list every defined investigator as an avatar, with filters by class and by cycle and a search by name in the game's language. An investigator whose ability has no written behaviour SHALL carry the partly-implemented note; one with no deck available SHALL be shown as needing a deck and not be pickable. Starting a campaign SHALL load the packs of the chosen investigators and their decks before it begins.
+The investigator step SHALL list every defined investigator as an avatar, with filters by class (the class icons) and by cycle, a search by name in the game's language (English names also match), and a sort: by release (the default), name, class, or a starting stat (health, sanity, willpower, intellect, combat, agility) highest first. Beside the list a sidebar SHALL show the investigator hovered, else the one last tapped: the full investigator card, the starting health, sanity and skills, the traits, the ability text and the deckbuilding rules, in the game's language. The step SHALL load every card pack when it opens, so the sidebar and the sort have every investigator's card. An investigator whose ability has no written behaviour SHALL carry the partly-implemented note; one with no deck available SHALL be shown as needing a deck and not be pickable. A picked investigator's turn-order badge (P1 to P4) SHALL be readable on the tile. The packs of the picked investigators and of every card in their decks SHALL be loaded as soon as they are picked, and the deck step SHALL check their decks only once those cards are in: until then it says it is loading and Continue waits, and a deck of a later cycle is never refused as unknown cards. Starting a campaign SHALL load those packs before it begins.
 
 #### Scenario: Filter Seekers of Dunwich
 - **WHEN** the player filters by Seeker and The Dunwich Legacy
 - **THEN** Rex Murphy is listed and Roland Banks is not
+
+#### Scenario: Read an investigator
+- **WHEN** the player rests the mouse on Zoey Samaras
+- **THEN** the sidebar shows her card, health 9, sanity 6, willpower 4, intellect 2, combat 4, agility 2, her ability and her deckbuilding rules
+
+#### Scenario: Sort by combat
+- **WHEN** the player sorts by combat
+- **THEN** the investigators with the highest combat come first
+
+#### Scenario: A deck of a later cycle
+- **WHEN** the player picks Zoey Samaras and goes on to the deck step
+- **THEN** her starter deck is valid once her pack is loaded, and Continue is enabled
 
 #### Scenario: Start with Zoey
 - **WHEN** a campaign starts with Zoey Samaras and her starter deck

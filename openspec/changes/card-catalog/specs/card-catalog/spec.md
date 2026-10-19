@@ -1,11 +1,15 @@
 ## ADDED Requirements
 
 ### Requirement: Catalog of cards and investigators
-The title menu SHALL offer a Cards item that opens a catalog of every card in the content, in three tabs: Investigators, Player cards and Encounter cards. Each entry SHALL show the card's image, name in the game's language, class, type and pack. Opening the catalog SHALL load every card pack; the rest of the game SHALL not wait for them.
+The title menu SHALL offer a Cards item that opens a catalog of every card in the content, in three tabs: Investigators, Player cards and Encounter cards. Each entry SHALL show the card's image, name in the game's language, class, type and pack. Opening the catalog SHALL load every card pack; the rest of the game SHALL not wait for them. The catalog SHALL fill the window: its title, tabs and Back stay on screen while only the list (or the card page) scrolls, so Back is always reachable, also when the catalog was opened from the menu during a game. The class, skill-icon and slot filters SHALL show their icons. Headings on the menus' parchment SHALL be set in the game's display face in dark ink.
 
 #### Scenario: Browse player cards
 - **WHEN** the player opens Cards and the Player cards tab
 - **THEN** the cards of every cycle are listed with their images and names, starting with the core set
+
+#### Scenario: Back from far down the list
+- **WHEN** the player opened Cards from the menu during a game and scrolled far down the Player cards
+- **THEN** Back is on screen, and pressing it returns to the menu, where Continue resumes the game
 
 ### Requirement: Filters
 The catalog SHALL filter by class, type, cycle and pack, level, cost, traits, skill icons, slot, encounter set (Encounter cards tab), whether the card works in the game, and a text search over name, traits and text in the game's language. Filters SHALL combine, show how many cards match, and be kept while the app is open.

@@ -13,6 +13,8 @@ The chaos draw and the result play over the subject card: the bag lands on it an
 
 The hand fan SHALL stay live under the strip: the cards that can be committed are bright and the rest dimmed (the choice spotlight), and a tap commits a card, which flies to the placed cards. A placed card of the deciding investigator SHALL be highlighted as removable while their commit window is open; tapping it returns it to their hand and updates the strip. Cards placed by another investigator, or after the window has closed, can't be taken back.
 
+While the tester's own commit window is open and nothing hidden has come out since the test began (it started from a choice of their turn, such as Fight or Investigate), the screen SHALL offer Cancel the test beside the line, and Escape does the same: every choice since the test began is taken back, the action and the cards placed included, and the turn is as it was before it, so the player can do something else first (play a fast card, use an asset, take another action). A test forced by a card (a treachery drawn) can't be cancelled.
+
 The instruction bar SHALL stay above the screen with its instruction and the Done button. The play strip SHALL stay visible and clickable above the overlay, dimmed except the cards whose fast ability is offered right now, so an in-play ability can be used during the test.
 
 After the tester's Done, each other investigator at the location who may commit SHALL be asked in turn on the same screen; with private hands the hand-off box appears over the screen, and the next player's fan comes in once they are ready. The placed cards and the strip keep everyone's contributions.
@@ -41,6 +43,14 @@ After the tester's Done, each other investigator at the location who may commit 
 - **WHEN** Roland has placed Vicious Blow in his fight against the Ghoul Minion
 - **THEN** the Ghoul Minion card in the centre is highlighted, and tapping it ends his commit window as Done does, and the draw begins
 
+#### Scenario: Cancel a fight
+- **WHEN** Roland chooses to fight the Ghoul Minion, places Vicious Blow, then presses Cancel the test
+- **THEN** the screen closes, Vicious Blow is back in his hand, he has the action back, and he can play a fast card before fighting again
+
+#### Scenario: A treachery's test can't be cancelled
+- **WHEN** Roland's test comes from Rotting Remains drawn in the mythos phase
+- **THEN** no Cancel the test is offered
+
 #### Scenario: Subject in the centre
 - **WHEN** Roland investigates the Study at 1600×900
 - **THEN** the Study card stands in the centre of the screen at least 240 px wide with the line above it, the placed cards to its right, the strip along the bottom, and when the draw starts the bag lands on the Study and the tokens tumble over it
@@ -54,7 +64,7 @@ The skill-test screen's line ("Willpower test · 3 vs 4"), the subject card unde
 
 ### Requirement: Chaos token draw
 When a skill test reveals a chaos token, the draw SHALL play as a stage of the skill-test screen over the subject card in the centre, with the subject, the placed cards and the calculation strip staying where they were:
-1. The chaos bag is tossed onto the table: it flies from its button in an arc, lands on the lower part of the subject card with a bounce and a squash, and tips over on its side with its mouth open. The tokens tumble out of the mouth in a burst: each leaves on its own arc, spins as it flies, hits the table, bounces once or twice with less height each time, and rolls or slides to rest at its own place over or around the subject card (the resting places cover the card and the space beside it, so the card stays visible between them), tilting flat as it settles; later tokens leave a few milliseconds after earlier ones, so they come out as a stream. Each token is shown face down as a plain cream chaos token, the colour of the real tokens, with no symbol, a slightly darker rim and a visible edge when tilted, casting a shadow on the table, the size of a revealed token, one per token currently in the bag. The whole toss takes about 1.2 seconds at the Slow and Tap paces and about 0.9 seconds at the Normal pace, plays on every draw, and the paths are seeded by the test so a reload tosses the same way. Under reduced motion the bag and tokens simply appear in place.
+1. The chaos bag is tossed onto the table: it flies from its button in an arc, lands on the lower part of the subject card with a bounce and a squash, and tips over on its side with its mouth open. The tokens tumble out of the mouth in a burst: each leaves low on its own arc and keeps its speed in the air, spinning and tumbling in perspective so its edge shows, hits the table, bounces once or twice with less height and speed each time, slides to a stop and wobbles flat like a coin settling, at its own place over or around the subject card (the resting places cover the card and the space beside it, so the card stays visible between them), tilting flat as it settles; later tokens leave a few milliseconds after earlier ones, so they come out as a stream. Each token is shown face down as a plain cream chaos token, the colour of the real tokens, with no symbol, a slightly darker rim and a visible edge when tilted, casting a shadow on the table that falls further away and fainter the higher it is, the size of a revealed token, one per token currently in the bag. The whole toss takes about 1.2 seconds at the Slow and Tap paces and about 0.9 seconds at the Normal pace, plays on every draw, and the paths are seeded by the test so a reload tosses the same way. Under reduced motion the bag and tokens simply appear in place.
 2. The deciding player taps any disc. Space or Enter picks one too.
 3. The chosen disc flips in place, revealing the token's real art on its face, while the other discs fade. The token then slides into the calculation strip, where its modifier (or "auto-fail" / "elder sign" effect) joins the sum.
 4. The screen moves to its result stage over the subject card: the big total, below it Success or Fail in big text, below that a Continue button; bottom centre, the arithmetic as icons, for example "[intellect] 3 + [token −1] + [card] 2 = 4 vs 2". It stays until Continue is pressed.
