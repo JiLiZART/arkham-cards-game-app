@@ -36,6 +36,9 @@ export function railItem(o: ChoiceOption): RailItem {
   if (kind === "resource") return { key: "rail.resource", icon: "resource", primary: false };
   if (kind === "investigate") return { key: "rail.investigate", icon: "intellect", primary: false };
   if (kind === "endTurn") return { key: "rail.endTurn", symbol: "⏎", primary: true };
+  // a draw waiting for a tap on a deck (the setting "Tap decks to draw"): the bar's button draws too
+  if (o.id === "draw" && typeof o.value === "string" && o.value.startsWith("draw:"))
+    return o.value === "draw:encounter" ? { key: "rail.drawEncounter", img: backUrl("encounter"), primary: true } : { key: "rail.draw", img: backUrl("player"), primary: true };
   if (o.id === "done") {
     const redraw = /^Redraw (\d+)/.exec(o.label);
     if (redraw) return { key: "rail.redraw", vars: { n: redraw[1] }, symbol: "↻", primary: true };

@@ -546,5 +546,6 @@
   "deck.newTab": "Новая колода",
   "deck.ready": "Готова",
   "deck.toFix": "Исправить: {n}",
-  "deck.renameHint": "Двойной щелчок — переименовать"
+  "deck.renameHint": "Двойной щелчок — переименовать",
+  "rail.drawEncounter": "Взять карту встреч"
 }

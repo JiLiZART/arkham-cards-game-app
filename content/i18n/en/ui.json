@@ -562,5 +562,6 @@
   "deck.newTab": "New deck",
   "deck.ready": "Ready",
   "deck.toFix": "{n} to fix",
-  "deck.renameHint": "Double-click to rename"
+  "deck.renameHint": "Double-click to rename",
+  "rail.drawEncounter": "Draw an encounter card"
 }

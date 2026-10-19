@@ -175,6 +175,8 @@ function Pile({ label, count, top, faceUp, kind, id, option }: { label: string; 
 /** encounter deck, discard, victory, side decks, then the viewer's deck and discard, down the left side */
 export function PileColumn() {
   const game = useGame((s) => s.game) as GameState;
+  // the piles' names follow the language
+  useGame((s) => s.locale);
   const viewer = viewerOf(game);
   const me = viewer ? game.invs[viewer] : null;
   // a tap on a lit deck answers the pending choice, while the decider's table is on screen
