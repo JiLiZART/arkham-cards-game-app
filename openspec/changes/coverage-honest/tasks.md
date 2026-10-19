@@ -23,8 +23,8 @@
 
 ## 5. The program
 
-- [ ] 5.1 `docs/campaign-program.md` tables rebuilt from the new report, checkboxes carried over; the campaign boxes (`eoec`, `tskc`, `fhvc`, `tdcc`, `cob`, `fof`, `guardians`) one row per scenario under their pack; a sentence that a campaign box is worked one scenario at a time; the doc's test also checks every incomplete scenario of a campaign box has a row.
-- [ ] 5.2 README coverage paragraph: what "works" means (every printed line accounted for, reference cards by their token lines), the `scenarios` report, a link to ADR-0013.
+- [x] 5.1 `docs/campaign-program.md` tables rebuilt from the new report, checkboxes carried over; the campaign boxes (`eoec`, `tskc`, `fhvc`, `tdcc`, `cob`, `fof`, `guardians`) one row per scenario under their pack; a sentence that a campaign box is worked one scenario at a time; the doc's test also checks every incomplete scenario of a campaign box has a row.
+- [x] 5.2 README coverage paragraph: what "works" means (every printed line accounted for, reference cards by their token lines), the `scenarios` report, a link to ADR-0013.
 
 ## 6. Verification
 

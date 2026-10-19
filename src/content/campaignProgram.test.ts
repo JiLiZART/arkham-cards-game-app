@@ -13,6 +13,16 @@ describe("docs/campaign-program.md", () => {
     expect(rows.filter((p, k) => rows.indexOf(p) !== k), "packs listed twice").toEqual([]);
   });
 
+  it("lists every incomplete scenario of a campaign box once, under its pack", () => {
+    const boxes = { eoec: "edge-of-the-earth", tskc: "the-scarlet-keys", fhvc: "the-feast-of-hemlock-vale", tdcc: "the-drowned-city", cob: "children-of-blood", fof: "fortune-and-folly", guardians: "guardians-of-the-abyss" };
+    const rows = [...program.matchAll(/^\| \[[ x]\] \| scenario `([^`]+)` \|/gm)].map((m) => m[1]);
+    const expected = Object.values(boxes).flatMap((campaign) => Object.entries(coverage.scenarios).filter(([, sc]) => sc.campaign === campaign && !sc.complete).map(([id]) => id));
+    expect(expected.length).toBeGreaterThan(40);
+    expect(expected.filter((id) => !rows.includes(id)), "scenarios missing from the program").toEqual([]);
+    expect(rows.filter((id, k) => rows.indexOf(id) !== k), "scenarios listed twice").toEqual([]);
+    expect(rows.filter((id) => !coverage.scenarios[id]), "rows naming no scenario").toEqual([]);
+  });
+
   it("names a pack that exists in every row", () => {
     expect(rows.filter((p) => !coverage.packs[p])).toEqual([]);
   });

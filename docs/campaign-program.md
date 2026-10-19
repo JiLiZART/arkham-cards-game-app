@@ -10,7 +10,7 @@ script, so the encounter side of a pack gates its campaign; the player side gate
 
 ## What a pack's change does
 
-One change per pack, each the size of Night of the Zealot's work or smaller and playable on its own:
+One change per pack, each the size of Night of the Zealot's work or smaller and playable on its own. **A campaign box** (a pack that holds a whole campaign: `eoec`, `tskc`, `fhvc`, `tdcc`, `cob`, `fof`, `guardians`) **is worked one scenario at a time**: its scenarios are listed under it below, and each scenario's change is done when `content/coverage.json` reports that scenario complete (ADR-0013). A Return-to scenario plays with its base scenario's reference card, so its change starts from the base scenario's script and token tables.
 
 1. the engine features its cards need (a cycle's new mechanics come first, see below);
 2. its encounter cards and player cards, with their tests;
@@ -43,7 +43,7 @@ abilities cover only part of its text counts as working, so the bot playthroughs
 
 | Done | Pack | Campaign | Encounter cards left | Player cards left |
 | --- | --- | --- | --- | --- |
-| [ ] | `core` | shared by every campaign | 8 of 79 | 21 of 99 |
+| [ ] | `core` | shared by every campaign | 3 of 79 | 20 of 99 |
 | [ ] | `rtnotz` | return-to-the-night-of-the-zealot, side-by-the-book | 30 of 38 | 10 of 10 |
 
 ### The cycles: each deluxe box, its mythos packs, its Return-to box
@@ -68,7 +68,7 @@ abilities cover only part of its text counts as working, so the bot playthroughs
 | [ ] | `rtptc` | return-to-the-path-to-carcosa | 68 of 69 | 15 of 15 |
 | [ ] | `tfa` | return-to-the-forgotten-age, side-bad-blood, side-relics-of-the-past, the-forgotten-age | 57 of 57 | 39 of 40 |
 | [ ] | `tof` | return-to-the-forgotten-age, side-bad-blood, the-forgotten-age | 41 of 41 | 15 of 15 |
-| [ ] | `tbb` | return-to-the-forgotten-age, the-forgotten-age | 27 of 30 | 13 of 13 |
+| [ ] | `tbb` | return-to-the-forgotten-age, the-forgotten-age | 27 of 30 | 12 of 13 |
 | [ ] | `hote` | return-to-the-forgotten-age, the-forgotten-age | 24 of 26 | 13 of 13 |
 | [ ] | `tcoa` | return-to-the-forgotten-age, the-forgotten-age | 25 of 25 | 10 of 10 |
 | [ ] | `tdoy` | the-forgotten-age | 21 of 26 | 13 of 13 |
@@ -111,6 +111,90 @@ abilities cover only part of its text counts as working, so the bot playthroughs
 | [ ] | `tdcc` | the-drowned-city | 256 of 259 | 36 of 36 |
 | [ ] | `core_2026` | shared by every campaign | 88 of 89 | 70 of 72 |
 | [ ] | `cob` | children-of-blood | 105 of 111 | 8 of 8 |
+
+The campaign boxes by scenario. A row is done when the scenario is complete: its cards work, its token effects are real on all four difficulties, and it has a scenario script.
+
+
+**`eoec` — edge-of-the-earth**
+
+| Done | Scenario | Cards left | Tokens | Script |
+| --- | --- | --- | --- | --- |
+| [ ] | scenario `ice-and-death-part-1` | 32 of 33 | not yet | no |
+| [ ] | scenario `ice-and-death-part-2` | 46 of 49 | not yet | no |
+| [ ] | scenario `ice-and-death-part-3` | 50 of 54 | not yet | no |
+| [ ] | scenario `to-the-forbidden-peaks` | 36 of 36 | not yet | no |
+| [ ] | scenario `city-of-the-elder-things` | 39 of 40 | not yet | no |
+| [ ] | scenario `the-heart-of-madness-part-1` | 32 of 34 | not yet | no |
+| [ ] | scenario `the-heart-of-madness-part-2` | 42 of 49 | not yet | no |
+| [ ] | scenario `fatal-mirage-2` | 87 of 89 | not yet | no |
+| [ ] | scenario `fatal-mirage-3` | 87 of 89 | not yet | no |
+| [ ] | scenario `fatal-mirage` | 87 of 89 | not yet | no |
+
+**`tskc` — the-scarlet-keys**
+
+| Done | Scenario | Cards left | Tokens | Script |
+| --- | --- | --- | --- | --- |
+| [ ] | scenario `riddles-and-rain` | 32 of 54 | not yet | no |
+| [ ] | scenario `marrakesh` | 33 of 39 | not yet | no |
+| [ ] | scenario `buenos-aires` | 31 of 34 | not yet | no |
+| [ ] | scenario `istanbul` | 34 of 56 | not yet | no |
+| [ ] | scenario `havana` | 35 of 36 | not yet | no |
+| [ ] | scenario `anchorage` | 42 of 47 | not yet | no |
+| [ ] | scenario `alexandria` | 37 of 40 | not yet | no |
+| [ ] | scenario `kuala-lampur` | 52 of 56 | not yet | no |
+| [ ] | scenario `bermuda-triangle` | 33 of 33 | not yet | no |
+| [ ] | scenario `tunguska` | 55 of 62 | not yet | no |
+
+**`fhvc` — the-feast-of-hemlock-vale**
+
+| Done | Scenario | Cards left | Tokens | Script |
+| --- | --- | --- | --- | --- |
+| [ ] | scenario `written-in-rock` | 54 of 59 | not yet | no |
+| [ ] | scenario `hemlock-house` | 65 of 68 | not yet | no |
+| [ ] | scenario `the-silent-heath` | 56 of 59 | not yet | no |
+| [ ] | scenario `the-lost-sister` | 57 of 57 | not yet | no |
+| [ ] | scenario `the-thing-in-the-depths` | 53 of 54 | not yet | no |
+| [ ] | scenario `the-twisted-hollow` | 55 of 55 | not yet | no |
+| [ ] | scenario `the-longest-night` | 59 of 81 | not yet | no |
+| [ ] | scenario `dawn-of-the-final-day` | 50 of 50 | not yet | no |
+| [ ] | scenario `the-final-evening` | 48 of 48 | not yet | no |
+| [ ] | scenario `fate-of-the-vale` | 93 of 93 | not yet | no |
+
+**`tdcc` — the-drowned-city**
+
+| Done | Scenario | Cards left | Tokens | Script |
+| --- | --- | --- | --- | --- |
+| [ ] | scenario `one-last-job` | 20 of 45 | not yet | no |
+| [ ] | scenario `the-western-wall` | 40 of 42 | not yet | no |
+| [ ] | scenario `the-drowned-quarter` | 38 of 38 | not yet | no |
+| [ ] | scenario `the-apiary` | 42 of 49 | not yet | no |
+| [ ] | scenario `the-grand-vault` | 40 of 40 | not yet | no |
+| [ ] | scenario `court-of-the-ancients` | 42 of 43 | not yet | no |
+| [ ] | scenario `obsidian-canyons` | 48 of 56 | not yet | no |
+| [ ] | scenario `the-doom-of-arkham-part-1` | 20 of 39 | not yet | no |
+| [ ] | scenario `the-doom-of-arkham-part-2` | 49 of 68 | not yet | no |
+
+**`cob` — children-of-blood**
+
+| Done | Scenario | Cards left | Tokens | Script |
+| --- | --- | --- | --- | --- |
+| [ ] | scenario `river-of-blood` | 47 of 49 | not yet | no |
+| [ ] | scenario `new-horizons` | 47 of 51 | not yet | no |
+| [ ] | scenario `blood-money` | 43 of 43 | not yet | no |
+
+**`fof` — fortune-and-folly**
+
+| Done | Scenario | Cards left | Tokens | Script |
+| --- | --- | --- | --- | --- |
+| [ ] | scenario `fortune-and-folly-part-1` | 72 of 72 | not yet | no |
+| [ ] | scenario `fortune-and-folly-part-2` | 72 of 72 | not yet | no |
+
+**`guardians` — guardians-of-the-abyss**
+
+| Done | Scenario | Cards left | Tokens | Script |
+| --- | --- | --- | --- | --- |
+| [ ] | scenario `the-eternal-slumber` | 47 of 47 | not yet | no |
+| [ ] | scenario `the-nights-usurper` | 51 of 53 | not yet | no |
 
 ### The side scenarios
 
