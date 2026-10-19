@@ -5,6 +5,7 @@ import { whenSettled } from "../arrivals";
 import { db, gameStore, useGame } from "../context";
 import { HELD, holdsForTap, viewerOf } from "../store";
 import { autoSwitchTarget, deckOptions, delayed, landingView, ownDecisionTitle } from "../players";
+import { phaseIsEmpty } from "../phases";
 import { useChoicesOffered } from "../usePlayers";
 import { hasSymbol, MARKUP_ICONS, markupColor } from "../icons";
 import { ActionRail, CameraButtons, InstructionBar, UndoButton } from "./ActionRail";
@@ -136,10 +137,13 @@ function PhaseTitle() {
   const holds = useStage(paused ? `pause:${pause!.seq}` : showing ? `title:${showing.key}` : null);
   // the title appears (held at the pause, or passing): its swell
   const titled = holds && (paused || !!showing);
+  // a phase with nothing to show (an enemy phase with no enemy to move or attack) goes on at once: no title, no pause
+  const empty = paused && phaseIsEmpty(game, String((pause!.step as { phase?: string }).phase ?? ""));
   useEffect(() => {
-    if (titled) moment("phase");
-  }, [titled]);
+    if (titled && !empty) moment("phase");
+  }, [titled, empty]);
   if (!holds) return null;
+  if (paused && empty) return <SkipPause key={pause!.seq} />;
   if (paused) return <PhasePause key={pause!.seq} />;
   if (!showing) return null;
   return (
@@ -246,13 +250,27 @@ function AutoSwitch() {
   return null;
 }
 
-/** the paced pause: the coming phase's title stays until the lead investigator continues (button, Space or Enter) */
+/** an empty phase's pause, answered at once (an ordinary choice, so replays and Undo see it like any other) */
+function SkipPause() {
+  const choose = useGame((s) => s.choose);
+  useEffect(() => choose("continue"), [choose]);
+  return null;
+}
+
+/** how long the coming phase's title waits for the lead investigator before it goes on by itself */
+export const PHASE_AUTO_MS = 3000;
+
+/**
+ * The paced pause: the coming phase's title with the lead investigator's avatar ringed by a countdown; when the ring
+ * closes (3 s) the phase begins by itself, a tap on the avatar (or Space or Enter) begins it sooner.
+ */
 function PhasePause() {
   const game = useGame((s) => s.game)!;
   const locale = useGame((s) => s.locale);
   const choose = useGame((s) => s.choose);
   const p = game.pending!;
   const phase = (p.step as { phase?: string }).phase ?? "";
+  const name = cardText(db, p.inv, locale).name;
   const go = () => {
     moment("button");
     choose("continue");
@@ -267,12 +285,17 @@ function PhasePause() {
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
   }, [choose]);
+  useEffect(() => delayed(PHASE_AUTO_MS, () => gameStore.getState().game?.pending?.seq === p.seq, () => choose("continue")), [p.seq, choose]);
   return (
     <div className="phase-title held">
       <div className="phase-title-name">{tr(`phase.title.${phase}`)}</div>
       <div className="phase-title-round">{tr("phase.round", { n: game.round })}</div>
-      <button className="primary big phase-continue" onClick={go} autoFocus>
-        {tr("phase.continue", { name: cardText(db, p.inv, locale).name })}
+      <button className="phase-continue phase-avatar" onClick={go} autoFocus title={tr("phase.continue", { name })} aria-label={tr("phase.continue", { name })}>
+        <svg className="phase-ring" viewBox="0 0 100 100" aria-hidden="true">
+          <circle cx="50" cy="50" r="46" />
+          <circle className="phase-ring-run" cx="50" cy="50" r="46" style={{ animationDuration: `${PHASE_AUTO_MS}ms` }} />
+        </svg>
+        <Portrait code={p.inv} size={76} />
       </button>
     </div>
   );
