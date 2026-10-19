@@ -647,5 +647,6 @@
   "wizard.chapters": "Главы",
   "wizard.interlude": "Интерлюдия",
   "wizard.close": "Закрыть",
-  "flow.neither": "Нет, ничего из этого"
+  "flow.neither": "Нет, ничего из этого",
+  "wizard.readCard": "Прочитать карту"
 }

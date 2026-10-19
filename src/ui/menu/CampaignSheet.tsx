@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { campaignBlurb, interludeName, t } from "../../content/i18n";
+import { campaignBlurb, cardText, interludeName, t } from "../../content/i18n";
 import type { CampaignDef } from "../../content/schema";
 import { db, gameStore, useGame } from "../context";
+import { formatText } from "../hud/Hud";
+import { Modal } from "../hud/Modals";
 import { cardImage } from "../images";
 import { blurb } from "./blurb";
 import { tileName } from "./wizard";
@@ -11,13 +13,40 @@ const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameSt
 /** "1 scenario", "8 scenarios" */
 export const scenarioCount = (n: number) => (n === 1 ? tr("wizard.length.one") : tr("wizard.scenarios", { n }));
 
-/** a chapter's card, its illustrated front, found by its code (its pack need not be loaded) */
-function Art({ code, alt }: { code: string; alt: string }) {
+/** one side of a chapter's card, found by its code (its pack need not be loaded; an act or agenda is printed on both sides) */
+function Face({ code, side, alt, lazy }: { code: string; side: "front" | "back"; alt: string; lazy?: boolean }) {
   const locale = useGame((s) => s.locale);
   const [broken, setBroken] = useState(false);
-  const url = cardImage(db.cards[code] ?? { code }, "front", locale);
+  const url = cardImage(db.cards[code] ?? { code, doubleSided: true }, side, locale);
   if (!url || broken) return null;
-  return <img src={url} alt={alt} loading="lazy" draggable={false} onError={() => setBroken(true)} />;
+  return <img src={url} alt={alt} loading={lazy ? "lazy" : undefined} draggable={false} onError={() => setBroken(true)} />;
+}
+
+/** a chapter's card at full size, both sides (the back of an act or agenda is what happens when it advances), to read */
+function ChapterCard({ code, title, onClose }: { code: string; title: string; onClose: () => void }) {
+  const locale = useGame((s) => s.locale);
+  // the text only once its pack is in (the scans carry it either way)
+  const tx = db.cards[code] ? cardText(db, code, locale) : null;
+  return (
+    <Modal onClose={onClose} className="card-modal both chapter-modal">
+      <div className="modal-sides">
+        <div className="modal-card landscape">
+          <Face code={code} side="front" alt={`${title} (1)`} />
+        </div>
+        <div className="modal-card landscape">
+          <Face code={code} side="back" alt={`${title} (2)`} />
+        </div>
+      </div>
+      <div className="modal-side">
+        <h2 className="card-name">{tx?.name ?? title}</h2>
+        {tx?.text && <p className="card-text" dangerouslySetInnerHTML={{ __html: formatText(tx.text) }} />}
+        {tx?.backText && <p className="card-text" dangerouslySetInnerHTML={{ __html: formatText(tx.backText) }} />}
+        <button className="modal-close" onClick={onClose}>
+          {tr("modal.close")}
+        </button>
+      </div>
+    </Modal>
+  );
 }
 
 /**
@@ -30,6 +59,7 @@ function Art({ code, alt }: { code: string; alt: string }) {
 export function CampaignSheet({ campaign, onClose }: { campaign: CampaignDef; onClose: () => void }) {
   const locale = useGame((s) => s.locale);
   const [more, setMore] = useState(false);
+  const [reading, setReading] = useState<{ code: string; title: string } | null>(null);
   const { prologue, scenarios } = campaignBlurb(db, campaign.id, locale);
   const { lead, more: rest } = blurb(prologue);
   // an epigraph is set in italics: it opens with a quotation mark
@@ -37,7 +67,13 @@ export function CampaignSheet({ campaign, onClose }: { campaign: CampaignDef; on
   // the chapters: the guide's order with the interludes in it; a campaign with no list shows its scenarios
   const chapters = campaign.cards.length
     ? campaign.cards
-    : campaign.scenarios.map((scenario, k) => ({ scenario, name: campaign.scenarioNames?.[k], code: db.scenarios[scenario]?.card, agenda: db.scenarios[scenario]?.agendas[0], act: db.scenarios[scenario]?.acts[0] }));
+    : campaign.scenarios.map((scenario, k) => ({
+        scenario,
+        name: campaign.scenarioNames?.[k],
+        code: db.scenarios[scenario]?.card,
+        agenda: db.scenarios[scenario]?.agendas[0],
+        act: db.scenarios[scenario]?.acts[0],
+      }));
   let n = 0;
   return (
     <aside className="wz-camp-sheet" aria-label={tileName(db, campaign, locale)}>
@@ -76,14 +112,25 @@ export function CampaignSheet({ campaign, onClose }: { campaign: CampaignDef; on
               </div>
               {playable && (ch.agenda || ch.act) && (
                 <div className="wz-chapter-cards">
-                  {ch.agenda && <Art code={ch.agenda} alt={`${name}: ${tr("card.type.agenda")}`} />}
-                  {ch.act && <Art code={ch.act} alt={`${name}: ${tr("card.type.act")}`} />}
+                  {(
+                    [
+                      [ch.agenda, "agenda"],
+                      [ch.act, "act"],
+                    ] as const
+                  ).map(([code, type]) =>
+                    code ? (
+                      <button key={type} className="wz-chapter-card" title={tr("wizard.readCard")} onClick={() => setReading({ code, title: `${name}: ${tr(`card.type.${type}`)}` })}>
+                        <Face code={code} side="front" alt={`${name}: ${tr(`card.type.${type}`)}`} lazy />
+                      </button>
+                    ) : null,
+                  )}
                 </div>
               )}
             </li>
           );
         })}
       </ol>
+      {reading && <ChapterCard code={reading.code} title={reading.title} onClose={() => setReading(null)} />}
     </aside>
   );
 }

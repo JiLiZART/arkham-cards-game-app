@@ -299,7 +299,8 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 .bag-reference img, .bag-reference .text-face { height: 70vh; max-height: 640px; border-radius: 14px; display: block; }
 .card-modal.both[open] { flex-direction: column; align-items: center; }
 .modal-sides { display: flex; gap: 14px; }
-.modal-sides .modal-card.landscape img { width: min(42vw, 600px); }
+/* two sides fit the dialog's width (its padding, border and the gap between them), so there is no scrollbar under them */
+.modal-sides .modal-card.landscape img { width: min(42vw, 600px, calc((min(1200px, 94vw) - 40px - 14px) / 2)); }
 .card-modal.both .modal-side { width: auto; max-width: 900px; align-items: center; }
 .play-strip { --sw: 124px; position: fixed; bottom: 228px; left: 436px; right: 184px; display: flex; justify-content: center; align-items: flex-end; gap: 8px; z-index: 45; pointer-events: none; }
 .play-strip > * { pointer-events: auto; }
@@ -1104,3 +1105,6 @@ button.danger { border-color: var(--bad); color: var(--bad); }
   .wz-camp.sheet-open .wz-camp-side { display: block; position: fixed; inset: 0; z-index: 40; max-height: none; padding: 12px; overflow-y: auto; background: #120e09f2; }
   .wz-camp.sheet-open .wz-camp-close { display: inline-grid; place-items: center; }
 }
+.wz-chapter-card { padding: 0; border: 0; background: none; cursor: zoom-in; border-radius: 8px; min-height: 0; }
+.parchment .wz-chapter-card, .parchment .wz-chapter-card:hover:not(:disabled) { background: none; border: 0; }
+.wz-chapter-card:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }

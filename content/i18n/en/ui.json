@@ -663,5 +663,6 @@
   "wizard.chapters": "Chapters",
   "wizard.interlude": "Interlude",
   "wizard.close": "Close",
-  "flow.neither": "No, none of these"
+  "flow.neither": "No, none of these",
+  "wizard.readCard": "Read the card"
 }
