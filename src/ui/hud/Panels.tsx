@@ -27,6 +27,7 @@ import { RESOLVE_BOX } from "./Reveal";
 import { abilitySymbol, stripAction } from "./ActionRail";
 import { moment } from "./SoundLayer";
 import { optionLabel } from "../optionText";
+import { stripDuringTest } from "../testScreen";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
 const gOf = () => ({ s: gameStore.getState().game!, db, events: [] });
@@ -292,6 +293,8 @@ export function PlayStrip() {
   const assets = all.filter((c) => c.zone === "play" && c.controller === viewer);
   const threats = [...all.filter((c) => c.zone === "threat" && c.controller === viewer), ...all.filter((c) => c.zone === "enemy" && c.engagedWith === viewer)];
   const shown = [...assets, ...threats];
+  // during a skill test the strip is compact while one of its cards has an option (a fast ability), and out of the way otherwise
+  const mode = stripDuringTest(useView((v) => v.testing), shown.map((c) => c.id), byCard);
   // an asset new to the strip has just been played: its sound (enemies arriving have their own events)
   const seenAssets = useRef<{ setup: unknown; ids: Set<InstId> } | null>(null);
   useLayoutEffect(() => {
@@ -310,9 +313,10 @@ export function PlayStrip() {
     const el = strip.current;
     if (!el) return;
     const sideways = shown.filter((c) => c.exhausted).length;
-    const w = phone ? (open ? 104 : 44) : stripCardWidth(el.clientWidth, shown.length - sideways, sideways, assets.length && threats.length ? 1 : 0);
+    const w = phone ? (open ? 104 : 44) : mode === "compact" ? STRIP_MIN_W : stripCardWidth(el.clientWidth, shown.length - sideways, sideways, assets.length && threats.length ? 1 : 0);
     el.style.setProperty("--sw", `${w}px`);
-    el.querySelectorAll<HTMLElement>("[data-card]").forEach((c) => rememberRect(c.dataset.card!, c));
+    // not while stepped aside: the rects would be the ones below the screen
+    if (mode !== "aside") el.querySelectorAll<HTMLElement>("[data-card]").forEach((c) => rememberRect(c.dataset.card!, c));
   });
   if (!visible || !shown.length) return null;
   const target = game.skillTest?.target ?? null;
@@ -350,7 +354,7 @@ export function PlayStrip() {
     );
   };
   return (
-    <div className={`play-strip ${phone ? `column ${open ? "open" : ""}` : ""}`} ref={strip}>
+    <div className={`play-strip ${phone ? `column ${open ? "open" : ""}` : ""} ${mode}`} ref={strip}>
       {phone && (
         <button className="strip-handle" onClick={() => setOpen(!open)} aria-expanded={open} aria-label={tr("phone.strip")} title={tr("phone.strip")}>
           {open ? "›" : "‹"} {shown.length}

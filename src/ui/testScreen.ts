@@ -150,3 +150,10 @@ export function finishOption(game: GameState, view: Looking): ChoiceOption | nul
 
 /** where the tossed bag lands on the stage: the middle of the subject's lower part, so the tokens spill over the card */
 export const bagLanding = (subject: Area): { x: number; y: number } => ({ x: subject.x + subject.w / 2, y: subject.y + subject.h * 0.72 });
+
+/** how the play strip shows: as usual, compact while one of its cards has an option during a test (a fast ability), else out of the way */
+export type StripMode = "normal" | "compact" | "aside";
+export function stripDuringTest(testing: boolean, stripCards: InstId[], optionsByCard: Map<InstId, unknown[]>): StripMode {
+  if (!testing) return "normal";
+  return stripCards.some((id) => optionsByCard.get(id)?.length) ? "compact" : "aside";
+}

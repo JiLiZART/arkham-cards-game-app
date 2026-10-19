@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { commitDone, db, giveCard, locId, mutate, pick, putEnemy, skipMulligans, start } from "../engine/testkit";
-import { addTokens, bagLanding, calcParts, finishOption, placedCards, sessionId, spillLayout, subjectOf } from "./testScreen";
+import { addTokens, bagLanding, calcParts, finishOption, placedCards, sessionId, spillLayout, stripDuringTest, subjectOf } from "./testScreen";
 
 const ROLAND = "01001";
 const DAISY = "01002";
@@ -202,5 +202,22 @@ describe("bagLanding", () => {
     expect(c.x).toBe(240);
     expect(c.y).toBeCloseTo(60 + 336 * 0.72, 5);
     expect(c.y).toBeGreaterThan(60 + (336 * 2) / 3);
+  });
+});
+
+describe("the play strip during a test", () => {
+  const offered = new Map([["a1", [{ id: "x" }]]]);
+  it("is as usual when no test is up", () => {
+    expect(stripDuringTest(false, ["a1"], offered)).toBe("normal");
+  });
+
+  it("is compact while one of its cards has an option (a fast ability in the commit window)", () => {
+    expect(stripDuringTest(true, ["a1", "a2"], offered)).toBe("compact");
+  });
+
+  it("steps aside when none of its cards has an option: the draw, the result, a window with nothing to use", () => {
+    expect(stripDuringTest(true, ["a1", "a2"], new Map())).toBe("aside");
+    expect(stripDuringTest(true, ["a2"], offered)).toBe("aside"); // the option is on a card that isn't in the strip (a hand card to commit)
+    expect(stripDuringTest(true, ["a1"], new Map([["a1", []]]))).toBe("aside");
   });
 });
