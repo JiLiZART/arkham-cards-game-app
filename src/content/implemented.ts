@@ -1,4 +1,5 @@
-import type { CardDef, ContentDb } from "../engine/types";
+import type { ContentDb } from "../engine/types";
+import type { CardDef } from "./schema";
 
 /** the keywords the engine acts on by themselves (CardDef.keywords) */
 const KEYWORD = /^(hunter|retaliate|aloof|alert|massive|surge|peril|fast|exceptional)(\s*\(\d+\))?$/i;
