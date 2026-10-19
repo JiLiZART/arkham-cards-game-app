@@ -119,17 +119,23 @@
     {
       "scenario": "return-to-the-gathering",
       "name": "Return to The Gathering",
-      "code": "01104"
+      "code": "01104",
+      "agenda": "01105",
+      "act": "50012"
     },
     {
       "scenario": "return-to-the-midnight-masks",
       "name": "Return to The Midnight Masks",
-      "code": "01120"
+      "code": "01120",
+      "agenda": "50026a",
+      "act": "01123"
     },
     {
       "scenario": "return-to-the-devourer-below",
       "name": "Return to The Devourer Below",
-      "code": "01142"
+      "code": "01142",
+      "agenda": "01143",
+      "act": "01146"
     }
   ]
 }

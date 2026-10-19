@@ -105,7 +105,9 @@
     {
       "scenario": "film-fatale",
       "name": "Film Fatale",
-      "code": "72001"
+      "code": "72001",
+      "agenda": "72002",
+      "act": "72004"
     }
   ]
 }

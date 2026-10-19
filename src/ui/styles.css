@@ -1095,7 +1095,7 @@ button.danger { border-color: var(--bad); color: var(--bad); }
 .wz-chapter-name small { color: #6b5a3a; font-style: italic; }
 .wz-chapter-n { display: inline-grid; place-items: center; min-width: 1.6em; height: 1.6em; border-radius: 50%; background: #c9a95c; color: #1d1306; font: 14px/1 Alegreya, Georgia, serif; }
 .wz-chapter-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-.wz-chapter-cards img { width: 100%; height: auto; border-radius: 8px; box-shadow: 0 3px 8px #0005; display: block; }
+.wz-chapter-cards img { width: 100%; aspect-ratio: 88 / 63; object-fit: cover; height: auto; border-radius: 8px; box-shadow: 0 3px 8px #0005; display: block; }
 .wz-interlude { padding-left: 4px; opacity: 0.9; }
 .wz-interlude .wz-chapter-n { background: transparent; color: #6b5a3a; }
 /* a narrow screen: the sidebar opens over the grid */

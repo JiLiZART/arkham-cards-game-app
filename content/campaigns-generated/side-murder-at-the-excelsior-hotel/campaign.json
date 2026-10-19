@@ -105,7 +105,9 @@
     {
       "scenario": "murder-at-the-excelsior-hotel",
       "name": "Murder at the Excelsior Hotel",
-      "code": "84001"
+      "code": "84001",
+      "agenda": "84002",
+      "act": "84004"
     }
   ]
 }

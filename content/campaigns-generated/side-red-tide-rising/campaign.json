@@ -106,7 +106,9 @@
     {
       "scenario": "red-tide-rising",
       "name": "Red Tide Rising",
-      "code": "90041"
+      "code": "90041",
+      "agenda": "90042",
+      "act": "90044"
     }
   ]
 }

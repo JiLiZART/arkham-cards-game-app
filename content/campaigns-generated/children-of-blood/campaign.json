@@ -115,12 +115,16 @@
     {
       "scenario": "river-of-blood",
       "name": "River of Blood",
-      "code": "13001"
+      "code": "13001",
+      "agenda": "13002",
+      "act": "13006"
     },
     {
       "scenario": "new-horizons",
       "name": "New Horizons",
-      "code": "13031"
+      "code": "13031",
+      "agenda": "13032",
+      "act": "13036"
     },
     {
       "scenario": "friends-in-low-places",
@@ -130,7 +134,9 @@
     {
       "scenario": "blood-money",
       "name": "Blood Money",
-      "code": "13068"
+      "code": "13068",
+      "agenda": "13069",
+      "act": "13073"
     },
     {
       "scenario": "cob-epilogue",

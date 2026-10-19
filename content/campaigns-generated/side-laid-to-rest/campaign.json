@@ -106,7 +106,9 @@
     {
       "scenario": "laid-to-rest",
       "name": "Laid to Rest",
-      "code": "90054"
+      "code": "90054",
+      "agenda": "90055",
+      "act": "90056"
     }
   ]
 }

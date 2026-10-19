@@ -113,7 +113,9 @@
     {
       "scenario": "beyond-the-gates-of-sleep",
       "name": "Beyond the Gates of Sleep",
-      "code": "06039"
+      "code": "06039",
+      "agenda": "06040",
+      "act": "06041"
     },
     {
       "scenario": "the-black-cat",
@@ -123,7 +125,9 @@
     {
       "scenario": "the-search-for-kadath",
       "name": "The Search for Kadath",
-      "code": "06119"
+      "code": "06119",
+      "agenda": "06120",
+      "act": "06122"
     },
     {
       "scenario": "the-oneironauts",
@@ -133,7 +137,9 @@
     {
       "scenario": "dark-side-of-the-moon",
       "name": "Dark Side of the Moon",
-      "code": "06206"
+      "code": "06206",
+      "agenda": "06207",
+      "act": "06210"
     },
     {
       "scenario": "the-great-ones",
@@ -143,7 +149,9 @@
     {
       "scenario": "where-gods-dwell",
       "name": "Where the Gods Dwell",
-      "code": "06286"
+      "code": "06286",
+      "agenda": "06287",
+      "act": "06290"
     },
     {
       "scenario": "tde-epilogue",

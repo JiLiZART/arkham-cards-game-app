@@ -107,7 +107,9 @@
     {
       "scenario": "all-or-nothing",
       "name": "All or Nothing",
-      "code": "90011"
+      "code": "90011",
+      "agenda": "90012",
+      "act": "90013"
     }
   ]
 }

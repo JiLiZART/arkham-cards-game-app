@@ -105,7 +105,9 @@
     {
       "scenario": "machinations-through-time",
       "name": "Machinations Through Time",
-      "code": "87001"
+      "code": "87001",
+      "agenda": "87002",
+      "act": "87004"
     }
   ]
 }

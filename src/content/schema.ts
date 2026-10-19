@@ -789,7 +789,22 @@ export const CampaignDef = z
     /** the campaign log's sections, as the guide prints them (the notes section is always there) */
     logSections: z.array(LogSection).default([]),
     /** every scenario's reference card, in order, with the interludes marked: the picker's sidebar before the scenarios load */
-    cards: z.array(z.object({ scenario: z.string(), name: z.string().optional(), code: z.string().optional(), interlude: z.boolean().optional() }).strict()).default([]),
+    cards: z
+      .array(
+        z
+          .object({
+            scenario: z.string(),
+            name: z.string().optional(),
+            /** the scenario's reference card */
+            code: z.string().optional(),
+            /** its first agenda and first act: the chapter's art, as the act and agenda viewer shows them */
+            agenda: z.string().optional(),
+            act: z.string().optional(),
+            interlude: z.boolean().optional(),
+          })
+          .strict(),
+      )
+      .default([]),
   })
   .strict();
 export type CampaignDef = z.infer<typeof CampaignDef>;

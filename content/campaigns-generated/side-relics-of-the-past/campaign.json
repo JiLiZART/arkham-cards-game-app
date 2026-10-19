@@ -106,7 +106,9 @@
     {
       "scenario": "relics-of-the-past",
       "name": "Relics of the Past",
-      "code": "90065"
+      "code": "90065",
+      "agenda": "90066a",
+      "act": "90068"
     }
   ]
 }

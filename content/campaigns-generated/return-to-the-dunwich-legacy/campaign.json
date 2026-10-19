@@ -126,12 +126,16 @@
     {
       "scenario": "return-to-extracurricular-activity",
       "name": "Return to Extracurricular Activity",
-      "code": "02041"
+      "code": "02041",
+      "agenda": "02042",
+      "act": "02045"
     },
     {
       "scenario": "return-to-the-house-always-wins",
       "name": "Return to The House Always Wins",
-      "code": "02062"
+      "code": "02062",
+      "agenda": "02063",
+      "act": "02066"
     },
     {
       "scenario": "armitages-fate",
@@ -141,17 +145,23 @@
     {
       "scenario": "return-to-the-miskatonic-museum",
       "name": "Return to The Miskatonic Museum",
-      "code": "02118"
+      "code": "02118",
+      "agenda": "02119",
+      "act": "02122"
     },
     {
       "scenario": "return-to-essex-county-express",
       "name": "Return to The Essex County Express",
-      "code": "02159"
+      "code": "02159",
+      "agenda": "02160",
+      "act": "02165"
     },
     {
       "scenario": "return-to-blood-on-the-altar",
       "name": "Return to Blood on the Altar",
-      "code": "02195"
+      "code": "02195",
+      "agenda": "02196",
+      "act": "02199"
     },
     {
       "scenario": "dwl-interlude2",
@@ -161,17 +171,23 @@
     {
       "scenario": "return-to-undimensioned-and-unseen",
       "name": "Return to Undimensioned and Unseen",
-      "code": "02236"
+      "code": "02236",
+      "agenda": "02237",
+      "act": "02240"
     },
     {
       "scenario": "return-to-where-doom-awaits",
       "name": "Return to Where Doom Awaits",
-      "code": "02274"
+      "code": "02274",
+      "agenda": "02275",
+      "act": "02277"
     },
     {
       "scenario": "return-to-lost-in-time-and-space",
       "name": "Return to Lost in Time and Space",
-      "code": "02311"
+      "code": "02311",
+      "agenda": "51054",
+      "act": "51055"
     },
     {
       "scenario": "dwl-epilogue",

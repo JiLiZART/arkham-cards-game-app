@@ -105,7 +105,9 @@
     {
       "scenario": "war-of-the-outer-gods",
       "name": "War of the Outer Gods",
-      "code": "86001"
+      "code": "86001",
+      "agenda": "86002",
+      "act": "86011"
     }
   ]
 }

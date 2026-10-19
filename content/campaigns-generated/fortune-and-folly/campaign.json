@@ -70,7 +70,9 @@
     {
       "scenario": "fortune-and-folly-part-1",
       "name": "The Stakeout",
-      "code": "88001"
+      "code": "88001",
+      "agenda": "88002",
+      "act": "88006"
     }
   ]
 }

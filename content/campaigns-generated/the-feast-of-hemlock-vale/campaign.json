@@ -165,37 +165,51 @@
     {
       "scenario": "written-in-rock",
       "name": "Written in Rock",
-      "code": "10501"
+      "code": "10501",
+      "agenda": "10503",
+      "act": "10505"
     },
     {
       "scenario": "hemlock-house",
       "name": "Hemlock House",
-      "code": "10523"
+      "code": "10523",
+      "agenda": "10525",
+      "act": "10529"
     },
     {
       "scenario": "the-silent-heath",
       "name": "The Silent Heath",
-      "code": "10549"
+      "code": "10549",
+      "agenda": "10550",
+      "act": "10553"
     },
     {
       "scenario": "the-lost-sister",
       "name": "The Lost Sister",
-      "code": "10528"
+      "code": "10528",
+      "agenda": "10570",
+      "act": "10572"
     },
     {
       "scenario": "the-thing-in-the-depths",
       "name": "The Thing in the Depths",
-      "code": "10588"
+      "code": "10588",
+      "agenda": "10589",
+      "act": "10591"
     },
     {
       "scenario": "the-twisted-hollow",
       "name": "The Twisted Hollow",
-      "code": "10605"
+      "code": "10605",
+      "agenda": "10606",
+      "act": "10607a"
     },
     {
       "scenario": "the-longest-night",
       "name": "The Longest Night",
-      "code": "10626"
+      "code": "10626",
+      "agenda": "10628",
+      "act": "10629"
     }
   ]
 }

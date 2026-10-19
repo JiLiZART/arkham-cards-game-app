@@ -179,7 +179,9 @@
     {
       "scenario": "ice-and-death-part-1",
       "name": "Ice and Death, Part I",
-      "code": "08501"
+      "code": "08501",
+      "agenda": "08518",
+      "act": "08521"
     },
     {
       "scenario": "the-disapperance",
@@ -189,7 +191,9 @@
     {
       "scenario": "ice-and-death-part-2",
       "name": "Ice and Death, Part II",
-      "code": "08501"
+      "code": "08501",
+      "agenda": "08523",
+      "act": "08526"
     },
     {
       "scenario": "the-attack",
@@ -199,7 +203,9 @@
     {
       "scenario": "ice-and-death-part-3",
       "name": "Ice and Death, Part III",
-      "code": "08501"
+      "code": "08501",
+      "agenda": "08544",
+      "act": "08546"
     },
     {
       "scenario": "restful-night",
@@ -209,7 +215,9 @@
     {
       "scenario": "to-the-forbidden-peaks",
       "name": "To the Forbidden Peaks",
-      "code": "08596"
+      "code": "08596",
+      "agenda": "08597",
+      "act": "08599"
     },
     {
       "scenario": "endless-night",
@@ -219,7 +227,9 @@
     {
       "scenario": "city-of-the-elder-things",
       "name": "City of the Elder Things",
-      "code": "08621"
+      "code": "08621",
+      "agenda": "08622",
+      "act": "08624"
     },
     {
       "scenario": "final-night",
@@ -234,7 +244,9 @@
     {
       "scenario": "the-heart-of-madness-part-1",
       "name": "The Heart of Madness, Part I",
-      "code": "08648"
+      "code": "08648",
+      "agenda": "08659",
+      "act": "08662"
     },
     {
       "scenario": "the-other-side",
@@ -244,7 +256,9 @@
     {
       "scenario": "the-heart-of-madness-part-2",
       "name": "The Heart of Madness, Part II",
-      "code": "08648"
+      "code": "08648",
+      "agenda": "08671",
+      "act": "08673"
     },
     {
       "scenario": "eoe-epilogue",

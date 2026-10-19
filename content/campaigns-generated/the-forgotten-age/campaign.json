@@ -128,7 +128,9 @@
     {
       "scenario": "wilds",
       "name": "The Untamed Wilds",
-      "code": "04043"
+      "code": "04043",
+      "agenda": "04044",
+      "act": "04046"
     },
     {
       "scenario": "tfa-interlude1",
@@ -138,7 +140,9 @@
     {
       "scenario": "eztli",
       "name": "The Doom of Eztli",
-      "code": "04054"
+      "code": "04054",
+      "agenda": "04055",
+      "act": "04057"
     },
     {
       "scenario": "tfa-interlude2",
@@ -148,12 +152,16 @@
     {
       "scenario": "threads-of-fate",
       "name": "Threads of Fate",
-      "code": "04113"
+      "code": "04113",
+      "agenda": "04114",
+      "act": "04117a"
     },
     {
       "scenario": "the-boundary-beyond",
       "name": "The Boundary Beyond",
-      "code": "04161"
+      "code": "04161",
+      "agenda": "04162",
+      "act": "04165"
     },
     {
       "scenario": "tfa-interlude3",
@@ -163,17 +171,23 @@
     {
       "scenario": "heart-of-the-elders-part-1",
       "name": "Heart of the Elders, Part 1",
-      "code": "04205"
+      "code": "04205",
+      "agenda": "04207",
+      "act": "04209"
     },
     {
       "scenario": "heart-of-the-elders-part-2",
       "name": "Heart of the Elders, Part 2",
-      "code": "04205"
+      "code": "04205",
+      "agenda": "04211",
+      "act": "04213"
     },
     {
       "scenario": "the-city-of-archives",
       "name": "The City of Archives",
-      "code": "04237"
+      "code": "04237",
+      "agenda": "04238",
+      "act": "04241"
     },
     {
       "scenario": "tfa-interlude4",
@@ -183,7 +197,9 @@
     {
       "scenario": "the-depths-of-yoth",
       "name": "The Depths of Yoth",
-      "code": "04277"
+      "code": "04277",
+      "agenda": "04278",
+      "act": "04285"
     },
     {
       "scenario": "tfa-interlude5",
@@ -193,7 +209,9 @@
     {
       "scenario": "shattered-aeons",
       "name": "Shattered Aeons",
-      "code": "04314"
+      "code": "04314",
+      "agenda": "04315",
+      "act": "04318"
     },
     {
       "scenario": "tfa-epilogue",

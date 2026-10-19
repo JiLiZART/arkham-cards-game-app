@@ -151,7 +151,9 @@
     {
       "scenario": "one-last-job",
       "name": "One Last Job",
-      "code": "11501"
+      "code": "11501",
+      "agenda": "11502",
+      "act": "11504"
     },
     {
       "scenario": "an-offer-you-cant-refuse",

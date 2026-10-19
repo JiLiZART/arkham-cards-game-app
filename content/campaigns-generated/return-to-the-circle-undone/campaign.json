@@ -140,12 +140,16 @@
     {
       "scenario": "return-to-the-witching-hour",
       "name": "Return to The Witching Hour",
-      "code": "05050"
+      "code": "05050",
+      "agenda": "05051",
+      "act": "54018"
     },
     {
       "scenario": "return-to-at-deaths-doorstep",
       "name": "Return to At Death's Doorstep",
-      "code": "05065"
+      "code": "05065",
+      "agenda": "05066",
+      "act": "05068"
     },
     {
       "scenario": "the-price-of-progress",
@@ -155,17 +159,23 @@
     {
       "scenario": "return-to-the-secret-name",
       "name": "Return to The Secret Name",
-      "code": "05120"
+      "code": "05120",
+      "agenda": "05121",
+      "act": "05125"
     },
     {
       "scenario": "return-to-the-wages-of-sin",
       "name": "Return to The Wages of Sin",
-      "code": "05161"
+      "code": "05161",
+      "agenda": "05162",
+      "act": "54035"
     },
     {
       "scenario": "return-to-for-the-greater-good",
       "name": "Return to For the Greater Good",
-      "code": "05197"
+      "code": "05197",
+      "agenda": "05198",
+      "act": "05200"
     },
     {
       "scenario": "the-inner-circle",
@@ -175,12 +185,16 @@
     {
       "scenario": "return-to-union-and-disillusion",
       "name": "Return to Union and Disillusion",
-      "code": "05238"
+      "code": "05238",
+      "agenda": "05239",
+      "act": "54047"
     },
     {
       "scenario": "return-to-in-the-clutches-of-chaos",
       "name": "Return to In the Clutches of Chaos",
-      "code": "05284"
+      "code": "05284",
+      "agenda": "05285",
+      "act": "05286a"
     },
     {
       "scenario": "twist-of-fate",
@@ -190,7 +204,9 @@
     {
       "scenario": "return-to-before-the-black-throne",
       "name": "Return to Before the Black Throne",
-      "code": "05325"
+      "code": "05325",
+      "agenda": "05326",
+      "act": "54057"
     },
     {
       "scenario": "tcu-epilogue",

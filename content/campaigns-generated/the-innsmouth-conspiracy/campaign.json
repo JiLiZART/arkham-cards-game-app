@@ -150,7 +150,9 @@
     {
       "scenario": "the-pit-of-despair",
       "name": "The Pit of Despair",
-      "code": "07041"
+      "code": "07041",
+      "agenda": "07042",
+      "act": "07045"
     },
     {
       "scenario": "puzzle-pieces",
@@ -160,7 +162,9 @@
     {
       "scenario": "the-vanishing-of-elina-harper",
       "name": "The Vanishing of Elina Harper",
-      "code": "07056"
+      "code": "07056",
+      "agenda": "07057",
+      "act": "07060"
     },
     {
       "scenario": "the-syzygy",
@@ -170,12 +174,16 @@
     {
       "scenario": "in-too-deep",
       "name": "In Too Deep",
-      "code": "07123"
+      "code": "07123",
+      "agenda": "07124",
+      "act": "07128"
     },
     {
       "scenario": "devil-reef",
       "name": "Devil Reef",
-      "code": "07163"
+      "code": "07163",
+      "agenda": "07164",
+      "act": "07167"
     },
     {
       "scenario": "beneath-the-waves",
@@ -185,17 +193,23 @@
     {
       "scenario": "horror-in-high-gear",
       "name": "Horror in High Gear",
-      "code": "07198"
+      "code": "07198",
+      "agenda": "07199",
+      "act": "07202"
     },
     {
       "scenario": "a-light-in-the-fog",
       "name": "A Light in the Fog",
-      "code": "07231"
+      "code": "07231",
+      "agenda": "07232",
+      "act": "07236"
     },
     {
       "scenario": "the-lair-of-dagon",
       "name": "The Lair of Dagon",
-      "code": "07274"
+      "code": "07274",
+      "agenda": "07275",
+      "act": "07280"
     },
     {
       "scenario": "hidden-truths",
@@ -205,7 +219,9 @@
     {
       "scenario": "into-the-maelstrom",
       "name": "Into the Maelstrom",
-      "code": "07311"
+      "code": "07311",
+      "agenda": "07312",
+      "act": "07315"
     },
     {
       "scenario": "tic-epilogue",

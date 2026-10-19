@@ -133,7 +133,9 @@
     {
       "scenario": "riddles-and-rain",
       "name": "Riddles and Rain",
-      "code": "09501"
+      "code": "09501",
+      "agenda": "09502",
+      "act": "09506"
     },
     {
       "scenario": "the-foundation",
@@ -143,47 +145,65 @@
     {
       "scenario": "marrakesh",
       "name": "Dead Heat",
-      "code": "09520"
+      "code": "09520",
+      "agenda": "09521",
+      "act": "09523"
     },
     {
       "scenario": "buenos-aires",
       "name": "Sanguine Shadows",
-      "code": "09545"
+      "code": "09545",
+      "agenda": "09562",
+      "act": "09547"
     },
     {
       "scenario": "istanbul",
       "name": "Dealings in the Dark",
-      "code": "09566"
+      "code": "09566",
+      "agenda": "09567",
+      "act": "09568"
     },
     {
       "scenario": "havana",
       "name": "Dancing Mad",
-      "code": "09591"
+      "code": "09591",
+      "agenda": "09592",
+      "act": "09595"
     },
     {
       "scenario": "anchorage",
       "name": "On Thin Ice",
-      "code": "09609"
+      "code": "09609",
+      "agenda": "09610",
+      "act": "09613"
     },
     {
       "scenario": "alexandria",
       "name": "Dogs of War",
-      "code": "09635"
+      "code": "09635",
+      "agenda": "09636",
+      "act": "09639"
     },
     {
       "scenario": "kuala-lampur",
       "name": "Shades of Suffering",
-      "code": "09660"
+      "code": "09660",
+      "agenda": "09661",
+      "act": "09664"
     },
     {
       "scenario": "bermuda-triangle",
       "name": "Without a Trace",
-      "code": "09681"
+      "code": "09681",
+      "agenda": "09682",
+      "act": "09685"
     },
     {
       "scenario": "tunguska",
       "name": "Congress of the Keys",
-      "code": "09694"
+      "code": "09694",
+      "agenda": "09695",
+      "act": "09698"
     }
   ]
 }

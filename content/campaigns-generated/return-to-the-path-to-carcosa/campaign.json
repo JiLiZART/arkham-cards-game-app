@@ -146,42 +146,58 @@
     {
       "scenario": "return-to-curtain-call",
       "name": "Return to Curtain Call",
-      "code": "03043"
+      "code": "03043",
+      "agenda": "03044",
+      "act": "52015"
     },
     {
       "scenario": "return-to-the-last-king",
       "name": "Return to The Last King",
-      "code": "03061"
+      "code": "03061",
+      "agenda": "52022",
+      "act": "03064"
     },
     {
       "scenario": "return-to-a-phantom-of-truth",
       "name": "Return to A Phantom of Truth",
-      "code": "03200"
+      "code": "03200",
+      "agenda": "03201",
+      "act": "03204"
     },
     {
       "scenario": "return-to-black-stars-rise",
       "name": "Return to Black Stars Rise",
-      "code": "03274"
+      "code": "03274",
+      "agenda": "03275",
+      "act": "03281"
     },
     {
       "scenario": "return-to-dim-carcosa",
       "name": "Return to Dim Carcosa",
-      "code": "03316"
+      "code": "03316",
+      "agenda": "03317",
+      "act": "03320"
     },
     {
       "scenario": "return-to-echoes-of-the-past",
       "name": "Return to Echoes of the Past",
-      "code": "03120"
+      "code": "03120",
+      "agenda": "03121",
+      "act": "03124"
     },
     {
       "scenario": "return-to-the-pallid-mask",
       "name": "Return to The Pallid Mask",
-      "code": "03240"
+      "code": "03240",
+      "agenda": "03241",
+      "act": "03243"
     },
     {
       "scenario": "return-to-the-unspeakable-oath",
       "name": "Return to The Unspeakable Oath",
-      "code": "03159"
+      "code": "03159",
+      "agenda": "03160",
+      "act": "52035"
     }
   ]
 }

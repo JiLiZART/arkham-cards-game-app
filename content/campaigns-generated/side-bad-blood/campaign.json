@@ -106,7 +106,9 @@
     {
       "scenario": "bad-blood",
       "name": "Bad Blood",
-      "code": "90020"
+      "code": "90020",
+      "agenda": "90021",
+      "act": "90022"
     }
   ]
 }

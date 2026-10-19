@@ -106,7 +106,9 @@
     {
       "scenario": "by-the-book",
       "name": "By the Book",
-      "code": "90032"
+      "code": "90032",
+      "agenda": "90033a",
+      "act": "90035"
     }
   ]
 }

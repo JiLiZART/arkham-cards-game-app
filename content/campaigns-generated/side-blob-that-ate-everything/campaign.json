@@ -105,7 +105,9 @@
     {
       "scenario": "blob-that-ate-everything",
       "name": "The Blob That Ate Everything",
-      "code": "85001"
+      "code": "85001",
+      "agenda": "85002",
+      "act": "85007"
     }
   ]
 }

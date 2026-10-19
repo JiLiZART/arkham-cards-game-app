@@ -242,7 +242,7 @@ export function main() {
       const byDef = new Map(defs.map((d) => [d.id, d]));
       const cardList = flow.order.map((id) => {
         const d = byDef.get(id);
-        return d ? { scenario: id, name: d.name, code: d.card } : { scenario: id, name: flow.interludes[id]?.name, interlude: true as const };
+        return d ? { scenario: id, name: d.name, code: d.card, ...(d.agendas[0] ? { agenda: d.agendas[0] } : {}), ...(d.acts[0] ? { act: d.acts[0] } : {}) } : { scenario: id, name: flow.interludes[id]?.name, interlude: true as const };
       });
       const logSections = [
         { id: "campaign_notes", kind: "entries" as const, label: "Campaign Notes" },

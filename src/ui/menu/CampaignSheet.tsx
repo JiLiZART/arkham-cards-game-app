@@ -11,18 +11,19 @@ const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameSt
 /** "1 scenario", "8 scenarios" */
 export const scenarioCount = (n: number) => (n === 1 ? tr("wizard.length.one") : tr("wizard.scenarios", { n }));
 
-/** a scenario's reference card: front or back, found by its code (its pack need not be loaded; both sides of a reference card are printed) */
-function Side({ code, side, name }: { code: string; side: "front" | "back"; name: string }) {
+/** a chapter's card, its illustrated front, found by its code (its pack need not be loaded) */
+function Art({ code, alt }: { code: string; alt: string }) {
   const locale = useGame((s) => s.locale);
   const [broken, setBroken] = useState(false);
-  const url = cardImage(db.cards[code] ?? { code, doubleSided: true }, side, locale);
+  const url = cardImage(db.cards[code] ?? { code }, "front", locale);
   if (!url || broken) return null;
-  return <img src={url} alt={`${name} (${side === "front" ? "1" : "2"})`} loading="lazy" draggable={false} onError={() => setBroken(true)} />;
+  return <img src={url} alt={alt} loading="lazy" draggable={false} onError={() => setBroken(true)} />;
 }
 
 /**
  * The campaign in the sidebar of the picker: its name and number of scenarios, whether its rules are complete, the
- * guide's opening text, then the chapters in order, each scenario's reference card front and back and the interludes
+ * guide's opening text, then the chapters in order, each scenario's first agenda and first act (their art, as the act
+ * and agenda viewer shows a scenario in play) and the interludes
  * between them (the way the act and agenda viewer lays out a scenario's chapters in play). Everything comes from the
  * campaign's own file, so it is all here before the scenarios are loaded.
  */
@@ -34,7 +35,9 @@ export function CampaignSheet({ campaign, onClose }: { campaign: CampaignDef; on
   // an epigraph is set in italics: it opens with a quotation mark
   const quote = /^[“"«„]/.test(lead);
   // the chapters: the guide's order with the interludes in it; a campaign with no list shows its scenarios
-  const chapters = campaign.cards.length ? campaign.cards : campaign.scenarios.map((scenario, k) => ({ scenario, name: campaign.scenarioNames?.[k], code: db.scenarios[scenario]?.card }));
+  const chapters = campaign.cards.length
+    ? campaign.cards
+    : campaign.scenarios.map((scenario, k) => ({ scenario, name: campaign.scenarioNames?.[k], code: db.scenarios[scenario]?.card, agenda: db.scenarios[scenario]?.agendas[0], act: db.scenarios[scenario]?.acts[0] }));
   let n = 0;
   return (
     <aside className="wz-camp-sheet" aria-label={tileName(db, campaign, locale)}>
@@ -71,10 +74,10 @@ export function CampaignSheet({ campaign, onClose }: { campaign: CampaignDef; on
                 <b>{name}</b>
                 {!playable && <small>{tr("wizard.interlude")}</small>}
               </div>
-              {playable && ch.code && (
+              {playable && (ch.agenda || ch.act) && (
                 <div className="wz-chapter-cards">
-                  <Side code={ch.code} side="front" name={name} />
-                  <Side code={ch.code} side="back" name={name} />
+                  {ch.agenda && <Art code={ch.agenda} alt={`${name}: ${tr("card.type.agenda")}`} />}
+                  {ch.act && <Art code={ch.act} alt={`${name}: ${tr("card.type.act")}`} />}
                 </div>
               )}
             </li>

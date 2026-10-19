@@ -104,7 +104,9 @@
     {
       "scenario": "in-the-labyrinths-of-lunacy",
       "name": "The Labyrinths of Lunacy",
-      "code": "70001"
+      "code": "70001",
+      "agenda": "70006",
+      "act": "70007"
     }
   ]
 }

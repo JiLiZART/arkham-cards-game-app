@@ -106,7 +106,9 @@
     {
       "scenario": "read-or-die",
       "name": "Read or Die",
-      "code": "90004"
+      "code": "90004",
+      "agenda": "90005",
+      "act": "90006"
     }
   ]
 }

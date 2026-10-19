@@ -145,42 +145,58 @@
     {
       "scenario": "curtain-call",
       "name": "Curtain Call",
-      "code": "03043"
+      "code": "03043",
+      "agenda": "03044",
+      "act": "03046"
     },
     {
       "scenario": "the-last-king",
       "name": "The Last King",
-      "code": "03061"
+      "code": "03061",
+      "agenda": "03062",
+      "act": "03064"
     },
     {
       "scenario": "a-phantom-of-truth",
       "name": "A Phantom of Truth",
-      "code": "03200"
+      "code": "03200",
+      "agenda": "03201",
+      "act": "03204"
     },
     {
       "scenario": "black-stars-rise",
       "name": "Black Stars Rise",
-      "code": "03274"
+      "code": "03274",
+      "agenda": "03275",
+      "act": "03281"
     },
     {
       "scenario": "dim-carcosa",
       "name": "Dim Carcosa",
-      "code": "03316"
+      "code": "03316",
+      "agenda": "03317",
+      "act": "03320"
     },
     {
       "scenario": "echoes-of-the-past",
       "name": "Echoes of the Past",
-      "code": "03120"
+      "code": "03120",
+      "agenda": "03121",
+      "act": "03124"
     },
     {
       "scenario": "the-pallid-mask",
       "name": "The Pallid Mask",
-      "code": "03240"
+      "code": "03240",
+      "agenda": "03241",
+      "act": "03243"
     },
     {
       "scenario": "the-unspeakable-oath",
       "name": "The Unspeakable Oath",
-      "code": "03159"
+      "code": "03159",
+      "agenda": "03160",
+      "act": "03163"
     }
   ]
 }

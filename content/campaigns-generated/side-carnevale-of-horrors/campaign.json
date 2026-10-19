@@ -105,7 +105,9 @@
     {
       "scenario": "carnevale-of-horrors",
       "name": "Carnevale of Horrors",
-      "code": "82001"
+      "code": "82001",
+      "agenda": "82002",
+      "act": "82005"
     }
   ]
 }

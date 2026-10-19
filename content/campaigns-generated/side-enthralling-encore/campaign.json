@@ -106,7 +106,9 @@
     {
       "scenario": "enthralling-encore",
       "name": "Enthralling Encore",
-      "code": "90094"
+      "code": "90094",
+      "agenda": "90095",
+      "act": "90096"
     }
   ]
 }

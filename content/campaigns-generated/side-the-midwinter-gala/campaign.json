@@ -105,7 +105,9 @@
     {
       "scenario": "the-midwinter-gala",
       "name": "The Midwinter Gala",
-      "code": "71001"
+      "code": "71001",
+      "agenda": "71002",
+      "act": "71005"
     }
   ]
 }

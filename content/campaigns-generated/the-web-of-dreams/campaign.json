@@ -125,7 +125,9 @@
     {
       "scenario": "waking-nightmare",
       "name": "Waking Nightmare",
-      "code": "06063"
+      "code": "06063",
+      "agenda": "06064",
+      "act": "06067"
     },
     {
       "scenario": "the-black-cat",
@@ -135,7 +137,9 @@
     {
       "scenario": "a-thousand-shapes-of-horror",
       "name": "A Thousand Shapes of Horror",
-      "code": "06168"
+      "code": "06168",
+      "agenda": "06169a",
+      "act": "06172"
     },
     {
       "scenario": "the-oneironauts",
@@ -145,7 +149,9 @@
     {
       "scenario": "point-of-no-return",
       "name": "Point of No Return",
-      "code": "06247"
+      "code": "06247",
+      "agenda": "06248",
+      "act": "06250"
     },
     {
       "scenario": "the-great-ones",
@@ -155,7 +161,9 @@
     {
       "scenario": "weaver-of-the-cosmos",
       "name": "Weaver of the Cosmos",
-      "code": "06333"
+      "code": "06333",
+      "agenda": "06334",
+      "act": "06337"
     },
     {
       "scenario": "tde-epilogue",

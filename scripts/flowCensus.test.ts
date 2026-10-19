@@ -30,7 +30,15 @@ describe("the generated flows", () => {
     const dwl = CampaignDef.parse(read("the-dunwich-legacy", "campaign.json"));
     expect(dwl.cards.map((c) => c.scenario)).toEqual(flows.find((f) => f.id === "the-dunwich-legacy")!.flow.order);
     expect(dwl.cards.filter((c) => c.interlude).map((c) => c.name)).toEqual(["Prologue", "Armitage's Fate", "The Survivors", "Epilogue"]);
-    expect(dwl.cards.find((c) => c.scenario === "extracurricular-activity")?.code).toBe("02041");
+    expect(dwl.cards.find((c) => c.scenario === "extracurricular-activity")).toMatchObject({ code: "02041", agenda: "02042" });
+    // every scenario of every campaign has its chapter art: its first agenda and first act, as its scenario file names them
+    for (const { id } of flows) {
+      const c = CampaignDef.parse(read(id, "campaign.json"));
+      for (const ch of c.cards.filter((x) => !x.interlude)) {
+        const sc = read(id, `scenarios/${ch.scenario}.json`);
+        expect([ch.agenda, ch.act], `${id} ${ch.scenario}`).toEqual([sc.agendas[0], sc.acts[0]]);
+      }
+    }
     expect(dwl.logSections.map((s) => s.id)).toEqual(["campaign_notes", "sacrificed"]);
   });
 
