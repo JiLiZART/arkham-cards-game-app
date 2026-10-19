@@ -50,19 +50,19 @@ abilities cover only part of its text counts as working, so the bot playthroughs
 
 | Done | Pack | Campaign | Encounter cards left | Player cards left |
 | --- | --- | --- | --- | --- |
-| [ ] | `dwl` | return-to-the-dunwich-legacy, side-all-or-nothing, side-read-or-die, the-dunwich-legacy | 54 of 59 | 40 of 40 |
-| [ ] | `tmm` | return-to-the-dunwich-legacy, the-dunwich-legacy | 25 of 26 | 16 of 16 |
+| [ ] | `dwl` | return-to-the-dunwich-legacy, side-all-or-nothing, side-read-or-die, the-dunwich-legacy | 54 of 59 | 39 of 40 |
+| [ ] | `tmm` | return-to-the-dunwich-legacy, the-dunwich-legacy | 25 of 26 | 14 of 16 |
 | [ ] | `tece` | return-to-the-dunwich-legacy, the-dunwich-legacy | 18 of 23 | 14 of 14 |
 | [ ] | `bota` | return-to-the-dunwich-legacy, the-dunwich-legacy | 23 of 26 | 15 of 15 |
 | [ ] | `uau` | return-to-the-dunwich-legacy, the-dunwich-legacy | 23 of 23 | 12 of 12 |
-| [ ] | `wda` | return-to-the-dunwich-legacy, the-dunwich-legacy | 22 of 25 | 14 of 14 |
+| [ ] | `wda` | return-to-the-dunwich-legacy, the-dunwich-legacy | 22 of 25 | 13 of 14 |
 | [ ] | `litas` | return-to-the-dunwich-legacy, the-dunwich-legacy | 23 of 23 | 12 of 12 |
-| [ ] | `rtdwl` | return-to-the-dunwich-legacy, side-all-or-nothing | 58 of 60 | 13 of 13 |
+| [ ] | `rtdwl` | return-to-the-dunwich-legacy, side-all-or-nothing | 58 of 60 | 12 of 13 |
 | [ ] | `ptc` | return-to-the-path-to-carcosa, side-enthralling-encore, the-path-to-carcosa | 64 of 68 | 47 of 47 |
 | [ ] | `eotp` | return-to-the-path-to-carcosa, the-path-to-carcosa | 22 of 24 | 16 of 17 |
 | [ ] | `tuo` | return-to-the-path-to-carcosa, the-path-to-carcosa | 27 of 30 | 13 of 13 |
 | [ ] | `apot` | return-to-the-path-to-carcosa, the-path-to-carcosa | 28 of 28 | 12 of 12 |
-| [ ] | `tpm` | return-to-the-path-to-carcosa, the-path-to-carcosa | 23 of 24 | 12 of 12 |
+| [ ] | `tpm` | return-to-the-path-to-carcosa, the-path-to-carcosa | 23 of 24 | 11 of 12 |
 | [ ] | `bsr` | return-to-the-path-to-carcosa, the-path-to-carcosa | 29 of 32 | 11 of 11 |
 | [ ] | `dca` | return-to-the-path-to-carcosa, the-path-to-carcosa | 44 of 46 | 13 of 13 |
 | [ ] | `rtptc` | return-to-the-path-to-carcosa | 68 of 69 | 15 of 15 |
@@ -84,7 +84,7 @@ abilities cover only part of its text counts as working, so the bot playthroughs
 | [ ] | `rttcu` | return-to-the-circle-undone | 61 of 61 | 17 of 17 |
 | [ ] | `tde` | the-dream-quest, the-web-of-dreams | 68 of 70 | 37 of 37 |
 | [ ] | `sfk` | the-dream-quest | 52 of 52 | 10 of 10 |
-| [ ] | `tsh` | the-web-of-dreams | 26 of 27 | 14 of 14 |
+| [ ] | `tsh` | the-web-of-dreams | 26 of 27 | 13 of 14 |
 | [ ] | `dsm` | the-dream-quest | 24 of 26 | 14 of 14 |
 | [ ] | `pnr` | the-web-of-dreams | 38 of 39 | 15 of 15 |
 | [ ] | `wgd` | the-dream-quest | 33 of 37 | 10 of 10 |
@@ -101,8 +101,8 @@ abilities cover only part of its text counts as working, so the bot playthroughs
 
 | Done | Pack | Campaign | Encounter cards left | Player cards left |
 | --- | --- | --- | --- | --- |
-| [ ] | `eoep` | — | 0 of 0 | 132 of 132 |
-| [ ] | `eoec` | edge-of-the-earth | 218 of 223 | 43 of 43 |
+| [ ] | `eoep` | — | 0 of 0 | 131 of 132 |
+| [ ] | `eoec` | edge-of-the-earth | 218 of 223 | 42 of 43 |
 | [ ] | `tskp` | — | 0 of 0 | 122 of 122 |
 | [ ] | `tskc` | the-scarlet-keys | 268 of 277 | 34 of 34 |
 | [ ] | `fhvp` | — | 0 of 0 | 133 of 133 |
@@ -225,7 +225,7 @@ The campaign boxes by scenario. A row is done when the scenario is complete: its
 
 | Done | Pack | Campaign | Encounter cards left | Player cards left |
 | --- | --- | --- | --- | --- |
-| [ ] | `nat` | — | 0 of 0 | 28 of 28 |
+| [ ] | `nat` | — | 0 of 0 | 27 of 28 |
 | [ ] | `tom` | — | 0 of 0 | 28 of 28 |
 | [ ] | `har` | — | 0 of 0 | 29 of 29 |
 | [ ] | `car` | — | 0 of 0 | 27 of 27 |
@@ -234,7 +234,7 @@ The campaign boxes by scenario. A row is done when the scenario is complete: its
 | [ ] | `jac` | — | 0 of 0 | 26 of 26 |
 | [ ] | `mar` | — | 0 of 0 | 28 of 28 |
 | [ ] | `ste` | — | 0 of 0 | 24 of 24 |
-| [ ] | `mig` | — | 0 of 0 | 30 of 30 |
+| [ ] | `mig` | — | 0 of 0 | 28 of 30 |
 | [ ] | `otr` | — | 0 of 0 | 2 of 2 |
 | [ ] | `ptr` | — | 0 of 0 | 2 of 2 |
 | [ ] | `hfa` | — | 0 of 0 | 2 of 2 |
