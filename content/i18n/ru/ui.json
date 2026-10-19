@@ -538,5 +538,13 @@
   "card.slot.tarot": "Таро",
   "card.slot.head": "Голова",
   "card.type.enemy_location": "Враг-локация",
-  "stat.wild": "Любой"
+  "stat.wild": "Любой",
+  "deck.add": "Добавить",
+  "deck.replace": "Заменить",
+  "deck.remove": "Убрать",
+  "deck.replaceWith": "Нажмите карту колоды, которую заменит «{card}»",
+  "deck.newTab": "Новая колода",
+  "deck.ready": "Готова",
+  "deck.toFix": "Исправить: {n}",
+  "deck.renameHint": "Двойной щелчок — переименовать"
 }

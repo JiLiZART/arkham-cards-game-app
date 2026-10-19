@@ -956,3 +956,45 @@ button.danger { border-color: var(--bad); color: var(--bad); }
 .parchment .wz-head h1 { font-size: clamp(28px, 4vw, 44px); }
 .parchment h3 { font-size: 22px; }
 .parchment .cat-details h3 { color: #c9a95c; text-shadow: none; font-size: 18px; }
+
+/* the deck step: investigators, the decks as tabs, the deck and the cards to add as grids */
+.screen.wizard:has(.dk), .screen.wizard:has(.deck-editor) { max-width: 1720px; }
+.dk { display: flex; flex-direction: column; gap: 10px; min-height: 0; }
+.dk-invs { display: flex; gap: 10px; flex-wrap: wrap; }
+.dk-inv { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 12px; border: 2px solid #b69c6a; border-radius: 14px; background: #f6edd6cc; min-height: 44px; }
+.dk-inv.on { border-color: #7a5410; border-width: 3px; background: #fff6d8; box-shadow: 0 0 12px #7a541066; }
+.dk-inv small.ok { color: #2f7a35; }
+.dk-inv small.bad { color: #a32a2a; }
+.dk-tabs { display: flex; align-items: flex-end; gap: 2px; border-bottom: 2px solid #9c8250; overflow-x: auto; }
+.dk-tab { display: flex; align-items: center; gap: 2px; padding: 0 4px 0 0; border: 2px solid #b69c6a; border-bottom: 0; border-radius: 10px 10px 0 0; background: #e9dcb8; margin-bottom: -2px; min-height: 40px; }
+.dk-tab.on { background: #fff6d8; border-color: #7a5410; }
+.dk-tab.bad .dk-tab-name { color: #a32a2a; }
+.dk-tab .dk-tab-name, .dk-tab .dk-tab-close { background: none; border: 0; min-height: 40px; }
+.dk-tab-name { padding: 0 12px; white-space: nowrap; max-width: 260px; overflow: hidden; text-overflow: ellipsis; }
+.dk-tab-close { width: 32px; padding: 0; color: #6b5a3c; font-size: 18px; }
+.dk-tab-close.confirm { color: #a32a2a; font-weight: bold; }
+.dk-tab-add { width: 44px; justify-content: center; font-size: 24px; font-weight: bold; padding: 0; }
+.dk-rename { min-height: 36px; margin: 2px; font: inherit; }
+.dk-problems { display: flex; flex-direction: column; gap: 2px; }
+.dk-area { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; min-height: 0; }
+.dk-deck, .dk-pool { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.dk-head, .dk-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; position: sticky; top: 0; z-index: 2; padding: 6px 0; background: #ecdfbfe6; }
+.dk-head b { font-size: 20px; }
+.dk-weakness { display: flex; align-items: center; gap: 6px; margin-left: auto; }
+.dk-filters input[type="search"] { flex: 1 1 200px; min-height: 44px; padding: 0 10px; border: 2px solid #9c8250; border-radius: 10px; background: #f6edd6; color: var(--ink); font: inherit; }
+.dk-count { color: var(--muted); }
+.dk-group h4 { margin: 6px 0; font: 18px Teutonic, TeutonicRU, Georgia, serif; color: #3a2410; }
+.dk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 10px; }
+.dk-card { position: relative; border-radius: 8px; transition: transform 0.12s, filter 0.12s; }
+.dk-card img, .dk-card .text-face { width: 100%; height: auto; display: block; border-radius: 8px; box-shadow: 0 3px 8px #0006; }
+.dk-card:hover { transform: translateY(-3px); }
+.dk-copies { position: absolute; right: 4px; top: 4px; padding: 0 7px; border-radius: 999px; background: #3b2a12; color: #f3d98f; border: 1px solid #c9a95c; font-size: 15px; }
+.dk-why { display: block; margin-top: 3px; font-size: 12px; line-height: 1.2; color: #8a2a1a; }
+.dk-actions { position: absolute; inset: auto 0 0 0; display: none; flex-direction: column; gap: 4px; padding: 6px; background: linear-gradient(transparent, #000c 40%); border-radius: 0 0 8px 8px; }
+.dk-card:hover .dk-actions, .dk-card:focus-within .dk-actions { display: flex; }
+.dk-actions button { min-height: 36px; font-size: 14px; }
+.dk-card.lit { cursor: pointer; box-shadow: 0 0 0 3px #2f9a3a, 0 0 16px #2f9a3acc; }
+.dk-card.dim { filter: brightness(0.55) saturate(0.6); }
+.dk-replace-bar { display: flex; align-items: center; gap: 10px; padding: 6px 10px; border: 2px solid #2f9a3a; border-radius: 10px; background: #e7f4e1; }
+.dk-more { align-self: center; }
+@media (max-width: 900px) { .dk-area { grid-template-columns: 1fr; } }

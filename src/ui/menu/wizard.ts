@@ -3,9 +3,8 @@ import { campaignName, cardText, t } from "../../content/i18n";
 import type { CampaignDef, DeckDef, Difficulty } from "../../content/schema";
 import { packsOf } from "../../content";
 import { packLoaded } from "../../content/loader";
-import { validateDeck } from "../../engine/decks";
 import type { ContentDb } from "../../engine/types";
-import { customDecks, type SavedDeck } from "../decks";
+import { customDecks, deckTabs, type SavedDeck } from "../decks";
 import type { Storage } from "../store";
 
 export const STEPS = ["campaign", "investigators", "decks", "difficulty", "ready"] as const;
@@ -160,8 +159,9 @@ export const picksReady = (db: ContentDb, s: WizardState) => packsOf(cardsOfPick
 /** problems with a picked investigator's deck (an empty list is fine; none are told while its cards are still loading) */
 export function deckProblems(db: ContentDb, s: WizardState, code: string): string[] {
   if (!picksReady(db, s)) return [];
-  const deck = decksFor(db, code).find((d) => d.id === s.decks[code]);
-  return deck ? validateDeck(db, deck).map((p) => p.message) : ["no deck chosen"];
+  // a saved deck may be unfinished (the deck step keeps drafts): its own problems
+  const tab = deckTabs(db, code).find((d) => d.id === s.decks[code]);
+  return tab ? tab.problems.map((p) => p.message) : ["no deck chosen"];
 }
 
 /** can the player move on from this step */

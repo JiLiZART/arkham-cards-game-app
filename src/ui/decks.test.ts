@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { validateDeck } from "../engine/decks";
 import { db } from "../engine/testkit";
-import { basicWeaknesses, builderPool, changeCopies, customDecks, defaultDeckName, deleteCustomDeck, emptyDeck, renameCustomDeck, saveCustomDeck, withWeakness } from "./decks";
+import { basicWeaknesses, builderPool, changeCopies, deckTabs, editDeck, replaceCard, customDecks, defaultDeckName, deleteCustomDeck, emptyDeck, renameCustomDeck, saveCustomDeck, withWeakness } from "./decks";
 import type { Storage } from "./store";
 
 const ROLAND = "01001";
@@ -125,5 +125,51 @@ describe("defaultDeckName", () => {
   it("is the investigator's first name and the date", () => {
     expect(defaultDeckName(db, ROLAND, "en", new Date(2026, 9, 17))).toBe("Roland · 17 Oct");
     expect(defaultDeckName(db, "01003", "en", new Date(2026, 9, 17))).toBe("Skids · 17 Oct");
+  });
+});
+
+describe("the deck step's tabs and edits", () => {
+  it("replaceCard takes one copy out and puts one in", () => {
+    expect(replaceCard({ a: 2, b: 1 }, "a", "c")).toEqual({ a: 1, b: 1, c: 1 });
+    expect(replaceCard({ a: 1 }, "a", "a")).toEqual({ a: 1 });
+    expect(replaceCard({ a: 1 }, "a", "b")).toEqual({ b: 1 });
+  });
+
+  it("the tabs are the starter decks first, then the saved decks, valid or not, each with its problems", () => {
+    const store = memory();
+    expect(deckTabs(db, ROLAND, store).map((t) => [t.id, t.kind])).toEqual([["roland-starter", "starter"]]);
+    const id = editDeck(db, store, ROLAND, db.decks["roland-starter"], { ...base.cards, [MACHETE]: 2 }, "en");
+    const tabs = deckTabs(db, ROLAND, store);
+    expect(tabs.map((t) => t.kind)).toEqual(["starter", "custom"]);
+    expect(tabs[1].id).toBe(id);
+    expect(tabs[1].problems.length).toBeGreaterThan(0); // 31 cards: kept as a draft, with its problems
+  });
+
+  it("an edit of a starter deck makes a new saved deck and never changes the starter", () => {
+    const store = memory();
+    const before = structuredClone(db.decks["roland-starter"]);
+    const id = editDeck(db, store, ROLAND, db.decks["roland-starter"], changeCopies(base.cards, FLASHLIGHT, -1), "en");
+    expect(id).not.toBe("roland-starter");
+    expect(db.decks["roland-starter"]).toEqual(before);
+    expect(customDecks(db, ROLAND, store)[0].deck.cards[FLASHLIGHT]).toBe(base.cards[FLASHLIGHT] - 1);
+  });
+
+  it("a second new deck the same day gets a number, so the tabs can be told apart", () => {
+    const store = memory();
+    editDeck(db, store, ROLAND, db.decks["roland-starter"], base.cards, "en");
+    editDeck(db, store, ROLAND, db.decks["roland-starter"], base.cards, "en");
+    const names = customDecks(db, ROLAND, store).map((d) => d.name);
+    expect(names[1]).toBe(`${names[0]} (2)`);
+  });
+
+  it("an edit of a saved deck changes it in place", () => {
+    const store = memory();
+    const id = editDeck(db, store, ROLAND, db.decks["roland-starter"], changeCopies(base.cards, FLASHLIGHT, -1), "en");
+    const saved = customDecks(db, ROLAND, store)[0].deck;
+    const again = editDeck(db, store, ROLAND, saved, changeCopies(saved.cards, FLASHLIGHT, 1), "en");
+    expect(again).toBe(id);
+    expect(customDecks(db, ROLAND, store)).toHaveLength(1);
+    expect(customDecks(db, ROLAND, store)[0].deck.cards).toEqual(base.cards);
+    expect(customDecks(db, ROLAND, store)[0].problems).toEqual([]);
   });
 });

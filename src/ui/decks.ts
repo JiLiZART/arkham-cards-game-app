@@ -146,3 +146,45 @@ export function renameCustomDeck(storage: Storage, id: string, name: string) {
 export function deleteCustomDeck(storage: Storage, id: string) {
   write(storage, read(storage).filter((d) => d.id !== id));
 }
+
+/** one copy of `out` taken out and one of `into` put in (the cards given are not changed) */
+export const replaceCard = (cards: Record<string, number>, out: string, into: string): Record<string, number> => changeCopies(changeCopies(cards, out, -1), into, 1);
+
+export interface DeckTab {
+  id: string;
+  name: string;
+  kind: "starter" | "custom";
+  deck: DeckDef;
+  problems: DeckProblem[];
+}
+
+/** the deck step's tabs for an investigator: their starter decks, then their saved decks (an unfinished one too, with its problems) */
+export function deckTabs(db: ContentDb, investigator: string, storage: Storage = safeStorage()): DeckTab[] {
+  const starters = Object.values(db.decks).filter((d) => d.investigator === investigator);
+  return [
+    ...starters.map((d) => ({ id: d.id, name: d.name, kind: "starter" as const, deck: d, problems: validateDeck(db, d) })),
+    ...customDecks(db, investigator, storage).map((d) => ({ id: d.id, name: d.name, kind: "custom" as const, deck: d.deck, problems: d.problems })),
+  ];
+}
+
+/**
+ * Keep an edit of a deck: a saved deck is changed in place; a starter deck (or a new one) is never changed, the edit
+ * becomes a new saved deck named after the investigator and the date. Saved as it stands, valid or not, so an unfinished
+ * deck stays as a tab with its problems. Returns the saved deck's id.
+ */
+export function editDeck(db: ContentDb, storage: Storage, investigator: string, from: DeckDef, cards: Record<string, number>, locale: string, randomBasicWeakness = from.randomBasicWeakness): string {
+  const all = read(storage);
+  const mine = all.find((d) => d.id === from.id);
+  if (mine) {
+    write(storage, all.map((d) => (d.id === from.id ? { ...d, deck: { ...d.deck, cards, randomBasicWeakness } } : d)));
+    return from.id;
+  }
+  const id = newId();
+  // a second deck of the same day gets a number: "Roland · 19 Oct (2)"
+  const taken = new Set(all.filter((d) => d.investigator === investigator).map((d) => d.name));
+  const plain = defaultDeckName(db, investigator, locale);
+  let name = plain;
+  for (let k = 2; taken.has(name); k++) name = `${plain} (${k})`;
+  write(storage, [...all, { id, name, investigator, base: from.id, deck: { id, name, investigator, cards, randomBasicWeakness } }]);
+  return id;
+}

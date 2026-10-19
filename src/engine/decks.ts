@@ -168,6 +168,19 @@ export function whyNot(db: ContentDb, deck: DeckDef, code: string): DeckReason |
   return after.find((p) => p.reason && !NOT_ABOUT_ONE_CARD.has(p.reason.key) && !before.has(sig(p)))?.reason ?? null;
 }
 
+/**
+ * Why swapping one copy of `out` for one of `into` can't be done, or null when it can: the first problem the swap brings
+ * that the deck did not have (a required card taken out counts; the deck's size doesn't change).
+ */
+export function whyNotReplace(db: ContentDb, deck: DeckDef, out: string, into: string): DeckReason | null {
+  const before = new Set(validateDeck(db, deck).map(sig));
+  const cards = { ...deck.cards };
+  if ((cards[out] ?? 0) <= 1) delete cards[out];
+  else cards[out] -= 1;
+  cards[into] = (cards[into] ?? 0) + 1;
+  return validateDeck(db, { ...deck, cards }).find((p) => p.reason && p.reason.key !== "deck.size" && !before.has(sig(p)))?.reason ?? null;
+}
+
 /** convert an ArkhamDB deck export ({investigator_code, slots, name}) into our deck format */
 export function fromArkhamDb(json: { name?: string; investigator_code: string; slots: Record<string, number>; id?: number | string }): DeckDef {
   const cards: Record<string, number> = {};

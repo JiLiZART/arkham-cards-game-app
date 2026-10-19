@@ -554,5 +554,13 @@
   "card.slot.tarot": "Tarot",
   "card.slot.head": "Head",
   "card.type.enemy_location": "Enemy-location",
-  "stat.wild": "Wild"
+  "stat.wild": "Wild",
+  "deck.add": "Add",
+  "deck.replace": "Replace",
+  "deck.remove": "Remove",
+  "deck.replaceWith": "Tap a card of the deck to replace with {card}",
+  "deck.newTab": "New deck",
+  "deck.ready": "Ready",
+  "deck.toFix": "{n} to fix",
+  "deck.renameHint": "Double-click to rename"
 }

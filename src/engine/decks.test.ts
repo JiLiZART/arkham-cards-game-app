@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from "vitest";
-import { fromArkhamDb, needsChoice, validateDeck, whyNot } from "./decks";
+import { fromArkhamDb, needsChoice, validateDeck, whyNot, whyNotReplace } from "./decks";
 import type { ContentDb } from "./types";
 import type { DeckDef } from "../content/schema";
 import { loadContentFromDisk } from "../content/node";
@@ -141,3 +141,22 @@ describe("the generic deckbuilding rules", () => {
   });
 });
 
+
+describe("whyNotReplace", () => {
+  const roland = () => structuredClone(db.decks["roland-starter"]);
+  /** a level 0 card Roland may take that his deck has no copy of (by title) */
+  const spare = () => {
+    const d = roland();
+    const signatures = new Set(Object.values(db.investigators).flatMap((i) => [...i.signatures, ...i.weaknesses]));
+    return Object.values(db.cards).find((c) => !signatures.has(c.code) && ["guardian", "seeker", "neutral"].includes(c.faction) && ["asset", "event", "skill"].includes(c.type) && (c.xp ?? 0) === 0 && !c.subtype && !c.encounterSet && (c.deckLimit ?? 2) >= 1 && !Object.keys(d.cards).some((k) => db.cards[k].name === c.name))!.code;
+  };
+  it("a swap the rules allow: nothing to say, even at the deck's full size", () => {
+    expect(whyNotReplace(db, roland(), "01087", spare())).toBeNull();
+  });
+  it("a swap that breaks a rule says which", () => {
+    expect(whyNotReplace(db, roland(), "01087", "01060")?.key).toBe("deck.notAllowed"); // Shrivelling is a mystic card
+  });
+  it("a required card can't be swapped out", () => {
+    expect(whyNotReplace(db, roland(), "01006", spare())?.key).toBe("deck.missing");
+  });
+});

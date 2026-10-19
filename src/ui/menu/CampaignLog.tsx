@@ -27,18 +27,14 @@ export function CampaignLog() {
           <DeckBuilder
             investigator={who.code}
             initial={{ id: `campaign:${who.code}`, name: cardText(db, who.code, locale).name, investigator: who.code, cards: before, randomBasicWeakness: false }}
-            mode={{
-              kind: "upgrade",
-              xp: who.xp,
-              before,
-              onSave: (cards) => {
-                const r = gameStore.getState().upgradeDeck(who.code, cards);
-                if (r.ok) {
-                  setUpgrading(null);
-                  return null;
-                }
-                return t(db, locale, r.reason.key, r.reason.vars);
-              },
+            xp={who.xp}
+            onSave={(cards) => {
+              const r = gameStore.getState().upgradeDeck(who.code, cards);
+              if (r.ok) {
+                setUpgrading(null);
+                return null;
+              }
+              return t(db, locale, r.reason.key, r.reason.vars);
             }}
             onCancel={() => setUpgrading(null)}
           />

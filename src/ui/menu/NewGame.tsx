@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { campaignLoaded, loadAllPacks, loadCampaign, loadPacksFor } from "../../content";
 import { campaignBlurb, campaignName, cardText, scenarioText, t } from "../../content/i18n";
-import type { DeckDef, Difficulty } from "../../content/schema";
+import type { Difficulty } from "../../content/schema";
 import { db, gameStore, useGame } from "../context";
 import { Glyph, Icon, Stat } from "../Icon";
 import { CardFace } from "../CardFace";
@@ -10,11 +10,11 @@ import { cardImage } from "../images";
 import { hasSymbol, isIcon, scenarioIcon } from "../icons";
 import { Avatar } from "./Avatar";
 import { BagCard } from "./BagCard";
-import { customDecks, deleteCustomDeck, emptyDeck, problemText, renameCustomDeck } from "../decks";
+import { deckTabs, deleteCustomDeck, editDeck, emptyDeck, problemText, renameCustomDeck } from "../decks";
 import { safeStorage } from "../store";
-import { DeckBuilder } from "./DeckBuilder";
+import { DeckEditArea } from "./DeckEditArea";
 import { blurb } from "./blurb";
-import { back, campaignOrder, canContinue, cardsOfPicks, cycleName, picksReady, cyclesOf, deckProblems, decksFor, initialWizard, invalidDecksFor, investigatorInfo, next, pickerList, setCampaign, sortPicker, SORTS, type SortBy, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type PickerFilter, type WizardState } from "./wizard";
+import { back, campaignOrder, canContinue, cardsOfPicks, cycleName, picksReady, cyclesOf, deckProblems, initialWizard, investigatorInfo, next, pickerList, setCampaign, sortPicker, SORTS, type SortBy, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type PickerFilter, type WizardState } from "./wizard";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
 const DIFFICULTIES: Difficulty[] = ["easy", "standard", "hard", "expert"];
@@ -204,140 +204,114 @@ function InvestigatorsStep({ s, set }: { s: WizardState; set: (w: WizardState) =
   );
 }
 
+/**
+ * The deck step: the picked investigators as avatars (a click switches to one), then their decks as tabs like a browser's
+ * (the starter decks, the saved ones, "+" for a new deck), then the chosen deck's editing area. The tab on show is the
+ * deck that investigator brings. An edit of a starter deck becomes a new saved deck; a saved deck is kept as it is edited.
+ */
 function DecksStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }) {
   const locale = useGame((s) => s.locale);
-  const [editing, setEditing] = useState<{ code: string; base: string; initial: DeckDef; name?: string } | null>(null);
+  const [active, setActive] = useState(s.picks[0]);
   const [renaming, setRenaming] = useState<{ id: string; name: string } | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
-  // saved decks change under us (rename, delete, save): re-read them on every render
+  // saved decks change under us (an edit, a rename, a delete): re-read them on every change
   const [, bump] = useState(0);
-  if (editing)
-    return (
-      <DeckBuilder
-        investigator={editing.code}
-        initial={editing.initial}
-        initialName={editing.name}
-        mode={{
-          kind: "new",
-          base: editing.base,
-          onSave: (d) => {
-            setEditing(null);
-            set(setDeck(s, editing.code, d.id));
-          },
-        }}
-        onCancel={() => setEditing(null)}
-      />
-    );
+  // the pool needs every pack's cards (the investigator step started loading them)
+  useEffect(() => {
+    let live = true;
+    loadAllPacks()
+      .then(() => live && bump((n) => n + 1))
+      .catch((e) => console.error(e));
+    return () => {
+      live = false;
+    };
+  }, []);
   if (!picksReady(db, s)) return <p className="wz-hint" role="status">{tr("wizard.loading")}</p>;
+  const code = s.picks.includes(active) ? active : s.picks[0];
+  const tabs = deckTabs(db, code);
+  const tab = tabs.find((x) => x.id === s.decks[code]) ?? tabs[0];
+  const choose = (id: string) => set(setDeck(s, code, id));
+  const edit = (cards: Record<string, number>, random: boolean) => {
+    const id = editDeck(db, safeStorage(), code, tab.deck, cards, locale, random);
+    if (id !== tab.id) choose(id);
+    bump((n) => n + 1);
+  };
+  const addTab = () => {
+    const empty = emptyDeck(db, code);
+    choose(editDeck(db, safeStorage(), code, empty, empty.cards, locale, true));
+    bump((n) => n + 1);
+  };
   return (
-    <div className="wz-decks">
-      {s.picks.map((code, k) => {
-        const problems = deckProblems(db, s, code);
-        const saved = customDecks(db, code);
-        const chosen = s.decks[code];
-        const mine = saved.find((d) => d.id === chosen);
-        return (
-          <section key={code} className="wz-deck-row">
-            <Avatar code={code} size={64} badge={`P${k + 1}`} />
-            <div className="wz-deck-cards">
-              {decksFor(db, code).map((d) => {
-                const custom = saved.find((x) => x.id === d.id);
-                return (
-                  <div key={d.id} className="wz-deck-wrap">
-                    {renaming?.id === d.id ? (
-                      <div className="wz-deck selected">
-                        <input
-                          autoFocus
-                          className="wz-rename"
-                          value={renaming.name}
-                          maxLength={40}
-                          aria-label={tr("deckEditor.name")}
-                          onChange={(e) => setRenaming({ id: d.id, name: e.target.value })}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter" && renaming.name.trim()) {
-                              renameCustomDeck(safeStorage(), d.id, renaming.name.trim());
-                              setRenaming(null);
-                            }
-                            if (e.key === "Escape") setRenaming(null);
-                          }}
-                        />
-                      </div>
-                    ) : (
-                      <button className={`wz-deck ${chosen === d.id ? "selected" : ""}`} aria-pressed={chosen === d.id} onClick={() => set(setDeck(s, code, d.id))}>
-                        <b>{d.name}</b>
-                        <small>
-                          {tr("wizard.deckSize", { n: Object.values(d.cards).reduce((a, b) => a + b, 0) })}
-                          {custom ? ` · ${tr("deckEditor.custom")}` : ""}
-                        </small>
-                      </button>
-                    )}
-                    {custom && (
-                      <span className="wz-deck-tools">
-                        {renaming?.id === d.id ? (
-                          <button
-                            disabled={!renaming.name.trim()}
-                            onClick={() => {
-                              renameCustomDeck(safeStorage(), d.id, renaming.name.trim());
-                              setRenaming(null);
-                            }}
-                          >
-                            {tr("deckEditor.ok")}
-                          </button>
-                        ) : (
-                          <button onClick={() => setRenaming({ id: d.id, name: d.name })}>{tr("deckEditor.rename")}</button>
-                        )}
-                        {deleting === d.id ? (
-                          <>
-                            <button
-                              className="danger"
-                              onClick={() => {
-                                deleteCustomDeck(safeStorage(), d.id);
-                                setDeleting(null);
-                                set(setDeck(s, code, Object.values(db.decks).find((x) => x.investigator === code)?.id ?? ""));
-                                bump((n) => n + 1);
-                              }}
-                            >
-                              {tr("deckEditor.confirmDelete")}
-                            </button>
-                            <button onClick={() => setDeleting(null)}>{tr("deckEditor.cancel")}</button>
-                          </>
-                        ) : (
-                          <button onClick={() => setDeleting(d.id)}>{tr("deckEditor.delete")}</button>
-                        )}
-                      </span>
-                    )}
-                  </div>
-                );
-              })}
-              {invalidDecksFor(db, code).map((d) => (
-                <div key={d.id} className="wz-deck-wrap">
-                  <button className="wz-deck invalid" disabled>
-                    <b>{d.name}</b>
-                    <small>{d.problems.map((p) => problemText(db, locale, p)).join(" · ")}</small>
-                  </button>
-                  <span className="wz-deck-tools">
-                    <button onClick={() => { deleteCustomDeck(safeStorage(), d.id); bump((n) => n + 1); }}>{tr("deckEditor.delete")}</button>
-                  </span>
-                </div>
-              ))}
-              <button
-                className="wz-edit"
-                onClick={() => {
-                  const current = decksFor(db, code).find((d) => d.id === chosen);
-                  if (current) setEditing({ code, base: mine?.base ?? chosen, initial: structuredClone(current), name: mine?.name });
+    <div className="dk">
+      <div className="dk-invs" role="tablist" aria-label={tr("wizard.decks.title")}>
+        {s.picks.map((c, k) => {
+          const problems = deckProblems(db, s, c);
+          return (
+            <button key={c} role="tab" aria-selected={c === code} className={`dk-inv ${c === code ? "on" : ""}`} onClick={() => setActive(c)}>
+              <Avatar code={c} size={56} badge={`P${k + 1}`} />
+              <small className={problems.length ? "bad" : "ok"}>{problems.length ? tr("deck.toFix", { n: problems.length }) : tr("deck.ready")}</small>
+            </button>
+          );
+        })}
+      </div>
+      <div className="dk-tabs" role="tablist">
+        {tabs.map((x) => (
+          <div key={x.id} className={`dk-tab ${x.id === tab?.id ? "on" : ""} ${x.problems.length ? "bad" : ""}`} role="tab" aria-selected={x.id === tab?.id}>
+            {renaming?.id === x.id ? (
+              <input
+                autoFocus
+                className="dk-rename"
+                value={renaming.name}
+                maxLength={40}
+                aria-label={tr("deckEditor.name")}
+                onChange={(e) => setRenaming({ id: x.id, name: e.target.value })}
+                onBlur={() => setRenaming(null)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && renaming.name.trim()) {
+                    renameCustomDeck(safeStorage(), x.id, renaming.name.trim());
+                    setRenaming(null);
+                    bump((n) => n + 1);
+                  }
+                  if (e.key === "Escape") setRenaming(null);
                 }}
-                disabled={!chosen || !decksFor(db, code).some((d) => d.id === chosen)}
+              />
+            ) : (
+              <button className="dk-tab-name" onClick={() => choose(x.id)} onDoubleClick={() => x.kind === "custom" && setRenaming({ id: x.id, name: x.name })} title={x.kind === "custom" ? tr("deck.renameHint") : undefined}>
+                {x.problems.length ? "⚠ " : ""}
+                {x.name}
+              </button>
+            )}
+            {x.kind === "custom" && (
+              <button
+                className={`dk-tab-close ${deleting === x.id ? "confirm" : ""}`}
+                aria-label={tr("deckEditor.delete")}
+                title={deleting === x.id ? tr("deckEditor.confirmDelete") : tr("deckEditor.delete")}
+                onBlur={() => setDeleting(null)}
+                onClick={() => {
+                  if (deleting !== x.id) return setDeleting(x.id);
+                  deleteCustomDeck(safeStorage(), x.id);
+                  setDeleting(null);
+                  if (tab?.id === x.id) choose(tabs[0].id);
+                  bump((n) => n + 1);
+                }}
               >
-                {tr("deckEditor.edit")}
+                {deleting === x.id ? "✓" : "×"}
               </button>
-              <button className="wz-edit" onClick={() => setEditing({ code, base: `empty:${code}`, initial: emptyDeck(db, code) })}>
-                {tr("deckEditor.new")}
-              </button>
-              {problems.length > 0 && <div className="problems">{problems.join(" · ")}</div>}
-            </div>
-          </section>
-        );
-      })}
+            )}
+          </div>
+        ))}
+        <button className="dk-tab dk-tab-add" onClick={addTab} title={tr("deck.newTab")} aria-label={tr("deck.newTab")}>
+          +
+        </button>
+      </div>
+      {tab && tab.problems.length > 0 && (
+        <div className="problems dk-problems" role="status">
+          {tab.problems.slice(0, 4).map((p, k) => (
+            <div key={k}>{problemText(db, locale, p)}</div>
+          ))}
+        </div>
+      )}
+      {tab && <DeckEditArea key={`${code}:${tab.id}`} investigator={code} deck={tab.deck} onChange={edit} />}
     </div>
   );
 }
