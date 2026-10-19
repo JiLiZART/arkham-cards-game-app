@@ -55,6 +55,8 @@ export function railItem(o: ChoiceOption): RailItem {
 /** a short label and icon for an option shown as a button on its card in the play strip */
 export function stripAction(o: ChoiceOption, cardName: string, locale: string): { label: string; icon?: IconName } {
   const kind = (o.value as { kind?: string } | null)?.kind;
+  // who takes the damage: the whole sentence is the button ("Assign 1 damage to Flesh Ward (defeated)")
+  if (o.key?.startsWith("option.assign")) return { label: o.label };
   if (kind === "fight") return { label: t(db, locale, "strip.fight"), icon: "combat" };
   if (kind === "evade") return { label: t(db, locale, "strip.evade"), icon: "agility" };
   if (kind === "engage") return { label: t(db, locale, "strip.engage") };

@@ -141,6 +141,9 @@ export interface ChoiceOption {
   /** board entity the option corresponds to (for click-to-choose in 3D) */
   card?: InstId;
   value: unknown;
+  /** a string of the UI that says this option in the game's language (the engine's label stays the English text) */
+  key?: string;
+  vars?: Record<string, string | number>;
 }
 
 export interface PendingChoice {

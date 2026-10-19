@@ -26,6 +26,16 @@ describe("optionLabel", () => {
     expect(abilityRef({ id: "y", label: "y", value: { ability: { card, index: 0 } } }, g)).toEqual({ code: ROLAND, index: 0 });
   });
 
+  it("an assignment option in the game's language, with the asset's name in it", () => {
+    const g = game();
+    const o = { id: "c1", label: "Assign 1 damage to Research Librarian (defeated)", value: "c1", key: "option.assignDamage", vars: { code: "01032", defeated: 1 } };
+    expect(optionLabel(o, g, "en")).toBe("Assign 1 damage to Research Librarian (defeated)");
+    expect(optionLabel(o, g, "ru")).toMatch(/^Назначить 1 рану: .+ \(карта уничтожается\)$/);
+    const h = { ...o, key: "option.assignHorror", vars: { code: "01032", defeated: 0 } };
+    expect(optionLabel(h, g, "en")).toBe("Assign 1 horror to Research Librarian");
+    expect(optionLabel(h, g, "ru")).toMatch(/^Назначить 1 ужас: /);
+  });
+
   it("anything else keeps the engine's label", () => {
     const g = game();
     expect(optionLabel({ id: "pass", label: "Pass", value: "pass" }, g, "ru")).toBe("Pass");

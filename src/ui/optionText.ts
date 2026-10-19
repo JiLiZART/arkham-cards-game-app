@@ -20,6 +20,8 @@ export function abilityRef(o: ChoiceOption, game: Pick<GameState, "cards">): { c
  * engine's own label otherwise.
  */
 export function optionLabel(o: ChoiceOption, game: Pick<GameState, "cards">, locale: string): string {
+  // an option with a string of its own (who takes the damage): the card's name in the game's language goes into it
+  if (o.key && o.vars) return t(db, locale, o.key, { card: cardText(db, String(o.vars.code), locale).name }) + (o.vars.defeated ? t(db, locale, "option.defeated") : "");
   const ref = abilityRef(o, game);
   if (!ref) return o.label;
   const key = `ability.${ref.code}.${ref.index}`;

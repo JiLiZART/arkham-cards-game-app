@@ -37,8 +37,8 @@ function attacked(enemy: string, ability?: Ability): Result {
 function untilAttack(r: Result): Result {
   for (let k = 0; k < 60 && r.state.pending; k++) {
     const p = r.state.pending;
-    if (p.kind === "turn" || p.options.some((o) => o.label === "Ward")) break;
-    if (r.state.log.some((e) => e.type === "attack") && p.kind !== "assign") break;
+    if (p.kind === "turn" || p.kind === "assign" || p.options.some((o) => o.label === "Ward")) break;
+    if (r.state.log.some((e) => e.type === "attack")) break;
     r = pick(r, p.options.some((o) => o.id === "pass") ? "pass" : /^Done/.test(p.options[0].label) || p.kind === "commit" ? /^Done/ : /./);
   }
   return r;
@@ -114,5 +114,30 @@ describe("an enemy attack deals damage: a window before it is assigned", () => {
     run(g);
     expect((g.s.pending as { kind?: string } | null)?.kind).not.toBe("reaction");
     expect(g.s.invs[ROLAND].damage).toBe(1);
+  });
+});
+
+describe("the assignment options say what they do", () => {
+  /** Roland with the given assets in play is dealt 1 damage by Swarm of Rats; the assignment prompt is open */
+  const assigning = (assets: string[]) => {
+    let r = skipMulligans(start("the-gathering", [ROLAND], 1, { chaosBag: ["0"] as never }));
+    r = mutate(r, (g) => {
+      for (const code of assets) moveCard(g, createCard(g, code, "limbo", ROLAND), "play");
+      const e = createCard(g, RATS, "limbo");
+      moveCard(g, e, "enemy", { location: inv(g, ROLAND).location });
+      g.s.cards[e].engagedWith = ROLAND;
+    });
+    r = untilAttack(pick(r, "End turn"));
+    return r;
+  };
+
+  it("an asset the point would defeat says so; one with room doesn't", () => {
+    const r = assigning(["01032", "01028"]); // Research Librarian (health 1), Beat Cop (health 2)
+    const p = r.state.pending!;
+    expect(p.kind).toBe("assign");
+    expect(p.options.map((o) => o.label)).toEqual(["Assign 1 damage to Roland Banks", "Assign 1 damage to Research Librarian (defeated)", "Assign 1 damage to Beat Cop"]);
+    expect(p.options.map((o) => o.key)).toEqual(["option.assignDamage", "option.assignDamage", "option.assignDamage"]);
+    expect(p.options[1].vars).toEqual({ code: "01032", defeated: 1 });
+    expect(p.options[2].vars).toEqual({ code: "01028", defeated: 0 });
   });
 });

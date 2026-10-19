@@ -84,9 +84,16 @@ export const assignDamageHandler: Handler<"AssignDamage"> = (g, step) => {
       continue;
     }
     const label = kind === 0 ? "damage" : "horror";
+    // each option says what it does, and whether that point defeats the asset
+    const word = kind === 0 ? "damage" : "horror";
+    const key = kind === 0 ? "option.assignDamage" : "option.assignHorror";
     const opts = [
-      { id: step.inv, label: `${me.name} (investigator)`, card: me.cardId, value: step.inv },
-      ...assets.map((a) => ({ id: a.id, label: def(g, a.id).name, card: a.id, value: a.id })),
+      { id: step.inv, label: `Assign 1 ${word} to ${me.name}`, card: me.cardId, value: step.inv, key, vars: { code: card(g, me.cardId).code, defeated: 0 } },
+      ...assets.map((a) => {
+        const cap = (kind === 0 ? def(g, a.id).health : def(g, a.id).sanity) ?? 0;
+        const defeated = (kind === 0 ? a.damage : a.horror) + (assigned[a.id]?.[kind] ?? 0) + 1 >= cap ? 1 : 0;
+        return { id: a.id, label: `Assign 1 ${word} to ${def(g, a.id).name}${defeated ? " (defeated)" : ""}`, card: a.id, value: a.id, key, vars: { code: a.code, defeated } };
+      }),
     ];
     const next: Step = { ...step, damage, horror, assigned, choice: undefined };
     ask(g, next, step.inv, "assign", `${me.name}: assign 1 ${label} (${kind === 0 ? damage : horror} left)`, opts, { key: kind === 0 ? "assignDamage" : "assignHorror", vars: { left: kind === 0 ? damage : horror } });
