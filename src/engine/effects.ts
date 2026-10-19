@@ -118,6 +118,26 @@ export const effHandler = (g: G, step: EffStep) => {
       return;
     }
     case "heal": {
+      // an Ally asset may be healed instead of an investigator: choose who first, then heal them
+      if (e.targetAlly && ctx.you) {
+        const mine = ctx.you;
+        const people = e.target === "you" ? [mine] : invsAt(g, inv(g, mine).location);
+        const allies = Object.values(g.s.cards).filter((c) => c.zone === "play" && c.controller && def(g, c.id).traits.includes("Ally") && (e.targetAlly === "controlled" ? c.controller === mine : inv(g, c.controller).location === inv(g, mine).location));
+        const opts = [...people.map((i) => ({ id: i, label: invName(g, i), card: inv(g, i).cardId, value: i })), ...allies.map((a) => ({ id: a.id, label: def(g, a.id).name, card: a.id, value: a.id }))];
+        const pick = ask<string>(g, step, mine, "target", "Choose who to heal", opts, { auto: true, key: "chooseHealTarget" });
+        if (pick === undefined) return;
+        const asset = g.s.cards[pick];
+        if (asset) {
+          const d = Math.min(e.damage ?? 0, asset.damage);
+          const h = Math.min(e.horror ?? 0, asset.horror);
+          asset.damage -= d;
+          asset.horror -= h;
+          if (d || h) emit(g, "heal", `${def(g, asset.id).name} heals ${d} damage and ${h} horror`, { card: asset.id, data: { damage: d, horror: h } });
+          return;
+        }
+        push(g, { ...step, choice: undefined, effect: { ...e, target: "eventInvestigator", targetAlly: undefined } as Effect, ctx: { ...ctx, inv: pick } });
+        return;
+      }
       const ts = invTargets(g, step, e.target, ctx);
       if (!ts) return;
       for (const i of ts) {

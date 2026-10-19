@@ -53,6 +53,7 @@ function payCost(g: G, i: InvId, cardId: InstId, cost: Cost | undefined) {
   if (cost.resources) me.resources -= cost.resources;
   if (cost.clues) me.clues -= cost.clues;
   if (cost.cluesPerInvestigator) spendGroupClues(g, cost.cluesPerInvestigator * playerCount(g));
+  if (cost.takeDamage) push(g, { t: "AssignDamage", inv: i, damage: cost.takeDamage, horror: 0, direct: true, source: cardId });
   if (cost.takeHorror) push(g, { t: "AssignDamage", inv: i, damage: 0, horror: cost.takeHorror, direct: true, source: cardId });
   if (cost.horrorOnSelf) c.horror += cost.horrorOnSelf;
   if (cost.damageOnSelf) c.damage += cost.damageOnSelf;

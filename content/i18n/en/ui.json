@@ -129,7 +129,7 @@
   "feed.resource": "{inv} took {n:resource}",
   "feed.resourceLost": "{inv} lost {n:resource}",
   "feed.heal": "{inv} healed {damage:damage} {horror:horror}",
-  "feed.healCard": "{card} healed {damage:damage}",
+  "feed.healCard": "{card} healed {damage:damage} {horror:horror}",
   "feed.threat": "{card} entered the threat area of {inv}",
   "feed.attach": "{card} was attached",
   "feed.victory": "{card} added to the victory display",

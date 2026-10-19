@@ -199,7 +199,7 @@ export type Effect =
   | { op: "discoverClues"; amount: Amount; at?: "yourLocation" | "testLocation" }
   | { op: "takeDamage"; amount: Amount; direct?: boolean; target?: InvTarget }
   | { op: "takeHorror"; amount: Amount; direct?: boolean; target?: InvTarget }
-  | { op: "heal"; damage?: number; horror?: number; target?: InvTarget }
+  | { op: "heal"; damage?: number; horror?: number; target?: InvTarget; /** an Ally asset may be healed too: one at your location, or one you control */ targetAlly?: "atLocation" | "controlled" }
   | { op: "dealDamage"; amount: Amount; to: EnemyTarget }
   | { op: "placeDoom"; amount: Amount; on: "agenda" | "self" | "nearestCultist" | "nearestEnemy" | "eachCultist" }
   | { op: "placeTokens"; on: "self"; clues?: number; horror?: number; damage?: number; doom?: number; resources?: number }
@@ -257,7 +257,7 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
     z.object({ op: z.literal("discoverClues"), amount: Amount, at: z.enum(["yourLocation", "testLocation"]).optional() }).strict(),
     z.object({ op: z.literal("takeDamage"), amount: Amount, direct: z.boolean().optional(), target: InvTarget.optional() }).strict(),
     z.object({ op: z.literal("takeHorror"), amount: Amount, direct: z.boolean().optional(), target: InvTarget.optional() }).strict(),
-    z.object({ op: z.literal("heal"), damage: z.number().optional(), horror: z.number().optional(), target: InvTarget.optional() }).strict(),
+    z.object({ op: z.literal("heal"), damage: z.number().optional(), horror: z.number().optional(), target: InvTarget.optional(), targetAlly: z.enum(["atLocation", "controlled"]).optional() }).strict(),
     z.object({ op: z.literal("dealDamage"), amount: Amount, to: EnemyTarget }).strict(),
     z.object({ op: z.literal("placeDoom"), amount: Amount, on: z.enum(["agenda", "self", "nearestCultist", "nearestEnemy", "eachCultist"]) }).strict(),
     z.object({ op: z.literal("placeTokens"), on: z.literal("self"), clues: z.number().optional(), horror: z.number().optional(), damage: z.number().optional(), doom: z.number().optional(), resources: z.number().optional() }).strict(),
@@ -338,6 +338,7 @@ export const Cost = z
     horrorOnSelf: z.number().optional(), // place horror on this card (Aquinnah)
     damageOnSelf: z.number().optional(),
     takeHorror: z.number().optional(),
+    takeDamage: z.number().optional(),
     discardFromHand: z.number().optional(),
   })
   .strict();
