@@ -1,9 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { loadPacksFor } from "../../content";
+import { campaignName } from "../../content/i18n";
 import { db } from "../../engine/testkit";
 import { saveCustomDeck } from "../decks";
 import type { Storage } from "../store";
-import { back, canContinue, cardsOfPicks, sortPicker, SORTS, deckProblems, cycleName, picksReady, cyclesOf, decksFor, investigatorInfo, pickerList, campaignOrder, initialWizard, invalidDecksFor, next, setCampaign, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type WizardState } from "./wizard";
+import { back, canContinue, cardsOfPicks, sortPicker, SORTS, deckProblems, cycleName, picksReady, cyclesOf, decksFor, investigatorInfo, pickerList, campaignOrder, filterCampaigns, tileName, initialWizard, NO_CAMPAIGN_FILTER, type CampaignFilter, invalidDecksFor, next, setCampaign, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type WizardState } from "./wizard";
 
 const ROLAND = "01001";
 const DAISY = "01002";
@@ -147,6 +148,60 @@ describe("the campaign list", () => {
   });
 });
 
+
+describe("filtering the campaign list", () => {
+  const ids = (f: Partial<CampaignFilter> = {}, locale = "en") => filterCampaigns(db, locale, { ...NO_CAMPAIGN_FILTER, ...f }).map((c) => c.id);
+
+  it("with no filter is the whole list in order", () => {
+    expect(ids()).toEqual(campaignOrder(db).map((c) => c.id));
+  });
+
+  it("by kind: campaigns, Return-to boxes, side scenarios", () => {
+    expect(ids({ kind: "campaign" })).toEqual(expect.arrayContaining(["night-of-the-zealot", "the-dunwich-legacy"]));
+    expect(ids({ kind: "campaign" }).some((id) => id.startsWith("return-to-") || id.startsWith("side-"))).toBe(false);
+    expect(ids({ kind: "return" }).every((id) => id.startsWith("return-to-"))).toBe(true);
+    expect(ids({ kind: "return" })).toContain("return-to-the-dunwich-legacy");
+    expect(ids({ kind: "side" }).every((id) => id.startsWith("side-"))).toBe(true);
+    expect(ids({ kind: "side" })).toContain("side-carnevale-of-horrors");
+  });
+
+  it("by rules: only the hand-written campaign is complete, the generated ones are partial", () => {
+    expect(ids({ rules: "complete" })).toEqual(["night-of-the-zealot"]);
+    expect(ids({ rules: "partial" })).not.toContain("night-of-the-zealot");
+    expect(ids({ rules: "partial" }).length + 1).toBe(ids().length);
+  });
+
+  it("by length: one scenario, two to four, five or more", () => {
+    const n = (id: string) => db.campaigns[id].scenarios.length;
+    expect(ids({ length: "one" }).every((id) => n(id) === 1)).toBe(true);
+    expect(ids({ length: "few" }).every((id) => n(id) >= 2 && n(id) <= 4)).toBe(true);
+    expect(ids({ length: "many" }).every((id) => n(id) >= 5)).toBe(true);
+    expect(ids({ length: "one" }).length + ids({ length: "few" }).length + ids({ length: "many" }).length).toBe(ids().length);
+    expect(ids({ length: "few" })).toContain("night-of-the-zealot");
+  });
+
+  it("by name, in the game's language, or by the name of a scenario in it", () => {
+    expect(ids({ query: "dunwich" })).toEqual(expect.arrayContaining(["the-dunwich-legacy", "return-to-the-dunwich-legacy"]));
+    expect(ids({ query: "extracurricular" })).toContain("the-dunwich-legacy");
+    expect(ids({ query: "данвич" }, "ru")).toContain("the-dunwich-legacy");
+    expect(ids({ query: "  CARNEVALE " })).toEqual(["side-carnevale-of-horrors"]);
+    expect(ids({ query: "zzzz" })).toEqual([]);
+  });
+
+  it("names a side scenario by its own name, in the game's language, and a campaign by its name", () => {
+    const side = db.campaigns["side-carnevale-of-horrors"];
+    expect(tileName(db, side, "en")).toBe("Carnevale of Horrors");
+    expect(tileName(db, side, "ru")).not.toBe(campaignName(db, side.id, "ru"));
+    expect(tileName(db, side, "ru")).toMatch(/Карнавал/);
+    expect(tileName(db, db.campaigns["the-dunwich-legacy"], "ru")).toBe("Наследие Данвича");
+  });
+
+  it("combines the filters", () => {
+    expect(ids({ kind: "side", query: "carn" })).toEqual(["side-carnevale-of-horrors"]);
+    expect(ids({ kind: "campaign", rules: "complete" })).toEqual(["night-of-the-zealot"]);
+    expect(ids({ kind: "side", rules: "complete" })).toEqual([]);
+  });
+});
 
 describe("choosing among all investigators", () => {
   const codes = (list: { code: string }[]) => list.map((i) => i.code);

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { moment } from "../hud/SoundLayer";
 import { campaignLoaded, loadAllPacks, loadCampaign, loadPacksFor } from "../../content";
-import { campaignBlurb, campaignName, cardText, scenarioText, t } from "../../content/i18n";
+import { cardText, scenarioText, t } from "../../content/i18n";
 import type { Difficulty } from "../../content/schema";
 import { db, gameStore, useGame } from "../context";
 import { Glyph, Icon, Stat } from "../Icon";
@@ -14,52 +14,79 @@ import { BagCard } from "./BagCard";
 import { deckTabs, deleteCustomDeck, editDeck, emptyDeck, problemText, renameCustomDeck } from "../decks";
 import { safeStorage } from "../store";
 import { DeckEditArea } from "./DeckEditArea";
-import { blurb } from "./blurb";
-import { back, campaignOrder, canContinue, cardsOfPicks, cycleName, picksReady, cyclesOf, deckProblems, initialWizard, investigatorInfo, next, pickerList, setCampaign, sortPicker, SORTS, type SortBy, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type PickerFilter, type WizardState } from "./wizard";
+import { CampaignSheet, scenarioCount } from "./CampaignSheet";
+import { back, canContinue, cardsOfPicks, cycleName, picksReady, cyclesOf, deckProblems, initialWizard, investigatorInfo, next, pickerList, setCampaign, filterCampaigns, tileName, NO_CAMPAIGN_FILTER, type CampaignFilter, sortPicker, SORTS, type SortBy, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type PickerFilter, type WizardState } from "./wizard";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
 const DIFFICULTIES: Difficulty[] = ["easy", "standard", "hard", "expert"];
 
+const KINDS = ["all", "campaign", "return", "side"] as const;
+const RULES = ["all", "complete", "partial"] as const;
+const LENGTHS = ["all", "one", "few", "many"] as const;
+
+/**
+ * The campaign picker: filters across the top (kind, rules, length, a name), a grid of tiles showing each campaign's first
+ * scenario card, and the campaign in the sidebar with its chapters in order. The filters and the sidebar are view state
+ * (ADR-0004); the pick is the wizard's. On a narrow screen the sidebar opens over the grid.
+ */
 function CampaignStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }) {
   const locale = useGame((s) => s.locale);
-  const campaigns = campaignOrder(db);
-  // the tile whose whole prologue is open ("More"); a tap there never picks the campaign
-  const [open, setOpen] = useState<string | null>(null);
+  const [filter, setFilter] = useState<CampaignFilter>(NO_CAMPAIGN_FILTER);
+  const [sheet, setSheet] = useState(false);
+  const list = filterCampaigns(db, locale, filter);
+  const chip = <K extends "kind" | "rules" | "length">(key: K, values: readonly CampaignFilter[K][]) => (
+    <div className="wz-chips" role="group" aria-label={tr(`wizard.${key}.${values[0]}`)}>
+      {values.map((v) => (
+        <button key={v} className={`wz-chip ${filter[key] === v ? "on" : ""}`} aria-pressed={filter[key] === v} onClick={() => setFilter({ ...filter, [key]: v })}>
+          {tr(`wizard.${key}.${v}`)}
+        </button>
+      ))}
+    </div>
+  );
+  const picked = db.campaigns[s.campaignId];
   return (
-    <div className="wz-campaigns">
-      {campaigns.map((c) => {
-        const first = db.scenarios[c.scenarios[0]];
-        // a generated campaign's scenarios and cards load when it is chosen: its reference card's scan is found by code
-        const card = first?.card ?? c.card;
-        const art = card ? (db.cards[card] ?? { code: card }) : null;
-        const { prologue, scenarios } = campaignBlurb(db, c.id, locale);
-        const { lead, more } = blurb(prologue);
-        const picked = s.campaignId === c.id;
-        // an epigraph is set in italics: it opens with a quotation mark
-        const quote = /^[“"«„]/.test(lead);
-        return (
-          <div key={c.id} className={`wz-campaign ${picked ? "selected" : ""}`}>
-            <button className="wz-pick" aria-pressed={picked} onClick={() => set(setCampaign(s, c.id, db))}>
-              {art && <img src={cardImage(art, "front", locale) ?? ""} alt="" draggable={false} onError={(e) => (e.currentTarget.style.display = "none")} />}
-              <span className="wz-text">
-                <b>{campaignName(db, c.id, locale)}</b>
-                <small className="wz-count">{tr("wizard.scenarios", { n: c.scenarios.length })}</small>
-                {c.generated && <small className="wz-generated">{tr("wizard.generated")}</small>}
-                {lead && <small className={`wz-lead ${quote ? "quote" : ""}`}>{lead}</small>}
-                {scenarios.length > 1 && <small className="wz-scenarios">{scenarios.join(" · ")}</small>}
-              </span>
-            </button>
-            {more && (
-              <>
-                {open === c.id && <small className="wz-more-text">{more}</small>}
-                <button className="link-btn wz-more" aria-expanded={open === c.id} onClick={() => setOpen(open === c.id ? null : c.id)}>
-                  {tr(open === c.id ? "wizard.less" : "wizard.more")}
-                </button>
-              </>
-            )}
-          </div>
-        );
-      })}
+    <div className={`wz-inv wz-camp ${sheet ? "sheet-open" : ""}`}>
+      <div className="wz-inv-main">
+        <p className="wz-hint">{tr("wizard.campaign.hint")}</p>
+        <div className="wz-filters">
+          {chip("kind", KINDS)}
+          {chip("rules", RULES)}
+          {chip("length", LENGTHS)}
+          <input type="search" placeholder={tr("wizard.filter.search")} aria-label={tr("wizard.filter.search")} value={filter.query} onChange={(e) => setFilter({ ...filter, query: e.target.value })} />
+        </div>
+        {list.length === 0 && <p className="wz-hint">{tr("wizard.noCampaigns")}</p>}
+        <div className="wz-ctiles">
+          {list.map((c) => {
+            // a generated campaign's scenarios and cards load when it is chosen: its reference card's scan is found by code
+            const card = db.scenarios[c.scenarios[0]]?.card ?? c.card;
+            const art = card ? (db.cards[card] ?? { code: card }) : null;
+            const on = s.campaignId === c.id;
+            return (
+              <button
+                key={c.id}
+                className={`wz-ctile ${on ? "selected" : ""}`}
+                aria-pressed={on}
+                onClick={() => {
+                  set(setCampaign(s, c.id, db));
+                  setSheet(true);
+                }}
+              >
+                {art && <img src={cardImage(art, "front", locale) ?? ""} alt="" loading="lazy" draggable={false} onError={(e) => (e.currentTarget.style.display = "none")} />}
+                <b>{tileName(db, c, locale)}</b>
+                <small>
+                  {scenarioCount(c.scenarios.length)}
+                  {c.generated && <span title={tr("wizard.generated")}> ◐</span>}
+                </small>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+      {picked && (
+        <div className="wz-inv-side wz-camp-side" aria-live="polite">
+          <CampaignSheet key={picked.id} campaign={picked} onClose={() => setSheet(false)} />
+        </div>
+      )}
     </div>
   );
 }

@@ -1,5 +1,5 @@
 /** the new-game wizard's state: pure, so the order and back rules are tested without React */
-import { campaignName, cardText, t } from "../../content/i18n";
+import { campaignBlurb, campaignName, cardText, t } from "../../content/i18n";
 import type { CampaignDef, DeckDef, Difficulty } from "../../content/schema";
 import { packsOf } from "../../content";
 import { packLoaded } from "../../content/loader";
@@ -40,6 +40,36 @@ export function campaignOrder(db: ContentDb): CampaignDef[] {
   const group = (c: CampaignDef) => (!c.generated ? 0 : c.id.startsWith("side-") ? 3 : c.id.startsWith("return-to-") ? 2 : 1);
   const card = (c: CampaignDef) => db.scenarios[c.scenarios[0]]?.card ?? c.card ?? "";
   return Object.values(db.campaigns).sort((a, b) => group(a) - group(b) || (card(a) < card(b) ? -1 : card(a) > card(b) ? 1 : a.id < b.id ? -1 : 1));
+}
+
+/** the filters over the campaign list: what kind, how complete, how long, and a name to look for */
+export interface CampaignFilter {
+  kind: "all" | "campaign" | "return" | "side";
+  rules: "all" | "complete" | "partial";
+  length: "all" | "one" | "few" | "many";
+  query: string;
+}
+export const NO_CAMPAIGN_FILTER: CampaignFilter = { kind: "all", rules: "all", length: "all", query: "" };
+
+export const campaignKind = (c: CampaignDef): "campaign" | "return" | "side" => (c.id.startsWith("side-") ? "side" : c.id.startsWith("return-to-") ? "return" : "campaign");
+const lengthOf = (c: CampaignDef): "one" | "few" | "many" => (c.scenarios.length <= 1 ? "one" : c.scenarios.length <= 4 ? "few" : "many");
+
+/** what a tile and the sidebar call a campaign: a side scenario (a campaign of one) goes by its scenario's name, which the game's language translates */
+export function tileName(db: ContentDb, c: CampaignDef, locale: string): string {
+  return campaignKind(c) === "side" ? (campaignBlurb(db, c.id, locale).scenarios[0] ?? campaignName(db, c.id, locale)) : campaignName(db, c.id, locale);
+}
+
+/** the campaigns that pass the filters, in the list's order; the name is looked for in the campaign's and its scenarios' names, in the game's language and in English */
+export function filterCampaigns(db: ContentDb, locale: string, f: CampaignFilter): CampaignDef[] {
+  const q = f.query.trim().toLowerCase();
+  return campaignOrder(db).filter((c) => {
+    if (f.kind !== "all" && campaignKind(c) !== f.kind) return false;
+    if (f.rules !== "all" && (f.rules === "complete") === !!c.generated) return false;
+    if (f.length !== "all" && lengthOf(c) !== f.length) return false;
+    if (!q) return true;
+    const names = [campaignName(db, c.id, locale), c.name, ...campaignBlurb(db, c.id, locale).scenarios, ...(c.scenarioNames ?? [])];
+    return names.some((n) => n.toLowerCase().includes(q));
+  });
 }
 
 export function initialWizard(db: ContentDb): WizardState {

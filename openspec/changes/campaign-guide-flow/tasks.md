@@ -23,9 +23,9 @@
 
 ## 5. The picker
 
-- [ ] 5.1 `wizard.ts`: `CampaignFilter` (kind, rules, length, query) and `filterCampaigns(db, locale, filter)`, kind derived from the id (`side-`, `return-to-`) and the scenario count, rules from `generated`, the search over campaign and scenario names in the locale; tests.
-- [ ] 5.2 `NewGame.tsx` campaign step: the filter bar (chips and search like the investigators step), the tile grid (preview art, name, count), focus and selection on tap, the sidebar `CampaignSheet.tsx` (name, count, the partly-implemented note, the prologue with More, the scenario reference cards in order front and back numbered and named with interludes between, `dv-*` layout, lazy images), the sheet over the grid on the phone layout; the tile texts that moved to the sheet removed from the tile; `ui.json` strings.
-- [ ] 5.3 The partly-implemented note reworded (the guide is played; cards without rules show text) in both languages; README's Campaigns section (what the flow plays, the unsupported kinds, the sources for verification, the picker).
+- [x] 5.1 `wizard.ts`: `CampaignFilter` (kind, rules, length, query) and `filterCampaigns(db, locale, filter)`, kind derived from the id (`side-`, `return-to-`) and the scenario count, rules from `generated`, the search over campaign and scenario names in the locale; tests.
+- [x] 5.2 `NewGame.tsx` campaign step: the filter bar (chips and search like the investigators step), the tile grid (preview art, name, count), focus and selection on tap, the sidebar `CampaignSheet.tsx` (name, count, the partly-implemented note, the prologue with More, the scenario reference cards in order front and back numbered and named with interludes between, `dv-*` layout, lazy images), the sheet over the grid on the phone layout; the tile texts that moved to the sheet removed from the tile; `ui.json` strings.
+- [x] 5.3 The partly-implemented note reworded (the guide is played; cards without rules show text) in both languages; README's Campaigns section (what the flow plays, the unsupported kinds, the sources for verification, the picker).
 
 ## 6. Verification
 
