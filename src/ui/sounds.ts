@@ -10,9 +10,18 @@ export interface SoundSettings {
   muted: boolean;
 }
 
+/** every UI moment the game plays, in the order the picker lists them; the manifest has a value (a clip or "none") for each */
+export const MOMENTS = [
+  "draw", "play", "flip", "commit", "shuffle", "phase", "button", "tip", "undo",
+  "move", "reveal", "deckTap", "bagLand", "tokenClatter", "tokenPick", "avatarChoice", "countdown", "cancel",
+  "builderAdd", "builderRemove", "builderReplace", "tab", "open", "close", "screen", "turn", "victory",
+  "resource", "heal", "evade", "engage", "discard",
+] as const;
+// "play", "fight" and "spawn" also have a clip of the card's own (traits, cards); "fight" has no generic one
+
 /** a card's own clip for a moment (play, fight, spawn): by code, then by the first trait the manifest lists, else null */
-function cardClip(when: CardSoundWhen, cardId: InstId | null, game: GameState, m: SoundManifest, content: ContentDb = db): string | null {
-  const inst = cardId ? game.cards[cardId] : null;
+function cardClip(when: CardSoundWhen, cardId: InstId | null, game: GameState | null, m: SoundManifest, content: ContentDb = db): string | null {
+  const inst = cardId && game ? game.cards[cardId] : null;
   if (!inst) return null;
   const own = m.cards[inst.code]?.[when];
   if (own) return own;
@@ -45,7 +54,7 @@ export function effectFor(e: GameEvent, game: GameState, m: SoundManifest, conte
 }
 
 /** the clip for a UI moment: for play, fight and spawn the card's own clip first; else the moment's generic clip; null for none */
-export function momentClip(name: string, cardId: InstId | null, game: GameState, m: SoundManifest, content: ContentDb = db): string | null {
+export function momentClip(name: string, cardId: InstId | null, game: GameState | null, m: SoundManifest, content: ContentDb = db): string | null {
   const own = isWhen(name) ? cardClip(name, cardId, game, m, content) : null;
   const generic = m.moments[name];
   return own ?? (generic === NO_SOUND ? null : (generic ?? null));
@@ -70,4 +79,15 @@ export function musicFor(game: GameState, m: SoundManifest, content: ContentDb =
 export function gainOf(s: SoundSettings, category: "music" | "effects", clipGain: number): number {
   if (s.muted) return 0;
   return ((category === "music" ? s.musicVolume : s.sfxVolume) / 100) * clipGain;
+}
+
+/** a moment fires at most once in this many ms: a burst (three cards discarded at once) is one sound */
+export const MOMENT_GAP = 60;
+
+/** whether the moment `name` may sound at `now`; records it when it may */
+export function mayPlay(last: Map<string, number>, name: string, now: number): boolean {
+  const before = last.get(name);
+  if (before !== undefined && now - before < MOMENT_GAP) return false;
+  last.set(name, now);
+  return true;
 }

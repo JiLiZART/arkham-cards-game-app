@@ -277,13 +277,17 @@ export function SkillTestScreen() {
   // calling the test off (the action and the cards placed, all taken back) while nothing hidden has come out of it
   const actionsN = useGame((s) => s.actions.length);
   const seq = game.pending?.seq;
+  const cancel = () => {
+    moment("cancel");
+    gameStore.getState().cancelTest();
+  };
   const cancellable = useMemo(() => !!finish && gameStore.getState().testCancellable(), [finish, actionsN, seq]);
   useEffect(() => {
     if (!cancellable) return;
     const key = (e: KeyboardEvent) => {
       if (e.key !== "Escape" || e.defaultPrevented || useView.getState().modal) return;
       e.preventDefault();
-      gameStore.getState().cancelTest();
+      cancel();
     };
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
@@ -307,7 +311,7 @@ export function SkillTestScreen() {
       <div className="st-middle">
         <div className="st-line">{lineOf(snap, view.calc, game, locale)}</div>
         {cancellable && (
-          <button className="st-cancel" onClick={() => gameStore.getState().cancelTest()} title={tr("test.cancelHint")}>
+          <button className="st-cancel" onClick={cancel} title={tr("test.cancelHint")}>
             ↶ {tr("test.cancel")}
           </button>
         )}

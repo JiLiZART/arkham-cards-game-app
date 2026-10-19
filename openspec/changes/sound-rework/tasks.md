@@ -17,8 +17,8 @@
 
 ## 4. More moments
 
-- [ ] 4.1 `sounds.ts`: `MOMENTS` list, `"none"` accepted by the schema and `momentClip`, a 60 ms debounce per name in `moment()`; manifest entries for the new moments and for `enemyDamage` and `weakness`; content check: every manifest moment is in the list and every list entry has a value; tests.
-- [ ] 4.2 Call sites: move (marker landing), reveal (with the flip), deck tap (`Pile`), bag landing and token clatter scaled by count (`DrawStage`), token pick, avatar choice and the automatic pick (`InvestigatorChoiceOverlay`), countdown close (`PhasePause`), cancel (`SkillTestScreen`), builder add/remove/replace (`DeckEditArea`), tabs (`Catalog`, `DecksStep`), open/close (`Modal`, `Drawer`), screen change (`App`), turn title, victory (`ScenarioEnd`), resource/heal/evade/engage/discard from `ActionFloats`; `sounds.test.ts` covers the routing.
+- [x] 4.1 `sounds.ts`: `MOMENTS` list, `"none"` accepted by the schema and `momentClip`, a 60 ms debounce per name in `moment()`; manifest entries for the new moments and for `enemyDamage` and `weakness`; content check: every manifest moment is in the list and every list entry has a value; tests.
+- [x] 4.2 Call sites: move (marker landing), reveal (with the flip), deck tap (`Pile`), bag landing and token clatter scaled by count (`DrawStage`), token pick, avatar choice and the automatic pick (`InvestigatorChoiceOverlay`), countdown close (`PhasePause`), cancel (`SkillTestScreen`), builder add/remove/replace (`DeckEditArea`), tabs (`Catalog`, `DecksStep`), open/close (`Modal`, `Drawer`), screen change (`App`), turn title, victory (`ScenarioEnd`), resource/heal/evade/engage/discard from `ActionFloats`; `sounds.test.ts` covers the routing.
 
 ## 5. Verification
 

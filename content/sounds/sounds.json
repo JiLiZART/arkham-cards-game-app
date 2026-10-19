@@ -338,7 +338,9 @@
     "actAdvance": "page",
     "enemyDefeated": "thud",
     "defeated": "sting-long",
-    "resolution": "sting-end"
+    "resolution": "sting-end",
+    "enemyDamage": "hit",
+    "weakness": "sting-low"
   },
   "moments": {
     "draw": "slide",
@@ -349,7 +351,30 @@
     "phase": "swell",
     "button": "click",
     "tip": "pop",
-    "undo": "rewind"
+    "undo": "rewind",
+    "move": "footstep",
+    "reveal": "flip",
+    "deckTap": "slide",
+    "bagLand": "snap",
+    "tokenClatter": "rattle",
+    "tokenPick": "click",
+    "avatarChoice": "pop",
+    "countdown": "click",
+    "cancel": "rewind",
+    "builderAdd": "snap-soft",
+    "builderRemove": "slide",
+    "builderReplace": "flip",
+    "tab": "click",
+    "open": "pop",
+    "close": "click",
+    "screen": "none",
+    "turn": "none",
+    "victory": "sting-end",
+    "resource": "clink",
+    "heal": "glint",
+    "evade": "slide",
+    "engage": "blade",
+    "discard": "slide"
   },
   "traits": {
     "play": {

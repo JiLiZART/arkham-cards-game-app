@@ -5,6 +5,7 @@ import { FLOAT_KINDS, floatLife, type FeedEntry } from "../feed";
 import { mapProjector } from "../scene/Table";
 import { useView, whenStageFree } from "../view";
 import { Sentence, useFeedEntries } from "./Feed";
+import { moment } from "./SoundLayer";
 import { useGame } from "../context";
 
 const STAGGER_MS = 900;
@@ -18,6 +19,9 @@ interface Float {
   born: number;
   life: number;
 }
+
+/** feed entries with no animation of their own that get a sound as they appear (the feed is on the animation clock, ADR-0002) */
+const ENTRY_MOMENT: Record<string, string> = { resource: "resource", heal: "heal", evade: "evade", engage: "engage", discard: "discard", move: "move", reveal: "reveal" };
 
 /** where a float rises from: the actor's portrait or card on the map, or the screen centre if it isn't visible */
 function anchorOf(e: FeedEntry): { x: number; y: number } {
@@ -40,6 +44,7 @@ export function ActionFloats() {
   const seen = useRef<{ entries: unknown; shown: number }>({ entries, shown });
   const pending = useRef<Float[]>([]);
   const [active, setActive] = useState<Float[]>([]);
+  const heard = useRef<string[]>([]);
 
   // new entries since last render go into the queue (a new game starts from its current log)
   if (seen.current.entries !== entries) seen.current = { entries, shown };
@@ -53,12 +58,19 @@ export function ActionFloats() {
     const fresh: Float[] = [];
     for (let i = seen.current.shown; i < shown; i++) {
       const e = entries.get(i);
+      if (e && ENTRY_MOMENT[e.kind]) heard.current.push(ENTRY_MOMENT[e.kind]);
       // only the big moments float (phase changes get the chapter title)
       if (e && FLOAT_KINDS.has(e.kind)) fresh.push({ key: i, entry: e, born: 0, life: floatLife(e.parts) });
     }
     seen.current.shown = shown;
     pending.current.push(...(fresh.length > BURST ? fresh.slice(-MAX_VISIBLE) : fresh));
   }
+
+  // the sounds of the entries that just appeared (a burst of the same kind is one sound)
+  useEffect(() => {
+    for (const name of new Set(heard.current)) moment(name);
+    heard.current = [];
+  });
 
   // release one queued float every STAGGER_MS, drop expired ones
   useEffect(() => {

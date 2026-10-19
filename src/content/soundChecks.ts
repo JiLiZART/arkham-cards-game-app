@@ -75,3 +75,12 @@ export function checkLoudness(m: SoundManifest, probe: SoundProbe): ContentError
 export function checkCandidates(m: SoundManifest, c: SoundCandidates, required: readonly string[] = []): ContentError[] {
   return [...new Set([...slotsOf(m), ...required])].filter((slot) => !c.slots[slot]).map((slot) => ({ file: "content/sounds/candidates.json", path: slot, message: "no candidates for this slot (npm run import:sounds -- --candidates)" }));
 }
+
+/** The manifest has a value (a clip or "none") for exactly the moments the UI plays: no typo, no silent new moment. */
+export function checkMoments(m: SoundManifest, moments: readonly string[]): ContentError[] {
+  const listed = new Set(moments);
+  return [
+    ...Object.keys(m.moments).filter((k) => !listed.has(k)).map((k) => ({ file: FILE, path: `moments.${k}`, message: "no UI moment of this name is ever played (add it to MOMENTS in src/ui/sounds.ts)" })),
+    ...moments.filter((k) => !(k in m.moments)).map((k) => ({ file: FILE, path: `moments.${k}`, message: "a UI moment with no value in the manifest (a clip, or none)" })),
+  ];
+}

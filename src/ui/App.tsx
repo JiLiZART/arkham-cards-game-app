@@ -1,10 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { contentErrors } from "../content";
 import { t } from "../content/i18n";
 import { db, gameStore, useGame } from "./context";
 import { HandFan } from "./hud/HandFan";
 import { HandDrawer } from "./hud/HandDrawer";
 import { Hud } from "./hud/Hud";
+import { moment, useAudioLevels } from "./hud/SoundLayer";
 import { Catalog } from "./catalog/Catalog";
 import { CampaignLog } from "./menu/CampaignLog";
 import { HowTo } from "./menu/HowTo";
@@ -37,6 +38,13 @@ export function App() {
   useEffect(() => {
     gameStore.getState().resume();
   }, []);
+  useAudioLevels();
+  // a change of screen has its own soft sound (not the first paint)
+  const shown = useRef(screen);
+  useEffect(() => {
+    if (shown.current !== screen) moment("screen");
+    shown.current = screen;
+  }, [screen]);
   // touch: tap to peek, tap again to choose, long press for the card (mouse unchanged)
   useEffect(() => installTouch(), []);
   if (contentErrors.length) {

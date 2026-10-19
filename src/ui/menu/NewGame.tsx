@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { moment } from "../hud/SoundLayer";
 import { campaignLoaded, loadAllPacks, loadCampaign, loadPacksFor } from "../../content";
 import { campaignBlurb, campaignName, cardText, scenarioText, t } from "../../content/i18n";
 import type { Difficulty } from "../../content/schema";
@@ -247,7 +248,10 @@ function DecksStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }
         {s.picks.map((c, k) => {
           const problems = deckProblems(db, s, c);
           return (
-            <button key={c} role="tab" aria-selected={c === code} className={`dk-inv ${c === code ? "on" : ""}`} onClick={() => setActive(c)}>
+            <button key={c} role="tab" aria-selected={c === code} className={`dk-inv ${c === code ? "on" : ""}`} onClick={() => {
+              moment("tab");
+              setActive(c);
+            }}>
               <Avatar code={c} size={56} badge={`P${k + 1}`} />
               <small className={problems.length ? "bad" : "ok"}>{problems.length ? tr("deck.toFix", { n: problems.length }) : tr("deck.ready")}</small>
             </button>
@@ -276,7 +280,10 @@ function DecksStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }
                 }}
               />
             ) : (
-              <button className="dk-tab-name" onClick={() => choose(x.id)} onDoubleClick={() => x.kind === "custom" && setRenaming({ id: x.id, name: x.name })} title={x.kind === "custom" ? tr("deck.renameHint") : undefined}>
+              <button className="dk-tab-name" onClick={() => {
+                moment("tab");
+                choose(x.id);
+              }} onDoubleClick={() => x.kind === "custom" && setRenaming({ id: x.id, name: x.name })} title={x.kind === "custom" ? tr("deck.renameHint") : undefined}>
                 {x.problems.length ? "⚠ " : ""}
                 {x.name}
               </button>

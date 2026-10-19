@@ -13,14 +13,22 @@ import { abilitySymbol } from "./ActionRail";
 import { formatText } from "./Hud";
 import { InvModal } from "./Investigators";
 import { ChaosBagModal } from "./Panels";
+import { moment } from "./SoundLayer";
 import { DeckViewer } from "./DeckViewer";
 
 /** a native modal dialog: Escape and focus trapping come from <dialog>; a click on the backdrop closes it */
-export function Modal({ onClose, className, children }: { onClose: () => void; className?: string; children: ReactNode }) {
+export function Modal({ onClose: close, className, children }: { onClose: () => void; className?: string; children: ReactNode }) {
   const ref = useRef<HTMLDialogElement>(null);
+  const onClose = () => {
+    moment("close");
+    close();
+  };
   useEffect(() => {
     const d = ref.current;
-    if (d && !d.open) d.showModal();
+    if (d && !d.open) {
+      d.showModal();
+      moment("open");
+    }
   }, []);
   return (
     <dialog

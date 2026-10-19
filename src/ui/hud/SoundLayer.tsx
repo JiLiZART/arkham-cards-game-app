@@ -2,19 +2,35 @@ import { useEffect, useRef } from "react";
 import type { GameState, InstId } from "../../engine/types";
 import { audio } from "../audio";
 import { db, gameStore, useGame } from "../context";
-import { effectFor, gainOf, momentClip, musicFor } from "../sounds";
+import { effectFor, gainOf, mayPlay, momentClip, musicFor } from "../sounds";
 import { useView } from "../view";
 import type { QueuedEvent } from "../store";
 
 const sounds = () => db.sounds;
 
-/** play the clip for a UI moment (a card landing, a flip, a button…), with the card's own clip for play, fight and spawn */
-export function moment(name: string, cardId: InstId | null = null) {
-  const s = gameStore.getState();
-  if (!s.game) return;
-  const clip = momentClip(name, cardId, s.game, sounds());
-  if (!clip) return;
-  void audio.play(clip, sounds().effects[clip].file, sounds().effects[clip].gain);
+/** the sliders and the mute, live, on every screen: the category buses carry them, each clip its own gain */
+export function useAudioLevels() {
+  const musicVolume = useGame((s) => s.musicVolume);
+  const sfxVolume = useGame((s) => s.sfxVolume);
+  const muted = useGame((s) => s.muted);
+  useEffect(() => {
+    const settings = { musicVolume, sfxVolume, muted };
+    audio.setLevel("music", gainOf(settings, "music", 1));
+    audio.setLevel("effects", gainOf(settings, "effects", 1));
+  }, [musicVolume, sfxVolume, muted]);
+}
+
+const lastMoment = new Map<string, number>();
+
+/**
+ * Play the clip for a UI moment (a card landing, a flip, a button, a tab…), with the card's own clip for play, fight and
+ * spawn. It works without a game (menus); `scale` softens or strengthens it (the token clatter by count); a moment
+ * repeated within a few ms is one sound.
+ */
+export function moment(name: string, cardId: InstId | null = null, scale = 1) {
+  const clip = momentClip(name, cardId, gameStore.getState().game, sounds());
+  if (!clip || !mayPlay(lastMoment, name, performance.now())) return;
+  void audio.play(clip, sounds().effects[clip].file, sounds().effects[clip].gain * scale);
 }
 
 /**
@@ -26,16 +42,6 @@ export function SoundLayer() {
   const playing = useView((s) => s.playing) as QueuedEvent | null;
   // the state runs ahead of the screen while events wait to play: the music changes once the screen has caught up
   const idle = useGame((s) => !s.current && s.queue.length === 0);
-  const musicVolume = useGame((s) => s.musicVolume);
-  const sfxVolume = useGame((s) => s.sfxVolume);
-  const muted = useGame((s) => s.muted);
-
-  // the sliders and the mute, live: the category buses carry them, each clip its own gain
-  useEffect(() => {
-    const settings = { musicVolume, sfxVolume, muted };
-    audio.setLevel("music", gainOf(settings, "music", 1));
-    audio.setLevel("effects", gainOf(settings, "effects", 1));
-  }, [musicVolume, sfxVolume, muted]);
 
   // effects are small: have them decoded before their first play (after the unlock, when the context exists)
   useEffect(() => {

@@ -34,7 +34,10 @@ export function InvestigatorChoiceOverlay() {
     return delayed(
       AUTO_PICK_MS,
       () => gameStore.getState().game?.pending?.seq === seq,
-      () => gameStore.getState().choose(single),
+      () => {
+        moment("avatarChoice");
+        gameStore.getState().choose(single);
+      },
     );
   }, [show, seq, single]);
   if (!show || !choice || !game.pending) return null;
@@ -49,7 +52,7 @@ export function InvestigatorChoiceOverlay() {
             key={o.id}
             className="inv-choice-avatar legal"
             onClick={() => {
-              moment("button");
+              moment("avatarChoice");
               choose(o.id);
             }}
           >

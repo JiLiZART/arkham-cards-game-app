@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { db, skipMulligans, start } from "../engine/testkit";
 import type { GameEvent, GameState } from "../engine/types";
-import { effectFor, gainOf, momentClip, musicFor } from "./sounds";
+import { effectFor, gainOf, MOMENT_GAP, mayPlay, MOMENTS, momentClip, musicFor } from "./sounds";
 
 const R = "01001";
 const fresh = skipMulligans(start("the-gathering", [R], 1)).state;
@@ -105,5 +105,22 @@ describe("gainOf", () => {
     expect(gainOf({ sfxVolume: 80, musicVolume: 50, muted: false }, "music", 1)).toBeCloseTo(0.5);
     expect(gainOf({ sfxVolume: 80, musicVolume: 50, muted: true }, "effects", 1)).toBe(0);
     expect(gainOf({ sfxVolume: 0, musicVolume: 50, muted: false }, "effects", 1)).toBe(0);
+  });
+});
+
+describe("mayPlay", () => {
+  it("lets a moment sound once per burst and again after the gap, per name", () => {
+    const last = new Map<string, number>();
+    expect(mayPlay(last, "discard", 1000)).toBe(true);
+    expect(mayPlay(last, "discard", 1000 + MOMENT_GAP - 1)).toBe(false);
+    expect(mayPlay(last, "heal", 1010)).toBe(true);
+    expect(mayPlay(last, "discard", 1000 + MOMENT_GAP)).toBe(true);
+  });
+});
+
+describe("moments", () => {
+  it("are all in the manifest, each a clip or none, and sound without a game (menus)", () => {
+    for (const name of MOMENTS) expect(name in m.moments, name).toBe(true);
+    expect(momentClip("button", null, null, m)).toBe("click");
   });
 });

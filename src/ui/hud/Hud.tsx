@@ -207,6 +207,10 @@ function TurnTitle() {
     });
   }, [showing, current, waiting]);
   const holds = useStage(showing ? `turn:${showing.key}` : null);
+  const titled = showing?.key;
+  useEffect(() => {
+    if (titled !== undefined) moment("turn");
+  }, [titled]);
   if (!holds || !showing) return null;
   return (
     <div
@@ -286,7 +290,10 @@ function PhasePause() {
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
   }, [choose]);
-  useEffect(() => delayed(PHASE_AUTO_MS, () => gameStore.getState().game?.pending?.seq === p.seq, () => choose("continue")), [p.seq, choose]);
+  useEffect(() => delayed(PHASE_AUTO_MS, () => gameStore.getState().game?.pending?.seq === p.seq, () => {
+    moment("countdown");
+    choose("continue");
+  }), [p.seq, choose]);
   return (
     <div className="phase-title held">
       <div className="phase-title-name">{tr(`phase.title.${phase}`)}</div>
@@ -510,7 +517,12 @@ function ScenarioEnd() {
   const finish = useGame((s) => s.finishScenario);
   const busy = useGame((s) => !!s.current || s.queue.length > 0);
   const locale = useGame((s) => s.locale);
-  if (game.phase !== "ended" || busy) return null;
+  const over = game.phase === "ended" && !busy;
+  const won = over && Object.values(game.invs).some((i) => i.status !== "defeated");
+  useEffect(() => {
+    if (won) moment("victory");
+  }, [won]);
+  if (!over) return null;
   const r = scenarioText(db, game.scenarioId, locale).resolution(game.resolution ?? "none");
   return (
     <div className="handoff">

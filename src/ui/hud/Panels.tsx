@@ -157,7 +157,10 @@ function Pile({ label, count, top, faceUp, kind, id, option }: { label: string; 
         disabled={!showTop && !option}
         aria-label={option ? `${label}: ${tr("pile.tapToDraw")}` : undefined}
         onClick={() => {
-          if (option) return choose(option.id);
+          if (option) {
+            moment("deckTap");
+            return choose(option.id);
+          }
           if (showTop) useView.getState().setModal({ card: top! });
         }}
         {...(showTop ? hoverProps(top) : {})}

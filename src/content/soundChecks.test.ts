@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { SoundCandidates, SoundManifest } from "./schema";
-import { checkCandidates, checkLoudness, checkSounds, EFFECTS_BUDGET, MUSIC_BUDGET, type SoundProbe } from "./soundChecks";
+import { checkCandidates, checkLoudness, checkMoments, checkSounds, EFFECTS_BUDGET, MUSIC_BUDGET, type SoundProbe } from "./soundChecks";
 
 const clip = { file: "snap.mp3", source: "https://kenney.nl/assets/casino-audio", author: "Kenney", license: "CC0" };
 const manifest = SoundManifest.parse({
@@ -92,5 +92,17 @@ describe("checkCandidates", () => {
   it("is a schema error to have other than five candidates or a licence other than CC0", () => {
     expect(SoundCandidates.safeParse({ slots: { a: { ...slot, candidates: [entry(1)] } } }).success).toBe(false);
     expect(SoundCandidates.safeParse({ slots: { a: { ...slot, candidates: slot.candidates.map((c) => ({ ...c, license: "CC-BY" })) } } }).success).toBe(false);
+  });
+});
+
+describe("checkMoments", () => {
+  it("passes when the manifest's moments are exactly the list", () => {
+    expect(checkMoments(manifest, ["play"])).toEqual([]);
+  });
+
+  it("reports a manifest moment the code never plays and a listed moment with no value", () => {
+    const errors = checkMoments(manifest, ["play", "draw"]);
+    expect(errors.map((e) => e.path)).toEqual(["moments.draw"]);
+    expect(checkMoments(manifest, []).map((e) => e.path)).toEqual(["moments.play"]);
   });
 });

@@ -1,5 +1,6 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { useView } from "../view";
+import { moment } from "./SoundLayer";
 
 type Edge = "left" | "right";
 
@@ -40,6 +41,12 @@ export function Drawer({ edge, handle, label, glow, children }: { edge: Edge; ha
       window.removeEventListener("pointerup", up, true);
     };
   }, [edge, setDrawer]);
+  // opening and closing have a sound (not the first paint)
+  const was = useRef(open);
+  useEffect(() => {
+    if (was.current !== open) moment(open ? "open" : "close");
+    was.current = open;
+  }, [open]);
   // Escape closes it
   useEffect(() => {
     if (!open) return;

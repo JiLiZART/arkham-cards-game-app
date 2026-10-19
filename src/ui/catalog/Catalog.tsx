@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { moment } from "../hud/SoundLayer";
 import { loadAllPacks } from "../../content";
 import { cardText, encounterSetName, t } from "../../content/i18n";
 import type { CardDef } from "../../content/schema";
@@ -157,7 +158,10 @@ export function Catalog() {
         <>
           <div className="cat-tabs" role="tablist">
             {TABS.map((x) => (
-              <button key={x} role="tab" aria-selected={filters.tab === x} className={`wz-chip ${filters.tab === x ? "on" : ""}`} onClick={() => setTab(x)}>
+              <button key={x} role="tab" aria-selected={filters.tab === x} className={`wz-chip ${filters.tab === x ? "on" : ""}`} onClick={() => {
+                moment("tab");
+                setTab(x);
+              }}>
                 {tr(`catalog.tab.${x}`)}
               </button>
             ))}

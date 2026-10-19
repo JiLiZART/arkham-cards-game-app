@@ -7,6 +7,7 @@ import { db, gameStore, useGame } from "../context";
 import { basicWeaknesses, builderPool, changeCopies, problemText, replaceCard, withWeakness, type PoolFilter } from "../decks";
 import { Icon } from "../Icon";
 import { isIcon } from "../icons";
+import { moment } from "../hud/SoundLayer";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
 const TYPES = ["asset", "event", "skill"] as const;
@@ -61,6 +62,7 @@ export function DeckEditArea({ investigator, deck, onChange, weakness = true }: 
   const change = (cards: Record<string, number>) => onChange(cards, deck.randomBasicWeakness);
   const swap = (out: string) => {
     if (!replacing) return;
+    moment("builderReplace");
     change(replaceCard(deck.cards, out, replacing));
     setReplacing(null);
   };
@@ -110,7 +112,10 @@ export function DeckEditArea({ investigator, deck, onChange, weakness = true }: 
                   return (
                     <GridCard key={card.code} card={card} n={n} lit={target} dim={!!replacing && !target} onClick={target ? () => swap(card.code) : undefined}>
                       {!replacing && (
-                        <button onClick={() => change(changeCopies(deck.cards, card.code, -1))} aria-label={tr("deckEditor.remove", { card: nameOf(card) })}>
+                        <button onClick={() => {
+                          moment("builderRemove");
+                          change(changeCopies(deck.cards, card.code, -1));
+                        }} aria-label={tr("deckEditor.remove", { card: nameOf(card) })}>
                           − {tr("deck.remove")}
                         </button>
                       )}
@@ -165,7 +170,10 @@ export function DeckEditArea({ investigator, deck, onChange, weakness = true }: 
               <GridCard key={card.code} card={card} n={deck.cards[card.code]} why={why} dim={!!replacing && replacing !== card.code} lit={replacing === card.code}>
                 {!replacing && (
                   <>
-                    <button className="primary" disabled={!!why} onClick={() => change(changeCopies(deck.cards, card.code, 1))} aria-label={tr("deckEditor.add", { card: nameOf(card) })}>
+                    <button className="primary" disabled={!!why} onClick={() => {
+                      moment("builderAdd");
+                      change(changeCopies(deck.cards, card.code, 1));
+                    }} aria-label={tr("deckEditor.add", { card: nameOf(card) })}>
                       + {tr("deck.add")}
                     </button>
                     <button onClick={() => setReplacing(card.code)} aria-label={tr("deck.replaceWith", { card: nameOf(card) })}>

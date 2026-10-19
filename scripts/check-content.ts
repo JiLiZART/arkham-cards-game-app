@@ -2,8 +2,9 @@
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { loadContentFromDisk } from "../src/content/node";
 import { SoundCandidates } from "../src/content/schema";
-import { checkCandidates, checkLoudness, checkSounds } from "../src/content/soundChecks";
+import { checkCandidates, checkLoudness, checkMoments, checkSounds } from "../src/content/soundChecks";
 import { SLOTS } from "./sound-candidates";
+import { MOMENTS } from "../src/ui/sounds";
 import { ANIMATED } from "../src/ui/store";
 import { ffmpegAvailable, ffmpegProbe } from "./sound-probe";
 import { checkIcons, MANIFEST, SPRITE, SPRITE_CAMPAIGNS, setsWithoutIcon, spriteIds } from "./import-icons";
@@ -18,7 +19,7 @@ const fileSize = (path: string) => {
     return null;
   }
 };
-errors.push(...checkSounds(db.sounds, fileSize, ANIMATED));
+errors.push(...checkSounds(db.sounds, fileSize, ANIMATED), ...checkMoments(db.sounds, MOMENTS));
 // every sound slot has its five candidates listed (the audio itself is untracked); the slots the game can play are in SLOTS
 const candidates = SoundCandidates.safeParse(JSON.parse(readFileSync("content/sounds/candidates.json", "utf8")));
 if (candidates.success) errors.push(...checkCandidates(db.sounds, candidates.data, SLOTS.map((s) => s.id)));

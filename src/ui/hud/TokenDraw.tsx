@@ -8,6 +8,7 @@ import { Icon } from "../Icon";
 import { bagLanding, spillLayout, type Area } from "../testScreen";
 import { ChaosToken } from "../ChaosToken";
 import { useLayoutMode } from "../layoutMode";
+import { moment } from "./SoundLayer";
 import { bagFrames, shadowFrames, tokenFrames, tokenPath, tossTiming } from "../toss";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
@@ -71,7 +72,12 @@ export function DrawStage({ e, byHand }: { e: GameEvent; byHand: boolean }) {
     if (!el || !from?.width || reducedMotion()) return;
     const a = el.animate(bagFrames(boxOf(from), boxOf(el.getBoundingClientRect())), { duration: tossTiming(pace, n).bagMs / 0.6, fill: "forwards" });
     bagAnim.current = a;
-    return () => a.cancel();
+    // the bag lands on the table when the toss's arc ends
+    const landed = setTimeout(() => moment("bagLand"), tossTiming(pace, n).bagMs);
+    return () => {
+      clearTimeout(landed);
+      a.cancel();
+    };
   }, [!!area]);
   // the tokens tumble out of the bag's mouth in a stream, each on its own seeded path; the pick waits for the last to come to rest
   const land = area ? (subject ? bagLanding(subject) : { x: area.w / 2, y: area.h - BAG * 0.35 }) : null;
@@ -81,6 +87,9 @@ export function DrawStage({ e, byHand }: { e: GameEvent; byHand: boolean }) {
     if (reducedMotion()) return setArrived(true);
     const timing = tossTiming(pace, spill.points.length);
     const anims: Animation[] = [];
+    // the first tokens hit the table: the clatter is louder the more tokens there are (1 to 30)
+    const count = spill.points.length;
+    const clatter = setTimeout(() => moment("tokenClatter", null, 0.6 + 0.4 * Math.min(1, (count - 1) / 29)), timing.launchAt(0) + 250);
     spill.points.forEach((p, k) => {
       const path = tokenPath({ mouth, rest: p, seed, k, size: spill.size, stage: area });
       const opts = { duration: timing.pathMs(path.duration), delay: timing.launchAt(k), fill: "backwards" as const };
@@ -97,6 +106,7 @@ export function DrawStage({ e, byHand }: { e: GameEvent; byHand: boolean }) {
     );
     return () => {
       live = false;
+      clearTimeout(clatter);
       anims.forEach((a) => a.cancel());
     };
   }, [spill]);
@@ -104,6 +114,7 @@ export function DrawStage({ e, byHand }: { e: GameEvent; byHand: boolean }) {
   const pick = (k: number) => {
     if (picked !== null || !arrived || !spill) return;
     setPicked(k);
+    moment("tokenPick");
     const motion = !reducedMotion();
     // the bag shrinks back into its button while the disc flips, then the token slides into the calculation
     bagAnim.current?.cancel();
