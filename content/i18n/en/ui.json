@@ -662,5 +662,6 @@
   "wizard.noCampaigns": "No campaign matches.",
   "wizard.chapters": "Chapters",
   "wizard.interlude": "Interlude",
-  "wizard.close": "Close"
+  "wizard.close": "Close",
+  "flow.neither": "No, none of these"
 }

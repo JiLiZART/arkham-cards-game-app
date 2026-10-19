@@ -387,6 +387,8 @@ function answer(db: ContentDb, c: CampaignState, value: FlowValue) {
       case "upgradeDecks":
         return;
       case "chooseOne": {
+        // a single choice is a "do this, if it applies": it can be declined
+        if (value === null && st.choices.length === 1) return;
         const ch = st.choices.find((x) => x.id === text(value) && (!x.when || test(db, c, x.when)));
         need(!!ch, `${text(value)} is not a choice here`);
         after(ch!.steps);

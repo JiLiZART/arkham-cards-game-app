@@ -167,6 +167,20 @@ describe("advance: the other prompts", () => {
     return { d, c: begin(d, who) };
   };
 
+  it("a prompt with a single choice is a yes-or-nothing: it can be declined, and nothing happens", () => {
+    const { d, c } = first({ one: { kind: "chooseOne", text: "Did any player cheat?", choices: [{ id: "cheat", text: "Yes", effects: [{ do: "record", key: "cheated" }], steps: [] }] } }, ["one"]);
+    expect(hasEntry(advance(d, c, "cheat").log, "cheated")).toBe(true);
+    const declined = advance(d, c, null);
+    expect(hasEntry(declined.log, "cheated")).toBe(false);
+    // the flow went on to what comes next (the prologue interlude's own question)
+    expect(declined.flow.waiting?.id).toBe("pick");
+  });
+
+  it("a prompt with several choices can't be declined", () => {
+    const { d, c } = first({ two: { kind: "chooseOne", choices: [{ id: "a", text: "A", effects: [], steps: [] }, { id: "b", text: "B", effects: [], steps: [] }] } }, ["two"]);
+    expect(() => advance(d, c, null)).toThrow(/not a choice/);
+  });
+
   it("a counter takes a number within its limits and hands it to the effects", () => {
     const { d, c } = first({ n: { kind: "counter", text: "How many?", min: 0, max: 3, effects: [{ do: "count", id: "doubt", section: "doubt", op: "add", value: "input" }], steps: [] } }, ["n"]);
     expect(kindOf(c)).toBe("counter");

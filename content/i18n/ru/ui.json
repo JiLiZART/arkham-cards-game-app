@@ -646,5 +646,6 @@
   "wizard.noCampaigns": "Подходящих кампаний нет.",
   "wizard.chapters": "Главы",
   "wizard.interlude": "Интерлюдия",
-  "wizard.close": "Закрыть"
+  "wizard.close": "Закрыть",
+  "flow.neither": "Нет, ничего из этого"
 }

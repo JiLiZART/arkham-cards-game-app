@@ -37,7 +37,10 @@ function CampaignStep({ s, set }: { s: WizardState; set: (w: WizardState) => voi
   const chip = <K extends "kind" | "rules" | "length">(key: K, values: readonly CampaignFilter[K][]) => (
     <div className="wz-chips" role="group" aria-label={tr(`wizard.${key}.${values[0]}`)}>
       {values.map((v) => (
-        <button key={v} className={`wz-chip ${filter[key] === v ? "on" : ""}`} aria-pressed={filter[key] === v} onClick={() => setFilter({ ...filter, [key]: v })}>
+        <button key={v} className={`wz-chip ${filter[key] === v ? "on" : ""}`} aria-pressed={filter[key] === v} onClick={() => {
+            moment("tab");
+            setFilter({ ...filter, [key]: v });
+          }}>
           {tr(`wizard.${key}.${v}`)}
         </button>
       ))}
@@ -67,6 +70,7 @@ function CampaignStep({ s, set }: { s: WizardState; set: (w: WizardState) => voi
                 className={`wz-ctile ${on ? "selected" : ""}`}
                 aria-pressed={on}
                 onClick={() => {
+                  moment("tab");
                   set(setCampaign(s, c.id, db));
                   setSheet(true);
                 }}

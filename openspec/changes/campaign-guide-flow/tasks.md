@@ -29,5 +29,5 @@
 
 ## 6. Verification
 
-- [ ] 6.1 Browser: Dunwich from the picker (filter to campaigns, search "dun", the sidebar's eight cards and two interludes in English and Russian) through the prologue choice, a scenario, its resolution with a choice, Armitage's Fate and the upgrade screen to the next scenario; Night of the Zealot unchanged through The Gathering's resolution; a version-2 save restored; the audio moments on the new screen; 0 console errors.
-- [ ] 6.2 `npm test`, lint, typecheck, build, `check:content` by exit code; `openspec validate campaign-guide-flow --type change --strict`.
+- [x] 6.1 Browser: Dunwich from the picker (filter to campaigns, search "dun", the sidebar's eight cards and two interludes in English and Russian) through the prologue choice, a scenario, its resolution with a choice, Armitage's Fate and the upgrade screen to the next scenario; Night of the Zealot unchanged through The Gathering's resolution; a version-2 save restored; the audio moments on the new screen; 0 console errors.
+- [x] 6.2 `npm test`, lint, typecheck, build, `check:content` by exit code; `openspec validate campaign-guide-flow --type change --strict`.

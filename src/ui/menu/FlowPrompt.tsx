@@ -4,10 +4,14 @@ import type { CampaignState } from "../../engine/campaign";
 import { db, gameStore, useGame } from "../context";
 import { guideHtml } from "../guideText";
 import { Portrait } from "../Portrait";
+import { moment } from "../hud/SoundLayer";
 import { visibleChoices } from "./campaignView";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
-const answer = (value: string | number | string[] | null) => gameStore.getState().answerFlow(value);
+const answer = (value: string | number | string[] | null) => {
+  moment("button");
+  gameStore.getState().answerFlow(value);
+};
 const Html = ({ text, className }: { text?: string; className?: string }) => (text ? <div className={className} dangerouslySetInnerHTML={{ __html: guideHtml(text) }} /> : null);
 
 /**
@@ -67,6 +71,11 @@ export function FlowPrompt({ campaign }: { campaign: CampaignState }) {
               </button>
             ))}
           </div>
+          {st.choices.length === 1 && (
+            <button className="link-btn" onClick={() => answer(null)}>
+              {tr("flow.neither")}
+            </button>
+          )}
         </div>
       );
     case "counter": {

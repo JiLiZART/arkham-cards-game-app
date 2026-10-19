@@ -5,6 +5,9 @@ import { type CampaignLog, NOTES } from "../../engine/campaignLog";
 import { test } from "../../engine/flow";
 import type { ContentDb } from "../../engine/types";
 
+/** the guide writes log entries as sentence fragments ("the investigators rescued…"); shown as sentences */
+const sentence = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+
 export type ReadItem = { kind: "story"; title?: string; text?: string } | { kind: "recorded"; label: string };
 
 /** what the campaign screen reads out above the prompt: the stories since the last answer, then the log entries just recorded */
@@ -14,7 +17,7 @@ export function readItems(db: ContentDb, c: CampaignState, locale: string): Read
       const { title, text } = stepText(db, c.campaignId, s.story, locale);
       return { kind: "story", ...(title ? { title } : {}), ...(text ? { text } : {}) };
     }
-    return { kind: "recorded", label: logLabel(db, c.campaignId, s.recorded.id, locale) };
+    return { kind: "recorded", label: sentence(logLabel(db, c.campaignId, s.recorded.id, locale)) };
   });
 }
 
@@ -43,7 +46,7 @@ export function logView(db: ContentDb, c: CampaignState, locale: string): LogVie
     const view: LogViewSection = {
       id,
       label: label(id),
-      entries: s.entries.map((e) => ({ id: e.id, label: logLabel(db, c.campaignId, e.id, locale), crossedOut: !!e.crossedOut })),
+      entries: s.entries.map((e) => ({ id: e.id, label: sentence(logLabel(db, c.campaignId, e.id, locale)), crossedOut: !!e.crossedOut })),
       counts: Object.entries(s.counts).map(([k, n]) => ({ id: k, n })),
       cards: Object.entries(s.cards).filter(([, codes]) => codes.length).map(([k, codes]) => ({ id: k, codes })),
       investigators: Object.entries(s.investigators).map(([k, by]) => ({ id: k, byInvestigator: Object.entries(by).map(([code, n]) => ({ code, n })) })),

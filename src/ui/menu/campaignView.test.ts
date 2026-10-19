@@ -37,6 +37,12 @@ describe("readItems", () => {
     expect(readItems(db, c, "en").at(-1)).toEqual({ kind: "recorded", label: "The investigators rescued Dr. Armitage." });
   });
 
+  it("writes a log entry the guide gave as a fragment as a sentence", () => {
+    const withFragment = { ...db, i18n: { ...db.i18n, en: { ...db.i18n.en, campaigns: { ...db.i18n.en.campaigns, campaigns: { ...db.i18n.en.campaigns.campaigns, t: { ...enText.campaigns.t, logLabels: { frag: "the investigators failed to save the students." } } } } } } };
+    const c = { ...c0, flow: { ...c0.flow, shown: [{ recorded: { id: "frag", section: "campaign_notes" } }] } };
+    expect(readItems(withFragment, c, "en")).toEqual([{ kind: "recorded", label: "The investigators failed to save the students." }]);
+  });
+
   it("is empty when nothing has been read", () => {
     expect(readItems(db, advance(db, c0, "continue"), "en")).toEqual([]);
   });
@@ -61,7 +67,7 @@ describe("logView", () => {
     log = setInvestigatorCount(log, "xp", "01001", "add", 3, "campaign_notes");
     const v = logView(db, { ...c0, log }, "en");
     expect(v.map((s) => s.id)).toEqual(["campaign_notes", "doubt", "sacrificed"]);
-    expect(v[0].entries).toEqual([{ id: "rescued", label: "The investigators rescued Dr. Armitage.", crossedOut: false }, { id: "gone", label: "gone", crossedOut: true }]);
+    expect(v[0].entries).toEqual([{ id: "rescued", label: "The investigators rescued Dr. Armitage.", crossedOut: false }, { id: "gone", label: "Gone", crossedOut: true }]);
     expect(v[0].investigators[0]).toMatchObject({ id: "xp", byInvestigator: [{ code: "01001", n: 3 }] });
     expect(v[1]).toMatchObject({ label: "Doubt", counts: [{ id: "doubt", n: 2 }] });
     expect(v[2].cards).toEqual([{ id: "sacrificed", codes: ["02040"] }]);
