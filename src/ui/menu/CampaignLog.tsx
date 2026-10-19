@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { campaignName, cardText, logLabel, scenarioText, t } from "../../content/i18n";
 import { currentScenarioId } from "../../engine/campaign";
+import { flatLog } from "../../engine/campaignLog";
 import { db, gameStore, useGame } from "../context";
 import { Portrait } from "../Portrait";
 import { DeckBuilder } from "./DeckBuilder";
@@ -86,7 +87,7 @@ export function CampaignLog() {
         </section>
         <section>
           <h3>{tr("log.title")}</h3>
-          {Object.entries(campaign.log).map(([k, v]) => (
+          {Object.entries(flatLog(campaign.log)).map(([k, v]) => (
             <div key={k}>
               {Array.isArray(v) ? (
                 <>

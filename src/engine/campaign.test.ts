@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { autoPlay } from "./bot";
-import { applyScenarioEnd, scenarioSetup, startCampaign } from "./campaign";
+import { flatLog, hasEntry } from "./campaignLog";
+import { applyScenarioEnd, migrateCampaign, scenarioSetup, startCampaign } from "./campaign";
 import { card, def, findByCode, inv, moveCard } from "./core";
 import { createGame } from "./engine";
 import { db, gOf, mutate, skipMulligans, start } from "./testkit";
@@ -11,7 +12,7 @@ const AGNES = "01004";
 describe("campaign", () => {
   it("starts Night of the Zealot with the Gathering and the Standard bag", () => {
     const c = startCampaign(db, { campaignId: "night-of-the-zealot", difficulty: "standard", seed: 3, investigators: [{ code: ROLAND, deckId: "roland-starter" }, { code: AGNES, deckId: "agnes-starter" }] });
-    expect(c.log).toEqual({});
+    expect(flatLog(c.log)).toEqual({});
     const s = scenarioSetup(db, c, 1);
     expect(s.scenarioId).toBe("the-gathering");
     expect(s.chaosBag).toEqual(db.campaigns["night-of-the-zealot"].chaosBags.standard);
@@ -83,10 +84,10 @@ describe("campaign", () => {
     });
     const next = applyScenarioEnd(db, c, r.state);
     expect(next.investigators.map((i) => i.xp)).toEqual([5, 5]);
-    expect(next.log.houseBurned).toBe(true);
+    expect(hasEntry(next.log, "houseBurned")).toBe(true);
     expect(next.investigators[0].mentalTrauma).toBe(1); // lead
     expect(next.investigators[0].deck).toContain("01117"); // Lita earned
-    expect(next.scenarioIndex).toBe(1);
+    expect(next.flow.play).toBe("the-midnight-masks");
   });
 
   it("weakness in the opening hand is set aside and redrawn", () => {
@@ -110,5 +111,53 @@ describe("campaign", () => {
     expect(r.state.phase).toBe("ended");
     const next = applyScenarioEnd(db, c, r.state);
     expect(next.history[0].scenarioId).toBe("the-gathering");
+  });
+});
+
+describe("migrateCampaign", () => {
+  const old = (over: object = {}) => ({
+    version: 2, campaignId: "night-of-the-zealot", difficulty: "standard", seed: 3, rng: 3, chaosBag: ["0"], scenarioIndex: 1, lead: ROLAND,
+    log: { houseBurned: true, cultistsGotAway: ["01121"] },
+    investigators: [{ code: ROLAND, deckId: "roland-starter", deck: [], xp: 2, physicalTrauma: 0, mentalTrauma: 1, status: "active" }],
+    history: [{ scenarioId: "the-gathering", resolution: "R1", xp: 2, victory: 0 }],
+    result: null,
+    ...over,
+  });
+
+  it("puts a campaign between scenarios at the Begin prompt of the scenario its index named, with the flat log as the notes section", () => {
+    const c = migrateCampaign(db, old(), false);
+    expect(c.flow.play).toBe("the-midnight-masks");
+    expect(c.flow.waiting?.step).toEqual({ kind: "play", scenario: "the-midnight-masks" });
+    expect(c.flow.pos).toBe(1);
+    expect(flatLog(c.log)).toEqual({ houseBurned: true, cultistsGotAway: ["01121"] });
+    expect(c.investigators[0].xp).toBe(2);
+    expect("scenarioIndex" in c).toBe(false);
+  });
+
+  it("puts a campaign in the middle of a scenario at that scenario, playing", () => {
+    const c = migrateCampaign(db, old(), true);
+    expect(c.flow).toMatchObject({ play: "the-midnight-masks", playing: true, waiting: null });
+  });
+
+  it("leaves a campaign past its last scenario with nothing to play", () => {
+    const c = migrateCampaign(db, old({ scenarioIndex: 3, result: "win" }), false);
+    expect(c.flow.play).toBeNull();
+    expect(c.flow.waiting).toBeNull();
+    expect(c.result).toBe("win");
+  });
+
+  it("keeps a campaign that already has a flow as it is", () => {
+    const c = startCampaign(db, { campaignId: "night-of-the-zealot", difficulty: "standard", seed: 3, investigators: [{ code: ROLAND, deckId: "roland-starter" }] });
+    expect(migrateCampaign(db, JSON.parse(JSON.stringify(c)), false)).toEqual(c);
+  });
+
+  it("goes on from a migrated campaign: the scenario ends and the flow reaches the next one", () => {
+    const c = migrateCampaign(db, old(), true);
+    const r = mutate(createGame(db, scenarioSetup(db, c, 1)), (g) => {
+      g.s.phase = "ended";
+      g.s.resolution = "R1";
+      g.s.pending = null;
+    });
+    expect(applyScenarioEnd(db, c, r.state).flow.play).toBe("the-devourer-below");
   });
 });

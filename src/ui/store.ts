@@ -2,8 +2,9 @@ import { createStore, type StoreApi } from "zustand/vanilla";
 import { useStore } from "zustand";
 import { autoPlay, botChoice } from "../engine/bot";
 import {
-  applyScenarioEnd, currentScenarioId, scenarioSetup, startCampaign, type CampaignState, type NewCampaign,
+  applyScenarioEnd, migrateCampaign, scenarioSetup, startCampaign, type CampaignState, type NewCampaign,
 } from "../engine/campaign";
+import { advance, type FlowValue } from "../engine/flow";
 import { createGame, dispatch, ENGINE_VERSION, replay } from "../engine/engine";
 import { upgradeDeck, type UpgradeResult } from "../engine/upgrade";
 import { quietNextGame } from "./arrivals";
@@ -77,7 +78,10 @@ export interface UiState {
   newCampaign(opts: NewCampaign): void;
   /** spend an investigator's experience on a new deck (between scenarios): the campaign keeps it, the result says what was refused */
   upgradeDeck(investigator: InvId, cards: Record<string, number>): UpgradeResult;
+  /** begin the scenario the campaign's flow has reached (answering its Begin prompt); nothing when the flow is somewhere else */
   startScenario(seed?: number): void;
+  /** answer what the campaign's flow is asking (a choice, a number, an investigator, cards, "continue"); a refused answer is reported */
+  answerFlow(value: FlowValue): void;
   choose(optionId: string): void;
   /** take back the last choice: replay without it (only down to `undoFloor`) */
   undo(): void;
@@ -222,8 +226,10 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage(),
         const codes = [...new Set(opts.investigators.flatMap((i) => [i.code, ...Object.keys((i.deck ?? db.decks[i.deckId])?.cards ?? {})]))];
         whenReady(opts.campaignId, codes, () => {
           const campaign = startCampaign(db, opts);
-          set({ campaign, setup: null, actions: [], game: null, error: null, notice: null });
-          get().startScenario(opts.seed);
+          // a campaign that opens with a prologue or a choice starts on the campaign screen; one that goes straight to its first scenario starts it
+          set({ campaign, setup: null, actions: [], game: null, error: null, notice: null, screen: "log" });
+          persist();
+          if (campaign.flow.waiting?.step.kind === "play" && !campaign.flow.shown.length) get().startScenario(opts.seed);
         });
       },
 
@@ -239,12 +245,26 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage(),
       },
 
       startScenario(seed) {
-        const c = get().campaign;
-        if (!c || !currentScenarioId(db, c)) return;
+        let c = get().campaign;
+        if (!c) return;
+        // the Begin prompt is answered here; a restarted scenario (the rules changed) has had it answered already
+        if (c.flow.waiting?.step.kind === "play") c = advance(db, c, "continue");
+        if (!c.flow.playing || !c.flow.play) return;
         const setup: GameSetup = { ...scenarioSetup(db, c, seed ?? (Date.now() >>> 0)), pacePhases: true, ...(get().tapDecks ? { tapDecks: true } : {}) };
         const r = createGame(db, setup);
-        set({ setup, actions: [], undoFloor: 0, logMarks: [r.state.log.length], game: r.state, screen: "game", queue: [], current: null, error: null });
+        set({ campaign: c, setup, actions: [], undoFloor: 0, logMarks: [r.state.log.length], game: r.state, screen: "game", queue: [], current: null, error: null });
         persist();
+      },
+
+      answerFlow(value) {
+        const c = get().campaign;
+        if (!c) return;
+        try {
+          set({ campaign: advance(db, c, value), error: null });
+          persist();
+        } catch (e) {
+          set({ error: e instanceof Error ? e.message : String(e) });
+        }
       },
 
       choose(optionId) {
@@ -307,6 +327,9 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage(),
         const settings = { locale: save.settings?.locale ?? "en", drawByHand: save.settings?.drawByHand ?? true, tapDecks: save.settings?.tapDecks ?? true, pace: save.settings?.pace ?? "normal", tipsOn: save.settings?.tipsOn ?? true, musicVolume: save.settings?.musicVolume ?? 50, sfxVolume: save.settings?.sfxVolume ?? 80, muted: save.settings?.muted ?? false };
         set(settings);
         const restore = () => {
+          // a campaign saved before the flow gets one (a scenario in progress stays in progress)
+          const inGame = save.version === ENGINE_VERSION && !!save.setup;
+          if (save.campaign) save = { ...save, campaign: migrateCampaign(db, save.campaign as unknown as Record<string, unknown>, inGame) };
           if (save.version !== ENGINE_VERSION || !save.setup) {
             // the rules changed since this save: keep the campaign, restart the scenario
             set({
@@ -429,7 +452,7 @@ export function createGameStore(db: ContentDb, storage: Storage = safeStorage(),
         const data = JSON.parse(json) as { setup: GameSetup; actions: Action[]; campaign?: CampaignState };
         const r = replayWithFloor(db, data.setup, data.actions);
         quietNextGame();
-        set({ setup: data.setup, actions: data.actions, game: r.state, undoFloor: r.undoFloor, logMarks: [r.state.log.length], campaign: data.campaign ?? get().campaign, screen: "game", queue: [], current: null });
+        set({ setup: data.setup, actions: data.actions, game: r.state, undoFloor: r.undoFloor, logMarks: [r.state.log.length], campaign: data.campaign ? migrateCampaign(db, data.campaign as unknown as Record<string, unknown>, true) : get().campaign, screen: "game", queue: [], current: null });
         persist();
       },
     };

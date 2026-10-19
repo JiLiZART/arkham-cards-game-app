@@ -1,6 +1,7 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import { loadCampaign, loadPack } from "../content";
 import { applyScenarioEnd, scenarioSetup, startCampaign } from "./campaign";
+import { flatLog, record } from "./campaignLog";
 import { card, createCard, def, enemyStat, findByCode, inv, locationByName, moveCard } from "./core";
 import { createGame, type Result } from "./engine";
 import { finalResolution } from "./rules/scenario";
@@ -86,7 +87,8 @@ describe("The Midnight Masks", () => {
 
   it("six unique cultists in the victory display → Resolution 1, recorded in the campaign log", () => {
     const c = startCampaign(db, { campaignId: "night-of-the-zealot", difficulty: "standard", seed: 4, investigators: [{ code: ROLAND, deckId: "roland-starter" }] });
-    const c2 = { ...c, scenarioIndex: 1, log: { houseStanding: true } };
+    // the campaign as it stands on the way to The Midnight Masks, the house still standing
+    const c2 = { ...c, log: record(c.log, "houseStanding"), flow: { ...c.flow, play: "the-midnight-masks", pos: 1 } };
     let r = skipMulligans(createGame(db, scenarioSetup(db, c2, 3)));
     r = settle(r);
     r = mutate(r, (g) => {
@@ -95,8 +97,8 @@ describe("The Midnight Masks", () => {
     r = pick(r, "Gain 1 resource");
     expect(r.state.resolution).toBe("R1");
     const next = applyScenarioEnd(db, c2, r.state);
-    expect((next.log.cultistsInterrogated as string[]).sort()).toEqual(["01121b", "01137", "01138", "01139", "01140", "01141"]);
-    expect(next.log.cultistsGotAway).toEqual([]);
+    expect((flatLog(next.log).cultistsInterrogated as string[]).sort()).toEqual(["01121b", "01137", "01138", "01139", "01140", "01141"]);
+    expect(flatLog(next.log).cultistsGotAway).toEqual([]);
   });
 
   it("the second agenda advancing ends the scenario at midnight (Resolution 2)", () => {

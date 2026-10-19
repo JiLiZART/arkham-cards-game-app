@@ -7,8 +7,17 @@ describe("starting a campaign with an investigator whose pack is not loaded", ()
     expect(packLoaded(db, "dwl")).toBe(false);
     gameStore.getState().newCampaign({ campaignId: "the-dunwich-legacy", difficulty: "standard", seed: 1, investigators: [{ code: "02001", deckId: "02001-starter" }] });
     expect(gameStore.getState().loading).toBe(true);
-    await vi.waitFor(() => expect(gameStore.getState().game).not.toBeNull(), { timeout: 5000 });
+    await vi.waitFor(() => expect(gameStore.getState().campaign).not.toBeNull(), { timeout: 5000 });
     expect(packLoaded(db, "dwl")).toBe(true);
+    // the campaign opens with its prologue, then the choice of the first scenario (Extracurricular Activity), then Begin
+    const waits = () => gameStore.getState().campaign!.flow.waiting?.step.kind;
+    expect(gameStore.getState().screen).toBe("log");
+    expect(waits()).toBe("continue");
+    gameStore.getState().answerFlow("continue");
+    expect(waits()).toBe("chooseOne");
+    gameStore.getState().answerFlow("1a");
+    expect(waits()).toBe("play");
+    gameStore.getState().startScenario(1);
     const game = gameStore.getState().game!;
     expect(Object.values(game.cards).some((c) => c.code === "02001")).toBe(true);
     expect(game.order).toEqual(["02001"]);

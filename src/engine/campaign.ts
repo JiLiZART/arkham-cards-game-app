@@ -1,6 +1,9 @@
-import type { CampaignEffect, ChaosToken, DeckDef, Difficulty } from "../content/schema";
+import type { ChaosToken, DeckDef, Difficulty } from "../content/schema";
+import { type CampaignLog, emptyLog, flatLog, migrateLog } from "./campaignLog";
+import { flowOf } from "../content/flow";
 import { expandDeck, validateDeck } from "./decks";
 import { ENGINE_VERSION } from "./engine";
+import { advance, type FlowState, initFlow, settle, startResolution } from "./flow";
 import { randInt } from "./rng";
 import type { ContentDb, GameSetup, GameState, InvId } from "./types";
 
@@ -28,9 +31,11 @@ export interface CampaignState {
   difficulty: Difficulty;
   seed: number;
   rng: number;
-  log: Record<string, unknown>;
+  /** the campaign log, in sections (campaignLog.ts) */
+  log: CampaignLog;
   chaosBag: ChaosToken[];
-  scenarioIndex: number;
+  /** where the campaign's flow stands: what it is waiting for, what comes next (flow.ts, ADR-0011) */
+  flow: FlowState;
   lead: InvId;
   investigators: CampaignInvestigator[];
   history: ScenarioRecord[];
@@ -68,14 +73,38 @@ export function startCampaign(db: ContentDb, opts: NewCampaign): CampaignState {
     if (d.randomBasicWeakness) deck.push(pool[randInt(rng, pool.length)].code);
     return { code, deckId, deck, xp: 0, physicalTrauma: 0, mentalTrauma: 0, status: "active" as const };
   });
-  return {
+  const state: CampaignState = {
     version: ENGINE_VERSION, campaignId: c.id, difficulty: opts.difficulty, seed: opts.seed, rng: rng.rng,
-    log: {}, chaosBag: [...bag], scenarioIndex: 0, lead: investigators[0].code,
+    log: emptyLog(), chaosBag: [...bag], flow: initFlow(db, c.id), lead: investigators[0].code,
     investigators, history: [], result: null,
   };
+  // the campaign's setup and its first interlude run up to the first prompt, or to the first scenario
+  return advance(db, state);
 }
 
-export const currentScenarioId = (db: ContentDb, c: CampaignState) => db.campaigns[c.campaignId].scenarios[c.scenarioIndex] ?? null;
+/**
+ * A campaign saved before the flow (a scenario index and a flat log) as a campaign with one: the flat log becomes the
+ * notes section, and the flow stands at the scenario the index named, playing it when a game of it was in progress and
+ * at its Begin prompt otherwise. A campaign that already has a flow is returned as it is.
+ */
+export function migrateCampaign(db: ContentDb, raw: Record<string, any>, inGame: boolean): CampaignState {
+  if (raw.flow) return raw as CampaignState;
+  const { scenarioIndex, log, ...rest } = raw;
+  const def = db.campaigns[raw.campaignId];
+  const id: string | null = def?.scenarios[scenarioIndex ?? 0] ?? null;
+  const flow = initFlow(db, raw.campaignId);
+  flow.queue = [];
+  if (id) {
+    flow.pos = Math.max(0, flowOf(db, raw.campaignId).order.indexOf(id));
+    flow.play = id;
+    if (inGame) flow.playing = true;
+    else flow.waiting = { id: "play", step: { kind: "play", scenario: id } };
+  } else flow.pos = flowOf(db, raw.campaignId).order.length;
+  return { ...rest, log: migrateLog(log ?? {}), flow } as CampaignState;
+}
+
+/** the scenario to play now (or being played); null while the flow is between, or when the campaign is over */
+export const currentScenarioId = (_db: ContentDb, c: CampaignState): string | null => c.flow.play;
 
 /** setup for the next scenario of the campaign */
 export function scenarioSetup(db: ContentDb, c: CampaignState, seed: number): GameSetup {
@@ -85,7 +114,7 @@ export function scenarioSetup(db: ContentDb, c: CampaignState, seed: number): Ga
   const ordered = [...active.filter((i) => i.code === c.lead), ...active.filter((i) => i.code !== c.lead)];
   // scenario setup steps may add tokens on top of this bag (and the campaign keeps them afterwards)
   return {
-    campaignId: c.campaignId, scenarioId, difficulty: c.difficulty, seed, campaignLog: structuredClone(c.log), chaosBag: [...c.chaosBag],
+    campaignId: c.campaignId, scenarioId, difficulty: c.difficulty, seed, campaignLog: flatLog(c.log), chaosBag: [...c.chaosBag],
     investigators: ordered.map((i) => ({ code: i.code, deck: i.deck, physicalTrauma: i.physicalTrauma, mentalTrauma: i.mentalTrauma })),
   };
 }
@@ -113,90 +142,33 @@ function uniqueCultists(db: ContentDb, s: GameState, where: "victory" | "remaini
   return [...out];
 }
 
-/** apply the end of a scenario to the campaign; returns the new campaign state */
+/**
+ * The end of a scenario: what the engine knows (trauma and experience from play, the victory display, killed and insane
+ * investigators), then the resolution's steps through the campaign flow (ADR-0011), which goes on to the next prompt,
+ * the next scenario or the end of the campaign. Returns the new campaign state.
+ */
 export function applyScenarioEnd(db: ContentDb, c0: CampaignState, s: GameState): CampaignState {
   if (s.phase !== "ended" || !s.resolution) throw new Error("scenario has not ended");
   const c = structuredClone(c0);
-  const res = db.scenarios[s.scenarioId].resolutions[s.resolution] ?? db.scenarios[s.scenarioId].resolutions.none;
   const victory = victoryTotal(db, s);
-  const rng = { rng: c.rng };
-  const byCode = (code: InvId) => c.investigators.find((i) => i.code === code)!;
   // trauma and adjustments that happened during play
   for (const i of Object.values(s.invs)) {
-    const ci = byCode(i.id);
+    const ci = c.investigators.find((x) => x.code === i.id)!;
     ci.physicalTrauma += i.physicalTrauma;
     ci.mentalTrauma += i.mentalTrauma;
     ci.xp += (s.flags[`xp:${i.id}`] as number | undefined) ?? 0;
   }
-  let xpEarned = 0;
-  const each = c.investigators.filter((i) => i.status === "active");
-  const lead = byCode(s.lead);
-  const apply = (e: CampaignEffect) => {
-    switch (e.do) {
-      case "record":
-        c.log[e.key] = e.value;
-        return;
-      case "crossOut":
-        delete c.log[e.key];
-        return;
-      case "crossOutIfInVictory":
-        if (Object.values(s.cards).some((x) => x.code === e.code && x.zone === "victory")) delete c.log[e.key];
-        return;
-      case "recordCards":
-        c.log[e.key] = uniqueCultists(db, s, e.source === "victoryUniqueCultists" ? "victory" : "remaining");
-        return;
-      case "xp": {
-        const n = e.bonus + (e.victory ? victory : 0);
-        for (const i of e.who === "lead" ? [lead] : each) i.xp += n;
-        if (e.who !== "lead") xpEarned += n;
-        return;
-      }
-      case "trauma":
-        for (const i of e.who === "lead" ? [lead] : each) {
-          i.physicalTrauma += e.physical;
-          i.mentalTrauma += e.mental;
-        }
-        return;
-      case "kill":
-        for (const i of each) if (e.who === "each" || s.invs[i.code]?.status !== "resigned") i.status = "killed";
-        return;
-      case "earnCard":
-        // ponytail: "choice" goes to the lead too; a picker UI can come with the deck upgrade screen
-        lead.deck.push(e.code);
-        return;
-      case "removeCard":
-        for (const i of c.investigators) i.deck = i.deck.filter((x) => x !== e.code);
-        return;
-      case "addWeakness": {
-        const pool = basicWeaknesses(db, e.trait);
-        for (const i of each) if (pool.length) i.deck.push(pool[randInt(rng, pool.length)].code);
-        return;
-      }
-      case "addChaosToken":
-        c.chaosBag.push(e.token);
-        return;
-      case "end":
-        c.result = e.result;
-        return;
-    }
-  };
-  for (const e of res.effects) apply(e);
   // permanent bag additions from this scenario's setup
   for (const st of db.scenarios[s.scenarioId].setup) if (st.do === "addChaosToken") c.chaosBag.push(st.token);
-  // killed or driven insane by trauma
-  for (const i of c.investigators) {
-    if (i.status !== "active") continue;
-    const d = db.cards[i.code];
-    if (i.physicalTrauma >= (d.health ?? Infinity)) i.status = "killed";
-    else if (i.mentalTrauma >= (d.sanity ?? Infinity)) i.status = "insane";
-  }
-  c.history.push({ scenarioId: s.scenarioId, resolution: s.resolution, xp: xpEarned, victory });
-  c.rng = rng.rng;
-  c.scenarioIndex++;
-  if (!c.result && c.investigators.every((i) => i.status !== "active")) c.result = "lose";
-  if (!c.result && !currentScenarioId(db, c)) c.result = "win";
-  if (!c.investigators.find((i) => i.code === c.lead && i.status === "active")) {
-    c.lead = c.investigators.find((i) => i.status === "active")?.code ?? c.lead;
-  }
-  return c;
+  c.history.push({ scenarioId: s.scenarioId, resolution: s.resolution, xp: 0, victory });
+  settle(db, c);
+  return startResolution(db, c, {
+    id: s.scenarioId,
+    resolution: s.resolution,
+    victory,
+    victoryCodes: Object.values(s.cards).filter((x) => x.zone === "victory").map((x) => x.code),
+    cultistsVictory: uniqueCultists(db, s, "victory"),
+    cultistsRemaining: uniqueCultists(db, s, "remaining"),
+    notResigned: Object.values(s.invs).filter((i) => i.status !== "resigned").map((i) => i.id),
+  });
 }

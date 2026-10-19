@@ -58,6 +58,52 @@ describe("ui store", () => {
     expect(reloaded.getState().screen).toBe("game");
   });
 
+  it("a campaign with nothing before its first scenario starts it at once, the flow playing it", () => {
+    const s = start(mem());
+    const c = s.getState().campaign!;
+    expect(c.flow).toMatchObject({ play: "the-gathering", playing: true, waiting: null });
+  });
+
+  it("a campaign saved before the flow (a scenario index, a flat log) resumes in the scenario it was in", () => {
+    const storage = mem();
+    start(storage);
+    const save = JSON.parse(storage.getItem(SAVE_KEY)!);
+    const { flow, log, ...rest } = save.campaign;
+    void flow;
+    void log;
+    storage.setItem(SAVE_KEY, JSON.stringify({ ...save, campaign: { ...rest, scenarioIndex: 0, log: { houseStanding: true } } }));
+    const reloaded = createGameStore(db, storage);
+    expect(reloaded.getState().resume()).toBe(true);
+    expect(reloaded.getState().screen).toBe("game");
+    expect(reloaded.getState().campaign!.flow).toMatchObject({ play: "the-gathering", playing: true });
+    expect(reloaded.getState().campaign!.log.campaign_notes.entries).toEqual([{ id: "houseStanding" }]);
+  });
+
+  it("an old save between scenarios resumes on the campaign screen at the Begin prompt", () => {
+    const storage = mem();
+    start(storage);
+    const save = JSON.parse(storage.getItem(SAVE_KEY)!);
+    const { flow, log, ...rest } = save.campaign;
+    void flow;
+    void log;
+    storage.setItem(SAVE_KEY, JSON.stringify({ ...save, setup: null, actions: [], campaign: { ...rest, scenarioIndex: 1, log: {} } }));
+    const reloaded = createGameStore(db, storage);
+    reloaded.getState().resume();
+    expect(reloaded.getState().screen).toBe("log");
+    expect(reloaded.getState().campaign!.flow.waiting?.step).toEqual({ kind: "play", scenario: "the-midnight-masks" });
+    reloaded.getState().startScenario(3);
+    expect(reloaded.getState().screen).toBe("game");
+    expect(reloaded.getState().game!.scenarioId).toBe("the-midnight-masks");
+  });
+
+  it("answerFlow reports an answer the flow refuses and leaves the campaign as it was", () => {
+    const s = start(mem());
+    const before = s.getState().campaign;
+    s.getState().answerFlow("continue");
+    expect(s.getState().error).toMatch(/not waiting/);
+    expect(s.getState().campaign).toBe(before);
+  });
+
   it("the pace is saved with the settings; old saves play at the normal pace", () => {
     const storage = mem();
     const s = start(storage);
