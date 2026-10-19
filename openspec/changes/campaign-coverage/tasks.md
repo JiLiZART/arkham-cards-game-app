@@ -1,6 +1,6 @@
 ## 0. Before
 
-- [ ] 0.1 Archive `campaign-guide-flow` (complete; it modifies the same two `campaign-play` requirements, and this change's deltas are written against its version of them).
+- [x] 0.1 Archive `campaign-guide-flow` (complete; it modifies the same two `campaign-play` requirements, and this change's deltas are written against its version of them).
 
 ## 1. Coverage
 
