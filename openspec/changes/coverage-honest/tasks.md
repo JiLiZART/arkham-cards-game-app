@@ -14,7 +14,7 @@
 ## 3. Token effects the engine lacks
 
 - [x] 3.1 Effect op `searchEncounterDraw { filter }`: search the encounter deck and discard pile, the resolving investigator draws the first match, shuffle the encounter deck; nothing found does nothing; schema, validation, engine, tests (found in the discard pile, found in the deck, none).
-- [ ] 3.2 `revealAnother: { if: Condition }` and condition `enemyInPlay: CardFilter`; `"ifAncientOneInPlay"` still valid; tests (no Cultist in play reveals another, a Cultist in play doesn't).
+- [x] 3.2 `revealAnother: { if: Condition }` and condition `enemyInPlay: CardFilter`; `"ifAncientOneInPlay"` still valid; tests (no Cultist in play reveals another, a Cultist in play doesn't).
 
 ## 4. Night of the Zealot's Hard and Expert tokens
 

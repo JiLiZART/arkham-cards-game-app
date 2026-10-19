@@ -134,6 +134,7 @@ export type Condition =
   | { cluesOnYourLocation: "none" | "some" }
   | { youHaveClues: "none" | "some" }
   | { enemyAtYourLocation: CardFilter | true }
+  | { enemyInPlay: CardFilter }
   | { exhaustedEnemyAtYourLocation: true }
   | { onlyEngagedEnemy: true }
   | { eventEnemy: CardFilter }
@@ -165,6 +166,7 @@ export const Condition: z.ZodType<Condition> = z.lazy(() =>
     z.object({ cluesOnYourLocation: z.enum(["none", "some"]) }).strict(),
     z.object({ youHaveClues: z.enum(["none", "some"]) }).strict(),
     z.object({ enemyAtYourLocation: z.union([CardFilter, z.literal(true)]) }).strict(),
+    z.object({ enemyInPlay: CardFilter }).strict(),
     z.object({ exhaustedEnemyAtYourLocation: z.literal(true) }).strict(),
     z.object({ onlyEngagedEnemy: z.literal(true) }).strict(),
     z.object({ eventEnemy: CardFilter }).strict(),
@@ -569,7 +571,7 @@ export const TokenEffect = z
     onFail: z.array(Effect).optional(),
     /** effects only if condition holds when revealed */
     condition: Condition.optional(),
-    revealAnother: z.union([z.boolean(), z.literal("ifAncientOneInPlay")]).optional(),
+    revealAnother: z.union([z.boolean(), z.literal("ifAncientOneInPlay"), z.object({ if: Condition }).strict()]).optional(),
   })
   .strict();
 export type TokenEffect = z.infer<typeof TokenEffect>;

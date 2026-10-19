@@ -231,6 +231,7 @@ function resolveTokensStage(g: G) {
         if (condOk && eff.onReveal) push(g, { t: "Effects", effects: eff.onReveal, ctx: { ...ctx, token } });
         if (condOk && eff.onFail) t.tokenOnFail.push(...eff.onFail);
         if (eff.revealAnother === true) revealAnother = true;
+        if (typeof eff.revealAnother === "object" && checkCondition(g, eff.revealAnother.if, ctx)) revealAnother = true;
         if (eff.revealAnother === "ifAncientOneInPlay" && Object.values(g.s.cards).some((c) => c.zone === "enemy" && def(g, c.id).traits.includes("Ancient One"))) revealAnother = true;
       }
     }

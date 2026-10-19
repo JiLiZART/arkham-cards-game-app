@@ -407,6 +407,7 @@ export function checkCondition(g: G, c: Condition, ctx: EffCtx): boolean {
     const f = c.enemyAtYourLocation;
     return enemiesAt(g, yourLoc).some((e) => f === true || matchesFilter(g, e.code, f));
   }
+  if ("enemyInPlay" in c) return Object.values(g.s.cards).some((x) => x.zone === "enemy" && matchesFilter(g, x.code, c.enemyInPlay));
   if ("exhaustedEnemyAtYourLocation" in c) return enemiesAt(g, yourLoc).some((e) => e.exhausted);
   if ("onlyEngagedEnemy" in c) return !!you && engagedWith(g, you).length === 1 && engagedWith(g, you)[0].id === ctx.enemy;
   if ("eventEnemy" in c) return !!ctx.enemy && matchesFilter(g, card(g, ctx.enemy).code, c.eventEnemy);
