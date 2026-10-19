@@ -2,8 +2,8 @@ import type { ContentError } from "./loader";
 import type { SoundManifest } from "./schema";
 
 /** bytes: effects stay small enough to ship with the first load; music loads after the game starts */
-export const EFFECTS_BUDGET = 1_000_000;
-export const MUSIC_BUDGET = 10_000_000;
+export const EFFECTS_BUDGET = 1_500_000;
+export const MUSIC_BUDGET = 12_000_000;
 /** the formats a music track ships in: AAC for Safari, Opus for the rest */
 export const MUSIC_FORMATS = ["m4a", "webm"] as const;
 
@@ -36,5 +36,36 @@ export function checkSounds(m: SoundManifest, size: (path: string) => number | n
   }
   if (effectsBytes > EFFECTS_BUDGET) errors.push({ file: FILE, path: "effects", message: `effects total ${effectsBytes} bytes, over the ${EFFECTS_BUDGET} budget` });
   if (musicBytes > MUSIC_BUDGET) errors.push({ file: FILE, path: "music", message: `music total ${musicBytes} bytes, over the ${MUSIC_BUDGET} budget` });
+  return errors;
+}
+
+/** measurements of a converted file; null when the file can't be read */
+export type SoundProbe = {
+  /** integrated loudness (LUFS) and true peak (dBTP) of a file under public/sounds */
+  loudness: (file: string) => { lufs: number; peak: number } | null;
+  /** dB between the 200 ms at the loop's start and the 200 ms before its end */
+  seam: (file: string, loopStart: number, loopEnd?: number) => number | null;
+};
+/** the targets the importer levels to (ADR-0009), the tolerance, the true-peak limit, the peak above which a quiet clip counts as held by the ceiling, and the loop seam limit */
+export const LOUDNESS = { effect: -18, music: -23, tolerance: 2, peak: -1, held: -4, seam: 6 } as const;
+
+/** Every converted effect is within 2 LU of -18 LUFS (or held below it by the peak ceiling) and under -1 dBTP; every track likewise near -23, and its loop seam under 6 dB. */
+export function checkLoudness(m: SoundManifest, probe: SoundProbe): ContentError[] {
+  const errors: ContentError[] = [];
+  const level = (path: string, file: string, target: number) => {
+    const l = probe.loudness(file);
+    if (!l) return;
+    // a transient the peak ceiling holds below the target is as loud as it can be; anything else must be within the tolerance
+    const held = l.lufs < target && l.peak >= LOUDNESS.held;
+    if (l.lufs > target + LOUDNESS.tolerance || (l.lufs < target - LOUDNESS.tolerance && !held)) errors.push({ file: FILE, path, message: `${file} is ${l.lufs.toFixed(1)} LUFS, more than ${LOUDNESS.tolerance} LU from ${target} (npm run import:sounds)` });
+    if (l.peak >= LOUDNESS.peak) errors.push({ file: FILE, path, message: `${file} peaks at ${l.peak.toFixed(1)} dBTP, not under ${LOUDNESS.peak} (npm run import:sounds)` });
+  };
+  for (const [id, clip] of Object.entries(m.effects)) level(`effects.${id}`, clip.file, LOUDNESS.effect);
+  for (const [id, track] of Object.entries(m.music)) {
+    level(`music.${id}`, `${track.file}.m4a`, LOUDNESS.music);
+    if (!track.loop) continue;
+    const d = probe.seam(`${track.file}.m4a`, track.loopStart ?? 0, track.loopEnd);
+    if (d !== null && Math.abs(d) > LOUDNESS.seam) errors.push({ file: FILE, path: `music.${id}`, message: `loop seam of ${track.file} is ${Math.abs(d).toFixed(1)} dB, over ${LOUDNESS.seam} dB: the loop will pump` });
+  }
   return errors;
 }

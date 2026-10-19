@@ -1,8 +1,9 @@
 /** validate all content files: schema + cross references. Exit code 1 on errors. */
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { loadContentFromDisk } from "../src/content/node";
-import { checkSounds } from "../src/content/soundChecks";
+import { checkLoudness, checkSounds } from "../src/content/soundChecks";
 import { ANIMATED } from "../src/ui/store";
+import { ffmpegAvailable, ffmpegProbe } from "./sound-probe";
 import { checkIcons, MANIFEST, SPRITE, SPRITE_CAMPAIGNS, setsWithoutIcon, spriteIds } from "./import-icons";
 import { cycleCoverage } from "./snapshotText";
 
@@ -16,6 +17,9 @@ const fileSize = (path: string) => {
   }
 };
 errors.push(...checkSounds(db.sounds, fileSize, ANIMATED));
+// loudness and loop seams need ffmpeg; without it they are skipped with a warning, not failed
+if (ffmpegAvailable()) errors.push(...checkLoudness(db.sounds, ffmpegProbe()));
+else console.warn("warning: ffmpeg not found, sound loudness and loop seam checks skipped");
 // every encounter set and scenario has an icon in the sprite; the manifest lists exactly the sprite's symbols
 const read = (f: string) => (existsSync(f) ? readFileSync(f, "utf8") : null);
 const manifest = read(MANIFEST);

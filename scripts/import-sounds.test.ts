@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { encodeArgs, placeholderInput } from "./import-sounds";
+import { encodeArgs, levelFilter, measureFilter, placeholderInput, TARGETS } from "./import-sounds";
 
 describe("import-sounds", () => {
   it("encodes an effect to mono MP3, trimmed when the manifest says so", () => {
@@ -16,5 +16,26 @@ describe("import-sounds", () => {
     expect(placeholderInput("snap", "effect").join(" ")).toMatch(/lavfi/);
     expect(placeholderInput("snap", "effect").join(" ")).toMatch(/duration=0\.\d/);
     expect(placeholderInput("bed-gathering", "music").join(" ")).toMatch(/duration=8/);
+  });
+
+  it("puts the loudness filter before the codec when one is given", () => {
+    const args = encodeArgs("effect", ["-i", "a.wav"], "a.mp3", undefined, "loudnorm=I=-18");
+    expect(args.slice(args.indexOf("-af"), args.indexOf("-af") + 2)).toEqual(["-af", "loudnorm=I=-18"]);
+    expect(args.indexOf("-af")).toBeLessThan(args.indexOf("-c:a"));
+  });
+
+  it("measures an effect as dual mono and a track as it is, both with the R128 meter", () => {
+    expect(measureFilter("effect")).toBe("aformat=channel_layouts=mono,pan=stereo|c0=c0|c1=c0,apad=whole_dur=0.5,ebur128=peak=true");
+    expect(measureFilter("music")).toMatch(/^silenceremove=.*areverse,apad=whole_dur=0.5,ebur128=peak=true$/);
+    expect(TARGETS.effect.lufs).toBe(-18);
+  });
+
+  it("levels a sustained clip to the target loudness", () => {
+    expect(levelFilter("effect", { lufs: -27.1, peak: -12 })).toBe("aformat=channel_layouts=mono,volume=9.1dB");
+    expect(levelFilter("music", { lufs: -20, peak: -6 })).toMatch(/^silenceremove=.*areverse,volume=-3dB$/);
+  });
+
+  it("stops a transient at the peak ceiling instead of reaching the target", () => {
+    expect(levelFilter("effect", { lufs: -29, peak: -3 })).toBe("aformat=channel_layouts=mono,volume=1dB");
   });
 });

@@ -1,20 +1,63 @@
 /**
  * Converts the sounds named in content/sounds/sounds.json into the files the game ships (public/sounds): effects as
- * mono MP3, music as AAC (.m4a) and Opus (.webm). Originals are read from sounds-src/<original> (untracked); a clip
+ * mono MP3, music as AAC (.m4a) and Opus (.webm), each loudness-normalised in two passes (ADR-0009). Originals are read from sounds-src/<original> (untracked); a clip
  * with no original gets a synthesised placeholder, so the game is never silent while CC0 recordings are still being
  * chosen. Usage: npm run import:sounds [-- clipId ...]
  */
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import { existsSync, mkdirSync } from "node:fs";
 import { SoundManifest } from "../src/content/schema";
+import { type Measured, parseEbur128 } from "./sound-probe";
 
 export type Kind = "effect" | "aac" | "opus";
 
 /** ffmpeg arguments for one output; `input` is the input part ("-i file" or a lavfi source) */
-export function encodeArgs(kind: Kind, input: string[], out: string, trim?: [number, number]): string[] {
+export function encodeArgs(kind: Kind, input: string[], out: string, trim?: [number, number], filter?: string): string[] {
   const cut = trim ? ["-ss", String(trim[0]), "-to", String(trim[1])] : [];
   const codec = kind === "effect" ? ["-ac", "1", "-ar", "44100", "-c:a", "libmp3lame", "-b:a", "80k"] : kind === "aac" ? ["-c:a", "aac", "-b:a", "96k"] : ["-c:a", "libopus", "-b:a", "80k"];
-  return ["-y", ...input, ...cut, ...codec, out];
+  return ["-y", ...input, ...cut, ...(filter ? ["-af", filter] : []), ...codec, out];
+}
+
+/** fixed levels (ADR-0009): integrated LUFS to reach, and the true-peak ceiling (under -1 dBTP once the encoder overshoots) */
+export const TARGETS = {
+  effect: { lufs: -18, ceiling: -2 },
+  music: { lufs: -23, ceiling: -2 },
+} as const;
+
+/** a looped track must not start or end in silence, or the loop pumps: cut both ends back to the first sound */
+const TRIM_SILENCE = "silenceremove=start_periods=1:start_threshold=-50dB,areverse,silenceremove=start_periods=1:start_threshold=-50dB,areverse,";
+
+/**
+ * What an effect is measured and levelled as: mono, the way it ships, played from both speakers (dual mono, 3 LU above
+ * a bare mono reading). A late downmix would add up to 6 dB of peak.
+ */
+const prefix = (category: keyof typeof TARGETS) => (category === "effect" ? "aformat=channel_layouts=mono,pan=stereo|c0=c0|c1=c0," : TRIM_SILENCE);
+/** the downmix alone, for the level filter (the output stays mono) */
+const downmix = (category: keyof typeof TARGETS) => (category === "effect" ? "aformat=channel_layouts=mono," : TRIM_SILENCE);
+
+/** the measuring pass: the same EBU R128 meter the content check uses; a clip under 400 ms is padded so it has a block */
+export function measureFilter(category: keyof typeof TARGETS): string {
+  return `${prefix(category)}apad=whole_dur=0.5,ebur128=peak=true`;
+}
+
+/**
+ * The gain that brings the measured clip to the target loudness, or only as far as its peak may go when it is a
+ * transient (a click can't reach -18 LUFS under the ceiling without a limiter squashing it, so it is peak-normalised).
+ */
+export function levelFilter(category: keyof typeof TARGETS, measured: Measured): string {
+  const t = TARGETS[category];
+  const gain = Math.min(t.lufs - measured.lufs, t.ceiling - measured.peak);
+  return `${downmix(category)}volume=${Math.round(gain * 100) / 100}dB`;
+}
+
+/** measure the (trimmed) clip; clips under 400 ms are padded with silence for the measurement only */
+function measure(category: keyof typeof TARGETS, input: string[], trim?: [number, number]): Measured {
+  const cut = trim ? ["-ss", String(trim[0]), "-to", String(trim[1])] : [];
+  const r = spawnSync("ffmpeg", ["-hide_banner", "-nostats", "-y", ...input, ...cut, "-af", measureFilter(category), "-f", "null", "-"], { encoding: "utf8" });
+  if (r.status !== 0) throw new Error(`ffmpeg failed measuring loudness:\n${r.stderr}`);
+  const m = parseEbur128(r.stderr);
+  if (!m) throw new Error("no loudness measurement in ffmpeg's output");
+  return m;
 }
 
 /** a stand-in sound synthesised from the clip's id: a short tone or noise burst for an effect, an 8 s drone for music */
@@ -34,7 +77,9 @@ export function placeholderInput(id: string, kind: "effect" | "music"): string[]
 }
 
 function run(args: string[]) {
-  execFileSync("ffmpeg", ["-hide_banner", "-loglevel", "error", ...args], { stdio: "inherit" });
+  execFileSync("ffmpeg", ["-hide_banner", "-loglevel", "error", ...args], {
+    stdio: "inherit",
+  });
 }
 
 async function main() {
@@ -50,7 +95,9 @@ async function main() {
     if (!wanted(id)) continue;
     const src = c.original ? `sounds-src/${c.original}` : null;
     if (src && !existsSync(src)) throw new Error(`${id}: original ${src} not found`);
-    run(encodeArgs("effect", src ? ["-i", src] : placeholderInput(id, "effect"), `public/sounds/${c.file}`, src ? c.trim : undefined));
+    const input = src ? ["-i", src] : placeholderInput(id, "effect");
+    const trim = src ? c.trim : undefined;
+    run(encodeArgs("effect", input, `public/sounds/${c.file}`, trim, levelFilter("effect", measure("effect", input, trim))));
     if (src) real++;
     else synth++;
   }
@@ -59,15 +106,18 @@ async function main() {
     const src = t.original ? `sounds-src/${t.original}` : null;
     if (src && !existsSync(src)) throw new Error(`${id}: original ${src} not found`);
     const input = src ? ["-i", src] : placeholderInput(t.file, "music");
-    run(encodeArgs("aac", input, `public/sounds/${t.file}.m4a`, src ? t.trim : undefined));
-    run(encodeArgs("opus", input, `public/sounds/${t.file}.webm`, src ? t.trim : undefined));
+    const trim = src ? t.trim : undefined;
+    const filter = levelFilter("music", measure("music", input, trim));
+    run(encodeArgs("aac", input, `public/sounds/${t.file}.m4a`, trim, filter));
+    run(encodeArgs("opus", input, `public/sounds/${t.file}.webm`, trim, filter));
     if (src) real++;
     else synth++;
   }
   console.log(`sounds: ${real} from originals, ${synth} synthesised placeholders`);
 }
 
-if (process.argv[1]?.endsWith("import-sounds.ts")) main().catch((e) => {
-  console.error(e.message);
-  process.exit(1);
-});
+if (process.argv[1]?.endsWith("import-sounds.ts"))
+  main().catch((e) => {
+    console.error(e.message);
+    process.exit(1);
+  });

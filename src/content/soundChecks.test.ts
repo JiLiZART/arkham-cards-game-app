@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { SoundManifest } from "./schema";
-import { checkSounds, EFFECTS_BUDGET, MUSIC_BUDGET } from "./soundChecks";
+import { checkLoudness, checkSounds, EFFECTS_BUDGET, MUSIC_BUDGET, type SoundProbe } from "./soundChecks";
 
 const clip = { file: "snap.mp3", source: "https://kenney.nl/assets/casino-audio", author: "Kenney", license: "CC0" };
 const manifest = SoundManifest.parse({
@@ -33,5 +33,43 @@ describe("checkSounds", () => {
   it("reports the budgets", () => {
     const errors = checkSounds(manifest, sizes({ "snap.mp3": EFFECTS_BUDGET + 1, "fight.m4a": MUSIC_BUDGET, "fight.webm": 1 }), animated);
     expect(errors.map((e) => e.path).sort()).toEqual(["effects", "music"]);
+  });
+});
+
+describe("checkLoudness", () => {
+  const probe = (p: Partial<SoundProbe>): SoundProbe => ({ loudness: () => ({ lufs: -18, peak: -3 }), seam: () => 1, ...p });
+
+  it("passes effects at the target and loops whose ends match", () => {
+    expect(checkLoudness(manifest, probe({ loudness: (f) => (f === "snap.mp3" ? { lufs: -18.5, peak: -2 } : { lufs: -23, peak: -2 }) }))).toEqual([]);
+  });
+
+  it("reports a track more than 2 LU above -23", () => {
+    expect(checkLoudness(manifest, probe({ loudness: (f) => (f === "snap.mp3" ? { lufs: -18, peak: -3 } : { lufs: -18, peak: -3 }) })).map((e) => e.path)).toEqual(["music.fight"]);
+  });
+
+  it("accepts a quiet transient whose peak sits at the ceiling, but not a quiet sustained clip", () => {
+    const held = checkLoudness(manifest, probe({ loudness: (f) => (f === "snap.mp3" ? { lufs: -24, peak: -2 } : { lufs: -23, peak: -6 }) }));
+    expect(held).toEqual([]);
+    const quiet = checkLoudness(manifest, probe({ loudness: (f) => (f === "snap.mp3" ? { lufs: -24, peak: -9 } : { lufs: -23, peak: -6 }) }));
+    expect(quiet.map((e) => e.path)).toEqual(["effects.snap"]);
+  });
+
+  it("reports an effect louder than the target by more than the tolerance", () => {
+    expect(checkLoudness(manifest, probe({ loudness: (f) => (f === "snap.mp3" ? { lufs: -14, peak: -3 } : { lufs: -23, peak: -3 }) })).map((e) => e.path)).toEqual(["effects.snap"]);
+  });
+
+  it("reports a peak at or above -1 dBTP", () => {
+    const errors = checkLoudness(manifest, probe({ loudness: (f) => ({ lufs: f === "snap.mp3" ? -18 : -23, peak: 0 }) }));
+    expect(errors.map((e) => e.message).join(" ")).toContain("peak");
+  });
+
+  it("reports a loop whose start and end differ by more than 6 dB", () => {
+    const errors = checkLoudness(manifest, probe({ loudness: (f) => ({ lufs: f === "snap.mp3" ? -18 : -23, peak: -3 }), seam: () => 9 }));
+    expect(errors.map((e) => e.path)).toEqual(["music.fight"]);
+    expect(errors[0].message).toContain("seam");
+  });
+
+  it("skips a file the probe cannot read (the missing-file check reports it)", () => {
+    expect(checkLoudness(manifest, probe({ loudness: () => null, seam: () => null }))).toEqual([]);
   });
 });

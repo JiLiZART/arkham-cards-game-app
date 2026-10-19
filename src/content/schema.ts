@@ -658,7 +658,8 @@ const SoundClip = z
   .object({
     /** file name under public/sounds (effects: .mp3; music: the stem, served as .m4a and .webm) */
     file: z.string().min(1),
-    gain: z.number().min(0).max(2).default(1),
+    /** a mix offset on top of the import's fixed loudness (ADR-0009) */
+    gain: z.number().min(0.5).max(1.5).default(1),
     source: z.string().url(),
     author: z.string().min(1),
     license: z.literal("CC0"),
