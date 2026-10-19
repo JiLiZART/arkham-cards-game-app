@@ -11,6 +11,7 @@ npm install
 npm run dev            # http://localhost:5173
 npm test               # engine, content and UI-logic tests
 npm run check:content  # validate every file under content/
+npm run coverage       # rewrite content/coverage.json: how much of the content works
 npm run build
 ```
 
@@ -164,6 +165,8 @@ Only the list of campaigns is in the first download. A generated campaign's scen
 To write a campaign by hand, create `content/campaigns/<id>/` with a `campaign.json`, one JSON file per scenario and, if needed, `scripts/<scenario>.ts`; use Night of the Zealot as the template. ArkhamDB has no location connection data, so each scenario file lists its `connections` as code pairs (and any one-way ones as `oneWay: [from, to]` pairs) and its `layout` as grid positions.
 
 **Keywords:** the card details and the card modal explain each keyword a card has (Hunter, Retaliate, Alert, Aloof, Massive, Surge, Peril, Fast, Patrol, Elusive, Swarming, Concealed, Exceptional, Myriad, Bonded, Permanent, Seal, Uses, Victory) in a sentence or two, worded after the rules reference (the English rulebook in `inspired/`, and `inspired/Arkham_Horror_LCG/документы/Rules_Reference.pdf` for Russian, with the names Russian cards print). The texts are the `kw.*` strings in each locale's `ui.json`.
+
+**Coverage** (ADR-0012). How complete the content is, is computed, not declared. `npm run coverage` loads all the content from disk and writes `content/coverage.json`, committed and sorted so a rerun on unchanged content is identical: per card pack, its encounter cards and player cards and how many work; per campaign, the cards its scenarios use (encounter sets, side decks, acts, agendas) and how many work, the rest by type, and the scenarios without a scenario script; per investigator, whether their card and signature cards work. A card works when its behaviour is written (abilities in data, or a card script) or its text holds nothing for the engine to run. A campaign is **complete** when every card its scenarios use works and every scenario has a scenario script, whoever wrote it; the new-game screen's "partly implemented" mark, its rules filter and the sidebar's "n of m cards work" read the file, which the first download carries. `check:content` fails with "content/coverage.json is behind the content (npm run coverage)" when the file is stale, so a pack's change shows its coverage going up in its diff. The plan for the other campaigns, one change per pack, is [docs/campaign-program.md](docs/campaign-program.md).
 
 ## Playing
 

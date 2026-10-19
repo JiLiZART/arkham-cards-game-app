@@ -1,5 +1,264 @@
 {
  "packs": {
+  "and": {
+   "encounter": {
+    "total": 0,
+    "works": 0,
+    "rest": {}
+   },
+   "player": {
+    "total": 27,
+    "works": 0,
+    "rest": {
+     "asset": 9,
+     "event": 9,
+     "skill": 7,
+     "treachery": 2
+    }
+   }
+  },
+  "aof": {
+   "encounter": {
+    "total": 0,
+    "works": 0,
+    "rest": {}
+   },
+   "player": {
+    "total": 2,
+    "works": 0,
+    "rest": {
+     "asset": 1,
+     "enemy": 1
+    }
+   }
+  },
+  "aon": {
+   "encounter": {
+    "total": 6,
+    "works": 0,
+    "rest": {
+     "act": 2,
+     "agenda": 1,
+     "enemy": 2,
+     "scenario": 1
+    }
+   },
+   "player": {
+    "total": 2,
+    "works": 0,
+    "rest": {
+     "event": 1,
+     "treachery": 1
+    }
+   }
+  },
+  "apot": {
+   "encounter": {
+    "total": 28,
+    "works": 0,
+    "rest": {
+     "act": 4,
+     "agenda": 3,
+     "enemy": 3,
+     "location": 13,
+     "scenario": 1,
+     "treachery": 4
+    }
+   },
+   "player": {
+    "total": 12,
+    "works": 0,
+    "rest": {
+     "asset": 5,
+     "event": 6,
+     "treachery": 1
+    }
+   }
+  },
+  "bad": {
+   "encounter": {
+    "total": 5,
+    "works": 0,
+    "rest": {
+     "act": 1,
+     "agenda": 1,
+     "enemy": 1,
+     "scenario": 1,
+     "story": 1
+    }
+   },
+   "player": {
+    "total": 2,
+    "works": 0,
+    "rest": {
+     "asset": 1,
+     "event": 1
+    }
+   }
+  },
+  "bbt": {
+   "encounter": {
+    "total": 22,
+    "works": 0,
+    "rest": {
+     "act": 3,
+     "agenda": 3,
+     "enemy": 2,
+     "location": 9,
+     "scenario": 1,
+     "treachery": 4
+    }
+   },
+   "player": {
+    "total": 12,
+    "works": 0,
+    "rest": {
+     "asset": 5,
+     "event": 7
+    }
+   }
+  },
+  "blbe": {
+   "encounter": {
+    "total": 19,
+    "works": 0,
+    "rest": {
+     "enemy": 12,
+     "location": 4,
+     "story": 3
+    }
+   },
+   "player": {
+    "total": 11,
+    "works": 0,
+    "rest": {
+     "asset": 7,
+     "event": 1,
+     "story": 2,
+     "treachery": 1
+    }
+   }
+  },
+  "blob": {
+   "encounter": {
+    "total": 46,
+    "works": 0,
+    "rest": {
+     "act": 5,
+     "agenda": 3,
+     "enemy": 12,
+     "location": 11,
+     "scenario": 1,
+     "story": 4,
+     "treachery": 10
+    }
+   },
+   "player": {
+    "total": 7,
+    "works": 0,
+    "rest": {
+     "asset": 7
+    }
+   }
+  },
+  "bob": {
+   "encounter": {
+    "total": 0,
+    "works": 0,
+    "rest": {}
+   },
+   "player": {
+    "total": 2,
+    "works": 0,
+    "rest": {
+     "asset": 1,
+     "treachery": 1
+    }
+   }
+  },
+  "bota": {
+   "encounter": {
+    "total": 26,
+    "works": 3,
+    "rest": {
+     "act": 2,
+     "enemy": 2,
+     "location": 14,
+     "scenario": 1,
+     "treachery": 4
+    }
+   },
+   "player": {
+    "total": 15,
+    "works": 0,
+    "rest": {
+     "asset": 10,
+     "event": 3,
+     "skill": 2
+    }
+   }
+  },
+  "bsr": {
+   "encounter": {
+    "total": 32,
+    "works": 3,
+    "rest": {
+     "act": 2,
+     "agenda": 8,
+     "enemy": 1,
+     "location": 15,
+     "scenario": 1,
+     "treachery": 2
+    }
+   },
+   "player": {
+    "total": 11,
+    "works": 0,
+    "rest": {
+     "asset": 5,
+     "event": 5,
+     "skill": 1
+    }
+   }
+  },
+  "btb": {
+   "encounter": {
+    "total": 6,
+    "works": 0,
+    "rest": {
+     "act": 1,
+     "agenda": 2,
+     "enemy": 1,
+     "location": 1,
+     "scenario": 1
+    }
+   },
+   "player": {
+    "total": 7,
+    "works": 0,
+    "rest": {
+     "asset": 6,
+     "treachery": 1
+    }
+   }
+  },
+  "car": {
+   "encounter": {
+    "total": 0,
+    "works": 0,
+    "rest": {}
+   },
+   "player": {
+    "total": 27,
+    "works": 0,
+    "rest": {
+     "asset": 13,
+     "event": 10,
+     "skill": 2,
+     "treachery": 2
+    }
+   }
+  },
   "cob": {
    "encounter": {
     "total": 111,
@@ -19,6 +278,27 @@
     "rest": {
      "asset": 7,
      "treachery": 1
+    }
+   }
+  },
+  "coh": {
+   "encounter": {
+    "total": 33,
+    "works": 2,
+    "rest": {
+     "act": 3,
+     "agenda": 1,
+     "enemy": 9,
+     "location": 10,
+     "scenario": 1,
+     "treachery": 7
+    }
+   },
+   "player": {
+    "total": 7,
+    "works": 0,
+    "rest": {
+     "asset": 7
     }
    }
   },
@@ -67,31 +347,159 @@
     }
    }
   },
-  "dwl": {
+  "cotr": {
    "encounter": {
-    "total": 205,
-    "works": 17,
+    "total": 31,
+    "works": 3,
     "rest": {
-     "act": 24,
-     "agenda": 14,
-     "enemy": 21,
-     "location": 85,
-     "scenario": 8,
-     "treachery": 36
+     "act": 2,
+     "agenda": 1,
+     "enemy": 5,
+     "location": 12,
+     "scenario": 1,
+     "treachery": 7
     }
    },
    "player": {
-    "total": 123,
+    "total": 5,
     "works": 0,
     "rest": {
-     "asset": 70,
-     "event": 32,
-     "skill": 12,
-     "treachery": 9
+     "asset": 4,
+     "treachery": 1
     }
    }
   },
-  "eoe": {
+  "dca": {
+   "encounter": {
+    "total": 46,
+    "works": 2,
+    "rest": {
+     "act": 5,
+     "agenda": 3,
+     "enemy": 5,
+     "location": 11,
+     "scenario": 1,
+     "story": 13,
+     "treachery": 6
+    }
+   },
+   "player": {
+    "total": 13,
+    "works": 0,
+    "rest": {
+     "asset": 6,
+     "event": 6,
+     "skill": 1
+    }
+   }
+  },
+  "def": {
+   "encounter": {
+    "total": 28,
+    "works": 0,
+    "rest": {
+     "act": 1,
+     "agenda": 3,
+     "enemy": 4,
+     "location": 14,
+     "scenario": 1,
+     "treachery": 5
+    }
+   },
+   "player": {
+    "total": 15,
+    "works": 0,
+    "rest": {
+     "asset": 8,
+     "event": 7
+    }
+   }
+  },
+  "dre": {
+   "encounter": {
+    "total": 0,
+    "works": 0,
+    "rest": {}
+   },
+   "player": {
+    "total": 2,
+    "works": 0,
+    "rest": {
+     "asset": 1,
+     "treachery": 1
+    }
+   }
+  },
+  "dsm": {
+   "encounter": {
+    "total": 26,
+    "works": 2,
+    "rest": {
+     "act": 4,
+     "agenda": 1,
+     "enemy": 4,
+     "location": 10,
+     "scenario": 1,
+     "story": 1,
+     "treachery": 3
+    }
+   },
+   "player": {
+    "total": 14,
+    "works": 0,
+    "rest": {
+     "asset": 6,
+     "event": 5,
+     "skill": 2,
+     "treachery": 1
+    }
+   }
+  },
+  "dwl": {
+   "encounter": {
+    "total": 59,
+    "works": 5,
+    "rest": {
+     "act": 6,
+     "agenda": 4,
+     "enemy": 10,
+     "location": 17,
+     "scenario": 2,
+     "treachery": 15
+    }
+   },
+   "player": {
+    "total": 40,
+    "works": 0,
+    "rest": {
+     "asset": 22,
+     "event": 9,
+     "skill": 1,
+     "treachery": 8
+    }
+   }
+  },
+  "enc": {
+   "encounter": {
+    "total": 4,
+    "works": 0,
+    "rest": {
+     "act": 1,
+     "agenda": 1,
+     "enemy": 1,
+     "scenario": 1
+    }
+   },
+   "player": {
+    "total": 6,
+    "works": 0,
+    "rest": {
+     "asset": 1,
+     "event": 5
+    }
+   }
+  },
+  "eoec": {
    "encounter": {
     "total": 223,
     "works": 5,
@@ -106,18 +514,78 @@
     }
    },
    "player": {
-    "total": 175,
+    "total": 43,
     "works": 0,
     "rest": {
-     "asset": 116,
-     "enemy": 1,
-     "event": 35,
-     "skill": 6,
-     "treachery": 17
+     "asset": 32,
+     "event": 2,
+     "treachery": 9
     }
    }
   },
-  "fhv": {
+  "eoep": {
+   "encounter": {
+    "total": 0,
+    "works": 0,
+    "rest": {}
+   },
+   "player": {
+    "total": 132,
+    "works": 0,
+    "rest": {
+     "asset": 84,
+     "enemy": 1,
+     "event": 33,
+     "skill": 6,
+     "treachery": 8
+    }
+   }
+  },
+  "eotp": {
+   "encounter": {
+    "total": 24,
+    "works": 2,
+    "rest": {
+     "act": 1,
+     "agenda": 3,
+     "enemy": 2,
+     "location": 13,
+     "scenario": 1,
+     "treachery": 2
+    }
+   },
+   "player": {
+    "total": 17,
+    "works": 1,
+    "rest": {
+     "asset": 10,
+     "event": 2,
+     "skill": 4
+    }
+   }
+  },
+  "fgg": {
+   "encounter": {
+    "total": 31,
+    "works": 3,
+    "rest": {
+     "act": 3,
+     "agenda": 2,
+     "enemy": 7,
+     "location": 11,
+     "scenario": 1,
+     "treachery": 4
+    }
+   },
+   "player": {
+    "total": 13,
+    "works": 0,
+    "rest": {
+     "asset": 13
+    }
+   }
+  },
+  "fhvc": {
    "encounter": {
     "total": 272,
     "works": 2,
@@ -133,58 +601,554 @@
     }
    },
    "player": {
-    "total": 161,
+    "total": 28,
     "works": 0,
     "rest": {
-     "asset": 90,
-     "enemy": 3,
-     "event": 52,
-     "skill": 13,
-     "treachery": 3
+     "asset": 27,
+     "skill": 1
     }
    }
   },
-  "investigator": {
+  "fhvp": {
    "encounter": {
     "total": 0,
     "works": 0,
     "rest": {}
    },
    "player": {
-    "total": 272,
-    "works": 1,
+    "total": 133,
+    "works": 0,
     "rest": {
-     "asset": 125,
+     "asset": 63,
      "enemy": 3,
-     "event": 95,
-     "skill": 33,
-     "treachery": 15
+     "event": 52,
+     "skill": 12,
+     "treachery": 3
     }
    }
   },
-  "parallel": {
+  "film_fatale": {
    "encounter": {
-    "total": 45,
-    "works": 0,
+    "total": 59,
+    "works": 3,
     "rest": {
-     "act": 10,
-     "agenda": 11,
-     "enemy": 10,
-     "location": 4,
-     "scenario": 8,
-     "story": 1,
-     "treachery": 1
+     "act": 7,
+     "agenda": 2,
+     "enemy": 13,
+     "location": 21,
+     "scenario": 1,
+     "treachery": 12
     }
    },
    "player": {
-    "total": 45,
+    "total": 5,
     "works": 0,
     "rest": {
-     "asset": 25,
-     "enemy": 2,
-     "event": 8,
-     "story": 1,
+     "asset": 5
+    }
+   }
+  },
+  "fof": {
+   "encounter": {
+    "total": 84,
+    "works": 0,
+    "rest": {
+     "act": 3,
+     "agenda": 4,
+     "asset": 9,
+     "enemy": 19,
+     "key": 2,
+     "location": 17,
+     "scenario": 1,
+     "story": 5,
+     "treachery": 24
+    }
+   },
+   "player": {
+    "total": 5,
+    "works": 0,
+    "rest": {
+     "asset": 4,
+     "story": 1
+    }
+   }
+  },
+  "guardians": {
+   "encounter": {
+    "total": 66,
+    "works": 2,
+    "rest": {
+     "act": 6,
+     "agenda": 4,
+     "enemy": 14,
+     "location": 18,
+     "scenario": 2,
+     "story": 12,
+     "treachery": 8
+    }
+   },
+   "player": {
+    "total": 4,
+    "works": 0,
+    "rest": {
+     "asset": 4
+    }
+   }
+  },
+  "har": {
+   "encounter": {
+    "total": 0,
+    "works": 0,
+    "rest": {}
+   },
+   "player": {
+    "total": 29,
+    "works": 0,
+    "rest": {
+     "asset": 17,
+     "event": 9,
+     "skill": 1,
+     "treachery": 2
+    }
+   }
+  },
+  "hfa": {
+   "encounter": {
+    "total": 0,
+    "works": 0,
+    "rest": {}
+   },
+   "player": {
+    "total": 2,
+    "works": 0,
+    "rest": {
+     "event": 1,
+     "treachery": 1
+    }
+   }
+  },
+  "hhg": {
+   "encounter": {
+    "total": 29,
+    "works": 0,
+    "rest": {
+     "act": 1,
+     "agenda": 3,
+     "enemy": 4,
+     "location": 16,
+     "scenario": 1,
+     "treachery": 4
+    }
+   },
+   "player": {
+    "total": 13,
+    "works": 0,
+    "rest": {
+     "asset": 10,
+     "event": 1,
+     "skill": 2
+    }
+   }
+  },
+  "hote": {
+   "encounter": {
+    "total": 26,
+    "works": 2,
+    "rest": {
+     "act": 2,
+     "agenda": 4,
+     "enemy": 3,
+     "location": 10,
+     "scenario": 1,
+     "treachery": 4
+    }
+   },
+   "player": {
+    "total": 13,
+    "works": 0,
+    "rest": {
+     "asset": 5,
+     "event": 5,
+     "skill": 3
+    }
+   }
+  },
+  "hotel": {
+   "encounter": {
+    "total": 44,
+    "works": 0,
+    "rest": {
+     "act": 2,
+     "agenda": 12,
+     "enemy": 10,
+     "location": 10,
+     "scenario": 1,
      "treachery": 9
+    }
+   },
+   "player": {
+    "total": 8,
+    "works": 0,
+    "rest": {
+     "asset": 7,
+     "treachery": 1
+    }
+   }
+  },
+  "hoth": {
+   "encounter": {
+    "total": 0,
+    "works": 0,
+    "rest": {}
+   },
+   "player": {
+    "total": 2,
+    "works": 0,
+    "rest": {
+     "asset": 1,
+     "enemy": 1
+    }
+   }
+  },
+  "icc": {
+   "encounter": {
+    "total": 31,
+    "works": 0,
+    "rest": {
+     "act": 4,
+     "agenda": 1,
+     "enemy": 4,
+     "location": 16,
+     "scenario": 1,
+     "treachery": 5
+    }
+   },
+   "player": {
+    "total": 11,
+    "works": 0,
+    "rest": {
+     "asset": 6,
+     "event": 5
+    }
+   }
+  },
+  "iotv": {
+   "encounter": {
+    "total": 0,
+    "works": 0,
+    "rest": {}
+   },
+   "player": {
+    "total": 2,
+    "works": 0,
+    "rest": {
+     "asset": 1,
+     "enemy": 1
+    }
+   }
+  },
+  "itd": {
+   "encounter": {
+    "total": 27,
+    "works": 0,
+    "rest": {
+     "act": 1,
+     "agenda": 4,
+     "enemy": 3,
+     "location": 15,
+     "scenario": 1,
+     "treachery": 3
+    }
+   },
+   "player": {
+    "total": 17,
+    "works": 0,
+    "rest": {
+     "asset": 13,
+     "event": 3,
+     "skill": 1
+    }
+   }
+  },
+  "itm": {
+   "encounter": {
+    "total": 29,
+    "works": 1,
+    "rest": {
+     "act": 4,
+     "agenda": 3,
+     "enemy": 7,
+     "location": 10,
+     "scenario": 1,
+     "treachery": 3
+    }
+   },
+   "player": {
+    "total": 11,
+    "works": 0,
+    "rest": {
+     "asset": 7,
+     "event": 3,
+     "skill": 1
+    }
+   }
+  },
+  "jac": {
+   "encounter": {
+    "total": 0,
+    "works": 0,
+    "rest": {}
+   },
+   "player": {
+    "total": 26,
+    "works": 0,
+    "rest": {
+     "asset": 17,
+     "event": 5,
+     "skill": 2,
+     "treachery": 2
+    }
+   }
+  },
+  "lif": {
+   "encounter": {
+    "total": 31,
+    "works": 0,
+    "rest": {
+     "act": 3,
+     "agenda": 4,
+     "enemy": 3,
+     "location": 14,
+     "scenario": 1,
+     "story": 1,
+     "treachery": 5
+    }
+   },
+   "player": {
+    "total": 11,
+    "works": 0,
+    "rest": {
+     "asset": 9,
+     "event": 1,
+     "skill": 1
+    }
+   }
+  },
+  "litas": {
+   "encounter": {
+    "total": 23,
+    "works": 0,
+    "rest": {
+     "act": 4,
+     "agenda": 4,
+     "enemy": 3,
+     "location": 8,
+     "scenario": 1,
+     "treachery": 3
+    }
+   },
+   "player": {
+    "total": 12,
+    "works": 0,
+    "rest": {
+     "asset": 8,
+     "event": 3,
+     "skill": 1
+    }
+   }
+  },
+  "lod": {
+   "encounter": {
+    "total": 27,
+    "works": 0,
+    "rest": {
+     "act": 3,
+     "agenda": 5,
+     "enemy": 4,
+     "location": 9,
+     "scenario": 1,
+     "treachery": 5
+    }
+   },
+   "player": {
+    "total": 15,
+    "works": 0,
+    "rest": {
+     "asset": 12,
+     "event": 3
+    }
+   }
+  },
+  "lol": {
+   "encounter": {
+    "total": 58,
+    "works": 3,
+    "rest": {
+     "act": 9,
+     "agenda": 3,
+     "enemy": 7,
+     "location": 16,
+     "scenario": 1,
+     "story": 12,
+     "treachery": 7
+    }
+   },
+   "player": {
+    "total": 9,
+    "works": 0,
+    "rest": {
+     "asset": 9
+    }
+   }
+  },
+  "ltr": {
+   "encounter": {
+    "total": 6,
+    "works": 0,
+    "rest": {
+     "act": 1,
+     "agenda": 1,
+     "enemy": 3,
+     "scenario": 1
+    }
+   },
+   "player": {
+    "total": 5,
+    "works": 0,
+    "rest": {
+     "asset": 2,
+     "enemy": 1,
+     "story": 1,
+     "treachery": 1
+    }
+   }
+  },
+  "mar": {
+   "encounter": {
+    "total": 0,
+    "works": 0,
+    "rest": {}
+   },
+   "player": {
+    "total": 28,
+    "works": 0,
+    "rest": {
+     "asset": 13,
+     "event": 9,
+     "skill": 4,
+     "treachery": 2
+    }
+   }
+  },
+  "mig": {
+   "encounter": {
+    "total": 0,
+    "works": 0,
+    "rest": {}
+   },
+   "player": {
+    "total": 30,
+    "works": 0,
+    "rest": {
+     "asset": 13,
+     "enemy": 2,
+     "event": 11,
+     "skill": 4
+    }
+   }
+  },
+  "mtt": {
+   "encounter": {
+    "total": 58,
+    "works": 0,
+    "rest": {
+     "act": 1,
+     "agenda": 2,
+     "enemy": 9,
+     "location": 17,
+     "scenario": 1,
+     "story": 18,
+     "treachery": 10
+    }
+   },
+   "player": {
+    "total": 11,
+    "works": 0,
+    "rest": {
+     "asset": 11
+    }
+   }
+  },
+  "nat": {
+   "encounter": {
+    "total": 0,
+    "works": 0,
+    "rest": {}
+   },
+   "player": {
+    "total": 28,
+    "works": 0,
+    "rest": {
+     "asset": 9,
+     "enemy": 1,
+     "event": 16,
+     "skill": 1,
+     "treachery": 1
+    }
+   }
+  },
+  "otr": {
+   "encounter": {
+    "total": 0,
+    "works": 0,
+    "rest": {}
+   },
+   "player": {
+    "total": 2,
+    "works": 0,
+    "rest": {
+     "asset": 1,
+     "treachery": 1
+    }
+   }
+  },
+  "pap": {
+   "encounter": {
+    "total": 0,
+    "works": 0,
+    "rest": {}
+   },
+   "player": {
+    "total": 2,
+    "works": 0,
+    "rest": {
+     "asset": 1,
+     "treachery": 1
+    }
+   }
+  },
+  "pnr": {
+   "encounter": {
+    "total": 39,
+    "works": 1,
+    "rest": {
+     "act": 4,
+     "agenda": 1,
+     "enemy": 3,
+     "location": 12,
+     "scenario": 1,
+     "story": 12,
+     "treachery": 5
+    }
+   },
+   "player": {
+    "total": 15,
+    "works": 0,
+    "rest": {
+     "asset": 9,
+     "event": 2,
+     "skill": 3,
+     "treachery": 1
     }
    }
   },
@@ -195,123 +1159,367 @@
     "rest": {}
    },
    "player": {
-    "total": 16,
+    "total": 2,
     "works": 0,
     "rest": {
-     "asset": 6,
-     "enemy": 2,
-     "event": 2,
-     "skill": 2,
-     "treachery": 4
+     "asset": 1,
+     "event": 1
     }
    }
   },
   "ptc": {
    "encounter": {
-    "total": 252,
-    "works": 15,
+    "total": 68,
+    "works": 4,
     "rest": {
-     "act": 25,
-     "agenda": 22,
-     "enemy": 32,
-     "location": 92,
-     "scenario": 8,
-     "story": 19,
-     "treachery": 39
+     "act": 5,
+     "agenda": 2,
+     "enemy": 16,
+     "location": 15,
+     "scenario": 2,
+     "story": 6,
+     "treachery": 18
     }
    },
    "player": {
-    "total": 125,
+    "total": 47,
+    "works": 0,
+    "rest": {
+     "asset": 21,
+     "enemy": 3,
+     "event": 11,
+     "skill": 2,
+     "story": 4,
+     "treachery": 6
+    }
+   }
+  },
+  "ptr": {
+   "encounter": {
+    "total": 0,
+    "works": 0,
+    "rest": {}
+   },
+   "player": {
+    "total": 2,
+    "works": 0,
+    "rest": {
+     "asset": 1,
+     "treachery": 1
+    }
+   }
+  },
+  "rod": {
+   "encounter": {
+    "total": 4,
+    "works": 0,
+    "rest": {
+     "act": 1,
+     "agenda": 1,
+     "enemy": 1,
+     "scenario": 1
+    }
+   },
+   "player": {
+    "total": 2,
+    "works": 0,
+    "rest": {
+     "asset": 2
+    }
+   }
+  },
+  "rop": {
+   "encounter": {
+    "total": 10,
+    "works": 0,
+    "rest": {
+     "act": 2,
+     "agenda": 2,
+     "enemy": 1,
+     "location": 3,
+     "scenario": 1,
+     "treachery": 1
+    }
+   },
+   "player": {
+    "total": 6,
+    "works": 0,
+    "rest": {
+     "asset": 5,
+     "treachery": 1
+    }
+   }
+  },
+  "rtdwl": {
+   "encounter": {
+    "total": 60,
+    "works": 2,
+    "rest": {
+     "act": 1,
+     "agenda": 1,
+     "enemy": 9,
+     "location": 23,
+     "scenario": 8,
+     "treachery": 16
+    }
+   },
+   "player": {
+    "total": 13,
+    "works": 0,
+    "rest": {
+     "asset": 7,
+     "event": 4,
+     "skill": 1,
+     "treachery": 1
+    }
+   }
+  },
+  "rtnotz": {
+   "encounter": {
+    "total": 38,
+    "works": 8,
+    "rest": {
+     "act": 1,
+     "agenda": 1,
+     "enemy": 2,
+     "location": 17,
+     "scenario": 3,
+     "treachery": 6
+    }
+   },
+   "player": {
+    "total": 10,
+    "works": 0,
+    "rest": {
+     "asset": 6,
+     "event": 4
+    }
+   }
+  },
+  "rtptc": {
+   "encounter": {
+    "total": 69,
     "works": 1,
     "rest": {
-     "asset": 55,
-     "enemy": 3,
-     "event": 43,
-     "skill": 12,
-     "story": 4,
+     "act": 5,
+     "enemy": 9,
+     "location": 22,
+     "scenario": 8,
+     "story": 6,
+     "treachery": 18
+    }
+   },
+   "player": {
+    "total": 15,
+    "works": 0,
+    "rest": {
+     "asset": 9,
+     "event": 3,
+     "treachery": 3
+    }
+   }
+  },
+  "rtr": {
+   "encounter": {
+    "total": 4,
+    "works": 0,
+    "rest": {
+     "act": 1,
+     "agenda": 2,
+     "scenario": 1
+    }
+   },
+   "player": {
+    "total": 5,
+    "works": 0,
+    "rest": {
+     "asset": 4,
+     "treachery": 1
+    }
+   }
+  },
+  "rttcu": {
+   "encounter": {
+    "total": 61,
+    "works": 0,
+    "rest": {
+     "act": 5,
+     "enemy": 5,
+     "location": 25,
+     "scenario": 9,
+     "story": 2,
+     "treachery": 15
+    }
+   },
+   "player": {
+    "total": 17,
+    "works": 0,
+    "rest": {
+     "asset": 15,
+     "event": 1,
+     "treachery": 1
+    }
+   }
+  },
+  "rttfa": {
+   "encounter": {
+    "total": 67,
+    "works": 0,
+    "rest": {
+     "act": 10,
+     "enemy": 9,
+     "location": 31,
+     "scenario": 10,
      "treachery": 7
     }
-   }
-  },
-  "return": {
-   "encounter": {
-    "total": 295,
-    "works": 11,
-    "rest": {
-     "act": 22,
-     "agenda": 2,
-     "enemy": 34,
-     "location": 118,
-     "scenario": 38,
-     "story": 8,
-     "treachery": 62
-    }
    },
    "player": {
-    "total": 73,
+    "total": 18,
     "works": 0,
     "rest": {
-     "asset": 49,
-     "event": 15,
-     "skill": 1,
-     "treachery": 8
-    }
-   }
-  },
-  "side": {
-   "encounter": {
-    "total": 602,
-    "works": 13,
-    "rest": {
-     "act": 43,
-     "agenda": 47,
-     "asset": 9,
-     "enemy": 140,
-     "key": 2,
-     "location": 155,
-     "scenario": 12,
-     "story": 64,
-     "treachery": 117
-    }
-   },
-   "player": {
-    "total": 100,
-    "works": 0,
-    "rest": {
-     "asset": 93,
-     "event": 1,
-     "story": 3,
+     "asset": 12,
+     "event": 3,
      "treachery": 3
+    }
+   }
+  },
+  "sfk": {
+   "encounter": {
+    "total": 52,
+    "works": 0,
+    "rest": {
+     "act": 5,
+     "agenda": 2,
+     "enemy": 8,
+     "location": 17,
+     "scenario": 1,
+     "story": 17,
+     "treachery": 2
+    }
+   },
+   "player": {
+    "total": 10,
+    "works": 0,
+    "rest": {
+     "asset": 4,
+     "event": 3,
+     "skill": 3
+    }
+   }
+  },
+  "sha": {
+   "encounter": {
+    "total": 35,
+    "works": 0,
+    "rest": {
+     "act": 9,
+     "agenda": 3,
+     "enemy": 4,
+     "location": 11,
+     "scenario": 2,
+     "story": 2,
+     "treachery": 4
+    }
+   },
+   "player": {
+    "total": 11,
+    "works": 0,
+    "rest": {
+     "asset": 7,
+     "event": 3,
+     "skill": 1
+    }
+   }
+  },
+  "ste": {
+   "encounter": {
+    "total": 0,
+    "works": 0,
+    "rest": {}
+   },
+   "player": {
+    "total": 24,
+    "works": 0,
+    "rest": {
+     "asset": 13,
+     "event": 7,
+     "skill": 2,
+     "treachery": 2
+    }
+   }
+  },
+  "tbb": {
+   "encounter": {
+    "total": 30,
+    "works": 3,
+    "rest": {
+     "act": 3,
+     "enemy": 3,
+     "location": 18,
+     "scenario": 1,
+     "treachery": 2
+    }
+   },
+   "player": {
+    "total": 13,
+    "works": 0,
+    "rest": {
+     "asset": 7,
+     "event": 2,
+     "skill": 4
+    }
+   }
+  },
+  "tcoa": {
+   "encounter": {
+    "total": 25,
+    "works": 0,
+    "rest": {
+     "act": 3,
+     "agenda": 3,
+     "enemy": 3,
+     "location": 11,
+     "scenario": 1,
+     "treachery": 4
+    }
+   },
+   "player": {
+    "total": 10,
+    "works": 0,
+    "rest": {
+     "asset": 6,
+     "event": 3,
+     "treachery": 1
     }
    }
   },
   "tcu": {
    "encounter": {
-    "total": 259,
-    "works": 9,
+    "total": 64,
+    "works": 2,
     "rest": {
-     "act": 29,
-     "agenda": 15,
-     "enemy": 40,
-     "location": 104,
-     "scenario": 9,
-     "story": 11,
-     "treachery": 42
+     "act": 7,
+     "agenda": 4,
+     "enemy": 11,
+     "location": 22,
+     "scenario": 3,
+     "story": 1,
+     "treachery": 14
     }
    },
    "player": {
-    "total": 108,
+    "total": 36,
     "works": 0,
     "rest": {
-     "asset": 64,
+     "asset": 15,
      "enemy": 1,
-     "event": 35,
+     "event": 12,
      "skill": 5,
      "treachery": 3
     }
    }
   },
-  "tdc": {
+  "tdcc": {
    "encounter": {
     "total": 259,
     "works": 3,
@@ -326,97 +1534,329 @@
     }
    },
    "player": {
-    "total": 158,
+    "total": 36,
     "works": 0,
     "rest": {
-     "asset": 101,
+     "asset": 34,
      "enemy": 1,
+     "treachery": 1
+    }
+   }
+  },
+  "tdcp": {
+   "encounter": {
+    "total": 0,
+    "works": 0,
+    "rest": {}
+   },
+   "player": {
+    "total": 122,
+    "works": 0,
+    "rest": {
+     "asset": 67,
      "event": 30,
      "skill": 15,
-     "treachery": 11
+     "treachery": 10
     }
    }
   },
   "tde": {
    "encounter": {
-    "total": 273,
-    "works": 10,
+    "total": 70,
+    "works": 2,
     "rest": {
-     "act": 28,
-     "agenda": 12,
-     "enemy": 46,
-     "location": 91,
-     "scenario": 8,
-     "story": 33,
-     "treachery": 45
+     "act": 6,
+     "agenda": 3,
+     "enemy": 16,
+     "location": 20,
+     "scenario": 2,
+     "story": 3,
+     "treachery": 18
     }
    },
    "player": {
-    "total": 110,
+    "total": 37,
     "works": 0,
     "rest": {
-     "asset": 59,
-     "enemy": 5,
-     "event": 23,
+     "asset": 18,
+     "enemy": 4,
+     "event": 7,
      "location": 2,
-     "skill": 13,
-     "treachery": 8
+     "treachery": 6
+    }
+   }
+  },
+  "tdg": {
+   "encounter": {
+    "total": 0,
+    "works": 0,
+    "rest": {}
+   },
+   "player": {
+    "total": 2,
+    "works": 0,
+    "rest": {
+     "skill": 2
+    }
+   }
+  },
+  "tdor": {
+   "encounter": {
+    "total": 0,
+    "works": 0,
+    "rest": {}
+   },
+   "player": {
+    "total": 2,
+    "works": 0,
+    "rest": {
+     "event": 1,
+     "treachery": 1
+    }
+   }
+  },
+  "tdoy": {
+   "encounter": {
+    "total": 26,
+    "works": 5,
+    "rest": {
+     "act": 1,
+     "agenda": 3,
+     "enemy": 2,
+     "location": 10,
+     "scenario": 1,
+     "treachery": 4
+    }
+   },
+   "player": {
+    "total": 13,
+    "works": 0,
+    "rest": {
+     "asset": 10,
+     "event": 3
+    }
+   }
+  },
+  "tece": {
+   "encounter": {
+    "total": 23,
+    "works": 5,
+    "rest": {
+     "act": 2,
+     "enemy": 2,
+     "location": 11,
+     "scenario": 1,
+     "treachery": 2
+    }
+   },
+   "player": {
+    "total": 14,
+    "works": 0,
+    "rest": {
+     "asset": 8,
+     "event": 4,
+     "skill": 1,
+     "treachery": 1
     }
    }
   },
   "tfa": {
    "encounter": {
-    "total": 240,
-    "works": 10,
+    "total": 57,
+    "works": 0,
     "rest": {
-     "act": 49,
-     "agenda": 20,
-     "enemy": 27,
-     "location": 83,
-     "scenario": 9,
-     "story": 2,
-     "treachery": 40
+     "act": 7,
+     "agenda": 4,
+     "enemy": 9,
+     "location": 16,
+     "scenario": 2,
+     "treachery": 19
     }
    },
    "player": {
-    "total": 115,
+    "total": 40,
     "works": 1,
     "rest": {
-     "asset": 62,
+     "asset": 18,
      "enemy": 1,
-     "event": 31,
-     "skill": 10,
-     "treachery": 10
+     "event": 10,
+     "skill": 1,
+     "treachery": 9
+    }
+   }
+  },
+  "tftbw": {
+   "encounter": {
+    "total": 0,
+    "works": 0,
+    "rest": {}
+   },
+   "player": {
+    "total": 2,
+    "works": 0,
+    "rest": {
+     "asset": 1,
+     "treachery": 1
     }
    }
   },
   "tic": {
    "encounter": {
-    "total": 237,
-    "works": 2,
+    "total": 66,
+    "works": 1,
     "rest": {
-     "act": 16,
-     "agenda": 28,
-     "enemy": 40,
-     "location": 100,
-     "scenario": 8,
-     "story": 2,
-     "treachery": 41
+     "act": 3,
+     "agenda": 6,
+     "enemy": 15,
+     "location": 22,
+     "scenario": 2,
+     "story": 1,
+     "treachery": 16
     }
    },
    "player": {
-    "total": 119,
+    "total": 37,
     "works": 0,
     "rest": {
-     "asset": 76,
+     "asset": 17,
      "enemy": 2,
-     "event": 27,
-     "skill": 10,
+     "event": 9,
+     "skill": 5,
      "treachery": 4
     }
    }
   },
-  "tsk": {
+  "tmg": {
+   "encounter": {
+    "total": 51,
+    "works": 0,
+    "rest": {
+     "act": 2,
+     "agenda": 3,
+     "enemy": 13,
+     "location": 8,
+     "scenario": 1,
+     "story": 10,
+     "treachery": 14
+    }
+   },
+   "player": {
+    "total": 23,
+    "works": 0,
+    "rest": {
+     "asset": 23
+    }
+   }
+  },
+  "tmm": {
+   "encounter": {
+    "total": 26,
+    "works": 1,
+    "rest": {
+     "act": 3,
+     "agenda": 3,
+     "enemy": 1,
+     "location": 12,
+     "scenario": 1,
+     "treachery": 5
+    }
+   },
+   "player": {
+    "total": 16,
+    "works": 0,
+    "rest": {
+     "asset": 10,
+     "event": 6
+    }
+   }
+  },
+  "tof": {
+   "encounter": {
+    "total": 41,
+    "works": 0,
+    "rest": {
+     "act": 24,
+     "agenda": 3,
+     "enemy": 3,
+     "location": 7,
+     "scenario": 1,
+     "treachery": 3
+    }
+   },
+   "player": {
+    "total": 15,
+    "works": 0,
+    "rest": {
+     "asset": 9,
+     "event": 5,
+     "skill": 1
+    }
+   }
+  },
+  "tom": {
+   "encounter": {
+    "total": 0,
+    "works": 0,
+    "rest": {}
+   },
+   "player": {
+    "total": 28,
+    "works": 0,
+    "rest": {
+     "asset": 11,
+     "event": 12,
+     "skill": 3,
+     "treachery": 2
+    }
+   }
+  },
+  "tpm": {
+   "encounter": {
+    "total": 24,
+    "works": 1,
+    "rest": {
+     "act": 4,
+     "agenda": 2,
+     "enemy": 2,
+     "location": 11,
+     "scenario": 1,
+     "treachery": 3
+    }
+   },
+   "player": {
+    "total": 12,
+    "works": 0,
+    "rest": {
+     "asset": 3,
+     "event": 5,
+     "skill": 4
+    }
+   }
+  },
+  "tsh": {
+   "encounter": {
+    "total": 27,
+    "works": 1,
+    "rest": {
+     "act": 2,
+     "agenda": 2,
+     "enemy": 1,
+     "location": 15,
+     "scenario": 1,
+     "treachery": 5
+    }
+   },
+   "player": {
+    "total": 14,
+    "works": 0,
+    "rest": {
+     "asset": 7,
+     "event": 5,
+     "skill": 2
+    }
+   }
+  },
+  "tskc": {
    "encounter": {
     "total": 277,
     "works": 9,
@@ -432,15 +1872,246 @@
     }
    },
    "player": {
-    "total": 156,
+    "total": 34,
     "works": 0,
     "rest": {
-     "asset": 72,
+     "asset": 13,
+     "key": 20,
+     "treachery": 1
+    }
+   }
+  },
+  "tskp": {
+   "encounter": {
+    "total": 0,
+    "works": 0,
+    "rest": {}
+   },
+   "player": {
+    "total": 122,
+    "works": 0,
+    "rest": {
+     "asset": 59,
      "enemy": 3,
      "event": 47,
-     "key": 20,
      "skill": 9,
+     "treachery": 4
+    }
+   }
+  },
+  "tsn": {
+   "encounter": {
+    "total": 30,
+    "works": 0,
+    "rest": {
+     "act": 3,
+     "agenda": 4,
+     "enemy": 2,
+     "location": 15,
+     "scenario": 1,
      "treachery": 5
+    }
+   },
+   "player": {
+    "total": 12,
+    "works": 0,
+    "rest": {
+     "asset": 9,
+     "event": 3
+    }
+   }
+  },
+  "tuo": {
+   "encounter": {
+    "total": 30,
+    "works": 3,
+    "rest": {
+     "act": 4,
+     "agenda": 1,
+     "enemy": 3,
+     "location": 14,
+     "scenario": 1,
+     "treachery": 4
+    }
+   },
+   "player": {
+    "total": 13,
+    "works": 0,
+    "rest": {
+     "asset": 5,
+     "event": 8
+    }
+   }
+  },
+  "uad": {
+   "encounter": {
+    "total": 35,
+    "works": 3,
+    "rest": {
+     "act": 7,
+     "enemy": 6,
+     "location": 9,
+     "scenario": 1,
+     "story": 4,
+     "treachery": 5
+    }
+   },
+   "player": {
+    "total": 13,
+    "works": 0,
+    "rest": {
+     "asset": 8,
+     "event": 5
+    }
+   }
+  },
+  "uau": {
+   "encounter": {
+    "total": 23,
+    "works": 0,
+    "rest": {
+     "act": 2,
+     "agenda": 3,
+     "enemy": 1,
+     "location": 12,
+     "scenario": 1,
+     "treachery": 4
+    }
+   },
+   "player": {
+    "total": 12,
+    "works": 0,
+    "rest": {
+     "asset": 6,
+     "event": 2,
+     "skill": 4
+    }
+   }
+  },
+  "wda": {
+   "encounter": {
+    "total": 25,
+    "works": 3,
+    "rest": {
+     "act": 5,
+     "enemy": 2,
+     "location": 11,
+     "scenario": 1,
+     "treachery": 3
+    }
+   },
+   "player": {
+    "total": 14,
+    "works": 0,
+    "rest": {
+     "asset": 6,
+     "event": 5,
+     "skill": 3
+    }
+   }
+  },
+  "wgd": {
+   "encounter": {
+    "total": 37,
+    "works": 4,
+    "rest": {
+     "act": 4,
+     "enemy": 8,
+     "location": 11,
+     "scenario": 1,
+     "treachery": 9
+    }
+   },
+   "player": {
+    "total": 10,
+    "works": 0,
+    "rest": {
+     "asset": 7,
+     "enemy": 1,
+     "event": 1,
+     "skill": 1
+    }
+   }
+  },
+  "win": {
+   "encounter": {
+    "total": 0,
+    "works": 0,
+    "rest": {}
+   },
+   "player": {
+    "total": 25,
+    "works": 1,
+    "rest": {
+     "asset": 10,
+     "event": 7,
+     "skill": 7
+    }
+   }
+  },
+  "woc": {
+   "encounter": {
+    "total": 22,
+    "works": 0,
+    "rest": {
+     "act": 3,
+     "agenda": 3,
+     "enemy": 6,
+     "location": 6,
+     "scenario": 1,
+     "treachery": 3
+    }
+   },
+   "player": {
+    "total": 10,
+    "works": 0,
+    "rest": {
+     "asset": 8,
+     "skill": 2
+    }
+   }
+  },
+  "wog": {
+   "encounter": {
+    "total": 53,
+    "works": 0,
+    "rest": {
+     "act": 3,
+     "agenda": 12,
+     "enemy": 17,
+     "location": 11,
+     "scenario": 1,
+     "treachery": 9
+    }
+   },
+   "player": {
+    "total": 5,
+    "works": 0,
+    "rest": {
+     "asset": 5
+    }
+   }
+  },
+  "wos": {
+   "encounter": {
+    "total": 46,
+    "works": 1,
+    "rest": {
+     "act": 2,
+     "agenda": 1,
+     "enemy": 8,
+     "location": 22,
+     "scenario": 1,
+     "story": 6,
+     "treachery": 5
+    }
+   },
+   "player": {
+    "total": 11,
+    "works": 0,
+    "rest": {
+     "asset": 8,
+     "event": 3
     }
    }
   }

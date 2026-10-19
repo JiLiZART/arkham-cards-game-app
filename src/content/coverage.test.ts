@@ -34,6 +34,21 @@ describe("pack coverage", () => {
   });
 });
 
+describe("pack coverage by card pack", () => {
+  it("a folder holding several packs reports each pack apart", () => {
+    const db = fixture(false);
+    db.cards.p2.pack = "q";
+    const r = packCoverage(db);
+    expect(Object.keys(r)).toEqual(["p", "q"]);
+    expect(r.q.player).toEqual({ total: 1, works: 0, rest: { event: 1 } });
+  });
+
+  it("the Dunwich cycle's deluxe box and its mythos packs are packs of their own", async () => {
+    const { db } = await loadContentFromDisk();
+    expect(Object.keys(db.coverage!.packs)).toEqual(expect.arrayContaining(["dwl", "tmm", "tece", "bota", "uau", "wda", "litas"]));
+  });
+});
+
 describe("campaign coverage", () => {
   it("counts the cards its scenarios use, not the player cards, and lists unscripted scenarios", () => {
     const c = campaignCoverage(fixture(false), "camp");

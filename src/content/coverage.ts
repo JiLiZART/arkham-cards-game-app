@@ -13,17 +13,16 @@ const count = (db: ContentDb, codes: string[]): CardCount => {
   return { total: codes.length, works, rest: Object.fromEntries(Object.entries(rest).sort(([a], [b]) => a.localeCompare(b))) };
 };
 
-/** per pack: its encounter cards and its player cards (weaknesses included), how many of each work */
+/** per card pack (the deluxe box, each mythos pack, a Return-to box...): its encounter cards and its player cards (weaknesses included), how many of each work */
 export function packCoverage(db: ContentDb): ContentCoverage["packs"] {
-  const out: ContentCoverage["packs"] = {};
-  for (const pack of Object.keys(db.packs).sort()) {
-    const cards = db.packs[pack].cards.filter((c) => db.cards[c]);
-    out[pack] = {
-      encounter: count(db, cards.filter((c) => db.cards[c].faction === "mythos")),
-      player: count(db, cards.filter((c) => db.cards[c].faction !== "mythos" && db.cards[c].type !== "investigator")),
-    };
-  }
-  return out;
+  const byPack: Record<string, string[]> = {};
+  for (const c of Object.values(db.cards)) if (c.type !== "investigator") (byPack[c.pack] ??= []).push(c.code);
+  return Object.fromEntries(
+    Object.keys(byPack).sort().map((pack) => [pack, {
+      encounter: count(db, byPack[pack].filter((c) => db.cards[c].faction === "mythos").sort()),
+      player: count(db, byPack[pack].filter((c) => db.cards[c].faction !== "mythos").sort()),
+    }]),
+  );
 }
 
 /** the cards a campaign's scenarios use (encounter sets, side decks, acts, agendas), how many work, which scenarios have no script */

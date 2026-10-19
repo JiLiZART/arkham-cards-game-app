@@ -10,4 +10,4 @@ if (errors.length) {
 }
 writeFileSync("content/coverage.json", coverageJson(db));
 const done = Object.values(db.campaigns).filter((c) => JSON.parse(coverageJson(db)).campaigns[c.id].complete).length;
-console.log(`content/coverage.json: ${Object.keys(db.packs).length} packs, ${Object.keys(db.campaigns).length} campaigns (${done} complete)`);
+console.log(`content/coverage.json: ${Object.keys(JSON.parse(coverageJson(db)).packs).length} packs, ${Object.keys(db.campaigns).length} campaigns (${done} complete)`);
