@@ -24,12 +24,13 @@ const lastMoment = new Map<string, number>();
 
 /**
  * Play the clip for a UI moment (a card landing, a flip, a button, a tab…), with the card's own clip for play, fight and
- * spawn. It works without a game (menus); `scale` softens or strengthens it (the token clatter by count); a moment
+ * spawn. It works without a game (menus); `scale` softens or strengthens it (the token clatter by count); a clip
  * repeated within a few ms is one sound.
  */
 export function moment(name: string, cardId: InstId | null = null, scale = 1) {
   const clip = momentClip(name, cardId, gameStore.getState().game, sounds());
-  if (!clip || !mayPlay(lastMoment, name, performance.now())) return;
+  // keyed by clip: two moments sharing a clip at the same instant are one sound too
+  if (!clip || !mayPlay(lastMoment, clip, performance.now())) return;
   void audio.play(clip, sounds().effects[clip].file, sounds().effects[clip].gain * scale);
 }
 

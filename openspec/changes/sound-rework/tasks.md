@@ -23,5 +23,5 @@
 
 ## 5. Verification
 
-- [ ] 5.1 Browser: a round with every new moment heard once and the levels even (the audio log shows each clip once per occurrence); the picker chooses a clip for "draw" and the next draw plays it; `npm test`, lint, build, content check; the production `dist` has no picker and no candidate files; drive-calm to round 3 with 0 errors.
+- [x] 5.1 Browser: a round with every new moment heard once and the levels even (the audio log shows each clip once per occurrence); the picker chooses a clip for "draw" and the next draw plays it; `npm test`, lint, build, content check; the production `dist` has no picker and no candidate files; drive-calm to round 3 with 0 errors.
 - [ ] 5.2 README (sound section, credits regenerated from the manifest, ffmpeg note, the picker under `npm run dev`); `openspec validate sound-rework --type change --strict`.

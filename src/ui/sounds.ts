@@ -81,10 +81,10 @@ export function gainOf(s: SoundSettings, category: "music" | "effects", clipGain
   return ((category === "music" ? s.musicVolume : s.sfxVolume) / 100) * clipGain;
 }
 
-/** a moment fires at most once in this many ms: a burst (three cards discarded at once) is one sound */
+/** a moment's clip sounds at most once in this many ms: a burst (three cards discarded at once) is one sound */
 export const MOMENT_GAP = 60;
 
-/** whether the moment `name` may sound at `now`; records it when it may */
+/** whether `name` (a moment's clip) may sound at `now`; records it when it may */
 export function mayPlay(last: Map<string, number>, name: string, now: number): boolean {
   const before = last.get(name);
   if (before !== undefined && now - before < MOMENT_GAP) return false;

@@ -16,20 +16,20 @@ const with_ = (patch: (s: GameState) => void): GameState => {
 
 describe("effectFor", () => {
   it("maps an animated event to its clip", () => {
-    expect(effectFor(ev("attack"), fresh, m)).toEqual(["strike"]);
-    expect(effectFor(ev("token"), fresh, m)).toEqual(["rattle", "clink"]);
+    expect(effectFor(ev("attack"), fresh, m)).toEqual([m.events.attack]);
+    expect(effectFor(ev("token"), fresh, m)).toEqual(m.events.token); // two layers
   });
 
   it("picks the variant: a failed test, horror without damage, both when both", () => {
-    expect(effectFor(ev("testResult", { success: true }), fresh, m)).toEqual(["chime"]);
-    expect(effectFor(ev("testResult", { success: false }), fresh, m)).toEqual(["thud"]);
-    expect(effectFor(ev("damage", { damage: 0, horror: 1 }), fresh, m)).toEqual(["breath"]);
-    expect(effectFor(ev("damage", { damage: 1, horror: 1 }), fresh, m)).toEqual(["hit", "breath"]);
+    expect(effectFor(ev("testResult", { success: true }), fresh, m)).toEqual([m.events.testResult]);
+    expect(effectFor(ev("testResult", { success: false }), fresh, m)).toEqual([m.events["testResult:fail"]]);
+    expect(effectFor(ev("damage", { damage: 0, horror: 1 }), fresh, m)).toEqual([m.events["damage:horror"]]);
+    expect(effectFor(ev("damage", { damage: 1, horror: 1 }), fresh, m)).toEqual([m.events.damage, m.events["damage:horror"]]);
   });
 
   it("a spawning enemy growls by its traits (Ghoul before Monster, in the manifest's order)", () => {
-    expect(effectFor(ev("spawn", {}, codeOf("01160")), fresh, m)).toEqual(["growl-ghoul"]); // Ghoul Minion: Humanoid, Monster, Ghoul
-    expect(effectFor(ev("spawn", {}, codeOf("01159")), fresh, m)).toEqual(["growl"]); // Swarm of Rats: Creature, no entry
+    expect(effectFor(ev("spawn", {}, codeOf("01160")), fresh, m)).toEqual([m.traits.spawn?.Ghoul]); // Ghoul Minion: Humanoid, Monster, Ghoul
+    expect(effectFor(ev("spawn", {}, codeOf("01159")), fresh, m)).toEqual([m.events.spawn]); // Swarm of Rats: Creature, no entry
   });
 
   it("nothing for an event without a sound", () => {
@@ -39,7 +39,7 @@ describe("effectFor", () => {
 
 describe("momentClip", () => {
   it("a UI moment's generic clip", () => {
-    expect(momentClip("draw", null, fresh, m)).toBe("slide");
+    expect(momentClip("draw", null, fresh, m)).toBe(m.moments.draw);
     expect(momentClip("nope", null, fresh, m)).toBeNull();
   });
 
@@ -48,10 +48,10 @@ describe("momentClip", () => {
   });
 
   it("a card's own clip: code first, then the first matching trait, then the generic one", () => {
-    expect(momentClip("fight", codeOf("01016"), fresh, m)).toBe("gunshot-45"); // the .45 override
-    expect(momentClip("play", codeOf("01016"), fresh, m)).toBe("gun-ready"); // Firearm by trait
-    expect(momentClip("fight", codeOf("01020"), fresh, m)).toBe("blade"); // Machete: Melee
-    expect(momentClip("play", codeOf("01159"), fresh, m)).toBe("snap"); // no trait match: generic
+    expect(momentClip("fight", codeOf("01016"), fresh, m)).toBe(m.cards["01016"]?.fight); // the .45 override
+    expect(momentClip("play", codeOf("01016"), fresh, m)).toBe(m.traits.play?.Firearm); // Firearm by trait
+    expect(momentClip("fight", codeOf("01020"), fresh, m)).toBe(m.traits.fight?.Melee); // Machete: Melee
+    expect(momentClip("play", codeOf("01159"), fresh, m)).toBe(m.moments.play); // no trait match: generic
     expect(momentClip("fight", codeOf("01159"), fresh, m)).toBeNull(); // no generic fight sound
   });
 });
@@ -121,6 +121,6 @@ describe("mayPlay", () => {
 describe("moments", () => {
   it("are all in the manifest, each a clip or none, and sound without a game (menus)", () => {
     for (const name of MOMENTS) expect(name in m.moments, name).toBe(true);
-    expect(momentClip("button", null, null, m)).toBe("click");
+    expect(momentClip("button", null, null, m)).toBe(m.moments.button);
   });
 });
