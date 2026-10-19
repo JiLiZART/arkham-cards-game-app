@@ -1108,3 +1108,8 @@ button.danger { border-color: var(--bad); color: var(--bad); }
 .wz-chapter-card { padding: 0; border: 0; background: none; cursor: zoom-in; border-radius: 8px; min-height: 0; }
 .parchment .wz-chapter-card, .parchment .wz-chapter-card:hover:not(:disabled) { background: none; border: 0; }
 .wz-chapter-card:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+/* a dialog opened from a menu screen is the game's dark dialog: it takes the dark theme's colours back from the parchment */
+.parchment .modal { --ink: #eadfc4; --muted: #a99c80; --gold: #c9a95c; --bad: #e06060; color: var(--ink); color-scheme: dark; }
+.parchment .modal h1, .parchment .modal h2, .parchment .modal h3 { color: var(--gold); text-shadow: none; }
+.parchment .modal button { color: var(--ink); background: #2b241b; border-color: #5a4a30; }
+.parchment .modal button:hover:not(:disabled) { background: #3a3024; border-color: var(--gold); }
