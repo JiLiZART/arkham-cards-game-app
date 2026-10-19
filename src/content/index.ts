@@ -10,7 +10,7 @@ import { addCampaignFiles, addCardText, addPack, buildContent, packOfCode, TEXT_
 const PACK_FILE = /^\/content\/packs\/([^/]+)\/cards(\.generated)?\.json$/;
 // the Russian image import's manifest and review overrides the icon manifest and the sound candidates are tooling data, not game content
 const files = import.meta.glob(
-  ["/content/**/*.json", "!/content/i18n/*/images*.json", "!/content/icons/*.json", "!/content/sounds/candidates.json", "!/content/packs/*/cards*.json", "!/content/i18n/*/packs/*.json", "!/content/campaigns-generated/*/scenarios/*.json", "!/content/i18n/*/campaign-texts/*.json"],
+  ["/content/**/*.json", "!/content/i18n/*/images*.json", "!/content/icons/*.json", "!/content/sounds/candidates.json", "!/content/packs/*/cards*.json", "!/content/i18n/*/packs/*.json", "!/content/campaigns-generated/*/scenarios/*.json", "!/content/campaigns-generated/*/flow.json", "!/content/i18n/*/campaign-texts/*.json"],
   { eager: true, import: "default" },
 ) as Record<string, unknown>;
 const eagerPacks = import.meta.glob("/content/packs/core/cards*.json", { eager: true, import: "default" }) as Record<string, unknown>;
@@ -18,7 +18,7 @@ const lazyPacks = import.meta.glob(["/content/packs/*/cards*.json", "!/content/p
 // the other packs' card text in each locale: loaded with the pack
 const lazyText = import.meta.glob("/content/i18n/*/packs/*.json", { import: "default" }) as Record<string, () => Promise<unknown>>;
 // the generated campaigns' scenarios and text (ADR-0007): loaded when one is chosen
-const lazyCampaignFiles = import.meta.glob(["/content/campaigns-generated/*/scenarios/*.json", "/content/i18n/*/campaign-texts/*.json"], { import: "default" }) as Record<string, () => Promise<unknown>>;
+const lazyCampaignFiles = import.meta.glob(["/content/campaigns-generated/*/scenarios/*.json", "/content/campaigns-generated/*/flow.json", "/content/i18n/*/campaign-texts/*.json"], { import: "default" }) as Record<string, () => Promise<unknown>>;
 const scripts = import.meta.glob("/content/**/scripts/*.ts", { eager: true, import: "default" }) as Record<string, CardScript>;
 
 const lazyNames = [...new Set(Object.keys(lazyPacks).map((f) => f.match(PACK_FILE)![1]))].sort();

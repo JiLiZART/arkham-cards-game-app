@@ -1,5 +1,5 @@
 import type {
-  Ability, CampaignDef, CardDef, ChaosToken, DeckDef, Difficulty, Effect, I18nCampaigns, InvestigatorDef, Modifier, ScenarioDef, Skill, SoundManifest, Trigger,
+  Ability, CampaignDef, CampaignFlow, CardDef, ChaosToken, DeckDef, Difficulty, Effect, I18nCampaigns, InvestigatorDef, Modifier, ScenarioDef, Skill, SoundManifest, Trigger,
 } from "../content/schema";
 
 export type InstId = string;
@@ -321,6 +321,8 @@ export interface ContentDb {
   decks: Record<string, DeckDef>;
   scenarios: Record<string, ScenarioDef>;
   campaigns: Record<string, CampaignDef>;
+  /** each campaign's flow (interludes, branches, choices between scenarios); a generated campaign's arrives with its scenarios (loadCampaign) */
+  flows: Record<string, CampaignFlow>;
   /** keyed by card code or scenario id */
   scripts: Record<string, CardScript>;
   encounterSets: Record<string, string[]>;

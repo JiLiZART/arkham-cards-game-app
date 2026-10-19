@@ -572,15 +572,18 @@ export const TokenEffect = z
   .strict();
 export type TokenEffect = z.infer<typeof TokenEffect>;
 
+/** whom an effect is for: every active investigator, the lead, one the players choose, or the one an input just named */
+const Who = z.enum(["each", "lead", "choice", "input"]);
+
 export const CampaignEffect = z.discriminatedUnion("do", [
-  z.object({ do: z.literal("record"), key: z.string(), value: z.union([z.boolean(), z.string(), z.array(z.string())]).default(true) }).strict(),
-  z.object({ do: z.literal("crossOut"), key: z.string() }).strict(),
+  z.object({ do: z.literal("record"), key: z.string(), value: z.union([z.boolean(), z.string(), z.array(z.string())]).default(true), section: z.string().optional(), text: z.string().optional() }).strict(),
+  z.object({ do: z.literal("crossOut"), key: z.string(), section: z.string().optional() }).strict(),
   z.object({ do: z.literal("crossOutIfInVictory"), key: z.string(), code: z.string() }).strict(),
   z.object({ do: z.literal("recordCards"), key: z.string(), source: z.enum(["victoryUniqueCultists", "remainingUniqueCultists"]) }).strict(),
-  z.object({ do: z.literal("xp"), bonus: z.number().default(0), who: z.enum(["each", "lead"]).default("each"), victory: z.boolean().default(false) }).strict(),
-  z.object({ do: z.literal("trauma"), who: z.enum(["each", "lead"]), physical: z.number().default(0), mental: z.number().default(0) }).strict(),
+  z.object({ do: z.literal("xp"), bonus: z.number().default(0), who: Who.exclude(["choice"]).default("each"), victory: z.boolean().default(false) }).strict(),
+  z.object({ do: z.literal("trauma"), who: Who.exclude(["choice"]), physical: z.number().default(0), mental: z.number().default(0) }).strict(),
   z.object({ do: z.literal("kill"), who: z.enum(["each", "notResigned"]) }).strict(),
-  z.object({ do: z.literal("earnCard"), code: z.string(), who: z.enum(["lead", "choice"]) }).strict(),
+  z.object({ do: z.literal("earnCard"), code: z.string(), who: Who.exclude(["each"]) }).strict(),
   z.object({ do: z.literal("removeCard"), code: z.string() }).strict(),
   z.object({ do: z.literal("addWeakness"), trait: z.string() }).strict(),
   z.object({ do: z.literal("addChaosToken"), token: ChaosToken }).strict(),
@@ -628,6 +631,140 @@ export const ScenarioDef = z
   .strict();
 export type ScenarioDef = z.infer<typeof ScenarioDef>;
 
+// ---------- campaign flow (ADR-0011) ----------
+
+/** the number an input answers with, where an effect takes a count */
+const FlowAmount = z.union([z.number(), z.literal("input")]);
+
+/** what a campaign does besides the resolution's own effects: the log's sections, the bag, decks, the order of play */
+export const FlowEffect = z.discriminatedUnion("do", [
+  ...CampaignEffect.options,
+  z.object({ do: z.literal("count"), id: z.string(), section: z.string().optional(), op: z.enum(["add", "set"]), value: FlowAmount }).strict(),
+  z.object({ do: z.literal("listCards"), id: z.string(), section: z.string().optional(), codes: z.array(z.string()), remove: z.boolean().default(false) }).strict(),
+  z.object({ do: z.literal("investigatorCount"), id: z.string(), section: z.string().optional(), who: Who.exclude(["choice"]), op: z.enum(["add", "set"]), value: FlowAmount }).strict(),
+  z.object({ do: z.literal("removeChaosToken"), token: ChaosToken }).strict(),
+  z.object({ do: z.literal("replaceCard"), old: z.string(), new: z.string(), who: Who.exclude(["choice"]) }).strict(),
+  z.object({ do: z.literal("nextScenario"), scenario: z.string() }).strict(),
+  z.object({ do: z.literal("skipScenario"), scenario: z.string() }).strict(),
+  z.object({ do: z.literal("replayScenario"), scenario: z.string() }).strict(),
+  z.object({ do: z.literal("setData"), key: z.string(), value: z.union([z.boolean(), z.number(), z.string()]) }).strict(),
+]);
+export type FlowEffect = z.infer<typeof FlowEffect>;
+
+type WhoInv = "any" | "input" | "lead";
+export type FlowCondition =
+  | { kind: "logHas"; id: string; section?: string }
+  | { kind: "logCrossedOut"; id: string; section?: string }
+  | { kind: "logCount"; id: string; section?: string; min?: number; max?: number }
+  | { kind: "logCards"; id: string; section?: string; card?: string }
+  | { kind: "investigatorCount"; id: string; section?: string; inv: WhoInv; min?: number; max?: number }
+  | { kind: "scenarioCompleted"; scenario: string; resolution?: string }
+  | { kind: "difficulty"; is: z.infer<typeof Difficulty>[] }
+  | { kind: "playerCount"; min?: number; max?: number }
+  | { kind: "trauma"; inv: WhoInv; physical?: number; mental?: number }
+  | { kind: "hasCard"; card: string; inv: WhoInv }
+  | { kind: "data"; key: string; equals?: boolean | number | string; min?: number }
+  | { kind: "not"; condition: FlowCondition }
+  | { kind: "all"; conditions: FlowCondition[] }
+  | { kind: "any"; conditions: FlowCondition[] }
+  /** a test the game can't make (partners, supplies, linked campaigns): it takes the guide's default `take` */
+  | { kind: "unsupported"; name: string; take: boolean };
+const WhoInv = z.enum(["any", "input", "lead"]);
+export const FlowCondition: z.ZodType<FlowCondition> = z.lazy(() =>
+  z.union([
+    z.object({ kind: z.literal("logHas"), id: z.string(), section: z.string().optional() }).strict(),
+    z.object({ kind: z.literal("logCrossedOut"), id: z.string(), section: z.string().optional() }).strict(),
+    z.object({ kind: z.literal("logCount"), id: z.string(), section: z.string().optional(), min: z.number().optional(), max: z.number().optional() }).strict(),
+    z.object({ kind: z.literal("logCards"), id: z.string(), section: z.string().optional(), card: z.string().optional() }).strict(),
+    z.object({ kind: z.literal("investigatorCount"), id: z.string(), section: z.string().optional(), inv: WhoInv, min: z.number().optional(), max: z.number().optional() }).strict(),
+    z.object({ kind: z.literal("scenarioCompleted"), scenario: z.string(), resolution: z.string().optional() }).strict(),
+    z.object({ kind: z.literal("difficulty"), is: z.array(Difficulty) }).strict(),
+    z.object({ kind: z.literal("playerCount"), min: z.number().optional(), max: z.number().optional() }).strict(),
+    z.object({ kind: z.literal("trauma"), inv: WhoInv, physical: z.number().optional(), mental: z.number().optional() }).strict(),
+    z.object({ kind: z.literal("hasCard"), card: z.string(), inv: WhoInv }).strict(),
+    z.object({ kind: z.literal("data"), key: z.string(), equals: z.union([z.boolean(), z.number(), z.string()]).optional(), min: z.number().optional() }).strict(),
+    z.object({ kind: z.literal("not"), condition: FlowCondition }).strict(),
+    z.object({ kind: z.literal("all"), conditions: z.array(FlowCondition) }).strict(),
+    z.object({ kind: z.literal("any"), conditions: z.array(FlowCondition) }).strict(),
+    z.object({ kind: z.literal("unsupported"), name: z.string(), take: z.boolean() }).strict(),
+  ]),
+);
+
+const StepIds = z.array(z.string()).default([]);
+const FlowChoice = z.object({ id: z.string(), text: z.string(), effects: z.array(FlowEffect).default([]), steps: StepIds, when: FlowCondition.optional() }).strict();
+export type FlowChoice = z.infer<typeof FlowChoice>;
+
+/** one thing a campaign shows or asks (the prompts are `chooseOne` … `unsupported`); steps are keyed by id in `CampaignFlow.steps` and named by the steps around them */
+export const CampaignStep = z.discriminatedUnion("kind", [
+  /** read: a title, the text, bullets (the log entries a step records are read as bullets) */
+  z.object({ kind: z.literal("story"), title: z.string().optional(), text: z.string().optional(), bullets: z.array(z.string()).default([]) }).strict(),
+  z.object({ kind: z.literal("branch"), condition: FlowCondition, then: StepIds, else: StepIds }).strict(),
+  z.object({ kind: z.literal("effects"), effects: z.array(FlowEffect) }).strict(),
+  z.object({ kind: z.literal("chooseOne"), title: z.string().optional(), text: z.string().optional(), choices: z.array(FlowChoice).min(1) }).strict(),
+  /** a number with limits; its effects take it as "input" */
+  z.object({ kind: z.literal("counter"), title: z.string().optional(), text: z.string().optional(), min: z.number().default(0), max: z.number().optional(), effects: z.array(FlowEffect).default([]), steps: StepIds }).strict(),
+  /** an investigator among the active ones; the effects and steps follow with them as "input" */
+  z.object({ kind: z.literal("investigatorChoice"), title: z.string().optional(), text: z.string().optional(), optional: z.boolean().default(false), effects: z.array(FlowEffect).default([]), steps: StepIds }).strict(),
+  /** cards among `codes` (or among the investigators' decks when empty); the effects take them as code "$input" */
+  z.object({ kind: z.literal("cardChoice"), title: z.string().optional(), text: z.string().optional(), codes: z.array(z.string()).default([]), min: z.number().default(1), max: z.number().default(1), effects: z.array(FlowEffect).default([]), steps: StepIds }).strict(),
+  z.object({ kind: z.literal("checklist"), title: z.string().optional(), text: z.string().optional(), min: z.number().default(0), max: z.number().optional(), choices: z.array(FlowChoice).min(1) }).strict(),
+  /** side scenarios on offer: accepting one pays its cost and plays it before the flow goes on */
+  z.object({ kind: z.literal("sideScenario"), title: z.string().optional(), text: z.string().optional(), scenarios: z.array(z.object({ scenario: z.string(), cost: z.number().default(0) }).strict()).min(1) }).strict(),
+  /** a prompt the game can't offer (linked campaigns, partners, supplies, text entry…): the guide's text, then its default */
+  z.object({ kind: z.literal("unsupported"), name: z.string(), title: z.string().optional(), text: z.string().optional(), effects: z.array(FlowEffect).default([]), steps: StepIds }).strict(),
+  z.object({ kind: z.literal("upgradeDecks") }).strict(),
+  z.object({ kind: z.literal("end"), result: z.enum(["win", "lose", "survived"]).optional() }).strict(),
+]);
+export type CampaignStep = z.infer<typeof CampaignStep>;
+
+/** the step ids a step leads to */
+export function stepRefs(st: CampaignStep): string[] {
+  switch (st.kind) {
+    case "branch":
+      return [...st.then, ...st.else];
+    case "chooseOne":
+    case "checklist":
+      return st.choices.flatMap((c) => c.steps);
+    case "counter":
+    case "investigatorChoice":
+    case "cardChoice":
+    case "unsupported":
+      return st.steps;
+    default:
+      return [];
+  }
+}
+
+/**
+ * content/campaigns/<id>/flow.json: what happens before the first scenario (`setup`), in the order of play (`order`:
+ * scenario ids and the interludes named in `interludes`), after each scenario (`resolutions`, by scenario then
+ * resolution id) and the steps themselves. A resolution with no entry here runs the scenario file's own `effects`.
+ */
+export const CampaignFlow = z
+  .object({
+    setup: StepIds,
+    order: z.array(z.string()),
+    interludes: z.record(z.string(), z.object({ kind: z.enum(["interlude", "epilogue"]), name: z.string().optional(), steps: StepIds }).strict()).default({}),
+    resolutions: z.record(z.string(), z.record(z.string(), StepIds)).default({}),
+    steps: z.record(z.string(), CampaignStep),
+  })
+  .strict()
+  .superRefine((f, ctx) => {
+    const need = (path: (string | number)[], id: string) => {
+      if (!f.steps[id]) ctx.addIssue({ code: z.ZodIssueCode.custom, path, message: `unknown step ${id}` });
+    };
+    f.setup.forEach((id, n) => need(["setup", n], id));
+    for (const [k, i] of Object.entries(f.interludes)) i.steps.forEach((id, n) => need(["interludes", k, "steps", n], id));
+    for (const [sc, byRes] of Object.entries(f.resolutions)) for (const [r, ids] of Object.entries(byRes)) ids.forEach((id, n) => need(["resolutions", sc, r, n], id));
+    for (const [k, st] of Object.entries(f.steps)) stepRefs(st).forEach((id, n) => need(["steps", k, n], id));
+  });
+export type CampaignFlow = z.infer<typeof CampaignFlow>;
+
+/** how a section of the campaign log is kept and shown */
+export const LOG_SECTION_KINDS = ["entries", "count", "cards", "investigatorCount"] as const;
+export const LogSection = z.object({ id: z.string(), kind: z.enum(LOG_SECTION_KINDS), label: z.string() }).strict();
+export type LogSection = z.infer<typeof LogSection>;
+
 export const CampaignDef = z
   .object({
     id: z.string(),
@@ -647,6 +784,10 @@ export const CampaignDef = z
     /** the campaign guide's opening text (an epigraph, or a story) and its scenarios' names, for the new-game tile */
     prologue: z.string().optional(),
     scenarioNames: z.array(z.string()).optional(),
+    /** the campaign log's sections, as the guide prints them (the notes section is always there) */
+    logSections: z.array(LogSection).default([]),
+    /** every scenario's reference card, in order, with the interludes marked: the picker's sidebar before the scenarios load */
+    cards: z.array(z.object({ scenario: z.string(), code: z.string().optional(), interlude: z.boolean().optional() }).strict()).default([]),
   })
   .strict();
 export type CampaignDef = z.infer<typeof CampaignDef>;

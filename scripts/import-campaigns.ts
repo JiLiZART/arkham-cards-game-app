@@ -243,6 +243,8 @@ export function main() {
         // a side scenario has no campaign prologue: its tile shows the scenario's own intro
         ...((c.id === "side" ? introLead(defs[0].intro) : prologueOf(c)) ? { prologue: c.id === "side" ? introLead(defs[0].intro) : prologueOf(c) } : {}),
         scenarioNames: defs.map((d) => d.name),
+        logSections: [],
+        cards: [],
       };
       write(join(OUT, grp.id, "campaign.json"), campaign);
       mkdirSync(EN_TEXT, { recursive: true });

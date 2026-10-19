@@ -1,7 +1,7 @@
 import type { ZodError } from "zod";
 import type { CardScript, ContentDb } from "../engine/types";
 import {
-  CampaignDef, CardDef, CardOverride, DeckDef, Effect, EMPTY_SOUNDS, I18nCampaigns, I18nCards, I18nUi, InvestigatorDef, ScenarioDef, SoundManifest, type Ability,
+  CampaignDef, CampaignFlow, CardDef, CardOverride, DeckDef, Effect, EMPTY_SOUNDS, I18nCampaigns, I18nCards, I18nUi, InvestigatorDef, ScenarioDef, SoundManifest, type Ability,
 } from "./schema";
 
 export interface ContentError {
@@ -91,12 +91,20 @@ export const TEXT_FILE = /\/i18n\/([^/]+)\/(?:(cards|ui|campaigns)|packs\/([^/]+
 /** a generated campaign's text in one locale, loaded with its scenarios: i18n/<locale>/campaign-texts/<campaign>.json */
 export const CAMPAIGN_TEXT = /\/i18n\/([^/]+)\/campaign-texts\/([^/]+)\.json$/;
 const CAMPAIGN_FILE = /\/campaigns(?:-generated)?\/[^/]+\/campaign\.json$/;
+const FLOW_FILE = /\/campaigns(?:-generated)?\/([^/]+)\/flow\.json$/;
 const SCENARIO_FILE = /\/campaigns(?:-generated)?\/[^/]+\/scenarios\/[^/]+\.json$/;
 
 /** a generated campaign's scenario files and text files, added to the content (in the browser, when it is chosen) */
 export function addCampaignFiles(db: ContentDb, files: Record<string, unknown>): ContentError[] {
   const errors: ContentError[] = [];
   for (const [file, raw] of Object.entries(files).sort(([a], [b]) => a.localeCompare(b))) {
+    const flow = file.match(FLOW_FILE);
+    if (flow) {
+      const r = CampaignFlow.safeParse(raw);
+      if (r.success) db.flows[flow[1]] = r.data;
+      else errors.push(...zerr(file, r.error));
+      continue;
+    }
     if (SCENARIO_FILE.test(file)) {
       const r = ScenarioDef.safeParse(raw);
       if (r.success) db.scenarios[r.data.id] = r.data;
@@ -118,7 +126,7 @@ export function addCampaignFiles(db: ContentDb, files: Record<string, unknown>):
 
 export function buildContent(files: Record<string, unknown>, scriptFiles: Record<string, CardScript>, lazyPacks: string[] = [], lazyCampaigns: string[] = []): { db: ContentDb; errors: ContentError[] } {
   const errors: ContentError[] = [];
-  const db: ContentDb = { cards: {}, investigators: {}, decks: {}, scenarios: {}, campaigns: {}, scripts: {}, encounterSets: {}, i18n: {}, sounds: EMPTY_SOUNDS, packs: {} };
+  const db: ContentDb = { cards: {}, investigators: {}, decks: {}, scenarios: {}, campaigns: {}, flows: {}, scripts: {}, encounterSets: {}, i18n: {}, sounds: EMPTY_SOUNDS, packs: {} };
   const cardFile: Record<string, string> = {};
   const entries = Object.entries(files).sort(([a], [b]) => a.localeCompare(b));
   for (const pack of lazyPacks) db.packs[pack] = { loaded: false, cards: [] };
@@ -144,6 +152,7 @@ export function buildContent(files: Record<string, unknown>, scriptFiles: Record
   parseInto(/\/decks(?:-generated)?\/[^/]+\.json$/, DeckDef, (v) => (db.decks[v.id] = v));
   parseInto(CAMPAIGN_FILE, CampaignDef, (v) => (db.campaigns[v.id] = v));
   parseInto(SCENARIO_FILE, ScenarioDef, (v) => (db.scenarios[v.id] = v));
+  errors.push(...addCampaignFiles(db, Object.fromEntries(entries.filter(([f]) => FLOW_FILE.test(f)))));
   parseInto(/\/sounds\/sounds\.json$/, SoundManifest, (v, file) => {
     db.sounds = v;
     // a bed names a scenario that exists ("bed:default" plays for the scenarios without one of their own)
