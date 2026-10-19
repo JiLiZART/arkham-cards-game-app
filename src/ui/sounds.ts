@@ -10,14 +10,8 @@ export interface SoundSettings {
   muted: boolean;
 }
 
-/** every UI moment the game plays, in the order the picker lists them; the manifest has a value (a clip or "none") for each */
-export const MOMENTS = [
-  "draw", "play", "flip", "commit", "shuffle", "phase", "button", "tip", "undo",
-  "move", "reveal", "deckTap", "bagLand", "tokenClatter", "tokenPick", "avatarChoice", "countdown", "cancel",
-  "builderAdd", "builderRemove", "builderReplace", "tab", "open", "close", "screen", "turn", "victory",
-  "resource", "heal", "evade", "engage", "discard",
-] as const;
-// "play", "fight" and "spawn" also have a clip of the card's own (traits, cards); "fight" has no generic one
+export { MOMENTS } from "../content/soundSlots";
+
 
 /** a card's own clip for a moment (play, fight, spawn): by code, then by the first trait the manifest lists, else null */
 function cardClip(when: CardSoundWhen, cardId: InstId | null, game: GameState | null, m: SoundManifest, content: ContentDb = db): string | null {

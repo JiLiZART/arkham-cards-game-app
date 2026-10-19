@@ -24,11 +24,16 @@ export function checkSounds(m: SoundManifest, size: (path: string) => number | n
     else effectsBytes += n;
   }
   let musicBytes = 0;
+  // two roles may share a track (bed:default and a scenario's bed): its files ship once
+  const counted = new Set<string>();
   for (const [id, track] of Object.entries(m.music)) {
     for (const ext of MUSIC_FORMATS) {
       const n = size(`${track.file}.${ext}`);
       if (n === null) errors.push({ file: FILE, path: `music.${id}`, message: `missing file public/sounds/${track.file}.${ext}` });
-      else musicBytes += n;
+      else if (!counted.has(`${track.file}.${ext}`)) {
+        counted.add(`${track.file}.${ext}`);
+        musicBytes += n;
+      }
     }
   }
   for (const key of Object.keys(m.events)) {

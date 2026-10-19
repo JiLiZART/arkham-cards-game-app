@@ -3,9 +3,10 @@ import { existsSync, readFileSync, statSync } from "node:fs";
 import { loadContentFromDisk } from "../src/content/node";
 import { SoundCandidates } from "../src/content/schema";
 import { checkCandidates, checkLoudness, checkMoments, checkSounds } from "../src/content/soundChecks";
+import { MOMENTS } from "../src/content/soundSlots";
 import { SLOTS } from "./sound-candidates";
-import { MOMENTS } from "../src/ui/sounds";
 import { ANIMATED } from "../src/ui/store";
+import { replaceCredits, soundCredits } from "./sound-credits";
 import { ffmpegAvailable, ffmpegProbe } from "./sound-probe";
 import { checkIcons, MANIFEST, SPRITE, SPRITE_CAMPAIGNS, setsWithoutIcon, spriteIds } from "./import-icons";
 import { cycleCoverage } from "./snapshotText";
@@ -24,6 +25,9 @@ errors.push(...checkSounds(db.sounds, fileSize, ANIMATED), ...checkMoments(db.so
 const candidates = SoundCandidates.safeParse(JSON.parse(readFileSync("content/sounds/candidates.json", "utf8")));
 if (candidates.success) errors.push(...checkCandidates(db.sounds, candidates.data, SLOTS.map((s) => s.id)));
 else errors.push({ file: "content/sounds/candidates.json", path: "", message: candidates.error.message });
+// the README credits every sound source the manifest uses (npm run sound-credits)
+const readme = readFileSync("README.md", "utf8");
+if (replaceCredits(readme, soundCredits(db.sounds)) !== readme) errors.push({ file: "README.md", path: "Sound credits", message: "behind content/sounds/sounds.json (npm run sound-credits)" });
 // loudness and loop seams need ffmpeg; without it they are skipped with a warning, not failed
 if (ffmpegAvailable()) errors.push(...checkLoudness(db.sounds, ffmpegProbe()));
 else console.warn("warning: ffmpeg not found, sound loudness and loop seam checks skipped");

@@ -30,6 +30,11 @@ describe("checkSounds", () => {
     expect(errors.map((e) => e.path)).toEqual(["events.resource"]);
   });
 
+  it("counts a file two roles share once against the budget", () => {
+    const shared = SoundManifest.parse({ ...manifest, music: { fight: { ...clip, file: "bed" }, tension: { ...clip, file: "bed" } } });
+    expect(checkSounds(shared, sizes({ "snap.mp3": 1, "bed.m4a": MUSIC_BUDGET * 0.3, "bed.webm": MUSIC_BUDGET * 0.3 }), animated)).toEqual([]);
+  });
+
   it("reports the budgets", () => {
     const errors = checkSounds(manifest, sizes({ "snap.mp3": EFFECTS_BUDGET + 1, "fight.m4a": MUSIC_BUDGET, "fight.webm": 1 }), animated);
     expect(errors.map((e) => e.path).sort()).toEqual(["effects", "music"]);
