@@ -7,7 +7,7 @@ import { HandDrawer } from "./hud/HandDrawer";
 import { Hud } from "./hud/Hud";
 import { moment, useAudioLevels } from "./hud/SoundLayer";
 import { Catalog } from "./catalog/Catalog";
-import { CampaignLog } from "./menu/CampaignLog";
+import { CampaignScreen } from "./menu/CampaignScreen";
 import { HowTo } from "./menu/HowTo";
 import { Settings } from "./menu/Settings";
 import { Title } from "./menu/Title";
@@ -67,7 +67,7 @@ export function App() {
       </div>
     );
   }
-  const page = screen === "log" ? <CampaignLog /> : screen === "howto" ? <HowTo /> : screen === "wizard" ? <Wizard /> : screen === "settings" ? <Settings /> : screen === "catalog" ? <Catalog /> : <Title />;
+  const page = screen === "log" ? <CampaignScreen /> : screen === "howto" ? <HowTo /> : screen === "wizard" ? <Wizard /> : screen === "settings" ? <Settings /> : screen === "catalog" ? <Catalog /> : <Title />;
   // every menu screen but the title sits on the rulebook's parchment (public/art)
   return (
     <>

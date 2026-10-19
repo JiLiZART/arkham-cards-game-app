@@ -634,5 +634,17 @@
   "ability.01174.2": "break down or pick the lock",
   "ability.01182.2": "test willpower (3) to discard",
   "test.cancel": "Cancel the test",
-  "test.cancelHint": "Take the action back and every card placed (Esc), to do something else first"
+  "test.cancelHint": "Take the action back and every card placed (Esc), to do something else first",
+  "flow.continue": "Continue",
+  "flow.confirm": "Confirm",
+  "flow.less": "Less",
+  "flow.more": "More",
+  "flow.none": "No one",
+  "flow.whoTakes": "Which investigator?",
+  "flow.pickCards": "Choose {min} to {max} cards",
+  "flow.cost": "{n} experience each",
+  "flow.side": "Side scenarios",
+  "flow.decline": "Not now",
+  "flow.recorded": "Recorded",
+  "flow.unsupported": "This part of the guide isn't played yet: the guide's usual outcome is taken."
 }

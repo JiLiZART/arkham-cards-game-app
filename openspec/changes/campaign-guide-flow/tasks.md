@@ -18,8 +18,8 @@
 
 ## 4. The campaign screen
 
-- [ ] 4.1 `CampaignScreen.tsx` (from `CampaignLog.tsx`): the guide reader (story steps with `formatText`, read steps collapsed to titles, the waiting prompt: choices as buttons, counter with − / + and max, investigators as avatars, cards as a list, checklist, the unsupported notice), the upgrade buttons at `upgradeDecks`, the sectioned log (entries struck through when crossed out, counts, card names), "Next: <scenario>" / the side-scenario offer at `playScenario`, the result; `ui.json` strings in English and Russian; store actions `answerFlow`, `continueFlow`, `acceptSideScenario`.
-- [ ] 4.2 Phone layout of the reader (one column, the prompt sticky at the bottom); the Abandon route unchanged.
+- [x] 4.1 `CampaignScreen.tsx` (from `CampaignLog.tsx`): the guide reader (story steps with `formatText`, read steps collapsed to titles, the waiting prompt: choices as buttons, counter with − / + and max, investigators as avatars, cards as a list, checklist, the unsupported notice), the upgrade buttons at `upgradeDecks`, the sectioned log (entries struck through when crossed out, counts, card names), "Next: <scenario>" / the side-scenario offer at `playScenario`, the result; `ui.json` strings in English and Russian; store actions `answerFlow`, `continueFlow`, `acceptSideScenario`.
+- [x] 4.2 Phone layout of the reader (one column, the prompt sticky at the bottom); the Abandon route unchanged.
 
 ## 5. The picker
 

@@ -1032,3 +1032,35 @@ button.danger { border-color: var(--bad); color: var(--bad); }
 .sp-open { display: flex; gap: 6px; align-items: center; font-size: 13px; white-space: nowrap; }
 .sp-result { font-size: 13px; color: var(--gold); }
 .sp-bad { color: #e0795a; }
+
+/* the campaign flow on the campaign screen (ADR-0011) */
+.flow-read, .flow-prompt { display: flex; flex-direction: column; gap: 10px; }
+.flow-story { display: flex; flex-direction: column; gap: 6px; }
+.flow-title { margin: 0; font: 24px Teutonic, TeutonicRU, Georgia, serif; font-weight: normal; color: var(--gold); }
+.flow-text { font: 18px/1.5 Alegreya, Georgia, serif; max-width: 70ch; }
+.flow-text i, .flow-choice i { opacity: 0.9; }
+.flow-recorded { font: 16px Alegreya, Georgia, serif; border-left: 3px solid var(--gold); padding-left: 10px; }
+.flow-recorded small { text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-right: 6px; }
+.flow-choices { display: flex; flex-direction: column; gap: 8px; max-width: 70ch; }
+.flow-choice { text-align: left; min-height: 48px; padding: 10px 14px; font: 17px/1.4 Alegreya, Georgia, serif; }
+.flow-counter { display: flex; align-items: center; gap: 14px; }
+.flow-counter output { min-width: 2ch; text-align: center; font: 28px Teutonic, TeutonicRU, Georgia, serif; }
+.flow-counter button { width: 48px; height: 48px; font-size: 24px; }
+.flow-avatars { display: flex; flex-wrap: wrap; gap: 14px; }
+.flow-avatar { display: flex; flex-direction: column; align-items: center; gap: 6px; min-height: 48px; padding: 10px 14px; }
+.flow-list { display: flex; flex-direction: column; gap: 4px; max-height: 40vh; overflow: auto; }
+.flow-list label { display: flex; gap: 8px; align-items: center; padding: 6px 10px; border-radius: 8px; cursor: pointer; }
+.flow-list label.on { background: #26200f55; outline: 1px solid var(--gold); }
+.flow-unsupported { color: #d9b46a; font-style: italic; }
+.parchment .flow-unsupported { color: #7a5410; }
+.log-crossed { text-decoration: line-through; opacity: 0.65; }
+.screen.log .wz-foot .primary { max-width: 100%; }
+/* a narrow screen: one column; the prompt stays in reach under the text, the buttons are full width */
+@media (max-width: 700px), (max-height: 500px) {
+  .flow-text { font-size: 17px; }
+  .flow-choice, .flow-prompt > .primary { width: 100%; }
+  .flow-avatars { justify-content: center; }
+  .screen.log .wz-foot { flex-wrap: wrap; }
+  .screen.log .wz-foot .primary { flex: 1 1 100%; }
+  .flow-prompt { position: sticky; bottom: 0; padding: 10px 0; background: linear-gradient(transparent, #f3e8c9 24%); }
+}
