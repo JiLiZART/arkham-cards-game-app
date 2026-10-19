@@ -1,5 +1,5 @@
 /**
- * `npm run import:sounds -- --candidates`: fetches the candidate packs once, draws five files for every slot in
+ * `npm run import:sounds -- --candidates`: fetches the candidate packs once, draws a dozen files for every slot in
  * sound-candidates.ts, renders each at the same loudness as the shipped clips (so they compare fairly in the picker) into
  * sounds-src/candidates/<slot>/<id of the original>, and writes content/sounds/candidates.json with their provenance. Safe to run again:
  * previews that exist are kept.
@@ -25,7 +25,7 @@ const dirOf = (slot: string) => slot.replace(/[^a-zA-Z0-9]+/g, "-").replace(/^-|
 const sha256 = (path: string) => createHash("sha256").update(readFileSync(path)).digest("hex");
 const duration = (path: string) => parseDuration(spawnSync("ffmpeg", ["-hide_banner", "-i", path], { encoding: "utf8" }).stderr);
 
-/** one slot's five candidates: the first files in its order that are the right length, each with a preview rendered */
+/** one slot's candidates: the first files in its order that are the right length, each with a preview rendered */
 function draw(slot: Slot, files: Source[], previewDir: string): SoundCandidate[] {
   const out: SoundCandidate[] = [];
   mkdirSync(`${ROOT}/candidates/${previewDir}`, { recursive: true });
@@ -54,11 +54,13 @@ export async function buildCandidates() {
   for (const l of LOOSE) await ensureLoose(l, ROOT).catch((e) => console.warn(`warning: ${e.message}; its slots are filled from the other packs`));
   const files = inventory((rel) => (existsSync(`${ROOT}/${rel}`) ? (readdirSync(`${ROOT}/${rel}`, { recursive: true }) as string[]) : []), (rel) => existsSync(`${ROOT}/${rel}`));
   const slots: SoundCandidates["slots"] = {};
+  const short: string[] = [];
   for (const slot of SLOTS) {
     const candidates = draw(slot, files, dirOf(slot.id));
-    if (candidates.length < CANDIDATES_PER_SLOT) throw new Error(`${slot.id}: only ${candidates.length} usable files in the packs, need ${CANDIDATES_PER_SLOT}; add a pattern or a pack in sound-candidates.ts`);
+    if (candidates.length < CANDIDATES_PER_SLOT) short.push(`${slot.id} (${candidates.length})`);
     slots[slot.id] = { kind: slot.kind, where: slot.where, candidates };
   }
+  if (short.length) throw new Error(`fewer than ${CANDIDATES_PER_SLOT} usable files for: ${short.join(", ")}; add patterns or packs in sound-candidates.ts`);
   writeFileSync(OUT, `${JSON.stringify(SoundCandidates.parse({ slots }), null, 2)}\n`);
   console.log(`candidates: ${SLOTS.length} slots × ${CANDIDATES_PER_SLOT}, written to ${OUT}`);
 }

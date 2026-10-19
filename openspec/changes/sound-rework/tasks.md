@@ -13,6 +13,7 @@
 
 - [x] 3.1 Vite dev middleware in `vite.config.ts`: `GET /__sounds-src/*` serves `sounds-src/candidates/`; `POST /__sounds/choose` validates `{ slot, candidate | "none" | "current" }` against `candidates.json`, moves the provenance into `sounds.json`, validates with `SoundManifest`, runs the importer for that clip, answers with the new entry; localhost only; tests for the handler as a pure function.
 - [x] 3.2 `src/ui/dev/SoundPicker.tsx` (lazy, DEV only) from a Sounds button in the Debug panel: every slot with where it plays, the current clip, five candidates and "no sound"; play through `audio.play` at `gainOf(...)` (music: a 10 s excerpt from the loop start); Choose posts and reloads the manifest; the seam measurement shown per music candidate; a test that the picker is absent from the production build (grep the dist).
+- [x] 3.4 (asked for during the change) Twelve candidates per slot (the file accepts 10 to 15); the picker marks a choice per slot (kept in the browser), Apply is offered once every slot has one and sends them all (`chooseSounds`, `{ choices }`), and the page is not reloaded while the Apply writes.
 - [ ] 3.3 Session with the user: pick a clip for every slot in the picker (the user's choices), commit the resulting `sounds.json` and files.
 
 ## 4. More moments

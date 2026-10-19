@@ -71,7 +71,7 @@ export function checkLoudness(m: SoundManifest, probe: SoundProbe): ContentError
   return errors;
 }
 
-/** Every slot of the manifest (and any `required` slot) has its five candidates listed in candidates.json. */
+/** Every slot of the manifest (and any `required` slot) has its candidates listed in candidates.json. */
 export function checkCandidates(m: SoundManifest, c: SoundCandidates, required: readonly string[] = []): ContentError[] {
   return [...new Set([...slotsOf(m), ...required])].filter((slot) => !c.slots[slot]).map((slot) => ({ file: "content/sounds/candidates.json", path: slot, message: "no candidates for this slot (npm run import:sounds -- --candidates)" }));
 }

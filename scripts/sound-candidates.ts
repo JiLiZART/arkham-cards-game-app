@@ -1,7 +1,7 @@
 /**
- * The sound slots (every event, moment, card sound and music role the game can play) and how five CC0 candidates are
+ * The sound slots (every event, moment, card sound and music role the game can play) and how a dozen CC0 candidates are
  * drawn for each from the packs in sound-packs.ts. A slot lists substrings of file paths, one per sound family that could
- * fit; the candidates take one file from each family in turn, so the five differ in character. Which of them a slot uses
+ * fit; the candidates take one file from each family in turn, so they differ in character. Which of them a slot uses
  * is the developer's ear's choice, made in the picker (ADR-0010).
  */
 import { type Loose, type Pack, LOOSE, PACKS } from "./sound-packs";
@@ -11,7 +11,8 @@ export type Slot = { id: string; kind: "effect" | "music"; where: string; patter
 const fx = (id: string, where: string, ...patterns: string[]): Slot => ({ id, kind: "effect", where, patterns });
 const track = (id: string, where: string, ...patterns: string[]): Slot => ({ id, kind: "music", where, patterns });
 
-const BEDS = ["sector", "airy", "cathedral", "music-dark-cavern", "music-ancient-caverns", "music-ambient-horror", "music-end-of-hope", "music-echoes", "music-hallway", "music-orien", "transmission", "drone57", "pulse"];
+/** every long recording in the packs: any of them may serve any music role */
+const BEDS = ["sector", "airy", "cathedral", "music-dark-cavern", "music-ancient-caverns", "music-ambient-horror", "music-end-of-hope", "music-echoes", "music-hallway", "music-orien", "transmission", "drone57", "pulse", "urgent", "war-drums", "music-empty-city", "music-action-loop", "music-determined-pursuit"];
 
 export const SLOTS: Slot[] = [
   // engine events (the animated ones)
@@ -26,14 +27,14 @@ export const SLOTS: Slot[] = [
   fx("event:damage", "an investigator takes damage", "impactpunch_medium", "creature/hurt_", "impactsoft_medium", "sfx100v2_hit_", "creature_hurt"),
   fx("event:damage:horror", "an investigator takes horror", "ghostbreath", "creature/breath", "creature/weird_", "creature/scream_", "creature/alien_"),
   fx("event:clues", "clues are gained", "glass_00", "item_gem", "forcefield", "pluck_", "handlecoins"),
-  fx("event:doom", "doom is placed", "impactbell", "bell1", "bell3", "bong_", "drone57"),
+  fx("event:doom", "doom is placed", "impactbell", "bell1", "bell3", "bong_", "drone57", "sfx100v2_metal_hit", "impactmetal_heavy", "music-jingles/audio/hit", "lowfrequency_explosion"),
   fx("event:agendaAdvance", "the agenda advances", "bookflip", "pageflips/", "bookopen", "sfx100v2_door", "thunder"),
   fx("event:actAdvance", "the act advances", "bookclose", "bookplace", "rpg/book_0", "dooropen", "creak"),
   fx("event:enemyDefeated", "an enemy is defeated", "creature_die", "creature/scream_", "impactmetal_heavy", "creature/monster_0", "zombie"),
-  fx("event:defeated", "an investigator is defeated", "thunder", "lowfrequency_explosion", "monster-roar", "zombie", "explosioncrunch"),
+  fx("event:defeated", "an investigator is defeated", "thunder", "lowfrequency_explosion", "monster-roar", "zombie", "explosioncrunch", "creature_die", "creature/scream_", "impactbell_heavy", "creature/howl"),
   fx("event:resolution", "the scenario ends", "music-jingles/audio/steel", "music-jingles/audio/sax", "music-jingles/audio/hit", "victory.mp3", "bell3"),
   fx("event:enemyDamage", "an enemy takes damage", "impactmetal_medium", "impactpunch_heavy", "sfx100v2_hit_", "rpg/blade_", "chop"),
-  fx("event:weakness", "a weakness is drawn", "thunder", "ghostbreath", "creak", "drone57", "creature/weird_"),
+  fx("event:weakness", "a weakness is drawn", "thunder", "ghostbreath", "creak", "drone57", "creature/weird_", "creature/alien_", "sfx100v2_air", "computernoise", "spaceenginelow"),
   // UI moments
   fx("moment:draw", "drawing a card", "card-slide", "cards-pack-take-out", "kenney-rpg-audio/audio/cloth", "pageflips/", "card-shove"),
   fx("moment:play", "playing a card", "card-place", "impactsoft_medium", "impactwood_medium", "bookplace", "chip-lay"),
@@ -86,8 +87,8 @@ export const SLOTS: Slot[] = [
   track("music:bed:the-midnight-masks", "the bed of The Midnight Masks", ...BEDS),
   track("music:bed:default", "the bed of a scenario without its own", ...BEDS),
   track("music:bed:the-devourer-below", "the bed of The Devourer Below", ...BEDS),
-  track("music:fight", "while an enemy is engaged", "war-drums", "music-action-loop", "music-determined-pursuit", "urgent", "pulse", "music-empty-city", "sector"),
-  track("music:tension", "in the enemy phase and one doom from the agenda advancing", "urgent", "pulse", "music-hallway", "music-orien", "drone57", "transmission", "music-ambient-horror", "airy"),
+  track("music:fight", "while an enemy is engaged", "war-drums", "music-action-loop", "music-determined-pursuit", "urgent", "pulse", "music-empty-city", ...BEDS),
+  track("music:tension", "in the enemy phase and one doom from the agenda advancing", "urgent", "pulse", "music-hallway", "music-orien", "drone57", "transmission", "music-ambient-horror", ...BEDS),
 ];
 
 export type Source = { path: string; source: string; author: string };
@@ -107,7 +108,7 @@ const hash = (s: string) => [...s].reduce((n, c) => (n * 31 + c.charCodeAt(0)) >
 /**
  * The files that may serve a slot, best first: one from each pattern's family in turn (starting at a place in the
  * family, and with a family, that depend on the slot, so two slots sharing families don't offer the same files). The caller takes the first
- * five that pass its own checks (length, readable).
+ * dozen that pass its own checks (length, readable).
  */
 export function candidateOrder(slot: Slot, files: Source[]): Source[] {
   // the families start in a different order per slot too, so slots with the same families still open differently

@@ -76,7 +76,7 @@ describe("checkLoudness", () => {
 
 describe("checkCandidates", () => {
   const entry = (n: number) => ({ original: `kenney/a${n}.ogg`, preview: `x/${n}.mp3`, source: "https://kenney.nl/assets/x", author: "Kenney", license: "CC0", description: `a${n}`, sha256: "a".repeat(64) });
-  const slot = { kind: "effect" as const, where: "w", candidates: [1, 2, 3, 4, 5].map(entry) };
+  const slot = { kind: "effect" as const, where: "w", candidates: Array.from({ length: 12 }, (_, i) => entry(i + 1)) };
   const all = SoundCandidates.parse({ slots: { "event:attack": slot, "moment:play": slot, "music:fight": { ...slot, kind: "music" } } });
 
   it("passes when every slot of the manifest has candidates", () => {
@@ -89,8 +89,10 @@ describe("checkCandidates", () => {
     expect(checkCandidates(manifest, all, ["moment:newOne"]).map((e) => e.path)).toEqual(["moment:newOne"]);
   });
 
-  it("is a schema error to have other than five candidates or a licence other than CC0", () => {
-    expect(SoundCandidates.safeParse({ slots: { a: { ...slot, candidates: [entry(1)] } } }).success).toBe(false);
+  it("is a schema error to have fewer than ten or more than fifteen candidates or a licence other than CC0", () => {
+    expect(SoundCandidates.safeParse({ slots: { a: { ...slot, candidates: slot.candidates.slice(0, 9) } } }).success).toBe(false);
+    expect(SoundCandidates.safeParse({ slots: { a: { ...slot, candidates: [...slot.candidates, ...slot.candidates.slice(0, 4)] } } }).success).toBe(false);
+    expect(SoundCandidates.safeParse({ slots: { a: { ...slot, candidates: slot.candidates.slice(0, 10) } } }).success).toBe(true);
     expect(SoundCandidates.safeParse({ slots: { a: { ...slot, candidates: slot.candidates.map((c) => ({ ...c, license: "CC-BY" })) } } }).success).toBe(false);
   });
 });

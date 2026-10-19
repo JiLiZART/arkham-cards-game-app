@@ -114,6 +114,25 @@ export function chooseSound(current: SoundManifest, candidates: SoundCandidates,
   return { manifest: SoundManifest.parse(m), importIds, removedFiles };
 }
 
+/**
+ * Every slot's choice at once (the picker's Apply): the last choice for a slot wins, each new clip is imported once, and
+ * only the files the final manifest no longer uses are removed. One wrong choice refuses the batch.
+ */
+export function chooseSounds(current: SoundManifest, candidates: SoundCandidates, choices: Choice[]): Chosen {
+  const last = new Map(choices.map((c) => [c.slot, c]));
+  let m = current;
+  const importIds = new Set<string>();
+  const removed = new Set<string>();
+  for (const c of last.values()) {
+    const r = chooseSound(m, candidates, c);
+    m = r.manifest;
+    r.importIds.forEach((id) => importIds.add(id));
+    r.removedFiles.forEach((f) => removed.add(f));
+  }
+  const kept = new Set([...Object.values(m.effects).map((c) => c.file), ...Object.values(m.music).flatMap((t) => [`${t.file}.m4a`, `${t.file}.webm`])]);
+  return { manifest: m, importIds: [...importIds], removedFiles: [...removed].filter((f) => !kept.has(f)) };
+}
+
 /** the clip (or, for music, the track) a slot uses now, or null when it has none; "none" for a silenced moment */
 export function clipAt(m: SoundManifest, slot: string): string | null {
   if (slot.startsWith("music:")) {

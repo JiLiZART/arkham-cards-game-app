@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { SoundCandidates, SoundManifest } from "./schema";
-import { chooseSound, clipAt, clipIdOf } from "./soundChoose";
+import { chooseSound, chooseSounds, clipAt, clipIdOf } from "./soundChoose";
 
 const clip = { file: "slide.mp3", source: "https://kenney.nl/x", author: "Kenney", license: "CC0" };
 const manifest = () =>
@@ -13,9 +13,9 @@ const manifest = () =>
     cards: { "01016": { fight: "snap" } },
   });
 const cand = (n: number) => ({ original: `kenney-casino/Audio/c${n}.ogg`, preview: `moment-draw/${n}.mp3`, source: `https://opengameart.org/content/c${n}`, author: `Author${n}`, license: "CC0", description: `c${n}`, sha256: "b".repeat(64) });
-const five = [1, 2, 3, 4, 5].map(cand);
-const slots = (...ids: string[]) => SoundCandidates.parse({ slots: Object.fromEntries(ids.map((id) => [id, { kind: id.startsWith("music:") ? "music" : "effect", where: "w", candidates: five }])) });
-const all = slots("moment:draw", "event:doom", "event:token.0", "event:token.1", "trait:play:Firearm", "card:01016:fight", "music:fight", "moment:newOne");
+const pool = Array.from({ length: 12 }, (_, i) => cand(i + 1));
+const slots = (...ids: string[]) => SoundCandidates.parse({ slots: Object.fromEntries(ids.map((id) => [id, { kind: id.startsWith("music:") ? "music" : "effect", where: "w", candidates: pool }])) });
+const all = slots("moment:draw", "moment:play", "event:doom", "event:token.0", "event:token.1", "trait:play:Firearm", "card:01016:fight", "music:fight", "moment:newOne");
 
 describe("clipIdOf", () => {
   it("makes a stable file-safe id from a slot", () => {
@@ -68,7 +68,7 @@ describe("chooseSound", () => {
 
   it("refuses a slot with no candidates, a candidate out of range, and none for a music track", () => {
     expect(() => chooseSound(manifest(), all, { slot: "moment:nope", candidate: 0 })).toThrow(/slot/);
-    expect(() => chooseSound(manifest(), all, { slot: "moment:draw", candidate: 5 })).toThrow(/candidate/);
+    expect(() => chooseSound(manifest(), all, { slot: "moment:draw", candidate: 12 })).toThrow(/candidate/);
     expect(() => chooseSound(manifest(), all, { slot: "music:fight", candidate: "none" })).toThrow(/music/);
   });
 
@@ -90,5 +90,34 @@ describe("clipAt", () => {
     expect(clipAt(m, "music:fight")).toBe("fight");
     expect(clipAt(m, "moment:newOne")).toBeNull();
     expect(clipAt(m, "music:nope")).toBeNull();
+  });
+});
+
+describe("chooseSounds", () => {
+  it("applies every slot's choice in one go, the last for a slot winning, and imports each new clip once", () => {
+    const r = chooseSounds(manifest(), all, [
+      { slot: "moment:draw", candidate: 1 },
+      { slot: "event:doom", candidate: 3 },
+      { slot: "moment:play", candidate: "current" },
+      { slot: "moment:draw", candidate: 7 },
+      { slot: "music:fight", candidate: 0 },
+    ]);
+    expect(r.manifest.effects["moment-draw"].original).toBe("kenney-casino/Audio/c8.ogg");
+    expect(r.manifest.events.doom).toBe("event-doom");
+    expect(r.manifest.moments.play).toBe("snap");
+    expect(r.importIds.sort()).toEqual(["event-doom", "fight", "moment-draw"]);
+  });
+
+  it("removes only the files no clip of the final manifest uses", () => {
+    // snap is used by play, token, Firearm and the .45: replacing doom alone keeps it, slide goes with draw
+    const r = chooseSounds(manifest(), all, [
+      { slot: "moment:draw", candidate: 0 },
+      { slot: "event:doom", candidate: 0 },
+    ]);
+    expect(r.removedFiles).toEqual(["slide.mp3"]);
+  });
+
+  it("refuses the whole batch when one choice is wrong, changing nothing", () => {
+    expect(() => chooseSounds(manifest(), all, [{ slot: "moment:draw", candidate: 0 }, { slot: "moment:nope", candidate: 0 }])).toThrow(/moment:nope/);
   });
 });

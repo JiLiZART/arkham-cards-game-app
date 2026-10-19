@@ -70,22 +70,22 @@ Every clip and track SHALL be an entry in `content/sounds/sounds.json` with its 
 ## ADDED Requirements
 
 ### Requirement: Sound candidates
-For every sound slot (each event and variant, each UI moment, each trait and card sound, and each music role) the import SHALL gather five CC0 candidates besides the current clip into `sounds-src/candidates/<slot>/` (untracked), each listed in `content/sounds/candidates.json` with its source URL, author, licence, original file and a short description, so a choice can be audited and the download repeated. A candidate whose licence is not CC0 SHALL be refused by the content check. The candidates file SHALL be committed; the candidate audio SHALL NOT.
+For every sound slot (each event and variant, each UI moment, each trait and card sound, and each music role) the import SHALL gather ten to fifteen (twelve by default) CC0 candidates besides the current clip into `sounds-src/candidates/<slot>/` (untracked), each listed in `content/sounds/candidates.json` with its source URL, author, licence, original file and a short description, so a choice can be audited and the download repeated. A candidate whose licence is not CC0 SHALL be refused by the content check. The candidates file SHALL be committed; the candidate audio SHALL NOT.
 
-#### Scenario: Five per slot
+#### Scenario: A dozen per slot
 - **WHEN** `npm run import:sounds -- --candidates` finishes
-- **THEN** every slot of the manifest has five candidates listed with provenance, and their files are under `sounds-src/candidates/`
+- **THEN** every slot of the manifest has twelve candidates listed with provenance, and their files are under `sounds-src/candidates/`
 
 #### Scenario: A repeatable download
 - **WHEN** `sounds-src/candidates/` is deleted and the command is run again
 - **THEN** the same files come back from the listed sources
 
 ### Requirement: Audition picker
-Under the development server, the Debug panel SHALL open a Sounds screen listing every sound slot with its name, where it plays, its current clip, its five candidates and "no sound". Each clip SHALL play on a tap through the game's own audio engine at the gain it would have in play (the effects or music slider as set, the clip's gain, the normalised level), so clips are compared as they would be heard; a music candidate plays a 10-second excerpt from its loop start. Tapping a candidate SHALL make it the slot's clip: the choice is written into `content/sounds/sounds.json` (the candidate's provenance moved in, the file name set) and the chosen clip converted, so the game plays it on the next load; "no sound" sets the moment to "none". A slot whose current clip is unchanged SHALL show it marked current. The screen SHALL NOT be in the production build.
+Under the development server, the Debug panel SHALL open a Sounds screen listing every sound slot with its name, where it plays, its current clip, its candidates and "no sound". Each clip SHALL play on a tap through the game's own audio engine at the gain it would have in play (the effects or music slider as set, the clip's gain, the normalised level), so clips are compared as they would be heard; a music candidate plays a 10-second excerpt from its loop start. Tapping a clip SHALL play it and mark it as the slot's choice (the current clip, a candidate, or "no sound"); the marks SHALL be kept in the browser until every slot has one, and only then SHALL Apply be offered. Apply writes every choice into `content/sounds/sounds.json` at once (each candidate's provenance moved in, the file name set) and converts the chosen clips, so the game plays them on the next load, without reloading the page under the picker; "no sound" sets a moment to "none". The screen SHALL NOT be in the production build.
 
 #### Scenario: Choose a clip
-- **WHEN** the developer taps the third candidate of the "draw" moment
-- **THEN** it plays at in-game level, becomes the moment's clip in the manifest, and a card drawn after a reload makes that sound
+- **WHEN** the developer taps the third candidate of the "draw" moment, marks a choice in every other slot and presses Apply
+- **THEN** the candidate plays at in-game level when tapped, becomes the moment's clip in the manifest on Apply, and a card drawn after a reload makes that sound
 
 #### Scenario: Not shipped
 - **WHEN** the production build is made

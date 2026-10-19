@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { candidateFile, isLocalRequest, parseChoice } from "./sounds-dev-server";
+import { candidateFile, isLocalRequest, parseChoice, parseChoices } from "./sounds-dev-server";
 
 describe("isLocalRequest", () => {
   it("accepts a loopback peer asking for localhost", () => {
@@ -39,5 +39,19 @@ describe("parseChoice", () => {
 
   it("refuses anything else", () => {
     for (const bad of ["not json", "{}", '{"slot":1,"candidate":0}', '{"slot":"a","candidate":-1}', '{"slot":"a","candidate":1.5}', '{"slot":"a","candidate":"all"}', '{"slot":"a","candidate":0,"x":1}']) expect(() => parseChoice(bad), bad).toThrow();
+  });
+});
+
+describe("parseChoices", () => {
+  it("reads every slot's choice", () => {
+    expect(parseChoices('{"choices":[{"slot":"moment:draw","candidate":11},{"slot":"event:doom","candidate":"none"}]}')).toEqual([
+      { slot: "moment:draw", candidate: 11 },
+      { slot: "event:doom", candidate: "none" },
+    ]);
+  });
+
+  it("refuses an empty batch and a bad entry", () => {
+    expect(() => parseChoices('{"choices":[]}')).toThrow();
+    expect(() => parseChoices('{"choices":[{"slot":"a","candidate":"x"}]}')).toThrow();
   });
 });

@@ -704,7 +704,7 @@ export const SoundManifest = z
   });
 export type SoundManifest = z.infer<typeof SoundManifest>;
 /**
- * content/sounds/candidates.json: five CC0 candidates for every sound slot, drawn by `import:sounds -- --candidates`.
+ * content/sounds/candidates.json: ten to fifteen CC0 candidates for every sound slot, drawn by `import:sounds -- --candidates`.
  * The audio itself stays in the untracked sounds-src/candidates; this file is the provenance and what the picker lists.
  */
 export const SoundCandidate = z
@@ -724,10 +724,12 @@ export const SoundCandidate = z
   })
   .strict();
 export type SoundCandidate = z.infer<typeof SoundCandidate>;
-export const CANDIDATES_PER_SLOT = 5;
+/** how many candidates a slot is drawn with, and the range the file accepts */
+export const CANDIDATES_PER_SLOT = 12;
+export const CANDIDATES_RANGE = [10, 15] as const;
 export const SoundCandidates = z
   .object({
-    slots: z.record(z.string(), z.object({ kind: z.enum(["effect", "music"]), where: z.string().min(1), candidates: z.array(SoundCandidate).length(CANDIDATES_PER_SLOT) }).strict()),
+    slots: z.record(z.string(), z.object({ kind: z.enum(["effect", "music"]), where: z.string().min(1), candidates: z.array(SoundCandidate).min(CANDIDATES_RANGE[0]).max(CANDIDATES_RANGE[1]) }).strict()),
   })
   .strict();
 export type SoundCandidates = z.infer<typeof SoundCandidates>;

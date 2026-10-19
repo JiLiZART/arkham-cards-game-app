@@ -3,14 +3,16 @@
  * records a choice by rewriting content/sounds/sounds.json and running the importer for the new clip. Only while
  * `vite` serves (vite.config.ts mounts it in configureServer, never in a build), only for requests from this machine.
  */
-import { execFileSync } from "node:child_process";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 import { createReadStream, existsSync, readFileSync, statSync, unlinkSync, writeFileSync } from "node:fs";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { extname, normalize } from "node:path";
 import { z } from "zod";
 import { SoundCandidates, SoundManifest } from "../src/content/schema";
-import { type Choice, chooseSound } from "../src/content/soundChoose";
+import { type Choice, chooseSounds } from "../src/content/soundChoose";
 
+const run = promisify(execFile);
 const MANIFEST = "content/sounds/sounds.json";
 const CANDIDATES = "content/sounds/candidates.json";
 const PREFIX = "/__sounds-src/";
@@ -44,6 +46,11 @@ const ChoiceBody = z.object({ slot: z.string().min(1), candidate: z.union([z.num
 export function parseChoice(body: string): Choice {
   return ChoiceBody.parse(JSON.parse(body));
 }
+/** the picker's Apply: every slot's choice at once */
+const ChoicesBody = z.object({ choices: z.array(ChoiceBody).min(1).max(500) }).strict();
+export function parseChoices(body: string): Choice[] {
+  return ChoicesBody.parse(JSON.parse(body)).choices;
+}
 
 const TYPES: Record<string, string> = { ".mp3": "audio/mpeg", ".m4a": "audio/mp4", ".ogg": "audio/ogg", ".wav": "audio/wav" };
 
@@ -58,6 +65,9 @@ function readBody(req: IncomingMessage, limit = 10_000): Promise<string> {
     req.on("error", reject);
   });
 }
+
+/** while an Apply writes sounds.json the dev server must not reload the page under the picker (vite.config.ts reads this) */
+export const applying = { now: false };
 
 /** the connect middleware vite.config.ts mounts while serving; `next` is called for every other URL */
 export async function soundsDevMiddleware(req: IncomingMessage, res: ServerResponse, next: () => void): Promise<void> {
@@ -79,21 +89,34 @@ export async function soundsDevMiddleware(req: IncomingMessage, res: ServerRespo
     }
     if (req.method === "GET" && url === "/__sounds/candidates") return send(200, SoundCandidates.parse(JSON.parse(readFileSync(CANDIDATES, "utf8"))));
     if (req.method === "POST" && url === "/__sounds/choose") {
-      const before = readFileSync(MANIFEST, "utf8");
-      const chosen = chooseSound(SoundManifest.parse(JSON.parse(before)), SoundCandidates.parse(JSON.parse(readFileSync(CANDIDATES, "utf8"))), parseChoice(await readBody(req)));
-      // the schema fills in gain 1 everywhere; the file keeps only gains that differ
-      writeFileSync(MANIFEST, `${JSON.stringify(chosen.manifest, (k, v) => (k === "gain" && v === 1 ? undefined : v), 2)}\n`);
+      if (applying.now) return send(409, { error: "an Apply is already running" });
+      applying.now = true;
       try {
-        if (chosen.importIds.length) execFileSync("npx", ["tsx", "scripts/import-sounds.ts", ...chosen.importIds], { stdio: "pipe" });
-      } catch (e) {
-        writeFileSync(MANIFEST, before);
-        throw new Error(`the importer failed, the choice is undone: ${(e as { stderr?: Buffer }).stderr?.toString() ?? e}`);
+        return await apply(req, send);
+      } finally {
+        // the watcher reports the write a moment later: keep holding the reload a little past the end
+        setTimeout(() => (applying.now = false), 2000);
       }
-      for (const f of chosen.removedFiles) if (existsSync(`public/sounds/${f}`)) unlinkSync(`public/sounds/${f}`);
-      return send(200, { manifest: chosen.manifest, imported: chosen.importIds });
     }
     return send(404, { error: "unknown dev route" });
   } catch (e) {
     return send(400, { error: e instanceof Error ? e.message : String(e) });
   }
+}
+
+/** the picker's Apply: every choice into sounds.json, the importer for the new clips, the unused files removed; undone if the importer fails */
+async function apply(req: IncomingMessage, send: (status: number, body: unknown) => void) {
+  const before = readFileSync(MANIFEST, "utf8");
+  const chosen = chooseSounds(SoundManifest.parse(JSON.parse(before)), SoundCandidates.parse(JSON.parse(readFileSync(CANDIDATES, "utf8"))), parseChoices(await readBody(req, 100_000)));
+  // the schema fills in gain 1 everywhere; the file keeps only gains that differ
+  writeFileSync(MANIFEST, `${JSON.stringify(chosen.manifest, (k, v) => (k === "gain" && v === 1 ? undefined : v), 2)}\n`);
+  try {
+    // asynchronous, so the dev server keeps answering (and sees the file change while `applying` holds the reload)
+    if (chosen.importIds.length) await run("npx", ["tsx", "scripts/import-sounds.ts", ...chosen.importIds]);
+  } catch (e) {
+    writeFileSync(MANIFEST, before);
+    throw new Error(`the importer failed, the choice is undone: ${(e as { stderr?: string }).stderr ?? e}`);
+  }
+  for (const f of chosen.removedFiles) if (existsSync(`public/sounds/${f}`)) unlinkSync(`public/sounds/${f}`);
+  return send(200, { manifest: chosen.manifest, imported: chosen.importIds });
 }
