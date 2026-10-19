@@ -252,7 +252,8 @@ export const discardIfEmptyHandler: Handler<"DiscardIfEmpty"> = (g, step) => {
   const c = g.s.cards[step.card];
   if (!c || c.zone !== "play" || c.uses > 0) return;
   const d = def(g, step.card);
-  if (!d.discardWhenEmpty && !spendsOnlyUses(d)) return;
+  // a card marked discardWhenEmpty: false stays (Flesh Ward still soaks a point with no charge)
+  if (d.discardWhenEmpty === false || (!d.discardWhenEmpty && !spendsOnlyUses(d))) return;
   emit(g, "usedUp", `${d.name} is used up`, { inv: c.controller ?? undefined, card: step.card });
   discard(g, step.card);
 };

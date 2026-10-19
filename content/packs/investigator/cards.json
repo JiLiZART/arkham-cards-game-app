@@ -1,1 +1,24 @@
-{}
+{
+  "60106": {
+    "discardWhenEmpty": false,
+    "abilities": [
+      {
+        "kind": "reaction",
+        "trigger": "attackDealsDamage",
+        "usableBy": "controller",
+        "label": "Flesh Ward: cancel 1 damage or horror",
+        "cost": {
+          "exhaust": true,
+          "uses": 1
+        },
+        "effects": [
+          {
+            "op": "preventDamage",
+            "amount": 1,
+            "kind": "either"
+          }
+        ]
+      }
+    ]
+  }
+}

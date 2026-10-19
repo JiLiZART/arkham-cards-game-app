@@ -471,8 +471,8 @@ export const effHandler = (g: G, step: EffStep) => {
       if (kind === "either") {
         if (left[0] > 0 && left[1] > 0) {
           const pick = ask<"damage" | "horror">(g, step, you, "generic", "Prevent damage or horror?", [
-            { id: "damage", label: "Prevent damage", value: "damage" },
-            { id: "horror", label: "Prevent horror", value: "horror" },
+            { id: "damage", label: "Prevent damage", value: "damage", key: "option.preventDamage" },
+            { id: "horror", label: "Prevent horror", value: "horror", key: "option.preventHorror" },
           ], { key: "preventWhich" });
           if (pick === undefined) return;
           kind = pick;

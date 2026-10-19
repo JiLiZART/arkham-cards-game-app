@@ -36,6 +36,13 @@ describe("optionLabel", () => {
     expect(optionLabel(h, g, "ru")).toMatch(/^Назначить 1 ужас: /);
   });
 
+  it("an option with only a string of its own (what to prevent)", () => {
+    const g = game();
+    const o = { id: "horror", label: "Prevent horror", value: "horror", key: "option.preventHorror" };
+    expect(optionLabel(o, g, "en")).toBe("Prevent horror");
+    expect(optionLabel(o, g, "ru")).toBe("Предотвратить ужас");
+  });
+
   it("anything else keeps the engine's label", () => {
     const g = game();
     expect(optionLabel({ id: "pass", label: "Pass", value: "pass" }, g, "ru")).toBe("Pass");

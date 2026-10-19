@@ -1084,9 +1084,9 @@
    },
    "player": {
     "total": 28,
-    "works": 0,
+    "works": 1,
     "rest": {
-     "asset": 9,
+     "asset": 8,
      "enemy": 1,
      "event": 16,
      "skill": 1,
