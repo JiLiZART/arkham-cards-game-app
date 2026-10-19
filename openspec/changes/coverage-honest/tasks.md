@@ -1,6 +1,6 @@
 ## 0. Before
 
-- [ ] 0.1 Archive `campaign-coverage` (complete; it brings the `content-coverage` spec this change's deltas modify), syncing its specs.
+- [x] 0.1 Archive `campaign-coverage` (complete; it brings the `content-coverage` spec this change's deltas modify), syncing its specs.
 
 ## 1. What "works" means
 
