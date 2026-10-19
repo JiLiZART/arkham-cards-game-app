@@ -467,9 +467,9 @@
    },
    "player": {
     "total": 40,
-    "works": 0,
+    "works": 1,
     "rest": {
-     "asset": 22,
+     "asset": 21,
      "event": 9,
      "skill": 1,
      "treachery": 8
@@ -512,9 +512,9 @@
    },
    "player": {
     "total": 43,
-    "works": 0,
+    "works": 1,
     "rest": {
-     "asset": 32,
+     "asset": 31,
      "event": 2,
      "treachery": 9
     }
@@ -528,9 +528,9 @@
    },
    "player": {
     "total": 132,
-    "works": 0,
+    "works": 1,
     "rest": {
-     "asset": 84,
+     "asset": 83,
      "enemy": 1,
      "event": 33,
      "skill": 6,
@@ -1045,9 +1045,9 @@
    },
    "player": {
     "total": 30,
-    "works": 0,
+    "works": 2,
     "rest": {
-     "asset": 13,
+     "asset": 11,
      "enemy": 2,
      "event": 11,
      "skill": 4
@@ -1262,9 +1262,9 @@
    },
    "player": {
     "total": 13,
-    "works": 0,
+    "works": 1,
     "rest": {
-     "asset": 7,
+     "asset": 6,
      "event": 4,
      "skill": 1,
      "treachery": 1
@@ -1760,9 +1760,9 @@
    },
    "player": {
     "total": 16,
-    "works": 0,
+    "works": 2,
     "rest": {
-     "asset": 10,
+     "asset": 8,
      "event": 6
     }
    }
@@ -1822,9 +1822,9 @@
    },
    "player": {
     "total": 12,
-    "works": 0,
+    "works": 1,
     "rest": {
-     "asset": 3,
+     "asset": 2,
      "event": 5,
      "skill": 4
     }
@@ -1845,9 +1845,9 @@
    },
    "player": {
     "total": 14,
-    "works": 0,
+    "works": 1,
     "rest": {
-     "asset": 7,
+     "asset": 6,
      "event": 5,
      "skill": 2
     }
@@ -1999,9 +1999,9 @@
    },
    "player": {
     "total": 14,
-    "works": 0,
+    "works": 1,
     "rest": {
-     "asset": 6,
+     "asset": 5,
      "event": 5,
      "skill": 3
     }

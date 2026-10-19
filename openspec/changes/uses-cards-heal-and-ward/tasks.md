@@ -8,7 +8,7 @@
 ## 2. The cards
 
 - [x] 2.1 Flesh Ward's ability; tests: the spec's scenarios (cancel 1 of 1 damage and 1 horror, choose horror, 3 charges left, exhausted; not offered for a treachery; exhausted it is not offered again).
-- [ ] 2.2 The healing cards' abilities and labels (Clarity of Mind ×2, Smoking Pipe, Painkillers, Strange Solution, First Aid 3, Healing Words ×2, Sinha's Medical Kit, Extra Rations, Canteen); a test per card (uses spent, cost paid, the heal landing where printed; First Aid 3 on an Ally; Extra Rations discarded when empty; Healing Words 3 placed point by point).
+- [x] 2.2 The healing cards' abilities and labels (Clarity of Mind ×2, Smoking Pipe, Painkillers, Strange Solution, First Aid 3, Healing Words ×2, Sinha's Medical Kit, Extra Rations, Canteen); a test per card (uses spent, cost paid, the heal landing where printed; First Aid 3 on an Ally; Extra Rations discarded when empty; Healing Words 3 placed point by point).
 - [ ] 2.3 `npm run coverage`; the 12 cards work; `docs/campaign-program.md` counts updated for the packs touched.
 
 ## 3. Verification

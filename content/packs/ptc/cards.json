@@ -1,1 +1,23 @@
-{}
+{
+  "03230": {
+    "discardWhenEmpty": true,
+    "abilities": [
+      {
+        "kind": "action",
+        "label": "First Aid: heal 1 damage and 1 horror",
+        "cost": {
+          "uses": 1
+        },
+        "effects": [
+          {
+            "op": "heal",
+            "damage": 1,
+            "horror": 1,
+            "targetAlly": "atLocation",
+            "target": "chooseAtLocation"
+          }
+        ]
+      }
+    ]
+  }
+}

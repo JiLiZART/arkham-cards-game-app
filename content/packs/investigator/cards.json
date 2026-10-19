@@ -20,5 +20,44 @@
         ]
       }
     ]
+  },
+  "60570": {
+    "discardWhenEmpty": true,
+    "abilities": [
+      {
+        "kind": "fast",
+        "label": "Extra Rations: heal 1 damage",
+        "cost": {
+          "uses": 1,
+          "exhaust": true
+        },
+        "effects": [
+          {
+            "op": "heal",
+            "damage": 1,
+            "target": "you",
+            "targetAlly": "controlled"
+          }
+        ]
+      }
+    ]
+  },
+  "60573": {
+    "abilities": [
+      {
+        "kind": "fast",
+        "label": "Canteen: heal 2 horror",
+        "cost": {
+          "uses": 1,
+          "exhaust": true
+        },
+        "effects": [
+          {
+            "op": "heal",
+            "horror": 2
+          }
+        ]
+      }
+    ]
   }
 }

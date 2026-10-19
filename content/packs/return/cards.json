@@ -1,1 +1,25 @@
-{}
+{
+  "51008": {
+    "abilities": [
+      {
+        "kind": "action",
+        "label": "Clarity of Mind: heal 2 horror",
+        "cost": {
+          "uses": 1
+        },
+        "effects": [
+          {
+            "op": "heal",
+            "horror": 1,
+            "target": "chooseAtLocation"
+          },
+          {
+            "op": "heal",
+            "horror": 1,
+            "target": "chooseAtLocation"
+          }
+        ]
+      }
+    ]
+  }
+}

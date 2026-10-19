@@ -1,1 +1,66 @@
-{}
+{
+  "08068": {
+    "abilities": [
+      {
+        "kind": "action",
+        "label": "Healing Words: heal 2 damage",
+        "cost": {
+          "uses": 1
+        },
+        "effects": [
+          {
+            "op": "heal",
+            "damage": 1,
+            "target": "chooseAtLocation"
+          },
+          {
+            "op": "heal",
+            "damage": 1,
+            "target": "chooseAtLocation"
+          }
+        ]
+      }
+    ]
+  },
+  "08736": {
+    "abilities": [
+      {
+        "kind": "fast",
+        "label": "Sinha's Medical Kit: heal 1 damage or 1 horror",
+        "cost": {
+          "uses": 1,
+          "exhaust": true
+        },
+        "effects": [
+          {
+            "op": "chooseOne",
+            "options": [
+              {
+                "label": "Heal 1 damage",
+                "effects": [
+                  {
+                    "op": "heal",
+                    "damage": 1,
+                    "targetAlly": "atLocation",
+                    "target": "chooseAtLocation"
+                  }
+                ]
+              },
+              {
+                "label": "Heal 1 horror",
+                "effects": [
+                  {
+                    "op": "heal",
+                    "horror": 1,
+                    "targetAlly": "atLocation",
+                    "target": "chooseAtLocation"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

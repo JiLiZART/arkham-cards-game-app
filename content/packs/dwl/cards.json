@@ -1,1 +1,76 @@
-{}
+{
+  "02030": {
+    "abilities": [
+      {
+        "kind": "action",
+        "label": "Clarity of Mind: heal 1 horror",
+        "cost": {
+          "uses": 1
+        },
+        "effects": [
+          {
+            "op": "heal",
+            "horror": 1,
+            "target": "chooseAtLocation"
+          }
+        ]
+      }
+    ]
+  },
+  "02116": {
+    "abilities": [
+      {
+        "kind": "fast",
+        "label": "Smoking Pipe: heal 1 horror",
+        "cost": {
+          "uses": 1,
+          "exhaust": true,
+          "takeDamage": 1
+        },
+        "effects": [
+          {
+            "op": "heal",
+            "horror": 1
+          }
+        ]
+      }
+    ]
+  },
+  "02117": {
+    "abilities": [
+      {
+        "kind": "fast",
+        "label": "Painkillers: heal 1 damage",
+        "cost": {
+          "uses": 1,
+          "exhaust": true,
+          "takeHorror": 1
+        },
+        "effects": [
+          {
+            "op": "heal",
+            "damage": 1
+          }
+        ]
+      }
+    ]
+  },
+  "02262": {
+    "abilities": [
+      {
+        "kind": "action",
+        "label": "Strange Solution: heal 2 damage",
+        "cost": {
+          "uses": 1
+        },
+        "effects": [
+          {
+            "op": "heal",
+            "damage": 2,
+            "target": "chooseAtLocation"
+          }
+        ]
+      }
+    ]
+  }
+}
