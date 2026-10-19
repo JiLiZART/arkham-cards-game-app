@@ -1,0 +1,55 @@
+{
+  "setup": [],
+  "order": [
+    "film-fatale"
+  ],
+  "interludes": {},
+  "resolutions": {
+    "film-fatale": {
+      "none": [
+        "film-fatale:earn_madness_flaw_weakness:text",
+        "film-fatale:earn_madness_flaw_weakness"
+      ],
+      "R1": [
+        "film-fatale:remove_andre_patel_story_asset:text",
+        "film-fatale:remove_andre_patel_story_asset"
+      ],
+      "R2": [],
+      "R3": [],
+      "R4": [],
+      "R5": []
+    }
+  },
+  "steps": {
+    "film-fatale:earn_madness_flaw_weakness:text": {
+      "kind": "story",
+      "text": "Each investigator must search the collection for a random basic [[Madness]] or [[Flaw]] weakness and permanently add it to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "film-fatale:earn_madness_flaw_weakness": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addWeakness",
+          "trait": "Madness"
+        }
+      ]
+    },
+    "film-fatale:remove_andre_patel_story_asset:text": {
+      "kind": "story",
+      "text": "Remove the André Patel story asset from the game.",
+      "bullets": []
+    },
+    "film-fatale:remove_andre_patel_story_asset": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "film_fatale_no_andre",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    }
+  }
+}

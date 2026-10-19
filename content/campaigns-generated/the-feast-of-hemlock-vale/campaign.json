@@ -102,5 +102,63 @@
     "Dawn of the Final Day",
     "The Final Evening",
     "Fate of the Vale"
-  ]
+  ],
+  "logSections": [
+    {
+      "id": "campaign_notes",
+      "kind": "entries",
+      "label": "Campaign Notes"
+    },
+    {
+      "id": "rachel",
+      "kind": "entries",
+      "label": "Mother Rachel"
+    },
+    {
+      "id": "leah",
+      "kind": "entries",
+      "label": "Leah Atwood"
+    },
+    {
+      "id": "simeon",
+      "kind": "entries",
+      "label": "Simeon Atwood"
+    },
+    {
+      "id": "william",
+      "kind": "entries",
+      "label": "William Hemlock"
+    },
+    {
+      "id": "river",
+      "kind": "entries",
+      "label": "River Hawthorne"
+    },
+    {
+      "id": "gideon",
+      "kind": "entries",
+      "label": "Gideon Mizrah"
+    },
+    {
+      "id": "judith",
+      "kind": "entries",
+      "label": "Judith Park"
+    },
+    {
+      "id": "theo",
+      "kind": "entries",
+      "label": "Theo Peters"
+    },
+    {
+      "id": "areas_surveyed",
+      "kind": "entries",
+      "label": "Areas Surveyed"
+    },
+    {
+      "id": "current_day",
+      "kind": "entries",
+      "label": "Day / Time"
+    }
+  ],
+  "cards": []
 }

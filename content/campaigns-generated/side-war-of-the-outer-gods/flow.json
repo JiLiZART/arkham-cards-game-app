@@ -1,0 +1,218 @@
+{
+  "setup": [],
+  "order": [
+    "war-of-the-outer-gods"
+  ],
+  "interludes": {},
+  "resolutions": {
+    "war-of-the-outer-gods": {
+      "none": [
+        "war-of-the-outer-gods:ask_faction_in_lead"
+      ],
+      "R1": [
+        "war-of-the-outer-gods:earn_cloak:text",
+        "war-of-the-outer-gods:earn_cloak",
+        "war-of-the-outer-gods:earn_pocket_portal:text",
+        "war-of-the-outer-gods:earn_pocket_portal",
+        "war-of-the-outer-gods:earn_xp_bonus_2",
+        "war-of-the-outer-gods:upgradeDecks"
+      ],
+      "R2": [
+        "war-of-the-outer-gods:earn_cloak:text",
+        "war-of-the-outer-gods:earn_cloak",
+        "war-of-the-outer-gods:earn_enchanted_skull:text",
+        "war-of-the-outer-gods:earn_enchanted_skull",
+        "war-of-the-outer-gods:earn_xp",
+        "war-of-the-outer-gods:upgradeDecks"
+      ],
+      "R3": [
+        "war-of-the-outer-gods:earn_cloak:text",
+        "war-of-the-outer-gods:earn_cloak",
+        "war-of-the-outer-gods:earn_dreaded_end:text",
+        "war-of-the-outer-gods:earn_dreaded_end",
+        "war-of-the-outer-gods:earn_xp",
+        "war-of-the-outer-gods:upgradeDecks"
+      ],
+      "R4": [
+        "war-of-the-outer-gods:earn_cloak:text",
+        "war-of-the-outer-gods:earn_cloak",
+        "war-of-the-outer-gods:earn_blade:text",
+        "war-of-the-outer-gods:earn_blade",
+        "war-of-the-outer-gods:earn_xp",
+        "war-of-the-outer-gods:upgradeDecks"
+      ],
+      "R5": [
+        "war-of-the-outer-gods:all_killed:text",
+        "war-of-the-outer-gods:all_killed",
+        "war-of-the-outer-gods:lose:text",
+        "war-of-the-outer-gods:lose"
+      ],
+      "R6": [
+        "war-of-the-outer-gods:all_killed:text",
+        "war-of-the-outer-gods:all_killed",
+        "war-of-the-outer-gods:lose:text",
+        "war-of-the-outer-gods:lose"
+      ],
+      "R7": [
+        "war-of-the-outer-gods:all_killed:text",
+        "war-of-the-outer-gods:all_killed",
+        "war-of-the-outer-gods:lose:text",
+        "war-of-the-outer-gods:lose"
+      ]
+    }
+  },
+  "steps": {
+    "war-of-the-outer-gods:ask_faction_in_lead": {
+      "kind": "chooseOne",
+      "text": "Find the faction that is in the lead and proceed accordingly:",
+      "choices": [
+        {
+          "id": "red",
+          "text": "Red faction was in the lead",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "blue",
+          "text": "Blue faction was in the lead",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "green",
+          "text": "Green faction was in the lead",
+          "effects": [],
+          "steps": []
+        }
+      ]
+    },
+    "war-of-the-outer-gods:earn_cloak:text": {
+      "kind": "story",
+      "text": "Any one investigator may choose to add the Cloak of the Outer Realms story asset to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "war-of-the-outer-gods:earn_cloak": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "86051",
+          "who": "choice"
+        }
+      ]
+    },
+    "war-of-the-outer-gods:earn_pocket_portal:text": {
+      "kind": "story",
+      "text": "Any one investigator may choose to add the Pocket Portal story asset to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "war-of-the-outer-gods:earn_pocket_portal": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "86052",
+          "who": "choice"
+        }
+      ]
+    },
+    "war-of-the-outer-gods:earn_xp_bonus_2": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 2,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "war-of-the-outer-gods:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "war-of-the-outer-gods:earn_enchanted_skull:text": {
+      "kind": "story",
+      "text": "Any one investigator may choose to add the Enchanted Skull story asset to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "war-of-the-outer-gods:earn_enchanted_skull": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "86055",
+          "who": "choice"
+        }
+      ]
+    },
+    "war-of-the-outer-gods:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "war-of-the-outer-gods:earn_dreaded_end:text": {
+      "kind": "story",
+      "text": "Any one investigator may choose to add the Dreaded End story asset to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "war-of-the-outer-gods:earn_dreaded_end": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "86053",
+          "who": "choice"
+        }
+      ]
+    },
+    "war-of-the-outer-gods:earn_blade:text": {
+      "kind": "story",
+      "text": "Any one investigator may choose to add the Blade of Ark'at story asset to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "war-of-the-outer-gods:earn_blade": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "86054",
+          "who": "choice"
+        }
+      ]
+    },
+    "war-of-the-outer-gods:all_killed:text": {
+      "kind": "story",
+      "text": "Each investigator is <b>killed</b>.",
+      "bullets": []
+    },
+    "war-of-the-outer-gods:all_killed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "kill",
+          "who": "each"
+        }
+      ]
+    },
+    "war-of-the-outer-gods:lose:text": {
+      "kind": "story",
+      "text": "The investigators lose the campaign.",
+      "bullets": []
+    },
+    "war-of-the-outer-gods:lose": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "lose"
+        }
+      ]
+    }
+  }
+}

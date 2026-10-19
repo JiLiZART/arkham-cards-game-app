@@ -97,5 +97,44 @@
     "River of Blood",
     "New Horizons",
     "Blood Money"
+  ],
+  "logSections": [
+    {
+      "id": "campaign_notes",
+      "kind": "entries",
+      "label": "Campaign Notes"
+    }
+  ],
+  "cards": [
+    {
+      "scenario": "cob-prologue",
+      "name": "Prologue",
+      "interlude": true
+    },
+    {
+      "scenario": "river-of-blood",
+      "name": "River of Blood",
+      "code": "13001"
+    },
+    {
+      "scenario": "new-horizons",
+      "name": "New Horizons",
+      "code": "13031"
+    },
+    {
+      "scenario": "friends-in-low-places",
+      "name": "Friends in Low Places",
+      "interlude": true
+    },
+    {
+      "scenario": "blood-money",
+      "name": "Blood Money",
+      "code": "13068"
+    },
+    {
+      "scenario": "cob-epilogue",
+      "name": "Epilogue",
+      "interlude": true
+    }
   ]
 }

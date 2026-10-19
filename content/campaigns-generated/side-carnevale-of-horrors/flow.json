@@ -1,0 +1,193 @@
+{
+  "setup": [],
+  "order": [
+    "carnevale-of-horrors"
+  ],
+  "interludes": {},
+  "resolutions": {
+    "carnevale-of-horrors": {
+      "none": [
+        "carnevale-of-horrors:many_were_sacrificed_to_cnidathqua",
+        "carnevale-of-horrors:earn_xp",
+        "carnevale-of-horrors:move_innocent_reveler:text",
+        "carnevale-of-horrors:choose_masks",
+        "carnevale-of-horrors:ask_innocent_revelers_saved",
+        "carnevale-of-horrors:upgradeDecks"
+      ],
+      "R1": [
+        "carnevale-of-horrors:sun_banished_cnidathqua",
+        "carnevale-of-horrors:earn_xp",
+        "carnevale-of-horrors:choose_masks",
+        "carnevale-of-horrors:ask_innocent_revelers_saved",
+        "carnevale-of-horrors:upgradeDecks"
+      ],
+      "R2": [
+        "carnevale-of-horrors:cnidathqua_retreated",
+        "carnevale-of-horrors:earn_xp",
+        "carnevale-of-horrors:choose_masks",
+        "carnevale-of-horrors:ask_innocent_revelers_saved",
+        "carnevale-of-horrors:upgradeDecks"
+      ]
+    }
+  },
+  "steps": {
+    "carnevale-of-horrors:many_were_sacrificed_to_cnidathqua": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "coh_many_were_sacrificed_to_cnidathqua",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "carnevale-of-horrors:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "carnevale-of-horrors:move_innocent_reveler:text": {
+      "kind": "story",
+      "text": "Move 1 Innocent Reveler from underneath the act deck to underneath the agenda deck, if able.",
+      "bullets": []
+    },
+    "carnevale-of-horrors:choose_masks": {
+      "kind": "unsupported",
+      "name": "investigator_choice",
+      "title": "Additional Rewards",
+      "text": "In player order, each investigator may choose one of the following [[Mask]] cards to add to their deck: Pantalone, Medico Della Peste, Bauta, Gilded Volto. The chosen card does not count towards that investigator's deck size.",
+      "effects": [],
+      "steps": []
+    },
+    "carnevale-of-horrors:sacrifice_made": {
+      "kind": "story",
+      "text": "Too many lives were lost during the eclipse to stop the machinations of Cnidathqua's servants. The beast has been fed, its minions empowered. You find yourself hoping you don't live long enough to see the fallout of your failure.",
+      "bullets": []
+    },
+    "carnevale-of-horrors:random_weakness:text": {
+      "kind": "story",
+      "text": "Each investigator searches the collection for a random basic [[Madness]], [[Injury]], or [[Monster]] weakness and adds it to their deck for the remainder of the campaign.",
+      "bullets": []
+    },
+    "carnevale-of-horrors:random_weakness": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addWeakness",
+          "trait": "Madness"
+        }
+      ]
+    },
+    "carnevale-of-horrors:ask_innocent_revelers_killed": {
+      "kind": "chooseOne",
+      "text": "How many Innocent Revelers are underneath the agenda deck?",
+      "choices": [
+        {
+          "id": "none",
+          "text": "None",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "one_or_more",
+          "text": "One or more",
+          "effects": [],
+          "steps": [
+            "carnevale-of-horrors:sacrifice_made",
+            "carnevale-of-horrors:random_weakness:text",
+            "carnevale-of-horrors:random_weakness"
+          ]
+        }
+      ]
+    },
+    "carnevale-of-horrors:no_further_rewards:text": {
+      "kind": "story",
+      "text": "No further rewards.",
+      "bullets": []
+    },
+    "carnevale-of-horrors:abbess_satisfied": {
+      "kind": "story",
+      "text": "\"Grazie mille—thank you for all your help.\" Allegria says as you return to the basilica. \"Thanks to you, there were few casualties. I shudder to think what might have happened had you not arrived. Should you ever require assistance, please do not hesitate to ask.\"",
+      "bullets": []
+    },
+    "carnevale-of-horrors:earn_abbess:text": {
+      "kind": "story",
+      "text": "Any one investigator may choose to add Abbess Allegria Di Biase to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "carnevale-of-horrors:earn_abbess": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "82022",
+          "who": "choice"
+        }
+      ]
+    },
+    "carnevale-of-horrors:ask_innocent_revelers_saved": {
+      "kind": "chooseOne",
+      "text": "How many Innocent Revelers are underneath the act deck?",
+      "choices": [
+        {
+          "id": "none",
+          "text": "None",
+          "effects": [],
+          "steps": [
+            "carnevale-of-horrors:ask_innocent_revelers_killed"
+          ]
+        },
+        {
+          "id": "one_or_two",
+          "text": "One or Two",
+          "effects": [],
+          "steps": [
+            "carnevale-of-horrors:no_further_rewards:text"
+          ]
+        },
+        {
+          "id": "three",
+          "text": "Three",
+          "effects": [],
+          "steps": [
+            "carnevale-of-horrors:abbess_satisfied",
+            "carnevale-of-horrors:earn_abbess:text",
+            "carnevale-of-horrors:earn_abbess"
+          ]
+        }
+      ]
+    },
+    "carnevale-of-horrors:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "carnevale-of-horrors:sun_banished_cnidathqua": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "coh_sun_banished_cnidathqua",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "carnevale-of-horrors:cnidathqua_retreated": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "coh_cnidathqua_retreated",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    }
+  }
+}

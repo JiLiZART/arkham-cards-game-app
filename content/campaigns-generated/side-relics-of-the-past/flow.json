@@ -1,0 +1,196 @@
+{
+  "setup": [],
+  "order": [
+    "relics-of-the-past"
+  ],
+  "interludes": {},
+  "resolutions": {
+    "relics-of-the-past": {
+      "R1": [
+        "relics-of-the-past:earn_jack_xp",
+        "relics-of-the-past:earn_location_xp",
+        "relics-of-the-past:ask_journal_xp",
+        "relics-of-the-past:jack_good_swap",
+        "relics-of-the-past:check_investigators_poisoned",
+        "relics-of-the-past:upgradeDecks"
+      ],
+      "R2": [
+        "relics-of-the-past:earn_xp",
+        "relics-of-the-past:jack_bad_swap",
+        "relics-of-the-past:check_investigators_poisoned",
+        "relics-of-the-past:upgradeDecks"
+      ]
+    }
+  },
+  "steps": {
+    "relics-of-the-past:earn_jack_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "relics-of-the-past:earn_location_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        },
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "relics-of-the-past:journal_resigned:text": {
+      "kind": "story",
+      "text": "Each investigator earns 1 bonus experience.",
+      "bullets": []
+    },
+    "relics-of-the-past:journal_resigned": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "relics-of-the-past:ask_journal_xp": {
+      "kind": "chooseOne",
+      "text": "Check the supplies of each investigator who resigned.",
+      "choices": [
+        {
+          "id": "journal",
+          "text": "Did an investigator with the journal resign?",
+          "effects": [],
+          "steps": [
+            "relics-of-the-past:journal_resigned:text",
+            "relics-of-the-past:journal_resigned"
+          ]
+        }
+      ]
+    },
+    "relics-of-the-past:jack_good_swap": {
+      "kind": "chooseOne",
+      "text": " Monterey Jack may either upgrade Trusty Bullwhip to its advanced version, or downgrade the advanced version of Buried Secrets to its original version.",
+      "choices": [
+        {
+          "id": "gun",
+          "text": "Upgrade to advanced Trusty Bullwhip",
+          "effects": [
+            {
+              "do": "removeCard",
+              "code": "08008",
+              "who": "each"
+            },
+            {
+              "do": "earnCard",
+              "code": "90063",
+              "who": "each"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "crime",
+          "text": "Downgrade advanced Buried Secrets",
+          "effects": [
+            {
+              "do": "removeCard",
+              "code": "90064",
+              "who": "each"
+            },
+            {
+              "do": "earnCard",
+              "code": "08009",
+              "who": "each"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "neither",
+          "text": "No change",
+          "effects": [],
+          "steps": []
+        }
+      ]
+    },
+    "relics-of-the-past:check_investigators_poisoned": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "04102",
+          "who": "each"
+        }
+      ]
+    },
+    "relics-of-the-past:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "relics-of-the-past:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "relics-of-the-past:jack_bad_swap": {
+      "kind": "chooseOne",
+      "text": "Monterey Jack must either upgrade Buried Secrets to its advanced version, or downgrade the advanced version of Trusty Bullwhip to its original version.",
+      "choices": [
+        {
+          "id": "necronomicon",
+          "text": "Upgrade to advanced Buried Secrets",
+          "effects": [
+            {
+              "do": "removeCard",
+              "code": "08009",
+              "who": "each"
+            },
+            {
+              "do": "earnCard",
+              "code": "90064",
+              "who": "each"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "tote_bag",
+          "text": "Downgrade from advanced Trusty Bullwhip",
+          "effects": [
+            {
+              "do": "removeCard",
+              "code": "90063",
+              "who": "each"
+            },
+            {
+              "do": "earnCard",
+              "code": "08008",
+              "who": "each"
+            }
+          ],
+          "steps": []
+        }
+      ]
+    }
+  }
+}

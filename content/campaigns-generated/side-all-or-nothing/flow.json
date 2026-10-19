@@ -1,0 +1,230 @@
+{
+  "setup": [],
+  "order": [
+    "all-or-nothing"
+  ],
+  "interludes": {},
+  "resolutions": {
+    "all-or-nothing": {
+      "none": [],
+      "R1": [
+        "all-or-nothing:earn_xp",
+        "all-or-nothing:ask_act2_resources",
+        "all-or-nothing:skids_good_swap",
+        "all-or-nothing:upgradeDecks"
+      ],
+      "R2": [
+        "all-or-nothing:earn_xp",
+        "all-or-nothing:skids_bad_swap",
+        "all-or-nothing:upgradeDecks"
+      ]
+    }
+  },
+  "steps": {
+    "all-or-nothing:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "all-or-nothing:1_additional_resource:text": {
+      "kind": "story",
+      "text": "“Skids” O’Toole begins the next scenario with 1 additional resource.",
+      "bullets": []
+    },
+    "all-or-nothing:2_additional_resources:text": {
+      "kind": "story",
+      "text": "“Skids” O’Toole begins the next scenario with 2 additional resources.",
+      "bullets": []
+    },
+    "all-or-nothing:3_additional_resources:text": {
+      "kind": "story",
+      "text": "“Skids” O’Toole begins the next scenario with 3 additional resources.",
+      "bullets": []
+    },
+    "all-or-nothing:4_additional_resources_1_xp:text": {
+      "kind": "story",
+      "text": "“Skids” O’Toole earns 1 bonus experience and begins the next scenario with 4 additional resources.",
+      "bullets": []
+    },
+    "all-or-nothing:5_additional_resources_2_xp:text": {
+      "kind": "story",
+      "text": "“Skids” O’Toole earns 2 bonus experience and begins the next scenario with 5 additional resources.",
+      "bullets": []
+    },
+    "all-or-nothing:6_additional_resources_3_xp:text": {
+      "kind": "story",
+      "text": "“Skids” O’Toole earns 3 bonus experience and begins the next scenario with 6 additional resources.",
+      "bullets": []
+    },
+    "all-or-nothing:ask_act2_resources": {
+      "kind": "chooseOne",
+      "text": "If the number of resources on Act 2a is (choose one)…",
+      "choices": [
+        {
+          "id": "resources_10",
+          "text": "10[per_investigator] or more resources…",
+          "effects": [],
+          "steps": [
+            "all-or-nothing:1_additional_resource:text"
+          ]
+        },
+        {
+          "id": "resources_20",
+          "text": "20[per_investigator] or more resources…",
+          "effects": [],
+          "steps": [
+            "all-or-nothing:2_additional_resources:text"
+          ]
+        },
+        {
+          "id": "resources_30",
+          "text": "30[per_investigator] or more resources…",
+          "effects": [],
+          "steps": [
+            "all-or-nothing:3_additional_resources:text"
+          ]
+        },
+        {
+          "id": "resource_40",
+          "text": "40[per_investigator] or more resources…",
+          "effects": [
+            {
+              "do": "xp",
+              "bonus": 1,
+              "who": "each",
+              "victory": false
+            }
+          ],
+          "steps": [
+            "all-or-nothing:4_additional_resources_1_xp:text"
+          ]
+        },
+        {
+          "id": "resource_50",
+          "text": "50[per_investigator] or more resources…",
+          "effects": [
+            {
+              "do": "xp",
+              "bonus": 2,
+              "who": "each",
+              "victory": false
+            }
+          ],
+          "steps": [
+            "all-or-nothing:5_additional_resources_2_xp:text"
+          ]
+        },
+        {
+          "id": "resource_60",
+          "text": "60[per_investigator] or more resources…",
+          "effects": [
+            {
+              "do": "xp",
+              "bonus": 3,
+              "who": "each",
+              "victory": false
+            }
+          ],
+          "steps": [
+            "all-or-nothing:6_additional_resources_3_xp:text"
+          ]
+        }
+      ]
+    },
+    "all-or-nothing:skids_good_swap": {
+      "kind": "chooseOne",
+      "text": "“Skids” O’Toole may either upgrade On the Lam to its advanced version, or downgrade the advanced version of Hospital Debts to its original version.",
+      "choices": [
+        {
+          "id": "tote_bag",
+          "text": "Upgrade to advanced On the Lam",
+          "effects": [
+            {
+              "do": "removeCard",
+              "code": "01010",
+              "who": "each"
+            },
+            {
+              "do": "earnCard",
+              "code": "90009",
+              "who": "each"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "necronomicon",
+          "text": "Downgrade advanced Hospital Debts",
+          "effects": [
+            {
+              "do": "removeCard",
+              "code": "90010",
+              "who": "each"
+            },
+            {
+              "do": "earnCard",
+              "code": "01011",
+              "who": "each"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "neither",
+          "text": "No change",
+          "effects": [],
+          "steps": []
+        }
+      ]
+    },
+    "all-or-nothing:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "all-or-nothing:skids_bad_swap": {
+      "kind": "chooseOne",
+      "text": "“Skids” O’Toole must either upgrade Hospital Debts to its advanced version, or downgrade the advanced version of On the Lam to its original version.",
+      "choices": [
+        {
+          "id": "necronomicon",
+          "text": "Upgrade to advanced Hospital Debts",
+          "effects": [
+            {
+              "do": "removeCard",
+              "code": "01011",
+              "who": "each"
+            },
+            {
+              "do": "earnCard",
+              "code": "90010",
+              "who": "each"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "tote_bag",
+          "text": "Downgrade from advanced On the Lam",
+          "effects": [
+            {
+              "do": "removeCard",
+              "code": "90009",
+              "who": "each"
+            },
+            {
+              "do": "earnCard",
+              "code": "01010",
+              "who": "each"
+            }
+          ],
+          "steps": []
+        }
+      ]
+    }
+  }
+}

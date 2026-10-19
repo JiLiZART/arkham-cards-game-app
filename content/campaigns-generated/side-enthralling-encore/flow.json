@@ -1,0 +1,61 @@
+{
+  "setup": [],
+  "order": [
+    "enthralling-encore"
+  ],
+  "interludes": {},
+  "resolutions": {
+    "enthralling-encore": {
+      "R1": [
+        "enthralling-encore:earn_xp",
+        "enthralling-encore:may_upgrade_signatures:text",
+        "enthralling-encore:choose_reward",
+        "enthralling-encore:upgradeDecks"
+      ],
+      "R2": [
+        "enthralling-encore:earn_xp",
+        "enthralling-encore:must_upgrade_signatures:text",
+        "enthralling-encore:choose_punishment",
+        "enthralling-encore:upgradeDecks"
+      ]
+    }
+  },
+  "steps": {
+    "enthralling-encore:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "enthralling-encore:may_upgrade_signatures:text": {
+      "kind": "story",
+      "text": "Each investigator may either upgrade their signature card to its advanced version, or downgrade the advanced version of their signature weakness to its original version (if able).",
+      "bullets": []
+    },
+    "enthralling-encore:choose_reward": {
+      "kind": "unsupported",
+      "name": "investigator_choice",
+      "effects": [],
+      "steps": []
+    },
+    "enthralling-encore:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "enthralling-encore:must_upgrade_signatures:text": {
+      "kind": "story",
+      "text": "Each investigator must either upgrade their signature weakness to its advanced version, or downgrade the advanced version of their signature card to its original version (if able).",
+      "bullets": []
+    },
+    "enthralling-encore:choose_punishment": {
+      "kind": "unsupported",
+      "name": "investigator_choice",
+      "effects": [],
+      "steps": []
+    }
+  }
+}

@@ -108,5 +108,54 @@
     "Obsidian Canyons",
     "The Doom of Arkham: Part I",
     "The Doom of Arkham: Part II"
+  ],
+  "logSections": [
+    {
+      "id": "campaign_notes",
+      "kind": "entries",
+      "label": "Campaign Notes"
+    },
+    {
+      "id": "glyphs",
+      "kind": "entries",
+      "label": "Alien Glyphs"
+    },
+    {
+      "id": "task_progress",
+      "kind": "investigatorCount",
+      "label": "Task progress"
+    },
+    {
+      "id": "artifacts_earned",
+      "kind": "entries",
+      "label": "Artifacts Earned"
+    },
+    {
+      "id": "locations",
+      "kind": "entries",
+      "label": "Locations of R'lyeh"
+    },
+    {
+      "id": "flooded_neighborhoods",
+      "kind": "entries",
+      "label": "Flooded Neighborhoods"
+    }
+  ],
+  "cards": [
+    {
+      "scenario": "tdc-prologue",
+      "name": "Prologue",
+      "interlude": true
+    },
+    {
+      "scenario": "one-last-job",
+      "name": "One Last Job",
+      "code": "11501"
+    },
+    {
+      "scenario": "an-offer-you-cant-refuse",
+      "name": "An Offer You Can't Refuse",
+      "interlude": true
+    }
   ]
 }

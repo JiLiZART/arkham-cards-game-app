@@ -91,5 +91,19 @@
   "card": "70001",
   "scenarioNames": [
     "The Labyrinths of Lunacy"
+  ],
+  "logSections": [
+    {
+      "id": "campaign_notes",
+      "kind": "entries",
+      "label": "Campaign Notes"
+    }
+  ],
+  "cards": [
+    {
+      "scenario": "in-the-labyrinths-of-lunacy",
+      "name": "The Labyrinths of Lunacy",
+      "code": "70001"
+    }
   ]
 }

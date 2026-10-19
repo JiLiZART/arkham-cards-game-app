@@ -1,0 +1,142 @@
+{
+  "setup": [],
+  "order": [
+    "laid-to-rest"
+  ],
+  "interludes": {},
+  "resolutions": {
+    "laid-to-rest": {
+      "R1": [
+        "laid-to-rest:earn_jim_xp",
+        "laid-to-rest:earn_location_xp",
+        "laid-to-rest:jim_good_swap",
+        "laid-to-rest:upgradeDecks"
+      ],
+      "R2": [
+        "laid-to-rest:earn_jim_xp",
+        "laid-to-rest:earn_location_xp",
+        "laid-to-rest:jim_bad_swap",
+        "laid-to-rest:upgradeDecks"
+      ]
+    }
+  },
+  "steps": {
+    "laid-to-rest:earn_jim_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "laid-to-rest:earn_location_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        },
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "laid-to-rest:jim_good_swap": {
+      "kind": "chooseOne",
+      "text": "Jim Culver may either Jim’s Trumpet to its advanced version, or downgrade the advanced version of Final Rhapsody to its original version.",
+      "choices": [
+        {
+          "id": "trumpet",
+          "text": "Upgrade to advanced Jim’s Trumpet",
+          "effects": [
+            {
+              "do": "removeCard",
+              "code": "02012",
+              "who": "each"
+            },
+            {
+              "do": "earnCard",
+              "code": "90050",
+              "who": "each"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "final",
+          "text": "Downgrade advanced Final Rhapsody",
+          "effects": [
+            {
+              "do": "removeCard",
+              "code": "90051",
+              "who": "each"
+            },
+            {
+              "do": "earnCard",
+              "code": "02013",
+              "who": "each"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "neither",
+          "text": "No change",
+          "effects": [],
+          "steps": []
+        }
+      ]
+    },
+    "laid-to-rest:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "laid-to-rest:jim_bad_swap": {
+      "kind": "chooseOne",
+      "text": "Jim Culver must either upgrade Final Rhapsody to its advanced version, or downgrade the advanced version of Jim’s Trumpet to its original version.",
+      "choices": [
+        {
+          "id": "final",
+          "text": "Upgrade to advanced Final Rhapsody",
+          "effects": [
+            {
+              "do": "removeCard",
+              "code": "02013",
+              "who": "each"
+            },
+            {
+              "do": "earnCard",
+              "code": "90051",
+              "who": "each"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "trumpet",
+          "text": "Downgrade from advanced Jim’s Trumpet",
+          "effects": [
+            {
+              "do": "removeCard",
+              "code": "90050",
+              "who": "each"
+            },
+            {
+              "do": "earnCard",
+              "code": "02012",
+              "who": "each"
+            }
+          ],
+          "steps": []
+        }
+      ]
+    }
+  }
+}

@@ -102,5 +102,79 @@
     "Undimensioned and Unseen",
     "Where Doom Awaits",
     "Lost in Time and Space"
+  ],
+  "logSections": [
+    {
+      "id": "campaign_notes",
+      "kind": "entries",
+      "label": "Campaign Notes"
+    },
+    {
+      "id": "sacrificed",
+      "kind": "entries",
+      "label": "Sacrificed to Yog-Sothoth"
+    }
+  ],
+  "cards": [
+    {
+      "scenario": "dwl-prologue",
+      "name": "Prologue",
+      "interlude": true
+    },
+    {
+      "scenario": "extracurricular-activity",
+      "name": "Extracurricular Activity",
+      "code": "02041"
+    },
+    {
+      "scenario": "the-house-always-wins",
+      "name": "The House Always Wins",
+      "code": "02062"
+    },
+    {
+      "scenario": "armitages-fate",
+      "name": "Armitage's Fate",
+      "interlude": true
+    },
+    {
+      "scenario": "the-miskatonic-museum",
+      "name": "The Miskatonic Museum",
+      "code": "02118"
+    },
+    {
+      "scenario": "essex-county-express",
+      "name": "The Essex County Express",
+      "code": "02159"
+    },
+    {
+      "scenario": "blood-on-the-altar",
+      "name": "Blood on the Altar",
+      "code": "02195"
+    },
+    {
+      "scenario": "dwl-interlude2",
+      "name": "The Survivors",
+      "interlude": true
+    },
+    {
+      "scenario": "undimensioned-and-unseen",
+      "name": "Undimensioned and Unseen",
+      "code": "02236"
+    },
+    {
+      "scenario": "where-doom-awaits",
+      "name": "Where Doom Awaits",
+      "code": "02274"
+    },
+    {
+      "scenario": "lost-in-time-and-space",
+      "name": "Lost in Time and Space",
+      "code": "02311"
+    },
+    {
+      "scenario": "dwl-epilogue",
+      "name": "Epilogue",
+      "interlude": true
+    }
   ]
 }

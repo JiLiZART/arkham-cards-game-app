@@ -102,5 +102,64 @@
     "A Thousand Shapes of Horror",
     "Point of No Return",
     "Weaver of the Cosmos"
+  ],
+  "logSections": [
+    {
+      "id": "campaign_notes",
+      "kind": "entries",
+      "label": "Campaign Notes"
+    },
+    {
+      "id": "steps_of_the_bridge",
+      "kind": "count",
+      "label": "Steps of the Bridge"
+    }
+  ],
+  "cards": [
+    {
+      "scenario": "tde-prologue",
+      "name": "Prologue",
+      "interlude": true
+    },
+    {
+      "scenario": "waking-nightmare",
+      "name": "Waking Nightmare",
+      "code": "06063"
+    },
+    {
+      "scenario": "the-black-cat",
+      "name": "The Black Cat",
+      "interlude": true
+    },
+    {
+      "scenario": "a-thousand-shapes-of-horror",
+      "name": "A Thousand Shapes of Horror",
+      "code": "06168"
+    },
+    {
+      "scenario": "the-oneironauts",
+      "name": "The Oneironauts",
+      "interlude": true
+    },
+    {
+      "scenario": "point-of-no-return",
+      "name": "Point of No Return",
+      "code": "06247"
+    },
+    {
+      "scenario": "the-great-ones",
+      "name": "The Great Ones",
+      "interlude": true
+    },
+    {
+      "scenario": "weaver-of-the-cosmos",
+      "name": "Weaver of the Cosmos",
+      "code": "06333"
+    },
+    {
+      "scenario": "tde-epilogue",
+      "name": "Epilogue",
+      "interlude": true
+    }
   ]
 }

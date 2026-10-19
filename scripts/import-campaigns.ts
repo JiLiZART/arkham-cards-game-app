@@ -7,6 +7,7 @@
 import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { CampaignDef, ChaosToken, Difficulty, Resolution, ScenarioDef, SetupStep, SymbolToken, TokenEffect } from "../src/content/schema";
+import { compileFlow } from "./campaignFlow";
 import { actsAndAgendas, chaosBag, codesByName, isOfficial, kebab, layoutOf, introLead, prologueOf, resolutionEffects, tokenEffects, type Raw } from "./campaignGuide";
 import { readSnapshot, SNAPSHOT } from "./import-cards";
 
@@ -214,6 +215,8 @@ export function main() {
       if (handWritten(grp.id)) continue;
       const labels: Record<string, string> = {};
       const defs: ScenarioDef[] = [];
+      /** guide scenario id → the file's id, for the flow */
+      const ids = new Map<string, string>();
       for (const s of grp.scenarios) {
         // a side scenario already generated as a standalone of its own (Fortune and Folly) is not repeated
         if (c.id === "side" && used.has(kebab(s.id))) continue;
@@ -222,6 +225,7 @@ export function main() {
         let id = kebab(s.id);
         if (used.has(id)) id = `${grp.id}-${id}`;
         used.add(id);
+        ids.set(s.id, id);
         defs.push({ ...def, id });
       }
       if (!defs.length) {
@@ -230,6 +234,22 @@ export function main() {
       }
       rmSync(join(OUT, grp.id), { recursive: true, force: true });
       for (const d of defs) write(join(OUT, grp.id, "scenarios", `${d.id}.json`), d);
+      // what happens between the scenarios: the campaign guide's flow (a side scenario has no campaign setup of its own)
+      const { flow, unsupported, logLabels } = compileFlow({ campaign: c.id === "side" ? { ...c, setup: [] } : c, scenarios: g.scenarios, ids });
+      Object.assign(labels, logLabels);
+      for (const [kind, n] of Object.entries(unsupported).sort()) note(`${grp.id}: flow ${kind} ×${n}`);
+      write(join(OUT, grp.id, "flow.json"), flow);
+      const byDef = new Map(defs.map((d) => [d.id, d]));
+      const cardList = flow.order.map((id) => {
+        const d = byDef.get(id);
+        return d ? { scenario: id, name: d.name, code: d.card } : { scenario: id, name: flow.interludes[id]?.name, interlude: true as const };
+      });
+      const logSections = [
+        { id: "campaign_notes", kind: "entries" as const, label: "Campaign Notes" },
+        ...(c.campaign_log ?? [])
+          .filter((sec: Raw) => sec.id && sec.id !== "campaign_notes" && !sec.hidden && sec.title)
+          .map((sec: Raw) => ({ id: sec.id as string, kind: (sec.type === "count" ? "count" : sec.type === "investigator_count" ? "investigatorCount" : "entries") as "count" | "investigatorCount" | "entries", label: String(sec.title) })),
+      ];
       const campaign: CampaignDef = {
         id: grp.id,
         name: grp.name,
@@ -243,8 +263,8 @@ export function main() {
         // a side scenario has no campaign prologue: its tile shows the scenario's own intro
         ...((c.id === "side" ? introLead(defs[0].intro) : prologueOf(c)) ? { prologue: c.id === "side" ? introLead(defs[0].intro) : prologueOf(c) } : {}),
         scenarioNames: defs.map((d) => d.name),
-        logSections: [],
-        cards: [],
+        logSections,
+        cards: cardList,
       };
       write(join(OUT, grp.id, "campaign.json"), campaign);
       mkdirSync(EN_TEXT, { recursive: true });

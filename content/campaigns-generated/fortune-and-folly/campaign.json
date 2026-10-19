@@ -57,5 +57,19 @@
   "scenarioNames": [
     "The Stakeout",
     "The Heist"
+  ],
+  "logSections": [
+    {
+      "id": "campaign_notes",
+      "kind": "entries",
+      "label": "Campaign Notes"
+    }
+  ],
+  "cards": [
+    {
+      "scenario": "fortune-and-folly-part-1",
+      "name": "The Stakeout",
+      "code": "88001"
+    }
   ]
 }

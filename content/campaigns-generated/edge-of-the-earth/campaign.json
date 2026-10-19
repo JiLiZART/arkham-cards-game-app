@@ -106,5 +106,149 @@
     "Fatal Mirage",
     "Fatal Mirage",
     "Fatal Mirage"
+  ],
+  "logSections": [
+    {
+      "id": "campaign_notes",
+      "kind": "entries",
+      "label": "Campaign Notes"
+    },
+    {
+      "id": "ice_and_death",
+      "kind": "entries",
+      "label": "Ice and Death"
+    },
+    {
+      "id": "locations_revealed",
+      "kind": "entries",
+      "label": "Locations Revealed"
+    },
+    {
+      "id": "supplies_recovered",
+      "kind": "entries",
+      "label": "Supplies Recovered"
+    },
+    {
+      "id": "fatal_mirage",
+      "kind": "entries",
+      "label": "Fatal Mirage"
+    },
+    {
+      "id": "memories_discovered",
+      "kind": "entries",
+      "label": "Memories Discovered"
+    },
+    {
+      "id": "memories_banished",
+      "kind": "entries",
+      "label": "Memories Banished"
+    },
+    {
+      "id": "the_heart_of_madness",
+      "kind": "entries",
+      "label": "The Heart of Madness"
+    },
+    {
+      "id": "seals_placed",
+      "kind": "entries",
+      "label": "Seals Placed"
+    },
+    {
+      "id": "seals_recovered",
+      "kind": "entries",
+      "label": "Seals Recovered"
+    },
+    {
+      "id": "expedition_team",
+      "kind": "entries",
+      "label": "Expedition Team"
+    }
+  ],
+  "cards": [
+    {
+      "scenario": "eoe-prologue",
+      "name": "Prologue",
+      "interlude": true
+    },
+    {
+      "scenario": "ice-and-death",
+      "name": "Ice and Death",
+      "interlude": true
+    },
+    {
+      "scenario": "ice-and-death-part-1",
+      "name": "Ice and Death, Part I",
+      "code": "08501"
+    },
+    {
+      "scenario": "the-disapperance",
+      "name": "The Disappearance",
+      "interlude": true
+    },
+    {
+      "scenario": "ice-and-death-part-2",
+      "name": "Ice and Death, Part II",
+      "code": "08501"
+    },
+    {
+      "scenario": "the-attack",
+      "name": "The Attack",
+      "interlude": true
+    },
+    {
+      "scenario": "ice-and-death-part-3",
+      "name": "Ice and Death, Part III",
+      "code": "08501"
+    },
+    {
+      "scenario": "restful-night",
+      "name": "Restful Night",
+      "interlude": true
+    },
+    {
+      "scenario": "to-the-forbidden-peaks",
+      "name": "To the Forbidden Peaks",
+      "code": "08596"
+    },
+    {
+      "scenario": "endless-night",
+      "name": "Endless Night",
+      "interlude": true
+    },
+    {
+      "scenario": "city-of-the-elder-things",
+      "name": "City of the Elder Things",
+      "code": "08621"
+    },
+    {
+      "scenario": "final-night",
+      "name": "Final Night",
+      "interlude": true
+    },
+    {
+      "scenario": "the-heart-of-madness",
+      "name": "The Heart of Madness",
+      "interlude": true
+    },
+    {
+      "scenario": "the-heart-of-madness-part-1",
+      "name": "The Heart of Madness, Part I",
+      "code": "08648"
+    },
+    {
+      "scenario": "the-other-side",
+      "name": "The Other Side",
+      "interlude": true
+    },
+    {
+      "scenario": "the-heart-of-madness-part-2",
+      "name": "The Heart of Madness, Part II",
+      "code": "08648"
+    },
+    {
+      "scenario": "eoe-epilogue",
+      "name": "Epilogue",
+      "interlude": true
+    }
   ]
 }

@@ -99,5 +99,99 @@
     "Return to The City of Archives",
     "Return to Shattered Aeons",
     "Return to Turn Back Time"
+  ],
+  "logSections": [
+    {
+      "id": "campaign_notes",
+      "kind": "entries",
+      "label": "Campaign Notes"
+    },
+    {
+      "id": "yigs_fury",
+      "kind": "count",
+      "label": "Yig's Fury"
+    },
+    {
+      "id": "supplies",
+      "kind": "entries",
+      "label": "Supplies"
+    }
+  ],
+  "cards": [
+    {
+      "scenario": "tfa-prologue",
+      "name": "Prologue",
+      "interlude": true
+    },
+    {
+      "scenario": "return-to-the-untamed-wilds",
+      "name": "Return to The Untamed Wilds",
+      "code": "04043"
+    },
+    {
+      "scenario": "tfa-interlude1",
+      "name": "Restless Nights",
+      "interlude": true
+    },
+    {
+      "scenario": "return-to-the-doom-of-eztli",
+      "name": "Return to The Doom of Eztli",
+      "code": "04054"
+    },
+    {
+      "scenario": "tfa-interlude2",
+      "name": "Expedition's End",
+      "interlude": true
+    },
+    {
+      "scenario": "return-to-threads-of-fate",
+      "name": "Return to Threads of Fate",
+      "code": "04113"
+    },
+    {
+      "scenario": "return-to-the-boundary-beyond",
+      "name": "Return to The Boundary Beyond",
+      "code": "04161"
+    },
+    {
+      "scenario": "tfa-interlude3",
+      "name": "The Jungle Beckons",
+      "interlude": true
+    },
+    {
+      "scenario": "return-to-heart-of-the-elders-part-1",
+      "name": "Return to Heart of the Elders, Part 1",
+      "code": "04205"
+    },
+    {
+      "scenario": "return-to-heart-of-the-elders-part-2",
+      "name": "Return to Heart of the Elders, Part 2",
+      "code": "04205"
+    },
+    {
+      "scenario": "return-to-the-city-of-archives",
+      "name": "Return to The City of Archives",
+      "code": "04237"
+    },
+    {
+      "scenario": "tfa-interlude4",
+      "name": "Those Held Captive",
+      "interlude": true
+    },
+    {
+      "scenario": "tfa-interlude5",
+      "name": "The Darkness",
+      "interlude": true
+    },
+    {
+      "scenario": "return-to-shattered-aeons",
+      "name": "Return to Shattered Aeons",
+      "code": "04314"
+    },
+    {
+      "scenario": "tfa-epilogue",
+      "name": "Epilogue",
+      "interlude": true
+    }
   ]
 }

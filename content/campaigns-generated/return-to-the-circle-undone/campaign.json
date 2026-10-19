@@ -92,5 +92,109 @@
     "Return to Union and Disillusion",
     "Return to In the Clutches of Chaos",
     "Return to Before the Black Throne"
+  ],
+  "logSections": [
+    {
+      "id": "campaign_notes",
+      "kind": "entries",
+      "label": "Campaign Notes"
+    },
+    {
+      "id": "mementos",
+      "kind": "entries",
+      "label": "Mementos Discovered"
+    },
+    {
+      "id": "missing_persons",
+      "kind": "entries",
+      "label": "Missing Persons"
+    },
+    {
+      "id": "05046",
+      "kind": "entries",
+      "label": "Missing Persons - Gavriella Mizrah"
+    },
+    {
+      "id": "05047",
+      "kind": "entries",
+      "label": "Missing Persons - Jerome Davids"
+    },
+    {
+      "id": "05049",
+      "kind": "entries",
+      "label": "Missing Persons - Penny White"
+    },
+    {
+      "id": "05048",
+      "kind": "entries",
+      "label": "Missing Persons - Valentino Rivas"
+    }
+  ],
+  "cards": [
+    {
+      "scenario": "disappearance-at-the-twilight-estate",
+      "name": "Return to Disappearance at the Twilight Estate",
+      "interlude": true
+    },
+    {
+      "scenario": "return-to-the-witching-hour",
+      "name": "Return to The Witching Hour",
+      "code": "05050"
+    },
+    {
+      "scenario": "return-to-at-deaths-doorstep",
+      "name": "Return to At Death's Doorstep",
+      "code": "05065"
+    },
+    {
+      "scenario": "the-price-of-progress",
+      "name": "The Price of Progress",
+      "interlude": true
+    },
+    {
+      "scenario": "return-to-the-secret-name",
+      "name": "Return to The Secret Name",
+      "code": "05120"
+    },
+    {
+      "scenario": "return-to-the-wages-of-sin",
+      "name": "Return to The Wages of Sin",
+      "code": "05161"
+    },
+    {
+      "scenario": "return-to-for-the-greater-good",
+      "name": "Return to For the Greater Good",
+      "code": "05197"
+    },
+    {
+      "scenario": "the-inner-circle",
+      "name": "The Inner Circle",
+      "interlude": true
+    },
+    {
+      "scenario": "return-to-union-and-disillusion",
+      "name": "Return to Union and Disillusion",
+      "code": "05238"
+    },
+    {
+      "scenario": "return-to-in-the-clutches-of-chaos",
+      "name": "Return to In the Clutches of Chaos",
+      "code": "05284"
+    },
+    {
+      "scenario": "twist-of-fate",
+      "name": "Twist of Fate",
+      "interlude": true
+    },
+    {
+      "scenario": "return-to-before-the-black-throne",
+      "name": "Return to Before the Black Throne",
+      "code": "05325"
+    },
+    {
+      "scenario": "tcu-epilogue",
+      "name": "Epilogue",
+      "interlude": true
+    }
   ]
 }

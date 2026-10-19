@@ -577,15 +577,15 @@ const Who = z.enum(["each", "lead", "choice", "input"]);
 
 export const CampaignEffect = z.discriminatedUnion("do", [
   z.object({ do: z.literal("record"), key: z.string(), value: z.union([z.boolean(), z.string(), z.array(z.string())]).default(true), section: z.string().optional(), text: z.string().optional() }).strict(),
-  z.object({ do: z.literal("crossOut"), key: z.string(), section: z.string().optional() }).strict(),
+  z.object({ do: z.literal("crossOut"), key: z.string(), section: z.string().optional(), erase: z.boolean().optional() }).strict(),
   z.object({ do: z.literal("crossOutIfInVictory"), key: z.string(), code: z.string() }).strict(),
   z.object({ do: z.literal("recordCards"), key: z.string(), source: z.enum(["victoryUniqueCultists", "remainingUniqueCultists"]) }).strict(),
   z.object({ do: z.literal("xp"), bonus: z.number().default(0), who: Who.exclude(["choice"]).default("each"), victory: z.boolean().default(false) }).strict(),
   z.object({ do: z.literal("trauma"), who: Who.exclude(["choice"]), physical: z.number().default(0), mental: z.number().default(0) }).strict(),
   z.object({ do: z.literal("kill"), who: z.enum(["each", "notResigned"]) }).strict(),
-  z.object({ do: z.literal("earnCard"), code: z.string(), who: Who.exclude(["each"]) }).strict(),
-  z.object({ do: z.literal("removeCard"), code: z.string() }).strict(),
-  z.object({ do: z.literal("addWeakness"), trait: z.string() }).strict(),
+  z.object({ do: z.literal("earnCard"), code: z.string(), who: Who }).strict(),
+  z.object({ do: z.literal("removeCard"), code: z.string(), who: Who.exclude(["choice"]).optional() }).strict(),
+  z.object({ do: z.literal("addWeakness"), trait: z.string().default(""), who: Who.exclude(["choice"]).optional() }).strict(),
   z.object({ do: z.literal("addChaosToken"), token: ChaosToken }).strict(),
   z.object({ do: z.literal("end"), result: z.enum(["win", "lose", "survived"]) }).strict(),
 ]);
@@ -787,7 +787,7 @@ export const CampaignDef = z
     /** the campaign log's sections, as the guide prints them (the notes section is always there) */
     logSections: z.array(LogSection).default([]),
     /** every scenario's reference card, in order, with the interludes marked: the picker's sidebar before the scenarios load */
-    cards: z.array(z.object({ scenario: z.string(), code: z.string().optional(), interlude: z.boolean().optional() }).strict()).default([]),
+    cards: z.array(z.object({ scenario: z.string(), name: z.string().optional(), code: z.string().optional(), interlude: z.boolean().optional() }).strict()).default([]),
   })
   .strict();
 export type CampaignDef = z.infer<typeof CampaignDef>;

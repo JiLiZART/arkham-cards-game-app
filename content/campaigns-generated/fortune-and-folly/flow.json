@@ -1,0 +1,50 @@
+{
+  "setup": [
+    "campaign:intro"
+  ],
+  "order": [
+    "fortune-and-folly-part-1"
+  ],
+  "interludes": {},
+  "resolutions": {
+    "fortune-and-folly-part-1": {
+      "none": [],
+      "R1": [
+        "fortune-and-folly-part-1:raise_non_resigned_alarm:text",
+        "fortune-and-folly-part-1:proceed_to_checkpoint:text",
+        "fortune-and-folly-part-1:proceed_to_checkpoint"
+      ],
+      "R2": [
+        "fortune-and-folly-part-1:proceed_to_checkpoint:text",
+        "fortune-and-folly-part-1:proceed_to_checkpoint"
+      ]
+    }
+  },
+  "steps": {
+    "campaign:intro": {
+      "kind": "story",
+      "title": "Care to Try Your Luck?",
+      "text": "A casino in Monte Carlo is using probability-manipulating powers to accumulate wealth at the cost of endangering the populace. In <i>Fortune and Folly</i>, a unique scenario for <i>Arkham Horror: The Card Game</i>, 1-4 investigators must plan and execute a daring heist in order to capture the source of this cult's power and put a stop to their nefarious work. But will their meddling turn fortune in their favor? Or will their luck run out?",
+      "bullets": []
+    },
+    "fortune-and-folly-part-1:raise_non_resigned_alarm:text": {
+      "kind": "story",
+      "text": "Each investigator who did not resign raises their alarm level by 2.",
+      "bullets": []
+    },
+    "fortune-and-folly-part-1:proceed_to_checkpoint:text": {
+      "kind": "story",
+      "text": "Investigators cannot spend experience or alter their decks in between Fortune and Folly, Part I and Fortune and Folly, Part II.",
+      "bullets": []
+    },
+    "fortune-and-folly-part-1:proceed_to_checkpoint": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "fortune-and-folly-checkpoint"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,354 @@
+{
+  "setup": [],
+  "order": [
+    "red-tide-rising"
+  ],
+  "interludes": {},
+  "resolutions": {
+    "red-tide-rising": {
+      "R1": [
+        "red-tide-rising:ignore_victory_xp:text",
+        "red-tide-rising:ask_victory_cards",
+        "red-tide-rising:earn_xp",
+        "red-tide-rising:check_wendy_defeated",
+        "red-tide-rising:upgradeDecks"
+      ],
+      "R2": [
+        "red-tide-rising:ignore_victory_xp:text",
+        "red-tide-rising:ask_victory_cards",
+        "red-tide-rising:earn_xp",
+        "red-tide-rising:wendy_bad_swap",
+        "red-tide-rising:upgradeDecks"
+      ]
+    }
+  },
+  "steps": {
+    "red-tide-rising:ignore_victory_xp:text": {
+      "kind": "story",
+      "text": "Ignore the Victory X value of each [[Suspect]] and [[Hideout]] card in the victory display. Instead…",
+      "bullets": []
+    },
+    "red-tide-rising:ask_victory_cards": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "rtr_victory_cards",
+          "section": "hidden",
+          "op": "set",
+          "value": "input"
+        },
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "red-tide-rising:earned_5": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": -5,
+          "who": "each",
+          "victory": false
+        },
+        {
+          "do": "xp",
+          "bonus": 2,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "red-tide-rising:earned_1": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": -1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "red-tide-rising:earned_2": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": -2,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "red-tide-rising:earned_3": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": -3,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "red-tide-rising:earned_4": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": -4,
+          "who": "each",
+          "victory": false
+        },
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "red-tide-rising:earn_xp#5": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "rtr_victory_cards",
+        "section": "hidden",
+        "min": 5,
+        "max": 5
+      },
+      "then": [
+        "red-tide-rising:earned_5"
+      ],
+      "else": [
+        "red-tide-rising:earned_5"
+      ]
+    },
+    "red-tide-rising:earn_xp#4": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "rtr_victory_cards",
+        "section": "hidden",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "red-tide-rising:earned_4"
+      ],
+      "else": [
+        "red-tide-rising:earn_xp#5"
+      ]
+    },
+    "red-tide-rising:earn_xp#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "rtr_victory_cards",
+        "section": "hidden",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "red-tide-rising:earned_3"
+      ],
+      "else": [
+        "red-tide-rising:earn_xp#4"
+      ]
+    },
+    "red-tide-rising:earn_xp#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "rtr_victory_cards",
+        "section": "hidden",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "red-tide-rising:earned_2"
+      ],
+      "else": [
+        "red-tide-rising:earn_xp#3"
+      ]
+    },
+    "red-tide-rising:earn_xp#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "rtr_victory_cards",
+        "section": "hidden",
+        "min": 1,
+        "max": 1
+      },
+      "then": [
+        "red-tide-rising:earned_1"
+      ],
+      "else": [
+        "red-tide-rising:earn_xp#2"
+      ]
+    },
+    "red-tide-rising:earn_xp": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "rtr_victory_cards",
+        "section": "hidden",
+        "min": 0,
+        "max": 0
+      },
+      "then": [],
+      "else": [
+        "red-tide-rising:earn_xp#1"
+      ]
+    },
+    "red-tide-rising:wendy_bad_swap_small": {
+      "kind": "chooseOne",
+      "text": "Wendy Adams must either upgrade Abandoned and Alone to its advanced version, or downgrade the advanced version of Wendy’s Amulet to its original version.",
+      "choices": [
+        {
+          "id": "abandoned",
+          "text": "Upgrade to advanced advanced Abandoned and Alone",
+          "effects": [
+            {
+              "do": "removeCard",
+              "code": "01015",
+              "who": "each"
+            },
+            {
+              "do": "earnCard",
+              "code": "90040",
+              "who": "each"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "amulet",
+          "text": "Downgrade from advanced Wendy's Amulet",
+          "effects": [
+            {
+              "do": "removeCard",
+              "code": "90039",
+              "who": "each"
+            },
+            {
+              "do": "earnCard",
+              "code": "01014",
+              "who": "each"
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "red-tide-rising:wendy_good_swap": {
+      "kind": "chooseOne",
+      "text": "She may either upgrade Wendy’s Amulet to its advanced version, or downgrade the advanced version of Abandoned and Alone to its original version.",
+      "choices": [
+        {
+          "id": "amulet",
+          "text": "Upgrade to advanced Wendy's Amulet",
+          "effects": [
+            {
+              "do": "removeCard",
+              "code": "01014",
+              "who": "each"
+            },
+            {
+              "do": "earnCard",
+              "code": "90039",
+              "who": "each"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "abandoned",
+          "text": "Downgrade advanced Abandoned and Alone",
+          "effects": [
+            {
+              "do": "removeCard",
+              "code": "90040",
+              "who": "each"
+            },
+            {
+              "do": "earnCard",
+              "code": "01015",
+              "who": "each"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "neither",
+          "text": "No change",
+          "effects": [],
+          "steps": []
+        }
+      ]
+    },
+    "red-tide-rising:check_wendy_defeated": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "scenario_data",
+        "take": false
+      },
+      "then": [
+        "red-tide-rising:wendy_bad_swap_small"
+      ],
+      "else": [
+        "red-tide-rising:wendy_good_swap"
+      ]
+    },
+    "red-tide-rising:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "red-tide-rising:wendy_bad_swap": {
+      "kind": "chooseOne",
+      "text": "Wendy Adams must either upgrade Abandoned and Alone to its advanced version, or downgrade the advanced version of Wendy’s Amulet to its original version.",
+      "choices": [
+        {
+          "id": "abandoned",
+          "text": "Upgrade to advanced advanced Abandoned and Alone",
+          "effects": [
+            {
+              "do": "removeCard",
+              "code": "01015",
+              "who": "each"
+            },
+            {
+              "do": "earnCard",
+              "code": "90040",
+              "who": "each"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "amulet",
+          "text": "Downgrade from advanced Wendy's Amulet",
+          "effects": [
+            {
+              "do": "removeCard",
+              "code": "90039",
+              "who": "each"
+            },
+            {
+              "do": "earnCard",
+              "code": "01014",
+              "who": "each"
+            }
+          ],
+          "steps": []
+        }
+      ]
+    }
+  }
+}

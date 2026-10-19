@@ -1,0 +1,155 @@
+{
+  "setup": [],
+  "order": [
+    "read-or-die"
+  ],
+  "interludes": {},
+  "resolutions": {
+    "read-or-die": {
+      "none": [],
+      "R1": [
+        "read-or-die:ask_daisy_tomes",
+        "read-or-die:others_experience",
+        "read-or-die:daisy_experience_explanation:text",
+        "read-or-die:daisy_good_swap",
+        "read-or-die:upgradeDecks"
+      ],
+      "R2": [
+        "read-or-die:ask_daisy_tomes",
+        "read-or-die:others_experience",
+        "read-or-die:daisy_experience_explanation:text",
+        "read-or-die:daisy_bad_swap",
+        "read-or-die:upgradeDecks"
+      ]
+    }
+  },
+  "steps": {
+    "read-or-die:ask_daisy_tomes": {
+      "kind": "counter",
+      "text": "How many [[Tome]] assets did Daisy Walker have in play at the end of the scenario?",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "rod_tome_count",
+          "section": "hidden",
+          "op": "set",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "read-or-die:others_experience": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "rod_victory_display",
+          "section": "hidden",
+          "op": "set",
+          "value": "input"
+        },
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "read-or-die:daisy_experience_explanation:text": {
+      "kind": "story",
+      "text": "Daisy Walker earns experience equal to either the combined Victory X value of each card in the victory display, or equal to the number of [[Tome]] assets she had in play at the end of the game, whichever is higher.",
+      "bullets": []
+    },
+    "read-or-die:daisy_good_swap": {
+      "kind": "chooseOne",
+      "text": "Daisy Walker may either upgrade Daisy’s Tote Bag to its advanced version, or downgrade the advanced version of The Necronomicon <i>(John Dee Translation)</i> to its original version.",
+      "choices": [
+        {
+          "id": "tote_bag",
+          "text": "Upgrade to advanced Daisy's Tote Bag",
+          "effects": [
+            {
+              "do": "removeCard",
+              "code": "01008",
+              "who": "each"
+            },
+            {
+              "do": "earnCard",
+              "code": "90002",
+              "who": "each"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "necronomicon",
+          "text": "Downgrade advanced The Necronomicon",
+          "effects": [
+            {
+              "do": "removeCard",
+              "code": "90003",
+              "who": "each"
+            },
+            {
+              "do": "earnCard",
+              "code": "01009",
+              "who": "each"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "neither",
+          "text": "No change",
+          "effects": [],
+          "steps": []
+        }
+      ]
+    },
+    "read-or-die:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "read-or-die:daisy_bad_swap": {
+      "kind": "chooseOne",
+      "text": "Daisy Walker must either upgrade The Necronomicon <i>(John Dee Translation)</i> to its advanced version, or downgrade the advanced version of Daisy’s Tote Bag to its original version",
+      "choices": [
+        {
+          "id": "necronomicon",
+          "text": "Upgrade to advanced The Necronomicon",
+          "effects": [
+            {
+              "do": "removeCard",
+              "code": "01009",
+              "who": "each"
+            },
+            {
+              "do": "earnCard",
+              "code": "90003",
+              "who": "each"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "tote_bag",
+          "text": "Downgrade from advanced Daisy's Tote Bag",
+          "effects": [
+            {
+              "do": "removeCard",
+              "code": "90002",
+              "who": "each"
+            },
+            {
+              "do": "earnCard",
+              "code": "01008",
+              "who": "each"
+            }
+          ],
+          "steps": []
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,159 @@
+{
+  "setup": [],
+  "order": [
+    "machinations-through-time"
+  ],
+  "interludes": {},
+  "resolutions": {
+    "machinations-through-time": {
+      "none": [
+        "machinations-through-time:all_mental_trauma:text",
+        "machinations-through-time:ask_edwin_bennet_in_play"
+      ],
+      "R1": [
+        "machinations-through-time:ask_assets_in_play",
+        "machinations-through-time:earn_xp",
+        "machinations-through-time:upgradeDecks"
+      ],
+      "R2": [
+        "machinations-through-time:ask_assets_in_play",
+        "machinations-through-time:earn_xp",
+        "machinations-through-time:upgradeDecks"
+      ],
+      "R3": [
+        "machinations-through-time:ask_assets_in_play",
+        "machinations-through-time:earn_xp",
+        "machinations-through-time:upgradeDecks"
+      ],
+      "R4": [
+        "machinations-through-time:ask_assets_in_play",
+        "machinations-through-time:earn_xp",
+        "machinations-through-time:upgradeDecks"
+      ]
+    }
+  },
+  "steps": {
+    "machinations-through-time:all_mental_trauma:text": {
+      "kind": "story",
+      "text": "Each remaining investigator in all eras is defeated and suffers 1 mental trauma.",
+      "bullets": []
+    },
+    "machinations-through-time:ask_edwin_bennet_in_play": {
+      "kind": "chooseOne",
+      "text": "Which of the following is in play (in any era)?",
+      "choices": [
+        {
+          "id": "asset",
+          "text": "Edwin Bennet asset.",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "enemy",
+          "text": "Edwin Bennet enemy.",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "neither",
+          "text": "Neither",
+          "effects": [],
+          "steps": []
+        }
+      ]
+    },
+    "machinations-through-time:earn_nikola_tesla:text": {
+      "kind": "story",
+      "text": "Any one investigator may choose to add the Nikola Tesla story asset to their deck. It does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "machinations-through-time:earn_nikola_tesla": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "87014",
+          "who": "choice"
+        }
+      ]
+    },
+    "machinations-through-time:earn_ezra_graves:text": {
+      "kind": "story",
+      "text": "Any one investigator may choose to add the Ezra Graves story asset to their deck. It does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "machinations-through-time:earn_ezra_graves": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "87023",
+          "who": "choice"
+        }
+      ]
+    },
+    "machinations-through-time:earn_dimensional_beam_machine:text": {
+      "kind": "story",
+      "text": "Any one investigator may choose to add the Dimensional Beam Machine story asset to their deck. It does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "machinations-through-time:earn_dimensional_beam_machine": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "87032",
+          "who": "choice"
+        }
+      ]
+    },
+    "machinations-through-time:ask_assets_in_play": {
+      "kind": "checklist",
+      "text": "Which of the following are in play?",
+      "min": 0,
+      "choices": [
+        {
+          "id": "tesla",
+          "text": "Nikola Tesla",
+          "effects": [],
+          "steps": [
+            "machinations-through-time:earn_nikola_tesla:text",
+            "machinations-through-time:earn_nikola_tesla"
+          ]
+        },
+        {
+          "id": "graves",
+          "text": "Ezra Graves",
+          "effects": [],
+          "steps": [
+            "machinations-through-time:earn_ezra_graves:text",
+            "machinations-through-time:earn_ezra_graves"
+          ]
+        },
+        {
+          "id": "beam_machine",
+          "text": "Dimensional Beam Machine",
+          "effects": [],
+          "steps": [
+            "machinations-through-time:earn_dimensional_beam_machine:text",
+            "machinations-through-time:earn_dimensional_beam_machine"
+          ]
+        }
+      ]
+    },
+    "machinations-through-time:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "machinations-through-time:upgradeDecks": {
+      "kind": "upgradeDecks"
+    }
+  }
+}

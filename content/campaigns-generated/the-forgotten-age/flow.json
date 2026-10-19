@@ -1,0 +1,3375 @@
+{
+  "setup": [
+    "campaign:prologue"
+  ],
+  "order": [
+    "tfa-prologue",
+    "wilds",
+    "tfa-interlude1",
+    "eztli",
+    "tfa-interlude2",
+    "threads-of-fate",
+    "the-boundary-beyond",
+    "tfa-interlude3",
+    "heart-of-the-elders-part-1",
+    "heart-of-the-elders-part-2",
+    "the-city-of-archives",
+    "tfa-interlude4",
+    "the-depths-of-yoth",
+    "tfa-interlude5",
+    "shattered-aeons",
+    "tfa-epilogue"
+  ],
+  "interludes": {
+    "tfa-prologue": {
+      "kind": "interlude",
+      "name": "Prologue",
+      "steps": [
+        "tfa-prologue:intro",
+        "tfa-prologue:expedition_leader:text",
+        "tfa-prologue:supplies"
+      ]
+    },
+    "tfa-interlude1": {
+      "kind": "interlude",
+      "name": "Restless Nights",
+      "steps": [
+        "tfa-interlude1:prompt:text",
+        "tfa-interlude1:check_blanket",
+        "tfa-interlude1:eat_provisions",
+        "tfa-interlude1:choose_lookout",
+        "tfa-interlude1:use_medicine",
+        "tfa-interlude1:check_poison_spreads",
+        "tfa-interlude1:upgradeDecks"
+      ]
+    },
+    "tfa-interlude2": {
+      "kind": "interlude",
+      "name": "Expedition's End",
+      "steps": [
+        "tfa-interlude2:check_investigators_recovered_relic",
+        "tfa-interlude2:upgradeDecks"
+      ]
+    },
+    "tfa-interlude3": {
+      "kind": "interlude",
+      "name": "The Jungle Beckons",
+      "steps": [
+        "tfa-interlude3:intro",
+        "tfa-interlude3:use_gasoline",
+        "tfa-interlude3:check_map",
+        "tfa-interlude3:eat_provisions",
+        "tfa-interlude3:use_medicine",
+        "tfa-interlude3:check_poison_spreads",
+        "tfa-interlude3:find_stone_carvings",
+        "tfa-interlude3:check_canteen",
+        "tfa-interlude3:explain_faith_restored:text",
+        "tfa-interlude3:check_faith_restored",
+        "tfa-interlude3:upgradeDecks"
+      ]
+    },
+    "tfa-interlude4": {
+      "kind": "interlude",
+      "name": "Those Held Captive",
+      "steps": [
+        "tfa-interlude4:check_process_backfired",
+        "tfa-interlude4:explain_mind_recovered:text",
+        "tfa-interlude4:ask_custodian",
+        "tfa-interlude4:check_mind_recovered",
+        "tfa-interlude4:find_stone_gate",
+        "tfa-interlude4:check_chalk",
+        "tfa-interlude4:eat_provisions",
+        "tfa-interlude4:use_medicine",
+        "tfa-interlude4:check_poison_spreads",
+        "tfa-interlude4:stop_and_rest",
+        "tfa-interlude4:check_blanket",
+        "tfa-interlude4:upgradeDecks"
+      ]
+    },
+    "tfa-interlude5": {
+      "kind": "interlude",
+      "name": "The Darkness",
+      "steps": [
+        "tfa-interlude5:check_fell_into_depths",
+        "tfa-interlude5:check_found_missing_relic",
+        "tfa-interlude5:find_brazier",
+        "tfa-interlude5:check_torches",
+        "tfa-interlude5:time_passes",
+        "tfa-interlude5:provisions_and_medicine_gone:text",
+        "tfa-interlude5:upgradeDecks"
+      ]
+    },
+    "tfa-epilogue": {
+      "kind": "epilogue",
+      "name": "Epilogue",
+      "steps": [
+        "tfa-epilogue:check_turned_back_time"
+      ]
+    }
+  },
+  "resolutions": {
+    "wilds": {
+      "none": [
+        "wilds:wait_for_additional_supplies",
+        "wilds:check_final_act",
+        "wilds:record_vengeance",
+        "wilds:earn_xp",
+        "wilds:check_investigators_poisoned"
+      ],
+      "R1": [
+        "wilds:cleared_path_to_temple",
+        "wilds:alejandro_remained_at_camp:text",
+        "wilds:alejandro_remained_at_camp",
+        "wilds:earned_ichtacas_trust",
+        "wilds:record_vengeance",
+        "wilds:earn_xp",
+        "wilds:check_investigators_poisoned"
+      ],
+      "R2": [
+        "wilds:cleared_path_to_temple",
+        "wilds:alejandro_followed_to_ruins:text",
+        "wilds:alejandro_followed_to_ruins",
+        "wilds:ichtaca_is_wary",
+        "wilds:record_vengeance",
+        "wilds:earn_xp",
+        "wilds:check_investigators_poisoned"
+      ]
+    },
+    "eztli": {
+      "R1": [
+        "eztli:investigators_recovered_relic:text",
+        "eztli:investigators_recovered_relic",
+        "eztli:maybe_check_harbinger",
+        "eztli:record_yigs_fury",
+        "eztli:earn_xp",
+        "eztli:check_investigators_poisoned"
+      ],
+      "R2": [
+        "eztli:alejandro_recovered_relic",
+        "eztli:maybe_check_harbinger",
+        "eztli:record_yigs_fury",
+        "eztli:earn_xp",
+        "eztli:check_investigators_poisoned"
+      ],
+      "R3": [
+        "eztli:choose_to_continue"
+      ],
+      "R4": [
+        "eztli:replay_scenario:text",
+        "eztli:replay_scenario",
+        "eztli:choose_new_investigators:text",
+        "eztli:extra_doom_on_entryway:text",
+        "eztli:check_investigators_poisoned"
+      ],
+      "R5": [
+        "eztli:investigators_recovered_relic:text",
+        "eztli:investigators_recovered_relic",
+        "eztli:maybe_check_harbinger",
+        "eztli:record_yigs_fury_plus_10",
+        "eztli:earn_xp",
+        "eztli:check_investigators_poisoned"
+      ]
+    },
+    "threads-of-fate": {
+      "none": [],
+      "R1": [
+        "threads-of-fate:check_act_ab",
+        "threads-of-fate:check_act_cd",
+        "threads-of-fate:check_act_ef",
+        "threads-of-fate:earn_expedition_journal:text",
+        "threads-of-fate:earn_expedition_journal",
+        "threads-of-fate:earn_xp",
+        "threads-of-fate:earn_act_xp",
+        "threads-of-fate:resupply_point:text",
+        "threads-of-fate:visit_hospital:text",
+        "threads-of-fate:choose_to_heal_poison",
+        "threads-of-fate:choose_to_heal_trauma",
+        "threads-of-fate:buy_supplies",
+        "threads-of-fate:upgradeDecks"
+      ]
+    },
+    "the-boundary-beyond": {
+      "none": [
+        "the-boundary-beyond:check_act_2:text",
+        "the-boundary-beyond:record_x_paths_known",
+        "the-boundary-beyond:maybe_check_harbinger",
+        "the-boundary-beyond:record_yigs_fury",
+        "the-boundary-beyond:earn_xp",
+        "the-boundary-beyond:check_investigators_poisoned"
+      ],
+      "R1": [
+        "the-boundary-beyond:record_x_paths_known",
+        "the-boundary-beyond:maybe_check_harbinger",
+        "the-boundary-beyond:record_yigs_fury",
+        "the-boundary-beyond:earn_xp",
+        "the-boundary-beyond:check_investigators_poisoned"
+      ],
+      "R2": [
+        "the-boundary-beyond:check_act_2:text",
+        "the-boundary-beyond:record_x_paths_known",
+        "the-boundary-beyond:maybe_check_harbinger",
+        "the-boundary-beyond:record_yigs_fury",
+        "the-boundary-beyond:earn_xp",
+        "the-boundary-beyond:check_investigators_poisoned"
+      ]
+    },
+    "heart-of-the-elders-part-1": {
+      "none": [
+        "heart-of-the-elders-part-1:record_paths_known",
+        "heart-of-the-elders-part-1:check_investigators_poisoned",
+        "heart-of-the-elders-part-1:replay_scenario:text",
+        "heart-of-the-elders-part-1:replay_scenario"
+      ],
+      "R1": [
+        "heart-of-the-elders-part-1:check_paths_known_jungle_watches",
+        "heart-of-the-elders-part-1:earn_xp",
+        "heart-of-the-elders-part-1:check_investigators_poisoned",
+        "heart-of-the-elders-part-1:proceed_scenario_2:text"
+      ]
+    },
+    "heart-of-the-elders-part-2": {
+      "none": [],
+      "R1": [
+        "heart-of-the-elders-part-2:maybe_check_harbinger",
+        "heart-of-the-elders-part-2:record_yigs_fury",
+        "heart-of-the-elders-part-2:earn_xp",
+        "heart-of-the-elders-part-2:check_investigators_poisoned",
+        "heart-of-the-elders-part-2:upgradeDecks"
+      ],
+      "R2": [
+        "heart-of-the-elders-part-2:maybe_check_harbinger",
+        "heart-of-the-elders-part-2:record_yigs_fury",
+        "heart-of-the-elders-part-2:earn_xp",
+        "heart-of-the-elders-part-2:check_investigators_poisoned",
+        "heart-of-the-elders-part-2:upgradeDecks"
+      ]
+    },
+    "the-city-of-archives": {
+      "none": [
+        "the-city-of-archives:had_memories_expunged",
+        "the-city-of-archives:all_insane:text",
+        "the-city-of-archives:lose_campaign:text",
+        "the-city-of-archives:lose_campaign"
+      ],
+      "R1": [
+        "the-city-of-archives:record_number_of_tasks",
+        "the-city-of-archives:check_number_of_tasks",
+        "the-city-of-archives:earn_xp"
+      ]
+    },
+    "the-depths-of-yoth": {
+      "none": [],
+      "R1": [
+        "the-depths-of-yoth:fell_into_depths",
+        "the-depths-of-yoth:record_final_depth",
+        "the-depths-of-yoth:check_final_depth",
+        "the-depths-of-yoth:maybe_check_harbinger",
+        "the-depths-of-yoth:record_yigs_fury",
+        "the-depths-of-yoth:earn_xp",
+        "the-depths-of-yoth:check_investigators_poisoned"
+      ],
+      "R2": [
+        "the-depths-of-yoth:nexus_is_near",
+        "the-depths-of-yoth:maybe_ask_win_depth",
+        "the-depths-of-yoth:maybe_check_harbinger",
+        "the-depths-of-yoth:record_yigs_fury",
+        "the-depths-of-yoth:earn_xp_full_depth",
+        "the-depths-of-yoth:check_investigators_poisoned"
+      ]
+    },
+    "shattered-aeons": {
+      "none": [],
+      "R1": [
+        "shattered-aeons:mended_tear_in_time",
+        "shattered-aeons:two_physical_and_mental_trauma:text",
+        "shattered-aeons:two_physical_and_mental_trauma",
+        "shattered-aeons:attached_locations_to_victory_display:text",
+        "shattered-aeons:earn_xp_plus_5",
+        "shattered-aeons:upgradeDecks",
+        "shattered-aeons:skip_epilogue",
+        "shattered-aeons:win:text",
+        "shattered-aeons:win"
+      ],
+      "R2": [
+        "shattered-aeons:investigators_saved_serpents",
+        "shattered-aeons:skip_epilogue",
+        "shattered-aeons:win_but:text",
+        "shattered-aeons:cannot_transfer_characters:text",
+        "shattered-aeons:cannot_transfer_characters"
+      ],
+      "R3": [
+        "shattered-aeons:investigators_saved_yithians",
+        "shattered-aeons:skip_epilogue",
+        "shattered-aeons:win_but:text",
+        "shattered-aeons:cannot_transfer_characters:text",
+        "shattered-aeons:cannot_transfer_characters"
+      ],
+      "R4": [
+        "shattered-aeons:fabric_of_time_unwoven",
+        "shattered-aeons:all_insane:text",
+        "shattered-aeons:skip_epilogue",
+        "shattered-aeons:lose:text",
+        "shattered-aeons:lose"
+      ],
+      "R5": [
+        "shattered-aeons:turned_back_time",
+        "shattered-aeons:attached_locations_to_victory_display:text",
+        "shattered-aeons:earn_xp",
+        "shattered-aeons:upgradeDecks"
+      ]
+    }
+  },
+  "steps": {
+    "campaign:prologue": {
+      "kind": "story",
+      "title": "Earth is Not Ours",
+      "text": "“Primal myth and modern delusion joined in their assumption that mankind is only one—perhaps the least—of the highly evolved and dominant races of this planet’s long and largely unknown career.” – H. P. Lovecraft, “The Shadow out of Time”",
+      "bullets": []
+    },
+    "tfa-prologue:intro": {
+      "kind": "story",
+      "text": "<right><fancy>Tuesday, June 2nd, 1925</fancy></right>\nThere will be no rest for us this summer, it seems.\nToday I met with Harlan Earnstone, a historical theorist at Miskatonic University and an old friend of mine. He’d said he had a job offer for me, but frankly, I didn’t know what to expect.\nHarlan introduced me to an associate of his: Alejandro Vela, a distinguished historian from across the southern border. Mr. Vela is a graduate of a prestigious university in Mexico City, and has spent many years researching the Aztec Empire. He claims that he has found evidence regarding the existence of an unheard-of Aztec city-state called Eztli. His strange and unprecedented findings were not accepted by the university, and he’s become a pariah among his peers.\nAlejandro came to Arkham to seek funding for an expedition into the rainforests of southern Mexico, where he believes that the ruins of the Eztli altepetl lie undiscovered. His description of this city-state’s origins defies modern understanding of Mesoamerican history. Despite this— or, knowing my old friend, because of this—Harlan is enthralled by Alejandro’s discoveries. Miskatonic University has agreed to fund the expedition (albeit meagerly), and Harlan wants me to go along.\nThe way I see it, there’s a good chance we’re looking for something that doesn’t even exist. But if there’s even a slight chance these Eztli people existed, the historical significance would be profound. We debated the issue for some time, but in the end, we accepted Alejandro’s offer. Preparations are underway, and we should be setting off by the end of the month. With any luck, we’ll have this journal filled with all manner of interesting discoveries. If not, perhaps it’ll be a nice wedge to place beneath Harlan’s lopsided desk.",
+      "bullets": []
+    },
+    "tfa-prologue:expedition_leader:text": {
+      "kind": "story",
+      "text": "If Ursula Downs, Leo Anderson, or Monterey Jack was chosen as an investigator for this campaign: Choose one of those investigators to be the expedition leader. That investigator begins Scenarios I and II as the lead investigator.",
+      "bullets": []
+    },
+    "tfa-prologue:supplies": {
+      "kind": "unsupported",
+      "name": "supplies",
+      "text": "As an outcast from academia, funding for Alejandro’s expedition is limited. Each investigator must choose supplies to bring for the expedition. In the Campaign Log, under each investigator’s “Supplies” section, record the supplies that investigator chose to bring. <i>(Note: Provisions and Medicine can be taken more than once by recording their name multiple times and spending the appropriate number of supply points each time.)</i>",
+      "effects": [],
+      "steps": []
+    },
+    "wilds:wait_for_additional_supplies": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "wait_for_additional_supplies",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "wilds:ichtaca_observed_progress": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "ichtaca_observed_progress",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "wilds:alejandro_followed_to_ruins:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>Alejandro followed the investigators into the ruins</i>. Any one investigator may choose to add Alejandro Vela to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "wilds:alejandro_followed_to_ruins": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "alejandro_followed_to_ruins",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "earnCard",
+          "code": "04051",
+          "who": "choice"
+        }
+      ]
+    },
+    "wilds:ichtaca_is_wary": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "ichtaca_is_wary",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "wilds:earned_ichtacas_trust": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "earned_ichtacas_trust",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "wilds:alejandro_remained_at_camp:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>Alejandro chose to remain at camp</i>. Do not add Alejandro Vela to any investigator’s deck.",
+      "bullets": []
+    },
+    "wilds:alejandro_remained_at_camp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "alejandro_remained_at_camp",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "wilds:check_final_act": {
+      "kind": "chooseOne",
+      "text": "Which of the following was true?",
+      "choices": [
+        {
+          "id": "act_1_or_2",
+          "text": "It was Act 1 or 2 when the scenario ended.",
+          "effects": [],
+          "steps": [
+            "wilds:ichtaca_observed_progress",
+            "wilds:alejandro_followed_to_ruins:text",
+            "wilds:alejandro_followed_to_ruins"
+          ]
+        },
+        {
+          "id": "fought_ichtaca",
+          "text": "“You fought with Ichtaca”",
+          "effects": [],
+          "steps": [
+            "wilds:ichtaca_is_wary",
+            "wilds:alejandro_followed_to_ruins:text",
+            "wilds:alejandro_followed_to_ruins"
+          ]
+        },
+        {
+          "id": "talked_to_ichtaca",
+          "text": "“Ichtaca is leading the way”",
+          "effects": [],
+          "steps": [
+            "wilds:earned_ichtacas_trust",
+            "wilds:alejandro_remained_at_camp:text",
+            "wilds:alejandro_remained_at_camp"
+          ]
+        }
+      ]
+    },
+    "wilds:record_vengeance": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "yigs_fury",
+          "section": "yigs_fury",
+          "op": "add",
+          "value": "input"
+        }
+      ]
+    },
+    "wilds:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "wilds:check_investigators_poisoned": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "04102",
+          "who": "each"
+        }
+      ]
+    },
+    "wilds:cleared_path_to_temple": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "cleared_path_to_temple",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "tfa-interlude1:prompt:text": {
+      "kind": "story",
+      "text": "In order, read each of the following sections:",
+      "bullets": []
+    },
+    "tfa-interlude1:restful_sleep": {
+      "kind": "story",
+      "title": "Restful Sleep",
+      "text": "Mercifully, I was able to sleep through each night. However, while my body rested, my mind was plagued by nightmares. A cavern like a gaping maw, bathed in dim red light…the walls slithering with the glimmering scales of a hundred vipers…it might have been better had I not slept at all.",
+      "bullets": []
+    },
+    "tfa-interlude1:no_ill_effects:text": {
+      "kind": "story",
+      "text": "You suffer no ill effects.",
+      "bullets": []
+    },
+    "tfa-interlude1:tossing_and_turning": {
+      "kind": "story",
+      "title": "Tossing and Turning",
+      "text": "Those nights in the jungle, I barely slept. A strange fog rolled through the camp each night, plunging the area in an intense and peculiar cold. My bedroll offered some protection against the elements, but we hadn’t been prepared for this unnatural weather. Flies and mosquitoes buzzed in my ears every time I began to drift off. Even when I finally slept, I would soon be startled awake by the crawling of an insect or lizard across my face. I wager I’ll get very little sleep on this journey…",
+      "bullets": []
+    },
+    "tfa-interlude1:check_blanket": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "check_supplies",
+        "take": false
+      },
+      "then": [
+        "tfa-interlude1:restful_sleep",
+        "tfa-interlude1:no_ill_effects:text"
+      ],
+      "else": [
+        "tfa-interlude1:tossing_and_turning"
+      ]
+    },
+    "tfa-interlude1:eat_provisions": {
+      "kind": "unsupported",
+      "name": "use_supplies",
+      "text": "Check your supplies. The investigators, as a group, must cross off one provisions per investigator from their supplies. For each provisions they cannot cross off, choose an investigator to read <b>Low on Rations</b>.",
+      "effects": [],
+      "steps": []
+    },
+    "tfa-interlude1:choose_lookout": {
+      "kind": "unsupported",
+      "name": "investigator_choice_supplies",
+      "text": "The lead investigator must choose one investigator to be the group’s lookout. Then, that investigator checks their supplies to see if they have binoculars.",
+      "effects": [],
+      "steps": []
+    },
+    "tfa-interlude1:use_medicine": {
+      "kind": "unsupported",
+      "name": "use_supplies",
+      "text": "Check your supplies. Each investigator with medicine may cross it off from their supplies to choose and remove a Poisoned weakness from any investigator’s deck. Each investigator who still has a Poisoned weakness in their deck reads <b>The Poison Spreads</b>.",
+      "effects": [],
+      "steps": []
+    },
+    "tfa-interlude1:poison_spreads": {
+      "kind": "story",
+      "title": "The Poison Spreads",
+      "text": "As the days went by, the poison continued to spread through my body. By the second night, my skin was drenched in sweat. I started having difficutly breathing, and I began every morning by retching up most of the previous night’s dinner.",
+      "bullets": []
+    },
+    "tfa-interlude1:check_poison_spreads:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "input",
+          "physical": 1,
+          "mental": 0
+        }
+      ]
+    },
+    "tfa-interlude1:check_poison_spreads": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "04102",
+        "inv": "any"
+      },
+      "then": [
+        "tfa-interlude1:poison_spreads",
+        "tfa-interlude1:check_poison_spreads:yes:fx"
+      ],
+      "else": []
+    },
+    "tfa-interlude1:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "eztli:investigators_recovered_relic:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>the investigators recovered the Relic of Ages</i>. One investigator must add the Relic of Ages to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "eztli:investigators_recovered_relic": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "investigators_recovered_relic",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "earnCard",
+          "code": "04061",
+          "who": "choice"
+        }
+      ]
+    },
+    "eztli:record_harbinger": {
+      "kind": "counter",
+      "text": "Record in your Campaign Log that <i>the Harbinger is still alive</i>. Next to this, in parentheses, record how much damage is on the Harbinger of Valusia.",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "harbinger_alive",
+          "section": "campaign_notes",
+          "op": "set",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "eztli:ask_harbinger": {
+      "kind": "chooseOne",
+      "text": "Where is the Harbinger of Valusia?",
+      "choices": [
+        {
+          "id": "aside",
+          "text": "Harbinger did not enter play.",
+          "effects": [],
+          "steps": [
+            "eztli:record_harbinger"
+          ]
+        },
+        {
+          "id": "play",
+          "text": "Harbinger is still in play or set aside.",
+          "effects": [],
+          "steps": [
+            "eztli:record_harbinger"
+          ]
+        },
+        {
+          "id": "victory",
+          "text": "Harbinger is in the victory display.",
+          "effects": [],
+          "steps": []
+        }
+      ]
+    },
+    "eztli:check_harbinger": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "harbinger_alive",
+          "text": "Is the Harbinger of Valusia still in play or set aside?",
+          "effects": [],
+          "steps": [
+            "eztli:record_harbinger"
+          ]
+        }
+      ]
+    },
+    "eztli:maybe_check_harbinger": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_data",
+        "take": true
+      },
+      "then": [
+        "eztli:ask_harbinger"
+      ],
+      "else": [
+        "eztli:check_harbinger"
+      ]
+    },
+    "eztli:record_yigs_fury": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "yigs_fury",
+          "section": "yigs_fury",
+          "op": "add",
+          "value": "input"
+        }
+      ]
+    },
+    "eztli:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "eztli:check_investigators_poisoned": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "04102",
+          "who": "each"
+        }
+      ]
+    },
+    "eztli:alejandro_recovered_relic": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "alejandro_recovered_relic",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "eztli:choose_to_continue": {
+      "kind": "chooseOne",
+      "text": "The investigators must decide (choose one):",
+      "choices": [
+        {
+          "id": "go_back_in",
+          "text": "<i>“We can’t stop now—we have to go back inside!”</i>",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "destroy",
+          "text": "<i>“It’s too dangerous. This place must be destroyed.”</i>",
+          "effects": [],
+          "steps": []
+        }
+      ]
+    },
+    "eztli:replay_scenario:text": {
+      "kind": "story",
+      "text": "The investigators must replay <b>Scenario II: The Doom of Eztli</b>. Reset the game to this scenario’s Setup. Do not record anything in your Campaign Log except for any trauma suffered from your previous game. No experience points are earned from your previous game.",
+      "bullets": []
+    },
+    "eztli:replay_scenario": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "replayScenario",
+          "scenario": "eztli"
+        }
+      ]
+    },
+    "eztli:choose_new_investigators:text": {
+      "kind": "story",
+      "text": "Any player whose investigator was killed or driven <b>insane</b> must choose a new investigator to play, as normal.",
+      "bullets": []
+    },
+    "eztli:extra_doom_on_entryway:text": {
+      "kind": "story",
+      "text": "During setup, when the Entryway is put into play, place one doom on it for each time this resolution has been reached.",
+      "bullets": []
+    },
+    "eztli:record_yigs_fury_plus_10": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "yigs_fury",
+          "section": "yigs_fury",
+          "op": "add",
+          "value": "input"
+        },
+        {
+          "do": "count",
+          "id": "yigs_fury",
+          "section": "yigs_fury",
+          "op": "add",
+          "value": 10
+        }
+      ]
+    },
+    "tfa-interlude2:ee_1": {
+      "kind": "story",
+      "text": "<right><fancy>Friday, July 17th, 1925</fancy></right>\nWe have finally made it back to Arkham, our expedition a “success.” Alejandro is excited to report his findings to the university. How he maintains his starry-eyed idealism after the hell we went through in the jungle is beyond me. His attention is fixated on the strange relic that we discovered in the ruins. I wish we knew a little more about the artifact’s origins. It unsettles me greatly. It hums at all times and pulses with an otherworldly energy I can scarcely describe. As we traveled home with the artifact in tow, our nights were plagued by bizarre nightmares: dreams of other worlds and civilizations.\nAlejandro wants to bring the relic to the Miskatonic Museum, to put on display along with the other Eztli artifacts we discovered. My feelings are mixed. At the museum, it will receive proper care, and historians will be able to study it and perhaps even discern its purpose. However, I fear that the relic may be too dangerous for the public. After all, we still have no idea what the damned thing even is. Alejandro would hate it, but perhaps it would be better to keep the relic somewhere safe, where Harlan and I can study it in private. I’ll have to decide tonight; after tomorrow, there won’t be time to change my mind…",
+      "bullets": []
+    },
+    "tfa-interlude2:ee_2": {
+      "kind": "story",
+      "text": "<right><fancy>Sunday, July 19th, 1925</fancy></right>\nI’ve decided to give custody of the relic to Alejandro. This entire expedition was based on his research, after all—he should be the one to study it. If anyone can discover the relic’s secrets, it’s him.\nThe relic is to be the centerpiece of a new exhibit at the museum. Alejandro has already written extensively about our discoveries, but his work has only just begun. Many mysteries about our expedition remain. How have the Eztli people remained undiscovered for so long? Why did they appear to be guarding the jungle, and from what? Who really built the temple ruins we explored? I have no doubt Alejandro will uncover the answers to these questions, given enough time.\nAs for me, my role in this endeavor has ended. However, I have yet to relax. My thoughts are constantly in the jungle—serpentine figures in the shadows, obsidian arrows embedded in skeletal bodies, malformed voices shrieking in the cavernous depths. When I walk through the streets, I find myself drawn toward the museum without realizing it, as though possessed to see the relic once again. There is a nagging sensation in the back of my mind, as though we have forgotten something important. What must I do to rid myself of—\n(The journal entry ends abruptly.)",
+      "bullets": []
+    },
+    "tfa-interlude2:gave_relic_to_alejandro": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "gave_relic_to_alejandro",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "tfa-interlude2:earned_alejandros_trust": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "earned_alejandros_trust",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "tfa-interlude2:earn_alejandro:text": {
+      "kind": "story",
+      "text": "Any one investigator may choose to add Alejandro Vela to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "tfa-interlude2:earn_alejandro": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "04051",
+          "who": "choice"
+        }
+      ]
+    },
+    "tfa-interlude2:maybe_earn_alejandro": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "04051",
+        "inv": "any"
+      },
+      "then": [],
+      "else": [
+        "tfa-interlude2:earn_alejandro:text",
+        "tfa-interlude2:earn_alejandro"
+      ]
+    },
+    "tfa-interlude2:add_tablet": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        }
+      ]
+    },
+    "tfa-interlude2:ee_4": {
+      "kind": "story",
+      "text": "You drop your pen as a loud knocking at the door startles you, and you jump to your feet. It is almost 2:30 in the morning. Who could possibly be at your door at this hour? Your thoughts wander again to the jungle, and you are faced with a vision of serpent-creatures attacking you in your own home. Shuddering, you find a weapon and approach the front door carefully, ready to strike if need be. You take a long breath and open the door.\nOn the other side is a familiar woman with brown skin, long brown hair, and piercing yellow eyes set in a hard glare. Though her attire has changed, you recognize her instantly as Ichtaca, the Eztli warrior you encountered in the rainforest. Wearing a long coat and a Bollman hat, she is visibly uncomfortable in her shoes. Her jaw is set in anger. You are about to raise your weapon in defense when she lets out a heavy sigh and walks slowly over the threshold of your home, shutting your front door behind her. “Whatever you did, you have to reverse it,” she intones darkly. “Or we will all cease to exist.”",
+      "bullets": []
+    },
+    "tfa-interlude2:ee_3": {
+      "kind": "story",
+      "text": "<right><fancy>Sunday, July 19th, 1925</fancy></right>\nI’ve decided to keep the relic hidden for now. Alejandro is not happy with my decision, but until we know what the orb is capable of, it’s important that it stay somewhere safe, where it won’t endanger others. Harlan agrees with me, and has offered to take custody of the relic and keep it in his private office. There, we can study the artifact in secret.\nAlejandro is staying in Arkham for the time being, recording his notes about the expedition and helping the museum put together an exhibit displaying our other, less dangerous discoveries. As for me, I hope to find answers to other mysteries: How have the Eztli people remained undiscovered for so long? Why did they appear to be guarding the jungle, and from what? Who really built the temple ruins we explored?\nMy thoughts are constantly in the jungle—serpentine figures in the shadows, obsidian arrows embedded in skeletal bodies, malformed voices shrieking in the cavernous depths. Each time I leave Harlan’s office, I find myself longing to head back and gaze upon the relic once more. There is a nagging sensation in the back of my mind, as though we have forgotten something important. What must I do to rid myself of—\n(The journal entry ends abruptly.)",
+      "bullets": []
+    },
+    "tfa-interlude2:gave_relic_to_harlan": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "gave_relic_to_harlan",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "tfa-interlude2:alejandro_on_his_own:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>Alejandro is continuing his research on his own</i>. If Alejandro Vela is currently in an investigator’s deck, remove him from that investigator’s deck.",
+      "bullets": []
+    },
+    "tfa-interlude2:alejandro_on_his_own": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "alejandro_on_his_own",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "removeCard",
+          "code": "04051"
+        }
+      ]
+    },
+    "tfa-interlude2:choose_where_relic_goes": {
+      "kind": "chooseOne",
+      "text": "The investigators must decide (choose one):",
+      "choices": [
+        {
+          "id": "museum",
+          "text": "<i>It belongs in a museum. Alejandro and the museum staff will be able to study it and learn more about its purpose.</i>",
+          "effects": [],
+          "steps": [
+            "tfa-interlude2:ee_2",
+            "tfa-interlude2:gave_relic_to_alejandro",
+            "tfa-interlude2:earned_alejandros_trust",
+            "tfa-interlude2:maybe_earn_alejandro",
+            "tfa-interlude2:add_tablet",
+            "tfa-interlude2:ee_4"
+          ]
+        },
+        {
+          "id": "hide",
+          "text": "<i>It is too dangerous to be on display. We should keep it hidden and safe until we know more about it.</i>",
+          "effects": [],
+          "steps": [
+            "tfa-interlude2:ee_3",
+            "tfa-interlude2:gave_relic_to_harlan",
+            "tfa-interlude2:alejandro_on_his_own:text",
+            "tfa-interlude2:alejandro_on_his_own",
+            "tfa-interlude2:ee_4"
+          ]
+        }
+      ]
+    },
+    "tfa-interlude2:ee_5": {
+      "kind": "story",
+      "text": "Harlan Earnstone paces across your living room, dabbing his wrinkled forehead with his handkerchief. “It’s my fault. I should never have encouraged them to go on that dreadful expedition.” Though your paths have only crossed a few times before, Mr. Earnstone has become a valuable contact of yours within Miskatonic University. When the University’s latest expedition returned with only a few survivors and a handful of strange, archaic artifacts, he came to you for advice.\n“I know, I know. I should at least take solace in the fact that the expedition was successful, despite its heavy losses. Alejandro was right all along. The Eztli people are real. And yet…I am concerned about some of these findings.” Harlan pulls a small leather-bound journal from his suitcase and hands it to you. “Before the expedition leader’s tragic death, the leader recorded many of the group’s discoveries in this journal. One of the surviving members of the expedition managed to grab it from the camp before fleeing the jungle. I think if you read these entries, you’ll understand what I mean. The things they experienced, the creatures they encountered…” Harlan shudders and adjusts his glasses with too-shaky hands. “I am concerned not only for Alejandro, but for all of us. Read this journal, and if you can, please keep an eye on my colleague.” You agree to help, but his worry does not fade. “I only hope that I am not damning you to a similar fate by asking for your aid.”\nYou spend the remainder of that night studying the expedition journal, your mind swimming with thoughts of strange serpent-creatures and Aztec warriors. Long after Harlan has left, a loud knocking at the door startles you, and you jump to your feet. It is almost 2:30 in the morning. Who could possibly be at your door at this hour? You open the front door warily. On the other side is a woman with brown skin, long brown hair, and piercing yellow eyes set in a hard glare. She wears a long coat and a Bollman-style hat, visibly uncomfortable in her shoes. Her jaw is set in anger. A sudden flash of insight crosses your mind, and you realize at once who she must be. After all, you’ve read and re-read the journal’s description of Ichtaca, the Eztli warrior. She lets out a heavy sigh and walks slowly over the threshold of your home, shutting your front door behind her. “Whatever they did, you have to reverse it,” she intones darkly. “Or we will all cease to exist.”",
+      "bullets": []
+    },
+    "tfa-interlude2:check_alejandro_recovered_relic": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "alejandro_recovered_relic",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tfa-interlude2:ee_5"
+      ],
+      "else": []
+    },
+    "tfa-interlude2:check_investigators_recovered_relic": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "investigators_recovered_relic",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tfa-interlude2:ee_1",
+        "tfa-interlude2:choose_where_relic_goes"
+      ],
+      "else": [
+        "tfa-interlude2:check_alejandro_recovered_relic"
+      ]
+    },
+    "tfa-interlude2:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "threads-of-fate:found_missing_relic": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "found_missing_relic",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "threads-of-fate:earn_relic_of_ages:text": {
+      "kind": "story",
+      "text": "Any one investigator must choose to include it in their deck. This card does not count toward that investigator’s deck size. For the remainder of the campaign, anytime the owner of the Relic of Ages leaves the campaign for any reason, choose another investigator and add it to that investigator’s deck.",
+      "bullets": []
+    },
+    "threads-of-fate:earn_relic_of_ages": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "04061",
+          "who": "choice"
+        }
+      ]
+    },
+    "threads-of-fate:maybe_earn_relic_of_ages": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "04061",
+        "inv": "any"
+      },
+      "then": [],
+      "else": [
+        "threads-of-fate:earn_relic_of_ages:text",
+        "threads-of-fate:earn_relic_of_ages"
+      ]
+    },
+    "threads-of-fate:relic_is_missing": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "relic_is_missing",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "threads-of-fate:remove_relic_of_ages:text": {
+      "kind": "story",
+      "text": "Remove The Relic of Ages from that investigator’s deck for the remainder of the campaign.",
+      "bullets": []
+    },
+    "threads-of-fate:remove_relic_of_ages": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "04061"
+        }
+      ]
+    },
+    "threads-of-fate:maybe_remove_relic_of_ages": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "04061",
+        "inv": "any"
+      },
+      "then": [
+        "threads-of-fate:remove_relic_of_ages:text",
+        "threads-of-fate:remove_relic_of_ages"
+      ],
+      "else": []
+    },
+    "threads-of-fate:check_act_ab": {
+      "kind": "chooseOne",
+      "text": "Which of the following is true?",
+      "choices": [
+        {
+          "id": "completed",
+          "text": "Act 3b was completed.",
+          "effects": [],
+          "steps": [
+            "threads-of-fate:found_missing_relic",
+            "threads-of-fate:maybe_earn_relic_of_ages"
+          ]
+        },
+        {
+          "id": "in_play",
+          "text": "The “a/b” act deck is still in play.",
+          "effects": [],
+          "steps": [
+            "threads-of-fate:relic_is_missing",
+            "threads-of-fate:maybe_remove_relic_of_ages"
+          ]
+        }
+      ]
+    },
+    "threads-of-fate:rescued_alejandro": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "rescued_alejandro",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "threads-of-fate:earn_alejandro_xp:text": {
+      "kind": "story",
+      "text": "Because you are <i>forging your own path</i>, instead of earning Alejandro Vela each investigator earns 2 bonus XP.",
+      "bullets": []
+    },
+    "threads-of-fate:earn_alejandro_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 2,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "threads-of-fate:earn_alejandro:text": {
+      "kind": "story",
+      "text": "Any one investigator may choose to include him in their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "threads-of-fate:earn_alejandro": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "04051",
+          "who": "choice"
+        }
+      ]
+    },
+    "threads-of-fate:check_forging_own_path_earn_alejandro": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "forging_own_path",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "threads-of-fate:earn_alejandro_xp:text",
+        "threads-of-fate:earn_alejandro_xp"
+      ],
+      "else": [
+        "threads-of-fate:earn_alejandro:text",
+        "threads-of-fate:earn_alejandro"
+      ]
+    },
+    "threads-of-fate:maybe_earn_alejandro": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "04051",
+        "inv": "any"
+      },
+      "then": [],
+      "else": [
+        "threads-of-fate:check_forging_own_path_earn_alejandro"
+      ]
+    },
+    "threads-of-fate:alejandro_is_missing": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "alejandro_is_missing",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "threads-of-fate:remove_alejandro:text": {
+      "kind": "story",
+      "text": "Remove Alejandro Vela from the investigator’s deck for the remainder of the campaign.",
+      "bullets": []
+    },
+    "threads-of-fate:remove_alejandro": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "04051"
+        }
+      ]
+    },
+    "threads-of-fate:maybe_remove_alejandro": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "04051",
+        "inv": "any"
+      },
+      "then": [
+        "threads-of-fate:remove_alejandro:text",
+        "threads-of-fate:remove_alejandro"
+      ],
+      "else": []
+    },
+    "threads-of-fate:check_act_cd": {
+      "kind": "chooseOne",
+      "text": "Which of the following is true?",
+      "choices": [
+        {
+          "id": "completed",
+          "text": "Act 3d was completed.",
+          "effects": [],
+          "steps": [
+            "threads-of-fate:rescued_alejandro",
+            "threads-of-fate:maybe_earn_alejandro"
+          ]
+        },
+        {
+          "id": "in_play",
+          "text": "The “c/d” act deck is still in play.",
+          "effects": [],
+          "steps": [
+            "threads-of-fate:alejandro_is_missing",
+            "threads-of-fate:maybe_remove_alejandro"
+          ]
+        }
+      ]
+    },
+    "threads-of-fate:forged_bond_with_ichtaca": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "forged_bond_with_ichtaca",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "threads-of-fate:earn_ichtaca_xp:text": {
+      "kind": "story",
+      "text": "Because you are <i>forging your own path</i>, instead of earning Ichtaca <i>(The Forgotten Guardian)</i> each investigator earns 2 bonus XP.",
+      "bullets": []
+    },
+    "threads-of-fate:earn_ichtaca_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 2,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "threads-of-fate:earn_ichtaca:text": {
+      "kind": "story",
+      "text": "Any one investigator may choose to include Ichtaca <i>(The Forgotten Guardian)</i> in their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "threads-of-fate:earn_ichtaca": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "04147",
+          "who": "choice"
+        }
+      ]
+    },
+    "threads-of-fate:maybe_earn_ichtaca": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "forging_own_path",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "threads-of-fate:earn_ichtaca_xp:text",
+        "threads-of-fate:earn_ichtaca_xp"
+      ],
+      "else": [
+        "threads-of-fate:earn_ichtaca:text",
+        "threads-of-fate:earn_ichtaca"
+      ]
+    },
+    "threads-of-fate:ichtaca_in_the_dark": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "ichtaca_in_the_dark",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "threads-of-fate:check_act_ef": {
+      "kind": "chooseOne",
+      "text": "Which of the following is true?",
+      "choices": [
+        {
+          "id": "completed",
+          "text": "Act 3f was completed.",
+          "effects": [],
+          "steps": [
+            "threads-of-fate:forged_bond_with_ichtaca",
+            "threads-of-fate:maybe_earn_ichtaca"
+          ]
+        },
+        {
+          "id": "in_play",
+          "text": "The “e/f” act deck is still in play.",
+          "effects": [],
+          "steps": [
+            "threads-of-fate:ichtaca_in_the_dark"
+          ]
+        }
+      ]
+    },
+    "threads-of-fate:earn_expedition_journal:text": {
+      "kind": "story",
+      "text": "The lead investigator earns the Expedition Journal card and may include it in their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "threads-of-fate:earn_expedition_journal": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "04148",
+          "who": "lead"
+        }
+      ]
+    },
+    "threads-of-fate:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "threads-of-fate:earn_act_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "threads-of-fate:resupply_point:text": {
+      "kind": "story",
+      "text": "It is clear now that you will have to venture once more into the wilds before the mystery behind the Relic of Ages is solved. Each investigator has the option to choose additional supplies to add to their current list of supplies. In the Campaign Log, under each investigator’s “Supplies” section, record the supplies that investigator chooses to bring.",
+      "bullets": []
+    },
+    "threads-of-fate:visit_hospital:text": {
+      "kind": "story",
+      "text": "Before departing from Arkham, it might be a good idea to take a visit to St. Mary’s Hospital.",
+      "bullets": []
+    },
+    "threads-of-fate:choose_to_heal_poison": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "04102",
+          "who": "each"
+        }
+      ]
+    },
+    "threads-of-fate:choose_to_heal_trauma": {
+      "kind": "unsupported",
+      "name": "investigator_choice",
+      "text": "Remove Trauma",
+      "effects": [],
+      "steps": []
+    },
+    "threads-of-fate:buy_supplies": {
+      "kind": "unsupported",
+      "name": "supplies",
+      "text": "Each investigator may spend supply points to purchase one or more of the supplies listed below. The number of supply points available to each investigator is based on the number of investigators in the campaign.  <i>(Note: Provisions, Medicine and Gasoline can be taken more than once by recording their name multiple times and spending the appropriate number of supply points each time.)</i>",
+      "effects": [],
+      "steps": []
+    },
+    "threads-of-fate:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "the-boundary-beyond:check_act_2:text": {
+      "kind": "story",
+      "text": "If it was act 2 when the game ended, add each [[Tenochtitlán]] location in play that has no clues on it to the victory display.",
+      "bullets": []
+    },
+    "the-boundary-beyond:record_x_paths_known": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "paths_known",
+          "section": "campaign_notes",
+          "op": "set",
+          "value": "input"
+        },
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "the-boundary-beyond:record_harbinger": {
+      "kind": "counter",
+      "text": "Record in your campaign log next to <i>“the Harbinger is still alive”</i>, record in parentheses how much damage is on the Harbinger of Valusia, replacing the number that was previously in parentheses.",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "harbinger_alive",
+          "section": "campaign_notes",
+          "op": "set",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "the-boundary-beyond:check_harbinger": {
+      "kind": "chooseOne",
+      "text": "Which of the following is true?",
+      "choices": [
+        {
+          "id": "no_harbinger",
+          "text": "Harbinger did not enter play.",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "victory_display",
+          "text": "Harbinger is in the victory display.",
+          "effects": [
+            {
+              "do": "crossOut",
+              "key": "harbinger_alive",
+              "section": "campaign_notes"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "alive",
+          "text": "Harbinger is still in play or set aside.",
+          "effects": [],
+          "steps": [
+            "the-boundary-beyond:record_harbinger"
+          ]
+        }
+      ]
+    },
+    "the-boundary-beyond:maybe_check_harbinger": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "harbinger_alive",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-boundary-beyond:check_harbinger"
+      ],
+      "else": []
+    },
+    "the-boundary-beyond:record_yigs_fury": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "yigs_fury",
+          "section": "yigs_fury",
+          "op": "add",
+          "value": "input"
+        }
+      ]
+    },
+    "the-boundary-beyond:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "the-boundary-beyond:check_investigators_poisoned": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "04102",
+          "who": "each"
+        }
+      ]
+    },
+    "tfa-interlude3:intro": {
+      "kind": "story",
+      "text": "Once more, you venture south, leaving the safety of civilization behind. There is no time to waste. The path to the Nexus lies on familiar ground, not far from the previous expedition’s trail. Using the leather-bound journal as your guide, you retrace the expedition’s journey. Soon, you are deep within the jungle, surrounded on all sides by hazards—some natural, others bizarre…",
+      "bullets": []
+    },
+    "tfa-interlude3:use_gasoline": {
+      "kind": "unsupported",
+      "name": "use_supplies",
+      "text": "Check your supplies. Any one investigator must cross off one gasoline from their supplies. If no gasoline was crossed off, read <b>Out of Gas</b>.",
+      "effects": [],
+      "steps": []
+    },
+    "tfa-interlude3:path_discovered": {
+      "kind": "story",
+      "title": "A Path Discovered",
+      "text": "Thanks to your map, which has been marked from the previous expedition, you are able to clear a path through the rainforest without getting lost, and you reach your destination on your own terms.",
+      "bullets": []
+    },
+    "tfa-interlude3:mapped_way_forward:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>the investigators mapped out the way forward.</i>",
+      "bullets": []
+    },
+    "tfa-interlude3:check_map:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "mapped_way_forward",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "tfa-interlude3:check_map": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "check_supplies",
+        "take": false
+      },
+      "then": [
+        "tfa-interlude3:path_discovered",
+        "tfa-interlude3:mapped_way_forward:text",
+        "tfa-interlude3:check_map:yes:fx"
+      ],
+      "else": []
+    },
+    "tfa-interlude3:eat_provisions": {
+      "kind": "unsupported",
+      "name": "use_supplies",
+      "text": "Check your supplies. The investigators, as a group, must cross off one provisions per investigator from their supplies. For each provisions they cannot cross off, choose an investigator to read Low on Rations.",
+      "effects": [],
+      "steps": []
+    },
+    "tfa-interlude3:use_medicine": {
+      "kind": "unsupported",
+      "name": "use_supplies",
+      "text": "Check your supplies. Each investigator with medicine may cross it off from their supplies to choose and remove a Poisoned weakness from any investigator’s deck. Each investigator who still has a Poisoned weakness in their deck reads <b>The Poison Spreads</b>.",
+      "effects": [],
+      "steps": []
+    },
+    "tfa-interlude3:poison_spreads": {
+      "kind": "story",
+      "title": "The Poison Spreads",
+      "text": "The poison continues to work its way through your body, wreacking havoc on your internal organs. A terrible fever burns through you, growing stronger with each passing day. You can hardly keep down your food. Your body feels as though it has been drained of all of its strength.",
+      "bullets": []
+    },
+    "tfa-interlude3:check_poison_spreads:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "input",
+          "physical": 1,
+          "mental": 0
+        }
+      ]
+    },
+    "tfa-interlude3:check_poison_spreads": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "04102",
+        "inv": "any"
+      },
+      "then": [
+        "tfa-interlude3:poison_spreads",
+        "tfa-interlude3:check_poison_spreads:yes:fx"
+      ],
+      "else": []
+    },
+    "tfa-interlude3:find_stone_carvings": {
+      "kind": "story",
+      "text": "As you trudge through the lush jungle and pass a series of familiar overgrown temple ruins, your keen eye spots a pattern along the stone wall of the structure. Upon closer examination, you find that vines and caked dirt has hidden an elaborate carving of hieroglyphs.",
+      "bullets": []
+    },
+    "tfa-interlude3:patterns_in_the_stone": {
+      "kind": "story",
+      "title": "Patterns in the Stone",
+      "text": "You take out your canteen and splash water on the stone walls, washing off the dirt and making the stiff vines easier to manipulate. The pattern of glyphs is clearly visible now, and although its meaning is still a mystery, the repetition of six glyphs in particular hints at a specific instruction…",
+      "bullets": []
+    },
+    "tfa-interlude3:start_with_clue:text": {
+      "kind": "story",
+      "text": "Each investigator who has a canteen begins the next scenario with 1 clue <i>(from the token bank)</i>.",
+      "bullets": []
+    },
+    "tfa-interlude3:check_canteen:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "hote_start_with_clue_true",
+          "section": "hidden",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "hote_start_with_clue",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "tfa-interlude3:secrets_in_the_stone": {
+      "kind": "story",
+      "title": "Secrets in the Stone",
+      "text": "Try as you might, you are unable to clear off the dirt and vines with only your bare hands. You have no choice but to leave this mystery behind.",
+      "bullets": []
+    },
+    "tfa-interlude3:no_ill_effects:text": {
+      "kind": "story",
+      "text": "You suffer no ill effects.",
+      "bullets": []
+    },
+    "tfa-interlude3:check_canteen": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "check_supplies",
+        "take": false
+      },
+      "then": [
+        "tfa-interlude3:patterns_in_the_stone",
+        "tfa-interlude3:start_with_clue:text",
+        "tfa-interlude3:check_canteen:yes:fx"
+      ],
+      "else": [
+        "tfa-interlude3:secrets_in_the_stone",
+        "tfa-interlude3:no_ill_effects:text"
+      ]
+    },
+    "tfa-interlude3:explain_faith_restored:text": {
+      "kind": "story",
+      "text": "Check the chaos bag and the Campaign Log. If all of the following are true, the lead investigator reads <b>Faith Restored</b>.",
+      "bullets": []
+    },
+    "tfa-interlude3:faith_restored": {
+      "kind": "story",
+      "title": "Faith Restored",
+      "text": "On the eve of your second night within the jungle, you and your companions sit in front of a dim campfire, keeping warm and trying to remain relaxed despite the task ahead of you. Ichtaca approaches the campfire and sits across from you. Her eyes are cast to the ground, and her shoulders sag with a burdensome weight. “I feel that I must apologize to you,” she admits, peering into the flickering fire. “You have proven yourselves to be both wise and formidable, and I have done nothing but command you and endanger you at every turn.” There is a long, peaceful pause between you. “Perhaps there is hope for humanity after all,” she says under her breath as she meets your gaze. Does she speak for you? Or for herself, as well?\nIchtaca rises to her feet after some time. “I trust you to take the first watch. Be on the lookout for serpents. They are surely on the lookout for us.” Your camp is quiet for the remainder of the night, but for the soothing crackling of the campfire and the choir of chirping insects whose singing fills the night air.",
+      "bullets": []
+    },
+    "tfa-interlude3:ichtacas_faith_restored:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>Ichtaca’s faith is restored</i>. Add 1 [cultist] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "tfa-interlude3:check_faith_restored:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "ichtacas_faith_restored",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        }
+      ]
+    },
+    "tfa-interlude3:check_faith_restored": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "tfa-interlude3:faith_restored",
+        "tfa-interlude3:ichtacas_faith_restored:text",
+        "tfa-interlude3:check_faith_restored:yes:fx"
+      ],
+      "else": []
+    },
+    "tfa-interlude3:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "heart-of-the-elders-part-1:record_paths_known": {
+      "kind": "counter",
+      "text": "If there are more pillar tokens on the Mouth of K’nyan than there were when the scenario began, in your Campaign Log, cross out how many paths are known to you. Then, record that X paths are known to you. X is the number of pillar tokens on the Mouth of K’n-yan.",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "paths_known",
+          "section": "campaign_notes",
+          "op": "set",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "heart-of-the-elders-part-1:check_investigators_poisoned": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "04102",
+          "who": "each"
+        }
+      ]
+    },
+    "heart-of-the-elders-part-1:replay_scenario:text": {
+      "kind": "story",
+      "text": "The investigators must replay <b>Scenario V-A: Heart of the Elders, Part 1</b>. Reset the game to this scenario’s <b>Setup</b>. Do not record anything else in your Campaign Log except for any trauma suffered from your previous game. No experience points are earned from your previous game. Any player whose investigator was killed or driven <b>insane</b> must choose a new investigator to play, as normal.",
+      "bullets": []
+    },
+    "heart-of-the-elders-part-1:replay_scenario": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "replayScenario",
+          "scenario": "heart-of-the-elders-part-1"
+        }
+      ]
+    },
+    "heart-of-the-elders-part-1:record_jungle_watches": {
+      "kind": "cardChoice",
+      "text": "In your Campaign Log, record that <i>the jungle watches</i>. Next to this, in parentheses, record the names of each card with Vengeance X in the victory display. Do not record any tally marks under “Yig’s Fury.”",
+      "codes": [],
+      "min": 1,
+      "max": 1,
+      "effects": [
+        {
+          "do": "record",
+          "key": "jungle_watches",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ],
+      "steps": []
+    },
+    "heart-of-the-elders-part-1:check_paths_known_jungle_watches": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "math",
+        "take": false
+      },
+      "then": [],
+      "else": [
+        "heart-of-the-elders-part-1:record_jungle_watches"
+      ]
+    },
+    "heart-of-the-elders-part-1:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "heart-of-the-elders-part-1:proceed_scenario_2:text": {
+      "kind": "story",
+      "text": "Investigators may not spend experience or alter their decks in between Scenarios V-A and V-B.",
+      "bullets": []
+    },
+    "heart-of-the-elders-part-2:record_harbinger": {
+      "kind": "counter",
+      "text": "Record in your campaign log next to <i>“the Harbinger is still alive”</i>, record in parentheses how much damage is on the Harbinger of Valusia, replacing the number that was previously in parentheses.",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "harbinger_alive",
+          "section": "campaign_notes",
+          "op": "set",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "heart-of-the-elders-part-2:check_harbinger": {
+      "kind": "chooseOne",
+      "text": "Which of the following is true?",
+      "choices": [
+        {
+          "id": "no_harbinger",
+          "text": "Harbinger did not enter play.",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "victory_display",
+          "text": "Harbinger is in the victory display.",
+          "effects": [
+            {
+              "do": "crossOut",
+              "key": "harbinger_alive",
+              "section": "campaign_notes"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "alive",
+          "text": "Harbinger is still in play or set aside.",
+          "effects": [],
+          "steps": [
+            "heart-of-the-elders-part-2:record_harbinger"
+          ]
+        }
+      ]
+    },
+    "heart-of-the-elders-part-2:maybe_check_harbinger": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "harbinger_alive",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "heart-of-the-elders-part-2:check_harbinger"
+      ],
+      "else": []
+    },
+    "heart-of-the-elders-part-2:record_yigs_fury": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "yigs_fury",
+          "section": "yigs_fury",
+          "op": "add",
+          "value": "input"
+        }
+      ]
+    },
+    "heart-of-the-elders-part-2:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "heart-of-the-elders-part-2:check_investigators_poisoned": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "04102",
+          "who": "each"
+        }
+      ]
+    },
+    "heart-of-the-elders-part-2:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "the-city-of-archives:had_memories_expunged": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "had_memories_expunged",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-city-of-archives:all_insane:text": {
+      "kind": "story",
+      "text": "Each investigator is driven <b>insane</b>.",
+      "bullets": []
+    },
+    "the-city-of-archives:lose_campaign:text": {
+      "kind": "story",
+      "text": "The investigators lose the campaign.",
+      "bullets": []
+    },
+    "the-city-of-archives:lose_campaign": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "tfa-epilogue"
+        },
+        {
+          "do": "end",
+          "result": "lose"
+        }
+      ]
+    },
+    "the-city-of-archives:record_number_of_tasks": {
+      "kind": "counter",
+      "text": "Tasks on act 2b that were completed:",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "tasks_completed",
+          "section": "hidden",
+          "op": "set",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "the-city-of-archives:process_was_perfected:text": {
+      "kind": "story",
+      "text": "Because all 6 tasks were completed, record in your Campaign Log that <i>the process was perfected</i>. Each investigator earns 4 bonus experience as they gain insight into the secrets of the Earth.",
+      "bullets": []
+    },
+    "the-city-of-archives:process_was_perfected": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "process_was_perfected",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "bonus": 4,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-city-of-archives:process_was_successful:text": {
+      "kind": "story",
+      "text": "Because 5 tasks were completed, record in your Campaign Log that <i>the process was successful</i>. Each investigator earns 2 bonus experience as they gain insight into the secrets of the Earth.",
+      "bullets": []
+    },
+    "the-city-of-archives:process_was_successful": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "process_was_successful",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "bonus": 2,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-city-of-archives:process_backfired:text": {
+      "kind": "story",
+      "text": "Because 4 tasks were completed, record in your Campaign Log that <i>the process backfired</i>. Each investigator earns 1 bonus experience as they gain insight into the secrets of the Earth.",
+      "bullets": []
+    },
+    "the-city-of-archives:process_backfired": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "process_backfired",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-city-of-archives:process_backfired_spectacularly:text": {
+      "kind": "story",
+      "text": "Because only 3 tasks were completed, record in your Campaign Log that <i>the process backfired spectacularly</i>.",
+      "bullets": []
+    },
+    "the-city-of-archives:process_backfired_spectacularly": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "process_backfired_spectacularly",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-city-of-archives:check_number_of_tasks#5": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "tasks_completed",
+        "section": "hidden",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "the-city-of-archives:process_backfired_spectacularly:text",
+        "the-city-of-archives:process_backfired_spectacularly"
+      ],
+      "else": []
+    },
+    "the-city-of-archives:check_number_of_tasks#4": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "tasks_completed",
+        "section": "hidden",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "the-city-of-archives:process_backfired:text",
+        "the-city-of-archives:process_backfired"
+      ],
+      "else": [
+        "the-city-of-archives:check_number_of_tasks#5"
+      ]
+    },
+    "the-city-of-archives:check_number_of_tasks#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "tasks_completed",
+        "section": "hidden",
+        "min": 5,
+        "max": 5
+      },
+      "then": [
+        "the-city-of-archives:process_was_successful:text",
+        "the-city-of-archives:process_was_successful"
+      ],
+      "else": [
+        "the-city-of-archives:check_number_of_tasks#4"
+      ]
+    },
+    "the-city-of-archives:check_number_of_tasks#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "tasks_completed",
+        "section": "hidden",
+        "min": 6
+      },
+      "then": [
+        "the-city-of-archives:process_was_perfected:text",
+        "the-city-of-archives:process_was_perfected"
+      ],
+      "else": [
+        "the-city-of-archives:check_number_of_tasks#3"
+      ]
+    },
+    "the-city-of-archives:check_number_of_tasks#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "tasks_completed",
+        "section": "hidden",
+        "min": 7
+      },
+      "then": [
+        "the-city-of-archives:process_was_perfected:text",
+        "the-city-of-archives:process_was_perfected"
+      ],
+      "else": [
+        "the-city-of-archives:check_number_of_tasks#2"
+      ]
+    },
+    "the-city-of-archives:check_number_of_tasks": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "tasks_completed",
+        "section": "hidden",
+        "min": 8
+      },
+      "then": [
+        "the-city-of-archives:process_was_perfected:text",
+        "the-city-of-archives:process_was_perfected"
+      ],
+      "else": [
+        "the-city-of-archives:check_number_of_tasks#1"
+      ]
+    },
+    "the-city-of-archives:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "tfa-interlude4:reveal_one_token": {
+      "kind": "unsupported",
+      "name": "investigator_choice",
+      "text": "Each investigator reveals a random chaos token from the chaos bag. Consult the list below to see what side effects result from your mishap.",
+      "effects": [],
+      "steps": []
+    },
+    "tfa-interlude4:reveal_two_tokens": {
+      "kind": "unsupported",
+      "name": "investigator_choice",
+      "text": "Each investigator reveals two random chaos token from the chaos bag, choosing the token that is lower on the list to resolve, and ignoring the other. Consult the list below to see what side effects result from your mishap.",
+      "effects": [],
+      "steps": []
+    },
+    "tfa-interlude4:check_process_backfired_spectacularly": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "process_backfired_spectacularly",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tfa-interlude4:reveal_two_tokens"
+      ],
+      "else": []
+    },
+    "tfa-interlude4:check_process_backfired": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "process_backfired",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tfa-interlude4:reveal_one_token"
+      ],
+      "else": [
+        "tfa-interlude4:check_process_backfired_spectacularly"
+      ]
+    },
+    "tfa-interlude4:explain_mind_recovered:text": {
+      "kind": "story",
+      "text": "Check the chaos bag and the Campaign Log. If all of the following are true, the lead investigator reads <b>A Mind Recovered</b>. If any of the following are not true, the lead investigator reads <b>Forever Lost</b> instead.",
+      "bullets": []
+    },
+    "tfa-interlude4:ask_custodian": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "rescued_custodian",
+          "text": "Was the Custodian under an investigator’s control when the previous scenario ended?",
+          "effects": [
+            {
+              "do": "record",
+              "key": "rescued_custodian",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "tfa-interlude4:mind_recovered": {
+      "kind": "story",
+      "title": "A Mind Recovered",
+      "text": "You turn your attention to your surroundings. Though the creatures that ambushed you are nowhere to be found, Alejandro lies on the ground nearby, stirring into consciousness. To your surprise, he appears just as confused as you are. At first, it seems as though he recalls nothing of the previous expedition or the Eztli relic, but then his eyes suddenly spark with recognition. He grips your shoulder tightly and gazes at you as though for the first time in years. “I do remember! We shared one mind for some time, the creature and I. It wished to find the Eztli relic, though for what purpose, I do not know.” He slumps backward against the stone wall, recovering from the sudden influx of memories. “You believed me at every turn, even when the creature had control. You saved me from that abysmal place and brought me back to humanity. For this, I cannot begin to repay you.” He shakes your hand vigorously, filled with a sudden and intense resolve. “We will right all of this, you and I. Then, we will tell the world what we have seen.”",
+      "bullets": []
+    },
+    "tfa-interlude4:alejandro_remembers_everything:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>Alejandro remembers everything</i>. Add 1 [tablet] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "tfa-interlude4:check_mind_recovered:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "alejandro_remembers_everything",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        }
+      ]
+    },
+    "tfa-interlude4:forever_lost": {
+      "kind": "story",
+      "title": "Forever Lost",
+      "text": "You turn your attention to your surroundings. Both Alejandro and the creatures that ambushed you are nowhere to be found. You wonder how long Alejandro was in league with them, and why. Perhaps you will never know. However, you suspect this is not the last you will see of him.",
+      "bullets": []
+    },
+    "tfa-interlude4:alejandro_set_against:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>Alejandro is set against you</i>. If Alejandro Vela is part of an investigator’s deck, remove him from that investigator’s deck for the remainder of the campaign.",
+      "bullets": []
+    },
+    "tfa-interlude4:check_mind_recovered:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "alejandro_set_against",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "removeCard",
+          "code": "04051"
+        }
+      ]
+    },
+    "tfa-interlude4:check_mind_recovered": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "tfa-interlude4:mind_recovered",
+        "tfa-interlude4:alejandro_remembers_everything:text",
+        "tfa-interlude4:check_mind_recovered:yes:fx"
+      ],
+      "else": [
+        "tfa-interlude4:forever_lost",
+        "tfa-interlude4:alejandro_set_against:text",
+        "tfa-interlude4:check_mind_recovered:no:fx"
+      ]
+    },
+    "tfa-interlude4:find_stone_gate": {
+      "kind": "story",
+      "text": "The narrow steps on the other side of the stone doorway seem almost endless. Though a dim red glow emanates from deeper within the cavern, no matter how many steps you traverse, the glow does not brighten. It almost seems to grow more distant with each step, mocking your tenacity. After a short while, you come to a small ledge where a stone gate bars your passage deeper into the cavern. The gate bears a familiar carved pattern, faded from age and disrepair, and seeping with an oddly discolored purulence.",
+      "bullets": []
+    },
+    "tfa-interlude4:the_way_is_open": {
+      "kind": "story",
+      "title": "The Way is Open",
+      "text": "The situation sparks your memory, and you consult the expedition journal. The pattern is similar to one found in the Eztli ruins. Using your chalk and the drawings in your journal as a reference, you restore the glyph in its entirety, and the grooves glow brightly once more. The stone gate lifts on its own, and you are able to continue onward.",
+      "bullets": []
+    },
+    "tfa-interlude4:no_ill_effects:text": {
+      "kind": "story",
+      "text": "You suffer no ill effects.",
+      "bullets": []
+    },
+    "tfa-interlude4:the_way_is_shut": {
+      "kind": "story",
+      "title": "The Way is Shut",
+      "text": "You are unsure how to proceed. After debating the merits of each of your options, you decide that brute force may be the only solution. It takes all of your strength to lift the stone, and you open the way forward for each of you one at a time. It is no simple task, and your body aches tremendously from the effort.",
+      "bullets": []
+    },
+    "tfa-interlude4:no_mulligan:text": {
+      "kind": "story",
+      "text": "When drawing opening hands during the next scenario, investigators cannot take a mulligan.",
+      "bullets": []
+    },
+    "tfa-interlude4:check_chalk:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "doy_no_mulligan",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "tfa-interlude4:check_chalk": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "check_supplies",
+        "take": false
+      },
+      "then": [
+        "tfa-interlude4:the_way_is_open",
+        "tfa-interlude4:no_ill_effects:text"
+      ],
+      "else": [
+        "tfa-interlude4:the_way_is_shut",
+        "tfa-interlude4:no_mulligan:text",
+        "tfa-interlude4:check_chalk:no:fx"
+      ]
+    },
+    "tfa-interlude4:eat_provisions": {
+      "kind": "unsupported",
+      "name": "use_supplies",
+      "text": "Check your supplies. The investigators, as a group, must cross off one provisions per investigator from their supplies. For each provisions they cannot cross off, choose an investigator to read <b>Low on Rations</b>.",
+      "effects": [],
+      "steps": []
+    },
+    "tfa-interlude4:use_medicine": {
+      "kind": "unsupported",
+      "name": "use_supplies",
+      "text": "Check your supplies. Each investigator with medicine may cross it off from their supplies to choose and remove a Poisoned weakness from any investigator’s deck. Each investigator who still has a Poisoned weakness in their deck reads <b>The Poison Spreads</b>.",
+      "effects": [],
+      "steps": []
+    },
+    "tfa-interlude4:poison_spreads": {
+      "kind": "story",
+      "title": "The Poison Spreads",
+      "text": "The poison has spread to nearly every part of your body. Your skin pales, and you are covered in cold feverish sweat. Simply rising to your feet requires a tremendous effort, and you get no rest at night despite your exhaustion. It won’t be long now before the poison claims your life.",
+      "bullets": []
+    },
+    "tfa-interlude4:check_poison_spreads:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "input",
+          "physical": 1,
+          "mental": 0
+        }
+      ]
+    },
+    "tfa-interlude4:check_poison_spreads": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "04102",
+        "inv": "any"
+      },
+      "then": [
+        "tfa-interlude4:poison_spreads",
+        "tfa-interlude4:check_poison_spreads:yes:fx"
+      ],
+      "else": []
+    },
+    "tfa-interlude4:stop_and_rest": {
+      "kind": "story",
+      "text": "After descending hundreds and hundreds of steps, you decide to stop and rest. Though your watch tells you that night has fallen, the lack of natural sky is starting to affect your internal clock. With no flat ledge in sight, each member of your party claims one of the many narrow steps to sleep on.",
+      "bullets": []
+    },
+    "tfa-interlude4:restful_sleep": {
+      "kind": "story",
+      "title": "Restful Sleep",
+      "text": "Though you long for a proper bed, at least your blanket protects you from the frigid chill that permeates the cavern. When “morning” arrives, your body longs for more sleep, but you know you must press onward and reach the Nexus as fast as you can…",
+      "bullets": []
+    },
+    "tfa-interlude4:tossing_and_turning": {
+      "kind": "story",
+      "title": "Tossing and Turning",
+      "text": "Sleep does not come easily for you. Barely any layers protect you from the bitter cold of the underground cavern, and you lie shivering for hours before exhaustion finally claims you. You awaken every hour or so as the shifting of your body almost causes you to tumble off your stone perch. When “morning” comes, you are even more weary than you were the previous night.",
+      "bullets": []
+    },
+    "tfa-interlude4:check_blanket": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "check_supplies",
+        "take": false
+      },
+      "then": [
+        "tfa-interlude4:restful_sleep",
+        "tfa-interlude4:no_ill_effects:text"
+      ],
+      "else": [
+        "tfa-interlude4:tossing_and_turning"
+      ]
+    },
+    "tfa-interlude4:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "the-depths-of-yoth:fell_into_depths": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "fell_into_depths",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-depths-of-yoth:record_final_depth": {
+      "kind": "counter",
+      "text": "Depth level when the scenario ended:",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "final_depth",
+          "section": "hidden",
+          "op": "set",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "the-depths-of-yoth:check_final_depth:default:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-depths-of-yoth:warn_standalone_depths:text": {
+      "kind": "story",
+      "text": "Note: when playing in campaign mode, reaching depth 5+ should always lead to <b>Resolution 2</b>",
+      "bullets": []
+    },
+    "the-depths-of-yoth:maybe_warn_standalone_depth": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_data",
+        "take": false
+      },
+      "then": [],
+      "else": [
+        "the-depths-of-yoth:warn_standalone_depths:text"
+      ]
+    },
+    "the-depths-of-yoth:depth_1_fall:text": {
+      "kind": "story",
+      "text": "Because the current depth level is 1, the fall is fatal, and the darkness of N’kai devours the shattered corpses. Each investigator is <b>killed</b>. The investigators lose the campaign.",
+      "bullets": []
+    },
+    "the-depths-of-yoth:depth_1_fall": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "kill",
+          "who": "each"
+        },
+        {
+          "do": "skipScenario",
+          "scenario": "tfa-epilogue"
+        },
+        {
+          "do": "end",
+          "result": "lose"
+        }
+      ]
+    },
+    "the-depths-of-yoth:depth_2_fall:text": {
+      "kind": "story",
+      "text": "Because the current depth level is 2, each investigator suffers 2 physical trauma and searches the collection for a random basic Injury weakness, adding it to their deck.",
+      "bullets": []
+    },
+    "the-depths-of-yoth:depth_2_fall": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 2,
+          "mental": 0
+        },
+        {
+          "do": "addWeakness",
+          "trait": "Injury"
+        },
+        {
+          "do": "xp",
+          "bonus": 2,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-depths-of-yoth:lose:text": {
+      "kind": "story",
+      "text": "Because all investigators have been killed by the fall trauma, the investigators <b>lose</b> the campaign.",
+      "bullets": []
+    },
+    "the-depths-of-yoth:lose": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "tfa-epilogue"
+        },
+        {
+          "do": "end",
+          "result": "lose"
+        }
+      ]
+    },
+    "the-depths-of-yoth:check_all_killed": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "trauma",
+        "take": false
+      },
+      "then": [
+        "the-depths-of-yoth:lose:text",
+        "the-depths-of-yoth:lose"
+      ],
+      "else": []
+    },
+    "the-depths-of-yoth:depth_3_fall:text": {
+      "kind": "story",
+      "text": "Because the current depth level is 3, each investigator suffers 1 physical trauma.",
+      "bullets": []
+    },
+    "the-depths-of-yoth:depth_3_fall": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 1,
+          "mental": 0
+        },
+        {
+          "do": "xp",
+          "bonus": 3,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-depths-of-yoth:depth_4_fall:text": {
+      "kind": "story",
+      "text": "Because the current depth level is 4, you suffer no ill effects.",
+      "bullets": []
+    },
+    "the-depths-of-yoth:depth_4_fall": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 4,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-depths-of-yoth:check_final_depth#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "final_depth",
+        "section": "hidden",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "the-depths-of-yoth:depth_4_fall:text",
+        "the-depths-of-yoth:depth_4_fall"
+      ],
+      "else": [
+        "the-depths-of-yoth:check_final_depth:default:fx",
+        "the-depths-of-yoth:maybe_warn_standalone_depth"
+      ]
+    },
+    "the-depths-of-yoth:check_final_depth#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "final_depth",
+        "section": "hidden",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "the-depths-of-yoth:depth_3_fall:text",
+        "the-depths-of-yoth:depth_3_fall",
+        "the-depths-of-yoth:check_all_killed"
+      ],
+      "else": [
+        "the-depths-of-yoth:check_final_depth#3"
+      ]
+    },
+    "the-depths-of-yoth:check_final_depth#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "final_depth",
+        "section": "hidden",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "the-depths-of-yoth:depth_2_fall:text",
+        "the-depths-of-yoth:depth_2_fall",
+        "the-depths-of-yoth:check_all_killed"
+      ],
+      "else": [
+        "the-depths-of-yoth:check_final_depth#2"
+      ]
+    },
+    "the-depths-of-yoth:check_final_depth": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "final_depth",
+        "section": "hidden",
+        "min": 1,
+        "max": 1
+      },
+      "then": [
+        "the-depths-of-yoth:depth_1_fall:text",
+        "the-depths-of-yoth:depth_1_fall"
+      ],
+      "else": [
+        "the-depths-of-yoth:check_final_depth#1"
+      ]
+    },
+    "the-depths-of-yoth:record_harbinger": {
+      "kind": "counter",
+      "text": "Record in your campaign log next to <i>“the Harbinger is still alive”</i>, record in parentheses how much damage is on the Harbinger of Valusia, replacing the number that was previously in parentheses.",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "harbinger_alive",
+          "section": "campaign_notes",
+          "op": "set",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "the-depths-of-yoth:check_harbinger": {
+      "kind": "chooseOne",
+      "text": "Which of the following is true?",
+      "choices": [
+        {
+          "id": "no_harbinger",
+          "text": "Harbinger did not enter play.",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "victory_display",
+          "text": "Harbinger is in the victory display.",
+          "effects": [
+            {
+              "do": "crossOut",
+              "key": "harbinger_alive",
+              "section": "campaign_notes"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "alive",
+          "text": "Harbinger is still in play or set aside.",
+          "effects": [],
+          "steps": [
+            "the-depths-of-yoth:record_harbinger"
+          ]
+        }
+      ]
+    },
+    "the-depths-of-yoth:maybe_check_harbinger": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "harbinger_alive",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-depths-of-yoth:check_harbinger"
+      ],
+      "else": []
+    },
+    "the-depths-of-yoth:record_yigs_fury": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "yigs_fury",
+          "section": "yigs_fury",
+          "op": "add",
+          "value": "input"
+        }
+      ]
+    },
+    "the-depths-of-yoth:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "the-depths-of-yoth:check_investigators_poisoned": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "04102",
+          "who": "each"
+        }
+      ]
+    },
+    "the-depths-of-yoth:nexus_is_near": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "nexus_is_near",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-depths-of-yoth:record_win_depth": {
+      "kind": "counter",
+      "text": "Depth level when the scenario ended:",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "final_depth",
+          "section": "hidden",
+          "op": "set",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "the-depths-of-yoth:earn_depth_6_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-depths-of-yoth:check_win_depth": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "final_depth",
+        "section": "hidden",
+        "min": 6
+      },
+      "then": [
+        "the-depths-of-yoth:earn_depth_6_xp"
+      ],
+      "else": []
+    },
+    "the-depths-of-yoth:maybe_ask_win_depth": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_data",
+        "take": true
+      },
+      "then": [
+        "the-depths-of-yoth:record_win_depth",
+        "the-depths-of-yoth:check_win_depth"
+      ],
+      "else": []
+    },
+    "the-depths-of-yoth:earn_xp_full_depth": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 5,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "tfa-interlude5:darkness_1": {
+      "kind": "story",
+      "text": "You stir awake, lying facedown on the cold, hard stone of the cavern. You are bruised and battered but, somehow, alive. It takes several minutes before you regain enough of your strength to stand. You are absolutely and hopelessly lost within the impossibly vast caverns, enveloped by pitch-black darkness. Have you survived all this way only to perish here, lost to all humanity?",
+      "bullets": []
+    },
+    "tfa-interlude5:darkness_2": {
+      "kind": "story",
+      "text": "The grim, blood-red caverns and resentful cities of Yoth hold no candle to the terrifying depths that lie below them. You are in the deepest level of this subterranean realm now: the caverns Ichtaca referred to as “N’kai.” Nothing could have prepared you for the impervious murk that surrounds you on all sides, an inky darkness that none of your light sources can penetrate. You grope around in the darkness until you feel the jagged wall of the cavern and begin to follow it aimlessly, desperately hoping to find the way forward. A grim realization dawns on you: Even should you complete your task, you will surely never find a way back to the surface. The overwhelming darkness of the cavern fills you with a dread you have never before experienced. You cannot see your hands as you grope about in the darkness, nor can you tell if you are in a narrow tunnel or a vast open space. The ground beside you could extend for miles or abruptly become a bottomless cavern, and you would not be able to tell the difference unless you stepped there. Hours pass as you stumble in the dark, slowly, carefully, nervously. Every step could be your last.",
+      "bullets": []
+    },
+    "tfa-interlude5:check_nexus_is_near": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "nexus_is_near",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tfa-interlude5:darkness_2"
+      ],
+      "else": []
+    },
+    "tfa-interlude5:check_fell_into_depths": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "fell_into_depths",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tfa-interlude5:darkness_1",
+        "tfa-interlude5:darkness_2"
+      ],
+      "else": [
+        "tfa-interlude5:check_nexus_is_near"
+      ]
+    },
+    "tfa-interlude5:arcane_thrumming": {
+      "kind": "story",
+      "title": "Arcane Thrumming",
+      "text": "Worried that your fall may have damaged the Eztli relic, you pull it out of your pack and examine it. Oddly, the device seems completely undamaged. It vibrates with a growing intensity, humming louder now than ever before.",
+      "bullets": []
+    },
+    "tfa-interlude5:final_dawning": {
+      "kind": "story",
+      "title": "Final Dawning",
+      "text": "Without Alejandro or Ichtaca to distract you, you find yourself studying the relic intently. Both of your “guides” have only fed you lies. They hid the relic’s true nature from you, manipulating you in an attempt to bring the relic to this very place. After your experience with the Great Race of Yith, you think you understand why. The technology behind the device’s design is far beyond what any human could accomplish, but quite possible for the Yithians. You even recognize some elements of the relic’s construction from the technology in Pnakotus. Somehow, it ended up in the hands of the Eztli, who defended it with care from all manner of creatures. Creatures that predate humanity. Creatures who wished to use it to turn back time. And now that the relic is in your possession, only you can stop this from occurring.",
+      "bullets": []
+    },
+    "tfa-interlude5:swap_relic:text": {
+      "kind": "story",
+      "text": "The investigator with Relic of Ages in their deck swaps it with the new version of Relic of Ages included in this Mythos Pack: Relic of Ages (<i>Repossess the Past</i>).",
+      "bullets": []
+    },
+    "tfa-interlude5:check_investigators_recovered_relic:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "replaceCard",
+          "old": "04191",
+          "new": "04303",
+          "who": "each"
+        }
+      ]
+    },
+    "tfa-interlude5:check_investigators_recovered_relic": {
+      "kind": "branch",
+      "condition": {
+        "kind": "all",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "investigators_recovered_relic",
+            "section": "campaign_notes"
+          },
+          {
+            "kind": "logHas",
+            "id": "forging_own_path",
+            "section": "campaign_notes"
+          }
+        ]
+      },
+      "then": [
+        "tfa-interlude5:final_dawning",
+        "tfa-interlude5:swap_relic:text",
+        "tfa-interlude5:check_investigators_recovered_relic:yes:fx"
+      ],
+      "else": []
+    },
+    "tfa-interlude5:growing_concern": {
+      "kind": "story",
+      "title": "Growing Concern",
+      "text": "As you rise to your feet, the ground rumbles and growls. Something deep below you is moving. Shifting. Mutating.",
+      "bullets": []
+    },
+    "tfa-interlude5:add_easy_token:text": {
+      "kind": "story",
+      "text": "Because you are playing on <b>Easy</b> difficulty, add a -3 token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "tfa-interlude5:check_relic_is_missing_easy:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "-3"
+        }
+      ]
+    },
+    "tfa-interlude5:check_relic_is_missing_easy": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "relic_is_missing",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tfa-interlude5:growing_concern",
+        "tfa-interlude5:add_easy_token:text",
+        "tfa-interlude5:check_relic_is_missing_easy:yes:fx"
+      ],
+      "else": []
+    },
+    "tfa-interlude5:add_standard_token:text": {
+      "kind": "story",
+      "text": "Because you are playing on <b>Standard</b> difficulty, add a -4 token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "tfa-interlude5:check_relic_is_missing_standard:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "-4"
+        }
+      ]
+    },
+    "tfa-interlude5:check_relic_is_missing_standard": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "relic_is_missing",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tfa-interlude5:growing_concern",
+        "tfa-interlude5:add_standard_token:text",
+        "tfa-interlude5:check_relic_is_missing_standard:yes:fx"
+      ],
+      "else": []
+    },
+    "tfa-interlude5:add_hard_token:text": {
+      "kind": "story",
+      "text": "Because you are playing on <b>Hard</b> difficulty, add a -5 token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "tfa-interlude5:check_relic_is_missing_hard:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "-5"
+        }
+      ]
+    },
+    "tfa-interlude5:check_relic_is_missing_hard": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "relic_is_missing",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tfa-interlude5:growing_concern",
+        "tfa-interlude5:add_hard_token:text",
+        "tfa-interlude5:check_relic_is_missing_hard:yes:fx"
+      ],
+      "else": []
+    },
+    "tfa-interlude5:add_expert_token:text": {
+      "kind": "story",
+      "text": "Because you are playing on <b>Expert</b> difficulty, add a -7 token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "tfa-interlude5:check_relic_is_missing_expert:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "-7"
+        }
+      ]
+    },
+    "tfa-interlude5:check_relic_is_missing_expert": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "relic_is_missing",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tfa-interlude5:growing_concern",
+        "tfa-interlude5:add_expert_token:text",
+        "tfa-interlude5:check_relic_is_missing_expert:yes:fx"
+      ],
+      "else": []
+    },
+    "tfa-interlude5:check_relic_is_missing_difficulty#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "expert"
+        ]
+      },
+      "then": [
+        "tfa-interlude5:check_relic_is_missing_expert"
+      ],
+      "else": []
+    },
+    "tfa-interlude5:check_relic_is_missing_difficulty#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "hard"
+        ]
+      },
+      "then": [
+        "tfa-interlude5:check_relic_is_missing_hard"
+      ],
+      "else": [
+        "tfa-interlude5:check_relic_is_missing_difficulty#3"
+      ]
+    },
+    "tfa-interlude5:check_relic_is_missing_difficulty#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "standard"
+        ]
+      },
+      "then": [
+        "tfa-interlude5:check_relic_is_missing_standard"
+      ],
+      "else": [
+        "tfa-interlude5:check_relic_is_missing_difficulty#2"
+      ]
+    },
+    "tfa-interlude5:check_relic_is_missing_difficulty": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "easy"
+        ]
+      },
+      "then": [
+        "tfa-interlude5:check_relic_is_missing_easy"
+      ],
+      "else": [
+        "tfa-interlude5:check_relic_is_missing_difficulty#1"
+      ]
+    },
+    "tfa-interlude5:check_found_missing_relic": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "found_missing_relic",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tfa-interlude5:arcane_thrumming",
+        "tfa-interlude5:check_investigators_recovered_relic"
+      ],
+      "else": [
+        "tfa-interlude5:check_relic_is_missing_difficulty"
+      ]
+    },
+    "tfa-interlude5:find_brazier": {
+      "kind": "story",
+      "text": "After hours of slow progress, you eventually stumble into a brazier, filled with marble cubes.",
+      "bullets": []
+    },
+    "tfa-interlude5:torchlight": {
+      "kind": "story",
+      "title": "Torchlight",
+      "text": "Though the light from your torches is snuffed by the overpowering darkness of this realm, you decide to try to light the brazier with the flames. To your surprise, after you hold the torch against the strange cubes for several moments, the brazier erupts in a fury of blue and silver flames, consuming your torch and almost melting your hand to the bone. Though the light from the brilliant flame only reaches a few yards around you, more braziers light up in the distance, their flames guiding your path forward. At least, you hope…",
+      "bullets": []
+    },
+    "tfa-interlude5:braziers_are_lit:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>the braziers are lit</i>.",
+      "bullets": []
+    },
+    "tfa-interlude5:check_torches:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "braziers_are_lit",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "tfa-interlude5:reading_signs": {
+      "kind": "story",
+      "title": "Reading Signs",
+      "text": "As you traverse the caverns, something catches your attention: streams of cold, gentle water that drip down the walls of the cavern. Curious, you unfold the previous expedition’s map and sit by one of the lit braziers, mentally retracing your steps. If your calculations are correct, you have traveled much farther south than you could have possibly guessed. Could it be these caverns extend all the way to the coastline? Do the caverns never end?",
+      "bullets": []
+    },
+    "tfa-interlude5:map_xp:text": {
+      "kind": "story",
+      "text": "Each investigator with a map earns 2 additional experience as they gain insight into the caverns that dwell beneath the surface of the Earth.",
+      "bullets": []
+    },
+    "tfa-interlude5:check_map_braziers:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 2,
+          "who": "input",
+          "victory": false
+        }
+      ]
+    },
+    "tfa-interlude5:check_map_braziers": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "check_supplies",
+        "take": false
+      },
+      "then": [
+        "tfa-interlude5:reading_signs",
+        "tfa-interlude5:map_xp:text",
+        "tfa-interlude5:check_map_braziers:yes:fx"
+      ],
+      "else": []
+    },
+    "tfa-interlude5:the_abyss": {
+      "kind": "story",
+      "title": "The Abyss",
+      "text": "The odd material inside does not seem to accept any source of fire you use to try to light it. Your hope is snuffed out along with the light around you. Miserable, you prepare to endure the darkness ahead.",
+      "bullets": []
+    },
+    "tfa-interlude5:braziers_remain_unlit:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>the braziers remain unlit</i>.",
+      "bullets": []
+    },
+    "tfa-interlude5:check_torches:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "braziers_remain_unlit",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "tfa-interlude5:check_torches": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "check_supplies",
+        "take": false
+      },
+      "then": [
+        "tfa-interlude5:torchlight",
+        "tfa-interlude5:braziers_are_lit:text",
+        "tfa-interlude5:check_torches:yes:fx",
+        "tfa-interlude5:check_map_braziers"
+      ],
+      "else": [
+        "tfa-interlude5:the_abyss",
+        "tfa-interlude5:braziers_remain_unlit:text",
+        "tfa-interlude5:check_torches:no:fx"
+      ]
+    },
+    "tfa-interlude5:time_passes": {
+      "kind": "story",
+      "text": "You have no sense of how much time passes in the cold, terrible abyss of N’kai.",
+      "bullets": []
+    },
+    "tfa-interlude5:provisions_and_medicine_gone:text": {
+      "kind": "story",
+      "text": "Cross off all provisions and medicine the investigators have remaining in their supplies.",
+      "bullets": []
+    },
+    "tfa-interlude5:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "shattered-aeons:mended_tear_in_time": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "mended_tear_in_time",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "shattered-aeons:two_physical_and_mental_trauma:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 2 physical trauma and 2 mental trauma, as they never fully recover from the expedition into N’kai.",
+      "bullets": []
+    },
+    "shattered-aeons:two_physical_and_mental_trauma": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 2,
+          "mental": 2
+        }
+      ]
+    },
+    "shattered-aeons:attached_locations_to_victory_display:text": {
+      "kind": "story",
+      "text": "Each location attached to the Relic of Ages with Victory X is added to the victory display.",
+      "bullets": []
+    },
+    "shattered-aeons:earn_xp_plus_5": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 5,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "shattered-aeons:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "shattered-aeons:skip_epilogue": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "tfa-epilogue"
+        }
+      ]
+    },
+    "shattered-aeons:win:text": {
+      "kind": "story",
+      "text": "The investigators win the campaign!",
+      "bullets": []
+    },
+    "shattered-aeons:win": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "win"
+        }
+      ]
+    },
+    "shattered-aeons:investigators_saved_serpents": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "investigators_saved_serpents",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "shattered-aeons:win_but:text": {
+      "kind": "story",
+      "text": "The Earth is saved, and the investigators win the campaign…",
+      "bullets": []
+    },
+    "shattered-aeons:cannot_transfer_characters:text": {
+      "kind": "story",
+      "text": "…But the investigators have reshaped the world, existing in another time altogether. These investigators cannot be transferred to a different campaign. (You must start fresh.)",
+      "bullets": []
+    },
+    "shattered-aeons:cannot_transfer_characters": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "win"
+        }
+      ]
+    },
+    "shattered-aeons:investigators_saved_yithians": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "investigators_saved_yithians",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "shattered-aeons:fabric_of_time_unwoven": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "fabric_of_time_unwoven",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "shattered-aeons:all_insane:text": {
+      "kind": "story",
+      "text": "Each investigator is driven <b>insane</b>.",
+      "bullets": []
+    },
+    "shattered-aeons:lose:text": {
+      "kind": "story",
+      "text": "The investigators lose the campaign.",
+      "bullets": []
+    },
+    "shattered-aeons:lose": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "lose"
+        }
+      ]
+    },
+    "shattered-aeons:turned_back_time": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "turned_back_time",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "shattered-aeons:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "tfa-epilogue:turned_back_time": {
+      "kind": "story",
+      "text": "There is only one way to stop all of this from ever happening. Before you arrived and set all of these events into motion, the Eztli ruins were asleep, and the relic was relatively safe in its prison of obscurity. Had it not been for Alejandro’s desire to find it, it might have remained undiscovered for centuries. With your new understanding of the relic’s capabilities, you can return to the past and set things right. You can seal it away forever and prevent your past selves from having ever found it… even if it costs you your own life.",
+      "bullets": []
+    },
+    "tfa-epilogue:proceed_secret_scenario": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "turn-back-time"
+        }
+      ]
+    },
+    "tfa-epilogue:skip_secret_scenario": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "turn-back-time"
+        }
+      ]
+    },
+    "tfa-epilogue:check_turned_back_time": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "turned_back_time",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tfa-epilogue:turned_back_time",
+        "tfa-epilogue:proceed_secret_scenario"
+      ],
+      "else": [
+        "tfa-epilogue:skip_secret_scenario"
+      ]
+    }
+  }
+}

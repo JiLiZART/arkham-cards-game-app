@@ -1,0 +1,66 @@
+{
+  "setup": [],
+  "order": [
+    "in-the-labyrinths-of-lunacy"
+  ],
+  "interludes": {},
+  "resolutions": {
+    "in-the-labyrinths-of-lunacy": {
+      "none": [],
+      "R1": [
+        "in-the-labyrinths-of-lunacy:lose:text",
+        "in-the-labyrinths-of-lunacy:lose"
+      ],
+      "R2": [
+        "in-the-labyrinths-of-lunacy:survived_new_guest:text"
+      ],
+      "R3": [
+        "in-the-labyrinths-of-lunacy:survived_eixodolon_lives:text"
+      ],
+      "R4": [
+        "in-the-labyrinths-of-lunacy:win:text",
+        "in-the-labyrinths-of-lunacy:win"
+      ]
+    }
+  },
+  "steps": {
+    "in-the-labyrinths-of-lunacy:lose:text": {
+      "kind": "story",
+      "text": "The investigators lose.",
+      "bullets": []
+    },
+    "in-the-labyrinths-of-lunacy:lose": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "lose"
+        }
+      ]
+    },
+    "in-the-labyrinths-of-lunacy:survived_new_guest:text": {
+      "kind": "story",
+      "text": "The investigators survived, but in another timeline, the labyrinth has a new guest.",
+      "bullets": []
+    },
+    "in-the-labyrinths-of-lunacy:survived_eixodolon_lives:text": {
+      "kind": "story",
+      "text": "The investigators survived, but Eixodolon lives on.",
+      "bullets": []
+    },
+    "in-the-labyrinths-of-lunacy:win:text": {
+      "kind": "story",
+      "text": "The investigators win.",
+      "bullets": []
+    },
+    "in-the-labyrinths-of-lunacy:win": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "win"
+        }
+      ]
+    }
+  }
+}

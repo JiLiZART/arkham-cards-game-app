@@ -90,5 +90,64 @@
     "The Search for Kadath",
     "Dark Side of the Moon",
     "Where the Gods Dwell"
+  ],
+  "logSections": [
+    {
+      "id": "campaign_notes",
+      "kind": "entries",
+      "label": "Campaign Notes"
+    },
+    {
+      "id": "evidence_of_kadath",
+      "kind": "count",
+      "label": "Evidence of Kadath"
+    }
+  ],
+  "cards": [
+    {
+      "scenario": "tde-prologue",
+      "name": "Prologue",
+      "interlude": true
+    },
+    {
+      "scenario": "beyond-the-gates-of-sleep",
+      "name": "Beyond the Gates of Sleep",
+      "code": "06039"
+    },
+    {
+      "scenario": "the-black-cat",
+      "name": "The Black Cat",
+      "interlude": true
+    },
+    {
+      "scenario": "the-search-for-kadath",
+      "name": "The Search for Kadath",
+      "code": "06119"
+    },
+    {
+      "scenario": "the-oneironauts",
+      "name": "The Oneironauts",
+      "interlude": true
+    },
+    {
+      "scenario": "dark-side-of-the-moon",
+      "name": "Dark Side of the Moon",
+      "code": "06206"
+    },
+    {
+      "scenario": "the-great-ones",
+      "name": "The Great Ones",
+      "interlude": true
+    },
+    {
+      "scenario": "where-gods-dwell",
+      "name": "Where the Gods Dwell",
+      "code": "06286"
+    },
+    {
+      "scenario": "tde-epilogue",
+      "name": "Epilogue",
+      "interlude": true
+    }
   ]
 }

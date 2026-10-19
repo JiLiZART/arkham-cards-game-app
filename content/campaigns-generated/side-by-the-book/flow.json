@@ -1,0 +1,333 @@
+{
+  "setup": [],
+  "order": [
+    "by-the-book"
+  ],
+  "interludes": {},
+  "resolutions": {
+    "by-the-book": {
+      "none": [],
+      "R1": [
+        "by-the-book:earn_roland_xp",
+        "by-the-book:earn_location_xp",
+        "by-the-book:ask_cultist_enemies",
+        "by-the-book:ask_mr_grey",
+        "by-the-book:upgradeDecks"
+      ],
+      "R2": [
+        "by-the-book:earn_roland_xp",
+        "by-the-book:earn_location_xp",
+        "by-the-book:roland_bad_swap",
+        "by-the-book:upgradeDecks"
+      ]
+    }
+  },
+  "steps": {
+    "by-the-book:earn_roland_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "by-the-book:earn_location_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        },
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "by-the-book:1_additional_card:text": {
+      "kind": "story",
+      "text": "Roland Banks begins the next scenario with 1 additional card in hand.",
+      "bullets": []
+    },
+    "by-the-book:2_additional_cards:text": {
+      "kind": "story",
+      "text": "Roland Banks begins the next scenario with 2 additional cards in hand.",
+      "bullets": []
+    },
+    "by-the-book:3_additional_cards:text": {
+      "kind": "story",
+      "text": "Roland Banks begins the next scenario with 3 additional cards in hand.",
+      "bullets": []
+    },
+    "by-the-book:remove_non_symbol_token": {
+      "kind": "chooseOne",
+      "text": "Choose and remove any non-symbol token from the chaos bag, for the remainder of the campaign.",
+      "choices": [
+        {
+          "id": "+1",
+          "text": "+1",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "+1"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "0",
+          "text": "0",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "0"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-1",
+          "text": "−1",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-1"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-2",
+          "text": "−2",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-2"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-3",
+          "text": "−3",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-3"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-4",
+          "text": "−4",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-4"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-5",
+          "text": "−5",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-5"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-6",
+          "text": "−6",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-6"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-7",
+          "text": "−7",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-7"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-8",
+          "text": "−8",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-8"
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "by-the-book:ask_cultist_enemies": {
+      "kind": "chooseOne",
+      "text": "If the number of [[Cultist]] enemies in the victory display is (choose one)…",
+      "choices": [
+        {
+          "id": "0_3",
+          "text": "0-3",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "4_5",
+          "text": "4–5",
+          "effects": [],
+          "steps": [
+            "by-the-book:1_additional_card:text"
+          ]
+        },
+        {
+          "id": "6_7",
+          "text": "6–7",
+          "effects": [],
+          "steps": [
+            "by-the-book:2_additional_cards:text"
+          ]
+        },
+        {
+          "id": "8_9",
+          "text": "8–9",
+          "effects": [],
+          "steps": [
+            "by-the-book:3_additional_cards:text"
+          ]
+        },
+        {
+          "id": "10",
+          "text": "10",
+          "effects": [],
+          "steps": [
+            "by-the-book:3_additional_cards:text",
+            "by-the-book:remove_non_symbol_token"
+          ]
+        }
+      ]
+    },
+    "by-the-book:roland_good_swap": {
+      "kind": "chooseOne",
+      "text": "Roland Banks may either upgrade Roland's .38 Special to its advanced version, or downgrade the advanced version of Cover Up to its original version.",
+      "choices": [
+        {
+          "id": "gun",
+          "text": "Upgrade to advanced Roland's .38 Special",
+          "effects": [
+            {
+              "do": "removeCard",
+              "code": "01006",
+              "who": "each"
+            },
+            {
+              "do": "earnCard",
+              "code": "90030",
+              "who": "each"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "crime",
+          "text": "Downgrade advanced Cover Up",
+          "effects": [
+            {
+              "do": "removeCard",
+              "code": "90031",
+              "who": "each"
+            },
+            {
+              "do": "earnCard",
+              "code": "01007",
+              "who": "each"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "neither",
+          "text": "No change",
+          "effects": [],
+          "steps": []
+        }
+      ]
+    },
+    "by-the-book:ask_mr_grey": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Is Mr. Grey in the victory display?",
+          "effects": [],
+          "steps": [
+            "by-the-book:roland_good_swap"
+          ]
+        }
+      ]
+    },
+    "by-the-book:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "by-the-book:roland_bad_swap": {
+      "kind": "chooseOne",
+      "text": "Roland Banks either upgrade Cover Up to its advanced version, or downgrade the advanced version of Roland's .38 Special to its original version.",
+      "choices": [
+        {
+          "id": "necronomicon",
+          "text": "Upgrade to advanced Cover Up",
+          "effects": [
+            {
+              "do": "removeCard",
+              "code": "01007",
+              "who": "each"
+            },
+            {
+              "do": "earnCard",
+              "code": "90031",
+              "who": "each"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "tote_bag",
+          "text": "Downgrade from advanced Roland's .38 Special",
+          "effects": [
+            {
+              "do": "removeCard",
+              "code": "90030",
+              "who": "each"
+            },
+            {
+              "do": "earnCard",
+              "code": "01006",
+              "who": "each"
+            }
+          ],
+          "steps": []
+        }
+      ]
+    }
+  }
+}

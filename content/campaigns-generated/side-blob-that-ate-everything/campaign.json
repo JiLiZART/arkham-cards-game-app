@@ -92,5 +92,19 @@
   "prologue": "Incident Report: 8L-08\nThursday, 07/05/1928\nBlackwater, MA",
   "scenarioNames": [
     "The Blob That Ate Everything"
+  ],
+  "logSections": [
+    {
+      "id": "campaign_notes",
+      "kind": "entries",
+      "label": "Campaign Notes"
+    }
+  ],
+  "cards": [
+    {
+      "scenario": "blob-that-ate-everything",
+      "name": "The Blob That Ate Everything",
+      "code": "85001"
+    }
   ]
 }

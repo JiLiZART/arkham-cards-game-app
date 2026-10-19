@@ -122,5 +122,94 @@
     "A Light in the Fog",
     "The Lair of Dagon",
     "Into the Maelstrom"
+  ],
+  "logSections": [
+    {
+      "id": "campaign_notes",
+      "kind": "entries",
+      "label": "Campaign Notes"
+    },
+    {
+      "id": "memories_recovered",
+      "kind": "entries",
+      "label": "Memories Recovered"
+    },
+    {
+      "id": "possible_suspects",
+      "kind": "entries",
+      "label": "Possible Suspects"
+    },
+    {
+      "id": "possible_hideouts",
+      "kind": "entries",
+      "label": "Possible Hideouts"
+    }
+  ],
+  "cards": [
+    {
+      "scenario": "the-pit-of-despair",
+      "name": "The Pit of Despair",
+      "code": "07041"
+    },
+    {
+      "scenario": "puzzle-pieces",
+      "name": "Puzzle Pieces",
+      "interlude": true
+    },
+    {
+      "scenario": "the-vanishing-of-elina-harper",
+      "name": "The Vanishing of Elina Harper",
+      "code": "07056"
+    },
+    {
+      "scenario": "the-syzygy",
+      "name": "The Syzygy",
+      "interlude": true
+    },
+    {
+      "scenario": "in-too-deep",
+      "name": "In Too Deep",
+      "code": "07123"
+    },
+    {
+      "scenario": "devil-reef",
+      "name": "Devil Reef",
+      "code": "07163"
+    },
+    {
+      "scenario": "beneath-the-waves",
+      "name": "Beneath the Waves",
+      "interlude": true
+    },
+    {
+      "scenario": "horror-in-high-gear",
+      "name": "Horror in High Gear",
+      "code": "07198"
+    },
+    {
+      "scenario": "a-light-in-the-fog",
+      "name": "A Light in the Fog",
+      "code": "07231"
+    },
+    {
+      "scenario": "the-lair-of-dagon",
+      "name": "The Lair of Dagon",
+      "code": "07274"
+    },
+    {
+      "scenario": "hidden-truths",
+      "name": "Hidden Truths",
+      "interlude": true
+    },
+    {
+      "scenario": "into-the-maelstrom",
+      "name": "Into the Maelstrom",
+      "code": "07311"
+    },
+    {
+      "scenario": "tic-epilogue",
+      "name": "Epilogue",
+      "interlude": true
+    }
   ]
 }

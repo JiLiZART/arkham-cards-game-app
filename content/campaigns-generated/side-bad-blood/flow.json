@@ -1,0 +1,155 @@
+{
+  "setup": [],
+  "order": [
+    "bad-blood"
+  ],
+  "interludes": {},
+  "resolutions": {
+    "bad-blood": {
+      "none": [],
+      "R1": [
+        "bad-blood:ask_agnes_memories",
+        "bad-blood:others_experience",
+        "bad-blood:agnes_experience_explanation:text",
+        "bad-blood:agnes_good_swap",
+        "bad-blood:upgradeDecks"
+      ],
+      "R2": [
+        "bad-blood:ask_agnes_memories",
+        "bad-blood:others_experience",
+        "bad-blood:agnes_experience_explanation:text",
+        "bad-blood:agnes_bad_swap",
+        "bad-blood:upgradeDecks"
+      ]
+    }
+  },
+  "steps": {
+    "bad-blood:ask_agnes_memories": {
+      "kind": "counter",
+      "text": "How many memories did Agnes Baker collect by the end of the scenario?",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "bb_memories",
+          "section": "hidden",
+          "op": "set",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "bad-blood:others_experience": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "bb_victory_display",
+          "section": "hidden",
+          "op": "set",
+          "value": "input"
+        },
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "bad-blood:agnes_experience_explanation:text": {
+      "kind": "story",
+      "text": "Agnes Baker earns experience equal to either the combined Victory X value of each card in the victory display, or equal to the number of memories she had collected at the end of the game, whichever is higher.",
+      "bullets": []
+    },
+    "bad-blood:agnes_good_swap": {
+      "kind": "chooseOne",
+      "text": "Agnes Baker may either upgrade Heirloom of Hyberborea to its advanced version, or downgrade the advanced version of Dark Memory to its original version.",
+      "choices": [
+        {
+          "id": "heirloom",
+          "text": "Upgrade to advanced Heirloom of Hyberborea",
+          "effects": [
+            {
+              "do": "removeCard",
+              "code": "01012",
+              "who": "each"
+            },
+            {
+              "do": "earnCard",
+              "code": "90018",
+              "who": "each"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "dark_memory",
+          "text": "Downgrade advanced Dark Memory",
+          "effects": [
+            {
+              "do": "removeCard",
+              "code": "90019",
+              "who": "each"
+            },
+            {
+              "do": "earnCard",
+              "code": "01013",
+              "who": "each"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "neither",
+          "text": "No change",
+          "effects": [],
+          "steps": []
+        }
+      ]
+    },
+    "bad-blood:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "bad-blood:agnes_bad_swap": {
+      "kind": "chooseOne",
+      "text": "Agnes Baker must either upgrade Dark Memory to its advanced version, or downgrade the advanced version of Heirloom of Hyberborea to its original version",
+      "choices": [
+        {
+          "id": "dark_memory",
+          "text": "Upgrade to advanced Dark Memory",
+          "effects": [
+            {
+              "do": "removeCard",
+              "code": "01013",
+              "who": "each"
+            },
+            {
+              "do": "earnCard",
+              "code": "90019",
+              "who": "each"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "heirloom",
+          "text": "Downgrade from advanced Heirloom of Hyberborea",
+          "effects": [
+            {
+              "do": "removeCard",
+              "code": "90018",
+              "who": "each"
+            },
+            {
+              "do": "earnCard",
+              "code": "01012",
+              "who": "each"
+            }
+          ],
+          "steps": []
+        }
+      ]
+    }
+  }
+}

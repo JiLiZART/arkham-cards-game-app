@@ -1,0 +1,1846 @@
+{
+  "setup": [
+    "campaign:prologue",
+    "campaign:check_campaign_link"
+  ],
+  "order": [
+    "tde-prologue",
+    "beyond-the-gates-of-sleep",
+    "the-black-cat",
+    "the-search-for-kadath",
+    "the-oneironauts",
+    "dark-side-of-the-moon",
+    "the-great-ones",
+    "where-gods-dwell",
+    "tde-epilogue"
+  ],
+  "interludes": {
+    "tde-prologue": {
+      "kind": "interlude",
+      "name": "Prologue",
+      "steps": [
+        "tde-prologue:intro"
+      ]
+    },
+    "the-black-cat": {
+      "kind": "interlude",
+      "name": "The Black Cat",
+      "steps": [
+        "the-black-cat:maybe_check_dreamers_grow_weaker",
+        "the-black-cat:black_cat_1",
+        "the-black-cat:connect_campaign_branch"
+      ]
+    },
+    "the-oneironauts": {
+      "kind": "interlude",
+      "name": "The Oneironauts",
+      "steps": [
+        "the-oneironauts:check_a_thousand_shapes_of_horror",
+        "the-oneironauts:wait_oneironauts_decision",
+        "the-oneironauts:check_black_cat_has_a_hunch",
+        "the-oneironauts:check_you_asked_for_it"
+      ]
+    },
+    "the-great-ones": {
+      "kind": "interlude",
+      "name": "The Great Ones",
+      "steps": [
+        "the-great-ones:check_point_of_no_return",
+        "the-great-ones:great_ones_1",
+        "the-great-ones:check_difficulty",
+        "the-great-ones:check_randolph_did_not_survive_the_voyage_and_black_cat_is_searching_for_the_truth",
+        "the-great-ones:check_asked_for_it",
+        "the-great-ones:upgradeDecks"
+      ]
+    },
+    "tde-epilogue": {
+      "kind": "epilogue",
+      "name": "Epilogue",
+      "steps": [
+        "tde-epilogue:check_weaver_of_the_cosmos",
+        "tde-epilogue:check_nyarlathoteps_invasion_has_begun",
+        "tde-epilogue:check_broken_the_law_of_ulthar"
+      ]
+    }
+  },
+  "resolutions": {
+    "beyond-the-gates-of-sleep": {
+      "none": [
+        "beyond-the-gates-of-sleep:maybe_check_final_act",
+        "beyond-the-gates-of-sleep:saved_by_randolph_carter",
+        "beyond-the-gates-of-sleep:gain_randolph_carter:text",
+        "beyond-the-gates-of-sleep:gain_randolph_carter",
+        "beyond-the-gates-of-sleep:earn_xp",
+        "beyond-the-gates-of-sleep:upgradeDecks",
+        "beyond-the-gates-of-sleep:send_beyond_the_gates_of_sleep_done",
+        "beyond-the-gates-of-sleep:maybe_proceed_campaign_b"
+      ],
+      "R1": [
+        "beyond-the-gates-of-sleep:cats_collected_their_tribute",
+        "beyond-the-gates-of-sleep:gain_randolph_carter:text",
+        "beyond-the-gates-of-sleep:gain_randolph_carter",
+        "beyond-the-gates-of-sleep:earn_xp",
+        "beyond-the-gates-of-sleep:upgradeDecks",
+        "beyond-the-gates-of-sleep:send_beyond_the_gates_of_sleep_done",
+        "beyond-the-gates-of-sleep:maybe_proceed_campaign_b"
+      ],
+      "R2": [
+        "beyond-the-gates-of-sleep:parleyed_with_zoogs",
+        "beyond-the-gates-of-sleep:gain_randolph_carter:text",
+        "beyond-the-gates-of-sleep:gain_randolph_carter",
+        "beyond-the-gates-of-sleep:earn_xp",
+        "beyond-the-gates-of-sleep:upgradeDecks",
+        "beyond-the-gates-of-sleep:send_beyond_the_gates_of_sleep_done",
+        "beyond-the-gates-of-sleep:maybe_proceed_campaign_b"
+      ]
+    },
+    "the-search-for-kadath": {
+      "R1": [
+        "the-search-for-kadath:someone_escaped",
+        "the-search-for-kadath:earn_xp",
+        "the-search-for-kadath:record_evidence_of_kadath",
+        "the-search-for-kadath:virgil_was_captured",
+        "the-search-for-kadath:randolph_eluded_capture",
+        "the-search-for-kadath:upgradeDecks",
+        "the-search-for-kadath:maybe_skip_interlude"
+      ],
+      "R2": [
+        "the-search-for-kadath:everyone_captured",
+        "the-search-for-kadath:earn_xp",
+        "the-search-for-kadath:record_evidence_of_kadath",
+        "the-search-for-kadath:virgil_was_captured",
+        "the-search-for-kadath:randolph_was_captured",
+        "the-search-for-kadath:upgradeDecks",
+        "the-search-for-kadath:maybe_skip_interlude"
+      ]
+    },
+    "dark-side-of-the-moon": {
+      "R1": [
+        "dark-side-of-the-moon:travelled_to_the_cold_wastes",
+        "dark-side-of-the-moon:randolph_survived_the_voyage",
+        "dark-side-of-the-moon:earn_xp",
+        "dark-side-of-the-moon:record_3_evidence_of_kadath:text",
+        "dark-side-of-the-moon:record_3_evidence_of_kadath",
+        "dark-side-of-the-moon:maybe_upgrade_decks",
+        "dark-side-of-the-moon:maybe_skip_interlude"
+      ]
+    },
+    "where-gods-dwell": {
+      "R1": [
+        "where-gods-dwell:dreamers_escaped_nyarlathoteps_grasp",
+        "where-gods-dwell:earn_xp",
+        "where-gods-dwell:two_mental_trauma:text",
+        "where-gods-dwell:two_mental_trauma",
+        "where-gods-dwell:choose_fate"
+      ],
+      "R2": [
+        "where-gods-dwell:dreamers_banished_nyarlathotep",
+        "where-gods-dwell:earn_xp_plus_5",
+        "where-gods-dwell:two_mental_trauma:text",
+        "where-gods-dwell:two_mental_trauma",
+        "where-gods-dwell:choose_fate"
+      ],
+      "R3": [
+        "where-gods-dwell:dreamers_awoke",
+        "where-gods-dwell:send_dreamers_awoke",
+        "where-gods-dwell:maybe_win_campaign"
+      ],
+      "R4": [
+        "where-gods-dwell:dreamers_stayed_in_dreamlands_forever",
+        "where-gods-dwell:send_dreamers_stayed_in_dreamlands_forever",
+        "where-gods-dwell:maybe_win_never_seen_again"
+      ],
+      "R5": [
+        "where-gods-dwell:dreamers_traveled_beneath_the_monastery",
+        "where-gods-dwell:send_dreamers_traveled_beneath_the_monastery"
+      ]
+    }
+  },
+  "steps": {
+    "campaign:prologue": {
+      "kind": "story",
+      "title": "The Waking World Is Only One Reality",
+      "text": "“In light slumber he descended the seventy steps to the cavern of flame and talked of this design to the bearded priests Nasht and Kaman-Thah. And the priests shook their pshent-bearing heads and vowed it would be the death of his soul.”\n– H. P. Lovecraft, The Dream-Quest of Unknown Kadath",
+      "bullets": []
+    },
+    "campaign:check_campaign_link:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "interconnected_campaign",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "campaign:8_part_campaign:text": {
+      "kind": "story",
+      "text": "Each player should build a different investigator deck for each campaign, choosing one of their investigators to be part of Campaign A and one to be part of Campaign B.",
+      "bullets": []
+    },
+    "campaign:separate_chaos_bag:text": {
+      "kind": "story",
+      "text": "Note that each campaign has its own separate chaos bag, as described in each campaign’s setup instructions. However, there is no need to build both chaos bags simultaneously. Use the “Chaos Bag” section of each Campaign Log to record the current contents of each chaos bag so you may switch between them easily.",
+      "bullets": []
+    },
+    "campaign:ask_8_part_campaign": {
+      "kind": "chooseOne",
+      "text": "It looks like you are playing <i>The Dream-Quest</i> as a 4-part campaign. If there is a separate group playing <i>The Web of Dreams</i>, the app can present you with instructions to send them during each interlude, and wait for their input at appropriate times.",
+      "choices": [
+        {
+          "id": "8_part_campaign",
+          "text": "Playing as half of an 8-part campaign.",
+          "effects": [
+            {
+              "do": "record",
+              "key": "interconnected_campaign",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": [
+            "campaign:8_part_campaign:text",
+            "campaign:separate_chaos_bag:text"
+          ]
+        },
+        {
+          "id": "4_part_campaign",
+          "text": "Playing as a 4-part campaign.",
+          "effects": [
+            {
+              "do": "record",
+              "key": "half_campaign",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "campaign:check_campaign_link": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_data",
+        "take": false
+      },
+      "then": [
+        "campaign:check_campaign_link:yes:fx",
+        "campaign:8_part_campaign:text",
+        "campaign:separate_chaos_bag:text"
+      ],
+      "else": [
+        "campaign:ask_8_part_campaign"
+      ]
+    },
+    "tde-prologue:intro": {
+      "kind": "story",
+      "text": "<fancy>Friday, February 13th, 1925</fancy>\nSomething odd was happening in Arkham, Massachusetts.\nTypically, this would not be a surprise to the residents of the dreary New England town. Indeed, Arkham has always been well-known for its strange—some would say supernatural—occurrences. The nature of this particular circumstance, however, was anything but typical.\nIt all began in the latest issue of <i>Tales from Nevermore</i>. A writer by the name of Virgil Gray described a journey he had taken in his dreams—a journey he claimed was not a work of fiction on his part. He wrote of a long, spiraling staircase, an unbearably hot pillar of sentient fire, a tree that came from the moon, and a curious talking cat…among other things equally difficult to believe. But it wasn’t this extraordinary tale that first drew your attention. Soon after Virgil’s tale was published, <i>Tales from Nevermore</i> began to receive and publish letter after letter from those who had read Virgil’s story and claimed to have experienced the same exact dream. Before long, the Arkham Advertiser picked up the story, and news of this strange phenomenon reached the ears of experts.\nVirgil Gray was convinced to undergo therapy at the local asylum, and many more who shared in the writer’s psychosis were committed as well. The prevailing theory among academics is that Virgil’s dream felt so real that he could not separate fact from fiction, and his writings spread his delusions to others like a form of shared hysteria. You remain unconvinced. After all, there is much that is not known about the simple act of dreaming. Medical experts have wildly differing theories on the state of one’s brain during sleep. Recently, experts like Sigmund Freud have proposed that dreams are manifestations of one’s subconscious desires, fears, or obsessions. Fortune tellers, for their part, have long believed that dreams can be sifted and interpreted in order to tell the dreamer’s past or future. But if these theories are true, how could multiple parties—all from very different walks of life—have the same shared experiences in their dreams? What if our modern understanding of sleep is all wrong? What if there really is a place our consciousness travels to when we sleep—a land of dreams that exists beyond our waking world?\nYou and your companions have gathered together to get to the bottom of this strange phenomenon. If others in town can travel to another world in their dreams, perhaps you can, too. You’ve re-created the circumstances of Virgil’s journey perfectly. If all goes well, half of you will take the trip to this “dreamland” and back. The rest will stay in the waking world, studying your companions’ sleep patterns to ensure nothing goes wrong…",
+      "bullets": []
+    },
+    "beyond-the-gates-of-sleep:strayed_from_the_path:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>the dreamers strayed from the path.</i>",
+      "bullets": []
+    },
+    "beyond-the-gates-of-sleep:strayed_from_the_path": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "strayed_from_the_path",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "beyond-the-gates-of-sleep:check_final_act": {
+      "kind": "chooseOne",
+      "text": "What act was in play when the scenario ended?",
+      "choices": [
+        {
+          "id": "act_1",
+          "text": "Act 1, 2, or 3",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "act_4",
+          "text": "Act 4",
+          "effects": [],
+          "steps": [
+            "beyond-the-gates-of-sleep:strayed_from_the_path:text",
+            "beyond-the-gates-of-sleep:strayed_from_the_path"
+          ]
+        }
+      ]
+    },
+    "beyond-the-gates-of-sleep:maybe_check_final_act": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "strayed_from_the_path",
+        "section": "campaign_notes"
+      },
+      "then": [],
+      "else": [
+        "beyond-the-gates-of-sleep:check_final_act"
+      ]
+    },
+    "beyond-the-gates-of-sleep:saved_by_randolph_carter": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "saved_by_randolph_carter",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "beyond-the-gates-of-sleep:gain_randolph_carter:text": {
+      "kind": "story",
+      "text": "Any one investigator may choose to add Randolph Carter <i>(Expert Dreamer)</i> (<i>The Dream-Eaters</i> card #59) to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "beyond-the-gates-of-sleep:gain_randolph_carter": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "06059",
+          "who": "choice"
+        }
+      ]
+    },
+    "beyond-the-gates-of-sleep:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "beyond-the-gates-of-sleep:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "beyond-the-gates-of-sleep:send_beyond_the_gates_of_sleep_done": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "beyond-the-gates-of-sleep:proceed_campaign_b_v2": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "beyond-the-gates-of-sleep:proceed_campaign_b_v1": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "beyond-the-gates-of-sleep:check_campaign_version_proceed": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_data",
+        "take": true
+      },
+      "then": [
+        "beyond-the-gates-of-sleep:proceed_campaign_b_v2"
+      ],
+      "else": [
+        "beyond-the-gates-of-sleep:proceed_campaign_b_v1"
+      ]
+    },
+    "beyond-the-gates-of-sleep:maybe_proceed_campaign_b": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_data",
+        "take": false
+      },
+      "then": [
+        "beyond-the-gates-of-sleep:check_campaign_version_proceed"
+      ],
+      "else": []
+    },
+    "beyond-the-gates-of-sleep:cats_collected_their_tribute": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "cats_collected_their_tribute",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "beyond-the-gates-of-sleep:parleyed_with_zoogs": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "parleyed_with_zoogs",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-black-cat:check_dreamers_grow_weaker": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-black-cat:maybe_check_dreamers_grow_weaker": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "interconnected_campaign",
+        "section": "hidden"
+      },
+      "then": [
+        "the-black-cat:check_dreamers_grow_weaker"
+      ],
+      "else": []
+    },
+    "the-black-cat:black_cat_1": {
+      "kind": "story",
+      "text": "<i>Following scenario 1–A, the dreamers travel beyond the Enchanted Woods…</i>\nAs you travel out of the Enchanted Woods, you pass through rolling green meadows under a bright-blue, cloudless sky. You speak with the blond-haired man—who introduces himself as Randolph Carter— for several hours along your journey south. You pass through a town Randolph calls Nir and over a stone bridge spanning a wide river. Since the man seems friendly and knowledgeable about both your world and this one, you explain to him your situation: that you had followed the writings of a man named Virgil Gray to reach this strange land, in order to see for yourself the truth of his story. “There is a place in Ulthar where you may yet meet this man for yourself,” Randolph responds. “When we reach Ulthar, I will show you.”\nThe town of Ulthar is not quite what you had imagined. The border of the town is marked by a cobblestone road separating its quaint cottages from the rolling green meadows beyond. Inside the town, narrow cobbled streets are filled almost to capacity with cats of all kinds and colors, which part as you approach. Old peaked roofs and overhanging upper stories arch over the hilly streets; the entire village seems a haphazard cluster of homes and old-fashioned businesses. As you reach the town square near the center of the village, Randolph stops and addresses you with a youthful smile. “Welcome to Ulthar,” he proclaims. “As I mentioned before, you are quite safe here. There is but one paramount law to keep in mind as you traverse this place: in the town of Ulthar, no one may kill a cat.” Given how utterly packed the streets are with cats, you wonder aloud if this is indeed a town run by cats. “Not quite,” Randolph replies, pondering your words, “though I suppose one might call it the center of cat society here in the Dreamlands. The reason for that law’s existence is a story for another time. First, come—I have a feeling we’ll find this ‘Virgil’ fellow you speak of at Einar’s.”\nRandolph leads you through the town square, which is surrounded by buildings adorned with cat motifs in the form of statues, signs, and even stained-glass windows. You eventually arrive at one such building bearing a sign that reads “Einar’s Place.” Inside is a medieval-style tavern filled with long wooden tables. You spot several patrons and three times as many cats. One such patron at the wooden counter feeds one of the cats small strips of dried meat. He is a handsome man in his early thirties, with short dark hair, a strong jaw, and sharp cheekbones. You recognize him instantly as the writer Virgil Gray. In the back of your mind, you wonder if this chance meeting is merely an act of fortune or something preordained, for good or for ill.\nRegardless, you approach the man and introduce yourself, along with Randolph. Virgil shakes your hand and Randolph’s with a joyful smile. “Well met, fellow dreamers!” the writer says, a hint of boyish excitement in his voice. “It is wonderful to meet more fellow believers. I had become so sick and tired of reading about my supposed ‘illness’ in the papers.”\nYou nod your head in agreement and inform Virgil that you intend to find some proof of this discovery to bring back to the waking world. “Don’t you think I tried that?” he replies, stymied. “Sadly, it is impossible for one who is asleep to bring anything from this realm into the real world. This is all imagination, you see. Ideas, concepts, fantasies. You cannot hold a thought in your hands, can you?”\nRandolph interjects. “There is a place within the Dreamlands that may hold the proof you seek. I have seen it in my dreams. I visited there three times, each time just a fleeting moment before I was snatched away by the rising sun…but try as I might, I cannot find the way again. I have spent many nights searching.”\n“Oh?” Virgil asks, intrigued. “And what is this place?”\n“It is a marvelous city,” he describes, his eyes aglow with wonder, “golden and lovely like nothing I have seen before or since. A city beyond the peaks of the unknown mountain Kadath, where no one has ever set foot before. There, veiled within the clouds and crowned by stars, lies the onyx castle of the Great Ones.”\nVirgil idly pets the cat on the countertop next to him as he is absorbed by Randolph’s tale. It is a slender creature with lustrous black fur, dark as the void of space itself. “Then we must find this place! Even if it does not have the proof we seek, it sounds like the adventure of a lifetime. Enough to fill a hundred pages, or more!”\nYou tell Virgil and Randolph that before you commit to such an adventure, you must return to the waking world and tell your companions about your experiences. Just then, another voice, cryptic and quiet, chimes: “Oh, you can’t wake up. The eye is upon you now.”\nYou and the others spin your heads around, searching for the source of the voice. The barkeeper? Another patron? Then Virgil’s black cat stretches and sits up, its piercing yellow eyes reflecting the light of the sun through the window outside. “I have waited a long time for you to seek Kadath,” it says.\n“You can talk?” Virgil says, nearly toppling over his stool as he jumps in surprise.\n“I’m a cat, you dolt. Of course I can talk,” the black cat replies, licking its paw out of boredom. “You have met a thousand cats from Ulthar, and now you are surprised?”\n“But…I thought…” Virgil wipes his brow with his palm.\n“Never mind him,” the black cat says, addressing you directly. “I assure you, you cannot cross back into the waking world until you find Kadath. It is your only way out. In the meantime, I will return and tell your companions about the quest ahead of you.” It hops off of the countertop and walks confidently toward the exit. “Though I imagine their task will be even more arduous…”",
+      "bullets": []
+    },
+    "the-black-cat:black_cat_prompt": {
+      "kind": "story",
+      "text": "“What shall I tell your friends in the waking world?”",
+      "bullets": []
+    },
+    "the-black-cat:black_cat_delivered_news": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "black_cat_delivered_news",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-black-cat:send_black_cat_delivered_news": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-black-cat:wait_for_other_side": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-black-cat:black_cat_at_your_side": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "black_cat_at_your_side",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-black-cat:add_elder_thing_token:text": {
+      "kind": "story",
+      "text": "Add 1 [elder_thing] token to the chaos bag.",
+      "bullets": []
+    },
+    "the-black-cat:add_elder_thing_token": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        }
+      ]
+    },
+    "the-black-cat:black_cat_shared_knowledge_of_the_dreamlands": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "black_cat_shared_knowledge_of_the_dreamlands",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-black-cat:send_black_cat_shared_knowledge_of_the_dreamlands": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-black-cat:black_cat_has_a_hunch:text": {
+      "kind": "story",
+      "text": "In both Campaign Logs, record that <i>the black cat has a hunch</i>.",
+      "bullets": []
+    },
+    "the-black-cat:black_cat_has_a_hunch": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "black_cat_has_a_hunch",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-black-cat:black_cat_warned_the_others": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "black_cat_warned_the_others",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-black-cat:send_black_cat_warned_the_others": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-black-cat:add_tablet_token:text": {
+      "kind": "story",
+      "text": "Add 1 [tablet] token to the chaos bag.",
+      "bullets": []
+    },
+    "the-black-cat:add_tablet_token": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        }
+      ]
+    },
+    "the-black-cat:threaten_black_cat": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "threaten_black_cat",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-black-cat:send_threaten_black_cat": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-black-cat:you_asked_for_it": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "you_asked_for_it",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-black-cat:black_cat_choice": {
+      "kind": "chooseOne",
+      "text": "The lead investigator must decide (choose one):",
+      "choices": [
+        {
+          "id": "black_cat_sent_news",
+          "text": "<i>Tell your companions of your quest, your plight, and your peril.</i>",
+          "effects": [],
+          "steps": [
+            "the-black-cat:black_cat_delivered_news",
+            "the-black-cat:send_black_cat_delivered_news",
+            "the-black-cat:wait_for_other_side",
+            "the-black-cat:black_cat_at_your_side",
+            "the-black-cat:add_elder_thing_token:text",
+            "the-black-cat:add_elder_thing_token"
+          ]
+        },
+        {
+          "id": "black_cat_shared_knowledge_of_the_dreamlands",
+          "text": "<i>Tell your companions about your new friends and about the Dreamlands.</i>",
+          "effects": [],
+          "steps": [
+            "the-black-cat:black_cat_shared_knowledge_of_the_dreamlands",
+            "the-black-cat:send_black_cat_shared_knowledge_of_the_dreamlands",
+            "the-black-cat:wait_for_other_side",
+            "the-black-cat:black_cat_has_a_hunch:text",
+            "the-black-cat:black_cat_has_a_hunch"
+          ]
+        },
+        {
+          "id": "black_cat_warned_the_others",
+          "text": "<i>Tell your companions that they are in danger, and that you are safe.</i>",
+          "effects": [],
+          "steps": [
+            "the-black-cat:black_cat_warned_the_others",
+            "the-black-cat:send_black_cat_warned_the_others",
+            "the-black-cat:wait_for_other_side",
+            "the-black-cat:add_tablet_token:text",
+            "the-black-cat:add_tablet_token"
+          ]
+        },
+        {
+          "id": "threaten_black_cat",
+          "text": "<i>You don’t trust this creature one bit.</i>",
+          "effects": [],
+          "steps": [
+            "the-black-cat:threaten_black_cat",
+            "the-black-cat:send_threaten_black_cat",
+            "the-black-cat:wait_for_other_side",
+            "the-black-cat:you_asked_for_it"
+          ]
+        }
+      ]
+    },
+    "the-black-cat:black_cat_vanishes": {
+      "kind": "story",
+      "text": "The enigmatic cat vanishes out the door before you get the chance to respond.",
+      "bullets": []
+    },
+    "the-black-cat:connect_campaign_branch": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "interconnected_campaign",
+        "section": "hidden"
+      },
+      "then": [
+        "the-black-cat:black_cat_prompt",
+        "the-black-cat:black_cat_choice"
+      ],
+      "else": [
+        "the-black-cat:black_cat_vanishes"
+      ]
+    },
+    "the-search-for-kadath:someone_escaped": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "someone_escaped",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-search-for-kadath:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "the-search-for-kadath:record_evidence_of_kadath": {
+      "kind": "counter",
+      "text": "For each Sign of the Gods the investigators unveiled during this scenario, record 1 tally mark next to “Evidence of Kadath” in your Campaign Log.",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "evidence_of_kadath",
+          "section": "evidence_of_kadath",
+          "op": "add",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "the-search-for-kadath:virgil_was_captured": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "virgil_was_captured",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-search-for-kadath:randolph_eluded_capture": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "randolph_eluded_capture",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-search-for-kadath:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "the-search-for-kadath:skip_interlude:text": {
+      "kind": "story",
+      "text": "Skip <b>Interlude II: The Oneironauts</b>.",
+      "bullets": []
+    },
+    "the-search-for-kadath:skip_interlude": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "the-oneironauts"
+        }
+      ]
+    },
+    "the-search-for-kadath:send_kadath_done": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-search-for-kadath:maybe_proceed_campaign_b": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-search-for-kadath:maybe_skip_interlude": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "half_campaign",
+        "section": "hidden"
+      },
+      "then": [
+        "the-search-for-kadath:skip_interlude:text",
+        "the-search-for-kadath:skip_interlude"
+      ],
+      "else": [
+        "the-search-for-kadath:send_kadath_done",
+        "the-search-for-kadath:maybe_proceed_campaign_b"
+      ]
+    },
+    "the-search-for-kadath:everyone_captured": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "everyone_captured",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-search-for-kadath:randolph_was_captured": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "randolph_was_captured",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-oneironauts:check_a_thousand_shapes_of_horror": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-oneironauts:wait_oneironauts_decision": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-oneironauts:check_oneironauts_black_cat_has_a_hunch": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-oneironauts:check_black_cat_has_a_hunch": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "black_cat_has_a_hunch",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-oneironauts:check_oneironauts_black_cat_has_a_hunch"
+      ],
+      "else": []
+    },
+    "the-oneironauts:skip_rest_of_interlude_cat_mad:text": {
+      "kind": "story",
+      "text": "Skip the rest of this interlude.",
+      "bullets": []
+    },
+    "the-oneironauts:oneironauts_2": {
+      "kind": "story",
+      "text": "<i>Following scenario 2–A, the dreamers sail for parts unknown…</i>\nYou open your eyes to the sound of a cat’s shrill caterwauling. You had been drifting off to…well, not sleep, exactly. Despite—or perhaps due to—your dreaming, you have been unable to truly sleep in this realm. When you come to your senses, you spot the source of the wailing: Virgil’s cat, black as the void of space itself, sits several feet away waiting for you to pay attention. “Finally,” it declares, “about time you noticed something outside your own head. Listen, I got something important to tell you.”",
+      "bullets": []
+    },
+    "the-oneironauts:escaped_story": {
+      "kind": "story",
+      "text": "“Wait, where is my human?” the cat asks, craning its head to look around the deck of your ship. “Didn’t I leave him with you?”\nYou explain that Virgil has been taken captive by Corsairs, and the cat replies by licking its paw without much concern. “Oh yeah, that’s right. Okay. I’m on the same page as you now.”",
+      "bullets": []
+    },
+    "the-oneironauts:check_someone_escaped": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "someone_escaped",
+        "section": "hidden"
+      },
+      "then": [
+        "the-oneironauts:escaped_story"
+      ],
+      "else": []
+    },
+    "the-oneironauts:captured_story": {
+      "kind": "story",
+      "text": "You try to shush the black cat, but it ignores you. “Relax. Your captors are all up on deck at the moment.” You ask bitterly why the creature is so cavalier about your capture, and request that it free you. “Nah. Somebody else has that covered, if memory serves,” it replies enigmatically.",
+      "bullets": []
+    },
+    "the-oneironauts:check_everyone_captured": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "everyone_captured",
+        "section": "hidden"
+      },
+      "then": [
+        "the-oneironauts:captured_story"
+      ],
+      "else": []
+    },
+    "the-oneironauts:black_cat_talks_to_randolph": {
+      "kind": "story",
+      "text": "The black cat sees Randolph at the helm of your ship and glares at him suspiciously. You wonder aloud what is wrong. “Normally I like the smell of fish, but this is too fishy. Something is wrong. There are not supposed to be two of him. But my memory is fuzzy…” You thought you were confused before, but now you are truly lost. Two Randolphs? “Yes,” the black cat affirms. “This one, and another in the waking world. That seems off,” the black cat understates the problem. “I think something is trying to interfere. I need to go figure this out.” With that, the cat leaps out of view.",
+      "bullets": []
+    },
+    "the-oneironauts:skip_rest_of_interlude_truth:text": {
+      "kind": "story",
+      "text": "Skip the rest of this interlude. In both Campaign Logs, record <i>the black cat is searching for the truth</i>.",
+      "bullets": []
+    },
+    "the-oneironauts:check_black_cat_has_a_hunch_and_randolph_eluded_capture:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "black_cat_is_searching_for_the_truth",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-oneironauts:send_oneironauts_searching_for_the_truth_yes": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-oneironauts:send_oneironauts_searching_for_the_truth_no": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-oneironauts:maybe_send_oneironauts_searching_for_the_truth_no": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "black_cat_has_a_hunch",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-oneironauts:send_oneironauts_searching_for_the_truth_no"
+      ],
+      "else": []
+    },
+    "the-oneironauts:resume_interlude_no_message": {
+      "kind": "story",
+      "text": "“Now, where was I? Oh, right. I had a chat with your friends. They’re in the Dreamlands now, too.”",
+      "bullets": []
+    },
+    "the-oneironauts:resume_interlude": {
+      "kind": "story",
+      "text": "“Now, where was I? Oh, right. I had a chat with your friends. They’re in the Dreamlands now, too. They have a message for you.”",
+      "bullets": []
+    },
+    "the-oneironauts:check_oneironauts_decision": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-oneironauts:check_black_cat_still_has_a_hunch": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "black_cat_has_a_hunch",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-oneironauts:resume_interlude_no_message"
+      ],
+      "else": [
+        "the-oneironauts:resume_interlude",
+        "the-oneironauts:check_oneironauts_decision"
+      ]
+    },
+    "the-oneironauts:check_black_cat_has_a_hunch_and_randolph_eluded_capture": {
+      "kind": "branch",
+      "condition": {
+        "kind": "all",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "randolph_eluded_capture",
+            "section": "campaign_notes"
+          },
+          {
+            "kind": "logHas",
+            "id": "black_cat_has_a_hunch",
+            "section": "campaign_notes"
+          }
+        ]
+      },
+      "then": [
+        "the-oneironauts:black_cat_talks_to_randolph",
+        "the-oneironauts:skip_rest_of_interlude_truth:text",
+        "the-oneironauts:check_black_cat_has_a_hunch_and_randolph_eluded_capture:yes:fx",
+        "the-oneironauts:send_oneironauts_searching_for_the_truth_yes"
+      ],
+      "else": [
+        "the-oneironauts:maybe_send_oneironauts_searching_for_the_truth_no",
+        "the-oneironauts:check_black_cat_still_has_a_hunch"
+      ]
+    },
+    "the-oneironauts:check_you_asked_for_it": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "you_asked_for_it",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-oneironauts:skip_rest_of_interlude_cat_mad:text"
+      ],
+      "else": [
+        "the-oneironauts:oneironauts_2",
+        "the-oneironauts:check_someone_escaped",
+        "the-oneironauts:check_everyone_captured",
+        "the-oneironauts:check_black_cat_has_a_hunch_and_randolph_eluded_capture"
+      ]
+    },
+    "dark-side-of-the-moon:travelled_to_the_cold_wastes": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "travelled_to_the_cold_wastes",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "dark-side-of-the-moon:randolph_survived_the_voyage": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "randolph_survived_the_voyage",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "dark-side-of-the-moon:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "dark-side-of-the-moon:record_3_evidence_of_kadath:text": {
+      "kind": "story",
+      "text": "Record 3 tally marks next to “Evidence of Kadath” in your Campaign Log.",
+      "bullets": []
+    },
+    "dark-side-of-the-moon:record_3_evidence_of_kadath": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "evidence_of_kadath",
+          "section": "evidence_of_kadath",
+          "op": "add",
+          "value": 3
+        }
+      ]
+    },
+    "dark-side-of-the-moon:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "dark-side-of-the-moon:maybe_upgrade_decks": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "dark-side-of-the-moon:upgradeDecks"
+      ],
+      "else": []
+    },
+    "dark-side-of-the-moon:skip_interlude:text": {
+      "kind": "story",
+      "text": "Skip <b>Interlude III: The Great Ones</b>.",
+      "bullets": []
+    },
+    "dark-side-of-the-moon:skip_interlude": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "the-great-ones"
+        }
+      ]
+    },
+    "dark-side-of-the-moon:send_moon_done": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "dark-side-of-the-moon:maybe_proceed_campaign_b": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "dark-side-of-the-moon:maybe_skip_interlude": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "half_campaign",
+        "section": "hidden"
+      },
+      "then": [
+        "dark-side-of-the-moon:skip_interlude:text",
+        "dark-side-of-the-moon:skip_interlude"
+      ],
+      "else": [
+        "dark-side-of-the-moon:send_moon_done",
+        "dark-side-of-the-moon:maybe_proceed_campaign_b"
+      ]
+    },
+    "the-great-ones:check_point_of_no_return": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-great-ones:great_ones_1": {
+      "kind": "story",
+      "text": "<i>Following scenario 3–A, the dreamers are on their way to the Cold Wastes wherein lies unknown Kadath…</i>\nYou are nudged out of a sleepless reverie by a furry forehead. You look down to find the black cat peering up at you. “Hey. I see you’ve made some progress.” You’re not quite sure if you would call this progress. Though you are finally on your way to the Cold Wastes, you haven’t pinned down the exact location of unknown Kadath, and you have no idea what to expect when you arrive.",
+      "bullets": []
+    },
+    "the-great-ones:dreamers_grow_weaker_story": {
+      "kind": "story",
+      "text": "“Whoa,” the cat says suddenly, “you’re not looking too good, you know.” It gazes up at you with unconcerned but curious eyes. You ask what it means. “You can’t tell? You look sick. You eating enough? Whatever, it doesn’t matter. You can walk, can’t you? That’s good enough.”",
+      "bullets": []
+    },
+    "the-great-ones:add_easy_token:text": {
+      "kind": "story",
+      "text": "Because you are playing on <b>Easy</b> difficulty, add a -3 token to the chaos bag.",
+      "bullets": []
+    },
+    "the-great-ones:check_dreamers_grow_weaker_easy:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "-3"
+        }
+      ]
+    },
+    "the-great-ones:check_dreamers_grow_weaker_easy": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "dreamers_grow_weaker",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-great-ones:dreamers_grow_weaker_story",
+        "the-great-ones:add_easy_token:text",
+        "the-great-ones:check_dreamers_grow_weaker_easy:yes:fx"
+      ],
+      "else": []
+    },
+    "the-great-ones:add_standard_token:text": {
+      "kind": "story",
+      "text": "Because you are playing on <b>Standard</b> difficulty, add a -4 token to the chaos bag.",
+      "bullets": []
+    },
+    "the-great-ones:check_dreamers_grow_weaker_standard:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "-4"
+        }
+      ]
+    },
+    "the-great-ones:check_dreamers_grow_weaker_standard": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "dreamers_grow_weaker",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-great-ones:dreamers_grow_weaker_story",
+        "the-great-ones:add_standard_token:text",
+        "the-great-ones:check_dreamers_grow_weaker_standard:yes:fx"
+      ],
+      "else": []
+    },
+    "the-great-ones:add_hard_token:text": {
+      "kind": "story",
+      "text": "Because you are playing on <b>Hard</b> difficulty, add a -5 token to the chaos bag.",
+      "bullets": []
+    },
+    "the-great-ones:check_dreamers_grow_weaker_hard:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "-5"
+        }
+      ]
+    },
+    "the-great-ones:check_dreamers_grow_weaker_hard": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "dreamers_grow_weaker",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-great-ones:dreamers_grow_weaker_story",
+        "the-great-ones:add_hard_token:text",
+        "the-great-ones:check_dreamers_grow_weaker_hard:yes:fx"
+      ],
+      "else": []
+    },
+    "the-great-ones:add_expert_token:text": {
+      "kind": "story",
+      "text": "Because you are playing on <b>Expert</b> difficulty, add a -7 token to the chaos bag.",
+      "bullets": []
+    },
+    "the-great-ones:check_dreamers_grow_weaker_expert:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "-7"
+        }
+      ]
+    },
+    "the-great-ones:check_dreamers_grow_weaker_expert": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "dreamers_grow_weaker",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-great-ones:dreamers_grow_weaker_story",
+        "the-great-ones:add_expert_token:text",
+        "the-great-ones:check_dreamers_grow_weaker_expert:yes:fx"
+      ],
+      "else": []
+    },
+    "the-great-ones:check_difficulty#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "expert"
+        ]
+      },
+      "then": [
+        "the-great-ones:check_dreamers_grow_weaker_expert"
+      ],
+      "else": []
+    },
+    "the-great-ones:check_difficulty#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "hard"
+        ]
+      },
+      "then": [
+        "the-great-ones:check_dreamers_grow_weaker_hard"
+      ],
+      "else": [
+        "the-great-ones:check_difficulty#3"
+      ]
+    },
+    "the-great-ones:check_difficulty#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "standard"
+        ]
+      },
+      "then": [
+        "the-great-ones:check_dreamers_grow_weaker_standard"
+      ],
+      "else": [
+        "the-great-ones:check_difficulty#2"
+      ]
+    },
+    "the-great-ones:check_difficulty": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "easy"
+        ]
+      },
+      "then": [
+        "the-great-ones:check_dreamers_grow_weaker_easy"
+      ],
+      "else": [
+        "the-great-ones:check_difficulty#1"
+      ]
+    },
+    "the-great-ones:black_cat_done_searching_for_the_truth": {
+      "kind": "story",
+      "text": "“Where’s what’s-his-name?” the black cat asks, searching for Randolph. You try to explain what happened, but you can barely choke out the words. “Say no more. I get it.” The cat ponders the situation, not seeming to care much about Randolph’s terrible fate. “Well, I guess the thing I was going to say is no longer going to be said,” it riddles.",
+      "bullets": []
+    },
+    "the-great-ones:cross_off_black_cat_is_searching_for_the_truth:text": {
+      "kind": "story",
+      "text": "In both Campaign Logs, cross off <i>the black cat is searching for the truth</i>.",
+      "bullets": []
+    },
+    "the-great-ones:check_randolph_did_not_survive_the_voyage_and_black_cat_is_searching_for_the_truth:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "black_cat_is_searching_for_the_truth",
+          "section": "campaign_notes"
+        }
+      ]
+    },
+    "the-great-ones:send_great_ones_black_cat_is_searching_for_the_truth_cross_out": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-great-ones:send_great_ones_black_cat_is_searching_for_the_truth_keep": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-great-ones:maybe_send_great_ones_black_cat_is_searching_for_the_truth_keep": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "black_cat_is_searching_for_the_truth",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-great-ones:send_great_ones_black_cat_is_searching_for_the_truth_keep"
+      ],
+      "else": []
+    },
+    "the-great-ones:check_randolph_did_not_survive_the_voyage_and_black_cat_is_searching_for_the_truth": {
+      "kind": "branch",
+      "condition": {
+        "kind": "all",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "black_cat_is_searching_for_the_truth",
+            "section": "campaign_notes"
+          },
+          {
+            "kind": "logHas",
+            "id": "randolph_did_not_survive_the_voyage",
+            "section": "campaign_notes"
+          }
+        ]
+      },
+      "then": [
+        "the-great-ones:black_cat_done_searching_for_the_truth",
+        "the-great-ones:cross_off_black_cat_is_searching_for_the_truth:text",
+        "the-great-ones:check_randolph_did_not_survive_the_voyage_and_black_cat_is_searching_for_the_truth:yes:fx",
+        "the-great-ones:send_great_ones_black_cat_is_searching_for_the_truth_cross_out"
+      ],
+      "else": [
+        "the-great-ones:maybe_send_great_ones_black_cat_is_searching_for_the_truth_keep"
+      ]
+    },
+    "the-great-ones:you_asked_for_it": {
+      "kind": "story",
+      "text": "“Don’t mind me. I just wanted to see if you’re alive.” You begin to tell the black cat of your troubles, and it tilts its head to the side with a look of catlike curiosity. “Huh. That’s funny. Did I say I cared what you had to say? I don’t <i>think</i> I did. Oh well. Let me make it more clear: I only care about whether you’re able to fulfill your duty. I don’t care how you are feeling.” The cat’s glaring eyes never blink. “Well, good luck. You’ll need it.” It bounds off into a shadow and vanishes.",
+      "bullets": []
+    },
+    "the-great-ones:skip_rest_of_interlude:text": {
+      "kind": "story",
+      "text": "Skip the rest of this interlude.",
+      "bullets": []
+    },
+    "the-great-ones:send_great_ones_black_cat_mad": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-great-ones:resume_interlude": {
+      "kind": "story",
+      "text": "You ask the black cat if it knows what you’ll find in Kadath. “Sort of,” it answers. “I’ve foreseen your arrival in Kadath for some time now. I’ve seen a lot of this, in fact. But it’s…well, it’s not playing out exactly the same way. Or maybe I just didn’t <i>see</i> it the same way. Regardless, I think you’re on the right path. After all, it’s the only path that’s left. I know a little more about what you’ll see when you get there, but I’m afraid that if I tell you, you’ll see it differently, too. Don’t worry about it. You’re doing fine. Get to Kadath. Find the land of the Great Ones. Everything else will fall into place when you arrive. As long as you don’t mess this up. These beings that you face, the ones whose names I do not wish to speak, they don’t just threaten the Dreamlands. They threaten existence itself. Now, if you’ll excuse me, I have somewhere to be.”",
+      "bullets": []
+    },
+    "the-great-ones:black_cat_wanders_off": {
+      "kind": "story",
+      "text": "The black cat bounds off into the void of space before you get the chance to ask it anything else.",
+      "bullets": []
+    },
+    "the-great-ones:send_great_ones_black_cat_wanders_off": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-great-ones:check_great_ones_silver_key": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-great-ones:other_campaign_header:text": {
+      "kind": "story",
+      "text": "Based on events from <i>The Web of Dreams</i> (Campaign B): ",
+      "bullets": []
+    },
+    "the-great-ones:black_cat_knows_the_truth": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "black_cat_knows_the_truth",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-great-ones:check_black_cat_still_searching_for_the_truth": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "black_cat_is_searching_for_the_truth",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-great-ones:other_campaign_header:text",
+        "the-great-ones:black_cat_knows_the_truth"
+      ],
+      "else": []
+    },
+    "the-great-ones:black_cat_spoke_of_nyarlathotep": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "black_cat_spoke_of_nyarlathotep",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-great-ones:send_great_ones_black_cat_spoke_of_nyarlathotep": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-great-ones:black_cat_spoke_of_atlach_nacha": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "black_cat_spoke_of_atlach_nacha",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-great-ones:send_great_ones_black_cat_spoke_of_atlach_nacha": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-great-ones:black_cat_decision": {
+      "kind": "chooseOne",
+      "text": "The black cat offers to pass a message along to your companions. The lead investigator must decide (choose one):",
+      "choices": [
+        {
+          "id": "black_cat_spoke_of_nyarlathotep",
+          "text": "<i>Tell your companions about the threats that you face.</i>",
+          "effects": [],
+          "steps": [
+            "the-great-ones:black_cat_spoke_of_nyarlathotep",
+            "the-great-ones:send_great_ones_black_cat_spoke_of_nyarlathotep"
+          ]
+        },
+        {
+          "id": "black_cat_spoke_of_atlach_nacha",
+          "text": "<i>Tell your companions that you will be okay.</i>",
+          "effects": [],
+          "steps": [
+            "the-great-ones:black_cat_spoke_of_atlach_nacha",
+            "the-great-ones:send_great_ones_black_cat_spoke_of_atlach_nacha"
+          ]
+        }
+      ]
+    },
+    "the-great-ones:check_black_cat_has_a_hunch": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "black_cat_has_a_hunch",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-great-ones:black_cat_wanders_off",
+        "the-great-ones:send_great_ones_black_cat_wanders_off",
+        "the-great-ones:check_great_ones_silver_key",
+        "the-great-ones:check_black_cat_still_searching_for_the_truth"
+      ],
+      "else": [
+        "the-great-ones:black_cat_decision",
+        "the-great-ones:check_great_ones_silver_key",
+        "the-great-ones:check_black_cat_still_searching_for_the_truth"
+      ]
+    },
+    "the-great-ones:check_asked_for_it": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "you_asked_for_it",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-great-ones:you_asked_for_it",
+        "the-great-ones:skip_rest_of_interlude:text",
+        "the-great-ones:send_great_ones_black_cat_mad"
+      ],
+      "else": [
+        "the-great-ones:resume_interlude",
+        "the-great-ones:check_black_cat_has_a_hunch"
+      ]
+    },
+    "the-great-ones:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "where-gods-dwell:dreamers_escaped_nyarlathoteps_grasp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "dreamers_escaped_nyarlathoteps_grasp",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "where-gods-dwell:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "where-gods-dwell:two_mental_trauma:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 2 mental trauma from the battle between truth and fiction within their own dreams.",
+      "bullets": []
+    },
+    "where-gods-dwell:two_mental_trauma": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 0,
+          "mental": 2
+        }
+      ]
+    },
+    "where-gods-dwell:choose_fate": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "wake_up",
+          "text": "<i>Wake up.</i>",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "remain_in_dreamlands",
+          "text": "<i>Remain on the surface of the Dreamlands.</i>",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "know_another_path",
+          "text": "<i>Venture into the Underworld to find your companions.</i>",
+          "effects": [],
+          "steps": [],
+          "when": {
+            "kind": "logHas",
+            "id": "dreamers_know_of_another_path",
+            "section": "campaign_notes"
+          }
+        }
+      ]
+    },
+    "where-gods-dwell:dreamers_banished_nyarlathotep": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "dreamers_banished_nyarlathotep",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "where-gods-dwell:earn_xp_plus_5": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 5,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "where-gods-dwell:dreamers_awoke": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "dreamers_awoke",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "where-gods-dwell:send_dreamers_awoke": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "where-gods-dwell:maybe_win_campaign:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "tde-epilogue"
+        }
+      ]
+    },
+    "where-gods-dwell:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "where-gods-dwell:win:text": {
+      "kind": "story",
+      "text": "The investigators win the campaign.",
+      "bullets": []
+    },
+    "where-gods-dwell:win": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "win"
+        }
+      ]
+    },
+    "where-gods-dwell:maybe_upgrade_decks": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_data",
+        "take": true
+      },
+      "then": [
+        "where-gods-dwell:upgradeDecks"
+      ],
+      "else": []
+    },
+    "where-gods-dwell:send_where_the_gods_dwell_done": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "where-gods-dwell:maybe_proceed_campaign_b": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "where-gods-dwell:maybe_win_campaign": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "half_campaign",
+        "section": "hidden"
+      },
+      "then": [
+        "where-gods-dwell:maybe_win_campaign:yes:fx",
+        "where-gods-dwell:upgradeDecks",
+        "where-gods-dwell:win:text",
+        "where-gods-dwell:win"
+      ],
+      "else": [
+        "where-gods-dwell:maybe_upgrade_decks",
+        "where-gods-dwell:send_where_the_gods_dwell_done",
+        "where-gods-dwell:maybe_proceed_campaign_b"
+      ]
+    },
+    "where-gods-dwell:dreamers_stayed_in_dreamlands_forever": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "dreamers_stayed_in_dreamlands_forever",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "where-gods-dwell:send_dreamers_stayed_in_dreamlands_forever": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "where-gods-dwell:maybe_win_never_seen_again:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "tde-epilogue"
+        }
+      ]
+    },
+    "where-gods-dwell:win_never_seen_again:text": {
+      "kind": "story",
+      "text": "The investigators win the campaign… and are never seen or heard from in the waking world again.",
+      "bullets": []
+    },
+    "where-gods-dwell:win_never_seen_again": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "win"
+        }
+      ]
+    },
+    "where-gods-dwell:maybe_win_never_seen_again": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "half_campaign",
+        "section": "hidden"
+      },
+      "then": [
+        "where-gods-dwell:maybe_win_never_seen_again:yes:fx",
+        "where-gods-dwell:win_never_seen_again:text",
+        "where-gods-dwell:win_never_seen_again"
+      ],
+      "else": [
+        "where-gods-dwell:maybe_upgrade_decks",
+        "where-gods-dwell:send_where_the_gods_dwell_done",
+        "where-gods-dwell:maybe_proceed_campaign_b"
+      ]
+    },
+    "where-gods-dwell:dreamers_traveled_beneath_the_monastery": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "dreamers_traveled_beneath_the_monastery",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "where-gods-dwell:send_dreamers_traveled_beneath_the_monastery": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "tde-epilogue:check_weaver_of_the_cosmos": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "tde-epilogue:nyarlathoteps_invasion_has_begun_row": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "tde-epilogue:dreamers_awoke_row": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "tde-epilogue:dreamers_stayed_in_dreamlands_forever_row": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "tde-epilogue:dreamers_traveled_beneath_the_monastery_row": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "tde-epilogue:check_dreamers_traveled_beneath_the_monastery": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "dreamers_traveled_beneath_the_monastery",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tde-epilogue:dreamers_traveled_beneath_the_monastery_row"
+      ],
+      "else": []
+    },
+    "tde-epilogue:check_dreamers_stayed_in_dreamlands_forever": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "dreamers_stayed_in_dreamlands_forever",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tde-epilogue:dreamers_stayed_in_dreamlands_forever_row"
+      ],
+      "else": [
+        "tde-epilogue:check_dreamers_traveled_beneath_the_monastery"
+      ]
+    },
+    "tde-epilogue:check_dreamers_awoke": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "dreamers_awoke",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tde-epilogue:dreamers_awoke_row"
+      ],
+      "else": [
+        "tde-epilogue:check_dreamers_stayed_in_dreamlands_forever"
+      ]
+    },
+    "tde-epilogue:check_nyarlathoteps_invasion_has_begun": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "nyarlathoteps_invasion_has_begun",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tde-epilogue:nyarlathoteps_invasion_has_begun_row"
+      ],
+      "else": [
+        "tde-epilogue:check_dreamers_awoke"
+      ]
+    },
+    "tde-epilogue:broken_the_law_of_ulthar": {
+      "kind": "story",
+      "text": "You awaken one night to the sound of hissing all around you. Hundreds of piercing cat eyes glare at you in the dark. One of the creatures leaps onto your chest, its claws digging painfully into your skin. \"Did you think we would not find you?\" Its eyes flash. It bares its teeth, and the rest of the cats close in.",
+      "bullets": []
+    },
+    "tde-epilogue:killed_by_cats:text": {
+      "kind": "story",
+      "text": "How dare you! You are <b>killed</b>.",
+      "bullets": []
+    },
+    "tde-epilogue:check_broken_the_law_of_ulthar": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCards",
+        "id": "broken_the_law_of_ulthar",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tde-epilogue:broken_the_law_of_ulthar",
+        "tde-epilogue:killed_by_cats:text"
+      ],
+      "else": []
+    }
+  }
+}

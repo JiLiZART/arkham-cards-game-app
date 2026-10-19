@@ -102,5 +102,54 @@
     "Echoes of the Past",
     "The Pallid Mask",
     "The Unspeakable Oath"
+  ],
+  "logSections": [
+    {
+      "id": "campaign_notes",
+      "kind": "entries",
+      "label": "Campaign Notes"
+    },
+    {
+      "id": "chasing_the_stranger",
+      "kind": "count",
+      "label": "Chasing the Stranger"
+    },
+    {
+      "id": "vips_interviewed",
+      "kind": "entries",
+      "label": "VIPs Interviewed"
+    },
+    {
+      "id": "vips_slain",
+      "kind": "entries",
+      "label": "VIPs Slain"
+    },
+    {
+      "id": "doubt",
+      "kind": "count",
+      "label": "Doubt"
+    },
+    {
+      "id": "conviction",
+      "kind": "count",
+      "label": "Conviction"
+    }
+  ],
+  "cards": [
+    {
+      "scenario": "ptc-prologue",
+      "name": "Prologue",
+      "interlude": true
+    },
+    {
+      "scenario": "curtain-call",
+      "name": "Curtain Call",
+      "code": "03043"
+    },
+    {
+      "scenario": "the-last-king",
+      "name": "The Last King",
+      "code": "03061"
+    }
   ]
 }

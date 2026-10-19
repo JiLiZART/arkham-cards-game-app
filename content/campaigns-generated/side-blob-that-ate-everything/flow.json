@@ -1,0 +1,215 @@
+{
+  "setup": [],
+  "order": [
+    "blob-that-ate-everything"
+  ],
+  "interludes": {},
+  "resolutions": {
+    "blob-that-ate-everything": {
+      "none": [],
+      "R1": [
+        "blob-that-ate-everything:blob_devoured_universe",
+        "blob-that-ate-everything:lose_campaign:text",
+        "blob-that-ate-everything:lose_campaign"
+      ],
+      "R2": [
+        "blob-that-ate-everything:blob_contained",
+        "blob-that-ate-everything:earn_assets",
+        "blob-that-ate-everything:maybe_earn_asset_85029",
+        "blob-that-ate-everything:maybe_earn_asset_85030",
+        "blob-that-ate-everything:maybe_earn_asset_85031",
+        "blob-that-ate-everything:maybe_earn_asset_85032",
+        "blob-that-ate-everything:earn_xp",
+        "blob-that-ate-everything:upgradeDecks"
+      ]
+    }
+  },
+  "steps": {
+    "blob-that-ate-everything:blob_devoured_universe": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "blob_devoured_universe",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "blob-that-ate-everything:lose_campaign:text": {
+      "kind": "story",
+      "text": "The investigators lose the campaign.",
+      "bullets": []
+    },
+    "blob-that-ate-everything:lose_campaign": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "lose"
+        }
+      ]
+    },
+    "blob-that-ate-everything:blob_contained": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "blob_contained",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "blob-that-ate-everything:earn_assets": {
+      "kind": "cardChoice",
+      "text": "For each of the following assets that are in play, any one investigator may choose to add that asset to their deck.",
+      "codes": [
+        "85029",
+        "85030",
+        "85031",
+        "85032"
+      ],
+      "min": 1,
+      "max": 1,
+      "effects": [
+        {
+          "do": "listCards",
+          "id": "hidden",
+          "section": "hidden",
+          "codes": [
+            "$input"
+          ],
+          "remove": false
+        }
+      ],
+      "steps": []
+    },
+    "blob-that-ate-everything:earn_asset_85029:text": {
+      "kind": "story",
+      "text": "Any one investigator may choose to add Universal Solvent to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "blob-that-ate-everything:earn_asset_85029": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "85029",
+          "who": "choice"
+        }
+      ]
+    },
+    "blob-that-ate-everything:maybe_earn_asset_85029": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCards",
+        "id": "85029",
+        "section": "hidden"
+      },
+      "then": [
+        "blob-that-ate-everything:earn_asset_85029:text",
+        "blob-that-ate-everything:earn_asset_85029"
+      ],
+      "else": []
+    },
+    "blob-that-ate-everything:earn_asset_85030:text": {
+      "kind": "story",
+      "text": "Any one investigator may choose to add Pet Oozeling to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "blob-that-ate-everything:earn_asset_85030": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "85030",
+          "who": "choice"
+        }
+      ]
+    },
+    "blob-that-ate-everything:maybe_earn_asset_85030": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCards",
+        "id": "85030",
+        "section": "hidden"
+      },
+      "then": [
+        "blob-that-ate-everything:earn_asset_85030:text",
+        "blob-that-ate-everything:earn_asset_85030"
+      ],
+      "else": []
+    },
+    "blob-that-ate-everything:earn_asset_85031:text": {
+      "kind": "story",
+      "text": "Any one investigator may choose to add Mi-Go Weapon to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "blob-that-ate-everything:earn_asset_85031": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "85031",
+          "who": "choice"
+        }
+      ]
+    },
+    "blob-that-ate-everything:maybe_earn_asset_85031": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCards",
+        "id": "85031",
+        "section": "hidden"
+      },
+      "then": [
+        "blob-that-ate-everything:earn_asset_85031:text",
+        "blob-that-ate-everything:earn_asset_85031"
+      ],
+      "else": []
+    },
+    "blob-that-ate-everything:earn_asset_85032:text": {
+      "kind": "story",
+      "text": "Any one investigator may choose to add Lt. Wilson Stewart to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "blob-that-ate-everything:earn_asset_85032": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "85032",
+          "who": "choice"
+        }
+      ]
+    },
+    "blob-that-ate-everything:maybe_earn_asset_85032": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCards",
+        "id": "85032",
+        "section": "hidden"
+      },
+      "then": [
+        "blob-that-ate-everything:earn_asset_85032:text",
+        "blob-that-ate-everything:earn_asset_85032"
+      ],
+      "else": []
+    },
+    "blob-that-ate-everything:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 3,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "blob-that-ate-everything:upgradeDecks": {
+      "kind": "upgradeDecks"
+    }
+  }
+}

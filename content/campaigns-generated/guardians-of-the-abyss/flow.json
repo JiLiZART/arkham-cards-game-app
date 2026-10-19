@@ -1,0 +1,280 @@
+{
+  "setup": [
+    "campaign:intro"
+  ],
+  "order": [
+    "the-eternal-slumber",
+    "the-nights-usurper"
+  ],
+  "interludes": {},
+  "resolutions": {
+    "the-eternal-slumber": {
+      "none": [
+        "the-eternal-slumber:earn_xp",
+        "the-eternal-slumber:record_dreamers_in_abyss",
+        "the-eternal-slumber:record_escaped_brotherhood",
+        "the-eternal-slumber:brotherhood_schemes_continue",
+        "the-eternal-slumber:upgradeDecks"
+      ],
+      "R1": [
+        "the-eternal-slumber:curse_of_slumber_lifted:text",
+        "the-eternal-slumber:curse_of_slumber_lifted",
+        "the-eternal-slumber:earn_john_and_jessie:text",
+        "the-eternal-slumber:earn_john_and_jessie",
+        "the-eternal-slumber:earn_xp",
+        "the-eternal-slumber:record_dreamers_in_abyss",
+        "the-eternal-slumber:record_escaped_brotherhood",
+        "the-eternal-slumber:upgradeDecks"
+      ],
+      "R2": [
+        "the-eternal-slumber:aware_of_xzharahs_plan",
+        "the-eternal-slumber:earn_ancient_ankh:text",
+        "the-eternal-slumber:earn_ancient_ankh",
+        "the-eternal-slumber:earn_xp",
+        "the-eternal-slumber:record_dreamers_in_abyss",
+        "the-eternal-slumber:record_escaped_brotherhood",
+        "the-eternal-slumber:upgradeDecks"
+      ]
+    },
+    "the-nights-usurper": {
+      "none": [],
+      "R1": [
+        "the-nights-usurper:day_of_reckoning_is_coming",
+        "the-nights-usurper:earn_xp",
+        "the-nights-usurper:upgradeDecks"
+      ],
+      "R2": [
+        "the-nights-usurper:abyss_was_saved:text",
+        "the-nights-usurper:abyss_was_saved",
+        "the-nights-usurper:earn_summoned_nightgaunt:text",
+        "the-nights-usurper:earn_summoned_nightgaunt",
+        "the-nights-usurper:earn_xp",
+        "the-nights-usurper:upgradeDecks"
+      ],
+      "R3": [
+        "the-nights-usurper:joined_xzharah",
+        "the-nights-usurper:earn_kopesh_of_the_abyss:text",
+        "the-nights-usurper:earn_kopesh_of_the_abyss",
+        "the-nights-usurper:earn_xp",
+        "the-nights-usurper:upgradeDecks"
+      ]
+    }
+  },
+  "steps": {
+    "campaign:intro": {
+      "kind": "story",
+      "text": "While not an official variant, some people like to play the two scenarios included in the Guardians of the Abyss expansion as a two scenario mini-campaign. Because this is an unofficial variant, note that you might want to utilize standalone deckbuilding rules, since the product was intended to be played with decks with some amount of XP.",
+      "bullets": []
+    },
+    "the-eternal-slumber:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "the-eternal-slumber:record_dreamers_in_abyss": {
+      "kind": "counter",
+      "text": "In your Campaign Log, record <i>dreamers in the abyss (X)</i>. X is the strength of the abyss when the scenario ended.",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "tes_dreamers_in_the_abyss",
+          "section": "campaign_notes",
+          "op": "set",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "the-eternal-slumber:record_escaped_brotherhood": {
+      "kind": "cardChoice",
+      "text": "In your Campaign Log, record <i>Brotherhood Agents Who Escaped:</i> and list the names of each unique [[Cultist]] enemy that was in play or beneath the scenario reference card when the game ended.",
+      "codes": [],
+      "min": 1,
+      "max": 1,
+      "effects": [
+        {
+          "do": "record",
+          "key": "tes_escaped_brotherhood",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ],
+      "steps": []
+    },
+    "the-eternal-slumber:brotherhood_schemes_continue": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "tes_brotherhood_schemes_continue",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-eternal-slumber:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "the-eternal-slumber:curse_of_slumber_lifted:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>the curse of slumber was lifted</i>. Cross off all <i>“(card name) was taken by the abyss”</i> notes in your Campaign Log.",
+      "bullets": []
+    },
+    "the-eternal-slumber:curse_of_slumber_lifted": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "tes_curse_of_slumber_lifted",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "crossOut",
+          "key": "tes_taken_by_the_abyss",
+          "section": "campaign_notes"
+        }
+      ]
+    },
+    "the-eternal-slumber:earn_john_and_jessie:text": {
+      "kind": "story",
+      "text": "Any one investigator may choose to add John & Jessie Burke to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "the-eternal-slumber:earn_john_and_jessie": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "83055",
+          "who": "choice"
+        }
+      ]
+    },
+    "the-eternal-slumber:aware_of_xzharahs_plan": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "tes_aware_of_xzharahs_plan",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-eternal-slumber:earn_ancient_ankh:text": {
+      "kind": "story",
+      "text": "Any one investigator may choose to add the Ancient Ankh to their deck. It does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "the-eternal-slumber:earn_ancient_ankh": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "83056",
+          "who": "choice"
+        }
+      ]
+    },
+    "the-nights-usurper:day_of_reckoning_is_coming": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "tnu_day_of_reckoning_is_coming",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-nights-usurper:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "the-nights-usurper:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "the-nights-usurper:abyss_was_saved:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>the Abyss was saved</i>. Cross off all <i>“(card name) was taken by the abyss”</i> notes in your Campaign Log.",
+      "bullets": []
+    },
+    "the-nights-usurper:abyss_was_saved": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "tnu_the_abyss_was_saved",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "crossOut",
+          "key": "tes_taken_by_the_abyss",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "tnu_taken_by_the_abyss",
+          "section": "campaign_notes"
+        }
+      ]
+    },
+    "the-nights-usurper:earn_summoned_nightgaunt:text": {
+      "kind": "story",
+      "text": "Any one investigator may choose to add Summoned Nightgaunt to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "the-nights-usurper:earn_summoned_nightgaunt": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "83058",
+          "who": "choice"
+        }
+      ]
+    },
+    "the-nights-usurper:joined_xzharah": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "tnu_joined_xzharah",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-nights-usurper:earn_kopesh_of_the_abyss:text": {
+      "kind": "story",
+      "text": "Any one investigator may choose to add Khopesh of the Abyss to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "the-nights-usurper:earn_kopesh_of_the_abyss": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "83057",
+          "who": "choice"
+        }
+      ]
+    }
+  }
+}

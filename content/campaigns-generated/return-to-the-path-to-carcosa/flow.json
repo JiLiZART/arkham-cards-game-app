@@ -1,0 +1,623 @@
+{
+  "setup": [
+    "campaign:prologue",
+    "campaign:check_reprint_version"
+  ],
+  "order": [
+    "ptc-prologue",
+    "return-to-curtain-call",
+    "return-to-the-last-king"
+  ],
+  "interludes": {
+    "ptc-prologue": {
+      "kind": "interlude",
+      "name": "Prologue",
+      "steps": [
+        "ptc-prologue:intro"
+      ]
+    }
+  },
+  "resolutions": {
+    "return-to-curtain-call": {
+      "none": [
+        "return-to-curtain-call:stranger_is_on_to_you:text",
+        "return-to-curtain-call:stranger_is_on_to_you",
+        "return-to-curtain-call:chasing_the_stranger",
+        "return-to-curtain-call:maybe_ask_mid_game_tokens",
+        "return-to-curtain-call:earn_xp",
+        "return-to-curtain-call:upgradeDecks"
+      ],
+      "R1": [
+        "return-to-curtain-call:police_unhelpful:text",
+        "return-to-curtain-call:tried_to_warn_police:text",
+        "return-to-curtain-call:tried_to_warn_police",
+        "return-to-curtain-call:stole_from_box_office",
+        "return-to-curtain-call:stranger_is_on_to_you:text",
+        "return-to-curtain-call:stranger_is_on_to_you",
+        "return-to-curtain-call:chasing_the_stranger_2:text",
+        "return-to-curtain-call:chasing_the_stranger_2",
+        "return-to-curtain-call:maybe_ask_mid_game_tokens",
+        "return-to-curtain-call:earn_xp",
+        "return-to-curtain-call:upgradeDecks"
+      ],
+      "R2": [
+        "return-to-curtain-call:wise_not_to_warn:text",
+        "return-to-curtain-call:chose_not_to_warn_police:text",
+        "return-to-curtain-call:chose_not_to_warn_police",
+        "return-to-curtain-call:stranger_is_on_to_you:text",
+        "return-to-curtain-call:stranger_is_on_to_you",
+        "return-to-curtain-call:chasing_the_stranger_2:text",
+        "return-to-curtain-call:chasing_the_stranger_2",
+        "return-to-curtain-call:maybe_ask_mid_game_tokens",
+        "return-to-curtain-call:earn_xp",
+        "return-to-curtain-call:upgradeDecks"
+      ]
+    },
+    "return-to-the-last-king": {
+      "R1": [
+        "return-to-the-last-king:vips_interviewed",
+        "return-to-the-last-king:check_vips_slain",
+        "return-to-the-last-king:earn_xp",
+        "return-to-the-last-king:earn_clue_xp"
+      ],
+      "R2": [
+        "return-to-the-last-king:vips_interviewed",
+        "return-to-the-last-king:check_vips_slain",
+        "return-to-the-last-king:earn_xp",
+        "return-to-the-last-king:earn_clue_xp",
+        "return-to-the-last-king:adjust_chaos_tokens:text",
+        "return-to-the-last-king:adjust_chaos_tokens",
+        "return-to-the-last-king:upgradeDecks",
+        "return-to-the-last-king:skip_lunacys_reward"
+      ],
+      "R3": [
+        "return-to-the-last-king:vips_interviewed",
+        "return-to-the-last-king:check_vips_slain",
+        "return-to-the-last-king:earn_xp",
+        "return-to-the-last-king:earn_clue_xp",
+        "return-to-the-last-king:adjust_chaos_tokens:text",
+        "return-to-the-last-king:adjust_chaos_tokens",
+        "return-to-the-last-king:upgradeDecks",
+        "return-to-the-last-king:skip_lunacys_reward"
+      ]
+    }
+  },
+  "steps": {
+    "campaign:prologue": {
+      "kind": "story",
+      "title": "Have You Seen the Yellow Sign?",
+      "text": "“He mentioned the establishment of the Dynasty in Carcosa, the lakes which connected Hastur, Aldebaran, and the mystery of the Hyades. He spoke of Cassilda and Camilla, and sounded the cloudy depths of Demhe and the Lake of Hali.” – Robert W. Chambers, “The Repairer of Reputations”",
+      "bullets": []
+    },
+    "campaign:describe_reprint:text": {
+      "kind": "story",
+      "text": "The reprinted version of this campaign that is packaged in a single box <i>(The Path to Carcosa Campaign Expansion)</i> contains updated names and traits on many encounter cards. To help minimize confusion, this app can provide setup matching either version.",
+      "bullets": []
+    },
+    "campaign:ask_reprint": {
+      "kind": "chooseOne",
+      "text": "Which version would you like to use?",
+      "choices": [
+        {
+          "id": "original",
+          "text": "Original",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "reprint",
+          "text": "Reprint",
+          "effects": [
+            {
+              "do": "record",
+              "key": "reprint_language",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "campaign:check_reprint_version": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_data",
+        "take": true
+      },
+      "then": [
+        "campaign:describe_reprint:text",
+        "campaign:ask_reprint"
+      ],
+      "else": []
+    },
+    "ptc-prologue:intro": {
+      "kind": "story",
+      "text": "You turn over the folded program in your hand, reading it for what seems like the hundredth time. “Miskatonic Playhouse presents: The King in Yellow,” it reads. “A special one-night engagement at Arkham’s very own Ward Theatre. An irresistible drama in two acts. Production staged and directed by Nigel Engram.” The cast is a small ensemble, with one unattributed credit at the end: “The Stranger.”\nTo have such a highly anticipated play come to Arkham all the way from Paris is a noteworthy event, even if it is just for one night. For weeks leading up to the show, it was the talk of the town. It seemed so unassuming…and yet, you have evidence something sinister is at work. It started with the disappearance of one of the stagehands at the theatre—a boy of only seventeen who missed rehearsal one night and was never seen again. Then, less than two weeks before the performance, there was the musician whose corpse was found with a gun in its mouth. Perhaps most chilling was the crazed man the coppers had picked up in Independence Square who had been ranting and raving about the “King’s return.” He was brought to Arkham Asylum, and you were surprised to discover that he was not alone in his delusions.\nFinding these events suspicious, you and your companions have delved deeper into the matter. Although no connection can be proven, these weren’t the only strange events surrounding the up-and-coming play. Instances of suicide and madness have followed in its wake, and you are determined to discover why.\nThe lights in the auditorium dim, and a spotlight shines on the stage. What unfolds is not quite what you expected. Slow-paced and monotonous, the first act of The King in Yellow is a tedious bore. The setting and characters are compelling, but the meandering and nonsensical story does little to entertain or inform. You begin to wonder whether the dreadful events surrounding The King in Yellow aren’t connected, after all. Perhaps it was just your overactive imagination; how could such a trivial and unassuming show cause such pandemonium? You are surprised when the first act closes without any rising action or revelation. The lights rise for the intermission, and you consider leaving early, stifling a yawn. Before you are able to decide, however, you find yourself drifting…drifting…to sleep.",
+      "bullets": []
+    },
+    "return-to-curtain-call:stranger_is_on_to_you:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record <i>the Stranger is on to you</i>. Add The Man in the Pallid Mask weakness to the lead investigator’s deck (does not count towards deck size). For the remainder of this campaign, any time the bearer of The Man in the Pallid Mask leaves the campaign for any reason, choose a new investigator to become the bearer of The Man in the Pallid Mask weakness, and add it to that investigator’s deck.",
+      "bullets": []
+    },
+    "return-to-curtain-call:stranger_is_on_to_you": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "stranger_is_on_to_you",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "earnCard",
+          "code": "03059",
+          "who": "lead"
+        }
+      ]
+    },
+    "return-to-curtain-call:chasing_the_stranger": {
+      "kind": "counter",
+      "text": "In your Campaign Log, under “Chasing the Stranger,” place one tally mark for each time The Man in the Pallid Mask was defeated during this scenario. For the remainder of the campaign, keep a running tally of the number of times The Man in the Pallid Mask is defeated during a game. Each tally will bring you one step closer to the truth.",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "chasing_the_stranger",
+          "section": "chasing_the_stranger",
+          "op": "add",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "return-to-curtain-call:ask_which_mid_game_token": {
+      "kind": "chooseOne",
+      "text": "Which version of Act 2b was advanced?",
+      "choices": [
+        {
+          "id": "a_city_aflame",
+          "text": "A City Aflame",
+          "effects": [
+            {
+              "do": "addChaosToken",
+              "token": "cultist"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "cultist"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "the_path_is_mine",
+          "text": "The Path is Mine",
+          "effects": [
+            {
+              "do": "addChaosToken",
+              "token": "tablet"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "tablet"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "the_shores_of_hali",
+          "text": "The Shores of Hali",
+          "effects": [
+            {
+              "do": "addChaosToken",
+              "token": "elderThing"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "elderThing"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "alaran_mists",
+          "text": "Alaran Mists",
+          "effects": [
+            {
+              "do": "addChaosToken",
+              "token": "cultist"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "tablet"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "under_the_city",
+          "text": "Under the City",
+          "effects": [
+            {
+              "do": "addChaosToken",
+              "token": "cultist"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "elderThing"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "here_is_my_reply",
+          "text": "Here Is My Reply",
+          "effects": [
+            {
+              "do": "addChaosToken",
+              "token": "tablet"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "elderThing"
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "return-to-curtain-call:ask_mid_game_tokens": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "While playing the scenario, were you instructed to add any tokens to the chaos bag?",
+          "effects": [],
+          "steps": [
+            "return-to-curtain-call:ask_which_mid_game_token"
+          ]
+        }
+      ]
+    },
+    "return-to-curtain-call:check_ask_mid_game_tokens": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "cca_add_chaos_token",
+        "section": "hidden"
+      },
+      "then": [],
+      "else": [
+        "return-to-curtain-call:ask_mid_game_tokens"
+      ]
+    },
+    "return-to-curtain-call:maybe_ask_mid_game_tokens": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_data",
+        "take": true
+      },
+      "then": [
+        "return-to-curtain-call:check_ask_mid_game_tokens"
+      ],
+      "else": []
+    },
+    "return-to-curtain-call:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "return-to-curtain-call:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "return-to-curtain-call:police_unhelpful:text": {
+      "kind": "story",
+      "text": "Did you really think the police would help you?",
+      "bullets": []
+    },
+    "return-to-curtain-call:tried_to_warn_police:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>you tried to warn the police</i>. Mark one <b>Conviction</b> in your Campaign Log.",
+      "bullets": []
+    },
+    "return-to-curtain-call:tried_to_warn_police": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "tried_to_warn_police",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "count",
+          "id": "conviction",
+          "section": "conviction",
+          "op": "add",
+          "value": 1
+        }
+      ]
+    },
+    "return-to-curtain-call:police_are_suspicious": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "police_are_suspicious",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-curtain-call:stole_from_box_office": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "steal",
+          "text": "Did anyone “steal from the box office?”",
+          "effects": [],
+          "steps": [
+            "return-to-curtain-call:police_are_suspicious"
+          ]
+        }
+      ]
+    },
+    "return-to-curtain-call:chasing_the_stranger_2:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, under “Chasing the Stranger,” place two tally marks. For the remainder of the campaign, keep a running tally of the number of times The Man in the Pallid Mask is defeated during a game. Each tally will bring you one step closer to the truth.",
+      "bullets": []
+    },
+    "return-to-curtain-call:chasing_the_stranger_2": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "chasing_the_stranger",
+          "section": "chasing_the_stranger",
+          "op": "add",
+          "value": 2
+        }
+      ]
+    },
+    "return-to-curtain-call:wise_not_to_warn:text": {
+      "kind": "story",
+      "text": "Do you think it was wise not to warn anyone?",
+      "bullets": []
+    },
+    "return-to-curtain-call:chose_not_to_warn_police:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>you chose not to go to the police</i>. Mark one <b>Doubt</b> in your Campaign Log.",
+      "bullets": []
+    },
+    "return-to-curtain-call:chose_not_to_warn_police": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "chose_not_to_warn_police",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "count",
+          "id": "doubt",
+          "section": "doubt",
+          "op": "add",
+          "value": 1
+        }
+      ]
+    },
+    "return-to-the-last-king:vips_interviewed": {
+      "kind": "cardChoice",
+      "text": "In your Campaign Log, under “VIPs Interviewed,” record the name of each character you “interviewed.”",
+      "codes": [
+        "03076a",
+        "03077",
+        "03078",
+        "03079",
+        "03080"
+      ],
+      "min": 1,
+      "max": 1,
+      "effects": [
+        {
+          "do": "listCards",
+          "id": "vips_interviewed",
+          "section": "vips_interviewed",
+          "codes": [
+            "$input"
+          ],
+          "remove": false
+        }
+      ],
+      "steps": []
+    },
+    "return-to-the-last-king:vips_slain_reprint": {
+      "kind": "cardChoice",
+      "text": "In your Campaign Log, under “VIPs Slain,” record the name of each unique [[Possessed]] or [[Lunatic]] enemy in the victory display.",
+      "codes": [
+        "03065b",
+        "03066b",
+        "03067b",
+        "03068b",
+        "03069b",
+        "52023"
+      ],
+      "min": 1,
+      "max": 1,
+      "effects": [
+        {
+          "do": "listCards",
+          "id": "vips_slain",
+          "section": "vips_slain",
+          "codes": [
+            "$input"
+          ],
+          "remove": false
+        }
+      ],
+      "steps": []
+    },
+    "return-to-the-last-king:vips_slain": {
+      "kind": "cardChoice",
+      "text": "In your Campaign Log, under “VIPs Slain,” record the name of each unique [[Lunatic]] enemy in the victory display.",
+      "codes": [
+        "03065b",
+        "03066b",
+        "03067b",
+        "03068b",
+        "03069b",
+        "52023"
+      ],
+      "min": 1,
+      "max": 1,
+      "effects": [
+        {
+          "do": "listCards",
+          "id": "vips_slain",
+          "section": "vips_slain",
+          "codes": [
+            "$input"
+          ],
+          "remove": false
+        }
+      ],
+      "steps": []
+    },
+    "return-to-the-last-king:check_vips_slain": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "reprint_language",
+        "section": "hidden"
+      },
+      "then": [
+        "return-to-the-last-king:vips_slain_reprint"
+      ],
+      "else": [
+        "return-to-the-last-king:vips_slain"
+      ]
+    },
+    "return-to-the-last-king:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "return-to-the-last-king:earn_clue_xp": {
+      "kind": "unsupported",
+      "name": "investigator_counter",
+      "text": "For every 2 clues that were on the act deck when the game ended, choose an investigator to earn 1 additional experience point. Experience from this reward must be divided as evenly among the investigators as possible.",
+      "effects": [],
+      "steps": []
+    },
+    "return-to-the-last-king:adjust_chaos_tokens:text": {
+      "kind": "story",
+      "text": "Remove all [cultist], [tablet], and [elder_thing] tokens from the chaos bag. Then, add 1 [cultist] token, 1 [tablet] token, and 1 [elder_thing] token to the chaos bag.",
+      "bullets": []
+    },
+    "return-to-the-last-king:adjust_chaos_tokens": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "elderThing"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "elderThing"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        }
+      ]
+    },
+    "return-to-the-last-king:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "return-to-the-last-king:skip_skeptics_reward:text": {
+      "kind": "story",
+      "text": "Skip <b>Interlude I: Reality's Shadow</b>.",
+      "bullets": []
+    },
+    "return-to-the-last-king:skip_skeptics_reward": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "ptc-interlude1-reprint"
+        }
+      ]
+    },
+    "return-to-the-last-king:really_skip_lunacys_reward:text": {
+      "kind": "story",
+      "text": "Skip <b>Interlude I: Lunacy's Reward</b>.",
+      "bullets": []
+    },
+    "return-to-the-last-king:really_skip_lunacys_reward": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "ptc-interlude1"
+        }
+      ]
+    },
+    "return-to-the-last-king:skip_lunacys_reward": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "reprint_language",
+        "section": "hidden"
+      },
+      "then": [
+        "return-to-the-last-king:skip_skeptics_reward:text",
+        "return-to-the-last-king:skip_skeptics_reward"
+      ],
+      "else": [
+        "return-to-the-last-king:really_skip_lunacys_reward:text",
+        "return-to-the-last-king:really_skip_lunacys_reward"
+      ]
+    }
+  }
+}

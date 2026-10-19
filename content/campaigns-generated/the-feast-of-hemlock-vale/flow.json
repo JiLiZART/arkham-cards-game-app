@@ -1,0 +1,41 @@
+{
+  "setup": [
+    "campaign:prologue",
+    "campaign:set_current_day"
+  ],
+  "order": [],
+  "interludes": {},
+  "resolutions": {},
+  "steps": {
+    "campaign:prologue": {
+      "kind": "story",
+      "title": "Against Nature",
+      "text": "“It was just a colour out of space—a frightful messenger from unformed realms of infinity beyond all Nature as we know it; from realms whose mere existence stuns the brain and numbs us with the black extra-cosmic gulfs it throws open before our frenzied eyes.”\n<i>– H. P. Lovecraft, “The Colour Out of Space”</i>",
+      "bullets": []
+    },
+    "campaign:set_current_day": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "day_1_day",
+          "section": "hidden",
+          "value": true
+        },
+        {
+          "do": "count",
+          "id": "day",
+          "section": "hidden",
+          "op": "set",
+          "value": 1
+        },
+        {
+          "do": "record",
+          "key": "always_true",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    }
+  }
+}

@@ -110,5 +110,34 @@
     "Shades of Suffering",
     "Without a Trace",
     "Congress of the Keys"
+  ],
+  "logSections": [
+    {
+      "id": "campaign_notes",
+      "kind": "entries",
+      "label": "Campaign Notes"
+    },
+    {
+      "id": "keys",
+      "kind": "entries",
+      "label": "Keys"
+    },
+    {
+      "id": "time",
+      "kind": "count",
+      "label": "Time Passed"
+    }
+  ],
+  "cards": [
+    {
+      "scenario": "riddles-and-rain",
+      "name": "Riddles and Rain",
+      "code": "09501"
+    },
+    {
+      "scenario": "the-foundation",
+      "name": "The Foundation",
+      "interlude": true
+    }
   ]
 }

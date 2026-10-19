@@ -91,5 +91,109 @@
     "Union and Disillusion",
     "In the Clutches of Chaos",
     "Before the Black Throne"
+  ],
+  "logSections": [
+    {
+      "id": "campaign_notes",
+      "kind": "entries",
+      "label": "Campaign Notes"
+    },
+    {
+      "id": "mementos",
+      "kind": "entries",
+      "label": "Mementos Discovered"
+    },
+    {
+      "id": "missing_persons",
+      "kind": "entries",
+      "label": "Missing Persons"
+    },
+    {
+      "id": "05046",
+      "kind": "entries",
+      "label": "Missing Persons - Gavriella Mizrah"
+    },
+    {
+      "id": "05047",
+      "kind": "entries",
+      "label": "Missing Persons - Jerome Davids"
+    },
+    {
+      "id": "05049",
+      "kind": "entries",
+      "label": "Missing Persons - Penny White"
+    },
+    {
+      "id": "05048",
+      "kind": "entries",
+      "label": "Missing Persons - Valentino Rivas"
+    }
+  ],
+  "cards": [
+    {
+      "scenario": "disappearance-at-the-twilight-estate",
+      "name": "Disappearance at the Twilight Estate",
+      "interlude": true
+    },
+    {
+      "scenario": "the-witching-hour",
+      "name": "The Witching Hour",
+      "code": "05050"
+    },
+    {
+      "scenario": "at-deaths-doorstep",
+      "name": "At Death's Doorstep",
+      "code": "05065"
+    },
+    {
+      "scenario": "the-price-of-progress",
+      "name": "The Price of Progress",
+      "interlude": true
+    },
+    {
+      "scenario": "the-secret-name",
+      "name": "The Secret Name",
+      "code": "05120"
+    },
+    {
+      "scenario": "the-wages-of-sin",
+      "name": "The Wages of Sin",
+      "code": "05161"
+    },
+    {
+      "scenario": "for-the-greater-good",
+      "name": "For the Greater Good",
+      "code": "05197"
+    },
+    {
+      "scenario": "the-inner-circle",
+      "name": "The Inner Circle",
+      "interlude": true
+    },
+    {
+      "scenario": "union-and-disillusion",
+      "name": "Union and Disillusion",
+      "code": "05238"
+    },
+    {
+      "scenario": "in-the-clutches-of-chaos",
+      "name": "In the Clutches of Chaos",
+      "code": "05284"
+    },
+    {
+      "scenario": "twist-of-fate",
+      "name": "Twist of Fate",
+      "interlude": true
+    },
+    {
+      "scenario": "before-the-black-throne",
+      "name": "Before the Black Throne",
+      "code": "05325"
+    },
+    {
+      "scenario": "tcu-epilogue",
+      "name": "Epilogue",
+      "interlude": true
+    }
   ]
 }

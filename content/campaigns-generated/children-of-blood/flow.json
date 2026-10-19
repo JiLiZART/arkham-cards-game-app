@@ -1,0 +1,1120 @@
+{
+  "setup": [
+    "campaign:prologue"
+  ],
+  "order": [
+    "cob-prologue",
+    "river-of-blood",
+    "new-horizons",
+    "friends-in-low-places",
+    "blood-money",
+    "cob-epilogue"
+  ],
+  "interludes": {
+    "cob-prologue": {
+      "kind": "interlude",
+      "name": "Prologue",
+      "steps": [
+        "cob-prologue:intro",
+        "cob-prologue:check_hard_or_expert"
+      ]
+    },
+    "friends-in-low-places": {
+      "kind": "interlude",
+      "name": "Friends in Low Places",
+      "steps": [
+        "friends-in-low-places:intro",
+        "friends-in-low-places:check_12_blood_tokens",
+        "friends-in-low-places:upgradeDecks"
+      ]
+    },
+    "cob-epilogue": {
+      "kind": "epilogue",
+      "name": "Epilogue",
+      "steps": [
+        "cob-epilogue:check_failed_to_stop_the_children_of_blood"
+      ]
+    }
+  },
+  "resolutions": {
+    "river-of-blood": {
+      "none": [
+        "river-of-blood:failed_to_stop_julia_stern",
+        "river-of-blood:add_1_blood_token:text",
+        "river-of-blood:earn_blood_blight:text",
+        "river-of-blood:earn_blood_blight",
+        "river-of-blood:earn_xp_failure"
+      ],
+      "R1": [
+        "river-of-blood:spared_julia_stern",
+        "river-of-blood:earn_xp",
+        "river-of-blood:choose_spend_xp_remove_blood"
+      ],
+      "R2": [
+        "river-of-blood:killed_julia_stern",
+        "river-of-blood:remove_blood_token:text",
+        "river-of-blood:earn_xp"
+      ],
+      "R3": [
+        "river-of-blood:failed_to_stop_julia_stern",
+        "river-of-blood:earn_xp_plus_2"
+      ],
+      "R4": [
+        "river-of-blood:earn_detective_reynolds:text",
+        "river-of-blood:earn_detective_reynolds",
+        "river-of-blood:ask_found_sacrificial_dagger",
+        "river-of-blood:ask_3_blood_tokens",
+        "river-of-blood:release_blood_tokens:text",
+        "river-of-blood:upgradeDecks"
+      ]
+    },
+    "new-horizons": {
+      "none": [
+        "new-horizons:add_1_blood_token:text",
+        "new-horizons:earn_xp"
+      ],
+      "R1": [
+        "new-horizons:did_not_complete_their_search",
+        "new-horizons:left_zburamoarte_alive",
+        "new-horizons:earn_xp",
+        "new-horizons:choose_spend_xp_remove_blood"
+      ],
+      "R2": [
+        "new-horizons:completed_their_search",
+        "new-horizons:left_zburamoarte_alive",
+        "new-horizons:earn_xp",
+        "new-horizons:choose_spend_xp_remove_blood"
+      ],
+      "R3": [
+        "new-horizons:completed_their_search",
+        "new-horizons:defeated_zburamoarte",
+        "new-horizons:remove_blood_token:text",
+        "new-horizons:earn_xp"
+      ],
+      "R4": [
+        "new-horizons:left_to_the_cults_mercy",
+        "new-horizons:add_2_blood_tokens:text",
+        "new-horizons:all_earn_blood_blight:text",
+        "new-horizons:actually_all_earn_blood_blight",
+        "new-horizons:defeated_zburamoarte",
+        "new-horizons:earn_xp"
+      ],
+      "R5": [
+        "new-horizons:ask_found_sheet_of_arcane_symbols",
+        "new-horizons:ask_found_forged_permits",
+        "new-horizons:maybe_ask_2_blood_tokens",
+        "new-horizons:release_blood_tokens:text"
+      ]
+    },
+    "blood-money": {
+      "none": [
+        "blood-money:failed_to_stop_the_children_of_blood",
+        "blood-money:physical_and_mental_trauma_witness:text",
+        "blood-money:physical_and_mental_trauma_witness",
+        "blood-money:earn_xp",
+        "blood-money:maybe_ask_2_blood_tokens",
+        "blood-money:upgradeDecks",
+        "blood-money:lose_campaign:text",
+        "blood-money:lose_campaign"
+      ],
+      "R1": [
+        "blood-money:stopped_the_children_of_blood",
+        "blood-money:ask_civilians_beneath_scenario",
+        "blood-money:earn_xp_plus_civilians",
+        "blood-money:maybe_ask_2_blood_tokens",
+        "blood-money:check_chosen_of_zburamoarte",
+        "blood-money:upgradeDecks",
+        "blood-money:win_campaign:text",
+        "blood-money:win_campaign"
+      ],
+      "R2": [
+        "blood-money:failed_to_stop_the_children_of_blood",
+        "blood-money:physical_and_mental_trauma_cult:text",
+        "blood-money:physical_and_mental_trauma_cult",
+        "blood-money:ask_civilians_beneath_scenario",
+        "blood-money:earn_xp_plus_civilians",
+        "blood-money:maybe_ask_2_blood_tokens",
+        "blood-money:check_chosen_of_zburamoarte",
+        "blood-money:upgradeDecks",
+        "blood-money:win_campaign:text",
+        "blood-money:win_campaign"
+      ]
+    }
+  },
+  "steps": {
+    "campaign:prologue": {
+      "kind": "story",
+      "title": "A Powerful Hunger",
+      "text": "\"To say that we actually believed in vampires or werewolves would be a carelessly inclusive statement. Rather must it be said that we were not prepared to deny the possibility of certain unfamiliar and unclassified modifications of vital force and attenuated matter; existing very infrequently in three-dimensional space because of its more intimate connexion with other spatial units, yet close enough to the boundary of our own to furnish us occasional manifestations which we, for lack of a proper vantage-point, may never hope to understand.\"\n- H.P. Lovecraft, \"The Shunned House\"",
+      "bullets": []
+    },
+    "cob-prologue:intro": {
+      "kind": "story",
+      "text": "The cold autumn wind blows through the streets of the city of Arkham, the cobblestones wet from the rainstorm earlier that day. The sky has since cleared, and overhead a field of stars is watched by a full moon. It is under the yellow glow of the streetlights that you have made your way to Arkham's Waterfront District, formerly known as Rivertown before the Miskatonic burst its banks some months ago.\nGrim paranoia has gripped the Waterfront District. In the wake of a series of murders and disappearances, the working-class residents in the area are afraid to go out at night. They go to work at the river docks, the train yards, or the New Horizons meat packing facility, then rush home before darkness overtakes the city. Pedestrians look over their shoulders and hurry past dark alleys. Something is hunting the people of the district.\nWith Detective Reynolds of the Arkham PD, you have been working to get to the bottom of what's going on, and there have been precious few leads.\nThat is, until tonight.\nYou've been called to the Waterfront District by a concerned citizen. Christopher Stern has invited you to his home on Water Street with the promise of more information in exchange for help in a personal matter. Mr. Stern's promise of information and request for assistance end up being one and the same. With painful effort he recounts how his wife, Julia, is an employee at the New Horizons facility. She had been taking longer and longer shifts, such that she began leaving for work before the sun came up and returning home after it had gone down. Over time she grew cold and distant, eventually sleeping in a separate room and—in Christopher's words—hiding herself from him.\nHe found her in the alleyway behind their home three days ago. In the light of the waxing moon, he saw the woman who used to be his wife crouched over the corpse of their neighbor. She was feeding on the body, greedily drinking the man's blood. When he called her name, she fled into the shadows. Christopher followed her, but quickly lost track. She moved with such inhuman swiftness that all sign of her was lost to the night. What's worse, when he returned to the alleyway, the neighbor's body was nowhere to be found.\nMr. Stern spent the next couple of days searching feverishly for any sign of his wife. Despite what he witnessed, he seemed to resist the notion that she has changed into some kind of monster. Now, however, with more and more stories circulating the district each night, he knew something had to be done.",
+      "bullets": []
+    },
+    "cob-prologue:earn_xp:text": {
+      "kind": "story",
+      "text": "Each investigator may begin the campaign with 5 bonus experience. You may upgrade your decks before starting the first scenario.",
+      "bullets": []
+    },
+    "cob-prologue:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 5,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "cob-prologue:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "cob-prologue:check_hard_or_expert": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "hard_or_expert",
+        "section": "hidden"
+      },
+      "then": [
+        "cob-prologue:earn_xp:text",
+        "cob-prologue:earn_xp",
+        "cob-prologue:upgradeDecks"
+      ],
+      "else": []
+    },
+    "river-of-blood:failed_to_stop_julia_stern": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "failed_to_stop_julia_stern",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "river-of-blood:add_1_blood_token:text": {
+      "kind": "story",
+      "text": "Add 1 [blood] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "river-of-blood:earn_blood_blight:text": {
+      "kind": "story",
+      "text": "Each investigator becomes the bearer of a set-aside The Blood Blight weakness.",
+      "bullets": []
+    },
+    "river-of-blood:earn_blood_blight": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "13118",
+          "who": "each"
+        }
+      ]
+    },
+    "river-of-blood:earn_xp_failure": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 3,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "river-of-blood:spared_julia_stern": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "spared_julia_stern",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "river-of-blood:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "river-of-blood:lose_xp_branch:1:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": -2,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "river-of-blood:remove_4_xp": {
+      "kind": "unsupported",
+      "name": "investigator_counter",
+      "text": "Who should spend XP?",
+      "effects": [],
+      "steps": []
+    },
+    "river-of-blood:remove_6_xp": {
+      "kind": "unsupported",
+      "name": "investigator_counter",
+      "text": "Who should spend XP?",
+      "effects": [],
+      "steps": []
+    },
+    "river-of-blood:remove_8_xp": {
+      "kind": "unsupported",
+      "name": "investigator_counter",
+      "text": "Who should spend XP?",
+      "effects": [],
+      "steps": []
+    },
+    "river-of-blood:lose_xp_branch#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "river-of-blood:remove_8_xp"
+      ],
+      "else": []
+    },
+    "river-of-blood:lose_xp_branch#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "river-of-blood:remove_6_xp"
+      ],
+      "else": [
+        "river-of-blood:lose_xp_branch#3"
+      ]
+    },
+    "river-of-blood:lose_xp_branch#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "river-of-blood:remove_4_xp"
+      ],
+      "else": [
+        "river-of-blood:lose_xp_branch#2"
+      ]
+    },
+    "river-of-blood:lose_xp_branch": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 1,
+        "max": 1
+      },
+      "then": [
+        "river-of-blood:lose_xp_branch:1:fx"
+      ],
+      "else": [
+        "river-of-blood:lose_xp_branch#1"
+      ]
+    },
+    "river-of-blood:choose_spend_xp_remove_blood": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "The investigators may decide to spend 2 [per_investigator] total experience, as a group, to remove 1 [blood] token from the chaos bag. Would you like to do this?",
+          "effects": [],
+          "steps": [
+            "river-of-blood:lose_xp_branch"
+          ]
+        }
+      ]
+    },
+    "river-of-blood:killed_julia_stern": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "killed_julia_stern",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "river-of-blood:remove_blood_token:text": {
+      "kind": "story",
+      "text": "Remove 1 [blood] token from the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "river-of-blood:earn_xp_plus_2": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 2,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "river-of-blood:earn_detective_reynolds:text": {
+      "kind": "story",
+      "text": "Detective Reynolds joins the investigation! Choose an investigator to become the bearer of the set-aside Detective Reynolds story asset.",
+      "bullets": []
+    },
+    "river-of-blood:earn_detective_reynolds": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "13029",
+          "who": "choice"
+        }
+      ]
+    },
+    "river-of-blood:earn_dagger:text": {
+      "kind": "story",
+      "text": "Choose an investigator to become the bearer of the set-aside Fang of Zburamoarte story asset.",
+      "bullets": []
+    },
+    "river-of-blood:earn_dagger": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "13030",
+          "who": "choice"
+        }
+      ]
+    },
+    "river-of-blood:ask_found_sacrificial_dagger": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Did the investigators find a sacrifical dagger?",
+          "effects": [],
+          "steps": [
+            "river-of-blood:earn_dagger:text",
+            "river-of-blood:earn_dagger"
+          ]
+        }
+      ]
+    },
+    "river-of-blood:ask_3_blood_tokens": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "13118",
+          "who": "each"
+        }
+      ]
+    },
+    "river-of-blood:release_blood_tokens:text": {
+      "kind": "story",
+      "text": "Release each sealed [blood] token and return them to the chaos bag.",
+      "bullets": []
+    },
+    "river-of-blood:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "new-horizons:add_1_blood_token:text": {
+      "kind": "story",
+      "text": "Add 1 [blood] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "new-horizons:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "new-horizons:did_not_complete_their_search": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "did_not_complete_their_search",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "new-horizons:left_zburamoarte_alive": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "left_zburamoarte_alive",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "new-horizons:lose_xp_branch:1:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": -2,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "new-horizons:remove_4_xp": {
+      "kind": "unsupported",
+      "name": "investigator_counter",
+      "text": "Who should spend XP?",
+      "effects": [],
+      "steps": []
+    },
+    "new-horizons:remove_6_xp": {
+      "kind": "unsupported",
+      "name": "investigator_counter",
+      "text": "Who should spend XP?",
+      "effects": [],
+      "steps": []
+    },
+    "new-horizons:remove_8_xp": {
+      "kind": "unsupported",
+      "name": "investigator_counter",
+      "text": "Who should spend XP?",
+      "effects": [],
+      "steps": []
+    },
+    "new-horizons:lose_xp_branch#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "new-horizons:remove_8_xp"
+      ],
+      "else": []
+    },
+    "new-horizons:lose_xp_branch#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "new-horizons:remove_6_xp"
+      ],
+      "else": [
+        "new-horizons:lose_xp_branch#3"
+      ]
+    },
+    "new-horizons:lose_xp_branch#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "new-horizons:remove_4_xp"
+      ],
+      "else": [
+        "new-horizons:lose_xp_branch#2"
+      ]
+    },
+    "new-horizons:lose_xp_branch": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 1,
+        "max": 1
+      },
+      "then": [
+        "new-horizons:lose_xp_branch:1:fx"
+      ],
+      "else": [
+        "new-horizons:lose_xp_branch#1"
+      ]
+    },
+    "new-horizons:choose_spend_xp_remove_blood": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "The investigators may decide to spend 2 [per_investigator] total experience, as a group, to remove 1 [blood] token from the chaos bag. Would you like to do this?",
+          "effects": [],
+          "steps": [
+            "new-horizons:lose_xp_branch"
+          ]
+        }
+      ]
+    },
+    "new-horizons:completed_their_search": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "completed_their_search",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "new-horizons:defeated_zburamoarte": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "defeated_zburamoarte",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "new-horizons:remove_blood_token:text": {
+      "kind": "story",
+      "text": "Remove 1 [blood] token from the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "new-horizons:left_to_the_cults_mercy": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "left_to_the_cults_mercy",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "new-horizons:add_2_blood_tokens:text": {
+      "kind": "story",
+      "text": "Add 2 [blood] tokens to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "new-horizons:all_earn_blood_blight:text": {
+      "kind": "story",
+      "text": "Each investigator who does not have The Blood Blight weakness becomes the bearer of a set-aside The Blood Blight weakness.",
+      "bullets": []
+    },
+    "new-horizons:actually_all_earn_blood_blight:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "13118",
+          "who": "input"
+        }
+      ]
+    },
+    "new-horizons:actually_all_earn_blood_blight": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "13118",
+        "inv": "any"
+      },
+      "then": [],
+      "else": [
+        "new-horizons:actually_all_earn_blood_blight:no:fx"
+      ]
+    },
+    "new-horizons:earn_sheet:text": {
+      "kind": "story",
+      "text": "Choose an investigator to become the bearer of the set-aside Sanguine Song story asset.",
+      "bullets": []
+    },
+    "new-horizons:earn_sheet": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "13066",
+          "who": "choice"
+        }
+      ]
+    },
+    "new-horizons:ask_found_sheet_of_arcane_symbols": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Did the investigators find a sheet of arcane symbols?",
+          "effects": [],
+          "steps": [
+            "new-horizons:earn_sheet:text",
+            "new-horizons:earn_sheet"
+          ]
+        }
+      ]
+    },
+    "new-horizons:earn_forged:text": {
+      "kind": "story",
+      "text": "Choose an investigator to become the bearer of the set-aside Forged Permit story asset.",
+      "bullets": []
+    },
+    "new-horizons:earn_forged": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "13067",
+          "who": "choice"
+        }
+      ]
+    },
+    "new-horizons:ask_found_forged_permits": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Did the investigators find forged permits?",
+          "effects": [],
+          "steps": [
+            "new-horizons:earn_forged:text",
+            "new-horizons:earn_forged"
+          ]
+        }
+      ]
+    },
+    "new-horizons:ask_2_blood_tokens": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "13118",
+          "who": "each"
+        }
+      ]
+    },
+    "new-horizons:maybe_ask_2_blood_tokens": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "13118",
+        "inv": "any"
+      },
+      "then": [],
+      "else": [
+        "new-horizons:ask_2_blood_tokens"
+      ]
+    },
+    "new-horizons:release_blood_tokens:text": {
+      "kind": "story",
+      "text": "Release each sealed [blood] token and return them to the chaos bag.",
+      "bullets": []
+    },
+    "friends-in-low-places:intro": {
+      "kind": "story",
+      "text": "You and Detective Reynolds meet up at Velma’s Diner in the early morning to discuss what’s next. With the police department alerted to the situation at the meat packing facility, the detective has his eyes set on the person responsible.\n“We managed to get a name from those damned yahoos,” Reynolds says in low tones over his steaming mug of coffee. “Wilkes. Howard Wilkes. I looked into him some, and he’s a powerful guy. Lots of money. Lots of friends. Just built himself a brand new apartment in Northside. Calls it his penthouse. Apparently it’s some French design.” Reynolds shrugs. “Anyway, while the people at his factory have been either becoming cultists or becoming monsters, he’s been a bit of a recluse. Hasn’t left his place for weeks, and doesn’t let anyone in. At least, until tonight.”\nReynolds tells you how Mr. Wilkes is apparently throwing a party at his penthouse, an opportunity to throw his money around and impress some other businesspeople from outside of Arkham. “He wants to expand his distribution area, get that dirty meat of his to places outside of town. We can’t let that happen. We’ll need to get into that party. And I know just the guy to get us there.”\nAs if on cue, the bell above the diner door rings. You follow Detective Reynolds’s gaze to see a familiar face enter. A disheveled man with a round face and a bald head, wearing a fraying gray suit and green tie. Charlie Kane nods with familiarity to the waitress as he makes his way to your booth, sliding in beside Reynolds.\n“Glad you could make it, mayor,” the detective says.\nCharlie scowls at the remark. “This will need to be quick,” he says, looking over his shoulder.\n“Worried they’re still after you?” Reynolds asks.\nCharlie turns a serious look on the detective. “They always are.”\nTogether you go over the plan: Kane will get your names on the guest list for the party. You’ll arrive, where you and the detective will attempt to detain Wilkes. When Reynolds suggests having police backup on standby, Charlie shakes his head. “Wilkes will know what you’re planning,” the former mayor says. “If he gets wind the fuzz are waiting for him, there’s no telling what he’ll do.”\nCharlie glances out the windows of the diner, scanning the dark street outside as he speaks. “There’s one person in particular you should keep an eye out for: Priscilla Thomas. She’s a savvy businesswoman from Boston looking to make a distribution deal with Wilkes to get his product shipped throughout the state. It would be best to try and convince her this is a bad idea, however you need to. But, according to my contacts, Miss Thomas isn’t part of Wilkes’s organization, so… well, try using words, not fists.”",
+      "bullets": []
+    },
+    "friends-in-low-places:intro_4": {
+      "kind": "story",
+      "text": "Charlie stands from his spot in the booth, reaching to shake hands with Detective Reynolds, and then with you. As you grip his hand there’s a pause. You can hear the quickening of his heartbeat as you hold his hand in a firm grip. You can feel his pulse through the handshake, and you can smell the fear growing in him. After a moment he rips his hand away with a sudden jerk, and rushes to the exit without another word.",
+      "bullets": []
+    },
+    "friends-in-low-places:mental_trauma:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 1 mental trauma.",
+      "bullets": []
+    },
+    "friends-in-low-places:mental_trauma": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 0,
+          "mental": 1
+        }
+      ]
+    },
+    "friends-in-low-places:intro_2": {
+      "kind": "story",
+      "text": "Charlie snorts derisively. “I don’t think I’ll be running again. Not in a campaign, at least,” he says, and then fixes his steely glare solidly on you. “You must not fail at this. If Wilkes is allowed to continue, and if he secures that deal with Priscilla, then it won’t be long before all of Massachusetts is overrun with those… things.”",
+      "bullets": []
+    },
+    "friends-in-low-places:earn_2_xp:text": {
+      "kind": "story",
+      "text": "Each investigator earns 2 bonus experience.",
+      "bullets": []
+    },
+    "friends-in-low-places:earn_2_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 2,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "friends-in-low-places:intro_3": {
+      "kind": "story",
+      "text": "Charlie narrows his eyes at you as he considers your request. You can tell that he is mulling over all that has happened so far in your efforts to help the people of the Waterfront District…",
+      "bullets": []
+    },
+    "friends-in-low-places:all_condition_explaination:text": {
+      "kind": "story",
+      "text": "If all of the following circumstances are true:",
+      "bullets": []
+    },
+    "friends-in-low-places:intro_5": {
+      "kind": "story",
+      "text": "Charlie sighs. “You’ve done a lot to help the people of the Waterfront,” he says. “These are civilians who are under the thumb of people like Wilkes, and you’ve gone to great lengths to see that justice is served. Alright. I’ll join you at the party.”",
+      "bullets": []
+    },
+    "friends-in-low-places:intro_6": {
+      "kind": "story",
+      "text": "Charlie sighs. “You’ve done a lot to help the people of the Waterfront,” he says. “But it’s not enough, and you’re not done. And what’s worse, you’ve drawn a lot of attention. Attention I can’t afford. I’m sorry but I’ve already done too much. You’re on your own.”",
+      "bullets": []
+    },
+    "friends-in-low-places:actually_check_all": {
+      "kind": "branch",
+      "condition": {
+        "kind": "any",
+        "conditions": [
+          {
+            "kind": "hasCard",
+            "card": "13118",
+            "inv": "any"
+          },
+          {
+            "kind": "logHas",
+            "id": "completed_their_search",
+            "section": "campaign_notes"
+          },
+          {
+            "kind": "logHas",
+            "id": "spared_julia_stern",
+            "section": "campaign_notes"
+          },
+          {
+            "kind": "logHas",
+            "id": "killed_julia_stern",
+            "section": "campaign_notes"
+          }
+        ]
+      },
+      "then": [
+        "friends-in-low-places:intro_5"
+      ],
+      "else": [
+        "friends-in-low-places:intro_6"
+      ]
+    },
+    "friends-in-low-places:charlie_choice": {
+      "kind": "chooseOne",
+      "text": "The lead investigator must decide (choose one):",
+      "choices": [
+        {
+          "id": "thank",
+          "text": "<i>“Thanks for the help, Charlie. If you decide to run again, I’ll be sure to vote for you this time.”</i>",
+          "effects": [],
+          "steps": [
+            "friends-in-low-places:intro_2",
+            "friends-in-low-places:earn_2_xp:text",
+            "friends-in-low-places:earn_2_xp"
+          ]
+        },
+        {
+          "id": "join",
+          "text": "<i>“Why don’t you come with us, Charlie? Let whoever’s after you know you’re not afraid of them.”</i>",
+          "effects": [],
+          "steps": [
+            "friends-in-low-places:intro_3",
+            "friends-in-low-places:all_condition_explaination:text",
+            "friends-in-low-places:actually_check_all"
+          ]
+        }
+      ]
+    },
+    "friends-in-low-places:check_12_blood_tokens": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "friends-in-low-places:intro_4",
+        "friends-in-low-places:mental_trauma:text",
+        "friends-in-low-places:mental_trauma"
+      ],
+      "else": [
+        "friends-in-low-places:charlie_choice"
+      ]
+    },
+    "friends-in-low-places:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "blood-money:failed_to_stop_the_children_of_blood": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "failed_to_stop_the_children_of_blood",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "blood-money:physical_and_mental_trauma_witness:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 1 physical trauma and 1 mental trauma, as they never fully recover from what they witnessed in their investigation.",
+      "bullets": []
+    },
+    "blood-money:physical_and_mental_trauma_witness": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 1,
+          "mental": 1
+        }
+      ]
+    },
+    "blood-money:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "blood-money:ask_2_blood_tokens": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "13118",
+          "who": "each"
+        }
+      ]
+    },
+    "blood-money:maybe_ask_2_blood_tokens": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "13118",
+        "inv": "any"
+      },
+      "then": [],
+      "else": [
+        "blood-money:ask_2_blood_tokens"
+      ]
+    },
+    "blood-money:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "blood-money:lose_campaign:text": {
+      "kind": "story",
+      "text": "The investigators lose the campaign.",
+      "bullets": []
+    },
+    "blood-money:lose_campaign": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "lose"
+        }
+      ]
+    },
+    "blood-money:stopped_the_children_of_blood": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "stopped_the_children_of_blood",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "blood-money:ask_civilians_beneath_scenario": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "blood-money:earn_xp_plus_civilians": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "blood-money:unlock_chosen_of_zburamoarte:text": {
+      "kind": "story",
+      "text": "The investigators have earned the Chosen of Zburamoarte campaign reward card. Add this card to the player card pool.",
+      "bullets": []
+    },
+    "blood-money:check_chosen_of_zburamoarte": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "13118",
+        "inv": "any"
+      },
+      "then": [
+        "blood-money:unlock_chosen_of_zburamoarte:text"
+      ],
+      "else": []
+    },
+    "blood-money:win_campaign:text": {
+      "kind": "story",
+      "text": "The investigators win the campaign!",
+      "bullets": []
+    },
+    "blood-money:win_campaign": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "win"
+        }
+      ]
+    },
+    "blood-money:physical_and_mental_trauma_cult:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 1 physical trauma and 1 mental trauma, as they never fully recover from the horrors of the Cult of the Sanguine Order.",
+      "bullets": []
+    },
+    "blood-money:physical_and_mental_trauma_cult": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 1,
+          "mental": 1
+        }
+      ]
+    },
+    "cob-epilogue:intro_1": {
+      "kind": "story",
+      "text": "With no other choice, you put the penthouse of Arkham’s Northside district behind you. No matter how far you go, you worry there won’t be enough distance between you and the monsters that ravaged the party and turned it into a bloodbath. It doesn’t take long for word of those events to spread throughout Arkham, and for more disappearances to take place as the creatures continue to hunt and feed in the dead of night. Eventually you decide to leave the city, relocating to Boston and thinking that at long last you can try and forget about the calamity on the Miskatonic.\nBut no matter how far you go, no matter how close you are to forgetting everything, in a matter of months you hear reports similar to those that led up to the chaos that plagued Arkham. The tainted blood of Zburamoarte and the machinations of the Cult of the Sanguine Order are spreading across New England. How long will it be before you have nowhere else to run?",
+      "bullets": []
+    },
+    "cob-epilogue:intro_2": {
+      "kind": "story",
+      "text": "The events of the penthouse in Northside finally behind you, it seems that at long last the city of Arkham can breathe a sigh of relief. As the days begin to pass, the people who were subjected to the tainted blood of Zburamoarte at the hands of the cult begin to recover. They are weak, disoriented, and lacking any memory of their transformations. Against all odds, it seems that the diabolical machinations of Howard Wilkes and the Cult of the Sanguine Order are finally put to rest.",
+      "bullets": []
+    },
+    "cob-epilogue:intro_4": {
+      "kind": "story",
+      "text": "Weeks later, you find yourself walking down the sidewalk of Water Street once again. That bloody and desperate night seems like a distant memory fading into shadows as the sun rises from the Eastern horizon. As you continue on your way, you catch a glimpse of a familiar face—a middle-aged woman, with long dark hair pulled back into a tight bun, dressed in the blue coveralls of a factory worker. She looks up as she crosses the street, and your eyes meet for a brief moment. She doesn’t recognize you, but you know immediately that it’s Julia. She offers a polite smile before she continues on, eventually disappearing into the growing crowds.",
+      "bullets": []
+    },
+    "cob-epilogue:check_spared_julia_stern": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "spared_julia_stern",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "cob-epilogue:intro_4"
+      ],
+      "else": []
+    },
+    "cob-epilogue:intro_3": {
+      "kind": "story",
+      "text": "The events of the penthouse in Northside finally behind you, it seems that at long last the city of Arkham can breathe a sigh of relief. As the days begin to pass, however, rumors and whispers of monsters in the night seem to return. In a matter of weeks, it seems Arkham is right back to where it started on that fateful night in the Waterfront District. More disappearances are reported throughout the city, and you fear the creatures have returned to hunt and feed in the dead of night. Eventually you decide to leave Arkham, relocating to Boston and thinking that at long last you can try and forget about the calamity on the Miskatonic.\nBut no matter how far you go, no matter how close you are to forgetting everything, in a matter of months you hear reports similar to those that led up to the chaos that plagued Arkham. The tainted blood of Zburamoarte, and the machinations of the Cult of the Sanguine Order, have returned, and are spreading across New England. How long will it be before you have nowhere else to run?",
+      "bullets": []
+    },
+    "cob-epilogue:check_stopped_the_children_of_blood": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "stopped_the_children_of_blood",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "cob-epilogue:intro_3"
+      ],
+      "else": []
+    },
+    "cob-epilogue:check_stopped_children_and_defeated_zburamoarte": {
+      "kind": "branch",
+      "condition": {
+        "kind": "all",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "stopped_the_children_of_blood",
+            "section": "campaign_notes"
+          },
+          {
+            "kind": "logHas",
+            "id": "defeated_zburamoarte",
+            "section": "campaign_notes"
+          }
+        ]
+      },
+      "then": [
+        "cob-epilogue:intro_2",
+        "cob-epilogue:check_spared_julia_stern"
+      ],
+      "else": [
+        "cob-epilogue:check_stopped_the_children_of_blood"
+      ]
+    },
+    "cob-epilogue:check_failed_to_stop_the_children_of_blood": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "failed_to_stop_the_children_of_blood",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "cob-epilogue:intro_1"
+      ],
+      "else": [
+        "cob-epilogue:check_stopped_children_and_defeated_zburamoarte"
+      ]
+    }
+  }
+}

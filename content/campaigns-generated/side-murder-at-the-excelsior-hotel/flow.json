@@ -1,0 +1,374 @@
+{
+  "setup": [],
+  "order": [
+    "murder-at-the-excelsior-hotel"
+  ],
+  "interludes": {},
+  "resolutions": {
+    "murder-at-the-excelsior-hotel": {
+      "none": [
+        "murder-at-the-excelsior-hotel:fled_scene_of_the_crime"
+      ],
+      "R1": [
+        "murder-at-the-excelsior-hotel:excelsior_is_quiet_for_now:text",
+        "murder-at-the-excelsior-hotel:excelsior_is_quiet_for_now",
+        "murder-at-the-excelsior-hotel:check_police_on_your_side",
+        "murder-at-the-excelsior-hotel:check_police_dont_believe_you",
+        "murder-at-the-excelsior-hotel:earn_xp",
+        "murder-at-the-excelsior-hotel:upgradeDecks"
+      ],
+      "R2": [
+        "murder-at-the-excelsior-hotel:check_replay_scenario_R2"
+      ],
+      "R3": [
+        "murder-at-the-excelsior-hotel:check_replay_scenario_R3"
+      ]
+    }
+  },
+  "steps": {
+    "murder-at-the-excelsior-hotel:fled_scene_of_the_crime": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "meh_fled_scene_of_the_crime",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "murder-at-the-excelsior-hotel:excelsior_is_quiet_for_now:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>the Excelsior is quiet, for now</i>. The lead investigator must add the What Have You Done? weakness to their deck. They may also choose to add the Bloodstained Dagger story asset to their deck as well. Both cards do not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "murder-at-the-excelsior-hotel:excelsior_is_quiet_for_now": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "meh_excelsior_is_quiet_for_now",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "earnCard",
+          "code": "84006",
+          "who": "lead"
+        },
+        {
+          "do": "earnCard",
+          "code": "84007",
+          "who": "lead"
+        }
+      ]
+    },
+    "murder-at-the-excelsior-hotel:earn_sergeant_monroe:text": {
+      "kind": "story",
+      "text": "Any one investigator may choose to add Sergeant Monroe to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "murder-at-the-excelsior-hotel:earn_sergeant_monroe": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "84008",
+          "who": "choice"
+        }
+      ]
+    },
+    "murder-at-the-excelsior-hotel:check_police_on_your_side": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "meh_police_are_on_your_side",
+        "section": "hidden"
+      },
+      "then": [
+        "murder-at-the-excelsior-hotel:earn_sergeant_monroe:text",
+        "murder-at-the-excelsior-hotel:earn_sergeant_monroe"
+      ],
+      "else": []
+    },
+    "murder-at-the-excelsior-hotel:do_not_earn_sergeant_monroe:text": {
+      "kind": "story",
+      "text": "Do not add Sergeant Monroe to any investigator’s deck.",
+      "bullets": []
+    },
+    "murder-at-the-excelsior-hotel:earn_weakness:text": {
+      "kind": "story",
+      "text": "Search the collection for a [[Detective]] or [[Madness]] weakness and add it to the lead investigator’s deck.",
+      "bullets": []
+    },
+    "murder-at-the-excelsior-hotel:earn_weakness": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addWeakness",
+          "trait": "Madness",
+          "who": "lead"
+        }
+      ]
+    },
+    "murder-at-the-excelsior-hotel:ask_police_in_victory_display": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "killed_police",
+          "text": "Are there any [[Police]] enemies in the victory display?",
+          "effects": [],
+          "steps": [
+            "murder-at-the-excelsior-hotel:earn_weakness:text",
+            "murder-at-the-excelsior-hotel:earn_weakness"
+          ]
+        }
+      ]
+    },
+    "murder-at-the-excelsior-hotel:check_police_dont_believe_you": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "meh_police_dont_believe_you",
+        "section": "hidden"
+      },
+      "then": [
+        "murder-at-the-excelsior-hotel:do_not_earn_sergeant_monroe:text",
+        "murder-at-the-excelsior-hotel:ask_police_in_victory_display"
+      ],
+      "else": []
+    },
+    "murder-at-the-excelsior-hotel:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "murder-at-the-excelsior-hotel:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "murder-at-the-excelsior-hotel:murders_continue_unsolved": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "meh_murders_continue_unsolved",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "murder-at-the-excelsior-hotel:earn_story_cards:text": {
+      "kind": "story",
+      "text": "The lead investigator must add the What Have You Done? weakness to their deck. They may also choose to add the Bloodstained Dagger story asset to their deck as well. Both cards do not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "murder-at-the-excelsior-hotel:earn_story_cards": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "84006",
+          "who": "lead"
+        },
+        {
+          "do": "earnCard",
+          "code": "84007",
+          "who": "lead"
+        }
+      ]
+    },
+    "murder-at-the-excelsior-hotel:replay_scenario": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "replayScenario",
+          "scenario": "murder-at-the-excelsior-hotel"
+        },
+        {
+          "do": "crossOut",
+          "key": "meh_excelsior_claims_another_victim",
+          "section": "campaign_notes",
+          "erase": true
+        },
+        {
+          "do": "crossOut",
+          "key": "meh_fled_scene_of_the_crime",
+          "section": "campaign_notes",
+          "erase": true
+        },
+        {
+          "do": "crossOut",
+          "key": "meh_police_are_on_your_side",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "crossOut",
+          "key": "meh_police_dont_believe_you",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "crossOut",
+          "key": "meh_did_cover_up",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "crossOut",
+          "key": "meh_did_not_cover_up",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "crossOut",
+          "key": "meh_have_clues",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "crossOut",
+          "key": "meh_no_innocents_killed",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "crossOut",
+          "key": "meh_the_truth",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "crossOut",
+          "key": "84028",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "crossOut",
+          "key": "84034",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "crossOut",
+          "key": "84031",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "crossOut",
+          "key": "84037",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "crossOut",
+          "key": "84040",
+          "section": "hidden",
+          "erase": true
+        }
+      ]
+    },
+    "murder-at-the-excelsior-hotel:ask_replay_scenario_R2": {
+      "kind": "chooseOne",
+      "text": "You may replay this scenario. If you choose to, reset the game to this scenario’s <b>Setup</b>. Do not record anything else in your Campaign Log except for any trauma suffered. No experience points are earned from your previous game.",
+      "choices": [
+        {
+          "id": "replay",
+          "text": "Replay scenario.",
+          "effects": [],
+          "steps": [
+            "murder-at-the-excelsior-hotel:upgradeDecks",
+            "murder-at-the-excelsior-hotel:replay_scenario"
+          ]
+        },
+        {
+          "id": "done",
+          "text": "Do not replay.",
+          "effects": [],
+          "steps": [
+            "murder-at-the-excelsior-hotel:murders_continue_unsolved",
+            "murder-at-the-excelsior-hotel:earn_xp",
+            "murder-at-the-excelsior-hotel:earn_story_cards:text",
+            "murder-at-the-excelsior-hotel:earn_story_cards",
+            "murder-at-the-excelsior-hotel:upgradeDecks"
+          ]
+        }
+      ]
+    },
+    "murder-at-the-excelsior-hotel:check_replay_scenario_R2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_data",
+        "take": false
+      },
+      "then": [
+        "murder-at-the-excelsior-hotel:murders_continue_unsolved",
+        "murder-at-the-excelsior-hotel:earn_xp",
+        "murder-at-the-excelsior-hotel:earn_story_cards:text",
+        "murder-at-the-excelsior-hotel:earn_story_cards",
+        "murder-at-the-excelsior-hotel:upgradeDecks"
+      ],
+      "else": [
+        "murder-at-the-excelsior-hotel:ask_replay_scenario_R2"
+      ]
+    },
+    "murder-at-the-excelsior-hotel:ask_replay_scenario_R3": {
+      "kind": "chooseOne",
+      "text": "You may replay this scenario. If you choose to, reset the game to this scenario’s <b>Setup</b>. Do not record anything else in your Campaign Log except for any trauma suffered. No experience points are earned from your previous game.",
+      "choices": [
+        {
+          "id": "replay",
+          "text": "Replay scenario.",
+          "effects": [],
+          "steps": [
+            "murder-at-the-excelsior-hotel:upgradeDecks",
+            "murder-at-the-excelsior-hotel:replay_scenario"
+          ]
+        },
+        {
+          "id": "done",
+          "text": "Do not replay.",
+          "effects": [],
+          "steps": [
+            "murder-at-the-excelsior-hotel:murders_continue_unsolved",
+            "murder-at-the-excelsior-hotel:earn_xp",
+            "murder-at-the-excelsior-hotel:earn_story_cards:text",
+            "murder-at-the-excelsior-hotel:earn_story_cards",
+            "murder-at-the-excelsior-hotel:earn_weakness:text",
+            "murder-at-the-excelsior-hotel:earn_weakness",
+            "murder-at-the-excelsior-hotel:upgradeDecks"
+          ]
+        }
+      ]
+    },
+    "murder-at-the-excelsior-hotel:check_replay_scenario_R3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_data",
+        "take": false
+      },
+      "then": [
+        "murder-at-the-excelsior-hotel:murders_continue_unsolved",
+        "murder-at-the-excelsior-hotel:earn_xp",
+        "murder-at-the-excelsior-hotel:earn_story_cards:text",
+        "murder-at-the-excelsior-hotel:earn_story_cards",
+        "murder-at-the-excelsior-hotel:earn_weakness:text",
+        "murder-at-the-excelsior-hotel:earn_weakness",
+        "murder-at-the-excelsior-hotel:upgradeDecks"
+      ],
+      "else": [
+        "murder-at-the-excelsior-hotel:ask_replay_scenario_R3"
+      ]
+    }
+  }
+}

@@ -67,5 +67,24 @@
   "scenarioNames": [
     "The Eternal Slumber",
     "The Night's Usurper"
+  ],
+  "logSections": [
+    {
+      "id": "campaign_notes",
+      "kind": "entries",
+      "label": "Campaign Notes"
+    }
+  ],
+  "cards": [
+    {
+      "scenario": "the-eternal-slumber",
+      "name": "The Eternal Slumber",
+      "code": "83001"
+    },
+    {
+      "scenario": "the-nights-usurper",
+      "name": "The Night's Usurper",
+      "code": "83016"
+    }
   ]
 }

@@ -96,5 +96,39 @@
     "Return to The Gathering",
     "Return to The Midnight Masks",
     "Return to The Devourer Below"
+  ],
+  "logSections": [
+    {
+      "id": "campaign_notes",
+      "kind": "entries",
+      "label": "Campaign Notes"
+    },
+    {
+      "id": "cultists_interrogated",
+      "kind": "entries",
+      "label": "Cultists We Interrogated"
+    },
+    {
+      "id": "cultists_escaped",
+      "kind": "entries",
+      "label": "Cultists Who Got Away"
+    }
+  ],
+  "cards": [
+    {
+      "scenario": "return-to-the-gathering",
+      "name": "Return to The Gathering",
+      "code": "01104"
+    },
+    {
+      "scenario": "return-to-the-midnight-masks",
+      "name": "Return to The Midnight Masks",
+      "code": "01120"
+    },
+    {
+      "scenario": "return-to-the-devourer-below",
+      "name": "Return to The Devourer Below",
+      "code": "01142"
+    }
   ]
 }

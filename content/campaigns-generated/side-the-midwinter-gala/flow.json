@@ -1,0 +1,521 @@
+{
+  "setup": [],
+  "order": [
+    "the-midwinter-gala"
+  ],
+  "interludes": {},
+  "resolutions": {
+    "the-midwinter-gala": {
+      "none": [],
+      "R1": [
+        "the-midwinter-gala:choose_one_guest",
+        "the-midwinter-gala:check_side_story"
+      ],
+      "R2": [],
+      "R3": [],
+      "R4": [],
+      "R5": [],
+      "R6": [],
+      "R7": [
+        "the-midwinter-gala:earn_xp",
+        "the-midwinter-gala:tally_score",
+        "the-midwinter-gala:check_tmg_score_tally",
+        "the-midwinter-gala:earn_extra_tmg_tally_xp:text",
+        "the-midwinter-gala:upgradeDecks"
+      ]
+    }
+  },
+  "steps": {
+    "the-midwinter-gala:choose_one_guest": {
+      "kind": "unsupported",
+      "name": "investigator_choice",
+      "text": "Each investigator may choose one single-sided [[Guest]] asset under any investigator's control to add to their deck ignoring deckbuilding restrictions). It does not count toward that investigator's deck size.",
+      "effects": [],
+      "steps": []
+    },
+    "the-midwinter-gala:future_shuffle_jewel:text": {
+      "kind": "story",
+      "text": "During the setup of each subsequent scenario in this campaign, you may shuffle the Jewel of Sarnath story asset into the encounter deck.",
+      "bullets": []
+    },
+    "the-midwinter-gala:check_side_story": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "tmg_side_story_mode",
+        "section": "hidden"
+      },
+      "then": [],
+      "else": [
+        "the-midwinter-gala:future_shuffle_jewel:text"
+      ]
+    },
+    "the-midwinter-gala:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "the-midwinter-gala:tally_score": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Would you like to use the app to tally your score?",
+          "effects": [
+            {
+              "do": "record",
+              "key": "tmg_calculate_score",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "the-midwinter-gala:ask_manor_locations_without_clues": {
+      "kind": "counter",
+      "text": "<b>1</b> point for each revealed [[Manor]] location with no clues.",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "tmg_score_tally",
+          "section": "hidden",
+          "op": "add",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "the-midwinter-gala:ask_guest_assets_controlled": {
+      "kind": "counter",
+      "text": "<b>1</b> point for each [[Guest]] asset controlled by the investigators.",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "tmg_score_tally",
+          "section": "hidden",
+          "op": "add",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "the-midwinter-gala:ask_any_spellbound_cards": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Are there any spellbound cards in play?",
+          "effects": [
+            {
+              "do": "record",
+              "key": "tmg_score_tally_spellbound",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "the-midwinter-gala:check_spellbound:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "tmg_score_tally",
+          "section": "hidden",
+          "op": "add",
+          "value": 4
+        }
+      ]
+    },
+    "the-midwinter-gala:earn_4_points:text": {
+      "kind": "story",
+      "text": "<b>4</b> points.",
+      "bullets": []
+    },
+    "the-midwinter-gala:check_spellbound": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "tmg_score_tally_spellbound",
+        "section": "hidden"
+      },
+      "then": [],
+      "else": [
+        "the-midwinter-gala:check_spellbound:no:fx",
+        "the-midwinter-gala:earn_4_points:text"
+      ]
+    },
+    "the-midwinter-gala:5_points_agenda:text": {
+      "kind": "story",
+      "text": "<b>5</b> points if agenda la or agenda 2a is in play.",
+      "bullets": []
+    },
+    "the-midwinter-gala:ask_agenda_number": {
+      "kind": "chooseOne",
+      "text": "What agenda is in play?",
+      "choices": [
+        {
+          "id": "1a",
+          "text": "Agenda 1a",
+          "effects": [
+            {
+              "do": "count",
+              "id": "tmg_score_tally",
+              "section": "hidden",
+              "op": "add",
+              "value": 5
+            }
+          ],
+          "steps": [
+            "the-midwinter-gala:5_points_agenda:text"
+          ]
+        },
+        {
+          "id": "2a",
+          "text": "Agenda 2a",
+          "effects": [
+            {
+              "do": "count",
+              "id": "tmg_score_tally",
+              "section": "hidden",
+              "op": "add",
+              "value": 5
+            }
+          ],
+          "steps": [
+            "the-midwinter-gala:5_points_agenda:text"
+          ]
+        },
+        {
+          "id": "3",
+          "text": "Agenda 3",
+          "effects": [],
+          "steps": []
+        }
+      ]
+    },
+    "the-midwinter-gala:ask_bloodless_man_in_victory": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Is The Bloodless Man in the victory display?",
+          "effects": [
+            {
+              "do": "count",
+              "id": "tmg_score_tally",
+              "section": "hidden",
+              "op": "add",
+              "value": 4
+            }
+          ],
+          "steps": [
+            "the-midwinter-gala:earn_4_points:text"
+          ]
+        }
+      ]
+    },
+    "the-midwinter-gala:earn_3_points:text": {
+      "kind": "story",
+      "text": "<b>3</b> points.",
+      "bullets": []
+    },
+    "the-midwinter-gala:ask_pale_lantern_in_victory": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Is The Pale Lantern in the victory display?",
+          "effects": [
+            {
+              "do": "count",
+              "id": "tmg_score_tally",
+              "section": "hidden",
+              "op": "add",
+              "value": 3
+            }
+          ],
+          "steps": [
+            "the-midwinter-gala:earn_3_points:text"
+          ]
+        }
+      ]
+    },
+    "the-midwinter-gala:ask_declan_pearce_in_victory": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Is Declan Pearce in the victory display?",
+          "effects": [
+            {
+              "do": "count",
+              "id": "tmg_score_tally",
+              "section": "hidden",
+              "op": "add",
+              "value": 3
+            }
+          ],
+          "steps": [
+            "the-midwinter-gala:earn_3_points:text"
+          ]
+        }
+      ]
+    },
+    "the-midwinter-gala:ask_rival_in_victory": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Is a Rival story card in the victory display?",
+          "effects": [
+            {
+              "do": "count",
+              "id": "tmg_score_tally",
+              "section": "hidden",
+              "op": "add",
+              "value": 4
+            }
+          ],
+          "steps": [
+            "the-midwinter-gala:earn_4_points:text"
+          ]
+        }
+      ]
+    },
+    "the-midwinter-gala:ask_damage": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Is there 2[per_investigator] or less damage on the investigators, as a group?",
+          "effects": [
+            {
+              "do": "count",
+              "id": "tmg_score_tally",
+              "section": "hidden",
+              "op": "add",
+              "value": 3
+            }
+          ],
+          "steps": [
+            "the-midwinter-gala:earn_3_points:text"
+          ]
+        }
+      ]
+    },
+    "the-midwinter-gala:ask_horror": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Is there 2[per_investigator] or less horror on the investigators, as a group?",
+          "effects": [
+            {
+              "do": "count",
+              "id": "tmg_score_tally",
+              "section": "hidden",
+              "op": "add",
+              "value": 3
+            }
+          ],
+          "steps": [
+            "the-midwinter-gala:earn_3_points:text"
+          ]
+        }
+      ]
+    },
+    "the-midwinter-gala:check_any_defeated": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "scenario_data",
+        "take": false
+      },
+      "then": [],
+      "else": [
+        "the-midwinter-gala:ask_damage",
+        "the-midwinter-gala:ask_horror"
+      ]
+    },
+    "the-midwinter-gala:easy_no_effect:text": {
+      "kind": "story",
+      "text": "... there is no effect.",
+      "bullets": []
+    },
+    "the-midwinter-gala:standard_no_effect:text": {
+      "kind": "story",
+      "text": "... there is no effect.",
+      "bullets": []
+    },
+    "the-midwinter-gala:check_difficulty:hard:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "tmg_score_tally",
+          "section": "hidden",
+          "op": "add",
+          "value": 3
+        }
+      ]
+    },
+    "the-midwinter-gala:hard_3_points:text": {
+      "kind": "story",
+      "text": "... you earn <b>3</b> points.",
+      "bullets": []
+    },
+    "the-midwinter-gala:check_difficulty:expert:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "tmg_score_tally",
+          "section": "hidden",
+          "op": "add",
+          "value": 6
+        }
+      ]
+    },
+    "the-midwinter-gala:expert_6_points:text": {
+      "kind": "story",
+      "text": "... you earn <b>6</b> points.",
+      "bullets": []
+    },
+    "the-midwinter-gala:check_difficulty#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "expert"
+        ]
+      },
+      "then": [
+        "the-midwinter-gala:check_difficulty:expert:fx",
+        "the-midwinter-gala:expert_6_points:text"
+      ],
+      "else": []
+    },
+    "the-midwinter-gala:check_difficulty#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "hard"
+        ]
+      },
+      "then": [
+        "the-midwinter-gala:check_difficulty:hard:fx",
+        "the-midwinter-gala:hard_3_points:text"
+      ],
+      "else": [
+        "the-midwinter-gala:check_difficulty#3"
+      ]
+    },
+    "the-midwinter-gala:check_difficulty#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "standard"
+        ]
+      },
+      "then": [
+        "the-midwinter-gala:standard_no_effect:text"
+      ],
+      "else": [
+        "the-midwinter-gala:check_difficulty#2"
+      ]
+    },
+    "the-midwinter-gala:check_difficulty": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "easy"
+        ]
+      },
+      "then": [
+        "the-midwinter-gala:easy_no_effect:text"
+      ],
+      "else": [
+        "the-midwinter-gala:check_difficulty#1"
+      ]
+    },
+    "the-midwinter-gala:ask_points_on_faction_card": {
+      "kind": "counter",
+      "text": "The end of game points on your faction's story card.",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "tmg_score_tally",
+          "section": "hidden",
+          "op": "add",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "the-midwinter-gala:ask_final_score": {
+      "kind": "counter",
+      "text": "Score:",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "tmg_score_tally",
+          "section": "hidden",
+          "op": "set",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "the-midwinter-gala:check_tmg_score_tally": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "tmg_calculate_score",
+        "section": "hidden"
+      },
+      "then": [
+        "the-midwinter-gala:ask_manor_locations_without_clues",
+        "the-midwinter-gala:ask_guest_assets_controlled",
+        "the-midwinter-gala:ask_any_spellbound_cards",
+        "the-midwinter-gala:check_spellbound",
+        "the-midwinter-gala:ask_agenda_number",
+        "the-midwinter-gala:ask_bloodless_man_in_victory",
+        "the-midwinter-gala:ask_pale_lantern_in_victory",
+        "the-midwinter-gala:ask_declan_pearce_in_victory",
+        "the-midwinter-gala:ask_rival_in_victory",
+        "the-midwinter-gala:check_any_defeated",
+        "the-midwinter-gala:check_difficulty",
+        "the-midwinter-gala:ask_points_on_faction_card"
+      ],
+      "else": [
+        "the-midwinter-gala:ask_final_score"
+      ]
+    },
+    "the-midwinter-gala:earn_extra_tmg_tally_xp:text": {
+      "kind": "story",
+      "text": "Because your score is...",
+      "bullets": []
+    },
+    "the-midwinter-gala:upgradeDecks": {
+      "kind": "upgradeDecks"
+    }
+  }
+}

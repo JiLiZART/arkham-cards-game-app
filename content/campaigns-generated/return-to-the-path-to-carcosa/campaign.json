@@ -103,5 +103,54 @@
     "Return to Echoes of the Past",
     "Return to The Pallid Mask",
     "Return to The Unspeakable Oath"
+  ],
+  "logSections": [
+    {
+      "id": "campaign_notes",
+      "kind": "entries",
+      "label": "Campaign Notes"
+    },
+    {
+      "id": "chasing_the_stranger",
+      "kind": "count",
+      "label": "Chasing the Stranger"
+    },
+    {
+      "id": "vips_interviewed",
+      "kind": "entries",
+      "label": "VIPs Interviewed"
+    },
+    {
+      "id": "vips_slain",
+      "kind": "entries",
+      "label": "VIPs Slain"
+    },
+    {
+      "id": "doubt",
+      "kind": "count",
+      "label": "Doubt"
+    },
+    {
+      "id": "conviction",
+      "kind": "count",
+      "label": "Conviction"
+    }
+  ],
+  "cards": [
+    {
+      "scenario": "ptc-prologue",
+      "name": "Prologue",
+      "interlude": true
+    },
+    {
+      "scenario": "return-to-curtain-call",
+      "name": "Return to Curtain Call",
+      "code": "03043"
+    },
+    {
+      "scenario": "return-to-the-last-king",
+      "name": "Return to The Last King",
+      "code": "03061"
+    }
   ]
 }

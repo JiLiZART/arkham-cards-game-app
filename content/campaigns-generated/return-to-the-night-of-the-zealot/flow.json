@@ -1,0 +1,561 @@
+{
+  "setup": [
+    "campaign:prologue"
+  ],
+  "order": [
+    "return-to-the-gathering",
+    "return-to-the-midnight-masks",
+    "return-to-the-devourer-below"
+  ],
+  "interludes": {},
+  "resolutions": {
+    "return-to-the-gathering": {
+      "none": [
+        "return-to-the-gathering:house_standing",
+        "return-to-the-gathering:ghoul_priest_alive",
+        "return-to-the-gathering:earn_lita:text",
+        "return-to-the-gathering:earn_lita",
+        "return-to-the-gathering:earn_xp",
+        "return-to-the-gathering:upgradeDecks"
+      ],
+      "R1": [
+        "return-to-the-gathering:house_burned",
+        "return-to-the-gathering:earn_lita:text",
+        "return-to-the-gathering:earn_lita",
+        "return-to-the-gathering:mental_trauma:text",
+        "return-to-the-gathering:mental_trauma",
+        "return-to-the-gathering:earn_xp",
+        "return-to-the-gathering:upgradeDecks"
+      ],
+      "R2": [
+        "return-to-the-gathering:house_standing",
+        "return-to-the-gathering:lead_investigator_xp:text",
+        "return-to-the-gathering:lead_investigator_xp",
+        "return-to-the-gathering:earn_xp",
+        "return-to-the-gathering:upgradeDecks"
+      ],
+      "R3": [
+        "return-to-the-gathering:lita_finds_others",
+        "return-to-the-gathering:house_standing",
+        "return-to-the-gathering:ghoul_priest_alive",
+        "return-to-the-gathering:killed:text",
+        "return-to-the-gathering:check_lead_investigator_killed"
+      ]
+    },
+    "return-to-the-midnight-masks": {
+      "none": [],
+      "R1": [
+        "return-to-the-midnight-masks:cultists_interrogated",
+        "return-to-the-midnight-masks:cultists_got_away_r1",
+        "return-to-the-midnight-masks:ghoul_priest_defeated",
+        "return-to-the-midnight-masks:earn_xp",
+        "return-to-the-midnight-masks:upgradeDecks"
+      ],
+      "R2": [
+        "return-to-the-midnight-masks:cultists_interrogated",
+        "return-to-the-midnight-masks:cultists_got_away_r2",
+        "return-to-the-midnight-masks:past_midnight",
+        "return-to-the-midnight-masks:ghoul_priest_defeated",
+        "return-to-the-midnight-masks:earn_xp",
+        "return-to-the-midnight-masks:upgradeDecks"
+      ]
+    },
+    "return-to-the-devourer-below": {
+      "none": [
+        "return-to-the-devourer-below:arkham_succumbed",
+        "return-to-the-devourer-below:killed:text",
+        "return-to-the-devourer-below:killed",
+        "return-to-the-devourer-below:lose:text",
+        "return-to-the-devourer-below:lose"
+      ],
+      "R1": [
+        "return-to-the-devourer-below:ritual_broken",
+        "return-to-the-devourer-below:ritual_trauma:text",
+        "return-to-the-devourer-below:ritual_trauma",
+        "return-to-the-devourer-below:earn_5_xp",
+        "return-to-the-devourer-below:upgradeDecks",
+        "return-to-the-devourer-below:win:text",
+        "return-to-the-devourer-below:win"
+      ],
+      "R2": [
+        "return-to-the-devourer-below:umordhoth_repelled",
+        "return-to-the-devourer-below:fight_trauma:text",
+        "return-to-the-devourer-below:fight_trauma",
+        "return-to-the-devourer-below:earn_10_xp",
+        "return-to-the-devourer-below:upgradeDecks",
+        "return-to-the-devourer-below:win:text",
+        "return-to-the-devourer-below:win"
+      ],
+      "R3": [
+        "return-to-the-devourer-below:lita_sacrificed",
+        "return-to-the-devourer-below:lita_trauma:text",
+        "return-to-the-devourer-below:lita_trauma",
+        "return-to-the-devourer-below:madness_weakness:text",
+        "return-to-the-devourer-below:madness_weakness",
+        "return-to-the-devourer-below:earn_xp",
+        "return-to-the-devourer-below:upgradeDecks",
+        "return-to-the-devourer-below:survived:text",
+        "return-to-the-devourer-below:survived"
+      ]
+    }
+  },
+  "steps": {
+    "campaign:prologue": {
+      "kind": "story",
+      "text": "Friday, September 18, 1925. Arkham, Massachusetts. It is the end of a long and abnormally hot summer. The first hints of autumn beckon, but a heavy heat persists, relentless. A silent, unspoken anger grips the town. Tempers are short, and in the last week alone there have been numerous reports of townspeople coming to heated, violent blows with one another over simple misunderstandings.\nAnd now, a call from James Hankerson. He claims to have found a dismembered body in his barn.\nBlaming the weather would be too easy. There is something wrong with this town, and not a whole lot this old soothsayer can do to stop the slide. My auguries indicate a small group of investigators will soon take note of these strange happenings and set forth to make things right. I’ll be watching their progress… but I won’t be holding my breath.",
+      "bullets": []
+    },
+    "return-to-the-gathering:house_standing": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "house_standing",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-the-gathering:ghoul_priest_alive": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "ghoul_priest_alive",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-the-gathering:earn_lita:text": {
+      "kind": "story",
+      "text": "The lead investigator earns the Lita Chantler card and may include it in their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "return-to-the-gathering:earn_lita": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "01117",
+          "who": "lead"
+        }
+      ]
+    },
+    "return-to-the-gathering:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 2,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "return-to-the-gathering:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "return-to-the-gathering:house_burned": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "house_burned",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-the-gathering:mental_trauma:text": {
+      "kind": "story",
+      "text": "The lead investigator suffers 1 mental trauma from watching their home become a smoldering ruin.",
+      "bullets": []
+    },
+    "return-to-the-gathering:mental_trauma": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "lead",
+          "physical": 0,
+          "mental": 1
+        }
+      ]
+    },
+    "return-to-the-gathering:lead_investigator_xp:text": {
+      "kind": "story",
+      "text": "The lead investigator earns 1 experience, as they refused to let the night’s events destroy their life.",
+      "bullets": []
+    },
+    "return-to-the-gathering:lead_investigator_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "lead",
+          "victory": false
+        }
+      ]
+    },
+    "return-to-the-gathering:lita_finds_others": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "lita_finds_others",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-the-gathering:killed:text": {
+      "kind": "story",
+      "text": "Each investigator who has not resigned is <b>killed</b>. If there are not enough investigators to continue the campaign, the campaign is over and the players lose. Otherwise, advance to the next scenario. (Each player whose investigator has been killed must choose a new investigator from the pool of available investigators. Refer to page 13 of the Rules Reference for the full rules on killed investigators.)",
+      "bullets": []
+    },
+    "return-to-the-gathering:lead_investigator_killed:text": {
+      "kind": "story",
+      "text": "Because the lead investigator was killed, choose an investigator to earn the Lita Chantler card. That investigator may include this card in their deck. It does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "return-to-the-gathering:lead_investigator_killed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "01117",
+          "who": "choice"
+        }
+      ]
+    },
+    "return-to-the-gathering:check_lead_investigator_killed": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "trauma",
+        "take": false
+      },
+      "then": [
+        "return-to-the-gathering:lead_investigator_killed:text",
+        "return-to-the-gathering:lead_investigator_killed",
+        "return-to-the-gathering:upgradeDecks"
+      ],
+      "else": []
+    },
+    "return-to-the-midnight-masks:cultists_interrogated": {
+      "kind": "cardChoice",
+      "text": "In your Campaign Log, under “Cultists We Interrogated,” record the names of each unique Cultist enemy in the victory display.",
+      "codes": [],
+      "min": 1,
+      "max": 1,
+      "effects": [
+        {
+          "do": "listCards",
+          "id": "cultists_interrogated",
+          "section": "cultists_interrogated",
+          "codes": [
+            "$input"
+          ],
+          "remove": false
+        }
+      ],
+      "steps": []
+    },
+    "return-to-the-midnight-masks:cultists_got_away_r1": {
+      "kind": "cardChoice",
+      "text": "In your Campaign Log, under “Cultists Who Got Away,” record the name of each unique enemy still remaining in the Cultist deck or in play. If it is Agenda 1, record “The Masked Hunter” under “Cultists Who Got Away” as well.",
+      "codes": [],
+      "min": 1,
+      "max": 1,
+      "effects": [
+        {
+          "do": "listCards",
+          "id": "cultists_escaped",
+          "section": "cultists_escaped",
+          "codes": [
+            "$input"
+          ],
+          "remove": false
+        }
+      ],
+      "steps": []
+    },
+    "return-to-the-midnight-masks:ask_ghoul_priest_defeated": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "ghoul_priest_killed",
+          "text": "Is the Ghoul Priest in the victory display?",
+          "effects": [
+            {
+              "do": "crossOut",
+              "key": "ghoul_priest_alive",
+              "section": "campaign_notes"
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "return-to-the-midnight-masks:ghoul_priest_defeated": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "ghoul_priest_alive",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "return-to-the-midnight-masks:ask_ghoul_priest_defeated"
+      ],
+      "else": []
+    },
+    "return-to-the-midnight-masks:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "return-to-the-midnight-masks:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "return-to-the-midnight-masks:cultists_got_away_r2": {
+      "kind": "cardChoice",
+      "text": "In your Campaign Log, under “Cultists Who Got Away,” record the name of each unique enemy still remaining in the Cultist deck or in play.",
+      "codes": [],
+      "min": 1,
+      "max": 1,
+      "effects": [
+        {
+          "do": "listCards",
+          "id": "cultists_escaped",
+          "section": "cultists_escaped",
+          "codes": [
+            "$input"
+          ],
+          "remove": false
+        }
+      ],
+      "steps": []
+    },
+    "return-to-the-midnight-masks:past_midnight": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "past_midnight",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-the-devourer-below:arkham_succumbed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "arkham_succumbed",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-the-devourer-below:killed:text": {
+      "kind": "story",
+      "text": "Each surviving investigator is <b>killed</b>.",
+      "bullets": []
+    },
+    "return-to-the-devourer-below:killed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "kill",
+          "who": "each"
+        }
+      ]
+    },
+    "return-to-the-devourer-below:lose:text": {
+      "kind": "story",
+      "text": "The investigators lose.",
+      "bullets": []
+    },
+    "return-to-the-devourer-below:lose": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "lose"
+        }
+      ]
+    },
+    "return-to-the-devourer-below:ritual_broken": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "ritual_broken",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-the-devourer-below:ritual_trauma:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 2 mental trauma, as they never fully recover from their ordeal.",
+      "bullets": []
+    },
+    "return-to-the-devourer-below:ritual_trauma": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 0,
+          "mental": 2
+        }
+      ]
+    },
+    "return-to-the-devourer-below:earn_5_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 5,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "return-to-the-devourer-below:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "return-to-the-devourer-below:win:text": {
+      "kind": "story",
+      "text": "The investigators win!",
+      "bullets": []
+    },
+    "return-to-the-devourer-below:win": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "win"
+        }
+      ]
+    },
+    "return-to-the-devourer-below:umordhoth_repelled": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "umordhoth_repelled",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-the-devourer-below:fight_trauma:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 2 physical and 2 mental trauma, as the fight against Umôrdhoth has taken its toll on their body and mind.",
+      "bullets": []
+    },
+    "return-to-the-devourer-below:fight_trauma": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 2,
+          "mental": 2
+        }
+      ]
+    },
+    "return-to-the-devourer-below:earn_10_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 10,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "return-to-the-devourer-below:lita_sacrificed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "lita_sacrificed",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "removeCard",
+          "code": "01117"
+        }
+      ]
+    },
+    "return-to-the-devourer-below:lita_trauma:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 2 physical and 2 mental trauma, as the mere sight of Umôrdhoth has taken its toll on their body and mind.",
+      "bullets": []
+    },
+    "return-to-the-devourer-below:lita_trauma": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 2,
+          "mental": 2
+        }
+      ]
+    },
+    "return-to-the-devourer-below:madness_weakness:text": {
+      "kind": "story",
+      "text": "The guilt over sacrificing Lita forever haunts your memory. Each investigator must search the collection for a random [[Madness]] weakness and add it to their deck.",
+      "bullets": []
+    },
+    "return-to-the-devourer-below:madness_weakness": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addWeakness",
+          "trait": "Madness"
+        }
+      ]
+    },
+    "return-to-the-devourer-below:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "return-to-the-devourer-below:survived:text": {
+      "kind": "story",
+      "text": "The investigators have survived, but their actions weigh heavily on their consciences.",
+      "bullets": []
+    },
+    "return-to-the-devourer-below:survived": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "survived"
+        }
+      ]
+    }
+  }
+}

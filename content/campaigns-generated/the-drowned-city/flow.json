@@ -1,0 +1,273 @@
+{
+  "setup": [
+    "campaign:prologue"
+  ],
+  "order": [
+    "tdc-prologue",
+    "one-last-job",
+    "an-offer-you-cant-refuse"
+  ],
+  "interludes": {
+    "tdc-prologue": {
+      "kind": "interlude",
+      "name": "Prologue",
+      "steps": [
+        "tdc-prologue:intro"
+      ]
+    },
+    "an-offer-you-cant-refuse": {
+      "kind": "interlude",
+      "name": "An Offer You Can't Refuse",
+      "steps": [
+        "an-offer-you-cant-refuse:intro",
+        "an-offer-you-cant-refuse:check_detective",
+        "an-offer-you-cant-refuse:intro_cont",
+        "an-offer-you-cant-refuse:explain_tasks:text",
+        "an-offer-you-cant-refuse:choose_tasks",
+        "an-offer-you-cant-refuse:intro_2",
+        "an-offer-you-cant-refuse:choice",
+        "an-offer-you-cant-refuse:activate_tasks"
+      ]
+    }
+  },
+  "resolutions": {
+    "one-last-job": {
+      "none": [
+        "one-last-job:ruby_won_the_bet",
+        "one-last-job:earn_xp",
+        "one-last-job:branch_discovered_an_alien_language",
+        "one-last-job:upgradeDecks"
+      ],
+      "R1": [
+        "one-last-job:ruby_lost_the_bet",
+        "one-last-job:earn_xp",
+        "one-last-job:branch_discovered_an_alien_language",
+        "one-last-job:upgradeDecks"
+      ]
+    }
+  },
+  "steps": {
+    "campaign:prologue": {
+      "kind": "story",
+      "text": "“... the nightmare corpse-city of R’lyeh, that was built in measureless aeons behind history by the vast, loathsome shapes that seeped down from the dark stars. There lay great Cthulhu and his hordes, hidden in green slimy vaults and sending out at last, after cycles incalculable, the thoughts that spread fear to the dreams of the sensitive and called imperiously to the faithful to come on a pilgrimage of liberation and restoration.”\n<right>–H. P. Lovecraft, “The Call of Cthulhu“</right>",
+      "bullets": []
+    },
+    "tdc-prologue:intro": {
+      "kind": "story",
+      "text": "<fancy>April 15</fancy>\nSomething hasn't seemed right for a while. It has been an unusually cold year, with heavy snow, rain, and fog keeping the New England sky in a state of perpetual melancholy. A restive nervousness seems to have crept into all aspects of domestic life. Small arguments on street corners come to blows. Muffled shouts and screams resound behind closed doors. A not insignificant number of students have simply stopped attending classes at Miskatonic University. The people of Arkham feel it in their bones. Something is different. Something feels wrong.",
+      "bullets": []
+    },
+    "one-last-job:ruby_won_the_bet": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "ruby_won_the_bet",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "one-last-job:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "one-last-job:discover_hash_symbol:text": {
+      "kind": "story",
+      "text": "You discover this symbol:\n<center>[tdc_rune_a]</center>\nIn your Campaign Log, record \"Depths\" under [tdc_rune_a] on the glyph record. This glyph has been translated.",
+      "bullets": []
+    },
+    "one-last-job:discover_hash_symbol": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "tdc_rune_a",
+          "section": "glyphs",
+          "value": true
+        }
+      ]
+    },
+    "one-last-job:check_discovered_an_alien_language": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "discovered_an_alien_language",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "one-last-job:discover_hash_symbol:text",
+        "one-last-job:discover_hash_symbol"
+      ],
+      "else": []
+    },
+    "one-last-job:discovered_an_alien_language": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "discovered_an_alien_language",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "one-last-job:ask_discovered_an_alien_language": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Did the investigators discover an alien language?",
+          "effects": [],
+          "steps": [
+            "one-last-job:discovered_an_alien_language",
+            "one-last-job:discover_hash_symbol:text",
+            "one-last-job:discover_hash_symbol"
+          ]
+        }
+      ]
+    },
+    "one-last-job:branch_discovered_an_alien_language": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "discovered_an_alien_language",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "one-last-job:check_discovered_an_alien_language"
+      ],
+      "else": [
+        "one-last-job:ask_discovered_an_alien_language"
+      ]
+    },
+    "one-last-job:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "one-last-job:ruby_lost_the_bet": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "ruby_lost_the_bet",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "an-offer-you-cant-refuse:intro": {
+      "kind": "story",
+      "text": "\"What you have recovered is no mere curio. It was bought at great expense from a dealer in Egypt, who inherited it from a relative who bought it in Peking, you know how it goes,\" Randall smirks as you admire the ancient artifact. It is a vaguely humanoid figure, sitting in a stooped position, with a heavy, octopoid head and squid-like features. There is something malevolent in its expression, something unwholesome in the very way it was sculpted. You find it difficult to look away.",
+      "bullets": []
+    },
+    "an-offer-you-cant-refuse:detective_story": {
+      "kind": "story",
+      "text": "Randall's operatic tale of the artifact's  acquisition seems needlessly contrived. You have every reason to believe the ancient statue was obtained through less than legitimate means. Sadly, this tells you nothing of the relic's true origins.",
+      "bullets": []
+    },
+    "an-offer-you-cant-refuse:check_detective": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "an-offer-you-cant-refuse:detective_story"
+      ],
+      "else": []
+    },
+    "an-offer-you-cant-refuse:intro_cont": {
+      "kind": "story",
+      "text": "\"This is a singular relic of prehistoric, dare I say, pre-human origins,\" Randall's voice breaks the spell. The rest of the eccentric antiquarian's story boggles the mind. He describes a record of some ancient cosmic struggle, and how he believes that all of earth is on the cusp of an apocalypse, much like the one that destroyed the statue's creator.\nIn all of human history—in every separate mythology—there exists a story of a great flood. A cataclysm. There are legends of a great city-state: a bastion of knowledge and might, that sank beneath the waves. Humankind has named it many things. Atlantis. Mu. Lemuria. But its true name, a name that predates history, is <i><b>R’lyeh</b></i>.\n\"Through much painstaking research, and the assistance of a mad sailor named Gustaf, I have pinpointed the relative coordinates of the ancient city. A stretch of ocean in the South Pacific where many sailing vessels have shipwrecked or disappeared with no explanation. Which brings me to my offer. I need someone bold and resourceful to lead an expedition to the ancient city. Someone to bring back evidence of its ancient knowledge, study its secrets, record its wonders. I need that person to be you\" Randall says, looking to you, then to Ruby and Andy.\n\"Should you accept, I shall absolve you of any remaining debt and provide you enough money to retire comfortably. <i>Very</i> comfortably. And, of course, lend my assistance for your <i>other</i> concerns.\"\nYour mind wanders back to those other \"concerns.\"",
+      "bullets": []
+    },
+    "an-offer-you-cant-refuse:explain_tasks:text": {
+      "kind": "story",
+      "text": "In player order, each investigator chooses a different Task.",
+      "bullets": []
+    },
+    "an-offer-you-cant-refuse:choose_tasks": {
+      "kind": "unsupported",
+      "name": "investigator_choice",
+      "text": "Choose a task:",
+      "effects": [],
+      "steps": []
+    },
+    "an-offer-you-cant-refuse:intro_2": {
+      "kind": "story",
+      "text": "You narrow your eyes at Randall. There's something he's not telling you. Some catch. There's always a catch with Tillinghast. Just as there's always one more job to be done. You ask him what it is and he sighs. \"I thought it was obvious, but this expedition is likely to be rather perilous. Which is why I thought to entrust it to you. You've proven yourself to be quite resourceful. And as I said, I intend to reward you handsomely\"",
+      "bullets": []
+    },
+    "an-offer-you-cant-refuse:refuse_story": {
+      "kind": "story",
+      "text": "There has to be a catch. Tillinghast wouldn't offer such tempting bait otherwise. You're through with him. You shake your head no.\n\"Then get out,\" Tilhnghast says icily, pointing to the door. \"I have no further use for you. Rest assured, however, that if you speak a word of this to anyone, you will regret it.\" Without a word, you walk out of the shop, leaving behind whatever wonders—and dangers—Tillinghast had in store for you.",
+      "bullets": []
+    },
+    "an-offer-you-cant-refuse:lose_campaign:text": {
+      "kind": "story",
+      "text": "The investigators lose the campaign.",
+      "bullets": []
+    },
+    "an-offer-you-cant-refuse:lose_campaign": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "lose"
+        }
+      ]
+    },
+    "an-offer-you-cant-refuse:accept_story": {
+      "kind": "story",
+      "text": "Whatever his reasons for burying the lede, the offer is too tempting to refuse. Ruby and Andy nod along with you in agreement. Tillinghast's face breaks into a familiar smirk. \"How lovely. I'd hoped you would say yes. Truly, this is the opportunity of a lifetime. I assure you this will change <i>everything.</i>\"\nAfter Andy negotiates for a comprehensive supply of film, and Ruby ups her commission,Tillinghast outlines the plan for the expedition. Tomorrow, a train will take you to San Francisco, where the <i>Cassandra</i> will sail you down to the provided coordinates in the South Pacific. There is an excited, almost childlike glee as the antiquarian outlines the details. \"I've sent supplies enough to last the entire expedition several months if needed. That said, be prepared for anything.\"",
+      "bullets": []
+    },
+    "an-offer-you-cant-refuse:choice": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "refuse",
+          "text": "Refuse",
+          "effects": [],
+          "steps": [
+            "an-offer-you-cant-refuse:refuse_story",
+            "an-offer-you-cant-refuse:lose_campaign:text",
+            "an-offer-you-cant-refuse:lose_campaign"
+          ]
+        },
+        {
+          "id": "accept",
+          "text": "Accept",
+          "effects": [
+            {
+              "do": "nextScenario",
+              "scenario": "expedition-to-ryleh"
+            }
+          ],
+          "steps": [
+            "an-offer-you-cant-refuse:accept_story"
+          ]
+        }
+      ]
+    },
+    "an-offer-you-cant-refuse:activate_tasks": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "tasks_active",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    }
+  }
+}
