@@ -38,6 +38,54 @@ describe("a card works when every printed line is accounted for", () => {
   });
 });
 
+/** a scenario "s" whose reference card "r" prints these lines, with these token tables */
+const scenario = (front: string, back: string | undefined, tokens: object): ContentDb =>
+  ({
+    cards: { r: { code: "r", type: "scenario", text: front, backText: back, abilities: [] } },
+    scenarios: { s: { id: "s", card: "r", tokens } },
+    scripts: {},
+  }) as unknown as ContentDb;
+const FRONT = "Easy / Standard\n[skull] -X. X is the number of [[Ghoul]] enemies at your location.\n[cultist] -1. If you fail, take 1 horror.\n[tablet] -2. If there is a [[Ghoul]] enemy at your location, take 1 damage.";
+const BACK = "Hard / Expert\n[skull] -2. If you fail, after this skill test, search the encounter deck for a [[Ghoul]] enemy, and draw it.\n[cultist] Reveal another token. If you fail, take 2 horror.\n[tablet] -4. If there is a [[Ghoul]] enemy at your location, take 1 damage and 1 horror.";
+const easyStd = { skull: { modifier: "X", x: "ghoulsAtYourLocation" }, cultist: { modifier: -1, onFail: [{}] }, tablet: { modifier: -2, condition: {}, onReveal: [{}] } };
+const hardExp = { skull: { modifier: -2, onFail: [{}] }, cultist: { modifier: 0, revealAnother: true, onFail: [{}] }, tablet: { modifier: -4, condition: {}, onReveal: [{}] } };
+const all = { easy: easyStd, standard: easyStd, hard: hardExp, expert: hardExp };
+
+describe("a scenario reference card works when its token lines are real", () => {
+  it("every line covered on all four difficulties", () => {
+    expect(implemented(scenario(FRONT, BACK, all), "r")).toBe(true);
+  });
+
+  it("a colon after the token, with or without a space before it, makes no difference", () => {
+    const flat = { skull: { modifier: "X", x: "ghoulsAtYourLocation" }, cultist: { modifier: -1 }, tablet: { modifier: -2 } };
+    expect(implemented(scenario("[skull] : -X. X is the number of Ghouls.\n[cultist]: -1.\n[tablet] -2.", undefined, { easy: flat, standard: flat, hard: flat, expert: flat }), "r")).toBe(true);
+  });
+
+  it("only Easy and Standard written: the back's lines are not covered", () => {
+    expect(implemented(scenario(FRONT, BACK, { easy: easyStd, standard: easyStd }), "r")).toBe(false);
+  });
+
+  it("placeholders (modifiers only) do not cover X, a failure effect or a reveal effect", () => {
+    const flat = { skull: { modifier: -1 }, cultist: { modifier: -1 }, tablet: { modifier: -2 } };
+    expect(implemented(scenario(FRONT, BACK, { easy: flat, standard: flat, hard: flat, expert: flat }), "r")).toBe(false);
+  });
+
+  it("a bare modifier line needs only the modifier", () => {
+    const flat = { skull: { modifier: -1 }, cultist: { modifier: -1 }, tablet: { modifier: -2 } };
+    expect(implemented(scenario("Easy / Standard\n[skull] -1.\n[cultist] -1.\n[tablet] -2.", undefined, { easy: flat, standard: flat, hard: flat, expert: flat }), "r")).toBe(true);
+  });
+
+  it("empty token tables (a Return-to scenario) do not work although the card prints no token lines", () => {
+    expect(implemented(scenario("Perform the setup as in the Campaign Guide.", undefined, { easy: {}, standard: {}, hard: {}, expert: {} }), "r")).toBe(false);
+  });
+
+  it("a reference card no scenario uses does not work", () => {
+    const d = scenario(FRONT, BACK, all);
+    d.scenarios = {};
+    expect(implemented(d, "r")).toBe(false);
+  });
+});
+
 describe("on the real content", () => {
   let real: ContentDb;
   beforeAll(async () => {
@@ -46,6 +94,11 @@ describe("on the real content", () => {
 
   it("the Ghoul Priest, the Ravenous Ghoul and the three Arkham Woods work by their data", () => {
     for (const code of ["01116", "01161", "01152", "01153", "01154"]) expect(implemented(real, code), code).toBe(true);
+  });
+
+  it("Night of the Zealot's reference cards are not yet real on Hard and Expert, a generated one is a placeholder", () => {
+    expect(implemented(real, "01104")).toBe(false);
+    expect(implemented(real, "02041")).toBe(false); // Extracurricular Activity
   });
 
   it("a card with a Forced line and no behaviour does not work", () => {

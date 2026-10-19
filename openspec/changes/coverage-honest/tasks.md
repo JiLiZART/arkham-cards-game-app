@@ -5,7 +5,7 @@
 ## 1. What "works" means
 
 - [x] 1.1 `implemented()`: a table of line kinds to the field that runs them (`Prey -` → `prey`, "investigated using [x] instead" → `investigateSkill`, `Uses (` → `uses`, "Max n committed per skill test" → `maxCommitted`, with spawn and keyword lines as now); a card works when no line is left; tests: the Ghoul Priest, the Ravenous Ghoul and the three Arkham Woods work, a card with `prey` and an uncovered Forced line doesn't, and the patterns matched against real cards of several cycles.
-- [ ] 1.2 Reference cards: each token line of the front (Easy, Standard) and back (Hard, Expert) covered by its scenario's token entry for that difficulty (modifier, `x`, `onFail`, `onReveal` or `condition`, `revealAnother`); a reference card no scenario uses doesn't work; tests: a placeholder-only generated scenario doesn't work, a scenario with Easy and Standard only doesn't work, a fixture with all four difficulties written works.
+- [x] 1.2 Reference cards: each token line of the front (Easy, Standard) and back (Hard, Expert) covered by its scenario's token entry for that difficulty (modifier, `x`, `onFail`, `onReveal` or `condition`, `revealAnother`); a reference card no scenario uses doesn't work; tests: a placeholder-only generated scenario doesn't work, a scenario with Easy and Standard only doesn't work, a fixture with all four difficulties written works.
 
 ## 2. Per-scenario coverage
 
