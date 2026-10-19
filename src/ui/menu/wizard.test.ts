@@ -4,7 +4,7 @@ import { campaignName } from "../../content/i18n";
 import { db } from "../../engine/testkit";
 import { saveCustomDeck } from "../decks";
 import type { Storage } from "../store";
-import { back, canContinue, cardsOfPicks, sortPicker, SORTS, deckProblems, cycleName, picksReady, cyclesOf, decksFor, investigatorInfo, pickerList, campaignOrder, filterCampaigns, tileName, initialWizard, NO_CAMPAIGN_FILTER, type CampaignFilter, invalidDecksFor, next, setCampaign, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type WizardState } from "./wizard";
+import { back, canContinue, cardsOfPicks, sortPicker, SORTS, deckProblems, cycleName, picksReady, cyclesOf, decksFor, investigatorInfo, pickerList, campaignOrder, campaignComplete, filterCampaigns, tileName, initialWizard, NO_CAMPAIGN_FILTER, type CampaignFilter, invalidDecksFor, next, setCampaign, setDeck, setDifficulty, STEPS, toggleInvestigator, toSetup, type WizardState } from "./wizard";
 
 const ROLAND = "01001";
 const DAISY = "01002";
@@ -165,10 +165,24 @@ describe("filtering the campaign list", () => {
     expect(ids({ kind: "side" })).toContain("side-carnevale-of-horrors");
   });
 
-  it("by rules: only the hand-written campaign is complete, the generated ones are partial", () => {
-    expect(ids({ rules: "complete" })).toEqual(["night-of-the-zealot"]);
-    expect(ids({ rules: "partial" })).not.toContain("night-of-the-zealot");
-    expect(ids({ rules: "partial" }).length + 1).toBe(ids().length);
+  it("by rules: complete is what the coverage reports complete, whoever wrote the campaign", () => {
+    const complete = Object.entries(db.coverage!.campaigns).filter(([, c]) => c.complete).map(([id]) => id);
+    expect(ids({ rules: "complete" }).sort()).toEqual(complete.sort());
+    expect(ids({ rules: "complete" }).length + ids({ rules: "partial" }).length).toBe(ids().length);
+  });
+
+  it("the mark follows the numbers: Night of the Zealot until its cards all work, Dunwich is partial", () => {
+    const zealot = db.coverage!.campaigns["night-of-the-zealot"];
+    expect(campaignComplete(db, "night-of-the-zealot")).toBe(zealot.cards.works === zealot.cards.total && !zealot.unscripted.length);
+    expect(campaignComplete(db, "the-dunwich-legacy")).toBe(false);
+    expect(ids({ rules: "partial" })).toContain("the-dunwich-legacy");
+  });
+
+  it("a generated campaign whose coverage is full is complete, and a hand-written one with cards left is not", () => {
+    const full = { ...db, coverage: { ...db.coverage!, campaigns: { ...db.coverage!.campaigns, "side-carnevale-of-horrors": { cards: { total: 3, works: 3, rest: {} }, unscripted: [], complete: true }, "night-of-the-zealot": { cards: { total: 3, works: 2, rest: { enemy: 1 } }, unscripted: [], complete: false } } } };
+    expect(campaignComplete(full, "side-carnevale-of-horrors")).toBe(true);
+    expect(filterCampaigns(full, "en", { ...NO_CAMPAIGN_FILTER, rules: "complete" }).map((c) => c.id)).toContain("side-carnevale-of-horrors");
+    expect(filterCampaigns(full, "en", { ...NO_CAMPAIGN_FILTER, rules: "partial" }).map((c) => c.id)).toContain("night-of-the-zealot");
   });
 
   it("by length: one scenario, two to four, five or more", () => {
@@ -198,8 +212,8 @@ describe("filtering the campaign list", () => {
 
   it("combines the filters", () => {
     expect(ids({ kind: "side", query: "carn" })).toEqual(["side-carnevale-of-horrors"]);
-    expect(ids({ kind: "campaign", rules: "complete" })).toEqual(["night-of-the-zealot"]);
-    expect(ids({ kind: "side", rules: "complete" })).toEqual([]);
+    expect(ids({ kind: "side", rules: "complete" }).every((id) => id.startsWith("side-"))).toBe(true);
+    expect(ids({ kind: "campaign", rules: "partial" })).toContain("the-dunwich-legacy");
   });
 });
 
@@ -231,6 +245,11 @@ describe("choosing among all investigators", () => {
     expect(investigatorInfo(db, "02001", "en")).toMatchObject({ name: "Zoey Samaras", faction: "guardian", pack: "dwl" });
     expect(investigatorInfo(db, "02001", "ru").name).toBe("Зои Самарас");
     expect(investigatorInfo(db, "01001", "ru").name).toBe("Роланд Бэнкс");
+  });
+
+  it("marks an investigator by the coverage of their card and signature cards", () => {
+    const byCode = Object.fromEntries(pickerList(db, "en", all).map((i) => [i.code, i]));
+    for (const [code, works] of Object.entries(db.coverage!.investigators)) expect(byCode[code].partlyImplemented, code).toBe(!works);
   });
 
   it("notes the investigators whose ability has no written behaviour, and those with no deck", () => {

@@ -14,7 +14,7 @@
 
 ## 3. The label from coverage
 
-- [ ] 3.1 `wizard.ts`: `filterCampaigns`'s rules filter and a `campaignComplete(db, id)` from coverage; the investigator picker's `partlyImplemented` from `investigatorCoverage`; tests (Night of the Zealot's mark follows its numbers, Dunwich is partial, a fixture campaign with full coverage is complete although generated).
+- [x] 3.1 `wizard.ts`: `filterCampaigns`'s rules filter and a `campaignComplete(db, id)` from coverage; the investigator picker's `partlyImplemented` from `investigatorCoverage`; tests (Night of the Zealot's mark follows its numbers, Dunwich is partial, a fixture campaign with full coverage is complete although generated).
 - [ ] 3.2 `NewGame.tsx` tile badge and `CampaignSheet.tsx` note from coverage, with "n of m cards work" and the scenarios without a script; strings in English and Russian.
 
 ## 4. The program

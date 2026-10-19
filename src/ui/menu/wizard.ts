@@ -42,6 +42,9 @@ export function campaignOrder(db: ContentDb): CampaignDef[] {
   return Object.values(db.campaigns).sort((a, b) => group(a) - group(b) || (card(a) < card(b) ? -1 : card(a) > card(b) ? 1 : a.id < b.id ? -1 : 1));
 }
 
+/** whether a campaign is complete, as the content's coverage reports it (a campaign without a report counts as complete when it is not generated) */
+export const campaignComplete = (db: ContentDb, id: string): boolean => db.coverage?.campaigns[id]?.complete ?? !db.campaigns[id]?.generated;
+
 /** the filters over the campaign list: what kind, how complete, how long, and a name to look for */
 export interface CampaignFilter {
   kind: "all" | "campaign" | "return" | "side";
@@ -64,7 +67,7 @@ export function filterCampaigns(db: ContentDb, locale: string, f: CampaignFilter
   const q = f.query.trim().toLowerCase();
   return campaignOrder(db).filter((c) => {
     if (f.kind !== "all" && campaignKind(c) !== f.kind) return false;
-    if (f.rules !== "all" && (f.rules === "complete") === !!c.generated) return false;
+    if (f.rules !== "all" && (f.rules === "complete") !== campaignComplete(db, c.id)) return false;
     if (f.length !== "all" && lengthOf(c) !== f.length) return false;
     if (!q) return true;
     const names = [campaignName(db, c.id, locale), c.name, ...campaignBlurb(db, c.id, locale).scenarios, ...(c.scenarioNames ?? [])];
@@ -107,8 +110,8 @@ export function pickerList(db: ContentDb, locale: string, f: PickerFilter) {
       const en = investigatorInfo(db, def.code, "en");
       return {
         code: def.code, ...info,
-        // the ability is written behaviour only when the card is here and carries abilities; the others show their text and do nothing
-        partlyImplemented: !db.cards[def.code]?.abilities.length,
+        // works when the investigator's card and their signature cards do (content/coverage.json); the others show their text and do nothing
+        partlyImplemented: !(db.coverage?.investigators[def.code] ?? !!db.cards[def.code]?.abilities.length),
         needsDeck: decksFor(db, def.code).length === 0,
         haystack: [info.name, info.subname, en.name, en.subname].join(" ").toLowerCase(),
       };
