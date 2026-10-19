@@ -14,7 +14,7 @@ import { allEliminated, finishRevelation, handlers as scenarioHandlers, nextAct,
 import { handlers as testHandlers, startTest } from "./rules/skillTest";
 import type { Action, ChoiceOption, ContentDb, EffCtx, GameEvent, GameSetup, GameState, InstId, Step } from "./types";
 
-export const ENGINE_VERSION = 2;
+export const ENGINE_VERSION = 3;
 
 // ---------- internal script functions (code "__engine") ----------
 const ENGINE_FNS: Record<string, (g: G, ctx: EffCtx, step: Step) => void> = {

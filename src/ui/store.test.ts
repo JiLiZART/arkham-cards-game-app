@@ -171,6 +171,22 @@ describe("ui store", () => {
   });
 });
 
+describe("the damage window (engine version 3)", () => {
+  it("a game saved under version 2 keeps its campaign and restarts the scenario", () => {
+    const storage = mem();
+    start(storage);
+    const save = JSON.parse(storage.data.get(SAVE_KEY)!);
+    save.version = 2;
+    storage.setItem(SAVE_KEY, JSON.stringify(save));
+    const s = createGameStore(db, storage);
+    s.getState().resume();
+    expect(s.getState().screen).toBe("log");
+    expect(s.getState().game).toBeNull();
+    expect(s.getState().campaign).not.toBeNull();
+    expect(s.getState().notice).toMatch(/restart/);
+  });
+});
+
 describe("undo", () => {
   it("takes back a commit, then the action; never past the token draw", () => {
     const s = start(mem());

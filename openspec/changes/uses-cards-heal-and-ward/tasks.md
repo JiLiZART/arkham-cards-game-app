@@ -3,7 +3,7 @@
 - [x] 1.1 Trigger `attackDealsDamage`; `AssignDamage` for an enemy attack opens it before assigning (`windowed`); effect `preventDamage { amount, kind }` recording against the window's key, a choice when `either` and both were dealt; the windowed step subtracts it; tests: prevented damage, prevented horror, a choice when both, all prevented assigns nothing, a treachery's damage opens no window, an attack with nothing to answer the window asks nothing new.
 - [x] 1.2 Assignment option labels by key (`option.assignDamage` / `option.assignHorror`, `card`, `defeated`), in English and Russian; `optionLabel` and the strip's button render them; tests (an asset at 0 of 1 health reads "(defeated)", one with room doesn't).
 - [x] 1.3 `cost.takeDamage` (direct damage on the controller); `heal` with `targetAlly: "atLocation" | "controlled"` offering Ally assets alongside the investigators; schema and validation; tests.
-- [ ] 1.4 `ENGINE_VERSION` 3; a test that a version-2 save restarts its scenario with its campaign kept.
+- [x] 1.4 `ENGINE_VERSION` 3; a test that a version-2 save restarts its scenario with its campaign kept.
 
 ## 2. The cards
 
