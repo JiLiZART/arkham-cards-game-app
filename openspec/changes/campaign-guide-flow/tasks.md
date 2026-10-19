@@ -1,0 +1,33 @@
+## 1. The step language
+
+- [ ] 1.1 `schema.ts`: `CampaignStep` (story, branch, input with `kind` chooseOne | counter | investigatorChoice | cardChoice | checklist | sideScenario and `unsupported?`, effects, playScenario, upgradeDecks, end), `FlowCondition` (logHas, logCrossedOut, logCount, logCards, investigatorCount, scenarioCompleted, resolution, difficulty, playerCount, trauma, hasCard, all, any, not; `unsupported` with a default), `FlowEffect` (the present `CampaignEffect` plus count, listCards, crossOut in a section, removeChaosToken, replaceCard, nextScenario, skipScenario, replayScenario, setData), `CampaignFlow` (`setup`, `steps`, per-scenario `resolutions: Record<id, string[]>`); `CampaignDef.logSections` and `cards`; `Resolution.steps` optional beside `effects`; tests on the schema's refusals (an unknown step id, a section not declared).
+- [ ] 1.2 `content/campaigns/night-of-the-zealot/flow.json` by hand (prologue, the three scenarios, the resolutions as steps, the campaign's end), the log sections, and the loader turning a resolution's `effects` into one step; `scenarios.test.ts` and `campaign.test.ts` still pass with the keys the scripts read.
+
+## 2. The compiler
+
+- [ ] 2.1 `scripts/campaignGuide.ts` `compileFlow(campaign, scenarios, cards)`: steps by id, the campaign setup, scenarios in order with interludes and epilogues as `playScenario` and story steps, resolutions' steps with branches and inputs, conditions and effects mapped, variables (`$input_value`, `lead_investigator`, `all`, `choice`) carried, unsupported kinds compiled to text with the guide's default; unit tests on Dunwich fixtures (Armitage's Fate branch, the Survivors' choices, Extracurricular Activity's Resolution 4 effects in order) and Carcosa's doubt/conviction counters.
+- [ ] 2.2 `import-campaigns.ts`: writes `flow.json`, `logSections` and `cards` (codes and names, interludes marked) into `campaign.json`; prints the unsupported steps per campaign and the cards it couldn't find by name (to look up in the Russian PDFs or Hall of Arkham); the census test fixes 22 flows and the count of unsupported kinds; a rerun is identical.
+- [ ] 2.3 `import-i18n.ts`: step texts (title, text, bullets, choice texts) from `all_campaigns_ru.txt` by step id into `campaign-texts/<id>.json`; `i18n.ts` `stepText(db, campaignId, stepId, locale)` with the English fallback; the missing Russian steps listed.
+- [ ] 2.4 `check:content` `checkFlow`: every step reachable from `setup`, every reference resolving (steps, scenarios, sections, cards), every path reaching `end`; run on the hand-written and all generated flows.
+
+## 3. The interpreter
+
+- [ ] 3.1 `src/engine/flow.ts`: `advance(db, state, answer?) → { state, shown }` over the cursor (stack, waiting, answers, data); conditions evaluated against the sectioned log and campaign data; effects applied to the log, bag, decks, trauma, experience, next scenario and result; random draws from the campaign rng; tests for each step kind, each condition and each effect, determinism (same answers, same state) and the stranded-flow error.
+- [ ] 3.2 `src/engine/campaign.ts`: `CampaignState` with `flow` and the sectioned `log` (`flatLog` view for `GameSetup.campaignLog`), `startCampaign` runs the setup steps up to the first wait, `currentScenarioId` and `applyScenarioEnd` through the flow (engine part kept: in-play trauma and XP, victory total, killed/insane); side scenario acceptance pays the cost; tests: The Gathering → Midnight Masks as before, Dunwich's prologue choice of first scenario, Armitage's Fate both ways, a Carcosa ending, a Forgotten Age side scenario.
+- [ ] 3.3 Save version 3 and the migration in `store.ts` (`scenarioIndex` → cursor, flat log → notes section); fixtures of a version 2 save mid-campaign and mid-scenario; `ENGINE_VERSION` bumped; the Copy report carries the flow.
+
+## 4. The campaign screen
+
+- [ ] 4.1 `CampaignScreen.tsx` (from `CampaignLog.tsx`): the guide reader (story steps with `formatText`, read steps collapsed to titles, the waiting prompt: choices as buttons, counter with − / + and max, investigators as avatars, cards as a list, checklist, the unsupported notice), the upgrade buttons at `upgradeDecks`, the sectioned log (entries struck through when crossed out, counts, card names), "Next: <scenario>" / the side-scenario offer at `playScenario`, the result; `ui.json` strings in English and Russian; store actions `answerFlow`, `continueFlow`, `acceptSideScenario`.
+- [ ] 4.2 Phone layout of the reader (one column, the prompt sticky at the bottom); the Abandon route unchanged.
+
+## 5. The picker
+
+- [ ] 5.1 `wizard.ts`: `CampaignFilter` (kind, rules, length, query) and `filterCampaigns(db, locale, filter)`, kind derived from the id (`side-`, `return-to-`) and the scenario count, rules from `generated`, the search over campaign and scenario names in the locale; tests.
+- [ ] 5.2 `NewGame.tsx` campaign step: the filter bar (chips and search like the investigators step), the tile grid (preview art, name, count), focus and selection on tap, the sidebar `CampaignSheet.tsx` (name, count, the partly-implemented note, the prologue with More, the scenario reference cards in order front and back numbered and named with interludes between, `dv-*` layout, lazy images), the sheet over the grid on the phone layout; the tile texts that moved to the sheet removed from the tile; `ui.json` strings.
+- [ ] 5.3 The partly-implemented note reworded (the guide is played; cards without rules show text) in both languages; README's Campaigns section (what the flow plays, the unsupported kinds, the sources for verification, the picker).
+
+## 6. Verification
+
+- [ ] 6.1 Browser: Dunwich from the picker (filter to campaigns, search "dun", the sidebar's eight cards and two interludes in English and Russian) through the prologue choice, a scenario, its resolution with a choice, Armitage's Fate and the upgrade screen to the next scenario; Night of the Zealot unchanged through The Gathering's resolution; a version-2 save restored; the audio moments on the new screen; 0 console errors.
+- [ ] 6.2 `npm test`, lint, typecheck, build, `check:content` by exit code; `openspec validate campaign-guide-flow --type change --strict`.
