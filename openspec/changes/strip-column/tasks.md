@@ -19,5 +19,5 @@
 
 ## 4. Verification
 
-- [ ] 4.1 Browser at 1600×900 and 1280×800: Roland with 8 assets and 2 engaged enemies: the enemies at the top, cards 72 px, the column scrolls, the camera's focus shows his location clear of the HUD; hovering a card shows only its buttons at its left and its enlarged copy further left; a click on a button works (the pointer crosses from the card to the button without losing it); a skill test with Physical Training: the column shown, the subject 240×336; the draw with the column slid out; the phone at 852×393 unchanged; 0 console errors; screenshots.
-- [ ] 4.2 `npm test`, lint, typecheck, build, `check:content` by exit code; `openspec validate strip-column --type change --strict`.
+- [x] 4.1 Browser at 1600×900 and 1280×800: Roland with 8 assets and 2 engaged enemies: the enemies at the top, cards 72 px, the column scrolls, the camera's focus shows his location clear of the HUD; hovering a card shows only its buttons at its left and its enlarged copy further left; a click on a button works (the pointer crosses from the card to the button without losing it); a skill test with Physical Training: the column shown, the subject 240×336; the draw with the column slid out; the phone at 852×393 unchanged; 0 console errors; screenshots.
+- [x] 4.2 `npm test`, lint, typecheck, build, `check:content` by exit code; `openspec validate strip-column --type change --strict`.
