@@ -482,7 +482,7 @@ The viewing investigator's cards in play and threat area SHALL be shown as a fix
 
 Cards with a pending option SHALL be highlighted. Each of their options SHALL be shown as a labelled button directly above the card, with the action's icon where it has one, for example "Fight" (combat icon) and "Evade" (agility icon) above an engaged enemy. One click on a button chooses that option; no menu or second click is needed. Clicking a card with exactly one option still chooses it. The buttons MUST stay inside the window and MUST NOT cover the neighbouring cards' buttons. They SHALL be hidden while an event is animating, like other options.
 
-While a fight or evade test is running against a strip enemy, that enemy SHALL stay highlighted as the test's target.
+While a fight or evade test is running against a strip enemy and the strip is shown (see Skill-test screen), that enemy SHALL stay highlighted as the test's target. The strip MUST NOT cover the skill-test screen's subject card or its chaos tokens.
 
 #### Scenario: Assets and an enemy
 - **WHEN** Roland has a .45 Automatic with 3 ammo and a Machete in play and is engaged with a Ghoul Minion
@@ -497,6 +497,7 @@ While a fight or evade test is running against a strip enemy, that enemy SHALL s
 - **THEN** a single button with the ability's label sits above the card, and clicking the card itself also chooses it
 
 #### Scenario: Target during the test
+- **GIVEN** Roland has Physical Training in play, so the strip is shown during the commit window
 - **WHEN** the fight test against the Ghoul Minion is in its commit window
 - **THEN** the Ghoul Minion in the strip is outlined as the target, with no option buttons above it
 
@@ -1050,7 +1051,9 @@ The hand fan SHALL stay live under the strip: the cards that can be committed ar
 
 While the tester's own commit window is open and nothing hidden has come out since the test began (it started from a choice of their turn, such as Fight or Investigate), the screen SHALL offer Cancel the test beside the line, and Escape does the same: every choice since the test began is taken back, the action and the cards placed included, and the turn is as it was before it, so the player can do something else first (play a fast card, use an asset, take another action). A test forced by a card (a treachery drawn) can't be cancelled.
 
-The instruction bar SHALL stay above the screen with its instruction and the Done button. The play strip SHALL stay visible and clickable above the overlay, dimmed except the cards whose fast ability is offered right now, so an in-play ability can be used during the test.
+The instruction bar SHALL stay above the screen with its instruction and the Done button. While one of the play strip's cards has an option offered right now (a fast ability in the commit window), the strip SHALL be shown above the overlay, compact (its cards at the strip's minimum size, 84 px wide at 1080p), clickable, and dimmed except the cards whose option is offered, so an in-play ability can be used during the test. At every other moment of the test (the token draw, the result, a commit window with no in-play ability offered) the strip SHALL step aside: it slides down out of view and fades, takes no pointer, and comes back when the screen closes. The strip MUST NOT cover the subject card or a chaos token disc at any window size.
+
+The subject card SHALL keep its 240×336 px size at 1080p and above; on a shorter window the subject and the line above it SHALL be sized and placed from the window's height so that the subject card and the line stay clear of the compact strip and its option buttons (during the draw the strip has stepped aside, so the tokens have the room below the card).
 
 After the tester's Done, each other investigator at the location who may commit SHALL be asked in turn on the same screen; with private hands the hand-off box appears over the screen, and the next player's fan comes in once they are ready. The placed cards and the strip keep everyone's contributions.
 
@@ -1089,6 +1092,25 @@ After the tester's Done, each other investigator at the location who may commit 
 #### Scenario: Subject in the centre
 - **WHEN** Roland investigates the Study at 1600×900
 - **THEN** the Study card stands in the centre of the screen at least 240 px wide with the line above it, the placed cards to its right, the strip along the bottom, and when the draw starts the bag lands on the Study and the tokens tumble over it
+
+#### Scenario: Tokens are free to pick
+- **GIVEN** Roland has a .45 Automatic and a Machete in play and is engaged with a Ghoul Minion, at 1600×900
+- **WHEN** he investigates the Study, presses Done, and the tokens spill
+- **THEN** the play strip has stepped aside, every face-down disc is visible and a tap on any of them picks it
+
+#### Scenario: Nothing to use, nothing in the way
+- **GIVEN** Roland has only a Machete in play, which has no ability usable during the test
+- **WHEN** his investigate test opens its commit window
+- **THEN** the play strip has stepped aside and the Study card in the centre is fully visible and tappable
+
+#### Scenario: Back after the test
+- **WHEN** the result is dismissed and the skill-test screen closes
+- **THEN** the play strip is back above the hand at its usual size
+
+#### Scenario: Short window
+- **GIVEN** Roland has Physical Training in play during a willpower test at 1600×900
+- **WHEN** the commit window is open
+- **THEN** the compact strip shows Physical Training bright, and the subject card and the line above it are both above the strip and its buttons
 
 ### Requirement: Player bar
 The top bar SHALL show every investigator in turn order as an avatar (the round class-ringed portrait) with health remaining and sanity remaining under it and, during the investigation phase, their action pips (as the ribbon showed them). The active investigator SHALL be ringed; the investigator whose view is on screen SHALL be marked; defeated or resigned investigators SHALL be greyed. A changed count SHALL flash. The bar replaces the stat dock and the right-edge investigator tokens.
