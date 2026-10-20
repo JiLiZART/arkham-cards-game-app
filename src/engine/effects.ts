@@ -2,7 +2,7 @@ import type { Amount, Effect, EnemyTarget, InvTarget } from "../content/schema";
 import {
   activeInvs, ask, card, cardsIn, checkCondition, connections, controlled, def, discard, distances, emit, enemies, enemiesAt,
   engagedWith, findByCode, inv, invName, invsAt, isElite, locationByName, locations, matchesFilter, moveCard, playerCount, push,
-  addTempMod, type G,
+  addTempMod, attackable, uniqueInPlay, type G,
 } from "./core";
 import { randInt, shuffle } from "./rng";
 import { playCost, win } from "./rules/cards";
@@ -55,10 +55,11 @@ function nearest(g: G, from: InstId | null, filter: (id: InstId) => boolean): In
 }
 
 /** resolve enemy targets; undefined = waiting */
-function enemyTargets(g: G, step: EffStep, t: EnemyTarget, ctx: EffCtx): InstId[] | undefined {
+function enemyTargets(g: G, step: EffStep, t: EnemyTarget, ctx: EffCtx, ok: (id: InstId) => boolean = () => true): InstId[] | undefined {
   const you = ctx.you;
   const loc = you ? inv(g, you).location : null;
-  const choose = (ids: InstId[], prompt: string) => {
+  const choose = (all: InstId[], prompt: string) => {
+    const ids = all.filter(ok);
     if (!ids.length) return [];
     const pick = ask<InstId>(g, step, you ?? g.s.lead, "target", prompt, ids.map((id) => opt(g, id)), { auto: true, key: "chooseEnemy" });
     return pick === undefined ? undefined : [pick];
@@ -66,7 +67,7 @@ function enemyTargets(g: G, step: EffStep, t: EnemyTarget, ctx: EffCtx): InstId[
   switch (t) {
     case "self": return ctx.source && g.s.cards[ctx.source]?.zone === "enemy" ? [ctx.source] : [];
     case "eventEnemy": return ctx.enemy && g.s.cards[ctx.enemy]?.zone === "enemy" ? [ctx.enemy] : [];
-    case "eachAtLocation": return enemiesAt(g, loc).map((e) => e.id);
+    case "eachAtLocation": return enemiesAt(g, loc).map((e) => e.id).filter(ok);
     case "chooseAtLocation": return choose(enemiesAt(g, loc).map((e) => e.id), "Choose an enemy at your location");
     case "chooseEngaged": return choose(engagedWith(g, you!).map((e) => e.id), "Choose an enemy engaged with you");
     case "chooseExhaustedAtLocation": return choose(enemiesAt(g, loc).filter((e) => e.exhausted).map((e) => e.id), "Choose an exhausted enemy");
@@ -244,7 +245,7 @@ export const effHandler = (g: G, step: EffStep) => {
       return;
     }
     case "fight": {
-      const ts = enemyTargets(g, step, e.target ?? "chooseAtLocation", ctx);
+      const ts = enemyTargets(g, step, e.target ?? "chooseAtLocation", ctx, (id) => attackable(g, id));
       if (!ts?.length) return;
       const fctx = { ...ctx, enemy: ts[0] };
       const extra = e.extraDamageIf && checkCondition(g, e.extraDamageIf, fctx) ? 1 : 0;
@@ -607,7 +608,7 @@ export const effHandler = (g: G, step: EffStep) => {
     }
     case "searchAndPlay": {
       const me = inv(g, you);
-      const pool = [...me.deck, ...me.discard].filter((id) => matchesFilter(g, card(g, id).code, e.filter) && me.resources >= playCost(g, you, id));
+      const pool = [...me.deck, ...me.discard].filter((id) => matchesFilter(g, card(g, id).code, e.filter) && me.resources >= playCost(g, you, id) && !uniqueInPlay(g, id));
       const pick = ask<InstId | "none">(g, step, you, "generic", "Search your deck and discard pile", [...pool.map((id) => opt(g, id)), { id: "none", label: "Take nothing", value: "none" }], { key: "searchAndPlay" });
       if (pick === undefined) return;
       if (pick !== "none") {

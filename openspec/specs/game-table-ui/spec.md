@@ -455,6 +455,8 @@ Hovering a card SHALL show an enlarged copy on the spot. That covers:
 
 The act, the agenda and the scenario reference card in the panel SHALL NOT enlarge on hover: the hover highlights them and a tap opens the viewer. The copy SHALL be twice the card's on-screen size, centred on the card and moved just enough to stay inside the window, fully visible. Beside it, the details column SHALL show the same rows as for hand cards (name, class and type, level, cost, traits, slots, icons, health and sanity, uses, rules text with icons). An enemy also shows its fight, health and evade values, its damage and horror, and the damage already on it. The column is placed right of the copy, or left when there is no room, and clamped to the window. The copy and column MUST NOT intercept the pointer, and SHALL disappear when the pointer leaves the card. A location that is not yet revealed shows its unrevealed side.
 
+A card in the strip's column SHALL have its copy and details column placed to the left of its option buttons, so they never cover them.
+
 Location cards SHALL NOT get the enlarged copy; they show the location details column instead (see Location details).
 
 #### Scenario: Hover a location
@@ -466,11 +468,11 @@ Location cards SHALL NOT get the enlarged copy; they show the location details c
 - **THEN** the Ghoul Minion is shown at twice its size, with a column beside it listing fight 2, health 2, evade 2, its 1 damage and 1 horror attack, and its text
 
 #### Scenario: Engaged enemy in the strip
-- **WHEN** the player hovers the engaged Ghoul Minion in the play strip at 1600×900
-- **THEN** the whole enlarged copy is visible above the strip, none of it below the window edge, and the details column is beside it
+- **WHEN** the player hovers the engaged Ghoul Minion in the strip's column at 1600×900, with Fight and Evade offered
+- **THEN** the Fight and Evade buttons are beside the card on its left, and the whole enlarged copy and its details column are further left, past the buttons, fully inside the window
 
 #### Scenario: Near the edge
-- **WHEN** the player hovers a play-strip card touching the right edge of the window
+- **WHEN** the player hovers a strip card in the column at the right edge of the window
 - **THEN** the enlarged copy is shifted left and the details column goes to its left, both fully visible
 
 #### Scenario: Hover the agenda
@@ -478,28 +480,42 @@ Location cards SHALL NOT get the enlarged copy; they show the location details c
 - **THEN** no enlarged copy and no column appear; the card is highlighted, and a tap opens the viewer
 
 ### Requirement: Play area strip
-The viewing investigator's cards in play and threat area SHALL be shown as a fixed strip of cards above the hand fan, between the stat bar and the action rail. Threat-area cards and engaged enemies come after the assets, separated from them. Strip cards SHALL be at least 124×173 px at 1080p and shrink only when the strip would not fit in its width. Exhausted cards SHALL be shown turned sideways. Tokens on the cards (uses, damage, horror, doom, resources) SHALL be visible on them. The strip SHALL be hidden while hand-off privacy hides the hand.
+On the desktop, the viewing investigator's cards in play and threat area SHALL be shown as a column of cards at the window's right edge, from under the top bar down to just above the action rail; the chaos bag and the feed sit to its left. The engaged enemies and threat-area cards SHALL come first, at the top, then a divider, then the assets. Column cards SHALL be 92 px wide at 1080p when they all fit in the column's height and shrink to no less than 72 px; when they still don't fit, the column SHALL scroll (mouse wheel, drag, touch) while the cards keep 72 px. Exhausted cards SHALL be shown turned sideways. Tokens on the cards (uses, damage, horror, doom, resources) SHALL be visible on them. The column SHALL be hidden while hand-off privacy hides the hand. The camera SHALL keep the column's width free on the right, so no location is under it when the map is fitted or focused. On the phone the strip stays the right-edge column of thumbnails with its handle.
 
-Cards with a pending option SHALL be highlighted. Each of their options SHALL be shown as a labelled button directly above the card, with the action's icon where it has one, for example "Fight" (combat icon) and "Evade" (agility icon) above an engaged enemy. One click on a button chooses that option; no menu or second click is needed. Clicking a card with exactly one option still chooses it. The buttons MUST stay inside the window and MUST NOT cover the neighbouring cards' buttons. They SHALL be hidden while an event is animating, like other options.
+Cards with a pending option SHALL be highlighted, so a card with something to do can be found without hovering. A card's options SHALL be shown as labelled buttons, with the action's icon where it has one ("Fight" with the combat icon, "Evade" with the agility icon), only while the card is hovered or has keyboard focus, for one card at a time, stacked beside the card on its left, inside the window. One click on a button chooses that option. Clicking a card with exactly one option still chooses it, with no need to hover first. On touch, a first tap on a card shows its buttons and a tap on a button chooses it. The buttons SHALL be hidden while an event is animating, like other options, and MUST NOT cover another card's buttons.
 
 While a fight or evade test is running against a strip enemy and the strip is shown (see Skill-test screen), that enemy SHALL stay highlighted as the test's target. The strip MUST NOT cover the skill-test screen's subject card or its chaos tokens.
 
 #### Scenario: Assets and an enemy
 - **WHEN** Roland has a .45 Automatic with 3 ammo and a Machete in play and is engaged with a Ghoul Minion
-- **THEN** the strip shows the two assets, the .45 Automatic with 3 uses on it, then the Ghoul Minion after a separator
+- **THEN** the column at the right edge shows the Ghoul Minion at the top, a divider, then the .45 Automatic with 3 uses on it and the Machete
 
 #### Scenario: Fight from the strip
-- **WHEN** Roland can fight and evade the engaged Ghoul Minion on his turn
-- **THEN** "Fight" and "Evade" buttons are shown above the Ghoul Minion, and one click on "Fight" starts the fight test against it
+- **WHEN** Roland can fight and evade the engaged Ghoul Minion on his turn and hovers it
+- **THEN** "Fight" and "Evade" buttons appear to the left of the Ghoul Minion, and one click on "Fight" starts the fight test against it
 
 #### Scenario: Asset ability
 - **WHEN** Roland's .45 Automatic has one pending option (its fight ability)
-- **THEN** a single button with the ability's label sits above the card, and clicking the card itself also chooses it
+- **THEN** the card glows; hovering it shows a single button with the ability's label, and clicking the card itself chooses it without hovering
+
+#### Scenario: Many cards
+- **GIVEN** 10 cards in Roland's play and threat area, two of them engaged enemies, at 1600×900
+- **WHEN** the table is on screen
+- **THEN** the two enemies are at the top of the column, the cards are 72 px wide, the column scrolls to the rest, no card covers the map's bottom row, and hovering one card shows only that card's buttons
+
+#### Scenario: The map is free
+- **GIVEN** Roland with 6 cards in play at 1600×900
+- **WHEN** the camera focuses Roland's location
+- **THEN** the location is fully visible, clear of the column, the hand fan and the stat bar
+
+#### Scenario: On touch
+- **WHEN** the player taps a strip card that has two options on a touch screen
+- **THEN** its buttons appear beside it, and a tap on one chooses it
 
 #### Scenario: Target during the test
 - **GIVEN** Roland has Physical Training in play, so the strip is shown during the commit window
 - **WHEN** the fight test against the Ghoul Minion is in its commit window
-- **THEN** the Ghoul Minion in the strip is outlined as the target, with no option buttons above it
+- **THEN** the Ghoul Minion in the column is outlined as the target, with no option buttons beside it
 
 ### Requirement: Chaos token draw
 When a skill test reveals a chaos token, the draw SHALL play as a stage of the skill-test screen over the subject card in the centre, with the subject, the placed cards and the calculation strip staying where they were:
@@ -1051,9 +1067,9 @@ The hand fan SHALL stay live under the strip: the cards that can be committed ar
 
 While the tester's own commit window is open and nothing hidden has come out since the test began (it started from a choice of their turn, such as Fight or Investigate), the screen SHALL offer Cancel the test beside the line, and Escape does the same: every choice since the test began is taken back, the action and the cards placed included, and the turn is as it was before it, so the player can do something else first (play a fast card, use an asset, take another action). A test forced by a card (a treachery drawn) can't be cancelled.
 
-The instruction bar SHALL stay above the screen with its instruction and the Done button. While one of the play strip's cards has an option offered right now (a fast ability in the commit window), the strip SHALL be shown above the overlay, compact (its cards at the strip's minimum size, 84 px wide at 1080p), clickable, and dimmed except the cards whose option is offered, so an in-play ability can be used during the test. At every other moment of the test (the token draw, the result, a commit window with no in-play ability offered) the strip SHALL step aside: it slides down out of view and fades, takes no pointer, and comes back when the screen closes. The strip MUST NOT cover the subject card or a chaos token disc at any window size.
+The instruction bar SHALL stay above the screen with its instruction and the Done button. While one of the play strip's cards has an option offered right now (a fast ability in the commit window), the strip's column SHALL be shown above the overlay, clickable, and dimmed except the cards whose option is offered, so an in-play ability can be used during the test. At every other moment of the test (the token draw, the result, a commit window with no in-play ability offered) the column SHALL step aside: it slides out past the window's right edge and fades, takes no pointer, and comes back when the screen closes. The strip MUST NOT cover the subject card or a chaos token disc at any window size.
 
-The subject card SHALL keep its 240×336 px size at 1080p and above; on a shorter window the subject and the line above it SHALL be sized and placed from the window's height so that the subject card and the line stay clear of the compact strip and its option buttons (during the draw the strip has stepped aside, so the tokens have the room below the card).
+The subject card SHALL keep its 240×336 px size and its place under the line on every desktop window: the strip's column is at the right edge, clear of the centre, so nothing below the subject has to be avoided.
 
 After the tester's Done, each other investigator at the location who may commit SHALL be asked in turn on the same screen; with private hands the hand-off box appears over the screen, and the next player's fan comes in once they are ready. The placed cards and the strip keep everyone's contributions.
 
@@ -1105,12 +1121,12 @@ After the tester's Done, each other investigator at the location who may commit 
 
 #### Scenario: Back after the test
 - **WHEN** the result is dismissed and the skill-test screen closes
-- **THEN** the play strip is back above the hand at its usual size
+- **THEN** the column is back at the right edge
 
 #### Scenario: Short window
 - **GIVEN** Roland has Physical Training in play during a willpower test at 1600×900
 - **WHEN** the commit window is open
-- **THEN** the compact strip shows Physical Training bright, and the subject card and the line above it are both above the strip and its buttons
+- **THEN** the column at the right edge shows Physical Training bright, and the subject card is 240×336 px in the centre, clear of the column and its buttons
 
 ### Requirement: Player bar
 The top bar SHALL show every investigator in turn order as an avatar (the round class-ringed portrait) with health remaining and sanity remaining under it and, during the investigation phase, their action pips (as the ribbon showed them). The active investigator SHALL be ringed; the investigator whose view is on screen SHALL be marked; defeated or resigned investigators SHALL be greyed. A changed count SHALL flash. The bar replaces the stat dock and the right-edge investigator tokens.

@@ -133,6 +133,8 @@ export function moveCard(g: G, id: InstId, zone: Zone, opts: { inv?: InvId | nul
         moveCard(g, other.id, other.owner ? "discard" : "encounterDiscard", { inv: other.owner });
       }
     }
+    // a card that re-enters play is a new copy: its "limit per period" starts unused (Grimoire, Limits and Maximums)
+    for (const k of Object.keys(g.s.usage)) if (k.startsWith(`${id}:`)) delete g.s.usage[k];
     Object.assign(c, { exhausted: false, damage: 0, horror: 0, clues: 0, doom: 0, uses: 0, resources: 0, engagedWith: null, attachedTo: null });
     if (c.owner) c.controller = c.owner;
   }
@@ -190,6 +192,26 @@ export const locationByName = (g: G, nm: string) => locations(g).find((l) => def
 export const hasTrait = (g: G, id: InstId, trait: string) => def(g, id).traits.includes(trait);
 export const isElite = (g: G, id: InstId) => hasTrait(g, id, "Elite");
 export const hasKeyword = (g: G, id: InstId, kw: CardDef["keywords"][number]) => def(g, id).keywords.includes(kw);
+/** an aloof enemy can only be attacked while it is engaged with an investigator */
+export const attackable = (g: G, id: InstId) => !hasKeyword(g, id, "aloof") || !!g.s.cards[id]?.engagedWith;
+/** a unique card cannot be played or put into play while a card with its title is in play (Grimoire, Unique) */
+export function uniqueInPlay(g: G, id: InstId): boolean {
+  const d = def(g, id);
+  return !!d.unique && Object.values(g.s.cards).some((c) => c.id !== id && ["play", "threat", "enemy", "attached"].includes(c.zone) && g.db.cards[c.code].name === d.name);
+}
+/** clues the act asks for, as a group (Infinity when it has none to spend) */
+export function actClueCost(g: G): number {
+  if (!g.s.act) return Infinity;
+  const d = def(g, g.s.act);
+  if (!d.actClues) return Infinity;
+  return d.actClues * (d.actCluesPerInvestigator ? g.s.order.length : 1);
+}
+/** clues the group may spend (Masked Hunter blocks engaged investigators) */
+export function spendableGroupClues(g: G) {
+  return activeInvs(g).filter((x) => !hasFlag(g, x, "cannotSpendClues")).reduce((n, x) => n + inv(g, x).clues, 0);
+}
+/** the group can advance the act by spending clues, in any player window (Grimoire, Act Deck and Agenda Deck) */
+export const canAdvanceAct = (g: G) => !!g.s.act && (def(g, g.s.act).actAdvance ?? "turn") === "turn" && spendableGroupClues(g) >= actClueCost(g);
 export const isMassive = (g: G, id: InstId) => hasKeyword(g, id, "massive");
 export const controlled = (g: G, i: InvId) => cardsIn(g, "play").filter((c) => c.controller === i);
 export const threatArea = (g: G, i: InvId) => cardsIn(g, "threat").filter((c) => c.controller === i);

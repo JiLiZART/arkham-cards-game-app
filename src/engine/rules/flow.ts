@@ -1,7 +1,7 @@
 import type { Ability, Effect, OnTokens, Skill } from "../../content/schema";
 import {
   abilitiesOf as abilitiesOfCard, activeInvs, allMods, ask, controlled, card, cardsIn, def, emit, enemiesAt, engagedWith, expireMods, hasFlag, inv, invName, logStep,
-  isMassive, modSum, push, threatArea, type G,
+  attackable, isMassive, modSum, push, spendableGroupClues, threatArea, type G,
 } from "../core";
 import type { ChoiceOption, InvId, Step, TurnAction } from "../types";
 import { activatable, canPlay, playAbility, win } from "./cards";
@@ -171,7 +171,7 @@ export function legalTurnActions(g: G, i: InvId): ChoiceOption[] {
     add({ kind: "ability", card: r.card, index: r.index }, r.ability.label ?? `${def(g, r.card).name}: ${r.ability.designator ?? "ability"}`, r.card);
   }
   for (const e of enemiesAt(g, loc)) {
-    add({ kind: "fight", enemy: e.id }, `Fight ${def(g, e.id).name}`, e.id);
+    if (attackable(g, e.id)) add({ kind: "fight", enemy: e.id }, `Fight ${def(g, e.id).name}`, e.id);
     if (e.engagedWith !== i && !isMassive(g, e.id)) add({ kind: "engage", enemy: e.id }, `Engage ${def(g, e.id).name}`, e.id);
   }
   for (const e of engagedWith(g, i)) add({ kind: "evade", enemy: e.id }, `Evade ${def(g, e.id).name}`, e.id);
@@ -182,10 +182,7 @@ export function legalTurnActions(g: G, i: InvId): ChoiceOption[] {
   return out;
 }
 
-/** clues the group may spend (Masked Hunter blocks engaged investigators) */
-export function spendableGroupClues(g: G) {
-  return activeInvs(g).filter((x) => !hasFlag(g, x, "cannotSpendClues")).reduce((n, x) => n + inv(g, x).clues, 0);
-}
+export { spendableGroupClues };
 
 export const turnHandler: Handler<"Turn"> = (g, step) => {
   const me = inv(g, step.inv);
@@ -295,13 +292,17 @@ export const enemyPhaseHandler: Handler<"EnemyPhase"> = (g) => {
 };
 
 // ---------- upkeep ----------
+export function readyAll(g: G) {
+  for (const c of Object.values(g.s.cards)) if (["play", "enemy", "location", "attached", "investigator", "threat"].includes(c.zone)) c.exhausted = false;
+  emit(g, "ready", "All exhausted cards are readied");
+}
+
 export const upkeepHandler: Handler<"UpkeepPhase"> = (g) => {
   if (g.s.phase === "ended") return;
   beginPhase(g, "upkeep");
-  for (const c of Object.values(g.s.cards)) if (["play", "enemy", "location", "attached", "investigator", "threat"].includes(c.zone)) c.exhausted = false;
-  emit(g, "ready", "All exhausted cards are readied");
   logStep(g, "upkeep");
-  const steps: Step[] = [win("phaseBegins", { phase: "upkeep" }), win("playerWindow", { phase: "upkeep" })];
+  // the player window comes before exhausted cards ready (Grimoire, 4.1 to 4.3)
+  const steps: Step[] = [win("phaseBegins", { phase: "upkeep" }), win("playerWindow", { phase: "upkeep" }), { t: "Script", code: "__engine", fn: "readyAll", ctx: {} }];
   // readied enemies at an investigator's location engage
   for (const i of activeInvs(g)) steps.push({ t: "Script", code: "__engine", fn: "checkEngagement", ctx: { inv: i } });
   for (const i of g.s.order) {
@@ -314,7 +315,8 @@ export const upkeepHandler: Handler<"UpkeepPhase"> = (g) => {
 
 export const endRoundHandler: Handler<"EndRound"> = (g) => {
   if (g.s.phase === "ended") return;
-  push(g, win("roundEnds", {}), { t: "Script", code: "__engine", fn: "roundCleanup", ctx: {} }, { t: "StartRound" });
+  // "until the end of the round" effects expire before "at the end of the round" abilities (Grimoire, Lasting Effects)
+  push(g, { t: "Script", code: "__engine", fn: "roundCleanup", ctx: {} }, win("roundEnds", {}), { t: "StartRound" });
 };
 
 export function roundCleanup(g: G) {

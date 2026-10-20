@@ -185,13 +185,15 @@ describe("step events", () => {
     expect(hs).toEqual([`handSize:${ROLAND}`]);
   });
 
-  it("upkeep is logged after the ready", () => {
+  it("upkeep is logged before the ready (the player window comes between, Grimoire 4.1 to 4.3)", () => {
     let r = gathering();
     const from = r.state.log.length;
     r = pick(r, "End turn");
     const log = r.state.log.slice(from);
+    const upkeep = log.findIndex((e) => e.type === "step" && (e.data as { step?: string })?.step === "upkeep");
     const ready = log.findIndex((e) => e.type === "ready");
-    expect(log[ready + 1]).toMatchObject({ type: "step", data: { step: "upkeep" } });
+    expect(upkeep).toBeGreaterThanOrEqual(0);
+    expect(ready).toBeGreaterThan(upkeep);
   });
 });
 

@@ -1,7 +1,7 @@
 import type { Effect, Skill, SymbolToken } from "../../content/schema";
 import { randInt } from "../rng";
 import {
-  abilitiesOf, ask, card, checkCondition, def, emit, enemyStat, expireMods, hasFlag, inv, invName, invsAt, modSum,
+  abilitiesOf, ask, card, checkCondition, def, emit, enemyStat, expireMods, hasFlag, inv, invName, invsAt, isMassive, modSum,
   moveCard, push, shroud, skillValue, type G,
 } from "../core";
 import type { EffCtx, InstId, InvId, SkillTestState, Step } from "../types";
@@ -125,9 +125,10 @@ function commitStage(g: G, step: Extract<Step, { t: "Test" }>) {
     return;
   }
   const me = inv(g, who);
-  const cards = me.hand.filter((h) => canCommit(g, who, h, t));
-  const fast = activatable(g, who, ["fast"]).filter((r) => r.ability.effects?.some((e) => e.op === "modify") || r.ability.run);
   const mine = t.committed.filter((c, k) => t.committers[k] === who);
+  // another investigator at the location commits at most one card (Grimoire, ST.2); they may still take it back
+  const cards = who !== t.inv && mine.length >= 1 ? [] : me.hand.filter((h) => canCommit(g, who, h, t));
+  const fast = activatable(g, who, ["fast"]).filter((r) => r.ability.effects?.some((e) => e.op === "modify") || r.ability.run);
   if (cards.length === 0 && fast.length === 0 && mine.length === 0) {
     push(g, { ...step, choice: undefined, asked: [...asked, who] });
     return;
@@ -170,6 +171,12 @@ function commitStage(g: G, step: Extract<Step, { t: "Test" }>) {
 
 function revealStage(g: G) {
   const t = test(g);
+  if (t.tokens.length === 0 && (t.autoSucceed || t.autoFail)) {
+    // a result known before the reveal skips the chaos token (Grimoire, Automatic Failure/Success)
+    emit(g, "noToken", "No chaos token is revealed", { inv: t.inv });
+    push(g, { t: "Test", stage: "result" });
+    return;
+  }
   if (hasFlag(g, t.inv, "noChaosTokens")) {
     emit(g, "noToken", "No chaos token is revealed", { inv: t.inv });
     push(g, { t: "Test", stage: "result" });
@@ -270,7 +277,8 @@ function resultStage(g: G) {
   t.value = value;
   t.total = total;
   t.success = success;
-  t.margin = total - diff;
+  // an automatic failure counts the skill value as 0, an automatic success the difficulty as 0 (Grimoire, ST.6)
+  t.margin = t.autoSucceed ? total : t.autoFail ? -diff : total - diff;
   const tokText = t.tokens.length ? t.tokens.join(", ") : "none";
   const icons = t.committed.reduce((n, c) => n + iconsFor(g, c, t.skill), 0);
   const base = value - icons;
@@ -338,11 +346,15 @@ function kindResultStage(g: G) {
         e.exhausted = true;
         e.engagedWith = null;
         emit(g, "evade", `${invName(g, t.inv)} evades ${def(g, t.target).name}`, { inv: t.inv, card: t.target });
-        steps.push(win("enemyEvaded", { inv: t.inv, enemy: t.target }));
+        steps.push(win("enemyEvaded", { inv: t.inv, enemy: t.target }), win("successfulEvade", { inv: t.inv, enemy: t.target }));
       }
     }
   } else if (t.target && (t.kind === "fight" || t.kind === "evade")) {
     const e = g.s.cards[t.target];
+    // the attack's damage goes to the one other investigator the enemy is engaged with (Grimoire, Fight Action)
+    if (t.kind === "fight" && e?.zone === "enemy" && e.engagedWith && e.engagedWith !== t.inv && !isMassive(g, t.target) && inv(g, e.engagedWith).status === "playing") {
+      steps.push({ t: "AssignDamage", inv: e.engagedWith, damage: enemyStat(g, t.target, "damage"), horror: 0, direct: false, source: t.target });
+    }
     const kw = t.kind === "fight" ? "retaliate" : "alert";
     if (e?.zone === "enemy" && !e.exhausted && def(g, t.target).keywords.includes(kw)) {
       emit(g, kw, `${def(g, t.target).name} ${kw === "retaliate" ? "retaliates" : "is alert"}!`, { card: t.target });

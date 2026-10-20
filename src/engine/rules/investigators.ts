@@ -15,6 +15,12 @@ export const drawHandler: Handler<"Draw"> = (g, step) => {
   if (me.status !== "playing" || step.n <= 0) return;
   // one tap covers a draw of several cards: the cards after the first go on without asking again
   if (!step.tapped && !tapToDraw(g, step, step.inv, "player", step.n)) return;
+  if (me.deck.length === 0 && me.discard.length === 0) {
+    // nothing to reshuffle: defeated at once with 1 mental trauma (Grimoire, Drawing Cards)
+    emit(g, "emptyDeck", `${me.name} must draw from an empty deck with no discard pile`, { inv: step.inv });
+    push(g, { t: "Defeated", inv: step.inv, by: "horror" });
+    return;
+  }
   if (me.deck.length === 0) {
     // empty deck: shuffle discard into deck, take 1 horror
     me.deck.push(...me.discard.splice(0));
@@ -172,6 +178,10 @@ export const defeatedHandler: Handler<"Defeated"> = (g, step) => {
   me.clues = 0;
   // engaged enemies stay at the location, unengaged
   for (const e of enemies(g)) if (e.engagedWith === step.inv) e.engagedWith = null;
+  // their weaknesses' "when the game ends" abilities resolve now, before leaving the game (Grimoire, Elimination)
+  for (const c of Object.values(g.s.cards)) {
+    if (c.owner === step.inv && ["play", "threat", "hand"].includes(c.zone) && def(g, c.id).subtype) g.db.scripts[c.code]?.hooks?.gameEnd?.(g, { source: c.id, you: c.controller });
+  }
   // cards leave play: owned cards out of the game, encounter cards to encounter discard
   for (const c of Object.values(g.s.cards)) {
     if (c.owner === step.inv && c.zone !== "removed" && c.zone !== "investigator") moveCard(g, c.id, "removed");

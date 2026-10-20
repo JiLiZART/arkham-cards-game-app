@@ -82,6 +82,8 @@ export const spawnHandler: Handler<"Spawn"> = (g, step) => {
     return;
   }
   moveCard(g, step.enemy, "enemy", { location: at });
+  // a unique encounter card entering play discards the player card with its title (Grimoire, Unique)
+  if (d.unique) for (const twin of Object.values(g.s.cards)) if (twin.owner && twin.zone === "play" && def(g, twin.id).name === d.name) moveCard(g, twin.id, "discard", { inv: twin.owner });
   emit(g, "spawn", `${d.name} spawns at ${def(g, at).name}`, { card: step.enemy, data: { at } });
   const aloof = d.keywords.includes("aloof");
   if (!engage && !aloof && !isMassive(g, step.enemy)) {
@@ -228,7 +230,9 @@ export const enemyAttacksHandler: Handler<"EnemyAttacks"> = (g, step) => {
       if (!done.length) logStep(g, "attacks");
       // the chart's player window follows the last of an investigator's attacks
       const more = engagedWith(g, i).some((x) => x.id !== e.id && !x.exhausted && !done.includes(`${i}|${x.id}`));
-      push(g, { t: "EnemyAttack", enemy: e.id, inv: i, aoo: false, key: attackKey(g) }, ...(more ? [] : [win("playerWindow", { phase: "enemy", inv: i })]), { ...step, choice: undefined, done: [...done, key] });
+      // a non-massive enemy exhausts as soon as its attack has resolved; a massive one after its last (the loop below)
+      const exhaust: Step[] = isMassive(g, e.id) ? [] : [{ t: "Script", code: "__engine", fn: "exhaustEnemy", ctx: { enemy: e.id } }];
+      push(g, { t: "EnemyAttack", enemy: e.id, inv: i, aoo: false, key: attackKey(g) }, ...exhaust, ...(more ? [] : [win("playerWindow", { phase: "enemy", inv: i })]), { ...step, choice: undefined, done: [...done, key] });
       return;
     }
   }
@@ -238,6 +242,10 @@ export const enemyAttacksHandler: Handler<"EnemyAttacks"> = (g, step) => {
     if (g.s.cards[id]?.zone === "enemy") g.s.cards[id].exhausted = true;
   }
 };
+
+export function exhaustEnemy(g: G, id: InstId) {
+  if (g.s.cards[id]?.zone === "enemy") g.s.cards[id].exhausted = true;
+}
 
 export const enemyEngageHandler: Handler<"EnemyEngage"> = (g, step) => {
   const e = card(g, step.enemy);

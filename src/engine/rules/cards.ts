@@ -1,7 +1,7 @@
 import type { Ability, CardDef, Cost, Slot, Trigger } from "../../content/schema";
 import {
   abilitiesOf, activeInvs, allMods, ask, blankedCards, card, checkCondition, controlled, def, discard, emit, hasFlag, inv, invName, invsAt,
-  matchesFilter, modSum, moveCard, playerCount, push, type G,
+  actClueCost, canAdvanceAct, matchesFilter, modSum, moveCard, playerCount, push, uniqueInPlay, type G,
 } from "../core";
 import type { EffCtx, EventData, InstId, InvId, Step } from "../types";
 
@@ -202,17 +202,25 @@ export const windowHandler: Handler<"Window"> = (g, step) => {
   }
   const offered = step.offered ?? [];
   const reactions = refs.filter((r) => (r.ability.kind === "reaction" || r.ability.anyWindow) && !offered.includes(`${r.card}:${r.index}`));
-  if (reactions.length === 0) return;
-  const who = reactions[0].controller;
+  // the group may spend clues to advance the act in any player window (Grimoire, Act Deck and Agenda Deck)
+  const act = step.trigger === "playerWindow" && !offered.includes("act") && canAdvanceAct(g);
+  if (reactions.length === 0 && !act) return;
+  const lead = activeInvs(g).includes(g.s.lead) ? g.s.lead : activeInvs(g)[0];
+  const who = reactions.length ? reactions[0].controller : lead;
   const mine = reactions.filter((r) => r.controller === who);
   const opts = [
+    ...(act ? [{ id: "act", label: `Advance act (spend ${actClueCost(g)} clues as a group)`, card: g.s.act!, value: { kind: "advanceAct" } }] : []),
     ...mine.map((r) => ({ id: `${r.card}:${r.index}`, label: r.ability.label ?? `${def(g, r.card).name}${r.ability.fromHand || r.ability.anyWindow ? " (play)" : ""}`, card: r.card, value: `${r.card}:${r.index}` })),
     { id: "pass", label: "Pass", value: "pass" },
   ];
-  const pick = ask<string>(g, step, who, "reaction", `${invName(g, who)}: use a reaction? (${step.trigger})`, opts, { key: step.trigger === "playerWindow" ? "playerWindow" : "reaction" });
+  const pick = ask<string | { kind: "advanceAct" }>(g, step, who, "reaction", `${invName(g, who)}: use a reaction? (${step.trigger})`, opts, { key: step.trigger === "playerWindow" ? "playerWindow" : "reaction" });
   if (pick === undefined) return;
   if (pick === "pass") {
-    push(g, { ...step, choice: undefined, offered: [...offered, ...mine.map((r) => `${r.card}:${r.index}`)] });
+    push(g, { ...step, choice: undefined, offered: [...offered, ...mine.map((r) => `${r.card}:${r.index}`), ...(act ? ["act"] : [])] });
+    return;
+  }
+  if (typeof pick === "object") {
+    push(g, { t: "AdvanceAct", spend: true }, { ...step, choice: undefined, offered: [...offered, "act"] });
     return;
   }
   const r = mine.find((x) => `${x.card}:${x.index}` === pick)!;
@@ -298,6 +306,7 @@ export function canPlay(g: G, i: InvId, cardId: InstId, asFast: boolean): boolea
   const d = def(g, cardId);
   if (d.type !== "asset" && d.type !== "event") return false;
   if (hasFlag(g, i, "cannotPlayAssetsOrEvents")) return false;
+  if (uniqueInPlay(g, cardId)) return false;
   const isFast = d.keywords.includes("fast");
   if (asFast !== isFast) return false;
   // events that are only playable in response to a trigger

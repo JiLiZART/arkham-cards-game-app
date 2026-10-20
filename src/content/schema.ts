@@ -353,7 +353,7 @@ export const TRIGGERS = [
   "tokenRevealed", "enemyAttacks", "enemyAttacked", "enemyEvaded", "horrorPlaced", "damageTaken", "horrorTaken",
   "enterPlay", "cardPlayed", "treacheryDrawn", "enemySpawns", "phaseBegins", "turnBegins", "turnEnds", "roundEnds",
   "attackDealsDamage", "mythosEnds", "enemyPhaseEnds", "enterLocation", "leaveLocation", "locationInvestigated", "assetDamaged", "enemyEngages",
-  "enemyDefeatedSelf", "playerWindow", "dealDamage", "excessDamage", "wouldMoveOut", "agendaAdvances", "wouldDiscoverClues", "skillTestEnds",
+  "enemyDefeatedSelf", "playerWindow", "successfulEvade", "dealDamage", "excessDamage", "wouldMoveOut", "agendaAdvances", "wouldDiscoverClues", "skillTestEnds",
 ] as const;
 export const Trigger = z.enum(TRIGGERS);
 export type Trigger = z.infer<typeof Trigger>;

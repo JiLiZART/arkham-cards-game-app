@@ -6,7 +6,8 @@ import { handlers as effectHandlers } from "./effects";
 import { randInt, shuffle } from "./rng";
 import { finishEvent, handlers as cardHandlers } from "./rules/cards";
 import { handlers as enemyHandlers } from "./rules/enemies";
-import { basicInvestigate, endTurnCleanup, handlers as flowHandlers, legalTurnActions, roundCleanup } from "./rules/flow";
+import { exhaustEnemy } from "./rules/enemies";
+import { basicInvestigate, endTurnCleanup, handlers as flowHandlers, legalTurnActions, readyAll, roundCleanup } from "./rules/flow";
 import {
   assetDefeatCheck, checkEngagement, drawOpeningCards, handlers as invHandlers, revealLocation,
 } from "./rules/investigators";
@@ -14,7 +15,7 @@ import { allEliminated, finishRevelation, handlers as scenarioHandlers, nextAct,
 import { handlers as testHandlers, startTest } from "./rules/skillTest";
 import type { Action, ChoiceOption, ContentDb, EffCtx, GameEvent, GameSetup, GameState, InstId, Step } from "./types";
 
-export const ENGINE_VERSION = 4;
+export const ENGINE_VERSION = 5;
 
 // ---------- internal script functions (code "__engine") ----------
 const ENGINE_FNS: Record<string, (g: G, ctx: EffCtx, step: Step) => void> = {
@@ -32,6 +33,8 @@ const ENGINE_FNS: Record<string, (g: G, ctx: EffCtx, step: Step) => void> = {
     inv(g, ctx.inv!).resources++;
   },
   roundCleanup: (g) => roundCleanup(g),
+  exhaustEnemy: (g, ctx) => exhaustEnemy(g, ctx.enemy!),
+  readyAll: (g) => readyAll(g),
   nextAgenda: (g, ctx) => nextAgenda(g, ctx.source!),
   nextAct: (g, ctx) => nextAct(g, ctx.source!),
 };

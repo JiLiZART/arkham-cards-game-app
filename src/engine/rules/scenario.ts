@@ -1,5 +1,5 @@
 import { shuffle } from "../rng";
-import { abilitiesOf, activeInvs, card, def, emit, hasFlag, inv, invName, moveCard, push, tapToDraw, type G } from "../core";
+import { abilitiesOf, activeInvs, actClueCost, card, def, emit, hasFlag, inv, invName, moveCard, push, tapToDraw, type G } from "../core";
 import type { InstId, Step } from "../types";
 import { win } from "./cards";
 
@@ -54,7 +54,8 @@ export function finishRevelation(g: G, cardId: InstId, invId: string) {
   delete g.s.flags.peril;
   const surge = g.s.flags[`surge:${cardId}`] || def(g, cardId).keywords.includes("surge");
   delete g.s.flags[`surge:${cardId}`];
-  if (c?.zone === "resolving") moveCard(g, cardId, c.owner ? "discard" : "encounterDiscard");
+  // a treachery with Victory X is added to the victory display instead (Grimoire, Victory X)
+  if (c?.zone === "resolving") moveCard(g, cardId, !c.owner && def(g, cardId).victory !== undefined ? "victory" : c.owner ? "discard" : "encounterDiscard");
   if (surge) push(g, { t: "DrawEncounter", inv: invId });
 }
 
@@ -122,12 +123,7 @@ function endUnscripted(g: G, prev: InstId, kind: "act" | "agenda") {
   push(g, { t: "Resolution", id: finalResolution(def(g, prev).backText, Object.keys(g.db.scenarios[g.s.scenarioId].resolutions), kind) });
 }
 
-export function actClueCost(g: G): number {
-  if (!g.s.act) return Infinity;
-  const d = def(g, g.s.act);
-  if (!d.actClues) return Infinity;
-  return d.actClues * (d.actCluesPerInvestigator ? g.s.order.length : 1);
-}
+export { actClueCost };
 
 export const advanceActHandler: Handler<"AdvanceAct"> = (g, step) => {
   const id = g.s.act;
