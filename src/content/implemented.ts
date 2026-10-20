@@ -4,9 +4,16 @@ import type { CardDef } from "./schema";
 /** the keywords the engine acts on by themselves (CardDef.keywords) */
 const KEYWORD = /^(hunter|retaliate|aloof|alert|massive|surge|peril|fast|exceptional)(\s*\(\d+\))?$/i;
 
+/** the spawn values the engine resolves (rules/enemies.ts): the two keywords, or the name of a location in the content */
+function spawnResolves(db: ContentDb, spawn: string | undefined): boolean {
+  if (!spawn) return false;
+  if (spawn === "emptyLocation" || spawn === "Engaged with Prey") return true;
+  return Object.values(db.cards).some((c) => c.type === "location" && c.name === spawn);
+}
+
 /** the kinds of printed line the engine runs from a card's data, and the field that must be set for the line to be accounted for (ADR-0013) */
-const LINE_RULES: [RegExp, (c: CardDef) => boolean][] = [
-  [/^Spawn - /, () => true],
+const LINE_RULES: [RegExp, (c: CardDef, db: ContentDb) => boolean][] = [
+  [/^Spawn - /, (c, db) => spawnResolves(db, c.spawn)],
   [/^Prey - /, (c) => !!c.prey],
   [/investigated using \[\w+\] instead/i, (c) => !!c.investigateSkill],
   [/^Uses \(/, (c) => !!c.uses],
@@ -78,6 +85,7 @@ export function implemented(db: ContentDb, code: string): boolean {
   if (!c) return false;
   if (c.type === "scenario") return referenceCardWorks(db, c);
   if (c.abilities.length || db.scripts[code]) return true;
-  const lines = c.text.replace(/<[^>]+>/g, "").split("\n").map((l) => l.trim()).filter(Boolean);
-  return lines.every((l) => keywordsOnly(l) || LINE_RULES.some(([re, set]) => re.test(l) && set(c)));
+  // both sides are printed text; a line break is printed as <br/> as often as a newline
+  const lines = `${c.text}\n${c.backText ?? ""}`.replace(/<br\s*\/?>/g, "\n").replace(/<[^>]+>/g, "").split("\n").map((l) => l.trim()).filter(Boolean);
+  return lines.every((l) => keywordsOnly(l) || LINE_RULES.some(([re, set]) => re.test(l) && set(c, db)));
 }

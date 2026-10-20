@@ -2144,7 +2144,7 @@
   },
   "subname": "A Perfect Fit",
   "deckLimit": 1,
-  "cost": -2
+  "cost": "X"
  },
  {
   "code": "90086",

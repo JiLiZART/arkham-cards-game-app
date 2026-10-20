@@ -44,7 +44,7 @@ const lower = (s: string) => s.toLowerCase();
 /** whether a card meets every criterion an option names (a card with no experience level counts as level 0) */
 function optionMatches(o: DeckOption, c: CardDef): boolean {
   if (o.permanent !== undefined && o.permanent !== /Permanent\./.test(c.text)) return false;
-  if (o.faction?.length && !o.faction.includes(c.faction)) return false;
+  if (o.faction?.length && !(c.factions ?? [c.faction]).some((f) => o.faction!.includes(f))) return false;
   if (o.type?.length && !o.type.includes(c.type)) return false;
   if (o.trait?.length && !o.trait.some((t) => c.traits.some((x) => lower(x) === lower(t)))) return false;
   if (o.uses?.length && !o.uses.some((u) => lower(c.uses?.type ?? "") === lower(u) || lower(c.text).includes(`${lower(u)}).`))) return false;

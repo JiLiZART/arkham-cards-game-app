@@ -2742,7 +2742,7 @@
   "flavor": "A mass of skittering roaches completely covers the floor, leaving a trail of sticky brown ooze in its wake.",
   "encounterSet": "decay",
   "enemy": {
-   "fight": -2,
+   "fight": null,
    "health": 2,
    "healthPerInvestigator": false,
    "evade": 3,
@@ -5535,7 +5535,7 @@
   "encounterSet": "a_phantom_of_truth",
   "enemy": {
    "fight": 5,
-   "health": 0,
+   "health": null,
    "healthPerInvestigator": false,
    "evade": 3,
    "damage": 0,
@@ -5567,7 +5567,7 @@
   "encounterSet": "a_phantom_of_truth",
   "enemy": {
    "fight": 3,
-   "health": 0,
+   "health": null,
    "healthPerInvestigator": false,
    "evade": 5,
    "damage": 0,
@@ -5982,7 +5982,7 @@
   },
   "deckLimit": 2,
   "xp": 2,
-  "cost": -2
+  "cost": "X"
  },
  {
   "code": "03239",

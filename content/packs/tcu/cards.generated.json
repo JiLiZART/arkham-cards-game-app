@@ -2774,6 +2774,10 @@
   "deckLimit": 2,
   "xp": 0,
   "cost": 6,
+  "factions": [
+   "guardian",
+   "rogue"
+  ],
   "uses": {
    "type": "ammo",
    "count": 5
@@ -2803,6 +2807,10 @@
   "deckLimit": 2,
   "xp": 0,
   "cost": 1,
+  "factions": [
+   "seeker",
+   "mystic"
+  ],
   "uses": {
    "type": "secrets",
    "count": 3
@@ -2830,6 +2838,10 @@
   "deckLimit": 2,
   "xp": 0,
   "cost": 3,
+  "factions": [
+   "rogue",
+   "survivor"
+  ],
   "uses": {
    "type": "supplies",
    "count": 2
@@ -2862,6 +2874,10 @@
   "deckLimit": 2,
   "xp": 0,
   "cost": 3,
+  "factions": [
+   "mystic",
+   "guardian"
+  ],
   "uses": {
    "type": "charges",
    "count": 3
@@ -2891,7 +2907,11 @@
   "flavor": "We should have thrown it back immediately.\nBut how could we have known?",
   "deckLimit": 2,
   "xp": 0,
-  "cost": 3
+  "cost": 3,
+  "factions": [
+   "survivor",
+   "seeker"
+  ]
  },
  {
   "code": "05120",
@@ -4140,7 +4160,7 @@
   "icons": {},
   "flavor": "The gallows were decommissioned in 1901 after the execution of serial murderer Piper Thomassan. Even so, the wooden platform still stands atop Hangman’s Hill, a memorial to the brutality of humankind.",
   "encounterSet": "the_wages_of_sin",
-  "shroud": -2,
+  "shroud": null,
   "clues": 0,
   "cluesPerInvestigator": false
  },
@@ -4162,7 +4182,7 @@
   "icons": {},
   "flavor": "One last gasp.",
   "encounterSet": "the_wages_of_sin",
-  "shroud": -2,
+  "shroud": null,
   "clues": 0,
   "cluesPerInvestigator": false
  },
@@ -8885,10 +8905,10 @@
   "subname": "The Primal Chaos",
   "encounterSet": "before_the_black_throne",
   "enemy": {
-   "fight": 0,
-   "health": 0,
+   "fight": null,
+   "health": null,
    "healthPerInvestigator": false,
-   "evade": 0,
+   "evade": null,
    "damage": 3,
    "horror": 3
   }

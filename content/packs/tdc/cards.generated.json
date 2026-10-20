@@ -3888,7 +3888,7 @@
   "subname": "Slick Steps",
   "backText": "You cannot enter Treacherous Path if there are clues on your location.",
   "encounterSet": "the_western_wall",
-  "shroud": -2,
+  "shroud": null,
   "clues": 1,
   "cluesPerInvestigator": true
  },
@@ -3912,7 +3912,7 @@
   "subname": "Eroded Shelf",
   "backText": "You cannot enter Treacherous Path if there are clues on your location.",
   "encounterSet": "the_western_wall",
-  "shroud": -2,
+  "shroud": null,
   "clues": 1,
   "cluesPerInvestigator": true
  },
@@ -3936,7 +3936,7 @@
   "subname": "Precarious Climb",
   "backText": "You cannot enter Treacherous Path if there are clues on your location.",
   "encounterSet": "the_western_wall",
-  "shroud": -2,
+  "shroud": null,
   "clues": 1,
   "cluesPerInvestigator": true
  },
@@ -3960,7 +3960,7 @@
   "subname": "Deadly Pass",
   "backText": "You cannot enter Treacherous Path if there are clues on your location.",
   "encounterSet": "the_western_wall",
-  "shroud": -2,
+  "shroud": null,
   "clues": 1,
   "cluesPerInvestigator": true
  },
@@ -3984,7 +3984,7 @@
   "subname": "Shallow Den",
   "backText": "You cannot enter Treacherous Path if there are clues on your location.",
   "encounterSet": "the_western_wall",
-  "shroud": -2,
+  "shroud": null,
   "clues": 1,
   "cluesPerInvestigator": true
  },
@@ -4009,7 +4009,7 @@
   "backText": "You cannot enter Treacherous Path if there are clues on your location.",
   "flavor": "[tdc_rune_a][tdc_rune_x][tdc_rune_p][tdc_rune_p][tdc_rune_x][tdc_rune_g] · [tdc_rune_o][tdc_rune_k] · [tdc_rune_m][tdc_rune_f][tdc_rune_c][tdc_rune_x] · [tdc_rune_c][tdc_rune_b][tdc_rune_k] · [tdc_rune_z][tdc_rune_d][tdc_rune_s][tdc_rune_i] · [tdc_rune_z][tdc_rune_k][tdc_rune_q][tdc_rune_c][tdc_rune_b][tdc_rune_l]",
   "encounterSet": "the_western_wall",
-  "shroud": -2,
+  "shroud": null,
   "clues": 2,
   "cluesPerInvestigator": true
  },
@@ -4033,7 +4033,7 @@
   "backName": "Treacherous Path",
   "backText": "You cannot enter Treacherous Path if there are clues on your location.",
   "encounterSet": "the_western_wall",
-  "shroud": -2,
+  "shroud": null,
   "clues": 2,
   "cluesPerInvestigator": true
  },
@@ -4059,7 +4059,7 @@
   "backText": "You cannot enter Treacherous Path if there are clues on your location.",
   "encounterSet": "the_western_wall",
   "victory": 1,
-  "shroud": -2,
+  "shroud": null,
   "clues": 2,
   "cluesPerInvestigator": true
  },
@@ -4083,7 +4083,7 @@
   "backText": "You cannot enter Treacherous Path if there are clues on your location.",
   "flavor": "[tdc_rune_m][tdc_rune_f] · [tdc_rune_c][tdc_rune_b][tdc_rune_k] · [tdc_rune_z][tdc_rune_k][tdc_rune_k][tdc_rune_q] · [tdc_rune_c][tdc_rune_b][tdc_rune_k][tdc_rune_h] · [tdc_rune_p][tdc_rune_m][tdc_rune_k] · [tdc_rune_g][tdc_rune_d][tdc_rune_m][tdc_rune_c][tdc_rune_m][tdc_rune_f][tdc_rune_e] · [tdc_rune_a][tdc_rune_x][tdc_rune_s] · [tdc_rune_o][tdc_rune_h] · [tdc_rune_d][tdc_rune_g][tdc_rune_d][tdc_rune_i][tdc_rune_k][tdc_rune_f][tdc_rune_m][tdc_rune_f][tdc_rune_e]",
   "encounterSet": "the_western_wall",
-  "shroud": -2,
+  "shroud": null,
   "clues": 2,
   "cluesPerInvestigator": true
  },
@@ -4107,7 +4107,7 @@
   "backText": "You cannot enter Treacherous Path if there are clues on your location.",
   "flavor": "[tdc_rune_c][tdc_rune_b][tdc_rune_k] · [tdc_rune_s][tdc_rune_k][tdc_rune_o][tdc_rune_f][tdc_rune_d][tdc_rune_f][tdc_rune_c][tdc_rune_l] · [tdc_rune_x][tdc_rune_a] · [tdc_rune_o][tdc_rune_h] · [tdc_rune_e][tdc_rune_s][tdc_rune_d][tdc_rune_f][tdc_rune_z] · [tdc_rune_d][tdc_rune_f][tdc_rune_z] · [tdc_rune_e][tdc_rune_p][tdc_rune_x][tdc_rune_s][tdc_rune_m][tdc_rune_x][tdc_rune_n][tdc_rune_l] · [tdc_rune_i][tdc_rune_m][tdc_rune_f][tdc_rune_e][tdc_rune_z][tdc_rune_x][tdc_rune_o]",
   "encounterSet": "the_western_wall",
-  "shroud": -2,
+  "shroud": null,
   "clues": 2,
   "cluesPerInvestigator": true
  },
@@ -4447,7 +4447,7 @@
   "backText": "<b>Forced</b> - When you enter Sea Floor: Increase the flood level of this location and an adjacent eligible location.",
   "flavor": "The seafloor trench feels as alien as another dimension.",
   "encounterSet": "the_drowned_quarter",
-  "shroud": -2,
+  "shroud": null,
   "clues": 1,
   "cluesPerInvestigator": true
  },
@@ -5981,7 +5981,7 @@
    "damage": 2,
    "horror": 0
   },
-  "spawn": "Engaged with prey"
+  "spawn": "Engaged with Prey"
  },
  {
   "code": "11607",
@@ -8316,10 +8316,10 @@
   "subname": "Ancient Evil",
   "encounterSet": "the_doom_of_arkham_part_2",
   "enemy": {
-   "fight": -3,
-   "health": -3,
+   "fight": null,
+   "health": null,
    "healthPerInvestigator": false,
-   "evade": -3,
+   "evade": null,
    "damage": 0,
    "horror": 0
   }
@@ -8347,10 +8347,10 @@
   "encounterSet": "the_doom_of_arkham_part_2",
   "victory": 2,
   "enemy": {
-   "fight": -2,
-   "health": 0,
+   "fight": null,
+   "health": null,
    "healthPerInvestigator": false,
-   "evade": -2,
+   "evade": null,
    "damage": 1,
    "horror": 1
   }
@@ -8379,10 +8379,10 @@
   "encounterSet": "the_doom_of_arkham_part_2",
   "victory": 2,
   "enemy": {
-   "fight": -2,
-   "health": -2,
+   "fight": null,
+   "health": null,
    "healthPerInvestigator": false,
-   "evade": -2,
+   "evade": null,
    "damage": 1,
    "horror": 1
   }
@@ -8411,10 +8411,10 @@
   "encounterSet": "the_doom_of_arkham_part_2",
   "victory": 5,
   "enemy": {
-   "fight": -2,
-   "health": 0,
+   "fight": null,
+   "health": null,
    "healthPerInvestigator": false,
-   "evade": -2,
+   "evade": null,
    "damage": 0,
    "horror": 1
   }
@@ -8444,10 +8444,10 @@
   "encounterSet": "the_doom_of_arkham_part_2",
   "victory": 5,
   "enemy": {
-   "fight": -2,
-   "health": -2,
+   "fight": null,
+   "health": null,
    "healthPerInvestigator": false,
-   "evade": -2,
+   "evade": null,
    "damage": 0,
    "horror": 1
   }
@@ -8475,10 +8475,10 @@
   "encounterSet": "the_doom_of_arkham_part_2",
   "victory": 2,
   "enemy": {
-   "fight": -2,
-   "health": 0,
+   "fight": null,
+   "health": null,
    "healthPerInvestigator": false,
-   "evade": -2,
+   "evade": null,
    "damage": 1,
    "horror": 0
   }
@@ -8507,10 +8507,10 @@
   "encounterSet": "the_doom_of_arkham_part_2",
   "victory": 2,
   "enemy": {
-   "fight": -2,
-   "health": -2,
+   "fight": null,
+   "health": null,
    "healthPerInvestigator": false,
-   "evade": -2,
+   "evade": null,
    "damage": 1,
    "horror": 0
   }

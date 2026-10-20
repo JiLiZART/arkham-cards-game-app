@@ -1822,7 +1822,7 @@
   "victory": 0,
   "enemy": {
    "fight": 2,
-   "health": 0,
+   "health": null,
    "healthPerInvestigator": false,
    "evade": 3,
    "damage": 0,
@@ -2044,7 +2044,7 @@
   "victory": 0,
   "enemy": {
    "fight": 2,
-   "health": 0,
+   "health": null,
    "healthPerInvestigator": false,
    "evade": 3,
    "damage": 0,
@@ -2259,7 +2259,7 @@
   "victory": 0,
   "enemy": {
    "fight": 3,
-   "health": 0,
+   "health": null,
    "healthPerInvestigator": false,
    "evade": 2,
    "damage": 0,
@@ -2476,7 +2476,7 @@
   "victory": 0,
   "enemy": {
    "fight": 3,
-   "health": 0,
+   "health": null,
    "healthPerInvestigator": false,
    "evade": 3,
    "damage": 0,
@@ -2698,7 +2698,7 @@
   "victory": 0,
   "enemy": {
    "fight": 4,
-   "health": 0,
+   "health": null,
    "healthPerInvestigator": false,
    "evade": 4,
    "damage": 0,
@@ -3928,7 +3928,7 @@
   "icons": {},
   "encounterSet": "cosmic_journey",
   "victory": 1,
-  "shroud": -14,
+  "shroud": null,
   "clues": 4,
   "cluesPerInvestigator": false
  },
@@ -4176,7 +4176,7 @@
   "encounterSet": "cosmic_journey",
   "enemy": {
    "fight": 4,
-   "health": 0,
+   "health": null,
    "healthPerInvestigator": false,
    "evade": 4,
    "damage": 2,
@@ -4360,7 +4360,7 @@
   "victory": 1,
   "enemy": {
    "fight": 5,
-   "health": 0,
+   "health": null,
    "healthPerInvestigator": false,
    "evade": 5,
    "damage": 3,
@@ -5297,7 +5297,7 @@
    "fight": 4,
    "health": 1,
    "healthPerInvestigator": false,
-   "evade": 0,
+   "evade": null,
    "damage": 1,
    "horror": 0
   },
@@ -6096,10 +6096,10 @@
   "encounterSet": "venice",
   "victory": 1,
   "enemy": {
-   "fight": -4,
+   "fight": null,
    "health": 3,
    "healthPerInvestigator": false,
-   "evade": -4,
+   "evade": null,
    "damage": 0,
    "horror": 2
   }
@@ -6308,7 +6308,7 @@
    "fight": 4,
    "health": 8,
    "healthPerInvestigator": true,
-   "evade": 0,
+   "evade": null,
    "damage": 2,
    "horror": 2
   }
@@ -6867,7 +6867,7 @@
   "icons": {},
   "encounterSet": "the_eternal_slumber",
   "enemy": {
-   "fight": -2,
+   "fight": null,
    "health": 3,
    "healthPerInvestigator": false,
    "evade": 3,
@@ -7768,7 +7768,7 @@
   "slots": [],
   "icons": {},
   "encounterSet": "sands_of_egypt",
-  "shroud": -2,
+  "shroud": null,
   "clues": 1,
   "cluesPerInvestigator": true
  },
@@ -9436,9 +9436,7 @@
   "backName": "It Is Exposed!",
   "backText": "<b>If this is the first time this act has advanced, read the following:</b>\n<blockquote><i>You've seen the anomaly's true heart. It lies beneath the surface of the ooze, pulsing with unseen power and guiding its myriad forms with alien hunger. You suspect this organ, whatever it may be, holds the secret to destroying the anomaly once and for all.</i></blockquote><hr><b>Regardless of how many times this act has advanced, read the following:</b>\n<blockquote><i>After hours of investigation, you believe that you have pinpointed the creature's heart. Due to the way it shifts throughout the surface of its all-encompassing body, you know it won't stay at its current location for very long. Then you'll have to track it down again...</i></blockquote>\nChoose any [[Oozified]] location. Spawn the set-aside Vulnerable Heart enemy at the chosen location.",
   "encounterSet": "blob_epic_multiplayer",
-  "stage": 1,
-  "actClues": -3,
-  "actCluesPerInvestigator": true
+  "stage": 1
  },
  {
   "code": "85006",
@@ -10180,10 +10178,10 @@
   "subname": "Extraspacial Anomaly",
   "encounterSet": "blob_epic_multiplayer",
   "enemy": {
-   "fight": 0,
-   "health": -3,
+   "fight": null,
+   "health": null,
    "healthPerInvestigator": false,
-   "evade": 0,
+   "evade": null,
    "damage": 0,
    "horror": 0
   }
@@ -10209,10 +10207,10 @@
   "subname": "Extraspacial Anomaly",
   "encounterSet": "blob_single_group",
   "enemy": {
-   "fight": 0,
+   "fight": null,
    "health": 15,
    "healthPerInvestigator": true,
-   "evade": 0,
+   "evade": null,
    "damage": 0,
    "horror": 0
   }
@@ -10363,10 +10361,10 @@
   "icons": {},
   "encounterSet": "blob",
   "enemy": {
-   "fight": -2,
-   "health": 0,
+   "fight": null,
+   "health": null,
    "healthPerInvestigator": false,
-   "evade": 0,
+   "evade": null,
    "damage": 2,
    "horror": 2
   }
@@ -10594,8 +10592,7 @@
   "backText": "If you are playing in Standalone Mode, add 1 [tablet] token to the chaos bag.\nShuffle the 2 set-aside Ethereal Entity enemies, the 3 Inevitable End treacheries, and the encounter discard pile into the encounter deck.\nIf this is the first agenda to advance to 1b, spawn the set-aside Hune-Stitched Herald enemy at the Athenaeum of the Empty Sky.",
   "flavor": "Deep in the cosmos of another dimension, something begins to seep through the veil between worlds...",
   "encounterSet": "war_of_the_outer_gods",
-  "stage": 1,
-  "doom": -3
+  "stage": 1
  },
  {
   "code": "86003",
@@ -10615,8 +10612,7 @@
   "backText": "If you are playing in Standalone Mode, add 1 [tablet] token to the chaos bag.\nIf the Hune-Stitched Herald enemy is set-aside, shuffle it into the encounter deck.\nIf this is the first agenda to advance to 2b, spawn the set-aside The Inescapable Maw enemy at the Athenaeum of the Empty Sky.",
   "flavor": "The Cult of the Empty Sky predicted these events many years ago. Now they will live out the ending that they have long foreknown.",
   "encounterSet": "war_of_the_outer_gods",
-  "stage": 2,
-  "doom": -3
+  "stage": 2
  },
  {
   "code": "86004",
@@ -10636,8 +10632,7 @@
   "backText": "If you are playing in Standalone Mode, add 1 [tablet] token to the chaos bag.\nFlip Hub Dimension to its <i>(Gateway to Destruction)</i> side. If Hub Dimension is not in play, put it into play, <i>(Gateway to Destruction)</i> side faceup.\nSpawn the set-aside Silenus enemy at Hub Dimension.\nSearch the encounter deck, encounter discard pile, and each play area for all green and red encounter cards and remove them from the game. Shuffle the encounter deck. Remove each agenda and act from the game and put the set-aside Silenus Descends agenda into play.",
   "flavor": "The end is nigh.",
   "encounterSet": "war_of_the_outer_gods",
-  "stage": 3,
-  "doom": -3
+  "stage": 3
  },
  {
   "code": "86005",
@@ -10657,8 +10652,7 @@
   "backText": "If you are playing in Standalone Mode, add 1 [cultist] token to the chaos bag.\nShuffle the 2 set-aside Bringer of Paradise enemies, the 3 Hunt Down treacheries, and the encounter discard pile into the encounter deck.\nIf this is the first agenda to advance to 1b, spawn the set-aside Horrific Shoggoth enemy at the Shrine of Magh'an Ark'at.",
   "flavor": "In a profane place hidden from society, an entity siphons otherworldly heat from another dimension...",
   "encounterSet": "war_of_the_outer_gods",
-  "stage": 1,
-  "doom": -3
+  "stage": 1
  },
  {
   "code": "86006",
@@ -10678,8 +10672,7 @@
   "backText": "If you are playing in Standalone Mode, add 1 [cultist] token to the chaos bag.\nIf the Horrific Shoggoth enemy is set-aside, shuffle it into the encounter deck.\nIf this is the first agenda to advance to 2b, spawn the set-aside Vile Broodmaster enemy at the Shrine of Magh'an Ark'at.",
   "flavor": "From each drop of embryonic liquid that rolls off of the egg's surface, horrible creatures gestate: agents of paradise, or so the Cult of Ark'at believes.",
   "encounterSet": "war_of_the_outer_gods",
-  "stage": 2,
-  "doom": -3
+  "stage": 2
  },
  {
   "code": "86007",
@@ -10699,8 +10692,7 @@
   "backText": "If you are playing in Standalone Mode, add 1 [cultist] token to the chaos bag.\nFlip Hub Dimension to its <i>(Gateway to Destruction)</i> side. If Hub Dimension is not in play, put it into play, <i>(Gateway to Destruction)</i> side faceup.\nSpawn the set-aside Magh'an Ark'at enemy at Hub Dimension.\nSearch the encounter deck, encounter discard pile, and each play area for all blue and red encounter cards and remove them from the game. Shuffle the encounter deck. Remove each agenda and act from the game and put the set-aside The Egg Hatches agenda into play.",
   "flavor": "The end is nigh.",
   "encounterSet": "war_of_the_outer_gods",
-  "stage": 3,
-  "doom": -3
+  "stage": 3
  },
  {
   "code": "86008",
@@ -10720,8 +10712,7 @@
   "backText": "If you are playing in Standalone Mode, add 1 [elder_thing] token to the chaos bag.\nShuffle 3 of the 4 set-aside Trylogog enemies, the 2 Transmogrify treacheries, and the encounter discard pile into the encounter deck.\nIf this is the first agenda to advance to 1b, spawn the remaining set-aside Trylogog enemy. That enemy gains an additional swarming 2.",
   "flavor": "From a pit deep within the crust of the Earth, something horrid begins to emerge...",
   "encounterSet": "war_of_the_outer_gods",
-  "stage": 1,
-  "doom": -3
+  "stage": 1
  },
  {
   "code": "86009",
@@ -10741,8 +10732,7 @@
   "backText": "If you are playing in Standalone Mode, add 1 [elder_thing] token to the chaos bag.\nIf a copy of Trylogog is set-aside, shuffle it into the encounter deck.\nIf this is the first agenda to advance to 2b, spawn the set-aside Droning Horde enemy at the Burning Pit.",
   "flavor": "For the Cult of Assimilation, the appearance of the swarm is the heralding of a new era. A rebirth, of sorts, into a higher form. An ascendance.",
   "encounterSet": "war_of_the_outer_gods",
-  "stage": 2,
-  "doom": -3
+  "stage": 2
  },
  {
   "code": "86010",
@@ -10762,8 +10752,7 @@
   "backText": "If you are playing in Standalone Mode, add 1 [elder_thing] token to the chaos bag.\nFlip Hub Dimension to its <i>(Gateway to Destruction)</i> side. If Hub Dimension is not in play, put it into play, <i>(Gateway to Destruction)</i> side faceup.\nSpawn the set-aside Ezel-zen-rezl enemy at Hub Dimension.\nSearch the encounter deck, encounter discard pile, and each play area for all blue and green encounter cards and remove them from the game. Shuffle the encounter deck. Remove each agenda and act from the game and put the set-aside Ezel-zen-rezl Emerges agenda into play.",
   "flavor": "The end is nigh.",
   "encounterSet": "war_of_the_outer_gods",
-  "stage": 3,
-  "doom": -3
+  "stage": 3
  },
  {
   "code": "86011",
@@ -11313,7 +11302,7 @@
   "victory": 2,
   "enemy": {
    "fight": 4,
-   "health": -3,
+   "health": null,
    "healthPerInvestigator": false,
    "evade": 4,
    "damage": 1,
@@ -11497,7 +11486,7 @@
   "victory": 2,
   "enemy": {
    "fight": 3,
-   "health": -3,
+   "health": null,
    "healthPerInvestigator": false,
    "evade": 5,
    "damage": 3,
@@ -11693,7 +11682,7 @@
   "victory": 2,
   "enemy": {
    "fight": 5,
-   "health": -3,
+   "health": null,
    "healthPerInvestigator": false,
    "evade": 3,
    "damage": 2,
@@ -12179,7 +12168,7 @@
   "slots": [],
   "icons": {},
   "encounterSet": "machinations_through_time",
-  "shroud": -11,
+  "shroud": null,
   "clues": 1,
   "cluesPerInvestigator": true
  },
@@ -12411,7 +12400,7 @@
   "slots": [],
   "icons": {},
   "encounterSet": "machinations_through_time",
-  "shroud": -11,
+  "shroud": null,
   "clues": 1,
   "cluesPerInvestigator": true
  },
@@ -12639,7 +12628,7 @@
   "slots": [],
   "icons": {},
   "encounterSet": "machinations_through_time",
-  "shroud": -11,
+  "shroud": null,
   "clues": 1,
   "cluesPerInvestigator": true
  },
@@ -12896,7 +12885,7 @@
   "encounterSet": "machinations_through_time_single_group",
   "enemy": {
    "fight": 2,
-   "health": 0,
+   "health": null,
    "healthPerInvestigator": false,
    "evade": 2,
    "damage": 1,
@@ -12948,7 +12937,7 @@
   "encounterSet": "machinations_through_time_epic_multiplayer",
   "enemy": {
    "fight": 3,
-   "health": 0,
+   "health": null,
    "healthPerInvestigator": false,
    "evade": 3,
    "damage": 1,
@@ -13184,7 +13173,7 @@
   "victory": 0,
   "enemy": {
    "fight": 3,
-   "health": -3,
+   "health": null,
    "healthPerInvestigator": false,
    "evade": 3,
    "damage": 1,
@@ -13986,7 +13975,7 @@
   "flavor": "Abarran's safe and desk drawers are locked. The far side of the office peers into the main hall of the casino through a false wall.",
   "encounterSet": "fortune_and_folly",
   "victory": 1,
-  "shroud": -2,
+  "shroud": null,
   "clues": 3,
   "cluesPerInvestigator": true
  },
@@ -14391,10 +14380,10 @@
   "subname": "The Man with the Ruby Ring",
   "encounterSet": "fortune_and_folly",
   "enemy": {
-   "fight": 0,
-   "health": 0,
+   "fight": null,
+   "health": null,
    "healthPerInvestigator": false,
-   "evade": 0,
+   "evade": null,
    "damage": 0,
    "horror": 0
   }

@@ -422,12 +422,15 @@ export const CardDef = z
     type: CardType,
     subtype: z.enum(["weakness", "basicweakness"]).optional(),
     faction: z.string(),
+    /** every class of a multi-class card (faction first); absent on a single-class card */
+    factions: z.array(z.string()).optional(),
     pack: z.string(),
     encounterSet: z.string().optional(),
     quantity: z.number().default(1),
     deckLimit: z.number().optional(),
     xp: z.number().optional(),
-    cost: z.number().nullable().optional(),
+    /** null: no cost printed; "X": the text defines it */
+    cost: z.union([z.number(), z.literal("X")]).nullable().optional(),
     traits: z.array(z.string()).default([]),
     icons: Icons.default({}),
     slots: z.array(Slot).default([]),
@@ -443,13 +446,13 @@ export const CardDef = z
     sanity: z.number().optional(),
     uses: z.object({ type: z.string(), count: z.number() }).optional(),
     skills: z.object({ willpower: z.number(), intellect: z.number(), combat: z.number(), agility: z.number() }).optional(),
-    // enemy
+    // enemy (null: no printed value, or one the text defines — the enemy can't be fought / evaded / defeated by damage)
     enemy: z
       .object({
-        fight: z.number(),
-        health: z.number(),
+        fight: z.number().nullable(),
+        health: z.number().nullable(),
         healthPerInvestigator: z.boolean().default(false),
-        evade: z.number(),
+        evade: z.number().nullable(),
         damage: z.number(),
         horror: z.number(),
       })
@@ -464,8 +467,8 @@ export const CardDef = z
         z.object({ only: z.string() }),
       ])
       .optional(),
-    // location
-    shroud: z.number().optional(),
+    // location (shroud null: the text defines it; the location can't be investigated)
+    shroud: z.number().nullable().optional(),
     clues: z.number().optional(),
     cluesPerInvestigator: z.boolean().optional(),
     // act/agenda

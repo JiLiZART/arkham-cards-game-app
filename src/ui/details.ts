@@ -17,12 +17,12 @@ export type DetailRow =
   | { k: "stats"; health?: number; sanity?: number }
   | { k: "uses"; n: number; label: string }
   // enemies
-  | { k: "enemy"; fight: number; health: number; perInv: boolean; evade: number; labels: { fight: string; health: string; evade: string; perInv: string } }
+  | { k: "enemy"; fight: number | string; health: number | string; perInv: boolean; evade: number | string; labels: { fight: string; health: string; evade: string; perInv: string } }
   | { k: "attack"; damage: number; horror: number; label: string }
   | { k: "wounds"; n: number; label: string }
   | { k: "text"; s: string }
   // locations on the map
-  | { k: "shroud"; n: number; skill?: IconName; label: string }
+  | { k: "shroud"; n: number | string; skill?: IconName; label: string }
   | { k: "clues"; now: number; printed: number | null; perInv: boolean; label: string; perInvLabel: string }
   | { k: "victory"; label: string }
   | { k: "connections"; names: string[]; label: string }
@@ -60,7 +60,7 @@ function locationDetails(db: ContentDb, inst: CardInst, game: GameState, locale:
   }
   const rows: DetailRow[] = [{ k: "name", name: tx.name, subname: tx.subname }];
   if (tx.traits?.length) rows.push({ k: "traits", s: tx.traits.map((s) => `${s}.`).join(" ") });
-  if (d.shroud !== undefined) rows.push({ k: "shroud", n: d.shroud, skill: d.investigateSkill && d.investigateSkill !== "intellect" ? d.investigateSkill : undefined, label: t(db, locale, "card.shroud") });
+  if (d.shroud !== undefined) rows.push({ k: "shroud", n: d.shroud ?? "X", skill: d.investigateSkill && d.investigateSkill !== "intellect" ? d.investigateSkill : undefined, label: t(db, locale, "card.shroud") });
   rows.push({ k: "clues", now: inst.clues, printed: d.clues ?? null, perInv: !!d.cluesPerInvestigator, label: t(db, locale, "card.clues"), perInvLabel: t(db, locale, "card.perInvestigator") });
   if (d.victory) rows.push({ k: "victory", label: t(db, locale, "card.victory", { n: d.victory }) });
   const names = connectionsOf(db, game, inst.id).map((id) => shownName(db, game.cards[id], locale));
@@ -94,7 +94,7 @@ export function cardDetails(db: ContentDb, code: string, locale: string, at?: { 
   if (d.enemy) {
     const e = d.enemy;
     const labels = { fight: t(db, locale, "card.fight"), health: t(db, locale, "card.health"), evade: t(db, locale, "card.evade"), perInv: t(db, locale, "card.perInvestigator") };
-    rows.push({ k: "enemy", fight: e.fight, health: e.health, perInv: e.healthPerInvestigator, evade: e.evade, labels });
+    rows.push({ k: "enemy", fight: e.fight ?? "–", health: e.health ?? "–", perInv: e.healthPerInvestigator, evade: e.evade ?? "–", labels });
     rows.push({ k: "attack", damage: e.damage, horror: e.horror, label: t(db, locale, "card.attack") });
     if (at?.inst.damage) rows.push({ k: "wounds", n: at.inst.damage, label: t(db, locale, "card.wounds") });
   }

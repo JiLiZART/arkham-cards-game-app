@@ -2322,7 +2322,7 @@
    "fight": 3,
    "health": 5,
    "healthPerInvestigator": false,
-   "evade": -2,
+   "evade": null,
    "damage": 1,
    "horror": 1
   }
@@ -6797,7 +6797,7 @@
    "se"
   ],
   "xp": 4,
-  "cost": -2
+  "cost": "X"
  },
  {
   "code": "07269",
@@ -7342,10 +7342,10 @@
   "subname": "Deep in Slumber",
   "encounterSet": "the_lair_of_dagon",
   "enemy": {
-   "fight": 0,
-   "health": 0,
+   "fight": null,
+   "health": null,
    "healthPerInvestigator": false,
-   "evade": 0,
+   "evade": null,
    "damage": 0,
    "horror": 0
   }
@@ -8288,10 +8288,10 @@
   "subname": "Deep in Slumber",
   "encounterSet": "into_the_maelstrom",
   "enemy": {
-   "fight": 0,
-   "health": 0,
+   "fight": null,
+   "health": null,
    "healthPerInvestigator": false,
-   "evade": 0,
+   "evade": null,
    "damage": 0,
    "horror": 0
   }
@@ -8321,7 +8321,7 @@
   "encounterSet": "into_the_maelstrom",
   "enemy": {
    "fight": 7,
-   "health": 0,
+   "health": null,
    "healthPerInvestigator": false,
    "evade": 4,
    "damage": 1,
@@ -8348,10 +8348,10 @@
   "subname": "Deep in Slumber",
   "encounterSet": "into_the_maelstrom",
   "enemy": {
-   "fight": 0,
-   "health": 0,
+   "fight": null,
+   "health": null,
    "healthPerInvestigator": false,
-   "evade": 0,
+   "evade": null,
    "damage": 0,
    "horror": 0
   }
@@ -8381,7 +8381,7 @@
   "encounterSet": "into_the_maelstrom",
   "enemy": {
    "fight": 7,
-   "health": 0,
+   "health": null,
    "healthPerInvestigator": false,
    "evade": 4,
    "damage": 2,

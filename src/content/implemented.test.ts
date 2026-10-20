@@ -34,7 +34,6 @@ describe("a card works when every printed line is accounted for", () => {
     expect(implemented(db("<b>Forced</b> - Do a thing.", { abilities: [{}] }), "c")).toBe(true);
     expect(implemented(db(""), "c")).toBe(true);
     expect(implemented(db("Hunter. Retaliate."), "c")).toBe(true);
-    expect(implemented(db("Spawn - Hallway."), "c")).toBe(true);
   });
 });
 
@@ -122,5 +121,26 @@ describe("on the real content", () => {
     const withPrey = Object.values(real.cards).filter((c) => /^Prey - /m.test(c.text.replace(/<[^>]+>/g, "")) && !c.abilities.length && !real.scripts[c.code]);
     expect(withPrey.length).toBeGreaterThan(30);
     for (const c of withPrey.filter((c) => !c.prey)) expect(implemented(real, c.code), c.code).toBe(false);
+  });
+});
+
+describe("the printed lines are read the way the card prints them", () => {
+  it("lines separated by <br/> are separate lines", () => {
+    expect(implemented(db("<b>Spawn</b> - Any empty location.<br/><b>Forced</b> - After this spawns: Place 1 doom on it.", { spawn: "emptyLocation" }), "c")).toBe(false);
+  });
+
+  it("a Spawn line is accounted for only by a spawn the engine can resolve", () => {
+    expect(implemented(db("<b>Spawn</b> - Any empty location.", { spawn: "emptyLocation" }), "c")).toBe(true);
+    expect(implemented(db("<b>Spawn</b> - Engaged with prey.", { spawn: "Engaged with Prey" }), "c")).toBe(true);
+    expect(implemented(db("<b>Spawn</b> - Location with the most clues.", { spawn: "Location with the most clues" }), "c")).toBe(false);
+    const withLoc = db("<b>Spawn</b> - Hallway.", { spawn: "Hallway" });
+    expect(implemented(withLoc, "c")).toBe(false);
+    (withLoc.cards as Record<string, object>).h = { code: "h", type: "location", name: "Hallway", text: "", abilities: [] };
+    expect(implemented(withLoc, "c")).toBe(true);
+  });
+
+  it("the back of a double-sided card is printed text too", () => {
+    expect(implemented(db("", { type: "agenda", backText: "Each investigator takes 1 horror. Advance to agenda 2a." }), "c")).toBe(false);
+    expect(implemented(db("", { type: "agenda", backText: "" }), "c")).toBe(true);
   });
 });

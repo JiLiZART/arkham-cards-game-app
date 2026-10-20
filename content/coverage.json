@@ -179,9 +179,10 @@
   "bota": {
    "encounter": {
     "total": 26,
-    "works": 3,
+    "works": 0,
     "rest": {
      "act": 2,
+     "agenda": 3,
      "enemy": 2,
      "location": 14,
      "scenario": 1,
@@ -201,12 +202,12 @@
   "bsr": {
    "encounter": {
     "total": 32,
-    "works": 3,
+    "works": 0,
     "rest": {
      "act": 2,
      "agenda": 8,
-     "enemy": 1,
-     "location": 15,
+     "enemy": 2,
+     "location": 17,
      "scenario": 1,
      "treachery": 2
     }
@@ -262,10 +263,10 @@
   "cob": {
    "encounter": {
     "total": 111,
-    "works": 6,
+    "works": 0,
     "rest": {
      "act": 8,
-     "agenda": 6,
+     "agenda": 12,
      "enemy": 27,
      "location": 42,
      "scenario": 3,
@@ -284,10 +285,10 @@
   "coh": {
    "encounter": {
     "total": 33,
-    "works": 2,
+    "works": 1,
     "rest": {
      "act": 3,
-     "agenda": 1,
+     "agenda": 2,
      "enemy": 9,
      "location": 10,
      "scenario": 1,
@@ -347,11 +348,11 @@
   "cotr": {
    "encounter": {
     "total": 31,
-    "works": 3,
+    "works": 0,
     "rest": {
      "act": 2,
-     "agenda": 1,
-     "enemy": 5,
+     "agenda": 3,
+     "enemy": 6,
      "location": 12,
      "scenario": 1,
      "treachery": 7
@@ -430,10 +431,10 @@
   "dsm": {
    "encounter": {
     "total": 26,
-    "works": 2,
+    "works": 0,
     "rest": {
      "act": 4,
-     "agenda": 1,
+     "agenda": 3,
      "enemy": 4,
      "location": 10,
      "scenario": 1,
@@ -455,12 +456,12 @@
   "dwl": {
    "encounter": {
     "total": 59,
-    "works": 5,
+    "works": 0,
     "rest": {
-     "act": 6,
-     "agenda": 4,
-     "enemy": 10,
-     "location": 17,
+     "act": 7,
+     "agenda": 6,
+     "enemy": 11,
+     "location": 18,
      "scenario": 2,
      "treachery": 15
     }
@@ -499,10 +500,10 @@
   "eoec": {
    "encounter": {
     "total": 223,
-    "works": 5,
+    "works": 0,
     "rest": {
      "act": 17,
-     "agenda": 15,
+     "agenda": 20,
      "enemy": 40,
      "location": 74,
      "scenario": 5,
@@ -541,9 +542,9 @@
   "eotp": {
    "encounter": {
     "total": 24,
-    "works": 2,
+    "works": 0,
     "rest": {
-     "act": 1,
+     "act": 3,
      "agenda": 3,
      "enemy": 2,
      "location": 13,
@@ -564,12 +565,12 @@
   "fgg": {
    "encounter": {
     "total": 31,
-    "works": 3,
+    "works": 0,
     "rest": {
-     "act": 3,
+     "act": 4,
      "agenda": 2,
      "enemy": 7,
-     "location": 11,
+     "location": 13,
      "scenario": 1,
      "treachery": 4
     }
@@ -585,10 +586,10 @@
   "fhvc": {
    "encounter": {
     "total": 272,
-    "works": 2,
+    "works": 1,
     "rest": {
      "act": 24,
-     "agenda": 23,
+     "agenda": 24,
      "enemy": 55,
      "enemy_location": 13,
      "location": 101,
@@ -673,10 +674,10 @@
   "guardians": {
    "encounter": {
     "total": 66,
-    "works": 2,
+    "works": 1,
     "rest": {
      "act": 6,
-     "agenda": 4,
+     "agenda": 5,
      "enemy": 14,
      "location": 18,
      "scenario": 2,
@@ -750,9 +751,9 @@
   "hote": {
    "encounter": {
     "total": 26,
-    "works": 2,
+    "works": 1,
     "rest": {
-     "act": 2,
+     "act": 3,
      "agenda": 4,
      "enemy": 3,
      "location": 10,
@@ -870,12 +871,12 @@
   "itm": {
    "encounter": {
     "total": 29,
-    "works": 1,
+    "works": 0,
     "rest": {
      "act": 4,
      "agenda": 3,
      "enemy": 7,
-     "location": 10,
+     "location": 11,
      "scenario": 1,
      "treachery": 3
     }
@@ -979,10 +980,10 @@
   "lol": {
    "encounter": {
     "total": 58,
-    "works": 3,
+    "works": 1,
     "rest": {
      "act": 9,
-     "agenda": 3,
+     "agenda": 5,
      "enemy": 7,
      "location": 16,
      "scenario": 1,
@@ -1121,10 +1122,10 @@
   "pnr": {
    "encounter": {
     "total": 39,
-    "works": 1,
+    "works": 0,
     "rest": {
      "act": 4,
-     "agenda": 1,
+     "agenda": 2,
      "enemy": 3,
      "location": 12,
      "scenario": 1,
@@ -1161,10 +1162,10 @@
   "ptc": {
    "encounter": {
     "total": 68,
-    "works": 4,
+    "works": 1,
     "rest": {
-     "act": 5,
-     "agenda": 2,
+     "act": 6,
+     "agenda": 4,
      "enemy": 16,
      "location": 15,
      "scenario": 2,
@@ -1244,10 +1245,10 @@
   "rtdwl": {
    "encounter": {
     "total": 60,
-    "works": 2,
+    "works": 1,
     "rest": {
      "act": 1,
-     "agenda": 1,
+     "agenda": 2,
      "enemy": 9,
      "location": 23,
      "scenario": 8,
@@ -1268,11 +1269,11 @@
   "rtnotz": {
    "encounter": {
     "total": 38,
-    "works": 8,
+    "works": 2,
     "rest": {
      "act": 1,
      "agenda": 1,
-     "enemy": 2,
+     "enemy": 8,
      "location": 17,
      "scenario": 3,
      "treachery": 6
@@ -1290,9 +1291,10 @@
   "rtptc": {
    "encounter": {
     "total": 69,
-    "works": 1,
+    "works": 0,
     "rest": {
      "act": 5,
+     "agenda": 1,
      "enemy": 9,
      "location": 22,
      "scenario": 8,
@@ -1442,9 +1444,10 @@
   "tbb": {
    "encounter": {
     "total": 30,
-    "works": 3,
+    "works": 0,
     "rest": {
      "act": 3,
+     "agenda": 3,
      "enemy": 3,
      "location": 18,
      "scenario": 1,
@@ -1453,9 +1456,9 @@
    },
    "player": {
     "total": 13,
-    "works": 1,
+    "works": 0,
     "rest": {
-     "asset": 6,
+     "asset": 7,
      "event": 2,
      "skill": 4
     }
@@ -1487,10 +1490,10 @@
   "tcu": {
    "encounter": {
     "total": 64,
-    "works": 2,
+    "works": 0,
     "rest": {
-     "act": 7,
-     "agenda": 4,
+     "act": 8,
+     "agenda": 5,
      "enemy": 11,
      "location": 22,
      "scenario": 3,
@@ -1513,10 +1516,10 @@
   "tdcc": {
    "encounter": {
     "total": 259,
-    "works": 3,
+    "works": 1,
     "rest": {
      "act": 24,
-     "agenda": 18,
+     "agenda": 20,
      "enemy": 41,
      "location": 93,
      "scenario": 10,
@@ -1554,10 +1557,10 @@
   "tde": {
    "encounter": {
     "total": 70,
-    "works": 2,
+    "works": 0,
     "rest": {
-     "act": 6,
-     "agenda": 3,
+     "act": 7,
+     "agenda": 4,
      "enemy": 16,
      "location": 20,
      "scenario": 2,
@@ -1609,11 +1612,11 @@
   "tdoy": {
    "encounter": {
     "total": 26,
-    "works": 5,
+    "works": 0,
     "rest": {
      "act": 1,
-     "agenda": 3,
-     "enemy": 2,
+     "agenda": 7,
+     "enemy": 3,
      "location": 10,
      "scenario": 1,
      "treachery": 4
@@ -1631,9 +1634,10 @@
   "tece": {
    "encounter": {
     "total": 23,
-    "works": 5,
+    "works": 0,
     "rest": {
      "act": 2,
+     "agenda": 5,
      "enemy": 2,
      "location": 11,
      "scenario": 1,
@@ -1694,9 +1698,9 @@
   "tic": {
    "encounter": {
     "total": 66,
-    "works": 1,
+    "works": 0,
     "rest": {
-     "act": 3,
+     "act": 4,
      "agenda": 6,
      "enemy": 15,
      "location": 22,
@@ -1742,9 +1746,9 @@
   "tmm": {
    "encounter": {
     "total": 26,
-    "works": 1,
+    "works": 0,
     "rest": {
-     "act": 3,
+     "act": 4,
      "agenda": 3,
      "enemy": 1,
      "location": 12,
@@ -1804,11 +1808,11 @@
   "tpm": {
    "encounter": {
     "total": 24,
-    "works": 1,
+    "works": 0,
     "rest": {
      "act": 4,
      "agenda": 2,
-     "enemy": 2,
+     "enemy": 3,
      "location": 11,
      "scenario": 1,
      "treachery": 3
@@ -1850,10 +1854,10 @@
   "tskc": {
    "encounter": {
     "total": 277,
-    "works": 9,
+    "works": 1,
     "rest": {
      "act": 35,
-     "agenda": 20,
+     "agenda": 28,
      "asset": 1,
      "enemy": 63,
      "location": 92,
@@ -1915,10 +1919,10 @@
   "tuo": {
    "encounter": {
     "total": 30,
-    "works": 3,
+    "works": 0,
     "rest": {
-     "act": 4,
-     "agenda": 1,
+     "act": 5,
+     "agenda": 3,
      "enemy": 3,
      "location": 14,
      "scenario": 1,
@@ -1937,9 +1941,10 @@
   "uad": {
    "encounter": {
     "total": 35,
-    "works": 3,
+    "works": 0,
     "rest": {
-     "act": 7,
+     "act": 8,
+     "agenda": 2,
      "enemy": 6,
      "location": 9,
      "scenario": 1,
@@ -1982,9 +1987,10 @@
   "wda": {
    "encounter": {
     "total": 25,
-    "works": 3,
+    "works": 1,
     "rest": {
      "act": 5,
+     "agenda": 2,
      "enemy": 2,
      "location": 11,
      "scenario": 1,
@@ -2004,9 +2010,10 @@
   "wgd": {
    "encounter": {
     "total": 37,
-    "works": 4,
+    "works": 0,
     "rest": {
-     "act": 4,
+     "act": 5,
+     "agenda": 3,
      "enemy": 8,
      "location": 11,
      "scenario": 1,
@@ -2086,10 +2093,10 @@
   "wos": {
    "encounter": {
     "total": 46,
-    "works": 1,
+    "works": 0,
     "rest": {
      "act": 2,
-     "agenda": 1,
+     "agenda": 2,
      "enemy": 8,
      "location": 22,
      "scenario": 1,
@@ -2111,10 +2118,10 @@
   "children-of-blood": {
    "cards": {
     "total": 119,
-    "works": 6,
+    "works": 0,
     "rest": {
      "act": 8,
-     "agenda": 6,
+     "agenda": 12,
      "asset": 6,
      "enemy": 27,
      "location": 42,
@@ -2132,10 +2139,10 @@
   "edge-of-the-earth": {
    "cards": {
     "total": 248,
-    "works": 12,
+    "works": 7,
     "rest": {
      "act": 17,
-     "agenda": 15,
+     "agenda": 20,
      "asset": 16,
      "enemy": 40,
      "location": 74,
@@ -2183,10 +2190,10 @@
   "guardians-of-the-abyss": {
    "cards": {
     "total": 70,
-    "works": 2,
+    "works": 1,
     "rest": {
      "act": 6,
-     "agenda": 4,
+     "agenda": 5,
      "asset": 4,
      "enemy": 14,
      "location": 18,
@@ -2213,13 +2220,13 @@
   "return-to-the-circle-undone": {
    "cards": {
     "total": 342,
-    "works": 37,
+    "works": 28,
     "rest": {
-     "act": 33,
-     "agenda": 14,
+     "act": 36,
+     "agenda": 18,
      "asset": 10,
      "enemy": 43,
-     "location": 129,
+     "location": 131,
      "scenario": 17,
      "story": 13,
      "treachery": 46
@@ -2240,13 +2247,13 @@
   "return-to-the-dunwich-legacy": {
    "cards": {
     "total": 285,
-    "works": 25,
+    "works": 8,
     "rest": {
-     "act": 25,
-     "agenda": 15,
+     "act": 27,
+     "agenda": 28,
      "asset": 16,
-     "enemy": 30,
-     "location": 108,
+     "enemy": 31,
+     "location": 109,
      "scenario": 16,
      "treachery": 50
     }
@@ -2266,10 +2273,10 @@
   "return-to-the-forgotten-age": {
    "cards": {
     "total": 317,
-    "works": 34,
+    "works": 30,
     "rest": {
-     "act": 58,
-     "agenda": 17,
+     "act": 59,
+     "agenda": 20,
      "asset": 12,
      "enemy": 33,
      "investigator": 1,
@@ -2295,11 +2302,11 @@
   "return-to-the-night-of-the-zealot": {
    "cards": {
     "total": 112,
-    "works": 79,
+    "works": 73,
     "rest": {
      "act": 1,
      "agenda": 1,
-     "enemy": 2,
+     "enemy": 8,
      "location": 17,
      "scenario": 6,
      "treachery": 6
@@ -2315,13 +2322,13 @@
   "return-to-the-path-to-carcosa": {
    "cards": {
     "total": 359,
-    "works": 43,
+    "works": 30,
     "rest": {
-     "act": 30,
-     "agenda": 22,
+     "act": 34,
+     "agenda": 27,
      "asset": 12,
-     "enemy": 41,
-     "location": 114,
+     "enemy": 43,
+     "location": 116,
      "scenario": 17,
      "story": 29,
      "treachery": 51
@@ -2342,10 +2349,10 @@
   "side-all-or-nothing": {
    "cards": {
     "total": 56,
-    "works": 19,
+    "works": 18,
     "rest": {
      "act": 6,
-     "agenda": 3,
+     "agenda": 4,
      "asset": 2,
      "enemy": 5,
      "location": 10,
@@ -2417,11 +2424,11 @@
   "side-by-the-book": {
    "cards": {
     "total": 44,
-    "works": 37,
+    "works": 34,
     "rest": {
      "act": 1,
      "agenda": 2,
-     "enemy": 1,
+     "enemy": 4,
      "location": 1,
      "scenario": 2
     }
@@ -2434,10 +2441,10 @@
   "side-carnevale-of-horrors": {
    "cards": {
     "total": 40,
-    "works": 2,
+    "works": 1,
     "rest": {
      "act": 3,
-     "agenda": 1,
+     "agenda": 2,
      "asset": 7,
      "enemy": 9,
      "location": 10,
@@ -2453,10 +2460,10 @@
   "side-enthralling-encore": {
    "cards": {
     "total": 41,
-    "works": 10,
+    "works": 8,
     "rest": {
-     "act": 5,
-     "agenda": 2,
+     "act": 6,
+     "agenda": 3,
      "enemy": 5,
      "location": 9,
      "scenario": 2,
@@ -2509,10 +2516,10 @@
   "side-laid-to-rest": {
    "cards": {
     "total": 66,
-    "works": 1,
+    "works": 0,
     "rest": {
      "act": 3,
-     "agenda": 2,
+     "agenda": 3,
      "asset": 1,
      "enemy": 14,
      "location": 22,
@@ -2568,13 +2575,13 @@
   "side-read-or-die": {
    "cards": {
     "total": 40,
-    "works": 8,
+    "works": 4,
     "rest": {
-     "act": 3,
-     "agenda": 3,
+     "act": 4,
+     "agenda": 4,
      "asset": 4,
-     "enemy": 4,
-     "location": 9,
+     "enemy": 5,
+     "location": 10,
      "scenario": 2,
      "treachery": 7
     }
@@ -2665,13 +2672,13 @@
   "the-circle-undone": {
    "cards": {
     "total": 294,
-    "works": 40,
+    "works": 31,
     "rest": {
-     "act": 28,
-     "agenda": 14,
+     "act": 31,
+     "agenda": 18,
      "asset": 8,
      "enemy": 39,
-     "location": 104,
+     "location": 106,
      "scenario": 9,
      "story": 11,
      "treachery": 41
@@ -2692,10 +2699,10 @@
   "the-dream-quest": {
    "cards": {
     "total": 167,
-    "works": 12,
+    "works": 6,
     "rest": {
-     "act": 17,
-     "agenda": 4,
+     "act": 18,
+     "agenda": 9,
      "asset": 4,
      "enemy": 29,
      "location": 50,
@@ -2715,10 +2722,10 @@
   "the-drowned-city": {
    "cards": {
     "total": 296,
-    "works": 35,
+    "works": 33,
     "rest": {
      "act": 24,
-     "agenda": 16,
+     "agenda": 18,
      "asset": 12,
      "enemy": 41,
      "location": 87,
@@ -2743,13 +2750,13 @@
   "the-dunwich-legacy": {
    "cards": {
     "total": 235,
-    "works": 32,
+    "works": 16,
     "rest": {
-     "act": 24,
-     "agenda": 14,
+     "act": 26,
+     "agenda": 26,
      "asset": 14,
-     "enemy": 21,
-     "location": 85,
+     "enemy": 22,
+     "location": 86,
      "scenario": 8,
      "treachery": 37
     }
@@ -2769,10 +2776,10 @@
   "the-feast-of-hemlock-vale": {
    "cards": {
     "total": 321,
-    "works": 29,
+    "works": 28,
     "rest": {
      "act": 22,
-     "agenda": 21,
+     "agenda": 22,
      "asset": 24,
      "enemy": 55,
      "enemy_location": 13,
@@ -2800,12 +2807,12 @@
   "the-forgotten-age": {
    "cards": {
     "total": 286,
-    "works": 42,
+    "works": 33,
     "rest": {
-     "act": 49,
-     "agenda": 20,
+     "act": 50,
+     "agenda": 27,
      "asset": 10,
-     "enemy": 27,
+     "enemy": 28,
      "investigator": 1,
      "location": 83,
      "scenario": 10,
@@ -2830,13 +2837,13 @@
   "the-innsmouth-conspiracy": {
    "cards": {
     "total": 285,
-    "works": 34,
+    "works": 32,
     "rest": {
-     "act": 16,
+     "act": 17,
      "agenda": 28,
      "asset": 15,
      "enemy": 40,
-     "location": 100,
+     "location": 101,
      "scenario": 9,
      "story": 2,
      "treachery": 41
@@ -2857,13 +2864,13 @@
   "the-path-to-carcosa": {
    "cards": {
     "total": 302,
-    "works": 48,
+    "works": 36,
     "rest": {
-     "act": 25,
-     "agenda": 22,
+     "act": 29,
+     "agenda": 26,
      "asset": 10,
-     "enemy": 33,
-     "location": 92,
+     "enemy": 35,
+     "location": 94,
      "scenario": 9,
      "story": 23,
      "treachery": 40
@@ -2884,10 +2891,10 @@
   "the-scarlet-keys": {
    "cards": {
     "total": 344,
-    "works": 41,
+    "works": 33,
     "rest": {
      "act": 35,
-     "agenda": 20,
+     "agenda": 28,
      "asset": 14,
      "enemy": 63,
      "key": 20,
@@ -2914,10 +2921,10 @@
   "the-web-of-dreams": {
    "cards": {
     "total": 130,
-    "works": 15,
+    "works": 12,
     "rest": {
-     "act": 11,
-     "agenda": 8,
+     "act": 12,
+     "agenda": 10,
      "asset": 4,
      "enemy": 15,
      "location": 41,
@@ -3016,10 +3023,10 @@
    "campaign": "side-all-or-nothing",
    "cards": {
     "total": 56,
-    "works": 19,
+    "works": 18,
     "rest": {
      "act": 6,
-     "agenda": 3,
+     "agenda": 4,
      "asset": 2,
      "enemy": 5,
      "location": 10,
@@ -3035,9 +3042,10 @@
    "campaign": "the-scarlet-keys",
    "cards": {
     "total": 47,
-    "works": 5,
+    "works": 2,
     "rest": {
      "act": 4,
+     "agenda": 3,
      "asset": 1,
      "enemy": 14,
      "key": 2,
@@ -3054,9 +3062,9 @@
    "campaign": "the-circle-undone",
    "cards": {
     "total": 34,
-    "works": 3,
+    "works": 2,
     "rest": {
-     "act": 2,
+     "act": 3,
      "agenda": 2,
      "enemy": 6,
      "location": 14,
@@ -3150,12 +3158,12 @@
    "campaign": "the-path-to-carcosa",
    "cards": {
     "total": 45,
-    "works": 7,
+    "works": 4,
     "rest": {
      "act": 2,
      "agenda": 8,
-     "enemy": 4,
-     "location": 15,
+     "enemy": 5,
+     "location": 17,
      "scenario": 1,
      "treachery": 8
     }
@@ -3223,9 +3231,10 @@
    "campaign": "the-dunwich-legacy",
    "cards": {
     "total": 40,
-    "works": 6,
+    "works": 3,
     "rest": {
      "act": 2,
+     "agenda": 3,
      "asset": 4,
      "enemy": 5,
      "location": 14,
@@ -3261,11 +3270,11 @@
    "campaign": "side-by-the-book",
    "cards": {
     "total": 44,
-    "works": 37,
+    "works": 34,
     "rest": {
      "act": 1,
      "agenda": 2,
-     "enemy": 1,
+     "enemy": 4,
      "location": 1,
      "scenario": 2
     }
@@ -3278,10 +3287,10 @@
    "campaign": "side-carnevale-of-horrors",
    "cards": {
     "total": 40,
-    "works": 2,
+    "works": 1,
     "rest": {
      "act": 3,
-     "agenda": 1,
+     "agenda": 2,
      "asset": 7,
      "enemy": 9,
      "location": 10,
@@ -3315,10 +3324,10 @@
    "campaign": "the-drowned-city",
    "cards": {
     "total": 43,
-    "works": 1,
+    "works": 0,
     "rest": {
      "act": 3,
-     "agenda": 2,
+     "agenda": 3,
      "asset": 1,
      "enemy": 9,
      "location": 12,
@@ -3334,10 +3343,10 @@
    "campaign": "the-path-to-carcosa",
    "cards": {
     "total": 37,
-    "works": 7,
+    "works": 5,
     "rest": {
-     "act": 4,
-     "agenda": 1,
+     "act": 5,
+     "agenda": 2,
      "enemy": 5,
      "location": 9,
      "scenario": 1,
@@ -3352,10 +3361,10 @@
    "campaign": "the-dream-quest",
    "cards": {
     "total": 35,
-    "works": 3,
+    "works": 1,
     "rest": {
      "act": 4,
-     "agenda": 1,
+     "agenda": 3,
      "asset": 2,
      "enemy": 5,
      "location": 10,
@@ -3431,9 +3440,9 @@
    "campaign": "the-path-to-carcosa",
    "cards": {
     "total": 57,
-    "works": 23,
+    "works": 21,
     "rest": {
-     "act": 1,
+     "act": 3,
      "agenda": 3,
      "asset": 3,
      "enemy": 4,
@@ -3450,10 +3459,10 @@
    "campaign": "side-enthralling-encore",
    "cards": {
     "total": 41,
-    "works": 10,
+    "works": 8,
     "rest": {
-     "act": 5,
-     "agenda": 2,
+     "act": 6,
+     "agenda": 3,
      "enemy": 5,
      "location": 9,
      "scenario": 2,
@@ -3468,9 +3477,10 @@
    "campaign": "the-dunwich-legacy",
    "cards": {
     "total": 35,
-    "works": 12,
+    "works": 7,
     "rest": {
      "act": 2,
+     "agenda": 5,
      "asset": 1,
      "enemy": 2,
      "location": 11,
@@ -3486,13 +3496,13 @@
    "campaign": "the-dunwich-legacy",
    "cards": {
     "total": 35,
-    "works": 8,
+    "works": 4,
     "rest": {
-     "act": 2,
-     "agenda": 2,
+     "act": 3,
+     "agenda": 3,
      "asset": 3,
-     "enemy": 3,
-     "location": 9,
+     "enemy": 4,
+     "location": 10,
      "scenario": 1,
      "treachery": 7
     }
@@ -3623,13 +3633,13 @@
    "campaign": "the-circle-undone",
    "cards": {
     "total": 43,
-    "works": 8,
+    "works": 5,
     "rest": {
-     "act": 3,
+     "act": 4,
      "agenda": 2,
      "asset": 2,
      "enemy": 9,
-     "location": 11,
+     "location": 13,
      "scenario": 1,
      "treachery": 7
     }
@@ -3721,9 +3731,9 @@
    "campaign": "the-forgotten-age",
    "cards": {
     "total": 29,
-    "works": 1,
+    "works": 0,
     "rest": {
-     "act": 1,
+     "act": 2,
      "agenda": 2,
      "enemy": 3,
      "location": 8,
@@ -3739,10 +3749,10 @@
    "campaign": "the-feast-of-hemlock-vale",
    "cards": {
     "total": 68,
-    "works": 3,
+    "works": 2,
     "rest": {
      "act": 3,
-     "agenda": 3,
+     "agenda": 4,
      "asset": 12,
      "enemy": 11,
      "enemy_location": 13,
@@ -3797,10 +3807,10 @@
    "campaign": "edge-of-the-earth",
    "cards": {
     "total": 49,
-    "works": 3,
+    "works": 0,
     "rest": {
      "act": 2,
-     "agenda": 3,
+     "agenda": 6,
      "enemy": 15,
      "location": 13,
      "scenario": 1,
@@ -3816,10 +3826,10 @@
    "campaign": "edge-of-the-earth",
    "cards": {
     "total": 54,
-    "works": 4,
+    "works": 0,
     "rest": {
      "act": 3,
-     "agenda": 4,
+     "agenda": 8,
      "enemy": 16,
      "location": 13,
      "scenario": 1,
@@ -3891,13 +3901,13 @@
    "campaign": "the-innsmouth-conspiracy",
    "cards": {
     "total": 59,
-    "works": 3,
+    "works": 1,
     "rest": {
-     "act": 5,
+     "act": 6,
      "agenda": 6,
      "asset": 1,
      "enemy": 11,
-     "location": 19,
+     "location": 20,
      "scenario": 2,
      "treachery": 12
     }
@@ -3931,10 +3941,10 @@
    "campaign": "the-scarlet-keys",
    "cards": {
     "total": 56,
-    "works": 4,
+    "works": 3,
     "rest": {
      "act": 3,
-     "agenda": 2,
+     "agenda": 3,
      "asset": 5,
      "enemy": 9,
      "key": 8,
@@ -3952,10 +3962,10 @@
    "campaign": "side-laid-to-rest",
    "cards": {
     "total": 66,
-    "works": 1,
+    "works": 0,
     "rest": {
      "act": 3,
-     "agenda": 2,
+     "agenda": 3,
      "asset": 1,
      "enemy": 14,
      "location": 22,
@@ -4049,9 +4059,10 @@
    "campaign": "children-of-blood",
    "cards": {
     "total": 51,
-    "works": 4,
+    "works": 0,
     "rest": {
      "act": 3,
+     "agenda": 4,
      "asset": 2,
      "enemy": 11,
      "location": 19,
@@ -4105,10 +4116,10 @@
    "campaign": "the-web-of-dreams",
    "cards": {
     "total": 47,
-    "works": 8,
+    "works": 7,
     "rest": {
      "act": 4,
-     "agenda": 1,
+     "agenda": 2,
      "asset": 1,
      "enemy": 3,
      "location": 12,
@@ -4125,13 +4136,13 @@
    "campaign": "side-read-or-die",
    "cards": {
     "total": 40,
-    "works": 8,
+    "works": 4,
     "rest": {
-     "act": 3,
-     "agenda": 3,
+     "act": 4,
+     "agenda": 4,
      "asset": 4,
-     "enemy": 4,
-     "location": 9,
+     "enemy": 5,
+     "location": 10,
      "scenario": 2,
      "treachery": 7
     }
@@ -4201,9 +4212,9 @@
    "campaign": "return-to-the-circle-undone",
    "cards": {
     "total": 39,
-    "works": 1,
+    "works": 0,
     "rest": {
-     "act": 2,
+     "act": 3,
      "agenda": 2,
      "enemy": 8,
      "location": 16,
@@ -4239,12 +4250,12 @@
    "campaign": "return-to-the-path-to-carcosa",
    "cards": {
     "total": 50,
-    "works": 6,
+    "works": 3,
     "rest": {
      "act": 2,
      "agenda": 8,
-     "enemy": 4,
-     "location": 17,
+     "enemy": 5,
+     "location": 19,
      "scenario": 2,
      "treachery": 11
     }
@@ -4257,9 +4268,10 @@
    "campaign": "return-to-the-dunwich-legacy",
    "cards": {
     "total": 49,
-    "works": 5,
+    "works": 2,
     "rest": {
      "act": 2,
+     "agenda": 3,
      "asset": 4,
      "enemy": 6,
      "location": 21,
@@ -4275,10 +4287,10 @@
    "campaign": "return-to-the-path-to-carcosa",
    "cards": {
     "total": 44,
-    "works": 4,
+    "works": 2,
     "rest": {
-     "act": 7,
-     "agenda": 1,
+     "act": 8,
+     "agenda": 2,
      "enemy": 6,
      "location": 11,
      "scenario": 2,
@@ -4313,9 +4325,9 @@
    "campaign": "return-to-the-path-to-carcosa",
    "cards": {
     "total": 63,
-    "works": 23,
+    "works": 21,
     "rest": {
-     "act": 1,
+     "act": 3,
      "agenda": 3,
      "asset": 3,
      "enemy": 5,
@@ -4332,9 +4344,10 @@
    "campaign": "return-to-the-dunwich-legacy",
    "cards": {
     "total": 43,
-    "works": 10,
+    "works": 4,
     "rest": {
      "act": 2,
+     "agenda": 6,
      "asset": 2,
      "enemy": 3,
      "location": 14,
@@ -4350,13 +4363,13 @@
    "campaign": "return-to-the-dunwich-legacy",
    "cards": {
     "total": 38,
-    "works": 4,
+    "works": 0,
     "rest": {
-     "act": 2,
-     "agenda": 2,
+     "act": 3,
+     "agenda": 3,
      "asset": 3,
-     "enemy": 5,
-     "location": 10,
+     "enemy": 6,
+     "location": 11,
      "scenario": 2,
      "treachery": 10
     }
@@ -4369,13 +4382,13 @@
    "campaign": "return-to-the-circle-undone",
    "cards": {
     "total": 47,
-    "works": 7,
+    "works": 4,
     "rest": {
-     "act": 3,
+     "act": 4,
      "agenda": 2,
      "asset": 2,
      "enemy": 9,
-     "location": 14,
+     "location": 16,
      "scenario": 2,
      "treachery": 8
     }
@@ -4406,9 +4419,9 @@
    "campaign": "return-to-the-forgotten-age",
    "cards": {
     "total": 34,
-    "works": 1,
+    "works": 0,
     "rest": {
-     "act": 1,
+     "act": 2,
      "agenda": 2,
      "enemy": 4,
      "location": 12,
@@ -4480,9 +4493,10 @@
    "campaign": "return-to-the-forgotten-age",
    "cards": {
     "total": 47,
-    "works": 3,
+    "works": 0,
     "rest": {
      "act": 3,
+     "agenda": 3,
      "asset": 1,
      "enemy": 6,
      "location": 24,
@@ -4518,9 +4532,9 @@
    "campaign": "return-to-the-night-of-the-zealot",
    "cards": {
     "total": 42,
-    "works": 30,
+    "works": 28,
     "rest": {
-     "enemy": 2,
+     "enemy": 4,
      "location": 4,
      "scenario": 2,
      "treachery": 4
@@ -4569,10 +4583,10 @@
    "campaign": "return-to-the-dunwich-legacy",
    "cards": {
     "total": 37,
-    "works": 2,
+    "works": 1,
     "rest": {
      "act": 4,
-     "agenda": 2,
+     "agenda": 3,
      "asset": 2,
      "enemy": 5,
      "location": 10,
@@ -4588,10 +4602,10 @@
    "campaign": "return-to-the-path-to-carcosa",
    "cards": {
     "total": 51,
-    "works": 2,
+    "works": 0,
     "rest": {
      "act": 1,
-     "agenda": 1,
+     "agenda": 3,
      "asset": 7,
      "enemy": 11,
      "location": 6,
@@ -4608,9 +4622,10 @@
    "campaign": "return-to-the-night-of-the-zealot",
    "cards": {
     "total": 42,
-    "works": 33,
+    "works": 27,
     "rest": {
      "agenda": 1,
+     "enemy": 6,
      "location": 4,
      "scenario": 2,
      "treachery": 2
@@ -4624,9 +4639,9 @@
    "campaign": "return-to-the-dunwich-legacy",
    "cards": {
     "total": 44,
-    "works": 1,
+    "works": 0,
     "rest": {
-     "act": 3,
+     "act": 4,
      "agenda": 3,
      "asset": 3,
      "enemy": 1,
@@ -4643,11 +4658,11 @@
    "campaign": "return-to-the-path-to-carcosa",
    "cards": {
     "total": 37,
-    "works": 6,
+    "works": 5,
     "rest": {
      "act": 4,
      "agenda": 2,
-     "enemy": 4,
+     "enemy": 5,
      "location": 15,
      "scenario": 2,
      "treachery": 4
@@ -4680,10 +4695,10 @@
    "campaign": "return-to-the-path-to-carcosa",
    "cards": {
     "total": 52,
-    "works": 3,
+    "works": 0,
     "rest": {
-     "act": 6,
-     "agenda": 1,
+     "act": 7,
+     "agenda": 3,
      "asset": 1,
      "enemy": 10,
      "location": 14,
@@ -4718,10 +4733,10 @@
    "campaign": "return-to-the-circle-undone",
    "cards": {
     "total": 71,
-    "works": 1,
+    "works": 0,
     "rest": {
      "act": 4,
-     "agenda": 1,
+     "agenda": 2,
      "asset": 2,
      "enemy": 13,
      "location": 24,
@@ -4738,10 +4753,10 @@
    "campaign": "return-to-the-circle-undone",
    "cards": {
     "total": 55,
-    "works": 22,
+    "works": 21,
     "rest": {
      "act": 5,
-     "agenda": 1,
+     "agenda": 2,
      "enemy": 4,
      "location": 13,
      "scenario": 3,
@@ -4812,9 +4827,10 @@
    "campaign": "return-to-the-circle-undone",
    "cards": {
     "total": 52,
-    "works": 3,
+    "works": 0,
     "rest": {
-     "act": 8,
+     "act": 9,
+     "agenda": 2,
      "asset": 4,
      "enemy": 8,
      "location": 9,
@@ -4831,11 +4847,12 @@
    "campaign": "return-to-the-dunwich-legacy",
    "cards": {
     "total": 47,
-    "works": 4,
+    "works": 1,
     "rest": {
      "act": 5,
+     "agenda": 2,
      "asset": 1,
-     "enemy": 7,
+     "enemy": 8,
      "location": 15,
      "scenario": 2,
      "treachery": 13
@@ -4849,10 +4866,10 @@
    "campaign": "the-scarlet-keys",
    "cards": {
     "total": 54,
-    "works": 22,
+    "works": 20,
     "rest": {
      "act": 4,
-     "agenda": 2,
+     "agenda": 4,
      "enemy": 6,
      "key": 2,
      "location": 8,
@@ -4868,10 +4885,10 @@
    "campaign": "children-of-blood",
    "cards": {
     "total": 49,
-    "works": 2,
+    "works": 0,
     "rest": {
      "act": 2,
-     "agenda": 2,
+     "agenda": 4,
      "asset": 2,
      "enemy": 8,
      "location": 16,
@@ -4907,10 +4924,10 @@
    "campaign": "the-drowned-city",
    "cards": {
     "total": 49,
-    "works": 7,
+    "works": 6,
     "rest": {
      "act": 3,
-     "agenda": 1,
+     "agenda": 2,
      "asset": 3,
      "enemy": 7,
      "location": 15,
@@ -4927,9 +4944,10 @@
    "campaign": "the-forgotten-age",
    "cards": {
     "total": 40,
-    "works": 3,
+    "works": 0,
     "rest": {
      "act": 3,
+     "agenda": 3,
      "asset": 1,
      "enemy": 5,
      "location": 18,
@@ -4965,12 +4983,12 @@
    "campaign": "the-forgotten-age",
    "cards": {
     "total": 40,
-    "works": 5,
+    "works": 0,
     "rest": {
      "act": 1,
-     "agenda": 3,
+     "agenda": 7,
      "asset": 1,
-     "enemy": 5,
+     "enemy": 6,
      "location": 10,
      "scenario": 1,
      "treachery": 14
@@ -5142,10 +5160,10 @@
    "campaign": "edge-of-the-earth",
    "cards": {
     "total": 49,
-    "works": 7,
+    "works": 6,
     "rest": {
      "act": 4,
-     "agenda": 4,
+     "agenda": 5,
      "enemy": 6,
      "location": 23,
      "scenario": 1,
@@ -5160,10 +5178,10 @@
    "campaign": "the-dunwich-legacy",
    "cards": {
     "total": 32,
-    "works": 5,
+    "works": 4,
     "rest": {
      "act": 4,
-     "agenda": 2,
+     "agenda": 3,
      "asset": 2,
      "enemy": 5,
      "location": 8,
@@ -5198,10 +5216,10 @@
    "campaign": "the-path-to-carcosa",
    "cards": {
     "total": 42,
-    "works": 2,
+    "works": 1,
     "rest": {
      "act": 1,
-     "agenda": 1,
+     "agenda": 2,
      "asset": 5,
      "enemy": 9,
      "location": 6,
@@ -5288,9 +5306,9 @@
    "campaign": "the-dunwich-legacy",
    "cards": {
     "total": 39,
-    "works": 4,
+    "works": 3,
     "rest": {
-     "act": 3,
+     "act": 4,
      "agenda": 3,
      "asset": 3,
      "enemy": 1,
@@ -5307,10 +5325,10 @@
    "campaign": "guardians-of-the-abyss",
    "cards": {
     "total": 53,
-    "works": 2,
+    "works": 1,
     "rest": {
      "act": 3,
-     "agenda": 1,
+     "agenda": 2,
      "asset": 2,
      "enemy": 11,
      "location": 13,
@@ -5327,11 +5345,11 @@
    "campaign": "the-path-to-carcosa",
    "cards": {
     "total": 31,
-    "works": 6,
+    "works": 5,
     "rest": {
      "act": 4,
      "agenda": 2,
-     "enemy": 3,
+     "enemy": 4,
      "location": 11,
      "scenario": 1,
      "treachery": 4
@@ -5345,9 +5363,9 @@
    "campaign": "the-innsmouth-conspiracy",
    "cards": {
     "total": 30,
-    "works": 4,
+    "works": 3,
     "rest": {
-     "act": 1,
+     "act": 2,
      "agenda": 3,
      "enemy": 3,
      "location": 9,
@@ -5460,10 +5478,10 @@
    "campaign": "the-path-to-carcosa",
    "cards": {
     "total": 46,
-    "works": 5,
+    "works": 2,
     "rest": {
-     "act": 4,
-     "agenda": 1,
+     "act": 5,
+     "agenda": 3,
      "asset": 1,
      "enemy": 8,
      "location": 14,
@@ -5499,10 +5517,10 @@
    "campaign": "the-circle-undone",
    "cards": {
     "total": 60,
-    "works": 1,
+    "works": 0,
     "rest": {
      "act": 2,
-     "agenda": 1,
+     "agenda": 2,
      "asset": 1,
      "enemy": 11,
      "location": 22,
@@ -5538,10 +5556,10 @@
    "campaign": "the-circle-undone",
    "cards": {
     "total": 48,
-    "works": 23,
+    "works": 22,
     "rest": {
      "act": 4,
-     "agenda": 1,
+     "agenda": 2,
      "enemy": 4,
      "location": 8,
      "scenario": 2,
@@ -5594,10 +5612,10 @@
    "campaign": "the-scarlet-keys",
    "cards": {
     "total": 62,
-    "works": 7,
+    "works": 5,
     "rest": {
      "act": 6,
-     "agenda": 1,
+     "agenda": 3,
      "enemy": 15,
      "location": 19,
      "scenario": 1,
@@ -5649,9 +5667,10 @@
    "campaign": "the-circle-undone",
    "cards": {
     "total": 49,
-    "works": 6,
+    "works": 3,
     "rest": {
-     "act": 7,
+     "act": 8,
+     "agenda": 2,
      "asset": 4,
      "enemy": 8,
      "location": 9,
@@ -5668,10 +5687,10 @@
    "campaign": "the-web-of-dreams",
    "cards": {
     "total": 29,
-    "works": 6,
+    "works": 4,
     "rest": {
-     "act": 2,
-     "agenda": 2,
+     "act": 3,
+     "agenda": 3,
      "asset": 2,
      "enemy": 2,
      "location": 8,
@@ -5725,10 +5744,11 @@
    "campaign": "the-dunwich-legacy",
    "cards": {
     "total": 41,
-    "works": 10,
+    "works": 7,
     "rest": {
      "act": 5,
-     "enemy": 7,
+     "agenda": 2,
+     "enemy": 8,
      "location": 11,
      "scenario": 1,
      "treachery": 7
@@ -5742,9 +5762,10 @@
    "campaign": "the-dream-quest",
    "cards": {
     "total": 48,
-    "works": 7,
+    "works": 3,
     "rest": {
-     "act": 4,
+     "act": 5,
+     "agenda": 3,
      "enemy": 9,
      "location": 11,
      "scenario": 1,

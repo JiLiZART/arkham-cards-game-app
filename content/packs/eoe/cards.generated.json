@@ -2202,6 +2202,10 @@
   ],
   "xp": 0,
   "cost": 2,
+  "factions": [
+   "guardian",
+   "seeker"
+  ],
   "health": 1,
   "sanity": 1
  },
@@ -2228,7 +2232,11 @@
   "flavor": "\"The game is afoot!\"",
   "deckLimit": 2,
   "xp": 1,
-  "cost": 1
+  "cost": 1,
+  "factions": [
+   "guardian",
+   "seeker"
+  ]
  },
  {
   "code": "08085",
@@ -2254,7 +2262,11 @@
   "flavor": "\"The game is afoot!\"",
   "deckLimit": 2,
   "xp": 3,
-  "cost": 1
+  "cost": 1,
+  "factions": [
+   "guardian",
+   "seeker"
+  ]
  },
  {
   "code": "08086",
@@ -2283,6 +2295,10 @@
   "deckLimit": 2,
   "xp": 5,
   "cost": 4,
+  "factions": [
+   "guardian",
+   "seeker"
+  ],
   "health": 3,
   "sanity": 3
  },
@@ -2310,7 +2326,11 @@
    "fa"
   ],
   "xp": 1,
-  "cost": 0
+  "cost": 0,
+  "factions": [
+   "guardian",
+   "rogue"
+  ]
  },
  {
   "code": "08088",
@@ -2338,6 +2358,10 @@
   "deckLimit": 2,
   "xp": 2,
   "cost": 0,
+  "factions": [
+   "guardian",
+   "rogue"
+  ],
   "uses": {
    "type": "ammo",
    "count": 0
@@ -2371,7 +2395,11 @@
    "fa"
   ],
   "xp": 4,
-  "cost": 4
+  "cost": 4,
+  "factions": [
+   "guardian",
+   "rogue"
+  ]
  },
  {
   "code": "08090",
@@ -2396,6 +2424,10 @@
   "deckLimit": 2,
   "xp": 1,
   "cost": 2,
+  "factions": [
+   "guardian",
+   "mystic"
+  ],
   "uses": {
    "type": "charges",
    "count": 6
@@ -2426,6 +2458,10 @@
   "deckLimit": 2,
   "xp": 3,
   "cost": 4,
+  "factions": [
+   "guardian",
+   "mystic"
+  ],
   "health": 2,
   "sanity": 2
  },
@@ -2453,6 +2489,10 @@
   "deckLimit": 2,
   "xp": 4,
   "cost": 2,
+  "factions": [
+   "guardian",
+   "mystic"
+  ],
   "uses": {
    "type": "charges",
    "count": 9
@@ -2485,7 +2525,11 @@
   },
   "deckLimit": 2,
   "xp": 5,
-  "cost": 5
+  "cost": 5,
+  "factions": [
+   "guardian",
+   "mystic"
+  ]
  },
  {
   "code": "08094",
@@ -2514,7 +2558,11 @@
   "flavor": "Twenty pounds of steel vengeance.",
   "deckLimit": 2,
   "xp": 0,
-  "cost": 3
+  "cost": 3,
+  "factions": [
+   "guardian",
+   "survivor"
+  ]
  },
  {
   "code": "08095",
@@ -2542,6 +2590,10 @@
   "deckLimit": 2,
   "xp": 2,
   "cost": 4,
+  "factions": [
+   "guardian",
+   "survivor"
+  ],
   "health": 3,
   "sanity": 3
  },
@@ -2572,7 +2624,11 @@
   "flavor": "Twenty-five pounds of steel vengeance.",
   "deckLimit": 2,
   "xp": 4,
-  "cost": 3
+  "cost": 3,
+  "factions": [
+   "guardian",
+   "survivor"
+  ]
  },
  {
   "code": "08097",
@@ -2597,7 +2653,11 @@
   },
   "deckLimit": 2,
   "xp": 0,
-  "cost": 2
+  "cost": 2,
+  "factions": [
+   "seeker",
+   "rogue"
+  ]
  },
  {
   "code": "08098",
@@ -2624,6 +2684,10 @@
   "deckLimit": 2,
   "xp": 1,
   "cost": 2,
+  "factions": [
+   "seeker",
+   "rogue"
+  ],
   "uses": {
    "type": "secrets",
    "count": 3
@@ -2655,6 +2719,10 @@
   "deckLimit": 2,
   "xp": 3,
   "cost": 5,
+  "factions": [
+   "seeker",
+   "rogue"
+  ],
   "health": 2,
   "sanity": 2
  },
@@ -2684,6 +2752,10 @@
   "deckLimit": 2,
   "xp": 4,
   "cost": 2,
+  "factions": [
+   "seeker",
+   "rogue"
+  ],
   "uses": {
    "type": "secrets",
    "count": 3
@@ -2713,6 +2785,10 @@
   "deckLimit": 2,
   "xp": 1,
   "cost": 3,
+  "factions": [
+   "seeker",
+   "mystic"
+  ],
   "uses": {
    "type": "charges",
    "count": 4
@@ -2742,7 +2818,11 @@
   "flavor": "All living things have breath.\nBe careful they do not curse you with theirs.",
   "deckLimit": 2,
   "xp": 2,
-  "cost": 1
+  "cost": 1,
+  "factions": [
+   "seeker",
+   "mystic"
+  ]
  },
  {
   "code": "08103",
@@ -2769,6 +2849,10 @@
   "deckLimit": 2,
   "xp": 4,
   "cost": 3,
+  "factions": [
+   "seeker",
+   "mystic"
+  ],
   "uses": {
    "type": "charges",
    "count": 6
@@ -2799,6 +2883,10 @@
   "deckLimit": 2,
   "xp": 0,
   "cost": 3,
+  "factions": [
+   "seeker",
+   "survivor"
+  ],
   "health": 1,
   "sanity": 2,
   "uses": {
@@ -2832,7 +2920,11 @@
   },
   "deckLimit": 2,
   "xp": 1,
-  "cost": 1
+  "cost": 1,
+  "factions": [
+   "seeker",
+   "survivor"
+  ]
  },
  {
   "code": "08106",
@@ -2860,6 +2952,10 @@
   "deckLimit": 2,
   "xp": 2,
   "cost": 3,
+  "factions": [
+   "seeker",
+   "survivor"
+  ],
   "health": 1,
   "sanity": 3,
   "uses": {
@@ -2894,7 +2990,11 @@
   },
   "deckLimit": 2,
   "xp": 3,
-  "cost": 1
+  "cost": 1,
+  "factions": [
+   "seeker",
+   "survivor"
+  ]
  },
  {
   "code": "08108",
@@ -2919,7 +3019,11 @@
   "flavor": "\"Now, for my next trick...\"",
   "deckLimit": 2,
   "xp": 0,
-  "cost": 2
+  "cost": 2,
+  "factions": [
+   "rogue",
+   "mystic"
+  ]
  },
  {
   "code": "08109",
@@ -2944,6 +3048,10 @@
   "deckLimit": 2,
   "xp": 1,
   "cost": 2,
+  "factions": [
+   "rogue",
+   "mystic"
+  ],
   "uses": {
    "type": "charges",
    "count": 3
@@ -2972,7 +3080,11 @@
   "flavor": "\"Now, for my next trick...\"",
   "deckLimit": 2,
   "xp": 2,
-  "cost": 1
+  "cost": 1,
+  "factions": [
+   "rogue",
+   "mystic"
+  ]
  },
  {
   "code": "08111",
@@ -2998,6 +3110,10 @@
   "deckLimit": 2,
   "xp": 4,
   "cost": 2,
+  "factions": [
+   "rogue",
+   "mystic"
+  ],
   "uses": {
    "type": "charges",
    "count": 4
@@ -3026,7 +3142,11 @@
   },
   "deckLimit": 2,
   "xp": 0,
-  "cost": 1
+  "cost": 1,
+  "factions": [
+   "rogue",
+   "survivor"
+  ]
  },
  {
   "code": "08113",
@@ -3046,7 +3166,11 @@
   "icons": {},
   "deckLimit": 2,
   "xp": 3,
-  "cost": 0
+  "cost": 0,
+  "factions": [
+   "rogue",
+   "survivor"
+  ]
  },
  {
   "code": "08114",
@@ -3078,6 +3202,10 @@
   ],
   "xp": 4,
   "cost": 3,
+  "factions": [
+   "rogue",
+   "survivor"
+  ],
   "health": 3,
   "sanity": 3
  },
@@ -3111,6 +3239,10 @@
   ],
   "xp": 4,
   "cost": 3,
+  "factions": [
+   "rogue",
+   "survivor"
+  ],
   "health": 3,
   "sanity": 3
  },
@@ -3139,7 +3271,11 @@
   },
   "deckLimit": 2,
   "xp": 0,
-  "cost": 2
+  "cost": 2,
+  "factions": [
+   "mystic",
+   "survivor"
+  ]
  },
  {
   "code": "08117",
@@ -3168,6 +3304,10 @@
   ],
   "xp": 1,
   "cost": 2,
+  "factions": [
+   "mystic",
+   "survivor"
+  ],
   "uses": {
    "type": "charges",
    "count": 4
@@ -3202,6 +3342,10 @@
   "deckLimit": 2,
   "xp": 2,
   "cost": 3,
+  "factions": [
+   "mystic",
+   "survivor"
+  ],
   "uses": {
    "type": "charges",
    "count": 3
@@ -3234,6 +3378,10 @@
   ],
   "xp": 4,
   "cost": 2,
+  "factions": [
+   "mystic",
+   "survivor"
+  ],
   "uses": {
    "type": "charges",
    "count": 6
@@ -3260,6 +3408,11 @@
   "deckLimit": 2,
   "xp": 3,
   "cost": 3,
+  "factions": [
+   "guardian",
+   "mystic",
+   "survivor"
+  ],
   "uses": {
    "type": "resources",
    "count": 2
@@ -3286,6 +3439,11 @@
   "deckLimit": 2,
   "xp": 3,
   "cost": 3,
+  "factions": [
+   "guardian",
+   "seeker",
+   "mystic"
+  ],
   "uses": {
    "type": "resources",
    "count": 2
@@ -3315,6 +3473,11 @@
   ],
   "xp": 3,
   "cost": 3,
+  "factions": [
+   "guardian",
+   "rogue",
+   "survivor"
+  ],
   "uses": {
    "type": "resources",
    "count": 2
@@ -3341,6 +3504,11 @@
   "deckLimit": 2,
   "xp": 3,
   "cost": 3,
+  "factions": [
+   "seeker",
+   "rogue",
+   "survivor"
+  ],
   "uses": {
    "type": "resources",
    "count": 2
@@ -3367,6 +3535,11 @@
   "deckLimit": 2,
   "xp": 3,
   "cost": 3,
+  "factions": [
+   "seeker",
+   "rogue",
+   "mystic"
+  ],
   "uses": {
    "type": "resources",
    "count": 2
@@ -4829,7 +5002,7 @@
   "slots": [],
   "icons": {},
   "encounterSet": "fatal_mirage",
-  "shroud": -2,
+  "shroud": null,
   "clues": 3,
   "cluesPerInvestigator": true
  },
@@ -6617,10 +6790,10 @@
   "encounterSet": "to_the_forbidden_peaks",
   "victory": 1,
   "enemy": {
-   "fight": -2,
+   "fight": null,
    "health": 3,
    "healthPerInvestigator": false,
-   "evade": -2,
+   "evade": null,
    "damage": 2,
    "horror": 2
   }
@@ -6647,7 +6820,7 @@
   "encounterSet": "to_the_forbidden_peaks",
   "enemy": {
    "fight": 3,
-   "health": -2,
+   "health": null,
    "healthPerInvestigator": false,
    "evade": 2,
    "damage": 1,
@@ -8208,7 +8381,7 @@
   "encounterSet": "stirring_in_the_deep",
   "enemy": {
    "fight": 1,
-   "health": 0,
+   "health": null,
    "healthPerInvestigator": false,
    "evade": 1,
    "damage": 1,

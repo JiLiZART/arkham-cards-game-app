@@ -394,12 +394,15 @@ export function enemyStat(g: G, id: InstId, stat: "fight" | "evade" | "damage" |
   const e = def(g, id).enemy!;
   const modStat: ModStat = stat === "health" ? "enemyHealth" : stat === "damage" ? "enemyDamage" : stat === "horror" ? "enemyHorror" : stat;
   let base = e[stat];
+  if (base === null) return Infinity; // no printed value: can't be fought, evaded or defeated by damage
   if (stat === "health" && e.healthPerInvestigator) base *= playerCount(g);
   return Math.max(0, base + modSum(g, id, modStat));
 }
 
 export function shroud(g: G, loc: InstId): number {
-  return Math.max(0, (def(g, loc).shroud ?? 0) + modSum(g, loc, "shroud"));
+  const base = def(g, loc).shroud;
+  if (base === null) return Infinity; // the text defines it: can't be investigated
+  return Math.max(0, (base ?? 0) + modSum(g, loc, "shroud"));
 }
 
 export function addTempMod(g: G, mod: Modifier, target: string, until: "test" | "turn" | "phase" | "round", source: InstId | null = null) {

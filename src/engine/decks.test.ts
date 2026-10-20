@@ -160,3 +160,14 @@ describe("whyNotReplace", () => {
     expect(whyNotReplace(db, roland(), "01006", spare())?.key).toBe("deck.missing");
   });
 });
+
+describe("multi-class cards", () => {
+  it("are allowed when the investigator has access to any of their classes", () => {
+    const d2 = { ...db, cards: { ...db.cards } } as ContentDb;
+    d2.cards["05118"] = { ...db.cards["01060"], code: "05118", name: "Enchanted Blade", faction: "mystic", factions: ["mystic", "guardian"], xp: 0 };
+    const deck = structuredClone(db.decks["roland-starter"]);
+    delete deck.cards["01086"];
+    deck.cards["05118"] = 2;
+    expect(validateDeck(d2, deck)).toEqual([]);
+  });
+});

@@ -5774,7 +5774,7 @@
   "encounterSet": "return_to_pillars_of_judgment",
   "enemy": {
    "fight": 4,
-   "health": 0,
+   "health": null,
    "healthPerInvestigator": false,
    "evade": 4,
    "damage": 1,
@@ -5801,7 +5801,7 @@
   "icons": {},
   "encounterSet": "return_to_pillars_of_judgment",
   "enemy": {
-   "fight": -2,
+   "fight": null,
    "health": 3,
    "healthPerInvestigator": false,
    "evade": 3,

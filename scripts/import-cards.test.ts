@@ -89,3 +89,32 @@ describe("tags", () => {
     expect(mapCard({ ...roland, code: "09998", type_code: "asset" }).tags).toBeUndefined();
   });
 });
+
+describe("ArkhamDB's placeholders and extra classes", () => {
+  const base = { code: "99002", name: "X", pack_code: "dwl", quantity: 1, text: "" };
+  it("X, * and ? (-2, -3, -4) and – (null) are not numbers: cost X, stats null, thresholds left out", () => {
+    expect(mapCard({ ...base, type_code: "asset", faction_code: "rogue", cost: -2 }).cost).toBe("X");
+    expect(mapCard({ ...base, type_code: "asset", faction_code: "rogue", cost: 2 }).cost).toBe(2);
+    const enemy = mapCard({ ...base, type_code: "enemy", faction_code: "mythos", enemy_fight: -3, enemy_evade: null, health: -2, enemy_damage: 1, enemy_horror: 1 });
+    expect(enemy.enemy).toMatchObject({ fight: null, evade: null, health: null, damage: 1, horror: 1 });
+    expect(mapCard({ ...base, type_code: "location", faction_code: "mythos", shroud: -2, clues: 1 }).shroud).toBeNull();
+    expect(mapCard({ ...base, type_code: "agenda", faction_code: "mythos", doom: -3 }).doom).toBeUndefined();
+    expect(mapCard({ ...base, type_code: "act", faction_code: "mythos", clues: -3 }).actClues).toBeUndefined();
+    expect(mapCard({ ...base, type_code: "investigator", faction_code: "neutral", skill_willpower: -2, skill_intellect: -2, skill_combat: -2, skill_agility: -2 }).skills).toBeUndefined();
+  });
+
+  it("an enemy-location has both a location's and an enemy's numbers", () => {
+    const c = mapCard({ ...base, type_code: "enemy_location", faction_code: "mythos", shroud: 4, clues: 3, enemy_fight: 3, health: 5, enemy_evade: 2, enemy_damage: 1, enemy_horror: 2 });
+    expect(c).toMatchObject({ shroud: 4, clues: 3, enemy: { fight: 3, health: 5, evade: 2, damage: 1, horror: 2 } });
+    expect(CardDef.safeParse(c).success).toBe(true);
+  });
+
+  it("a multi-class card keeps every class; a single-class card has no list", () => {
+    expect(mapCard({ ...base, type_code: "asset", faction_code: "seeker", faction2_code: "mystic" }).factions).toEqual(["seeker", "mystic"]);
+    expect(mapCard({ ...base, type_code: "asset", faction_code: "seeker" }).factions).toBeUndefined();
+  });
+
+  it("spawn instructions are spelled the way the engine reads them", () => {
+    expect(mapCard({ ...base, type_code: "enemy", faction_code: "mythos", text: "<b>Spawn</b> - Engaged with prey." }).spawn).toBe("Engaged with Prey");
+  });
+});

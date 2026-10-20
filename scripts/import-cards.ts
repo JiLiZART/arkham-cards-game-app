@@ -62,6 +62,9 @@ export function parseSlots(slot?: string): CardDefInput["slots"] {
   return out;
 }
 
+/** ArkhamDB prints X as -2, * as -3, ? as -4 and – as null: none of them is a number */
+const num = (v: unknown): number | null => (typeof v === "number" && v >= 0 ? v : null);
+
 export function mapCard(c: Raw): CardDefInput {
   const type = c.type_code as CardDefInput["type"];
   const text: string = c.text ?? "";
@@ -93,46 +96,49 @@ export function mapCard(c: Raw): CardDefInput {
   opt("deckLimit", c.deck_limit);
   if (typeof c.tags === "string" && c.tags) card.tags = c.tags.split(".").filter(Boolean);
   opt("xp", c.xp);
-  if ("cost" in c) card.cost = c.cost;
+  if ("cost" in c) card.cost = c.cost === -2 ? "X" : num(c.cost);
+  if (c.faction2_code) card.factions = [c.faction_code, c.faction2_code, c.faction3_code].filter(Boolean);
   opt("victory", c.victory);
   for (const s of ["willpower", "intellect", "combat", "agility", "wild"] as const) {
     if (c[`skill_${s}`] && type !== "investigator") card.icons![s] = c[`skill_${s}`];
   }
   if (type === "investigator") {
-    card.skills = { willpower: c.skill_willpower, intellect: c.skill_intellect, combat: c.skill_combat, agility: c.skill_agility };
+    const skills = { willpower: num(c.skill_willpower), intellect: num(c.skill_intellect), combat: num(c.skill_combat), agility: num(c.skill_agility) };
+    if (Object.values(skills).every((n) => n !== null)) card.skills = skills as CardDefInput["skills"];
   }
   if (type === "asset" || type === "investigator") {
     opt("health", c.health);
     opt("sanity", c.sanity);
   }
   opt("uses", parseUses(text));
-  if (type === "enemy") {
+  if (type === "enemy" || type === "enemy_location") {
     card.enemy = {
-      fight: c.enemy_fight ?? 0,
-      health: c.health ?? 0,
+      fight: num(c.enemy_fight),
+      health: num(c.health),
       healthPerInvestigator: !!c.health_per_investigator,
-      evade: c.enemy_evade ?? 0,
+      evade: num(c.enemy_evade),
       damage: c.enemy_damage ?? 0,
       horror: c.enemy_horror ?? 0,
     };
     const spawn = strip(text).match(/Spawn - ([^.]+)\./);
-    if (spawn) card.spawn = spawn[1] === "Any empty location" ? "emptyLocation" : spawn[1];
+    if (spawn) card.spawn = spawn[1] === "Any empty location" ? "emptyLocation" : /^engaged with prey$/i.test(spawn[1]) ? "Engaged with Prey" : spawn[1];
   }
-  if (type === "location") {
-    opt("shroud", c.shroud);
+  if (type === "location" || type === "enemy_location") {
+    if (typeof c.shroud === "number") card.shroud = num(c.shroud);
     card.clues = c.clues ?? 0;
     card.cluesPerInvestigator = !c.clues_fixed && (c.clues ?? 0) > 0;
   }
   if (type === "act") {
     opt("stage", c.stage);
-    if (c.clues) {
+    // a * threshold (-3) is in the text, not a number
+    if (c.clues > 0) {
       card.actClues = c.clues;
       card.actCluesPerInvestigator = !c.clues_fixed;
     }
   }
   if (type === "agenda") {
     opt("stage", c.stage);
-    opt("doom", c.doom);
+    opt("doom", num(c.doom));
   }
   if (type === "treachery" && card.keywords!.length === 0) card.keywords = parseKeywords(text, type);
   return card;

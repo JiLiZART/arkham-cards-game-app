@@ -51,7 +51,7 @@ export function catalogCards(db: ContentDb, locale: string, f: CatalogFilters): 
       if (!anyOf(f.factions, c.faction) || !anyOf(f.types, c.type) || !anyOf(f.packs, c.pack) || !anyOf(f.sets, c.encounterSet ?? "")) return false;
       if (cycles && !f.cycles.includes(cycles.get(c.code) ?? "")) return false;
       if (f.levels.length && !f.levels.includes(c.xp ?? 0)) return false;
-      if (f.costs.length && (c.cost === null || c.cost === undefined || !f.costs.includes(c.cost))) return false;
+      if (f.costs.length && (typeof c.cost !== "number" || !f.costs.includes(c.cost))) return false;
       if (f.icons.length && !f.icons.some((i) => (c.icons[i as keyof typeof c.icons] ?? 0) > 0)) return false;
       if (f.slots.length && !f.slots.some((s) => c.slots.includes(s as never))) return false;
       if (f.traits.length) {

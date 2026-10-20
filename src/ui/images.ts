@@ -55,8 +55,8 @@ export function faceLines(card: CardDef, side: "front" | "back", name = card.nam
   if (card.cost !== undefined && card.cost !== null) stats.push(`Cost ${card.cost}`);
   if (card.xp) stats.push(`XP ${card.xp}`);
   if (card.skills) stats.push(`WIL ${card.skills.willpower} INT ${card.skills.intellect} COM ${card.skills.combat} AGI ${card.skills.agility}`);
-  if (card.enemy) stats.push(`Fight ${card.enemy.fight} · HP ${card.enemy.health}${card.enemy.healthPerInvestigator ? "/inv" : ""} · Evade ${card.enemy.evade} · ${card.enemy.damage}D ${card.enemy.horror}H`);
-  if (card.shroud !== undefined) stats.push(`Shroud ${card.shroud} · Clues ${card.clues ?? 0}${card.cluesPerInvestigator ? "/inv" : ""}`);
+  if (card.enemy) stats.push(`Fight ${card.enemy.fight ?? "–"} · HP ${card.enemy.health ?? "–"}${card.enemy.healthPerInvestigator ? "/inv" : ""} · Evade ${card.enemy.evade ?? "–"} · ${card.enemy.damage}D ${card.enemy.horror}H`);
+  if (card.shroud !== undefined) stats.push(`Shroud ${card.shroud ?? "X"} · Clues ${card.clues ?? 0}${card.cluesPerInvestigator ? "/inv" : ""}`);
   if (card.doom !== undefined) stats.push(`Doom ${card.doom}`);
   if (card.actClues) stats.push(`Clues ${card.actClues}${card.actCluesPerInvestigator ? "/inv" : ""}`);
   if (card.health || card.sanity) stats.push(`HP ${card.health ?? "-"} SAN ${card.sanity ?? "-"}`);

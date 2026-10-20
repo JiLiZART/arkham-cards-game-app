@@ -2266,7 +2266,7 @@
   },
   "deckLimit": 2,
   "xp": 0,
-  "cost": -2
+  "cost": "X"
  },
  {
   "code": "09088",
@@ -4468,7 +4468,7 @@
   "slots": [],
   "icons": {},
   "encounterSet": "sanguine_shadows",
-  "shroud": -2,
+  "shroud": null,
   "clues": 1,
   "cluesPerInvestigator": true
  },
@@ -4833,10 +4833,10 @@
   "icons": {},
   "encounterSet": "sanguine_shadows",
   "enemy": {
-   "fight": 0,
-   "health": 0,
+   "fight": null,
+   "health": null,
    "healthPerInvestigator": false,
-   "evade": 0,
+   "evade": null,
    "damage": 1,
    "horror": 1
   }
@@ -7610,7 +7610,7 @@
   "icons": {},
   "encounterSet": "shades_of_suffering",
   "victory": 1,
-  "shroud": -2,
+  "shroud": null,
   "clues": 1,
   "cluesPerInvestigator": true
  },
@@ -8271,7 +8271,7 @@
   "encounterSet": "without_a_trace",
   "enemy": {
    "fight": 3,
-   "health": 0,
+   "health": null,
    "healthPerInvestigator": false,
    "evade": 4,
    "damage": 1,

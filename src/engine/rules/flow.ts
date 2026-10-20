@@ -157,7 +157,7 @@ export function legalTurnActions(g: G, i: InvId): ChoiceOption[] {
   const loc = me.location;
   if (loc) {
     const l = card(g, loc);
-    if (l.revealed && !hasFlag(g, loc, "cannotBeInvestigated")) add({ kind: "investigate" }, `Investigate ${def(g, loc).name}`, loc);
+    if (l.revealed && def(g, loc).shroud !== null && !hasFlag(g, loc, "cannotBeInvestigated")) add({ kind: "investigate" }, `Investigate ${def(g, loc).name}`, loc);
     for (const c of cardsIn(g, "location")) if (canMoveTo(g, i, c.id)) add({ kind: "move", to: c.id }, `Move to ${def(g, c.id).name}`, c.id);
   }
   add({ kind: "draw" }, "Draw 1 card");
@@ -171,10 +171,10 @@ export function legalTurnActions(g: G, i: InvId): ChoiceOption[] {
     add({ kind: "ability", card: r.card, index: r.index }, r.ability.label ?? `${def(g, r.card).name}: ${r.ability.designator ?? "ability"}`, r.card);
   }
   for (const e of enemiesAt(g, loc)) {
-    if (attackable(g, e.id)) add({ kind: "fight", enemy: e.id }, `Fight ${def(g, e.id).name}`, e.id);
+    if (attackable(g, e.id) && def(g, e.id).enemy?.fight !== null) add({ kind: "fight", enemy: e.id }, `Fight ${def(g, e.id).name}`, e.id);
     if (e.engagedWith !== i && !isMassive(g, e.id)) add({ kind: "engage", enemy: e.id }, `Engage ${def(g, e.id).name}`, e.id);
   }
-  for (const e of engagedWith(g, i)) add({ kind: "evade", enemy: e.id }, `Evade ${def(g, e.id).name}`, e.id);
+  for (const e of engagedWith(g, i)) if (def(g, e.id).enemy?.evade !== null) add({ kind: "evade", enemy: e.id }, `Evade ${def(g, e.id).name}`, e.id);
   if (g.s.act && (def(g, g.s.act).actAdvance ?? "turn") === "turn" && spendableGroupClues(g) >= actClueCost(g)) {
     add({ kind: "advanceAct" }, `Advance act (spend ${actClueCost(g)} clues as a group)`, g.s.act);
   }

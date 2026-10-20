@@ -259,7 +259,7 @@
   "subname": "A Perfect Fit",
   "flavor": "\"...Say, are those Mr. Donohue's guns?\" Jenny held a pistol over her shoulder and struck a pose. \"I think they suit me better than him. Don't you agree?\"",
   "deckLimit": 1,
-  "cost": -2
+  "cost": "X"
  },
  {
   "code": "02011",
@@ -7497,7 +7497,7 @@
    "fight": 4,
    "health": 4,
    "healthPerInvestigator": false,
-   "evade": 0,
+   "evade": null,
    "damage": 1,
    "horror": 5
   }

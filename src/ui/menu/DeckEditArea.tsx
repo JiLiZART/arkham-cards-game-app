@@ -51,10 +51,11 @@ export function DeckEditArea({ investigator, deck, onChange, weakness = true }: 
   const pool = useMemo(() => builderPool(db, locale, investigator, filter), [locale, investigator, filter]);
   const required = new Set([...(inv?.signatures ?? []), ...(inv?.weaknesses ?? []), ...Object.values(inv?.alternatives ?? {}).flat()]);
   const nameOf = (c: CardDef) => cardText(db, c.code, locale).name;
+  const costNum = (c: CardDef) => (typeof c.cost === "number" ? c.cost : 0);
   const entries = Object.entries(deck.cards)
     .map(([code, n]) => ({ card: db.cards[code], n }))
     .filter((x) => x.card)
-    .sort((a, b) => (a.card.cost ?? 0) - (b.card.cost ?? 0) || nameOf(a.card).localeCompare(nameOf(b.card)));
+    .sort((a, b) => costNum(a.card) - costNum(b.card) || nameOf(a.card).localeCompare(nameOf(b.card)));
   const fixed = entries.filter((x) => required.has(x.card.code) || x.card.subtype);
   const size = entries.reduce((n, x) => n + (required.has(x.card.code) || x.card.subtype ? 0 : x.n), 0);
   const chosenWeakness = Object.keys(deck.cards).find((c) => db.cards[c]?.subtype === "basicweakness") ?? "";

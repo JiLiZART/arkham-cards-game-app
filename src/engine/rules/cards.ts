@@ -290,6 +290,7 @@ export const discardIfEmptyHandler: Handler<"DiscardIfEmpty"> = (g, step) => {
 // ---------- playing cards ----------
 export function playCost(g: G, i: InvId, cardId: InstId): number {
   const d = def(g, cardId);
+  if (d.cost === "X") return Infinity; // ponytail: no X choice yet, so an X-cost card can't be played
   let cost = d.cost ?? 0;
   for (const m of allMods(g)) {
     if (m.target !== i || m.mod.stat !== "cost") continue;

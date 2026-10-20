@@ -5114,7 +5114,7 @@
   "encounterSet": "pillars_of_judgment",
   "enemy": {
    "fight": 8,
-   "health": 0,
+   "health": null,
    "healthPerInvestigator": false,
    "evade": 5,
    "damage": 1,
@@ -7108,7 +7108,7 @@
   "icons": {},
   "flavor": "Formerly several races of them had inhabited the entire underground world, which stretched down to unfathomable abysses and which included besides the blue-litten region a red-litten region called Yoth, where relics of a still older and non-human race were found by archaeologists. - H. P. Lovecraft and Zealia Bishop, <u>The Mound</u>",
   "encounterSet": "the_depths_of_yoth",
-  "shroud": -2,
+  "shroud": null,
   "clues": 1,
   "cluesPerInvestigator": true
  },
@@ -7224,7 +7224,7 @@
    "fight": 5,
    "health": 6,
    "healthPerInvestigator": false,
-   "evade": -2,
+   "evade": null,
    "damage": 3,
    "horror": 2
   },

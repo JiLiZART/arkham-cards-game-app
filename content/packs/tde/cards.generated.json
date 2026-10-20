@@ -880,7 +880,7 @@
   "icons": {},
   "deckLimit": 3,
   "xp": 0,
-  "cost": -2
+  "cost": "X"
  },
  {
   "code": "06035",
@@ -1999,8 +1999,8 @@
   "icons": {},
   "encounterSet": "waking_nightmare",
   "enemy": {
-   "fight": 0,
-   "health": 0,
+   "fight": null,
+   "health": null,
    "healthPerInvestigator": false,
    "evade": 2,
    "damage": 0,
@@ -2468,7 +2468,7 @@
    "fight": 1,
    "health": 1,
    "healthPerInvestigator": false,
-   "evade": -2,
+   "evade": null,
    "damage": 1,
    "horror": 0
   }
@@ -4413,7 +4413,7 @@
   "encounterSet": "a_thousand_shapes_of_horror",
   "enemy": {
    "fight": 5,
-   "health": 0,
+   "health": null,
    "healthPerInvestigator": false,
    "evade": 5,
    "damage": 2,
@@ -5422,7 +5422,7 @@
   "icons": {},
   "encounterSet": "dark_side_of_the_moon",
   "victory": 1,
-  "shroud": -2,
+  "shroud": null,
   "clues": 1,
   "cluesPerInvestigator": true
  },
@@ -5533,7 +5533,7 @@
   "icons": {},
   "backText": "The path to the Moon's core is long and winding. You cannot enter The Black Core while Caverns Beneath the Moon <i>(Dark Side)</i> has clues on it.",
   "encounterSet": "dark_side_of_the_moon",
-  "shroud": -2,
+  "shroud": null,
   "clues": 1,
   "cluesPerInvestigator": true
  },
@@ -5672,10 +5672,10 @@
   "encounterSet": "dark_side_of_the_moon",
   "victory": 2,
   "enemy": {
-   "fight": -2,
+   "fight": null,
    "health": 4,
    "healthPerInvestigator": true,
-   "evade": -2,
+   "evade": null,
    "damage": 2,
    "horror": 2
   }
@@ -6641,7 +6641,7 @@
   "icons": {},
   "flavor": "Deep in the vacuous expanse lies another dimension.\nWill you take the plunge?",
   "encounterSet": "point_of_no_return",
-  "shroud": -2,
+  "shroud": null,
   "clues": 1,
   "cluesPerInvestigator": true
  },
@@ -6680,7 +6680,7 @@
   "icons": {},
   "flavor": "Deep in the vacuous expanse lies another dimension.\nWill you take the plunge?",
   "encounterSet": "point_of_no_return",
-  "shroud": -2,
+  "shroud": null,
   "clues": 1,
   "cluesPerInvestigator": true
  },
@@ -6719,7 +6719,7 @@
   "icons": {},
   "flavor": "Deep in the vacuous expanse lies another dimension.\nWill you take the plunge?",
   "encounterSet": "point_of_no_return",
-  "shroud": -2,
+  "shroud": null,
   "clues": 1,
   "cluesPerInvestigator": true
  },
@@ -6758,7 +6758,7 @@
   "icons": {},
   "flavor": "Deep in the vacuous expanse lies another dimension.\nWill you take the plunge?",
   "encounterSet": "point_of_no_return",
-  "shroud": -2,
+  "shroud": null,
   "clues": 1,
   "cluesPerInvestigator": true
  },
@@ -8759,7 +8759,7 @@
   "encounterSet": "weaver_of_the_cosmos",
   "victory": 1,
   "enemy": {
-   "fight": -2,
+   "fight": null,
    "health": 3,
    "healthPerInvestigator": true,
    "evade": 3,
@@ -8790,7 +8790,7 @@
   "encounterSet": "weaver_of_the_cosmos",
   "victory": 1,
   "enemy": {
-   "fight": -2,
+   "fight": null,
    "health": 3,
    "healthPerInvestigator": true,
    "evade": 3,
@@ -8821,7 +8821,7 @@
   "encounterSet": "weaver_of_the_cosmos",
   "victory": 1,
   "enemy": {
-   "fight": -2,
+   "fight": null,
    "health": 3,
    "healthPerInvestigator": true,
    "evade": 3,
@@ -8852,7 +8852,7 @@
   "encounterSet": "weaver_of_the_cosmos",
   "victory": 1,
   "enemy": {
-   "fight": -2,
+   "fight": null,
    "health": 3,
    "healthPerInvestigator": true,
    "evade": 3,
