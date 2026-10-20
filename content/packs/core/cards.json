@@ -37,7 +37,7 @@
   ] },
   "01011": { "script": true, "abilities": [
     { "kind": "revelation", "effects": [{ "op": "putInThreatArea" }] },
-    { "kind": "fast", "label": "Hospital Debts: move 1 resource onto it", "cost": { "resources": 1 }, "limit": { "per": "round", "count": 2 }, "effects": [{ "op": "placeTokens", "on": "self", "resources": 1 }] }
+    { "kind": "fast", "label": "Hospital Debts: move 1 resource onto it", "condition": { "resources": { "min": 1 } }, "limit": { "per": "round", "count": 2 }, "effects": [{ "op": "placeTokens", "on": "self", "resources": 1 }] }
   ] },
   "01012": { "abilities": [
     { "kind": "reaction", "trigger": "cardPlayed", "label": "Heirloom of Hyperborea: draw 1 card", "condition": { "eventCard": { "trait": "Spell" } }, "effects": [{ "op": "drawCards", "amount": 1 }] }

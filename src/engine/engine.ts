@@ -9,7 +9,7 @@ import { handlers as enemyHandlers } from "./rules/enemies";
 import { exhaustEnemy } from "./rules/enemies";
 import { basicInvestigate, endTurnCleanup, handlers as flowHandlers, legalTurnActions, readyAll, roundCleanup } from "./rules/flow";
 import {
-  assetDefeatCheck, checkEngagement, drawOpeningCards, handlers as invHandlers, revealLocation,
+  assetDefeatCheck, checkEngagement, chooseLead, drawOpeningCards, handlers as invHandlers, revealLocation,
 } from "./rules/investigators";
 import { allEliminated, finishRevelation, handlers as scenarioHandlers, nextAct, nextAgenda } from "./rules/scenario";
 import { handlers as testHandlers, startTest } from "./rules/skillTest";
@@ -35,6 +35,7 @@ const ENGINE_FNS: Record<string, (g: G, ctx: EffCtx, step: Step) => void> = {
   roundCleanup: (g) => roundCleanup(g),
   exhaustEnemy: (g, ctx) => exhaustEnemy(g, ctx.enemy!),
   readyAll: (g) => readyAll(g),
+  chooseLead: (g, _ctx, step) => chooseLead(g, step),
   nextAgenda: (g, ctx) => nextAgenda(g, ctx.source!),
   nextAct: (g, ctx) => nextAct(g, ctx.source!),
 };

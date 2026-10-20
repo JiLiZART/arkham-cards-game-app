@@ -1,7 +1,7 @@
 import { shuffle } from "../rng";
 import {
   logStep,
-  activeInvs, ask, card, cardsIn, connections, controlled, def, emit, engagedWith, enemies, hasFlag, inv, invName,
+  abilitiesOf, activeInvs, ask, card, cardsIn, connections, controlled, def, emit, engagedWith, enemies, hasFlag, inv, invName,
   isMassive, maxHealth, maxSanity, moveCard, playerCount, push, tapToDraw, type G,
 } from "../core";
 import type { InstId, InvId, Step } from "../types";
@@ -32,7 +32,8 @@ export const drawHandler: Handler<"Draw"> = (g, step) => {
   const id = me.deck[0];
   const d = def(g, id);
   moveCard(g, id, "hand");
-  const weakness = !!d.subtype && (d.type === "treachery" || d.type === "enemy");
+  // an encounter-type weakness resolves as if drawn from the encounter deck; a player-type one resolves its revelation and stays in hand (Grimoire, Weakness)
+  const weakness = !!d.subtype && (d.type === "treachery" || d.type === "enemy" || abilitiesOf(g, id).some((a) => a.kind === "revelation"));
   // a weakness that resolves on draw is public and announced as such (the table shows it before it resolves)
   if (weakness) emit(g, "weakness", `${me.name} draws the weakness ${d.name}`, { inv: step.inv, card: id });
   else emit(g, "draw", `${me.name} draws ${d.subtype ? d.name : "a card"}`, { inv: step.inv, card: id });
@@ -190,7 +191,18 @@ export const defeatedHandler: Handler<"Defeated"> = (g, step) => {
   me.location = null;
   if (g.s.active === step.inv) g.s.active = null;
   if (activeInvs(g).length === 0) push(g, { t: "Script", code: "__engine", fn: "allEliminated", ctx: {} });
+  else if (g.s.lead === step.inv) push(g, { t: "Script", code: "__engine", fn: "chooseLead", ctx: {} });
 };
+
+/** the remaining investigators choose a new lead when the lead is eliminated (Grimoire, Elimination) */
+export function chooseLead(g: G, step: Step) {
+  const rest = activeInvs(g);
+  if (!rest.length || rest.includes(g.s.lead)) return;
+  const pick = ask<InvId>(g, step, rest[0], "generic", "Choose the new lead investigator", rest.map((i) => ({ id: i, label: invName(g, i), card: inv(g, i).cardId, value: i })), { auto: true, key: "newLead" });
+  if (pick === undefined) return;
+  g.s.lead = pick;
+  emit(g, "lead", `${invName(g, pick)} is the new lead investigator`, { inv: pick });
+}
 
 // ---------- movement ----------
 export function canMoveTo(g: G, i: InvId, to: InstId) {

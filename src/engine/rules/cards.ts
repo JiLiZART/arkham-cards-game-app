@@ -157,7 +157,7 @@ function triggered(g: G, trigger: Trigger, data: EventData): AbilityRef[] {
       if (!withinLimit(g, cardId, index, a)) return;
       if (a.condition && !checkCondition(g, a.condition, ctxFor(data, cardId, you))) return;
       if (you && a.kind === "reaction" && !canPay(g, you, cardId, a.cost)) return;
-      if (fromHand && you) {
+      if (fromHand && you && a.kind === "reaction") {
         const cost = playCost(g, you, cardId);
         if (inv(g, you).resources < cost || hasFlag(g, you, "cannotPlayAssetsOrEvents")) return;
       }

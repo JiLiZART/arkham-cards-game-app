@@ -55,7 +55,9 @@ export function finishRevelation(g: G, cardId: InstId, invId: string) {
   const surge = g.s.flags[`surge:${cardId}`] || def(g, cardId).keywords.includes("surge");
   delete g.s.flags[`surge:${cardId}`];
   // a treachery with Victory X is added to the victory display instead (Grimoire, Victory X)
-  if (c?.zone === "resolving") moveCard(g, cardId, !c.owner && def(g, cardId).victory !== undefined ? "victory" : c.owner ? "discard" : "encounterDiscard");
+  const d = def(g, cardId);
+  const playerType = d.type === "asset" || d.type === "event" || d.type === "skill";
+  if (c?.zone === "resolving") moveCard(g, cardId, !c.owner && d.victory !== undefined ? "victory" : c.owner ? (playerType ? "hand" : "discard") : "encounterDiscard");
   if (surge) push(g, { t: "DrawEncounter", inv: invId });
 }
 

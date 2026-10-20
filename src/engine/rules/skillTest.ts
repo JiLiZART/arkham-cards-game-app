@@ -301,8 +301,9 @@ function applyStage(g: G) {
     location: t.kind === "investigate" ? t.target : t.ctx.location,
   };
   const steps: Step[] = [];
-  // committed cards' own effects (skill cards)
+  // committed skill cards' own text; a committed asset or event only lends its icons (Grimoire, Skill Icons)
   for (const c of t.committed) {
+    if (def(g, c).type !== "skill") continue;
     for (const a of abilitiesOf(g, c)) {
       if (a.kind !== "onPlay") continue;
       const cctx = { ...ctx, source: c, you: card(g, c).owner ?? t.inv };
