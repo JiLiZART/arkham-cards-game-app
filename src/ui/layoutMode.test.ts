@@ -27,8 +27,9 @@ describe("layoutModeOf", () => {
 
 describe("the desktop insets", () => {
   it("keep the strip's column and the feed free on the right, and no row of cards at the bottom", () => {
-    expect(DESKTOP_INSETS.right).toBeGreaterThanOrEqual(143 + 300 + 24); // the column, the feed band and their margins
+    expect(DESKTOP_INSETS.right).toBeGreaterThanOrEqual(16 + 300 + 143); // the feed, the strip's column and their margins
     expect(DESKTOP_INSETS.bottom).toBeLessThanOrEqual(200); // the hand fan's peek and the stat bar: the strip is no longer a row here
+    expect(DESKTOP_INSETS.bottom).toBe(170); // the strip's column ends here, above the hand fan's resting cards
   });
 });
 

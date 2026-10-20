@@ -79,20 +79,12 @@ describe("which strip card shows its buttons", () => {
   const opts = new Map([["a", [{ id: "x" }]], ["b", [{ id: "y" }, { id: "z" }]], ["c", []]]);
 
   it("the hovered card, when it has options", () => {
-    expect(stripButtonsFor("b", null, opts)).toBe("b");
+    expect(stripButtonsFor("b", opts)).toBe("b");
   });
 
-  it("the focused card when nothing is hovered", () => {
-    expect(stripButtonsFor(null, "a", opts)).toBe("a");
-  });
-
-  it("hover wins over focus, one card at a time", () => {
-    expect(stripButtonsFor("b", "a", opts)).toBe("b");
-  });
-
-  it("none for a card with nothing to offer, or when nothing is hovered or focused", () => {
-    expect(stripButtonsFor("c", null, opts)).toBeNull();
-    expect(stripButtonsFor("zz", null, opts)).toBeNull();
-    expect(stripButtonsFor(null, null, opts)).toBeNull();
+  it("none for a card with nothing to offer, or when nothing is hovered", () => {
+    expect(stripButtonsFor("c", opts)).toBeNull();
+    expect(stripButtonsFor("zz", opts)).toBeNull();
+    expect(stripButtonsFor(null, opts)).toBeNull();
   });
 });

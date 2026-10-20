@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { placeHover } from "./hover";
+import { centreOn, placeHover } from "./hover";
 
 describe("hover placement", () => {
   const vw = 1600;
@@ -24,15 +24,28 @@ describe("hover placement", () => {
     expect(b.h + 150).toBeLessThanOrEqual(vh - 16 + 1e-9);
     expect(b.w / b.h).toBeCloseTo(300 / 420);
   });
-  it("with a limit on the right (the strip's buttons) the copy ends before it", () => {
-    const b = placeHover({ x0: 1450, y0: 300, x1: 1542, y1: 429 }, 150, vw, vh, 1290);
-    expect(b.x + b.w).toBeLessThanOrEqual(1290);
-    expect(b.x).toBeGreaterThanOrEqual(8);
-    expect(b.w).toBe(184);
+});
+
+describe("centring the strip card's buttons on its copy", () => {
+  const vw = 1600;
+  const vh = 900;
+  const copy = { x: 1200, y: 300, w: 184, h: 258 };
+  it("their centre is the copy's centre", () => {
+    const p = centreOn(copy, 120, 90, vw, vh);
+    expect(p.x + 60).toBe(1292);
+    expect(p.y + 45).toBe(429);
   });
-  it("a limit too near the left edge scales the copy down to fit before it", () => {
-    const b = placeHover({ x0: 1450, y0: 300, x1: 1542, y1: 429 }, 150, vw, vh, 150);
-    expect(b.x + b.w).toBeLessThanOrEqual(150);
-    expect(b.x).toBeGreaterThanOrEqual(8);
+  it("wider than the copy: still centred, and kept inside the window", () => {
+    const p = centreOn({ x: 1500, y: 300, w: 92, h: 129 }, 160, 90, vw, vh);
+    expect(p.x + 160).toBeLessThanOrEqual(vw - 8);
+    expect(p.x).toBeGreaterThanOrEqual(8);
+  });
+  it("clamped at the bottom", () => {
+    const p = centreOn({ x: 1200, y: 800, w: 184, h: 258 }, 120, 90, vw, vh);
+    expect(p.y + 90).toBeLessThanOrEqual(vh - 8);
+  });
+  it("clamped at the top", () => {
+    const p = centreOn({ x: 1200, y: -100, w: 184, h: 100 }, 120, 90, vw, vh);
+    expect(p.y).toBeGreaterThanOrEqual(8);
   });
 });

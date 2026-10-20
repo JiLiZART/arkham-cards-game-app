@@ -302,22 +302,32 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 /* two sides fit the dialog's width (its padding, border and the gap between them), so there is no scrollbar under them */
 .modal-sides .modal-card.landscape img { width: min(42vw, 600px, calc((min(1200px, 94vw) - 40px - 14px) / 2)); }
 .card-modal.both .modal-side { width: auto; max-width: 900px; align-items: center; }
-/* the desktop strip: a column at the right edge from under the top bar to above the dock, threats first, scrolling when the cards are at their smallest */
-.game { --col-w: 143px; }
-.play-strip { --sw: 92px; position: fixed; top: 76px; right: 8px; bottom: var(--dock-h, 250px); width: var(--col-w); display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 4px 0; overflow-y: auto; overflow-x: hidden; scrollbar-width: thin; overscroll-behavior: contain; z-index: 45; pointer-events: none; }
+/* the desktop strip: a column left of the chaos bag and the feed (which hold the window's right edge), from under the top bar to above the hand fan's resting cards, threats first, scrolling when the cards are at their smallest */
+.game { --col-w: 143px; --feed-w: 300px; }
+.play-strip { --sw: 92px; position: fixed; top: 76px; right: calc(16px + var(--feed-w)); bottom: 170px; width: var(--col-w); display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 4px 0; overflow-y: auto; overflow-x: hidden; scrollbar-width: thin; overscroll-behavior: contain; z-index: 45; pointer-events: none; }
 .play-strip > * { pointer-events: auto; }
 /* during a skill test: out of the way of the discs and the subject unless one of its cards has an option (stripDuringTest) */
-.play-strip { transition: translate 0.2s ease-out, opacity 0.2s ease-out; }
+.play-strip { transition: translate 0.2s ease-out, opacity 0.2s ease-out, right 0.2s ease-out; }
+/* the compact strip of a skill test slides to the window's edge, under the test screen, so the placed cards keep their room */
+.game:not(.phone).testing .play-strip.compact { right: 8px; }
 .play-strip.aside, .play-strip.aside > * { pointer-events: none; }
 .play-strip.aside { translate: 130% 0; opacity: 0; }
 .game.phone .play-strip.column.aside { translate: 130% 0; pointer-events: none; }
 @media (prefers-reduced-motion: reduce) { .play-strip { transition: none; } }
 .strip-slot { position: relative; flex: none; width: var(--sw); height: calc(var(--sw) * 1.4); display: grid; place-items: center; }
 .strip-slot.exhausted { width: calc(var(--sw) * 1.4); height: var(--sw); }
-.strip-actions { position: fixed; z-index: 56; display: flex; flex-direction: column; gap: 4px; align-items: stretch; padding-right: 8px; }
+/* a strip card's option buttons: over the centre of its enlarged copy (HoverCard sets left and top), taking the pointer the copy does not */
+.strip-actions { position: fixed; left: 0; top: 0; z-index: 81; display: flex; flex-direction: column; gap: 4px; align-items: stretch; pointer-events: auto; }
 .strip-action { display: flex; align-items: center; justify-content: center; gap: 5px; white-space: nowrap; padding: 4px 12px; border-radius: 16px; border: 1px solid #7fe08a; background: rgba(18, 30, 18, 0.92); color: #eaffea;
   font: 17px/1.1 Alegreya, Georgia, serif; box-shadow: 0 2px 8px #000c; }
 .strip-action:hover { background: #2f5a30; }
+/* a strip card with something to do pulses: stronger than the hand's static ring, so it stands apart from idle and exhausted cards */
+@keyframes strip-pulse {
+  from { box-shadow: 0 0 0 3px #7fe08a, 0 0 14px #7fe08acc; }
+  to { box-shadow: 0 0 0 4px #9ff0a8, 0 0 28px #7fe08a; }
+}
+.strip-slot .mini-card.legal { animation: strip-pulse 1.6s ease-in-out infinite alternate; }
+@media (prefers-reduced-motion: reduce) { .strip-slot .mini-card.legal { animation: none; } }
 .mini-card.target { box-shadow: 0 0 0 3px var(--gold), 0 0 16px #e8c46acc; }
 .strip-slot.exhausted .mini-card { transform: rotate(90deg); }
 .strip-divider { flex: none; height: 2px; width: 70%; background: #c9a95c66; margin: 3px 0; }
@@ -397,7 +407,7 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 .token-stack b { position: relative; top: 0.08em; }
 
 /* right-hand column: chaos bag, other investigators, then the action feed / Journal */
-.right-col { position: fixed; top: 76px; right: calc(16px + var(--col-w)); bottom: 320px; width: 300px; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; z-index: 47; pointer-events: none; }
+.right-col { position: fixed; top: 76px; right: 8px; bottom: 320px; width: var(--feed-w); display: flex; flex-direction: column; align-items: flex-end; gap: 8px; z-index: 47; pointer-events: none; }
 .right-col > * { pointer-events: auto; }
 .feed { width: 100%; flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 6px; overflow: hidden; pointer-events: none; }
 .feed > * { pointer-events: auto; }
@@ -813,7 +823,7 @@ button.danger { border-color: var(--bad); color: var(--bad); }
 .game.phone .play-strip.column { --sw: 44px; top: 88px; bottom: 132px; left: auto; right: calc(2px + var(--safe-r)); width: calc(var(--sw) + 10px); flex-direction: column; justify-content: flex-start; align-items: center; gap: 6px; padding: 4px; overflow-y: auto; overflow-x: hidden; background: rgba(12, 9, 6, 0.7); border: 1px solid #4a3b22; border-radius: 12px; pointer-events: auto; z-index: 47; }
 .game.phone .play-strip.column.open { width: calc(var(--sw) + 24px); }
 .game.phone .play-strip.column .strip-divider { width: 70%; height: 2px; align-self: center; margin: 2px 0; }
-.game.phone .play-strip.column.open .strip-action { min-height: 44px; padding: 2px 8px; font-size: 13px; }
+.game.phone .strip-action { min-height: 44px; padding: 2px 8px; font-size: 13px; }
 .strip-handle { flex: none; width: 44px; height: 44px; padding: 0; font-size: 15px; }
 /* spans between the left tools and the strip column (a box at left: 50% could only grow to half the screen) */
 .game.phone .center-col { top: auto; bottom: calc(84px + var(--safe-b)); left: calc(56px + var(--safe-l)); right: calc(64px + var(--safe-r)); transform: none; max-width: none; gap: 4px; }

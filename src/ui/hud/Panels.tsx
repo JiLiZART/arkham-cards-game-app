@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useLayoutEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
+import { Fragment, useLayoutEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
 import { useLayoutMode } from "../layoutMode";
 import { tapCard } from "../touch";
 import { cardText, t } from "../../content/i18n";
@@ -24,7 +24,6 @@ import { referenceSide } from "./DeckViewer";
 import { useFlyIn } from "./flights";
 import { Modal, useCardOptions } from "./Modals";
 import { RESOLVE_BOX } from "./Reveal";
-import { abilitySymbol, stripAction } from "./ActionRail";
 import { moment } from "./SoundLayer";
 import { optionLabel } from "../optionText";
 import { stripDuringTest } from "../testScreen";
@@ -35,7 +34,11 @@ const gOf = () => ({ s: gameStore.getState().game!, db, events: [] });
 /** hovering an HTML card shows the enlarged copy over it */
 const hoverProps = (id: InstId | null) => ({
   onMouseEnter: (e: ReactMouseEvent<HTMLElement>) => id && useView.getState().setHover(id, e.currentTarget.getBoundingClientRect()),
-  onMouseLeave: () => useView.getState().setHover(null),
+  // onto a strip card's own option buttons (drawn over it) is still hovering that card
+  onMouseLeave: (e: ReactMouseEvent<HTMLElement>) => {
+    if ((e.relatedTarget as Element | null)?.closest?.(".strip-actions")) return;
+    useView.getState().setHover(null);
+  },
 });
 
 /** a small HTML card: its scan (or the card back), tokens, highlight when it has options */
@@ -273,19 +276,17 @@ export function stripOrder<T>(assets: T[], threats: T[]): { cards: T[]; dividerA
   return { cards: [...threats, ...assets], dividerAt: assets.length && threats.length ? threats.length : null };
 }
 
-/** the card whose buttons show: the hovered one, else the focused one, and only when it has options (one card at a time, so buttons never overlap) */
-export function stripButtonsFor(hovered: InstId | null, focused: InstId | null, byCard: Map<InstId, unknown[]>): InstId | null {
-  const id = hovered && byCard.has(hovered) ? hovered : focused;
-  return id && byCard.get(id)?.length ? id : null;
+/** the card whose buttons show: the hovered (peeked, focused) one, and only when it has options (one card at a time, so buttons never overlap) */
+export function stripButtonsFor(hovered: InstId | null, byCard: Map<InstId, unknown[]>): InstId | null {
+  return hovered && byCard.get(hovered)?.length ? hovered : null;
 }
 
 /**
  * The viewer's cards in play, then (after a separator) their threat area and engaged enemies, above the hand.
- * A card's pending options sit on it as buttons (Fight / Evade on an engaged enemy); the test's target is outlined.
+ * A card's pending options pulse its ring and show as buttons in the centre of its enlarged copy (HoverCard); the test's target is outlined.
  */
 export function PlayStrip() {
   const game = useGame((s) => s.game) as GameState;
-  const locale = useGame((s) => s.locale);
   const choose = useGame((s) => s.choose);
   const { byCard } = useCardClick();
   const viewer = useShown();
@@ -331,33 +332,18 @@ export function PlayStrip() {
     // not while stepped aside: the rects would be the ones below the screen
     if (mode !== "aside") el.querySelectorAll<HTMLElement>("[data-card]").forEach((c) => rememberRect(c.dataset.card!, c));
   });
-  // the buttons of the hovered (or keyboard-focused) card, kept a moment so the pointer can cross onto them
-  const hovered = useView((v) => v.hovered);
-  const [focused, setFocused] = useState<InstId | null>(null);
-  const want = stripButtonsFor(shown.some((c) => c.id === hovered) ? hovered : null, focused, byCard);
-  const [kept, setKept] = useState<InstId | null>(null);
-  const onButtons = useRef(false);
-  useEffect(() => {
-    if (want) return setKept(want);
-    const t = setTimeout(() => !onButtons.current && setKept(null), 200);
-    return () => clearTimeout(t);
-  }, [want]);
-  const buttons = useRef<HTMLDivElement>(null);
-  // beside the card, on its left, inside the window
-  useLayoutEffect(() => {
-    const el = buttons.current;
-    const slot = kept && strip.current?.querySelector<HTMLElement>(`[data-card="${kept}"]`);
-    if (!el || !slot) return;
-    const r = slot.getBoundingClientRect();
-    el.style.right = `${innerWidth - r.left}px`;
-    el.style.top = `${Math.max(80, Math.min(innerHeight - el.offsetHeight - 8, r.top + r.height / 2 - el.offsetHeight / 2))}px`;
-  });
   if (!visible || !shown.length) return null;
   const target = game.skillTest?.target ?? null;
   const card = (id: InstId, exhausted: boolean) => {
     const opts = byCard.get(id) ?? [];
     return (
-      <div key={id} className={`strip-slot ${exhausted ? "exhausted" : ""}`} onFocus={() => setFocused(id)} onBlur={() => setFocused((f) => (f === id ? null : f))}>
+      // keyboard focus shows the copy and its buttons like a hover does
+      <div
+        key={id}
+        className={`strip-slot ${exhausted ? "exhausted" : ""}`}
+        onFocus={(e) => useView.getState().setHover(id, e.target.getBoundingClientRect())}
+        onBlur={() => useView.getState().hovered === id && useView.getState().setHover(null)}
+      >
         <MiniCard
           id={id}
           w="var(--sw)"
@@ -371,10 +357,7 @@ export function PlayStrip() {
       </div>
     );
   };
-  const keptOpts = kept ? byCard.get(kept) ?? [] : [];
-  const keptName = kept && game.cards[kept] ? cardText(db, game.cards[kept].code, locale).name : "";
   return (
-    <>
     <div className={`play-strip ${phone ? `column ${open ? "open" : ""}` : ""} ${mode}`} ref={strip}>
       {phone && (
         <button className="strip-handle" onClick={() => setOpen(!open)} aria-expanded={open} aria-label={tr("phone.strip")} title={tr("phone.strip")}>
@@ -388,34 +371,5 @@ export function PlayStrip() {
         </Fragment>
       ))}
     </div>
-    {kept && keptOpts.length > 0 && mode !== "aside" && (
-      <div
-        className="strip-actions"
-        ref={buttons}
-        onMouseEnter={() => (onButtons.current = true)}
-        onMouseLeave={() => {
-          onButtons.current = false;
-          setKept(null);
-        }}
-        onFocus={() => (onButtons.current = true)}
-        onBlur={() => {
-          onButtons.current = false;
-          setKept(null);
-        }}
-      >
-        {keptOpts.map((o) => {
-          const a = stripAction({ ...o, label: optionLabel(o, game, locale) }, keptName, locale);
-          const sym = abilitySymbol(o, game);
-          return (
-            <button key={o.id} className="strip-action" onClick={() => choose(o.id)} title={o.label}>
-              {sym && <Glyph name={sym} size={18} />}
-              {a.icon && <Icon name={a.icon} size={22} />}
-              <span>{a.label}</span>
-            </button>
-          );
-        })}
-      </div>
-    )}
-    </>
   );
 }
