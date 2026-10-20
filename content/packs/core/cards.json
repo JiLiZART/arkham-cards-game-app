@@ -137,7 +137,7 @@
     { "kind": "onPlay", "condition": { "yourTurn": true }, "effects": [{ "op": "disengageAll" }, { "op": "moveTo", "where": "revealedNoEnemies" }] }
   ] },
   "01051": { "abilities": [
-    { "kind": "onPlay", "condition": { "enemyAtYourLocation": true }, "effects": [{ "op": "fight", "skill": "agility", "damageBonus": 2 }] }
+    { "kind": "onPlay", "designator": "fight", "condition": { "enemyAtYourLocation": true }, "effects": [{ "op": "fight", "skill": "agility", "damageBonus": 2 }] }
   ] },
   "01052": { "abilities": [
     { "kind": "onPlay", "condition": { "exhaustedEnemyAtYourLocation": true }, "effects": [{ "op": "dealDamage", "amount": 2, "to": "chooseExhaustedAtLocation" }] }
@@ -172,7 +172,7 @@
     { "kind": "reaction", "fromHand": true, "trigger": "treacheryDrawn", "condition": { "eventCard": { "weakness": false } }, "effects": [{ "op": "cancel" }, { "op": "takeHorror", "amount": 1 }] }
   ] },
   "01066": { "abilities": [
-    { "kind": "onPlay", "condition": { "engaged": true }, "effects": [{ "op": "evade", "skill": "willpower", "onSuccess": [{ "op": "dealDamage", "amount": 1, "to": "eventEnemy" }],
+    { "kind": "onPlay", "designator": "evade", "condition": { "engaged": true }, "effects": [{ "op": "evade", "skill": "willpower", "onSuccess": [{ "op": "dealDamage", "amount": 1, "to": "eventEnemy" }],
       "onTokens": { "tokens": ["skull", "cultist", "tablet", "elderThing", "autoFail"], "effects": [{ "op": "gainActions", "amount": -1 }] } }] }
   ] },
   "01067": { "abilities": [
@@ -197,7 +197,7 @@
     { "kind": "fast", "label": "Dig Deep: +1 agility", "cost": { "resources": 1 }, "condition": { "yourSkillTest": true }, "effects": [{ "op": "modify", "mod": { "stat": "agility", "value": 1 }, "until": "test" }] }
   ] },
   "01078": { "abilities": [
-    { "kind": "onPlay", "condition": { "enemyAtYourLocation": true }, "effects": [{ "op": "evade", "auto": true, "all": true }] }
+    { "kind": "onPlay", "designator": "evade", "condition": { "enemyAtYourLocation": true }, "effects": [{ "op": "evade", "auto": true, "all": true }] }
   ] },
   "01079": { "abilities": [
     { "kind": "reaction", "fromHand": true, "trigger": "skillTestFailed", "condition": { "all": [{ "failedBy": { "max": 2 } }, { "testKind": "investigate" }] }, "effects": [{ "op": "discoverClues", "amount": 2 }] }

@@ -49,9 +49,13 @@ export interface InvState {
   resources: number;
   actionsLeft: number;
   /** extra actions only usable for abilities of cards matching trait (Daisy: Tome) */
-  restrictedActions: { trait: string; left: number }[];
+  restrictedActions: { trait?: string; designator?: string; left: number }[];
   /** actions taken this turn by designator, for "first time you do X each round" (Frozen in Fear) */
   actionsThisRound: string[];
+  /** actions spent this turn (reset when the turn begins), for "play only as your first action" */
+  actionsTaken: number;
+  /** printed health of the enemies this investigator defeated since a turn began (Evidence!) */
+  defeatedHealth: number;
   status: InvStatus;
   defeatedBy?: "damage" | "horror";
   turnDone: boolean;
@@ -131,6 +135,8 @@ export interface EffCtx {
   /** test id the effect belongs to */
   testId?: number;
   x?: number;
+  /** the location a move left (enterLocation) */
+  from?: InstId | null;
   /** [damage, horror] an attack just dealt, in its attackDealsDamage window */
   dealt?: [number, number];
 }
@@ -210,7 +216,7 @@ export type Step = { choice?: any } & (
   | { t: "ResolveAttack"; enemy: InstId; inv: InvId; key: string }
   | { t: "AssignDamage"; inv: InvId; damage: number; horror: number; direct: boolean; source: InstId | null; enemy?: InstId | null; /** the attack's key: what its window prevented waits under it */ key?: string; assigned?: Record<string, [number, number]> }
   | { t: "AfterDamage"; inv: InvId; damage: number; horror: number; assets: InstId[]; enemy: InstId | null }
-  | { t: "DamageEnemy"; enemy: InstId; amount: number; by: InvId | null; attack?: boolean }
+  | { t: "DamageEnemy"; enemy: InstId; amount: number; by: InvId | null; attack?: boolean; /** the card dealing it */ source?: InstId | null; key?: string; windowed?: boolean }
   | { t: "DefeatEnemy"; enemy: InstId; by: InvId | null; fired?: boolean }
   | { t: "Move"; inv: InvId; to: InstId; key?: string }
   | { t: "Arrive"; inv: InvId; to: InstId; key?: string }
@@ -242,6 +248,8 @@ export interface EventData {
   /** the test this event belongs to */
   testId?: number;
   amount?: number;
+  /** the location a move left (enterLocation) */
+  from?: InstId | null;
   /** what an attack just dealt (the attackDealsDamage window) */
   damage?: number;
   horror?: number;

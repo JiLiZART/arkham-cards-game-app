@@ -225,7 +225,7 @@ The campaign boxes by scenario. A row is done when the scenario is complete: its
 
 | Done | Pack | Campaign | Encounter cards left | Player cards left |
 | --- | --- | --- | --- | --- |
-| [ ] | `nat` | — | 0 of 0 | 27 of 28 |
+| [x] | `nat` | — | 0 of 0 | 0 of 28 |
 | [ ] | `tom` | — | 0 of 0 | 28 of 28 |
 | [ ] | `har` | — | 0 of 0 | 29 of 29 |
 | [ ] | `car` | — | 0 of 0 | 27 of 27 |

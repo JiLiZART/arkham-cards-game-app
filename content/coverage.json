@@ -1084,14 +1084,8 @@
    },
    "player": {
     "total": 28,
-    "works": 1,
-    "rest": {
-     "asset": 8,
-     "enemy": 1,
-     "event": 16,
-     "skill": 1,
-     "treachery": 1
-    }
+    "works": 28,
+    "rest": {}
    }
   },
   "otr": {
@@ -5818,7 +5812,7 @@
   "12007": false,
   "12010": false,
   "12013": false,
-  "60101": false,
+  "60101": true,
   "60151": false,
   "60201": false,
   "60251": false,

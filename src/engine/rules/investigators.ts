@@ -134,7 +134,7 @@ export const afterDamageHandler: Handler<"AfterDamage"> = (g, step) => {
   // asset defeat
   steps.push({ t: "Script", code: "__engine", fn: "assetDefeatCheck", ctx: { you: step.inv } });
   if (step.horror > 0) steps.push(win("horrorPlaced", { inv: step.inv, amount: step.horror }));
-  if (step.damage > 0) steps.push(win("damageTaken", { inv: step.inv, amount: step.damage }));
+  if (step.damage > 0) steps.push(win("damageTaken", { inv: step.inv, amount: step.damage, enemy }));
   if (step.horror > 0) steps.push(win("horrorTaken", { inv: step.inv, amount: step.horror }));
   steps.push({ t: "CheckDefeat", inv: step.inv });
   push(g, ...steps);
@@ -210,7 +210,7 @@ export const arriveHandler: Handler<"Arrive"> = (g, step) => {
   const steps: Step[] = [];
   const loc = card(g, step.to);
   if (!loc.revealed) steps.push({ t: "Script", code: "__engine", fn: "revealLocation", ctx: { location: step.to } });
-  steps.push(win("enterLocation", { inv: step.inv, location: step.to }));
+  steps.push(win("enterLocation", { inv: step.inv, location: step.to, from }));
   steps.push({ t: "Script", code: "__engine", fn: "checkEngagement", ctx: { inv: step.inv } });
   steps.push({ t: "CheckObjectives" });
   push(g, ...steps);

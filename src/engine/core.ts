@@ -203,6 +203,7 @@ export function matchesFilter(g: G, code: string, f: CardFilter): boolean {
   if (f.unique !== undefined && d.unique !== f.unique) return false;
   if (f.weakness !== undefined && !!d.subtype !== f.weakness) return false;
   if (f.elite !== undefined && d.traits.includes("Elite") !== f.elite) return false;
+  if (f.faction && !arr(f.faction)!.includes(d.faction)) return false;
   return true;
 }
 
@@ -430,6 +431,16 @@ export function checkCondition(g: G, c: Condition, ctx: EffCtx): boolean {
   if ("engaged" in c) return !!you && engagedWith(g, you).length > 0;
   if ("yourSkillTest" in c) return !!g.s.skillTest && g.s.skillTest.inv === you;
   if ("eventCard" in c) return !!ctx.card && !!g.s.cards[ctx.card] && matchesFilter(g, card(g, ctx.card).code, c.eventCard);
+  if ("firstAction" in c) return !!you && g.s.active === you && inv(g, you).actionsTaken === 0;
+  if ("eventSource" in c) return !!ctx.card && !!g.s.cards[ctx.card] && matchesFilter(g, card(g, ctx.card).code, c.eventSource);
+  if ("eventFromYourLocation" in c) return !!ctx.from && ctx.from === yourLoc;
+  if ("eventEnemyInPlay" in c) return !!ctx.enemy && g.s.cards[ctx.enemy]?.zone === "enemy";
+  if ("enemyNearby" in c) {
+    if (!yourLoc) return false;
+    const d = distances(g, yourLoc);
+    return enemies(g).some((e) => !!e.location && (d.get(e.location) ?? Infinity) <= c.enemyNearby.range && (!c.enemyNearby.nonElite || !isElite(g, e.id)));
+  }
+  if ("defeatedHealthThisTurn" in c) return !!you && inv(g, you).defeatedHealth >= c.defeatedHealthThisTurn.min;
   if ("controlled" in c) return !!ctx.source && !!card(g, ctx.source).controller === c.controlled;
   if ("exhausted" in c) return !!ctx.source && card(g, ctx.source).exhausted === c.exhausted;
   return false;

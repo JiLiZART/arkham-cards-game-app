@@ -16,6 +16,10 @@ export function preyCandidates(g: G, enemy: InstId, candidates: InvId[]): InvId[
     const owner = card(g, enemy).owner;
     return owner && candidates.includes(owner) ? [owner] : candidates;
   }
+  if ("only" in prey) {
+    const only = candidates.filter((i) => card(g, inv(g, i).cardId).code === prey.only);
+    return only.length ? only : candidates;
+  }
   const [dir, stat] = "highest" in prey ? [1, prey.highest] : [-1, prey.lowest];
   const val = (i: InvId) => {
     switch (stat) {
@@ -104,6 +108,7 @@ export const resolveAttackHandler: Handler<"ResolveAttack"> = (g, step) => {
   if (!e || e.zone !== "enemy" || inv(g, step.inv).status !== "playing") return;
   if (g.s.cancelled.includes(step.key)) {
     emit(g, "attackCancelled", `${def(g, step.enemy).name}'s attack is cancelled`, { card: step.enemy });
+    push(g, win("enemyAttacked", { inv: step.inv, enemy: step.enemy }));
     return;
   }
   if (!isElite(g, step.enemy) && hasFlag(g, step.inv, "nonEliteCannotAttack")) return;
@@ -136,9 +141,22 @@ export function attacksOfOpportunity(g: G, i: InvId): Step[] {
 export const damageEnemyHandler: Handler<"DamageEnemy"> = (g, step) => {
   const e = g.s.cards[step.enemy];
   if (!e || e.zone !== "enemy" || step.amount <= 0) return;
-  e.damage += step.amount;
-  emit(g, "enemyDamage", `${def(g, step.enemy).name} takes ${step.amount} damage (${e.damage}/${enemyStat(g, step.enemy, "health")})`, { card: step.enemy, data: { amount: step.amount } });
-  if (e.damage >= enemyStat(g, step.enemy, "health")) push(g, { t: "DefeatEnemy", enemy: step.enemy, by: step.by });
+  // what an investigator deals can grow, or be capped, before it is placed (Nathaniel Cho, Tommy Malloy)
+  if (step.by && !step.windowed) {
+    const key = step.key ?? `dmg${g.s.seq++}`;
+    push(g, win("dealDamage", { inv: step.by, enemy: step.enemy, card: step.source ?? null, key, amount: step.amount }), { ...step, key, windowed: true });
+    return;
+  }
+  let amount = step.amount + ((g.s.flags[`damageBonus:${step.key}`] as number | undefined) ?? 0);
+  delete g.s.flags[`damageBonus:${step.key}`];
+  if (hasFlag(g, step.enemy, "damageCapOne")) amount = Math.min(amount, 1);
+  const health = enemyStat(g, step.enemy, "health");
+  const excess = e.damage + amount - health;
+  e.damage += amount;
+  emit(g, "enemyDamage", `${def(g, step.enemy).name} takes ${amount} damage (${e.damage}/${health})`, { card: step.enemy, data: { amount } });
+  if (e.damage >= health) {
+    push(g, ...(excess > 0 && step.by ? [win("excessDamage", { inv: step.by, enemy: step.enemy, amount: excess })] : []), { t: "DefeatEnemy", enemy: step.enemy, by: step.by });
+  }
 };
 
 export const defeatEnemyHandler: Handler<"DefeatEnemy"> = (g, step) => {
@@ -150,6 +168,7 @@ export const defeatEnemyHandler: Handler<"DefeatEnemy"> = (g, step) => {
     return;
   }
   const d = def(g, step.enemy);
+  if (step.by && g.s.invs[step.by]) g.s.invs[step.by].defeatedHealth += d.enemy?.health ?? 0;
   emit(g, "enemyDefeated", `${d.name} is defeated${step.by ? ` by ${invName(g, step.by)}` : ""}`, { card: step.enemy, inv: step.by, data: { by: step.by ?? null } });
   if (d.victory !== undefined) moveCard(g, step.enemy, "victory");
   else moveCard(g, step.enemy, e.owner ? "discard" : "encounterDiscard");
@@ -207,7 +226,9 @@ export const enemyAttacksHandler: Handler<"EnemyAttacks"> = (g, step) => {
       const key = `${i}|${e.id}`;
       if (done.includes(key) || e.exhausted) continue;
       if (!done.length) logStep(g, "attacks");
-      push(g, { t: "EnemyAttack", enemy: e.id, inv: i, aoo: false, key: attackKey(g) }, { ...step, choice: undefined, done: [...done, key] });
+      // the chart's player window follows the last of an investigator's attacks
+      const more = engagedWith(g, i).some((x) => x.id !== e.id && !x.exhausted && !done.includes(`${i}|${x.id}`));
+      push(g, { t: "EnemyAttack", enemy: e.id, inv: i, aoo: false, key: attackKey(g) }, ...(more ? [] : [win("playerWindow", { phase: "enemy", inv: i })]), { ...step, choice: undefined, done: [...done, key] });
       return;
     }
   }

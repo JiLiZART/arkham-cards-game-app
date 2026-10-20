@@ -1,4 +1,170 @@
 {
+  "60101": {
+    "abilities": [
+      {
+        "kind": "reaction",
+        "trigger": "dealDamage",
+        "label": "Nathaniel Cho: deal 1 additional damage",
+        "limit": {
+          "per": "phase",
+          "count": 1
+        },
+        "condition": {
+          "eventSource": {
+            "type": "event"
+          }
+        },
+        "effects": [
+          {
+            "op": "addDamage",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "kind": "elderSign",
+        "tokenValue": 1,
+        "effects": [
+          {
+            "op": "chooseOne",
+            "options": [
+              {
+                "label": "Return an event from your discard pile to your hand",
+                "condition": {
+                  "testKind": "fight"
+                },
+                "effects": [
+                  {
+                    "op": "takeFromDiscard",
+                    "filter": {
+                      "type": "event"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "60102": {
+    "abilities": [
+      {
+        "kind": "reaction",
+        "trigger": "enterPlay",
+        "label": "Randall Cho: heal 3 damage or play a Weapon",
+        "effects": [
+          {
+            "op": "chooseOne",
+            "options": [
+              {
+                "label": "Heal 3 damage",
+                "effects": [
+                  {
+                    "op": "heal",
+                    "damage": 3
+                  }
+                ]
+              },
+              {
+                "label": "Search your deck and discard pile for a Weapon asset and play it",
+                "effects": [
+                  {
+                    "op": "searchAndPlay",
+                    "filter": {
+                      "type": "asset",
+                      "trait": "Weapon"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "60103": {
+    "prey": {
+      "only": "60101"
+    },
+    "abilities": [
+      {
+        "kind": "constant",
+        "modifiers": [
+          {
+            "flag": "damageCapOne",
+            "scope": "self"
+          }
+        ]
+      }
+    ]
+  },
+  "60104": {
+    "abilities": [
+      {
+        "kind": "revelation",
+        "effects": [
+          {
+            "op": "putInThreatArea"
+          }
+        ]
+      },
+      {
+        "kind": "forced",
+        "trigger": "dealDamage",
+        "effects": [
+          {
+            "op": "takeDamage",
+            "amount": 1
+          }
+        ]
+      },
+      {
+        "kind": "action",
+        "actionCost": 2,
+        "label": "Discard Self-Destructive",
+        "effects": [
+          {
+            "op": "discardSelf"
+          }
+        ]
+      }
+    ]
+  },
+  "60105": {
+    "abilities": [
+      {
+        "kind": "constant",
+        "modifiers": [
+          {
+            "stat": "combat",
+            "value": 1,
+            "when": "fighting"
+          }
+        ]
+      },
+      {
+        "kind": "reaction",
+        "trigger": "enemyDefeated",
+        "label": "Boxing Gloves: search the top 6 for a Spirit event",
+        "cost": {
+          "exhaust": true
+        },
+        "effects": [
+          {
+            "op": "searchDeck",
+            "top": 6,
+            "filter": {
+              "type": "event",
+              "trait": "Spirit"
+            }
+          }
+        ]
+      }
+    ]
+  },
   "60106": {
     "discardWhenEmpty": false,
     "abilities": [
@@ -16,6 +182,657 @@
             "op": "preventDamage",
             "amount": 1,
             "kind": "either"
+          }
+        ]
+      }
+    ]
+  },
+  "60107": {
+    "abilities": [
+      {
+        "kind": "constant",
+        "modifiers": [
+          {
+            "stat": "combat",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "kind": "reaction",
+        "trigger": "enemyDefeated",
+        "label": "Grete Wagner: deal 1 damage to her to discover 1 clue",
+        "cost": {
+          "exhaust": true,
+          "damageOnSelf": 1
+        },
+        "condition": {
+          "cluesOnYourLocation": "some"
+        },
+        "effects": [
+          {
+            "op": "discoverClues",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  "60109": {
+    "abilities": [
+      {
+        "kind": "reaction",
+        "trigger": "excessDamage",
+        "label": "Relentless: place the excess damage on it",
+        "cost": {
+          "exhaust": true
+        },
+        "effects": [
+          {
+            "op": "placeTokens",
+            "on": "self",
+            "damage": "X"
+          }
+        ]
+      },
+      {
+        "kind": "fast",
+        "label": "Relentless: discard to gain resources equal to its damage",
+        "effects": [
+          {
+            "op": "gainResources",
+            "amount": {
+              "onSelf": "damage"
+            }
+          },
+          {
+            "op": "discardSelf"
+          }
+        ]
+      }
+    ]
+  },
+  "60110": {
+    "abilities": [
+      {
+        "kind": "reaction",
+        "trigger": "enterLocation",
+        "usableBy": "anyone",
+        "label": "Safeguard: move to that location",
+        "cost": {
+          "exhaust": true
+        },
+        "condition": {
+          "all": [
+            {
+              "not": {
+                "eventInvestigatorIsYou": true
+              }
+            },
+            {
+              "eventFromYourLocation": true
+            }
+          ]
+        },
+        "effects": [
+          {
+            "op": "moveTo",
+            "where": "eventLocation"
+          }
+        ]
+      }
+    ]
+  },
+  "60111": {
+    "abilities": [
+      {
+        "kind": "onPlay",
+        "designator": "fight",
+        "condition": {
+          "enemyAtYourLocation": true
+        },
+        "effects": [
+          {
+            "op": "gainResources",
+            "amount": 2
+          },
+          {
+            "op": "fight"
+          }
+        ]
+      }
+    ]
+  },
+  "60112": {
+    "abilities": [
+      {
+        "kind": "reaction",
+        "fromHand": true,
+        "trigger": "enemyAttacked",
+        "condition": {
+          "eventInvestigatorIsYou": true
+        },
+        "effects": [
+          {
+            "op": "fight",
+            "target": "eventEnemy"
+          }
+        ]
+      }
+    ]
+  },
+  "60114": {
+    "abilities": [
+      {
+        "kind": "onPlay",
+        "designator": "fight",
+        "condition": {
+          "enemyNearby": {
+            "range": 1,
+            "nonElite": true
+          }
+        },
+        "effects": [
+          {
+            "op": "pullEnemy",
+            "range": 1,
+            "nonElite": true,
+            "then": [
+              {
+                "op": "fight",
+                "target": "eventEnemy"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "60115": {
+    "abilities": [
+      {
+        "kind": "reaction",
+        "fromHand": true,
+        "trigger": "enemyDefeated",
+        "effects": [
+          {
+            "op": "drawCards",
+            "amount": 2
+          }
+        ]
+      }
+    ]
+  },
+  "60116": {
+    "abilities": [
+      {
+        "kind": "onPlay",
+        "designator": "fight",
+        "condition": {
+          "enemyAtYourLocation": true
+        },
+        "effects": [
+          {
+            "op": "fight",
+            "damageBonus": 1
+          }
+        ]
+      }
+    ]
+  },
+  "60117": {
+    "abilities": [
+      {
+        "kind": "onPlay",
+        "designator": "fight",
+        "condition": {
+          "enemyAtYourLocation": true
+        },
+        "effects": [
+          {
+            "op": "fight",
+            "bonus": 1,
+            "onSuccess": [
+              {
+                "op": "chooseOne",
+                "options": [
+                  {
+                    "label": "Fight that enemy again",
+                    "condition": {
+                      "eventEnemyInPlay": true
+                    },
+                    "effects": [
+                      {
+                        "op": "fight",
+                        "target": "eventEnemy",
+                        "bonus": 2,
+                        "damageBonus": 1
+                      }
+                    ]
+                  },
+                  {
+                    "label": "Stop",
+                    "effects": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "60118": {
+    "abilities": [
+      {
+        "kind": "onPlay",
+        "effects": [
+          {
+            "op": "gainResources",
+            "amount": 2
+          },
+          {
+            "op": "gainResources",
+            "amount": 2,
+            "target": "chooseOtherAtLocation"
+          }
+        ]
+      }
+    ]
+  },
+  "60120": {
+    "abilities": [
+      {
+        "kind": "reaction",
+        "fromHand": true,
+        "trigger": "enemyDefeated",
+        "condition": {
+          "cluesOnYourLocation": "some"
+        },
+        "effects": [
+          {
+            "op": "chooseOne",
+            "options": [
+              {
+                "label": "Discover 2 clues",
+                "condition": {
+                  "defeatedHealthThisTurn": {
+                    "min": 4
+                  }
+                },
+                "effects": [
+                  {
+                    "op": "discoverClues",
+                    "amount": 2
+                  }
+                ]
+              },
+              {
+                "label": "Discover 1 clue",
+                "condition": {
+                  "not": {
+                    "defeatedHealthThisTurn": {
+                      "min": 4
+                    }
+                  }
+                },
+                "effects": [
+                  {
+                    "op": "discoverClues",
+                    "amount": 1
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "60121": {
+    "abilities": [
+      {
+        "kind": "onPlay",
+        "condition": {
+          "yourTurn": true
+        },
+        "effects": [
+          {
+            "op": "readyCard",
+            "filter": {
+              "type": "asset",
+              "faction": "guardian"
+            }
+          },
+          {
+            "op": "gainActions",
+            "amount": 1,
+            "onlyFor": "fight"
+          }
+        ]
+      }
+    ]
+  },
+  "60122": {
+    "abilities": [
+      {
+        "kind": "reaction",
+        "fromHand": true,
+        "trigger": "enemyAttacks",
+        "condition": {
+          "eventInvestigatorIsYou": true
+        },
+        "effects": [
+          {
+            "op": "fight",
+            "target": "eventEnemy",
+            "bonus": 2,
+            "damageBonus": 1
+          }
+        ]
+      }
+    ]
+  },
+  "60123": {
+    "abilities": [
+      {
+        "kind": "onPlay",
+        "designator": "fight",
+        "anyWindow": true,
+        "condition": {
+          "enemyNearby": {
+            "range": 2,
+            "nonElite": true
+          }
+        },
+        "effects": [
+          {
+            "op": "pullEnemy",
+            "range": 2,
+            "nonElite": true,
+            "then": [
+              {
+                "op": "fight",
+                "target": "eventEnemy"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "60124": {
+    "abilities": [
+      {
+        "kind": "reaction",
+        "fromHand": true,
+        "trigger": "damageTaken",
+        "condition": {
+          "all": [
+            {
+              "eventEnemy": {}
+            },
+            {
+              "cluesOnYourLocation": "some"
+            }
+          ]
+        },
+        "effects": [
+          {
+            "op": "discoverClues",
+            "amount": 2
+          }
+        ]
+      }
+    ]
+  },
+  "60125": {
+    "abilities": [
+      {
+        "kind": "onPlay",
+        "aoo": false,
+        "condition": {
+          "all": [
+            {
+              "firstAction": true
+            },
+            {
+              "engaged": true
+            }
+          ]
+        },
+        "effects": [
+          {
+            "op": "dealDamage",
+            "amount": 2,
+            "to": "chooseEngaged"
+          }
+        ]
+      }
+    ]
+  },
+  "60126": {
+    "maxCommitted": 1,
+    "abilities": [
+      {
+        "kind": "onPlay",
+        "condition": {
+          "succeededBy": {
+            "min": 2
+          }
+        },
+        "effects": [
+          {
+            "op": "drawCards",
+            "amount": 2
+          }
+        ]
+      },
+      {
+        "kind": "onPlay",
+        "condition": {
+          "all": [
+            {
+              "succeededBy": {
+                "min": 0
+              }
+            },
+            {
+              "not": {
+                "succeededBy": {
+                  "min": 2
+                }
+              }
+            }
+          ]
+        },
+        "effects": [
+          {
+            "op": "drawCards",
+            "amount": 1
+          }
+        ]
+      }
+    ]
+  },
+  "60127": {
+    "abilities": [
+      {
+        "kind": "constant",
+        "modifiers": [
+          {
+            "stat": "combat",
+            "value": 2,
+            "when": "fighting"
+          }
+        ]
+      },
+      {
+        "kind": "reaction",
+        "trigger": "enemyDefeated",
+        "label": "Boxing Gloves: search the top 9 for a Spirit event",
+        "cost": {
+          "exhaust": true
+        },
+        "effects": [
+          {
+            "op": "searchDeck",
+            "top": 9,
+            "filter": {
+              "type": "event",
+              "trait": "Spirit"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "60128": {
+    "abilities": [
+      {
+        "kind": "constant",
+        "modifiers": [
+          {
+            "stat": "combat",
+            "value": 1
+          },
+          {
+            "stat": "intellect",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "kind": "reaction",
+        "trigger": "enemyDefeated",
+        "label": "Grete Wagner: deal 1 damage to her to discover 1 clue",
+        "cost": {
+          "exhaust": true,
+          "damageOnSelf": 1
+        },
+        "effects": [
+          {
+            "op": "discoverClues",
+            "amount": 1,
+            "at": "yourOrConnecting"
+          }
+        ]
+      }
+    ]
+  },
+  "60129": {
+    "script": true
+  },
+  "60130": {
+    "abilities": [
+      {
+        "kind": "onPlay",
+        "anyWindow": true,
+        "condition": {
+          "enemyAtYourLocation": true
+        },
+        "effects": [
+          {
+            "op": "engageAny",
+            "each": [
+              {
+                "op": "dealDamage",
+                "amount": 1,
+                "to": "eventEnemy"
+              },
+              {
+                "op": "drawCards",
+                "amount": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "60131": {
+    "replenish": "round",
+    "abilities": [
+      {
+        "kind": "fast",
+        "label": "Physical Training: +1 willpower",
+        "cost": {
+          "resourcesOrUses": 1
+        },
+        "condition": {
+          "yourSkillTest": true
+        },
+        "effects": [
+          {
+            "op": "modify",
+            "mod": {
+              "stat": "willpower",
+              "value": 1
+            },
+            "until": "test"
+          }
+        ]
+      },
+      {
+        "kind": "fast",
+        "label": "Physical Training: +1 combat",
+        "cost": {
+          "resourcesOrUses": 1
+        },
+        "condition": {
+          "yourSkillTest": true
+        },
+        "effects": [
+          {
+            "op": "modify",
+            "mod": {
+              "stat": "combat",
+              "value": 1
+            },
+            "until": "test"
+          }
+        ]
+      }
+    ]
+  },
+  "60132": {
+    "abilities": [
+      {
+        "kind": "onPlay",
+        "designator": "fight",
+        "condition": {
+          "enemyAtYourLocation": true
+        },
+        "effects": [
+          {
+            "op": "fight",
+            "auto": true,
+            "damageBonus": 1,
+            "onSuccess": [
+              {
+                "op": "chooseOne",
+                "options": [
+                  {
+                    "label": "Fight that enemy again",
+                    "condition": {
+                      "eventEnemyInPlay": true
+                    },
+                    "effects": [
+                      {
+                        "op": "fight",
+                        "target": "eventEnemy",
+                        "bonus": 3,
+                        "damageBonus": 2
+                      }
+                    ]
+                  },
+                  {
+                    "label": "Stop",
+                    "effects": []
+                  }
+                ]
+              }
+            ]
           }
         ]
       }

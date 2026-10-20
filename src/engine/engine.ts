@@ -14,7 +14,7 @@ import { allEliminated, finishRevelation, handlers as scenarioHandlers, nextAct,
 import { handlers as testHandlers, startTest } from "./rules/skillTest";
 import type { Action, ChoiceOption, ContentDb, EffCtx, GameEvent, GameSetup, GameState, InstId, Step } from "./types";
 
-export const ENGINE_VERSION = 3;
+export const ENGINE_VERSION = 4;
 
 // ---------- internal script functions (code "__engine") ----------
 const ENGINE_FNS: Record<string, (g: G, ctx: EffCtx, step: Step) => void> = {
@@ -193,7 +193,7 @@ export function createGame(db: ContentDb, setup: GameSetup): Result {
     s.invs[x.code] = {
       id: x.code, cardId, name: db.cards[x.code].name, deck: [], hand: [], discard: [], location: null,
       damage: x.physicalTrauma ?? 0, horror: x.mentalTrauma ?? 0, clues: 0, resources: 5, actionsLeft: 0,
-      restrictedActions: [], actionsThisRound: [], status: "playing", turnDone: false, physicalTrauma: 0, mentalTrauma: 0, player,
+      restrictedActions: [], actionsThisRound: [], actionsTaken: 0, defeatedHealth: 0, status: "playing", turnDone: false, physicalTrauma: 0, mentalTrauma: 0, player,
     };
     for (const code of x.deck) createCard(g, code, "deck", x.code);
   });

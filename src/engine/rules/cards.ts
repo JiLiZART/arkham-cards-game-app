@@ -34,6 +34,7 @@ export function canPay(g: G, i: InvId, cardId: InstId, cost: Cost | undefined): 
   if (cost.exhaust && c.exhausted) return false;
   if (cost.uses && c.uses < cost.uses) return false;
   if (cost.resources && me.resources < cost.resources) return false;
+  if (cost.resourcesOrUses && c.uses < cost.resourcesOrUses && me.resources < cost.resourcesOrUses) return false;
   if (cost.clues && (me.clues < cost.clues || hasFlag(g, i, "cannotSpendClues"))) return false;
   if (cost.cluesPerInvestigator) {
     const total = activeInvs(g).reduce((n, x) => n + inv(g, x).clues, 0);
@@ -51,6 +52,10 @@ function payCost(g: G, i: InvId, cardId: InstId, cost: Cost | undefined) {
   if (cost.exhaust) c.exhausted = true;
   if (cost.uses) c.uses -= cost.uses;
   if (cost.resources) me.resources -= cost.resources;
+  if (cost.resourcesOrUses) {
+    if (c.uses >= cost.resourcesOrUses) c.uses -= cost.resourcesOrUses; // ponytail: the card first; a prompt if a card ever wants the pool spent first
+    else me.resources -= cost.resourcesOrUses;
+  }
   if (cost.clues) me.clues -= cost.clues;
   if (cost.cluesPerInvestigator) spendGroupClues(g, cost.cluesPerInvestigator * playerCount(g));
   if (cost.takeDamage) push(g, { t: "AssignDamage", inv: i, damage: cost.takeDamage, horror: 0, direct: true, source: cardId });
@@ -135,7 +140,7 @@ function triggerMatches(g: G, cardId: InstId, a: Ability, you: InvId | null, dat
 export function ctxFor(data: EventData, source: InstId, you: InvId | null): EffCtx {
   return {
     source, you, inv: data.inv ?? null, enemy: data.enemy ?? null, location: data.location ?? null, key: data.key, card: data.card ?? null,
-    token: data.token, testId: data.testId, failBy: data.margin !== undefined && data.margin < 0 ? -data.margin : undefined,
+    from: data.from, token: data.token, testId: data.testId, failBy: data.margin !== undefined && data.margin < 0 ? -data.margin : undefined,
     succeedBy: data.margin !== undefined && data.margin >= 0 ? data.margin : undefined, x: data.amount,
     dealt: data.damage !== undefined || data.horror !== undefined ? [data.damage ?? 0, data.horror ?? 0] : undefined,
   };
@@ -166,6 +171,20 @@ function triggered(g: G, trigger: Trigger, data: EventData): AbilityRef[] {
     }
   }
   for (const i of activeInvs(g)) for (const h of inv(g, i).hand) consider(h, i, true);
+  if (trigger === "playerWindow") {
+    // fast events printed "play during any [fast] window" (ADR-0014)
+    for (const i of activeInvs(g)) {
+      for (const h of inv(g, i).hand) {
+        const a = abilitiesOf(g, h, blanked).findIndex((x) => x.kind === "onPlay" && x.anyWindow);
+        if (a < 0) continue;
+        const ab = abilitiesOf(g, h, blanked)[a];
+        if (def(g, h).type !== "event" || !def(g, h).keywords.includes("fast")) continue;
+        if (hasFlag(g, i, "cannotPlayAssetsOrEvents") || inv(g, i).resources < playCost(g, i, h)) continue;
+        if (ab.condition && !checkCondition(g, ab.condition, { source: h, you: i })) continue;
+        out.push({ card: h, index: a, ability: ab, controller: i });
+      }
+    }
+  }
   return out;
 }
 
@@ -182,15 +201,15 @@ export const windowHandler: Handler<"Window"> = (g, step) => {
     return;
   }
   const offered = step.offered ?? [];
-  const reactions = refs.filter((r) => r.ability.kind === "reaction" && !offered.includes(`${r.card}:${r.index}`));
+  const reactions = refs.filter((r) => (r.ability.kind === "reaction" || r.ability.anyWindow) && !offered.includes(`${r.card}:${r.index}`));
   if (reactions.length === 0) return;
   const who = reactions[0].controller;
   const mine = reactions.filter((r) => r.controller === who);
   const opts = [
-    ...mine.map((r) => ({ id: `${r.card}:${r.index}`, label: r.ability.label ?? `${def(g, r.card).name}${r.ability.fromHand ? " (play)" : ""}`, card: r.card, value: `${r.card}:${r.index}` })),
+    ...mine.map((r) => ({ id: `${r.card}:${r.index}`, label: r.ability.label ?? `${def(g, r.card).name}${r.ability.fromHand || r.ability.anyWindow ? " (play)" : ""}`, card: r.card, value: `${r.card}:${r.index}` })),
     { id: "pass", label: "Pass", value: "pass" },
   ];
-  const pick = ask<string>(g, step, who, "reaction", `${invName(g, who)}: use a reaction? (${step.trigger})`, opts, { key: "reaction" });
+  const pick = ask<string>(g, step, who, "reaction", `${invName(g, who)}: use a reaction? (${step.trigger})`, opts, { key: step.trigger === "playerWindow" ? "playerWindow" : "reaction" });
   if (pick === undefined) return;
   if (pick === "pass") {
     push(g, { ...step, choice: undefined, offered: [...offered, ...mine.map((r) => `${r.card}:${r.index}`)] });
@@ -199,7 +218,7 @@ export const windowHandler: Handler<"Window"> = (g, step) => {
   const r = mine.find((x) => `${x.card}:${x.index}` === pick)!;
   push(
     g,
-    r.ability.fromHand
+    r.ability.fromHand || r.ability.anyWindow
       ? { t: "PlayCard", inv: who, card: r.card, ctx: ctxFor(step.data, r.card, who), viaTrigger: true }
       : { t: "UseAbility", inv: who, card: r.card, index: r.index, ctx: ctxFor(step.data, r.card, who) },
     { ...step, choice: undefined, offered: [...offered, pick] },
@@ -233,6 +252,8 @@ export const useAbilityHandler: Handler<"UseAbility"> = (g, step) => {
   emit(g, "ability", `${invName(g, step.inv)} uses ${a.label ?? def(g, step.card).name}`, { inv: step.inv, card: step.card });
   // an asset whose last use this spent leaves play once the ability has resolved (its own modifiers still apply)
   const after: Step[] = !step.paid && a.cost?.uses ? [{ t: "DiscardIfEmpty", card: step.card }] : [];
+  // a cost that puts damage or horror on the asset itself can defeat it
+  if (!step.paid && (a.cost?.damageOnSelf || a.cost?.horrorOnSelf)) after.push({ t: "Script", code: "__engine", fn: "assetDefeatCheck", ctx: { you: step.inv } });
   if (a.run) push(g, { t: "Script", code: card(g, step.card).code, fn: a.run, ctx }, ...after);
   else if (a.effects) push(g, { t: "Effects", effects: a.effects, ctx }, ...after);
   else push(g, ...after);
@@ -270,7 +291,7 @@ export function playCost(g: G, i: InvId, cardId: InstId): number {
   return Math.max(0, cost);
 }
 
-const playAbility = (g: G, cardId: InstId) => abilitiesOf(g, cardId).find((a) => a.kind === "onPlay");
+export const playAbility = (g: G, cardId: InstId) => abilitiesOf(g, cardId).find((a) => a.kind === "onPlay");
 
 /** can the card be played from hand now, as an action (fast=false) or fast */
 export function canPlay(g: G, i: InvId, cardId: InstId, asFast: boolean): boolean {
@@ -303,7 +324,7 @@ export const playCardHandler: Handler<"PlayCard"> = (g, step) => {
   // event
   moveCard(g, step.card, "resolving");
   c.controller = step.inv;
-  const a = step.viaTrigger ? abilitiesOf(g, step.card).find((x) => x.fromHand) : playAbility(g, step.card);
+  const a = step.viaTrigger ? abilitiesOf(g, step.card).find((x) => x.fromHand) ?? playAbility(g, step.card) : playAbility(g, step.card);
   const after: Step = { t: "Script", code: "__engine", fn: "finishEvent", ctx: { source: step.card, you: step.inv } };
   if (a?.run) push(g, { t: "Script", code: c.code, fn: a.run, ctx }, after, win("cardPlayed", { inv: step.inv, card: step.card }));
   else push(g, { t: "Effects", effects: a?.effects ?? [], ctx }, after, win("cardPlayed", { inv: step.inv, card: step.card }));

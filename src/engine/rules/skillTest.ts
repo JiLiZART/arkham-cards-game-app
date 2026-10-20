@@ -29,6 +29,7 @@ export interface TestOpts {
   after?: { code: string; fn: string };
   onTokens?: { tokens: string[]; effects: Effect[] };
   marginDamage?: number;
+  autoSucceed?: boolean;
   ctx: EffCtx;
 }
 
@@ -49,7 +50,7 @@ export function startTest(g: G, o: TestOpts) {
     tokens: [],
     tokenMods: [],
     autoFail: false,
-    autoSucceed: false,
+    autoSucceed: !!o.autoSucceed,
     skillBonus: o.skillBonus ?? 0,
     damageBonus: o.damageBonus ?? 0,
     shroudMod: o.shroudMod ?? 0,
@@ -329,7 +330,7 @@ function kindResultStage(g: G) {
       steps.push(win("locationInvestigated", { location: t.target, inv: null }));
     }
     if (t.kind === "fight" && t.target) {
-      steps.push({ t: "DamageEnemy", enemy: t.target, amount: 1 + t.damageBonus + modSum(g, t.inv, "attackDamage") + (t.marginDamage !== undefined && (t.margin ?? 0) >= t.marginDamage ? 1 : 0), by: t.inv, attack: true });
+      steps.push({ t: "DamageEnemy", enemy: t.target, amount: 1 + t.damageBonus + modSum(g, t.inv, "attackDamage") + (t.marginDamage !== undefined && (t.margin ?? 0) >= t.marginDamage ? 1 : 0), by: t.inv, attack: true, source: t.source });
     }
     if (t.kind === "evade" && t.target) {
       const e = g.s.cards[t.target];

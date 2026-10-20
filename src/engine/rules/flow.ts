@@ -4,7 +4,7 @@ import {
   isMassive, modSum, push, threatArea, type G,
 } from "../core";
 import type { ChoiceOption, InvId, Step, TurnAction } from "../types";
-import { activatable, canPlay, win } from "./cards";
+import { activatable, canPlay, playAbility, win } from "./cards";
 import { attacksOfOpportunity } from "./enemies";
 import { canMoveTo, checkEngagement } from "./investigators";
 import { actClueCost } from "./scenario";
@@ -24,6 +24,7 @@ export const startRoundHandler: Handler<"StartRound"> = (g) => {
   g.s.round++;
   g.s.counters.round++;
   for (const i of Object.values(g.s.invs)) i.actionsThisRound = [];
+  for (const c of cardsIn(g, "play")) if (def(g, c.id).replenish === "round" && def(g, c.id).uses) c.uses = def(g, c.id).uses!.count;
   const paced = (phase: Extract<Step, { t: "PhasePause" }>["phase"], step: Step): Step[] => (g.s.pacePhases ? [{ t: "PhasePause", phase }, step] : [step]);
   push(g,
     ...(g.s.round > 1 ? paced("mythos", { t: "MythosPhase" }) : []), ...paced("investigation", { t: "InvestigationPhase" }), ...paced("enemy", { t: "EnemyPhase" }),
@@ -45,7 +46,7 @@ export const mythosHandler: Handler<"MythosPhase"> = (g) => {
     steps.push({ t: "PlaceDoom", card: g.s.agenda, n: 1 }, { t: "CheckDoom" });
   }
   for (const i of g.s.order) steps.push({ t: "MythosDraw", inv: i });
-  steps.push(win("mythosEnds", {}));
+  steps.push(win("playerWindow", { phase: "mythos" }), win("mythosEnds", {}));
   push(g, ...steps);
 };
 
@@ -58,7 +59,7 @@ export const mythosDrawHandler: Handler<"MythosDraw"> = (g, step) => {
 export const investigationHandler: Handler<"InvestigationPhase"> = (g) => {
   beginPhase(g, "investigation");
   for (const i of Object.values(g.s.invs)) i.turnDone = false;
-  push(g, win("phaseBegins", { phase: "investigation" }), { t: "NextTurn" });
+  push(g, win("phaseBegins", { phase: "investigation" }), win("playerWindow", { phase: "investigation" }), { t: "NextTurn" });
 };
 
 /** players choose who takes the next turn (lead decides) */
@@ -71,12 +72,14 @@ export const nextTurnHandler: Handler<"NextTurn"> = (g, step) => {
   const me = inv(g, who);
   g.s.active = who;
   g.s.counters.turn++;
+  me.actionsTaken = 0;
+  for (const x of Object.values(g.s.invs)) x.defeatedHealth = 0;
   me.actionsLeft = 3 + modSum(g, who, "additionalActions", allMods(g).filter((m) => !m.mod.filter));
   me.restrictedActions = allMods(g)
     .filter((m) => m.target === who && m.mod.stat === "additionalActions" && m.mod.filter?.trait)
     .map((m) => ({ trait: String(m.mod.filter!.trait), left: m.mod.value ?? 1 }));
   emit(g, "turn", `${me.name}'s turn`, { inv: who });
-  push(g, win("turnBegins", { inv: who }), { t: "Turn", inv: who }, { t: "NextTurn" });
+  push(g, win("turnBegins", { inv: who }), win("playerWindow", { phase: "investigation", inv: who }), { t: "Turn", inv: who }, { t: "NextTurn" });
 };
 
 // ---------- actions ----------
@@ -99,16 +102,28 @@ function designatorOf(g: G, a: TurnAction): string {
       const ab = abilitiesOfCard(g, a.card)[a.index];
       return ab?.designator ?? "ability";
     }
+    case "play":
+      return playAbility(g, a.card)?.designator ?? "play";
     default:
       return a.kind;
   }
 }
 
+/** the ability an action uses, if it is one or plays an event (for what the ability says about itself) */
+function abilityOfAction(g: G, a: TurnAction) {
+  return a.kind === "ability" ? abilitiesOfCard(g, a.card)[a.index] : a.kind === "play" ? playAbility(g, a.card) : undefined;
+}
+
 /** actions available (counting restricted actions usable for this card) */
-function actionsFor(g: G, i: InvId, cardId: string | null) {
+function actionsFor(g: G, i: InvId, cardId: string | null, designator: string) {
   const me = inv(g, i);
-  const restricted = cardId ? me.restrictedActions.filter((r) => r.left > 0 && def(g, cardId).traits.includes(r.trait)).reduce((n, r) => n + r.left, 0) : 0;
+  const restricted = me.restrictedActions.filter((r) => restrictedFits(g, r, cardId, designator)).reduce((n, r) => n + r.left, 0);
   return me.actionsLeft + restricted;
+}
+
+/** an extra action restricted to a trait of the card used (Daisy: Tome) or to a kind of action (Galvanize: fight) */
+function restrictedFits(g: G, r: { trait?: string; designator?: string; left: number }, cardId: string | null, designator: string) {
+  return r.left > 0 && ((!!r.trait && !!cardId && def(g, cardId).traits.includes(r.trait)) || (!!r.designator && r.designator === designator));
 }
 
 export function actionCost(g: G, i: InvId, a: TurnAction): number {
@@ -135,7 +150,7 @@ export function legalTurnActions(g: G, i: InvId): ChoiceOption[] {
   const add = (a: TurnAction, label: string, cardId?: string) => {
     const cost = actionCost(g, i, a);
     const cardForRestricted = a.kind === "ability" ? a.card : a.kind === "play" ? a.card : null;
-    if (cost > actionsFor(g, i, cardForRestricted)) return;
+    if (cost > actionsFor(g, i, cardForRestricted, designatorOf(g, a))) return;
     const id = JSON.stringify(a);
     out.push({ id, label: cost > 1 ? `${label} [${cost} actions]` : label, card: cardId, value: a });
   };
@@ -207,19 +222,20 @@ export const performActionHandler: Handler<"PerformAction"> = (g, step) => {
   // spend actions (restricted actions first when they apply)
   let left = cost;
   const cardId = a.kind === "ability" || a.kind === "play" ? a.card : null;
-  if (cardId) {
-    for (const r of me.restrictedActions) {
-      if (left > 0 && r.left > 0 && def(g, cardId).traits.includes(r.trait)) {
-        const n = Math.min(left, r.left);
-        r.left -= n;
-        left -= n;
-      }
+  for (const r of me.restrictedActions) {
+    if (left > 0 && restrictedFits(g, r, cardId, designator)) {
+      const n = Math.min(left, r.left);
+      r.left -= n;
+      left -= n;
     }
   }
   me.actionsLeft -= left;
-  if (cost > 0) me.actionsThisRound.push(designator);
+  if (cost > 0) {
+    me.actionsThisRound.push(designator);
+    me.actionsTaken++;
+  }
   const steps: Step[] = [];
-  if (cost > 0 && !NO_AOO.includes(designator)) steps.push(...attacksOfOpportunity(g, i));
+  if (cost > 0 && !NO_AOO.includes(designator) && abilityOfAction(g, a)?.aoo !== false) steps.push(...attacksOfOpportunity(g, i));
   const ctx = { you: i, inv: i };
   switch (a.kind) {
     case "investigate": {
@@ -275,7 +291,7 @@ export function basicInvestigate(g: G, i: InvId, loc: string, extra: { bonus?: n
 export const enemyPhaseHandler: Handler<"EnemyPhase"> = (g) => {
   if (g.s.phase === "ended") return;
   beginPhase(g, "enemy");
-  push(g, win("phaseBegins", { phase: "enemy" }), { t: "HunterMoves" }, { t: "EnemyAttacks" }, win("enemyPhaseEnds", {}));
+  push(g, win("phaseBegins", { phase: "enemy" }), { t: "HunterMoves" }, win("playerWindow", { phase: "enemy" }), { t: "EnemyAttacks" }, win("enemyPhaseEnds", {}));
 };
 
 // ---------- upkeep ----------
@@ -285,7 +301,7 @@ export const upkeepHandler: Handler<"UpkeepPhase"> = (g) => {
   for (const c of Object.values(g.s.cards)) if (["play", "enemy", "location", "attached", "investigator", "threat"].includes(c.zone)) c.exhausted = false;
   emit(g, "ready", "All exhausted cards are readied");
   logStep(g, "upkeep");
-  const steps: Step[] = [win("phaseBegins", { phase: "upkeep" })];
+  const steps: Step[] = [win("phaseBegins", { phase: "upkeep" }), win("playerWindow", { phase: "upkeep" })];
   // readied enemies at an investigator's location engage
   for (const i of activeInvs(g)) steps.push({ t: "Script", code: "__engine", fn: "checkEngagement", ctx: { inv: i } });
   for (const i of g.s.order) {

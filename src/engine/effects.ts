@@ -5,7 +5,7 @@ import {
   addTempMod, type G,
 } from "./core";
 import { randInt, shuffle } from "./rng";
-import { win } from "./rules/cards";
+import { playCost, win } from "./rules/cards";
 import { basicInvestigate } from "./rules/flow";
 import { startTest } from "./rules/skillTest";
 import type { EffCtx, InstId, InvId, Step } from "./types";
@@ -14,7 +14,7 @@ type EffStep = Extract<Step, { t: "Eff" }>;
 
 function amt(g: G, a: Amount, ctx: EffCtx): number {
   if (typeof a === "number") return a;
-  if (typeof a === "object") return a.perInvestigator * playerCount(g);
+  if (typeof a === "object") return "onSelf" in a ? (ctx.source ? g.s.cards[ctx.source]?.[a.onSelf] ?? 0 : 0) : a.perInvestigator * playerCount(g);
   if (a === "failBy") return ctx.failBy ?? 0;
   if (a === "succeedBy") return ctx.succeedBy ?? 0;
   if (a === "X") return ctx.x ?? 0;
@@ -32,8 +32,9 @@ function invTargets(g: G, step: EffStep, t: InvTarget | undefined, ctx: EffCtx):
     case "each": return activeInvs(g);
     case "eachAtLocation": return invsAt(g, inv(g, you).location);
     case "eventInvestigator": return ctx.inv ? [ctx.inv] : [];
+    case "chooseOtherAtLocation":
     case "chooseAtLocation": {
-      const here = invsAt(g, inv(g, you).location);
+      const here = invsAt(g, inv(g, you).location).filter((i) => t === "chooseAtLocation" || i !== you);
       if (!here.length) return [];
       const pick = ask<InvId>(g, step, you, "target", "Choose an investigator", here.map((i) => ({ id: i, label: invName(g, i), card: inv(g, i).cardId, value: i })), { auto: true, key: "chooseInvestigator" });
       if (pick === undefined) return undefined;
@@ -67,6 +68,7 @@ function enemyTargets(g: G, step: EffStep, t: EnemyTarget, ctx: EffCtx): InstId[
     case "eventEnemy": return ctx.enemy && g.s.cards[ctx.enemy]?.zone === "enemy" ? [ctx.enemy] : [];
     case "eachAtLocation": return enemiesAt(g, loc).map((e) => e.id);
     case "chooseAtLocation": return choose(enemiesAt(g, loc).map((e) => e.id), "Choose an enemy at your location");
+    case "chooseEngaged": return choose(engagedWith(g, you!).map((e) => e.id), "Choose an enemy engaged with you");
     case "chooseExhaustedAtLocation": return choose(enemiesAt(g, loc).filter((e) => e.exhausted).map((e) => e.id), "Choose an exhausted enemy");
     case "nearestCultist": return choose(nearest(g, loc, (id) => def(g, id).traits.includes("Cultist")), "Choose the nearest Cultist enemy");
     case "nearestEnemy": return choose(nearest(g, loc, () => true), "Choose the nearest enemy");
@@ -104,7 +106,15 @@ export const effHandler = (g: G, step: EffStep) => {
       return;
     }
     case "discoverClues": {
-      const loc = e.at === "testLocation" ? ctx.location : inv(g, you).location;
+      let loc = e.at === "testLocation" ? ctx.location : inv(g, you).location;
+      if (e.at === "yourOrConnecting" && loc) {
+        const here = loc;
+        const cands = [here, ...connections(g, here)].filter((l) => card(g, l).clues > 0);
+        if (!cands.length) return;
+        const pick = ask<InstId>(g, step, you, "target", "Choose a location to discover a clue at", cands.map((l) => opt(g, l)), { auto: true, key: "chooseClueLocation" });
+        if (pick === undefined) return;
+        loc = pick;
+      }
       if (loc) push(g, { t: "DiscoverClues", inv: you, location: loc, n: amt(g, e.amount, ctx) });
       return;
     }
@@ -153,7 +163,12 @@ export const effHandler = (g: G, step: EffStep) => {
     case "dealDamage": {
       const ts = enemyTargets(g, step, e.to, ctx);
       if (!ts) return;
-      for (const id of ts) push(g, { t: "DamageEnemy", enemy: id, amount: amt(g, e.amount, ctx), by: ctx.you ?? null });
+      for (const id of ts) push(g, { t: "DamageEnemy", enemy: id, amount: amt(g, e.amount, ctx), by: ctx.you ?? null, source: ctx.source ?? null });
+      return;
+    }
+    case "addDamage": {
+      const k = `damageBonus:${ctx.key}`;
+      g.s.flags[k] = ((g.s.flags[k] as number | undefined) ?? 0) + e.amount;
       return;
     }
     case "placeDoom": {
@@ -175,7 +190,7 @@ export const effHandler = (g: G, step: EffStep) => {
       if (!src) return;
       src.clues += e.clues ?? 0;
       src.horror += e.horror ?? 0;
-      src.damage += e.damage ?? 0;
+      src.damage += e.damage === undefined ? 0 : amt(g, e.damage, ctx);
       src.doom += e.doom ?? 0;
       src.resources += e.resources ?? 0;
       if (e.resources) inv(g, you).resources -= e.resources;
@@ -229,13 +244,13 @@ export const effHandler = (g: G, step: EffStep) => {
       return;
     }
     case "fight": {
-      const ts = enemyTargets(g, step, "chooseAtLocation", ctx);
+      const ts = enemyTargets(g, step, e.target ?? "chooseAtLocation", ctx);
       if (!ts?.length) return;
       const fctx = { ...ctx, enemy: ts[0] };
       const extra = e.extraDamageIf && checkCondition(g, e.extraDamageIf, fctx) ? 1 : 0;
       startTest(g, {
         inv: you, skill: e.skill ?? "combat", kind: "fight", target: ts[0], source: ctx.source, skillBonus: e.bonus, damageBonus: (e.damageBonus ?? 0) + extra,
-        onSuccess: e.onSuccess, onFail: e.onFail, onTokens: e.onTokens, marginDamage: e.extraDamageIfSucceedBy, ctx: fctx,
+        onSuccess: e.onSuccess, onFail: e.onFail, onTokens: e.onTokens, marginDamage: e.extraDamageIfSucceedBy, autoSucceed: e.auto, ctx: fctx,
       });
       return;
     }
@@ -341,7 +356,8 @@ export const effHandler = (g: G, step: EffStep) => {
       push(g, { t: "DrawEncounter", inv: you });
       return;
     case "gainActions":
-      inv(g, you).actionsLeft += e.amount;
+      if (e.onlyFor) inv(g, you).restrictedActions.push({ designator: e.onlyFor, left: e.amount });
+      else inv(g, you).actionsLeft += e.amount;
       emit(g, "actions", `${invName(g, you)} gains ${e.amount} action(s)`, { inv: you, data: { n: e.amount } });
       return;
     case "cancel":
@@ -359,6 +375,7 @@ export const effHandler = (g: G, step: EffStep) => {
       if (e.where === "revealedNoEnemies") cands = locations(g).filter((l) => l.revealed && enemiesAt(g, l.id).length === 0).map((l) => l.id);
       if (e.where === "central") cands = locations(g).filter((l) => def(g, l.id).traits.includes("Central")).map((l) => l.id);
       if (e.where === "choose") cands = locations(g).map((l) => l.id);
+      if (e.where === "eventLocation" && ctx.location) cands = [ctx.location];
       cands = cands.filter((l) => l !== from);
       if (!cands.length) return;
       const pick = ask<InstId>(g, step, you, "target", "Choose a location to move to", cands.map((l) => opt(g, l)), { auto: true, key: "chooseMove" });
@@ -550,6 +567,54 @@ export const effHandler = (g: G, step: EffStep) => {
       if (!src || src.zone !== "enemy") return;
       src.damage = Math.max(0, src.damage - e.amount);
       emit(g, "heal", `${def(g, src.id).name} heals ${e.amount} damage`, { card: src.id, data: { damage: e.amount, horror: 0 } });
+      return;
+    }
+    case "pullEnemy": {
+      const loc = inv(g, you).location;
+      if (!loc) return;
+      const d = distances(g, loc);
+      const ids = enemies(g).filter((x) => !!x.location && (d.get(x.location) ?? Infinity) <= e.range && (!e.nonElite || !isElite(g, x.id))).map((x) => x.id);
+      if (!ids.length) return;
+      const pick = ask<InstId>(g, step, you, "target", "Choose an enemy to pull to your location", ids.map((id) => opt(g, id)), { auto: true, key: "chooseEnemyPull" });
+      if (pick === undefined) return;
+      const en = card(g, pick);
+      en.location = loc;
+      en.engagedWith = you;
+      emit(g, "engage", `${def(g, pick).name} is pulled to ${invName(g, you)} and engages them`, { inv: you, card: pick });
+      push(g, win("enemyEngages", { inv: you, enemy: pick }), { t: "Effects", effects: e.then, ctx: { ...ctx, enemy: pick } });
+      return;
+    }
+    case "engageAny": {
+      const done = e.done ?? [];
+      const ids = enemiesAt(g, inv(g, you).location).filter((x) => x.engagedWith !== you && !done.includes(x.id)).map((x) => x.id);
+      if (!ids.length) return;
+      const pick = ask<string>(g, step, you, "target", "Choose an enemy to engage", [...ids.map((id) => opt(g, id)), { id: "done", label: "Done", value: "done" }], { key: "chooseEnemyEngage" });
+      if (pick === undefined || pick === "done") return;
+      card(g, pick).engagedWith = you;
+      emit(g, "engage", `${invName(g, you)} engages ${def(g, pick).name}`, { inv: you, card: pick, data: { byInv: true } });
+      push(g, win("enemyEngages", { inv: you, enemy: pick }), { t: "Effects", effects: e.each, ctx: { ...ctx, enemy: pick } },
+        { ...step, choice: undefined, effect: { ...e, done: [...done, pick] } });
+      return;
+    }
+    case "readyCard": {
+      const ids = controlled(g, you).filter((c) => c.exhausted && matchesFilter(g, c.code, e.filter)).map((c) => c.id);
+      if (!ids.length) return;
+      const pick = ask<InstId>(g, step, you, "target", "Choose a card to ready", ids.map((id) => opt(g, id)), { auto: true, key: "chooseReady" });
+      if (pick === undefined) return;
+      card(g, pick).exhausted = false;
+      emit(g, "ready", `${def(g, pick).name} is readied`, { inv: you, card: pick });
+      return;
+    }
+    case "searchAndPlay": {
+      const me = inv(g, you);
+      const pool = [...me.deck, ...me.discard].filter((id) => matchesFilter(g, card(g, id).code, e.filter) && me.resources >= playCost(g, you, id));
+      const pick = ask<InstId | "none">(g, step, you, "generic", "Search your deck and discard pile", [...pool.map((id) => opt(g, id)), { id: "none", label: "Take nothing", value: "none" }], { key: "searchAndPlay" });
+      if (pick === undefined) return;
+      if (pick !== "none") {
+        emit(g, "search", `${me.name} plays ${def(g, pick).name} from their deck or discard pile`, { inv: you, card: pick });
+        push(g, { t: "PlayCard", inv: you, card: pick });
+      }
+      shuffle(g.s, me.deck);
       return;
     }
     case "script": {

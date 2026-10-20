@@ -21,6 +21,7 @@ function goal(db: ContentDb, r: Result, i: string): string | undefined {
 }
 export function botChoice(db: ContentDb, r: Result): string {
   const p = r.state.pending!;
+  if (p.promptKey === "playerWindow") return "pass"; // the bot plays no cards out of turn
   if (p.kind === "reaction") return p.options.find((o) => o.id !== "pass")?.id ?? "pass";
   if (p.kind === "turn") {
     // move toward unexplored locations when there's nothing to investigate here
