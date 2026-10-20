@@ -1,13 +1,29 @@
 import { describe, expect, it } from "vitest";
 import type { ChoiceOption } from "../../engine/types";
 import { abilitySymbol, stripAction } from "./ActionRail";
-import { pileIcon, stripCardWidth } from "./Panels";
+import { columnCardWidth, pileIcon, stripButtonsFor, stripOrder } from "./Panels";
 
-describe("strip card width", () => {
-  it("full size when there is room, smaller when crowded, never below the minimum", () => {
-    expect(stripCardWidth(980, 3, 0, 1)).toBe(124);
-    expect(stripCardWidth(980, 8, 1, 1)).toBeLessThan(124);
-    expect(stripCardWidth(300, 10, 2, 1)).toBe(84);
+describe("strip column card width", () => {
+  const ROOM = 520; // the column's height at 1600x900
+
+  it("full size when they all fit", () => {
+    expect(columnCardWidth(ROOM, 3, 0, 1)).toBe(92);
+  });
+
+  it("smaller when crowded, between the sizes", () => {
+    const w = columnCardWidth(ROOM, 4, 0, 1);
+    expect(w).toBeGreaterThan(72);
+    expect(w).toBeLessThan(92);
+    // what it chose does fit: four upright cards, three gaps and a divider with a gap each side
+    expect(4 * 1.4 * w + 3 * 8 + 2 * 8 + 14).toBeLessThanOrEqual(ROOM);
+  });
+
+  it("never below 72: past that the column scrolls", () => {
+    expect(columnCardWidth(ROOM, 10, 2, 1)).toBe(72);
+  });
+
+  it("an exhausted card lies sideways and takes only its width in height", () => {
+    expect(columnCardWidth(ROOM, 2, 2, 0)).toBeGreaterThan(columnCardWidth(ROOM, 4, 0, 0));
   });
 });
 
@@ -45,5 +61,38 @@ describe("encounter pile badges", () => {
     expect(pileIcon("r", false, game)).toBe("the_gathering");
     expect(pileIcon("r", true, game)).toBe("striking_fear");
     expect(pileIcon(null, true, game)).toBe("the_gathering");
+  });
+});
+
+describe("strip order", () => {
+  it("the engaged enemies and threat-area cards come first, then a divider, then the assets", () => {
+    expect(stripOrder(["a1", "a2"], ["t1", "e1"])).toEqual({ cards: ["t1", "e1", "a1", "a2"], dividerAt: 2 });
+  });
+
+  it("no divider when only one kind is in play", () => {
+    expect(stripOrder(["a1", "a2"], [])).toEqual({ cards: ["a1", "a2"], dividerAt: null });
+    expect(stripOrder([], ["e1"])).toEqual({ cards: ["e1"], dividerAt: null });
+  });
+});
+
+describe("which strip card shows its buttons", () => {
+  const opts = new Map([["a", [{ id: "x" }]], ["b", [{ id: "y" }, { id: "z" }]], ["c", []]]);
+
+  it("the hovered card, when it has options", () => {
+    expect(stripButtonsFor("b", null, opts)).toBe("b");
+  });
+
+  it("the focused card when nothing is hovered", () => {
+    expect(stripButtonsFor(null, "a", opts)).toBe("a");
+  });
+
+  it("hover wins over focus, one card at a time", () => {
+    expect(stripButtonsFor("b", "a", opts)).toBe("b");
+  });
+
+  it("none for a card with nothing to offer, or when nothing is hovered or focused", () => {
+    expect(stripButtonsFor("c", null, opts)).toBeNull();
+    expect(stripButtonsFor("zz", null, opts)).toBeNull();
+    expect(stripButtonsFor(null, null, opts)).toBeNull();
   });
 });

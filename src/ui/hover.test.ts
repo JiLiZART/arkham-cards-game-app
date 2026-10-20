@@ -24,4 +24,15 @@ describe("hover placement", () => {
     expect(b.h + 150).toBeLessThanOrEqual(vh - 16 + 1e-9);
     expect(b.w / b.h).toBeCloseTo(300 / 420);
   });
+  it("with a limit on the right (the strip's buttons) the copy ends before it", () => {
+    const b = placeHover({ x0: 1450, y0: 300, x1: 1542, y1: 429 }, 150, vw, vh, 1290);
+    expect(b.x + b.w).toBeLessThanOrEqual(1290);
+    expect(b.x).toBeGreaterThanOrEqual(8);
+    expect(b.w).toBe(184);
+  });
+  it("a limit too near the left edge scales the copy down to fit before it", () => {
+    const b = placeHover({ x0: 1450, y0: 300, x1: 1542, y1: 429 }, 150, vw, vh, 150);
+    expect(b.x + b.w).toBeLessThanOrEqual(150);
+    expect(b.x).toBeGreaterThanOrEqual(8);
+  });
 });

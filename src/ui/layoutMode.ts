@@ -17,7 +17,7 @@ export function layoutModeOf(width: number, height: number): { mode: LayoutMode;
 export const viewportOf = (w: { innerWidth: number; innerHeight: number }) => ({ width: w.innerWidth, height: w.innerHeight });
 
 /** screen space (px) covered by fixed HUD around the map on the desktop; the camera centres things in what's left */
-export const DESKTOP_INSETS: Insets = { top: 86, right: 320, bottom: 300, left: 200 };
+export const DESKTOP_INSETS: Insets = { top: 86, right: 470, bottom: 170, left: 200 };
 /** on the phone: the 36 px bar, the strip's thumbnail column on the right, and the hand drawer's peek with the instruction bar above it */
 export const PHONE_INSETS: Insets = { top: 36, right: 56, bottom: 136, left: 0 };
 

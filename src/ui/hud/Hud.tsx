@@ -555,6 +555,17 @@ export function Hud() {
   useViewReset();
   // the phone layout (ADR-0005): one thin bar, the panels and the Journal in drawers, the rail's actions in the bar
   const phone = useLayoutMode() === "phone";
+  // the strip's column ends above the dock (camera buttons, undo, the action rail), however tall that is
+  useEffect(() => {
+    const dock = document.querySelector<HTMLElement>(".right-dock");
+    const root = dock?.closest<HTMLElement>(".game");
+    if (!dock || !root) return;
+    const set = () => root.style.setProperty("--dock-h", `${Math.ceil(dock.getBoundingClientRect().height) + 14 + 10}px`);
+    set();
+    const ro = new ResizeObserver(set);
+    ro.observe(dock);
+    return () => ro.disconnect();
+  }, [phone]);
   return (
     <>
       <TopBar phone={phone} />

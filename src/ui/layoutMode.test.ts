@@ -25,6 +25,13 @@ describe("layoutModeOf", () => {
   });
 });
 
+describe("the desktop insets", () => {
+  it("keep the strip's column and the feed free on the right, and no row of cards at the bottom", () => {
+    expect(DESKTOP_INSETS.right).toBeGreaterThanOrEqual(143 + 300 + 24); // the column, the feed band and their margins
+    expect(DESKTOP_INSETS.bottom).toBeLessThanOrEqual(200); // the hand fan's peek and the stat bar: the strip is no longer a row here
+  });
+});
+
 describe("insetsFor", () => {
   it("the desktop insets are the fixed panels'", () => {
     expect(insetsFor("desktop")).toEqual(DESKTOP_INSETS);

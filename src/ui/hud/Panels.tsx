@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
+import { Fragment, useEffect, useLayoutEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
 import { useLayoutMode } from "../layoutMode";
 import { tapCard } from "../touch";
 import { cardText, t } from "../../content/i18n";
@@ -255,16 +255,28 @@ export function ChaosBagModal() {
   );
 }
 
-/** strip card width: full size, smaller when the strip is crowded (px) */
-const STRIP_W = 124;
-const STRIP_MIN_W = 84;
+/** strip column card width: full size, smaller when the column is crowded, never below the minimum (then it scrolls) (px) */
+const STRIP_W = 92;
+const STRIP_MIN_W = 72;
 const STRIP_GAP = 8;
+const DIVIDER_H = 14;
 
-/** the widest strip card that lets every slot (exhausted ones lie sideways) fit in `room` px */
-export function stripCardWidth(room: number, upright: number, sideways: number, dividers: number): number {
-  const units = upright + sideways * 1.4;
-  const gaps = (upright + sideways + dividers * 2 - 1) * STRIP_GAP + dividers * 14;
+/** the widest card that lets every slot fit in `room` px of column height: an upright card is 1.4 times its width tall, an exhausted one (lying sideways) its width */
+export function columnCardWidth(room: number, upright: number, sideways: number, dividers: number): number {
+  const units = upright * 1.4 + sideways;
+  const gaps = (upright + sideways + dividers * 2 - 1) * STRIP_GAP + dividers * DIVIDER_H;
   return Math.max(STRIP_MIN_W, Math.min(STRIP_W, Math.floor((room - gaps) / Math.max(units, 1))));
+}
+
+/** the strip's order: the engaged enemies and threat-area cards first (Fight and Evade stay at the top), then a divider, then the assets */
+export function stripOrder<T>(assets: T[], threats: T[]): { cards: T[]; dividerAt: number | null } {
+  return { cards: [...threats, ...assets], dividerAt: assets.length && threats.length ? threats.length : null };
+}
+
+/** the card whose buttons show: the hovered one, else the focused one, and only when it has options (one card at a time, so buttons never overlap) */
+export function stripButtonsFor(hovered: InstId | null, focused: InstId | null, byCard: Map<InstId, unknown[]>): InstId | null {
+  const id = hovered && byCard.has(hovered) ? hovered : focused;
+  return id && byCard.get(id)?.length ? id : null;
 }
 
 /**
@@ -292,7 +304,8 @@ export function PlayStrip() {
   const all = Object.values(heldGame(game, queue).cards).filter((c) => !waiting.has(c.id));
   const assets = all.filter((c) => c.zone === "play" && c.controller === viewer);
   const threats = [...all.filter((c) => c.zone === "threat" && c.controller === viewer), ...all.filter((c) => c.zone === "enemy" && c.engagedWith === viewer)];
-  const shown = [...assets, ...threats];
+  const order = stripOrder(assets, threats);
+  const shown = order.cards;
   // during a skill test the strip is compact while one of its cards has an option (a fast ability), and out of the way otherwise
   const mode = stripDuringTest(useView((v) => v.testing), shown.map((c) => c.id), byCard);
   // an asset new to the strip has just been played: its sound (enemies arriving have their own events)
@@ -313,33 +326,38 @@ export function PlayStrip() {
     const el = strip.current;
     if (!el) return;
     const sideways = shown.filter((c) => c.exhausted).length;
-    const w = phone ? (open ? 104 : 44) : mode === "compact" ? STRIP_MIN_W : stripCardWidth(el.clientWidth, shown.length - sideways, sideways, assets.length && threats.length ? 1 : 0);
+    const w = phone ? (open ? 104 : 44) : columnCardWidth(el.clientHeight, shown.length - sideways, sideways, assets.length && threats.length ? 1 : 0);
     el.style.setProperty("--sw", `${w}px`);
     // not while stepped aside: the rects would be the ones below the screen
     if (mode !== "aside") el.querySelectorAll<HTMLElement>("[data-card]").forEach((c) => rememberRect(c.dataset.card!, c));
+  });
+  // the buttons of the hovered (or keyboard-focused) card, kept a moment so the pointer can cross onto them
+  const hovered = useView((v) => v.hovered);
+  const [focused, setFocused] = useState<InstId | null>(null);
+  const want = stripButtonsFor(shown.some((c) => c.id === hovered) ? hovered : null, focused, byCard);
+  const [kept, setKept] = useState<InstId | null>(null);
+  const onButtons = useRef(false);
+  useEffect(() => {
+    if (want) return setKept(want);
+    const t = setTimeout(() => !onButtons.current && setKept(null), 200);
+    return () => clearTimeout(t);
+  }, [want]);
+  const buttons = useRef<HTMLDivElement>(null);
+  // beside the card, on its left, inside the window
+  useLayoutEffect(() => {
+    const el = buttons.current;
+    const slot = kept && strip.current?.querySelector<HTMLElement>(`[data-card="${kept}"]`);
+    if (!el || !slot) return;
+    const r = slot.getBoundingClientRect();
+    el.style.right = `${innerWidth - r.left}px`;
+    el.style.top = `${Math.max(80, Math.min(innerHeight - el.offsetHeight - 8, r.top + r.height / 2 - el.offsetHeight / 2))}px`;
   });
   if (!visible || !shown.length) return null;
   const target = game.skillTest?.target ?? null;
   const card = (id: InstId, exhausted: boolean) => {
     const opts = byCard.get(id) ?? [];
-    const name = cardText(db, game.cards[id].code, locale).name;
     return (
-      <div key={id} className={`strip-slot ${exhausted ? "exhausted" : ""}`}>
-        {opts.length > 0 && (
-          <div className="strip-actions">
-            {opts.map((o) => {
-              const a = stripAction({ ...o, label: optionLabel(o, game, locale) }, name, locale);
-              const sym = abilitySymbol(o, game);
-              return (
-                <button key={o.id} className="strip-action" onClick={() => choose(o.id)} title={o.label}>
-                  {sym && <Glyph name={sym} size={18} />}
-                  {a.icon && <Icon name={a.icon} size={22} />}
-                  <span>{a.label}</span>
-                </button>
-              );
-            })}
-          </div>
-        )}
+      <div key={id} className={`strip-slot ${exhausted ? "exhausted" : ""}`} onFocus={() => setFocused(id)} onBlur={() => setFocused((f) => (f === id ? null : f))}>
         <MiniCard
           id={id}
           w="var(--sw)"
@@ -353,16 +371,51 @@ export function PlayStrip() {
       </div>
     );
   };
+  const keptOpts = kept ? byCard.get(kept) ?? [] : [];
+  const keptName = kept && game.cards[kept] ? cardText(db, game.cards[kept].code, locale).name : "";
   return (
+    <>
     <div className={`play-strip ${phone ? `column ${open ? "open" : ""}` : ""} ${mode}`} ref={strip}>
       {phone && (
         <button className="strip-handle" onClick={() => setOpen(!open)} aria-expanded={open} aria-label={tr("phone.strip")} title={tr("phone.strip")}>
           {open ? "›" : "‹"} {shown.length}
         </button>
       )}
-      {assets.map((c) => card(c.id, c.exhausted))}
-      {threats.length > 0 && assets.length > 0 && <div className="strip-divider" />}
-      {threats.map((c) => card(c.id, c.exhausted))}
+      {order.cards.map((c, k) => (
+        <Fragment key={c.id}>
+          {k === order.dividerAt && <div className="strip-divider" />}
+          {card(c.id, c.exhausted)}
+        </Fragment>
+      ))}
     </div>
+    {kept && keptOpts.length > 0 && mode !== "aside" && (
+      <div
+        className="strip-actions"
+        ref={buttons}
+        onMouseEnter={() => (onButtons.current = true)}
+        onMouseLeave={() => {
+          onButtons.current = false;
+          setKept(null);
+        }}
+        onFocus={() => (onButtons.current = true)}
+        onBlur={() => {
+          onButtons.current = false;
+          setKept(null);
+        }}
+      >
+        {keptOpts.map((o) => {
+          const a = stripAction({ ...o, label: optionLabel(o, game, locale) }, keptName, locale);
+          const sym = abilitySymbol(o, game);
+          return (
+            <button key={o.id} className="strip-action" onClick={() => choose(o.id)} title={o.label}>
+              {sym && <Glyph name={sym} size={18} />}
+              {a.icon && <Icon name={a.icon} size={22} />}
+              <span>{a.label}</span>
+            </button>
+          );
+        })}
+      </div>
+    )}
+    </>
   );
 }

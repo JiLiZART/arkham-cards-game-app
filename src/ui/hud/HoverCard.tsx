@@ -5,9 +5,13 @@ import { db, useGame } from "../context";
 import { placeHover } from "../hover";
 import { mapProjector } from "../scene/Table";
 import { IntentBadge, TokenBadges } from "../TokenBadges";
+import { useCardClick } from "../cardClick";
 import { useView } from "../view";
 import { cardDetails } from "../details";
 import { DetailsColumn, LocationDetails } from "./HandDetails";
+
+/** the width kept for a strip card's option buttons (px) */
+const STRIP_BUTTONS_W = 150;
 
 /**
  * Hovering any card (map, HUD panels, play strip) shows a copy at twice its on-screen size on the spot,
@@ -30,6 +34,7 @@ export function HoverCard() {
   const blocked = useView((s) => !!s.moveDrag || !!s.modal);
   const game = useGame((s) => s.game) as GameState;
   const locale = useGame((s) => s.locale);
+  const { byCard } = useCardClick();
   if (!hovered || blocked || !game.cards[hovered]) return null;
   const inst = game.cards[hovered];
   // hand cards have their own hover (the fan raises and enlarges them); locations get a details column, no copy
@@ -39,7 +44,10 @@ export function HoverCard() {
   const rect = hoverRect ?? mapProjector.rect(hovered);
   if (!rect) return null;
   // the copy alone is kept fully on screen; the details column goes beside it, like for hand cards
-  const box = placeHover(rect, 0, innerWidth, innerHeight);
+  // a card in the strip's column has its option buttons on its left: the copy and the details go further left, past them
+  const inStrip = !!document.querySelector(`.play-strip [data-card="${hovered}"]`);
+  const limit = inStrip ? rect.x0 - 8 - ((byCard.get(hovered)?.length ?? 0) > 0 ? STRIP_BUTTONS_W : 0) : undefined;
+  const box = placeHover(rect, 0, innerWidth, innerHeight, limit);
   const back = db.cards[inst.code].type === "location" && !inst.revealed;
   return (
     <>
@@ -50,7 +58,7 @@ export function HoverCard() {
           <IntentBadge inst={inst} words />
         </div>
       </div>
-      <DetailsColumn rows={cardDetails(db, inst.code, locale, { inst, game })} rect={{ x0: box.x, y0: box.y, x1: box.x + box.w, y1: box.y + box.h }} />
+      <DetailsColumn rows={cardDetails(db, inst.code, locale, { inst, game })} rect={{ x0: box.x, y0: box.y, x1: box.x + box.w, y1: box.y + box.h }} prefer={inStrip ? "left" : undefined} />
     </>
   );
 }
