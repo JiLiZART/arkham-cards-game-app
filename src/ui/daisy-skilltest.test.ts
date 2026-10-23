@@ -1,16 +1,26 @@
 import { describe, expect, it } from "vitest";
-import { createCard, inv, moveCard } from "./core";
-import type { Result } from "./engine";
-import { canCommit, testValue } from "./rules/skillTest";
-import { gOf, giveCard, mutate, options, pick, putEnemy, skipMulligans, start } from "./testkit";
-import { optionHome } from "../ui/optionHome";
+import { createCard, inv, moveCard } from "../engine/core";
+import type { Result } from "../engine/engine";
+import { canCommit, testValue } from "../engine/rules/skillTest";
+import {
+  gOf,
+  giveCard,
+  mutate,
+  options,
+  pick,
+  putEnemy,
+  skipMulligans,
+  start,
+} from "../engine/testkit";
+import { optionHome } from "./optionHome";
 
 describe("fast cards and abilities in the skill test commit window", () => {
   const DAISY = "01002";
   const ROLAND = "01001";
   const table = () => {
     let r = skipMulligans(start("the-gathering", [DAISY, ROLAND], 3, { chaosBag: ["0"] as never }));
-    while (r.state.pending?.inv !== DAISY || r.state.pending.kind !== "turn") r = pick(r, r.state.pending!.options.at(-1)!.label);
+    while (r.state.pending?.inv !== DAISY || r.state.pending.kind !== "turn")
+      r = pick(r, r.state.pending!.options.at(-1)!.label);
     return r;
   };
   const inPlay = (r: Result, code: string) =>
@@ -43,7 +53,10 @@ describe("fast cards and abilities in the skill test commit window", () => {
   it("Magnifying Glass played mid-investigate: paid, boosts this test, can't also be committed", () => {
     let r = table();
     let glass = "";
-    r = mutate(r, (g) => { glass = giveCard(g, DAISY, "01030"); g.s.invs[DAISY].resources = 3; });
+    r = mutate(r, (g) => {
+      glass = giveCard(g, DAISY, "01030");
+      g.s.invs[DAISY].resources = 3;
+    });
     r = pick(r, /^Investigate/);
     const play = r.state.pending!.options.find((o) => o.id === `play:${glass}`)!;
     expect(play.label).toBe("Play Magnifying Glass (fast)");
@@ -87,7 +100,10 @@ describe("fast cards and abilities in the skill test commit window", () => {
 
   it("Mind over Matter played after combat icons are committed keeps the higher combat total", () => {
     let r = table();
-    let mom = "", over = "", b1 = "", b2 = "";
+    let mom = "",
+      over = "",
+      b1 = "",
+      b2 = "";
     r = mutate(r, (g) => {
       mom = giveCard(g, DAISY, "01036");
       over = giveCard(g, DAISY, "01091"); // 2 combat icons

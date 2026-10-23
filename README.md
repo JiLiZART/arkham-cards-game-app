@@ -1,6 +1,6 @@
 # Arkham Table
 
-A browser version of *Arkham Horror: The Card Game* on a 3D table (React + react-three-fiber), with a rules engine in plain TypeScript. 1–4 investigators play hot-seat on one device. It ships the **Night of the Zealot** campaign and starter decks for the five core investigators.
+A browser version of _Arkham Horror: The Card Game_ on a 3D table (React + react-three-fiber), with a rules engine in plain TypeScript. 1–4 investigators play hot-seat on one device. It ships the **Night of the Zealot** campaign and starter decks for the five core investigators.
 
 Fan project for personal use. Card text comes from ArkhamDB and card images from arkham.build. The game is © Fantasy Flight Games.
 
@@ -49,7 +49,7 @@ content/                         game data — no engine changes needed to add m
   i18n/<locale>/{ui,cards,campaigns}.json            hand-written translations (English is the fallback)
   i18n/<locale>/*.generated.json   imported translations; the hand-written files win field by field
 scripts/import-cards.ts          ArkhamDB → cards.generated.json
-src/engine/                      rules engine (no React/three imports — enforced by ESLint)
+src/engine/                      rules engine (no React/three imports — enforced by oxlint, `.oxlintrc.json`)
 src/content/                     zod schemas, loader, i18n
 src/ui/                          React HUD + R3F table
 ```
@@ -66,6 +66,7 @@ src/ui/                          React HUD + R3F table
    `--all` lists the snapshot's folders, not `cycles.json`, so the core folder's 2026 reprints are a pack of their own (`core_2026`) and the Return-to boxes share one (`return`). Bare duplicate stubs and the `01000` placeholder are left out. A record that fails the schema is reported with its code. The older `--pack <pack_code>` form still reads the ArkhamDB API. Either form only rewrites `cards.generated.json`.
 
    Only the core pack is in the first download. The other packs are separate chunks that `loadPack(pack)` fetches when a game needs them, together with that pack's translated text. Measured on 2026-10-18, the main JS chunk is 1,736 KB with the core pack alone, 5,469 KB with every pack eager, and 1,742 KB with lazy packs. Gzipped, those are 462 KB, 1,151 KB and 464 KB.
+
 2. Describe behavior in `content/packs/<pack>/cards.json`:
 
    ```json
@@ -73,6 +74,7 @@ src/ui/                          React HUD + R3F table
    ```
 
    Ability kinds are `action`, `fast`, `reaction`, `forced`, `constant`, `revelation` (also an act's or agenda's back side), `onPlay` (also a skill card's effect when committed), and `elderSign`. Effects, conditions, triggers and modifiers form a closed vocabulary defined in `src/content/schema.ts`. Unknown names fail validation.
+
 3. If something can't be expressed this way, set `"script": true` and add `scripts/<code>.ts` exporting a `CardScript`. Copy any existing script as a starting point.
 4. Run `npm run check:content`.
 
@@ -95,21 +97,21 @@ Uncertain matches are left out and listed on one contact sheet per code range, `
 
 The run of 2026-10-18 gave 3,833 of 7,812 card sides a Russian image: 3,382 from the folders, 374 from the community cards and 77 from the print sheets. Of the OCR matches, every one scoring under 0.65 was checked by eye and 7 were rejected. About 7,500 candidate images match no card side; most are copies, encounter backs or sides the folders already cover.
 
-| Code range | Sides with a Russian image |
-| --- | --- |
-| 01 core | 229 / 229 |
-| 02 Dunwich | 475 / 478 |
-| 03 Carcosa | 481 / 534 |
-| 04 Forgotten Age | 450 / 466 |
-| 05 Circle Undone | 495 / 526 |
-| 06 Dream-Eaters | 450 / 512 |
-| 07 Innsmouth | 226 / 510 |
-| 08–11 later cycles, community cards only | 316 / 2,222 |
-| 12–13 | 0 / 399 |
-| 50–54 Return to… | 271 / 512 |
-| 60 starter decks | 141 / 292 |
-| 70–72, 81–82 standalones | 255 / 387 |
-| other ranges | 44 / 745 |
+| Code range                               | Sides with a Russian image |
+| ---------------------------------------- | -------------------------- |
+| 01 core                                  | 229 / 229                  |
+| 02 Dunwich                               | 475 / 478                  |
+| 03 Carcosa                               | 481 / 534                  |
+| 04 Forgotten Age                         | 450 / 466                  |
+| 05 Circle Undone                         | 495 / 526                  |
+| 06 Dream-Eaters                          | 450 / 512                  |
+| 07 Innsmouth                             | 226 / 510                  |
+| 08–11 later cycles, community cards only | 316 / 2,222                |
+| 12–13                                    | 0 / 399                    |
+| 50–54 Return to…                         | 271 / 512                  |
+| 60 starter decks                         | 141 / 292                  |
+| 70–72, 81–82 standalones                 | 255 / 387                  |
+| other ranges                             | 44 / 745                   |
 
 The images take about 184 MB in the repository. A rerun with the same inputs writes identical files, so only changed picks add history. Moving them to Git LFS or external storage later only changes the base path in `src/ui/images.ts`.
 
@@ -170,7 +172,7 @@ To write a campaign by hand, create `content/campaigns/<id>/` with a `campaign.j
 
 ## Playing
 
-- **Cards:** the title menu's **Cards** opens a catalog of every card and investigator in three tabs (Investigators, Player cards, Encounter cards); opening it loads every card pack (a progress line, about 4 MB, cached by the browser). Filter by class, type, cycle and pack, level, cost, skill icons, slot, trait, encounter set (Encounter cards), and whether the card **works in the game**, and search name, traits and text in the game's language (English names also match); the filters combine, the count updates, and they are kept until the app closes. The results are a grid of card images, paged sixty at a time as you scroll, or a compact list; on a phone the filters open as a drawer. A card's page shows both sides, its details, pack and encounter set, and a badge: *works in the game* (its behaviour is written, or it has no rules text to run) or *text only*. An investigator's page adds the back with the deckbuilding rules, the signature cards and weaknesses as links, and the starter deck. Scans the game doesn't host (every pack but the core) are linked from arkham.build's CDN (ADR-0008); the table never uses them.
+- **Cards:** the title menu's **Cards** opens a catalog of every card and investigator in three tabs (Investigators, Player cards, Encounter cards); opening it loads every card pack (a progress line, about 4 MB, cached by the browser). Filter by class, type, cycle and pack, level, cost, skill icons, slot, trait, encounter set (Encounter cards), and whether the card **works in the game**, and search name, traits and text in the game's language (English names also match); the filters combine, the count updates, and they are kept until the app closes. The results are a grid of card images, paged sixty at a time as you scroll, or a compact list; on a phone the filters open as a drawer. A card's page shows both sides, its details, pack and encounter set, and a badge: _works in the game_ (its behaviour is written, or it has no rules text to run) or _text only_. An investigator's page adds the back with the deckbuilding rules, the signature cards and weaknesses as links, and the starter deck. Scans the game doesn't host (every pack but the core) are linked from arkham.build's CDN (ADR-0008); the table never uses them.
 - **Title screen and new game:** the game opens on a title screen over the rulebook's cover painting: **Continue** (when there is a game, a campaign or a save), **New campaign**, **How to play** and **Settings**. The other menu screens sit on the rulebook's parchment. New campaign is a short wizard with Back and Continue: pick the campaign (a grid of tiles with the first scenario's card, filters on top, and a sidebar for the one you tap with the guide's opening text and every chapter's reference cards in order; **More** opens a long prologue), tap investigators (up to four; the avatars get badges P1 to P4 in tap order, the first is the lead, tapping again removes one and closes the gap), pick a deck for each, pick the difficulty, then check the summary (avatars in order, the chaos bag, the first scenario) and press **Begin**. Difficulty is shown as the bag itself: four cards with the tokens grouped and the bag's average modifier (the lower, the harder). The settings screen holds language, tapping decks to draw, drawing tokens by hand, pace, tips, **Reset tips**, music and sound effects. **Decks:** on the wizard's deck step each investigator has **Edit** (the chosen deck, a starter or a saved one) and **New empty deck**, which open the deck builder: the deck as a list by type with each card's cost, level, copies and glance chips, the signature cards and weakness slot apart, and beside it the catalog's card list narrowed to what the investigator may take. A card that can go in has a **+**; any other says why in plain words ("3 copies of Machete; the limit is 2", "Too many cards of level 0 beyond the main options: at most 5", "excluded"). Any card can be removed; there is no swap limit, only the deckbuilding rules, which are the snapshot's own (classes and levels, traits, tags and text patterns, card types, uses, per-option limits, "at least" counts, exclusions, copies by title across levels, the signatures and the weakness). The builder shows the deck's validation as it changes and won't save an invalid deck. Pick the basic weakness or leave it random. Saving makes a custom deck (named "Roland · 18 Oct" unless you rename it) kept on this device under `ah:decks`; a starter deck is never changed. Custom decks sit beside the starter decks in later new games, where they can be renamed or deleted; one that no longer validates (a pack removed) is shown with the reason and can't be picked. An investigator whose deck needs a choice made when it is created (a class, an option or a deck size: Mandy Thompson and about a dozen more) or a role (Lola Hayes) is refused by the builder, in plain words, for now. Between scenarios the campaign log shows each investigator's avatar with experience and trauma, an **Upgrade deck** button for each (the builder again, with the experience left: a new card costs its level, at least 1; replacing a card with a higher level of the same title costs the difference; an Exceptional card costs double; Myriad copies come together for one price; signatures and weaknesses are free; it refuses what the experience can't pay and says how much is needed; saving updates the campaign's deck and experience, and the next scenario uses it), the scenarios played, the log and what comes next.
 - **The introduction fits the screen:** a long intro scrolls inside its own area, with a fade at the bottom edge while more is below; the card shrinks on short screens (and sits beside the text on a phone held sideways); Continue and Skip stay on screen. The campaign guides' markup is drawn, never shown as tags (`src/ui/guideText.ts`, also used by the resolution screen): `<fancy>` in Caveat, `<typewriter>` in TT2020 Style E (both SIL OFL, in `public/fonts`, TT2020 is 3.4 MB and loads only when a typed line shows), `<game>` and `<innsmouth>` in Teutonic (the guides' About Dead font is "all rights reserved", see `public/fonts/LICENSES.md`), `<smallcaps>`, centred and right-aligned blocks, indented quotations, strikethrough; a tag it doesn't know shows its text. Campaign tiles keep stripping the markup (they show short plain text).
 - **Starting a scenario:** the table is empty while you mulligan. Click cards in your hand to put them on the "to redraw" row above it; click one there to take it back. **Redraw** sends them face down into your deck and deals new ones (**Keep hand** if you picked none). After the last mulligan the scenario is introduced: its name and story with the agenda, then the act, each large in the middle until you press **Continue** (or Space / Enter); each then flies to the act/agenda panel, and the starting locations are dealt face down from there, turning over where an investigator starts. **Skip introduction** puts everything in place at once. A loaded game skips the introduction.

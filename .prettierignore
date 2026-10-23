@@ -1,0 +1,5 @@
+# parsed by src/content/campaignProgram.test.ts: the table rows must keep their exact spacing
+docs/campaign-program.md
+# data: written by the import scripts, coverage and the sound picker, whose output must stay byte-identical
+content/**/*.json
+src/ui/ruImages.generated.json
