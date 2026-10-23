@@ -253,8 +253,8 @@ describe("filtering the campaign list", () => {
     expect(ids({ rules: "complete" }).length + ids({ rules: "partial" }).length).toBe(ids().length);
   });
 
-  it("Night of the Zealot is the one campaign the Complete filter shows", () => {
-    expect(ids({ rules: "complete" })).toEqual(["night-of-the-zealot"]);
+  it("Night of the Zealot and Brethren of Ash are the campaigns the Complete filter shows", () => {
+    expect(ids({ rules: "complete" }).sort()).toEqual(["brethren-of-ash", "night-of-the-zealot"]);
     expect(campaignComplete(db, "night-of-the-zealot")).toBe(true);
   });
 

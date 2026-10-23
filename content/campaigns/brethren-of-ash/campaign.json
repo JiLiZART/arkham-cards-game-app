@@ -1,0 +1,150 @@
+{
+  "id": "brethren-of-ash",
+  "name": "Brethren of Ash",
+  "i18nId": "boa",
+  "scenarios": [
+    "spreading-flames",
+    "smoke-and-mirrors",
+    "queen-of-ash"
+  ],
+  "packs": [
+    "core",
+    "core_2026"
+  ],
+  "card": "12105",
+  "cover": "12106",
+  "logSections": [
+    {
+      "id": "campaign_notes",
+      "kind": "entries",
+      "label": "Campaign Notes"
+    }
+  ],
+  "prologue": "Arkham has always been a little strange. It seems like every time you read the news, there's a fresh report of some gruesome murder or sudden disappearance. A battered corpse in the Waterfront District. A missing police officer in French Hill. A bloody sigil drawn in the alley behind Velma's Diner. The city has its share of crackpots and conspiracy theorists, sure, but even the most levelheaded observer can't ignore the facts: there's something wrong with this city.\nHowever, most folks in Arkham don't like to dwell on the bad. In the wake of the flood six months ago, the city is building itself back stronger than ever, with new money pouring in from outside investors. They say everything's on the up-and-up, and it sure looks like it. But you know there's always something more to the story.\nWhatever lies ahead, you don't have to face it alone. There are others like you who have encountered similar horrors, and who won't settle for easy explanations or comforting distractions. They, too, know there is something to this city's ancient curses and witch legends. Will you stand with them against the evils that lurk beyond mortal understanding? Or will you succumb, as so many have, to the terrors of the Mythos?",
+  "cards": [
+    {
+      "scenario": "spreading-flames",
+      "name": "Spreading Flames",
+      "code": "12105",
+      "agenda": "12106",
+      "act": "12109"
+    },
+    {
+      "scenario": "smoke-and-mirrors",
+      "name": "Smoke and Mirrors",
+      "code": "12133",
+      "agenda": "12134",
+      "act": "12136"
+    },
+    {
+      "scenario": "queen-of-ash",
+      "name": "Queen of Ash",
+      "code": "12168",
+      "agenda": "12169",
+      "act": "12172"
+    }
+  ],
+  "scenarioNames": [
+    "Spreading Flames",
+    "Smoke and Mirrors",
+    "Queen of Ash"
+  ],
+  "chaosBags": {
+    "easy": [
+      "+1",
+      "+1",
+      "0",
+      "0",
+      "0",
+      "-1",
+      "-1",
+      "-1",
+      "-2",
+      "-2",
+      "skull",
+      "skull",
+      "tablet",
+      "elderThing",
+      "autoFail",
+      "elderSign"
+    ],
+    "standard": [
+      "+1",
+      "0",
+      "0",
+      "-1",
+      "-1",
+      "-1",
+      "-2",
+      "-2",
+      "-3",
+      "-4",
+      "skull",
+      "skull",
+      "tablet",
+      "elderThing",
+      "autoFail",
+      "elderSign"
+    ],
+    "hard": [
+      "0",
+      "0",
+      "0",
+      "-1",
+      "-1",
+      "-2",
+      "-2",
+      "-3",
+      "-3",
+      "-4",
+      "-5",
+      "skull",
+      "skull",
+      "tablet",
+      "elderThing",
+      "autoFail",
+      "elderSign"
+    ],
+    "expert": [
+      "0",
+      "-1",
+      "-1",
+      "-2",
+      "-2",
+      "-3",
+      "-3",
+      "-4",
+      "-4",
+      "-5",
+      "-6",
+      "-8",
+      "skull",
+      "skull",
+      "tablet",
+      "elderThing",
+      "autoFail",
+      "elderSign"
+    ]
+  },
+  "logLabels": {
+    "miskatonic_university_burned": "Miskatonic University burned.",
+    "defeated_their_masked_pursuer": "The investigators defeated their masked pursuer.",
+    "saved_miskatonic_university": "The investigators saved Miskatonic University.",
+    "david_harbinger": "David Renfield is the harbinger of Elokoss.",
+    "cornelia_harbinger": "Cornelia Akely is the harbinger of Elokoss.",
+    "naomi_harbinger": "Naomi O'Bannion is the harbinger of Elokoss.",
+    "earl_harbinger": "Sgt. Earl Monroe is the harbinger of Elokoss.",
+    "abigail_harbinger": "Abigail Foreman is the harbinger of Elokoss.",
+    "margaret_harbinger": "Margaret Liu is the harbinger of Elokoss.",
+    "discovered_the_cults_whereabouts": "The investigators discovered the cult's whereabouts.",
+    "failed_in_their_search": "The investigators failed in their search.",
+    "killed_the_servant_of_flame": "The investigators killed the Servant of Flame.",
+    "scoured_arkham_for_answers": "The investigators scoured Arkham for answers.",
+    "stirred_up_trouble": "The investigators stirred up trouble.",
+    "the_servant_of_flame_escaped": "The Servant of Flame escaped.",
+    "elokoss_was_reborn": "Elokoss was reborn.",
+    "defeated_elokoss_and_the_brethren_of_ash": "The investigators defeated Elokoss and the Brethren of Ash.",
+    "stopped_elokoss_glorious_rebirth": "The investigators stopped Elokoss's glorious rebirth.",
+    "flooded_the_ritual": "The investigators flooded the Brethren of Ash's summoning ritual."
+  }
+}

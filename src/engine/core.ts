@@ -432,6 +432,16 @@ const MOD_ZONES: Zone[] = [
   "investigator",
 ];
 
+/** a card the investigator can't play or commit now (Languor) */
+export function cardBlocked(g: G, i: InvId, cardId: InstId): boolean {
+  return allMods(g).some(
+    (m) =>
+      m.target === i &&
+      m.mod.flag === "cannotPlayOrCommit" &&
+      (!m.mod.filter || matchesFilter(g, card(g, cardId).code, m.mod.filter)),
+  );
+}
+
 /** card instances whose text box is blank right now */
 export function blankedCards(g: G): Set<InstId> {
   // blankText comes only from temporary effects (Mind Wipe) or card scripts (Stubborn Detective), never from constant abilities
@@ -488,7 +498,9 @@ function scopeTargets(g: G, c: CardInst, mod: Modifier): string[] {
         ? g.s.invs[c.controller]?.location
         : c.zone === "location"
           ? c.id
-          : null;
+          : c.zone === "enemy" || c.zone === "attached"
+            ? c.location
+            : null;
       return invsAt(g, loc ?? null);
     }
     case "attachedLocation":
@@ -597,6 +609,11 @@ export function canPay(g: G, i: InvId, cardId: InstId, cost: Cost | undefined): 
   if (cost.exhaust && c.exhausted) return false;
   if (cost.uses && c.uses < cost.uses) return false;
   if (cost.resources && me.resources < cost.resources) return false;
+  if (
+    cost.resourcesPerInvestigator &&
+    me.resources < cost.resourcesPerInvestigator * playerCount(g)
+  )
+    return false;
   if (cost.resourcesOrUses && c.uses < cost.resourcesOrUses && me.resources < cost.resourcesOrUses)
     return false;
   if (cost.clues && (me.clues < cost.clues || hasFlag(g, i, "cannotSpendClues"))) return false;
@@ -693,6 +710,15 @@ export function checkCondition(g: G, c: Condition, ctx: EffCtx): boolean {
   if ("eventCardIsSelf" in c) return !!ctx.card && ctx.card === ctx.source;
   if ("canPay" in c) return !!you && !!ctx.source && canPay(g, you, ctx.source, c.canPay);
   if ("testTokens" in c) return !!g.s.skillTest?.tokens.some((t) => c.testTokens.includes(t));
+  if ("eventAtThisLocation" in c)
+    return !!ctx.inv && !!ctx.source && g.s.invs[ctx.inv]?.location === ctx.source;
+  if ("script" in c) {
+    const own = ctx.source ? g.s.cards[ctx.source]?.code : undefined;
+    const fn =
+      (own ? g.db.scripts[own]?.conditions?.[c.script] : undefined) ??
+      g.db.scripts[g.s.scenarioId]?.conditions?.[c.script];
+    return !!fn?.(g, ctx);
+  }
   if ("controlled" in c) return !!ctx.source && !!card(g, ctx.source).controller === c.controlled;
   if ("exhausted" in c) return !!ctx.source && card(g, ctx.source).exhausted === c.exhausted;
   return false;

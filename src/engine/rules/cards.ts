@@ -7,6 +7,7 @@ import {
   ask,
   blankedCards,
   card,
+  cardBlocked,
   checkCondition,
   controlled,
   def,
@@ -57,9 +58,10 @@ export function payCost(g: G, i: InvId, cardId: InstId, cost: Cost | undefined):
   const me = inv(g, i);
   if (cost.exhaust) c.exhausted = true;
   if (cost.uses) c.uses -= cost.uses;
-  if (cost.resources) me.resources -= cost.resources;
-  const take: Step[] = cost.resources
-    ? [win("resourcesSpent", { inv: i, card: cardId, amount: cost.resources })]
+  const spent = (cost.resources ?? 0) + (cost.resourcesPerInvestigator ?? 0) * playerCount(g);
+  me.resources -= spent;
+  const take: Step[] = spent
+    ? [win("resourcesSpent", { inv: i, card: cardId, amount: spent })]
     : [];
   if (cost.resourcesOrUses) {
     if (c.uses >= cost.resourcesOrUses) c.uses -= cost.resourcesOrUses; // ponytail: the card first; a prompt if a card ever wants the pool spent first
@@ -242,9 +244,17 @@ export function ctxFor(data: EventData, source: InstId, you: InvId | null): EffC
 function triggered(g: G, trigger: Trigger, data: EventData): AbilityRef[] {
   const out: AbilityRef[] = [];
   const blanked = blankedCards(g);
-  const consider = (cardId: InstId, you: InvId | null, fromHand: boolean) => {
+  const consider = (
+    cardId: InstId,
+    you: InvId | null,
+    fromHand: boolean,
+    only?: "reaction" | "forced",
+  ) => {
     abilitiesOf(g, cardId, blanked).forEach((a, index) => {
       if (a.trigger !== trigger || (a.kind !== "reaction" && a.kind !== "forced")) return;
+      if (only && a.kind !== only) return;
+      // an encounter card's reaction belongs to each investigator who may use it (a location's, to those there)
+      if (only === "reaction" && (!you || !usersOf(g, cardId, a).includes(you))) return;
       if (fromHand !== !!(a.fromHand || a.revealOnly)) return;
       if (!fromHand && assetBlocked(g, cardId)) return;
       if (!triggerMatches(g, cardId, a, you, data)) return;
@@ -261,7 +271,11 @@ function triggered(g: G, trigger: Trigger, data: EventData): AbilityRef[] {
   for (const c of Object.values(g.s.cards)) {
     if (ABILITY_ZONES.includes(c.zone)) {
       if (c.zone === "location" && !c.revealed && trigger !== "enterLocation") continue;
-      consider(c.id, c.controller ?? null, false);
+      if (c.controller) consider(c.id, c.controller, false);
+      else {
+        consider(c.id, null, false, "forced");
+        for (const i of activeInvs(g)) consider(c.id, i, false, "reaction");
+      }
     }
   }
   for (const i of activeInvs(g)) for (const h of inv(g, i).hand) consider(h, i, true);
@@ -288,14 +302,17 @@ export const windowHandler: Handler<"Window"> = (g, step) => {
   const refs = triggered(g, step.trigger, step.data);
   if (!step.forcedDone) {
     const forced = refs.filter((r) => r.ability.kind === "forced");
+    // an encounter card's forced ability resolves for the investigator the event is about (Hellhound's attack)
+    const who = (r: AbilityRef) =>
+      r.controller ?? (step.data.inv && g.s.invs[step.data.inv] ? step.data.inv : null);
     push(
       g,
       ...forced.map((r): Step => ({
         t: "UseAbility",
-        inv: r.controller ?? g.s.lead,
+        inv: who(r) ?? g.s.lead,
         card: r.card,
         index: r.index,
-        ctx: ctxFor(step.data, r.card, r.controller ?? null),
+        ctx: ctxFor(step.data, r.card, who(r)),
       })),
       { ...step, forcedDone: true, choice: undefined },
     );
@@ -474,6 +491,7 @@ export function canPlay(g: G, i: InvId, cardId: InstId, asFast: boolean): boolea
   if (d.type !== "asset" && d.type !== "event") return false;
   if (hasFlag(g, i, "cannotPlayAssetsOrEvents")) return false;
   if (d.type === "asset" && hasFlag(g, i, "cannotPlayAssets")) return false;
+  if (cardBlocked(g, i, cardId)) return false;
   if (uniqueInPlay(g, cardId)) return false;
   const isFast = d.keywords.includes("fast");
   if (asFast !== isFast) return false;

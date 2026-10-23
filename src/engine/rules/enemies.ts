@@ -10,6 +10,8 @@ import {
   enemyStat,
   engagedWith,
   hasFlag,
+  hasKeyword,
+  connections,
   inv,
   invName,
   invsAt,
@@ -49,6 +51,8 @@ export function preyCandidates(g: G, enemy: InstId, candidates: InvId[]): InvId[
         return remainingSanity(g, i);
       case "cardsInHand":
         return inv(g, i).hand.length;
+      case "resources":
+        return inv(g, i).resources;
       default:
         return skillValue(g, i, stat);
     }
@@ -169,13 +173,42 @@ export const spawnHandler: Handler<"Spawn"> = (g, step) => {
 
 // ---------- attacks ----------
 export const enemyAttackHandler: Handler<"EnemyAttack"> = (g, step) => {
-  push(g, win("enemyAttacks", { inv: step.inv, enemy: step.enemy, key: step.key }), {
-    t: "ResolveAttack",
-    enemy: step.enemy,
-    inv: step.inv,
-    key: step.key,
-  });
+  const e = g.s.cards[step.enemy];
+  push(
+    g,
+    win("enemyAttacks", { inv: step.inv, enemy: step.enemy, key: step.key }),
+    { t: "ResolveAttack", enemy: step.enemy, inv: step.inv, key: step.key },
+    // a ready elusive enemy slips away after it attacks
+    ...(e && !e.exhausted && hasKeyword(g, step.enemy, "elusive")
+      ? [{ t: "Script", code: "__engine", fn: "elusive", ctx: { enemy: step.enemy } } as Step]
+      : []),
+  );
 };
+
+/** Elusive: the enemy disengages, moves to a connecting location (one with no investigators if able) and exhausts */
+export function elusive(g: G, id: InstId, step: Step) {
+  const e = g.s.cards[id];
+  if (!e || e.zone !== "enemy" || e.exhausted || !e.location) return;
+  const near = connections(g, e.location).filter((l) => canEnemyEnter(g, id, l));
+  const empty = near.filter((l) => !invsAt(g, l).length);
+  const opts = empty.length ? empty : near;
+  if (opts.length) {
+    const to = ask<InstId>(
+      g,
+      step,
+      g.s.lead,
+      "target",
+      `Where does ${def(g, id).name} move?`,
+      opts.map((l) => ({ id: l, label: def(g, l).name, card: l, value: l })),
+      { auto: true, key: "enemyMoveWhere", vars: { card: id } },
+    );
+    if (to === undefined) return;
+    e.location = to;
+  }
+  e.engagedWith = null;
+  e.exhausted = true;
+  emit(g, "elusive", `${def(g, id).name} slips away`, { card: id, data: { to: e.location } });
+}
 
 export const resolveAttackHandler: Handler<"ResolveAttack"> = (g, step) => {
   const e = g.s.cards[step.enemy];
@@ -188,6 +221,8 @@ export const resolveAttackHandler: Handler<"ResolveAttack"> = (g, step) => {
     return;
   }
   if (!isElite(g, step.enemy) && hasFlag(g, step.inv, "nonEliteCannotAttack")) return;
+  // "she cannot attack you for the remainder of the round" (Elokoss)
+  if (g.s.flags[`noAttack:${step.enemy}:${step.inv}`] === g.s.round) return;
   const bonus = (g.s.flags[`attackBonus:${step.key}`] as number | undefined) ?? 0;
   delete g.s.flags[`attackBonus:${step.key}`];
   // "if this enemy attacked you this round" (Daniela's Wrench)
@@ -225,7 +260,12 @@ export function attackKey(g: G) {
 /** attacks of opportunity from each ready engaged enemy */
 export function attacksOfOpportunity(g: G, i: InvId): Step[] {
   return engagedWith(g, i)
-    .filter((e) => !e.exhausted && !def(g, e.id).keywords.includes("aloof"))
+    .filter(
+      (e) =>
+        !e.exhausted &&
+        !def(g, e.id).keywords.includes("aloof") &&
+        !hasFlag(g, e.id, "noAttacksOfOpportunity"),
+    )
     .map((e) => ({ t: "EnemyAttack", enemy: e.id, inv: i, aoo: true, key: attackKey(g) }));
 }
 
@@ -233,6 +273,10 @@ export function attacksOfOpportunity(g: G, i: InvId): Step[] {
 export const damageEnemyHandler: Handler<"DamageEnemy"> = (g, step) => {
   const e = g.s.cards[step.enemy];
   if (!e || e.zone !== "enemy" || step.amount <= 0) return;
+  if (hasFlag(g, step.enemy, "cannotBeDamaged")) {
+    emit(g, "noDamage", `${def(g, step.enemy).name} cannot be damaged`, { card: step.enemy });
+    return;
+  }
   // what an investigator deals can grow, or be capped, before it is placed (Nathaniel Cho, Tommy Malloy)
   if (step.by && !step.windowed) {
     const key = step.key ?? `dmg${g.s.seq++}`;
@@ -293,6 +337,9 @@ export const defeatEnemyHandler: Handler<"DefeatEnemy"> = (g, step) => {
   else moveCard(g, step.enemy, e.owner ? "discard" : "encounterDiscard");
   g.s.flags[`defeated:${e.code}`] = true;
   push(g, win("enemyDefeated", { inv: step.by }), { t: "CheckObjectives" });
+  // Doomed: 1 doom on the current agenda, which can make it advance
+  if (d.keywords.includes("doomed") && g.s.agenda)
+    push(g, { t: "PlaceDoom", card: g.s.agenda, n: 1 }, { t: "CheckDoom" });
 };
 
 // ---------- enemy phase ----------

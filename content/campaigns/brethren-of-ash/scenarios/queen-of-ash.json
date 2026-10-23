@@ -1,0 +1,409 @@
+{
+  "id": "queen-of-ash",
+  "name": "Queen of Ash",
+  "i18nId": "queen_of_ash",
+  "card": "12168",
+  "intro": "Dr. Armitage thanks the waitress at Velma’s Diner as she sets two pieces of warm apple pie between you. The head librarian pushes one toward you with a strained smile. “Arkham is changing. The world is changing—for the worse, I fear—but at least we have pie.”\nTogether, you and Dr. Armitage piece together a disturbing picture of the situation at hand. “The Brethren of Ash are not conspirators,” Armitage says. “They are thralls, all of them. Thralls of an ancient goddess, one they call ‘Elokoss’.” Dr. Armitage shows you a grotesque woodcut of a gnarled tree with burning branches before continuing.\n“After attending one of the cult’s secret gatherings, some prospective followers develop a strange bruise that marks them as one of Elokoss’s own. These followers are from all walks of life: rich and poor, weak and strong. Most importantly, these thralls have no idea that they are under her sway. Your mysterious pursuer is one such thrall. According to prophecy, the ‘Servant of Flame’ who attacked us at the university is the harbinger of the queen’s return. The servant gathers sacrifices to make way for their queen’s glorious rebirth. A rebirth they predict will happen this very evening.”",
+  "encounterSets": [
+    "queen_of_ash",
+    "ashen_pilgrims",
+    "cosmic_evils",
+    "cultists_ch2",
+    "fire_ch2",
+    "hallucinations",
+    "reeking_decay",
+    "arkham_sewers",
+    "torment"
+  ],
+  "acts": [
+    "12172",
+    "12173"
+  ],
+  "agendas": [
+    "12169",
+    "12170",
+    "12171"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "12174",
+        "12182",
+        "12183",
+        "12184",
+        "12185",
+        "12186",
+        "12187"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "12175",
+        "12129",
+        "12129",
+        "12129",
+        "12129",
+        "12129",
+        "12181",
+        "12181",
+        "12179",
+        "12179b",
+        "12177",
+        "12178"
+      ]
+    },
+    {
+      "do": "remove",
+      "codes": [
+        "12180"
+      ],
+      "when": {
+        "logHas": "killed_the_servant_of_flame"
+      }
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "12180"
+      ]
+    },
+    {
+      "do": "placeDoomOnAgenda",
+      "amount": 1,
+      "when": {
+        "not": {
+          "logHas": "discovered_the_cults_whereabouts"
+        }
+      }
+    },
+    {
+      "do": "placeDoomOnAgenda",
+      "amount": 1,
+      "when": {
+        "playersAtLeast": 3
+      }
+    },
+    {
+      "do": "startAt",
+      "code": "12182"
+    },
+    {
+      "do": "script",
+      "fn": "setup"
+    }
+  ],
+  "connections": [
+    [
+      "12182",
+      "12183"
+    ],
+    [
+      "12182",
+      "12184"
+    ],
+    [
+      "12182",
+      "12185"
+    ],
+    [
+      "12182",
+      "12186"
+    ],
+    [
+      "12182",
+      "12187"
+    ],
+    [
+      "12174",
+      "12183"
+    ],
+    [
+      "12174",
+      "12184"
+    ],
+    [
+      "12174",
+      "12185"
+    ],
+    [
+      "12174",
+      "12186"
+    ],
+    [
+      "12174",
+      "12187"
+    ],
+    [
+      "12183",
+      "12184"
+    ],
+    [
+      "12184",
+      "12185"
+    ],
+    [
+      "12185",
+      "12186"
+    ],
+    [
+      "12186",
+      "12187"
+    ],
+    [
+      "12175",
+      "12182"
+    ],
+    [
+      "12175",
+      "12174"
+    ]
+  ],
+  "layout": {
+    "12174": [
+      2,
+      0
+    ],
+    "12183": [
+      0,
+      1
+    ],
+    "12184": [
+      1,
+      1
+    ],
+    "12185": [
+      2,
+      1
+    ],
+    "12186": [
+      3,
+      1
+    ],
+    "12187": [
+      4,
+      1
+    ],
+    "12182": [
+      2,
+      2
+    ],
+    "12175": [
+      4,
+      2
+    ]
+  },
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": "X",
+        "x": "fireInPlay"
+      },
+      "cultist": {
+        "modifier": -2,
+        "revealAnother": {
+          "if": {
+            "all": [
+              {
+                "eventEnemy": {
+                  "trait": "Cultist"
+                }
+              },
+              {
+                "any": [
+                  {
+                    "testKind": "fight"
+                  },
+                  {
+                    "testKind": "evade"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "tablet": {
+        "modifier": "X",
+        "x": "atRitualSite",
+        "xTimes": 2,
+        "xPlus": 2
+      },
+      "elderThing": {
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "script",
+            "fn": "drawFire"
+          }
+        ]
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": "X",
+        "x": "fireInPlay"
+      },
+      "cultist": {
+        "modifier": -2,
+        "revealAnother": {
+          "if": {
+            "all": [
+              {
+                "eventEnemy": {
+                  "trait": "Cultist"
+                }
+              },
+              {
+                "any": [
+                  {
+                    "testKind": "fight"
+                  },
+                  {
+                    "testKind": "evade"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "tablet": {
+        "modifier": "X",
+        "x": "atRitualSite",
+        "xTimes": 2,
+        "xPlus": 2
+      },
+      "elderThing": {
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "script",
+            "fn": "drawFire"
+          }
+        ]
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": "X",
+        "x": "fireInPlay",
+        "xTimes": 2
+      },
+      "cultist": {
+        "modifier": -3,
+        "revealAnother": {
+          "if": {
+            "all": [
+              {
+                "eventEnemy": {
+                  "trait": "Cultist"
+                }
+              },
+              {
+                "any": [
+                  {
+                    "testKind": "fight"
+                  },
+                  {
+                    "testKind": "evade"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "tablet": {
+        "modifier": -4,
+        "onReveal": [
+          {
+            "op": "script",
+            "fn": "ritualSiteFails"
+          }
+        ]
+      },
+      "elderThing": {
+        "modifier": -5,
+        "onFail": [
+          {
+            "op": "script",
+            "fn": "drawFire"
+          }
+        ]
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": "X",
+        "x": "fireInPlay",
+        "xTimes": 2
+      },
+      "cultist": {
+        "modifier": -3,
+        "revealAnother": {
+          "if": {
+            "all": [
+              {
+                "eventEnemy": {
+                  "trait": "Cultist"
+                }
+              },
+              {
+                "any": [
+                  {
+                    "testKind": "fight"
+                  },
+                  {
+                    "testKind": "evade"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "tablet": {
+        "modifier": -4,
+        "onReveal": [
+          {
+            "op": "script",
+            "fn": "ritualSiteFails"
+          }
+        ]
+      },
+      "elderThing": {
+        "modifier": -5,
+        "onFail": [
+          {
+            "op": "script",
+            "fn": "drawFire"
+          }
+        ]
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "Dr. Armitage barely escapes the sewers alive, wracked with guilt at leaving his companions behind. By dawn, an unquenchable fire has spread through all of Easttown, claiming countless lives. Although the Arkham Fire Department tries its best, the flames rage for three days before finally dying out. Those who fled whisper of unspeakable visions – a terrifying, ghoulish faces staring out of the flames – that still haunt them. Doctors and nurses are still unable to identify the source of the victims’ strange bruises, which will not heal. Any trace of Armitage’s companions, as well as the Brethren of Ash, has been eradicated in the inferno.",
+      "effects": []
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "Against all odds, the vessel of the ancient evil Elokoss has been destroyed, and the cult’s plans to bring her to this plane foiled. Dr. Armitage tends to the cultists as they reawaken. You find your friend among them, frightened and confused, but otherwise unharmed. As you explain the awful events of the evening, they listen intently. While escorting them and the rest of the innocents out of the sewers, you notice a strange, familiar mark on their neck. The bruise has lightened, and is only faintly visible, but it is still there.\nIt may only be a matter of time until the mark reawakens, and more followers of the Queen of Ash rise again to resurrect their goddess. You vow you will be ready, should that day come again.",
+      "effects": []
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "A howling wind pelts you with cinders. Dr. Armitage pulls a battered tome out of the hands of a fallen cultist and chants a guttural, inhuman language. A loud crack, as of splitting timber, resounds through the cistern, and the flaming tree turns to powdery ash before your very eyes. All around you, the cultists drop their weapons and stop in their tracks, looking suddenly lost. They are no longer under Elokoss’s sway.\nYou find your friend among them, frightened and confused, but otherwise unharmed. All trace of the mark on their neck has vanished, and the rest of the cult seem to have returned to normal, with no memory of the events of the evening. Still, your experience tonight leaves you fearful. In the months ahead, the slightest hint of smoke sets your pulse racing. The flames have subsided, but you can’t shake the nagging feeling that somewhere deep below the city, the embers of Elokoss’s rage continue to smolder.",
+      "effects": []
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "The old sluice gate screeches open, loosing a deluge of fetid sewage. Down the corridors, you hear the torrent of water accompanied by the screams of countless cultists. Rather than try to run, you accept your fate. It is clear that there is no escape. You did what had to be done. As the muck rises rapidly to your ankles, then your knees, then your neck, you think of your friend and Dr. Armitage, and the countless others who have likely drowned. You sacrificed yourself and them to stop the return of an ancient evil. You only hope your sacrifice was not in vain.",
+      "effects": []
+    }
+  }
+}

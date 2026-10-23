@@ -5,6 +5,7 @@ import {
   ask,
   baseSkill,
   card,
+  cardBlocked,
   checkCondition,
   def,
   emit,
@@ -141,6 +142,7 @@ export function canCommit(g: G, who: InvId, cardId: InstId, t: SkillTestState): 
   if (iconsFor(g, cardId, t.skill) === 0 && !(mom && iconsFor(g, cardId, "intellect") > 0))
     return false;
   if (d.commitOnlyOwnTest && who !== t.inv) return false;
+  if (cardBlocked(g, who, cardId)) return false;
   if (
     d.maxCommitted !== undefined &&
     t.committed.filter((c) => card(g, c).code === d.code).length >= d.maxCommitted
@@ -423,7 +425,10 @@ function resolveTokensStage(g: G) {
     } else {
       const eff = scen.tokens[g.s.difficulty]?.[token as SymbolToken];
       if (eff) {
-        mod = eff.modifier === "X" ? -tokenX(g, eff.x!, t.inv) : eff.modifier;
+        mod =
+          eff.modifier === "X"
+            ? -(tokenX(g, eff.x!, t.inv) * (eff.xTimes ?? 1) + (eff.xPlus ?? 0))
+            : eff.modifier;
         const condOk = !eff.condition || checkCondition(g, eff.condition, ctx);
         if (condOk && eff.onReveal)
           push(g, { t: "Effects", effects: eff.onReveal, ctx: { ...ctx, token } });
@@ -715,7 +720,8 @@ function kindResultStage(g: G, step: Extract<Step, { t: "Test" }>) {
         );
       }
     }
-  } else if (t.target && (t.kind === "fight" || t.kind === "evade")) {
+  }
+  if (!t.success && t.target && (t.kind === "fight" || t.kind === "evade")) {
     const e = g.s.cards[t.target];
     // the attack's damage goes to the one other investigator the enemy is engaged with (Grimoire, Fight Action)
     if (
@@ -748,6 +754,14 @@ function kindResultStage(g: G, step: Extract<Step, { t: "Test" }>) {
       steps.push({ t: "EnemyAttack", enemy: t.target, inv: t.inv, aoo: true, key: attackKey(g) });
     }
   }
+  // a ready elusive enemy slips away after it is attacked (after a retaliate attack, which slips it away itself)
+  const attacked = t.kind === "fight" && t.target ? g.s.cards[t.target] : undefined;
+  if (
+    attacked?.zone === "enemy" &&
+    !attacked.exhausted &&
+    def(g, t.target!).keywords.includes("elusive")
+  )
+    steps.push({ t: "Script", code: "__engine", fn: "elusive", ctx: { enemy: t.target } });
   push(g, ...steps);
 }
 

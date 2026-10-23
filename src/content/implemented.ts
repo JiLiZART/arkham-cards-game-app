@@ -3,7 +3,7 @@ import type { CardDef } from "./schema";
 
 /** the keywords the engine acts on by themselves (CardDef.keywords) */
 const KEYWORD =
-  /^(hunter|retaliate|aloof|alert|massive|surge|peril|fast|exceptional)(\s*\(\d+\))?$/i;
+  /^(hunter|retaliate|aloof|alert|massive|surge|peril|fast|exceptional|doomed|elusive)(\s*\(\d+\))?$/i;
 
 /** the spawn values the engine resolves (rules/enemies.ts): the two keywords, or the name of a location in the content */
 function spawnResolves(db: ContentDb, spawn: string | undefined): boolean {
@@ -26,14 +26,22 @@ const LINE_RULES: [RegExp, (c: CardDef, db: ContentDb) => boolean][] = [
   [/^Max \d+ committed per skill test/i, (c) => c.maxCommitted !== undefined],
   [/^As an additional cost to commit .*, take \d+ horror/i, (c) => !!c.commitHorror],
   [/^You may commit .* after revealing chaos tokens/i, (c) => !!c.commitAfterReveal],
+  // deckbuilding lines, read by the deck validator (engine/decks.ts) and the setup (a permanent card starts in play)
+  [/^((Permanent|Reward|Limit \d+ per deck|Purchase only at deck creation)\.\s*)+$/, () => true],
+  [/^You get \+\d+ deck size\.$/, () => true],
+  [
+    /^Your investigator's Deckbuilding Options gains: "one other \[\[\w+\]\] or \[\[\w+\]\] asset/,
+    () => true,
+  ],
 ];
 
-const keywordsOnly = (line: string) =>
+/** a line of keywords, with a "Prey (…)" among them when the card's prey is set */
+const keywordsOnly = (line: string, c: CardDef) =>
   line
     .split(".")
     .map((p) => p.trim())
     .filter(Boolean)
-    .every((p) => KEYWORD.test(p));
+    .every((p) => KEYWORD.test(p) || (p.startsWith("Prey (") && !!c.prey));
 
 const DIFFICULTIES = { front: ["easy", "standard"], back: ["hard", "expert"] } as const;
 const SYMBOLS: Record<string, string> = {
@@ -52,7 +60,7 @@ function tokenNeeds(rest: string): ("x" | "onFail" | "revealAnother" | "effect")
     .map((p) => p.trim())
     .filter(Boolean)) {
     if (/^[-+]?\d+$/.test(sentence)) continue; // the modifier
-    if (/^-X$/.test(sentence)) needs.add("x");
+    if (/^-X$/.test(sentence) || /^-\d+ (for each|\(-\d+ instead)/.test(sentence)) needs.add("x");
     else if (/^X is /.test(sentence)) continue;
     else if (/^If you fail/i.test(sentence)) {
       needs.add("onFail");
@@ -129,11 +137,13 @@ export function implemented(db: ContentDb, code: string): boolean {
   // both sides are printed text; a line break is printed as <br/> as often as a newline
   const lines = `${c.text}\n${c.backText ?? ""}`
     .replace(/<br\s*\/?>/g, "\n")
+    // italic reminder text in parentheses explains a keyword: not a line of its own
+    .replace(/<i>\([^<]*\)<\/i>/g, "")
     .replace(/<[^>]+>/g, "")
     .split("\n")
     .map((l) => l.trim())
     .filter(Boolean);
   return lines.every(
-    (l) => keywordsOnly(l) || LINE_RULES.some(([re, set]) => re.test(l) && set(c, db)),
+    (l) => keywordsOnly(l, c) || LINE_RULES.some(([re, set]) => re.test(l) && set(c, db)),
   );
 }

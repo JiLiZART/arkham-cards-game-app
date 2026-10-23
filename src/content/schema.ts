@@ -152,6 +152,10 @@ export const ModFlag = z.enum([
   "cannotUseOtherAssetAbilities",
   /** your first action each round provokes no attack of opportunity (Dr. Henry Armitage) */
   "firstActionNoAoO",
+  /** cards matching the modifier's filter can't be played or committed (Languor) */
+  "cannotPlayOrCommit",
+  "noAttacksOfOpportunity",
+  "cannotBeDamaged",
 ]);
 export type ModFlag = z.infer<typeof ModFlag>;
 
@@ -196,6 +200,8 @@ export const Cost = z
     damageOnSelf: z.number().optional(),
     takeHorror: z.number().optional(),
     takeDamage: z.number().optional(),
+    /** resources spent per investigator in the game (Naomi O'Bannion) */
+    resourcesPerInvestigator: z.number().optional(),
     /** spend from the card's uses or the resource pool, the card first (Physical Training 4) */
     resourcesOrUses: z.number().optional(),
     discardFromHand: z.number().optional(),
@@ -246,7 +252,10 @@ export type Condition =
   | { eventEnemyAttackedYouThisRound: true }
   | { eventCardIsSelf: true }
   | { canPay: Cost }
-  | { testTokens: ChaosToken[] };
+  | { testTokens: ChaosToken[] }
+  | { eventAtThisLocation: true }
+  /** a condition a card or scenario script decides (`CardScript.conditions`) */
+  | { script: string };
 
 export const Condition: z.ZodType<Condition> = z.lazy(() =>
   z.union([
@@ -294,6 +303,8 @@ export const Condition: z.ZodType<Condition> = z.lazy(() =>
     z.object({ eventCardIsSelf: z.literal(true) }).strict(),
     z.object({ canPay: Cost }).strict(),
     z.object({ testTokens: z.array(ChaosToken) }).strict(),
+    z.object({ eventAtThisLocation: z.literal(true) }).strict(),
+    z.object({ script: z.string() }).strict(),
   ]),
 );
 
@@ -436,6 +447,8 @@ export type Effect =
       draw?: boolean;
       /** the weaknesses among the searched cards are drawn too (Mysterious Grimoire) */
       drawWeaknesses?: boolean;
+      /** if no card was taken, draw 1 card (Ye Olde Magick Shoppe) */
+      orDraw?: boolean;
     }
   /** `anyDeck`: any investigator's deck or the encounter deck (Scrying); the cards go back on top in the order chosen */
   | { op: "lookAtTop"; amount: number; anyDeck?: boolean }
@@ -456,7 +469,7 @@ export type Effect =
       filter: CardFilter;
       count?: number;
       countIfPlayersAtLeast?: [number, number];
-      then: "leadDraws" | "spawnAt";
+      then: "leadDraws" | "youDraw" | "spawnAt";
       at?: string;
       doom?: number;
       shuffleDiscardFirst?: boolean;
@@ -470,7 +483,13 @@ export type Effect =
   | { op: "engageAny"; each: Effect[]; done?: string[] }
   | { op: "readyCard"; filter: CardFilter }
   /** choose a card of your deck or discard pile that you can afford, play it, shuffle the deck */
-  | { op: "searchAndPlay"; filter: CardFilter; costMod?: number; deckOnly?: boolean }
+  | {
+      op: "searchAndPlay";
+      filter: CardFilter;
+      costMod?: number;
+      deckOnly?: boolean;
+      discardOnly?: boolean;
+    }
   | { op: "checkDoom" }
   | { op: "returnSelfToHand" }
   /** spend uses from the source, or resolve `orElse` when it hasn't enough (Cosmic Flame's backlash) */
@@ -694,6 +713,7 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
         target: InvTarget.optional(),
         draw: z.boolean().optional(),
         drawWeaknesses: z.boolean().optional(),
+        orDraw: z.boolean().optional(),
       })
       .strict(),
     z
@@ -727,7 +747,7 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
         filter: CardFilter,
         count: z.number().optional(),
         countIfPlayersAtLeast: z.tuple([z.number(), z.number()]).optional(),
-        then: z.enum(["leadDraws", "spawnAt"]),
+        then: z.enum(["leadDraws", "youDraw", "spawnAt"]),
         at: z.string().optional(),
         doom: z.number().optional(),
         shuffleDiscardFirst: z.boolean().optional(),
@@ -758,6 +778,7 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
         filter: CardFilter,
         costMod: z.number().optional(),
         deckOnly: z.boolean().optional(),
+        discardOnly: z.boolean().optional(),
       })
       .strict(),
     z.object({ op: z.literal("checkDoom") }).strict(),
@@ -898,6 +919,10 @@ export const TRIGGERS = [
   "resourcesSpent",
   /** after an investigator's damage is placed on an enemy */
   "enemyDamaged",
+  /** after an investigator discovers clues (`location`, `amount`) */
+  "cluesDiscovered",
+  /** after doom is placed on a card (`card`) */
+  "doomPlaced",
 ] as const;
 export const Trigger = z.enum(TRIGGERS);
 export type Trigger = z.infer<typeof Trigger>;
@@ -1030,6 +1055,7 @@ export const CardDef = z
             "remainingHealth",
             "remainingSanity",
             "cardsInHand",
+            "resources",
           ]),
         }),
         z.object({
@@ -1060,6 +1086,8 @@ export const CardDef = z
     actCluesPerInvestigator: z.boolean().optional(),
     /** when the group may spend clues to advance this act (default: any time during a turn) */
     actAdvance: z.enum(["turn", "script"]).optional(),
+    /** clues the group spends, per investigator, to enter it while unrevealed (Underground Cistern) */
+    enterCluesPerInvestigator: z.number().optional(),
     /** location investigated with a different skill */
     investigateSkill: Skill.optional(),
     victory: z.number().optional(),
@@ -1075,6 +1103,8 @@ export const CardDef = z
           "peril",
           "fast",
           "exceptional",
+          "doomed",
+          "elusive",
         ]),
       )
       .default([]),
@@ -1269,8 +1299,21 @@ export const TokenEffect = z
     modifier: z.union([z.number(), z.enum(["X"])]),
     /** how X is computed; implemented in engine/rules/chaosBag */
     x: z
-      .enum(["ghoulsAtYourLocation", "highestDoomOnCultist", "monstersInPlay", "totalDoomInPlay"])
+      .enum([
+        "ghoulsAtYourLocation",
+        "highestDoomOnCultist",
+        "monstersInPlay",
+        "totalDoomInPlay",
+        "actStage",
+        "elitesInVictoryOrUnderAct",
+        "cluesYouControl",
+        "fireInPlay",
+        "atRitualSite",
+      ])
       .optional(),
+    /** X becomes X × xTimes + xPlus */
+    xTimes: z.number().optional(),
+    xPlus: z.number().optional(),
     onReveal: z.array(Effect).optional(),
     onFail: z.array(Effect).optional(),
     /** effects only if condition holds when revealed */

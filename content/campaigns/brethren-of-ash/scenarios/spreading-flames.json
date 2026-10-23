@@ -1,0 +1,261 @@
+{
+  "id": "spreading-flames",
+  "name": "Spreading Flames",
+  "i18nId": "spreading_flames",
+  "card": "12105",
+  "intro": "Strange things are afoot in the city of Arkham. A recent spate of fires and grisly \"accidents\" have the entire city on edge. While the Arkham Advertiser has offered a few flimsy explanations, you and your associates are not so sure. Robed figures have been sighted near these odd happenings, and your mutual friend is convinced they are to blame. You agree to meet at your friend's dormitory at Miskatonic University to try and get to the bottom of things. However, when you arrive, your friend's room is empty and the dormitories are strangely quiet…",
+  "encounterSets": [
+    "spreading_flames",
+    "ashen_pilgrims",
+    "bystanders",
+    "cosmic_evils",
+    "eldritch_lore",
+    "fire_ch2",
+    "hallucinations",
+    "mad_science",
+    "miskatonic_university"
+  ],
+  "acts": [
+    "12109",
+    "12110",
+    "12111",
+    "12112"
+  ],
+  "agendas": [
+    "12106",
+    "12107",
+    "12108"
+  ],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "12113"
+      ]
+    },
+    {
+      "do": "setAside",
+      "codes": [
+        "12129",
+        "12129",
+        "12129",
+        "12129",
+        "12129",
+        "12115",
+        "12114"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "12113"
+    }
+  ],
+  "connections": [
+    [
+      "12113",
+      "12117"
+    ],
+    [
+      "12117",
+      "12116"
+    ],
+    [
+      "12116",
+      "12118"
+    ],
+    [
+      "12116",
+      "12119"
+    ],
+    [
+      "12116",
+      "12120"
+    ]
+  ],
+  "layout": {
+    "12113": [
+      0,
+      1
+    ],
+    "12117": [
+      1,
+      1
+    ],
+    "12116": [
+      2,
+      1
+    ],
+    "12120": [
+      3,
+      0
+    ],
+    "12118": [
+      3,
+      1
+    ],
+    "12119": [
+      3,
+      2
+    ]
+  },
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": "X",
+        "x": "actStage"
+      },
+      "tablet": {
+        "modifier": -1,
+        "revealAnother": true,
+        "onFail": [
+          {
+            "op": "takeDamage",
+            "amount": 1
+          }
+        ]
+      },
+      "elderThing": {
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "chooseOne",
+            "options": [
+              {
+                "label": "Draw the topmost Fire!",
+                "condition": {
+                  "not": {
+                    "failedBy": {
+                      "max": 1
+                    }
+                  }
+                },
+                "effects": [
+                  {
+                    "op": "script",
+                    "fn": "drawFire"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": "X",
+        "x": "actStage"
+      },
+      "tablet": {
+        "modifier": -1,
+        "revealAnother": true,
+        "onFail": [
+          {
+            "op": "takeDamage",
+            "amount": 1
+          }
+        ]
+      },
+      "elderThing": {
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "chooseOne",
+            "options": [
+              {
+                "label": "Draw the topmost Fire!",
+                "condition": {
+                  "not": {
+                    "failedBy": {
+                      "max": 1
+                    }
+                  }
+                },
+                "effects": [
+                  {
+                    "op": "script",
+                    "fn": "drawFire"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": "X",
+        "x": "actStage",
+        "xPlus": 1
+      },
+      "tablet": {
+        "modifier": -2,
+        "revealAnother": true,
+        "onFail": [
+          {
+            "op": "takeDamage",
+            "amount": 1
+          }
+        ]
+      },
+      "elderThing": {
+        "modifier": -4,
+        "onFail": [
+          {
+            "op": "script",
+            "fn": "drawFire"
+          }
+        ]
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": "X",
+        "x": "actStage",
+        "xPlus": 1
+      },
+      "tablet": {
+        "modifier": -2,
+        "revealAnother": true,
+        "onFail": [
+          {
+            "op": "takeDamage",
+            "amount": 1
+          }
+        ]
+      },
+      "elderThing": {
+        "modifier": -4,
+        "onFail": [
+          {
+            "op": "script",
+            "fn": "drawFire"
+          }
+        ]
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "You awaken at the edge of campus, eyes stinging from the smoke, and watch in stunned silence as Miskatonic University burns. Embers dance in the sky above the conflagration like burning stars. Too exhausted to help, you watch a cadre of students struggle in vain to stop the blaze. First the observatory, then the dorms, and finally the science building succumb to the flames. Amidst the clamor, you find Dr. Henry Armitage standing under a birch tree, watching Orne Library burn. The flames lick the bones of the stately building clean, leaving behind a skeletal ruin. The head librarian is clearly in shock. His face goes ashen as you explain the odd circumstances surrounding your friend's disappearance. Who was your burning nemesis? And what did the hooded figures patrolling the campus want?",
+      "effects": []
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "Mayhem unfolds as dozens of students work together to fight the raging inferno. Your mind races with a flurry of questions. Who was your pursuer? What did the hooded figures patrolling the campus actually want? And where is your friend?\nDr. Armitage places one hand on your shoulder, startling you. \"If we hope to find your friend and their kidnapper, we must leave now. I'll explain everything on the way.\" You look at the students, fighting bravely against the blaze, and then at the head librarian. You could stay and help, but it would cost you precious time.",
+      "effects": []
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "Your eyes sting from the acrid smoke as you work hand in hand with the others to quench the hungry flames. You manage to hold the flames at bay until the Arkham Fire Department arrives on the scene. With the situation under control, you hasten to meet up with Dr. Armitage.",
+      "effects": []
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "You flee the campus with Dr. Armitage, leaving the university to its fate. The wail of sirens drowns out all other sounds as you follow the head librarian to his apartment.",
+      "effects": []
+    }
+  }
+}

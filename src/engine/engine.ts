@@ -15,7 +15,7 @@ import { handlers as effectHandlers } from "./effects";
 import { randInt, shuffle } from "./rng";
 import { finishEvent, handlers as cardHandlers } from "./rules/cards";
 import { handlers as enemyHandlers } from "./rules/enemies";
-import { exhaustEnemy } from "./rules/enemies";
+import { elusive, exhaustEnemy } from "./rules/enemies";
 import {
   basicInvestigate,
   endTurnCleanup,
@@ -89,6 +89,7 @@ const ENGINE_FNS: Record<string, (g: G, ctx: EffCtx, step: Step) => void> = {
   },
   roundCleanup: (g) => roundCleanup(g),
   exhaustEnemy: (g, ctx) => exhaustEnemy(g, ctx.enemy!),
+  elusive: (g, ctx, step) => elusive(g, ctx.enemy!, step),
   readyAll: (g) => readyAll(g),
   chooseLead: (g, _ctx, step) => chooseLead(g, step),
   nextAgenda: (g, ctx) => nextAgenda(g, ctx.source!),
@@ -237,8 +238,11 @@ function applySetupStep(g: G, st: SetupStep) {
       return;
     }
     case "setAside":
+      // a code listed n times sets n copies aside: a copy already set aside is not taken again
       for (const code of st.codes) {
-        const c = take(code);
+        const c = Object.values(s.cards).find(
+          (x) => x.code === code && ["encounterDeck", "sideDeck", "limbo"].includes(x.zone),
+        );
         if (c) moveCard(g, c.id, "setAside");
       }
       return;
@@ -325,7 +329,11 @@ export function createGame(db: ContentDb, setup: GameSetup): Result {
       mentalTrauma: 0,
       player,
     };
-    for (const code of x.deck) createCard(g, code, "deck", x.code);
+    for (const code of x.deck) {
+      const id = createCard(g, code, "deck", x.code);
+      // a permanent card starts the game in play (Grimoire, Permanent)
+      if (db.cards[code].text.startsWith("Permanent.")) moveCard(g, id, "play");
+    }
   });
   // encounter cards
   const sets = [...scen.encounterSets];

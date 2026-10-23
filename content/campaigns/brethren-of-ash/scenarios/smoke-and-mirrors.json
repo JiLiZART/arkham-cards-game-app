@@ -1,0 +1,366 @@
+{
+  "id": "smoke-and-mirrors",
+  "name": "Smoke and Mirrors",
+  "i18nId": "smoke_and_mirrors",
+  "card": "12133",
+  "intro": "You follow Dr. Armitage back to his apartment. A veil of black smoke obscures the moon and stars as a warm breeze carries ash and embers through the familiar city streets.\n\"I've had my suspicions that something foul was afoot. Several students have disappeared in the last few weeks,\" the head librarian tells you. \"All of them began to exhibit strange behaviors after attending a supposedly exclusive ‘meeting' off campus not long ago. They complained of horrible, incessant whispers and a strange bruise that suddenly appeared on their skin. And then, they vanished.\"\nFearing the worst, you ask him about your friend. \"They insisted we meet earlier today,\" he replies. \"They told me that an organization calling themselves the ‘Brethren of Ash' have been inviting students and vulnerable citizens to these strange assemblies. Your friend listed a number of individuals who attended, although it is unclear whether they were prospective recruits or loyal adherents. Before they left, your friend spoke of another meeting tonight. A gathering of all the faithful. I don't know why, but the thought of it fills me with an inutterable dread. And now your friend is gone,\" he says dourly.\nYou resolve to interrogate the list of suspects and then meet at Velma's Diner in Easttown before midnight. The head librarian suggests you use a light touch rather than a more heavy-handed approach, which could alert the cabal. However, you worry you will not have any other choice.",
+  "encounterSets": [
+    "smoke_and_mirrors",
+    "arcane_lock",
+    "arkham_ch2",
+    "bad_weather",
+    "dead_ends",
+    "flying_terrors",
+    "gangs_of_arkham",
+    "people_of_arkham",
+    "whippoorwills_ch2"
+  ],
+  "acts": [
+    "12136"
+  ],
+  "agendas": [
+    "12134",
+    "12135"
+  ],
+  "setup": [
+    {
+      "do": "addChaosToken",
+      "token": "cultist"
+    },
+    {
+      "do": "addChaosToken",
+      "token": "cultist"
+    },
+    {
+      "do": "putRandomIntoPlay",
+      "from": [
+        "12145",
+        "12146"
+      ],
+      "count": 1
+    },
+    {
+      "do": "putRandomIntoPlay",
+      "from": [
+        "12147",
+        "12148"
+      ],
+      "count": 1
+    },
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "12149",
+        "12150",
+        "12151",
+        "12152",
+        "12153",
+        "12154"
+      ]
+    },
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "12155"
+      ],
+      "when": {
+        "logHas": "miskatonic_university_burned"
+      }
+    },
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "12156"
+      ],
+      "when": {
+        "not": {
+          "logHas": "miskatonic_university_burned"
+        }
+      }
+    },
+    {
+      "do": "placeDoomOnAgenda",
+      "amount": 1,
+      "when": {
+        "not": {
+          "logHas": "miskatonic_university_burned"
+        }
+      }
+    },
+    {
+      "do": "startAt",
+      "code": "Miskatonic University"
+    },
+    {
+      "do": "script",
+      "fn": "setup"
+    }
+  ],
+  "connections": [
+    [
+      "12149",
+      "12155"
+    ],
+    [
+      "12149",
+      "12156"
+    ],
+    [
+      "12149",
+      "12145"
+    ],
+    [
+      "12149",
+      "12146"
+    ],
+    [
+      "12145",
+      "12150"
+    ],
+    [
+      "12146",
+      "12150"
+    ],
+    [
+      "12150",
+      "12152"
+    ],
+    [
+      "12155",
+      "12147"
+    ],
+    [
+      "12155",
+      "12148"
+    ],
+    [
+      "12156",
+      "12147"
+    ],
+    [
+      "12156",
+      "12148"
+    ],
+    [
+      "12151",
+      "12153"
+    ],
+    [
+      "12155",
+      "12151"
+    ],
+    [
+      "12156",
+      "12151"
+    ],
+    [
+      "12151",
+      "12152"
+    ],
+    [
+      "12147",
+      "12153"
+    ],
+    [
+      "12148",
+      "12153"
+    ],
+    [
+      "12153",
+      "12154"
+    ],
+    [
+      "12151",
+      "12150"
+    ]
+  ],
+  "layout": {
+    "12149": [
+      0,
+      0
+    ],
+    "12145": [
+      1,
+      0
+    ],
+    "12146": [
+      1,
+      0
+    ],
+    "12150": [
+      2,
+      0
+    ],
+    "12155": [
+      0,
+      1
+    ],
+    "12156": [
+      0,
+      1
+    ],
+    "12151": [
+      1,
+      1
+    ],
+    "12152": [
+      2,
+      1
+    ],
+    "12147": [
+      0,
+      2
+    ],
+    "12148": [
+      0,
+      2
+    ],
+    "12153": [
+      1,
+      2
+    ],
+    "12154": [
+      2,
+      2
+    ]
+  },
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": "X",
+        "x": "elitesInVictoryOrUnderAct"
+      },
+      "cultist": {
+        "modifier": -1,
+        "revealAnother": {
+          "if": {
+            "eventEnemy": {
+              "elite": true
+            }
+          }
+        }
+      },
+      "tablet": {
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "dropClues",
+            "amount": 1
+          }
+        ]
+      },
+      "elderThing": {
+        "modifier": "X",
+        "x": "cluesYouControl"
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": "X",
+        "x": "elitesInVictoryOrUnderAct"
+      },
+      "cultist": {
+        "modifier": -1,
+        "revealAnother": {
+          "if": {
+            "eventEnemy": {
+              "elite": true
+            }
+          }
+        }
+      },
+      "tablet": {
+        "modifier": -3,
+        "onFail": [
+          {
+            "op": "dropClues",
+            "amount": 1
+          }
+        ]
+      },
+      "elderThing": {
+        "modifier": "X",
+        "x": "cluesYouControl"
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": "X",
+        "x": "elitesInVictoryOrUnderAct",
+        "xPlus": 2
+      },
+      "cultist": {
+        "modifier": -3,
+        "revealAnother": {
+          "if": {
+            "eventEnemy": {
+              "elite": true
+            }
+          }
+        }
+      },
+      "tablet": {
+        "modifier": -4,
+        "onFail": [
+          {
+            "op": "dropClues",
+            "amount": 1
+          }
+        ]
+      },
+      "elderThing": {
+        "modifier": "X",
+        "x": "cluesYouControl",
+        "xTimes": 2
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": "X",
+        "x": "elitesInVictoryOrUnderAct",
+        "xPlus": 2
+      },
+      "cultist": {
+        "modifier": -3,
+        "revealAnother": {
+          "if": {
+            "eventEnemy": {
+              "elite": true
+            }
+          }
+        }
+      },
+      "tablet": {
+        "modifier": -4,
+        "onFail": [
+          {
+            "op": "dropClues",
+            "amount": 1
+          }
+        ]
+      },
+      "elderThing": {
+        "modifier": "X",
+        "x": "cluesYouControl",
+        "xTimes": 2
+      }
+    }
+  },
+  "resolutions": {
+    "none": {
+      "title": "No resolution was reached",
+      "text": "On the cab ride to Velma's Diner, you consider all that you've learned. Unfortunately, your search turned up plenty of leads but few solid results. You can only hope Dr. Armitage fared better.",
+      "effects": []
+    },
+    "R1": {
+      "title": "Resolution 1",
+      "text": "You hail a cab bound for Easttown and reflect on all that you've learned. Despite their attempts to hide their true identity, you've sussed out the real culprit. You only hope the information you gathered is enough to save your missing friend.",
+      "effects": []
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "On your way to meet Dr. Armitage, you ask the cab to swing by the secure location where you kept your unconscious nemesis. The smell of smoke greets you as you enter, and the floors are black with soot. Despite your best efforts, the ghoulish figure escaped capture. The handcuffs you used to secure the servant were smashed—not melted or otherwise tampered with—suggesting that they had help in their escape.",
+      "effects": []
+    }
+  }
+}

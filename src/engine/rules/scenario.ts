@@ -106,11 +106,15 @@ export const doomInPlay = (g: G) =>
 export const placeDoomHandler: Handler<"PlaceDoom"> = (g, step) => {
   const c = g.s.cards[step.card];
   if (!c) return;
+  // the agenda may replace placing doom (Brethren of Ash)
+  const agenda = g.s.agenda ? g.s.cards[g.s.agenda] : undefined;
+  if (agenda && g.db.scripts[agenda.code]?.wouldPlaceDoom?.(g, agenda.id, step.n)) return;
   c.doom += step.n;
   emit(g, "doom", `${step.n} doom placed on ${def(g, step.card).name}`, {
     card: step.card,
     data: { n: step.n },
   });
+  push(g, win("doomPlaced", { card: step.card, amount: step.n }));
 };
 
 export const checkDoomHandler: Handler<"CheckDoom"> = (g) => {
@@ -240,6 +244,8 @@ export const resolutionHandler: Handler<"Resolution"> = (g, step) => {
   g.s.resolution = step.id;
   g.s.queue = [];
   g.s.pending = null;
+  // what the scenario's script records about the game, before its cards are gone (Smoke and Mirrors)
+  g.db.scripts[g.s.scenarioId]?.hooks?.ended?.(g, { x: step.id === "none" ? 0 : 1 });
   // "when the game ends" effects (Cover Up, Hospital Debts; Dead Ends in the hand)
   for (const c of Object.values(g.s.cards)) {
     if (c.zone !== "threat" && c.zone !== "play" && c.zone !== "hand") continue;

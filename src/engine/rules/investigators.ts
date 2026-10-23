@@ -22,6 +22,7 @@ import {
   moveCard,
   playerCount,
   push,
+  spendableGroupClues,
   tapToDraw,
   type G,
 } from "../core";
@@ -348,7 +349,18 @@ export function chooseLead(g: G, step: Step) {
 // ---------- movement ----------
 export function canMoveTo(g: G, i: InvId, to: InstId) {
   const from = inv(g, i).location;
-  return !!from && connections(g, from).includes(to) && !hasFlag(g, to, "cannotMoveInto");
+  return (
+    !!from &&
+    connections(g, from).includes(to) &&
+    !hasFlag(g, to, "cannotMoveInto") &&
+    spendableGroupClues(g) >= enterCost(g, to)
+  );
+}
+
+/** clues the group spends to enter a location (Underground Cistern, unrevealed) */
+export function enterCost(g: G, to: InstId): number {
+  const n = def(g, to).enterCluesPerInvestigator;
+  return n && !card(g, to).revealed ? n * playerCount(g) : 0;
 }
 
 export const moveHandler: Handler<"Move"> = (g, step) => {
@@ -439,6 +451,7 @@ export const gainCluesHandler: Handler<"GainClues"> = (g, step) => {
   const n = Math.min(step.n, loc.clues);
   loc.clues -= n;
   inv(g, step.inv).clues += n;
+  if (n > 0) push(g, win("cluesDiscovered", { inv: step.inv, location: step.location, amount: n }));
   emit(
     g,
     "clues",

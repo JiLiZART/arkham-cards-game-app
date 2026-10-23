@@ -263,11 +263,11 @@
   "cob": {
    "encounter": {
     "total": 111,
-    "works": 0,
+    "works": 1,
     "rest": {
      "act": 8,
      "agenda": 12,
-     "enemy": 27,
+     "enemy": 26,
      "location": 42,
      "scenario": 3,
      "treachery": 19
@@ -318,22 +318,13 @@
   "core_2026": {
    "encounter": {
     "total": 89,
-    "works": 1,
-    "rest": {
-     "act": 7,
-     "agenda": 8,
-     "enemy": 21,
-     "location": 26,
-     "scenario": 3,
-     "treachery": 23
-    }
+    "works": 89,
+    "rest": {}
    },
    "player": {
     "total": 72,
-    "works": 71,
-    "rest": {
-     "asset": 1
-    }
+    "works": 72,
+    "rest": {}
    }
   },
   "cotr": {
@@ -2106,18 +2097,27 @@
   }
  },
  "campaigns": {
+  "brethren-of-ash": {
+   "cards": {
+    "total": 92,
+    "works": 92,
+    "rest": {}
+   },
+   "unscripted": [],
+   "complete": true
+  },
   "children-of-blood": {
    "cards": {
     "total": 119,
-    "works": 0,
+    "works": 6,
     "rest": {
      "act": 8,
      "agenda": 12,
      "asset": 6,
-     "enemy": 27,
+     "enemy": 25,
      "location": 42,
      "scenario": 3,
-     "treachery": 21
+     "treachery": 17
     }
    },
    "unscripted": [
@@ -3203,15 +3203,15 @@
    "campaign": "children-of-blood",
    "cards": {
     "total": 43,
-    "works": 0,
+    "works": 2,
     "rest": {
      "act": 3,
      "agenda": 4,
      "asset": 2,
-     "enemy": 13,
+     "enemy": 12,
      "location": 7,
      "scenario": 1,
-     "treachery": 13
+     "treachery": 12
     }
    },
    "tokens": false,
@@ -4050,15 +4050,15 @@
    "campaign": "children-of-blood",
    "cards": {
     "total": 51,
-    "works": 0,
+    "works": 2,
     "rest": {
      "act": 3,
      "agenda": 4,
      "asset": 2,
-     "enemy": 11,
+     "enemy": 10,
      "location": 19,
      "scenario": 1,
-     "treachery": 11
+     "treachery": 10
     }
    },
    "tokens": false,
@@ -4122,6 +4122,17 @@
    "tokens": false,
    "scripted": false,
    "complete": false
+  },
+  "queen-of-ash": {
+   "campaign": "brethren-of-ash",
+   "cards": {
+    "total": 36,
+    "works": 36,
+    "rest": {}
+   },
+   "tokens": true,
+   "scripted": true,
+   "complete": true
   },
   "read-or-die": {
    "campaign": "side-read-or-die",
@@ -4876,15 +4887,15 @@
    "campaign": "children-of-blood",
    "cards": {
     "total": 49,
-    "works": 0,
+    "works": 4,
     "rest": {
      "act": 2,
      "agenda": 4,
      "asset": 2,
-     "enemy": 8,
+     "enemy": 7,
      "location": 16,
      "scenario": 1,
-     "treachery": 16
+     "treachery": 13
     }
    },
    "tokens": false,
@@ -4910,6 +4921,28 @@
    "tokens": false,
    "scripted": false,
    "complete": false
+  },
+  "smoke-and-mirrors": {
+   "campaign": "brethren-of-ash",
+   "cards": {
+    "total": 35,
+    "works": 35,
+    "rest": {}
+   },
+   "tokens": true,
+   "scripted": true,
+   "complete": true
+  },
+  "spreading-flames": {
+   "campaign": "brethren-of-ash",
+   "cards": {
+    "total": 28,
+    "works": 28,
+    "rest": {}
+   },
+   "tokens": true,
+   "scripted": true,
+   "complete": true
   },
   "the-apiary": {
    "campaign": "the-drowned-city",

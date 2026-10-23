@@ -530,6 +530,31 @@
       "original": "cathedral.ogg",
       "loop": true
     },
+    "bed:spreading-flames": {
+      "file": "bed-gathering",
+      "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+      "author": "SRG774",
+      "license": "CC0",
+      "original": "sector.mp3",
+      "loop": true
+    },
+    "bed:smoke-and-mirrors": {
+      "file": "bed-midnight-masks",
+      "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+      "author": "SRG774",
+      "license": "CC0",
+      "original": "airy.mp3",
+      "loop": true,
+      "loopStart": 10
+    },
+    "bed:queen-of-ash": {
+      "file": "bed-devourer-below",
+      "source": "https://opengameart.org/content/cathedral-in-the-forest-ambient-loop",
+      "author": "congusbongus",
+      "license": "CC0",
+      "original": "cathedral.ogg",
+      "loop": true
+    },
     "fight": {
       "file": "music-fight",
       "source": "https://opengameart.org/content/dark-cavern-ambient",

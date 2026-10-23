@@ -7800,6 +7800,384 @@
         }
       ]
     },
+    "music:bed:spreading-flames": {
+      "kind": "music",
+      "where": "the bed of Spreading Flames",
+      "candidates": [
+        {
+          "original": "music-hallway.ogg",
+          "preview": "music-bed-the-gathering/ca6029f8.m4a",
+          "source": "https://opengameart.org/content/hallway",
+          "author": "thenewkgb",
+          "license": "CC0",
+          "description": "music-hallway.ogg · music-hallway.ogg",
+          "sha256": "f38b088fc7d05dc3154a6a763540eeaccab683155fe93aac44b0153ee9fb4335",
+          "seam": 17.3
+        },
+        {
+          "original": "music-orien.ogg",
+          "preview": "music-bed-the-gathering/285cbb5b.m4a",
+          "source": "https://opengameart.org/content/orien",
+          "author": "Snabisch",
+          "license": "CC0",
+          "description": "music-orien.ogg · music-orien.ogg",
+          "sha256": "7e9a6f28b131ddb6c19f8f0ece0eb5e391d3657007e2156de6efabd6816ed58c",
+          "seam": 2.3
+        },
+        {
+          "original": "transmission.mp3",
+          "preview": "music-bed-the-gathering/bba4919f.m4a",
+          "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+          "author": "SRG774",
+          "license": "CC0",
+          "description": "transmission.mp3 · transmission.mp3",
+          "sha256": "ad4fee95b89809905a7a8c010759577d99cd2eb1332b339e34768d234981f857",
+          "seam": 9.4
+        },
+        {
+          "original": "drone57.wav",
+          "preview": "music-bed-the-gathering/088a88db.m4a",
+          "source": "https://opengameart.org/content/droning-sound-effects",
+          "author": "bretbernhoft",
+          "license": "CC0",
+          "description": "drone57.wav · drone57.wav",
+          "sha256": "414443b3716845e4b1133bbfbbdb429a7f464976ae70f6c2b6e6a1656945cb66",
+          "seam": 2.7
+        },
+        {
+          "original": "pulse.mp3",
+          "preview": "music-bed-the-gathering/0724f69f.m4a",
+          "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+          "author": "SRG774",
+          "license": "CC0",
+          "description": "pulse.mp3 · pulse.mp3",
+          "sha256": "8d53270befde7be6f2e836599e8895fc22dfb76c3d851138bb17c0974794fa98",
+          "seam": 1.2
+        },
+        {
+          "original": "urgent.mp3",
+          "preview": "music-bed-the-gathering/da7048f0.m4a",
+          "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+          "author": "SRG774",
+          "license": "CC0",
+          "description": "urgent.mp3 · urgent.mp3",
+          "sha256": "4aba1f1a01f328e0337a3764eb89d8d69e13ea2a86929840c787f4d736565b82",
+          "seam": 2.9
+        },
+        {
+          "original": "music-empty-city.ogg",
+          "preview": "music-bed-the-gathering/90d32c6a.m4a",
+          "source": "https://opengameart.org/content/emptycity-background-music",
+          "author": "TinyWorlds",
+          "license": "CC0",
+          "description": "music-empty-city.ogg · music-empty-city.ogg",
+          "sha256": "10cdeb8e7ede29f8afeedaec23f16297752a89aac36c37b06a0262b5190efaad",
+          "seam": 21.3
+        },
+        {
+          "original": "music-action-loop.ogg",
+          "preview": "music-bed-the-gathering/0c2b6b18.m4a",
+          "source": "https://opengameart.org/content/action-music-loop",
+          "author": "AppPro",
+          "license": "CC0",
+          "description": "music-action-loop.ogg · music-action-loop.ogg",
+          "sha256": "809ce77a8034bd951d92ab275b1f931bfd19de3e2fe5110a7e469a6024f82e92",
+          "seam": 5.9
+        },
+        {
+          "original": "music-determined-pursuit.wav",
+          "preview": "music-bed-the-gathering/66a1bc7f.m4a",
+          "source": "https://opengameart.org/content/determined-pursuit-epic-orchestra-loop",
+          "author": "Tozan",
+          "license": "CC0",
+          "description": "music-determined-pursuit.wav · music-determined-pursuit.wav",
+          "sha256": "e4f3be098b50213b56a60aefe60fffae79cd9f7c9008088f93c187ef1bbc856b",
+          "seam": 3.1
+        },
+        {
+          "original": "sector.mp3",
+          "preview": "music-bed-the-gathering/2235c64e.m4a",
+          "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+          "author": "SRG774",
+          "license": "CC0",
+          "description": "sector.mp3 · sector.mp3",
+          "sha256": "4f5e7f035dad8ce32d8c04393ec11470da52383dce0ffd421220c2de0ee2bf5d",
+          "seam": 3
+        },
+        {
+          "original": "airy.mp3",
+          "preview": "music-bed-the-gathering/cbafabac.m4a",
+          "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+          "author": "SRG774",
+          "license": "CC0",
+          "description": "airy.mp3 · airy.mp3",
+          "sha256": "2880297bb0bace79448ea47732aa7db78ea526663ce2791d733e353b6f8adf87",
+          "seam": 10.4
+        },
+        {
+          "original": "cathedral.ogg",
+          "preview": "music-bed-the-gathering/7bfc2872.m4a",
+          "source": "https://opengameart.org/content/cathedral-in-the-forest-ambient-loop",
+          "author": "congusbongus",
+          "license": "CC0",
+          "description": "cathedral.ogg · cathedral.ogg",
+          "sha256": "b9e05a1fcd5869b63193515e2a9c1bd578906a78e628e307f19527d387262593",
+          "seam": 0.2
+        }
+      ]
+    },
+    "music:bed:smoke-and-mirrors": {
+      "kind": "music",
+      "where": "the bed of Smoke and Mirrors",
+      "candidates": [
+        {
+          "original": "music-echoes-of-the-past.wav",
+          "preview": "music-bed-the-midnight-masks/e2cfa743.m4a",
+          "source": "https://opengameart.org/content/echoes-of-the-past",
+          "author": "glitchart",
+          "license": "CC0",
+          "description": "music-echoes-of-the-past.wav · music-echoes-of-the-past.wav",
+          "sha256": "ec149d7daceb8d0d5f20816ae401d8e04ea8e5960fc558d378c2c27139835292",
+          "seam": 1.7
+        },
+        {
+          "original": "music-hallway.ogg",
+          "preview": "music-bed-the-midnight-masks/ca6029f8.m4a",
+          "source": "https://opengameart.org/content/hallway",
+          "author": "thenewkgb",
+          "license": "CC0",
+          "description": "music-hallway.ogg · music-hallway.ogg",
+          "sha256": "f38b088fc7d05dc3154a6a763540eeaccab683155fe93aac44b0153ee9fb4335",
+          "seam": 17.3
+        },
+        {
+          "original": "music-orien.ogg",
+          "preview": "music-bed-the-midnight-masks/285cbb5b.m4a",
+          "source": "https://opengameart.org/content/orien",
+          "author": "Snabisch",
+          "license": "CC0",
+          "description": "music-orien.ogg · music-orien.ogg",
+          "sha256": "7e9a6f28b131ddb6c19f8f0ece0eb5e391d3657007e2156de6efabd6816ed58c",
+          "seam": 2.3
+        },
+        {
+          "original": "transmission.mp3",
+          "preview": "music-bed-the-midnight-masks/bba4919f.m4a",
+          "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+          "author": "SRG774",
+          "license": "CC0",
+          "description": "transmission.mp3 · transmission.mp3",
+          "sha256": "ad4fee95b89809905a7a8c010759577d99cd2eb1332b339e34768d234981f857",
+          "seam": 9.4
+        },
+        {
+          "original": "drone57.wav",
+          "preview": "music-bed-the-midnight-masks/088a88db.m4a",
+          "source": "https://opengameart.org/content/droning-sound-effects",
+          "author": "bretbernhoft",
+          "license": "CC0",
+          "description": "drone57.wav · drone57.wav",
+          "sha256": "414443b3716845e4b1133bbfbbdb429a7f464976ae70f6c2b6e6a1656945cb66",
+          "seam": 2.7
+        },
+        {
+          "original": "pulse.mp3",
+          "preview": "music-bed-the-midnight-masks/0724f69f.m4a",
+          "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+          "author": "SRG774",
+          "license": "CC0",
+          "description": "pulse.mp3 · pulse.mp3",
+          "sha256": "8d53270befde7be6f2e836599e8895fc22dfb76c3d851138bb17c0974794fa98",
+          "seam": 1.2
+        },
+        {
+          "original": "urgent.mp3",
+          "preview": "music-bed-the-midnight-masks/da7048f0.m4a",
+          "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+          "author": "SRG774",
+          "license": "CC0",
+          "description": "urgent.mp3 · urgent.mp3",
+          "sha256": "4aba1f1a01f328e0337a3764eb89d8d69e13ea2a86929840c787f4d736565b82",
+          "seam": 2.9
+        },
+        {
+          "original": "music-empty-city.ogg",
+          "preview": "music-bed-the-midnight-masks/90d32c6a.m4a",
+          "source": "https://opengameart.org/content/emptycity-background-music",
+          "author": "TinyWorlds",
+          "license": "CC0",
+          "description": "music-empty-city.ogg · music-empty-city.ogg",
+          "sha256": "10cdeb8e7ede29f8afeedaec23f16297752a89aac36c37b06a0262b5190efaad",
+          "seam": 21.3
+        },
+        {
+          "original": "music-action-loop.ogg",
+          "preview": "music-bed-the-midnight-masks/0c2b6b18.m4a",
+          "source": "https://opengameart.org/content/action-music-loop",
+          "author": "AppPro",
+          "license": "CC0",
+          "description": "music-action-loop.ogg · music-action-loop.ogg",
+          "sha256": "809ce77a8034bd951d92ab275b1f931bfd19de3e2fe5110a7e469a6024f82e92",
+          "seam": 5.9
+        },
+        {
+          "original": "music-determined-pursuit.wav",
+          "preview": "music-bed-the-midnight-masks/66a1bc7f.m4a",
+          "source": "https://opengameart.org/content/determined-pursuit-epic-orchestra-loop",
+          "author": "Tozan",
+          "license": "CC0",
+          "description": "music-determined-pursuit.wav · music-determined-pursuit.wav",
+          "sha256": "e4f3be098b50213b56a60aefe60fffae79cd9f7c9008088f93c187ef1bbc856b",
+          "seam": 3.1
+        },
+        {
+          "original": "sector.mp3",
+          "preview": "music-bed-the-midnight-masks/2235c64e.m4a",
+          "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+          "author": "SRG774",
+          "license": "CC0",
+          "description": "sector.mp3 · sector.mp3",
+          "sha256": "4f5e7f035dad8ce32d8c04393ec11470da52383dce0ffd421220c2de0ee2bf5d",
+          "seam": 3
+        },
+        {
+          "original": "airy.mp3",
+          "preview": "music-bed-the-midnight-masks/cbafabac.m4a",
+          "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+          "author": "SRG774",
+          "license": "CC0",
+          "description": "airy.mp3 · airy.mp3",
+          "sha256": "2880297bb0bace79448ea47732aa7db78ea526663ce2791d733e353b6f8adf87",
+          "seam": 10.4
+        }
+      ]
+    },
+    "music:bed:queen-of-ash": {
+      "kind": "music",
+      "where": "the bed of Queen of Ash",
+      "candidates": [
+        {
+          "original": "airy.mp3",
+          "preview": "music-bed-the-devourer-below/cbafabac.m4a",
+          "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+          "author": "SRG774",
+          "license": "CC0",
+          "description": "airy.mp3 · airy.mp3",
+          "sha256": "2880297bb0bace79448ea47732aa7db78ea526663ce2791d733e353b6f8adf87",
+          "seam": 10.4
+        },
+        {
+          "original": "cathedral.ogg",
+          "preview": "music-bed-the-devourer-below/7bfc2872.m4a",
+          "source": "https://opengameart.org/content/cathedral-in-the-forest-ambient-loop",
+          "author": "congusbongus",
+          "license": "CC0",
+          "description": "cathedral.ogg · cathedral.ogg",
+          "sha256": "b9e05a1fcd5869b63193515e2a9c1bd578906a78e628e307f19527d387262593",
+          "seam": 0.2
+        },
+        {
+          "original": "music-dark-cavern.ogg",
+          "preview": "music-bed-the-devourer-below/99222041.m4a",
+          "source": "https://opengameart.org/content/dark-cavern-ambient",
+          "author": "Paul Wortmann",
+          "license": "CC0",
+          "description": "music-dark-cavern.ogg · music-dark-cavern.ogg",
+          "sha256": "3e364b94dc1fceff13d8d067af9f034f297cfa5d15ff9cecfbe02fd857801dce",
+          "seam": 2.4
+        },
+        {
+          "original": "music-ancient-caverns.ogg",
+          "preview": "music-bed-the-devourer-below/1f0c5ae5.m4a",
+          "source": "https://opengameart.org/content/ancient-caverns-horror-ambient-loop",
+          "author": "congusbongus",
+          "license": "CC0",
+          "description": "music-ancient-caverns.ogg · music-ancient-caverns.ogg",
+          "sha256": "5c841ef1a7bacd2a038801ecee0741e200d1cf1cd08f36a6a89cce95bcfb6a8a",
+          "seam": 3.1
+        },
+        {
+          "original": "music-ambient-horror.ogg",
+          "preview": "music-bed-the-devourer-below/dfd0da29.m4a",
+          "source": "https://opengameart.org/content/ambient-horror-track-01",
+          "author": "Nerdzmasterz",
+          "license": "CC0",
+          "description": "music-ambient-horror.ogg · music-ambient-horror.ogg",
+          "sha256": "0c7ac65060abfedc63ab6cdf04ecb2fb012948b6a7dff5436e96926eeabc4785",
+          "seam": 12.3
+        },
+        {
+          "original": "music-end-of-hope.mp3",
+          "preview": "music-bed-the-devourer-below/30b1fb89.m4a",
+          "source": "https://opengameart.org/content/at-the-end-of-hope",
+          "author": "Chasersgaming",
+          "license": "CC0",
+          "description": "music-end-of-hope.mp3 · music-end-of-hope.mp3",
+          "sha256": "c5c9a612ff8650b62b4be6c9276263b7c21ec4bcf6f28d1ba73d0b29034ae12a",
+          "seam": 2.8
+        },
+        {
+          "original": "music-echoes-of-the-past.wav",
+          "preview": "music-bed-the-devourer-below/e2cfa743.m4a",
+          "source": "https://opengameart.org/content/echoes-of-the-past",
+          "author": "glitchart",
+          "license": "CC0",
+          "description": "music-echoes-of-the-past.wav · music-echoes-of-the-past.wav",
+          "sha256": "ec149d7daceb8d0d5f20816ae401d8e04ea8e5960fc558d378c2c27139835292",
+          "seam": 1.7
+        },
+        {
+          "original": "music-hallway.ogg",
+          "preview": "music-bed-the-devourer-below/ca6029f8.m4a",
+          "source": "https://opengameart.org/content/hallway",
+          "author": "thenewkgb",
+          "license": "CC0",
+          "description": "music-hallway.ogg · music-hallway.ogg",
+          "sha256": "f38b088fc7d05dc3154a6a763540eeaccab683155fe93aac44b0153ee9fb4335",
+          "seam": 17.3
+        },
+        {
+          "original": "music-orien.ogg",
+          "preview": "music-bed-the-devourer-below/285cbb5b.m4a",
+          "source": "https://opengameart.org/content/orien",
+          "author": "Snabisch",
+          "license": "CC0",
+          "description": "music-orien.ogg · music-orien.ogg",
+          "sha256": "7e9a6f28b131ddb6c19f8f0ece0eb5e391d3657007e2156de6efabd6816ed58c",
+          "seam": 2.3
+        },
+        {
+          "original": "transmission.mp3",
+          "preview": "music-bed-the-devourer-below/bba4919f.m4a",
+          "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+          "author": "SRG774",
+          "license": "CC0",
+          "description": "transmission.mp3 · transmission.mp3",
+          "sha256": "ad4fee95b89809905a7a8c010759577d99cd2eb1332b339e34768d234981f857",
+          "seam": 9.4
+        },
+        {
+          "original": "drone57.wav",
+          "preview": "music-bed-the-devourer-below/088a88db.m4a",
+          "source": "https://opengameart.org/content/droning-sound-effects",
+          "author": "bretbernhoft",
+          "license": "CC0",
+          "description": "drone57.wav · drone57.wav",
+          "sha256": "414443b3716845e4b1133bbfbbdb429a7f464976ae70f6c2b6e6a1656945cb66",
+          "seam": 2.7
+        },
+        {
+          "original": "pulse.mp3",
+          "preview": "music-bed-the-devourer-below/0724f69f.m4a",
+          "source": "https://opengameart.org/content/dark-sci-fi-audio-pack",
+          "author": "SRG774",
+          "license": "CC0",
+          "description": "pulse.mp3 · pulse.mp3",
+          "sha256": "8d53270befde7be6f2e836599e8895fc22dfb76c3d851138bb17c0974794fa98",
+          "seam": 1.2
+        }
+      ]
+    },
     "music:fight": {
       "kind": "music",
       "where": "while an enemy is engaged",

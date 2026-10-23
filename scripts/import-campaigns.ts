@@ -107,6 +107,13 @@ const sentences = (texts: string[]) =>
   texts.flatMap((t) => t.replace(/<[^>]+>/g, "").split(/(?<=[.!])\s+/));
 const plain = (t: string) => t.replace(/<\/?(b|i|u|em|strong)>/g, "").trim();
 
+/** the scenario's reference card: the guide's, or the scenario card of the encounter set named like the scenario (Brethren of Ash) */
+function refCode(s: Raw, cards: Map<string, Card>): string | undefined {
+  if (s.chaos_bag_card) return s.chaos_bag_card;
+  for (const c of cards.values()) if (c.type === "scenario" && c.set === s.id) return c.code;
+  return undefined;
+}
+
 function scenarioOf(
   s: Raw,
   campaignId: string,
@@ -128,7 +135,7 @@ function scenarioOf(
   const sets = guideSets.filter((x) => bySet.has(x));
   const unknown = guideSets.filter((x) => !bySet.has(x));
   if (unknown.length) note(`${where}: encounter sets not in the snapshot: ${unknown.join(", ")}`);
-  const ref = cards.get(s.chaos_bag_card);
+  const ref = cards.get(refCode(s, cards) ?? "");
   if (!ref || !sets.length) {
     note(`${where}: skipped (${!ref ? "no reference card" : "no known encounter set"})`);
     return null;
@@ -326,7 +333,7 @@ export function main() {
       ...(c.scenarios ?? []).map((id: string) => byId.get(id)).filter(Boolean),
       ...g.scenarios.filter((s: Raw) => !(c.scenarios ?? []).includes(s.id)),
     ];
-    const playable = ordered.filter((s) => s.chaos_bag_card);
+    const playable = ordered.filter((s) => refCode(s, cards));
     // the side scenarios are each a campaign of their own
     const groups: { id: string; name: string; i18nId: string; scenarios: Raw[] }[] =
       c.id === "side"

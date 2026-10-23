@@ -25,9 +25,9 @@ import {
   type G,
 } from "../core";
 import type { ChoiceOption, EffCtx, InvId, Step, TurnAction } from "../types";
-import { activatable, canPlay, playAbility, win } from "./cards";
+import { activatable, canPlay, playAbility, spendGroupClues, win } from "./cards";
 import { attacksOfOpportunity } from "./enemies";
-import { canMoveTo, checkEngagement } from "./investigators";
+import { canMoveTo, checkEngagement, enterCost } from "./investigators";
 import { actClueCost } from "./scenario";
 import { startTest } from "./skillTest";
 
@@ -151,11 +151,16 @@ function abilityActionCost(a: Ability) {
   return a.kind === "action" ? (a.actionCost ?? 1) : 0;
 }
 
-function extraCost(g: G, i: InvId, designator: string) {
+function extraCost(g: G, i: InvId, designator: string, action?: TurnAction) {
   let n = 0;
-  for (const c of [...threatArea(g, i), ...cardsIn(g, "play")]) {
+  for (const c of [
+    ...threatArea(g, i),
+    ...cardsIn(g, "play"),
+    ...cardsIn(g, "location"),
+    ...cardsIn(g, "attached"),
+  ]) {
     const fn = g.db.scripts[c.code]?.extraActionCost;
-    if (fn) n += fn(g, c.id, i, designator);
+    if (fn) n += fn(g, c.id, i, designator, action);
   }
   return n;
 }
@@ -226,7 +231,7 @@ export function actionCost(g: G, i: InvId, a: TurnAction): number {
       return base === 0 ? 0 : base + extraCost(g, i, ab.designator ?? "ability");
     }
     default:
-      return 1 + extraCost(g, i, a.kind);
+      return 1 + extraCost(g, i, a.kind, a);
   }
 }
 
@@ -386,9 +391,12 @@ export const performActionHandler: Handler<"PerformAction"> = (g, step) => {
       });
       break;
     }
-    case "move":
+    case "move": {
+      const clues = enterCost(g, a.to);
+      if (clues) spendGroupClues(g, clues);
       steps.push({ t: "Move", inv: i, to: a.to });
       break;
+    }
     case "draw":
       emit(g, "action", `${me.name} takes the draw action`, { inv: i });
       // choosing the Draw action is the tap on the deck: no second wait

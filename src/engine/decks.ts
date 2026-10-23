@@ -118,6 +118,38 @@ const levelText = (o: DeckOption) =>
     : "0";
 const sig = (p: DeckProblem) => `${p.reason?.key}:${JSON.stringify(p.reason?.vars ?? {})}`;
 
+const PERMANENT = /^Permanent\./;
+const CLASSES = ["guardian", "seeker", "rogue", "mystic", "survivor"];
+
+/** "You get +5 deck size." on a card in the deck (the Collector) */
+function sizeBonus(db: ContentDb, d: DeckDef): number {
+  return Object.keys(d.cards).reduce(
+    (n, code) => n + Number(/You get \+(\d+) deck size/.exec(db.cards[code]?.text ?? "")?.[1] ?? 0),
+    0,
+  );
+}
+
+/** a card in the deck that adds a deckbuilding option: "one other [[Relic]] or [[Charm]] asset of any class … level 0-3" */
+function grantedOptions(db: ContentDb, d: DeckDef): DeckOption[] {
+  return Object.keys(d.cards).flatMap((code): DeckOption[] => {
+    const m =
+      /Deckbuilding Options gains: "one other \[\[(\w+)\]\] or \[\[(\w+)\]\] asset of any class .* level (\d)-(\d)/.exec(
+        db.cards[code]?.text ?? "",
+      );
+    return m
+      ? [
+          {
+            faction: CLASSES,
+            type: ["asset"],
+            trait: [m[1], m[2]],
+            level: { min: Number(m[3]), max: Number(m[4]) },
+            limit: 1,
+          } as DeckOption,
+        ]
+      : [];
+  });
+}
+
 /** validate a deck against its investigator's deckbuilding rules */
 export function validateDeck(db: ContentDb, d: DeckDef): DeckProblem[] {
   const problems: DeckProblem[] = [];
@@ -168,7 +200,8 @@ export function validateDeck(db: ContentDb, d: DeckDef): DeckProblem[] {
     t.card = (c.deckLimit ?? 2) < (t.card.deckLimit ?? 2) ? c : t.card;
     titles.set(title, t);
     if (c.subtype === "basicweakness") basicWeaknesses += n;
-    if (required.has(code) || isWeakness(c)) continue;
+    // a permanent card is part of the deck but doesn't count toward its size (Grimoire, Permanent)
+    if (required.has(code) || isWeakness(c) || PERMANENT.test(c.text)) continue;
     for (let k = 0; k < n; k++) counted.push(c);
   }
   for (const { card, n } of titles.values()) {
@@ -182,14 +215,15 @@ export function validateDeck(db: ContentDb, d: DeckDef): DeckProblem[] {
   }
   // the highest levels first, so a limited option is spent on the cards that need it least often
   counted.sort((a, b) => (b.xp ?? 0) - (a.xp ?? 0) || a.code.localeCompare(b.code));
-  const counts: OptionCount[] = inv.deckOptions.map(() => ({ limit: 0, atleast: {} }));
+  const options = [...inv.deckOptions, ...grantedOptions(db, d)];
+  const counts: OptionCount[] = options.map(() => ({ limit: 0, atleast: {} }));
   const reported = new Set<string>();
   for (const c of counted) {
     // "<Investigator> deck only" cards are signatures of someone else
     const foreignSignature = Object.values(db.investigators).some(
       (i) => i.code !== inv.code && i.signatures.includes(c.code),
     );
-    const verdict = foreignSignature ? "foreign" : admit(inv.deckOptions, counts, c);
+    const verdict = foreignSignature ? "foreign" : admit(options, counts, c);
     if (verdict === "ok" || reported.has(c.code)) continue;
     reported.add(c.code);
     const level = c.xp ?? 0;
@@ -215,7 +249,7 @@ export function validateDeck(db: ContentDb, d: DeckDef): DeckProblem[] {
         },
       });
   }
-  for (const [i, o] of inv.deckOptions.entries()) {
+  for (const [i, o] of options.entries()) {
     if (o.limit && counts[i].limit > o.limit)
       problems.push({
         message:
@@ -248,10 +282,11 @@ export function validateDeck(db: ContentDb, d: DeckDef): DeckProblem[] {
         message: `missing required card ${db.cards[code]?.name ?? code}`,
         reason: { key: "deck.missing", vars: { card: code } },
       });
-  if (counted.length !== inv.deckSize)
+  const size = inv.deckSize + sizeBonus(db, d);
+  if (counted.length !== size)
     problems.push({
-      message: `deck has ${counted.length} cards, needs ${inv.deckSize} (not counting signatures and weaknesses)`,
-      reason: { key: "deck.size", vars: { n: counted.length, size: inv.deckSize } },
+      message: `deck has ${counted.length} cards, needs ${size} (not counting signatures and weaknesses)`,
+      reason: { key: "deck.size", vars: { n: counted.length, size } },
     });
   if (basicWeaknesses === 0 && !d.randomBasicWeakness)
     problems.push({

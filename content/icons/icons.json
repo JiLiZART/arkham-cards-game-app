@@ -182,12 +182,24 @@
    "file": "midnight_masks.svg",
    "set": "extra"
   },
+  "arkham_ch2": {
+   "file": "arkham_ch2.svg",
+   "set": "extra"
+  },
   "arkham_incidents": {
    "file": "arkham_incidents.svg",
    "set": "standalone"
   },
+  "arkham_sewers": {
+   "file": "arkham_sewers.svg",
+   "set": "extra"
+  },
   "armitages_fate": {
    "file": "armitages_fate.svg",
+   "set": "extra"
+  },
+  "ashen_pilgrims": {
+   "file": "ashen_pilgrims.svg",
    "set": "extra"
   },
   "assimilating_swarm": {
@@ -208,6 +220,10 @@
   },
   "bad_luck": {
    "file": "bad_luck.svg",
+   "set": "extra"
+  },
+  "bad_weather": {
+   "file": "bad_weather.svg",
    "set": "extra"
   },
   "barkham_horror": {
@@ -330,6 +346,10 @@
    "file": "byakhee.svg",
    "set": "extra"
   },
+  "bystanders": {
+   "file": "bystanders.svg",
+   "set": "extra"
+  },
   "card": {
    "file": "card-outline.svg",
    "set": "extra"
@@ -394,6 +414,10 @@
    "file": "corsairs.svg",
    "set": "extra"
   },
+  "cosmic_evils": {
+   "file": "cosmic_evils.svg",
+   "set": "extra"
+  },
   "cosmic_journey": {
    "file": "cosmic_journey.svg",
    "set": "standalone"
@@ -436,6 +460,10 @@
   },
   "cultists": {
    "file": "cult_of_umordoth.svg",
+   "set": "extra"
+  },
+  "cultists_ch2": {
+   "file": "cultists_ch2.svg",
    "set": "extra"
   },
   "curse": {
@@ -574,6 +602,10 @@
    "file": "elder_things.svg",
    "set": "extra"
   },
+  "eldritch_lore": {
+   "file": "eldritch_lore.svg",
+   "set": "extra"
+  },
   "enthralling_encore": {
    "file": "enthralling_encore.svg",
    "set": "standalone"
@@ -642,6 +674,10 @@
    "file": "fire.svg",
    "set": "extra"
   },
+  "fire_ch2": {
+   "file": "fire_ch2.svg",
+   "set": "extra"
+  },
   "flying_terrors": {
    "file": "flying_terrors.svg",
    "set": "extra"
@@ -694,6 +730,10 @@
    "file": "gala.svg",
    "set": "standalone"
   },
+  "gangs_of_arkham": {
+   "file": "gangs_of_arkham.svg",
+   "set": "extra"
+  },
   "ghouls": {
    "file": "ghouls.svg",
    "set": "extra"
@@ -717,6 +757,10 @@
   "guide_bullet": {
    "file": "guide_bullet.svg",
    "set": "arkhamicons"
+  },
+  "hallucinations": {
+   "file": "hallucinations.svg",
+   "set": "extra"
   },
   "hand": {
    "file": "hand.svg",
@@ -914,6 +958,10 @@
    "file": "machinations_through_time.svg",
    "set": "standalone"
   },
+  "mad_science": {
+   "file": "mad_science.svg",
+   "set": "extra"
+  },
   "maddening_delusions": {
    "file": "maddening_delusions.svg",
    "set": "extra"
@@ -965,6 +1013,10 @@
   "misinformation": {
    "file": "misinformation.svg",
    "set": "blood"
+  },
+  "miskatonic_university": {
+   "file": "miskatonic_university.svg",
+   "set": "extra"
   },
   "mongrels": {
    "file": "mongrels.svg",
@@ -1218,6 +1270,10 @@
    "file": "dark_cult.svg",
    "set": "extra"
   },
+  "people_of_arkham": {
+   "file": "people_of_arkham.svg",
+   "set": "extra"
+  },
   "per_investigator": {
    "file": "per_investigator.svg",
    "set": "arkhamicons"
@@ -1246,6 +1302,10 @@
    "file": "preyed_upon.svg",
    "set": "blood"
   },
+  "queen_of_ash": {
+   "file": "queen_of_ash.svg",
+   "set": "extra"
+  },
   "rainforest": {
    "file": "rainforest.svg",
    "set": "extra"
@@ -1273,6 +1333,10 @@
   "red_tide_rising": {
    "file": "red_tide_rising.svg",
    "set": "standalone"
+  },
+  "reeking_decay": {
+   "file": "reeking_decay.svg",
+   "set": "extra"
   },
   "refractions": {
    "file": "refractions.svg",
@@ -1622,6 +1686,10 @@
    "file": "skull.svg",
    "set": "arkhamicons"
   },
+  "smoke_and_mirrors": {
+   "file": "smoke_and_mirrors.svg",
+   "set": "extra"
+  },
   "something_big": {
    "file": "something_big.svg",
    "set": "standalone"
@@ -1648,6 +1716,10 @@
   },
   "spreading_corruption": {
    "file": "spreading_corruption.svg",
+   "set": "extra"
+  },
+  "spreading_flames": {
+   "file": "spreading_flames.svg",
    "set": "extra"
   },
   "stalked": {
@@ -2266,6 +2338,10 @@
    "file": "the_gathering.svg",
    "set": "extra"
   },
+  "torment": {
+   "file": "torment.svg",
+   "set": "extra"
+  },
   "transfiguration": {
    "file": "transfiguration.svg",
    "set": "extra"
@@ -2364,6 +2440,10 @@
   },
   "whippoorwills": {
    "file": "whippoorwills.svg",
+   "set": "extra"
+  },
+  "whippoorwills_ch2": {
+   "file": "whippoorwills_ch2.svg",
    "set": "extra"
   },
   "whispers_of_hypnos": {

@@ -208,6 +208,8 @@ export const effHandler = (g: G, step: EffStep) => {
   if (g.s.phase === "ended") return;
   const e = step.effect;
   const ctx = step.ctx;
+  // an investigator eliminated mid-effect (an attack of opportunity) resolves nothing more of it
+  if (ctx.you && g.s.invs[ctx.you] && g.s.invs[ctx.you].status !== "playing") return;
   const you = ctx.you ?? g.s.lead;
   const src = ctx.source ? g.s.cards[ctx.source] : undefined;
   switch (e.op) {
@@ -811,6 +813,7 @@ export const effHandler = (g: G, step: EffStep) => {
         });
       }
       shuffle(g.s, me.deck);
+      if (pick === "none" && e.orDraw) push(g, { t: "Draw", inv: who, n: 1, tapped: true });
       return;
     }
     case "lookAtTop": {
@@ -1053,12 +1056,13 @@ export const effHandler = (g: G, step: EffStep) => {
         }
       }
       for (const id of found) {
-        if (e.then === "leadDraws") {
-          emit(g, "encounter", `${invName(g, g.s.lead)} draws ${def(g, id).name}`, {
-            inv: g.s.lead,
+        if (e.then === "leadDraws" || e.then === "youDraw") {
+          const who = e.then === "youDraw" ? you : g.s.lead;
+          emit(g, "encounter", `${invName(g, who)} draws ${def(g, id).name}`, {
+            inv: who,
             card: id,
           });
-          push(g, { t: "Spawn", enemy: id, inv: g.s.lead });
+          push(g, { t: "Spawn", enemy: id, inv: who });
         } else {
           const at = e.at
             ? (locationByName(g, e.at) ?? findByCode(g, e.at, ["location"]))
@@ -1186,7 +1190,7 @@ export const effHandler = (g: G, step: EffStep) => {
     case "searchAndPlay": {
       const me = inv(g, you);
       if (step.choice === undefined && searchBlocked(g, you, me.deck)) return;
-      const pool = [...me.deck, ...(e.deckOnly ? [] : me.discard)].filter(
+      const pool = [...(e.discardOnly ? [] : me.deck), ...(e.deckOnly ? [] : me.discard)].filter(
         (id) =>
           matchesFilter(g, card(g, id).code, e.filter) &&
           me.resources >= Math.max(0, playCost(g, you, id) + (e.costMod ?? 0)) &&

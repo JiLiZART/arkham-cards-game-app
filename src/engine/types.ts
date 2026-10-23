@@ -438,6 +438,8 @@ export interface CardScript {
   /** abilities replacing/adding to data abilities; `run` names a fn in fns */
   abilities?: (Ability & { run?: string })[];
   fns?: Record<string, ScriptFn>;
+  /** conditions named by `{ script: name }` in the card's (or scenario's) data */
+  conditions?: Record<string, (g: any, ctx: EffCtx) => boolean>;
   /** dynamic constant modifiers */
   modifiers?: (g: any, cardId: InstId) => { target: string; mod: Modifier }[];
   /** cards (e.g. top event of discard) the controller may additionally play */
@@ -445,7 +447,15 @@ export interface CardScript {
   /** card instances whose text is treated as blank while this card is in play */
   blanks?: (g: any, cardId: InstId) => InstId[];
   /** additional action cost for a designator (Frozen in Fear) */
-  extraActionCost?: (g: any, cardId: InstId, inv: InvId, designator: string) => number;
+  extraActionCost?: (
+    g: any,
+    cardId: InstId,
+    inv: InvId,
+    designator: string,
+    action?: TurnAction,
+  ) => number;
+  /** when doom would be placed while this card is the agenda: true replaces it (Brethren of Ash) */
+  wouldPlaceDoom?: (g: any, cardId: InstId, n: number) => boolean;
   /** called by the engine for special hooks */
   hooks?: Partial<Record<string, ScriptFn>>;
 }

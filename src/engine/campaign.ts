@@ -1,5 +1,13 @@
 import type { ChaosToken, DeckDef, Difficulty } from "../content/schema";
-import { type CampaignLog, emptyLog, flatLog, migrateLog } from "./campaignLog";
+import {
+  type CampaignLog,
+  emptyLog,
+  flatLog,
+  migrateLog,
+  NOTES,
+  record,
+  setCount,
+} from "./campaignLog";
 import { flowOf } from "../content/flow";
 import { expandDeck, validateDeck } from "./decks";
 import { ENGINE_VERSION } from "./engine";
@@ -206,6 +214,13 @@ export function applyScenarioEnd(db: ContentDb, c0: CampaignState, s: GameState)
     ci.physicalTrauma += i.physicalTrauma;
     ci.mentalTrauma += i.mentalTrauma;
     ci.xp += (s.flags[`xp:${i.id}`] as number | undefined) ?? 0;
+  }
+  // what the scenario's script found out and the guide asks the players (`log:<section>:<id>`, `count:<section>:<id>`)
+  for (const [k, v] of Object.entries(s.flags)) {
+    const m = /^(log|count):([^:]*):(.+)$/.exec(k);
+    if (!m || v === undefined || v === false) continue;
+    if (m[1] === "log") c.log = record(c.log, m[3], m[2] || NOTES);
+    else c.log = setCount(c.log, m[3], "add", Number(v), m[2] || NOTES);
   }
   // permanent bag additions from this scenario's setup
   for (const st of db.scenarios[s.scenarioId].setup)

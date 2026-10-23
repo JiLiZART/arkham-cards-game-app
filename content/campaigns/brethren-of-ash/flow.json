@@ -1,0 +1,508 @@
+{
+  "setup": [
+    "prologue"
+  ],
+  "order": [
+    "spreading-flames",
+    "smoke-and-mirrors",
+    "queen-of-ash"
+  ],
+  "interludes": {},
+  "resolutions": {
+    "spreading-flames": {
+      "none": [
+        "sf:burned",
+        "sf:burnTrauma:text",
+        "sf:burnTrauma",
+        "sf:xp2",
+        "upgrade"
+      ],
+      "R1": [
+        "sf:pursuer",
+        "sf:armitage",
+        "sf:xp3",
+        "sf:stayOrGo"
+      ]
+    },
+    "smoke-and-mirrors": {
+      "none": [
+        "sm:harbinger:text",
+        "sm:xp",
+        "sm:servant"
+      ],
+      "R1": [
+        "sm:harbinger:text",
+        "sm:xp",
+        "sm:servant"
+      ]
+    },
+    "queen-of-ash": {
+      "none": [
+        "qa:reborn",
+        "qa:allKilled:text",
+        "qa:allKilled",
+        "qa:lose:text",
+        "qa:lose"
+      ],
+      "R1": [
+        "qa:defeated",
+        "qa:xp5",
+        "qa:collector:text",
+        "qa:horrific:text",
+        "qa:trauma22",
+        "upgrade",
+        "qa:win:text",
+        "qa:win"
+      ],
+      "R2": [
+        "qa:stopped",
+        "qa:xp5",
+        "qa:collector:text",
+        "qa:nightly:text",
+        "qa:trauma22",
+        "upgrade",
+        "qa:win:text",
+        "qa:win"
+      ],
+      "R3": [
+        "qa:flooded",
+        "qa:notResigned:text",
+        "qa:notResigned",
+        "qa:xp3",
+        "qa:collector:text",
+        "qa:flood:text",
+        "qa:flood",
+        "upgrade",
+        "qa:winMaybe:text",
+        "qa:winMaybe"
+      ]
+    }
+  },
+  "steps": {
+    "prologue": {
+      "kind": "story",
+      "title": "A Glorious Rebirth",
+      "text": "Arkham has always been a little strange. It seems like every time you read the news, there's a fresh report of some gruesome murder or sudden disappearance. A battered corpse in the Waterfront District. A missing police officer in French Hill. A bloody sigil drawn in the alley behind Velma's Diner. The city has its share of crackpots and conspiracy theorists, sure, but even the most levelheaded observer can't ignore the facts: there's something wrong with this city.\nHowever, most folks in Arkham don't like to dwell on the bad. In the wake of the flood six months ago, the city is building itself back stronger than ever, with new money pouring in from outside investors. They say everything's on the up-and-up, and it sure looks like it. But you know there's always something more to the story.\nWhatever lies ahead, you don't have to face it alone. There are others like you who have encountered similar horrors, and who won't settle for easy explanations or comforting distractions. They, too, know there is something to this city's ancient curses and witch legends. Will you stand with them against the evils that lurk beyond mortal understanding? Or will you succumb, as so many have, to the terrors of the Mythos?",
+      "bullets": []
+    },
+    "sf:burned": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "miskatonic_university_burned",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "sf:burnTrauma:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 1 mental trauma, as they are wracked with guilt for letting the university burn.",
+      "bullets": []
+    },
+    "sf:burnTrauma": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 0,
+          "mental": 1
+        }
+      ]
+    },
+    "sf:xp2": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 2,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "sf:xp3": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 3,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "sf:pursuer": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "defeated_their_masked_pursuer",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "sf:armitage": {
+      "kind": "investigatorChoice",
+      "text": "Choose an investigator to become the bearer of the Dr. Henry Armitage story asset. (Add that card to that investigator's deck, ignoring deckbuilding restrictions. It does not count toward that investigator's deck size.)",
+      "optional": false,
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "12115",
+          "who": "input"
+        }
+      ],
+      "steps": []
+    },
+    "sf:stayOrGo": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "stay",
+          "text": "Stay and fight the fire!",
+          "effects": [],
+          "steps": [
+            "sf:R2:text",
+            "sf:saved",
+            "sf:fire:text",
+            "sf:fire",
+            "upgrade"
+          ]
+        },
+        {
+          "id": "go",
+          "text": "\"There's no time. We have to go.\"",
+          "effects": [],
+          "steps": [
+            "sf:R3:text",
+            "sf:burned",
+            "sf:burnTrauma:text",
+            "sf:burnTrauma",
+            "upgrade"
+          ]
+        }
+      ]
+    },
+    "sf:R2:text": {
+      "kind": "story",
+      "title": "Resolution 2",
+      "text": "Your eyes sting from the acrid smoke as you work hand in hand with the others to quench the hungry flames. You manage to hold the flames at bay until the Arkham Fire Department arrives on the scene. With the situation under control, you hasten to meet up with Dr. Armitage.",
+      "bullets": []
+    },
+    "sf:R3:text": {
+      "kind": "story",
+      "title": "Resolution 3",
+      "text": "You flee the campus with Dr. Armitage, leaving the university to its fate. The wail of sirens drowns out all other sounds as you follow the head librarian to his apartment.",
+      "bullets": []
+    },
+    "sf:saved": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "saved_miskatonic_university",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "sf:fire:text": {
+      "kind": "story",
+      "text": "Each investigator earns 1 bonus experience and suffers 1 physical trauma from the burns they sustained while fighting the fires.",
+      "bullets": []
+    },
+    "sf:fire": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        },
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 1,
+          "mental": 0
+        }
+      ]
+    },
+    "upgrade": {
+      "kind": "upgradeDecks"
+    },
+    "sm:xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "sm:servant": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "servant_of_flame_beneath_act",
+        "section": "hidden"
+      },
+      "then": [
+        "sm:R2:text",
+        "sm:escaped",
+        "sm:xp1",
+        "sm:mark",
+        "upgrade"
+      ],
+      "else": [
+        "sm:mark",
+        "upgrade"
+      ]
+    },
+    "sm:escaped": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "the_servant_of_flame_escaped",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "sm:xp1": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "sm:mark": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "mark_of_elokoss",
+        "section": "hidden"
+      },
+      "then": [
+        "sm:addMark:text",
+        "sm:addMark"
+      ],
+      "else": []
+    },
+    "sm:addMark:text": {
+      "kind": "story",
+      "text": "Each investigator adds Mark of Elokoss to their deck.",
+      "bullets": []
+    },
+    "sm:addMark": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "12137",
+          "who": "each"
+        }
+      ]
+    },
+    "sm:harbinger:text": {
+      "kind": "story",
+      "text": "Reveal the enemy from the People of Arkham encounter set that was set aside at the beginning of the game. This is the true identity of the Servant of Flame enemy, a harbinger of Elokoss.",
+      "bullets": []
+    },
+    "qa:reborn": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "elokoss_was_reborn",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "qa:allKilled:text": {
+      "kind": "story",
+      "text": "Each investigator is killed.",
+      "bullets": []
+    },
+    "qa:allKilled": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "kill",
+          "who": "each"
+        }
+      ]
+    },
+    "qa:lose:text": {
+      "kind": "story",
+      "text": "The investigators lose the campaign.",
+      "bullets": []
+    },
+    "qa:lose": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "lose"
+        }
+      ]
+    },
+    "qa:defeated": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "defeated_elokoss_and_the_brethren_of_ash",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "qa:xp5": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 5,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "qa:collector:text": {
+      "kind": "story",
+      "text": "The investigators have earned the Collector campaign reward card. Add both copies of this card to the player card pool.",
+      "bullets": []
+    },
+    "qa:horrific:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 2 mental trauma and 2 physical trauma from their horrific experiences.",
+      "bullets": []
+    },
+    "qa:trauma22": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 2,
+          "mental": 2
+        }
+      ]
+    },
+    "qa:win:text": {
+      "kind": "story",
+      "text": "The investigators win the campaign!",
+      "bullets": []
+    },
+    "qa:win": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "win"
+        }
+      ]
+    },
+    "qa:stopped": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "stopped_elokoss_glorious_rebirth",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "qa:nightly:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 2 mental trauma and 2 physical trauma from the events of the evening.",
+      "bullets": []
+    },
+    "qa:flooded": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "flooded_the_ritual",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "qa:notResigned:text": {
+      "kind": "story",
+      "text": "Each investigator who did not resign is killed.",
+      "bullets": []
+    },
+    "qa:notResigned": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "kill",
+          "who": "notResigned"
+        }
+      ]
+    },
+    "qa:xp3": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 3,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "qa:flood:text": {
+      "kind": "story",
+      "text": "Each surviving investigator suffers 3 mental trauma, as they are wracked with guilt for leaving their friends behind.",
+      "bullets": []
+    },
+    "qa:flood": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 0,
+          "mental": 3
+        }
+      ]
+    },
+    "qa:winMaybe:text": {
+      "kind": "story",
+      "text": "The investigators win the campaign, but it is only a matter of time until the followers of Elokoss rise again...",
+      "bullets": []
+    },
+    "qa:winMaybe": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "win"
+        }
+      ]
+    },
+    "sm:R2:text": {
+      "kind": "story",
+      "title": "Resolution 2",
+      "text": "On your way to meet Dr. Armitage, you ask the cab to swing by the secure location where you kept your unconscious nemesis. The smell of smoke greets you as you enter, and the floors are black with soot. Despite your best efforts, the ghoulish figure escaped capture. The handcuffs you used to secure the servant were smashed—not melted or otherwise tampered with—suggesting that they had help in their escape.",
+      "bullets": []
+    }
+  }
+}
