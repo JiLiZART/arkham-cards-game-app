@@ -49,7 +49,13 @@ export function parseImageName(name: string): ImageName | null {
 }
 
 /** standalone scenarios have their own code ranges */
-const STANDALONE: Record<string, string> = { sa_01: "81", sa_02: "82", sa_03: "70", sa_04: "71", sa_05: "72" };
+const STANDALONE: Record<string, string> = {
+  sa_01: "81",
+  sa_02: "82",
+  sa_03: "70",
+  sa_04: "71",
+  sa_05: "72",
+};
 
 /**
  * The leading digits of the codes a folder holds: `02_…` is cycle 2, `0xR_…` a Return-to box (50 on), `SD_0k_…` the
@@ -76,7 +82,11 @@ export interface FolderResult {
 }
 
 /** map one folder's files onto card sides; `codes` holds every content card by code */
-export function resolveFolder(folder: string, files: string[], codes: Map<string, CodeInfo>): FolderResult {
+export function resolveFolder(
+  folder: string,
+  files: string[],
+  codes: Map<string, CodeInfo>,
+): FolderResult {
   const prefix = codePrefix(folder);
   const out: FolderResult = { picks: [], rejected: [], unparsed: [], extra: [] };
   if (!prefix) return out;

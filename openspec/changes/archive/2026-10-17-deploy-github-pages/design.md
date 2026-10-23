@@ -15,6 +15,7 @@
 **Goals:** a one-file workflow that only publishes green builds; the same code paths in dev and on Pages (`<base>cards/<code>.webp`); no change for local development.
 
 **Non-Goals:**
+
 - A custom domain.
 - PR preview deploys.
 - Storing card scans in the repository.
@@ -24,19 +25,23 @@
 ## Decisions
 
 ### 1. Base path from an env var
+
 `vite.config.ts` sets `base: process.env.PAGES_BASE ?? "/"`. The workflow sets it (`/` for the custom domain, see §5).
 
 JS paths use `import.meta.env.BASE_URL`:
+
 - one helper `asset(path)` in `images.ts` returns `${BASE_URL}${path}`;
 - `cardImage`, `backUrl`, `iconUrl` and the `Screens` portrait use it;
 - the card base default becomes `asset("cards")`, and `VITE_CARD_IMAGE_BASE` still wins.
 
 A unit test checks that no `src/**` file outside the helper contains a string literal starting with `"/cards`, `"/icons`, `"/table` or `"/fonts`, so a new hard-coded path fails CI.
 
-*Alternative:* derive the base from `GITHUB_REPOSITORY` inside the config. Rejected: explicit is easier to read and to reuse for a fork.
+_Alternative:_ derive the base from `GITHUB_REPOSITORY` inside the config. Rejected: explicit is easier to read and to reuse for a fork.
 
 ### 2. Card scans downloaded into `dist/cards` after the build
+
 `scripts/fetch-card-images.ts`, run as `npm run fetch:cards -- <outDir>`:
+
 - loads content with `loadContentFromDisk`;
 - collects every card code that `cardImage` would request: the front `<code>`, plus `<code>b` for `doubleSided` cards (cards with an explicit `image` / `backImage` URL are skipped);
 - downloads `https://cdn.arkham.build/optimized/<file>.webp` into `<outDir>/cards/<file>.webp`, 8 at a time, with one retry;
@@ -44,12 +49,14 @@ A unit test checks that no `src/**` file outside the helper contains a string li
 
 It reuses `cardImage` itself, so the list can't drift from what the game requests. A failed file is logged and listed at the end with exit code 0, as the spec requires. Files are written to `dist/` after `vite build`, so `public/` and the repo stay free of scans.
 
-*Alternative:* put the scans in `public/cards` before the build. Rejected: it would clash with the dev proxy path and tempt committing them.
+_Alternative:_ put the scans in `public/cards` before the build. Rejected: it would clash with the dev proxy path and tempt committing them.
 
 ### 3. Caching scans between runs
+
 `actions/cache` on a `.cache/cards` directory, keyed on the hash of the content card files: `hashFiles('content/**/cards*.json', 'content/investigators/**')`. The script downloads into the cache directory, then copies into `dist/cards`. A content change re-downloads only the missing files; restore-keys allow a partial hit. `.cache/` goes in `.gitignore`.
 
 ### 4. Workflow shape (`.github/workflows/deploy.yml`)
+
 - Triggers: `push` to `main`, `workflow_dispatch`.
 - Permissions: `contents: read`, `pages: write`, `id-token: write`.
 - Concurrency: group `pages`, `cancel-in-progress: false`. A running publish finishes; a newer queued run replaces older queued ones.
@@ -68,17 +75,20 @@ It reuses `cardImage` itself, so the list can't drift from what the game request
 Pinned major versions: checkout@v4, setup-node@v4, cache@v4, configure-pages@v5, upload-pages-artifact@v3, deploy-pages@v4.
 
 ### 5. Custom domain `arkham.artkost.dev`
+
 The account's user site (`jilizart.github.io`) has the custom domain `artkost.dev`. GitHub therefore redirects `jilizart.github.io/arkham-cards-game-app/` to `artkost.dev/arkham-cards-game-app/`, but Cloudflare serves `artkost.dev` (the portfolio) and answers every path itself. This was found after the first deploy.
 
 The repository's Pages site therefore gets its own custom domain, `arkham.artkost.dev`:
+
 - a `CNAME` record `arkham` → `jilizart.github.io` in Cloudflare, DNS only;
 - the domain set in the repository's Pages settings, then Enforce HTTPS.
 
 The site is served from its root, so the workflow builds with `PAGES_BASE: /`. The sub-path support (`asset()`, the guard test) stays, so a fork without a custom domain only changes that one value.
 
-*Alternatives:* proxying `/arkham-cards-game-app/*` from the portfolio's Cloudflare site (needs portfolio changes and fights GitHub's redirect), or deploying to Cloudflare Pages (different pipeline and secrets). The user chose the subdomain.
+_Alternatives:_ proxying `/arkham-cards-game-app/*` from the portfolio's Cloudflare site (needs portfolio changes and fights GitHub's redirect), or deploying to Cloudflare Pages (different pipeline and secrets). The user chose the subdomain.
 
 ### 6. Enabling Pages
+
 Pages must use "GitHub Actions" as its source. The README documents this (Settings → Pages → Source). The apply step does it with `gh api -X POST repos/JiLiZART/arkham-cards-game-app/pages -f build_type=workflow`, or `PUT` if a Pages site already exists, after asking the user, since it changes repository settings.
 
 ## Risks / Trade-offs

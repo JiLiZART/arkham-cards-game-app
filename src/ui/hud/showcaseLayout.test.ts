@@ -20,12 +20,19 @@ describe("showcaseLayout", () => {
   it("more shrink further, and everything always fits the screen", () => {
     expect(at(10).width).toBeLessThanOrEqual(at(8).width);
     expect(at(20).width).toBeLessThan(at(8).width);
-    for (const [w, h] of [[1920, 1080], [1600, 900], [1366, 768]]) {
+    for (const [w, h] of [
+      [1920, 1080],
+      [1600, 900],
+      [1366, 768],
+    ]) {
       for (const n of [1, 2, 4, 6, 10, 20]) {
         const l = showcaseLayout(n, w, h);
         const rows = Math.ceil(n / l.cols);
         expect(l.cols * (l.width + 18), `${n} wide @${w}`).toBeLessThanOrEqual(w - 100);
-        expect(rows * l.width * CARD_RATIO + (rows - 1) * 18, `${n} tall @${h}`).toBeLessThanOrEqual(h - 200);
+        expect(
+          rows * l.width * CARD_RATIO + (rows - 1) * 18,
+          `${n} tall @${h}`,
+        ).toBeLessThanOrEqual(h - 200);
       }
     }
   });

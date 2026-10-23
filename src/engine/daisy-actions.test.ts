@@ -17,11 +17,13 @@ describe("Daisy's Tome action", () => {
       giveCard(g, DAISY, "01035");
       g.s.invs[DAISY].resources = 5;
     });
-    while (r.state.pending?.inv !== DAISY || r.state.pending.kind !== "turn") r = pick(r, r.state.pending!.options.at(-1)!.label);
+    while (r.state.pending?.inv !== DAISY || r.state.pending.kind !== "turn")
+      r = pick(r, r.state.pending!.options.at(-1)!.label);
     return r;
   };
   const settle = (r: Result) => {
-    while (r.state.pending && r.state.pending.kind !== "turn") r = pick(r, r.state.pending.options[0].label);
+    while (r.state.pending && r.state.pending.kind !== "turn")
+      r = pick(r, r.state.pending.options[0].label);
     return r;
   };
 

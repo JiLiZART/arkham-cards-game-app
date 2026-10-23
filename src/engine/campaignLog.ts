@@ -22,18 +22,32 @@ export interface LogSectionState {
 
 export type CampaignLog = Record<string, LogSectionState>;
 
-const emptySection = (): LogSectionState => ({ entries: [], counts: {}, cards: {}, investigators: {} });
+const emptySection = (): LogSectionState => ({
+  entries: [],
+  counts: {},
+  cards: {},
+  investigators: {},
+});
 export const emptyLog = (): CampaignLog => ({ [NOTES]: emptySection() });
 
 /** a copy of the log with `section` there, handed to `change` */
-function edit(log: CampaignLog, section: string, change: (s: LogSectionState) => void): CampaignLog {
+function edit(
+  log: CampaignLog,
+  section: string,
+  change: (s: LogSectionState) => void,
+): CampaignLog {
   const next = structuredClone(log);
   const s = (next[section] ??= emptySection());
   change(s);
   return next;
 }
 
-export function record(log: CampaignLog, id: string, section = NOTES, value?: LogEntry["value"]): CampaignLog {
+export function record(
+  log: CampaignLog,
+  id: string,
+  section = NOTES,
+  value?: LogEntry["value"],
+): CampaignLog {
   return edit(log, section, (s) => {
     const e = s.entries.find((x) => x.id === id);
     const keep = value !== undefined && value !== true ? { value } : {};
@@ -46,7 +60,12 @@ export function record(log: CampaignLog, id: string, section = NOTES, value?: Lo
 }
 
 /** crossed out: still shown, struck through; erased: gone */
-export function crossOut(log: CampaignLog, id: string, section = NOTES, erase = false): CampaignLog {
+export function crossOut(
+  log: CampaignLog,
+  id: string,
+  section = NOTES,
+  erase = false,
+): CampaignLog {
   return edit(log, section, (s) => {
     if (erase) s.entries = s.entries.filter((x) => x.id !== id);
     else {
@@ -62,25 +81,47 @@ export function hasEntry(log: CampaignLog, id: string, section = NOTES, crossed 
   return !!e && !!e.crossedOut === crossed;
 }
 
-export const logCount = (log: CampaignLog, id: string, section = NOTES): number => log[section]?.counts[id] ?? 0;
+export const logCount = (log: CampaignLog, id: string, section = NOTES): number =>
+  log[section]?.counts[id] ?? 0;
 
-export function setCount(log: CampaignLog, id: string, op: "add" | "set", value: number, section = NOTES): CampaignLog {
+export function setCount(
+  log: CampaignLog,
+  id: string,
+  op: "add" | "set",
+  value: number,
+  section = NOTES,
+): CampaignLog {
   return edit(log, section, (s) => {
     s.counts[id] = op === "set" ? value : (s.counts[id] ?? 0) + value;
   });
 }
 
-export function setInvestigatorCount(log: CampaignLog, id: string, inv: string, op: "add" | "set", value: number, section = NOTES): CampaignLog {
+export function setInvestigatorCount(
+  log: CampaignLog,
+  id: string,
+  inv: string,
+  op: "add" | "set",
+  value: number,
+  section = NOTES,
+): CampaignLog {
   return edit(log, section, (s) => {
     const by = (s.investigators[id] ??= {});
     by[inv] = op === "set" ? value : (by[inv] ?? 0) + value;
   });
 }
 
-export function addCards(log: CampaignLog, id: string, codes: string[], remove = false, section = NOTES): CampaignLog {
+export function addCards(
+  log: CampaignLog,
+  id: string,
+  codes: string[],
+  remove = false,
+  section = NOTES,
+): CampaignLog {
   return edit(log, section, (s) => {
     const now = s.cards[id] ?? [];
-    s.cards[id] = remove ? now.filter((c) => !codes.includes(c)) : [...now, ...codes.filter((c) => !now.includes(c))];
+    s.cards[id] = remove
+      ? now.filter((c) => !codes.includes(c))
+      : [...now, ...codes.filter((c) => !now.includes(c))];
   });
 }
 

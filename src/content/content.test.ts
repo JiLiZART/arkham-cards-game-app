@@ -23,10 +23,15 @@ describe("schemas", () => {
 
 describe("loader", () => {
   const base = {
-    "/content/packs/x/cards.generated.json": [{ code: "X1", name: "Thing", type: "event", faction: "neutral", pack: "x" }],
+    "/content/packs/x/cards.generated.json": [
+      { code: "X1", name: "Thing", type: "event", faction: "neutral", pack: "x" },
+    ],
   };
   it("merges overrides over generated data", () => {
-    const { db: d, errors } = buildContent({ ...base, "/content/packs/x/cards.json": { X1: { cost: 2 } } }, {});
+    const { db: d, errors } = buildContent(
+      { ...base, "/content/packs/x/cards.json": { X1: { cost: 2 } } },
+      {},
+    );
     expect(errors).toEqual([]);
     expect(d.cards.X1.cost).toBe(2);
     expect(d.cards.X1.name).toBe("Thing");
@@ -34,57 +39,138 @@ describe("loader", () => {
 
   it("reports a deck referencing a missing card with file and code", () => {
     const { errors } = buildContent(
-      { ...base, "/content/decks/bad.json": { id: "bad", name: "Bad", investigator: "X1", cards: { "01999": 1 } } },
+      {
+        ...base,
+        "/content/decks/bad.json": {
+          id: "bad",
+          name: "Bad",
+          investigator: "X1",
+          cards: { "01999": 1 },
+        },
+      },
       {},
     );
-    expect(errors).toContainEqual(expect.objectContaining({ file: "decks/bad.json", path: "cards.01999", message: "missing card 01999" }));
+    expect(errors).toContainEqual(
+      expect.objectContaining({
+        file: "decks/bad.json",
+        path: "cards.01999",
+        message: "missing card 01999",
+      }),
+    );
   });
 
   it("reports unknown effect ops with the field path", () => {
-    const { errors } = buildContent({ ...base, "/content/packs/x/cards.json": { X1: { abilities: [{ kind: "onPlay", effects: [{ op: "nope" }] }] } } }, {});
+    const { errors } = buildContent(
+      {
+        ...base,
+        "/content/packs/x/cards.json": {
+          X1: { abilities: [{ kind: "onPlay", effects: [{ op: "nope" }] }] },
+        },
+      },
+      {},
+    );
     expect(errors[0]).toMatchObject({ file: "/content/packs/x/cards.json" });
     expect(errors[0].path).toMatch(/^X1\.abilities\.0\.effects\.0/);
   });
 });
 
 describe("generated investigators", () => {
-  const inv = (extra: object = {}) => ({ code: "X1", signatures: [], weaknesses: [], deckSize: 30, deckOptions: [], ...extra });
-  const base = { "/content/packs/x/cards.generated.json": [{ code: "X1", name: "Thing", type: "investigator", faction: "neutral", pack: "x" }] };
+  const inv = (extra: object = {}) => ({
+    code: "X1",
+    signatures: [],
+    weaknesses: [],
+    deckSize: 30,
+    deckOptions: [],
+    ...extra,
+  });
+  const base = {
+    "/content/packs/x/cards.generated.json": [
+      { code: "X1", name: "Thing", type: "investigator", faction: "neutral", pack: "x" },
+    ],
+  };
   it("a hand-written definition replaces the generated one with the same code", () => {
-    const files = { ...base, "/content/investigators-generated/X1.json": inv({ deckSize: 40, generated: true }), "/content/investigators/X1.json": inv({ deckSize: 30 }) };
+    const files = {
+      ...base,
+      "/content/investigators-generated/X1.json": inv({ deckSize: 40, generated: true }),
+      "/content/investigators/X1.json": inv({ deckSize: 30 }),
+    };
     const { db: d, errors } = buildContent(files, {});
     expect(errors).toEqual([]);
     expect(d.investigators.X1.deckSize).toBe(30);
   });
   it("reads generated decks too", () => {
-    const files = { ...base, "/content/investigators-generated/X1.json": inv(), "/content/decks-generated/X1-starter.json": { id: "X1-starter", name: "S", investigator: "X1", cards: {} } };
+    const files = {
+      ...base,
+      "/content/investigators-generated/X1.json": inv(),
+      "/content/decks-generated/X1-starter.json": {
+        id: "X1-starter",
+        name: "S",
+        investigator: "X1",
+        cards: {},
+      },
+    };
     expect(buildContent(files, {}).db.decks["X1-starter"]).toBeDefined();
   });
   it("does not look for the cards of a pack that is not loaded yet", () => {
-    const files = { "/content/investigators-generated/X1.json": inv({ pack: "lazy", signatures: ["L1"] }), "/content/decks-generated/X1-starter.json": { id: "X1-starter", name: "S", investigator: "X1", cards: { L2: 1 } } };
+    const files = {
+      "/content/investigators-generated/X1.json": inv({ pack: "lazy", signatures: ["L1"] }),
+      "/content/decks-generated/X1-starter.json": {
+        id: "X1-starter",
+        name: "S",
+        investigator: "X1",
+        cards: { L2: 1 },
+      },
+    };
     expect(buildContent(files, {}, ["lazy"]).errors).toEqual([]);
   });
   it("defines Zoey Samaras with her signatures, weakness, options and starter deck", () => {
-    expect(db.investigators["02001"]).toMatchObject({ deckSize: 30, signatures: ["02006"], weaknesses: ["02007"], generated: true });
+    expect(db.investigators["02001"]).toMatchObject({
+      deckSize: 30,
+      signatures: ["02006"],
+      weaknesses: ["02007"],
+      generated: true,
+    });
     expect(db.investigators["02001"].deckOptions).toHaveLength(2);
-    expect(db.decks["02001-starter"]).toMatchObject({ investigator: "02001", randomBasicWeakness: true });
+    expect(db.decks["02001-starter"]).toMatchObject({
+      investigator: "02001",
+      randomBasicWeakness: true,
+    });
   });
   it("leaves the five core investigators hand-written", () => {
-    for (const code of ["01001", "01002", "01003", "01004", "01005"]) expect(db.investigators[code].generated).toBeUndefined();
+    for (const code of ["01001", "01002", "01003", "01004", "01005"])
+      expect(db.investigators[code].generated).toBeUndefined();
   });
 });
 
 describe("ArkhamDB import mapping", () => {
   it("parses keywords, uses and slots", () => {
-    expect(parseKeywords("<b>Prey</b> - Highest [combat].\nHunter. Retaliate.", "enemy")).toEqual(["hunter", "retaliate"]);
+    expect(parseKeywords("<b>Prey</b> - Highest [combat].\nHunter. Retaliate.", "enemy")).toEqual([
+      "hunter",
+      "retaliate",
+    ]);
     expect(parseUses("Uses (4 ammo). [action] Spend 1 ammo")).toEqual({ type: "ammo", count: 4 });
     expect(parseSlots("Hand x2")).toEqual(["hand", "hand"]);
     expect(parseSlots("Hand. Arcane")).toEqual(["hand", "arcane"]);
   });
 
   it("maps a location with per-investigator clues", () => {
-    const c = mapCard({ code: "01111", name: "Study", type_code: "location", faction_code: "mythos", pack_code: "core", shroud: 2, clues: 2, encounter_code: "torch", text: "" });
-    expect(c).toMatchObject({ shroud: 2, clues: 2, cluesPerInvestigator: true, encounterSet: "torch" });
+    const c = mapCard({
+      code: "01111",
+      name: "Study",
+      type_code: "location",
+      faction_code: "mythos",
+      pack_code: "core",
+      shroud: 2,
+      clues: 2,
+      encounter_code: "torch",
+      text: "",
+    });
+    expect(c).toMatchObject({
+      shroud: 2,
+      clues: 2,
+      cluesPerInvestigator: true,
+      encounterSet: "torch",
+    });
   });
 
   it("generated file holds every imported core card and overrides stay separate", () => {

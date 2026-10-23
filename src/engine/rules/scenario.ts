@@ -1,5 +1,19 @@
 import { shuffle } from "../rng";
-import { abilitiesOf, activeInvs, actClueCost, card, def, emit, hasFlag, inv, invName, moveCard, push, tapToDraw, type G } from "../core";
+import {
+  abilitiesOf,
+  activeInvs,
+  actClueCost,
+  card,
+  def,
+  emit,
+  hasFlag,
+  inv,
+  invName,
+  moveCard,
+  push,
+  tapToDraw,
+  type G,
+} from "../core";
 import type { InstId, Step } from "../types";
 import { win } from "./cards";
 
@@ -21,17 +35,27 @@ export const drawEncounterHandler: Handler<"DrawEncounter"> = (g, step) => {
   moveCard(g, id, "resolving");
   emit(g, "encounter", `${invName(g, step.inv)} draws ${d.name}`, { inv: step.inv, card: id });
   if (d.type === "enemy") {
-    push(g, { t: "Spawn", enemy: id, inv: step.inv }, ...(d.keywords.includes("surge") ? [{ t: "DrawEncounter", inv: step.inv } as Step] : []));
+    push(
+      g,
+      { t: "Spawn", enemy: id, inv: step.inv },
+      ...(d.keywords.includes("surge") ? [{ t: "DrawEncounter", inv: step.inv } as Step] : []),
+    );
     return;
   }
-  push(g, win("treacheryDrawn", { inv: step.inv, card: id, key: `rev:${id}` }), { t: "Revelation", inv: step.inv, card: id });
+  push(g, win("treacheryDrawn", { inv: step.inv, card: id, key: `rev:${id}` }), {
+    t: "Revelation",
+    inv: step.inv,
+    card: id,
+  });
 };
 
 export const revelationHandler: Handler<"Revelation"> = (g, step) => {
   const c = g.s.cards[step.card];
   if (!c) return;
   if (g.s.cancelled.includes(`rev:${step.card}`)) {
-    emit(g, "cancelled", `${def(g, step.card).name}'s revelation is cancelled`, { card: step.card });
+    emit(g, "cancelled", `${def(g, step.card).name}'s revelation is cancelled`, {
+      card: step.card,
+    });
     moveCard(g, step.card, c.owner ? "discard" : "encounterDiscard");
     return;
   }
@@ -57,19 +81,36 @@ export function finishRevelation(g: G, cardId: InstId, invId: string) {
   // a treachery with Victory X is added to the victory display instead (Grimoire, Victory X)
   const d = def(g, cardId);
   const playerType = d.type === "asset" || d.type === "event" || d.type === "skill";
-  if (c?.zone === "resolving") moveCard(g, cardId, !c.owner && d.victory !== undefined ? "victory" : c.owner ? (playerType ? "hand" : "discard") : "encounterDiscard");
+  if (c?.zone === "resolving")
+    moveCard(
+      g,
+      cardId,
+      !c.owner && d.victory !== undefined
+        ? "victory"
+        : c.owner
+          ? playerType
+            ? "hand"
+            : "discard"
+          : "encounterDiscard",
+    );
   if (surge) push(g, { t: "DrawEncounter", inv: invId });
 }
 
 // ---------- doom, agenda, act ----------
 const DOOM_ZONES = ["agenda", "act", "enemy", "play", "location", "attached", "threat"];
-export const doomInPlay = (g: G) => Object.values(g.s.cards).filter((c) => DOOM_ZONES.includes(c.zone)).reduce((n, c) => n + c.doom, 0);
+export const doomInPlay = (g: G) =>
+  Object.values(g.s.cards)
+    .filter((c) => DOOM_ZONES.includes(c.zone))
+    .reduce((n, c) => n + c.doom, 0);
 
 export const placeDoomHandler: Handler<"PlaceDoom"> = (g, step) => {
   const c = g.s.cards[step.card];
   if (!c) return;
   c.doom += step.n;
-  emit(g, "doom", `${step.n} doom placed on ${def(g, step.card).name}`, { card: step.card, data: { n: step.n } });
+  emit(g, "doom", `${step.n} doom placed on ${def(g, step.card).name}`, {
+    card: step.card,
+    data: { n: step.n },
+  });
 };
 
 export const checkDoomHandler: Handler<"CheckDoom"> = (g) => {
@@ -82,7 +123,11 @@ function backSide(g: G, id: InstId): Step[] {
   const c = card(g, id);
   return abilitiesOf(g, id)
     .filter((a) => a.kind === "revelation")
-    .map((a): Step => (a.run ? { t: "Script", code: c.code, fn: a.run, ctx: { source: id, you: g.s.lead } } : { t: "Effects", effects: a.effects ?? [], ctx: { source: id, you: g.s.lead } }));
+    .map((a): Step =>
+      a.run
+        ? { t: "Script", code: c.code, fn: a.run, ctx: { source: id, you: g.s.lead } }
+        : { t: "Effects", effects: a.effects ?? [], ctx: { source: id, you: g.s.lead } },
+    );
 }
 
 export const advanceAgendaHandler: Handler<"AdvanceAgenda"> = (g, step) => {
@@ -93,9 +138,16 @@ export const advanceAgendaHandler: Handler<"AdvanceAgenda"> = (g, step) => {
     return;
   }
   for (const c of Object.values(g.s.cards)) if (DOOM_ZONES.includes(c.zone)) c.doom = 0;
-  emit(g, "agendaAdvance", `Agenda advances: ${def(g, id).backName ?? def(g, id).name}`, { card: id });
+  emit(g, "agendaAdvance", `Agenda advances: ${def(g, id).backName ?? def(g, id).name}`, {
+    card: id,
+  });
   moveCard(g, id, "limbo");
-  push(g, ...backSide(g, id), { t: "Script", code: "__engine", fn: "nextAgenda", ctx: { source: id } });
+  push(g, ...backSide(g, id), {
+    t: "Script",
+    code: "__engine",
+    fn: "nextAgenda",
+    ctx: { source: id },
+  });
 };
 
 export function nextAgenda(g: G, prev: InstId) {
@@ -112,17 +164,32 @@ export function nextAgenda(g: G, prev: InstId) {
  * The resolution an unscripted last act or agenda leads to (generated scenarios, ADR-0007): the "(→R2)" its back
  * names when the scenario has it, else the first numbered resolution for an act and no resolution for an agenda.
  */
-export function finalResolution(backText: string | undefined, ids: string[], kind: "act" | "agenda"): string {
+export function finalResolution(
+  backText: string | undefined,
+  ids: string[],
+  kind: "act" | "agenda",
+): string {
   const named = /→\s*(R\d+)/.exec((backText ?? "").replace(/<[^>]+>/g, ""))?.[1];
   if (named && ids.includes(named)) return named;
   if (kind === "agenda") return "none";
-  return ids.filter((i) => /^R\d+$/.test(i)).sort((a, b) => Number(a.slice(1)) - Number(b.slice(1)))[0] ?? "none";
+  return (
+    ids
+      .filter((i) => /^R\d+$/.test(i))
+      .sort((a, b) => Number(a.slice(1)) - Number(b.slice(1)))[0] ?? "none"
+  );
 }
 
 /** the deck ran out and the card's back did nothing (no written behaviour): the scenario ends rather than stalls */
 function endUnscripted(g: G, prev: InstId, kind: "act" | "agenda") {
   if (backSide(g, prev).length) return;
-  push(g, { t: "Resolution", id: finalResolution(def(g, prev).backText, Object.keys(g.db.scenarios[g.s.scenarioId].resolutions), kind) });
+  push(g, {
+    t: "Resolution",
+    id: finalResolution(
+      def(g, prev).backText,
+      Object.keys(g.db.scenarios[g.s.scenarioId].resolutions),
+      kind,
+    ),
+  });
 }
 
 export { actClueCost };
@@ -132,7 +199,9 @@ export const advanceActHandler: Handler<"AdvanceAct"> = (g, step) => {
   if (!id) return;
   if (step.spend) {
     let n = actClueCost(g);
-    const order = [g.s.lead, ...activeInvs(g).filter((x) => x !== g.s.lead)].filter((x) => !hasFlag(g, x, "cannotSpendClues"));
+    const order = [g.s.lead, ...activeInvs(g).filter((x) => x !== g.s.lead)].filter(
+      (x) => !hasFlag(g, x, "cannotSpendClues"),
+    );
     for (const i of order) {
       const take = Math.min(n, inv(g, i).clues);
       inv(g, i).clues -= take;
@@ -141,7 +210,12 @@ export const advanceActHandler: Handler<"AdvanceAct"> = (g, step) => {
   }
   emit(g, "actAdvance", `Act advances: ${def(g, id).backName ?? def(g, id).name}`, { card: id });
   moveCard(g, id, "limbo");
-  push(g, ...backSide(g, id), { t: "Script", code: "__engine", fn: "nextAct", ctx: { source: id } });
+  push(g, ...backSide(g, id), {
+    t: "Script",
+    code: "__engine",
+    fn: "nextAct",
+    ctx: { source: id },
+  });
 };
 
 export function nextAct(g: G, prev: InstId) {

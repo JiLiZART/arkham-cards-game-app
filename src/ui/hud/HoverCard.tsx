@@ -29,7 +29,8 @@ export function HoverCard() {
     const move = (e: PointerEvent) => {
       const r = useView.getState().hoverRect;
       if (!r || (e.target as Element | null)?.closest?.(".strip-actions")) return;
-      if (e.clientX < r.x0 || e.clientX > r.x1 || e.clientY < r.y0 || e.clientY > r.y1) useView.getState().setHover(null);
+      if (e.clientX < r.x0 || e.clientX > r.x1 || e.clientY < r.y0 || e.clientY > r.y1)
+        useView.getState().setHover(null);
     };
     window.addEventListener("pointermove", move);
     return () => window.removeEventListener("pointermove", move);
@@ -41,8 +42,13 @@ export function HoverCard() {
   const choose = useGame((s) => s.choose);
   const { byCard } = useCardClick();
   // a strip card with options keeps its buttons a moment after the pointer leaves it, so the pointer can cross onto them
-  const live = hovered && hoverRect && document.querySelector(`.play-strip [data-card="${hovered}"]`) ? stripButtonsFor(hovered, byCard) : null;
-  const [held, setHeld] = useState<{ id: InstId; rect: NonNullable<typeof hoverRect> } | null>(null);
+  const live =
+    hovered && hoverRect && document.querySelector(`.play-strip [data-card="${hovered}"]`)
+      ? stripButtonsFor(hovered, byCard)
+      : null;
+  const [held, setHeld] = useState<{ id: InstId; rect: NonNullable<typeof hoverRect> } | null>(
+    null,
+  );
   const onButtons = useRef(false);
   useEffect(() => {
     if (live && hoverRect) return setHeld({ id: live, rect: hoverRect });
@@ -79,7 +85,7 @@ export function HoverCard() {
   const box = placeHover(rect, 0, innerWidth, innerHeight);
   boxNow.current = box;
   const inStrip = !!document.querySelector(`.play-strip [data-card="${shownId}"]`);
-  const opts = inStrip ? byCard.get(shownId) ?? [] : [];
+  const opts = inStrip ? (byCard.get(shownId) ?? []) : [];
   const name = opts.length ? cardText(db, inst.code, locale).name : "";
   const back = db.cards[inst.code].type === "location" && !inst.revealed;
   return (
@@ -91,7 +97,11 @@ export function HoverCard() {
           <IntentBadge inst={inst} words />
         </div>
       </div>
-      <DetailsColumn rows={cardDetails(db, inst.code, locale, { inst, game })} rect={{ x0: box.x, y0: box.y, x1: box.x + box.w, y1: box.y + box.h }} prefer={inStrip ? "left" : undefined} />
+      <DetailsColumn
+        rows={cardDetails(db, inst.code, locale, { inst, game })}
+        rect={{ x0: box.x, y0: box.y, x1: box.x + box.w, y1: box.y + box.h }}
+        prefer={inStrip ? "left" : undefined}
+      />
       {opts.length > 0 && (
         <div
           className="strip-actions"
@@ -109,7 +119,12 @@ export function HoverCard() {
             const a = stripAction({ ...o, label: optionLabel(o, game, locale) }, name, locale);
             const sym = abilitySymbol(o, game);
             return (
-              <button key={o.id} className="strip-action" onClick={() => choose(o.id)} title={o.label}>
+              <button
+                key={o.id}
+                className="strip-action"
+                onClick={() => choose(o.id)}
+                title={o.label}
+              >
                 {sym && <Glyph name={sym} size={18} />}
                 {a.icon && <Icon name={a.icon} size={22} />}
                 <span>{a.label}</span>

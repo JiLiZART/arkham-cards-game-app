@@ -13,9 +13,11 @@ Out of scope: the showcase and the play strip (their cards keep their sizes), th
 ## Capabilities
 
 ### New Capabilities
+
 <!-- none -->
 
 ### Modified Capabilities
+
 - `game-table-ui`: the hand fan (sizes, the glance badge) and the stat bar (the hand count).
 
 ## Impact

@@ -1,8 +1,29 @@
 import { shuffle } from "../rng";
 import {
   logStep,
-  abilitiesOf, activeInvs, ask, card, cardsIn, connections, controlled, def, emit, engagedWith, enemies, hasFlag, inv, invName,
-  invsAt, isMassive, maxHealth, maxSanity, moveCard, playerCount, push, tapToDraw, type G,
+  abilitiesOf,
+  activeInvs,
+  ask,
+  card,
+  cardsIn,
+  connections,
+  controlled,
+  def,
+  emit,
+  engagedWith,
+  enemies,
+  hasFlag,
+  inv,
+  invName,
+  invsAt,
+  isMassive,
+  maxHealth,
+  maxSanity,
+  moveCard,
+  playerCount,
+  push,
+  tapToDraw,
+  type G,
 } from "../core";
 import type { InstId, InvId, Step } from "../types";
 import { win } from "./cards";
@@ -18,7 +39,9 @@ export const drawHandler: Handler<"Draw"> = (g, step) => {
   if (!step.tapped && !tapToDraw(g, step, step.inv, "player", step.n)) return;
   if (me.deck.length === 0 && me.discard.length === 0) {
     // nothing to reshuffle: defeated at once with 1 mental trauma (Grimoire, Drawing Cards)
-    emit(g, "emptyDeck", `${me.name} must draw from an empty deck with no discard pile`, { inv: step.inv });
+    emit(g, "emptyDeck", `${me.name} must draw from an empty deck with no discard pile`, {
+      inv: step.inv,
+    });
     push(g, { t: "Defeated", inv: step.inv, by: "horror" });
     return;
   }
@@ -26,19 +49,38 @@ export const drawHandler: Handler<"Draw"> = (g, step) => {
     // empty deck: shuffle discard into deck, take 1 horror
     me.deck.push(...me.discard.splice(0));
     shuffle(g.s, me.deck);
-    emit(g, "reshuffle", `${me.name} shuffles their discard pile into their deck and takes 1 horror`, { inv: step.inv, data: { horror: 1 } });
-    push(g, { t: "AssignDamage", inv: step.inv, damage: 0, horror: 1, direct: true, source: null }, step);
+    emit(
+      g,
+      "reshuffle",
+      `${me.name} shuffles their discard pile into their deck and takes 1 horror`,
+      { inv: step.inv, data: { horror: 1 } },
+    );
+    push(
+      g,
+      { t: "AssignDamage", inv: step.inv, damage: 0, horror: 1, direct: true, source: null },
+      step,
+    );
     return;
   }
   const id = me.deck[0];
   const d = def(g, id);
   moveCard(g, id, "hand");
   // an encounter-type weakness resolves as if drawn from the encounter deck; a player-type one resolves its revelation and stays in hand (Grimoire, Weakness)
-  const weakness = !!d.subtype && (d.type === "treachery" || d.type === "enemy" || abilitiesOf(g, id).some((a) => a.kind === "revelation"));
+  const weakness =
+    !!d.subtype &&
+    (d.type === "treachery" ||
+      d.type === "enemy" ||
+      abilitiesOf(g, id).some((a) => a.kind === "revelation"));
   // a weakness that resolves on draw is public and announced as such (the table shows it before it resolves)
-  if (weakness) emit(g, "weakness", `${me.name} draws the weakness ${d.name}`, { inv: step.inv, card: id });
-  else emit(g, "draw", `${me.name} draws ${d.subtype ? d.name : "a card"}`, { inv: step.inv, card: id });
-  const rest: Step[] = step.n > 1 ? [{ t: "Draw", inv: step.inv, n: step.n - 1, tapped: true }] : [];
+  if (weakness)
+    emit(g, "weakness", `${me.name} draws the weakness ${d.name}`, { inv: step.inv, card: id });
+  else
+    emit(g, "draw", `${me.name} draws ${d.subtype ? d.name : "a card"}`, {
+      inv: step.inv,
+      card: id,
+    });
+  const rest: Step[] =
+    step.n > 1 ? [{ t: "Draw", inv: step.inv, n: step.n - 1, tapped: true }] : [];
   if (weakness) {
     // weaknesses resolve immediately
     if (d.type === "enemy") push(g, { t: "Spawn", enemy: id, inv: step.inv }, ...rest);
@@ -66,7 +108,9 @@ export const assignDamageHandler: Handler<"AssignDamage"> = (g, step) => {
   const assigned = { ...(step.assigned ?? {}) };
   let { damage, horror } = step;
   // what the attack's window prevented comes off once, before the first point is placed
-  const prevented = step.key ? (g.s.flags[`prevented:${step.key}`] as [number, number] | undefined) : undefined;
+  const prevented = step.key
+    ? (g.s.flags[`prevented:${step.key}`] as [number, number] | undefined)
+    : undefined;
   if (prevented) {
     delete g.s.flags[`prevented:${step.key}`];
     damage = Math.max(0, damage - prevented[0]);
@@ -96,15 +140,41 @@ export const assignDamageHandler: Handler<"AssignDamage"> = (g, step) => {
     const word = kind === 0 ? "damage" : "horror";
     const key = kind === 0 ? "option.assignDamage" : "option.assignHorror";
     const opts = [
-      { id: step.inv, label: `Assign 1 ${word} to ${me.name}`, card: me.cardId, value: step.inv, key, vars: { code: card(g, me.cardId).code, defeated: 0 } },
+      {
+        id: step.inv,
+        label: `Assign 1 ${word} to ${me.name}`,
+        card: me.cardId,
+        value: step.inv,
+        key,
+        vars: { code: card(g, me.cardId).code, defeated: 0 },
+      },
       ...assets.map((a) => {
         const cap = (kind === 0 ? def(g, a.id).health : def(g, a.id).sanity) ?? 0;
-        const defeated = (kind === 0 ? a.damage : a.horror) + (assigned[a.id]?.[kind] ?? 0) + 1 >= cap ? 1 : 0;
-        return { id: a.id, label: `Assign 1 ${word} to ${def(g, a.id).name}${defeated ? " (defeated)" : ""}`, card: a.id, value: a.id, key, vars: { code: a.code, defeated } };
+        const defeated =
+          (kind === 0 ? a.damage : a.horror) + (assigned[a.id]?.[kind] ?? 0) + 1 >= cap ? 1 : 0;
+        return {
+          id: a.id,
+          label: `Assign 1 ${word} to ${def(g, a.id).name}${defeated ? " (defeated)" : ""}`,
+          card: a.id,
+          value: a.id,
+          key,
+          vars: { code: a.code, defeated },
+        };
       }),
     ];
     const next: Step = { ...step, damage, horror, assigned, choice: undefined };
-    ask(g, next, step.inv, "assign", `${me.name}: assign 1 ${label} (${kind === 0 ? damage : horror} left)`, opts, { key: kind === 0 ? "assignDamage" : "assignHorror", vars: { left: kind === 0 ? damage : horror } });
+    ask(
+      g,
+      next,
+      step.inv,
+      "assign",
+      `${me.name}: assign 1 ${label} (${kind === 0 ? damage : horror} left)`,
+      opts,
+      {
+        key: kind === 0 ? "assignDamage" : "assignHorror",
+        vars: { left: kind === 0 ? damage : horror },
+      },
+    );
     return;
   }
   // apply
@@ -122,13 +192,27 @@ export const assignDamageHandler: Handler<"AssignDamage"> = (g, step) => {
       c.damage += d;
       c.horror += h;
       if (d > 0 || h > 0) touchedAssets.push(target);
-      emit(g, "assetDamage", `${def(g, target).name} takes ${d} damage, ${h} horror`, { card: target, inv: step.inv, data: { damage: d, horror: h, source: step.source } });
+      emit(g, "assetDamage", `${def(g, target).name} takes ${d} damage, ${h} horror`, {
+        card: target,
+        inv: step.inv,
+        data: { damage: d, horror: h, source: step.source },
+      });
     }
   }
   if (invDamage || invHorror) {
-    emit(g, "damage", `${me.name} takes ${invDamage} damage and ${invHorror} horror`, { inv: step.inv, data: { damage: invDamage, horror: invHorror, source: step.source } });
+    emit(g, "damage", `${me.name} takes ${invDamage} damage and ${invHorror} horror`, {
+      inv: step.inv,
+      data: { damage: invDamage, horror: invHorror, source: step.source },
+    });
   }
-  push(g, { t: "AfterDamage", inv: step.inv, damage: invDamage, horror: invHorror, assets: touchedAssets, enemy: step.enemy ?? null });
+  push(g, {
+    t: "AfterDamage",
+    inv: step.inv,
+    damage: invDamage,
+    horror: invHorror,
+    assets: touchedAssets,
+    enemy: step.enemy ?? null,
+  });
 };
 
 export const afterDamageHandler: Handler<"AfterDamage"> = (g, step) => {
@@ -142,7 +226,8 @@ export const afterDamageHandler: Handler<"AfterDamage"> = (g, step) => {
   // asset defeat
   steps.push({ t: "Script", code: "__engine", fn: "assetDefeatCheck", ctx: { you: step.inv } });
   if (step.horror > 0) steps.push(win("horrorPlaced", { inv: step.inv, amount: step.horror }));
-  if (step.damage > 0) steps.push(win("damageTaken", { inv: step.inv, amount: step.damage, enemy }));
+  if (step.damage > 0)
+    steps.push(win("damageTaken", { inv: step.inv, amount: step.damage, enemy }));
   if (step.horror > 0) steps.push(win("horrorTaken", { inv: step.inv, amount: step.horror }));
   steps.push({ t: "CheckDefeat", inv: step.inv });
   push(g, ...steps);
@@ -162,7 +247,8 @@ export const checkDefeatHandler: Handler<"CheckDefeat"> = (g, step) => {
   const me = inv(g, step.inv);
   if (me.status !== "playing") return;
   if (me.damage >= maxHealth(g, step.inv)) push(g, { t: "Defeated", inv: step.inv, by: "damage" });
-  else if (me.horror >= maxSanity(g, step.inv)) push(g, { t: "Defeated", inv: step.inv, by: "horror" });
+  else if (me.horror >= maxSanity(g, step.inv))
+    push(g, { t: "Defeated", inv: step.inv, by: "horror" });
 };
 
 export const defeatedHandler: Handler<"Defeated"> = (g, step) => {
@@ -174,7 +260,14 @@ export const defeatedHandler: Handler<"Defeated"> = (g, step) => {
     if (step.by === "damage") me.physicalTrauma++;
     else me.mentalTrauma++;
   }
-  emit(g, step.by === "resign" ? "resign" : "defeated", step.by === "resign" ? `${me.name} resigns` : `${me.name} is defeated (${step.by === "damage" ? "physical" : "mental"} trauma)`, { inv: step.inv, data: { by: step.by } });
+  emit(
+    g,
+    step.by === "resign" ? "resign" : "defeated",
+    step.by === "resign"
+      ? `${me.name} resigns`
+      : `${me.name} is defeated (${step.by === "damage" ? "physical" : "mental"} trauma)`,
+    { inv: step.inv, data: { by: step.by } },
+  );
   // clues drop at location
   if (me.location && me.clues) card(g, me.location).clues += me.clues;
   me.clues = 0;
@@ -182,24 +275,37 @@ export const defeatedHandler: Handler<"Defeated"> = (g, step) => {
   for (const e of enemies(g)) if (e.engagedWith === step.inv) e.engagedWith = null;
   // their weaknesses' "when the game ends" abilities resolve now, before leaving the game (Grimoire, Elimination)
   for (const c of Object.values(g.s.cards)) {
-    if (c.owner === step.inv && ["play", "threat", "hand"].includes(c.zone) && def(g, c.id).subtype) g.db.scripts[c.code]?.hooks?.gameEnd?.(g, { source: c.id, you: c.controller });
+    if (c.owner === step.inv && ["play", "threat", "hand"].includes(c.zone) && def(g, c.id).subtype)
+      g.db.scripts[c.code]?.hooks?.gameEnd?.(g, { source: c.id, you: c.controller });
   }
   // cards leave play: owned cards out of the game, encounter cards to encounter discard
   for (const c of Object.values(g.s.cards)) {
-    if (c.owner === step.inv && c.zone !== "removed" && c.zone !== "investigator") moveCard(g, c.id, "removed");
-    else if (!c.owner && c.controller === step.inv && (c.zone === "threat" || c.zone === "play")) moveCard(g, c.id, "encounterDiscard");
+    if (c.owner === step.inv && c.zone !== "removed" && c.zone !== "investigator")
+      moveCard(g, c.id, "removed");
+    else if (!c.owner && c.controller === step.inv && (c.zone === "threat" || c.zone === "play"))
+      moveCard(g, c.id, "encounterDiscard");
   }
   me.location = null;
   if (g.s.active === step.inv) g.s.active = null;
-  if (activeInvs(g).length === 0) push(g, { t: "Script", code: "__engine", fn: "allEliminated", ctx: {} });
-  else if (g.s.lead === step.inv) push(g, { t: "Script", code: "__engine", fn: "chooseLead", ctx: {} });
+  if (activeInvs(g).length === 0)
+    push(g, { t: "Script", code: "__engine", fn: "allEliminated", ctx: {} });
+  else if (g.s.lead === step.inv)
+    push(g, { t: "Script", code: "__engine", fn: "chooseLead", ctx: {} });
 };
 
 /** the remaining investigators choose a new lead when the lead is eliminated (Grimoire, Elimination) */
 export function chooseLead(g: G, step: Step) {
   const rest = activeInvs(g);
   if (!rest.length || rest.includes(g.s.lead)) return;
-  const pick = ask<InvId>(g, step, rest[0], "generic", "Choose the new lead investigator", rest.map((i) => ({ id: i, label: invName(g, i), card: inv(g, i).cardId, value: i })), { auto: true, key: "newLead" });
+  const pick = ask<InvId>(
+    g,
+    step,
+    rest[0],
+    "generic",
+    "Choose the new lead investigator",
+    rest.map((i) => ({ id: i, label: invName(g, i), card: inv(g, i).cardId, value: i })),
+    { auto: true, key: "newLead" },
+  );
   if (pick === undefined) return;
   g.s.lead = pick;
   emit(g, "lead", `${invName(g, pick)} is the new lead investigator`, { inv: pick });
@@ -216,7 +322,12 @@ export const moveHandler: Handler<"Move"> = (g, step) => {
   const from = inv(g, step.inv).location;
   push(
     g,
-    ...(from ? [win("wouldMoveOut", { inv: step.inv, location: from, key }), win("leaveLocation", { inv: step.inv, location: from, key })] : []),
+    ...(from
+      ? [
+          win("wouldMoveOut", { inv: step.inv, location: from, key }),
+          win("leaveLocation", { inv: step.inv, location: from, key }),
+        ]
+      : []),
     { t: "Arrive", inv: step.inv, to: step.to, key },
   );
 };
@@ -228,11 +339,17 @@ export const arriveHandler: Handler<"Arrive"> = (g, step) => {
   const from = me.location;
   me.location = step.to;
   // engaged enemies move with the investigator (massive ones engage everyone at their location)
-  for (const e of enemies(g)) if (e.engagedWith === step.inv && !isMassive(g, e.id)) e.location = step.to;
-  emit(g, "move", `${me.name} moves to ${def(g, step.to).name}`, { inv: step.inv, card: step.to, data: { from } });
+  for (const e of enemies(g))
+    if (e.engagedWith === step.inv && !isMassive(g, e.id)) e.location = step.to;
+  emit(g, "move", `${me.name} moves to ${def(g, step.to).name}`, {
+    inv: step.inv,
+    card: step.to,
+    data: { from },
+  });
   const steps: Step[] = [];
   const loc = card(g, step.to);
-  if (!loc.revealed) steps.push({ t: "Script", code: "__engine", fn: "revealLocation", ctx: { location: step.to } });
+  if (!loc.revealed)
+    steps.push({ t: "Script", code: "__engine", fn: "revealLocation", ctx: { location: step.to } });
   steps.push(win("enterLocation", { inv: step.inv, location: step.to, from }));
   steps.push({ t: "Script", code: "__engine", fn: "checkEngagement", ctx: { inv: step.inv } });
   steps.push({ t: "CheckObjectives" });
@@ -245,7 +362,10 @@ export function revealLocation(g: G, loc: InstId) {
   c.revealed = true;
   const d = def(g, loc);
   c.clues += (d.clues ?? 0) * (d.cluesPerInvestigator ? playerCount(g) : 1);
-  emit(g, "reveal", `${d.name} is revealed (${c.clues} clues)`, { card: loc, data: { n: c.clues } });
+  emit(g, "reveal", `${d.name} is revealed (${c.clues} clues)`, {
+    card: loc,
+    data: { n: c.clues },
+  });
 }
 
 /** ready unengaged non-aloof enemies at an investigator's location engage by prey among everyone there (the mover on a tie) */
@@ -270,7 +390,13 @@ export const discoverCluesHandler: Handler<"DiscoverClues"> = (g, step) => {
   const n = Math.min(step.n, loc.clues);
   if (n <= 0 || hasFlag(g, step.inv, "cannotDiscoverClues")) return;
   const key = `clues${g.s.seq++}`;
-  push(g, win("wouldDiscoverClues", { inv: step.inv, location: step.location, key, amount: n }), { t: "GainClues", inv: step.inv, location: step.location, n, key });
+  push(g, win("wouldDiscoverClues", { inv: step.inv, location: step.location, key, amount: n }), {
+    t: "GainClues",
+    inv: step.inv,
+    location: step.location,
+    n,
+    key,
+  });
 };
 
 export const gainCluesHandler: Handler<"GainClues"> = (g, step) => {
@@ -279,7 +405,12 @@ export const gainCluesHandler: Handler<"GainClues"> = (g, step) => {
   const n = Math.min(step.n, loc.clues);
   loc.clues -= n;
   inv(g, step.inv).clues += n;
-  emit(g, "clues", `${invName(g, step.inv)} discovers ${n} clue${n === 1 ? "" : "s"} at ${def(g, step.location).name}`, { inv: step.inv, card: step.location, data: { n } });
+  emit(
+    g,
+    "clues",
+    `${invName(g, step.inv)} discovers ${n} clue${n === 1 ? "" : "s"} at ${def(g, step.location).name}`,
+    { inv: step.inv, card: step.location, data: { n } },
+  );
 };
 
 // ---------- setup helpers ----------
@@ -287,11 +418,30 @@ export const mulliganHandler: Handler<"Mulligan"> = (g, step) => {
   const me = inv(g, step.inv);
   const chosen = step.chosen ?? [];
   const opts = me.hand.filter((h) => !chosen.includes(h));
-  const pick = ask<string | { unpick: InstId }>(g, step, step.inv, "mulligan", `${me.name}: mulligan — choose cards to redraw (${chosen.length} chosen)`, [
-    { id: "done", label: chosen.length ? `Redraw ${chosen.length} card(s)` : "Keep hand", value: "done" },
-    ...(chosen.length < 5 ? opts.map((h) => ({ id: h, label: def(g, h).name, card: h, value: h })) : []),
-    ...chosen.map((h) => ({ id: `un:${h}`, label: `Take back ${def(g, h).name}`, card: h, value: { unpick: h } })),
-  ], { key: "mulligan", vars: { n: chosen.length } });
+  const pick = ask<string | { unpick: InstId }>(
+    g,
+    step,
+    step.inv,
+    "mulligan",
+    `${me.name}: mulligan — choose cards to redraw (${chosen.length} chosen)`,
+    [
+      {
+        id: "done",
+        label: chosen.length ? `Redraw ${chosen.length} card(s)` : "Keep hand",
+        value: "done",
+      },
+      ...(chosen.length < 5
+        ? opts.map((h) => ({ id: h, label: def(g, h).name, card: h, value: h }))
+        : []),
+      ...chosen.map((h) => ({
+        id: `un:${h}`,
+        label: `Take back ${def(g, h).name}`,
+        card: h,
+        value: { unpick: h },
+      })),
+    ],
+    { key: "mulligan", vars: { n: chosen.length } },
+  );
   if (pick === undefined) return;
   if (typeof pick === "object") {
     push(g, { ...step, choice: undefined, chosen: chosen.filter((h) => h !== pick.unpick) });
@@ -310,7 +460,11 @@ export const mulliganHandler: Handler<"Mulligan"> = (g, step) => {
   for (const h of aside) moveCard(g, h, "deck");
   if (aside.length) shuffle(g.s, me.deck);
   delete g.s.flags[`aside:${step.inv}`];
-  if (chosen.length) emit(g, "mulligan", `${me.name} redraws ${chosen.length} card(s)`, { inv: step.inv, data: { n: chosen.length } });
+  if (chosen.length)
+    emit(g, "mulligan", `${me.name} redraws ${chosen.length} card(s)`, {
+      inv: step.inv,
+      data: { n: chosen.length },
+    });
 };
 
 /** draw n opening cards, setting weaknesses aside and replacing them */
@@ -340,8 +494,15 @@ export const handSizeHandler: Handler<"HandSize"> = (g, step) => {
   const excess = me.hand.length - HAND_LIMIT;
   if (excess <= 0) return;
   if (!step.stepped && step.choice === undefined) logStep(g, "handSize", step.inv);
-  const pick = ask<InstId>(g, step, step.inv, "generic", `${me.name}: discard down to ${HAND_LIMIT} cards (${excess} more)`,
-    me.hand.map((h) => ({ id: h, label: def(g, h).name, card: h, value: h })), { key: "discardDown", vars: { n: excess } });
+  const pick = ask<InstId>(
+    g,
+    step,
+    step.inv,
+    "generic",
+    `${me.name}: discard down to ${HAND_LIMIT} cards (${excess} more)`,
+    me.hand.map((h) => ({ id: h, label: def(g, h).name, card: h, value: h })),
+    { key: "discardDown", vars: { n: excess } },
+  );
   if (pick === undefined) return;
   moveCard(g, pick, "discard");
   emit(g, "discard", `${me.name} discards ${def(g, pick).name}`, { inv: step.inv, card: pick });

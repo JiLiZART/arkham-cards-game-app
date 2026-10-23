@@ -33,7 +33,11 @@ describe("map camera", () => {
     expect(toScreenX(big.x0, b)).toBeCloseTo(v.w - hud.right - 320);
     expect(toScreenY(big.z0, b)).toBeCloseTo(v.h - hud.bottom - 320);
     // a centred camera is left alone; zoom is clamped
-    expect(clampCam({ cx: 1, cz: 1, zoom: 50 }, bounds, view, 4)).toEqual({ cx: 1, cz: 1, zoom: 50 });
+    expect(clampCam({ cx: 1, cz: 1, zoom: 50 }, bounds, view, 4)).toEqual({
+      cx: 1,
+      cz: 1,
+      zoom: 50,
+    });
     expect(clampCam({ cx: 0, cz: 0, zoom: 999 }, bounds, view, 4).zoom).toBe(210);
   });
 
@@ -51,7 +55,13 @@ describe("map camera", () => {
   });
 
   it("focus shows a location 420 px tall at 1080p and centres it in the free area", () => {
-    const c = focusCam(3, 2, 4, { w: 1920, h: 1080 }, { top: 60, right: 160, bottom: 300, left: 200 });
+    const c = focusCam(
+      3,
+      2,
+      4,
+      { w: 1920, h: 1080 },
+      { top: 60, right: 160, bottom: 300, left: 200 },
+    );
     expect(c.zoom * 4).toBeCloseTo(420);
     // screen position of the location: centre + (world - camera) * zoom
     const sx = 960 + (3 - c.cx) * c.zoom;
@@ -74,7 +84,19 @@ describe("eventFocus", () => {
   const game = skipMulligans(start("the-gathering", ["01001"], 1)).state;
   const study = game.invs["01001"].location!;
   const ghoul = "g1";
-  const withGhoul = { ...game, cards: { ...game.cards, [ghoul]: { ...game.cards[study], id: ghoul, code: "01160", zone: "enemy" as const, location: study } } };
+  const withGhoul = {
+    ...game,
+    cards: {
+      ...game.cards,
+      [ghoul]: {
+        ...game.cards[study],
+        id: ghoul,
+        code: "01160",
+        zone: "enemy" as const,
+        location: study,
+      },
+    },
+  };
   const ev = (type: string, extra: object) => ({ type, text: "", ...extra });
 
   it("an enemy's event looks at the enemy's location", () => {

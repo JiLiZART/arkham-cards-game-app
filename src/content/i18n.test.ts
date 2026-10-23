@@ -9,16 +9,27 @@ describe("translations", () => {
       {
         "/content/i18n/ru/ui.generated.json": { a: "generated a", b: "generated b" },
         "/content/i18n/ru/ui.json": { a: "hand a" },
-        "/content/i18n/ru/cards.generated.json": { "01020": { name: "Мачете (gen)", text: "текст" } },
+        "/content/i18n/ru/cards.generated.json": {
+          "01020": { name: "Мачете (gen)", text: "текст" },
+        },
         "/content/i18n/ru/cards.json": { "01020": { name: "Мачете" } },
-        "/content/i18n/ru/campaigns.generated.json": { scenarios: { s: { name: "gen", resolutions: { R1: { title: "gen R1", text: "gen text" } } } } },
-        "/content/i18n/ru/campaigns.json": { scenarios: { s: { resolutions: { R1: { title: "hand R1" } } } } },
+        "/content/i18n/ru/campaigns.generated.json": {
+          scenarios: {
+            s: { name: "gen", resolutions: { R1: { title: "gen R1", text: "gen text" } } },
+          },
+        },
+        "/content/i18n/ru/campaigns.json": {
+          scenarios: { s: { resolutions: { R1: { title: "hand R1" } } } },
+        },
       },
       {},
     );
     expect(d.i18n.ru.ui).toEqual({ a: "hand a", b: "generated b" });
     expect(d.i18n.ru.cards["01020"]).toEqual({ name: "Мачете", text: "текст" });
-    expect(d.i18n.ru.campaigns.scenarios.s).toEqual({ name: "gen", resolutions: { R1: { title: "hand R1", text: "gen text" } } });
+    expect(d.i18n.ru.campaigns.scenarios.s).toEqual({
+      name: "gen",
+      resolutions: { R1: { title: "hand R1", text: "gen text" } },
+    });
   });
 
   it("card text layers: imported, then printed on the Russian card image, then hand-written", () => {
@@ -26,17 +37,32 @@ describe("translations", () => {
       {
         // file order must not matter
         "/content/i18n/ru/cards.json": { "01016": { subname: "ручная правка" } },
-        "/content/i18n/ru/cards.print.json": { "01016": { name: "Кольт 45-го калибра", text: "с карты" } },
-        "/content/i18n/ru/cards.generated.json": { "01016": { name: "Пистолет 45-го калибра", text: "импорт", traits: ["Предмет"] } },
+        "/content/i18n/ru/cards.print.json": {
+          "01016": { name: "Кольт 45-го калибра", text: "с карты" },
+        },
+        "/content/i18n/ru/cards.generated.json": {
+          "01016": { name: "Пистолет 45-го калибра", text: "импорт", traits: ["Предмет"] },
+        },
       },
       {},
     );
-    expect(d.i18n.ru.cards["01016"]).toEqual({ name: "Кольт 45-го калибра", text: "с карты", traits: ["Предмет"], subname: "ручная правка" });
+    expect(d.i18n.ru.cards["01016"]).toEqual({
+      name: "Кольт 45-го калибра",
+      text: "с карты",
+      traits: ["Предмет"],
+      subname: "ручная правка",
+    });
   });
 
   it("printed texts are checked: known codes and icon tokens only", () => {
-    const errors = checkPrintText(db, "cards.print.json", { "01020": { text: "[action] Битва. +1 [combat], [cmbat]" }, "99999": {} });
-    expect(errors.map((e) => `${e.path}: ${e.message}`).sort()).toEqual(["01020.text: unknown icon [cmbat]", "99999: unknown card code"]);
+    const errors = checkPrintText(db, "cards.print.json", {
+      "01020": { text: "[action] Битва. +1 [combat], [cmbat]" },
+      "99999": {},
+    });
+    expect(errors.map((e) => `${e.path}: ${e.message}`).sort()).toEqual([
+      "01020.text: unknown icon [cmbat]",
+      "99999: unknown card code",
+    ]);
   });
 
   it("Russian scenario, log and card text come from the imported data", () => {

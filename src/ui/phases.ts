@@ -7,5 +7,10 @@ import { db } from "./context";
  */
 export function phaseIsEmpty(game: GameState, phase: string): boolean {
   if (phase !== "enemy") return false;
-  return !Object.values(game.cards).some((c) => c.zone === "enemy" && !c.exhausted && (c.engagedWith || db.cards[c.code]?.keywords.includes("hunter")));
+  return !Object.values(game.cards).some(
+    (c) =>
+      c.zone === "enemy" &&
+      !c.exhausted &&
+      (c.engagedWith || db.cards[c.code]?.keywords.includes("hunter")),
+  );
 }

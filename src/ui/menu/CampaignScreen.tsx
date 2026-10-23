@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { campaignName, cardText, interludeName, logLabel, scenarioText, t } from "../../content/i18n";
+import {
+  campaignName,
+  cardText,
+  interludeName,
+  logLabel,
+  scenarioText,
+  t,
+} from "../../content/i18n";
 import { currentScenarioId } from "../../engine/campaign";
 import { db, gameStore, useGame } from "../context";
 import { guideHtml } from "../guideText";
@@ -8,7 +15,8 @@ import { logView, readItems } from "./campaignView";
 import { DeckBuilder } from "./DeckBuilder";
 import { FlowPrompt } from "./FlowPrompt";
 
-const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
+const tr = (key: string, vars?: Record<string, string | number>) =>
+  t(db, gameStore.getState().locale, key, vars);
 
 /**
  * The campaign between scenarios: the guide read out (stories, what was recorded), the prompt the flow waits at, each
@@ -32,7 +40,13 @@ export function CampaignScreen() {
         <div className="wz-body">
           <DeckBuilder
             investigator={who.code}
-            initial={{ id: `campaign:${who.code}`, name: cardText(db, who.code, locale).name, investigator: who.code, cards: before, randomBasicWeakness: false }}
+            initial={{
+              id: `campaign:${who.code}`,
+              name: cardText(db, who.code, locale).name,
+              investigator: who.code,
+              cards: before,
+              randomBasicWeakness: false,
+            }}
             xp={who.xp}
             onSave={(cards) => {
               const r = gameStore.getState().upgradeDeck(who.code, cards);
@@ -54,24 +68,34 @@ export function CampaignScreen() {
   // the deck upgrade is offered where the guide offers it, and before a scenario begins
   const mayUpgrade = !campaign.result && (waiting === "upgradeDecks" || waiting === "play");
   const read = readItems(db, campaign, locale);
-  const item = campaign.flow.item ? interludeName(db, def.id, campaign.flow.item, locale) : undefined;
+  const item = campaign.flow.item
+    ? interludeName(db, def.id, campaign.flow.item, locale)
+    : undefined;
   return (
     <div className="screen wizard log">
       <header className="wz-head">
         <h1>
-          {campaignName(db, def.id, locale)} — {campaign.result ? tr("log.summary") : (item ?? tr("log.title"))}
+          {campaignName(db, def.id, locale)} —{" "}
+          {campaign.result ? tr("log.summary") : (item ?? tr("log.title"))}
         </h1>
       </header>
       <div className="wz-body">
         {notice && <div className="notice">{notice}</div>}
-        {campaign.result && <h2 className={`result-${campaign.result}`}>{tr(`result.${campaign.result}`)}</h2>}
+        {campaign.result && (
+          <h2 className={`result-${campaign.result}`}>{tr(`result.${campaign.result}`)}</h2>
+        )}
         {read.length > 0 && (
           <section className="flow-read" aria-live="polite">
             {read.map((r, k) =>
               r.kind === "story" ? (
                 <div key={k} className="flow-story">
                   {r.title && <h3 className="flow-title">{r.title}</h3>}
-                  {r.text && <div className="flow-text" dangerouslySetInnerHTML={{ __html: guideHtml(r.text) }} />}
+                  {r.text && (
+                    <div
+                      className="flow-text"
+                      dangerouslySetInnerHTML={{ __html: guideHtml(r.text) }}
+                    />
+                  )}
                 </div>
               ) : (
                 <div key={k} className="flow-recorded">
@@ -112,7 +136,10 @@ export function CampaignScreen() {
             <h3>{tr("log.scenarios")}</h3>
             {campaign.history.map((h, k) => (
               <div key={k}>
-                {scenarioText(db, h.scenarioId, locale).name}: {scenarioText(db, h.scenarioId, locale).resolution(h.resolution)?.title ?? h.resolution} · {tr("log.victory")} {h.victory} · +{h.xp} XP
+                {scenarioText(db, h.scenarioId, locale).name}:{" "}
+                {scenarioText(db, h.scenarioId, locale).resolution(h.resolution)?.title ??
+                  h.resolution}{" "}
+                · {tr("log.victory")} {h.victory} · +{h.xp} XP
               </div>
             ))}
           </section>
@@ -127,17 +154,27 @@ export function CampaignScreen() {
             ))}
             {sec.counts.map((n) => (
               <div key={n.id}>
-                <b>{sec.counts.length === 1 && sec.entries.length === 0 ? sec.label : logLabel(db, def.id, n.id, locale)}:</b> {n.n}
+                <b>
+                  {sec.counts.length === 1 && sec.entries.length === 0
+                    ? sec.label
+                    : logLabel(db, def.id, n.id, locale)}
+                  :
+                </b>{" "}
+                {n.n}
               </div>
             ))}
             {sec.cards.map((l) => (
               <div key={l.id}>
-                <b>{logLabel(db, def.id, l.id, locale)}:</b> {l.codes.map((c) => cardText(db, c, locale).name).join(", ")}
+                <b>{logLabel(db, def.id, l.id, locale)}:</b>{" "}
+                {l.codes.map((c) => cardText(db, c, locale).name).join(", ")}
               </div>
             ))}
             {sec.investigators.map((x) => (
               <div key={x.id}>
-                <b>{logLabel(db, def.id, x.id, locale)}:</b> {x.byInvestigator.map((b) => `${cardText(db, b.code, locale).name} ${b.n}`).join(", ")}
+                <b>{logLabel(db, def.id, x.id, locale)}:</b>{" "}
+                {x.byInvestigator
+                  .map((b) => `${cardText(db, b.code, locale).name} ${b.n}`)
+                  .join(", ")}
               </div>
             ))}
           </section>

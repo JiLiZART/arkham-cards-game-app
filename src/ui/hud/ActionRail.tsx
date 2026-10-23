@@ -39,21 +39,32 @@ export function railItem(o: ChoiceOption): RailItem {
   if (kind === "endTurn") return { key: "rail.endTurn", symbol: "⏎", primary: true };
   // a draw waiting for a tap on a deck (the setting "Tap decks to draw"): the bar's button draws too
   if (o.id === "draw" && typeof o.value === "string" && o.value.startsWith("draw:"))
-    return o.value === "draw:encounter" ? { key: "rail.drawEncounter", img: backUrl("encounter"), primary: true } : { key: "rail.draw", img: backUrl("player"), primary: true };
+    return o.value === "draw:encounter"
+      ? { key: "rail.drawEncounter", img: backUrl("encounter"), primary: true }
+      : { key: "rail.draw", img: backUrl("player"), primary: true };
   if (o.id === "done") {
     const redraw = /^Redraw (\d+)/.exec(o.label);
     if (redraw) return { key: "rail.redraw", vars: { n: redraw[1] }, symbol: "↻", primary: true };
-    return { key: /^Keep hand/.test(o.label) ? "rail.keep" : "rail.done", symbol: "✔", primary: true };
+    return {
+      key: /^Keep hand/.test(o.label) ? "rail.keep" : "rail.done",
+      symbol: "✔",
+      primary: true,
+    };
   }
   if (o.id === "pass") return { key: "rail.pass", symbol: "»", primary: true };
   if (o.id === "none") return { key: "rail.nothing", symbol: "✖", primary: false };
   if (/^Resign/.test(o.label)) return { key: "rail.resign", symbol: "⚑", primary: false };
-  if (typeof o.value === "string" && SKILLS.has(o.value)) return { key: null, icon: o.value as IconName, primary: false };
+  if (typeof o.value === "string" && SKILLS.has(o.value))
+    return { key: null, icon: o.value as IconName, primary: false };
   return { key: null, symbol: "•", primary: false };
 }
 
 /** a short label and icon for an option shown as a button on its card in the play strip */
-export function stripAction(o: ChoiceOption, cardName: string, locale: string): { label: string; icon?: IconName } {
+export function stripAction(
+  o: ChoiceOption,
+  cardName: string,
+  locale: string,
+): { label: string; icon?: IconName } {
   const kind = (o.value as { kind?: string } | null)?.kind;
   // who takes the damage: the whole sentence is the button ("Assign 1 damage to Flesh Ward (defeated)")
   if (o.key?.startsWith("option.assign")) return { label: o.label };
@@ -61,25 +72,53 @@ export function stripAction(o: ChoiceOption, cardName: string, locale: string): 
   if (kind === "evade") return { label: t(db, locale, "strip.evade"), icon: "agility" };
   if (kind === "engage") return { label: t(db, locale, "strip.engage") };
   // the engine label without the card's own name: "Use .45 Automatic" → "Use", "Machete: fight" → "fight"
-  const short = o.label.replace(cardName, "").replace(/^[\s:·-]+|[\s:·-]+$/g, "").replace(/\s{2,}/g, " ");
+  const short = o.label
+    .replace(cardName, "")
+    .replace(/^[\s:·-]+|[\s:·-]+$/g, "")
+    .replace(/\s{2,}/g, " ");
   if (/^Use$/i.test(short)) return { label: t(db, locale, "strip.use") };
   const label = short || o.label;
   return { label: label[0].toUpperCase() + label.slice(1) };
 }
 
 /** the action, reaction or free symbol of an option that uses a card ability (from the ability's kind), else null */
-export function abilitySymbol(o: ChoiceOption, game: Pick<GameState, "cards">): "action" | "reaction" | "free" | null {
-  const v = o.value as { kind?: string; card?: string; index?: number; ability?: { ability: { kind: string } } } | string | null;
+export function abilitySymbol(
+  o: ChoiceOption,
+  game: Pick<GameState, "cards">,
+): "action" | "reaction" | "free" | null {
+  const v = o.value as
+    | { kind?: string; card?: string; index?: number; ability?: { ability: { kind: string } } }
+    | string
+    | null;
   // a reaction choice is "card:index"; a turn option { kind: "ability", card, index }; a fast ability during a test carries its ability
   const m = typeof v === "string" ? /^(.+):(\d+)$/.exec(v) : null;
-  const ref = m ? { card: m[1], index: +m[2] } : typeof v === "object" && v?.kind === "ability" ? { card: v.card!, index: v.index! } : null;
+  const ref = m
+    ? { card: m[1], index: +m[2] }
+    : typeof v === "object" && v?.kind === "ability"
+      ? { card: v.card!, index: v.index! }
+      : null;
   const code = ref && game.cards[ref.card]?.code;
-  const kind = typeof v === "object" && v?.ability ? v.ability.ability.kind : code ? [...(db.cards[code]?.abilities ?? []), ...(db.scripts[code]?.abilities ?? [])][ref!.index]?.kind : null;
-  return kind === "action" ? "action" : kind === "reaction" ? "reaction" : kind === "fast" ? "free" : null;
+  const kind =
+    typeof v === "object" && v?.ability
+      ? v.ability.ability.kind
+      : code
+        ? [...(db.cards[code]?.abilities ?? []), ...(db.scripts[code]?.abilities ?? [])][ref!.index]
+            ?.kind
+        : null;
+  return kind === "action"
+    ? "action"
+    : kind === "reaction"
+      ? "reaction"
+      : kind === "fast"
+        ? "free"
+        : null;
 }
 
 /** rail and bar buttons the tips point at */
-const TIP_OF: Record<string, string> = { "rail.investigate": "investigate", "rail.endTurn": "endTurn" };
+const TIP_OF: Record<string, string> = {
+  "rail.investigate": "investigate",
+  "rail.endTurn": "endTurn",
+};
 
 /** a no-card option as an icon button; End turn glows when nothing is left to spend */
 function OptionButton({ o, game, busy }: { o: ChoiceOption; game: GameState; busy: boolean }) {
@@ -88,13 +127,33 @@ function OptionButton({ o, game, busy }: { o: ChoiceOption; game: GameState; bus
   const it = railItem(o);
   // costs and extra detail stay visible: "[2 actions]" suffixes come from the engine label
   const extra = /\[(\d+ actions)\]$/.exec(o.label)?.[1];
-  const label = it.key ? t(db, locale, it.key, it.vars) + (extra ? ` (${extra})` : "") : optionLabel(o, game, locale);
+  const label = it.key
+    ? t(db, locale, it.key, it.vars) + (extra ? ` (${extra})` : "")
+    : optionLabel(o, game, locale);
   // no actions left: End turn is the thing to do (paid actions are no longer offered, free ones stay)
   const me = game.pending?.kind === "turn" ? game.invs[game.pending.inv] : null;
   const spent = !!me && me.actionsLeft + me.restrictedActions.reduce((n, r) => n + r.left, 0) === 0;
   return (
-    <button className={`rail-btn ${it.primary ? "primary" : ""} ${spent && it.key === "rail.endTurn" ? "glow" : ""}`} disabled={busy} onClick={() => { moment("button"); choose(o.id); }} title={o.label} aria-label={label} data-tip={TIP_OF[it.key ?? ""]}>
-      <span className="rail-icon">{it.img ? <img src={it.img} alt="" /> : it.icon ? <Icon name={it.icon} size={30} /> : it.symbol}</span>
+    <button
+      className={`rail-btn ${it.primary ? "primary" : ""} ${spent && it.key === "rail.endTurn" ? "glow" : ""}`}
+      disabled={busy}
+      onClick={() => {
+        moment("button");
+        choose(o.id);
+      }}
+      title={o.label}
+      aria-label={label}
+      data-tip={TIP_OF[it.key ?? ""]}
+    >
+      <span className="rail-icon">
+        {it.img ? (
+          <img src={it.img} alt="" />
+        ) : it.icon ? (
+          <Icon name={it.icon} size={30} />
+        ) : (
+          it.symbol
+        )}
+      </span>
       <span className="rail-label">{label}</span>
     </button>
   );
@@ -128,9 +187,22 @@ export function InstructionBar() {
     const name = cardText(db, ask.inv, locale).name;
     return (
       <div className="instruction-bar" data-tip="bar">
-        <Sentence parts={[{ t: "inv", id: ask.inv }, { t: "text", s: " " }, { t: "text", s: t(db, locale, ask.key, { name }).replace(name, "").trim() }]} size={30} />
+        <Sentence
+          parts={[
+            { t: "inv", id: ask.inv },
+            { t: "text", s: " " },
+            { t: "text", s: t(db, locale, ask.key, { name }).replace(name, "").trim() },
+          ]}
+          size={30}
+        />
         <div className="bar-buttons">
-          <button className="primary" onClick={() => { moment("button"); useView.getState().setViewing(null); }}>
+          <button
+            className="primary"
+            onClick={() => {
+              moment("button");
+              useView.getState().setViewing(null);
+            }}
+          >
             {t(db, locale, "players.switchTo", { name })}
           </button>
         </div>
@@ -142,7 +214,14 @@ export function InstructionBar() {
   const buttons = ask.buttons ? p.options.filter((o) => inBar(o, game, viewer, mode)) : [];
   return (
     <div className="instruction-bar" data-tip="bar">
-      <Sentence parts={[{ t: "inv", id: p.inv }, { t: "text", s: ": " }, ...instructionParts(p, game, db, locale)]} size={30} />
+      <Sentence
+        parts={[
+          { t: "inv", id: p.inv },
+          { t: "text", s: ": " },
+          ...instructionParts(p, game, db, locale),
+        ]}
+        size={30}
+      />
       {buttons.length > 0 && (
         <div className="bar-buttons">
           {buttons.map((o) => (
@@ -196,7 +275,13 @@ export function UndoButton() {
   }, [undoStore]);
   if (ended) return null;
   return (
-    <button className="undo-btn" data-tip="undo" disabled={!able || intro} onClick={undo} title={t(db, locale, able ? "undo.hint" : "undo.blocked")}>
+    <button
+      className="undo-btn"
+      data-tip="undo"
+      disabled={!able || intro}
+      onClick={undo}
+      title={t(db, locale, able ? "undo.hint" : "undo.blocked")}
+    >
       ↶ <span className="btn-word">{t(db, locale, "undo.label")}</span>
     </button>
   );

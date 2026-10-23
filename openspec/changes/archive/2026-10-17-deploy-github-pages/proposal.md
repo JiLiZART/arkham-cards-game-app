@@ -3,6 +3,7 @@
 The game only runs from a local dev server. A GitHub Pages deployment of `JiLiZART/arkham-cards-game-app`, at `https://arkham.artkost.dev`, would let it be played from a link on any computer, rebuilt automatically on every push to `main`.
 
 Two things stop a plain static deploy from working today:
+
 - **Root paths.** A Pages project site lives under `/arkham-cards-game-app/` unless it has its own domain, but several asset URLs assume the site root. (The account's user site redirects to `artkost.dev`, which Cloudflare serves, so this site gets its own subdomain and is built for `/`. Sub-path builds still work.)
 - **Card scans.** They come from `cdn.arkham.build`, which sends no CORS headers. The dev server proxies `/cards/*` so WebGL can use the images as textures; GitHub Pages can't proxy.
 
@@ -16,6 +17,7 @@ Two things stop a plain static deploy from working today:
   - publishes the result with the official Pages actions.
 
   A failing check stops the deploy, and the live site stays on the previous version.
+
 - **Base-path-aware asset URLs.** Card images, card backs, PNG icons and the investigator picker portraits are built from Vite's base URL instead of `/`. The dev server and local builds keep working at `/`.
 - **Card scans bundled at deploy.** A script downloads every front, plus the back of each double-sided card, from the CDN into the build's `cards/` folder. These are the same files the dev proxy serves, so the game reads them same-origin. The workflow caches them between runs.
 - **Pages setup notes** in the README: "GitHub Actions" as the Pages source; the custom domain and its Cloudflare DNS record; the site URL; how to run the deploy by hand.
@@ -25,9 +27,11 @@ The card scans and other art become publicly hosted on the Pages site. This was 
 ## Capabilities
 
 ### New Capabilities
+
 - `web-deployment`: building and publishing the game as a static site on GitHub Pages, including how card images are served there.
 
 ### Modified Capabilities
+
 <!-- none: gameplay and table UI behaviour don't change -->
 
 ## Impact

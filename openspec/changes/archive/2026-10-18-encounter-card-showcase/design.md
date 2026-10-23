@@ -9,11 +9,13 @@ Constraints: in-force ADRs 0001–0006. ADR-0002 (presentation reacts to the ani
 ## Goals / Non-Goals
 
 **Goals:**
+
 - Every drawn encounter card and weakness is readable and waits for the player before anything it does happens, at every pace.
 - After the tap the card visibly goes where the rules send it; nothing appears in place.
 - Nothing else about the event order, the engine or the pace model changes.
 
 **Non-Goals:**
+
 - Showcasing events played from hand or cards revealed by other effects (locations, act or agenda advances).
 - Changing the Tap pace for other events, or the drawn-hand-card showcase.
 - A new engine step or save format change.
@@ -50,18 +52,23 @@ Constraints: in-force ADRs 0001–0006. ADR-0002 (presentation reacts to the ani
 ## Decisions
 
 ### 1. The encounter reveal becomes a showcase overlay, driven by the same event
+
 Replace `EncounterFlight` with `EncounterShowcase` in `Reveal.tsx`: the `.showcase` backdrop and layout (`showcaseLayout(1, w, h)`), the card rising with `riseAndArc` from its pile (`domPlace("encounter")` for an encounter card, the viewer's deck pile for a weakness, `RESOLVE_BOX` as fallback), face up after the arc, `DetailsColumn` on hover/focus/long press like the hand showcase, a help line (`encounter.take`: "Tap the card to continue") and a Continue button. Tap, Continue, Space and Enter call `noteLocalMove(card, el)` then `nextEvent()`. Alternative rejected: pushing the card into `view.showcase` and reusing `Showcase.tsx` outright; that component is about the viewer's hand (privacy, deck picks, "To hand"), and an encounter card is public with different destinations.
 
 ### 2. Held at every pace through the event player
+
 In `Hud.tsx`, `HELD = new Set(["encounter", "weakness"])`; `waits` is true for them regardless of pace, so no timer fires. `CENTER` gains `weakness` so it claims the stage like `encounter`. In `store.ts`, `holdsForTap` is unchanged and `needsNext` excludes HELD types (the overlay has its own Continue, as the result panel does), so the caption shows no second Next; `ANIMATED` gains `weakness`. Alternative rejected: a timed reveal at Normal, held only at Tap; the user chose to always wait.
 
 ### 3. A drawn weakness is its own event
+
 `investigators.ts` emits `weakness` instead of `draw` when the drawn card has a subtype and is a treachery or enemy ("{inv} draws weakness {card}"), with `feed.weakness` in en and ru. The UI keys the showcase on event type, not on card data at render time. `spotlight.ts` SPOT gains `weakness`. Alternative rejected: detecting a weakness from a `draw` event by looking up the card; it couples the event player to card data and would also fire for face-down draws of other investigators.
 
 ### 4. Arrivals leave from the showcased card
+
 `originRect` in `arrivals.ts`: when a local move is noted for the card (`takeLocalMove(id)`), use it before the `shown`/`resolving` fallback to `RESOLVE_BOX`. `diffArrivals` marks cards from `weakness` events as `shown` too. `Table.tsx` `held` treats `weakness` like `encounter` so a weakness enemy stays hidden until tapped. `Resolving` and `useFlyIn` already fly from a noted move (the fan uses it), so a treachery with a choice slides from the showcase down to `RESOLVE_BOX`.
 
 ### 5. Scripts tap the showcase
+
 `drive-calm.js` `settle()` taps `.encounter-showcase .sc-card` when present (as it does for the hand showcase); `check-encounter-showcase.js` injects a Ghoul Minion draw, a Rotting Remains draw, an Offer of Power draw and a Cover Up draw and asserts the hold, the tap, the destination and that no follow-on event (damage, test, spawn) happened before the tap.
 
 ## Risks / Trade-offs

@@ -3,7 +3,13 @@ import { card, emit, inv, type CardScript, type EffCtx, type G } from "../../../
 
 export default {
   abilities: [
-    { kind: "reaction", trigger: "wouldDiscoverClues", label: "Cover Up: remove clues from Cover Up instead", condition: { selfHasClues: true }, run: "coverUp" },
+    {
+      kind: "reaction",
+      trigger: "wouldDiscoverClues",
+      label: "Cover Up: remove clues from Cover Up instead",
+      condition: { selfHasClues: true },
+      run: "coverUp",
+    },
   ],
   fns: {
     coverUp(g: G, ctx: EffCtx) {
@@ -11,7 +17,10 @@ export default {
       const n = Math.min(ctx.x ?? 1, c.clues);
       c.clues -= n;
       if (ctx.key) g.s.cancelled.push(ctx.key);
-      emit(g, "coverUp", `${n} clue(s) are discarded from Cover Up (${c.clues} left)`, { card: c.id, data: { n } });
+      emit(g, "coverUp", `${n} clue(s) are discarded from Cover Up (${c.clues} left)`, {
+        card: c.id,
+        data: { n },
+      });
     },
   },
   hooks: {

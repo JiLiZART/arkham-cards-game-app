@@ -11,5 +11,9 @@ if (errors.length) {
   process.exit(1);
 }
 writeFileSync("content/coverage.json", coverageJson(db));
-const done = Object.values(db.campaigns).filter((c) => JSON.parse(coverageJson(db)).campaigns[c.id].complete).length;
-console.log(`content/coverage.json: ${Object.keys(JSON.parse(coverageJson(db)).packs).length} packs, ${Object.keys(db.campaigns).length} campaigns (${done} complete)`);
+const done = Object.values(db.campaigns).filter(
+  (c) => JSON.parse(coverageJson(db)).campaigns[c.id].complete,
+).length;
+console.log(
+  `content/coverage.json: ${Object.keys(JSON.parse(coverageJson(db)).packs).length} packs, ${Object.keys(db.campaigns).length} campaigns (${done} complete)`,
+);

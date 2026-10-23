@@ -67,4 +67,5 @@ export function guideHtml(text: string): string {
 }
 
 /** whether text is scrolled out of sight below the box's bottom edge (a pixel or two of rounding doesn't count) */
-export const moreBelow = (el: Pick<HTMLElement, "scrollHeight" | "clientHeight" | "scrollTop">) => el.scrollHeight - el.clientHeight - el.scrollTop > 2;
+export const moreBelow = (el: Pick<HTMLElement, "scrollHeight" | "clientHeight" | "scrollTop">) =>
+  el.scrollHeight - el.clientHeight - el.scrollTop > 2;

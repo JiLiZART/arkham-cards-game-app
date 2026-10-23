@@ -1,9 +1,35 @@
 import { describe, expect, it, vi } from "vitest";
 import { createCard, type G } from "../engine/core";
 import { run } from "../engine/engine";
-import { commitDone, db, giveCard, locId, mutate, pick, putEnemy, skipMulligans, start } from "../engine/testkit";
+import {
+  commitDone,
+  db,
+  giveCard,
+  locId,
+  mutate,
+  pick,
+  putEnemy,
+  skipMulligans,
+  start,
+} from "../engine/testkit";
 import type { GameState } from "../engine/types";
-import { abilityOptionsOf, autoSwitchTarget, barAsk, deckOptions, HOVER_SHEET_MS, sheetFor, barModel, canAct, choicesOffered, delayed, investigatorChoice, investigatorOptions, landingView, ownDecisionTitle, shownInv } from "./players";
+import {
+  abilityOptionsOf,
+  autoSwitchTarget,
+  barAsk,
+  deckOptions,
+  HOVER_SHEET_MS,
+  sheetFor,
+  barModel,
+  canAct,
+  choicesOffered,
+  delayed,
+  investigatorChoice,
+  investigatorOptions,
+  landingView,
+  ownDecisionTitle,
+  shownInv,
+} from "./players";
 
 const ROLAND = "01001";
 const DAISY = "01002";
@@ -39,7 +65,8 @@ describe("shownInv and choicesOffered", () => {
 });
 
 describe("canAct", () => {
-  const withPending = (state: GameState, inv: string, kind: string) => ({ ...state, pending: { ...state.pending!, inv, kind } }) as GameState;
+  const withPending = (state: GameState, inv: string, kind: string) =>
+    ({ ...state, pending: { ...state.pending!, inv, kind } }) as GameState;
 
   it("nothing on the active investigator's own turn or own commit window", () => {
     const { state } = turn();
@@ -82,20 +109,28 @@ describe("canAct", () => {
 
   it("a reaction for someone other than the active investigator: they may react", () => {
     const { state } = turn();
-    expect(canAct(withPending(state, DAISY, "reaction"))).toEqual({ inv: DAISY, key: "players.mayReact" });
+    expect(canAct(withPending(state, DAISY, "reaction"))).toEqual({
+      inv: DAISY,
+      key: "players.mayReact",
+    });
   });
 
   it("other kinds of choice, and choices with nobody's turn, don't signal", () => {
     const { state } = turn();
     expect(canAct(withPending(state, DAISY, "generic"))).toBeNull();
-    expect(canAct({ ...withPending(state, DAISY, "reaction"), active: null } as GameState)).toBeNull();
+    expect(
+      canAct({ ...withPending(state, DAISY, "reaction"), active: null } as GameState),
+    ).toBeNull();
   });
 });
 
 describe("landingView", () => {
   it("when the decision passes: the active investigator's table while another can act, else the decider's", () => {
     const { state } = turn();
-    const daisyReacts = { ...state, pending: { ...state.pending!, inv: DAISY, kind: "reaction" } } as GameState;
+    const daisyReacts = {
+      ...state,
+      pending: { ...state.pending!, inv: DAISY, kind: "reaction" },
+    } as GameState;
     expect(landingView(daisyReacts)).toBe(ROLAND);
     expect(landingView(state)).toBeNull();
   });
@@ -106,20 +141,38 @@ describe("barModel", () => {
     const { state } = turn();
     const bar = barModel(state, none);
     expect(bar.map((a) => a.inv)).toEqual([ROLAND, DAISY]);
-    expect(bar[0]).toMatchObject({ health: 9, sanity: 5, active: true, shown: true, grey: false, pips: 3, filled: 3 });
+    expect(bar[0]).toMatchObject({
+      health: 9,
+      sanity: 5,
+      active: true,
+      shown: true,
+      grey: false,
+      pips: 3,
+      filled: 3,
+    });
     expect(bar[1]).toMatchObject({ active: false, shown: false });
   });
 
   it("marks the viewed investigator, not the active one, as shown", () => {
     const bar = barModel(turn().state, { viewing: DAISY });
-    expect(bar.map((a) => [a.inv, a.active, a.shown])).toEqual([[ROLAND, true, false], [DAISY, false, true]]);
+    expect(bar.map((a) => [a.inv, a.active, a.shown])).toEqual([
+      [ROLAND, true, false],
+      [DAISY, false, true],
+    ]);
   });
 
   it("flags the investigator who can act", () => {
     const { state } = turn();
     // Daisy helping Roland's test
-    const daisy = { ...state, skillTest: { inv: ROLAND }, pending: { ...state.pending!, inv: DAISY, kind: "commit" } } as unknown as GameState;
-    expect(barModel(daisy, { viewing: ROLAND }).map((a) => a.canAct)).toEqual([null, "players.canCommit"]);
+    const daisy = {
+      ...state,
+      skillTest: { inv: ROLAND },
+      pending: { ...state.pending!, inv: DAISY, kind: "commit" },
+    } as unknown as GameState;
+    expect(barModel(daisy, { viewing: ROLAND }).map((a) => a.canAct)).toEqual([
+      null,
+      "players.canCommit",
+    ]);
   });
 
   it("four players with one defeated: all four stay, the defeated one is grey with no pips", () => {
@@ -136,11 +189,22 @@ describe("barModel", () => {
 describe("investigatorOptions", () => {
   const card = (state: GameState, inv: string) => state.invs[inv].cardId;
   const withOptions = (state: GameState, inv: string, options: { id: string; card?: string }[]) =>
-    ({ ...state, pending: { ...state.pending!, inv, kind: "generic", options: options.map((o) => ({ ...o, label: o.id, value: o.id })) } }) as GameState;
+    ({
+      ...state,
+      pending: {
+        ...state.pending!,
+        inv,
+        kind: "generic",
+        options: options.map((o) => ({ ...o, label: o.id, value: o.id })),
+      },
+    }) as GameState;
 
   it("choosing among investigators: each is answered by tapping its avatar", () => {
     const { state } = turn();
-    const s = withOptions(state, ROLAND, [{ id: ROLAND, card: card(state, ROLAND) }, { id: DAISY, card: card(state, DAISY) }]);
+    const s = withOptions(state, ROLAND, [
+      { id: ROLAND, card: card(state, ROLAND) },
+      { id: DAISY, card: card(state, DAISY) },
+    ]);
     const o = investigatorOptions(s);
     expect([...o.answers.keys()]).toEqual([ROLAND, DAISY]);
     expect(o.answers.get(DAISY)?.id).toBe(DAISY);
@@ -157,7 +221,9 @@ describe("investigatorOptions", () => {
 
   it("another investigator's card, even alone, is a target to tap", () => {
     const { state } = turn();
-    const o = investigatorOptions(withOptions(state, ROLAND, [{ id: DAISY, card: card(state, DAISY) }]));
+    const o = investigatorOptions(
+      withOptions(state, ROLAND, [{ id: DAISY, card: card(state, DAISY) }]),
+    );
     expect([...o.answers.keys()]).toEqual([DAISY]);
   });
 
@@ -170,7 +236,15 @@ describe("investigatorOptions", () => {
 
 describe("abilityOptionsOf", () => {
   const withOptions = (state: GameState, options: { id: string; card?: string }[]) =>
-    ({ ...state, pending: { ...state.pending!, inv: ROLAND, kind: "reaction", options: options.map((o) => ({ ...o, label: o.id, value: o.id })) } }) as GameState;
+    ({
+      ...state,
+      pending: {
+        ...state.pending!,
+        inv: ROLAND,
+        kind: "reaction",
+        options: options.map((o) => ({ ...o, label: o.id, value: o.id })),
+      },
+    }) as GameState;
   const cardOf = (state: GameState, i: string) => state.invs[i].cardId;
 
   it("the investigator's own ability on their card is offered on their stat bar, and a pass is not", () => {
@@ -182,7 +256,10 @@ describe("abilityOptionsOf", () => {
 
   it("answers among investigators stay on the avatars: none for the stat bar", () => {
     const { state } = turn();
-    const s = withOptions(state, [{ id: ROLAND, card: cardOf(state, ROLAND) }, { id: DAISY, card: cardOf(state, DAISY) }]);
+    const s = withOptions(state, [
+      { id: ROLAND, card: cardOf(state, ROLAND) },
+      { id: DAISY, card: cardOf(state, DAISY) },
+    ]);
     expect(abilityOptionsOf(s, ROLAND)).toEqual([]);
     expect(abilityOptionsOf(s, DAISY)).toEqual([]);
   });
@@ -193,7 +270,12 @@ describe("abilityOptionsOf", () => {
 });
 
 describe("barAsk", () => {
-  const helping = (state: GameState) => ({ ...state, skillTest: { inv: ROLAND }, pending: { ...state.pending!, inv: DAISY, kind: "commit" } }) as unknown as GameState;
+  const helping = (state: GameState) =>
+    ({
+      ...state,
+      skillTest: { inv: ROLAND },
+      pending: { ...state.pending!, inv: DAISY, kind: "commit" },
+    }) as unknown as GameState;
 
   it("the decider's own table: their choice, with its buttons", () => {
     expect(barAsk(turn().state, none)).toEqual({ kind: "choice", buttons: true });
@@ -204,14 +286,17 @@ describe("barAsk", () => {
   });
 
   it("someone else can act and their table is not on screen: who, and the switch to them", () => {
-    expect(barAsk(helping(turn().state), { viewing: ROLAND })).toEqual({ kind: "handoff", inv: DAISY, key: "players.canCommit" });
+    expect(barAsk(helping(turn().state), { viewing: ROLAND })).toEqual({
+      kind: "handoff",
+      inv: DAISY,
+      key: "players.canCommit",
+    });
   });
 
   it("once their table is on screen, it is their choice", () => {
     expect(barAsk(helping(turn().state), none)).toEqual({ kind: "choice", buttons: true });
   });
 });
-
 
 /** Daisy's own treachery test (Rotting Remains) opens while Roland is the active investigator */
 const daisysTest = (base: GameState): GameState => {
@@ -244,7 +329,8 @@ describe("ownDecisionTitle", () => {
 
   it("a help (a commit to a teammate's test, a reaction) plays no title", () => {
     const { state } = turn();
-    const help = (kind: string) => ({ ...state, pending: { ...state.pending!, inv: DAISY, kind } }) as GameState;
+    const help = (kind: string) =>
+      ({ ...state, pending: { ...state.pending!, inv: DAISY, kind } }) as GameState;
     expect(ownDecisionTitle(state, help("reaction"))).toBeNull();
     let r = turn();
     r = mutate(r, (g) => {
@@ -260,7 +346,8 @@ describe("ownDecisionTitle", () => {
 
   it("no title for the mulligan or the phase pause", () => {
     const { state } = turn();
-    const p = (kind: string) => ({ ...state, active: null, pending: { ...state.pending!, inv: DAISY, kind } }) as GameState;
+    const p = (kind: string) =>
+      ({ ...state, active: null, pending: { ...state.pending!, inv: DAISY, kind } }) as GameState;
     expect(ownDecisionTitle(state, p("mulligan"))).toBeNull();
     expect(ownDecisionTitle(state, p("phase"))).toBeNull();
   });
@@ -294,7 +381,10 @@ describe("investigatorChoice", () => {
   it("every option an investigator: their avatars, to tap", () => {
     const { state } = turn([ROLAND, DAISY, SKIDS]);
     const own = new Map(state.order.map((i) => [state.invs[i].cardId, i]));
-    const pending = { ...state.pending!, options: [...own].map(([card, inv]) => ({ id: `pick:${inv}`, label: inv, card })) };
+    const pending = {
+      ...state.pending!,
+      options: [...own].map(([card, inv]) => ({ id: `pick:${inv}`, label: inv, card })),
+    };
     const c = investigatorChoice({ ...state, pending } as GameState);
     expect(c?.options.map((o) => o.inv)).toEqual([ROLAND, DAISY, SKIDS]);
     expect(c?.single).toBe(false);
@@ -303,7 +393,10 @@ describe("investigatorChoice", () => {
   it("exactly one option: it is the single choice to make by itself", () => {
     const { state } = turn();
     const card = state.invs[DAISY].cardId;
-    const c = investigatorChoice({ ...state, pending: { ...state.pending!, options: [{ id: "only", label: "Daisy", card }] } } as GameState);
+    const c = investigatorChoice({
+      ...state,
+      pending: { ...state.pending!, options: [{ id: "only", label: "Daisy", card }] },
+    } as GameState);
     expect(c).toMatchObject({ single: true, options: [{ inv: DAISY, id: "only" }] });
   });
 
@@ -311,7 +404,18 @@ describe("investigatorChoice", () => {
     const { state } = turn();
     expect(investigatorChoice(state)).toBeNull();
     const card = state.invs[DAISY].cardId;
-    expect(investigatorChoice({ ...state, pending: { ...state.pending!, options: [{ id: "a", label: "Daisy", card }, { id: "b", label: "Nobody" }] } } as GameState)).toBeNull();
+    expect(
+      investigatorChoice({
+        ...state,
+        pending: {
+          ...state.pending!,
+          options: [
+            { id: "a", label: "Daisy", card },
+            { id: "b", label: "Nobody" },
+          ],
+        },
+      } as GameState),
+    ).toBeNull();
     expect(investigatorChoice({ ...state, pending: null } as GameState)).toBeNull();
   });
 });
@@ -345,8 +449,11 @@ describe("delayed", () => {
 
 describe("deckOptions", () => {
   const tappedGame = () => {
-    let r = skipMulligans(start("the-gathering", [ROLAND, DAISY], 1, { chaosBag: ["0"] as never, tapDecks: true }));
-    if (r.state.pending?.options.some((o) => o.label === "Roland Banks")) r = pick(r, "Roland Banks");
+    let r = skipMulligans(
+      start("the-gathering", [ROLAND, DAISY], 1, { chaosBag: ["0"] as never, tapDecks: true }),
+    );
+    if (r.state.pending?.options.some((o) => o.label === "Roland Banks"))
+      r = pick(r, "Roland Banks");
     return r;
   };
   const untilDraw = (deck: string) => {
@@ -387,7 +494,11 @@ describe("deckOptions", () => {
     const state = untilDraw("encounter");
     const other = state.order.find((i) => i !== state.pending!.inv)!;
     expect(deckOptions(state, other)).toEqual({ player: null, encounter: null, waiting: false });
-    expect(deckOptions({ ...state, pending: null } as GameState, ROLAND)).toEqual({ player: null, encounter: null, waiting: false });
+    expect(deckOptions({ ...state, pending: null } as GameState, ROLAND)).toEqual({
+      player: null,
+      encounter: null,
+      waiting: false,
+    });
   });
 });
 

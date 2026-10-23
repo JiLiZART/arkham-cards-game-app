@@ -1,6 +1,7 @@
 ## Why
 
 Playing a few rounds shows the table still moves faster than a player can follow:
+
 - A drawn card only pauses at the show spot for a moment before it lands in the fan, so you don't get to read it.
 - Searching or looking at your deck is a list of names in a prompt.
 - Phase titles stack, so you see "Enemy phase" and a second later "Upkeep phase" with nothing in between.
@@ -35,9 +36,11 @@ Playing a few rounds shows the table still moves faster than a player can follow
 ## Capabilities
 
 ### New Capabilities
+
 <!-- none -->
 
 ### Modified Capabilities
+
 - `game-table-ui`: new requirements Card showcase, Picking cards from a deck, Investigate in the action rail, Effect hits, Phase pacing on screen, Undo, Chaos bag entrance, and Act and agenda buttons on the card.
 - `game-engine`:
   - new requirement Phase pacing: a recorded lead-investigator pause at the start of each phase, enabled by a setup flag;

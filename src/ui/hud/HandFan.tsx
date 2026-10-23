@@ -1,17 +1,47 @@
-import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type PointerEvent as ReactPointerEvent,
+} from "react";
 import { cardText } from "../../content/i18n";
 import type { ChoiceOption, GameState, InstId } from "../../engine/types";
 import { db, useGame } from "../context";
 import { CardFace as Face } from "../CardFace";
 import { backUrl } from "../images";
-import { domPlace, lastRects, noteLocalMove, originRect, rememberRect, takeArrival, takeLocalMove, type Arrival } from "../arrivals";
+import {
+  domPlace,
+  lastRects,
+  noteLocalMove,
+  originRect,
+  rememberRect,
+  takeArrival,
+  takeLocalMove,
+  type Arrival,
+} from "../arrivals";
 import { placeDetails } from "../details";
 import { useChoicesOffered, useShown } from "../usePlayers";
 import { outsideSpotlight, useView } from "../view";
 import { moment } from "./SoundLayer";
 import { GlanceBadge } from "./GlanceBadge";
 import { useViewport } from "../layoutMode";
-import { boxTransform, dockRadius, dockRect, dockTransform, dockWeight, FAN_CARD_H, FAN_CARD_W, FAN_LEGAL_RAISE, FAN_REST_VISIBLE, fanLayout, fanWidth, hoverScale, showBox, statBarW } from "./fan";
+import {
+  boxTransform,
+  dockRadius,
+  dockRect,
+  dockTransform,
+  dockWeight,
+  FAN_CARD_H,
+  FAN_CARD_W,
+  FAN_LEGAL_RAISE,
+  FAN_REST_VISIBLE,
+  fanLayout,
+  fanWidth,
+  hoverScale,
+  showBox,
+  statBarW,
+} from "./fan";
 import { flyDraw, flyIn, STAGGER_MS } from "./flights";
 import { DETAILS_W, HandDetails } from "./HandDetails";
 import { mulliganPicks } from "./MulliganRow";
@@ -35,8 +65,12 @@ export function useHand() {
   const picks = mulliganPicks(game, viewer);
   // cards just drawn wait in the showcase until sent on
   const showcase = useView((s) => s.showcase);
-  const hand = viewer && visible ? game.invs[viewer].hand.filter((h) => !picks.includes(h) && !showcase.includes(h)) : [];
-  const optionsFor = (id: InstId): ChoiceOption[] => (!busy && offered && game.pending?.options.filter((o) => o.card === id)) || [];
+  const hand =
+    viewer && visible
+      ? game.invs[viewer].hand.filter((h) => !picks.includes(h) && !showcase.includes(h))
+      : [];
+  const optionsFor = (id: InstId): ChoiceOption[] =>
+    (!busy && offered && game.pending?.options.filter((o) => o.card === id)) || [];
   return { viewer, visible, hand, optionsFor };
 }
 
@@ -54,7 +88,13 @@ export function HandFan() {
   const { width: vw, height: vh } = useViewport();
   // the fan starts after the stat bar, whose size follows the window
   const FAN_LEFT = statBarW(vw, vh) + 12;
-  const [drag, setDrag] = useState<{ id: InstId; startX: number; startY: number; dx: number; dy: number } | null>(null);
+  const [drag, setDrag] = useState<{
+    id: InstId;
+    startX: number;
+    startY: number;
+    dx: number;
+    dy: number;
+  } | null>(null);
   const dragRef = useRef(drag);
   dragRef.current = drag;
   // the card the Dock is centred on (nearest the pointer, or keyboard-focused): it gets the details column
@@ -99,7 +139,20 @@ export function HandFan() {
     const box = detailsBox.current;
     const fi = focus ? hand.indexOf(focus) : -1;
     if (box && fi >= 0) {
-      const p = placeDetails(dockRect(slots[fi], weights.current.get(focus!) ?? 0, k, raiseOf(focus!), FAN_LEFT, innerHeight), DETAILS_W, box.offsetHeight, innerWidth, innerHeight);
+      const p = placeDetails(
+        dockRect(
+          slots[fi],
+          weights.current.get(focus!) ?? 0,
+          k,
+          raiseOf(focus!),
+          FAN_LEFT,
+          innerHeight,
+        ),
+        DETAILS_W,
+        box.offsetHeight,
+        innerWidth,
+        innerHeight,
+      );
       box.style.left = `${p.x}px`;
       box.style.top = `${p.y}px`;
     }
@@ -142,12 +195,30 @@ export function HandFan() {
     known.current = null;
   }
   const launch = (el: HTMLElement, a: Arrival, i: number) => {
-    const from = originRect(a, viewer, (p) => domPlace(p, RESOLVE_BOX), (id) => lastRects.get(id) ?? null, innerWidth, innerHeight);
-    const at = (b: { x: number; y: number; w: number; h: number }) => boxTransform(b, slots[i].x, FAN_LEFT, innerHeight);
+    const from = originRect(
+      a,
+      viewer,
+      (p) => domPlace(p, RESOLVE_BOX),
+      (id) => lastRects.get(id) ?? null,
+      innerWidth,
+      innerHeight,
+    );
+    const at = (b: { x: number; y: number; w: number; h: number }) =>
+      boxTransform(b, slots[i].x, FAN_LEFT, innerHeight);
     const flip = el.querySelector<HTMLElement>(".fan-flip");
     const delay = a.batch * STAGGER_MS;
-    if (a.from === "deck" && !a.opening) flyDraw(el, flip, from, showBox(innerWidth, innerHeight), el.style.transform, at, delay);
-    else flyIn(el, flip, at(from), el.style.transform, delay, a.from === "deck", a.opening ? 400 : 450);
+    if (a.from === "deck" && !a.opening)
+      flyDraw(el, flip, from, showBox(innerWidth, innerHeight), el.style.transform, at, delay);
+    else
+      flyIn(
+        el,
+        flip,
+        at(from),
+        el.style.transform,
+        delay,
+        a.from === "deck",
+        a.opening ? 400 : 450,
+      );
   };
 
   // every render (hand, options, drag changed): put the cards where they belong now, then keep easing
@@ -171,7 +242,16 @@ export function HandFan() {
       const a = takeArrival(id);
       const el = els.current.get(id);
       if ((from || a) && el && !a?.opening) moment("draw", id);
-      if (from && el) flyIn(el, null, boxTransform(from, slots[i].x, FAN_LEFT, innerHeight), el.style.transform, 0, false, 500);
+      if (from && el)
+        flyIn(
+          el,
+          null,
+          boxTransform(from, slots[i].x, FAN_LEFT, innerHeight),
+          el.style.transform,
+          0,
+          false,
+          500,
+        );
       else if (a && el) launch(el, a, i);
     });
     for (const id of seen) if (!hand.includes(id)) seen.delete(id);
@@ -216,7 +296,8 @@ export function HandFan() {
   // drag a card upward out of the fan to play it
   useEffect(() => {
     if (!drag) return;
-    const move = (e: PointerEvent) => setDrag((d) => d && { ...d, dx: e.clientX - d.startX, dy: d.startY - e.clientY });
+    const move = (e: PointerEvent) =>
+      setDrag((d) => d && { ...d, dx: e.clientX - d.startX, dy: d.startY - e.clientY });
     const up = (e: PointerEvent) => {
       const d = dragRef.current;
       setDrag(null);
@@ -236,8 +317,28 @@ export function HandFan() {
   const fi = focus && !drag ? hand.indexOf(focus) : -1;
   return (
     <>
-      {fi >= 0 && <HandDetails code={game.cards[hand[fi]].code} rect={dockRect(slots[fi], weights.current.get(hand[fi]) ?? 0, k, raiseOf(hand[fi]), FAN_LEFT, innerHeight)} boxRef={detailsBox} />}
-      <div className="hand-fan" data-tip="hand" style={{ left: FAN_LEFT, width }} aria-label="Your hand" onPointerMove={onMove} onPointerLeave={onLeave}>
+      {fi >= 0 && (
+        <HandDetails
+          code={game.cards[hand[fi]].code}
+          rect={dockRect(
+            slots[fi],
+            weights.current.get(hand[fi]) ?? 0,
+            k,
+            raiseOf(hand[fi]),
+            FAN_LEFT,
+            innerHeight,
+          )}
+          boxRef={detailsBox}
+        />
+      )}
+      <div
+        className="hand-fan"
+        data-tip="hand"
+        style={{ left: FAN_LEFT, width }}
+        aria-label="Your hand"
+        onPointerMove={onMove}
+        onPointerLeave={onLeave}
+      >
         {hand.map((id, i) => {
           const s = slots[i];
           const opts = optionsFor(id);
@@ -256,7 +357,12 @@ export function HandFan() {
                 bottom: FAN_REST_VISIBLE - FAN_CARD_H,
                 width: FAN_CARD_W,
                 height: FAN_CARD_H,
-                ...(dragging ? { zIndex: 200, transform: `translate(${drag.dx}px, ${-Math.max(0, drag.dy)}px) scale(1.2)` } : {}),
+                ...(dragging
+                  ? {
+                      zIndex: 200,
+                      transform: `translate(${drag.dx}px, ${-Math.max(0, drag.dy)}px) scale(1.2)`,
+                    }
+                  : {}),
               }}
               onPointerDown={(e: ReactPointerEvent) => {
                 if (e.button !== 0) return;

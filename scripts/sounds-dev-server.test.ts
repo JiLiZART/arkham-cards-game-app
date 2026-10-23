@@ -18,7 +18,9 @@ describe("isLocalRequest", () => {
 
 describe("candidateFile", () => {
   it("maps a request path under /__sounds-src/ into sounds-src/candidates", () => {
-    expect(candidateFile("/__sounds-src/moment-draw/ab12cd34.mp3")).toBe("sounds-src/candidates/moment-draw/ab12cd34.mp3");
+    expect(candidateFile("/__sounds-src/moment-draw/ab12cd34.mp3")).toBe(
+      "sounds-src/candidates/moment-draw/ab12cd34.mp3",
+    );
     expect(candidateFile("/__sounds-src/a%20b/c.mp3")).toBe("sounds-src/candidates/a b/c.mp3");
   });
 
@@ -32,19 +34,41 @@ describe("candidateFile", () => {
 
 describe("parseChoice", () => {
   it("reads a slot with a candidate number, none or current", () => {
-    expect(parseChoice('{"slot":"moment:draw","candidate":3}')).toEqual({ slot: "moment:draw", candidate: 3 });
-    expect(parseChoice('{"slot":"moment:draw","candidate":"none"}')).toEqual({ slot: "moment:draw", candidate: "none" });
-    expect(parseChoice('{"slot":"moment:draw","candidate":"current"}')).toEqual({ slot: "moment:draw", candidate: "current" });
+    expect(parseChoice('{"slot":"moment:draw","candidate":3}')).toEqual({
+      slot: "moment:draw",
+      candidate: 3,
+    });
+    expect(parseChoice('{"slot":"moment:draw","candidate":"none"}')).toEqual({
+      slot: "moment:draw",
+      candidate: "none",
+    });
+    expect(parseChoice('{"slot":"moment:draw","candidate":"current"}')).toEqual({
+      slot: "moment:draw",
+      candidate: "current",
+    });
   });
 
   it("refuses anything else", () => {
-    for (const bad of ["not json", "{}", '{"slot":1,"candidate":0}', '{"slot":"a","candidate":-1}', '{"slot":"a","candidate":1.5}', '{"slot":"a","candidate":"all"}', '{"slot":"a","candidate":0,"x":1}']) expect(() => parseChoice(bad), bad).toThrow();
+    for (const bad of [
+      "not json",
+      "{}",
+      '{"slot":1,"candidate":0}',
+      '{"slot":"a","candidate":-1}',
+      '{"slot":"a","candidate":1.5}',
+      '{"slot":"a","candidate":"all"}',
+      '{"slot":"a","candidate":0,"x":1}',
+    ])
+      expect(() => parseChoice(bad), bad).toThrow();
   });
 });
 
 describe("parseChoices", () => {
   it("reads every slot's choice", () => {
-    expect(parseChoices('{"choices":[{"slot":"moment:draw","candidate":11},{"slot":"event:doom","candidate":"none"}]}')).toEqual([
+    expect(
+      parseChoices(
+        '{"choices":[{"slot":"moment:draw","candidate":11},{"slot":"event:doom","candidate":"none"}]}',
+      ),
+    ).toEqual([
       { slot: "moment:draw", candidate: 11 },
       { slot: "event:doom", candidate: "none" },
     ]);

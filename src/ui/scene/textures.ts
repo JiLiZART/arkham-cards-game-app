@@ -25,7 +25,13 @@ function finish(c: HTMLCanvasElement) {
 }
 
 /** text-based card face used until (or instead of) the scanned image */
-export function drawnFace(card: CardDef, side: "front" | "back", name: string, text: string, landscape: boolean): THREE.Texture {
+export function drawnFace(
+  card: CardDef,
+  side: "front" | "back",
+  name: string,
+  text: string,
+  landscape: boolean,
+): THREE.Texture {
   const key = `drawn:${card.code}:${side}:${name}`;
   const hit = cache.get(key);
   if (hit) return hit;
@@ -61,7 +67,14 @@ export function drawnFace(card: CardDef, side: "front" | "back", name: string, t
   return t;
 }
 
-function wrapFill(g: CanvasRenderingContext2D, s: string, x: number, y: number, w: number, lh: number) {
+function wrapFill(
+  g: CanvasRenderingContext2D,
+  s: string,
+  x: number,
+  y: number,
+  w: number,
+  lh: number,
+) {
   let line = "";
   for (const word of s.split(" ")) {
     if (g.measureText(line + word).width > w) {
@@ -94,12 +107,19 @@ export function backTexture(kind: "player" | "encounter", landscape = false): TH
  * Texture for one side of a card: the drawn face immediately, swapped for the scanned image once it loads.
  * Failed images (offline, 404) keep the drawn face.
  */
-export function useCardTexture(card: CardDef, side: "front" | "back", name: string, text: string, landscape: boolean): THREE.Texture {
+export function useCardTexture(
+  card: CardDef,
+  side: "front" | "back",
+  name: string,
+  text: string,
+  landscape: boolean,
+): THREE.Texture {
   // the cache is keyed by URL, so switching the language swaps in the other locale's image
   const locale = useGame((s) => s.locale);
   const url = cardImage(card, side, locale);
   const genericBack = () => backTexture(isEncounterCard(card) ? "encounter" : "player", landscape);
-  const fallback = () => (side === "back" && !url ? genericBack() : drawnFace(card, side, name, text, landscape));
+  const fallback = () =>
+    side === "back" && !url ? genericBack() : drawnFace(card, side, name, text, landscape);
   const [tex, setTex] = useState<THREE.Texture>(() => (url && cache.get(url)) || fallback());
   useEffect(() => {
     if (!url) {

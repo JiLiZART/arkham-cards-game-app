@@ -1,4 +1,10 @@
-import { Fragment, useLayoutEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
+import {
+  Fragment,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type MouseEvent as ReactMouseEvent,
+} from "react";
 import { useLayoutMode } from "../layoutMode";
 import { tapCard } from "../touch";
 import { cardText, t } from "../../content/i18n";
@@ -28,12 +34,14 @@ import { moment } from "./SoundLayer";
 import { optionLabel } from "../optionText";
 import { stripDuringTest } from "../testScreen";
 
-const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
+const tr = (key: string, vars?: Record<string, string | number>) =>
+  t(db, gameStore.getState().locale, key, vars);
 const gOf = () => ({ s: gameStore.getState().game!, db, events: [] });
 
 /** hovering an HTML card shows the enlarged copy over it */
 const hoverProps = (id: InstId | null) => ({
-  onMouseEnter: (e: ReactMouseEvent<HTMLElement>) => id && useView.getState().setHover(id, e.currentTarget.getBoundingClientRect()),
+  onMouseEnter: (e: ReactMouseEvent<HTMLElement>) =>
+    id && useView.getState().setHover(id, e.currentTarget.getBoundingClientRect()),
   // onto a strip card's own option buttons (drawn over it) is still hovering that card
   onMouseLeave: (e: ReactMouseEvent<HTMLElement>) => {
     if ((e.relatedTarget as Element | null)?.closest?.(".strip-actions")) return;
@@ -43,7 +51,27 @@ const hoverProps = (id: InstId | null) => ({
 
 /** a small HTML card: its scan (or the card back), tokens, highlight when it has options */
 /** `hover: false`: no enlarged copy and details column on hover (the scenario panel's cards: a tap opens the viewer) */
-export function MiniCard({ id, w, h, legal, exhausted, target, onClick, faceDown, hover = true }: { id: InstId; w: number | string; h: number | string; legal?: boolean; exhausted?: boolean; target?: boolean; faceDown?: boolean; hover?: boolean; onClick?: (e: ReactMouseEvent) => void }) {
+export function MiniCard({
+  id,
+  w,
+  h,
+  legal,
+  exhausted,
+  target,
+  onClick,
+  faceDown,
+  hover = true,
+}: {
+  id: InstId;
+  w: number | string;
+  h: number | string;
+  legal?: boolean;
+  exhausted?: boolean;
+  target?: boolean;
+  faceDown?: boolean;
+  hover?: boolean;
+  onClick?: (e: ReactMouseEvent) => void;
+}) {
   const game = useGame((s) => s.game) as GameState;
   const locale = useGame((s) => s.locale);
   const dimmed = useDimmed(id);
@@ -60,7 +88,11 @@ export function MiniCard({ id, w, h, legal, exhausted, target, onClick, faceDown
       data-hover={hover ? undefined : "off"}
       {...(faceDown || !hover ? {} : hoverProps(id))}
     >
-      {faceDown ? <img src={backUrl(isEncounterCard(d) ? "encounter" : "player")} alt="" draggable={false} /> : <CardFace code={inst.code} locale={locale} />}
+      {faceDown ? (
+        <img src={backUrl(isEncounterCard(d) ? "encounter" : "player")} alt="" draggable={false} />
+      ) : (
+        <CardFace code={inst.code} locale={locale} />
+      )}
       <TokenBadges inst={inst} size={20} />
       <IntentBadge inst={inst} />
     </button>
@@ -87,7 +119,9 @@ export function CardOptions({ id }: { id: InstId | null }) {
             choose(o.id);
           }}
         >
-          {(o.value as { kind?: string } | null)?.kind === "advanceAct" ? tr("act.advance") : optionLabel(o, game, locale)}
+          {(o.value as { kind?: string } | null)?.kind === "advanceAct"
+            ? tr("act.advance")
+            : optionLabel(o, game, locale)}
         </button>
       ))}
     </div>
@@ -106,14 +140,27 @@ export function ScenarioPanel() {
   const agendaDef = game.agenda ? db.cards[game.cards[game.agenda].code] : null;
   const cost = actClueCost(g);
   // during the mulligan and the introduction the cards keep their place (the introduction flies them there) but hide
-  const hides = introHides(game, useView((s) => s.intro?.step));
+  const hides = introHides(
+    game,
+    useView((s) => s.intro?.step),
+  );
   return (
     <div className="scenario-panel">
       {game.agenda && (
         <div className={`scenario-card ${hides.agenda ? "intro-hidden" : ""}`} data-tip="agenda">
-          <MiniCard id={game.agenda} w={170} h={122} hover={false} legal={byCard.has(game.agenda)} onClick={() => open("agenda")} />
+          <MiniCard
+            id={game.agenda}
+            w={170}
+            h={122}
+            hover={false}
+            legal={byCard.has(game.agenda)}
+            onClick={() => open("agenda")}
+          />
           <CardOptions id={game.agenda} />
-          <span className="scenario-badge" title={`${tr("stat.doom")} ${doomInPlay(g)} / ${agendaDef?.doom ?? "?"}`}>
+          <span
+            className="scenario-badge"
+            title={`${tr("stat.doom")} ${doomInPlay(g)} / ${agendaDef?.doom ?? "?"}`}
+          >
             <Icon name="doom" size={22} /> <b>{doomInPlay(g)}</b>
             <small>/{agendaDef?.doom ?? "?"}</small>
           </span>
@@ -121,7 +168,14 @@ export function ScenarioPanel() {
       )}
       {game.act && (
         <div className={`scenario-card ${hides.act ? "intro-hidden" : ""}`} data-tip="act">
-          <MiniCard id={game.act} w={170} h={122} hover={false} legal={byCard.has(game.act)} onClick={() => open("act")} />
+          <MiniCard
+            id={game.act}
+            w={170}
+            h={122}
+            hover={false}
+            legal={byCard.has(game.act)}
+            onClick={() => open("act")}
+          />
           <CardOptions id={game.act} />
           {Number.isFinite(cost) && (
             <span className="scenario-badge" title={`${tr("stat.clues")} ${cost}`}>
@@ -132,7 +186,12 @@ export function ScenarioPanel() {
       )}
       {ref && db.cards[ref] && (
         <div className={`scenario-card ${hides.act ? "intro-hidden" : ""}`}>
-          <button className={`mini-card scenario-ref ${refDimmed ? "dimmed" : ""}`} style={{ width: 86, height: 122 }} onClick={() => open("reference")} title={tr("viewer.reference")}>
+          <button
+            className={`mini-card scenario-ref ${refDimmed ? "dimmed" : ""}`}
+            style={{ width: 86, height: 122 }}
+            onClick={() => open("reference")}
+            title={tr("viewer.reference")}
+          >
             <CardFace code={ref} locale={locale} side={referenceSide(game)} />
           </button>
         </div>
@@ -142,20 +201,45 @@ export function ScenarioPanel() {
 }
 
 /** an encounter pile's icon: its top card's set when the top is face up, else the scenario's (a face-down top stays secret) */
-export function pileIcon(top: InstId | null, faceUp: boolean, game: Pick<GameState, "scenarioId" | "cards">): string {
+export function pileIcon(
+  top: InstId | null,
+  faceUp: boolean,
+  game: Pick<GameState, "scenarioId" | "cards">,
+): string {
   const set = faceUp && top ? db.cards[game.cards[top]?.code]?.encounterSet : undefined;
   return set ?? scenarioIcon(game.scenarioId);
 }
 
 /** `option`: a tap on this deck answers the pending choice (a waiting draw, or the turn's Draw action): lit like a legal card */
-function Pile({ label, count, top, faceUp, kind, id, option }: { label: string; count: number; top: InstId | null; faceUp: boolean; kind: "player" | "encounter"; id?: string; option?: ChoiceOption | null }) {
+function Pile({
+  label,
+  count,
+  top,
+  faceUp,
+  kind,
+  id,
+  option,
+}: {
+  label: string;
+  count: number;
+  top: InstId | null;
+  faceUp: boolean;
+  kind: "player" | "encounter";
+  id?: string;
+  option?: ChoiceOption | null;
+}) {
   const locale = useGame((s) => s.locale);
   const game = useGame((s) => s.game) as GameState;
   const showTop = faceUp && top && game.cards[top];
   const dimmed = useDimmed(top ?? "") && !option;
   const choose = useGame((s) => s.choose);
   return (
-    <div className="pile" data-pile={id} data-tip={id === "deck" ? "deck" : undefined} title={`${label}: ${count}`}>
+    <div
+      className="pile"
+      data-pile={id}
+      data-tip={id === "deck" ? "deck" : undefined}
+      title={`${label}: ${count}`}
+    >
       <button
         className={`pile-card ${count === 0 ? "empty" : ""} ${dimmed ? "dimmed" : ""} ${option ? "legal" : ""}`}
         disabled={!showTop && !option}
@@ -169,7 +253,12 @@ function Pile({ label, count, top, faceUp, kind, id, option }: { label: string; 
         }}
         {...(showTop ? hoverProps(top) : {})}
       >
-        {count > 0 && (showTop ? <CardFace code={game.cards[top!].code} locale={locale} /> : <img src={backUrl(kind)} alt="" draggable={false} />)}
+        {count > 0 &&
+          (showTop ? (
+            <CardFace code={game.cards[top!].code} locale={locale} />
+          ) : (
+            <img src={backUrl(kind)} alt="" draggable={false} />
+          ))}
         <span className="pile-count">{count}</span>
         {kind === "encounter" && count > 0 && hasSymbol(pileIcon(top, faceUp, game)) && (
           <span className="pile-set">
@@ -191,22 +280,69 @@ export function PileColumn() {
   const me = viewer ? game.invs[viewer] : null;
   // a tap on a lit deck answers the pending choice, while the decider's table is on screen
   const offered = useChoicesOffered();
-  const decks = offered ? deckOptions(game, viewer) : { player: null, encounter: null, waiting: false };
+  const decks = offered
+    ? deckOptions(game, viewer)
+    : { player: null, encounter: null, waiting: false };
   const victory = Object.values(game.cards).filter((c) => c.zone === "victory");
   return (
     <div className="pile-column">
-      <Pile label={tr("pile.encounter")} count={game.encounterDeck.length} top={game.encounterDeck[0] ?? null} faceUp={false} kind="encounter" id="encounter" option={decks.encounter} />
-      <Pile label={tr("pile.discard")} count={game.encounterDiscard.length} id="encounterDiscard" top={game.encounterDiscard.at(-1) ?? null} faceUp kind="encounter" />
-      <Pile label={tr("pile.victory")} count={victory.length} top={victory.at(-1)?.id ?? null} faceUp kind="encounter" />
+      <Pile
+        label={tr("pile.encounter")}
+        count={game.encounterDeck.length}
+        top={game.encounterDeck[0] ?? null}
+        faceUp={false}
+        kind="encounter"
+        id="encounter"
+        option={decks.encounter}
+      />
+      <Pile
+        label={tr("pile.discard")}
+        count={game.encounterDiscard.length}
+        id="encounterDiscard"
+        top={game.encounterDiscard.at(-1) ?? null}
+        faceUp
+        kind="encounter"
+      />
+      <Pile
+        label={tr("pile.victory")}
+        count={victory.length}
+        top={victory.at(-1)?.id ?? null}
+        faceUp
+        kind="encounter"
+      />
       {/* a side deck named "_…" only holds cards for the setup to take (generated scenarios): not a pile */}
-      {Object.entries(game.sideDecks).filter(([name]) => !name.startsWith("_")).map(([name, deck]) => (
-        <Pile key={name} label={`${name[0].toUpperCase()}${name.slice(1)}`} count={deck.length} top={deck[0] ?? null} faceUp={false} kind="encounter" />
-      ))}
+      {Object.entries(game.sideDecks)
+        .filter(([name]) => !name.startsWith("_"))
+        .map(([name, deck]) => (
+          <Pile
+            key={name}
+            label={`${name[0].toUpperCase()}${name.slice(1)}`}
+            count={deck.length}
+            top={deck[0] ?? null}
+            faceUp={false}
+            kind="encounter"
+          />
+        ))}
       {me && (
         <>
           <div className="pile-divider" />
-          <Pile label={tr("pile.deck")} id="deck" count={me.deck.length} top={me.deck[0] ?? null} faceUp={false} kind="player" option={decks.player} />
-          <Pile label={tr("pile.discard")} id="discard" count={me.discard.length} top={me.discard.at(-1) ?? null} faceUp kind="player" />
+          <Pile
+            label={tr("pile.deck")}
+            id="deck"
+            count={me.deck.length}
+            top={me.deck[0] ?? null}
+            faceUp={false}
+            kind="player"
+            option={decks.player}
+          />
+          <Pile
+            label={tr("pile.discard")}
+            id="discard"
+            count={me.discard.length}
+            top={me.discard.at(-1) ?? null}
+            faceUp
+            kind="player"
+          />
         </>
       )}
     </div>
@@ -217,7 +353,13 @@ export function PileColumn() {
 export function ChaosBagButton() {
   const count = useGame((s) => s.game?.chaosBag.length ?? 0);
   return (
-    <button className="chaos-bag" id="chaos-bag" data-tip="bag" onClick={() => useView.getState().setModal({ bag: true })} title={`${tr("bag.title")}: ${count}`}>
+    <button
+      className="chaos-bag"
+      id="chaos-bag"
+      data-tip="bag"
+      onClick={() => useView.getState().setModal({ bag: true })}
+      title={`${tr("bag.title")}: ${count}`}
+    >
       <Icon name="chaosBag" size={96} title={tr("bag.title")} />
       <span className="pile-count">{count}</span>
     </button>
@@ -265,7 +407,12 @@ const STRIP_GAP = 8;
 const DIVIDER_H = 14;
 
 /** the widest card that lets every slot fit in `room` px of column height: an upright card is 1.4 times its width tall, an exhausted one (lying sideways) its width */
-export function columnCardWidth(room: number, upright: number, sideways: number, dividers: number): number {
+export function columnCardWidth(
+  room: number,
+  upright: number,
+  sideways: number,
+  dividers: number,
+): number {
   const units = upright * 1.4 + sideways;
   const gaps = (upright + sideways + dividers * 2 - 1) * STRIP_GAP + dividers * DIVIDER_H;
   return Math.max(STRIP_MIN_W, Math.min(STRIP_W, Math.floor((room - gaps) / Math.max(units, 1))));
@@ -273,11 +420,17 @@ export function columnCardWidth(room: number, upright: number, sideways: number,
 
 /** the strip's order: the engaged enemies and threat-area cards first (Fight and Evade stay at the top), then a divider, then the assets */
 export function stripOrder<T>(assets: T[], threats: T[]): { cards: T[]; dividerAt: number | null } {
-  return { cards: [...threats, ...assets], dividerAt: assets.length && threats.length ? threats.length : null };
+  return {
+    cards: [...threats, ...assets],
+    dividerAt: assets.length && threats.length ? threats.length : null,
+  };
 }
 
 /** the card whose buttons show: the hovered (peeked, focused) one, and only when it has options (one card at a time, so buttons never overlap) */
-export function stripButtonsFor(hovered: InstId | null, byCard: Map<InstId, unknown[]>): InstId | null {
+export function stripButtonsFor(
+  hovered: InstId | null,
+  byCard: Map<InstId, unknown[]>,
+): InstId | null {
   return hovered && byCard.get(hovered)?.length ? hovered : null;
 }
 
@@ -304,11 +457,18 @@ export function PlayStrip() {
   const waiting = heldCards({ current, queue });
   const all = Object.values(heldGame(game, queue).cards).filter((c) => !waiting.has(c.id));
   const assets = all.filter((c) => c.zone === "play" && c.controller === viewer);
-  const threats = [...all.filter((c) => c.zone === "threat" && c.controller === viewer), ...all.filter((c) => c.zone === "enemy" && c.engagedWith === viewer)];
+  const threats = [
+    ...all.filter((c) => c.zone === "threat" && c.controller === viewer),
+    ...all.filter((c) => c.zone === "enemy" && c.engagedWith === viewer),
+  ];
   const order = stripOrder(assets, threats);
   const shown = order.cards;
   // during a skill test the strip is compact while one of its cards has an option (a fast ability), and out of the way otherwise
-  const mode = stripDuringTest(useView((v) => v.testing), shown.map((c) => c.id), byCard);
+  const mode = stripDuringTest(
+    useView((v) => v.testing),
+    shown.map((c) => c.id),
+    byCard,
+  );
   // an asset new to the strip has just been played: its sound (enemies arriving have their own events)
   const seenAssets = useRef<{ setup: unknown; ids: Set<InstId> } | null>(null);
   useLayoutEffect(() => {
@@ -327,10 +487,22 @@ export function PlayStrip() {
     const el = strip.current;
     if (!el) return;
     const sideways = shown.filter((c) => c.exhausted).length;
-    const w = phone ? (open ? 104 : 44) : columnCardWidth(el.clientHeight, shown.length - sideways, sideways, assets.length && threats.length ? 1 : 0);
+    const w = phone
+      ? open
+        ? 104
+        : 44
+      : columnCardWidth(
+          el.clientHeight,
+          shown.length - sideways,
+          sideways,
+          assets.length && threats.length ? 1 : 0,
+        );
     el.style.setProperty("--sw", `${w}px`);
     // not while stepped aside: the rects would be the ones below the screen
-    if (mode !== "aside") el.querySelectorAll<HTMLElement>("[data-card]").forEach((c) => rememberRect(c.dataset.card!, c));
+    if (mode !== "aside")
+      el.querySelectorAll<HTMLElement>("[data-card]").forEach((c) =>
+        rememberRect(c.dataset.card!, c),
+      );
   });
   if (!visible || !shown.length) return null;
   const target = game.skillTest?.target ?? null;
@@ -352,15 +524,30 @@ export function PlayStrip() {
           exhausted={exhausted}
           target={id === target}
           // one option: the card itself chooses it; several: the buttons on it do
-          onClick={(e) => tapCard(id, () => opts.length === 1 && choose(opts[0].id), e.currentTarget.getBoundingClientRect())}
+          onClick={(e) =>
+            tapCard(
+              id,
+              () => opts.length === 1 && choose(opts[0].id),
+              e.currentTarget.getBoundingClientRect(),
+            )
+          }
         />
       </div>
     );
   };
   return (
-    <div className={`play-strip ${phone ? `column ${open ? "open" : ""}` : ""} ${mode}`} ref={strip}>
+    <div
+      className={`play-strip ${phone ? `column ${open ? "open" : ""}` : ""} ${mode}`}
+      ref={strip}
+    >
       {phone && (
-        <button className="strip-handle" onClick={() => setOpen(!open)} aria-expanded={open} aria-label={tr("phone.strip")} title={tr("phone.strip")}>
+        <button
+          className="strip-handle"
+          onClick={() => setOpen(!open)}
+          aria-expanded={open}
+          aria-label={tr("phone.strip")}
+          title={tr("phone.strip")}
+        >
           {open ? "›" : "‹"} {shown.length}
         </button>
       )}

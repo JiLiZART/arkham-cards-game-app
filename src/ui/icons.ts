@@ -18,37 +18,125 @@ export interface GlyphSource {
 export type IconSource = { png: string } | GlyphSource | { token: string };
 
 /** printed colours (ArkhamCards' palette), brightened a little for the dark HUD */
-export const SKILL_COLORS = { willpower: "#2C7FC0", intellect: "#9a4a8a", combat: "#c0392b", agility: "#1f9d3a", wild: "#8a7a3a" } as const;
-export const CLASS_COLORS = { guardian: "#2b80c5", seeker: "#ec8426", rogue: "#1b9a2a", mystic: "#6f5ce0", survivor: "#cc3038", neutral: "#9a9a9a" } as const;
+export const SKILL_COLORS = {
+  willpower: "#2C7FC0",
+  intellect: "#9a4a8a",
+  combat: "#c0392b",
+  agility: "#1f9d3a",
+  wild: "#8a7a3a",
+} as const;
+export const CLASS_COLORS = {
+  guardian: "#2b80c5",
+  seeker: "#ec8426",
+  rogue: "#1b9a2a",
+  mystic: "#6f5ce0",
+  survivor: "#cc3038",
+  neutral: "#9a9a9a",
+} as const;
 
-const skill = (s: keyof typeof SKILL_COLORS): GlyphSource => ({ glyph: `skill_${s}_inverted`, color: "#fff", under: { glyph: `skill_${s}`, color: SKILL_COLORS[s] } });
+const skill = (s: keyof typeof SKILL_COLORS): GlyphSource => ({
+  glyph: `skill_${s}_inverted`,
+  color: "#fff",
+  under: { glyph: `skill_${s}`, color: SKILL_COLORS[s] },
+});
 const klass = (c: keyof typeof CLASS_COLORS): GlyphSource => ({ glyph: c, color: CLASS_COLORS[c] });
 const ink = (glyph: string): GlyphSource => ({ glyph, color: "#e6dcc3" });
 
 export const ICON_SOURCES = {
-  willpower: skill("willpower"), intellect: skill("intellect"), combat: skill("combat"), agility: skill("agility"), wild: skill("wild"),
-  guardian: klass("guardian"), seeker: klass("seeker"), rogue: klass("rogue"), mystic: klass("mystic"), survivor: klass("survivor"), neutral: klass("neutral"),
-  health: { glyph: "health", color: "#ffe9e2", under: { glyph: "health_inverted", color: "#b3261e" } },
-  sanity: { glyph: "sanity", color: "#e6eeff", under: { glyph: "sanity_inverted", color: "#2f5fb3" }, aspect: 1.35 },
-  hand: ink("hand"), hands: ink("hand_x2"), arcane: ink("arcane"), arcane2: ink("arcane_x2"), accessory: ink("accessory"), body: ink("body"), ally: ink("ally"),
-  skull: { token: "skull" }, cultist: { token: "cultist" }, tablet: { token: "tablet" }, elderThing: { token: "elderThing" }, elderSign: { token: "elderSign" }, autoFail: { token: "autoFail" },
-  "+1": { token: "+1" }, "-1": { token: "-1" },
+  willpower: skill("willpower"),
+  intellect: skill("intellect"),
+  combat: skill("combat"),
+  agility: skill("agility"),
+  wild: skill("wild"),
+  guardian: klass("guardian"),
+  seeker: klass("seeker"),
+  rogue: klass("rogue"),
+  mystic: klass("mystic"),
+  survivor: klass("survivor"),
+  neutral: klass("neutral"),
+  health: {
+    glyph: "health",
+    color: "#ffe9e2",
+    under: { glyph: "health_inverted", color: "#b3261e" },
+  },
+  sanity: {
+    glyph: "sanity",
+    color: "#e6eeff",
+    under: { glyph: "sanity_inverted", color: "#2f5fb3" },
+    aspect: 1.35,
+  },
+  hand: ink("hand"),
+  hands: ink("hand_x2"),
+  arcane: ink("arcane"),
+  arcane2: ink("arcane_x2"),
+  accessory: ink("accessory"),
+  body: ink("body"),
+  ally: ink("ally"),
+  skull: { token: "skull" },
+  cultist: { token: "cultist" },
+  tablet: { token: "tablet" },
+  elderThing: { token: "elderThing" },
+  elderSign: { token: "elderSign" },
+  autoFail: { token: "autoFail" },
+  "+1": { token: "+1" },
+  "-1": { token: "-1" },
   chaosBag: { png: "chaos-bag" },
-  damage: { png: "damage" }, horror: { png: "horror" }, doom: { png: "doom" },
-  resource: { png: "resource" }, "resource-3": { png: "resource-3" }, "resource-5": { png: "resource-5" }, clue: { png: "clue" }, "clue-3": { png: "clue-3" },
-  lead: { png: "lead" }, connectorBoth: { png: "connector-both" }, connectorOneWay: { png: "connector-one-way" },
+  damage: { png: "damage" },
+  horror: { png: "horror" },
+  doom: { png: "doom" },
+  resource: { png: "resource" },
+  "resource-3": { png: "resource-3" },
+  "resource-5": { png: "resource-5" },
+  clue: { png: "clue" },
+  "clue-3": { png: "clue-3" },
+  lead: { png: "lead" },
+  connectorBoth: { png: "connector-both" },
+  connectorOneWay: { png: "connector-one-way" },
 } satisfies Record<string, IconSource>;
 export type IconName = keyof typeof ICON_SOURCES;
 
 /** readable text used when an icon can't be drawn */
 export const ICON_LABELS: Record<IconName, string> = {
-  willpower: "Will", intellect: "Int", combat: "Com", agility: "Agi", wild: "?",
-  guardian: "Gua", seeker: "See", rogue: "Rog", mystic: "Mys", survivor: "Sur", neutral: "Neu",
-  health: "HP", sanity: "San", hand: "Hand", hands: "Hands", arcane: "Arc", arcane2: "Arc×2", accessory: "Acc", body: "Body", ally: "Ally",
-  skull: "Skull", cultist: "Cult", tablet: "Tab", elderThing: "ElTh", elderSign: "ElSi", autoFail: "Fail", "+1": "+1", "-1": "−1",
-  damage: "Dmg", horror: "Hor", clue: "Clue", doom: "Doom", resource: "Res",
-  "resource-3": "3 Res", "resource-5": "5 Res", "clue-3": "3 Clue",
-  lead: "Lead", chaosBag: "Bag", connectorBoth: "↔", connectorOneWay: "→",
+  willpower: "Will",
+  intellect: "Int",
+  combat: "Com",
+  agility: "Agi",
+  wild: "?",
+  guardian: "Gua",
+  seeker: "See",
+  rogue: "Rog",
+  mystic: "Mys",
+  survivor: "Sur",
+  neutral: "Neu",
+  health: "HP",
+  sanity: "San",
+  hand: "Hand",
+  hands: "Hands",
+  arcane: "Arc",
+  arcane2: "Arc×2",
+  accessory: "Acc",
+  body: "Body",
+  ally: "Ally",
+  skull: "Skull",
+  cultist: "Cult",
+  tablet: "Tab",
+  elderThing: "ElTh",
+  elderSign: "ElSi",
+  autoFail: "Fail",
+  "+1": "+1",
+  "-1": "−1",
+  damage: "Dmg",
+  horror: "Hor",
+  clue: "Clue",
+  doom: "Doom",
+  resource: "Res",
+  "resource-3": "3 Res",
+  "resource-5": "5 Res",
+  "clue-3": "3 Clue",
+  lead: "Lead",
+  chaosBag: "Bag",
+  connectorBoth: "↔",
+  connectorOneWay: "→",
 };
 
 export const isIcon = (name: string): name is IconName => name in ICON_SOURCES;
@@ -63,13 +151,39 @@ export const iconUrl = (name: IconName) => {
 /** ArkhamDB rules-text markup key → sprite symbol; markup not listed here shows as text */
 export const MARKUP_ICONS: Record<string, string> = {
   ...Object.fromEntries(
-    ["willpower", "intellect", "combat", "agility", "wild", "skull", "cultist", "tablet", "elder_thing", "elder_sign", "auto_fail", "bless", "curse", "frost",
-      "guardian", "seeker", "rogue", "mystic", "survivor", "action", "reaction", "free", "per_investigator", "unique", "weakness"].map((k) => [k, k]),
+    [
+      "willpower",
+      "intellect",
+      "combat",
+      "agility",
+      "wild",
+      "skull",
+      "cultist",
+      "tablet",
+      "elder_thing",
+      "elder_sign",
+      "auto_fail",
+      "bless",
+      "curse",
+      "frost",
+      "guardian",
+      "seeker",
+      "rogue",
+      "mystic",
+      "survivor",
+      "action",
+      "reaction",
+      "free",
+      "per_investigator",
+      "unique",
+      "weakness",
+    ].map((k) => [k, k]),
   ),
   fast: "free",
 };
 /** the printed colour of a markup icon (skills and classes), else none: it takes the text colour */
-export const markupColor = (key: string): string | undefined => (SKILL_COLORS as Record<string, string>)[key] ?? (CLASS_COLORS as Record<string, string>)[key];
+export const markupColor = (key: string): string | undefined =>
+  (SKILL_COLORS as Record<string, string>)[key] ?? (CLASS_COLORS as Record<string, string>)[key];
 
 /** a scenario's icon: the scenario id spelled like the icon set ("the-gathering" → "the_gathering") */
 export const scenarioIcon = (scenarioId: string) => scenarioId.replace(/-/g, "_");
@@ -100,5 +214,6 @@ export async function loadSprite(file = "icons/sprite.svg") {
 
 let campaignSprite: Promise<void> | null = null;
 /** the generated campaigns' icons (ADR-0007): a second sprite, fetched once, the first time such a campaign is played */
-export const loadCampaignSprite = () => (campaignSprite ??= loadSprite("icons/sprite-campaigns.svg"));
+export const loadCampaignSprite = () =>
+  (campaignSprite ??= loadSprite("icons/sprite-campaigns.svg"));
 export const campaignSpriteLoaded = () => campaignSprite !== null;

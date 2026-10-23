@@ -3,6 +3,7 @@
 This builds on `flat-hearthstone-table`: a fixed orthographic board fitted into `SAFE_INSETS` (top 52, right 344, bottom 178), an HTML `HandFan`, a `StatBar` and `PlayerPlaques`, and a right column holding `SkillTestPanel` and `Prompt`. `Prompt` lists every option of `game.pending`, grouped by matching on the label.
 
 The engine already tags most options with `card`:
+
 - locations: move and investigate;
 - enemies: fight, evade and engage;
 - hand cards: play, commit and mulligan;
@@ -13,11 +14,13 @@ The engine already tags most options with `card`:
 Options with no card are draw, resource, end turn, done/pass/keep hand, skill choice, "Choose one" and "Take nothing". The engine needs no change.
 
 Measured at 1600×900:
+
 - the board scale is about 40 px per world unit;
 - a location is 1.96 units, about 80 px;
 - a hand card is 150×210 px.
 
 New sources in `inspired/`:
+
 - `icons/`:
   - `table-bg.png` (2275×1495, the parchment with a green frame);
   - `token-resource-{1,3,5}`, `token-clue-trhee` (3 clues), `token-doom-three`, `damage/horror-token-three`;
@@ -32,11 +35,13 @@ New sources in `inspired/`:
 ## Goals / Non-Goals
 
 **Goals:**
+
 - Hand cards and locations about 2× larger on screen. Everything else on the board gets smaller to make room.
 - Every pending option reachable without a sidebar.
 - One glyph source for all symbols that have no PNG.
 
 **Non-Goals:**
+
 - Engine or rules changes, apart from the optional one-way connections in Decision 6.
 - Panning or zooming the board. The camera stays fixed; the user chose to shrink the scenario cards instead.
 - Translations for languages other than Russian. The import script takes a locale argument, but only `ru` is run and checked.
@@ -45,6 +50,7 @@ New sources in `inspired/`:
 ## Decisions
 
 ### 1. Board regions and fit
+
 `SAFE_INSETS.right` drops from 344 to about 120 (the action rail), and `bottom` grows to about 230 for the bigger hand band. `layout()` splits the board into regions:
 
 ```
@@ -76,15 +82,17 @@ New sources in `inspired/`:
 - The viewer's area holds no investigator card: `layout()` skips `cardId` when `inv === viewer`. The engine still has the card. Options targeting it are routed to the stat-bar portrait (see 4).
 
 **Changed during implementation:**
+
 - The viewer's play area is a block to the right of the map, not a strip under it. The Gathering's map is three locations tall, which only fits at 2× when the map gets the board's full height.
 - The board is 32×16 units, with the framed art stretched to fit, so it uses the wide free area better.
 - Locations measure about 153 px tall at 1600×900.
 - Portrait markers let clicks pass through to the location unless they can be dragged. A tap on a draggable marker is a click on its location.
 - The table plane sits lower (y −0.3), because the highlight under a 2× card was dropping below the old one.
 
-*Alternative:* a board larger than the screen with panning. Rejected by the user in favour of shrinking the scenario cards.
+_Alternative:_ a board larger than the screen with panning. Rejected by the user in favour of shrinking the scenario cards.
 
 ### 2. Hand fan 2×
+
 - `FAN_CARD_W/H` go to 300×420.
 - At rest, about 45% of each card shows above the bottom edge (`translateY` ≈ 230 px). On hover, it is raised to full height with no extra scale, because the card is already the readable size.
 - A card that has an option rises halfway: `.legal` plus `translateY(-120px)`. This is the visual for "if the action is a card, move up the cards that can be played". It applies to every choice kind: play, commit, mulligan and discard-to-hand-size.
@@ -92,6 +100,7 @@ New sources in `inspired/`:
 - `fanLayout` already tightens with `n`. The 12-card test is updated to the new width, keeping at least 40 px visible per card.
 
 ### 2b. Portrait markers on locations
+
 - `Mini` in `Table.tsx` currently draws an initials disc ("DW") as `Html`. It switches to the same `Portrait` used by the stat bar and the tokens: a `div` with the investigator card image as background, cropped with `background-position` on the face, `border-radius: 50%`, and a ring in the class colour from `FACTION_COLORS`.
 - The marker is about 40 px, scaled with the location size.
 - The active investigator gets the existing glow.
@@ -100,15 +109,17 @@ New sources in `inspired/`:
 - The offsets already in `layout()` keep several markers apart. They are re-checked at the 2× location size.
 
 ### 2c. Drag a portrait to move
+
 - The marker is DOM (drei `Html`), so the drag uses pointer events on it, the same pattern as the `HandFan` drag. While dragging, the portrait follows the cursor in a fixed-position overlay.
 - **Legal drops** are the pending options with `value.kind === "move"` for the deciding investigator; their `card` is the destination. A marker is draggable only when it belongs to `pending.inv` and at least one such option exists.
 - **Hit test:** on drag start, `Table` projects each location placement's four corners through the orthographic camera into screen rects and stores them in `useView` (`dropRects`). A pure `hitRect(x, y, rects)` returns the location under the pointer. The camera is fixed, so the rects stay valid for the whole drag.
 - **Highlight:** `useView.dragMoveTargets` (a set of location ids) makes `CardMesh` show the legal glow on those locations. The hovered legal target gets a stronger glow.
 - **Drop:** on a target, `choose(moveOption.id)`. Otherwise, or on Escape, the drag is cancelled. A press that moves less than 6 px is treated as a click.
 
-*Alternative:* raycast the WebGL scene on every pointer move. Rejected: projected rects are simpler, and they are pure and testable.
+_Alternative:_ raycast the WebGL scene on every pointer move. Rejected: projected rects are simpler, and they are pure and testable.
 
 ### 3. Action rail replaces `Prompt`
+
 - `Prompt` is deleted.
 - `PromptBanner` sits top-centre under the top bar and shows "<who>: <prompt>" on one line.
 - `ActionRail` sits on the right and renders `pending.options.filter(o => !o.card)`.
@@ -120,6 +131,7 @@ New sources in `inspired/`:
   ```
 
   Labels for known kinds go through `t()`. Unknown labels show the engine text.
+
 - `SkillTestPanel` stays and floats top-right under the banner.
 - Options with a `card` are reached on that card:
   - hand cards: in the fan;
@@ -130,6 +142,7 @@ New sources in `inspired/`:
 - A pure helper, `optionHome(option, game, viewer)`, returns `"hand" | "board" | "strip" | "portrait" | "invModal" | "rail"`. A unit test runs a bot playthrough of The Gathering and asserts that every option of every pending choice resolves to a home that is actually rendered. This is the "every option reachable" check.
 
 ### 4. Card detail modal
+
 - `CardModal` is one DOM dialog driven by the `useView` state `modal: InstId | null`.
 - It shows the image (or text face) at about 70vh, the tokens on the card, and buttons for the pending options with `card === id`.
 - It opens on a click on a strip card or the portrait.
@@ -137,6 +150,7 @@ New sources in `inspired/`:
 - Strip cards with options get the existing legal highlight, so the player knows to open them.
 
 ### 5. Stat bar
+
 - Portrait 120 px, stat icons 44 px, health and sanity as remaining/max, actions, skills.
 - Every `Stat` gets `title` and `aria-label`: "Health 7 / 9", translated with `t()`. A native `title` is the tooltip; no tooltip library.
 - `TokenStack({ kind, value })` sits above the bar:
@@ -147,6 +161,7 @@ New sources in `inspired/`:
 - Plaques keep their compact icons and get the same tooltips.
 
 ### 6. Icon fonts
+
 - `scripts/extract-assets.sh` copies `arkhamicons.ttf`, `tokens.ttf`, `Teutonic.ttf`, `Teutonic RU.ttf` and `Alegreya-*.ttf` into `public/fonts/`. It writes glyph maps `src/ui/glyphs.generated.json` (name → code point) from the IcoMoon selection JSONs, so no code points are hard-coded.
 - `@font-face` uses `font-display: block` for the icon fonts. That avoids flashing wrong letters, because the glyphs sit on ASCII code points.
 - `<Glyph name>` renders a `span` in the icon font. If `document.fonts.check()` fails after load, it renders the old `GLYPHS` fallback symbol.
@@ -165,6 +180,7 @@ New sources in `inspired/`:
 - `table-bg.png` replaces the parchment JPEG as the board texture, converted to JPEG at about q82.
 
 ### 7. Reused translations
+
 - `scripts/import-i18n.ts --locale ru` reads the ArkhamCards `generated/*_ru.txt` and `i18n/ru.po.json`. It writes `content/i18n/ru/campaigns.generated.json`: campaign and scenario names, encounter sets, log titles, and narrative by ArkhamCards id for NotZ.
 - Our scenario JSONs gain an optional `i18nId` (the ArkhamCards id, e.g. `the_gathering`) so the names line up.
 - UI labels: our `ui.json` keys are matched against `ru.po` by msgid, preferring `msgctxt "action"` for action names. Matches go to `ui.generated.json`.
@@ -172,7 +188,7 @@ New sources in `inspired/`:
 - The loader merges `*.generated.json` first, then the hand-written `cards.json`/`ui.json`/`campaigns.json` over it. That is how manual fixes survive a re-run: the script never touches hand-written files. This follows the existing `cards.generated.json` + `cards.json` pattern.
 - The runtime reads only `content/`.
 
-*Alternative:* read `arkham4.db` for cards. Rejected: it has English only.
+_Alternative:_ read `arkham4.db` for cards. Rejected: it has English only.
 
 ## Risks / Trade-offs
 

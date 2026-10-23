@@ -15,7 +15,28 @@ const SYMBOL = (name: string, fill: string, fillGlyph = `token_${name}_fill`): L
 ];
 
 /** every chaos token the game draws */
-export const CHAOS_TOKENS = ["+1", "0", "-1", "-2", "-3", "-4", "-5", "-6", "-7", "-8", "skull", "cultist", "tablet", "elderThing", "elderSign", "autoFail", "bless", "curse", "frost", "blood"];
+export const CHAOS_TOKENS = [
+  "+1",
+  "0",
+  "-1",
+  "-2",
+  "-3",
+  "-4",
+  "-5",
+  "-6",
+  "-7",
+  "-8",
+  "skull",
+  "cultist",
+  "tablet",
+  "elderThing",
+  "elderSign",
+  "autoFail",
+  "bless",
+  "curse",
+  "frost",
+  "blood",
+];
 
 /** a token's layers, bottom to top: [symbol, colour] */
 export function layersFor(token: string): Layers | null {
@@ -31,17 +52,38 @@ export function layersFor(token: string): Layers | null {
     case "elderThing":
       return SYMBOL("elder_thing", "#442946");
     case "autoFail":
-      return [["token_auto_fail_overlay", "#E6E1D3"], ["token_auto_fail_highlight", "#8D181E"]];
+      return [
+        ["token_auto_fail_overlay", "#E6E1D3"],
+        ["token_auto_fail_highlight", "#8D181E"],
+      ];
     case "elderSign":
-      return [["token_elder_sign_overlay", "#E6E1D3"], ["token_elder_sign_fill", "#427DAD"], ["token_elder_sign_highlight", "#E6E1D3"]];
+      return [
+        ["token_elder_sign_overlay", "#E6E1D3"],
+        ["token_elder_sign_fill", "#427DAD"],
+        ["token_elder_sign_highlight", "#E6E1D3"],
+      ];
     case "bless":
-      return [["token_bless_fill", "#9D702A"], ["token_bless_overlay", "#E6E1D3"]];
+      return [
+        ["token_bless_fill", "#9D702A"],
+        ["token_bless_overlay", "#E6E1D3"],
+      ];
     case "curse":
-      return [["token_curse_fill", "#35232F"], ["token_curse_overlay", "#E6E1D3"]];
+      return [
+        ["token_curse_fill", "#35232F"],
+        ["token_curse_overlay", "#E6E1D3"],
+      ];
     case "frost":
-      return [["token_number_fill", "#3D3A63"], ["token_frost_overlay", "#E6E1D3"], ["token_frost_highlight", "#FFFBF2"]];
+      return [
+        ["token_number_fill", "#3D3A63"],
+        ["token_frost_overlay", "#E6E1D3"],
+        ["token_frost_highlight", "#FFFBF2"],
+      ];
     case "blood":
-      return [["token_blood_fill", "#C22026"], ["token_blood_overlay", "#353534"], ["token_blood_highlight", "#353534"]];
+      return [
+        ["token_blood_fill", "#C22026"],
+        ["token_blood_overlay", "#353534"],
+        ["token_blood_highlight", "#353534"],
+      ];
   }
   return null;
 }
@@ -61,18 +103,36 @@ const DEFAULT_GRADIENT = "radial-gradient(circle, #FFFBF2 60%, #D6CFB9 100%)";
 export const hasTokenArt = (token: string) => !!layersFor(token)?.every(([id]) => hasSymbol(id));
 
 /** a chaos token: the sprite's layers on the token disc; a plain disc with the token's label if they're missing */
-export function ChaosToken({ token, size = 28, title }: { token: string; size?: number; title?: string }) {
+export function ChaosToken({
+  token,
+  size = 28,
+  title,
+}: {
+  token: string;
+  size?: number;
+  title?: string;
+}) {
   const label = token.replace("-", "−");
   const layers = layersFor(token);
   if (!layers || !hasTokenArt(token)) {
     return (
-      <span className="token-face" style={{ width: size, height: size, fontSize: size * 0.38 }} title={title ?? token}>
+      <span
+        className="token-face"
+        style={{ width: size, height: size, fontSize: size * 0.38 }}
+        title={title ?? token}
+      >
         {label}
       </span>
     );
   }
   return (
-    <span className="tok-wrap" style={{ width: size, height: size, background: GRADIENT[token] ?? DEFAULT_GRADIENT }} title={title ?? token} role="img" aria-label={title ?? label}>
+    <span
+      className="tok-wrap"
+      style={{ width: size, height: size, background: GRADIENT[token] ?? DEFAULT_GRADIENT }}
+      title={title ?? token}
+      role="img"
+      aria-label={title ?? label}
+    >
       <Symbols layers={layers.map(([id, color]) => ({ id, color }))} width={size} height={size} />
     </span>
   );

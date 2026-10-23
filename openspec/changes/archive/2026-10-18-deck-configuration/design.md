@@ -8,10 +8,12 @@
 ## Goals / Non-Goals
 
 **Goals:**
+
 - A bounded editor: swap limit, pool from data, validation reused.
 - Custom decks as plain `DeckDef`s in local storage; the rest of the game sees them as decks.
 
 **Non-Goals:**
+
 - XP and upgrades; levels above 0; import; cloud sync.
 
 ## Diagram (C4-inspired, component level, ASCII; the browser app is the only container)
@@ -39,15 +41,19 @@
 ## Decisions
 
 ### 1. Edits as ops over the starter deck
+
 A custom deck stores its base deck id and a list of ops (`remove code`, `add code`, `weakness code`) plus the resolved `DeckDef`; the resolved deck is what validation and the game use, the ops are what the editor edits and what the 5-removal budget counts. Alternative: store only the resolved deck; rejected, the budget would be unrecoverable after a reload.
 
 ### 2. Pool from data
+
 `poolFor(inv)`: cards with `level === 0`, class in the investigator's deck options or neutral, type asset/event/skill, not a signature or weakness, from loaded packs; the deck's own cards included so copies can be restored. Validation decides the rest.
 
 ### 3. Storage
+
 `ah:decks` holds `{ id: "custom:<uuid>", name, investigator, base, ops, cards }[]` through `safeStorage()`; `customDecks()` validates each against the loaded packs and marks invalid ones with the reason.
 
 ### 4. The chosen weakness is a card in the resolved deck; `NewCampaign` carries the custom deck
+
 The random basic weakness is drawn in `startCampaign` (campaign start), not in `scenarioSetup`, which only copies the stored deck. So a chosen weakness is simply the card in the resolved `DeckDef` (`randomBasicWeakness: false`, no random draw); "random" is the flag with no weakness listed. `NewCampaign.investigators[]` gains an optional `deck: DeckDef` (a custom deck used as given, validated by `startCampaign`), and the campaign stores the full deck codes as it always did. `GameSetup` is unchanged. Covered by `campaign.test.ts`.
 
 ## Risks / Trade-offs

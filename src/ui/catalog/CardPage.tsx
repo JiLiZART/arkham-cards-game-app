@@ -30,7 +30,10 @@ export function WorksBadge({ code }: { code: string }) {
   const locale = useGame((s) => s.locale);
   const works = implemented(db, code);
   return (
-    <span className={`cat-badge ${works ? "works" : "text-only"}`} title={t(db, locale, works ? "catalog.worksHint" : "catalog.textOnlyHint")}>
+    <span
+      className={`cat-badge ${works ? "works" : "text-only"}`}
+      title={t(db, locale, works ? "catalog.worksHint" : "catalog.textOnlyHint")}
+    >
       {t(db, locale, works ? "catalog.works" : "catalog.textOnly")}
     </span>
   );
@@ -86,7 +89,9 @@ function Facts({ code, locale }: { code: string; locale: string }) {
           {d.actCluesPerInvestigator ? ` ${t(db, locale, "card.perInvestigator")}` : ""}
         </div>
       )}
-      {d.victory ? <div className="hd-strong">{t(db, locale, "card.victory", { n: d.victory })}.</div> : null}
+      {d.victory ? (
+        <div className="hd-strong">{t(db, locale, "card.victory", { n: d.victory })}.</div>
+      ) : null}
     </>
   );
 }
@@ -100,14 +105,20 @@ export function CardPage({ code }: { code: string }) {
   const tx = cardText(db, code, locale);
   const inv = db.investigators[code];
   const starters = Object.values(db.decks).filter((x) => x.investigator === code);
-  const set = d.encounterSet ? (encounterSetName(db, d.encounterSet, locale) ?? d.encounterSet) : null;
+  const set = d.encounterSet
+    ? (encounterSetName(db, d.encounterSet, locale) ?? d.encounterSet)
+    : null;
   const cycle = cycleOf(db, code);
   const rows = cardDetails(db, code, locale);
   const twoSided = d.doubleSided || !!d.backImage;
   return (
     <article className="cat-page">
       <button className="big" onClick={back}>
-        {t(db, locale, useCatalog.getState().open.length > 1 ? "catalog.back" : "catalog.backToList")}
+        {t(
+          db,
+          locale,
+          useCatalog.getState().open.length > 1 ? "catalog.back" : "catalog.backToList",
+        )}
       </button>
       <div className="cat-page-body">
         <div className="cat-images">
@@ -128,12 +139,20 @@ export function CardPage({ code }: { code: string }) {
             <Row key={r.k} r={r} locale={locale} />
           ))}
           <Facts code={code} locale={locale} />
-          <div className="hd-traits">{t(db, locale, "catalog.packLine", { cycle: cycle ? cycleName(db, locale, cycle) : "", pack: d.pack.toUpperCase() })}</div>
+          <div className="hd-traits">
+            {t(db, locale, "catalog.packLine", {
+              cycle: cycle ? cycleName(db, locale, cycle) : "",
+              pack: d.pack.toUpperCase(),
+            })}
+          </div>
           {set && <div className="hd-traits">{set}</div>}
           {d.type === "investigator" && tx.backText && (
             <div className="cat-sec cat-back">
               <h3>{t(db, locale, "catalog.deckbuilding")}</h3>
-              <p className="hd-text" dangerouslySetInnerHTML={{ __html: formatText(tx.backText) }} />
+              <p
+                className="hd-text"
+                dangerouslySetInnerHTML={{ __html: formatText(tx.backText) }}
+              />
             </div>
           )}
           {inv && (

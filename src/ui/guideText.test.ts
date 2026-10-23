@@ -4,10 +4,14 @@ import { guideHtml, moreBelow } from "./guideText";
 describe("guideHtml", () => {
   it("renders each of the guide's tags as styled text, never as raw tags", () => {
     expect(guideHtml("<fancy>June</fancy>")).toBe('<span class="g-fancy">June</span>');
-    expect(guideHtml("<typewriter>Dear sir</typewriter>")).toBe('<span class="g-typewriter">Dear sir</span>');
+    expect(guideHtml("<typewriter>Dear sir</typewriter>")).toBe(
+      '<span class="g-typewriter">Dear sir</span>',
+    );
     expect(guideHtml("<innsmouth>Deep</innsmouth>")).toBe('<span class="g-innsmouth">Deep</span>');
     expect(guideHtml("<game>Title</game>")).toBe('<span class="g-game">Title</span>');
-    expect(guideHtml("<smallcaps>Small</smallcaps>")).toBe('<span class="g-smallcaps">Small</span>');
+    expect(guideHtml("<smallcaps>Small</smallcaps>")).toBe(
+      '<span class="g-smallcaps">Small</span>',
+    );
     expect(guideHtml("<center>mid</center>")).toBe('<div class="g-center">mid</div>');
     expect(guideHtml("<right>end</right>")).toBe('<div class="g-right">end</div>');
     expect(guideHtml("<blockquote>said</blockquote>")).toBe('<div class="g-blockquote">said</div>');
@@ -16,7 +20,9 @@ describe("guideHtml", () => {
   });
 
   it("nests: a centred handwritten date", () => {
-    expect(guideHtml("<center><fancy>June 1926</fancy></center>")).toBe('<div class="g-center"><span class="g-fancy">June 1926</span></div>');
+    expect(guideHtml("<center><fancy>June 1926</fancy></center>")).toBe(
+      '<div class="g-center"><span class="g-fancy">June 1926</span></div>',
+    );
   });
 
   it("shows an unknown tag's text without the tag", () => {
@@ -40,16 +46,21 @@ describe("guideHtml", () => {
   it("keeps line breaks and the card markup of its text runs", () => {
     expect(guideHtml("one\ntwo")).toBe("one<br/>two");
     expect(guideHtml("the [[Cultist]] came")).toBe("the <i>Cultist</i> came");
-    expect(guideHtml("<center>\nTitle\n</center>\nBody")).toBe('<div class="g-center">Title</div>Body');
+    expect(guideHtml("<center>\nTitle\n</center>\nBody")).toBe(
+      '<div class="g-center">Title</div>Body',
+    );
   });
 
   it("handles Russian text and the Russian guide's tags", () => {
-    expect(guideHtml("<center><fancy>Июнь 1926</fancy></center>")).toBe('<div class="g-center"><span class="g-fancy">Июнь 1926</span></div>');
+    expect(guideHtml("<center><fancy>Июнь 1926</fancy></center>")).toBe(
+      '<div class="g-center"><span class="g-fancy">Июнь 1926</span></div>',
+    );
   });
 });
 
 describe("moreBelow", () => {
-  const el = (scrollHeight: number, clientHeight: number, scrollTop: number) => ({ scrollHeight, clientHeight, scrollTop }) as HTMLElement;
+  const el = (scrollHeight: number, clientHeight: number, scrollTop: number) =>
+    ({ scrollHeight, clientHeight, scrollTop }) as HTMLElement;
   it("is true while text is scrolled out of sight below", () => {
     expect(moreBelow(el(1000, 300, 0))).toBe(true);
     expect(moreBelow(el(1000, 300, 500))).toBe(true);

@@ -8,22 +8,50 @@ import { cardImage } from "../images";
 import { blurb } from "./blurb";
 import { campaignComplete, campaignProgress, tileName } from "./wizard";
 
-const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
+const tr = (key: string, vars?: Record<string, string | number>) =>
+  t(db, gameStore.getState().locale, key, vars);
 
 /** "1 scenario", "8 scenarios" */
-export const scenarioCount = (n: number) => (n === 1 ? tr("wizard.length.one") : tr("wizard.scenarios", { n }));
+export const scenarioCount = (n: number) =>
+  n === 1 ? tr("wizard.length.one") : tr("wizard.scenarios", { n });
 
 /** one side of a chapter's card, found by its code (its pack need not be loaded; an act or agenda is printed on both sides) */
-function Face({ code, side, alt, lazy }: { code: string; side: "front" | "back"; alt: string; lazy?: boolean }) {
+function Face({
+  code,
+  side,
+  alt,
+  lazy,
+}: {
+  code: string;
+  side: "front" | "back";
+  alt: string;
+  lazy?: boolean;
+}) {
   const locale = useGame((s) => s.locale);
   const [broken, setBroken] = useState(false);
   const url = cardImage(db.cards[code] ?? { code, doubleSided: true }, side, locale);
   if (!url || broken) return null;
-  return <img src={url} alt={alt} loading={lazy ? "lazy" : undefined} draggable={false} onError={() => setBroken(true)} />;
+  return (
+    <img
+      src={url}
+      alt={alt}
+      loading={lazy ? "lazy" : undefined}
+      draggable={false}
+      onError={() => setBroken(true)}
+    />
+  );
 }
 
 /** a chapter's card at full size, both sides (the back of an act or agenda is what happens when it advances), to read */
-function ChapterCard({ code, title, onClose }: { code: string; title: string; onClose: () => void }) {
+function ChapterCard({
+  code,
+  title,
+  onClose,
+}: {
+  code: string;
+  title: string;
+  onClose: () => void;
+}) {
   const locale = useGame((s) => s.locale);
   // the text only once its pack is in (the scans carry it either way)
   const tx = db.cards[code] ? cardText(db, code, locale) : null;
@@ -39,8 +67,12 @@ function ChapterCard({ code, title, onClose }: { code: string; title: string; on
       </div>
       <div className="modal-side">
         <h2 className="card-name">{tx?.name ?? title}</h2>
-        {tx?.text && <p className="card-text" dangerouslySetInnerHTML={{ __html: formatText(tx.text) }} />}
-        {tx?.backText && <p className="card-text" dangerouslySetInnerHTML={{ __html: formatText(tx.backText) }} />}
+        {tx?.text && (
+          <p className="card-text" dangerouslySetInnerHTML={{ __html: formatText(tx.text) }} />
+        )}
+        {tx?.backText && (
+          <p className="card-text" dangerouslySetInnerHTML={{ __html: formatText(tx.backText) }} />
+        )}
         <button className="modal-close" onClick={onClose}>
           {tr("modal.close")}
         </button>
@@ -56,7 +88,13 @@ function ChapterCard({ code, title, onClose }: { code: string; title: string; on
  * between them (the way the act and agenda viewer lays out a scenario's chapters in play). Everything comes from the
  * campaign's own file, so it is all here before the scenarios are loaded.
  */
-export function CampaignSheet({ campaign, onClose }: { campaign: CampaignDef; onClose: () => void }) {
+export function CampaignSheet({
+  campaign,
+  onClose,
+}: {
+  campaign: CampaignDef;
+  onClose: () => void;
+}) {
   const locale = useGame((s) => s.locale);
   const [more, setMore] = useState(false);
   const [reading, setReading] = useState<{ code: string; title: string } | null>(null);
@@ -86,7 +124,8 @@ export function CampaignSheet({ campaign, onClose }: { campaign: CampaignDef; on
             <>
               {" "}
               {tr("wizard.progress", { works: progress.works, total: progress.total })}
-              {progress.unscripted > 0 && ` ${tr("wizard.unscripted", { n: progress.unscripted, total: campaign.scenarios.length })}`}
+              {progress.unscripted > 0 &&
+                ` ${tr("wizard.unscripted", { n: progress.unscripted, total: campaign.scenarios.length })}`}
             </>
           )}
         </small>
@@ -105,12 +144,19 @@ export function CampaignSheet({ campaign, onClose }: { campaign: CampaignDef; on
         {chapters.map((ch) => {
           const playable = !("interlude" in ch && ch.interlude);
           const k = campaign.scenarios.indexOf(ch.scenario);
-          const name = (playable ? (scenarios[k] ?? ch.name) : (interludeName(db, campaign.id, ch.scenario, locale) ?? ch.name)) ?? ch.scenario;
+          const name =
+            (playable
+              ? (scenarios[k] ?? ch.name)
+              : (interludeName(db, campaign.id, ch.scenario, locale) ?? ch.name)) ?? ch.scenario;
           if (playable) n++;
           return (
             <li key={ch.scenario} className={playable ? "wz-chapter" : "wz-chapter wz-interlude"}>
               <div className="wz-chapter-name">
-                {playable ? <span className="wz-chapter-n">{n}</span> : <span className="wz-chapter-n">·</span>}
+                {playable ? (
+                  <span className="wz-chapter-n">{n}</span>
+                ) : (
+                  <span className="wz-chapter-n">·</span>
+                )}
                 <b>{name}</b>
                 {!playable && <small>{tr("wizard.interlude")}</small>}
               </div>
@@ -123,8 +169,20 @@ export function CampaignSheet({ campaign, onClose }: { campaign: CampaignDef; on
                     ] as const
                   ).map(([code, type]) =>
                     code ? (
-                      <button key={type} className="wz-chapter-card" title={tr("wizard.readCard")} onClick={() => setReading({ code, title: `${name}: ${tr(`card.type.${type}`)}` })}>
-                        <Face code={code} side="front" alt={`${name}: ${tr(`card.type.${type}`)}`} lazy />
+                      <button
+                        key={type}
+                        className="wz-chapter-card"
+                        title={tr("wizard.readCard")}
+                        onClick={() =>
+                          setReading({ code, title: `${name}: ${tr(`card.type.${type}`)}` })
+                        }
+                      >
+                        <Face
+                          code={code}
+                          side="front"
+                          alt={`${name}: ${tr(`card.type.${type}`)}`}
+                          lazy
+                        />
                       </button>
                     ) : null,
                   )}
@@ -134,7 +192,9 @@ export function CampaignSheet({ campaign, onClose }: { campaign: CampaignDef; on
           );
         })}
       </ol>
-      {reading && <ChapterCard code={reading.code} title={reading.title} onClose={() => setReading(null)} />}
+      {reading && (
+        <ChapterCard code={reading.code} title={reading.title} onClose={() => setReading(null)} />
+      )}
     </aside>
   );
 }

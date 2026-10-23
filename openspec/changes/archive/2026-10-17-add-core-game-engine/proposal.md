@@ -20,6 +20,7 @@ Non-goals: online multiplayer, deckbuilding editor UI, XP upgrade shop UI beyond
 ## Capabilities
 
 ### New Capabilities
+
 - `game-engine`: rules engine — state model, round/phase flow, actions, skill tests, chaos bag, damage/horror, enemies, locations, act/agenda, encounter deck, win/lose, determinism.
 - `card-content`: on-disk content format for cards, encounter sets, investigators, decks, scenarios, campaigns and i18n; validation, loading, ArkhamDB import; data-driven card effects.
 - `campaign-play`: campaign definitions, scenario setup from data, resolutions, campaign log, XP/trauma, Night of the Zealot content.
@@ -27,6 +28,7 @@ Non-goals: online multiplayer, deckbuilding editor UI, XP upgrade shop UI beyond
 - `game-table-ui`: react-three-fiber top-down table, player areas, location map, card interactions, chaos bag reveal, HUD prompts, hot-seat flow.
 
 ### Modified Capabilities
+
 <!-- none: no existing specs -->
 
 ## Impact

@@ -18,16 +18,33 @@ afterEach(() => {
   db.cards[MACHETE].abilities = saved;
 });
 
-const turn = (ability: Ability, extra: (g: Parameters<Parameters<typeof mutate>[1]>[0]) => void = () => {}, invs = [ROLAND]): Result => {
+const turn = (
+  ability: Ability,
+  extra: (g: Parameters<Parameters<typeof mutate>[1]>[0]) => void = () => {},
+  invs = [ROLAND],
+): Result => {
   db.cards[MACHETE].abilities = [ability];
   let r = skipMulligans(start("the-gathering", invs, 1, { chaosBag: ["0"] as never }));
-  while (r.state.pending && r.state.pending.kind !== "turn") r = pick(r, r.state.pending.options.some((o) => o.id === "pass") ? "pass" : /^Done/.test(r.state.pending.options[0].label) ? /^Done/ : /./);
+  while (r.state.pending && r.state.pending.kind !== "turn")
+    r = pick(
+      r,
+      r.state.pending.options.some((o) => o.id === "pass")
+        ? "pass"
+        : /^Done/.test(r.state.pending.options[0].label)
+          ? /^Done/
+          : /./,
+    );
   return mutate(r, (g) => {
     moveCard(g, createCard(g, MACHETE, "limbo", ROLAND), "play");
     extra(g);
   });
 };
-const beatCop = (g: Parameters<Parameters<typeof mutate>[1]>[0], damage = 0, horror = 0, owner = ROLAND) => {
+const beatCop = (
+  g: Parameters<Parameters<typeof mutate>[1]>[0],
+  damage = 0,
+  horror = 0,
+  owner = ROLAND,
+) => {
   const id = createCard(g, BEAT_COP, "limbo", owner);
   moveCard(g, id, "play");
   g.s.cards[id].damage = damage;
@@ -36,7 +53,12 @@ const beatCop = (g: Parameters<Parameters<typeof mutate>[1]>[0], damage = 0, hor
 };
 
 describe("an ability's cost can take damage", () => {
-  const ab: Ability = { kind: "action", label: "Patch up", cost: { takeDamage: 1 }, effects: [{ op: "heal", horror: 1 }] } as never;
+  const ab: Ability = {
+    kind: "action",
+    label: "Patch up",
+    cost: { takeDamage: 1 },
+    effects: [{ op: "heal", horror: 1 }],
+  } as never;
 
   it("the controller takes it, then the ability resolves", () => {
     let r = turn(ab, (g) => {
@@ -50,7 +72,13 @@ describe("an ability's cost can take damage", () => {
 });
 
 describe("a heal can target an Ally asset", () => {
-  const atLocation: Ability = { kind: "action", label: "Mend", effects: [{ op: "heal", damage: 1, horror: 1, target: "chooseAtLocation", targetAlly: "atLocation" }] } as never;
+  const atLocation: Ability = {
+    kind: "action",
+    label: "Mend",
+    effects: [
+      { op: "heal", damage: 1, horror: 1, target: "chooseAtLocation", targetAlly: "atLocation" },
+    ],
+  } as never;
 
   it("the investigators at the location and the Ally assets there are offered; choosing the Ally heals it", () => {
     let cop = "";
@@ -76,17 +104,25 @@ describe("a heal can target an Ally asset", () => {
   });
 
   it("an Ally at another location is not offered; a card that is not an Ally never is", () => {
-    let r = turn(atLocation, (g) => {
-      beatCop(g, 1, 0, DAISY);
-      inv(g, DAISY).location = null;
-    }, [ROLAND, DAISY]);
+    let r = turn(
+      atLocation,
+      (g) => {
+        beatCop(g, 1, 0, DAISY);
+        inv(g, DAISY).location = null;
+      },
+      [ROLAND, DAISY],
+    );
     r = pick(r, "Mend");
     expect(options(r)).not.toContain("Machete");
     expect(options(r)).not.toContain("Beat Cop");
   });
 
   it("'controlled': you, or an Ally asset you control", () => {
-    const mine: Ability = { kind: "action", label: "Mend mine", effects: [{ op: "heal", damage: 1, target: "you", targetAlly: "controlled" }] } as never;
+    const mine: Ability = {
+      kind: "action",
+      label: "Mend mine",
+      effects: [{ op: "heal", damage: 1, target: "you", targetAlly: "controlled" }],
+    } as never;
     let cop = "";
     let r = turn(mine, (g) => {
       cop = beatCop(g, 1);

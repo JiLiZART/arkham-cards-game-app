@@ -9,11 +9,13 @@
 ## Goals / Non-Goals
 
 **Goals:**
+
 - One overlay for the whole test; the subject, placed cards and strip never move between stages.
 - Reuse the pieces that work: the subject block, the circle-to-token flight, `MiniCard`, the fan's commit flight, `testParts`, the settle gate, the event player's pacing.
 - The engine untouched.
 
 **Non-Goals:**
+
 - The phone layout of the screen; new test rules; a different multi-token draw.
 
 ## Diagram (C4-inspired, component level, ASCII; the browser app is the only container)
@@ -57,24 +59,31 @@ Assumptions: lightweight rigor; existing components named as they are in `src/ui
 ## Decisions
 
 ### 1. The screen owns the stage for the test's whole duration
+
 `useStage("test:<id>")` from the first commit prompt until the result's Continue (or the auto-close). `EventPlayer` keeps gating `token` and `testResult` on settling and pacing, but their "holds the middle" check becomes "the test screen holds" instead of claiming `event:<logIndex>` themselves. Alternative: keep per-event stage claims and let the screen mount and unmount around them. Rejected: the screen would flicker between stages, and the hand-off box ordering (stage-based) would race it.
 
 ### 2. Reuse, don't redraw
+
 The subject block, the circle flight (now a flip then a slide), `MiniCard`, `stripAction`, the fan's commit and take-back flights and `testParts` are reused as they are. The new code is the frame, the spill layout, the flip, the result stage and the strip. Alternative: a fresh component tree. Rejected for the usual reason: the flights and hover already work and are tested by the drive scripts.
 
 ### 3. Discs are tokens face down
+
 A disc is the token's own component (`ChaosToken`) rendered face down (a plain disc of the same size); the flip is a 3D rotation that swaps to the face. Sizes match by construction. Alternative: keep the small white circles and grow them on the flip. Rejected: the user wants same-size discs, and a face-down token is also the right thing for the auto mode's single flip.
 
 ### 4. Spill layout is deterministic
+
 Disc positions come from a seeded scatter (the test id as seed) around the bag's mouth, within the middle area, no overlap; the same test spills the same way after a reload. Alternative: physics. Rejected: cost, and nondeterminism in screenshots.
 
 ### 5. Helpers on the same screen through the existing prompts
+
 Nothing changes in the engine: each `commitOther` prompt is a new deciding player; the screen reads `pending.inv` for whose fan is live and whose placed cards are removable (`committers[k] === pending.inv` and an `un:` option exists). The hand-off box already appears when hands are private; it sits above the overlay by z-index.
 
 ### 6. Strip above the overlay
+
 The play strip's z-index goes above the overlay while a test is on, with a `dimmed` class on cards that have no option in `byCard` for the current prompt; this reuses the choice spotlight's dim style. Alternative: a "from play" row on the screen (asked; declined).
 
 ### 7. Result stage waits like the breakdown did
+
 By hand or at the Tap pace, Continue dismisses it; otherwise it closes after the existing timer. Continue also answers nothing in the engine (the result event is already past), so Undo keeps working as before.
 
 ## Risks / Trade-offs

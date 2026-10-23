@@ -17,7 +17,11 @@ const cardProxy = {
 };
 
 // the build's version, shown in bug reports (the Debug panel's Copy report)
-const appVersion = (JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf8")) as { version: string }).version;
+const appVersion = (
+  JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf8")) as {
+    version: string;
+  }
+).version;
 
 // dev-only sound picker routes (ADR-0010): loaded through vite's own pipeline, so the build never sees them
 let dev: typeof import("./scripts/sounds-dev-server") | undefined;
@@ -25,7 +29,9 @@ const soundsDev = (): Plugin => ({
   name: "arkham-sounds-dev",
   apply: "serve",
   async configureServer(server) {
-    dev = (await server.ssrLoadModule("/scripts/sounds-dev-server.ts")) as typeof import("./scripts/sounds-dev-server");
+    dev = (await server.ssrLoadModule(
+      "/scripts/sounds-dev-server.ts",
+    )) as typeof import("./scripts/sounds-dev-server");
     server.middlewares.use(dev.soundsDevMiddleware);
   },
   // the picker's Apply rewrites sounds.json: the module is still refreshed, but the page under the picker isn't reloaded

@@ -8,7 +8,7 @@ Between two choices the engine resolves a whole phase at once, and the screen re
 - **Step captions.** While a step's events play, a caption under the top bar names it with its actor: "Enemies attack", "Roland draws an encounter card". It sits where the prompt sits when there is a choice, so the top of the screen always says either what is happening or what to do.
 - **The camera follows the event.** While an animated event plays, the map pans to the card or investigator it is about (the hunter that moves, the enemy that attacks, the location a card spawns at) and returns to the deciding investigator when input is needed.
 - **Enemy moves get a beat.** A hunter's move becomes an animated event with the spotlight, instead of a card sliding while the feed says so.
-- **Pace setting.** A menu setting with three values: *Tap* (each big event waits for a tap, Space or Enter, like the chaos token draw by hand), *Slow* (longer timings) and *Normal* (today's timings). Saved with the other settings.
+- **Pace setting.** A menu setting with three values: _Tap_ (each big event waits for a tap, Space or Enter, like the chaos token draw by hand), _Slow_ (longer timings) and _Normal_ (today's timings). Saved with the other settings.
 
 ## Capabilities
 

@@ -6,7 +6,16 @@ import { describe, expect, it } from "vitest";
 describe.skipIf(!existsSync("dist"))("the production build", () => {
   const grep = (pattern: string) => {
     try {
-      return execFileSync("grep", ["-rl", "--include=*.js", "--include=*.html", "--include=*.json", pattern, "dist"]).toString().trim();
+      return execFileSync("grep", [
+        "-rl",
+        "--include=*.js",
+        "--include=*.html",
+        "--include=*.json",
+        pattern,
+        "dist",
+      ])
+        .toString()
+        .trim();
     } catch {
       return "";
     }

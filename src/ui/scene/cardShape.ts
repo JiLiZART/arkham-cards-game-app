@@ -28,10 +28,14 @@ export function cardFace(w: number, h: number): THREE.ShapeGeometry {
   const key = `${w}x${h}`;
   const hit = faces.get(key);
   if (hit) return hit;
-  const g = new THREE.ShapeGeometry(roundedRect(new THREE.Shape(), w, h, CORNER * Math.min(w, h)), 6);
+  const g = new THREE.ShapeGeometry(
+    roundedRect(new THREE.Shape(), w, h, CORNER * Math.min(w, h)),
+    6,
+  );
   const pos = g.attributes.position;
   const uv = g.attributes.uv;
-  for (let i = 0; i < pos.count; i++) uv.setXY(i, (pos.getX(i) + w / 2) / w, (pos.getY(i) + h / 2) / h);
+  for (let i = 0; i < pos.count; i++)
+    uv.setXY(i, (pos.getX(i) + w / 2) / w, (pos.getY(i) + h / 2) / h);
   uv.needsUpdate = true;
   faces.set(key, g);
   return g;

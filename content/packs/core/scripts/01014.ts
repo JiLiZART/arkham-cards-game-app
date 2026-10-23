@@ -1,5 +1,16 @@
 // Wendy's Amulet — play the topmost event of your discard pile; played events go to the bottom of your deck
-import { card, def, emit, inv, moveCard, type CardScript, type EffCtx, type G, type InstId, type InvId } from "../../../../src/engine/api";
+import {
+  card,
+  def,
+  emit,
+  inv,
+  moveCard,
+  type CardScript,
+  type EffCtx,
+  type G,
+  type InstId,
+  type InvId,
+} from "../../../../src/engine/api";
 
 export default {
   extraPlayable(g: G, _cardId: InstId, i: InvId) {
@@ -10,7 +21,12 @@ export default {
     eventFinished(g: G, ctx: EffCtx) {
       const ev = card(g, ctx.card!);
       moveCard(g, ev.id, "deck", { inv: ev.owner });
-      emit(g, "amulet", `${def(g, ev.id).name} is placed on the bottom of the deck (Wendy's Amulet)`, { card: ev.id });
+      emit(
+        g,
+        "amulet",
+        `${def(g, ev.id).name} is placed on the bottom of the deck (Wendy's Amulet)`,
+        { card: ev.id },
+      );
     },
   },
 } satisfies CardScript;

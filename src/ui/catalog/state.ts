@@ -16,7 +16,15 @@ interface CatalogState {
 }
 
 /** what only makes sense within one tab */
-const PER_TAB: Partial<CatalogFilters> = { types: [], levels: [], costs: [], icons: [], slots: [], sets: [], traits: [] };
+const PER_TAB: Partial<CatalogFilters> = {
+  types: [],
+  levels: [],
+  costs: [],
+  icons: [],
+  slots: [],
+  sets: [],
+  traits: [],
+};
 
 export const useCatalog = create<CatalogState>((set, get) => ({
   filters: emptyFilters,

@@ -4,7 +4,22 @@ import { loadPack } from "../content";
 import { addTempMod, card, createCard, inv, moveCard } from "./core";
 import type { Ability } from "../content/schema";
 import type { Result } from "./engine";
-import { ACOLYTE, DAISY, MINION, NATHANIEL, ROLAND, attacks, enemyHere, enemyIn, game, hand, inPlay, nathaniel, neutral, toTurn } from "./natkit";
+import {
+  ACOLYTE,
+  DAISY,
+  MINION,
+  NATHANIEL,
+  ROLAND,
+  attacks,
+  enemyHere,
+  enemyIn,
+  game,
+  hand,
+  inPlay,
+  nathaniel,
+  neutral,
+  toTurn,
+} from "./natkit";
 
 const N = NATHANIEL;
 
@@ -48,7 +63,13 @@ describe("an unengaged aloof enemy", () => {
 
 describe("successful evasion", () => {
   const savedAbilities = db.cards["01020"].abilities;
-  const onSuccess = (): Ability => ({ kind: "reaction", trigger: "successfulEvade", label: "Slick", effects: [{ op: "gainResources", amount: 1 }] }) as never;
+  const onSuccess = (): Ability =>
+    ({
+      kind: "reaction",
+      trigger: "successfulEvade",
+      label: "Slick",
+      effects: [{ op: "gainResources", amount: 1 }],
+    }) as never;
   it("automatic evasion triggers 'evaded' but not 'successfully evaded'", () => {
     db.cards["01020"].abilities = [onSuccess()];
     try {
@@ -89,7 +110,8 @@ describe("a helper's commit", () => {
       enemyHere(g, ROLAND, MINION, false);
     });
     r = pick(r, /^Fight/);
-    while (r.state.pending?.kind === "commit" && r.state.pending.inv === ROLAND) r = pick(r, "done"); // Roland commits nothing
+    while (r.state.pending?.kind === "commit" && r.state.pending.inv === ROLAND)
+      r = pick(r, "done"); // Roland commits nothing
     expect(r.state.pending?.inv).toBe(DAISY);
     expect(r.state.pending?.kind).toBe("commit");
     r = pick(r, /^Commit Vicious Blow/);
@@ -101,9 +123,13 @@ describe("a helper's commit", () => {
 
 describe("automatic results", () => {
   it("an auto-fail counts the skill value as 0: Rotting Remains fails by its whole difficulty", () => {
-    let r = game([ROLAND], (g) => {
-      moveCard(g, createCard(g, "01163", "limbo", null), "encounterDeck", { top: true }); // the next mythos phase draws it
-    }, ["autoFail"]);
+    let r = game(
+      [ROLAND],
+      (g) => {
+        moveCard(g, createCard(g, "01163", "limbo", null), "encounterDeck", { top: true }); // the next mythos phase draws it
+      },
+      ["autoFail"],
+    );
     r = toTurn(pick(r, "End turn"), (x) => x.state.round === 2 && x.state.pending?.kind === "turn");
     expect(r.state.invs[ROLAND].horror).toBe(3);
   });
@@ -113,7 +139,8 @@ describe("automatic results", () => {
       hand(g, N, "60126"); // Overpower (2): draws 2 when it succeeds by 2 or more
       enemyHere(g, N, ACOLYTE);
     });
-    const draws = (x: Result) => x.state.log.filter((e) => e.type === "draw" || e.type === "weakness").length;
+    const draws = (x: Result) =>
+      x.state.log.filter((e) => e.type === "draw" || e.type === "weakness").length;
     const before = draws(r);
     r = pick(r, /^Play One-Two Punch/);
     r = pick(r, /^Commit Overpower/);
@@ -169,7 +196,10 @@ describe("unique cards, limits and victory", () => {
         inPlay(g, N, "60107");
         moveCard(g, createCard(g, ACOLYTE, "limbo", null), "encounterDeck", { top: true });
       });
-      r = toTurn(pick(r, "End turn"), (x) => x.state.round === 2 && x.state.pending?.kind === "turn");
+      r = toTurn(
+        pick(r, "End turn"),
+        (x) => x.state.round === 2 && x.state.pending?.kind === "turn",
+      );
       const grete = Object.values(r.state.cards).find((c) => c.code === "60107")!;
       expect(grete.zone).toBe("discard");
     } finally {
@@ -178,7 +208,14 @@ describe("unique cards, limits and victory", () => {
   });
   it("a card that leaves play and returns has its limit unused", () => {
     const saved = db.cards["01020"].abilities;
-    db.cards["01020"].abilities = [{ kind: "fast", label: "Once", limit: { per: "round", count: 1 }, effects: [{ op: "gainResources", amount: 1 }] }] as never;
+    db.cards["01020"].abilities = [
+      {
+        kind: "fast",
+        label: "Once",
+        limit: { per: "round", count: 1 },
+        effects: [{ op: "gainResources", amount: 1 }],
+      },
+    ] as never;
     try {
       let r = game([ROLAND], (g) => {
         inPlay(g, ROLAND, "01020");
@@ -198,11 +235,21 @@ describe("unique cards, limits and victory", () => {
   it("a resolved treachery with Victory X goes to the victory display", () => {
     db.cards["01163"].victory = 1;
     try {
-      let r = game([ROLAND], (g) => {
-        moveCard(g, createCard(g, "01163", "limbo", null), "encounterDeck", { top: true });
-      }, ["0"]);
-      r = toTurn(pick(r, "End turn"), (x) => x.state.round === 2 && x.state.pending?.kind === "turn");
-      expect(Object.values(r.state.cards).filter((c) => c.code === "01163" && c.zone === "victory").length).toBe(1);
+      let r = game(
+        [ROLAND],
+        (g) => {
+          moveCard(g, createCard(g, "01163", "limbo", null), "encounterDeck", { top: true });
+        },
+        ["0"],
+      );
+      r = toTurn(
+        pick(r, "End turn"),
+        (x) => x.state.round === 2 && x.state.pending?.kind === "turn",
+      );
+      expect(
+        Object.values(r.state.cards).filter((c) => c.code === "01163" && c.zone === "victory")
+          .length,
+      ).toBe(1);
     } finally {
       delete db.cards["01163"].victory;
     }
@@ -217,15 +264,22 @@ describe("the enemy phase, upkeep and round end follow the chart", () => {
       enemyHere(g, ROLAND, ACOLYTE);
     });
     r = toTurn(pick(r, "End turn"), (x) => attacks(x) === 2 && x.state.pending?.kind === "assign");
-    const exhausted = Object.values(r.state.cards).filter((c) => c.zone === "enemy" && c.exhausted).length;
+    const exhausted = Object.values(r.state.cards).filter(
+      (c) => c.zone === "enemy" && c.exhausted,
+    ).length;
     expect(exhausted).toBe(1); // the first attacker; the second is attacking now
   });
 
   const fastCache = () => {
     db.cards["01088"].keywords = ["fast"];
-    db.cards["01088"].abilities = [{ kind: "onPlay", anyWindow: true, effects: [{ op: "gainResources", amount: 1 }] }];
+    db.cards["01088"].abilities = [
+      { kind: "onPlay", anyWindow: true, effects: [{ op: "gainResources", amount: 1 }] },
+    ];
   };
-  const savedCache = { abilities: db.cards["01088"].abilities, keywords: db.cards["01088"].keywords };
+  const savedCache = {
+    abilities: db.cards["01088"].abilities,
+    keywords: db.cards["01088"].keywords,
+  };
   it("the upkeep player window comes before cards ready", () => {
     fastCache();
     try {
@@ -233,9 +287,13 @@ describe("the enemy phase, upkeep and round end follow the chart", () => {
         card(g, inPlay(g, ROLAND, "01020")).exhausted = true; // Machete
         hand(g, ROLAND, "01088");
       });
-      r = toTurn(pick(r, "End turn"), (x) => x.state.phase === "upkeep" && x.state.pending?.promptKey === "playerWindow");
+      r = toTurn(
+        pick(r, "End turn"),
+        (x) => x.state.phase === "upkeep" && x.state.pending?.promptKey === "playerWindow",
+      );
       expect(r.state.pending?.promptKey).toBe("playerWindow");
-      const machete = () => Object.values(r.state.cards).find((c) => c.code === "01020" && c.zone === "play")!;
+      const machete = () =>
+        Object.values(r.state.cards).find((c) => c.code === "01020" && c.zone === "play")!;
       expect(machete().exhausted).toBe(true);
       r = toTurn(pick(r, "pass"));
       expect(machete().exhausted).toBe(false);
@@ -246,7 +304,14 @@ describe("the enemy phase, upkeep and round end follow the chart", () => {
 
   it("'until the end of the round' effects expire before the round-end window", () => {
     const saved = db.cards["01020"].abilities;
-    db.cards["01020"].abilities = [{ kind: "reaction", trigger: "roundEnds", label: "Slick", effects: [{ op: "gainResources", amount: 1 }] }] as never;
+    db.cards["01020"].abilities = [
+      {
+        kind: "reaction",
+        trigger: "roundEnds",
+        label: "Slick",
+        effects: [{ op: "gainResources", amount: 1 }],
+      },
+    ] as never;
     try {
       let r = game([ROLAND], (g) => {
         inPlay(g, ROLAND, "01020");
@@ -266,7 +331,10 @@ describe("advancing the act in a player window", () => {
     let r = game([ROLAND], (g) => {
       inv(g, ROLAND).clues = 2;
     });
-    r = toTurn(pick(r, "End turn"), (x) => x.state.phase === "enemy" && x.state.pending?.promptKey === "playerWindow");
+    r = toTurn(
+      pick(r, "End turn"),
+      (x) => x.state.phase === "enemy" && x.state.pending?.promptKey === "playerWindow",
+    );
     expect(r.state.phase).toBe("enemy");
     expect(offered(/^Advance act/)(r)).toBe(true);
     const act = r.state.act;
@@ -284,4 +352,10 @@ describe("advancing the act in a player window", () => {
   });
 });
 
-void card; void createCard; void moveCard; void neutral; void attacks; void enemyIn; void ACOLYTE;
+void card;
+void createCard;
+void moveCard;
+void neutral;
+void attacks;
+void enemyIn;
+void ACOLYTE;

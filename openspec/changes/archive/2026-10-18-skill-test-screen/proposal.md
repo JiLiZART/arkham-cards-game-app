@@ -5,9 +5,9 @@ A skill test is the game's central moment, and today it is scattered: a small pa
 ## What Changes
 
 - **One skill-test screen, three stages.** When a test begins, an overlay like today's token draw opens over the dimmed table and stays until the result is dismissed:
-  - *commit*: the test's subject large on the left (the location, enemy or card the test is against or comes from; the investigator's portrait when there is none), the placed cards on the right with each card's icon contribution and a tap to take it back, a calculation strip across the bottom (base skill, each placed card, modifiers, total vs difficulty), the hand fan live below it with only committable cards bright; the instruction bar above with its instruction and Done;
-  - *draw*: the discs spill out of the bag into the free middle, each the size of a real token; the chosen disc flips in place to reveal the token, which then slides into the calculation strip; with "Draw by hand" off a single token flips straight out of the bag instead;
-  - *result*: in the same frame, the big total, then Success or Fail in big text, then Continue; bottom centre the arithmetic as icons, "[intellect] 3 + [token] −1 + [card] 2 = 4".
+  - _commit_: the test's subject large on the left (the location, enemy or card the test is against or comes from; the investigator's portrait when there is none), the placed cards on the right with each card's icon contribution and a tap to take it back, a calculation strip across the bottom (base skill, each placed card, modifiers, total vs difficulty), the hand fan live below it with only committable cards bright; the instruction bar above with its instruction and Done;
+  - _draw_: the discs spill out of the bag into the free middle, each the size of a real token; the chosen disc flips in place to reveal the token, which then slides into the calculation strip; with "Draw by hand" off a single token flips straight out of the bag instead;
+  - _result_: in the same frame, the big total, then Success or Fail in big text, then Continue; bottom centre the arithmetic as icons, "[intellect] 3 + [token] −1 + [card] 2 = 4".
 - **Helpers' cards on the same screen.** After the tester's Done, the other investigators at the location commit in turn on the same screen (the hand-off box over it when hands are private); placed cards carry their owner's portrait, each player can take back only their own, and the strip counts everyone's.
 - **The play strip stays reachable** above the overlay, dimmed except the cards with a usable fast ability, so Physical Training and its kind can still be used during a test.
 - **Replaces** the top-centre skill-test panel, the standalone token-draw overlay and the result box. The Journal, sounds, tips and the choice spotlight keep working: the test, token and result events are unchanged; only where they are shown moves.
@@ -17,9 +17,11 @@ Out of scope: the phone layout of the screen (the phone-landscape change lays th
 ## Capabilities
 
 ### New Capabilities
+
 <!-- none -->
 
 ### Modified Capabilities
+
 - `game-table-ui`: the chaos token draw becomes a stage of the skill-test screen with the spill-and-flip animation and the new result layout; the skill-test panel requirement is replaced by the skill-test screen.
 
 ## Impact

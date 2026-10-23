@@ -14,7 +14,9 @@ export function parseEbur128(log: string): Measured | null {
     .match(/Peak:\s+(-?[\d.]+) dBFS/g)
     ?.pop()
     ?.match(/(-?[\d.]+) dBFS/)?.[1];
-  return lufs === undefined || peak === undefined ? null : { lufs: Number(lufs), peak: Number(peak) };
+  return lufs === undefined || peak === undefined
+    ? null
+    : { lufs: Number(lufs), peak: Number(peak) };
 }
 
 /** the Overall RMS level of an astats run; silence (-inf) counts as -90 */
@@ -46,12 +48,32 @@ export function ffmpegAvailable(): boolean {
 /** a probe over public/sounds; clips under 400 ms are padded with silence so ebur128 has a block to integrate */
 export function ffmpegProbe(dir = "public/sounds"): SoundProbe {
   const rms = (file: string, from: number) => {
-    const r = ffmpeg(["-ss", String(Math.max(0, from)), "-t", "0.2", "-i", `${dir}/${file}`, "-af", "astats=metadata=0", "-f", "null", "-"]);
+    const r = ffmpeg([
+      "-ss",
+      String(Math.max(0, from)),
+      "-t",
+      "0.2",
+      "-i",
+      `${dir}/${file}`,
+      "-af",
+      "astats=metadata=0",
+      "-f",
+      "null",
+      "-",
+    ]);
     return r.status === 0 ? parseRms(r.stderr) : null;
   };
   return {
     loudness(file) {
-      const r = ffmpeg(["-i", `${dir}/${file}`, "-af", `${file.endsWith(".mp3") ? DUAL_MONO : ""}apad=whole_dur=0.5,ebur128=peak=true`, "-f", "null", "-"]);
+      const r = ffmpeg([
+        "-i",
+        `${dir}/${file}`,
+        "-af",
+        `${file.endsWith(".mp3") ? DUAL_MONO : ""}apad=whole_dur=0.5,ebur128=peak=true`,
+        "-f",
+        "null",
+        "-",
+      ]);
       return r.status === 0 ? parseEbur128(r.stderr) : null;
     },
     seam(file, loopStart, loopEnd) {

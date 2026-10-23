@@ -21,9 +21,11 @@ Out of scope: a portrait layout, touch gestures beyond tap, long press, swipe an
 ## Capabilities
 
 ### New Capabilities
+
 <!-- none -->
 
 ### Modified Capabilities
+
 - `game-table-ui`: adds the phone layout mode, touch interaction and orientation handling.
 
 ## Impact

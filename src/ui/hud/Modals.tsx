@@ -17,7 +17,15 @@ import { moment } from "./SoundLayer";
 import { DeckViewer } from "./DeckViewer";
 
 /** a native modal dialog: Escape and focus trapping come from <dialog>; a click on the backdrop closes it */
-export function Modal({ onClose: close, className, children }: { onClose: () => void; className?: string; children: ReactNode }) {
+export function Modal({
+  onClose: close,
+  className,
+  children,
+}: {
+  onClose: () => void;
+  className?: string;
+  children: ReactNode;
+}) {
   const ref = useRef<HTMLDialogElement>(null);
   const onClose = () => {
     moment("close");
@@ -55,7 +63,13 @@ export function useCardOptions(ids: (InstId | null | undefined)[]): ChoiceOption
   return game.pending.options.filter((o) => o.card && ids.includes(o.card));
 }
 
-export function OptionButtons({ options, onChosen }: { options: ChoiceOption[]; onChosen?: () => void }) {
+export function OptionButtons({
+  options,
+  onChosen,
+}: {
+  options: ChoiceOption[];
+  onChosen?: () => void;
+}) {
   const choose = useGame((s) => s.choose);
   const game = useGame((s) => s.game) as GameState;
   const locale = useGame((s) => s.locale);
@@ -73,7 +87,8 @@ export function OptionButtons({ options, onChosen }: { options: ChoiceOption[]; 
               choose(o.id);
             }}
           >
-            <Glyph name={sym ?? "action"} size={22} title="" /> <span>{optionLabel(o, game, locale)}</span>
+            <Glyph name={sym ?? "action"} size={22} title="" />{" "}
+            <span>{optionLabel(o, game, locale)}</span>
           </button>
         );
       })}
@@ -81,7 +96,10 @@ export function OptionButtons({ options, onChosen }: { options: ChoiceOption[]; 
   );
 }
 
-const TOKENS: [keyof Pick<GameState["cards"][string], "damage" | "horror" | "clues" | "doom" | "resources">, IconName][] = [
+const TOKENS: [
+  keyof Pick<GameState["cards"][string], "damage" | "horror" | "clues" | "doom" | "resources">,
+  IconName,
+][] = [
   ["damage", "damage"],
   ["horror", "horror"],
   ["clues", "clue"],
@@ -130,14 +148,18 @@ export function CardModal({ id }: { id: InstId }) {
           </div>
         </div>
       ) : (
-        <div className={`modal-card ${["act", "agenda", "investigator"].includes(d.type) ? "landscape" : ""}`}>
+        <div
+          className={`modal-card ${["act", "agenda", "investigator"].includes(d.type) ? "landscape" : ""}`}
+        >
           <CardFace code={inst.code} locale={locale} side={back ? "back" : "front"} />
         </div>
       )}
       <div className="modal-side">
-        <h2 className="card-name">{back ? tx.backName ?? tx.name : tx.name}</h2>
+        <h2 className="card-name">{back ? (tx.backName ?? tx.name) : tx.name}</h2>
         {tx.subname && <div className="muted">{tx.subname}</div>}
-        {d.encounterSet && encounterSetName(db, d.encounterSet, locale) && <div className="muted">{encounterSetName(db, d.encounterSet, locale)}</div>}
+        {d.encounterSet && encounterSetName(db, d.encounterSet, locale) && (
+          <div className="muted">{encounterSetName(db, d.encounterSet, locale)}</div>
+        )}
         <div className="modal-tokens">
           {TOKENS.filter(([k]) => inst[k] > 0).map(([k, icon]) => (
             <span key={k} className="stat" title={`${t(db, locale, `stat.${k}`)} ${inst[k]}`}>
@@ -146,10 +168,15 @@ export function CardModal({ id }: { id: InstId }) {
             </span>
           ))}
         </div>
-        <p className="card-text" dangerouslySetInnerHTML={{ __html: formatText(back ? tx.backText ?? "" : tx.text) }} />
+        <p
+          className="card-text"
+          dangerouslySetInnerHTML={{ __html: formatText(back ? (tx.backText ?? "") : tx.text) }}
+        />
         {!back && <Keywords code={inst.code} locale={locale} />}
         <OptionButtons options={options} onChosen={close} />
-        <button className="modal-close" onClick={close}>{t(db, locale, "modal.close")}</button>
+        <button className="modal-close" onClick={close}>
+          {t(db, locale, "modal.close")}
+        </button>
       </div>
     </Modal>
   );

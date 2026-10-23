@@ -1,7 +1,21 @@
 import { describe, expect, it } from "vitest";
 import { validateDeck } from "../engine/decks";
 import { db } from "../engine/testkit";
-import { basicWeaknesses, builderPool, changeCopies, deckTabs, editDeck, replaceCard, customDecks, defaultDeckName, deleteCustomDeck, emptyDeck, renameCustomDeck, saveCustomDeck, withWeakness } from "./decks";
+import {
+  basicWeaknesses,
+  builderPool,
+  changeCopies,
+  deckTabs,
+  editDeck,
+  replaceCard,
+  customDecks,
+  defaultDeckName,
+  deleteCustomDeck,
+  emptyDeck,
+  renameCustomDeck,
+  saveCustomDeck,
+  withWeakness,
+} from "./decks";
 import type { Storage } from "./store";
 
 const ROLAND = "01001";
@@ -12,7 +26,12 @@ const PARANOIA = "01097";
 
 const memory = (): Storage & { data: Map<string, string> } => {
   const data = new Map<string, string>();
-  return { data, getItem: (k) => data.get(k) ?? null, setItem: (k, v) => void data.set(k, v), removeItem: (k) => void data.delete(k) };
+  return {
+    data,
+    getItem: (k) => data.get(k) ?? null,
+    setItem: (k, v) => void data.set(k, v),
+    removeItem: (k) => void data.delete(k),
+  };
 };
 
 describe("building a deck", () => {
@@ -51,7 +70,9 @@ describe("building a deck", () => {
     expect(codes.has(MACHETE)).toBe(true);
     expect(codes.has("01006")).toBe(false); // Roland's .38 Special
     expect(codes.has("01007")).toBe(false); // Cover Up
-    expect(rows.every((c) => !c.subtype && c.faction !== "mythos" && c.type !== "investigator")).toBe(true);
+    expect(
+      rows.every((c) => !c.subtype && c.faction !== "mythos" && c.type !== "investigator"),
+    ).toBe(true);
     // preset to the classes of the investigator's options
     expect(new Set(rows.map((c) => c.faction))).toEqual(new Set(["guardian", "seeker", "neutral"]));
   });
@@ -59,14 +80,32 @@ describe("building a deck", () => {
 
 describe("saved custom decks", () => {
   function poolRows() {
-    return builderPool(db, "en", ROLAND, { query: "", factions: [], types: [], levels: [0] }).filter((c) => !c.keywords.includes("exceptional") && (c.deckLimit ?? 2) >= 2 && !Object.keys(base.cards).some((k) => db.cards[k].name === c.name));
+    return builderPool(db, "en", ROLAND, {
+      query: "",
+      factions: [],
+      types: [],
+      levels: [0],
+    }).filter(
+      (c) =>
+        !c.keywords.includes("exceptional") &&
+        (c.deckLimit ?? 2) >= 2 &&
+        !Object.keys(base.cards).some((k) => db.cards[k].name === c.name),
+    );
   }
   const six = () => {
     const swapped = { ...base.cards };
-    const out = Object.keys(swapped).filter((k) => k !== "01006" && k !== "01007" && k !== PARANOIA && swapped[k] === 2).slice(0, 3);
+    const out = Object.keys(swapped)
+      .filter((k) => k !== "01006" && k !== "01007" && k !== PARANOIA && swapped[k] === 2)
+      .slice(0, 3);
     for (const k of out) delete swapped[k];
     for (const c of poolRows().slice(0, 3)) swapped[c.code] = 2;
-    return { name: "Roland · test", investigator: ROLAND, base: base.id, cards: swapped, randomBasicWeakness: base.randomBasicWeakness };
+    return {
+      name: "Roland · test",
+      investigator: ROLAND,
+      base: base.id,
+      cards: swapped,
+      randomBasicWeakness: base.randomBasicWeakness,
+    };
   };
 
   it("round-trips through storage and is offered for its investigator only", () => {
@@ -137,8 +176,17 @@ describe("the deck step's tabs and edits", () => {
 
   it("the tabs are the starter decks first, then the saved decks, valid or not, each with its problems", () => {
     const store = memory();
-    expect(deckTabs(db, ROLAND, store).map((t) => [t.id, t.kind])).toEqual([["roland-starter", "starter"]]);
-    const id = editDeck(db, store, ROLAND, db.decks["roland-starter"], { ...base.cards, [MACHETE]: 2 }, "en");
+    expect(deckTabs(db, ROLAND, store).map((t) => [t.id, t.kind])).toEqual([
+      ["roland-starter", "starter"],
+    ]);
+    const id = editDeck(
+      db,
+      store,
+      ROLAND,
+      db.decks["roland-starter"],
+      { ...base.cards, [MACHETE]: 2 },
+      "en",
+    );
     const tabs = deckTabs(db, ROLAND, store);
     expect(tabs.map((t) => t.kind)).toEqual(["starter", "custom"]);
     expect(tabs[1].id).toBe(id);
@@ -148,10 +196,19 @@ describe("the deck step's tabs and edits", () => {
   it("an edit of a starter deck makes a new saved deck and never changes the starter", () => {
     const store = memory();
     const before = structuredClone(db.decks["roland-starter"]);
-    const id = editDeck(db, store, ROLAND, db.decks["roland-starter"], changeCopies(base.cards, FLASHLIGHT, -1), "en");
+    const id = editDeck(
+      db,
+      store,
+      ROLAND,
+      db.decks["roland-starter"],
+      changeCopies(base.cards, FLASHLIGHT, -1),
+      "en",
+    );
     expect(id).not.toBe("roland-starter");
     expect(db.decks["roland-starter"]).toEqual(before);
-    expect(customDecks(db, ROLAND, store)[0].deck.cards[FLASHLIGHT]).toBe(base.cards[FLASHLIGHT] - 1);
+    expect(customDecks(db, ROLAND, store)[0].deck.cards[FLASHLIGHT]).toBe(
+      base.cards[FLASHLIGHT] - 1,
+    );
   });
 
   it("a second new deck the same day gets a number, so the tabs can be told apart", () => {
@@ -164,9 +221,23 @@ describe("the deck step's tabs and edits", () => {
 
   it("an edit of a saved deck changes it in place", () => {
     const store = memory();
-    const id = editDeck(db, store, ROLAND, db.decks["roland-starter"], changeCopies(base.cards, FLASHLIGHT, -1), "en");
+    const id = editDeck(
+      db,
+      store,
+      ROLAND,
+      db.decks["roland-starter"],
+      changeCopies(base.cards, FLASHLIGHT, -1),
+      "en",
+    );
     const saved = customDecks(db, ROLAND, store)[0].deck;
-    const again = editDeck(db, store, ROLAND, saved, changeCopies(saved.cards, FLASHLIGHT, 1), "en");
+    const again = editDeck(
+      db,
+      store,
+      ROLAND,
+      saved,
+      changeCopies(saved.cards, FLASHLIGHT, 1),
+      "en",
+    );
     expect(again).toBe(id);
     expect(customDecks(db, ROLAND, store)).toHaveLength(1);
     expect(customDecks(db, ROLAND, store)[0].deck.cards).toEqual(base.cards);

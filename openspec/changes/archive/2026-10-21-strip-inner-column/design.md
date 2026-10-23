@@ -9,12 +9,14 @@ A strip card with options glows with the hand's static ring (`.mini-card.legal`)
 ## Goals / Non-Goals
 
 **Goals:**
+
 - Desktop order: panels, map, strip, bag and feed at the edge; the camera's free area unchanged.
 - The strip's column runs down to the hand fan's resting cards (170 px), not to the dock.
 - A strip card's buttons sit in the centre of its enlarged copy, on desktop and phone, with the pointer able to cross onto them.
 - Cards with options pulse; hand cards unchanged; reduced motion keeps a static ring.
 
 **Non-Goals:**
+
 - No change to which options a card offers (`useOptionsByCard`), to the strip's order or card sizes, to the phone's column, or to the skill-test screen's stages.
 - No change to the hover copy's size or to the details column's rows.
 

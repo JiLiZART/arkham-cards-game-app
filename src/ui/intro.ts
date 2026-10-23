@@ -11,7 +11,14 @@ export function trackIntro(store: StoreApi<UiState>) {
       if (useView.getState().intro) useView.setState({ intro: null });
       return;
     }
-    if (s.game && prev.game && s.game !== prev.game && mulliganing(prev.game) && !mulliganing(s.game)) useView.setState({ intro: { step: "agenda", setup: s.setup } });
+    if (
+      s.game &&
+      prev.game &&
+      s.game !== prev.game &&
+      mulliganing(prev.game) &&
+      !mulliganing(s.game)
+    )
+      useView.setState({ intro: { step: "agenda", setup: s.setup } });
   });
 }
 
@@ -21,7 +28,11 @@ export const mulliganing = (g: GameState) => g.phase === "setup" && g.pending?.k
 /** what is still off the table: nothing is set up during the mulligan, and the introduction brings agenda, act and map in turn */
 export function introHides(game: GameState, step: IntroStep | undefined) {
   const setup = mulliganing(game);
-  return { agenda: setup || step === "agenda", act: setup || step === "agenda" || step === "act", map: setup || step === "agenda" || step === "act" };
+  return {
+    agenda: setup || step === "agenda",
+    act: setup || step === "agenda" || step === "act",
+    map: setup || step === "agenda" || step === "act",
+  };
 }
 
 /** calls `done` once every dealt location has landed and flipped (quiet for a moment), or after `max` ms */

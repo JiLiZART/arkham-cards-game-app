@@ -10,6 +10,7 @@ There is no readable record of what happens during play. The engine's log is pla
   - game actions: phases, mythos draws, doom, act and agenda advances, spawns.
 
   It works like a shooter's kill feed: new entries drop in at the top and push older ones down. Entries grow fainter the lower they sit, and the oldest fade out at the bottom (after about 12 s, or beyond the newest 8), so the live feed stays short.
+
 - **Entries are styled sentences, not raw text**, for example `[Roland portrait] Roland Banks took 2 [resource icon]`.
   - Investigators appear as their portrait and class-coloured name; enemies as their card thumbnail and name.
   - Amounts appear as token icons (resources, clues, damage, horror, doom) and skills as their icons.
@@ -33,9 +34,11 @@ There is no readable record of what happens during play. The engine's log is pla
 ## Capabilities
 
 ### New Capabilities
+
 - `action-feed`: the live action feed, the Journal history, styled entries with card thumbnails, and action floats rising from the actor like the damage numbers.
 
 ### Modified Capabilities
+
 - `game-engine`: "Event log" — every event carries structured data (who, which card, amounts) so it can be shown without parsing text; added "Translatable prompts".
 - `game-table-ui`: added "Prompt banner" (bigger, styled, translated), "Map card frames" (thinner, rounded highlight; rounded card corners) and "Hand card details" (a details column beside a hovered hand card).
 

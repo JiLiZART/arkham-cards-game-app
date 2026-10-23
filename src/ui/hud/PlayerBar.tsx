@@ -6,7 +6,16 @@ import { useOptionsByCard } from "../cardClick";
 import { db, gameStore, useGame } from "../context";
 import { Icon } from "../Icon";
 import { backUrl } from "../images";
-import { barModel, delayed, HOVER_SHEET_MS, investigatorOptions, SHEET_GRACE_MS, sheetFor, shownInv, type Avatar as AvatarModel } from "../players";
+import {
+  barModel,
+  delayed,
+  HOVER_SHEET_MS,
+  investigatorOptions,
+  SHEET_GRACE_MS,
+  sheetFor,
+  shownInv,
+  type Avatar as AvatarModel,
+} from "../players";
 import { Portrait } from "../Portrait";
 import { viewerOf } from "../store";
 import { isTouch } from "../touch";
@@ -15,9 +24,18 @@ import { flyGhost, STAGGER_MS } from "./flights";
 import { RESOLVE_BOX } from "./Reveal";
 import { StatBody, useFlash } from "./Stats";
 
-const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
+const tr = (key: string, vars?: Record<string, string | number>) =>
+  t(db, gameStore.getState().locale, key, vars);
 
-function Count({ icon, value, label }: { icon: "health" | "sanity"; value: number; label: string }) {
+function Count({
+  icon,
+  value,
+  label,
+}: {
+  icon: "health" | "sanity";
+  value: number;
+  label: string;
+}) {
   const flash = useFlash(value);
   return (
     <span className={`pb-count ${flash ? "flash" : ""}`} title={`${label} ${value}`}>
@@ -31,7 +49,10 @@ function Count({ icon, value, label }: { icon: "health" | "sanity"; value: numbe
 function useGhostDraws(inv: InvId, ref: React.RefObject<HTMLElement>, skip: boolean) {
   const game = useGame((s) => s.game) as GameState;
   const setup = useGame((s) => s.setup);
-  const known = useRef<{ setup: unknown; ids: Set<InstId> }>({ setup, ids: new Set(game.invs[inv].hand) });
+  const known = useRef<{ setup: unknown; ids: Set<InstId> }>({
+    setup,
+    ids: new Set(game.invs[inv].hand),
+  });
   useLayoutEffect(() => {
     if (known.current.setup !== setup) known.current = { setup, ids: new Set() };
     const el = ref.current;
@@ -42,14 +63,38 @@ function useGhostDraws(inv: InvId, ref: React.RefObject<HTMLElement>, skip: bool
       const a = takeArrival(id);
       if (skip || !a || !el) continue;
       const r = el.getBoundingClientRect();
-      const from = originRect(a, viewerOf(game), (p) => domPlace(p, RESOLVE_BOX), (i) => lastRects.get(i) ?? null, innerWidth, innerHeight);
-      flyGhost(backUrl("player"), from, { x: r.left, y: r.top, w: r.width, h: r.height }, a.batch * STAGGER_MS);
+      const from = originRect(
+        a,
+        viewerOf(game),
+        (p) => domPlace(p, RESOLVE_BOX),
+        (i) => lastRects.get(i) ?? null,
+        innerWidth,
+        innerHeight,
+      );
+      flyGhost(
+        backUrl("player"),
+        from,
+        { x: r.left, y: r.top, w: r.width, h: r.height },
+        a.batch * STAGGER_MS,
+      );
     }
     for (const id of known.current.ids) if (!hand.includes(id)) known.current.ids.delete(id);
   });
 }
 
-function AvatarButton({ a, legal, onTap, onEnter, onLeave }: { a: AvatarModel; legal: boolean; onTap: (el: HTMLElement) => void; onEnter: (el: HTMLElement, e: React.PointerEvent) => void; onLeave: () => void }) {
+function AvatarButton({
+  a,
+  legal,
+  onTap,
+  onEnter,
+  onLeave,
+}: {
+  a: AvatarModel;
+  legal: boolean;
+  onTap: (el: HTMLElement) => void;
+  onEnter: (el: HTMLElement, e: React.PointerEvent) => void;
+  onLeave: () => void;
+}) {
   const locale = useGame((s) => s.locale);
   const ref = useRef<HTMLButtonElement>(null);
   const dimmed = useDimmed(a.inv);
@@ -88,7 +133,19 @@ function AvatarButton({ a, legal, onTap, onEnter, onLeave }: { a: AvatarModel; l
 }
 
 /** the details of the investigator on screen, opened from their avatar: card, ability and its options, skills, resources, clues, hand count */
-function Sheet({ inv, anchor, onClose, onEnter, onLeave }: { inv: InvId; anchor: DOMRect | null; onClose: () => void; onEnter: () => void; onLeave: () => void }) {
+function Sheet({
+  inv,
+  anchor,
+  onClose,
+  onEnter,
+  onLeave,
+}: {
+  inv: InvId;
+  anchor: DOMRect | null;
+  onClose: () => void;
+  onEnter: () => void;
+  onLeave: () => void;
+}) {
   const game = useGame((s) => s.game) as GameState;
   const cardId = game.invs[inv].cardId;
   const byCard = useOptionsByCard();
@@ -99,7 +156,8 @@ function Sheet({ inv, anchor, onClose, onEnter, onLeave }: { inv: InvId; anchor:
   // outside taps and Escape close it
   useEffect(() => {
     const key = (e: KeyboardEvent) => e.key === "Escape" && onClose();
-    const down = (e: PointerEvent) => !(e.target as Element).closest(".pb-sheet, .pb-avatar") && onClose();
+    const down = (e: PointerEvent) =>
+      !(e.target as Element).closest(".pb-sheet, .pb-avatar") && onClose();
     window.addEventListener("keydown", key);
     window.addEventListener("pointerdown", down);
     return () => {
@@ -108,10 +166,30 @@ function Sheet({ inv, anchor, onClose, onEnter, onLeave }: { inv: InvId; anchor:
     };
   }, [onClose]);
   return (
-    <div className="pb-sheet" onPointerEnter={onEnter} onPointerLeave={onLeave} style={{ left: Math.max(8, Math.min((anchor?.left ?? 8), innerWidth - 440)), top: (anchor?.bottom ?? 60) + 6 }}>
-      <StatBody inv={inv} legal={options.length > 0} dimmed={dimmed} options={options} onPortrait={() => useView.getState().setModal({ card: cardId })} />
+    <div
+      className="pb-sheet"
+      onPointerEnter={onEnter}
+      onPointerLeave={onLeave}
+      style={{
+        left: Math.max(8, Math.min(anchor?.left ?? 8, innerWidth - 440)),
+        top: (anchor?.bottom ?? 60) + 6,
+      }}
+    >
+      <StatBody
+        inv={inv}
+        legal={options.length > 0}
+        dimmed={dimmed}
+        options={options}
+        onPortrait={() => useView.getState().setModal({ card: cardId })}
+      />
       {inv !== decider && (
-        <button className="pb-details" onClick={() => { onClose(); useView.getState().setModal({ inv }); }}>
+        <button
+          className="pb-details"
+          onClick={() => {
+            onClose();
+            useView.getState().setModal({ inv });
+          }}
+        >
           {tr("players.details")}
         </button>
       )}
@@ -141,7 +219,10 @@ export function PlayerBar() {
   const shown = shownInv(game, { viewing });
   const { answers, abilities } = investigatorOptions(game);
   // an investigator whose own card offers an ability glows too: a tap opens the sheet with its button
-  const hasAbility = (inv: InvId) => abilities.some((o) => o.card === game.invs[inv].cardId && byCard.get(o.card!)?.some((x) => x.id === o.id));
+  const hasAbility = (inv: InvId) =>
+    abilities.some(
+      (o) => o.card === game.invs[inv].cardId && byCard.get(o.card!)?.some((x) => x.id === o.id),
+    );
   const answerable = (inv: InvId) => {
     const o = answers.get(inv);
     return o && byCard.get(game.invs[inv].cardId)?.some((x) => x.id === o.id) ? o : null;
@@ -155,8 +236,11 @@ export function PlayerBar() {
     if (answer) return choose(answer.id);
     clearTimers();
     // someone who can act: the switch to them; with a finger the one on screen opens their sheet; anyone else: look at them (a click never opens the sheet with a mouse)
-    if (a.canAct) return useView.getState().setViewing(null), setOpen(null);
-    if (a.shown) return setOpen((o) => (o || !isTouch() ? null : { inv: a.inv, anchor: el.getBoundingClientRect() }));
+    if (a.canAct) return (useView.getState().setViewing(null), setOpen(null));
+    if (a.shown)
+      return setOpen((o) =>
+        o || !isTouch() ? null : { inv: a.inv, anchor: el.getBoundingClientRect() },
+      );
     setOpen(null);
     useView.getState().setViewing(a.inv === decider ? null : a.inv);
   };
@@ -166,16 +250,24 @@ export function PlayerBar() {
     cancelClose.current?.();
     hovered.current = a.inv;
     cancelOpen.current?.();
-    cancelOpen.current = delayed(HOVER_SHEET_MS, () => hovered.current === a.inv, () => {
-      const inv = sheetFor(hovered.current, shown, HOVER_SHEET_MS);
-      if (inv) setOpen({ inv, anchor: el.getBoundingClientRect() });
-    });
+    cancelOpen.current = delayed(
+      HOVER_SHEET_MS,
+      () => hovered.current === a.inv,
+      () => {
+        const inv = sheetFor(hovered.current, shown, HOVER_SHEET_MS);
+        if (inv) setOpen({ inv, anchor: el.getBoundingClientRect() });
+      },
+    );
   };
   const leave = () => {
     hovered.current = null;
     cancelOpen.current?.();
     cancelClose.current?.();
-    cancelClose.current = delayed(SHEET_GRACE_MS, () => true, () => setOpen((o) => (isTouch() ? o : null)));
+    cancelClose.current = delayed(
+      SHEET_GRACE_MS,
+      () => true,
+      () => setOpen((o) => (isTouch() ? o : null)),
+    );
   };
   // the sheet belongs to the table on screen: closed when the view moves on
   useEffect(() => {
@@ -187,14 +279,29 @@ export function PlayerBar() {
   return (
     <div className="player-bar">
       {model.map((a) => (
-        <AvatarButton key={a.inv} a={a} legal={!!answerable(a.inv) || hasAbility(a.inv)} onTap={(el) => tap(a, el)} onEnter={(el, e) => enter(a, el, e)} onLeave={leave} />
+        <AvatarButton
+          key={a.inv}
+          a={a}
+          legal={!!answerable(a.inv) || hasAbility(a.inv)}
+          onTap={(el) => tap(a, el)}
+          onEnter={(el, e) => enter(a, el, e)}
+          onLeave={leave}
+        />
       ))}
       {shown !== decider && decider && (
         <button className="pb-back" onClick={() => useView.getState().setViewing(null)}>
           {tr("players.back", { name: cardText(db, decider, gameStore.getState().locale).name })}
         </button>
       )}
-      {open && <Sheet inv={open.inv} anchor={open.anchor} onClose={() => setOpen(null)} onEnter={() => cancelClose.current?.()} onLeave={leave} />}
+      {open && (
+        <Sheet
+          inv={open.inv}
+          anchor={open.anchor}
+          onClose={() => setOpen(null)}
+          onEnter={() => cancelClose.current?.()}
+          onLeave={leave}
+        />
+      )}
     </div>
   );
 }

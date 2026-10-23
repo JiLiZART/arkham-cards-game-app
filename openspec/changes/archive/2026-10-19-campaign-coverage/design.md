@@ -12,7 +12,7 @@ In-force ADRs: 0001 to 0011, none superseded. 0007 (generated campaigns, hand-wr
 
 ## Decisions
 
-1. **Coverage is computed offline and committed, not computed in the browser.** `src/content/coverage.ts` is pure (`packCoverage(db)`, `campaignCoverage(db, id)`) over a fully loaded content db; `scripts/coverage.ts` loads everything from disk and writes `content/coverage.json`; the loader reads it eagerly like `pack-index.json`. *Why:* the browser has neither the generated scenarios nor the packs before a pick, and loading all packs to draw the picker would cost the first download. *Alternative:* compute at run time after `loadAllPacks`: rejected for the cost. *Alternative:* a `complete: true` flag written by hand into each campaign file: rejected, it would drift from the cards.
+1. **Coverage is computed offline and committed, not computed in the browser.** `src/content/coverage.ts` is pure (`packCoverage(db)`, `campaignCoverage(db, id)`) over a fully loaded content db; `scripts/coverage.ts` loads everything from disk and writes `content/coverage.json`; the loader reads it eagerly like `pack-index.json`. _Why:_ the browser has neither the generated scenarios nor the packs before a pick, and loading all packs to draw the picker would cost the first download. _Alternative:_ compute at run time after `loadAllPacks`: rejected for the cost. _Alternative:_ a `complete: true` flag written by hand into each campaign file: rejected, it would drift from the cards.
 
 2. **The check guards the file.** `check:content` computes the same report and fails when it differs from the committed file ("content/coverage.json is behind the content (npm run coverage)"), the pattern the README credits already use. Coverage moves only by changing content and rerunning the command, so a pack change's diff shows its coverage going up.
 
@@ -22,7 +22,7 @@ In-force ADRs: 0001 to 0011, none superseded. 0007 (generated campaigns, hand-wr
 
 5. **One campaign shape.** Night of the Zealot's `campaign.json` gains `packs`, `card` and `cards`, written by hand, and `check:content` checks every campaign's `cards` against its scenarios' reference cards, agendas and acts, so a hand-written list can't drift. The run-time fallback in `CampaignSheet` goes, so a moved campaign and Night of the Zealot are read the same way.
 
-6. **The program is a document, each pack a change.** `docs/campaign-program.md` is generated from the coverage report the first time (counts, packs in play order) and then kept by hand: each pack's change ticks its row. One change per pack keeps every change the size of Night of the Zealot's work or smaller, each playable on its own. A cycle's new mechanics (supplies, keys, partners…) come as a change of their own before that cycle's first pack. *Alternative:* one change per campaign: rejected by the user (too large to review or ship).
+6. **The program is a document, each pack a change.** `docs/campaign-program.md` is generated from the coverage report the first time (counts, packs in play order) and then kept by hand: each pack's change ticks its row. One change per pack keeps every change the size of Night of the Zealot's work or smaller, each playable on its own. A cycle's new mechanics (supplies, keys, partners…) come as a change of their own before that cycle's first pack. _Alternative:_ one change per campaign: rejected by the user (too large to review or ship).
 
 ## Risks / Trade-offs
 

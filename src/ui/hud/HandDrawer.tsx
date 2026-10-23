@@ -59,13 +59,26 @@ export function HandDrawer() {
   if (!open) {
     const peek = peekLayout(hand.length, innerWidth, legal);
     return (
-      <button className="hand-drawer" data-tip="hand" aria-label={t(db, locale, "phone.hand")} onClick={() => setDrawer("hand")} onPointerDown={down} onPointerMove={move} onPointerUp={up}>
+      <button
+        className="hand-drawer"
+        data-tip="hand"
+        aria-label={t(db, locale, "phone.hand")}
+        onClick={() => setDrawer("hand")}
+        onPointerDown={down}
+        onPointerMove={move}
+        onPointerUp={up}
+      >
         {hand.map((id, i) => (
           <span
             key={id}
             data-card={id}
             className={`peek-card ${legal[i] ? "legal" : ""} ${outsideSpotlight(spotlight, id) ? "dimmed" : ""}`}
-            style={{ left: peek[i].x, width: peek[i].w, height: peek[i].w * 1.4, bottom: peek[i].visible - peek[i].w * 1.4 }}
+            style={{
+              left: peek[i].x,
+              width: peek[i].w,
+              height: peek[i].w * 1.4,
+              bottom: peek[i].visible - peek[i].w * 1.4,
+            }}
           >
             <CardFace code={game.cards[id].code} locale={locale} />
           </span>
@@ -77,7 +90,13 @@ export function HandDrawer() {
   return (
     <>
       <div className="drawer-shade hand-shade" onClick={() => setDrawer(null)} />
-      <div className="hand-drawer open" data-tip="hand" onPointerDown={down} onPointerMove={move} onPointerUp={up}>
+      <div
+        className="hand-drawer open"
+        data-tip="hand"
+        onPointerDown={down}
+        onPointerMove={move}
+        onPointerUp={up}
+      >
         {hand.map((id, i) => {
           const s = o.slots[i];
           return (
@@ -85,7 +104,13 @@ export function HandDrawer() {
               key={id}
               data-card={id}
               className={`hand-card ${legal[i] ? "legal" : ""} ${outsideSpotlight(spotlight, id) ? "dimmed" : ""}`}
-              style={{ left: s.x - o.w / 2, width: o.w, height: o.h, transform: `rotate(${s.rotate}deg)`, zIndex: i + 1 }}
+              style={{
+                left: s.x - o.w / 2,
+                width: o.w,
+                height: o.h,
+                transform: `rotate(${s.rotate}deg)`,
+                zIndex: i + 1,
+              }}
               title={cardText(db, game.cards[id].code, locale).name}
               onClick={(e) => pick(id, e.currentTarget)}
             >

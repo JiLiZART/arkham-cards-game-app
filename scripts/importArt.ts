@@ -12,11 +12,23 @@ export interface ArtEntry {
   source: string;
 }
 
-const entry = (name: string, image: string, mask: string, width: number, source: string): ArtEntry => ({ name, image, mask, width, page: Number(image.slice(0, 3)), source });
+const entry = (
+  name: string,
+  image: string,
+  mask: string,
+  width: number,
+  source: string,
+): ArtEntry => ({ name, image, mask, width, page: Number(image.slice(0, 3)), source });
 
 /** the images used, found by looking at every large image of the rulebook (ahc100_rulebook-web.pdf) */
 export const ART: ArtEntry[] = [
-  entry("title", "024-922", "024-923", 1400, "the cover painting without the logo, fading into the dark"),
+  entry(
+    "title",
+    "024-922",
+    "024-923",
+    1400,
+    "the cover painting without the logo, fading into the dark",
+  ),
   entry("parchment", "006-354", "006-355", 1000, "a portrait page with the vine border"),
   entry("parchment-wide", "002-003", "002-004", 1600, "a landscape page with the vine border"),
   entry("class-guardian", "025-925", "025-926", 1000, "a page with the Guardian emblem"),
@@ -51,7 +63,23 @@ export const artFile = (dir: string, object: string) => join(dir, `i-${object}.p
 /** ImageMagick arguments: the image with its mask as alpha, laid on the page colour, resized, written as WebP */
 export function magickArgs(a: ArtEntry, dir: string, out: string, pages?: number[]): string[] {
   const local = (o: string) => (pages ? pageLocal(pages, o) : o);
-  return [artFile(dir, local(a.image)), artFile(dir, local(a.mask)), "-alpha", "off", "-channel-fx", "| gray=>alpha", "-background", PAGE_COLOUR, "-flatten", "-resize", `${a.width}x`, "-strip", "-quality", "80", out];
+  return [
+    artFile(dir, local(a.image)),
+    artFile(dir, local(a.mask)),
+    "-alpha",
+    "off",
+    "-channel-fx",
+    "| gray=>alpha",
+    "-background",
+    PAGE_COLOUR,
+    "-flatten",
+    "-resize",
+    `${a.width}x`,
+    "-strip",
+    "-quality",
+    "80",
+    out,
+  ];
 }
 
 export interface ArtManifest {
@@ -61,6 +89,7 @@ export interface ArtManifest {
 
 export function manifestOf(source: string, entries: ArtEntry[]): ArtManifest {
   const files: ArtManifest["files"] = {};
-  for (const a of [...entries].sort((x, y) => (x.name < y.name ? -1 : 1))) files[a.name] = { file: `${a.name}.webp`, page: a.page, object: a.image, note: a.source };
+  for (const a of [...entries].sort((x, y) => (x.name < y.name ? -1 : 1)))
+    files[a.name] = { file: `${a.name}.webp`, page: a.page, object: a.image, note: a.source };
   return { source, files };
 }

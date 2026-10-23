@@ -40,7 +40,12 @@ describe("insetsFor", () => {
 
   it("the phone insets are the bar, the strip column and the hand drawer, plus the safe areas", () => {
     expect(insetsFor("phone")).toEqual(PHONE_INSETS);
-    expect(insetsFor("phone", { top: 0, right: 47, bottom: 21, left: 47 })).toEqual({ top: PHONE_INSETS.top, right: PHONE_INSETS.right + 47, bottom: PHONE_INSETS.bottom + 21, left: 47 });
+    expect(insetsFor("phone", { top: 0, right: 47, bottom: 21, left: 47 })).toEqual({
+      top: PHONE_INSETS.top,
+      right: PHONE_INSETS.right + 47,
+      bottom: PHONE_INSETS.bottom + 21,
+      left: 47,
+    });
   });
 });
 

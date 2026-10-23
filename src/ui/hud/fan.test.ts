@@ -1,5 +1,20 @@
 import { describe, expect, it } from "vitest";
-import { boxTransform, dockRadius, dockRect, dockTransform, dockWeight, FAN_CARD_H, FAN_CARD_W, fanLayout, fanWidth, HOVER_LIFT, hoverScale, showBox, statBarW, statBarZoom } from "./fan";
+import {
+  boxTransform,
+  dockRadius,
+  dockRect,
+  dockTransform,
+  dockWeight,
+  FAN_CARD_H,
+  FAN_CARD_W,
+  fanLayout,
+  fanWidth,
+  HOVER_LIFT,
+  hoverScale,
+  showBox,
+  statBarW,
+  statBarZoom,
+} from "./fan";
 
 describe("hand fan size", () => {
   it("rests at 225×315 and hovers at 1.28× (about 288×403)", () => {
@@ -70,7 +85,9 @@ describe("dock magnification", () => {
   });
   it("full weight is unrotated, lifted and scaled to the hover zoom; zero weight is the resting arc", () => {
     const slot = { x: 0, y: 10, rotate: 6 };
-    expect(dockTransform(slot, 1, hoverScale(1080))).toBe(`translateY(${HOVER_LIFT}px) rotate(0deg) scale(1.28)`);
+    expect(dockTransform(slot, 1, hoverScale(1080))).toBe(
+      `translateY(${HOVER_LIFT}px) rotate(0deg) scale(1.28)`,
+    );
     expect(dockTransform(slot, 0, 1.28, 36)).toBe("translateY(-26px) rotate(6deg) scale(1)");
   });
 });
@@ -88,8 +105,12 @@ describe("dockRect", () => {
 describe("flight keyframes", () => {
   it("boxTransform maps the card's untransformed box onto a screen box (identity for its own box)", () => {
     // untransformed card at slot x 200 in a fan starting at 432, window 900 tall: box 519.5..744.5 x 758..1073
-    expect(boxTransform({ x: 519.5, y: 758, w: 225, h: 315 }, 200, 432, 900)).toBe("translate(0px, 0px) scale(1)");
-    expect(boxTransform({ x: 20, y: 300, w: 45, h: 63 }, 200, 432, 900)).toBe("translate(-589.5px, -710px) scale(0.2)");
+    expect(boxTransform({ x: 519.5, y: 758, w: 225, h: 315 }, 200, 432, 900)).toBe(
+      "translate(0px, 0px) scale(1)",
+    );
+    expect(boxTransform({ x: 20, y: 300, w: 45, h: 63 }, 200, 432, 900)).toBe(
+      "translate(-589.5px, -710px) scale(0.2)",
+    );
   });
   it("showBox sits above the hand at about the hover size, inside the window", () => {
     const b = showBox(1600, 900);
@@ -103,7 +124,14 @@ describe("the phone's hand drawer", () => {
   it("collapsed: the top 60 px of each card peeks, playable cards 20 px higher, within the screen", async () => {
     const { peekLayout, PEEK, PEEK_RAISE } = await import("./fan");
     const p = peekLayout(6, 852, [false, true, false, true, false, false]);
-    expect(p.map((c) => c.visible)).toEqual([PEEK, PEEK + PEEK_RAISE, PEEK, PEEK + PEEK_RAISE, PEEK, PEEK]);
+    expect(p.map((c) => c.visible)).toEqual([
+      PEEK,
+      PEEK + PEEK_RAISE,
+      PEEK,
+      PEEK + PEEK_RAISE,
+      PEEK,
+      PEEK,
+    ]);
     expect(PEEK).toBe(60);
     expect(PEEK_RAISE).toBe(20);
     for (const c of p) expect(c.x).toBeGreaterThanOrEqual(0);

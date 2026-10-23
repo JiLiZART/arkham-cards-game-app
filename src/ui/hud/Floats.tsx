@@ -21,7 +21,15 @@ interface Float {
 }
 
 /** feed entries with no animation of their own that get a sound as they appear (the feed is on the animation clock, ADR-0002) */
-const ENTRY_MOMENT: Record<string, string> = { resource: "resource", heal: "heal", evade: "evade", engage: "engage", discard: "discard", move: "move", reveal: "reveal" };
+const ENTRY_MOMENT: Record<string, string> = {
+  resource: "resource",
+  heal: "heal",
+  evade: "evade",
+  engage: "engage",
+  discard: "discard",
+  move: "move",
+  reveal: "reveal",
+};
 
 /** where a float rises from: the actor's portrait or card on the map, or the screen centre if it isn't visible */
 function anchorOf(e: FeedEntry): { x: number; y: number } {
@@ -30,7 +38,8 @@ function anchorOf(e: FeedEntry): { x: number; y: number } {
   const p = a?.inv ? mapProjector.mini(a.inv) : null;
   const r = !p && a?.card ? mapProjector.rect(a.card) : null;
   const pt = p ?? (r ? { x: (r.x0 + r.x1) / 2, y: r.y0 + (r.y1 - r.y0) * 0.3 } : null);
-  if (!pt || pt.x < 40 || pt.x > innerWidth - 40 || pt.y < 60 || pt.y > innerHeight - 60) return centre;
+  if (!pt || pt.x < 40 || pt.x > innerWidth - 40 || pt.y < 60 || pt.y > innerHeight - 60)
+    return centre;
   return pt;
 }
 
@@ -60,7 +69,8 @@ export function ActionFloats() {
       const e = entries.get(i);
       if (e && ENTRY_MOMENT[e.kind]) heard.current.push(ENTRY_MOMENT[e.kind]);
       // only the big moments float (phase changes get the chapter title)
-      if (e && FLOAT_KINDS.has(e.kind)) fresh.push({ key: i, entry: e, born: 0, life: floatLife(e.parts) });
+      if (e && FLOAT_KINDS.has(e.kind))
+        fresh.push({ key: i, entry: e, born: 0, life: floatLife(e.parts) });
     }
     seen.current.shown = shown;
     pending.current.push(...(fresh.length > BURST ? fresh.slice(-MAX_VISIBLE) : fresh));
@@ -81,7 +91,8 @@ export function ActionFloats() {
       setActive((list) => {
         let next = list.filter((f) => now - f.born < f.life);
         const last = next.at(-1)?.born ?? 0;
-        if (free && pending.current.length && next.length < MAX_VISIBLE && now - last >= STAGGER_MS) next = [...next, { ...pending.current.shift()!, born: now }];
+        if (free && pending.current.length && next.length < MAX_VISIBLE && now - last >= STAGGER_MS)
+          next = [...next, { ...pending.current.shift()!, born: now }];
         return next.length === list.length && next.every((f, k) => f === list[k]) ? list : next;
       });
     }, 60);
@@ -98,7 +109,11 @@ export function ActionFloats() {
           return Math.abs(b.x - at.x) < 40 && Math.abs(b.y - at.y) < 40;
         }).length;
         return (
-          <div key={f.key} className="action-float" style={{ left: at.x, top: at.y - sameSpot * 44, ["--life" as string]: `${f.life}ms` }}>
+          <div
+            key={f.key}
+            className="action-float"
+            style={{ left: at.x, top: at.y - sameSpot * 44, ["--life" as string]: `${f.life}ms` }}
+          >
             <Sentence parts={f.entry.parts} size={30} />
           </div>
         );
@@ -117,7 +132,12 @@ const HIT_GAP_MS = 550;
 export function hitOf(e: GameEvent): { source: InstId; inv: InvId } | null {
   const source = e.data?.source as InstId | null | undefined;
   if (!source || !e.inv) return null;
-  if (e.type === "damage" || (e.type === "resource" && e.data?.lost) || (e.type === "clues" && e.data?.placed)) return { source, inv: e.inv };
+  if (
+    e.type === "damage" ||
+    (e.type === "resource" && e.data?.lost) ||
+    (e.type === "clues" && e.data?.placed)
+  )
+    return { source, inv: e.inv };
   return null;
 }
 
@@ -147,10 +167,24 @@ function playHit(source: InstId, inv: InvId) {
   if (!from) return;
   const pulse = document.createElement("div");
   pulse.className = "hit-pulse";
-  Object.assign(pulse.style, { left: `${from.x}px`, top: `${from.y}px`, width: `${from.w}px`, height: `${from.h}px` });
+  Object.assign(pulse.style, {
+    left: `${from.x}px`,
+    top: `${from.y}px`,
+    width: `${from.w}px`,
+    height: `${from.h}px`,
+  });
   document.body.appendChild(pulse);
-  pulse.animate([{ opacity: 0, transform: "scale(1)" }, { opacity: 1, transform: "scale(1.04)", offset: 0.3 }, { opacity: 0, transform: "scale(1)" }], { duration: 700, easing: "ease-out" })
-    .finished.catch(() => undefined).finally(() => pulse.remove());
+  pulse
+    .animate(
+      [
+        { opacity: 0, transform: "scale(1)" },
+        { opacity: 1, transform: "scale(1.04)", offset: 0.3 },
+        { opacity: 0, transform: "scale(1)" },
+      ],
+      { duration: 700, easing: "ease-out" },
+    )
+    .finished.catch(() => undefined)
+    .finally(() => pulse.remove());
   if (reducedMotion()) return;
   const to = targetEl(inv);
   if (!to.box) return;
@@ -161,17 +195,34 @@ function playHit(source: InstId, inv: InvId) {
   Object.assign(streak.style, { left: `${c1.x - 14}px`, top: `${c1.y - 14}px` });
   document.body.appendChild(streak);
   const angle = Math.atan2(c1.y - c0.y, c1.x - c0.x);
-  streak.animate(
-    [
-      { transform: `translate(${c0.x - c1.x}px, ${c0.y - c1.y}px) rotate(${angle}rad) scale(0.6, 0.6)`, opacity: 0 },
-      { transform: `translate(${(c0.x - c1.x) * 0.6}px, ${(c0.y - c1.y) * 0.6}px) rotate(${angle}rad) scale(2.4, 0.8)`, opacity: 1, offset: 0.4 },
-      { transform: `translate(0, 0) rotate(${angle}rad) scale(1, 1)`, opacity: 1 },
-    ],
-    { duration: HIT_MS, delay: 150, easing: "cubic-bezier(.5,0,.6,1)", fill: "backwards" },
-  ).finished.catch(() => undefined).finally(() => {
-    streak.remove();
-    to.el?.animate([{ filter: "drop-shadow(0 0 0 #f33)", transform: "scale(1)" }, { filter: "drop-shadow(0 0 18px #f33)", transform: "scale(1.08)" }, { filter: "drop-shadow(0 0 0 #f33)", transform: "scale(1)" }], { duration: 420, easing: "ease-out" });
-  });
+  streak
+    .animate(
+      [
+        {
+          transform: `translate(${c0.x - c1.x}px, ${c0.y - c1.y}px) rotate(${angle}rad) scale(0.6, 0.6)`,
+          opacity: 0,
+        },
+        {
+          transform: `translate(${(c0.x - c1.x) * 0.6}px, ${(c0.y - c1.y) * 0.6}px) rotate(${angle}rad) scale(2.4, 0.8)`,
+          opacity: 1,
+          offset: 0.4,
+        },
+        { transform: `translate(0, 0) rotate(${angle}rad) scale(1, 1)`, opacity: 1 },
+      ],
+      { duration: HIT_MS, delay: 150, easing: "cubic-bezier(.5,0,.6,1)", fill: "backwards" },
+    )
+    .finished.catch(() => undefined)
+    .finally(() => {
+      streak.remove();
+      to.el?.animate(
+        [
+          { filter: "drop-shadow(0 0 0 #f33)", transform: "scale(1)" },
+          { filter: "drop-shadow(0 0 18px #f33)", transform: "scale(1.08)" },
+          { filter: "drop-shadow(0 0 0 #f33)", transform: "scale(1)" },
+        ],
+        { duration: 420, easing: "ease-out" },
+      );
+    });
 }
 
 /** plays a hit for each log entry as it is shown (in step with the event animations); one effect's hits together */
@@ -202,16 +253,18 @@ export function HitFx() {
     if (!queue.current.length) return;
     const fresh = queue.current.splice(0);
     // after the cards on screen have landed (a location revealed by the move flips first) and the middle is free
-    whenStageFree(() => whenSettled(() => {
-      let last: InstId | null = null;
-      let at = Math.max(performance.now(), nextFree.current);
-      for (const h of fresh) {
-        if (last && h.source !== last) at += HIT_GAP_MS;
-        last = h.source;
-        setTimeout(() => playHit(h.source, h.inv), Math.max(0, at - performance.now()));
-      }
-      nextFree.current = at + HIT_GAP_MS;
-    }));
+    whenStageFree(() =>
+      whenSettled(() => {
+        let last: InstId | null = null;
+        let at = Math.max(performance.now(), nextFree.current);
+        for (const h of fresh) {
+          if (last && h.source !== last) at += HIT_GAP_MS;
+          last = h.source;
+          setTimeout(() => playHit(h.source, h.inv), Math.max(0, at - performance.now()));
+        }
+        nextFree.current = at + HIT_GAP_MS;
+      }),
+    );
   });
   return null;
 }

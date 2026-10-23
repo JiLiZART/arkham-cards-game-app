@@ -18,6 +18,7 @@
   - hidden behind the hand-off screen.
 
   Verify manually with a screenshot sequence over three quick events: each drops in at the top, the older ones move down and fade, and the oldest leaves at the bottom. Also check that clicking a thumbnail opens the card modal.
+
 - [x] 3.2 Journal: the navbar Log button becomes Journal and switches the column to the full scrollable history (newest first, no fading, opened at the top, new entries appear at the top, Escape returns). Remove `LogPanel`. Verify manually after two rounds: scroll down to the scenario start, then toggle back to the live feed.
 - [x] 3.3 Action floats: for each new entry, the styled sentence rises and fades from the acting investigator's portrait, or the enemy's card, on the map, following camera moves. It falls back to the centre when there is no on-screen actor. Floats are staggered 350 ms, at most three visible, last three only on bursts over six, and never take the pointer. Remove the plain-text event banner. Verify manually: Roland's resource action rises from his portrait, an enemy attack rises from the enemy's card, a doom entry rises from the centre, and starting a scenario doesn't flood the screen.
 

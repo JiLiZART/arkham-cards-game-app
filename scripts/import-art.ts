@@ -15,14 +15,30 @@ const OUT = "public/art";
 const dir = mkdtempSync(join(tmpdir(), "rulebook-art-"));
 try {
   // pdfimages counts images over the whole document, but extracting a page numbers them from 0: the list maps one to the other
-  const list = pagesOfList(execFileSync("pdfimages", ["-list", PDF], { maxBuffer: 1 << 26 }).toString());
+  const list = pagesOfList(
+    execFileSync("pdfimages", ["-list", PDF], { maxBuffer: 1 << 26 }).toString(),
+  );
   const pages = [...new Set(ART.map((a) => a.page))];
-  for (const p of pages) execFileSync("pdfimages", ["-png", "-p", "-f", String(p), "-l", String(p), PDF, join(dir, "i")]);
+  for (const p of pages)
+    execFileSync("pdfimages", [
+      "-png",
+      "-p",
+      "-f",
+      String(p),
+      "-l",
+      String(p),
+      PDF,
+      join(dir, "i"),
+    ]);
   mkdirSync(OUT, { recursive: true });
   mkdirSync("content/art", { recursive: true });
-  for (const a of ART) execFileSync("magick", magickArgs(a, dir, join(OUT, `${a.name}.webp`), list));
+  for (const a of ART)
+    execFileSync("magick", magickArgs(a, dir, join(OUT, `${a.name}.webp`), list));
   writeFileSync("content/art/art.json", JSON.stringify(manifestOf(PDF, ART), null, 1) + "\n");
-  for (const a of ART) console.log(`${a.name.padEnd(16)} ${(statSync(join(OUT, `${a.name}.webp`)).size / 1024).toFixed(0)} KB`);
+  for (const a of ART)
+    console.log(
+      `${a.name.padEnd(16)} ${(statSync(join(OUT, `${a.name}.webp`)).size / 1024).toFixed(0)} KB`,
+    );
 } finally {
   rmSync(dir, { recursive: true, force: true });
 }

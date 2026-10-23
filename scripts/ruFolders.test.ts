@@ -29,7 +29,15 @@ describe("parseImageName", () => {
   });
 
   it("leaves everything else alone: minis, helps, act sides, variants", () => {
-    for (const n of ["01mini_a.png", "Help1.png", "68 Act 2 A.jpg", "178b-5.png", "NC-back.png", "notes.txt"]) expect(parseImageName(n)).toBeNull();
+    for (const n of [
+      "01mini_a.png",
+      "Help1.png",
+      "68 Act 2 A.jpg",
+      "178b-5.png",
+      "NC-back.png",
+      "notes.txt",
+    ])
+      expect(parseImageName(n)).toBeNull();
   });
 });
 
@@ -94,7 +102,9 @@ describe("resolveFolder", () => {
 describe("resolveFolder in a starter deck", () => {
   it("NC_09_2 in the first starter deck is card 60109", () => {
     const codes = new Map<string, CodeInfo>([["60109", { quantity: 2, doubleSided: false }]]);
-    expect(resolveFolder("SD_01_Nathaniel_Cho", ["NC_09_2.png"], codes).picks).toEqual([{ code: "60109", side: "front", file: "NC_09_2.png" }]);
+    expect(resolveFolder("SD_01_Nathaniel_Cho", ["NC_09_2.png"], codes).picks).toEqual([
+      { code: "60109", side: "front", file: "NC_09_2.png" },
+    ]);
   });
 });
 
@@ -117,6 +127,12 @@ describe("pdfScope", () => {
   });
 
   it("tokens, the playmat and the superseded sheet are not cards", () => {
-    for (const f of ["playmat.pdf", "Arkham Horror The Card Game - жетоны.pdf", "Жетоны Иннсмут.pdf", "SD_01-05(old).pdf"]) expect(pdfScope(f)).toBeNull();
+    for (const f of [
+      "playmat.pdf",
+      "Arkham Horror The Card Game - жетоны.pdf",
+      "Жетоны Иннсмут.pdf",
+      "SD_01-05(old).pdf",
+    ])
+      expect(pdfScope(f)).toBeNull();
   });
 });

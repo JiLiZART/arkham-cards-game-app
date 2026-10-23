@@ -26,7 +26,8 @@ type Mark = number | "none" | "current";
 const EXCERPT = 10;
 const STORE = "ah:soundPicks";
 
-const inGroup = (slot: string, g: Group) => g === "all" || slot.startsWith(`${g}:`) || (g === "card" && slot.startsWith("trait:"));
+const inGroup = (slot: string, g: Group) =>
+  g === "all" || slot.startsWith(`${g}:`) || (g === "card" && slot.startsWith("trait:"));
 
 function loadMarks(): Record<string, Mark> {
   try {
@@ -56,13 +57,23 @@ export default function SoundPicker({ onClose }: { onClose: () => void }) {
 
   useEffect(() => {
     fetch(`${BASE}/__sounds/candidates`)
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`the dev server answered ${r.status}`))))
+      .then((r) =>
+        r.ok ? r.json() : Promise.reject(new Error(`the dev server answered ${r.status}`)),
+      )
       .then((c: SoundCandidates) => {
         setCands(c);
         // marks for slots that no longer exist, or past a shortened list, are dropped
-        setMarks((m) => Object.fromEntries(Object.entries(m).filter(([k, v]) => c.slots[k] && (typeof v !== "number" || v < c.slots[k].candidates.length))));
+        setMarks((m) =>
+          Object.fromEntries(
+            Object.entries(m).filter(
+              ([k, v]) => c.slots[k] && (typeof v !== "number" || v < c.slots[k].candidates.length),
+            ),
+          ),
+        );
       })
-      .catch((e: Error) => setError(`${e.message}. Run npm run import:sounds -- --candidates and start npm run dev.`));
+      .catch((e: Error) =>
+        setError(`${e.message}. Run npm run import:sounds -- --candidates and start npm run dev.`),
+      );
     return () => audio.stopAudition();
   }, []);
   useEffect(() => saveMarks(marks), [marks]);
@@ -70,7 +81,13 @@ export default function SoundPicker({ onClose }: { onClose: () => void }) {
   const all = Object.keys(cands?.slots ?? {});
   const left = all.filter((s) => marks[s] === undefined);
   const slots = useMemo(
-    () => Object.entries(cands?.slots ?? {}).filter(([id, s]) => inGroup(id, group) && (!open || marks[id] === undefined) && `${id} ${s.where}`.toLowerCase().includes(query.toLowerCase())),
+    () =>
+      Object.entries(cands?.slots ?? {}).filter(
+        ([id, s]) =>
+          inGroup(id, group) &&
+          (!open || marks[id] === undefined) &&
+          `${id} ${s.where}`.toLowerCase().includes(query.toLowerCase()),
+      ),
     [cands, group, query, open, marks],
   );
   const mark = (slot: string, m: Mark) => setMarks((x) => ({ ...x, [slot]: m }));
@@ -80,13 +97,28 @@ export default function SoundPicker({ onClose }: { onClose: () => void }) {
     if (!id || id === "none") return audio.stopAudition();
     if (music) {
       const t = manifest.music[id];
-      void audio.audition(asset(`sounds/${t.file}.${document.createElement("audio").canPlayType('audio/mp4; codecs="mp4a.40.2"') ? "m4a" : "webm"}`), "music", t.gain, t.loopStart ?? 0, EXCERPT);
+      void audio.audition(
+        asset(
+          `sounds/${t.file}.${document.createElement("audio").canPlayType('audio/mp4; codecs="mp4a.40.2"') ? "m4a" : "webm"}`,
+        ),
+        "music",
+        t.gain,
+        t.loopStart ?? 0,
+        EXCERPT,
+      );
     } else {
       const c = manifest.effects[id];
       void audio.audition(asset(`sounds/${c.file}`), "effects", c.gain);
     }
   };
-  const playCandidate = (preview: string, music: boolean) => void audio.audition(`${BASE}/__sounds-src/${preview}`, music ? "music" : "effects", 1, 0, music ? EXCERPT : undefined);
+  const playCandidate = (preview: string, music: boolean) =>
+    void audio.audition(
+      `${BASE}/__sounds-src/${preview}`,
+      music ? "music" : "effects",
+      1,
+      0,
+      music ? EXCERPT : undefined,
+    );
 
   const apply = async () => {
     setApplying(true);
@@ -94,12 +126,24 @@ export default function SoundPicker({ onClose }: { onClose: () => void }) {
     audio.stopAudition();
     try {
       const choices = Object.entries(marks).map(([slot, candidate]) => ({ slot, candidate }));
-      const r = await fetch(`${BASE}/__sounds/choose`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ choices }) });
-      const body = (await r.json()) as { manifest?: SoundManifest; imported?: string[]; error?: string };
-      if (!r.ok || !body.manifest) throw new Error(body.error ?? `the dev server answered ${r.status}`);
+      const r = await fetch(`${BASE}/__sounds/choose`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ choices }),
+      });
+      const body = (await r.json()) as {
+        manifest?: SoundManifest;
+        imported?: string[];
+        error?: string;
+      };
+      if (!r.ok || !body.manifest)
+        throw new Error(body.error ?? `the dev server answered ${r.status}`);
       // the live game uses the new manifest from now on; the rewritten files are fetched afresh
       (db as { sounds: SoundManifest }).sounds = body.manifest;
-      audio.forget(Object.values(body.manifest.effects).map((c) => c.file), Object.values(body.manifest.music).map((t) => t.file));
+      audio.forget(
+        Object.values(body.manifest.effects).map((c) => c.file),
+        Object.values(body.manifest.music).map((t) => t.file),
+      );
       setManifest(body.manifest);
       setMarks({});
       setResult(`Applied: ${body.imported?.length ?? 0} files converted, sounds.json rewritten.`);
@@ -121,14 +165,29 @@ export default function SoundPicker({ onClose }: { onClose: () => void }) {
             </button>
           ))}
         </div>
-        <input placeholder="Search a slot" value={query} onChange={(e) => setQuery(e.target.value)} aria-label="Search a slot" />
+        <input
+          placeholder="Search a slot"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          aria-label="Search a slot"
+        />
         <label className="sp-open">
-          <input type="checkbox" checked={open} onChange={(e) => setOpen(e.target.checked)} /> Not chosen yet
+          <input type="checkbox" checked={open} onChange={(e) => setOpen(e.target.checked)} /> Not
+          chosen yet
         </label>
         <span className="sp-count">
           {all.length - left.length} / {all.length} chosen
         </span>
-        <button className="primary" disabled={applying || !all.length || left.length > 0} onClick={apply} title={left.length ? `Still to choose: ${left.join(", ")}` : "Write every choice to sounds.json and convert the files"}>
+        <button
+          className="primary"
+          disabled={applying || !all.length || left.length > 0}
+          onClick={apply}
+          title={
+            left.length
+              ? `Still to choose: ${left.join(", ")}`
+              : "Write every choice to sounds.json and convert the files"
+          }
+        >
           {applying ? "Applying…" : left.length ? `Apply (${left.length} left)` : "Apply all"}
         </button>
         <button onClick={onClose}>Close</button>
@@ -139,7 +198,8 @@ export default function SoundPicker({ onClose }: { onClose: () => void }) {
         {slots.map(([slot, s]) => {
           const music = s.kind === "music";
           const now = clipAt(manifest, slot);
-          const clip = !now || now === "none" ? null : music ? manifest.music[now] : manifest.effects[now];
+          const clip =
+            !now || now === "none" ? null : music ? manifest.music[now] : manifest.effects[now];
           const m = marks[slot];
           return (
             <div key={slot} className={`sp-slot ${m !== undefined ? "chosen" : ""}`}>
@@ -154,7 +214,11 @@ export default function SoundPicker({ onClose }: { onClose: () => void }) {
                     mark(slot, "current");
                     playCurrent(slot, music);
                   }}
-                  title={clip ? `keep the current sound\n${clip.author} · ${clip.source}` : "keep it silent, as it is now"}
+                  title={
+                    clip
+                      ? `keep the current sound\n${clip.author} · ${clip.source}`
+                      : "keep it silent, as it is now"
+                  }
                 >
                   ▶ Now{clip ? `: ${now}` : ": none"}
                 </button>
@@ -169,7 +233,9 @@ export default function SoundPicker({ onClose }: { onClose: () => void }) {
                     title={`${c.description}\n${c.author} · ${c.source}${c.seam !== undefined ? `\nloop seam ${c.seam} dB` : ""}`}
                   >
                     ▶ {i + 1}
-                    {c.seam !== undefined && <small className={c.seam > 6 ? "sp-bad" : ""}> {c.seam} dB</small>}
+                    {c.seam !== undefined && (
+                      <small className={c.seam > 6 ? "sp-bad" : ""}> {c.seam} dB</small>
+                    )}
                   </button>
                 ))}
                 {!music && (

@@ -13,11 +13,13 @@ In-force ADRs: 0001–0006; ADR-0002 (presentation follows the clock) and ADR-00
 ## Goals / Non-Goals
 
 **Goals:**
+
 - Done reachable in every commit window, in every phase.
 - The line and the strip on one axis.
 - A one-tap report the player can paste into a message, and a paste box that recreates the table from it.
 
 **Non-Goals:**
+
 - Changing when captions show during events, or the showcase rule.
 - A bug-report backend; the report is clipboard text.
 
@@ -35,12 +37,15 @@ In-force ADRs: 0001–0006; ADR-0002 (presentation follows the clock) and ADR-00
 ## Decisions
 
 ### 1. Only the test screen's hold is transparent to the caption
+
 `captionStageBusy(stage: string[])` in `feed.ts`: true when any stage key doesn't start with `test:`. `useCaption` passes that instead of `stage.length > 0`. The showcase (`showcase`), titles, pauses and held events keep the caption as before; the test screen, which is the player's interaction surface, does not. Alternative rejected: making `InstructionBar` win over the caption whenever a choice is pending; it would also show buttons under the hand showcase after an upkeep draw, where the spec wants the caption.
 
 ### 2. Centre the line with a transform
+
 `.st-middle { left: 50%; right: auto; width: 440px; translate: -50% 0; }` keeps the column's top and bottom and centres it on the screen like the strip. The draw stage's own layout is untouched. At 1280 px the placed cards (right: 360 px, 290 px wide) start at 630 px, inside the column's right edge (860 px); the line is a 220 px pill in the middle, so no overlap in practice; verified at 1280 and 1600.
 
 ### 3. The report is the replay log plus context
+
 `exportReport()` in `store.ts` returns `JSON.stringify({ version: ENGINE_VERSION, app: <package version>, setup, actions, campaign, settings: { locale, privacy, drawByHand, pace }, view: { viewing }, pending: game.pending && { inv, kind, prompt } })`. `importReport(json)` applies the settings then `importLog` (which already tolerates an unknown campaign). The DebugPanel's Copy report uses `navigator.clipboard.writeText`, and on rejection fills the panel's text box with the report and selects it. Paste report… toggles a textarea with a Load button calling `importReport`, errors shown in the panel (no `alert`). The app version comes from `import.meta.env.VITE_APP_VERSION ?? "dev"` with `define` in `vite.config.ts` reading `package.json` (one line), so a pasted report says which build it came from.
 
 ## Risks / Trade-offs

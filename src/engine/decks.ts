@@ -4,9 +4,22 @@ import type { ContentDb } from "./types";
 /** what is wrong, as a string key with its values, so the UI can say it in the player's language */
 export interface DeckReason {
   key:
-    | "deck.unknown" | "deck.cannot" | "deck.copies" | "deck.foreign" | "deck.notAllowed" | "deck.excluded" | "deck.optionLimit" | "deck.atLeast"
-    | "deck.missing" | "deck.size" | "deck.noWeakness" | "deck.investigator"
-    | "deck.choice.class" | "deck.choice.option" | "deck.choice.size" | "deck.choice.role";
+    | "deck.unknown"
+    | "deck.cannot"
+    | "deck.copies"
+    | "deck.foreign"
+    | "deck.notAllowed"
+    | "deck.excluded"
+    | "deck.optionLimit"
+    | "deck.atLeast"
+    | "deck.missing"
+    | "deck.size"
+    | "deck.noWeakness"
+    | "deck.investigator"
+    | "deck.choice.class"
+    | "deck.choice.option"
+    | "deck.choice.size"
+    | "deck.choice.role";
   vars?: Record<string, string | number>;
 }
 
@@ -35,7 +48,8 @@ export function needsChoice(inv: InvestigatorDef): DeckReason | undefined {
     if (o.deck_size_select) return { key: "deck.choice.size", vars };
   }
   // the same required card listed several times is a choice among role cards (Lola Hayes)
-  if (new Set(inv.signatures).size < inv.signatures.length) return { key: "deck.choice.role", vars };
+  if (new Set(inv.signatures).size < inv.signatures.length)
+    return { key: "deck.choice.role", vars };
   return undefined;
 }
 
@@ -44,10 +58,18 @@ const lower = (s: string) => s.toLowerCase();
 /** whether a card meets every criterion an option names (a card with no experience level counts as level 0) */
 function optionMatches(o: DeckOption, c: CardDef): boolean {
   if (o.permanent !== undefined && o.permanent !== /Permanent\./.test(c.text)) return false;
-  if (o.faction?.length && !(c.factions ?? [c.faction]).some((f) => o.faction!.includes(f))) return false;
+  if (o.faction?.length && !(c.factions ?? [c.faction]).some((f) => o.faction!.includes(f)))
+    return false;
   if (o.type?.length && !o.type.includes(c.type)) return false;
-  if (o.trait?.length && !o.trait.some((t) => c.traits.some((x) => lower(x) === lower(t)))) return false;
-  if (o.uses?.length && !o.uses.some((u) => lower(c.uses?.type ?? "") === lower(u) || lower(c.text).includes(`${lower(u)}).`))) return false;
+  if (o.trait?.length && !o.trait.some((t) => c.traits.some((x) => lower(x) === lower(t))))
+    return false;
+  if (
+    o.uses?.length &&
+    !o.uses.some(
+      (u) => lower(c.uses?.type ?? "") === lower(u) || lower(c.text).includes(`${lower(u)}).`),
+    )
+  )
+    return false;
   // a tag, where the option names one, decides; otherwise the text patterns do
   if (o.tag?.length) {
     if (!o.tag.some((t) => c.tags?.includes(t))) return false;
@@ -64,7 +86,11 @@ interface OptionCount {
 }
 
 /** the first option that admits the card, as ArkhamDB reads them: a `not` option that matches shuts it out; limited options count */
-function admit(options: DeckOption[], counts: OptionCount[], c: CardDef): "ok" | "excluded" | "none" {
+function admit(
+  options: DeckOption[],
+  counts: OptionCount[],
+  c: CardDef,
+): "ok" | "excluded" | "none" {
   for (const [i, o] of options.entries()) {
     if (!optionMatches(o, c)) continue;
     if (o.not) return "excluded";
@@ -84,16 +110,34 @@ function admit(options: DeckOption[], counts: OptionCount[], c: CardDef): "ok" |
   return "none";
 }
 
-const levelText = (o: DeckOption) => (o.level ? (o.level.min === o.level.max ? String(o.level.min) : `${o.level.min}–${o.level.max}`) : "0");
+const levelText = (o: DeckOption) =>
+  o.level
+    ? o.level.min === o.level.max
+      ? String(o.level.min)
+      : `${o.level.min}–${o.level.max}`
+    : "0";
 const sig = (p: DeckProblem) => `${p.reason?.key}:${JSON.stringify(p.reason?.vars ?? {})}`;
 
 /** validate a deck against its investigator's deckbuilding rules */
 export function validateDeck(db: ContentDb, d: DeckDef): DeckProblem[] {
   const problems: DeckProblem[] = [];
   const inv = db.investigators[d.investigator];
-  if (!inv) return [{ code: d.investigator, message: `unknown investigator ${d.investigator}`, reason: { key: "deck.investigator", vars: { inv: d.investigator } } }];
+  if (!inv)
+    return [
+      {
+        code: d.investigator,
+        message: `unknown investigator ${d.investigator}`,
+        reason: { key: "deck.investigator", vars: { inv: d.investigator } },
+      },
+    ];
   const choice = needsChoice(inv);
-  if (choice) return [{ message: `${db.cards[inv.code]?.name ?? inv.code}'s deck needs a choice this builder does not offer (${choice.key})`, reason: choice }];
+  if (choice)
+    return [
+      {
+        message: `${db.cards[inv.code]?.name ?? inv.code}'s deck needs a choice this builder does not offer (${choice.key})`,
+        reason: choice,
+      },
+    ];
   const alternatives = new Set(Object.values(inv.alternatives ?? {}).flat());
   const required = new Set([...inv.signatures, ...inv.weaknesses, ...alternatives]);
   const counted: CardDef[] = [];
@@ -102,11 +146,19 @@ export function validateDeck(db: ContentDb, d: DeckDef): DeckProblem[] {
   for (const [code, n] of Object.entries(d.cards)) {
     const c = db.cards[code];
     if (!c) {
-      problems.push({ code, message: `unknown card ${code}`, reason: { key: "deck.unknown", vars: { card: code } } });
+      problems.push({
+        code,
+        message: `unknown card ${code}`,
+        reason: { key: "deck.unknown", vars: { card: code } },
+      });
       continue;
     }
     if (c.type === "investigator" || c.faction === "mythos") {
-      problems.push({ code, message: `${c.name} cannot be included in a deck`, reason: { key: "deck.cannot", vars: { card: code } } });
+      problems.push({
+        code,
+        message: `${c.name} cannot be included in a deck`,
+        reason: { key: "deck.cannot", vars: { card: code } },
+      });
       continue;
     }
     // copies are counted by title across levels (a weakness or story card by its code)
@@ -121,7 +173,12 @@ export function validateDeck(db: ContentDb, d: DeckDef): DeckProblem[] {
   }
   for (const { card, n } of titles.values()) {
     const limit = card.deckLimit ?? 2;
-    if (n > limit) problems.push({ code: card.code, message: `too many copies of ${card.name} (${n}, limit ${limit})`, reason: { key: "deck.copies", vars: { card: card.code, n, limit } } });
+    if (n > limit)
+      problems.push({
+        code: card.code,
+        message: `too many copies of ${card.name} (${n}, limit ${limit})`,
+        reason: { key: "deck.copies", vars: { card: card.code, n, limit } },
+      });
   }
   // the highest levels first, so a limited option is spent on the cards that need it least often
   counted.sort((a, b) => (b.xp ?? 0) - (a.xp ?? 0) || a.code.localeCompare(b.code));
@@ -129,29 +186,78 @@ export function validateDeck(db: ContentDb, d: DeckDef): DeckProblem[] {
   const reported = new Set<string>();
   for (const c of counted) {
     // "<Investigator> deck only" cards are signatures of someone else
-    const foreignSignature = Object.values(db.investigators).some((i) => i.code !== inv.code && i.signatures.includes(c.code));
+    const foreignSignature = Object.values(db.investigators).some(
+      (i) => i.code !== inv.code && i.signatures.includes(c.code),
+    );
     const verdict = foreignSignature ? "foreign" : admit(inv.deckOptions, counts, c);
     if (verdict === "ok" || reported.has(c.code)) continue;
     reported.add(c.code);
     const level = c.xp ?? 0;
-    if (verdict === "foreign") problems.push({ code: c.code, message: `${c.name} belongs to another investigator's deck`, reason: { key: "deck.foreign", vars: { card: c.code } } });
-    else if (verdict === "excluded") problems.push({ code: c.code, message: `${c.name} is excluded for ${db.cards[inv.code]?.name ?? inv.code}`, reason: { key: "deck.excluded", vars: { card: c.code, inv: inv.code } } });
-    else problems.push({ code: c.code, message: `${c.name} (${c.faction} ${level}) is not allowed for ${db.cards[inv.code]?.name ?? inv.code}`, reason: { key: "deck.notAllowed", vars: { card: c.code, faction: c.faction, level, inv: inv.code } } });
+    if (verdict === "foreign")
+      problems.push({
+        code: c.code,
+        message: `${c.name} belongs to another investigator's deck`,
+        reason: { key: "deck.foreign", vars: { card: c.code } },
+      });
+    else if (verdict === "excluded")
+      problems.push({
+        code: c.code,
+        message: `${c.name} is excluded for ${db.cards[inv.code]?.name ?? inv.code}`,
+        reason: { key: "deck.excluded", vars: { card: c.code, inv: inv.code } },
+      });
+    else
+      problems.push({
+        code: c.code,
+        message: `${c.name} (${c.faction} ${level}) is not allowed for ${db.cards[inv.code]?.name ?? inv.code}`,
+        reason: {
+          key: "deck.notAllowed",
+          vars: { card: c.code, faction: c.faction, level, inv: inv.code },
+        },
+      });
   }
   for (const [i, o] of inv.deckOptions.entries()) {
-    if (o.limit && counts[i].limit > o.limit) problems.push({ message: o.error ?? `more than ${o.limit} cards of level ${levelText(o)} beyond the main options`, reason: { key: "deck.optionLimit", vars: { limit: o.limit, level: levelText(o) } } });
+    if (o.limit && counts[i].limit > o.limit)
+      problems.push({
+        message:
+          o.error ?? `more than ${o.limit} cards of level ${levelText(o)} beyond the main options`,
+        reason: { key: "deck.optionLimit", vars: { limit: o.limit, level: levelText(o) } },
+      });
     if (o.atleast) {
       const groups = Object.values(counts[i].atleast).filter((n) => n >= o.atleast!.min).length;
-      if (groups < (o.atleast.factions ?? 0)) problems.push({ message: o.error ?? `needs at least ${o.atleast.min} cards from ${o.atleast.factions} classes`, reason: { key: "deck.atLeast", vars: { min: o.atleast.min, n: o.atleast.factions } } });
+      if (groups < (o.atleast.factions ?? 0))
+        problems.push({
+          message:
+            o.error ?? `needs at least ${o.atleast.min} cards from ${o.atleast.factions} classes`,
+          reason: { key: "deck.atLeast", vars: { min: o.atleast.min, n: o.atleast.factions } },
+        });
     }
   }
   for (const code of inv.signatures) {
     // a signature may stand as its alternative version
-    if (!d.cards[code] && !(inv.alternatives?.[code] ?? []).some((a) => d.cards[a])) problems.push({ code, message: `missing required card ${db.cards[code]?.name ?? code}`, reason: { key: "deck.missing", vars: { card: code } } });
+    if (!d.cards[code] && !(inv.alternatives?.[code] ?? []).some((a) => d.cards[a]))
+      problems.push({
+        code,
+        message: `missing required card ${db.cards[code]?.name ?? code}`,
+        reason: { key: "deck.missing", vars: { card: code } },
+      });
   }
-  for (const code of inv.weaknesses) if (!d.cards[code] && !(inv.alternatives?.[code] ?? []).some((a) => d.cards[a])) problems.push({ code, message: `missing required card ${db.cards[code]?.name ?? code}`, reason: { key: "deck.missing", vars: { card: code } } });
-  if (counted.length !== inv.deckSize) problems.push({ message: `deck has ${counted.length} cards, needs ${inv.deckSize} (not counting signatures and weaknesses)`, reason: { key: "deck.size", vars: { n: counted.length, size: inv.deckSize } } });
-  if (basicWeaknesses === 0 && !d.randomBasicWeakness) problems.push({ message: "deck needs a basic weakness (or randomBasicWeakness: true)", reason: { key: "deck.noWeakness" } });
+  for (const code of inv.weaknesses)
+    if (!d.cards[code] && !(inv.alternatives?.[code] ?? []).some((a) => d.cards[a]))
+      problems.push({
+        code,
+        message: `missing required card ${db.cards[code]?.name ?? code}`,
+        reason: { key: "deck.missing", vars: { card: code } },
+      });
+  if (counted.length !== inv.deckSize)
+    problems.push({
+      message: `deck has ${counted.length} cards, needs ${inv.deckSize} (not counting signatures and weaknesses)`,
+      reason: { key: "deck.size", vars: { n: counted.length, size: inv.deckSize } },
+    });
+  if (basicWeaknesses === 0 && !d.randomBasicWeakness)
+    problems.push({
+      message: "deck needs a basic weakness (or randomBasicWeakness: true)",
+      reason: { key: "deck.noWeakness" },
+    });
   return problems;
 }
 
@@ -164,25 +270,45 @@ const NOT_ABOUT_ONE_CARD = new Set(["deck.size", "deck.missing", "deck.noWeaknes
  */
 export function whyNot(db: ContentDb, deck: DeckDef, code: string): DeckReason | null {
   const before = new Set(validateDeck(db, deck).map(sig));
-  const after = validateDeck(db, { ...deck, cards: { ...deck.cards, [code]: (deck.cards[code] ?? 0) + 1 } });
-  return after.find((p) => p.reason && !NOT_ABOUT_ONE_CARD.has(p.reason.key) && !before.has(sig(p)))?.reason ?? null;
+  const after = validateDeck(db, {
+    ...deck,
+    cards: { ...deck.cards, [code]: (deck.cards[code] ?? 0) + 1 },
+  });
+  return (
+    after.find((p) => p.reason && !NOT_ABOUT_ONE_CARD.has(p.reason.key) && !before.has(sig(p)))
+      ?.reason ?? null
+  );
 }
 
 /**
  * Why swapping one copy of `out` for one of `into` can't be done, or null when it can: the first problem the swap brings
  * that the deck did not have (a required card taken out counts; the deck's size doesn't change).
  */
-export function whyNotReplace(db: ContentDb, deck: DeckDef, out: string, into: string): DeckReason | null {
+export function whyNotReplace(
+  db: ContentDb,
+  deck: DeckDef,
+  out: string,
+  into: string,
+): DeckReason | null {
   const before = new Set(validateDeck(db, deck).map(sig));
   const cards = { ...deck.cards };
   if ((cards[out] ?? 0) <= 1) delete cards[out];
   else cards[out] -= 1;
   cards[into] = (cards[into] ?? 0) + 1;
-  return validateDeck(db, { ...deck, cards }).find((p) => p.reason && p.reason.key !== "deck.size" && !before.has(sig(p)))?.reason ?? null;
+  return (
+    validateDeck(db, { ...deck, cards }).find(
+      (p) => p.reason && p.reason.key !== "deck.size" && !before.has(sig(p)),
+    )?.reason ?? null
+  );
 }
 
 /** convert an ArkhamDB deck export ({investigator_code, slots, name}) into our deck format */
-export function fromArkhamDb(json: { name?: string; investigator_code: string; slots: Record<string, number>; id?: number | string }): DeckDef {
+export function fromArkhamDb(json: {
+  name?: string;
+  investigator_code: string;
+  slots: Record<string, number>;
+  id?: number | string;
+}): DeckDef {
   const cards: Record<string, number> = {};
   let random = false;
   for (const [code, n] of Object.entries(json.slots)) {

@@ -8,6 +8,7 @@
   - put the clamp, anchored-zoom and focus-zoom math in pure helpers with unit tests.
 
   Verify manually: dragging pans without clicking, the wheel zooms around the cursor, and the limits hold.
+
 - [x] 1.3 Default focus: glide to the deciding investigator's location at about 420 px tall (scaled to the window height). Re-centre when the decider changes or moves, unless the player panned or zoomed in the last 1.5 s. Add "Focus" and "Whole map" buttons. Verify manually at 1920×1080: the Study is centred about 420 px tall at turn start, the camera follows a hand-off to Daisy in another location, and "Whole map" fits The Midnight Masks.
 - [x] 1.4 Keep drag-to-move working at any zoom: dragging a portrait never pans, and the legal highlights and drop still work. Verify manually by zooming out fully and dragging Roland's portrait to a connected location.
 

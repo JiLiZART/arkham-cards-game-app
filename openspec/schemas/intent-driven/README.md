@@ -55,11 +55,13 @@ Use OpenSpec Markdown delta headers so archive can merge the change:
 ## ADDED Requirements
 
 ### Requirement: User data export
+
 Feature: User data export
 
 Rule: Users can export their own data
 
 #### Scenario: Successful CSV export
+
 - **GIVEN** a user has saved data
 - **WHEN** the user exports their data as CSV
 - **THEN** the system provides a CSV file containing the user's data

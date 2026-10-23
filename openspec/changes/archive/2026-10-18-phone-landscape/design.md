@@ -8,11 +8,13 @@
 ## Goals / Non-Goals
 
 **Goals:**
+
 - One mode switch, read by components; the desktop layout untouched.
 - Touch as a first-class input: peek, choose, long press.
 - Measured on a phone-sized viewport in CI (`perf-devourer.js` at 852×393).
 
 **Non-Goals:**
+
 - Portrait play; new gestures; a native shell.
 
 ## Diagram (C4-inspired, component level, ASCII; the browser app is the only container)
@@ -41,21 +43,27 @@
 ## Decisions
 
 ### 1. One layout mode, one root class (ADR-0005)
+
 `useLayoutMode()` returns the mode from a `matchMedia` pair plus orientation; `App` sets `.game.phone`; CSS rules live under that class; components that need geometry (camera insets, fan sizes, overlay layouts) read the mode. Alternative: media queries per component; rejected, the camera and the fan compute in pixels and would drift from the CSS.
 
 ### 2. Drawers are one component
+
 `Drawer` (edge, open state, handle, swipe to open, tap outside to close, safe-area padding) hosts the left panels, the Journal and the hand. The hand drawer wraps `HandFan` in a "drawer mode" that renders the peek row when collapsed and the fan (sized to the drawer) when open.
 
 ### 3. Touch model in `touch.ts`
+
 A pointer of type `touch` on a card/marker/token goes through `peek(id)` (sets hover state so the existing details and copies render) and, if the same id is tapped again within 1.5 s, `choose`. Long press (450 ms, no move) opens the modal. Pointer type `mouse` keeps hover and single-click choose. The existing `useCardClick().byCard` supplies the options; no component gets a second code path, only the gate in front of `choose`.
 
 ### 4. Instruction bar absorbs the rail
+
 In phone mode `onRail` options render inside the instruction bar after its own buttons; the rail component is not mounted.
 
 ### 5. Insets and DPR
+
 `HUD_INSETS` becomes `insets(mode)`: phone `{top 36, right 56, bottom 70, left 0}` plus safe-area values read from CSS env through a resize observer; `MapCamera` caps `dpr` at 2 in phone mode.
 
 ### 6. Orientation card
+
 A `RotateCard` overlay when `mode === "phone"` and the viewport is portrait; state untouched.
 
 ## Risks / Trade-offs

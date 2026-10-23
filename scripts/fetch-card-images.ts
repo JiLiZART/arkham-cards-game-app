@@ -69,4 +69,5 @@ async function main(outDir: string) {
   if (missing.length) console.warn(`missing (drawn faces instead): ${missing.sort().join(", ")}`);
 }
 
-if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) await main(process.argv[2] ?? "dist");
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href)
+  await main(process.argv[2] ?? "dist");

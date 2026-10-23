@@ -6,7 +6,12 @@ import { ScenarioPanel } from "./Panels";
 
 describe("the scenario panel", () => {
   it("the act and the agenda do not enlarge on hover (a tap opens the viewer); the reference card is a plain button", () => {
-    gameStore.getState().newCampaign({ campaignId: "night-of-the-zealot", difficulty: "standard", seed: 3, investigators: [{ code: "01001", deckId: "roland-starter" }] });
+    gameStore.getState().newCampaign({
+      campaignId: "night-of-the-zealot",
+      difficulty: "standard",
+      seed: 3,
+      investigators: [{ code: "01001", deckId: "roland-starter" }],
+    });
     // server rendering reads the initial state: make that the game just started
     gameStore.getInitialState = gameStore.getState;
     const html = renderToStaticMarkup(createElement(ScenarioPanel));

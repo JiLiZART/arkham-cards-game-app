@@ -71,7 +71,9 @@ class AudioEngine {
   /** called from the first gesture: create the context, apply the levels, start the track that was asked for */
   private unlock() {
     if (this.unlocked) return;
-    const Ctx = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+    const Ctx =
+      window.AudioContext ??
+      (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
     if (!Ctx) return;
     this.ctx = new Ctx();
     void this.ctx.resume();
@@ -96,7 +98,9 @@ class AudioEngine {
   }
 
   private music_url(files: MusicFiles) {
-    const aac = typeof document !== "undefined" && document.createElement("audio").canPlayType('audio/mp4; codecs="mp4a.40.2"');
+    const aac =
+      typeof document !== "undefined" &&
+      document.createElement("audio").canPlayType('audio/mp4; codecs="mp4a.40.2"');
     return asset(`sounds/${files.stem}.${aac ? "m4a" : "webm"}`);
   }
 
@@ -146,7 +150,13 @@ class AudioEngine {
    * Dev picker: play any file once on a category's bus, stopping the previous audition. `from` and `length` (seconds)
    * pick an excerpt, for a music track. Returns once playback has started (false when it could not).
    */
-  async audition(url: string, category: Category, gain: number, from = 0, length?: number): Promise<boolean> {
+  async audition(
+    url: string,
+    category: Category,
+    gain: number,
+    from = 0,
+    length?: number,
+  ): Promise<boolean> {
     this.stopAudition();
     const buf = await this.buffer(url);
     if (!buf || !this.ctx || !this.bus) return false;
@@ -174,7 +184,10 @@ class AudioEngine {
 
   /** drop the decoded copies of files that were rewritten on disk (effects as files; music as stems) */
   forget(files: string[], stems: string[] = []) {
-    const urls = [...files.map((f) => asset(`sounds/${f}`)), ...stems.flatMap((t) => [asset(`sounds/${t}.m4a`), asset(`sounds/${t}.webm`)])];
+    const urls = [
+      ...files.map((f) => asset(`sounds/${f}`)),
+      ...stems.flatMap((t) => [asset(`sounds/${t}.m4a`), asset(`sounds/${t}.webm`)]),
+    ];
     for (const u of urls) {
       this.buffers.delete(u);
       this.stale.add(u);
@@ -236,5 +249,12 @@ class AudioEngine {
 export const audio = new AudioEngine();
 
 if (typeof window !== "undefined" && import.meta.env?.DEV) {
-  Object.assign(window, { __arkhamAudio: { log: audio.log, track: () => audio.track, unlocked: () => audio.unlocked, levels: () => audio.levelsNow } });
+  Object.assign(window, {
+    __arkhamAudio: {
+      log: audio.log,
+      track: () => audio.track,
+      unlocked: () => audio.unlocked,
+      levels: () => audio.levelsNow,
+    },
+  });
 }

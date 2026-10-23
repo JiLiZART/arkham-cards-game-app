@@ -6,7 +6,9 @@ import { db } from "./testkit";
 
 // every generated campaign's real flow, walked with automatic answers and scenarios that end at once: none may strand
 // (an error, a prompt nobody can answer, a flow that never ends)
-const ids = Object.values(db.campaigns).filter((c) => c.generated).map((c) => c.id);
+const ids = Object.values(db.campaigns)
+  .filter((c) => c.generated)
+  .map((c) => c.id);
 
 beforeAll(async () => {
   await Promise.all(ids.map((id) => loadCampaign(id)));
@@ -39,7 +41,12 @@ function answerFor(c: CampaignState): string | number | string[] | null {
 describe("every generated campaign's flow", () => {
   for (const id of ids) {
     it(`${id} runs from its start to a result`, () => {
-      let c = startCampaign(db, { campaignId: id, difficulty: "standard", seed: 5, investigators: [{ code: "01001", deckId: "roland-starter" }] });
+      let c = startCampaign(db, {
+        campaignId: id,
+        difficulty: "standard",
+        seed: 5,
+        investigators: [{ code: "01001", deckId: "roland-starter" }],
+      });
       const played: string[] = [];
       for (let step = 0; step < 1200 && !c.result; step++) {
         if (c.flow.waiting) {
@@ -51,8 +58,19 @@ describe("every generated campaign's flow", () => {
           const resolution = keys.find((k) => k.startsWith("R")) ?? "none";
           played.push(`${sc.id}:${resolution}`);
           c.history.push({ scenarioId: sc.id, resolution, xp: 0, victory: 0 });
-          c = startResolution(db, c, { id: sc.id, resolution, victory: 0, victoryCodes: [], cultistsVictory: [], cultistsRemaining: [], notResigned: [c.lead] });
-        } else throw new Error(`${id}: the flow is neither waiting nor playing (${JSON.stringify(c.flow).slice(0, 300)})`);
+          c = startResolution(db, c, {
+            id: sc.id,
+            resolution,
+            victory: 0,
+            victoryCodes: [],
+            cultistsVictory: [],
+            cultistsRemaining: [],
+            notResigned: [c.lead],
+          });
+        } else
+          throw new Error(
+            `${id}: the flow is neither waiting nor playing (${JSON.stringify(c.flow).slice(0, 300)})`,
+          );
       }
       expect(c.result, `${id} did not finish after playing ${played.join(", ")}`).not.toBeNull();
     });

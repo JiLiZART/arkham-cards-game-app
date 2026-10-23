@@ -10,11 +10,13 @@
 ## Goals / Non-Goals
 
 **Goals:**
+
 - One pure function turns an event into styled parts. The feed, the Journal, the action floats and the prompt banner all render those parts the same way.
 - The feed never shows an event before the table animates it.
 - Every event type has a template (enforced by a test), with a styled generic fallback.
 
 **Non-Goals:**
+
 - Filtering or searching the Journal.
 - Persisting the Journal across scenarios. It is the current scenario's `game.log`, which saves already keep.
 - Translating the engine's fallback text.
@@ -22,25 +24,33 @@
 ## Decisions
 
 ### 1. Engine: complete the event data (additive)
+
 - Audit every `emit()` and add the missing fields:
   - `resource` `{ n, lost? }`, `heal` `{ damage, horror }`, `attack` `{ damage, horror }`;
   - `draw` `{ n }` per card, already one event per card;
   - `play` / `commit` / `discard` / `encounter` keep `card`;
   - `move` `{ from }`, `spawn` `{ at }`, `enemyDefeated` `{ by }`, `phase` `{ phase }`, `actAdvance` / `agendaAdvance` (`card`), `testStart` `{ skill, kind }`.
 - No logic changes. Replaying the scenario tests' action logs must give identical states apart from `log[].data`, which an engine test asserts.
-- *Alternative:* parse the English text in the UI. Rejected: it is brittle, untranslatable, and breaks whenever wording changes.
+- _Alternative:_ parse the English text in the UI. Rejected: it is brittle, untranslatable, and breaks whenever wording changes.
 
 ### 2. `feed.ts`: event → parts
+
 ```ts
-type Part = { t: "text"; s: string }
-  | { t: "inv"; id: InvId }                 // round portrait + class-coloured name
-  | { t: "card"; id: InstId }               // thumbnail + name; click → modal, hover → HoverCard
+type Part =
+  | { t: "text"; s: string }
+  | { t: "inv"; id: InvId } // round portrait + class-coloured name
+  | { t: "card"; id: InstId } // thumbnail + name; click → modal, hover → HoverCard
   | { t: "amount"; n: number; icon: IconName }
-  | { t: "icon"; name: IconName }           // skills, etc.
-  | { t: "token"; token: string }           // chaos token art
-  | { t: "outcome"; ok: boolean };          // "succeeded" (green) / "failed" (red)
-export function feedEntry(e: GameEvent, game: GameState, locale: string): { parts: Part[]; tone: "player" | "enemy" | "game" } | null;
+  | { t: "icon"; name: IconName } // skills, etc.
+  | { t: "token"; token: string } // chaos token art
+  | { t: "outcome"; ok: boolean }; // "succeeded" (green) / "failed" (red)
+export function feedEntry(
+  e: GameEvent,
+  game: GameState,
+  locale: string,
+): { parts: Part[]; tone: "player" | "enemy" | "game" } | null;
 ```
+
 - **Templates** live in `ui.json` as `feed.<type>` strings with placeholders, for example:
   - `"feed.resource": "{inv} took {n:resource}"`
   - `"feed.attack": "{card} attacked {inv}: {damage:damage} {horror:horror}"`
@@ -53,18 +63,21 @@ export function feedEntry(e: GameEvent, game: GameState, locale: string): { part
   - `resource`, `attack` and `testResult` produce the expected parts.
 
 ### 3. Feed cursor (never ahead of the table)
+
 - The store records, for each queued animated event, its index in `game.log` (`logIndex`). The visible count is:
   - `current ? current.logIndex + 1 : queue[0]?.logIndex ?? game.log.length`.
 - Non-animated events before an animated one show at once. The ones after it show when it starts playing.
 - This is a pure helper `shownCount(log, current, queue)`, with a unit test.
 
 ### 4. Live feed and Journal (`hud/Feed.tsx`)
+
 - **Layout:** a single `.right-col` flex column, fixed to the right edge, 300 px wide. It stacks:
   - the chaos bag;
   - the investigator tokens;
   - the feed (`flex: 1; min-height: 0`), down to just above the camera buttons and the action rail.
 
   `HUD_INSETS.right` becomes 320.
+
 - **Live mode:**
   - Kill-feed order: it renders the newest ≤ 8 shown entries newest-first (top to bottom), keyed by log index.
   - **Appear at the top:** a CSS `@keyframes feed-in` animation, from `translateY(-16px); opacity: 0` to rest, over 300 ms. Entries below move down smoothly with a FLIP: measure each item's previous `offsetTop` in a layout effect and transition the difference.
@@ -80,6 +93,7 @@ export function feedEntry(e: GameEvent, game: GameState, locale: string): { part
   - A card no longer in the game (removed) is shown without the click.
 
 ### 5. Action floats (`hud/Floats.tsx`), anchored like the damage numbers
+
 - When the shown count grows, the new entries' parts go into a float queue, each with an anchor:
   - the acting investigator's marker (`minis`), when the event's `inv` is on the map;
   - else the event's card, when it is a map card (an enemy or location);
@@ -93,25 +107,30 @@ export function feedEntry(e: GameEvent, game: GameState, locale: string): { part
 - The plain-text banner in `EventPlayer` is removed. The token draw and the test breakdown keep their own overlays.
 
 ### 6. Translations
+
 - `feed.*` templates go in `en/ui.json` and hand-written `ru/ui.json`: about 30 types plus `feed.outcome.ok` / `feed.outcome.fail`.
 - The test from Decision 2 checks that every English template has a Russian counterpart with the same placeholders.
 
 ### 7. Prompt banner
+
 - **Engine:** `ask()` gets an optional `{ key, vars }`, stored on `PendingChoice` as `promptKey` and `promptVars`. All 23 call sites pass one, for example:
   - `turn {inv, actions}`, `commit {inv, skill}`, `assign {inv, kind, left}`, `mulligan {inv, n}`, `discardDown {inv, n}`;
   - `chooseEnemy`, `chooseLocation {purpose}`, `chooseInvestigator`, `nextTurn`, `chooseSkill`, `chooseOne`, `search {top}`, `spawnAt {card}`, …
 
   The English text is kept as the fallback.
+
 - **UI:** `PromptBanner` renders through the same template parser as the feed (`prompt.<key>` templates in `ui.json`), so placeholders like `{inv}`, `{card}`, `{n:action}` and `{skill}` produce styled parts. The investigator part always leads (portrait plus class-coloured name).
 - **Look:** 22 px Alegreya with bold numbers, `.card-name` type for card names, a gold border, and more padding.
 - **Test:** every `promptKey` seen in bot playthroughs has `en` and `ru` templates with the same placeholders.
 
 ### 8. Rounded map cards and thinner frames
+
 - `CardMesh` replaces the `BoxGeometry` with a rounded-rectangle `ShapeGeometry`, extruded to the same 0.012 depth: corner radius 4.5% of the width, which matches the printed corners. The UVs are mapped to the card's bounding box so the scan textures still fit.
 - The glow plane becomes a rounded frame: a ring shape (outer rounded rectangle minus inner) 0.03 units wide, half the current 0.06 per side, with the same corner radius plus the frame width.
 - Both geometries are memoised per (w, h).
 
 ### 9. Hand card details
+
 - A pure `cardDetails(def, text, locale)` returns rows from the card data: name, subname, faction, type, `xp`, `cost`, traits, `slots`, `icons`, health and sanity, `uses`, and text. Missing fields are skipped. It is unit-tested with Machete (01020), a skill and an ally.
 - **`HandDetails`** is a fixed DOM column (`pointer-events: none`, about 280 px wide, 17 px Alegreya, with the name in card-name type). It renders the rows with `Icon` and `Glyph` (class, skills, slots, the resource icon for cost, XP as filled and empty pips) and `formatText` for the text.
 - **Position:**

@@ -1,19 +1,56 @@
 import type { LogCondition, SetupStep } from "../content/schema";
 import {
-  card, createCard, def, emit, findByCode, inv, locationByName, moveCard, push, type G,
+  card,
+  createCard,
+  def,
+  emit,
+  findByCode,
+  inv,
+  locationByName,
+  moveCard,
+  push,
+  type G,
 } from "./core";
 import { handlers as effectHandlers } from "./effects";
 import { randInt, shuffle } from "./rng";
 import { finishEvent, handlers as cardHandlers } from "./rules/cards";
 import { handlers as enemyHandlers } from "./rules/enemies";
 import { exhaustEnemy } from "./rules/enemies";
-import { basicInvestigate, endTurnCleanup, handlers as flowHandlers, legalTurnActions, readyAll, roundCleanup } from "./rules/flow";
 import {
-  assetDefeatCheck, checkEngagement, chooseLead, drawOpeningCards, handlers as invHandlers, revealLocation,
+  basicInvestigate,
+  endTurnCleanup,
+  handlers as flowHandlers,
+  legalTurnActions,
+  readyAll,
+  roundCleanup,
+} from "./rules/flow";
+import {
+  assetDefeatCheck,
+  checkEngagement,
+  chooseLead,
+  drawOpeningCards,
+  handlers as invHandlers,
+  revealLocation,
 } from "./rules/investigators";
-import { allEliminated, finishRevelation, handlers as scenarioHandlers, nextAct, nextAgenda } from "./rules/scenario";
+import {
+  allEliminated,
+  finishRevelation,
+  handlers as scenarioHandlers,
+  nextAct,
+  nextAgenda,
+} from "./rules/scenario";
 import { handlers as testHandlers, startTest } from "./rules/skillTest";
-import type { Action, ChoiceOption, ContentDb, EffCtx, GameEvent, GameSetup, GameState, InstId, Step } from "./types";
+import type {
+  Action,
+  ChoiceOption,
+  ContentDb,
+  EffCtx,
+  GameEvent,
+  GameSetup,
+  GameState,
+  InstId,
+  Step,
+} from "./types";
 
 export const ENGINE_VERSION = 5;
 
@@ -26,8 +63,24 @@ const ENGINE_FNS: Record<string, (g: G, ctx: EffCtx, step: Step) => void> = {
   revealLocation: (g, ctx) => revealLocation(g, ctx.location!),
   checkEngagement: (g, ctx) => checkEngagement(g, ctx.inv!),
   investigate: (g, ctx) => basicInvestigate(g, ctx.you!, ctx.location!),
-  basicFight: (g, ctx) => startTest(g, { inv: ctx.you!, skill: "combat", kind: "fight", target: ctx.enemy!, label: `Fight ${def(g, ctx.enemy!).name}`, ctx }),
-  basicEvade: (g, ctx) => startTest(g, { inv: ctx.you!, skill: "agility", kind: "evade", target: ctx.enemy!, label: `Evade ${def(g, ctx.enemy!).name}`, ctx }),
+  basicFight: (g, ctx) =>
+    startTest(g, {
+      inv: ctx.you!,
+      skill: "combat",
+      kind: "fight",
+      target: ctx.enemy!,
+      label: `Fight ${def(g, ctx.enemy!).name}`,
+      ctx,
+    }),
+  basicEvade: (g, ctx) =>
+    startTest(g, {
+      inv: ctx.you!,
+      skill: "agility",
+      kind: "evade",
+      target: ctx.enemy!,
+      label: `Evade ${def(g, ctx.enemy!).name}`,
+      ctx,
+    }),
   endTurnCleanup: (g, ctx) => endTurnCleanup(g, ctx.inv!),
   gainResource: (g, ctx) => {
     inv(g, ctx.inv!).resources++;
@@ -45,7 +98,8 @@ const scriptHandler = (g: G, step: Extract<Step, { t: "Script" }>) => {
     ENGINE_FNS[step.fn](g, step.ctx, step);
     return;
   }
-  const fn = g.db.scripts[step.code]?.fns?.[step.fn] ?? g.db.scripts[g.s.scenarioId]?.fns?.[step.fn];
+  const fn =
+    g.db.scripts[step.code]?.fns?.[step.fn] ?? g.db.scripts[g.s.scenarioId]?.fns?.[step.fn];
   if (!fn) throw new Error(`missing script function ${step.code}.${step.fn}`);
   fn(g, step.ctx, step.args, step);
 };
@@ -55,7 +109,13 @@ const forEachInvHandler = (g: G, step: Extract<Step, { t: "ForEachInv" }>) => {
 };
 
 const HANDLERS: Record<string, (g: G, step: any) => void> = {
-  ...flowHandlers, ...cardHandlers, ...invHandlers, ...enemyHandlers, ...testHandlers, ...scenarioHandlers, ...effectHandlers,
+  ...flowHandlers,
+  ...cardHandlers,
+  ...invHandlers,
+  ...enemyHandlers,
+  ...testHandlers,
+  ...scenarioHandlers,
+  ...effectHandlers,
   Script: scriptHandler,
   ForEachInv: forEachInvHandler,
   Setup: () => {},
@@ -69,9 +129,15 @@ export function run(g: G) {
   let n = 0;
   const recent: string[] = [];
   while (!g.s.pending && g.s.queue.length && g.s.phase !== "ended") {
-    if (++n > MAX_STEPS) throw new Error(`engine loop limit exceeded; recent steps: ${recent.join(" ")}`);
+    if (++n > MAX_STEPS)
+      throw new Error(`engine loop limit exceeded; recent steps: ${recent.join(" ")}`);
     const step = g.s.queue.pop()!;
-    if (n > MAX_STEPS - 30) recent.push(step.t + ("trigger" in step ? `:${step.trigger}` : "") + ("fn" in step ? `:${step.fn}` : ""));
+    if (n > MAX_STEPS - 30)
+      recent.push(
+        step.t +
+          ("trigger" in step ? `:${step.trigger}` : "") +
+          ("fn" in step ? `:${step.fn}` : ""),
+      );
     const h = HANDLERS[step.t];
     if (!h) throw new Error(`no handler for step ${step.t}`);
     h(g, step);
@@ -79,7 +145,11 @@ export function run(g: G) {
 }
 
 // ---------- setup ----------
-export function checkLog(log: Record<string, unknown>, c: LogCondition | undefined, players: number): boolean {
+export function checkLog(
+  log: Record<string, unknown>,
+  c: LogCondition | undefined,
+  players: number,
+): boolean {
   if (!c) return true;
   if ("logHas" in c) return !!log[c.logHas];
   if ("not" in c) return !checkLog(log, c.not, players);
@@ -95,13 +165,41 @@ export function checkLog(log: Record<string, unknown>, c: LogCondition | undefin
 
 function emptyState(setup: GameSetup): GameState {
   return {
-    version: ENGINE_VERSION, seed: setup.seed, rng: setup.seed >>> 0, seq: 0,
-    scenarioId: setup.scenarioId, campaignId: setup.campaignId, difficulty: setup.difficulty,
-    round: 0, phase: "setup", counters: { turn: 0, phase: 0, round: 0, test: 0, reveal: 0 },
-    cards: {}, invs: {}, order: [], lead: setup.investigators[0].code, active: null,
-    encounterDeck: [], encounterDiscard: [], sideDecks: {}, act: null, agenda: null, actDeck: [], agendaDeck: [],
-    chaosBag: [], skillTest: null, testStack: [], tempMods: [], usage: {}, queue: [], pending: null, cancelled: [],
-    log: [], flags: {}, campaignLog: setup.campaignLog ?? {}, resolution: null, nextId: 1,
+    version: ENGINE_VERSION,
+    seed: setup.seed,
+    rng: setup.seed >>> 0,
+    seq: 0,
+    scenarioId: setup.scenarioId,
+    campaignId: setup.campaignId,
+    difficulty: setup.difficulty,
+    round: 0,
+    phase: "setup",
+    counters: { turn: 0, phase: 0, round: 0, test: 0, reveal: 0 },
+    cards: {},
+    invs: {},
+    order: [],
+    lead: setup.investigators[0].code,
+    active: null,
+    encounterDeck: [],
+    encounterDiscard: [],
+    sideDecks: {},
+    act: null,
+    agenda: null,
+    actDeck: [],
+    agendaDeck: [],
+    chaosBag: [],
+    skillTest: null,
+    testStack: [],
+    tempMods: [],
+    usage: {},
+    queue: [],
+    pending: null,
+    cancelled: [],
+    log: [],
+    flags: {},
+    campaignLog: setup.campaignLog ?? {},
+    resolution: null,
+    nextId: 1,
     ...(setup.pacePhases ? { pacePhases: true } : {}),
     ...(setup.tapDecks ? { tapDecks: true } : {}),
   };
@@ -114,7 +212,10 @@ function locByRef(g: G, ref: string) {
 function applySetupStep(g: G, st: SetupStep) {
   const s = g.s;
   if (!checkLog(s.campaignLog, st.when, s.order.length)) return;
-  const take = (code: string) => Object.values(s.cards).find((c) => c.code === code && ["setAside", "encounterDeck", "sideDeck", "limbo"].includes(c.zone));
+  const take = (code: string) =>
+    Object.values(s.cards).find(
+      (c) => c.code === code && ["setAside", "encounterDeck", "sideDeck", "limbo"].includes(c.zone),
+    );
   switch (st.do) {
     case "putIntoPlay":
       for (const code of st.codes) {
@@ -123,9 +224,14 @@ function applySetupStep(g: G, st: SetupStep) {
       }
       return;
     case "putRandomIntoPlay": {
-      const pool = st.from.map(take).filter(Boolean).map((c) => c!.id);
+      const pool = st.from
+        .map(take)
+        .filter(Boolean)
+        .map((c) => c!.id);
       shuffle(s, pool);
-      pool.forEach((id, k) => moveCard(g, id, k < st.count ? "location" : st.removeRest ? "removed" : "setAside"));
+      pool.forEach((id, k) =>
+        moveCard(g, id, k < st.count ? "location" : st.removeRest ? "removed" : "setAside"),
+      );
       return;
     }
     case "setAside":
@@ -195,27 +301,49 @@ export function createGame(db: ContentDb, setup: GameSetup): Result {
     const cardId = createCard(g, x.code, "investigator", x.code);
     s.order.push(x.code);
     s.invs[x.code] = {
-      id: x.code, cardId, name: db.cards[x.code].name, deck: [], hand: [], discard: [], location: null,
-      damage: x.physicalTrauma ?? 0, horror: x.mentalTrauma ?? 0, clues: 0, resources: 5, actionsLeft: 0,
-      restrictedActions: [], actionsThisRound: [], actionsTaken: 0, defeatedHealth: 0, status: "playing", turnDone: false, physicalTrauma: 0, mentalTrauma: 0, player,
+      id: x.code,
+      cardId,
+      name: db.cards[x.code].name,
+      deck: [],
+      hand: [],
+      discard: [],
+      location: null,
+      damage: x.physicalTrauma ?? 0,
+      horror: x.mentalTrauma ?? 0,
+      clues: 0,
+      resources: 5,
+      actionsLeft: 0,
+      restrictedActions: [],
+      actionsThisRound: [],
+      actionsTaken: 0,
+      defeatedHealth: 0,
+      status: "playing",
+      turnDone: false,
+      physicalTrauma: 0,
+      mentalTrauma: 0,
+      player,
     };
     for (const code of x.deck) createCard(g, code, "deck", x.code);
   });
   // encounter cards
   const sets = [...scen.encounterSets];
-  if (scen.randomEncounterSet?.length) sets.push(scen.randomEncounterSet[randInt(s, scen.randomEncounterSet.length)]);
+  if (scen.randomEncounterSet?.length)
+    sets.push(scen.randomEncounterSet[randInt(s, scen.randomEncounterSet.length)]);
   for (const set of sets) {
     for (const code of db.encounterSets[set] ?? []) {
       const d = db.cards[code];
       if (d.type === "act" || d.type === "agenda" || d.type === "scenario") continue;
-      for (let k = 0; k < d.quantity; k++) createCard(g, code, d.type === "location" ? "setAside" : "encounterDeck");
+      for (let k = 0; k < d.quantity; k++)
+        createCard(g, code, d.type === "location" ? "setAside" : "encounterDeck");
     }
   }
   for (const [deck, deckSets] of Object.entries(scen.sideDecks)) {
     s.sideDecks[deck] = [];
-    for (const set of deckSets) for (const code of db.encounterSets[set] ?? []) {
-      for (let k = 0; k < db.cards[code].quantity; k++) s.sideDecks[deck].push(createCard(g, code, "sideDeck"));
-    }
+    for (const set of deckSets)
+      for (const code of db.encounterSets[set] ?? []) {
+        for (let k = 0; k < db.cards[code].quantity; k++)
+          s.sideDecks[deck].push(createCard(g, code, "sideDeck"));
+      }
     shuffle(s, s.sideDecks[deck]);
   }
   for (const code of scen.acts) s.actDeck.push(createCard(g, code, "actDeck"));
@@ -235,10 +363,16 @@ export function createGame(db: ContentDb, setup: GameSetup): Result {
   const discardN = (s.flags.discardFromOpeningHands as number | undefined) ?? 0;
   for (const i of s.order) {
     const me = inv(g, i);
-    for (let k = 0; k < discardN && me.hand.length; k++) moveCard(g, me.hand[randInt(s, me.hand.length)], "discard");
+    for (let k = 0; k < discardN && me.hand.length; k++)
+      moveCard(g, me.hand[randInt(s, me.hand.length)], "discard");
   }
   emit(g, "setup", `${scen.name} begins`, { data: { scenario: scen.id } });
-  push(g, ...s.order.map((i): Step => ({ t: "Mulligan", inv: i })), { t: "Script", code: "__engine", fn: "roundCleanup", ctx: {} }, { t: "StartRound" });
+  push(
+    g,
+    ...s.order.map((i): Step => ({ t: "Mulligan", inv: i })),
+    { t: "Script", code: "__engine", fn: "roundCleanup", ctx: {} },
+    { t: "StartRound" },
+  );
   // setup spawns pushed earlier resolve first
   s.queue = [...s.queue.filter((x) => x.t !== "Spawn"), ...s.queue.filter((x) => x.t === "Spawn")];
   run(g);
@@ -249,7 +383,8 @@ export function createGame(db: ContentDb, setup: GameSetup): Result {
 export function dispatch(db: ContentDb, state: GameState, action: Action): Result {
   const p = state.pending;
   if (!p) return { state, events: [], error: "no pending choice" };
-  if (p.inv !== action.inv) return { state, events: [], error: `waiting for ${p.inv}, not ${action.inv}` };
+  if (p.inv !== action.inv)
+    return { state, events: [], error: `waiting for ${p.inv}, not ${action.inv}` };
   const opt = p.options.find((o) => o.id === action.option);
   if (!opt) return { state, events: [], error: `illegal option ${action.option}` };
   const events: GameEvent[] = [];
@@ -267,9 +402,13 @@ export function revealed(prev: GameState, next: GameState, events: GameEvent[]):
   if (next.rng !== prev.rng) return true;
   const left = (a: InstId[], b: InstId[]) => a.some((id) => !b.includes(id));
   if (left(prev.encounterDeck, next.encounterDeck)) return true;
-  for (const [i, me] of Object.entries(prev.invs)) if (left(me.deck, next.invs[i].deck)) return true;
+  for (const [i, me] of Object.entries(prev.invs))
+    if (left(me.deck, next.invs[i].deck)) return true;
   if (events.some((e) => e.type === "look")) return true;
-  const shown = (s: GameState) => (s.pending?.options ?? []).some((o) => o.card && ["deck", "encounterDeck"].includes(s.cards[o.card]?.zone));
+  const shown = (s: GameState) =>
+    (s.pending?.options ?? []).some(
+      (o) => o.card && ["deck", "encounterDeck"].includes(s.cards[o.card]?.zone),
+    );
   return shown(next) && !shown(prev);
 }
 

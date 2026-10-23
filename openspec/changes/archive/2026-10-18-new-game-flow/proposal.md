@@ -14,9 +14,11 @@ Out of scope: deck editing (its own change), the in-game player bar, the phone l
 ## Capabilities
 
 ### New Capabilities
+
 <!-- none -->
 
 ### Modified Capabilities
+
 - `game-table-ui`: the menus become a wizard; difficulty is shown as its bag.
 
 ## Impact

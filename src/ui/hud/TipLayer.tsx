@@ -26,7 +26,8 @@ interface Rect {
   x1: number;
   y1: number;
 }
-const onScreen = (r: Rect | null): r is Rect => !!r && r.x1 > 0 && r.y1 > 0 && r.x0 < innerWidth && r.y0 < innerHeight && r.x1 > r.x0;
+const onScreen = (r: Rect | null): r is Rect =>
+  !!r && r.x1 > 0 && r.y1 > 0 && r.x0 < innerWidth && r.y0 < innerHeight && r.x1 > r.x0;
 const boxOf = (el: Element | null): Rect | null => {
   if (!el) return null;
   const b = el.getBoundingClientRect();
@@ -35,7 +36,11 @@ const boxOf = (el: Element | null): Rect | null => {
 
 /** where the anchor is on screen: a marked element, a card in the HUD or on the map; else the instruction bar, else null */
 function anchorRect(a: TipAnchor | null): Rect | null {
-  const r = !a ? null : "tip" in a ? boxOf(document.querySelector(`[data-tip="${a.tip}"]`)) : (boxOf(document.querySelector(`[data-card="${a.card}"]`)) ?? mapProjector.rect(a.card));
+  const r = !a
+    ? null
+    : "tip" in a
+      ? boxOf(document.querySelector(`[data-tip="${a.tip}"]`))
+      : (boxOf(document.querySelector(`[data-card="${a.card}"]`)) ?? mapProjector.rect(a.card));
   return onScreen(r) ? r : boxOf(document.querySelector('[data-tip="bar"]'));
 }
 
@@ -59,7 +64,12 @@ function place(r: Rect | null): { left: number; top: number; side: Side; arrow: 
   }
   const left = clamp(cx - W / 2, 8, innerWidth - W - 8);
   const above = cy > innerHeight / 2;
-  return { left, top: above ? r.y0 - GAP : r.y1 + GAP, side: above ? "above" : "below", arrow: clamp(cx - left, 16, W - 16) };
+  return {
+    left,
+    top: above ? r.y0 - GAP : r.y1 + GAP,
+    side: above ? "above" : "below",
+    arrow: clamp(cx - left, 16, W - 16),
+  };
 }
 
 /**
@@ -75,16 +85,25 @@ export function TipLayer() {
   const playing = useGame((s) => s.current);
   const queued = useGame((s) => s.queue.length > 0);
   const byHand = useGame((s) => s.drawByHand);
-  const stageFree = useView((s) => s.stage.every((k) => k.startsWith("pause:") || k.startsWith("test:")));
+  const stageFree = useView((s) =>
+    s.stage.every((k) => k.startsWith("pause:") || k.startsWith("test:")),
+  );
   const quiet = useView((s) => !s.modal && !s.intro && !s.moveDrag);
   // re-placed as the map camera moves
   useView((s) => s.camTick);
   const [seen, setSeen] = useState(readSeen);
   const viewer = viewerOf(game);
   const phone = useLayoutMode() === "phone";
-  const c: TipContext = { viewer, shown: true, canUndo: able, drawing: playing?.type === "token" && byHand, phone };
+  const c: TipContext = {
+    viewer,
+    shown: true,
+    canUndo: able,
+    drawing: playing?.type === "token" && byHand,
+    phone,
+  };
   const tip = pickTip(game, c, seen, on);
-  const visible = !!tip && quiet && ((!playing && !queued && stageFree) || (!!tip.duringDraw && c.drawing));
+  const visible =
+    !!tip && quiet && ((!playing && !queued && stageFree) || (!!tip.duringDraw && c.drawing));
 
   const markSeen = (id: string) =>
     setSeen((s) => {
@@ -97,7 +116,9 @@ export function TipLayer() {
       return next;
     });
   // the tip on screen and the choice it came with: once that changes, it has been seen
-  const showing = useRef<{ id: string; seq: number | undefined; viewer: string | null } | null>(null);
+  const showing = useRef<{ id: string; seq: number | undefined; viewer: string | null } | null>(
+    null,
+  );
   useEffect(() => {
     const was = showing.current;
     if (was && (tip?.id !== was.id || game.pending?.seq !== was.seq || viewer !== was.viewer)) {
@@ -118,16 +139,30 @@ export function TipLayer() {
   }, []);
   useLayoutEffect(() => {
     const r = visible ? anchorRect(tip!.anchor(game, c)) : null;
-    setRect((old) => (old && r && old.x0 === r.x0 && old.y0 === r.y0 && old.x1 === r.x1 && old.y1 === r.y1 ? old : r));
+    setRect((old) =>
+      old && r && old.x0 === r.x0 && old.y0 === r.y0 && old.x1 === r.x1 && old.y1 === r.y1
+        ? old
+        : r,
+    );
   });
 
   if (!visible) return null;
   const p = place(rect);
   return (
-    <div key={tip!.id} className={`tip-card ${p.side}`} style={{ left: p.left, top: p.top, width: W }} role="note">
+    <div
+      key={tip!.id}
+      className={`tip-card ${p.side}`}
+      style={{ left: p.left, top: p.top, width: W }}
+      role="note"
+    >
       <p>{t(db, locale, `tip.${tip!.id}`)}</p>
       <button onClick={() => markSeen(tip!.id)}>{t(db, locale, "tip.gotIt")}</button>
-      {p.arrow >= 0 && <span className="tip-arrow" style={p.side === "left" || p.side === "right" ? { top: p.arrow } : { left: p.arrow }} />}
+      {p.arrow >= 0 && (
+        <span
+          className="tip-arrow"
+          style={p.side === "left" || p.side === "right" ? { top: p.arrow } : { left: p.arrow }}
+        />
+      )}
     </div>
   );
 }

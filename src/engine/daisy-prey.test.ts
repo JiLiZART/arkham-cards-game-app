@@ -21,7 +21,11 @@ describe("Prey - Bearer only (Daisy's basic weaknesses)", () => {
   const table = (code: string, hunter = false) => {
     const g = gOf(skipMulligans(start("the-gathering", [ROLAND, DAISY], 3)));
     const at: Record<string, string> = {};
-    for (const [name, c] of [["hallway", "01112"], ["attic", "01113"], ["cellar", "01114"]]) {
+    for (const [name, c] of [
+      ["hallway", "01112"],
+      ["attic", "01113"],
+      ["cellar", "01114"],
+    ]) {
       at[name] = createCard(g, c, "limbo");
       moveCard(g, at[name], "location");
       g.s.cards[at[name]].revealed = true;
@@ -31,7 +35,10 @@ describe("Prey - Bearer only (Daisy's basic weaknesses)", () => {
     if (hunter) {
       // a test-only Hunter copy of the weakness
       const d = g.db.cards[code];
-      g.db = { ...g.db, cards: { ...g.db.cards, [code]: { ...d, keywords: [...d.keywords, "hunter"] } } };
+      g.db = {
+        ...g.db,
+        cards: { ...g.db.cards, [code]: { ...d, keywords: [...d.keywords, "hunter"] } },
+      };
     }
     const e = createCard(g, code, "limbo", DAISY);
     return { g, e, at };

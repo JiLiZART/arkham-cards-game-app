@@ -4,21 +4,51 @@ import type { CardDef, DeckDef } from "../../content/schema";
 import { whyNot, whyNotReplace } from "../../engine/decks";
 import { CardFace } from "../CardFace";
 import { db, gameStore, useGame } from "../context";
-import { basicWeaknesses, builderPool, changeCopies, problemText, replaceCard, withWeakness, type PoolFilter } from "../decks";
+import {
+  basicWeaknesses,
+  builderPool,
+  changeCopies,
+  problemText,
+  replaceCard,
+  withWeakness,
+  type PoolFilter,
+} from "../decks";
 import { Icon } from "../Icon";
 import { isIcon } from "../icons";
 import { moment } from "../hud/SoundLayer";
 
-const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
+const tr = (key: string, vars?: Record<string, string | number>) =>
+  t(db, gameStore.getState().locale, key, vars);
 const TYPES = ["asset", "event", "skill"] as const;
 const CLASSES = ["guardian", "seeker", "rogue", "mystic", "survivor", "neutral"] as const;
 const PAGE = 48;
 
 /** a card of the grid: its scan, the copies, and the buttons that show on hover */
-function GridCard({ card, n, lit, dim, why, children, onClick }: { card: CardDef; n?: number; lit?: boolean; dim?: boolean; why?: string | null; children?: React.ReactNode; onClick?: () => void }) {
+function GridCard({
+  card,
+  n,
+  lit,
+  dim,
+  why,
+  children,
+  onClick,
+}: {
+  card: CardDef;
+  n?: number;
+  lit?: boolean;
+  dim?: boolean;
+  why?: string | null;
+  children?: React.ReactNode;
+  onClick?: () => void;
+}) {
   const locale = useGame((s) => s.locale);
   return (
-    <div className={`dk-card ${lit ? "lit" : ""} ${dim ? "dim" : ""}`} data-card-code={card.code} onClick={onClick} title={cardText(db, card.code, locale).name}>
+    <div
+      className={`dk-card ${lit ? "lit" : ""} ${dim ? "dim" : ""}`}
+      data-card-code={card.code}
+      onClick={onClick}
+      title={cardText(db, card.code, locale).name}
+    >
       <CardFace code={card.code} locale={locale} remote />
       {n !== undefined && n > 0 && <b className="dk-copies">×{n}</b>}
       {why && <small className="dk-why">{why}</small>}
@@ -33,10 +63,25 @@ function GridCard({ card, n, lit, dim, why, children, onClick }: { card: CardDef
  * a search, a hover offering Add or Replace. Replace lights the deck's cards it may stand in for: a click on one swaps
  * them. Every change goes to `onChange` with the deck's new cards.
  */
-export function DeckEditArea({ investigator, deck, onChange, weakness = true }: { investigator: string; deck: DeckDef; onChange: (cards: Record<string, number>, randomBasicWeakness: boolean) => void; weakness?: boolean }) {
+export function DeckEditArea({
+  investigator,
+  deck,
+  onChange,
+  weakness = true,
+}: {
+  investigator: string;
+  deck: DeckDef;
+  onChange: (cards: Record<string, number>, randomBasicWeakness: boolean) => void;
+  weakness?: boolean;
+}) {
   const locale = useGame((s) => s.locale);
   const inv = db.investigators[investigator];
-  const [filter, setFilter] = useState<PoolFilter>({ query: "", factions: [], types: [], levels: [] });
+  const [filter, setFilter] = useState<PoolFilter>({
+    query: "",
+    factions: [],
+    types: [],
+    levels: [],
+  });
   const [shown, setShown] = useState(PAGE);
   const [replacing, setReplacing] = useState<string | null>(null);
   useEffect(() => setShown(PAGE), [filter]);
@@ -48,18 +93,32 @@ export function DeckEditArea({ investigator, deck, onChange, weakness = true }: 
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
   }, [replacing]);
-  const pool = useMemo(() => builderPool(db, locale, investigator, filter), [locale, investigator, filter]);
-  const required = new Set([...(inv?.signatures ?? []), ...(inv?.weaknesses ?? []), ...Object.values(inv?.alternatives ?? {}).flat()]);
+  const pool = useMemo(
+    () => builderPool(db, locale, investigator, filter),
+    [locale, investigator, filter],
+  );
+  const required = new Set([
+    ...(inv?.signatures ?? []),
+    ...(inv?.weaknesses ?? []),
+    ...Object.values(inv?.alternatives ?? {}).flat(),
+  ]);
   const nameOf = (c: CardDef) => cardText(db, c.code, locale).name;
   const costNum = (c: CardDef) => (typeof c.cost === "number" ? c.cost : 0);
   const entries = Object.entries(deck.cards)
     .map(([code, n]) => ({ card: db.cards[code], n }))
     .filter((x) => x.card)
-    .sort((a, b) => costNum(a.card) - costNum(b.card) || nameOf(a.card).localeCompare(nameOf(b.card)));
+    .sort(
+      (a, b) => costNum(a.card) - costNum(b.card) || nameOf(a.card).localeCompare(nameOf(b.card)),
+    );
   const fixed = entries.filter((x) => required.has(x.card.code) || x.card.subtype);
-  const size = entries.reduce((n, x) => n + (required.has(x.card.code) || x.card.subtype ? 0 : x.n), 0);
-  const chosenWeakness = Object.keys(deck.cards).find((c) => db.cards[c]?.subtype === "basicweakness") ?? "";
-  const reason = (r: ReturnType<typeof whyNot>) => (r ? problemText(db, locale, { message: r.key, reason: r }) : null);
+  const size = entries.reduce(
+    (n, x) => n + (required.has(x.card.code) || x.card.subtype ? 0 : x.n),
+    0,
+  );
+  const chosenWeakness =
+    Object.keys(deck.cards).find((c) => db.cards[c]?.subtype === "basicweakness") ?? "";
+  const reason = (r: ReturnType<typeof whyNot>) =>
+    r ? problemText(db, locale, { message: r.key, reason: r }) : null;
   const change = (cards: Record<string, number>) => onChange(cards, deck.randomBasicWeakness);
   const swap = (out: string) => {
     if (!replacing) return;
@@ -100,7 +159,9 @@ export function DeckEditArea({ investigator, deck, onChange, weakness = true }: 
           </div>
         )}
         {TYPES.map((type) => {
-          const rows = entries.filter((x) => x.card.type === type && !required.has(x.card.code) && !x.card.subtype);
+          const rows = entries.filter(
+            (x) => x.card.type === type && !required.has(x.card.code) && !x.card.subtype,
+          );
           if (!rows.length) return null;
           return (
             <div key={type} className="dk-group">
@@ -111,12 +172,22 @@ export function DeckEditArea({ investigator, deck, onChange, weakness = true }: 
                 {rows.map(({ card, n }) => {
                   const target = replacing ? !whyNotReplace(db, deck, card.code, replacing) : false;
                   return (
-                    <GridCard key={card.code} card={card} n={n} lit={target} dim={!!replacing && !target} onClick={target ? () => swap(card.code) : undefined}>
+                    <GridCard
+                      key={card.code}
+                      card={card}
+                      n={n}
+                      lit={target}
+                      dim={!!replacing && !target}
+                      onClick={target ? () => swap(card.code) : undefined}
+                    >
                       {!replacing && (
-                        <button onClick={() => {
-                          moment("builderRemove");
-                          change(changeCopies(deck.cards, card.code, -1));
-                        }} aria-label={tr("deckEditor.remove", { card: nameOf(card) })}>
+                        <button
+                          onClick={() => {
+                            moment("builderRemove");
+                            change(changeCopies(deck.cards, card.code, -1));
+                          }}
+                          aria-label={tr("deckEditor.remove", { card: nameOf(card) })}
+                        >
                           − {tr("deck.remove")}
                         </button>
                       )}
@@ -140,24 +211,68 @@ export function DeckEditArea({ investigator, deck, onChange, weakness = true }: 
       </section>
       <section className="dk-pool">
         <header className="dk-filters">
-          <input type="search" value={filter.query} placeholder={tr("deckEditor.search")} aria-label={tr("deckEditor.search")} onChange={(e) => setFilter({ ...filter, query: e.target.value })} />
+          <input
+            type="search"
+            value={filter.query}
+            placeholder={tr("deckEditor.search")}
+            aria-label={tr("deckEditor.search")}
+            onChange={(e) => setFilter({ ...filter, query: e.target.value })}
+          />
           <div className="wz-chips" role="group" aria-label={tr("catalog.class")}>
             {CLASSES.map((c) => (
-              <button key={c} className={`wz-chip wz-class ${filter.factions.includes(c) ? "on" : ""}`} aria-pressed={filter.factions.includes(c)} title={tr(`card.faction.${c}`)} onClick={() => setFilter({ ...filter, factions: filter.factions.includes(c) ? filter.factions.filter((x) => x !== c) : [...filter.factions, c] })}>
+              <button
+                key={c}
+                className={`wz-chip wz-class ${filter.factions.includes(c) ? "on" : ""}`}
+                aria-pressed={filter.factions.includes(c)}
+                title={tr(`card.faction.${c}`)}
+                onClick={() =>
+                  setFilter({
+                    ...filter,
+                    factions: filter.factions.includes(c)
+                      ? filter.factions.filter((x) => x !== c)
+                      : [...filter.factions, c],
+                  })
+                }
+              >
                 {isIcon(c) ? <Icon name={c} size={22} title={tr(`card.faction.${c}`)} /> : c}
               </button>
             ))}
           </div>
           <div className="wz-chips" role="group" aria-label={tr("catalog.type")}>
             {TYPES.map((x) => (
-              <button key={x} className={`wz-chip ${filter.types.includes(x) ? "on" : ""}`} aria-pressed={filter.types.includes(x)} onClick={() => setFilter({ ...filter, types: filter.types.includes(x) ? filter.types.filter((y) => y !== x) : [...filter.types, x] })}>
+              <button
+                key={x}
+                className={`wz-chip ${filter.types.includes(x) ? "on" : ""}`}
+                aria-pressed={filter.types.includes(x)}
+                onClick={() =>
+                  setFilter({
+                    ...filter,
+                    types: filter.types.includes(x)
+                      ? filter.types.filter((y) => y !== x)
+                      : [...filter.types, x],
+                  })
+                }
+              >
                 {tr(`card.type.${x}`)}
               </button>
             ))}
           </div>
           <div className="wz-chips" role="group" aria-label={tr("catalog.level")}>
             {[0, 1, 2, 3, 4, 5].map((n) => (
-              <button key={n} className={`wz-chip ${filter.levels.includes(n) ? "on" : ""}`} aria-pressed={filter.levels.includes(n)} title={tr("card.level", { n })} onClick={() => setFilter({ ...filter, levels: filter.levels.includes(n) ? filter.levels.filter((y) => y !== n) : [...filter.levels, n] })}>
+              <button
+                key={n}
+                className={`wz-chip ${filter.levels.includes(n) ? "on" : ""}`}
+                aria-pressed={filter.levels.includes(n)}
+                title={tr("card.level", { n })}
+                onClick={() =>
+                  setFilter({
+                    ...filter,
+                    levels: filter.levels.includes(n)
+                      ? filter.levels.filter((y) => y !== n)
+                      : [...filter.levels, n],
+                  })
+                }
+              >
                 {n}
               </button>
             ))}
@@ -168,16 +283,31 @@ export function DeckEditArea({ investigator, deck, onChange, weakness = true }: 
           {pool.slice(0, shown).map((card) => {
             const why = reason(whyNot(db, deck, card.code));
             return (
-              <GridCard key={card.code} card={card} n={deck.cards[card.code]} why={why} dim={!!replacing && replacing !== card.code} lit={replacing === card.code}>
+              <GridCard
+                key={card.code}
+                card={card}
+                n={deck.cards[card.code]}
+                why={why}
+                dim={!!replacing && replacing !== card.code}
+                lit={replacing === card.code}
+              >
                 {!replacing && (
                   <>
-                    <button className="primary" disabled={!!why} onClick={() => {
-                      moment("builderAdd");
-                      change(changeCopies(deck.cards, card.code, 1));
-                    }} aria-label={tr("deckEditor.add", { card: nameOf(card) })}>
+                    <button
+                      className="primary"
+                      disabled={!!why}
+                      onClick={() => {
+                        moment("builderAdd");
+                        change(changeCopies(deck.cards, card.code, 1));
+                      }}
+                      aria-label={tr("deckEditor.add", { card: nameOf(card) })}
+                    >
                       + {tr("deck.add")}
                     </button>
-                    <button onClick={() => setReplacing(card.code)} aria-label={tr("deck.replaceWith", { card: nameOf(card) })}>
+                    <button
+                      onClick={() => setReplacing(card.code)}
+                      aria-label={tr("deck.replaceWith", { card: nameOf(card) })}
+                    >
                       ⇄ {tr("deck.replace")}
                     </button>
                   </>

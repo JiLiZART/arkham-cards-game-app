@@ -8,13 +8,19 @@ import type { Insets } from "./camera";
 export type LayoutMode = "desktop" | "phone";
 
 /** a phone held sideways (500 px tall or less, or 900 px wide or less), or held upright (500 px wide or less: the rotate card) */
-export function layoutModeOf(width: number, height: number): { mode: LayoutMode; portrait: boolean } {
+export function layoutModeOf(
+  width: number,
+  height: number,
+): { mode: LayoutMode; portrait: boolean } {
   const portrait = height > width;
   const phone = portrait ? width <= 500 : height <= 500 || width <= 900;
   return { mode: phone ? "phone" : "desktop", portrait };
 }
 
-export const viewportOf = (w: { innerWidth: number; innerHeight: number }) => ({ width: w.innerWidth, height: w.innerHeight });
+export const viewportOf = (w: { innerWidth: number; innerHeight: number }) => ({
+  width: w.innerWidth,
+  height: w.innerHeight,
+});
 
 /** screen space (px) covered by fixed HUD around the map on the desktop; the camera centres things in what's left */
 export const DESKTOP_INSETS: Insets = { top: 86, right: 470, bottom: 170, left: 200 };
@@ -22,9 +28,17 @@ export const DESKTOP_INSETS: Insets = { top: 86, right: 470, bottom: 170, left: 
 export const PHONE_INSETS: Insets = { top: 36, right: 56, bottom: 136, left: 0 };
 
 /** the camera's insets for a mode; on the phone the notch and home-indicator areas are added */
-export function insetsFor(mode: LayoutMode, safe: Insets = { top: 0, right: 0, bottom: 0, left: 0 }): Insets {
+export function insetsFor(
+  mode: LayoutMode,
+  safe: Insets = { top: 0, right: 0, bottom: 0, left: 0 },
+): Insets {
   if (mode === "desktop") return DESKTOP_INSETS;
-  return { top: PHONE_INSETS.top + safe.top, right: PHONE_INSETS.right + safe.right, bottom: PHONE_INSETS.bottom + safe.bottom, left: PHONE_INSETS.left + safe.left };
+  return {
+    top: PHONE_INSETS.top + safe.top,
+    right: PHONE_INSETS.right + safe.right,
+    bottom: PHONE_INSETS.bottom + safe.bottom,
+    left: PHONE_INSETS.left + safe.left,
+  };
 }
 
 // ---------- live values ----------
@@ -39,7 +53,12 @@ export function safeAreaInsets(): Insets {
     document.body.appendChild(probe);
   }
   const s = getComputedStyle(probe);
-  return { top: parseFloat(s.paddingTop) || 0, right: parseFloat(s.paddingRight) || 0, bottom: parseFloat(s.paddingBottom) || 0, left: parseFloat(s.paddingLeft) || 0 };
+  return {
+    top: parseFloat(s.paddingTop) || 0,
+    right: parseFloat(s.paddingRight) || 0,
+    bottom: parseFloat(s.paddingBottom) || 0,
+    left: parseFloat(s.paddingLeft) || 0,
+  };
 }
 
 const subscribe = (on: () => void) => {
@@ -67,7 +86,10 @@ export function useLayout(): { mode: LayoutMode; portrait: boolean } {
 export const useLayoutMode = (): LayoutMode => useLayout().mode;
 
 /** the current mode, outside React */
-export const layoutModeNow = (): LayoutMode => (typeof window === "undefined" ? "desktop" : layoutModeOf(window.innerWidth, window.innerHeight).mode);
+export const layoutModeNow = (): LayoutMode =>
+  typeof window === "undefined"
+    ? "desktop"
+    : layoutModeOf(window.innerWidth, window.innerHeight).mode;
 
 /** the window's size, updated as it changes */
 export function useViewport(): { width: number; height: number } {

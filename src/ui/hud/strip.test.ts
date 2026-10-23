@@ -28,11 +28,18 @@ describe("strip column card width", () => {
 });
 
 describe("strip buttons", () => {
-  const o = (label: string, value: unknown): ChoiceOption => ({ id: label, label, value }) as ChoiceOption;
+  const o = (label: string, value: unknown): ChoiceOption =>
+    ({ id: label, label, value }) as ChoiceOption;
   it("fight and evade get their icons; other labels lose the card name", () => {
-    expect(stripAction(o("Fight Ghoul Minion", { kind: "fight", enemy: "c1" }), "Ghoul Minion", "en")).toEqual({ label: "Fight", icon: "combat" });
-    expect(stripAction(o("Evade Ghoul Minion", { kind: "evade", enemy: "c1" }), "Ghoul Minion", "ru")).toEqual({ label: "Уклониться", icon: "agility" });
-    expect(stripAction(o("Use .45 Automatic", {}), ".45 Automatic", "en")).toEqual({ label: "Use" });
+    expect(
+      stripAction(o("Fight Ghoul Minion", { kind: "fight", enemy: "c1" }), "Ghoul Minion", "en"),
+    ).toEqual({ label: "Fight", icon: "combat" });
+    expect(
+      stripAction(o("Evade Ghoul Minion", { kind: "evade", enemy: "c1" }), "Ghoul Minion", "ru"),
+    ).toEqual({ label: "Уклониться", icon: "agility" });
+    expect(stripAction(o("Use .45 Automatic", {}), ".45 Automatic", "en")).toEqual({
+      label: "Use",
+    });
     expect(stripAction(o("Machete: fight", {}), "Machete", "en")).toEqual({ label: "Fight" });
   });
 });
@@ -45,7 +52,9 @@ describe("ability symbols", () => {
   });
   it("a reaction (Roland's) shows the reaction symbol; a fast ability in a test shows free", () => {
     expect(abilitySymbol(o("roland:0"), game)).toBe("reaction");
-    expect(abilitySymbol(o({ ability: { card: "gun", index: 0, ability: { kind: "fast" } } }), game)).toBe("free");
+    expect(
+      abilitySymbol(o({ ability: { card: "gun", index: 0, ability: { kind: "fast" } } }), game),
+    ).toBe("free");
   });
   it("no symbol for options that aren't card abilities", () => {
     expect(abilitySymbol(o({ kind: "fight", enemy: "e1" }), game)).toBeNull();
@@ -66,7 +75,10 @@ describe("encounter pile badges", () => {
 
 describe("strip order", () => {
   it("the engaged enemies and threat-area cards come first, then a divider, then the assets", () => {
-    expect(stripOrder(["a1", "a2"], ["t1", "e1"])).toEqual({ cards: ["t1", "e1", "a1", "a2"], dividerAt: 2 });
+    expect(stripOrder(["a1", "a2"], ["t1", "e1"])).toEqual({
+      cards: ["t1", "e1", "a1", "a2"],
+      dividerAt: 2,
+    });
   });
 
   it("no divider when only one kind is in play", () => {
@@ -76,7 +88,11 @@ describe("strip order", () => {
 });
 
 describe("which strip card shows its buttons", () => {
-  const opts = new Map([["a", [{ id: "x" }]], ["b", [{ id: "y" }, { id: "z" }]], ["c", []]]);
+  const opts = new Map([
+    ["a", [{ id: "x" }]],
+    ["b", [{ id: "y" }, { id: "z" }]],
+    ["c", []],
+  ]);
 
   it("the hovered card, when it has options", () => {
     expect(stripButtonsFor("b", opts)).toBe("b");

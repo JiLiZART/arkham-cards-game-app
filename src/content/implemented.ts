@@ -2,7 +2,8 @@ import type { ContentDb } from "../engine/types";
 import type { CardDef } from "./schema";
 
 /** the keywords the engine acts on by themselves (CardDef.keywords) */
-const KEYWORD = /^(hunter|retaliate|aloof|alert|massive|surge|peril|fast|exceptional)(\s*\(\d+\))?$/i;
+const KEYWORD =
+  /^(hunter|retaliate|aloof|alert|massive|surge|peril|fast|exceptional)(\s*\(\d+\))?$/i;
 
 /** the spawn values the engine resolves (rules/enemies.ts): the two keywords, or the name of a location in the content */
 function spawnResolves(db: ContentDb, spawn: string | undefined): boolean {
@@ -20,23 +21,41 @@ const LINE_RULES: [RegExp, (c: CardDef, db: ContentDb) => boolean][] = [
   [/^Max \d+ committed per skill test/i, (c) => c.maxCommitted !== undefined],
 ];
 
-const keywordsOnly = (line: string) => line.split(".").map((p) => p.trim()).filter(Boolean).every((p) => KEYWORD.test(p));
+const keywordsOnly = (line: string) =>
+  line
+    .split(".")
+    .map((p) => p.trim())
+    .filter(Boolean)
+    .every((p) => KEYWORD.test(p));
 
 const DIFFICULTIES = { front: ["easy", "standard"], back: ["hard", "expert"] } as const;
-const SYMBOLS: Record<string, string> = { skull: "skull", cultist: "cultist", tablet: "tablet", elder_thing: "elderThing" };
+const SYMBOLS: Record<string, string> = {
+  skull: "skull",
+  cultist: "cultist",
+  tablet: "tablet",
+  elder_thing: "elderThing",
+};
 
 /** what a printed token line needs from the scenario's token entry, read off its sentences */
 function tokenNeeds(rest: string): ("x" | "onFail" | "revealAnother" | "effect")[] {
   const needs = new Set<"x" | "onFail" | "revealAnother" | "effect">();
   let failing = false; // the sentences after "If you fail, …" that don't start a new condition go on being the failure effect
-  for (const sentence of rest.split(/\.\s+|\.$/).map((p) => p.trim()).filter(Boolean)) {
+  for (const sentence of rest
+    .split(/\.\s+|\.$/)
+    .map((p) => p.trim())
+    .filter(Boolean)) {
     if (/^[-+]?\d+$/.test(sentence)) continue; // the modifier
     if (/^-X$/.test(sentence)) needs.add("x");
     else if (/^X is /.test(sentence)) continue;
     else if (/^If you fail/i.test(sentence)) {
       needs.add("onFail");
       failing = true;
-    } else if (failing && !/^(If |Reveal )/.test(sentence) && !/reveal another token/i.test(sentence)) continue;
+    } else if (
+      failing &&
+      !/^(If |Reveal )/.test(sentence) &&
+      !/reveal another token/i.test(sentence)
+    )
+      continue;
     else if (/reveal another token/i.test(sentence)) needs.add("revealAnother");
     else needs.add("effect");
   }
@@ -51,17 +70,32 @@ export function tokensReal(db: ContentDb, scenarioId: string): boolean {
   const scenario = db.scenarios[scenarioId];
   const c = scenario && db.cards[scenario.card];
   if (!c) return false;
-  if (!(["easy", "standard", "hard", "expert"] as const).every((d) => Object.keys(scenario.tokens[d] ?? {}).length)) return false;
+  if (
+    !(["easy", "standard", "hard", "expert"] as const).every(
+      (d) => Object.keys(scenario.tokens[d] ?? {}).length,
+    )
+  )
+    return false;
   for (const side of ["front", "back"] as const) {
-    const text = side === "front" ? c.text : c.backText ?? "";
-    for (const line of text.replace(/<br\s*\/?>/g, "\n").replace(/<[^>]+>/g, "").split("\n")) {
+    const text = side === "front" ? c.text : (c.backText ?? "");
+    for (const line of text
+      .replace(/<br\s*\/?>/g, "\n")
+      .replace(/<[^>]+>/g, "")
+      .split("\n")) {
       const m = line.trim().match(/^\[(skull|cultist|tablet|elder_thing)\]\s*:?\s*(.*)$/);
       if (!m) continue;
       for (const d of DIFFICULTIES[side]) {
         const e = scenario.tokens[d]?.[SYMBOLS[m[1]] as "skull"];
         if (!e) return false;
         for (const need of tokenNeeds(m[2])) {
-          const ok = need === "x" ? e.x !== undefined : need === "onFail" ? !!e.onFail?.length : need === "revealAnother" ? !!e.revealAnother : !!(e.onReveal?.length || e.condition);
+          const ok =
+            need === "x"
+              ? e.x !== undefined
+              : need === "onFail"
+                ? !!e.onFail?.length
+                : need === "revealAnother"
+                  ? !!e.revealAnother
+                  : !!(e.onReveal?.length || e.condition);
           if (!ok) return false;
         }
       }
@@ -86,6 +120,13 @@ export function implemented(db: ContentDb, code: string): boolean {
   if (c.type === "scenario") return referenceCardWorks(db, c);
   if (c.abilities.length || db.scripts[code]) return true;
   // both sides are printed text; a line break is printed as <br/> as often as a newline
-  const lines = `${c.text}\n${c.backText ?? ""}`.replace(/<br\s*\/?>/g, "\n").replace(/<[^>]+>/g, "").split("\n").map((l) => l.trim()).filter(Boolean);
-  return lines.every((l) => keywordsOnly(l) || LINE_RULES.some(([re, set]) => re.test(l) && set(c, db)));
+  const lines = `${c.text}\n${c.backText ?? ""}`
+    .replace(/<br\s*\/?>/g, "\n")
+    .replace(/<[^>]+>/g, "")
+    .split("\n")
+    .map((l) => l.trim())
+    .filter(Boolean);
+  return lines.every(
+    (l) => keywordsOnly(l) || LINE_RULES.some(([re, set]) => re.test(l) && set(c, db)),
+  );
 }

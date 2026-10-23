@@ -35,7 +35,12 @@ export const focusZoom = (view: View, locH: number) => (FOCUS_PX * (view.h / 108
  * Far end: the whole map fits the window (and never less than half the default size, so a one-room map can still zoom out);
  * near end: a location MAX_LOC_PX tall.
  */
-export function zoomLimits(bounds: Bounds, view: View, locH: number, insets: Insets = NO_INSETS): { min: number; max: number } {
+export function zoomLimits(
+  bounds: Bounds,
+  view: View,
+  locH: number,
+  insets: Insets = NO_INSETS,
+): { min: number; max: number } {
   // "whole map" fits the free area between the HUD panels, so that zoom must be reachable
   const fit = fitCam(bounds, view, insets).zoom;
   const min = Math.min(fit, focusZoom(view, locH) / 2);
@@ -46,7 +51,13 @@ export function zoomLimits(bounds: Bounds, view: View, locH: number, insets: Ins
 const KEEP_PX = 320;
 
 /** keep the zoom within its limits and the map visible in the free area (never hidden under the HUD panels) */
-export function clampCam(c: Cam, bounds: Bounds, view: View, locH: number, insets: Insets = NO_INSETS): Cam {
+export function clampCam(
+  c: Cam,
+  bounds: Bounds,
+  view: View,
+  locH: number,
+  insets: Insets = NO_INSETS,
+): Cam {
   const { min, max } = zoomLimits(bounds, view, locH, insets);
   const zoom = Math.min(max, Math.max(min, c.zoom));
   const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
@@ -76,7 +87,11 @@ export function zoomAt(c: Cam, factor: number, px: number, py: number, view: Vie
 }
 
 /** move the camera so the screen drags by (dx, dy) px */
-export const panBy = (c: Cam, dx: number, dy: number): Cam => ({ ...c, cx: c.cx - dx / c.zoom, cz: c.cz - dy / c.zoom });
+export const panBy = (c: Cam, dx: number, dy: number): Cam => ({
+  ...c,
+  cx: c.cx - dx / c.zoom,
+  cz: c.cz - dy / c.zoom,
+});
 
 /** centre a point in the free area between the HUD insets */
 function centreIn(x: number, z: number, zoom: number, view: View, insets: Insets): Cam {
@@ -104,7 +119,8 @@ export function fitCam(bounds: Bounds, view: View, insets: Insets): Cam {
  */
 export function eventFocus(e: GameEvent | null, game: GameState): InstId | null {
   if (!e) return null;
-  const isLoc = (id: unknown): id is InstId => typeof id === "string" && game.cards[id]?.zone === "location";
+  const isLoc = (id: unknown): id is InstId =>
+    typeof id === "string" && game.cards[id]?.zone === "location";
   if (e.type === "spawn" && isLoc(e.data?.at)) return e.data.at;
   const c = e.card ? game.cards[e.card] : null;
   if (c?.zone === "enemy" && isLoc(c.location)) return c.location;

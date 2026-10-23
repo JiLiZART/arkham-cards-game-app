@@ -6,8 +6,22 @@ export const Skill = z.enum(SKILLS);
 export type Skill = z.infer<typeof Skill>;
 
 export const CHAOS_TOKENS = [
-  "+1", "0", "-1", "-2", "-3", "-4", "-5", "-6", "-7", "-8",
-  "skull", "cultist", "tablet", "elderThing", "autoFail", "elderSign",
+  "+1",
+  "0",
+  "-1",
+  "-2",
+  "-3",
+  "-4",
+  "-5",
+  "-6",
+  "-7",
+  "-8",
+  "skull",
+  "cultist",
+  "tablet",
+  "elderThing",
+  "autoFail",
+  "elderSign",
 ] as const;
 export const ChaosToken = z.enum(CHAOS_TOKENS);
 export type ChaosToken = z.infer<typeof ChaosToken>;
@@ -15,9 +29,20 @@ export const SYMBOL_TOKENS = ["skull", "cultist", "tablet", "elderThing"] as con
 export type SymbolToken = (typeof SYMBOL_TOKENS)[number];
 
 export const CardType = z.enum([
-  "investigator", "asset", "event", "skill", "treachery", "enemy", "location", "act", "agenda", "scenario",
+  "investigator",
+  "asset",
+  "event",
+  "skill",
+  "treachery",
+  "enemy",
+  "location",
+  "act",
+  "agenda",
+  "scenario",
   // later cycles: story cards, keys and enemy-locations
-  "story", "key", "enemy_location",
+  "story",
+  "key",
+  "enemy_location",
 ]);
 export type CardType = z.infer<typeof CardType>;
 
@@ -77,11 +102,28 @@ export const Duration = z.enum(["test", "turn", "phase", "round"]);
 
 // ---------- modifiers (constant or temporary) ----------
 export const ModStat = z.enum([
-  "willpower", "intellect", "combat", "agility",
-  "health", "sanity",
-  "shroud", "fight", "evade", "enemyHealth", "enemyDamage", "enemyHorror",
-  "additionalActions", "handSlots", "arcaneSlots", "allySlots", "accessorySlots", "bodySlots",
-  "cost", "attackDamage", "clueBonus", "testValue",
+  "willpower",
+  "intellect",
+  "combat",
+  "agility",
+  "health",
+  "sanity",
+  "shroud",
+  "fight",
+  "evade",
+  "enemyHealth",
+  "enemyDamage",
+  "enemyHorror",
+  "additionalActions",
+  "handSlots",
+  "arcaneSlots",
+  "allySlots",
+  "accessorySlots",
+  "bodySlots",
+  "cost",
+  "attackDamage",
+  "clueBonus",
+  "testValue",
 ]);
 export type ModStat = z.infer<typeof ModStat>;
 
@@ -204,7 +246,9 @@ export const Condition: z.ZodType<Condition> = z.lazy(() =>
     z.object({ eventSource: CardFilter }).strict(),
     z.object({ eventFromYourLocation: z.literal(true) }).strict(),
     z.object({ eventEnemyInPlay: z.literal(true) }).strict(),
-    z.object({ enemyNearby: z.object({ range: z.number(), nonElite: z.boolean().optional() }) }).strict(),
+    z
+      .object({ enemyNearby: z.object({ range: z.number(), nonElite: z.boolean().optional() }) })
+      .strict(),
     z.object({ defeatedHealthThisTurn: z.object({ min: z.number() }) }).strict(),
   ]),
 );
@@ -214,36 +258,116 @@ export type Effect =
   | { op: "gainResources"; amount: Amount; target?: InvTarget }
   | { op: "loseResources"; amount: Amount; target?: InvTarget }
   | { op: "drawCards"; amount: Amount; target?: InvTarget }
-  | { op: "discoverClues"; amount: Amount; at?: "yourLocation" | "testLocation" | "yourOrConnecting" }
+  | {
+      op: "discoverClues";
+      amount: Amount;
+      at?: "yourLocation" | "testLocation" | "yourOrConnecting";
+    }
   | { op: "takeDamage"; amount: Amount; direct?: boolean; target?: InvTarget }
   | { op: "takeHorror"; amount: Amount; direct?: boolean; target?: InvTarget }
-  | { op: "heal"; damage?: number; horror?: number; target?: InvTarget; /** an Ally asset may be healed too: one at your location, or one you control */ targetAlly?: "atLocation" | "controlled" }
+  | {
+      op: "heal";
+      damage?: number;
+      horror?: number;
+      target?: InvTarget;
+      /** an Ally asset may be healed too: one at your location, or one you control */ targetAlly?:
+        | "atLocation"
+        | "controlled";
+    }
   | { op: "dealDamage"; amount: Amount; to: EnemyTarget }
   | { op: "addDamage"; amount: number } // in a dealDamage window: damage being dealt to the enemy grows
-  | { op: "placeDoom"; amount: Amount; on: "agenda" | "self" | "nearestCultist" | "nearestEnemy" | "eachCultist" }
-  | { op: "placeTokens"; on: "self"; clues?: number; horror?: number; damage?: Amount; doom?: number; resources?: number }
+  | {
+      op: "placeDoom";
+      amount: Amount;
+      on: "agenda" | "self" | "nearestCultist" | "nearestEnemy" | "eachCultist";
+    }
+  | {
+      op: "placeTokens";
+      on: "self";
+      clues?: number;
+      horror?: number;
+      damage?: Amount;
+      doom?: number;
+      resources?: number;
+    }
   | { op: "putInThreatArea" }
   | { op: "attachToLocation"; where: "yours" | "mostClues"; limitOnePerLocation?: boolean }
   | { op: "discardSelf" }
   | { op: "addSelfToVictory" }
   | { op: "removeSelf" }
-  | { op: "skillTest"; skill: Skill | Skill[]; difficulty: number; onSuccess?: Effect[]; onFail?: Effect[]; perPointFailed?: Effect[] }
-  | { op: "fight"; target?: EnemyTarget; auto?: boolean; skill?: Skill; bonus?: number; damageBonus?: number; onSuccess?: Effect[]; onFail?: Effect[]; onTokens?: OnTokens; extraDamageIf?: Condition; extraDamageIfSucceedBy?: number }
-  | { op: "investigate"; skill?: Skill; bonus?: number; shroud?: number; insteadOfClues?: Effect[]; onSuccess?: Effect[]; onFail?: Effect[]; onTokens?: OnTokens }
-  | { op: "evade"; skill?: Skill; bonus?: number; onSuccess?: Effect[]; onFail?: Effect[]; auto?: boolean; all?: boolean; nonElite?: boolean; onTokens?: OnTokens }
+  | {
+      op: "skillTest";
+      skill: Skill | Skill[];
+      difficulty: number;
+      onSuccess?: Effect[];
+      onFail?: Effect[];
+      perPointFailed?: Effect[];
+    }
+  | {
+      op: "fight";
+      target?: EnemyTarget;
+      auto?: boolean;
+      skill?: Skill;
+      bonus?: number;
+      damageBonus?: number;
+      onSuccess?: Effect[];
+      onFail?: Effect[];
+      onTokens?: OnTokens;
+      extraDamageIf?: Condition;
+      extraDamageIfSucceedBy?: number;
+    }
+  | {
+      op: "investigate";
+      skill?: Skill;
+      bonus?: number;
+      shroud?: number;
+      insteadOfClues?: Effect[];
+      onSuccess?: Effect[];
+      onFail?: Effect[];
+      onTokens?: OnTokens;
+    }
+  | {
+      op: "evade";
+      skill?: Skill;
+      bonus?: number;
+      onSuccess?: Effect[];
+      onFail?: Effect[];
+      auto?: boolean;
+      all?: boolean;
+      nonElite?: boolean;
+      onTokens?: OnTokens;
+    }
   | { op: "modify"; mod: Modifier; until: z.infer<typeof Duration>; target?: InvTarget }
-  | { op: "chooseOne"; options: { label: string; effects: Effect[]; condition?: Condition }[]; chooser?: "you" | "lead" }
+  | {
+      op: "chooseOne";
+      options: { label: string; effects: Effect[]; condition?: Condition }[];
+      chooser?: "you" | "lead";
+    }
   | { op: "discardFromHand"; amount: Amount; random?: boolean; target?: InvTarget }
   | { op: "discardAsset"; orElse?: Effect[] }
   | { op: "discardAllButOneFromHand" }
   | { op: "removeDiscardFromGame" }
   | { op: "drawEncounterCard" }
-  | { op: "gainActions"; amount: number; /** the action can only be used for this kind of action */ onlyFor?: string }
+  | {
+      op: "gainActions";
+      amount: number;
+      /** the action can only be used for this kind of action */ onlyFor?: string;
+    }
   | { op: "cancel" } // cancel the triggering attack/revelation/token
   | { op: "disengageAll"; nonTrait?: string }
-  | { op: "moveTo"; where: "connecting" | "revealedNoEnemies" | "central" | "choose" | "eventLocation" }
+  | {
+      op: "moveTo";
+      where: "connecting" | "revealedNoEnemies" | "central" | "choose" | "eventLocation";
+    }
   /** `draw`: the card found is drawn (a weakness resolves), not just added to the hand */
-  | { op: "searchDeck"; top?: number; filter: CardFilter; amount?: number; target?: InvTarget; draw?: boolean }
+  | {
+      op: "searchDeck";
+      top?: number;
+      filter: CardFilter;
+      amount?: number;
+      target?: InvTarget;
+      draw?: boolean;
+    }
   /** `anyDeck`: any investigator's deck or the encounter deck (Scrying); the cards go back on top in the order chosen */
   | { op: "lookAtTop"; amount: number; anyDeck?: boolean }
   | { op: "addUses"; amount: number; filter: CardFilter }
@@ -258,7 +382,16 @@ export type Effect =
   | { op: "takeFromDiscard"; filter: CardFilter }
   | { op: "searchEncounterDraw"; filter: CardFilter }
   | { op: "preventDamage"; amount: number; kind: "damage" | "horror" | "either" } // in an attackDealsDamage window: cancel points of what the attack just dealt
-  | { op: "discardEncounterUntil"; filter: CardFilter; count?: number; countIfPlayersAtLeast?: [number, number]; then: "leadDraws" | "spawnAt"; at?: string; doom?: number; shuffleDiscardFirst?: boolean }
+  | {
+      op: "discardEncounterUntil";
+      filter: CardFilter;
+      count?: number;
+      countIfPlayersAtLeast?: [number, number];
+      then: "leadDraws" | "spawnAt";
+      at?: string;
+      doom?: number;
+      shuffleDiscardFirst?: boolean;
+    }
   | { op: "dropClues"; amount: Amount }
   | { op: "spendClues"; amount: Amount }
   | { op: "healEnemy"; amount: number }
@@ -276,60 +409,237 @@ export type Effect =
 /** extra effects if any of the listed tokens was revealed during the test */
 export type OnTokens = { tokens: ChaosToken[]; effects: Effect[] };
 const effectsArr = (): z.ZodType<Effect[]> => z.array(Effect);
-const OnTokens = (): z.ZodType<OnTokens> => z.object({ tokens: z.array(ChaosToken), effects: effectsArr() }).strict();
+const OnTokens = (): z.ZodType<OnTokens> =>
+  z.object({ tokens: z.array(ChaosToken), effects: effectsArr() }).strict();
 export const Effect: z.ZodType<Effect> = z.lazy(() =>
   z.discriminatedUnion("op", [
-    z.object({ op: z.literal("gainResources"), amount: Amount, target: InvTarget.optional() }).strict(),
-    z.object({ op: z.literal("loseResources"), amount: Amount, target: InvTarget.optional() }).strict(),
+    z
+      .object({ op: z.literal("gainResources"), amount: Amount, target: InvTarget.optional() })
+      .strict(),
+    z
+      .object({ op: z.literal("loseResources"), amount: Amount, target: InvTarget.optional() })
+      .strict(),
     z.object({ op: z.literal("drawCards"), amount: Amount, target: InvTarget.optional() }).strict(),
-    z.object({ op: z.literal("discoverClues"), amount: Amount, at: z.enum(["yourLocation", "testLocation", "yourOrConnecting"]).optional() }).strict(),
-    z.object({ op: z.literal("takeDamage"), amount: Amount, direct: z.boolean().optional(), target: InvTarget.optional() }).strict(),
-    z.object({ op: z.literal("takeHorror"), amount: Amount, direct: z.boolean().optional(), target: InvTarget.optional() }).strict(),
-    z.object({ op: z.literal("heal"), damage: z.number().optional(), horror: z.number().optional(), target: InvTarget.optional(), targetAlly: z.enum(["atLocation", "controlled"]).optional() }).strict(),
+    z
+      .object({
+        op: z.literal("discoverClues"),
+        amount: Amount,
+        at: z.enum(["yourLocation", "testLocation", "yourOrConnecting"]).optional(),
+      })
+      .strict(),
+    z
+      .object({
+        op: z.literal("takeDamage"),
+        amount: Amount,
+        direct: z.boolean().optional(),
+        target: InvTarget.optional(),
+      })
+      .strict(),
+    z
+      .object({
+        op: z.literal("takeHorror"),
+        amount: Amount,
+        direct: z.boolean().optional(),
+        target: InvTarget.optional(),
+      })
+      .strict(),
+    z
+      .object({
+        op: z.literal("heal"),
+        damage: z.number().optional(),
+        horror: z.number().optional(),
+        target: InvTarget.optional(),
+        targetAlly: z.enum(["atLocation", "controlled"]).optional(),
+      })
+      .strict(),
     z.object({ op: z.literal("dealDamage"), amount: Amount, to: EnemyTarget }).strict(),
     z.object({ op: z.literal("addDamage"), amount: z.number() }).strict(),
-    z.object({ op: z.literal("placeDoom"), amount: Amount, on: z.enum(["agenda", "self", "nearestCultist", "nearestEnemy", "eachCultist"]) }).strict(),
-    z.object({ op: z.literal("placeTokens"), on: z.literal("self"), clues: z.number().optional(), horror: z.number().optional(), damage: Amount.optional(), doom: z.number().optional(), resources: z.number().optional() }).strict(),
+    z
+      .object({
+        op: z.literal("placeDoom"),
+        amount: Amount,
+        on: z.enum(["agenda", "self", "nearestCultist", "nearestEnemy", "eachCultist"]),
+      })
+      .strict(),
+    z
+      .object({
+        op: z.literal("placeTokens"),
+        on: z.literal("self"),
+        clues: z.number().optional(),
+        horror: z.number().optional(),
+        damage: Amount.optional(),
+        doom: z.number().optional(),
+        resources: z.number().optional(),
+      })
+      .strict(),
     z.object({ op: z.literal("putInThreatArea") }).strict(),
-    z.object({ op: z.literal("attachToLocation"), where: z.enum(["yours", "mostClues"]), limitOnePerLocation: z.boolean().optional() }).strict(),
+    z
+      .object({
+        op: z.literal("attachToLocation"),
+        where: z.enum(["yours", "mostClues"]),
+        limitOnePerLocation: z.boolean().optional(),
+      })
+      .strict(),
     z.object({ op: z.literal("discardSelf") }).strict(),
     z.object({ op: z.literal("addSelfToVictory") }).strict(),
     z.object({ op: z.literal("removeSelf") }).strict(),
-    z.object({ op: z.literal("skillTest"), skill: z.union([Skill, z.array(Skill)]), difficulty: z.number(), onSuccess: effectsArr().optional(), onFail: effectsArr().optional(), perPointFailed: effectsArr().optional() }).strict(),
-    z.object({ op: z.literal("fight"), target: EnemyTarget.optional(), auto: z.boolean().optional(), skill: Skill.optional(), bonus: z.number().optional(), damageBonus: z.number().optional(), onSuccess: effectsArr().optional(), onFail: effectsArr().optional(), onTokens: OnTokens().optional(), extraDamageIf: Condition.optional(), extraDamageIfSucceedBy: z.number().optional() }).strict(),
-    z.object({ op: z.literal("investigate"), skill: Skill.optional(), bonus: z.number().optional(), shroud: z.number().optional(), insteadOfClues: effectsArr().optional(), onSuccess: effectsArr().optional(), onFail: effectsArr().optional(), onTokens: OnTokens().optional() }).strict(),
-    z.object({ op: z.literal("evade"), skill: Skill.optional(), bonus: z.number().optional(), onSuccess: effectsArr().optional(), onFail: effectsArr().optional(), auto: z.boolean().optional(), all: z.boolean().optional(), nonElite: z.boolean().optional(), onTokens: OnTokens().optional() }).strict(),
-    z.object({ op: z.literal("modify"), mod: Modifier, until: Duration, target: InvTarget.optional() }).strict(),
-    z.object({ op: z.literal("chooseOne"), options: z.array(z.object({ label: z.string(), effects: effectsArr(), condition: Condition.optional() }).strict()), chooser: z.enum(["you", "lead"]).optional() }).strict(),
-    z.object({ op: z.literal("discardFromHand"), amount: Amount, random: z.boolean().optional(), target: InvTarget.optional() }).strict(),
+    z
+      .object({
+        op: z.literal("skillTest"),
+        skill: z.union([Skill, z.array(Skill)]),
+        difficulty: z.number(),
+        onSuccess: effectsArr().optional(),
+        onFail: effectsArr().optional(),
+        perPointFailed: effectsArr().optional(),
+      })
+      .strict(),
+    z
+      .object({
+        op: z.literal("fight"),
+        target: EnemyTarget.optional(),
+        auto: z.boolean().optional(),
+        skill: Skill.optional(),
+        bonus: z.number().optional(),
+        damageBonus: z.number().optional(),
+        onSuccess: effectsArr().optional(),
+        onFail: effectsArr().optional(),
+        onTokens: OnTokens().optional(),
+        extraDamageIf: Condition.optional(),
+        extraDamageIfSucceedBy: z.number().optional(),
+      })
+      .strict(),
+    z
+      .object({
+        op: z.literal("investigate"),
+        skill: Skill.optional(),
+        bonus: z.number().optional(),
+        shroud: z.number().optional(),
+        insteadOfClues: effectsArr().optional(),
+        onSuccess: effectsArr().optional(),
+        onFail: effectsArr().optional(),
+        onTokens: OnTokens().optional(),
+      })
+      .strict(),
+    z
+      .object({
+        op: z.literal("evade"),
+        skill: Skill.optional(),
+        bonus: z.number().optional(),
+        onSuccess: effectsArr().optional(),
+        onFail: effectsArr().optional(),
+        auto: z.boolean().optional(),
+        all: z.boolean().optional(),
+        nonElite: z.boolean().optional(),
+        onTokens: OnTokens().optional(),
+      })
+      .strict(),
+    z
+      .object({
+        op: z.literal("modify"),
+        mod: Modifier,
+        until: Duration,
+        target: InvTarget.optional(),
+      })
+      .strict(),
+    z
+      .object({
+        op: z.literal("chooseOne"),
+        options: z.array(
+          z
+            .object({ label: z.string(), effects: effectsArr(), condition: Condition.optional() })
+            .strict(),
+        ),
+        chooser: z.enum(["you", "lead"]).optional(),
+      })
+      .strict(),
+    z
+      .object({
+        op: z.literal("discardFromHand"),
+        amount: Amount,
+        random: z.boolean().optional(),
+        target: InvTarget.optional(),
+      })
+      .strict(),
     z.object({ op: z.literal("discardAsset"), orElse: effectsArr().optional() }).strict(),
     z.object({ op: z.literal("discardAllButOneFromHand") }).strict(),
     z.object({ op: z.literal("removeDiscardFromGame") }).strict(),
     z.object({ op: z.literal("drawEncounterCard") }).strict(),
-    z.object({ op: z.literal("gainActions"), amount: z.number(), onlyFor: z.string().optional() }).strict(),
+    z
+      .object({ op: z.literal("gainActions"), amount: z.number(), onlyFor: z.string().optional() })
+      .strict(),
     z.object({ op: z.literal("cancel") }).strict(),
     z.object({ op: z.literal("disengageAll"), nonTrait: z.string().optional() }).strict(),
-    z.object({ op: z.literal("moveTo"), where: z.enum(["connecting", "revealedNoEnemies", "central", "choose", "eventLocation"]) }).strict(),
-    z.object({ op: z.literal("searchDeck"), top: z.number().optional(), filter: CardFilter, amount: z.number().optional(), target: InvTarget.optional(), draw: z.boolean().optional() }).strict(),
-    z.object({ op: z.literal("lookAtTop"), amount: z.number(), anyDeck: z.boolean().optional() }).strict(),
+    z
+      .object({
+        op: z.literal("moveTo"),
+        where: z.enum(["connecting", "revealedNoEnemies", "central", "choose", "eventLocation"]),
+      })
+      .strict(),
+    z
+      .object({
+        op: z.literal("searchDeck"),
+        top: z.number().optional(),
+        filter: CardFilter,
+        amount: z.number().optional(),
+        target: InvTarget.optional(),
+        draw: z.boolean().optional(),
+      })
+      .strict(),
+    z
+      .object({ op: z.literal("lookAtTop"), amount: z.number(), anyDeck: z.boolean().optional() })
+      .strict(),
     z.object({ op: z.literal("addUses"), amount: z.number(), filter: CardFilter }).strict(),
     z.object({ op: z.literal("surge") }).strict(),
     z.object({ op: z.literal("drawCultistOrSearch") }).strict(),
-    z.object({ op: z.literal("spawnSetAside"), code: z.string(), at: z.string().optional() }).strict(),
+    z
+      .object({ op: z.literal("spawnSetAside"), code: z.string(), at: z.string().optional() })
+      .strict(),
     z.object({ op: z.literal("putSetAsideIntoPlay"), code: z.string() }).strict(),
-    z.object({ op: z.literal("shuffleIntoEncounterDeck"), target: z.literal("eventEnemy") }).strict(),
+    z
+      .object({ op: z.literal("shuffleIntoEncounterDeck"), target: z.literal("eventEnemy") })
+      .strict(),
     z.object({ op: z.literal("takeControl") }).strict(),
     z.object({ op: z.literal("resolution"), id: z.string() }).strict(),
     z.object({ op: z.literal("resign") }).strict(),
     z.object({ op: z.literal("takeFromDiscard"), filter: CardFilter }).strict(),
     z.object({ op: z.literal("searchEncounterDraw"), filter: CardFilter }).strict(),
-    z.object({ op: z.literal("preventDamage"), amount: z.number(), kind: z.enum(["damage", "horror", "either"]) }).strict(),
-    z.object({ op: z.literal("discardEncounterUntil"), filter: CardFilter, count: z.number().optional(), countIfPlayersAtLeast: z.tuple([z.number(), z.number()]).optional(), then: z.enum(["leadDraws", "spawnAt"]), at: z.string().optional(), doom: z.number().optional(), shuffleDiscardFirst: z.boolean().optional() }).strict(),
+    z
+      .object({
+        op: z.literal("preventDamage"),
+        amount: z.number(),
+        kind: z.enum(["damage", "horror", "either"]),
+      })
+      .strict(),
+    z
+      .object({
+        op: z.literal("discardEncounterUntil"),
+        filter: CardFilter,
+        count: z.number().optional(),
+        countIfPlayersAtLeast: z.tuple([z.number(), z.number()]).optional(),
+        then: z.enum(["leadDraws", "spawnAt"]),
+        at: z.string().optional(),
+        doom: z.number().optional(),
+        shuffleDiscardFirst: z.boolean().optional(),
+      })
+      .strict(),
     z.object({ op: z.literal("dropClues"), amount: Amount }).strict(),
     z.object({ op: z.literal("spendClues"), amount: Amount }).strict(),
     z.object({ op: z.literal("healEnemy"), amount: z.number() }).strict(),
-    z.object({ op: z.literal("pullEnemy"), range: z.number(), nonElite: z.boolean().optional(), then: effectsArr() }).strict(),
-    z.object({ op: z.literal("engageAny"), each: effectsArr(), done: z.array(z.string()).optional() }).strict(),
+    z
+      .object({
+        op: z.literal("pullEnemy"),
+        range: z.number(),
+        nonElite: z.boolean().optional(),
+        then: effectsArr(),
+      })
+      .strict(),
+    z
+      .object({
+        op: z.literal("engageAny"),
+        each: effectsArr(),
+        done: z.array(z.string()).optional(),
+      })
+      .strict(),
     z.object({ op: z.literal("readyCard"), filter: CardFilter }).strict(),
     z.object({ op: z.literal("searchAndPlay"), filter: CardFilter }).strict(),
     z.object({ op: z.literal("checkDoom") }).strict(),
@@ -338,24 +648,105 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
   ]),
 );
 export const EFFECT_OPS = [
-  "gainResources", "loseResources", "drawCards", "discoverClues", "takeDamage", "takeHorror", "heal", "dealDamage", "addDamage",
-  "placeDoom", "placeTokens", "putInThreatArea", "attachToLocation", "discardSelf", "addSelfToVictory", "removeSelf",
-  "skillTest", "fight", "investigate", "evade", "modify", "chooseOne", "discardFromHand", "discardAsset",
-  "discardAllButOneFromHand", "removeDiscardFromGame", "drawEncounterCard", "gainActions", "cancel", "disengageAll",
-  "moveTo", "searchDeck", "lookAtTop", "addUses", "surge", "drawCultistOrSearch", "spawnSetAside",
-  "putSetAsideIntoPlay", "shuffleIntoEncounterDeck", "takeControl", "resolution", "resign", "checkDoom",
-  "takeFromDiscard", "searchEncounterDraw", "preventDamage", "discardEncounterUntil", "dropClues", "spendClues", "healEnemy", "pullEnemy", "engageAny", "readyCard", "searchAndPlay",
-  "returnSelfToHand", "script",
+  "gainResources",
+  "loseResources",
+  "drawCards",
+  "discoverClues",
+  "takeDamage",
+  "takeHorror",
+  "heal",
+  "dealDamage",
+  "addDamage",
+  "placeDoom",
+  "placeTokens",
+  "putInThreatArea",
+  "attachToLocation",
+  "discardSelf",
+  "addSelfToVictory",
+  "removeSelf",
+  "skillTest",
+  "fight",
+  "investigate",
+  "evade",
+  "modify",
+  "chooseOne",
+  "discardFromHand",
+  "discardAsset",
+  "discardAllButOneFromHand",
+  "removeDiscardFromGame",
+  "drawEncounterCard",
+  "gainActions",
+  "cancel",
+  "disengageAll",
+  "moveTo",
+  "searchDeck",
+  "lookAtTop",
+  "addUses",
+  "surge",
+  "drawCultistOrSearch",
+  "spawnSetAside",
+  "putSetAsideIntoPlay",
+  "shuffleIntoEncounterDeck",
+  "takeControl",
+  "resolution",
+  "resign",
+  "checkDoom",
+  "takeFromDiscard",
+  "searchEncounterDraw",
+  "preventDamage",
+  "discardEncounterUntil",
+  "dropClues",
+  "spendClues",
+  "healEnemy",
+  "pullEnemy",
+  "engageAny",
+  "readyCard",
+  "searchAndPlay",
+  "returnSelfToHand",
+  "script",
 ] as const;
 
 // ---------- abilities ----------
 export const TRIGGERS = [
   // investigator-side
-  "enemyDefeated", "successfulInvestigate", "successfulAttack", "skillTestFailed", "skillTestSucceeded", "wouldFailSkillTest",
-  "tokenRevealed", "enemyAttacks", "enemyAttacked", "enemyEvaded", "horrorPlaced", "damageTaken", "horrorTaken",
-  "enterPlay", "cardPlayed", "treacheryDrawn", "enemySpawns", "phaseBegins", "turnBegins", "turnEnds", "roundEnds",
-  "attackDealsDamage", "mythosEnds", "enemyPhaseEnds", "enterLocation", "leaveLocation", "locationInvestigated", "assetDamaged", "enemyEngages",
-  "enemyDefeatedSelf", "playerWindow", "successfulEvade", "dealDamage", "excessDamage", "wouldMoveOut", "agendaAdvances", "wouldDiscoverClues", "skillTestEnds",
+  "enemyDefeated",
+  "successfulInvestigate",
+  "successfulAttack",
+  "skillTestFailed",
+  "skillTestSucceeded",
+  "wouldFailSkillTest",
+  "tokenRevealed",
+  "enemyAttacks",
+  "enemyAttacked",
+  "enemyEvaded",
+  "horrorPlaced",
+  "damageTaken",
+  "horrorTaken",
+  "enterPlay",
+  "cardPlayed",
+  "treacheryDrawn",
+  "enemySpawns",
+  "phaseBegins",
+  "turnBegins",
+  "turnEnds",
+  "roundEnds",
+  "attackDealsDamage",
+  "mythosEnds",
+  "enemyPhaseEnds",
+  "enterLocation",
+  "leaveLocation",
+  "locationInvestigated",
+  "assetDamaged",
+  "enemyEngages",
+  "enemyDefeatedSelf",
+  "playerWindow",
+  "successfulEvade",
+  "dealDamage",
+  "excessDamage",
+  "wouldMoveOut",
+  "agendaAdvances",
+  "wouldDiscoverClues",
+  "skillTestEnds",
 ] as const;
 export const Trigger = z.enum(TRIGGERS);
 export type Trigger = z.infer<typeof Trigger>;
@@ -379,7 +770,16 @@ export const Cost = z
   .strict();
 export type Cost = z.infer<typeof Cost>;
 
-export const AbilityKind = z.enum(["action", "fast", "reaction", "forced", "constant", "revelation", "onPlay", "elderSign"]);
+export const AbilityKind = z.enum([
+  "action",
+  "fast",
+  "reaction",
+  "forced",
+  "constant",
+  "revelation",
+  "onPlay",
+  "elderSign",
+]);
 export type AbilityKind = z.infer<typeof AbilityKind>;
 
 export const Ability = z
@@ -389,10 +789,18 @@ export const Ability = z
     /** for reaction/forced */
     trigger: Trigger.optional(),
     /** action designator, e.g. fight/investigate (counts as that action for AoO and effects) */
-    designator: z.enum(["fight", "investigate", "evade", "parley", "resign", "move", "engage"]).optional(),
+    designator: z
+      .enum(["fight", "investigate", "evade", "parley", "resign", "move", "engage"])
+      .optional(),
     actionCost: z.number().optional(), // default 1 for kind=action
     cost: Cost.optional(),
-    limit: z.object({ per: z.enum(["test", "turn", "phase", "round", "game"]), count: z.number().default(1), group: z.boolean().optional() }).optional(),
+    limit: z
+      .object({
+        per: z.enum(["test", "turn", "phase", "round", "game"]),
+        count: z.number().default(1),
+        group: z.boolean().optional(),
+      })
+      .optional(),
     condition: Condition.optional(),
     effects: z.array(Effect).optional(),
     modifiers: z.array(Modifier).optional(),
@@ -412,7 +820,13 @@ export type Ability = z.infer<typeof Ability>;
 
 // ---------- cards ----------
 export const Icons = z
-  .object({ willpower: z.number(), intellect: z.number(), combat: z.number(), agility: z.number(), wild: z.number() })
+  .object({
+    willpower: z.number(),
+    intellect: z.number(),
+    combat: z.number(),
+    agility: z.number(),
+    wild: z.number(),
+  })
   .partial();
 
 export const CardDef = z
@@ -432,7 +846,10 @@ export const CardDef = z
     deckLimit: z.number().optional(),
     xp: z.number().optional(),
     /** null: no cost printed; "X": the text defines it */
-    cost: z.union([z.number(), z.literal("X")]).nullable().optional(),
+    cost: z
+      .union([z.number(), z.literal("X")])
+      .nullable()
+      .optional(),
     traits: z.array(z.string()).default([]),
     icons: Icons.default({}),
     slots: z.array(Slot).default([]),
@@ -447,7 +864,14 @@ export const CardDef = z
     health: z.number().optional(),
     sanity: z.number().optional(),
     uses: z.object({ type: z.string(), count: z.number() }).optional(),
-    skills: z.object({ willpower: z.number(), intellect: z.number(), combat: z.number(), agility: z.number() }).optional(),
+    skills: z
+      .object({
+        willpower: z.number(),
+        intellect: z.number(),
+        combat: z.number(),
+        agility: z.number(),
+      })
+      .optional(),
     // enemy (null: no printed value, or one the text defines — the enemy can't be fought / evaded / defeated by damage)
     enemy: z
       .object({
@@ -462,8 +886,30 @@ export const CardDef = z
     spawn: z.string().optional(), // location name or "emptyLocation" / "engagedWithPrey"
     prey: z
       .union([
-        z.object({ highest: z.enum(["willpower", "intellect", "combat", "agility", "clues", "remainingHealth", "remainingSanity", "cardsInHand"]) }),
-        z.object({ lowest: z.enum(["willpower", "intellect", "combat", "agility", "clues", "remainingHealth", "remainingSanity", "cardsInHand"]) }),
+        z.object({
+          highest: z.enum([
+            "willpower",
+            "intellect",
+            "combat",
+            "agility",
+            "clues",
+            "remainingHealth",
+            "remainingSanity",
+            "cardsInHand",
+          ]),
+        }),
+        z.object({
+          lowest: z.enum([
+            "willpower",
+            "intellect",
+            "combat",
+            "agility",
+            "clues",
+            "remainingHealth",
+            "remainingSanity",
+            "cardsInHand",
+          ]),
+        }),
         z.literal("bearer"),
         /** only this investigator (by card code) is prey: Tommy Malloy */
         z.object({ only: z.string() }),
@@ -483,7 +929,21 @@ export const CardDef = z
     /** location investigated with a different skill */
     investigateSkill: Skill.optional(),
     victory: z.number().optional(),
-    keywords: z.array(z.enum(["hunter", "retaliate", "aloof", "alert", "massive", "surge", "peril", "fast", "exceptional"])).default([]),
+    keywords: z
+      .array(
+        z.enum([
+          "hunter",
+          "retaliate",
+          "aloof",
+          "alert",
+          "massive",
+          "surge",
+          "peril",
+          "fast",
+          "exceptional",
+        ]),
+      )
+      .default([]),
     /** wild/limits */
     maxCommitted: z.number().optional(),
     /** discard the asset when its last use is spent (First Aid, Forbidden Knowledge) */
@@ -543,7 +1003,9 @@ export const InvestigatorDef = z
     pack: z.string().optional(),
     generated: z.boolean().optional(),
     /** the name in each other language, for the picker before the investigator's pack (and its text) is loaded */
-    names: z.record(z.string(), z.object({ name: z.string(), subname: z.string().optional() }).strict()).optional(),
+    names: z
+      .record(z.string(), z.object({ name: z.string(), subname: z.string().optional() }).strict())
+      .optional(),
     signatures: z.array(z.string()),
     weaknesses: z.array(z.string()),
     /** a required card and the alternative codes that can stand in for it */
@@ -584,22 +1046,80 @@ export const LogCondition: z.ZodType<LogCondition> = z.lazy(() =>
     z.object({ not: LogCondition }).strict(),
     z.object({ playerCount: z.number() }).strict(),
     z.object({ playersAtLeast: z.number() }).strict(),
-    z.object({ logCount: z.object({ key: z.string(), min: z.number().optional(), max: z.number().optional() }) }).strict(),
+    z
+      .object({
+        logCount: z.object({
+          key: z.string(),
+          min: z.number().optional(),
+          max: z.number().optional(),
+        }),
+      })
+      .strict(),
   ]),
 );
 
 /** scenario setup steps, performed in order */
 export const SetupStep = z.discriminatedUnion("do", [
-  z.object({ do: z.literal("putIntoPlay"), codes: z.array(z.string()), when: LogCondition.optional() }).strict(),
-  z.object({ do: z.literal("putRandomIntoPlay"), from: z.array(z.string()), count: z.number(), removeRest: z.boolean().default(true), when: LogCondition.optional() }).strict(),
-  z.object({ do: z.literal("setAside"), codes: z.array(z.string()), when: LogCondition.optional() }).strict(),
-  z.object({ do: z.literal("remove"), codes: z.array(z.string()), when: LogCondition.optional() }).strict(),
+  z
+    .object({
+      do: z.literal("putIntoPlay"),
+      codes: z.array(z.string()),
+      when: LogCondition.optional(),
+    })
+    .strict(),
+  z
+    .object({
+      do: z.literal("putRandomIntoPlay"),
+      from: z.array(z.string()),
+      count: z.number(),
+      removeRest: z.boolean().default(true),
+      when: LogCondition.optional(),
+    })
+    .strict(),
+  z
+    .object({
+      do: z.literal("setAside"),
+      codes: z.array(z.string()),
+      when: LogCondition.optional(),
+    })
+    .strict(),
+  z
+    .object({ do: z.literal("remove"), codes: z.array(z.string()), when: LogCondition.optional() })
+    .strict(),
   z.object({ do: z.literal("startAt"), code: z.string(), when: LogCondition.optional() }).strict(),
-  z.object({ do: z.literal("spawn"), code: z.string(), at: z.string(), when: LogCondition.optional() }).strict(),
-  z.object({ do: z.literal("shuffleIntoEncounter"), codes: z.array(z.string()), create: z.boolean().optional(), when: LogCondition.optional() }).strict(),
-  z.object({ do: z.literal("placeDoomOnAgenda"), amount: z.number(), when: LogCondition.optional() }).strict(),
-  z.object({ do: z.literal("addChaosToken"), token: ChaosToken, when: LogCondition.optional() }).strict(),
-  z.object({ do: z.literal("discardRandomFromHands"), amount: z.number(), when: LogCondition.optional() }).strict(),
+  z
+    .object({
+      do: z.literal("spawn"),
+      code: z.string(),
+      at: z.string(),
+      when: LogCondition.optional(),
+    })
+    .strict(),
+  z
+    .object({
+      do: z.literal("shuffleIntoEncounter"),
+      codes: z.array(z.string()),
+      create: z.boolean().optional(),
+      when: LogCondition.optional(),
+    })
+    .strict(),
+  z
+    .object({
+      do: z.literal("placeDoomOnAgenda"),
+      amount: z.number(),
+      when: LogCondition.optional(),
+    })
+    .strict(),
+  z
+    .object({ do: z.literal("addChaosToken"), token: ChaosToken, when: LogCondition.optional() })
+    .strict(),
+  z
+    .object({
+      do: z.literal("discardRandomFromHands"),
+      amount: z.number(),
+      when: LogCondition.optional(),
+    })
+    .strict(),
   z.object({ do: z.literal("script"), fn: z.string(), when: LogCondition.optional() }).strict(),
 ]);
 export type SetupStep = z.infer<typeof SetupStep>;
@@ -609,18 +1129,15 @@ export const TokenEffect = z
     modifier: z.union([z.number(), z.enum(["X"])]),
     /** how X is computed; implemented in engine/rules/chaosBag */
     x: z
-      .enum([
-        "ghoulsAtYourLocation",
-        "highestDoomOnCultist",
-        "monstersInPlay",
-        "totalDoomInPlay",
-      ])
+      .enum(["ghoulsAtYourLocation", "highestDoomOnCultist", "monstersInPlay", "totalDoomInPlay"])
       .optional(),
     onReveal: z.array(Effect).optional(),
     onFail: z.array(Effect).optional(),
     /** effects only if condition holds when revealed */
     condition: Condition.optional(),
-    revealAnother: z.union([z.boolean(), z.literal("ifAncientOneInPlay"), z.object({ if: Condition }).strict()]).optional(),
+    revealAnother: z
+      .union([z.boolean(), z.literal("ifAncientOneInPlay"), z.object({ if: Condition }).strict()])
+      .optional(),
   })
   .strict();
 export type TokenEffect = z.infer<typeof TokenEffect>;
@@ -629,16 +1146,63 @@ export type TokenEffect = z.infer<typeof TokenEffect>;
 const Who = z.enum(["each", "lead", "choice", "input"]);
 
 export const CampaignEffect = z.discriminatedUnion("do", [
-  z.object({ do: z.literal("record"), key: z.string(), value: z.union([z.boolean(), z.string(), z.array(z.string())]).default(true), section: z.string().optional(), text: z.string().optional() }).strict(),
-  z.object({ do: z.literal("crossOut"), key: z.string(), section: z.string().optional(), erase: z.boolean().optional() }).strict(),
+  z
+    .object({
+      do: z.literal("record"),
+      key: z.string(),
+      value: z.union([z.boolean(), z.string(), z.array(z.string())]).default(true),
+      section: z.string().optional(),
+      text: z.string().optional(),
+    })
+    .strict(),
+  z
+    .object({
+      do: z.literal("crossOut"),
+      key: z.string(),
+      section: z.string().optional(),
+      erase: z.boolean().optional(),
+    })
+    .strict(),
   z.object({ do: z.literal("crossOutIfInVictory"), key: z.string(), code: z.string() }).strict(),
-  z.object({ do: z.literal("recordCards"), key: z.string(), source: z.enum(["victoryUniqueCultists", "remainingUniqueCultists"]) }).strict(),
-  z.object({ do: z.literal("xp"), bonus: z.number().default(0), who: Who.exclude(["choice"]).default("each"), victory: z.boolean().default(false) }).strict(),
-  z.object({ do: z.literal("trauma"), who: Who.exclude(["choice"]), physical: z.number().default(0), mental: z.number().default(0) }).strict(),
+  z
+    .object({
+      do: z.literal("recordCards"),
+      key: z.string(),
+      source: z.enum(["victoryUniqueCultists", "remainingUniqueCultists"]),
+    })
+    .strict(),
+  z
+    .object({
+      do: z.literal("xp"),
+      bonus: z.number().default(0),
+      who: Who.exclude(["choice"]).default("each"),
+      victory: z.boolean().default(false),
+    })
+    .strict(),
+  z
+    .object({
+      do: z.literal("trauma"),
+      who: Who.exclude(["choice"]),
+      physical: z.number().default(0),
+      mental: z.number().default(0),
+    })
+    .strict(),
   z.object({ do: z.literal("kill"), who: z.enum(["each", "notResigned"]) }).strict(),
   z.object({ do: z.literal("earnCard"), code: z.string(), who: Who }).strict(),
-  z.object({ do: z.literal("removeCard"), code: z.string(), who: Who.exclude(["choice"]).optional() }).strict(),
-  z.object({ do: z.literal("addWeakness"), trait: z.string().default(""), who: Who.exclude(["choice"]).optional() }).strict(),
+  z
+    .object({
+      do: z.literal("removeCard"),
+      code: z.string(),
+      who: Who.exclude(["choice"]).optional(),
+    })
+    .strict(),
+  z
+    .object({
+      do: z.literal("addWeakness"),
+      trait: z.string().default(""),
+      who: Who.exclude(["choice"]).optional(),
+    })
+    .strict(),
   z.object({ do: z.literal("addChaosToken"), token: ChaosToken }).strict(),
   z.object({ do: z.literal("end"), result: z.enum(["win", "lose", "survived"]) }).strict(),
 ]);
@@ -668,7 +1232,10 @@ export const ScenarioDef = z
     acts: z.array(z.string()),
     agendas: z.array(z.string()),
     setup: z.array(SetupStep),
-    tokens: z.record(z.enum(["easy", "standard", "hard", "expert"]), z.record(z.enum(["skull", "cultist", "tablet", "elderThing"]), TokenEffect)),
+    tokens: z.record(
+      z.enum(["easy", "standard", "hard", "expert"]),
+      z.record(z.enum(["skull", "cultist", "tablet", "elderThing"]), TokenEffect),
+    ),
     /** id -> resolution; "none" for no resolution reached */
     resolutions: z.record(z.string(), Resolution),
     /** the scenario's id in ArkhamCards' data, for imported translations */
@@ -692,15 +1259,53 @@ const FlowAmount = z.union([z.number(), z.literal("input")]);
 /** what a campaign does besides the resolution's own effects: the log's sections, the bag, decks, the order of play */
 export const FlowEffect = z.discriminatedUnion("do", [
   ...CampaignEffect.options,
-  z.object({ do: z.literal("count"), id: z.string(), section: z.string().optional(), op: z.enum(["add", "set"]), value: FlowAmount }).strict(),
-  z.object({ do: z.literal("listCards"), id: z.string(), section: z.string().optional(), codes: z.array(z.string()), remove: z.boolean().default(false) }).strict(),
-  z.object({ do: z.literal("investigatorCount"), id: z.string(), section: z.string().optional(), who: Who.exclude(["choice"]), op: z.enum(["add", "set"]), value: FlowAmount }).strict(),
+  z
+    .object({
+      do: z.literal("count"),
+      id: z.string(),
+      section: z.string().optional(),
+      op: z.enum(["add", "set"]),
+      value: FlowAmount,
+    })
+    .strict(),
+  z
+    .object({
+      do: z.literal("listCards"),
+      id: z.string(),
+      section: z.string().optional(),
+      codes: z.array(z.string()),
+      remove: z.boolean().default(false),
+    })
+    .strict(),
+  z
+    .object({
+      do: z.literal("investigatorCount"),
+      id: z.string(),
+      section: z.string().optional(),
+      who: Who.exclude(["choice"]),
+      op: z.enum(["add", "set"]),
+      value: FlowAmount,
+    })
+    .strict(),
   z.object({ do: z.literal("removeChaosToken"), token: ChaosToken }).strict(),
-  z.object({ do: z.literal("replaceCard"), old: z.string(), new: z.string(), who: Who.exclude(["choice"]) }).strict(),
+  z
+    .object({
+      do: z.literal("replaceCard"),
+      old: z.string(),
+      new: z.string(),
+      who: Who.exclude(["choice"]),
+    })
+    .strict(),
   z.object({ do: z.literal("nextScenario"), scenario: z.string() }).strict(),
   z.object({ do: z.literal("skipScenario"), scenario: z.string() }).strict(),
   z.object({ do: z.literal("replayScenario"), scenario: z.string() }).strict(),
-  z.object({ do: z.literal("setData"), key: z.string(), value: z.union([z.boolean(), z.number(), z.string()]) }).strict(),
+  z
+    .object({
+      do: z.literal("setData"),
+      key: z.string(),
+      value: z.union([z.boolean(), z.number(), z.string()]),
+    })
+    .strict(),
 ]);
 export type FlowEffect = z.infer<typeof FlowEffect>;
 
@@ -710,7 +1315,14 @@ export type FlowCondition =
   | { kind: "logCrossedOut"; id: string; section?: string }
   | { kind: "logCount"; id: string; section?: string; min?: number; max?: number }
   | { kind: "logCards"; id: string; section?: string; card?: string }
-  | { kind: "investigatorCount"; id: string; section?: string; inv: WhoInv; min?: number; max?: number }
+  | {
+      kind: "investigatorCount";
+      id: string;
+      section?: string;
+      inv: WhoInv;
+      min?: number;
+      max?: number;
+    }
   | { kind: "scenarioCompleted"; scenario: string; resolution?: string }
   | { kind: "difficulty"; is: z.infer<typeof Difficulty>[] }
   | { kind: "playerCount"; min?: number; max?: number }
@@ -725,17 +1337,71 @@ export type FlowCondition =
 const WhoInv = z.enum(["any", "input", "lead"]);
 export const FlowCondition: z.ZodType<FlowCondition> = z.lazy(() =>
   z.union([
-    z.object({ kind: z.literal("logHas"), id: z.string(), section: z.string().optional() }).strict(),
-    z.object({ kind: z.literal("logCrossedOut"), id: z.string(), section: z.string().optional() }).strict(),
-    z.object({ kind: z.literal("logCount"), id: z.string(), section: z.string().optional(), min: z.number().optional(), max: z.number().optional() }).strict(),
-    z.object({ kind: z.literal("logCards"), id: z.string(), section: z.string().optional(), card: z.string().optional() }).strict(),
-    z.object({ kind: z.literal("investigatorCount"), id: z.string(), section: z.string().optional(), inv: WhoInv, min: z.number().optional(), max: z.number().optional() }).strict(),
-    z.object({ kind: z.literal("scenarioCompleted"), scenario: z.string(), resolution: z.string().optional() }).strict(),
+    z
+      .object({ kind: z.literal("logHas"), id: z.string(), section: z.string().optional() })
+      .strict(),
+    z
+      .object({ kind: z.literal("logCrossedOut"), id: z.string(), section: z.string().optional() })
+      .strict(),
+    z
+      .object({
+        kind: z.literal("logCount"),
+        id: z.string(),
+        section: z.string().optional(),
+        min: z.number().optional(),
+        max: z.number().optional(),
+      })
+      .strict(),
+    z
+      .object({
+        kind: z.literal("logCards"),
+        id: z.string(),
+        section: z.string().optional(),
+        card: z.string().optional(),
+      })
+      .strict(),
+    z
+      .object({
+        kind: z.literal("investigatorCount"),
+        id: z.string(),
+        section: z.string().optional(),
+        inv: WhoInv,
+        min: z.number().optional(),
+        max: z.number().optional(),
+      })
+      .strict(),
+    z
+      .object({
+        kind: z.literal("scenarioCompleted"),
+        scenario: z.string(),
+        resolution: z.string().optional(),
+      })
+      .strict(),
     z.object({ kind: z.literal("difficulty"), is: z.array(Difficulty) }).strict(),
-    z.object({ kind: z.literal("playerCount"), min: z.number().optional(), max: z.number().optional() }).strict(),
-    z.object({ kind: z.literal("trauma"), inv: WhoInv, physical: z.number().optional(), mental: z.number().optional() }).strict(),
+    z
+      .object({
+        kind: z.literal("playerCount"),
+        min: z.number().optional(),
+        max: z.number().optional(),
+      })
+      .strict(),
+    z
+      .object({
+        kind: z.literal("trauma"),
+        inv: WhoInv,
+        physical: z.number().optional(),
+        mental: z.number().optional(),
+      })
+      .strict(),
     z.object({ kind: z.literal("hasCard"), card: z.string(), inv: WhoInv }).strict(),
-    z.object({ kind: z.literal("data"), key: z.string(), equals: z.union([z.boolean(), z.number(), z.string()]).optional(), min: z.number().optional() }).strict(),
+    z
+      .object({
+        kind: z.literal("data"),
+        key: z.string(),
+        equals: z.union([z.boolean(), z.number(), z.string()]).optional(),
+        min: z.number().optional(),
+      })
+      .strict(),
     z.object({ kind: z.literal("not"), condition: FlowCondition }).strict(),
     z.object({ kind: z.literal("all"), conditions: z.array(FlowCondition) }).strict(),
     z.object({ kind: z.literal("any"), conditions: z.array(FlowCondition) }).strict(),
@@ -744,29 +1410,112 @@ export const FlowCondition: z.ZodType<FlowCondition> = z.lazy(() =>
 );
 
 const StepIds = z.array(z.string()).default([]);
-const FlowChoice = z.object({ id: z.string(), text: z.string(), effects: z.array(FlowEffect).default([]), steps: StepIds, when: FlowCondition.optional() }).strict();
+const FlowChoice = z
+  .object({
+    id: z.string(),
+    text: z.string(),
+    effects: z.array(FlowEffect).default([]),
+    steps: StepIds,
+    when: FlowCondition.optional(),
+  })
+  .strict();
 export type FlowChoice = z.infer<typeof FlowChoice>;
 
 /** one thing a campaign shows or asks (the prompts are `chooseOne` … `unsupported`); steps are keyed by id in `CampaignFlow.steps` and named by the steps around them */
 export const CampaignStep = z.discriminatedUnion("kind", [
   /** read: a title, the text, bullets (the log entries a step records are read as bullets) */
-  z.object({ kind: z.literal("story"), title: z.string().optional(), text: z.string().optional(), bullets: z.array(z.string()).default([]) }).strict(),
-  z.object({ kind: z.literal("branch"), condition: FlowCondition, then: StepIds, else: StepIds }).strict(),
+  z
+    .object({
+      kind: z.literal("story"),
+      title: z.string().optional(),
+      text: z.string().optional(),
+      bullets: z.array(z.string()).default([]),
+    })
+    .strict(),
+  z
+    .object({ kind: z.literal("branch"), condition: FlowCondition, then: StepIds, else: StepIds })
+    .strict(),
   z.object({ kind: z.literal("effects"), effects: z.array(FlowEffect) }).strict(),
-  z.object({ kind: z.literal("chooseOne"), title: z.string().optional(), text: z.string().optional(), choices: z.array(FlowChoice).min(1) }).strict(),
+  z
+    .object({
+      kind: z.literal("chooseOne"),
+      title: z.string().optional(),
+      text: z.string().optional(),
+      choices: z.array(FlowChoice).min(1),
+    })
+    .strict(),
   /** a number with limits; its effects take it as "input" */
-  z.object({ kind: z.literal("counter"), title: z.string().optional(), text: z.string().optional(), min: z.number().default(0), max: z.number().optional(), effects: z.array(FlowEffect).default([]), steps: StepIds }).strict(),
+  z
+    .object({
+      kind: z.literal("counter"),
+      title: z.string().optional(),
+      text: z.string().optional(),
+      min: z.number().default(0),
+      max: z.number().optional(),
+      effects: z.array(FlowEffect).default([]),
+      steps: StepIds,
+    })
+    .strict(),
   /** an investigator among the active ones; the effects and steps follow with them as "input" */
-  z.object({ kind: z.literal("investigatorChoice"), title: z.string().optional(), text: z.string().optional(), optional: z.boolean().default(false), effects: z.array(FlowEffect).default([]), steps: StepIds }).strict(),
+  z
+    .object({
+      kind: z.literal("investigatorChoice"),
+      title: z.string().optional(),
+      text: z.string().optional(),
+      optional: z.boolean().default(false),
+      effects: z.array(FlowEffect).default([]),
+      steps: StepIds,
+    })
+    .strict(),
   /** cards among `codes` (or among the investigators' decks when empty); the effects take them as code "$input" */
-  z.object({ kind: z.literal("cardChoice"), title: z.string().optional(), text: z.string().optional(), codes: z.array(z.string()).default([]), min: z.number().default(1), max: z.number().default(1), effects: z.array(FlowEffect).default([]), steps: StepIds }).strict(),
-  z.object({ kind: z.literal("checklist"), title: z.string().optional(), text: z.string().optional(), min: z.number().default(0), max: z.number().optional(), choices: z.array(FlowChoice).min(1) }).strict(),
+  z
+    .object({
+      kind: z.literal("cardChoice"),
+      title: z.string().optional(),
+      text: z.string().optional(),
+      codes: z.array(z.string()).default([]),
+      min: z.number().default(1),
+      max: z.number().default(1),
+      effects: z.array(FlowEffect).default([]),
+      steps: StepIds,
+    })
+    .strict(),
+  z
+    .object({
+      kind: z.literal("checklist"),
+      title: z.string().optional(),
+      text: z.string().optional(),
+      min: z.number().default(0),
+      max: z.number().optional(),
+      choices: z.array(FlowChoice).min(1),
+    })
+    .strict(),
   /** side scenarios on offer: accepting one pays its cost and plays it before the flow goes on */
-  z.object({ kind: z.literal("sideScenario"), title: z.string().optional(), text: z.string().optional(), scenarios: z.array(z.object({ scenario: z.string(), cost: z.number().default(0) }).strict()).min(1) }).strict(),
+  z
+    .object({
+      kind: z.literal("sideScenario"),
+      title: z.string().optional(),
+      text: z.string().optional(),
+      scenarios: z
+        .array(z.object({ scenario: z.string(), cost: z.number().default(0) }).strict())
+        .min(1),
+    })
+    .strict(),
   /** a prompt the game can't offer (linked campaigns, partners, supplies, text entry…): the guide's text, then its default */
-  z.object({ kind: z.literal("unsupported"), name: z.string(), title: z.string().optional(), text: z.string().optional(), effects: z.array(FlowEffect).default([]), steps: StepIds }).strict(),
+  z
+    .object({
+      kind: z.literal("unsupported"),
+      name: z.string(),
+      title: z.string().optional(),
+      text: z.string().optional(),
+      effects: z.array(FlowEffect).default([]),
+      steps: StepIds,
+    })
+    .strict(),
   z.object({ kind: z.literal("upgradeDecks") }).strict(),
-  z.object({ kind: z.literal("end"), result: z.enum(["win", "lose", "survived"]).optional() }).strict(),
+  z
+    .object({ kind: z.literal("end"), result: z.enum(["win", "lose", "survived"]).optional() })
+    .strict(),
 ]);
 export type CampaignStep = z.infer<typeof CampaignStep>;
 
@@ -797,25 +1546,43 @@ export const CampaignFlow = z
   .object({
     setup: StepIds,
     order: z.array(z.string()),
-    interludes: z.record(z.string(), z.object({ kind: z.enum(["interlude", "epilogue"]), name: z.string().optional(), steps: StepIds }).strict()).default({}),
+    interludes: z
+      .record(
+        z.string(),
+        z
+          .object({
+            kind: z.enum(["interlude", "epilogue"]),
+            name: z.string().optional(),
+            steps: StepIds,
+          })
+          .strict(),
+      )
+      .default({}),
     resolutions: z.record(z.string(), z.record(z.string(), StepIds)).default({}),
     steps: z.record(z.string(), CampaignStep),
   })
   .strict()
   .superRefine((f, ctx) => {
     const need = (path: (string | number)[], id: string) => {
-      if (!f.steps[id]) ctx.addIssue({ code: z.ZodIssueCode.custom, path, message: `unknown step ${id}` });
+      if (!f.steps[id])
+        ctx.addIssue({ code: z.ZodIssueCode.custom, path, message: `unknown step ${id}` });
     };
     f.setup.forEach((id, n) => need(["setup", n], id));
-    for (const [k, i] of Object.entries(f.interludes)) i.steps.forEach((id, n) => need(["interludes", k, "steps", n], id));
-    for (const [sc, byRes] of Object.entries(f.resolutions)) for (const [r, ids] of Object.entries(byRes)) ids.forEach((id, n) => need(["resolutions", sc, r, n], id));
-    for (const [k, st] of Object.entries(f.steps)) stepRefs(st).forEach((id, n) => need(["steps", k, n], id));
+    for (const [k, i] of Object.entries(f.interludes))
+      i.steps.forEach((id, n) => need(["interludes", k, "steps", n], id));
+    for (const [sc, byRes] of Object.entries(f.resolutions))
+      for (const [r, ids] of Object.entries(byRes))
+        ids.forEach((id, n) => need(["resolutions", sc, r, n], id));
+    for (const [k, st] of Object.entries(f.steps))
+      stepRefs(st).forEach((id, n) => need(["steps", k, n], id));
   });
 export type CampaignFlow = z.infer<typeof CampaignFlow>;
 
 /** how a section of the campaign log is kept and shown */
 export const LOG_SECTION_KINDS = ["entries", "count", "cards", "investigatorCount"] as const;
-export const LogSection = z.object({ id: z.string(), kind: z.enum(LOG_SECTION_KINDS), label: z.string() }).strict();
+export const LogSection = z
+  .object({ id: z.string(), kind: z.enum(LOG_SECTION_KINDS), label: z.string() })
+  .strict();
 export type LogSection = z.infer<typeof LogSection>;
 
 export const CampaignDef = z
@@ -880,7 +1647,11 @@ const SoundClip = z
     trim: z.tuple([z.number().min(0), z.number().min(0)]).optional(),
   })
   .strict();
-const SoundTrack = SoundClip.extend({ loop: z.boolean().default(true), loopStart: z.number().min(0).optional(), loopEnd: z.number().min(0).optional() }).strict();
+const SoundTrack = SoundClip.extend({
+  loop: z.boolean().default(true),
+  loopStart: z.number().min(0).optional(),
+  loopEnd: z.number().min(0).optional(),
+}).strict();
 /** a moment's value that silences it while keeping its slot */
 export const NO_SOUND = "none";
 /** when a card's own sound replaces the generic one */
@@ -906,12 +1677,18 @@ export const SoundManifest = z
   .strict()
   .superRefine((m, ctx) => {
     const need = (path: (string | number)[], id: string) => {
-      if (!m.effects[id]) ctx.addIssue({ code: z.ZodIssueCode.custom, path, message: `unknown clip ${id}` });
+      if (!m.effects[id])
+        ctx.addIssue({ code: z.ZodIssueCode.custom, path, message: `unknown clip ${id}` });
     };
-    for (const [k, v] of Object.entries(m.events)) (Array.isArray(v) ? v : [v]).forEach((id, n) => need(["events", k, ...(Array.isArray(v) ? [n] : [])], id));
+    for (const [k, v] of Object.entries(m.events))
+      (Array.isArray(v) ? v : [v]).forEach((id, n) =>
+        need(["events", k, ...(Array.isArray(v) ? [n] : [])], id),
+      );
     for (const [k, id] of Object.entries(m.moments)) if (id !== NO_SOUND) need(["moments", k], id);
-    for (const [when, byTrait] of Object.entries(m.traits)) for (const [trait, id] of Object.entries(byTrait)) need(["traits", when, trait], id);
-    for (const [code, byWhen] of Object.entries(m.cards)) for (const [when, id] of Object.entries(byWhen)) need(["cards", code, when], id);
+    for (const [when, byTrait] of Object.entries(m.traits))
+      for (const [trait, id] of Object.entries(byTrait)) need(["traits", when, trait], id);
+    for (const [code, byWhen] of Object.entries(m.cards))
+      for (const [when, id] of Object.entries(byWhen)) need(["cards", code, when], id);
   });
 export type SoundManifest = z.infer<typeof SoundManifest>;
 /**
@@ -940,14 +1717,42 @@ export const CANDIDATES_PER_SLOT = 12;
 export const CANDIDATES_RANGE = [10, 15] as const;
 export const SoundCandidates = z
   .object({
-    slots: z.record(z.string(), z.object({ kind: z.enum(["effect", "music"]), where: z.string().min(1), candidates: z.array(SoundCandidate).min(CANDIDATES_RANGE[0]).max(CANDIDATES_RANGE[1]) }).strict()),
+    slots: z.record(
+      z.string(),
+      z
+        .object({
+          kind: z.enum(["effect", "music"]),
+          where: z.string().min(1),
+          candidates: z.array(SoundCandidate).min(CANDIDATES_RANGE[0]).max(CANDIDATES_RANGE[1]),
+        })
+        .strict(),
+    ),
   })
   .strict();
 export type SoundCandidates = z.infer<typeof SoundCandidates>;
 
-export const EMPTY_SOUNDS: SoundManifest = { effects: {}, music: {}, events: {}, moments: {}, traits: {}, cards: {} };
+export const EMPTY_SOUNDS: SoundManifest = {
+  effects: {},
+  music: {},
+  events: {},
+  moments: {},
+  traits: {},
+  cards: {},
+};
 
-export const I18nCards = z.record(z.string(), z.object({ name: z.string().optional(), text: z.string().optional(), backText: z.string().optional(), subname: z.string().optional(), backName: z.string().optional(), traits: z.array(z.string()).optional() }).strict());
+export const I18nCards = z.record(
+  z.string(),
+  z
+    .object({
+      name: z.string().optional(),
+      text: z.string().optional(),
+      backText: z.string().optional(),
+      subname: z.string().optional(),
+      backName: z.string().optional(),
+      traits: z.array(z.string()).optional(),
+    })
+    .strict(),
+);
 export const I18nUi = z.record(z.string(), z.string());
 /** campaign / scenario / encounter-set text for a locale */
 export const I18nCampaigns = z
@@ -962,7 +1767,18 @@ export const I18nCampaigns = z
             scenarioNames: z.array(z.string()).optional(),
             logLabels: z.record(z.string(), z.string()).default({}),
             /** a campaign flow's words by step id: the title and text of a story or prompt, the text of each choice by its id */
-            steps: z.record(z.string(), z.object({ title: z.string().optional(), text: z.string().optional(), choices: z.record(z.string(), z.string()).optional() }).strict()).default({}),
+            steps: z
+              .record(
+                z.string(),
+                z
+                  .object({
+                    title: z.string().optional(),
+                    text: z.string().optional(),
+                    choices: z.record(z.string(), z.string()).optional(),
+                  })
+                  .strict(),
+              )
+              .default({}),
             /** the interludes' and epilogues' names by id */
             interludeNames: z.record(z.string(), z.string()).default({}),
           })
@@ -976,7 +1792,12 @@ export const I18nCampaigns = z
           .object({
             name: z.string().optional(),
             intro: z.string().optional(),
-            resolutions: z.record(z.string(), z.object({ title: z.string().optional(), text: z.string().optional() }).strict()).default({}),
+            resolutions: z
+              .record(
+                z.string(),
+                z.object({ title: z.string().optional(), text: z.string().optional() }).strict(),
+              )
+              .default({}),
           })
           .strict(),
       )
@@ -988,15 +1809,37 @@ export type I18nCampaigns = z.infer<typeof I18nCampaigns>;
 
 // ---------- coverage (ADR-0012) ----------
 /** how many of some cards work in the game, and the ones that don't counted by card type */
-export const CardCount = z.object({ total: z.number().int(), works: z.number().int(), rest: z.record(z.string(), z.number().int()) }).strict();
+export const CardCount = z
+  .object({
+    total: z.number().int(),
+    works: z.number().int(),
+    rest: z.record(z.string(), z.number().int()),
+  })
+  .strict();
 export type CardCount = z.infer<typeof CardCount>;
 /** content/coverage.json (npm run coverage): per pack, per campaign and per investigator, read by the new-game screen before any pack loads */
 export const ContentCoverage = z
   .object({
     packs: z.record(z.string(), z.object({ encounter: CardCount, player: CardCount }).strict()),
-    campaigns: z.record(z.string(), z.object({ cards: CardCount, unscripted: z.array(z.string()), complete: z.boolean() }).strict()),
+    campaigns: z.record(
+      z.string(),
+      z
+        .object({ cards: CardCount, unscripted: z.array(z.string()), complete: z.boolean() })
+        .strict(),
+    ),
     /** per scenario: the cards it uses (its reference card too), whether its token effects are real, whether it has a script (ADR-0013) */
-    scenarios: z.record(z.string(), z.object({ campaign: z.string(), cards: CardCount, tokens: z.boolean(), scripted: z.boolean(), complete: z.boolean() }).strict()),
+    scenarios: z.record(
+      z.string(),
+      z
+        .object({
+          campaign: z.string(),
+          cards: CardCount,
+          tokens: z.boolean(),
+          scripted: z.boolean(),
+          complete: z.boolean(),
+        })
+        .strict(),
+    ),
     /** whether the investigator's card and their signature cards work */
     investigators: z.record(z.string(), z.boolean()),
   })

@@ -15,7 +15,11 @@ import { useCardTexture } from "./textures";
 import { moment } from "../hud/SoundLayer";
 
 const glow = new THREE.MeshBasicMaterial({ color: "#ffcf5a", transparent: true, opacity: 0.85 });
-const hoverGlow = new THREE.MeshBasicMaterial({ color: "#8fd3ff", transparent: true, opacity: 0.9 });
+const hoverGlow = new THREE.MeshBasicMaterial({
+  color: "#8fd3ff",
+  transparent: true,
+  opacity: 0.9,
+});
 
 const damp = THREE.MathUtils.damp;
 /** height of the plane that dims the map around a spotlit card (above every card lying on the table) */
@@ -45,7 +49,19 @@ export interface CardMeshProps {
 }
 
 /** one card on the table: eases toward its layout target every frame */
-export function CardMesh({ inst, place, highlighted, hovered, exhausted, onClick, onHover, fromScale, hold, faceDown, spotlit }: CardMeshProps) {
+export function CardMesh({
+  inst,
+  place,
+  highlighted,
+  hovered,
+  exhausted,
+  onClick,
+  onHover,
+  fromScale,
+  hold,
+  faceDown,
+  spotlit,
+}: CardMeshProps) {
   const locale = useGame((s) => s.locale);
   const card = db.cards[inst.code];
   const isLocation = card.type === "location" && inst.zone === "location";
@@ -55,11 +71,23 @@ export function CardMesh({ inst, place, highlighted, hovered, exhausted, onClick
   // a location's "front" is its revealed side; other cards show their back when face down
   const showFront = card.type === "location" ? inst.revealed : place.faceUp;
   const front = useCardTexture(card, "front", tr.name, tr.text, place.landscape);
-  const back = useCardTexture(card, "back", tr.backName ?? tr.name, tr.backText ?? "", place.landscape);
+  const back = useCardTexture(
+    card,
+    "back",
+    tr.backName ?? tr.name,
+    tr.backText ?? "",
+    place.landscape,
+  );
   // rounded like the printed cards: a face on each side (the back faces away until the card flips)
   const face = cardFace(w, h);
-  const frontMat = useMemo(() => new THREE.MeshStandardMaterial({ map: front, roughness: 0.75 }), [front]);
-  const backMat = useMemo(() => new THREE.MeshStandardMaterial({ map: back, roughness: 0.75 }), [back]);
+  const frontMat = useMemo(
+    () => new THREE.MeshStandardMaterial({ map: front, roughness: 0.75 }),
+    [front],
+  );
+  const backMat = useMemo(
+    () => new THREE.MeshStandardMaterial({ map: back, roughness: 0.75 }),
+    [back],
+  );
   const group = useRef<THREE.Group>(null);
   const flip = useRef<THREE.Group>(null);
   const started = useRef(false);
@@ -115,7 +143,8 @@ export function CardMesh({ inst, place, highlighted, hovered, exhausted, onClick
     // spotlit: above the dim plane (see Table), and lifted a little unless motion is reduced
     const y = spotlit ? y0 + SPOT_Y + 1 : y0;
     const scale = spotlit && !reducedMotion() ? place.scale * 1.06 : place.scale;
-    const moving = Math.abs(g.position.x - x) + Math.abs(g.position.z - z) + Math.abs(g.scale.x - scale) > 0.03;
+    const moving =
+      Math.abs(g.position.x - x) + Math.abs(g.position.z - z) + Math.abs(g.scale.x - scale) > 0.03;
     if (moving) mapMoving.add(inst.id);
     else mapMoving.delete(inst.id);
     const k = 8;
@@ -170,15 +199,35 @@ export function CardMesh({ inst, place, highlighted, hovered, exhausted, onClick
           />
         ))}
       </group>
-      {(highlighted || hovered || spotlit) && <mesh ref={frame} geometry={cardFrame(w, h)} position={[0, 0, 0.001]} material={hovered ? hoverGlow : glow} />}
+      {(highlighted || hovered || spotlit) && (
+        <mesh
+          ref={frame}
+          geometry={cardFrame(w, h)}
+          position={[0, 0, 0.001]}
+          material={hovered ? hoverGlow : glow}
+        />
+      )}
       {place.badge && (
-        <Html position={[-w / 2 + 0.1, h / 2 - 0.1, 0.03]} zIndexRange={[21, 0]} pointerEvents="none">
+        <Html
+          position={[-w / 2 + 0.1, h / 2 - 0.1, 0.03]}
+          zIndexRange={[21, 0]}
+          pointerEvents="none"
+        >
           <div className="engaged-badge" ref={overlay}>
-            <Portrait code={place.badge} size={30} title={t(db, locale, "hud.engaged", { name: cardText(db, place.badge, locale).name })} />
+            <Portrait
+              code={place.badge}
+              size={30}
+              title={t(db, locale, "hud.engaged", { name: cardText(db, place.badge, locale).name })}
+            />
           </div>
         </Html>
       )}
-      <Html position={[w / 2 - 0.05, h / 2 - 0.05, 0.02]} center zIndexRange={[20, 0]} pointerEvents="none">
+      <Html
+        position={[w / 2 - 0.05, h / 2 - 0.05, 0.02]}
+        center
+        zIndexRange={[20, 0]}
+        pointerEvents="none"
+      >
         <div ref={overlay}>
           <TokenBadges inst={inst} skip={isLocation ? ["clues"] : []} />
         </div>
@@ -193,7 +242,11 @@ export function CardMesh({ inst, place, highlighted, hovered, exhausted, onClick
       {/* clues on a location: a pile of clue tokens with the total, like the stat bar */}
       {isLocation && inst.clues > 0 && (
         <Html position={[0, -h * 0.12, 0.03]} center zIndexRange={[20, 0]} pointerEvents="none">
-          <div className="loc-clues" ref={overlay} title={`${t(db, locale, "stat.clues")} ${inst.clues}`}>
+          <div
+            className="loc-clues"
+            ref={overlay}
+            title={`${t(db, locale, "stat.clues")} ${inst.clues}`}
+          >
             <TokenPile kind="clue" value={inst.clues} size={34} />
             <b>{inst.clues}</b>
           </div>

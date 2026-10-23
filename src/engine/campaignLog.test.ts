@@ -1,5 +1,17 @@
 import { describe, expect, it } from "vitest";
-import { addCards, crossOut, emptyLog, flatLog, hasEntry, logCount, record, setCount, setInvestigatorCount, migrateLog, NOTES } from "./campaignLog";
+import {
+  addCards,
+  crossOut,
+  emptyLog,
+  flatLog,
+  hasEntry,
+  logCount,
+  record,
+  setCount,
+  setInvestigatorCount,
+  migrateLog,
+  NOTES,
+} from "./campaignLog";
 
 describe("the sectioned campaign log", () => {
   it("records an entry in a section, once, and the notes section is the default", () => {
@@ -38,7 +50,14 @@ describe("the sectioned campaign log", () => {
   });
 
   it("per-investigator counts", () => {
-    const log = setInvestigatorCount(setInvestigatorCount(emptyLog(), "xp", "01001", "add", 2, "s"), "xp", "01001", "add", 1, "s");
+    const log = setInvestigatorCount(
+      setInvestigatorCount(emptyLog(), "xp", "01001", "add", 2, "s"),
+      "xp",
+      "01001",
+      "add",
+      1,
+      "s",
+    );
     expect(log.s.investigators.xp["01001"]).toBe(3);
   });
 
@@ -78,9 +97,23 @@ describe("flatLog", () => {
 
 describe("migrateLog", () => {
   it("turns a flat log into the notes section: arrays become card lists, the rest entries", () => {
-    const log = migrateLog({ houseBurned: true, cultistsGotAway: ["01121", "01122"], pastMidnight: true, note: "text" });
-    expect(log[NOTES].entries).toEqual([{ id: "houseBurned" }, { id: "pastMidnight" }, { id: "note", value: "text" }]);
+    const log = migrateLog({
+      houseBurned: true,
+      cultistsGotAway: ["01121", "01122"],
+      pastMidnight: true,
+      note: "text",
+    });
+    expect(log[NOTES].entries).toEqual([
+      { id: "houseBurned" },
+      { id: "pastMidnight" },
+      { id: "note", value: "text" },
+    ]);
     expect(log[NOTES].cards.cultistsGotAway).toEqual(["01121", "01122"]);
-    expect(flatLog(log)).toEqual({ houseBurned: true, cultistsGotAway: ["01121", "01122"], pastMidnight: true, note: "text" });
+    expect(flatLog(log)).toEqual({
+      houseBurned: true,
+      cultistsGotAway: ["01121", "01122"],
+      pastMidnight: true,
+      note: "text",
+    });
   });
 });

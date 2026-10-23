@@ -10,10 +10,21 @@ const HEADING = "## Sound credits";
 
 export function soundCredits(m: SoundManifest): string {
   const sources = new Map<string, string>();
-  for (const c of [...Object.values(m.effects), ...Object.values(m.music)]) if (!sources.has(c.source)) sources.set(c.source, c.author);
-  const sites = [...new Set([...sources.keys()].map((u) => SITES[new URL(u).hostname] ?? new URL(u).hostname))];
-  const name = (u: string) => decodeURIComponent(new URL(u).pathname.split("/").filter(Boolean).pop() ?? u).replace(/-/g, " ");
-  return [`All sounds are CC0 (public domain), from ${sites.join(" and ")}:`, "", ...[...sources].map(([u, author]) => `- [${name(u)}](${u}) by ${author} (CC0)`)].join("\n");
+  for (const c of [...Object.values(m.effects), ...Object.values(m.music)])
+    if (!sources.has(c.source)) sources.set(c.source, c.author);
+  const sites = [
+    ...new Set([...sources.keys()].map((u) => SITES[new URL(u).hostname] ?? new URL(u).hostname)),
+  ];
+  const name = (u: string) =>
+    decodeURIComponent(new URL(u).pathname.split("/").filter(Boolean).pop() ?? u).replace(
+      /-/g,
+      " ",
+    );
+  return [
+    `All sounds are CC0 (public domain), from ${sites.join(" and ")}:`,
+    "",
+    ...[...sources].map(([u, author]) => `- [${name(u)}](${u}) by ${author} (CC0)`),
+  ].join("\n");
 }
 
 /** the README with its Sound credits section's body replaced */

@@ -179,7 +179,17 @@ export function Row({ r, locale }: { r: DetailRow; locale: string }) {
 }
 
 /** a column of details rows beside a card (right, or left if no room; clamped to the window); never takes the pointer */
-export function DetailsColumn({ rows, rect, boxRef, prefer }: { rows: DetailRow[]; rect: Rect; boxRef?: RefObject<HTMLDivElement>; prefer?: "right" | "left" }) {
+export function DetailsColumn({
+  rows,
+  rect,
+  boxRef,
+  prefer,
+}: {
+  rows: DetailRow[];
+  rect: Rect;
+  boxRef?: RefObject<HTMLDivElement>;
+  prefer?: "right" | "left";
+}) {
   const locale = useGame((s) => s.locale);
   const own = useRef<HTMLDivElement>(null);
   const ref = boxRef ?? own;
@@ -200,7 +210,15 @@ export function DetailsColumn({ rows, rect, boxRef, prefer }: { rows: DetailRow[
 }
 
 /** what the raised hand card is: class, type, level, cost, traits, slots, icons, text */
-export function HandDetails({ code, rect, boxRef }: { code: string; rect: Rect; boxRef?: RefObject<HTMLDivElement> }) {
+export function HandDetails({
+  code,
+  rect,
+  boxRef,
+}: {
+  code: string;
+  rect: Rect;
+  boxRef?: RefObject<HTMLDivElement>;
+}) {
   const locale = useGame((s) => s.locale);
   return <DetailsColumn rows={cardDetails(db, code, locale)} rect={rect} boxRef={boxRef} />;
 }

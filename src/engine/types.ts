@@ -1,16 +1,48 @@
 import type {
-  Ability, CampaignDef, CampaignFlow, CardDef, ChaosToken, ContentCoverage, DeckDef, Difficulty, Effect, I18nCampaigns, InvestigatorDef, Modifier, ScenarioDef, Skill, SoundManifest, Trigger,
+  Ability,
+  CampaignDef,
+  CampaignFlow,
+  CardDef,
+  ChaosToken,
+  ContentCoverage,
+  DeckDef,
+  Difficulty,
+  Effect,
+  I18nCampaigns,
+  InvestigatorDef,
+  Modifier,
+  ScenarioDef,
+  Skill,
+  SoundManifest,
+  Trigger,
 } from "../content/schema";
 
 export type InstId = string;
 export type InvId = string;
 
 export type Zone =
-  | "deck" | "hand" | "discard" | "play" | "threat" | "commit"
-  | "encounterDeck" | "encounterDiscard" | "sideDeck"
-  | "location" | "enemy" | "attached"
-  | "act" | "agenda" | "actDeck" | "agendaDeck"
-  | "victory" | "setAside" | "removed" | "investigator" | "resolving" | "limbo";
+  | "deck"
+  | "hand"
+  | "discard"
+  | "play"
+  | "threat"
+  | "commit"
+  | "encounterDeck"
+  | "encounterDiscard"
+  | "sideDeck"
+  | "location"
+  | "enemy"
+  | "attached"
+  | "act"
+  | "agenda"
+  | "actDeck"
+  | "agendaDeck"
+  | "victory"
+  | "setAside"
+  | "removed"
+  | "investigator"
+  | "resolving"
+  | "limbo";
 
 export interface CardInst {
   id: InstId;
@@ -155,7 +187,17 @@ export interface ChoiceOption {
 export interface PendingChoice {
   seq: number;
   inv: InvId;
-  kind: "turn" | "target" | "commit" | "reaction" | "generic" | "mulligan" | "assign" | "order" | "phase" | "draw";
+  kind:
+    | "turn"
+    | "target"
+    | "commit"
+    | "reaction"
+    | "generic"
+    | "mulligan"
+    | "assign"
+    | "order"
+    | "phase"
+    | "draw";
   prompt: string;
   /** translation key and values for the prompt (the English text above is the fallback); ids in the values are investigators or cards */
   promptKey?: string;
@@ -207,7 +249,15 @@ export type Step = { choice?: any } & (
   | { t: "ChooseTurnOrder" }
   | { t: "Script"; code: string; fn: string; ctx: EffCtx; args?: any }
   | { t: "DiscardIfEmpty"; card: InstId }
-  | { t: "UseAbility"; inv: InvId; card: InstId; index: number; ctx?: EffCtx; paid?: boolean; discards?: InstId[] }
+  | {
+      t: "UseAbility";
+      inv: InvId;
+      card: InstId;
+      index: number;
+      ctx?: EffCtx;
+      paid?: boolean;
+      discards?: InstId[];
+    }
   | { t: "PlayCard"; inv: InvId; card: InstId; ctx?: EffCtx; free?: boolean; viaTrigger?: boolean }
   /** `tapped`: the draw was asked for by tapping the deck already (the Draw action, or the second card of a draw of several) */
   | { t: "Draw"; inv: InvId; n: number; tapped?: boolean }
@@ -216,9 +266,35 @@ export type Step = { choice?: any } & (
   | { t: "Spawn"; enemy: InstId; inv: InvId | null; at?: InstId | null }
   | { t: "EnemyAttack"; enemy: InstId; inv: InvId; aoo: boolean; key: string }
   | { t: "ResolveAttack"; enemy: InstId; inv: InvId; key: string }
-  | { t: "AssignDamage"; inv: InvId; damage: number; horror: number; direct: boolean; source: InstId | null; enemy?: InstId | null; /** the attack's key: what its window prevented waits under it */ key?: string; assigned?: Record<string, [number, number]> }
-  | { t: "AfterDamage"; inv: InvId; damage: number; horror: number; assets: InstId[]; enemy: InstId | null }
-  | { t: "DamageEnemy"; enemy: InstId; amount: number; by: InvId | null; attack?: boolean; /** the card dealing it */ source?: InstId | null; key?: string; windowed?: boolean }
+  | {
+      t: "AssignDamage";
+      inv: InvId;
+      damage: number;
+      horror: number;
+      direct: boolean;
+      source: InstId | null;
+      enemy?: InstId | null;
+      /** the attack's key: what its window prevented waits under it */ key?: string;
+      assigned?: Record<string, [number, number]>;
+    }
+  | {
+      t: "AfterDamage";
+      inv: InvId;
+      damage: number;
+      horror: number;
+      assets: InstId[];
+      enemy: InstId | null;
+    }
+  | {
+      t: "DamageEnemy";
+      enemy: InstId;
+      amount: number;
+      by: InvId | null;
+      attack?: boolean;
+      /** the card dealing it */ source?: InstId | null;
+      key?: string;
+      windowed?: boolean;
+    }
   | { t: "DefeatEnemy"; enemy: InstId; by: InvId | null; fired?: boolean }
   | { t: "Move"; inv: InvId; to: InstId; key?: string }
   | { t: "Arrive"; inv: InvId; to: InstId; key?: string }
@@ -228,10 +304,28 @@ export type Step = { choice?: any } & (
   | { t: "AdvanceAgenda"; fired?: boolean }
   | { t: "AdvanceAct"; spend?: boolean }
   | { t: "Resolution"; id: string }
-  | { t: "Choose"; inv: InvId; prompt: string; options: { label: string; effects: Effect[] }[]; ctx: EffCtx }
+  | {
+      t: "Choose";
+      inv: InvId;
+      prompt: string;
+      options: { label: string; effects: Effect[] }[];
+      ctx: EffCtx;
+    }
   | { t: "CheckDefeat"; inv: InvId }
   | { t: "Defeated"; inv: InvId; by: "damage" | "horror" | "resign" }
-  | { t: "Test"; stage: "commit" | "reveal" | "afterReveal" | "resolveTokens" | "result" | "apply" | "kindResult" | "end"; asked?: InvId[] }
+  | {
+      t: "Test";
+      stage:
+        | "commit"
+        | "reveal"
+        | "afterReveal"
+        | "resolveTokens"
+        | "result"
+        | "apply"
+        | "kindResult"
+        | "end";
+      asked?: InvId[];
+    }
   | { t: "EnemyEngage"; enemy: InstId; inv: InvId }
   | { t: "CheckObjectives" }
   | { t: "ForEachInv"; invs: InvId[]; step: Step }
@@ -346,7 +440,10 @@ export interface ContentDb {
   /** keyed by card code or scenario id */
   scripts: Record<string, CardScript>;
   encounterSets: Record<string, string[]>;
-  i18n: Record<string, { cards: Record<string, any>; ui: Record<string, string>; campaigns: I18nCampaigns }>;
+  i18n: Record<
+    string,
+    { cards: Record<string, any>; ui: Record<string, string>; campaigns: I18nCampaigns }
+  >;
   /** the sound clips and tracks and what they serve (content/sounds/sounds.json) */
   sounds: SoundManifest;
   /** every pack of cards (a folder under content/packs): whether it is loaded, and its card codes once it is */

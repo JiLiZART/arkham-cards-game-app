@@ -2,7 +2,16 @@ import { beforeAll, describe, expect, it } from "vitest";
 import { loadPacksFor } from "../content";
 import { card, createCard, inv, moveCard, push } from "./core";
 import { run } from "./engine";
-import { DECK_BY_INV, deckCodes, gOf, mutate, options, pick, skipMulligans, start } from "./testkit";
+import {
+  DECK_BY_INV,
+  deckCodes,
+  gOf,
+  mutate,
+  options,
+  pick,
+  skipMulligans,
+  start,
+} from "./testkit";
 import type { Result } from "./engine";
 
 const NATHANIEL = "60101";
@@ -17,7 +26,15 @@ beforeAll(async () => {
 /** Nathaniel with Flesh Ward in play (4 charges unless `uses`), a Ghoul Minion engaged, his turn ended: the attack is next */
 function attacked(opts: { uses?: number; exhausted?: boolean } = {}): { r: Result; ward: string } {
   let r = skipMulligans(start("the-gathering", [NATHANIEL], 1, { chaosBag: ["0"] as never }));
-  while (r.state.pending && r.state.pending.kind !== "turn") r = pick(r, r.state.pending.options.some((o) => o.id === "pass") ? "pass" : /^Done/.test(r.state.pending.options[0].label) ? /^Done/ : /./);
+  while (r.state.pending && r.state.pending.kind !== "turn")
+    r = pick(
+      r,
+      r.state.pending.options.some((o) => o.id === "pass")
+        ? "pass"
+        : /^Done/.test(r.state.pending.options[0].label)
+          ? /^Done/
+          : /./,
+    );
   let ward = "";
   r = mutate(r, (g) => {
     ward = createCard(g, WARD, "limbo", NATHANIEL);
@@ -31,16 +48,37 @@ function attacked(opts: { uses?: number; exhausted?: boolean } = {}): { r: Resul
   r = pick(r, "End turn");
   for (let k = 0; k < 40 && r.state.pending; k++) {
     const p = r.state.pending;
-    if (p.kind === "turn" || p.kind === "assign" || p.options.some((o) => /Flesh Ward/.test(o.label) && p.kind === "reaction")) break;
+    if (
+      p.kind === "turn" ||
+      p.kind === "assign" ||
+      p.options.some((o) => /Flesh Ward/.test(o.label) && p.kind === "reaction")
+    )
+      break;
     if (r.state.log.some((e) => e.type === "attack")) break;
-    r = pick(r, p.options.some((o) => o.id === "pass") ? "pass" : /^Done/.test(p.options[0].label) ? /^Done/ : /./);
+    r = pick(
+      r,
+      p.options.some((o) => o.id === "pass")
+        ? "pass"
+        : /^Done/.test(p.options[0].label)
+          ? /^Done/
+          : /./,
+    );
   }
   return { r, ward };
 }
 const finish = (r: Result): Result => {
   for (let k = 0; k < 40 && r.state.pending && r.state.pending.kind !== "turn"; k++) {
     const p = r.state.pending;
-    r = pick(r, p.kind === "assign" ? new RegExp(`to ${inv(gOf(r), NATHANIEL).name}`) : p.options.some((o) => o.id === "pass") ? "pass" : /^Done/.test(p.options[0].label) ? /^Done/ : /./);
+    r = pick(
+      r,
+      p.kind === "assign"
+        ? new RegExp(`to ${inv(gOf(r), NATHANIEL).name}`)
+        : p.options.some((o) => o.id === "pass")
+          ? "pass"
+          : /^Done/.test(p.options[0].label)
+            ? /^Done/
+            : /./,
+    );
   }
   return r;
 };
@@ -89,7 +127,14 @@ describe("Flesh Ward", () => {
     moveCard(g, createCard(g, WARD, "limbo", NATHANIEL), "play");
     g.s.pending = null;
     g.s.queue.length = 0;
-    push(g, { t: "AssignDamage", inv: NATHANIEL, damage: 0, horror: 1, direct: false, source: null });
+    push(g, {
+      t: "AssignDamage",
+      inv: NATHANIEL,
+      damage: 0,
+      horror: 1,
+      direct: false,
+      source: null,
+    });
     run(g);
     // straight to who takes the horror: no window for the ward
     expect((g.s.pending as { kind?: string } | null)?.kind).toBe("assign");

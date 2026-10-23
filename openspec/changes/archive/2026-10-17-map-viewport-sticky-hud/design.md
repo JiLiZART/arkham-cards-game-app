@@ -1,6 +1,7 @@
 ## Context
 
 This builds on `readable-table-rework`.
+
 - `Table.tsx` has a fixed `OrthographicCamera` fitted by `fitZoom()` to a `BOARD` rect (32×16 units) inside `SAFE_INSETS`.
 - `layout()` places three regions on that board: the scenario strip, the map, and the viewer's play area.
 - `CardMesh` draws every board card in WebGL. `CardZoom` (Hud.tsx) shows the hovered card in a fixed top-right panel.
@@ -14,11 +15,13 @@ The user chose a fixed play-area strip (not on the map) and a centred default vi
 ## Goals / Non-Goals
 
 **Goals:**
+
 - The WebGL scene draws only the map. Everything else is DOM, so its text is sharp and it never moves with the camera.
 - One hover mechanism for every card, in place.
 - Camera controls that a mouse user understands without help: drag to pan, wheel to zoom, Focus and Whole map buttons.
 
 **Non-Goals:**
+
 - Touch gestures beyond a two-finger pinch zoom.
 - Edge auto-pan while dragging a portrait. The player zooms out instead; add it if play shows the need.
 - Engine or content changes.
@@ -26,13 +29,14 @@ The user chose a fixed play-area strip (not on the map) and a centred default vi
 ## Decisions
 
 ### 1. Camera: own small controller, no drei controls
+
 `MapCamera` replaces `FittedCamera`. It keeps `{ cx, cz, zoom }` in a ref and eases toward a target every frame (`damp`).
 
 - **Input:** pointer handlers on the canvas element.
-  - *Pan:* a press followed by more than 5 px of movement pans, converting pixels to world units with `1/zoom`.
-  - *Click:* a press that moves less than that is a click. R3F `onClick` still fires, but `Table` drops clicks when `panned.current` is set.
-  - *Zoom:* the wheel changes zoom by ×1.1 per notch, anchored at the pointer: the world point under the cursor stays fixed.
-  - *Pinch:* two pointers zoom by the ratio of their distances.
+  - _Pan:_ a press followed by more than 5 px of movement pans, converting pixels to world units with `1/zoom`.
+  - _Click:_ a press that moves less than that is a click. R3F `onClick` still fires, but `Table` drops clicks when `panned.current` is set.
+  - _Zoom:_ the wheel changes zoom by ×1.1 per notch, anchored at the pointer: the world point under the cursor stays fixed.
+  - _Pinch:_ two pointers zoom by the ratio of their distances.
 - **Limits:**
   - `zoomMin` fits the map bounds plus a one-card margin inside the window.
   - `zoomMax` draws a location at 840 px tall.
@@ -44,6 +48,7 @@ The user chose a fixed play-area strip (not on the map) and a centred default vi
 - **Why not drei `MapControls`:** it was removed in the flat change because it fought card drags. Pointer-anchored zoom, the clamps and click suppression are about 80 lines with no new dependency.
 
 ### 2. Layout: map only
+
 `layout()` drops the strip and viewer regions, and with them `BOARD` and `SAFE_INSETS`.
 
 - It returns:
@@ -56,6 +61,7 @@ The user chose a fixed play-area strip (not on the map) and a centred default vi
 - `layout.test` becomes: no overlaps between groups on the map, all inside `bounds`, and nothing of the viewer's except their minis on the map.
 
 ### 3. HUD panels (DOM)
+
 - **`ScenarioPanel` (top-left, fixed):**
   - act and agenda as `CardFace` at about 170×122 px (landscape scans), with a token badge row (doom, clue cost) and legal highlight;
   - a click opens `CardModal`, which gains a `bothSides` mode for act and agenda: front and back side by side.
@@ -72,6 +78,7 @@ The user chose a fixed play-area strip (not on the map) and a centred default vi
 - **Encounter resolving:** the encounter card being resolved and the encounter-draw flight become a centred DOM overlay (`ResolvingCard`), animated from the encounter pile's rect. Committed skill cards show as thumbnails in `SkillTestPanel`.
 
 ### 4. Hover enlarge (one overlay for everything)
+
 `useView.hover` stores `{ id, rect }`, where `rect` is the card's on-screen rectangle.
 
 - **Where `rect` comes from:**
@@ -85,17 +92,20 @@ The user chose a fixed play-area strip (not on the map) and a centred default vi
 - Hand cards keep their own hover (Decision 5); the overlay ignores `zone === "hand"`.
 
 ### 5. Hand hover at 2×
+
 - The hover style changes from `translateY(-243px)` to `translateY(…) scale(k)`, where `k = min(2, (innerHeight − 16) / 420)`. The origin is bottom-centre, and the translate lifts the scaled card's bottom just above the screen edge.
 - `k` is set as a CSS variable from `HandFan` on resize.
 - The hovered card's `z-index` goes above the strip and stat dock.
 
 ### 6. Stat numbers at least 48 px
+
 - `.stat-bar .stat b`, `.token-stack b`, the skill values and the action count get `font-size: 48px; line-height: 1`.
 - Max values (`/9`) stay smaller (22 px) beside them.
 - The bar becomes three rows: portrait and name; health, sanity and actions; skills. Its width grows to about 420 px (`STAT_BAR_W`).
 - The fan's 12-card check at 1280 px relaxes from 40 px to 32 px visible per card. Hover is still reachable, which is what the "Large hand" scenario requires.
 
 ### 7. Font-first icons, transparent PNGs
+
 - **`src/ui/icons.ts`** maps each concept to a source:
   - `{ glyph: "<arkhamicons name>", color }` for skills, classes, health, sanity, slots and action symbols, with colours as CSS variables (`--c-willpower`…, `--c-guardian`…, health `#b3261e`, sanity `#2f5fb3`);
   - `{ token: "<tokens base name>" }` for chaos tokens;
@@ -117,6 +127,7 @@ The user chose a fixed play-area strip (not on the map) and a centred default vi
   - every remaining PNG has a transparent top-left pixel (checked with `magick` in the asset step, and by reading the PNG alpha in a node test using `pngjs`-free raw parsing: the IHDR colour type must include alpha).
 
 ### 8. Chaos token draw
+
 - **Where it hooks in:** into the existing event queue. The engine already emits `token` (`data.token`) and then `testResult` (`base`, `icons`, `tokens`, `tokenTotal`, `total`, `difficulty`, `success`, `skill`). The engine is unchanged; the token is already drawn by the seeded RNG when the event arrives.
 - **`TokenDraw` overlay** (DOM): when `current.type === "token"` and the hand-draw setting is on, `EventPlayer` does not start its timer; the overlay takes over.
   - **Circle count:** the number of tokens in the bag at reveal time, which is `game.chaosBag.length` plus the tokens already revealed in this test if the engine holds them out.
@@ -130,6 +141,7 @@ The user chose a fixed play-area strip (not on the map) and a centred default vi
 - **Setting:** `drawByHand: boolean` lives in the store and is saved with the locale and privacy preferences. A menu checkbox reads "Draw chaos tokens by hand", translated.
 
 ### 9. Card backs
+
 - `extract-assets.sh` copies the two ArkhamCards backs, mapped by artwork, since the source names are swapped compared with the printed game:
   - `inspired/ArkhamCards/assets/encounter-back.png` (sepia tentacles, 728×1024, square corners) → `public/table/back-player.png`. Corners are rounded with a mask so it matches the scans.
   - `player-back.png` (blue eclipse, 738×1048, transparent corners) → `public/table/back-encounter.png`. It replaces the 140×193 `card-back-bg`.
@@ -140,6 +152,7 @@ The user chose a fixed play-area strip (not on the map) and a centred default vi
   - an encounter card is still recognised by `isEncounterCard`.
 
 ### Changed during implementation
+
 - **Zoom-out limit:** the far limit is "whole map in the free area" or half the default zoom, whichever is further out, so a one-room map can still zoom out.
 - **HUD insets:** `HUD_INSETS` is `{ top: 60, right: 170, bottom: 380, left: 200 }`.
 - **Hand fan stacking:** at rest the fan sits under the stat dock, and a hovered or focused card lifts the whole fan above everything. Otherwise a tilted edge card could cover the dock.

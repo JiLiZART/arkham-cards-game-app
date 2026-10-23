@@ -14,10 +14,18 @@ export function trackShowcase(store: StoreApi<UiState>) {
       if (useView.getState().showcase.length) useView.setState({ showcase: [] });
       return;
     }
-    if (!s.game || !prev.game || s.game === prev.game || s.actions.length <= prev.actions.length) return;
+    if (!s.game || !prev.game || s.game === prev.game || s.actions.length <= prev.actions.length)
+      return;
     const viewer = viewerOf(s.game);
     const picked = new Set(deckPick(prev.game, viewerOf(prev.game)));
-    const drawn = diffArrivals(prev.game, s.game).filter((a) => a.to === "hand" && a.from === "deck" && !a.opening && a.owner === viewer && !picked.has(a.id));
+    const drawn = diffArrivals(prev.game, s.game).filter(
+      (a) =>
+        a.to === "hand" &&
+        a.from === "deck" &&
+        !a.opening &&
+        a.owner === viewer &&
+        !picked.has(a.id),
+    );
     if (!drawn.length) return;
     // the showcase flies these in itself; the fan takes them later from there
     for (const a of drawn) takeArrival(a.id);

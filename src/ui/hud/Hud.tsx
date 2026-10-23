@@ -36,16 +36,34 @@ import { spotlightNow } from "../spotlight";
 import { LangSwitch } from "../LangSwitch";
 import { useStage, useView } from "../view";
 
-const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
+const tr = (key: string, vars?: Record<string, string | number>) =>
+  t(db, gameStore.getState().locale, key, vars);
 
 /** how long each animated event holds the screen (ms) */
-const DURATION: Record<string, number> = { enemyMove: 800, token: 650, testResult: 1300, encounter: 1400, attack: 700, spawn: 500, agendaAdvance: 1500, actAdvance: 1500, resolution: 800, enemyDefeated: 600, defeated: 1200, damage: 750, enemyDamage: 650, clues: 450, doom: 450 };
+const DURATION: Record<string, number> = {
+  enemyMove: 800,
+  token: 650,
+  testResult: 1300,
+  encounter: 1400,
+  attack: 700,
+  spawn: 500,
+  agendaAdvance: 1500,
+  actAdvance: 1500,
+  resolution: 800,
+  enemyDefeated: 600,
+  defeated: 1200,
+  damage: 750,
+  enemyDamage: 650,
+  clues: 450,
+  doom: 450,
+};
 
 /** the Slow pace holds every event this many times as long */
 const SLOW = 1.6;
 
 /** events that start only once every card on screen has landed: the chaos draw, and a hit from a card */
-export const waitsForSettle = (e: GameEvent | null) => e?.type === "token" || (e?.type === "damage" && !!e.data?.source);
+export const waitsForSettle = (e: GameEvent | null) =>
+  e?.type === "token" || (e?.type === "damage" && !!e.data?.source);
 
 /** events that take the middle of the screen (the rest play only while nothing holds it) */
 const CENTER = new Set(["token", "testResult", "encounter", "weakness"]);
@@ -60,13 +78,21 @@ function EventPlayer() {
   const settledFor = useView((s) => s.settledFor);
   // so does a hit from a card (its streak and numbers follow a revealed location's flip)
   // a test's draw and result play inside the skill-test screen, which holds the stage for the whole test
-  const testKey = current && (current.type === "token" || current.type === "testResult") && typeof current.data?.testId === "number" ? `test:${current.data.testId}` : null;
+  const testKey =
+    current &&
+    (current.type === "token" || current.type === "testResult") &&
+    typeof current.data?.testId === "number"
+      ? `test:${current.data.testId}`
+      : null;
   const center = !!current && !testKey && CENTER.has(current.type);
   const holdsEvent = useStage(center ? `event:${current!.logIndex}` : null);
   const holds = useView((s) => (testKey ? s.stage[0] === testKey : holdsEvent));
   // other events play when nothing holds the middle, or only the test screen does (a fast ability's damage mid-test)
   const stageFree = useView((s) => s.stage.every((k) => k.startsWith("test:")));
-  const ready = !!current && (!waitsForSettle(current) || settledFor === current) && (testKey || center ? holds : stageFree);
+  const ready =
+    !!current &&
+    (!waitsForSettle(current) || settledFor === current) &&
+    (testKey || center ? holds : stageFree);
   // the event plays: everything else on the map dims around what it is about; once all is played, around the choice's options
   const game = useGame((s) => s.game);
   const queued = useGame((s) => s.queue.length > 0);
@@ -74,7 +100,10 @@ function EventPlayer() {
   const idle = !current && !queued && stageFree;
   useEffect(() => {
     const playing = ready ? current : null;
-    useView.setState({ playing, spotlight: game ? spotlightNow(game, viewerOf(game), playing, idle) : null });
+    useView.setState({
+      playing,
+      spotlight: game ? spotlightNow(game, viewerOf(game), playing, idle) : null,
+    });
   }, [current, ready, game, idle]);
   useEffect(() => {
     if (!waitsForSettle(current)) return;
@@ -83,13 +112,21 @@ function EventPlayer() {
   // a token draw advances itself when its token has landed in the strip (by hand it waits for the tap first);
   // drawing by hand also waits for Continue on the result; at the Tap pace every big event waits for Next
   // a drawn encounter card or weakness waits in the showcase for the player's tap at every pace
-  const waits = !!testKey && current?.type === "token" ? true : (byHand && current?.type === "testResult") || holdsForTap(current, pace) || (!!current && HELD.has(current.type));
+  const waits =
+    !!testKey && current?.type === "token"
+      ? true
+      : (byHand && current?.type === "testResult") ||
+        holdsForTap(current, pace) ||
+        (!!current && HELD.has(current.type));
   useEffect(() => {
     if (!current || waits || !ready) return;
     // a hit from a card plays its streak first, then the numbers
     const hit = current.type === "damage" && current.data?.source ? HIT_MS + 300 : 0;
     const slow = pace === "slow" ? SLOW : 1;
-    const id = setTimeout(next, (current.type === "testResult" ? 1800 : (DURATION[current.type] ?? 500) + hit) * slow);
+    const id = setTimeout(
+      next,
+      (current.type === "testResult" ? 1800 : (DURATION[current.type] ?? 500) + hit) * slow,
+    );
     return () => clearTimeout(id);
   }, [current, next, waits, ready, pace]);
   if (!current || !ready) return null;
@@ -111,15 +148,19 @@ function PhaseTitle() {
   const current = useGame((s) => s.current);
   const seen = useRef<{ setup: unknown; n: number }>({ setup, n: game.log.length });
   const queue = useRef<{ phase: string; round: number; key: number }[]>([]);
-  const [showing, setShowing] = useState<{ phase: string; round: number; key: number } | null>(null);
+  const [showing, setShowing] = useState<{ phase: string; round: number; key: number } | null>(
+    null,
+  );
   // a new game (new or loaded) starts from its current log: nothing plays for phases already past; an undo shortens it
-  if (seen.current.setup !== setup || game.log.length < seen.current.n) seen.current = { setup, n: game.log.length };
+  if (seen.current.setup !== setup || game.log.length < seen.current.n)
+    seen.current = { setup, n: game.log.length };
   if (game.log.length > seen.current.n) {
     for (let i = seen.current.n; i < game.log.length; i++) {
       const e = game.log[i];
       const phase = String(e.data?.phase ?? "");
       // a paced game's title is its pause (below), not the log entry that follows it
-      if (e.type === "phase" && TITLED.has(phase) && !game.pacePhases) queue.current.push({ phase, round: Number(e.data?.round ?? game.round), key: i });
+      if (e.type === "phase" && TITLED.has(phase) && !game.pacePhases)
+        queue.current.push({ phase, round: Number(e.data?.round ?? game.round), key: i });
     }
     seen.current.n = game.log.length;
   }
@@ -140,7 +181,8 @@ function PhaseTitle() {
   // the title appears (held at the pause, or passing): its swell
   const titled = holds && (paused || !!showing);
   // a phase with nothing to show (an enemy phase with no enemy to move or attack) goes on at once: no title, no pause
-  const empty = paused && phaseIsEmpty(game, String((pause!.step as { phase?: string }).phase ?? ""));
+  const empty =
+    paused && phaseIsEmpty(game, String((pause!.step as { phase?: string }).phase ?? ""));
   useEffect(() => {
     if (titled && !empty) moment("phase");
   }, [titled, empty]);
@@ -174,12 +216,17 @@ function TurnTitle() {
   const setup = useGame((s) => s.setup);
   const current = useGame((s) => s.current);
   const locale = useGame((s) => s.locale);
-  const seen = useRef<{ setup: unknown; n: number; prev: GameState | null }>({ setup, n: game.log.length, prev: game });
+  const seen = useRef<{ setup: unknown; n: number; prev: GameState | null }>({
+    setup,
+    n: game.log.length,
+    prev: game,
+  });
   // a turn title waits for its turn to still be the active one; a decision's for its investigator to still be deciding
   type Title = { inv: string; key: number; decision?: boolean };
   const queue = useRef<Title[]>([]);
   const [showing, setShowing] = useState<Title | null>(null);
-  if (seen.current.setup !== setup || game.log.length < seen.current.n) seen.current = { setup, n: game.log.length, prev: game };
+  if (seen.current.setup !== setup || game.log.length < seen.current.n)
+    seen.current = { setup, n: game.log.length, prev: game };
   if (seen.current.prev !== game) {
     const own = ownDecisionTitle(seen.current.prev, game);
     if (own) queue.current.push({ inv: own, key: -game.seq, decision: true });
@@ -191,7 +238,8 @@ function TurnTitle() {
       if (e.type !== "turn" || !e.inv) continue;
       // the first turn of the phase (no turn since the phase entry) belongs to the lead who just saw the phase title
       let first = true;
-      for (let k = i - 1; k >= 0 && game.log[k].type !== "phase"; k--) if (game.log[k].type === "turn") first = false;
+      for (let k = i - 1; k >= 0 && game.log[k].type !== "phase"; k--)
+        if (game.log[k].type === "turn") first = false;
       if (first && e.inv === game.lead) continue;
       queue.current.push({ inv: e.inv, key: i });
     }
@@ -203,7 +251,11 @@ function TurnTitle() {
     return whenSettled(() => {
       // a turn already over (the player was quicker than the screen) gets no title
       const g = gameStore.getState().game;
-      while (queue.current.length && queue.current[0].inv !== (queue.current[0].decision ? g?.pending?.inv : g?.active)) queue.current.shift();
+      while (
+        queue.current.length &&
+        queue.current[0].inv !== (queue.current[0].decision ? g?.pending?.inv : g?.active)
+      )
+        queue.current.shift();
       setShowing(queue.current.shift() ?? null);
     });
   }, [showing, current, waiting]);
@@ -223,7 +275,9 @@ function TurnTitle() {
       }}
     >
       <Portrait code={showing.inv} size={72} />
-      <div className="phase-title-name">{tr("turn.title", { name: cardText(db, showing.inv, locale).name })}</div>
+      <div className="phase-title-name">
+        {tr("turn.title", { name: cardText(db, showing.inv, locale).name })}
+      </div>
     </div>
   );
 }
@@ -240,7 +294,12 @@ function AutoSwitch() {
   const game = useGame((s) => s.game)!;
   const viewing = useView((s) => s.viewing);
   const busy = useGame((s) => !!s.current || s.queue.length > 0);
-  const free = useView((s) => s.stage.every((k) => k.startsWith("test:") || k.startsWith("pause:")) && !s.intro && s.showcase.length === 0);
+  const free = useView(
+    (s) =>
+      s.stage.every((k) => k.startsWith("test:") || k.startsWith("pause:")) &&
+      !s.intro &&
+      s.showcase.length === 0,
+  );
   const target = autoSwitchTarget(game, { viewing });
   useEffect(() => {
     if (!target || busy || !free) return;
@@ -291,18 +350,38 @@ function PhasePause() {
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
   }, [choose]);
-  useEffect(() => delayed(PHASE_AUTO_MS, () => gameStore.getState().game?.pending?.seq === p.seq, () => {
-    moment("countdown");
-    choose("continue");
-  }), [p.seq, choose]);
+  useEffect(
+    () =>
+      delayed(
+        PHASE_AUTO_MS,
+        () => gameStore.getState().game?.pending?.seq === p.seq,
+        () => {
+          moment("countdown");
+          choose("continue");
+        },
+      ),
+    [p.seq, choose],
+  );
   return (
     <div className="phase-title held">
       <div className="phase-title-name">{tr(`phase.title.${phase}`)}</div>
       <div className="phase-title-round">{tr("phase.round", { n: game.round })}</div>
-      <button className="phase-continue phase-avatar" onClick={go} autoFocus title={tr("phase.continue", { name })} aria-label={tr("phase.continue", { name })}>
+      <button
+        className="phase-continue phase-avatar"
+        onClick={go}
+        autoFocus
+        title={tr("phase.continue", { name })}
+        aria-label={tr("phase.continue", { name })}
+      >
         <svg className="phase-ring" viewBox="0 0 100 100" aria-hidden="true">
           <circle cx="50" cy="50" r="46" />
-          <circle className="phase-ring-run" cx="50" cy="50" r="46" style={{ animationDuration: `${PHASE_AUTO_MS}ms` }} />
+          <circle
+            className="phase-ring-run"
+            cx="50"
+            cy="50"
+            r="46"
+            style={{ animationDuration: `${PHASE_AUTO_MS}ms` }}
+          />
         </svg>
         <Portrait code={p.inv} size={76} />
       </button>
@@ -314,7 +393,10 @@ function PhasePause() {
 function JournalButton() {
   const mode = useView((s) => s.feedMode);
   return (
-    <button className={mode === "journal" ? "primary" : ""} onClick={() => useView.getState().setFeedMode(mode === "journal" ? "live" : "journal")}>
+    <button
+      className={mode === "journal" ? "primary" : ""}
+      onClick={() => useView.getState().setFeedMode(mode === "journal" ? "live" : "journal")}
+    >
       {tr("hud.journal")}
     </button>
   );
@@ -333,12 +415,23 @@ function TopBar({ phone }: { phone: boolean }) {
       <PlayerBar />
       <div className="buttons">
         <LangSwitch compact={phone} />
-        <button className={`mute-btn ${muted ? "muted" : ""}`} onClick={() => setMuted(!muted)} title={tr(muted ? "hud.unmute" : "hud.mute")} aria-pressed={muted}>
+        <button
+          className={`mute-btn ${muted ? "muted" : ""}`}
+          onClick={() => setMuted(!muted)}
+          title={tr(muted ? "hud.unmute" : "hud.mute")}
+          aria-pressed={muted}
+        >
           {muted ? "🔇" : "🔊"}
         </button>
         {phone ? (
           <>
-            <button className={`icon-btn ${journal ? "primary" : ""}`} onClick={() => useView.getState().setDrawer(journal ? null : "right")} title={tr("hud.journal")} aria-label={tr("hud.journal")} aria-pressed={journal}>
+            <button
+              className={`icon-btn ${journal ? "primary" : ""}`}
+              onClick={() => useView.getState().setDrawer(journal ? null : "right")}
+              title={tr("hud.journal")}
+              aria-label={tr("hud.journal")}
+              aria-pressed={journal}
+            >
               <Glyph name="tomes" size={22} title="" />
             </button>
             <ChaosBagButton />
@@ -346,10 +439,20 @@ function TopBar({ phone }: { phone: boolean }) {
         ) : (
           <JournalButton />
         )}
-        <button className={phone ? "icon-btn" : ""} onClick={() => toggle("debug")} title={tr("hud.debug")} aria-label={tr("hud.debug")}>
+        <button
+          className={phone ? "icon-btn" : ""}
+          onClick={() => toggle("debug")}
+          title={tr("hud.debug")}
+          aria-label={tr("hud.debug")}
+        >
           {phone ? "{ }" : tr("hud.debug")}
         </button>
-        <button className={phone ? "icon-btn" : ""} onClick={() => gameStore.setState({ screen: "title" })} title={tr("hud.menu")} aria-label={tr("hud.menu")}>
+        <button
+          className={phone ? "icon-btn" : ""}
+          onClick={() => gameStore.setState({ screen: "title" })}
+          title={tr("hud.menu")}
+          aria-label={tr("hud.menu")}
+        >
           {phone ? "☰" : tr("hud.menu")}
         </button>
       </div>
@@ -420,7 +523,13 @@ function DebugPanel() {
   const [pasteError, setPasteError] = useState<string | null>(null);
   const [picking, setPicking] = useState(false);
   const manualBox = useRef<HTMLTextAreaElement>(null);
-  const json = useMemo(() => (panel === "debug" ? JSON.stringify({ ...game, log: `(${game.log.length} entries)` }, null, 1) : ""), [game, panel]);
+  const json = useMemo(
+    () =>
+      panel === "debug"
+        ? JSON.stringify({ ...game, log: `(${game.log.length} entries)` }, null, 1)
+        : "",
+    [game, panel],
+  );
   if (panel !== "debug") return null;
   const download = () => {
     const blob = new Blob([exportLog()], { type: "application/json" });
@@ -484,8 +593,17 @@ function DebugPanel() {
         />
       </div>
       <div className="row">
-        <button className="primary" onClick={copyReport}>{tr("debug.copyReport")}</button>
-        <button onClick={() => { setPasting(!pasting); setPasteError(null); }}>{tr("debug.pasteReport")}</button>
+        <button className="primary" onClick={copyReport}>
+          {tr("debug.copyReport")}
+        </button>
+        <button
+          onClick={() => {
+            setPasting(!pasting);
+            setPasteError(null);
+          }}
+        >
+          {tr("debug.pasteReport")}
+        </button>
         {copied === "ok" && <span className="report-ok">{tr("debug.copied")}</span>}
         {SoundPicker && <button onClick={() => setPicking(true)}>Sounds</button>}
       </div>
@@ -497,14 +615,27 @@ function DebugPanel() {
       {copied === "manual" && (
         <div className="report-copy">
           <div className="problems">{tr("debug.copyRefused")}</div>
-          <textarea ref={manualBox} readOnly value={manual} onFocus={(e) => e.currentTarget.select()} aria-label={tr("debug.copyReport")} />
+          <textarea
+            ref={manualBox}
+            readOnly
+            value={manual}
+            onFocus={(e) => e.currentTarget.select()}
+            aria-label={tr("debug.copyReport")}
+          />
         </div>
       )}
       {pasting && (
         <div className="report-paste">
-          <textarea value={pasted} placeholder={tr("debug.pastePlaceholder")} onChange={(e) => setPasted(e.target.value)} aria-label={tr("debug.pasteReport")} />
+          <textarea
+            value={pasted}
+            placeholder={tr("debug.pastePlaceholder")}
+            onChange={(e) => setPasted(e.target.value)}
+            aria-label={tr("debug.pasteReport")}
+          />
           <div className="row">
-            <button className="primary" disabled={!pasted.trim()} onClick={loadReport}>{tr("debug.load")}</button>
+            <button className="primary" disabled={!pasted.trim()} onClick={loadReport}>
+              {tr("debug.load")}
+            </button>
           </div>
           {pasteError && <div className="problems">{pasteError}</div>}
         </div>
@@ -530,8 +661,13 @@ function ScenarioEnd() {
     <div className="handoff">
       <div className="handoff-box resolution">
         <h2>{r?.title ?? game.resolution}</h2>
-        <div className="resolution-text" dangerouslySetInnerHTML={{ __html: guideHtml(r?.text ?? "") }} />
-        <button className="primary big" onClick={finish}>{tr("log.title")} →</button>
+        <div
+          className="resolution-text"
+          dangerouslySetInnerHTML={{ __html: guideHtml(r?.text ?? "") }}
+        />
+        <button className="primary big" onClick={finish}>
+          {tr("log.title")} →
+        </button>
       </div>
     </div>
   );
@@ -540,7 +676,11 @@ function ScenarioEnd() {
 function ErrorToast() {
   const error = useGame((s) => s.error);
   if (!error) return null;
-  return <div className="error" onClick={() => gameStore.setState({ error: null })}>{error}</div>;
+  return (
+    <div className="error" onClick={() => gameStore.setState({ error: null })}>
+      {error}
+    </div>
+  );
 }
 
 /** the view returns to the deciding player's table (or stays on the active one while another can act) whenever the decision passes */

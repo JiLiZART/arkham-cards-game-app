@@ -10,13 +10,19 @@ describe("tapDecision", () => {
 
   it("a second tap on the same card within 1.5 s chooses, and forgets the peek", () => {
     const first = tapDecision(none, "c1", 1000);
-    expect(tapDecision(first.next, "c1", 1000 + SECOND_TAP_MS - 1)).toEqual({ action: "choose", next: none });
+    expect(tapDecision(first.next, "c1", 1000 + SECOND_TAP_MS - 1)).toEqual({
+      action: "choose",
+      next: none,
+    });
   });
 
   it("a second tap too late, or on another card, peeks again", () => {
     const first = tapDecision(none, "c1", 1000).next;
     expect(tapDecision(first, "c1", 1000 + SECOND_TAP_MS + 1).action).toBe("peek");
-    expect(tapDecision(first, "c2", 1100)).toEqual({ action: "peek", next: { id: "c2", at: 1100 } });
+    expect(tapDecision(first, "c2", 1100)).toEqual({
+      action: "peek",
+      next: { id: "c2", at: 1100 },
+    });
   });
 
   it("the timings are the spec's", () => {

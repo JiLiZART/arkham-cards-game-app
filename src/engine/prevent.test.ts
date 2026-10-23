@@ -11,7 +11,15 @@ const MINION = "01160"; // Ghoul Minion: 1 damage, 1 horror
 const RATS = "01159"; // Swarm of Rats: 1 damage, 0 horror
 
 /** the Machete, for these tests, answers an enemy attack's damage by preventing some of it (the real wards come with their cards) */
-const ward = (kind: "damage" | "horror" | "either", amount = 1): Ability => ({ kind: "reaction", trigger: "attackDealsDamage", usableBy: "controller", label: "Ward", cost: { exhaust: true }, effects: [{ op: "preventDamage", amount, kind }] } as never);
+const ward = (kind: "damage" | "horror" | "either", amount = 1): Ability =>
+  ({
+    kind: "reaction",
+    trigger: "attackDealsDamage",
+    usableBy: "controller",
+    label: "Ward",
+    cost: { exhaust: true },
+    effects: [{ op: "preventDamage", amount, kind }],
+  }) as never;
 let saved: Ability[];
 beforeEach(() => {
   saved = db.cards[MACHETE].abilities;
@@ -37,19 +45,38 @@ function attacked(enemy: string, ability?: Ability): Result {
 function untilAttack(r: Result): Result {
   for (let k = 0; k < 60 && r.state.pending; k++) {
     const p = r.state.pending;
-    if (p.kind === "turn" || p.kind === "assign" || p.options.some((o) => o.label === "Ward")) break;
+    if (p.kind === "turn" || p.kind === "assign" || p.options.some((o) => o.label === "Ward"))
+      break;
     if (r.state.log.some((e) => e.type === "attack")) break;
-    r = pick(r, p.options.some((o) => o.id === "pass") ? "pass" : /^Done/.test(p.options[0].label) || p.kind === "commit" ? /^Done/ : /./);
+    r = pick(
+      r,
+      p.options.some((o) => o.id === "pass")
+        ? "pass"
+        : /^Done/.test(p.options[0].label) || p.kind === "commit"
+          ? /^Done/
+          : /./,
+    );
   }
   return r;
 }
 /** answer what is left of the attack with neutral options until the next turn */
 function finish(r: Result): Result {
-  for (let k = 0; k < 60 && r.state.pending && r.state.pending.kind !== "turn"; k++) r = pick(r, r.state.pending.options.some((o) => o.id === "pass") ? "pass" : /^Done/.test(r.state.pending.options[0].label) ? /^Done/ : /./);
+  for (let k = 0; k < 60 && r.state.pending && r.state.pending.kind !== "turn"; k++)
+    r = pick(
+      r,
+      r.state.pending.options.some((o) => o.id === "pass")
+        ? "pass"
+        : /^Done/.test(r.state.pending.options[0].label)
+          ? /^Done/
+          : /./,
+    );
   return r;
 }
 const labels = (r: Result) => options(r);
-const hit = (r: Result) => ({ damage: r.state.invs[ROLAND].damage, horror: r.state.invs[ROLAND].horror });
+const hit = (r: Result) => ({
+  damage: r.state.invs[ROLAND].damage,
+  horror: r.state.invs[ROLAND].horror,
+});
 
 describe("an enemy attack deals damage: a window before it is assigned", () => {
   it("offers the reaction, and preventing the damage assigns only the horror", () => {
@@ -135,8 +162,16 @@ describe("the assignment options say what they do", () => {
     const r = assigning(["01032", "01028"]); // Research Librarian (health 1), Beat Cop (health 2)
     const p = r.state.pending!;
     expect(p.kind).toBe("assign");
-    expect(p.options.map((o) => o.label)).toEqual(["Assign 1 damage to Roland Banks", "Assign 1 damage to Research Librarian (defeated)", "Assign 1 damage to Beat Cop"]);
-    expect(p.options.map((o) => o.key)).toEqual(["option.assignDamage", "option.assignDamage", "option.assignDamage"]);
+    expect(p.options.map((o) => o.label)).toEqual([
+      "Assign 1 damage to Roland Banks",
+      "Assign 1 damage to Research Librarian (defeated)",
+      "Assign 1 damage to Beat Cop",
+    ]);
+    expect(p.options.map((o) => o.key)).toEqual([
+      "option.assignDamage",
+      "option.assignDamage",
+      "option.assignDamage",
+    ]);
     expect(p.options[1].vars).toEqual({ code: "01032", defeated: 1 });
     expect(p.options[2].vars).toEqual({ code: "01028", defeated: 0 });
   });

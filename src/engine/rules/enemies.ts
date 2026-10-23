@@ -1,7 +1,29 @@
 import {
   logStep,
-  activeInvs, ask, card, def, distances, emit, enemies, enemyStat, engagedWith, hasFlag, inv, invName, invsAt, isElite,
-  isMassive, locationByName, locations, moveCard, push, remainingHealth, remainingSanity, skillValue, stepsToward, type G,
+  activeInvs,
+  ask,
+  card,
+  def,
+  distances,
+  emit,
+  enemies,
+  enemyStat,
+  engagedWith,
+  hasFlag,
+  inv,
+  invName,
+  invsAt,
+  isElite,
+  isMassive,
+  locationByName,
+  locations,
+  moveCard,
+  push,
+  remainingHealth,
+  remainingSanity,
+  skillValue,
+  stepsToward,
+  type G,
 } from "../core";
 import type { InstId, InvId, Step } from "../types";
 import { win } from "./cards";
@@ -19,11 +41,16 @@ export function preyCandidates(g: G, enemy: InstId, candidates: InvId[]): InvId[
   const [dir, stat] = "highest" in prey ? [1, prey.highest] : [-1, prey.lowest];
   const val = (i: InvId) => {
     switch (stat) {
-      case "clues": return inv(g, i).clues;
-      case "remainingHealth": return remainingHealth(g, i);
-      case "remainingSanity": return remainingSanity(g, i);
-      case "cardsInHand": return inv(g, i).hand.length;
-      default: return skillValue(g, i, stat);
+      case "clues":
+        return inv(g, i).clues;
+      case "remainingHealth":
+        return remainingHealth(g, i);
+      case "remainingSanity":
+        return remainingSanity(g, i);
+      case "cardsInHand":
+        return inv(g, i).hand.length;
+      default:
+        return skillValue(g, i, stat);
     }
   };
   const best = Math.max(...candidates.map((i) => dir * val(i)));
@@ -51,29 +78,49 @@ export const spawnHandler: Handler<"Spawn"> = (g, step) => {
   }
   if (!at && d.spawn) {
     if (d.spawn === "emptyLocation") {
-      const empty = locations(g).filter((l) => invsAt(g, l.id).length === 0 && !enemies(g).some((e) => e.location === l.id));
+      const empty = locations(g).filter(
+        (l) => invsAt(g, l.id).length === 0 && !enemies(g).some((e) => e.location === l.id),
+      );
       if (empty.length) {
-        const pick = ask<InstId>(g, step, g.s.lead, "target", `Choose an empty location to spawn ${d.name}`,
-          empty.map((l) => ({ id: l.id, label: def(g, l.id).name, card: l.id, value: l.id })), { auto: true, key: "spawnAt", vars: { card: step.enemy } });
+        const pick = ask<InstId>(
+          g,
+          step,
+          g.s.lead,
+          "target",
+          `Choose an empty location to spawn ${d.name}`,
+          empty.map((l) => ({ id: l.id, label: def(g, l.id).name, card: l.id, value: l.id })),
+          { auto: true, key: "spawnAt", vars: { card: step.enemy } },
+        );
         if (pick === undefined) return;
         at = pick;
       }
     } else if (d.spawn === "Engaged with Prey") {
       const cands = preyCandidates(g, step.enemy, activeInvs(g));
       if (!cands.length) {
-        emit(g, "spawnFail", `${d.name} has no prey in play and is discarded`, { card: step.enemy });
+        emit(g, "spawnFail", `${d.name} has no prey in play and is discarded`, {
+          card: step.enemy,
+        });
         moveCard(g, step.enemy, c.owner ? "discard" : "encounterDiscard");
         return;
       }
-      const pick = ask<InvId>(g, step, g.s.lead, "target", `${d.name} spawns engaged with:`,
-        cands.map((i) => ({ id: i, label: invName(g, i), card: inv(g, i).cardId, value: i })), { auto: true, key: "spawnEngaged", vars: { card: step.enemy } });
+      const pick = ask<InvId>(
+        g,
+        step,
+        g.s.lead,
+        "target",
+        `${d.name} spawns engaged with:`,
+        cands.map((i) => ({ id: i, label: invName(g, i), card: inv(g, i).cardId, value: i })),
+        { auto: true, key: "spawnEngaged", vars: { card: step.enemy } },
+      );
       if (pick === undefined) return;
       engage = pick;
       at = inv(g, pick).location;
     } else {
       const loc = locationByName(g, d.spawn);
       if (!loc) {
-        emit(g, "spawnFail", `${d.name} has no spawn location in play and is discarded`, { card: step.enemy });
+        emit(g, "spawnFail", `${d.name} has no spawn location in play and is discarded`, {
+          card: step.enemy,
+        });
         moveCard(g, step.enemy, c.owner ? "discard" : "encounterDiscard");
         return;
       }
@@ -90,7 +137,10 @@ export const spawnHandler: Handler<"Spawn"> = (g, step) => {
   }
   moveCard(g, step.enemy, "enemy", { location: at });
   // a unique encounter card entering play discards the player card with its title (Grimoire, Unique)
-  if (d.unique) for (const twin of Object.values(g.s.cards)) if (twin.owner && twin.zone === "play" && def(g, twin.id).name === d.name) moveCard(g, twin.id, "discard", { inv: twin.owner });
+  if (d.unique)
+    for (const twin of Object.values(g.s.cards))
+      if (twin.owner && twin.zone === "play" && def(g, twin.id).name === d.name)
+        moveCard(g, twin.id, "discard", { inv: twin.owner });
   emit(g, "spawn", `${d.name} spawns at ${def(g, at).name}`, { card: step.enemy, data: { at } });
   const aloof = d.keywords.includes("aloof");
   if (!engage && !aloof && !isMassive(g, step.enemy)) {
@@ -101,19 +151,32 @@ export const spawnHandler: Handler<"Spawn"> = (g, step) => {
     c.engagedWith = engage;
     emit(g, "engage", `${d.name} engages ${invName(g, engage)}`, { inv: engage, card: step.enemy });
   }
-  push(g, win("enemySpawns", { inv: step.inv, enemy: step.enemy, location: at }), win("enterPlay", { card: step.enemy, enemy: step.enemy }), ...(engage ? [win("enemyEngages", { inv: engage, enemy: step.enemy })] : []), { t: "CheckObjectives" });
+  push(
+    g,
+    win("enemySpawns", { inv: step.inv, enemy: step.enemy, location: at }),
+    win("enterPlay", { card: step.enemy, enemy: step.enemy }),
+    ...(engage ? [win("enemyEngages", { inv: engage, enemy: step.enemy })] : []),
+    { t: "CheckObjectives" },
+  );
 };
 
 // ---------- attacks ----------
 export const enemyAttackHandler: Handler<"EnemyAttack"> = (g, step) => {
-  push(g, win("enemyAttacks", { inv: step.inv, enemy: step.enemy, key: step.key }), { t: "ResolveAttack", enemy: step.enemy, inv: step.inv, key: step.key });
+  push(g, win("enemyAttacks", { inv: step.inv, enemy: step.enemy, key: step.key }), {
+    t: "ResolveAttack",
+    enemy: step.enemy,
+    inv: step.inv,
+    key: step.key,
+  });
 };
 
 export const resolveAttackHandler: Handler<"ResolveAttack"> = (g, step) => {
   const e = g.s.cards[step.enemy];
   if (!e || e.zone !== "enemy" || inv(g, step.inv).status !== "playing") return;
   if (g.s.cancelled.includes(step.key)) {
-    emit(g, "attackCancelled", `${def(g, step.enemy).name}'s attack is cancelled`, { card: step.enemy });
+    emit(g, "attackCancelled", `${def(g, step.enemy).name}'s attack is cancelled`, {
+      card: step.enemy,
+    });
     push(g, win("enemyAttacked", { inv: step.inv, enemy: step.enemy }));
     return;
   }
@@ -122,12 +185,26 @@ export const resolveAttackHandler: Handler<"ResolveAttack"> = (g, step) => {
   delete g.s.flags[`attackBonus:${step.key}`];
   const damage = enemyStat(g, step.enemy, "damage") + bonus;
   const horror = enemyStat(g, step.enemy, "horror") + bonus;
-  emit(g, "attack", `${def(g, step.enemy).name} attacks ${invName(g, step.inv)} (${damage} damage, ${horror} horror)`, { inv: step.inv, card: step.enemy, data: { damage, horror } });
+  emit(
+    g,
+    "attack",
+    `${def(g, step.enemy).name} attacks ${invName(g, step.inv)} (${damage} damage, ${horror} horror)`,
+    { inv: step.inv, card: step.enemy, data: { damage, horror } },
+  );
   push(
     g,
     // what the attack deals can be prevented before it is assigned (Flesh Ward); the window names what was dealt
     win("attackDealsDamage", { inv: step.inv, enemy: step.enemy, key: step.key, damage, horror }),
-    { t: "AssignDamage", inv: step.inv, damage, horror, direct: false, source: step.enemy, enemy: step.enemy, key: step.key },
+    {
+      t: "AssignDamage",
+      inv: step.inv,
+      damage,
+      horror,
+      direct: false,
+      source: step.enemy,
+      enemy: step.enemy,
+      key: step.key,
+    },
     win("enemyAttacked", { inv: step.inv, enemy: step.enemy }),
   );
 };
@@ -150,7 +227,17 @@ export const damageEnemyHandler: Handler<"DamageEnemy"> = (g, step) => {
   // what an investigator deals can grow, or be capped, before it is placed (Nathaniel Cho, Tommy Malloy)
   if (step.by && !step.windowed) {
     const key = step.key ?? `dmg${g.s.seq++}`;
-    push(g, win("dealDamage", { inv: step.by, enemy: step.enemy, card: step.source ?? null, key, amount: step.amount }), { ...step, key, windowed: true });
+    push(
+      g,
+      win("dealDamage", {
+        inv: step.by,
+        enemy: step.enemy,
+        card: step.source ?? null,
+        key,
+        amount: step.amount,
+      }),
+      { ...step, key, windowed: true },
+    );
     return;
   }
   let amount = step.amount + ((g.s.flags[`damageBonus:${step.key}`] as number | undefined) ?? 0);
@@ -159,9 +246,20 @@ export const damageEnemyHandler: Handler<"DamageEnemy"> = (g, step) => {
   const health = enemyStat(g, step.enemy, "health");
   const excess = e.damage + amount - health;
   e.damage += amount;
-  emit(g, "enemyDamage", `${def(g, step.enemy).name} takes ${amount} damage (${e.damage}/${health})`, { card: step.enemy, data: { amount } });
+  emit(
+    g,
+    "enemyDamage",
+    `${def(g, step.enemy).name} takes ${amount} damage (${e.damage}/${health})`,
+    { card: step.enemy, data: { amount } },
+  );
   if (e.damage >= health) {
-    push(g, ...(excess > 0 && step.by ? [win("excessDamage", { inv: step.by, enemy: step.enemy, amount: excess })] : []), { t: "DefeatEnemy", enemy: step.enemy, by: step.by });
+    push(
+      g,
+      ...(excess > 0 && step.by
+        ? [win("excessDamage", { inv: step.by, enemy: step.enemy, amount: excess })]
+        : []),
+      { t: "DefeatEnemy", enemy: step.enemy, by: step.by },
+    );
   }
 };
 
@@ -175,7 +273,11 @@ export const defeatEnemyHandler: Handler<"DefeatEnemy"> = (g, step) => {
   }
   const d = def(g, step.enemy);
   if (step.by && g.s.invs[step.by]) g.s.invs[step.by].defeatedHealth += d.enemy?.health ?? 0;
-  emit(g, "enemyDefeated", `${d.name} is defeated${step.by ? ` by ${invName(g, step.by)}` : ""}`, { card: step.enemy, inv: step.by, data: { by: step.by ?? null } });
+  emit(g, "enemyDefeated", `${d.name} is defeated${step.by ? ` by ${invName(g, step.by)}` : ""}`, {
+    card: step.enemy,
+    inv: step.by,
+    data: { by: step.by ?? null },
+  });
   if (d.victory !== undefined) moveCard(g, step.enemy, "victory");
   else moveCard(g, step.enemy, e.owner ? "discard" : "encounterDiscard");
   g.s.flags[`defeated:${e.code}`] = true;
@@ -186,13 +288,19 @@ export const defeatEnemyHandler: Handler<"DefeatEnemy"> = (g, step) => {
 export const hunterMovesHandler: Handler<"HunterMoves"> = (g, step) => {
   const done = step.done ?? [];
   const hunters = enemies(g).filter(
-    (e) => !done.includes(e.id) && !e.exhausted && !e.engagedWith && def(g, e.id).keywords.includes("hunter")
-      && preyCandidates(g, e.id, invsAt(g, e.location)).length === 0, // stays only with someone it may engage
+    (e) =>
+      !done.includes(e.id) &&
+      !e.exhausted &&
+      !e.engagedWith &&
+      def(g, e.id).keywords.includes("hunter") &&
+      preyCandidates(g, e.id, invsAt(g, e.location)).length === 0, // stays only with someone it may engage
   );
   if (hunters.length === 0) return;
   const e = hunters[0];
   // "only" prey hunts just its prey; other prey only breaks ties between the nearest
-  const targets = (onlyPrey(g, e.id) ? preyCandidates(g, e.id, activeInvs(g)) : activeInvs(g)).map((i) => inv(g, i).location!).filter(Boolean);
+  const targets = (onlyPrey(g, e.id) ? preyCandidates(g, e.id, activeInvs(g)) : activeInvs(g))
+    .map((i) => inv(g, i).location!)
+    .filter(Boolean);
   const dist = distances(g, e.location!);
   const nearest = Math.min(...targets.map((t) => dist.get(t) ?? Infinity));
   const goals = targets.filter((t) => dist.get(t) === nearest);
@@ -206,17 +314,31 @@ export const hunterMovesHandler: Handler<"HunterMoves"> = (g, step) => {
   const next: Step = { ...step, choice: undefined, done: [...done, e.id], stepped: true };
   if (options.length > 1) {
     // prefer the path toward prey
-    const preyInvs = preyCandidates(g, e.id, activeInvs(g).filter((i) => goals.includes(inv(g, i).location!)));
+    const preyInvs = preyCandidates(
+      g,
+      e.id,
+      activeInvs(g).filter((i) => goals.includes(inv(g, i).location!)),
+    );
     const preyLocs = preyInvs.map((i) => inv(g, i).location!);
     const toward = stepsToward(g, e.location!, preyLocs).filter((l) => options.includes(l));
     if (toward.length) options = toward;
   }
-  const to = ask<InstId>(g, step, g.s.lead, "target", `Where does ${def(g, e.id).name} move?`,
-    options.map((l) => ({ id: l, label: def(g, l).name, card: l, value: l })), { auto: true, key: "enemyMoveWhere", vars: { card: e.id } });
+  const to = ask<InstId>(
+    g,
+    step,
+    g.s.lead,
+    "target",
+    `Where does ${def(g, e.id).name} move?`,
+    options.map((l) => ({ id: l, label: def(g, l).name, card: l, value: l })),
+    { auto: true, key: "enemyMoveWhere", vars: { card: e.id } },
+  );
   if (to === undefined) return;
   const from = e.location;
   e.location = to;
-  emit(g, "enemyMove", `${def(g, e.id).name} moves to ${def(g, to).name}`, { card: e.id, data: { from, to } });
+  emit(g, "enemyMove", `${def(g, e.id).name} moves to ${def(g, to).name}`, {
+    card: e.id,
+    data: { from, to },
+  });
   const p = preyCandidates(g, e.id, invsAt(g, to))[0];
   if (p && !def(g, e.id).keywords.includes("aloof") && !isMassive(g, e.id)) {
     e.engagedWith = p;
@@ -234,10 +356,20 @@ export const enemyAttacksHandler: Handler<"EnemyAttacks"> = (g, step) => {
       if (done.includes(key) || e.exhausted) continue;
       if (!done.length) logStep(g, "attacks");
       // the chart's player window follows the last of an investigator's attacks
-      const more = engagedWith(g, i).some((x) => x.id !== e.id && !x.exhausted && !done.includes(`${i}|${x.id}`));
+      const more = engagedWith(g, i).some(
+        (x) => x.id !== e.id && !x.exhausted && !done.includes(`${i}|${x.id}`),
+      );
       // a non-massive enemy exhausts as soon as its attack has resolved; a massive one after its last (the loop below)
-      const exhaust: Step[] = isMassive(g, e.id) ? [] : [{ t: "Script", code: "__engine", fn: "exhaustEnemy", ctx: { enemy: e.id } }];
-      push(g, { t: "EnemyAttack", enemy: e.id, inv: i, aoo: false, key: attackKey(g) }, ...exhaust, ...(more ? [] : [win("playerWindow", { phase: "enemy", inv: i })]), { ...step, choice: undefined, done: [...done, key] });
+      const exhaust: Step[] = isMassive(g, e.id)
+        ? []
+        : [{ t: "Script", code: "__engine", fn: "exhaustEnemy", ctx: { enemy: e.id } }];
+      push(
+        g,
+        { t: "EnemyAttack", enemy: e.id, inv: i, aoo: false, key: attackKey(g) },
+        ...exhaust,
+        ...(more ? [] : [win("playerWindow", { phase: "enemy", inv: i })]),
+        { ...step, choice: undefined, done: [...done, key] },
+      );
       return;
     }
   }
@@ -256,7 +388,11 @@ export const enemyEngageHandler: Handler<"EnemyEngage"> = (g, step) => {
   const e = card(g, step.enemy);
   e.engagedWith = step.inv;
   e.location = inv(g, step.inv).location;
-  emit(g, "engage", `${invName(g, step.inv)} engages ${def(g, step.enemy).name}`, { inv: step.inv, card: step.enemy, data: { byInv: true } });
+  emit(g, "engage", `${invName(g, step.inv)} engages ${def(g, step.enemy).name}`, {
+    inv: step.inv,
+    card: step.enemy,
+    data: { byInv: true },
+  });
   push(g, win("enemyEngages", { inv: step.inv, enemy: step.enemy }));
 };
 

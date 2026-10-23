@@ -12,7 +12,17 @@ import type { IconName } from "../icons";
 /** matches the HUD's hit streak (hud/Floats HIT_MS plus its start delay) */
 const HIT_WAIT_MS = 600;
 
-function FloatingNumber({ parts, at, startedAt, color }: { parts: [IconName | null, number][]; at: Vec3; startedAt: number; color: string }) {
+function FloatingNumber({
+  parts,
+  at,
+  startedAt,
+  color,
+}: {
+  parts: [IconName | null, number][];
+  at: Vec3;
+  startedAt: number;
+  color: string;
+}) {
   const ref = useRef<THREE.Group>(null);
   useFrame(() => {
     const t = Math.min(1, (performance.now() - startedAt) / 700);
@@ -36,7 +46,13 @@ function FloatingNumber({ parts, at, startedAt, color }: { parts: [IconName | nu
 }
 
 /** damage numbers floating up from the map (encounter draws and token reveals are HTML overlays, see hud/Reveal) */
-export function EventFx({ cards, minis }: { cards: Map<string, { pos: Vec3 }>; minis: { inv: string; pos: Vec3 }[] }) {
+export function EventFx({
+  cards,
+  minis,
+}: {
+  cards: Map<string, { pos: Vec3 }>;
+  minis: { inv: string; pos: Vec3 }[];
+}) {
   const current = useGame((s) => s.current);
   const game = useGame((s) => s.game);
   const started = useRef<{ e: unknown; at: number }>({ e: null, at: 0 });
@@ -54,11 +70,21 @@ export function EventFx({ cards, minis }: { cards: Map<string, { pos: Vec3 }>; m
     if (d.horror) parts.push(["horror", d.horror]);
     // a hit from a card: the numbers rise once its streak has landed
     const wait = d && current.data?.source ? HIT_WAIT_MS : 0;
-    if (p) return <FloatingNumber key={at} parts={parts} at={p} startedAt={at + wait} color="#ff8a80" />;
+    if (p)
+      return <FloatingNumber key={at} parts={parts} at={p} startedAt={at + wait} color="#ff8a80" />;
   }
   if (current.type === "enemyDamage" && current.card) {
     const p = cards.get(current.card)?.pos;
-    if (p) return <FloatingNumber key={at} parts={[["damage", Number(current.data?.amount)]]} at={p} startedAt={at} color="#ffd27a" />;
+    if (p)
+      return (
+        <FloatingNumber
+          key={at}
+          parts={[["damage", Number(current.data?.amount)]]}
+          at={p}
+          startedAt={at}
+          color="#ffd27a"
+        />
+      );
   }
   return null;
 }

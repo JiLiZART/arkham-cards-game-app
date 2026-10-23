@@ -30,6 +30,7 @@ describe("phaseIsEmpty", () => {
   });
 
   it("the mythos, investigation and upkeep phases always have something", () => {
-    for (const p of ["mythos", "investigation", "upkeep"]) expect(phaseIsEmpty(roland().state, p)).toBe(false);
+    for (const p of ["mythos", "investigation", "upkeep"])
+      expect(phaseIsEmpty(roland().state, p)).toBe(false);
   });
 });

@@ -12,9 +12,14 @@ export interface SoundSettings {
 
 export { MOMENTS } from "../content/soundSlots";
 
-
 /** a card's own clip for a moment (play, fight, spawn): by code, then by the first trait the manifest lists, else null */
-function cardClip(when: CardSoundWhen, cardId: InstId | null, game: GameState | null, m: SoundManifest, content: ContentDb = db): string | null {
+function cardClip(
+  when: CardSoundWhen,
+  cardId: InstId | null,
+  game: GameState | null,
+  m: SoundManifest,
+  content: ContentDb = db,
+): string | null {
   const inst = cardId && game ? game.cards[cardId] : null;
   if (!inst) return null;
   const own = m.cards[inst.code]?.[when];
@@ -25,10 +30,16 @@ function cardClip(when: CardSoundWhen, cardId: InstId | null, game: GameState | 
   return null;
 }
 
-const isWhen = (name: string): name is CardSoundWhen => name === "play" || name === "fight" || name === "spawn";
+const isWhen = (name: string): name is CardSoundWhen =>
+  name === "play" || name === "fight" || name === "spawn";
 
 /** the clips for an animated event (an event's data picks a variant), or null when the event has no sound */
-export function effectFor(e: GameEvent, game: GameState, m: SoundManifest, content: ContentDb = db): string[] | null {
+export function effectFor(
+  e: GameEvent,
+  game: GameState,
+  m: SoundManifest,
+  content: ContentDb = db,
+): string[] | null {
   const d = (e.data ?? {}) as Record<string, unknown>;
   const of = (key: string) => {
     const v = m.events[key];
@@ -36,10 +47,14 @@ export function effectFor(e: GameEvent, game: GameState, m: SoundManifest, conte
   };
   if (e.type === "damage") {
     // the same event carries damage and horror: one clip for each that is dealt
-    const clips = [...(Number(d.damage ?? 0) > 0 ? (of("damage") ?? []) : []), ...(Number(d.horror ?? 0) > 0 ? (of("damage:horror") ?? []) : [])];
+    const clips = [
+      ...(Number(d.damage ?? 0) > 0 ? (of("damage") ?? []) : []),
+      ...(Number(d.horror ?? 0) > 0 ? (of("damage:horror") ?? []) : []),
+    ];
     return clips.length ? clips : null;
   }
-  if (e.type === "testResult" && d.success === false) return of("testResult:fail") ?? of("testResult");
+  if (e.type === "testResult" && d.success === false)
+    return of("testResult:fail") ?? of("testResult");
   if (e.type === "spawn") {
     const own = cardClip("spawn", e.card ?? null, game, m, content);
     if (own) return [own];
@@ -48,23 +63,42 @@ export function effectFor(e: GameEvent, game: GameState, m: SoundManifest, conte
 }
 
 /** the clip for a UI moment: for play, fight and spawn the card's own clip first; else the moment's generic clip; null for none */
-export function momentClip(name: string, cardId: InstId | null, game: GameState | null, m: SoundManifest, content: ContentDb = db): string | null {
+export function momentClip(
+  name: string,
+  cardId: InstId | null,
+  game: GameState | null,
+  m: SoundManifest,
+  content: ContentDb = db,
+): string | null {
   const own = isWhen(name) ? cardClip(name, cardId, game, m, content) : null;
   const generic = m.moments[name];
   return own ?? (generic === NO_SOUND ? null : (generic ?? null));
 }
 
 /** which music track should play: fight while an enemy is engaged, tension in the enemy phase or one doom from the agenda advancing, else the scenario's bed; null when the scenario has ended or has no bed */
-export function musicFor(game: GameState, m: SoundManifest, content: ContentDb = db): string | null {
+export function musicFor(
+  game: GameState,
+  m: SoundManifest,
+  content: ContentDb = db,
+): string | null {
   if (game.phase === "ended") return null;
   // a scenario without a bed of its own (a generated one, ADR-0007) plays the default bed
-  const bed = m.music[`bed:${game.scenarioId}`] ? `bed:${game.scenarioId}` : m.music["bed:default"] ? "bed:default" : null;
+  const bed = m.music[`bed:${game.scenarioId}`]
+    ? `bed:${game.scenarioId}`
+    : m.music["bed:default"]
+      ? "bed:default"
+      : null;
   if (!bed) return null;
-  if (m.music.fight && Object.values(game.cards).some((c) => c.zone === "enemy" && c.engagedWith)) return "fight";
+  if (m.music.fight && Object.values(game.cards).some((c) => c.zone === "enemy" && c.engagedWith))
+    return "fight";
   if (m.music.tension) {
     if (game.phase === "enemy") return "tension";
     const threshold = game.agenda ? content.cards[game.cards[game.agenda].code]?.doom : undefined;
-    if (threshold !== undefined && doomInPlay({ s: game, db: content, events: [] }) === threshold - 1) return "tension";
+    if (
+      threshold !== undefined &&
+      doomInPlay({ s: game, db: content, events: [] }) === threshold - 1
+    )
+      return "tension";
   }
   return bed;
 }

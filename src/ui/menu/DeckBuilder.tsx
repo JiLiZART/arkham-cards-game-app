@@ -9,13 +9,26 @@ import { problemText } from "../decks";
 import { Avatar } from "./Avatar";
 import { DeckEditArea } from "./DeckEditArea";
 
-const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
+const tr = (key: string, vars?: Record<string, string | number>) =>
+  t(db, gameStore.getState().locale, key, vars);
 
 /**
  * Spending a campaign investigator's experience between scenarios: the deck's editing area (as on the deck step) under a
  * header with the experience left. Save is disabled while the deck breaks the rules or costs more than the experience.
  */
-export function DeckBuilder({ investigator, initial, xp, onSave, onCancel }: { investigator: string; initial: DeckDef; xp: number; onSave: (cards: Record<string, number>) => string | null; onCancel: () => void }) {
+export function DeckBuilder({
+  investigator,
+  initial,
+  xp,
+  onSave,
+  onCancel,
+}: {
+  investigator: string;
+  initial: DeckDef;
+  xp: number;
+  onSave: (cards: Record<string, number>) => string | null;
+  onCancel: () => void;
+}) {
   const locale = useGame((s) => s.locale);
   const [ready, setReady] = useState(false);
   const [deck, setDeck] = useState<DeckDef>(initial);
@@ -24,7 +37,8 @@ export function DeckBuilder({ investigator, initial, xp, onSave, onCancel }: { i
     let live = true;
     loadAllPacks().then(
       () => live && setReady(true),
-      (e: unknown) => live && (setError(e instanceof Error ? e.message : String(e)), setReady(true)),
+      (e: unknown) =>
+        live && (setError(e instanceof Error ? e.message : String(e)), setReady(true)),
     );
     return () => {
       live = false;
@@ -39,20 +53,51 @@ export function DeckBuilder({ investigator, initial, xp, onSave, onCancel }: { i
       <header className="de-head">
         <Avatar code={investigator} size={56} />
         <div className="de-status">
-          <span className={poor ? "bad" : ""}>{tr("upgrade.xp", { left: xp - cost, cost, have: xp })}</span>
+          <span className={poor ? "bad" : ""}>
+            {tr("upgrade.xp", { left: xp - cost, cost, have: xp })}
+          </span>
         </div>
       </header>
       <div className="de-messages" role="status">
-        {!ready && <div>{tr("catalog.loading", { done: 0, total: Object.keys(db.packs).length })}</div>}
+        {!ready && (
+          <div>{tr("catalog.loading", { done: 0, total: Object.keys(db.packs).length })}</div>
+        )}
         {error && <div className="problems">{error}</div>}
-        {choice && <div className="problems">{problemText(db, locale, { message: choice.key, reason: { ...choice, vars: { inv: investigator } } })}</div>}
+        {choice && (
+          <div className="problems">
+            {problemText(db, locale, {
+              message: choice.key,
+              reason: { ...choice, vars: { inv: investigator } },
+            })}
+          </div>
+        )}
         {poor && <div className="problems">{tr("upgrade.cost", { need: cost, have: xp })}</div>}
-        {ready && (problems.length === 0 ? <div className="de-valid">{tr("deckEditor.valid")}</div> : problems.slice(0, 4).map((p, k) => <div key={k} className="problems">{problemText(db, locale, p)}</div>))}
+        {ready &&
+          (problems.length === 0 ? (
+            <div className="de-valid">{tr("deckEditor.valid")}</div>
+          ) : (
+            problems.slice(0, 4).map((p, k) => (
+              <div key={k} className="problems">
+                {problemText(db, locale, p)}
+              </div>
+            ))
+          ))}
       </div>
-      {ready && !choice && <DeckEditArea investigator={investigator} deck={deck} weakness={false} onChange={(cards) => setDeck({ ...deck, cards })} />}
+      {ready && !choice && (
+        <DeckEditArea
+          investigator={investigator}
+          deck={deck}
+          weakness={false}
+          onChange={(cards) => setDeck({ ...deck, cards })}
+        />
+      )}
       <footer className="de-foot">
         <button onClick={onCancel}>{tr("deckEditor.cancel")}</button>
-        <button className="primary" disabled={!ready || !!choice || problems.length > 0 || poor} onClick={() => setError(onSave(deck.cards))}>
+        <button
+          className="primary"
+          disabled={!ready || !!choice || problems.length > 0 || poor}
+          onClick={() => setError(onSave(deck.cards))}
+        >
           {tr("upgrade.save", { n: cost })}
         </button>
       </footer>

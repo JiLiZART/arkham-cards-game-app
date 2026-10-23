@@ -7,6 +7,7 @@
   - generate `src/ui/glyphs.generated.json` (glyph name → code point) from the IcoMoon selection JSONs.
 
   Verify: re-run the script; the icon unit test confirms every mapped PNG and font file exists; a `dist/` build served without `inspired/` loads all of them.
+
 - [x] 1.2 Add `@font-face` rules (`font-display: block` for the icon fonts) and a `<Glyph name>` component that falls back to the existing `GLYPHS` symbols when the font is unavailable. Switch `formatText` to glyphs for `[action] [reaction] [fast]/[free] [per_investigator] [bless] [curse]`. Draw numeric chaos tokens with the `tokens` font. Verify: unit test (Roland's text has the reaction glyph and no raw brackets; `2[per_investigator]` renders a glyph), plus a manual reveal of a −3 token.
 - [x] 1.3 Add the table art.
   - Copy `card-back-bg.png`, `chaos-bag.png` and both `connector-*.png` into `public/` through the extract script.
@@ -16,6 +17,7 @@
   - Add an optional `oneWay` field to the scenario schema, using the one-way plaque and directed movement in `canMoveTo`.
 
   Verify: a schema and engine unit test (one-way A→B allows moving from A to B but not from B to A), a screenshot of The Gathering showing the plaques, bag and encounter back, and a manual skull reveal flying from the bag.
+
 - [x] 1.4 Swap the board texture to the framed table background and use the card fonts for card names and the stat bar. Verify with a screenshot at 1600×900.
 
 ## 2. Board layout
@@ -27,6 +29,7 @@
   - no placements for other investigators' cards; their engaged enemies sit at their location.
 
   Update `SAFE_INSETS` (right about 120, bottom about 230). Verify with `layout.test`: no overlaps for 1 to 4 players; everything inside the board; The Gathering locations at full 2× scale; no placement for the viewer's investigator card.
+
 - [x] 2.2 Check on-screen sizes in the browser at 1600×900: every Gathering location is at least 150 px tall. Resizing to 1280×800 keeps the whole board visible. Verify with a screenshot.
 
 - [x] 2.3 Replace the initials disc on locations with a small round portrait marker: investigator art cropped to the face, a class-coloured ring, a glow for the active investigator, the name on hover, and the initials as a fallback when the image fails. Keep several markers on one location apart. Verify with a screenshot of two investigators on one location, plus a check with images blocked.
@@ -48,6 +51,7 @@
   - Move `SkillTestPanel` under the banner.
 
   Verify manually: on Roland's turn the rail shows Draw, Resource and End turn with icons, and Investigate and Move are only on the map.
+
 - [x] 3.3 Add a `CardModal` (`<dialog>`) that opens from scenario-strip cards and the stat-bar portrait. It shows the full-size card, its tokens, and buttons for its options; it closes on Escape or a backdrop click. Highlight strip cards that have options. Verify manually: advance the act through the modal, and open the agenda read-only.
 
 ## 4. Hand fan and stat bar

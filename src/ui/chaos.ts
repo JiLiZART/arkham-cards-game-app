@@ -1,5 +1,24 @@
 /** chaos tokens in reference-card order: numbers high to low, then the symbols */
-const ORDER = ["+1", "0", "-1", "-2", "-3", "-4", "-5", "-6", "-7", "-8", "skull", "cultist", "tablet", "elderThing", "autoFail", "elderSign", "bless", "curse"];
+const ORDER = [
+  "+1",
+  "0",
+  "-1",
+  "-2",
+  "-3",
+  "-4",
+  "-5",
+  "-6",
+  "-7",
+  "-8",
+  "skull",
+  "cultist",
+  "tablet",
+  "elderThing",
+  "autoFail",
+  "elderSign",
+  "bless",
+  "curse",
+];
 
 /** a chaos bag as [token, count] pairs in reference-card order (unknown tokens last) */
 export function groupTokens(bag: readonly string[]): [string, number][] {

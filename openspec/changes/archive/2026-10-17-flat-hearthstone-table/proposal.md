@@ -17,9 +17,11 @@ Non-goals: new rules or engine changes; a pure-DOM board, because three.js stays
 ## Capabilities
 
 ### New Capabilities
+
 - `game-iconography`: the icon set and table art (where the assets come from, the token/stat-to-icon mapping, the fallback when an icon is missing) and the rule that all stats and tokens on screen use these icons.
 
 ### Modified Capabilities
+
 - `game-table-ui`: table layout changes to a fixed top-down orthographic board with the parchment background. Card interaction changes to the HTML hand fan with hover enlarge. Hot-seat no longer says "camera focus"; the viewer switch swaps the hand and stat bar instead.
 
 ## Impact

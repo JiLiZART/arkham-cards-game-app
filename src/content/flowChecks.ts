@@ -8,7 +8,11 @@ const OPEN_SECTIONS = new Set(["campaign_notes", "hidden"]);
 
 /** codes an effect or test names (a "$input" is the card the players picked) */
 function conditionParts(c: FlowCondition): FlowCondition[] {
-  return c.kind === "not" ? [c, ...conditionParts(c.condition)] : c.kind === "all" || c.kind === "any" ? [c, ...c.conditions.flatMap(conditionParts)] : [c];
+  return c.kind === "not"
+    ? [c, ...conditionParts(c.condition)]
+    : c.kind === "all" || c.kind === "any"
+      ? [c, ...c.conditions.flatMap(conditionParts)]
+      : [c];
 }
 
 function effectCodes(e: FlowEffect): string[] {
@@ -49,29 +53,40 @@ export function checkFlow(db: ContentDb, campaignId: string): ContentError[] {
   };
   visit(flow.setup);
   for (const i of Object.values(flow.interludes)) visit(i.steps);
-  for (const byRes of Object.values(flow.resolutions)) for (const ids of Object.values(byRes)) visit(ids);
-  for (const id of Object.keys(flow.steps)) if (!reached.has(id)) err(`steps.${id}`, "unreachable step: nothing leads to it");
+  for (const byRes of Object.values(flow.resolutions))
+    for (const ids of Object.values(byRes)) visit(ids);
+  for (const id of Object.keys(flow.steps))
+    if (!reached.has(id)) err(`steps.${id}`, "unreachable step: nothing leads to it");
 
   // the order of play
   const known = new Set([...c.scenarios, ...Object.keys(flow.interludes)]);
   flow.order.forEach((id, n) => {
-    if (!known.has(id)) err(`order.${n}`, `${id} is neither a scenario of the campaign nor an interlude of the flow`);
+    if (!known.has(id))
+      err(`order.${n}`, `${id} is neither a scenario of the campaign nor an interlude of the flow`);
   });
   // a scenario outside the guide's order is played when a step names it; one nothing names is never played
   const named = namedScenarios(flow);
-  for (const id of c.scenarios) if (!flow.order.includes(id) && !named.has(id)) err("order", `scenario ${id} is not in the order and no step sends play to it`);
+  for (const id of c.scenarios)
+    if (!flow.order.includes(id) && !named.has(id))
+      err("order", `scenario ${id} is not in the order and no step sends play to it`);
   for (const sc of Object.keys(flow.resolutions)) {
-    if (!c.scenarios.includes(sc)) err(`resolutions.${sc}`, `${sc} is not a scenario of the campaign`);
-    else if (db.scenarios[sc]) for (const r of Object.keys(flow.resolutions[sc])) if (!db.scenarios[sc].resolutions[r]) err(`resolutions.${sc}.${r}`, `scenario ${sc} has no resolution ${r}`);
+    if (!c.scenarios.includes(sc))
+      err(`resolutions.${sc}`, `${sc} is not a scenario of the campaign`);
+    else if (db.scenarios[sc])
+      for (const r of Object.keys(flow.resolutions[sc]))
+        if (!db.scenarios[sc].resolutions[r])
+          err(`resolutions.${sc}.${r}`, `scenario ${sc} has no resolution ${r}`);
   }
 
   // what each step names
   const sections = new Set([...OPEN_SECTIONS, ...c.logSections.map((s) => s.id)]);
   const scenario = (path: string, id: string) => {
-    if (!known.has(id)) err(path, `${id} is neither a scenario of the campaign nor an interlude of the flow`);
+    if (!known.has(id))
+      err(path, `${id} is neither a scenario of the campaign nor an interlude of the flow`);
   };
   const section = (path: string, s: string | undefined) => {
-    if (s !== undefined && !sections.has(s)) err(path, `log section ${s} is not defined by the campaign`);
+    if (s !== undefined && !sections.has(s))
+      err(path, `log section ${s} is not defined by the campaign`);
   };
   const card = (path: string, code: string) => {
     if (code !== "$input" && !db.cards[code]) err(path, `unknown card ${code}`);
@@ -80,7 +95,8 @@ export function checkFlow(db: ContentDb, campaignId: string): ContentError[] {
     list.forEach((e, n) => {
       const p = `${path}.${n}`;
       if ("section" in e) section(p, e.section);
-      if (e.do === "nextScenario" || e.do === "skipScenario" || e.do === "replayScenario") scenario(p, e.scenario);
+      if (e.do === "nextScenario" || e.do === "skipScenario" || e.do === "replayScenario")
+        scenario(p, e.scenario);
       for (const code of effectCodes(e)) card(p, code);
     });
   const condition = (path: string, cond: FlowCondition) => {
@@ -125,4 +141,5 @@ export function checkFlow(db: ContentDb, campaignId: string): ContentError[] {
 }
 
 /** every campaign's flow */
-export const checkFlows = (db: ContentDb): ContentError[] => Object.keys(db.flows).flatMap((id) => checkFlow(db, id));
+export const checkFlows = (db: ContentDb): ContentError[] =>
+  Object.keys(db.flows).flatMap((id) => checkFlow(db, id));

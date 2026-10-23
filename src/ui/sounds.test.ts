@@ -6,7 +6,11 @@ import { effectFor, gainOf, MOMENT_GAP, mayPlay, MOMENTS, momentClip, musicFor }
 const R = "01001";
 const fresh = skipMulligans(start("the-gathering", [R], 1)).state;
 const m = db.sounds;
-const ev = (type: string, data: Record<string, unknown> = {}, card: string | null = null): GameEvent => ({ type, text: type, inv: R, card, data });
+const ev = (
+  type: string,
+  data: Record<string, unknown> = {},
+  card: string | null = null,
+): GameEvent => ({ type, text: type, inv: R, card, data });
 const codeOf = (code: string) => Object.values(fresh.cards).find((c) => c.code === code)!.id;
 const with_ = (patch: (s: GameState) => void): GameState => {
   const s = structuredClone(fresh);
@@ -22,9 +26,16 @@ describe("effectFor", () => {
 
   it("picks the variant: a failed test, horror without damage, both when both", () => {
     expect(effectFor(ev("testResult", { success: true }), fresh, m)).toEqual([m.events.testResult]);
-    expect(effectFor(ev("testResult", { success: false }), fresh, m)).toEqual([m.events["testResult:fail"]]);
-    expect(effectFor(ev("damage", { damage: 0, horror: 1 }), fresh, m)).toEqual([m.events["damage:horror"]]);
-    expect(effectFor(ev("damage", { damage: 1, horror: 1 }), fresh, m)).toEqual([m.events.damage, m.events["damage:horror"]]);
+    expect(effectFor(ev("testResult", { success: false }), fresh, m)).toEqual([
+      m.events["testResult:fail"],
+    ]);
+    expect(effectFor(ev("damage", { damage: 0, horror: 1 }), fresh, m)).toEqual([
+      m.events["damage:horror"],
+    ]);
+    expect(effectFor(ev("damage", { damage: 1, horror: 1 }), fresh, m)).toEqual([
+      m.events.damage,
+      m.events["damage:horror"],
+    ]);
   });
 
   it("a spawning enemy growls by its traits (Ghoul before Monster, in the manifest's order)", () => {
@@ -44,7 +55,9 @@ describe("momentClip", () => {
   });
 
   it("a moment set to none is silent", () => {
-    expect(momentClip("draw", null, fresh, { ...m, moments: { ...m.moments, draw: "none" } })).toBeNull();
+    expect(
+      momentClip("draw", null, fresh, { ...m, moments: { ...m.moments, draw: "none" } }),
+    ).toBeNull();
   });
 
   it("a card's own clip: code first, then the first matching trait, then the generic one", () => {
@@ -65,43 +78,85 @@ describe("musicFor", () => {
     const generated = with_((s) => (s.scenarioId = "extracurricular-activity"));
     expect(musicFor(generated, m)).toBe("bed:default");
     const ghoul = codeOf("01160");
-    expect(musicFor(with_((s) => {
-      s.scenarioId = "extracurricular-activity";
-      s.cards[ghoul] = { ...s.cards[ghoul], zone: "enemy", location: s.invs[R].location, engagedWith: R };
-    }), m)).toBe("fight");
+    expect(
+      musicFor(
+        with_((s) => {
+          s.scenarioId = "extracurricular-activity";
+          s.cards[ghoul] = {
+            ...s.cards[ghoul],
+            zone: "enemy",
+            location: s.invs[R].location,
+            engagedWith: R,
+          };
+        }),
+        m,
+      ),
+    ).toBe("fight");
   });
 
   it("fight while an enemy is engaged, the bed again once it is gone", () => {
     const ghoul = codeOf("01160");
-    const engaged = with_((s) => (s.cards[ghoul] = { ...s.cards[ghoul], zone: "enemy", location: s.invs[R].location, engagedWith: R }));
+    const engaged = with_(
+      (s) =>
+        (s.cards[ghoul] = {
+          ...s.cards[ghoul],
+          zone: "enemy",
+          location: s.invs[R].location,
+          engagedWith: R,
+        }),
+    );
     expect(musicFor(engaged, m)).toBe("fight");
-    const gone = with_((s) => (s.cards[ghoul] = { ...s.cards[ghoul], zone: "discard", engagedWith: null }));
+    const gone = with_(
+      (s) => (s.cards[ghoul] = { ...s.cards[ghoul], zone: "discard", engagedWith: null }),
+    );
     expect(musicFor(gone, m)).toBe("bed:the-gathering");
   });
 
   it("tension in the enemy phase and when the agenda is one doom from advancing; fight wins over tension", () => {
-    expect(musicFor(with_((s) => (s.phase = "enemy")), m)).toBe("tension");
+    expect(
+      musicFor(
+        with_((s) => (s.phase = "enemy")),
+        m,
+      ),
+    ).toBe("tension");
     const threshold = db.cards[fresh.cards[fresh.agenda!].code].doom!;
     const almost = with_((s) => (s.cards[s.agenda!].doom = threshold - 1));
     expect(musicFor(almost, m)).toBe("tension");
     const ghoul = codeOf("01160");
     const both = with_((s) => {
       s.phase = "enemy";
-      s.cards[ghoul] = { ...s.cards[ghoul], zone: "enemy", location: s.invs[R].location, engagedWith: R };
+      s.cards[ghoul] = {
+        ...s.cards[ghoul],
+        zone: "enemy",
+        location: s.invs[R].location,
+        engagedWith: R,
+      };
     });
     expect(musicFor(both, m)).toBe("fight");
   });
 
   it("silent once the scenario has ended, and for a scenario with no bed when there is no default bed either", () => {
-    expect(musicFor(with_((s) => (s.phase = "ended")), m)).toBeNull();
+    expect(
+      musicFor(
+        with_((s) => (s.phase = "ended")),
+        m,
+      ),
+    ).toBeNull();
     const music = Object.fromEntries(Object.entries(m.music).filter(([k]) => k !== "bed:default"));
-    expect(musicFor(with_((s) => (s.scenarioId = "nowhere")), { ...m, music })).toBeNull();
+    expect(
+      musicFor(
+        with_((s) => (s.scenarioId = "nowhere")),
+        { ...m, music },
+      ),
+    ).toBeNull();
   });
 });
 
 describe("gainOf", () => {
   it("scales the clip's gain by the slider, silent when muted or at zero", () => {
-    expect(gainOf({ sfxVolume: 80, musicVolume: 50, muted: false }, "effects", 0.5)).toBeCloseTo(0.4);
+    expect(gainOf({ sfxVolume: 80, musicVolume: 50, muted: false }, "effects", 0.5)).toBeCloseTo(
+      0.4,
+    );
     expect(gainOf({ sfxVolume: 80, musicVolume: 50, muted: false }, "music", 1)).toBeCloseTo(0.5);
     expect(gainOf({ sfxVolume: 80, musicVolume: 50, muted: true }, "effects", 1)).toBe(0);
     expect(gainOf({ sfxVolume: 0, musicVolume: 50, muted: false }, "effects", 1)).toBe(0);

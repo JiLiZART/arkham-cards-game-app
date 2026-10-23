@@ -1,6 +1,7 @@
 ## Why
 
 The start of a scenario is flat:
+
 - The mulligan raises a card you pick, but nothing shows that it will be swapped, and a pick can't be undone.
 - The act and agenda just appear in their corner panel. The scenario's story never shows, and only the current act can be opened.
 - The scenario reference card is reachable only through the chaos bag.
@@ -17,6 +18,7 @@ The opening should feel like setting up the real game on a table, in the style o
   2. the act card, shown the same way.
 
   The player reads each one and clicks Continue. Each card then flies to its place in the act/agenda panel.
+
 - **Locations dealt onto the table.** After the act, the starting locations are dealt face down from the act/agenda panel onto the map, one after another. A location an investigator starts in then flips face up as their portrait lands on it. The table stays empty of locations during the mulligan.
 - **A visible flip on reveal.** When a location is revealed later (an investigator moves in, or an effect reveals it), it lifts, turns over in 3D, and settles.
 - **Locations placed later** (act advance, effects) arrive the same way: dealt face down from the act/agenda panel, then flipped if they come in revealed.
@@ -28,9 +30,11 @@ The opening should feel like setting up the real game on a table, in the style o
 ## Capabilities
 
 ### New Capabilities
+
 <!-- none -->
 
 ### Modified Capabilities
+
 - `game-table-ui`: new requirements Mulligan on the table, Scenario introduction, Location dealing and flips (also covers locations placed later, which the existing Card arrival animations already fly from the act panel), Act and agenda viewer.
 - `investigator-decks`: Starting a scenario with a deck (a card picked for the mulligan can be taken back before confirming).
 

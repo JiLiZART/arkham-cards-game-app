@@ -2,7 +2,8 @@ import { t } from "../../content/i18n";
 import { db, gameStore, useGame } from "../context";
 import { SAVE_KEY, safeStorage } from "../store";
 
-const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
+const tr = (key: string, vars?: Record<string, string | number>) =>
+  t(db, gameStore.getState().locale, key, vars);
 
 /** the first screen, over the cover painting: Continue (with a game or a save), New campaign, How to play and Settings */
 export function Title() {
@@ -12,14 +13,18 @@ export function Title() {
   const { resume, abandon } = gameStore.getState();
   // read on every render: Abandon clears the save while this screen stays mounted
   const hasSave = !!safeStorage().getItem(SAVE_KEY);
-  const go = (screen: "wizard" | "howto" | "settings" | "catalog") => gameStore.setState({ screen });
+  const go = (screen: "wizard" | "howto" | "settings" | "catalog") =>
+    gameStore.setState({ screen });
   return (
     <div className="screen title">
       <div className="title-body">
         <h1>{tr("app.title")}</h1>
         <div className="title-buttons">
           {(game || campaign) && (
-            <button className="primary big" onClick={() => gameStore.setState({ screen: game ? "game" : "log" })}>
+            <button
+              className="primary big"
+              onClick={() => gameStore.setState({ screen: game ? "game" : "log" })}
+            >
               {tr("menu.continue")}
             </button>
           )}
@@ -28,7 +33,10 @@ export function Title() {
               {tr("menu.continue")}
             </button>
           )}
-          <button className={`big ${game || campaign || hasSave ? "" : "primary"}`} onClick={() => go("wizard")}>
+          <button
+            className={`big ${game || campaign || hasSave ? "" : "primary"}`}
+            onClick={() => go("wizard")}
+          >
             {tr("menu.newCampaign")}
           </button>
           <button className="big" onClick={() => go("howto")}>

@@ -1,17 +1,36 @@
 import type { ChoiceOption, GameState, InstId, InvId } from "../engine/types";
 
 /** where an option of the pending choice is offered on screen (there is no option sidebar) */
-export type OptionHome = "hand" | "board" | "strip" | "avatar" | "invModal" | "rail" | "bar" | "skilltest" | "mulligan" | "phase" | "showcase";
+export type OptionHome =
+  | "hand"
+  | "board"
+  | "strip"
+  | "avatar"
+  | "invModal"
+  | "rail"
+  | "bar"
+  | "skilltest"
+  | "mulligan"
+  | "phase"
+  | "showcase";
 
 /** the options of no card that are something to do on the turn; every other option of no card answers the question in the bar */
 const RAIL_KINDS = new Set(["draw", "resource", "investigate"]);
 const kindOf = (o: ChoiceOption) => (o.value as { kind?: string } | null)?.kind;
 
-const STRIP_ZONES = new Set(["act", "agenda", "victory", "encounterDiscard", "encounterDeck", "sideDeck"]);
+const STRIP_ZONES = new Set([
+  "act",
+  "agenda",
+  "victory",
+  "encounterDiscard",
+  "encounterDeck",
+  "sideDeck",
+]);
 const BOARD_ZONES = new Set(["location", "enemy", "attached", "play", "threat", "resolving"]);
 
 /** the investigator whose card this is, if it is an investigator card */
-const investigatorOf = (s: GameState, card: string): InvId | undefined => s.order.find((i) => s.invs[i].cardId === card);
+const investigatorOf = (s: GameState, card: string): InvId | undefined =>
+  s.order.find((i) => s.invs[i].cardId === card);
 
 export function optionHome(o: ChoiceOption, s: GameState, viewer: InvId | null): OptionHome {
   // the pause before a phase: Continue on the phase title
@@ -26,7 +45,8 @@ export function optionHome(o: ChoiceOption, s: GameState, viewer: InvId | null):
   // an investigator card (a choice among investigators, or an ability on their card): the avatars in the player bar
   if (inv) return "avatar";
   // whose card it is: hand cards by owner, cards in play / threat area by controller
-  const holder = c.zone === "hand" ? c.owner : c.zone === "play" || c.zone === "threat" ? c.controller : null;
+  const holder =
+    c.zone === "hand" ? c.owner : c.zone === "play" || c.zone === "threat" ? c.controller : null;
   if (holder && holder !== viewer) return "invModal";
   // cards committed to the skill test sit in the skill-test panel (taking one back)
   if (c.zone === "commit") return "skilltest";
@@ -39,7 +59,8 @@ export function optionHome(o: ChoiceOption, s: GameState, viewer: InvId | null):
 
 /** the action rail's buttons: Draw and Gain resource, plus Investigate beside them (its location takes it too) */
 export const onRail = (o: ChoiceOption, s: GameState, viewer: InvId | null) =>
-  optionHome(o, s, viewer) === "rail" || (s.pending?.kind === "turn" && kindOf(o) === "investigate");
+  optionHome(o, s, viewer) === "rail" ||
+  (s.pending?.kind === "turn" && kindOf(o) === "investigate");
 
 /** the investigator whose modal shows an "invModal" option */
 export function optionOwner(o: ChoiceOption, s: GameState): InvId | null {
@@ -72,7 +93,12 @@ export function deckPick(game: GameState, viewer: InvId | null): InstId[] {
  * phone (ADR-0005) the bar also takes the rail's actions (no rail there) and the act's and agenda's options (their
  * cards sit in the closed left drawer).
  */
-export function inBar(o: ChoiceOption, s: GameState, viewer: InvId | null, mode: "desktop" | "phone"): boolean {
+export function inBar(
+  o: ChoiceOption,
+  s: GameState,
+  viewer: InvId | null,
+  mode: "desktop" | "phone",
+): boolean {
   const home = optionHome(o, s, viewer);
   if (home === "bar") return true;
   return mode === "phone" && (home === "strip" || onRail(o, s, viewer));

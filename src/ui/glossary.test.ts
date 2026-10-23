@@ -13,13 +13,26 @@ describe("keywordsOf", () => {
 
   it("reads keyword lines of later cycles' text: Patrol, Concealed, Swarming", () => {
     const card = (text: string) => ({ keywords: [], text }) as never;
-    expect(keywordsOf(card("Alert. Patrol (nearest location with at least 1 memory). Retaliate."))).toEqual(["retaliate", "alert", "patrol"]);
-    expect(keywordsOf(card("Concealed 1 [per_investigator]. Retaliate."))).toEqual(["retaliate", "concealed"]);
-    expect(keywordsOf(card("Hunter. Swarming 6. <b>Forced</b> - After it enters play…"))).toEqual(["hunter", "swarming"]);
+    expect(
+      keywordsOf(card("Alert. Patrol (nearest location with at least 1 memory). Retaliate.")),
+    ).toEqual(["retaliate", "alert", "patrol"]);
+    expect(keywordsOf(card("Concealed 1 [per_investigator]. Retaliate."))).toEqual([
+      "retaliate",
+      "concealed",
+    ]);
+    expect(keywordsOf(card("Hunter. Swarming 6. <b>Forced</b> - After it enters play…"))).toEqual([
+      "hunter",
+      "swarming",
+    ]);
   });
 
   it("a keyword word inside a sentence is not a keyword", () => {
-    expect(keywordsOf({ keywords: [], text: "Play only during your turn. If the enemy is a hunter, it moves fast." } as never)).toEqual([]);
+    expect(
+      keywordsOf({
+        keywords: [],
+        text: "Play only during your turn. If the enemy is a hunter, it moves fast.",
+      } as never),
+    ).toEqual([]);
   });
 
   it("a card without keywords has none", () => {

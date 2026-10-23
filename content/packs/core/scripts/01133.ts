@@ -1,5 +1,11 @@
 // Graveyard — failing its test may move you to Rivertown
-import { locationByName, push, type CardScript, type EffCtx, type G } from "../../../../src/engine/api";
+import {
+  locationByName,
+  push,
+  type CardScript,
+  type EffCtx,
+  type G,
+} from "../../../../src/engine/api";
 
 export default {
   fns: {

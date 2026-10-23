@@ -1,6 +1,7 @@
 ## Why
 
 Fighting an engaged enemy from the play strip is awkward:
+
 - the strip cards are small;
 - the hover copy is cut off at the bottom of the screen, and its details sit under it;
 - Fight and Evade are hidden behind a click menu.
@@ -33,9 +34,11 @@ Centre-screen notifications fade in about 1.5 s, too fast to read. A phase chang
 ## Capabilities
 
 ### New Capabilities
+
 <!-- none -->
 
 ### Modified Capabilities
+
 - `game-table-ui`: Play area strip (bigger cards, option buttons on cards, details column), Hover enlarge (strip cards use the details column), Chaos token draw (tested card shown, waits for animations), new Skill-test panel requirement (bigger committed cards, details, breakdown, take back), new Phase title requirement.
 - `action-feed`: Action floats (longer, length-based life and wider stagger; phase changes excluded).
 - `game-engine`: Skill tests (a committed card can be taken back during its commit window).

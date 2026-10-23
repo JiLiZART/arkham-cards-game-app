@@ -1,6 +1,26 @@
 import { describe, expect, it } from "vitest";
-import { commitDone, db, giveCard, locId, mutate, pick, putEnemy, skipMulligans, start } from "../engine/testkit";
-import { addTokens, bagLanding, calcParts, finishOption, placedCards, sessionId, spillLayout, stripDuringTest, subjectOf } from "./testScreen";
+import {
+  commitDone,
+  db,
+  giveCard,
+  locId,
+  mutate,
+  pick,
+  putEnemy,
+  skipMulligans,
+  start,
+} from "../engine/testkit";
+import {
+  addTokens,
+  bagLanding,
+  calcParts,
+  finishOption,
+  placedCards,
+  sessionId,
+  spillLayout,
+  stripDuringTest,
+  subjectOf,
+} from "./testScreen";
 
 const ROLAND = "01001";
 const DAISY = "01002";
@@ -19,10 +39,15 @@ const fight = (invs = [ROLAND]) => pick(begin(invs), /^Fight Ghoul Minion/);
 describe("subjectOf", () => {
   it("a fight: the enemy; an investigate: the location", () => {
     const f = fight();
-    expect(subjectOf(f.state.skillTest!, f.state)).toEqual({ kind: "card", id: f.state.skillTest!.target });
+    expect(subjectOf(f.state.skillTest!, f.state)).toEqual({
+      kind: "card",
+      id: f.state.skillTest!.target,
+    });
     expect(f.state.cards[f.state.skillTest!.target!].code).toBe("01160");
     const i = pick(begin(), /^Investigate/);
-    expect(i.state.cards[(subjectOf(i.state.skillTest!, i.state) as { id: string }).id].code).toBe("01111");
+    expect(i.state.cards[(subjectOf(i.state.skillTest!, i.state) as { id: string }).id].code).toBe(
+      "01111",
+    );
   });
 
   it("a test called by a card with no target: the card; a plain test: the investigator's portrait", () => {
@@ -46,7 +71,9 @@ describe("placedCards", () => {
   it("a card is not removable once the window has closed", () => {
     let r = pick(fight(), /^Commit Vicious Blow/);
     r = commitDone(r);
-    expect(placedCards(r.state.skillTest!, r.state, db, r.state.pending).every((c) => !c.removable)).toBe(true);
+    expect(
+      placedCards(r.state.skillTest!, r.state, db, r.state.pending).every((c) => !c.removable),
+    ).toBe(true);
   });
 
   it("a helper's card is not removable by the tester, and carries its owner", () => {
@@ -56,14 +83,25 @@ describe("placedCards", () => {
     expect(r.state.pending?.inv).toBe(DAISY);
     r = pick(r, /^Commit Unexpected Courage/);
     const placed = placedCards(r.state.skillTest!, r.state, db, r.state.pending);
-    expect(placed.map((c) => [c.owner, c.icons, c.removable])).toEqual([[ROLAND, 1, false], [DAISY, 2, true]]);
+    expect(placed.map((c) => [c.owner, c.icons, c.removable])).toEqual([
+      [ROLAND, 1, false],
+      [DAISY, 2, true],
+    ]);
   });
 });
 
 describe("calcParts", () => {
   it("before a token: base, placed icons, total against the difficulty", () => {
     const r = pick(fight(), /^Commit Vicious Blow/);
-    expect(calcParts(r.state.skillTest!, r.state, db, 0)).toMatchObject({ skill: "combat", base: 4, icons: [1], mods: 0, tokens: [], total: 5, difficulty: 2 });
+    expect(calcParts(r.state.skillTest!, r.state, db, 0)).toMatchObject({
+      skill: "combat",
+      base: 4,
+      icons: [1],
+      mods: 0,
+      tokens: [],
+      total: 5,
+      difficulty: 2,
+    });
   });
 
   it("revealed tokens join the strip and the total; unrevealed ones are held back", () => {
@@ -72,21 +110,31 @@ describe("calcParts", () => {
     const t = r.state.skillTest!;
     expect(t.tokens).toEqual(["0"]);
     expect(calcParts(t, r.state, db, 0).tokens).toEqual([]);
-    expect(calcParts(t, r.state, db, 1)).toMatchObject({ tokens: [{ token: "0", mod: 0 }], total: 5 });
+    expect(calcParts(t, r.state, db, 1)).toMatchObject({
+      tokens: [{ token: "0", mod: 0 }],
+      total: 5,
+    });
     const minus = { ...t, tokens: ["-1"], tokenMods: [-1] } as typeof t;
-    expect(calcParts(minus, r.state, db, 1)).toMatchObject({ tokens: [{ token: "-1", mod: -1 }], total: 4 });
+    expect(calcParts(minus, r.state, db, 1)).toMatchObject({
+      tokens: [{ token: "-1", mod: -1 }],
+      total: 4,
+    });
   });
 
   it("an auto-fail makes the total 0", () => {
     const r = fight();
-    const t = { ...r.state.skillTest!, tokens: ["autoFail"], tokenMods: [0] } as ReturnType<typeof fight>["state"]["skillTest"] & object;
+    const t = { ...r.state.skillTest!, tokens: ["autoFail"], tokenMods: [0] } as ReturnType<
+      typeof fight
+    >["state"]["skillTest"] &
+      object;
     expect(calcParts(t, r.state, db, 1)).toMatchObject({ autoFail: true, total: 0 });
   });
 });
 
 describe("spillLayout", () => {
   const area = { x: 300, y: 150, w: 520, h: 320 };
-  const dist = (a: { x: number; y: number }, b: { x: number; y: number }) => Math.hypot(a.x - b.x, a.y - b.y);
+  const dist = (a: { x: number; y: number }, b: { x: number; y: number }) =>
+    Math.hypot(a.x - b.x, a.y - b.y);
 
   it("is deterministic for a seed and differs between seeds", () => {
     expect(spillLayout(16, 7, area, 64)).toEqual(spillLayout(16, 7, area, 64));
@@ -103,7 +151,9 @@ describe("spillLayout", () => {
         expect(p.y - size / 2).toBeGreaterThanOrEqual(area.y);
         expect(p.y + size / 2).toBeLessThanOrEqual(area.y + area.h);
       }
-      for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) expect(dist(points[i], points[j])).toBeGreaterThanOrEqual(size);
+      for (let i = 0; i < n; i++)
+        for (let j = i + 1; j < n; j++)
+          expect(dist(points[i], points[j])).toBeGreaterThanOrEqual(size);
     }
   });
 
@@ -114,15 +164,31 @@ describe("spillLayout", () => {
 });
 
 describe("addTokens", () => {
-  const base = { skill: "combat", base: 4, icons: [1], mods: 0, tokens: [], autoFail: false, total: 5, difficulty: 2 };
+  const base = {
+    skill: "combat",
+    base: 4,
+    icons: [1],
+    mods: 0,
+    tokens: [],
+    autoFail: false,
+    total: 5,
+    difficulty: 2,
+  };
 
   it("adds the revealed tokens' modifiers to the total", () => {
-    expect(addTokens(base, [{ token: "-1", mod: -1 }])).toMatchObject({ tokens: [{ token: "-1", mod: -1 }], total: 4, autoFail: false });
+    expect(addTokens(base, [{ token: "-1", mod: -1 }])).toMatchObject({
+      tokens: [{ token: "-1", mod: -1 }],
+      total: 4,
+      autoFail: false,
+    });
   });
 
   it("never goes below 0, and an auto-fail is 0", () => {
     expect(addTokens({ ...base, total: 1 }, [{ token: "-3", mod: -3 }]).total).toBe(0);
-    expect(addTokens(base, [{ token: "autoFail", mod: 0 }])).toMatchObject({ autoFail: true, total: 0 });
+    expect(addTokens(base, [{ token: "autoFail", mod: 0 }])).toMatchObject({
+      autoFail: true,
+      total: 0,
+    });
   });
 
   it("an exact total from the result event wins (doubled negatives, flipped tokens)", () => {
@@ -135,8 +201,16 @@ describe("addTokens", () => {
 });
 
 describe("sessionId", () => {
-  const ev = (type: string, testId?: number) => ({ type, data: testId === undefined ? undefined : { testId } }) as never;
-  const base = { events: [] as never[], lead: null, live: null, resolved: false, commitPending: false, started: null };
+  const ev = (type: string, testId?: number) =>
+    ({ type, data: testId === undefined ? undefined : { testId } }) as never;
+  const base = {
+    events: [] as never[],
+    lead: null,
+    live: null,
+    resolved: false,
+    commitPending: false,
+    started: null,
+  };
 
   it("a commit prompt opens the screen for the live test", () => {
     expect(sessionId({ ...base, live: 4, commitPending: true })).toBe(4);
@@ -191,7 +265,10 @@ describe("finishOption", () => {
 
   it("no Done option in the commit window, nothing to tap", () => {
     const r = fight();
-    const p = { ...r.state.pending!, options: r.state.pending!.options.filter((o) => o.id !== "done") };
+    const p = {
+      ...r.state.pending!,
+      options: r.state.pending!.options.filter((o) => o.id !== "done"),
+    };
     expect(finishOption({ ...r.state, pending: p }, { viewing: null })).toBeNull();
   });
 });

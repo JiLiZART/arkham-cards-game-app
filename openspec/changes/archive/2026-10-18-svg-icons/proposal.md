@@ -15,9 +15,11 @@ Out of scope: placing icons in the campaign log and the menu (the new-game-flow 
 ## Capabilities
 
 ### New Capabilities
+
 <!-- none -->
 
 ### Modified Capabilities
+
 - `game-iconography`: icons come from a generated SVG sprite instead of the icon fonts; fewer PNGs; rules-text markup and new placements (encounter sets, scenarios, ability symbols); provenance.
 
 ## Impact

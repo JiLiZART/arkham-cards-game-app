@@ -8,10 +8,12 @@
 ## Goals / Non-Goals
 
 **Goals:**
+
 - One place for players; looking is a view-state override that never touches who decides.
 - The "can act" moment is a signal, not a screen takeover, until the player takes it.
 
 **Non-Goals:**
+
 - Two devices; the phone layout of the bar's sheet (phone-landscape).
 
 ## Diagram (C4-inspired, component level, ASCII; the browser app is the only container)
@@ -39,18 +41,23 @@
 ## Decisions
 
 ### 1. `viewing` is view state; the decider is game state (ADR-0004)
+
 `view.viewing: InvId | null` overrides whose table is shown; `shownInv(game, view) = viewing ?? viewerOf(game)`. Choices are offered only when `shownInv === viewerOf(game)`. `viewing` is cleared when `pending.inv` changes. Alternative: switch the engine's notion of the active player; rejected, the engine must not know about looking.
 
 ### 2. The can-act signal delays the hand-off
+
 Today a teammate's decision jumps the view at once. With the bar, while `pending.inv !== active` and the pending kind is `commit`/`reaction`, the table stays on `active`'s view with `viewing = active` set automatically, the avatar pulses, and the tap sets `viewing = null` (the decider's view), which is where `HandOff` shows "Pass to" for private hands. No engine change: the prompt was pending all along.
 
 ### 3. Sheet replaces the dock
+
 `StatBody` (portrait, ability, skills, token stacks) becomes the sheet's content, anchored under the avatar; `FlashStat` moves to the avatar's counts. The investigator modal stays for a teammate's cards when hands are not private, reached from their sheet.
 
 ### 4. Options on avatars
+
 `optionHome` returns `bar` for investigator-card options (both the viewer's and others'); `PlayerBar` highlights those avatars and answers on tap. The modal's option buttons remain for cards in a teammate's area.
 
 ### 5. Ribbon keeps the phases
+
 `ribbonModel.turns` feeds the bar; the ribbon renders phases only. Tips anchored to `portrait` move to the viewer's avatar.
 
 ## Risks / Trade-offs

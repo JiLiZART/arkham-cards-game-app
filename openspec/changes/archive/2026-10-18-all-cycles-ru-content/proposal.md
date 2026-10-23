@@ -15,9 +15,11 @@ Out of scope: scenario definitions for the other campaigns (they stay unplayable
 ## Capabilities
 
 ### New Capabilities
+
 <!-- none -->
 
 ### Modified Capabilities
+
 - `card-content`: the import source becomes the local snapshot for every cycle; localization covers every cycle from it; the Russian image import reads the new PDF folder across cycles.
 
 ## Impact

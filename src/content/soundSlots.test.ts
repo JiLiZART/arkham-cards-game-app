@@ -14,6 +14,16 @@ describe("slotsOf", () => {
       traits: { play: { Firearm: "a" } },
       cards: { "01016": { fight: "a" } },
     });
-    expect(slotsOf(m)).toEqual(["event:damage", "event:damage:horror", "event:token.0", "event:token.1", "moment:draw", "trait:play:Firearm", "card:01016:fight", "music:fight", "music:bed:default"]);
+    expect(slotsOf(m)).toEqual([
+      "event:damage",
+      "event:damage:horror",
+      "event:token.0",
+      "event:token.1",
+      "moment:draw",
+      "trait:play:Firearm",
+      "card:01016:fight",
+      "music:fight",
+      "music:bed:default",
+    ]);
   });
 });

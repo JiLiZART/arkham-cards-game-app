@@ -1,6 +1,6 @@
 ## Why
 
-Campaigns are the heart of the game, and today only their scenarios play: the campaign guides' own rules, what happens *between* scenarios, are flattened away by the import. Of the 22 official campaigns in ArkhamCards' guides, the import keeps a fixed scenario order and a handful of resolution effects; it drops 107 interludes and epilogues, 770 branches under resolutions, 326 end-of-scenario choices, 578 counters (clues, doubt, conviction, supplies), 86 investigator choices, 33 side scenarios with an experience cost, and every `next_scenario` / `skip_scenario` turn. A choice in a setup takes its first option. So Dunwich never asks who Armitage's fate falls on, Carcosa never counts doubt and conviction, and no campaign reaches its own branching endings. The hand-written Night of the Zealot has the same shape (a fixed list), so it can't serve as the pattern for the rest.
+Campaigns are the heart of the game, and today only their scenarios play: the campaign guides' own rules, what happens _between_ scenarios, are flattened away by the import. Of the 22 official campaigns in ArkhamCards' guides, the import keeps a fixed scenario order and a handful of resolution effects; it drops 107 interludes and epilogues, 770 branches under resolutions, 326 end-of-scenario choices, 578 counters (clues, doubt, conviction, supplies), 86 investigator choices, 33 side scenarios with an experience cost, and every `next_scenario` / `skip_scenario` turn. A choice in a setup takes its first option. So Dunwich never asks who Armitage's fate falls on, Carcosa never counts doubt and conviction, and no campaign reaches its own branching endings. The hand-written Night of the Zealot has the same shape (a fixed list), so it can't serve as the pattern for the rest.
 
 The campaign picker, meanwhile, is a tall column of tiles with no way to find a campaign and nothing to read about one beyond its epigraph; the player can't see a campaign's chapters before starting, the way the act and agenda viewer shows a scenario's chapters in play.
 
@@ -16,9 +16,11 @@ The campaign picker, meanwhile, is a tall column of tiles with no way to find a 
 ## Capabilities
 
 ### New Capabilities
+
 - `campaign-flow`: the campaign guide's flow as data run by the engine: the step language, conditions and effects, the sectioned campaign log, the cursor and persistence, the next scenario from the flow (interludes, branches, side scenarios, endings), and the import that compiles it from the guides for every official campaign.
 
 ### Modified Capabilities
+
 - `campaign-play`: Resolutions (their steps run through the flow, with branches and choices, on the campaign screen); Campaign tiles (becomes the campaign picker: filters, the preview tile, the sidebar of scenario cards); Every official campaign can be played (scenario order and interludes follow the guide's flow; the partly-implemented note says what is and isn't played).
 - `card-content`: Campaigns imported from the campaign guides (the import also writes each campaign's flow and the scenario card list, and reports the inputs it can't offer).
 

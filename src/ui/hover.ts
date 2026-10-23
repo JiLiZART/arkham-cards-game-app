@@ -30,11 +30,25 @@ export function placeHover(r: Rect, detailsH: number, vw: number, vh: number): H
   const cx = (r.x0 + r.x1) / 2;
   const cy = (r.y0 + r.y1) / 2;
   const clamp = (v: number, lo: number, hi: number) => Math.min(Math.max(v, lo), Math.max(lo, hi));
-  return { w, h, x: clamp(cx - w / 2, PAD, vw - PAD - w), y: clamp(cy - h / 2, PAD, vh - PAD - h - detailsH) };
+  return {
+    w,
+    h,
+    x: clamp(cx - w / 2, PAD, vw - PAD - w),
+    y: clamp(cy - h / 2, PAD, vh - PAD - h - detailsH),
+  };
 }
 
 /** the top-left of a w x h block (a strip card's option buttons) whose centre is the copy's centre, kept inside the window */
-export function centreOn(box: { x: number; y: number; w: number; h: number }, w: number, h: number, vw: number, vh: number): { x: number; y: number } {
+export function centreOn(
+  box: { x: number; y: number; w: number; h: number },
+  w: number,
+  h: number,
+  vw: number,
+  vh: number,
+): { x: number; y: number } {
   const clamp = (v: number, lo: number, hi: number) => Math.min(Math.max(v, lo), Math.max(lo, hi));
-  return { x: clamp(box.x + (box.w - w) / 2, PAD, vw - PAD - w), y: clamp(box.y + (box.h - h) / 2, PAD, vh - PAD - h) };
+  return {
+    x: clamp(box.x + (box.w - w) / 2, PAD, vw - PAD - w),
+    y: clamp(box.y + (box.h - h) / 2, PAD, vh - PAD - h),
+  };
 }

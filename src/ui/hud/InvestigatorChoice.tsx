@@ -24,7 +24,12 @@ export function InvestigatorChoiceOverlay() {
   const busy = useGame((s) => !!s.current || s.queue.length > 0);
   const viewing = useView((s) => s.viewing);
   // the test screen and the paced pause don't stop it; a title, the introduction or drawn cards in the middle do
-  const free = useView((s) => s.stage.every((k) => k.startsWith("test:") || k.startsWith("pause:")) && !s.intro && s.showcase.length === 0);
+  const free = useView(
+    (s) =>
+      s.stage.every((k) => k.startsWith("test:") || k.startsWith("pause:")) &&
+      !s.intro &&
+      s.showcase.length === 0,
+  );
   const choice = investigatorChoice(game);
   const show = !!choice && choicesOffered(game, { viewing }) && !busy && free;
   const seq = game.pending?.seq;

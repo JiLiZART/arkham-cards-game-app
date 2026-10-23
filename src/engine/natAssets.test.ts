@@ -3,7 +3,24 @@ import { loadPack } from "../content";
 import { card, createCard, inv, moveCard, type G } from "./core";
 import type { Result } from "./engine";
 import { preyCandidates } from "./rules/enemies";
-import { ACOLYTE, ATTIC, DAISY, HALLWAY, MINION, NATHANIEL, PRIEST, STUDY, addLocation, enemyHere, enemyIn, game, hand, inPlay, nathaniel, toTurn } from "./natkit";
+import {
+  ACOLYTE,
+  ATTIC,
+  DAISY,
+  HALLWAY,
+  MINION,
+  NATHANIEL,
+  PRIEST,
+  STUDY,
+  addLocation,
+  enemyHere,
+  enemyIn,
+  game,
+  hand,
+  inPlay,
+  nathaniel,
+  toTurn,
+} from "./natkit";
 import { gOf, locId, options, pick } from "./testkit";
 
 beforeAll(async () => {
@@ -13,11 +30,16 @@ beforeAll(async () => {
 const N = NATHANIEL;
 const offered = (name: RegExp) => (x: Result) => options(x).some((o) => name.test(o));
 const finish = (r: Result) => toTurn(r);
-const win = (trigger: string) => (x: Result) => x.state.pending?.step.t === "Window" && (x.state.pending.step as { trigger?: string }).trigger === trigger;
+const win = (trigger: string) => (x: Result) =>
+  x.state.pending?.step.t === "Window" &&
+  (x.state.pending.step as { trigger?: string }).trigger === trigger;
 /** the combat the last fight test was made with */
-const lastValue = (r: Result) => (r.state.log.filter((e) => e.type === "testResult").at(-1)!.data as { value: number }).value;
-const inZone = (r: Result, code: string, zone: string) => Object.values(r.state.cards).some((c) => c.code === code && c.zone === zone);
-const cardOf = (r: Result, code: string) => Object.values(r.state.cards).find((c) => c.code === code)!;
+const lastValue = (r: Result) =>
+  (r.state.log.filter((e) => e.type === "testResult").at(-1)!.data as { value: number }).value;
+const inZone = (r: Result, code: string, zone: string) =>
+  Object.values(r.state.cards).some((c) => c.code === code && c.zone === zone);
+const cardOf = (r: Result, code: string) =>
+  Object.values(r.state.cards).find((c) => c.code === code)!;
 /** a card of `code` on top of the investigator's deck, `at` cards down */
 function onDeck(g: G, i: string, code: string, at = 0) {
   const id = createCard(g, code, "limbo", i);
@@ -33,18 +55,21 @@ describe("Boxing Gloves", () => {
   it.each([
     ["60105", 6, 5],
     ["60127", 7, 8],
-  ])("%s: +combat while fighting; after a defeat, finds a Spirit event at the bottom of its range", (code, value, depth) => {
-    let r = nathaniel((g) => {
-      inPlay(g, N, code);
-      enemyHere(g, N, ACOLYTE);
-      onDeck(g, N, "60116", depth);
-    });
-    r = toTurn(pick(r, /^Fight/), offered(/^Boxing Gloves/));
-    expect(lastValue(r)).toBe(value);
-    r = pick(pick(r, /^Boxing Gloves/), /^Monster Slayer/);
-    expect(inZone(r, "60116", "hand")).toBe(true);
-    expect(cardOf(r, code).exhausted).toBe(true);
-  });
+  ])(
+    "%s: +combat while fighting; after a defeat, finds a Spirit event at the bottom of its range",
+    (code, value, depth) => {
+      let r = nathaniel((g) => {
+        inPlay(g, N, code);
+        enemyHere(g, N, ACOLYTE);
+        onDeck(g, N, "60116", depth);
+      });
+      r = toTurn(pick(r, /^Fight/), offered(/^Boxing Gloves/));
+      expect(lastValue(r)).toBe(value);
+      r = pick(pick(r, /^Boxing Gloves/), /^Monster Slayer/);
+      expect(inZone(r, "60116", "hand")).toBe(true);
+      expect(cardOf(r, code).exhausted).toBe(true);
+    },
+  );
   it("(0) does not see a Spirit event deeper than the top 6", () => {
     let r = nathaniel((g) => {
       inPlay(g, N, "60105");
@@ -121,7 +146,10 @@ describe("Safeguard", () => {
       inPlay(g, N, "60110");
       addLocation(g, HALLWAY, [[STUDY, HALLWAY]]);
     });
-    r = toTurn(pick(r, "End turn"), (x) => x.state.pending?.kind === "turn" && x.state.pending.inv === DAISY);
+    r = toTurn(
+      pick(r, "End turn"),
+      (x) => x.state.pending?.kind === "turn" && x.state.pending.inv === DAISY,
+    );
     r = toTurn(move(r, /^Move to Hallway/), offered(/^Safeguard/));
     r = pick(r, /^Safeguard/);
     expect(r.state.invs[N].location).toBe(locId(gOf(r), HALLWAY));
@@ -134,7 +162,10 @@ describe("Safeguard", () => {
       addLocation(g, ATTIC, [[HALLWAY, ATTIC]]);
       inv(g, DAISY).location = h;
     });
-    r = toTurn(pick(r, "End turn"), (x) => x.state.pending?.kind === "turn" && x.state.pending.inv === DAISY);
+    r = toTurn(
+      pick(r, "End turn"),
+      (x) => x.state.pending?.kind === "turn" && x.state.pending.inv === DAISY,
+    );
     r = move(r, /^Move to Attic/);
     for (let k = 0; k < 20 && r.state.pending && r.state.pending.kind !== "turn"; k++) {
       expect(options(r).some((o) => /Safeguard/.test(o))).toBe(false);
@@ -200,14 +231,23 @@ describe("Randall Cho", () => {
 
 describe("Overpower (2)", () => {
   const fightWith = (token: string, enemy: string) => {
-    let r = nathaniel((g) => {
-      hand(g, N, "60126");
-      enemyHere(g, N, enemy);
-    }, [], [token]);
-    const draws = (x: Result) => x.state.log.filter((e) => e.type === "draw" || e.type === "weakness").length;
+    let r = nathaniel(
+      (g) => {
+        hand(g, N, "60126");
+        enemyHere(g, N, enemy);
+      },
+      [],
+      [token],
+    );
+    const draws = (x: Result) =>
+      x.state.log.filter((e) => e.type === "draw" || e.type === "weakness").length;
     const before = draws(r);
     r = pick(r, /^Fight/);
-    r = finish(pick(r, /^Commit Overpower/).state.pending?.kind === "commit" ? pick(pick(r, /^Commit Overpower/), "done") : pick(r, /^Commit Overpower/));
+    r = finish(
+      pick(r, /^Commit Overpower/).state.pending?.kind === "commit"
+        ? pick(pick(r, /^Commit Overpower/), "done")
+        : pick(r, /^Commit Overpower/),
+    );
     return draws(r) - before;
   };
   it("draws 2 cards when it succeeds by 2 or more", () => {
@@ -243,22 +283,37 @@ describe("Nathaniel Cho", () => {
     r = pick(r, /^Fight/);
     for (let k = 0; k < 20 && r.state.pending?.kind !== "turn"; k++) {
       expect(options(r).some((o) => /^Nathaniel Cho/.test(o))).toBe(false);
-      r = pick(r, r.state.pending!.options.some((o) => o.id === "pass") ? "pass" : /^Done/.test(r.state.pending!.options[0].label) || r.state.pending!.kind === "commit" ? /^Done/ : /./);
+      r = pick(
+        r,
+        r.state.pending!.options.some((o) => o.id === "pass")
+          ? "pass"
+          : /^Done/.test(r.state.pending!.options[0].label) || r.state.pending!.kind === "commit"
+            ? /^Done/
+            : /./,
+      );
     }
   });
   it("elder sign: +1, and an attack that succeeds returns an event from the discard pile", () => {
-    let r = nathaniel((g) => {
-      moveCard(g, createCard(g, "60111", "limbo", N), "discard");
-      enemyHere(g, N, ACOLYTE);
-    }, [], ["elderSign"]);
+    let r = nathaniel(
+      (g) => {
+        moveCard(g, createCard(g, "60111", "limbo", N), "discard");
+        enemyHere(g, N, ACOLYTE);
+      },
+      [],
+      ["elderSign"],
+    );
     r = finish(pick(r, /^Fight/));
     expect(lastValue(r)).toBe(5);
     expect(inZone(r, "60111", "hand")).toBe(true);
   });
   it("elder sign: nothing returns outside an attack", () => {
-    let r = nathaniel((g) => {
-      moveCard(g, createCard(g, "60111", "limbo", N), "discard");
-    }, [], ["elderSign"]);
+    let r = nathaniel(
+      (g) => {
+        moveCard(g, createCard(g, "60111", "limbo", N), "discard");
+      },
+      [],
+      ["elderSign"],
+    );
     r = finish(pick(r, /^Investigate/));
     expect(inZone(r, "60111", "discard")).toBe(true);
   });

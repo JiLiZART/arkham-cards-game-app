@@ -13,14 +13,31 @@
  */
 import { execFile } from "node:child_process";
 import { createHash } from "node:crypto";
-import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  rmSync,
+  statSync,
+  writeFileSync,
+} from "node:fs";
 import { basename, extname, join, relative } from "node:path";
 import { promisify } from "node:util";
 import { loadContentFromDisk } from "../src/content/node";
 import type { ContentDb } from "../src/engine/types";
 import { draftName, draftText, type PrintDraft } from "./ruText";
 import { pdfScope, resolveFolder, type CodeInfo } from "./ruFolders";
-import { accepted, ACCEPT, norm, rank, type CardInfo, type ImageInfo, type Score, type Side } from "./ruMatch";
+import {
+  accepted,
+  ACCEPT,
+  norm,
+  rank,
+  type CardInfo,
+  type ImageInfo,
+  type Score,
+  type Side,
+} from "./ruMatch";
 
 const run = promisify(execFile);
 const ROOT = process.cwd();
@@ -48,10 +65,16 @@ export interface Ocr {
 }
 
 const walk = (dir: string): string[] =>
-  readdirSync(dir, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? walk(join(dir, e.name)) : [join(dir, e.name)]));
+  readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
+    e.isDirectory() ? walk(join(dir, e.name)) : [join(dir, e.name)],
+  );
 
 /** a tiny parallel map */
-async function pool<T, R>(items: T[], n: number, fn: (t: T, k: number) => Promise<R>): Promise<R[]> {
+async function pool<T, R>(
+  items: T[],
+  n: number,
+  fn: (t: T, k: number) => Promise<R>,
+): Promise<R[]> {
   const out: R[] = new Array(items.length);
   let next = 0;
   await Promise.all(
@@ -71,7 +94,9 @@ async function tessdata() {
   for (const lang of ["rus", "eng"]) {
     const f = join(TESSDATA, `${lang}.traineddata`);
     if (existsSync(f)) continue;
-    const res = await fetch(`https://github.com/tesseract-ocr/tessdata_best/raw/main/${lang}.traineddata`);
+    const res = await fetch(
+      `https://github.com/tesseract-ocr/tessdata_best/raw/main/${lang}.traineddata`,
+    );
     if (!res.ok) throw new Error(`tessdata ${lang}: HTTP ${res.status}`);
     writeFileSync(f, Buffer.from(await res.arrayBuffer()));
     console.log(`downloaded ${f}`);
@@ -79,7 +104,8 @@ async function tessdata() {
 }
 
 /** the PDFs in the source folder that hold cards (not tokens or the playmat) */
-const cardPdfs = () => readdirSync(PDF_DIR).filter((f) => f.endsWith(".pdf") && pdfScope(f) !== null);
+const cardPdfs = () =>
+  readdirSync(PDF_DIR).filter((f) => f.endsWith(".pdf") && pdfScope(f) !== null);
 
 async function extractPdfs() {
   for (const pdf of cardPdfs()) {
@@ -104,27 +130,43 @@ async function candidates(): Promise<Candidate[]> {
   if (existsSync(cache)) return JSON.parse(readFileSync(cache, "utf8"));
   const img = (f: string) => /\.(jpe?g|png|ppm)$/i.test(f);
   const files = [
-    ...walk(CARDS_DIR).filter((f) => img(f) && !f.includes("/Рубашки/")).map((file) => ({ file, source: "cards" as const })),
+    ...walk(CARDS_DIR)
+      .filter((f) => img(f) && !f.includes("/Рубашки/"))
+      .map((file) => ({ file, source: "cards" as const })),
     ...cardPdfs().flatMap((pdf) => {
       const dir = join(CACHE, "pdf", basename(pdf, ".pdf"));
-      return existsSync(dir) ? walk(dir).filter(img).map((file) => ({ file, source: "pdf" as const, scope: pdfScope(pdf)! })) : [];
+      return existsSync(dir)
+        ? walk(dir)
+            .filter(img)
+            .map((file) => ({ file, source: "pdf" as const, scope: pdfScope(pdf)! }))
+        : [];
     }),
   ];
   const sized = await pool(files, PARALLEL, async (c) => ({ ...c, ...(await size(c.file)) }));
   // portrait card scans are ~756×1063; smaller images on the sheets are investigator portraits and decorations
-  const out = sized.filter((c) => Math.max(c.w, c.h) >= 900 && Math.min(c.w, c.h) >= 600).map((c) => ({ ...c, file: relative(ROOT, join(ROOT, c.file)) }));
+  const out = sized
+    .filter((c) => Math.max(c.w, c.h) >= 900 && Math.min(c.w, c.h) >= 600)
+    .map((c) => ({ ...c, file: relative(ROOT, join(ROOT, c.file)) }));
   writeFileSync(cache, JSON.stringify(out, null, 1));
   return out;
 }
 
 // ---------- 2. ocr ----------
-const keyOf = (c: Candidate) => createHash("sha1").update(`${c.file}:${statSync(c.file).size}`).digest("hex").slice(0, 16);
+const keyOf = (c: Candidate) =>
+  createHash("sha1")
+    .update(`${c.file}:${statSync(c.file).size}`)
+    .digest("hex")
+    .slice(0, 16);
 
 async function tesseract(image: string, psm: number): Promise<string> {
-  const { stdout } = await run("tesseract", [image, "stdout", "-l", "rus+eng", "--psm", String(psm)], {
-    env: { ...process.env, TESSDATA_PREFIX: join(ROOT, TESSDATA), OMP_THREAD_LIMIT: "1" },
-    maxBuffer: 1 << 24,
-  });
+  const { stdout } = await run(
+    "tesseract",
+    [image, "stdout", "-l", "rus+eng", "--psm", String(psm)],
+    {
+      env: { ...process.env, TESSDATA_PREFIX: join(ROOT, TESSDATA), OMP_THREAD_LIMIT: "1" },
+      maxBuffer: 1 << 24,
+    },
+  );
   return stdout.replace(/\f/g, "").trim();
 }
 
@@ -141,9 +183,27 @@ export async function ocrOf(c: Candidate): Promise<Ocr> {
   const crop = portrait
     ? `${Math.round(c.w * 0.7)}x${Math.round(c.h * 0.08)}+${Math.round(c.w * 0.15)}+${Math.round(c.h * 0.008)}`
     : `${Math.round(c.w * 0.55)}x${Math.round(c.h * 0.13)}+${Math.round(c.w * 0.02)}+${Math.round(c.h * 0.02)}`;
-  await run("magick", [`${c.file}[0]`, "-crop", crop, "+repage", "-resize", "300%", "-colorspace", "Gray", "-normalize", tmp]);
+  await run("magick", [
+    `${c.file}[0]`,
+    "-crop",
+    crop,
+    "+repage",
+    "-resize",
+    "300%",
+    "-colorspace",
+    "Gray",
+    "-normalize",
+    tmp,
+  ]);
   // rules text: the lower half of a portrait card (the art above only adds noise); the whole of a landscape one
-  await run("magick", [`${c.file}[0]`, ...(portrait ? ["-gravity", "South", "-crop", "100%x48%+0+0", "+repage"] : []), "-colorspace", "Gray", "-normalize", body]);
+  await run("magick", [
+    `${c.file}[0]`,
+    ...(portrait ? ["-gravity", "South", "-crop", "100%x48%+0+0", "+repage"] : []),
+    "-colorspace",
+    "Gray",
+    "-normalize",
+    body,
+  ]);
   const title = await tesseract(tmp, 7);
   const text = await tesseract(body, portrait ? 6 : 3);
   rmSync(tmp);
@@ -172,7 +232,10 @@ function cardInfos(db: ContentDb): CardInfo[] {
       landscape: { front: landscape || d.type === "investigator", back: landscape },
       doubleSided: !!d.doubleSided,
       names: [tr.name, tr.backName].filter((n): n is string => !!n),
-      text: { front: sideText([tr.traits?.join(". "), tr.text].filter(Boolean).join("\n") || undefined), back: sideText(tr.backText) },
+      text: {
+        front: sideText([tr.traits?.join(". "), tr.text].filter(Boolean).join("\n") || undefined),
+        back: sideText(tr.backText),
+      },
       enLength: { front: norm(d.text ?? "").length, back: norm(d.backText ?? "").length },
     };
   });
@@ -188,15 +251,28 @@ export interface Pick {
 export type Manifest = Record<string, Partial<Record<Side, Pick>>>;
 
 /** per code and side: the file the folders name (`fixed`), else the best accepted CARDS_ru image, else the best accepted PDF image; overrides on top */
-export function choose(ranked: { img: ImageInfo; scores: Score[] }[], overrides: Record<string, string | null>, sourceOf: (file: string) => "folder" | "cards" | "pdf", fixed: Manifest = {}): Manifest {
+export function choose(
+  ranked: { img: ImageInfo; scores: Score[] }[],
+  overrides: Record<string, string | null>,
+  sourceOf: (file: string) => "folder" | "cards" | "pdf",
+  fixed: Manifest = {},
+): Manifest {
   const out: Manifest = structuredClone(fixed);
   for (const { img, scores } of ranked) {
     const best = accepted(scores);
     if (!best) continue;
     const cur = out[best.code]?.[best.side];
     if (cur?.source === "folder") continue;
-    const better = !cur || (img.source === "cards" && cur.source === "pdf") || (img.source === cur.source && best.score > cur.score);
-    if (better) (out[best.code] ??= {})[best.side] = { src: img.file, source: img.source, score: Math.round(best.score * 1000) / 1000 };
+    const better =
+      !cur ||
+      (img.source === "cards" && cur.source === "pdf") ||
+      (img.source === cur.source && best.score > cur.score);
+    if (better)
+      (out[best.code] ??= {})[best.side] = {
+        src: img.file,
+        source: img.source,
+        score: Math.round(best.score * 1000) / 1000,
+      };
   }
   for (const [key, src] of Object.entries(overrides)) {
     // keys are "<code>:front" / "<code>:back"
@@ -218,7 +294,12 @@ async function convert(src: string, dest: string) {
   await run("magick", [`${src}[0]`, ...fix, "-resize", "50%", "-strip", "-quality", "82", dest]);
 }
 
-function reviewPage(db: ContentDb, cards: CardInfo[], manifest: Manifest, ranked: { img: ImageInfo; scores: Score[] }[]): string {
+function reviewPage(
+  db: ContentDb,
+  cards: CardInfo[],
+  manifest: Manifest,
+  ranked: { img: ImageInfo; scores: Score[] }[],
+): string {
   const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
   const rel = (f: string) => relative(CACHE, f).split("\\").join("/");
   // the best images that were not accepted, by the card side they would have gone to
@@ -227,7 +308,10 @@ function reviewPage(db: ContentDb, cards: CardInfo[], manifest: Manifest, ranked
     const s = scores[0];
     if (!s || s.score < 0.35) continue;
     const k = `${s.code}:${s.side}`;
-    near.set(k, [...(near.get(k) ?? []), { img, s }].sort((a, b) => b.s.score - a.s.score).slice(0, 4));
+    near.set(
+      k,
+      [...(near.get(k) ?? []), { img, s }].sort((a, b) => b.s.score - a.s.score).slice(0, 4),
+    );
   }
   const rows = cards.flatMap((c) =>
     (["front", "back"] as Side[])
@@ -236,7 +320,13 @@ function reviewPage(db: ContentDb, cards: CardInfo[], manifest: Manifest, ranked
         const pick = manifest[c.code]?.[side];
         const en = rel(join(".cache/cards", outName(c.code, side)));
         const cands = (near.get(`${c.code}:${side}`) ?? []).filter((n) => n.img.file !== pick?.src);
-        const cls = pick ? (pick.pinned ? "pinned" : pick.score < ACCEPT + 0.1 ? "weak" : "ok") : "none";
+        const cls = pick
+          ? pick.pinned
+            ? "pinned"
+            : pick.score < ACCEPT + 0.1
+              ? "weak"
+              : "ok"
+          : "none";
         return `<tr class="${cls}"><td><b>${c.code}${side === "back" ? "b" : ""}</b><br>${esc(c.names[0] ?? db.cards[c.code].name)}<br><i>${c.type}</i>${pick ? `<br>${pick.score}${pick.pinned ? " (pinned)" : ""}` : "<br>— none —"}</td>
 <td><img src="${en}"></td><td>${pick ? `<img src="${rel(pick.src)}"><br><small>${esc(pick.src)}</small>` : ""}</td>
 <td>${cands.map((n) => `<figure><img src="${rel(n.img.file)}"><figcaption>${n.s.score.toFixed(2)} ${esc(n.img.file)}</figcaption></figure>`).join("")}</td></tr>`;
@@ -253,42 +343,99 @@ async function matchAndOutput(cands: Candidate[]) {
   const { db } = await loadContentFromDisk();
   const cards = cardInfos(db);
   // the per-card folders name their cards: those sides need no matching
-  const codes = new Map<string, CodeInfo>(Object.values(db.cards).map((d) => [d.code, { quantity: d.quantity ?? 1, doubleSided: !!d.doubleSided }]));
+  const codes = new Map<string, CodeInfo>(
+    Object.values(db.cards).map((d) => [
+      d.code,
+      { quantity: d.quantity ?? 1, doubleSided: !!d.doubleSided },
+    ]),
+  );
   const fixed: Manifest = {};
   const folderLog: string[] = [];
-  for (const dir of readdirSync(FOLDERS_DIR, { withFileTypes: true }).filter((e) => e.isDirectory()).map((e) => e.name).sort()) {
+  for (const dir of readdirSync(FOLDERS_DIR, { withFileTypes: true })
+    .filter((e) => e.isDirectory())
+    .map((e) => e.name)
+    .sort()) {
     const r = resolveFolder(dir, readdirSync(join(FOLDERS_DIR, dir)), codes);
-    for (const p of r.picks) (fixed[p.code] ??= {})[p.side] = { src: join(FOLDERS_DIR, dir, p.file), source: "folder", score: 1 };
-    folderLog.push(`${dir}: ${r.picks.length} sides, ${r.rejected.length} rejected, ${r.unparsed.length} unparsed, ${r.extra.length} extra`);
+    for (const p of r.picks)
+      (fixed[p.code] ??= {})[p.side] = {
+        src: join(FOLDERS_DIR, dir, p.file),
+        source: "folder",
+        score: 1,
+      };
+    folderLog.push(
+      `${dir}: ${r.picks.length} sides, ${r.rejected.length} rejected, ${r.unparsed.length} unparsed, ${r.extra.length} extra`,
+    );
   }
   writeFileSync(join(CACHE, "folders.log"), folderLog.join("\n") + "\n");
   const scopeOf = new Map(cands.map((c) => [c.file, c.scope]));
-  const imgs: ImageInfo[] = await pool(cands, PARALLEL, async (c) => ({ file: c.file, source: c.source, landscape: c.w > c.h, ...(await ocrOf(c)) }));
-  const scoped = (scope: string[] | "all" | undefined) => (!scope || scope === "all" ? cards : cards.filter((c) => scope.includes(c.code.slice(0, 2))));
+  const imgs: ImageInfo[] = await pool(cands, PARALLEL, async (c) => ({
+    file: c.file,
+    source: c.source,
+    landscape: c.w > c.h,
+    ...(await ocrOf(c)),
+  }));
+  const scoped = (scope: string[] | "all" | undefined) =>
+    !scope || scope === "all" ? cards : cards.filter((c) => scope.includes(c.code.slice(0, 2)));
   const ranked = imgs.map((img) => ({ img, scores: rank(img, scoped(scopeOf.get(img.file))) }));
   // every image's best guesses, for reviewing cards that got no image
-  writeFileSync(join(CACHE, "ranked.json"), JSON.stringify(ranked.filter((r) => r.scores[0]?.score >= 0.3).map((r) => ({ file: r.img.file, title: r.img.title, scores: r.scores.slice(0, 3) }))));
-  const overrides: Record<string, string | null> = existsSync(OVERRIDES) ? JSON.parse(readFileSync(OVERRIDES, "utf8")) : {};
-  const manifest = choose(ranked, overrides, (f) => (f.startsWith(CARDS_DIR) ? "cards" : f.startsWith(FOLDERS_DIR) ? "folder" : "pdf"), fixed);
-  const sorted = Object.fromEntries(Object.keys(manifest).sort().map((k) => [k, manifest[k]]));
+  writeFileSync(
+    join(CACHE, "ranked.json"),
+    JSON.stringify(
+      ranked
+        .filter((r) => r.scores[0]?.score >= 0.3)
+        .map((r) => ({ file: r.img.file, title: r.img.title, scores: r.scores.slice(0, 3) })),
+    ),
+  );
+  const overrides: Record<string, string | null> = existsSync(OVERRIDES)
+    ? JSON.parse(readFileSync(OVERRIDES, "utf8"))
+    : {};
+  const manifest = choose(
+    ranked,
+    overrides,
+    (f) => (f.startsWith(CARDS_DIR) ? "cards" : f.startsWith(FOLDERS_DIR) ? "folder" : "pdf"),
+    fixed,
+  );
+  const sorted = Object.fromEntries(
+    Object.keys(manifest)
+      .sort()
+      .map((k) => [k, manifest[k]]),
+  );
   writeFileSync(MANIFEST, JSON.stringify(sorted, null, 1) + "\n");
   // one contact sheet per code range (a cycle, a Return-to box, a standalone), so a review is a page at a time
   for (const f of readdirSync(CACHE)) if (/^review(-\d\d)?\.html$/.test(f)) rmSync(join(CACHE, f));
   for (const range of [...new Set(cards.map((c) => c.code.slice(0, 2)))].sort())
-    writeFileSync(join(CACHE, `review-${range}.html`), reviewPage(db, cards.filter((c) => c.code.startsWith(range)), manifest, ranked));
+    writeFileSync(
+      join(CACHE, `review-${range}.html`),
+      reviewPage(
+        db,
+        cards.filter((c) => c.code.startsWith(range)),
+        manifest,
+        ranked,
+      ),
+    );
   // outputs: 50% WebP for every chosen side, and the list the game reads
   mkdirSync(OUT_DIR, { recursive: true });
   const outputs: string[] = [];
-  await pool(Object.entries(manifest).flatMap(([code, sides]) => Object.entries(sides).map(([side, p]) => ({ code, side: side as Side, p: p! }))), PARALLEL, async ({ code, side, p }) => {
-    await convert(p.src, join(OUT_DIR, outName(code, side)));
-    outputs.push(`${code}${side === "back" ? "b" : ""}`);
-  });
+  await pool(
+    Object.entries(manifest).flatMap(([code, sides]) =>
+      Object.entries(sides).map(([side, p]) => ({ code, side: side as Side, p: p! })),
+    ),
+    PARALLEL,
+    async ({ code, side, p }) => {
+      await convert(p.src, join(OUT_DIR, outName(code, side)));
+      outputs.push(`${code}${side === "back" ? "b" : ""}`);
+    },
+  );
   // stale outputs from earlier runs go away
-  for (const f of readdirSync(OUT_DIR)) if (!outputs.includes(f.replace(/\.webp$/, ""))) rmSync(join(OUT_DIR, f));
+  for (const f of readdirSync(OUT_DIR))
+    if (!outputs.includes(f.replace(/\.webp$/, ""))) rmSync(join(OUT_DIR, f));
   writeFileSync(GENERATED, JSON.stringify(outputs.sort(), null, 1) + "\n");
   // print-text drafts for the community cards (the PDFs are the official translation the game already has)
   const ocrByFile = new Map(imgs.map((i) => [i.file, i]));
-  const drafts: Record<string, PrintDraft & { back?: { name?: string; text?: string; iconsUnsure?: boolean }; src: string }> = {};
+  const drafts: Record<
+    string,
+    PrintDraft & { back?: { name?: string; text?: string; iconsUnsure?: boolean }; src: string }
+  > = {};
   for (const [code, sides] of Object.entries(manifest)) {
     const d = db.cards[code];
     const tr = db.i18n.ru?.cards[code] ?? {};
@@ -306,16 +453,24 @@ async function matchAndOutput(cands: Candidate[]) {
   }
   writeFileSync(join(CACHE, "print-drafts.json"), JSON.stringify(drafts, null, 1));
   // report
-  const sides = cards.flatMap((c) => (c.doubleSided ? [`${c.code}:front`, `${c.code}:back`] : [`${c.code}:front`]));
-  const have = sides.filter((k) => { const [code, side] = k.split(":"); return manifest[code]?.[side as Side]; });
+  const sides = cards.flatMap((c) =>
+    c.doubleSided ? [`${c.code}:front`, `${c.code}:back`] : [`${c.code}:front`],
+  );
+  const have = sides.filter((k) => {
+    const [code, side] = k.split(":");
+    return manifest[code]?.[side as Side];
+  });
   const picks = Object.values(manifest).flatMap((m) => Object.values(m));
   const fromCards = picks.filter((p) => p!.source === "cards").length;
   const fromFolders = picks.filter((p) => p!.source === "folder").length;
   const missing = sides.filter((k) => !have.includes(k));
   const byType: Record<string, number> = {};
-  for (const k of missing) byType[db.cards[k.split(":")[0]].type] = (byType[db.cards[k.split(":")[0]].type] ?? 0) + 1;
+  for (const k of missing)
+    byType[db.cards[k.split(":")[0]].type] = (byType[db.cards[k.split(":")[0]].type] ?? 0) + 1;
   const bytes = readdirSync(OUT_DIR).reduce((n, f) => n + statSync(join(OUT_DIR, f)).size, 0);
-  console.log(`card sides: ${have.length}/${sides.length} have a Russian image (${fromFolders} from the card folders, ${fromCards} from CARDS_ru, ${have.length - fromFolders - fromCards} from the PDFs); ${(bytes / 1e6).toFixed(1)} MB in ${OUT_DIR}`);
+  console.log(
+    `card sides: ${have.length}/${sides.length} have a Russian image (${fromFolders} from the card folders, ${fromCards} from CARDS_ru, ${have.length - fromFolders - fromCards} from the PDFs); ${(bytes / 1e6).toFixed(1)} MB in ${OUT_DIR}`,
+  );
   console.log(`missing by type: ${JSON.stringify(byType)}`);
   // per code range (the cycle number, or the Return-to / standalone range): sides with an image of all sides
   const perRange: Record<string, [number, number]> = {};
@@ -324,12 +479,21 @@ async function matchAndOutput(cands: Candidate[]) {
     r[1]++;
     if (have.includes(k)) r[0]++;
   }
-  console.log(`by code range: ${Object.entries(perRange).sort().map(([r, [h, n]]) => `${r} ${h}/${n}`).join(", ")}`);
-  console.log(`unmatched images: ${ranked.filter((r) => !accepted(r.scores)).length}; review: ${join(CACHE, "review-<range>.html")}`);
+  console.log(
+    `by code range: ${Object.entries(perRange)
+      .sort()
+      .map(([r, [h, n]]) => `${r} ${h}/${n}`)
+      .join(", ")}`,
+  );
+  console.log(
+    `unmatched images: ${ranked.filter((r) => !accepted(r.scores)).length}; review: ${join(CACHE, "review-<range>.html")}`,
+  );
 }
 
 async function main() {
-  const only = process.argv.includes("--stage") ? process.argv[process.argv.indexOf("--stage") + 1] : null;
+  const only = process.argv.includes("--stage")
+    ? process.argv[process.argv.indexOf("--stage") + 1]
+    : null;
   mkdirSync(CACHE, { recursive: true });
   await tessdata();
   await extractPdfs();
@@ -341,11 +505,17 @@ async function main() {
   const t0 = Date.now();
   await pool(cands, PARALLEL, async (c) => {
     await ocrOf(c);
-    if (++done % 100 === 0) console.log(`ocr ${done}/${cands.length} (${Math.round((Date.now() - t0) / 1000)} s)`);
+    if (++done % 100 === 0)
+      console.log(`ocr ${done}/${cands.length} (${Math.round((Date.now() - t0) / 1000)} s)`);
   });
   console.log(`ocr done: ${cands.length}`);
   if (only === "ocr") return;
   await matchAndOutput(cands);
 }
 
-if (process.argv[1] && extname(process.argv[1]) && import.meta.url.endsWith(basename(process.argv[1]))) await main();
+if (
+  process.argv[1] &&
+  extname(process.argv[1]) &&
+  import.meta.url.endsWith(basename(process.argv[1]))
+)
+  await main();

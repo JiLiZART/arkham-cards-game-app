@@ -2,13 +2,7 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { CHAOS_TOKENS, hasTokenArt, layersFor } from "./ChaosToken";
 import { spriteIds } from "../../scripts/import-icons";
-import {
-  hasSymbol,
-  ICON_SOURCES,
-  MARKUP_ICONS,
-  registerSymbols,
-  type IconSource,
-} from "./icons";
+import { hasSymbol, ICON_SOURCES, MARKUP_ICONS, registerSymbols, type IconSource } from "./icons";
 
 /** PNG colour type (IHDR byte 25): 4 = grey + alpha, 6 = RGBA */
 const hasAlpha = (file: string) => [4, 6].includes(readFileSync(file)[25]);
@@ -18,12 +12,8 @@ registerSymbols(SPRITE_IDS);
 
 describe("icons", () => {
   it("every icon layer is a sprite symbol, a chaos token or an existing PNG", () => {
-    for (const [name, src] of Object.entries(ICON_SOURCES) as [
-      string,
-      IconSource,
-    ][]) {
-      if ("png" in src)
-        expect(existsSync(`public/icons/${src.png}.png`), name).toBe(true);
+    for (const [name, src] of Object.entries(ICON_SOURCES) as [string, IconSource][]) {
+      if ("png" in src) expect(existsSync(`public/icons/${src.png}.png`), name).toBe(true);
       else if ("token" in src) expect(hasTokenArt(src.token), name).toBe(true);
       else {
         expect(hasSymbol(src.glyph), name).toBe(true);
@@ -35,8 +25,7 @@ describe("icons", () => {
   it("every chaos token is drawn from sprite layers", () => {
     for (const t of CHAOS_TOKENS) {
       expect(layersFor(t), t).not.toBeNull();
-      for (const [id] of layersFor(t)!)
-        expect(SPRITE_IDS, `${t}: ${id}`).toContain(id);
+      for (const [id] of layersFor(t)!) expect(SPRITE_IDS, `${t}: ${id}`).toContain(id);
     }
   });
 
@@ -64,10 +53,7 @@ describe("icons", () => {
       "resource-5",
     ]);
     for (const n of ["health", "sanity"])
-      expect(
-        "glyph" in (ICON_SOURCES as Record<string, IconSource>)[n],
-        n,
-      ).toBe(true);
+      expect("glyph" in (ICON_SOURCES as Record<string, IconSource>)[n], n).toBe(true);
     expect(
       readdirSync("public/icons")
         .filter((f) => f.endsWith(".png"))
@@ -90,16 +76,12 @@ describe("icons", () => {
 
   it("every remaining PNG icon has a transparent background", () => {
     for (const src of Object.values(ICON_SOURCES) as IconSource[])
-      if ("png" in src)
-        expect(hasAlpha(`public/icons/${src.png}.png`), src.png).toBe(true);
+      if ("png" in src) expect(hasAlpha(`public/icons/${src.png}.png`), src.png).toBe(true);
   });
 
   it("every rules-text markup key names a symbol in the sprite", () => {
-    const ids = new Set(
-      spriteIds(readFileSync("public/icons/sprite.svg", "utf8")),
-    );
-    for (const [k, id] of Object.entries(MARKUP_ICONS))
-      expect(ids.has(id), k).toBe(true);
+    const ids = new Set(spriteIds(readFileSync("public/icons/sprite.svg", "utf8")));
+    for (const [k, id] of Object.entries(MARKUP_ICONS)) expect(ids.has(id), k).toBe(true);
   });
 
   it("the sprite, table art, card backs and card fonts exist", () => {

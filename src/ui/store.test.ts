@@ -2,16 +2,36 @@ import { describe, expect, it } from "vitest";
 import { db } from "../engine/testkit";
 import { scenarioSetup } from "../engine/campaign";
 import { ENGINE_VERSION } from "../engine/engine";
-import { ANIMATED, canUndo, createGameStore, HELD, heldCards, holdsForTap, needsNext, SAVE_KEY, type Storage } from "./store";
+import {
+  ANIMATED,
+  canUndo,
+  createGameStore,
+  HELD,
+  heldCards,
+  holdsForTap,
+  needsNext,
+  SAVE_KEY,
+  type Storage,
+} from "./store";
 
 const mem = (): Storage & { data: Map<string, string> } => {
   const data = new Map<string, string>();
-  return { data, getItem: (k) => data.get(k) ?? null, setItem: (k, v) => void data.set(k, v), removeItem: (k) => void data.delete(k) };
+  return {
+    data,
+    getItem: (k) => data.get(k) ?? null,
+    setItem: (k, v) => void data.set(k, v),
+    removeItem: (k) => void data.delete(k),
+  };
 };
 
 const start = (storage: Storage) => {
   const s = createGameStore(db, storage);
-  s.getState().newCampaign({ campaignId: "night-of-the-zealot", difficulty: "standard", seed: 9, investigators: [{ code: "01001", deckId: "roland-starter" }] });
+  s.getState().newCampaign({
+    campaignId: "night-of-the-zealot",
+    difficulty: "standard",
+    seed: 9,
+    investigators: [{ code: "01001", deckId: "roland-starter" }],
+  });
   return s;
 };
 
@@ -71,12 +91,23 @@ describe("ui store", () => {
     const { flow, log, ...rest } = save.campaign;
     void flow;
     void log;
-    storage.setItem(SAVE_KEY, JSON.stringify({ ...save, campaign: { ...rest, scenarioIndex: 0, log: { houseStanding: true } } }));
+    storage.setItem(
+      SAVE_KEY,
+      JSON.stringify({
+        ...save,
+        campaign: { ...rest, scenarioIndex: 0, log: { houseStanding: true } },
+      }),
+    );
     const reloaded = createGameStore(db, storage);
     expect(reloaded.getState().resume()).toBe(true);
     expect(reloaded.getState().screen).toBe("game");
-    expect(reloaded.getState().campaign!.flow).toMatchObject({ play: "the-gathering", playing: true });
-    expect(reloaded.getState().campaign!.log.campaign_notes.entries).toEqual([{ id: "houseStanding" }]);
+    expect(reloaded.getState().campaign!.flow).toMatchObject({
+      play: "the-gathering",
+      playing: true,
+    });
+    expect(reloaded.getState().campaign!.log.campaign_notes.entries).toEqual([
+      { id: "houseStanding" },
+    ]);
   });
 
   it("an old save between scenarios resumes on the campaign screen at the Begin prompt", () => {
@@ -86,11 +117,22 @@ describe("ui store", () => {
     const { flow, log, ...rest } = save.campaign;
     void flow;
     void log;
-    storage.setItem(SAVE_KEY, JSON.stringify({ ...save, setup: null, actions: [], campaign: { ...rest, scenarioIndex: 1, log: {} } }));
+    storage.setItem(
+      SAVE_KEY,
+      JSON.stringify({
+        ...save,
+        setup: null,
+        actions: [],
+        campaign: { ...rest, scenarioIndex: 1, log: {} },
+      }),
+    );
     const reloaded = createGameStore(db, storage);
     reloaded.getState().resume();
     expect(reloaded.getState().screen).toBe("log");
-    expect(reloaded.getState().campaign!.flow.waiting?.step).toEqual({ kind: "play", scenario: "the-midnight-masks" });
+    expect(reloaded.getState().campaign!.flow.waiting?.step).toEqual({
+      kind: "play",
+      scenario: "the-midnight-masks",
+    });
     reloaded.getState().startScenario(3);
     expect(reloaded.getState().screen).toBe("game");
     expect(reloaded.getState().game!.scenarioId).toBe("the-midnight-masks");
@@ -140,13 +182,21 @@ describe("ui store", () => {
   it("volumes and mute are saved with the settings; old saves get the defaults", () => {
     const storage = mem();
     const s = start(storage);
-    expect([s.getState().musicVolume, s.getState().sfxVolume, s.getState().muted]).toEqual([50, 80, false]);
+    expect([s.getState().musicVolume, s.getState().sfxVolume, s.getState().muted]).toEqual([
+      50,
+      80,
+      false,
+    ]);
     s.getState().setVolume("music", 20);
     s.getState().setVolume("effects", 100);
     s.getState().setMuted(true);
     const reloaded = createGameStore(db, storage);
     reloaded.getState().resume();
-    expect([reloaded.getState().musicVolume, reloaded.getState().sfxVolume, reloaded.getState().muted]).toEqual([20, 100, true]);
+    expect([
+      reloaded.getState().musicVolume,
+      reloaded.getState().sfxVolume,
+      reloaded.getState().muted,
+    ]).toEqual([20, 100, true]);
     const save = JSON.parse(storage.getItem(SAVE_KEY)!);
     delete save.settings.musicVolume;
     delete save.settings.sfxVolume;
@@ -154,7 +204,11 @@ describe("ui store", () => {
     storage.setItem(SAVE_KEY, JSON.stringify(save));
     const old = createGameStore(db, storage);
     old.getState().resume();
-    expect([old.getState().musicVolume, old.getState().sfxVolume, old.getState().muted]).toEqual([50, 80, false]);
+    expect([old.getState().musicVolume, old.getState().sfxVolume, old.getState().muted]).toEqual([
+      50,
+      80,
+      false,
+    ]);
   });
 
   it("a save from another engine version keeps the campaign and restarts the scenario", () => {
@@ -283,13 +337,26 @@ describe("pace and held events", () => {
     for (const type of ["encounter", "weakness"]) {
       expect(HELD.has(type), type).toBe(true);
       expect(ANIMATED.has(type), type).toBe(true);
-      for (const pace of ["normal", "slow", "tap"] as const) expect(needsNext(ev(type), pace, false), `${type} ${pace}`).toBe(false);
+      for (const pace of ["normal", "slow", "tap"] as const)
+        expect(needsNext(ev(type), pace, false), `${type} ${pace}`).toBe(false);
     }
   });
 
   it("the cards still waiting in (or for) the showcase: the playing one and the queued ones", () => {
-    const e = (type: string, card: string | null) => ({ type, text: type, inv: null, card, data: {}, logIndex: 0 });
-    expect([...heldCards({ current: e("encounter", "c1"), queue: [e("damage", "c9"), e("weakness", "c2"), e("encounter", null)] })]).toEqual(["c1", "c2"]);
+    const e = (type: string, card: string | null) => ({
+      type,
+      text: type,
+      inv: null,
+      card,
+      data: {},
+      logIndex: 0,
+    });
+    expect([
+      ...heldCards({
+        current: e("encounter", "c1"),
+        queue: [e("damage", "c9"), e("weakness", "c2"), e("encounter", null)],
+      }),
+    ]).toEqual(["c1", "c2"]);
     expect(heldCards({ current: null, queue: [] }).size).toBe(0);
   });
 
@@ -350,7 +417,12 @@ describe("the tap decks setting", () => {
   it("off: the setup doesn't ask, and the draws happen without waiting", () => {
     const s = createGameStore(db, mem());
     s.getState().setTapDecks(false);
-    s.getState().newCampaign({ campaignId: "night-of-the-zealot", difficulty: "standard", seed: 9, investigators: [{ code: "01001", deckId: "roland-starter" }] });
+    s.getState().newCampaign({
+      campaignId: "night-of-the-zealot",
+      difficulty: "standard",
+      seed: 9,
+      investigators: [{ code: "01001", deckId: "roland-starter" }],
+    });
     expect(s.getState().setup?.tapDecks).toBeUndefined();
     expect(s.getState().game?.tapDecks).toBeUndefined();
   });
@@ -405,7 +477,11 @@ describe("game report", () => {
     expect(r.campaign.campaignId).toBe("night-of-the-zealot");
     expect(r.settings).toEqual({ locale: "en", drawByHand: false, pace: "slow" });
     expect(r.view).toEqual({ viewing: null });
-    expect(r.pending).toEqual({ inv: g.pending!.inv, kind: g.pending!.kind, prompt: g.pending!.prompt });
+    expect(r.pending).toEqual({
+      inv: g.pending!.inv,
+      kind: g.pending!.kind,
+      prompt: g.pending!.prompt,
+    });
     expect(r.where).toEqual({ scenario: g.scenarioId, round: g.round, phase: g.phase });
   });
 
@@ -440,7 +516,9 @@ describe("game report", () => {
   it("text that isn't a report is refused in plain words", () => {
     const b = createGameStore(db, mem());
     expect(() => b.getState().importReport("{nope")).toThrow(/not valid JSON/i);
-    expect(() => b.getState().importReport(JSON.stringify({ hello: 1 }))).toThrow(/not a game report/i);
+    expect(() => b.getState().importReport(JSON.stringify({ hello: 1 }))).toThrow(
+      /not a game report/i,
+    );
     expect(b.getState().game).toBeNull();
   });
 });
@@ -450,7 +528,17 @@ describe("spending experience on the campaign's deck", () => {
     // Flashlight (two copies) out, two copies of another level 0 card in: 2 experience
     const cards = { ...db.decks["roland-starter"].cards };
     delete cards["01087"];
-    const other = Object.values(db.cards).find((c) => ["guardian", "seeker", "neutral"].includes(c.faction) && ["asset", "event", "skill"].includes(c.type) && (c.xp ?? 0) === 0 && !cards[c.code] && !c.subtype && (c.deckLimit ?? 2) >= 2 && !Object.keys(db.decks["roland-starter"].cards).some((k) => db.cards[k].name === c.name) && !c.encounterSet)!;
+    const other = Object.values(db.cards).find(
+      (c) =>
+        ["guardian", "seeker", "neutral"].includes(c.faction) &&
+        ["asset", "event", "skill"].includes(c.type) &&
+        (c.xp ?? 0) === 0 &&
+        !cards[c.code] &&
+        !c.subtype &&
+        (c.deckLimit ?? 2) >= 2 &&
+        !Object.keys(db.decks["roland-starter"].cards).some((k) => db.cards[k].name === c.name) &&
+        !c.encounterSet,
+    )!;
     cards[other.code] = 2;
     return { cards, other: other.code };
   };
@@ -458,7 +546,12 @@ describe("spending experience on the campaign's deck", () => {
   it("takes the experience, keeps the new deck in the campaign and saves it; the next scenario uses it", () => {
     const storage = mem();
     const s = start(storage);
-    s.setState({ campaign: { ...s.getState().campaign!, investigators: [{ ...s.getState().campaign!.investigators[0], xp: 5 }] } });
+    s.setState({
+      campaign: {
+        ...s.getState().campaign!,
+        investigators: [{ ...s.getState().campaign!.investigators[0], xp: 5 }],
+      },
+    });
     const { cards, other } = swap();
     const r = s.getState().upgradeDeck("01001", cards);
     expect(r).toMatchObject({ ok: true, cost: 2 });
@@ -493,7 +586,12 @@ describe("campaigns whose cards load first", () => {
     };
     return { prepare, asked, release: () => release(), fail: (e: Error) => fail(e) };
   };
-  const opts = { campaignId: "night-of-the-zealot", difficulty: "standard" as const, seed: 9, investigators: [{ code: "01001", deckId: "roland-starter" }] };
+  const opts = {
+    campaignId: "night-of-the-zealot",
+    difficulty: "standard" as const,
+    seed: 9,
+    investigators: [{ code: "01001", deckId: "roland-starter" }],
+  };
 
   it("a new campaign starts once its cards are loaded, and says it is loading meanwhile", async () => {
     const g = gate();
@@ -542,9 +640,17 @@ describe("campaigns whose cards load first", () => {
     expect(seen[0]).toContain("01086");
     expect(seen[0]).toHaveLength(new Set(seen[0]).size);
     // a custom deck is read from the deck itself
-    const custom = { ...db.decks["roland-starter"], id: "mine", cards: { "01006": 1, "01007": 1, "99999": 1 } };
+    const custom = {
+      ...db.decks["roland-starter"],
+      id: "mine",
+      cards: { "01006": 1, "01007": 1, "99999": 1 },
+    };
     // (the deck is not a legal one, so the start itself is refused: only what prepare was asked matters here)
-    expect(() => s.getState().newCampaign({ ...opts, investigators: [{ code: "01001", deckId: "mine", deck: custom }] })).toThrow();
+    expect(() =>
+      s
+        .getState()
+        .newCampaign({ ...opts, investigators: [{ code: "01001", deckId: "mine", deck: custom }] }),
+    ).toThrow();
     expect(seen[1]).toContain("99999");
   });
 
@@ -553,7 +659,9 @@ describe("campaigns whose cards load first", () => {
     const first = start(storage);
     begin(first);
     const seen: (string[] | undefined)[] = [];
-    createGameStore(db, storage, (_id, codes) => void seen.push(codes)).getState().resume();
+    createGameStore(db, storage, (_id, codes) => void seen.push(codes))
+      .getState()
+      .resume();
     expect(seen[0]).toContain("01001");
     expect(seen[0]).toContain("01086");
   });

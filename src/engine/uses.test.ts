@@ -13,12 +13,18 @@ function withAsset(code: string, uses: number) {
     inv(g, ROLAND).resources = 10;
     giveCard(g, ROLAND, code);
   });
-  r = pick(r, new RegExp(`^Play ${def(gOf(r), findInHand(r, code)).name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`));
+  r = pick(
+    r,
+    new RegExp(
+      `^Play ${def(gOf(r), findInHand(r, code)).name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`,
+    ),
+  );
   const id = Object.values(r.state.cards).find((c) => c.code === code && c.zone === "play")!.id;
   r = mutate(r, (g) => (card(g, id).uses = uses));
   return { r, id };
 }
-const findInHand = (r: ReturnType<typeof start>, code: string) => r.state.invs[ROLAND].hand.find((h) => r.state.cards[h].code === code)!;
+const findInHand = (r: ReturnType<typeof start>, code: string) =>
+  r.state.invs[ROLAND].hand.find((h) => r.state.cards[h].code === code)!;
 
 describe("assets with uses leave play when empty", () => {
   it("Flashlight's last supply: the investigation uses −2 shroud, then Flashlight is discarded", () => {
@@ -39,7 +45,11 @@ describe("assets with uses leave play when empty", () => {
     const { r: r0, id } = withAsset("01016", 2);
     const r1 = mutate(r0, (g) => putEnemy(g, "01160", inv(g, ROLAND).location!, ROLAND));
     let r = pick(r1, /^\.45 Automatic: fight/);
-    if (r.state.pending?.kind === "generic" && /Ghoul/.test(r.state.pending.options[0]?.label ?? "")) r = pick(r, /Ghoul/);
+    if (
+      r.state.pending?.kind === "generic" &&
+      /Ghoul/.test(r.state.pending.options[0]?.label ?? "")
+    )
+      r = pick(r, /Ghoul/);
     r = commitDone(r);
     expect(r.state.cards[id].zone).toBe("play");
     expect(r.state.cards[id].uses).toBe(1);
@@ -49,9 +59,18 @@ describe("assets with uses leave play when empty", () => {
     const g = gOf(skipMulligans(start("the-gathering", [ROLAND], 1)));
     const flashlight = g.db.cards["01087"];
     expect(spendsOnlyUses(flashlight)).toBe(true);
-    const withConstant = { ...flashlight, abilities: [...(flashlight.abilities ?? []), { kind: "constant", modifiers: [{ stat: "intellect", value: 1 }] }] } as unknown as CardDef;
+    const withConstant = {
+      ...flashlight,
+      abilities: [
+        ...(flashlight.abilities ?? []),
+        { kind: "constant", modifiers: [{ stat: "intellect", value: 1 }] },
+      ],
+    } as unknown as CardDef;
     expect(spendsOnlyUses(withConstant)).toBe(false);
-    const free = { ...flashlight, abilities: [{ kind: "fast", label: "x", cost: { resources: 1 }, effects: [] }] } as unknown as CardDef;
+    const free = {
+      ...flashlight,
+      abilities: [{ kind: "fast", label: "x", cost: { resources: 1 }, effects: [] }],
+    } as unknown as CardDef;
     expect(spendsOnlyUses(free)).toBe(false);
     void findByCode;
   });

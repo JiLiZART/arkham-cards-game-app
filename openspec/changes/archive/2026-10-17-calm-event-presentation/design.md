@@ -1,6 +1,7 @@
 ## Context
 
 How the screen tells the story today:
+
 - `store.ts` applies every choice at once and queues the animated events (`ANIMATED`). `EventPlayer` (`hud/Hud.tsx`) plays them one by one on timers.
 - The feed shows the log up to the next unplayed animated event (`shownCount`). Every visible entry is drawn twice: once by `Feed` (live: 8 lines, 12 s each) and once by `ActionFloats` (2 at a time, 900 ms apart).
 - Each overlay that uses the middle of the screen has its own partial wait rules:
@@ -14,11 +15,13 @@ How the screen tells the story today:
 ## Goals / Non-Goals
 
 **Goals:**
+
 - One middle-of-screen holder at a time, in the order the game produced them, with one mechanism instead of per-component rules.
 - Fewer floating texts and a shorter, merged live feed. The full detail stays in the Journal.
 - A spotlight on the map for the animated event that is playing.
 
 **Non-Goals:**
+
 - Engine, save-format or replay changes.
 - Slowing event timings (`DURATION` stays as it is).
 - A settings toggle for any of this. Add one if players ask.
@@ -27,11 +30,14 @@ How the screen tells the story today:
 ## Decisions
 
 ### 1. The stage is a FIFO of claims in the view store
+
 `view.ts` gains `stage: string[]` with two actions:
+
 - `claimStage(key)` appends the key if it is absent.
 - `releaseStage(key)` removes it.
 
 The head of the queue holds the middle; `useStageHolder(key)` returns whether `stage[0] === key`. Each holder claims when it wants the middle and renders only while it holds it:
+
 - the showcase (key `showcase`), and a deck pick (`pick:<seq>`);
 - the intro (`intro`);
 - the encounter flight (`event:<logIndex>`);
@@ -44,27 +50,32 @@ A card being resolved does not claim the stage. It shows only while the stage is
 
 The showcase claims only once no events are playing or queued, because the drawn cards come after the events of the same choice.
 
-*Why a queue, not a derived precedence rule:* the spec says "in the order the game produced them". A derived rule needs a fixed priority, which breaks for "showcase opened, then an encounter came". A queue makes the order fall out of claim order. *Alternative considered:* extending each component's own wait list, as `PhaseTitle` does today. That is the source of the current gaps, because every new overlay must be added to every list.
+_Why a queue, not a derived precedence rule:_ the spec says "in the order the game produced them". A derived rule needs a fixed priority, which breaks for "showcase opened, then an encounter came". A queue makes the order fall out of claim order. _Alternative considered:_ extending each component's own wait list, as `PhaseTitle` does today. That is the source of the current gaps, because every new overlay must be added to every list.
 
 ### 2. EventPlayer waits for the stage
+
 - Center events (`token`, `testResult`, `encounter`) claim `event:<logIndex>` when they become current. Their timer starts only while they hold the stage.
 - Every other animated event, such as attack or damage, starts only when the stage is empty. Its float, hit streak and numbers therefore never play over a held middle.
 
 `waitsForSettle` keeps its meaning: settle first, then the stage.
 
 ### 3. Floats and hits wait for an empty stage
+
 - `ActionFloats` releases queued floats only while `stage.length === 0`.
 - `HitFx` wraps its `whenSettled` callback in `whenStageFree`, which subscribes to the view store until the stage is empty.
 
 Both keep their queues, so nothing is dropped.
 
 ### 4. Float whitelist in `feed.ts`
+
 `FLOAT_KINDS` lists: `damage`, `defeated`, `attack`, `enemyDamage`, `enemyDefeated`, `spawn`, `clues`, `doom`, `agendaAdvance` and `actAdvance`. `ActionFloats` floats only entries whose `kind` is in the list. This is one `Set`, beside the existing `HIDDEN`.
 
 ### 5. Merging is a pure function over raw events plus burst marks
+
 `mergeLive(items, game, db, locale)` takes the newest visible log indexes and returns feed lines. Each line is either a single entry or a merge of a run.
 
 **Runs:**
+
 - A run is consecutive entries in the same burst whose types are in `ROUTINE = {draw, resource (not lost), ready}`.
 - `enemyMove` is merged only with other `enemyMove` entries.
 - An entry of any other type ends the run.
@@ -72,6 +83,7 @@ Both keep their queues, so nothing is dropped.
 **Bursts:** a burst is the set of log entries produced by one dispatch. The store records `logMarks: number[]`, the log length before each `choose`/auto step. It is in-memory only and reset on a new game, a load or an undo. An undo truncates the marks. A load starts with one mark at the current log length, so older entries are never merged; they are past the live window anyway.
 
 **Line text:** a run sums its amounts per investigator. The line uses new templates:
+
 - `feed.merged.draw` ("{inv} drew {n} cards") and `feed.merged.resource`;
 - the `.each` variants ("each investigator drew {n} card(s)") when every playing investigator has the same amount;
 - `feed.merged.ready` ("cards readied");
@@ -79,11 +91,12 @@ Both keep their queues, so nothing is dropped.
 
 Russian strings use the existing plural helper, if there is one, or fixed forms like the current feed strings.
 
-*Alternative considered:* merging by time window in `Feed`. It is simpler, but it merges across separate player actions (two Draw actions in a row become "drew 2") and isn't testable as a pure function.
+_Alternative considered:_ merging by time window in `Feed`. It is simpler, but it merges across separate player actions (two Draw actions in a row become "drew 2") and isn't testable as a pure function.
 
 Live feed: `LIVE_MAX` drops from 8 to 4. The Journal path stays on raw `entries`.
 
 ### 6. Spotlight via a dim plane and lifted cards
+
 - `EventPlayer` sets `view.spotlight = { cards, invs }` from the current event: `e.card`, `e.data.source`, `e.data.enemy` (if present) and `e.inv`. It clears the spotlight when no event is current. Events whose ids aren't on the map give an empty spotlight, which means no dim.
 - `Table` renders one large black plane above the table cards and below lifted cards. Its opacity eases toward 0.55 or 0 in `useFrame` over about 150 ms.
 - `CardMesh` gets a `spotlit` prop that raises the card above the plane, with the existing `highlighted` frame.
@@ -91,7 +104,7 @@ Live feed: `LIVE_MAX` drops from 8 to 4. The Journal path stays on raw `entries`
 - The plane has `raycast={() => null}`, so it never takes the pointer.
 - Under reduced motion, the plane stays at 0 and there is no lift, only the frame.
 
-*Alternative considered:* post-processing, or darkening each material. That means more code and more draw-state churn for the same look.
+_Alternative considered:_ post-processing, or darkening each material. That means more code and more draw-state churn for the same look.
 
 ## Risks / Trade-offs
 

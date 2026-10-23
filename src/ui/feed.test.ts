@@ -3,14 +3,31 @@ import { botChoice } from "../engine/bot";
 import { dispatch } from "../engine/engine";
 import { db, giveCard, mutate, pick, putEnemy, skipMulligans, start } from "../engine/testkit";
 import type { GameEvent } from "../engine/types";
-import { captionIndex, captionStageBusy, feedEntry, FLOAT_KINDS, floatLife, HIDDEN, mergeLive, promptParts, shownCount, templateKey, type Part } from "./feed";
+import {
+  captionIndex,
+  captionStageBusy,
+  feedEntry,
+  FLOAT_KINDS,
+  floatLife,
+  HIDDEN,
+  mergeLive,
+  promptParts,
+  shownCount,
+  templateKey,
+  type Part,
+} from "./feed";
 
 const last = (log: GameEvent[], type: string) => [...log].reverse().find((e) => e.type === type)!;
 const placeholders = (s: string) => (s.match(/\{[\w:]+\}/g) ?? []).sort();
 
 describe("feed entries", () => {
   it("prevent: the investigator, the words and what was prevented, in the game's language", () => {
-    const ev = { type: "prevent", text: "Roland Banks prevents 1 horror", inv: "01001", data: { damage: 0, horror: 1 } } as unknown as GameEvent;
+    const ev = {
+      type: "prevent",
+      text: "Roland Banks prevents 1 horror",
+      inv: "01001",
+      data: { damage: 0, horror: 1 },
+    } as unknown as GameEvent;
     const r = skipMulligans(start("the-gathering", ["01001"], 1));
     const f = feedEntry(ev, r.state, db, "en")!;
     expect(f.parts.some((p) => p.t === "inv")).toBe(true);
@@ -22,7 +39,11 @@ describe("feed entries", () => {
     let r = skipMulligans(start("the-gathering", ["01001"], 1));
     r = pick(r, /^Gain 1 resource/);
     const f = feedEntry(last(r.state.log, "resource"), r.state, db, "en")!;
-    expect(f.parts).toEqual([{ t: "inv", id: "01001" }, { t: "text", s: " took " }, { t: "amount", n: 1, icon: "resource" }]);
+    expect(f.parts).toEqual([
+      { t: "inv", id: "01001" },
+      { t: "text", s: " took " },
+      { t: "amount", n: 1, icon: "resource" },
+    ]);
     expect(f.tone).toBe("player");
     expect(f.actor).toEqual({ inv: "01001" });
   });
@@ -34,7 +55,12 @@ describe("feed entries", () => {
       enemy = putEnemy(g, "01160", g.s.invs["01001"].location!, "01001");
     });
     r = pick(r, /^End turn/);
-    const f = feedEntry(r.state.log.find((e) => e.type === "attack")!, r.state, db, "en")!;
+    const f = feedEntry(
+      r.state.log.find((e) => e.type === "attack")!,
+      r.state,
+      db,
+      "en",
+    )!;
     expect(f.parts.filter((p) => p.t !== "text")).toEqual([
       { t: "card", id: enemy },
       { t: "inv", id: "01001" },
@@ -63,7 +89,8 @@ describe("feed entries", () => {
     for (const e of r.state.log) {
       const f = feedEntry(e, r.state, db, "en");
       if (!f) continue;
-      for (const p of f.parts) if (p.t === "text" || p.t === "strong") expect(p.s).not.toMatch(/\{\w+/);
+      for (const p of f.parts)
+        if (p.t === "text" || p.t === "strong") expect(p.s).not.toMatch(/\{\w+/);
       for (const p of f.parts) if (p.t === "amount") expect(p.n).not.toBe(0);
     }
   });
@@ -73,12 +100,19 @@ describe("feed entries", () => {
     for (const sc of ["the-gathering", "the-midnight-masks", "the-devourer-below"]) {
       let r = start(sc, ["01001", "01002", "01004"], 3);
       for (let k = 0; k < 1500 && r.state.pending; k++) {
-        r = dispatch(db, r.state, { type: "choose", inv: r.state.pending.inv, option: botChoice(db, r) });
+        r = dispatch(db, r.state, {
+          type: "choose",
+          inv: r.state.pending.inv,
+          option: botChoice(db, r),
+        });
       }
       for (const e of r.state.log) {
         if (HIDDEN.has(e.type)) continue;
         seen.add(templateKey(e));
-        for (const loc of ["en", "ru"]) expect(feedEntry(e, r.state, db, loc)?.parts.length, `${e.type} ${loc}`).toBeGreaterThan(0);
+        for (const loc of ["en", "ru"])
+          expect(feedEntry(e, r.state, db, loc)?.parts.length, `${e.type} ${loc}`).toBeGreaterThan(
+            0,
+          );
       }
     }
     const missing = [...seen].filter((k) => !db.i18n.en.ui[k]);
@@ -93,7 +127,8 @@ describe("feed entries", () => {
       for (let k = 0; k < 1500 && r.state.pending; k++) {
         const p = r.state.pending;
         keys.add(p.promptKey ?? "(none)");
-        for (const loc of ["en", "ru"]) expect(promptParts(p, r.state, db, loc), `${p.promptKey} ${loc}`).not.toBeNull();
+        for (const loc of ["en", "ru"])
+          expect(promptParts(p, r.state, db, loc), `${p.promptKey} ${loc}`).not.toBeNull();
         r = dispatch(db, r.state, { type: "choose", inv: p.inv, option: botChoice(db, r) });
       }
     }
@@ -103,7 +138,13 @@ describe("feed entries", () => {
   it("every English feed, phase and prompt template has a Russian one with the same placeholders", () => {
     const en = db.i18n.en.ui;
     const ru = db.i18n.ru.ui;
-    for (const k of Object.keys(en).filter((k) => k.startsWith("feed.") || k.startsWith("phase.") || k.startsWith("prompt.") || k.startsWith("instruction."))) {
+    for (const k of Object.keys(en).filter(
+      (k) =>
+        k.startsWith("feed.") ||
+        k.startsWith("phase.") ||
+        k.startsWith("prompt.") ||
+        k.startsWith("instruction."),
+    )) {
       expect(ru[k], k).toBeDefined();
       expect(placeholders(ru[k]), k).toEqual(placeholders(en[k]));
     }
@@ -135,8 +176,10 @@ describe("float life", () => {
 
 describe("float kinds", () => {
   it("float only the big moments", () => {
-    for (const k of ["attack", "damage", "enemyDefeated", "clues", "doom"]) expect(FLOAT_KINDS.has(k)).toBe(true);
-    for (const k of ["resource", "draw", "move", "play", "engage", "phase"]) expect(FLOAT_KINDS.has(k)).toBe(false);
+    for (const k of ["attack", "damage", "enemyDefeated", "clues", "doom"])
+      expect(FLOAT_KINDS.has(k)).toBe(true);
+    for (const k of ["resource", "draw", "move", "play", "engage", "phase"])
+      expect(FLOAT_KINDS.has(k)).toBe(false);
   });
 });
 
@@ -145,27 +188,56 @@ describe("merged live feed", () => {
   const [R, D] = game.order;
   const [r1, r2, r3] = game.invs[R].hand;
   const d1 = game.invs[D].hand[0];
-  const ev = (type: string, inv: string | null, card: string | null = null, data: Record<string, unknown> = {}): GameEvent => ({ type, text: type, inv, card, data });
+  const ev = (
+    type: string,
+    inv: string | null,
+    card: string | null = null,
+    data: Record<string, unknown> = {},
+  ): GameEvent => ({ type, text: type, inv, card, data });
   /** the live lines for a crafted log, as plain words (cards as [card]) */
   const lines = (log: GameEvent[], marks: number[]) => {
     const g = { ...game, log };
     const entries = new Map(log.map((e, i) => [i, feedEntry(e, g, db, "en")]));
     return mergeLive(g, entries, log.length, marks, db, "en").map((l) =>
-      l.entry.parts.map((p) => (p.t === "text" || p.t === "strong" ? p.s : p.t === "inv" ? p.id : p.t === "card" ? "[card]" : p.t === "amount" ? `${p.n}${p.icon}` : "")).join(""),
+      l.entry.parts
+        .map((p) =>
+          p.t === "text" || p.t === "strong"
+            ? p.s
+            : p.t === "inv"
+              ? p.id
+              : p.t === "card"
+                ? "[card]"
+                : p.t === "amount"
+                  ? `${p.n}${p.icon}`
+                  : "",
+        )
+        .join(""),
     );
   };
 
   it("upkeep with two investigators is one line", () => {
-    const log = [ev("ready", null), ev("draw", R, r1), ev("resource", R, null, { n: 1 }), ev("draw", D, d1), ev("resource", D, null, { n: 1 })];
+    const log = [
+      ev("ready", null),
+      ev("draw", R, r1),
+      ev("resource", R, null, { n: 1 }),
+      ev("draw", D, d1),
+      ev("resource", D, null, { n: 1 }),
+    ];
     expect(lines(log, [0])).toEqual(["Each investigator drew a card and took 1resource"]);
   });
 
   it("three draws by one investigator name the cards", () => {
-    expect(lines([ev("draw", R, r1), ev("draw", R, r2), ev("draw", R, r3)], [0])).toEqual([`${R} drew [card][card][card]`]);
+    expect(lines([ev("draw", R, r1), ev("draw", R, r2), ev("draw", R, r3)], [0])).toEqual([
+      `${R} drew [card][card][card]`,
+    ]);
   });
 
   it("an attack breaks the run", () => {
-    const log = [ev("draw", R, r1), ev("attack", R, null, { damage: 1, horror: 0 }), ev("draw", R, r2)];
+    const log = [
+      ev("draw", R, r1),
+      ev("attack", R, null, { damage: 1, horror: 0 }),
+      ev("draw", R, r2),
+    ];
     expect(lines(log, [0])).toHaveLength(3);
   });
 
@@ -184,14 +256,35 @@ describe("merged live feed", () => {
     const state = { ...g, log };
     const entries = new Map(log.map((e, i) => [i, feedEntry(e, state, db, "en")]));
     expect(entries.get(0)).toMatchObject({ kind: "step" });
-    expect(entries.get(0)!.parts.map((p) => (p.t === "text" ? p.s : "")).join("")).toMatch(/Upkeep/);
+    expect(
+      entries
+        .get(0)!
+        .parts.map((p) => (p.t === "text" ? p.s : ""))
+        .join(""),
+    ).toMatch(/Upkeep/);
     const lines = mergeLive(state, entries, log.length, [0], db, "en");
     expect(lines.map((l) => l.entry.kind)).toEqual(["merged"]);
     expect(FLOAT_KINDS.has("step")).toBe(false);
   });
   it("caption: the latest step of the phase at or before the playing event", () => {
-    const ev = (type: string, step?: string): GameEvent => ({ type, text: "", data: step ? { step } : {} });
-    const log = [ev("step", "upkeep"), ev("draw"), ev("phase"), ev("step", "hunters"), ev("enemyMove"), ev("step", "attacks"), ev("attack"), ev("damage"), ev("phase"), ev("turn"), ev("attack")];
+    const ev = (type: string, step?: string): GameEvent => ({
+      type,
+      text: "",
+      data: step ? { step } : {},
+    });
+    const log = [
+      ev("step", "upkeep"),
+      ev("draw"),
+      ev("phase"),
+      ev("step", "hunters"),
+      ev("enemyMove"),
+      ev("step", "attacks"),
+      ev("attack"),
+      ev("damage"),
+      ev("phase"),
+      ev("turn"),
+      ev("attack"),
+    ];
     // the hunter's move plays: "Hunters move", even though the feed already shows up to the attack
     expect(captionIndex(log, { logIndex: 4 }, [{ logIndex: 6 }], 6, false, "turn")).toBe(3);
     // the attack plays (also after a reaction choice inside the step)
@@ -207,7 +300,13 @@ describe("merged live feed", () => {
 });
 
 describe("captionStageBusy", () => {
-  const ev = (type: string, step?: string): GameEvent => ({ type, text: "", inv: null, card: null, data: step ? { step } : {} });
+  const ev = (type: string, step?: string): GameEvent => ({
+    type,
+    text: "",
+    inv: null,
+    card: null,
+    data: step ? { step } : {},
+  });
   it("the skill-test screen's hold doesn't keep the caption; anything else on the stage does", () => {
     expect(captionStageBusy([])).toBe(false);
     expect(captionStageBusy(["test:1"])).toBe(false);
@@ -229,7 +328,12 @@ describe("encounter set icons", () => {
   /** play with the bot until an encounter card has been drawn */
   const untilEncounter = () => {
     let r = skipMulligans(start("the-gathering", ["01001"], 1));
-    for (let k = 0; k < 200 && !r.state.log.some((e) => e.type === "encounter"); k++) r = dispatch(db, r.state, { type: "choose", inv: r.state.pending!.inv, option: botChoice(db, r) });
+    for (let k = 0; k < 200 && !r.state.log.some((e) => e.type === "encounter"); k++)
+      r = dispatch(db, r.state, {
+        type: "choose",
+        inv: r.state.pending!.inv,
+        option: botChoice(db, r),
+      });
     return r;
   };
 
@@ -247,6 +351,8 @@ describe("encounter set icons", () => {
   it("entries that don't draw or reveal an encounter card have no set icon", () => {
     let r = skipMulligans(start("the-gathering", ["01001"], 1));
     r = pick(r, /^Gain 1 resource/);
-    expect(feedEntry(last(r.state.log, "resource"), r.state, db, "en")!.parts.some((p) => p.t === "set")).toBe(false);
+    expect(
+      feedEntry(last(r.state.log, "resource"), r.state, db, "en")!.parts.some((p) => p.t === "set"),
+    ).toBe(false);
   });
 });

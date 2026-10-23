@@ -14,12 +14,24 @@ export function deckCodes(deckId: string): string[] {
 }
 
 export const DECK_BY_INV: Record<string, string> = {
-  "01001": "roland-starter", "01002": "daisy-starter", "01003": "skids-starter", "01004": "agnes-starter", "01005": "wendy-starter",
+  "01001": "roland-starter",
+  "01002": "daisy-starter",
+  "01003": "skids-starter",
+  "01004": "agnes-starter",
+  "01005": "wendy-starter",
 };
 
-export function setup(scenarioId: string, invs: InvId[], seed = 1, extra: Partial<GameSetup> = {}): GameSetup {
+export function setup(
+  scenarioId: string,
+  invs: InvId[],
+  seed = 1,
+  extra: Partial<GameSetup> = {},
+): GameSetup {
   return {
-    campaignId: "night-of-the-zealot", scenarioId, difficulty: "standard", seed,
+    campaignId: "night-of-the-zealot",
+    scenarioId,
+    difficulty: "standard",
+    seed,
     investigators: invs.map((code) => ({ code, deck: deckCodes(DECK_BY_INV[code]) })),
     ...extra,
   };
@@ -33,8 +45,13 @@ export function start(scenarioId: string, invs: InvId[], seed = 1, extra: Partia
 export function pick(r: Result, match: RegExp | string): Result {
   const p = r.state.pending;
   if (!p) throw new Error("no pending choice");
-  const o = p.options.find((x) => (typeof match === "string" ? x.id === match || x.label === match : match.test(x.label)));
-  if (!o) throw new Error(`no option ${match} in [${p.options.map((x) => x.label).join(" | ")}] (${p.prompt})`);
+  const o = p.options.find((x) =>
+    typeof match === "string" ? x.id === match || x.label === match : match.test(x.label),
+  );
+  if (!o)
+    throw new Error(
+      `no option ${match} in [${p.options.map((x) => x.label).join(" | ")}] (${p.prompt})`,
+    );
   const next = dispatch(db, r.state, { type: "choose", inv: p.inv, option: o.id });
   if (next.error) throw new Error(next.error);
   return next;

@@ -8,11 +8,13 @@
 ## Goals / Non-Goals
 
 **Goals:**
+
 - One component owns the question and its confirm buttons.
 - Instructions are data (strings per prompt key), not code.
 - The choice spotlight reuses the event spotlight end to end.
 
 **Non-Goals:**
+
 - Rewriting the engine's prompt sentences or keys.
 - Captions for automated steps (phase-director). The bar leaves the slot empty while events play.
 - Coach marks and tips (first-game-tutorial). The bar's instruction is the same every time; tips add the one-time explanation.
@@ -20,19 +22,23 @@
 ## Decisions
 
 ### 1. Primary options move into the bar through `optionHome`
+
 `optionHome` returns `"bar"` for options that `railItem` marks `primary`. `ActionRail` keeps `rail` homes only, so it shows Draw, Resource and Investigate. `InstructionBar` renders the `bar` options with their existing `railItem` labels and symbols. The rail's `busy` dimming applies to the bar's buttons too.
 
-*Alternative:* End turn stays on the rail as a fixed spot, like a CCG's end-turn button. Rejected for consistency: one place to confirm, and the rail becomes "things to do" only. If the mobile layout later wants End turn by the thumb, the bar moves, not the rule.
+_Alternative:_ End turn stays on the rail as a fixed spot, like a CCG's end-turn button. Rejected for consistency: one place to confirm, and the rail becomes "things to do" only. If the mobile layout later wants End turn by the thumb, the bar moves, not the rule.
 
 ### 2. Instructions are `instruction.<promptKey>` strings
+
 `instructionParts(p, game, db, locale)` in `src/ui/instruction.ts` looks up `instruction.<promptKey>` with the same `promptVars` substitution and sentence parts as `promptParts`, falling back to `promptParts` and then to the engine's sentence. Each key in `prompt.*` gets an `instruction.*` sibling in `en` and `ru`; `check:content` verifies both locales have the same keys. Tested in `instruction.test.ts` for substitution and the two fallbacks.
 
 ### 3. Choice spotlight is a second spotlight source
+
 `spotlightOfChoice(game, viewer)` returns `{ cards, invs } | null`: null for `turn`, `mulligan`, `phase` and deck picks; otherwise the option cards (map cards, strip cards, hand cards) and the option investigators. `view.spotlight` is set from the event spotlight while `playing`, else from the choice spotlight once the stage is empty and no event is queued. `DimPlane` and `CardMesh` need no change. HTML cards get `dimmed` when a spotlight is on and they aren't in it: `MiniCard` (strip, act, agenda, piles), the fan's cards, `StatBar`'s portrait and the `InvToken`s. One `useDimmed(id | inv)` hook reads the spotlight.
 
-*Why the same `spotlight` field:* the dim plane's easing and the lift already work; two fields would mean two dims.
+_Why the same `spotlight` field:_ the dim plane's easing and the lift already work; two fields would mean two dims.
 
 ### 4. The bar and the caption share one slot
+
 `InstructionBar` renders in the centre column where `PromptBanner` was. It renders nothing while `busy` (events playing or queued). `StepCaption` from phase-director renders in the same column and is empty when a choice is pending, so they never show together.
 
 ## Risks / Trade-offs

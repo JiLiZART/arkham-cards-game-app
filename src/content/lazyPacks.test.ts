@@ -4,7 +4,17 @@ import { cardText } from "./i18n";
 import { addCardText, addPack, buildContent, cardsOf, packLoaded, packOfCode } from "./loader";
 import { loadContentFromDisk } from "./node";
 
-const card = (code: string, extra: object = {}) => ({ code, name: `Card ${code}`, type: "asset", faction: "neutral", pack: "x", quantity: 1, traits: [], text: "", ...extra });
+const card = (code: string, extra: object = {}) => ({
+  code,
+  name: `Card ${code}`,
+  type: "asset",
+  faction: "neutral",
+  pack: "x",
+  quantity: 1,
+  traits: [],
+  text: "",
+  ...extra,
+});
 
 describe("packs in the content database", () => {
   it("the browser's first load has the core pack, and the other packs known but not loaded", () => {
@@ -25,12 +35,19 @@ describe("packs in the content database", () => {
     expect(await loadPack("dwl")).toEqual([]);
     expect(Object.keys(content.cards)).toHaveLength(n);
     // its encounter sets joined the database too
-    expect(Object.keys(content.encounterSets).some((s) => content.encounterSets[s].some((c) => c.startsWith("021")))).toBe(true);
+    expect(
+      Object.keys(content.encounterSets).some((s) =>
+        content.encounterSets[s].some((c) => c.startsWith("021")),
+      ),
+    ).toBe(true);
   });
 
   it("a pack's Russian text comes with it: Zoey's name and text are the snapshot's, English until then and for anything untranslated", async () => {
     await loadPack("dwl");
-    expect(cardText(content, "02001", "ru")).toMatchObject({ name: "Зои Самарас", subname: "Повар" });
+    expect(cardText(content, "02001", "ru")).toMatchObject({
+      name: "Зои Самарас",
+      subname: "Повар",
+    });
     expect(cardText(content, "02001", "ru").text).toMatch(/Получите 1 ресурс/);
     expect(cardText(content, "02001", "en").name).toBe("Zoey Samaras");
     // the core pack keeps its layers: print-matched text over imported text
@@ -39,14 +56,32 @@ describe("packs in the content database", () => {
 
   it("text loaded late never overwrites a higher layer already there (print-matched or hand-written)", () => {
     const db = buildContent({}, {}, []).db;
-    addCardText(db, "ru", "/content/i18n/ru/cards.print.json", { "1": { name: "Напечатано" } }, 1, false);
-    addCardText(db, "ru", "/content/i18n/ru/packs/x.generated.json", { "1": { name: "Импорт", text: "Текст" }, "2": { name: "Два" } }, 0, true);
+    addCardText(
+      db,
+      "ru",
+      "/content/i18n/ru/cards.print.json",
+      { "1": { name: "Напечатано" } },
+      1,
+      false,
+    );
+    addCardText(
+      db,
+      "ru",
+      "/content/i18n/ru/packs/x.generated.json",
+      { "1": { name: "Импорт", text: "Текст" }, "2": { name: "Два" } },
+      0,
+      true,
+    );
     expect(db.i18n.ru.cards["1"]).toEqual({ name: "Напечатано", text: "Текст" });
     expect(db.i18n.ru.cards["2"]).toEqual({ name: "Два" });
   });
 
   it("the browser's content has no errors although the generated campaigns' scenarios and cards are not loaded yet", () => {
-    expect(content.campaigns["the-dunwich-legacy"]).toMatchObject({ generated: true, packs: ["core", "dwl"], card: "02041" });
+    expect(content.campaigns["the-dunwich-legacy"]).toMatchObject({
+      generated: true,
+      packs: ["core", "dwl"],
+      card: "02041",
+    });
     expect(content.scenarios["extracurricular-activity"]).toBeUndefined();
     expect(campaignLoaded("the-dunwich-legacy")).toBe(false);
     expect(campaignLoaded("night-of-the-zealot")).toBe(true);
@@ -62,18 +97,46 @@ describe("packs in the content database", () => {
   });
 
   it("a scenario's references are checked once its campaign's packs are loaded", () => {
-    const scenario = { id: "s", name: "S", card: "9", encounterSets: [], acts: ["8"], agendas: ["7"], setup: [], tokens: {}, resolutions: { none: { title: "", text: "", effects: [] } }, connections: [] };
+    const scenario = {
+      id: "s",
+      name: "S",
+      card: "9",
+      encounterSets: [],
+      acts: ["8"],
+      agendas: ["7"],
+      setup: [],
+      tokens: {},
+      resolutions: { none: { title: "", text: "", effects: [] } },
+      connections: [],
+    };
     const files = {
-      "/content/campaigns/c/campaign.json": { id: "c", name: "C", scenarios: ["s"], chaosBags: { standard: ["0"] }, packs: ["x"], generated: true },
+      "/content/campaigns/c/campaign.json": {
+        id: "c",
+        name: "C",
+        scenarios: ["s"],
+        chaosBags: { standard: ["0"] },
+        packs: ["x"],
+        generated: true,
+      },
       "/content/campaigns/c/scenarios/s.json": scenario,
     };
     expect(buildContent(files, {}, ["x"]).errors).toEqual([]);
-    const loaded = buildContent({ ...files, "/content/packs/x/cards.generated.json": [card("1", { pack: "x" })] }, {}, []);
-    expect(loaded.errors.map((e) => e.message)).toEqual(expect.arrayContaining(["missing card 9", "missing card 8", "missing card 7"]));
+    const loaded = buildContent(
+      { ...files, "/content/packs/x/cards.generated.json": [card("1", { pack: "x" })] },
+      {},
+      [],
+    );
+    expect(loaded.errors.map((e) => e.message)).toEqual(
+      expect.arrayContaining(["missing card 9", "missing card 8", "missing card 7"]),
+    );
   });
 
   it("the pack of a card is known from its code alone", () => {
-    const index: [string, string, string][] = [["01000", "01182", "core"], ["02001", "02333", "dwl"], ["09001", "09770b", "tsk"]];
+    const index: [string, string, string][] = [
+      ["01000", "01182", "core"],
+      ["02001", "02333", "dwl"],
+      ["09001", "09770b", "tsk"],
+    ];
     expect(packOfCode(index, "01006")).toBe("core");
     expect(packOfCode(index, "02001")).toBe("dwl");
     expect(packOfCode(index, "09770b")).toBe("tsk");

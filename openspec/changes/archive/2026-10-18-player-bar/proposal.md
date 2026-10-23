@@ -14,9 +14,11 @@ Out of scope: the phone layout of the bar (phone-landscape keeps it as the one b
 ## Capabilities
 
 ### New Capabilities
+
 <!-- none -->
 
 ### Modified Capabilities
+
 - `game-table-ui`: hot-seat play and the investigators' display become the player bar with view switching and the "can act" signal; the stat bar and the right-edge tokens are removed.
 
 ## Impact

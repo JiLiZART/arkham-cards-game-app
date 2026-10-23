@@ -45,7 +45,7 @@ In-force ADRs: 0001–0014. ADR-0014 (player windows are engine windows) is wher
 
 ## Decisions
 
-1. **Failed attack on another's enemy** (`kindResultStage`, failure branch): when `t.kind === "fight"`, the target is in play, not massive, and `engagedWith` is an investigator other than `t.inv`, push `AssignDamage { inv: other, damage: enemyStat(damage), horror: 0, direct: false, source: enemy, enemy }`, before the retaliate check. *Why:* the grimoire deals "the damage of the attack"; horror is not part of a missed blow. No attack window opens: it is not an enemy attack, and Flesh Ward must not answer it.
+1. **Failed attack on another's enemy** (`kindResultStage`, failure branch): when `t.kind === "fight"`, the target is in play, not massive, and `engagedWith` is an investigator other than `t.inv`, push `AssignDamage { inv: other, damage: enemyStat(damage), horror: 0, direct: false, source: enemy, enemy }`, before the retaliate check. _Why:_ the grimoire deals "the damage of the attack"; horror is not part of a missed blow. No attack window opens: it is not an enemy attack, and Flesh Ward must not answer it.
 
 2. **Aloof**: one predicate `attackable(g, enemy) = !aloof || engagedWith` used by `legalTurnActions`' Fight option and by the `fight` effect's target list (`chooseAtLocation`). Engage stays offered.
 

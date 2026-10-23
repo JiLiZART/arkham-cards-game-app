@@ -1,6 +1,25 @@
-import type { Ability, CardDef, CardFilter, Condition, Modifier, ModStat, Skill } from "../content/schema";
 import type {
-  CardInst, ChoiceOption, ContentDb, EffCtx, GameEvent, GameState, InstId, InvId, InvState, PendingChoice, Step, Zone,
+  Ability,
+  CardDef,
+  CardFilter,
+  Condition,
+  Modifier,
+  ModStat,
+  Skill,
+} from "../content/schema";
+import type {
+  CardInst,
+  ChoiceOption,
+  ContentDb,
+  EffCtx,
+  GameEvent,
+  GameState,
+  InstId,
+  InvId,
+  InvState,
+  PendingChoice,
+  Step,
+  Zone,
 } from "./types";
 
 /** engine context passed to every rule: mutable (immer draft) state + static content */
@@ -32,7 +51,8 @@ export const inv = (g: G, id: InvId): InvState => {
 export const name = (g: G, id: InstId) => def(g, id).name;
 export const invName = (g: G, id: InvId) => g.s.invs[id]?.name ?? id;
 
-export const activeInvs = (g: G): InvId[] => g.s.order.filter((i) => g.s.invs[i].status === "playing");
+export const activeInvs = (g: G): InvId[] =>
+  g.s.order.filter((i) => g.s.invs[i].status === "playing");
 export const playerCount = (g: G) => g.s.order.length; // per-investigator values use starting count
 
 // ---------- events ----------
@@ -45,7 +65,10 @@ export function emit(g: G, type: string, text: string, extra: Partial<GameEvent>
 
 /** marks the start of an automated step of a phase in the log (the UI's captions); never a choice */
 export function logStep(g: G, step: string, who?: string) {
-  emit(g, "step", who ? `${invName(g, who)}: ${step}` : step, { ...(who ? { inv: who } : {}), data: { step, phase: g.s.phase } });
+  emit(g, "step", who ? `${invName(g, who)}: ${step}` : step, {
+    ...(who ? { inv: who } : {}),
+    data: { step, phase: g.s.phase },
+  });
 }
 
 // ---------- queue ----------
@@ -60,13 +83,32 @@ export function push(g: G, ...steps: Step[]) {
  * With `auto`, a single option is chosen without asking.
  */
 export function ask<T = unknown>(
-  g: G, step: Step, invId: InvId, kind: PendingChoice["kind"], prompt: string, options: ChoiceOption[],
-  opts: { auto?: boolean; key?: string; vars?: Record<string, string | number | null>; shown?: InstId[] } = {},
+  g: G,
+  step: Step,
+  invId: InvId,
+  kind: PendingChoice["kind"],
+  prompt: string,
+  options: ChoiceOption[],
+  opts: {
+    auto?: boolean;
+    key?: string;
+    vars?: Record<string, string | number | null>;
+    shown?: InstId[];
+  } = {},
 ): T | undefined {
   if (step.choice !== undefined) return step.choice as T;
   if (options.length === 0) throw new Error(`no options for choice: ${prompt}`);
   if (opts.auto && options.length === 1) return options[0].value as T;
-  g.s.pending = { seq: ++g.s.seq, inv: invId, kind, prompt, ...(opts.key ? { promptKey: opts.key, promptVars: opts.vars ?? {} } : {}), options, ...(opts.shown?.length ? { shown: opts.shown } : {}), step: { ...step } };
+  g.s.pending = {
+    seq: ++g.s.seq,
+    inv: invId,
+    kind,
+    prompt,
+    ...(opts.key ? { promptKey: opts.key, promptVars: opts.vars ?? {} } : {}),
+    options,
+    ...(opts.shown?.length ? { shown: opts.shown } : {}),
+    step: { ...step },
+  };
   return undefined;
 }
 
@@ -75,10 +117,21 @@ export function ask<T = unknown>(
  * `draw` choice with the one option "draw" (a recorded choice, so replays stay exact). True when the draw may go ahead:
  * the game doesn't ask for taps, it is setup (the opening hands) or the scenario has ended, or the tap has come.
  */
-export function tapToDraw(g: G, step: Step, invId: InvId, deck: "player" | "encounter", n: number): boolean {
+export function tapToDraw(
+  g: G,
+  step: Step,
+  invId: InvId,
+  deck: "player" | "encounter",
+  n: number,
+): boolean {
   if (!g.s.tapDecks || g.s.phase === "setup" || g.s.phase === "ended") return true;
   const label = deck === "player" ? "Tap your deck to draw" : "Tap the encounter deck to draw";
-  return ask(g, step, invId, "draw", label, [{ id: "draw", label: "Draw", value: `draw:${deck}` }], { key: `tapDeck.${deck}${n > 1 ? ".many" : ""}`, vars: { deck, n } }) !== undefined;
+  return (
+    ask(g, step, invId, "draw", label, [{ id: "draw", label: "Draw", value: `draw:${deck}` }], {
+      key: `tapDeck.${deck}${n > 1 ? ".many" : ""}`,
+      vars: { deck, n },
+    }) !== undefined
+  );
 }
 
 export function nextId(g: G) {
@@ -90,8 +143,22 @@ export function createCard(g: G, code: string, zone: Zone, owner: InvId | null =
   if (!g.db.cards[code]) throw new Error(`unknown card ${code}`);
   const id = nextId(g);
   g.s.cards[id] = {
-    id, code, owner, controller: owner, zone, exhausted: false, revealed: false,
-    damage: 0, horror: 0, clues: 0, doom: 0, uses: 0, resources: 0, location: null, engagedWith: null, attachedTo: null,
+    id,
+    code,
+    owner,
+    controller: owner,
+    zone,
+    exhausted: false,
+    revealed: false,
+    damage: 0,
+    horror: 0,
+    clues: 0,
+    doom: 0,
+    uses: 0,
+    resources: 0,
+    location: null,
+    engagedWith: null,
+    attachedTo: null,
   };
   if (zone === "hand" && owner) inv(g, owner).hand.push(id);
   if (zone === "deck" && owner) inv(g, owner).deck.push(id);
@@ -118,24 +185,51 @@ function removeFromPiles(g: G, id: InstId) {
   if (s.agenda === id) s.agenda = null;
 }
 
-const IN_PLAY: Zone[] = ["play", "threat", "location", "enemy", "attached", "act", "agenda", "investigator"];
+const IN_PLAY: Zone[] = [
+  "play",
+  "threat",
+  "location",
+  "enemy",
+  "attached",
+  "act",
+  "agenda",
+  "investigator",
+];
 export const isInPlay = (c: CardInst) => IN_PLAY.includes(c.zone);
 
 /** move a card instance to a zone; resets tokens when leaving play */
-export function moveCard(g: G, id: InstId, zone: Zone, opts: { inv?: InvId | null; top?: boolean; location?: InstId | null } = {}) {
+export function moveCard(
+  g: G,
+  id: InstId,
+  zone: Zone,
+  opts: { inv?: InvId | null; top?: boolean; location?: InstId | null } = {},
+) {
   const c = card(g, id);
   const leavingPlay = isInPlay(c) && !IN_PLAY.includes(zone);
   removeFromPiles(g, id);
   if (leavingPlay) {
     // discard attachments
     for (const other of Object.values(g.s.cards)) {
-      if (other.attachedTo === id || (other.zone === "attached" && other.location === id && c.zone === "location")) {
+      if (
+        other.attachedTo === id ||
+        (other.zone === "attached" && other.location === id && c.zone === "location")
+      ) {
         moveCard(g, other.id, other.owner ? "discard" : "encounterDiscard", { inv: other.owner });
       }
     }
     // a card that re-enters play is a new copy: its "limit per period" starts unused (Grimoire, Limits and Maximums)
     for (const k of Object.keys(g.s.usage)) if (k.startsWith(`${id}:`)) delete g.s.usage[k];
-    Object.assign(c, { exhausted: false, damage: 0, horror: 0, clues: 0, doom: 0, uses: 0, resources: 0, engagedWith: null, attachedTo: null });
+    Object.assign(c, {
+      exhausted: false,
+      damage: 0,
+      horror: 0,
+      clues: 0,
+      doom: 0,
+      uses: 0,
+      resources: 0,
+      engagedWith: null,
+      attachedTo: null,
+    });
     if (c.owner) c.controller = c.owner;
   }
   c.zone = zone;
@@ -179,25 +273,43 @@ export function discard(g: G, id: InstId) {
 }
 
 // ---------- queries ----------
-export const cardsIn = (g: G, zone: Zone) => Object.values(g.s.cards).filter((c) => c.zone === zone);
+export const cardsIn = (g: G, zone: Zone) =>
+  Object.values(g.s.cards).filter((c) => c.zone === zone);
 export const locations = (g: G) => cardsIn(g, "location");
 export const enemies = (g: G) => cardsIn(g, "enemy");
 export const enemiesAt = (g: G, loc: InstId | null) => enemies(g).filter((e) => e.location === loc);
-export const engagedWith = (g: G, i: InvId) => enemies(g).filter((e) => e.engagedWith === i || (isMassive(g, e.id) && e.location === g.s.invs[i]?.location && !e.exhausted));
-export const invsAt = (g: G, loc: InstId | null) => activeInvs(g).filter((i) => g.s.invs[i].location === loc);
+export const engagedWith = (g: G, i: InvId) =>
+  enemies(g).filter(
+    (e) =>
+      e.engagedWith === i ||
+      (isMassive(g, e.id) && e.location === g.s.invs[i]?.location && !e.exhausted),
+  );
+export const invsAt = (g: G, loc: InstId | null) =>
+  activeInvs(g).filter((i) => g.s.invs[i].location === loc);
 export const findByCode = (g: G, code: string, zones?: Zone[]) =>
   Object.values(g.s.cards).find((c) => c.code === code && (!zones || zones.includes(c.zone)));
 export const locationByCode = (g: G, code: string) => findByCode(g, code, ["location"]);
-export const locationByName = (g: G, nm: string) => locations(g).find((l) => def(g, l.id).name === nm);
+export const locationByName = (g: G, nm: string) =>
+  locations(g).find((l) => def(g, l.id).name === nm);
 export const hasTrait = (g: G, id: InstId, trait: string) => def(g, id).traits.includes(trait);
 export const isElite = (g: G, id: InstId) => hasTrait(g, id, "Elite");
-export const hasKeyword = (g: G, id: InstId, kw: CardDef["keywords"][number]) => def(g, id).keywords.includes(kw);
+export const hasKeyword = (g: G, id: InstId, kw: CardDef["keywords"][number]) =>
+  def(g, id).keywords.includes(kw);
 /** an aloof enemy can only be attacked while it is engaged with an investigator */
-export const attackable = (g: G, id: InstId) => !hasKeyword(g, id, "aloof") || !!g.s.cards[id]?.engagedWith;
+export const attackable = (g: G, id: InstId) =>
+  !hasKeyword(g, id, "aloof") || !!g.s.cards[id]?.engagedWith;
 /** a unique card cannot be played or put into play while a card with its title is in play (Grimoire, Unique) */
 export function uniqueInPlay(g: G, id: InstId): boolean {
   const d = def(g, id);
-  return !!d.unique && Object.values(g.s.cards).some((c) => c.id !== id && ["play", "threat", "enemy", "attached"].includes(c.zone) && g.db.cards[c.code].name === d.name);
+  return (
+    !!d.unique &&
+    Object.values(g.s.cards).some(
+      (c) =>
+        c.id !== id &&
+        ["play", "threat", "enemy", "attached"].includes(c.zone) &&
+        g.db.cards[c.code].name === d.name,
+    )
+  );
 }
 /** clues the act asks for, as a group (Infinity when it has none to spend) */
 export function actClueCost(g: G): number {
@@ -208,17 +320,24 @@ export function actClueCost(g: G): number {
 }
 /** clues the group may spend (Masked Hunter blocks engaged investigators) */
 export function spendableGroupClues(g: G) {
-  return activeInvs(g).filter((x) => !hasFlag(g, x, "cannotSpendClues")).reduce((n, x) => n + inv(g, x).clues, 0);
+  return activeInvs(g)
+    .filter((x) => !hasFlag(g, x, "cannotSpendClues"))
+    .reduce((n, x) => n + inv(g, x).clues, 0);
 }
 /** the group can advance the act by spending clues, in any player window (Grimoire, Act Deck and Agenda Deck) */
-export const canAdvanceAct = (g: G) => !!g.s.act && (def(g, g.s.act).actAdvance ?? "turn") === "turn" && spendableGroupClues(g) >= actClueCost(g);
+export const canAdvanceAct = (g: G) =>
+  !!g.s.act &&
+  (def(g, g.s.act).actAdvance ?? "turn") === "turn" &&
+  spendableGroupClues(g) >= actClueCost(g);
 export const isMassive = (g: G, id: InstId) => hasKeyword(g, id, "massive");
 export const controlled = (g: G, i: InvId) => cardsIn(g, "play").filter((c) => c.controller === i);
-export const threatArea = (g: G, i: InvId) => cardsIn(g, "threat").filter((c) => c.controller === i);
+export const threatArea = (g: G, i: InvId) =>
+  cardsIn(g, "threat").filter((c) => c.controller === i);
 
 export function matchesFilter(g: G, code: string, f: CardFilter): boolean {
   const d = defOf(g, code);
-  const arr = <T,>(v: T | T[] | undefined) => (v === undefined ? undefined : Array.isArray(v) ? v : [v]);
+  const arr = <T>(v: T | T[] | undefined) =>
+    v === undefined ? undefined : Array.isArray(v) ? v : [v];
   if (f.type && !arr(f.type)!.includes(d.type)) return false;
   if (f.trait && !arr(f.trait)!.some((t) => d.traits.includes(t))) return false;
   if (f.code && !arr(f.code)!.includes(code)) return false;
@@ -240,11 +359,14 @@ export function connections(g: G, loc: InstId): InstId[] {
     if (b === code) codes.add(a);
   }
   for (const [a, b] of scen.oneWay ?? []) if (a === code) codes.add(b);
-  return locations(g).filter((l) => codes.has(l.code) && l.id !== loc).map((l) => l.id);
+  return locations(g)
+    .filter((l) => codes.has(l.code) && l.id !== loc)
+    .map((l) => l.id);
 }
 
 /** connections() for read-only callers (the UI) that hold a state rather than an engine context */
-export const connectionsOf = (db: ContentDb, s: GameState, loc: InstId): InstId[] => connections({ s, db, events: [] }, loc);
+export const connectionsOf = (db: ContentDb, s: GameState, loc: InstId): InstId[] =>
+  connections({ s, db, events: [] }, loc);
 
 /** BFS distances from a location */
 export function distances(g: G, from: InstId): Map<InstId, number> {
@@ -286,7 +408,16 @@ export interface AppliedMod {
   source: InstId | null;
 }
 
-const MOD_ZONES: Zone[] = ["play", "threat", "attached", "location", "enemy", "act", "agenda", "investigator"];
+const MOD_ZONES: Zone[] = [
+  "play",
+  "threat",
+  "attached",
+  "location",
+  "enemy",
+  "act",
+  "agenda",
+  "investigator",
+];
 
 /** card instances whose text box is blank right now */
 export function blankedCards(g: G): Set<InstId> {
@@ -302,7 +433,11 @@ export function blankedCards(g: G): Set<InstId> {
 
 export const isBlank = (g: G, id: InstId, blanked = blankedCards(g)) => blanked.has(id);
 
-export function abilitiesOf(g: G, id: InstId, blanked?: Set<InstId>): (Ability & { run?: string })[] {
+export function abilitiesOf(
+  g: G,
+  id: InstId,
+  blanked?: Set<InstId>,
+): (Ability & { run?: string })[] {
   if (isBlank(g, id, blanked)) return [];
   const c = card(g, id);
   const script = g.db.scripts[c.code];
@@ -318,11 +453,14 @@ export function allMods(g: G): AppliedMod[] {
     const abilities = c.zone === "location" && !c.revealed ? [] : abilitiesOf(g, c.id, blanked);
     for (const a of abilities) {
       if (a.kind !== "constant" || !a.modifiers) continue;
-      if (a.condition && !checkCondition(g, a.condition, { source: c.id, you: c.controller })) continue;
-      for (const mod of a.modifiers) for (const target of scopeTargets(g, c, mod)) out.push({ target, mod, source: c.id });
+      if (a.condition && !checkCondition(g, a.condition, { source: c.id, you: c.controller }))
+        continue;
+      for (const mod of a.modifiers)
+        for (const target of scopeTargets(g, c, mod)) out.push({ target, mod, source: c.id });
     }
     const script = g.db.scripts[c.code];
-    if (script?.modifiers && !blanked.has(c.id)) for (const m of script.modifiers(g, c.id)) out.push({ ...m, source: c.id });
+    if (script?.modifiers && !blanked.has(c.id))
+      for (const m of script.modifiers(g, c.id)) out.push({ ...m, source: c.id });
   }
   for (const t of g.s.tempMods) out.push({ target: t.target, mod: t.mod, source: t.source });
   return out;
@@ -333,7 +471,11 @@ function scopeTargets(g: G, c: CardInst, mod: Modifier): string[] {
     case "controller":
       return c.controller ? [c.controller] : [];
     case "investigatorsAtLocation": {
-      const loc = c.controller ? g.s.invs[c.controller]?.location : c.zone === "location" ? c.id : null;
+      const loc = c.controller
+        ? g.s.invs[c.controller]?.location
+        : c.zone === "location"
+          ? c.id
+          : null;
       return invsAt(g, loc ?? null);
     }
     case "attachedLocation":
@@ -379,20 +521,36 @@ export function baseSkill(g: G, i: InvId, skill: Skill): number {
 export function skillValue(g: G, i: InvId, skill: Skill): number {
   const mods = allMods(g);
   let v = baseSkill(g, i, skill) + modSum(g, i, skill, mods);
-  if ((skill === "combat" || skill === "agility") && hasFlag(g, i, "intellectForCombatAndAgility", mods)) {
+  if (
+    (skill === "combat" || skill === "agility") &&
+    hasFlag(g, i, "intellectForCombatAndAgility", mods)
+  ) {
     v = Math.max(v, baseSkill(g, i, "intellect") + modSum(g, i, "intellect", mods));
   }
   return Math.max(0, v);
 }
 
-export const maxHealth = (g: G, i: InvId) => (def(g, inv(g, i).cardId).health ?? 0) + modSum(g, i, "health");
-export const maxSanity = (g: G, i: InvId) => (def(g, inv(g, i).cardId).sanity ?? 0) + modSum(g, i, "sanity");
+export const maxHealth = (g: G, i: InvId) =>
+  (def(g, inv(g, i).cardId).health ?? 0) + modSum(g, i, "health");
+export const maxSanity = (g: G, i: InvId) =>
+  (def(g, inv(g, i).cardId).sanity ?? 0) + modSum(g, i, "sanity");
 export const remainingHealth = (g: G, i: InvId) => maxHealth(g, i) - inv(g, i).damage;
 export const remainingSanity = (g: G, i: InvId) => maxSanity(g, i) - inv(g, i).horror;
 
-export function enemyStat(g: G, id: InstId, stat: "fight" | "evade" | "damage" | "horror" | "health"): number {
+export function enemyStat(
+  g: G,
+  id: InstId,
+  stat: "fight" | "evade" | "damage" | "horror" | "health",
+): number {
   const e = def(g, id).enemy!;
-  const modStat: ModStat = stat === "health" ? "enemyHealth" : stat === "damage" ? "enemyDamage" : stat === "horror" ? "enemyHorror" : stat;
+  const modStat: ModStat =
+    stat === "health"
+      ? "enemyHealth"
+      : stat === "damage"
+        ? "enemyDamage"
+        : stat === "horror"
+          ? "enemyHorror"
+          : stat;
   let base = e[stat];
   if (base === null) return Infinity; // no printed value: can't be fought, evaded or defeated by damage
   if (stat === "health" && e.healthPerInvestigator) base *= playerCount(g);
@@ -405,7 +563,13 @@ export function shroud(g: G, loc: InstId): number {
   return Math.max(0, (base ?? 0) + modSum(g, loc, "shroud"));
 }
 
-export function addTempMod(g: G, mod: Modifier, target: string, until: "test" | "turn" | "phase" | "round", source: InstId | null = null) {
+export function addTempMod(
+  g: G,
+  mod: Modifier,
+  target: string,
+  until: "test" | "turn" | "phase" | "round",
+  source: InstId | null = null,
+) {
   g.s.tempMods.push({ id: g.s.seq++, mod, target, until, source });
 }
 export function expireMods(g: G, until: "test" | "turn" | "phase" | "round") {
@@ -416,7 +580,7 @@ export function expireMods(g: G, until: "test" | "turn" | "phase" | "round") {
 
 export function checkCondition(g: G, c: Condition, ctx: EffCtx): boolean {
   const you = ctx.you ?? null;
-  const yourLoc = you ? g.s.invs[you]?.location ?? null : null;
+  const yourLoc = you ? (g.s.invs[you]?.location ?? null) : null;
   if ("all" in c) return c.all.every((x) => checkCondition(g, x, ctx));
   if ("any" in c) return c.any.some((x) => checkCondition(g, x, ctx));
   if ("not" in c) return !checkCondition(g, c.not, ctx);
@@ -433,10 +597,15 @@ export function checkCondition(g: G, c: Condition, ctx: EffCtx): boolean {
     const f = c.enemyAtYourLocation;
     return enemiesAt(g, yourLoc).some((e) => f === true || matchesFilter(g, e.code, f));
   }
-  if ("enemyInPlay" in c) return Object.values(g.s.cards).some((x) => x.zone === "enemy" && matchesFilter(g, x.code, c.enemyInPlay));
+  if ("enemyInPlay" in c)
+    return Object.values(g.s.cards).some(
+      (x) => x.zone === "enemy" && matchesFilter(g, x.code, c.enemyInPlay),
+    );
   if ("exhaustedEnemyAtYourLocation" in c) return enemiesAt(g, yourLoc).some((e) => e.exhausted);
-  if ("onlyEngagedEnemy" in c) return !!you && engagedWith(g, you).length === 1 && engagedWith(g, you)[0].id === ctx.enemy;
-  if ("eventEnemy" in c) return !!ctx.enemy && matchesFilter(g, card(g, ctx.enemy).code, c.eventEnemy);
+  if ("onlyEngagedEnemy" in c)
+    return !!you && engagedWith(g, you).length === 1 && engagedWith(g, you)[0].id === ctx.enemy;
+  if ("eventEnemy" in c)
+    return !!ctx.enemy && matchesFilter(g, card(g, ctx.enemy).code, c.eventEnemy);
   if ("eventInvestigatorIsYou" in c) return ctx.inv === you;
   if ("eventAtYourLocation" in c) {
     const evLoc = ctx.location ?? (ctx.inv ? g.s.invs[ctx.inv]?.location : null);
@@ -448,24 +617,38 @@ export function checkCondition(g: G, c: Condition, ctx: EffCtx): boolean {
   if ("tokenIs" in c) return !!ctx.token && c.tokenIs.includes(ctx.token);
   if ("tokenNegative" in c) return !!ctx.token && /^-/.test(ctx.token);
   if ("resources" in c) return !!you && inv(g, you).resources >= c.resources.min;
-  if ("assetInPlay" in c) return !!you && controlled(g, you).some((a) => matchesFilter(g, a.code, c.assetInPlay));
-  if ("controlsCard" in c) return !!you && controlled(g, you).some((a) => a.code === c.controlsCard);
+  if ("assetInPlay" in c)
+    return !!you && controlled(g, you).some((a) => matchesFilter(g, a.code, c.assetInPlay));
+  if ("controlsCard" in c)
+    return !!you && controlled(g, you).some((a) => a.code === c.controlsCard);
   if ("scenarioFlag" in c) return !!g.s.flags[c.scenarioFlag];
   if ("phase" in c) return g.s.phase === c.phase;
   if ("selfHasClues" in c) return !!ctx.source && card(g, ctx.source).clues > 0;
   if ("engaged" in c) return !!you && engagedWith(g, you).length > 0;
   if ("yourSkillTest" in c) return !!g.s.skillTest && g.s.skillTest.inv === you;
-  if ("eventCard" in c) return !!ctx.card && !!g.s.cards[ctx.card] && matchesFilter(g, card(g, ctx.card).code, c.eventCard);
+  if ("eventCard" in c)
+    return (
+      !!ctx.card && !!g.s.cards[ctx.card] && matchesFilter(g, card(g, ctx.card).code, c.eventCard)
+    );
   if ("firstAction" in c) return !!you && g.s.active === you && inv(g, you).actionsTaken === 0;
-  if ("eventSource" in c) return !!ctx.card && !!g.s.cards[ctx.card] && matchesFilter(g, card(g, ctx.card).code, c.eventSource);
+  if ("eventSource" in c)
+    return (
+      !!ctx.card && !!g.s.cards[ctx.card] && matchesFilter(g, card(g, ctx.card).code, c.eventSource)
+    );
   if ("eventFromYourLocation" in c) return !!ctx.from && ctx.from === yourLoc;
   if ("eventEnemyInPlay" in c) return !!ctx.enemy && g.s.cards[ctx.enemy]?.zone === "enemy";
   if ("enemyNearby" in c) {
     if (!yourLoc) return false;
     const d = distances(g, yourLoc);
-    return enemies(g).some((e) => !!e.location && (d.get(e.location) ?? Infinity) <= c.enemyNearby.range && (!c.enemyNearby.nonElite || !isElite(g, e.id)));
+    return enemies(g).some(
+      (e) =>
+        !!e.location &&
+        (d.get(e.location) ?? Infinity) <= c.enemyNearby.range &&
+        (!c.enemyNearby.nonElite || !isElite(g, e.id)),
+    );
   }
-  if ("defeatedHealthThisTurn" in c) return !!you && inv(g, you).defeatedHealth >= c.defeatedHealthThisTurn.min;
+  if ("defeatedHealthThisTurn" in c)
+    return !!you && inv(g, you).defeatedHealth >= c.defeatedHealthThisTurn.min;
   if ("controlled" in c) return !!ctx.source && !!card(g, ctx.source).controller === c.controlled;
   if ("exhausted" in c) return !!ctx.source && card(g, ctx.source).exhausted === c.exhausted;
   return false;

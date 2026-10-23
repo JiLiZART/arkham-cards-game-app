@@ -4,7 +4,8 @@ import { Glyph } from "../Icon";
 import { hasSymbol, scenarioIcon } from "../icons";
 import { ribbonModel } from "../ribbon";
 
-const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
+const tr = (key: string, vars?: Record<string, string | number>) =>
+  t(db, gameStore.getState().locale, key, vars);
 
 /** where the game is: scenario and round, the round's four phases, and in the investigation phase whose turn it is with the actions left */
 export function Ribbon() {
@@ -14,18 +15,29 @@ export function Ribbon() {
   return (
     <div className="ribbon">
       <span className="ribbon-scen">
-        {hasSymbol(scenarioIcon(game.scenarioId)) && <Glyph name={scenarioIcon(game.scenarioId)} size={20} title={scenarioText(db, game.scenarioId, locale).name} />}
+        {hasSymbol(scenarioIcon(game.scenarioId)) && (
+          <Glyph
+            name={scenarioIcon(game.scenarioId)}
+            size={20}
+            title={scenarioText(db, game.scenarioId, locale).name}
+          />
+        )}
         <b>{scenarioText(db, game.scenarioId, locale).name}</b>
         <span className="ribbon-round">{tr("phase.round", { n: m.round })}</span>
       </span>
       {m.stage !== "play" ? (
-        <span className="ribbon-phase current">{tr(m.stage === "setup" ? "phase.setup" : "phase.ended")}</span>
+        <span className="ribbon-phase current">
+          {tr(m.stage === "setup" ? "phase.setup" : "phase.ended")}
+        </span>
       ) : (
         m.phases.map((p) => {
           const name = tr(`phase.${p.id}`);
           return (
             <span key={p.id} className="ribbon-seg">
-              <span className={`ribbon-phase ${p.state}`} title={p.state === "skipped" ? tr("ribbon.skipped", { phase: name }) : name}>
+              <span
+                className={`ribbon-phase ${p.state}`}
+                title={p.state === "skipped" ? tr("ribbon.skipped", { phase: name }) : name}
+              >
                 <span className="full">{name}</span>
                 <span className="short">{name[0]}</span>
               </span>

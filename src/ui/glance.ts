@@ -18,9 +18,15 @@ const DOES = new Set(["action", "onPlay", "reaction", "fast"]);
 /** cards whose behaviour lives in a script, so the data can't say what they do */
 export const GLANCE_OVERRIDES: Record<string, Chip[]> = {
   // Dynamite Blast: 3 damage to each enemy and investigator at a location
-  "01024": [{ icon: "damage", n: 3 }, { icon: "willpower", n: 1 }],
+  "01024": [
+    { icon: "damage", n: 3 },
+    { icon: "willpower", n: 1 },
+  ],
   // Medical Texts: test intellect, heal 1 damage
-  "01035": [{ icon: "health", n: 1 }, { icon: "combat", n: 1 }],
+  "01035": [
+    { icon: "health", n: 1 },
+    { icon: "combat", n: 1 },
+  ],
 };
 
 type Eff = Record<string, unknown>;
@@ -86,13 +92,19 @@ const same = (a: Chip, b: Chip) => a.icon === b.icon && a.n === b.n && !!a.plus 
  * evade, damage, healing, clues, cards, resources), then the skill icons it commits merged by skill. A weakness is just
  * the weakness icon; `overrides` (by card code) win over the derivation; a card with nothing to say has no chips.
  */
-export function chipsFor(card: CardDef, overrides: Record<string, Chip[]> = GLANCE_OVERRIDES): Chip[] {
+export function chipsFor(
+  card: CardDef,
+  overrides: Record<string, Chip[]> = GLANCE_OVERRIDES,
+): Chip[] {
   const fixed = overrides[card.code];
   if (fixed) return fixed.slice(0, MAX_CHIPS);
   if (card.subtype === "weakness") return [{ icon: "weakness" }];
   const effects: Chip[] = [];
   for (const a of card.abilities) if (DOES.has(a.kind)) walk(a.effects, effects);
   const unique = effects.filter((c, k) => effects.findIndex((d) => same(c, d)) === k);
-  const icons: Chip[] = SKILLS.filter((s) => (card.icons[s] ?? 0) > 0).map((s) => ({ icon: s, n: card.icons[s] }));
+  const icons: Chip[] = SKILLS.filter((s) => (card.icons[s] ?? 0) > 0).map((s) => ({
+    icon: s,
+    n: card.icons[s],
+  }));
   return [...unique, ...icons].slice(0, MAX_CHIPS);
 }

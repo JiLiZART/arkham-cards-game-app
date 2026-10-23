@@ -11,13 +11,49 @@ import { cardImage } from "../images";
 import { hasSymbol, isIcon, scenarioIcon } from "../icons";
 import { Avatar } from "./Avatar";
 import { BagCard } from "./BagCard";
-import { deckTabs, deleteCustomDeck, editDeck, emptyDeck, problemText, renameCustomDeck } from "../decks";
+import {
+  deckTabs,
+  deleteCustomDeck,
+  editDeck,
+  emptyDeck,
+  problemText,
+  renameCustomDeck,
+} from "../decks";
 import { safeStorage } from "../store";
 import { DeckEditArea } from "./DeckEditArea";
 import { CampaignSheet, scenarioCount } from "./CampaignSheet";
-import { back, canContinue, cardsOfPicks, cycleName, picksReady, cyclesOf, deckProblems, initialWizard, investigatorInfo, next, pickerList, setCampaign, filterCampaigns, tileName, NO_CAMPAIGN_FILTER, type CampaignFilter, sortPicker, SORTS, type SortBy, setDeck, setDifficulty, STEPS, campaignComplete, toggleInvestigator, toSetup, type PickerFilter, type WizardState } from "./wizard";
+import {
+  back,
+  canContinue,
+  cardsOfPicks,
+  cycleName,
+  picksReady,
+  cyclesOf,
+  deckProblems,
+  initialWizard,
+  investigatorInfo,
+  next,
+  pickerList,
+  setCampaign,
+  filterCampaigns,
+  tileName,
+  NO_CAMPAIGN_FILTER,
+  type CampaignFilter,
+  sortPicker,
+  SORTS,
+  type SortBy,
+  setDeck,
+  setDifficulty,
+  STEPS,
+  campaignComplete,
+  toggleInvestigator,
+  toSetup,
+  type PickerFilter,
+  type WizardState,
+} from "./wizard";
 
-const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
+const tr = (key: string, vars?: Record<string, string | number>) =>
+  t(db, gameStore.getState().locale, key, vars);
 const DIFFICULTIES: Difficulty[] = ["easy", "standard", "hard", "expert"];
 
 const KINDS = ["all", "campaign", "return", "side"] as const;
@@ -34,13 +70,21 @@ function CampaignStep({ s, set }: { s: WizardState; set: (w: WizardState) => voi
   const [filter, setFilter] = useState<CampaignFilter>(NO_CAMPAIGN_FILTER);
   const [sheet, setSheet] = useState(false);
   const list = filterCampaigns(db, locale, filter);
-  const chip = <K extends "kind" | "rules" | "length">(key: K, values: readonly CampaignFilter[K][]) => (
+  const chip = <K extends "kind" | "rules" | "length">(
+    key: K,
+    values: readonly CampaignFilter[K][],
+  ) => (
     <div className="wz-chips" role="group" aria-label={tr(`wizard.${key}.${values[0]}`)}>
       {values.map((v) => (
-        <button key={v} className={`wz-chip ${filter[key] === v ? "on" : ""}`} aria-pressed={filter[key] === v} onClick={() => {
+        <button
+          key={v}
+          className={`wz-chip ${filter[key] === v ? "on" : ""}`}
+          aria-pressed={filter[key] === v}
+          onClick={() => {
             moment("tab");
             setFilter({ ...filter, [key]: v });
-          }}>
+          }}
+        >
           {tr(`wizard.${key}.${v}`)}
         </button>
       ))}
@@ -55,7 +99,13 @@ function CampaignStep({ s, set }: { s: WizardState; set: (w: WizardState) => voi
           {chip("kind", KINDS)}
           {chip("rules", RULES)}
           {chip("length", LENGTHS)}
-          <input type="search" placeholder={tr("wizard.filter.search")} aria-label={tr("wizard.filter.search")} value={filter.query} onChange={(e) => setFilter({ ...filter, query: e.target.value })} />
+          <input
+            type="search"
+            placeholder={tr("wizard.filter.search")}
+            aria-label={tr("wizard.filter.search")}
+            value={filter.query}
+            onChange={(e) => setFilter({ ...filter, query: e.target.value })}
+          />
         </div>
         {list.length === 0 && <p className="wz-hint">{tr("wizard.noCampaigns")}</p>}
         <div className="wz-ctiles">
@@ -75,7 +125,15 @@ function CampaignStep({ s, set }: { s: WizardState; set: (w: WizardState) => voi
                   setSheet(true);
                 }}
               >
-                {art && <img src={cardImage(art, "front", locale) ?? ""} alt="" loading="lazy" draggable={false} onError={(e) => (e.currentTarget.style.display = "none")} />}
+                {art && (
+                  <img
+                    src={cardImage(art, "front", locale) ?? ""}
+                    alt=""
+                    loading="lazy"
+                    draggable={false}
+                    onError={(e) => (e.currentTarget.style.display = "none")}
+                  />
+                )}
                 <b>{tileName(db, c, locale)}</b>
                 <small>
                   {scenarioCount(c.scenarios.length)}
@@ -122,12 +180,30 @@ function InvestigatorSheet({ code }: { code: string }) {
             <Stat icon="health" value={card.health ?? "–"} size={30} label={tr("stat.health")} />
             <Stat icon="sanity" value={card.sanity ?? "–"} size={30} label={tr("stat.sanity")} />
             {(["willpower", "intellect", "combat", "agility"] as const).map((k) => (
-              <Stat key={k} icon={k} value={card.skills?.[k] ?? "–"} size={28} label={tr(`stat.${k}`)} />
+              <Stat
+                key={k}
+                icon={k}
+                value={card.skills?.[k] ?? "–"}
+                size={28}
+                label={tr(`stat.${k}`)}
+              />
             ))}
           </div>
-          {tx?.traits?.length ? <div className="wz-sheet-traits">{tx.traits.map((t) => `${t}.`).join(" ")}</div> : null}
-          {tx?.text && <p className="wz-sheet-text" dangerouslySetInnerHTML={{ __html: formatText(tx.text) }} />}
-          {tx?.backText && <p className="wz-sheet-text wz-sheet-back" dangerouslySetInnerHTML={{ __html: formatText(tx.backText) }} />}
+          {tx?.traits?.length ? (
+            <div className="wz-sheet-traits">{tx.traits.map((t) => `${t}.`).join(" ")}</div>
+          ) : null}
+          {tx?.text && (
+            <p
+              className="wz-sheet-text"
+              dangerouslySetInnerHTML={{ __html: formatText(tx.text) }}
+            />
+          )}
+          {tx?.backText && (
+            <p
+              className="wz-sheet-text wz-sheet-back"
+              dangerouslySetInnerHTML={{ __html: formatText(tx.backText) }}
+            />
+          )}
         </>
       ) : (
         <p className="wz-hint">{tr("wizard.loading")}</p>
@@ -177,7 +253,11 @@ function InvestigatorsStep({ s, set }: { s: WizardState; set: (w: WizardState) =
               </button>
             ))}
           </div>
-          <select aria-label={tr("wizard.filter.cycle")} value={filter.cycle ?? ""} onChange={(e) => setFilter({ ...filter, cycle: e.target.value || null })}>
+          <select
+            aria-label={tr("wizard.filter.cycle")}
+            value={filter.cycle ?? ""}
+            onChange={(e) => setFilter({ ...filter, cycle: e.target.value || null })}
+          >
             <option value="">{tr("wizard.filter.allCycles")}</option>
             {cyclesOf(db).map((p) => (
               <option key={p} value={p}>
@@ -195,7 +275,13 @@ function InvestigatorsStep({ s, set }: { s: WizardState; set: (w: WizardState) =
               ))}
             </select>
           </label>
-          <input type="search" placeholder={tr("wizard.filter.search")} aria-label={tr("wizard.filter.search")} value={filter.query} onChange={(e) => setFilter({ ...filter, query: e.target.value })} />
+          <input
+            type="search"
+            placeholder={tr("wizard.filter.search")}
+            aria-label={tr("wizard.filter.search")}
+            value={filter.query}
+            onChange={(e) => setFilter({ ...filter, query: e.target.value })}
+          />
         </div>
         {!list.length && <p className="wz-hint">{tr("wizard.noMatch")}</p>}
         <div className="wz-tiles">
@@ -258,7 +344,12 @@ function DecksStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }
       live = false;
     };
   }, []);
-  if (!picksReady(db, s)) return <p className="wz-hint" role="status">{tr("wizard.loading")}</p>;
+  if (!picksReady(db, s))
+    return (
+      <p className="wz-hint" role="status">
+        {tr("wizard.loading")}
+      </p>
+    );
   const code = s.picks.includes(active) ? active : s.picks[0];
   const tabs = deckTabs(db, code);
   const tab = tabs.find((x) => x.id === s.decks[code]) ?? tabs[0];
@@ -279,19 +370,32 @@ function DecksStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }
         {s.picks.map((c, k) => {
           const problems = deckProblems(db, s, c);
           return (
-            <button key={c} role="tab" aria-selected={c === code} className={`dk-inv ${c === code ? "on" : ""}`} onClick={() => {
-              moment("tab");
-              setActive(c);
-            }}>
+            <button
+              key={c}
+              role="tab"
+              aria-selected={c === code}
+              className={`dk-inv ${c === code ? "on" : ""}`}
+              onClick={() => {
+                moment("tab");
+                setActive(c);
+              }}
+            >
               <Avatar code={c} size={48} badge={`P${k + 1}`} />
-              <small className={problems.length ? "bad" : "ok"}>{problems.length ? tr("deck.toFix", { n: problems.length }) : tr("deck.ready")}</small>
+              <small className={problems.length ? "bad" : "ok"}>
+                {problems.length ? tr("deck.toFix", { n: problems.length }) : tr("deck.ready")}
+              </small>
             </button>
           );
         })}
       </div>
       <div className="dk-tabs" role="tablist">
         {tabs.map((x) => (
-          <div key={x.id} className={`dk-tab ${x.id === tab?.id ? "on" : ""} ${x.problems.length ? "bad" : ""}`} role="tab" aria-selected={x.id === tab?.id}>
+          <div
+            key={x.id}
+            className={`dk-tab ${x.id === tab?.id ? "on" : ""} ${x.problems.length ? "bad" : ""}`}
+            role="tab"
+            aria-selected={x.id === tab?.id}
+          >
             {renaming?.id === x.id ? (
               <input
                 autoFocus
@@ -311,10 +415,15 @@ function DecksStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }
                 }}
               />
             ) : (
-              <button className="dk-tab-name" onClick={() => {
-                moment("tab");
-                choose(x.id);
-              }} onDoubleClick={() => x.kind === "custom" && setRenaming({ id: x.id, name: x.name })} title={x.kind === "custom" ? tr("deck.renameHint") : undefined}>
+              <button
+                className="dk-tab-name"
+                onClick={() => {
+                  moment("tab");
+                  choose(x.id);
+                }}
+                onDoubleClick={() => x.kind === "custom" && setRenaming({ id: x.id, name: x.name })}
+                title={x.kind === "custom" ? tr("deck.renameHint") : undefined}
+              >
                 {x.problems.length ? "⚠ " : ""}
                 {x.name}
               </button>
@@ -338,7 +447,12 @@ function DecksStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }
             )}
           </div>
         ))}
-        <button className="dk-tab dk-tab-add" onClick={addTab} title={tr("deck.newTab")} aria-label={tr("deck.newTab")}>
+        <button
+          className="dk-tab dk-tab-add"
+          onClick={addTab}
+          title={tr("deck.newTab")}
+          aria-label={tr("deck.newTab")}
+        >
           +
         </button>
       </div>
@@ -349,7 +463,14 @@ function DecksStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }
           ))}
         </div>
       )}
-      {tab && <DeckEditArea key={`${code}:${tab.id}`} investigator={code} deck={tab.deck} onChange={edit} />}
+      {tab && (
+        <DeckEditArea
+          key={`${code}:${tab.id}`}
+          investigator={code}
+          deck={tab.deck}
+          onChange={edit}
+        />
+      )}
     </div>
   );
 }
@@ -359,7 +480,13 @@ function DifficultyStep({ s, set }: { s: WizardState; set: (w: WizardState) => v
   return (
     <div className="wz-bags">
       {DIFFICULTIES.filter((d) => bags[d]).map((d) => (
-        <BagCard key={d} bag={bags[d]!} difficulty={d} selected={s.difficulty === d} onSelect={() => set(setDifficulty(s, d, db))} />
+        <BagCard
+          key={d}
+          bag={bags[d]!}
+          difficulty={d}
+          selected={s.difficulty === d}
+          onSelect={() => set(setDifficulty(s, d, db))}
+        />
       ))}
     </div>
   );
@@ -382,7 +509,8 @@ function ReadyStep({ s }: { s: WizardState }) {
       <div className="wz-first">
         <small>{tr("wizard.firstScenario")}</small>
         <b>
-          {hasSymbol(icon) && <Glyph name={icon} size={26} title="" />} {scenarioText(db, first, locale).name}
+          {hasSymbol(icon) && <Glyph name={icon} size={26} title="" />}{" "}
+          {scenarioText(db, first, locale).name}
         </b>
       </div>
     </div>
@@ -435,16 +563,27 @@ export function Wizard() {
         {s.step === "ready" && <ReadyStep s={s} />}
       </div>
       <footer className="wz-foot">
-        <button className="big" onClick={() => (at === 0 ? gameStore.setState({ screen: "title" }) : set(back(s)))}>
+        <button
+          className="big"
+          onClick={() => (at === 0 ? gameStore.setState({ screen: "title" }) : set(back(s)))}
+        >
           {tr("wizard.back")}
         </button>
         {error && <span className="wz-error">{error}</span>}
         {last ? (
-          <button className="primary big" disabled={loading} onClick={() => gameStore.getState().newCampaign(toSetup(s, Date.now() >>> 0, db))}>
+          <button
+            className="primary big"
+            disabled={loading}
+            onClick={() => gameStore.getState().newCampaign(toSetup(s, Date.now() >>> 0, db))}
+          >
             {tr(loading ? "wizard.loading" : "wizard.begin")}
           </button>
         ) : (
-          <button className="primary big" disabled={!canContinue(db, s)} onClick={() => set(next(db, s))}>
+          <button
+            className="primary big"
+            disabled={!canContinue(db, s)}
+            onClick={() => set(next(db, s))}
+          >
             {tr("wizard.next")}
           </button>
         )}

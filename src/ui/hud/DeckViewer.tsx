@@ -13,7 +13,8 @@ import { CardOptions } from "./Panels";
 export type DeckKind = "act" | "agenda" | "reference";
 
 /** the scenario reference card for the game's difficulty: its front on Easy/Standard, its back on Hard/Expert */
-export const referenceSide = (game: GameState) => (game.difficulty === "hard" || game.difficulty === "expert" ? "back" : "front");
+export const referenceSide = (game: GameState) =>
+  game.difficulty === "hard" || game.difficulty === "expert" ? "back" : "front";
 
 /**
  * Every act or agenda of the scenario in order (the current one marked; ones still to come keep their backs hidden),
@@ -26,24 +27,35 @@ export function DeckViewer({ kind }: { kind: DeckKind }) {
   const sc = db.scenarios[game.scenarioId];
   const currentId = kind === "act" ? game.act : kind === "agenda" ? game.agenda : null;
   const codes = kind === "act" ? sc.acts : kind === "agenda" ? sc.agendas : [sc.card];
-  const cur = kind === "reference" ? 0 : currentId ? codes.indexOf(game.cards[currentId].code) : codes.length;
+  const cur =
+    kind === "reference" ? 0 : currentId ? codes.indexOf(game.cards[currentId].code) : codes.length;
   const first = kind === "reference" ? referenceSide(game) : "front";
-  const [focus, setFocus] = useState<{ code: string; side: "front" | "back" }>({ code: codes[Math.min(cur, codes.length - 1)], side: first });
+  const [focus, setFocus] = useState<{ code: string; side: "front" | "back" }>({
+    code: codes[Math.min(cur, codes.length - 1)],
+    side: first,
+  });
   const tx = cardText(db, focus.code, locale);
   const text = focus.side === "back" ? (tx.backText ?? "") : tx.text;
 
   const face = (code: string, side: "front" | "back") => (
-    <div className={`dv-card ${kind === "reference" ? "" : "landscape"} ${focus.code === code && focus.side === side ? "focused" : ""}`} onMouseEnter={() => setFocus({ code, side })}>
+    <div
+      className={`dv-card ${kind === "reference" ? "" : "landscape"} ${focus.code === code && focus.side === side ? "focused" : ""}`}
+      onMouseEnter={() => setFocus({ code, side })}
+    >
       <CardFace code={code} locale={locale} side={side} />
     </div>
   );
-  const title = kind === "reference" ? t(db, locale, "viewer.reference") : t(db, locale, `card.type.${kind}`);
+  const title =
+    kind === "reference" ? t(db, locale, "viewer.reference") : t(db, locale, `card.type.${kind}`);
   return (
     <Modal onClose={close} className={`deck-viewer dv-${kind}`}>
       <div className="dv-list">
         <h2 className="card-name">{title}</h2>
         {codes.map((code, i) => (
-          <div key={code} className={`dv-item ${i === cur && kind !== "reference" ? "current" : ""}`}>
+          <div
+            key={code}
+            className={`dv-item ${i === cur && kind !== "reference" ? "current" : ""}`}
+          >
             {kind !== "reference" && (
               <div className="dv-label">
                 {i + 1}. {cardText(db, code, locale).name}
@@ -62,7 +74,13 @@ export function DeckViewer({ kind }: { kind: DeckKind }) {
                     {face(code, "front")}
                     {i === cur && <CardOptions id={currentId} />}
                   </div>
-                  {i <= cur ? face(code, "back") : <div className="dv-card landscape dv-hidden">{t(db, locale, "viewer.notRevealed")}</div>}
+                  {i <= cur ? (
+                    face(code, "back")
+                  ) : (
+                    <div className="dv-card landscape dv-hidden">
+                      {t(db, locale, "viewer.notRevealed")}
+                    </div>
+                  )}
                 </>
               )}
             </div>

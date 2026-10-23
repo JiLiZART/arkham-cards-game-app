@@ -38,7 +38,12 @@ export function MulliganRow() {
   const rects = useRef(new Map<InstId, ScreenBox>());
 
   useLayoutEffect(() => {
-    const els = new Map([...(ref.current?.querySelectorAll<HTMLElement>("[data-card]") ?? [])].map((el) => [el.dataset.card!, el]));
+    const els = new Map(
+      [...(ref.current?.querySelectorAll<HTMLElement>("[data-card]") ?? [])].map((el) => [
+        el.dataset.card!,
+        el,
+      ]),
+    );
     // picks that left the row into the deck (the redraw was confirmed)
     let k = 0;
     for (const [id, from] of rects.current) {
@@ -46,7 +51,8 @@ export function MulliganRow() {
       rects.current.delete(id);
       if (game.cards[id]?.zone === "deck" && !k) moment("shuffle");
       const to = domPlace("deck", RESOLVE_BOX);
-      if (game.cards[id]?.zone === "deck" && to && !reducedMotion()) flyGhost(backUrl("player"), from, to, k++ * STAGGER_MS);
+      if (game.cards[id]?.zone === "deck" && to && !reducedMotion())
+        flyGhost(backUrl("player"), from, to, k++ * STAGGER_MS);
     }
     // a card just picked flies in from its place in the fan
     for (const [id, el] of els) {
@@ -59,7 +65,11 @@ export function MulliganRow() {
   });
 
   return (
-    <div className={`mulligan-row ${picks.length ? "" : "empty"}`} ref={ref} aria-hidden={!picks.length}>
+    <div
+      className={`mulligan-row ${picks.length ? "" : "empty"}`}
+      ref={ref}
+      aria-hidden={!picks.length}
+    >
       {picks.length > 0 && <div className="mulligan-label">{t(db, locale, "mulligan.row")}</div>}
       <div className="mulligan-cards">
         {picks.map((id) => {

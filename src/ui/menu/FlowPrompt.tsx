@@ -7,12 +7,14 @@ import { Portrait } from "../Portrait";
 import { moment } from "../hud/SoundLayer";
 import { visibleChoices } from "./campaignView";
 
-const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
+const tr = (key: string, vars?: Record<string, string | number>) =>
+  t(db, gameStore.getState().locale, key, vars);
 const answer = (value: string | number | string[] | null) => {
   moment("button");
   gameStore.getState().answerFlow(value);
 };
-const Html = ({ text, className }: { text?: string; className?: string }) => (text ? <div className={className} dangerouslySetInnerHTML={{ __html: guideHtml(text) }} /> : null);
+const Html = ({ text, className }: { text?: string; className?: string }) =>
+  text ? <div className={className} dangerouslySetInnerHTML={{ __html: guideHtml(text) }} /> : null;
 
 /**
  * What the campaign's flow asks the players (ADR-0011): a choice as buttons, a number, an investigator as avatars, cards
@@ -33,7 +35,10 @@ export function FlowPrompt({ campaign }: { campaign: CampaignState }) {
       <Html text={words.text} className="flow-text" />
     </>
   );
-  const toggle = (id: string, max: number) => setTicked((x) => (x.includes(id) ? x.filter((y) => y !== id) : x.length < max ? [...x, id] : x));
+  const toggle = (id: string, max: number) =>
+    setTicked((x) =>
+      x.includes(id) ? x.filter((y) => y !== id) : x.length < max ? [...x, id] : x,
+    );
   const confirm = (ok: boolean, value: string | number | string[] | null) => (
     <button className="primary big" disabled={!ok} onClick={() => answer(value)}>
       {tr("flow.confirm")}
@@ -67,7 +72,9 @@ export function FlowPrompt({ campaign }: { campaign: CampaignState }) {
           <div className="flow-choices">
             {visibleChoices(db, campaign, st.choices).map((ch) => (
               <button key={ch.id} className="flow-choice" onClick={() => answer(ch.id)}>
-                <span dangerouslySetInnerHTML={{ __html: guideHtml(words.choices?.[ch.id] ?? ch.text) }} />
+                <span
+                  dangerouslySetInnerHTML={{ __html: guideHtml(words.choices?.[ch.id] ?? ch.text) }}
+                />
               </button>
             ))}
           </div>
@@ -84,11 +91,19 @@ export function FlowPrompt({ campaign }: { campaign: CampaignState }) {
         <div className="flow-prompt">
           {head}
           <div className="flow-counter">
-            <button aria-label={tr("flow.less")} disabled={value <= st.min} onClick={() => setN(value - 1)}>
+            <button
+              aria-label={tr("flow.less")}
+              disabled={value <= st.min}
+              onClick={() => setN(value - 1)}
+            >
               −
             </button>
             <output>{value}</output>
-            <button aria-label={tr("flow.more")} disabled={st.max !== undefined && value >= st.max} onClick={() => setN(value + 1)}>
+            <button
+              aria-label={tr("flow.more")}
+              disabled={st.max !== undefined && value >= st.max}
+              onClick={() => setN(value + 1)}
+            >
               +
             </button>
           </div>
@@ -100,7 +115,11 @@ export function FlowPrompt({ campaign }: { campaign: CampaignState }) {
     case "investigator":
       return (
         <div className="flow-prompt">
-          {st.kind === "investigatorChoice" ? head : <div className="flow-text">{tr("flow.whoTakes")}</div>}
+          {st.kind === "investigatorChoice" ? (
+            head
+          ) : (
+            <div className="flow-text">{tr("flow.whoTakes")}</div>
+          )}
           <div className="flow-avatars">
             {active.map((i) => (
               <button key={i.code} className="flow-avatar" onClick={() => answer(i.code)}>
@@ -117,7 +136,11 @@ export function FlowPrompt({ campaign }: { campaign: CampaignState }) {
         </div>
       );
     case "cardChoice": {
-      const codes = st.codes.length ? st.codes : [...new Set(active.flatMap((i) => i.deck))].filter((c) => db.cards[c] && !db.cards[c].subtype);
+      const codes = st.codes.length
+        ? st.codes
+        : [...new Set(active.flatMap((i) => i.deck))].filter(
+            (c) => db.cards[c] && !db.cards[c].subtype,
+          );
       return (
         <div className="flow-prompt">
           {head}
@@ -125,7 +148,11 @@ export function FlowPrompt({ campaign }: { campaign: CampaignState }) {
           <div className="flow-list">
             {codes.map((code) => (
               <label key={code} className={ticked.includes(code) ? "on" : ""}>
-                <input type="checkbox" checked={ticked.includes(code)} onChange={() => toggle(code, st.max)} />
+                <input
+                  type="checkbox"
+                  checked={ticked.includes(code)}
+                  onChange={() => toggle(code, st.max)}
+                />
                 {cardText(db, code, locale).name}
               </label>
             ))}
@@ -142,8 +169,14 @@ export function FlowPrompt({ campaign }: { campaign: CampaignState }) {
           <div className="flow-list">
             {visibleChoices(db, campaign, st.choices).map((ch) => (
               <label key={ch.id} className={ticked.includes(ch.id) ? "on" : ""}>
-                <input type="checkbox" checked={ticked.includes(ch.id)} onChange={() => toggle(ch.id, max)} />
-                <span dangerouslySetInnerHTML={{ __html: guideHtml(words.choices?.[ch.id] ?? ch.text) }} />
+                <input
+                  type="checkbox"
+                  checked={ticked.includes(ch.id)}
+                  onChange={() => toggle(ch.id, max)}
+                />
+                <span
+                  dangerouslySetInnerHTML={{ __html: guideHtml(words.choices?.[ch.id] ?? ch.text) }}
+                />
               </label>
             ))}
           </div>
@@ -160,8 +193,22 @@ export function FlowPrompt({ campaign }: { campaign: CampaignState }) {
             {st.scenarios.map((s) => {
               const can = active.every((i) => i.xp >= s.cost);
               return (
-                <button key={s.scenario} className="flow-choice" disabled={!can} onClick={() => answer(s.scenario)} title={can ? undefined : tr("upgrade.cost", { need: s.cost, have: Math.min(...active.map((i) => i.xp)) })}>
-                  <b>{scenarioText(db, s.scenario, locale).name}</b> <small>{tr("flow.cost", { n: s.cost })}</small>
+                <button
+                  key={s.scenario}
+                  className="flow-choice"
+                  disabled={!can}
+                  onClick={() => answer(s.scenario)}
+                  title={
+                    can
+                      ? undefined
+                      : tr("upgrade.cost", {
+                          need: s.cost,
+                          have: Math.min(...active.map((i) => i.xp)),
+                        })
+                  }
+                >
+                  <b>{scenarioText(db, s.scenario, locale).name}</b>{" "}
+                  <small>{tr("flow.cost", { n: s.cost })}</small>
                 </button>
               );
             })}

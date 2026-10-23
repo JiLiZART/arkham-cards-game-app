@@ -5,7 +5,17 @@ import type { Ability } from "../content/schema";
 import type { Result } from "./engine";
 import { toTurn } from "./natkit";
 import { checkCondition } from "./core";
-import { db, giveCard, gOf, mutate, options, pick, putEnemy, skipMulligans, start } from "./testkit";
+import {
+  db,
+  giveCard,
+  gOf,
+  mutate,
+  options,
+  pick,
+  putEnemy,
+  skipMulligans,
+  start,
+} from "./testkit";
 
 const ROLAND = "01001";
 const MINION = "01160"; // Ghoul Minion: fight 2, health 2, 1 damage, 1 horror
@@ -15,7 +25,11 @@ beforeAll(async () => {
 });
 
 /** Roland (plus whoever) at the start of a turn, a token bag of zeros, with `setup` applied to the state */
-function turn(setup: (g: ReturnType<typeof gOf>) => void = () => {}, invs = [ROLAND], bag = ["0"]): Result {
+function turn(
+  setup: (g: ReturnType<typeof gOf>) => void = () => {},
+  invs = [ROLAND],
+  bag = ["0"],
+): Result {
   const r = toTurn(skipMulligans(start("the-gathering", invs, 1, { chaosBag: bag as never })));
   return mutate(r, (g) => {
     setup(g);
@@ -56,7 +70,9 @@ describe("player windows", () => {
   afterEach(() => Object.assign(db.cards[CACHE], saved));
   const fastCache = () => {
     db.cards[CACHE].keywords = ["fast"];
-    db.cards[CACHE].abilities = [{ kind: "onPlay", anyWindow: true, effects: [{ op: "gainResources", amount: 3 }] }];
+    db.cards[CACHE].abilities = [
+      { kind: "onPlay", anyWindow: true, effects: [{ op: "gainResources", amount: 3 }] },
+    ];
   };
   const windows = (r: Result) => r.state.pending?.promptKey === "playerWindow";
 
@@ -66,7 +82,14 @@ describe("player windows", () => {
     for (let k = 0; k < 120 && r.state.pending && r.state.pending.kind !== "turn"; k++) {
       expect(windows(r)).toBe(false);
       const p = r.state.pending;
-      r = pick(r, p.options.some((o) => o.id === "pass") ? "pass" : /^Done/.test(p.options[0].label) || p.kind === "commit" ? /^Done/ : /./);
+      r = pick(
+        r,
+        p.options.some((o) => o.id === "pass")
+          ? "pass"
+          : /^Done/.test(p.options[0].label) || p.kind === "commit"
+            ? /^Done/
+            : /./,
+      );
     }
     expect(r.state.round).toBeGreaterThan(1);
   });
@@ -79,13 +102,23 @@ describe("player windows", () => {
     const before = r.state.invs[ROLAND].resources;
     // the window of the turn's beginning has passed; end the turn: the enemy phase's window is next
     r = pick(r, "End turn");
-    for (let k = 0; k < 40 && !windows(r); k++) r = pick(r, r.state.pending!.options.some((o) => o.id === "pass") ? "pass" : /./);
+    for (let k = 0; k < 40 && !windows(r); k++)
+      r = pick(r, r.state.pending!.options.some((o) => o.id === "pass") ? "pass" : /./);
     expect(windows(r)).toBe(true);
     expect(options(r)).toContain("Emergency Cache (play)");
-    expect(r.state.pending?.step).toMatchObject({ trigger: "playerWindow", data: { phase: "enemy" } });
+    expect(r.state.pending?.step).toMatchObject({
+      trigger: "playerWindow",
+      data: { phase: "enemy" },
+    });
     r = pick(r, /^Emergency Cache/);
     expect(r.state.invs[ROLAND].resources).toBe(before + 3);
-    expect(r.state.cards[Object.keys(r.state.cards).find((id) => r.state.cards[id].code === CACHE && r.state.cards[id].zone === "discard")!]).toBeTruthy();
+    expect(
+      r.state.cards[
+        Object.keys(r.state.cards).find(
+          (id) => r.state.cards[id].code === CACHE && r.state.cards[id].zone === "discard",
+        )!
+      ],
+    ).toBeTruthy();
   });
 
   it("is not offered a card it cannot pay for", () => {
@@ -97,7 +130,14 @@ describe("player windows", () => {
       for (let k = 0; k < 120 && r.state.pending && r.state.pending.kind !== "turn"; k++) {
         expect(windows(r)).toBe(false);
         const p = r.state.pending;
-        r = pick(r, p.options.some((o) => o.id === "pass") ? "pass" : /^Done/.test(p.options[0].label) || p.kind === "commit" ? /^Done/ : /./);
+        r = pick(
+          r,
+          p.options.some((o) => o.id === "pass")
+            ? "pass"
+            : /^Done/.test(p.options[0].label) || p.kind === "commit"
+              ? /^Done/
+              : /./,
+        );
       }
     } finally {
       db.cards[CACHE].cost = 0;
@@ -122,13 +162,25 @@ describe("the window before an enemy takes damage", () => {
       putEnemy(g, enemy, inv(g, ROLAND).location!, ROLAND);
     });
   };
-  const react = (trigger: string, effects: Ability["effects"], extra: Partial<Ability> = {}): Ability =>
-    ({ kind: "reaction", trigger, usableBy: "controller", label: "Ward", effects, ...extra }) as never;
+  const react = (
+    trigger: string,
+    effects: Ability["effects"],
+    extra: Partial<Ability> = {},
+  ): Ability =>
+    ({
+      kind: "reaction",
+      trigger,
+      usableBy: "controller",
+      label: "Ward",
+      effects,
+      ...extra,
+    }) as never;
   const fight = (r: Result) => {
     r = pick(r, /^Fight/);
     return r.state.pending?.kind === "commit" ? pick(r, "done") : r;
   };
-  const enemyDamage = (r: Result) => Object.values(r.state.cards).find((c) => c.zone === "enemy")!.damage;
+  const enemyDamage = (r: Result) =>
+    Object.values(r.state.cards).find((c) => c.zone === "enemy")!.damage;
 
   it("asks nothing when no card answers it", () => {
     const r = fight(withMachete([]));
@@ -145,9 +197,14 @@ describe("the window before an enemy takes damage", () => {
   });
 
   it("the cap of 1 applies after the additions", () => {
-    db.cards[PRIEST].abilities = [{ kind: "constant", modifiers: [{ flag: "damageCapOne", scope: "self" }] }];
+    db.cards[PRIEST].abilities = [
+      { kind: "constant", modifiers: [{ flag: "damageCapOne", scope: "self" }] },
+    ];
     try {
-      const r = pick(fight(withMachete([react("dealDamage", [{ op: "addDamage", amount: 2 }])], PRIEST)), "Ward");
+      const r = pick(
+        fight(withMachete([react("dealDamage", [{ op: "addDamage", amount: 2 }])], PRIEST)),
+        "Ward",
+      );
       expect(enemyDamage(r)).toBe(1);
     } finally {
       db.cards[PRIEST].abilities = [];
@@ -155,13 +212,20 @@ describe("the window before an enemy takes damage", () => {
   });
 
   it("damage past the enemy's health opens the excess window", () => {
-    let r = fight(withMachete([react("excessDamage", [{ op: "gainResources", amount: 1 }]), react("dealDamage", [{ op: "addDamage", amount: 3 }])]));
+    let r = fight(
+      withMachete([
+        react("excessDamage", [{ op: "gainResources", amount: 1 }]),
+        react("dealDamage", [{ op: "addDamage", amount: 3 }]),
+      ]),
+    );
     r = pick(r, "Ward"); // dealDamage first: 1 + 3 on a Minion with 2 health
     expect(r.state.pending?.step).toMatchObject({ trigger: "excessDamage", data: { amount: 2 } });
     const before = r.state.invs[ROLAND].resources;
     r = pick(r, "Ward");
     expect(r.state.invs[ROLAND].resources).toBe(before + 1);
-    expect(Object.values(r.state.cards).some((c) => c.code === MINION && c.zone === "enemy")).toBe(false);
+    expect(Object.values(r.state.cards).some((c) => c.code === MINION && c.zone === "enemy")).toBe(
+      false,
+    );
   });
 
   it("counts the printed health of the enemies defeated this turn", () => {
@@ -178,7 +242,8 @@ describe("the window before an enemy takes damage", () => {
       giveCard(g, ROLAND, "01023"); // Dodge
     });
     r = pick(r, "End turn");
-    for (let k = 0; k < 40 && r.state.pending && !options(r).some((o) => /^Dodge/.test(o)); k++) r = pick(r, r.state.pending.options.some((o) => o.id === "pass") ? "pass" : /./);
+    for (let k = 0; k < 40 && r.state.pending && !options(r).some((o) => /^Dodge/.test(o)); k++)
+      r = pick(r, r.state.pending.options.some((o) => o.id === "pass") ? "pass" : /./);
     r = pick(r, /^Dodge/);
     expect(r.state.pending?.step).toMatchObject({ trigger: "enemyAttacked" });
     expect(options(r)).toContain("Ward");

@@ -56,7 +56,10 @@ export function Showcase() {
       const id = el.dataset.card!;
       if (flown.current.has(id)) continue;
       flown.current.add(id);
-      const pile = domPlace(!drawn.includes(id) && game.cards[id]?.zone === "discard" ? "discard" : "deck", RESOLVE_BOX);
+      const pile = domPlace(
+        !drawn.includes(id) && game.cards[id]?.zone === "discard" ? "discard" : "deck",
+        RESOLVE_BOX,
+      );
       if (!pile || reducedMotion()) continue;
       riseAndArc(el, el.querySelector<HTMLElement>(".sc-flip"), pile, riseDelay(k++));
     }
@@ -65,7 +68,9 @@ export function Showcase() {
 
   // the drawn cards go on to the fan, which flies each one from where it stands here
   const toHand = () => {
-    root.current?.querySelectorAll<HTMLElement>(".sc-card[data-card]").forEach((el) => noteLocalMove(el.dataset.card!, el));
+    root.current
+      ?.querySelectorAll<HTMLElement>(".sc-card[data-card]")
+      .forEach((el) => noteLocalMove(el.dataset.card!, el));
     setDetail(null);
     useView.setState({ showcase: [] });
   };
@@ -91,7 +96,12 @@ export function Showcase() {
   if (!ids.length || !holds) return null;
   const layout = showcaseLayout(ids.length, screen.w, screen.h);
   // the rightmost column's details go to its left, so they don't run off the screen
-  const show = (id: InstId, i: number, el: HTMLElement) => setDetail({ id, rect: el.getBoundingClientRect(), left: layout.cols > 1 && i % layout.cols === layout.cols - 1 });
+  const show = (id: InstId, i: number, el: HTMLElement) =>
+    setDetail({
+      id,
+      rect: el.getBoundingClientRect(),
+      left: layout.cols > 1 && i % layout.cols === layout.cols - 1,
+    });
   // under drawn cards: how to take them; under a pick: choose one, with the options that aren't cards as links in the line
   // a searched card that doesn't match is shown but can't be taken
   const pickable = (id: InstId) => !!game.pending?.options.some((o) => o.card === id);
@@ -104,7 +114,9 @@ export function Showcase() {
     </button>
   );
   const SPLIT = "\u0000";
-  const [before, after] = t(db, locale, none ? "showcase.chooseOrNone" : "showcase.choose", { none: SPLIT }).split(SPLIT);
+  const [before, after] = t(db, locale, none ? "showcase.chooseOrNone" : "showcase.choose", {
+    none: SPLIT,
+  }).split(SPLIT);
   const help = drawn.length ? (
     t(db, locale, "showcase.take")
   ) : (
@@ -121,8 +133,15 @@ export function Showcase() {
     </>
   );
   return (
-    <div className={`showcase ${pick.length ? "picking" : ""}`} ref={root} onClick={(e) => drawn.length > 0 && !(e.target as Element).closest(".sc-help") && toHand()}>
-      <div className="sc-cards" style={{ ["--cols" as string]: layout.cols, ["--w" as string]: `${layout.width}px` }}>
+    <div
+      className={`showcase ${pick.length ? "picking" : ""}`}
+      ref={root}
+      onClick={(e) => drawn.length > 0 && !(e.target as Element).closest(".sc-help") && toHand()}
+    >
+      <div
+        className="sc-cards"
+        style={{ ["--cols" as string]: layout.cols, ["--w" as string]: `${layout.width}px` }}
+      >
         {ids.map((id, i) => (
           <button
             key={id}
@@ -150,13 +169,29 @@ export function Showcase() {
               <span className="sc-front">
                 <CardFace code={game.cards[id].code} locale={locale} />
               </span>
-              <img className="sc-back" src={backUrl(game.cards[id].zone === "encounterDeck" ? "encounter" : "player")} alt="" draggable={false} />
+              <img
+                className="sc-back"
+                src={backUrl(game.cards[id].zone === "encounterDeck" ? "encounter" : "player")}
+                alt=""
+                draggable={false}
+              />
             </span>
           </button>
         ))}
       </div>
       <div className="sc-help">{help}</div>
-      {detail && game.cards[detail.id] && <DetailsColumn rows={cardDetails(db, game.cards[detail.id].code, locale)} rect={{ x0: detail.rect.left, y0: detail.rect.top, x1: detail.rect.right, y1: detail.rect.bottom }} prefer={detail.left ? "left" : "right"} />}
+      {detail && game.cards[detail.id] && (
+        <DetailsColumn
+          rows={cardDetails(db, game.cards[detail.id].code, locale)}
+          rect={{
+            x0: detail.rect.left,
+            y0: detail.rect.top,
+            x1: detail.rect.right,
+            y1: detail.rect.bottom,
+          }}
+          prefer={detail.left ? "left" : "right"}
+        />
+      )}
     </div>
   );
 }

@@ -10,7 +10,12 @@ const flow = (over: Record<string, unknown> = {}) => ({
   resolutions: { extracurricular: { R1: ["rescued"], none: ["lost"] } },
   steps: {
     intro: { kind: "story", text: "Their hand is at your throats" },
-    check: { kind: "branch", condition: { kind: "logHas", id: "unconscious" }, then: ["rescued"], else: ["lost"] },
+    check: {
+      kind: "branch",
+      condition: { kind: "logHas", id: "unconscious" },
+      then: ["rescued"],
+      else: ["lost"],
+    },
     rescued: { kind: "effects", effects: [{ do: "record", key: "rescued" }] },
     lost: { kind: "story", text: "Lost." },
   },
@@ -23,14 +28,23 @@ describe("CampaignFlow", () => {
   });
 
   it("refuses a step that names a step that doesn't exist", () => {
-    const bad = flow({ steps: { ...flow().steps, check: { kind: "branch", condition: { kind: "logHas", id: "x" }, then: ["nope"], else: [] } } });
+    const bad = flow({
+      steps: {
+        ...flow().steps,
+        check: { kind: "branch", condition: { kind: "logHas", id: "x" }, then: ["nope"], else: [] },
+      },
+    });
     const r = CampaignFlow.safeParse(bad);
     expect(r.success).toBe(false);
     expect(JSON.stringify(r.success ? "" : r.error.issues)).toContain("nope");
   });
 
   it("refuses a setup, an interlude or a resolution naming a missing step", () => {
-    for (const bad of [flow({ setup: ["gone"] }), flow({ interludes: { armitage: { kind: "interlude", steps: ["gone"] } } }), flow({ resolutions: { extracurricular: { R1: ["gone"] } } })]) {
+    for (const bad of [
+      flow({ setup: ["gone"] }),
+      flow({ interludes: { armitage: { kind: "interlude", steps: ["gone"] } } }),
+      flow({ resolutions: { extracurricular: { R1: ["gone"] } } }),
+    ]) {
       expect(CampaignFlow.safeParse(bad).success).toBe(false);
     }
   });
@@ -38,14 +52,20 @@ describe("CampaignFlow", () => {
   it("follows the steps inside a choice, a counter's effects and a nested branch", () => {
     const steps = {
       ...flow().steps,
-      pick: { kind: "chooseOne", text: "Who?", choices: [{ id: "a", text: "A", effects: [], steps: ["ghost"] }] },
+      pick: {
+        kind: "chooseOne",
+        text: "Who?",
+        choices: [{ id: "a", text: "A", effects: [], steps: ["ghost"] }],
+      },
     };
     expect(CampaignFlow.safeParse(flow({ steps })).success).toBe(false);
   });
 
   it("refuses a step without a kind and an unknown kind", () => {
     expect(CampaignFlow.safeParse(flow({ steps: { intro: { text: "x" } } })).success).toBe(false);
-    expect(CampaignFlow.safeParse(flow({ steps: { intro: { kind: "dance" } } })).success).toBe(false);
+    expect(CampaignFlow.safeParse(flow({ steps: { intro: { kind: "dance" } } })).success).toBe(
+      false,
+    );
   });
 });
 
@@ -63,7 +83,13 @@ describe("FlowCondition", () => {
       { kind: "playerCount", min: 3 },
       { kind: "hasCard", card: "01016", inv: "any" },
       { kind: "not", condition: { kind: "logHas", id: "x" } },
-      { kind: "all", conditions: [{ kind: "logHas", id: "x" }, { kind: "any", conditions: [{ kind: "playerCount", max: 2 }] }] },
+      {
+        kind: "all",
+        conditions: [
+          { kind: "logHas", id: "x" },
+          { kind: "any", conditions: [{ kind: "playerCount", max: 2 }] },
+        ],
+      },
       { kind: "unsupported", name: "partner_status", take: false },
     ];
     for (const c of ok) expect(FlowCondition.safeParse(c).success, JSON.stringify(c)).toBe(true);
@@ -116,13 +142,19 @@ describe("CampaignDef additions", () => {
         { id: "campaign_notes", kind: "entries", label: "Campaign Notes" },
         { id: "doubt", kind: "count", label: "Doubt" },
       ],
-      cards: [{ scenario: "a", code: "02041" }, { scenario: "dwl-interlude", interlude: true }],
+      cards: [
+        { scenario: "a", code: "02041" },
+        { scenario: "dwl-interlude", interlude: true },
+      ],
     });
     expect(r.success).toBe(true);
   });
 
   it("refuses a log section of an unknown kind", () => {
-    expect(CampaignDef.safeParse({ ...base, logSections: [{ id: "x", kind: "magic", label: "X" }] }).success).toBe(false);
+    expect(
+      CampaignDef.safeParse({ ...base, logSections: [{ id: "x", kind: "magic", label: "X" }] })
+        .success,
+    ).toBe(false);
   });
 });
 
@@ -130,12 +162,20 @@ describe("flows in the content", () => {
   it("Night of the Zealot's hand-written flow plays its three scenarios in order and declares the notes section", () => {
     const f = flowOf(db, "night-of-the-zealot");
     expect(f.order).toEqual(["the-gathering", "the-midnight-masks", "the-devourer-below"]);
-    expect(db.campaigns["night-of-the-zealot"].logSections.map((x) => x.id)).toEqual(["campaign_notes"]);
+    expect(db.campaigns["night-of-the-zealot"].logSections.map((x) => x.id)).toEqual([
+      "campaign_notes",
+    ]);
   });
 
   it("a campaign with no flow file plays its scenarios in the campaign's order, with nothing between them", () => {
     const f = flowOf({ ...db, flows: {} }, "night-of-the-zealot");
-    expect(f).toMatchObject({ setup: [], order: ["the-gathering", "the-midnight-masks", "the-devourer-below"], interludes: {}, resolutions: {}, steps: {} });
+    expect(f).toMatchObject({
+      setup: [],
+      order: ["the-gathering", "the-midnight-masks", "the-devourer-below"],
+      interludes: {},
+      resolutions: {},
+      steps: {},
+    });
   });
 
   it("refuses a campaign that doesn't exist", () => {
@@ -149,13 +189,26 @@ describe("resolutionSteps", () => {
     expect(ids).toEqual(["res:the-gathering:R1"]);
     const st = steps[ids[0]];
     expect(st.kind).toBe("effects");
-    expect(st.kind === "effects" && st.effects.map((e) => e.do)).toEqual(["record", "earnCard", "trauma", "xp"]);
+    expect(st.kind === "effects" && st.effects.map((e) => e.do)).toEqual([
+      "record",
+      "earnCard",
+      "trauma",
+      "xp",
+    ]);
   });
 
   it("uses the flow's own steps for a resolution it lists", () => {
     const withFlow = {
       ...db,
-      flows: { "night-of-the-zealot": { setup: [], order: ["the-gathering"], interludes: {}, resolutions: { "the-gathering": { R1: ["a"] } }, steps: { a: { kind: "story" as const, text: "x", bullets: [] } } } },
+      flows: {
+        "night-of-the-zealot": {
+          setup: [],
+          order: ["the-gathering"],
+          interludes: {},
+          resolutions: { "the-gathering": { R1: ["a"] } },
+          steps: { a: { kind: "story" as const, text: "x", bullets: [] } },
+        },
+      },
     };
     const r = resolutionSteps(withFlow, "night-of-the-zealot", "the-gathering", "R1");
     expect(r.ids).toEqual(["a"]);
@@ -163,6 +216,8 @@ describe("resolutionSteps", () => {
   });
 
   it("falls back to the none resolution for one the scenario doesn't have", () => {
-    expect(resolutionSteps(db, "night-of-the-zealot", "the-gathering", "R9").ids).toEqual(["res:the-gathering:none"]);
+    expect(resolutionSteps(db, "night-of-the-zealot", "the-gathering", "R9").ids).toEqual([
+      "res:the-gathering:none",
+    ]);
   });
 });

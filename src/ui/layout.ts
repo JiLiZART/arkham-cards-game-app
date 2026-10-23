@@ -73,7 +73,9 @@ export function layout(db: ContentDb, s: GameState, viewer: InvId | null): Table
   for (const l of locs) grid.set(l.id, scen.layout[l.code] ?? [spare++, 3]);
   const cols = [...grid.values()].map((g) => g[0]);
   const rows = [...grid.values()].map((g) => g[1]);
-  const [c0, c1, q0, q1] = locs.length ? [Math.min(...cols), Math.max(...cols), Math.min(...rows), Math.max(...rows)] : [0, 0, 0, 0];
+  const [c0, c1, q0, q1] = locs.length
+    ? [Math.min(...cols), Math.max(...cols), Math.min(...rows), Math.max(...rows)]
+    : [0, 0, 0, 0];
   const ls = LOC_SCALE;
   const locW = CARD_W * ls;
   const locH = CARD_H * ls;
@@ -85,7 +87,9 @@ export function layout(db: ContentDb, s: GameState, viewer: InvId | null): Table
     put(l.id, p, `loc:${l.id}`, { from: p, scale: ls });
   }
   const link = (a: string, b: string, oneWay: boolean) => {
-    for (const la of locs.filter((l) => l.code === a)) for (const lb of locs.filter((l) => l.code === b)) links.push({ a: locPos.get(la.id)!, b: locPos.get(lb.id)!, oneWay });
+    for (const la of locs.filter((l) => l.code === a))
+      for (const lb of locs.filter((l) => l.code === b))
+        links.push({ a: locPos.get(la.id)!, b: locPos.get(lb.id)!, oneWay });
   };
   for (const [a, b] of scen.connections) link(a, b, false);
   for (const [a, b] of scen.oneWay ?? []) link(a, b, true);
@@ -94,18 +98,28 @@ export function layout(db: ContentDb, s: GameState, viewer: InvId | null): Table
   // (the viewer's engaged enemies are in the play area strip)
   for (const l of locs) {
     const p = locPos.get(l.id)!;
-    const here = Object.values(s.cards).filter((c) => c.location === l.id && ((c.zone === "enemy" && c.engagedWith !== viewer) || c.zone === "attached"));
+    const here = Object.values(s.cards).filter(
+      (c) =>
+        c.location === l.id &&
+        ((c.zone === "enemy" && c.engagedWith !== viewer) || c.zone === "attached"),
+    );
     here.forEach((c, k) => {
       const enemy = c.zone === "enemy";
-      put(c.id, [p[0] - locW * 0.22 + k * locW * 0.22, 0.02 + k * 0.02, p[2] + locH * 0.18], `loc:${l.id}`, {
-        scale: ls * 0.5,
-        badge: enemy && c.engagedWith ? c.engagedWith : undefined,
-      });
+      put(
+        c.id,
+        [p[0] - locW * 0.22 + k * locW * 0.22, 0.02 + k * 0.02, p[2] + locH * 0.18],
+        `loc:${l.id}`,
+        {
+          scale: ls * 0.5,
+          badge: enemy && c.engagedWith ? c.engagedWith : undefined,
+        },
+      );
     });
   }
   for (const i of s.order) {
     const st = s.invs[i];
-    if (st.location && st.status === "playing" && locPos.has(st.location)) minis.push({ inv: i, pos: locPos.get(st.location)!, index: s.order.indexOf(i) });
+    if (st.location && st.status === "playing" && locPos.has(st.location))
+      minis.push({ inv: i, pos: locPos.get(st.location)!, index: s.order.indexOf(i) });
   }
   // investigator portraits sit along the top of their location, side by side
   const base = minis.map((m) => m.pos);
@@ -117,12 +131,22 @@ export function layout(db: ContentDb, s: GameState, viewer: InvId | null): Table
 
   const halfW = ((c1 - c0 + 1) * locW + (c1 - c0) * GAP) / 2;
   const halfH = ((q1 - q0 + 1) * locH + (q1 - q0) * GAP) / 2;
-  const bounds = { x0: -halfW - MARGIN, x1: halfW + MARGIN, z0: -halfH - MARGIN, z1: halfH + MARGIN };
+  const bounds = {
+    x0: -halfW - MARGIN,
+    x1: halfW + MARGIN,
+    z0: -halfH - MARGIN,
+    z1: halfH + MARGIN,
+  };
   return { cards, minis, links, bounds, connectorSize: GAP + 0.7, locScale: ls };
 }
 
 /** axis-aligned footprint of a placement on the table */
-export function footprint(p: Pick<Placement, "pos" | "scale" | "landscape"> & { yaw?: number }): { x0: number; x1: number; z0: number; z1: number } {
+export function footprint(p: Pick<Placement, "pos" | "scale" | "landscape"> & { yaw?: number }): {
+  x0: number;
+  x1: number;
+  z0: number;
+  z1: number;
+} {
   // a card turned a quarter turn swaps its width and height
   const wide = p.landscape !== Math.abs(Math.sin(p.yaw ?? 0)) > 0.5;
   const w = (wide ? CARD_H : CARD_W) * p.scale;

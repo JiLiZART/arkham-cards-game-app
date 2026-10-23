@@ -16,17 +16,23 @@ export function shownInv(game: GameState, view: Looking): InvId | null {
 }
 
 /** choices are offered only while the deciding investigator's table is on screen */
-export const choicesOffered = (game: GameState, view: Looking): boolean => !!game.pending && shownInv(game, view) === viewerOf(game);
+export const choicesOffered = (game: GameState, view: Looking): boolean =>
+  !!game.pending && shownInv(game, view) === viewerOf(game);
 
 /**
  * A decision that belongs to someone other than the investigator whose turn it is and helps another's play: a commit to
  * another investigator's test, or a reaction. Who, and the string that says what they can do. Null otherwise; a commit
  * window of the decider's own test (a treachery drawn in the mythos phase) is theirs to answer like any decision.
  */
-export function canAct(game: GameState): { inv: InvId; key: "players.canCommit" | "players.mayReact" } | null {
+export function canAct(
+  game: GameState,
+): { inv: InvId; key: "players.canCommit" | "players.mayReact" } | null {
   const p = game.pending;
   if (!p || game.active === null || p.inv === game.active) return null;
-  if (p.kind === "commit") return game.skillTest && game.skillTest.inv !== p.inv ? { inv: p.inv, key: "players.canCommit" } : null;
+  if (p.kind === "commit")
+    return game.skillTest && game.skillTest.inv !== p.inv
+      ? { inv: p.inv, key: "players.canCommit" }
+      : null;
   if (p.kind === "reaction") return { inv: p.inv, key: "players.mayReact" };
   return null;
 }
@@ -41,7 +47,9 @@ export const landingView = (game: GameState): InvId | null => (canAct(game) ? ga
  * What the instruction bar asks: the decider's choice (with its buttons only on their table), or, while someone else
  * can act and their table is not on screen, who can act and a switch to them. Never an instruction nobody can answer.
  */
-export type BarAsk = { kind: "choice"; buttons: boolean } | { kind: "handoff"; inv: InvId; key: "players.canCommit" | "players.mayReact" };
+export type BarAsk =
+  | { kind: "choice"; buttons: boolean }
+  | { kind: "handoff"; inv: InvId; key: "players.canCommit" | "players.mayReact" };
 export function barAsk(game: GameState, view: Looking): BarAsk {
   const offered = choicesOffered(game, view);
   const can = canAct(game);
@@ -107,7 +115,10 @@ export function barModel(game: GameState, view: Looking): Avatar[] {
  * turn, the damage, a card's target) or for any investigator but the decider, the avatar answers on a tap; the decider's
  * own card alone is an ability, offered in their sheet.
  */
-export function investigatorOptions(game: GameState): { answers: Map<InvId, ChoiceOption>; abilities: ChoiceOption[] } {
+export function investigatorOptions(game: GameState): {
+  answers: Map<InvId, ChoiceOption>;
+  abilities: ChoiceOption[];
+} {
   const own = new Map(game.order.map((i) => [game.invs[i].cardId, i]));
   const mine = (game.pending?.options ?? []).filter((o) => o.card && own.has(o.card));
   const answers = new Map<InvId, ChoiceOption>();
@@ -156,7 +167,11 @@ export function investigatorChoice(game: GameState): InvestigatorChoice | null {
   if (!p || p.kind === "reaction" || p.kind === "commit" || !p.options.length) return null;
   const own = new Map(game.order.map((i) => [game.invs[i].cardId, i]));
   if (!p.options.every((o) => o.card && own.has(o.card))) return null;
-  return { prompt: p.prompt, options: p.options.map((o) => ({ inv: own.get(o.card!)!, id: o.id, label: o.label })), single: p.options.length === 1 };
+  return {
+    prompt: p.prompt,
+    options: p.options.map((o) => ({ inv: own.get(o.card!)!, id: o.id, label: o.label })),
+    single: p.options.length === 1,
+  };
 }
 
 /**
@@ -190,10 +205,13 @@ export function deckOptions(game: GameState, viewer: InvId | null): DeckOptions 
   if (!p || !viewer || p.inv !== viewer) return none;
   if (p.kind === "draw") {
     const o = p.options[0] ?? null;
-    return p.promptVars?.deck === "encounter" ? { player: null, encounter: o, waiting: true } : { player: o, encounter: null, waiting: true };
+    return p.promptVars?.deck === "encounter"
+      ? { player: null, encounter: o, waiting: true }
+      : { player: o, encounter: null, waiting: true };
   }
   if (p.kind === "turn") {
-    const draw = p.options.find((o) => (o.value as { kind?: string } | null)?.kind === "draw") ?? null;
+    const draw =
+      p.options.find((o) => (o.value as { kind?: string } | null)?.kind === "draw") ?? null;
     return { player: draw, encounter: null, waiting: false };
   }
   return none;
@@ -204,4 +222,8 @@ export const HOVER_SHEET_MS = 500;
 export const SHEET_GRACE_MS = 150;
 
 /** the investigator whose sheet a resting mouse opens: the one hovered, once long enough, unless they are the one on screen */
-export const sheetFor = (hovered: InvId | null, shown: InvId | null, elapsed: number): InvId | null => (hovered && hovered !== shown && elapsed >= HOVER_SHEET_MS ? hovered : null);
+export const sheetFor = (
+  hovered: InvId | null,
+  shown: InvId | null,
+  elapsed: number,
+): InvId | null => (hovered && hovered !== shown && elapsed >= HOVER_SHEET_MS ? hovered : null);

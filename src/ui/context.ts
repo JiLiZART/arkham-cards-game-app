@@ -17,14 +17,17 @@ export const db = content;
 const prepare = (campaignId: string, codes: string[] = []) => {
   const c = content.campaigns[campaignId];
   if (!c) return;
-  const packs = [...new Set([...c.packs, ...packsOf(codes)])].filter((p) => content.packs[p] && !packLoaded(content, p));
+  const packs = [...new Set([...c.packs, ...packsOf(codes)])].filter(
+    (p) => content.packs[p] && !packLoaded(content, p),
+  );
   const icons = c.generated && !campaignSpriteLoaded();
   const scenarios = !campaignLoaded(campaignId);
   if (!packs.length && !icons && !scenarios) return;
   return Promise.all([
     scenarios
       ? loadCampaign(campaignId).then((errors) => {
-          if (errors.length) throw new Error(`${campaignId}: ${errors[0].path} ${errors[0].message}`);
+          if (errors.length)
+            throw new Error(`${campaignId}: ${errors[0].path} ${errors[0].message}`);
         })
       : null,
     ...packs.map((p) =>

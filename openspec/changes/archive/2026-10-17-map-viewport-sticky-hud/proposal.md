@@ -37,14 +37,17 @@ The board is still hard to play on. One fixed camera has to fit the whole map, t
   - a result panel then shows the calculation step by step: skill, modifiers, committed icons, token, total against the difficulty, and Success or Fail.
 
   Which token comes out is still decided by the engine's seeded draw, so replays and saved games stay exact; the click stages the reveal. A menu setting turns the click off for an automatic reveal.
+
 - Committed skill cards and the encounter card being resolved move out of the map into the skill-test panel and a centred overlay, since the map can be scrolled away from them.
 
 ## Capabilities
 
 ### New Capabilities
+
 None.
 
 ### Modified Capabilities
+
 - `game-table-ui`:
   - modified: "Table layout" (full-width map viewport plus fixed HUD panels), "Card interaction" (hover enlarges in place; act and agenda show both sides), "Hand fan" (2× on hover), "Stat bar" (numbers at least 48 px), "Card detail modal" (both sides for act and agenda), "Drag to move" (at any zoom) and "Other investigators" (now under the chaos bag);
   - also modified: "Prompts and choices" (the reveal goes through the token draw);

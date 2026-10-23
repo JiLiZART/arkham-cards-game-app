@@ -10,11 +10,13 @@
 ## Goals / Non-Goals
 
 **Goals:**
+
 - Sound as data: which clip plays for what is a manifest, not code.
 - One clock: effects follow the animation, music follows game state.
 - Pure decision logic, thin audio wrapper, browser-checkable through a dev hook.
 
 **Non-Goals:**
+
 - Haptics, voice, per-location ambience, menu music, Debug-panel sounds.
 - A general audio middleware (buses, reverb, ducking graphs). Two gain nodes and a crossfade are enough.
 
@@ -65,20 +67,25 @@ Assumptions: lightweight rigor; the single container is the browser app; "Web Au
 ## Decisions
 
 ### 1. Effects fire from `view.playing`, UI moments from one `moment()` call
+
 Alternative: subscribe to the log and play on append. Rejected: at the tap pace sound would run ahead of the screen and bursts would stack (proposal Q10). `view.playing` already encodes "this is on screen now".
 
 ### 2. Pure `sounds.ts` + thin `audio.ts`, split for tests
+
 Alternative: one module with Web Audio calls next to the lookups. Rejected: vitest has no audio; the decisions are where bugs would hide (trait order, priority, gains). The wrapper stays small enough to read.
 
 ### 3. Music selection is a function of game state, re-evaluated on store change
+
 `musicFor(game)` returns a track id; `audio.music(id)` is idempotent (same id → nothing). Crossfade 1.5 s via two sources and gain ramps. Alternative: event-driven cues (on engage, on defeat). Rejected: state-derived can't drift out of sync after undo or reload.
 
 Signals: fight = any card in zone `enemy` with `engagedWith` set; tension = `phase === "enemy"` or doom on the agenda equals its threshold minus 1 (via `doomInPlay` and the agenda card's `doom`, as the scenario panel badge does); bed = `scenarioId`.
 
 ### 4. Formats: MP3 mono 80 kbps for effects; AAC `.m4a` + Opus `.webm` for music
+
 Music needs gapless loops; containers that support them beat the loop-point trick (proposal Q5). `audio.ts` picks by `canPlayType("audio/mp4; codecs=mp4a.40.2")`, else Opus. Effects are short, MP3 everywhere, no fallback. The import script encodes with `ffmpeg` (`-ac 1 -b:a 80k` for effects; `-c:a aac -b:a 96k` and `-c:a libopus -b:a 80k` for music) and fails if `libopus` is absent.
 
 ### 5. Manifest shape
+
 ```json
 {
   "effects": { "snap": { "file": "snap.mp3", "gain": 0.8, "source": "...", "author": "...", "license": "CC0" } },
@@ -89,17 +96,20 @@ Music needs gapless loops; containers that support them beat the loop-point tric
   "cards":   { "01016": { "fight": "gunshot-45" } }
 }
 ```
+
 Validated by a zod schema in `src/content/schema.ts`; `check:content` adds: files exist, licence is `CC0`, every referenced clip id exists, every `events` key is in `ANIMATED`, sizes within budget.
 
 ### 6. Settings in the save, mute as a flag
+
 `musicVolume`, `sfxVolume` (0 to 100), `muted` on `UiState` and in `settings`; resume defaults 50 / 80 / false. Mute keeps the levels. Gains apply as `volume/100 * clipGain`, muted → 0, with a short ramp to avoid clicks.
 
 ### 7. Unlock on the first gesture
+
 A one-shot `pointerdown`/`keydown` listener on `window` calls `ctx.resume()`. Until then `audio.ts` drops plays silently and `music()` just records the wanted track, which starts on unlock.
 
 ## Risks / Trade-offs
 
-- [Finding good CC0 clips takes longer than the code] -> the manifest allows a placeholder clip per target; the change ships when every target has *a* clip, and clips improve by data later.
+- [Finding good CC0 clips takes longer than the code] -> the manifest allows a placeholder clip per target; the change ships when every target has _a_ clip, and clips improve by data later.
 - [Audible loop seam in a music track] -> containers chosen for gaplessness; the manifest allows `loopStart`/`loopEnd` per track as a fallback.
 - [Sound and screen drift at the tap pace] -> effects keyed to `view.playing` only; a check script asserts play order against the sampler.
 - [Mobile data: 10 MB of music] -> loaded after the game starts, bed first, fight and tension after; music absence is silent, never an error.

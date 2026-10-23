@@ -14,9 +14,11 @@ Out of scope: the opening hand and mulligan (they fly straight to the fan, as no
 ## Capabilities
 
 ### New Capabilities
+
 <!-- none -->
 
 ### Modified Capabilities
+
 - `game-table-ui`: the card showcase (animation, size, dismissal, help text, hover details) and picking cards from a deck (same animation, help line instead of buttons).
 
 ## Impact

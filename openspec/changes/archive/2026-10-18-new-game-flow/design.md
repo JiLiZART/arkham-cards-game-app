@@ -7,11 +7,13 @@
 ## Goals / Non-Goals
 
 **Goals:**
+
 - A phone-first wizard that a first-time player can walk through without reading.
 - Pure step state (`wizard.ts`) so the flow is unit-tested without React.
 - No change to what `newCampaign` receives.
 
 **Non-Goals:**
+
 - Deck editing (deck-configuration), the table's phone layout, campaign selection beyond what content defines.
 
 ## Diagram (C4-inspired, component level, ASCII; the browser app is the only container)
@@ -39,18 +41,23 @@
 ## Decisions
 
 ### 1. Pure wizard state in `wizard.ts`
+
 `WizardState` plus reducers (`toggleInvestigator` keeps tap order and caps at four, `setDeck`, `setDifficulty`, `next`/`back` with per-step `canContinue`), tested without React. The React steps render it. Alternative: state inside the components; rejected, the back-keeps-picks rule and the order rule deserve tests.
 
 ### 2. Screens as store values
+
 `screen` gains `"title" | "wizard" | "settings"`; the wizard's own step lives in the wizard state (not the store) so a reload returns to the title, which is fine for a menu.
 
 ### 3. Bag cards from the data
+
 `BagCard` groups the bag with `groupTokens` and renders `ChaosToken`s with counts; `averageModifier(tokens)` in `chaos.ts` averages the numeric tokens (symbols excluded) and is tested. No per-difficulty text beyond a one-line blurb string per difficulty id.
 
 ### 4. Avatars are `Portrait`
+
 The tiles and the ready screen use the existing `Portrait` (class ring, active ring unused). The campaign log's investigator rows switch to it too.
 
 ### 5. Deck step defers editing
+
 The step lists `db.decks` for the investigator plus custom decks read through a `customDecks()` function that returns `[]` until deck-configuration provides them; the "Edit" control appears only when that change registers an editor. No coupling in the other direction.
 
 ## Risks / Trade-offs

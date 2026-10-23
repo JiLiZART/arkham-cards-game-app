@@ -17,7 +17,15 @@ type Setup = (g: G, asset: string) => void;
 /** Roland (and Daisy, if asked) at the start of a turn with `code` in play with `uses`, 2 damage and 2 horror on Roland */
 function turn(code: string, setup: Setup = () => {}, invs = [ROLAND]): { r: Result; id: string } {
   let r = skipMulligans(start("the-gathering", invs, 1, { chaosBag: ["0"] as never }));
-  while (r.state.pending && r.state.pending.kind !== "turn") r = pick(r, r.state.pending.options.some((o) => o.id === "pass") ? "pass" : /^Done/.test(r.state.pending.options[0].label) ? /^Done/ : /./);
+  while (r.state.pending && r.state.pending.kind !== "turn")
+    r = pick(
+      r,
+      r.state.pending.options.some((o) => o.id === "pass")
+        ? "pass"
+        : /^Done/.test(r.state.pending.options[0].label)
+          ? /^Done/
+          : /./,
+    );
   let id = "";
   r = mutate(r, (g) => {
     id = createCard(g, code, "limbo", ROLAND);
@@ -31,7 +39,10 @@ function turn(code: string, setup: Setup = () => {}, invs = [ROLAND]): { r: Resu
 }
 const use = (r: Result, name: string) => pick(r, new RegExp(`^${name}`));
 const state = (r: Result) => gOf(r);
-const hurt = (r: Result, i = ROLAND) => ({ damage: r.state.invs[i].damage, horror: r.state.invs[i].horror });
+const hurt = (r: Result, i = ROLAND) => ({
+  damage: r.state.invs[i].damage,
+  horror: r.state.invs[i].horror,
+});
 
 describe("Clarity of Mind", () => {
   it("level 0 heals 1 horror and spends a charge", () => {
@@ -42,10 +53,14 @@ describe("Clarity of Mind", () => {
   });
 
   it("level 3 heals 2 horror from among the investigators, a point at a time", () => {
-    const { r: r0, id } = turn("51008", (g) => {
-      inv(g, DAISY).horror = 1;
-      inv(g, DAISY).location = inv(g, ROLAND).location;
-    }, [ROLAND, DAISY]);
+    const { r: r0, id } = turn(
+      "51008",
+      (g) => {
+        inv(g, DAISY).horror = 1;
+        inv(g, DAISY).location = inv(g, ROLAND).location;
+      },
+      [ROLAND, DAISY],
+    );
     let r = use(r0, "Clarity of Mind");
     expect(options(r)).toEqual(["Roland Banks", "Daisy Walker"]);
     r = pick(r, "Daisy Walker");
@@ -86,10 +101,14 @@ describe("healing damage", () => {
   });
 
   it("Healing Words level 3 heals 2 damage from among the investigators, placed point by point", () => {
-    const { r: r0 } = turn("08068", (g) => {
-      inv(g, DAISY).damage = 1;
-      inv(g, DAISY).location = inv(g, ROLAND).location;
-    }, [ROLAND, DAISY]);
+    const { r: r0 } = turn(
+      "08068",
+      (g) => {
+        inv(g, DAISY).damage = 1;
+        inv(g, DAISY).location = inv(g, ROLAND).location;
+      },
+      [ROLAND, DAISY],
+    );
     let r = use(r0, "Healing Words");
     r = pick(r, "Daisy Walker");
     r = pick(r, "Roland Banks");

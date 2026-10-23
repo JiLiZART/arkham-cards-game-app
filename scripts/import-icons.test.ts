@@ -1,22 +1,43 @@
 import { describe, expect, it } from "vitest";
-import { buildSymbols, checkIcons, codeIconNames, contentIconNames, generatedIconNames, iconAlias, setsWithoutIcon, spriteIds, spriteSvg, stripSvg, symbolSet } from "./import-icons";
+import {
+  buildSymbols,
+  checkIcons,
+  codeIconNames,
+  contentIconNames,
+  generatedIconNames,
+  iconAlias,
+  setsWithoutIcon,
+  spriteIds,
+  spriteSvg,
+  stripSvg,
+  symbolSet,
+} from "./import-icons";
 
 describe("stripSvg", () => {
   it("keeps the viewBox and every path, drops size, fill, ids and editor metadata", () => {
     const svg = `<?xml version="1.0"?><svg xmlns="http://www.w3.org/2000/svg" id="x" viewBox="0 0 1024 1024" width="1024" height="1024">
       <style>.st0{fill:#020203;}</style><path class="st0" fill="#000" d="M10.26,20.04l5 5z" id="p1"/><path
         d="M1 2h3z" /></svg>`;
-    expect(stripSvg(svg)).toEqual({ viewBox: "0 0 1024 1024", body: '<path d="M10,20l5 5z"/><path d="M1 2h3z"/>' });
+    expect(stripSvg(svg)).toEqual({
+      viewBox: "0 0 1024 1024",
+      body: '<path d="M10,20l5 5z"/><path d="M1 2h3z"/>',
+    });
   });
 
   it("small boxes keep one decimal and rounding never merges neighbouring numbers", () => {
     // "0.95.3" is two numbers (0.95 and .3); rounded, they must stay two
-    expect(stripSvg('<svg viewBox="0 0 10 10"><path d="c0.95.3-1.04-2.5"/></svg>').body).toBe('<path d="c1 .3-1-2.5"/>');
+    expect(stripSvg('<svg viewBox="0 0 10 10"><path d="c0.95.3-1.04-2.5"/></svg>').body).toBe(
+      '<path d="c1 .3-1-2.5"/>',
+    );
   });
 
   it("refuses shapes it would silently drop", () => {
-    expect(() => stripSvg('<svg viewBox="0 0 10 10"><circle r="3"/></svg>')).toThrow(/only plain <path>/);
-    expect(() => stripSvg('<svg viewBox="0 0 10 10"><path transform="scale(2)" d="M0 0"/></svg>')).toThrow(/only plain <path>/);
+    expect(() => stripSvg('<svg viewBox="0 0 10 10"><circle r="3"/></svg>')).toThrow(
+      /only plain <path>/,
+    );
+    expect(() =>
+      stripSvg('<svg viewBox="0 0 10 10"><path transform="scale(2)" d="M0 0"/></svg>'),
+    ).toThrow(/only plain <path>/);
   });
 });
 
@@ -25,13 +46,29 @@ describe("symbol set", () => {
     const names = codeIconNames();
     // the painted bag is a PNG now, but its glyph stays in the sprite
     expect(names).toContain("chaos_bag");
-    for (const n of ["skill_willpower", "skill_willpower_inverted", "health", "health_inverted", "token_symbol_fill", "token_skull_overlay", "token_skull_highlight", "token_number_overlay", "token_-3_highlight", "per_investigator", "unique"]) {
+    for (const n of [
+      "skill_willpower",
+      "skill_willpower_inverted",
+      "health",
+      "health_inverted",
+      "token_symbol_fill",
+      "token_skull_overlay",
+      "token_skull_highlight",
+      "token_number_overlay",
+      "token_-3_highlight",
+      "per_investigator",
+      "unique",
+    ]) {
       expect(names, n).toContain(n);
     }
   });
 
   it("font glyphs keep their font, other names and aliases are extras", () => {
-    const set = symbolSet({ fonts: { arkhamicons: ["skull"], tokens: ["skull", "token_symbol_fill"] }, referenced: ["skull", "chaos_bag"], extra: { torch: "the_gathering" } });
+    const set = symbolSet({
+      fonts: { arkhamicons: ["skull"], tokens: ["skull", "token_symbol_fill"] },
+      referenced: ["skull", "chaos_bag"],
+      extra: { torch: "the_gathering" },
+    });
     expect(Object.fromEntries(set)).toEqual({
       skull: { file: "skull", set: "arkhamicons" },
       token_symbol_fill: { file: "token_symbol_fill", set: "tokens" },
@@ -41,47 +78,88 @@ describe("symbol set", () => {
   });
 
   it("fails naming every icon with no source file", () => {
-    const set = symbolSet({ fonts: {}, referenced: ["skull", "made_up_icon", "other_missing"], extra: {} });
-    const read = (f: string) => (f === "skull" ? '<svg viewBox="0 0 10 10"><path d="M0 0"/></svg>' : null);
+    const set = symbolSet({
+      fonts: {},
+      referenced: ["skull", "made_up_icon", "other_missing"],
+      extra: {},
+    });
+    const read = (f: string) =>
+      f === "skull" ? '<svg viewBox="0 0 10 10"><path d="M0 0"/></svg>' : null;
     expect(() => buildSymbols(set, read)).toThrow("no icon file for: made_up_icon, other_missing");
   });
 
   it("writes one symbol per name and reads the ids back", () => {
     const set = symbolSet({ fonts: {}, referenced: ["skull"], extra: { torch: "the_gathering" } });
-    const svg = spriteSvg(buildSymbols(set, () => '<svg viewBox="0 0 10 20"><path d="M0 0"/></svg>'));
+    const svg = spriteSvg(
+      buildSymbols(set, () => '<svg viewBox="0 0 10 20"><path d="M0 0"/></svg>'),
+    );
     expect(svg).toContain('<symbol id="skull" viewBox="0 0 10 20"><path d="M0 0"/></symbol>');
     expect(spriteIds(svg)).toEqual(["skull", "torch"]);
   });
 });
 
 describe("checkIcons", () => {
-  const db = (sets: string[]) => ({ encounterSets: {}, scenarios: { "the-gathering": { encounterSets: sets, sideDecks: {} } } }) as never;
-  const manifest = (ids: string[]) => ({ source: "", extra: {}, symbols: Object.fromEntries(ids.map((id) => [id, { file: `${id}.svg`, set: "extra" }])) });
+  const db = (sets: string[]) =>
+    ({
+      encounterSets: {},
+      scenarios: { "the-gathering": { encounterSets: sets, sideDecks: {} } },
+    }) as never;
+  const manifest = (ids: string[]) => ({
+    source: "",
+    extra: {},
+    symbols: Object.fromEntries(ids.map((id) => [id, { file: `${id}.svg`, set: "extra" }])),
+  });
 
   it("passes when every set and scenario has a symbol and manifest and sprite agree", () => {
-    expect(checkIcons(db(["torch"]), manifest(["torch", "the_gathering"]), ["the_gathering", "torch"])).toEqual([]);
+    expect(
+      checkIcons(db(["torch"]), manifest(["torch", "the_gathering"]), ["the_gathering", "torch"]),
+    ).toEqual([]);
   });
 
   it("fails on an encounter set the sprite does not know", () => {
-    const errors = checkIcons(db(["torch", "made_up_set"]), manifest(["torch", "the_gathering"]), ["the_gathering", "torch"]);
+    const errors = checkIcons(db(["torch", "made_up_set"]), manifest(["torch", "the_gathering"]), [
+      "the_gathering",
+      "torch",
+    ]);
     expect(errors.map((e) => e.path)).toEqual(["made_up_set"]);
   });
 
   it("fails when the manifest and the sprite disagree, or either is missing", () => {
-    expect(checkIcons(db([]), manifest(["the_gathering", "skull"]), ["the_gathering", "curse"]).map((e) => e.path)).toEqual(["curse", "skull"]);
+    expect(
+      checkIcons(db([]), manifest(["the_gathering", "skull"]), ["the_gathering", "curse"]).map(
+        (e) => e.path,
+      ),
+    ).toEqual(["curse", "skull"]);
     expect(checkIcons(db([]), null, null)).toHaveLength(1);
   });
 
   it("the generated campaigns' sprite counts for the manifest, not for the icons hand-written scenarios require", () => {
-    expect(checkIcons(db(["torch"]), manifest(["torch", "the_gathering", "sorcery"]), ["the_gathering", "torch"], ["sorcery"])).toEqual([]);
-    expect(checkIcons(db(["torch", "sorcery"]), manifest(["torch", "the_gathering", "sorcery"]), ["the_gathering", "torch"], ["sorcery"]).map((e) => e.path)).toEqual(["sorcery"]);
+    expect(
+      checkIcons(
+        db(["torch"]),
+        manifest(["torch", "the_gathering", "sorcery"]),
+        ["the_gathering", "torch"],
+        ["sorcery"],
+      ),
+    ).toEqual([]);
+    expect(
+      checkIcons(
+        db(["torch", "sorcery"]),
+        manifest(["torch", "the_gathering", "sorcery"]),
+        ["the_gathering", "torch"],
+        ["sorcery"],
+      ).map((e) => e.path),
+    ).toEqual(["sorcery"]);
   });
 });
 
 describe("which encounter sets need an icon", () => {
   /** a core card in set "rats", a Dunwich card in set "dealings", a scenario that uses "torch" */
   const db = {
-    cards: { "01159": { pack: "core", encounterSet: "rats" }, "02200": { pack: "dwl", encounterSet: "dealings" } },
+    cards: {
+      "01159": { pack: "core", encounterSet: "rats" },
+      "02200": { pack: "dwl", encounterSet: "dealings" },
+    },
     encounterSets: { rats: ["01159"], dealings: ["02200"], torch: [] },
     scenarios: { "the-gathering": { encounterSets: ["torch"], sideDecks: {} } },
   } as never;
@@ -93,15 +171,25 @@ describe("which encounter sets need an icon", () => {
   it("a generated campaign's scenarios and sets are wanted, not required", () => {
     const withGenerated = {
       ...(db as object),
-      scenarios: { "the-gathering": { encounterSets: ["torch"], sideDecks: {} }, "extracurricular-activity": { encounterSets: ["torch", "sorcery"], sideDecks: {} } },
-      campaigns: { notz: { scenarios: ["the-gathering"] }, dwl: { scenarios: ["extracurricular-activity"], generated: true } },
+      scenarios: {
+        "the-gathering": { encounterSets: ["torch"], sideDecks: {} },
+        "extracurricular-activity": { encounterSets: ["torch", "sorcery"], sideDecks: {} },
+      },
+      campaigns: {
+        notz: { scenarios: ["the-gathering"] },
+        dwl: { scenarios: ["extracurricular-activity"], generated: true },
+      },
     } as never;
     expect(contentIconNames(withGenerated).sort()).toEqual(["rats", "the_gathering", "torch"]);
-    expect(generatedIconNames(withGenerated).sort()).toEqual(["extracurricular_activity", "sorcery"]);
+    expect(generatedIconNames(withGenerated).sort()).toEqual([
+      "extracurricular_activity",
+      "sorcery",
+    ]);
   });
 
   it("a wanted name without a glyph borrows the glyph of its base name", () => {
-    const has = (n: string) => ["essex_county_express", "heart_of_the_elders", "ice_and_death"].includes(n);
+    const has = (n: string) =>
+      ["essex_county_express", "heart_of_the_elders", "ice_and_death"].includes(n);
     expect(iconAlias("return_to_essex_county_express", has)).toBe("essex_county_express");
     expect(iconAlias("return_to_heart_of_the_elders_part_2", has)).toBe("heart_of_the_elders");
     expect(iconAlias("ice_and_death_part_3", has)).toBe("ice_and_death");

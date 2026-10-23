@@ -17,7 +17,17 @@ const QUIET_MS = 1500;
  * Top-down orthographic map camera: drag to pan, wheel / pinch to zoom around the pointer, eased toward a target.
  * The target follows the deciding investigator's location (`focus`) unless the player recently moved the view.
  */
-export function MapCamera({ bounds, locH, focus, focusKey }: { bounds: Bounds; locH: number; focus: Vec3 | null; focusKey: string }) {
+export function MapCamera({
+  bounds,
+  locH,
+  focus,
+  focusKey,
+}: {
+  bounds: Bounds;
+  locH: number;
+  focus: Vec3 | null;
+  focusKey: string;
+}) {
   const camera = useThree((s) => s.camera) as THREE.OrthographicCamera;
   const gl = useThree((s) => s.gl);
   const size = useThree((s) => s.size);
@@ -30,8 +40,12 @@ export function MapCamera({ bounds, locH, focus, focusKey }: { bounds: Bounds; l
   insets.current = insetsFor(mode, mode === "phone" ? safeAreaInsets() : undefined);
   const geo = useRef({ bounds, locH });
   geo.current = { bounds, locH };
-  const home = (): Cam => (focus ? focusCam(focus[0], focus[2], locH, viewRef.current, insets.current) : fitCam(bounds, viewRef.current, insets.current));
-  const clamp = (c: Cam) => clampCam(c, geo.current.bounds, viewRef.current, geo.current.locH, insets.current);
+  const home = (): Cam =>
+    focus
+      ? focusCam(focus[0], focus[2], locH, viewRef.current, insets.current)
+      : fitCam(bounds, viewRef.current, insets.current);
+  const clamp = (c: Cam) =>
+    clampCam(c, geo.current.bounds, viewRef.current, geo.current.locH, insets.current);
   const cur = useRef<Cam | null>(null);
   const target = useRef<Cam>(home());
   if (!cur.current) cur.current = clamp(target.current);
@@ -48,7 +62,10 @@ export function MapCamera({ bounds, locH, focus, focusKey }: { bounds: Bounds; l
   const cmd = useView((s) => s.camCmd);
   useEffect(() => {
     if (!cmd) return;
-    target.current = cmd.kind === "focus" ? focusRef.current() : fitCam(geo.current.bounds, viewRef.current, insets.current);
+    target.current =
+      cmd.kind === "focus"
+        ? focusRef.current()
+        : fitCam(geo.current.bounds, viewRef.current, insets.current);
   }, [cmd]);
 
   useEffect(() => {
@@ -84,12 +101,14 @@ export function MapCamera({ bounds, locH, focus, focusKey }: { bounds: Bounds; l
       if (pointers.size === 2) {
         const [a, b] = [...pointers.values()];
         const d = Math.hypot(a.x - b.x, a.y - b.y);
-        if (pinch > 0) set(zoomAt(cur.current!, d / pinch, (a.x + b.x) / 2, (a.y + b.y) / 2, viewRef.current));
+        if (pinch > 0)
+          set(zoomAt(cur.current!, d / pinch, (a.x + b.x) / 2, (a.y + b.y) / 2, viewRef.current));
         pinch = d;
         camInput.panned = true;
         return;
       }
-      if (!camInput.panned && start && Math.hypot(p.x - start.x, p.y - start.y) < PAN_THRESHOLD) return;
+      if (!camInput.panned && start && Math.hypot(p.x - start.x, p.y - start.y) < PAN_THRESHOLD)
+        return;
       camInput.panned = true;
       set(panBy(cur.current!, p.x - prev.x, p.y - prev.y));
     };
@@ -123,9 +142,17 @@ export function MapCamera({ bounds, locH, focus, focusKey }: { bounds: Bounds; l
     const c = cur.current!;
     // reduced motion: the camera jumps instead of panning
     const k = reducedMotion() ? Infinity : 7;
-    const next = { cx: THREE.MathUtils.damp(c.cx, t.cx, k, dt), cz: THREE.MathUtils.damp(c.cz, t.cz, k, dt), zoom: THREE.MathUtils.damp(c.zoom, t.zoom, k, dt) };
+    const next = {
+      cx: THREE.MathUtils.damp(c.cx, t.cx, k, dt),
+      cz: THREE.MathUtils.damp(c.cz, t.cz, k, dt),
+      zoom: THREE.MathUtils.damp(c.zoom, t.zoom, k, dt),
+    };
     cur.current = next;
-    if (camera.zoom !== next.zoom || camera.position.x !== next.cx || camera.position.z !== next.cz) {
+    if (
+      camera.zoom !== next.zoom ||
+      camera.position.x !== next.cx ||
+      camera.position.z !== next.cz
+    ) {
       camera.zoom = next.zoom;
       camera.position.set(next.cx, 50, next.cz);
       camera.rotation.set(-Math.PI / 2, 0, 0);

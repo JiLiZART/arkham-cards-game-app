@@ -28,7 +28,19 @@ export const RESOLVE_BOX = (): Box => ({ x: innerWidth / 2 - 130, y: 120, w: 260
  * face up, and waits, large and readable, until the player taps it (or Continue, Space, Enter). Nothing it does happens
  * before that; then it leaves from where it stands for wherever the game puts it.
  */
-function EncounterShowcase({ id, code, inv, weakness, locale }: { id: InstId; code: string; inv: InvId | null; weakness: boolean; locale: string }) {
+function EncounterShowcase({
+  id,
+  code,
+  inv,
+  weakness,
+  locale,
+}: {
+  id: InstId;
+  code: string;
+  inv: InvId | null;
+  weakness: boolean;
+  locale: string;
+}) {
   const next = useGame((s) => s.nextEvent);
   const game = useGame((s) => s.game) as GameState;
   const card = useRef<HTMLButtonElement>(null);
@@ -45,8 +57,12 @@ function EncounterShowcase({ id, code, inv, weakness, locale }: { id: InstId; co
     const el = card.current;
     if (!el) return;
     moment("flip");
-    const pile = domPlace(weakness ? (inv && inv === viewerOf(game) ? "deck" : "piles") : "encounter", RESOLVE_BOX);
-    if (pile && !reducedMotion()) riseAndArc(el, el.querySelector<HTMLElement>(".sc-flip"), pile, 0);
+    const pile = domPlace(
+      weakness ? (inv && inv === viewerOf(game) ? "deck" : "piles") : "encounter",
+      RESOLVE_BOX,
+    );
+    if (pile && !reducedMotion())
+      riseAndArc(el, el.querySelector<HTMLElement>(".sc-flip"), pile, 0);
   }, []);
   const send = () => {
     if (card.current) rememberRect(id, card.current);
@@ -65,8 +81,14 @@ function EncounterShowcase({ id, code, inv, weakness, locale }: { id: InstId; co
   });
   const { width } = showcaseLayout(1, screen.w, screen.h);
   return (
-    <div className="showcase encounter-showcase" onClick={(e) => !(e.target as Element).closest(".sc-help") && send()}>
-      <div className="sc-cards" style={{ ["--cols" as string]: 1, ["--w" as string]: `${width}px` }}>
+    <div
+      className="showcase encounter-showcase"
+      onClick={(e) => !(e.target as Element).closest(".sc-help") && send()}
+    >
+      <div
+        className="sc-cards"
+        style={{ ["--cols" as string]: 1, ["--w" as string]: `${width}px` }}
+      >
         <button
           ref={card}
           className="sc-card"
@@ -92,7 +114,12 @@ function EncounterShowcase({ id, code, inv, weakness, locale }: { id: InstId; co
             <span className="sc-front">
               <CardFace code={code} locale={locale} />
             </span>
-            <img className="sc-back" src={backUrl(weakness ? "player" : "encounter")} alt="" draggable={false} />
+            <img
+              className="sc-back"
+              src={backUrl(weakness ? "player" : "encounter")}
+              alt=""
+              draggable={false}
+            />
           </span>
         </button>
       </div>
@@ -102,7 +129,13 @@ function EncounterShowcase({ id, code, inv, weakness, locale }: { id: InstId; co
           {t(db, locale, "draw.continue")}
         </button>
       </div>
-      {detail && <DetailsColumn rows={cardDetails(db, code, locale)} rect={{ x0: detail.left, y0: detail.top, x1: detail.right, y1: detail.bottom }} prefer="right" />}
+      {detail && (
+        <DetailsColumn
+          rows={cardDetails(db, code, locale)}
+          rect={{ x0: detail.left, y0: detail.top, x1: detail.right, y1: detail.bottom }}
+          prefer="right"
+        />
+      )}
     </div>
   );
 }
@@ -117,7 +150,12 @@ function Resolving({ game, locale }: { game: GameState; locale: string }) {
   if (!cards.length) return null;
   const b = RESOLVE_BOX();
   return (
-    <div className="resolving" ref={ref} data-card={cards.at(-1)!.id} style={{ left: b.x, top: b.y, width: b.w, height: b.h }}>
+    <div
+      className="resolving"
+      ref={ref}
+      data-card={cards.at(-1)!.id}
+      style={{ left: b.x, top: b.y, width: b.w, height: b.h }}
+    >
       <CardFace code={cards.at(-1)!.code} locale={locale} />
     </div>
   );
@@ -134,7 +172,16 @@ export function RevealOverlay() {
   const key = current ? `${current.type}:${game.log.length}:${current.card ?? ""}` : "";
   if (current && HELD.has(current.type) && current.card && game.cards[current.card]) {
     if (!playing) return null;
-    return <EncounterShowcase key={key} id={current.card} code={game.cards[current.card].code} inv={current.inv ?? null} weakness={current.type === "weakness"} locale={locale} />;
+    return (
+      <EncounterShowcase
+        key={key}
+        id={current.card}
+        code={game.cards[current.card].code}
+        inv={current.inv ?? null}
+        weakness={current.type === "weakness"}
+        locale={locale}
+      />
+    );
   }
   // a card being resolved shows only while nothing else holds the middle (it may wait there for a choice)
   return stageFree ? <Resolving game={game} locale={locale} /> : null;

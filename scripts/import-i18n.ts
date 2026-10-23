@@ -36,18 +36,30 @@ type Raw = Record<string, any>;
 const LOG_ALIASES: Record<string, string> = { cultists_escaped: "cultistsGotAway" };
 
 const missingSteps: string[] = [];
-const campaignsOut: { campaigns: Raw; scenarios: Raw; encounterSets: Record<string, string> } = { campaigns: {}, scenarios: {}, encounterSets: {} };
+const campaignsOut: { campaigns: Raw; scenarios: Raw; encounterSets: Record<string, string> } = {
+  campaigns: {},
+  scenarios: {},
+  encounterSets: {},
+};
 const acCampaigns: Raw[] = read(join(AC, `generated/all_campaigns_${locale}.txt`));
-const encounterNames: Record<string, string> = read(join(AC, `generated/encounter_sets_${locale}.txt`));
+const encounterNames: Record<string, string> = read(
+  join(AC, `generated/encounter_sets_${locale}.txt`),
+);
 
 // the generated campaigns' scenario text and log labels go to one file each, loaded with the campaign (ADR-0007)
-const perCampaign: Record<string, { campaigns: Raw; scenarios: Raw; encounterSets: Record<string, string> }> = {};
-const campaignDirs = ["content/campaigns", "content/campaigns-generated"].flatMap((root) => (existsSync(root) ? readdirSync(root).map((d) => join(root, d)) : [])).filter((d) => existsSync(join(d, "campaign.json")));
+const perCampaign: Record<
+  string,
+  { campaigns: Raw; scenarios: Raw; encounterSets: Record<string, string> }
+> = {};
+const campaignDirs = ["content/campaigns", "content/campaigns-generated"]
+  .flatMap((root) => (existsSync(root) ? readdirSync(root).map((d) => join(root, d)) : []))
+  .filter((d) => existsSync(join(d, "campaign.json")));
 for (const dirPath of campaignDirs) {
   const campaign = read(join(dirPath, "campaign.json"));
   // a generated campaign keeps its (English) log labels with its text, not in campaign.json
   const enText = join("content/i18n/en/campaign-texts", `${campaign.id}.json`);
-  if (campaign.generated && existsSync(enText)) campaign.logLabels = read(enText).campaigns[campaign.id].logLabels;
+  if (campaign.generated && existsSync(enText))
+    campaign.logLabels = read(enText).campaigns[campaign.id].logLabels;
   const ac = acCampaigns.find((c) => c.campaign.id === campaign.i18nId);
   if (!ac) {
     console.warn(`${campaign.id}: no ArkhamCards campaign "${campaign.i18nId}"`);
@@ -61,18 +73,50 @@ for (const dirPath of campaignDirs) {
   };
   for (const section of ac.campaign.campaign_log ?? []) addLog(section.id, section.title);
   const scenarios = new Map<string, Raw>(ac.scenarios.map((s: Raw) => [s.id, s]));
-  for (const s of ac.scenarios) for (const step of s.steps ?? []) for (const e of step.effects ?? []) if (e.type === "campaign_log" && e.id && e.text) addLog(e.id, e.text);
-  const out = campaign.generated ? (perCampaign[campaign.id] = { campaigns: { [campaign.id]: { logLabels } }, scenarios: {}, encounterSets: {} }) : campaignsOut;
+  for (const s of ac.scenarios)
+    for (const step of s.steps ?? [])
+      for (const e of step.effects ?? [])
+        if (e.type === "campaign_log" && e.id && e.text) addLog(e.id, e.text);
+  const out = campaign.generated
+    ? (perCampaign[campaign.id] = {
+        campaigns: { [campaign.id]: { logLabels } },
+        scenarios: {},
+        encounterSets: {},
+      })
+    : campaignsOut;
   // the tile's text before the scenarios are loaded: the campaign's opening text and its scenarios' names
-  const blurb = { ...(prologueOf(ac.campaign) ? { prologue: prologueOf(ac.campaign) } : {}), scenarioNames: campaign.scenarios.map((id: string) => scenarios.get(read(join(dirPath, "scenarios", `${id}.json`)).i18nId)?.scenario_name).filter(Boolean) };
-  campaignsOut.campaigns[campaign.id] = campaign.generated ? { name: ac.campaign.name, ...blurb } : { name: ac.campaign.name, ...blurb, logLabels };
+  const blurb = {
+    ...(prologueOf(ac.campaign) ? { prologue: prologueOf(ac.campaign) } : {}),
+    scenarioNames: campaign.scenarios
+      .map(
+        (id: string) =>
+          scenarios.get(read(join(dirPath, "scenarios", `${id}.json`)).i18nId)?.scenario_name,
+      )
+      .filter(Boolean),
+  };
+  campaignsOut.campaigns[campaign.id] = campaign.generated
+    ? { name: ac.campaign.name, ...blurb }
+    : { name: ac.campaign.name, ...blurb, logLabels };
 
   // the flow's words: the same compile of this language's guide gives the same step ids
   if (campaign.generated && existsSync(join(dirPath, "flow.json"))) {
-    const ids = new Map<string, string>(campaign.scenarios.map((id: string) => [read(join(dirPath, "scenarios", `${id}.json`)).i18nId, id]));
-    const flowText = stepTexts(compileFlow({ campaign: campaign.id.startsWith("side-") ? { ...ac.campaign, setup: [] } : ac.campaign, scenarios: ac.scenarios, ids }).flow);
+    const ids = new Map<string, string>(
+      campaign.scenarios.map((id: string) => [
+        read(join(dirPath, "scenarios", `${id}.json`)).i18nId,
+        id,
+      ]),
+    );
+    const flowText = stepTexts(
+      compileFlow({
+        campaign: campaign.id.startsWith("side-") ? { ...ac.campaign, setup: [] } : ac.campaign,
+        scenarios: ac.scenarios,
+        ids,
+      }).flow,
+    );
     const ours: Raw = read(join(dirPath, "flow.json")).steps;
-    out.campaigns[campaign.id].steps = Object.fromEntries(Object.entries(flowText.steps).filter(([k]) => k in ours));
+    out.campaigns[campaign.id].steps = Object.fromEntries(
+      Object.entries(flowText.steps).filter(([k]) => k in ours),
+    );
     out.campaigns[campaign.id].interludeNames = flowText.interludes;
     // steps with words in English and none in this language fall back to English: say how many
     const wordsOf = stepTexts(read(join(dirPath, "flow.json"))).steps;
@@ -91,18 +135,28 @@ for (const dirPath of campaignDirs) {
     const resolutions: Raw = {};
     for (const r of theirs.resolutions ?? []) {
       const key = r.id === "no_resolution" ? "none" : r.id;
-      if (key in ours.resolutions) resolutions[key] = { title: r.title, ...(r.text ? { text: clean(r.text) } : {}) };
+      if (key in ours.resolutions)
+        resolutions[key] = { title: r.title, ...(r.text ? { text: clean(r.text) } : {}) };
     }
-    out.scenarios[id] = { name: theirs.scenario_name, ...(intro ? { intro: clean(intro) } : {}), resolutions };
-    for (const set of ours.encounterSets ?? []) if (encounterNames[set]) campaignsOut.encounterSets[set] = encounterNames[set];
+    out.scenarios[id] = {
+      name: theirs.scenario_name,
+      ...(intro ? { intro: clean(intro) } : {}),
+      resolutions,
+    };
+    for (const set of ours.encounterSets ?? [])
+      if (encounterNames[set]) campaignsOut.encounterSets[set] = encounterNames[set];
     // a side scenario's tile shows its intro
-    if (campaign.id.startsWith("side-") && out.scenarios[id].intro) campaignsOut.campaigns[campaign.id].prologue = introLead(out.scenarios[id].intro);
+    if (campaign.id.startsWith("side-") && out.scenarios[id].intro)
+      campaignsOut.campaigns[campaign.id].prologue = introLead(out.scenarios[id].intro);
   }
 }
 
 // UI strings: our English text → the locale's msgstr for the same msgid
 const en: Record<string, string> = read("content/i18n/en/ui.json");
-const po = read(join(AC, `i18n/${locale}.po.json`)).translations as Record<string, Record<string, { msgstr: string[] }>>;
+const po = read(join(AC, `i18n/${locale}.po.json`)).translations as Record<
+  string,
+  Record<string, { msgstr: string[] }>
+>;
 const ui: Record<string, string> = {};
 for (const [key, text] of Object.entries(en)) {
   if (/\{/.test(text)) continue; // placeholders never line up with ArkhamCards' strings
@@ -112,16 +166,27 @@ for (const [key, text] of Object.entries(en)) {
 
 const dir = join("content/i18n", locale);
 if (!existsSync(dir)) throw new Error(`${dir} does not exist`);
-const write = (name: string, data: unknown) => writeFileSync(join(dir, name), JSON.stringify(data, null, name.startsWith("packs") ? 0 : name === "cards.generated.json" ? 1 : 2) + "\n");
+const write = (name: string, data: unknown) =>
+  writeFileSync(
+    join(dir, name),
+    JSON.stringify(
+      data,
+      null,
+      name.startsWith("packs") ? 0 : name === "cards.generated.json" ? 1 : 2,
+    ) + "\n",
+  );
 write("campaigns.generated.json", campaignsOut);
 const textDir = join(dir, "campaign-texts");
 rmSync(textDir, { recursive: true, force: true });
 mkdirSync(textDir, { recursive: true });
-for (const [id, text] of Object.entries(perCampaign)) writeFileSync(join(textDir, `${id}.json`), JSON.stringify(text) + "\n");
+for (const [id, text] of Object.entries(perCampaign))
+  writeFileSync(join(textDir, `${id}.json`), JSON.stringify(text) + "\n");
 write("ui.generated.json", ui);
 
 // card text for every cycle, from the snapshot
-const root = process.argv.includes("--root") ? process.argv[process.argv.indexOf("--root") + 1] : SNAPSHOT;
+const root = process.argv.includes("--root")
+  ? process.argv[process.argv.indexOf("--root") + 1]
+  : SNAPSHOT;
 const byPack = translationsByPack(root, locale);
 const packsDir = join(dir, "packs");
 rmSync(packsDir, { recursive: true, force: true });
@@ -135,7 +200,8 @@ for (const [pack, cards] of byPack) {
   }
   cardTotal += Object.keys(cards).length;
 }
-if (missingSteps.length) console.log(`flow steps with no ${locale} text (shown in English): ${missingSteps.join(", ")}`);
+if (missingSteps.length)
+  console.log(`flow steps with no ${locale} text (shown in English): ${missingSteps.join(", ")}`);
 console.log(
   `${locale}: ${Object.keys(campaignsOut.campaigns).length} campaigns, ${Object.keys(campaignsOut.scenarios).length} scenarios, ${Object.keys(campaignsOut.encounterSets).length} encounter sets, ${Object.keys(ui).length} UI strings, ${cardTotal} card texts in ${byPack.size} packs`,
 );

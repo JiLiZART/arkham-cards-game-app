@@ -5,11 +5,18 @@ import { blurb } from "./blurb";
 
 describe("blurb", () => {
   it("strips the guide's markup and splits the first paragraph from the rest", () => {
-    expect(blurb("<fancy>June 1926</fancy> Miskatonic.\n\nSecond <i>paragraph</i>.\n\nThird.")).toEqual({ lead: "June 1926 Miskatonic.", more: "Second paragraph.\n\nThird." });
+    expect(
+      blurb("<fancy>June 1926</fancy> Miskatonic.\n\nSecond <i>paragraph</i>.\n\nThird."),
+    ).toEqual({ lead: "June 1926 Miskatonic.", more: "Second paragraph.\n\nThird." });
   });
 
   it("a short prologue, an epigraph, has nothing more", () => {
-    expect(blurb("“I’m going to burn his accursed diary…”\n–H. P. Lovecraft, “The Dunwich Horror”")).toEqual({ lead: "“I’m going to burn his accursed diary…”\n–H. P. Lovecraft, “The Dunwich Horror”", more: null });
+    expect(
+      blurb("“I’m going to burn his accursed diary…”\n–H. P. Lovecraft, “The Dunwich Horror”"),
+    ).toEqual({
+      lead: "“I’m going to burn his accursed diary…”\n–H. P. Lovecraft, “The Dunwich Horror”",
+      more: null,
+    });
   });
 
   it("a long single paragraph is cut at a sentence near 300 characters, the rest behind More", () => {

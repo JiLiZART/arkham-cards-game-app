@@ -31,7 +31,8 @@ describe("generated scenarios", () => {
       for (let steps = 0; r.state.pending && r.state.round <= 3 && steps < 1500; steps++) {
         const p = r.state.pending;
         const end = p.options.find((o) => o.label === "End turn");
-        const o = end && next(rng) < 0.3 ? end : p.options[Math.floor(next(rng) * p.options.length)];
+        const o =
+          end && next(rng) < 0.3 ? end : p.options[Math.floor(next(rng) * p.options.length)];
         const res = dispatch(db, r.state, { type: "choose", inv: p.inv, option: o.id });
         if (res.error) throw new Error(res.error);
         r = res;

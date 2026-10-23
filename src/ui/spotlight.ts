@@ -3,13 +3,29 @@ import { deckPick } from "./optionHome";
 import type { Spotlight } from "./view";
 
 /** animated events that spotlight what they are about (the chaos draw and test results don't) */
-const SPOT = new Set(["enemyMove", "attack", "spawn", "enemyDamage", "enemyDefeated", "defeated", "damage", "clues", "doom", "encounter", "weakness", "agendaAdvance", "actAdvance"]);
+const SPOT = new Set([
+  "enemyMove",
+  "attack",
+  "spawn",
+  "enemyDamage",
+  "enemyDefeated",
+  "defeated",
+  "damage",
+  "clues",
+  "doom",
+  "encounter",
+  "weakness",
+  "agendaAdvance",
+  "actAdvance",
+]);
 const ON_MAP = new Set(["location", "enemy"]);
 
 /** the map cards and investigator portraits an event is about, or null when none of them is on the map */
 export function spotlightOf(e: GameEvent | null, game: GameState): Spotlight | null {
   if (!e || !SPOT.has(e.type)) return null;
-  const ids = [e.card, e.data?.source as string | null | undefined].filter((id): id is string => !!id);
+  const ids = [e.card, e.data?.source as string | null | undefined].filter(
+    (id): id is string => !!id,
+  );
   const cards = [...new Set(ids)].filter((id) => ON_MAP.has(game.cards[id]?.zone));
   const invs = e.inv && game.invs[e.inv]?.location ? [e.inv] : [];
   return cards.length || invs.length ? { cards, invs } : null;
@@ -45,7 +61,12 @@ export function spotlightOfChoice(game: GameState, viewer: InvId | null): Spotli
  * The spotlight on screen: the playing event's (it wins, even when it lights nothing); once nothing plays, waits to play
  * or holds the middle of the screen, the pending choice's.
  */
-export function spotlightNow(game: GameState, viewer: InvId | null, playing: GameEvent | null, idle: boolean): Spotlight | null {
+export function spotlightNow(
+  game: GameState,
+  viewer: InvId | null,
+  playing: GameEvent | null,
+  idle: boolean,
+): Spotlight | null {
   if (playing) return spotlightOf(playing, game);
   return idle ? spotlightOfChoice(game, viewer) : null;
 }
@@ -58,10 +79,12 @@ export function heldGame(game: GameState, queue: GameEvent[]): GameState {
   const held = new Map<string, string>();
   for (const e of queue) {
     const from = e.data?.from;
-    if (e.type === "enemyMove" && e.card && typeof from === "string" && !held.has(e.card)) held.set(e.card, from);
+    if (e.type === "enemyMove" && e.card && typeof from === "string" && !held.has(e.card))
+      held.set(e.card, from);
   }
   if (!held.size) return game;
   const cards = { ...game.cards };
-  for (const [id, from] of held) if (cards[id]) cards[id] = { ...cards[id], location: from, engagedWith: null };
+  for (const [id, from] of held)
+    if (cards[id]) cards[id] = { ...cards[id], location: from, engagedWith: null };
   return { ...game, cards };
 }

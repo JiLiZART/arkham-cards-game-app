@@ -1,7 +1,7 @@
 ## Context
 
 - `PlayStrip` (`src/ui/hud/Panels.tsx`) renders `MiniCard`s at 96×134. A click goes through `useCardClick`, which chooses a single option or opens the `PopupMenu` at the pointer.
-- Hovering a strip card shows `HoverCard`: a 2× copy placed by `placeHover`, with a fixed 170 px details panel *under* the copy. Strip cards sit 228 px from the bottom, so the copy plus panel is squeezed and the panel is clipped.
+- Hovering a strip card shows `HoverCard`: a 2× copy placed by `placeHover`, with a fixed 170 px details panel _under_ the copy. Strip cards sit 228 px from the bottom, so the copy plus panel is squeezed and the panel is clipped.
 - Hand cards and locations already use `DetailsColumn` (`HandDetails.tsx`), which `cardDetails` (`src/ui/details.ts`) fills and `placeDetails` places beside the card. `cardDetails` has no enemy rows yet.
 - `SkillTestPanel` (`Hud.tsx`) shows `value vs diff`, tokens, and 54×76 committed thumbnails, with no hover or click.
 - The engine's `commitStage` (`skillTest.ts`) asks `who` with options: `done`, `{ commit }` per hand card, and `{ ability }` per fast ability. `t.committed` and `t.committers` are parallel arrays. Each investigator gets exactly one commit window (`asked`).
@@ -11,11 +11,13 @@
 ## Goals / Non-Goals
 
 **Goals:**
+
 - Reuse `DetailsColumn` / `cardDetails` for every non-hand hover, instead of a second details layout.
 - Make card options visible on the card, starting with the strip.
 - Make the take-back engine-side, so it is replayable and testable.
 
 **Non-Goals:**
+
 - Option buttons on map enemies. Map cards keep click / menu; the strip is where engaged enemies live.
 - Phase titles blocking input or joining the event queue.
 - Undo of fast abilities used during the commit window.
@@ -23,19 +25,23 @@
 ## Decisions
 
 ### 1. Hover: copy without the under-panel, plus `DetailsColumn`
+
 `HoverCard` drops its `hover-details` block and calls `placeHover(rect, 0, …)`, so the copy alone is clamped fully on screen. It then renders `DetailsColumn` with `cardDetails(db, code, locale, { inst, game })` next to the copy's box. `DetailsColumn` takes a `Rect`, so passing the copy's box puts the column beside the copy, not over it.
 
 `cardDetails` gains enemy rows, used when `d.type === "enemy"`:
+
 - `enemy`: fight, health (× per investigator glyph when printed so), evade;
 - `attack`: damage and horror icons;
 - `damage`: current damage on the instance, when `at` is given.
 
 The text row stays as-is, and tokens stay on the copy through `TokenBadges`.
 
-*Alternative:* keep the under-panel and grow it. Rejected: it duplicates the hand layout and is exactly what clips at the bottom.
+_Alternative:_ keep the under-panel and grow it. Rejected: it duplicates the hand layout and is exactly what clips at the bottom.
 
 ### 2. Option buttons above strip cards
+
 `PlayStrip` reads `byCard` (already there). For a card with options and while not busy, it renders a small `.strip-actions` row absolutely positioned above the slot. Each option is a button with an icon and a short label:
+
 - `{ kind: "fight" }` → combat icon + "Fight";
 - `{ kind: "evade" }` → agility icon + "Evade";
 - `{ kind: "engage" }` → "Engage";
@@ -50,7 +56,9 @@ Size: strip slots grow to 124×173 (exhausted width 173). The strip already flex
 Target highlight: if `game.skillTest?.target` is a strip card, its `MiniCard` gets the class `target` (gold outline).
 
 ### 3. Uncommit in the engine
+
 `commitStage` adds, for the cards `c` with `t.committers[k] === who`, an option `{ id: "un:" + c, label: "Take back <name>", card: c, value: { uncommit: c } }`. On pick:
+
 - move the card to its owner's hand with `moveCard(g, c, "hand")`;
 - splice it from `committed` and `committers`;
 - emit `uncommit` (feed line "X takes back Y", translated);
@@ -61,12 +69,15 @@ The take-back only ever covers the current window, because a window is closed (a
 `optionHome`: `commit`-zone cards are in `BOARD_ZONES` today, which sends them to "board", where nothing renders them. A new home `"skilltest"` covers options whose card is in the `commit` zone, and `SkillTestPanel` renders those as clickable cards. The test in `optionHome.test.ts` covers this.
 
 ### 4. Skill-test panel
+
 Committed cards render at 86×120 with `hoverProps` and `rememberRect`, so a taken-back card flies from its spot into the fan. `originRect` gets `case "commit": return last(a.id) ?? find("skilltest")`, with `.skilltest` in `SELECTORS`. Cards with an un-commit option get `legal` styling and an "↶" corner badge, and a click chooses the option.
 
 The breakdown line uses a new pure helper `testParts(g, t)` in `skillTest.ts`, returning `{ base, icons: [{card, n}], mods, total, diff }`. It is unit-tested, and `testValue` is rewritten as its sum so the two never disagree.
 
 ### 5. Phase title
+
 `PhaseTitle` in `Hud.tsx` watches `game.log` for new `phase` entries, the same way `ActionFloats` tracks `shown`, and queues them. A new game starts from its current log, so loading a save shows nothing. It shows one at a time for 2.6 s in total (0.5 s in, about 1.6 s hold, 0.5 s out) with a CSS keyframe animation:
+
 - `letter-spacing` opening up;
 - a slight upward drift;
 - a dark horizontal band behind the text.
@@ -76,14 +87,18 @@ It plays the next one on `animationend`. Text: `t("phase.title", { phase })` →
 To keep phases out of floats, `FeedEntry` gains an optional `kind` (the event type), set in `feedEntry`. `ActionFloats` skips `kind === "phase"`.
 
 ### 6. Float timing
+
 `Floats.tsx`:
+
 - life `= clamp(3500 + 60 × max(0, chars − 30), 3500, 6000)`, where `chars` is the summed text length of the parts;
 - `STAGGER_MS` 900, `MAX_VISIBLE` 2, `BURST` keeps the last 2.
 
 The life is stored per float, and the CSS fade uses a custom property `--life` so the fade starts at `life − 600 ms`.
 
 ### 7. Chaos draw: what is tested, and waiting for the screen to settle
+
 The game state is already final when the `token` event plays, so `game.skillTest` may be gone. The engine's `token` event therefore carries the test itself:
+
 - its `card` is `target ?? source`;
 - its `data` gains `skill`, `kind`, `value` and `difficulty`, taken from `testParts` at reveal time, so committed cards count.
 
@@ -92,12 +107,13 @@ The game state is already final when the `token` event plays, so `game.skillTest
 `TestSubject` renders the card as a `CardFace` left of the bag (`.test-subject`); the circles fan out above the bag, so there is no room there. The hover sets an HTML rect, so the enlarged copy and details column work; `HoverCard` now uses its copy for any HTML-hovered location, keeping the side column for map locations. The line under it is a `Sentence`: the inv part, the skill icon and name, then value `draw.vs` difficulty. The automatic `TokenPop` shows the same block while it runs. The skill-test panel hides tokens whose draw hasn't played yet, so it doesn't spoil the draw.
 
 Settling lives in `EventPlayer`. When `current` is a `token` event, it renders nothing until `settled` is true. A `requestAnimationFrame` loop checks:
+
 - whether `document.getAnimations()` has any running animation whose target is a card flight (`[data-card]`, `.flight`, `.fan-flip`, `.ghost-card`);
 - whether the map has an arrival still `hold`ing or gliding (`peekArrival` for map cards, which `Table` already consults).
 
 Once both are clear for 400 ms, `settled` turns true; after 4 s it turns true regardless. The encounter flight is itself a queued event, so it has already finished by the time `current` becomes the token. The settle wait mainly covers the WAAPI arrival flights that run alongside the queue (a drawn card, an enemy gliding in). The same gate applies to the automatic reveal and to the phase title.
 
-*Alternative:* add every arrival flight to the event queue. Rejected: arrivals are deliberately outside the queue so input isn't blocked by every draw.
+_Alternative:_ add every arrival flight to the event queue. Rejected: arrivals are deliberately outside the queue so input isn't blocked by every draw.
 
 ## Risks / Trade-offs
 

@@ -12,9 +12,20 @@ import { type Measured, parseEbur128 } from "./sound-probe";
 export type Kind = "effect" | "aac" | "opus";
 
 /** ffmpeg arguments for one output; `input` is the input part ("-i file" or a lavfi source) */
-export function encodeArgs(kind: Kind, input: string[], out: string, trim?: [number, number], filter?: string): string[] {
+export function encodeArgs(
+  kind: Kind,
+  input: string[],
+  out: string,
+  trim?: [number, number],
+  filter?: string,
+): string[] {
   const cut = trim ? ["-ss", String(trim[0]), "-to", String(trim[1])] : [];
-  const codec = kind === "effect" ? ["-ac", "1", "-ar", "44100", "-c:a", "libmp3lame", "-b:a", "80k"] : kind === "aac" ? ["-c:a", "aac", "-b:a", "96k"] : ["-c:a", "libopus", "-b:a", "80k"];
+  const codec =
+    kind === "effect"
+      ? ["-ac", "1", "-ar", "44100", "-c:a", "libmp3lame", "-b:a", "80k"]
+      : kind === "aac"
+        ? ["-c:a", "aac", "-b:a", "96k"]
+        : ["-c:a", "libopus", "-b:a", "80k"];
   return ["-y", ...input, ...cut, ...(filter ? ["-af", filter] : []), ...codec, out];
 }
 
@@ -25,15 +36,18 @@ export const TARGETS = {
 } as const;
 
 /** a looped track must not start or end in silence, or the loop pumps: cut both ends back to the first sound */
-const TRIM_SILENCE = "silenceremove=start_periods=1:start_threshold=-50dB,areverse,silenceremove=start_periods=1:start_threshold=-50dB,areverse,";
+const TRIM_SILENCE =
+  "silenceremove=start_periods=1:start_threshold=-50dB,areverse,silenceremove=start_periods=1:start_threshold=-50dB,areverse,";
 
 /**
  * What an effect is measured and levelled as: mono, the way it ships, played from both speakers (dual mono, 3 LU above
  * a bare mono reading). A late downmix would add up to 6 dB of peak.
  */
-const prefix = (category: keyof typeof TARGETS) => (category === "effect" ? "aformat=channel_layouts=mono,pan=stereo|c0=c0|c1=c0," : TRIM_SILENCE);
+const prefix = (category: keyof typeof TARGETS) =>
+  category === "effect" ? "aformat=channel_layouts=mono,pan=stereo|c0=c0|c1=c0," : TRIM_SILENCE;
 /** the downmix alone, for the level filter (the output stays mono) */
-const downmix = (category: keyof typeof TARGETS) => (category === "effect" ? "aformat=channel_layouts=mono," : TRIM_SILENCE);
+const downmix = (category: keyof typeof TARGETS) =>
+  category === "effect" ? "aformat=channel_layouts=mono," : TRIM_SILENCE;
 
 /** the measuring pass: the same EBU R128 meter the content check uses; a clip under 400 ms is padded so it has a block */
 export function measureFilter(category: keyof typeof TARGETS): string {
@@ -51,9 +65,28 @@ export function levelFilter(category: keyof typeof TARGETS, measured: Measured):
 }
 
 /** measure the (trimmed) clip; clips under 400 ms are padded with silence for the measurement only */
-export function measure(category: keyof typeof TARGETS, input: string[], trim?: [number, number]): Measured {
+export function measure(
+  category: keyof typeof TARGETS,
+  input: string[],
+  trim?: [number, number],
+): Measured {
   const cut = trim ? ["-ss", String(trim[0]), "-to", String(trim[1])] : [];
-  const r = spawnSync("ffmpeg", ["-hide_banner", "-nostats", "-y", ...input, ...cut, "-af", measureFilter(category), "-f", "null", "-"], { encoding: "utf8" });
+  const r = spawnSync(
+    "ffmpeg",
+    [
+      "-hide_banner",
+      "-nostats",
+      "-y",
+      ...input,
+      ...cut,
+      "-af",
+      measureFilter(category),
+      "-f",
+      "null",
+      "-",
+    ],
+    { encoding: "utf8" },
+  );
   if (r.status !== 0) throw new Error(`ffmpeg failed measuring loudness:\n${r.stderr}`);
   const m = parseEbur128(r.stderr);
   if (!m) throw new Error("no loudness measurement in ffmpeg's output");
@@ -68,11 +101,17 @@ export function placeholderInput(id: string, kind: "effect" | "music"): string[]
     const f = 50 + (hash % 40);
     return ["-f", "lavfi", "-i", `sine=frequency=${f}:duration=8,tremolo=f=0.25:d=0.6,volume=0.4`];
   }
-  const noisy = /rattle|shuffle|slide|steps|footstep|breath|growl|strike|hit|thud|gunshot|blade/.test(id);
+  const noisy =
+    /rattle|shuffle|slide|steps|footstep|breath|growl|strike|hit|thud|gunshot|blade/.test(id);
   const f = 220 + (hash % 600);
   const d = /sting|swell|two-note|page|bell|chime/.test(id) ? 0.6 : 0.2;
   return noisy
-    ? ["-f", "lavfi", "-i", `anoisesrc=duration=${d}:color=pink:amplitude=0.6,afade=t=out:st=0:d=${d}`]
+    ? [
+        "-f",
+        "lavfi",
+        "-i",
+        `anoisesrc=duration=${d}:color=pink:amplitude=0.6,afade=t=out:st=0:d=${d}`,
+      ]
     : ["-f", "lavfi", "-i", `sine=frequency=${f}:duration=${d},afade=t=out:st=0:d=${d},volume=0.6`];
 }
 
@@ -89,8 +128,14 @@ async function main() {
     return;
   }
   const encoders = execFileSync("ffmpeg", ["-hide_banner", "-encoders"]).toString();
-  for (const enc of ["libopus", "aac", "libmp3lame"]) if (!encoders.includes(` ${enc} `)) throw new Error(`ffmpeg lacks the ${enc} encoder; install one built with it (brew install ffmpeg)`);
-  const m = SoundManifest.parse((await import("../content/sounds/sounds.json", { with: { type: "json" } })).default);
+  for (const enc of ["libopus", "aac", "libmp3lame"])
+    if (!encoders.includes(` ${enc} `))
+      throw new Error(
+        `ffmpeg lacks the ${enc} encoder; install one built with it (brew install ffmpeg)`,
+      );
+  const m = SoundManifest.parse(
+    (await import("../content/sounds/sounds.json", { with: { type: "json" } })).default,
+  );
   const only = new Set(process.argv.slice(2));
   const wanted = (id: string) => !only.size || only.has(id);
   mkdirSync("public/sounds", { recursive: true });
@@ -102,7 +147,15 @@ async function main() {
     if (src && !existsSync(src)) throw new Error(`${id}: original ${src} not found`);
     const input = src ? ["-i", src] : placeholderInput(id, "effect");
     const trim = src ? c.trim : undefined;
-    run(encodeArgs("effect", input, `public/sounds/${c.file}`, trim, levelFilter("effect", measure("effect", input, trim))));
+    run(
+      encodeArgs(
+        "effect",
+        input,
+        `public/sounds/${c.file}`,
+        trim,
+        levelFilter("effect", measure("effect", input, trim)),
+      ),
+    );
     if (src) real++;
     else synth++;
   }

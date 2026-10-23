@@ -14,7 +14,8 @@ const LIVE_MAX = 4;
 const LIVE_MS = 12000;
 const LEAVE_MS = 400;
 
-const classColor = (code: string) => (CLASS_COLORS as Record<string, string>)[db.cards[code]?.faction] ?? "var(--gold)";
+const classColor = (code: string) =>
+  (CLASS_COLORS as Record<string, string>)[db.cards[code]?.faction] ?? "var(--gold)";
 
 /** one styled part: portrait + class-coloured name, card thumbnail (click: modal, hover: enlarge), icons, tokens, outcome */
 function PartView({ p, size }: { p: Part; size: number }) {
@@ -38,18 +39,27 @@ function PartView({ p, size }: { p: Part; size: number }) {
       const inst = game.cards[p.id];
       if (!inst) return null;
       const d = db.cards[inst.code];
-      const name = d.type === "location" && !inst.revealed ? cardText(db, inst.code, locale).backName ?? cardText(db, inst.code, locale).name : cardText(db, inst.code, locale).name;
+      const name =
+        d.type === "location" && !inst.revealed
+          ? (cardText(db, inst.code, locale).backName ?? cardText(db, inst.code, locale).name)
+          : cardText(db, inst.code, locale).name;
       return (
         <span className="fe-card">
           <button
             className="fe-thumb"
             style={{ width: size * 0.72, height: size }}
             onClick={() => useView.getState().setModal({ card: p.id })}
-            onMouseEnter={(e) => useView.getState().setHover(p.id, e.currentTarget.getBoundingClientRect())}
+            onMouseEnter={(e) =>
+              useView.getState().setHover(p.id, e.currentTarget.getBoundingClientRect())
+            }
             onMouseLeave={() => useView.getState().setHover(null)}
             title={name}
           >
-            <CardFace code={inst.code} locale={locale} side={d.type === "location" && !inst.revealed ? "back" : "front"} />
+            <CardFace
+              code={inst.code}
+              locale={locale}
+              side={d.type === "location" && !inst.revealed ? "back" : "front"}
+            />
           </button>
           <b className="card-name">{name}</b>
         </span>
@@ -76,9 +86,19 @@ function PartView({ p, size }: { p: Part; size: number }) {
         </span>
       );
     case "set":
-      return hasSymbol(p.code) ? <Glyph name={p.code} size={size * 0.8} title={encounterSetName(db, p.code, locale) ?? p.code.replace(/_/g, " ")} /> : null;
+      return hasSymbol(p.code) ? (
+        <Glyph
+          name={p.code}
+          size={size * 0.8}
+          title={encounterSetName(db, p.code, locale) ?? p.code.replace(/_/g, " ")}
+        />
+      ) : null;
     case "outcome":
-      return <b className={p.ok ? "fe-ok" : "fe-fail"}>{t(db, gameStore.getState().locale, p.ok ? "feed.outcome.ok" : "feed.outcome.fail")}</b>;
+      return (
+        <b className={p.ok ? "fe-ok" : "fe-fail"}>
+          {t(db, gameStore.getState().locale, p.ok ? "feed.outcome.ok" : "feed.outcome.fail")}
+        </b>
+      );
   }
 }
 
@@ -94,19 +114,30 @@ export function Sentence({ parts, size = 22 }: { parts: Part[]; size?: number })
 }
 
 /** log index → feed entry, built once per entry (log entries never change) */
-export function useFeedEntries(): { shown: number; entries: Map<number, FeedEntry | null>; game: GameState } {
+export function useFeedEntries(): {
+  shown: number;
+  entries: Map<number, FeedEntry | null>;
+  game: GameState;
+} {
   const game = useGame((s) => s.game) as GameState;
   const locale = useGame((s) => s.locale);
   const current = useGame((s) => s.current);
   const queue = useGame((s) => s.queue);
   // a new game (new or resumed scenario) has a new setup object: start a fresh cache
   const setup = useGame((s) => s.setup);
-  const cache = useRef<{ locale: string; setup: unknown; map: Map<number, FeedEntry | null> }>({ locale, setup: null, map: new Map() });
-  if (cache.current.locale !== locale || cache.current.setup !== setup) cache.current = { locale, setup, map: new Map() };
+  const cache = useRef<{ locale: string; setup: unknown; map: Map<number, FeedEntry | null> }>({
+    locale,
+    setup: null,
+    map: new Map(),
+  });
+  if (cache.current.locale !== locale || cache.current.setup !== setup)
+    cache.current = { locale, setup, map: new Map() };
   // an undo shortens the log: entries past its end are gone (their indexes will be reused)
   for (const i of cache.current.map.keys()) if (i >= game.log.length) cache.current.map.delete(i);
   const shown = shownCount(game.log.length, current, queue);
-  for (let i = 0; i < shown; i++) if (!cache.current.map.has(i)) cache.current.map.set(i, feedEntry(game.log[i], game, db, locale));
+  for (let i = 0; i < shown; i++)
+    if (!cache.current.map.has(i))
+      cache.current.map.set(i, feedEntry(game.log[i], game, db, locale));
   return { shown, entries: cache.current.map, game };
 }
 
@@ -142,13 +173,19 @@ export function Feed() {
     for (let i = shown - 1; i >= 0; i--) if (entries.get(i)) out.push(i);
     return out;
   }, [shown, entries]);
-  const lines = useMemo(() => new Map(mergeLive(game, entries, shown, marks, db, locale).map((l) => [l.key, l.entry])), [game, entries, shown, marks, locale]);
+  const lines = useMemo(
+    () => new Map(mergeLive(game, entries, shown, marks, db, locale).map((l) => [l.key, l.entry])),
+    [game, entries, shown, marks, locale],
+  );
   const newest = useMemo(() => [...lines.keys()].reverse(), [lines]);
 
   const now = performance.now();
-  for (const i of newest.slice(0, LIVE_MAX + 1)) if (!arrived.current.has(i)) arrived.current.set(i, now);
+  for (const i of newest.slice(0, LIVE_MAX + 1))
+    if (!arrived.current.has(i)) arrived.current.set(i, now);
   // live: the newest few, plus the ones still fading out
-  const live = newest.slice(0, LIVE_MAX + 1).filter((i) => now - (arrived.current.get(i) ?? now) < LIVE_MS + LEAVE_MS);
+  const live = newest
+    .slice(0, LIVE_MAX + 1)
+    .filter((i) => now - (arrived.current.get(i) ?? now) < LIVE_MS + LEAVE_MS);
   const items = mode === "journal" ? visible : live;
 
   // age the live feed out
@@ -189,7 +226,11 @@ export function Feed() {
 
   return (
     <div className={`feed ${mode}`} ref={listRef} aria-live="polite">
-      {mode === "journal" && <div className="feed-title card-name">{t(db, gameStore.getState().locale, "hud.journal")}</div>}
+      {mode === "journal" && (
+        <div className="feed-title card-name">
+          {t(db, gameStore.getState().locale, "hud.journal")}
+        </div>
+      )}
       {items.map((i, k) => {
         const e = (mode === "live" ? lines.get(i) : entries.get(i))!;
         // the Journal: a phase's step is a section line between the entries it introduces
@@ -201,9 +242,17 @@ export function Feed() {
           );
         const age = now - (arrived.current.get(i) ?? now);
         const leaving = mode === "live" && (age > LIVE_MS || k >= LIVE_MAX);
-        const style = mode === "live" ? { opacity: leaving ? 0 : Math.max(0.25, 1 - 0.11 * k), borderLeftColor: toneColor(e) } : { borderLeftColor: toneColor(e) };
+        const style =
+          mode === "live"
+            ? { opacity: leaving ? 0 : Math.max(0.25, 1 - 0.11 * k), borderLeftColor: toneColor(e) }
+            : { borderLeftColor: toneColor(e) };
         return (
-          <div key={i} data-log={i} className={`feed-item ${leaving ? "leaving" : ""}`} style={style}>
+          <div
+            key={i}
+            data-log={i}
+            className={`feed-item ${leaving ? "leaving" : ""}`}
+            style={style}
+          >
             <Sentence parts={e.parts} size={24} />
           </div>
         );

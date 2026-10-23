@@ -13,9 +13,11 @@ Out of scope: XP, upgrades, higher-level cards, deck import from ArkhamDB (its r
 ## Capabilities
 
 ### New Capabilities
+
 <!-- none -->
 
 ### Modified Capabilities
+
 - `investigator-decks`: deck configuration (swap within limits, weakness choice) and saved custom decks.
 
 ## Impact

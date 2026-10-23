@@ -114,7 +114,14 @@ function simulate(speed: number, vz0: number, spin0: number, tumble: number) {
   return { out, impacts, apexes, stop: t, travel: d, lifts };
 }
 
-export function tokenPath(o: { mouth: Pt; rest: Pt; seed: number; k: number; size: number; stage: Area }): Path {
+export function tokenPath(o: {
+  mouth: Pt;
+  rest: Pt;
+  seed: number;
+  k: number;
+  size: number;
+  stage: Area;
+}): Path {
   const rand = rng(o.seed * 7919 + o.k * 104729 + 1);
   const duration = 450 + Math.round(rand() * 100);
   const T = duration / 1000;
@@ -151,36 +158,73 @@ export function tokenPath(o: { mouth: Pt; rest: Pt; seed: number; k: number; siz
     if (time >= settle) {
       // the wobble of a coin coming to rest: quicker and smaller until it lies flat
       const w = (time - settle) / (T - settle);
-      const tilt = wobbleSign * 12 * Math.exp(-4 * w) * Math.sin(2 * Math.PI * (2.2 * w + 1.6 * w * w)) * (1 - w);
-      return { offset: u, x: o.rest.x, y: o.rest.y, z: 0, tilt: Math.round(tilt * 10) / 10, spin: turns };
+      const tilt =
+        wobbleSign *
+        12 *
+        Math.exp(-4 * w) *
+        Math.sin(2 * Math.PI * (2.2 * w + 1.6 * w * w)) *
+        (1 - w);
+      return {
+        offset: u,
+        x: o.rest.x,
+        y: o.rest.y,
+        z: 0,
+        tilt: Math.round(tilt * 10) / 10,
+        spin: turns,
+      };
     }
     const st = sim.out[Math.min(sim.out.length - 1, Math.round(time / k / DT))];
     const f = st.d / travel;
     const r = (n: number) => Math.round(n * 100) / 100;
-    return { offset: u, x: r(o.mouth.x + ux * st.d + missX * f), y: r(o.mouth.y + uy * st.d + missY * f), z: r(st.z), tilt: Math.round(st.tilt * 10) / 10, spin: Math.round(st.spin * spinScale * 10) / 10 };
+    return {
+      offset: u,
+      x: r(o.mouth.x + ux * st.d + missX * f),
+      y: r(o.mouth.y + uy * st.d + missY * f),
+      z: r(st.z),
+      tilt: Math.round(st.tilt * 10) / 10,
+      spin: Math.round(st.spin * spinScale * 10) / 10,
+    };
   };
   // keyframes at the start, each landing and top of a flight, the stop, through the wobble, then evenly between
   const times = new Set<number>([0, 1]);
-  for (const t of [...sim.impacts, ...sim.apexes, sim.stop]) times.add(Math.min(1 - WOBBLE, (t * k) / T));
+  for (const t of [...sim.impacts, ...sim.apexes, sim.stop])
+    times.add(Math.min(1 - WOBBLE, (t * k) / T));
   for (let i = 1; i <= 6; i++) times.add(1 - WOBBLE + (WOBBLE * i) / 7);
-  let sorted = [...times].sort((a, b) => a - b).filter((u, i, all) => i === 0 || u - all[i - 1] > 1e-6);
+  let sorted = [...times]
+    .sort((a, b) => a - b)
+    .filter((u, i, all) => i === 0 || u - all[i - 1] > 1e-6);
   while (sorted.length < 20) {
     let gap = 0;
-    for (let i = 1; i < sorted.length; i++) if (sorted[i] - sorted[i - 1] > sorted[gap + 1] - sorted[gap]) gap = i - 1;
-    sorted = [...sorted.slice(0, gap + 1), (sorted[gap] + sorted[gap + 1]) / 2, ...sorted.slice(gap + 1)];
+    for (let i = 1; i < sorted.length; i++)
+      if (sorted[i] - sorted[i - 1] > sorted[gap + 1] - sorted[gap]) gap = i - 1;
+    sorted = [
+      ...sorted.slice(0, gap + 1),
+      (sorted[gap] + sorted[gap + 1]) / 2,
+      ...sorted.slice(gap + 1),
+    ];
   }
   return { samples: sorted.slice(0, 32).map(at), duration, bounces: sim.lifts };
 }
 
 /** the Web Animations keyframes of a token's path, relative to where it rests: moved to the table spot, lifted by its height, spun, and tilted in perspective (its edge shows) */
 export function tokenFrames(p: Path, rest: Pt): { offset: number; transform: string }[] {
-  return p.samples.map((s) => ({ offset: s.offset, transform: `translate(${s.x - rest.x}px, ${s.y - s.z - rest.y}px) perspective(520px) rotateZ(${s.spin}deg) rotateX(${s.tilt}deg)` }));
+  return p.samples.map((s) => ({
+    offset: s.offset,
+    transform: `translate(${s.x - rest.x}px, ${s.y - s.z - rest.y}px) perspective(520px) rotateZ(${s.spin}deg) rotateX(${s.tilt}deg)`,
+  }));
 }
 
 /** a token's shadow on the table follows its height: smaller and fainter the higher it is */
-export function shadowFrames(p: Path, at: Pt): { offset: number; transform: string; opacity: number }[] {
+export function shadowFrames(
+  p: Path,
+  at: Pt,
+): { offset: number; transform: string; opacity: number }[] {
   // the light is above and behind: a higher token's shadow falls further down and right, larger and fainter
-  return p.samples.map((s) => ({ offset: s.offset, transform: `translate(${s.x - at.x + s.z * 0.35}px, ${s.y - at.y + s.z * 0.5}px) scale(${(1 + s.z / 140).toFixed(3)})`, opacity: Math.max(0.12, 0.75 - s.z / 70) }));
+  return p.samples.map((s) => ({
+    offset: s.offset,
+    transform: `translate(${s.x - at.x + s.z * 0.35}px, ${s.y - at.y + s.z * 0.5}px) scale(${(1 + s.z / 140).toFixed(3)})`,
+    opacity: Math.max(0.12, 0.75 - s.z / 70),
+  }));
 }
 
 export type Pace = "slow" | "normal" | "tap";
@@ -207,18 +251,30 @@ export function tossTiming(pace: Pace, n: number) {
  * The bag's keyframes (relative to the box it ends up in): it flies from over its button in an arc, tumbling a little,
  * lands with a squash and a bounce, and tips over toward the spill with its mouth open.
  */
-export function bagFrames(from: Box, to: Box): { offset: number; transform: string; opacity: number }[] {
+export function bagFrames(
+  from: Box,
+  to: Box,
+): { offset: number; transform: string; opacity: number }[] {
   const c = (b: Box): Pt => ({ x: b.x + b.w / 2, y: b.y + b.h / 2 });
   const a = c(from);
   const b = c(to);
   const s0 = from.w / to.w;
   const flightAt = (p: number) => {
     const e = 1 - (1 - p) ** 2;
-    return { x: a.x - b.x - (a.x - b.x) * e, y: a.y - b.y - (a.y - b.y) * e - 170 * 4 * p * (1 - p), s: s0 + (1 - s0) * e, r: -35 * (1 - e) };
+    return {
+      x: a.x - b.x - (a.x - b.x) * e,
+      y: a.y - b.y - (a.y - b.y) * e - 170 * 4 * p * (1 - p),
+      s: s0 + (1 - s0) * e,
+      r: -35 * (1 - e),
+    };
   };
   const at = (offset: number, p: number, extra = "") => {
     const f = flightAt(p);
-    return { offset, transform: `translate(${f.x}px, ${f.y}px) rotate(${f.r}deg) scale(${f.s})${extra}`, opacity: 0.6 + 0.4 * Math.min(1, p * 2) };
+    return {
+      offset,
+      transform: `translate(${f.x}px, ${f.y}px) rotate(${f.r}deg) scale(${f.s})${extra}`,
+      opacity: 0.6 + 0.4 * Math.min(1, p * 2),
+    };
   };
   return [
     at(0, 0),

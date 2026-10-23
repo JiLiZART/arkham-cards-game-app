@@ -2,14 +2,24 @@ import { beforeAll, describe, expect, it } from "vitest";
 import { cardText } from "../../content/i18n";
 import { loadContentFromDisk } from "../../content/node";
 import type { ContentDb } from "../../engine/types";
-import { catalogCards, cyclesOfCards, emptyFilters, normalise, packsOfCards, tabOf, traitsOf, type CatalogFilters } from "./filter";
+import {
+  catalogCards,
+  cyclesOfCards,
+  emptyFilters,
+  normalise,
+  packsOfCards,
+  tabOf,
+  traitsOf,
+  type CatalogFilters,
+} from "./filter";
 import { implemented } from "../../content/implemented";
 
 let db: ContentDb;
 beforeAll(async () => {
   db = (await loadContentFromDisk()).db;
 });
-const find = (f: Partial<CatalogFilters>, locale = "en") => catalogCards(db, locale, { ...emptyFilters, ...f });
+const find = (f: Partial<CatalogFilters>, locale = "en") =>
+  catalogCards(db, locale, { ...emptyFilters, ...f });
 const codes = (cs: { code: string }[]) => cs.map((c) => c.code);
 
 describe("which tab a card belongs to", () => {
@@ -30,7 +40,13 @@ describe("catalog filters", () => {
   });
 
   it("level 0 Seeker allies: only those, with their count", () => {
-    const list = find({ tab: "player", factions: ["seeker"], types: ["asset"], levels: [0], traits: ["Ally"] });
+    const list = find({
+      tab: "player",
+      factions: ["seeker"],
+      types: ["asset"],
+      levels: [0],
+      traits: ["Ally"],
+    });
     expect(list.length).toBeGreaterThan(3);
     for (const c of list) {
       expect(c.faction).toBe("seeker");
@@ -39,15 +55,29 @@ describe("catalog filters", () => {
       expect(c.traits).toContain("Ally");
     }
     // the same cards by hand
-    const by = Object.values(db.cards).filter((c) => c.faction === "seeker" && c.type === "asset" && (c.xp ?? 0) === 0 && c.traits.includes("Ally"));
+    const by = Object.values(db.cards).filter(
+      (c) =>
+        c.faction === "seeker" &&
+        c.type === "asset" &&
+        (c.xp ?? 0) === 0 &&
+        c.traits.includes("Ally"),
+    );
     expect(list).toHaveLength(by.length);
   });
 
   it("filters by cost, skill icon, slot, pack and cycle", () => {
-    expect(find({ tab: "player", costs: [3], types: ["asset"] }).every((c) => c.cost === 3)).toBe(true);
-    expect(find({ tab: "player", icons: ["agility"] }).every((c) => (c.icons.agility ?? 0) > 0)).toBe(true);
-    expect(find({ tab: "player", slots: ["arcane"] }).every((c) => c.slots.includes("arcane"))).toBe(true);
-    expect(find({ tab: "player", cycles: ["dwl"] }).every((c) => c.code.startsWith("02"))).toBe(true);
+    expect(find({ tab: "player", costs: [3], types: ["asset"] }).every((c) => c.cost === 3)).toBe(
+      true,
+    );
+    expect(
+      find({ tab: "player", icons: ["agility"] }).every((c) => (c.icons.agility ?? 0) > 0),
+    ).toBe(true);
+    expect(
+      find({ tab: "player", slots: ["arcane"] }).every((c) => c.slots.includes("arcane")),
+    ).toBe(true);
+    expect(find({ tab: "player", cycles: ["dwl"] }).every((c) => c.code.startsWith("02"))).toBe(
+      true,
+    );
     expect(codes(find({ tab: "investigators", packs: ["dwl"] }))).toContain("02001");
   });
 
@@ -64,9 +94,13 @@ describe("catalog filters", () => {
 
   it("searches name, traits and text, and combines with the other filters", () => {
     expect(codes(find({ tab: "player", query: "machete" }))).toContain("01020");
-    expect(codes(find({ tab: "player", query: "weapon melee", types: ["asset"] }))).toContain("01020");
+    expect(codes(find({ tab: "player", query: "weapon melee", types: ["asset"] }))).toContain(
+      "01020",
+    );
     expect(codes(find({ tab: "player", query: "zzzz-no-card" }))).toEqual([]);
-    expect(codes(find({ tab: "player", query: "machete", factions: ["seeker"] }))).not.toContain("01020");
+    expect(codes(find({ tab: "player", query: "machete", factions: ["seeker"] }))).not.toContain(
+      "01020",
+    );
   });
 
   it("searches in Russian: фонарь finds Flashlight", () => {
@@ -95,10 +129,18 @@ describe("works in the game", () => {
     expect(implemented(db, "02006")).toBe(false); // Zoey's Cross
   });
   it("a card with no rules text or only keywords works", () => {
-    const vanilla = Object.values(db.cards).find((c) => ["asset", "event", "skill", "enemy"].includes(c.type) && !c.text.replace(/<[^>]+>/g, "").trim() && !c.abilities.length && !db.scripts[c.code])!;
+    const vanilla = Object.values(db.cards).find(
+      (c) =>
+        ["asset", "event", "skill", "enemy"].includes(c.type) &&
+        !c.text.replace(/<[^>]+>/g, "").trim() &&
+        !c.abilities.length &&
+        !db.scripts[c.code],
+    )!;
     expect(vanilla).toBeDefined();
     expect(implemented(db, vanilla.code)).toBe(true);
-    const keywordOnly = Object.values(db.cards).find((c) => c.type === "enemy" && /^(Hunter\.?\s*)+$/.test(c.text.trim()) && !c.abilities.length);
+    const keywordOnly = Object.values(db.cards).find(
+      (c) => c.type === "enemy" && /^(Hunter\.?\s*)+$/.test(c.text.trim()) && !c.abilities.length,
+    );
     if (keywordOnly) expect(implemented(db, keywordOnly.code)).toBe(true);
   });
   it("an unknown code does not work", () => {

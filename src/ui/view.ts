@@ -67,7 +67,12 @@ export interface ViewState {
 }
 
 /** a card at full size, an investigator, the chaos bag, or every act / agenda / the reference card */
-export type Modal = { card: InstId } | { inv: InvId } | { bag: true } | { deck: "act" | "agenda" | "reference" } | null;
+export type Modal =
+  | { card: InstId }
+  | { inv: InvId }
+  | { bag: true }
+  | { deck: "act" | "agenda" | "reference" }
+  | null;
 
 export interface Spotlight {
   cards: InstId[];
@@ -77,7 +82,8 @@ export interface Spotlight {
 }
 
 /** a HUD card or portrait outside a choice's spotlight: shown dimmed (not while motion is reduced, like the map's dim) */
-export const outsideSpotlight = (s: Spotlight | null, id: string) => !!s?.choice && !reducedMotion() && !s.cards.includes(id) && !s.invs.includes(id);
+export const outsideSpotlight = (s: Spotlight | null, id: string) =>
+  !!s?.choice && !reducedMotion() && !s.cards.includes(id) && !s.invs.includes(id);
 export const useDimmed = (id: string) => useView((s) => outsideSpotlight(s.spotlight, id));
 
 export type IntroStep = "agenda" | "act" | "deal";
@@ -96,9 +102,14 @@ export const useView = create<ViewState>((set, get) => ({
   setDrawer: (drawer) => set({ drawer }),
   testing: false,
   claimStage: (key) => !get().stage.includes(key) && set({ stage: [...get().stage, key] }),
-  releaseStage: (key) => get().stage.includes(key) && set({ stage: get().stage.filter((k) => k !== key) }),
+  releaseStage: (key) =>
+    get().stage.includes(key) && set({ stage: get().stage.filter((k) => k !== key) }),
   spotlight: null,
-  setHover: (hovered, rect) => set({ hovered, hoverRect: rect ? { x0: rect.left, y0: rect.top, x1: rect.right, y1: rect.bottom } : null }),
+  setHover: (hovered, rect) =>
+    set({
+      hovered,
+      hoverRect: rect ? { x0: rect.left, y0: rect.top, x1: rect.right, y1: rect.bottom } : null,
+    }),
   menu: null,
   dragging: null,
   panel: "none",

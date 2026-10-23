@@ -45,7 +45,11 @@ describe("event data (for the action feed)", () => {
 describe("prompt keys (for the translated prompt banner)", () => {
   it("a turn prompt carries its key and the actions left", () => {
     const r = skipMulligans(start("the-gathering", ["01001"], 1));
-    expect(r.state.pending).toMatchObject({ promptKey: "turn", promptVars: { actions: 3 }, prompt: "Roland Banks: choose an action (3 left)" });
+    expect(r.state.pending).toMatchObject({
+      promptKey: "turn",
+      promptVars: { actions: 3 },
+      prompt: "Roland Banks: choose an action (3 left)",
+    });
   });
 
   it("every prompt in bot playthroughs of the three scenarios has a key", () => {
@@ -54,7 +58,11 @@ describe("prompt keys (for the translated prompt banner)", () => {
       let r = start(sc, ["01001", "01002", "01004"], 3);
       for (let k = 0; k < 1500 && r.state.pending; k++) {
         if (!r.state.pending.promptKey) missing.add(r.state.pending.prompt);
-        r = dispatch(db, r.state, { type: "choose", inv: r.state.pending.inv, option: botChoice(db, r) });
+        r = dispatch(db, r.state, {
+          type: "choose",
+          inv: r.state.pending.inv,
+          option: botChoice(db, r),
+        });
       }
     }
     expect([...missing]).toEqual([]);

@@ -14,7 +14,8 @@ describe("chaos token draw", () => {
       actions.push(a);
       r = dispatch(db, r.state, a);
     }
-    const tokens = (log: { type: string; text: string }[]) => log.filter((e) => e.type === "token").map((e) => e.text);
+    const tokens = (log: { type: string; text: string }[]) =>
+      log.filter((e) => e.type === "token").map((e) => e.text);
     const first = tokens(r.state.log);
     expect(first.length).toBeGreaterThan(0);
     const again = replay(db, setup("the-gathering", invs, 9), actions);

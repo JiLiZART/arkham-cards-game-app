@@ -10,7 +10,16 @@
 import { flowOf, resolutionSteps } from "../content/flow";
 import type { CampaignStep, FlowCondition, FlowEffect } from "../content/schema";
 import type { CampaignState } from "./campaign";
-import { addCards, crossOut, hasEntry, logCount, NOTES, record, setCount, setInvestigatorCount } from "./campaignLog";
+import {
+  addCards,
+  crossOut,
+  hasEntry,
+  logCount,
+  NOTES,
+  record,
+  setCount,
+  setInvestigatorCount,
+} from "./campaignLog";
 import { randInt } from "./rng";
 import type { ContentDb, InvId } from "./types";
 
@@ -18,7 +27,20 @@ export type QueueItem = string | CampaignStep;
 
 /** what the players are asked: a step of the flow, or one the interpreter makes (reading on, the next scenario, who) */
 export type WaitingStep =
-  | Extract<CampaignStep, { kind: "chooseOne" | "counter" | "investigatorChoice" | "cardChoice" | "checklist" | "sideScenario" | "unsupported" | "upgradeDecks" }>
+  | Extract<
+      CampaignStep,
+      {
+        kind:
+          | "chooseOne"
+          | "counter"
+          | "investigatorChoice"
+          | "cardChoice"
+          | "checklist"
+          | "sideScenario"
+          | "unsupported"
+          | "upgradeDecks";
+      }
+    >
   | { kind: "continue" }
   | { kind: "play"; scenario: string }
   | { kind: "investigator"; effects: FlowEffect[] };
@@ -66,7 +88,20 @@ export interface FlowState {
 export type FlowValue = string | number | string[] | null;
 
 export function initFlow(db: ContentDb, campaignId: string): FlowState {
-  return { queue: [...flowOf(db, campaignId).setup], shown: [], waiting: null, pos: -1, play: null, playing: false, override: null, skipped: [], data: {}, answers: [], scenario: null, item: null };
+  return {
+    queue: [...flowOf(db, campaignId).setup],
+    shown: [],
+    waiting: null,
+    pos: -1,
+    play: null,
+    playing: false,
+    override: null,
+    skipped: [],
+    data: {},
+    answers: [],
+    scenario: null,
+    item: null,
+  };
 }
 
 // ---------- who, and the investigators ----------
@@ -94,13 +129,28 @@ interface Input {
   code?: string;
 }
 
-const basicWeaknesses = (db: ContentDb, trait?: string) => Object.values(db.cards).filter((c) => c.subtype === "basicweakness" && c.type !== "investigator" && (!trait || c.traits.includes(trait)));
+const basicWeaknesses = (db: ContentDb, trait?: string) =>
+  Object.values(db.cards).filter(
+    (c) =>
+      c.subtype === "basicweakness" &&
+      c.type !== "investigator" &&
+      (!trait || c.traits.includes(trait)),
+  );
 
 // ---------- conditions ----------
 
-export function test(db: ContentDb, c: CampaignState, cond: FlowCondition, input: Input = {}): boolean {
-  const inv = (who: "any" | "input" | "lead") => (who === "any" ? active(c) : active(c).filter((i) => (who === "lead" ? i.code === c.lead : i.code === input.inv)));
-  const within = (n: number, min?: number, max?: number) => n >= (min ?? -Infinity) && n <= (max ?? Infinity);
+export function test(
+  db: ContentDb,
+  c: CampaignState,
+  cond: FlowCondition,
+  input: Input = {},
+): boolean {
+  const inv = (who: "any" | "input" | "lead") =>
+    who === "any"
+      ? active(c)
+      : active(c).filter((i) => (who === "lead" ? i.code === c.lead : i.code === input.inv));
+  const within = (n: number, min?: number, max?: number) =>
+    n >= (min ?? -Infinity) && n <= (max ?? Infinity);
   switch (cond.kind) {
     case "logHas":
       return hasEntry(c.log, cond.id, cond.section ?? NOTES);
@@ -117,17 +167,26 @@ export function test(db: ContentDb, c: CampaignState, cond: FlowCondition, input
       return inv(cond.inv).some((i) => within(by[i.code] ?? 0, cond.min, cond.max));
     }
     case "scenarioCompleted":
-      return c.history.some((h) => h.scenarioId === cond.scenario && (!cond.resolution || h.resolution === cond.resolution));
+      return c.history.some(
+        (h) =>
+          h.scenarioId === cond.scenario && (!cond.resolution || h.resolution === cond.resolution),
+      );
     case "difficulty":
       return cond.is.includes(c.difficulty);
     case "playerCount":
       return within(c.investigators.length, cond.min, cond.max);
     case "trauma":
-      return inv(cond.inv).some((i) => (cond.physical === undefined || i.physicalTrauma >= cond.physical) && (cond.mental === undefined || i.mentalTrauma >= cond.mental));
+      return inv(cond.inv).some(
+        (i) =>
+          (cond.physical === undefined || i.physicalTrauma >= cond.physical) &&
+          (cond.mental === undefined || i.mentalTrauma >= cond.mental),
+      );
     case "hasCard":
       return inv(cond.inv).some((i) => i.deck.includes(cond.card));
     case "data":
-      return cond.equals !== undefined ? c.flow.data[cond.key] === cond.equals : Number(c.flow.data[cond.key] ?? 0) >= (cond.min ?? 1);
+      return cond.equals !== undefined
+        ? c.flow.data[cond.key] === cond.equals
+        : Number(c.flow.data[cond.key] ?? 0) >= (cond.min ?? 1);
     case "not":
       return !test(db, c, cond.condition, input);
     case "all":
@@ -143,9 +202,12 @@ export function test(db: ContentDb, c: CampaignState, cond: FlowCondition, input
 
 /** the effect with "input" amounts and codes filled in from the answer */
 function bound(e: FlowEffect, input: Input): FlowEffect {
-  if ((e.do === "count" || e.do === "investigatorCount") && e.value === "input") return { ...e, value: input.n ?? 0 };
-  if ((e.do === "removeCard" || e.do === "earnCard") && e.code === "$input") return { ...e, code: input.code ?? "" };
-  if (e.do === "listCards" && e.codes.includes("$input")) return { ...e, codes: e.codes.map((x) => (x === "$input" ? (input.code ?? "") : x)) };
+  if ((e.do === "count" || e.do === "investigatorCount") && e.value === "input")
+    return { ...e, value: input.n ?? 0 };
+  if ((e.do === "removeCard" || e.do === "earnCard") && e.code === "$input")
+    return { ...e, code: input.code ?? "" };
+  if (e.do === "listCards" && e.codes.includes("$input"))
+    return { ...e, codes: e.codes.map((x) => (x === "$input" ? (input.code ?? "") : x)) };
   return e;
 }
 
@@ -154,9 +216,16 @@ function kill(c: CampaignState, inv: InvId) {
   if (i && i.status === "active") i.status = "killed";
 }
 
-function apply(db: ContentDb, c: CampaignState, raw: FlowEffect, input: Input, rng: { rng: number }) {
+function apply(
+  db: ContentDb,
+  c: CampaignState,
+  raw: FlowEffect,
+  input: Input,
+  rng: { rng: number },
+) {
   const e = bound(raw, input);
-  const who = (w: string | undefined) => targets(c, w, input).map((code) => c.investigators.find((i) => i.code === code)!);
+  const who = (w: string | undefined) =>
+    targets(c, w, input).map((code) => c.investigators.find((i) => i.code === code)!);
   const facts = c.flow.scenario;
   switch (e.do) {
     case "record": {
@@ -172,7 +241,15 @@ function apply(db: ContentDb, c: CampaignState, raw: FlowEffect, input: Input, r
       if (facts?.victoryCodes.includes(e.code)) c.log = crossOut(c.log, e.key, NOTES, true);
       return;
     case "recordCards":
-      c.log = addCards(c.log, e.key, e.source === "victoryUniqueCultists" ? (facts?.cultistsVictory ?? []) : (facts?.cultistsRemaining ?? []), false, NOTES);
+      c.log = addCards(
+        c.log,
+        e.key,
+        e.source === "victoryUniqueCultists"
+          ? (facts?.cultistsVictory ?? [])
+          : (facts?.cultistsRemaining ?? []),
+        false,
+        NOTES,
+      );
       return;
     case "count":
       c.log = setCount(c.log, e.id, e.op, e.value === "input" ? 0 : e.value, e.section ?? NOTES);
@@ -181,7 +258,15 @@ function apply(db: ContentDb, c: CampaignState, raw: FlowEffect, input: Input, r
       c.log = addCards(c.log, e.id, e.codes, e.remove, e.section ?? NOTES);
       return;
     case "investigatorCount":
-      for (const i of who(e.who)) c.log = setInvestigatorCount(c.log, e.id, i.code, e.op, e.value === "input" ? 0 : e.value, e.section ?? NOTES);
+      for (const i of who(e.who))
+        c.log = setInvestigatorCount(
+          c.log,
+          e.id,
+          i.code,
+          e.op,
+          e.value === "input" ? 0 : e.value,
+          e.section ?? NOTES,
+        );
       return;
     case "xp": {
       const n = e.bonus + (e.victory ? (facts?.victory ?? 0) : 0);
@@ -197,20 +282,23 @@ function apply(db: ContentDb, c: CampaignState, raw: FlowEffect, input: Input, r
       }
       return;
     case "kill":
-      for (const i of active(c)) if (e.who === "each" || facts?.notResigned.includes(i.code) !== false) kill(c, i.code);
+      for (const i of active(c))
+        if (e.who === "each" || facts?.notResigned.includes(i.code) !== false) kill(c, i.code);
       return;
     case "earnCard":
       for (const i of who(e.who === "choice" ? "lead" : e.who)) i.deck.push(e.code);
       return;
     case "removeCard":
-      for (const i of e.who ? who(e.who) : c.investigators) i.deck = i.deck.filter((x) => x !== e.code);
+      for (const i of e.who ? who(e.who) : c.investigators)
+        i.deck = i.deck.filter((x) => x !== e.code);
       return;
     case "replaceCard":
       for (const i of who(e.who)) i.deck = i.deck.map((x) => (x === e.old ? e.new : x));
       return;
     case "addWeakness": {
       const pool = basicWeaknesses(db, e.trait || undefined);
-      for (const i of who(e.who)) if (pool.length) i.deck.push(pool[randInt(rng, pool.length)].code);
+      for (const i of who(e.who))
+        if (pool.length) i.deck.push(pool[randInt(rng, pool.length)].code);
       return;
     }
     case "addChaosToken":
@@ -249,19 +337,33 @@ export function settle(db: ContentDb, c: CampaignState) {
     if (i.physicalTrauma >= (d.health ?? Infinity)) i.status = "killed";
     else if (i.mentalTrauma >= (d.sanity ?? Infinity)) i.status = "insane";
   }
-  if (!c.investigators.find((i) => i.code === c.lead && i.status === "active")) c.lead = c.investigators.find((i) => i.status === "active")?.code ?? c.lead;
+  if (!c.investigators.find((i) => i.code === c.lead && i.status === "active"))
+    c.lead = c.investigators.find((i) => i.status === "active")?.code ?? c.lead;
 }
 
 /**
  * Apply effects in order. An effect for "one investigator the players choose" with more than one to choose from stops
  * for the answer; the effects after it wait in the queue behind it.
  */
-function runEffects(db: ContentDb, c: CampaignState, effects: FlowEffect[], input: Input, rng: { rng: number }) {
+function runEffects(
+  db: ContentDb,
+  c: CampaignState,
+  effects: FlowEffect[],
+  input: Input,
+  rng: { rng: number },
+) {
   for (let k = 0; k < effects.length; k++) {
     const e = effects[k];
     if ("who" in e && e.who === "choice" && active(c).length > 1) {
-      c.flow.queue.unshift(...(k + 1 < effects.length ? [{ kind: "effects" as const, effects: effects.slice(k + 1) }] : []));
-      c.flow.waiting = { id: `who:${e.do}`, step: { kind: "investigator", effects: [{ ...e, who: "input" } as FlowEffect] } };
+      c.flow.queue.unshift(
+        ...(k + 1 < effects.length
+          ? [{ kind: "effects" as const, effects: effects.slice(k + 1) }]
+          : []),
+      );
+      c.flow.waiting = {
+        id: `who:${e.do}`,
+        step: { kind: "investigator", effects: [{ ...e, who: "input" } as FlowEffect] },
+      };
       return;
     }
     apply(db, c, e, input, rng);
@@ -296,7 +398,16 @@ const stepOf = (db: ContentDb, c: CampaignState, id: string): CampaignStep | und
   return m ? resolutionSteps(db, c.campaignId, m[1], m[2]).steps[id] : undefined;
 };
 
-const PROMPTS = new Set(["chooseOne", "counter", "investigatorChoice", "cardChoice", "checklist", "sideScenario", "unsupported", "upgradeDecks"]);
+const PROMPTS = new Set([
+  "chooseOne",
+  "counter",
+  "investigatorChoice",
+  "cardChoice",
+  "checklist",
+  "sideScenario",
+  "unsupported",
+  "upgradeDecks",
+]);
 
 /** run until a prompt, a scenario to play, or the campaign's end */
 function run(db: ContentDb, c: CampaignState) {
@@ -396,35 +507,56 @@ function answer(db: ContentDb, c: CampaignState, value: FlowValue) {
         return;
       }
       case "counter": {
-        need(typeof value === "number" && value >= st.min && (st.max === undefined || value <= st.max), "that number is out of range");
+        need(
+          typeof value === "number" && value >= st.min && (st.max === undefined || value <= st.max),
+          "that number is out of range",
+        );
         after(st.steps);
         runEffects(db, c, st.effects, { n: value as number }, rng);
         return;
       }
       case "investigatorChoice": {
-        need((value === null && st.optional) || active(c).some((i) => i.code === value), "that investigator can't be chosen");
+        need(
+          (value === null && st.optional) || active(c).some((i) => i.code === value),
+          "that investigator can't be chosen",
+        );
         after(st.steps);
         runEffects(db, c, st.effects, { inv: value as string | null }, rng);
         return;
       }
       case "investigator": {
-        need(active(c).some((i) => i.code === value), "that investigator can't be chosen");
+        need(
+          active(c).some((i) => i.code === value),
+          "that investigator can't be chosen",
+        );
         runEffects(db, c, st.effects, { inv: text(value) }, rng);
         return;
       }
       case "cardChoice": {
         const codes = Array.isArray(value) ? value : [];
-        need(codes.length >= st.min && codes.length <= st.max, `choose from ${st.min} to ${st.max} cards`);
-        need(!st.codes.length || codes.every((x) => st.codes.includes(x)), "that card is not on offer");
+        need(
+          codes.length >= st.min && codes.length <= st.max,
+          `choose from ${st.min} to ${st.max} cards`,
+        );
+        need(
+          !st.codes.length || codes.every((x) => st.codes.includes(x)),
+          "that card is not on offer",
+        );
         after(st.steps);
         for (const code of codes) runEffects(db, c, st.effects, { code }, rng);
         return;
       }
       case "checklist": {
         const ids = Array.isArray(value) ? value : [];
-        need(ids.length >= st.min && (st.max === undefined || ids.length <= st.max), "that many can't be ticked");
+        need(
+          ids.length >= st.min && (st.max === undefined || ids.length <= st.max),
+          "that many can't be ticked",
+        );
         const chosen = ids.map((id) => st.choices.find((x) => x.id === id));
-        need(chosen.every((x) => !!x && (!x.when || test(db, c, x.when))), "that is not on the list");
+        need(
+          chosen.every((x) => !!x && (!x.when || test(db, c, x.when))),
+          "that is not on the list",
+        );
         after(chosen.flatMap((x) => x!.steps));
         for (const ch of chosen) runEffects(db, c, ch!.effects, {}, rng);
         return;
@@ -433,7 +565,10 @@ function answer(db: ContentDb, c: CampaignState, value: FlowValue) {
         if (value === null) return;
         const offer = st.scenarios.find((x) => x.scenario === value);
         need(!!offer, "that scenario is not on offer");
-        need(active(c).every((i) => i.xp >= offer!.cost), `each investigator needs ${offer!.cost} experience`);
+        need(
+          active(c).every((i) => i.xp >= offer!.cost),
+          `each investigator needs ${offer!.cost} experience`,
+        );
         for (const i of active(c)) i.xp -= offer!.cost;
         f.override = offer!.scenario;
         return;
@@ -464,7 +599,11 @@ export function advance(db: ContentDb, c0: CampaignState, value?: FlowValue): Ca
 }
 
 /** the resolution of a scenario just ended: its steps run, then the flow goes on (the engine's own part of the end is done) */
-export function startResolution(db: ContentDb, c0: CampaignState, facts: ScenarioFacts): CampaignState {
+export function startResolution(
+  db: ContentDb,
+  c0: CampaignState,
+  facts: ScenarioFacts,
+): CampaignState {
   const c = structuredClone(c0);
   // a scenario that has ended: the "begin" prompt that started it (if the caller never answered it) is moot
   c.flow.waiting = null;

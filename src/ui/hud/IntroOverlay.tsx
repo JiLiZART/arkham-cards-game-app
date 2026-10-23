@@ -56,7 +56,10 @@ export function IntroOverlay() {
   });
 
   const id = step === "agenda" ? game.agenda : step === "act" ? game.act : null;
-  const next = () => useView.setState((s) => (s.intro ? { intro: { ...s.intro, step: s.intro.step === "agenda" ? "act" : "deal" } } : {}));
+  const next = () =>
+    useView.setState((s) =>
+      s.intro ? { intro: { ...s.intro, step: s.intro.step === "agenda" ? "act" : "deal" } } : {},
+    );
   const proceed = () => {
     const el = card.current;
     if (busy.current || !el || !id) return;
@@ -64,7 +67,10 @@ export function IntroOverlay() {
     if (!slot || reducedMotion()) return next();
     busy.current = true;
     setFlying(true);
-    const a = el.animate([{ transform: "none" }, { transform: centreTransform(boxOf(el), boxOf(slot)) }], { duration: FLY_MS, easing: "cubic-bezier(.5,0,.3,1)", fill: "forwards" });
+    const a = el.animate(
+      [{ transform: "none" }, { transform: centreTransform(boxOf(el), boxOf(slot)) }],
+      { duration: FLY_MS, easing: "cubic-bezier(.5,0,.3,1)", fill: "forwards" },
+    );
     a.finished
       .catch(() => undefined)
       .finally(() => {
@@ -96,7 +102,14 @@ export function IntroOverlay() {
           <div className="intro-card" ref={card} data-intro={step}>
             <CardFace code={game.cards[id].code} locale={locale} />
           </div>
-          {step === "agenda" && sc.intro && <div className={`intro-text ${more ? "more" : ""}`} ref={text} tabIndex={0} dangerouslySetInnerHTML={{ __html: guideHtml(sc.intro) }} />}
+          {step === "agenda" && sc.intro && (
+            <div
+              className={`intro-text ${more ? "more" : ""}`}
+              ref={text}
+              tabIndex={0}
+              dangerouslySetInnerHTML={{ __html: guideHtml(sc.intro) }}
+            />
+          )}
         </div>
         <div className="intro-buttons">
           <button className="primary big" onClick={proceed} autoFocus>

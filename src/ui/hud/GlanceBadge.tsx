@@ -20,8 +20,17 @@ export function GlanceBadge({ card }: { card: CardDef }) {
     <span className="glance">
       {chips.map((c, k) => (
         <span key={k} className="glance-chip" title={chipTitle(c, locale)}>
-          {isIcon(c.icon) ? <Icon name={c.icon} size={20} title="" /> : <Glyph name={c.icon} size={18} title="" />}
-          {c.n !== undefined && <b>{c.plus ? "+" : ""}{c.n}</b>}
+          {isIcon(c.icon) ? (
+            <Icon name={c.icon} size={20} title="" />
+          ) : (
+            <Glyph name={c.icon} size={18} title="" />
+          )}
+          {c.n !== undefined && (
+            <b>
+              {c.plus ? "+" : ""}
+              {c.n}
+            </b>
+          )}
         </span>
       ))}
     </span>

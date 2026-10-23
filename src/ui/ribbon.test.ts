@@ -14,7 +14,12 @@ const states = (s: GameState) => ribbonModel(s).phases.map((p) => p.state);
 
 describe("ribbonModel", () => {
   it("round 1: mythos skipped, investigation lit", () => {
-    expect(states(at({ round: 1, phase: "investigation" }))).toEqual(["skipped", "current", "todo", "todo"]);
+    expect(states(at({ round: 1, phase: "investigation" }))).toEqual([
+      "skipped",
+      "current",
+      "todo",
+      "todo",
+    ]);
   });
 
   it("round 2 enemy phase: mythos and investigation done, enemy lit, upkeep to come", () => {
@@ -22,17 +27,28 @@ describe("ribbonModel", () => {
     expect(m.round).toBe(2);
     expect(m.phases.map((p) => p.state)).toEqual(["done", "done", "current", "todo"]);
     // outside the investigation phase only the portraits
-    expect(m.turns.map((t) => [t.state, t.pips])).toEqual([["idle", 0], ["idle", 0]]);
+    expect(m.turns.map((t) => [t.state, t.pips])).toEqual([
+      ["idle", 0],
+      ["idle", 0],
+    ]);
   });
 
   it("the pause before a phase lights that phase", () => {
-    const s = at({ round: 2, phase: "upkeep" }, (s) => (s.pending = { ...s.pending!, kind: "phase", step: { t: "PhasePause", phase: "mythos" } }));
+    const s = at(
+      { round: 2, phase: "upkeep" },
+      (s) =>
+        (s.pending = { ...s.pending!, kind: "phase", step: { t: "PhasePause", phase: "mythos" } }),
+    );
     expect(states(s)).toEqual(["current", "todo", "todo", "todo"]);
   });
 
   it("the pause before the investigation phase shows everyone still to play", () => {
     const s = at({ round: 2, phase: "mythos", active: null }, (s) => {
-      s.pending = { ...s.pending!, kind: "phase", step: { t: "PhasePause", phase: "investigation" } };
+      s.pending = {
+        ...s.pending!,
+        kind: "phase",
+        step: { t: "PhasePause", phase: "investigation" },
+      };
       for (const i of s.order) s.invs[i].turnDone = true;
     });
     expect(ribbonModel(s).turns.map((t) => t.state)).toEqual(["todo", "todo"]);
@@ -52,7 +68,10 @@ describe("ribbonModel", () => {
       { inv: "01001", state: "done", pips: 3, filled: 0 },
       { inv: "01002", state: "active", pips: 3, filled: 2 },
     ]);
-    const todo = at({ phase: "investigation", active: "01001" }, (s) => (s.invs["01001"].actionsLeft = 3));
+    const todo = at(
+      { phase: "investigation", active: "01001" },
+      (s) => (s.invs["01001"].actionsLeft = 3),
+    );
     expect(ribbonModel(todo).turns[1]).toEqual({ inv: "01002", state: "todo", pips: 3, filled: 3 });
   });
 

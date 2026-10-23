@@ -11,11 +11,13 @@
 ## Goals / Non-Goals
 
 **Goals:**
+
 - One source for card data and card text: the vendored snapshot; reproducible imports.
 - Every cycle present without slowing the first screen.
 - The Russian image pipeline unchanged in method, widened in input.
 
 **Non-Goals:**
+
 - Scenario definitions for other campaigns; shipping other locales (available by command); images for cycles without PDFs.
 
 ## Diagram (C4-inspired, component level, ASCII; build-time tools on the left, the browser app on the right)
@@ -43,21 +45,27 @@ BUILD TIME (inspired/ never ships)                   RUN TIME (browser app)
 ## Decisions
 
 ### 1. The vendored snapshot is the card source (ADR-0006)
+
 `import:cards --source arkhamdb-json-data` reads the local files; `mapCard` is reused as is (the snapshot's records are the API's). The API path stays for one-off refreshes. Alternative: fetch every pack from the API; rejected, 114 requests, rate limits, and no reproducibility.
 
 ### 2. One pack per cycle
+
 `content/packs/<cycle>/cards.generated.json` concatenates the cycle's pack files; `cards.json` per cycle for overrides (empty until needed). The loader's pack regex already accepts any pack name.
 
 ### 3. Lazy packs
+
 `import.meta.glob` with `eager: false` for `content/packs/*/cards.generated.json` except `core`; `buildContent` builds the eager set first and exposes `loadPack(cycle)` that validates and merges a pack on demand; `db.cards` grows, with a `packLoaded` set and a `cardsOf(cycle)` helper. Scenario content references are validated against the eager set plus the packs they name (scenario files list their cycle). `check:content` (Node) loads everything eagerly. Alternative: eager everything; rejected, ~4 MB of JSON on the first screen for cards no scenario uses yet.
 
 ### 4. Translations per cycle, layered as today
+
 `import:i18n --locale ru` writes `cards.generated.json` for every cycle from the snapshot (the ArkhamCards card translations are dropped in favour of the snapshot's, which are the same ArkhamDB community strings), and campaign text from ArkhamCards as before. The print layer and the hand layer are untouched.
 
 ### 5. PDFs tagged by cycle
+
 A table in `import-ru-cards.ts` maps each PDF's leading number (`02_…` → dwl, `03_…` → ptc, …, `0xR_…` → return) to a cycle; `ruMatch` searches that cycle's cards only (plus core for the investigator-only PDF). Cache keyed per PDF. Everything else in the pipeline stays.
 
 ### 6. Images committed
+
 ~6,000 WebP at 50 % (about 300 MB) in `public/cards-ru/`; `fetch:cards` and Pages unchanged. Alternative: external storage; rejected by the user for now; a later move is a `BASE` change in `images.ts`.
 
 ## Risks / Trade-offs

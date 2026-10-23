@@ -20,7 +20,16 @@ export interface Arrival {
   shown: boolean;
 }
 
-const SHOWN = new Set<Zone>(["hand", "play", "threat", "enemy", "location", "attached", "resolving", "commit"]);
+const SHOWN = new Set<Zone>([
+  "hand",
+  "play",
+  "threat",
+  "enemy",
+  "location",
+  "attached",
+  "resolving",
+  "commit",
+]);
 
 /** every card that changed into a shown zone between two states (hand cards in hand order first) */
 export function diffArrivals(prev: GameState | null, next: GameState): Arrival[] {
@@ -28,15 +37,30 @@ export function diffArrivals(prev: GameState | null, next: GameState): Arrival[]
   const seen = new Set<InstId>();
   const count = new Map<string, number>();
   // encounter cards and weaknesses drawn since the previous state are shown in the showcase before they go anywhere
-  const recent = next.log.slice(prev ? Math.max(0, Math.min(prev.log.length, next.log.length) - 1) : 0);
-  const shownCards = new Set(recent.filter((e) => (e.type === "encounter" || e.type === "weakness") && e.card).map((e) => e.card!));
+  const recent = next.log.slice(
+    prev ? Math.max(0, Math.min(prev.log.length, next.log.length) - 1) : 0,
+  );
+  const shownCards = new Set(
+    recent
+      .filter((e) => (e.type === "encounter" || e.type === "weakness") && e.card)
+      .map((e) => e.card!),
+  );
   const add = (id: InstId, from: Zone, owner: InvId | null) => {
     const to = next.cards[id].zone;
     const k = `${to}:${owner}`;
     const batch = count.get(k) ?? 0;
     count.set(k, batch + 1);
     seen.add(id);
-    out.push({ id, from, to, owner, opening: next.phase === "setup" || prev?.phase === "setup", batch, log: next.log.length, shown: shownCards.has(id) });
+    out.push({
+      id,
+      from,
+      to,
+      owner,
+      opening: next.phase === "setup" || prev?.phase === "setup",
+      batch,
+      log: next.log.length,
+      shown: shownCards.has(id),
+    });
   };
   for (const i of next.order)
     for (const id of next.invs[i].hand) {
@@ -52,7 +76,8 @@ export function diffArrivals(prev: GameState | null, next: GameState): Arrival[]
 }
 
 const MAX_AGE = 1500;
-export const reducedMotion = () => typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
+export const reducedMotion = () =>
+  typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 let record = new Map<InstId, Arrival & { at: number }>();
 
@@ -120,10 +145,28 @@ export function takeLocalMove(id: InstId, now = performance.now()): ScreenBox | 
 
 // ---------- where an arrival flies from ----------
 /** named HUD places an arrival can start from */
-export type Place = "deck" | "discard" | "encounter" | "encounterDiscard" | "resolve" | "actAgenda" | "piles" | "fan" | "strip" | "skilltest" | "showcase";
+export type Place =
+  | "deck"
+  | "discard"
+  | "encounter"
+  | "encounterDiscard"
+  | "resolve"
+  | "actAgenda"
+  | "piles"
+  | "fan"
+  | "strip"
+  | "skilltest"
+  | "showcase";
 
 /** the screen box an arriving card starts from: its old HTML rect, the pile or panel it came from, or a small box mid-screen */
-export function originRect(a: Arrival, viewer: InvId | null, find: (p: Place) => ScreenBox | null, last: (id: InstId) => ScreenBox | null, vw: number, vh: number): ScreenBox {
+export function originRect(
+  a: Arrival,
+  viewer: InvId | null,
+  find: (p: Place) => ScreenBox | null,
+  last: (id: InstId) => ScreenBox | null,
+  vw: number,
+  vh: number,
+): ScreenBox {
   const mine = a.owner === viewer;
   const place = (): ScreenBox | null => {
     // a card just shown in the showcase leaves from where it stood there
@@ -198,7 +241,8 @@ export function cardsFlying(): boolean {
 export const SETTLE_MS = 400;
 export const SETTLE_MAX_MS = 4000;
 /** has the screen settled: quiet for SETTLE_MS since anything last flew, or waited SETTLE_MAX_MS in all */
-export const isSettled = (now: number, start: number, lastFlying: number) => now - lastFlying >= SETTLE_MS || now - start >= SETTLE_MAX_MS;
+export const isSettled = (now: number, start: number, lastFlying: number) =>
+  now - lastFlying >= SETTLE_MS || now - start >= SETTLE_MAX_MS;
 
 /** calls `done` once the screen has settled; returns a cancel function */
 export function whenSettled(done: () => void): () => void {

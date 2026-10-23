@@ -15,7 +15,17 @@ export const initials = (name: string) =>
     .slice(0, 3);
 
 /** round investigator portrait cropped from the card art, ringed in the class colour; initials if the art can't load */
-export function Portrait({ code, size, active, title }: { code: string; size: number; active?: boolean; title?: string }) {
+export function Portrait({
+  code,
+  size,
+  active,
+  title,
+}: {
+  code: string;
+  size: number;
+  active?: boolean;
+  title?: string;
+}) {
   const locale = useGame((s) => s.locale);
   // the card may not be loaded yet (the picker lists investigators of packs still to come): the scan is found by its code
   const { name, faction } = investigatorInfo(db, code, locale);
@@ -37,7 +47,14 @@ export function Portrait({ code, size, active, title }: { code: string; size: nu
     <div
       className={`portrait ${active ? "active" : ""}`}
       title={title ?? name}
-      style={{ width: size, height: size, borderColor: ring, backgroundImage: ok ? `url(${url})` : "none", backgroundColor: ok ? "#333" : ring, fontSize: size * 0.36 }}
+      style={{
+        width: size,
+        height: size,
+        borderColor: ring,
+        backgroundImage: ok ? `url(${url})` : "none",
+        backgroundColor: ok ? "#333" : ring,
+        fontSize: size * 0.36,
+      }}
     >
       {!ok && <span className="portrait-initials">{initials(name)}</span>}
     </div>

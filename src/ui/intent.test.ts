@@ -11,10 +11,14 @@ describe("intentOf", () => {
     const r = mutate(base, (g) => (ghoul = putEnemy(g, "01160", study, "01001")));
     expect(intentOf(r.state, ghoul)).toEqual({ kind: "attack", damage: 1, horror: 1 });
     // an evade exhausts and disengages
-    const evaded = mutate(r, (g) => Object.assign(g.s.cards[ghoul], { exhausted: true, engagedWith: null }));
+    const evaded = mutate(r, (g) =>
+      Object.assign(g.s.cards[ghoul], { exhausted: true, engagedWith: null }),
+    );
     expect(intentOf(evaded.state, ghoul)).toEqual({ kind: "rest" });
     // ready and engaged again
-    const engaged = mutate(evaded, (g) => Object.assign(g.s.cards[ghoul], { exhausted: false, engagedWith: "01001" }));
+    const engaged = mutate(evaded, (g) =>
+      Object.assign(g.s.cards[ghoul], { exhausted: false, engagedWith: "01001" }),
+    );
     expect(intentOf(engaged.state, ghoul).kind).toBe("attack");
   });
 

@@ -57,7 +57,8 @@ export function SoundLayer() {
   useEffect(() => {
     if (!playing || playing === last.current) return;
     last.current = playing;
-    for (const id of effectFor(playing, game, sounds()) ?? []) void audio.play(id, sounds().effects[id].file, sounds().effects[id].gain);
+    for (const id of effectFor(playing, game, sounds()) ?? [])
+      void audio.play(id, sounds().effects[id].file, sounds().effects[id].gain);
   }, [playing, game]);
 
   // a fight begins: the weapon's sound (the test start has no animation of its own)
@@ -74,7 +75,13 @@ export function SoundLayer() {
     if (!idle) return;
     const id = musicFor(game, sounds());
     const track = id ? sounds().music[id] : null;
-    audio.music(id, track ? { stem: track.file, loop: track.loop, loopStart: track.loopStart, loopEnd: track.loopEnd } : null, track?.gain ?? 1);
+    audio.music(
+      id,
+      track
+        ? { stem: track.file, loop: track.loop, loopStart: track.loopStart, loopEnd: track.loopEnd }
+        : null,
+      track?.gain ?? 1,
+    );
   }, [game, idle]);
 
   // leaving the table (menu, campaign log): silence

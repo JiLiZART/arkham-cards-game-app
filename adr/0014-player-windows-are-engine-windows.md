@@ -5,7 +5,7 @@
 
 ## Context and Problem Statement
 
-The engine's round runs the framework events of the Arkham Grimoire's flow chart (mythos, investigation, enemy, upkeep), but offers players a move only during their own turn and in reaction windows a card's text names ("after you defeat an enemy"). The grimoire (p.11, p.27–29) also marks *player windows*, red boxes between framework events, in which any investigator may play a fast card printed "during any [fast] window" or use a fast ability. Three cards of the first starter pack need them (Dynamite Blast 3, "Get over here!" 2, Taunt 3) and every later pack brings more. The engine needs one way to say where those moments are and what may happen in them.
+The engine's round runs the framework events of the Arkham Grimoire's flow chart (mythos, investigation, enemy, upkeep), but offers players a move only during their own turn and in reaction windows a card's text names ("after you defeat an enemy"). The grimoire (p.11, p.27–29) also marks _player windows_, red boxes between framework events, in which any investigator may play a fast card printed "during any [fast] window" or use a fast ability. Three cards of the first starter pack need them (Dynamite Blast 3, "Get over here!" 2, Taunt 3) and every later pack brings more. The engine needs one way to say where those moments are and what may happen in them.
 
 ## Considered Options
 

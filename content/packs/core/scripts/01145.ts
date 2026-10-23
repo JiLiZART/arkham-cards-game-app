@@ -1,6 +1,13 @@
 // Vengeance Awaits (Devourer Below, agenda 3)
 import {
-  discard, emit, enemiesAt, findByCode, moveCard, push, type CardScript, type G,
+  discard,
+  emit,
+  enemiesAt,
+  findByCode,
+  moveCard,
+  push,
+  type CardScript,
+  type G,
 } from "../../../../src/engine/api";
 
 export default {
@@ -25,7 +32,9 @@ export default {
       g.s.actDeck = [];
       g.s.agendaDeck = [];
       g.s.flags.devourer = true;
-      emit(g, "devourer", `The Devourer Below: defeat Umôrdhoth!`, { card: findByCode(g, "01157")?.id ?? null });
+      emit(g, "devourer", `The Devourer Below: defeat Umôrdhoth!`, {
+        card: findByCode(g, "01157")?.id ?? null,
+      });
     },
   },
 } satisfies CardScript;

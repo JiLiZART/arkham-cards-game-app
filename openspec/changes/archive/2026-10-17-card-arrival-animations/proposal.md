@@ -14,9 +14,11 @@ Only encounter cards are animated today: they fly from the encounter pile to the
 ## Capabilities
 
 ### New Capabilities
+
 <!-- none -->
 
 ### Modified Capabilities
+
 - `game-table-ui`: new requirement for card arrival animations (draws, hand arrivals, played cards, cards entering the play strip, threat area and map).
 
 ## Impact

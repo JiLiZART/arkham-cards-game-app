@@ -1,7 +1,29 @@
 import type { Ability, CardDef, Cost, Slot, Trigger } from "../../content/schema";
 import {
-  abilitiesOf, activeInvs, allMods, ask, blankedCards, card, checkCondition, controlled, def, discard, emit, hasFlag, inv, invName, invsAt,
-  actClueCost, canAdvanceAct, matchesFilter, modSum, moveCard, playerCount, push, uniqueInPlay, type G,
+  abilitiesOf,
+  activeInvs,
+  allMods,
+  ask,
+  blankedCards,
+  card,
+  checkCondition,
+  controlled,
+  def,
+  discard,
+  emit,
+  hasFlag,
+  inv,
+  invName,
+  invsAt,
+  actClueCost,
+  canAdvanceAct,
+  matchesFilter,
+  modSum,
+  moveCard,
+  playerCount,
+  push,
+  uniqueInPlay,
+  type G,
 } from "../core";
 import type { EffCtx, EventData, InstId, InvId, Step } from "../types";
 
@@ -34,13 +56,15 @@ export function canPay(g: G, i: InvId, cardId: InstId, cost: Cost | undefined): 
   if (cost.exhaust && c.exhausted) return false;
   if (cost.uses && c.uses < cost.uses) return false;
   if (cost.resources && me.resources < cost.resources) return false;
-  if (cost.resourcesOrUses && c.uses < cost.resourcesOrUses && me.resources < cost.resourcesOrUses) return false;
+  if (cost.resourcesOrUses && c.uses < cost.resourcesOrUses && me.resources < cost.resourcesOrUses)
+    return false;
   if (cost.clues && (me.clues < cost.clues || hasFlag(g, i, "cannotSpendClues"))) return false;
   if (cost.cluesPerInvestigator) {
     const total = activeInvs(g).reduce((n, x) => n + inv(g, x).clues, 0);
     if (total < cost.cluesPerInvestigator * playerCount(g)) return false;
   }
-  if (cost.discardFromHand && me.hand.filter((h) => h !== cardId).length < cost.discardFromHand) return false;
+  if (cost.discardFromHand && me.hand.filter((h) => h !== cardId).length < cost.discardFromHand)
+    return false;
   return true;
 }
 
@@ -60,8 +84,24 @@ function payCost(g: G, i: InvId, cardId: InstId, cost: Cost | undefined): Step[]
   if (cost.cluesPerInvestigator) spendGroupClues(g, cost.cluesPerInvestigator * playerCount(g));
   // damage or horror taken as a cost is not direct: it may go on assets (Holy Rosary)
   const take: Step[] = [];
-  if (cost.takeDamage) take.push({ t: "AssignDamage", inv: i, damage: cost.takeDamage, horror: 0, direct: false, source: cardId });
-  if (cost.takeHorror) take.push({ t: "AssignDamage", inv: i, damage: 0, horror: cost.takeHorror, direct: false, source: cardId });
+  if (cost.takeDamage)
+    take.push({
+      t: "AssignDamage",
+      inv: i,
+      damage: cost.takeDamage,
+      horror: 0,
+      direct: false,
+      source: cardId,
+    });
+  if (cost.takeHorror)
+    take.push({
+      t: "AssignDamage",
+      inv: i,
+      damage: 0,
+      horror: cost.takeHorror,
+      direct: false,
+      source: cardId,
+    });
   if (cost.horrorOnSelf) c.horror += cost.horrorOnSelf;
   if (cost.damageOnSelf) c.damage += cost.damageOnSelf;
   if (cost.discardSelf) discard(g, cardId);
@@ -86,16 +126,33 @@ export interface AbilityRef {
   controller: InvId;
 }
 
-const ABILITY_ZONES = ["play", "threat", "attached", "location", "enemy", "act", "agenda", "investigator"];
+const ABILITY_ZONES = [
+  "play",
+  "threat",
+  "attached",
+  "location",
+  "enemy",
+  "act",
+  "agenda",
+  "investigator",
+];
 
 /** who may use an ability of this card */
 function usersOf(g: G, cardId: InstId, a: Ability): InvId[] {
   const c = card(g, cardId);
   const by = a.usableBy ?? (c.controller ? "controller" : "atLocation");
-  if (by === "controller") return c.controller && inv(g, c.controller).status === "playing" ? [c.controller] : [];
+  if (by === "controller")
+    return c.controller && inv(g, c.controller).status === "playing" ? [c.controller] : [];
   if (by === "anyone") return activeInvs(g);
   if (by === "engaged") return c.engagedWith ? [c.engagedWith] : [];
-  const loc = c.zone === "location" ? c.id : c.zone === "enemy" || c.zone === "attached" ? c.location : c.controller ? inv(g, c.controller).location : null;
+  const loc =
+    c.zone === "location"
+      ? c.id
+      : c.zone === "enemy" || c.zone === "attached"
+        ? c.location
+        : c.controller
+          ? inv(g, c.controller).location
+          : null;
   if (c.zone === "act" || c.zone === "agenda") return activeInvs(g);
   return invsAt(g, loc);
 }
@@ -111,7 +168,15 @@ export function activatable(g: G, i: InvId, kinds: ("action" | "fast")[]): Abili
       if (!kinds.includes(a.kind as "action" | "fast")) return;
       if (!usersOf(g, c.id, a).includes(i)) return;
       if (!withinLimit(g, c.id, index, a)) return;
-      if (a.condition && !checkCondition(g, a.condition, { source: c.id, you: i, enemy: c.zone === "enemy" ? c.id : null })) return;
+      if (
+        a.condition &&
+        !checkCondition(g, a.condition, {
+          source: c.id,
+          you: i,
+          enemy: c.zone === "enemy" ? c.id : null,
+        })
+      )
+        return;
       if (!canPay(g, i, c.id, a.cost)) return;
       out.push({ card: c.id, index, ability: a, controller: i });
     });
@@ -124,17 +189,30 @@ export function activatable(g: G, i: InvId, kinds: ("action" | "fast")[]): Abili
 function isSubject(g: G, cardId: InstId, data: EventData) {
   const c = card(g, cardId);
   return (
-    data.card === cardId || data.enemy === cardId || data.location === cardId ||
+    data.card === cardId ||
+    data.enemy === cardId ||
+    data.location === cardId ||
     (c.zone === "attached" && !!data.location && c.location === data.location)
   );
 }
 
-function triggerMatches(g: G, cardId: InstId, a: Ability, you: InvId | null, data: EventData): boolean {
+function triggerMatches(
+  g: G,
+  cardId: InstId,
+  a: Ability,
+  you: InvId | null,
+  data: EventData,
+): boolean {
   const hasSubject = !!(data.card || data.enemy || data.location);
   if (!you) return isSubject(g, cardId, data) || !hasSubject;
   if (isSubject(g, cardId, data)) return true;
   // "after X enters play" is about the card itself; an attached card watches only its own location
-  if (a.trigger === "enterPlay" || (card(g, cardId).zone === "attached" && (a.trigger === "enterLocation" || a.trigger === "leaveLocation"))) return false;
+  if (
+    a.trigger === "enterPlay" ||
+    (card(g, cardId).zone === "attached" &&
+      (a.trigger === "enterLocation" || a.trigger === "leaveLocation"))
+  )
+    return false;
   if (!data.inv) return !hasSubject || a.usableBy === "anyone";
   if (data.inv === you) return true;
   if (a.usableBy === "anyone") return true;
@@ -144,10 +222,23 @@ function triggerMatches(g: G, cardId: InstId, a: Ability, you: InvId | null, dat
 
 export function ctxFor(data: EventData, source: InstId, you: InvId | null): EffCtx {
   return {
-    source, you, inv: data.inv ?? null, enemy: data.enemy ?? null, location: data.location ?? null, key: data.key, card: data.card ?? null,
-    from: data.from, token: data.token, testId: data.testId, failBy: data.margin !== undefined && data.margin < 0 ? -data.margin : undefined,
-    succeedBy: data.margin !== undefined && data.margin >= 0 ? data.margin : undefined, x: data.amount,
-    dealt: data.damage !== undefined || data.horror !== undefined ? [data.damage ?? 0, data.horror ?? 0] : undefined,
+    source,
+    you,
+    inv: data.inv ?? null,
+    enemy: data.enemy ?? null,
+    location: data.location ?? null,
+    key: data.key,
+    card: data.card ?? null,
+    from: data.from,
+    token: data.token,
+    testId: data.testId,
+    failBy: data.margin !== undefined && data.margin < 0 ? -data.margin : undefined,
+    succeedBy: data.margin !== undefined && data.margin >= 0 ? data.margin : undefined,
+    x: data.amount,
+    dealt:
+      data.damage !== undefined || data.horror !== undefined
+        ? [data.damage ?? 0, data.horror ?? 0]
+        : undefined,
   };
 }
 
@@ -184,7 +275,8 @@ function triggered(g: G, trigger: Trigger, data: EventData): AbilityRef[] {
         if (a < 0) continue;
         const ab = abilitiesOf(g, h, blanked)[a];
         if (def(g, h).type !== "event" || !def(g, h).keywords.includes("fast")) continue;
-        if (hasFlag(g, i, "cannotPlayAssetsOrEvents") || inv(g, i).resources < playCost(g, i, h)) continue;
+        if (hasFlag(g, i, "cannotPlayAssetsOrEvents") || inv(g, i).resources < playCost(g, i, h))
+          continue;
         if (ab.condition && !checkCondition(g, ab.condition, { source: h, you: i })) continue;
         out.push({ card: h, index: a, ability: ab, controller: i });
       }
@@ -200,13 +292,23 @@ export const windowHandler: Handler<"Window"> = (g, step) => {
     const forced = refs.filter((r) => r.ability.kind === "forced");
     push(
       g,
-      ...forced.map((r): Step => ({ t: "UseAbility", inv: r.controller ?? g.s.lead, card: r.card, index: r.index, ctx: ctxFor(step.data, r.card, r.controller ?? null) })),
+      ...forced.map((r): Step => ({
+        t: "UseAbility",
+        inv: r.controller ?? g.s.lead,
+        card: r.card,
+        index: r.index,
+        ctx: ctxFor(step.data, r.card, r.controller ?? null),
+      })),
       { ...step, forcedDone: true, choice: undefined },
     );
     return;
   }
   const offered = step.offered ?? [];
-  const reactions = refs.filter((r) => (r.ability.kind === "reaction" || r.ability.anyWindow) && !offered.includes(`${r.card}:${r.index}`));
+  const reactions = refs.filter(
+    (r) =>
+      (r.ability.kind === "reaction" || r.ability.anyWindow) &&
+      !offered.includes(`${r.card}:${r.index}`),
+  );
   // the group may spend clues to advance the act in any player window (Grimoire, Act Deck and Agenda Deck)
   const act = step.trigger === "playerWindow" && !offered.includes("act") && canAdvanceAct(g);
   if (reactions.length === 0 && !act) return;
@@ -214,26 +316,70 @@ export const windowHandler: Handler<"Window"> = (g, step) => {
   const who = reactions.length ? reactions[0].controller : lead;
   const mine = reactions.filter((r) => r.controller === who);
   const opts = [
-    ...(act ? [{ id: "act", label: `Advance act (spend ${actClueCost(g)} clues as a group)`, card: g.s.act!, value: { kind: "advanceAct" } }] : []),
-    ...mine.map((r) => ({ id: `${r.card}:${r.index}`, label: r.ability.label ?? `${def(g, r.card).name}${r.ability.fromHand || r.ability.anyWindow ? " (play)" : ""}`, card: r.card, value: `${r.card}:${r.index}` })),
+    ...(act
+      ? [
+          {
+            id: "act",
+            label: `Advance act (spend ${actClueCost(g)} clues as a group)`,
+            card: g.s.act!,
+            value: { kind: "advanceAct" },
+          },
+        ]
+      : []),
+    ...mine.map((r) => ({
+      id: `${r.card}:${r.index}`,
+      label:
+        r.ability.label ??
+        `${def(g, r.card).name}${r.ability.fromHand || r.ability.anyWindow ? " (play)" : ""}`,
+      card: r.card,
+      value: `${r.card}:${r.index}`,
+    })),
     { id: "pass", label: "Pass", value: "pass" },
   ];
-  const pick = ask<string | { kind: "advanceAct" }>(g, step, who, "reaction", `${invName(g, who)}: use a reaction? (${step.trigger})`, opts, { key: step.trigger === "playerWindow" ? "playerWindow" : "reaction" });
+  const pick = ask<string | { kind: "advanceAct" }>(
+    g,
+    step,
+    who,
+    "reaction",
+    `${invName(g, who)}: use a reaction? (${step.trigger})`,
+    opts,
+    { key: step.trigger === "playerWindow" ? "playerWindow" : "reaction" },
+  );
   if (pick === undefined) return;
   if (pick === "pass") {
-    push(g, { ...step, choice: undefined, offered: [...offered, ...mine.map((r) => `${r.card}:${r.index}`), ...(act ? ["act"] : [])] });
+    push(g, {
+      ...step,
+      choice: undefined,
+      offered: [...offered, ...mine.map((r) => `${r.card}:${r.index}`), ...(act ? ["act"] : [])],
+    });
     return;
   }
   if (typeof pick === "object") {
-    push(g, { t: "AdvanceAct", spend: true }, { ...step, choice: undefined, offered: [...offered, "act"] });
+    push(
+      g,
+      { t: "AdvanceAct", spend: true },
+      { ...step, choice: undefined, offered: [...offered, "act"] },
+    );
     return;
   }
   const r = mine.find((x) => `${x.card}:${x.index}` === pick)!;
   push(
     g,
     r.ability.fromHand || r.ability.anyWindow
-      ? { t: "PlayCard", inv: who, card: r.card, ctx: ctxFor(step.data, r.card, who), viaTrigger: true }
-      : { t: "UseAbility", inv: who, card: r.card, index: r.index, ctx: ctxFor(step.data, r.card, who) },
+      ? {
+          t: "PlayCard",
+          inv: who,
+          card: r.card,
+          ctx: ctxFor(step.data, r.card, who),
+          viaTrigger: true,
+        }
+      : {
+          t: "UseAbility",
+          inv: who,
+          card: r.card,
+          index: r.index,
+          ctx: ctxFor(step.data, r.card, who),
+        },
     { ...step, choice: undefined, offered: [...offered, pick] },
   );
 };
@@ -250,8 +396,15 @@ export const useAbilityHandler: Handler<"UseAbility"> = (g, step) => {
     const chosen = step.discards ?? [];
     if (chosen.length < need) {
       const opts = inv(g, step.inv).hand.filter((h) => h !== step.card && !chosen.includes(h));
-      const pick = ask<InstId>(g, step, step.inv, "generic", `Choose a card to discard (cost of ${def(g, step.card).name})`,
-        opts.map((h) => ({ id: h, label: def(g, h).name, card: h, value: h })), { key: "discardForCost", vars: { card: step.card } });
+      const pick = ask<InstId>(
+        g,
+        step,
+        step.inv,
+        "generic",
+        `Choose a card to discard (cost of ${def(g, step.card).name})`,
+        opts.map((h) => ({ id: h, label: def(g, h).name, card: h, value: h })),
+        { key: "discardForCost", vars: { card: step.card } },
+      );
       if (pick === undefined) return;
       push(g, { ...step, choice: undefined, discards: [...chosen, pick] });
       return;
@@ -263,12 +416,18 @@ export const useAbilityHandler: Handler<"UseAbility"> = (g, step) => {
   const c = g.s.cards[step.card];
   const ctx: EffCtx = { ...(step.ctx ?? {}), source: step.card, you: step.ctx?.you ?? step.inv };
   if (c && c.zone === "location") ctx.location ??= c.id;
-  emit(g, "ability", `${invName(g, step.inv)} uses ${a.label ?? def(g, step.card).name}`, { inv: step.inv, card: step.card });
+  emit(g, "ability", `${invName(g, step.inv)} uses ${a.label ?? def(g, step.card).name}`, {
+    inv: step.inv,
+    card: step.card,
+  });
   // an asset whose last use this spent leaves play once the ability has resolved (its own modifiers still apply)
-  const after: Step[] = !step.paid && a.cost?.uses ? [{ t: "DiscardIfEmpty", card: step.card }] : [];
+  const after: Step[] =
+    !step.paid && a.cost?.uses ? [{ t: "DiscardIfEmpty", card: step.card }] : [];
   // a cost that puts damage or horror on the asset itself can defeat it
-  if (!step.paid && (a.cost?.damageOnSelf || a.cost?.horrorOnSelf)) after.push({ t: "Script", code: "__engine", fn: "assetDefeatCheck", ctx: { you: step.inv } });
-  if (a.run) push(g, ...take, { t: "Script", code: card(g, step.card).code, fn: a.run, ctx }, ...after);
+  if (!step.paid && (a.cost?.damageOnSelf || a.cost?.horrorOnSelf))
+    after.push({ t: "Script", code: "__engine", fn: "assetDefeatCheck", ctx: { you: step.inv } });
+  if (a.run)
+    push(g, ...take, { t: "Script", code: card(g, step.card).code, fn: a.run, ctx }, ...after);
   else if (a.effects) push(g, ...take, { t: "Effects", effects: a.effects, ctx }, ...after);
   else push(g, ...take, ...after);
 };
@@ -276,7 +435,9 @@ export const useAbilityHandler: Handler<"UseAbility"> = (g, step) => {
 /** every ability of the card spends its uses and it has no constant ability: with no uses left it can do nothing */
 export function spendsOnlyUses(d: CardDef): boolean {
   const abilities = d.abilities ?? [];
-  return abilities.length > 0 && abilities.every((a) => a.kind !== "constant" && (a.cost?.uses ?? 0) > 0);
+  return (
+    abilities.length > 0 && abilities.every((a) => a.kind !== "constant" && (a.cost?.uses ?? 0) > 0)
+  );
 }
 
 /**
@@ -306,7 +467,8 @@ export function playCost(g: G, i: InvId, cardId: InstId): number {
   return Math.max(0, cost);
 }
 
-export const playAbility = (g: G, cardId: InstId) => abilitiesOf(g, cardId).find((a) => a.kind === "onPlay");
+export const playAbility = (g: G, cardId: InstId) =>
+  abilitiesOf(g, cardId).find((a) => a.kind === "onPlay");
 
 /** can the card be played from hand now, as an action (fast=false) or fast */
 export function canPlay(g: G, i: InvId, cardId: InstId, asFast: boolean): boolean {
@@ -334,16 +496,40 @@ export const playCardHandler: Handler<"PlayCard"> = (g, step) => {
   if (d.type === "asset") {
     moveCard(g, step.card, "limbo");
     c.controller = step.inv;
-    push(g, { t: "SlotCheck", inv: step.inv, card: step.card }, { t: "EnterPlay", inv: step.inv, card: step.card }, win("cardPlayed", { inv: step.inv, card: step.card }));
+    push(
+      g,
+      { t: "SlotCheck", inv: step.inv, card: step.card },
+      { t: "EnterPlay", inv: step.inv, card: step.card },
+      win("cardPlayed", { inv: step.inv, card: step.card }),
+    );
     return;
   }
   // event
   moveCard(g, step.card, "resolving");
   c.controller = step.inv;
-  const a = step.viaTrigger ? abilitiesOf(g, step.card).find((x) => x.fromHand) ?? playAbility(g, step.card) : playAbility(g, step.card);
-  const after: Step = { t: "Script", code: "__engine", fn: "finishEvent", ctx: { source: step.card, you: step.inv } };
-  if (a?.run) push(g, { t: "Script", code: c.code, fn: a.run, ctx }, after, win("cardPlayed", { inv: step.inv, card: step.card }));
-  else push(g, { t: "Effects", effects: a?.effects ?? [], ctx }, after, win("cardPlayed", { inv: step.inv, card: step.card }));
+  const a = step.viaTrigger
+    ? (abilitiesOf(g, step.card).find((x) => x.fromHand) ?? playAbility(g, step.card))
+    : playAbility(g, step.card);
+  const after: Step = {
+    t: "Script",
+    code: "__engine",
+    fn: "finishEvent",
+    ctx: { source: step.card, you: step.inv },
+  };
+  if (a?.run)
+    push(
+      g,
+      { t: "Script", code: c.code, fn: a.run, ctx },
+      after,
+      win("cardPlayed", { inv: step.inv, card: step.card }),
+    );
+  else
+    push(
+      g,
+      { t: "Effects", effects: a?.effects ?? [], ctx },
+      after,
+      win("cardPlayed", { inv: step.inv, card: step.card }),
+    );
 };
 
 /** after an event resolves, discard it unless an effect moved it */
@@ -351,7 +537,8 @@ export function finishEvent(g: G, ctx: EffCtx) {
   const c = g.s.cards[ctx.source!];
   if (c?.zone !== "resolving") return;
   // e.g. Wendy's Amulet puts events on the bottom of the deck instead
-  for (const a of controlled(g, ctx.you!)) g.db.scripts[a.code]?.hooks?.eventFinished?.(g, { ...ctx, card: c.id });
+  for (const a of controlled(g, ctx.you!))
+    g.db.scripts[a.code]?.hooks?.eventFinished?.(g, { ...ctx, card: c.id });
   if (c.zone === "resolving") discard(g, c.id);
 }
 
@@ -365,8 +552,24 @@ export const enterPlayHandler: Handler<"EnterPlay"> = (g, step) => {
 };
 
 // ---------- slots ----------
-const SLOT_BASE: Record<Slot, number> = { hand: 2, arcane: 2, accessory: 1, body: 1, ally: 1, tarot: 1, head: 1 };
-const SLOT_MOD = { hand: "handSlots", arcane: "arcaneSlots", ally: "allySlots", accessory: "accessorySlots", body: "bodySlots", tarot: null, head: null } as const;
+const SLOT_BASE: Record<Slot, number> = {
+  hand: 2,
+  arcane: 2,
+  accessory: 1,
+  body: 1,
+  ally: 1,
+  tarot: 1,
+  head: 1,
+};
+const SLOT_MOD = {
+  hand: "handSlots",
+  arcane: "arcaneSlots",
+  ally: "allySlots",
+  accessory: "accessorySlots",
+  body: "bodySlots",
+  tarot: null,
+  head: null,
+} as const;
 
 /** returns a slot type that is over capacity, if any */
 export function overfullSlot(g: G, i: InvId, incoming: InstId | null): Slot | null {
@@ -376,7 +579,8 @@ export function overfullSlot(g: G, i: InvId, incoming: InstId | null): Slot | nu
   for (const slot of Object.keys(SLOT_BASE) as Slot[]) {
     const statName = SLOT_MOD[slot];
     let general = SLOT_BASE[slot];
-    const restricted: { filter: NonNullable<(typeof mods)[number]["mod"]["filter"]>; n: number }[] = [];
+    const restricted: { filter: NonNullable<(typeof mods)[number]["mod"]["filter"]>; n: number }[] =
+      [];
     for (const m of mods) {
       if (!statName || m.mod.stat !== statName) continue;
       if (m.mod.filter) restricted.push({ filter: m.mod.filter, n: m.mod.value ?? 0 });
@@ -401,8 +605,15 @@ export const slotCheckHandler: Handler<"SlotCheck"> = (g, step) => {
   const slot = overfullSlot(g, step.inv, step.card);
   if (!slot) return;
   const victims = controlled(g, step.inv).filter((c) => def(g, c.id).slots.includes(slot));
-  const pick = ask<InstId>(g, step, step.inv, "generic", `Not enough ${slot} slots: choose an asset to discard`,
-    victims.map((v) => ({ id: v.id, label: def(g, v.id).name, card: v.id, value: v.id })), { auto: true, key: "slots", vars: { slot } });
+  const pick = ask<InstId>(
+    g,
+    step,
+    step.inv,
+    "generic",
+    `Not enough ${slot} slots: choose an asset to discard`,
+    victims.map((v) => ({ id: v.id, label: def(g, v.id).name, card: v.id, value: v.id })),
+    { auto: true, key: "slots", vars: { slot } },
+  );
   if (pick === undefined) return;
   discard(g, pick);
   push(g, { ...step, choice: undefined });

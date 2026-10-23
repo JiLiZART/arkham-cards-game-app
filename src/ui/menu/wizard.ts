@@ -25,11 +25,14 @@ export interface WizardState {
 /** the decks an investigator can bring: the starter decks, then the saved custom ones that still validate */
 export const decksFor = (db: ContentDb, code: string, storage?: Storage): DeckDef[] => [
   ...Object.values(db.decks).filter((d) => d.investigator === code),
-  ...customDecks(db, code, storage).filter((d) => d.problems.length === 0).map((d) => d.deck),
+  ...customDecks(db, code, storage)
+    .filter((d) => d.problems.length === 0)
+    .map((d) => d.deck),
 ];
 
 /** saved decks that no longer validate (a pack is gone): shown with the reason, not selectable */
-export const invalidDecksFor = (db: ContentDb, code: string, storage?: Storage): SavedDeck[] => customDecks(db, code, storage).filter((d) => d.problems.length > 0);
+export const invalidDecksFor = (db: ContentDb, code: string, storage?: Storage): SavedDeck[] =>
+  customDecks(db, code, storage).filter((d) => d.problems.length > 0);
 
 /**
  * The campaigns as the new-game screen lists them: the hand-written ones first (fully implemented), then the
@@ -37,16 +40,25 @@ export const invalidDecksFor = (db: ContentDb, code: string, storage?: Storage):
  * same order, and the side scenarios last.
  */
 export function campaignOrder(db: ContentDb): CampaignDef[] {
-  const group = (c: CampaignDef) => (!c.generated ? 0 : c.id.startsWith("side-") ? 3 : c.id.startsWith("return-to-") ? 2 : 1);
+  const group = (c: CampaignDef) =>
+    !c.generated ? 0 : c.id.startsWith("side-") ? 3 : c.id.startsWith("return-to-") ? 2 : 1;
   const card = (c: CampaignDef) => db.scenarios[c.scenarios[0]]?.card ?? c.card ?? "";
-  return Object.values(db.campaigns).sort((a, b) => group(a) - group(b) || (card(a) < card(b) ? -1 : card(a) > card(b) ? 1 : a.id < b.id ? -1 : 1));
+  return Object.values(db.campaigns).sort(
+    (a, b) =>
+      group(a) - group(b) ||
+      (card(a) < card(b) ? -1 : card(a) > card(b) ? 1 : a.id < b.id ? -1 : 1),
+  );
 }
 
 /** whether a campaign is complete, as the content's coverage reports it (a campaign without a report counts as complete when it is not generated) */
-export const campaignComplete = (db: ContentDb, id: string): boolean => db.coverage?.campaigns[id]?.complete ?? !db.campaigns[id]?.generated;
+export const campaignComplete = (db: ContentDb, id: string): boolean =>
+  db.coverage?.campaigns[id]?.complete ?? !db.campaigns[id]?.generated;
 
 /** how far a campaign is, for its note: the cards its scenarios use that work, out of how many, and how many scenarios have no scenario script */
-export function campaignProgress(db: ContentDb, id: string): { works: number; total: number; unscripted: number } | undefined {
+export function campaignProgress(
+  db: ContentDb,
+  id: string,
+): { works: number; total: number; unscripted: number } | undefined {
   const c = db.coverage?.campaigns[id];
   return c && { works: c.cards.works, total: c.cards.total, unscripted: c.unscripted.length };
 }
@@ -58,14 +70,23 @@ export interface CampaignFilter {
   length: "all" | "one" | "few" | "many";
   query: string;
 }
-export const NO_CAMPAIGN_FILTER: CampaignFilter = { kind: "all", rules: "all", length: "all", query: "" };
+export const NO_CAMPAIGN_FILTER: CampaignFilter = {
+  kind: "all",
+  rules: "all",
+  length: "all",
+  query: "",
+};
 
-export const campaignKind = (c: CampaignDef): "campaign" | "return" | "side" => (c.id.startsWith("side-") ? "side" : c.id.startsWith("return-to-") ? "return" : "campaign");
-const lengthOf = (c: CampaignDef): "one" | "few" | "many" => (c.scenarios.length <= 1 ? "one" : c.scenarios.length <= 4 ? "few" : "many");
+export const campaignKind = (c: CampaignDef): "campaign" | "return" | "side" =>
+  c.id.startsWith("side-") ? "side" : c.id.startsWith("return-to-") ? "return" : "campaign";
+const lengthOf = (c: CampaignDef): "one" | "few" | "many" =>
+  c.scenarios.length <= 1 ? "one" : c.scenarios.length <= 4 ? "few" : "many";
 
 /** what a tile and the sidebar call a campaign: a side scenario (a campaign of one) goes by its scenario's name, which the game's language translates */
 export function tileName(db: ContentDb, c: CampaignDef, locale: string): string {
-  return campaignKind(c) === "side" ? (campaignBlurb(db, c.id, locale).scenarios[0] ?? campaignName(db, c.id, locale)) : campaignName(db, c.id, locale);
+  return campaignKind(c) === "side"
+    ? (campaignBlurb(db, c.id, locale).scenarios[0] ?? campaignName(db, c.id, locale))
+    : campaignName(db, c.id, locale);
 }
 
 /** the campaigns that pass the filters, in the list's order; the name is looked for in the campaign's and its scenarios' names, in the game's language and in English */
@@ -76,13 +97,24 @@ export function filterCampaigns(db: ContentDb, locale: string, f: CampaignFilter
     if (f.rules !== "all" && (f.rules === "complete") !== campaignComplete(db, c.id)) return false;
     if (f.length !== "all" && lengthOf(c) !== f.length) return false;
     if (!q) return true;
-    const names = [campaignName(db, c.id, locale), c.name, ...campaignBlurb(db, c.id, locale).scenarios, ...(c.scenarioNames ?? [])];
+    const names = [
+      campaignName(db, c.id, locale),
+      c.name,
+      ...campaignBlurb(db, c.id, locale).scenarios,
+      ...(c.scenarioNames ?? []),
+    ];
     return names.some((n) => n.toLowerCase().includes(q));
   });
 }
 
 export function initialWizard(db: ContentDb): WizardState {
-  return { step: "campaign", campaignId: campaignOrder(db)[0]?.id ?? "", picks: [], decks: {}, difficulty: "standard" };
+  return {
+    step: "campaign",
+    campaignId: campaignOrder(db)[0]?.id ?? "",
+    picks: [],
+    decks: {},
+    difficulty: "standard",
+  };
 }
 
 export function setCampaign(s: WizardState, id: string, db?: ContentDb): WizardState {
@@ -90,15 +122,29 @@ export function setCampaign(s: WizardState, id: string, db?: ContentDb): WizardS
 }
 
 /** what the picker shows of an investigator: from the card when its pack is loaded, from the definition (with the other languages' names) until then */
-export function investigatorInfo(db: ContentDb, code: string, locale: string): { name: string; subname?: string; faction: string; pack: string } {
+export function investigatorInfo(
+  db: ContentDb,
+  code: string,
+  locale: string,
+): { name: string; subname?: string; faction: string; pack: string } {
   const def = db.investigators[code];
   const card = db.cards[code];
   if (card) {
     const text = cardText(db, code, locale);
-    return { name: text.name, subname: text.subname, faction: card.faction, pack: def?.pack ?? card.pack };
+    return {
+      name: text.name,
+      subname: text.subname,
+      faction: card.faction,
+      pack: def?.pack ?? card.pack,
+    };
   }
   const tr = def?.names?.[locale];
-  return { name: tr?.name ?? def?.name ?? code, subname: tr ? tr.subname : def?.subname, faction: def?.faction ?? "neutral", pack: def?.pack ?? "" };
+  return {
+    name: tr?.name ?? def?.name ?? code,
+    subname: tr ? tr.subname : def?.subname,
+    faction: def?.faction ?? "neutral",
+    pack: def?.pack ?? "",
+  };
 }
 
 export interface PickerFilter {
@@ -115,23 +161,45 @@ export function pickerList(db: ContentDb, locale: string, f: PickerFilter) {
       const info = investigatorInfo(db, def.code, locale);
       const en = investigatorInfo(db, def.code, "en");
       return {
-        code: def.code, ...info,
+        code: def.code,
+        ...info,
         // works when the investigator's card and their signature cards do (content/coverage.json); the others show their text and do nothing
-        partlyImplemented: !(db.coverage?.investigators[def.code] ?? !!db.cards[def.code]?.abilities.length),
+        partlyImplemented: !(
+          db.coverage?.investigators[def.code] ?? !!db.cards[def.code]?.abilities.length
+        ),
         needsDeck: decksFor(db, def.code).length === 0,
         haystack: [info.name, info.subname, en.name, en.subname].join(" ").toLowerCase(),
       };
     })
-    .filter((i) => (!f.faction || i.faction === f.faction) && (!f.cycle || i.pack === f.cycle) && words.every((w) => i.haystack.includes(w)))
+    .filter(
+      (i) =>
+        (!f.faction || i.faction === f.faction) &&
+        (!f.cycle || i.pack === f.cycle) &&
+        words.every((w) => i.haystack.includes(w)),
+    )
     .sort((a, b) => a.code.localeCompare(b.code));
 }
 
-export const SORTS = ["release", "name", "class", "health", "sanity", "willpower", "intellect", "combat", "agility"] as const;
+export const SORTS = [
+  "release",
+  "name",
+  "class",
+  "health",
+  "sanity",
+  "willpower",
+  "intellect",
+  "combat",
+  "agility",
+] as const;
 export type SortBy = (typeof SORTS)[number];
 const CLASS_ORDER = ["guardian", "seeker", "rogue", "mystic", "survivor", "neutral"];
 
 /** the picker's order: release (code), name, class, or a stat highest first (investigators whose card isn't loaded last) */
-export function sortPicker<T extends { code: string; name: string; faction: string }>(db: ContentDb, list: T[], by: SortBy): T[] {
+export function sortPicker<T extends { code: string; name: string; faction: string }>(
+  db: ContentDb,
+  list: T[],
+  by: SortBy,
+): T[] {
   const stat = (i: T): number | null => {
     const c = db.cards[i.code];
     if (!c) return null;
@@ -143,7 +211,8 @@ export function sortPicker<T extends { code: string; name: string; faction: stri
   return [...list].sort((a, b) => {
     if (by === "release") return byCode(a, b);
     if (by === "name") return a.name.localeCompare(b.name) || byCode(a, b);
-    if (by === "class") return CLASS_ORDER.indexOf(a.faction) - CLASS_ORDER.indexOf(b.faction) || byCode(a, b);
+    if (by === "class")
+      return CLASS_ORDER.indexOf(a.faction) - CLASS_ORDER.indexOf(b.faction) || byCode(a, b);
     const x = stat(a);
     const y = stat(b);
     if (x === null || y === null) return x === y ? byCode(a, b) : x === null ? 1 : -1;
@@ -165,7 +234,11 @@ export function cyclesOf(db: ContentDb): string[] {
 export function cycleName(db: ContentDb, locale: string, pack: string): string {
   const key = `cycle.${pack}`;
   if (db.i18n.en?.ui[key]) return t(db, locale, key);
-  const own = Object.values(db.campaigns).find((c) => !/^(side|return-to)-/.test(c.id) && (pack === "core" ? c.id === "night-of-the-zealot" : c.packs.includes(pack)));
+  const own = Object.values(db.campaigns).find(
+    (c) =>
+      !/^(side|return-to)-/.test(c.id) &&
+      (pack === "core" ? c.id === "night-of-the-zealot" : c.packs.includes(pack)),
+  );
   return own ? campaignName(db, own.id, locale) : pack;
 }
 
@@ -178,22 +251,34 @@ export function toggleInvestigator(db: ContentDb, s: WizardState, code: string):
     return { ...s, picks: s.picks.filter((c) => c !== code), decks };
   }
   if (s.picks.length >= MAX_INVESTIGATORS) return s;
-  return { ...s, picks: [...s.picks, code], decks: { ...s.decks, [code]: decksFor(db, code)[0]?.id ?? "" } };
+  return {
+    ...s,
+    picks: [...s.picks, code],
+    decks: { ...s.decks, [code]: decksFor(db, code)[0]?.id ?? "" },
+  };
 }
 
-export const setDeck = (s: WizardState, code: string, deckId: string): WizardState => (s.picks.includes(code) ? { ...s, decks: { ...s.decks, [code]: deckId } } : s);
+export const setDeck = (s: WizardState, code: string, deckId: string): WizardState =>
+  s.picks.includes(code) ? { ...s, decks: { ...s.decks, [code]: deckId } } : s;
 
 /** a difficulty the campaign defines (the check is skipped without the content) */
 export function setDifficulty(s: WizardState, d: Difficulty, db?: ContentDb): WizardState {
-  const known = db ? d in (db.campaigns[s.campaignId]?.chaosBags ?? {}) : ["easy", "standard", "hard", "expert"].includes(d);
+  const known = db
+    ? d in (db.campaigns[s.campaignId]?.chaosBags ?? {})
+    : ["easy", "standard", "hard", "expert"].includes(d);
   return known ? { ...s, difficulty: d } : s;
 }
 
 /** every card the picked investigators may bring: their own cards and every card of the decks on offer to them */
-export const cardsOfPicks = (db: ContentDb, s: WizardState): string[] => [...new Set(s.picks.flatMap((code) => [code, ...decksFor(db, code).flatMap((d) => Object.keys(d.cards))]))];
+export const cardsOfPicks = (db: ContentDb, s: WizardState): string[] => [
+  ...new Set(
+    s.picks.flatMap((code) => [code, ...decksFor(db, code).flatMap((d) => Object.keys(d.cards))]),
+  ),
+];
 
 /** whether the packs of those cards are in the content: a deck of a later cycle can only be checked once they are */
-export const picksReady = (db: ContentDb, s: WizardState) => packsOf(cardsOfPicks(db, s)).every((p) => !db.packs[p] || packLoaded(db, p));
+export const picksReady = (db: ContentDb, s: WizardState) =>
+  packsOf(cardsOfPicks(db, s)).every((p) => !db.packs[p] || packLoaded(db, p));
 
 /** problems with a picked investigator's deck (an empty list is fine; none are told while its cards are still loading) */
 export function deckProblems(db: ContentDb, s: WizardState, code: string): string[] {
@@ -211,7 +296,11 @@ export function canContinue(db: ContentDb, s: WizardState): boolean {
     case "investigators":
       return s.picks.length >= 1;
     case "decks":
-      return s.picks.length >= 1 && picksReady(db, s) && s.picks.every((c) => deckProblems(db, s, c).length === 0);
+      return (
+        s.picks.length >= 1 &&
+        picksReady(db, s) &&
+        s.picks.every((c) => deckProblems(db, s, c).length === 0)
+      );
     case "difficulty":
       return s.difficulty in (db.campaigns[s.campaignId]?.chaosBags ?? {});
     case "ready":
@@ -232,11 +321,16 @@ export function back(s: WizardState): WizardState {
 /** what `newCampaign` takes */
 export function toSetup(s: WizardState, seed: number, db?: ContentDb, storage?: Storage) {
   return {
-    campaignId: s.campaignId, difficulty: s.difficulty, seed,
+    campaignId: s.campaignId,
+    difficulty: s.difficulty,
+    seed,
     // a custom deck goes along as the deck itself (the content knows only the starter decks)
     investigators: s.picks.map((code) => {
       const deckId = s.decks[code];
-      const custom = db && !db.decks[deckId] ? decksFor(db, code, storage).find((d) => d.id === deckId) : undefined;
+      const custom =
+        db && !db.decks[deckId]
+          ? decksFor(db, code, storage).find((d) => d.id === deckId)
+          : undefined;
       return custom ? { code, deckId, deck: custom } : { code, deckId };
     }),
   };

@@ -7,7 +7,8 @@ const mouth = { x: 450, y: 330 };
 const rest = { x: 220, y: 120 };
 
 describe("tokenPath", () => {
-  const path = (seed = 7, k = 3, to = rest) => tokenPath({ mouth, rest: to, seed, k, size: DISC, stage });
+  const path = (seed = 7, k = 3, to = rest) =>
+    tokenPath({ mouth, rest: to, seed, k, size: DISC, stage });
 
   it("starts at the bag's mouth and ends exactly at its rest point, flat", () => {
     const p = path();
@@ -34,7 +35,9 @@ describe("tokenPath", () => {
   it("each bounce is lower than the one before", () => {
     const p = path();
     const peaks: number[] = [];
-    for (let i = 1; i < p.samples.length - 1; i++) if (p.samples[i].z > p.samples[i - 1].z && p.samples[i].z >= p.samples[i + 1].z) peaks.push(p.samples[i].z);
+    for (let i = 1; i < p.samples.length - 1; i++)
+      if (p.samples[i].z > p.samples[i - 1].z && p.samples[i].z >= p.samples[i + 1].z)
+        peaks.push(p.samples[i].z);
     for (let i = 1; i < peaks.length; i++) expect(peaks[i]).toBeLessThan(peaks[i - 1]);
   });
 
@@ -61,13 +64,17 @@ describe("tokenPath", () => {
       const p = path(seed, seed);
       expect(p.samples.length).toBeGreaterThanOrEqual(16);
       expect(p.samples.length).toBeLessThanOrEqual(32);
-      for (let i = 1; i < p.samples.length; i++) expect(p.samples[i].offset).toBeGreaterThan(p.samples[i - 1].offset);
-      expect(Math.abs(p.samples[0].spin - p.samples[p.samples.length - 1].spin)).toBeGreaterThan(90);
+      for (let i = 1; i < p.samples.length; i++)
+        expect(p.samples[i].offset).toBeGreaterThan(p.samples[i - 1].offset);
+      expect(Math.abs(p.samples[0].spin - p.samples[p.samples.length - 1].spin)).toBeGreaterThan(
+        90,
+      );
     }
   });
 
   it("ends upright: its spin a whole number of turns, so the revealed token isn't turned", () => {
-    for (let seed = 0; seed < 20; seed++) expect(Math.abs(path(seed, seed).samples.at(-1)!.spin % 360)).toBeLessThan(1e-9);
+    for (let seed = 0; seed < 20; seed++)
+      expect(Math.abs(path(seed, seed).samples.at(-1)!.spin % 360)).toBeLessThan(1e-9);
   });
 
   it("moves like a thrown token: it keeps going in the air, slides on the table to a stop, then wobbles flat", () => {
@@ -82,7 +89,8 @@ describe("tokenPath", () => {
       expect(Math.abs(onTable.at(-2)!.tilt)).toBeLessThan(Math.max(...tilts.map(Math.abs)));
       // in the air its sideways speed doesn't die away the way an ease would: the first flight covers real ground
       const first = p.findIndex((s, i) => i > 0 && s.z === 0);
-      const d = (a: { x: number; y: number }, b: { x: number; y: number }) => Math.hypot(a.x - b.x, a.y - b.y);
+      const d = (a: { x: number; y: number }, b: { x: number; y: number }) =>
+        Math.hypot(a.x - b.x, a.y - b.y);
       const total = d(p[0], p.at(-1)!);
       if (total > 80) expect(d(p[0], p[first])).toBeGreaterThan(total * 0.25);
     }
@@ -100,10 +108,15 @@ describe("tokenPath", () => {
 describe("tossTiming", () => {
   it("everything is at rest within 1.2 s at the Slow and Tap paces and 0.9 s at Normal, for any number of tokens", () => {
     for (const n of [1, 5, 16, 30, 45]) {
-      for (const [pace, ms] of [["slow", 1200], ["tap", 1200], ["normal", 900]] as const) {
+      for (const [pace, ms] of [
+        ["slow", 1200],
+        ["tap", 1200],
+        ["normal", 900],
+      ] as const) {
         const t = tossTiming(pace, n);
         let last = 0;
-        for (let k = 0; k < n; k++) last = Math.max(last, t.launchAt(k) + t.pathMs(450 + (k % 11) * 10));
+        for (let k = 0; k < n; k++)
+          last = Math.max(last, t.launchAt(k) + t.pathMs(450 + (k % 11) * 10));
         expect(last, `${pace} ${n}`).toBeLessThanOrEqual(ms + 1);
         expect(t.total).toBeLessThanOrEqual(ms);
       }
@@ -127,7 +140,9 @@ describe("bagFrames", () => {
   it("starts over its button and ends tipped over at its landing place", () => {
     const first = frames[0];
     expect(first.offset).toBe(0);
-    expect(first.transform).toContain(`translate(${1300 + 48 - (375 + 75)}px, ${20 + 48 - (280 + 75)}px)`);
+    expect(first.transform).toContain(
+      `translate(${1300 + 48 - (375 + 75)}px, ${20 + 48 - (280 + 75)}px)`,
+    );
     const last = frames[frames.length - 1];
     expect(last.offset).toBe(1);
     expect(last.transform).toMatch(/rotate\(-?2[0-9]deg\)/);

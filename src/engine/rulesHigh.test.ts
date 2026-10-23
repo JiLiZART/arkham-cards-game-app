@@ -41,7 +41,9 @@ describe("weaknesses", () => {
       me.deck.unshift(id);
     });
     r = pick(r, "Draw 1 card");
-    const necro = Object.values(r.state.cards).find((c) => c.code === "01009" && c.zone !== "deck")!; // her deck's own copy stays below
+    const necro = Object.values(r.state.cards).find(
+      (c) => c.code === "01009" && c.zone !== "deck",
+    )!; // her deck's own copy stays below
     expect(necro.zone).toBe("threat");
     expect(necro.horror).toBe(3);
   });

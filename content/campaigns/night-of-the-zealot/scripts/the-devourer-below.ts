@@ -1,5 +1,12 @@
 // The Devourer Below: act objectives and the final confrontation with Umôrdhoth
-import { card, findByCode, invsAt, push, type CardScript, type G } from "../../../../src/engine/api";
+import {
+  card,
+  findByCode,
+  invsAt,
+  push,
+  type CardScript,
+  type G,
+} from "../../../../src/engine/api";
 
 export default {
   hooks: {

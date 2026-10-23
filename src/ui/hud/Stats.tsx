@@ -18,7 +18,8 @@ import { statBarZoom } from "./fan";
 import { useViewport } from "../layoutMode";
 import { OptionButtons, useCardOptions } from "./Modals";
 
-const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
+const tr = (key: string, vars?: Record<string, string | number>) =>
+  t(db, gameStore.getState().locale, key, vars);
 
 /** true for a moment after the value changes */
 export function useFlash(value: unknown): boolean {
@@ -56,7 +57,15 @@ export function invNumbers(game: GameState, i: InvId) {
 }
 
 /** resources or clues as a pile of physical tokens (fewest tokens), followed by the total */
-export function TokenStack({ kind, value, size = 40 }: { kind: "resource" | "clue"; value: number; size?: number }) {
+export function TokenStack({
+  kind,
+  value,
+  size = 40,
+}: {
+  kind: "resource" | "clue";
+  value: number;
+  size?: number;
+}) {
   const flash = useFlash(value);
   const tip = `${tr(kind === "resource" ? "stat.resources" : "stat.clues")} ${value}`;
   return (
@@ -72,7 +81,11 @@ export function HandCount({ value, limit }: { value: number; limit: number }) {
   const flash = useFlash(value);
   const tip = tr("stat.hand", { n: value, max: limit });
   return (
-    <div className={`token-stack hand-count ${flash ? "flash" : ""} ${value > limit ? "over" : ""}`} title={tip} aria-label={tip}>
+    <div
+      className={`token-stack hand-count ${flash ? "flash" : ""} ${value > limit ? "over" : ""}`}
+      title={tip}
+      aria-label={tip}
+    >
       <img className="hand-count-back" src={backUrl("player")} alt="" draggable={false} />
       <b>{value}</b>
     </div>
@@ -80,7 +93,19 @@ export function HandCount({ value, limit }: { value: number; limit: number }) {
 }
 
 /** stats shared by the viewer's bar and the investigator modal */
-export function StatBody({ inv, onPortrait, legal, options, dimmed }: { inv: InvId; onPortrait?: () => void; legal?: boolean; options?: ChoiceOption[]; dimmed?: boolean }) {
+export function StatBody({
+  inv,
+  onPortrait,
+  legal,
+  options,
+  dimmed,
+}: {
+  inv: InvId;
+  onPortrait?: () => void;
+  legal?: boolean;
+  options?: ChoiceOption[];
+  dimmed?: boolean;
+}) {
   const game = useGame((s) => s.game) as GameState;
   const locale = useGame((s) => s.locale);
   const n = invNumbers(game, inv);
@@ -95,7 +120,13 @@ export function StatBody({ inv, onPortrait, legal, options, dimmed }: { inv: Inv
       </div>
       <div className="stat-bar">
         <div className="stat-head">
-          <button data-tip="portrait" className={`portrait-btn ${legal ? "legal" : ""} ${dimmed ? "dimmed" : ""}`} onClick={onPortrait} title={tx.name} disabled={!onPortrait}>
+          <button
+            data-tip="portrait"
+            className={`portrait-btn ${legal ? "legal" : ""} ${dimmed ? "dimmed" : ""}`}
+            onClick={onPortrait}
+            title={tx.name}
+            disabled={!onPortrait}
+          >
             <Portrait code={inv} size={120} active={game.active === inv} />
           </button>
           <div className="stat-who">
@@ -103,13 +134,28 @@ export function StatBody({ inv, onPortrait, legal, options, dimmed }: { inv: Inv
               {isIcon(d.faction) && <Icon name={d.faction} size={36} />} {tx.name}
             </div>
             {/* the investigator's ability, and its options when it can be used right now */}
-            <div className="stat-ability card-text" dangerouslySetInnerHTML={{ __html: formatText(tx.text) }} />
+            <div
+              className="stat-ability card-text"
+              dangerouslySetInnerHTML={{ __html: formatText(tx.text) }}
+            />
             {options && options.length > 0 && <OptionButtons options={options} />}
           </div>
         </div>
         <div className="stat-row vitals">
-          <FlashStat icon="health" value={n.health} max={n.maxHealth} size={44} label={tr("stat.health")} />
-          <FlashStat icon="sanity" value={n.sanity} max={n.maxSanity} size={44} label={tr("stat.sanity")} />
+          <FlashStat
+            icon="health"
+            value={n.health}
+            max={n.maxHealth}
+            size={44}
+            label={tr("stat.health")}
+          />
+          <FlashStat
+            icon="sanity"
+            value={n.sanity}
+            max={n.maxSanity}
+            size={44}
+            label={tr("stat.sanity")}
+          />
         </div>
         <div className="stat-row skills">
           {n.skills.map(([s, v]) => (
@@ -140,7 +186,13 @@ export function StatBar() {
   // full size at 1080p and up, smaller on a smaller window (the fan makes room for it at the same size)
   return (
     <div className="stat-dock" style={{ width: 420, zoom: statBarZoom(width, height) }}>
-      <StatBody inv={shown} dimmed={dimmed} legal={options.length > 0} options={options} onPortrait={() => useView.getState().setModal({ card: cardId })} />
+      <StatBody
+        inv={shown}
+        dimmed={dimmed}
+        legal={options.length > 0}
+        options={options}
+        onPortrait={() => useView.getState().setModal({ card: cardId })}
+      />
     </div>
   );
 }

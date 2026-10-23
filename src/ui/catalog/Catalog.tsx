@@ -10,7 +10,15 @@ import { isIcon } from "../icons";
 import { useLayout } from "../layoutMode";
 import { cycleName } from "../menu/wizard";
 import { CardPage, WorksBadge } from "./CardPage";
-import { catalogCards, cyclesOfCards, emptyFilters, packsOfCards, traitsOf, type CatalogFilters, type Tab } from "./filter";
+import {
+  catalogCards,
+  cyclesOfCards,
+  emptyFilters,
+  packsOfCards,
+  traitsOf,
+  type CatalogFilters,
+  type Tab,
+} from "./filter";
 import { useCatalog } from "./state";
 
 const TABS: Tab[] = ["investigators", "player", "encounter"];
@@ -19,17 +27,35 @@ const SKILLS = ["willpower", "intellect", "combat", "agility", "wild"];
 const SLOTS = ["hand", "arcane", "accessory", "body", "ally", "tarot", "head"];
 const PAGE = 60;
 
-const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
+const tr = (key: string, vars?: Record<string, string | number>) =>
+  t(db, gameStore.getState().locale, key, vars);
 
 /** a row of toggle chips: the chosen values are `on` */
-export function Chips<T extends string | number>({ label, options, on, set }: { label: string; options: { value: T; label: ReactNode }[]; on: T[]; set(v: T[]): void }) {
+export function Chips<T extends string | number>({
+  label,
+  options,
+  on,
+  set,
+}: {
+  label: string;
+  options: { value: T; label: ReactNode }[];
+  on: T[];
+  set(v: T[]): void;
+}) {
   if (!options.length) return null;
   return (
     <div className="cat-filter" role="group" aria-label={label}>
       <span className="hd-label">{label}</span>
       <div className="wz-chips">
         {options.map((o) => (
-          <button key={o.value} className={`wz-chip ${on.includes(o.value) ? "on" : ""}`} aria-pressed={on.includes(o.value)} onClick={() => set(on.includes(o.value) ? on.filter((v) => v !== o.value) : [...on, o.value])}>
+          <button
+            key={o.value}
+            className={`wz-chip ${on.includes(o.value) ? "on" : ""}`}
+            aria-pressed={on.includes(o.value)}
+            onClick={() =>
+              set(on.includes(o.value) ? on.filter((v) => v !== o.value) : [...on, o.value])
+            }
+          >
             {o.label}
           </button>
         ))}
@@ -39,7 +65,17 @@ export function Chips<T extends string | number>({ label, options, on, set }: { 
 }
 
 /** a single choice among many: "Any" or one value */
-function Pick({ label, options, value, set }: { label: string; options: { value: string; label: string }[]; value: string; set(v: string): void }) {
+function Pick({
+  label,
+  options,
+  value,
+  set,
+}: {
+  label: string;
+  options: { value: string; label: string }[];
+  value: string;
+  set(v: string): void;
+}) {
   if (!options.length) return null;
   return (
     <label className="cat-filter">
@@ -61,25 +97,118 @@ function Filters({ tabCards, locale }: { tabCards: CardDef[]; locale: string }) 
   const player = f.tab === "player";
   const types = [...new Set(tabCards.map((c) => c.type))];
   const cycles = cyclesOfCards(db, tabCards);
-  const inCycle = f.cycles.length ? catalogCards(db, locale, { ...emptyFilters, tab: f.tab, cycles: f.cycles }) : tabCards;
+  const inCycle = f.cycles.length
+    ? catalogCards(db, locale, { ...emptyFilters, tab: f.tab, cycles: f.cycles })
+    : tabCards;
   const sets = [...new Set(tabCards.flatMap((c) => c.encounterSet ?? []))].sort();
   const one = (v: string) => (v ? [v] : []);
   return (
     <div className="cat-filters">
-      <input type="search" placeholder={tr("catalog.search")} aria-label={tr("catalog.search")} value={f.query} onChange={(e) => set({ query: e.target.value })} />
+      <input
+        type="search"
+        placeholder={tr("catalog.search")}
+        aria-label={tr("catalog.search")}
+        value={f.query}
+        onChange={(e) => set({ query: e.target.value })}
+      />
       {f.tab !== "encounter" && (
-        <Chips label={tr("catalog.class")} on={f.factions} set={(factions) => set({ factions })} options={CLASSES.map((c) => ({ value: c, label: isIcon(c) ? <Icon name={c} size={24} title={tr(`card.faction.${c}`)} /> : tr(`card.faction.${c}`) }))} />
+        <Chips
+          label={tr("catalog.class")}
+          on={f.factions}
+          set={(factions) => set({ factions })}
+          options={CLASSES.map((c) => ({
+            value: c,
+            label: isIcon(c) ? (
+              <Icon name={c} size={24} title={tr(`card.faction.${c}`)} />
+            ) : (
+              tr(`card.faction.${c}`)
+            ),
+          }))}
+        />
       )}
-      <Chips label={tr("catalog.type")} on={f.types} set={(v) => set({ types: v })} options={types.map((x) => ({ value: x, label: tr(`card.type.${x}`) }))} />
-      <Pick label={tr("catalog.cycle")} value={f.cycles[0] ?? ""} set={(v) => set({ cycles: one(v), packs: [] })} options={cycles.map((c) => ({ value: c, label: cycleName(db, locale, c) }))} />
-      <Pick label={tr("catalog.pack")} value={f.packs[0] ?? ""} set={(v) => set({ packs: one(v) })} options={packsOfCards(inCycle).map((p) => ({ value: p, label: p.toUpperCase() }))} />
-      {player && <Chips label={tr("catalog.level")} on={f.levels} set={(levels) => set({ levels })} options={[0, 1, 2, 3, 4, 5].map((n) => ({ value: n, label: String(n) }))} />}
-      {player && <Chips label={tr("catalog.cost")} on={f.costs} set={(costs) => set({ costs })} options={[0, 1, 2, 3, 4, 5, 6].map((n) => ({ value: n, label: String(n) }))} />}
-      {player && <Chips label={tr("catalog.icons")} on={f.icons} set={(icons) => set({ icons })} options={SKILLS.map((s) => ({ value: s, label: isIcon(s) ? <Icon name={s} size={24} title={tr(`stat.${s}`)} /> : s }))} />}
-      {player && <Chips label={tr("catalog.slot")} on={f.slots} set={(slots) => set({ slots })} options={SLOTS.map((s) => ({ value: s, label: isIcon(s) ? <Icon name={s} size={24} title={tr(`card.slot.${s}`)} /> : tr(`card.slot.${s}`) }))} />}
-      <Pick label={tr("catalog.trait")} value={f.traits[0] ?? ""} set={(v) => set({ traits: one(v) })} options={traitsOf(db, locale, tabCards).map((x) => ({ value: x, label: x }))} />
-      {f.tab === "encounter" && <Pick label={tr("catalog.set")} value={f.sets[0] ?? ""} set={(v) => set({ sets: one(v) })} options={sets.map((x) => ({ value: x, label: encounterSetName(db, x, locale) ?? x }))} />}
-      <Pick label={tr("catalog.status")} value={f.works === "any" ? "" : f.works} set={(v) => set({ works: (v || "any") as CatalogFilters["works"] })} options={[{ value: "yes", label: tr("catalog.works") }, { value: "no", label: tr("catalog.textOnly") }]} />
+      <Chips
+        label={tr("catalog.type")}
+        on={f.types}
+        set={(v) => set({ types: v })}
+        options={types.map((x) => ({ value: x, label: tr(`card.type.${x}`) }))}
+      />
+      <Pick
+        label={tr("catalog.cycle")}
+        value={f.cycles[0] ?? ""}
+        set={(v) => set({ cycles: one(v), packs: [] })}
+        options={cycles.map((c) => ({ value: c, label: cycleName(db, locale, c) }))}
+      />
+      <Pick
+        label={tr("catalog.pack")}
+        value={f.packs[0] ?? ""}
+        set={(v) => set({ packs: one(v) })}
+        options={packsOfCards(inCycle).map((p) => ({ value: p, label: p.toUpperCase() }))}
+      />
+      {player && (
+        <Chips
+          label={tr("catalog.level")}
+          on={f.levels}
+          set={(levels) => set({ levels })}
+          options={[0, 1, 2, 3, 4, 5].map((n) => ({ value: n, label: String(n) }))}
+        />
+      )}
+      {player && (
+        <Chips
+          label={tr("catalog.cost")}
+          on={f.costs}
+          set={(costs) => set({ costs })}
+          options={[0, 1, 2, 3, 4, 5, 6].map((n) => ({ value: n, label: String(n) }))}
+        />
+      )}
+      {player && (
+        <Chips
+          label={tr("catalog.icons")}
+          on={f.icons}
+          set={(icons) => set({ icons })}
+          options={SKILLS.map((s) => ({
+            value: s,
+            label: isIcon(s) ? <Icon name={s} size={24} title={tr(`stat.${s}`)} /> : s,
+          }))}
+        />
+      )}
+      {player && (
+        <Chips
+          label={tr("catalog.slot")}
+          on={f.slots}
+          set={(slots) => set({ slots })}
+          options={SLOTS.map((s) => ({
+            value: s,
+            label: isIcon(s) ? (
+              <Icon name={s} size={24} title={tr(`card.slot.${s}`)} />
+            ) : (
+              tr(`card.slot.${s}`)
+            ),
+          }))}
+        />
+      )}
+      <Pick
+        label={tr("catalog.trait")}
+        value={f.traits[0] ?? ""}
+        set={(v) => set({ traits: one(v) })}
+        options={traitsOf(db, locale, tabCards).map((x) => ({ value: x, label: x }))}
+      />
+      {f.tab === "encounter" && (
+        <Pick
+          label={tr("catalog.set")}
+          value={f.sets[0] ?? ""}
+          set={(v) => set({ sets: one(v) })}
+          options={sets.map((x) => ({ value: x, label: encounterSetName(db, x, locale) ?? x }))}
+        />
+      )}
+      <Pick
+        label={tr("catalog.status")}
+        value={f.works === "any" ? "" : f.works}
+        set={(v) => set({ works: (v || "any") as CatalogFilters["works"] })}
+        options={[
+          { value: "yes", label: tr("catalog.works") },
+          { value: "no", label: tr("catalog.textOnly") },
+        ]}
+      />
       <button className="link-btn" onClick={clear}>
         {tr("catalog.clear")}
       </button>
@@ -91,7 +220,11 @@ function Filters({ tabCards, locale }: { tabCards: CardDef[]; locale: string }) 
 function Entry({ c, locale, view }: { c: CardDef; locale: string; view: "grid" | "list" }) {
   const open = useCatalog((s) => s.openCard);
   const tx = cardText(db, c.code, locale);
-  const line = [tr(`card.faction.${c.faction}`), tr(`card.type.${c.type}`), c.pack.toUpperCase()].join(" · ");
+  const line = [
+    tr(`card.faction.${c.faction}`),
+    tr(`card.type.${c.type}`),
+    c.pack.toUpperCase(),
+  ].join(" · ");
   return (
     <button className={`cat-entry ${view}`} onClick={() => open(c.code)}>
       {view === "grid" && (
@@ -105,7 +238,9 @@ function Entry({ c, locale, view }: { c: CardDef; locale: string; view: "grid" |
         <small>
           {line}
           {c.xp ? ` · ${tr("card.level", { n: c.xp })}` : ""}
-          {view === "list" && c.cost !== undefined && c.cost !== null ? ` · ${tr("card.cost")} ${c.cost}` : ""}
+          {view === "list" && c.cost !== undefined && c.cost !== null
+            ? ` · ${tr("card.cost")} ${c.cost}`
+            : ""}
         </small>
       </span>
       {view === "list" && <WorksBadge code={c.code} />}
@@ -134,14 +269,22 @@ export function Catalog() {
       live = false;
     };
   }, []);
-  const tabCards = useMemo(() => (ready ? catalogCards(db, locale, { ...emptyFilters, tab: filters.tab }) : []), [ready, locale, filters.tab]);
-  const results = useMemo(() => (ready ? catalogCards(db, locale, filters) : []), [ready, locale, filters]);
+  const tabCards = useMemo(
+    () => (ready ? catalogCards(db, locale, { ...emptyFilters, tab: filters.tab }) : []),
+    [ready, locale, filters.tab],
+  );
+  const results = useMemo(
+    () => (ready ? catalogCards(db, locale, filters) : []),
+    [ready, locale, filters],
+  );
   // a new search starts at the top; scrolling to the end of the page shows the next sixty
   useEffect(() => setShown(PAGE), [filters, locale]);
   useEffect(() => {
     const el = sentinel.current;
     if (!el || typeof IntersectionObserver === "undefined") return;
-    const io = new IntersectionObserver((e) => e[0].isIntersecting && setShown((n) => n + PAGE), { rootMargin: "400px" });
+    const io = new IntersectionObserver((e) => e[0].isIntersecting && setShown((n) => n + PAGE), {
+      rootMargin: "400px",
+    });
     io.observe(el);
     return () => io.disconnect();
   }, [ready, results, open.length]);
@@ -151,17 +294,27 @@ export function Catalog() {
       <header className="wz-head">
         <h1>{tr("catalog.title")}</h1>
       </header>
-      {!ready && <p className="wz-hint" role="status">{tr("catalog.loading", { done: progress[0], total: progress[1] })}</p>}
+      {!ready && (
+        <p className="wz-hint" role="status">
+          {tr("catalog.loading", { done: progress[0], total: progress[1] })}
+        </p>
+      )}
       {error && <p className="wz-error">{tr("catalog.loadError", { message: error })}</p>}
       {ready && page && <CardPage key={page} code={page} />}
       {ready && !page && (
         <>
           <div className="cat-tabs" role="tablist">
             {TABS.map((x) => (
-              <button key={x} role="tab" aria-selected={filters.tab === x} className={`wz-chip ${filters.tab === x ? "on" : ""}`} onClick={() => {
-                moment("tab");
-                setTab(x);
-              }}>
+              <button
+                key={x}
+                role="tab"
+                aria-selected={filters.tab === x}
+                className={`wz-chip ${filters.tab === x ? "on" : ""}`}
+                onClick={() => {
+                  moment("tab");
+                  setTab(x);
+                }}
+              >
                 {tr(`catalog.tab.${x}`)}
               </button>
             ))}
@@ -194,10 +347,19 @@ export function Catalog() {
         </>
       )}
       <footer className="wz-foot">
-        <button className="big" onClick={() => (page ? useCatalog.getState().back() : gameStore.setState({ screen: "title" }))}>
+        <button
+          className="big"
+          onClick={() =>
+            page ? useCatalog.getState().back() : gameStore.setState({ screen: "title" })
+          }
+        >
           {tr("wizard.back")}
         </button>
-        {ready && !page && shown < results.length && <span className="wz-hint">{tr("catalog.more", { n: Math.min(shown, results.length), total: results.length })}</span>}
+        {ready && !page && shown < results.length && (
+          <span className="wz-hint">
+            {tr("catalog.more", { n: Math.min(shown, results.length), total: results.length })}
+          </span>
+        )}
       </footer>
     </div>
   );

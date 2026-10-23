@@ -10,7 +10,18 @@ import { isIcon } from "../icons";
 import { Portrait } from "../Portrait";
 import { viewerOf } from "../store";
 import { cardDetails } from "../details";
-import { addTokens, calcParts, finishOption, isTestEvent, placedCards, sessionId, subjectOf, type CalcParts, type PlacedCard, type Subject } from "../testScreen";
+import {
+  addTokens,
+  calcParts,
+  finishOption,
+  isTestEvent,
+  placedCards,
+  sessionId,
+  subjectOf,
+  type CalcParts,
+  type PlacedCard,
+  type Subject,
+} from "../testScreen";
 import { useStage, useView } from "../view";
 import { ChaosTokenIcon } from "./ChaosTokenIcon";
 import { useFlyIn } from "./flights";
@@ -20,7 +31,8 @@ import { MiniCard } from "./Panels";
 import { DrawStage } from "./TokenDraw";
 import { moment } from "./SoundLayer";
 
-const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
+const tr = (key: string, vars?: Record<string, string | number>) =>
+  t(db, gameStore.getState().locale, key, vars);
 
 /** what the screen knows of a test: its static facts and the strip and placed cards as they stood when it last was live */
 interface Snap {
@@ -46,7 +58,16 @@ const snapOf = (test: SkillTestState, game: GameState): Snap => ({
 
 /** a test the screen never saw live (nothing could be committed): rebuilt from its first event */
 function snapFromEvent(e: GameEvent, game: GameState): Snap {
-  const d = (e.data ?? {}) as { testId: number; skill?: string; kind?: string; value?: number; difficulty?: number; base?: number; icons?: number; total?: number };
+  const d = (e.data ?? {}) as {
+    testId: number;
+    skill?: string;
+    kind?: string;
+    value?: number;
+    difficulty?: number;
+    base?: number;
+    icons?: number;
+    total?: number;
+  };
   const isResult = e.type === "testResult";
   const base = isResult ? (d.base ?? 0) : (d.value ?? 0);
   const icons = isResult && d.icons ? [d.icons] : [];
@@ -59,7 +80,16 @@ function snapFromEvent(e: GameEvent, game: GameState): Snap {
     kind: d.kind ?? "plain",
     subject: card ? { kind: "card", id: card } : { kind: "portrait", inv: e.inv ?? game.order[0] },
     placed: [],
-    calc: { skill: d.skill ?? "willpower", base, icons, mods: value - base - icons.reduce((n, i) => n + i, 0), tokens: [], autoFail: false, total: value, difficulty: d.difficulty ?? 0 },
+    calc: {
+      skill: d.skill ?? "willpower",
+      base,
+      icons,
+      mods: value - base - icons.reduce((n, i) => n + i, 0),
+      tokens: [],
+      autoFail: false,
+      total: value,
+      difficulty: d.difficulty ?? 0,
+    },
   };
 }
 
@@ -77,9 +107,16 @@ export interface TestView {
 /** tokens of one test: their strings and resolved modifiers, from the log (the state is ahead of the animations) */
 function tokensOf(game: GameState, id: number): { token: string; mod: number }[] {
   const res = game.log.find((e) => e.type === "testResult" && e.data?.testId === id);
-  const names = (res?.data?.tokens as string[] | undefined) ?? game.log.filter((e) => e.type === "token" && e.data?.testId === id).map((e) => String(e.data?.token));
+  const names =
+    (res?.data?.tokens as string[] | undefined) ??
+    game.log
+      .filter((e) => e.type === "token" && e.data?.testId === id)
+      .map((e) => String(e.data?.token));
   const mods = (res?.data?.tokenMods as number[] | undefined) ?? [];
-  return names.map((token, k) => ({ token, mod: mods[k] ?? (/^[+-]?\d+$/.test(token) ? Number(token) : 0) }));
+  return names.map((token, k) => ({
+    token,
+    mod: mods[k] ?? (/^[+-]?\d+$/.test(token) ? Number(token) : 0),
+  }));
 }
 
 /** is the screen showing a test now: from its commit prompt through the draw and the result */
@@ -94,8 +131,16 @@ export function useTestView(): TestView | null {
   if (live && mine) snaps.current.set(live.id, mine);
   const events: GameEvent[] = [current, ...queue].flatMap((e) => (isTestEvent(e) ? [e!] : []));
   // the screen ends with the result: reactions and effects after it (the test is still live in the state) play on the table
-  const resolved = !!live && game.log.some((e) => e.type === "testResult" && e.data?.testId === live.id);
-  const id = sessionId({ events, lead: current ?? queue[0] ?? null, live: live?.id ?? null, resolved, commitPending: game.pending?.kind === "commit", started: started.current });
+  const resolved =
+    !!live && game.log.some((e) => e.type === "testResult" && e.data?.testId === live.id);
+  const id = sessionId({
+    events,
+    lead: current ?? queue[0] ?? null,
+    live: live?.id ?? null,
+    resolved,
+    commitPending: game.pending?.kind === "commit",
+    started: started.current,
+  });
   started.current = id;
   if (id === null) return null;
   const snap = snaps.current.get(id) ?? (events[0] ? snapFromEvent(events[0], game) : null);
@@ -107,7 +152,12 @@ export function useTestView(): TestView | null {
   const pending = mineEvents.filter((e) => e.type === "token").length;
   const drawn = all.slice(0, Math.max(0, all.length - pending));
   const done = result && pending === 0 ? (result.data?.total as number) : undefined;
-  return { snap, calc: addTokens(snap.calc, drawn, done), result: result && pending === 0 ? result : null, live: live && live.id === id ? live : null };
+  return {
+    snap,
+    calc: addTokens(snap.calc, drawn, done),
+    result: result && pending === 0 ? result : null,
+    live: live && live.id === id ? live : null,
+  };
 }
 
 /**
@@ -125,7 +175,11 @@ function SubjectView({ subject, finish }: { subject: Subject; finish: ChoiceOpti
   if (subject.kind === "portrait") {
     return (
       <div className="st-subject">
-        <div className={`st-subject-portrait ${lit}`} onClick={tap} role={tap ? "button" : undefined}>
+        <div
+          className={`st-subject-portrait ${lit}`}
+          onClick={tap}
+          role={tap ? "button" : undefined}
+        >
           <Portrait code={subject.inv} size={150} />
         </div>
       </div>
@@ -146,17 +200,33 @@ function SubjectView({ subject, finish }: { subject: Subject; finish: ChoiceOpti
       >
         <CardFace code={inst.code} locale={locale} side={back ? "back" : "front"} />
       </div>
-      {hover && <DetailsColumn rows={cardDetails(db, inst.code, locale, { inst, game })} rect={{ x0: hover.left, y0: hover.top, x1: hover.right, y1: hover.bottom }} />}
+      {hover && (
+        <DetailsColumn
+          rows={cardDetails(db, inst.code, locale, { inst, game })}
+          rect={{ x0: hover.left, y0: hover.top, x1: hover.right, y1: hover.bottom }}
+        />
+      )}
     </div>
   );
 }
 
 /** "Investigate: Study · shroud 2", "Willpower test · 3 vs 3" */
 function lineOf(snap: Snap, calc: CalcParts, game: GameState, locale: string): string {
-  const name = snap.subject.kind === "card" && game.cards[snap.subject.id] ? cardText(db, game.cards[snap.subject.id].code, locale).name : "";
+  const name =
+    snap.subject.kind === "card" && game.cards[snap.subject.id]
+      ? cardText(db, game.cards[snap.subject.id].code, locale).name
+      : "";
   const skill = t(db, locale, `stat.${snap.skill}`);
-  const key = ["investigate", "fight", "evade"].includes(snap.kind) && name ? `test.${snap.kind}` : "test.plain";
-  return t(db, locale, key, { name, skill, n: calc.difficulty, value: calc.base + calc.icons.reduce((n, i) => n + i, 0) + calc.mods });
+  const key =
+    ["investigate", "fight", "evade"].includes(snap.kind) && name
+      ? `test.${snap.kind}`
+      : "test.plain";
+  return t(db, locale, key, {
+    name,
+    skill,
+    n: calc.difficulty,
+    value: calc.base + calc.icons.reduce((n, i) => n + i, 0) + calc.mods,
+  });
 }
 
 const sign = (n: number) => (n >= 0 ? `+ ${n}` : `− ${-n}`);
@@ -180,7 +250,11 @@ function CalcStrip({ calc }: { calc: CalcParts }) {
         </span>
       ))}
       <span className="st-eq">=</span>
-      <b className={`st-num st-total ${calc.autoFail || calc.total < calc.difficulty ? "low" : "ok"}`}>{calc.total}</b>
+      <b
+        className={`st-num st-total ${calc.autoFail || calc.total < calc.difficulty ? "low" : "ok"}`}
+      >
+        {calc.total}
+      </b>
       <span className="st-vs">{tr("draw.vs")}</span>
       <b className="st-num st-diff">{calc.difficulty}</b>
     </div>
@@ -188,14 +262,24 @@ function CalcStrip({ calc }: { calc: CalcParts }) {
 }
 
 /** the placed cards: owner's portrait when several investigators placed, the icons each adds, a tap takes one back */
-function PlacedCards({ placed, skill, viewerCanAct }: { placed: PlacedCard[]; skill: string; viewerCanAct: boolean }) {
+function PlacedCards({
+  placed,
+  skill,
+  viewerCanAct,
+}: {
+  placed: PlacedCard[];
+  skill: string;
+  viewerCanAct: boolean;
+}) {
   const game = useGame((s) => s.game) as GameState;
   const choose = useGame((s) => s.choose);
   const byCard = useOptionsByCard();
   const ref = useRef<HTMLDivElement>(null);
   // remember where placed cards are, so one taken back flies from here into the fan
   useLayoutEffect(() => {
-    ref.current?.querySelectorAll<HTMLElement>("[data-card]").forEach((el) => rememberRect(el.dataset.card!, el));
+    ref.current
+      ?.querySelectorAll<HTMLElement>("[data-card]")
+      .forEach((el) => rememberRect(el.dataset.card!, el));
   });
   const setup = useGame((s) => s.setup);
   const viewer = viewerOf(game);
@@ -204,10 +288,23 @@ function PlacedCards({ placed, skill, viewerCanAct }: { placed: PlacedCard[]; sk
   return (
     <div className="st-placed" ref={ref}>
       {placed.map((p) => {
-        const back = viewerCanAct && p.removable ? byCard.get(p.card)?.find((o) => o.id === `un:${p.card}`) : undefined;
+        const back =
+          viewerCanAct && p.removable
+            ? byCard.get(p.card)?.find((o) => o.id === `un:${p.card}`)
+            : undefined;
         return (
-          <div key={p.card} className={`st-placed-slot ${back ? "removable" : ""}`} title={back ? back.label : undefined}>
-            <MiniCard id={p.card} w={86} h={120} legal={!!back} onClick={() => back && choose(back.id)} />
+          <div
+            key={p.card}
+            className={`st-placed-slot ${back ? "removable" : ""}`}
+            title={back ? back.label : undefined}
+          >
+            <MiniCard
+              id={p.card}
+              w={86}
+              h={120}
+              legal={!!back}
+              onClick={() => back && choose(back.id)}
+            />
             {back && <span className="st-takeback">↶</span>}
             {owners.size > 1 && (
               <span className="st-owner">
@@ -231,7 +328,10 @@ function ResultStage({ e, waits }: { e: GameEvent; waits: boolean }) {
   const next = useGame((s) => s.nextEvent);
   const ok = !!e.data?.success;
   return (
-    <div className={`breakdown st-result ${ok ? "ok" : "bad"}`} onClick={(ev) => ev.stopPropagation()}>
+    <div
+      className={`breakdown st-result ${ok ? "ok" : "bad"}`}
+      onClick={(ev) => ev.stopPropagation()}
+    >
       <div className="st-result-total">{String(e.data?.total ?? 0)}</div>
       <div className="bd-result">{tr(ok ? "draw.success" : "draw.fail")}</div>
       {waits && (
@@ -281,7 +381,10 @@ export function SkillTestScreen() {
     moment("cancel");
     gameStore.getState().cancelTest();
   };
-  const cancellable = useMemo(() => !!finish && gameStore.getState().testCancellable(), [finish, actionsN, seq]);
+  const cancellable = useMemo(
+    () => !!finish && gameStore.getState().testCancellable(),
+    [finish, actionsN, seq],
+  );
   useEffect(() => {
     if (!cancellable) return;
     const key = (e: KeyboardEvent) => {
@@ -318,12 +421,32 @@ export function SkillTestScreen() {
         <div className="st-center">
           <SubjectView subject={snap.subject} finish={finish} />
           <div className="st-stage">
-            {playing?.type === "testResult" && playing.data?.testId === snap.id && <ResultStage key={(playing as GameEvent & { logIndex?: number }).logIndex} e={playing} waits={waits} />}
-            {playing?.type === "token" && playing.data?.testId === snap.id && <DrawStage key={(playing as GameEvent & { logIndex?: number }).logIndex} e={playing} byHand={byHand} />}
+            {playing?.type === "testResult" && playing.data?.testId === snap.id && (
+              <ResultStage
+                key={(playing as GameEvent & { logIndex?: number }).logIndex}
+                e={playing}
+                waits={waits}
+              />
+            )}
+            {playing?.type === "token" && playing.data?.testId === snap.id && (
+              <DrawStage
+                key={(playing as GameEvent & { logIndex?: number }).logIndex}
+                e={playing}
+                byHand={byHand}
+              />
+            )}
           </div>
         </div>
       </div>
-      <PlacedCards skill={snap.skill} placed={view.live ? placedCards(view.live, game, db, game.pending) : snap.placed.map((p) => ({ ...p, removable: false }))} viewerCanAct={!!view.live} />
+      <PlacedCards
+        skill={snap.skill}
+        placed={
+          view.live
+            ? placedCards(view.live, game, db, game.pending)
+            : snap.placed.map((p) => ({ ...p, removable: false }))
+        }
+        viewerCanAct={!!view.live}
+      />
       <CalcStrip calc={calc} />
     </div>
   );

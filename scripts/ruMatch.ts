@@ -32,7 +32,11 @@ export interface Score {
 
 /** lower case, ё → е, letters and digits only */
 export const norm = (s: string) =>
-  s.toLowerCase().replace(/ё/g, "е").replace(/[^a-zа-я0-9]+/g, " ").trim();
+  s
+    .toLowerCase()
+    .replace(/ё/g, "е")
+    .replace(/[^a-zа-я0-9]+/g, " ")
+    .trim();
 
 const grams = (s: string): Set<string> => {
   const t = ` ${norm(s)} `;
@@ -63,8 +67,15 @@ export function contains(hay: string, needle: string): number {
 
 /** the name part of a CARDS_ru file name: no extension, copy/level suffixes or "(база)" notes */
 export function fileStem(file: string): string {
-  const base = file.split("/").pop()!.replace(/\.[a-z]+$/i, "");
-  return base.replace(/\s*\([^)]*\)\s*$/, "").replace(/[\s_]*\d+\s*$/, "").replace(/\s+-\s+.*$/, "").trim();
+  const base = file
+    .split("/")
+    .pop()!
+    .replace(/\.[a-z]+$/i, "");
+  return base
+    .replace(/\s*\([^)]*\)\s*$/, "")
+    .replace(/[\s_]*\d+\s*$/, "")
+    .replace(/\s+-\s+.*$/, "")
+    .trim();
 }
 
 /** score one image against one card side */
@@ -73,7 +84,10 @@ export function scoreSide(img: ImageInfo, card: CardInfo, side: Side): number {
   if (side === "back" && !card.doubleSided) return 0;
   const nameFromTitle = Math.max(0, ...card.names.map((n) => similarity(img.title, n)));
   const nameInText = Math.max(0, ...card.names.map((n) => contains(img.text, n)));
-  const nameFromFile = img.source === "cards" ? Math.max(0, ...card.names.map((n) => similarity(fileStem(img.file), n))) : 0;
+  const nameFromFile =
+    img.source === "cards"
+      ? Math.max(0, ...card.names.map((n) => similarity(fileStem(img.file), n)))
+      : 0;
   const name = Math.max(nameFromTitle, nameFromFile, nameInText * 0.85);
   const known = card.text[side];
   // sides: with a known text, the body decides; without one, a little weight on the name alone
@@ -91,10 +105,11 @@ export function lengthFit(got: number, expected: number): number {
 /** the two best card sides for an image */
 export function rank(img: ImageInfo, cards: CardInfo[]): Score[] {
   const all: Score[] = [];
-  for (const c of cards) for (const side of ["front", "back"] as Side[]) {
-    const score = scoreSide(img, c, side);
-    if (score > 0) all.push({ code: c.code, side, score });
-  }
+  for (const c of cards)
+    for (const side of ["front", "back"] as Side[]) {
+      const score = scoreSide(img, c, side);
+      if (score > 0) all.push({ code: c.code, side, score });
+    }
   return all.sort((a, b) => b.score - a.score).slice(0, 5);
 }
 

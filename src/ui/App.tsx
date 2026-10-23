@@ -23,7 +23,9 @@ function RotateCard() {
   const locale = useGame((s) => s.locale);
   return (
     <div className="rotate-card" role="alert">
-      <div className="rotate-icon" aria-hidden>📱↻</div>
+      <div className="rotate-icon" aria-hidden>
+        📱↻
+      </div>
       <h2>{t(db, locale, "phone.rotate")}</h2>
       <p>{t(db, locale, "phone.rotateWhy")}</p>
     </div>
@@ -58,7 +60,9 @@ export function App() {
       <div className="screen">
         <h1>Content errors</h1>
         {contentErrors.map((e, k) => (
-          <div key={k}>{e.file} {e.path}: {e.message}</div>
+          <div key={k}>
+            {e.file} {e.path}: {e.message}
+          </div>
         ))}
       </div>
     );
@@ -73,7 +77,20 @@ export function App() {
       </div>
     );
   }
-  const page = screen === "log" ? <CampaignScreen /> : screen === "howto" ? <HowTo /> : screen === "wizard" ? <Wizard /> : screen === "settings" ? <Settings /> : screen === "catalog" ? <Catalog /> : <Title />;
+  const page =
+    screen === "log" ? (
+      <CampaignScreen />
+    ) : screen === "howto" ? (
+      <HowTo />
+    ) : screen === "wizard" ? (
+      <Wizard />
+    ) : screen === "settings" ? (
+      <Settings />
+    ) : screen === "catalog" ? (
+      <Catalog />
+    ) : (
+      <Title />
+    );
   // every menu screen but the title sits on the rulebook's parchment (public/art)
   return (
     <>

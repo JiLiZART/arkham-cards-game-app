@@ -3,3 +3,10 @@ docs/campaign-program.md
 # data: written by the import scripts, coverage and the sound picker, whose output must stay byte-identical
 content/**/*.json
 src/ui/ruImages.generated.json
+# vendored agent skills: updated by their installers
+.agents
+.claude
+.codex
+.github/skills
+.github/agents
+.github/hooks

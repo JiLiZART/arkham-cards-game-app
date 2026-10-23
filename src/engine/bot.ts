@@ -4,9 +4,22 @@ import { locations, stepsToward } from "./core";
 import type { ContentDb } from "./types";
 
 const PREFS: RegExp[] = [
-  /^Advance act/, /Spend .* clues and advance/, /^Spend 2 clues per investigator/,
-  /^Throw Lita/, /Lita Chantler: parley/, /^Commit/, /^Fight/, /fight/i, /^Play (?!Dynamite)/, /^Investigate/, /investigate/i,
-  /^Move to (?!Study)/, /^Done/, /^Keep hand/, /^Gain 1 resource/, /^End turn/,
+  /^Advance act/,
+  /Spend .* clues and advance/,
+  /^Spend 2 clues per investigator/,
+  /^Throw Lita/,
+  /Lita Chantler: parley/,
+  /^Commit/,
+  /^Fight/,
+  /fight/i,
+  /^Play (?!Dynamite)/,
+  /^Investigate/,
+  /investigate/i,
+  /^Move to (?!Study)/,
+  /^Done/,
+  /^Keep hand/,
+  /^Gain 1 resource/,
+  /^End turn/,
 ];
 
 /** next step toward the nearest location that is unrevealed or has clues */
@@ -15,8 +28,14 @@ function goal(db: ContentDb, r: Result, i: string): string | undefined {
   const g = { s, db, events: [] };
   const here = s.invs[i].location;
   if (!here) return undefined;
-  const wanted = locations(g).filter((l) => l.id !== here && (!l.revealed || l.clues > 0)).map((l) => l.id);
-  const targets = wanted.length ? wanted : locations(g).filter((l) => l.id !== here).map((l) => l.id);
+  const wanted = locations(g)
+    .filter((l) => l.id !== here && (!l.revealed || l.clues > 0))
+    .map((l) => l.id);
+  const targets = wanted.length
+    ? wanted
+    : locations(g)
+        .filter((l) => l.id !== here)
+        .map((l) => l.id);
   return stepsToward(g, here, targets)[0];
 }
 export function botChoice(db: ContentDb, r: Result): string {
@@ -31,7 +50,8 @@ export function botChoice(db: ContentDb, r: Result): string {
       const o = p.options.find((x) => {
         if (!re.test(x.label)) return false;
         if (/investigate/i.test(x.label) && clues === 0) return false;
-        if (/^Move/.test(x.label)) return clues === 0 && (x.value as { to?: string }).to === goal(db, r, p.inv);
+        if (/^Move/.test(x.label))
+          return clues === 0 && (x.value as { to?: string }).to === goal(db, r, p.inv);
         return true;
       });
       if (o) return o.id;

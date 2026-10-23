@@ -10,7 +10,8 @@ export const FAN_LEGAL_RAISE = 27;
 export const STAT_BAR_ZOOM = 0.75;
 export const STAT_BAR_W = 420 * STAT_BAR_ZOOM;
 /** the stat bar's zoom for a window: full size at 1080p (the window's smaller ratio to it), between 0.75 and 1.15 */
-export const statBarZoom = (vw: number, vh: number) => Math.min(1.15, Math.max(0.75, Math.min(vw / 1920, vh / 1080)));
+export const statBarZoom = (vw: number, vh: number) =>
+  Math.min(1.15, Math.max(0.75, Math.min(vw / 1920, vh / 1080)));
 /** the stat bar's width on screen at that zoom */
 export const statBarW = (vw: number, vh: number) => 420 * statBarZoom(vw, vh);
 export const RAIL_W = 172;
@@ -25,7 +26,8 @@ export interface FanSlot {
 }
 
 /** width available to the hand fan for a viewport width */
-export const fanWidth = (viewportW: number, statW = STAT_BAR_W) => Math.max(FAN_CARD_W, viewportW - RAIL_W - statW - 24);
+export const fanWidth = (viewportW: number, statW = STAT_BAR_W) =>
+  Math.max(FAN_CARD_W, viewportW - RAIL_W - statW - 24);
 
 /** Hearthstone-style fan: cards on an arc, overlap tightening as the hand grows */
 export function fanLayout(n: number, width: number, cardW = FAN_CARD_W): FanSlot[] {
@@ -43,12 +45,14 @@ export function fanLayout(n: number, width: number, cardW = FAN_CARD_W): FanSlot
 
 /** hover zoom for a hand card (1.28×, about 288×403 px), or as much as fits the window height */
 export const HAND_HOVER_ZOOM = 1.28;
-export const hoverScale = (viewportH: number) => Math.min(HAND_HOVER_ZOOM, (viewportH - 16 - 12) / FAN_CARD_H);
+export const hoverScale = (viewportH: number) =>
+  Math.min(HAND_HOVER_ZOOM, (viewportH - 16 - 12) / FAN_CARD_H);
 /** lift that puts a hovered card's bottom 12 px above the screen edge */
 export const HOVER_LIFT = -(FAN_CARD_H - FAN_REST_VISIBLE + 12);
 
 /** how far (px) the Dock magnification reaches either side of the pointer, from the gap between card centres */
-export const dockRadius = (step: number) => Math.min(1.5 * FAN_CARD_W, Math.max(0.6 * FAN_CARD_W, 2.2 * step));
+export const dockRadius = (step: number) =>
+  Math.min(1.5 * FAN_CARD_W, Math.max(0.6 * FAN_CARD_W, 2.2 * step));
 
 /** macOS Dock falloff: 1 with the pointer on the card centre, easing to 0 at `radius` */
 export function dockWeight(cardX: number, pointerX: number, radius: number): number {
@@ -63,11 +67,23 @@ export function dockTransform(slot: FanSlot, w: number, k: number, raise = 0): s
 }
 
 /** screen rect of a card at weight w (ignoring its leftover tilt), for the details column; fanLeft is the fan's left edge */
-export function dockRect(slot: FanSlot, w: number, k: number, raise: number, fanLeft: number, vh: number) {
+export function dockRect(
+  slot: FanSlot,
+  w: number,
+  k: number,
+  raise: number,
+  fanLeft: number,
+  vh: number,
+) {
   const s = 1 + (k - 1) * w;
   const bottom = vh + (FAN_CARD_H - FAN_REST_VISIBLE) + (slot.y - raise) * (1 - w) + HOVER_LIFT * w;
   const cx = fanLeft + slot.x;
-  return { x0: cx - (FAN_CARD_W * s) / 2, x1: cx + (FAN_CARD_W * s) / 2, y0: bottom - FAN_CARD_H * s, y1: bottom };
+  return {
+    x0: cx - (FAN_CARD_W * s) / 2,
+    x1: cx + (FAN_CARD_W * s) / 2,
+    y0: bottom - FAN_CARD_H * s,
+    y1: bottom,
+  };
 }
 
 /** a screen box (x, y, w, h) */
@@ -104,17 +120,29 @@ export const PEEK_RAISE = 20;
 const PEEK_W = 86;
 
 /** the collapsed drawer's row: each card's left edge and width, and how much of it shows */
-export function peekLayout(n: number, vw: number, legal: boolean[]): { x: number; w: number; visible: number }[] {
+export function peekLayout(
+  n: number,
+  vw: number,
+  legal: boolean[],
+): { x: number; w: number; visible: number }[] {
   if (n <= 0) return [];
   const room = vw - 24;
   const step = n > 1 ? Math.min(PEEK_W + 6, (room - PEEK_W) / (n - 1)) : 0;
   const total = PEEK_W + step * (n - 1);
   const left = (vw - total) / 2;
-  return Array.from({ length: n }, (_, i) => ({ x: left + i * step, w: PEEK_W, visible: PEEK + (legal[i] ? PEEK_RAISE : 0) }));
+  return Array.from({ length: n }, (_, i) => ({
+    x: left + i * step,
+    w: PEEK_W,
+    visible: PEEK + (legal[i] ? PEEK_RAISE : 0),
+  }));
 }
 
 /** the open drawer's fan: cards as tall as the short screen allows (at least 220 px), spread over the width */
-export function openHandLayout(n: number, vw: number, vh: number): { w: number; h: number; slots: FanSlot[] } {
+export function openHandLayout(
+  n: number,
+  vw: number,
+  vh: number,
+): { w: number; h: number; slots: FanSlot[] } {
   const h = Math.max(220, Math.min(300, vh - 36 - 48));
   const w = h * (FAN_CARD_W / FAN_CARD_H);
   const slots = fanLayout(n, vw - 24, w).map((s) => ({ ...s, x: s.x + 12 }));

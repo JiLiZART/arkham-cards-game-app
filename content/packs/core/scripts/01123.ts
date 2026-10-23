@@ -3,7 +3,13 @@ import { def, emit, push, type CardScript, type EffCtx, type G } from "../../../
 
 export default {
   abilities: [
-    { kind: "action", label: "Spend 2 clues per investigator: draw from the Cultist deck", usableBy: "anyone", cost: { cluesPerInvestigator: 2 }, run: "drawCultist" },
+    {
+      kind: "action",
+      label: "Spend 2 clues per investigator: draw from the Cultist deck",
+      usableBy: "anyone",
+      cost: { cluesPerInvestigator: 2 },
+      run: "drawCultist",
+    },
     { kind: "revelation", effects: [{ op: "resolution", id: "R1" }] },
   ],
   fns: {

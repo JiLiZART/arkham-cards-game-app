@@ -25,7 +25,8 @@ function until(r: Result, stop: (s: GameState) => boolean, max = 600): Result {
   }
   return r;
 }
-const draws = (deck: string) => (s: GameState) => s.pending?.kind === "draw" && s.pending.promptVars?.deck === deck;
+const draws = (deck: string) => (s: GameState) =>
+  s.pending?.kind === "draw" && s.pending.promptVars?.deck === deck;
 const handSize = (s: GameState, i: string) => s.invs[i].hand.length;
 
 describe("tapped draws", () => {
@@ -38,7 +39,12 @@ describe("tapped draws", () => {
   it("the upkeep draw waits for the drawing investigator, then draws one card", () => {
     const r = until(tapped([ROLAND]), draws("player"));
     const p = r.state.pending!;
-    expect(p).toMatchObject({ kind: "draw", inv: ROLAND, promptKey: "tapDeck.player", promptVars: { deck: "player", n: 1 } });
+    expect(p).toMatchObject({
+      kind: "draw",
+      inv: ROLAND,
+      promptKey: "tapDeck.player",
+      promptVars: { deck: "player", n: 1 },
+    });
     expect(p.options.map((o) => o.label)).toEqual(["Draw"]);
     const before = handSize(r.state, ROLAND);
     const deck = r.state.invs[ROLAND].deck.length;
@@ -62,7 +68,11 @@ describe("tapped draws", () => {
     r = pick(r, "draw");
     expect(r.state.encounterDeck.length).toBeLessThan(deck);
     r = until(r, draws("encounter"));
-    expect(r.state.pending).toMatchObject({ kind: "draw", inv: first === ROLAND ? DAISY : ROLAND, promptVars: { deck: "encounter" } });
+    expect(r.state.pending).toMatchObject({
+      kind: "draw",
+      inv: first === ROLAND ? DAISY : ROLAND,
+      promptVars: { deck: "encounter" },
+    });
   });
 
   it("a draw of two cards from one effect is one tap", () => {
@@ -73,7 +83,12 @@ describe("tapped draws", () => {
     s.pending = null;
     s.queue.push({ ...step, choice: undefined }, { t: "Draw", inv: DAISY, n: 2 });
     run(g);
-    expect(s.pending).toMatchObject({ kind: "draw", inv: DAISY, promptKey: "tapDeck.player.many", promptVars: { deck: "player", n: 2 } });
+    expect(s.pending).toMatchObject({
+      kind: "draw",
+      inv: DAISY,
+      promptKey: "tapDeck.player.many",
+      promptVars: { deck: "player", n: 2 },
+    });
     const hand = handSize(s, DAISY);
     const r = pick({ state: s, events: [] }, "draw");
     expect(handSize(r.state, DAISY)).toBe(hand + 2);

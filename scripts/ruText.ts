@@ -14,29 +14,49 @@ export interface PrintDraft {
 }
 
 const CYR = /[А-Яа-яЁё]/g;
-const cyrShare = (s: string) => (s.match(CYR)?.length ?? 0) / Math.max(1, s.replace(/\s/g, "").length);
+const cyrShare = (s: string) =>
+  (s.match(CYR)?.length ?? 0) / Math.max(1, s.replace(/\s/g, "").length);
 
 /** the printed name: the community file name (typed by people; OCR adds typos), else the cleaned OCR title */
 export function draftName(title: string, file: string | null): string {
   const stem = file?.includes("CARDS_ru") ? fileStem(file) : "";
-  return stem || title.replace(/^[^А-Яа-яЁё«]+|[^А-Яа-яЁё»!?.)]+$/g, "").replace(/\s{2,}/g, " ").trim();
+  return (
+    stem ||
+    title
+      .replace(/^[^А-Яа-яЁё«]+|[^А-Яа-яЁё»!?.)]+$/g, "")
+      .replace(/\s{2,}/g, " ")
+      .trim()
+  );
 }
 
 /** "Предмет. Оружие. Рукопашный." → ["Предмет", "Оружие", "Рукопашный"] */
 const TRAITS = /^([А-ЯЁ][а-яё-]+(?: [а-яё-]+)?\.\s*)+$/;
 
 /** icon tokens of a marked-up text, in order */
-export const iconTokens = (markup: string) => [...markup.matchAll(/\[(\w+)\]/g)].map((m) => `[${m[1]}]`);
+export const iconTokens = (markup: string) =>
+  [...markup.matchAll(/\[(\w+)\]/g)].map((m) => `[${m[1]}]`);
 
 /** what OCR makes of a printed icon: a short run of symbols, stray Latin letters or punctuation */
-const JUNK = /(?:^|(?<=\s))(?:[»«›‹„“”"%@$#&*^~|\\/<>{}©®°§¶•■●○◆→=_`']|[A-Za-z]{1,2}(?=\s))+(?=\s|$|[.:,])/g;
+const JUNK =
+  /(?:^|(?<=\s))(?:[»«›‹„“”"%@$#&*^~|\\/<>{}©®°§¶•■●○◆→=_`']|[A-Za-z]{1,2}(?=\s))+(?=\s|$|[.:,])/g;
 
-export function draftText(ocr: string, official: string): { traits?: string[]; text?: string; iconsUnsure: boolean } {
-  const lines = ocr.split("\n").map((l) => l.trim()).filter(Boolean);
+export function draftText(
+  ocr: string,
+  official: string,
+): { traits?: string[]; text?: string; iconsUnsure: boolean } {
+  const lines = ocr
+    .split("\n")
+    .map((l) => l.trim())
+    .filter(Boolean);
   // keep the lines that are mostly Russian text; card numbers, artist credits and art noise go
   const kept = lines.filter((l) => cyrShare(l) > 0.55 && /[А-Яа-яЁё]{4,}/.test(l));
   let traits: string[] | undefined;
-  if (kept.length && TRAITS.test(kept[0])) traits = kept.shift()!.split(".").map((s) => s.trim()).filter(Boolean);
+  if (kept.length && TRAITS.test(kept[0]))
+    traits = kept
+      .shift()!
+      .split(".")
+      .map((s) => s.trim())
+      .filter(Boolean);
   const tokens = iconTokens(official);
   let k = 0;
   const body = kept.join("\n").replace(JUNK, (m) => (k < tokens.length ? tokens[k++] : m));

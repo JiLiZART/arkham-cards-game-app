@@ -4,8 +4,10 @@ import { moveCard } from "../engine/core";
 import { db, giveCard, mutate, putEnemy, skipMulligans, start } from "../engine/testkit";
 import { footprint, layout, type Bounds } from "./layout";
 
-const overlaps = (a: ReturnType<typeof footprint>, b: ReturnType<typeof footprint>) => a.x0 < b.x1 - 1e-6 && b.x0 < a.x1 - 1e-6 && a.z0 < b.z1 - 1e-6 && b.z0 < a.z1 - 1e-6;
-const inside = (f: ReturnType<typeof footprint>, b: Bounds) => f.x0 >= b.x0 && f.x1 <= b.x1 && f.z0 >= b.z0 && f.z1 <= b.z1;
+const overlaps = (a: ReturnType<typeof footprint>, b: ReturnType<typeof footprint>) =>
+  a.x0 < b.x1 - 1e-6 && b.x0 < a.x1 - 1e-6 && a.z0 < b.z1 - 1e-6 && b.z0 < a.z1 - 1e-6;
+const inside = (f: ReturnType<typeof footprint>, b: Bounds) =>
+  f.x0 >= b.x0 && f.x1 <= b.x1 && f.z0 >= b.z0 && f.z1 <= b.z1;
 
 function check(scenario: string, seed: number, players = 4) {
   const invs = ["01001", "01002", "01003", "01004"].slice(0, players);
@@ -20,10 +22,15 @@ function check(scenario: string, seed: number, players = 4) {
       const [ia, a] = placed[i];
       const [ib, b] = placed[j];
       if (a.group === b.group) continue;
-      if (overlaps(footprint(a), footprint(b))) bad.push(`${db.cards[r.state.cards[ia].code].name}(${a.group}) × ${db.cards[r.state.cards[ib].code].name}(${b.group})`);
+      if (overlaps(footprint(a), footprint(b)))
+        bad.push(
+          `${db.cards[r.state.cards[ia].code].name}(${a.group}) × ${db.cards[r.state.cards[ib].code].name}(${b.group})`,
+        );
     }
   }
-  const outside = placed.filter(([, p]) => !inside(footprint(p), L.bounds)).map(([id]) => db.cards[r.state.cards[id].code].name);
+  const outside = placed
+    .filter(([, p]) => !inside(footprint(p), L.bounds))
+    .map(([id]) => db.cards[r.state.cards[id].code].name);
   return { r, L, viewer, bad, outside };
 }
 
@@ -34,7 +41,13 @@ describe("map layout", () => {
         const { bad, outside, L } = check(sc, 2 + n, n);
         expect(bad, `${sc} ×${n}`).toEqual([]);
         expect(outside, `${sc} ×${n}`).toEqual([]);
-        for (const m of L.minis) expect(m.pos[0] >= L.bounds.x0 && m.pos[0] <= L.bounds.x1 && m.pos[2] >= L.bounds.z0 && m.pos[2] <= L.bounds.z1).toBe(true);
+        for (const m of L.minis)
+          expect(
+            m.pos[0] >= L.bounds.x0 &&
+              m.pos[0] <= L.bounds.x1 &&
+              m.pos[2] >= L.bounds.z0 &&
+              m.pos[2] <= L.bounds.z1,
+          ).toBe(true);
       }
     }
   });

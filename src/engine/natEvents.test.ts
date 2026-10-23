@@ -2,7 +2,26 @@ import { beforeAll, describe, expect, it } from "vitest";
 import { loadPack } from "../content";
 import { card, inv, type G } from "./core";
 import type { Result } from "./engine";
-import { ACOLYTE, ATTIC, DAISY, HALLWAY, MINION, NATHANIEL, PRIEST, ROLAND, STUDY, addLocation, attacks, enemyHere, enemyIn, game, hand, inPlay, nathaniel, toTurn } from "./natkit";
+import {
+  ACOLYTE,
+  ATTIC,
+  DAISY,
+  HALLWAY,
+  MINION,
+  NATHANIEL,
+  PRIEST,
+  ROLAND,
+  STUDY,
+  addLocation,
+  attacks,
+  enemyHere,
+  enemyIn,
+  game,
+  hand,
+  inPlay,
+  nathaniel,
+  toTurn,
+} from "./natkit";
 import { gOf, locId, options, pick, putEnemy } from "./testkit";
 
 beforeAll(async () => {
@@ -40,7 +59,12 @@ describe("Monster Slayer", () => {
       enemyHere(g, N, PRIEST);
     });
     r = pick(r, /^Play Monster Slayer/);
-    r = toTurn(r, (x) => x.state.pending?.step.t === "Window" && (x.state.pending.step as { trigger?: string }).trigger === "dealDamage");
+    r = toTurn(
+      r,
+      (x) =>
+        x.state.pending?.step.t === "Window" &&
+        (x.state.pending.step as { trigger?: string }).trigger === "dealDamage",
+    );
     expect((r.state.pending?.step as { data: { amount: number } }).data.amount).toBe(2); // 1 + 1
     r = pick(r, /^Nathaniel Cho/);
     r = finish(r);
@@ -55,15 +79,21 @@ describe("Glory", () => {
       enemyHere(g, N, ACOLYTE);
       inv(g, N).resources = 3;
     });
-    const draws = (x: Result) => x.state.log.filter((e) => e.type === "draw" || e.type === "weakness").length;
+    const draws = (x: Result) =>
+      x.state.log.filter((e) => e.type === "draw" || e.type === "weakness").length;
     const before = draws(r);
     r = pick(r, /^Fight/);
-    r = toTurn(r, (x) => x.state.pending?.step.t === "Window" && (x.state.pending.step as { trigger?: string }).trigger === "enemyDefeated" && options(x).some((o) => /Glory/.test(o)));
+    r = toTurn(
+      r,
+      (x) =>
+        x.state.pending?.step.t === "Window" &&
+        (x.state.pending.step as { trigger?: string }).trigger === "enemyDefeated" &&
+        options(x).some((o) => /Glory/.test(o)),
+    );
     r = pick(r, /^Glory/);
     expect(draws(r) - before).toBe(2);
   });
 });
-
 
 describe("Counterpunch", () => {
   const endTurnIntoAttack = (r: Result, name: RegExp) => toTurn(pick(r, "End turn"), offered(name));
@@ -134,10 +164,14 @@ describe('"Get over here!"', () => {
 
 describe("One-Two Punch", () => {
   const punch = (code: string) => {
-    let r = nathaniel((g) => {
-      hand(g, N, code);
-      enemyHere(g, N, PRIEST);
-    }, [], ["0", "0", "0", "0"]);
+    let r = nathaniel(
+      (g) => {
+        hand(g, N, code);
+        enemyHere(g, N, PRIEST);
+      },
+      [],
+      ["0", "0", "0", "0"],
+    );
     r = pick(r, /^Play One-Two Punch/);
     return toTurn(r, offered(/^Fight that enemy again/));
   };
@@ -165,7 +199,11 @@ describe("Stand Together", () => {
     });
     const before = [N, DAISY, ROLAND].map((i) => res(r, i));
     r = pick(r, /^Play Stand Together/);
-    expect([N, DAISY, ROLAND].map((i) => res(r, i))).toEqual([before[0] + 2, before[1] + 2, before[2]]);
+    expect([N, DAISY, ROLAND].map((i) => res(r, i))).toEqual([
+      before[0] + 2,
+      before[1] + 2,
+      before[2],
+    ]);
   });
 });
 
@@ -244,17 +282,21 @@ describe("Taunt (3)", () => {
       hand(g, N, "60130");
       const a = enemyHere(g, DAISY);
       const b = enemyHere(g, DAISY);
-      void a; void b;
+      void a;
+      void b;
       inv(g, N).resources = 5;
     });
-    const draws = (x: Result) => x.state.log.filter((e) => e.type === "draw" || e.type === "weakness").length;
+    const draws = (x: Result) =>
+      x.state.log.filter((e) => e.type === "draw" || e.type === "weakness").length;
     const before = draws(r);
     r = pick(r, /^Play Taunt/);
     r = pick(r, /^Ghoul Minion/);
     r = toTurn(r, offered(/^Ghoul Minion|^Done/));
     r = pick(r, /^Ghoul Minion/);
     r = toTurn(r);
-    const minions = Object.values(r.state.cards).filter((c) => c.code === MINION && c.zone === "enemy");
+    const minions = Object.values(r.state.cards).filter(
+      (c) => c.code === MINION && c.zone === "enemy",
+    );
     expect(minions.map((m) => m.engagedWith)).toEqual([N, N]);
     expect(minions.map((m) => m.damage)).toEqual([1, 1]);
     expect(draws(r) - before).toBe(2);
@@ -266,7 +308,10 @@ describe("Taunt (3)", () => {
       enemyHere(g, DAISY);
     });
     r = toTurn(pick(r, "End turn"));
-    r = toTurn(pick(r, "End turn"), (x) => x.state.phase === "enemy" && x.state.pending?.promptKey === "playerWindow");
+    r = toTurn(
+      pick(r, "End turn"),
+      (x) => x.state.phase === "enemy" && x.state.pending?.promptKey === "playerWindow",
+    );
     expect(r.state.phase).toBe("enemy");
     expect(r.state.pending?.promptKey).toBe("playerWindow");
     r = pick(r, /^Taunt/);

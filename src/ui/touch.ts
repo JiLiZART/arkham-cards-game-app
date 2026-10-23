@@ -17,13 +17,22 @@ export interface TapState {
 }
 
 /** what a tap on `id` does: peek it, or choose it when it was just peeked */
-export function tapDecision(prev: TapState, id: string, now: number): { action: "peek" | "choose"; next: TapState } {
-  if (prev.id === id && now - prev.at <= SECOND_TAP_MS) return { action: "choose", next: { id: null, at: 0 } };
+export function tapDecision(
+  prev: TapState,
+  id: string,
+  now: number,
+): { action: "peek" | "choose"; next: TapState } {
+  if (prev.id === id && now - prev.at <= SECOND_TAP_MS)
+    return { action: "choose", next: { id: null, at: 0 } };
   return { action: "peek", next: { id, at: now } };
 }
 
 /** has a press held at `down` turned into a long press by now, at `pos`? */
-export function longPressFired(down: { x: number; y: number; at: number }, pos: { x: number; y: number }, now: number): boolean {
+export function longPressFired(
+  down: { x: number; y: number; at: number },
+  pos: { x: number; y: number },
+  now: number,
+): boolean {
   return now - down.at >= LONG_PRESS_MS && Math.hypot(pos.x - down.x, pos.y - down.y) <= STILL_PX;
 }
 

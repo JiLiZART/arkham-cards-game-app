@@ -12,9 +12,11 @@ Moving the pointer along the hand fan jumps: each card snaps up to its full 1.6Ã
 ## Capabilities
 
 ### New Capabilities
+
 <!-- none -->
 
 ### Modified Capabilities
+
 - `game-table-ui`: the hand fan hover becomes a Dock-style magnification at a smaller zoom; locations show clues as a token stack and a details column on hover.
 
 ## Impact

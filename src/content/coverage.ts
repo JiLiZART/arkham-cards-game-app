@@ -4,32 +4,47 @@ import type { CardCount, ContentCoverage } from "./schema";
 import type { ContentError } from "./loader";
 
 /** how many of some cards work; `works` decides a card (a scenario's own reference card is judged by that scenario's tokens) */
-const count = (db: ContentDb, codes: string[], works: (code: string) => boolean = (code) => implemented(db, code)): CardCount => {
+const count = (
+  db: ContentDb,
+  codes: string[],
+  works: (code: string) => boolean = (code) => implemented(db, code),
+): CardCount => {
   const rest: Record<string, number> = {};
   let n = 0;
   for (const code of codes) {
     if (works(code)) n++;
     else rest[db.cards[code].type] = (rest[db.cards[code].type] ?? 0) + 1;
   }
-  return { total: codes.length, works: n, rest: Object.fromEntries(Object.entries(rest).sort(([a], [b]) => a.localeCompare(b))) };
+  return {
+    total: codes.length,
+    works: n,
+    rest: Object.fromEntries(Object.entries(rest).sort(([a], [b]) => a.localeCompare(b))),
+  };
 };
 
 /** per card pack (the deluxe box, each mythos pack, a Return-to box...): its encounter cards and its player cards (weaknesses included), how many of each work */
 export function packCoverage(db: ContentDb): ContentCoverage["packs"] {
   const byPack: Record<string, string[]> = {};
-  for (const c of Object.values(db.cards)) if (c.type !== "investigator") (byPack[c.pack] ??= []).push(c.code);
+  for (const c of Object.values(db.cards))
+    if (c.type !== "investigator") (byPack[c.pack] ??= []).push(c.code);
   return Object.fromEntries(
-    Object.keys(byPack).sort().map((pack) => [pack, {
-      encounter: count(db, byPack[pack].filter((c) => db.cards[c].faction === "mythos").sort()),
-      player: count(db, byPack[pack].filter((c) => db.cards[c].faction !== "mythos").sort()),
-    }]),
+    Object.keys(byPack)
+      .sort()
+      .map((pack) => [
+        pack,
+        {
+          encounter: count(db, byPack[pack].filter((c) => db.cards[c].faction === "mythos").sort()),
+          player: count(db, byPack[pack].filter((c) => db.cards[c].faction !== "mythos").sort()),
+        },
+      ]),
   );
 }
 
 /** the cards a scenario uses: its encounter sets, side decks, acts, agendas and reference card */
 function usedBy(db: ContentDb, s: ContentDb["scenarios"][string]): string[] {
   const used = new Set<string>();
-  for (const set of [...s.encounterSets, ...Object.values(s.sideDecks).flat()]) for (const c of db.encounterSets[set] ?? []) used.add(c);
+  for (const set of [...s.encounterSets, ...Object.values(s.sideDecks).flat()])
+    for (const c of db.encounterSets[set] ?? []) used.add(c);
   for (const c of [s.card, ...s.acts, ...s.agendas]) if (db.cards[c]) used.add(c);
   return [...used].sort();
 }
@@ -38,9 +53,17 @@ function usedBy(db: ContentDb, s: ContentDb["scenarios"][string]): string[] {
 export function scenarioCoverage(db: ContentDb, id: string): ContentCoverage["scenarios"][string] {
   const s = db.scenarios[id];
   const tokens = tokensReal(db, id);
-  const cards = count(db, usedBy(db, s), (code) => (code === s.card ? tokens : implemented(db, code)));
+  const cards = count(db, usedBy(db, s), (code) =>
+    code === s.card ? tokens : implemented(db, code),
+  );
   const scripted = !!db.scripts[id];
-  return { campaign: Object.values(db.campaigns).find((c) => c.scenarios.includes(id))?.id ?? "", cards, tokens, scripted, complete: cards.works === cards.total && tokens && scripted };
+  return {
+    campaign: Object.values(db.campaigns).find((c) => c.scenarios.includes(id))?.id ?? "",
+    cards,
+    tokens,
+    scripted,
+    complete: cards.works === cards.total && tokens && scripted,
+  };
 }
 
 /** the cards a campaign's scenarios use, how many work, which scenarios have no script; complete when all its scenarios are */
@@ -52,7 +75,11 @@ export function campaignCoverage(db: ContentDb, id: string): ContentCoverage["ca
     return mine.length ? mine.every((s) => tokensReal(db, s.id)) : implemented(db, code);
   });
   const unscripted = scenarios.filter((s) => !db.scripts[s.id]).map((s) => s.id);
-  return { cards, unscripted, complete: scenarios.every((s) => scenarioCoverage(db, s.id).complete) };
+  return {
+    cards,
+    unscripted,
+    complete: scenarios.every((s) => scenarioCoverage(db, s.id).complete),
+  };
 }
 
 /** an investigator works when their card and their signature cards do */
@@ -67,8 +94,16 @@ export function investigatorCoverage(db: ContentDb): ContentCoverage["investigat
 export function contentCoverage(db: ContentDb): ContentCoverage {
   return {
     packs: packCoverage(db),
-    campaigns: Object.fromEntries(Object.keys(db.campaigns).sort().map((id) => [id, campaignCoverage(db, id)])),
-    scenarios: Object.fromEntries(Object.keys(db.scenarios).sort().map((id) => [id, scenarioCoverage(db, id)])),
+    campaigns: Object.fromEntries(
+      Object.keys(db.campaigns)
+        .sort()
+        .map((id) => [id, campaignCoverage(db, id)]),
+    ),
+    scenarios: Object.fromEntries(
+      Object.keys(db.scenarios)
+        .sort()
+        .map((id) => [id, scenarioCoverage(db, id)]),
+    ),
     investigators: investigatorCoverage(db),
   };
 }
@@ -79,7 +114,13 @@ export const coverageJson = (db: ContentDb) => JSON.stringify(contentCoverage(db
 /** content/coverage.json must be what the content gives (the README credits work the same way) */
 export function checkCoverage(db: ContentDb): ContentError[] {
   if (db.coverage && JSON.stringify(db.coverage) === JSON.stringify(contentCoverage(db))) return [];
-  return [{ file: "content/coverage.json", path: "", message: "content/coverage.json is behind the content (npm run coverage)" }];
+  return [
+    {
+      file: "content/coverage.json",
+      path: "",
+      message: "content/coverage.json is behind the content (npm run coverage)",
+    },
+  ];
 }
 
 /** a campaign's chapters (`cards`) must agree with its scenarios: reference card, first agenda, first act */
@@ -89,8 +130,17 @@ export function checkCampaignCards(db: ContentDb): ContentError[] {
     c.cards.forEach((ch, k) => {
       const s = ch.interlude ? undefined : db.scenarios[ch.scenario];
       if (!s) return;
-      for (const [field, want] of [["code", s.card], ["agenda", s.agendas[0]], ["act", s.acts[0]]] as const)
-        if (ch[field] !== want) errors.push({ file: `campaigns/${c.id}/campaign.json`, path: `cards.${k}.${field}`, message: `${ch[field]} but ${ch.scenario} has ${want}` });
+      for (const [field, want] of [
+        ["code", s.card],
+        ["agenda", s.agendas[0]],
+        ["act", s.acts[0]],
+      ] as const)
+        if (ch[field] !== want)
+          errors.push({
+            file: `campaigns/${c.id}/campaign.json`,
+            path: `cards.${k}.${field}`,
+            message: `${ch[field]} but ${ch.scenario} has ${want}`,
+          });
     });
   }
   return errors;

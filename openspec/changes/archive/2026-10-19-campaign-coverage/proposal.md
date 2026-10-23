@@ -14,9 +14,11 @@ Only Night of the Zealot plays by the rules; the other 35 campaigns are generate
 ## Capabilities
 
 ### New Capabilities
+
 - `content-coverage`: the coverage report per pack and per campaign, its committed file, the check that keeps it current, and what "complete" means.
 
 ### Modified Capabilities
+
 - `campaign-play`: Every official campaign can be played (the partly-implemented note comes from coverage and says how far a campaign is); Campaign tiles (the rules filter and badge follow coverage).
 
 ## Impact

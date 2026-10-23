@@ -11,9 +11,13 @@ import { useLayoutMode } from "../layoutMode";
 import { moment } from "./SoundLayer";
 import { bagFrames, shadowFrames, tokenFrames, tokenPath, tossTiming } from "../toss";
 
-const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
+const tr = (key: string, vars?: Record<string, string | number>) =>
+  t(db, gameStore.getState().locale, key, vars);
 /** the bag in the draw stage, and a disc (a token's size on screen); smaller on the phone's short screen (ADR-0005) */
-const SIZES = { desktop: { BAG: 150, DISC: 56, HINT_H: 38 }, phone: { BAG: 84, DISC: 44, HINT_H: 26 } };
+const SIZES = {
+  desktop: { BAG: 150, DISC: 56, HINT_H: 38 },
+  phone: { BAG: 84, DISC: 44, HINT_H: 26 },
+};
 const FLIP_MS = 550;
 const SLIDE_MS = 450;
 
@@ -22,7 +26,10 @@ function circlesFor(game: GameState, e: GameEvent): number {
   const testId = e.data?.testId;
   const out = game.skillTest && game.skillTest.id === testId ? game.skillTest.tokens.length : 0;
   const thisTest = game.log.filter((l) => l.type === "token" && l.data?.testId === testId);
-  const earlier = Math.max(0, thisTest.findIndex((l) => l.text === e.text && l.data?.token === e.data?.token));
+  const earlier = Math.max(
+    0,
+    thisTest.findIndex((l) => l.text === e.text && l.data?.token === e.data?.token),
+  );
   return Math.max(1, game.chaosBag.length + out - earlier);
 }
 
@@ -46,15 +53,25 @@ export function DrawStage({ e, byHand }: { e: GameEvent; byHand: boolean }) {
   useLayoutEffect(() => {
     const r = stage.current!.getBoundingClientRect();
     setArea({ x: 0, y: 0, w: r.width, h: r.height });
-    const card = document.querySelector(".st-subject-card, .st-subject-portrait")?.getBoundingClientRect();
-    setSubject(card ? { x: card.left - r.left, y: card.top - r.top, w: card.width, h: card.height } : null);
+    const card = document
+      .querySelector(".st-subject-card, .st-subject-portrait")
+      ?.getBoundingClientRect();
+    setSubject(
+      card ? { x: card.left - r.left, y: card.top - r.top, w: card.width, h: card.height } : null,
+    );
   }, []);
   // the same test spills the same way after a reload: seeded by the test and the token's place in it
-  const seed = Number(e.data?.testId ?? 0) * 31 + game.log.filter((l) => l.type === "token" && l.data?.testId === e.data?.testId).findIndex((l) => l.text === e.text);
+  const seed =
+    Number(e.data?.testId ?? 0) * 31 +
+    game.log
+      .filter((l) => l.type === "token" && l.data?.testId === e.data?.testId)
+      .findIndex((l) => l.text === e.text);
   const spill = useMemo(() => {
     if (!area) return null;
     // the bottom rows of the stage hold the hint
-    return byHand ? spillLayout(n, seed, { ...area, y: 0, h: area.h - HINT_H }, DISC) : { size: DISC * 1.4, points: [{ x: area.w / 2, y: area.h * 0.38 }] };
+    return byHand
+      ? spillLayout(n, seed, { ...area, y: 0, h: area.h - HINT_H }, DISC)
+      : { size: DISC * 1.4, points: [{ x: area.w / 2, y: area.h * 0.38 }] };
   }, [area, n, seed, byHand]);
   const [picked, setPicked] = useState<number | null>(null);
   const [arrived, setArrived] = useState(false);
@@ -70,7 +87,10 @@ export function DrawStage({ e, byHand }: { e: GameEvent; byHand: boolean }) {
     const from = button();
     if (!area) return;
     if (!el || !from?.width || reducedMotion()) return;
-    const a = el.animate(bagFrames(boxOf(from), boxOf(el.getBoundingClientRect())), { duration: tossTiming(pace, n).bagMs / 0.6, fill: "forwards" });
+    const a = el.animate(bagFrames(boxOf(from), boxOf(el.getBoundingClientRect())), {
+      duration: tossTiming(pace, n).bagMs / 0.6,
+      fill: "forwards",
+    });
     bagAnim.current = a;
     // the bag lands on the table when the toss's arc ends
     const landed = setTimeout(() => moment("bagLand"), tossTiming(pace, n).bagMs);
@@ -80,7 +100,11 @@ export function DrawStage({ e, byHand }: { e: GameEvent; byHand: boolean }) {
     };
   }, [!!area]);
   // the tokens tumble out of the bag's mouth in a stream, each on its own seeded path; the pick waits for the last to come to rest
-  const land = area ? (subject ? bagLanding(subject) : { x: area.w / 2, y: area.h - BAG * 0.35 }) : null;
+  const land = area
+    ? subject
+      ? bagLanding(subject)
+      : { x: area.w / 2, y: area.h - BAG * 0.35 }
+    : null;
   const mouth = land ? { x: land.x + BAG * 0.17, y: land.y - BAG * 0.36 } : null;
   useLayoutEffect(() => {
     if (!spill || !area || !mouth) return;
@@ -89,14 +113,27 @@ export function DrawStage({ e, byHand }: { e: GameEvent; byHand: boolean }) {
     const anims: Animation[] = [];
     // the first tokens hit the table: the clatter is louder the more tokens there are (1 to 30)
     const count = spill.points.length;
-    const clatter = setTimeout(() => moment("tokenClatter", null, 0.6 + 0.4 * Math.min(1, (count - 1) / 29)), timing.launchAt(0) + 250);
+    const clatter = setTimeout(
+      () => moment("tokenClatter", null, 0.6 + 0.4 * Math.min(1, (count - 1) / 29)),
+      timing.launchAt(0) + 250,
+    );
     spill.points.forEach((p, k) => {
       const path = tokenPath({ mouth, rest: p, seed, k, size: spill.size, stage: area });
-      const opts = { duration: timing.pathMs(path.duration), delay: timing.launchAt(k), fill: "backwards" as const };
+      const opts = {
+        duration: timing.pathMs(path.duration),
+        delay: timing.launchAt(k),
+        fill: "backwards" as const,
+      };
       const disc = discs.current[k];
       const shadow = shadows.current[k];
       // a token is there from the moment it leaves the bag
-      if (disc) anims.push(disc.animate(tokenFrames(path, p).map((f, i) => ({ ...f, opacity: i === 0 ? 0 : 1 })), opts));
+      if (disc)
+        anims.push(
+          disc.animate(
+            tokenFrames(path, p).map((f, i) => ({ ...f, opacity: i === 0 ? 0 : 1 })),
+            opts,
+          ),
+        );
       if (shadow) anims.push(shadow.animate(shadowFrames(path, p), opts));
     });
     let live = true;
@@ -120,14 +157,37 @@ export function DrawStage({ e, byHand }: { e: GameEvent; byHand: boolean }) {
     bagAnim.current?.cancel();
     const el = bag.current;
     const to = button();
-    if (motion && el && to?.width) el.animate([{ transform: "rotate(25deg)", opacity: 1 }, { transform: centreTransform(boxOf(el.getBoundingClientRect()), boxOf(to)), opacity: 0.4 }], { duration: 450, delay: 250, easing: "cubic-bezier(.5,0,.6,1)", fill: "forwards" });
+    if (motion && el && to?.width)
+      el.animate(
+        [
+          { transform: "rotate(25deg)", opacity: 1 },
+          {
+            transform: centreTransform(boxOf(el.getBoundingClientRect()), boxOf(to)),
+            opacity: 0.4,
+          },
+        ],
+        { duration: 450, delay: 250, easing: "cubic-bezier(.5,0,.6,1)", fill: "forwards" },
+      );
     const disc = discs.current[k];
     if (motion && disc) {
       setTimeout(() => {
         const target = document.querySelector(".st-strip .st-eq")?.getBoundingClientRect();
         if (!target) return;
         const own = disc.getBoundingClientRect();
-        disc.animate([{ transform: "none" }, { transform: centreTransform(boxOf(own), { x: target.left - 20, y: target.top + target.height / 2 - 17, w: 34, h: 34 }) }], { duration: SLIDE_MS, easing: "cubic-bezier(.5,0,.3,1)", fill: "forwards" });
+        disc.animate(
+          [
+            { transform: "none" },
+            {
+              transform: centreTransform(boxOf(own), {
+                x: target.left - 20,
+                y: target.top + target.height / 2 - 17,
+                w: 34,
+                h: 34,
+              }),
+            },
+          ],
+          { duration: SLIDE_MS, easing: "cubic-bezier(.5,0,.3,1)", fill: "forwards" },
+        );
       }, FLIP_MS);
     }
     setTimeout(next, motion ? FLIP_MS + SLIDE_MS + 50 : 600);
@@ -156,37 +216,56 @@ export function DrawStage({ e, byHand }: { e: GameEvent; byHand: boolean }) {
         <>
           <div className="st-hint">{picked === null && byHand ? tr("draw.hint") : ""}</div>
           {/* the wrapper stays where the bag ends up (the tip points at it); the bag inside grows out of its button */}
-          <span className="st-bag" data-tip="drawbag" style={{ left: land!.x - BAG / 2, top: land!.y - BAG / 2, width: BAG, height: BAG }}>
+          <span
+            className="st-bag"
+            data-tip="drawbag"
+            style={{ left: land!.x - BAG / 2, top: land!.y - BAG / 2, width: BAG, height: BAG }}
+          >
             <span ref={bag} className="st-bag-icon">
               <Icon name="chaosBag" size={BAG} />
             </span>
           </span>
           {spill?.points.map((p, k) => (
-            <span key={`s${k}`} className="disc-shadow" ref={(el) => void (shadows.current[k] = el)} style={{ left: p.x - spill.size / 2, top: p.y - spill.size / 2, width: spill.size, height: spill.size }} />
+            <span
+              key={`s${k}`}
+              className="disc-shadow"
+              ref={(el) => void (shadows.current[k] = el)}
+              style={{
+                left: p.x - spill.size / 2,
+                top: p.y - spill.size / 2,
+                width: spill.size,
+                height: spill.size,
+              }}
+            />
           ))}
           {spill?.points.map((p, k) => (
-              <button
-                key={k}
-                ref={(el) => {
-                  discs.current[k] = el;
-                }}
-                className={`token-circle ${picked === k ? "chosen" : ""} ${byHand ? "" : "auto"}`}
-                style={{ left: p.x - spill.size / 2, top: p.y - spill.size / 2, width: spill.size, height: spill.size }}
-                onClick={() => pick(k)}
-                aria-label={tr("draw.circle")}
-              >
-                <span className="disc-flip">
-                  {/* the token's cardboard edge, a few px behind its face: it shows when the token tilts */}
-                  <span className="disc-edge" />
-                  <span className="disc-face disc-back" />
-                  {picked === k && (
-                    <span className="disc-face disc-front">
-                      <ChaosToken token={token} size={spill.size} />
-                    </span>
-                  )}
-                </span>
-              </button>
-            ))}
+            <button
+              key={k}
+              ref={(el) => {
+                discs.current[k] = el;
+              }}
+              className={`token-circle ${picked === k ? "chosen" : ""} ${byHand ? "" : "auto"}`}
+              style={{
+                left: p.x - spill.size / 2,
+                top: p.y - spill.size / 2,
+                width: spill.size,
+                height: spill.size,
+              }}
+              onClick={() => pick(k)}
+              aria-label={tr("draw.circle")}
+            >
+              <span className="disc-flip">
+                {/* the token's cardboard edge, a few px behind its face: it shows when the token tilts */}
+                <span className="disc-edge" />
+                <span className="disc-face disc-back" />
+                {picked === k && (
+                  <span className="disc-face disc-front">
+                    <ChaosToken token={token} size={spill.size} />
+                  </span>
+                )}
+              </span>
+            </button>
+          ))}
         </>
       )}
     </div>

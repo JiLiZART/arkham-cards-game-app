@@ -16,9 +16,11 @@ Out of scope: haptics, per-location ambience, voice, music on the menu or log sc
 ## Capabilities
 
 ### New Capabilities
+
 - `game-audio`: sound effects for game events and UI moments, trait-based card sounds, scenario music with tension and fight tracks, the volume and mute controls, the audio unlock, and the sound manifest with its CC0 provenance and validation.
 
 ### Modified Capabilities
+
 <!-- none: the menu gains two sliders and the top bar a button, both specified under game-audio -->
 
 ## Impact

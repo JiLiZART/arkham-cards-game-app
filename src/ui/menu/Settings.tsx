@@ -4,7 +4,8 @@ import { db, gameStore, useGame } from "../context";
 import { safeStorage, type Pace } from "../store";
 import { TIPS_KEY } from "../tips";
 
-const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
+const tr = (key: string, vars?: Record<string, string | number>) =>
+  t(db, gameStore.getState().locale, key, vars);
 
 /** language, then three groups: at the table (tap decks, draw by hand, pace with its hint), tips (show, reset), sound (music, effects) */
 export function Settings() {
@@ -16,7 +17,8 @@ export function Settings() {
   const musicVolume = useGame((s) => s.musicVolume);
   const sfxVolume = useGame((s) => s.sfxVolume);
   const [tipsReset, setTipsReset] = useState(false);
-  const { setLocale, setTapDecks, setDrawByHand, setPace, setTipsOn, setVolume } = gameStore.getState();
+  const { setLocale, setTapDecks, setDrawByHand, setPace, setTipsOn, setVolume } =
+    gameStore.getState();
   return (
     <div className="screen settings-screen">
       <h1>{tr("settings.title")}</h1>
@@ -25,32 +27,53 @@ export function Settings() {
           {tr("menu.language")}{" "}
           <select value={locale} onChange={(e) => setLocale(e.target.value)}>
             {locales(db).map((l) => (
-              <option key={l} value={l}>{l.toUpperCase()}</option>
+              <option key={l} value={l}>
+                {l.toUpperCase()}
+              </option>
             ))}
           </select>
         </label>
         <fieldset>
           <legend>{tr("settings.table")}</legend>
           <label>
-            <input type="checkbox" checked={tapDecks} onChange={(e) => setTapDecks(e.target.checked)} /> {tr("menu.tapDecks")}
+            <input
+              type="checkbox"
+              checked={tapDecks}
+              onChange={(e) => setTapDecks(e.target.checked)}
+            />{" "}
+            {tr("menu.tapDecks")}
           </label>
           <label>
-            <input type="checkbox" checked={drawByHand} onChange={(e) => setDrawByHand(e.target.checked)} /> {tr("menu.drawByHand")}
+            <input
+              type="checkbox"
+              checked={drawByHand}
+              onChange={(e) => setDrawByHand(e.target.checked)}
+            />{" "}
+            {tr("menu.drawByHand")}
           </label>
           <label>
             {tr("menu.pace")}{" "}
-            <select value={pace} aria-describedby="pace-hint" onChange={(e) => setPace(e.target.value as Pace)}>
+            <select
+              value={pace}
+              aria-describedby="pace-hint"
+              onChange={(e) => setPace(e.target.value as Pace)}
+            >
               {(["normal", "slow", "tap"] as const).map((p) => (
-                <option key={p} value={p}>{tr(`pace.${p}`)}</option>
+                <option key={p} value={p}>
+                  {tr(`pace.${p}`)}
+                </option>
               ))}
             </select>
           </label>
-          <small id="pace-hint" className="set-hint">{tr(`pace.${pace}.hint`)}</small>
+          <small id="pace-hint" className="set-hint">
+            {tr(`pace.${pace}.hint`)}
+          </small>
         </fieldset>
         <fieldset>
           <legend>{tr("settings.tips")}</legend>
           <label>
-            <input type="checkbox" checked={tipsOn} onChange={(e) => setTipsOn(e.target.checked)} /> {tr("menu.tips")}
+            <input type="checkbox" checked={tipsOn} onChange={(e) => setTipsOn(e.target.checked)} />{" "}
+            {tr("menu.tips")}
           </label>
           <button
             disabled={tipsReset}
@@ -59,16 +82,33 @@ export function Settings() {
               setTipsReset(true);
             }}
           >
-            {tr("menu.resetTips")}{tipsReset ? " ✔" : ""}
+            {tr("menu.resetTips")}
+            {tipsReset ? " ✔" : ""}
           </button>
         </fieldset>
         <fieldset>
           <legend>{tr("settings.sound")}</legend>
           <label className="slider">
-            {tr("menu.music")} <input type="range" min={0} max={100} value={musicVolume} onChange={(e) => setVolume("music", Number(e.target.value))} /> <span>{musicVolume}</span>
+            {tr("menu.music")}{" "}
+            <input
+              type="range"
+              min={0}
+              max={100}
+              value={musicVolume}
+              onChange={(e) => setVolume("music", Number(e.target.value))}
+            />{" "}
+            <span>{musicVolume}</span>
           </label>
           <label className="slider">
-            {tr("menu.effects")} <input type="range" min={0} max={100} value={sfxVolume} onChange={(e) => setVolume("effects", Number(e.target.value))} /> <span>{sfxVolume}</span>
+            {tr("menu.effects")}{" "}
+            <input
+              type="range"
+              min={0}
+              max={100}
+              value={sfxVolume}
+              onChange={(e) => setVolume("effects", Number(e.target.value))}
+            />{" "}
+            <span>{sfxVolume}</span>
           </label>
         </fieldset>
       </section>

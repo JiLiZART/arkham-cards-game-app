@@ -3,6 +3,7 @@
 Card text is still too small to read during play. On a 1600×900 window, a hand card at rest is 210 px tall and a location on the board is about 80 px. The right-hand action sidebar takes 344 px and repeats things that could be done on the cards themselves. The investigator card on the board repeats what the stat bar shows, and the stat icons are too small to tell apart.
 
 The `inspired/` folder now also contains resources we don't use yet:
+
 - ArkhamCards' icon fonts, which have proper action, reaction, fast, health and sanity glyphs and every chaos token;
 - its card fonts;
 - Russian strings for campaigns, scenarios, encounter sets and UI labels;
@@ -56,9 +57,11 @@ The `inspired/` folder now also contains resources we don't use yet:
 ## Capabilities
 
 ### New Capabilities
+
 None.
 
 ### Modified Capabilities
+
 - `game-table-ui`:
   - modified: "Table layout" (left scenario strip, 2× locations, no viewer investigator card, no action sidebar), "Card interaction", "Prompts and choices", "Hand fan" (2× cards, playable cards raised) and "Stat bar" (bigger portrait and icons, tooltips, token stacks; no plaques);
   - added: "Action rail", "Card detail modal" "Other investigators" (portrait tokens and investigator modal) "Investigator markers on the map" and "Drag to move".

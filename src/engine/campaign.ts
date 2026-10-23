@@ -51,14 +51,20 @@ export interface NewCampaign {
 }
 
 const basicWeaknesses = (db: ContentDb, trait?: string) =>
-  Object.values(db.cards).filter((c) => c.subtype === "basicweakness" && c.type !== "investigator" && (!trait || c.traits.includes(trait)));
+  Object.values(db.cards).filter(
+    (c) =>
+      c.subtype === "basicweakness" &&
+      c.type !== "investigator" &&
+      (!trait || c.traits.includes(trait)),
+  );
 
 export function startCampaign(db: ContentDb, opts: NewCampaign): CampaignState {
   const c = db.campaigns[opts.campaignId];
   if (!c) throw new Error(`unknown campaign ${opts.campaignId}`);
   const bag = c.chaosBags[opts.difficulty];
   if (!bag) throw new Error(`${c.name} has no ${opts.difficulty} chaos bag`);
-  if (opts.investigators.length < 1 || opts.investigators.length > 4) throw new Error("1–4 investigators");
+  if (opts.investigators.length < 1 || opts.investigators.length > 4)
+    throw new Error("1–4 investigators");
   const rng = { rng: opts.seed >>> 0 };
   const pool = basicWeaknesses(db);
   const investigators = opts.investigators.map(({ code, deckId, deck: custom }) => {
@@ -66,17 +72,35 @@ export function startCampaign(db: ContentDb, opts: NewCampaign): CampaignState {
     if (!d || d.investigator !== code) throw new Error(`deck ${deckId} is not a ${code} deck`);
     if (custom) {
       const problems = validateDeck(db, custom);
-      if (problems.length) throw new Error(`invalid deck ${deckId}: ${problems.map((p) => p.message).join("; ")}`);
+      if (problems.length)
+        throw new Error(`invalid deck ${deckId}: ${problems.map((p) => p.message).join("; ")}`);
     }
     const deck = expandDeck(d);
     // the random basic weakness is chosen once, at campaign start
     if (d.randomBasicWeakness) deck.push(pool[randInt(rng, pool.length)].code);
-    return { code, deckId, deck, xp: 0, physicalTrauma: 0, mentalTrauma: 0, status: "active" as const };
+    return {
+      code,
+      deckId,
+      deck,
+      xp: 0,
+      physicalTrauma: 0,
+      mentalTrauma: 0,
+      status: "active" as const,
+    };
   });
   const state: CampaignState = {
-    version: ENGINE_VERSION, campaignId: c.id, difficulty: opts.difficulty, seed: opts.seed, rng: rng.rng,
-    log: emptyLog(), chaosBag: [...bag], flow: initFlow(db, c.id), lead: investigators[0].code,
-    investigators, history: [], result: null,
+    version: ENGINE_VERSION,
+    campaignId: c.id,
+    difficulty: opts.difficulty,
+    seed: opts.seed,
+    rng: rng.rng,
+    log: emptyLog(),
+    chaosBag: [...bag],
+    flow: initFlow(db, c.id),
+    lead: investigators[0].code,
+    investigators,
+    history: [],
+    result: null,
   };
   // the campaign's setup and its first interlude run up to the first prompt, or to the first scenario
   return advance(db, state);
@@ -87,7 +111,11 @@ export function startCampaign(db: ContentDb, opts: NewCampaign): CampaignState {
  * notes section, and the flow stands at the scenario the index named, playing it when a game of it was in progress and
  * at its Begin prompt otherwise. A campaign that already has a flow is returned as it is.
  */
-export function migrateCampaign(db: ContentDb, raw: Record<string, any>, inGame: boolean): CampaignState {
+export function migrateCampaign(
+  db: ContentDb,
+  raw: Record<string, any>,
+  inGame: boolean,
+): CampaignState {
   if (raw.flow) return raw as CampaignState;
   const { scenarioIndex, log, ...rest } = raw;
   const def = db.campaigns[raw.campaignId];
@@ -111,11 +139,24 @@ export function scenarioSetup(db: ContentDb, c: CampaignState, seed: number): Ga
   const scenarioId = currentScenarioId(db, c);
   if (!scenarioId) throw new Error("campaign is over");
   const active = c.investigators.filter((i) => i.status === "active");
-  const ordered = [...active.filter((i) => i.code === c.lead), ...active.filter((i) => i.code !== c.lead)];
+  const ordered = [
+    ...active.filter((i) => i.code === c.lead),
+    ...active.filter((i) => i.code !== c.lead),
+  ];
   // scenario setup steps may add tokens on top of this bag (and the campaign keeps them afterwards)
   return {
-    campaignId: c.campaignId, scenarioId, difficulty: c.difficulty, seed, campaignLog: flatLog(c.log), chaosBag: [...c.chaosBag],
-    investigators: ordered.map((i) => ({ code: i.code, deck: i.deck, physicalTrauma: i.physicalTrauma, mentalTrauma: i.mentalTrauma })),
+    campaignId: c.campaignId,
+    scenarioId,
+    difficulty: c.difficulty,
+    seed,
+    campaignLog: flatLog(c.log),
+    chaosBag: [...c.chaosBag],
+    investigators: ordered.map((i) => ({
+      code: i.code,
+      deck: i.deck,
+      physicalTrauma: i.physicalTrauma,
+      mentalTrauma: i.mentalTrauma,
+    })),
   };
 }
 
@@ -136,8 +177,16 @@ function uniqueCultists(db: ContentDb, s: GameState, where: "victory" | "remaini
   for (const c of Object.values(s.cards)) {
     const d = db.cards[c.code];
     if (!d.unique || !d.traits.includes("Cultist") || d.type !== "enemy") continue;
-    const remaining = ["sideDeck", "enemy", "setAside", "encounterDeck", "encounterDiscard", "limbo"].includes(c.zone);
-    if ((where === "victory" && c.zone === "victory") || (where === "remaining" && remaining)) out.add(c.code);
+    const remaining = [
+      "sideDeck",
+      "enemy",
+      "setAside",
+      "encounterDeck",
+      "encounterDiscard",
+      "limbo",
+    ].includes(c.zone);
+    if ((where === "victory" && c.zone === "victory") || (where === "remaining" && remaining))
+      out.add(c.code);
   }
   return [...out];
 }
@@ -159,16 +208,21 @@ export function applyScenarioEnd(db: ContentDb, c0: CampaignState, s: GameState)
     ci.xp += (s.flags[`xp:${i.id}`] as number | undefined) ?? 0;
   }
   // permanent bag additions from this scenario's setup
-  for (const st of db.scenarios[s.scenarioId].setup) if (st.do === "addChaosToken") c.chaosBag.push(st.token);
+  for (const st of db.scenarios[s.scenarioId].setup)
+    if (st.do === "addChaosToken") c.chaosBag.push(st.token);
   c.history.push({ scenarioId: s.scenarioId, resolution: s.resolution, xp: 0, victory });
   settle(db, c);
   return startResolution(db, c, {
     id: s.scenarioId,
     resolution: s.resolution,
     victory,
-    victoryCodes: Object.values(s.cards).filter((x) => x.zone === "victory").map((x) => x.code),
+    victoryCodes: Object.values(s.cards)
+      .filter((x) => x.zone === "victory")
+      .map((x) => x.code),
     cultistsVictory: uniqueCultists(db, s, "victory"),
     cultistsRemaining: uniqueCultists(db, s, "remaining"),
-    notResigned: Object.values(s.invs).filter((i) => i.status !== "resigned").map((i) => i.id),
+    notResigned: Object.values(s.invs)
+      .filter((i) => i.status !== "resigned")
+      .map((i) => i.id),
   });
 }

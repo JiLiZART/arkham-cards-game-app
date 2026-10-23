@@ -1,9 +1,27 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import type { ContentDb } from "../engine/types";
-import { campaignCoverage, checkCampaignCards, scenarioCoverage, checkCoverage, contentCoverage, coverageJson, investigatorCoverage, packCoverage } from "./coverage";
+import {
+  campaignCoverage,
+  checkCampaignCards,
+  scenarioCoverage,
+  checkCoverage,
+  contentCoverage,
+  coverageJson,
+  investigatorCoverage,
+  packCoverage,
+} from "./coverage";
 import { loadContentFromDisk } from "./node";
 
-const card = (code: string, over: object = {}) => ({ code, name: code, type: "treachery", faction: "mythos", pack: "p", text: "", abilities: [], ...over });
+const card = (code: string, over: object = {}) => ({
+  code,
+  name: code,
+  type: "treachery",
+  faction: "mythos",
+  pack: "p",
+  text: "",
+  abilities: [],
+  ...over,
+});
 
 const TOK = { skull: { modifier: -1 } };
 
@@ -12,7 +30,11 @@ const fixture = (scripted: boolean, broken = true): ContentDb =>
   ({
     cards: {
       e1: card("e1", { encounterSet: "set" }),
-      e2: card("e2", { encounterSet: "set", type: "enemy", text: "When this enters play, do a thing." }),
+      e2: card("e2", {
+        encounterSet: "set",
+        type: "enemy",
+        text: "When this enters play, do a thing.",
+      }),
       r1: card("r1", { type: "scenario", encounterSet: "set" }),
       a1: card("a1", { type: "agenda" }),
       c1: card("c1", { type: "act", text: broken ? "Objective - something." : "" }),
@@ -23,7 +45,17 @@ const fixture = (scripted: boolean, broken = true): ContentDb =>
     },
     packs: { p: { loaded: true, cards: ["e1", "e2", "r1", "a1", "c1", "p1", "p2", "i1", "s1"] } },
     encounterSets: { set: ["e1", "e2", "r1"] },
-    scenarios: { s: { id: "s", card: "r1", encounterSets: ["set"], sideDecks: {}, acts: ["c1"], agendas: ["a1"], tokens: { easy: TOK, standard: TOK, hard: TOK, expert: TOK } } },
+    scenarios: {
+      s: {
+        id: "s",
+        card: "r1",
+        encounterSets: ["set"],
+        sideDecks: {},
+        acts: ["c1"],
+        agendas: ["a1"],
+        tokens: { easy: TOK, standard: TOK, hard: TOK, expert: TOK },
+      },
+    },
     campaigns: { camp: { id: "camp", scenarios: ["s"], generated: true } },
     investigators: { i1: { code: "i1", signatures: ["s1"] } },
     scripts: scripted ? { s: { fns: {} } } : {},
@@ -48,7 +80,9 @@ describe("pack coverage by card pack", () => {
 
   it("the Dunwich cycle's deluxe box and its mythos packs are packs of their own", async () => {
     const { db } = await loadContentFromDisk();
-    expect(Object.keys(db.coverage!.packs)).toEqual(expect.arrayContaining(["dwl", "tmm", "tece", "bota", "uau", "wda", "litas"]));
+    expect(Object.keys(db.coverage!.packs)).toEqual(
+      expect.arrayContaining(["dwl", "tmm", "tece", "bota", "uau", "wda", "litas"]),
+    );
   });
 });
 
@@ -87,7 +121,13 @@ describe("campaign coverage", () => {
 describe("scenario coverage", () => {
   it("counts the cards the scenario uses, its tokens, its script, and whether it is complete", () => {
     const db = fixture(false);
-    expect(scenarioCoverage(db, "s")).toEqual({ campaign: "camp", cards: { total: 5, works: 3, rest: { act: 1, enemy: 1 } }, tokens: true, scripted: false, complete: false });
+    expect(scenarioCoverage(db, "s")).toEqual({
+      campaign: "camp",
+      cards: { total: 5, works: 3, rest: { act: 1, enemy: 1 } },
+      tokens: true,
+      scripted: false,
+      complete: false,
+    });
   });
 
   it("is complete when every card works and it is scripted", () => {
@@ -119,7 +159,15 @@ describe("scenario coverage", () => {
     const db = fixture(true);
     db.cards.e2.text = "";
     db.cards.c1.text = "";
-    db.scenarios.rt = { id: "rt", card: "r1", encounterSets: [], sideDecks: {}, acts: [], agendas: [], tokens: { easy: {}, standard: {}, hard: {}, expert: {} } } as never;
+    db.scenarios.rt = {
+      id: "rt",
+      card: "r1",
+      encounterSets: [],
+      sideDecks: {},
+      acts: [],
+      agendas: [],
+      tokens: { easy: {}, standard: {}, hard: {}, expert: {} },
+    } as never;
     db.campaigns.ret = { id: "ret", scenarios: ["rt"], generated: true } as never;
     expect(scenarioCoverage(db, "s")).toMatchObject({ tokens: true, complete: true });
     expect(campaignCoverage(db, "camp").complete).toBe(true);
@@ -157,21 +205,38 @@ describe("the real content", () => {
   });
 
   it("every scenario of a campaign has a report naming it, and The Gathering is not complete until its Hard and Expert tokens are written", () => {
-    expect(Object.keys(db.coverage!.scenarios).length).toBe(Object.values(db.campaigns).flatMap((c) => c.scenarios).length);
+    expect(Object.keys(db.coverage!.scenarios).length).toBe(
+      Object.values(db.campaigns).flatMap((c) => c.scenarios).length,
+    );
     expect(db.coverage!.scenarios["the-gathering"].campaign).toBe("night-of-the-zealot");
-    expect(db.coverage!.scenarios["extracurricular-activity"]).toMatchObject({ campaign: "the-dunwich-legacy", tokens: false, scripted: false, complete: false });
+    expect(db.coverage!.scenarios["extracurricular-activity"]).toMatchObject({
+      campaign: "the-dunwich-legacy",
+      tokens: false,
+      scripted: false,
+      complete: false,
+    });
   });
 
   it("Night of the Zealot is complete: its scenarios scripted, every card working, its tokens real on all four difficulties", () => {
-    expect(campaignCoverage(db, "night-of-the-zealot")).toMatchObject({ complete: true, unscripted: [] });
-    for (const id of ["the-gathering", "the-midnight-masks", "the-devourer-below"]) expect(scenarioCoverage(db, id), id).toMatchObject({ tokens: true, scripted: true, complete: true });
+    expect(campaignCoverage(db, "night-of-the-zealot")).toMatchObject({
+      complete: true,
+      unscripted: [],
+    });
+    for (const id of ["the-gathering", "the-midnight-masks", "the-devourer-below"])
+      expect(scenarioCoverage(db, id), id).toMatchObject({
+        tokens: true,
+        scripted: true,
+        complete: true,
+      });
   });
 
   it("Night of the Zealot has its three scenarios scripted and a few cards left", () => {
     const c = campaignCoverage(db, "night-of-the-zealot");
     expect(c.unscripted).toEqual([]);
     expect(c.cards.total).toBeGreaterThan(60);
-    expect(c.cards.total - c.cards.works).toBe(Object.values(c.cards.rest).reduce((a, b) => a + b, 0));
+    expect(c.cards.total - c.cards.works).toBe(
+      Object.values(c.cards.rest).reduce((a, b) => a + b, 0),
+    );
     expect(c.complete).toBe(c.cards.works === c.cards.total);
   });
 
@@ -180,7 +245,12 @@ describe("the real content", () => {
     expect(c.packs).toEqual(["core"]);
     expect(c.card).toBe("01104");
     expect(c.cards.map((ch) => [ch.scenario, ch.code, ch.agenda, ch.act])).toEqual(
-      c.scenarios.map((id) => [id, db.scenarios[id].card, db.scenarios[id].agendas[0], db.scenarios[id].acts[0]]),
+      c.scenarios.map((id) => [
+        id,
+        db.scenarios[id].card,
+        db.scenarios[id].agendas[0],
+        db.scenarios[id].acts[0],
+      ]),
     );
   });
 
@@ -212,7 +282,9 @@ describe("checkCoverage", () => {
     const db = fixture(false);
     db.coverage = contentCoverage(db);
     db.cards.e2.text = "";
-    expect(checkCoverage(db).map((e) => e.message)).toEqual(["content/coverage.json is behind the content (npm run coverage)"]);
+    expect(checkCoverage(db).map((e) => e.message)).toEqual([
+      "content/coverage.json is behind the content (npm run coverage)",
+    ]);
   });
 
   it("fails when there is no file", () => {
@@ -229,10 +301,19 @@ describe("checkCampaignCards", () => {
     return db;
   };
   it("passes chapters that match their scenarios' reference card, first agenda and first act", () => {
-    expect(checkCampaignCards(withCards([{ scenario: "s", code: "c0", agenda: "a1", act: "c1" }, { scenario: "mid", interlude: true }]))).toEqual([]);
+    expect(
+      checkCampaignCards(
+        withCards([
+          { scenario: "s", code: "c0", agenda: "a1", act: "c1" },
+          { scenario: "mid", interlude: true },
+        ]),
+      ),
+    ).toEqual([]);
   });
   it("names a chapter that drifted", () => {
-    const e = checkCampaignCards(withCards([{ scenario: "s", code: "c0", agenda: "zz", act: "c1" }]));
+    const e = checkCampaignCards(
+      withCards([{ scenario: "s", code: "c0", agenda: "zz", act: "c1" }]),
+    );
     expect(e.map((x) => x.path)).toEqual(["cards.0.agenda"]);
   });
 });

@@ -5,7 +5,14 @@
  */
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
-import { createReadStream, existsSync, readFileSync, statSync, unlinkSync, writeFileSync } from "node:fs";
+import {
+  createReadStream,
+  existsSync,
+  readFileSync,
+  statSync,
+  unlinkSync,
+  writeFileSync,
+} from "node:fs";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { extname, normalize } from "node:path";
 import { z } from "zod";
@@ -19,12 +26,21 @@ const PREFIX = "/__sounds-src/";
 const LOOPBACK = new Set(["127.0.0.1", "::1", "::ffff:127.0.0.1"]);
 
 /** a request from this machine, for localhost by name (not a rebinding of another name to 127.0.0.1), from this page */
-export function isLocalRequest(host: string | undefined, remote: string | undefined, origin?: string): boolean {
+export function isLocalRequest(
+  host: string | undefined,
+  remote: string | undefined,
+  origin?: string,
+): boolean {
   if (!host || !remote || !LOOPBACK.has(remote)) return false;
   const name = (h: string) => h.replace(/:\d+$/, "").replace(/^\[|\]$/g, "");
   const local = (h: string) => ["localhost", "127.0.0.1", "::1"].includes(name(h));
   if (!local(host)) return false;
-  return origin === undefined || (/^https?:\/\//.test(origin) && local(origin.replace(/^https?:\/\//, "")) && origin.endsWith(host));
+  return (
+    origin === undefined ||
+    (/^https?:\/\//.test(origin) &&
+      local(origin.replace(/^https?:\/\//, "")) &&
+      origin.endsWith(host))
+  );
 }
 
 /** the file a /__sounds-src/ request names, inside sounds-src/candidates; null for anything else */
@@ -42,7 +58,12 @@ export function candidateFile(url: string): string | null {
   return `sounds-src/candidates/${clean}`;
 }
 
-const ChoiceBody = z.object({ slot: z.string().min(1), candidate: z.union([z.number().int().min(0), z.literal("none"), z.literal("current")]) }).strict();
+const ChoiceBody = z
+  .object({
+    slot: z.string().min(1),
+    candidate: z.union([z.number().int().min(0), z.literal("none"), z.literal("current")]),
+  })
+  .strict();
 export function parseChoice(body: string): Choice {
   return ChoiceBody.parse(JSON.parse(body));
 }
@@ -52,7 +73,12 @@ export function parseChoices(body: string): Choice[] {
   return ChoicesBody.parse(JSON.parse(body)).choices;
 }
 
-const TYPES: Record<string, string> = { ".mp3": "audio/mpeg", ".m4a": "audio/mp4", ".ogg": "audio/ogg", ".wav": "audio/wav" };
+const TYPES: Record<string, string> = {
+  ".mp3": "audio/mpeg",
+  ".m4a": "audio/mp4",
+  ".ogg": "audio/ogg",
+  ".wav": "audio/wav",
+};
 
 function readBody(req: IncomingMessage, limit = 10_000): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -70,7 +96,11 @@ function readBody(req: IncomingMessage, limit = 10_000): Promise<string> {
 export const applying = { now: false };
 
 /** the connect middleware vite.config.ts mounts while serving; `next` is called for every other URL */
-export async function soundsDevMiddleware(req: IncomingMessage, res: ServerResponse, next: () => void): Promise<void> {
+export async function soundsDevMiddleware(
+  req: IncomingMessage,
+  res: ServerResponse,
+  next: () => void,
+): Promise<void> {
   const url = req.url ?? "";
   if (!url.startsWith(PREFIX) && !url.startsWith("/__sounds/")) return next();
   const send = (status: number, body: unknown) => {
@@ -78,16 +108,22 @@ export async function soundsDevMiddleware(req: IncomingMessage, res: ServerRespo
     res.setHeader("Content-Type", "application/json");
     res.end(JSON.stringify(body));
   };
-  if (!isLocalRequest(req.headers.host, req.socket.remoteAddress, req.headers.origin)) return send(403, { error: "dev tooling answers this machine only" });
+  if (!isLocalRequest(req.headers.host, req.socket.remoteAddress, req.headers.origin))
+    return send(403, { error: "dev tooling answers this machine only" });
   try {
     if (req.method === "GET" && url.startsWith(PREFIX)) {
       const file = candidateFile(url);
-      if (!file || !existsSync(file) || !statSync(file).isFile()) return send(404, { error: "no such candidate" });
-      res.setHeader("Content-Type", TYPES[extname(file).toLowerCase()] ?? "application/octet-stream");
+      if (!file || !existsSync(file) || !statSync(file).isFile())
+        return send(404, { error: "no such candidate" });
+      res.setHeader(
+        "Content-Type",
+        TYPES[extname(file).toLowerCase()] ?? "application/octet-stream",
+      );
       res.setHeader("Cache-Control", "no-cache");
       return void createReadStream(file).pipe(res);
     }
-    if (req.method === "GET" && url === "/__sounds/candidates") return send(200, SoundCandidates.parse(JSON.parse(readFileSync(CANDIDATES, "utf8"))));
+    if (req.method === "GET" && url === "/__sounds/candidates")
+      return send(200, SoundCandidates.parse(JSON.parse(readFileSync(CANDIDATES, "utf8"))));
     if (req.method === "POST" && url === "/__sounds/choose") {
       if (applying.now) return send(409, { error: "an Apply is already running" });
       applying.now = true;
@@ -107,16 +143,27 @@ export async function soundsDevMiddleware(req: IncomingMessage, res: ServerRespo
 /** the picker's Apply: every choice into sounds.json, the importer for the new clips, the unused files removed; undone if the importer fails */
 async function apply(req: IncomingMessage, send: (status: number, body: unknown) => void) {
   const before = readFileSync(MANIFEST, "utf8");
-  const chosen = chooseSounds(SoundManifest.parse(JSON.parse(before)), SoundCandidates.parse(JSON.parse(readFileSync(CANDIDATES, "utf8"))), parseChoices(await readBody(req, 100_000)));
+  const chosen = chooseSounds(
+    SoundManifest.parse(JSON.parse(before)),
+    SoundCandidates.parse(JSON.parse(readFileSync(CANDIDATES, "utf8"))),
+    parseChoices(await readBody(req, 100_000)),
+  );
   // the schema fills in gain 1 everywhere; the file keeps only gains that differ
-  writeFileSync(MANIFEST, `${JSON.stringify(chosen.manifest, (k, v) => (k === "gain" && v === 1 ? undefined : v), 2)}\n`);
+  writeFileSync(
+    MANIFEST,
+    `${JSON.stringify(chosen.manifest, (k, v) => (k === "gain" && v === 1 ? undefined : v), 2)}\n`,
+  );
   try {
     // asynchronous, so the dev server keeps answering (and sees the file change while `applying` holds the reload)
-    if (chosen.importIds.length) await run("npx", ["tsx", "scripts/import-sounds.ts", ...chosen.importIds]);
+    if (chosen.importIds.length)
+      await run("npx", ["tsx", "scripts/import-sounds.ts", ...chosen.importIds]);
   } catch (e) {
     writeFileSync(MANIFEST, before);
-    throw new Error(`the importer failed, the choice is undone: ${(e as { stderr?: string }).stderr ?? e}`);
+    throw new Error(
+      `the importer failed, the choice is undone: ${(e as { stderr?: string }).stderr ?? e}`,
+    );
   }
-  for (const f of chosen.removedFiles) if (existsSync(`public/sounds/${f}`)) unlinkSync(`public/sounds/${f}`);
+  for (const f of chosen.removedFiles)
+    if (existsSync(`public/sounds/${f}`)) unlinkSync(`public/sounds/${f}`);
   return send(200, { manifest: chosen.manifest, imported: chosen.importIds });
 }

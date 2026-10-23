@@ -1,5 +1,13 @@
 // Investigating the Trail (Devourer Below, act 1) — back: Ritual Site enters play; cultists who got away spawn at the Main Path
-import { createCard, findByCode, locationByName, moveCard, push, type CardScript, type G } from "../../../../src/engine/api";
+import {
+  createCard,
+  findByCode,
+  locationByName,
+  moveCard,
+  push,
+  type CardScript,
+  type G,
+} from "../../../../src/engine/api";
 
 export default {
   abilities: [{ kind: "revelation", run: "back" }],

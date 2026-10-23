@@ -8,7 +8,8 @@ import { useView } from "../view";
 import { Modal, OptionButtons, useCardOptions } from "./Modals";
 import { StatBody } from "./Stats";
 
-const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
+const tr = (key: string, vars?: Record<string, string | number>) =>
+  t(db, gameStore.getState().locale, key, vars);
 
 /** every card of an investigator shown in their modal: investigator card, hand, play area, threat area */
 function cardsOf(game: GameState, i: InvId) {
@@ -28,7 +29,9 @@ function useInvOptions(i: InvId) {
   const game = useGame((s) => s.game) as GameState;
   const c = cardsOf(game, i);
   const viewer = viewerOf(game);
-  return useCardOptions([game.invs[i].cardId, ...c.hand, ...c.play, ...c.threat]).filter((o) => optionHome(o, game, viewer) === "invModal" && optionOwner(o, game) === i);
+  return useCardOptions([game.invs[i].cardId, ...c.hand, ...c.play, ...c.threat]).filter(
+    (o) => optionHome(o, game, viewer) === "invModal" && optionOwner(o, game) === i,
+  );
 }
 
 function CardRow({ title, ids }: { title: string; ids: InstId[] }) {
@@ -42,7 +45,12 @@ function CardRow({ title, ids }: { title: string; ids: InstId[] }) {
       </h3>
       <div className="inv-cards">
         {ids.map((id) => (
-          <button key={id} className="card-btn" onClick={() => useView.getState().setModal({ card: id })} title={cardText(db, game.cards[id].code, locale).name}>
+          <button
+            key={id}
+            className="card-btn"
+            onClick={() => useView.getState().setModal({ card: id })}
+            title={cardText(db, game.cards[id].code, locale).name}
+          >
             <CardFace code={game.cards[id].code} locale={locale} />
           </button>
         ))}
@@ -66,12 +74,18 @@ export function InvModal({ inv }: { inv: InvId }) {
         <div className="inv-stats">
           <StatBody inv={inv} />
         </div>
-        <button className="card-btn landscape" onClick={() => useView.getState().setModal({ card: cardId })} title={cardText(db, inv, locale).name}>
+        <button
+          className="card-btn landscape"
+          onClick={() => useView.getState().setModal({ card: cardId })}
+          title={cardText(db, inv, locale).name}
+        >
           <CardFace code={inv} locale={locale} />
         </button>
         <div className="inv-actions">
           <OptionButtons options={options} onChosen={close} />
-          <button className="modal-close" onClick={close}>{tr("modal.close")}</button>
+          <button className="modal-close" onClick={close}>
+            {tr("modal.close")}
+          </button>
         </div>
       </div>
       <CardRow title={tr("modal.hand")} ids={c.hand} />

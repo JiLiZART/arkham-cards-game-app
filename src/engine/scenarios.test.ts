@@ -2,7 +2,16 @@ import { beforeAll, describe, expect, it } from "vitest";
 import { loadCampaign, loadPack } from "../content";
 import { applyScenarioEnd, scenarioSetup, startCampaign } from "./campaign";
 import { flatLog, record } from "./campaignLog";
-import { card, createCard, def, enemyStat, findByCode, inv, locationByName, moveCard } from "./core";
+import {
+  card,
+  createCard,
+  def,
+  enemyStat,
+  findByCode,
+  inv,
+  locationByName,
+  moveCard,
+} from "./core";
 import { createGame, type Result } from "./engine";
 import { finalResolution } from "./rules/scenario";
 import { commitDone, db, gOf, mutate, pick, skipMulligans, start } from "./testkit";
@@ -49,7 +58,9 @@ describe("The Gathering", () => {
     r = commitDone(r);
     expect(r.state.pending?.prompt).toMatch(/Defending the Home/);
     r = settle(r, /Burn it down|^(Pass|done|Done)$/);
-    expect(r.state.log.some((e) => e.type === "actAdvance" && /Defending the Home/.test(e.text))).toBe(true);
+    expect(
+      r.state.log.some((e) => e.type === "actAdvance" && /Defending the Home/.test(e.text)),
+    ).toBe(true);
     expect(r.state.phase).toBe("ended");
     expect(r.state.resolution).toBe("R1");
   });
@@ -86,18 +97,35 @@ describe("The Midnight Masks", () => {
   });
 
   it("six unique cultists in the victory display → Resolution 1, recorded in the campaign log", () => {
-    const c = startCampaign(db, { campaignId: "night-of-the-zealot", difficulty: "standard", seed: 4, investigators: [{ code: ROLAND, deckId: "roland-starter" }] });
+    const c = startCampaign(db, {
+      campaignId: "night-of-the-zealot",
+      difficulty: "standard",
+      seed: 4,
+      investigators: [{ code: ROLAND, deckId: "roland-starter" }],
+    });
     // the campaign as it stands on the way to The Midnight Masks, the house still standing
-    const c2 = { ...c, log: record(c.log, "houseStanding"), flow: { ...c.flow, play: "the-midnight-masks", pos: 1 } };
+    const c2 = {
+      ...c,
+      log: record(c.log, "houseStanding"),
+      flow: { ...c.flow, play: "the-midnight-masks", pos: 1 },
+    };
     let r = skipMulligans(createGame(db, scenarioSetup(db, c2, 3)));
     r = settle(r);
     r = mutate(r, (g) => {
-      for (const code of ["01137", "01138", "01139", "01140", "01141", "01121b"]) moveCard(g, findByCode(g, code)!.id, "victory");
+      for (const code of ["01137", "01138", "01139", "01140", "01141", "01121b"])
+        moveCard(g, findByCode(g, code)!.id, "victory");
     });
     r = pick(r, "Gain 1 resource");
     expect(r.state.resolution).toBe("R1");
     const next = applyScenarioEnd(db, c2, r.state);
-    expect((flatLog(next.log).cultistsInterrogated as string[]).sort()).toEqual(["01121b", "01137", "01138", "01139", "01140", "01141"]);
+    expect((flatLog(next.log).cultistsInterrogated as string[]).sort()).toEqual([
+      "01121b",
+      "01137",
+      "01138",
+      "01139",
+      "01140",
+      "01141",
+    ]);
     expect(flatLog(next.log).cultistsGotAway).toEqual([]);
   });
 
@@ -131,7 +159,12 @@ describe("The Devourer Below", () => {
   const escaped = ["01137", "01139"];
 
   it("acts 1–3 lead to Resolution 1", () => {
-    let r = skipMulligans(start("the-devourer-below", [ROLAND], 2, { chaosBag: ["+1"] as never, campaignLog: { cultistsGotAway: escaped } }));
+    let r = skipMulligans(
+      start("the-devourer-below", [ROLAND], 2, {
+        chaosBag: ["+1"] as never,
+        campaignLog: { cultistsGotAway: escaped },
+      }),
+    );
     r = settle(r);
     expect(card(gOf(r), r.state.agenda!).doom).toBe(1); // 2 cultists got away
     r = mutate(r, (g) => {
@@ -141,7 +174,8 @@ describe("The Devourer Below", () => {
     r = settle(r);
     const g1 = gOf(r);
     expect(findByCode(g1, "01156")!.zone).toBe("location");
-    for (const code of escaped) expect(def(g1, findByCode(g1, code, ["enemy"])!.location!).name).toBe("Main Path");
+    for (const code of escaped)
+      expect(def(g1, findByCode(g1, code, ["enemy"])!.location!).name).toBe("Main Path");
     expect(act(r)).toBe("Into the Darkness");
     r = mutate(r, (g) => {
       for (const e of Object.values(g.s.cards)) if (e.zone === "enemy") e.engagedWith = null;
@@ -153,7 +187,8 @@ describe("The Devourer Below", () => {
     r = mutate(r, (g) => {
       card(g, g.s.act!).clues = 1;
       inv(g, ROLAND).clues = 1;
-      for (const e of Object.values(g.s.cards)) if (e.zone === "enemy") moveCard(g, e.id, "encounterDiscard");
+      for (const e of Object.values(g.s.cards))
+        if (e.zone === "enemy") moveCard(g, e.id, "encounterDiscard");
     });
     r = pick(r, /Disrupting the Ritual: spend 1 clue/);
     r = settle(r, /^Test willpower|^(Pass|done|Done)$/);
@@ -207,7 +242,13 @@ describe("a generated scenario ends at its last act or agenda", () => {
     await loadPack("dwl");
     await loadCampaign("the-dunwich-legacy");
   });
-  const dunwich = (seed = 3) => skipMulligans(start("extracurricular-activity", [ROLAND], seed, { campaignId: "the-dunwich-legacy", chaosBag: ["+1"] as never }));
+  const dunwich = (seed = 3) =>
+    skipMulligans(
+      start("extracurricular-activity", [ROLAND], seed, {
+        campaignId: "the-dunwich-legacy",
+        chaosBag: ["+1"] as never,
+      }),
+    );
 
   it("advancing the act when no act is left ends the scenario: After Hours, made the last, names none and gives Resolution 1", () => {
     let r = dunwich();
@@ -238,7 +279,9 @@ describe("a generated scenario ends at its last act or agenda", () => {
   it("without a marker the last act gives the first numbered resolution, the last agenda none", () => {
     expect(finalResolution("Proceed to <b>(→R2)</b>.", ["none", "R1", "R2"], "act")).toBe("R2");
     expect(finalResolution("The campus is quiet again.", ["none", "R2", "R1"], "act")).toBe("R1");
-    expect(finalResolution("Each investigator is defeated.", ["none", "R1"], "agenda")).toBe("none");
+    expect(finalResolution("Each investigator is defeated.", ["none", "R1"], "agenda")).toBe(
+      "none",
+    );
     expect(finalResolution("(→R5)", ["none", "R1"], "act")).toBe("R1");
   });
 });
