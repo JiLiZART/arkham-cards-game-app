@@ -8,7 +8,12 @@ const KEYWORD =
 /** the spawn values the engine resolves (rules/enemies.ts): the two keywords, or the name of a location in the content */
 function spawnResolves(db: ContentDb, spawn: string | undefined): boolean {
   if (!spawn) return false;
-  if (spawn === "emptyLocation" || spawn === "Engaged with Prey") return true;
+  if (
+    spawn === "emptyLocation" ||
+    spawn === "farthestEmptyLocation" ||
+    spawn === "Engaged with Prey"
+  )
+    return true;
   return Object.values(db.cards).some((c) => c.type === "location" && c.name === spawn);
 }
 
@@ -19,6 +24,8 @@ const LINE_RULES: [RegExp, (c: CardDef, db: ContentDb) => boolean][] = [
   [/investigated using \[\w+\] instead/i, (c) => !!c.investigateSkill],
   [/^Uses \(/, (c) => !!c.uses],
   [/^Max \d+ committed per skill test/i, (c) => c.maxCommitted !== undefined],
+  [/^As an additional cost to commit .*, take \d+ horror/i, (c) => !!c.commitHorror],
+  [/^You may commit .* after revealing chaos tokens/i, (c) => !!c.commitAfterReveal],
 ];
 
 const keywordsOnly = (line: string) =>

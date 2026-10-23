@@ -77,10 +77,16 @@ export const spawnHandler: Handler<"Spawn"> = (g, step) => {
     at = ctx.location;
   }
   if (!at && d.spawn) {
-    if (d.spawn === "emptyLocation") {
-      const empty = locations(g).filter(
+    if (d.spawn === "emptyLocation" || d.spawn === "farthestEmptyLocation") {
+      let empty = locations(g).filter(
         (l) => invsAt(g, l.id).length === 0 && !enemies(g).some((e) => e.location === l.id),
       );
+      // the farthest from the investigator who drew it (The Nameless Lurker)
+      if (d.spawn === "farthestEmptyLocation" && drawerLoc && empty.length) {
+        const dist = distances(g, drawerLoc);
+        const far = Math.max(...empty.map((l) => dist.get(l.id) ?? -1));
+        empty = empty.filter((l) => (dist.get(l.id) ?? -1) === far);
+      }
       if (empty.length) {
         const pick = ask<InstId>(
           g,
@@ -154,6 +160,7 @@ export const spawnHandler: Handler<"Spawn"> = (g, step) => {
   push(
     g,
     win("enemySpawns", { inv: step.inv, enemy: step.enemy, location: at }),
+    win("enemyEntersLocation", { enemy: step.enemy, location: at }),
     win("enterPlay", { card: step.enemy, enemy: step.enemy }),
     ...(engage ? [win("enemyEngages", { inv: engage, enemy: step.enemy })] : []),
     { t: "CheckObjectives" },
@@ -183,6 +190,8 @@ export const resolveAttackHandler: Handler<"ResolveAttack"> = (g, step) => {
   if (!isElite(g, step.enemy) && hasFlag(g, step.inv, "nonEliteCannotAttack")) return;
   const bonus = (g.s.flags[`attackBonus:${step.key}`] as number | undefined) ?? 0;
   delete g.s.flags[`attackBonus:${step.key}`];
+  // "if this enemy attacked you this round" (Daniela's Wrench)
+  g.s.flags[`attacked:${step.enemy}:${step.inv}`] = g.s.round;
   const damage = enemyStat(g, step.enemy, "damage") + bonus;
   const horror = enemyStat(g, step.enemy, "horror") + bonus;
   emit(
@@ -252,6 +261,8 @@ export const damageEnemyHandler: Handler<"DamageEnemy"> = (g, step) => {
     `${def(g, step.enemy).name} takes ${amount} damage (${e.damage}/${health})`,
     { card: step.enemy, data: { amount } },
   );
+  // after an investigator's damage is placed (In Harm's Way)
+  if (step.by) push(g, win("enemyDamaged", { inv: step.by, enemy: step.enemy, amount }));
   if (e.damage >= health) {
     push(
       g,
@@ -343,8 +354,13 @@ export const hunterMovesHandler: Handler<"HunterMoves"> = (g, step) => {
   if (p && !def(g, e.id).keywords.includes("aloof") && !isMassive(g, e.id)) {
     e.engagedWith = p;
     emit(g, "engage", `${def(g, e.id).name} engages ${invName(g, p)}`, { inv: p, card: e.id });
-    push(g, win("enemyEngages", { inv: p, enemy: e.id }), next);
-  } else push(g, next);
+    push(
+      g,
+      win("enemyEntersLocation", { enemy: e.id, location: to }),
+      win("enemyEngages", { inv: p, enemy: e.id }),
+      next,
+    );
+  } else push(g, win("enemyEntersLocation", { enemy: e.id, location: to }), next);
 };
 
 export const enemyAttacksHandler: Handler<"EnemyAttacks"> = (g, step) => {

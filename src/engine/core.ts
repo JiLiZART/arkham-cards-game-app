@@ -1,8 +1,10 @@
+import { shuffle } from "./rng";
 import type {
   Ability,
   CardDef,
   CardFilter,
   Condition,
+  Cost,
   Modifier,
   ModStat,
   Skill,
@@ -263,6 +265,16 @@ export function moveCard(
   }
 }
 
+/** shuffle a card into its owner's deck */
+export function shuffleIntoDeck(g: G, id: InstId, owner: InvId) {
+  moveCard(g, id, "deck", { inv: owner });
+  shuffle(g.s, inv(g, owner).deck);
+  emit(g, "shuffle", `${def(g, id).name} is shuffled into ${invName(g, owner)}'s deck`, {
+    inv: owner,
+    card: id,
+  });
+}
+
 /** discard a card to its owner's discard pile or the encounter discard */
 export function discard(g: G, id: InstId) {
   const c = card(g, id);
@@ -345,6 +357,7 @@ export function matchesFilter(g: G, code: string, f: CardFilter): boolean {
   if (f.weakness !== undefined && !!d.subtype !== f.weakness) return false;
   if (f.elite !== undefined && d.traits.includes("Elite") !== f.elite) return false;
   if (f.faction && !arr(f.faction)!.includes(d.faction)) return false;
+  if (f.maxXp !== undefined && (d.xp ?? 0) > f.maxXp) return false;
   return true;
 }
 
@@ -576,6 +589,26 @@ export function expireMods(g: G, until: "test" | "turn" | "phase" | "round") {
   g.s.tempMods = g.s.tempMods.filter((t) => t.until !== until);
 }
 
+// ---------- costs ----------
+export function canPay(g: G, i: InvId, cardId: InstId, cost: Cost | undefined): boolean {
+  if (!cost) return true;
+  const c = card(g, cardId);
+  const me = inv(g, i);
+  if (cost.exhaust && c.exhausted) return false;
+  if (cost.uses && c.uses < cost.uses) return false;
+  if (cost.resources && me.resources < cost.resources) return false;
+  if (cost.resourcesOrUses && c.uses < cost.resourcesOrUses && me.resources < cost.resourcesOrUses)
+    return false;
+  if (cost.clues && (me.clues < cost.clues || hasFlag(g, i, "cannotSpendClues"))) return false;
+  if (cost.cluesPerInvestigator) {
+    const total = activeInvs(g).reduce((n, x) => n + inv(g, x).clues, 0);
+    if (total < cost.cluesPerInvestigator * playerCount(g)) return false;
+  }
+  if (cost.discardFromHand && me.hand.filter((h) => h !== cardId).length < cost.discardFromHand)
+    return false;
+  return true;
+}
+
 // ---------- conditions ----------
 
 export function checkCondition(g: G, c: Condition, ctx: EffCtx): boolean {
@@ -649,6 +682,17 @@ export function checkCondition(g: G, c: Condition, ctx: EffCtx): boolean {
   }
   if ("defeatedHealthThisTurn" in c)
     return !!you && inv(g, you).defeatedHealth >= c.defeatedHealthThisTurn.min;
+  if ("testSource" in c) {
+    const src = g.s.skillTest?.source;
+    return !!src && !!g.s.cards[src] && matchesFilter(g, card(g, src).code, c.testSource);
+  }
+  if ("remainingSanity" in c) return !!you && remainingSanity(g, you) <= c.remainingSanity.max;
+  if ("eventEnemyExhausted" in c) return !!ctx.enemy && !!g.s.cards[ctx.enemy]?.exhausted;
+  if ("eventEnemyAttackedYouThisRound" in c)
+    return !!ctx.enemy && g.s.flags[`attacked:${ctx.enemy}:${you}`] === g.s.round;
+  if ("eventCardIsSelf" in c) return !!ctx.card && ctx.card === ctx.source;
+  if ("canPay" in c) return !!you && !!ctx.source && canPay(g, you, ctx.source, c.canPay);
+  if ("testTokens" in c) return !!g.s.skillTest?.tokens.some((t) => c.testTokens.includes(t));
   if ("controlled" in c) return !!ctx.source && !!card(g, ctx.source).controller === c.controlled;
   if ("exhausted" in c) return !!ctx.source && card(g, ctx.source).exhausted === c.exhausted;
   return false;

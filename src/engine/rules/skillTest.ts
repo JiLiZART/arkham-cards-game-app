@@ -1,4 +1,4 @@
-import type { Effect, Skill, SymbolToken } from "../../content/schema";
+import type { Boost, Effect, Skill, SymbolToken } from "../../content/schema";
 import { randInt } from "../rng";
 import {
   abilitiesOf,
@@ -22,7 +22,7 @@ import {
   type G,
 } from "../core";
 import type { EffCtx, InstId, InvId, SkillTestState, Step } from "../types";
-import { activatable, canPlay, win } from "./cards";
+import { activatable, canPay, canPlay, payCost, win } from "./cards";
 import { attackKey } from "./enemies";
 import { tokenX } from "./tokens";
 
@@ -46,7 +46,9 @@ export interface TestOpts {
   after?: { code: string; fn: string };
   onTokens?: { tokens: string[]; effects: Effect[] };
   marginDamage?: number;
-  damagePerMargin?: { max: number; instead?: boolean };
+  damagePerMargin?: { max: number; instead?: boolean; failMax?: number };
+  boost?: Boost;
+  onDefeat?: Effect[];
   autoSucceed?: boolean;
   ctx: EffCtx;
 }
@@ -80,6 +82,8 @@ export function startTest(g: G, o: TestOpts) {
     onTokens: o.onTokens,
     marginDamage: o.marginDamage,
     damagePerMargin: o.damagePerMargin,
+    boost: o.boost,
+    onDefeat: o.onDefeat,
     ctx: o.ctx,
     tokenOnFail: [],
     tokenAfter: [],
@@ -247,6 +251,23 @@ function commitStage(g: G, step: Extract<Step, { t: "Test" }>) {
       inv: who,
       card: pick.commit,
     });
+    // an additional cost to commit it (Soul Link)
+    const horror = def(g, pick.commit).commitHorror;
+    if (horror) {
+      push(
+        g,
+        {
+          t: "AssignDamage",
+          inv: who,
+          damage: 0,
+          horror,
+          direct: false,
+          source: pick.commit,
+        },
+        { ...step, choice: undefined },
+      );
+      return;
+    }
   } else if ("uncommit" in pick) {
     const k = t.committed.indexOf(pick.uncommit);
     t.committed.splice(k, 1);
@@ -438,8 +459,45 @@ export function tokenTotal(g: G, t: SkillTestState): number {
   }, 0);
 }
 
-function resultStage(g: G) {
+function resultStage(g: G, step: Extract<Step, { t: "Test" }>) {
   const t = test(g);
+  // a card committed after the reveal (Timely Intervention): asked once, before the result
+  if (!t.lateAsked) {
+    const late = inv(g, t.inv).hand.filter(
+      (h) => def(g, h).commitAfterReveal && canCommit(g, t.inv, h, t),
+    );
+    if (late.length) {
+      const pick = ask<InstId | "none">(
+        g,
+        step,
+        t.inv,
+        "commit",
+        `${invName(g, t.inv)}: commit a card after the reveal?`,
+        [
+          { id: "none", label: "Done", value: "none" },
+          ...late.map((h) => ({
+            id: h,
+            label: `Commit ${def(g, h).name} (+${iconsFor(g, h, testedSkill(g, t))})`,
+            card: h,
+            value: h,
+          })),
+        ],
+        { key: "commit", vars: { by: t.inv, skill: t.skill } },
+      );
+      if (pick === undefined) return;
+      if (pick !== "none") {
+        moveCard(g, pick, "commit");
+        card(g, pick).controller = t.inv;
+        t.committed.push(pick);
+        t.committers.push(t.inv);
+        emit(g, "commit", `${invName(g, t.inv)} commits ${def(g, pick).name}`, {
+          inv: t.inv,
+          card: pick,
+        });
+      }
+    }
+    t.lateAsked = true;
+  }
   const value = testValue(g, t);
   const tokens = tokenTotal(g, t);
   const total = Math.max(0, value + tokens);
@@ -554,8 +612,48 @@ function marginDamage(t: SkillTestState): number {
   return m.instead ? Math.min(m.max, Math.max(1, by)) : 1 + Math.min(m.max, Math.max(0, by));
 }
 
-function kindResultStage(g: G) {
+function kindResultStage(g: G, step: Extract<Step, { t: "Test" }>) {
   const t = test(g);
+  // after a success, before its damage or clues: the test's source may be paid for more (Sledgehammer)
+  if (t.success && t.boost && !t.boostDone) {
+    const src = t.source;
+    if (src && g.s.cards[src] && canPay(g, t.inv, src, t.boost.cost)) {
+      const yes = ask<boolean>(
+        g,
+        step,
+        t.inv,
+        "generic",
+        `${def(g, src).name}: pay for more?`,
+        [
+          {
+            id: "yes",
+            label: `Use ${def(g, src).name}`,
+            value: true,
+            key: "option.boost",
+            vars: { code: card(g, src).code },
+          },
+          { id: "no", label: "No", value: false, key: "option.boostNo" },
+        ],
+        { key: "testBoost", vars: { card: src } },
+      );
+      if (yes === undefined) return;
+      t.boostDone = true;
+      if (yes) {
+        t.damageBonus += t.boost.damage ?? 0;
+        t.boostClues = t.boost.clues ?? 0;
+        push(
+          g,
+          ...payCost(g, t.inv, src, t.boost.cost),
+          { t: "Test", stage: "kindResult" },
+          ...(t.boost.effects?.length
+            ? [{ t: "Effects" as const, effects: t.boost.effects, ctx: { ...t.ctx, you: t.inv } }]
+            : []),
+        );
+        return;
+      }
+    }
+    t.boostDone = true;
+  }
   const steps: Step[] = [];
   if (t.success) {
     if (t.kind === "investigate" && t.target) {
@@ -570,7 +668,7 @@ function kindResultStage(g: G) {
           t: "DiscoverClues",
           inv: t.inv,
           location: t.target,
-          n: 1 + modSum(g, t.inv, "clueBonus"),
+          n: 1 + modSum(g, t.inv, "clueBonus") + (t.boostClues ?? 0),
         });
       steps.push(win("locationInvestigated", { location: t.target, inv: null }));
     }
@@ -587,6 +685,20 @@ function kindResultStage(g: G) {
         attack: true,
         source: t.source,
       });
+      // "if this attack defeats an enemy" (Decisive Strike)
+      if (t.onDefeat?.length)
+        steps.push({
+          t: "Effects",
+          effects: [
+            {
+              op: "chooseOne",
+              options: [
+                { label: "", condition: { not: { eventEnemyInPlay: true } }, effects: t.onDefeat },
+              ],
+            },
+          ],
+          ctx: { ...t.ctx, you: t.inv, enemy: t.target },
+        });
     }
     if (t.kind === "evade" && t.target) {
       const e = g.s.cards[t.target];
@@ -618,7 +730,10 @@ function kindResultStage(g: G) {
         t: "AssignDamage",
         inv: e.engagedWith,
         damage: t.damagePerMargin
-          ? Math.min(t.damagePerMargin.max, Math.max(1, -(t.margin ?? 0)))
+          ? Math.min(
+              t.damagePerMargin.failMax ?? t.damagePerMargin.max,
+              Math.max(1, -(t.margin ?? 0)),
+            )
           : enemyStat(g, t.target, "damage"),
         horror: 0,
         direct: false,
@@ -657,11 +772,11 @@ export const testHandler: Handler<"Test"> = (g, step) => {
     case "resolveTokens":
       return resolveTokensStage(g);
     case "result":
-      return resultStage(g);
+      return resultStage(g, step);
     case "apply":
       return applyStage(g);
     case "kindResult":
-      return kindResultStage(g);
+      return kindResultStage(g, step);
     case "end":
       return endStage(g);
   }

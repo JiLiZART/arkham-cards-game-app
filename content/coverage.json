@@ -330,13 +330,9 @@
    },
    "player": {
     "total": 72,
-    "works": 2,
+    "works": 71,
     "rest": {
-     "asset": 39,
-     "enemy": 2,
-     "event": 17,
-     "skill": 6,
-     "treachery": 6
+     "asset": 1
     }
    }
   },
@@ -5823,11 +5819,11 @@
   "11011": false,
   "11014": false,
   "11017": false,
-  "12001": false,
-  "12004": false,
-  "12007": false,
-  "12010": false,
-  "12013": false,
+  "12001": true,
+  "12004": true,
+  "12007": true,
+  "12010": true,
+  "12013": true,
   "60101": true,
   "60151": false,
   "60201": false,

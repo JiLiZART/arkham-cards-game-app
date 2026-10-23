@@ -1,4 +1,4 @@
-import type { Ability, Effect, OnTokens, Skill } from "../../content/schema";
+import type { Ability, Boost, Effect, OnTokens, Skill } from "../../content/schema";
 import {
   abilitiesOf as abilitiesOfCard,
   activeInvs,
@@ -24,7 +24,7 @@ import {
   threatArea,
   type G,
 } from "../core";
-import type { ChoiceOption, InvId, Step, TurnAction } from "../types";
+import type { ChoiceOption, EffCtx, InvId, Step, TurnAction } from "../types";
 import { activatable, canPlay, playAbility, win } from "./cards";
 import { attacksOfOpportunity } from "./enemies";
 import { canMoveTo, checkEngagement } from "./investigators";
@@ -102,6 +102,7 @@ export const investigationHandler: Handler<"InvestigationPhase"> = (g) => {
     win("phaseBegins", { phase: "investigation" }),
     win("playerWindow", { phase: "investigation" }),
     { t: "NextTurn" },
+    win("phaseEnds", { phase: "investigation" }),
   );
 };
 
@@ -330,6 +331,14 @@ export const endTurnHandler: Handler<"EndTurn"> = (g, step) => {
 };
 
 export function endTurnCleanup(g: G, i: InvId) {
+  // effects that waited for the end of this turn (Prestidigitation)
+  const due = (
+    (g.s.flags.atTurnEnd as { inv: InvId; effects: Effect[]; ctx: EffCtx }[]) ?? []
+  ).filter((d) => d.inv === i);
+  if (due.length) {
+    g.s.flags.atTurnEnd = (g.s.flags.atTurnEnd as { inv: InvId }[]).filter((d) => d.inv !== i);
+    push(g, ...due.map((d): Step => ({ t: "Effects", effects: d.effects, ctx: d.ctx })));
+  }
   expireMods(g, "turn");
   if (g.s.active === i) g.s.active = null;
 }
@@ -356,7 +365,14 @@ export const performActionHandler: Handler<"PerformAction"> = (g, step) => {
     me.actionsTaken++;
   }
   const steps: Step[] = [];
-  if (cost > 0 && !NO_AOO.includes(designator) && abilityOfAction(g, a)?.aoo !== false)
+  // Dr. Henry Armitage: the first action each round provokes none
+  const firstFree = hasFlag(g, i, "firstActionNoAoO") && me.actionsThisRound.length === 1;
+  if (
+    cost > 0 &&
+    !firstFree &&
+    !NO_AOO.includes(designator) &&
+    abilityOfAction(g, a)?.aoo !== false
+  )
     steps.push(...attacksOfOpportunity(g, i));
   const ctx = { you: i, inv: i };
   switch (a.kind) {
@@ -428,6 +444,7 @@ export function basicInvestigate(
     onSuccess?: Effect[];
     onFail?: Effect[];
     onTokens?: OnTokens;
+    boost?: Boost;
   } = {},
 ) {
   const skill = extra.skill ?? def(g, loc).investigateSkill ?? "intellect";
@@ -444,6 +461,7 @@ export function basicInvestigate(
     onSuccess: extra.onSuccess,
     onFail: extra.onFail,
     onTokens: extra.onTokens,
+    boost: extra.boost,
     ctx: { you: i, location: loc, source: extra.source ?? null },
   });
 }
@@ -464,9 +482,15 @@ export const enemyPhaseHandler: Handler<"EnemyPhase"> = (g) => {
 
 // ---------- upkeep ----------
 export function readyAll(g: G) {
-  for (const c of Object.values(g.s.cards))
+  for (const c of Object.values(g.s.cards)) {
+    // an enemy kept from readying this upkeep (Slippery)
+    if (g.s.flags[`noReady:${c.id}`]) {
+      delete g.s.flags[`noReady:${c.id}`];
+      continue;
+    }
     if (["play", "enemy", "location", "attached", "investigator", "threat"].includes(c.zone))
       c.exhausted = false;
+  }
   emit(g, "ready", "All exhausted cards are readied");
 }
 

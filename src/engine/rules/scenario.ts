@@ -240,9 +240,9 @@ export const resolutionHandler: Handler<"Resolution"> = (g, step) => {
   g.s.resolution = step.id;
   g.s.queue = [];
   g.s.pending = null;
-  // "when the game ends" effects (Cover Up, Hospital Debts)
+  // "when the game ends" effects (Cover Up, Hospital Debts; Dead Ends in the hand)
   for (const c of Object.values(g.s.cards)) {
-    if (c.zone !== "threat" && c.zone !== "play") continue;
+    if (c.zone !== "threat" && c.zone !== "play" && c.zone !== "hand") continue;
     g.db.scripts[c.code]?.hooks?.gameEnd?.(g, { source: c.id, you: c.controller });
   }
   const r = g.db.scenarios[g.s.scenarioId].resolutions[step.id];

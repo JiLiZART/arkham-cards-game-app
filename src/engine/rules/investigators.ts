@@ -81,6 +81,8 @@ export const drawHandler: Handler<"Draw"> = (g, step) => {
     });
   const rest: Step[] =
     step.n > 1 ? [{ t: "Draw", inv: step.inv, n: step.n - 1, tapped: true }] : [];
+  // "after you draw X" (Detective's Intuition)
+  if (!weakness) rest.unshift(win("cardDrawn", { inv: step.inv, card: id }));
   if (weakness) {
     // weaknesses resolve immediately
     if (d.type === "enemy") push(g, { t: "Spawn", enemy: id, inv: step.inv }, ...rest);
@@ -93,7 +95,19 @@ export const drawHandler: Handler<"Draw"> = (g, step) => {
 // ---------- damage & horror ----------
 /** assets that can soak damage (health) or horror (sanity) */
 function soakers(g: G, i: InvId, kind: 0 | 1, assigned: Record<string, [number, number]>) {
-  return controlled(g, i).filter((c) => {
+  const here = inv(g, i).location;
+  // another investigator's asset that may be assigned damage dealt at its location (Bodyguard)
+  const guards =
+    kind === 0
+      ? cardsIn(g, "play").filter(
+          (c) =>
+            c.controller &&
+            c.controller !== i &&
+            def(g, c.id).soaksForLocation &&
+            inv(g, c.controller).location === here,
+        )
+      : [];
+  return [...controlled(g, i), ...guards].filter((c) => {
     const d = def(g, c.id);
     const cap = kind === 0 ? d.health : d.sanity;
     if (!cap) return false;
@@ -222,6 +236,7 @@ export const afterDamageHandler: Handler<"AfterDamage"> = (g, step) => {
     const c = g.s.cards[a];
     if (!c || c.zone !== "play") continue;
     if (enemy && c.damage > 0) steps.push(win("assetDamaged", { inv: step.inv, card: a, enemy }));
+    if (c.horror > 0) steps.push(win("horrorOnAsset", { inv: c.controller, card: a }));
   }
   // asset defeat
   steps.push({ t: "Script", code: "__engine", fn: "assetDefeatCheck", ctx: { you: step.inv } });
@@ -229,18 +244,37 @@ export const afterDamageHandler: Handler<"AfterDamage"> = (g, step) => {
   if (step.damage > 0)
     steps.push(win("damageTaken", { inv: step.inv, amount: step.damage, enemy }));
   if (step.horror > 0) steps.push(win("horrorTaken", { inv: step.inv, amount: step.horror }));
+  if (step.damage > 0 || step.horror > 0)
+    steps.push(win("damageOrHorrorTaken", { inv: step.inv, enemy }));
   steps.push({ t: "CheckDefeat", inv: step.inv });
   push(g, ...steps);
 };
 
 export function assetDefeatCheck(g: G, i: InvId) {
-  for (const c of controlled(g, i)) {
+  // every investigator's: a Bodyguard takes damage dealt to another
+  for (const c of cardsIn(g, "play")) {
+    if (!c.controller || (c.controller !== i && !def(g, c.id).soaksForLocation)) continue;
     const d = def(g, c.id);
     if ((d.health && c.damage >= d.health) || (d.sanity && c.horror >= d.sanity)) {
+      if (g.s.flags[`dying:${c.id}`]) continue;
       emit(g, "assetDefeated", `${d.name} is defeated`, { card: c.id });
-      moveCard(g, c.id, c.owner ? "discard" : "encounterDiscard", { inv: c.owner });
+      // "when defeated" reactions resolve while it is still in play, then it leaves
+      g.s.flags[`dying:${c.id}`] = true;
+      push(g, win("assetDefeated", { inv: c.controller, card: c.id }), {
+        t: "Script",
+        code: "__engine",
+        fn: "removeDefeatedAsset",
+        ctx: { source: c.id },
+      });
     }
   }
+}
+
+export function removeDefeatedAsset(g: G, id: InstId) {
+  delete g.s.flags[`dying:${id}`];
+  const c = g.s.cards[id];
+  if (c?.zone === "play")
+    moveCard(g, id, c.owner ? "discard" : "encounterDiscard", { inv: c.owner });
 }
 
 export const checkDefeatHandler: Handler<"CheckDefeat"> = (g, step) => {

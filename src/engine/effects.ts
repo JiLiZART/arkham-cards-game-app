@@ -25,13 +25,15 @@ import {
   moveCard,
   playerCount,
   push,
+  shuffleIntoDeck,
+  skillValue,
   addTempMod,
   attackable,
   uniqueInPlay,
   type G,
 } from "./core";
 import { randInt, shuffle } from "./rng";
-import { playCost, win } from "./rules/cards";
+import { canPay, payCost, playCost, win } from "./rules/cards";
 import { canEnemyEnter } from "./rules/enemies";
 import { basicInvestigate } from "./rules/flow";
 import { startTest } from "./rules/skillTest";
@@ -46,7 +48,13 @@ function amt(g: G, a: Amount, ctx: EffCtx): number {
       ? ctx.source
         ? (g.s.cards[ctx.source]?.[a.onSelf] ?? 0)
         : 0
-      : a.perInvestigator * playerCount(g);
+      : "yourClues" in a
+        ? Math.min(a.max ?? Infinity, a.yourClues * (ctx.you ? inv(g, ctx.you).clues : 0))
+        : "yourSkill" in a
+          ? ctx.you
+            ? skillValue(g, ctx.you, a.yourSkill)
+            : 0
+          : a.perInvestigator * playerCount(g);
   if (a === "failBy") return ctx.failBy ?? 0;
   if (a === "succeedBy") return ctx.succeedBy ?? 0;
   if (a === "X") return ctx.x ?? 0;
@@ -177,6 +185,19 @@ function enemyTargets(
         "Choose the nearest enemy",
       );
   }
+}
+
+/** a card that cancels a search of the deck it is found in, and is drawn instead (Dead Ends) */
+function searchBlocked(g: G, who: InvId, searched: InstId[]): boolean {
+  const id = searched.find((x) => g.db.scripts[card(g, x).code]?.hooks?.searched);
+  if (!id) return false;
+  const me = inv(g, who);
+  me.deck.splice(me.deck.indexOf(id), 1);
+  shuffle(g.s, me.deck);
+  me.deck.unshift(id);
+  emit(g, "searchCancelled", `${def(g, id).name} cancels the search`, { inv: who, card: id });
+  push(g, { t: "Draw", inv: who, n: 1, tapped: true });
+  return true;
 }
 
 export const effectsHandler = (g: G, step: Extract<Step, { t: "Effects" }>) => {
@@ -459,16 +480,34 @@ export const effHandler = (g: G, step: EffStep) => {
         onTokens: e.onTokens,
         marginDamage: e.extraDamageIfSucceedBy,
         damagePerMargin: e.damagePerMargin,
+        boost: e.boost,
+        onDefeat: e.onDefeat,
         autoSucceed: e.auto,
         ctx: fctx,
       });
       return;
     }
     case "investigate": {
-      const loc = inv(g, you).location;
+      let loc = inv(g, you).location;
       if (!loc) return;
+      if (e.at === "connecting") {
+        const cands = connections(g, loc).filter((l) => card(g, l).revealed);
+        if (!cands.length) return;
+        const pick = ask<InstId>(
+          g,
+          step,
+          you,
+          "target",
+          "Choose a location to investigate",
+          cands.map((l) => opt(g, l)),
+          { auto: true, key: "chooseInvestigateLocation" },
+        );
+        if (pick === undefined) return;
+        loc = pick;
+      }
       basicInvestigate(g, you, loc, {
-        bonus: e.bonus,
+        bonus: e.bonus === undefined ? undefined : amt(g, e.bonus, ctx),
+        boost: e.boost,
         shroud: e.shroud,
         skill: def(g, loc).investigateSkill ?? e.skill,
         insteadOfClues: e.insteadOfClues,
@@ -526,7 +565,7 @@ export const effHandler = (g: G, step: EffStep) => {
         kind: "evade",
         target: pick,
         source: ctx.source,
-        skillBonus: e.bonus,
+        skillBonus: e.bonus === undefined ? undefined : amt(g, e.bonus, ctx),
         onSuccess: e.onSuccess,
         onFail: e.onFail,
         onTokens: e.onTokens,
@@ -535,6 +574,11 @@ export const effHandler = (g: G, step: EffStep) => {
       return;
     }
     case "modify": {
+      if (e.on === "yourLocation") {
+        const loc = inv(g, you).location;
+        if (loc) addTempMod(g, { ...e.mod, scope: undefined }, loc, e.until, ctx.source ?? null);
+        return;
+      }
       const tester = g.s.skillTest?.inv;
       const target =
         e.until === "test" && tester ? tester : invTargets(g, step, e.target, ctx)?.[0];
@@ -683,6 +727,14 @@ export const effHandler = (g: G, step: EffStep) => {
       const from = inv(g, you).location;
       let cands: InstId[] = [];
       if (e.where === "connecting" && from) cands = connections(g, from);
+      if (e.where === "connectingRevealed" && from)
+        cands = connections(g, from).filter((l) => card(g, l).revealed);
+      if (e.where === "revealedWithin2" && from) {
+        const d = distances(g, from);
+        cands = locations(g)
+          .filter((l) => l.revealed && (d.get(l.id) ?? Infinity) <= 2)
+          .map((l) => l.id);
+      }
       if (e.where === "revealedNoEnemies")
         cands = locations(g)
           .filter((l) => l.revealed && enemiesAt(g, l.id).length === 0)
@@ -714,6 +766,7 @@ export const effHandler = (g: G, step: EffStep) => {
       const who = ts[0];
       const me = inv(g, who);
       const top = e.top ? me.deck.slice(0, e.top) : null;
+      if (step.choice === undefined && searchBlocked(g, who, top ?? me.deck)) return;
       const pool = (top ?? me.deck).filter((id) => matchesFilter(g, card(g, id).code, e.filter));
       // the top cards that don't match are shown too: the searcher sees what they looked at
       const pick = ask<InstId | "none">(
@@ -730,6 +783,18 @@ export const effHandler = (g: G, step: EffStep) => {
         },
       );
       if (pick === undefined) return;
+      // the weaknesses among the searched cards are drawn as well, after the card found
+      const weak = e.drawWeaknesses
+        ? (top ?? []).filter((id) => id !== pick && !!def(g, id).subtype)
+        : [];
+      if (weak.length) {
+        for (const id of weak) me.deck.splice(me.deck.indexOf(id), 1);
+        shuffle(g.s, me.deck);
+        if (pick !== "none") me.deck.splice(me.deck.indexOf(pick), 1);
+        me.deck.unshift(...(pick !== "none" ? [pick] : []), ...weak);
+        push(g, { t: "Draw", inv: who, n: weak.length + (pick !== "none" ? 1 : 0), tapped: true });
+        return;
+      }
       if (pick !== "none" && e.draw) {
         // drawn: the rest is shuffled, the card goes on top and is drawn from there (a weakness resolves as drawn)
         me.deck.splice(me.deck.indexOf(pick), 1);
@@ -1120,10 +1185,11 @@ export const effHandler = (g: G, step: EffStep) => {
     }
     case "searchAndPlay": {
       const me = inv(g, you);
-      const pool = [...me.deck, ...me.discard].filter(
+      if (step.choice === undefined && searchBlocked(g, you, me.deck)) return;
+      const pool = [...me.deck, ...(e.deckOnly ? [] : me.discard)].filter(
         (id) =>
           matchesFilter(g, card(g, id).code, e.filter) &&
-          me.resources >= playCost(g, you, id) &&
+          me.resources >= Math.max(0, playCost(g, you, id) + (e.costMod ?? 0)) &&
           !uniqueInPlay(g, id),
       );
       const pick = ask<InstId | "none">(
@@ -1141,9 +1207,69 @@ export const effHandler = (g: G, step: EffStep) => {
           inv: you,
           card: pick,
         });
-        push(g, { t: "PlayCard", inv: you, card: pick });
+        if (e.costMod) {
+          // the reduction is paid here; the card itself is then played for free
+          me.resources -= Math.max(0, playCost(g, you, pick) + e.costMod);
+          push(g, { t: "PlayCard", inv: you, card: pick, free: true });
+        } else push(g, { t: "PlayCard", inv: you, card: pick });
       }
       shuffle(g.s, me.deck);
+      return;
+    }
+    case "removeUses": {
+      if (src && src.uses >= e.amount) {
+        src.uses -= e.amount;
+        emit(g, "uses", `${def(g, src.id).name} loses ${e.amount} use(s)`, { card: src.id });
+      } else if (e.orElse) push(g, { t: "Effects", effects: e.orElse, ctx });
+      return;
+    }
+    case "payCost": {
+      if (!src || !canPay(g, you, src.id, e.cost)) return;
+      push(g, ...payCost(g, you, src.id, e.cost));
+      return;
+    }
+    case "shuffleSelfIntoDeck": {
+      if (!src?.owner) return;
+      shuffleIntoDeck(g, src.id, src.owner);
+      return;
+    }
+    case "healSelf": {
+      if (!src) return;
+      const can = [
+        ...(e.damage && src.damage ? ["damage" as const] : []),
+        ...(e.horror && src.horror ? ["horror" as const] : []),
+      ];
+      if (!can.length) return;
+      const kind = ask<"damage" | "horror">(
+        g,
+        step,
+        you,
+        "generic",
+        "Heal damage or horror?",
+        can.map((k) => ({
+          id: k,
+          label: `Heal ${k}`,
+          value: k,
+          key: k === "damage" ? "option.healDamage" : "option.healHorror",
+        })),
+        { auto: true, key: "healWhich" },
+      );
+      if (kind === undefined) return;
+      const n = Math.min(kind === "damage" ? e.damage! : e.horror!, src[kind]);
+      src[kind] -= n;
+      emit(g, "heal", `${def(g, src.id).name} heals ${n} ${kind}`, {
+        card: src.id,
+        data: { damage: kind === "damage" ? n : 0, horror: kind === "horror" ? n : 0 },
+      });
+      return;
+    }
+    case "skipNextReady": {
+      if (ctx.enemy) g.s.flags[`noReady:${ctx.enemy}`] = true;
+      return;
+    }
+    case "atTurnEnd": {
+      const list = (g.s.flags.atTurnEnd as { inv: InvId; effects: unknown; ctx: EffCtx }[]) ?? [];
+      g.s.flags.atTurnEnd = [...list, { inv: you, effects: e.effects, ctx }];
       return;
     }
     case "script": {

@@ -26,6 +26,7 @@ import {
 } from "./rules/flow";
 import {
   assetDefeatCheck,
+  removeDefeatedAsset,
   checkEngagement,
   chooseLead,
   drawOpeningCards,
@@ -59,6 +60,7 @@ const ENGINE_FNS: Record<string, (g: G, ctx: EffCtx, step: Step) => void> = {
   finishEvent: (g, ctx) => finishEvent(g, ctx),
   finishRevelation: (g, ctx) => finishRevelation(g, ctx.source!, ctx.you!),
   assetDefeatCheck: (g, ctx) => assetDefeatCheck(g, ctx.you!),
+  removeDefeatedAsset: (g, ctx) => removeDefeatedAsset(g, ctx.source!),
   allEliminated: (g) => allEliminated(g),
   revealLocation: (g, ctx) => revealLocation(g, ctx.location!),
   checkEngagement: (g, ctx) => checkEngagement(g, ctx.inv!),

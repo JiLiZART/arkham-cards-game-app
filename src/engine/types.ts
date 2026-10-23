@@ -1,5 +1,6 @@
 import type {
   Ability,
+  Boost,
   CampaignDef,
   CampaignFlow,
   CardDef,
@@ -136,7 +137,16 @@ export interface SkillTestState {
   /** +1 damage if the attack succeeds by at least this much */
   marginDamage?: number;
   /** damage by the margin (Shotgun) */
-  damagePerMargin?: { max: number; instead?: boolean };
+  damagePerMargin?: { max: number; instead?: boolean; failMax?: number };
+  /** paid for more after a success (Sledgehammer); asked once */
+  boost?: Boost;
+  boostDone?: boolean;
+  /** clues the boost added */
+  boostClues?: number;
+  /** effects when the attack defeats its enemy */
+  onDefeat?: Effect[];
+  /** the late commit window (Timely Intervention) was asked */
+  lateAsked?: boolean;
   /** script continuation run after results: {code, fn} */
   after?: { code: string; fn: string };
   ctx: EffCtx;

@@ -109,7 +109,7 @@ abilities cover only part of its text counts as working, so the bot playthroughs
 | [ ] | `fhvc` | the-feast-of-hemlock-vale | 270 of 272 | 28 of 28 |
 | [ ] | `tdcp` | — | 0 of 0 | 122 of 122 |
 | [ ] | `tdcc` | the-drowned-city | 256 of 259 | 36 of 36 |
-| [ ] | `core_2026` | shared by every campaign | 88 of 89 | 70 of 72 |
+| [ ] | `core_2026` | shared by every campaign | 88 of 89 | 1 of 72 |
 | [ ] | `cob` | children-of-blood | 105 of 111 | 8 of 8 |
 
 The campaign boxes by scenario. A row is done when the scenario is complete: its cards work, its token effects are real on all four difficulties, and it has a scenario script.
