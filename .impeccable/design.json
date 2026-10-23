@@ -1,0 +1,830 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-21T22:52:30.792Z",
+  "title": "Design System: Arkham Table",
+  "extensions": {
+    "colorMeta": {
+      "gilt-edge": {
+        "role": "primary",
+        "displayName": "Gilt Edge",
+        "canonical": "#c9a95c",
+        "oklch": "oklch(74.718% 0.103 87.263)",
+        "tonalRamp": [
+          "oklch(15% 0.103 87.263)",
+          "oklch(26.429% 0.103 87.263)",
+          "oklch(37.857% 0.103 87.263)",
+          "oklch(49.286% 0.103 87.263)",
+          "oklch(60.714% 0.103 87.263)",
+          "oklch(72.143% 0.103 87.263)",
+          "oklch(83.571% 0.103 87.263)",
+          "oklch(95% 0.103 87.263)"
+        ]
+      },
+      "lamp-glow": {
+        "role": "primary",
+        "displayName": "Lamp Glow",
+        "canonical": "#ffd27a",
+        "oklch": "oklch(88.47% 0.118 82.93)",
+        "tonalRamp": [
+          "oklch(15% 0.118 82.93)",
+          "oklch(26.429% 0.118 82.93)",
+          "oklch(37.857% 0.118 82.93)",
+          "oklch(49.286% 0.118 82.93)",
+          "oklch(60.714% 0.118 82.93)",
+          "oklch(72.143% 0.118 82.93)",
+          "oklch(83.571% 0.118 82.93)",
+          "oklch(95% 0.118 82.93)"
+        ]
+      },
+      "brass-shadow": {
+        "role": "primary",
+        "displayName": "Brass Shadow",
+        "canonical": "#5a4520",
+        "oklch": "oklch(40.434% 0.06 79.839)",
+        "tonalRamp": [
+          "oklch(15% 0.06 79.839)",
+          "oklch(26.429% 0.06 79.839)",
+          "oklch(37.857% 0.06 79.839)",
+          "oklch(49.286% 0.06 79.839)",
+          "oklch(60.714% 0.06 79.839)",
+          "oklch(72.143% 0.06 79.839)",
+          "oklch(83.571% 0.06 79.839)",
+          "oklch(95% 0.06 79.839)"
+        ]
+      },
+      "umber-gilt": {
+        "role": "secondary",
+        "displayName": "Umber Gilt",
+        "canonical": "#7a5410",
+        "oklch": "oklch(47.56% 0.093 76.041)",
+        "tonalRamp": [
+          "oklch(15% 0.093 76.041)",
+          "oklch(26.429% 0.093 76.041)",
+          "oklch(37.857% 0.093 76.041)",
+          "oklch(49.286% 0.093 76.041)",
+          "oklch(60.714% 0.093 76.041)",
+          "oklch(72.143% 0.093 76.041)",
+          "oklch(83.571% 0.093 76.041)",
+          "oklch(95% 0.093 76.041)"
+        ]
+      },
+      "playable-green": {
+        "role": "tertiary",
+        "displayName": "Playable Green",
+        "canonical": "#7fe08a",
+        "oklch": "oklch(82.582% 0.151 146.579)",
+        "tonalRamp": [
+          "oklch(15% 0.15 146.579)",
+          "oklch(26.429% 0.15 146.579)",
+          "oklch(37.857% 0.15 146.579)",
+          "oklch(49.286% 0.15 146.579)",
+          "oklch(60.714% 0.15 146.579)",
+          "oklch(72.143% 0.15 146.579)",
+          "oklch(83.571% 0.15 146.579)",
+          "oklch(95% 0.15 146.579)"
+        ]
+      },
+      "steady-green": {
+        "role": "tertiary",
+        "displayName": "Steady Green",
+        "canonical": "#6fbf73",
+        "oklch": "oklch(73.422% 0.134 145.135)",
+        "tonalRamp": [
+          "oklch(15% 0.134 145.135)",
+          "oklch(26.429% 0.134 145.135)",
+          "oklch(37.857% 0.134 145.135)",
+          "oklch(49.286% 0.134 145.135)",
+          "oklch(60.714% 0.134 145.135)",
+          "oklch(72.143% 0.134 145.135)",
+          "oklch(83.571% 0.134 145.135)",
+          "oklch(95% 0.134 145.135)"
+        ]
+      },
+      "warning-red": {
+        "role": "tertiary",
+        "displayName": "Warning Red",
+        "canonical": "#e06060",
+        "oklch": "oklch(64.968% 0.161 22.614)",
+        "tonalRamp": [
+          "oklch(15% 0.15 22.614)",
+          "oklch(26.429% 0.15 22.614)",
+          "oklch(37.857% 0.15 22.614)",
+          "oklch(49.286% 0.15 22.614)",
+          "oklch(60.714% 0.15 22.614)",
+          "oklch(72.143% 0.15 22.614)",
+          "oklch(83.571% 0.15 22.614)",
+          "oklch(95% 0.15 22.614)"
+        ]
+      },
+      "attack-red": {
+        "role": "tertiary",
+        "displayName": "Attack Red",
+        "canonical": "#7a1e14",
+        "oklch": "oklch(38.623% 0.128 30.08)",
+        "tonalRamp": [
+          "oklch(15% 0.128 30.08)",
+          "oklch(26.429% 0.128 30.08)",
+          "oklch(37.857% 0.128 30.08)",
+          "oklch(49.286% 0.128 30.08)",
+          "oklch(60.714% 0.128 30.08)",
+          "oklch(72.143% 0.128 30.08)",
+          "oklch(83.571% 0.128 30.08)",
+          "oklch(95% 0.128 30.08)"
+        ]
+      },
+      "attack-ember": {
+        "role": "tertiary",
+        "displayName": "Attack Ember",
+        "canonical": "#e0573f",
+        "oklch": "oklch(63.276% 0.176 32.115)",
+        "tonalRamp": [
+          "oklch(15% 0.15 32.115)",
+          "oklch(26.429% 0.15 32.115)",
+          "oklch(37.857% 0.15 32.115)",
+          "oklch(49.286% 0.15 32.115)",
+          "oklch(60.714% 0.15 32.115)",
+          "oklch(72.143% 0.15 32.115)",
+          "oklch(83.571% 0.15 32.115)",
+          "oklch(95% 0.15 32.115)"
+        ]
+      },
+      "oxblood": {
+        "role": "tertiary",
+        "displayName": "Oxblood",
+        "canonical": "#a32a2a",
+        "oklch": "oklch(47.701% 0.158 25.49)",
+        "tonalRamp": [
+          "oklch(15% 0.15 25.49)",
+          "oklch(26.429% 0.15 25.49)",
+          "oklch(37.857% 0.15 25.49)",
+          "oklch(49.286% 0.15 25.49)",
+          "oklch(60.714% 0.15 25.49)",
+          "oklch(72.143% 0.15 25.49)",
+          "oklch(83.571% 0.15 25.49)",
+          "oklch(95% 0.15 25.49)"
+        ]
+      },
+      "night-table": {
+        "role": "neutral",
+        "displayName": "Night Table",
+        "canonical": "#0d1410",
+        "oklch": "oklch(18.239% 0.013 159.669)",
+        "tonalRamp": [
+          "oklch(15% 0.013 159.669)",
+          "oklch(26.429% 0.013 159.669)",
+          "oklch(37.857% 0.013 159.669)",
+          "oklch(49.286% 0.013 159.669)",
+          "oklch(60.714% 0.013 159.669)",
+          "oklch(72.143% 0.013 159.669)",
+          "oklch(83.571% 0.013 159.669)",
+          "oklch(95% 0.013 159.669)"
+        ]
+      },
+      "walnut-dark": {
+        "role": "neutral",
+        "displayName": "Walnut Dark",
+        "canonical": "#1a120b",
+        "oklch": "oklch(19.019% 0.019 62.5)",
+        "tonalRamp": [
+          "oklch(15% 0.019 62.5)",
+          "oklch(26.429% 0.019 62.5)",
+          "oklch(37.857% 0.019 62.5)",
+          "oklch(49.286% 0.019 62.5)",
+          "oklch(60.714% 0.019 62.5)",
+          "oklch(72.143% 0.019 62.5)",
+          "oklch(83.571% 0.019 62.5)",
+          "oklch(95% 0.019 62.5)"
+        ]
+      },
+      "smoked-panel": {
+        "role": "neutral",
+        "displayName": "Smoked Panel",
+        "canonical": "rgba(18, 14, 10, 0.88)",
+        "oklch": "oklch(16.733% 0.011 66.983)",
+        "tonalRamp": [
+          "oklch(15% 0.011 66.983)",
+          "oklch(26.429% 0.011 66.983)",
+          "oklch(37.857% 0.011 66.983)",
+          "oklch(49.286% 0.011 66.983)",
+          "oklch(60.714% 0.011 66.983)",
+          "oklch(72.143% 0.011 66.983)",
+          "oklch(83.571% 0.011 66.983)",
+          "oklch(95% 0.011 66.983)"
+        ]
+      },
+      "lacquer-black": {
+        "role": "neutral",
+        "displayName": "Lacquer Black",
+        "canonical": "#17120c",
+        "oklch": "oklch(18.63% 0.014 71.859)",
+        "tonalRamp": [
+          "oklch(15% 0.014 71.859)",
+          "oklch(26.429% 0.014 71.859)",
+          "oklch(37.857% 0.014 71.859)",
+          "oklch(49.286% 0.014 71.859)",
+          "oklch(60.714% 0.014 71.859)",
+          "oklch(72.143% 0.014 71.859)",
+          "oklch(83.571% 0.014 71.859)",
+          "oklch(95% 0.014 71.859)"
+        ]
+      },
+      "worn-leather": {
+        "role": "neutral",
+        "displayName": "Worn Leather",
+        "canonical": "#2b241b",
+        "oklch": "oklch(26.528% 0.019 73.798)",
+        "tonalRamp": [
+          "oklch(15% 0.019 73.798)",
+          "oklch(26.429% 0.019 73.798)",
+          "oklch(37.857% 0.019 73.798)",
+          "oklch(49.286% 0.019 73.798)",
+          "oklch(60.714% 0.019 73.798)",
+          "oklch(72.143% 0.019 73.798)",
+          "oklch(83.571% 0.019 73.798)",
+          "oklch(95% 0.019 73.798)"
+        ]
+      },
+      "worn-leather-lit": {
+        "role": "neutral",
+        "displayName": "Worn Leather, lit",
+        "canonical": "#3a3022",
+        "oklch": "oklch(31.589% 0.028 75.797)",
+        "tonalRamp": [
+          "oklch(15% 0.028 75.797)",
+          "oklch(26.429% 0.028 75.797)",
+          "oklch(37.857% 0.028 75.797)",
+          "oklch(49.286% 0.028 75.797)",
+          "oklch(60.714% 0.028 75.797)",
+          "oklch(72.143% 0.028 75.797)",
+          "oklch(83.571% 0.028 75.797)",
+          "oklch(95% 0.028 75.797)"
+        ]
+      },
+      "brass-rule": {
+        "role": "neutral",
+        "displayName": "Brass Rule",
+        "canonical": "#5a4a30",
+        "oklch": "oklch(41.868% 0.045 79.181)",
+        "tonalRamp": [
+          "oklch(15% 0.045 79.181)",
+          "oklch(26.429% 0.045 79.181)",
+          "oklch(37.857% 0.045 79.181)",
+          "oklch(49.286% 0.045 79.181)",
+          "oklch(60.714% 0.045 79.181)",
+          "oklch(72.143% 0.045 79.181)",
+          "oklch(83.571% 0.045 79.181)",
+          "oklch(95% 0.045 79.181)"
+        ]
+      },
+      "brass-rule-dim": {
+        "role": "neutral",
+        "displayName": "Brass Rule, dim",
+        "canonical": "#4a3b22",
+        "oklch": "oklch(36.192% 0.044 79.456)",
+        "tonalRamp": [
+          "oklch(15% 0.044 79.456)",
+          "oklch(26.429% 0.044 79.456)",
+          "oklch(37.857% 0.044 79.456)",
+          "oklch(49.286% 0.044 79.456)",
+          "oklch(60.714% 0.044 79.456)",
+          "oklch(72.143% 0.044 79.456)",
+          "oklch(83.571% 0.044 79.456)",
+          "oklch(95% 0.044 79.456)"
+        ]
+      },
+      "bone-ink": {
+        "role": "neutral",
+        "displayName": "Bone Ink",
+        "canonical": "#eadfc4",
+        "oklch": "oklch(90.536% 0.038 88.471)",
+        "tonalRamp": [
+          "oklch(15% 0.038 88.471)",
+          "oklch(26.429% 0.038 88.471)",
+          "oklch(37.857% 0.038 88.471)",
+          "oklch(49.286% 0.038 88.471)",
+          "oklch(60.714% 0.038 88.471)",
+          "oklch(72.143% 0.038 88.471)",
+          "oklch(83.571% 0.038 88.471)",
+          "oklch(95% 0.038 88.471)"
+        ]
+      },
+      "faded-ink": {
+        "role": "neutral",
+        "displayName": "Faded Ink",
+        "canonical": "#a99c80",
+        "oklch": "oklch(69.65% 0.042 86.027)",
+        "tonalRamp": [
+          "oklch(15% 0.042 86.027)",
+          "oklch(26.429% 0.042 86.027)",
+          "oklch(37.857% 0.042 86.027)",
+          "oklch(49.286% 0.042 86.027)",
+          "oklch(60.714% 0.042 86.027)",
+          "oklch(72.143% 0.042 86.027)",
+          "oklch(83.571% 0.042 86.027)",
+          "oklch(95% 0.042 86.027)"
+        ]
+      },
+      "parchment": {
+        "role": "neutral",
+        "displayName": "Parchment",
+        "canonical": "#e6d9bb",
+        "oklch": "oklch(88.8% 0.042 87.366)",
+        "tonalRamp": [
+          "oklch(15% 0.042 87.366)",
+          "oklch(26.429% 0.042 87.366)",
+          "oklch(37.857% 0.042 87.366)",
+          "oklch(49.286% 0.042 87.366)",
+          "oklch(60.714% 0.042 87.366)",
+          "oklch(72.143% 0.042 87.366)",
+          "oklch(83.571% 0.042 87.366)",
+          "oklch(95% 0.042 87.366)"
+        ]
+      },
+      "parchment-leaf": {
+        "role": "neutral",
+        "displayName": "Parchment Leaf",
+        "canonical": "#f6edd6",
+        "oklch": "oklch(94.711% 0.032 89.14)",
+        "tonalRamp": [
+          "oklch(15% 0.032 89.14)",
+          "oklch(26.429% 0.032 89.14)",
+          "oklch(37.857% 0.032 89.14)",
+          "oklch(49.286% 0.032 89.14)",
+          "oklch(60.714% 0.032 89.14)",
+          "oklch(72.143% 0.032 89.14)",
+          "oklch(83.571% 0.032 89.14)",
+          "oklch(95% 0.032 89.14)"
+        ]
+      },
+      "parchment-chosen": {
+        "role": "neutral",
+        "displayName": "Parchment Chosen",
+        "canonical": "#fff6d8",
+        "oklch": "oklch(97.244% 0.04 93.2)",
+        "tonalRamp": [
+          "oklch(15% 0.04 93.2)",
+          "oklch(26.429% 0.04 93.2)",
+          "oklch(37.857% 0.04 93.2)",
+          "oklch(49.286% 0.04 93.2)",
+          "oklch(60.714% 0.04 93.2)",
+          "oklch(72.143% 0.04 93.2)",
+          "oklch(83.571% 0.04 93.2)",
+          "oklch(95% 0.04 93.2)"
+        ]
+      },
+      "parchment-button": {
+        "role": "neutral",
+        "displayName": "Parchment Button",
+        "canonical": "#e9dcb8",
+        "oklch": "oklch(89.578% 0.05 90.527)",
+        "tonalRamp": [
+          "oklch(15% 0.05 90.527)",
+          "oklch(26.429% 0.05 90.527)",
+          "oklch(37.857% 0.05 90.527)",
+          "oklch(49.286% 0.05 90.527)",
+          "oklch(60.714% 0.05 90.527)",
+          "oklch(72.143% 0.05 90.527)",
+          "oklch(83.571% 0.05 90.527)",
+          "oklch(95% 0.05 90.527)"
+        ]
+      },
+      "parchment-rule": {
+        "role": "neutral",
+        "displayName": "Parchment Rule",
+        "canonical": "#b69c6a",
+        "oklch": "oklch(70.416% 0.074 83.221)",
+        "tonalRamp": [
+          "oklch(15% 0.074 83.221)",
+          "oklch(26.429% 0.074 83.221)",
+          "oklch(37.857% 0.074 83.221)",
+          "oklch(49.286% 0.074 83.221)",
+          "oklch(60.714% 0.074 83.221)",
+          "oklch(72.143% 0.074 83.221)",
+          "oklch(83.571% 0.074 83.221)",
+          "oklch(95% 0.074 83.221)"
+        ]
+      },
+      "iron-gall": {
+        "role": "neutral",
+        "displayName": "Iron Gall",
+        "canonical": "#2b1d0e",
+        "oklch": "oklch(24.411% 0.034 67.055)",
+        "tonalRamp": [
+          "oklch(15% 0.034 67.055)",
+          "oklch(26.429% 0.034 67.055)",
+          "oklch(37.857% 0.034 67.055)",
+          "oklch(49.286% 0.034 67.055)",
+          "oklch(60.714% 0.034 67.055)",
+          "oklch(72.143% 0.034 67.055)",
+          "oklch(83.571% 0.034 67.055)",
+          "oklch(95% 0.034 67.055)"
+        ]
+      },
+      "sepia-heading": {
+        "role": "neutral",
+        "displayName": "Sepia Heading",
+        "canonical": "#3a2410",
+        "oklch": "oklch(28.312% 0.046 61.434)",
+        "tonalRamp": [
+          "oklch(15% 0.046 61.434)",
+          "oklch(26.429% 0.046 61.434)",
+          "oklch(37.857% 0.046 61.434)",
+          "oklch(49.286% 0.046 61.434)",
+          "oklch(60.714% 0.046 61.434)",
+          "oklch(72.143% 0.046 61.434)",
+          "oklch(83.571% 0.046 61.434)",
+          "oklch(95% 0.046 61.434)"
+        ]
+      },
+      "sepia-muted": {
+        "role": "neutral",
+        "displayName": "Sepia Muted",
+        "canonical": "#6b5a3c",
+        "oklch": "oklch(47.66% 0.05 81.252)",
+        "tonalRamp": [
+          "oklch(15% 0.05 81.252)",
+          "oklch(26.429% 0.05 81.252)",
+          "oklch(37.857% 0.05 81.252)",
+          "oklch(49.286% 0.05 81.252)",
+          "oklch(60.714% 0.05 81.252)",
+          "oklch(72.143% 0.05 81.252)",
+          "oklch(83.571% 0.05 81.252)",
+          "oklch(95% 0.05 81.252)"
+        ]
+      },
+      "tip-paper": {
+        "role": "neutral",
+        "displayName": "Tip Paper",
+        "canonical": "#f3e6c4",
+        "oklch": "oklch(92.662% 0.047 89.578)",
+        "tonalRamp": [
+          "oklch(15% 0.047 89.578)",
+          "oklch(26.429% 0.047 89.578)",
+          "oklch(37.857% 0.047 89.578)",
+          "oklch(49.286% 0.047 89.578)",
+          "oklch(60.714% 0.047 89.578)",
+          "oklch(72.143% 0.047 89.578)",
+          "oklch(83.571% 0.047 89.578)",
+          "oklch(95% 0.047 89.578)"
+        ]
+      },
+      "leather-top": {
+        "role": "neutral",
+        "displayName": "Leather, top",
+        "canonical": "#2e2619",
+        "oklch": "oklch(27.365% 0.025 79.472)",
+        "tonalRamp": [
+          "oklch(15% 0.025 79.472)",
+          "oklch(26.429% 0.025 79.472)",
+          "oklch(37.857% 0.025 79.472)",
+          "oklch(49.286% 0.025 79.472)",
+          "oklch(60.714% 0.025 79.472)",
+          "oklch(72.143% 0.025 79.472)",
+          "oklch(83.571% 0.025 79.472)",
+          "oklch(95% 0.025 79.472)"
+        ]
+      },
+      "leather-bottom": {
+        "role": "neutral",
+        "displayName": "Leather, bottom",
+        "canonical": "#1d1710",
+        "oklch": "oklch(20.949% 0.016 71.061)",
+        "tonalRamp": [
+          "oklch(15% 0.016 71.061)",
+          "oklch(26.429% 0.016 71.061)",
+          "oklch(37.857% 0.016 71.061)",
+          "oklch(49.286% 0.016 71.061)",
+          "oklch(60.714% 0.016 71.061)",
+          "oklch(72.143% 0.016 71.061)",
+          "oklch(83.571% 0.016 71.061)",
+          "oklch(95% 0.016 71.061)"
+        ]
+      },
+      "brass-highlight": {
+        "role": "primary",
+        "displayName": "Brass Highlight",
+        "canonical": "#e3c67c",
+        "oklch": "oklch(83.508% 0.099 88.813)",
+        "tonalRamp": [
+          "oklch(15% 0.099 88.813)",
+          "oklch(26.429% 0.099 88.813)",
+          "oklch(37.857% 0.099 88.813)",
+          "oklch(49.286% 0.099 88.813)",
+          "oklch(60.714% 0.099 88.813)",
+          "oklch(72.143% 0.099 88.813)",
+          "oklch(83.571% 0.099 88.813)",
+          "oklch(95% 0.099 88.813)"
+        ]
+      },
+      "brass-low": {
+        "role": "primary",
+        "displayName": "Brass, low",
+        "canonical": "#a8863f",
+        "oklch": "oklch(63.786% 0.098 83.631)",
+        "tonalRamp": [
+          "oklch(15% 0.098 83.631)",
+          "oklch(26.429% 0.098 83.631)",
+          "oklch(37.857% 0.098 83.631)",
+          "oklch(49.286% 0.098 83.631)",
+          "oklch(60.714% 0.098 83.631)",
+          "oklch(72.143% 0.098 83.631)",
+          "oklch(83.571% 0.098 83.631)",
+          "oklch(95% 0.098 83.631)"
+        ]
+      },
+      "brass-edge-lit": {
+        "role": "neutral",
+        "displayName": "Brass Edge, lit",
+        "canonical": "#7a6440",
+        "oklch": "oklch(51.593% 0.059 79.206)",
+        "tonalRamp": [
+          "oklch(15% 0.059 79.206)",
+          "oklch(26.429% 0.059 79.206)",
+          "oklch(37.857% 0.059 79.206)",
+          "oklch(49.286% 0.059 79.206)",
+          "oklch(60.714% 0.059 79.206)",
+          "oklch(72.143% 0.059 79.206)",
+          "oklch(83.571% 0.059 79.206)",
+          "oklch(95% 0.059 79.206)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Page titles on parchment."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Card names in the card modal."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Card names on drawn faces, stat names."
+      },
+      "prompt": {
+        "displayName": "Prompt",
+        "purpose": "The instruction bar."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Card text, guide story, modal side column."
+      },
+      "ui": {
+        "displayName": "UI",
+        "purpose": "Buttons and controls."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Top bar and ribbon."
+      }
+    },
+    "shadows": [
+      {
+        "name": "tabletop-lift",
+        "value": "0 3px 12px #000c",
+        "purpose": "Small floating notes."
+      },
+      {
+        "name": "instruction-lift",
+        "value": "0 4px 14px #000c",
+        "purpose": "Instruction bar, inside its frame rings."
+      },
+      {
+        "name": "hud-plate",
+        "value": "0 8px 22px #000c",
+        "purpose": "Investigator panel and token row, with the bevel."
+      },
+      {
+        "name": "held-object",
+        "value": "0 8px 24px #000c",
+        "purpose": "Tip card and pop-out sheets."
+      },
+      {
+        "name": "lifted-off-page",
+        "value": "0 10px 40px #000",
+        "purpose": "Modals."
+      },
+      {
+        "name": "gilt-framed-lift",
+        "value": "0 10px 30px #000d, 0 0 0 2px var(--gold)",
+        "purpose": "Focused large card."
+      },
+      {
+        "name": "bevel",
+        "value": "inset 0 1px 0 #c9a95c2e, inset 0 -1px 0 #00000080",
+        "purpose": "Lit top and shaded bottom of every leather prop."
+      },
+      {
+        "name": "pressed",
+        "value": "inset 0 2px 4px #000a",
+        "purpose": "Leather tab while pressed, with a 1px drop."
+      },
+      {
+        "name": "brass-plate",
+        "value": "inset 0 1px 0 #fff3c4, inset 0 -1px 0 #7a5a20, 0 2px 5px #000a",
+        "purpose": "The polished primary action."
+      },
+      {
+        "name": "brass-rail",
+        "value": "0 3px 8px #000a",
+        "purpose": "Shadow under the 4px brass rail beneath the top bar."
+      },
+      {
+        "name": "token-contact",
+        "value": "0 1px 3px #000c",
+        "purpose": "Badges and intent chips on cards."
+      },
+      {
+        "name": "playable-ring",
+        "value": "0 0 0 3px #7fe08a, 0 0 18px #7fe08acc",
+        "purpose": "Legal target; 14px blur for small targets."
+      },
+      {
+        "name": "current-light",
+        "value": "0 0 10px #c9a95c88",
+        "purpose": "Current phase chip."
+      },
+      {
+        "name": "chosen-page",
+        "value": "0 0 14px #7a541066",
+        "purpose": "Selected tile on parchment."
+      }
+    ],
+    "motion": [
+      {
+        "name": "state",
+        "value": "0.2s ease",
+        "purpose": "Hover and state changes."
+      },
+      {
+        "name": "settle",
+        "value": "0.3s ease-out",
+        "purpose": "Pips filling, feed entries arriving."
+      },
+      {
+        "name": "arrive",
+        "value": "cubic-bezier(.2,.8,.2,1)",
+        "purpose": "Cards and panels sliding into place."
+      },
+      {
+        "name": "pulse",
+        "value": "1.6s ease-in-out infinite alternate",
+        "purpose": "Suggested-action glow; off under reduced motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone-landscape",
+        "value": "height ≤ 500px or width ≤ 900px (landscape)"
+      },
+      {
+        "name": "phone-portrait",
+        "value": "width ≤ 500px (portrait)"
+      },
+      {
+        "name": "ribbon-compact",
+        "value": "max-width: 700px"
+      },
+      {
+        "name": "short-viewport",
+        "value": "max-height: 1000px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Button",
+      "kind": "button",
+      "refersTo": "button",
+      "description": "Default table control: worn leather with a brass rule.",
+      "html": "<button class=\"ds-btn\">End turn</button>",
+      "css": ".ds-btn{font:15px Georgia,'Times New Roman',serif;color:#eadfc4;background:#2b241b;border:1px solid #5a4a30;border-radius:6px;padding:5px 10px;cursor:pointer;transition:background .2s ease,border-color .2s ease}.ds-btn:hover{background:#3a3022;border-color:#c9a95c}.ds-btn:focus-visible{outline:2px solid #ffd27a;outline-offset:2px}.ds-btn:active{background:#221c14}"
+    },
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The main call on a table screen.",
+      "html": "<button class=\"ds-btn-primary\">Investigate</button>",
+      "css": ".ds-btn-primary{font:15px Georgia,'Times New Roman',serif;color:#eadfc4;background:#2b241b;border:1px solid #5a4a30;border-radius:6px;padding:5px 10px;cursor:pointer;transition:background .2s ease,border-color .2s ease;background:#5a4520;border-color:#c9a95c}.ds-btn-primary:hover{background:#6a5226;border-color:#ffd27a}.ds-btn-primary:focus-visible{outline:2px solid #ffd27a;outline-offset:2px}"
+    },
+    {
+      "name": "Parchment Primary Button",
+      "kind": "button",
+      "refersTo": "parchment-button-primary",
+      "description": "Main call in the study: a gilt plate on paper.",
+      "html": "<div class=\"ds-paper\"><button class=\"ds-pbtn\">Begin campaign</button> <button class=\"ds-pbtn ds-pbtn-plain\">Back</button></div>",
+      "css": ".ds-paper{background:#e6d9bb;padding:16px}.ds-pbtn{font:15px Georgia,serif;color:#1d1306;background:#c9a95c;border:1px solid #7a5410;border-radius:6px;padding:5px 10px;cursor:pointer}.ds-pbtn-plain{background:#e9dcb8;border-color:#9c8250;color:#2b1d0e}.ds-pbtn:hover{border-color:#7a5410;filter:brightness(1.05)}.ds-pbtn-plain:hover{background:#f4e8c6}.ds-pbtn:focus-visible{outline:2px solid #7a5410;outline-offset:2px}"
+    },
+    {
+      "name": "Phase Ribbon",
+      "kind": "nav",
+      "refersTo": "phase-chip-current",
+      "description": "Round tracker in the top bar; the current phase is lit.",
+      "html": "<nav class=\"ds-ribbon\"><span class=\"ds-round\">Round 2</span><span class=\"ds-ph ds-done\">Mythos</span><span class=\"ds-sep\">›</span><span class=\"ds-ph ds-cur\">Investigation</span><span class=\"ds-sep\">›</span><span class=\"ds-ph\">Enemy</span><span class=\"ds-sep\">›</span><span class=\"ds-ph\">Upkeep</span></nav>",
+      "css": ".ds-ribbon{display:flex;align-items:center;gap:4px;background:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .8 0 0 0 0 .66 0 0 0 0 .36 0 0 0 .1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\"),linear-gradient(#2e2619,#1d1710);border-bottom:4px solid #a8863f;box-shadow:inset 0 1px 0 #c9a95c2e,0 3px 8px #000a;padding:6px 12px;font:14px Georgia,serif;color:#eadfc4}.ds-round{color:#c9a95c;font-variant:small-caps;margin-right:10px}.ds-ph{padding:3px 10px;border-radius:12px;border:1px solid transparent;color:#a99c80}.ds-done{color:#7d725c}.ds-cur{color:#1a120b;background:#c9a95c;border-color:#ffd27a;font-weight:bold;box-shadow:0 0 10px #c9a95c88}.ds-sep{color:#6a5a3a}"
+    },
+    {
+      "name": "Instruction Bar",
+      "kind": "custom",
+      "refersTo": "instruction-bar",
+      "description": "Brass-framed leather plaque telling the player what to do now.",
+      "html": "<div class=\"ds-instr\"><b class=\"ds-inv\">Roland Banks</b>: <b>3</b> left: tap an action, a card or a room <button class=\"ds-plate\">End turn</button></div>",
+      "css": ".ds-instr{display:inline-flex;align-items:center;gap:10px;background:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .8 0 0 0 0 .66 0 0 0 0 .36 0 0 0 .1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\"),linear-gradient(#2e2619,#1d1710);border:2px solid #c9a95c;border-radius:22px;padding:6px 14px 6px 8px;font:22px/1.3 Alegreya,Georgia,serif;color:#eadfc4;box-shadow:0 0 0 1px #5a4520,inset 0 0 0 1px #00000099,inset 0 1px 0 #ffd27a33,0 4px 14px #000c}.ds-instr b{color:#c9a95c}.ds-inv{font-family:Teutonic,TeutonicRU,Georgia,serif;font-weight:normal}.ds-plate{font:16px Alegreya,Georgia,serif;color:#1a120b;background:linear-gradient(#e3c67c,#c9a95c 45%,#a8863f);border:1px solid #5a4520;border-radius:16px;padding:4px 12px;cursor:pointer;box-shadow:inset 0 1px 0 #fff3c4,inset 0 -1px 0 #7a5a20,0 2px 5px #000a}.ds-plate:hover{background:linear-gradient(#f0d58c,#d6b768 45%,#b8964d)}.ds-plate:focus-visible{outline:2px solid #ffd27a;outline-offset:2px}"
+    },
+    {
+      "name": "Action Rail Button (suggested)",
+      "kind": "button",
+      "refersTo": "rail-button",
+      "description": "Grained leather tab with a lit brass edge; the suggested one glows with lamp light.",
+      "html": "<div class=\"ds-rail\"><button class=\"ds-rail-btn\">Draw</button><button class=\"ds-rail-btn ds-glow\">Investigate</button></div>",
+      "css": ".ds-rail{display:flex;flex-direction:column;gap:6px;width:180px}.ds-rail-btn{text-align:left;font:15px Georgia,serif;color:#eadfc4;background:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .8 0 0 0 0 .66 0 0 0 0 .36 0 0 0 .1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\"),linear-gradient(#3a3022,#2b241b);border:1px solid #5a4a30;border-top-color:#7a6440;border-radius:10px;padding:6px 10px;cursor:pointer;box-shadow:inset 0 1px 0 #c9a95c2e,inset 0 -1px 0 #00000080,0 2px 4px #000a}.ds-rail-btn:hover{background:url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .8 0 0 0 0 .66 0 0 0 0 .36 0 0 0 .1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\"),linear-gradient(#4a3d2b,#352b1f);border-color:#c9a95c}.ds-rail-btn:active{transform:translateY(1px);box-shadow:inset 0 2px 4px #000a}.ds-rail-btn:focus-visible{outline:2px solid #ffd27a;outline-offset:2px}.ds-glow{border-color:#ffd27a;box-shadow:0 0 0 1px #ffd27a,0 0 16px 4px #ffd27a99;animation:ds-g 1.6s ease-in-out infinite alternate}@keyframes ds-g{to{box-shadow:0 0 0 1px #ffd27a,0 0 8px 1px #ffd27a66}}@media (prefers-reduced-motion:reduce){.ds-glow{animation:none}}"
+    },
+    {
+      "name": "Tip Card",
+      "kind": "card",
+      "refersTo": "tip-card",
+      "description": "Tutorial note laid on the table.",
+      "html": "<div class=\"ds-tip\"><p>Tap your location or Investigate to look for clues.</p><button>Got it</button></div>",
+      "css": ".ds-tip{max-width:300px;padding:12px 14px 10px;background:#f3e6c4;color:#2a1f12;border:2px solid #c9a95c;border-radius:12px;box-shadow:0 8px 24px #000c;font:17px/1.35 Alegreya,Georgia,serif}.ds-tip p{margin:0 0 8px}.ds-tip button{float:right;padding:3px 14px;font:15px Alegreya,Georgia,serif;background:#5a4520;color:#f3e6c4;border:1px solid #5a4a30;border-radius:12px;cursor:pointer}.ds-tip::after{content:'';display:block;clear:both}"
+    },
+    {
+      "name": "Modal",
+      "kind": "card",
+      "refersTo": "modal",
+      "description": "Dark object lifted off the table or page.",
+      "html": "<div class=\"ds-modal\"><h2>Flashlight</h2><p>Investigate. Your location gets −2 shroud for this investigation.</p><button class=\"ds-mbtn\">Close</button></div>",
+      "css": ".ds-modal{max-width:360px;border:1px solid #c9a95c;border-radius:14px;background:#17120c;color:#eadfc4;padding:18px;box-shadow:0 10px 40px #000;font:16px/1.4 Alegreya,Georgia,serif}.ds-modal h2{margin:0 0 8px;color:#c9a95c;font:26px Teutonic,TeutonicRU,Georgia,serif;letter-spacing:.02em}.ds-mbtn{font:15px Georgia,serif;color:#eadfc4;background:#2b241b;border:1px solid #5a4a30;border-radius:6px;padding:5px 10px;cursor:pointer}.ds-mbtn:hover{background:#3a3022;border-color:#c9a95c}"
+    },
+    {
+      "name": "Parchment Tile",
+      "kind": "card",
+      "refersTo": "parchment-tile-selected",
+      "description": "Choice tile in the study; the chosen one lifts with umber light.",
+      "html": "<div class=\"ds-paper2\"><div class=\"ds-tile\">The Gathering</div><div class=\"ds-tile ds-sel\">The Midnight Masks</div></div>",
+      "css": ".ds-paper2{display:flex;gap:10px;background:#e6d9bb;padding:16px}.ds-tile{padding:10px 14px;background:#f6edd6cc;border:1px solid #b69c6a;border-radius:10px;color:#2b1d0e;font:18px Teutonic,TeutonicRU,Georgia,serif;cursor:pointer}.ds-tile:hover{border-color:#7a5410}.ds-sel{background:#fff6d8;border-color:#7a5410;box-shadow:0 0 14px #7a541066}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Investigator's Casebook",
+    "overview": "Arkham Table is a record of a case being worked. Between scenarios the player handles the casebook itself: parchment pages with vine borders, set in a blackletter display face and inked in sepia, where the campaign log, the guide's story and the deck choices are written down. During a scenario the casebook is open on a dark table at night. The real card scans, the cardboard tokens and the rulebook art carry the color, and everything the interface adds is a prop on that table: brass fittings, worn leather, a slip of paper with a note.\n\nThe system has two rooms and one material language. The **study** is light: parchment, iron-gall ink, umber gilt. The **table** is dark: night green-black, smoked panels, bone-colored ink and gilt edges. A modal opened over parchment switches back to the table's dark theme, so every dialog reads as an object lifted off the page.\n\nDensity is high on the table, because a hot-seat game needs the whole state in view, and calm in the study, where reading comes first. The HUD is made of props on that table, drawn entirely in CSS: worn brown leather with a fine grain, brass bevels, stitching on the large plates, and a brass rail under the top bar. They have weight and material instead of reading as floating software chrome.\n\nRejected directions: generic dark SaaS, neon or sci-fi glow, cartoon or mobile-game styling, and gore or splatter horror.",
+    "keyCharacteristics": [
+      "Real card scans, tokens and rulebook art are the imagery. The interface never competes with them.",
+      "Two themes from one token set: the dark table and the light parchment study.",
+      "Serif everywhere. Teutonic for names and headings, Alegreya for reading, Georgia for controls.",
+      "HUD chrome is grained brown leather with brass edges. The primary action is the one polished brass plate. Glow is a signal, not decoration.",
+      "Every animation has a reduced-motion fallback."
+    ],
+    "rules": [
+      {
+        "name": "The Earned Glow Rule",
+        "body": "Glow means \"act here\". Playable Green rings legal targets and Lamp Glow lights the current step. No other element glows.",
+        "section": "colors"
+      },
+      {
+        "name": "The Props Rule",
+        "body": "Chrome is a physical prop: on the table and over the cover it is grained leather with a lit brass top edge and a downward shadow; on parchment it is card stock. Only the primary action is polished brass, one plate per screen; a switched-on toggle or chosen tab is pressed in, never brass. Content panels like the feed and modals keep Lacquer Black.",
+        "section": "colors"
+      },
+      {
+        "name": "The Two Inks Rule",
+        "body": "Theme switches by redefining the same ink, muted, gold and bad variables. Never hard-code table colors inside the study, or study colors on the table.",
+        "section": "colors"
+      },
+      {
+        "name": "The Printed Name Rule",
+        "body": "A card, investigator, scenario or encounter name is set in Teutonic, like the printed card. Running text never is.",
+        "section": "typography"
+      },
+      {
+        "name": "The Both Alphabets Rule",
+        "body": "Every display stack lists TeutonicRU right after Teutonic, so Russian names keep the same face.",
+        "section": "typography"
+      },
+      {
+        "name": "The Lamplight Rule",
+        "body": "Cast shadows are black and fall downward. Colored light exists only as the earned glow. A 1px inset edge in brass or gilt is a bevel on the material, not a shadow.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do let card scans, tokens and rulebook art carry the color. Interface surfaces stay within Night Table, Smoked Panel, Lacquer Black, the leather and brass of the props, and the parchment tones.",
+      "Do set every card, investigator and scenario name in Teutonic with TeutonicRU, and read-at-length text in Alegreya.",
+      "Do mark legal targets with the Playable Green ring (3px plus glow) and the current step with Lamp Glow, and nothing else.",
+      "Do switch themes by redefining the ink, muted, gold and bad variables, as the parchment and its modals do.",
+      "Do give every animation a reduced-motion fallback that places the result instantly.",
+      "Do build table chrome as props in CSS: grained leather, a lit brass top edge, a bevel and a shadow that falls downward. Stitch the large plates.",
+      "Do keep a single brass plate per screen, for the primary action. Toggles and chosen tabs are pressed in instead.",
+      "Do keep every menu screen inside the painted frame: wizard and catalog pad by the frame insets (`clamp(20px, max(6vh, 3.2vw), 64px)` vertical, `clamp(16px, 3.4vw, 56px)` horizontal), and headings stop short of the language tabs."
+    ],
+    "donts": [
+      "Don't use flat grey panels, sans-serif UI or blue accents. Generic dark SaaS styling is rejected.",
+      "Don't use neon or sci-fi glow, saturated cyan or purple, glassmorphism or holographic effects.",
+      "Don't use cartoon or mobile-game styling: bouncy chunky buttons, bright gradients or loot-box sparkle.",
+      "Don't decorate with gore, blood drips, splatter or grunge textures.",
+      "Don't add glow, colored cast shadows or pulsing to anything that is not the current step or a legal move.",
+      "Don't use pure white or pure black as broad surfaces. Pure black is only for shadows and scrims."
+    ]
+  }
+}
