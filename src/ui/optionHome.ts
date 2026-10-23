@@ -49,18 +49,22 @@ export function optionOwner(o: ChoiceOption, s: GameState): InvId | null {
 }
 
 /**
- * A pending choice that picks one of the viewer's own deck or discard cards (a search, the top cards, the discard pile):
- * its card options are shown large in the showcase area. Returns those card ids, or [] when the choice is anything else.
+ * A pending choice that picks one of the deck or discard cards the viewer is looking at (a search, the top cards, the
+ * discard pile, Scrying's look at any deck): its card options, and the cards shown beside them, are laid out large in the
+ * showcase area, in the order they lie in their pile. Returns those card ids, or [] when the choice is anything else.
  */
 export function deckPick(game: GameState, viewer: InvId | null): InstId[] {
   const p = game.pending;
   if (!p || p.inv !== viewer || p.kind !== "generic") return [];
-  const cards = p.options.filter((o) => o.card).map((o) => o.card!);
-  const own = (id: InstId) => {
+  const cards = [...p.options.flatMap((o) => o.card ?? []), ...(p.shown ?? [])];
+  const pile = (id: InstId) => {
     const c = game.cards[id];
-    return !!c && (c.zone === "deck" || c.zone === "discard") && c.owner === viewer;
+    if (c?.zone === "encounterDeck") return game.encounterDeck;
+    if (c?.zone === "deck" && c.owner) return game.invs[c.owner].deck;
+    return c?.zone === "discard" && c.owner === viewer ? game.invs[viewer].discard : null;
   };
-  return cards.length && cards.every(own) ? cards : [];
+  if (!cards.length || !cards.every(pile)) return [];
+  return cards.sort((a, b) => pile(a)!.indexOf(a) - pile(b)!.indexOf(b));
 }
 
 /**

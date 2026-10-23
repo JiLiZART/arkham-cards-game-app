@@ -6,7 +6,7 @@ import { TIPS_KEY } from "../tips";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
 
-/** language, tap decks to draw, draw by hand, pace, tips, reset tips, music and effects, behind the gear */
+/** language, then three groups: at the table (tap decks, draw by hand, pace with its hint), tips (show, reset), sound (music, effects) */
 export function Settings() {
   const locale = useGame((s) => s.locale);
   const drawByHand = useGame((s) => s.drawByHand);
@@ -29,38 +29,48 @@ export function Settings() {
             ))}
           </select>
         </label>
-        <label>
-          <input type="checkbox" checked={tapDecks} onChange={(e) => setTapDecks(e.target.checked)} /> {tr("menu.tapDecks")}
-        </label>
-        <label>
-          <input type="checkbox" checked={drawByHand} onChange={(e) => setDrawByHand(e.target.checked)} /> {tr("menu.drawByHand")}
-        </label>
-        <label title={tr(`pace.${pace}.hint`)}>
-          {tr("menu.pace")}{" "}
-          <select value={pace} onChange={(e) => setPace(e.target.value as Pace)}>
-            {(["normal", "slow", "tap"] as const).map((p) => (
-              <option key={p} value={p}>{tr(`pace.${p}`)}</option>
-            ))}
-          </select>
-        </label>
-        <label>
-          <input type="checkbox" checked={tipsOn} onChange={(e) => setTipsOn(e.target.checked)} /> {tr("menu.tips")}
-        </label>
-        <label className="slider">
-          {tr("menu.music")} <input type="range" min={0} max={100} value={musicVolume} onChange={(e) => setVolume("music", Number(e.target.value))} /> <span>{musicVolume}</span>
-        </label>
-        <label className="slider">
-          {tr("menu.effects")} <input type="range" min={0} max={100} value={sfxVolume} onChange={(e) => setVolume("effects", Number(e.target.value))} /> <span>{sfxVolume}</span>
-        </label>
-        <button
-          disabled={tipsReset}
-          onClick={() => {
-            safeStorage().removeItem(TIPS_KEY);
-            setTipsReset(true);
-          }}
-        >
-          {tr("menu.resetTips")}{tipsReset ? " ✔" : ""}
-        </button>
+        <fieldset>
+          <legend>{tr("settings.table")}</legend>
+          <label>
+            <input type="checkbox" checked={tapDecks} onChange={(e) => setTapDecks(e.target.checked)} /> {tr("menu.tapDecks")}
+          </label>
+          <label>
+            <input type="checkbox" checked={drawByHand} onChange={(e) => setDrawByHand(e.target.checked)} /> {tr("menu.drawByHand")}
+          </label>
+          <label>
+            {tr("menu.pace")}{" "}
+            <select value={pace} aria-describedby="pace-hint" onChange={(e) => setPace(e.target.value as Pace)}>
+              {(["normal", "slow", "tap"] as const).map((p) => (
+                <option key={p} value={p}>{tr(`pace.${p}`)}</option>
+              ))}
+            </select>
+          </label>
+          <small id="pace-hint" className="set-hint">{tr(`pace.${pace}.hint`)}</small>
+        </fieldset>
+        <fieldset>
+          <legend>{tr("settings.tips")}</legend>
+          <label>
+            <input type="checkbox" checked={tipsOn} onChange={(e) => setTipsOn(e.target.checked)} /> {tr("menu.tips")}
+          </label>
+          <button
+            disabled={tipsReset}
+            onClick={() => {
+              safeStorage().removeItem(TIPS_KEY);
+              setTipsReset(true);
+            }}
+          >
+            {tr("menu.resetTips")}{tipsReset ? " ✔" : ""}
+          </button>
+        </fieldset>
+        <fieldset>
+          <legend>{tr("settings.sound")}</legend>
+          <label className="slider">
+            {tr("menu.music")} <input type="range" min={0} max={100} value={musicVolume} onChange={(e) => setVolume("music", Number(e.target.value))} /> <span>{musicVolume}</span>
+          </label>
+          <label className="slider">
+            {tr("menu.effects")} <input type="range" min={0} max={100} value={sfxVolume} onChange={(e) => setVolume("effects", Number(e.target.value))} /> <span>{sfxVolume}</span>
+          </label>
+        </fieldset>
       </section>
       <button className="primary big" onClick={() => gameStore.setState({ screen: "title" })}>
         {tr("wizard.back")}

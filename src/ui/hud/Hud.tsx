@@ -33,6 +33,7 @@ import { Ribbon } from "./Ribbon";
 import { SkillTestScreen } from "./SkillTestScreen";
 import { Portrait } from "../Portrait";
 import { spotlightNow } from "../spotlight";
+import { LangSwitch } from "../LangSwitch";
 import { useStage, useView } from "../view";
 
 const tr = (key: string, vars?: Record<string, string | number>) => t(db, gameStore.getState().locale, key, vars);
@@ -331,6 +332,7 @@ function TopBar({ phone }: { phone: boolean }) {
       <Ribbon />
       <PlayerBar />
       <div className="buttons">
+        <LangSwitch compact={phone} />
         <button className={`mute-btn ${muted ? "muted" : ""}`} onClick={() => setMuted(!muted)} title={tr(muted ? "hud.unmute" : "hud.mute")} aria-pressed={muted}>
           {muted ? "🔇" : "🔊"}
         </button>

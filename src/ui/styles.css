@@ -567,6 +567,8 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 .sc-card:disabled { cursor: default; }
 .showcase.picking .sc-card { outline: 2px solid transparent; }
 .showcase.picking .sc-card:hover { outline-color: var(--gold); box-shadow: 0 0 24px #c9a95c88; }
+/* a searched card that doesn't match: seen, not taken */
+.showcase.picking .sc-card.sc-off, .showcase.picking .sc-card.sc-off:hover { opacity: 1; filter: grayscale(0.7) brightness(0.6); translate: none; outline-color: transparent; box-shadow: 0 12px 34px #000c; }
 .sc-flip { position: relative; display: block; width: 100%; height: 100%; transform-style: preserve-3d; }
 .sc-front, .sc-back { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 12px; overflow: hidden; }
 .sc-front > * { width: 100%; height: 100%; }
@@ -669,14 +671,12 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 
 /* title, settings and the new-game wizard: phone-first, every control at least 44 px */
 /* the cover painting fades into the dark; a scrim keeps the buttons readable (phone: the painting crops to its middle) */
-.screen.title { position: relative; min-height: 100dvh; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px 16px; background: linear-gradient(#0d0906aa, #0d0906dd), url(/art/title.webp) center 25% / cover no-repeat #0d0906; max-width: none; }
+.screen.title { position: relative; min-height: 100dvh; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 24px 16px; background: linear-gradient(#0d0906aa, #0d0906dd), url(/art/title.webp) center 45% / cover no-repeat #0d0906; max-width: none; }
 .title-body h1 { text-shadow: 0 2px 18px #000; }
 .title-body h1 { font: 64px/1 Teutonic, TeutonicRU, Georgia, serif; margin: 0 0 28px; }
 .title-buttons { display: flex; flex-direction: column; gap: 12px; width: min(360px, 90vw); margin: 0 auto; }
 .title-buttons .big { min-height: 56px; font-size: 22px; }
-.title-buttons button { background: #1f1810d9; }
-.title-buttons button.primary { background: #5a4520e6; }
-.title footer { position: absolute; bottom: 10px; left: 0; right: 0; color: var(--muted); font-size: 12px; padding: 0 16px; }
+.title footer { position: absolute; bottom: 10px; left: 0; right: 0; padding: 0 16px; color: var(--muted); font: 13px/1.4 Alegreya, Georgia, serif; text-shadow: 0 1px 3px #000; }
 .link-btn { background: none; border: 0; color: var(--muted); text-decoration: underline; min-height: 44px; cursor: pointer; font-size: 16px; }
 .settings-screen .settings label { display: flex; align-items: center; gap: 10px; min-height: 44px; margin: 0; }
 .settings-screen .settings button, .settings-screen .settings select { min-height: 44px; }
@@ -724,7 +724,7 @@ footer { color: var(--muted); font-size: 12px; margin-top: 30px; }
 .wz-deck-cards { display: flex; flex-wrap: wrap; gap: 10px; flex: 1; }
 .wz-deck { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding: 8px 14px; min-height: 56px; border: 2px solid #3a2f1f; border-radius: 12px; background: #15110c; color: var(--ink); cursor: pointer; text-align: left; }
 .wz-deck small { color: var(--muted); }
-.wz-bags { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.wz-bags { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); gap: 16px; }
 .bag-card { display: flex; flex-direction: column; gap: 8px; padding: 12px; border: 2px solid #3a2f1f; border-radius: 14px; background: #15110c; color: var(--ink); text-align: left; min-height: 44px; font: inherit; }
 button.bag-card { cursor: pointer; }
 .bag-head { display: flex; flex-direction: column; }
@@ -734,7 +734,6 @@ button.bag-card { cursor: pointer; }
 .bag-group { display: inline-flex; align-items: center; gap: 2px; }
 .bag-group b { font-size: 15px; color: var(--muted); }
 .bag-average { color: var(--ink); font-variant-numeric: lining-nums; }
-.wz-ready { display: flex; flex-direction: column; gap: 16px; align-items: center; }
 .wz-order { display: flex; flex-wrap: wrap; gap: 18px; justify-content: center; }
 .wz-ready .bag-card { width: min(420px, 100%); }
 .wz-first { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 20px; }
@@ -1116,7 +1115,7 @@ button.danger { border-color: var(--bad); color: var(--bad); }
 /* a narrow screen: the sidebar opens over the grid */
 @media (max-width: 900px) {
   .wz-camp .wz-camp-side { display: none; }
-  .wz-camp.sheet-open .wz-camp-side { display: block; position: fixed; inset: 0; z-index: 40; max-height: none; padding: 12px; overflow-y: auto; background: #120e09f2; }
+  .wz-camp.sheet-open .wz-camp-side { display: block; position: fixed; inset: 0; z-index: 61; max-height: none; padding: 12px; overflow-y: auto; background: #120e09f2; }
   .wz-camp.sheet-open .wz-camp-close { display: inline-grid; place-items: center; }
 }
 .wz-chapter-card { padding: 0; border: 0; background: none; cursor: zoom-in; border-radius: 8px; min-height: 0; }
@@ -1127,3 +1126,170 @@ button.danger { border-color: var(--bad); color: var(--bad); }
 .parchment .modal h1, .parchment .modal h2, .parchment .modal h3 { color: var(--gold); text-shadow: none; }
 .parchment .modal button { color: var(--ink); background: #2b241b; border-color: #5a4a30; }
 .parchment .modal button:hover:not(:disabled) { background: #3a3024; border-color: var(--gold); }
+
+/* The HUD as props on the table, in CSS only (the material tokens live on :root so the menus share them): worn leather (the button browns plus a faint inline noise grain, kept light so Faded Ink stays at 4.5:1), brass bevels,
+   stitching on the large plates, a polished brass plate for the primary action and a brass rail under the top bar. */
+:root {
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .8 0 0 0 0 .66 0 0 0 0 .36 0 0 0 .1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --leather: var(--grain), linear-gradient(#2e2619, #1d1710);
+  --leather-tab: var(--grain), linear-gradient(#3a3022, #2b241b);
+  --leather-tab-lit: var(--grain), linear-gradient(#4a3d2b, #352b1f);
+  --brass-plate: linear-gradient(#e3c67c, #c9a95c 45%, #a8863f);
+  --brass-plate-lit: linear-gradient(#f0d58c, #d6b768 45%, #b8964d);
+  --bevel: inset 0 1px 0 #c9a95c2e, inset 0 -1px 0 #00000080;
+}
+.topbar { background: var(--leather); border-bottom: 0; box-shadow: var(--bevel); }
+.topbar::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 4px; background: linear-gradient(#e3c67c, #a8863f 55%, #5a4520); box-shadow: 0 3px 8px #000a; pointer-events: none; }
+
+.topbar .buttons > button:not(.chaos-bag), .rail-btn, .camera-buttons button, .undo-btn {
+  background: var(--leather-tab); border: 1px solid #5a4a30; border-top-color: #7a6440; box-shadow: var(--bevel), 0 2px 4px #000a;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+}
+.topbar .buttons > button:not(.chaos-bag):hover:not(:disabled), .rail-btn:hover:not(:disabled), .camera-buttons button:hover:not(:disabled), .undo-btn:hover:not(:disabled) { background: var(--leather-tab-lit); border-color: var(--gold); }
+.topbar .buttons > button:not(.chaos-bag):active:not(:disabled), .rail-btn:active:not(:disabled), .camera-buttons button:active:not(:disabled), .undo-btn:active:not(:disabled) { transform: translateY(1px); box-shadow: inset 0 2px 4px #000a; }
+.topbar .buttons > button:not(.chaos-bag):focus-visible, .rail-btn:focus-visible, .camera-buttons button:focus-visible, .undo-btn:focus-visible { outline: 2px solid #ffd27a; outline-offset: 2px; }
+
+/* the primary action is the one polished brass plate on screen; its glyphs and label take the walnut ink */
+.rail-btn.primary { background: var(--brass-plate); color: #1a120b; border-color: #5a4520; box-shadow: inset 0 1px 0 #fff3c4, inset 0 -1px 0 #7a5a20, 0 2px 5px #000a; }
+.rail-btn.primary:hover:not(:disabled) { background: var(--brass-plate-lit); border-color: #5a4520; }
+.rail-btn.primary .rail-icon { color: #1a120b; }
+
+.instruction-bar { background: var(--leather); border: 2px solid var(--gold); box-shadow: 0 0 0 1px #5a4520, inset 0 0 0 1px #00000099, inset 0 1px 0 #ffd27a33, 0 4px 14px #000c; }
+.stat-bar, .token-row { background: var(--leather); border: 1px solid #5a4a30; border-top-color: #7a6440; box-shadow: var(--bevel), 0 8px 22px #000c; outline: 2px dashed #c9a95c80; outline-offset: -7px; }
+.stat-bar { padding: 12px 14px; }
+.token-row { padding: 9px 16px 9px 12px; outline-offset: -5px; }
+/* on leather the finished and skipped phases keep Faded Ink (4.5:1); position, the gilt current chip and the strike-through tell them apart */
+.topbar .ribbon-phase.done, .topbar .ribbon-phase.skipped { color: var(--muted); }
+/* a toggle that is on (Journal open) is a tab pressed into the bar */
+.topbar .buttons > button.primary:not(.chaos-bag) { background: var(--leather-tab-lit); border-color: var(--gold); box-shadow: inset 0 2px 4px #000a, inset 0 0 0 1px #c9a95c66; }
+
+/* the glow is the state and outranks the plate (DESIGN.md: The Earned Glow Rule) */
+.rail-btn.glow { border-color: #ffd27a; box-shadow: 0 0 0 1px #ffd27a, 0 0 16px 4px #ffd27a99; animation: rail-glow 1.6s ease-in-out infinite alternate; }
+.rail-btn.glow:hover:not(:disabled) { border-color: #ffd27a; }
+.rail-btn.glow:focus-visible { outline-color: #fff; outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { .rail-btn.glow { animation: none; } .topbar .buttons > button:not(.chaos-bag), .rail-btn, .camera-buttons button, .undo-btn { transition: none; } }
+
+/* ── Menus: the same props in the study. The title's buttons are leather tabs over the cover; on parchment the primary is
+   the brass plate, secondaries are card stock, chosen chips are inked stamps, and every screen keeps clear of the frame. */
+.title-buttons button:not(.link-btn) { background: var(--leather-tab); border: 1px solid #5a4a30; border-top-color: #7a6440; border-radius: 8px; box-shadow: var(--bevel), 0 3px 8px #000c; font: 22px/1.2 Alegreya, Georgia, serif; color: var(--ink); transition: background 0.2s ease, border-color 0.2s ease, transform 0.1s ease; }
+.title-buttons button:not(.link-btn):hover:not(:disabled) { background: var(--leather-tab-lit); border-color: var(--gold); }
+.title-buttons button:not(.link-btn):active:not(:disabled) { transform: translateY(1px); box-shadow: inset 0 2px 4px #000a; }
+.title-buttons button.primary { background: var(--brass-plate); color: #1a120b; border-color: #5a4520; box-shadow: inset 0 1px 0 #fff3c4, inset 0 -1px 0 #7a5a20, 0 3px 10px #000c; }
+.title-buttons button.primary:hover:not(:disabled) { background: var(--brass-plate-lit); border-color: #5a4520; }
+.title-buttons button:focus-visible { outline: 2px solid #ffd27a; outline-offset: 3px; }
+.title-buttons .link-btn { color: var(--muted); background: none; border-color: transparent; text-shadow: 0 1px 3px #000, 0 0 8px #000; font: 17px Alegreya, Georgia, serif; }
+.title-buttons .link-btn:hover:not(:disabled) { color: var(--ink); background: none; border-color: transparent; }
+@media (max-height: 500px) and (orientation: landscape) {
+  .screen.title { justify-content: center; padding: 12px 16px; }
+  .title-body h1 { font-size: 34px; margin-bottom: 14px; }
+  .title-buttons { flex-direction: row; flex-wrap: wrap; gap: 8px; width: min(560px, 92vw); }
+  .title-buttons > * { flex: 1 1 40%; }
+  .title-buttons > .primary, .title-buttons > .link-btn { flex-basis: 100%; }
+  .title-buttons button.big:not(.link-btn) { min-height: 44px; font-size: 19px; padding: 6px 14px; }
+  .title footer { position: static; margin-top: 10px; font-size: 11px; }
+}
+
+/* the parchment shell: insets that follow the painted frame, ink scrollbars, a printed rule under the heading */
+.parchment { --frame-y: clamp(20px, max(6vh, 3.2vw), 64px); --frame-x: clamp(16px, 3.4vw, 56px); scrollbar-color: #8a7350 transparent; }
+.parchment .screen.wizard, .parchment .screen.catalog { padding: var(--frame-y) var(--frame-x); }
+.parchment .wz-head { justify-content: flex-start; gap: 16px; padding-bottom: 8px; margin-bottom: 8px; border-bottom: 1px solid #b69c6a; box-shadow: 0 1px 0 #fff8e6b0; }
+.parchment .screen:not(.wizard):not(.catalog) > h1 { padding-bottom: 8px; border-bottom: 1px solid #b69c6a; box-shadow: 0 1px 0 #fff8e6b0; }
+/* the language tabs sit in the top-right corner: headings stop short of them */
+.parchment .wz-head, .parchment .screen > h1:first-child { padding-right: min(112px, 30vw); }
+.parchment .wz-dots { gap: 8px; }
+.parchment .wz-dots i { width: 12px; height: 12px; background: transparent; box-shadow: inset 0 0 0 1.5px #8a7350; }
+.parchment .wz-dots i.done { background: #6b5a3c; box-shadow: none; }
+.parchment .wz-dots i.on { width: 28px; border-radius: 6px; background: #7a5410; box-shadow: none; }
+/* a chosen chip or tab is an inked stamp (the class chips keep a pressed well: their icons are coloured) */
+.parchment .wz-chip.on:not(.wz-class), .parchment .wz-chip.on:not(.wz-class):hover:not(:disabled) { background: #3a2410; color: #f6edd6; border-color: #3a2410; box-shadow: inset 0 1px 2px #000a; }
+/* the footer: a printed rule, the brass plate for the way on, card stock for the way back */
+.parchment .wz-foot { border-top: 1px solid #b69c6a; box-shadow: inset 0 1px 0 #fff8e6b0; padding-top: 12px; }
+.parchment button.primary { background: var(--brass-plate); color: #1d1306; border: 1px solid #5a4520; box-shadow: inset 0 1px 0 #fff3c4, inset 0 -1px 0 #7a5a20, 0 2px 5px #3a241066; }
+.parchment button.primary:hover:not(:disabled) { background: var(--brass-plate-lit); border-color: #5a4520; }
+.parchment button.primary:disabled { opacity: 1; background: #d8c8a0; color: #6b5a3c; border: 1px dashed #9c8250; box-shadow: none; }
+.parchment .wz-foot button:not(.primary) { background: linear-gradient(#f6ecd0, #e4d4ab); border: 1px solid #9c8250; border-top-color: #c8b385; box-shadow: inset 0 1px 0 #fffaea, 0 2px 4px #3a241033; }
+.parchment .wz-foot button:not(.primary):hover:not(:disabled) { background: linear-gradient(#fbf3dc, #ecdfba); border-color: #7a5410; }
+.parchment .wz-foot button:active:not(:disabled) { transform: translateY(1px); box-shadow: inset 0 2px 4px #3a241040; }
+.parchment .wz-foot button { transition: background 0.2s ease, transform 0.1s ease; }
+
+/* Settings: one narrow leaf of the casebook, ledger rows with the control on the right, grouped under printed legends */
+.parchment .settings-screen { max-width: 640px; }
+.parchment .settings-screen .settings { padding: 6px clamp(16px, 4vw, 28px) 18px; background: #f6edd6e6; border-radius: 12px; box-shadow: inset 0 0 0 1px #fff8e6b0, 0 2px 8px #3a24101a; }
+.settings-screen .settings label { justify-content: space-between; padding: 4px 0; border-bottom: 1px dotted #b69c6a; font: 18px/1.3 Alegreya, Georgia, serif; }
+.settings-screen .settings label:has(+ .set-hint) { border-bottom: 0; }
+.settings-screen .settings label.slider { justify-content: flex-start; }
+.settings-screen .settings label.slider input[type="range"] { flex: 0 1 220px; width: auto; margin-left: auto; }
+.settings-screen .settings label.slider span { min-width: 3ch; font-variant-numeric: tabular-nums; }
+.settings-screen .settings input[type="checkbox"] { order: 2; width: 22px; height: 22px; margin: 0; accent-color: var(--gold); cursor: pointer; }
+.settings-screen .settings select { min-width: 180px; padding: 0 10px; border-radius: 6px; font: inherit; }
+.settings-screen .settings fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+.settings-screen .settings legend { padding: 16px 0 2px; font: 22px Teutonic, TeutonicRU, Georgia, serif; color: var(--ink); }
+.settings-screen .settings fieldset > button { margin-top: 10px; }
+.settings-screen .set-hint { display: block; padding: 2px 0 8px; border-bottom: 1px dotted #b69c6a; color: var(--muted); font: 15px/1.35 Alegreya, Georgia, serif; }
+.parchment .settings-screen :focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.settings-screen > button.primary { margin-top: 18px; }
+
+/* How to play: one continuous page at reading measure */
+.parchment .screen.howto { max-width: 760px; }
+.parchment .screen.howto section { margin: 0; padding: 18px clamp(16px, 4vw, 32px); border-width: 0 1px; border-radius: 0; background: #f6edd6e6; }
+.parchment .screen.howto section:first-of-type { border-top-width: 1px; border-radius: 12px 12px 0 0; }
+.parchment .screen.howto section:last-of-type { border-bottom-width: 1px; border-radius: 0 0 12px 12px; }
+.parchment .screen.howto section + section { border-top: 1px dotted #b69c6a; }
+.parchment .screen.howto h2 { margin: 0 0 4px; font-size: 24px; }
+.screen.howto > button.primary { margin-top: 20px; }
+
+/* wizard tiles: paper cards that lift; the chosen one gets a stitched edge */
+.parchment .wz-ctile, .parchment .wz-tile, .parchment button.bag-card, .parchment .dk-inv { background: linear-gradient(#fbf4e1, #f1e5c6); box-shadow: inset 0 1px 0 #fffaf0, 0 1px 0 #b69c6a66, 0 3px 6px #5a452030; transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease; }
+.parchment .wz-ctile:hover:not(:disabled), .parchment .wz-tile:hover:not(:disabled), .parchment button.bag-card:hover:not(:disabled), .parchment .dk-inv:hover:not(:disabled) { background: linear-gradient(#fdf7e6, #f4e9cc); transform: translateY(-2px); border-color: #7a5410; box-shadow: inset 0 1px 0 #fffaf0, 0 6px 12px #5a452040; }
+.parchment .wz-ctile.selected, .parchment .wz-tile.selected, .parchment .bag-card.selected, .parchment .dk-inv.on,
+.parchment .wz-ctile.selected:hover:not(:disabled), .parchment .wz-tile.selected:hover:not(:disabled), .parchment button.bag-card.selected:hover:not(:disabled), .parchment .dk-inv.on:hover:not(:disabled) { background: linear-gradient(#fffaea, #fbefc9); border-color: #7a5410; box-shadow: 0 0 0 1px #c9a95c, inset 0 1px 0 #fff, 0 6px 14px #7a541055; outline: 2px dashed #7a5410a0; outline-offset: -7px; }
+.parchment .wz-ctile:focus-visible, .parchment .wz-tile:focus-visible, .parchment .bag-card:focus-visible, .parchment .dk-inv:focus-visible,
+.parchment .wz-ctile.selected:focus-visible:not(:disabled), .parchment .wz-tile.selected:focus-visible:not(:disabled), .parchment button.bag-card.selected:focus-visible:not(:disabled), .parchment .dk-inv.on:focus-visible:not(:disabled) { outline: 3px solid #7a5410; outline-offset: 2px; }
+.parchment .dk-inv small.ok { color: #2a6b2f; }
+.wz-tile { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 12px 6px 10px; }
+.wz-tile .wz-avatar b { line-height: 1.15; text-align: center; }
+.wz-tile .wz-partly { color: var(--muted); font-size: 13px; line-height: 1.15; max-width: none; }
+/* decks: compact investigator chips free the band above the tabs */
+.dk-inv { position: relative; display: grid; grid-template-columns: 48px auto; column-gap: 10px; align-items: center; justify-items: start; padding: 6px 30px 6px 8px; text-align: left; }
+.dk-inv .wz-avatar { display: contents; }
+.dk-inv .portrait { grid-column: 1; grid-row: 1 / span 3; }
+.dk-inv .wz-avatar b, .dk-inv .wz-avatar small, .dk-inv > small { grid-column: 2; line-height: 1.15; }
+.dk-inv .wz-badge { top: -8px; right: -8px; }
+/* difficulty: two columns, the average as the figure that separates the levels; difficulty and ready sit centred */
+.wz-body:has(> .wz-bags), .wz-body:has(> .wz-ready) { display: flex; flex-direction: column; }
+.wz-bags, .wz-ready { margin-block: auto; }
+.wz-bags .bag-card { padding: 16px 18px; gap: 12px; }
+@media (max-height: 500px) { .wz-bags { grid-template-columns: repeat(2, 1fr); } }
+.wz-bags .bag-average { margin-top: auto; padding-top: 8px; border-top: 1px solid #b69c6a; font: 20px/1.2 Alegreya, Georgia, serif; }
+/* ready: one case-file sheet — campaign, investigators, chaos bag, first scenario */
+.wz-ready { display: flex; flex-direction: column; align-items: center; gap: 18px; width: min(680px, 100%); margin-inline: auto; padding: 22px 28px 26px; border: 2px solid #b69c6a; border-radius: 14px; background: linear-gradient(#fbf4e1, #f1e5c6); box-shadow: inset 0 1px 0 #fffaf0, 0 8px 22px #5a452040; outline: 2px dashed #b69c6a; outline-offset: -8px; }
+.wz-ready-camp { margin: 0; font-size: clamp(26px, 3vw, 34px); text-align: center; }
+.wz-order { gap: 24px; justify-content: center; }
+.parchment .wz-ready .bag-card.selected { width: 100%; border: 0; border-block: 1px solid #b69c6a; border-radius: 0; background: none; box-shadow: none; outline: none; padding: 14px 0; transform: none; }
+.wz-first small { font-size: 15px; letter-spacing: 0.06em; text-transform: uppercase; }
+.wz-first b { font: 28px/1.15 Teutonic, TeutonicRU, Georgia, serif; color: var(--ink); display: inline-flex; align-items: center; gap: 8px; }
+@media (max-width: 640px) { .wz-ready { padding: 18px 16px; outline-offset: -6px; } }
+
+/* the language tabs, on every screen at the top right: a leather strip with a brass plate on the chosen tongue; ink on paper in the study */
+.lang-switch { display: inline-flex; gap: 2px; padding: 2px; border-radius: 8px; background: var(--leather); border: 1px solid #5a4a30; border-top-color: #7a6440; box-shadow: var(--bevel), 0 2px 4px #000a; }
+.lang-switch button { min-width: 44px; min-height: 44px; padding: 0 10px; border: 0; border-radius: 6px; background: transparent; color: #d9c9a3; font: 600 14px/1 Georgia, serif; letter-spacing: 0.08em; transition: background 0.2s ease; }
+.lang-switch button:hover:not([aria-pressed="true"]) { background: var(--leather-tab-lit); }
+.lang-switch button[aria-pressed="true"] { background: var(--leather-tab-lit); color: #f3e3b8; box-shadow: inset 0 0 0 1px #c9a95c, inset 0 2px 3px #0008; }
+.lang-switch button:focus-visible { outline: 2px solid #ffd27a; outline-offset: 2px; }
+.topbar .lang-switch { box-shadow: var(--bevel); }
+.topbar .lang-switch button { min-height: 0; min-width: 40px; padding: 4px 10px; }
+.lang-corner { position: fixed; top: calc(8px + env(safe-area-inset-top, 0px)); right: calc(16px + env(safe-area-inset-right, 0px)); z-index: 60; }
+/* on parchment the tabs belong to the page: they scroll away with the heading that is padded to clear them */
+.parchment { position: relative; }
+.parchment .lang-corner { position: absolute; }
+.parchment .lang-switch { background: #f6edd6cc; border-color: #b69c6a; box-shadow: inset 0 1px 0 #fff8, 0 1px 3px #2b1d0e33; }
+.parchment .lang-switch button { color: var(--ink); }
+.parchment .lang-switch button:hover:not([aria-pressed="true"]) { background: #e9dcbc; }
+.parchment .lang-switch button[aria-pressed="true"] { background: #7a5410; color: #f6edd6; box-shadow: inset 0 1px 0 #c9a95c66, inset 0 -1px 0 #0006; }
+.parchment .lang-switch button:focus-visible { outline-color: #7a5410; }
+.lang-step { font: 600 14px/1 Georgia, serif; letter-spacing: 0.06em; }
+
+@media (prefers-reduced-motion: reduce) {
+  .title-buttons button:not(.link-btn), .parchment .wz-foot button, .lang-switch button, .parchment .wz-ctile, .parchment .wz-tile, .parchment button.bag-card, .parchment .dk-inv { transition: none; }
+  .parchment .wz-ctile:hover:not(:disabled), .parchment .wz-tile:hover:not(:disabled), .parchment button.bag-card:hover:not(:disabled), .parchment .dk-inv:hover:not(:disabled) { transform: none; }
+}

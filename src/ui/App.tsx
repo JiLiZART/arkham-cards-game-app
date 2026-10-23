@@ -16,6 +16,7 @@ import { Table } from "./scene/Table";
 import { useView } from "./view";
 import { useLayout } from "./layoutMode";
 import { installTouch } from "./touch";
+import { LangSwitch } from "./LangSwitch";
 
 /** a phone held upright: the table needs it sideways (nothing about the game changes while this shows) */
 function RotateCard() {
@@ -32,6 +33,11 @@ function RotateCard() {
 export function App() {
   const screen = useGame((s) => s.screen);
   const game = useGame((s) => s.game);
+  // a language switch re-renders everything: module-level tr() helpers read the locale without subscribing
+  const locale = useGame((s) => s.locale);
+  useEffect(() => {
+    document.documentElement.lang = locale;
+  }, [locale]);
   const testing = useView((s) => s.testing);
   const { mode, portrait } = useLayout();
   const rotate = mode === "phone" && portrait;
@@ -72,7 +78,17 @@ export function App() {
   return (
     <>
       {rotate && <RotateCard />}
-      {screen === "title" ? page : <div className="parchment">{page}</div>}
+      {screen === "title" ? (
+        <>
+          {page}
+          <LangSwitch className="lang-corner" />
+        </>
+      ) : (
+        <div className="parchment">
+          {page}
+          <LangSwitch className="lang-corner" />
+        </div>
+      )}
     </>
   );
 }

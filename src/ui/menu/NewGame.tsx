@@ -217,7 +217,7 @@ function InvestigatorsStep({ s, set }: { s: WizardState; set: (w: WizardState) =
                 <Avatar code={i.code} badge={k >= 0 ? `P${k + 1}` : undefined}>
                   {i.needsDeck && <small className="wz-note">{tr("wizard.needsDeck")}</small>}
                   {i.partlyImplemented && !i.needsDeck && (
-                    <small className="wz-note" title={tr("wizard.partly")}>
+                    <small className="wz-note wz-partly" title={tr("wizard.partly")}>
                       ◐ {tr("wizard.partlyShort")}
                     </small>
                   )}
@@ -283,7 +283,7 @@ function DecksStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }
               moment("tab");
               setActive(c);
             }}>
-              <Avatar code={c} size={56} badge={`P${k + 1}`} />
+              <Avatar code={c} size={48} badge={`P${k + 1}`} />
               <small className={problems.length ? "bad" : "ok"}>{problems.length ? tr("deck.toFix", { n: problems.length }) : tr("deck.ready")}</small>
             </button>
           );
@@ -372,6 +372,7 @@ function ReadyStep({ s }: { s: WizardState }) {
   const icon = scenarioIcon(first);
   return (
     <div className="wz-ready">
+      <h2 className="wz-ready-camp">{tileName(db, c, locale)}</h2>
       <div className="wz-order">
         {s.picks.map((code, k) => (
           <Avatar key={code} code={code} badge={`P${k + 1}`} />

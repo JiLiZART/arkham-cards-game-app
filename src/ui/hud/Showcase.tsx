@@ -93,6 +93,8 @@ export function Showcase() {
   // the rightmost column's details go to its left, so they don't run off the screen
   const show = (id: InstId, i: number, el: HTMLElement) => setDetail({ id, rect: el.getBoundingClientRect(), left: layout.cols > 1 && i % layout.cols === layout.cols - 1 });
   // under drawn cards: how to take them; under a pick: choose one, with the options that aren't cards as links in the line
+  // a searched card that doesn't match is shown but can't be taken
+  const pickable = (id: InstId) => !!game.pending?.options.some((o) => o.card === id);
   const others = pick.length ? (game.pending?.options ?? []).filter((o) => !o.card) : [];
   const none = others.find((o) => o.id === "none");
   const links = others.filter((o) => o !== none);
@@ -124,9 +126,9 @@ export function Showcase() {
         {ids.map((id, i) => (
           <button
             key={id}
-            className="sc-card"
+            className={`sc-card ${pick.length && !pickable(id) ? "sc-off" : ""}`}
             data-card={id}
-            disabled={!!pick.length && busy}
+            disabled={!!pick.length && (busy || !pickable(id))}
             onClick={(e) => pick.length && choosePick(id, e.currentTarget)}
             onMouseEnter={(e) => show(id, i, e.currentTarget)}
             onMouseLeave={() => setDetail(null)}
@@ -148,7 +150,7 @@ export function Showcase() {
               <span className="sc-front">
                 <CardFace code={game.cards[id].code} locale={locale} />
               </span>
-              <img className="sc-back" src={backUrl("player")} alt="" draggable={false} />
+              <img className="sc-back" src={backUrl(game.cards[id].zone === "encounterDeck" ? "encounter" : "player")} alt="" draggable={false} />
             </span>
           </button>
         ))}

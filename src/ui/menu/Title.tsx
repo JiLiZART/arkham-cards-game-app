@@ -47,7 +47,7 @@ export function Title() {
           )}
         </div>
       </div>
-      <footer>Card data from ArkhamDB · images from arkham.build. Arkham Horror: The Card Game is © Fantasy Flight Games; fan project for personal use.</footer>
+      <footer>{tr("menu.credit")}</footer>
     </div>
   );
 }
