@@ -106,13 +106,15 @@ describe("readInvestigators", () => {
       { ...zoey, code: "05046", deck_requirements: undefined }, // not deckbuildable
     ]),
   );
-  it("names the content pack of the card, the snapshot's folder, not its ArkhamDB pack code", () => {
+  it("names the content pack of the card: the snapshot's folder, or the pack code in a split folder", () => {
     mkdirSync(join(root, "pack", "investigator"), { recursive: true });
     writeFileSync(
       join(root, "pack", "investigator", "nat.json"),
       JSON.stringify([{ ...zoey, code: "60101", pack_code: "nat" }]),
     );
-    expect(readInvestigators(root).find((d) => d.code === "60101")?.pack).toBe("investigator");
+    // a folder is a pack (dwl holds the whole Dunwich cycle); the investigator folder is one pack per starter deck box
+    expect(readInvestigators(root).find((d) => d.code === "02001")?.pack).toBe("dwl");
+    expect(readInvestigators(root).find((d) => d.code === "60101")?.pack).toBe("nat");
   });
   it("takes regular investigators only, and leaves the hand-written ones alone", () => {
     const defs = readInvestigators(root, new Set(["02002"]));

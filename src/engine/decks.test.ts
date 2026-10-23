@@ -26,8 +26,7 @@ describe("decks", () => {
             ? [upstream[d.id]]
             : [],
       );
-    // the whole content, from disk: slow under a full parallel run
-  }, 30_000);
+  });
 
   it("rejects too many copies", () => {
     const d = structuredClone(db.decks["roland-starter"]);

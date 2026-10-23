@@ -1,0 +1,769 @@
+[
+ {
+  "code": "60201",
+  "name": "Harvey Walters",
+  "type": "investigator",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 1,
+  "traits": [
+   "Miskatonic"
+  ],
+  "text": "[reaction] After an investigator at your location draws 1 or more cards from their deck during the investigation phase: That investigator draws 1 card. (Limit once per round.)\n[elder_sign] effect: +1. Draw 1 card.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Professor",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Seeker cards ([seeker]) level 0-5, Neutral cards level 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Vault of Knowledge, Thrice-Damned Curiosity, 1 random basic weakness.",
+  "flavor": "\"I have experience dealing with these sorts of horrors.\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 4,
+   "intellect": 5,
+   "combat": 1,
+   "agility": 2
+  },
+  "health": 7,
+  "sanity": 8
+ },
+ {
+  "code": "60202",
+  "name": "Vault of Knowledge",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 1,
+  "traits": [
+   "Talent"
+  ],
+  "text": "Harvey Walters deck only.\nYour maximum hand size is increased by 2.\n[reaction] After you successfully investigate, exhaust Vault of Knowledge and choose an investigator at your location: That investigator draws 1 card.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "deckLimit": 1,
+  "cost": 3
+ },
+ {
+  "code": "60203",
+  "name": "Thrice-Damned Curiosity",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "har",
+  "quantity": 1,
+  "traits": [
+   "Flaw"
+  ],
+  "text": "<b>Revelation</b> - For every 3 cards in your hand: Take 1 damage.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "\"... I can only hope that my account will not arouse a curiosity greater than sane caution on the part of those who believe me at all.\"\n- H. P. Lovecraft, \"At the Mountains of Madness\"",
+  "subtype": "weakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "60204",
+  "name": "Obsessive",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "har",
+  "quantity": 1,
+  "traits": [
+   "Flaw"
+  ],
+  "text": "<b>Revelation</b> - Put Obsessive into play in your threat area.\n<b>Forced</b> - When your turn begins: Discard 1 non-weakness card at random from your hand.\n[action][action]: Discard Obsessive.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "basicweakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "60205",
+  "name": "Arcane Enlightenment",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Ritual"
+  ],
+  "text": "Your maximum hand size is increased by 1.\nYou have 1 additional hand slot, which can only be used to hold a [[Tome]] asset.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "arcane"
+  ],
+  "icons": {
+   "willpower": 2
+  },
+  "flavor": "An augmented mind can memorize entire volumes of books.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60206",
+  "name": "Celaeno Fragments",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Tome"
+  ],
+  "text": "While you have...\n- ...5 or more cards in hand, you get +1 [intellect].\n- ...10 or more cards in hand, you get +1 [willpower].\n- ...15 or more cards in hand, you get +1 [intellect].",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "intellect": 1
+  },
+  "subname": "Book of Books",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1
+ },
+ {
+  "code": "60207",
+  "name": "Disc of Itzamna",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Relic"
+  ],
+  "text": "[reaction] When a non-[[Elite]] enemy spawns at your location, discard Disc of Itzamna: Automatically evade that enemy or deal it 2 damage.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "accessory"
+  ],
+  "icons": {
+   "willpower": 1
+  },
+  "subname": "Protective Amulet",
+  "flavor": "Do they fear it because of what it will do to them? Or, do they fear it because of what it will do to you?",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3
+ },
+ {
+  "code": "60208",
+  "name": "Encyclopedia",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Tome"
+  ],
+  "text": "Uses (5 secrets).\n[action] Exhaust Encyclopedia and spend 1 secret: Choose an investigator at your location. That investigator gets +2 to a skill of your choice until the end of the phase.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2,
+  "uses": {
+   "type": "secrets",
+   "count": 5
+  }
+ },
+ {
+  "code": "60209",
+  "name": "Feed the Mind",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Spell"
+  ],
+  "text": "Uses (3 secrets).\n[action] Exhaust Feed the Mind and spend 1 secret: Test [intellect] (1). For each point you succeed by (to a maximum of 3), draw 1 card.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "arcane"
+  ],
+  "icons": {
+   "intellect": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "uses": {
+   "type": "secrets",
+   "count": 3
+  }
+ },
+ {
+  "code": "60210",
+  "name": "Forbidden Tome",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Relic",
+   "Tome"
+  ],
+  "text": "Uses (5 secrets).\n[action] Exhaust Forbidden Tome and spend 1 secret: Draw 1 card. Then, if you have 10 or more cards in your hand and there are no secrets on Forbidden Tome, you may discard it to record in your Campaign Log that \"you have translated the tome.\"",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "wild": 1
+  },
+  "subname": "Untranslated",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1,
+  "uses": {
+   "type": "secrets",
+   "count": 5
+  }
+ },
+ {
+  "code": "60211",
+  "name": "Higher Education",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "While you have 5 or more cards in your hand, Higher Education gains:\n\"[fast] Spend 1 resource: You get +1 [willpower] for this skill test.\n[fast] Spend 1 resource: You get +1 [intellect] for this skill test.\"",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 0
+ },
+ {
+  "code": "60213",
+  "name": "Whitton Greene",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Miskatonic"
+  ],
+  "text": "While you control a [[Tome]] or [[Relic]] asset, you get +1 [intellect].\n[reaction] After you reveal a location or put a new location into play, exhaust Whitton Greene: Search the top 6 cards of your deck for a [[Tome]] or [[Relic]] asset and draw it. Shuffle your deck.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "intellect": 1
+  },
+  "subname": "Hunter of Rare Books",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 4,
+  "health": 2,
+  "sanity": 2
+ },
+ {
+  "code": "60214",
+  "name": "Burning the Midnight Oil",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Insight"
+  ],
+  "text": "<b>Investigate.</b> When this action begins, gain 2 resources.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "agility": 1
+  },
+  "flavor": "You'll sleep when you're dead.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 0
+ },
+ {
+  "code": "60215",
+  "name": "Cryptic Writings",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Insight"
+  ],
+  "text": "Gain 2 resources.\n[reaction] After you draw Cryptic Writings during your turn: Play it.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 2
+  },
+  "flavor": "\"...these are few as compared with those in languages I cannot understand.\" - H. P. Lovecraft, \"The Statement of Randolph Carter\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 0
+ },
+ {
+  "code": "60216",
+  "name": "Extensive Research",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Insight"
+  ],
+  "text": "Reduce the cost to play Extensive Research by 1 for each other card in your hand.\nDiscover 2 clues at your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 2
+  },
+  "flavor": "\"Nothing in here, either. How many do we have left?\"\n\"...See the wall behind you?\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 12
+ },
+ {
+  "code": "60217",
+  "name": "Occult Invocation",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Spell"
+  ],
+  "text": "As an additional cost to play Occult Invocation, discard up to 2 cards from your hand.\n<b>Fight.</b> This attack uses [intellect] instead of [combat]. You get +1 [intellect] and deal +1 damage for this attack for each card discarded as part of this card's cost.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "combat": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60220",
+  "name": "Library Docent",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Miskatonic"
+  ],
+  "text": "[reaction] After Library Docent enters play, return a [[Tome]] asset you control to its owner's hand: Play a different [[Tome]] asset (by title) from your hand, reducing its cost by 2.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "intellect": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 1,
+  "cost": 1,
+  "health": 1,
+  "sanity": 2
+ },
+ {
+  "code": "60221",
+  "name": "Glimpse the Unthinkable",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Insight"
+  ],
+  "text": "Draw 1 card. Shuffle any number of non-weakness cards from your hand into your deck. Then, draw that many cards.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 2
+  },
+  "flavor": "Ignorance is a bliss you cannot afford.",
+  "deckLimit": 2,
+  "xp": 1,
+  "cost": 0
+ },
+ {
+  "code": "60222",
+  "name": "Esoteric Atlas",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Tome"
+  ],
+  "text": "Uses (4 secrets).\n[action] Spend 1 secret: Choose a revealed location up to 3 connections away from your location. Move to that location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "willpower": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 3,
+  "uses": {
+   "type": "secrets",
+   "count": 4
+  }
+ },
+ {
+  "code": "60223",
+  "name": "Whitton Greene",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Miskatonic"
+  ],
+  "text": "While you control a [[Tome]] or [[Relic]] asset, you get +1 [willpower] and +1 [intellect].\n[reaction] After you reveal a location or put a new location into play, exhaust Whitton Greene: Search the top 9 cards of your deck for a [[Tome]] or [[Relic]] asset and draw it. Shuffle your deck.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1
+  },
+  "subname": "Hunter of Rare Books",
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 4,
+  "health": 2,
+  "sanity": 3
+ },
+ {
+  "code": "60224",
+  "name": "Cryptic Writings",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Insight"
+  ],
+  "text": "Gain 3 resources (4 resources instead if you have 10 or more other cards in hand).\n[reaction] After you draw Cryptic Writings during your turn: Play it.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "wild": 1
+  },
+  "flavor": "\"...these are few as compared with those in the languages I cannot understand.\" - H. P. Lovecraft, \"The Statement of Randolph Carter\"",
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 0
+ },
+ {
+  "code": "60225",
+  "name": "\"I've got a plan!\"",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Insight",
+   "Tactic"
+  ],
+  "text": "<b>Fight.</b> This attack uses [intellect] instead of [combat]. You get +2 [intellect] for this test. You deal +1 damage for this attack for each clue you have (max +3 damage).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 2,
+   "combat": 1
+  },
+  "flavor": "\"That's the worst plan I've ever heard. Well, what are we waiting for?\"",
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2
+ },
+ {
+  "code": "60226",
+  "name": "Mind over Matter",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Insight"
+  ],
+  "text": "Fast. Play during your turn.\nUntil the end of the round, add your [intellect] to your [combat] and [agility]. Draw 1 card.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 1
+ },
+ {
+  "code": "60227",
+  "name": "Seeking Answers",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Insight"
+  ],
+  "text": "<b>Investigate.</b> If you succeed, instead of discovering a clue at your location, discover 2 total clues from among your location and connecting locations.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "agility": 2
+  },
+  "flavor": "Some people need to know the truth at any cost. Some truths can cut like knives.",
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 1
+ },
+ {
+  "code": "60228",
+  "name": "Perception",
+  "type": "skill",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Practiced",
+   "Expert"
+  ],
+  "text": "Max 1 committed per skill test.\nIf this test is successful, draw 1 card (2 cards instead if it succeeds by 2 or more).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 3
+  },
+  "flavor": "At last, I've found it!",
+  "deckLimit": 2,
+  "xp": 2
+ },
+ {
+  "code": "60229",
+  "name": "Forbidden Tome",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Relic",
+   "Tome"
+  ],
+  "text": "Researched.\n[action][action][action][action] Exhaust Forbidden Tome: Move 1 damage from a player card at your location to an enemy at your location. Reduce this ability's cost by 1 action for every 4 cards in your hand (to a minimum of [action]).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "willpower": 1,
+   "combat": 1,
+   "wild": 1
+  },
+  "subname": "Dark Knowledge",
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 1
+ },
+ {
+  "code": "60230",
+  "name": "Forbidden Tome",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Relic",
+   "Tome"
+  ],
+  "text": "Researched.\n[action][action][action][action] Exhaust Forbidden Tome: You may move to a connecting location. Discover 1 clue at your location. Reduce this ability's cost by 1 action for every 4 cards in your hand (to a minimum of [action]).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "intellect": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "subname": "Secrets Revealed",
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 1
+ },
+ {
+  "code": "60231",
+  "name": "Farsight",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 2,
+  "traits": [
+   "Ritual"
+  ],
+  "text": "[fast] During your turn, if you have 8 or more cards in your hand, exhaust Farsight: Play an event from your hand <i>(paying its cost)</i>.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "arcane"
+  ],
+  "icons": {
+   "willpower": 1,
+   "wild": 1
+  },
+  "flavor": "Beyond all points in time. Beyond all angles of space. Beyond the curves of reality.",
+  "deckLimit": 2,
+  "xp": 4,
+  "cost": 2
+ },
+ {
+  "code": "60232",
+  "name": "Miskatonic Archaeology Funding",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 1,
+  "traits": [
+   "Grant"
+  ],
+  "text": "Permanent. Limit 1 per deck.\nYou have 2 additional ally slots, which can only be used to hold [[Miskatonic]] assets.\n<b>Forced</b> - When you take damage or horror: No more than 1 of that damage/horror can be assigned to a [[Miskatonic]] asset.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "deckLimit": 1,
+  "xp": 4,
+  "cost": null
+ },
+ {
+  "code": "60233",
+  "name": "The Necronomicon",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "har",
+  "quantity": 1,
+  "traits": [
+   "Item",
+   "Tome"
+  ],
+  "text": "Uses (6 secrets). Limit 1 per deck.\n[fast] Spend 1 secret: You get +2 skill value for this skill test.\n[fast] Spend 2 secrets: Draw 2 cards.\n[fast] Spend 3 secrets: Discover 1 clue at any location.\n[fast] Spend 4 secrets: Deal 3 damage to an enemy engaged with you.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "intellect": 5
+  },
+  "subname": "Petrus de Dacia Translation",
+  "deckLimit": 1,
+  "xp": 5,
+  "cost": 3,
+  "uses": {
+   "type": "secrets",
+   "count": 6
+  }
+ }
+]

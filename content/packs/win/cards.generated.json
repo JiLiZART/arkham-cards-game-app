@@ -1,0 +1,661 @@
+[
+ {
+  "code": "60301",
+  "name": "Winifred Habbamock",
+  "type": "investigator",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 1,
+  "traits": [
+   "Criminal"
+  ],
+  "text": "[fast] If 2 different non-weakness cards you control are committed to this skill test: Draw 1 card. (Limit once per test.)\n[elder_sign] effect: +1. After this test ends, for every 2 points you succeeded by, return a card you committed to this test to your hand.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Aviatrix",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Rogue cards ([rogue]) level 0-5, Neutral cards level 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Anything You Can Do, Better; Arrogance; 1 random basic weakness.",
+  "flavor": "\"I can top that.\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 1,
+   "intellect": 3,
+   "combat": 3,
+   "agility": 5
+  },
+  "health": 8,
+  "sanity": 7
+ },
+ {
+  "code": "60302",
+  "name": "Anything You Can Do, Better",
+  "type": "skill",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 1,
+  "traits": [
+   "Innate",
+   "Developed"
+  ],
+  "text": "Winifred Habbamock deck only.\nCommit only to a skill test you are performing.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 6
+  },
+  "flavor": "\"Told you.\"",
+  "deckLimit": 1
+ },
+ {
+  "code": "60303",
+  "name": "Arrogance",
+  "type": "skill",
+  "faction": "neutral",
+  "pack": "win",
+  "quantity": 1,
+  "traits": [
+   "Flaw"
+  ],
+  "text": "You must commit Arrogance to each eligible skill test you perform.\nThis skill's icons subtract from your skill value instead of adding to it.\nIf this test succeeds, return this skill to your hand.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "subtype": "weakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "60304",
+  "name": "Reckless",
+  "type": "skill",
+  "faction": "neutral",
+  "pack": "win",
+  "quantity": 1,
+  "traits": [
+   "Flaw"
+  ],
+  "text": "Commit only to a skill test you are performing (of any type) that has no other cards committed to it. Other cards cannot be committed to this skill test.\nIf this test fails, return this skill to your hand.\n<b>Forced</b> - If Reckless is in your hand at the end of your turn: Reveal it and lose 2 resources.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "basicweakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "60305",
+  "name": "Lockpicks",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Tool",
+   "Illicit"
+  ],
+  "text": "[action] Exhaust Lockpicks: <b>Investigate.</b> Add your [agility] value to your skill value for this investigation. If you do not succeed by at least 2, discard Lockpicks.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "intellect": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3
+ },
+ {
+  "code": "60306",
+  "name": "Mauser C96",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Weapon",
+   "Firearm",
+   "Illicit"
+  ],
+  "text": "Uses (5 ammo).\n[action] Exhaust Mauser C96 and spend 1 ammo: <b>Fight.</b> You get +1 [combat] and deal +1 damage for this attack. If you succeed by 2 or more, either ready Mauser C96 or gain 1 resource.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 4,
+  "uses": {
+   "type": "ammo",
+   "count": 5
+  }
+ },
+ {
+  "code": "60309",
+  "name": "Lonnie Ritter",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Ally"
+  ],
+  "text": "You get +1 [combat].\n[fast] Exhaust Lonnie Ritter and spend 1 resource: Choose an [[Item]] asset controlled by an investigator at your location. Heal 1 damage from that asset and 1 horror from Lonnie Ritter.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "combat": 1
+  },
+  "subname": "Feisty Mechanic",
+  "deckLimit": 2,
+  "tags": [
+   "hd",
+   "hh"
+  ],
+  "xp": 0,
+  "cost": 4,
+  "health": 2,
+  "sanity": 3
+ },
+ {
+  "code": "60310",
+  "name": "Leather Jacket",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Armor"
+  ],
+  "text": "Fast.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [
+   "body"
+  ],
+  "icons": {
+   "combat": 1
+  },
+  "flavor": "\"You think wearing that makes you look like the cat's meow?\"\n\"Nah, I already know I'm the cat's meow. This just lets everyone else know.\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2,
+  "health": 2
+ },
+ {
+  "code": "60311",
+  "name": "Streetwise",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "[fast] Spend 2 resources: You get +2 [intellect] for this skill test.\n[fast] Spend 2 resources: You get +2 [agility] for this skill test.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 0
+ },
+ {
+  "code": "60315",
+  "name": "Pilfer",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Trick"
+  ],
+  "text": "<b>Investigate.</b> This investigation uses [agility] instead of [intellect]. If you succeed, discover 2 additional clues at your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 4
+ },
+ {
+  "code": "60316",
+  "name": "Sneak By",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Trick"
+  ],
+  "text": "<b>Evade.</b> When this action begins, gain 2 resources.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "agility": 2
+  },
+  "flavor": "Being told not to do something was generally Winifred's cue to proceed as planned.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 0
+ },
+ {
+  "code": "60317",
+  "name": "Nimble",
+  "type": "skill",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Innate"
+  ],
+  "text": "For each point this skill test succeeds by, after it resolves, you may immediately move to a connecting location (to a maximum of 3 times).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0
+ },
+ {
+  "code": "60318",
+  "name": "Daredevil",
+  "type": "skill",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Fortune",
+   "Practiced"
+  ],
+  "text": "After you commit Daredevil to a skill test, discard cards from the top of your deck until you discard a [rogue] skill you can commit to this test. Commit it. Shuffle each weakness that was discarded by this effect back into your deck.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "flavor": "\"You're a maniac, Wini!\"\n\"I know! Isn't it wonderful?\"",
+  "deckLimit": 2,
+  "xp": 0
+ },
+ {
+  "code": "60320",
+  "name": "Liquid Courage",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Illicit"
+  ],
+  "text": "Uses (4 supplies).\n[action] Spend 1 supply: Choose an investigator at your location to heal 1 horror. Then, that investigator tests [willpower] (2). If the test succeeds, they draw 1 card. If the test fails, they heal 1 additional horror and discard 1 card at random from their hand.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 2
+  },
+  "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
+  "xp": 1,
+  "cost": 1,
+  "uses": {
+   "type": "supplies",
+   "count": 4
+  }
+ },
+ {
+  "code": "60321",
+  "name": "Mauser C96",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Weapon",
+   "Firearm",
+   "Illicit"
+  ],
+  "text": "Uses (5 ammo).\n[action] Exhaust Mauser C96 and spend 1 ammo: <b>Fight.</b> You get +2 [combat] and deal +1 damage for this attack. If you succeed by 2 or more, either ready Mauser C96 or gain 1 resource (if you succeed by 4 or more, do both).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 3,
+  "uses": {
+   "type": "ammo",
+   "count": 5
+  }
+ },
+ {
+  "code": "60322",
+  "name": "Daring Maneuver",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Gambit"
+  ],
+  "text": "Fast. Play when you would succeed at a skill test.\nYou get +3 skill value for this test. Draw 1 card.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "flavor": "\"McGlen, are you tryin' to get us both killed?\"\n\"Not this time, pal. Not this time.\"",
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 0
+ },
+ {
+  "code": "60323",
+  "name": "Cheap Shot",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Trick"
+  ],
+  "text": "<b>Fight.</b> Add your [agility] value to your skill value for this attack. If you succeed by 1 or more, automatically evade the attacked enemy. If you succeed by 3 or more, return Cheap Shot to your hand at the end of your turn.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "flavor": "\"Aim for the eyes,\" they told me.",
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2
+ },
+ {
+  "code": "60324",
+  "name": "Slip Away",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Trick"
+  ],
+  "text": "<b>Evade.</b> Add your [intellect] to your skill value for this evasion attempt. If you succeed by 1 or more and the evaded enemy is non-[[Elite]], it does not ready during the next upkeep phase. If you succeed by 3 or more, return Slip Away to your hand at the end of your turn.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2
+ },
+ {
+  "code": "60325",
+  "name": "Manual Dexterity",
+  "type": "skill",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Innate",
+   "Developed"
+  ],
+  "text": "Max 1 committed per skill test.\nIf this test is successful, draw 1 card (2 cards instead if it succeeds by 2 or more).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "agility": 3
+  },
+  "flavor": "Too easy.",
+  "deckLimit": 2,
+  "xp": 2
+ },
+ {
+  "code": "60326",
+  "name": "Lucky Cigarette Case",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Charm"
+  ],
+  "text": "[reaction] After you succeed at a skill test by 1 or more, exhaust Lucky Cigarette Case: Search the top X cards of your deck for a card, draw it, and shuffle the remaining cards into your deck. X is the amount you succeeded by.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "accessory"
+  ],
+  "icons": {
+   "willpower": 2
+  },
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 2
+ },
+ {
+  "code": "60327",
+  "name": "Sharpshooter",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "[reaction] When you use a fight ability on a [[Firearm]] asset, exhaust Sharpshooter: Choose one, or both - \n- This attack uses [agility] instead of [combat]. All modifiers to your [combat] for this attack modify your [agility] instead.\n- Use the attacked enemy's evade value for this attack, instead of their fight value.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "tags": [
+   "fa"
+  ],
+  "xp": 3,
+  "cost": 2
+ },
+ {
+  "code": "60328",
+  "name": "Pilfer",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Trick"
+  ],
+  "text": "<b>Investigate.</b> This investigation uses [agility] instead of [intellect]. If you succeed, discover 2 additional clues at your location. If you succeed by 2 or more, return Pilfer to your hand at the end of your turn.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 4
+ },
+ {
+  "code": "60329",
+  "name": "Backstab",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Tactic"
+  ],
+  "text": "<b>Fight.</b> This attack uses [agility] instead of [combat]. This attack deals +2 damage. If you succeed by 2 or more, return Backstab to your hand at the end of your turn.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 3
+ },
+ {
+  "code": "60330",
+  "name": "Copycat",
+  "type": "skill",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Gambit"
+  ],
+  "text": "After you commit Copycat to a skill test, search the discard pile of another investigator for a skill you can commit to this test, and commit it. After this test ends, place that card on the bottom of its owner's deck.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 3
+ },
+ {
+  "code": "60331",
+  "name": "Beretta M1918",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Weapon",
+   "Firearm",
+   "Illicit"
+  ],
+  "text": "Uses (4 ammo).\n[action] Exhaust Beretta M1918 and spend 1 ammo: <b>Fight.</b> You get +4 [combat] and deal +1 damage for this attack. If you succeed by 2 or more, either ready Beretta M1918, or this attack deals an additional +1 damage (if you succeed by 4 or more, do both).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand",
+   "hand"
+  ],
+  "icons": {
+   "combat": 2,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 4,
+  "cost": 4,
+  "uses": {
+   "type": "ammo",
+   "count": 4
+  }
+ },
+ {
+  "code": "60332",
+  "name": "Chuck Fergus",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "win",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Criminal"
+  ],
+  "text": "[reaction] When you play a [[Tactic]] or [[Trick]] event, exhaust Chuck Fergus: Choose two -\n- That event gains fast.\n- That event costs 2 fewer resources to play.\n- You get +2 skill value while performing a skill test during the resolution of that event.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "combat": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "subname": "O'Bannion Driver",
+  "deckLimit": 2,
+  "xp": 5,
+  "cost": 3,
+  "health": 2,
+  "sanity": 2
+ }
+]

@@ -1,0 +1,751 @@
+[
+ {
+  "code": "60101",
+  "name": "Nathaniel Cho",
+  "type": "investigator",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 1,
+  "traits": [
+   "Criminal",
+   "Warden"
+  ],
+  "text": "[reaction] When you deal damage to an enemy by an event or a fight ability on an event: Deal 1 additional damage. (Limit once per phase.)\n[elder_sign] effect: +1. If this skill test is successful during an attack, return an event from your discard pile to your hand.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Boxer",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Guardian cards ([guardian]) level 0-5, Neutral cards level 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Randall Cho, Tommy Malloy, 1 random basic weakness.",
+  "flavor": "\"I must fight on.\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 3,
+   "intellect": 2,
+   "combat": 5,
+   "agility": 2
+  },
+  "health": 9,
+  "sanity": 6
+ },
+ {
+  "code": "60102",
+  "name": "Randall Cho",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 1,
+  "traits": [
+   "Ally",
+   "Medic"
+  ],
+  "text": "Nathaniel Cho deck only.\n[reaction] After Randall Cho enters play: Heal 3 damage or search your deck and discard pile for a [[Weapon]] asset, play it <i>(paying its cost)</i>, and shuffle your deck.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1,
+   "wild": 1
+  },
+  "subname": "Concerned Brother",
+  "flavor": "\"You gotta give this up, Nathaniel. Sooner or later, you're gonna get yourself killed.\"",
+  "deckLimit": 1,
+  "tags": [
+   "hd"
+  ],
+  "cost": 2,
+  "health": 1,
+  "sanity": 3
+ },
+ {
+  "code": "60103",
+  "name": "Tommy Malloy",
+  "type": "enemy",
+  "faction": "neutral",
+  "pack": "nat",
+  "quantity": 1,
+  "traits": [
+   "Humanoid",
+   "Criminal",
+   "Syndicate"
+  ],
+  "text": "<b>Prey</b> - Nathaniel Cho only.\nHunter.\n<b>Forced</b> - When Tommy Malloy would take any amount of damage: Reduce that amount to 1.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [
+   "hunter"
+  ],
+  "slots": [],
+  "icons": {},
+  "flavor": "They call him \"The Big Palooka.\"\nNathaniel calls him scum.",
+  "subtype": "weakness",
+  "deckLimit": 1,
+  "enemy": {
+   "fight": 2,
+   "health": 3,
+   "healthPerInvestigator": false,
+   "evade": 3,
+   "damage": 2,
+   "horror": 0
+  }
+ },
+ {
+  "code": "60104",
+  "name": "Self-Destructive",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "nat",
+  "quantity": 1,
+  "traits": [
+   "Flaw"
+  ],
+  "text": "<b>Revelation</b> - Put Self-Destructive into play in your threat area.\n<b>Forced</b> - When you deal 1 or more damage to an enemy: Take 1 damage.\n[action][action]: Discard Self-Destructive.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "basicweakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "60105",
+  "name": "Boxing Gloves",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Weapon"
+  ],
+  "text": "You get +1 [combat] while fighting.\n[reaction] After you defeat an enemy, exhaust Boxing Gloves: Search the top 6 cards of your deck for a [[Spirit]] event and add it to your hand. Shuffle your deck.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand",
+   "hand"
+  ],
+  "icons": {
+   "combat": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3
+ },
+ {
+  "code": "60106",
+  "name": "Flesh Ward",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Ritual"
+  ],
+  "text": "Uses (4 charges).\n[reaction] When you are dealt damage and/or horror from an enemy attack, exhaust Flesh Ward and spend 1 charge: Cancel 1 damage or horror just dealt from that attack.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "arcane"
+  ],
+  "icons": {
+   "willpower": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "health": 1,
+  "sanity": 1,
+  "uses": {
+   "type": "charges",
+   "count": 4
+  }
+ },
+ {
+  "code": "60107",
+  "name": "Grete Wagner",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Hunter"
+  ],
+  "text": "You get +1 [combat].\n[reaction] After you defeat an enemy, exhaust Grete Wagner and deal 1 damage to her: Discover 1 clue at your location.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "intellect": 1,
+   "combat": 1
+  },
+  "subname": "The Purifier",
+  "flavor": "\"With Iron and Salt. With Water and Fire.\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 5,
+  "health": 3,
+  "sanity": 2
+ },
+ {
+  "code": "60109",
+  "name": "Relentless",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "[reaction] When you deal excess damage to an enemy, exhaust Relentless: Place that excess damage on Relentless.\n[fast] Discard Relentless: Gain resources equal to the amount of damage on it.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 0
+ },
+ {
+  "code": "60110",
+  "name": "Safeguard",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "[reaction] After another investigator moves from your location to a connecting location, exhaust Safeguard: Move to that location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1
+  },
+  "flavor": "Keep an eye out for any trouble, she told me. I rolled my eyes. There was always trouble.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60111",
+  "name": "Clean Them Out",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Spirit",
+   "Tactic"
+  ],
+  "text": "<b>Fight.</b> When this action begins, gain 2 resources.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "combat": 1
+  },
+  "flavor": "Time to tighten some screws.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 0
+ },
+ {
+  "code": "60112",
+  "name": "Counterpunch",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Spirit",
+   "Tactic"
+  ],
+  "text": "Fast. Play after an enemy attacks you, even if that attack was canceled.\n<b>Fight.</b> This attack targets the attacking enemy.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 0
+ },
+ {
+  "code": "60114",
+  "name": "\"Get over here!\"",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Spirit",
+   "Tactic"
+  ],
+  "text": "<b>Engage.</b> <b>Fight.</b> Choose a non-[[Elite]] enemy at your location or a connecting location. Move that enemy to your location, engage it, and attack it.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "combat": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60115",
+  "name": "Glory",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Spirit"
+  ],
+  "text": "Fast. Play after you defeat an enemy.\nDraw 2 cards.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "intellect": 2
+  },
+  "flavor": "Ding, ding, ding!",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1
+ },
+ {
+  "code": "60116",
+  "name": "Monster Slayer",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Spirit"
+  ],
+  "text": "<b>Fight.</b> This attack deals +1 damage.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 0
+ },
+ {
+  "code": "60117",
+  "name": "One-Two Punch",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Spirit",
+   "Tactic"
+  ],
+  "text": "<b>Fight.</b> You get +1 [combat] for this attack. If you succeed, you may fight that enemy again. You get +2 [combat] and deal +1 damage for that attack.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1
+  },
+  "flavor": "Nathaniel is renowned for his rapid left jab and right cross signature move.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60118",
+  "name": "Stand Together",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Spirit"
+  ],
+  "text": "Choose another investigator at your location. Both you and that investigator gain 2 resources.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1
+  },
+  "flavor": "They won't take us down that easily!",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 0
+ },
+ {
+  "code": "60120",
+  "name": "Evidence!",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Insight"
+  ],
+  "text": "Fast. Play after you defeat an enemy.\nDiscover 1 clue at your location (2 clues instead if you defeated enemies with a combined total of at least 4 printed health this turn).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "intellect": 2
+  },
+  "flavor": "Just as I suspected!",
+  "deckLimit": 2,
+  "xp": 1,
+  "cost": 1
+ },
+ {
+  "code": "60121",
+  "name": "Galvanize",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Spirit"
+  ],
+  "text": "Fast. Play only during your turn.\nReady a [guardian] asset you control. You may take an additional action during your turn, which can only be used to fight.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "willpower": 2
+  },
+  "deckLimit": 2,
+  "xp": 1,
+  "cost": 2
+ },
+ {
+  "code": "60122",
+  "name": "Counterpunch",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Spirit",
+   "Tactic"
+  ],
+  "text": "Fast. Play when an enemy attacks you <i>(before resolving that attack)</i>.\n<b>Fight.</b> This attack targets the attacking enemy. You get +2 [combat] and deal +1 damage for this attack.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "combat": 2,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 0
+ },
+ {
+  "code": "60123",
+  "name": "\"Get over here!\"",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Spirit",
+   "Tactic"
+  ],
+  "text": "Fast. Play during any [fast] window.\n<b>Engage. Fight.</b> Choose a non-[[Elite]] enemy up to 2 locations away. Move that enemy to your location, engage it, and attack it.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "willpower": 2,
+   "combat": 1
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2
+ },
+ {
+  "code": "60124",
+  "name": "Lesson Learned",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Insight",
+   "Spirit"
+  ],
+  "text": "Fast. Play after you take damage from an enemy attack.\nDiscover 2 clues at your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "intellect": 2
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 1
+ },
+ {
+  "code": "60125",
+  "name": "Mano a Mano",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Spirit",
+   "Bold"
+  ],
+  "text": "Play only as your first action.\nDeal 2 damage to an enemy engaged with you. This action does not provoke attacks of opportunity.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "combat": 1
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 0
+ },
+ {
+  "code": "60126",
+  "name": "Overpower",
+  "type": "skill",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Practiced",
+   "Expert"
+  ],
+  "text": "Max 1 committed per skill test.\nIf this test is successful, draw 1 card (2 cards instead if it succeeds by 2 or more).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 3
+  },
+  "flavor": "Die, you beast!",
+  "deckLimit": 2,
+  "xp": 2
+ },
+ {
+  "code": "60127",
+  "name": "Boxing Gloves",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Weapon"
+  ],
+  "text": "You get +2 [combat] while fighting.\n[reaction] After you defeat an enemy, exhaust Boxing Gloves: Search the top 9 cards of your deck for a [[Spirit]] event and add it to your hand. Shuffle your deck.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand",
+   "hand"
+  ],
+  "icons": {
+   "combat": 2
+  },
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 2
+ },
+ {
+  "code": "60128",
+  "name": "Grete Wagner",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Hunter"
+  ],
+  "text": "You get +1 [combat] and +1 [intellect].\n[reaction] After you defeat an enemy, exhaust Grete Wagner and deal 1 damage to her: Discover 1 clue at your location or a connecting location.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "intellect": 1,
+   "combat": 1,
+   "wild": 1
+  },
+  "subname": "The Purifier",
+  "flavor": "\"With Iron and Salt. With Water and Fire.\"",
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 5,
+  "health": 4,
+  "sanity": 2
+ },
+ {
+  "code": "60129",
+  "name": "Dynamite Blast",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Tactic"
+  ],
+  "text": "Fast. Play during any [fast] window.\nChoose either your location or a connecting location. Deal 3 damage to each enemy and investigator at the chosen location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "willpower": 2,
+   "combat": 2
+  },
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 4
+ },
+ {
+  "code": "60130",
+  "name": "Taunt",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Tactic"
+  ],
+  "text": "Fast. Play during any [fast] window.\nEngage any number of enemies at your location. For each enemy engaged this way, deal it 1 damage and draw 1 card.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "willpower": 2,
+   "combat": 1,
+   "agility": 1
+  },
+  "flavor": "You steel your nerves and shout into the darkness. \"Come and get me!\"",
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 1
+ },
+ {
+  "code": "60131",
+  "name": "Physical Training",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "Uses (2 resources). Replenish these resources at the start of each round.\n[fast] Spend 1 resource from your resource pool or from Physical Training: You get +1 [willpower] or +1 [combat] for this skill test.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 2,
+   "combat": 2
+  },
+  "deckLimit": 2,
+  "xp": 4,
+  "cost": 2,
+  "uses": {
+   "type": "resources",
+   "count": 2
+  }
+ },
+ {
+  "code": "60132",
+  "name": "One-Two Punch",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "nat",
+  "quantity": 2,
+  "traits": [
+   "Spirit",
+   "Tactic"
+  ],
+  "text": "<b>Fight.</b> You automatically succeed and deal +1 damage for this attack. You may fight again. You get +3 [combat] and deal +2 damage for that attack.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 4
+  },
+  "flavor": "Nathaniel is renowned for his rapid left jab and right cross signature move.",
+  "deckLimit": 2,
+  "xp": 5,
+  "cost": 2
+ }
+]

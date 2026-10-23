@@ -47,5 +47,9 @@ export default defineConfig({
   plugins: [react(), soundsDev()],
   server: { proxy: cardProxy },
   preview: { proxy: cardProxy },
-  test: { include: ["src/**/*.test.ts", "scripts/**/*.test.ts"] },
+  test: {
+    include: ["src/**/*.test.ts", "scripts/**/*.test.ts"],
+    // several tests load every pack from disk: under a full parallel run that takes longer than the 5s default
+    testTimeout: 30_000,
+  },
 });

@@ -1,0 +1,757 @@
+[
+ {
+  "code": "60251",
+  "name": "Carolyn Fern",
+  "type": "investigator",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 1,
+  "traits": [
+   "Medic",
+   "Scholar"
+  ],
+  "text": "[reaction] After you heal 1 or more horror from an investigator or [[Ally]] asset: Discover 1 clue at your location. (Limit once per round.)\n[elder_sign] effect: +1. Heal 1 horror from an investigator at your location.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Psychologist",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Seeker cards ([seeker]) level 0-5, Neutral cards level 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Experimental Psychology, Unbroken Web, 1 random basic weakness.",
+  "flavor": "\"Our dreams are a window into the hidden truths of not just our minds, but of the universe.\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 3,
+   "intellect": 5,
+   "combat": 1,
+   "agility": 3
+  },
+  "health": 6,
+  "sanity": 9
+ },
+ {
+  "code": "60252",
+  "name": "Experimental Psychology",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 1,
+  "traits": [
+   "Item",
+   "Tome",
+   "Science"
+  ],
+  "text": "Carolyn Fern deck only.\n[action]: Test [intellect] (2). If you succeed, heal 1 horror from an investigator or [[Ally]] asset at your location.\n[reaction] After you heal horror from an investigator, exhaust Experimental Psychology: That investigator gets +2 skill value to their next skill test this round.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1,
+   "wild": 1
+  },
+  "subname": "From Mind to Behavior",
+  "deckLimit": 1,
+  "tags": [
+   "hh"
+  ],
+  "cost": 2
+ },
+ {
+  "code": "60253",
+  "name": "Unbroken Web",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "car",
+  "quantity": 1,
+  "traits": [
+   "Terror",
+   "Dreamlands"
+  ],
+  "text": "<b>Revelation</b> - Put this card into play in your threat area.\n[reaction] When you would discover any number of clues: Place that much horror on Unbroken Web, instead. Then, discard this card if there is 4 or more horror on it.\n<b>Forced</b> - When the game ends or you are eliminated: You earn 2 fewer experience.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "weakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "60254",
+  "name": "Lethal Curiosity",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "car",
+  "quantity": 1,
+  "traits": [
+   "Flaw"
+  ],
+  "text": "<b>Revelation</b> - Test [willpower] (4). For each point you fail by, you must either take 1 damage or place 1 of your clues on your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "If only you could get a closer look.",
+  "subtype": "basicweakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "60255",
+  "name": "Dreamer's Chronicle",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Tome"
+  ],
+  "text": "Uses (4 secrets).\n[action] Spend 1 secret: <b>Investigate</b> ([intellect]). The first card you commit to this investigation gains [wild]. If you succeed, you may take 1 horror to discover 1 additional clue at your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "intellect": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 4,
+  "uses": {
+   "type": "secrets",
+   "count": 4
+  }
+ },
+ {
+  "code": "60256",
+  "name": "Occult Records",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Tome",
+   "Occult"
+  ],
+  "text": "Uses (3 secrets).\n[fast] During your turn, spend 1 secret and exhaust Occult Records: Heal 2 horror from an investigator at your location. Then, test [willpower] (2). If you fail, discard 1 card at random from your hand.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "willpower": 1
+  },
+  "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
+  "xp": 0,
+  "cost": 3,
+  "uses": {
+   "type": "secrets",
+   "count": 3
+  }
+ },
+ {
+  "code": "60257",
+  "name": "Private Practice",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Profession"
+  ],
+  "text": "Limit 1 per investigator.\n[reaction] After you heal 1 or more horror, exhaust Private Practice: Gain 1 resource.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1
+  },
+  "flavor": "\"Do you want to tell me about it?\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1
+ },
+ {
+  "code": "60258",
+  "name": "Psychology Student",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Miskatonic"
+  ],
+  "text": "[reaction] After you play Psychology Student: Heal 2 horror from an investigator or [[Ally]] asset at your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "willpower": 1
+  },
+  "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
+  "xp": 0,
+  "cost": 2,
+  "health": 1,
+  "sanity": 1
+ },
+ {
+  "code": "60259",
+  "name": "Scroll of the Pharaohs",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Relic",
+   "Tome"
+  ],
+  "text": "Uses (4 secrets).\n[action] Spend 1 secret and exhaust Scroll of the Pharaohs: Deal 1 horror to an investigator or [[Ally]] asset at your location. Then, if there are no secrets on Scroll of the Pharaohs, discard it, draw 3 cards, and record \"you have unearthed the secrets of the Pharaohs\" in your campaign log.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "intellect": 1
+  },
+  "subname": "Untranslated",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "uses": {
+   "type": "secrets",
+   "count": 4
+  }
+ },
+ {
+  "code": "60260",
+  "name": "University Archivist",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Miskatonic"
+  ],
+  "text": "You have 1 additional hand slot, which can only be used to hold a [[Tome]] asset.\n[reaction] After University Archivist enters play: Search the top 6 cards of your deck for a [[Tome]] asset and add it to your hand. Shuffle your deck.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2,
+  "health": 1,
+  "sanity": 1
+ },
+ {
+  "code": "60261",
+  "name": "Caustic Reaction",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Tactic",
+   "Science"
+  ],
+  "text": "<b>Fight</b> ([intellect]). You get +1 [intellect] for this attack. If you control 2 or more clues, this attack deals +1 damage.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "combat": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60262",
+  "name": "Unflappable",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Insight"
+  ],
+  "text": "<b>Evade</b> ([agility]). You get +2 [agility] for this evasion. If you succeed and you control 2 or more clues, heal 1 horror.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "agility": 1
+  },
+  "flavor": "\"Stay calm! We'll get out of this, yet.\"",
+  "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60264",
+  "name": "Psychoanalysis",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Insight",
+   "Science"
+  ],
+  "text": "Choose an investigator at your location and reveal the top 3 cards of their deck. That investigator may choose to either draw 1 revealed card and shuffle the rest into their deck, or heal 2 horror and return the revealed cards to the top of their owner's deck in any order.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60265",
+  "name": "De-Escalate",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Insight"
+  ],
+  "text": "<b>Parley.</b> Choose an enemy at your location. Heal horror equal to that enemy's horror value.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 2
+  },
+  "flavor": "\"Hold on, now. Let's stop and think about this.\"",
+  "deckLimit": 2,
+  "tags": [
+   "hh",
+   "pa"
+  ],
+  "xp": 0,
+  "cost": 1
+ },
+ {
+  "code": "60266",
+  "name": "Insidious Truths",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Insight",
+   "Cursed"
+  ],
+  "text": "As an additional cost to play Insidious Truths, you may discard up to 2 cards from hand.\n<b>Fight</b> ([combat]). For each card discarded as part of this card's cost, you get +2 [combat] and deal +1 damage for this attack.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60268",
+  "name": "Establish Motive",
+  "type": "skill",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Practiced"
+  ],
+  "text": "If this skill test is successful, the performing investigator searches the top 6 cards of their deck for an [[Insight]] event, draws it, and shuffles their deck.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 0
+ },
+ {
+  "code": "60269",
+  "name": "Literary Analysis",
+  "type": "skill",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Practiced"
+  ],
+  "text": "If this skill test is successful, replenish 1 secret on a [[Tome]] asset at your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 2
+  },
+  "deckLimit": 2,
+  "xp": 0
+ },
+ {
+  "code": "60271",
+  "name": "Unflappable",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Insight"
+  ],
+  "text": "<b>Evade</b> ([agility]). You get +3 [agility] for this evasion. If you succeed, heal 2 horror from among cards you control.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "flavor": "\"Stay calm! We'll get out of this, yet.\"",
+  "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
+  "xp": 1,
+  "cost": 2
+ },
+ {
+  "code": "60272",
+  "name": "Typewriter",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Tool"
+  ],
+  "text": "Uses (3 secrets). If there are no secrets on Typewriter, discard it.\nSecrets on Typewriter may be spent as if they were on [[Tome]] assets you control.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1
+  },
+  "flavor": "You must record your findings, even if nobody believes you.",
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2,
+  "uses": {
+   "type": "secrets",
+   "count": 3
+  }
+ },
+ {
+  "code": "60273",
+  "name": "Caustic Reaction",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Tactic",
+   "Science"
+  ],
+  "text": "<b>Fight</b> ([intellect]). You get +2 [intellect] and deal +1 damage for this attack. If you succeed and you control 2 or more clues, this attack deals +2 damage instead.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "combat": 2
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2
+ },
+ {
+  "code": "60274",
+  "name": "Hypnotize",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Science"
+  ],
+  "text": "<b>Parley</b> ([intellect]). You get +2 [intellect] for this parley. Choose a non-[[Elite]] enemy at your location. This test's difficulty is equal to that enemy's remaining health. If you succeed, shuffle that enemy into the encounter deck.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "tags": [
+   "pa"
+  ],
+  "xp": 2,
+  "cost": 2
+ },
+ {
+  "code": "60276",
+  "name": "Autopsy Report",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Tome",
+   "Science"
+  ],
+  "text": "[reaction] After an enemy at your location is defeated, exhaust Autopsy Report: <b>Investigate</b> ([intellect]). You get +X [intellect] for this investigation, where X is the defeated enemy's printed health (to a maximum of +5).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "combat": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 3
+ },
+ {
+  "code": "60277",
+  "name": "Sharp Rhetoric",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "Starting. <i>(You may begin the game with 1 copy of a starting card in your opening hand.)</i>\n[fast] Spend 1 resource: You get +1 [intellect] for this skill test (+2 [intellect] instead if this is an investigation or parley).\n[fast] Spend 1 resource: You get +1 [willpower] for this skill test (+2 [willpower] instead if this is an investigation or parley).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "tags": [
+   "pa"
+  ],
+  "xp": 3,
+  "cost": 2
+ },
+ {
+  "code": "60278",
+  "name": "Psychoanalysis",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Insight",
+   "Science"
+  ],
+  "text": "One at a time, each investigator at your location reveals the top 3 cards of their deck, draws 1 of those cards, shuffles the remaining cards into their deck, and heals 2 horror.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
+  "xp": 3,
+  "cost": 2
+ },
+ {
+  "code": "60279",
+  "name": "Scroll of the Pharaohs",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Relic",
+   "Tome"
+  ],
+  "text": "Researched. Uses (4 secrets).\n[action] Take 1 horror and spend 1 or 2 secrets: For each secret you spent as part of this ability's cost, reveal 3 cards from the top of the encounter deck. Choose and discard 1 non-peril, non-[[Elite]] card among them, then return the rest to the top of the encounter deck in any order.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "willpower": 1,
+   "wild": 2
+  },
+  "subname": "Words of Bast",
+  "deckLimit": 2,
+  "xp": 4,
+  "cost": 3,
+  "uses": {
+   "type": "secrets",
+   "count": 4
+  }
+ },
+ {
+  "code": "60280",
+  "name": "Scroll of the Pharaohs",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Relic",
+   "Tome"
+  ],
+  "text": "Researched. Uses (4 secrets).\n[action] Take 1 horror and spend 1 or 2 secrets: <b>Fight</b> ([intellect]). You get +3 [intellect] for this attack. If you succeed, this attack deals +1 damage for each secret you spent as part of this ability's cost.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "intellect": 1,
+   "wild": 2
+  },
+  "subname": "Words of Ra",
+  "deckLimit": 2,
+  "xp": 4,
+  "cost": 3,
+  "uses": {
+   "type": "secrets",
+   "count": 4
+  }
+ },
+ {
+  "code": "60281",
+  "name": "Scroll of the Pharaohs",
+  "type": "asset",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Relic",
+   "Tome"
+  ],
+  "text": "Researched. Uses (4 secrets).\n[action] Take 1 horror and spend 1 or 2 secrets: <b>Investigate</b> ([intellect]). You get +3 [intellect] for this investigation. If you succeed, discover 1 additional clue at your location for each secret you spent as part of this ability's cost.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "intellect": 1,
+   "wild": 2
+  },
+  "subname": "Words of Set",
+  "deckLimit": 2,
+  "xp": 4,
+  "cost": 3,
+  "uses": {
+   "type": "secrets",
+   "count": 4
+  }
+ },
+ {
+  "code": "60282",
+  "name": "Commune with the Cosmos",
+  "type": "event",
+  "faction": "seeker",
+  "pack": "car",
+  "quantity": 2,
+  "traits": [
+   "Spell"
+  ],
+  "text": "When you play Commune with the Cosmos, you may take up to 3 horror.\n<b>Investigate</b> ([intellect]). You get +2 [intellect] for this investigation. If you succeed, discover X additional clues at your location, where X is the amount of horror on you (to a maximum of 4 additional clues).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 2,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 5,
+  "cost": 2
+ }
+]

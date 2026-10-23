@@ -4,7 +4,8 @@
  *
  *   npm run import:cards -- --pack core [--source arkhamdb|arkham.build] [--file cached.json]
  *   npm run import:cards -- --source arkhamdb-json-data (--all | --cycle dwl) [--root inspired/arkhamdb-json-data]
- *     reads the local ArkhamDB snapshot: one pack per folder under pack/, the core folder's reprints (rcore, core_2026) as packs of their own
+ *     reads the local ArkhamDB snapshot: one pack per folder under pack/, the core folder's reprints (rcore, core_2026)
+ *     and the investigator folder's starter deck boxes (nat, har, …) as packs of their own
  *
  * With --locale <code>, it imports that language's card text from ArkhamDB's localized site instead and writes
  * content/i18n/<code>/cards.generated.json (hand-written content/i18n/<code>/cards.json wins over it field by field).
@@ -182,12 +183,16 @@ export async function fetchCards(source: string, file?: string, locale?: string)
 // ---------- the local ArkhamDB snapshot (inspired/arkhamdb-json-data) ----------
 export const SNAPSHOT = "inspired/arkhamdb-json-data";
 
+/** the snapshot folders split into a pack per ArkhamDB pack code */
+const SPLIT = new Set(["core", "investigator"]);
+
 /**
- * The pack a snapshot record goes to: its folder under `pack/`, except in the core folder, whose reprints (the revised
- * core and the 2026 core) are packs of their own, so the core pack stays the original set the scenarios are written for.
+ * The pack a snapshot record goes to: its folder under `pack/`, except in two folders split by pack code: the core
+ * folder, whose reprints (the revised core and the 2026 core) are packs of their own, so the core pack stays the
+ * original set the scenarios are written for, and the investigator folder, one pack per starter deck box (`nat`, `har`…).
  */
 export function snapshotTarget(folder: string, packCode: string): string {
-  return folder === "core" ? packCode : folder;
+  return SPLIT.has(folder) ? packCode : folder;
 }
 
 /**

@@ -1,0 +1,794 @@
+[
+ {
+  "code": "60151",
+  "name": "Tommy Muldoon",
+  "type": "investigator",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 1,
+  "traits": [
+   "Police"
+  ],
+  "text": "[action] Spend 1 resource, or discard a [[Firearm]] asset you control from play: Play a [[Firearm]] asset from your hand, paying its cost. It enters play with 2 additional ammo on it.\n[elder_sign] effect: +1. Place 1 ammo on an asset you control with uses (ammo).",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Officer",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Guardian cards ([guardian]) level 0-5, Neutral cards level 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Becky, Loose Cannon, 1 random basic weakness.",
+  "flavor": "\"This uniform means something. I'm reminded of that every time I put it on.\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 3,
+   "intellect": 3,
+   "combat": 4,
+   "agility": 2
+  },
+  "health": 9,
+  "sanity": 6
+ },
+ {
+  "code": "60152",
+  "name": "Becky",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 1,
+  "traits": [
+   "Item",
+   "Weapon",
+   "Firearm"
+  ],
+  "text": "Tommy Muldoon deck only. Uses (2 ammo).\n[action] Spend 1 ammo: <b>Fight</b> ([combat]). You get +2 [combat] and deal +1 damage for this attack.\n[reaction] When you trigger the above [action] ability, exhaust Becky: This attack ignores the aloof and retaliate keywords.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand",
+   "hand"
+  ],
+  "icons": {
+   "willpower": 1,
+   "combat": 1,
+   "wild": 1
+  },
+  "subname": "Custom Marlin Model 1894",
+  "deckLimit": 1,
+  "cost": 2,
+  "uses": {
+   "type": "ammo",
+   "count": 2
+  }
+ },
+ {
+  "code": "60153",
+  "name": "Loose Cannon",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "tom",
+  "quantity": 1,
+  "traits": [
+   "Flaw"
+  ],
+  "text": "<b>Revelation</b> - You must either discard each [[Firearm]] asset you control or lose 5 resources.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "\"You're outta line, Muldoon!\"",
+  "subtype": "weakness",
+  "deckLimit": 1,
+  "tags": [
+   "fa"
+  ]
+ },
+ {
+  "code": "60154",
+  "name": "Overconfident",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "tom",
+  "quantity": 1,
+  "traits": [
+   "Flaw"
+  ],
+  "text": "<b>Revelation</b> - Put Overconfident into play in your threat area.\n<b>Forced</b> - After you fail a skill test: Take 1 damage.\n[action][action]: Discard Overconfident.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "basicweakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "60156",
+  "name": "Police Dog",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Creature",
+   "Police"
+  ],
+  "text": "[fast] During an attack or investigation at your location, exhaust Police Dog: The performing investigator gets +1 skill value for this test.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "agility": 1
+  },
+  "flavor": "\"Good boy, Saxon.\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "health": 1,
+  "sanity": 1
+ },
+ {
+  "code": "60157",
+  "name": "Rookie Cop",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Police"
+  ],
+  "text": "Rookie Cop may be assigned damage and/or horror dealt to other investigators at your location.\n[reaction] When Rookie Cop is defeated: Discover 1 clue at your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "willpower": 1
+  },
+  "flavor": "Too eager to be cautious, too naive to know better.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "health": 2,
+  "sanity": 2
+ },
+ {
+  "code": "60158",
+  "name": "Service Revolver",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Weapon",
+   "Firearm",
+   "Police"
+  ],
+  "text": "Uses (3 ammo).\n[reaction] After an enemy attacks you, spend 1 ammo: <b>Fight</b> ([combat]). This attack targets that enemy. You get +1 [combat] and deal +1 damage for this attack.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "agility": 1
+  },
+  "flavor": "It's mostly for show, but handy when you need it.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2,
+  "uses": {
+   "type": "ammo",
+   "count": 3
+  }
+ },
+ {
+  "code": "60159",
+  "name": "Protective Vest",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Armor"
+  ],
+  "text": "[reaction] After you play Protective Vest: Search the top 6 cards of your deck for a [[Firearm]] or [[Upgrade]] card and add it to your hand. Shuffle your deck.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "body"
+  ],
+  "icons": {
+   "willpower": 1
+  },
+  "deckLimit": 2,
+  "tags": [
+   "fa"
+  ],
+  "xp": 0,
+  "cost": 3,
+  "health": 2
+ },
+ {
+  "code": "60160",
+  "name": "\"Make 'em sing\"",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Tactic"
+  ],
+  "text": "<b>Parley.</b> Choose an enemy at your location and test [combat] (X), where X is that enemy's remaining health. If you succeed, automatically evade that enemy and discover 1 clue at your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "combat": 1
+  },
+  "deckLimit": 2,
+  "tags": [
+   "pa"
+  ],
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60161",
+  "name": "Bounty",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Fortune"
+  ],
+  "text": "Fast. Play after an enemy at your location is defeated.\nInvestigators at your location gain a total of X resources, distributed as your wish. X is that enemy's printed health (to a maximum of 6).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "combat": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 0
+ },
+ {
+  "code": "60162",
+  "name": "Custom Grip",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Upgrade"
+  ],
+  "text": "Fast. Play only during your turn.\nAttach to a [[Firearm]] asset you control.\n[fast] During your turn, except during an action, discard Custom Grip: Return attached asset to your hand. You may play a [[Firearm]] asset from your hand <i>(paying its cost)</i>.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "intellect": 1
+  },
+  "deckLimit": 2,
+  "tags": [
+   "fa"
+  ],
+  "xp": 0,
+  "cost": 1
+ },
+ {
+  "code": "60163",
+  "name": "Iron Sights",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Upgrade"
+  ],
+  "text": "Fast. Play only during your turn.\nAttach to a [[Firearm]] asset you control.\n[action] Exhaust Iron Sights: You get +3 skill value the next time you fight using attached asset this turn. This action does not provoke attacks of opportunity.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "tags": [
+   "fa"
+  ],
+  "xp": 0,
+  "cost": 1
+ },
+ {
+  "code": "60164",
+  "name": "Physical Fitness",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Spirit"
+  ],
+  "text": "<b>Move.</b> After this move, heal 2 damage.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "flavor": "At your peak.",
+  "deckLimit": 2,
+  "tags": [
+   "hd"
+  ],
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60165",
+  "name": "Restrained",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Tactic"
+  ],
+  "text": "Fast. Play after a non-[[Elite]] enemy attacks you.\nAutomatically evade that enemy and attach Restrained to it. Attached enemy cannot ready.\n<b>Forced</b> - When the round ends, if attached enemy is not a [[Humanoid]]: Discard Restrained.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1
+ },
+ {
+  "code": "60166",
+  "name": "Stakeout",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Tactic"
+  ],
+  "text": "<b>Investigate</b> ([intellect]). You get +2 [intellect] for this investigation. If you succeed, heal 1 horror.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 2
+  },
+  "flavor": "\"Well, look at that. Who do we have here?\"",
+  "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60167",
+  "name": "Adapt and Overcome",
+  "type": "skill",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Practiced"
+  ],
+  "text": "Commit only to a skill test during an attack or evasion.\nThe performing investigator ignores the alert and retaliate keywords during this test.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 0
+ },
+ {
+  "code": "60168",
+  "name": "Armed to the Teeth",
+  "type": "skill",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Practiced"
+  ],
+  "text": "While it is committed to a skill test on an [[Item]] asset you control, Armed to the Teeth gains [wild] [wild].",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "combat": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0
+ },
+ {
+  "code": "60170",
+  "name": "Police Dog",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Creature",
+   "Police"
+  ],
+  "text": "[fast] During an attack or investigation at your location, exhaust Police Dog: The performing investigator gets +2 skill value for this test.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "agility": 1
+  },
+  "flavor": "\"Good boy, Saxon.\"",
+  "deckLimit": 2,
+  "xp": 1,
+  "cost": 3,
+  "health": 1,
+  "sanity": 1
+ },
+ {
+  "code": "60171",
+  "name": "M1911",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Weapon",
+   "Firearm"
+  ],
+  "text": "Uses (4 ammo).\n[action] Spend 1 ammo: <b>Fight</b> ([combat]). You get +2 [combat] and deal +1 damage for this attack. Ignore the retaliate keyword for this attack.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 3,
+  "uses": {
+   "type": "ammo",
+   "count": 4
+  }
+ },
+ {
+  "code": "60172",
+  "name": "Extended Barrel",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Upgrade"
+  ],
+  "text": "Fast. Play only during your turn.\nAttach to a [[Firearm]] asset you control.\nYou get +1 skill value while attacking with attached asset.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "intellect": 1
+  },
+  "deckLimit": 2,
+  "tags": [
+   "fa"
+  ],
+  "xp": 1,
+  "cost": 1
+ },
+ {
+  "code": "60173",
+  "name": "On the Beat",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Tactic",
+   "Police"
+  ],
+  "text": "Fast. Play when your turn begins.\nUntil the end of your turn, you get +3 skill value while investigating or parleying.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1,
+   "wild": 1
+  },
+  "flavor": "\"Police work isn't about catching people. It's about protecting your community.\"",
+  "deckLimit": 2,
+  "tags": [
+   "pa"
+  ],
+  "xp": 1,
+  "cost": 2
+ },
+ {
+  "code": "60174",
+  "name": "Physical Fitness",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Spirit"
+  ],
+  "text": "<b>Move.</b> After this move, heal 3 damage.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "flavor": "At your peak.",
+  "deckLimit": 2,
+  "tags": [
+   "hd"
+  ],
+  "xp": 2,
+  "cost": 1
+ },
+ {
+  "code": "60175",
+  "name": "Stock Ammo Reload",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Supply"
+  ],
+  "text": "Place 5 ammo, divided as you choose, among [[Firearm]] assets you control.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1
+  },
+  "flavor": "More bullets than you know what to do with.",
+  "deckLimit": 2,
+  "tags": [
+   "fa"
+  ],
+  "xp": 2,
+  "cost": 2
+ },
+ {
+  "code": "60177",
+  "name": "Detective Sherman",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Detective",
+   "Police"
+  ],
+  "text": "You get +1 [combat].\nDetective Sherman may be assigned damage and/or horror dealt to other investigators at your location.\n[reaction] After damage is placed on Detective Sherman, exhaust him: Discover 1 clue at your location.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "intellect": 1,
+   "combat": 1,
+   "wild": 1
+  },
+  "subname": "Eagle Eye",
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 4,
+  "health": 3,
+  "sanity": 2
+ },
+ {
+  "code": "60178",
+  "name": "Endurance",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "Starting. <i>(You may begin the game with 1 copy of a starting card in your opening hand.)</i>\n[fast] Spend 1 resource: You get +1 [combat] for this skill test (+2 [combat] instead if this is an attack or evasion).\n[fast] Spend 1 resource: You get +1 [agility] for this skill test (+2 [agility] instead if this is an attack or evasion).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 2
+ },
+ {
+  "code": "60179",
+  "name": "Stakeout",
+  "type": "event",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Tactic"
+  ],
+  "text": "<b>Investigate</b> ([intellect]). You get +3 [intellect] for this investigation. If you succeed, discover 1 additional clue at your location and heal 2 horror.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "agility": 1
+  },
+  "flavor": "\"Well, look at that. Who do we have here?\"",
+  "deckLimit": 2,
+  "tags": [
+   "hh"
+  ],
+  "xp": 3,
+  "cost": 2
+ },
+ {
+  "code": "60180",
+  "name": "Indomitable",
+  "type": "skill",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Innate",
+   "Developed"
+  ],
+  "text": "If an enemy has attacked an investigator at this location this round, Indomitable gains [wild] [wild] [wild].",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "combat": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 3
+ },
+ {
+  "code": "60181",
+  "name": "Protective Vest",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Armor",
+   "Police"
+  ],
+  "text": "You have 1 additional hand slot, which may only be used to hold a [[Firearm]] asset.\n[reaction] After you play Protective Vest: Search the top 9 cards of your deck for a [[Firearm]] or [[Upgrade]] card and add it to your hand. Shuffle your deck.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "body"
+  ],
+  "icons": {
+   "willpower": 1,
+   "combat": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "tags": [
+   "fa"
+  ],
+  "xp": 4,
+  "cost": 3,
+  "health": 3
+ },
+ {
+  "code": "60182",
+  "name": "Thompson Submachine Gun",
+  "type": "asset",
+  "faction": "guardian",
+  "pack": "tom",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Weapon",
+   "Firearm"
+  ],
+  "text": "Uses (6 ammo).\n[action] Spend 1 ammo: <b>Fight</b> ([combat]). You get +3 [combat] and deal +1 damage for this attack.\n[reaction] After you resolve the above [action] ability, spend 1 ammo: <b>Fight</b> ([combat]). This attack deals +1 damage.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand",
+   "hand"
+  ],
+  "icons": {
+   "combat": 2
+  },
+  "deckLimit": 2,
+  "xp": 5,
+  "cost": 6,
+  "uses": {
+   "type": "ammo",
+   "count": 6
+  }
+ }
+]

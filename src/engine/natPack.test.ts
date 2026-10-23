@@ -21,7 +21,7 @@ const ROLAND = "01001";
 const MINION = "01160"; // Ghoul Minion: fight 2, health 2, 1 damage, 1 horror
 
 beforeAll(async () => {
-  await loadPack("investigator");
+  await loadPack("nat");
 });
 
 /** Roland (plus whoever) at the start of a turn, a token bag of zeros, with `setup` applied to the state */

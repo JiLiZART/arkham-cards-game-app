@@ -138,5 +138,13 @@
   "card.slot.ally": "Союзник",
   "card.slot.tarot": "Таро",
   "deck.add": "Добавить",
-  "deck.remove": "Удалить"
+  "deck.remove": "Удалить",
+  "flow.continue": "Продолжить",
+  "flow.confirm": "Подтвердить",
+  "flow.none": "Никто",
+  "flow.decline": "Не сейчас",
+  "wizard.kind.campaign": "Кампании",
+  "wizard.interlude": "Интерлюдия",
+  "wizard.close": "Закрыть",
+  "option.boostNo": "Нет"
 }

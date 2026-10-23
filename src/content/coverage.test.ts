@@ -83,8 +83,7 @@ describe("pack coverage by card pack", () => {
     expect(Object.keys(db.coverage!.packs)).toEqual(
       expect.arrayContaining(["dwl", "tmm", "tece", "bota", "uau", "wda", "litas"]),
     );
-    // the whole content, from disk: slow under a full parallel run
-  }, 30_000);
+  });
 });
 
 describe("campaign coverage", () => {
@@ -269,8 +268,7 @@ describe("content/coverage.json", () => {
     expect(coverageJson(db)).toBe(coverageJson(db));
     expect(db.coverage).toBeDefined();
     expect(coverageJson(db)).toBe(JSON.stringify(db.coverage, null, 1) + "\n");
-    // the whole content, from disk: slow under a full parallel run
-  }, 30_000);
+  });
 });
 
 describe("checkCoverage", () => {

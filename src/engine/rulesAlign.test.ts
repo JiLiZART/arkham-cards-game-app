@@ -26,7 +26,7 @@ const N = NATHANIEL;
 import { db, mutate, options, pick } from "./testkit";
 
 beforeAll(async () => {
-  await loadPack("investigator");
+  await loadPack("nat");
 });
 
 const offered = (name: RegExp) => (x: Result) => options(x).some((o) => name.test(o));

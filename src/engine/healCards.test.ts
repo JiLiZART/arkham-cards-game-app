@@ -10,7 +10,7 @@ const DAISY = "01002";
 const BEAT_COP = "01028"; // an Ally
 
 beforeAll(async () => {
-  await Promise.all(["dwl", "return", "ptc", "tde", "eoe", "investigator"].map(loadPack));
+  await Promise.all(["dwl", "return", "ptc", "tde", "eoe", "mig"].map(loadPack));
 });
 
 type Setup = (g: G, asset: string) => void;

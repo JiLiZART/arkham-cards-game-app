@@ -101,6 +101,7 @@ describe("snapshotTarget", () => {
     expect(snapshotTarget("core", "core")).toBe("core");
     expect(snapshotTarget("core", "rcore")).toBe("rcore");
     expect(snapshotTarget("core", "core_2026")).toBe("core_2026");
+    expect(snapshotTarget("investigator", "nat")).toBe("nat");
   });
 });
 

@@ -1,0 +1,702 @@
+[
+ {
+  "code": "60351",
+  "name": "André Patel",
+  "type": "investigator",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 1,
+  "traits": [
+   "Performer"
+  ],
+  "text": "[reaction] After you succeed at a skill test by 2 or more during your turn: You may take an additional action this turn. (Limit once per round.)\n[elder_sign] effect: +2. Gain 1 resource.",
+  "unique": true,
+  "doubleSided": true,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subname": "The Film Star",
+  "backText": "<b>Deck Size</b>: 30.\n<b>Deckbuilding Options</b>: Rogue cards ([rogue]) level 0-5, Neutral cards level 0-5.\n<b>Deckbuilding Requirements</b> (do not count toward deck size): Know the Exit, Know the Line, Know the Scene, Weight of the World, 1 random basic weakness.",
+  "flavor": "\"All the world's my stage.\"",
+  "deckLimit": 1,
+  "skills": {
+   "willpower": 2,
+   "intellect": 3,
+   "combat": 2,
+   "agility": 5
+  },
+  "health": 7,
+  "sanity": 8
+ },
+ {
+  "code": "60352",
+  "name": "Know the Exit",
+  "type": "skill",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 1,
+  "traits": [
+   "Practiced"
+  ],
+  "text": "André Patel deck only.\nWhile this card is committed to an attack or an evasion, it gains [wild] [wild].",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "deckLimit": 1
+ },
+ {
+  "code": "60353",
+  "name": "Know the Line",
+  "type": "skill",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 1,
+  "traits": [
+   "Practiced"
+  ],
+  "text": "André Patel deck only.\nWhile this card is committed to a skill test on a scenario card, it gains [wild] [wild].",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "deckLimit": 1
+ },
+ {
+  "code": "60354",
+  "name": "Know the Scene",
+  "type": "skill",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 1,
+  "traits": [
+   "Practiced"
+  ],
+  "text": "André Patel deck only.\nWhile this card is committed to an investigation or parley, it gains [wild] [wild].",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "deckLimit": 1,
+  "tags": [
+   "pa"
+  ]
+ },
+ {
+  "code": "60355",
+  "name": "Weight of the World",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "and",
+  "quantity": 1,
+  "traits": [
+   "Terror"
+  ],
+  "text": "<b>Revelation</b> - Put Weight of the World into play in your threat area.\n<b>Forced</b> - When you fail a skill test while Weight of the World is in play, take 1 horror and shuffle it back into your deck.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "flavor": "All eyes are on you.",
+  "subtype": "weakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "60356",
+  "name": "Unaware",
+  "type": "treachery",
+  "faction": "neutral",
+  "pack": "and",
+  "quantity": 1,
+  "traits": [
+   "Flaw"
+  ],
+  "text": "<b>Revelation</b> - Put Unaware into play in your threat area.\n<b>Forced</b> - The first time you fail a skill test during your turn: Draw the top card of the encounter deck. If that card is an enemy, discard Unaware.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "subtype": "basicweakness",
+  "deckLimit": 1
+ },
+ {
+  "code": "60357",
+  "name": "Center Stage",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "Limit 1 per investigator. Uses (3 renown). If there is no renown on Center Stage, discard it.\n[fast] During a skill test, spend 1 renown and exhaust Center Stage: You get +1 skill value for each action you have spent this round <i>(including this one, if this is triggered during one of your actions)</i>.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {},
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "uses": {
+   "type": "renown",
+   "count": 3
+  }
+ },
+ {
+  "code": "60358",
+  "name": "Fame",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Condition"
+  ],
+  "text": "Uses (4 renown). If there is no renown on Fame, discard it.\n[action] If there is an enemy at your location, spend 1 renown: <b>Parley.</b> Gain 2 resources.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "tags": [
+   "pa"
+  ],
+  "xp": 0,
+  "cost": 1,
+  "uses": {
+   "type": "renown",
+   "count": 4
+  }
+ },
+ {
+  "code": "60359",
+  "name": "The Grapevine",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Connection"
+  ],
+  "text": "Uses (3 rumors). If there are no rumors on The Grapevine, discard it.\n[action] Spend 1 rumor and exhaust The Grapevine: <b>Parley.</b> Choose an enemy at a revealed location up to 2 connections away. Move (one location at a time) along the shortest path to that enemy's location and engage it.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "tags": [
+   "pa"
+  ],
+  "xp": 0,
+  "cost": 2,
+  "uses": {
+   "type": "rumors",
+   "count": 3
+  }
+ },
+ {
+  "code": "60360",
+  "name": "Extravagant Ring",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Charm"
+  ],
+  "text": "Uses (3 renown).\n[reaction] When you would succeed at a skill test, spend 1 renown and exhaust Extravagant Ring: You get +2 skill value for this test.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "accessory"
+  ],
+  "icons": {
+   "intellect": 1
+  },
+  "flavor": "Lina always wanted the attention.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 1,
+  "uses": {
+   "type": "renown",
+   "count": 3
+  }
+ },
+ {
+  "code": "60362",
+  "name": "Marcus Sengstacke",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Patron"
+  ],
+  "text": "You gain 1 additional resource during the upkeep phase.\n<b>Forced</b> - After you fail a skill test: Deal 1 horror to Marcus Sengstacke.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1
+  },
+  "subname": "Wealthy Benefactor",
+  "flavor": "\"I am certain this city will know of your accomplishments.\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3,
+  "health": 1,
+  "sanity": 2
+ },
+ {
+  "code": "60363",
+  "name": "Polished Cane",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Item",
+   "Weapon",
+   "Melee"
+  ],
+  "text": "[action]: <b>Fight</b> ([combat]). Add your [agility] to your [combat] for this attack. If this attack succeeds by 2 or more against a non-[[Elite]] enemy, you may exhaust Polished Cane to automatically evade that enemy.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "hand"
+  ],
+  "icons": {
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 3
+ },
+ {
+  "code": "60364",
+  "name": "Clean Sweep",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Tactic",
+   "Trick"
+  ],
+  "text": "<b>Investigate</b> ([intellect]). You get +2 [intellect] for this investigation. If you discover the last clue at your location, you may move to a connecting location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "agility": 1
+  },
+  "flavor": "\"Better luck next time, love.\"\n- R. S.",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60365",
+  "name": "Pay Your Dues",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Favor"
+  ],
+  "text": "<b>Parley.</b> Choose a non-[[Elite]] enemy at your location with X remaining health. That enemy disengages from each investigator and gains aloof until the end of the round. Discover 1 clue at your location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1
+  },
+  "deckLimit": 2,
+  "tags": [
+   "pa"
+  ],
+  "xp": 0,
+  "cost": "X"
+ },
+ {
+  "code": "60366",
+  "name": "Quick Exit",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Tactic",
+   "Trick"
+  ],
+  "text": "<b>Evade</b> ([agility]). You get +2 [agility] for this evasion. If you succeed by 2 or more and the evaded enemy is non-[[Elite]], that enemy does not ready during the next upkeep phase.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60367",
+  "name": "A Sudden Fall",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Tactic",
+   "Trick"
+  ],
+  "text": "<b>Fight</b> ([combat]). You get +2 [combat] for this attack. If the targeted enemy is exhausted, this attack deals +1 damage.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 1,
+   "agility": 1
+  },
+  "flavor": "What an unfortunate \"accident.\"",
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60368",
+  "name": "Right Under Their Noses",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Trick",
+   "Illicit"
+  ],
+  "text": "Fast. Play after you successfully evade an enemy.\nDiscover 1 clue at your location (if you succeeded by 2 or more, you may discover 1 clue at a connecting location, instead).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1
+  },
+  "deckLimit": 2,
+  "xp": 0,
+  "cost": 2
+ },
+ {
+  "code": "60369",
+  "name": "Easy Street",
+  "type": "skill",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Favor"
+  ],
+  "text": "Commit only to a skill test you are performing. Max 1 committed per skill test.\nEasy Street gains [wild] for every 3 resources you have (to a maximum of [wild] [wild] [wild]).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 0
+ },
+ {
+  "code": "60370",
+  "name": "Out the Door",
+  "type": "skill",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Gambit"
+  ],
+  "text": "After Out the Door is committed to a skill test, the performing investigator gains 2 resources. If this skill test fails, that investigator loses 2 resources.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "agility": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 0
+ },
+ {
+  "code": "60373",
+  "name": "Out the Door",
+  "type": "skill",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Gambit"
+  ],
+  "text": "After Out the Door is committed to a skill test, the performing investigator gains 4 resources. If this skill test fails, that investigator loses 4 resources.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "agility": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 1
+ },
+ {
+  "code": "60374",
+  "name": "The Grapevine",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Connection"
+  ],
+  "text": "Uses (3 rumors). If there are no rumors on The Grapevine, discard it.\n[action] Spend 1 rumor and exhaust The Grapevine: <b>Parley.</b> Choose an enemy at a revealed location up to 3 connections away. Move (one location at a time) along the shortest path to that enemy's location and engage it. Draw 1 card.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "agility": 1
+  },
+  "deckLimit": 2,
+  "tags": [
+   "pa"
+  ],
+  "xp": 2,
+  "cost": 2,
+  "uses": {
+   "type": "rumors",
+   "count": 3
+  }
+ },
+ {
+  "code": "60375",
+  "name": "Marcus Sengstacke",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Ally",
+   "Patron"
+  ],
+  "text": "You gain 1 additional resource during the upkeep phase.\n<b>Forced</b> - After you fail a skill test: Deal 1 horror to Marcus Sengstacke.",
+  "unique": true,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [
+   "ally"
+  ],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1
+  },
+  "subname": "Wealthy Benefactor",
+  "flavor": "\"I am certain this city will know of your accomplishments.\"",
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2,
+  "health": 1,
+  "sanity": 3
+ },
+ {
+  "code": "60376",
+  "name": "Clean Sweep",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Tactic",
+   "Trick"
+  ],
+  "text": "<b>Investigate</b> ([agility]). Add your [intellect] to your [agility] for this test. After this test resolves, you may move to a connecting location.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 2,
+   "wild": 1
+  },
+  "flavor": "\"Better luck next time, love.\"\n- R. S.",
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2
+ },
+ {
+  "code": "60377",
+  "name": "Quick Exit",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Tactic",
+   "Trick"
+  ],
+  "text": "<b>Evade</b> ([agility]). Add your [willpower] to your [agility] for this test. If you succeed and the evaded enemy is non-[[Elite]], that enemy does not ready during the next upkeep phase.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "willpower": 2,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2
+ },
+ {
+  "code": "60378",
+  "name": "A Sudden Fall",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Tactic",
+   "Trick"
+  ],
+  "text": "<b>Fight</b> ([agility]). Add your [combat] to your [agility] for this test. If the targeted enemy is exhausted, this attack deals +2 damage.",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "combat": 2,
+   "wild": 1
+  },
+  "flavor": "What an unfortunate \"accident.\"",
+  "deckLimit": 2,
+  "xp": 2,
+  "cost": 2
+ },
+ {
+  "code": "60380",
+  "name": "Silver Tongue",
+  "type": "asset",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Talent"
+  ],
+  "text": "Starting. <i>(You may begin the game with 1 copy of a starting card in your opening hand.)</i>\n[fast] Spend 1 resource: You get +1 [intellect] for this skill test (+2 [intellect] instead if this is an evasion or parley).\n[fast] Spend 1 resource: You get +1 [agility] for this skill test (+2 [agility] instead if this is an evasion or parley).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "intellect": 1,
+   "agility": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "tags": [
+   "pa"
+  ],
+  "xp": 3,
+  "cost": 2
+ },
+ {
+  "code": "60382",
+  "name": "Right Under Their Noses",
+  "type": "event",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Trick",
+   "Illicit"
+  ],
+  "text": "Fast. Play after you successfully evade an enemy.\nDiscover 1 clue at your location (if you succeeded by 2 or more, you may discover 1 clue at a connecting location, as well).",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [
+   "fast"
+  ],
+  "slots": [],
+  "icons": {
+   "willpower": 1,
+   "intellect": 1,
+   "wild": 1
+  },
+  "deckLimit": 2,
+  "xp": 3,
+  "cost": 2
+ },
+ {
+  "code": "60383",
+  "name": "Contingency",
+  "type": "skill",
+  "faction": "rogue",
+  "pack": "and",
+  "quantity": 2,
+  "traits": [
+   "Practiced",
+   "Expert"
+  ],
+  "text": "While Contingency is committed to a skill test targeting an enemy, after revealing chaos tokens, you may spend 3 resources to cancel a revealed token, return it to the chaos bag, and reveal a new one. <i>(You may do this any number of times.)</i>",
+  "unique": false,
+  "doubleSided": false,
+  "keywords": [],
+  "slots": [],
+  "icons": {
+   "wild": 2
+  },
+  "deckLimit": 2,
+  "xp": 3
+ }
+]

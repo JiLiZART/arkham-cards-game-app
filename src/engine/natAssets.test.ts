@@ -24,7 +24,7 @@ import {
 import { gOf, locId, options, pick } from "./testkit";
 
 beforeAll(async () => {
-  await loadPack("investigator");
+  await loadPack("nat");
 });
 
 const N = NATHANIEL;
