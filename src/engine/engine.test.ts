@@ -750,3 +750,73 @@ describe("event sources", () => {
     expect(r.state.log.some((e) => e.type === "damage" && e.data?.source === ghoul)).toBe(true);
   });
 });
+
+describe("looking at the top of a deck", () => {
+  // Agnes with Arcane Initiate and Scrying in play, Shrivelling (a Spell) under two cards that aren't Spells
+  const table = (spellAt: number) => {
+    let r = skipMulligans(start("the-gathering", [AGNES, ROLAND], 3));
+    r = mutate(r, (g) => {
+      for (const code of ["01063", "01061"]) {
+        const a = createCard(g, code, "limbo", AGNES);
+        moveCard(g, a, "play");
+        g.s.cards[a].controller = AGNES;
+        g.s.cards[a].uses = 3;
+      }
+      const d = g.s.invs[AGNES].deck;
+      const plain = d.filter((id) => !def(g, id).traits.includes("Spell")).slice(0, 3);
+      const spell = createCard(g, "01060", "limbo", AGNES);
+      moveCard(g, spell, "deck");
+      const top = spellAt < 0 ? plain : [...plain.slice(0, spellAt), spell, ...plain.slice(spellAt, 2)];
+      g.s.invs[AGNES].deck = [...top, ...d.filter((id) => !top.includes(id))];
+    });
+    while (r.state.pending?.inv !== AGNES || r.state.pending.kind !== "turn") r = pick(r, r.state.pending!.options.at(-1)!.label);
+    return r;
+  };
+
+  it("Arcane Initiate offers the Spell and shows the other top cards", () => {
+    let r = pick(table(1), /Arcane Initiate/);
+    const top = r.state.invs[AGNES].deck.slice(0, 3);
+    expect(r.state.pending?.options.map((o) => o.label)).toEqual(["Shrivelling", "Take nothing"]);
+    expect(r.state.pending?.shown).toEqual([top[0], top[2]]);
+    r = pick(r, "Shrivelling");
+    expect(r.state.invs[AGNES].hand).toContain(top[1]);
+  });
+
+  it("Arcane Initiate with no Spell on top still shows the three cards", () => {
+    const r = pick(table(-1), /Arcane Initiate/);
+    expect(r.state.pending?.options.map((o) => o.id)).toEqual(["none"]);
+    expect(r.state.pending?.shown).toEqual(r.state.invs[AGNES].deck.slice(0, 3));
+  });
+
+  it("Old Book of Lore draws the card it finds: a weakness found resolves", () => {
+    let r = table(-1);
+    r = mutate(r, (g) => {
+      const book = createCard(g, "01031", "limbo", AGNES);
+      moveCard(g, book, "play");
+      g.s.cards[book].controller = AGNES;
+      const weak = createCard(g, "01097", "limbo", AGNES);
+      moveCard(g, weak, "deck");
+      g.s.invs[AGNES].deck = [weak, ...g.s.invs[AGNES].deck.filter((x) => x !== weak)];
+    });
+    const resources = r.state.invs[AGNES].resources;
+    r = pick(r, /Old Book/);
+    if (r.state.pending?.kind === "target") r = pick(r, "Agnes Baker");
+    r = pick(r, "Paranoia");
+    // Paranoia's revelation: lose all resources
+    expect(r.state.invs[AGNES].resources).toBe(0);
+    expect(resources).toBeGreaterThan(0);
+  });
+
+  it("Scrying puts the top 3 of the chosen deck back in the order picked", () => {
+    let r = pick(table(0), /Scrying/);
+    expect(r.state.pending?.options.map((o) => o.id)).toEqual([AGNES, ROLAND, "encounter"]);
+    r = pick(r, "encounter");
+    const [a, b, c] = r.state.encounterDeck.slice(0, 3);
+    const rest = r.state.encounterDeck.slice(3);
+    expect(r.state.pending?.options.map((o) => o.card)).toEqual([a, b, c]);
+    r = pick(r, c);
+    r = pick(r, a);
+    expect(r.state.encounterDeck).toEqual([c, a, b, ...rest]);
+    expect(r.state.pending?.kind).toBe("turn");
+  });
+});

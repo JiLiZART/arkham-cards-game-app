@@ -61,12 +61,12 @@ export function push(g: G, ...steps: Step[]) {
  */
 export function ask<T = unknown>(
   g: G, step: Step, invId: InvId, kind: PendingChoice["kind"], prompt: string, options: ChoiceOption[],
-  opts: { auto?: boolean; key?: string; vars?: Record<string, string | number | null> } = {},
+  opts: { auto?: boolean; key?: string; vars?: Record<string, string | number | null>; shown?: InstId[] } = {},
 ): T | undefined {
   if (step.choice !== undefined) return step.choice as T;
   if (options.length === 0) throw new Error(`no options for choice: ${prompt}`);
   if (opts.auto && options.length === 1) return options[0].value as T;
-  g.s.pending = { seq: ++g.s.seq, inv: invId, kind, prompt, ...(opts.key ? { promptKey: opts.key, promptVars: opts.vars ?? {} } : {}), options, step: { ...step } };
+  g.s.pending = { seq: ++g.s.seq, inv: invId, kind, prompt, ...(opts.key ? { promptKey: opts.key, promptVars: opts.vars ?? {} } : {}), options, ...(opts.shown?.length ? { shown: opts.shown } : {}), step: { ...step } };
   return undefined;
 }
 

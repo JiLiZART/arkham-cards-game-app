@@ -272,7 +272,7 @@ describe("Tommy Malloy", () => {
     const g = gOf(r);
     const tommy = Object.values(r.state.cards).find((c) => c.code === "60103")!;
     expect(preyCandidates(g, tommy.id, [DAISY, N])).toEqual([N]);
-    expect(preyCandidates(g, tommy.id, [DAISY])).toEqual([DAISY]);
+    expect(preyCandidates(g, tommy.id, [DAISY])).toEqual([]);
   });
   it("takes only 1 of any damage", () => {
     let r = nathaniel((g) => {

@@ -161,6 +161,8 @@ export interface PendingChoice {
   promptKey?: string;
   promptVars?: Record<string, string | number | null>;
   options: ChoiceOption[];
+  /** deck cards looked at alongside the options that aren't options themselves (a search's other top cards) */
+  shown?: InstId[];
   step: Step;
 }
 
@@ -233,6 +235,8 @@ export type Step = { choice?: any } & (
   | { t: "EnemyEngage"; enemy: InstId; inv: InvId }
   | { t: "CheckObjectives" }
   | { t: "ForEachInv"; invs: InvId[]; step: Step }
+  /** put looked-at cards back on top of a deck in the order chosen: `placed` from the top down, the last one goes under them */
+  | { t: "ArrangeTop"; inv: InvId; deck: InvId | "encounter"; cards: InstId[]; placed: InstId[] }
 );
 
 export interface EventData {

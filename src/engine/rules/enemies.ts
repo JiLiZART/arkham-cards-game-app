@@ -11,15 +11,11 @@ type Handler<T extends Step["t"]> = (g: G, step: Extract<Step, { t: T }>) => voi
 /** investigators among candidates that match the enemy's prey instruction */
 export function preyCandidates(g: G, enemy: InstId, candidates: InvId[]): InvId[] {
   const prey = def(g, enemy).prey;
-  if (!prey || candidates.length <= 1) return candidates;
-  if (prey === "bearer") {
-    const owner = card(g, enemy).owner;
-    return owner && candidates.includes(owner) ? [owner] : candidates;
-  }
-  if ("only" in prey) {
-    const only = candidates.filter((i) => card(g, inv(g, i).cardId).code === prey.only);
-    return only.length ? only : candidates;
-  }
+  if (!prey) return candidates;
+  // "only" prey never falls back to others: with nobody matching it engages and hunts no one
+  if (prey === "bearer") return candidates.filter((i) => i === card(g, enemy).owner);
+  if ("only" in prey) return candidates.filter((i) => card(g, inv(g, i).cardId).code === prey.only);
+  if (candidates.length <= 1) return candidates;
   const [dir, stat] = "highest" in prey ? [1, prey.highest] : [-1, prey.lowest];
   const val = (i: InvId) => {
     switch (stat) {
@@ -32,6 +28,12 @@ export function preyCandidates(g: G, enemy: InstId, candidates: InvId[]): InvId[
   };
   const best = Math.max(...candidates.map((i) => dir * val(i)));
   return candidates.filter((i) => dir * val(i) === best);
+}
+
+/** Prey - bearer only / Prey - X only: the enemy ignores every other investigator */
+export function onlyPrey(g: G, enemy: InstId) {
+  const prey = def(g, enemy).prey;
+  return prey === "bearer" || (!!prey && "only" in prey);
 }
 
 // ---------- spawning ----------
@@ -58,6 +60,11 @@ export const spawnHandler: Handler<"Spawn"> = (g, step) => {
       }
     } else if (d.spawn === "Engaged with Prey") {
       const cands = preyCandidates(g, step.enemy, activeInvs(g));
+      if (!cands.length) {
+        emit(g, "spawnFail", `${d.name} has no prey in play and is discarded`, { card: step.enemy });
+        moveCard(g, step.enemy, c.owner ? "discard" : "encounterDiscard");
+        return;
+      }
       const pick = ask<InvId>(g, step, g.s.lead, "target", `${d.name} spawns engaged with:`,
         cands.map((i) => ({ id: i, label: invName(g, i), card: inv(g, i).cardId, value: i })), { auto: true, key: "spawnEngaged", vars: { card: step.enemy } });
       if (pick === undefined) return;
@@ -75,7 +82,7 @@ export const spawnHandler: Handler<"Spawn"> = (g, step) => {
   }
   if (!at) {
     at = drawerLoc;
-    engage = step.inv;
+    engage = step.inv && preyCandidates(g, step.enemy, [step.inv]).length ? step.inv : null;
   }
   if (!at) {
     moveCard(g, step.enemy, c.owner ? "discard" : "encounterDiscard");
@@ -87,11 +94,8 @@ export const spawnHandler: Handler<"Spawn"> = (g, step) => {
   emit(g, "spawn", `${d.name} spawns at ${def(g, at).name}`, { card: step.enemy, data: { at } });
   const aloof = d.keywords.includes("aloof");
   if (!engage && !aloof && !isMassive(g, step.enemy)) {
-    const here = invsAt(g, at);
-    if (here.length) {
-      const cands = preyCandidates(g, step.enemy, here);
-      engage = cands[0]; // ponytail: first tied prey in player order; lead choice if it ever matters
-    }
+    // ponytail: first tied prey in player order; lead choice if it ever matters
+    engage = preyCandidates(g, step.enemy, invsAt(g, at))[0] ?? null;
   }
   if (engage && !aloof && !isMassive(g, step.enemy)) {
     c.engagedWith = engage;
@@ -182,15 +186,17 @@ export const defeatEnemyHandler: Handler<"DefeatEnemy"> = (g, step) => {
 export const hunterMovesHandler: Handler<"HunterMoves"> = (g, step) => {
   const done = step.done ?? [];
   const hunters = enemies(g).filter(
-    (e) => !done.includes(e.id) && !e.exhausted && !e.engagedWith && def(g, e.id).keywords.includes("hunter") && invsAt(g, e.location).length === 0,
+    (e) => !done.includes(e.id) && !e.exhausted && !e.engagedWith && def(g, e.id).keywords.includes("hunter")
+      && preyCandidates(g, e.id, invsAt(g, e.location)).length === 0, // stays only with someone it may engage
   );
   if (hunters.length === 0) return;
   const e = hunters[0];
-  const targets = activeInvs(g).map((i) => inv(g, i).location!).filter(Boolean);
+  // "only" prey hunts just its prey; other prey only breaks ties between the nearest
+  const targets = (onlyPrey(g, e.id) ? preyCandidates(g, e.id, activeInvs(g)) : activeInvs(g)).map((i) => inv(g, i).location!).filter(Boolean);
   const dist = distances(g, e.location!);
   const nearest = Math.min(...targets.map((t) => dist.get(t) ?? Infinity));
   const goals = targets.filter((t) => dist.get(t) === nearest);
-  let options = stepsToward(g, e.location!, goals).filter((l) => !(hasFlag(g, l, "nonEliteCannotMoveInto") && !isElite(g, e.id)) && !hasFlag(g, l, "cannotMoveInto"));
+  let options = stepsToward(g, e.location!, goals).filter((l) => canEnemyEnter(g, e.id, l));
   if (options.length === 0 || nearest === Infinity) {
     push(g, { ...step, choice: undefined, done: [...done, e.id] });
     return;
@@ -211,9 +217,8 @@ export const hunterMovesHandler: Handler<"HunterMoves"> = (g, step) => {
   const from = e.location;
   e.location = to;
   emit(g, "enemyMove", `${def(g, e.id).name} moves to ${def(g, to).name}`, { card: e.id, data: { from, to } });
-  const here = invsAt(g, to);
-  if (here.length && !def(g, e.id).keywords.includes("aloof") && !isMassive(g, e.id)) {
-    const p = preyCandidates(g, e.id, here)[0];
+  const p = preyCandidates(g, e.id, invsAt(g, to))[0];
+  if (p && !def(g, e.id).keywords.includes("aloof") && !isMassive(g, e.id)) {
     e.engagedWith = p;
     emit(g, "engage", `${def(g, e.id).name} engages ${invName(g, p)}`, { inv: p, card: e.id });
     push(g, win("enemyEngages", { inv: p, enemy: e.id }), next);
@@ -265,3 +270,8 @@ export const handlers = {
   EnemyAttacks: enemyAttacksHandler,
   EnemyEngage: enemyEngageHandler,
 };
+
+/** can the enemy move into the location: Barricade keeps non-Elite enemies out; "cannotMoveInto" (the unrevealed Parlor) binds investigators only */
+export function canEnemyEnter(g: G, enemy: InstId, loc: InstId): boolean {
+  return !(hasFlag(g, loc, "nonEliteCannotMoveInto") && !isElite(g, enemy));
+}

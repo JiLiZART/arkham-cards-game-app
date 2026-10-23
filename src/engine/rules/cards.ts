@@ -44,9 +44,9 @@ export function canPay(g: G, i: InvId, cardId: InstId, cost: Cost | undefined): 
   return true;
 }
 
-/** pay non-interactive costs (discarding from hand is chosen beforehand) */
-function payCost(g: G, i: InvId, cardId: InstId, cost: Cost | undefined) {
-  if (!cost) return;
+/** pay non-interactive costs (discarding from hand is chosen beforehand); returns the damage/horror to take first */
+function payCost(g: G, i: InvId, cardId: InstId, cost: Cost | undefined): Step[] {
+  if (!cost) return [];
   const c = card(g, cardId);
   const me = inv(g, i);
   if (cost.exhaust) c.exhausted = true;
@@ -58,11 +58,14 @@ function payCost(g: G, i: InvId, cardId: InstId, cost: Cost | undefined) {
   }
   if (cost.clues) me.clues -= cost.clues;
   if (cost.cluesPerInvestigator) spendGroupClues(g, cost.cluesPerInvestigator * playerCount(g));
-  if (cost.takeDamage) push(g, { t: "AssignDamage", inv: i, damage: cost.takeDamage, horror: 0, direct: true, source: cardId });
-  if (cost.takeHorror) push(g, { t: "AssignDamage", inv: i, damage: 0, horror: cost.takeHorror, direct: true, source: cardId });
+  // damage or horror taken as a cost is not direct: it may go on assets (Holy Rosary)
+  const take: Step[] = [];
+  if (cost.takeDamage) take.push({ t: "AssignDamage", inv: i, damage: cost.takeDamage, horror: 0, direct: false, source: cardId });
+  if (cost.takeHorror) take.push({ t: "AssignDamage", inv: i, damage: 0, horror: cost.takeHorror, direct: false, source: cardId });
   if (cost.horrorOnSelf) c.horror += cost.horrorOnSelf;
   if (cost.damageOnSelf) c.damage += cost.damageOnSelf;
   if (cost.discardSelf) discard(g, cardId);
+  return take;
 }
 
 /** spend clues as a group, lead investigator first then player order */
@@ -130,6 +133,8 @@ function triggerMatches(g: G, cardId: InstId, a: Ability, you: InvId | null, dat
   const hasSubject = !!(data.card || data.enemy || data.location);
   if (!you) return isSubject(g, cardId, data) || !hasSubject;
   if (isSubject(g, cardId, data)) return true;
+  // "after X enters play" is about the card itself; an attached card watches only its own location
+  if (a.trigger === "enterPlay" || (card(g, cardId).zone === "attached" && (a.trigger === "enterLocation" || a.trigger === "leaveLocation"))) return false;
   if (!data.inv) return !hasSubject || a.usableBy === "anyone";
   if (data.inv === you) return true;
   if (a.usableBy === "anyone") return true;
@@ -239,6 +244,7 @@ export const win = (trigger: Trigger, data: EventData): Step => ({ t: "Window", 
 export const useAbilityHandler: Handler<"UseAbility"> = (g, step) => {
   const a = abilitiesOf(g, step.card)[step.index];
   if (!a) return;
+  let take: Step[] = [];
   if (!step.paid) {
     const need = a.cost?.discardFromHand ?? 0;
     const chosen = step.discards ?? [];
@@ -252,7 +258,7 @@ export const useAbilityHandler: Handler<"UseAbility"> = (g, step) => {
     }
     for (const h of chosen) discard(g, h);
     recordUse(g, step.card, step.index, a);
-    payCost(g, step.inv, step.card, a.cost);
+    take = payCost(g, step.inv, step.card, a.cost);
   }
   const c = g.s.cards[step.card];
   const ctx: EffCtx = { ...(step.ctx ?? {}), source: step.card, you: step.ctx?.you ?? step.inv };
@@ -262,9 +268,9 @@ export const useAbilityHandler: Handler<"UseAbility"> = (g, step) => {
   const after: Step[] = !step.paid && a.cost?.uses ? [{ t: "DiscardIfEmpty", card: step.card }] : [];
   // a cost that puts damage or horror on the asset itself can defeat it
   if (!step.paid && (a.cost?.damageOnSelf || a.cost?.horrorOnSelf)) after.push({ t: "Script", code: "__engine", fn: "assetDefeatCheck", ctx: { you: step.inv } });
-  if (a.run) push(g, { t: "Script", code: card(g, step.card).code, fn: a.run, ctx }, ...after);
-  else if (a.effects) push(g, { t: "Effects", effects: a.effects, ctx }, ...after);
-  else push(g, ...after);
+  if (a.run) push(g, ...take, { t: "Script", code: card(g, step.card).code, fn: a.run, ctx }, ...after);
+  else if (a.effects) push(g, ...take, { t: "Effects", effects: a.effects, ctx }, ...after);
+  else push(g, ...take, ...after);
 };
 
 /** every ability of the card spends its uses and it has no constant ability: with no uses left it can do nothing */

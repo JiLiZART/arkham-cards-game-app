@@ -87,7 +87,7 @@
 
   "01030": { "abilities": [{ "kind": "constant", "modifiers": [{ "stat": "intellect", "value": 1, "when": "investigating" }] }] },
   "01031": { "abilities": [
-    { "kind": "action", "label": "Old Book of Lore: search top 3", "cost": { "exhaust": true }, "effects": [{ "op": "searchDeck", "top": 3, "filter": {}, "target": "chooseAtLocation" }] }
+    { "kind": "action", "label": "Old Book of Lore: search top 3", "cost": { "exhaust": true }, "effects": [{ "op": "searchDeck", "draw": true, "top": 3, "filter": {}, "target": "chooseAtLocation" }] }
   ] },
   "01032": { "abilities": [
     { "kind": "reaction", "trigger": "enterPlay", "label": "Research Librarian: search for a Tome", "effects": [{ "op": "searchDeck", "filter": { "type": "asset", "trait": "Tome" } }] }
@@ -155,7 +155,7 @@
       "onTokens": { "tokens": ["skull", "cultist", "tablet", "elderThing", "autoFail"], "effects": [{ "op": "takeHorror", "amount": 1 }] } }] }
   ] },
   "01061": { "abilities": [
-    { "kind": "action", "label": "Scrying: look at the top 3 cards of your deck", "cost": { "exhaust": true, "uses": 1 }, "effects": [{ "op": "lookAtTop", "amount": 3 }] }
+    { "kind": "action", "label": "Scrying: look at the top 3 cards of a deck", "cost": { "exhaust": true, "uses": 1 }, "effects": [{ "op": "lookAtTop", "amount": 3, "anyDeck": true }] }
   ] },
   "01062": { "abilities": [
     { "kind": "fast", "label": "Arcane Studies: +1 willpower", "cost": { "resources": 1 }, "condition": { "yourSkillTest": true }, "effects": [{ "op": "modify", "mod": { "stat": "willpower", "value": 1 }, "until": "test" }] },
@@ -163,7 +163,7 @@
   ] },
   "01063": { "abilities": [
     { "kind": "forced", "trigger": "enterPlay", "effects": [{ "op": "placeDoom", "amount": 1, "on": "self" }] },
-    { "kind": "fast", "label": "Arcane Initiate: search top 3 for a Spell", "cost": { "exhaust": true }, "effects": [{ "op": "searchDeck", "top": 3, "filter": { "trait": "Spell" } }] }
+    { "kind": "fast", "label": "Arcane Initiate: search top 3 for a Spell", "cost": { "exhaust": true }, "effects": [{ "op": "searchDeck", "draw": true, "top": 3, "filter": { "trait": "Spell" } }] }
   ] },
   "01064": { "abilities": [
     { "kind": "onPlay", "effects": [{ "op": "drawEncounterCard" }, { "op": "discoverClues", "amount": 2 }] }

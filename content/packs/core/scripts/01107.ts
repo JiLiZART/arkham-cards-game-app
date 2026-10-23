@@ -1,6 +1,6 @@
 // They're Getting Out! (The Gathering, agenda 3)
 import {
-  def, emit, enemies, findByCode, push, stepsToward, type CardScript, type G,
+  canEnemyEnter, def, emit, enemies, findByCode, push, stepsToward, type CardScript, type G,
 } from "../../../../src/engine/api";
 
 const ghouls = (g: G) => enemies(g).filter((e) => def(g, e.id).traits.includes("Ghoul"));
@@ -17,7 +17,7 @@ export default {
       if (!parlor) return;
       for (const e of ghouls(g)) {
         if (e.engagedWith || !e.location) continue;
-        const next = stepsToward(g, e.location, [parlor.id])[0];
+        const next = stepsToward(g, e.location, [parlor.id]).find((l) => canEnemyEnter(g, e.id, l));
         if (next) {
           const from = e.location;
           e.location = next;

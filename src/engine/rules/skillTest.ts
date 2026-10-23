@@ -1,11 +1,11 @@
 import type { Effect, Skill, SymbolToken } from "../../content/schema";
 import { randInt } from "../rng";
 import {
-  abilitiesOf, ask, card, checkCondition, def, emit, enemyStat, expireMods, hasFlag, inv, invName, invsAt, isMassive, modSum,
-  moveCard, push, shroud, skillValue, type G,
+  abilitiesOf, ask, baseSkill, card, checkCondition, def, emit, enemyStat, expireMods, hasFlag, inv, invName, invsAt, isMassive, modSum,
+  moveCard, push, shroud, type G,
 } from "../core";
 import type { EffCtx, InstId, InvId, SkillTestState, Step } from "../types";
-import { activatable, win } from "./cards";
+import { activatable, canPlay, win } from "./cards";
 import { attackKey } from "./enemies";
 import { tokenX } from "./tokens";
 
@@ -87,6 +87,16 @@ export function difficultyOf(g: G, t: SkillTestState): number {
   return t.difficulty;
 }
 
+/** the skill whose icons count: intellect when Mind over Matter lets it stand in for combat/agility and its whole total (value + committed icons) is higher */
+export function testedSkill(g: G, t: SkillTestState): Skill {
+  if (t.skill !== "combat" && t.skill !== "agility") return t.skill;
+  if (!hasFlag(g, t.inv, "intellectForCombatAndAgility")) return t.skill;
+  const total = (s: Skill) => ownSkill(g, t.inv, s) + t.committed.reduce((n, c) => n + iconsFor(g, c, s), 0);
+  return total("intellect") > total(t.skill) ? "intellect" : t.skill;
+}
+
+const ownSkill = (g: G, i: InvId, s: Skill) => Math.max(0, baseSkill(g, i, s) + modSum(g, i, s));
+
 /** icons a card contributes to a test */
 export function iconsFor(g: G, cardId: InstId, skill: Skill): number {
   const icons = def(g, cardId).icons;
@@ -96,7 +106,9 @@ export function iconsFor(g: G, cardId: InstId, skill: Skill): number {
 export function canCommit(g: G, who: InvId, cardId: InstId, t: SkillTestState): boolean {
   const d = def(g, cardId);
   if (d.subtype) return false;
-  if (iconsFor(g, cardId, t.skill) === 0) return false;
+  // under Mind over Matter either skill may end up tested, so icons for either count
+  const mom = (t.skill === "combat" || t.skill === "agility") && hasFlag(g, t.inv, "intellectForCombatAndAgility");
+  if (iconsFor(g, cardId, t.skill) === 0 && !(mom && iconsFor(g, cardId, "intellect") > 0)) return false;
   if (d.commitOnlyOwnTest && who !== t.inv) return false;
   if (d.maxCommitted !== undefined && t.committed.filter((c) => card(g, c).code === d.code).length >= d.maxCommitted) return false;
   return true;
@@ -104,8 +116,9 @@ export function canCommit(g: G, who: InvId, cardId: InstId, t: SkillTestState): 
 
 /** the current skill value without tokens, part by part: base skill, each committed card's icons, other modifiers */
 export function testParts(g: G, t: SkillTestState) {
-  const base = skillValue(g, t.inv, t.skill);
-  const icons = t.committed.map((c) => ({ card: c, n: iconsFor(g, c, t.skill) }));
+  const skill = testedSkill(g, t);
+  const base = ownSkill(g, t.inv, skill);
+  const icons = t.committed.map((c) => ({ card: c, n: iconsFor(g, c, skill) }));
   const mods = t.skillBonus + modSum(g, t.inv, "testValue");
   return { base, icons, mods, total: base + icons.reduce((n, i) => n + i.n, 0) + mods, difficulty: difficultyOf(g, t) };
 }
@@ -128,19 +141,22 @@ function commitStage(g: G, step: Extract<Step, { t: "Test" }>) {
   const mine = t.committed.filter((c, k) => t.committers[k] === who);
   // another investigator at the location commits at most one card (Grimoire, ST.2); they may still take it back
   const cards = who !== t.inv && mine.length >= 1 ? [] : me.hand.filter((h) => canCommit(g, who, h, t));
-  const fast = activatable(g, who, ["fast"]).filter((r) => r.ability.effects?.some((e) => e.op === "modify") || r.ability.run);
-  if (cards.length === 0 && fast.length === 0 && mine.length === 0) {
+  // a player window: any [fast] ability, and fast cards playable now (Grimoire, ST.1)
+  const fast = activatable(g, who, ["fast"]);
+  const plays = me.hand.filter((h) => canPlay(g, who, h, true));
+  if (cards.length === 0 && fast.length === 0 && plays.length === 0 && mine.length === 0) {
     push(g, { ...step, choice: undefined, asked: [...asked, who] });
     return;
   }
   const opts = [
     { id: "done", label: who === t.inv ? `Done (value ${testValue(g, t)} vs ${difficultyOf(g, t)})` : "Done", value: "done" },
-    ...cards.map((h) => ({ id: h, label: `Commit ${def(g, h).name} (+${iconsFor(g, h, t.skill)})`, card: h, value: { commit: h } })),
+    ...cards.map((h) => ({ id: h, label: `Commit ${def(g, h).name} (+${iconsFor(g, h, testedSkill(g, t))})`, card: h, value: { commit: h } })),
+    ...plays.map((h) => ({ id: `play:${h}`, label: `Play ${def(g, h).name} (fast)`, card: h, value: { play: h } })),
     ...fast.map((r) => ({ id: `${r.card}:${r.index}`, label: r.ability.label ?? `Use ${def(g, r.card).name}`, card: r.card, value: { ability: r } })),
     // cards committed in this window can be taken back until Done
     ...mine.map((c) => ({ id: `un:${c}`, label: `Take back ${def(g, c).name}`, card: c, value: { uncommit: c } })),
   ];
-  const pick = ask<"done" | { commit: InstId } | { uncommit: InstId } | { ability: { card: InstId; index: number } }>(
+  const pick = ask<"done" | { commit: InstId } | { uncommit: InstId } | { play: InstId } | { ability: { card: InstId; index: number } }>(
     g, step, who, "commit", `${me.name}: commit cards to ${invName(g, t.inv)}'s ${t.skill} test`, opts,
     { key: who === t.inv ? "commit" : "commitOther", vars: { by: t.inv, skill: t.skill } },
   );
@@ -161,6 +177,10 @@ function commitStage(g: G, step: Extract<Step, { t: "Test" }>) {
     t.committers.splice(k, 1);
     moveCard(g, pick.uncommit, "hand");
     emit(g, "uncommit", `${me.name} takes back ${def(g, pick.uncommit).name}`, { inv: who, card: pick.uncommit });
+  } else if ("play" in pick) {
+    // the card is paid for and resolves, then the window asks again
+    push(g, { t: "PlayCard", inv: who, card: pick.play }, { ...step, choice: undefined });
+    return;
   } else {
     // the ability resolves first (its bonus and cost), then the window asks again
     push(g, { t: "UseAbility", inv: who, card: pick.ability.card, index: pick.ability.index }, { ...step, choice: undefined });
@@ -280,7 +300,8 @@ function resultStage(g: G) {
   // an automatic failure counts the skill value as 0, an automatic success the difficulty as 0 (Grimoire, ST.6)
   t.margin = t.autoSucceed ? total : t.autoFail ? -diff : total - diff;
   const tokText = t.tokens.length ? t.tokens.join(", ") : "none";
-  const icons = t.committed.reduce((n, c) => n + iconsFor(g, c, t.skill), 0);
+  const skill = testedSkill(g, t);
+  const icons = t.committed.reduce((n, c) => n + iconsFor(g, c, skill), 0);
   const base = value - icons;
   emit(
     g, "testResult",

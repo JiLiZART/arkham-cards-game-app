@@ -114,16 +114,20 @@ function abilityOfAction(g: G, a: TurnAction) {
   return a.kind === "ability" ? abilitiesOfCard(g, a.card)[a.index] : a.kind === "play" ? playAbility(g, a.card) : undefined;
 }
 
-/** actions available (counting restricted actions usable for this card) */
-function actionsFor(g: G, i: InvId, cardId: string | null, designator: string) {
+/** actions available (counting restricted actions usable for this action) */
+function actionsFor(g: G, i: InvId, a: TurnAction, designator: string) {
   const me = inv(g, i);
-  const restricted = me.restrictedActions.filter((r) => restrictedFits(g, r, cardId, designator)).reduce((n, r) => n + r.left, 0);
+  const restricted = me.restrictedActions.filter((r) => restrictedFits(g, i, r, a, designator)).reduce((n, r) => n + r.left, 0);
   return me.actionsLeft + restricted;
 }
 
-/** an extra action restricted to a trait of the card used (Daisy: Tome) or to a kind of action (Galvanize: fight) */
-function restrictedFits(g: G, r: { trait?: string; designator?: string; left: number }, cardId: string | null, designator: string) {
-  return r.left > 0 && ((!!r.trait && !!cardId && def(g, cardId).traits.includes(r.trait)) || (!!r.designator && r.designator === designator));
+/** an extra action restricted to [action] abilities of cards with a trait (Daisy: Tome — not playing one, and only while
+ *  the granting text is still active) or to a kind of action (Galvanize: fight) */
+function restrictedFits(g: G, i: InvId, r: { trait?: string; designator?: string; left: number }, a: TurnAction, designator: string) {
+  if (r.left <= 0) return false;
+  if (r.designator) return r.designator === designator;
+  return !!r.trait && a.kind === "ability" && def(g, a.card).traits.includes(r.trait)
+    && allMods(g).some((m) => m.target === i && m.mod.stat === "additionalActions" && m.mod.filter?.trait === r.trait);
 }
 
 export function actionCost(g: G, i: InvId, a: TurnAction): number {
@@ -149,8 +153,7 @@ export function legalTurnActions(g: G, i: InvId): ChoiceOption[] {
   const out: ChoiceOption[] = [];
   const add = (a: TurnAction, label: string, cardId?: string) => {
     const cost = actionCost(g, i, a);
-    const cardForRestricted = a.kind === "ability" ? a.card : a.kind === "play" ? a.card : null;
-    if (cost > actionsFor(g, i, cardForRestricted, designatorOf(g, a))) return;
+    if (cost > actionsFor(g, i, a, designatorOf(g, a))) return;
     const id = JSON.stringify(a);
     out.push({ id, label: cost > 1 ? `${label} [${cost} actions]` : label, card: cardId, value: a });
   };
@@ -218,9 +221,8 @@ export const performActionHandler: Handler<"PerformAction"> = (g, step) => {
   const designator = designatorOf(g, a);
   // spend actions (restricted actions first when they apply)
   let left = cost;
-  const cardId = a.kind === "ability" || a.kind === "play" ? a.card : null;
   for (const r of me.restrictedActions) {
-    if (left > 0 && restrictedFits(g, r, cardId, designator)) {
+    if (left > 0 && restrictedFits(g, i, r, a, designator)) {
       const n = Math.min(left, r.left);
       r.left -= n;
       left -= n;

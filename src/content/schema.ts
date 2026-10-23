@@ -242,8 +242,10 @@ export type Effect =
   | { op: "cancel" } // cancel the triggering attack/revelation/token
   | { op: "disengageAll"; nonTrait?: string }
   | { op: "moveTo"; where: "connecting" | "revealedNoEnemies" | "central" | "choose" | "eventLocation" }
-  | { op: "searchDeck"; top?: number; filter: CardFilter; amount?: number; target?: InvTarget }
-  | { op: "lookAtTop"; amount: number }
+  /** `draw`: the card found is drawn (a weakness resolves), not just added to the hand */
+  | { op: "searchDeck"; top?: number; filter: CardFilter; amount?: number; target?: InvTarget; draw?: boolean }
+  /** `anyDeck`: any investigator's deck or the encounter deck (Scrying); the cards go back on top in the order chosen */
+  | { op: "lookAtTop"; amount: number; anyDeck?: boolean }
   | { op: "addUses"; amount: number; filter: CardFilter }
   | { op: "surge" }
   | { op: "drawCultistOrSearch" } // Mysterious Chanting fallback
@@ -308,8 +310,8 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
     z.object({ op: z.literal("cancel") }).strict(),
     z.object({ op: z.literal("disengageAll"), nonTrait: z.string().optional() }).strict(),
     z.object({ op: z.literal("moveTo"), where: z.enum(["connecting", "revealedNoEnemies", "central", "choose", "eventLocation"]) }).strict(),
-    z.object({ op: z.literal("searchDeck"), top: z.number().optional(), filter: CardFilter, amount: z.number().optional(), target: InvTarget.optional() }).strict(),
-    z.object({ op: z.literal("lookAtTop"), amount: z.number() }).strict(),
+    z.object({ op: z.literal("searchDeck"), top: z.number().optional(), filter: CardFilter, amount: z.number().optional(), target: InvTarget.optional(), draw: z.boolean().optional() }).strict(),
+    z.object({ op: z.literal("lookAtTop"), amount: z.number(), anyDeck: z.boolean().optional() }).strict(),
     z.object({ op: z.literal("addUses"), amount: z.number(), filter: CardFilter }).strict(),
     z.object({ op: z.literal("surge") }).strict(),
     z.object({ op: z.literal("drawCultistOrSearch") }).strict(),

@@ -6,6 +6,7 @@ import {
 } from "./core";
 import { randInt, shuffle } from "./rng";
 import { playCost, win } from "./rules/cards";
+import { canEnemyEnter } from "./rules/enemies";
 import { basicInvestigate } from "./rules/flow";
 import { startTest } from "./rules/skillTest";
 import type { EffCtx, InstId, InvId, Step } from "./types";
@@ -358,7 +359,20 @@ export const effHandler = (g: G, step: EffStep) => {
       return;
     case "gainActions":
       if (e.onlyFor) inv(g, you).restrictedActions.push({ designator: e.onlyFor, left: e.amount });
-      else inv(g, you).actionsLeft += e.amount;
+      else if (e.amount >= 0) inv(g, you).actionsLeft += e.amount;
+      else {
+        // losing actions: from normal actions first, then restricted ones, never below 0
+        const me = inv(g, you);
+        let lose = -e.amount;
+        const n = Math.min(lose, me.actionsLeft);
+        me.actionsLeft -= n;
+        lose -= n;
+        for (const r of me.restrictedActions) {
+          const k = Math.min(lose, r.left);
+          r.left -= k;
+          lose -= k;
+        }
+      }
       emit(g, "actions", `${invName(g, you)} gains ${e.amount} action(s)`, { inv: you, data: { n: e.amount } });
       return;
     case "cancel":
@@ -389,10 +403,21 @@ export const effHandler = (g: G, step: EffStep) => {
       if (!ts) return;
       const who = ts[0];
       const me = inv(g, who);
-      const pool = (e.top ? me.deck.slice(0, e.top) : me.deck).filter((id) => matchesFilter(g, card(g, id).code, e.filter));
+      const top = e.top ? me.deck.slice(0, e.top) : null;
+      const pool = (top ?? me.deck).filter((id) => matchesFilter(g, card(g, id).code, e.filter));
+      // the top cards that don't match are shown too: the searcher sees what they looked at
       const pick = ask<InstId | "none">(g, step, who, "generic", `Search your deck${e.top ? ` (top ${e.top})` : ""}`,
-        [...pool.map((id) => opt(g, id)), { id: "none", label: "Take nothing", value: "none" }]);
+        [...pool.map((id) => opt(g, id)), { id: "none", label: "Take nothing", value: "none" }],
+        { key: e.top ? "searchTop" : "searchDeck", vars: { n: e.top ?? 0 }, shown: top?.filter((id) => !pool.includes(id)) });
       if (pick === undefined) return;
+      if (pick !== "none" && e.draw) {
+        // drawn: the rest is shuffled, the card goes on top and is drawn from there (a weakness resolves as drawn)
+        me.deck.splice(me.deck.indexOf(pick), 1);
+        shuffle(g.s, me.deck);
+        me.deck.unshift(pick);
+        push(g, { t: "Draw", inv: who, n: 1, tapped: true });
+        return;
+      }
       if (pick !== "none") {
         moveCard(g, pick, "hand");
         emit(g, "search", `${me.name} adds ${def(g, pick).name} to their hand`, { inv: who, card: pick });
@@ -401,8 +426,17 @@ export const effHandler = (g: G, step: EffStep) => {
       return;
     }
     case "lookAtTop": {
-      const me = inv(g, you);
-      emit(g, "look", `${me.name} looks at: ${me.deck.slice(0, e.amount).map((id) => def(g, id).name).join(", ")}`, { inv: you, data: { n: Math.min(e.amount, me.deck.length) } });
+      const decks = e.anyDeck
+        ? [...activeInvs(g).filter((i) => inv(g, i).deck.length).map((i) => ({ id: i, label: `${invName(g, i)}'s deck`, value: i, key: "option.deckOf", vars: { code: i } })),
+          ...(g.s.encounterDeck.length ? [{ id: "encounter", label: "Encounter deck", value: "encounter", key: "option.encounterDeck" }] : [])]
+        : [{ id: you, label: invName(g, you), value: you }];
+      if (!decks.length) return;
+      const deck = ask<InvId | "encounter">(g, step, you, "generic", "Choose a deck to look at", decks, { auto: true, key: "chooseDeck" });
+      if (deck === undefined) return;
+      const cards = (deck === "encounter" ? g.s.encounterDeck : inv(g, deck).deck).slice(0, e.amount);
+      const whose = deck === "encounter" ? "the encounter deck" : invName(g, deck);
+      emit(g, "look", `${invName(g, you)} looks at the top ${cards.length} of ${whose}`, { inv: you, data: { n: cards.length } });
+      push(g, { t: "ArrangeTop", inv: you, deck, cards, placed: [] });
       return;
     }
     case "addUses": {
@@ -574,7 +608,7 @@ export const effHandler = (g: G, step: EffStep) => {
       const loc = inv(g, you).location;
       if (!loc) return;
       const d = distances(g, loc);
-      const ids = enemies(g).filter((x) => !!x.location && (d.get(x.location) ?? Infinity) <= e.range && (!e.nonElite || !isElite(g, x.id))).map((x) => x.id);
+      const ids = enemies(g).filter((x) => !!x.location && (d.get(x.location) ?? Infinity) <= e.range && (!e.nonElite || !isElite(g, x.id)) && canEnemyEnter(g, x.id, loc)).map((x) => x.id);
       if (!ids.length) return;
       const pick = ask<InstId>(g, step, you, "target", "Choose an enemy to pull to your location", ids.map((id) => opt(g, id)), { auto: true, key: "chooseEnemyPull" });
       if (pick === undefined) return;
@@ -626,5 +660,21 @@ export const effHandler = (g: G, step: EffStep) => {
   }
 };
 
-export const handlers = { Effects: effectsHandler, Eff: effHandler };
+/** one card at a time, top down, until one is left: it goes under the others */
+const arrangeTopHandler = (g: G, step: Extract<Step, { t: "ArrangeTop" }>) => {
+  const left = step.cards.filter((id) => !step.placed.includes(id));
+  const pick = left.length > 1
+    ? ask<InstId>(g, step, step.inv, "generic", `Choose the card to put ${step.placed.length ? "next" : "on top"}`, left.map((id) => opt(g, id)), { key: step.placed.length ? "arrangeNext" : "arrangeTop" })
+    : left[0];
+  if (pick === undefined) return;
+  const placed = [...step.placed, pick];
+  if (placed.length < step.cards.length) {
+    push(g, { ...step, placed, choice: undefined });
+    return;
+  }
+  const deck = step.deck === "encounter" ? g.s.encounterDeck : inv(g, step.deck).deck;
+  deck.splice(0, deck.length, ...placed, ...deck.filter((id) => !placed.includes(id)));
+};
+
+export const handlers = { Effects: effectsHandler, Eff: effHandler, ArrangeTop: arrangeTopHandler };
 export type { Effect };

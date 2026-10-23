@@ -2,10 +2,11 @@ import { shuffle } from "../rng";
 import {
   logStep,
   abilitiesOf, activeInvs, ask, card, cardsIn, connections, controlled, def, emit, engagedWith, enemies, hasFlag, inv, invName,
-  isMassive, maxHealth, maxSanity, moveCard, playerCount, push, tapToDraw, type G,
+  invsAt, isMassive, maxHealth, maxSanity, moveCard, playerCount, push, tapToDraw, type G,
 } from "../core";
 import type { InstId, InvId, Step } from "../types";
 import { win } from "./cards";
+import { preyCandidates } from "./enemies";
 
 type Handler<T extends Step["t"]> = (g: G, step: Extract<Step, { t: T }>) => void;
 
@@ -247,16 +248,19 @@ export function revealLocation(g: G, loc: InstId) {
   emit(g, "reveal", `${d.name} is revealed (${c.clues} clues)`, { card: loc, data: { n: c.clues } });
 }
 
-/** ready unengaged non-aloof enemies at an investigator's location engage them */
+/** ready unengaged non-aloof enemies at an investigator's location engage by prey among everyone there (the mover on a tie) */
 export function checkEngagement(g: G, i: InvId) {
   const me = inv(g, i);
   if (me.status !== "playing") return;
   for (const e of enemies(g)) {
     if (e.location !== me.location || e.engagedWith || e.exhausted) continue;
     if (def(g, e.id).keywords.includes("aloof") || isMassive(g, e.id)) continue;
-    e.engagedWith = i;
-    emit(g, "engage", `${def(g, e.id).name} engages ${me.name}`, { inv: i, card: e.id });
-    push(g, win("enemyEngages", { inv: i, enemy: e.id }));
+    const prey = preyCandidates(g, e.id, invsAt(g, me.location));
+    const to = prey.includes(i) ? i : prey[0];
+    if (!to) continue; // Prey - bearer only with no bearer here
+    e.engagedWith = to;
+    emit(g, "engage", `${def(g, e.id).name} engages ${invName(g, to)}`, { inv: to, card: e.id });
+    push(g, win("enemyEngages", { inv: to, enemy: e.id }));
   }
 }
 
