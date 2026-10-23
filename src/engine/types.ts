@@ -135,6 +135,8 @@ export interface SkillTestState {
   onTokens?: { tokens: string[]; effects: Effect[] };
   /** +1 damage if the attack succeeds by at least this much */
   marginDamage?: number;
+  /** damage by the margin (Shotgun) */
+  damagePerMargin?: { max: number; instead?: boolean };
   /** script continuation run after results: {code, fn} */
   after?: { code: string; fn: string };
   ctx: EffCtx;
@@ -145,6 +147,16 @@ export interface SkillTestState {
   /** number of tokens whose effects were resolved */
   resolvedTokens: number;
   flipNegative: boolean;
+  /** tokens revealed when the "would reveal" window was last opened (it opens once per reveal) */
+  revealAsked?: number;
+  /** additional tokens the next reveal draws, one of which is chosen (Grotesque Statue) */
+  extraReveal?: number;
+  /** a script run with the token chosen from several (Mask of Silenus) */
+  onChoose?: { code: string; fn: string };
+  /** tokens drawn by a reveal and not yet chosen between */
+  drawn?: ChaosToken[];
+  /** tokens drawn and not chosen: ignored, back in the bag when the test ends */
+  ignored?: ChaosToken[];
   /** cancel key of the most recently revealed token */
   tokenKey?: string;
   /** chosen skill when the test allows several (Locked Door) */

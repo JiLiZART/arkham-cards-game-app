@@ -43,7 +43,7 @@ abilities cover only part of its text counts as working, so the bot playthroughs
 
 | Done | Pack | Campaign | Encounter cards left | Player cards left |
 | --- | --- | --- | --- | --- |
-| [ ] | `core` | shared by every campaign | 3 of 79 | 20 of 99 |
+| [x] | `core` | shared by every campaign | 0 of 79 | 0 of 99 |
 | [ ] | `rtnotz` | return-to-the-night-of-the-zealot, side-by-the-book | 30 of 38 | 10 of 10 |
 
 ### The cycles: each deluxe box, its mythos packs, its Return-to box

@@ -306,18 +306,13 @@
   "core": {
    "encounter": {
     "total": 79,
-    "works": 76,
-    "rest": {
-     "scenario": 3
-    }
+    "works": 79,
+    "rest": {}
    },
    "player": {
     "total": 99,
-    "works": 79,
-    "rest": {
-     "asset": 11,
-     "event": 9
-    }
+    "works": 99,
+    "rest": {}
    }
   },
   "core_2026": {
@@ -2220,14 +2215,14 @@
   "return-to-the-circle-undone": {
    "cards": {
     "total": 342,
-    "works": 28,
+    "works": 29,
     "rest": {
      "act": 36,
      "agenda": 18,
      "asset": 10,
      "enemy": 43,
      "location": 131,
-     "scenario": 17,
+     "scenario": 16,
      "story": 13,
      "treachery": 46
     }
@@ -2273,7 +2268,7 @@
   "return-to-the-forgotten-age": {
    "cards": {
     "total": 317,
-    "works": 30,
+    "works": 31,
     "rest": {
      "act": 59,
      "agenda": 20,
@@ -2281,7 +2276,7 @@
      "enemy": 33,
      "investigator": 1,
      "location": 104,
-     "scenario": 18,
+     "scenario": 17,
      "story": 2,
      "treachery": 38
     }
@@ -2302,13 +2297,13 @@
   "return-to-the-night-of-the-zealot": {
    "cards": {
     "total": 112,
-    "works": 73,
+    "works": 76,
     "rest": {
      "act": 1,
      "agenda": 1,
      "enemy": 8,
      "location": 17,
-     "scenario": 6,
+     "scenario": 3,
      "treachery": 6
     }
    },
@@ -2322,14 +2317,14 @@
   "return-to-the-path-to-carcosa": {
    "cards": {
     "total": 359,
-    "works": 30,
+    "works": 31,
     "rest": {
      "act": 34,
      "agenda": 27,
      "asset": 12,
      "enemy": 43,
      "location": 116,
-     "scenario": 17,
+     "scenario": 16,
      "story": 29,
      "treachery": 51
     }
@@ -2349,14 +2344,14 @@
   "side-all-or-nothing": {
    "cards": {
     "total": 56,
-    "works": 18,
+    "works": 19,
     "rest": {
      "act": 6,
      "agenda": 4,
      "asset": 2,
      "enemy": 5,
      "location": 10,
-     "scenario": 4,
+     "scenario": 3,
      "treachery": 7
     }
    },
@@ -2368,14 +2363,14 @@
   "side-bad-blood": {
    "cards": {
     "total": 78,
-    "works": 23,
+    "works": 24,
     "rest": {
      "act": 25,
      "agenda": 4,
      "asset": 5,
      "enemy": 5,
      "location": 7,
-     "scenario": 3,
+     "scenario": 2,
      "story": 1,
      "treachery": 5
     }
@@ -2424,13 +2419,13 @@
   "side-by-the-book": {
    "cards": {
     "total": 44,
-    "works": 34,
+    "works": 35,
     "rest": {
      "act": 1,
      "agenda": 2,
      "enemy": 4,
      "location": 1,
-     "scenario": 2
+     "scenario": 1
     }
    },
    "unscripted": [
@@ -2594,14 +2589,14 @@
   "side-red-tide-rising": {
    "cards": {
     "total": 65,
-    "works": 22,
+    "works": 23,
     "rest": {
      "act": 3,
      "agenda": 5,
      "asset": 4,
      "enemy": 11,
      "location": 13,
-     "scenario": 3,
+     "scenario": 2,
      "story": 1,
      "treachery": 3
     }
@@ -2614,14 +2609,14 @@
   "side-relics-of-the-past": {
    "cards": {
     "total": 66,
-    "works": 21,
+    "works": 22,
     "rest": {
      "act": 5,
      "agenda": 4,
      "asset": 4,
      "enemy": 7,
      "location": 10,
-     "scenario": 3,
+     "scenario": 2,
      "treachery": 12
     }
    },
@@ -2672,14 +2667,14 @@
   "the-circle-undone": {
    "cards": {
     "total": 294,
-    "works": 31,
+    "works": 32,
     "rest": {
      "act": 31,
      "agenda": 18,
      "asset": 8,
      "enemy": 39,
      "location": 106,
-     "scenario": 9,
+     "scenario": 8,
      "story": 11,
      "treachery": 41
     }
@@ -2722,14 +2717,14 @@
   "the-drowned-city": {
    "cards": {
     "total": 296,
-    "works": 33,
+    "works": 34,
     "rest": {
      "act": 24,
      "agenda": 18,
      "asset": 12,
      "enemy": 41,
      "location": 87,
-     "scenario": 10,
+     "scenario": 9,
      "story": 26,
      "treachery": 45
     }
@@ -2776,7 +2771,7 @@
   "the-feast-of-hemlock-vale": {
    "cards": {
     "total": 321,
-    "works": 28,
+    "works": 29,
     "rest": {
      "act": 22,
      "agenda": 22,
@@ -2785,7 +2780,7 @@
      "enemy_location": 13,
      "investigator": 1,
      "location": 101,
-     "scenario": 11,
+     "scenario": 10,
      "story": 7,
      "treachery": 37
     }
@@ -2807,7 +2802,7 @@
   "the-forgotten-age": {
    "cards": {
     "total": 286,
-    "works": 33,
+    "works": 34,
     "rest": {
      "act": 50,
      "agenda": 27,
@@ -2815,7 +2810,7 @@
      "enemy": 28,
      "investigator": 1,
      "location": 83,
-     "scenario": 10,
+     "scenario": 9,
      "story": 2,
      "treachery": 42
     }
@@ -2837,14 +2832,14 @@
   "the-innsmouth-conspiracy": {
    "cards": {
     "total": 285,
-    "works": 32,
+    "works": 33,
     "rest": {
      "act": 17,
      "agenda": 28,
      "asset": 15,
      "enemy": 40,
      "location": 101,
-     "scenario": 9,
+     "scenario": 8,
      "story": 2,
      "treachery": 41
     }
@@ -2864,14 +2859,14 @@
   "the-path-to-carcosa": {
    "cards": {
     "total": 302,
-    "works": 36,
+    "works": 37,
     "rest": {
      "act": 29,
      "agenda": 26,
      "asset": 10,
      "enemy": 35,
      "location": 94,
-     "scenario": 9,
+     "scenario": 8,
      "story": 23,
      "treachery": 40
     }
@@ -2891,7 +2886,7 @@
   "the-scarlet-keys": {
    "cards": {
     "total": 344,
-    "works": 33,
+    "works": 34,
     "rest": {
      "act": 35,
      "agenda": 28,
@@ -2899,7 +2894,7 @@
      "enemy": 63,
      "key": 20,
      "location": 92,
-     "scenario": 11,
+     "scenario": 10,
      "story": 10,
      "treachery": 38
     }
@@ -2966,13 +2961,13 @@
    "campaign": "the-path-to-carcosa",
    "cards": {
     "total": 56,
-    "works": 19,
+    "works": 20,
     "rest": {
      "act": 4,
      "agenda": 3,
      "enemy": 4,
      "location": 13,
-     "scenario": 2,
+     "scenario": 1,
      "treachery": 11
     }
    },
@@ -3023,14 +3018,14 @@
    "campaign": "side-all-or-nothing",
    "cards": {
     "total": 56,
-    "works": 18,
+    "works": 19,
     "rest": {
      "act": 6,
      "agenda": 4,
      "asset": 2,
      "enemy": 5,
      "location": 10,
-     "scenario": 4,
+     "scenario": 3,
      "treachery": 7
     }
    },
@@ -3081,14 +3076,14 @@
    "campaign": "side-bad-blood",
    "cards": {
     "total": 78,
-    "works": 23,
+    "works": 24,
     "rest": {
      "act": 25,
      "agenda": 4,
      "asset": 5,
      "enemy": 5,
      "location": 7,
-     "scenario": 3,
+     "scenario": 2,
      "story": 1,
      "treachery": 5
     }
@@ -3270,13 +3265,13 @@
    "campaign": "side-by-the-book",
    "cards": {
     "total": 44,
-    "works": 34,
+    "works": 35,
     "rest": {
      "act": 1,
      "agenda": 2,
      "enemy": 4,
      "location": 1,
-     "scenario": 2
+     "scenario": 1
     }
    },
    "tokens": false,
@@ -3440,14 +3435,14 @@
    "campaign": "the-path-to-carcosa",
    "cards": {
     "total": 57,
-    "works": 21,
+    "works": 22,
     "rest": {
      "act": 3,
      "agenda": 3,
      "asset": 3,
      "enemy": 4,
      "location": 13,
-     "scenario": 2,
+     "scenario": 1,
      "treachery": 8
     }
    },
@@ -3920,7 +3915,7 @@
    "campaign": "the-scarlet-keys",
    "cards": {
     "total": 56,
-    "works": 22,
+    "works": 23,
     "rest": {
      "act": 2,
      "agenda": 2,
@@ -3928,7 +3923,7 @@
      "enemy": 5,
      "key": 2,
      "location": 12,
-     "scenario": 2,
+     "scenario": 1,
      "story": 2,
      "treachery": 6
     }
@@ -4098,13 +4093,13 @@
    "campaign": "the-drowned-city",
    "cards": {
     "total": 45,
-    "works": 25,
+    "works": 26,
     "rest": {
      "act": 5,
      "agenda": 2,
      "enemy": 4,
      "location": 3,
-     "scenario": 2,
+     "scenario": 1,
      "treachery": 4
     }
    },
@@ -4155,14 +4150,14 @@
    "campaign": "side-red-tide-rising",
    "cards": {
     "total": 65,
-    "works": 22,
+    "works": 23,
     "rest": {
      "act": 3,
      "agenda": 5,
      "asset": 4,
      "enemy": 11,
      "location": 13,
-     "scenario": 3,
+     "scenario": 2,
      "story": 1,
      "treachery": 3
     }
@@ -4175,14 +4170,14 @@
    "campaign": "side-relics-of-the-past",
    "cards": {
     "total": 66,
-    "works": 21,
+    "works": 22,
     "rest": {
      "act": 5,
      "agenda": 4,
      "asset": 4,
      "enemy": 7,
      "location": 10,
-     "scenario": 3,
+     "scenario": 2,
      "treachery": 12
     }
    },
@@ -4194,13 +4189,13 @@
    "campaign": "return-to-the-path-to-carcosa",
    "cards": {
     "total": 64,
-    "works": 17,
+    "works": 18,
     "rest": {
      "act": 4,
      "agenda": 3,
      "enemy": 5,
      "location": 19,
-     "scenario": 3,
+     "scenario": 2,
      "treachery": 13
     }
    },
@@ -4325,14 +4320,14 @@
    "campaign": "return-to-the-path-to-carcosa",
    "cards": {
     "total": 63,
-    "works": 21,
+    "works": 22,
     "rest": {
      "act": 3,
      "agenda": 3,
      "asset": 3,
      "enemy": 5,
      "location": 17,
-     "scenario": 3,
+     "scenario": 2,
      "treachery": 8
     }
    },
@@ -4532,15 +4527,15 @@
    "campaign": "return-to-the-night-of-the-zealot",
    "cards": {
     "total": 42,
-    "works": 28,
+    "works": 29,
     "rest": {
      "enemy": 4,
      "location": 4,
-     "scenario": 2,
+     "scenario": 1,
      "treachery": 4
     }
    },
-   "tokens": false,
+   "tokens": true,
    "scripted": false,
    "complete": false
   },
@@ -4566,16 +4561,16 @@
    "campaign": "return-to-the-night-of-the-zealot",
    "cards": {
     "total": 40,
-    "works": 24,
+    "works": 25,
     "rest": {
      "act": 1,
      "enemy": 2,
      "location": 9,
-     "scenario": 2,
+     "scenario": 1,
      "treachery": 2
     }
    },
-   "tokens": false,
+   "tokens": true,
    "scripted": false,
    "complete": false
   },
@@ -4622,16 +4617,16 @@
    "campaign": "return-to-the-night-of-the-zealot",
    "cards": {
     "total": 42,
-    "works": 27,
+    "works": 28,
     "rest": {
      "agenda": 1,
      "enemy": 6,
      "location": 4,
-     "scenario": 2,
+     "scenario": 1,
      "treachery": 2
     }
    },
-   "tokens": false,
+   "tokens": true,
    "scripted": false,
    "complete": false
   },
@@ -4753,13 +4748,13 @@
    "campaign": "return-to-the-circle-undone",
    "cards": {
     "total": 55,
-    "works": 21,
+    "works": 22,
     "rest": {
      "act": 5,
      "agenda": 2,
      "enemy": 4,
      "location": 13,
-     "scenario": 3,
+     "scenario": 2,
      "treachery": 7
     }
    },
@@ -4771,14 +4766,14 @@
    "campaign": "return-to-the-forgotten-age",
    "cards": {
     "total": 87,
-    "works": 20,
+    "works": 21,
     "rest": {
      "act": 32,
      "agenda": 3,
      "asset": 8,
      "enemy": 6,
      "location": 9,
-     "scenario": 3,
+     "scenario": 2,
      "treachery": 6
     }
    },
@@ -4866,14 +4861,14 @@
    "campaign": "the-scarlet-keys",
    "cards": {
     "total": 54,
-    "works": 20,
+    "works": 21,
     "rest": {
      "act": 4,
      "agenda": 4,
      "enemy": 6,
      "key": 2,
      "location": 8,
-     "scenario": 2,
+     "scenario": 1,
      "treachery": 8
     }
    },
@@ -5013,14 +5008,14 @@
    "campaign": "the-drowned-city",
    "cards": {
     "total": 39,
-    "works": 19,
+    "works": 20,
     "rest": {
      "act": 1,
      "agenda": 1,
      "asset": 2,
      "enemy": 7,
      "location": 1,
-     "scenario": 2,
+     "scenario": 1,
      "treachery": 6
     }
    },
@@ -5032,13 +5027,13 @@
    "campaign": "the-drowned-city",
    "cards": {
     "total": 68,
-    "works": 19,
+    "works": 20,
     "rest": {
      "act": 2,
      "agenda": 2,
      "enemy": 11,
      "location": 9,
-     "scenario": 2,
+     "scenario": 1,
      "story": 11,
      "treachery": 12
     }
@@ -5236,14 +5231,14 @@
    "campaign": "the-feast-of-hemlock-vale",
    "cards": {
     "total": 81,
-    "works": 22,
+    "works": 23,
     "rest": {
      "act": 1,
      "agenda": 1,
      "asset": 13,
      "enemy": 21,
      "location": 11,
-     "scenario": 2,
+     "scenario": 1,
      "story": 2,
      "treachery": 8
     }
@@ -5497,14 +5492,14 @@
    "campaign": "the-innsmouth-conspiracy",
    "cards": {
     "total": 59,
-    "works": 22,
+    "works": 23,
     "rest": {
      "act": 2,
      "agenda": 3,
      "asset": 2,
      "enemy": 11,
      "location": 13,
-     "scenario": 2,
+     "scenario": 1,
      "story": 1,
      "treachery": 3
     }
@@ -5556,13 +5551,13 @@
    "campaign": "the-circle-undone",
    "cards": {
     "total": 48,
-    "works": 22,
+    "works": 23,
     "rest": {
      "act": 4,
      "agenda": 2,
      "enemy": 4,
      "location": 8,
-     "scenario": 2,
+     "scenario": 1,
      "treachery": 6
     }
    },
@@ -5574,14 +5569,14 @@
    "campaign": "the-forgotten-age",
    "cards": {
     "total": 73,
-    "works": 23,
+    "works": 24,
     "rest": {
      "act": 24,
      "agenda": 3,
      "asset": 5,
      "enemy": 4,
      "location": 7,
-     "scenario": 2,
+     "scenario": 1,
      "treachery": 5
     }
    },

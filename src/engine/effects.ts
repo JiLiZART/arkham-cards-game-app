@@ -458,6 +458,7 @@ export const effHandler = (g: G, step: EffStep) => {
         onFail: e.onFail,
         onTokens: e.onTokens,
         marginDamage: e.extraDamageIfSucceedBy,
+        damagePerMargin: e.damagePerMargin,
         autoSucceed: e.auto,
         ctx: fctx,
       });

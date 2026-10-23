@@ -4,7 +4,7 @@
  * hand-written folder of the same id in content/campaigns is skipped. The mapping itself is in campaignGuide.ts.
  *   npm run import:campaigns
  */
-import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type {
   CampaignDef,
@@ -42,6 +42,17 @@ const DIFFICULTIES: Difficulty[] = ["easy", "standard", "hard", "expert"];
 /** the bags a side scenario uses when its guide names none: the core set's */
 const CORE_BAGS = JSON.parse(readFileSync(join(HAND, "night-of-the-zealot/campaign.json"), "utf8"))
   .chaosBags as Record<Difficulty, ChaosToken[]>;
+/** the token tables of the hand-written scenarios, by reference card */
+const HAND_TOKENS = new Map<string, ScenarioDef["tokens"]>(
+  readdirSync(HAND).flatMap((c) =>
+    existsSync(join(HAND, c, "scenarios"))
+      ? readdirSync(join(HAND, c, "scenarios")).map((f) => {
+          const s = JSON.parse(readFileSync(join(HAND, c, "scenarios", f), "utf8")) as ScenarioDef;
+          return [s.card, s.tokens] as const;
+        })
+      : [],
+  ),
+);
 
 interface Card {
   code: string;
@@ -198,17 +209,19 @@ function scenarioOf(
   const setup: SetupStep[] = [{ do: "putIntoPlay", codes: inPlay }];
   if (setAside.length) setup.push({ do: "setAside", codes: setAside });
   setup.push({ do: "startAt", code: start });
-  // chaos tokens: the reference card's front for easy/standard, its back for hard/expert
-  const tokens: ScenarioDef["tokens"] = {};
-  for (const [side, diffs] of [
-    [ref.text, ["easy", "standard"]],
-    [ref.backText ?? ref.text, ["hard", "expert"]],
-  ] as const) {
-    const t = tokenEffects(side);
-    if (t.approximated.length)
-      note(`${where}: ${diffs.join("/")} ${t.approximated.join(", ")} read as -2`);
-    for (const d of diffs) tokens[d] = t.effects as Record<SymbolToken, TokenEffect>;
-  }
+  // chaos tokens: a hand-written scenario's tables when it plays with the same reference card (a Return-to scenario);
+  // otherwise the reference card's front for easy/standard, its back for hard/expert
+  const tokens: ScenarioDef["tokens"] = { ...HAND_TOKENS.get(ref.code) };
+  if (!HAND_TOKENS.has(ref.code))
+    for (const [side, diffs] of [
+      [ref.text, ["easy", "standard"]],
+      [ref.backText ?? ref.text, ["hard", "expert"]],
+    ] as const) {
+      const t = tokenEffects(side);
+      if (t.approximated.length)
+        note(`${where}: ${diffs.join("/")} ${t.approximated.join(", ")} read as -2`);
+      for (const d of diffs) tokens[d] = t.effects as Record<SymbolToken, TokenEffect>;
+    }
   const resolutions: Record<string, Resolution> = {};
   for (const r of s.resolutions ?? []) {
     const key = r.id === "no_resolution" ? "none" : /^R\d+$/.test(r.id) ? r.id : null;

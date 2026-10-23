@@ -46,8 +46,8 @@ describe("chipsFor", () => {
     expect(chips("Fearless")).toEqual([c("sanity", 1), c("willpower", 1)]);
   });
 
-  it("a card with nothing to say has no badge (Cryptic Research)", () => {
-    expect(chips("Cryptic Research")).toEqual([]);
+  it("a card's draw shows its amount (Cryptic Research)", () => {
+    expect(chips("Cryptic Research")).toEqual([c("card", 3)]);
   });
 
   it("a weakness shows the weakness icon alone", () => {

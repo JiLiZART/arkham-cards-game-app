@@ -85,6 +85,20 @@
     { "kind": "onPlay", "condition": { "all": [{ "succeededBy": { "min": 0 } }, { "testKind": "fight" }] }, "effects": [{ "op": "modify", "mod": { "stat": "attackDamage", "value": 1 }, "until": "test" }] }
   ] },
 
+  "01026": { "abilities": [
+    { "kind": "onPlay", "effects": [{ "op": "addUses", "amount": 3, "filter": { "trait": "Firearm" } }] }
+  ] },
+  "01027": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "willpower", "value": 1 }] },
+    { "kind": "fast", "label": "Police Badge: discard to take 2 additional actions", "cost": { "discardSelf": true }, "condition": { "yourTurn": true }, "effects": [{ "op": "gainActions", "amount": 2 }] }
+  ] },
+  "01028": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "combat", "value": 1 }] },
+    { "kind": "fast", "label": "Beat Cop: exhaust and take 1 damage to deal 1 damage", "cost": { "exhaust": true, "damageOnSelf": 1 }, "condition": { "enemyAtYourLocation": true }, "effects": [{ "op": "dealDamage", "amount": 1, "to": "chooseAtLocation" }] }
+  ] },
+  "01029": { "abilities": [
+    { "kind": "action", "designator": "fight", "label": "Shotgun: fight (+3 combat, damage by margin)", "cost": { "uses": 1 }, "condition": { "enemyAtYourLocation": true }, "effects": [{ "op": "fight", "bonus": 3, "damagePerMargin": { "max": 5, "instead": true } }] }
+  ] },
   "01030": { "abilities": [{ "kind": "constant", "modifiers": [{ "stat": "intellect", "value": 1, "when": "investigating" }] }] },
   "01031": { "abilities": [
     { "kind": "action", "label": "Old Book of Lore: search top 3", "cost": { "exhaust": true }, "effects": [{ "op": "searchDeck", "draw": true, "top": 3, "filter": {}, "target": "chooseAtLocation" }] }
@@ -116,6 +130,19 @@
     { "kind": "onPlay", "condition": { "all": [{ "succeededBy": { "min": 0 } }, { "testKind": "investigate" }] }, "effects": [{ "op": "modify", "mod": { "stat": "clueBonus", "value": 1 }, "until": "test" }] }
   ] },
 
+  "01040": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "intellect", "value": 1, "when": "investigating" }] },
+    { "kind": "fast", "label": "Magnifying Glass: return to your hand", "condition": { "cluesOnYourLocation": "none" }, "effects": [{ "op": "returnSelfToHand" }] }
+  ] },
+  "01041": { "script": true, "abilities": [
+    { "kind": "reaction", "trigger": "enemySpawns", "usableBy": "anyone", "label": "Disc of Itzamna: discard the enemy", "cost": { "discardSelf": true }, "condition": { "all": [{ "eventAtYourLocation": true }, { "eventEnemy": { "elite": false } }] }, "effects": [{ "op": "script", "fn": "discardEnemy" }] }
+  ] },
+  "01042": { "abilities": [
+    { "kind": "action", "label": "Encyclopedia: +2 to a skill until the end of the phase", "cost": { "exhaust": true }, "effects": [{ "op": "chooseOne", "options": [{ "label": "+2 willpower", "effects": [{ "op": "modify", "mod": { "stat": "willpower", "value": 2 }, "until": "phase", "target": "chooseAtLocation" }] }, { "label": "+2 intellect", "effects": [{ "op": "modify", "mod": { "stat": "intellect", "value": 2 }, "until": "phase", "target": "chooseAtLocation" }] }, { "label": "+2 combat", "effects": [{ "op": "modify", "mod": { "stat": "combat", "value": 2 }, "until": "phase", "target": "chooseAtLocation" }] }, { "label": "+2 agility", "effects": [{ "op": "modify", "mod": { "stat": "agility", "value": 2 }, "until": "phase", "target": "chooseAtLocation" }] }] }] }
+  ] },
+  "01043": { "abilities": [
+    { "kind": "onPlay", "condition": { "yourTurn": true }, "effects": [{ "op": "drawCards", "amount": 3, "target": "chooseAtLocation" }] }
+  ] },
   "01044": { "abilities": [
     { "kind": "action", "designator": "fight", "label": "Switchblade: fight", "condition": { "enemyAtYourLocation": true }, "effects": [{ "op": "fight", "extraDamageIfSucceedBy": 2 }] }
   ] },
@@ -146,6 +173,20 @@
     { "kind": "onPlay", "condition": { "succeededBy": { "min": 3 } }, "effects": [{ "op": "returnSelfToHand" }] }
   ] },
 
+  "01054": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "additionalActions", "value": 1 }] },
+    { "kind": "forced", "trigger": "enterPlay", "condition": { "yourTurn": true }, "effects": [{ "op": "gainActions", "amount": 1 }] }
+  ] },
+  "01055": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "agility", "value": 1 }] },
+    { "kind": "action", "aoo": false, "label": "Cat Burglar: disengage and move", "cost": { "exhaust": true }, "effects": [{ "op": "disengageAll" }, { "op": "moveTo", "where": "connecting" }] }
+  ] },
+  "01056": { "script": true, "abilities": [
+    { "kind": "reaction", "fromHand": true, "trigger": "tokenRevealed", "condition": { "all": [{ "tokenNegative": true }, { "yourSkillTest": true }] }, "effects": [{ "op": "script", "fn": "flip" }] }
+  ] },
+  "01057": { "abilities": [
+    { "kind": "onPlay", "effects": [{ "op": "gainResources", "amount": 10 }] }
+  ] },
   "01058": { "discardWhenEmpty": true, "abilities": [
     { "kind": "fast", "label": "Forbidden Knowledge: take 1 horror, gain 1 resource", "cost": { "exhaust": true, "takeHorror": 1, "uses": 1 }, "effects": [{ "op": "gainResources", "amount": 1 }] }
   ] },
@@ -179,6 +220,19 @@
     { "kind": "onPlay", "condition": { "succeededBy": { "min": 0 } }, "effects": [{ "op": "heal", "horror": 1 }] }
   ] },
 
+  "01068": { "script": true, "abilities": [
+    { "kind": "reaction", "fromHand": true, "trigger": "phaseBegins", "condition": { "enemyAtYourLocation": { "elite": false } }, "effects": [{ "op": "script", "fn": "wipe" }] }
+  ] },
+  "01069": { "abilities": [
+    { "kind": "onPlay", "designator": "evade", "condition": { "engaged": true }, "effects": [{ "op": "evade", "skill": "willpower", "onSuccess": [{ "op": "dealDamage", "amount": 2, "to": "eventEnemy" }], "onTokens": { "tokens": ["skull", "cultist", "tablet", "elderThing", "autoFail"], "effects": [{ "op": "gainActions", "amount": -1 }, { "op": "takeHorror", "amount": 1 }] } }] }
+  ] },
+  "01070": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "arcaneSlots", "value": 1 }] },
+    { "kind": "action", "label": "Book of Shadows: add 1 charge to a Spell", "cost": { "exhaust": true }, "condition": { "assetInPlay": { "trait": "Spell" } }, "effects": [{ "op": "addUses", "amount": 1, "filter": { "trait": "Spell" } }] }
+  ] },
+  "01071": { "script": true, "discardWhenEmpty": true, "abilities": [
+    { "kind": "reaction", "trigger": "wouldRevealToken", "label": "Grotesque Statue: reveal 2 tokens, resolve 1", "cost": { "uses": 1 }, "condition": { "yourSkillTest": true }, "effects": [{ "op": "script", "fn": "twoTokens" }] }
+  ] },
   "01073": { "abilities": [
     { "kind": "reaction", "trigger": "successfulInvestigate", "label": "Scavenging: return an Item from discard", "cost": { "exhaust": true }, "condition": { "succeededBy": { "min": 2 } }, "effects": [{ "op": "takeFromDiscard", "filter": { "trait": "Item" } }] }
   ] },
@@ -212,6 +266,18 @@
     ] }] }
   ] },
 
+  "01082": { "script": true, "abilities": [
+    { "kind": "reaction", "trigger": "attackDealsDamage", "label": "Aquinnah: deal the attack's damage to another enemy", "cost": { "exhaust": true, "horrorOnSelf": 1 }, "condition": { "eventInvestigatorIsYou": true }, "effects": [{ "op": "script", "fn": "redirect" }] }
+  ] },
+  "01083": { "abilities": [
+    { "kind": "reaction", "fromHand": true, "trigger": "enemyEvaded", "usableBy": "atLocation", "condition": { "all": [{ "eventEnemy": { "elite": false, "weakness": false } }, { "eventEnemyInPlay": true }] }, "effects": [{ "op": "shuffleIntoEncounterDeck", "target": "eventEnemy" }] }
+  ] },
+  "01084": { "abilities": [
+    { "kind": "reaction", "fromHand": true, "trigger": "wouldFailSkillTest", "effects": [{ "op": "modify", "mod": { "stat": "testValue", "value": 2 }, "until": "test" }, { "op": "drawCards", "amount": 1 }] }
+  ] },
+  "01085": { "abilities": [
+    { "kind": "onPlay", "condition": { "yourTurn": true }, "effects": [{ "op": "modify", "mod": { "flag": "noChaosTokens" }, "until": "turn" }] }
+  ] },
   "01086": { "abilities": [
     { "kind": "action", "designator": "fight", "label": "Knife: fight (+1 combat)", "condition": { "enemyAtYourLocation": true }, "effects": [{ "op": "fight", "bonus": 1 }] },
     { "kind": "action", "designator": "fight", "label": "Knife: discard to fight (+2 combat, +1 damage)", "cost": { "discardSelf": true }, "condition": { "enemyAtYourLocation": true }, "effects": [{ "op": "fight", "bonus": 2, "damageBonus": 1 }] }

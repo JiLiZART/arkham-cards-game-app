@@ -46,6 +46,7 @@ export interface TestOpts {
   after?: { code: string; fn: string };
   onTokens?: { tokens: string[]; effects: Effect[] };
   marginDamage?: number;
+  damagePerMargin?: { max: number; instead?: boolean };
   autoSucceed?: boolean;
   ctx: EffCtx;
 }
@@ -78,6 +79,7 @@ export function startTest(g: G, o: TestOpts) {
     after: o.after,
     onTokens: o.onTokens,
     marginDamage: o.marginDamage,
+    damagePerMargin: o.damagePerMargin,
     ctx: o.ctx,
     tokenOnFail: [],
     tokenAfter: [],
@@ -270,7 +272,7 @@ function commitStage(g: G, step: Extract<Step, { t: "Test" }>) {
   push(g, { ...step, choice: undefined });
 }
 
-function revealStage(g: G) {
+function revealStage(g: G, step: Extract<Step, { t: "Test" }>) {
   const t = test(g);
   if (t.tokens.length === 0 && (t.autoSucceed || t.autoFail)) {
     // a result known before the reveal skips the chaos token (Grimoire, Automatic Failure/Success)
@@ -283,8 +285,51 @@ function revealStage(g: G) {
     push(g, { t: "Test", stage: "result" });
     return;
   }
-  if (g.s.chaosBag.length === 0) throw new Error("chaos bag is empty");
-  const [token] = g.s.chaosBag.splice(randInt(g.s, g.s.chaosBag.length), 1);
+  if (!t.drawn) {
+    // "when you would reveal a chaos token" (Grotesque Statue): once per reveal
+    if (t.revealAsked !== t.tokens.length) {
+      t.revealAsked = t.tokens.length;
+      push(g, win("wouldRevealToken", { inv: t.inv, testId: t.id }), {
+        t: "Test",
+        stage: "reveal",
+      });
+      return;
+    }
+    if (g.s.chaosBag.length === 0) throw new Error("chaos bag is empty");
+    const n = 1 + (t.extraReveal ?? 0);
+    t.extraReveal = 0;
+    t.drawn = [];
+    for (let k = 0; k < n && g.s.chaosBag.length; k++)
+      t.drawn.push(...g.s.chaosBag.splice(randInt(g.s, g.s.chaosBag.length), 1));
+  }
+  let token = t.drawn[0];
+  if (t.drawn.length > 1) {
+    const drawn = t.drawn;
+    const k = ask<number>(
+      g,
+      step,
+      t.inv,
+      "generic",
+      `Choose a chaos token to resolve (${drawn.join(", ")})`,
+      drawn.map((x, i) => ({ id: String(i), label: `Resolve ${x}`, value: i })),
+      { key: "chooseToken" },
+    );
+    if (k === undefined) return;
+    token = drawn[k];
+    (t.ignored ??= []).push(...drawn.filter((_, i) => i !== k));
+    emit(g, "tokenIgnored", `Ignored chaos token: ${drawn.filter((_, i) => i !== k).join(", ")}`, {
+      inv: t.inv,
+    });
+    if (t.onChoose)
+      push(g, {
+        t: "Script",
+        code: t.onChoose.code,
+        fn: t.onChoose.fn,
+        ctx: { you: t.inv, token },
+      });
+    t.onChoose = undefined;
+  }
+  t.drawn = undefined;
   t.tokens.push(token);
   // what is being tested travels with the token, so the draw can show it after the test has already resolved
   const p = testParts(g, t);
@@ -501,6 +546,14 @@ function applyStage(g: G) {
   push(g, ...steps);
 }
 
+/** an attack's standard damage, or what its margin makes it (Shotgun, Winchester Model 12) */
+function marginDamage(t: SkillTestState): number {
+  const m = t.damagePerMargin;
+  if (!m) return 1;
+  const by = t.margin ?? 0;
+  return m.instead ? Math.min(m.max, Math.max(1, by)) : 1 + Math.min(m.max, Math.max(0, by));
+}
+
 function kindResultStage(g: G) {
   const t = test(g);
   const steps: Step[] = [];
@@ -526,7 +579,7 @@ function kindResultStage(g: G) {
         t: "DamageEnemy",
         enemy: t.target,
         amount:
-          1 +
+          marginDamage(t) +
           t.damageBonus +
           modSum(g, t.inv, "attackDamage") +
           (t.marginDamage !== undefined && (t.margin ?? 0) >= t.marginDamage ? 1 : 0),
@@ -564,7 +617,9 @@ function kindResultStage(g: G) {
       steps.push({
         t: "AssignDamage",
         inv: e.engagedWith,
-        damage: enemyStat(g, t.target, "damage"),
+        damage: t.damagePerMargin
+          ? Math.min(t.damagePerMargin.max, Math.max(1, -(t.margin ?? 0)))
+          : enemyStat(g, t.target, "damage"),
         horror: 0,
         direct: false,
         source: t.target,
@@ -584,7 +639,7 @@ function kindResultStage(g: G) {
 function endStage(g: G) {
   const t = test(g);
   for (const c of t.committed) if (g.s.cards[c]?.zone === "commit") moveCard(g, c, "discard");
-  g.s.chaosBag.push(...t.tokens);
+  g.s.chaosBag.push(...t.tokens, ...(t.ignored ?? []));
   expireMods(g, "test");
   g.s.skillTest = g.s.testStack.pop() ?? null;
   delete g.s.flags.peril;
@@ -596,7 +651,7 @@ export const testHandler: Handler<"Test"> = (g, step) => {
     case "commit":
       return commitStage(g, step);
     case "reveal":
-      return revealStage(g);
+      return revealStage(g, step);
     case "afterReveal":
       return afterRevealStage(g);
     case "resolveTokens":

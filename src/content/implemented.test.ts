@@ -175,10 +175,11 @@ describe("on the real content", () => {
       expect(implemented(real, code), code).toBe(true);
   });
 
-  it("Night of the Zealot's scenarios are real on all four difficulties; the card they share with Return to is not, until Return to's are", () => {
+  it("Night of the Zealot's scenarios are real on all four difficulties, and so is the card they share with Return to", () => {
     for (const id of ["the-gathering", "the-midnight-masks", "the-devourer-below"])
       expect(tokensReal(real, id), id).toBe(true);
-    expect(implemented(real, "01104")).toBe(false); // return-to-the-gathering plays with it and has no tokens yet
+    // return-to-the-gathering plays with it, with the hand-written scenario's token tables (import:campaigns)
+    expect(implemented(real, "01104")).toBe(true);
   });
 
   it("a generated scenario's tokens are placeholders", () => {

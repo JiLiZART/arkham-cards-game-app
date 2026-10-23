@@ -315,6 +315,8 @@ export type Effect =
       onTokens?: OnTokens;
       extraDamageIf?: Condition;
       extraDamageIfSucceedBy?: number;
+      /** damage by the margin: +1 per point succeeded by up to `max` (or, `instead`, 1 per point, at least 1, at most `max`, in place of the standard 1); a failure that damages another investigator deals 1 per point failed by, at most `max` */
+      damagePerMargin?: { max: number; instead?: boolean };
     }
   | {
       op: "investigate";
@@ -506,6 +508,7 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
         onTokens: OnTokens().optional(),
         extraDamageIf: Condition.optional(),
         extraDamageIfSucceedBy: z.number().optional(),
+        damagePerMargin: z.object({ max: z.number(), instead: z.boolean().optional() }).optional(),
       })
       .strict(),
     z
@@ -747,6 +750,7 @@ export const TRIGGERS = [
   "agendaAdvances",
   "wouldDiscoverClues",
   "skillTestEnds",
+  "wouldRevealToken",
 ] as const;
 export const Trigger = z.enum(TRIGGERS);
 export type Trigger = z.infer<typeof Trigger>;
