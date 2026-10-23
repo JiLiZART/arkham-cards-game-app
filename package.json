@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "test": "vitest run",
-    "lint": "eslint src scripts content",
+    "format": "oxfmt .",
+    "lint": "oxlint src scripts content",
+    "format:fix": "oxfmt --write",
+    "lint:fix": "oxlint --fix",
     "typecheck": "tsc --noEmit",
     "import:investigators": "tsx scripts/import-investigators.ts",
     "coverage": "tsx scripts/coverage.ts",
@@ -20,7 +23,8 @@
     "import:ru-cards": "tsx scripts/import-ru-cards.ts",
     "import:campaigns": "tsx scripts/import-campaigns.ts",
     "import:art": "tsx scripts/import-art.ts",
-    "sound-credits": "tsx scripts/sound-credits.ts"
+    "sound-credits": "tsx scripts/sound-credits.ts",
+    "skills:link": "node scripts/link-claude-skills.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^9.122.0",
@@ -42,6 +46,8 @@
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.71.2",
     "vite": "^8.3.4",
-    "vitest": "^4.1.11"
+    "vitest": "^4.1.11",
+    "oxlint": "1.89.0",
+    "oxfmt": "0.74.0"
   }
 }
