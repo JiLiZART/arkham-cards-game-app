@@ -349,8 +349,8 @@ export function PileColumn() {
   );
 }
 
-/** the chaos bag, top-right corner; a click lists its tokens */
-export function ChaosBagButton() {
+/** the chaos bag, top-right corner (on a phone, a small icon in the top bar); a click lists its tokens */
+export function ChaosBagButton({ size = 96 }: { size?: number }) {
   const count = useGame((s) => s.game?.chaosBag.length ?? 0);
   return (
     <button
@@ -360,7 +360,7 @@ export function ChaosBagButton() {
       onClick={() => useView.getState().setModal({ bag: true })}
       title={`${tr("bag.title")}: ${count}`}
     >
-      <Icon name="chaosBag" size={96} title={tr("bag.title")} />
+      <Icon name="chaosBag" size={size} title={tr("bag.title")} />
       <span className="pile-count">{count}</span>
     </button>
   );

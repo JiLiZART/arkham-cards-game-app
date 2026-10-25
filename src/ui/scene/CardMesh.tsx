@@ -14,12 +14,13 @@ import { cardFace, cardFrame } from "./cardShape";
 import { useCardTexture } from "./textures";
 import { moment } from "../hud/SoundLayer";
 
-const glow = new THREE.MeshBasicMaterial({ color: "#ffcf5a", transparent: true, opacity: 0.85 });
-const hoverGlow = new THREE.MeshBasicMaterial({
-  color: "#8fd3ff",
-  transparent: true,
-  opacity: 0.9,
-});
+// DESIGN.md, The Earned Glow Rule: Playable Green frames a legal target, as the hand's rings do; Lamp Glow the card
+// under the pointer and the card an event is about
+// not tone-mapped: the frame keeps the palette's own colour on the pale map instead of a washed-out one
+const frameOf = (color: string) =>
+  new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.95, toneMapped: false });
+const glow = frameOf("#7fe08a");
+const hoverGlow = frameOf("#ffd27a");
 
 const damp = THREE.MathUtils.damp;
 /** height of the plane that dims the map around a spotlit card (above every card lying on the table) */
@@ -204,7 +205,7 @@ export function CardMesh({
           ref={frame}
           geometry={cardFrame(w, h)}
           position={[0, 0, 0.001]}
-          material={hovered ? hoverGlow : glow}
+          material={hovered || (spotlit && !highlighted) ? hoverGlow : glow}
         />
       )}
       {place.badge && (

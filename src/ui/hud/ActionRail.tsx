@@ -36,7 +36,8 @@ export function railItem(o: ChoiceOption): RailItem {
   if (kind === "draw") return { key: "rail.draw", img: backUrl("player"), primary: false };
   if (kind === "resource") return { key: "rail.resource", icon: "resource", primary: false };
   if (kind === "investigate") return { key: "rail.investigate", icon: "intellect", primary: false };
-  if (kind === "endTurn") return { key: "rail.endTurn", symbol: "⏎", primary: true };
+  // End turn takes the brass plate only once nothing is left to spend (OptionButton): before that it is a way out, not the move
+  if (kind === "endTurn") return { key: "rail.endTurn", symbol: "⏎", primary: false };
   // a draw waiting for a tap on a deck (the setting "Tap decks to draw"): the bar's button draws too
   if (o.id === "draw" && typeof o.value === "string" && o.value.startsWith("draw:"))
     return o.value === "draw:encounter"
@@ -51,7 +52,8 @@ export function railItem(o: ChoiceOption): RailItem {
       primary: true,
     };
   }
-  if (o.id === "pass") return { key: "rail.pass", symbol: "»", primary: true };
+  // declining a reaction is never the polished default
+  if (o.id === "pass") return { key: "rail.pass", symbol: "»", primary: false };
   if (o.id === "none") return { key: "rail.nothing", symbol: "✖", primary: false };
   if (/^Resign/.test(o.label)) return { key: "rail.resign", symbol: "⚑", primary: false };
   if (typeof o.value === "string" && SKILLS.has(o.value))
@@ -135,7 +137,7 @@ function OptionButton({ o, game, busy }: { o: ChoiceOption; game: GameState; bus
   const spent = !!me && me.actionsLeft + me.restrictedActions.reduce((n, r) => n + r.left, 0) === 0;
   return (
     <button
-      className={`rail-btn ${it.primary ? "primary" : ""} ${spent && it.key === "rail.endTurn" ? "glow" : ""}`}
+      className={`rail-btn ${it.primary ? "primary" : ""} ${spent && it.key === "rail.endTurn" ? "primary glow" : ""}`}
       disabled={busy}
       onClick={() => {
         moment("button");

@@ -12,4 +12,12 @@ describe("railItem", () => {
       primary: true,
     });
   });
+
+  it("ways out (End turn, Pass) are leather tabs, not the brass plate", () => {
+    expect(railItem({ id: "end", label: "End turn", value: { kind: "endTurn" } }).primary).toBe(
+      false,
+    );
+    expect(railItem({ id: "pass", label: "Pass", value: "pass" }).primary).toBe(false);
+    expect(railItem({ id: "done", label: "Keep hand", value: null }).primary).toBe(true);
+  });
 });

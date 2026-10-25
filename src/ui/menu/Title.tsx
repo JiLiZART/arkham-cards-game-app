@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { t } from "../../content/i18n";
 import { db, gameStore, useGame } from "../context";
 import { SAVE_KEY, safeStorage } from "../store";
@@ -13,6 +14,8 @@ export function Title() {
   const { resume, abandon } = gameStore.getState();
   // read on every render: Abandon clears the save while this screen stays mounted
   const hasSave = !!safeStorage().getItem(SAVE_KEY);
+  // abandoning deletes the save for good: the link asks once, in place
+  const [asking, setAsking] = useState(false);
   const go = (screen: "wizard" | "howto" | "settings" | "catalog") =>
     gameStore.setState({ screen });
   return (
@@ -48,10 +51,21 @@ export function Title() {
           <button className="big" onClick={() => go("settings")}>
             {tr("settings.title")}
           </button>
-          {campaign && (
-            <button className="link-btn" onClick={abandon}>
+          {campaign && !asking && (
+            <button className="link-btn" onClick={() => setAsking(true)}>
               {tr("menu.abandon")}
             </button>
+          )}
+          {campaign && asking && (
+            <div className="abandon-ask" role="group" aria-label={tr("menu.abandon")}>
+              <p>{tr("menu.abandonAsk")}</p>
+              <button className="danger" onClick={abandon}>
+                {tr("menu.abandonYes")}
+              </button>
+              <button autoFocus onClick={() => setAsking(false)}>
+                {tr("menu.abandonNo")}
+              </button>
+            </div>
           )}
         </div>
       </div>
