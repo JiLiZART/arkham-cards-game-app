@@ -122,3 +122,44 @@ export function Glyph({ name, size = 18, title }: { name: string; size?: number;
     <Symbols layers={[{ id }]} width={size} height={size} title={label} className="svg-icon gl" />
   );
 }
+
+/** the interface's own glyphs: one stroke, drawn like the ironwork (game symbols come from the sprite: Icon, Glyph) */
+const PATHS = {
+  check: "M5 12.5l4.5 4.5L19 7.5",
+  redraw: "M19 12a7 7 0 1 1-2.05-4.95M19 5v4.5h-4.5",
+  pass: "M6 6l6 6-6 6M12 6l6 6-6 6",
+  none: "M6.5 6.5l11 11M17.5 6.5l-11 11",
+  resign: "M6 21V4M6 4h11l-2.5 4L17 12H6",
+  enter: "M19 5v7a3 3 0 0 1-3 3H6M10 11l-4 4 4 4",
+  dot: "M12 11.2a.8.8 0 1 0 0 1.6.8.8 0 1 0 0-1.6",
+  undo: "M9 14L4 9l5-5M4 9h10a6 6 0 0 1 0 12h-3",
+  focus: "M12 5a7 7 0 1 0 0 14 7 7 0 1 0 0-14M12 10a2 2 0 1 0 0 4 2 2 0 1 0 0-4",
+  fit: "M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5",
+  menu: "M4 7h16M4 12h16M4 17h16",
+  debug: "M9 5C6.5 5 7 9.5 4.5 12 7 14.5 6.5 19 9 19M15 5c2.5 0 2 4.5 4.5 7-2.5 2.5-2 7-4.5 7",
+  sound: "M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12",
+  mute: "M16 9l6 6M22 9l-6 6",
+} as const;
+
+export type UiIconName = keyof typeof PATHS;
+
+export function UiIcon({ name, size = 18 }: { name: UiIconName; size?: number }) {
+  const speaker = name === "sound" || name === "mute";
+  return (
+    <svg
+      className="ui-icon"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.8}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      {speaker && <path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor" stroke="none" />}
+      <path d={PATHS[name]} />
+    </svg>
+  );
+}

@@ -91,7 +91,7 @@ export function App() {
     ) : (
       <Title />
     );
-  // every menu screen but the title sits on the rulebook's parchment (public/art)
+  // every menu screen but the title is the desk at night: the night ground, paper notes for what is written down
   return (
     <>
       {rotate && <RotateCard />}
@@ -101,7 +101,7 @@ export function App() {
           <LangSwitch className="lang-corner" />
         </>
       ) : (
-        <div className="parchment">
+        <div className="desk">
           {page}
           <LangSwitch className="lang-corner" />
         </div>

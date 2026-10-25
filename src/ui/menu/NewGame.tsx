@@ -4,7 +4,7 @@ import { campaignLoaded, loadAllPacks, loadCampaign, loadPacksFor } from "../../
 import { cardText, scenarioText, t } from "../../content/i18n";
 import type { Difficulty } from "../../content/schema";
 import { db, gameStore, useGame } from "../context";
-import { Glyph, Icon, Stat } from "../Icon";
+import { Glyph, Icon, Stat, UiIcon } from "../Icon";
 import { CardFace } from "../CardFace";
 import { formatText } from "../hud/Hud";
 import { cardImage } from "../images";
@@ -442,7 +442,7 @@ function DecksStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }
                   bump((n) => n + 1);
                 }}
               >
-                {deleting === x.id ? "✓" : "×"}
+                <UiIcon name={deleting === x.id ? "check" : "none"} size={16} />
               </button>
             )}
           </div>

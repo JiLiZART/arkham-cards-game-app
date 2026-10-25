@@ -44,8 +44,17 @@ cp inspired/icons/no_bg_chaos-bag.png "$OUT/chaos-bag.png"
 magick "$AC_ASSETS/encounter-back.png" \( +clone -alpha extract -fill black -colorize 100 -fill white -draw "roundrectangle 0,0 %[fx:w-1],%[fx:h-1] 34,34" \) -alpha off -compose CopyOpacity -composite public/table/back-player.png
 cp "$AC_ASSETS/player-back.png" public/table/back-encounter.png
 
-# the play-area background with its green frame
-magick inspired/icons/table-bg.png -quality 82 public/table/table-bg.jpg
+# the play-area background: a night-teal baize drawn here (no source art), framed by two bone hairlines
+W=2275 H=1495 T=$(mktemp -d)
+magick -seed 7 -size ${W}x${H} plasma:fractal -colorspace gray -blur 0x60 -auto-level "$T/cloud.png"
+magick -seed 11 -size ${W}x${H} xc:gray50 +noise Gaussian -colorspace gray -motion-blur 0x2+30 -motion-blur 0x2-60 -auto-level "$T/fiber.png"
+magick -size ${W}x${H} radial-gradient:white-black -evaluate pow 0.35 "$T/vig.png"
+magick "$T/cloud.png" \( "$T/fiber.png" -level 20%,80% \) -compose blend -define compose:args=28 -composite \
+  "$T/vig.png" -compose multiply -composite -level 10%,100% +level-colors '#081316','#24464a' \
+  -fill none -stroke '#c9c6b85a' -strokewidth 2 -draw "roundrectangle 46,46 $((W - 47)),$((H - 47)) 14,14" \
+  -stroke '#c9c6b82a' -strokewidth 1 -draw "roundrectangle 57,57 $((W - 58)),$((H - 58)) 10,10" \
+  -quality 84 public/table/table-bg.jpg
+rm -r "$T"
 
 # ArkhamCards card fonts, copied as they are (icons come from the sprite, scripts/import-icons.ts)
 AC=inspired/ArkhamCards/assets

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { cardText, t } from "../../content/i18n";
 import type { ChoiceOption, GameState } from "../../engine/types";
 import { db, useGame } from "../context";
-import { Icon } from "../Icon";
+import { Icon, UiIcon, type UiIconName } from "../Icon";
 import type { IconName } from "../icons";
 import { backUrl } from "../images";
 import { instructionParts } from "../instruction";
@@ -24,7 +24,7 @@ export interface RailItem {
   icon?: IconName;
   /** an image instead of an icon (the card back for Draw) */
   img?: string;
-  symbol?: string;
+  symbol?: UiIconName;
   primary: boolean;
 }
 
@@ -37,7 +37,7 @@ export function railItem(o: ChoiceOption): RailItem {
   if (kind === "resource") return { key: "rail.resource", icon: "resource", primary: false };
   if (kind === "investigate") return { key: "rail.investigate", icon: "intellect", primary: false };
   // End turn takes the brass plate only once nothing is left to spend (OptionButton): before that it is a way out, not the move
-  if (kind === "endTurn") return { key: "rail.endTurn", symbol: "⏎", primary: false };
+  if (kind === "endTurn") return { key: "rail.endTurn", symbol: "enter", primary: false };
   // a draw waiting for a tap on a deck (the setting "Tap decks to draw"): the bar's button draws too
   if (o.id === "draw" && typeof o.value === "string" && o.value.startsWith("draw:"))
     return o.value === "draw:encounter"
@@ -45,20 +45,20 @@ export function railItem(o: ChoiceOption): RailItem {
       : { key: "rail.draw", img: backUrl("player"), primary: true };
   if (o.id === "done") {
     const redraw = /^Redraw (\d+)/.exec(o.label);
-    if (redraw) return { key: "rail.redraw", vars: { n: redraw[1] }, symbol: "↻", primary: true };
+    if (redraw) return { key: "rail.redraw", vars: { n: redraw[1] }, symbol: "redraw", primary: true };
     return {
       key: /^Keep hand/.test(o.label) ? "rail.keep" : "rail.done",
-      symbol: "✔",
+      symbol: "check",
       primary: true,
     };
   }
   // declining a reaction is never the polished default
-  if (o.id === "pass") return { key: "rail.pass", symbol: "»", primary: false };
-  if (o.id === "none") return { key: "rail.nothing", symbol: "✖", primary: false };
-  if (/^Resign/.test(o.label)) return { key: "rail.resign", symbol: "⚑", primary: false };
+  if (o.id === "pass") return { key: "rail.pass", symbol: "pass", primary: false };
+  if (o.id === "none") return { key: "rail.nothing", symbol: "none", primary: false };
+  if (/^Resign/.test(o.label)) return { key: "rail.resign", symbol: "resign", primary: false };
   if (typeof o.value === "string" && SKILLS.has(o.value))
     return { key: null, icon: o.value as IconName, primary: false };
-  return { key: null, symbol: "•", primary: false };
+  return { key: null, symbol: "dot", primary: false };
 }
 
 /** a short label and icon for an option shown as a button on its card in the play strip */
@@ -153,7 +153,7 @@ function OptionButton({ o, game, busy }: { o: ChoiceOption; game: GameState; bus
         ) : it.icon ? (
           <Icon name={it.icon} size={30} />
         ) : (
-          it.symbol
+          it.symbol && <UiIcon name={it.symbol} size={22} />
         )}
       </span>
       <span className="rail-label">{label}</span>
@@ -284,7 +284,7 @@ export function UndoButton() {
       onClick={undo}
       title={t(db, locale, able ? "undo.hint" : "undo.blocked")}
     >
-      ↶ <span className="btn-word">{t(db, locale, "undo.label")}</span>
+      <UiIcon name="undo" /> <span className="btn-word">{t(db, locale, "undo.label")}</span>
     </button>
   );
 }
@@ -296,10 +296,10 @@ export function CameraButtons() {
   return (
     <div className="camera-buttons">
       <button onClick={() => cmd("focus")} title={t(db, locale, "cam.focusHint")}>
-        ◎ <span className="btn-word">{t(db, locale, "cam.focus")}</span>
+        <UiIcon name="focus" /> <span className="btn-word">{t(db, locale, "cam.focus")}</span>
       </button>
       <button onClick={() => cmd("fit")} title={t(db, locale, "cam.fitHint")}>
-        ⛶ <span className="btn-word">{t(db, locale, "cam.fit")}</span>
+        <UiIcon name="fit" /> <span className="btn-word">{t(db, locale, "cam.fit")}</span>
       </button>
     </div>
   );

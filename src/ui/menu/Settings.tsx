@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { UiIcon } from "../Icon";
 import { locales, t } from "../../content/i18n";
 import { db, gameStore, useGame } from "../context";
 import { safeStorage, type Pace } from "../store";
@@ -83,7 +84,7 @@ export function Settings() {
             }}
           >
             {tr("menu.resetTips")}
-            {tipsReset ? " ✔" : ""}
+            {tipsReset && <UiIcon name="check" />}
           </button>
         </fieldset>
         <fieldset>

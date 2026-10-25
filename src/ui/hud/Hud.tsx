@@ -19,7 +19,7 @@ import { RevealOverlay } from "./Reveal";
 import { ChaosBagButton, PileColumn, PlayStrip, ScenarioPanel } from "./Panels";
 import { PlayerBar } from "./PlayerBar";
 import { Drawer } from "./Drawer";
-import { Glyph } from "../Icon";
+import { Glyph, UiIcon } from "../Icon";
 import { useLayoutMode } from "../layoutMode";
 import { StatBar } from "./Stats";
 import { MulliganRow } from "./MulliganRow";
@@ -403,25 +403,6 @@ function JournalButton() {
 }
 
 /** a drawn speaker in the ink colour, struck through while muted (an emoji would bring its own colours to the leather) */
-function SpeakerIcon({ muted }: { muted: boolean }) {
-  return (
-    <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" className="speaker-icon">
-      <path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor" />
-      {muted ? (
-        <path d="M16 9l6 6M22 9l-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-      ) : (
-        <path
-          d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          fill="none"
-        />
-      )}
-    </svg>
-  );
-}
-
 function TopBar({ phone }: { phone: boolean }) {
   // the button labels follow the language
   useGame((s) => s.locale);
@@ -442,7 +423,7 @@ function TopBar({ phone }: { phone: boolean }) {
           aria-label={tr("hud.mute")}
           aria-pressed={muted}
         >
-          <SpeakerIcon muted={muted} />
+          <UiIcon name={muted ? "mute" : "sound"} size={20} />
         </button>
         {phone ? (
           <>
@@ -466,7 +447,7 @@ function TopBar({ phone }: { phone: boolean }) {
           title={tr("hud.debug")}
           aria-label={tr("hud.debug")}
         >
-          {phone ? "{ }" : tr("hud.debug")}
+          {phone ? <UiIcon name="debug" size={20} /> : tr("hud.debug")}
         </button>
         <button
           className={phone ? "icon-btn" : ""}
@@ -474,7 +455,7 @@ function TopBar({ phone }: { phone: boolean }) {
           title={tr("hud.menu")}
           aria-label={tr("hud.menu")}
         >
-          {phone ? "☰" : tr("hud.menu")}
+          {phone ? <UiIcon name="menu" size={20} /> : tr("hud.menu")}
         </button>
       </div>
     </div>
@@ -714,10 +695,30 @@ function useViewReset() {
   }, [decider]);
 }
 
+/** the bar's bottom edge as --bar-bottom on the page: the skill test's line starts under the bar however far it wraps */
+function useBarBottom() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || typeof ResizeObserver === "undefined") return;
+    const root = document.documentElement.style;
+    const ro = new ResizeObserver(() =>
+      root.setProperty("--bar-bottom", `${el.getBoundingClientRect().bottom}px`),
+    );
+    ro.observe(el);
+    return () => {
+      ro.disconnect();
+      root.removeProperty("--bar-bottom");
+    };
+  }, []);
+  return ref;
+}
+
 export function Hud() {
   useViewReset();
   // the phone layout (ADR-0005): one thin bar, the panels and the Journal in drawers, the rail's actions in the bar
   const phone = useLayoutMode() === "phone";
+  const centerCol = useBarBottom();
   return (
     <>
       <TopBar phone={phone} />
@@ -736,7 +737,7 @@ export function Hud() {
       )}
       <PlayStrip />
       <MulliganRow />
-      <div className="center-col">
+      <div className="center-col" ref={centerCol}>
         <StepCaption />
         <InstructionBar />
       </div>

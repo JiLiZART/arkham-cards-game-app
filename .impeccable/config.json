@@ -1,0 +1,26 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-font",
+        "value": "caveat",
+        "createdAt": "2026-10-25T00:48:41.350Z",
+        "reason": "campaign guide <fancy> markup font, carried from ArkhamCards for content fidelity"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "tt2020",
+        "createdAt": "2026-10-25T00:48:41.367Z",
+        "reason": "campaign guide <typewriter> markup font, carried from ArkhamCards for content fidelity"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "alegreya",
+        "createdAt": "2026-10-25T01:15:37.371Z",
+        "reason": "card-face rules text font carried from ArkhamCards; DESIGN.md keeps it inside card faces only"
+      }
+    ]
+  }
+}

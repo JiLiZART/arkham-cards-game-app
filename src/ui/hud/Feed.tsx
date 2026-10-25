@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import { useEffect, useLayoutEffect, useMemo, useReducer, useRef } from "react";
 import { cardText, encounterSetName, t } from "../../content/i18n";
 import type { GameState } from "../../engine/types";
@@ -15,7 +16,7 @@ const LIVE_MS = 12000;
 const LEAVE_MS = 400;
 
 const classColor = (code: string) =>
-  (CLASS_COLORS as Record<string, string>)[db.cards[code]?.faction] ?? "var(--gold)";
+  (CLASS_COLORS as Record<string, string>)[db.cards[code]?.faction] ?? "var(--accent)";
 
 /** one styled part: portrait + class-coloured name, card thumbnail (click: modal, hover: enlarge), icons, tokens, outcome */
 function PartView({ p, size }: { p: Part; size: number }) {
@@ -143,7 +144,7 @@ export function useFeedEntries(): {
 
 function toneColor(e: FeedEntry): string {
   if (e.tone === "enemy") return "var(--bad)";
-  if (e.tone === "game") return "var(--gold)";
+  if (e.tone === "game") return "var(--accent)";
   const inv = e.actor?.inv;
   return inv ? classColor(inv) : "var(--muted)";
 }
@@ -242,10 +243,10 @@ export function Feed() {
           );
         const age = now - (arrived.current.get(i) ?? now);
         const leaving = mode === "live" && (age > LIVE_MS || k >= LIVE_MAX);
+        // the entry's frame takes the colour of whoever acted (--tone in the stylesheet)
+        const tone = { "--tone": toneColor(e) } as CSSProperties;
         const style =
-          mode === "live"
-            ? { opacity: leaving ? 0 : Math.max(0.25, 1 - 0.11 * k), borderLeftColor: toneColor(e) }
-            : { borderLeftColor: toneColor(e) };
+          mode === "live" ? { ...tone, opacity: leaving ? 0 : Math.max(0.25, 1 - 0.11 * k) } : tone;
         return (
           <div
             key={i}

@@ -402,7 +402,7 @@ function SceneInner({ game }: { game: GameState }) {
               [a[0], -0.25, a[2]],
               [b[0], -0.25, b[2]],
             ]}
-            color="#4a2e14"
+            color="#c9c6b8"
             lineWidth={2}
             transparent
             opacity={0.5}

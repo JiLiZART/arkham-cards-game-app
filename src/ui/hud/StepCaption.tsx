@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { UiIcon } from "../Icon";
 import { t } from "../../content/i18n";
 import type { GameEvent } from "../../engine/types";
 import { captionIndex, captionStageBusy } from "../feed";
@@ -49,7 +50,7 @@ export function StepCaption() {
       {e && <Sentence parts={e.parts} size={26} />}
       {held && (
         <button className="primary caption-next" onClick={next}>
-          {t(db, locale, "caption.next")} ⏎
+          {t(db, locale, "caption.next")} <UiIcon name="enter" />
         </button>
       )}
     </div>

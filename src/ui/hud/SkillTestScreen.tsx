@@ -5,7 +5,7 @@ import { rememberRect } from "../arrivals";
 import { useOptionsByCard } from "../cardClick";
 import { CardFace } from "../CardFace";
 import { db, gameStore, useGame } from "../context";
-import { Icon } from "../Icon";
+import { Icon, UiIcon } from "../Icon";
 import { isIcon } from "../icons";
 import { Portrait } from "../Portrait";
 import { viewerOf } from "../store";
@@ -305,7 +305,11 @@ function PlacedCards({
               legal={!!back}
               onClick={() => back && choose(back.id)}
             />
-            {back && <span className="st-takeback">↶</span>}
+            {back && (
+              <span className="st-takeback">
+                <UiIcon name="undo" />
+              </span>
+            )}
             {owners.size > 1 && (
               <span className="st-owner">
                 <Portrait code={p.owner} size={26} />

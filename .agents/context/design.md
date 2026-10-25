@@ -1,349 +1,278 @@
 ---
 name: Arkham Table
-description: The Investigator's Casebook. A candlelit card table framed by brass and parchment.
+description: Arkham at night, seen through a 1920s case file. A cold teal dark where the card scans are the only warm things.
 colors:
-  gilt-edge: "#c9a95c"
-  lamp-glow: "#ffd27a"
-  brass-shadow: "#5a4520"
-  night-table: "#0d1410"
-  walnut-dark: "#1a120b"
-  smoked-panel: "rgba(18, 14, 10, 0.88)"
-  lacquer-black: "#17120c"
-  worn-leather: "#2b241b"
-  worn-leather-lit: "#3a3022"
-  brass-rule: "#5a4a30"
-  brass-rule-dim: "#4a3b22"
-  bone-ink: "#eadfc4"
-  faded-ink: "#a99c80"
-  playable-green: "#7fe08a"
-  steady-green: "#6fbf73"
-  warning-red: "#e06060"
-  attack-red: "#7a1e14"
-  attack-ember: "#e0573f"
-  parchment: "#e6d9bb"
-  parchment-leaf: "#f6edd6"
-  parchment-chosen: "#fff6d8"
-  parchment-button: "#e9dcb8"
-  parchment-rule: "#b69c6a"
-  iron-gall: "#2b1d0e"
-  sepia-heading: "#3a2410"
-  sepia-muted: "#6b5a3c"
-  umber-gilt: "#7a5410"
+  night: "#0d1317"
+  abyss: "#070c0e"
+  panel: "rgba(11, 17, 20, 0.9)"
+  bone-ink: "#f1efe4"
+  fog: "#9fb0b0"
+  accent-teal: "#6fa9a0"
+  plate-enamel: "#1d4f4b"
+  ironwork: "#c9c6b8"
+  rule: "#33474b"
+  rule-dim: "#22323a"
+  edge-lit: "#4d6a6c"
+  slate: "#16232a"
+  slate-lit: "#1e3038"
+  lamp: "#ffd27a"
+  playable: "#7fe08a"
+  ok: "#6fbf73"
+  bad: "#e06060"
   oxblood: "#a32a2a"
-  tip-paper: "#f3e6c4"
-  leather-top: "#2e2619"
-  leather-bottom: "#1d1710"
-  brass-highlight: "#e3c67c"
-  brass-low: "#a8863f"
-  brass-edge-lit: "#7a6440"
+  paper-leaf: "#ebe6d8"
+  paper-chosen: "#f5f1e6"
+  paper-button: "#ddd6c4"
+  paper-rule: "#9b9584"
+  paper-accent: "#1f5752"
+  paper-ink: "#10171b"
+  paper-muted: "#4a5257"
+  tip-paper: "#ece6d6"
 typography:
   display:
-    fontFamily: "Teutonic, TeutonicRU, Georgia, serif"
+    fontFamily: "Prata, EB Garamond, Georgia, serif"
+    fontSize: "clamp(44px, 7vw, 76px)"
+    fontWeight: 400
+    lineHeight: 1
+    letterSpacing: "0.02em"
+  headline:
+    fontFamily: "Prata, EB Garamond, Georgia, serif"
     fontSize: "clamp(28px, 4vw, 44px)"
     fontWeight: 400
-    letterSpacing: "0.01em"
-  headline:
-    fontFamily: "Teutonic, TeutonicRU, Georgia, serif"
-    fontSize: "26px"
-    fontWeight: 400
-    letterSpacing: "0.02em"
+    letterSpacing: "0.03em"
   title:
-    fontFamily: "Teutonic, TeutonicRU, Georgia, serif"
-    fontSize: "20px"
-    fontWeight: 400
-    letterSpacing: "0.02em"
-  prompt:
-    fontFamily: "Alegreya, Georgia, serif"
+    fontFamily: "Prata, EB Garamond, Georgia, serif"
     fontSize: "22px"
-    lineHeight: 1.3
+    fontWeight: 400
   body:
-    fontFamily: "Alegreya, Georgia, serif"
-    fontSize: "16px"
-    lineHeight: 1.4
-  ui:
-    fontFamily: "Georgia, 'Times New Roman', serif"
-    fontSize: "15px"
+    fontFamily: "EB Garamond, Georgia, serif"
+    fontSize: "18px"
+    fontWeight: 400
+    lineHeight: 1.3
+  instruction:
+    fontFamily: "EB Garamond, Georgia, serif"
+    fontSize: "22px"
+    fontWeight: 400
+    lineHeight: 1.3
   label:
-    fontFamily: "Georgia, 'Times New Roman', serif"
-    fontSize: "14px"
-    fontFeature: "smcp"
+    fontFamily: "EB Garamond, Georgia, serif"
+    fontSize: "19px"
+    fontWeight: 500
+    lineHeight: 1.2
+    letterSpacing: "0.14em"
+  name:
+    fontFamily: "Teutonic, TeutonicRU, Georgia, serif"
+    fontWeight: 400
 rounded:
-  xs: "4px"
-  sm: "6px"
-  md: "8px"
-  lg: "10px"
-  xl: "12px"
-  card: "14px"
-  plate: "16px"
-  bar: "22px"
-  pill: "999px"
-  round: "50%"
+  select: "6px"
+  tab: "10px"
+  note: "12px"
+  cartouche: "22px"
+  oval: "999px"
 spacing:
-  xs: "4px"
-  sm: "6px"
-  md: "10px"
-  lg: "14px"
-  xl: "18px"
-  xxl: "24px"
+  gap: "8px"
+  touch: "44px"
+  frame-x: "clamp(16px, 3.4vw, 56px)"
+  frame-y: "clamp(20px, max(6vh, 3.2vw), 64px)"
 components:
-  button:
-    backgroundColor: "{colors.worn-leather}"
-    textColor: "{colors.bone-ink}"
-    rounded: "{rounded.sm}"
-    padding: "5px 10px"
-  button-hover:
-    backgroundColor: "{colors.worn-leather-lit}"
   button-primary:
-    backgroundColor: "{colors.brass-shadow}"
+    backgroundColor: "{colors.plate-enamel}"
     textColor: "{colors.bone-ink}"
-    rounded: "{rounded.sm}"
-    padding: "5px 10px"
-  button-big:
-    padding: "10px 18px"
-  rail-button:
-    backgroundColor: "{colors.worn-leather}"
+    rounded: "{rounded.tab}"
+  button-tab:
+    backgroundColor: "{colors.slate}"
     textColor: "{colors.bone-ink}"
-    typography: "{typography.ui}"
-    rounded: "{rounded.lg}"
+    rounded: "{rounded.tab}"
     padding: "6px 10px"
-  instruction-bar:
-    backgroundColor: "{colors.leather-top}"
+  button-tab-hover:
+    backgroundColor: "{colors.slate-lit}"
+  button-title:
+    backgroundColor: "{colors.abyss}"
     textColor: "{colors.bone-ink}"
-    typography: "{typography.prompt}"
-    rounded: "{rounded.bar}"
+    typography: "{typography.label}"
+    rounded: "{rounded.oval}"
+  button-title-primary:
+    backgroundColor: "{colors.plate-enamel}"
+    textColor: "{colors.bone-ink}"
+    typography: "{typography.label}"
+    rounded: "{rounded.oval}"
+  chip:
+    backgroundColor: "{colors.slate}"
+    textColor: "{colors.bone-ink}"
+    rounded: "{rounded.oval}"
+    padding: "6px 12px"
+    height: "44px"
+  chip-on:
+    backgroundColor: "{colors.plate-enamel}"
+    textColor: "{colors.bone-ink}"
+  chip-on-paper:
+    backgroundColor: "{colors.paper-ink}"
+    textColor: "{colors.paper-leaf}"
+  paper-note:
+    backgroundColor: "{colors.paper-leaf}"
+    textColor: "{colors.paper-ink}"
+    rounded: "{rounded.note}"
+  paper-note-chosen:
+    backgroundColor: "{colors.paper-chosen}"
+    textColor: "{colors.paper-ink}"
+  instruction-cartouche:
+    backgroundColor: "{colors.night}"
+    textColor: "{colors.bone-ink}"
+    typography: "{typography.instruction}"
+    rounded: "{rounded.cartouche}"
     padding: "6px 14px 6px 8px"
-  phase-chip:
-    textColor: "{colors.faded-ink}"
-    rounded: "{rounded.xl}"
-    padding: "3px 10px"
-  phase-chip-current:
-    backgroundColor: "{colors.gilt-edge}"
-    textColor: "{colors.walnut-dark}"
-    rounded: "{rounded.xl}"
-    padding: "3px 10px"
-  rail-button-primary:
-    backgroundColor: "{colors.gilt-edge}"
-    textColor: "{colors.walnut-dark}"
-    rounded: "{rounded.lg}"
-    padding: "6px 10px"
-  hud-plate:
-    backgroundColor: "{colors.leather-top}"
-    textColor: "{colors.bone-ink}"
-    rounded: "{rounded.plate}"
-    padding: "12px 14px"
-  modal:
-    backgroundColor: "{colors.lacquer-black}"
-    textColor: "{colors.bone-ink}"
-    rounded: "{rounded.card}"
-    padding: "18px"
-  tip-card:
-    backgroundColor: "{colors.tip-paper}"
-    textColor: "{colors.iron-gall}"
-    typography: "{typography.body}"
-    rounded: "{rounded.xl}"
-    padding: "12px 14px 10px"
-  parchment-button:
-    backgroundColor: "{colors.parchment-button}"
-    textColor: "{colors.iron-gall}"
-    rounded: "{rounded.sm}"
-    padding: "5px 10px"
-  parchment-button-primary:
-    backgroundColor: "{colors.gilt-edge}"
-    textColor: "{colors.iron-gall}"
-    rounded: "{rounded.sm}"
-    padding: "5px 10px"
-  parchment-tile:
-    backgroundColor: "{colors.parchment-leaf}"
-    textColor: "{colors.iron-gall}"
-    rounded: "{rounded.lg}"
-  parchment-tile-selected:
-    backgroundColor: "{colors.parchment-chosen}"
-  select:
-    backgroundColor: "#221c14"
-    textColor: "{colors.bone-ink}"
-    rounded: "{rounded.xs}"
-    padding: "3px"
 ---
 
 # Design System: Arkham Table
 
 ## Overview
 
-**Creative North Star: "The Investigator's Casebook"**
+**Creative North Star: "Arkham at Night, Through a Case File"**
 
-Arkham Table is a record of a case being worked. Between scenarios the player handles the casebook itself: parchment pages with vine borders, set in a blackletter display face and inked in sepia, where the campaign log, the guide's story and the deck choices are written down. During a scenario the casebook is open on a dark table at night. The real card scans, the cardboard tokens and the rulebook art carry the color, and everything the interface adds is a prop on that table: brass fittings, worn leather, a slip of paper with a note.
+The table and every menu sit in a cold teal night: a dark baize, bone ink, fog-grey secondary text, and thin ironwork hairlines that end in a curl. Card scans are the only warm things on screen; the chrome around them stays cool and quiet so the cards carry the color. The look is inspired by arkhamhorror.com without borrowing its logo, ornament art or imagery. This is a fan project and must never look official.
 
-The system has two rooms and one material language. The **study** is light: parchment, iron-gall ink, umber gilt. The **table** is dark: night green-black, smoked panels, bone-colored ink and gilt edges. A modal opened over parchment switches back to the table's dark theme, so every dialog reads as an object lifted off the page.
+Between scenarios the player handles the case file. Menus are night ground. What you would write down (tiles, sheets, the campaign log, settings, the rules) sits on warm off-white paper notes with dark ink. A chosen tile gets a paperclip, and a chosen chip on paper is an inked stamp. On the table, the instruction bar is an ironwork cartouche that holds the current answer, and one teal enamel plate per screen marks the way on.
 
-Density is high on the table, because a hot-seat game needs the whole state in view, and calm in the study, where reading comes first. The HUD is made of props on that table, drawn entirely in CSS: worn brown leather with a fine grain, brass bevels, stitching on the large plates, and a brass rail under the top bar. They have weight and material instead of reading as floating software chrome.
-
-Rejected directions: generic dark SaaS, neon or sci-fi glow, cartoon or mobile-game styling, and gore or splatter horror.
+Density follows the game. The HUD is compact and reads at a glance, menus read like a ledger, and both work at desktop and phone-landscape sizes in Russian and English. Rejected outright: leather, brass and gold props, parchment page grounds, blue SaaS dark themes, neon, glass, gore and grunge.
 
 **Key Characteristics:**
-- Real card scans, tokens and rulebook art are the imagery. The interface never competes with them.
-- Two themes from one token set: the dark table and the light parchment study.
-- Serif everywhere. Teutonic for names and headings, Alegreya for reading, Georgia for controls.
-- HUD chrome is grained brown leather with brass edges. The primary action is the one polished brass plate. Glow is a signal, not decoration.
-- Every animation has a reduced-motion fallback.
+- Cold teal night ground; card scans are the only warm color.
+- Bone ironwork hairlines with curled ends instead of frames and props.
+- Paper notes hold what you'd write down; the night holds everything else.
+- One teal enamel plate per screen for the primary action.
+- Two earned glows: lamp gold for the current step, Playable Green for legal moves.
+- Prata capitals for titles over EB Garamond; Teutonic for names.
 
 ## Colors
 
-Warm, low-saturation browns and golds on a near-black green table, with paper tones for the study. Two saturated signals, green and red, stand out because nothing else is saturated.
+A low-chroma teal night with one muted teal accent, bone ink, and a warm paper set that is only used inside paper notes.
 
 ### Primary
-- **Gilt Edge** (#c9a95c): the system's accent on the dark table. It is the border of modals, the instruction bar, hand-off boxes and the tip card, the fill of the current phase chip, and the color of headings and emphasised words in prompts.
-- **Lamp Glow** (#ffd27a): the lit version of Gilt Edge. It is used only for the thing that is live right now: the current phase's border, filled action pips, the glowing rail button, keyboard focus outlines on HUD tabs, and the faint top highlight inside the instruction bar's frame.
-- **Brass Shadow** (#5a4520): the primary button fill on the table, and the button inside a tip card.
+- **Teal Enamel Plate** (plate-enamel): the fill of the one primary action per screen (rail primary, desk footer "next", the title's primary oval). Lit as a vertical gradient from #2a6b65 to the base, #32807a to #225c57 on hover, edged in translucent ironwork.
+- **Muted Teal** (accent-teal): chrome state on the night: the chosen tab, the current wizard dot, hover borders, focus outlines. It is never a fill for large areas.
 
 ### Secondary
-- **Umber Gilt** (#7a5410): Gilt Edge's role on parchment. It marks the border and stitching of a selected tile, the current step dot (a 28px pill), keyboard focus on paper, and the chosen language tab.
+- **Lamp Gold** (lamp): only the current step and its hover glow (the rail button that answers the prompt).
+- **Playable Green** (playable): only the ring around a legal target (`--ring-playable`, `--ring-playable-sm`).
 
 ### Tertiary
-- **Playable Green** (#7fe08a): the legal-move ring. A card, portrait, token or mini card the player can act on gets a 3px ring and a soft glow of this color.
-- **Attack Red / Attack Ember** (#7a1e14 / #e0573f): an enemy that will attack, shown on its intent badge.
-- **Warning Red** (#e06060) and **Oxblood** (#a32a2a): danger buttons and errors on the table and on parchment.
-- **Steady Green** (#6fbf73): success text.
+- **Paper Teal** (paper-accent): the accent inside a paper note: hover border, chosen border, focus outline.
+- **Oxblood** (oxblood): the danger color inside a paper note; on the night it is the softer red (bad).
 
 ### Neutral
-- **Night Table** (#0d1410): the page background behind everything.
-- **Walnut Dark** (#1a120b): the table under the framed table art, and dark text on gilt.
-- **Smoked Panel** (rgba(18, 14, 10, 0.88)): the translucent content panels over the table that are not props, such as the action feed entries, the zoom panel and small count chips.
-- **Lacquer Black** (#17120c): solid surfaces like modals and the hand-off box.
-- **Worn Leather / lit** (#2b241b / #3a3022): button fill at rest and on hover.
-- **Brass Rule / dim** (#5a4a30 / #4a3b22): one-pixel borders on buttons, the top bar and panels.
-- **Bone Ink** (#eadfc4): body text on the table. **Faded Ink** (#a99c80): secondary text.
-- **Parchment** (#e6d9bb): the study's base under the parchment art. **Parchment Leaf** (#f6edd6, at 80% opacity on the page): sections, tiles and inputs. **Parchment Chosen** (#fff6d8): a selected tile. **Parchment Button** (#e9dcb8). **Parchment Rule** (#b69c6a): borders on paper.
-- **Iron Gall** (#2b1d0e): text on parchment. **Sepia Heading** (#3a2410): parchment headings. **Sepia Muted** (#6b5a3c): secondary text on parchment.
-- **Tip Paper** (#f3e6c4): the tutorial note.
-- **Leather** (#2e2619 to #1d1710): the HUD plates and the top bar, a vertical gradient with a warm speckle grain from an inline SVG noise filter (sRGB, at most 10% strength). The grain stays this faint so Faded Ink keeps 4.5:1 on it.
-- **Brass** (#e3c67c to #c9a95c to #a8863f): the primary action's plate on the table, on the title menu and on parchment, and the rail under the top bar. **Brass Edge, lit** (#7a6440): the top border of leather tabs and plates, where light catches the edge.
+- **Night** (night): the page and table ground. The baize raster (public/table/table-bg.jpg) is generated procedurally between #081316 and #24464a with two bone hairline frames.
+- **Abyss** (abyss): the deepest well behind scrims and the title's oval buttons.
+- **Smoked Panel** (panel): dialogs and floating panels over the table.
+- **Bone Ink** (bone-ink): all primary text on the night.
+- **Fog** (fog): secondary text, finished phases, hints.
+- **Ironwork** (ironwork): hairlines, curls and cartouche caps, usually at 40-75% opacity.
+- **Rule / Rule Dim / Edge Lit** (rule, rule-dim, edge-lit): control borders, dividers and the lit top edge of a tab.
+- **Slate / Slate Lit** (slate, slate-lit): control fills on the night (`--ctl-bg`, `--ctl-bg-on`).
+- **Paper set** (paper-leaf, paper-chosen, paper-button, paper-rule, paper-ink, paper-muted): the leaf, the chosen leaf, control fill, dotted ledger rule, ink and secondary ink of a paper note. Tooltips use tip-paper.
 
 ### Named Rules
-**The Earned Glow Rule.** Glow means "act here". Playable Green rings legal targets and Lamp Glow lights the current step. No other element glows.
+**The Warm Cards Rule.** Card scans are the only warm color on the table. Chrome stays in the teal-bone range; warm paper appears only as paper notes in the menus and as tooltips.
 
-**The Props Rule.** Chrome is a physical prop: on the table and over the cover it is grained leather with a lit brass top edge and a downward shadow; on parchment it is card stock. Only the primary action is polished brass, one plate per screen; a switched-on toggle or chosen tab is pressed in, never brass. Content panels like the feed and modals keep Lacquer Black.
+**The Earned Glow Rule.** Lamp gold means "the current step" and Playable Green means "a legal move". Neither is decoration, and the glow outranks the plate when both apply.
 
-**The Two Inks Rule.** Theme switches by redefining the same ink, muted, gold and bad variables. Never hard-code table colors inside the study, or study colors on the table.
+**The Paper Note Rule.** Inside a paper note the semantic tokens (`--ink`, `--muted`, `--accent`, `--bad`, `--ctl-bg`, `--ctl-bg-on`, `--ctl-line`) switch to the paper set, so components need no paper variant. The scope is one list in the stylesheet; add new note surfaces to that list.
 
 ## Typography
 
-**Display Font:** Teutonic, with TeutonicRU for Cyrillic and Georgia as the fallback.
-**Body Font:** Alegreya, with Georgia as the fallback.
-**UI Font:** Georgia, with Times New Roman as the fallback.
+**Display Font:** Prata (with EB Garamond, Georgia)
+**Body Font:** EB Garamond (with Georgia)
+**Name Font:** Teutonic / TeutonicRU, for card, investigator and scenario names
 
-**Character:** Teutonic is the blackletter of the printed cards, so names on screen look like names on cardboard. Alegreya is a calligraphic book serif for anything read at length: card text, the guide, prompts and tips.
+**Character:** Prata's high-contrast capitals read as an engraved case-file heading; EB Garamond is a calm book face for everything read and every control. Teutonic marks proper names as belonging to the game's world.
 
 ### Hierarchy
-- **Display** (400, clamp(28px, 4vw, 44px)): wizard and menu page titles on parchment.
-- **Headline** (400, 26px): card names in the card modal, in Gilt Edge.
-- **Title** (400, 20px): card names on drawn card faces and stat names.
-- **Prompt** (400, 22px, 1.3): the instruction bar, the line that tells the player what to do now.
-- **Body** (400, 16px, 1.4): card text, the modal side column, the guide's story and the deck editor.
-- **UI** (400, 15px): rail buttons and general controls, inheriting the page's Georgia.
-- **Label** (400, 14px, small caps for the round counter): the top bar and ribbon.
+- **Display** (Prata 400, clamp(44px, 7vw, 76px), 1): the title screen's ARKHAM TABLE in uppercase. Phase cards (76px), skill test results (110px total, 54px board result) use the same face.
+- **Headline** (Prata 400, clamp(28px, 4vw, 44px), uppercase, 0.03em): desk screen titles.
+- **Title** (Prata 400, 22-30px): settings legends, panel and dialog headings, how-to section heads.
+- **Body** (EB Garamond 400, 18px/1.3): ledger rows, notes and HUD text; hints at 15px/1.35. The instruction cartouche is set at 22px/1.3.
+- **Label** (EB Garamond 500, 19px, 0.14em, uppercase): the title screen's oval buttons only.
+- **Name** (Teutonic 400): names inside running text and on tiles, sized relative to the surrounding text.
 
 ### Named Rules
-**The Printed Name Rule.** A card, investigator, scenario or encounter name is set in Teutonic, like the printed card. Running text never is.
-
-**The Both Alphabets Rule.** Every display stack lists TeutonicRU right after Teutonic, so Russian names keep the same face.
+**The Name Face Rule.** Teutonic is for names and nothing else. Alegreya stays inside card faces; Caveat and TT2020 appear only where campaign-guide markup asks for `<fancy>` or `<typewriter>`.
 
 ## Layout
 
-The table is a fixed, full-viewport stage. The WebGL map fills it, and the HUD is pinned around its edges. The top bar runs across the top. A 300px action feed sits on the right, with a 143px column of played cards beside it. The hand fans along the bottom in the DOM, and the instruction bar floats above it. Overlays such as the card showcase, modals and hand-off screens cover the centre on a dark backdrop.
+Menus share one desk shell with insets that scale with the window (frame-x, frame-y), a heading with an ironwork rule under it, and a footer with an ironwork rule above it. The language tabs sit in the top-right corner, so desk headings stop short of them (`padding-right: min(112px, 30vw)`). Settings is one narrow paper leaf (max 640px) of ledger rows with the control on the right. How to play is one continuous paper page at reading measure (max 760px). The catalog fills the window and only its list scrolls.
 
-Layout mode is a single switch between desktop and phone. A viewport counts as a phone when it is landscape and at most 500px tall or 900px wide, or portrait and at most 500px wide. Phone mode adds a root class and safe-area insets, shrinks the played-cards strip to 44px cards, and collapses phase names to short forms. Components that compute pixels read the same mode.
+On the table, the top bar is a dark band with a double ironwork rule under it. The instruction cartouche is centred above the map, and the rail tabs sit at the right. Controls keep a 44px minimum touch height and an 8px gap. Phone landscape (max-height 500px) compresses titles and puts the title buttons in two columns.
 
-The study is a scrolling page on parchment art with centred content, tiles in grids, and a header that stays in reach. Spacing follows a loose 4–6–10–14–18–24px rhythm. Gaps between controls are usually 6px, and panels pad at 14 to 18px.
+**The Bar Bottom Rule.** Anything that has to sit under the top bar reads its measured bottom edge from `--bar-bottom` (set by the HUD, since the bar wraps). The skill-test line starts at `max(140px, var(--bar-bottom) + 18px)`, never under the bar.
 
 ## Elevation & Depth
 
-Depth comes from shadow and light, like objects on a lamplit table. Panels cast heavy black shadows straight down, overlays sit over a dark scrim, and the only colored light is the earned glow. The study is flatter: paper on paper, with selected tiles lifted by a soft umber glow.
+Depth comes from material, not floating cards. Bands and tabs are lacquered night-slate gradients with a faint cool grain (`--grain`) and a one-pixel bevel: a bone highlight on top and a black line underneath. Things that sit on the night cast short, dark drop shadows. Pressed states sink with an inset shadow and a 1px shift. Paper notes lift on hover (translateY(-2px), deeper shadow). Glows are reserved for the two earned states.
 
 ### Shadow Vocabulary
-- **Tabletop lift** (`box-shadow: 0 3px 12px #000c`): small floating notes. The instruction bar lifts a little further (`0 4px 14px #000c`) inside its frame rings.
-- **HUD plate** (`box-shadow: 0 8px 22px #000c` with the bevel): the investigator panel and the token row.
-- **Held object** (`box-shadow: 0 8px 24px #000c`): the tip card and pop-out sheets.
-- **Lifted off the page** (`box-shadow: 0 10px 40px #000`): modals.
-- **Gilt-framed lift** (`box-shadow: 0 10px 30px #000d, 0 0 0 2px var(--gold)`): a focused large card.
-- **Bevel** (`box-shadow: inset 0 1px 0 #c9a95c2e, inset 0 -1px 0 #00000080`): the lit top and shaded bottom of every leather prop.
-- **Pressed** (`box-shadow: inset 0 2px 4px #000a` with a 1px drop): a leather tab while pressed.
-- **Brass plate** (`box-shadow: inset 0 1px 0 #fff3c4, inset 0 -1px 0 #7a5a20, 0 2px 5px #000a`): the polished primary action.
-- **Brass rail** (a 4px gradient from #e3c67c through #a8863f to #5a4520, with `0 3px 8px #000a` below): the edge under the top bar.
-- **Token contact** (`box-shadow: 0 1px 3px #000c`): badges and intent chips resting on cards.
-- **Playable ring** (`box-shadow: 0 0 0 3px #7fe08a, 0 0 18px #7fe08acc`): a legal target. Use 14px blur for small targets.
-- **Current light** (`box-shadow: 0 0 10px #c9a95c88`): the current phase chip.
-- **Chosen page** (`box-shadow: 0 0 0 1px #c9a95c, inset 0 1px 0 #fff, 0 6px 14px #7a541055` with a 2px dashed `#7a5410a0` stitch at -7px): a selected wizard tile on parchment. Campaign rows and deck rows keep the plain glow `0 0 14px #7a541066`.
-- **Paper card** (`box-shadow: inset 0 1px 0 #fffaf0, 0 1px 0 #b69c6a66, 0 3px 6px #5a452030`): a wizard tile at rest; it lifts 2px with a deeper shadow on hover.
+- **Bevel** (`inset 0 1px 0 #c9c6b81f, inset 0 -1px 0 #00000080`): every tab and band.
+- **Tab drop** (`0 2px 4px #000a`): rail, top-bar and footer tabs at rest.
+- **Pressed** (`inset 0 2px 4px #000a`): active tabs and toggles that are on.
+- **Band lift** (`0 8px 22px #000c`): stat bar and token row.
+- **Note lift** (`inset 0 1px 0 #fffdf6, 0 2px 0 #00000040, 0 6px 14px #000a`): paper tiles at rest; `0 10px 20px #000c` on hover.
+- **Lamp glow** (`0 0 0 1px var(--lamp), 0 0 16px 4px #ffd27a99`, pulsing 1.6s): the current step.
+- **Playable ring** (`0 0 0 3px var(--playable), 0 0 18px #7fe08acc`): a legal target.
 
 ### Named Rules
-**The Lamplight Rule.** Cast shadows are black and fall downward. Colored light exists only as the earned glow. A 1px inset edge in brass or gilt is a bevel on the material, not a shadow.
+**The Ironwork Rule.** Structure is drawn with bone hairlines that end in a curl (`--curl`, `--curl-r`): under the top bar, under desk headings, over desk footers, under the title. `--cap` closes the instruction cartouche and the title's primary oval. No brass, gilt or leather borders stand in for them.
 
 ## Shapes
 
-Corners are softened but never bubbly, like the die-cut corners of the cards. Small controls use 6px, panels and tiles 10 to 12px, cards and modals 14px. Round shapes are reserved for tokens, pips and portraits, the cardboard pieces of the game. HUD plates use 14 to 16px. The instruction bar is the one long pill, at 22px. Borders are one pixel of Brass Rule or Parchment Rule, lit on the top edge for leather props. Modals and the hand-off box get a one-pixel Gilt Edge, and the instruction bar a 2px gilt frame.
+Shapes are soft but not bubbly. Tabs and buttons use a 10px radius, paper notes 12px, the instruction cartouche 22px, and chips and title buttons are full ovals (999px). Borders are one pixel (two on chips): ironwork or rule on the night, paper-rule on paper, dotted for ledger rows. A disabled primary keeps its place as a dashed outline. The paperclip (a 14x38 stroked SVG at the top right of a chosen tile) is the only object prop.
 
 ## Components
 
 ### Buttons
-Worn and solid, like a leather-bound case with brass fittings.
-- **Shape:** gently rounded (6px).
-- **Default:** Worn Leather fill, Bone Ink text, a one-pixel Brass Rule border, 5px 10px padding.
-- **Hover:** the fill lightens to Worn Leather lit and the border turns Gilt Edge.
-- **Primary:** Brass Shadow fill with a Gilt Edge border.
-- **Big:** 1.15rem text with 10px 18px padding, for the main call on a screen.
-- **Danger:** Warning Red border and text.
-- **Disabled:** 50% opacity, no pointer.
-- **HUD tabs:** on the table and on the title menu over the cover art, the top bar buttons, the title menu buttons, the action rail, the camera buttons and Undo are leather tabs: grained Worn Leather, a Brass Rule border with a lit top edge, a bevel and a short drop shadow. Hover lightens the leather and gilds the border. Pressing sinks the tab 1px. Focus shows a 2px Lamp Glow outline.
-- **HUD toggle on:** a top bar button that is switched on, such as an open Journal, is a tab pressed into the bar: lit leather, a Gilt Edge border and an inset shadow.
-- **HUD primary:** the one polished brass plate, with Walnut Dark text and glyphs. The suggested-action glow replaces its shadow while it pulses.
-- **On parchment:** Parchment Button fill with an Iron Gall label. Hover turns the border Umber Gilt. Primary is the brass plate with a Brass Shadow border; disabled, it is an unfilled stamp with a dashed border. Footer secondaries (Back) are card stock: a pale paper gradient with a lit top edge.
-- **Language tabs:** at the top right of every screen, and first in the top bar during a game: a leather strip with one 44px tab per language, labelled EN and RU and named in its own language for screen readers. The chosen tab is pressed in (lit leather, gilt ring). On parchment the strip is Parchment Leaf with a Parchment Rule border, the chosen tab Umber Gilt with Parchment Leaf text, and it scrolls away with the page. In the phone top bar it is a single tab that steps to the next language.
-- **Chips on parchment:** a chosen filter chip or tab is an inked stamp: Sepia Heading fill with Parchment Leaf text.
+Lacquered tabs on the night and one enamel plate.
+- **Shape:** gently rounded (10px); title-screen buttons are hairline ovals (999px).
+- **Primary:** the teal enamel plate with a bone edge (#c9c6b899) and a bone top highlight. One per screen. On the title screen it is a filled oval closed by ironwork caps on both sides.
+- **Tab (secondary):** the slate gradient, a rule border with a lit top edge, a bevel and a tab drop. Hover lightens the gradient and turns the border muted teal; active sinks 1px.
+- **Toggle on:** a tab pressed into the bar (inset shadow, teal border).
+- **Focus:** a 2px muted teal outline, offset 2px (3px on the title).
+- **Disabled primary on the desk:** transparent, fog text, dashed edge-lit border.
 
 ### Chips
-- **Phase chip:** a 12px-radius chip in Faded Ink. Done phases dim, skipped ones are struck through, and the current one fills with Gilt Edge, takes a Lamp Glow border and glows softly.
-- **Intent badge:** a 10px-radius badge in bold 12px sans-serif. Attack is Attack Red with an ember border, Hunt is dark amber, and Rest is grey.
+- **Style:** an oval with a 44px minimum height, `--ctl-bg` fill and a 2px `--ctl-line` border, so the night or paper colors follow from where the chip sits.
+- **State:** chosen on the night is the teal plate with a muted teal border; chosen on paper is an inked stamp (paper-ink fill, paper-leaf text). Class chips keep a pressed well because their icons are colored.
 
 ### Cards / Containers
-- **Corner Style:** 14px for modals and the hand-off box, 10–12px for tiles and side panels.
-- **Background:** grained leather for HUD plates (the investigator panel and token row), with a 2px dashed gilt stitch 7px inside the edge. Lacquer Black for dialogs, Parchment Leaf in the study.
-- **Shadow Strategy:** see Elevation & Depth.
-- **Border:** one pixel of Gilt Edge for modals and the hand-off box. Brass Rule with a lit top edge on HUD plates.
-- **Internal Padding:** 18px for modals, 24px for the hand-off box.
+- **Paper notes:** a paper-leaf gradient, a paper-rule border, 12px corners and the note lift. Hover lifts 2px with a paper-teal border. Chosen notes take the paper-chosen leaf, a 2px teal ring and the paperclip.
+- **Night panels:** the smoked panel with a rule border and a dark drop; stat bar and token row add an inner ironwork outline inset 5-6px.
 
 ### Inputs / Fields
-- **Select:** a 4px-radius field with a dark fill, Bone Ink text and a Brass Rule border.
-- **On parchment:** inputs and selects take the Parchment Leaf fill and a Parchment Rule border.
+- **Style:** checkboxes are 22px with an accent-color of the local accent; selects are 6px rounded and inherit the body face; range sliders are flexible up to 220px with tabular numerals.
+- **Focus:** a 2px accent outline, offset 2px.
 
 ### Navigation
-- **Top bar:** a band of grained leather resting on a 4px brass rail, with 14px text. Finished and skipped phases keep Faded Ink on the leather. The chaos bag in the phone top bar stays a bare icon, not a tab. It holds the round ribbon: the scenario, the round in small caps, the four phases as chips joined by › separators, and each investigator's turn with action pips.
-- **Action rail:** a stack of leather tabs at 10px radius. The primary action is a brass plate. The suggested action glows with Lamp Glow and pulses unless reduced motion is on.
+- **Top bar:** a grained night band with a bevel, a double ironwork rule underneath ending in curls, and a soft shadow below. Finished and skipped phases stay fog; the current phase is a teal chip.
+- **Wizard dots:** 12px hairline rings; done ones fill with fog, and the current one stretches into a 28px teal pill.
 
-### Instruction Bar
-The signature component, a brass-framed leather plaque telling the player what to do now. It is a grained leather pill with a 2px Gilt Edge frame, a thin Brass Shadow ring outside it and a dark ring inside, and 22px Alegreya text in Bone Ink. Investigator names are set in Teutonic and key words in Gilt Edge. Its main answer is the brass plate.
+### Instruction Cartouche (signature)
+The prompt and its answer share one night pill in a double bone rule (`1px #c9c6b88c` border plus 3px and 4px inset rings), closed at each end by the ironwork `--cap`. The answer sits inside the cartouche, not beside it. It is set in EB Garamond at 22px, with names in Teutonic.
 
-### Tip Card
-A slip of paper laid on the table: Tip Paper fill, Iron Gall text, a two-pixel Gilt Edge border, 12px corners and a held-object shadow. An arrow points at the thing it explains, and a small Brass Shadow button closes it.
-
-### Hand-off Screen
-Hides the table between hot-seat turns. A 93% black scrim carries a centred Lacquer Black box with a Gilt Edge border.
+### Icons
+The UI uses an authored stroke icon set (`UiIcon`): 24x24 viewBox, `currentColor`, 1.8 stroke, round caps and joins. Game symbols come from the card icon sprite.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** let card scans, tokens and rulebook art carry the color. Interface surfaces stay within Night Table, Smoked Panel, Lacquer Black, the leather and brass of the props, and the parchment tones.
-- **Do** set every card, investigator and scenario name in Teutonic with TeutonicRU, and read-at-length text in Alegreya.
-- **Do** mark legal targets with the Playable Green ring (3px plus glow) and the current step with Lamp Glow, and nothing else.
-- **Do** switch themes by redefining the ink, muted, gold and bad variables, as the parchment and its modals do.
-- **Do** give every animation a reduced-motion fallback that places the result instantly.
-- **Do** build table chrome as props in CSS: grained leather, a lit brass top edge, a bevel and a shadow that falls downward. Stitch the large plates.
-- **Do** keep a single brass plate per screen, for the primary action. Toggles and chosen tabs are pressed in instead.
-- **Do** keep every menu screen inside the painted frame: wizard and catalog pad by the frame insets (`clamp(20px, max(6vh, 3.2vw), 64px)` vertical, `clamp(16px, 3.4vw, 56px)` horizontal), and headings stop short of the language tabs.
+- **Do** keep chrome in the teal-bone range so card scans stay the only warm things (The Warm Cards Rule).
+- **Do** give each screen exactly one teal enamel plate for the primary action.
+- **Do** use lamp gold only for the current step and Playable Green only for legal moves (The Earned Glow Rule).
+- **Do** draw structure with ironwork hairlines that end in a curl, and close cartouches and the title's primary oval with `--cap`.
+- **Do** put what a player would write down on a paper note by adding it to the paper-note scope, and keep everything else on the night.
+- **Do** set screen titles in uppercase Prata, everything read and every control in EB Garamond, and names in Teutonic.
+- **Do** place anything below the top bar from `--bar-bottom`.
+- **Do** draw icons as `UiIcon` strokes (1.8, round caps, currentColor).
 
 ### Don't:
-- **Don't** use flat grey panels, sans-serif UI or blue accents. Generic dark SaaS styling is rejected.
-- **Don't** use neon or sci-fi glow, saturated cyan or purple, glassmorphism or holographic effects.
-- **Don't** use cartoon or mobile-game styling: bouncy chunky buttons, bright gradients or loot-box sparkle.
-- **Don't** decorate with gore, blood drips, splatter or grunge textures.
-- **Don't** add glow, colored cast shadows or pulsing to anything that is not the current step or a legal move.
-- **Don't** use pure white or pure black as broad surfaces. Pure black is only for shadows and scrims.
+- **Don't** use leather, brass or gold props, or parchment page grounds.
+- **Don't** drift into a blue SaaS dark theme, neon, glass, or gore and grunge textures.
+- **Don't** copy arkhamhorror.com's logo, ornament art or imagery, or anything that makes the app look official.
+- **Don't** use Unicode glyphs or emoji as icons.
+- **Don't** use colored side stripes on cards, notes or panels.
+- **Don't** use a second filled primary on the same screen; secondary actions are tabs or hairline ovals.
