@@ -87,7 +87,7 @@
 .center-col {
   position: absolute;
   /* clear of the fan cards and the skill icons above them */
-  bottom: 196px;
+  bottom: 200px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;

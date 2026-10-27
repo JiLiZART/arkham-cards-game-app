@@ -212,7 +212,7 @@
     inset 0 0 0 3px #0b1418,
     inset 0 0 0 4px #c9c6b833,
     0 6px 18px #000c;
-  margin-inline: 22px;
+  margin-inline: 12px;
 }
 :global(.instruction-bar)::before,
 :global(.instruction-bar)::after {
