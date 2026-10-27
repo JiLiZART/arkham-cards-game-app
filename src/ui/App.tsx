@@ -6,7 +6,7 @@ import { HandFan } from "./hud/HandFan";
 import { HandDrawer } from "./hud/HandDrawer";
 import { Hud } from "./hud/Hud";
 import { moment, useAudioLevels } from "./hud/SoundLayer";
-import { Catalog } from "./catalog/Catalog";
+import { Catalog } from "./catalog/Catalog/index";
 import { CampaignScreen } from "./menu/CampaignScreen";
 import { HowTo } from "./menu/HowTo";
 import { Settings } from "./menu/Settings";

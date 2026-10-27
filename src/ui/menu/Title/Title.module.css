@@ -1,0 +1,163 @@
+.title-body h1 {
+  color: var(--ink);
+  font: clamp(44px, 7vw, 76px) / 1 var(--f-display);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  text-shadow: 0 2px 18px #000;
+  margin: 0 0 12px;
+}
+/* a rule under the name: a hairline that ends in a curl on either side */
+.title-body h1::after {
+  content: "";
+  display: block;
+  width: min(420px, 80vw);
+  height: 16px;
+  margin: 18px auto 30px;
+  background:
+    var(--curl) left center / 40px 16px no-repeat,
+    var(--curl-r) right center / 40px 16px no-repeat,
+    linear-gradient(var(--iron-line), var(--iron-line)) center / calc(100% - 80px) 1px no-repeat;
+}
+.title-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(360px, 90vw);
+  margin: 0 auto;
+}
+.title-buttons :global(.big) {
+  min-height: 56px;
+  font-size: 22px;
+}
+button.danger {
+  border-color: var(--bad);
+  color: var(--bad);
+}
+
+/* ── Menus: the night outside the case file. The title's buttons are hairline ovals over the cover, the primary a teal
+   enamel oval closed by the ironwork caps; on the desk, chosen chips are inked stamps on the paper notes. */
+.title-buttons button:not(:global(.link-btn)) {
+  position: relative;
+  background: #0b1418b3;
+  border: 1px solid #c9c6b873;
+  border-radius: 999px;
+  box-shadow: 0 3px 10px #000c;
+  font: 500 19px/1.2 var(--f-body);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink);
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.1s ease;
+}
+.title-buttons button:not(:global(.link-btn)):hover:not(:disabled) {
+  background: #16232ae6;
+  border-color: var(--iron);
+}
+.title-buttons button:not(:global(.link-btn)):active:not(:disabled) {
+  transform: translateY(1px);
+}
+.title-buttons button:global(.primary) {
+  background: var(--plate);
+  border-color: #c9c6b8b3;
+  margin-inline: 20px;
+}
+.title-buttons button:global(.primary):hover:not(:disabled) {
+  background: #24605b;
+  border-color: var(--iron);
+}
+.title-buttons button:global(.primary)::before,
+.title-buttons button:global(.primary)::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 22px;
+  height: 44px;
+  margin-top: -22px;
+  background: var(--cap) center / contain no-repeat;
+  pointer-events: none;
+}
+.title-buttons button:global(.primary)::before {
+  left: -19px;
+}
+.title-buttons button:global(.primary)::after {
+  right: -19px;
+  transform: scaleX(-1);
+}
+.title-buttons button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.title-buttons :global(.link-btn) {
+  color: var(--muted);
+  background: none;
+  border-color: transparent;
+  text-shadow:
+    0 1px 3px #000,
+    0 0 8px #000;
+  font: 17px var(--f-body);
+}
+/* Abandon asks once, in place: a smoked note with the danger answer and the way back */
+.abandon-ask {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 14px;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  box-shadow: 0 3px 12px #000c;
+}
+.abandon-ask p {
+  flex-basis: 100%;
+  margin: 0 0 4px;
+  font: 17px/1.35 var(--f-body);
+  color: var(--ink);
+}
+.title-buttons .abandon-ask button {
+  min-height: 44px;
+  padding: 6px 16px;
+  font-size: 17px;
+}
+.title-buttons .abandon-ask button.danger {
+  color: var(--bad);
+  border-color: var(--bad);
+}
+.title-buttons :global(.link-btn):hover:not(:disabled) {
+  color: var(--ink);
+  background: none;
+  border-color: transparent;
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  .title-body h1 {
+    font-size: 34px;
+    margin-bottom: 14px;
+  }
+  .title-buttons {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: min(560px, 92vw);
+  }
+  .title-buttons > * {
+    flex: 1 1 40%;
+  }
+  .title-buttons > :global(.primary),
+  .title-buttons > :global(.link-btn),
+  .title-buttons > .abandon-ask {
+    flex-basis: 100%;
+  }
+  .title-buttons button:global(.big):not(:global(.link-btn)) {
+    min-height: 44px;
+    font-size: 19px;
+    padding: 6px 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .title-buttons button:not(:global(.link-btn)) {
+    transition: none;
+  }
+}

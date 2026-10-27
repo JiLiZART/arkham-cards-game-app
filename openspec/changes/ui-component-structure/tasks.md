@@ -35,9 +35,9 @@
 
 ## 6. Menus
 
-- [ ] 6.1 Folders and modules for `Title`, `NewGame`, `CampaignScreen`, `CampaignSheet`, `DeckBuilder`, `DeckEditArea`, `FlowPrompt`, `HowTo`, `Settings`, `Avatar`, `BagCard`; helpers (`blurb`, `campaignView`, `wizard`) move with their owner
-- [ ] 6.2 Decide the open question on shared menu styles (noir panels, brass plate): shared primitive in `styles.css` or a `components/` piece; record the outcome in design.md
-- [ ] 6.3 Menu screenshots (desktop and phone, EN and RU) match the baseline
+- [x] 6.1 Folders and modules for `Title`, `NewGame`, `CampaignScreen`, `CampaignSheet`, `DeckBuilder`, `DeckEditArea`, `FlowPrompt`, `HowTo`, `Settings`, `Avatar`, `BagCard`; helpers (`blurb`, `campaignView`, `wizard`) move with their owner
+- [x] 6.2 Decide the open question on shared menu styles (noir panels, brass plate): shared primitive in `styles.css` or a `components/` piece; record the outcome in design.md
+- [x] 6.3 Menu screenshots (desktop and phone, EN and RU) match the baseline
 
 ## 7. Scene
 

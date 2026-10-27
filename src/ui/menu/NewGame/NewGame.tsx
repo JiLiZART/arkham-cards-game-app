@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
-import { moment } from "../hud/SoundLayer";
-import { campaignLoaded, loadAllPacks, loadCampaign, loadPacksFor } from "../../content/index";
-import { cardText, scenarioText, t } from "../../content/i18n";
-import type { Difficulty } from "../../content/schema";
-import { db, gameStore, useGame } from "../state/context";
-import { Glyph, Icon, Stat, UiIcon } from "../components/Icon/index";
-import { CardFace } from "../components/CardFace/index";
-import { formatText } from "../hud/Hud";
-import { cardImage } from "../assets/images";
-import { hasSymbol, isIcon, scenarioIcon } from "../assets/icons";
-import { Avatar } from "./Avatar";
-import { BagCard } from "./BagCard";
+import { moment } from "../../hud/SoundLayer";
+import { campaignLoaded, loadAllPacks, loadCampaign, loadPacksFor } from "../../../content/index";
+import { cardText, scenarioText, t } from "../../../content/i18n";
+import type { Difficulty } from "../../../content/schema";
+import { db, gameStore, useGame } from "../../state/context";
+import { Glyph, Icon, Stat, UiIcon } from "../../components/Icon/index";
+import { CardFace } from "../../components/CardFace/index";
+import { formatText } from "../../hud/Hud";
+import { cardImage } from "../../assets/images";
+import { hasSymbol, isIcon, scenarioIcon } from "../../assets/icons";
+import { Avatar } from "../Avatar";
+import { BagCard } from "../BagCard";
 import {
   deckTabs,
   deleteCustomDeck,
@@ -18,10 +18,10 @@ import {
   emptyDeck,
   problemText,
   renameCustomDeck,
-} from "../game/decks";
-import { safeStorage } from "../state/store";
-import { DeckEditArea } from "./DeckEditArea";
-import { CampaignSheet, scenarioCount } from "./CampaignSheet";
+} from "../../game/decks";
+import { safeStorage } from "../../state/store";
+import { DeckEditArea } from "../DeckEditArea";
+import { CampaignSheet, scenarioCount } from "../CampaignSheet";
 import {
   back,
   canContinue,
@@ -50,7 +50,9 @@ import {
   toSetup,
   type PickerFilter,
   type WizardState,
-} from "./wizard";
+} from "../wizard";
+import { cx } from "../../components/cx";
+import styles from "./NewGame.module.css";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);
@@ -92,10 +94,10 @@ function CampaignStep({ s, set }: { s: WizardState; set: (w: WizardState) => voi
   );
   const picked = db.campaigns[s.campaignId];
   return (
-    <div className={`wz-inv wz-camp ${sheet ? "sheet-open" : ""}`}>
-      <div className="wz-inv-main">
+    <div className={cx(styles.wzInv, "wz-camp", sheet ? "sheet-open" : "")}>
+      <div className={styles.wzInvMain}>
         <p className="wz-hint">{tr("wizard.campaign.hint")}</p>
-        <div className="wz-filters">
+        <div className={styles.wzFilters}>
           {chip("kind", KINDS)}
           {chip("rules", RULES)}
           {chip("length", LENGTHS)}
@@ -108,7 +110,7 @@ function CampaignStep({ s, set }: { s: WizardState; set: (w: WizardState) => voi
           />
         </div>
         {list.length === 0 && <p className="wz-hint">{tr("wizard.noCampaigns")}</p>}
-        <div className="wz-ctiles">
+        <div className={styles.wzCtiles}>
           {list.map((c) => {
             // the first chapter's art (the first agenda), found by code: a generated campaign's cards load only when it is chosen
             const card = c.cover ?? db.scenarios[c.scenarios[0]]?.agendas[0] ?? c.card;
@@ -117,7 +119,7 @@ function CampaignStep({ s, set }: { s: WizardState; set: (w: WizardState) => voi
             return (
               <button
                 key={c.id}
-                className={`wz-ctile ${on ? "selected" : ""}`}
+                className={cx(styles.wzCtile, on ? "selected" : "")}
                 aria-pressed={on}
                 onClick={() => {
                   moment("tab");
@@ -145,7 +147,7 @@ function CampaignStep({ s, set }: { s: WizardState; set: (w: WizardState) => voi
         </div>
       </div>
       {picked && (
-        <div className="wz-inv-side wz-camp-side" aria-live="polite">
+        <div className={cx(styles.wzInvSide, styles.wzCampSide)} aria-live="polite">
           <CampaignSheet key={picked.id} campaign={picked} onClose={() => setSheet(false)} />
         </div>
       )}
@@ -163,7 +165,7 @@ function InvestigatorSheet({ code }: { code: string }) {
   const inv = db.investigators[code];
   const tx = card ? cardText(db, code, locale) : null;
   return (
-    <div className="wz-sheet">
+    <div className={styles.wzSheet}>
       <div className="wz-sheet-head">
         {isIcon(info.faction) && <Icon name={info.faction} size={30} />}
         <div>
@@ -171,12 +173,12 @@ function InvestigatorSheet({ code }: { code: string }) {
           {info.subname && <i>{info.subname}</i>}
         </div>
       </div>
-      <div className="wz-sheet-card">
+      <div className={styles.wzSheetCard}>
         <CardFace code={code} locale={locale} remote />
       </div>
       {card ? (
         <>
-          <div className="wz-sheet-stats">
+          <div className={styles.wzSheetStats}>
             <Stat icon="health" value={card.health ?? "–"} size={30} label={tr("stat.health")} />
             <Stat icon="sanity" value={card.sanity ?? "–"} size={30} label={tr("stat.sanity")} />
             {(["willpower", "intellect", "combat", "agility"] as const).map((k) => (
@@ -190,7 +192,7 @@ function InvestigatorSheet({ code }: { code: string }) {
             ))}
           </div>
           {tx?.traits?.length ? (
-            <div className="wz-sheet-traits">{tx.traits.map((t) => `${t}.`).join(" ")}</div>
+            <div className={styles.wzSheetTraits}>{tx.traits.map((t) => `${t}.`).join(" ")}</div>
           ) : null}
           {tx?.text && (
             <p
@@ -200,7 +202,7 @@ function InvestigatorSheet({ code }: { code: string }) {
           )}
           {tx?.backText && (
             <p
-              className="wz-sheet-text wz-sheet-back"
+              className={cx("wz-sheet-text", styles.wzSheetBack)}
               dangerouslySetInnerHTML={{ __html: formatText(tx.backText) }}
             />
           )}
@@ -208,7 +210,7 @@ function InvestigatorSheet({ code }: { code: string }) {
       ) : (
         <p className="wz-hint">{tr("wizard.loading")}</p>
       )}
-      <small className="wz-sheet-meta">
+      <small className={styles.wzSheetMeta}>
         {cycleName(db, locale, info.pack || "core")}
         {inv ? ` · ${tr("wizard.deckSize", { n: inv.deckSize })}` : ""}
       </small>
@@ -236,10 +238,10 @@ function InvestigatorsStep({ s, set }: { s: WizardState; set: (w: WizardState) =
   const list = sortPicker(db, pickerList(db, locale, filter), sort);
   const shown = focus ?? s.picks.at(-1) ?? list[0]?.code ?? null;
   return (
-    <div className="wz-inv">
-      <div className="wz-inv-main">
+    <div className={styles.wzInv}>
+      <div className={styles.wzInvMain}>
         <p className="wz-hint">{tr("wizard.investigators.hint")}</p>
-        <div className="wz-filters">
+        <div className={styles.wzFilters}>
           <div className="wz-chips" role="group" aria-label={tr("wizard.filter.class")}>
             {CLASSES.map((c) => (
               <button
@@ -265,7 +267,7 @@ function InvestigatorsStep({ s, set }: { s: WizardState; set: (w: WizardState) =
               </option>
             ))}
           </select>
-          <label className="wz-sort">
+          <label className={styles.wzSort}>
             <span>{tr("wizard.sort")}</span>
             <select value={sort} onChange={(e) => setSort(e.target.value as SortBy)}>
               {SORTS.map((k) => (
@@ -284,13 +286,18 @@ function InvestigatorsStep({ s, set }: { s: WizardState; set: (w: WizardState) =
           />
         </div>
         {!list.length && <p className="wz-hint">{tr("wizard.noMatch")}</p>}
-        <div className="wz-tiles">
+        <div className={styles.wzTiles}>
           {list.map((i) => {
             const k = s.picks.indexOf(i.code);
             return (
               <button
                 key={i.code}
-                className={`wz-tile ${k >= 0 ? "selected" : ""} ${i.needsDeck ? "needs-deck" : ""} ${shown === i.code ? "focused" : ""}`}
+                className={cx(
+                  "wz-tile",
+                  k >= 0 ? "selected" : "",
+                  i.needsDeck ? styles.needsDeck : "",
+                  shown === i.code ? "focused" : "",
+                )}
                 aria-pressed={k >= 0}
                 disabled={i.needsDeck && k < 0}
                 onMouseEnter={() => setFocus(i.code)}
@@ -301,9 +308,12 @@ function InvestigatorsStep({ s, set }: { s: WizardState; set: (w: WizardState) =
                 }}
               >
                 <Avatar code={i.code} badge={k >= 0 ? `P${k + 1}` : undefined}>
-                  {i.needsDeck && <small className="wz-note">{tr("wizard.needsDeck")}</small>}
+                  {i.needsDeck && <small className={styles.wzNote}>{tr("wizard.needsDeck")}</small>}
                   {i.partlyImplemented && !i.needsDeck && (
-                    <small className="wz-note wz-partly" title={tr("wizard.partly")}>
+                    <small
+                      className={cx(styles.wzNote, styles.wzPartly)}
+                      title={tr("wizard.partly")}
+                    >
                       ◐ {tr("wizard.partlyShort")}
                     </small>
                   )}
@@ -314,7 +324,7 @@ function InvestigatorsStep({ s, set }: { s: WizardState; set: (w: WizardState) =
         </div>
       </div>
       {shown && (
-        <aside className="wz-inv-side" aria-live="polite">
+        <aside className={styles.wzInvSide} aria-live="polite">
           <InvestigatorSheet key={shown} code={shown} />
         </aside>
       )}
@@ -365,8 +375,8 @@ function DecksStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }
     bump((n) => n + 1);
   };
   return (
-    <div className="dk">
-      <div className="dk-invs" role="tablist" aria-label={tr("wizard.decks.title")}>
+    <div className={styles.dk}>
+      <div className={styles.dkInvs} role="tablist" aria-label={tr("wizard.decks.title")}>
         {s.picks.map((c, k) => {
           const problems = deckProblems(db, s, c);
           return (
@@ -388,18 +398,22 @@ function DecksStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }
           );
         })}
       </div>
-      <div className="dk-tabs" role="tablist">
+      <div className={styles.dkTabs} role="tablist">
         {tabs.map((x) => (
           <div
             key={x.id}
-            className={`dk-tab ${x.id === tab?.id ? "on" : ""} ${x.problems.length ? "bad" : ""}`}
+            className={cx(
+              styles.dkTab,
+              x.id === tab?.id ? "on" : "",
+              x.problems.length ? "bad" : "",
+            )}
             role="tab"
             aria-selected={x.id === tab?.id}
           >
             {renaming?.id === x.id ? (
               <input
                 autoFocus
-                className="dk-rename"
+                className={styles.dkRename}
                 value={renaming.name}
                 maxLength={40}
                 aria-label={tr("deckEditor.name")}
@@ -416,7 +430,7 @@ function DecksStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }
               />
             ) : (
               <button
-                className="dk-tab-name"
+                className={styles.dkTabName}
                 onClick={() => {
                   moment("tab");
                   choose(x.id);
@@ -430,7 +444,7 @@ function DecksStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }
             )}
             {x.kind === "custom" && (
               <button
-                className={`dk-tab-close ${deleting === x.id ? "confirm" : ""}`}
+                className={cx(styles.dkTabClose, deleting === x.id ? styles.confirm : "")}
                 aria-label={tr("deckEditor.delete")}
                 title={deleting === x.id ? tr("deckEditor.confirmDelete") : tr("deckEditor.delete")}
                 onBlur={() => setDeleting(null)}
@@ -448,7 +462,7 @@ function DecksStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }
           </div>
         ))}
         <button
-          className="dk-tab dk-tab-add"
+          className={cx(styles.dkTab, styles.dkTabAdd)}
           onClick={addTab}
           title={tr("deck.newTab")}
           aria-label={tr("deck.newTab")}
@@ -457,7 +471,7 @@ function DecksStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }
         </button>
       </div>
       {tab && tab.problems.length > 0 && (
-        <div className="problems dk-problems" role="status">
+        <div className={cx("problems", styles.dkProblems)} role="status">
           {tab.problems.slice(0, 4).map((p, k) => (
             <div key={k}>{problemText(db, locale, p)}</div>
           ))}
@@ -499,14 +513,14 @@ function ReadyStep({ s }: { s: WizardState }) {
   const icon = scenarioIcon(first);
   return (
     <div className="wz-ready">
-      <h2 className="wz-ready-camp">{tileName(db, c, locale)}</h2>
-      <div className="wz-order">
+      <h2 className={styles.wzReadyCamp}>{tileName(db, c, locale)}</h2>
+      <div className={styles.wzOrder}>
         {s.picks.map((code, k) => (
           <Avatar key={code} code={code} badge={`P${k + 1}`} />
         ))}
       </div>
       <BagCard bag={c.chaosBags[s.difficulty] ?? []} difficulty={s.difficulty} selected />
-      <div className="wz-first">
+      <div className={styles.wzFirst}>
         <small>{tr("wizard.firstScenario")}</small>
         <b>
           {hasSymbol(icon) && <Glyph name={icon} size={26} title="" />}{" "}
@@ -549,7 +563,7 @@ export function Wizard() {
     <div className="screen wizard">
       <header className="wz-head">
         <h1>{tr(`wizard.${s.step}.title`)}</h1>
-        <div className="wz-dots" aria-hidden="true">
+        <div className={styles.wzDots} aria-hidden="true">
           {STEPS.map((x, k) => (
             <i key={x} className={k === at ? "on" : k < at ? "done" : ""} />
           ))}

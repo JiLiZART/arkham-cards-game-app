@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { t } from "../../content/i18n";
-import { db, gameStore, useGame } from "../state/context";
-import { SAVE_KEY, safeStorage } from "../state/store";
+import { t } from "../../../content/i18n";
+import { db, gameStore, useGame } from "../../state/context";
+import { SAVE_KEY, safeStorage } from "../../state/store";
+import styles from "./Title.module.css";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);
@@ -20,9 +21,9 @@ export function Title() {
     gameStore.setState({ screen });
   return (
     <div className="screen title">
-      <div className="title-body">
+      <div className={styles.titleBody}>
         <h1>{tr("app.title")}</h1>
-        <div className="title-buttons">
+        <div className={styles.titleButtons}>
           {(game || campaign) && (
             <button
               className="primary big"
@@ -57,9 +58,9 @@ export function Title() {
             </button>
           )}
           {campaign && asking && (
-            <div className="abandon-ask" role="group" aria-label={tr("menu.abandon")}>
+            <div className={styles.abandonAsk} role="group" aria-label={tr("menu.abandon")}>
               <p>{tr("menu.abandonAsk")}</p>
-              <button className="danger" onClick={abandon}>
+              <button className={styles.danger} onClick={abandon}>
                 {tr("menu.abandonYes")}
               </button>
               <button autoFocus onClick={() => setAsking(false)}>

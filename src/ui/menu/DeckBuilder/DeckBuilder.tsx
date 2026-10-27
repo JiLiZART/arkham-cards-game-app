@@ -1,13 +1,14 @@
 import { useEffect, useMemo, useState } from "react";
-import { loadAllPacks } from "../../content/index";
-import { t } from "../../content/i18n";
-import type { DeckDef } from "../../content/schema";
-import { needsChoice, validateDeck } from "../../engine/decks";
-import { deckChangeCost } from "../../engine/upgrade";
-import { db, gameStore, useGame } from "../state/context";
-import { problemText } from "../game/decks";
-import { Avatar } from "./Avatar";
-import { DeckEditArea } from "./DeckEditArea";
+import { loadAllPacks } from "../../../content/index";
+import { t } from "../../../content/i18n";
+import type { DeckDef } from "../../../content/schema";
+import { needsChoice, validateDeck } from "../../../engine/decks";
+import { deckChangeCost } from "../../../engine/upgrade";
+import { db, gameStore, useGame } from "../../state/context";
+import { problemText } from "../../game/decks";
+import { Avatar } from "../Avatar";
+import { DeckEditArea } from "../DeckEditArea";
+import styles from "./DeckBuilder.module.css";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);
@@ -49,16 +50,16 @@ export function DeckBuilder({
   const cost = deckChangeCost(db, investigator, initial.cards, deck.cards);
   const poor = cost > xp;
   return (
-    <div className="deck-editor">
-      <header className="de-head">
+    <div className={styles.deckEditor}>
+      <header className={styles.deHead}>
         <Avatar code={investigator} size={56} />
-        <div className="de-status">
+        <div className={styles.deStatus}>
           <span className={poor ? "bad" : ""}>
             {tr("upgrade.xp", { left: xp - cost, cost, have: xp })}
           </span>
         </div>
       </header>
-      <div className="de-messages" role="status">
+      <div className={styles.deMessages} role="status">
         {!ready && (
           <div>{tr("catalog.loading", { done: 0, total: Object.keys(db.packs).length })}</div>
         )}
@@ -74,7 +75,7 @@ export function DeckBuilder({
         {poor && <div className="problems">{tr("upgrade.cost", { need: cost, have: xp })}</div>}
         {ready &&
           (problems.length === 0 ? (
-            <div className="de-valid">{tr("deckEditor.valid")}</div>
+            <div className={styles.deValid}>{tr("deckEditor.valid")}</div>
           ) : (
             problems.slice(0, 4).map((p, k) => (
               <div key={k} className="problems">
@@ -91,7 +92,7 @@ export function DeckBuilder({
           onChange={(cards) => setDeck({ ...deck, cards })}
         />
       )}
-      <footer className="de-foot">
+      <footer className={styles.deFoot}>
         <button onClick={onCancel}>{tr("deckEditor.cancel")}</button>
         <button
           className="primary"

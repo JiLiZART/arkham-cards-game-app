@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { cardText, scenarioText, stepText, t } from "../../content/i18n";
-import type { CampaignState } from "../../engine/campaign";
-import { db, gameStore, useGame } from "../state/context";
-import { guideHtml } from "../game/guideText";
-import { Portrait } from "../components/Portrait/index";
-import { moment } from "../hud/SoundLayer";
-import { visibleChoices } from "./campaignView";
+import { cardText, scenarioText, stepText, t } from "../../../content/i18n";
+import type { CampaignState } from "../../../engine/campaign";
+import { db, gameStore, useGame } from "../../state/context";
+import { guideHtml } from "../../game/guideText";
+import { Portrait } from "../../components/Portrait/index";
+import { moment } from "../../hud/SoundLayer";
+import { visibleChoices } from "../campaignView";
+import styles from "./FlowPrompt.module.css";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);
@@ -49,7 +50,7 @@ export function FlowPrompt({ campaign }: { campaign: CampaignState }) {
     case "continue":
     case "upgradeDecks":
       return (
-        <div className="flow-prompt">
+        <div className={styles.flowPrompt}>
           <button className="primary big" onClick={() => answer("continue")}>
             {tr("flow.continue")}
           </button>
@@ -57,9 +58,9 @@ export function FlowPrompt({ campaign }: { campaign: CampaignState }) {
       );
     case "unsupported":
       return (
-        <div className="flow-prompt">
+        <div className={styles.flowPrompt}>
           {head}
-          <small className="flow-unsupported">{tr("flow.unsupported")}</small>
+          <small className={styles.flowUnsupported}>{tr("flow.unsupported")}</small>
           <button className="primary big" onClick={() => answer("continue")}>
             {tr("flow.continue")}
           </button>
@@ -67,11 +68,11 @@ export function FlowPrompt({ campaign }: { campaign: CampaignState }) {
       );
     case "chooseOne":
       return (
-        <div className="flow-prompt">
+        <div className={styles.flowPrompt}>
           {head}
-          <div className="flow-choices">
+          <div className={styles.flowChoices}>
             {visibleChoices(db, campaign, st.choices).map((ch) => (
-              <button key={ch.id} className="flow-choice" onClick={() => answer(ch.id)}>
+              <button key={ch.id} className={styles.flowChoice} onClick={() => answer(ch.id)}>
                 <span
                   dangerouslySetInnerHTML={{ __html: guideHtml(words.choices?.[ch.id] ?? ch.text) }}
                 />
@@ -88,9 +89,9 @@ export function FlowPrompt({ campaign }: { campaign: CampaignState }) {
     case "counter": {
       const value = n ?? st.min;
       return (
-        <div className="flow-prompt">
+        <div className={styles.flowPrompt}>
           {head}
-          <div className="flow-counter">
+          <div className={styles.flowCounter}>
             <button
               aria-label={tr("flow.less")}
               disabled={value <= st.min}
@@ -114,15 +115,15 @@ export function FlowPrompt({ campaign }: { campaign: CampaignState }) {
     case "investigatorChoice":
     case "investigator":
       return (
-        <div className="flow-prompt">
+        <div className={styles.flowPrompt}>
           {st.kind === "investigatorChoice" ? (
             head
           ) : (
             <div className="flow-text">{tr("flow.whoTakes")}</div>
           )}
-          <div className="flow-avatars">
+          <div className={styles.flowAvatars}>
             {active.map((i) => (
-              <button key={i.code} className="flow-avatar" onClick={() => answer(i.code)}>
+              <button key={i.code} className={styles.flowAvatar} onClick={() => answer(i.code)}>
                 <Portrait code={i.code} size={88} />
                 <b>{cardText(db, i.code, locale).name}</b>
               </button>
@@ -142,10 +143,10 @@ export function FlowPrompt({ campaign }: { campaign: CampaignState }) {
             (c) => db.cards[c] && !db.cards[c].subtype,
           );
       return (
-        <div className="flow-prompt">
+        <div className={styles.flowPrompt}>
           {head}
           <small>{tr("flow.pickCards", { min: st.min, max: st.max })}</small>
-          <div className="flow-list">
+          <div className={styles.flowList}>
             {codes.map((code) => (
               <label key={code} className={ticked.includes(code) ? "on" : ""}>
                 <input
@@ -164,9 +165,9 @@ export function FlowPrompt({ campaign }: { campaign: CampaignState }) {
     case "checklist": {
       const max = st.max ?? st.choices.length;
       return (
-        <div className="flow-prompt">
+        <div className={styles.flowPrompt}>
           {head}
-          <div className="flow-list">
+          <div className={styles.flowList}>
             {visibleChoices(db, campaign, st.choices).map((ch) => (
               <label key={ch.id} className={ticked.includes(ch.id) ? "on" : ""}>
                 <input
@@ -186,16 +187,16 @@ export function FlowPrompt({ campaign }: { campaign: CampaignState }) {
     }
     case "sideScenario":
       return (
-        <div className="flow-prompt">
+        <div className={styles.flowPrompt}>
           {head}
           <h3 className="flow-title">{tr("flow.side")}</h3>
-          <div className="flow-choices">
+          <div className={styles.flowChoices}>
             {st.scenarios.map((s) => {
               const can = active.every((i) => i.xp >= s.cost);
               return (
                 <button
                   key={s.scenario}
-                  className="flow-choice"
+                  className={styles.flowChoice}
                   disabled={!can}
                   onClick={() => answer(s.scenario)}
                   title={

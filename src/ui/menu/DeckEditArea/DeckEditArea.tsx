@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { cardText, t } from "../../content/i18n";
-import type { CardDef, DeckDef } from "../../content/schema";
-import { whyNot, whyNotReplace } from "../../engine/decks";
-import { CardFace } from "../components/CardFace/index";
-import { db, gameStore, useGame } from "../state/context";
+import { cardText, t } from "../../../content/i18n";
+import type { CardDef, DeckDef } from "../../../content/schema";
+import { whyNot, whyNotReplace } from "../../../engine/decks";
+import { CardFace } from "../../components/CardFace/index";
+import { db, gameStore, useGame } from "../../state/context";
 import {
   basicWeaknesses,
   builderPool,
@@ -12,10 +12,12 @@ import {
   replaceCard,
   withWeakness,
   type PoolFilter,
-} from "../game/decks";
-import { Icon } from "../components/Icon/index";
-import { isIcon } from "../assets/icons";
-import { moment } from "../hud/SoundLayer";
+} from "../../game/decks";
+import { Icon } from "../../components/Icon/index";
+import { isIcon } from "../../assets/icons";
+import { moment } from "../../hud/SoundLayer";
+import { cx } from "../../components/cx";
+import styles from "./DeckEditArea.module.css";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);
@@ -44,15 +46,15 @@ function GridCard({
   const locale = useGame((s) => s.locale);
   return (
     <div
-      className={`dk-card ${lit ? "lit" : ""} ${dim ? "dim" : ""}`}
+      className={cx(styles.dkCard, lit ? styles.lit : "", dim ? styles.dim : "")}
       data-card-code={card.code}
       onClick={onClick}
       title={cardText(db, card.code, locale).name}
     >
       <CardFace code={card.code} locale={locale} remote />
-      {n !== undefined && n > 0 && <b className="dk-copies">×{n}</b>}
-      {why && <small className="dk-why">{why}</small>}
-      {children && <div className="dk-actions">{children}</div>}
+      {n !== undefined && n > 0 && <b className={styles.dkCopies}>×{n}</b>}
+      {why && <small className={styles.dkWhy}>{why}</small>}
+      {children && <div className={styles.dkActions}>{children}</div>}
     </div>
   );
 }
@@ -128,12 +130,12 @@ export function DeckEditArea({
   };
   const into = replacing ? db.cards[replacing] : null;
   return (
-    <div className={`dk-area ${replacing ? "replacing" : ""}`}>
-      <section className="dk-deck">
-        <header className="dk-head">
+    <div className={cx(styles.dkArea, replacing ? "replacing" : "")}>
+      <section className={styles.dkDeck}>
+        <header className={styles.dkHead}>
           <b>{tr("deckEditor.size", { n: size, size: inv?.deckSize ?? 30 })}</b>
           {weakness && (
-            <label className="dk-weakness">
+            <label className={styles.dkWeakness}>
               {tr("deckEditor.weakness")}
               <select
                 value={chosenWeakness}
@@ -153,7 +155,7 @@ export function DeckEditArea({
           )}
         </header>
         {into && (
-          <div className="dk-replace-bar" role="status">
+          <div className={styles.dkReplaceBar} role="status">
             <span>{tr("deck.replaceWith", { card: nameOf(into) })}</span>
             <button onClick={() => setReplacing(null)}>{tr("deckEditor.cancel")}</button>
           </div>
@@ -164,11 +166,11 @@ export function DeckEditArea({
           );
           if (!rows.length) return null;
           return (
-            <div key={type} className="dk-group">
+            <div key={type} className={styles.dkGroup}>
               <h4>
                 {tr(`deckEditor.${type}`)} · {rows.reduce((n, x) => n + x.n, 0)}
               </h4>
-              <div className="dk-grid">
+              <div className={styles.dkGrid}>
                 {rows.map(({ card, n }) => {
                   const target = replacing ? !whyNotReplace(db, deck, card.code, replacing) : false;
                   return (
@@ -199,9 +201,9 @@ export function DeckEditArea({
           );
         })}
         {fixed.length > 0 && (
-          <div className="dk-group">
+          <div className={styles.dkGroup}>
             <h4>{tr("deckEditor.always")}</h4>
-            <div className="dk-grid">
+            <div className={styles.dkGrid}>
               {fixed.map(({ card, n }) => (
                 <GridCard key={card.code} card={card} n={n} dim={!!replacing} />
               ))}
@@ -209,8 +211,8 @@ export function DeckEditArea({
           </div>
         )}
       </section>
-      <section className="dk-pool">
-        <header className="dk-filters">
+      <section className={styles.dkPool}>
+        <header className={styles.dkFilters}>
           <input
             type="search"
             value={filter.query}
@@ -277,9 +279,9 @@ export function DeckEditArea({
               </button>
             ))}
           </div>
-          <small className="dk-count">{tr("deckEditor.pool", { n: pool.length })}</small>
+          <small className={styles.dkCount}>{tr("deckEditor.pool", { n: pool.length })}</small>
         </header>
-        <div className="dk-grid">
+        <div className={styles.dkGrid}>
           {pool.slice(0, shown).map((card) => {
             const why = reason(whyNot(db, deck, card.code));
             return (
@@ -317,7 +319,7 @@ export function DeckEditArea({
           })}
         </div>
         {shown < pool.length && (
-          <button className="link-btn dk-more" onClick={() => setShown(shown + PAGE)}>
+          <button className={cx("link-btn", styles.dkMore)} onClick={() => setShown(shown + PAGE)}>
             {tr("catalog.more", { n: shown, total: pool.length })}
           </button>
         )}

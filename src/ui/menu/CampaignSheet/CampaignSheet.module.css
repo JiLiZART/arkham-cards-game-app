@@ -1,0 +1,116 @@
+.wz-more {
+  align-self: flex-start;
+}
+.wz-more {
+  min-height: 36px;
+}
+:global(.wz-camp-sheet) {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 2px solid var(--paper-rule);
+  border-radius: 14px;
+  background: #ece9e0e6;
+  color: var(--ink);
+}
+:global(.wz-camp-sheet) :global(.wz-sheet-head) {
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.wz-camp-close {
+  display: none;
+  width: 44px;
+  height: 44px;
+  font-size: 24px;
+  padding: 0;
+}
+.wz-quote,
+.wz-quote-more {
+  white-space: pre-line;
+}
+.wz-quote {
+  font-style: italic;
+}
+.wz-chapters {
+  margin: 6px 0 0;
+  font: 20px var(--f-name);
+  font-weight: normal;
+}
+.wz-chapter-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.wz-chapter {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.wz-chapter-name {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.wz-chapter-name small {
+  color: #465b62;
+  font-style: italic;
+}
+.wz-chapter-n {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.6em;
+  height: 1.6em;
+  border-radius: 50%;
+  background: #73ada5;
+  color: #0e1416;
+  font: 14px/1 var(--f-body);
+}
+.wz-chapter-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+.wz-chapter-cards img {
+  width: 100%;
+  aspect-ratio: 88 / 63;
+  object-fit: cover;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 3px 8px #0005;
+  display: block;
+}
+.wz-interlude {
+  padding-left: 4px;
+  opacity: 0.9;
+}
+.wz-interlude .wz-chapter-n {
+  background: transparent;
+  color: #465b62;
+}
+@media (max-width: 900px) {
+  :global(.wz-camp):global(.sheet-open) .wz-camp-close {
+    display: inline-grid;
+    place-items: center;
+  }
+}
+.wz-chapter-card {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+  border-radius: 8px;
+  min-height: 0;
+}
+:global(.desk) .wz-chapter-card,
+:global(.desk) .wz-chapter-card:hover:not(:disabled) {
+  background: none;
+  border: 0;
+}
+.wz-chapter-card:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}

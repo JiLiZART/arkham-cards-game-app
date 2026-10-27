@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { UiIcon } from "../components/Icon/index";
-import { locales, t } from "../../content/i18n";
-import { db, gameStore, useGame } from "../state/context";
-import { safeStorage, type Pace } from "../state/store";
-import { TIPS_KEY } from "../game/tips";
+import { UiIcon } from "../../components/Icon/index";
+import { locales, t } from "../../../content/i18n";
+import { db, gameStore, useGame } from "../../state/context";
+import { safeStorage, type Pace } from "../../state/store";
+import { TIPS_KEY } from "../../game/tips";
+import { cx } from "../../components/cx";
+import styles from "./Settings.module.css";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);
@@ -21,9 +23,9 @@ export function Settings() {
   const { setLocale, setTapDecks, setDrawByHand, setPace, setTipsOn, setVolume } =
     gameStore.getState();
   return (
-    <div className="screen settings-screen">
+    <div className={cx("screen", styles.settingsScreen)}>
       <h1>{tr("settings.title")}</h1>
-      <section className="settings">
+      <section className={styles.settings}>
         <label>
           {tr("menu.language")}{" "}
           <select value={locale} onChange={(e) => setLocale(e.target.value)}>
@@ -66,7 +68,7 @@ export function Settings() {
               ))}
             </select>
           </label>
-          <small id="pace-hint" className="set-hint">
+          <small id="pace-hint" className={styles.setHint}>
             {tr(`pace.${pace}.hint`)}
           </small>
         </fieldset>
@@ -89,7 +91,7 @@ export function Settings() {
         </fieldset>
         <fieldset>
           <legend>{tr("settings.sound")}</legend>
-          <label className="slider">
+          <label className={styles.slider}>
             {tr("menu.music")}{" "}
             <input
               type="range"
@@ -100,7 +102,7 @@ export function Settings() {
             />{" "}
             <span>{musicVolume}</span>
           </label>
-          <label className="slider">
+          <label className={styles.slider}>
             {tr("menu.effects")}{" "}
             <input
               type="range"

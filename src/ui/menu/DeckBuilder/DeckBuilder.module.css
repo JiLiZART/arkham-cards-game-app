@@ -1,0 +1,53 @@
+.deck-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+  font-family: var(--f-body);
+}
+.de-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.de-status {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 20px;
+}
+.de-status :global(.ok) {
+  color: var(--playable);
+}
+.de-status :global(.bad) {
+  color: var(--bad);
+}
+.de-messages {
+  min-height: 24px;
+}
+.de-valid {
+  color: var(--playable);
+}
+.de-foot {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+  padding-top: 6px;
+}
+.de-foot button {
+  min-height: 48px;
+  min-width: 110px;
+}
+:global(.desk) .deck-editor input[type="search"] {
+  background: var(--slate);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+}
+
+/* the deck step: investigators, the decks as tabs, the deck and the cards to add as grids */
+:global(.screen):global(.wizard):has(.deck-editor) {
+  max-width: 1720px;
+}

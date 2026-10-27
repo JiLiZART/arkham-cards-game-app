@@ -9,7 +9,7 @@ import { Icon } from "../../components/Icon/index";
 import { isIcon } from "../../assets/icons";
 import { useLayout } from "../../state/layoutMode";
 import { cycleName } from "../../menu/wizard";
-import { CardPage, WorksBadge } from "../CardPage";
+import { CardPage, WorksBadge } from "../CardPage/index";
 import {
   catalogCards,
   cyclesOfCards,

@@ -134,6 +134,7 @@ Vitest doesn't process CSS here, so a module import in a test returns its own ke
 - [Large import churn makes the history hard to follow] → Use `git mv` for moves and keep moves and edits in separate commits, so blame follows the files.
 - [The impeccable design sidecar (`.impeccable/`, `.agents/context/design.md`) names classes and `styles.css`] → Update those references in the final step.
 - [Phone layout breaks without anyone noticing] → Every step's screenshot set includes the phone layout.
+- [Two modules' rules tie on specificity and their import order now decides, where file order used to: found in the deck builder, whose `.deck-editor input[type="search"]` started beating DeckEditArea's later rule] → Besides the screenshots, every step compares the computed style of every element on every captured screen with the baseline; a rule that only ever lost its tie is deleted.
 
 ## Migration Plan
 
@@ -146,6 +147,6 @@ Each step is a separate commit that builds and passes tests, so the work can pau
 
 ## Open Questions
 
-- Whether `menu/` and `catalog/` share enough styles (the noir panels, the "brass plate") to warrant a shared `components/` piece or should stay global primitives. Settle while moving `menu/`.
+- ~~Whether `menu/` and `catalog/` share enough styles to warrant a shared piece.~~ Settled while moving `menu/`: the noir layer's `.desk …` rules went to each owning component's module as `:global(.desk) .x`; `desk` is a public hook class on the menu root, and no shared menu component was needed.
 - Whether `scene/` needs any module at all, or keeps its few HTML overlays' styles global.
 - No in-force ADR needs revisiting. ADR-0005 holds as long as modules reach phone styles through `:global(.game.phone)` and add no breakpoints of their own.

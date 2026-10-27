@@ -1,0 +1,80 @@
+.notice {
+  background: #263135;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+.result-win {
+  color: var(--ok);
+}
+.result-lose {
+  color: var(--bad);
+}
+.log-investigators {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+:global(.log-inv) {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border: 1px solid #263135;
+  border-radius: 14px;
+  background: #0e1213;
+  min-width: 260px;
+}
+:global(.log-inv).out {
+  opacity: 0.55;
+  filter: grayscale(0.8);
+}
+.log-inv-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.log-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  color: var(--muted);
+  font-size: 15px;
+}
+.log-status {
+  color: var(--bad);
+  text-transform: capitalize;
+}
+
+:global(.desk) :global(.log-inv) {
+  background: var(--paper-leaf);
+  border-color: var(--paper-rule);
+  color: var(--ink);
+}
+.flow-read {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.flow-story {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+/* what the log records carries a stamped tag, as the case file's notes do */
+.flow-recorded {
+  font: 16px var(--f-body);
+}
+.flow-recorded small {
+  display: inline-block;
+  padding: 1px 7px;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  margin-right: 8px;
+}
+.log-crossed {
+  text-decoration: line-through;
+  opacity: 0.65;
+}

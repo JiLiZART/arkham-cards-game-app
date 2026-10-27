@@ -388,17 +388,6 @@ select {
   display: inline-block;
   margin: 6px 16px 6px 0;
 }
-.screen label.slider input[type="range"] {
-  width: 160px;
-  vertical-align: middle;
-  accent-color: var(--accent);
-}
-.screen label.slider span {
-  display: inline-block;
-  min-width: 2.2em;
-  text-align: right;
-  color: var(--muted);
-}
 .mute-btn {
   display: inline-flex;
   align-items: center;
@@ -410,27 +399,9 @@ select {
 .mute-btn.muted {
   color: var(--muted);
 }
-.badge {
-  background: var(--accent);
-  color: #000;
-  border-radius: 6px;
-  padding: 0 6px;
-  font-size: 12px;
-}
 .problems {
   color: var(--bad);
   margin: 8px 0;
-}
-.notice {
-  background: #263135;
-  padding: 8px 12px;
-  border-radius: 8px;
-}
-.result-win {
-  color: var(--ok);
-}
-.result-lose {
-  color: var(--bad);
 }
 table {
   border-collapse: collapse;
@@ -3285,37 +3256,6 @@ footer {
   background-blend-mode: normal, color, normal;
   max-width: none;
 }
-.title-body h1 {
-  color: var(--ink);
-  font: clamp(44px, 7vw, 76px) / 1 var(--f-display);
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  text-shadow: 0 2px 18px #000;
-  margin: 0 0 12px;
-}
-/* a rule under the name: a hairline that ends in a curl on either side */
-.title-body h1::after {
-  content: "";
-  display: block;
-  width: min(420px, 80vw);
-  height: 16px;
-  margin: 18px auto 30px;
-  background:
-    var(--curl) left center / 40px 16px no-repeat,
-    var(--curl-r) right center / 40px 16px no-repeat,
-    linear-gradient(var(--iron-line), var(--iron-line)) center / calc(100% - 80px) 1px no-repeat;
-}
-.title-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  width: min(360px, 90vw);
-  margin: 0 auto;
-}
-.title-buttons .big {
-  min-height: 56px;
-  font-size: 22px;
-}
 .title footer {
   position: absolute;
   bottom: 10px;
@@ -3335,17 +3275,6 @@ footer {
   cursor: pointer;
   font-size: 16px;
 }
-.settings-screen .settings label {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 44px;
-  margin: 0;
-}
-.settings-screen .settings button,
-.settings-screen .settings select {
-  min-height: 44px;
-}
 .screen.wizard {
   display: flex;
   flex-direction: column;
@@ -3363,23 +3292,6 @@ footer {
 .wz-head h1 {
   margin: 0;
   font-size: clamp(22px, 5vw, 34px);
-}
-.wz-dots {
-  display: flex;
-  gap: 6px;
-}
-.wz-dots i {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: #263135;
-}
-.wz-dots i.done {
-  background: #657378;
-}
-.wz-dots i.on {
-  background: var(--accent);
-  box-shadow: 0 0 8px #73ada588;
 }
 .wz-body {
   flex: 1;
@@ -3403,43 +3315,10 @@ footer {
   min-height: 48px;
   min-width: 120px;
 }
-.wz-more {
-  align-self: flex-start;
-}
-.wz-more {
-  min-height: 36px;
-}
 .wz-error {
   align-self: center;
   color: #e08a7a;
   font: 15px/1.3 var(--f-body);
-}
-.wz-tile.selected,
-.bag-card.selected {
-  border-color: var(--accent);
-  background: #171f22;
-  box-shadow: 0 0 14px #73ada555;
-}
-.wz-tiles {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 12px;
-}
-.wz-tile {
-  padding: 10px 6px;
-  border: 2px solid #263135;
-  border-radius: 14px;
-  background: #0e1213;
-  color: var(--ink);
-  min-height: 44px;
-  cursor: pointer;
-}
-.wz-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-  margin: 0 0 12px;
 }
 .wz-chips {
   display: flex;
@@ -3459,158 +3338,6 @@ footer {
   border-color: var(--accent);
   background: var(--ctl-bg-on);
 }
-.wz-filters select,
-.wz-filters input {
-  min-height: 44px;
-  padding: 0 10px;
-  border: 2px solid var(--ctl-line);
-  border-radius: 10px;
-  background: var(--ctl-bg);
-  color: var(--ink);
-  font: inherit;
-}
-.wz-filters input {
-  flex: 1 1 160px;
-}
-.wz-tile.needs-deck {
-  opacity: 0.55;
-  cursor: not-allowed;
-}
-.wz-note {
-  color: var(--accent);
-  text-transform: none;
-  font-size: 0.78em;
-  text-align: center;
-  max-width: 120px;
-}
-.wz-avatar {
-  position: relative;
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-}
-.wz-avatar small {
-  color: var(--muted);
-  text-transform: capitalize;
-}
-.wz-badge {
-  position: absolute;
-  top: -6px;
-  right: -8px;
-  font: bold 15px/1.3 var(--f-body);
-  padding: 1px 8px;
-  background: #1e2c31;
-  color: #d5caad;
-  border: 1px solid #73ada5;
-  border-radius: 999px;
-  box-shadow: 0 2px 6px #0008;
-}
-.wz-bags {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr));
-  gap: 16px;
-}
-.bag-card {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 12px;
-  border: 2px solid #263135;
-  border-radius: 14px;
-  background: #0e1213;
-  color: var(--ink);
-  text-align: left;
-  min-height: 44px;
-  font: inherit;
-}
-button.bag-card {
-  cursor: pointer;
-}
-.bag-head {
-  display: flex;
-  flex-direction: column;
-}
-.bag-head b {
-  font: 24px var(--f-display);
-  color: var(--accent);
-  font-weight: normal;
-}
-.bag-head small {
-  color: var(--muted);
-}
-.bag-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 8px;
-}
-.bag-group {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-}
-.bag-group b {
-  font-size: 15px;
-  color: var(--muted);
-}
-.bag-average {
-  color: var(--ink);
-  font-variant-numeric: lining-nums;
-}
-.wz-order {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 18px;
-  justify-content: center;
-}
-.wz-ready .bag-card {
-  width: min(420px, 100%);
-}
-.wz-first {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  font-size: 20px;
-}
-.wz-first small {
-  color: var(--muted);
-}
-.log-investigators {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-}
-.log-inv {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 14px;
-  border: 1px solid #263135;
-  border-radius: 14px;
-  background: #0e1213;
-  min-width: 260px;
-}
-.log-inv.out {
-  opacity: 0.55;
-  filter: grayscale(0.8);
-}
-.log-inv-text {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.log-stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 12px;
-  color: var(--muted);
-  font-size: 15px;
-}
-.log-status {
-  color: var(--bad);
-  text-transform: capitalize;
-}
 .screen.log .wz-body section {
   margin: 14px 0;
 }
@@ -3625,62 +3352,6 @@ button.bag-card {
   min-height: 44px;
   padding: 8px 20px;
   font-size: 20px;
-}
-button.danger {
-  border-color: var(--bad);
-  color: var(--bad);
-}
-.deck-editor {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  min-height: 0;
-  font-family: var(--f-body);
-}
-.de-head {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-.de-status {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  font-size: 20px;
-}
-.de-status .ok {
-  color: var(--playable);
-}
-.de-status .bad {
-  color: var(--bad);
-}
-.deck-editor input[type="search"] {
-  min-height: 44px;
-  font: inherit;
-  color: var(--ink);
-  background: #090c0d;
-  border: 1px solid var(--rule);
-  border-radius: 6px;
-  padding: 4px 8px;
-}
-.de-messages {
-  min-height: 24px;
-}
-.de-valid {
-  color: var(--playable);
-}
-.de-foot {
-  display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-  align-items: center;
-  flex-wrap: wrap;
-  padding-top: 6px;
-}
-.de-foot button {
-  min-height: 48px;
-  min-width: 110px;
 }
 .side-panel.debug .report-paste textarea,
 .side-panel.debug .report-copy textarea {
@@ -4202,32 +3873,6 @@ button.danger {
   background-attachment: fixed;
   color: var(--ink);
 }
-/* the paper notes on the desk: what you would write down (tiles, sheets, the log, settings, the rules) takes the
-   paper and its dark ink; everything around it stays the night's */
-.desk
-  :is(
-    .screen section,
-    .wz-campaign,
-    .wz-tile,
-    .wz-ctile,
-    .wz-deck,
-    .bag-card,
-    .log-inv,
-    .dk-inv,
-    .wz-sheet,
-    .wz-camp-sheet,
-    .wz-ready
-  ) {
-  --ink: var(--paper-ink);
-  --muted: var(--paper-muted);
-  --accent: var(--paper-accent);
-  --bad: var(--oxblood);
-  --ctl-bg: var(--paper-button);
-  --ctl-bg-on: var(--paper-chosen);
-  --ctl-line: var(--paper-rule);
-  color: var(--ink);
-  color-scheme: light;
-}
 
 /* ---- the card catalog ---- */
 /* the catalog fills the window: the header, the tabs and the footer stay, only the list and the page scroll */
@@ -4243,25 +3888,10 @@ button.danger {
   flex: none;
 }
 
-.desk .screen section,
-.desk .wz-tile,
-.desk .bag-card,
-.desk .log-inv {
+.desk .screen section {
   background: var(--paper-leaf);
   border-color: var(--paper-rule);
   color: var(--ink);
-}
-.desk .wz-tile.selected,
-.desk .bag-card.selected {
-  background: var(--paper-chosen);
-  border-color: var(--paper-accent);
-  box-shadow: 0 0 14px #1f575266;
-}
-.desk .deck-editor input[type="search"],
-.desk .wz-filters input {
-  background: var(--slate);
-  color: var(--ink);
-  border: 1px solid var(--rule);
 }
 .desk .link-btn {
   background: none;
@@ -4352,27 +3982,6 @@ button.danger {
   border-radius: 50%;
   background: radial-gradient(#000d 0, #000b 55%, transparent 72%);
 }
-
-/* the investigator step: the list with its filters, and the sidebar with the one hovered or last tapped */
-.screen.wizard:has(.wz-inv) {
-  max-width: 1440px;
-}
-.wz-inv {
-  display: flex;
-  gap: 18px;
-  align-items: flex-start;
-}
-.wz-inv-main {
-  flex: 1;
-  min-width: 0;
-}
-.wz-inv-side {
-  flex: 0 0 340px;
-  position: sticky;
-  top: 0;
-  max-height: calc(100dvh - 170px);
-  overflow-y: auto;
-}
 .wz-class {
   width: 48px;
   padding: 0;
@@ -4383,32 +3992,6 @@ button.danger {
   box-shadow:
     0 0 0 2px var(--accent),
     0 0 10px #73ada588;
-}
-/* .screen label would make it inline-block: the label and its select keep their gap */
-.screen .wz-sort {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.wz-tile.selected {
-  border-color: var(--paper-accent);
-  border-width: 3px;
-  box-shadow:
-    0 0 0 2px #73ada5,
-    0 0 16px #354e5788;
-}
-.wz-tile.focused:not(.selected) {
-  border-color: #4d847c;
-}
-.wz-sheet {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 12px;
-  border: 2px solid var(--paper-rule);
-  border-radius: 14px;
-  background: #ece9e0e6;
-  color: var(--ink);
 }
 .wz-sheet-head {
   display: flex;
@@ -4422,41 +4005,9 @@ button.danger {
 .wz-sheet-head i {
   color: #465b62;
 }
-.wz-sheet-card img,
-.wz-sheet-card .text-face {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px #0005;
-}
-.wz-sheet-stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 12px;
-  align-items: center;
-  font-size: 20px;
-}
-.wz-sheet-traits {
-  font-style: italic;
-  color: #465b62;
-}
 .wz-sheet-text {
   margin: 0;
   font: 16px/1.4 var(--f-body);
-}
-.wz-sheet-back {
-  border-top: 1px solid var(--paper-rule);
-  padding-top: 6px;
-  font-size: 14px;
-}
-.wz-sheet-meta {
-  color: #465b62;
-}
-@media (max-width: 900px) {
-  .wz-inv-side {
-    display: none;
-  }
 }
 
 /* headings on the desk: Prata in bone on the night; on a paper note they take its ink */
@@ -4477,266 +4028,6 @@ button.danger {
 .desk h3 {
   font-size: 22px;
 }
-
-/* the deck step: investigators, the decks as tabs, the deck and the cards to add as grids */
-.screen.wizard:has(.dk),
-.screen.wizard:has(.deck-editor) {
-  max-width: 1720px;
-}
-.dk {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  min-height: 0;
-}
-.dk-invs {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-.dk-inv {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-  padding: 6px 12px;
-  border: 2px solid var(--paper-rule);
-  border-radius: 14px;
-  background: #ece9e0cc;
-  min-height: 44px;
-}
-.dk-inv.on {
-  border-color: var(--paper-accent);
-  border-width: 3px;
-  background: var(--paper-chosen);
-  box-shadow: 0 0 12px #354e5766;
-}
-.dk-inv small.ok {
-  color: #2f7a35;
-}
-.dk-inv small.bad {
-  color: var(--oxblood);
-}
-.dk-tabs {
-  display: flex;
-  align-items: flex-end;
-  gap: 2px;
-  border-bottom: 2px solid var(--paper-rule);
-  overflow-x: auto;
-}
-.dk-tab {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  padding: 0 4px 0 0;
-  border: 2px solid var(--rule);
-  border-bottom: 0;
-  border-radius: 10px 10px 0 0;
-  background: var(--tab);
-  color: var(--ink);
-  margin-bottom: -2px;
-  min-height: 40px;
-}
-/* the open deck's tab is the paper of the sheets under it */
-.dk-tab.on {
-  --ink: var(--paper-ink);
-  background: var(--paper-leaf);
-  border-color: var(--paper-rule);
-  color: var(--paper-ink);
-}
-.dk-tab.bad .dk-tab-name {
-  color: var(--oxblood);
-}
-.dk-tab .dk-tab-name,
-.dk-tab .dk-tab-close {
-  background: none;
-  border: 0;
-  min-height: 40px;
-}
-.dk-tab-name {
-  padding: 0 12px;
-  white-space: nowrap;
-  max-width: 260px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.dk-tab-close {
-  width: 32px;
-  padding: 0;
-  color: var(--paper-muted);
-  font-size: 18px;
-}
-.dk-tab-close.confirm {
-  color: var(--oxblood);
-  font-weight: bold;
-}
-.dk-tab-add {
-  width: 44px;
-  justify-content: center;
-  font-size: 24px;
-  font-weight: bold;
-  padding: 0;
-}
-.dk-rename {
-  min-height: 36px;
-  margin: 2px;
-  font: inherit;
-}
-.dk-problems {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.dk-area {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 16px;
-  min-height: 0;
-}
-.dk-deck,
-.dk-pool {
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.dk-head,
-.dk-filters {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  padding: 6px 0;
-  background: var(--paper-leaf);
-}
-.dk-head b {
-  font-size: 20px;
-}
-.dk-weakness {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin-left: auto;
-}
-.dk-filters input[type="search"] {
-  flex: 1 1 200px;
-  min-height: 44px;
-  padding: 0 10px;
-  border: 2px solid #63828e;
-  border-radius: 10px;
-  background: var(--paper-leaf);
-  color: var(--ink);
-  font: inherit;
-}
-.dk-count {
-  color: var(--muted);
-}
-.dk-group h4 {
-  margin: 6px 0;
-  font: 18px var(--f-display);
-  color: var(--paper-ink);
-}
-.dk-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
-  gap: 10px;
-}
-.dk-card {
-  position: relative;
-  border-radius: 8px;
-  transition:
-    transform 0.12s,
-    filter 0.12s;
-}
-.dk-card img,
-.dk-card .text-face {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 8px;
-  box-shadow: 0 3px 8px #0006;
-}
-.dk-card:hover {
-  transform: translateY(-3px);
-}
-.dk-copies {
-  position: absolute;
-  right: 4px;
-  top: 4px;
-  padding: 0 7px;
-  border-radius: 999px;
-  background: #1e2c31;
-  color: #d5caad;
-  border: 1px solid #73ada5;
-  font-size: 15px;
-}
-.dk-why {
-  display: block;
-  margin-top: 3px;
-  font-size: 12px;
-  line-height: 1.2;
-  color: #8a2a1a;
-}
-.dk-actions {
-  position: absolute;
-  inset: auto 0 0 0;
-  display: none;
-  flex-direction: column;
-  gap: 4px;
-  padding: 6px;
-  background: linear-gradient(transparent, #000c 40%);
-  border-radius: 0 0 8px 8px;
-}
-.dk-card:hover .dk-actions,
-.dk-card:focus-within .dk-actions {
-  display: flex;
-}
-.dk-actions button {
-  min-height: 36px;
-  font-size: 14px;
-}
-.dk-card.lit {
-  cursor: pointer;
-  box-shadow:
-    0 0 0 3px #2f9a3a,
-    0 0 16px #2f9a3acc;
-}
-.dk-card.dim {
-  filter: brightness(0.55) saturate(0.6);
-}
-.dk-replace-bar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 6px 10px;
-  border: 2px solid #2f9a3a;
-  border-radius: 10px;
-  background: #e7f4e1;
-}
-.dk-more {
-  align-self: center;
-}
-@media (max-width: 900px) {
-  .dk-area {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* the campaign flow on the campaign screen (ADR-0011) */
-.flow-read,
-.flow-prompt {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.flow-story {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
 .flow-title {
   margin: 0;
   font: 24px var(--f-display);
@@ -4747,93 +4038,8 @@ button.danger {
   font: 18px/1.5 var(--f-body);
   max-width: 70ch;
 }
-.flow-text i,
-.flow-choice i {
+.flow-text i {
   opacity: 0.9;
-}
-/* what the log records carries a stamped tag, as the case file's notes do */
-.flow-recorded {
-  font: 16px var(--f-body);
-}
-.flow-recorded small {
-  display: inline-block;
-  padding: 1px 7px;
-  border: 1px solid currentColor;
-  border-radius: 3px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--accent);
-  margin-right: 8px;
-}
-.flow-choices {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  max-width: 70ch;
-}
-.flow-choice {
-  text-align: left;
-  min-height: 48px;
-  padding: 10px 14px;
-  font: 17px/1.4 var(--f-body);
-}
-.flow-counter {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-.flow-counter output {
-  min-width: 2ch;
-  text-align: center;
-  font: 28px var(--f-display);
-}
-.flow-counter button {
-  width: 48px;
-  height: 48px;
-  font-size: 24px;
-}
-.flow-avatars {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 14px;
-}
-.flow-avatar {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  min-height: 48px;
-  padding: 10px 14px;
-}
-.flow-list {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  max-height: 40vh;
-  overflow: auto;
-}
-.flow-list label {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  padding: 6px 10px;
-  border-radius: 8px;
-  cursor: pointer;
-}
-.flow-list label.on {
-  background: #151e2155;
-  outline: 1px solid var(--accent);
-}
-.flow-unsupported {
-  color: #85b7b1;
-  font-style: italic;
-}
-.desk .flow-unsupported {
-  color: var(--paper-accent);
-}
-.log-crossed {
-  text-decoration: line-through;
-  opacity: 0.65;
 }
 .screen.log .wz-foot .primary {
   max-width: 100%;
@@ -4843,232 +4049,14 @@ button.danger {
   .flow-text {
     font-size: 17px;
   }
-  .flow-choice,
-  .flow-prompt > .primary {
-    width: 100%;
-  }
-  .flow-avatars {
-    justify-content: center;
-  }
   .screen.log .wz-foot {
     flex-wrap: wrap;
   }
   .screen.log .wz-foot .primary {
     flex: 1 1 100%;
   }
-  .flow-prompt {
-    position: sticky;
-    bottom: 0;
-    padding: 10px 0;
-    background: linear-gradient(transparent, #e6e2d6 24%);
-  }
-}
-
-/* the campaign picker: filters, a grid of tiles with the first scenario's card, the chapters in the sidebar */
-.screen.wizard:has(.wz-camp) {
-  max-width: 1440px;
-}
-.wz-ctiles {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 12px;
-}
-.wz-ctile {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  padding: 8px;
-  border: 2px solid #263135;
-  border-radius: 14px;
-  background: #0e1213;
-  color: var(--ink);
-  cursor: pointer;
-  min-height: 44px;
-  text-align: center;
-}
-.wz-ctile img {
-  width: 100%;
-  aspect-ratio: 88 / 63;
-  object-fit: cover;
-  border-radius: 8px;
-  background: #0003;
-}
-.wz-ctile b {
-  font: 18px/1.15 var(--f-name);
-  font-weight: normal;
-  color: var(--accent);
-}
-.wz-ctile small {
-  color: var(--muted);
-  font: 14px var(--f-body);
-}
-.wz-ctile.selected {
-  border-color: var(--accent);
-  background: #171f22;
-  box-shadow: 0 0 14px #73ada555;
-}
-.desk .wz-ctile {
-  background: var(--paper-leaf);
-  border-color: var(--paper-rule);
-}
-.desk .wz-ctile b {
-  color: #25363c;
-}
-.desk .wz-ctile.selected {
-  background: var(--paper-chosen);
-  border-color: var(--paper-accent);
-  box-shadow: 0 0 14px #354e5766;
-}
-.wz-camp .wz-filters input[type="search"] {
-  flex: 1 1 200px;
-}
-.wz-camp-side {
-  flex-basis: 420px;
-}
-/* one scroll area per pane: the grid and the sidebar each scroll on their own, the wizard's body doesn't scroll around them */
-.wz-body:has(> .wz-camp) {
-  overflow: hidden;
-  display: flex;
-}
-.wz-camp {
-  flex: 1;
-  min-height: 0;
-  align-items: stretch;
-}
-.wz-camp .wz-inv-main {
-  overflow-y: auto;
-  padding-right: 6px;
-}
-.wz-camp .wz-camp-side {
-  position: static;
-  max-height: none;
-  overflow-y: auto;
-}
-.wz-camp-sheet {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 12px;
-  border: 2px solid var(--paper-rule);
-  border-radius: 14px;
-  background: #ece9e0e6;
-  color: var(--ink);
-}
-.wz-camp-sheet .wz-sheet-head {
-  justify-content: space-between;
-  align-items: flex-start;
-}
-.wz-camp-close {
-  display: none;
-  width: 44px;
-  height: 44px;
-  font-size: 24px;
-  padding: 0;
-}
-.wz-quote,
-.wz-quote-more {
-  white-space: pre-line;
-}
-.wz-quote {
-  font-style: italic;
-}
-.wz-chapters {
-  margin: 6px 0 0;
-  font: 20px var(--f-name);
-  font-weight: normal;
-}
-.wz-chapter-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.wz-chapter {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-.wz-chapter-name {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-}
-.wz-chapter-name small {
-  color: #465b62;
-  font-style: italic;
-}
-.wz-chapter-n {
-  display: inline-grid;
-  place-items: center;
-  min-width: 1.6em;
-  height: 1.6em;
-  border-radius: 50%;
-  background: #73ada5;
-  color: #0e1416;
-  font: 14px/1 var(--f-body);
-}
-.wz-chapter-cards {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px;
-}
-.wz-chapter-cards img {
-  width: 100%;
-  aspect-ratio: 88 / 63;
-  object-fit: cover;
-  height: auto;
-  border-radius: 8px;
-  box-shadow: 0 3px 8px #0005;
-  display: block;
-}
-.wz-interlude {
-  padding-left: 4px;
-  opacity: 0.9;
-}
-.wz-interlude .wz-chapter-n {
-  background: transparent;
-  color: #465b62;
 }
 /* a narrow screen: the sidebar opens over the grid */
-@media (max-width: 900px) {
-  .wz-camp .wz-camp-side {
-    display: none;
-  }
-  .wz-camp.sheet-open .wz-camp-side {
-    display: block;
-    position: fixed;
-    inset: 0;
-    z-index: 61;
-    max-height: none;
-    padding: 12px;
-    overflow-y: auto;
-    background: #0b0f10f2;
-  }
-  .wz-camp.sheet-open .wz-camp-close {
-    display: inline-grid;
-    place-items: center;
-  }
-}
-.wz-chapter-card {
-  padding: 0;
-  border: 0;
-  background: none;
-  cursor: zoom-in;
-  border-radius: 8px;
-  min-height: 0;
-}
-.desk .wz-chapter-card,
-.desk .wz-chapter-card:hover:not(:disabled) {
-  background: none;
-  border: 0;
-}
-.wz-chapter-card:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
 /* a dialog opened from a menu screen is the game's dark dialog: it keeps the night's colours even inside a paper note */
 .desk .modal {
   --ink: #f1efe4;
@@ -5282,130 +4270,10 @@ button.danger {
     transition: none;
   }
 }
-
-/* ── Menus: the night outside the case file. The title's buttons are hairline ovals over the cover, the primary a teal
-   enamel oval closed by the ironwork caps; on the desk, chosen chips are inked stamps on the paper notes. */
-.title-buttons button:not(.link-btn) {
-  position: relative;
-  background: #0b1418b3;
-  border: 1px solid #c9c6b873;
-  border-radius: 999px;
-  box-shadow: 0 3px 10px #000c;
-  font: 500 19px/1.2 var(--f-body);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink);
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.1s ease;
-}
-.title-buttons button:not(.link-btn):hover:not(:disabled) {
-  background: #16232ae6;
-  border-color: var(--iron);
-}
-.title-buttons button:not(.link-btn):active:not(:disabled) {
-  transform: translateY(1px);
-}
-.title-buttons button.primary {
-  background: var(--plate);
-  border-color: #c9c6b8b3;
-  margin-inline: 20px;
-}
-.title-buttons button.primary:hover:not(:disabled) {
-  background: #24605b;
-  border-color: var(--iron);
-}
-.title-buttons button.primary::before,
-.title-buttons button.primary::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  width: 22px;
-  height: 44px;
-  margin-top: -22px;
-  background: var(--cap) center / contain no-repeat;
-  pointer-events: none;
-}
-.title-buttons button.primary::before {
-  left: -19px;
-}
-.title-buttons button.primary::after {
-  right: -19px;
-  transform: scaleX(-1);
-}
-.title-buttons button:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 3px;
-}
-.title-buttons .link-btn {
-  color: var(--muted);
-  background: none;
-  border-color: transparent;
-  text-shadow:
-    0 1px 3px #000,
-    0 0 8px #000;
-  font: 17px var(--f-body);
-}
-/* Abandon asks once, in place: a smoked note with the danger answer and the way back */
-.abandon-ask {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px 14px;
-  background: var(--panel);
-  border: 1px solid var(--rule);
-  border-radius: 10px;
-  box-shadow: 0 3px 12px #000c;
-}
-.abandon-ask p {
-  flex-basis: 100%;
-  margin: 0 0 4px;
-  font: 17px/1.35 var(--f-body);
-  color: var(--ink);
-}
-.title-buttons .abandon-ask button {
-  min-height: 44px;
-  padding: 6px 16px;
-  font-size: 17px;
-}
-.title-buttons .abandon-ask button.danger {
-  color: var(--bad);
-  border-color: var(--bad);
-}
-.title-buttons .link-btn:hover:not(:disabled) {
-  color: var(--ink);
-  background: none;
-  border-color: transparent;
-}
 @media (max-height: 500px) and (orientation: landscape) {
   .screen.title {
     justify-content: center;
     padding: 12px 16px;
-  }
-  .title-body h1 {
-    font-size: 34px;
-    margin-bottom: 14px;
-  }
-  .title-buttons {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 8px;
-    width: min(560px, 92vw);
-  }
-  .title-buttons > * {
-    flex: 1 1 40%;
-  }
-  .title-buttons > .primary,
-  .title-buttons > .link-btn,
-  .title-buttons > .abandon-ask {
-    flex-basis: 100%;
-  }
-  .title-buttons button.big:not(.link-btn) {
-    min-height: 44px;
-    font-size: 19px;
-    padding: 6px 14px;
   }
   .title footer {
     position: static;
@@ -5453,34 +4321,6 @@ button.danger {
 .desk .wz-head,
 .desk .screen > h1:first-child {
   padding-right: min(112px, 30vw);
-}
-.desk .wz-dots {
-  gap: 8px;
-}
-.desk .wz-dots i {
-  width: 12px;
-  height: 12px;
-  background: transparent;
-  box-shadow: inset 0 0 0 1.5px var(--edge-lit);
-}
-.desk .wz-dots i.done {
-  background: var(--muted);
-  box-shadow: none;
-}
-.desk .wz-dots i.on {
-  width: 28px;
-  border-radius: 6px;
-  background: var(--accent);
-  box-shadow: none;
-}
-/* a chosen chip or tab is the teal plate on the night, an inked stamp on paper (the class chips keep a pressed well: their icons are coloured) */
-.desk :is(.screen section, .wz-sheet, .wz-camp-sheet, .wz-ready) .wz-chip.on:not(.wz-class),
-.desk
-  :is(.screen section, .wz-sheet, .wz-camp-sheet, .wz-ready)
-  .wz-chip.on:not(.wz-class):hover:not(:disabled) {
-  background: var(--paper-ink);
-  color: var(--paper-leaf);
-  border-color: var(--paper-ink);
 }
 .desk .wz-chip.on:not(.wz-class),
 .desk .wz-chip.on:not(.wz-class):hover:not(:disabled) {
@@ -5546,82 +4386,6 @@ button.danger {
     transform 0.1s ease;
 }
 
-/* Settings: one narrow paper note, ledger rows with the control on the right, grouped under printed legends */
-.desk .settings-screen {
-  max-width: 640px;
-}
-.desk .settings-screen .settings {
-  padding: 6px clamp(16px, 4vw, 28px) 18px;
-  background: var(--paper-leaf);
-  border-radius: 12px;
-  box-shadow:
-    inset 0 0 0 1px #f8f5edb0,
-    0 2px 8px #1d2a2f1a;
-}
-.settings-screen .settings label {
-  justify-content: space-between;
-  padding: 4px 0;
-  border-bottom: 1px dotted var(--paper-rule);
-  font: 18px/1.3 var(--f-body);
-}
-.settings-screen .settings label:has(+ .set-hint) {
-  border-bottom: 0;
-}
-.settings-screen .settings label.slider {
-  justify-content: flex-start;
-}
-.settings-screen .settings label.slider input[type="range"] {
-  flex: 0 1 220px;
-  width: auto;
-  margin-left: auto;
-}
-.settings-screen .settings label.slider span {
-  min-width: 3ch;
-  font-variant-numeric: tabular-nums;
-}
-.settings-screen .settings input[type="checkbox"] {
-  order: 2;
-  width: 22px;
-  height: 22px;
-  margin: 0;
-  accent-color: var(--accent);
-  cursor: pointer;
-}
-.settings-screen .settings select {
-  min-width: 180px;
-  padding: 0 10px;
-  border-radius: 6px;
-  font: inherit;
-}
-.settings-screen .settings fieldset {
-  border: 0;
-  margin: 0;
-  padding: 0;
-  min-width: 0;
-}
-.settings-screen .settings legend {
-  padding: 16px 0 2px;
-  font: 22px var(--f-display);
-  color: var(--ink);
-}
-.settings-screen .settings fieldset > button {
-  margin-top: 10px;
-}
-.settings-screen .set-hint {
-  display: block;
-  padding: 2px 0 8px;
-  border-bottom: 1px dotted var(--paper-rule);
-  color: var(--muted);
-  font: 15px/1.35 var(--f-body);
-}
-.desk .settings-screen :focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-.settings-screen > button.primary {
-  margin-top: 18px;
-}
-
 /* How to play: one continuous page at reading measure */
 .desk .screen.howto {
   max-width: 760px;
@@ -5651,214 +4415,6 @@ button.danger {
 .screen.howto > button.primary {
   margin-top: 20px;
 }
-
-/* wizard tiles: paper notes on the night that lift; the chosen one is clipped */
-.desk .wz-ctile,
-.desk .wz-tile,
-.desk button.bag-card,
-.desk .dk-inv {
-  background: linear-gradient(#f1ede2, var(--paper-leaf));
-  border-color: var(--paper-rule);
-  box-shadow:
-    inset 0 1px 0 #fffdf6,
-    0 2px 0 #00000040,
-    0 6px 14px #000a;
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease,
-    border-color 0.15s ease;
-}
-.desk .wz-ctile:hover:not(:disabled),
-.desk .wz-tile:hover:not(:disabled),
-.desk button.bag-card:hover:not(:disabled),
-.desk .dk-inv:hover:not(:disabled) {
-  background: linear-gradient(#f7f4ec, #eee9dc);
-  transform: translateY(-2px);
-  border-color: var(--paper-accent);
-  box-shadow:
-    inset 0 1px 0 #fffdf6,
-    0 10px 20px #000c;
-}
-.desk .wz-ctile.selected,
-.desk .wz-tile.selected,
-.desk .bag-card.selected,
-.desk .dk-inv.on,
-.desk .wz-ctile.selected:hover:not(:disabled),
-.desk .wz-tile.selected:hover:not(:disabled),
-.desk button.bag-card.selected:hover:not(:disabled),
-.desk .dk-inv.on:hover:not(:disabled) {
-  position: relative;
-  background: linear-gradient(#fbf9f3, var(--paper-chosen));
-  border-color: var(--paper-accent);
-  box-shadow:
-    0 0 0 2px var(--accent),
-    inset 0 1px 0 #fff,
-    0 10px 22px #000c;
-}
-/* the paperclip: what is chosen is clipped to the case file */
-.desk .wz-ctile.selected::after,
-.desk .wz-tile.selected::after,
-.desk .bag-card.selected::after,
-.desk .dk-inv.on::after {
-  content: "";
-  position: absolute;
-  top: -14px;
-  left: 22px;
-  width: 14px;
-  height: 38px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='38' viewBox='0 0 14 38' fill='none' stroke='%239aa3a6' stroke-width='1.6' stroke-linecap='round'%3E%3Cpath d='M4 12v17a3 3 0 0 0 6 0V6.5a4.5 4.5 0 0 0-9 0V30a6 6 0 0 0 12 0V12'/%3E%3C/svg%3E")
-    center / contain no-repeat;
-  filter: drop-shadow(0 1px 1px #0008);
-  pointer-events: none;
-}
-/* an investigator chip carries its player badge at the right: the clip holds the photograph instead */
-.desk .dk-inv.on::after {
-  right: auto;
-  left: 30px;
-}
-.desk .wz-ctile:focus-visible,
-.desk .wz-tile:focus-visible,
-.desk .bag-card:focus-visible,
-.desk .dk-inv:focus-visible,
-.desk .wz-ctile.selected:focus-visible:not(:disabled),
-.desk .wz-tile.selected:focus-visible:not(:disabled),
-.desk button.bag-card.selected:focus-visible:not(:disabled),
-.desk .dk-inv.on:focus-visible:not(:disabled) {
-  outline: 3px solid var(--paper-accent);
-  outline-offset: 2px;
-}
-.desk .dk-inv small.ok {
-  color: #2a6b2f;
-}
-.wz-tile {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 12px 6px 10px;
-}
-.wz-tile .wz-avatar b {
-  line-height: 1.15;
-  text-align: center;
-}
-.wz-tile .wz-partly {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.15;
-  max-width: none;
-}
-/* decks: compact investigator chips free the band above the tabs */
-.dk-inv {
-  position: relative;
-  display: grid;
-  grid-template-columns: 48px auto;
-  column-gap: 10px;
-  align-items: center;
-  justify-items: start;
-  padding: 6px 30px 6px 8px;
-  text-align: left;
-}
-.dk-inv .wz-avatar {
-  display: contents;
-}
-.dk-inv .portrait {
-  grid-column: 1;
-  grid-row: 1 / span 3;
-}
-.dk-inv .wz-avatar b,
-.dk-inv .wz-avatar small,
-.dk-inv > small {
-  grid-column: 2;
-  line-height: 1.15;
-}
-.dk-inv .wz-badge {
-  top: -8px;
-  right: -8px;
-}
-/* difficulty: two columns, the average as the figure that separates the levels; difficulty and ready sit centred */
-.wz-body:has(> .wz-bags),
-.wz-body:has(> .wz-ready) {
-  display: flex;
-  flex-direction: column;
-}
-.wz-bags,
-.wz-ready {
-  margin-block: auto;
-}
-.wz-bags .bag-card {
-  padding: 16px 18px;
-  gap: 12px;
-}
-@media (max-height: 500px) {
-  .wz-bags {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-.wz-bags .bag-average {
-  margin-top: auto;
-  padding-top: 8px;
-  border-top: 1px solid var(--paper-rule);
-  font: 20px/1.2 var(--f-body);
-}
-/* ready: one case-file sheet — campaign, investigators, chaos bag, first scenario */
-.wz-ready {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 18px;
-  width: min(680px, 100%);
-  margin-inline: auto;
-  padding: 22px 28px 26px;
-  border: 2px solid var(--paper-rule);
-  border-radius: 14px;
-  background: linear-gradient(#f3f0e9, #e4e0d3);
-  box-shadow:
-    inset 0 1px 0 #fffdf6,
-    0 14px 30px #000c;
-  outline: 1px solid var(--paper-rule);
-  outline-offset: -8px;
-}
-.wz-ready-camp {
-  margin: 0;
-  font-size: clamp(26px, 3vw, 34px);
-  text-align: center;
-}
-.wz-order {
-  gap: 24px;
-  justify-content: center;
-}
-.desk .wz-ready .bag-card.selected::after {
-  content: none;
-}
-.desk .wz-ready .bag-card.selected {
-  width: 100%;
-  border: 0;
-  border-block: 1px solid var(--paper-rule);
-  border-radius: 0;
-  background: none;
-  box-shadow: none;
-  outline: none;
-  padding: 14px 0;
-  transform: none;
-}
-.wz-first small {
-  font-size: 15px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-.wz-first b {
-  font: 28px/1.15 var(--f-name);
-  color: var(--ink);
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-@media (max-width: 640px) {
-  .wz-ready {
-    padding: 18px 16px;
-    outline-offset: -6px;
-  }
-}
 .topbar .lang-switch {
   box-shadow: var(--bevel);
 }
@@ -5882,18 +4438,7 @@ button.danger {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .title-buttons button:not(.link-btn),
-  .desk .wz-foot button,
-  .desk .wz-ctile,
-  .desk .wz-tile,
-  .desk button.bag-card,
-  .desk .dk-inv {
+  .desk .wz-foot button {
     transition: none;
-  }
-  .desk .wz-ctile:hover:not(:disabled),
-  .desk .wz-tile:hover:not(:disabled),
-  .desk button.bag-card:hover:not(:disabled),
-  .desk .dk-inv:hover:not(:disabled) {
-    transform: none;
   }
 }

@@ -504,7 +504,7 @@ function PopupMenu() {
 }
 
 // the dev-only sound picker (ADR-0010): not in the production build, where DEV is false and the import is dropped
-const SoundPicker = import.meta.env.DEV ? lazy(() => import("../dev/SoundPicker")) : null;
+const SoundPicker = import.meta.env.DEV ? lazy(() => import("../dev/SoundPicker/index")) : null;
 
 function DebugPanel() {
   const panel = useView((s) => s.panel);

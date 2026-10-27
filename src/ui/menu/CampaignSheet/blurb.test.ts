@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { db } from "../../engine/testkit";
-import { campaignBlurb } from "../../content/i18n";
+import { db } from "../../../engine/testkit";
+import { campaignBlurb } from "../../../content/i18n";
 import { blurb } from "./blurb";
 
 describe("blurb", () => {

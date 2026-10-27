@@ -6,14 +6,16 @@ import {
   logLabel,
   scenarioText,
   t,
-} from "../../content/i18n";
-import { currentScenarioId } from "../../engine/campaign";
-import { db, gameStore, useGame } from "../state/context";
-import { guideHtml } from "../game/guideText";
-import { Portrait } from "../components/Portrait/index";
-import { logView, readItems } from "./campaignView";
-import { DeckBuilder } from "./DeckBuilder";
-import { FlowPrompt } from "./FlowPrompt";
+} from "../../../content/i18n";
+import { currentScenarioId } from "../../../engine/campaign";
+import { db, gameStore, useGame } from "../../state/context";
+import { guideHtml } from "../../game/guideText";
+import { Portrait } from "../../components/Portrait/index";
+import { logView, readItems } from "../campaignView";
+import { DeckBuilder } from "../DeckBuilder";
+import { FlowPrompt } from "../FlowPrompt";
+import { cx } from "../../components/cx";
+import styles from "./CampaignScreen.module.css";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);
@@ -80,15 +82,15 @@ export function CampaignScreen() {
         </h1>
       </header>
       <div className="wz-body">
-        {notice && <div className="notice">{notice}</div>}
+        {notice && <div className={styles.notice}>{notice}</div>}
         {campaign.result && (
-          <h2 className={`result-${campaign.result}`}>{tr(`result.${campaign.result}`)}</h2>
+          <h2 className={styles[`result-${campaign.result}`]}>{tr(`result.${campaign.result}`)}</h2>
         )}
         {read.length > 0 && (
-          <section className="flow-read" aria-live="polite">
+          <section className={styles.flowRead} aria-live="polite">
             {read.map((r, k) =>
               r.kind === "story" ? (
-                <div key={k} className="flow-story">
+                <div key={k} className={styles.flowStory}>
                   {r.title && <h3 className="flow-title">{r.title}</h3>}
                   {r.text && (
                     <div
@@ -98,7 +100,7 @@ export function CampaignScreen() {
                   )}
                 </div>
               ) : (
-                <div key={k} className="flow-recorded">
+                <div key={k} className={styles.flowRecorded}>
                   <small>{tr("flow.recorded")}</small> {r.label}
                 </div>
               ),
@@ -106,13 +108,13 @@ export function CampaignScreen() {
           </section>
         )}
         {!campaign.result && <FlowPrompt campaign={campaign} />}
-        <section className="log-investigators">
+        <section className={styles.logInvestigators}>
           {campaign.investigators.map((i) => (
-            <div key={i.code} className={`log-inv ${i.status !== "active" ? "out" : ""}`}>
+            <div key={i.code} className={cx("log-inv", i.status !== "active" ? styles.out : "")}>
               <Portrait code={i.code} size={72} />
-              <div className="log-inv-text">
+              <div className={styles.logInvText}>
                 <b>{cardText(db, i.code, locale).name}</b>
-                <span className="log-stats">
+                <span className={styles.logStats}>
                   <span>{i.xp} XP</span>
                   <span>
                     {tr("log.physical")} {i.physicalTrauma}
@@ -120,7 +122,7 @@ export function CampaignScreen() {
                   <span>
                     {tr("log.mental")} {i.mentalTrauma}
                   </span>
-                  {i.status !== "active" && <span className="log-status">{i.status}</span>}
+                  {i.status !== "active" && <span className={styles.logStatus}>{i.status}</span>}
                 </span>
                 {i.status === "active" && mayUpgrade && (
                   <button className="link-btn" onClick={() => setUpgrading(i.code)}>
@@ -148,7 +150,7 @@ export function CampaignScreen() {
           <section key={sec.id} className="log-section">
             <h3>{sec.id === "campaign_notes" ? tr("log.title") : sec.label}</h3>
             {sec.entries.map((e) => (
-              <div key={e.id} className={e.crossedOut ? "log-crossed" : ""}>
+              <div key={e.id} className={e.crossedOut ? styles.logCrossed : ""}>
                 {e.label}
               </div>
             ))}

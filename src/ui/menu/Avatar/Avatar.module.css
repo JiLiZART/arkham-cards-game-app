@@ -1,0 +1,46 @@
+.badge {
+  background: var(--accent);
+  color: #000;
+  border-radius: 6px;
+  padding: 0 6px;
+  font-size: 12px;
+}
+.wz-avatar {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.wz-avatar small {
+  color: var(--muted);
+  text-transform: capitalize;
+}
+.wz-badge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  font: bold 15px/1.3 var(--f-body);
+  padding: 1px 8px;
+  background: #1e2c31;
+  color: #d5caad;
+  border: 1px solid #73ada5;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px #0008;
+}
+:global(.wz-tile) .wz-avatar b {
+  line-height: 1.15;
+  text-align: center;
+}
+:global(.dk-inv) .wz-avatar {
+  display: contents;
+}
+:global(.dk-inv) .wz-avatar b,
+:global(.dk-inv) .wz-avatar small {
+  grid-column: 2;
+  line-height: 1.15;
+}
+:global(.dk-inv) .wz-badge {
+  top: -8px;
+  right: -8px;
+}

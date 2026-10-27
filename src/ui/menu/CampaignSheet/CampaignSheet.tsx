@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { campaignBlurb, cardText, interludeName, t } from "../../content/i18n";
-import type { CampaignDef } from "../../content/schema";
-import { db, gameStore, useGame } from "../state/context";
-import { formatText } from "../hud/Hud";
-import { Modal } from "../hud/Modals";
-import { cardImage } from "../assets/images";
+import { campaignBlurb, cardText, interludeName, t } from "../../../content/i18n";
+import type { CampaignDef } from "../../../content/schema";
+import { db, gameStore, useGame } from "../../state/context";
+import { formatText } from "../../hud/Hud";
+import { Modal } from "../../hud/Modals";
+import { cardImage } from "../../assets/images";
 import { blurb } from "./blurb";
-import { campaignComplete, campaignProgress, tileName } from "./wizard";
+import { campaignComplete, campaignProgress, tileName } from "../wizard";
+import { cx } from "../../components/cx";
+import styles from "./CampaignSheet.module.css";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);
@@ -113,7 +115,7 @@ export function CampaignSheet({
           <b>{tileName(db, campaign, locale)}</b>
           <i>{scenarioCount(campaign.scenarios.length)}</i>
         </div>
-        <button className="wz-camp-close" onClick={onClose} aria-label={tr("wizard.close")}>
+        <button className={styles.wzCampClose} onClick={onClose} aria-label={tr("wizard.close")}>
           ×
         </button>
       </div>
@@ -130,17 +132,21 @@ export function CampaignSheet({
           )}
         </small>
       )}
-      {lead && <p className={`wz-sheet-text ${quote ? "wz-quote" : ""}`}>{lead}</p>}
+      {lead && <p className={cx("wz-sheet-text", quote ? styles.wzQuote : "")}>{lead}</p>}
       {rest && (
         <>
-          {more && <p className="wz-sheet-text wz-quote-more">{rest}</p>}
-          <button className="link-btn wz-more" aria-expanded={more} onClick={() => setMore(!more)}>
+          {more && <p className={cx("wz-sheet-text", styles.wzQuoteMore)}>{rest}</p>}
+          <button
+            className={cx("link-btn", styles.wzMore)}
+            aria-expanded={more}
+            onClick={() => setMore(!more)}
+          >
             {tr(more ? "wizard.less" : "wizard.more")}
           </button>
         </>
       )}
-      <h4 className="wz-chapters">{tr("wizard.chapters")}</h4>
-      <ol className="wz-chapter-list">
+      <h4 className={styles.wzChapters}>{tr("wizard.chapters")}</h4>
+      <ol className={styles.wzChapterList}>
         {chapters.map((ch) => {
           const playable = !("interlude" in ch && ch.interlude);
           const k = campaign.scenarios.indexOf(ch.scenario);
@@ -150,18 +156,21 @@ export function CampaignSheet({
               : (interludeName(db, campaign.id, ch.scenario, locale) ?? ch.name)) ?? ch.scenario;
           if (playable) n++;
           return (
-            <li key={ch.scenario} className={playable ? "wz-chapter" : "wz-chapter wz-interlude"}>
-              <div className="wz-chapter-name">
+            <li
+              key={ch.scenario}
+              className={playable ? styles.wzChapter : cx(styles.wzChapter, styles.wzInterlude)}
+            >
+              <div className={styles.wzChapterName}>
                 {playable ? (
-                  <span className="wz-chapter-n">{n}</span>
+                  <span className={styles.wzChapterN}>{n}</span>
                 ) : (
-                  <span className="wz-chapter-n">·</span>
+                  <span className={styles.wzChapterN}>·</span>
                 )}
                 <b>{name}</b>
                 {!playable && <small>{tr("wizard.interlude")}</small>}
               </div>
               {playable && (ch.agenda || ch.act) && (
-                <div className="wz-chapter-cards">
+                <div className={styles.wzChapterCards}>
                   {(
                     [
                       [ch.agenda, "agenda"],
@@ -171,7 +180,7 @@ export function CampaignSheet({
                     code ? (
                       <button
                         key={type}
-                        className="wz-chapter-card"
+                        className={styles.wzChapterCard}
                         title={tr("wizard.readCard")}
                         onClick={() =>
                           setReading({ code, title: `${name}: ${tr(`card.type.${type}`)}` })

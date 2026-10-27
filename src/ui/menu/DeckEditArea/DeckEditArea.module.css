@@ -1,0 +1,137 @@
+.dk-area {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+  min-height: 0;
+}
+.dk-deck,
+.dk-pool {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.dk-head,
+.dk-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding: 6px 0;
+  background: var(--paper-leaf);
+}
+.dk-head b {
+  font-size: 20px;
+}
+.dk-weakness {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+.dk-filters input[type="search"] {
+  flex: 1 1 200px;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 2px solid #63828e;
+  border-radius: 10px;
+  background: var(--paper-leaf);
+  color: var(--ink);
+  font: inherit;
+}
+.dk-count {
+  color: var(--muted);
+}
+.dk-group h4 {
+  margin: 6px 0;
+  font: 18px var(--f-display);
+  color: var(--paper-ink);
+}
+.dk-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+  gap: 10px;
+}
+.dk-card {
+  position: relative;
+  border-radius: 8px;
+  transition:
+    transform 0.12s,
+    filter 0.12s;
+}
+.dk-card img,
+.dk-card :global(.text-face) {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+  box-shadow: 0 3px 8px #0006;
+}
+.dk-card:hover {
+  transform: translateY(-3px);
+}
+.dk-copies {
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: #1e2c31;
+  color: #d5caad;
+  border: 1px solid #73ada5;
+  font-size: 15px;
+}
+.dk-why {
+  display: block;
+  margin-top: 3px;
+  font-size: 12px;
+  line-height: 1.2;
+  color: #8a2a1a;
+}
+.dk-actions {
+  position: absolute;
+  inset: auto 0 0 0;
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px;
+  background: linear-gradient(transparent, #000c 40%);
+  border-radius: 0 0 8px 8px;
+}
+.dk-card:hover .dk-actions,
+.dk-card:focus-within .dk-actions {
+  display: flex;
+}
+.dk-actions button {
+  min-height: 36px;
+  font-size: 14px;
+}
+.dk-card.lit {
+  cursor: pointer;
+  box-shadow:
+    0 0 0 3px #2f9a3a,
+    0 0 16px #2f9a3acc;
+}
+.dk-card.dim {
+  filter: brightness(0.55) saturate(0.6);
+}
+.dk-replace-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 10px;
+  border: 2px solid #2f9a3a;
+  border-radius: 10px;
+  background: #e7f4e1;
+}
+.dk-more {
+  align-self: center;
+}
+@media (max-width: 900px) {
+  .dk-area {
+    grid-template-columns: 1fr;
+  }
+}
