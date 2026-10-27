@@ -25,6 +25,7 @@ import { heldCards, viewerOf } from "../store";
 import { deckOptions } from "../players";
 import { useChoicesOffered, useShown } from "../usePlayers";
 import { IntentBadge, TokenBadges } from "../TokenBadges";
+import { SlotChips } from "./GlanceBadge";
 import { useDimmed, useView } from "../view";
 import { heldGame } from "../spotlight";
 import { ChaosTokenIcon } from "./ChaosTokenIcon";
@@ -571,6 +572,11 @@ export function PlayStrip({ part = "all" }: { part?: "all" | "threats" | "assets
             )
           }
         />
+        {!phone && (
+          <span className="strip-slots">
+            <SlotChips card={db.cards[game.cards[id].code]} className="slot-chip" />
+          </span>
+        )}
       </div>
     );
   };

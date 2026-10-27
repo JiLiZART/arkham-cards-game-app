@@ -2,6 +2,7 @@ import { t } from "../../content/i18n";
 import type { CardDef } from "../../content/schema";
 import { db, useGame } from "../context";
 import { Glyph, Icon } from "../Icon";
+import { slotIcons } from "../details";
 import { chipsFor, type Chip } from "../glance";
 import { isIcon } from "../icons";
 
@@ -11,11 +12,33 @@ function chipTitle(chip: Chip, locale: string): string {
   return chip.n === undefined ? name : `${name} ${chip.plus ? "+" : ""}${chip.n}`;
 }
 
-/** up to three chips along a hand card's top edge saying what the card is for; part of the card, so it scales with it */
+/** the slots an asset takes, as chips: on a hand card's glance badge and on the cards in the asset area */
+export function SlotChips({
+  card,
+  className = "glance-chip slot-chip",
+}: {
+  card: CardDef;
+  className?: string;
+}) {
+  const locale = useGame((s) => s.locale);
+  return slotIcons(card.slots).map((s) => {
+    const name = t(db, locale, `card.slot.${s.slot}`);
+    return (
+      <span key={s.slot} className={className} title={s.n > 1 ? `${name} ×${s.n}` : name}>
+        <Icon name={s.icon} size={20} title="" />
+      </span>
+    );
+  });
+}
+
+/**
+ * up to three chips along a hand card's top edge saying what the card is for, and at its right end the slots an asset
+ * takes; part of the card, so it scales with it
+ */
 export function GlanceBadge({ card }: { card: CardDef }) {
   const locale = useGame((s) => s.locale);
   const chips = chipsFor(card);
-  if (!chips.length) return null;
+  if (!chips.length && !card.slots.length) return null;
   return (
     <span className="glance">
       {chips.map((c, k) => (
@@ -33,6 +56,11 @@ export function GlanceBadge({ card }: { card: CardDef }) {
           )}
         </span>
       ))}
+      {card.slots.length > 0 && (
+        <span className="glance-slots">
+          <SlotChips card={card} />
+        </span>
+      )}
     </span>
   );
 }

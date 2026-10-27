@@ -710,6 +710,35 @@ footer {
 .glance-chip .svg-icon {
   color: var(--accent);
 }
+/* the slots an asset takes: at the glance badge's right end */
+.glance-slots {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+.glance .slot-chip {
+  padding: 1px 3px;
+}
+/* a strip card's slots: a small plate at its bottom left, over the card's edge */
+.strip-slots {
+  position: absolute;
+  left: 2px;
+  bottom: 2px;
+  display: flex;
+  gap: 2px;
+  pointer-events: none;
+  z-index: 1;
+}
+.strip-slots .slot-chip {
+  display: inline-flex;
+  padding: 2px;
+  border-radius: 8px;
+  background: rgba(8, 11, 12, 0.86);
+  border: 1px solid var(--rule);
+}
+.strip-slots .slot-chip .svg-icon {
+  color: var(--accent);
+}
 .fan-card.legal {
   box-shadow: var(--ring-playable);
 }

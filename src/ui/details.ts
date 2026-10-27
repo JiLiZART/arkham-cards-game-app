@@ -1,5 +1,6 @@
 import { cardText, encounterSetName, t } from "../content/i18n";
 import { connectionsOf } from "../engine/core";
+import type { Slot } from "../content/schema";
 import type { CardInst, ContentDb, GameState, InvId } from "../engine/types";
 import type { Rect } from "./hover";
 import { keywordsOf } from "./glossary";
@@ -53,13 +54,29 @@ function glossary(db: ContentDb, code: string, locale: string): DetailRow[] {
   return items.length ? [{ k: "keywords", label: t(db, locale, "card.keywords"), items }] : [];
 }
 
-const SLOT_ICONS: Record<string, IconName> = {
+const SLOT_ICONS: Record<Slot, IconName> = {
   hand: "hand",
   arcane: "arcane",
   accessory: "accessory",
   body: "body",
   ally: "ally",
+  head: "head",
+  tarot: "tarot",
 };
+
+/** the slots a card takes, one icon each; two hand or two arcane slots are the printed double icon */
+export function slotIcons(slots: readonly Slot[]): { slot: Slot; icon: IconName; n: number }[] {
+  return [...new Set(slots)].map((slot) => {
+    const n = slots.filter((s) => s === slot).length;
+    const icon =
+      n === 2 && slot === "hand"
+        ? "hands"
+        : n === 2 && slot === "arcane"
+          ? "arcane2"
+          : SLOT_ICONS[slot];
+    return { slot, icon, n };
+  });
+}
 const SKILLS = ["willpower", "intellect", "combat", "agility", "wild"] as const;
 
 /** a card as it shows on the map (an unrevealed location goes by its back name) */
@@ -155,7 +172,7 @@ export function cardDetails(
   const set = d.encounterSet ? encounterSetName(db, d.encounterSet, locale) : null;
   const traits = [tx.traits?.map((s) => `${s}.`).join(" "), set].filter(Boolean).join(" · ");
   if (traits) rows.push({ k: "traits", s: traits });
-  const slots = d.slots.map((s) => SLOT_ICONS[s]).filter(Boolean);
+  const slots = slotIcons(d.slots).map((s) => s.icon);
   if (slots.length) rows.push({ k: "slots", slots });
   const icons = SKILLS.flatMap((s) => Array<IconName>(d.icons[s] ?? 0).fill(s));
   if (icons.length) rows.push({ k: "icons", icons });

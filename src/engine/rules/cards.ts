@@ -8,6 +8,7 @@ import {
   blankedCards,
   card,
   cardBlocked,
+  cardsIn,
   checkCondition,
   controlled,
   def,
@@ -603,10 +604,16 @@ const SLOT_MOD = {
   head: null,
 } as const;
 
-/** returns a slot type that is over capacity, if any */
+/** the assets an investigator's slots hold: those they control in their play area or threat area */
+const slotted = (g: G, i: InvId) =>
+  [...cardsIn(g, "play"), ...cardsIn(g, "threat")].filter(
+    (c) => c.controller === i && def(g, c.id).type === "asset",
+  );
+
+/** returns a slot type that is over capacity, if any; `incoming` counts once whether or not it is in play already */
 export function overfullSlot(g: G, i: InvId, incoming: InstId | null): Slot | null {
-  const assets = controlled(g, i).map((c) => c.id);
-  if (incoming) assets.push(incoming);
+  const assets = slotted(g, i).map((c) => c.id);
+  if (incoming && !assets.includes(incoming)) assets.push(incoming);
   const mods = allMods(g).filter((m) => m.target === i);
   for (const slot of Object.keys(SLOT_BASE) as Slot[]) {
     const statName = SLOT_MOD[slot];
@@ -636,7 +643,10 @@ export function overfullSlot(g: G, i: InvId, incoming: InstId | null): Slot | nu
 export const slotCheckHandler: Handler<"SlotCheck"> = (g, step) => {
   const slot = overfullSlot(g, step.inv, step.card);
   if (!slot) return;
-  const victims = controlled(g, step.inv).filter((c) => def(g, c.id).slots.includes(slot));
+  // another asset makes room for the new one: the one being played or taken is never discarded for itself
+  const victims = slotted(g, step.inv).filter(
+    (c) => c.id !== step.card && def(g, c.id).slots.includes(slot),
+  );
   const pick = ask<InstId>(
     g,
     step,

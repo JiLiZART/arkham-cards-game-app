@@ -11,6 +11,7 @@ import {
   moveCard,
   skillValue,
 } from "./core";
+import { overfullSlot } from "./rules/cards";
 import { testParts, testValue } from "./rules/skillTest";
 import { deserialize, dispatch, getLegalActions, replay, serialize } from "./engine";
 import {
@@ -573,6 +574,36 @@ describe("player cards", () => {
       .filter((c) => c.zone === "play" && c.controller === ROLAND)
       .map((c) => def(g, c.id).name);
     expect(inPlay.sort()).toEqual([".45 Automatic", "Flashlight"]);
+  });
+
+  it("slot limit: an asset in the threat area holds its slot too", () => {
+    let r = gathering([ROLAND], ["0"]);
+    r = mutate(r, (g) => {
+      inv(g, ROLAND).resources = 20;
+      const knife = giveCard(g, ROLAND, "01086");
+      moveCard(g, knife, "threat", { inv: ROLAND });
+      card(g, knife).controller = ROLAND;
+      for (const code of ["01087", "01016"]) giveCard(g, ROLAND, code);
+    });
+    r = pick(r, /^Play Flashlight/);
+    r = pick(r, /^Play .45 Automatic/);
+    expect(r.state.pending?.prompt).toMatch(/hand slots/);
+    // the new .45 Automatic is not offered: another asset makes room for it
+    expect(options(r).sort()).toEqual(["Flashlight", "Knife"]);
+  });
+
+  it("slot limit: an asset already moved into play counts once (taking control of it)", () => {
+    const r = gathering([ROLAND], ["0"]);
+    const g = gOf(r);
+    const ids = ["01087", "01016"].map((code) => {
+      const id = giveCard(g, ROLAND, code);
+      moveCard(g, id, "play");
+      card(g, id).controller = ROLAND;
+      return id;
+    });
+    expect(overfullSlot(g, ROLAND, ids[1])).toBeNull();
+    const knife = giveCard(g, ROLAND, "01086");
+    expect(overfullSlot(g, ROLAND, knife)).toBe("hand");
   });
 
   it("weakness drawn: revelation resolves immediately and it leaves the hand", () => {
