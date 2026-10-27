@@ -1,14 +1,16 @@
-import { cardText, encounterSetName, t } from "../../content/i18n";
-import { db, useGame } from "../state/context";
-import { CardFace } from "../components/CardFace";
-import { cardDetails } from "../game/details";
-import { Row } from "../hud/HandDetails";
-import { Icon } from "../components/Icon";
-import { cycleName } from "../menu/wizard";
-import { cycleOf } from "./filter";
-import { implemented } from "../../content/implemented";
-import { useCatalog } from "./state";
-import { formatText } from "../hud/Hud";
+import { cardText, encounterSetName, t } from "../../../content/i18n";
+import { db, useGame } from "../../state/context";
+import { CardFace } from "../../components/CardFace/index";
+import { cardDetails } from "../../game/details";
+import { Row } from "../../hud/HandDetails";
+import { Icon } from "../../components/Icon/index";
+import { cycleName } from "../../menu/wizard";
+import { cycleOf } from "../filter";
+import { implemented } from "../../../content/implemented";
+import { useCatalog } from "../state";
+import { formatText } from "../../hud/Hud";
+import { cx } from "../../components/cx";
+import styles from "./CardPage.module.css";
 
 const SKILLS = ["willpower", "intellect", "combat", "agility"] as const;
 
@@ -18,7 +20,7 @@ function CardLink({ code, n }: { code: string; n?: number }) {
   const open = useCatalog((s) => s.openCard);
   if (!db.cards[code]) return <span>{code}</span>;
   return (
-    <button className="link-btn cat-link" onClick={() => open(code)}>
+    <button className={cx("link-btn", styles.catLink)} onClick={() => open(code)}>
       {n && n > 1 ? `${n}× ` : ""}
       {cardText(db, code, locale).name}
     </button>
@@ -31,7 +33,7 @@ export function WorksBadge({ code }: { code: string }) {
   const works = implemented(db, code);
   return (
     <span
-      className={`cat-badge ${works ? "works" : "text-only"}`}
+      className={cx(styles.catBadge, works ? styles.works : styles.textOnly)}
       title={t(db, locale, works ? "catalog.worksHint" : "catalog.textOnlyHint")}
     >
       {t(db, locale, works ? "catalog.works" : "catalog.textOnly")}
@@ -112,7 +114,7 @@ export function CardPage({ code }: { code: string }) {
   const rows = cardDetails(db, code, locale);
   const twoSided = d.doubleSided || !!d.backImage;
   return (
-    <article className="cat-page">
+    <article className={styles.catPage}>
       <button className="big" onClick={back}>
         {t(
           db,
@@ -120,8 +122,8 @@ export function CardPage({ code }: { code: string }) {
           useCatalog.getState().open.length > 1 ? "catalog.back" : "catalog.backToList",
         )}
       </button>
-      <div className="cat-page-body">
-        <div className="cat-images">
+      <div className={styles.catPageBody}>
+        <div className={styles.catImages}>
           <figure>
             <CardFace code={code} locale={locale} remote />
             <figcaption>{t(db, locale, "catalog.front")}</figcaption>
@@ -133,7 +135,7 @@ export function CardPage({ code }: { code: string }) {
             </figure>
           )}
         </div>
-        <div className="hand-details static cat-details">
+        <div className={cx("hand-details", styles.static, styles.catDetails)}>
           <WorksBadge code={code} />
           {rows.map((r) => (
             <Row key={r.k} r={r} locale={locale} />
@@ -147,7 +149,7 @@ export function CardPage({ code }: { code: string }) {
           </div>
           {set && <div className="hd-traits">{set}</div>}
           {d.type === "investigator" && tx.backText && (
-            <div className="cat-sec cat-back">
+            <div className={cx(styles.catSec, "cat-back")}>
               <h3>{t(db, locale, "catalog.deckbuilding")}</h3>
               <p
                 className="hd-text"
@@ -158,7 +160,7 @@ export function CardPage({ code }: { code: string }) {
           {inv && (
             <>
               {inv.signatures.length > 0 && (
-                <div className="cat-sec">
+                <div className={styles.catSec}>
                   <h3>{t(db, locale, "catalog.signatures")}</h3>
                   {inv.signatures.map((c) => (
                     <CardLink key={c} code={c} />
@@ -166,7 +168,7 @@ export function CardPage({ code }: { code: string }) {
                 </div>
               )}
               {inv.weaknesses.length > 0 && (
-                <div className="cat-sec">
+                <div className={styles.catSec}>
                   <h3>{t(db, locale, "catalog.weaknesses")}</h3>
                   {inv.weaknesses.map((c) => (
                     <CardLink key={c} code={c} />
@@ -176,9 +178,9 @@ export function CardPage({ code }: { code: string }) {
             </>
           )}
           {starters.map((deck) => (
-            <div key={deck.id} className="cat-sec">
+            <div key={deck.id} className={styles.catSec}>
               <h3>{t(db, locale, "catalog.starter")}</h3>
-              <div className="cat-deck">
+              <div className={styles.catDeck}>
                 {Object.entries(deck.cards)
                   .sort(([a], [b]) => a.localeCompare(b))
                   .map(([c, n]) => (

@@ -6,11 +6,13 @@
  * content/sounds/sounds.json and converts the files.
  */
 import { useEffect, useMemo, useState } from "react";
-import type { SoundCandidates, SoundManifest } from "../../content/schema";
-import { clipAt } from "../../content/soundChoose";
-import { audio } from "../assets/audio";
-import { asset } from "../assets/images";
-import { db } from "../state/context";
+import type { SoundCandidates, SoundManifest } from "../../../content/schema";
+import { clipAt } from "../../../content/soundChoose";
+import { audio } from "../../assets/audio";
+import { asset } from "../../assets/images";
+import { db } from "../../state/context";
+import { cx } from "../../components/cx";
+import styles from "./SoundPicker.module.css";
 
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
 const GROUPS = [
@@ -155,10 +157,10 @@ export default function SoundPicker({ onClose }: { onClose: () => void }) {
   };
 
   return (
-    <div className="sound-picker" role="dialog" aria-label="Sounds">
-      <div className="sp-head">
+    <div className={styles.soundPicker} role="dialog" aria-label="Sounds">
+      <div className={styles.spHead}>
         <h2>Sounds</h2>
-        <div className="sp-tabs">
+        <div className={styles.spTabs}>
           {GROUPS.map(([g, label]) => (
             <button key={g} className={group === g ? "primary" : ""} onClick={() => setGroup(g)}>
               {label}
@@ -171,11 +173,11 @@ export default function SoundPicker({ onClose }: { onClose: () => void }) {
           onChange={(e) => setQuery(e.target.value)}
           aria-label="Search a slot"
         />
-        <label className="sp-open">
+        <label className={styles.spOpen}>
           <input type="checkbox" checked={open} onChange={(e) => setOpen(e.target.checked)} /> Not
           chosen yet
         </label>
-        <span className="sp-count">
+        <span className={styles.spCount}>
           {all.length - left.length} / {all.length} chosen
         </span>
         <button
@@ -193,8 +195,8 @@ export default function SoundPicker({ onClose }: { onClose: () => void }) {
         <button onClick={onClose}>Close</button>
       </div>
       {error && <div className="problems">{error}</div>}
-      {result && <div className="sp-result">{result}</div>}
-      <div className="sp-list">
+      {result && <div className={styles.spResult}>{result}</div>}
+      <div className={styles.spList}>
         {slots.map(([slot, s]) => {
           const music = s.kind === "music";
           const now = clipAt(manifest, slot);
@@ -202,12 +204,12 @@ export default function SoundPicker({ onClose }: { onClose: () => void }) {
             !now || now === "none" ? null : music ? manifest.music[now] : manifest.effects[now];
           const m = marks[slot];
           return (
-            <div key={slot} className={`sp-slot ${m !== undefined ? "chosen" : ""}`}>
-              <div className="sp-name">
+            <div key={slot} className={cx(styles.spSlot, m !== undefined ? "chosen" : "")}>
+              <div className={styles.spName}>
                 <code>{slot}</code>
                 <span>{s.where}</span>
               </div>
-              <div className="sp-options">
+              <div className={styles.spOptions}>
                 <button
                   className={m === "current" ? "primary" : ""}
                   onClick={() => {
@@ -234,7 +236,7 @@ export default function SoundPicker({ onClose }: { onClose: () => void }) {
                   >
                     ▶ {i + 1}
                     {c.seam !== undefined && (
-                      <small className={c.seam > 6 ? "sp-bad" : ""}> {c.seam} dB</small>
+                      <small className={c.seam > 6 ? styles.spBad : ""}> {c.seam} dB</small>
                     )}
                   </button>
                 ))}

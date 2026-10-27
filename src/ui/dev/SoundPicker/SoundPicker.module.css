@@ -1,0 +1,93 @@
+/* dev-only sound picker (src/ui/dev/SoundPicker.tsx) */
+.sound-picker {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  background: #0b0f10;
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  padding: 14px 18px;
+  gap: 10px;
+  font-family: system-ui, sans-serif;
+}
+.sp-head {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.sp-head h2 {
+  margin: 0;
+  color: var(--accent);
+  font-size: 22px;
+}
+.sp-head > input {
+  padding: 6px 10px;
+  min-width: 200px;
+}
+.sp-open input {
+  width: auto;
+  min-width: 0;
+  margin: 0;
+}
+.sp-tabs {
+  display: flex;
+  gap: 6px;
+}
+.sp-count {
+  opacity: 0.7;
+  font-size: 13px;
+  flex: 1;
+}
+.sp-list {
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sp-slot {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 12px;
+  align-items: center;
+  border: 1px solid #233034;
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+.sp-name {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 13px;
+}
+.sp-name code {
+  color: var(--accent);
+}
+.sp-name span {
+  opacity: 0.75;
+}
+.sp-options {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.sp-slot:global(.chosen) {
+  border-color: #3d5761;
+  background: #101618;
+}
+.sp-open {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 13px;
+  white-space: nowrap;
+}
+.sp-result {
+  font-size: 13px;
+  color: var(--accent);
+}
+.sp-bad {
+  color: #e0795a;
+}

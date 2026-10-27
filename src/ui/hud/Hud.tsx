@@ -19,7 +19,7 @@ import { RevealOverlay } from "./Reveal";
 import { ChaosBagButton, PileColumn, PlayStrip, ScenarioPanel } from "./Panels";
 import { PlayerBar } from "./PlayerBar";
 import { Drawer } from "./Drawer";
-import { Glyph, UiIcon } from "../components/Icon";
+import { Glyph, UiIcon } from "../components/Icon/index";
 import { useLayoutMode } from "../state/layoutMode";
 import { StatBar } from "./Stats";
 import { MulliganRow } from "./MulliganRow";
@@ -31,9 +31,9 @@ import { optionLabel } from "../game/optionText";
 import { InvestigatorChoiceOverlay } from "./InvestigatorChoice";
 import { Ribbon } from "./Ribbon";
 import { SkillTestScreen } from "./SkillTestScreen";
-import { Portrait } from "../components/Portrait";
+import { Portrait } from "../components/Portrait/index";
 import { spotlightNow } from "../game/spotlight";
-import { LangSwitch } from "../components/LangSwitch";
+import { LangSwitch } from "../components/LangSwitch/index";
 import { useStage, useView } from "../state/view";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>

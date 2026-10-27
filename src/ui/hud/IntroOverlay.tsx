@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { campaignBlurb, scenarioText, t } from "../../content/i18n";
 import { reducedMotion } from "../game/arrivals";
-import { CardFace } from "../components/CardFace";
+import { CardFace } from "../components/CardFace/index";
 import { db, useGame } from "../state/context";
 import { guideHtml, moreBelow } from "../game/guideText";
 import { backUrl } from "../assets/images";

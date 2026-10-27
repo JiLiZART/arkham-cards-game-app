@@ -16,7 +16,7 @@ import { Table } from "./scene/Table";
 import { useView } from "./state/view";
 import { useLayout } from "./state/layoutMode";
 import { installTouch } from "./game/touch";
-import { LangSwitch } from "./components/LangSwitch";
+import { LangSwitch } from "./components/LangSwitch/index";
 
 /** a phone held upright: the table needs it sideways (nothing about the game changes while this shows) */
 function RotateCard() {

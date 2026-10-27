@@ -4,8 +4,8 @@ import { campaignLoaded, loadAllPacks, loadCampaign, loadPacksFor } from "../../
 import { cardText, scenarioText, t } from "../../content/i18n";
 import type { Difficulty } from "../../content/schema";
 import { db, gameStore, useGame } from "../state/context";
-import { Glyph, Icon, Stat, UiIcon } from "../components/Icon";
-import { CardFace } from "../components/CardFace";
+import { Glyph, Icon, Stat, UiIcon } from "../components/Icon/index";
+import { CardFace } from "../components/CardFace/index";
 import { formatText } from "../hud/Hud";
 import { cardImage } from "../assets/images";
 import { hasSymbol, isIcon, scenarioIcon } from "../assets/icons";

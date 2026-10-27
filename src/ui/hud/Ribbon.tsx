@@ -1,6 +1,6 @@
 import { scenarioText, t } from "../../content/i18n";
 import { db, gameStore, useGame } from "../state/context";
-import { Glyph } from "../components/Icon";
+import { Glyph } from "../components/Icon/index";
 import { hasSymbol, scenarioIcon } from "../assets/icons";
 import { ribbonModel } from "../game/ribbon";
 

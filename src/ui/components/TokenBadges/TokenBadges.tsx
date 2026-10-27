@@ -2,7 +2,7 @@ import { t } from "../../../content/i18n";
 import type { CardInst } from "../../../engine/types";
 import { db, useGame } from "../../state/context";
 import { intentOf } from "../../game/intent";
-import { Glyph, Icon } from "../Icon";
+import { Glyph, Icon } from "../Icon/index";
 import type { IconName } from "../../assets/icons";
 import { cx } from "../cx";
 import styles from "./TokenBadges.module.css";

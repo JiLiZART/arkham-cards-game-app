@@ -2,13 +2,13 @@ import type { CSSProperties } from "react";
 import { useEffect, useLayoutEffect, useMemo, useReducer, useRef } from "react";
 import { cardText, encounterSetName, t } from "../../content/i18n";
 import type { GameState } from "../../engine/types";
-import { CardFace } from "../components/CardFace";
-import { ChaosToken } from "../components/ChaosToken";
+import { CardFace } from "../components/CardFace/index";
+import { ChaosToken } from "../components/ChaosToken/index";
 import { db, gameStore, useGame } from "../state/context";
 import { feedEntry, mergeLive, shownCount, STEP, type FeedEntry, type Part } from "../game/feed";
-import { Glyph, Icon } from "../components/Icon";
+import { Glyph, Icon } from "../components/Icon/index";
 import { CLASS_COLORS, hasSymbol } from "../assets/icons";
-import { Portrait } from "../components/Portrait";
+import { Portrait } from "../components/Portrait/index";
 import { useView } from "../state/view";
 
 const LIVE_MAX = 4;

@@ -29,9 +29,9 @@
 
 ## 5. Catalog and dev
 
-- [ ] 5.1 `catalog/`: `Catalog/` and `CardPage/` folders with modules; `filter.ts` and `state.ts` move with their owner or stay as catalog helpers
-- [ ] 5.2 `dev/`: its component folder and module
-- [ ] 5.3 Screenshots of the catalog and the dev panel match the baseline
+- [x] 5.1 `catalog/`: `Catalog/` and `CardPage/` folders with modules; `filter.ts` and `state.ts` move with their owner or stay as catalog helpers
+- [x] 5.2 `dev/`: its component folder and module
+- [x] 5.3 Screenshots of the catalog and the dev panel match the baseline
 
 ## 6. Menus
 

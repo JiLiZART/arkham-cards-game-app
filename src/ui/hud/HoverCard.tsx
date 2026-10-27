@@ -1,13 +1,13 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { cardText } from "../../content/i18n";
 import type { GameState, InstId } from "../../engine/types";
-import { CardFace } from "../components/CardFace";
+import { CardFace } from "../components/CardFace/index";
 import { db, useGame } from "../state/context";
 import { centreOn, placeHover } from "../game/hover";
-import { Glyph, Icon } from "../components/Icon";
+import { Glyph, Icon } from "../components/Icon/index";
 import { optionLabel } from "../game/optionText";
 import { mapProjector } from "../scene/Table";
-import { IntentBadge, TokenBadges } from "../components/TokenBadges";
+import { IntentBadge, TokenBadges } from "../components/TokenBadges/index";
 import { useCardClick } from "../game/cardClick";
 import { useView } from "../state/view";
 import { cardDetails } from "../game/details";

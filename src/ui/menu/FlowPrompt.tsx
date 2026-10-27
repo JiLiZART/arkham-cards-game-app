@@ -3,7 +3,7 @@ import { cardText, scenarioText, stepText, t } from "../../content/i18n";
 import type { CampaignState } from "../../engine/campaign";
 import { db, gameStore, useGame } from "../state/context";
 import { guideHtml } from "../game/guideText";
-import { Portrait } from "../components/Portrait";
+import { Portrait } from "../components/Portrait/index";
 import { moment } from "../hud/SoundLayer";
 import { visibleChoices } from "./campaignView";
 

@@ -3,7 +3,7 @@ import { cardText } from "../../content/i18n";
 import { db, gameStore, useGame } from "../state/context";
 import { instructionParts } from "../game/instruction";
 import { choicesOffered, delayed, investigatorChoice } from "../state/players";
-import { Portrait } from "../components/Portrait";
+import { Portrait } from "../components/Portrait/index";
 import { useView } from "../state/view";
 import { Sentence } from "./Feed";
 import { moment } from "./SoundLayer";

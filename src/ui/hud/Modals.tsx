@@ -1,10 +1,10 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { cardText, encounterSetName, t } from "../../content/i18n";
 import type { ChoiceOption, GameState, InstId } from "../../engine/types";
-import { CardFace } from "../components/CardFace";
+import { CardFace } from "../components/CardFace/index";
 import { cardDetails } from "../game/details";
 import { db, useGame } from "../state/context";
-import { Glyph, Icon } from "../components/Icon";
+import { Glyph, Icon } from "../components/Icon/index";
 import type { IconName } from "../assets/icons";
 import { useChoicesOffered } from "../state/usePlayers";
 import { optionLabel } from "../game/optionText";

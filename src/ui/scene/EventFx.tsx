@@ -5,7 +5,7 @@ import * as THREE from "three";
 import { useGame } from "../state/context";
 import { useView } from "../state/view";
 import type { Vec3 } from "../game/layout";
-import { Icon } from "../components/Icon";
+import { Icon } from "../components/Icon/index";
 import type { IconName } from "../assets/icons";
 
 /** "−2 [damage]" style numbers floating up from a card */

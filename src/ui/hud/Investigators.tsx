@@ -1,6 +1,6 @@
 import { cardText, t } from "../../content/i18n";
 import type { GameState, InstId, InvId } from "../../engine/types";
-import { CardFace } from "../components/CardFace";
+import { CardFace } from "../components/CardFace/index";
 import { db, gameStore, useGame } from "../state/context";
 import { optionHome, optionOwner } from "../game/optionHome";
 import { viewerOf } from "../state/store";

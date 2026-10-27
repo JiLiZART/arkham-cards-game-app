@@ -26,7 +26,7 @@ import {
 import { useCardClick } from "../game/cardClick";
 import { clearPeek, setMapCardAt, tapCard } from "../game/touch";
 import { iconUrl } from "../assets/icons";
-import { Portrait } from "../components/Portrait";
+import { Portrait } from "../components/Portrait/index";
 import { db, gameStore, useGame } from "../state/context";
 import { RESOLVE_BOX } from "../hud/Reveal";
 import { CARD_H, CARD_W, footprint, layout, type Placement, type Vec3 } from "../game/layout";

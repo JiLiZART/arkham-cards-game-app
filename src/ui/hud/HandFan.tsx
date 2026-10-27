@@ -8,7 +8,7 @@ import {
 import { cardText } from "../../content/i18n";
 import type { ChoiceOption, GameState, InstId } from "../../engine/types";
 import { db, useGame } from "../state/context";
-import { CardFace as Face } from "../components/CardFace";
+import { CardFace as Face } from "../components/CardFace/index";
 import { backUrl } from "../assets/images";
 import {
   domPlace,

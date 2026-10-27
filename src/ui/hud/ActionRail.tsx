@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { cardText, t } from "../../content/i18n";
 import type { ChoiceOption, GameState } from "../../engine/types";
 import { db, useGame } from "../state/context";
-import { Icon, UiIcon, type UiIconName } from "../components/Icon";
+import { Icon, UiIcon, type UiIconName } from "../components/Icon/index";
 import type { IconName } from "../assets/icons";
 import { backUrl } from "../assets/images";
 import { instructionParts } from "../game/instruction";

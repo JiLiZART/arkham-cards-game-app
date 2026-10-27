@@ -10,7 +10,7 @@ import {
 import { currentScenarioId } from "../../engine/campaign";
 import { db, gameStore, useGame } from "../state/context";
 import { guideHtml } from "../game/guideText";
-import { Portrait } from "../components/Portrait";
+import { Portrait } from "../components/Portrait/index";
 import { logView, readItems } from "./campaignView";
 import { DeckBuilder } from "./DeckBuilder";
 import { FlowPrompt } from "./FlowPrompt";

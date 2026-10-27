@@ -3,11 +3,11 @@ import { cardText, t } from "../../content/i18n";
 import type { ChoiceOption, GameEvent, GameState, InvId, SkillTestState } from "../../engine/types";
 import { rememberRect } from "../game/arrivals";
 import { useOptionsByCard } from "../game/cardClick";
-import { CardFace } from "../components/CardFace";
+import { CardFace } from "../components/CardFace/index";
 import { db, gameStore, useGame } from "../state/context";
-import { Icon, UiIcon } from "../components/Icon";
+import { Icon, UiIcon } from "../components/Icon/index";
 import { isIcon } from "../assets/icons";
-import { Portrait } from "../components/Portrait";
+import { Portrait } from "../components/Portrait/index";
 import { viewerOf } from "../state/store";
 import { cardDetails } from "../game/details";
 import {

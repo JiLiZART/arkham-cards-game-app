@@ -3,7 +3,7 @@ import { t } from "../../content/i18n";
 import type { GameState, InstId, InvId } from "../../engine/types";
 import { domPlace, reducedMotion, rememberRect } from "../game/arrivals";
 import { cardDetails } from "../game/details";
-import { CardFace } from "../components/CardFace";
+import { CardFace } from "../components/CardFace/index";
 import { db, useGame } from "../state/context";
 import { backUrl } from "../assets/images";
 import { HELD, viewerOf } from "../state/store";

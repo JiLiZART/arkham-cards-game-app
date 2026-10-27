@@ -1,15 +1,15 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { moment } from "../hud/SoundLayer";
-import { loadAllPacks } from "../../content/index";
-import { cardText, encounterSetName, t } from "../../content/i18n";
-import type { CardDef } from "../../content/schema";
-import { db, gameStore, useGame } from "../state/context";
-import { CardFace } from "../components/CardFace";
-import { Icon } from "../components/Icon";
-import { isIcon } from "../assets/icons";
-import { useLayout } from "../state/layoutMode";
-import { cycleName } from "../menu/wizard";
-import { CardPage, WorksBadge } from "./CardPage";
+import { moment } from "../../hud/SoundLayer";
+import { loadAllPacks } from "../../../content/index";
+import { cardText, encounterSetName, t } from "../../../content/i18n";
+import type { CardDef } from "../../../content/schema";
+import { db, gameStore, useGame } from "../../state/context";
+import { CardFace } from "../../components/CardFace/index";
+import { Icon } from "../../components/Icon/index";
+import { isIcon } from "../../assets/icons";
+import { useLayout } from "../../state/layoutMode";
+import { cycleName } from "../../menu/wizard";
+import { CardPage, WorksBadge } from "../CardPage";
 import {
   catalogCards,
   cyclesOfCards,
@@ -18,8 +18,10 @@ import {
   traitsOf,
   type CatalogFilters,
   type Tab,
-} from "./filter";
-import { useCatalog } from "./state";
+} from "../filter";
+import { useCatalog } from "../state";
+import { cx } from "../../components/cx";
+import styles from "./Catalog.module.css";
 
 const TABS: Tab[] = ["investigators", "player", "encounter"];
 const CLASSES = ["guardian", "seeker", "rogue", "mystic", "survivor", "neutral"];
@@ -44,7 +46,7 @@ export function Chips<T extends string | number>({
 }) {
   if (!options.length) return null;
   return (
-    <div className="cat-filter" role="group" aria-label={label}>
+    <div className={styles.catFilter} role="group" aria-label={label}>
       <span className="hd-label">{label}</span>
       <div className="wz-chips">
         {options.map((o) => (
@@ -78,7 +80,7 @@ function Pick({
 }) {
   if (!options.length) return null;
   return (
-    <label className="cat-filter">
+    <label className={styles.catFilter}>
       <span className="hd-label">{label}</span>
       <select value={value} onChange={(e) => set(e.target.value)}>
         <option value="">{tr("catalog.any")}</option>
@@ -103,7 +105,7 @@ function Filters({ tabCards, locale }: { tabCards: CardDef[]; locale: string }) 
   const sets = [...new Set(tabCards.flatMap((c) => c.encounterSet ?? []))].sort();
   const one = (v: string) => (v ? [v] : []);
   return (
-    <div className="cat-filters">
+    <div className={styles.catFilters}>
       <input
         type="search"
         placeholder={tr("catalog.search")}
@@ -226,13 +228,13 @@ function Entry({ c, locale, view }: { c: CardDef; locale: string; view: "grid" |
     c.pack.toUpperCase(),
   ].join(" · ");
   return (
-    <button className={`cat-entry ${view}`} onClick={() => open(c.code)}>
+    <button className={cx(styles.catEntry, styles[view])} onClick={() => open(c.code)}>
       {view === "grid" && (
-        <span className="cat-thumb">
+        <span className={styles.catThumb}>
           <CardFace code={c.code} locale={locale} remote />
         </span>
       )}
-      <span className="cat-name">
+      <span className={styles.catName}>
         <b>{tx.name}</b>
         {tx.subname && <i> {tx.subname}</i>}
         <small>
@@ -303,7 +305,7 @@ export function Catalog() {
       {ready && page && <CardPage key={page} code={page} />}
       {ready && !page && (
         <>
-          <div className="cat-tabs" role="tablist">
+          <div className={styles.catTabs} role="tablist">
             {TABS.map((x) => (
               <button
                 key={x}
@@ -318,7 +320,7 @@ export function Catalog() {
                 {tr(`catalog.tab.${x}`)}
               </button>
             ))}
-            <span className="cat-count" role="status">
+            <span className={styles.catCount} role="status">
               {tr("catalog.count", { n: results.length })}
             </span>
             <button className="wz-chip" onClick={() => setView(view === "grid" ? "list" : "grid")}>
@@ -330,18 +332,18 @@ export function Catalog() {
               </button>
             )}
           </div>
-          <div className="cat-main">
+          <div className={styles.catMain}>
             {(mode !== "phone" || drawer) && (
-              <aside className={`cat-aside ${mode === "phone" ? "drawer" : ""}`}>
+              <aside className={cx(styles.catAside, mode === "phone" ? "drawer" : "")}>
                 <Filters tabCards={tabCards} locale={locale} />
               </aside>
             )}
-            <div className={`cat-results ${view}`}>
+            <div className={cx(styles.catResults, styles[view])}>
               {!results.length && <p className="wz-hint">{tr("catalog.noMatch")}</p>}
               {results.slice(0, shown).map((c) => (
                 <Entry key={c.code} c={c} locale={locale} view={view} />
               ))}
-              <div ref={sentinel} className="cat-sentinel" aria-hidden="true" />
+              <div ref={sentinel} className={styles.catSentinel} aria-hidden="true" />
             </div>
           </div>
         </>

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { cardText, t } from "../../content/i18n";
 import type { CardDef, DeckDef } from "../../content/schema";
 import { whyNot, whyNotReplace } from "../../engine/decks";
-import { CardFace } from "../components/CardFace";
+import { CardFace } from "../components/CardFace/index";
 import { db, gameStore, useGame } from "../state/context";
 import {
   basicWeaknesses,
@@ -13,7 +13,7 @@ import {
   withWeakness,
   type PoolFilter,
 } from "../game/decks";
-import { Icon } from "../components/Icon";
+import { Icon } from "../components/Icon/index";
 import { isIcon } from "../assets/icons";
 import { moment } from "../hud/SoundLayer";
 

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { cardText, t } from "../../content/i18n";
 import type { GameState } from "../../engine/types";
-import { CardFace } from "../components/CardFace";
+import { CardFace } from "../components/CardFace/index";
 import { groupTokens } from "../game/chaos";
 import { db, useGame } from "../state/context";
 import { useView } from "../state/view";

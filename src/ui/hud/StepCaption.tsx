@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { UiIcon } from "../components/Icon";
+import { UiIcon } from "../components/Icon/index";
 import { t } from "../../content/i18n";
 import type { GameEvent } from "../../engine/types";
 import { captionIndex, captionStageBusy } from "../game/feed";
