@@ -1,12 +1,13 @@
 #!/usr/bin/env bash
 # Copy the cardboard token art and table art from inspired/ into public/ (run once; outputs are committed).
 # Every other icon is a symbol of the sprite built by scripts/import-icons.ts.
-# Needs: ImageMagick (magick).
+# Needs: ImageMagick (magick), Upscayl (its bundled CLI, for the 4x upscale) and cwebp.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 SRC=inspired/icons
 AC_ASSETS=inspired/ArkhamCards/assets
 OUT=public/icons
+UPSCAYL=/Applications/Upscayl.app/Contents/Resources
 mkdir -p "$OUT" public/table
 
 # target name  ←  source file
@@ -14,13 +15,14 @@ mkdir -p "$OUT" public/table
 # Tokens and plaques come on an opaque white box; $SRC/transparent has them cut out by hand, but its cut also
 # cleared white inside the art (the heart, the 3s). Keep its outline, fill the holes: alpha = its alpha, or opaque
 # for anything not reachable from the border through fully transparent pixels (eroded 1px to keep its soft edge).
-rm -f "$OUT"/*.png  # the sprite (sprite.svg) is not touched
+rm -f "$OUT"/*.webp  # the sprite (sprite.svg) is not touched
 TMP=$(mktemp -d)
+mkdir -p "$TMP/png" "$TMP/up"
 while read -r dst src; do
   magick "$SRC/transparent/$src" -alpha extract -threshold 0 -bordercolor black -border 1 -fill gray50 -draw "color 0,0 floodfill" \
     -fill white +opaque gray50 -fill black -opaque gray50 -shave 1x1 -morphology Erode Disk:1 "$TMP/inside.png"
   magick "$SRC/transparent/$src" -alpha extract "$TMP/inside.png" -compose Lighten -composite "$TMP/alpha.png"
-  magick "$SRC/$src" -alpha off "$TMP/alpha.png" -compose CopyOpacity -composite "$OUT/$dst.png"
+  magick "$SRC/$src" -alpha off "$TMP/alpha.png" -compose CopyOpacity -composite "$TMP/png/$dst.png"
 done <<'MAP'
 damage damage-token-one.png
 horror horror-token.png
@@ -34,10 +36,19 @@ lead token-lead-player.png
 connector-both connector-both-ways.png
 connector-one-way connector-one-way-from-left-to-right.png
 MAP
-rm -rf "$TMP"
 
 # the painted chaos bag (already on a transparent background)
-cp inspired/icons/no_bg_chaos-bag.png "$OUT/chaos-bag.png"
+cp inspired/icons/no_bg_chaos-bag.png "$TMP/png/chaos-bag.png"
+
+# the rulebook art is 60-180 px: upscale 4x (Upscayl, remacri model) and store as WebP. The upscaled alpha keeps the
+# hand cut's jagged edge, stray speckles and a white rim from the source's white box: snap it to a hard edge (blur +
+# level), shave 3 px off that rim and soften the result by a pixel.
+"$UPSCAYL/bin/upscayl-bin" -i "$TMP/png" -o "$TMP/up" -s 4 -n remacri-4x -m "$UPSCAYL/models" -f png >/dev/null 2>&1
+for f in "$TMP"/up/*.png; do
+  magick "$f" \( +clone -alpha extract -blur 0x2 -level 45%,55% -morphology Erode Disk:3 -blur 0x1 \) -alpha off -compose CopyOpacity -composite "$f"
+  cwebp -quiet -q 90 -alpha_q 100 -m 6 -metadata none "$f" -o "$OUT/$(basename "$f" .png).webp"
+done
+rm -rf "$TMP"
 
 # card backs from ArkhamCards, mapped by their art: its file names are swapped relative to the printed game
 # (encounter-back.png is the sepia tentacle player back, player-back.png the blue eclipse encounter back)
