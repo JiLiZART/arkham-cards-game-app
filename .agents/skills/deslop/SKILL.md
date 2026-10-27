@@ -28,7 +28,6 @@ The failure mode this exists for: AI-assisted code that passes review because it
 - Keep behavior unchanged unless fixing a clear bug.
 - Prefer minimal, focused edits over broad rewrites.
 - Match the local style — don't impose a different convention, remove the deviation from the existing one.
-- Follow [030-coding-style](../../../.cursor/rules/030-coding-style.mdc) and [040-logging](../../../.cursor/rules/040-logging.mdc).
 
 ## Output should feel like
 

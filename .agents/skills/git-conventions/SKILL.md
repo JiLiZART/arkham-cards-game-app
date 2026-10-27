@@ -37,30 +37,7 @@ The type must be one of the following:
 
 ### Scope
 
-The scope should be the name of the package or area affected. For this monorepo:
-
-**Apps:**
-
-- `api` - Backend API service
-- `bot` - Discord bot
-- `desktop` - Desktop application
-- `lockdex` - Lockdex service
-- `www` - Web application
-- `mirror-service` - Mirror service
-
-**Packages:**
-
-- `common` - Common utilities
-- `database` - Database schema and client
-- `logging` - Logging package
-- `shared` - Shared utilities
-- `vpk-parser` - VPK parser
-
-**Other:**
-
-- `deps` - Dependency updates
-- `repo` - Repository-wide changes
-- `release` - Release-related changes
+The scope should be the name of the package or area affected.
 
 ### Subject
 
@@ -124,7 +101,7 @@ Migration guide available at docs/migration/v1-to-v2.md
 ### Dependency Update
 
 ```text
-chore(deps): update @tauri-apps/api to v2.1.0
+chore(deps): update react-dom to v2.1.0
 ```
 
 ### Documentation
@@ -150,17 +127,17 @@ fix(www): correct button alignment on mobile
 ### Branch Format
 
 ```text
-<type>/<ticket-or-description>
+<type>-<ticket-or-shortdescription>
 ```
 
 ### Types
 
-- `feature/` - New features
-- `bugfix/` - Bug fixes
-- `hotfix/` - Critical fixes that need immediate deployment
-- `refactor/` - Code refactoring
-- `chore/` - Maintenance tasks
-- `docs/` - Documentation updates
+- `feat-` - New features
+- `fix-` - Bug fixes
+- `hotfix-` - Critical fixes that need immediate deployment
+- `refactor-` - Code refactoring
+- `chore-` - Maintenance tasks
+- `docs-` - Documentation updates
 
 ### Branch Naming Rules
 
@@ -173,16 +150,16 @@ fix(www): correct button alignment on mobile
 
 ```bash
 # With ticket number
-feature/KR-123-add-mod-collections
-bugfix/KR-456-fix-download-crash
-hotfix/KR-789-security-patch
+feat-KR-123-add-mod-collections
+fix-KR-456-fix-download-crash
+hotfix-KR-789-security-patch
 
 # Without ticket number
-feature/dark-mode-toggle
-bugfix/pagination-edge-case
-refactor/extract-validation-logic
-chore/update-dependencies
-docs/add-api-examples
+feat-dark-mode-toggle
+fix-pagination-edge-case
+refactor-extract-validation-logic
+chore-update-dependencies
+docs-add-api-examples
 ```
 
 ## Gathering Git Context
@@ -199,10 +176,6 @@ This provides:
 - Staged files summary → determine scope (which workspace/package)
 - Actual changes → determine commit type and write description
 
-### Changesets Integration
-
-This project uses changesets for version management. See [090-changesets.mdc](mdc:.cursor/rules/090-changesets.mdc) for details on when and how to create changesets alongside commits.
-
 ### Current branch (agents)
 
 When running `/commit` or creating commits for the user, use the **checked-out
@@ -214,5 +187,3 @@ asks for a different branch.
 
 - [Conventional Commits Specification](https://www.conventionalcommits.org/)
 - [Semantic Versioning](https://semver.org/)
-- [Keep a Changelog](https://keepachangelog.com/)
-- [Project Changeset Guidelines](mdc:.cursor/rules/090-changesets.mdc)

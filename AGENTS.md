@@ -94,10 +94,28 @@ Pass script arguments without `--` (`pnpm fetch:cards dist`); pnpm forwards a `-
 
 ## Agent workflows
 
-- Skills live in `.agents/skills`. Run `pnpm skills:link` to link them into `.claude/skills` after changing the skill set; existing directories are preserved.
+- Skills live in `.agents/skills`, one source for every harness. `pnpm skills:link` links each into `.claude/skills`; run it after adding or renaming a skill. A real directory there is a harness-specific install and is kept: `impeccable` (its Claude build) and the `openspec-*` skills (written by the OpenSpec CLI). Edit a linked skill in `.agents/skills`, never through the link.
 - New features start with an OpenSpec change: propose with the `openspec-propose` skill (`/opsx:propose`), implement with `/opsx:apply`, archive with `/opsx:archive`. Bug fixes don't need one. Follow [openspec-git-discipline](.agents/skills/openspec-git-discipline/SKILL.md) and the rules in `openspec/config.yaml`.
 - For architecture decisions, add an ADR in `adr/` with the [architectural-decision-records](.agents/skills/architectural-decision-records/SKILL.md) skill.
 - On request, use [simplify](.agents/skills/simplify/SKILL.md) or [code-simplifier](.agents/skills/code-simplifier/SKILL.md) for scoped review and cleanup, and [deslop](.agents/skills/deslop/SKILL.md) for AI-flavored code and prose.
 - UI design work goes through [impeccable](.agents/skills/impeccable/SKILL.md); the design context is `.agents/context/design.md` and `.agents/context/product.md`, with the sidecar `.impeccable/design.json`.
 - Anti-slop rules initially report warnings so existing code can be inventoried without a bulk refactor. Resolve findings in new or modified code; promote rules only after reviewing their existing violations.
 - Tests sit next to the code as `*.test.ts`. Tests under `src/engine/` follow the engine's import rule; a test that also checks UI placement goes in `src/ui/`.
+
+### Which skill when
+
+| When                                         | Skill                                                                                                                                                                                                               |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Committing                                   | `commit` for the commit itself, `git-conventions` for message and branch naming (`type(scope): description`)                                                                                                        |
+| A new feature                                | `openspec-propose` → `openspec-apply-change` → `openspec-archive-change`, with `openspec-git-discipline`; `openspec-explore` to think one through first, `openspec-update-change` / `openspec-sync-specs` to revise |
+| Specs written as executable acceptance tests | `spec-as-source`, `gherkin-authoring`, `acceptance-test-authoring`                                                                                                                                                  |
+| Wording in specs, ADRs and tasks             | `glossary`                                                                                                                                                                                                          |
+| Logic changes and bug fixes                  | `test-driven-development` (vitest, `src/engine/testkit.ts`)                                                                                                                                                         |
+| An architecture decision                     | `architectural-decision-records` (MADR minimal, in `adr/`); `c4-diagrams` to draw it                                                                                                                                |
+| Stress-testing a plan before building        | `grill-me`                                                                                                                                                                                                          |
+| HUD, menus, any screen design                | `impeccable` (design context in `.agents/context/`); `web-design-guidelines` to review UI for accessibility and UX                                                                                                  |
+| React components                             | `vercel-react-best-practices`, `vercel-composition-patterns`, `you-might-not-need-an-effect` (no `useEffect` for derived state); `split-react-components` when a file holds several components                      |
+| The 3D table (`src/ui/scene/`)               | `react-three-fiber`, plus the `threejs-*` skill for the topic: fundamentals, interaction, animation, lighting, materials, shaders, textures                                                                         |
+| Driving the app in a browser                 | `agent-browser`, or Playwright as in "DO" above                                                                                                                                                                     |
+| Cleanup, on request only                     | `simplify` (a diff), `code-simplifier` (recently changed code), `deslop` (AI-flavored code and prose)                                                                                                               |
+| Structure reviews, on request only           | `improve-codebase-architecture` (reads `adr/` here); `feature-sliced-design` only if moving to FSD is discussed: the codebase is laid out by engine / content / ui, not FSD layers                                  |

@@ -24,8 +24,10 @@ export async function linkClaudeSkills(workspace = root) {
     const target = join(source, entry.name);
     const link = join(destination, entry.name);
     const stats = await statLink(link);
+    // a real directory is a harness-specific install (impeccable's Claude build): kept as it is
     if (stats && !stats.isSymbolicLink()) {
-      throw new Error(`Skill path is not a link; preserve and move it manually: ${link}`);
+      console.warn(`kept ${link}: a directory, not a link`);
+      continue;
     }
     if (stats) {
       const existing = resolve(destination, await readlink(link));
