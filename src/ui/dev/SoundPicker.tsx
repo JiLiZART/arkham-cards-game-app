@@ -8,9 +8,9 @@
 import { useEffect, useMemo, useState } from "react";
 import type { SoundCandidates, SoundManifest } from "../../content/schema";
 import { clipAt } from "../../content/soundChoose";
-import { audio } from "../audio";
-import { asset } from "../images";
-import { db } from "../context";
+import { audio } from "../assets/audio";
+import { asset } from "../assets/images";
+import { db } from "../state/context";
 
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, "");
 const GROUPS = [

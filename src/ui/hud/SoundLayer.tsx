@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react";
 import type { GameState, InstId } from "../../engine/types";
-import { audio } from "../audio";
-import { db, gameStore, useGame } from "../context";
-import { effectFor, gainOf, mayPlay, momentClip, musicFor } from "../sounds";
-import { useView } from "../view";
-import type { QueuedEvent } from "../store";
+import { audio } from "../assets/audio";
+import { db, gameStore, useGame } from "../state/context";
+import { effectFor, gainOf, mayPlay, momentClip, musicFor } from "../assets/sounds";
+import { useView } from "../state/view";
+import type { QueuedEvent } from "../state/store";
 
 const sounds = () => db.sounds;
 

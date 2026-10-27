@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { t } from "../../content/i18n";
-import { db, gameStore, useGame } from "../context";
-import { SAVE_KEY, safeStorage } from "../store";
+import { db, gameStore, useGame } from "../state/context";
+import { SAVE_KEY, safeStorage } from "../state/store";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);

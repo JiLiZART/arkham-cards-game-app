@@ -1,12 +1,12 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { campaignBlurb, scenarioText, t } from "../../content/i18n";
-import { reducedMotion } from "../arrivals";
-import { CardFace } from "../CardFace";
-import { db, useGame } from "../context";
-import { guideHtml, moreBelow } from "../guideText";
-import { backUrl } from "../images";
-import { INTRO_STEPS, whenDealt } from "../intro";
-import { useStage, useView } from "../view";
+import { reducedMotion } from "../game/arrivals";
+import { CardFace } from "../components/CardFace";
+import { db, useGame } from "../state/context";
+import { guideHtml, moreBelow } from "../game/guideText";
+import { backUrl } from "../assets/images";
+import { INTRO_STEPS, whenDealt } from "../game/intro";
+import { useStage, useView } from "../state/view";
 import { centreTransform, riseAndArc } from "./flights";
 
 const FLY_MS = 650;

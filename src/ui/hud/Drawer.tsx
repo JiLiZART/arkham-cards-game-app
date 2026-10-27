@@ -1,5 +1,5 @@
 import { useEffect, useRef, type ReactNode } from "react";
-import { useView } from "../view";
+import { useView } from "../state/view";
 import { moment } from "./SoundLayer";
 
 type Edge = "left" | "right";

@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from "vitest";
-import { loadPack } from "../content";
+import { loadPack } from "../content/index";
 import { createGame, dispatch, run, type Result } from "./engine";
 import { next } from "./rng";
 import { db, gOf, mutate, options, pick, putEnemy, skipMulligans, start } from "./testkit";

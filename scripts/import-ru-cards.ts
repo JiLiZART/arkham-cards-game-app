@@ -8,7 +8,7 @@
  *   3. match    — score each image against the content's cards (see ruMatch.ts)
  *   4. choose   — per code and side: the folder file, else the best CARDS_ru image, else the best PDF image; overrides on top
  *   5. review   — .cache/ru-import/review-<range>.html, one contact sheet per code range (01 core, 02 Dunwich, 50 Return to…)
- *   6. output   — content/i18n/ru/images.json, public/cards-ru/*.webp (content cards, 50%), src/ui/ruImages.generated.json
+ *   6. output   — content/i18n/ru/images.json, public/cards-ru/*.webp (content cards, 50%), src/ui/assets/ruImages.generated.json
  * Needs tesseract, pdfimages (poppler), ImageMagick and cwebp.   npm run import:ru-cards [-- --stage ocr]
  */
 import { execFile } from "node:child_process";
@@ -217,7 +217,7 @@ export async function ocrOf(c: Candidate): Promise<Ocr> {
 const MANIFEST = "content/i18n/ru/images.json";
 const OVERRIDES = "content/i18n/ru/images.overrides.json";
 const OUT_DIR = "public/cards-ru";
-const GENERATED = "src/ui/ruImages.generated.json";
+const GENERATED = "src/ui/assets/ruImages.generated.json";
 
 /** what the matcher knows about each content card */
 function cardInfos(db: ContentDb): CardInfo[] {

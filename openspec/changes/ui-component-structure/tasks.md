@@ -15,11 +15,11 @@
 
 ## 3. Group the root by concern (moves and imports only)
 
-- [ ] 3.1 `git mv` the stores into `state/` (`context`, `store`, `view`, `layoutMode`, `usePlayers`, `players` and their tests); update imports
-- [ ] 3.2 `git mv` table logic into `game/` (option placement, option text, feed, instruction, arrivals, showcase, intro, card click, details, glance, glossary, intent, phases, spotlight, test screen, tips, chaos, toss, hit, hover, touch, camera, layout, ribbon, decks, guide text, with tests); update imports
-- [ ] 3.3 `git mv` `images`, `icons`, `sounds`, `audio`, `ruImages.generated.json` into `assets/`; update imports and any script that writes `ruImages.generated.json`
-- [ ] 3.4 Move `CardFace`, `ChaosToken`, `Icon`, `Portrait`, `TokenBadges`, `TokenPile`, `LangSwitch` into `components/<Name>/` folders with `index.ts`
-- [ ] 3.5 `pnpm typecheck`, `pnpm test`, `pnpm lint`, `pnpm build`; the root lists only folders, `App.tsx`, `styles.css`
+- [x] 3.1 `git mv` the stores into `state/` (`context`, `store`, `view`, `layoutMode`, `usePlayers`, `players` and their tests); update imports
+- [x] 3.2 `git mv` table logic into `game/` (option placement, option text, feed, instruction, arrivals, showcase, intro, card click, details, glance, glossary, intent, phases, spotlight, test screen, tips, chaos, toss, hit, hover, touch, camera, layout, ribbon, decks, guide text, with tests); update imports
+- [x] 3.3 `git mv` `images`, `icons`, `sounds`, `audio`, `ruImages.generated.json` into `assets/`; update imports and any script that writes `ruImages.generated.json`
+- [x] 3.4 Move `CardFace`, `ChaosToken`, `Icon`, `Portrait`, `TokenBadges`, `TokenPile`, `LangSwitch` into `components/<Name>/` folders with `index.ts`
+- [x] 3.5 `pnpm typecheck`, `pnpm test`, `pnpm lint`, `pnpm build`; the root lists only folders, `App.tsx`, `styles.css`
 
 ## 4. Shared components get modules
 

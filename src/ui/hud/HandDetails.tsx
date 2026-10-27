@@ -1,15 +1,15 @@
 import { useLayoutEffect, useRef, type RefObject } from "react";
 import { t } from "../../content/i18n";
 import type { GameState, InstId } from "../../engine/types";
-import { db, useGame } from "../context";
-import { blockedRow, cardDetails, placeDetails, type DetailRow } from "../details";
-import type { Rect } from "../hover";
-import { Glyph, Icon } from "../Icon";
-import { isIcon } from "../icons";
-import { Portrait } from "../Portrait";
+import { db, useGame } from "../state/context";
+import { blockedRow, cardDetails, placeDetails, type DetailRow } from "../game/details";
+import type { Rect } from "../game/hover";
+import { Glyph, Icon } from "../components/Icon";
+import { isIcon } from "../assets/icons";
+import { Portrait } from "../components/Portrait";
 import { mapProjector } from "../scene/Table";
-import { TokenPile } from "../TokenPile";
-import { useView } from "../view";
+import { TokenPile } from "../components/TokenPile";
+import { useView } from "../state/view";
 import { formatText } from "./Hud";
 
 export const DETAILS_W = 280;

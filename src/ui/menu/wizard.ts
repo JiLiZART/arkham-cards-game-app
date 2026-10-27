@@ -1,11 +1,11 @@
 /** the new-game wizard's state: pure, so the order and back rules are tested without React */
 import { campaignBlurb, campaignName, cardText, t } from "../../content/i18n";
 import type { CampaignDef, DeckDef, Difficulty } from "../../content/schema";
-import { packsOf } from "../../content";
+import { packsOf } from "../../content/index";
 import { packLoaded } from "../../content/loader";
 import type { ContentDb } from "../../engine/types";
-import { customDecks, deckTabs, type SavedDeck } from "../decks";
-import type { Storage } from "../store";
+import { customDecks, deckTabs, type SavedDeck } from "../game/decks";
+import type { Storage } from "../state/store";
 
 export const STEPS = ["campaign", "investigators", "decks", "difficulty", "ready"] as const;
 export type Step = (typeof STEPS)[number];

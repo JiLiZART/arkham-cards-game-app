@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from "vitest";
-import { loadCampaign, loadPack } from "../content";
+import { loadCampaign, loadPack } from "../content/index";
 import { dispatch } from "./engine";
 import { next } from "./rng";
 import { db, start } from "./testkit";

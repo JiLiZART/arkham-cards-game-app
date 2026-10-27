@@ -1,8 +1,8 @@
 import { scenarioText, t } from "../../content/i18n";
-import { db, gameStore, useGame } from "../context";
-import { Glyph } from "../Icon";
-import { hasSymbol, scenarioIcon } from "../icons";
-import { ribbonModel } from "../ribbon";
+import { db, gameStore, useGame } from "../state/context";
+import { Glyph } from "../components/Icon";
+import { hasSymbol, scenarioIcon } from "../assets/icons";
+import { ribbonModel } from "../game/ribbon";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);

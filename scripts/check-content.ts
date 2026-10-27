@@ -12,7 +12,7 @@ import {
 } from "../src/content/soundChecks";
 import { MOMENTS } from "../src/content/soundSlots";
 import { SLOTS } from "./sound-candidates";
-import { ANIMATED } from "../src/ui/store";
+import { ANIMATED } from "../src/ui/state/store";
 import { replaceCredits, soundCredits } from "./sound-credits";
 import { ffmpegAvailable, ffmpegProbe } from "./sound-probe";
 import {

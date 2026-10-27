@@ -7,9 +7,9 @@ import {
 } from "react";
 import { cardText } from "../../content/i18n";
 import type { ChoiceOption, GameState, InstId } from "../../engine/types";
-import { db, useGame } from "../context";
-import { CardFace as Face } from "../CardFace";
-import { backUrl } from "../images";
+import { db, useGame } from "../state/context";
+import { CardFace as Face } from "../components/CardFace";
+import { backUrl } from "../assets/images";
 import {
   domPlace,
   lastRects,
@@ -19,13 +19,13 @@ import {
   takeArrival,
   takeLocalMove,
   type Arrival,
-} from "../arrivals";
-import { placeDetails } from "../details";
-import { useChoicesOffered, useShown } from "../usePlayers";
-import { outsideSpotlight, useView } from "../view";
+} from "../game/arrivals";
+import { placeDetails } from "../game/details";
+import { useChoicesOffered, useShown } from "../state/usePlayers";
+import { outsideSpotlight, useView } from "../state/view";
 import { moment } from "./SoundLayer";
 import { GlanceBadge } from "./GlanceBadge";
-import { useViewport } from "../layoutMode";
+import { useViewport } from "../state/layoutMode";
 import {
   boxTransform,
   dockRadius,

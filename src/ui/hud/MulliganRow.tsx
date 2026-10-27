@@ -1,10 +1,10 @@
 import { useLayoutEffect, useRef } from "react";
 import { t } from "../../content/i18n";
 import type { GameState, InstId, InvId } from "../../engine/types";
-import { domPlace, noteLocalMove, reducedMotion, takeLocalMove, type ScreenBox } from "../arrivals";
-import { db, useGame } from "../context";
-import { backUrl } from "../images";
-import { viewerOf } from "../store";
+import { domPlace, noteLocalMove, reducedMotion, takeLocalMove, type ScreenBox } from "../game/arrivals";
+import { db, useGame } from "../state/context";
+import { backUrl } from "../assets/images";
+import { viewerOf } from "../state/store";
 import { centreTransform, flyGhost, flyIn, STAGGER_MS } from "./flights";
 import { MiniCard } from "./Panels";
 import { RESOLVE_BOX } from "./Reveal";

@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { cardText, scenarioText, stepText, t } from "../../content/i18n";
 import type { CampaignState } from "../../engine/campaign";
-import { db, gameStore, useGame } from "../context";
-import { guideHtml } from "../guideText";
-import { Portrait } from "../Portrait";
+import { db, gameStore, useGame } from "../state/context";
+import { guideHtml } from "../game/guideText";
+import { Portrait } from "../components/Portrait";
 import { moment } from "../hud/SoundLayer";
 import { visibleChoices } from "./campaignView";
 

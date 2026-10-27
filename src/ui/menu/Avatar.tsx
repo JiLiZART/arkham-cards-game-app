@@ -1,5 +1,5 @@
-import { db, useGame } from "../context";
-import { Portrait } from "../Portrait";
+import { db, useGame } from "../state/context";
+import { Portrait } from "../components/Portrait";
 import { investigatorInfo } from "./wizard";
 
 /** an investigator as the round class-ringed portrait with name and class; `badge` is the P1 to P4 turn-order mark */

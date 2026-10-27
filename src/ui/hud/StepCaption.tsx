@@ -1,11 +1,11 @@
 import { useEffect } from "react";
-import { UiIcon } from "../Icon";
+import { UiIcon } from "../components/Icon";
 import { t } from "../../content/i18n";
 import type { GameEvent } from "../../engine/types";
-import { captionIndex, captionStageBusy } from "../feed";
-import { db, useGame } from "../context";
-import { needsNext } from "../store";
-import { useView } from "../view";
+import { captionIndex, captionStageBusy } from "../game/feed";
+import { db, useGame } from "../state/context";
+import { needsNext } from "../state/store";
+import { useView } from "../state/view";
 import { Sentence, useFeedEntries } from "./Feed";
 
 /** the log index of the phase step being played out, or null (the prompt banner gives way to it) */

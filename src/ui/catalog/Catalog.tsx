@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { moment } from "../hud/SoundLayer";
-import { loadAllPacks } from "../../content";
+import { loadAllPacks } from "../../content/index";
 import { cardText, encounterSetName, t } from "../../content/i18n";
 import type { CardDef } from "../../content/schema";
-import { db, gameStore, useGame } from "../context";
-import { CardFace } from "../CardFace";
-import { Icon } from "../Icon";
-import { isIcon } from "../icons";
-import { useLayout } from "../layoutMode";
+import { db, gameStore, useGame } from "../state/context";
+import { CardFace } from "../components/CardFace";
+import { Icon } from "../components/Icon";
+import { isIcon } from "../assets/icons";
+import { useLayout } from "../state/layoutMode";
 import { cycleName } from "../menu/wizard";
 import { CardPage, WorksBadge } from "./CardPage";
 import {

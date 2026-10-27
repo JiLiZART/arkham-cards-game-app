@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { cardText, t } from "../../content/i18n";
 import type { GameState } from "../../engine/types";
-import { CardFace } from "../CardFace";
-import { groupTokens } from "../chaos";
-import { db, useGame } from "../context";
-import { useView } from "../view";
+import { CardFace } from "../components/CardFace";
+import { groupTokens } from "../game/chaos";
+import { db, useGame } from "../state/context";
+import { useView } from "../state/view";
 import { ChaosTokenIcon } from "./ChaosTokenIcon";
 import { formatText } from "./Hud";
 import { Modal } from "./Modals";

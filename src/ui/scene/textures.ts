@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import * as THREE from "three";
 import type { CardDef } from "../../content/schema";
-import { useGame } from "../context";
-import { backUrl, cardImage, FACTION_COLORS, faceLines, isEncounterCard } from "../images";
+import { useGame } from "../state/context";
+import { backUrl, cardImage, FACTION_COLORS, faceLines, isEncounterCard } from "../assets/images";
 
 const W = 360;
 const H = 504;

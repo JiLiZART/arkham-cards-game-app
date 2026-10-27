@@ -4,18 +4,18 @@ import { SKILLS } from "../../content/schema";
 import { maxHealth, maxSanity, skillValue } from "../../engine/core";
 import { HAND_LIMIT } from "../../engine/rules/investigators";
 import type { ChoiceOption, GameState, InvId } from "../../engine/types";
-import { db, gameStore, useGame } from "../context";
-import { Icon, Stat } from "../Icon";
-import { isIcon } from "../icons";
-import { backUrl } from "../images";
-import { Portrait } from "../Portrait";
-import { TokenPile } from "../TokenPile";
-import { abilityOptionsOf } from "../players";
-import { useShown } from "../usePlayers";
-import { useDimmed, useView } from "../view";
+import { db, gameStore, useGame } from "../state/context";
+import { Icon, Stat } from "../components/Icon";
+import { isIcon } from "../assets/icons";
+import { backUrl } from "../assets/images";
+import { Portrait } from "../components/Portrait";
+import { TokenPile } from "../components/TokenPile";
+import { abilityOptionsOf } from "../state/players";
+import { useShown } from "../state/usePlayers";
+import { useDimmed, useView } from "../state/view";
 import { formatText } from "./Hud";
 import { statBarZoom } from "./fan";
-import { useViewport } from "../layoutMode";
+import { useViewport } from "../state/layoutMode";
 import { OptionButtons, useCardOptions } from "./Modals";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>

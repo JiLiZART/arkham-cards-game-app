@@ -1,10 +1,10 @@
 import { cardText, t } from "../../content/i18n";
 import type { GameState, InstId, InvId } from "../../engine/types";
-import { CardFace } from "../CardFace";
-import { db, gameStore, useGame } from "../context";
-import { optionHome, optionOwner } from "../optionHome";
-import { viewerOf } from "../store";
-import { useView } from "../view";
+import { CardFace } from "../components/CardFace";
+import { db, gameStore, useGame } from "../state/context";
+import { optionHome, optionOwner } from "../game/optionHome";
+import { viewerOf } from "../state/store";
+import { useView } from "../state/view";
 import { Modal, OptionButtons, useCardOptions } from "./Modals";
 import { StatBody } from "./Stats";
 

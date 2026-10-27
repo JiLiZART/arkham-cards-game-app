@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { campaignBlurb, cardText, interludeName, t } from "../../content/i18n";
 import type { CampaignDef } from "../../content/schema";
-import { db, gameStore, useGame } from "../context";
+import { db, gameStore, useGame } from "../state/context";
 import { formatText } from "../hud/Hud";
 import { Modal } from "../hud/Modals";
-import { cardImage } from "../images";
+import { cardImage } from "../assets/images";
 import { blurb } from "./blurb";
 import { campaignComplete, campaignProgress, tileName } from "./wizard";
 

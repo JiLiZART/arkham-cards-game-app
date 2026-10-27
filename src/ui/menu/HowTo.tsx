@@ -1,5 +1,5 @@
 import { t } from "../../content/i18n";
-import { db, gameStore, useGame } from "../context";
+import { db, gameStore, useGame } from "../state/context";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);

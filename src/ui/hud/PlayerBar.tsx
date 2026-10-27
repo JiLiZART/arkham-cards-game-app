@@ -1,11 +1,11 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { cardText, t } from "../../content/i18n";
 import type { GameState, InstId, InvId } from "../../engine/types";
-import { domPlace, lastRects, originRect, takeArrival } from "../arrivals";
-import { useOptionsByCard } from "../cardClick";
-import { db, gameStore, useGame } from "../context";
-import { Icon } from "../Icon";
-import { backUrl } from "../images";
+import { domPlace, lastRects, originRect, takeArrival } from "../game/arrivals";
+import { useOptionsByCard } from "../game/cardClick";
+import { db, gameStore, useGame } from "../state/context";
+import { Icon } from "../components/Icon";
+import { backUrl } from "../assets/images";
 import {
   barModel,
   delayed,
@@ -15,11 +15,11 @@ import {
   sheetFor,
   shownInv,
   type Avatar as AvatarModel,
-} from "../players";
-import { Portrait } from "../Portrait";
-import { viewerOf } from "../store";
-import { isTouch } from "../touch";
-import { useDimmed, useView } from "../view";
+} from "../state/players";
+import { Portrait } from "../components/Portrait";
+import { viewerOf } from "../state/store";
+import { isTouch } from "../game/touch";
+import { useDimmed, useView } from "../state/view";
 import { flyGhost, STAGGER_MS } from "./flights";
 import { RESOLVE_BOX } from "./Reveal";
 import { StatBody, useFlash } from "./Stats";

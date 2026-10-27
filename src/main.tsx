@@ -1,9 +1,9 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "./ui/App";
-import { gameStore } from "./ui/context";
-import { loadSprite } from "./ui/icons";
-import { useView } from "./ui/view";
+import { gameStore } from "./ui/state/context";
+import { loadSprite } from "./ui/assets/icons";
+import { useView } from "./ui/state/view";
 import "./ui/styles.css";
 
 // the icon sprite is in the document before the first screen: icons never flash blank (without it, text badges)

@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { UiIcon } from "../Icon";
+import { UiIcon } from "../components/Icon";
 import { locales, t } from "../../content/i18n";
-import { db, gameStore, useGame } from "../context";
-import { safeStorage, type Pace } from "../store";
-import { TIPS_KEY } from "../tips";
+import { db, gameStore, useGame } from "../state/context";
+import { safeStorage, type Pace } from "../state/store";
+import { TIPS_KEY } from "../game/tips";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);

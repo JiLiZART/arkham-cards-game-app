@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from "vitest";
-import { loadCampaign } from "../content";
+import { loadCampaign } from "../content/index";
 import { startCampaign, type CampaignState } from "./campaign";
 import { advance, startResolution, test } from "./flow";
 import { db } from "./testkit";

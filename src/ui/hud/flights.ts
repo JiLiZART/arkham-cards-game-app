@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef, type RefObject } from "react";
-import { domPlace, lastRects, originRect, takeArrival } from "../arrivals";
+import { domPlace, lastRects, originRect, takeArrival } from "../game/arrivals";
 import type { InstId, InvId } from "../../engine/types";
 import type { Box } from "./fan";
 

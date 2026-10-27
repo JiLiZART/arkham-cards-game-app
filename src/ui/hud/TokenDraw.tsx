@@ -1,15 +1,15 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { reducedMotion } from "../arrivals";
+import { reducedMotion } from "../game/arrivals";
 import { centreTransform } from "./flights";
 import { t } from "../../content/i18n";
 import type { GameEvent, GameState } from "../../engine/types";
-import { db, gameStore, useGame } from "../context";
-import { Icon } from "../Icon";
-import { bagLanding, spillLayout, type Area } from "../testScreen";
-import { ChaosToken } from "../ChaosToken";
-import { useLayoutMode } from "../layoutMode";
+import { db, gameStore, useGame } from "../state/context";
+import { Icon } from "../components/Icon";
+import { bagLanding, spillLayout, type Area } from "../game/testScreen";
+import { ChaosToken } from "../components/ChaosToken";
+import { useLayoutMode } from "../state/layoutMode";
 import { moment } from "./SoundLayer";
-import { bagFrames, shadowFrames, tokenFrames, tokenPath, tossTiming } from "../toss";
+import { bagFrames, shadowFrames, tokenFrames, tokenPath, tossTiming } from "../game/toss";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);

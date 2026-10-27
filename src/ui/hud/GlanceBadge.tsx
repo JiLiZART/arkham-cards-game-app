@@ -1,10 +1,10 @@
 import { t } from "../../content/i18n";
 import type { CardDef } from "../../content/schema";
-import { db, useGame } from "../context";
-import { Glyph, Icon } from "../Icon";
-import { slotIcons } from "../details";
-import { chipsFor, type Chip } from "../glance";
-import { isIcon } from "../icons";
+import { db, useGame } from "../state/context";
+import { Glyph, Icon } from "../components/Icon";
+import { slotIcons } from "../game/details";
+import { chipsFor, type Chip } from "../game/glance";
+import { isIcon } from "../assets/icons";
 
 /** the chip's tooltip: its name, with the amount ("Damage +1", "Combat 1") */
 function chipTitle(chip: Chip, locale: string): string {

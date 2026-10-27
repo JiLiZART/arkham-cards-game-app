@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import type { GameEvent, InstId, InvId } from "../../engine/types";
-import { reducedMotion, whenSettled, type ScreenBox } from "../arrivals";
-import { FLOAT_KINDS, floatLife, type FeedEntry } from "../feed";
+import { reducedMotion, whenSettled, type ScreenBox } from "../game/arrivals";
+import { FLOAT_KINDS, floatLife, type FeedEntry } from "../game/feed";
 import { mapProjector } from "../scene/Table";
-import { useView, whenStageFree } from "../view";
+import { useView, whenStageFree } from "../state/view";
 import { Sentence, useFeedEntries } from "./Feed";
 import { moment } from "./SoundLayer";
-import { useGame } from "../context";
+import { useGame } from "../state/context";
 
 const STAGGER_MS = 900;
 const MAX_VISIBLE = 2;

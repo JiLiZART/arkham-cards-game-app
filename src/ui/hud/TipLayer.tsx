@@ -1,12 +1,12 @@
-import { useLayoutMode } from "../layoutMode";
+import { useLayoutMode } from "../state/layoutMode";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { t } from "../../content/i18n";
 import type { GameState } from "../../engine/types";
-import { db, useGame } from "../context";
+import { db, useGame } from "../state/context";
 import { mapProjector } from "../scene/Table";
-import { canUndo, safeStorage, viewerOf } from "../store";
-import { pickTip, TIPS_KEY, type TipAnchor, type TipContext } from "../tips";
-import { useView } from "../view";
+import { canUndo, safeStorage, viewerOf } from "../state/store";
+import { pickTip, TIPS_KEY, type TipAnchor, type TipContext } from "../game/tips";
+import { useView } from "../state/view";
 import { moment } from "./SoundLayer";
 
 const W = 300;

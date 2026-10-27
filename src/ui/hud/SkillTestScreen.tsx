@@ -1,15 +1,15 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { cardText, t } from "../../content/i18n";
 import type { ChoiceOption, GameEvent, GameState, InvId, SkillTestState } from "../../engine/types";
-import { rememberRect } from "../arrivals";
-import { useOptionsByCard } from "../cardClick";
-import { CardFace } from "../CardFace";
-import { db, gameStore, useGame } from "../context";
-import { Icon, UiIcon } from "../Icon";
-import { isIcon } from "../icons";
-import { Portrait } from "../Portrait";
-import { viewerOf } from "../store";
-import { cardDetails } from "../details";
+import { rememberRect } from "../game/arrivals";
+import { useOptionsByCard } from "../game/cardClick";
+import { CardFace } from "../components/CardFace";
+import { db, gameStore, useGame } from "../state/context";
+import { Icon, UiIcon } from "../components/Icon";
+import { isIcon } from "../assets/icons";
+import { Portrait } from "../components/Portrait";
+import { viewerOf } from "../state/store";
+import { cardDetails } from "../game/details";
 import {
   addTokens,
   calcParts,
@@ -21,8 +21,8 @@ import {
   type CalcParts,
   type PlacedCard,
   type Subject,
-} from "../testScreen";
-import { useStage, useView } from "../view";
+} from "../game/testScreen";
+import { useStage, useView } from "../state/view";
 import { ChaosTokenIcon } from "./ChaosTokenIcon";
 import { useFlyIn } from "./flights";
 import { RESOLVE_BOX } from "./Reveal";

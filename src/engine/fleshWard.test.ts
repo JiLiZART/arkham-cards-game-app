@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from "vitest";
-import { loadPacksFor } from "../content";
+import { loadPacksFor } from "../content/index";
 import { card, createCard, inv, moveCard, push } from "./core";
 import { run } from "./engine";
 import {

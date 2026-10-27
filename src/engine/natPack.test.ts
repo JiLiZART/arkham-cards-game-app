@@ -1,5 +1,5 @@
 import { afterEach, beforeAll, describe, expect, it } from "vitest";
-import { loadPack } from "../content";
+import { loadPack } from "../content/index";
 import { createCard, inv, moveCard } from "./core";
 import type { Ability } from "../content/schema";
 import type { Result } from "./engine";

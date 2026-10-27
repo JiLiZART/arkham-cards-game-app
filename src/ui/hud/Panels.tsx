@@ -7,35 +7,35 @@ import {
   useState,
   type MouseEvent as ReactMouseEvent,
 } from "react";
-import { useLayoutMode } from "../layoutMode";
-import { tapCard } from "../touch";
+import { useLayoutMode } from "../state/layoutMode";
+import { tapCard } from "../game/touch";
 import { cardText, t } from "../../content/i18n";
 import { actClueCost, doomInPlay } from "../../engine/rules/scenario";
 import type { ChoiceOption, GameState, InstId } from "../../engine/types";
-import { rememberRect } from "../arrivals";
-import { CardFace } from "../CardFace";
-import { useCardClick } from "../cardClick";
-import { groupTokens } from "../chaos";
-import { db, gameStore, useGame } from "../context";
-import { Glyph, Icon } from "../Icon";
-import { hasSymbol, scenarioIcon } from "../icons";
-import { introHides } from "../intro";
-import { backUrl, isEncounterCard } from "../images";
-import { heldCards, viewerOf } from "../store";
-import { deckOptions } from "../players";
-import { useChoicesOffered, useShown } from "../usePlayers";
-import { IntentBadge, TokenBadges } from "../TokenBadges";
+import { rememberRect } from "../game/arrivals";
+import { CardFace } from "../components/CardFace";
+import { useCardClick } from "../game/cardClick";
+import { groupTokens } from "../game/chaos";
+import { db, gameStore, useGame } from "../state/context";
+import { Glyph, Icon } from "../components/Icon";
+import { hasSymbol, scenarioIcon } from "../assets/icons";
+import { introHides } from "../game/intro";
+import { backUrl, isEncounterCard } from "../assets/images";
+import { heldCards, viewerOf } from "../state/store";
+import { deckOptions } from "../state/players";
+import { useChoicesOffered, useShown } from "../state/usePlayers";
+import { IntentBadge, TokenBadges } from "../components/TokenBadges";
 import { SlotChips } from "./GlanceBadge";
-import { useDimmed, useView } from "../view";
-import { heldGame } from "../spotlight";
+import { useDimmed, useView } from "../state/view";
+import { heldGame } from "../game/spotlight";
 import { ChaosTokenIcon } from "./ChaosTokenIcon";
 import { referenceSide } from "./DeckViewer";
 import { useFlyIn } from "./flights";
 import { Modal, useCardOptions } from "./Modals";
 import { RESOLVE_BOX } from "./Reveal";
 import { moment } from "./SoundLayer";
-import { optionLabel } from "../optionText";
-import { stripDuringTest } from "../testScreen";
+import { optionLabel } from "../game/optionText";
+import { stripDuringTest } from "../game/testScreen";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);

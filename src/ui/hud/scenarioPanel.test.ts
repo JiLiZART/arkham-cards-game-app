@@ -1,7 +1,7 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import { gameStore } from "../context";
+import { gameStore } from "../state/context";
 import { ScenarioPanel } from "./Panels";
 
 describe("the scenario panel", () => {

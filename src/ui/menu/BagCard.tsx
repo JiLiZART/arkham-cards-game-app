@@ -1,8 +1,8 @@
 import { t } from "../../content/i18n";
 import type { Difficulty } from "../../content/schema";
-import { averageModifier, groupTokens } from "../chaos";
-import { ChaosToken } from "../ChaosToken";
-import { db, gameStore } from "../context";
+import { averageModifier, groupTokens } from "../game/chaos";
+import { ChaosToken } from "../components/ChaosToken";
+import { db, gameStore } from "../state/context";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);

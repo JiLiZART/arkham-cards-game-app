@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { moment } from "../hud/SoundLayer";
-import { campaignLoaded, loadAllPacks, loadCampaign, loadPacksFor } from "../../content";
+import { campaignLoaded, loadAllPacks, loadCampaign, loadPacksFor } from "../../content/index";
 import { cardText, scenarioText, t } from "../../content/i18n";
 import type { Difficulty } from "../../content/schema";
-import { db, gameStore, useGame } from "../context";
-import { Glyph, Icon, Stat, UiIcon } from "../Icon";
-import { CardFace } from "../CardFace";
+import { db, gameStore, useGame } from "../state/context";
+import { Glyph, Icon, Stat, UiIcon } from "../components/Icon";
+import { CardFace } from "../components/CardFace";
 import { formatText } from "../hud/Hud";
-import { cardImage } from "../images";
-import { hasSymbol, isIcon, scenarioIcon } from "../icons";
+import { cardImage } from "../assets/images";
+import { hasSymbol, isIcon, scenarioIcon } from "../assets/icons";
 import { Avatar } from "./Avatar";
 import { BagCard } from "./BagCard";
 import {
@@ -18,8 +18,8 @@ import {
   emptyDeck,
   problemText,
   renameCustomDeck,
-} from "../decks";
-import { safeStorage } from "../store";
+} from "../game/decks";
+import { safeStorage } from "../state/store";
 import { DeckEditArea } from "./DeckEditArea";
 import { CampaignSheet, scenarioCount } from "./CampaignSheet";
 import {

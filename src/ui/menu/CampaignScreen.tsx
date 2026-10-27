@@ -8,9 +8,9 @@ import {
   t,
 } from "../../content/i18n";
 import { currentScenarioId } from "../../engine/campaign";
-import { db, gameStore, useGame } from "../context";
-import { guideHtml } from "../guideText";
-import { Portrait } from "../Portrait";
+import { db, gameStore, useGame } from "../state/context";
+import { guideHtml } from "../game/guideText";
+import { Portrait } from "../components/Portrait";
 import { logView, readItems } from "./campaignView";
 import { DeckBuilder } from "./DeckBuilder";
 import { FlowPrompt } from "./FlowPrompt";

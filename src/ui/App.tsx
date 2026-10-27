@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
-import { contentErrors } from "../content";
+import { contentErrors } from "../content/index";
 import { t } from "../content/i18n";
-import { db, gameStore, useGame } from "./context";
+import { db, gameStore, useGame } from "./state/context";
 import { HandFan } from "./hud/HandFan";
 import { HandDrawer } from "./hud/HandDrawer";
 import { Hud } from "./hud/Hud";
@@ -13,10 +13,10 @@ import { Settings } from "./menu/Settings";
 import { Title } from "./menu/Title";
 import { Wizard } from "./menu/NewGame";
 import { Table } from "./scene/Table";
-import { useView } from "./view";
-import { useLayout } from "./layoutMode";
-import { installTouch } from "./touch";
-import { LangSwitch } from "./LangSwitch";
+import { useView } from "./state/view";
+import { useLayout } from "./state/layoutMode";
+import { installTouch } from "./game/touch";
+import { LangSwitch } from "./components/LangSwitch";
 
 /** a phone held upright: the table needs it sideways (nothing about the game changes while this shows) */
 function RotateCard() {

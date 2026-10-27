@@ -2,11 +2,11 @@ import { Html } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
-import { useGame } from "../context";
-import { useView } from "../view";
-import type { Vec3 } from "../layout";
-import { Icon } from "../Icon";
-import type { IconName } from "../icons";
+import { useGame } from "../state/context";
+import { useView } from "../state/view";
+import type { Vec3 } from "../game/layout";
+import { Icon } from "../components/Icon";
+import type { IconName } from "../assets/icons";
 
 /** "−2 [damage]" style numbers floating up from a card */
 /** matches the HUD's hit streak (hud/Floats HIT_MS plus its start delay) */

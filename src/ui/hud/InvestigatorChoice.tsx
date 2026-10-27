@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { cardText } from "../../content/i18n";
-import { db, gameStore, useGame } from "../context";
-import { instructionParts } from "../instruction";
-import { choicesOffered, delayed, investigatorChoice } from "../players";
-import { Portrait } from "../Portrait";
-import { useView } from "../view";
+import { db, gameStore, useGame } from "../state/context";
+import { instructionParts } from "../game/instruction";
+import { choicesOffered, delayed, investigatorChoice } from "../state/players";
+import { Portrait } from "../components/Portrait";
+import { useView } from "../state/view";
 import { Sentence } from "./Feed";
 import { moment } from "./SoundLayer";
 

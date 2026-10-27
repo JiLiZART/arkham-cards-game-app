@@ -12,7 +12,7 @@ import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import type { ContentDb } from "../src/engine/types";
 import { loadContentFromDisk } from "../src/content/node";
-import { asset, cardImage } from "../src/ui/images";
+import { asset, cardImage } from "../src/ui/assets/images";
 
 const CDN = "https://cdn.arkham.build/optimized";
 const CACHE = ".cache/cards";

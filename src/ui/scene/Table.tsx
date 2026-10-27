@@ -7,9 +7,9 @@ import {
   useRef,
   type PointerEvent as ReactPointerEvent,
 } from "react";
-import { heldGame } from "../spotlight";
-import { eventFocus } from "../camera";
-import { heldCards, needsNext, type QueuedEvent } from "../store";
+import { heldGame } from "../game/spotlight";
+import { eventFocus } from "../game/camera";
+import { heldCards, needsNext, type QueuedEvent } from "../state/store";
 import * as THREE from "three";
 import { t } from "../../content/i18n";
 import type { GameState, InstId } from "../../engine/types";
@@ -22,19 +22,19 @@ import {
   reducedMotion,
   takeArrival,
   type ScreenBox,
-} from "../arrivals";
-import { useCardClick } from "../cardClick";
-import { clearPeek, setMapCardAt, tapCard } from "../touch";
-import { iconUrl } from "../icons";
-import { Portrait } from "../Portrait";
-import { db, gameStore, useGame } from "../context";
+} from "../game/arrivals";
+import { useCardClick } from "../game/cardClick";
+import { clearPeek, setMapCardAt, tapCard } from "../game/touch";
+import { iconUrl } from "../assets/icons";
+import { Portrait } from "../components/Portrait";
+import { db, gameStore, useGame } from "../state/context";
 import { RESOLVE_BOX } from "../hud/Reveal";
-import { CARD_H, CARD_W, footprint, layout, type Placement, type Vec3 } from "../layout";
-import { hitRect, type ScreenRect } from "../hit";
-import { introHides } from "../intro";
-import { viewerOf } from "../store";
-import { useShown } from "../usePlayers";
-import { useView } from "../view";
+import { CARD_H, CARD_W, footprint, layout, type Placement, type Vec3 } from "../game/layout";
+import { hitRect, type ScreenRect } from "../game/hit";
+import { introHides } from "../game/intro";
+import { viewerOf } from "../state/store";
+import { useShown } from "../state/usePlayers";
+import { useView } from "../state/view";
 import { CardMesh, SPOT_Y } from "./CardMesh";
 import { EventFx } from "./EventFx";
 import { camInput, MapCamera } from "./MapCamera";

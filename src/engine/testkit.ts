@@ -1,5 +1,5 @@
 /** helpers for engine tests (not used at runtime) */
-import { content } from "../content";
+import { content } from "../content/index";
 import { createGame, dispatch, type Result } from "./engine";
 import type { GameSetup, InvId } from "./types";
 

@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { spriteIds } from "../../../scripts/import-icons";
 import { db } from "../../engine/testkit";
-import { registerSymbols } from "../icons";
+import { registerSymbols } from "../assets/icons";
 import { formatText } from "./Hud";
 
 registerSymbols(spriteIds(readFileSync("public/icons/sprite.svg", "utf8")));
