@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { db, mutate, skipMulligans, start } from "../../engine/testkit";
-import { cardDetails, placeDetails } from "./details";
+import { db, giveCard, mutate, pick, putEnemy, skipMulligans, start } from "../../engine/testkit";
+import type { Result } from "../../engine/engine";
+import { cardDetails, commitRow, placeDetails } from "./details";
 
 const rows = (code: string, locale = "en") =>
   Object.fromEntries(cardDetails(db, code, locale).map((r) => [r.k, r]));
@@ -129,5 +130,58 @@ describe("cardDetails for map locations", () => {
       perInvLabel: "per investigator",
     });
     expect(loc("01113", "ru").shroud).toMatchObject({ label: "Завеса" });
+  });
+});
+
+describe("commitRow", () => {
+  /** Roland fights a Ghoul Minion; the cards are in his hand, the commit window open */
+  const fighting = (...codes: string[]) => {
+    let r = skipMulligans(start("the-gathering", ["01001"], 1, { chaosBag: ["0"] as never }));
+    while (r.state.pending && r.state.pending.kind !== "turn")
+      r = pick(r, r.state.pending.options.some((o) => o.id === "pass") ? "pass" : /./);
+    const ids: string[] = [];
+    r = mutate(r, (g) => {
+      for (const c of codes) ids.push(giveCard(g, "01001", c));
+      putEnemy(g, "01160", g.s.invs["01001"].location!, "01001");
+    });
+    r = pick(r, /^Fight Ghoul Minion/);
+    expect(r.state.pending?.kind).toBe("commit");
+    return { r, ids };
+  };
+  const row = (r: Result, id: string) => commitRow(db, r.state, id, "en");
+
+  it("an asset gives its icons and says its text does not apply", () => {
+    const { r, ids } = fighting("01020"); // Machete: one combat icon
+    expect(row(r, ids[0])).toMatchObject({
+      k: "commit",
+      icons: ["combat"],
+      n: 1,
+      textApplies: false,
+      note: "Not played: only its icons count, its text does not apply",
+    });
+  });
+
+  it("a skill card's text applies", () => {
+    const { r, ids } = fighting("01025"); // Vicious Blow
+    expect(row(r, ids[0])).toMatchObject({ icons: ["combat"], n: 1, textApplies: true });
+    expect(row(r, ids[0])!.note).toBe("Its text applies while committed");
+  });
+
+  it("wild icons count and are listed after the skill's", () => {
+    const { r, ids } = fighting("01093"); // Unexpected Courage: two wild
+    expect(row(r, ids[0])).toMatchObject({ icons: ["wild", "wild"], n: 2 });
+  });
+
+  it("a card that isn't offered for commit has no row, and neither does a game outside a commit window", () => {
+    const { r, ids } = fighting("01020");
+    expect(row(r, "no-such-card")).toBeNull();
+    const done = pick(r, "done");
+    expect(done.state.pending?.kind).not.toBe("commit");
+    expect(commitRow(db, done.state, ids[0], "en")).toBeNull();
+  });
+
+  it("is translated", () => {
+    const { r, ids } = fighting("01020");
+    expect(commitRow(db, r.state, ids[0], "ru")!.note).toMatch(/Не разыгрывается/);
   });
 });

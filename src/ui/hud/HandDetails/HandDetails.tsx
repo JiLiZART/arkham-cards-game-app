@@ -2,10 +2,17 @@ import { useLayoutEffect, useRef, type RefObject } from "react";
 import { t } from "../../../content/i18n";
 import type { GameState, InstId } from "../../../engine/types";
 import { db, useGame } from "../../state/context";
-import { blockedRow, cardDetails, placeDetails, type DetailRow } from "../../game/details";
+import {
+  blockedRow,
+  cardDetails,
+  commitRow,
+  placeDetails,
+  type DetailRow,
+} from "../../game/details";
 import type { Rect } from "../../game/hover";
 import { Glyph, Icon } from "../../components/Icon";
 import { isIcon } from "../../assets/icons";
+import { cx } from "../../components/cx";
 import { Portrait } from "../../components/Portrait";
 import { mapProjector } from "../../scene/Table";
 import { TokenPile } from "../../components/TokenPile";
@@ -165,8 +172,26 @@ export function Row({ r, locale }: { r: DetailRow; locale: string }) {
       );
     case "blocked":
       return <div className={styles.hdBlocked}>{r.text}</div>;
+    case "commit":
+      return (
+        <div className={styles.hdCommit}>
+          <div className="hd-icons">
+            <span className="hd-label">{label("card.commit")}</span>
+            {r.icons.map((n, k) => (
+              <Icon key={k} name={n} size={28} />
+            ))}
+            <b className="hd-num">+{r.n}</b>
+          </div>
+          <small>{r.note}</small>
+        </div>
+      );
     case "text":
-      return <p className="hd-text" dangerouslySetInnerHTML={{ __html: formatText(r.s) }} />;
+      return (
+        <p
+          className={cx("hd-text", r.dim ? styles.hdDim : "")}
+          dangerouslySetInnerHTML={{ __html: formatText(r.s) }}
+        />
+      );
     case "keywords":
       return (
         <dl className="hd-keywords" aria-label={r.label}>
@@ -212,6 +237,8 @@ export function DetailsColumn({
   );
 }
 
+const dimText = (r: DetailRow): DetailRow => (r.k === "text" ? { ...r, dim: true } : r);
+
 /** what the raised hand card is: class, type, level, cost, traits, slots, icons, text; first, why it can't be played if it can't */
 export function HandDetails({
   id,
@@ -226,7 +253,9 @@ export function HandDetails({
   const game = useGame((s) => s.game) as GameState;
   const [name, ...rest] = cardDetails(db, game.cards[id].code, locale);
   const blocked = blockedRow(db, game, id, locale);
-  const rows = blocked ? [name, blocked, ...rest] : [name, ...rest];
+  const commit = commitRow(db, game, id, locale);
+  const body = commit && !commit.textApplies ? rest.map(dimText) : rest;
+  const rows = [name, ...(blocked ? [blocked] : []), ...(commit ? [commit] : []), ...body];
   return <DetailsColumn rows={rows} rect={rect} boxRef={boxRef} />;
 }
 

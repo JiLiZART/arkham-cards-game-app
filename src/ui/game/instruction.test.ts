@@ -17,7 +17,7 @@ describe("instructionParts", () => {
     );
     expect(parts).toContainEqual({ t: "inv", id: "01001" });
     expect(parts).toContainEqual({ t: "icon", name: "intellect" });
-    expect(parts[0]).toEqual({ t: "text", s: "Tap a card to help " });
+    expect(parts[0]).toEqual({ t: "text", s: "Tap a card to add its " });
     expect(
       instructionParts(
         { ...base, promptKey: "enemyMoveWhere", promptVars: { card: ghoul } },

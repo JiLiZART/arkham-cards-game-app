@@ -29,7 +29,9 @@ export type DetailRow =
     }
   | { k: "attack"; damage: number; horror: number; label: string }
   | { k: "wounds"; n: number; label: string }
-  | { k: "text"; s: string }
+  | { k: "text"; s: string; dim?: boolean }
+  // what committing the hovered hand card to the live test adds, and whether its text applies (commitRow)
+  | { k: "commit"; icons: IconName[]; n: number; note: string; textApplies: boolean }
   // locations on the map
   | { k: "shroud"; n: number | string; skill?: IconName; label: string }
   | {
@@ -73,6 +75,40 @@ export function blockedRow(
             have: game.invs[inst.owner].resources,
           });
   return { k: "blocked", text };
+}
+
+/**
+ * In a commit window, what committing this hand card adds: its icons that count for the test's skill (that skill's and
+ * wild) and their number, and whether its text applies (only a skill card's does; an asset or event committed for its
+ * icons is not played). Null when the card isn't offered for commit. Counts the tested skill printed on the test, not
+ * Mind over Matter's stand-in: the engine's option label stays authoritative there.
+ */
+export function commitRow(
+  db: ContentDb,
+  game: GameState,
+  id: InstId,
+  locale: string,
+): Extract<DetailRow, { k: "commit" }> | null {
+  const test = game.skillTest;
+  const offered =
+    game.pending?.kind === "commit" &&
+    game.pending.options.some((o) => (o.value as { commit?: InstId } | null)?.commit === id);
+  const inst = game.cards[id];
+  if (!test || !offered || !inst) return null;
+  const d = db.cards[inst.code];
+  const icons = [
+    ...Array<IconName>(d.icons[test.skill] ?? 0).fill(test.skill),
+    ...Array<IconName>(d.icons.wild ?? 0).fill("wild"),
+  ];
+  if (!icons.length) return null;
+  const textApplies = d.type === "skill";
+  return {
+    k: "commit",
+    icons,
+    n: icons.length,
+    textApplies,
+    note: t(db, locale, textApplies ? "card.commit.skill" : "card.commit.icons"),
+  };
 }
 
 /** the glossary row: each keyword the card has, by its name in the locale, with its explanation */

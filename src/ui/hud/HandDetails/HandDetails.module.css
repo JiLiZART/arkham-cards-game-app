@@ -27,3 +27,20 @@
 :global(.hand-details) .hd-enemy {
   color: var(--bad);
 }
+
+/* a hand card in a commit window: what it adds to the test and whether its text applies */
+.hd-commit {
+  padding: 4px 8px;
+  border-radius: 6px;
+  border-left: 3px solid var(--lamp);
+  background: color-mix(in srgb, var(--lamp) 10%, transparent);
+}
+.hd-commit small {
+  display: block;
+  color: var(--muted);
+  font-size: 15px;
+}
+/* the text of a card committed only for its icons: not played */
+.hd-dim {
+  opacity: 0.45;
+}
