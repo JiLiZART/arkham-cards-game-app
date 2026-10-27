@@ -2,7 +2,7 @@ import { useLayoutEffect, useRef, type RefObject } from "react";
 import { t } from "../../content/i18n";
 import type { GameState, InstId } from "../../engine/types";
 import { db, useGame } from "../context";
-import { cardDetails, placeDetails, type DetailRow } from "../details";
+import { blockedRow, cardDetails, placeDetails, type DetailRow } from "../details";
 import type { Rect } from "../hover";
 import { Glyph, Icon } from "../Icon";
 import { isIcon } from "../icons";
@@ -162,6 +162,8 @@ export function Row({ r, locale }: { r: DetailRow; locale: string }) {
           <b className="hd-num">{r.n}</b>
         </div>
       );
+    case "blocked":
+      return <div className="hd-blocked">{r.text}</div>;
     case "text":
       return <p className="hd-text" dangerouslySetInnerHTML={{ __html: formatText(r.s) }} />;
     case "keywords":
@@ -209,18 +211,22 @@ export function DetailsColumn({
   );
 }
 
-/** what the raised hand card is: class, type, level, cost, traits, slots, icons, text */
+/** what the raised hand card is: class, type, level, cost, traits, slots, icons, text; first, why it can't be played if it can't */
 export function HandDetails({
-  code,
+  id,
   rect,
   boxRef,
 }: {
-  code: string;
+  id: InstId;
   rect: Rect;
   boxRef?: RefObject<HTMLDivElement>;
 }) {
   const locale = useGame((s) => s.locale);
-  return <DetailsColumn rows={cardDetails(db, code, locale)} rect={rect} boxRef={boxRef} />;
+  const game = useGame((s) => s.game) as GameState;
+  const [name, ...rest] = cardDetails(db, game.cards[id].code, locale);
+  const blocked = blockedRow(db, game, id, locale);
+  const rows = blocked ? [name, blocked, ...rest] : [name, ...rest];
+  return <DetailsColumn rows={rows} rect={rect} boxRef={boxRef} />;
 }
 
 /** what a hovered map location is: shroud, clues, victory, connections, who is there, text (only its back while unrevealed) */

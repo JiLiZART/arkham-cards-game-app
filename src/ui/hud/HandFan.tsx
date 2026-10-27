@@ -319,7 +319,7 @@ export function HandFan() {
     <>
       {fi >= 0 && (
         <HandDetails
-          code={game.cards[hand[fi]].code}
+          id={hand[fi]}
           rect={dockRect(
             slots[fi],
             weights.current.get(hand[fi]) ?? 0,

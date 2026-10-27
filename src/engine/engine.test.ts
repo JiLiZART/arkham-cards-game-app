@@ -11,7 +11,7 @@ import {
   moveCard,
   skillValue,
 } from "./core";
-import { overfullSlot } from "./rules/cards";
+import { overfullSlot, playBlock } from "./rules/cards";
 import { testParts, testValue } from "./rules/skillTest";
 import { deserialize, dispatch, getLegalActions, replay, serialize } from "./engine";
 import {
@@ -604,6 +604,20 @@ describe("player cards", () => {
     expect(overfullSlot(g, ROLAND, ids[1])).toBeNull();
     const knife = giveCard(g, ROLAND, "01086");
     expect(overfullSlot(g, ROLAND, knife)).toBe("hand");
+  });
+
+  it("why a hand card can't be played: the card that forbids it, else its cost", () => {
+    const r = gathering([ROLAND], ["0"]);
+    const g = gOf(r);
+    const glass = giveCard(g, ROLAND, "01030");
+    inv(g, ROLAND).resources = 0;
+    expect(playBlock(g, ROLAND, glass)).toEqual({ reason: "resources", cost: 1 });
+    inv(g, ROLAND).resources = 5;
+    expect(playBlock(g, ROLAND, glass)).toBeNull();
+    const voices = createCard(g, "01165", "limbo", null);
+    moveCard(g, voices, "threat", { inv: ROLAND });
+    card(g, voices).controller = ROLAND;
+    expect(playBlock(g, ROLAND, glass)).toEqual({ reason: "forbidden", by: voices });
   });
 
   it("weakness drawn: revelation resolves immediately and it leaves the hand", () => {

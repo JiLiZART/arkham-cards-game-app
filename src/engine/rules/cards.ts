@@ -498,6 +498,32 @@ export function playCost(g: G, i: InvId, cardId: InstId): number {
 export const playAbility = (g: G, cardId: InstId) =>
   abilitiesOf(g, cardId).find((a) => a.kind === "onPlay");
 
+/** why an asset or event in hand can't be played whatever the timing, or null; `by` is the card that forbids it */
+export type PlayBlock =
+  | { reason: "forbidden"; by: InstId | null }
+  | { reason: "unique" }
+  | { reason: "resources"; cost: number };
+
+export function playBlock(g: G, i: InvId, cardId: InstId): PlayBlock | null {
+  const d = def(g, cardId);
+  if (d.type !== "asset" && d.type !== "event") return null;
+  const code = card(g, cardId).code;
+  const ban = allMods(g).find(
+    (m) =>
+      m.target === i &&
+      (m.mod.flag === "cannotPlayAssetsOrEvents" ||
+        (m.mod.flag === "cannotPlayAssets" && d.type === "asset") ||
+        (m.mod.flag === "cannotPlayOrCommit" &&
+          (!m.mod.filter || matchesFilter(g, code, m.mod.filter)))),
+  );
+  if (ban)
+    return { reason: "forbidden", by: ban.source && g.s.cards[ban.source] ? ban.source : null };
+  if (uniqueInPlay(g, cardId)) return { reason: "unique" };
+  const cost = playCost(g, i, cardId);
+  if (inv(g, i).resources < cost) return { reason: "resources", cost };
+  return null;
+}
+
 /** can the card be played from hand now, as an action (fast=false) or fast */
 export function canPlay(g: G, i: InvId, cardId: InstId, asFast: boolean): boolean {
   const d = def(g, cardId);

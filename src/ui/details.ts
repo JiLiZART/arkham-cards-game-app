@@ -1,7 +1,8 @@
 import { cardText, encounterSetName, t } from "../content/i18n";
 import { connectionsOf } from "../engine/core";
 import type { Slot } from "../content/schema";
-import type { CardInst, ContentDb, GameState, InvId } from "../engine/types";
+import { playBlock } from "../engine/rules/cards";
+import type { CardInst, ContentDb, GameState, InstId, InvId } from "../engine/types";
 import type { Rect } from "./hover";
 import { keywordsOf } from "./glossary";
 import type { IconName } from "./icons";
@@ -43,7 +44,36 @@ export type DetailRow =
   | { k: "connections"; names: string[]; label: string }
   | { k: "here"; invs: InvId[]; enemies: string[]; label: string }
   // the card's keywords, each explained (glossary.ts)
-  | { k: "keywords"; label: string; items: { name: string; text: string }[] };
+  | { k: "keywords"; label: string; items: { name: string; text: string }[] }
+  // why a hand card can't be played right now (Dissonant Voices, a unique copy in play, too few resources)
+  | { k: "blocked"; text: string };
+
+/** the "can't play" row for a hand card, or null when nothing but timing stands in its way */
+export function blockedRow(
+  db: ContentDb,
+  game: GameState,
+  id: InstId,
+  locale: string,
+): DetailRow | null {
+  const inst = game.cards[id];
+  if (!inst || inst.zone !== "hand" || !inst.owner) return null;
+  const b = playBlock({ s: game, db, events: [] }, inst.owner, id);
+  if (!b) return null;
+  const text =
+    b.reason === "forbidden"
+      ? b.by
+        ? t(db, locale, "card.blocked.forbidden", {
+            card: cardText(db, game.cards[b.by].code, locale).name,
+          })
+        : t(db, locale, "card.blocked.forbiddenAny")
+      : b.reason === "unique"
+        ? t(db, locale, "card.blocked.unique")
+        : t(db, locale, "card.blocked.resources", {
+            cost: b.cost,
+            have: game.invs[inst.owner].resources,
+          });
+  return { k: "blocked", text };
+}
 
 /** the glossary row: each keyword the card has, by its name in the locale, with its explanation */
 function glossary(db: ContentDb, code: string, locale: string): DetailRow[] {
