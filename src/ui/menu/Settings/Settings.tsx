@@ -42,10 +42,14 @@ export function Settings() {
             <input
               type="checkbox"
               checked={tapDecks}
+              aria-describedby="tap-decks-hint"
               onChange={(e) => setTapDecks(e.target.checked)}
             />{" "}
             {tr("menu.tapDecks")}
           </label>
+          <small id="tap-decks-hint" className={styles.setHint}>
+            {tr("menu.tapDecks.hint")}
+          </small>
           <label>
             <input
               type="checkbox"

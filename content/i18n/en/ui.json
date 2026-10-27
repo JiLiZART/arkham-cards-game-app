@@ -568,6 +568,7 @@
   "upgrade.invalid": "The deck can't be saved: {message}",
   "upgrade.noCampaign": "There is no campaign to spend experience in",
   "menu.tapDecks": "Tap decks to draw",
+  "menu.tapDecks.hint": "Off: cards are drawn by themselves, nothing to tap",
   "prompt.tapDeck.player": "draw a card",
   "prompt.tapDeck.player.many": "draw {n} cards",
   "prompt.tapDeck.encounter": "draw an encounter card",

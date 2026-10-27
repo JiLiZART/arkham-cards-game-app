@@ -552,6 +552,7 @@
   "upgrade.invalid": "Колоду нельзя сохранить: {message}",
   "upgrade.noCampaign": "Нет кампании, в которой можно тратить опыт",
   "menu.tapDecks": "Брать карты нажатием на колоду",
+  "menu.tapDecks.hint": "Выключено: карты берутся сами, нажимать не нужно",
   "prompt.tapDeck.player": "взять карту",
   "prompt.tapDeck.player.many": "взять карт: {n}",
   "prompt.tapDeck.encounter": "взять карту встреч",

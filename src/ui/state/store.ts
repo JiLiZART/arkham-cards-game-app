@@ -257,6 +257,56 @@ export function createGameStore(
   prepare: Prepare = () => undefined,
 ): StoreApi<UiState> {
   const store = createStore<UiState>((set, get) => {
+    /**
+     * Record and run the pending choice's answer; false (with the error set) when the engine refuses it. The engine
+     * asks before every draw in play; while "Tap decks to draw" is off the draws that follow are answered here too,
+     * before anything is published, so the wait is never shown. Only a prompt with the single "draw" option is
+     * answered. `first` is null to settle a state that already waits (the setting just turned off, a save loaded).
+     */
+    const answer = (first: string | null): boolean => {
+      const start = get().game;
+      if (!start) return false;
+      let state = start;
+      let events: GameEvent[] = [];
+      const added: Action[] = [];
+      let undoFloor = get().undoFloor;
+      const actions = get().actions;
+      const step = (option: string): string | null => {
+        const a: Action = { type: "choose", inv: state.pending!.inv, option };
+        const r = dispatch(db, state, a);
+        if (r.error) return r.error;
+        if (pastUndo(state, r.state)) undoFloor = actions.length + added.length + 1;
+        added.push(a);
+        state = r.state;
+        events = [...events, ...r.events];
+        return null;
+      };
+      if (first !== null) {
+        if (!state.pending) return false;
+        const err = step(first);
+        if (err) {
+          set({ error: err });
+          return false;
+        }
+      }
+      while (
+        !get().tapDecks &&
+        state.pending?.kind === "draw" &&
+        state.pending.options.length === 1
+      )
+        if (step(state.pending.options[0].id)) break;
+      if (!added.length) return false;
+      set({
+        game: state,
+        actions: [...actions, ...added],
+        logMarks: [...get().logMarks, start.log.length],
+        undoFloor,
+        error: null,
+      });
+      enqueue(events);
+      return true;
+    };
+    const settleDraws = () => void answer(null);
     const persist = () => {
       const {
         campaign,
@@ -390,7 +440,8 @@ export function createGameStore(
         const setup: GameSetup = {
           ...scenarioSetup(db, c, seed ?? Date.now() >>> 0),
           pacePhases: true,
-          ...(get().tapDecks ? { tapDecks: true } : {}),
+          // always asked for: the setting decides who answers the draw (settleDraws), so it can change mid-game
+          tapDecks: true,
         };
         const r = createGame(db, setup);
         set({
@@ -405,6 +456,7 @@ export function createGameStore(
           current: null,
           error: null,
         });
+        settleDraws();
         persist();
       },
 
@@ -420,23 +472,10 @@ export function createGameStore(
       },
 
       choose(optionId) {
-        const { game, actions, queue, current } = get();
+        const { game, queue, current } = get();
         const v = useView.getState();
         if (!game?.pending || queue.length || current || v.intro || v.showcase.length) return; // input is blocked while animating, introducing or showing drawn cards
-        const action: Action = { type: "choose", inv: game.pending.inv, option: optionId };
-        const r = dispatch(db, game, action);
-        if (r.error) {
-          set({ error: r.error });
-          return;
-        }
-        set({
-          game: r.state,
-          actions: [...actions, action],
-          logMarks: [...get().logMarks, game.log.length],
-          error: null,
-          ...(pastUndo(game, r.state) ? { undoFloor: actions.length + 1 } : {}),
-        });
-        enqueue(r.events);
+        if (!answer(optionId)) return;
         persist();
       },
 
@@ -476,6 +515,7 @@ export function createGameStore(
           current: null,
           error: null,
         });
+        settleDraws();
         persist();
       },
 
@@ -547,6 +587,7 @@ export function createGameStore(
               queue: [],
               current: null,
             });
+            settleDraws();
           } catch {
             set({
               campaign: save.campaign,
@@ -592,6 +633,7 @@ export function createGameStore(
       },
       setTapDecks(tapDecks) {
         set({ tapDecks });
+        settleDraws();
         persist();
       },
       setPace(pace) {
@@ -718,6 +760,7 @@ export function createGameStore(
           queue: [],
           current: null,
         });
+        settleDraws();
         persist();
       },
     };

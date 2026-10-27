@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { botChoice } from "../../engine/bot";
 import { db } from "../../engine/testkit";
+import type { GameState } from "../../engine/types";
 import { scenarioSetup } from "../../engine/campaign";
 import { ENGINE_VERSION } from "../../engine/engine";
 import {
@@ -281,7 +283,7 @@ describe("undo", () => {
     const g0 = s.getState().game!;
     const n0 = s.getState().actions.length;
     s.getState().choose(JSON.stringify({ kind: "investigate" }));
-    const commit = s.getState().game!.pending!.options.find((o) => /^Commit/.test(o.label))!;
+    const commit = s.getState().game!.pending!.options.find((o) => o.label.startsWith("Commit"))!;
     s.getState().choose(commit.id);
     expect(canUndo(s.getState())).toBe(true);
     s.getState().undo();
@@ -380,7 +382,7 @@ describe("cancelling a skill test before the draw", () => {
     const s = investigating();
     expect(s.getState().game!.pending!.kind).toBe("commit");
     const before = s.getState().actions.length;
-    const card = s.getState().game!.pending!.options.find((o) => /^Commit/.test(o.label));
+    const card = s.getState().game!.pending!.options.find((o) => o.label.startsWith("Commit"));
     if (card) s.getState().choose(card.id);
     expect(s.getState().testCancellable()).toBe(true);
     expect(s.getState().cancelTest()).toBe(true);
@@ -414,7 +416,21 @@ describe("the tap decks setting", () => {
     expect(s.getState().game?.tapDecks).toBe(true);
   });
 
-  it("off: the setup doesn't ask, and the draws happen without waiting", () => {
+  /** the bot answers through the store (so the store's own draw handling runs) until `stop` holds */
+  const play = (s: ReturnType<typeof start>, stop: (g: GameState) => boolean, max = 800) => {
+    for (let k = 0; k < max; k++) {
+      const g = s.getState().game!;
+      if (!g.pending || stop(g)) return;
+      s.getState().skipEvents();
+      s.getState().choose(botChoice(db, { state: g, events: [] }));
+    }
+    throw new Error("the condition never held");
+  };
+  const waiting = (g: GameState) => g.pending?.kind === "draw";
+  const drawsOf = (s: ReturnType<typeof start>) =>
+    s.getState().actions.filter((a) => a.type === "choose" && a.option === "draw").length;
+
+  it("every scenario asks the engine for tapped decks, whatever the setting", () => {
     const s = createGameStore(db, mem());
     s.getState().setTapDecks(false);
     s.getState().newCampaign({
@@ -423,8 +439,81 @@ describe("the tap decks setting", () => {
       seed: 9,
       investigators: [{ code: "01001", deckId: "roland-starter" }],
     });
-    expect(s.getState().setup?.tapDecks).toBeUndefined();
-    expect(s.getState().game?.tapDecks).toBeUndefined();
+    expect(s.getState().setup?.tapDecks).toBe(true);
+    expect(s.getState().game?.tapDecks).toBe(true);
+  });
+
+  it("on: a draw in play waits for the tap", () => {
+    const s = start(mem());
+    play(s, waiting);
+    expect(s.getState().game!.pending).toMatchObject({ kind: "draw" });
+  });
+
+  it("off: the draws are answered at once and recorded, and nothing ever waits", () => {
+    const s = createGameStore(db, mem());
+    s.getState().setTapDecks(false);
+    s.getState().newCampaign({
+      campaignId: "night-of-the-zealot",
+      difficulty: "standard",
+      seed: 9,
+      investigators: [{ code: "01001", deckId: "roland-starter" }],
+    });
+    let sawWait = false;
+    s.subscribe((st) => (sawWait ||= waiting(st.game!)));
+    play(s, (g) => g.round >= 2 && g.phase === "investigation");
+    expect(sawWait).toBe(false);
+    expect(drawsOf(s)).toBeGreaterThan(0);
+  });
+
+  it("turned off while a deck waits: the draw happens at once; turned on again, the next one waits", () => {
+    const s = start(mem());
+    play(s, waiting);
+    const hand = s.getState().game!.invs["01001"].hand.length;
+    s.getState().setTapDecks(false);
+    const g = s.getState().game!;
+    expect(waiting(g)).toBe(false);
+    expect(g.invs["01001"].hand.length).toBe(hand + 1);
+    s.getState().setTapDecks(true);
+    play(s, (x) => waiting(x) || x.round >= 4);
+    expect(waiting(s.getState().game!)).toBe(true);
+  });
+
+  it("off, two investigators: each mythos draw is answered in turn, none waits", () => {
+    const s = createGameStore(db, mem());
+    s.getState().setTapDecks(false);
+    s.getState().newCampaign({
+      campaignId: "night-of-the-zealot",
+      difficulty: "standard",
+      seed: 9,
+      investigators: [
+        { code: "01001", deckId: "roland-starter" },
+        { code: "01002", deckId: "daisy-starter" },
+      ],
+    });
+    let sawWait = false;
+    s.subscribe((st) => (sawWait ||= waiting(st.game!)));
+    play(s, (g) => g.round >= 2 && g.phase === "investigation");
+    expect(sawWait).toBe(false);
+    expect(drawsOf(s)).toBeGreaterThanOrEqual(4);
+  });
+
+  it("a save with a waiting draw, loaded with the setting off, draws on load; the replay is the same game", () => {
+    const storage = mem();
+    const a = start(storage);
+    play(a, waiting);
+    const raw = JSON.parse(storage.getItem(SAVE_KEY)!);
+    raw.settings.tapDecks = false;
+    storage.setItem(SAVE_KEY, JSON.stringify(raw));
+    const b = createGameStore(db, storage);
+    b.getState().resume();
+    const g = b.getState().game!;
+    expect(waiting(g)).toBe(false);
+    expect(drawsOf(b)).toBe(drawsOf(a) + 1);
+    const again = createGameStore(db, mem());
+    again
+      .getState()
+      .importLog(JSON.stringify({ setup: b.getState().setup, actions: b.getState().actions }));
+    expect(again.getState().game!.invs["01001"].hand).toEqual(g.invs["01001"].hand);
   });
 
   it("is saved with the other settings, and a save from before it reads as on", () => {
