@@ -2,11 +2,12 @@ import { Html } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
-import { useGame } from "../state/context";
-import { useView } from "../state/view";
-import type { Vec3 } from "../game/layout";
-import { Icon } from "../components/Icon/index";
-import type { IconName } from "../assets/icons";
+import { useGame } from "../../state/context";
+import { useView } from "../../state/view";
+import type { Vec3 } from "../../game/layout";
+import { Icon } from "../../components/Icon/index";
+import type { IconName } from "../../assets/icons";
+import styles from "./EventFx.module.css";
 
 /** "−2 [damage]" style numbers floating up from a card */
 /** matches the HUD's hit streak (hud/Floats HIT_MS plus its start delay) */
@@ -32,7 +33,7 @@ function FloatingNumber({
   return (
     <group ref={ref}>
       <Html center zIndexRange={[15, 0]} pointerEvents="none">
-        <div className="float-num" style={{ color }}>
+        <div className={styles.floatNum} style={{ color }}>
           {parts.map(([icon, n], k) => (
             <span key={k}>
               −{n}

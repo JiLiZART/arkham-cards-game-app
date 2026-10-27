@@ -6,8 +6,8 @@ import { needsChoice, validateDeck } from "../../../engine/decks";
 import { deckChangeCost } from "../../../engine/upgrade";
 import { db, gameStore, useGame } from "../../state/context";
 import { problemText } from "../../game/decks";
-import { Avatar } from "../Avatar";
-import { DeckEditArea } from "../DeckEditArea";
+import { Avatar } from "../Avatar/index";
+import { DeckEditArea } from "../DeckEditArea/index";
 import styles from "./DeckBuilder.module.css";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>

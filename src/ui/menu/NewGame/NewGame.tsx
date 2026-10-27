@@ -9,8 +9,8 @@ import { CardFace } from "../../components/CardFace/index";
 import { formatText } from "../../hud/Hud";
 import { cardImage } from "../../assets/images";
 import { hasSymbol, isIcon, scenarioIcon } from "../../assets/icons";
-import { Avatar } from "../Avatar";
-import { BagCard } from "../BagCard";
+import { Avatar } from "../Avatar/index";
+import { BagCard } from "../BagCard/index";
 import {
   deckTabs,
   deleteCustomDeck,
@@ -20,8 +20,8 @@ import {
   renameCustomDeck,
 } from "../../game/decks";
 import { safeStorage } from "../../state/store";
-import { DeckEditArea } from "../DeckEditArea";
-import { CampaignSheet, scenarioCount } from "../CampaignSheet";
+import { DeckEditArea } from "../DeckEditArea/index";
+import { CampaignSheet, scenarioCount } from "../CampaignSheet/index";
 import {
   back,
   canContinue,

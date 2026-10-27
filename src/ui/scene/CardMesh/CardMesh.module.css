@@ -1,0 +1,22 @@
+.map-intent {
+  transform: translate(-30%, -70%);
+}
+.engaged-badge {
+  transform: translate(-50%, -50%);
+}
+
+/* clues on a map location: token pile + total on a dark rounded backing */
+.loc-clues {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px 4px 6px;
+  border-radius: 22px;
+  background: #000a;
+  box-shadow: 0 2px 8px #000a;
+  font: bold 26px/1 var(--f-body);
+  color: #fff;
+  text-shadow: 0 1px 3px #000;
+  white-space: nowrap;
+  pointer-events: none;
+}

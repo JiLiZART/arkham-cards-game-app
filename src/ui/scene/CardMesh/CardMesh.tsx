@@ -2,17 +2,18 @@ import { Html } from "@react-three/drei";
 import { useFrame, type ThreeEvent } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
-import { cardText, t } from "../../content/i18n";
-import type { CardInst } from "../../engine/types";
-import { db, useGame } from "../state/context";
-import { CARD_H, CARD_W, type Placement } from "../game/layout";
-import { Portrait } from "../components/Portrait/index";
-import { IntentBadge, TokenBadges } from "../components/TokenBadges/index";
-import { TokenPile } from "../components/TokenPile/index";
-import { mapDealing, mapMoving, mapPending, reducedMotion } from "../game/arrivals";
+import { cardText, t } from "../../../content/i18n";
+import type { CardInst } from "../../../engine/types";
+import { db, useGame } from "../../state/context";
+import { CARD_H, CARD_W, type Placement } from "../../game/layout";
+import { Portrait } from "../../components/Portrait/index";
+import { IntentBadge, TokenBadges } from "../../components/TokenBadges/index";
+import { TokenPile } from "../../components/TokenPile/index";
+import { mapDealing, mapMoving, mapPending, reducedMotion } from "../../game/arrivals";
 import { cardFace, cardFrame } from "./cardShape";
 import { useCardTexture } from "./textures";
-import { moment } from "../hud/SoundLayer";
+import { moment } from "../../hud/SoundLayer";
+import styles from "./CardMesh.module.css";
 
 // DESIGN.md, The Earned Glow Rule: Playable Green frames a legal target, as the hand's rings do; Lamp Glow the card
 // under the pointer and the card an event is about
@@ -214,7 +215,7 @@ export function CardMesh({
           zIndexRange={[21, 0]}
           pointerEvents="none"
         >
-          <div className="engaged-badge" ref={overlay}>
+          <div className={styles.engagedBadge} ref={overlay}>
             <Portrait
               code={place.badge}
               size={30}
@@ -235,7 +236,7 @@ export function CardMesh({
       </Html>
       {inst.zone === "enemy" && (
         <Html position={[-w / 2 + 0.05, -h / 2 + 0.05, 0.02]} zIndexRange={[20, 0]}>
-          <div className="map-intent" ref={overlay}>
+          <div className={styles.mapIntent} ref={overlay}>
             <IntentBadge inst={inst} />
           </div>
         </Html>
@@ -244,7 +245,7 @@ export function CardMesh({
       {isLocation && inst.clues > 0 && (
         <Html position={[0, -h * 0.12, 0.03]} center zIndexRange={[20, 0]} pointerEvents="none">
           <div
-            className="loc-clues"
+            className={styles.locClues}
             ref={overlay}
             title={`${t(db, locale, "stat.clues")} ${inst.clues}`}
           >

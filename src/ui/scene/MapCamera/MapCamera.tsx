@@ -1,11 +1,11 @@
 import { useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useRef } from "react";
 import * as THREE from "three";
-import { reducedMotion } from "../game/arrivals";
-import { clampCam, fitCam, focusCam, panBy, zoomAt, type Cam } from "../game/camera";
-import type { Bounds, Vec3 } from "../game/layout";
-import { insetsFor, safeAreaInsets, useLayoutMode } from "../state/layoutMode";
-import { useView } from "../state/view";
+import { reducedMotion } from "../../game/arrivals";
+import { clampCam, fitCam, focusCam, panBy, zoomAt, type Cam } from "../../game/camera";
+import type { Bounds, Vec3 } from "../../game/layout";
+import { insetsFor, safeAreaInsets, useLayoutMode } from "../../state/layoutMode";
+import { useView } from "../../state/view";
 
 /** pointer state shared with the scene: a press that panned must not count as a click */
 export const camInput = { panned: false, last: 0 };

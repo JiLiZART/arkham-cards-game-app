@@ -1,0 +1,4 @@
+:global(.mini).draggable {
+  cursor: grab;
+  pointer-events: auto;
+}

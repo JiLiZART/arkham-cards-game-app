@@ -41,8 +41,8 @@
 
 ## 7. Scene
 
-- [ ] 7.1 `Table/`, `CardMesh/`, `EventFx/`, `MapCamera/` folders; modules only where an HTML overlay has styles; `cardShape.ts`, `textures.ts` move with their owner
-- [ ] 7.2 The table renders as before: map, cards, flips, camera buttons
+- [x] 7.1 `Table/`, `CardMesh/`, `EventFx/`, `MapCamera/` folders; modules only where an HTML overlay has styles; `cardShape.ts`, `textures.ts` move with their owner
+- [x] 7.2 The table renders as before: map, cards, flips, camera buttons
 
 ## 8. HUD, in groups
 

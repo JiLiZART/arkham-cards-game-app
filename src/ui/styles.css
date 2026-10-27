@@ -228,9 +228,6 @@ select {
   left: -6px;
   top: -8px;
 }
-.map-intent {
-  transform: translate(-30%, -70%);
-}
 .hover-face > .intent {
   position: absolute;
   left: 6px;
@@ -416,16 +413,6 @@ footer {
   color: var(--muted);
   font-size: 12px;
   margin-top: 30px;
-}
-.float-num {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  font: bold 26px sans-serif;
-  text-shadow:
-    0 0 6px #000,
-    0 0 2px #000;
-  white-space: nowrap;
 }
 .stat {
   display: inline-flex;
@@ -641,13 +628,6 @@ footer {
 .fan-card.dimmed.focused,
 .mini-card.dimmed:hover {
   filter: brightness(0.8);
-}
-.mini.draggable {
-  cursor: grab;
-  pointer-events: auto;
-}
-.engaged-badge {
-  transform: translate(-50%, -50%);
 }
 .stat-name {
   font-weight: bold;
@@ -2098,22 +2078,6 @@ footer {
   color: var(--muted);
   font-size: 14px;
   line-height: 1.35;
-}
-
-/* clues on a map location: token pile + total on a dark rounded backing */
-.loc-clues {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 10px 4px 6px;
-  border-radius: 22px;
-  background: #000a;
-  box-shadow: 0 2px 8px #000a;
-  font: bold 26px/1 var(--f-body);
-  color: #fff;
-  text-shadow: 0 1px 3px #000;
-  white-space: nowrap;
-  pointer-events: none;
 }
 .hand-details .hd-muted {
   color: var(--muted);

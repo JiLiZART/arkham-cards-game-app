@@ -7,12 +7,12 @@ import {
   useRef,
   type PointerEvent as ReactPointerEvent,
 } from "react";
-import { heldGame } from "../game/spotlight";
-import { eventFocus } from "../game/camera";
-import { heldCards, needsNext, type QueuedEvent } from "../state/store";
+import { heldGame } from "../../game/spotlight";
+import { eventFocus } from "../../game/camera";
+import { heldCards, needsNext, type QueuedEvent } from "../../state/store";
 import * as THREE from "three";
-import { t } from "../../content/i18n";
-import type { GameState, InstId } from "../../engine/types";
+import { t } from "../../../content/i18n";
+import type { GameState, InstId } from "../../../engine/types";
 import {
   domPlace,
   lastRects,
@@ -22,22 +22,24 @@ import {
   reducedMotion,
   takeArrival,
   type ScreenBox,
-} from "../game/arrivals";
-import { useCardClick } from "../game/cardClick";
-import { clearPeek, setMapCardAt, tapCard } from "../game/touch";
-import { iconUrl } from "../assets/icons";
-import { Portrait } from "../components/Portrait/index";
-import { db, gameStore, useGame } from "../state/context";
-import { RESOLVE_BOX } from "../hud/Reveal";
-import { CARD_H, CARD_W, footprint, layout, type Placement, type Vec3 } from "../game/layout";
-import { hitRect, type ScreenRect } from "../game/hit";
-import { introHides } from "../game/intro";
-import { viewerOf } from "../state/store";
-import { useShown } from "../state/usePlayers";
-import { useView } from "../state/view";
-import { CardMesh, SPOT_Y } from "./CardMesh";
-import { EventFx } from "./EventFx";
-import { camInput, MapCamera } from "./MapCamera";
+} from "../../game/arrivals";
+import { useCardClick } from "../../game/cardClick";
+import { clearPeek, setMapCardAt, tapCard } from "../../game/touch";
+import { iconUrl } from "../../assets/icons";
+import { Portrait } from "../../components/Portrait/index";
+import { db, gameStore, useGame } from "../../state/context";
+import { RESOLVE_BOX } from "../../hud/Reveal";
+import { CARD_H, CARD_W, footprint, layout, type Placement, type Vec3 } from "../../game/layout";
+import { hitRect, type ScreenRect } from "../../game/hit";
+import { introHides } from "../../game/intro";
+import { viewerOf } from "../../state/store";
+import { useShown } from "../../state/usePlayers";
+import { useView } from "../../state/view";
+import { CardMesh, SPOT_Y } from "../CardMesh";
+import { EventFx } from "../EventFx";
+import { camInput, MapCamera } from "../MapCamera";
+import { cx } from "../../components/cx";
+import styles from "./Table.module.css";
 
 /** on-screen rect of a card on the map (set by the scene; the HTML hover overlay uses it) */
 export const mapProjector: {
@@ -163,7 +165,12 @@ function Mini({
       >
         <div
           ref={el}
-          className={`mini ${moves ? "draggable" : ""} ${drag ? "dragging" : ""} ${dimmed ? "dimmed" : ""}`}
+          className={cx(
+            "mini",
+            moves ? styles.draggable : "",
+            drag ? "dragging" : "",
+            dimmed ? "dimmed" : "",
+          )}
           style={
             drag ? { transform: `translate(${drag.dx}px, ${drag.dy}px) scale(1.15)` } : undefined
           }
