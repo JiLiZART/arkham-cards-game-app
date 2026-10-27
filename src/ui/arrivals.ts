@@ -197,17 +197,17 @@ export function originRect(
 }
 
 const SELECTORS: Record<Place, string> = {
-  deck: '[data-pile="deck"] .pile-card',
-  discard: '[data-pile="discard"] .pile-card',
-  encounter: '[data-pile="encounter"] .pile-card',
-  encounterDiscard: '[data-pile="encounterDiscard"] .pile-card',
+  deck: '[data-pile="deck"] [data-ui="pile-card"]',
+  discard: '[data-pile="discard"] [data-ui="pile-card"]',
+  encounter: '[data-pile="encounter"] [data-ui="pile-card"]',
+  encounterDiscard: '[data-pile="encounterDiscard"] [data-ui="pile-card"]',
   resolve: "",
-  actAgenda: ".scenario-panel",
-  piles: ".pile-column",
-  fan: ".hand-fan, .hand-drawer",
-  strip: ".play-strip",
-  skilltest: ".st-placed",
-  showcase: ".encounter-showcase .sc-card",
+  actAgenda: '[data-ui="scenario-panel"]',
+  piles: '[data-ui="pile-column"]',
+  fan: '[data-ui="hand-fan"], [data-ui="hand-drawer"]',
+  strip: '[data-ui="play-strip"]',
+  skilltest: '[data-ui="st-placed"]',
+  showcase: '[data-ui="encounter-showcase"] [data-ui="sc-card"]',
 };
 
 /** the real places on screen */
@@ -226,7 +226,7 @@ export const mapMoving = new Set<InstId>();
 export const mapPending = new Set<InstId>();
 /** map cards being dealt: held back, gliding face down, or turning over for the first time (their portraits wait) */
 export const mapDealing = new Set<InstId>();
-const FLYING = "[data-card], .flight, .ghost-card, .fan-card, .resolving";
+const FLYING = '[data-card], [data-ui="ghost-card"], [data-ui="fan-card"], [data-ui="resolving"]';
 
 /** true while an HTML card flight or a map card glide is running */
 export function cardsFlying(): boolean {

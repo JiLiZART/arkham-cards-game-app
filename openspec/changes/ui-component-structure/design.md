@@ -112,7 +112,7 @@ Each list is a starting point. A file that turns out to belong elsewhere moves t
 
 ### Vitest and CSS Modules
 
-Vitest runs with `css.modules.classNameStrategy: "non-scoped"`, so the class names in rendered test markup are stable and readable. Tests that assert on placement use data attributes rather than class names wherever they can.
+Vitest doesn't process CSS here, so a module import in a test returns its own key names (`styles.fanCard` is `"fanCard"`): stable, readable, and no config needed. (Found while applying; a `classNameStrategy` setting would have no effect.) Tests that assert on placement use data attributes rather than class names.
 
 ## Risks / Trade-offs
 

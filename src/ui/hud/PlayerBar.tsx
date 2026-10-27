@@ -106,6 +106,7 @@ function AvatarButton({
       ref={ref}
       data-inv={a.inv}
       data-tip={a.shown ? "portrait" : undefined}
+      data-ui="pb-avatar"
       className={`pb-avatar ${a.active ? "active" : ""} ${a.shown ? "shown" : ""} ${a.grey ? "grey" : ""} ${a.turn === "done" ? "done" : ""} ${legal ? "legal" : ""} ${a.canAct ? "pulse" : ""} ${dimmed ? "dimmed" : ""}`}
       onClick={() => onTap(ref.current!)}
       onPointerEnter={(e) => onEnter(ref.current!, e)}
@@ -157,7 +158,7 @@ function Sheet({
   useEffect(() => {
     const key = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     const down = (e: PointerEvent) =>
-      !(e.target as Element).closest(".pb-sheet, .pb-avatar") && onClose();
+      !(e.target as Element).closest('[data-ui="pb-sheet"], [data-ui="pb-avatar"]') && onClose();
     window.addEventListener("keydown", key);
     window.addEventListener("pointerdown", down);
     return () => {
@@ -168,6 +169,7 @@ function Sheet({
   return (
     <div
       className="pb-sheet"
+      data-ui="pb-sheet"
       onPointerEnter={onEnter}
       onPointerLeave={onLeave}
       style={{

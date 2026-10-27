@@ -43,7 +43,9 @@ export function HoverCard() {
   const { byCard } = useCardClick();
   // a strip card with options keeps its buttons a moment after the pointer leaves it, so the pointer can cross onto them
   const live =
-    hovered && hoverRect && document.querySelector(`.play-strip [data-card="${hovered}"]`)
+    hovered &&
+    hoverRect &&
+    document.querySelector(`[data-ui="play-strip"] [data-card="${hovered}"]`)
       ? stripButtonsFor(hovered, byCard)
       : null;
   const [held, setHeld] = useState<{ id: InstId; rect: NonNullable<typeof hoverRect> } | null>(
@@ -84,7 +86,7 @@ export function HoverCard() {
   // the copy alone is kept fully on screen; the details column goes beside it, like for hand cards
   const box = placeHover(rect, 0, innerWidth, innerHeight);
   boxNow.current = box;
-  const inStrip = !!document.querySelector(`.play-strip [data-card="${shownId}"]`);
+  const inStrip = !!document.querySelector(`[data-ui="play-strip"] [data-card="${shownId}"]`);
   const opts = inStrip ? (byCard.get(shownId) ?? []) : [];
   const name = opts.length ? cardText(db, inst.code, locale).name : "";
   const back = db.cards[inst.code].type === "location" && !inst.revealed;

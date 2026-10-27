@@ -61,6 +61,7 @@ export function HandDrawer() {
     return (
       <button
         className="hand-drawer"
+        data-ui="hand-drawer"
         data-tip="hand"
         aria-label={t(db, locale, "phone.hand")}
         onClick={() => setDrawer("hand")}
@@ -92,6 +93,7 @@ export function HandDrawer() {
       <div className="drawer-shade hand-shade" onClick={() => setDrawer(null)} />
       <div
         className="hand-drawer open"
+        data-ui="hand-drawer"
         data-tip="hand"
         onPointerDown={down}
         onPointerMove={move}

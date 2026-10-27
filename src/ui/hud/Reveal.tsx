@@ -62,7 +62,7 @@ function EncounterShowcase({
       RESOLVE_BOX,
     );
     if (pile && !reducedMotion())
-      riseAndArc(el, el.querySelector<HTMLElement>(".sc-flip"), pile, 0);
+      riseAndArc(el, el.querySelector<HTMLElement>('[data-ui="sc-flip"]'), pile, 0);
   }, []);
   const send = () => {
     if (card.current) rememberRect(id, card.current);
@@ -83,7 +83,8 @@ function EncounterShowcase({
   return (
     <div
       className="showcase encounter-showcase"
-      onClick={(e) => !(e.target as Element).closest(".sc-help") && send()}
+      data-ui="encounter-showcase"
+      onClick={(e) => !(e.target as Element).closest('[data-ui="sc-help"]') && send()}
     >
       <div
         className="sc-cards"
@@ -92,6 +93,7 @@ function EncounterShowcase({
         <button
           ref={card}
           className="sc-card"
+          data-ui="sc-card"
           data-card={id}
           onClick={(e) => {
             e.stopPropagation();
@@ -110,7 +112,7 @@ function EncounterShowcase({
           onPointerUp={() => clearTimeout(press.current)}
           onPointerCancel={() => clearTimeout(press.current)}
         >
-          <span className="sc-flip">
+          <span className="sc-flip" data-ui="sc-flip">
             <span className="sc-front">
               <CardFace code={code} locale={locale} />
             </span>
@@ -123,7 +125,7 @@ function EncounterShowcase({
           </span>
         </button>
       </div>
-      <div className="sc-help">
+      <div className="sc-help" data-ui="sc-help">
         {t(db, locale, "encounter.take")}{" "}
         <button className="primary" onClick={send} autoFocus>
           {t(db, locale, "draw.continue")}
@@ -152,6 +154,7 @@ function Resolving({ game, locale }: { game: GameState; locale: string }) {
   return (
     <div
       className="resolving"
+      data-ui="resolving"
       ref={ref}
       data-card={cards.at(-1)!.id}
       style={{ left: b.x, top: b.y, width: b.w, height: b.h }}

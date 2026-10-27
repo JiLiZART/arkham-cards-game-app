@@ -177,6 +177,7 @@ function SubjectView({ subject, finish }: { subject: Subject; finish: ChoiceOpti
       <div className="st-subject">
         <div
           className={`st-subject-portrait ${lit}`}
+          data-ui="st-subject"
           onClick={tap}
           role={tap ? "button" : undefined}
         >
@@ -192,6 +193,7 @@ function SubjectView({ subject, finish }: { subject: Subject; finish: ChoiceOpti
     <div className="st-subject">
       <div
         className={`st-subject-card ${lit}`}
+        data-ui="st-subject"
         data-card={inst.id}
         onClick={tap}
         role={tap ? "button" : undefined}
@@ -234,7 +236,7 @@ const sign = (n: number) => (n >= 0 ? `+ ${n}` : `− ${-n}`);
 /** the calculation as icons: skill and base, each placed card, other modifiers, each token, "= total vs difficulty" */
 function CalcStrip({ calc }: { calc: CalcParts }) {
   return (
-    <div className="st-strip" data-tip="skilltest">
+    <div className="st-strip" data-tip="skilltest" data-ui="st-strip">
       {isIcon(calc.skill) && <Icon name={calc.skill} size={34} />}
       <b className="st-num">{calc.base}</b>
       {calc.icons.map((n, k) => (
@@ -249,7 +251,9 @@ function CalcStrip({ calc }: { calc: CalcParts }) {
           <ChaosTokenIcon token={tk.token} size={34} />
         </span>
       ))}
-      <span className="st-eq">=</span>
+      <span className="st-eq" data-ui="st-eq">
+        =
+      </span>
       <b
         className={`st-num st-total ${calc.autoFail || calc.total < calc.difficulty ? "low" : "ok"}`}
       >
@@ -286,7 +290,7 @@ function PlacedCards({
   useFlyIn(ref, !!viewer, viewer, RESOLVE_BOX, setup);
   const owners = new Set(placed.map((p) => p.owner));
   return (
-    <div className="st-placed" ref={ref}>
+    <div className="st-placed" data-ui="st-placed" ref={ref}>
       {placed.map((p) => {
         const back =
           viewerCanAct && p.removable

@@ -205,7 +205,7 @@ export function HandFan() {
     );
     const at = (b: { x: number; y: number; w: number; h: number }) =>
       boxTransform(b, slots[i].x, FAN_LEFT, innerHeight);
-    const flip = el.querySelector<HTMLElement>(".fan-flip");
+    const flip = el.querySelector<HTMLElement>('[data-ui="fan-flip"]');
     const delay = a.batch * STAGGER_MS;
     if (a.from === "deck" && !a.opening)
       flyDraw(el, flip, from, showBox(innerWidth, innerHeight), el.style.transform, at, delay);
@@ -333,6 +333,7 @@ export function HandFan() {
       )}
       <div
         className="hand-fan"
+        data-ui="hand-fan"
         data-tip="hand"
         style={{ left: FAN_LEFT, width }}
         aria-label="Your hand"
@@ -350,6 +351,7 @@ export function HandFan() {
                 if (el) els.current.set(id, el);
                 else els.current.delete(id);
               }}
+              data-ui="fan-card"
               className={`fan-card ${opts.length ? "legal" : ""} ${dragging ? "dragging" : ""} ${focus === id ? "focused" : ""} ${outsideSpotlight(spotlight, id) ? "dimmed" : ""}`}
               // transform and z-index come from the frame loop, except while dragging
               style={{
@@ -389,7 +391,7 @@ export function HandFan() {
               }}
               title={cardText(db, game.cards[id].code, locale).name}
             >
-              <span className="fan-flip">
+              <span className="fan-flip" data-ui="fan-flip">
                 <span className="ff-front">
                   <Face code={game.cards[id].code} locale={locale} />
                   <GlanceBadge card={db.cards[game.cards[id].code]} />

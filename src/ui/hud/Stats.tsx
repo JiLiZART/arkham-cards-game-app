@@ -185,7 +185,11 @@ export function StatBar() {
   if (!shown || !game.invs[shown] || !cardId) return null;
   // full size at 1080p and up, smaller on a smaller window (the fan makes room for it at the same size)
   return (
-    <div className="stat-dock" style={{ width: 420, zoom: statBarZoom(width, height) }}>
+    <div
+      className="stat-dock"
+      data-ui="stat-dock"
+      style={{ width: 420, zoom: statBarZoom(width, height) }}
+    >
       <StatBody
         inv={shown}
         dimmed={dimmed}

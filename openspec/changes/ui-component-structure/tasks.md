@@ -1,15 +1,17 @@
 ## 1. Baseline
 
-- [ ] 1.1 Capture the "before" screenshots under `.playwright-mcp/ui-structure/before/` with a dev server on a spare port: title, new game, campaign screen, deck builder, card catalog, settings, how-to; the table in desktop and phone layouts (EN and RU), with a card hovered in hand, assets and threats in the strips, a skill test, the drawn-card showcase, an encounter reveal, the scenario introduction (story and card steps), the deck viewer and a card modal
-- [ ] 1.2 Record the list of class-based DOM lookups (`querySelector`, `closest`, `matches` with a `.` selector, `arrivals.ts` `SELECTORS`) as the checklist for group 2
+- [x] 1.1 Capture the "before" screenshots under `.playwright-mcp/ui-structure/before/` with a dev server on a spare port: title, new game, campaign screen, deck builder, card catalog, settings, how-to; the table in desktop and phone layouts (EN and RU), with a card hovered in hand, assets and threats in the strips, a skill test, the drawn-card showcase, an encounter reveal, the scenario introduction (story and card steps), the deck viewer and a card modal
+- [x] 1.2 Record the list of class-based DOM lookups (`querySelector`, `closest`, `matches` with a `.` selector, `arrivals.ts` `SELECTORS`) as the checklist for group 2
 
 ## 2. Groundwork (global CSS still in place)
 
-- [ ] 2.1 `vite.config.ts`: `css.modules.localsConvention: "camelCaseOnly"`; Vitest `css.modules.classNameStrategy: "non-scoped"`; confirm a `*.module.css` import typechecks with `vite/client` types
-- [ ] 2.2 Add `src/ui/components/cx.ts` (join truthy class parts) with a test
-- [ ] 2.3 Replace every class-based DOM lookup from 1.2 with a `data-ui` attribute on the target element and a `[data-ui="…"]` selector; update the tests that read those classes
-- [ ] 2.4 Add a test that fails when `src/ui` code calls `querySelector`, `querySelectorAll`, `closest` or `matches` with a class selector
-- [ ] 2.5 `pnpm typecheck`, `pnpm test`, `pnpm lint`; spot-check flights (play a card, draw, encounter reveal, intro deal) in the browser
+- [x] 2.1 `vite.config.ts`: `css.modules.localsConvention: "camelCaseOnly"` (Vitest needs no setting: it doesn't process CSS, so a module import returns its key names); confirm a `*.module.css` import typechecks with `vite/client` types
+- [x] 2.2 Add `src/ui/components/cx.ts` (join truthy class parts) with a test
+- [x] 2.3 Replace every class-based DOM lookup from 1.2 with a `data-ui` attribute on the target element and a `[data-ui="…"]` selector; update the tests that read those classes
+  - Lookups (from 1.2): `arrivals.ts` `SELECTORS` (`.pile-card`, `.scenario-panel`, `.pile-column`, `.hand-fan`, `.hand-drawer`, `.play-strip`, `.st-placed`, `.encounter-showcase .sc-card`) and `FLYING` (`.flight`, `.ghost-card`, `.fan-card`, `.resolving`); `IntroOverlay` `.scenario-panel`; `PlayerBar` `.pb-sheet, .pb-avatar`; `Showcase` `.sc-card`, `.sc-flip`, `.sc-help`; `Reveal` `.sc-flip`, `.sc-help`; `Panels` `.stat-dock`; `HandFan` `.fan-flip`; `TokenDraw` `.st-subject-card, .st-subject-portrait`, `.st-strip .st-eq`; `HoverCard` `.play-strip`; `Floats` `.pb-avatar`
+  - No test reads class names. Classes set imperatively (`hit-pulse`, `hit-streak` in `Floats`, `ghost-card` in `flights.ts`) take their module's names; classes in HTML strings (`g-*` from `guideText.ts`, `icon`, `svg-icon`, `gl` from `formatText`) stay global
+- [x] 2.4 Add a test that fails when `src/ui` code calls `querySelector`, `querySelectorAll`, `closest` or `matches` with a class selector
+- [x] 2.5 `pnpm typecheck`, `pnpm test`, `pnpm lint`; spot-check flights (play a card, draw, encounter reveal, intro deal) in the browser
 
 ## 3. Group the root by concern (moves and imports only)
 

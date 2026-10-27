@@ -148,7 +148,7 @@ export function ScenarioPanel() {
     useView((s) => s.intro?.step),
   );
   return (
-    <div className="scenario-panel">
+    <div className="scenario-panel" data-ui="scenario-panel">
       {game.agenda && (
         <div className={`scenario-card ${hides.agenda ? "intro-hidden" : ""}`} data-tip="agenda">
           <MiniCard
@@ -244,6 +244,7 @@ function Pile({
       title={`${label}: ${count}`}
     >
       <button
+        data-ui="pile-card"
         className={`pile-card ${count === 0 ? "empty" : ""} ${dimmed ? "dimmed" : ""} ${option ? "legal" : ""}`}
         disabled={!showTop && !option}
         aria-label={option ? `${label}: ${tr("pile.tapToDraw")}` : undefined}
@@ -288,7 +289,7 @@ export function PileColumn() {
     : { player: null, encounter: null, waiting: false };
   const victory = Object.values(game.cards).filter((c) => c.zone === "victory");
   return (
-    <div className="pile-column">
+    <div className="pile-column" data-ui="pile-column">
       <Pile
         label={tr("pile.encounter")}
         count={game.encounterDeck.length}
@@ -512,7 +513,7 @@ export function PlayStrip({ part = "all" }: { part?: "all" | "threats" | "assets
     const sideways = shown.filter((c) => c.exhausted).length;
     if (part === "assets") {
       // under the piles, over the stat dock and as wide as it; the cards keep full size and overlap when they don't fit
-      const dock = document.querySelector(".stat-dock")?.getBoundingClientRect();
+      const dock = document.querySelector('[data-ui="stat-dock"]')?.getBoundingClientRect();
       if (dock) {
         el.style.bottom = `${innerHeight - dock.top + 8}px`;
         el.style.width = `${dock.width}px`;
@@ -582,6 +583,7 @@ export function PlayStrip({ part = "all" }: { part?: "all" | "threats" | "assets
   };
   return (
     <div
+      data-ui="play-strip"
       className={`play-strip ${part === "all" ? "" : part} ${phone ? `column ${open ? "open" : ""}` : ""} ${mode}`}
       ref={strip}
     >

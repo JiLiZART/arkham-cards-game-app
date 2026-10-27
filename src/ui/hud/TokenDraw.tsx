@@ -53,9 +53,7 @@ export function DrawStage({ e, byHand }: { e: GameEvent; byHand: boolean }) {
   useLayoutEffect(() => {
     const r = stage.current!.getBoundingClientRect();
     setArea({ x: 0, y: 0, w: r.width, h: r.height });
-    const card = document
-      .querySelector(".st-subject-card, .st-subject-portrait")
-      ?.getBoundingClientRect();
+    const card = document.querySelector('[data-ui="st-subject"]')?.getBoundingClientRect();
     setSubject(
       card ? { x: card.left - r.left, y: card.top - r.top, w: card.width, h: card.height } : null,
     );
@@ -171,7 +169,9 @@ export function DrawStage({ e, byHand }: { e: GameEvent; byHand: boolean }) {
     const disc = discs.current[k];
     if (motion && disc) {
       setTimeout(() => {
-        const target = document.querySelector(".st-strip .st-eq")?.getBoundingClientRect();
+        const target = document
+          .querySelector('[data-ui="st-strip"] [data-ui="st-eq"]')
+          ?.getBoundingClientRect();
         if (!target) return;
         const own = disc.getBoundingClientRect();
         disc.animate(

@@ -16,7 +16,8 @@ const boxOf = (el: Element) => {
   return { x: r.left, y: r.top, w: r.width, h: r.height };
 };
 
-const slotOf = (id: string) => document.querySelector(`.scenario-panel [data-card="${id}"]`);
+const slotOf = (id: string) =>
+  document.querySelector(`[data-ui="scenario-panel"] [data-card="${id}"]`);
 
 /**
  * The scenario introduction after the last mulligan, as the campaign guide reads it: first the story (the campaign's

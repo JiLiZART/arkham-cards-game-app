@@ -156,7 +156,7 @@ function sourceBox(id: InstId): ScreenBox | null {
 
 /** the investigator's avatar in the player bar, else their portrait on the map */
 function targetEl(inv: InvId): { el: HTMLElement | null; box: ScreenBox | null } {
-  const el = document.querySelector<HTMLElement>(`.pb-avatar[data-inv="${inv}"]`);
+  const el = document.querySelector<HTMLElement>(`[data-ui="pb-avatar"][data-inv="${inv}"]`);
   if (el) return { el, box: boxOfEl(el) };
   const p = mapProjector.mini(inv);
   return { el: null, box: p ? { x: p.x - 30, y: p.y - 30, w: 60, h: 60 } : null };

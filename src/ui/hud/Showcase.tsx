@@ -50,7 +50,9 @@ export function Showcase() {
 
   // new cards rise face down out of their pile (the deck; a pick from the discard comes from the discard) and arc to their place
   useLayoutEffect(() => {
-    const els = [...(root.current?.querySelectorAll<HTMLElement>(".sc-card[data-card]") ?? [])];
+    const els = [
+      ...(root.current?.querySelectorAll<HTMLElement>('[data-ui="sc-card"][data-card]') ?? []),
+    ];
     let k = 0;
     for (const el of els) {
       const id = el.dataset.card!;
@@ -61,7 +63,7 @@ export function Showcase() {
         RESOLVE_BOX,
       );
       if (!pile || reducedMotion()) continue;
-      riseAndArc(el, el.querySelector<HTMLElement>(".sc-flip"), pile, riseDelay(k++));
+      riseAndArc(el, el.querySelector<HTMLElement>('[data-ui="sc-flip"]'), pile, riseDelay(k++));
     }
     for (const id of flown.current) if (!ids.includes(id)) flown.current.delete(id);
   });
@@ -69,7 +71,7 @@ export function Showcase() {
   // the drawn cards (all, or the one clicked) go on to the fan, which flies each one from where it stands here
   const toHand = (only?: InstId) => {
     root.current
-      ?.querySelectorAll<HTMLElement>(".sc-card[data-card]")
+      ?.querySelectorAll<HTMLElement>('[data-ui="sc-card"][data-card]')
       .forEach((el) => (!only || el.dataset.card === only) && noteLocalMove(el.dataset.card!, el));
     setDetail(null);
     useView.setState((v) => ({ showcase: only ? v.showcase.filter((x) => x !== only) : [] }));
@@ -136,7 +138,9 @@ export function Showcase() {
     <div
       className={`showcase ${pick.length ? "picking" : ""}`}
       ref={root}
-      onClick={(e) => drawn.length > 0 && !(e.target as Element).closest(".sc-help") && toHand()}
+      onClick={(e) =>
+        drawn.length > 0 && !(e.target as Element).closest('[data-ui="sc-help"]') && toHand()
+      }
     >
       <div
         className="sc-cards"
@@ -145,6 +149,7 @@ export function Showcase() {
         {ids.map((id, i) => (
           <button
             key={id}
+            data-ui="sc-card"
             className={`sc-card ${pick.length && !pickable(id) ? "sc-off" : ""}`}
             data-card={id}
             disabled={!!pick.length && (busy || !pickable(id))}
@@ -170,7 +175,7 @@ export function Showcase() {
             }}
             onPointerCancel={() => clearTimeout(press.current)}
           >
-            <span className="sc-flip">
+            <span className="sc-flip" data-ui="sc-flip">
               <span className="sc-front">
                 <CardFace code={game.cards[id].code} locale={locale} />
               </span>
@@ -184,7 +189,9 @@ export function Showcase() {
           </button>
         ))}
       </div>
-      <div className="sc-help">{help}</div>
+      <div className="sc-help" data-ui="sc-help">
+        {help}
+      </div>
       {detail && game.cards[detail.id] && (
         <DetailsColumn
           rows={cardDetails(db, game.cards[detail.id].code, locale)}
