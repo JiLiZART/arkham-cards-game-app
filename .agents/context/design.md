@@ -200,9 +200,9 @@ A low-chroma teal night with one muted teal accent, bone ink, and a warm paper s
 
 Menus share one desk shell with insets that scale with the window (frame-x, frame-y), a heading with an ironwork rule under it, and a footer with an ironwork rule above it. The language tabs sit in the top-right corner, so desk headings stop short of them (`padding-right: min(112px, 30vw)`). Settings is one narrow paper leaf (max 640px) of ledger rows with the control on the right. How to play is one continuous paper page at reading measure (max 760px). The catalog fills the window and only its list scrolls.
 
-On the table, the top bar is a dark band with a double ironwork rule under it. The instruction cartouche is centred above the map, and the rail tabs sit at the right. Controls keep a 44px minimum touch height and an 8px gap. Phone landscape (max-height 500px) compresses titles and puts the title buttons in two columns.
+On the table, the top bar is a dark band with a double ironwork rule under it. The instruction cartouche sits at the bottom centre, just above the hand fan, and the rail tabs sit at the right. The viewer's cards in play form a row at the bottom left, over the stat dock: full-size cards that overlap rather than wrap or scroll, the hovered one in front, token badges at the top left; the threat area and engaged enemies keep the column at the right. Controls keep a 44px minimum touch height and an 8px gap. Phone landscape (max-height 500px) compresses titles and puts the title buttons in two columns.
 
-**The Bar Bottom Rule.** Anything that has to sit under the top bar reads its measured bottom edge from `--bar-bottom` (set by the HUD, since the bar wraps). The skill-test line starts at `max(140px, var(--bar-bottom) + 18px)`, never under the bar.
+**The Bar Top Rule.** Anything that has to sit above the instruction cartouche reads its measured top edge from `--bar-top` (set by the HUD, since the cartouche wraps): the mulligan row, the skill test's calculation strip, and the height of the test's subject card. Nothing sits under the cartouche.
 
 ## Elevation & Depth
 
@@ -266,7 +266,7 @@ The UI uses an authored stroke icon set (`UiIcon`): 24x24 viewBox, `currentColor
 - **Do** draw structure with ironwork hairlines that end in a curl, and close cartouches and the title's primary oval with `--cap`.
 - **Do** put what a player would write down on a paper note by adding it to the paper-note scope, and keep everything else on the night.
 - **Do** set screen titles in uppercase Prata, everything read and every control in EB Garamond, and names in Teutonic.
-- **Do** place anything below the top bar from `--bar-bottom`.
+- **Do** place anything above the instruction cartouche from `--bar-top`.
 - **Do** draw icons as `UiIcon` strokes (1.8, round caps, currentColor).
 
 ### Don't:

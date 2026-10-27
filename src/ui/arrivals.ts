@@ -10,7 +10,7 @@ export interface Arrival {
   to: Zone;
   /** whose hand / play area it went to (null for the map) */
   owner: InvId | null;
-  /** the opening hand or a mulligan redraw (also the last one, which ends setup): no stop at the show spot */
+  /** the opening hand: no stop at the show spot (a mulligan redraw stops in the showcase like any draw) */
   opening: boolean;
   /** position among arrivals of the same state change going to the same place, for staggering */
   batch: number;
@@ -56,7 +56,8 @@ export function diffArrivals(prev: GameState | null, next: GameState): Arrival[]
       from,
       to,
       owner,
-      opening: next.phase === "setup" || prev?.phase === "setup",
+      opening:
+        (next.phase === "setup" || prev?.phase === "setup") && prev?.pending?.kind !== "mulligan",
       batch,
       log: next.log.length,
       shown: shownCards.has(id),

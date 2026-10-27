@@ -689,26 +689,29 @@ function ErrorToast() {
 function useViewReset() {
   const game = useGame((s) => s.game);
   const decider = game ? viewerOf(game) : null;
+  // cards still in the showcase (a mulligan redraw) keep their owner's table until they are taken
+  const held = useView((s) => s.showcase.length > 0);
   useEffect(() => {
+    if (held) return;
     const g = gameStore.getState().game;
     useView.getState().setViewing(g ? landingView(g) : null);
-  }, [decider]);
+  }, [decider, held]);
 }
 
-/** the bar's bottom edge as --bar-bottom on the page: the skill test's line starts under the bar however far it wraps */
-function useBarBottom() {
+/** the bar's top edge as --bar-top on the page: the mulligan row stays above the bar however far it wraps */
+function useBarTop() {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = ref.current;
     if (!el || typeof ResizeObserver === "undefined") return;
     const root = document.documentElement.style;
     const ro = new ResizeObserver(() =>
-      root.setProperty("--bar-bottom", `${el.getBoundingClientRect().bottom}px`),
+      root.setProperty("--bar-top", `${el.getBoundingClientRect().top}px`),
     );
     ro.observe(el);
     return () => {
       ro.disconnect();
-      root.removeProperty("--bar-bottom");
+      root.removeProperty("--bar-top");
     };
   }, []);
   return ref;
@@ -718,7 +721,7 @@ export function Hud() {
   useViewReset();
   // the phone layout (ADR-0005): one thin bar, the panels and the Journal in drawers, the rail's actions in the bar
   const phone = useLayoutMode() === "phone";
-  const centerCol = useBarBottom();
+  const centerCol = useBarTop();
   return (
     <>
       <TopBar phone={phone} />
@@ -735,7 +738,14 @@ export function Hud() {
           <StatBar />
         </>
       )}
-      <PlayStrip />
+      {phone ? (
+        <PlayStrip />
+      ) : (
+        <>
+          <PlayStrip part="threats" />
+          <PlayStrip part="assets" />
+        </>
+      )}
       <MulliganRow />
       <div className="center-col" ref={centerCol}>
         <StepCaption />

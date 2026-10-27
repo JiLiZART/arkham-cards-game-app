@@ -66,13 +66,13 @@ export function Showcase() {
     for (const id of flown.current) if (!ids.includes(id)) flown.current.delete(id);
   });
 
-  // the drawn cards go on to the fan, which flies each one from where it stands here
-  const toHand = () => {
+  // the drawn cards (all, or the one clicked) go on to the fan, which flies each one from where it stands here
+  const toHand = (only?: InstId) => {
     root.current
       ?.querySelectorAll<HTMLElement>(".sc-card[data-card]")
-      .forEach((el) => noteLocalMove(el.dataset.card!, el));
+      .forEach((el) => (!only || el.dataset.card === only) && noteLocalMove(el.dataset.card!, el));
     setDetail(null);
-    useView.setState({ showcase: [] });
+    useView.setState((v) => ({ showcase: only ? v.showcase.filter((x) => x !== only) : [] }));
   };
   const choosePick = (id: InstId, el: HTMLElement) => {
     const o = game.pending?.options.find((x) => x.card === id);
@@ -148,7 +148,12 @@ export function Showcase() {
             className={`sc-card ${pick.length && !pickable(id) ? "sc-off" : ""}`}
             data-card={id}
             disabled={!!pick.length && (busy || !pickable(id))}
-            onClick={(e) => pick.length && choosePick(id, e.currentTarget)}
+            onClick={(e) => {
+              if (pick.length) return choosePick(id, e.currentTarget);
+              // a drawn card goes to the hand by itself; the others stay to be read
+              e.stopPropagation();
+              toHand(id);
+            }}
             onMouseEnter={(e) => show(id, i, e.currentTarget)}
             onMouseLeave={() => setDetail(null)}
             onFocus={(e) => show(id, i, e.currentTarget)}

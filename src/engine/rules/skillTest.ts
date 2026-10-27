@@ -23,7 +23,7 @@ import {
   type G,
 } from "../core";
 import type { EffCtx, InstId, InvId, SkillTestState, Step } from "../types";
-import { activatable, canPay, canPlay, payCost, win } from "./cards";
+import { activatable, canPay, canPlay, payCost, playable, win } from "./cards";
 import { attackKey } from "./enemies";
 import { tokenX } from "./tokens";
 
@@ -187,7 +187,7 @@ function commitStage(g: G, step: Extract<Step, { t: "Test" }>) {
     who !== t.inv && mine.length >= 1 ? [] : me.hand.filter((h) => canCommit(g, who, h, t));
   // a player window: any [fast] ability, and fast cards playable now (Grimoire, ST.1)
   const fast = activatable(g, who, ["fast"]);
-  const plays = me.hand.filter((h) => canPlay(g, who, h, true));
+  const plays = playable(g, who).filter((h) => canPlay(g, who, h, true));
   if (cards.length === 0 && fast.length === 0 && plays.length === 0 && mine.length === 0) {
     push(g, { ...step, choice: undefined, asked: [...asked, who] });
     return;

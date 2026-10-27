@@ -46,7 +46,7 @@ export interface ViewState {
   settledFor: unknown;
   /** the animated event that is playing now: settled where it must, and holding the middle or waiting for it to clear */
   playing: unknown;
-  /** the scenario introduction after the last mulligan (agenda, act, then dealing the locations); input waits meanwhile */
+  /** the scenario introduction after the last mulligan (the story, agenda, act, then dealing the locations); input waits meanwhile */
   intro: { step: IntroStep; setup: unknown } | null;
   /** cards just drawn into the on-screen hand, held large in the middle until sent on to the hand; input waits meanwhile */
   showcase: InstId[];
@@ -86,7 +86,7 @@ export const outsideSpotlight = (s: Spotlight | null, id: string) =>
   !!s?.choice && !reducedMotion() && !s.cards.includes(id) && !s.invs.includes(id);
 export const useDimmed = (id: string) => useView((s) => outsideSpotlight(s.spotlight, id));
 
-export type IntroStep = "agenda" | "act" | "deal";
+export type IntroStep = "story" | "agenda" | "act" | "deal";
 
 export const useView = create<ViewState>((set, get) => ({
   hovered: null,

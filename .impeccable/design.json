@@ -158,7 +158,7 @@
       { "name": "The Earned Glow Rule", "body": "Lamp gold means \"the current step\" and Playable Green means \"a legal move\". Neither is decoration, and the glow outranks the plate when both apply.", "section": "colors" },
       { "name": "The Paper Note Rule", "body": "Inside a paper note the semantic tokens (--ink, --muted, --accent, --bad, --ctl-bg, --ctl-bg-on, --ctl-line) switch to the paper set, so components need no paper variant. The scope is one list in the stylesheet; add new note surfaces to that list.", "section": "colors" },
       { "name": "The Name Face Rule", "body": "Teutonic is for names and nothing else. Alegreya stays inside card faces; Caveat and TT2020 appear only where campaign-guide markup asks for <fancy> or <typewriter>.", "section": "typography" },
-      { "name": "The Bar Bottom Rule", "body": "Anything that has to sit under the top bar reads its measured bottom edge from --bar-bottom (set by the HUD, since the bar wraps). The skill-test line starts at max(140px, var(--bar-bottom) + 18px), never under the bar.", "section": "layout" },
+      { "name": "The Bar Top Rule", "body": "Anything that has to sit above the instruction cartouche reads its measured top edge from --bar-top (set by the HUD, since the cartouche wraps): the mulligan row, the skill test's calculation strip, and the height of the test's subject card. Nothing sits under the cartouche.", "section": "layout" },
       { "name": "The Ironwork Rule", "body": "Structure is drawn with bone hairlines that end in a curl (--curl, --curl-r): under the top bar, under desk headings, over desk footers, under the title. --cap closes the instruction cartouche and the title's primary oval. No brass, gilt or leather borders stand in for them.", "section": "elevation" }
     ],
     "dos": [
@@ -168,7 +168,7 @@
       "Do draw structure with ironwork hairlines that end in a curl, and close cartouches and the title's primary oval with --cap.",
       "Do put what a player would write down on a paper note by adding it to the paper-note scope, and keep everything else on the night.",
       "Do set screen titles in uppercase Prata, everything read and every control in EB Garamond, and names in Teutonic.",
-      "Do place anything below the top bar from --bar-bottom.",
+      "Do place anything above the instruction cartouche from --bar-top.",
       "Do draw icons as UiIcon strokes (1.8, round caps, currentColor)."
     ],
     "donts": [

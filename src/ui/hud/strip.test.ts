@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { ChoiceOption } from "../../engine/types";
 import { abilitySymbol, stripAction } from "./ActionRail";
-import { columnCardWidth, pileIcon, stripButtonsFor, stripOrder } from "./Panels";
+import { columnCardWidth, pileIcon, rowGap, stripButtonsFor, stripOrder } from "./Panels";
 
 describe("strip column card width", () => {
   const ROOM = 520; // the column's height at 1600x900
@@ -24,6 +24,34 @@ describe("strip column card width", () => {
 
   it("an exhausted card lies sideways and takes only its width in height", () => {
     expect(columnCardWidth(ROOM, 2, 2, 0)).toBeGreaterThan(columnCardWidth(ROOM, 4, 0, 0));
+  });
+});
+
+describe("asset row gap", () => {
+  // the stat dock's width at 1440x900, and the full card width
+  const W = 320;
+  const C = 92;
+
+  it("cards that fit lie flat with the normal gap", () => {
+    expect(rowGap(W, [C, C, C])).toBe(8);
+    expect(rowGap(W, [C])).toBe(8);
+  });
+
+  it("a row that exactly fits keeps its gap; one more card overlaps", () => {
+    expect(rowGap(4 * C + 3 * 8, [C, C, C, C])).toBe(8);
+    expect(rowGap(W, [C, C, C, C])).toBeLessThan(8);
+  });
+
+  it("many cards overlap until the last one's right edge meets the row's", () => {
+    for (const n of [5, 6, 8]) {
+      const g = rowGap(W, Array(n).fill(C));
+      expect(g).toBeLessThan(0);
+      expect(n * C + (n - 1) * g).toBeCloseTo(W);
+    }
+  });
+
+  it("an exhausted card (lying sideways) is 1.4 times as wide and overlaps more", () => {
+    expect(rowGap(W, [C, C, C, C * 1.4])).toBeLessThan(rowGap(W, [C, C, C, C]));
   });
 });
 

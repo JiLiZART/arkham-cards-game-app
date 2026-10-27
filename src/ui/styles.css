@@ -131,7 +131,6 @@ select {
 }
 .ribbon-scen {
   display: flex;
-  align-items: baseline;
   gap: 8px;
   margin-right: 10px;
 }
@@ -613,6 +612,21 @@ footer {
   z-index: 46;
   pointer-events: none;
 }
+/* a shade of night under the hand: the table behind the cards darkens so their text reads; its edges fade into the table */
+.hand-fan::before {
+  content: "";
+  position: absolute;
+  inset: -70px -90px 0;
+  z-index: -1;
+  background: linear-gradient(to top, rgb(7 12 14 / 0.88), rgb(7 12 14 / 0.6) 55%, transparent);
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 90px,
+    #000 calc(100% - 90px),
+    transparent
+  );
+}
 .hand-fan:has(.fan-card:hover),
 .hand-fan:focus-within,
 .hand-fan:has(.dragging),
@@ -932,10 +946,11 @@ footer {
   font-family: var(--f-body);
 }
 
-/* prompt banner + skill test, top centre; non-card options on the right rail next to the hand */
+/* prompt banner, bottom centre just over the hand fan; non-card options on the right rail next to the hand */
 .center-col {
   position: absolute;
-  top: 80px;
+  /* clear of the fan cards and the skill icons above them */
+  bottom: 196px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -1610,6 +1625,59 @@ footer {
 .game:not(.phone).testing .play-strip.compact {
   right: 8px;
 }
+/* the viewer's assets: a row at the bottom left, over the stat dock and under the piles (PlayStrip sets its bottom and width from them).
+   The cards keep full size and overlap (--gap goes negative) when they don't fit: no second row, no scrolling */
+.play-strip.assets {
+  --gap: 8px;
+  top: auto;
+  right: auto;
+  left: 8px;
+  bottom: 300px;
+  width: 320px;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-end;
+  gap: 0;
+  padding: 0;
+  overflow: visible;
+}
+/* the viewer's threat area and engaged enemies: a row at the top centre, under the top bar, scrolling sideways when full */
+.play-strip.threats {
+  top: 76px;
+  bottom: auto;
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+  width: auto;
+  max-width: calc(100vw - 2 * (16px + var(--feed-w)));
+  flex-direction: row;
+  align-items: flex-start;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 12px 6px 4px;
+}
+.play-strip.threats.aside {
+  translate: 0 -130%;
+}
+.game:not(.phone).testing .play-strip.threats.compact {
+  right: auto;
+}
+.play-strip.assets .strip-slot + .strip-slot {
+  margin-left: var(--gap);
+}
+/* the hovered or focused (a tap focuses it) card comes to the front of the overlap */
+.play-strip.assets .strip-slot:hover,
+.play-strip.assets .strip-slot:focus-within {
+  z-index: 1;
+}
+/* the right side of an overlapped card is covered: its badges sit at the top left, over the cost */
+.play-strip.assets .mini-card .tokens {
+  left: -6px;
+  right: auto;
+}
+.play-strip.assets.aside {
+  translate: -130% 0;
+}
 .play-strip.aside,
 .play-strip.aside > * {
   pointer-events: none;
@@ -1870,6 +1938,17 @@ footer {
   }
   .pile-name {
     font-size: 11px;
+  }
+}
+/* shorter still: the piles in one row (the divider stands upright), so the asset row has room over the stat dock */
+@media (max-height: 860px) {
+  .pile-column {
+    display: flex;
+    width: auto;
+  }
+  .pile-divider {
+    border-top: 0;
+    border-left: 1px solid var(--rule-dim);
   }
 }
 
@@ -2526,7 +2605,8 @@ footer {
 .mulligan-row {
   position: fixed;
   left: calc(50% + 120px);
-  bottom: 250px;
+  /* above the instruction bar, however many lines it wraps to */
+  bottom: calc(100vh - var(--bar-top, 100vh - 250px) + 14px);
   transform: translateX(-50%);
   z-index: 45;
   display: flex;
@@ -2558,7 +2638,7 @@ footer {
   color: var(--muted);
 }
 
-/* scenario introduction: agenda, then act, large in the middle before they fly to the act/agenda panel */
+/* scenario introduction: the story, then agenda and act drawn large into the middle before they fly to the act/agenda panel */
 .intro-overlay {
   position: fixed;
   inset: 0;
@@ -2614,12 +2694,38 @@ footer {
   width: clamp(300px, 34vw, 620px);
   aspect-ratio: 88 / 63;
   border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 10px 40px #000;
 }
-.intro-card > * {
+.intro-card {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  perspective: 1600px;
+}
+.intro-card .flip {
+  transition: none;
+}
+.intro-card .flip-front,
+.intro-card .flip-back {
+  overflow: hidden;
+  border-radius: 16px;
+}
+.intro-card .flip-front > * {
   width: 100%;
   height: 100%;
+}
+/* the card back is portrait; the act and agenda are landscape */
+.intro-card .flip-back img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(100% * 63 / 88);
+  height: calc(100% * 88 / 63);
+  transform: translate(-50%, -50%) rotate(90deg);
+  object-fit: cover;
+}
+.intro-text.intro-story {
+  max-width: 680px;
 }
 /* the text takes what is left of the screen and scrolls; a fade at its bottom edge says there is more */
 .intro-text {
@@ -3119,8 +3225,8 @@ footer {
   position: absolute;
   left: 50%;
   translate: -50% 0;
-  /* under the instruction bar, however many lines it wraps to */
-  top: max(140px, calc(var(--bar-bottom, 0px) + 18px));
+  /* under the top bar (the instruction bar is at the bottom now) */
+  top: 104px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -3128,8 +3234,9 @@ footer {
 }
 .st-center {
   position: relative;
-  width: 240px;
-  height: 336px;
+  /* as tall as the room between the line and the calculation strip over the bar allows (at most 336px) */
+  height: min(336px, calc(var(--bar-top, 590px) - 254px));
+  aspect-ratio: 5 / 7;
   margin-top: 8px;
 }
 /* calling the test off: beside the line, small, out of the way of the card */
@@ -3216,7 +3323,8 @@ footer {
 .st-strip {
   position: fixed;
   left: 50%;
-  bottom: 236px;
+  /* above the instruction bar, however many lines it wraps to */
+  bottom: calc(100vh - var(--bar-top, 100vh - 236px) + 12px);
   transform: translateX(-50%);
   z-index: 50;
   display: flex;
@@ -3316,10 +3424,10 @@ footer {
 .pb-avatar {
   position: relative;
   display: flex;
-  flex-direction: column;
+  flex-direction: row-reverse;
   align-items: center;
-  gap: 1px;
-  padding: 2px 6px;
+  gap: 4px;
+  padding: 4px 6px;
   border: 1px solid transparent;
   border-radius: 12px;
   background: transparent;
@@ -3373,6 +3481,7 @@ footer {
 }
 .pb-counts {
   display: flex;
+  flex-direction: column;
   gap: 6px;
   font: 15px/1 var(--f-body);
 }
@@ -3547,7 +3656,8 @@ footer {
   flex: 1;
   min-height: 0;
   overflow-y: auto;
-  padding: 10px 2px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 .wz-hint {
   color: var(--muted);
@@ -3558,6 +3668,7 @@ footer {
   justify-content: space-between;
   gap: 12px;
   padding-top: 10px;
+  margin-top: -8px;
 }
 .wz-foot button {
   min-height: 48px;
@@ -4300,7 +4411,6 @@ button.danger {
 }
 /* spans between the left tools and the strip column (a box at left: 50% could only grow to half the screen) */
 .game.phone .center-col {
-  top: auto;
   bottom: calc(84px + var(--safe-b));
   left: calc(56px + var(--safe-l));
   right: calc(64px + var(--safe-r));
@@ -5806,7 +5916,7 @@ button.danger {
 :root {
   --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .7 0 0 0 0 .82 0 0 0 0 .82 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   --band: var(--grain), linear-gradient(#13212a, #0b1418);
-  --tab: var(--grain), linear-gradient(var(--slate-lit), var(--slate));
+  --tab: var(--grain), linear-gradient(45deg, var(--slate-lit), var(--slate));
   --tab-lit: var(--grain), linear-gradient(#27404a, #1b2f37);
   --plate-fill: linear-gradient(#2a6b65, #1d4f4b);
   --plate-fill-lit: linear-gradient(#32807a, #225c57);
@@ -6142,6 +6252,7 @@ button.danger {
 .desk .wz-head {
   justify-content: flex-start;
   gap: 16px;
+  margin-bottom: -8px;
 }
 .desk .wz-head::after,
 .desk .screen:not(.wizard):not(.catalog) > h1::after {
@@ -6408,7 +6519,7 @@ button.danger {
   content: "";
   position: absolute;
   top: -14px;
-  right: 22px;
+  left: 22px;
   width: 14px;
   height: 38px;
   background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='38' viewBox='0 0 14 38' fill='none' stroke='%239aa3a6' stroke-width='1.6' stroke-linecap='round'%3E%3Cpath d='M4 12v17a3 3 0 0 0 6 0V6.5a4.5 4.5 0 0 0-9 0V30a6 6 0 0 0 12 0V12'/%3E%3C/svg%3E")

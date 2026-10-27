@@ -1,6 +1,8 @@
 import {
   Fragment,
+  useEffect,
   useLayoutEffect,
+  useReducer,
   useRef,
   useState,
   type MouseEvent as ReactMouseEvent,
@@ -434,11 +436,20 @@ export function stripButtonsFor(
   return hovered && byCard.get(hovered)?.length ? hovered : null;
 }
 
+/** the space between the asset row's cards: the normal gap while they fit `w` px, then negative (they overlap) so the last one's edge stays at the row's; widths in px, an exhausted card lying sideways is 1.4 times its width */
+export function rowGap(w: number, widths: number[]): number {
+  if (widths.length < 2) return STRIP_GAP;
+  const room = w - widths.reduce((a, b) => a + b, 0);
+  return Math.min(STRIP_GAP, room / (widths.length - 1));
+}
+
 /**
  * The viewer's cards in play, then (after a separator) their threat area and engaged enemies, above the hand.
+ * On the desktop they are two places: `threats` (the threat area and engaged enemies, a row at the top centre) and
+ * `assets` (the cards in play, a row at the bottom left over the stat dock); the phone keeps them in one column.
  * A card's pending options pulse its ring and show as buttons in the centre of its enlarged copy (HoverCard); the test's target is outlined.
  */
-export function PlayStrip() {
+export function PlayStrip({ part = "all" }: { part?: "all" | "threats" | "assets" }) {
   const game = useGame((s) => s.game) as GameState;
   const choose = useGame((s) => s.choose);
   const { byCard } = useCardClick();
@@ -456,11 +467,15 @@ export function PlayStrip() {
   // an enemy whose move hasn't played yet isn't engaged on screen yet; a card still in (or waiting for) the showcase isn't here yet
   const waiting = heldCards({ current, queue });
   const all = Object.values(heldGame(game, queue).cards).filter((c) => !waiting.has(c.id));
-  const assets = all.filter((c) => c.zone === "play" && c.controller === viewer);
-  const threats = [
-    ...all.filter((c) => c.zone === "threat" && c.controller === viewer),
-    ...all.filter((c) => c.zone === "enemy" && c.engagedWith === viewer),
-  ];
+  const assets =
+    part === "threats" ? [] : all.filter((c) => c.zone === "play" && c.controller === viewer);
+  const threats =
+    part === "assets"
+      ? []
+      : [
+          ...all.filter((c) => c.zone === "threat" && c.controller === viewer),
+          ...all.filter((c) => c.zone === "enemy" && c.engagedWith === viewer),
+        ];
   const order = stripOrder(assets, threats);
   const shown = order.cards;
   // during a skill test the strip is compact while one of its cards has an option (a fast ability), and out of the way otherwise
@@ -469,6 +484,13 @@ export function PlayStrip() {
     shown.map((c) => c.id),
     byCard,
   );
+  // the asset row is sized from the piles and the stat dock: measure again when the window changes
+  const [, remeasure] = useReducer((n: number) => n + 1, 0);
+  useEffect(() => {
+    if (part !== "assets") return;
+    addEventListener("resize", remeasure);
+    return () => removeEventListener("resize", remeasure);
+  }, [part]);
   // an asset new to the strip has just been played: its sound (enemies arriving have their own events)
   const seenAssets = useRef<{ setup: unknown; ids: Set<InstId> } | null>(null);
   useLayoutEffect(() => {
@@ -487,16 +509,33 @@ export function PlayStrip() {
     const el = strip.current;
     if (!el) return;
     const sideways = shown.filter((c) => c.exhausted).length;
+    if (part === "assets") {
+      // under the piles, over the stat dock and as wide as it; the cards keep full size and overlap when they don't fit
+      const dock = document.querySelector(".stat-dock")?.getBoundingClientRect();
+      if (dock) {
+        el.style.bottom = `${innerHeight - dock.top + 8}px`;
+        el.style.width = `${dock.width}px`;
+        el.style.setProperty(
+          "--gap",
+          `${rowGap(
+            dock.width,
+            shown.map((c) => (c.exhausted ? STRIP_W * 1.4 : STRIP_W)),
+          )}px`,
+        );
+      }
+    }
     const w = phone
       ? open
         ? 104
         : 44
-      : columnCardWidth(
-          el.clientHeight,
-          shown.length - sideways,
-          sideways,
-          assets.length && threats.length ? 1 : 0,
-        );
+      : part !== "all"
+        ? STRIP_W
+        : columnCardWidth(
+            el.clientHeight,
+            shown.length - sideways,
+            sideways,
+            assets.length && threats.length ? 1 : 0,
+          );
     el.style.setProperty("--sw", `${w}px`);
     // not while stepped aside: the rects would be the ones below the screen
     if (mode !== "aside")
@@ -537,7 +576,7 @@ export function PlayStrip() {
   };
   return (
     <div
-      className={`play-strip ${phone ? `column ${open ? "open" : ""}` : ""} ${mode}`}
+      className={`play-strip ${part === "all" ? "" : part} ${phone ? `column ${open ? "open" : ""}` : ""} ${mode}`}
       ref={strip}
     >
       {phone && (

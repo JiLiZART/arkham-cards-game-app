@@ -4,7 +4,6 @@ import {
   activeInvs,
   allMods,
   ask,
-  controlled,
   card,
   cardsIn,
   def,
@@ -25,7 +24,7 @@ import {
   type G,
 } from "../core";
 import type { ChoiceOption, EffCtx, InvId, Step, TurnAction } from "../types";
-import { activatable, canPlay, playAbility, spendGroupClues, win } from "./cards";
+import { activatable, canPlay, playAbility, playable, spendGroupClues, win } from "./cards";
 import { attacksOfOpportunity } from "./enemies";
 import { canMoveTo, checkEngagement, enterCost } from "./investigators";
 import { actClueCost } from "./scenario";
@@ -261,10 +260,7 @@ export function legalTurnActions(g: G, i: InvId): ChoiceOption[] {
   }
   add({ kind: "draw" }, "Draw 1 card");
   add({ kind: "resource" }, "Gain 1 resource");
-  const extra = controlled(g, i).flatMap(
-    (c) => g.db.scripts[c.code]?.extraPlayable?.(g, c.id, i) ?? [],
-  );
-  for (const h of [...me.hand, ...extra]) {
+  for (const h of playable(g, i)) {
     if (canPlay(g, i, h, false)) add({ kind: "play", card: h }, `Play ${def(g, h).name}`, h);
     else if (canPlay(g, i, h, true))
       add({ kind: "play", card: h }, `Play ${def(g, h).name} (fast)`, h);

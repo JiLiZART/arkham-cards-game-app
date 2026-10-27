@@ -21,7 +21,7 @@ OWN-WORLD: night-teal ground (#0d1317 to #122428 baize), bone ink (#f1efe4), fog
 
 STORY: players read the round, the prompt and their options at a glance, act on the cards, and between scenarios handle the case file: notes, photographs, stamped tags.
 
-FIRST VIEWPORT: table: the baize with hairline frame, the top bar as a dark band with an ironwork rule, the instruction cartouche centred above the map with the answer inside it, leather-free rail tabs at right. Title: cover art under a teal scrim, ARKHAM TABLE in Prata caps, oval ironwork buttons, the primary filled.
+FIRST VIEWPORT: table: the baize with hairline frame, the top bar as a dark band with an ironwork rule, the instruction cartouche at the bottom centre over the hand fan, with the answer inside it, leather-free rail tabs at right. Title: cover art under a teal scrim, ARKHAM TABLE in Prata caps, oval ironwork buttons, the primary filled.
 
 FORM: user-pinned direction (arkhamhorror.com-inspired noir), first on the ordered list; the roll ran afterwards for the record and the pin beats it. seed:8631e5b97f2c1cdd
 

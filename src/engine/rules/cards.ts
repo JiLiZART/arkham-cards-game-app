@@ -241,6 +241,14 @@ export function ctxFor(data: EventData, source: InstId, you: InvId | null): EffC
   };
 }
 
+/** the cards an investigator may play as if from hand: the hand, plus e.g. the top event of the discard pile (Wendy's Amulet) */
+export function playable(g: G, i: InvId): InstId[] {
+  const extra = controlled(g, i).flatMap(
+    (c) => g.db.scripts[c.code]?.extraPlayable?.(g, c.id, i) ?? [],
+  );
+  return [...inv(g, i).hand, ...extra];
+}
+
 function triggered(g: G, trigger: Trigger, data: EventData): AbilityRef[] {
   const out: AbilityRef[] = [];
   const blanked = blankedCards(g);
@@ -256,6 +264,9 @@ function triggered(g: G, trigger: Trigger, data: EventData): AbilityRef[] {
       // an encounter card's reaction belongs to each investigator who may use it (a location's, to those there)
       if (only === "reaction" && (!you || !usersOf(g, cardId, a).includes(you))) return;
       if (fromHand !== !!(a.fromHand || a.revealOnly)) return;
+      // a card played from elsewhere (Wendy's Amulet) is played, never revealed, and its forced in-hand abilities stay quiet
+      if (fromHand && card(g, cardId).zone !== "hand" && (a.revealOnly || a.kind !== "reaction"))
+        return;
       if (!fromHand && assetBlocked(g, cardId)) return;
       if (!triggerMatches(g, cardId, a, you, data)) return;
       if (!withinLimit(g, cardId, index, a)) return;
@@ -278,11 +289,11 @@ function triggered(g: G, trigger: Trigger, data: EventData): AbilityRef[] {
       }
     }
   }
-  for (const i of activeInvs(g)) for (const h of inv(g, i).hand) consider(h, i, true);
+  for (const i of activeInvs(g)) for (const h of playable(g, i)) consider(h, i, true);
   if (trigger === "playerWindow") {
     // fast events printed "play during any [fast] window" (ADR-0014)
     for (const i of activeInvs(g)) {
-      for (const h of inv(g, i).hand) {
+      for (const h of playable(g, i)) {
         const a = abilitiesOf(g, h, blanked).findIndex((x) => x.kind === "onPlay" && x.anyWindow);
         if (a < 0) continue;
         const ab = abilitiesOf(g, h, blanked)[a];
@@ -324,9 +335,10 @@ export const windowHandler: Handler<"Window"> = (g, step) => {
       (r.ability.kind === "reaction" || r.ability.anyWindow) &&
       !offered.includes(`${r.card}:${r.index}`),
   );
+  // nothing to play: no window (advancing the act alone is left to the turn's actions)
+  if (reactions.length === 0) return;
   // the group may spend clues to advance the act in any player window (Grimoire, Act Deck and Agenda Deck)
   const act = step.trigger === "playerWindow" && !offered.includes("act") && canAdvanceAct(g);
-  if (reactions.length === 0 && !act) return;
   const lead = activeInvs(g).includes(g.s.lead) ? g.s.lead : activeInvs(g)[0];
   const who = reactions.length ? reactions[0].controller : lead;
   const mine = reactions.filter((r) => r.controller === who);
@@ -429,7 +441,7 @@ export const useAbilityHandler: Handler<"UseAbility"> = (g, step) => {
     take = payCost(g, step.inv, step.card, a.cost);
   }
   const c = g.s.cards[step.card];
-  const ctx: EffCtx = { ...(step.ctx ?? {}), source: step.card, you: step.ctx?.you ?? step.inv };
+  const ctx: EffCtx = { ...step.ctx, source: step.card, you: step.ctx?.you ?? step.inv };
   if (c && c.zone === "location") ctx.location ??= c.id;
   emit(g, "ability", `${invName(g, step.inv)} uses ${a.label ?? def(g, step.card).name}`, {
     inv: step.inv,
@@ -512,7 +524,7 @@ export const playCardHandler: Handler<"PlayCard"> = (g, step) => {
   emit(g, "play", `${me.name} plays ${d.name}`, { inv: step.inv, card: step.card });
   // after the card resolves (Syndicate Obligations)
   if (paid > 0) push(g, win("resourcesSpent", { inv: step.inv, card: step.card, amount: paid }));
-  const ctx: EffCtx = { ...(step.ctx ?? {}), source: step.card, you: step.inv };
+  const ctx: EffCtx = { ...step.ctx, source: step.card, you: step.inv };
   if (d.type === "asset") {
     moveCard(g, step.card, "limbo");
     c.controller = step.inv;

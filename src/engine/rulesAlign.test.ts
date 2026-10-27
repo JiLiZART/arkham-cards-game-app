@@ -116,8 +116,8 @@ describe("a helper's commit", () => {
     expect(r.state.pending?.kind).toBe("commit");
     r = pick(r, /^Commit Vicious Blow/);
     expect(r.state.pending?.inv).toBe(DAISY);
-    expect(options(r).some((o) => /^Commit/.test(o))).toBe(false);
-    expect(options(r).some((o) => /^Take back/.test(o))).toBe(true);
+    expect(options(r).some((o) => o.startsWith("Commit"))).toBe(false);
+    expect(options(r).some((o) => o.startsWith("Take back"))).toBe(true);
   });
 });
 
@@ -327,15 +327,15 @@ describe("the enemy phase, upkeep and round end follow the chart", () => {
 });
 
 describe("advancing the act in a player window", () => {
-  it("is offered when the group holds the clues, in the enemy phase too", () => {
+  it("opens no window for it alone: it waits for the next turn", () => {
     let r = game([ROLAND], (g) => {
       inv(g, ROLAND).clues = 2;
     });
-    r = toTurn(
-      pick(r, "End turn"),
-      (x) => x.state.phase === "enemy" && x.state.pending?.promptKey === "playerWindow",
-    );
-    expect(r.state.phase).toBe("enemy");
+    r = pick(r, "End turn");
+    for (let k = 0; k < 100 && r.state.pending && r.state.pending.kind !== "turn"; k++) {
+      expect(r.state.pending.promptKey).not.toBe("playerWindow");
+      r = neutral(r);
+    }
     expect(offered(/^Advance act/)(r)).toBe(true);
     const act = r.state.act;
     r = pick(r, /^Advance act/);
