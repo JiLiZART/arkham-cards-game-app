@@ -1,0 +1,272 @@
+:global(.instruction-bar) {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--panel);
+  border: 1px solid var(--accent);
+  border-radius: 22px;
+  padding: 6px 14px 6px 8px;
+  font: 22px/1.3 var(--f-body);
+  text-align: center;
+  text-wrap: balance;
+  box-shadow: 0 3px 12px #000c;
+}
+:global(.instruction-bar) {
+  flex-wrap: nowrap;
+}
+:global(.instruction-bar) > :first-child {
+  min-width: 0;
+}
+:global(.instruction-bar) b {
+  color: var(--accent);
+}
+.action-rail {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.camera-buttons {
+  display: flex;
+  gap: 6px;
+}
+.undo-btn {
+  font-size: 14px;
+  padding: 5px 8px;
+  background: var(--panel);
+}
+.undo-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.camera-buttons button {
+  flex: 1;
+  font-size: 13px;
+  padding: 4px 6px;
+  background: var(--panel);
+}
+.action-rail.busy {
+  opacity: 0.6;
+}
+.bar-buttons {
+  display: flex;
+  gap: 6px;
+  flex: none;
+}
+.bar-buttons .rail-btn {
+  font: 16px var(--f-body);
+  padding: 4px 12px 4px 6px;
+  border-radius: 16px;
+}
+.bar-buttons .rail-icon {
+  width: 26px;
+  height: 26px;
+  font-size: 18px;
+}
+.rail-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+  padding: 6px 10px;
+  font-size: 15px;
+  background: var(--panel);
+  border-radius: 10px;
+}
+.rail-btn:global(.primary) {
+  background: var(--plate);
+}
+/* nothing left to spend: End turn calls for the click */
+.rail-btn:global(.glow) {
+  border-color: var(--lamp);
+  box-shadow:
+    0 0 0 1px var(--lamp),
+    0 0 16px 4px #ffd27a99;
+  animation: rail-glow 1.6s ease-in-out infinite alternate;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rail-btn:global(.glow) {
+    animation: none;
+  }
+}
+.rail-icon {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  color: var(--accent);
+  flex: none;
+}
+.rail-icon :global(.icon-img) {
+  object-fit: contain;
+}
+.rail-icon > img {
+  height: 32px;
+  border-radius: 3px;
+}
+.rail-label {
+  line-height: 1.15;
+}
+:global(.game):global(.phone) :global(.instruction-bar) {
+  font-size: 15px;
+  gap: 8px;
+  padding: 2px 6px 2px 4px;
+  border-radius: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+:global(.game):global(.phone) :global(.instruction-bar) .bar-buttons {
+  flex-wrap: wrap;
+  gap: 4px;
+}
+:global(.game):global(.phone) :global(.instruction-bar) .rail-btn {
+  min-height: 44px;
+  min-width: 44px;
+  padding: 2px 10px;
+  font-size: 14px;
+  justify-content: center;
+}
+/* one line on a phone: the actions as icons (their names in the tooltip), the answer (Done, End turn…) keeps its word */
+:global(.game):global(.phone)
+  :global(.instruction-bar)
+  .rail-btn:not(:global(.primary))
+  .rail-label {
+  display: none;
+}
+:global(.game):global(.phone) :global(.instruction-bar) {
+  flex-wrap: nowrap;
+}
+:global(.game):global(.phone) :global(.instruction-bar) > :first-child {
+  min-width: 0;
+}
+:global(.game):global(.phone) :global(.instruction-bar) .rail-icon img,
+:global(.game):global(.phone) :global(.instruction-bar) .rail-icon :global(.svg-icon) {
+  width: 22px;
+  height: 22px;
+}
+:global(.game):global(.phone) :global(.right-dock) .camera-buttons {
+  flex-direction: column;
+  gap: 4px;
+}
+:global(.game):global(.phone) :global(.right-dock) .btn-word {
+  display: none;
+}
+
+.rail-btn,
+.camera-buttons button,
+.undo-btn {
+  background: var(--tab);
+  border: 1px solid var(--rule);
+  border-top-color: var(--edge-lit);
+  box-shadow:
+    var(--bevel),
+    0 2px 4px #000a;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.1s ease;
+}
+.rail-btn:hover:not(:disabled),
+.camera-buttons button:hover:not(:disabled),
+.undo-btn:hover:not(:disabled) {
+  background: var(--tab-lit);
+  border-color: var(--accent);
+}
+.rail-btn:active:not(:disabled),
+.camera-buttons button:active:not(:disabled),
+.undo-btn:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 4px #000a;
+}
+.rail-btn:focus-visible,
+.camera-buttons button:focus-visible,
+.undo-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* the primary action is the one teal enamel plate on screen, edged in bone */
+.rail-btn:global(.primary) {
+  background: var(--plate-fill);
+  color: var(--ink);
+  border-color: #c9c6b899;
+  box-shadow:
+    inset 0 1px 0 #c9c6b840,
+    inset 0 -1px 0 #0008,
+    0 2px 5px #000a;
+}
+.rail-btn:global(.primary):hover:not(:disabled) {
+  background: var(--plate-fill-lit);
+  border-color: var(--iron);
+}
+.rail-btn:global(.primary) .rail-icon {
+  color: var(--ink);
+}
+
+/* the instruction cartouche: a night pill in a double bone rule, closed by an ironwork cap at each end */
+:global(.instruction-bar) {
+  position: relative;
+  background: var(--band);
+  border: 1px solid #c9c6b88c;
+  box-shadow:
+    inset 0 0 0 3px #0b1418,
+    inset 0 0 0 4px #c9c6b833,
+    0 6px 18px #000c;
+  margin-inline: 22px;
+}
+:global(.instruction-bar)::before,
+:global(.instruction-bar)::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 22px;
+  height: 44px;
+  margin-top: -22px;
+  background: var(--cap) center / contain no-repeat;
+  pointer-events: none;
+}
+:global(.instruction-bar)::before {
+  left: -19px;
+}
+:global(.instruction-bar)::after {
+  right: -19px;
+  transform: scaleX(-1);
+}
+
+/* the glow is the state and outranks the plate (DESIGN.md: The Earned Glow Rule) */
+.rail-btn:global(.glow) {
+  border-color: var(--lamp);
+  box-shadow:
+    0 0 0 1px var(--lamp),
+    0 0 16px 4px #ffd27a99;
+  animation: rail-glow 1.6s ease-in-out infinite alternate;
+}
+.rail-btn:global(.glow):hover:not(:disabled) {
+  border-color: var(--lamp);
+}
+.rail-btn:global(.glow):focus-visible {
+  outline-color: #fff;
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rail-btn:global(.glow) {
+    animation: none;
+  }
+  .rail-btn,
+  .camera-buttons button,
+  .undo-btn {
+    transition: none;
+  }
+}
+@keyframes rail-glow {
+  from {
+    box-shadow:
+      0 0 0 1px var(--lamp),
+      0 0 8px 2px #ffd27a66;
+  }
+  to {
+    box-shadow:
+      0 0 0 1px var(--lamp),
+      0 0 18px 6px #ffd27aaa;
+  }
+}

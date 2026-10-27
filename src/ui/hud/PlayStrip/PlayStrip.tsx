@@ -130,7 +130,7 @@ export function PlayStrip({ part = "all" }: { part?: "all" | "threats" | "assets
     const sideways = shown.filter((c) => c.exhausted).length;
     if (part === "assets") {
       // under the piles, over the stat dock and as wide as it; the cards keep full size and overlap when they don't fit
-      const dock = document.querySelector('[data-ui="stat-dock"]')?.getBoundingClientRect();
+      const dock = document.querySelector('[data-testid="stat-dock"]')?.getBoundingClientRect();
       if (dock) {
         el.style.bottom = `${innerHeight - dock.top + 8}px`;
         el.style.width = `${dock.width}px`;
@@ -200,7 +200,7 @@ export function PlayStrip({ part = "all" }: { part?: "all" | "threats" | "assets
   };
   return (
     <div
-      data-ui="play-strip"
+      data-testid="play-strip"
       className={cx(
         "play-strip",
         part !== "all" && styles[part],

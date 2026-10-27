@@ -13,7 +13,7 @@ export const hoverProps = (id: InstId | null) => ({
     id && useView.getState().setHover(id, e.currentTarget.getBoundingClientRect()),
   // onto a strip card's own option buttons (drawn over it) is still hovering that card
   onMouseLeave: (e: ReactMouseEvent<HTMLElement>) => {
-    if ((e.relatedTarget as Element | null)?.closest?.('[data-ui="strip-actions"]')) return;
+    if ((e.relatedTarget as Element | null)?.closest?.('[data-testid="strip-actions"]')) return;
     useView.getState().setHover(null);
   },
 });

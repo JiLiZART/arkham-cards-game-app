@@ -1,0 +1,42 @@
+/* a choice among investigators: large avatars across the middle (the bar's avatars answer too) */
+.inv-choice {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 34%;
+  z-index: 66;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 12px;
+  background: linear-gradient(transparent, #000b 20%, #000b 80%, transparent);
+}
+.inv-choice-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 22px;
+}
+.inv-choice-avatar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 120px;
+  min-height: 44px;
+  padding: 8px 12px;
+  background: none;
+  border: 2px solid transparent;
+  border-radius: 14px;
+  color: var(--ink);
+  cursor: pointer;
+}
+.inv-choice-avatar:global(.legal) {
+  border-color: var(--accent);
+  box-shadow: 0 0 18px #73ada566;
+}
+.inv-choice-avatar:hover,
+.inv-choice-avatar:focus-visible {
+  background: #171f22;
+}

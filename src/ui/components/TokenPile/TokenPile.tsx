@@ -1,4 +1,4 @@
-import { stackTokens } from "../../hud/tokenStack";
+import { stackTokens } from "./tokenStack";
 import { Icon } from "../Icon";
 import type { IconName } from "../../assets/icons";
 import styles from "./TokenPile.module.css";

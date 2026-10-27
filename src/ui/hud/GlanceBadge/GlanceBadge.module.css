@@ -1,0 +1,37 @@
+.glance {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  top: -26px;
+  display: flex;
+  gap: 4px;
+  pointer-events: none;
+  z-index: 2;
+}
+.glance-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 1px 6px 1px 3px;
+  border-radius: 12px;
+  background: rgba(8, 11, 12, 0.86);
+  border: 1px solid var(--rule);
+  color: #fff;
+  pointer-events: auto;
+  box-shadow: 0 1px 4px #000a;
+}
+.glance-chip b {
+  font: bold 15px/1 var(--f-body);
+  font-variant-numeric: lining-nums;
+}
+.glance-chip :global(.svg-icon) {
+  color: var(--accent);
+}
+.glance-slots {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+.glance :global(.slot-chip) {
+  padding: 1px 3px;
+}

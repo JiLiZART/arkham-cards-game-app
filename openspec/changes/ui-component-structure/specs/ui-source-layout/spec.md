@@ -2,7 +2,7 @@
 
 ### Requirement: A component lives in its own folder
 
-Every React component under `src/ui` SHALL live in a folder named after it, holding `Component.tsx`, its CSS Module when it has styles, its tests, and helpers only it uses. The folder's `index.ts` SHALL be the only path other code imports the component from. A file MUST NOT define more than one exported component; small private sub-components used only by that file MAY stay in it.
+Every React component under `src/ui` SHALL live in a folder named after it, holding `Component.tsx`, its CSS Module when it has styles, its tests, and helpers only it uses. The folder's `index.ts` SHALL be the only path other code imports the component from. A folder SHALL hold one main component; small sibling components that share its styles and are exported beside it (a glyph beside the icon, the intent badge beside the token badges, the details column beside the hand details) MAY stay in its file, as MAY private sub-components. Unrelated components MUST NOT share a file.
 
 #### Scenario: Finding a component's styles
 

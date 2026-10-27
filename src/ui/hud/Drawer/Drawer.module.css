@@ -1,0 +1,43 @@
+.drawer-handle {
+  position: fixed;
+  z-index: 48;
+  width: 44px;
+  height: 64px;
+  padding: 0;
+  font-size: 26px;
+  background: rgba(20, 25, 27, 0.85);
+  border: 1px solid var(--rule);
+  color: var(--accent);
+}
+.drawer-handle:global(.left) {
+  left: var(--safe-l);
+  top: 40px;
+  height: 44px;
+  border-radius: 0 12px 12px 0;
+  border-left: 0;
+}
+.drawer-handle:global(.right) {
+  right: var(--safe-r);
+  top: 40px;
+  height: 44px;
+  border-radius: 12px 0 0 12px;
+  border-right: 0;
+}
+.drawer-handle {
+  touch-action: none;
+}
+.drawer-handle:global(.glow) {
+  border-color: var(--playable);
+  box-shadow: 0 0 12px #7fe08acc;
+  animation: handle-glow 1.2s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .drawer-handle:global(.glow) {
+    animation: none;
+  }
+}
+@keyframes handle-glow {
+  50% {
+    box-shadow: 0 0 20px var(--playable);
+  }
+}

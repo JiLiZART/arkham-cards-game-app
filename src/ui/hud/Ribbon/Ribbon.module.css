@@ -1,0 +1,88 @@
+.ribbon-scen {
+  display: flex;
+  gap: 8px;
+  margin-right: 10px;
+}
+.ribbon-round {
+  color: var(--accent);
+  font-variant: small-caps;
+}
+.ribbon-seg {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.ribbon-seg + .ribbon-seg::before {
+  content: "›";
+  color: #465a61;
+  margin-right: 2px;
+}
+.ribbon-phase {
+  padding: 3px 10px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.ribbon-phase:global(.done) {
+  color: #657378;
+}
+.ribbon-phase.skipped {
+  color: #4b5559;
+  text-decoration: line-through;
+}
+.ribbon-phase:global(.current) {
+  color: var(--abyss);
+  background: var(--accent);
+  border-color: var(--lamp);
+  font-weight: bold;
+  box-shadow: 0 0 10px #73ada588;
+}
+.ribbon-phase .short {
+  display: none;
+}
+@media (max-width: 700px) {
+  .ribbon-scen b,
+  .ribbon-phase .full {
+    display: none;
+  }
+  .ribbon-phase .short {
+    display: inline;
+  }
+  .ribbon-phase {
+    padding: 3px 7px;
+  }
+}
+.ribbon-scen :global(.svg-icon) {
+  margin-right: 4px;
+  color: var(--accent);
+}
+:global(.game):global(.phone) .ribbon-scen {
+  margin-right: 4px;
+  gap: 4px;
+}
+:global(.game):global(.phone) .ribbon-scen b,
+:global(.game):global(.phone) .ribbon-phase .full {
+  display: none;
+}
+:global(.game):global(.phone) .ribbon-phase .short {
+  display: inline;
+}
+/* the current phase keeps its whole name: one letter alone (М, Р, В, П) doesn't say where the round is */
+:global(.game):global(.phone) .ribbon-phase:global(.current) .full {
+  display: inline;
+}
+:global(.game):global(.phone) .ribbon-phase:global(.current) .short {
+  display: none;
+}
+:global(.game):global(.phone) .ribbon-phase {
+  padding: 1px 6px;
+}
+:global(.game):global(.phone) .ribbon-seg + .ribbon-seg::before {
+  margin-right: 0;
+}
+/* on the band the finished and skipped phases keep the fog grey; position, the teal current chip and the strike-through tell them apart */
+:global(.topbar) .ribbon-phase:global(.done),
+:global(.topbar) .ribbon-phase.skipped {
+  color: var(--muted);
+}

@@ -1,0 +1,153 @@
+:global(.flip).flipped {
+  transform: rotateY(0deg);
+}
+.flip-front,
+.flip-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  box-shadow: 0 10px 30px #000c;
+  border-radius: 12px;
+}
+.flip-back {
+  transform: rotateY(180deg);
+}
+
+/* scenario introduction: the story, then agenda and act drawn large into the middle before they fly to the act/agenda panel */
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000b;
+  animation: intro-in 0.35s ease-out;
+}
+.intro-overlay.flying {
+  background: transparent;
+  transition: background 0.5s;
+  pointer-events: none;
+}
+.intro-overlay.flying .intro-title,
+.intro-overlay.flying .intro-text,
+.intro-overlay.flying .intro-buttons {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.intro-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  max-width: min(1200px, 92vw);
+  max-height: 100dvh;
+  box-sizing: border-box;
+  padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+}
+.intro-title {
+  margin: 0;
+  font: 46px/1.1 var(--f-name);
+  color: var(--accent);
+  text-shadow: 0 2px 10px #000;
+  flex: none;
+}
+.intro-card {
+  flex: none;
+  width: clamp(300px, 34vw, 620px);
+  aspect-ratio: 88 / 63;
+  border-radius: 16px;
+}
+.intro-card {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  perspective: 1600px;
+}
+.intro-card :global(.flip) {
+  transition: none;
+}
+.intro-card .flip-front,
+.intro-card .flip-back {
+  overflow: hidden;
+  border-radius: 16px;
+}
+.intro-card .flip-front > * {
+  width: 100%;
+  height: 100%;
+}
+/* the card back is portrait; the act and agenda are landscape */
+.intro-card .flip-back img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(100% * 63 / 88);
+  height: calc(100% * 88 / 63);
+  transform: translate(-50%, -50%) rotate(90deg);
+  object-fit: cover;
+}
+.intro-text.intro-story {
+  max-width: 680px;
+}
+/* the text takes what is left of the screen and scrolls; a fade at its bottom edge says there is more */
+.intro-text {
+  margin: 0;
+  max-width: 460px;
+  max-height: calc(100dvh - 200px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  font: 20px/1.45 var(--f-body);
+  font-style: italic;
+  color: #e0dcd2;
+  text-shadow: 0 1px 4px #000;
+  padding-right: 8px;
+}
+.intro-text.more {
+  -webkit-mask-image: linear-gradient(#000 calc(100% - 56px), transparent);
+  mask-image: linear-gradient(#000 calc(100% - 56px), transparent);
+}
+@media (max-height: 500px) {
+  .intro-card {
+    width: min(34vw, calc(48dvh * 88 / 63));
+  }
+  .intro-title {
+    font-size: 28px;
+  }
+  .intro-box {
+    gap: 8px;
+  }
+  .intro-text {
+    font-size: 16px;
+    max-height: calc(100dvh - 120px);
+  }
+}
+.intro-buttons {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex: none;
+}
+.intro-buttons :global(.link) {
+  background: none;
+  border: 0;
+  color: var(--muted);
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 15px;
+}
+@media (max-width: 900px) and (min-height: 501px) {
+  .intro-text {
+    max-height: 36dvh;
+  }
+}
+@media (max-height: 500px) {
+  .intro-text {
+    max-width: min(460px, 56vw);
+  }
+}
+@keyframes intro-in {
+  from {
+    opacity: 0;
+  }
+}

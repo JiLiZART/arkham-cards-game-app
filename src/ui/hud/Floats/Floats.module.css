@@ -1,0 +1,68 @@
+/* action floats: the styled sentence rises from whoever acted and fades, like the damage numbers */
+.action-float {
+  position: fixed;
+  z-index: 62;
+  pointer-events: none;
+  transform: translate(-50%, -100%);
+  white-space: nowrap;
+  font: 22px/1.3 var(--f-body);
+  color: #fff;
+  text-shadow:
+    0 2px 4px #000,
+    0 0 10px #000;
+  --life: 3500ms;
+  /* rises slowly for its whole life (long enough to read), fades out over its last 0.6 s */
+  animation:
+    float-rise var(--life) ease-out forwards,
+    float-fade 0.6s calc(var(--life) - 0.6s) ease-in forwards;
+}
+.action-float :global(.sentence) {
+  background: rgba(7, 9, 9, 0.55);
+  border-radius: 12px;
+  padding: 3px 10px;
+}
+.action-float :global(.card-name) {
+  color: #eae2cd;
+}
+
+/* effect hits: the source card glows red, a streak flies to the investigator it hurt */
+.hit-pulse {
+  position: fixed;
+  z-index: 70;
+  pointer-events: none;
+  border-radius: 10px;
+  box-shadow:
+    0 0 0 3px #ff4d4d,
+    0 0 28px 8px #ff2a2acc;
+  opacity: 0;
+}
+.hit-streak {
+  position: fixed;
+  z-index: 71;
+  pointer-events: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 0 18%, #ff6b5a 40%, #ff1a1a00 72%);
+  box-shadow: 0 0 18px 6px #ff3b3b99;
+}
+@keyframes float-rise {
+  0% {
+    opacity: 0;
+    margin-top: 0;
+    scale: 0.85;
+  }
+  8% {
+    opacity: 1;
+    scale: 1;
+  }
+  100% {
+    opacity: 1;
+    margin-top: -50px;
+  }
+}
+@keyframes float-fade {
+  to {
+    opacity: 0;
+  }
+}

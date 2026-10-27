@@ -1,0 +1,88 @@
+/* act / agenda / reference viewer: every card of the deck in order, the hovered one's text beside */
+.deck-viewer[open] {
+  display: flex;
+  gap: 22px;
+  align-items: flex-start;
+}
+.dv-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.dv-list h2 {
+  margin: 0;
+  color: var(--accent);
+}
+.dv-item {
+  padding: 8px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+}
+.dv-item:global(.current) {
+  border-color: var(--accent);
+  background: #182225;
+}
+.dv-label {
+  margin-bottom: 6px;
+  font-size: 16px;
+}
+.dv-current {
+  margin-left: 10px;
+  padding: 1px 8px;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #0d1316;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+.dv-sides {
+  display: flex;
+  gap: 10px;
+}
+.dv-card {
+  width: 230px;
+  aspect-ratio: 63 / 88;
+  border-radius: 10px;
+  overflow: hidden;
+  outline: 2px solid transparent;
+}
+.dv-card:global(.landscape) {
+  width: 300px;
+  aspect-ratio: 88 / 63;
+}
+.dv-reference .dv-card {
+  width: min(300px, 30vw);
+}
+.dv-card > * {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.dv-card:global(.focused) {
+  outline-color: #8fd3ff;
+}
+.dv-hidden {
+  display: grid;
+  place-items: center;
+  background: repeating-linear-gradient(45deg, #151d20, #151d20 10px, #101619 10px, #101619 20px);
+  color: var(--muted);
+  font-style: italic;
+  border: 1px dashed var(--rule-dim);
+}
+.dv-side {
+  width: 340px;
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.dv-side h3 {
+  margin: 0;
+  color: var(--accent);
+}
+
+/* options on the act / agenda laid over the card (panel and viewer) */
+:global(.dv-front) {
+  position: relative;
+}

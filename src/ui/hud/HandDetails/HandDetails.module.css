@@ -1,0 +1,29 @@
+/* a hand card's details: why it can't be played now */
+.hd-blocked {
+  padding: 4px 8px;
+  border-radius: 6px;
+  border-left: 3px solid var(--bad);
+  background: color-mix(in srgb, var(--oxblood) 22%, transparent);
+  color: var(--ink);
+  font-weight: 600;
+}
+:global(.hand-details) .hd-name {
+  display: block;
+}
+:global(.hand-details) .hd-name b {
+  color: var(--accent);
+  font-size: 26px;
+  font-weight: normal;
+}
+:global(.hand-details) .hd-name i {
+  color: var(--muted);
+}
+:global(.hand-details) .hd-muted {
+  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+:global(.hand-details) .hd-enemy {
+  color: var(--bad);
+}

@@ -105,7 +105,7 @@ This stays inside ADR-0016: public hook classes are the "primitives shared by ma
 
 ### DOM lookups by data attribute
 
-Each class-based lookup becomes a data attribute on the element it targets: `data-ui="play-strip"`, `data-ui="stat-dock"`, `data-ui="scenario-panel"`, and so on, with `[data-ui="…"]` selectors. `arrivals.ts`'s `SELECTORS` switches the same way. Tests that look for class names in markup use the same attributes.
+Each class-based lookup becomes a data attribute on the element it targets: `data-testid="play-strip"`, `data-testid="stat-dock"`, `data-testid="scenario-panel"`, and so on, with `[data-testid="…"]` selectors. `arrivals.ts`'s `SELECTORS` switches the same way. Tests that look for class names in markup use the same attributes.
 
 - Alternative: export the module class name and query `.${styles.playStrip}`. It couples other files to a module's internals. Rejected.
 
@@ -124,7 +124,7 @@ Each list is a starting point. A file that turns out to belong elsewhere moves t
 
 ### Vitest and CSS Modules
 
-Vitest doesn't process CSS here, so a module import in a test returns its own key names (`styles.fanCard` is `"fanCard"`): stable, readable, and no config needed. (Found while applying; a `classNameStrategy` setting would have no effect.) Tests that assert on placement use data attributes rather than class names.
+Vitest gives module classes scoped names, as the build does. A test that checks a class reads it from the module (`expect(html).toContain(styles.over)`), never as a literal name; tests that check placement use data attributes. (Corrected while applying: an early probe of a bare module import returned the key names, which a component's import does not.)
 
 ## Risks / Trade-offs
 

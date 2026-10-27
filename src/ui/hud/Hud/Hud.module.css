@@ -1,0 +1,483 @@
+:global(.topbar) {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  align-items: center;
+  padding: 6px 12px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--rule-dim);
+  font-size: 14px;
+  z-index: 50;
+}
+:global(.topbar) .buttons {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+}
+.handoff-box {
+  text-align: center;
+  max-width: 520px;
+  padding: 24px;
+  border: 1px solid var(--accent);
+  border-radius: 14px;
+  background: #0f1315;
+}
+.handoff-box.resolution .resolution-text {
+  line-height: 1.5;
+  text-align: left;
+  max-height: 60dvh;
+  overflow-y: auto;
+}
+
+.popup {
+  position: fixed;
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--panel);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  padding: 6px;
+  transform: translate(-50%, -110%);
+}
+
+.side-panel {
+  position: absolute;
+  left: 12px;
+  bottom: 12px;
+  width: 380px;
+  max-height: 45vh;
+  overflow: auto;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 13px;
+  z-index: 55;
+}
+.side-panel h3 {
+  margin: 0 0 6px;
+  color: var(--accent);
+}
+.side-panel.debug textarea {
+  width: 100%;
+  height: 200px;
+  background: #080a0b;
+  color: var(--ink);
+  font: 11px monospace;
+}
+.mute-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.mute-btn :global(.ui-icon) {
+  display: block;
+}
+.mute-btn:global(.muted) {
+  color: var(--muted);
+}
+
+/* prompt banner, bottom centre just over the hand fan; non-card options on the right rail next to the hand */
+.center-col {
+  position: absolute;
+  /* clear of the fan cards and the skill icons above them */
+  bottom: 196px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  z-index: 46;
+  pointer-events: none;
+  max-width: min(72vw, 1080px);
+}
+.center-col > * {
+  pointer-events: auto;
+}
+:global(.right-dock) {
+  position: fixed;
+  right: 12px;
+  bottom: 14px;
+  width: 160px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 48;
+}
+
+/* right-hand column: chaos bag, other investigators, then the action feed / Journal */
+.right-col {
+  position: fixed;
+  top: 76px;
+  right: 8px;
+  bottom: 320px;
+  width: var(--feed-w);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  z-index: 47;
+  pointer-events: none;
+}
+.right-col > * {
+  pointer-events: auto;
+}
+/* the live feed lets the pointer through to the map, except on its entries (the global .feed rule, which used to win here by coming later) */
+.right-col > :global(.feed) {
+  pointer-events: none;
+}
+.right-col > :global(.feed.journal) {
+  pointer-events: auto;
+}
+
+/* ---------- phase title: a film's chapter card across the middle of the screen ---------- */
+.phase-title {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 50%;
+  z-index: 72;
+  pointer-events: none;
+  transform: translateY(-50%);
+  padding: 26px 0 22px;
+  text-align: center;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(5, 5, 6, 0.82) 22%,
+    rgba(5, 5, 6, 0.82) 78%,
+    transparent
+  );
+  animation: phase-band 2.6s ease-in-out forwards;
+}
+.phase-title-name {
+  font: 76px/1.05 var(--f-display);
+  color: #ded6c2;
+  text-shadow:
+    0 4px 18px #000,
+    0 0 30px #73ada555;
+  animation: phase-name 2.6s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+.phase-title-round {
+  margin-top: 8px;
+  font: italic 26px var(--f-body);
+  color: var(--muted);
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  animation: phase-round 2.6s ease-out forwards;
+}
+/* the turn title: a shorter band with the investigator's portrait */
+.turn-title,
+.turn-title .phase-title-name {
+  animation-duration: 1.2s;
+}
+.turn-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 16px 0;
+}
+.turn-title .phase-title-name {
+  font-size: 54px;
+}
+.phase-title:global(.held) {
+  pointer-events: auto;
+  animation: phase-hold 0.5s ease-out both;
+}
+.phase-title:global(.held) .phase-title-name {
+  animation: phase-name-hold 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.phase-title:global(.held) .phase-title-round {
+  animation: phase-hold 0.8s ease-out both;
+}
+.phase-continue {
+  margin-top: 18px;
+}
+/* the lead's avatar with a closing ring: the phase begins when it closes, or on a tap */
+.phase-title:global(.held) .phase-avatar {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  pointer-events: auto;
+  cursor: pointer;
+  display: inline-grid;
+  place-items: center;
+}
+.phase-avatar :global(.portrait) {
+  position: relative;
+  z-index: 1;
+}
+.phase-ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.phase-ring circle {
+  fill: none;
+  stroke: #0008;
+  stroke-width: 6;
+}
+.phase-ring .phase-ring-run {
+  stroke: var(--accent);
+  stroke-dasharray: 289;
+  stroke-dashoffset: 0;
+  animation: phase-ring linear forwards;
+}
+.phase-avatar:hover .phase-ring-run,
+.phase-avatar:focus-visible .phase-ring-run {
+  stroke: #d5caad;
+}
+@media (prefers-reduced-motion: reduce) {
+  .phase-title-name {
+    animation-name: phase-band;
+  }
+  .phase-title-round {
+    animation-name: phase-band;
+  }
+}
+:global(.game):global(.testing) .center-col {
+  z-index: 52;
+}
+/* the rail is empty during a test, so the camera buttons sit low beside the fan: they stay over its last card */
+:global(.game):global(.testing) :global(.right-dock) {
+  z-index: 53;
+}
+.side-panel.debug .report-paste textarea,
+.side-panel.debug .report-copy textarea {
+  height: 110px;
+}
+.side-panel.debug :global(.row) button {
+  min-height: 44px;
+}
+.report-ok {
+  color: var(--playable);
+  align-self: center;
+}
+:global(.game):global(.phone) :global(.topbar) {
+  height: 36px;
+  flex-wrap: nowrap;
+  gap: 8px;
+  padding: 0 calc(6px + var(--safe-r)) 0 calc(6px + var(--safe-l));
+  overflow: visible;
+}
+:global(.game):global(.phone) :global(.topbar) .buttons {
+  gap: 2px;
+}
+:global(.game):global(.phone) :global(.topbar) .buttons > button {
+  position: relative;
+  height: 36px;
+  min-width: 44px;
+  padding: 0 6px;
+  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+/* the bar is 36 px tall; its buttons still take a 44 px tap */
+:global(.game):global(.phone) :global(.topbar) .buttons > button::after {
+  content: "";
+  position: absolute;
+  inset: -5px 0;
+}
+:global(.game):global(.phone) :global(.topbar) :global(.chaos-bag) {
+  width: 44px;
+  height: 36px;
+  filter: none;
+}
+:global(.game):global(.phone) :global(.topbar) :global(.chaos-bag) :global(.pile-count) {
+  font-size: 11px;
+  right: 0;
+  bottom: 0;
+}
+/* spans between the left tools and the strip column (a box at left: 50% could only grow to half the screen) */
+:global(.game):global(.phone) .center-col {
+  bottom: calc(84px + var(--safe-b));
+  left: calc(56px + var(--safe-l));
+  right: calc(64px + var(--safe-r));
+  transform: none;
+  max-width: none;
+  gap: 4px;
+}
+:global(.game):global(.phone) :global(.right-dock) {
+  left: calc(4px + var(--safe-l));
+  right: auto;
+  bottom: calc(84px + var(--safe-b));
+  width: auto;
+  gap: 4px;
+}
+:global(.game):global(.phone) :global(.right-dock) button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 8px;
+  font-size: 18px;
+}
+:global(.game):global(.phone) .handoff-box button,
+:global(.game):global(.phone) .phase-continue {
+  min-height: 44px;
+  min-width: 44px;
+}
+:global(.game):global(.phone) .phase-title-name {
+  font-size: 44px;
+}
+:global(.game):global(.phone) .phase-title-round {
+  font-size: 18px;
+}
+:global(.topbar) {
+  background: var(--band);
+  border-bottom: 0;
+  box-shadow: var(--bevel);
+}
+/* under the bar: a double ironwork rule that ends in a curl at each edge */
+:global(.topbar)::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: 16px;
+  margin-top: -8px;
+  background:
+    var(--curl) left 4px center / 40px 16px no-repeat,
+    var(--curl-r) right 4px center / 40px 16px no-repeat,
+    linear-gradient(var(--iron-line), var(--iron-line)) center 7px / calc(100% - 88px) 1px no-repeat,
+    linear-gradient(#c9c6b833, #c9c6b833) center 10px / calc(100% - 96px) 1px no-repeat;
+  pointer-events: none;
+}
+:global(.topbar)::before {
+  content: "";
+  position: absolute;
+  inset: 100% 0 auto;
+  height: 12px;
+  background: linear-gradient(#000a, transparent);
+  pointer-events: none;
+}
+
+:global(.topbar) .buttons > button:not(:global(.chaos-bag)) {
+  background: var(--tab);
+  border: 1px solid var(--rule);
+  border-top-color: var(--edge-lit);
+  box-shadow:
+    var(--bevel),
+    0 2px 4px #000a;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.1s ease;
+}
+:global(.topbar) .buttons > button:not(:global(.chaos-bag)):hover:not(:disabled) {
+  background: var(--tab-lit);
+  border-color: var(--accent);
+}
+:global(.topbar) .buttons > button:not(:global(.chaos-bag)):active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 4px #000a;
+}
+:global(.topbar) .buttons > button:not(:global(.chaos-bag)):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+/* a toggle that is on (Journal open) is a tab pressed into the bar */
+:global(.topbar) .buttons > button:global(.primary):not(:global(.chaos-bag)) {
+  background: var(--tab-lit);
+  border-color: var(--accent);
+  box-shadow:
+    inset 0 2px 4px #000a,
+    inset 0 0 0 1px #6fa9a066;
+}
+@media (prefers-reduced-motion: reduce) {
+  :global(.topbar) .buttons > button:not(:global(.chaos-bag)) {
+    transition: none;
+  }
+}
+:global(.topbar) :global(.lang-switch) {
+  box-shadow: var(--bevel);
+}
+:global(.topbar) :global(.lang-switch) button {
+  min-height: 0;
+  min-width: 40px;
+  padding: 4px 10px;
+}
+@keyframes phase-band {
+  0% {
+    opacity: 0;
+  }
+  18% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes phase-name {
+  0% {
+    opacity: 0;
+    letter-spacing: 0;
+    translate: 0 14px;
+  }
+  22% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    letter-spacing: 0.12em;
+    translate: 0 -6px;
+  }
+}
+@keyframes phase-round {
+  0%,
+  15% {
+    opacity: 0;
+  }
+  35% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes phase-hold {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes phase-name-hold {
+  from {
+    opacity: 0;
+    translate: 0 14px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+@keyframes phase-ring {
+  to {
+    stroke-dashoffset: 289;
+  }
+}

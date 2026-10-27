@@ -1,0 +1,28 @@
+.modal-tokens {
+  display: flex;
+  gap: 12px;
+  font-size: 22px;
+}
+.modal-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.modal-options button {
+  text-align: left;
+  font-size: 16px;
+  padding: 8px 12px;
+}
+:global(.stat-who) .modal-options button {
+  padding: 4px 10px;
+  font-size: 14px;
+}
+/* the bar is drawn at 75 %: its buttons are at least 44 px on screen, lit like the rail's */
+:global(.stat-dock) :global(.stat-who) .modal-options button {
+  min-height: 44px;
+  min-width: 44px;
+  font-size: 16px;
+  box-shadow:
+    0 0 0 2px var(--accent),
+    0 0 14px #73ada588;
+}

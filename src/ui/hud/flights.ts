@@ -196,7 +196,7 @@ export function flyGhost(src: string, from: Box, to: Box, delay: number) {
   const img = document.createElement("img");
   img.src = src;
   img.className = "ghost-card";
-  img.dataset.ui = "ghost-card";
+  img.dataset.testid = "ghost-card";
   img.alt = "";
   Object.assign(img.style, {
     left: `${to.x + to.w / 2 - w / 2}px`,

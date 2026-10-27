@@ -1,0 +1,43 @@
+/* mulligan: the cards picked for redraw lie on the table above the hand */
+.mulligan-row {
+  position: fixed;
+  left: calc(50% + 120px);
+  /* above the instruction bar, however many lines it wraps to */
+  bottom: calc(100vh - var(--bar-top, 100vh - 250px) + 14px);
+  transform: translateX(-50%);
+  z-index: 45;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px 10px;
+  border-radius: 14px;
+  background: #0c0f11cc;
+  border: 1px dashed var(--accent);
+  box-shadow: 0 4px 18px #000a;
+}
+.mulligan-row:global(.empty) {
+  display: none;
+}
+.mulligan-label {
+  font: 20px/1.2 var(--f-display);
+  color: var(--accent);
+}
+:global(.mulligan-cards) {
+  display: flex;
+  gap: 10px;
+}
+:global(.mulligan-cards) :global(.mini-card) {
+  cursor: pointer;
+}
+.mulligan-hint {
+  font-size: 13px;
+  color: var(--muted);
+}
+:global(.game):global(.testing) .mulligan-row {
+  z-index: 52;
+}
+:global(.game):global(.phone) .mulligan-row {
+  left: 50%;
+  bottom: calc(70px + var(--safe-b));
+}

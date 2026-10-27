@@ -1,0 +1,160 @@
+.pips {
+  display: flex;
+  gap: 3px;
+}
+:global(.pip).filled {
+  background: var(--lamp);
+  transform: scale(1);
+  box-shadow: 0 0 4px #ffd27a99;
+}
+
+/* the player bar: every investigator in turn order, in the top bar after the phases */
+.player-bar {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  position: relative;
+}
+.pb-avatar {
+  position: relative;
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 6px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: transparent;
+  cursor: pointer;
+  transition:
+    filter 0.15s,
+    opacity 0.15s;
+}
+.pb-avatar:hover {
+  background: #ffffff10;
+}
+.pb-avatar.shown {
+  border-color: var(--accent);
+  background: #73ada522;
+}
+.pb-avatar:global(.done) {
+  opacity: 0.5;
+  filter: grayscale(0.6);
+}
+.pb-avatar.grey {
+  opacity: 0.45;
+  filter: grayscale(1);
+}
+.pb-avatar:global(.legal) {
+  box-shadow: var(--ring-playable-sm);
+}
+.pb-avatar.pulse {
+  animation: pb-pulse 1.1s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pb-avatar.pulse {
+    animation: none;
+    box-shadow: 0 0 0 3px var(--lamp);
+  }
+}
+.pb-top {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.pb-pips {
+  flex-direction: column;
+  gap: 2px;
+}
+.pb-counts {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font: 15px/1 var(--f-body);
+}
+.pb-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+.pb-count b {
+  font-variant-numeric: lining-nums;
+}
+.pb-count:global(.flash) b {
+  animation: flash 0.6s ease-out;
+}
+.pb-label {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 60;
+  margin-top: 4px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background: var(--lamp);
+  color: var(--abyss);
+  font: bold 14px sans-serif;
+  white-space: nowrap;
+  box-shadow: 0 3px 10px #000a;
+}
+.pb-back {
+  align-self: center;
+  padding: 4px 12px;
+  border-radius: 14px;
+  border: 1px solid var(--accent);
+  background: var(--panel);
+  color: var(--accent);
+  cursor: pointer;
+}
+.pb-sheet {
+  position: fixed;
+  z-index: 72;
+  width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: var(--f-body);
+  filter: drop-shadow(0 12px 24px #000d);
+}
+.pb-details {
+  align-self: flex-end;
+  padding: 4px 12px;
+  border-radius: 14px;
+}
+:global(.game):global(.phone) .player-bar {
+  gap: 2px;
+}
+:global(.game):global(.phone) .pb-avatar {
+  flex-direction: row;
+  gap: 4px;
+  padding: 0 4px;
+  zoom: 0.72;
+}
+:global(.game):global(.phone) .pb-back {
+  padding: 2px 8px;
+  font-size: 13px;
+}
+/* the avatars are drawn at 72 %: their tap reaches 44 px the same way (in their zoomed units) */
+:global(.game):global(.phone) .pb-avatar::after {
+  content: "";
+  position: absolute;
+  inset: -12px 0;
+}
+@keyframes pb-pulse {
+  50% {
+    box-shadow:
+      0 0 0 3px var(--lamp),
+      0 0 16px #ffd27acc;
+  }
+}
+@keyframes flash {
+  0% {
+    color: #fff;
+    text-shadow: 0 0 8px var(--lamp);
+    transform: scale(1.4);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

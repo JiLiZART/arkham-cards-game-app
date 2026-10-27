@@ -7,7 +7,7 @@
 
 - [x] 2.1 `vite.config.ts`: `css.modules.localsConvention: "camelCaseOnly"` (Vitest needs no setting: it doesn't process CSS, so a module import returns its key names); confirm a `*.module.css` import typechecks with `vite/client` types
 - [x] 2.2 Add `src/ui/components/cx.ts` (join truthy class parts) with a test
-- [x] 2.3 Replace every class-based DOM lookup from 1.2 with a `data-ui` attribute on the target element and a `[data-ui="…"]` selector; update the tests that read those classes
+- [x] 2.3 Replace every class-based DOM lookup from 1.2 with a `data-testid` attribute on the target element and a `[data-testid="…"]` selector; update the tests that read those classes
   - Lookups (from 1.2): `arrivals.ts` `SELECTORS` (`.pile-card`, `.scenario-panel`, `.pile-column`, `.hand-fan`, `.hand-drawer`, `.play-strip`, `.st-placed`, `.encounter-showcase .sc-card`) and `FLYING` (`.flight`, `.ghost-card`, `.fan-card`, `.resolving`); `IntroOverlay` `.scenario-panel`; `PlayerBar` `.pb-sheet, .pb-avatar`; `Showcase` `.sc-card`, `.sc-flip`, `.sc-help`; `Reveal` `.sc-flip`, `.sc-help`; `Panels` `.stat-dock`; `HandFan` `.fan-flip`; `TokenDraw` `.st-subject-card, .st-subject-portrait`, `.st-strip .st-eq`; `HoverCard` `.play-strip`; `Floats` `.pb-avatar`
   - No test reads class names. Classes set imperatively (`hit-pulse`, `hit-streak` in `Floats`, `ghost-card` in `flights.ts`) take their module's names; classes in HTML strings (`g-*` from `guideText.ts`, `icon`, `svg-icon`, `gl` from `formatText`) stay global
 - [x] 2.4 Add a test that fails when `src/ui` code calls `querySelector`, `querySelectorAll`, `closest` or `matches` with a class selector
@@ -47,12 +47,12 @@
 ## 8. HUD, in groups
 
 - [x] 8.1 Split `Panels.tsx` into one folder per exported component (`MiniCard`, `PlayStrip`, `ScenarioPanel`, `PileColumn`, `CardOptions` and the rest) with modules; `stripOrder`, `columnCardWidth`, `rowGap` and their tests go with `PlayStrip`
-- [ ] 8.2 Hand: `HandFan` (with `fan.ts`), `HandDrawer`, `HandDetails` (with `DetailsColumn`, `LocationDetails`), `GlanceBadge`, `MulliganRow`, `HoverCard`
-- [ ] 8.3 Skill test: `SkillTestScreen`, `TokenDraw` (with `tokenStack.ts`), `ChaosTokenIcon`
-- [ ] 8.4 Showcase and reveal: `Showcase` (with `showcaseLayout.ts`), `Reveal`, `IntroOverlay`, `flights.ts` as a HUD helper
-- [ ] 8.5 Bars and rails: `ActionRail` (with `InstructionBar`, `UndoButton`), `PlayerBar`, `Stats`, `StepCaption`, `Ribbon`, `Drawer`
-- [ ] 8.6 Overlays: `Modals`, `DeckViewer`, `Investigators`, `InvestigatorChoice`, `TipLayer`, `Feed`, `Floats`, `SoundLayer`, then `Hud` itself
-- [ ] 8.7 After each of 8.1–8.6: `pnpm typecheck`, `pnpm test`, compare the table screenshots (desktop and phone) for the parts moved
+- [x] 8.2 Hand: `HandFan` (with `fan.ts`), `HandDrawer`, `HandDetails` (with `DetailsColumn`, `LocationDetails`), `GlanceBadge`, `MulliganRow`, `HoverCard`
+- [x] 8.3 Skill test: `SkillTestScreen`, `TokenDraw` (with `tokenStack.ts`), `ChaosTokenIcon`
+- [x] 8.4 Showcase and reveal: `Showcase` (with `showcaseLayout.ts`), `Reveal`, `IntroOverlay`, `flights.ts` as a HUD helper
+- [x] 8.5 Bars and rails: `ActionRail` (with `InstructionBar`, `UndoButton`), `PlayerBar`, `Stats`, `StepCaption`, `Ribbon`, `Drawer`
+- [x] 8.6 Overlays: `Modals`, `DeckViewer`, `Investigators`, `InvestigatorChoice`, `TipLayer`, `Feed`, `Floats`, `SoundLayer`, then `Hud` itself
+- [x] 8.7 After each of 8.1–8.6: `pnpm typecheck`, `pnpm test`, compare the table screenshots (desktop and phone) for the parts moved
 
 ## 9. Global CSS and docs
 

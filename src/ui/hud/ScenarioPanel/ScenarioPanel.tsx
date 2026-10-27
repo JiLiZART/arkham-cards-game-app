@@ -34,7 +34,7 @@ export function ScenarioPanel() {
     useView((s) => s.intro?.step),
   );
   return (
-    <div className={styles.scenarioPanel} data-ui="scenario-panel">
+    <div className={styles.scenarioPanel} data-testid="scenario-panel">
       {game.agenda && (
         <div
           className={cx(styles.scenarioCard, hides.agenda ? styles.introHidden : "")}

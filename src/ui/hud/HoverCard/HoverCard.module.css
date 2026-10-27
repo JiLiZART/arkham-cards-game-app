@@ -1,0 +1,70 @@
+.hover-face > :global(.intent) {
+  position: absolute;
+  left: 6px;
+  bottom: 6px;
+  right: 6px;
+  font-size: 14px;
+  padding: 4px 8px;
+}
+/* a strip card's option buttons: over the centre of its enlarged copy (HoverCard sets left and top), taking the pointer the copy does not */
+.strip-actions {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 81;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: stretch;
+  pointer-events: auto;
+}
+.strip-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  white-space: nowrap;
+  padding: 4px 12px;
+  border-radius: 16px;
+  border: 1px solid var(--playable);
+  background: rgba(18, 30, 18, 0.92);
+  color: #eaffea;
+  font: 17px/1.1 var(--f-body);
+  box-shadow: 0 2px 8px #000c;
+}
+.strip-action:hover {
+  background: #2f5a30;
+}
+
+/* hover: the card at 2× on the spot, details underneath */
+.hover-card {
+  position: fixed;
+  z-index: 80;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  filter: drop-shadow(0 12px 28px #000e);
+}
+.hover-face {
+  position: relative;
+}
+.hover-face > img,
+.hover-face > :global(.text-face) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 14px;
+  display: block;
+}
+.hover-face :global(.tokens) {
+  position: absolute;
+  right: -8px;
+  top: -10px;
+  transform: none;
+}
+:global(.game):global(.phone) .strip-action {
+  min-height: 44px;
+  padding: 2px 8px;
+  font-size: 13px;
+}

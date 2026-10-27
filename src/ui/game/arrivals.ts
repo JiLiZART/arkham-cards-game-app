@@ -1,4 +1,4 @@
-import { showcaseLayout } from "../hud/showcaseLayout";
+import { showcaseLayout } from "./showcaseLayout";
 import type { StoreApi } from "zustand";
 import type { GameState, InstId, InvId, Zone } from "../../engine/types";
 import type { UiState } from "../state/store";
@@ -197,17 +197,17 @@ export function originRect(
 }
 
 const SELECTORS: Record<Place, string> = {
-  deck: '[data-pile="deck"] [data-ui="pile-card"]',
-  discard: '[data-pile="discard"] [data-ui="pile-card"]',
-  encounter: '[data-pile="encounter"] [data-ui="pile-card"]',
-  encounterDiscard: '[data-pile="encounterDiscard"] [data-ui="pile-card"]',
+  deck: '[data-pile="deck"] [data-testid="pile-card"]',
+  discard: '[data-pile="discard"] [data-testid="pile-card"]',
+  encounter: '[data-pile="encounter"] [data-testid="pile-card"]',
+  encounterDiscard: '[data-pile="encounterDiscard"] [data-testid="pile-card"]',
   resolve: "",
-  actAgenda: '[data-ui="scenario-panel"]',
-  piles: '[data-ui="pile-column"]',
-  fan: '[data-ui="hand-fan"], [data-ui="hand-drawer"]',
-  strip: '[data-ui="play-strip"]',
-  skilltest: '[data-ui="st-placed"]',
-  showcase: '[data-ui="encounter-showcase"] [data-ui="sc-card"]',
+  actAgenda: '[data-testid="scenario-panel"]',
+  piles: '[data-testid="pile-column"]',
+  fan: '[data-testid="hand-fan"], [data-testid="hand-drawer"]',
+  strip: '[data-testid="play-strip"]',
+  skilltest: '[data-testid="st-placed"]',
+  showcase: '[data-testid="encounter-showcase"] [data-testid="sc-card"]',
 };
 
 /** the real places on screen */
@@ -226,7 +226,8 @@ export const mapMoving = new Set<InstId>();
 export const mapPending = new Set<InstId>();
 /** map cards being dealt: held back, gliding face down, or turning over for the first time (their portraits wait) */
 export const mapDealing = new Set<InstId>();
-const FLYING = '[data-card], [data-ui="ghost-card"], [data-ui="fan-card"], [data-ui="resolving"]';
+const FLYING =
+  '[data-card], [data-testid="ghost-card"], [data-testid="fan-card"], [data-testid="resolving"]';
 
 /** true while an HTML card flight or a map card glide is running */
 export function cardsFlying(): boolean {

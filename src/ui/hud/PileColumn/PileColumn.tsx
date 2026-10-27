@@ -57,7 +57,7 @@ function Pile({
       title={`${label}: ${count}`}
     >
       <button
-        data-ui="pile-card"
+        data-testid="pile-card"
         className={cx(
           styles.pileCard,
           count === 0 ? "empty" : "",
@@ -107,7 +107,7 @@ export function PileColumn() {
     : { player: null, encounter: null, waiting: false };
   const victory = Object.values(game.cards).filter((c) => c.zone === "victory");
   return (
-    <div className={styles.pileColumn} data-ui="pile-column">
+    <div className={styles.pileColumn} data-testid="pile-column">
       <Pile
         label={tr("pile.encounter")}
         count={game.encounterDeck.length}

@@ -1,0 +1,126 @@
+/* the draw stage inside the skill-test screen: the bag, a face-down disc per token, the flip */
+:global(.st-stage) .token-circle {
+  pointer-events: auto;
+}
+/* shorter still: the piles in one row (the divider stands upright), so the asset row has room over the stat dock */
+.st-draw {
+  position: absolute;
+  inset: 0;
+}
+/* shorter windows: three smaller piles per row so the column clears the stat dock */
+.st-hint {
+  position: absolute;
+  bottom: 2px;
+  width: 100%;
+  text-align: center;
+  font: 26px var(--f-display);
+  color: var(--accent);
+  text-shadow: 0 2px 6px #000;
+}
+.st-bag {
+  position: absolute;
+}
+.st-bag-icon {
+  display: block;
+  filter: drop-shadow(0 10px 20px #000);
+}
+.token-circle {
+  position: absolute;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  perspective: 500px;
+  cursor: pointer;
+  transition:
+    opacity 0.3s,
+    transform 0.2s;
+}
+.token-circle {
+  transform-style: preserve-3d;
+}
+.token-circle:hover:not(:global(.chosen)) {
+  transform: translateY(-4px);
+}
+.disc-edge {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(#80949b, #5e6f76);
+  transform: translateZ(-5px);
+  box-shadow: 0 0 0 1px #4f5e64;
+}
+.token-circle:global(.chosen) .disc-edge {
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.token-circle.auto {
+  cursor: default;
+  pointer-events: none;
+}
+.disc-flip {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  transition: transform 0.55s ease-in-out;
+}
+.token-circle:global(.chosen) .disc-flip {
+  transform: rotateY(180deg);
+}
+.disc-face {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  backface-visibility: hidden;
+  display: grid;
+  place-items: center;
+}
+/* a face-down chaos token as the real ones are: plain cream, no symbol, a darker rim, an edge with some thickness */
+.disc-back {
+  border: 3px solid #c8b98f;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .3 0 0 0 0 .2 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='80' height='80' filter='url(%23n)'/%3E%3C/svg%3E"),
+    radial-gradient(circle at 38% 30%, #f7f0dd, #ebe0c5 55%, #d8cba8);
+  box-shadow:
+    inset 0 0 0 2px #e6dcc0,
+    inset 0 0 12px #b3a37866,
+    0 2px 0 #a39878,
+    0 3px 0 #8e8466;
+}
+.disc-shadow {
+  position: absolute;
+  border-radius: 50%;
+  margin-top: 6px;
+  background: radial-gradient(#000c 0, #0007 45%, transparent 72%);
+  filter: blur(2px);
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.st-draw.picked .disc-shadow {
+  opacity: 0;
+}
+.token-circle:hover:not(:global(.chosen)) .disc-back {
+  border-color: var(--accent);
+  box-shadow:
+    inset 0 0 0 2px #dbd7cb,
+    inset 0 0 12px #89a0a866,
+    0 2px 0 #85969c,
+    0 3px 0 #718288,
+    0 0 14px #73ada599;
+}
+.disc-front {
+  transform: rotateY(180deg);
+}
+.st-draw.picked .token-circle:not(:global(.chosen)) {
+  opacity: 0;
+  pointer-events: none;
+}
+.token-circle:global(.chosen) {
+  z-index: 2;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .disc-flip {
+    transition: none;
+  }
+}

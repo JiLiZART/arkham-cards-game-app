@@ -1,0 +1,16 @@
+:global(.showcase).picking :global(.sc-card) {
+  outline: 2px solid transparent;
+}
+:global(.showcase).picking :global(.sc-card):hover {
+  outline-color: var(--accent);
+  box-shadow: 0 0 24px #73ada588;
+}
+/* a searched card that doesn't match: seen, not taken */
+:global(.showcase).picking :global(.sc-card).sc-off,
+:global(.showcase).picking :global(.sc-card).sc-off:hover {
+  opacity: 1;
+  filter: grayscale(0.7) brightness(0.6);
+  translate: none;
+  outline-color: transparent;
+  box-shadow: 0 12px 34px #000c;
+}

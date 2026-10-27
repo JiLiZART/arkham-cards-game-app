@@ -2,9 +2,9 @@ import { asset } from "./images";
 
 /**
  * The one place that maps game concepts to icon sources. Sprite symbols come first (public/icons/sprite.svg, from
- * scripts/import-icons.ts: sharp at any size, coloured like the printed icons); PNG art (public/icons, from
- * scripts/extract-assets.sh) for the cardboard tokens: damage, horror, doom, clues and resources (with their 3 and 5
- * stacks), the lead token, the connector plaques and the painted chaos bag.
+ * scripts/import-icons.ts: sharp at any size, coloured like the printed icons); WebP art (public/icons, from inspired/icons via
+ * scripts/extract-assets.sh, upscaled 4x) for the cardboard tokens: damage, horror, doom, clues and resources (with their
+ * 3 and 5 stacks), the lead token, the connector plaques and the painted chaos bag.
  */
 
 /** a sprite symbol drawn in a colour, optionally over a silhouette layer (printed skill boxes, health and sanity) */
@@ -15,7 +15,7 @@ export interface GlyphSource {
   /** width / height of the icon box when the symbol isn't square (the sanity brain is wide) */
   aspect?: number;
 }
-export type IconSource = { png: string } | GlyphSource | { token: string };
+export type IconSource = { webp: string } | GlyphSource | { token: string };
 
 /** printed colours (ArkhamCards' palette), brightened a little for the dark HUD */
 export const SKILL_COLORS = {
@@ -82,18 +82,18 @@ export const ICON_SOURCES = {
   autoFail: { token: "autoFail" },
   "+1": { token: "+1" },
   "-1": { token: "-1" },
-  chaosBag: { png: "chaos-bag" },
-  damage: { png: "damage" },
-  horror: { png: "horror" },
-  doom: { png: "doom" },
-  resource: { png: "resource" },
-  "resource-3": { png: "resource-3" },
-  "resource-5": { png: "resource-5" },
-  clue: { png: "clue" },
-  "clue-3": { png: "clue-3" },
-  lead: { png: "lead" },
-  connectorBoth: { png: "connector-both" },
-  connectorOneWay: { png: "connector-one-way" },
+  chaosBag: { webp: "chaos-bag" },
+  damage: { webp: "damage" },
+  horror: { webp: "horror" },
+  doom: { webp: "doom" },
+  resource: { webp: "resource" },
+  "resource-3": { webp: "resource-3" },
+  "resource-5": { webp: "resource-5" },
+  clue: { webp: "clue" },
+  "clue-3": { webp: "clue-3" },
+  lead: { webp: "lead" },
+  connectorBoth: { webp: "connector-both" },
+  connectorOneWay: { webp: "connector-one-way" },
 } satisfies Record<string, IconSource>;
 export type IconName = keyof typeof ICON_SOURCES;
 
@@ -145,11 +145,11 @@ export const ICON_LABELS: Record<IconName, string> = {
 
 export const isIcon = (name: string): name is IconName => name in ICON_SOURCES;
 export const iconSource = (name: IconName): IconSource => ICON_SOURCES[name];
-/** URL of a PNG icon (only for the art the sprite doesn't have) */
+/** URL of a WebP icon (only for the art the sprite doesn't have) */
 export const iconUrl = (name: IconName) => {
   const s = ICON_SOURCES[name] as IconSource;
-  if (!("png" in s)) throw new Error(`${name} is drawn from the sprite, not a PNG`);
-  return asset(`icons/${s.png}.png`);
+  if (!("webp" in s)) throw new Error(`${name} is drawn from the sprite, not a WebP`);
+  return asset(`icons/${s.webp}.webp`);
 };
 
 /** ArkhamDB rules-text markup key → sprite symbol; markup not listed here shows as text */

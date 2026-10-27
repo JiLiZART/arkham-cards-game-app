@@ -1,0 +1,103 @@
+/* at rest the fan sits under the stat dock (a tilted edge card tucks under it); a hovered or focused card lifts the fan above everything */
+.hand-fan {
+  position: fixed;
+  bottom: 0;
+  height: 142px;
+  z-index: 46;
+  pointer-events: none;
+}
+/* a shade of night under the hand: the table behind the cards darkens so their text reads; its edges fade into the table */
+.hand-fan::before {
+  content: "";
+  position: absolute;
+  inset: -70px -90px 0;
+  z-index: -1;
+  background: linear-gradient(to top, rgb(7 12 14 / 0.88), rgb(7 12 14 / 0.6) 55%, transparent);
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 90px,
+    #000 calc(100% - 90px),
+    transparent
+  );
+}
+
+/* ---------- hand fan (Hearthstone-style) ---------- */
+.hand-fan:has(.fan-card:hover),
+.hand-fan:focus-within,
+.hand-fan:has(.dragging),
+.hand-fan:has(:global(.focused)) {
+  z-index: 60;
+}
+/* transforms come from the Dock frame loop in HandFan (pivot at the bottom centre so cards grow upward) */
+.fan-card {
+  position: absolute;
+  padding: 0;
+  border: 0;
+  border-radius: 14px;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+  transform-origin: 50% 100%;
+  transition:
+    box-shadow 0.18s,
+    left 0.3s ease-out,
+    filter 0.15s;
+  box-shadow: 0 4px 14px #000a;
+  touch-action: none;
+  perspective: 1400px;
+}
+/* face and back for the draw flip (the back only shows while a drawn card is turning over) */
+.fan-flip {
+  position: absolute;
+  inset: 0;
+  display: block;
+  transform-style: preserve-3d;
+}
+.ff-front,
+.ff-back {
+  position: absolute;
+  inset: 0;
+  display: block;
+  backface-visibility: hidden;
+  border-radius: 14px;
+}
+.ff-back {
+  transform: rotateY(180deg);
+}
+.fan-card:focus-visible {
+  outline: none;
+}
+.fan-card img,
+.fan-card :global(.text-face) {
+  width: 100%;
+  height: 100%;
+  border-radius: 14px;
+  display: block;
+  object-fit: cover;
+  user-select: none;
+}
+/* the slots an asset takes: at the glance badge's right end */
+.fan-card:global(.legal) {
+  box-shadow: var(--ring-playable);
+}
+.fan-card.dragging {
+  transition: none;
+  cursor: grabbing;
+}
+.fan-card:global(.dimmed) {
+  filter: brightness(0.45);
+}
+.fan-card:global(.dimmed):hover,
+.fan-card:global(.dimmed):global(.focused) {
+  filter: brightness(0.8);
+}
+:global(.game):global(.testing) .hand-fan {
+  z-index: 52;
+}
+:global(.game):global(.testing) .hand-fan:has(.fan-card:hover),
+:global(.game):global(.testing) .hand-fan:focus-within,
+:global(.game):global(.testing) .hand-fan:has(.dragging),
+:global(.game):global(.testing) .hand-fan:has(:global(.focused)) {
+  z-index: 60;
+}
