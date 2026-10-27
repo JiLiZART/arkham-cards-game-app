@@ -1,0 +1,11 @@
+.token-face {
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+  background: radial-gradient(#e8dcc0, #b8a67e);
+  color: #2a1d10;
+  font-weight: bold;
+  font-family: sans-serif;
+  border: 2px solid var(--rule);
+  vertical-align: middle;
+}

@@ -4,6 +4,8 @@ import { db, useGame } from "../../state/context";
 import { intentOf } from "../../game/intent";
 import { Glyph, Icon } from "../Icon";
 import type { IconName } from "../../assets/icons";
+import { cx } from "../cx";
+import styles from "./TokenBadges.module.css";
 
 const TOKEN_ICONS: Record<string, IconName | undefined> = {
   damage: "damage",
@@ -38,12 +40,12 @@ export function TokenBadges({
     <div className="tokens">
       {tokens.map(([k, n]) =>
         TOKEN_ICONS[k] ? (
-          <span key={k} className="tok-icon" title={`${k} ${n}`}>
+          <span key={k} className={styles.tokIcon} title={`${k} ${n}`}>
             <Icon name={TOKEN_ICONS[k]!} size={size} />
             <b>{n}</b>
           </span>
         ) : (
-          <span key={k} className={`tok tok-${k}`} title={`${k} ${n}`}>
+          <span key={k} className={cx("tok", styles[`tok-${k}`])} title={`${k} ${n}`}>
             <Glyph name="bullet" size={12} title="uses" />
             {n}
           </span>
@@ -68,7 +70,11 @@ export function IntentBadge({ inst, words }: { inst: CardInst; words?: boolean }
     it.kind === "attack" ? { damage: it.damage, horror: it.horror } : undefined,
   );
   return (
-    <span className={`intent ${it.kind} ${words ? "words" : ""}`} title={tip} aria-label={tip}>
+    <span
+      className={cx("intent", it.kind, styles[it.kind], words && "words")}
+      title={tip}
+      aria-label={tip}
+    >
       <span>{INTENT_MARK[it.kind]}</span>
       {it.kind === "attack" && (
         <>
@@ -86,7 +92,7 @@ export function IntentBadge({ inst, words }: { inst: CardInst; words?: boolean }
           )}
         </>
       )}
-      {words && <span className="intent-words">{tip}</span>}
+      {words && <span className={styles.intentWords}>{tip}</span>}
     </span>
   );
 }

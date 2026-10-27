@@ -17,7 +17,15 @@ Every React component under `src/ui` SHALL live in a folder named after it, hold
 
 ### Requirement: Component styles are CSS Modules
 
-A component's styles SHALL be in `Component.module.css` next to it, read in JSX as `styles.<name>`. A component's class MUST NOT be styled from another component's CSS file. Global state on the game root (`.game.phone`, `.game.testing`) SHALL be reached from a module with `:global(...)`.
+A component's styles SHALL be in `Component.module.css` next to it, read in JSX as `styles.<name>`. A component's module class MUST NOT be styled from another component's CSS file. Global state on the game root (`.game.phone`, `.game.testing`) SHALL be reached from a module with `:global(...)`.
+
+A class that other components legitimately style (a card face inside a thumbnail, an icon inside a button) SHALL be a public hook class: it is listed at the top of `styles.css`, the owning component renders it as a plain string next to its module class, and other modules reach it only as `:global(.<name>)`. No other class may be styled from outside its owner.
+
+#### Scenario: Styling a card face inside a thumbnail
+
+- **GIVEN** `text-face` is a listed public hook class rendered by the card face
+- **WHEN** the catalog sizes card faces inside its thumbnails
+- **THEN** its module selects `.thumb :global(.text-face)`, and the card face's own look stays in its module
 
 #### Scenario: A class name used in two components
 

@@ -1,6 +1,7 @@
 import { stackTokens } from "../../hud/tokenStack";
 import { Icon } from "../Icon";
 import type { IconName } from "../../assets/icons";
+import styles from "./TokenPile.module.css";
 
 const STACKS: Record<
   "resource" | "clue" | "damage",
@@ -28,11 +29,11 @@ export function TokenPile({
   const tokens = kind === "damage" ? (value > 0 ? [1] : []) : stackTokens(value, denominations);
   return (
     <div
-      className="token-pile"
+      className={styles.tokenPile}
       style={{ width: size + Math.max(0, tokens.length - 1) * size * 0.45, height: size }}
     >
       {tokens.length === 0 && (
-        <span className="token-empty">
+        <span className={styles.tokenEmpty}>
           <Icon name={art[1]} size={size} title={title} />
         </span>
       )}

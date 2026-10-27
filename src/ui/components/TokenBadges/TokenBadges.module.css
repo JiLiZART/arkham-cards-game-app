@@ -1,0 +1,64 @@
+/* enemy intents: what the enemy does in the coming enemy phase */
+:global(.intent) {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 1px 5px;
+  border-radius: 10px;
+  font: bold 12px sans-serif;
+  color: #fff;
+  background: var(--slate-lit);
+  border: 1px solid #465a61;
+  box-shadow: 0 1px 3px #000c;
+  pointer-events: auto;
+}
+:global(.intent).attack {
+  background: #7a1e14;
+  border-color: #e0573f;
+}
+:global(.intent):global(.rest) {
+  background: var(--slate);
+  color: var(--muted);
+}
+:global(.intent) b {
+  font-weight: bold;
+}
+.intent-words {
+  font-weight: normal;
+  margin-left: 4px;
+}
+.tok-damage {
+  background: #b3261e;
+}
+.tok-horror {
+  background: #2f5fb3;
+}
+.tok-clues {
+  background: #2e8b57;
+}
+.tok-doom {
+  background: #4f867f;
+}
+.tok-uses {
+  background: #556166;
+}
+.tok-resources {
+  background: #528c84;
+}
+.tok-icon {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  filter: drop-shadow(0 1px 2px #000c);
+}
+.tok-icon b {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font: bold 13px sans-serif;
+  color: #fff;
+  text-shadow:
+    0 0 3px #000,
+    0 0 2px #000;
+}

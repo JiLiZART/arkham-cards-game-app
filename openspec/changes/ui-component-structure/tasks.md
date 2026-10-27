@@ -23,8 +23,9 @@
 
 ## 4. Shared components get modules
 
-- [ ] 4.1 For each `components/` folder: move its rules from `styles.css` into `<Name>.module.css` (only rules no other component uses), switch JSX to `styles.x` / `cx`
-- [ ] 4.2 Compare screenshots for every screen that shows card faces, icons, portraits and token badges; fix differences
+- [x] 4.0 Tooling: a CSS mover (rules whose anchor classes one component owns go to its module, in original order and inside their at-rules; other classes become `:global(...)`) and a className codemod (string literals and the string parts of conditionals become `styles.x` / `cx(...)`; public hook classes stay as strings too); list the public hook classes at the top of `styles.css`; delete the 58 dead rules
+- [x] 4.1 For each `components/` folder: move its rules from `styles.css` into `<Name>.module.css` (only rules no other component uses), switch JSX to `styles.x` / `cx`
+- [x] 4.2 Compare screenshots for every screen that shows card faces, icons, portraits and token badges; fix differences
 
 ## 5. Catalog and dev
 

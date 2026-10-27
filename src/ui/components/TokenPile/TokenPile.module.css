@@ -1,0 +1,11 @@
+.token-pile {
+  position: relative;
+}
+.token-pile > span {
+  position: absolute;
+  top: 0;
+  filter: drop-shadow(0 2px 3px #000c);
+}
+.token-empty {
+  opacity: 0.35;
+}

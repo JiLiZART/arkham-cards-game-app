@@ -1,0 +1,36 @@
+:global(.text-face) {
+  background: #dfdcd3;
+  color: #1b2326;
+  border-top: 24px solid var(--rule);
+  padding: 10px;
+  text-align: left;
+  overflow: hidden;
+  font: 16px/1.3 var(--f-body);
+  display: flex !important;
+  flex-direction: column;
+  gap: 2px;
+}
+:global(.text-face) b {
+  font-size: 20px;
+  font-family: var(--f-name);
+  font-weight: normal;
+}
+:global(.text-face) small {
+  font-style: italic;
+  color: var(--rule);
+}
+:global(.modal-card) :global(.text-face) {
+  height: 70vh;
+  max-height: 640px;
+  border-radius: 14px;
+  display: block;
+}
+:global(.modal-card) :global(.text-face) {
+  width: calc(70vh * 0.715);
+}
+:global(.resolving) :global(.text-face) {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+}

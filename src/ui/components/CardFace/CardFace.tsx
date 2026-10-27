@@ -2,6 +2,7 @@ import { useState } from "react";
 import { cardText } from "../../../content/i18n";
 import { db } from "../../state/context";
 import { cardImage, FACTION_COLORS, faceLines } from "../../assets/images";
+import "./CardFace.module.css";
 
 /** card face: the scan, or a text face drawn from card data when the image can't load; `remote` lets an HTML view link the scans the game does not host */
 export function CardFace({

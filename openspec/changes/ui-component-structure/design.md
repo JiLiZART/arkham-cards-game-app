@@ -91,6 +91,18 @@ Component styles go in `Component.module.css`, read as `styles.fanCard`. `vite.c
 
 Buttons (`.primary`, `.big`, `.link`), the campaign-guide markup (`g-*`, produced as HTML strings by `guideText.ts`, so it can't use modules), the flip card (`.flip`, `.flip-front`, `.flip-back`), and the card-face and token styles used by many components remain in `styles.css`. A rule moves into a module only when one component owns it.
 
+### Public hook classes for styling across components
+
+Found while applying: of 1,078 rules in `styles.css`, 735 have one owning component, 183 are generic modifiers that become local where they move, 58 are dead, and 85 style another component's insides (`.mini-card > .text-face`, `.cat-thumb .text-face`, `.rail-icon .icon-img`, `.mulligan-cards .mini-card`, the noir layer's shared button and card lists). Those 85 keep working through a short list of public hook classes (about 15: `text-face`, `ui-icon`, `icon-img`, `intent`, `tokens`, `mini-card`, `pile-card`, `card-options`, `modal-options`, `token-circle`, `bag-card`, …), listed at the top of `styles.css`.
+
+- The owner renders the public name as a plain string, and its own rules for that class live in its module written as `:global(.text-face)`. (Found while applying: simpler than rendering a module class beside it, and the rules still sit with their owner.)
+- Other modules reach it only as `:global(.text-face)`, inside their own local selector (`.thumb :global(.text-face)`).
+- The noir layer's shared selector lists are split per component, each part going into its component's module in the original order (base rules first, then the noir rules), so the cascade within a component is kept.
+
+- Alternative: a `className` or variant prop on every child that is styled from outside (strict isolation). Real isolation, but about 85 small API changes and a larger risk of visual drift. Rejected by the user.
+
+This stays inside ADR-0016: public hook classes are the "primitives shared by many components" it keeps global.
+
 ### DOM lookups by data attribute
 
 Each class-based lookup becomes a data attribute on the element it targets: `data-ui="play-strip"`, `data-ui="stat-dock"`, `data-ui="scenario-panel"`, and so on, with `[data-ui="…"]` selectors. `arrivals.ts`'s `SELECTORS` switches the same way. Tests that look for class names in markup use the same attributes.

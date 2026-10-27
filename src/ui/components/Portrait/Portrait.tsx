@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { db, useGame } from "../../state/context";
 import { cardImage, FACTION_COLORS } from "../../assets/images";
 import { investigatorInfo } from "../../menu/wizard";
+import styles from "./Portrait.module.css";
 
 const broken = new Set<string>();
 
@@ -56,7 +57,7 @@ export function Portrait({
         fontSize: size * 0.36,
       }}
     >
-      {!ok && <span className="portrait-initials">{initials(name)}</span>}
+      {!ok && <span className={styles.portraitInitials}>{initials(name)}</span>}
     </div>
   );
 }

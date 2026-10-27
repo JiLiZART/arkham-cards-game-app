@@ -1,5 +1,7 @@
 import { locales, t } from "../../../content/i18n";
 import { db, gameStore, useGame } from "../../state/context";
+import { cx } from "../cx";
+import styles from "./LangSwitch.module.css";
 
 /** the language from any screen: a tab per locale (EN | RU), each named in its own tongue; `compact` (phone top bar) is one tab that steps to the next */
 export function LangSwitch({
@@ -18,7 +20,7 @@ export function LangSwitch({
     const next = all[(all.indexOf(locale) + 1) % all.length];
     return (
       <button
-        className={`lang-step ${className}`}
+        className={cx(styles.langStep, className)}
         onClick={() => setLocale(next)}
         title={name(next)}
         aria-label={`${t(db, locale, "menu.language")}: ${name(next)}`}

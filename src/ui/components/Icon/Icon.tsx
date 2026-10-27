@@ -1,6 +1,14 @@
 import { useState } from "react";
 import { ChaosToken } from "../ChaosToken";
-import { hasSymbol, ICON_LABELS, iconSource, iconUrl, MARKUP_ICONS, type IconName } from "../../assets/icons";
+import {
+  hasSymbol,
+  ICON_LABELS,
+  iconSource,
+  iconUrl,
+  MARKUP_ICONS,
+  type IconName,
+} from "../../assets/icons";
+import styles from "./Icon.module.css";
 
 /** sprite symbols stacked in one box, bottom first, each in its colour */
 export function Symbols({
@@ -49,7 +57,7 @@ export function Icon({
   if ("token" in src) return <ChaosToken token={src.token} size={size} title={label} />;
   const fallback = (
     <span
-      className="icon-fallback"
+      className={styles.iconFallback}
       style={{ width: size, height: size, fontSize: Math.max(8, size * 0.38) }}
       title={label}
     >
@@ -114,7 +122,7 @@ export function Glyph({ name, size = 18, title }: { name: string; size?: number;
   const id = MARKUP_ICONS[name] ?? name;
   if (!hasSymbol(id))
     return (
-      <span className="gl-fb" title={label}>
+      <span className={styles.glFb} title={label}>
         {label}
       </span>
     );

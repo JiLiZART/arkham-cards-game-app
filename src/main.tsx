@@ -1,10 +1,11 @@
+// the global base layer (tokens, resets, shared primitives) loads before the components' CSS Modules (ADR-0016)
+import "./ui/styles.css";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "./ui/App";
 import { gameStore } from "./ui/state/context";
 import { loadSprite } from "./ui/assets/icons";
 import { useView } from "./ui/state/view";
-import "./ui/styles.css";
 
 // the icon sprite is in the document before the first screen: icons never flash blank (without it, text badges)
 loadSprite()

@@ -1,0 +1,32 @@
+:global(.ui-icon) {
+  flex: none;
+  vertical-align: -0.2em;
+}
+:global(.icon-img) {
+  display: inline-block;
+  vertical-align: middle;
+  object-fit: contain;
+}
+.icon-fallback {
+  display: inline-grid;
+  place-items: center;
+  vertical-align: middle;
+  border-radius: 50%;
+  background: #263135;
+  color: var(--ink);
+  font-family: sans-serif;
+  font-weight: bold;
+  overflow: hidden;
+}
+.glyph {
+  color: var(--accent);
+  font-weight: bold;
+}
+.gl-fb {
+  font-weight: bold;
+}
+:global(.chaos-bag) :global(.icon-img) {
+  display: block;
+  margin: 0 auto;
+  object-fit: contain;
+}

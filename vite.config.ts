@@ -45,8 +45,9 @@ export default defineConfig({
   // GitHub Pages serves the site under /<repo>/ (the deploy workflow sets PAGES_BASE); locally it is /
   base: process.env.PAGES_BASE ?? "/",
   plugins: [react(), soundsDev()],
-  // components' CSS Modules keep their kebab-case class names in CSS and read them as camelCase (ADR-0016)
-  css: { modules: { localsConvention: "camelCaseOnly" } },
+  // components' CSS Modules keep their kebab-case class names in CSS and read them as camelCase (ADR-0016); the
+  // kebab-case keys stay too, for names built at runtime (styles[`tok-${kind}`])
+  css: { modules: { localsConvention: "camelCase" } },
   server: { proxy: cardProxy },
   preview: { proxy: cardProxy },
   test: {
