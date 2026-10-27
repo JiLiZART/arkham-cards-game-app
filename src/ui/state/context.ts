@@ -1,7 +1,7 @@
 import { createContext, useContext } from "react";
 import type { StoreApi } from "zustand";
 import { useStore } from "zustand";
-import { campaignLoaded, content, loadCampaign, loadPack, packsOf } from "../../content/index";
+import { campaignLoaded, content, loadCampaign, loadPack, packsOf } from "../../content";
 import { packLoaded } from "../../content/loader";
 import { campaignSpriteLoaded, loadCampaignSprite } from "../assets/icons";
 import { trackArrivals } from "../game/arrivals";

@@ -2,7 +2,7 @@ import { useRef, type PointerEvent as ReactPointerEvent } from "react";
 import { cardText, t } from "../../content/i18n";
 import type { GameState, InstId } from "../../engine/types";
 import { rememberRect } from "../game/arrivals";
-import { CardFace } from "../components/CardFace/index";
+import { CardFace } from "../components/CardFace";
 import { db, useGame } from "../state/context";
 import { outsideSpotlight, useView } from "../state/view";
 import { openHandLayout, peekLayout } from "./fan";

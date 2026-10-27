@@ -1,7 +1,7 @@
 import { t } from "../../content/i18n";
 import type { CardDef } from "../../content/schema";
 import { db, useGame } from "../state/context";
-import { Glyph, Icon } from "../components/Icon/index";
+import { Glyph, Icon } from "../components/Icon";
 import { slotIcons } from "../game/details";
 import { chipsFor, type Chip } from "../game/glance";
 import { isIcon } from "../assets/icons";

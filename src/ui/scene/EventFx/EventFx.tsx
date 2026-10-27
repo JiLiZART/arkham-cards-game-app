@@ -5,7 +5,7 @@ import * as THREE from "three";
 import { useGame } from "../../state/context";
 import { useView } from "../../state/view";
 import type { Vec3 } from "../../game/layout";
-import { Icon } from "../../components/Icon/index";
+import { Icon } from "../../components/Icon";
 import type { IconName } from "../../assets/icons";
 import styles from "./EventFx.module.css";
 

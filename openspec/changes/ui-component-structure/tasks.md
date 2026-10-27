@@ -46,7 +46,7 @@
 
 ## 8. HUD, in groups
 
-- [ ] 8.1 Split `Panels.tsx` into one folder per exported component (`MiniCard`, `PlayStrip`, `ScenarioPanel`, `PileColumn`, `CardOptions` and the rest) with modules; `stripOrder`, `columnCardWidth`, `rowGap` and their tests go with `PlayStrip`
+- [x] 8.1 Split `Panels.tsx` into one folder per exported component (`MiniCard`, `PlayStrip`, `ScenarioPanel`, `PileColumn`, `CardOptions` and the rest) with modules; `stripOrder`, `columnCardWidth`, `rowGap` and their tests go with `PlayStrip`
 - [ ] 8.2 Hand: `HandFan` (with `fan.ts`), `HandDrawer`, `HandDetails` (with `DetailsColumn`, `LocationDetails`), `GlanceBadge`, `MulliganRow`, `HoverCard`
 - [ ] 8.3 Skill test: `SkillTestScreen`, `TokenDraw` (with `tokenStack.ts`), `ChaosTokenIcon`
 - [ ] 8.4 Showcase and reveal: `Showcase` (with `showcaseLayout.ts`), `Reveal`, `IntroOverlay`, `flights.ts` as a HUD helper

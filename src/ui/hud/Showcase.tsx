@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { t } from "../../content/i18n";
 import type { GameState, InstId } from "../../engine/types";
 import { domPlace, noteLocalMove, reducedMotion } from "../game/arrivals";
-import { CardFace } from "../components/CardFace/index";
+import { CardFace } from "../components/CardFace";
 import { db, useGame } from "../state/context";
 import { backUrl } from "../assets/images";
 import { viewerOf } from "../state/store";

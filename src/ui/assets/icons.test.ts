@@ -1,6 +1,6 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { CHAOS_TOKENS, hasTokenArt, layersFor } from "../components/ChaosToken/index";
+import { CHAOS_TOKENS, hasTokenArt, layersFor } from "../components/ChaosToken";
 import { spriteIds } from "../../../scripts/import-icons";
 import { hasSymbol, ICON_SOURCES, MARKUP_ICONS, registerSymbols, type IconSource } from "./icons";
 

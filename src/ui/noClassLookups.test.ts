@@ -14,7 +14,7 @@ const sources = (dir: string): string[] =>
 /** a selector that names a class: a `.name` at its start or after a space, comma, combinator or attribute */
 const namesClass = (selector: string) => /(^|[\s,>+~\])])\.[A-Za-z_-]/.test(selector);
 const LOOKUP =
-  /\b(?:querySelector|querySelectorAll|closest|matches)\s*(?:<[^>]*>)?\(\s*(["'`])((?:(?!\1).)*)\1/g;
+  /\b(?:querySelector|querySelectorAll|closest|matches)\s*(?:\?\.)?\s*(?:<[^>]*>)?\(\s*(["'`])((?:(?!\1).)*)\1/g;
 
 describe("DOM lookups go by data attribute", () => {
   it("no querySelector, closest or matches call in src/ui names a class", () => {

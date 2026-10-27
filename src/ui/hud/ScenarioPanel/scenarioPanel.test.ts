@@ -1,8 +1,8 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import { gameStore } from "../state/context";
-import { ScenarioPanel } from "./Panels";
+import { gameStore } from "../../state/context";
+import { ScenarioPanel } from ".";
 
 describe("the scenario panel", () => {
   it("the act and the agenda do not enlarge on hover (a tap opens the viewer); the reference card is a plain button", () => {

@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
-import type { ChoiceOption } from "../../engine/types";
-import { abilitySymbol, stripAction } from "./ActionRail";
-import { columnCardWidth, pileIcon, rowGap, stripButtonsFor, stripOrder } from "./Panels";
+import type { ChoiceOption } from "../../../engine/types";
+import { abilitySymbol, stripAction } from "../ActionRail";
+import { pileIcon } from "../PileColumn";
+import { columnCardWidth, rowGap, stripButtonsFor, stripOrder } from ".";
 
 describe("strip column card width", () => {
   const ROOM = 520; // the column's height at 1600x900

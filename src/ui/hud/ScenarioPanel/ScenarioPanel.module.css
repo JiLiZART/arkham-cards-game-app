@@ -1,0 +1,48 @@
+/* fixed HUD panels over the map */
+.scenario-panel {
+  position: fixed;
+  top: 78px;
+  left: 8px;
+  display: flex;
+  gap: 8px;
+  z-index: 44;
+}
+.scenario-card {
+  position: relative;
+}
+.scenario-badge {
+  position: absolute;
+  left: 6px;
+  bottom: -14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  padding: 1px 8px 1px 4px;
+  font-size: 18px;
+}
+.scenario-badge small {
+  color: var(--muted);
+  font-size: 13px;
+}
+.scenario-badge b {
+  font-variant-numeric: lining-nums;
+}
+.scenario-card.intro-hidden {
+  visibility: hidden;
+}
+.scenario-ref {
+  padding: 0;
+  overflow: hidden;
+}
+.scenario-card {
+  position: relative;
+}
+:global(.drawer) .scenario-panel {
+  position: static;
+}
+:global(.drawer) .scenario-panel {
+  flex-wrap: wrap;
+}

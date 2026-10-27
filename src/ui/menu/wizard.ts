@@ -1,7 +1,7 @@
 /** the new-game wizard's state: pure, so the order and back rules are tested without React */
 import { campaignBlurb, campaignName, cardText, t } from "../../content/i18n";
 import type { CampaignDef, DeckDef, Difficulty } from "../../content/schema";
-import { packsOf } from "../../content/index";
+import { packsOf } from "../../content";
 import { packLoaded } from "../../content/loader";
 import type { ContentDb } from "../../engine/types";
 import { customDecks, deckTabs, type SavedDeck } from "../game/decks";

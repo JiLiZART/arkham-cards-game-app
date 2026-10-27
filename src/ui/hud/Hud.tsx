@@ -4,7 +4,13 @@ import type { GameEvent, GameState } from "../../engine/types";
 import { whenSettled } from "../game/arrivals";
 import { db, gameStore, useGame } from "../state/context";
 import { HELD, holdsForTap, viewerOf } from "../state/store";
-import { autoSwitchTarget, deckOptions, delayed, landingView, ownDecisionTitle } from "../state/players";
+import {
+  autoSwitchTarget,
+  deckOptions,
+  delayed,
+  landingView,
+  ownDecisionTitle,
+} from "../state/players";
 import { phaseIsEmpty } from "../game/phases";
 import { useChoicesOffered } from "../state/usePlayers";
 import { hasSymbol, MARKUP_ICONS, markupColor } from "../assets/icons";
@@ -16,10 +22,13 @@ import { Feed } from "./Feed";
 import { ActionFloats, HitFx, HIT_MS } from "./Floats";
 import { Modals } from "./Modals";
 import { RevealOverlay } from "./Reveal";
-import { ChaosBagButton, PileColumn, PlayStrip, ScenarioPanel } from "./Panels";
+import { ChaosBagButton } from "./ChaosBagButton";
+import { PileColumn } from "./PileColumn";
+import { PlayStrip } from "./PlayStrip";
+import { ScenarioPanel } from "./ScenarioPanel";
 import { PlayerBar } from "./PlayerBar";
 import { Drawer } from "./Drawer";
-import { Glyph, UiIcon } from "../components/Icon/index";
+import { Glyph, UiIcon } from "../components/Icon";
 import { useLayoutMode } from "../state/layoutMode";
 import { StatBar } from "./Stats";
 import { MulliganRow } from "./MulliganRow";
@@ -31,9 +40,9 @@ import { optionLabel } from "../game/optionText";
 import { InvestigatorChoiceOverlay } from "./InvestigatorChoice";
 import { Ribbon } from "./Ribbon";
 import { SkillTestScreen } from "./SkillTestScreen";
-import { Portrait } from "../components/Portrait/index";
+import { Portrait } from "../components/Portrait";
 import { spotlightNow } from "../game/spotlight";
-import { LangSwitch } from "../components/LangSwitch/index";
+import { LangSwitch } from "../components/LangSwitch";
 import { useStage, useView } from "../state/view";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
@@ -504,7 +513,7 @@ function PopupMenu() {
 }
 
 // the dev-only sound picker (ADR-0010): not in the production build, where DEV is false and the import is dropped
-const SoundPicker = import.meta.env.DEV ? lazy(() => import("../dev/SoundPicker/index")) : null;
+const SoundPicker = import.meta.env.DEV ? lazy(() => import("../dev/SoundPicker")) : null;
 
 function DebugPanel() {
   const panel = useView((s) => s.panel);

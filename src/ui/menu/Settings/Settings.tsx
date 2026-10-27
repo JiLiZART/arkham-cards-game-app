@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { UiIcon } from "../../components/Icon/index";
+import { UiIcon } from "../../components/Icon";
 import { locales, t } from "../../../content/i18n";
 import { db, gameStore, useGame } from "../../state/context";
 import { safeStorage, type Pace } from "../../state/store";

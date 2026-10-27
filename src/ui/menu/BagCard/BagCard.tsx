@@ -1,7 +1,7 @@
 import { t } from "../../../content/i18n";
 import type { Difficulty } from "../../../content/schema";
 import { averageModifier, groupTokens } from "../../game/chaos";
-import { ChaosToken } from "../../components/ChaosToken/index";
+import { ChaosToken } from "../../components/ChaosToken";
 import { db, gameStore } from "../../state/context";
 import styles from "./BagCard.module.css";
 

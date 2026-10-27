@@ -1,0 +1,123 @@
+.pile-card:global(.dimmed) {
+  filter: brightness(0.45);
+}
+.pile-card {
+  transition: filter 0.15s;
+}
+.pile-set {
+  position: absolute;
+  left: 4px;
+  top: 4px;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--panel);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+}
+.pile-column {
+  position: fixed;
+  top: 222px;
+  left: 8px;
+  width: 184px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 8px;
+  z-index: 44;
+}
+.pile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.pile-card {
+  position: relative;
+  width: 80px;
+  height: 112px;
+  padding: 0;
+  border: 0;
+  border-radius: 7px;
+  background: rgba(0, 0, 0, 0.25);
+  box-shadow:
+    2px 3px 0 #0008,
+    4px 6px 0 #0005;
+}
+.pile-card:disabled {
+  opacity: 1;
+  cursor: default;
+}
+.pile-card:global(.empty) {
+  box-shadow: none;
+  outline: 1px dashed var(--rule);
+}
+.pile-card > img,
+.pile-card > :global(.text-face) {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 7px;
+  display: block;
+}
+.pile-card > :global(.text-face) {
+  font-size: 7px;
+  padding: 3px;
+  border-top-width: 8px;
+}
+.pile-name {
+  font-size: 12px;
+  color: var(--muted);
+}
+.pile-divider {
+  grid-column: 1 / -1;
+  border-top: 1px solid var(--rule-dim);
+}
+@media (max-height: 1000px) {
+  .pile-column {
+    width: 228px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px 6px;
+  }
+  .pile-card {
+    width: 64px;
+    height: 90px;
+  }
+  .pile-name {
+    font-size: 11px;
+  }
+}
+@media (max-height: 860px) {
+  .pile-column {
+    display: flex;
+    width: auto;
+  }
+  .pile-divider {
+    border-top: 0;
+    border-left: 1px solid var(--rule-dim);
+  }
+}
+
+/* labels and the token row get a dark backing over the map */
+.pile-name {
+  background: var(--panel);
+  color: var(--ink);
+  padding: 0 7px;
+  border-radius: 8px;
+}
+.pile-card:global(.empty) {
+  background: rgba(11, 16, 18, 0.35);
+}
+:global(.drawer) .pile-column {
+  position: static;
+}
+:global(.drawer) .pile-column {
+  width: auto;
+}
+
+/* a deck that a tap answers (a waiting draw, the Draw action), and the phone drawer's handle while one waits */
+.pile-card:global(.legal) {
+  box-shadow: var(--ring-playable);
+  cursor: pointer;
+}

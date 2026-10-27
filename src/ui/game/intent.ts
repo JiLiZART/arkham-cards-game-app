@@ -1,4 +1,4 @@
-import { content } from "../../content/index";
+import { content } from "../../content";
 import { def, enemyStat, invsAt } from "../../engine/core";
 import type { GameState, InstId } from "../../engine/types";
 

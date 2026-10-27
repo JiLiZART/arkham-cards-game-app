@@ -1,5 +1,5 @@
 import { stackTokens } from "../../hud/tokenStack";
-import { Icon } from "../Icon/index";
+import { Icon } from "../Icon";
 import type { IconName } from "../../assets/icons";
 import styles from "./TokenPile.module.css";
 

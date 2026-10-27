@@ -4,7 +4,7 @@ import type { GameState, InstId, InvId } from "../../engine/types";
 import { domPlace, lastRects, originRect, takeArrival } from "../game/arrivals";
 import { useOptionsByCard } from "../game/cardClick";
 import { db, gameStore, useGame } from "../state/context";
-import { Icon } from "../components/Icon/index";
+import { Icon } from "../components/Icon";
 import { backUrl } from "../assets/images";
 import {
   barModel,
@@ -16,7 +16,7 @@ import {
   shownInv,
   type Avatar as AvatarModel,
 } from "../state/players";
-import { Portrait } from "../components/Portrait/index";
+import { Portrait } from "../components/Portrait";
 import { viewerOf } from "../state/store";
 import { isTouch } from "../game/touch";
 import { useDimmed, useView } from "../state/view";

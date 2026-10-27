@@ -4,11 +4,11 @@ import type { GameState, InstId } from "../../engine/types";
 import { db, useGame } from "../state/context";
 import { blockedRow, cardDetails, placeDetails, type DetailRow } from "../game/details";
 import type { Rect } from "../game/hover";
-import { Glyph, Icon } from "../components/Icon/index";
+import { Glyph, Icon } from "../components/Icon";
 import { isIcon } from "../assets/icons";
-import { Portrait } from "../components/Portrait/index";
+import { Portrait } from "../components/Portrait";
 import { mapProjector } from "../scene/Table";
-import { TokenPile } from "../components/TokenPile/index";
+import { TokenPile } from "../components/TokenPile";
 import { useView } from "../state/view";
 import { formatText } from "./Hud";
 

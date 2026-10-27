@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { cardText, t } from "../../content/i18n";
 import type { ChoiceOption, GameState } from "../../engine/types";
 import { db, useGame } from "../state/context";
-import { Icon, UiIcon, type UiIconName } from "../components/Icon/index";
+import { Icon, UiIcon, type UiIconName } from "../components/Icon";
 import type { IconName } from "../assets/icons";
 import { backUrl } from "../assets/images";
 import { instructionParts } from "../game/instruction";
@@ -45,7 +45,8 @@ export function railItem(o: ChoiceOption): RailItem {
       : { key: "rail.draw", img: backUrl("player"), primary: true };
   if (o.id === "done") {
     const redraw = /^Redraw (\d+)/.exec(o.label);
-    if (redraw) return { key: "rail.redraw", vars: { n: redraw[1] }, symbol: "redraw", primary: true };
+    if (redraw)
+      return { key: "rail.redraw", vars: { n: redraw[1] }, symbol: "redraw", primary: true };
     return {
       key: /^Keep hand/.test(o.label) ? "rail.keep" : "rail.done",
       symbol: "check",

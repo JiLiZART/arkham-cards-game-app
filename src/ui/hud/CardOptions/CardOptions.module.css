@@ -1,0 +1,33 @@
+.card-options {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: 6px;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 4px;
+  z-index: 2;
+  pointer-events: none;
+}
+.card-options button {
+  pointer-events: auto;
+  font-size: 14px;
+  padding: 4px 8px;
+  box-shadow: 0 2px 10px #000c;
+  animation: card-option-in 0.25s ease-out;
+}
+:global(.dv-front) .card-options {
+  left: 12%;
+  right: 12%;
+  bottom: 14px;
+}
+:global(.dv-front) .card-options button {
+  font-size: 18px;
+  padding: 8px 14px;
+}
+@keyframes card-option-in {
+  from {
+    opacity: 0;
+    translate: 0 6px;
+  }
+}

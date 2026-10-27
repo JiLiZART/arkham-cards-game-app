@@ -1,10 +1,10 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { cardText, encounterSetName, t } from "../../content/i18n";
 import type { ChoiceOption, GameState, InstId } from "../../engine/types";
-import { CardFace } from "../components/CardFace/index";
+import { CardFace } from "../components/CardFace";
 import { cardDetails } from "../game/details";
 import { db, useGame } from "../state/context";
-import { Glyph, Icon } from "../components/Icon/index";
+import { Glyph, Icon } from "../components/Icon";
 import type { IconName } from "../assets/icons";
 import { useChoicesOffered } from "../state/usePlayers";
 import { optionLabel } from "../game/optionText";
@@ -12,7 +12,7 @@ import { useView } from "../state/view";
 import { abilitySymbol } from "./ActionRail";
 import { formatText } from "./Hud";
 import { InvModal } from "./Investigators";
-import { ChaosBagModal } from "./Panels";
+import { ChaosBagModal } from "./ChaosBagModal";
 import { moment } from "./SoundLayer";
 import { DeckViewer } from "./DeckViewer";
 

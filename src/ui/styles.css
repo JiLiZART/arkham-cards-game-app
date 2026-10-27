@@ -561,26 +561,6 @@ footer {
 .glance .slot-chip {
   padding: 1px 3px;
 }
-/* a strip card's slots: a small plate at its bottom left, over the card's edge */
-.strip-slots {
-  position: absolute;
-  left: 2px;
-  bottom: 2px;
-  display: flex;
-  gap: 2px;
-  pointer-events: none;
-  z-index: 1;
-}
-.strip-slots .slot-chip {
-  display: inline-flex;
-  padding: 2px;
-  border-radius: 8px;
-  background: rgba(8, 11, 12, 0.86);
-  border: 1px solid var(--rule);
-}
-.strip-slots .slot-chip .svg-icon {
-  color: var(--accent);
-}
 .fan-card.legal {
   box-shadow: var(--ring-playable);
 }
@@ -615,12 +595,10 @@ footer {
 /* outside a choice's spotlight: dimmed, still readable on hover */
 .mini-card.dimmed,
 .fan-card.dimmed,
-.pile-card.dimmed,
 .portrait-btn.dimmed {
   filter: brightness(0.45);
 }
 .mini-card,
-.pile-card,
 .portrait-btn {
   transition: filter 0.15s;
 }
@@ -1029,19 +1007,6 @@ footer {
 .token-stack.flash b {
   animation: flash 0.6s ease-out;
 }
-.pile-set {
-  position: absolute;
-  left: 4px;
-  top: 4px;
-  display: grid;
-  place-items: center;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  background: var(--panel);
-  color: var(--ink);
-  border: 1px solid var(--rule);
-}
 .ribbon-scen .svg-icon {
   margin-right: 4px;
   color: var(--accent);
@@ -1109,36 +1074,6 @@ footer {
   object-fit: cover;
   display: block;
 }
-
-/* fixed HUD panels over the map */
-.scenario-panel {
-  position: fixed;
-  top: 78px;
-  left: 8px;
-  display: flex;
-  gap: 8px;
-  z-index: 44;
-}
-.scenario-card {
-  position: relative;
-}
-.scenario-badge {
-  position: absolute;
-  left: 6px;
-  bottom: -14px;
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  background: var(--panel);
-  border: 1px solid var(--rule);
-  border-radius: 12px;
-  padding: 1px 8px 1px 4px;
-  font-size: 18px;
-}
-.scenario-badge small {
-  color: var(--muted);
-  font-size: 13px;
-}
 .mini-card {
   position: relative;
   padding: 0;
@@ -1176,55 +1111,6 @@ footer {
   top: -8px;
   transform: none;
 }
-.pile-column {
-  position: fixed;
-  top: 222px;
-  left: 8px;
-  width: 184px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px 8px;
-  z-index: 44;
-}
-.pile {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2px;
-}
-.pile-card {
-  position: relative;
-  width: 80px;
-  height: 112px;
-  padding: 0;
-  border: 0;
-  border-radius: 7px;
-  background: rgba(0, 0, 0, 0.25);
-  box-shadow:
-    2px 3px 0 #0008,
-    4px 6px 0 #0005;
-}
-.pile-card:disabled {
-  opacity: 1;
-  cursor: default;
-}
-.pile-card.empty {
-  box-shadow: none;
-  outline: 1px dashed var(--rule);
-}
-.pile-card > img,
-.pile-card > .text-face {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 7px;
-  display: block;
-}
-.pile-card > .text-face {
-  font-size: 7px;
-  padding: 3px;
-  border-top-width: 8px;
-}
 .pile-count {
   position: absolute;
   right: -6px;
@@ -1236,14 +1122,6 @@ footer {
   border: 1px solid var(--accent);
   font: bold 14px sans-serif;
   color: var(--ink);
-}
-.pile-name {
-  font-size: 12px;
-  color: var(--muted);
-}
-.pile-divider {
-  grid-column: 1 / -1;
-  border-top: 1px solid var(--rule-dim);
 }
 .chaos-bag {
   flex: none;
@@ -1259,21 +1137,6 @@ footer {
   background: transparent;
   transform: scale(1.05);
 }
-.bag-modal[open] {
-  display: flex;
-  gap: 24px;
-  align-items: flex-start;
-}
-.bag-tokens {
-  width: 380px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.bag-tokens h2 {
-  margin: 0;
-  color: var(--accent);
-}
 .bag-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1284,13 +1147,6 @@ footer {
   align-items: center;
   gap: 8px;
   font-size: 22px;
-}
-.bag-reference img,
-.bag-reference .text-face {
-  height: 70vh;
-  max-height: 640px;
-  border-radius: 14px;
-  display: block;
 }
 .card-modal.both[open] {
   flex-direction: column;
@@ -1314,120 +1170,9 @@ footer {
   --col-w: 143px;
   --feed-w: 300px;
 }
-.play-strip {
-  --sw: 92px;
-  position: fixed;
-  top: 76px;
-  right: calc(16px + var(--feed-w));
-  bottom: 170px;
-  width: var(--col-w);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  padding: 4px 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  scrollbar-width: thin;
-  overscroll-behavior: contain;
-  z-index: 45;
-  pointer-events: none;
-}
-.play-strip > * {
-  pointer-events: auto;
-}
-/* during a skill test: out of the way of the discs and the subject unless one of its cards has an option (stripDuringTest) */
-.play-strip {
-  transition:
-    translate 0.2s ease-out,
-    opacity 0.2s ease-out,
-    right 0.2s ease-out;
-}
-/* the compact strip of a skill test slides to the window's edge, under the test screen, so the placed cards keep their room */
-.game:not(.phone).testing .play-strip.compact {
-  right: 8px;
-}
-/* the viewer's assets: a row at the bottom left, over the stat dock and under the piles (PlayStrip sets its bottom and width from them).
-   The cards keep full size and overlap (--gap goes negative) when they don't fit: no second row, no scrolling */
-.play-strip.assets {
-  --gap: 8px;
-  top: auto;
-  right: auto;
-  left: 8px;
-  bottom: 300px;
-  width: 320px;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: flex-end;
-  gap: 0;
-  padding: 0;
-  overflow: visible;
-}
-/* the viewer's threat area and engaged enemies: a row at the top centre, under the top bar, scrolling sideways when full */
-.play-strip.threats {
-  top: 76px;
-  bottom: auto;
-  left: 50%;
-  right: auto;
-  transform: translateX(-50%);
-  width: auto;
-  max-width: calc(100vw - 2 * (16px + var(--feed-w)));
-  flex-direction: row;
-  align-items: flex-start;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: 12px 6px 4px;
-}
-.play-strip.threats.aside {
-  translate: 0 -130%;
-}
-.game:not(.phone).testing .play-strip.threats.compact {
-  right: auto;
-}
-.play-strip.assets .strip-slot + .strip-slot {
-  margin-left: var(--gap);
-}
-/* the hovered or focused (a tap focuses it) card comes to the front of the overlap */
-.play-strip.assets .strip-slot:hover,
-.play-strip.assets .strip-slot:focus-within {
-  z-index: 1;
-}
-/* the right side of an overlapped card is covered: its badges sit at the top left, over the cost */
-.play-strip.assets .mini-card .tokens {
-  left: -6px;
-  right: auto;
-}
-.play-strip.assets.aside {
-  translate: -130% 0;
-}
-.play-strip.aside,
-.play-strip.aside > * {
-  pointer-events: none;
-}
-.play-strip.aside {
-  translate: 130% 0;
-  opacity: 0;
-}
 .game.phone .play-strip.column.aside {
   translate: 130% 0;
   pointer-events: none;
-}
-@media (prefers-reduced-motion: reduce) {
-  .play-strip {
-    transition: none;
-  }
-}
-.strip-slot {
-  position: relative;
-  flex: none;
-  width: var(--sw);
-  height: calc(var(--sw) * 1.4);
-  display: grid;
-  place-items: center;
-}
-.strip-slot.exhausted {
-  width: calc(var(--sw) * 1.4);
-  height: var(--sw);
 }
 /* a strip card's option buttons: over the centre of its enlarged copy (HoverCard sets left and top), taking the pointer the copy does not */
 .strip-actions {
@@ -1469,28 +1214,10 @@ footer {
       0 0 28px var(--playable);
   }
 }
-.strip-slot .mini-card.legal {
-  animation: strip-pulse 1.6s ease-in-out infinite alternate;
-}
-@media (prefers-reduced-motion: reduce) {
-  .strip-slot .mini-card.legal {
-    animation: none;
-  }
-}
 .mini-card.target {
   box-shadow:
     0 0 0 3px var(--accent),
     0 0 16px #85b7b1cc;
-}
-.strip-slot.exhausted .mini-card {
-  transform: rotate(90deg);
-}
-.strip-divider {
-  flex: none;
-  height: 2px;
-  width: 70%;
-  background: #73ada566;
-  margin: 3px 0;
 }
 .flip {
   position: relative;
@@ -1620,36 +1347,11 @@ footer {
 }
 /* big numbers use lining figures (Alegreya's old-style 0 reads as an "o") */
 .stat-dock b,
-.scenario-badge b,
 .pile-count {
   font-variant-numeric: lining-nums;
 }
 /* shorter windows: three smaller piles per row so the column clears the stat dock */
-@media (max-height: 1000px) {
-  .pile-column {
-    width: 228px;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px 6px;
-  }
-  .pile-card {
-    width: 64px;
-    height: 90px;
-  }
-  .pile-name {
-    font-size: 11px;
-  }
-}
 /* shorter still: the piles in one row (the divider stands upright), so the asset row has room over the stat dock */
-@media (max-height: 860px) {
-  .pile-column {
-    display: flex;
-    width: auto;
-  }
-  .pile-divider {
-    border-top: 0;
-    border-left: 1px solid var(--rule-dim);
-  }
-}
 
 /* the draw stage inside the skill-test screen: the bag, a face-down disc per token, the flip */
 /* the stage reaches past the subject card on every side so tokens can rest around it; it takes no pointer but its discs and buttons */
@@ -1791,23 +1493,12 @@ footer {
     opacity: 0;
   }
 }
-
-/* labels and the token row get a dark backing over the map */
-.pile-name {
-  background: var(--panel);
-  color: var(--ink);
-  padding: 0 7px;
-  border-radius: 8px;
-}
 .token-row {
   align-self: flex-start;
   background: var(--panel);
   border: 1px solid var(--rule);
   border-radius: 14px;
   padding: 4px 12px 4px 8px;
-}
-.pile-card.empty {
-  background: rgba(11, 16, 18, 0.35);
 }
 /* Alegreya's figures sit high in their line box: nudge the totals down to centre them on the tokens */
 .token-stack b {
@@ -2489,9 +2180,6 @@ footer {
   cursor: pointer;
   font-size: 15px;
 }
-.scenario-card.intro-hidden {
-  visibility: hidden;
-}
 @media (max-width: 900px) and (min-height: 501px) {
   .intro-text {
     max-height: 36dvh;
@@ -2583,10 +2271,6 @@ footer {
 .dv-side h3 {
   margin: 0;
   color: var(--accent);
-}
-.scenario-ref {
-  padding: 0;
-  overflow: hidden;
 }
 
 /* showcase: cards just drawn (or offered from a deck) stand large in the middle until sent on */
@@ -2712,36 +2396,8 @@ footer {
 /* the automatic chaos draw: a small bag comes out of the bag button, then the token pops out of it */
 
 /* options on the act / agenda laid over the card (panel and viewer) */
-.scenario-card,
 .dv-front {
   position: relative;
-}
-.card-options {
-  position: absolute;
-  left: 6px;
-  right: 6px;
-  bottom: 6px;
-  display: flex;
-  flex-direction: column-reverse;
-  gap: 4px;
-  z-index: 2;
-  pointer-events: none;
-}
-.card-options button {
-  pointer-events: auto;
-  font-size: 14px;
-  padding: 4px 8px;
-  box-shadow: 0 2px 10px #000c;
-  animation: card-option-in 0.25s ease-out;
-}
-.dv-front .card-options {
-  left: 12%;
-  right: 12%;
-  bottom: 14px;
-}
-.dv-front .card-options button {
-  font-size: 18px;
-  padding: 8px 14px;
 }
 @keyframes card-option-in {
   from {
@@ -3025,7 +2681,6 @@ footer {
   color: var(--muted);
 }
 /* under the test screen the strip, the bar, the fan and the docks stay above it; the strip makes room for the calculation */
-.game.testing .play-strip,
 .game.testing .center-col,
 .game.testing .hand-fan,
 .game.testing .stat-dock,
@@ -3487,16 +3142,6 @@ footer {
   border-radius: 12px 0 0 12px;
   border-right: 0;
 }
-.drawer .scenario-panel,
-.drawer .pile-column {
-  position: static;
-}
-.drawer .scenario-panel {
-  flex-wrap: wrap;
-}
-.drawer .pile-column {
-  width: auto;
-}
 .drawer .feed.journal {
   flex: 1;
   min-height: 0;
@@ -3524,23 +3169,10 @@ footer {
 .game.phone .play-strip.column.open {
   width: calc(var(--sw) + 24px);
 }
-.game.phone .play-strip.column .strip-divider {
-  width: 70%;
-  height: 2px;
-  align-self: center;
-  margin: 2px 0;
-}
 .game.phone .strip-action {
   min-height: 44px;
   padding: 2px 8px;
   font-size: 13px;
-}
-.strip-handle {
-  flex: none;
-  width: 44px;
-  height: 44px;
-  padding: 0;
-  font-size: 15px;
 }
 /* spans between the left tools and the strip column (a box at left: 50% could only grow to half the screen) */
 .game.phone .center-col {
@@ -3910,12 +3542,6 @@ footer {
 .inv-choice-avatar:hover,
 .inv-choice-avatar:focus-visible {
   background: #171f22;
-}
-
-/* a deck that a tap answers (a waiting draw, the Draw action), and the phone drawer's handle while one waits */
-.pile-card.legal {
-  box-shadow: var(--ring-playable);
-  cursor: pointer;
 }
 .drawer-handle.glow {
   border-color: var(--playable);

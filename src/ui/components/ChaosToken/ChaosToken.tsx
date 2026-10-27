@@ -1,5 +1,5 @@
 import { hasSymbol } from "../../assets/icons";
-import { Symbols } from "../Icon/index";
+import { Symbols } from "../Icon";
 import styles from "./ChaosToken.module.css";
 
 /** the sprite's token layers (from the tokens font), bottom to top, with the colours ArkhamCards paints them in */

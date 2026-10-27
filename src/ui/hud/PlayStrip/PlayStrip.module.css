@@ -1,0 +1,175 @@
+/* a strip card's slots: a small plate at its bottom left, over the card's edge */
+.strip-slots {
+  position: absolute;
+  left: 2px;
+  bottom: 2px;
+  display: flex;
+  gap: 2px;
+  pointer-events: none;
+  z-index: 1;
+}
+.strip-slots :global(.slot-chip) {
+  display: inline-flex;
+  padding: 2px;
+  border-radius: 8px;
+  background: rgba(8, 11, 12, 0.86);
+  border: 1px solid var(--rule);
+}
+.strip-slots :global(.slot-chip) :global(.svg-icon) {
+  color: var(--accent);
+}
+:global(.play-strip) {
+  --sw: 92px;
+  position: fixed;
+  top: 76px;
+  right: calc(16px + var(--feed-w));
+  bottom: 170px;
+  width: var(--col-w);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  overscroll-behavior: contain;
+  z-index: 45;
+  pointer-events: none;
+}
+:global(.play-strip) > * {
+  pointer-events: auto;
+}
+/* during a skill test: out of the way of the discs and the subject unless one of its cards has an option (stripDuringTest) */
+:global(.play-strip) {
+  transition:
+    translate 0.2s ease-out,
+    opacity 0.2s ease-out,
+    right 0.2s ease-out;
+}
+/* the compact strip of a skill test slides to the window's edge, under the test screen, so the placed cards keep their room */
+:global(.game):not(:global(.phone)):global(.testing) :global(.play-strip):global(.compact) {
+  right: 8px;
+}
+/* the viewer's assets: a row at the bottom left, over the stat dock and under the piles (PlayStrip sets its bottom and width from them).
+   The cards keep full size and overlap (--gap goes negative) when they don't fit: no second row, no scrolling */
+:global(.play-strip).assets {
+  --gap: 8px;
+  top: auto;
+  right: auto;
+  left: 8px;
+  bottom: 300px;
+  width: 320px;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: flex-end;
+  gap: 0;
+  padding: 0;
+  overflow: visible;
+}
+/* the viewer's threat area and engaged enemies: a row at the top centre, under the top bar, scrolling sideways when full */
+:global(.play-strip).threats {
+  top: 76px;
+  bottom: auto;
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+  width: auto;
+  max-width: calc(100vw - 2 * (16px + var(--feed-w)));
+  flex-direction: row;
+  align-items: flex-start;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 12px 6px 4px;
+}
+:global(.play-strip).threats:global(.aside) {
+  translate: 0 -130%;
+}
+:global(.game):not(:global(.phone)):global(.testing) :global(.play-strip).threats:global(.compact) {
+  right: auto;
+}
+:global(.play-strip).assets .strip-slot + .strip-slot {
+  margin-left: var(--gap);
+}
+/* the hovered or focused (a tap focuses it) card comes to the front of the overlap */
+:global(.play-strip).assets .strip-slot:hover,
+:global(.play-strip).assets .strip-slot:focus-within {
+  z-index: 1;
+}
+/* the right side of an overlapped card is covered: its badges sit at the top left, over the cost */
+:global(.play-strip).assets :global(.mini-card) :global(.tokens) {
+  left: -6px;
+  right: auto;
+}
+:global(.play-strip).assets:global(.aside) {
+  translate: -130% 0;
+}
+:global(.play-strip):global(.aside),
+:global(.play-strip):global(.aside) > * {
+  pointer-events: none;
+}
+:global(.play-strip):global(.aside) {
+  translate: 130% 0;
+  opacity: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  :global(.play-strip) {
+    transition: none;
+  }
+}
+.strip-slot {
+  position: relative;
+  flex: none;
+  width: var(--sw);
+  height: calc(var(--sw) * 1.4);
+  display: grid;
+  place-items: center;
+}
+.strip-slot.exhausted {
+  width: calc(var(--sw) * 1.4);
+  height: var(--sw);
+}
+.strip-slot :global(.mini-card):global(.legal) {
+  animation: strip-pulse 1.6s ease-in-out infinite alternate;
+}
+@media (prefers-reduced-motion: reduce) {
+  .strip-slot :global(.mini-card):global(.legal) {
+    animation: none;
+  }
+}
+.strip-slot.exhausted :global(.mini-card) {
+  transform: rotate(90deg);
+}
+.strip-divider {
+  flex: none;
+  height: 2px;
+  width: 70%;
+  background: #73ada566;
+  margin: 3px 0;
+}
+:global(.game):global(.testing) :global(.play-strip) {
+  z-index: 52;
+}
+:global(.game):global(.phone) :global(.play-strip):global(.column) .strip-divider {
+  width: 70%;
+  height: 2px;
+  align-self: center;
+  margin: 2px 0;
+}
+.strip-handle {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  font-size: 15px;
+}
+@keyframes strip-pulse {
+  from {
+    box-shadow: var(--ring-playable-sm);
+  }
+  to {
+    box-shadow:
+      0 0 0 4px #9ff0a8,
+      0 0 28px var(--playable);
+  }
+}

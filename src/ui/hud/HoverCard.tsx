@@ -1,19 +1,19 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { cardText } from "../../content/i18n";
 import type { GameState, InstId } from "../../engine/types";
-import { CardFace } from "../components/CardFace/index";
+import { CardFace } from "../components/CardFace";
 import { db, useGame } from "../state/context";
 import { centreOn, placeHover } from "../game/hover";
-import { Glyph, Icon } from "../components/Icon/index";
+import { Glyph, Icon } from "../components/Icon";
 import { optionLabel } from "../game/optionText";
 import { mapProjector } from "../scene/Table";
-import { IntentBadge, TokenBadges } from "../components/TokenBadges/index";
+import { IntentBadge, TokenBadges } from "../components/TokenBadges";
 import { useCardClick } from "../game/cardClick";
 import { useView } from "../state/view";
 import { cardDetails } from "../game/details";
 import { abilitySymbol, stripAction } from "./ActionRail";
 import { DetailsColumn, LocationDetails } from "./HandDetails";
-import { stripButtonsFor } from "./Panels";
+import { stripButtonsFor } from "./PlayStrip";
 
 /**
  * Hovering any card (map, HUD panels, play strip) shows a copy at twice its on-screen size on the spot,
@@ -28,7 +28,7 @@ export function HoverCard() {
     if (!hoverRect) return;
     const move = (e: PointerEvent) => {
       const r = useView.getState().hoverRect;
-      if (!r || (e.target as Element | null)?.closest?.(".strip-actions")) return;
+      if (!r || (e.target as Element | null)?.closest?.('[data-ui="strip-actions"]')) return;
       if (e.clientX < r.x0 || e.clientX > r.x1 || e.clientY < r.y0 || e.clientY > r.y1)
         useView.getState().setHover(null);
     };
@@ -107,6 +107,7 @@ export function HoverCard() {
       {opts.length > 0 && (
         <div
           className="strip-actions"
+          data-ui="strip-actions"
           ref={buttons}
           onMouseEnter={() => (onButtons.current = true)}
           onMouseLeave={(e) => {

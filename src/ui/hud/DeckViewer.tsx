@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { cardText, t } from "../../content/i18n";
 import type { GameState } from "../../engine/types";
-import { CardFace } from "../components/CardFace/index";
+import { CardFace } from "../components/CardFace";
 import { groupTokens } from "../game/chaos";
 import { db, useGame } from "../state/context";
 import { useView } from "../state/view";
 import { ChaosTokenIcon } from "./ChaosTokenIcon";
 import { formatText } from "./Hud";
 import { Modal } from "./Modals";
-import { CardOptions } from "./Panels";
+import { CardOptions } from "./CardOptions";
 
 export type DeckKind = "act" | "agenda" | "reference";
 

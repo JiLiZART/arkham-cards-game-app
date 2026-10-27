@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ChaosToken } from "../ChaosToken/index";
+import { ChaosToken } from "../ChaosToken";
 import {
   hasSymbol,
   ICON_LABELS,

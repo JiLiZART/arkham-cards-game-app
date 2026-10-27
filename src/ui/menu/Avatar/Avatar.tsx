@@ -1,5 +1,5 @@
 import { db, useGame } from "../../state/context";
-import { Portrait } from "../../components/Portrait/index";
+import { Portrait } from "../../components/Portrait";
 import { investigatorInfo } from "../wizard";
 import { cx } from "../../components/cx";
 import styles from "./Avatar.module.css";

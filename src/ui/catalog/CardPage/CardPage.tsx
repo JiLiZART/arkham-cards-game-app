@@ -1,9 +1,9 @@
 import { cardText, encounterSetName, t } from "../../../content/i18n";
 import { db, useGame } from "../../state/context";
-import { CardFace } from "../../components/CardFace/index";
+import { CardFace } from "../../components/CardFace";
 import { cardDetails } from "../../game/details";
 import { Row } from "../../hud/HandDetails";
-import { Icon } from "../../components/Icon/index";
+import { Icon } from "../../components/Icon";
 import { cycleName } from "../../menu/wizard";
 import { cycleOf } from "../filter";
 import { implemented } from "../../../content/implemented";

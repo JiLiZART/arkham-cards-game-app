@@ -10,10 +10,10 @@ import {
 import { currentScenarioId } from "../../../engine/campaign";
 import { db, gameStore, useGame } from "../../state/context";
 import { guideHtml } from "../../game/guideText";
-import { Portrait } from "../../components/Portrait/index";
+import { Portrait } from "../../components/Portrait";
 import { logView, readItems } from "../campaignView";
-import { DeckBuilder } from "../DeckBuilder/index";
-import { FlowPrompt } from "../FlowPrompt/index";
+import { DeckBuilder } from "../DeckBuilder";
+import { FlowPrompt } from "../FlowPrompt";
 import { cx } from "../../components/cx";
 import styles from "./CampaignScreen.module.css";
 
