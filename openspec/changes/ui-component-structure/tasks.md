@@ -56,8 +56,8 @@
 
 ## 9. Global CSS and docs
 
-- [ ] 9.1 `styles.css` holds only tokens (light and dark), resets, fonts, root layout and state classes, buttons, `g-*` guide markup, the flip card and other primitives used by several components; move or delete anything else
-- [ ] 9.2 Update `AGENTS.md` (key directories, where styles go, data-attribute lookups), `.agents/context/design.md` and `.impeccable/` references to classes and `styles.css`
-- [ ] 9.3 Full "after" screenshot set under `.playwright-mcp/ui-structure/after/`, compared with the baseline; no differences left
-- [ ] 9.4 `pnpm lint:fix`, `pnpm format:fix`, `pnpm typecheck`, `pnpm test`, `pnpm check:content`, `pnpm build` pass
-- [ ] 9.5 `openspec validate ui-component-structure --type change --strict`
+- [x] 9.1 `styles.css` holds only tokens (light and dark), resets, fonts, root layout and state classes, buttons, `g-*` guide markup, the flip card and other primitives used by several components; move or delete anything else
+- [x] 9.2 Update `AGENTS.md` (key directories, where styles go, data-attribute lookups), `.agents/context/design.md` and `.impeccable/` references to classes and `styles.css`
+- [x] 9.3 Full "after" screenshot set under `.playwright-mcp/ui-structure/after/`, compared with the baseline; no differences left
+- [x] 9.4 `pnpm lint:fix`, `pnpm format:fix`, `pnpm typecheck`, `pnpm test`, `pnpm check:content`, `pnpm build` pass
+- [x] 9.5 `openspec validate ui-component-structure --type change --strict`

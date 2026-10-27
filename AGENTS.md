@@ -12,7 +12,7 @@ Key directories:
   - `rules/` — flow, skill tests, cards, enemies, investigators, scenario, chaos tokens.
   - `effects.ts` — the effect handlers card data refers to; `api.ts` — what card and scenario scripts may import.
 - `src/content/` — zod schemas (`schema.ts`), the loader, i18n (`i18n.ts`), coverage and content checks.
-- `src/ui/` — the React HUD (`hud/`), menus (`menu/`), the react-three-fiber table (`scene/`), the card catalog (`catalog/`) and dev-only tools (`dev/`).
+- `src/ui/` — the screen areas: the React HUD (`hud/`), menus (`menu/`), the react-three-fiber table (`scene/`), the card catalog (`catalog/`) and dev-only tools (`dev/`); each component in a folder of its own. Beside them `components/` (shared presentational components such as `CardFace` and `Icon`), `state/` (the stores), `game/` (table logic: option placement, feed, arrivals, showcase) and `assets/` (images, icons, sounds). `styles.css` is the global base layer (ADR-0016).
 - `content/` — game data. Adding cards and scenarios needs no engine change.
   - `packs/<pack>/cards.generated.json` is imported from ArkhamDB: never edit it by hand. `cards.json` holds hand-written behavior, merged over it by card code. `scripts/<code>.ts` covers what the data format can't express.
   - `campaigns/`, `investigators/`, `decks/`, and the `*-generated/` folders the import scripts write.
@@ -34,10 +34,12 @@ Key directories:
 - When creating a requested branch, use a descriptive prefix such as `feature/`, `bugfix/`, or `chore/`; never use `codex/`.
 - Respect TypeScript strict mode — never use `any`; use `unknown` only for untyped input (parsed JSON, `value` fields) and narrow it before use
 - Put every user-facing string in `content/i18n/{en,ru}/ui.json`, in both locales, and read it with `t(db, locale, key, vars)` from `src/content/i18n.ts`. Card text comes from `cardText()`. Engine prompts carry a `key` that the UI translates.
-- Keep game state in the engine and screen state in the zustand stores (`useGame` in `src/ui/context.ts`, `useView` in `src/ui/view.ts`); what is being looked at is view state, what is being decided is game state (ADR-0004)
+- Keep game state in the engine and screen state in the zustand stores (`useGame` in `src/ui/state/context.ts`, `useView` in `src/ui/state/view.ts`); what is being looked at is view state, what is being decided is game state (ADR-0004)
 - When verifying UI in the browser, start your own dev server on another port (`pnpm dev --port 5174`) and stop it when done; port 5173 is the user's. Drive it with Playwright and save screenshots under `.playwright-mcp/`. In dev, `window.__arkham` is the game store and `window.__arkhamView` the view store.
 - Test engine and content changes with vitest. `src/engine/testkit.ts` starts a scenario (`start`, `skipMulligans`), picks options by label (`pick`), and edits the table (`mutate`, `giveCard`, `putEnemy`).
 - Check rules questions against the Arkham Grimoire, the engine's rules reference (ADR-0015)
+- Give a new component its own folder under its screen area: `Name.tsx`, `Name.module.css`, its tests and an `index.ts`, imported as the folder. Its styles go in its CSS Module (`styles.x`, joined with `cx()` from `src/ui/components/cx.ts`); `styles.css` takes only tokens, resets, root state classes and primitives several components share. Reach another component's element only through a public hook class listed at the top of `styles.css`, as `:global(.name)` (ADR-0016)
+- Find rendered elements by `data-testid`, never by class name (CSS Modules hash class names; `src/ui/noClassLookups.test.ts` enforces it)
 
 ### DON'T
 
@@ -90,7 +92,7 @@ Pass script arguments without `--` (`pnpm fetch:cards dist`); pnpm forwards a `-
 - **Engine.** `createGame(db, setup)` and `dispatch(db, state, action)` in `src/engine/engine.ts` return a new state plus events. The engine runs a stack of steps until it needs a decision, then sets `state.pending`: a prompt with options. The only action is choosing an option, so a game is its seed plus the list of choices (the Debug panel's report replays it).
 - **Content.** Cards are data first: abilities, costs, triggers and effects in `cards.json`, interpreted by `rules/cards.ts` and `effects.ts`. A card the data can't express gets a script in `content/packs/<pack>/scripts/<code>.ts`, importing only from `src/engine/api.ts`. Scenarios and campaign guides are data plus scripts in the same way (ADR-0007, ADR-0011).
 - **Coverage.** A card "works" when every printed line is accounted for (ADR-0013). `pnpm coverage` computes it into `content/coverage.json`, and `check:content` fails when that file is stale (ADR-0012).
-- **UI.** `src/ui/context.ts` holds the game store. Each pending option is placed on screen by `optionHome()` (`src/ui/optionHome.ts`): hand, board, strip, rail, bar, skill-test panel or showcase. Animations follow the event clock, and choices wait while events play (ADR-0002). One layout mode, desktop or phone, is read by the components (ADR-0005).
+- **UI.** `src/ui/state/context.ts` holds the game store. Each pending option is placed on screen by `optionHome()` (`src/ui/game/optionHome.ts`): hand, board, strip, rail, bar, skill-test panel or showcase. Animations follow the event clock, and choices wait while events play (ADR-0002). One layout mode, desktop or phone, is read by the components (ADR-0005).
 
 ## Agent workflows
 

@@ -10,7 +10,7 @@ import { pathToFileURL } from "node:url";
 import { loadContentFromDisk } from "../src/content/node";
 import type { ContentError } from "../src/content/loader";
 import type { ContentDb } from "../src/engine/types";
-import { CHAOS_TOKENS, layersFor } from "../src/ui/components/ChaosToken";
+import { CHAOS_TOKENS, layersFor } from "../src/ui/assets/chaosTokens";
 import { ICON_SOURCES, MARKUP_ICONS, scenarioIcon, type IconSource } from "../src/ui/assets/icons";
 
 const SVG_DIR = "inspired/svg-icons";

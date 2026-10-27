@@ -134,6 +134,7 @@ Vitest gives module classes scoped names, as the build does. A test that checks 
 - [Large import churn makes the history hard to follow] → Use `git mv` for moves and keep moves and edits in separate commits, so blame follows the files.
 - [The impeccable design sidecar (`.impeccable/`, `.agents/context/design.md`) names classes and `styles.css`] → Update those references in the final step.
 - [Phone layout breaks without anyone noticing] → Every step's screenshot set includes the phone layout.
+- [Scripts run under tsx, which can't load CSS: a script that imports a component (import-icons read the chaos tokens from the ChaosToken component) fails once that component has a module] → Data that scripts read lives in plain modules (`assets/chaosTokens.ts`); `pnpm check:content` runs the icon checks, so it catches a regression.
 - [Two modules' rules tie on specificity and their import order now decides, where file order used to: found in the deck builder, whose `.deck-editor input[type="search"]` started beating DeckEditArea's later rule] → Besides the screenshots, every step compares the computed style of every element on every captured screen with the baseline; a rule that only ever lost its tie is deleted.
 
 ## Migration Plan

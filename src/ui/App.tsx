@@ -17,13 +17,14 @@ import { useView } from "./state/view";
 import { useLayout } from "./state/layoutMode";
 import { installTouch } from "./game/touch";
 import { LangSwitch } from "./components/LangSwitch";
+import styles from "./App.module.css";
 
 /** a phone held upright: the table needs it sideways (nothing about the game changes while this shows) */
 function RotateCard() {
   const locale = useGame((s) => s.locale);
   return (
-    <div className="rotate-card" role="alert">
-      <div className="rotate-icon" aria-hidden>
+    <div className={styles.rotateCard} role="alert">
+      <div className={styles.rotateIcon} aria-hidden>
         📱↻
       </div>
       <h2>{t(db, locale, "phone.rotate")}</h2>
@@ -98,12 +99,12 @@ export function App() {
       {screen === "title" ? (
         <>
           {page}
-          <LangSwitch className="lang-corner" />
+          <LangSwitch className={styles.langCorner} />
         </>
       ) : (
         <div className="desk">
           {page}
-          <LangSwitch className="lang-corner" />
+          <LangSwitch className={styles.langCorner} />
         </div>
       )}
     </>

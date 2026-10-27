@@ -1,6 +1,7 @@
 /*
  * Global CSS: design tokens, resets, fonts, the game root's layout and state classes (.game.phone, .game.testing)
- * and primitives shared by many components. Everything else lives in a component's CSS Module (ADR-0016).
+ * and primitives several components share (buttons, screens, modals, the showcase card, the campaign-guide markup).
+ * Everything one component owns lives in its CSS Module (ADR-0016).
  *
  * Public hook classes: rendered as plain strings by their owner and reached from other modules only as
  * :global(.name). No other class is styled from outside its owner.
@@ -1203,36 +1204,6 @@ footer {
 .game .mini {
   touch-action: none;
 }
-.rotate-card {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 24px calc(24px + env(safe-area-inset-right, 0px)) 24px
-    calc(24px + env(safe-area-inset-left, 0px));
-  background: var(--bg);
-  color: var(--ink);
-  text-align: center;
-  font-family: var(--f-body);
-}
-.rotate-card h2 {
-  margin: 0;
-  color: var(--accent);
-  font: 30px var(--f-display);
-}
-.rotate-card p {
-  margin: 0;
-  color: var(--muted);
-  max-width: 320px;
-}
-.rotate-icon {
-  font-size: 56px;
-  animation: rotate-hint 2.4s ease-in-out infinite;
-}
 @keyframes rotate-hint {
   0%,
   30% {
@@ -1242,20 +1213,6 @@ footer {
   100% {
     transform: rotate(-90deg);
   }
-}
-@media (prefers-reduced-motion: reduce) {
-  .rotate-icon {
-    animation: none;
-  }
-}
-
-/* ---------- menus on the desk at night: the night ground, paper notes for what is written down, the same controls ---------- */
-.desk {
-  min-height: 100dvh;
-  background:
-    radial-gradient(ellipse at 50% 0%, #16303499 0%, transparent 60%), var(--grain), var(--bg);
-  background-attachment: fixed;
-  color: var(--ink);
 }
 
 /* ---- the card catalog ---- */
@@ -1270,23 +1227,6 @@ footer {
 .catalog .wz-foot {
   margin-top: 10px;
   flex: none;
-}
-
-.desk .screen section {
-  background: var(--paper-leaf);
-  border-color: var(--paper-rule);
-  color: var(--ink);
-}
-.desk .link-btn {
-  background: none;
-  border: 0;
-  color: var(--muted);
-}
-.desk .screen.howto p {
-  color: var(--ink);
-}
-.desk .wz-error {
-  color: var(--oxblood);
 }
 @keyframes handle-glow {
   50% {
@@ -1320,25 +1260,6 @@ footer {
   margin: 0;
   font: 16px/1.4 var(--f-body);
 }
-
-/* headings on the desk: Prata in bone on the night; on a paper note they take its ink */
-.desk h1,
-.desk h2,
-.desk h3 {
-  color: var(--ink);
-  font-family: var(--f-display);
-  font-weight: normal;
-  letter-spacing: 0.01em;
-}
-.desk .wz-head h1,
-.desk .screen > h1 {
-  font-size: clamp(28px, 4vw, 44px);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-.desk h3 {
-  font-size: 22px;
-}
 .flow-title {
   margin: 0;
   font: 24px var(--f-display);
@@ -1366,31 +1287,6 @@ footer {
   .screen.log .wz-foot .primary {
     flex: 1 1 100%;
   }
-}
-/* a narrow screen: the sidebar opens over the grid */
-/* a dialog opened from a menu screen is the game's dark dialog: it keeps the night's colours even inside a paper note */
-.desk .modal {
-  --ink: #f1efe4;
-  --muted: #9fb0b0;
-  --accent: #6fa9a0;
-  --bad: #e06060;
-  color: var(--ink);
-  color-scheme: dark;
-}
-.desk .modal h1,
-.desk .modal h2,
-.desk .modal h3 {
-  color: var(--ink);
-  text-shadow: none;
-}
-.desk .modal button {
-  color: var(--ink);
-  background: var(--slate);
-  border-color: var(--rule);
-}
-.desk .modal button:hover:not(:disabled) {
-  background: var(--slate-lit);
-  border-color: var(--accent);
 }
 
 /* Arkham at night, in CSS only (the material tokens live on :root so the menus share them): lacquered night-slate tabs
@@ -1420,156 +1316,6 @@ footer {
     font-size: 11px;
   }
 }
-
-/* the desk shell: insets every screen keeps, cool scrollbars, an ironwork rule under the heading and over the footer */
-.desk {
-  --frame-y: clamp(20px, max(6vh, 3.2vw), 64px);
-  --frame-x: clamp(16px, 3.4vw, 56px);
-  --iron-rule:
-    var(--curl) left center / 40px 16px no-repeat, var(--curl-r) right center / 40px 16px no-repeat,
-    linear-gradient(var(--iron-line), var(--iron-line)) center / calc(100% - 80px) 1px no-repeat;
-  scrollbar-color: var(--rule) transparent;
-}
-.desk .screen.wizard,
-.desk .screen.catalog {
-  padding: var(--frame-y) var(--frame-x);
-}
-.desk .wz-head,
-.desk .screen:not(.wizard):not(.catalog) > h1 {
-  position: relative;
-  padding-bottom: 18px;
-  margin-bottom: 10px;
-}
-.desk .wz-head {
-  justify-content: flex-start;
-  gap: 16px;
-  margin-bottom: -8px;
-}
-.desk .wz-head::after,
-.desk .screen:not(.wizard):not(.catalog) > h1::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 16px;
-  background: var(--iron-rule);
-  pointer-events: none;
-}
-/* the language tabs sit in the top-right corner: headings stop short of them */
-.desk .wz-head,
-.desk .screen > h1:first-child {
-  padding-right: min(112px, 30vw);
-}
-.desk .wz-chip.on:not(.wz-class),
-.desk .wz-chip.on:not(.wz-class):hover:not(:disabled) {
-  background: var(--plate);
-  color: var(--ink);
-  border-color: var(--accent);
-  box-shadow: inset 0 1px 2px #0006;
-}
-/* the footer: an ironwork rule, the teal enamel plate for the way on, a hairline tab for the way back */
-.desk .wz-foot {
-  position: relative;
-  padding-top: 22px;
-}
-.desk .wz-foot::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 16px;
-  background: var(--iron-rule);
-  pointer-events: none;
-}
-.desk button.primary {
-  background: var(--plate-fill);
-  color: var(--ink);
-  border: 1px solid #c9c6b899;
-  box-shadow:
-    inset 0 1px 0 #c9c6b840,
-    inset 0 -1px 0 #0008,
-    0 2px 6px #000a;
-}
-.desk button.primary:hover:not(:disabled) {
-  background: var(--plate-fill-lit);
-  border-color: var(--iron);
-}
-.desk button.primary:disabled {
-  opacity: 1;
-  background: transparent;
-  color: var(--muted);
-  border: 1px dashed var(--edge-lit);
-  box-shadow: none;
-}
-.desk .wz-foot button:not(.primary) {
-  background: var(--tab);
-  border: 1px solid var(--rule);
-  border-top-color: var(--edge-lit);
-  box-shadow:
-    var(--bevel),
-    0 2px 4px #000a;
-}
-.desk .wz-foot button:not(.primary):hover:not(:disabled) {
-  background: var(--tab-lit);
-  border-color: var(--accent);
-}
-.desk .wz-foot button:active:not(:disabled) {
-  transform: translateY(1px);
-  box-shadow: inset 0 2px 4px #000a;
-}
-.desk .wz-foot button {
-  transition:
-    background 0.2s ease,
-    transform 0.1s ease;
-}
-
-/* How to play: one continuous page at reading measure */
-.desk .screen.howto {
-  max-width: 760px;
-}
-.desk .screen.howto section {
-  margin: 0;
-  padding: 18px clamp(16px, 4vw, 32px);
-  border-width: 0 1px;
-  border-radius: 0;
-  background: var(--paper-leaf);
-}
-.desk .screen.howto section:first-of-type {
-  border-top-width: 1px;
-  border-radius: 12px 12px 0 0;
-}
-.desk .screen.howto section:last-of-type {
-  border-bottom-width: 1px;
-  border-radius: 0 0 12px 12px;
-}
-.desk .screen.howto section + section {
-  border-top: 1px dotted var(--paper-rule);
-}
-.desk .screen.howto h2 {
-  margin: 0 0 4px;
-  font-size: 24px;
-}
 .screen.howto > button.primary {
   margin-top: 20px;
-}
-.lang-corner {
-  position: fixed;
-  top: calc(8px + env(safe-area-inset-top, 0px));
-  right: calc(16px + env(safe-area-inset-right, 0px));
-  z-index: 60;
-}
-/* on the desk the tabs belong to the page: they scroll away with the heading that is padded to clear them */
-.desk {
-  position: relative;
-}
-.desk .lang-corner {
-  position: absolute;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .desk .wz-foot button {
-    transition: none;
-  }
 }
