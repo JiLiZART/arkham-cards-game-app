@@ -32,3 +32,19 @@ export function showcaseLayout(
   }
   return best;
 }
+
+/** room the phone's top bar and instruction bar take above and below the resolving card (PHONE_INSETS plus a gap) */
+const PHONE_RESOLVE_TOP = 40;
+const PHONE_RESOLVE_BOTTOM = 124;
+
+/** where the card being resolved (a treachery, an event being played) stands: under the prompt banner on the desktop, between the top bar and the instruction bar on the phone */
+export function resolveBox(
+  vw: number,
+  vh: number,
+  phone: boolean,
+): { x: number; y: number; w: number; h: number } {
+  if (!phone) return { x: vw / 2 - 130, y: 120, w: 260, h: 364 };
+  const h = vh - PHONE_RESOLVE_TOP - PHONE_RESOLVE_BOTTOM;
+  const w = Math.round(h / CARD_RATIO);
+  return { x: Math.round(vw / 2 - w / 2), y: PHONE_RESOLVE_TOP, w, h };
+}

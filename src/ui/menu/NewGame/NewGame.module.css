@@ -742,6 +742,13 @@
   min-width: 36px;
   font-size: 20px;
 }
+/* the rows sit close on the phone: a smaller clip that stays off the Filter chip above the tile */
+:global(.menus):global(.phone) .wz-ctile:global(.selected)::after,
+:global(.menus):global(.phone) :global(.wz-tile):global(.selected)::after {
+  top: -5px;
+  width: 11px;
+  height: 30px;
+}
 /* the paper clip is the tall tile's mark; a chip shows its choice by its edge */
 :global(.menus):global(.phone) :global(.dk-inv):global(.on)::after {
   display: none;

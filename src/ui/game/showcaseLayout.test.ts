@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { CARD_RATIO, showcaseLayout } from "./showcaseLayout";
+import { CARD_RATIO, resolveBox, showcaseLayout } from "./showcaseLayout";
 
 const at = (n: number, w = 1920, h = 1080) => showcaseLayout(n, w, h);
 
@@ -58,5 +58,19 @@ describe("showcaseLayout on the phone", () => {
         393 - 24,
       );
     }
+  });
+});
+
+describe("resolveBox", () => {
+  it("on the desktop the resolving card stands 260 px wide under the prompt banner", () => {
+    expect(resolveBox(1600, 900, false)).toEqual({ x: 670, y: 120, w: 260, h: 364 });
+  });
+
+  it("on the phone it fits between the top bar and the instruction bar", () => {
+    const b = resolveBox(852, 393, true);
+    expect(b.y).toBeGreaterThanOrEqual(36);
+    expect(b.y + b.h).toBeLessThanOrEqual(393 - 120);
+    expect(b.h / b.w).toBeCloseTo(CARD_RATIO, 1);
+    expect(b.x + b.w / 2).toBeCloseTo(852 / 2, 0);
   });
 });

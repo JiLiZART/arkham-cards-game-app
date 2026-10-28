@@ -297,10 +297,24 @@
   position: absolute;
   inset: -5px 0;
 }
+/* in the bar the bag is one of its tabs: the same lacquer, so the dark bag reads against it */
 :global(.game):global(.phone) :global(.topbar) :global(.chaos-bag) {
+  position: relative;
   width: 44px;
   height: 36px;
   filter: none;
+  background: var(--tab);
+  border: 1px solid var(--rule);
+  border-top-color: var(--edge-lit);
+  border-radius: 10px;
+  box-shadow:
+    var(--bevel),
+    0 2px 4px #000a;
+}
+:global(.game):global(.phone) :global(.topbar) :global(.chaos-bag):hover:not(:disabled) {
+  background: var(--tab-lit);
+  border-color: var(--accent);
+  transform: none;
 }
 :global(.game):global(.phone) :global(.topbar) :global(.chaos-bag) :global(.pile-count) {
   font-size: 11px;

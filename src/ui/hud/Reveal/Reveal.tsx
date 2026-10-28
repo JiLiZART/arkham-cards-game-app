@@ -10,8 +10,8 @@ import { HELD, viewerOf } from "../../state/store";
 import { useView } from "../../state/view";
 import { riseAndArc, useFlyIn } from "../flights";
 import { DetailsColumn } from "../HandDetails";
-import { showcaseLayout } from "../../game/showcaseLayout";
-import { useLayoutMode } from "../../state/layoutMode";
+import { resolveBox, showcaseLayout } from "../../game/showcaseLayout";
+import { layoutModeNow, useLayoutMode } from "../../state/layoutMode";
 import { moment } from "../SoundLayer";
 import { cx } from "../../components/cx";
 import styles from "./Reveal.module.css";
@@ -23,8 +23,9 @@ interface Box {
   h: number;
 }
 
-/** the card being resolved sits here, under the prompt banner */
-export const RESOLVE_BOX = (): Box => ({ x: innerWidth / 2 - 130, y: 120, w: 260, h: 364 });
+/** the card being resolved sits here: under the prompt banner, or between the bars on the phone */
+export const RESOLVE_BOX = (): Box =>
+  resolveBox(innerWidth, innerHeight, layoutModeNow() === "phone");
 
 /**
  * A drawn encounter card or weakness, in the showcase: it rises face down out of its pile, arcs to the middle turning

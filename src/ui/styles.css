@@ -1264,6 +1264,8 @@ footer {
 /* the showcase on the phone: the cards take the height to be read, the help line stands in a column beside them
    (showcaseLayout reserves its width) */
 .game.phone .showcase {
+  /* the help line sits where the feed's captions and the map show through: the scrim hides them */
+  background: #040405e6;
   flex-direction: row;
   gap: 12px;
   padding: 0 calc(12px + var(--safe-r)) 0 calc(12px + var(--safe-l));

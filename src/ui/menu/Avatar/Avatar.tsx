@@ -1,3 +1,4 @@
+import { t } from "../../../content/i18n";
 import { db, useGame } from "../../state/context";
 import { Portrait } from "../../components/Portrait";
 import { investigatorInfo } from "../wizard";
@@ -23,7 +24,7 @@ export function Avatar({
       <Portrait code={code} size={size} />
       {badge && <span className={cx(styles.badge, styles.wzBadge)}>{badge}</span>}
       <b>{info.name}</b>
-      <small>{info.faction}</small>
+      <small>{t(db, locale, `card.faction.${info.faction}`)}</small>
       {children}
     </span>
   );

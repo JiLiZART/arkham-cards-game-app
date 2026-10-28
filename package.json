@@ -25,7 +25,8 @@
     "import:art": "tsx scripts/import-art.ts",
     "sound-credits": "tsx scripts/sound-credits.ts",
     "skills:link": "node scripts/link-claude-skills.mjs",
-    "net:dev": "wrangler dev -c worker/wrangler.toml --port 8787"
+    "net:dev": "node -e \"require('fs').mkdirSync('dist',{recursive:true})\" && wrangler dev --port 8787",
+    "deploy": "wrangler deploy --var APP_VERSION:$npm_package_version"
   },
   "dependencies": {
     "@react-three/drei": "^9.122.0",

@@ -1,0 +1,30 @@
+# The site and its online rooms as one Worker (ADR-0019): the built game in dist/ as static assets, the room service
+# under /net/, and the card scans under /cards/ fetched from the arkham.build CDN. Deployed by Cloudflare's Git
+# integration (build `pnpm build`, deploy `pnpm run deploy`). Secrets, set with `wrangler secret put`:
+#   TURN_KEY_ID, TURN_KEY_TOKEN   a Cloudflare Realtime TURN key (dashboard, Realtime, TURN)
+name = "arkham-horror-app"
+main = "worker/src/index.ts"
+compatibility_date = "2026-10-01"
+# served on <name>.<account>.workers.dev until arkham.artkost.dev moves over from GitHub Pages
+workers_dev = true
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+# everything else is a file of the build, served without waking the Worker
+run_worker_first = ["/net/*", "/cards/*"]
+
+[vars]
+APP_VERSION = "dev"
+
+[[durable_objects.bindings]]
+name = "ROOMS"
+class_name = "Room"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Room"]
+
+[observability]
+enabled = true

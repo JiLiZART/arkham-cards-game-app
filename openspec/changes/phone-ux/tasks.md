@@ -45,6 +45,8 @@
 - [x] 7a.7 Play strip split on the phone as on the desktop: threats in a small top-centre row, assets in the right column; a tap opens `AssetsModal` (new modal kind `{ assets }` in the view store) with every asset large, options over the centre, slots, tokens and an Exhausted mark.
 - [x] 7a.8 Phone: the asset column moves to the left edge and the undo and camera dock to the right (camera insets follow, tested); the threat row opens the same full-screen view (`{ threats }` modal kind) with Fight and Evade over each card; strip thumbnails get no hover copy on the phone so a tap reaches the card.
 - [x] 7a.9 The encounter card showcase (`Reveal`) uses the phone layout too: the card at the full height, its help line beside it.
+- [x] 7a.10 Phone sweep fixes: the resolving card (`resolveBox`, tested) fits between the top bar and the instruction bar instead of running off the bottom; the showcase scrim hides the feed captions behind its help line; How to play, the campaign log and the catalog get a one-line heading and the catalog the wizard's slim padding.
+- [x] 7a.11 Polish: the top bar's chaos bag takes the bar's tab lacquer so the dark bag reads; a chosen wizard tile's paperclip is smaller on the phone and stays off the Filter chip; the investigator avatar's class line is translated (`card.faction.*`) instead of the raw class code.
 
 ## 8. Review and close
 

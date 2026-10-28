@@ -78,6 +78,21 @@
 :global(.desk) h3 {
   font-size: 22px;
 }
+/* the phone: a one-line heading beside the corner's buttons, so the page keeps the short screen */
+:global(.menus.phone) :global(.desk) :global(.screen) > h1 {
+  margin: 0 0 6px;
+  padding-right: 184px;
+  font-size: 22px;
+  line-height: 40px;
+}
+:global(.menus.phone) :global(.desk) :global(.screen):not(:global(.wizard)):not(:global(.catalog)) {
+  padding-top: 6px;
+}
+/* the catalog's grid takes the height, as the wizard's step does */
+:global(.menus.phone) :global(.desk) :global(.screen):global(.catalog) {
+  padding: 6px calc(12px + env(safe-area-inset-right, 0px))
+    calc(4px + env(safe-area-inset-bottom, 0px)) calc(12px + env(safe-area-inset-left, 0px));
+}
 /* a dialog opened from a menu screen is the game's dark dialog: it keeps the night's colours even inside a paper note */
 :global(.desk) :global(.modal) {
   --ink: #f1efe4;

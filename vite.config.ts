@@ -5,8 +5,8 @@ import type { Plugin } from "vite";
 
 // card images come from the arkham.build CDN, which sends no CORS headers; WebGL textures need
 // same-origin (or CORS) images, so the dev/preview server proxies /cards/* to the CDN.
-// On GitHub Pages the scans are downloaded into the build instead (scripts/fetch-card-images.ts);
-// elsewhere, configure the same rewrite on the host or set VITE_CARD_IMAGE_BASE.
+// On Cloudflare the site's Worker does the same (worker/src/index.ts); on GitHub Pages the scans are downloaded into
+// the build instead (scripts/fetch-card-images.ts).
 const cardProxy = {
   // only /cards/… (a bare "/cards" prefix would also catch the Russian images in /cards-ru/)
   "^/cards/": {
@@ -20,13 +20,14 @@ const cardProxy = {
 const netProxy = { "/net": { target: "http://127.0.0.1:8787", ws: true } };
 
 // the build's version, shown in bug reports (the Debug panel's Copy report) and checked when joining an online room:
-// a deploy adds its commit, so a room never mixes two builds
+// a deploy adds its commit (GitHub Actions or Cloudflare's Workers Builds), so a room never mixes two builds
+const commit = process.env.GITHUB_SHA ?? process.env.WORKERS_CI_COMMIT_SHA;
 const appVersion =
   (
     JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf8")) as {
       version: string;
     }
-  ).version + (process.env.GITHUB_SHA ? `+${process.env.GITHUB_SHA.slice(0, 7)}` : "");
+  ).version + (commit ? `+${commit.slice(0, 7)}` : "");
 
 // dev-only sound picker routes (ADR-0010): loaded through vite's own pipeline, so the build never sees them
 let dev: typeof import("./scripts/sounds-dev-server") | undefined;
