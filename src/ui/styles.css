@@ -112,6 +112,24 @@ select {
   inset: 0;
   background: var(--abyss) url(/table/table-bg.jpg) center / 100% 100% no-repeat;
 }
+/* a shade of night under the top bar, like the hand fan's: over the map canvas and under every HUD layer (the piles
+   are at 44, the strips at 45), so the act, agenda and threat cards read over a location behind them */
+.game:not(.phone)::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 260px;
+  z-index: 1;
+  background: linear-gradient(
+    to bottom,
+    rgb(7 12 14 / 0.85) 60px,
+    rgb(7 12 14 / 0.5) 55%,
+    transparent
+  );
+  pointer-events: none;
+}
 /* the round tracker: scenario and round, the four phases, and in the investigation phase the turns with their action pips */
 .ribbon {
   display: flex;

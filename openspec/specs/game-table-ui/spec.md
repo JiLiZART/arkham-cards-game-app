@@ -648,6 +648,26 @@ While a fight or evade test is running against a strip enemy and the strip is sh
 - **WHEN** the fight test against the Ghoul Minion is in its commit window
 - **THEN** the Ghoul Minion in the column is outlined as the target, with no option buttons on it
 
+### Requirement: Threat row shade
+
+On the desktop, a shade of night SHALL lie under the top bar across the whole table: a dark gradient, strongest at the bar's edge and fading down into the table over about the height of a strip card, like the shade under the hand fan. It darkens the map behind the viewer's threat row (their engaged enemies and threat-area cards, at the top centre) and behind the act and agenda, so those cards and their badges read over a location behind them. It MUST NOT take the pointer, and it is there whether or not the threat row has cards. The phone layout keeps the bar's thin shadow only.
+
+#### Scenario: Enemy over a location
+
+- **GIVEN** Roland is engaged with a Ghoul Minion, and the map behind the threat row shows a location card
+- **WHEN** the table is on screen
+- **THEN** the Ghoul Minion's card and its badges read on a dark shade under the top bar that fades into the table below, and the location is still visible under the shade
+
+#### Scenario: Act and agenda
+
+- **WHEN** a location sits under the act and agenda at the top left
+- **THEN** the act and agenda read on the same shade
+
+#### Scenario: Phone
+
+- **WHEN** the phone layout is on screen
+- **THEN** only the bar's thin shadow is under it
+
 ### Requirement: Chaos token draw
 
 When a skill test reveals a chaos token, the draw SHALL play as a stage of the skill-test screen over the subject card in the centre, with the subject, the placed cards and the calculation strip staying where they were:
@@ -756,6 +776,13 @@ While a hand card is hovered or focused (raised and enlarged), a details column 
 - health and sanity (allies), and uses (for example 4 ammo);
 - the rules text with icons.
 
+While a commit window is open on the viewer's table and the hovered card can be committed to that test, the column SHALL lead with a Commit row right under the name: the card's icons that count for this test (the tested skill's icons and its wild icons, each drawn as an icon) and the total they add as "+N". Under the icons, one line in plain words SHALL say what happens to the card:
+
+- for an asset or an event: it is not played, only its icons count, and its text does not apply; its rules-text row is dimmed;
+- for a skill card: its text applies while it is committed; its rules text stays bright.
+
+Cards that cannot be committed (no icon that counts, a card the test forbids) show their usual column. Outside a commit window the Commit row is absent.
+
 It disappears when the card is no longer hovered or focused, and MUST NOT take the pointer, so moving across the fan still works. Everything is translated.
 
 #### Scenario: Read a weapon at a glance
@@ -767,6 +794,30 @@ It disappears when the card is no longer hovered or focused, and MUST NOT take t
 
 - **WHEN** the player hovers the rightmost card of a 7-card hand
 - **THEN** the details column appears on the left of the enlarged card, fully on screen
+
+#### Scenario: An asset hovered in the commit window
+
+- **GIVEN** Roland is fighting a Ghoul Minion and his commit window is open
+- **WHEN** he hovers Machete (one combat icon) in his fan
+- **THEN** under "Machete" the column shows a Commit row with the combat icon and "+1", the line "Not played: only its icons count, its text does not apply", and Machete's rules text dimmed
+
+#### Scenario: A skill card hovered in the commit window
+
+- **GIVEN** the same commit window
+- **WHEN** Roland hovers Vicious Blow (one combat icon)
+- **THEN** the Commit row shows the combat icon and "+1" and the line "Its text applies while committed", and its rules text is bright
+
+#### Scenario: Wild icons count
+
+- **GIVEN** Daisy's investigate test is in its commit window
+- **WHEN** she hovers Unexpected Courage (two wild icons)
+- **THEN** the Commit row shows two wild icons and "+2"
+
+#### Scenario: A card with nothing to give
+
+- **GIVEN** Roland's fight test is in its commit window
+- **WHEN** he hovers a card with only agility icons, which has not risen
+- **THEN** its column has no Commit row and its text is not dimmed
 
 ### Requirement: Clues on locations
 
@@ -1261,14 +1312,14 @@ When an investigator's turn begins, or a decision of their own begins for an inv
 
 When a choice is pending for the investigator whose hand is on screen, a bar under the top bar SHALL show that investigator's portrait and name, an instruction in plain words saying what to tap and what it does, and the choice's primary options as buttons inside the bar. Primary options are the ones that stand for no card and no action to take: Done, Pass, Keep hand, Redraw, Take nothing, Resign and End turn. Draw, Gain resource and Investigate stay on the action rail. Options that belong to a card stay on that card.
 
-The instruction is written for a first-time player and names the target: "Tap a card to commit it to the test, then Done", "Tap the room the Ghoul moves to", "Tap a card to discard (2 more)". When no instruction exists for a prompt, the bar shows the prompt's own sentence. The phase pause keeps its title and Continue and shows no bar. While events play, the bar shows no choice.
+The instruction is written for a first-time player and names the target: "Tap a card to add its combat icons to the test, then Done", "Tap the room the Ghoul moves to", "Tap a card to discard (2 more)". The commit instruction names the tested skill and says that the card's icons are what it adds, for the tester's own window and for a helper's. When no instruction exists for a prompt, the bar shows the prompt's own sentence. The phase pause keeps its title and Continue and shows no bar. While events play, the bar shows no choice.
 
 When the decision belongs to another investigator who can act (a commit to another's test, a reaction) and the table on screen is not theirs, the bar SHALL NOT show that investigator's instruction without its buttons. It SHALL instead show who can act ("Daisy Walker can commit cards") with one button that switches the table to them, the same as tapping their pulsing avatar, until the table switches by itself. The bar MUST never show an instruction that has no button or tap that answers it.
 
 #### Scenario: Commit
 
 - **WHEN** Roland starts an investigate test
-- **THEN** the bar reads "Tap a card to commit it to the test, then Done" with a Done button in it, and the rail shows no Done
+- **THEN** the bar reads "Tap a card to add its intellect icons to the test, then Done" with a Done button in it, and the rail shows no Done
 
 #### Scenario: End turn
 
@@ -1698,16 +1749,46 @@ When every option of the pending choice is an investigator, the choice SHALL be 
 
 ### Requirement: Tap decks to draw setting
 
-The settings SHALL offer "Tap decks to draw", on by default and saved with the other settings; a new scenario starts with tapped decks when it is on. On the phone layout, where the piles are in the left drawer, the drawer's handle SHALL glow while a deck waits for a tap and the instruction bar SHALL offer a Draw button that chooses the same option, so the drawer needn't be opened. The bar's instruction, its Draw button ("Draw" or "Draw an encounter card") and the piles' names are in the player's language.
+The settings SHALL offer "Tap decks to draw", on by default and saved with the other settings, with a hint under it saying what off does (cards are drawn by themselves, nothing to tap). Every scenario the UI starts SHALL ask the engine for tapped decks, so a draw in play is always a recorded "draw" choice; the setting decides who answers it:
+
+- while it is on, the deck waits for the drawing investigator's tap as today: the deck glows, the instruction bar says which deck to tap, and on the phone the drawer's handle glows and the bar offers a Draw button;
+- while it is off, the UI SHALL answer the choice itself as soon as it appears, in the same update that produced it: nothing glows, no instruction or Draw button is shown, the table does not switch to the drawing investigator for it, and the cards leave the deck and fly as they do after a tap.
+
+The setting SHALL apply at once in the running game: turning it off while a deck is waiting draws at once; turning it on makes the next draw wait. The automatic answer is recorded like a tap, so saves, bug reports and replays give the same game, and Undo's limits are unchanged (a draw reveals hidden information). A save or imported log whose setup never asked for tapped decks keeps drawing without a choice, whatever the setting.
+
+On the phone layout, where the piles are in the left drawer, the drawer's handle SHALL glow while a deck waits for a tap and the instruction bar SHALL offer a Draw button that chooses the same option, so the drawer needn't be opened. The bar's instruction, its Draw button ("Draw" or "Draw an encounter card") and the piles' names are in the player's language.
 
 #### Scenario: Setting off
 
-- **WHEN** "Tap decks to draw" is off and a scenario starts
-- **THEN** draws happen without waiting, as before
+- **WHEN** "Tap decks to draw" is off and Roland's upkeep draw comes
+- **THEN** the card flies from his deck to his hand without any deck glowing, no "Tap your deck" instruction and no Draw button, and the game's recorded choices hold the draw
+
+#### Scenario: Turned off while a deck waits
+
+- **GIVEN** the setting is on and the encounter deck is waiting for Roland's tap in the mythos phase
+- **WHEN** he turns the setting off in the menu and returns to the table
+- **THEN** the encounter card is drawn at once and shows in the showcase, with no tap
+
+#### Scenario: Turned on mid-game
+
+- **GIVEN** the setting was off when the scenario started
+- **WHEN** the player turns it on and Roland's next upkeep draw comes
+- **THEN** his deck glows and waits for the tap
+
+#### Scenario: Save with a waiting draw
+
+- **GIVEN** a save made with the setting on while Roland's deck waited for a tap
+- **WHEN** it is loaded with the setting off
+- **THEN** the draw happens on load and the table shows the card in his hand
+
+#### Scenario: Replay
+
+- **WHEN** a game played with the setting off is replayed from its setup and recorded choices
+- **THEN** it reaches the same state, draws included
 
 #### Scenario: Phone
 
-- **WHEN** a draw waits on a phone
+- **WHEN** a draw waits on a phone with the setting on
 - **THEN** the left drawer's handle glows and the instruction bar's Draw button draws the card
 
 ### Requirement: Ability labels in the player's language

@@ -80,16 +80,7 @@
   align-items: flex-start;
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 12px 30px 20px;
-  /* a shade of night under the row, like the hand fan's: the map behind darkens so the cards and their badges read,
-     and it fades out toward the ends and the bottom. It is the row's own background, so it follows .aside and is gone
-     with an empty row (nothing is rendered then). */
-  background: radial-gradient(
-    ellipse 100% 100% at 50% 0,
-    rgb(7 12 14 / 0.88),
-    rgb(7 12 14 / 0.6) 55%,
-    transparent
-  );
+  padding: 12px 6px 4px;
 }
 :global(.play-strip).threats:global(.aside) {
   translate: 0 -130%;
