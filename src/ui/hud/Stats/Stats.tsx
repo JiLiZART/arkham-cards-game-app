@@ -18,6 +18,7 @@ import { statBarZoom } from "../fan";
 import { useViewport } from "../../state/layoutMode";
 import { OptionButtons, useCardOptions } from "../Modals";
 import { cx } from "../../components/cx";
+import { playSpend } from "./tokenFx";
 import styles from "./Stats.module.css";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
@@ -69,9 +70,24 @@ export function TokenStack({
   size?: number;
 }) {
   const flash = useFlash(value);
+  const el = useRef<HTMLDivElement>(null);
+  // spending logs no event of its own: tokens fly away as the number drops (a gain lands on the event clock, ResourceFx)
+  const prev = useRef(value);
+  useEffect(() => {
+    if (kind === "resource" && value < prev.current && el.current)
+      playSpend(el.current, prev.current - value);
+    prev.current = value;
+  }, [kind, value]);
   const tip = `${tr(kind === "resource" ? "stat.resources" : "stat.clues")} ${value}`;
   return (
-    <div className={cx(styles.tokenStack, flash ? "flash" : "")} title={tip} aria-label={tip}>
+    <div
+      ref={el}
+      className={cx(styles.tokenStack, flash ? "flash" : "")}
+      data-testid="token-stack"
+      data-kind={kind}
+      title={tip}
+      aria-label={tip}
+    >
       <TokenPile kind={kind} value={value} size={size} title={tip} />
       <b>{value}</b>
     </div>
@@ -120,7 +136,7 @@ export function StatBody({
   const tx = cardText(db, inv, locale);
   return (
     <>
-      <div className={styles.tokenRow}>
+      <div className={styles.tokenRow} data-inv={inv}>
         <TokenStack kind="resource" value={n.resources} />
         <TokenStack kind="clue" value={n.clues} />
         <HandCount value={n.hand} limit={n.handLimit} />

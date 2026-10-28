@@ -157,6 +157,13 @@
   padding: 9px 16px 9px 12px;
   outline-offset: -5px;
 }
+/* a loose resource token over the pile: falls onto it on a gain, rises away on a cost */
+.token-fly {
+  position: fixed;
+  z-index: 62;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 6px #000c);
+}
 @keyframes flash {
   0% {
     color: #fff;

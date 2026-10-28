@@ -9,6 +9,7 @@ import {
   feedEntry,
   FLOAT_KINDS,
   floatLife,
+  gainOf,
   HIDDEN,
   mergeLive,
   promptParts,
@@ -354,5 +355,25 @@ describe("encounter set icons", () => {
     expect(
       feedEntry(last(r.state.log, "resource"), r.state, db, "en")!.parts.some((p) => p.t === "set"),
     ).toBe(false);
+  });
+});
+
+describe("gainOf", () => {
+  const ev = (data: Record<string, unknown>, inv: string | null = "01001"): GameEvent => ({
+    type: "resource",
+    text: "",
+    inv,
+    data,
+  });
+
+  it("is the investigator and the number taken", () => {
+    expect(gainOf(ev({ n: 2 }))).toEqual({ inv: "01001", n: 2 });
+  });
+
+  it("is nothing for a loss, a gain of nothing, or no investigator", () => {
+    expect(gainOf(ev({ n: 1, lost: true }))).toBeNull();
+    expect(gainOf(ev({ n: 0 }))).toBeNull();
+    expect(gainOf(ev({ n: 1 }, null))).toBeNull();
+    expect(gainOf({ ...ev({ n: 1 }), type: "draw" })).toBeNull();
   });
 });

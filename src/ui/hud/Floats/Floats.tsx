@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import type { GameEvent, InstId, InvId } from "../../../engine/types";
 import { reducedMotion, whenSettled, type ScreenBox } from "../../game/arrivals";
-import { FLOAT_KINDS, floatLife, type FeedEntry } from "../../game/feed";
+import { FLOAT_KINDS, floatLife, gainOf, type FeedEntry } from "../../game/feed";
 import { mapProjector } from "../../scene/Table";
 import { useView, whenStageFree } from "../../state/view";
 import { Sentence, useFeedEntries } from "../Feed";
 import { moment } from "../SoundLayer";
 import { useGame } from "../../state/context";
+import { playGain } from "../Stats/tokenFx";
 import styles from "./Floats.module.css";
 
 const STAGGER_MS = 900;
@@ -264,6 +265,33 @@ export function HitFx() {
           setTimeout(() => playHit(h.source, h.inv), Math.max(0, at - performance.now()));
         }
         nextFree.current = at + HIT_GAP_MS;
+      }),
+    );
+  });
+  return null;
+}
+
+/** drops tokens on the pile for each resource gain as it is logged (in step with the event animations); one effect's gains together */
+export function ResourceFx() {
+  const { shown, game } = useFeedEntries();
+  const setup = useGame((s) => s.setup);
+  const seen = useRef<{ setup: unknown; n: number }>({ setup, n: shown });
+  // queued in render (kept across StrictMode's double render), played after commit
+  const queue = useRef(new Map<InvId, number>());
+  // a new game starts from its current log; an undo shortens it
+  if (seen.current.setup !== setup || shown < seen.current.n) seen.current = { setup, n: shown };
+  for (let i = seen.current.n; i < shown; i++) {
+    const g = gainOf(game.log[i]);
+    if (g) queue.current.set(g.inv, (queue.current.get(g.inv) ?? 0) + g.n);
+  }
+  seen.current.n = shown;
+  useEffect(() => {
+    if (!queue.current.size) return;
+    const fresh = [...queue.current];
+    queue.current.clear();
+    whenStageFree(() =>
+      whenSettled(() => {
+        for (const [inv, n] of fresh) playGain(inv, n);
       }),
     );
   });

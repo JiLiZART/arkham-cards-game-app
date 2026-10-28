@@ -292,6 +292,13 @@ export interface FeedLine {
   entry: FeedEntry;
 }
 
+/** an investigator took resources (a loss is a hit, animated from its source) */
+export function gainOf(e: GameEvent): { inv: InvId; n: number } | null {
+  if (e.type !== "resource" || !e.inv || e.data?.lost) return null;
+  const n = Number(e.data?.n ?? 1);
+  return n > 0 ? { inv: e.inv, n } : null;
+}
+
 /** routine entries that merge with their neighbours from the same choice (enemy moves merge only with each other) */
 function routineKind(e: GameEvent): "draw" | "resource" | "enemyMove" | null {
   if (e.type === "draw" && e.inv) return "draw";

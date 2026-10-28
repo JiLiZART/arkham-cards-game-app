@@ -19,7 +19,7 @@ import { moment, SoundLayer } from "../SoundLayer";
 import { TipLayer } from "../TipLayer";
 import { HoverCard } from "../HoverCard";
 import { Feed } from "../Feed";
-import { ActionFloats, HitFx, HIT_MS } from "../Floats";
+import { ActionFloats, HitFx, HIT_MS, ResourceFx } from "../Floats";
 import { Modals } from "../Modals";
 import { RevealOverlay } from "../Reveal";
 import { ChaosBagButton } from "../ChaosBagButton";
@@ -774,6 +774,7 @@ export function Hud() {
       <RevealOverlay />
       <ActionFloats />
       <HitFx />
+      <ResourceFx />
       <SkillTestScreen />
       <EventPlayer />
       <PhaseTitle />
