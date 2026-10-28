@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from "vitest";
-import { loadPack } from "../content/index";
+import { loadPack } from "../content";
 import { card, createCard, inv, moveCard } from "./core";
 import type { G } from "./core";
 import type { Result } from "./engine";
@@ -22,7 +22,7 @@ function turn(code: string, setup: Setup = () => {}, invs = [ROLAND]): { r: Resu
       r,
       r.state.pending.options.some((o) => o.id === "pass")
         ? "pass"
-        : /^Done/.test(r.state.pending.options[0].label)
+        : r.state.pending.options[0].label.startsWith("Done")
           ? /^Done/
           : /./,
     );

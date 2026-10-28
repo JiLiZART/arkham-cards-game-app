@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useLayoutEffect, useReducer, useRef, useState } from "react";
+import { Fragment, useEffect, useLayoutEffect, useReducer, useRef } from "react";
 import { useLayoutMode } from "../../state/layoutMode";
 import { tapCard } from "../../game/touch";
 import { t } from "../../../content/i18n";
@@ -64,8 +64,9 @@ export function rowGap(w: number, widths: number[]): number {
 
 /**
  * The viewer's cards in play, then (after a separator) their threat area and engaged enemies, above the hand.
- * On the desktop they are two places: `threats` (the threat area and engaged enemies, a row at the top centre) and
- * `assets` (the cards in play, a row at the bottom left over the stat dock); the phone keeps them in one column.
+ * They are two places: `threats` (the threat area and engaged enemies, a row at the top centre) and `assets` (the cards
+ * in play: on the desktop a row at the bottom left over the stat dock; on the phone a column of thumbnails on the left
+ * whose tap opens every asset large in the AssetsModal, with the options over each card; the phone's threat row opens the same way).
  * A card's pending options pulse its ring and show as buttons in the centre of its enlarged copy (HoverCard); the test's target is outlined.
  */
 export function PlayStrip({ part = "all" }: { part?: "all" | "threats" | "assets" }) {
@@ -77,9 +78,13 @@ export function PlayStrip({ part = "all" }: { part?: "all" | "threats" | "assets
   const setup = useGame((s) => s.setup);
   const queue = useGame((s) => s.queue);
   const visible = !!viewer;
-  // the phone (ADR-0005): a column of thumbnails on the right edge; a tap on its handle widens it to readable cards
+  // the phone (ADR-0005): the assets are a column of thumbnails on the left edge; a tap opens them all large (AssetsModal)
   const phone = useLayoutMode() === "phone";
-  const [open, setOpen] = useState(false);
+  const column = phone && part === "assets";
+  // on the phone a tap on any strip card opens the whole strip large, with the options over each card (AssetsModal)
+  const openModal = () =>
+    viewer &&
+    useView.getState().setModal(part === "threats" ? { threats: viewer } : { assets: viewer });
   // new strip cards fly in from where they came from (before their rects are remembered below)
   useFlyIn(strip, visible, viewer, RESOLVE_BOX, setup);
   const current = useGame((s) => s.current);
@@ -103,6 +108,14 @@ export function PlayStrip({ part = "all" }: { part?: "all" | "threats" | "assets
     shown.map((c) => c.id),
     byCard,
   );
+  // the phone's column clips: a card that becomes an option scrolls into view
+  const firstLegal = phone ? (shown.find((c) => byCard.get(c.id)?.length)?.id ?? null) : null;
+  useEffect(() => {
+    if (!firstLegal) return;
+    strip.current
+      ?.querySelector<HTMLElement>(`[data-card="${firstLegal}"]`)
+      ?.scrollIntoView({ block: "nearest" });
+  }, [firstLegal]);
   // the asset row is sized from the piles and the stat dock: measure again when the window changes
   const [, remeasure] = useReducer((n: number) => n + 1, 0);
   useEffect(() => {
@@ -144,8 +157,8 @@ export function PlayStrip({ part = "all" }: { part?: "all" | "threats" | "assets
       }
     }
     const w = phone
-      ? open
-        ? 104
+      ? part === "threats"
+        ? 56
         : 44
       : part !== "all"
         ? STRIP_W
@@ -171,23 +184,28 @@ export function PlayStrip({ part = "all" }: { part?: "all" | "threats" | "assets
       <div
         key={id}
         className={cx(styles.stripSlot, exhausted ? styles.exhausted : "")}
-        onFocus={(e) => useView.getState().setHover(id, e.target.getBoundingClientRect())}
+        // not on the phone: a tap focuses the card, and the copy would land over it and take the tap (the modal shows it large)
+        onFocus={(e) => !phone && useView.getState().setHover(id, e.target.getBoundingClientRect())}
         onBlur={() => useView.getState().hovered === id && useView.getState().setHover(null)}
       >
         <MiniCard
           id={id}
           w="var(--sw)"
           h="calc(var(--sw) * 1.4)"
+          // the phone opens the whole strip large instead of an enlarged copy over the thumbnail
+          hover={!phone}
           legal={opts.length > 0}
           exhausted={exhausted}
           target={id === target}
-          // one option: the card itself chooses it; several: the buttons on it do
+          // one option: the card itself chooses it; several: the buttons on it do (the phone's asset thumbnails open them all)
           onClick={(e) =>
-            tapCard(
-              id,
-              () => opts.length === 1 && choose(opts[0].id),
-              e.currentTarget.getBoundingClientRect(),
-            )
+            phone
+              ? openModal()
+              : tapCard(
+                  id,
+                  () => opts.length === 1 && choose(opts[0].id),
+                  e.currentTarget.getBoundingClientRect(),
+                )
           }
         />
         {!phone && (
@@ -201,24 +219,18 @@ export function PlayStrip({ part = "all" }: { part?: "all" | "threats" | "assets
   return (
     <div
       data-testid="play-strip"
-      className={cx(
-        "play-strip",
-        part !== "all" && styles[part],
-        phone && "column",
-        phone && open && "open",
-        mode,
-      )}
+      className={cx("play-strip", part !== "all" && styles[part], column && "column", mode)}
       ref={strip}
     >
-      {phone && (
+      {column && (
         <button
           className={styles.stripHandle}
-          onClick={() => setOpen(!open)}
-          aria-expanded={open}
+          data-testid="strip-open"
+          onClick={openModal}
           aria-label={tr("phone.strip")}
           title={tr("phone.strip")}
         >
-          {open ? "›" : "‹"} {shown.length}
+          › {shown.length}
         </button>
       )}
       {order.cards.map((c, k) => (

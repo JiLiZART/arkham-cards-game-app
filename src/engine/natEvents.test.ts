@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from "vitest";
-import { loadPack } from "../content/index";
+import { loadPack } from "../content";
 import { card, inv, type G } from "./core";
 import type { Result } from "./engine";
 import {
@@ -238,7 +238,7 @@ describe("Galvanize", () => {
     expect(Object.values(r.state.cards).find((c) => c.code === "60105")!.exhausted).toBe(false);
     for (let k = 0; k < 3; k++) r = pick(r, /^Gain 1 resource/);
     expect(r.state.invs[N].actionsLeft).toBe(0);
-    expect(options(r).some((o) => /^Fight/.test(o))).toBe(true);
+    expect(options(r).some((o) => o.startsWith("Fight"))).toBe(true);
     expect(options(r).some((o) => /^Gain 1 resource|^Draw/.test(o))).toBe(false);
   });
 });

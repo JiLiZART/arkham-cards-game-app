@@ -151,3 +151,20 @@
     opacity: 0;
   }
 }
+
+/* the phone (ADR-0005): the act or agenda takes almost the whole height to be read, its buttons stand beside it */
+:global(.game):global(.phone) .intro-box:has(.intro-card) {
+  flex-direction: row;
+  gap: 16px;
+  max-width: 100vw;
+  padding: 4px calc(12px + env(safe-area-inset-right, 0px)) 4px
+    calc(12px + env(safe-area-inset-left, 0px));
+}
+:global(.game):global(.phone) .intro-card {
+  width: min(calc(88dvh * 88 / 63), calc(100vw - 240px));
+}
+:global(.game):global(.phone) .intro-box:has(.intro-card) .intro-buttons {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+}

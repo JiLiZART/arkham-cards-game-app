@@ -52,7 +52,7 @@ function untilAttack(r: Result): Result {
       r,
       p.options.some((o) => o.id === "pass")
         ? "pass"
-        : /^Done/.test(p.options[0].label) || p.kind === "commit"
+        : p.options[0].label.startsWith("Done") || p.kind === "commit"
           ? /^Done/
           : /./,
     );
@@ -66,7 +66,7 @@ function finish(r: Result): Result {
       r,
       r.state.pending.options.some((o) => o.id === "pass")
         ? "pass"
-        : /^Done/.test(r.state.pending.options[0].label)
+        : r.state.pending.options[0].label.startsWith("Done")
           ? /^Done/
           : /./,
     );

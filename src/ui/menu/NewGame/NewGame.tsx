@@ -46,12 +46,16 @@ import {
   setDifficulty,
   STEPS,
   campaignComplete,
+  campaignFilterCount,
+  pickerFilterCount,
   toggleInvestigator,
   toSetup,
   type PickerFilter,
   type WizardState,
 } from "../wizard";
 import { cx } from "../../components/cx";
+import { BottomSheet } from "../../components/BottomSheet";
+import { useLayoutMode } from "../../state/layoutMode";
 import styles from "./NewGame.module.css";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
@@ -62,6 +66,45 @@ const KINDS = ["all", "campaign", "return", "side"] as const;
 const RULES = ["all", "complete", "partial"] as const;
 const LENGTHS = ["all", "one", "few", "many"] as const;
 
+/** the phone's one Filter chip: the filter row is folded behind it, with a count of the filters set */
+function FilterToggle({
+  open,
+  count,
+  onToggle,
+}: {
+  open: boolean;
+  count: number;
+  onToggle: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      className={cx("wz-chip", styles.wzFilterToggle, open || count ? "on" : "")}
+      data-testid="wz-filter-toggle"
+      aria-expanded={open}
+      onClick={onToggle}
+    >
+      {count ? tr("wizard.filter.count", { n: count }) : tr("wizard.filter.toggle")}
+    </button>
+  );
+}
+
+/** the phone's details control on a tile: opens the bottom sheet; looks small, takes a 44 px tap */
+function DetailsButton({ label, onClick }: { label: string; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      className={styles.wzDetails}
+      data-testid="wz-details"
+      title={tr("wizard.details")}
+      aria-label={`${tr("wizard.details")}: ${label}`}
+      onClick={onClick}
+    >
+      i
+    </button>
+  );
+}
+
 /**
  * The campaign picker: filters across the top (kind, rules, length, a name), a grid of tiles showing each campaign's first
  * scenario card, and the campaign in the sidebar with its chapters in order. The filters and the sidebar are view state
@@ -69,7 +112,9 @@ const LENGTHS = ["all", "one", "few", "many"] as const;
  */
 function CampaignStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }) {
   const locale = useGame((s) => s.locale);
+  const phone = useLayoutMode() === "phone";
   const [filter, setFilter] = useState<CampaignFilter>(NO_CAMPAIGN_FILTER);
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [sheet, setSheet] = useState(false);
   const list = filterCampaigns(db, locale, filter);
   const chip = <K extends "kind" | "rules" | "length">(
@@ -96,19 +141,28 @@ function CampaignStep({ s, set }: { s: WizardState; set: (w: WizardState) => voi
   return (
     <div className={cx(styles.wzInv, "wz-camp", sheet ? "sheet-open" : "")}>
       <div className={styles.wzInvMain}>
-        <p className="wz-hint">{tr("wizard.campaign.hint")}</p>
-        <div className={styles.wzFilters}>
-          {chip("kind", KINDS)}
-          {chip("rules", RULES)}
-          {chip("length", LENGTHS)}
-          <input
-            type="search"
-            placeholder={tr("wizard.filter.search")}
-            aria-label={tr("wizard.filter.search")}
-            value={filter.query}
-            onChange={(e) => setFilter({ ...filter, query: e.target.value })}
+        <p className="wz-hint wz-intro">{tr("wizard.campaign.hint")}</p>
+        {phone && (
+          <FilterToggle
+            open={filtersOpen}
+            count={campaignFilterCount(filter)}
+            onToggle={() => setFiltersOpen(!filtersOpen)}
           />
-        </div>
+        )}
+        {(!phone || filtersOpen) && (
+          <div className={styles.wzFilters}>
+            {chip("kind", KINDS)}
+            {chip("rules", RULES)}
+            {chip("length", LENGTHS)}
+            <input
+              type="search"
+              placeholder={tr("wizard.filter.search")}
+              aria-label={tr("wizard.filter.search")}
+              value={filter.query}
+              onChange={(e) => setFilter({ ...filter, query: e.target.value })}
+            />
+          </div>
+        )}
         {list.length === 0 && <p className="wz-hint">{tr("wizard.noCampaigns")}</p>}
         <div className={styles.wzCtiles}>
           {list.map((c) => {
@@ -117,39 +171,60 @@ function CampaignStep({ s, set }: { s: WizardState; set: (w: WizardState) => voi
             const art = card ? (db.cards[card] ?? { code: card }) : null;
             const on = s.campaignId === c.id;
             return (
-              <button
-                key={c.id}
-                className={cx(styles.wzCtile, on ? "selected" : "")}
-                aria-pressed={on}
-                onClick={() => {
-                  moment("tab");
-                  set(setCampaign(s, c.id, db));
-                  setSheet(true);
-                }}
-              >
-                {art && (
-                  <img
-                    src={cardImage(art, "front", locale) ?? ""}
-                    alt=""
-                    loading="lazy"
-                    draggable={false}
-                    onError={(e) => (e.currentTarget.style.display = "none")}
+              <div key={c.id} className={styles.wzTileWrap}>
+                <button
+                  className={cx(styles.wzCtile, on ? "selected" : "")}
+                  aria-pressed={on}
+                  onClick={() => {
+                    moment("tab");
+                    set(setCampaign(s, c.id, db));
+                    // the phone opens the details from the tile's own control: a tap only picks
+                    if (!phone) setSheet(true);
+                  }}
+                >
+                  {art && (
+                    <img
+                      src={cardImage(art, "front", locale) ?? ""}
+                      alt=""
+                      loading="lazy"
+                      draggable={false}
+                      onError={(e) => (e.currentTarget.style.display = "none")}
+                    />
+                  )}
+                  <b>{tileName(db, c, locale)}</b>
+                  <small>
+                    {scenarioCount(c.scenarios.length)}
+                    {!campaignComplete(db, c.id) && <span title={tr("wizard.generated")}> ◐</span>}
+                  </small>
+                </button>
+                {phone && (
+                  <DetailsButton
+                    label={tileName(db, c, locale)}
+                    onClick={() => {
+                      set(setCampaign(s, c.id, db));
+                      setSheet(true);
+                    }}
                   />
                 )}
-                <b>{tileName(db, c, locale)}</b>
-                <small>
-                  {scenarioCount(c.scenarios.length)}
-                  {!campaignComplete(db, c.id) && <span title={tr("wizard.generated")}> ◐</span>}
-                </small>
-              </button>
+              </div>
             );
           })}
         </div>
       </div>
-      {picked && (
+      {picked && !phone && (
         <div className={cx(styles.wzInvSide, styles.wzCampSide)} aria-live="polite">
           <CampaignSheet key={picked.id} campaign={picked} onClose={() => setSheet(false)} />
         </div>
+      )}
+      {picked && phone && sheet && (
+        <BottomSheet
+          title={tileName(db, picked, locale)}
+          onClose={() => setSheet(false)}
+          testId="wz-campaign-sheet"
+          portal={false}
+        >
+          <CampaignSheet key={picked.id} campaign={picked} />
+        </BottomSheet>
       )}
     </div>
   );
@@ -221,9 +296,13 @@ function InvestigatorSheet({ code }: { code: string }) {
 function InvestigatorsStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }) {
   const locale = useGame((s) => s.locale);
   // filters, the order and the investigator in the sidebar are view state (ADR-0004): they are not part of the picks
+  const phone = useLayoutMode() === "phone";
   const [filter, setFilter] = useState<PickerFilter>({ faction: null, cycle: null, query: "" });
   const [sort, setSort] = useState<SortBy>("release");
   const [focus, setFocus] = useState<string | null>(null);
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  // the phone shows the investigator in a bottom sheet from the tile's details control
+  const [sheet, setSheet] = useState<string | null>(null);
   // every investigator's card (stats, ability, the language's text) comes with the packs: all of them, once
   const [, loaded] = useState(0);
   useEffect(() => {
@@ -240,93 +319,116 @@ function InvestigatorsStep({ s, set }: { s: WizardState; set: (w: WizardState) =
   return (
     <div className={styles.wzInv}>
       <div className={styles.wzInvMain}>
-        <p className="wz-hint">{tr("wizard.investigators.hint")}</p>
-        <div className={styles.wzFilters}>
-          <div className="wz-chips" role="group" aria-label={tr("wizard.filter.class")}>
-            {CLASSES.map((c) => (
-              <button
-                key={c}
-                className={`wz-chip wz-class ${filter.faction === c ? "on" : ""}`}
-                aria-pressed={filter.faction === c}
-                title={tr(`card.faction.${c}`)}
-                onClick={() => setFilter({ ...filter, faction: filter.faction === c ? null : c })}
-              >
-                <Icon name={c} size={24} title={tr(`card.faction.${c}`)} />
-              </button>
-            ))}
-          </div>
-          <select
-            aria-label={tr("wizard.filter.cycle")}
-            value={filter.cycle ?? ""}
-            onChange={(e) => setFilter({ ...filter, cycle: e.target.value || null })}
-          >
-            <option value="">{tr("wizard.filter.allCycles")}</option>
-            {cyclesOf(db).map((p) => (
-              <option key={p} value={p}>
-                {cycleName(db, locale, p)}
-              </option>
-            ))}
-          </select>
-          <label className={styles.wzSort}>
-            <span>{tr("wizard.sort")}</span>
-            <select value={sort} onChange={(e) => setSort(e.target.value as SortBy)}>
-              {SORTS.map((k) => (
-                <option key={k} value={k}>
-                  {tr(`wizard.sort.${k}`)}
+        <p className="wz-hint wz-intro">{tr("wizard.investigators.hint")}</p>
+        {phone && (
+          <FilterToggle
+            open={filtersOpen}
+            count={pickerFilterCount(filter)}
+            onToggle={() => setFiltersOpen(!filtersOpen)}
+          />
+        )}
+        {(!phone || filtersOpen) && (
+          <div className={styles.wzFilters}>
+            <div className="wz-chips" role="group" aria-label={tr("wizard.filter.class")}>
+              {CLASSES.map((c) => (
+                <button
+                  key={c}
+                  className={`wz-chip wz-class ${filter.faction === c ? "on" : ""}`}
+                  aria-pressed={filter.faction === c}
+                  title={tr(`card.faction.${c}`)}
+                  onClick={() => setFilter({ ...filter, faction: filter.faction === c ? null : c })}
+                >
+                  <Icon name={c} size={24} title={tr(`card.faction.${c}`)} />
+                </button>
+              ))}
+            </div>
+            <select
+              aria-label={tr("wizard.filter.cycle")}
+              value={filter.cycle ?? ""}
+              onChange={(e) => setFilter({ ...filter, cycle: e.target.value || null })}
+            >
+              <option value="">{tr("wizard.filter.allCycles")}</option>
+              {cyclesOf(db).map((p) => (
+                <option key={p} value={p}>
+                  {cycleName(db, locale, p)}
                 </option>
               ))}
             </select>
-          </label>
-          <input
-            type="search"
-            placeholder={tr("wizard.filter.search")}
-            aria-label={tr("wizard.filter.search")}
-            value={filter.query}
-            onChange={(e) => setFilter({ ...filter, query: e.target.value })}
-          />
-        </div>
+            <label className={styles.wzSort}>
+              <span>{tr("wizard.sort")}</span>
+              <select value={sort} onChange={(e) => setSort(e.target.value as SortBy)}>
+                {SORTS.map((k) => (
+                  <option key={k} value={k}>
+                    {tr(`wizard.sort.${k}`)}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <input
+              type="search"
+              placeholder={tr("wizard.filter.search")}
+              aria-label={tr("wizard.filter.search")}
+              value={filter.query}
+              onChange={(e) => setFilter({ ...filter, query: e.target.value })}
+            />
+          </div>
+        )}
         {!list.length && <p className="wz-hint">{tr("wizard.noMatch")}</p>}
         <div className={styles.wzTiles}>
           {list.map((i) => {
             const k = s.picks.indexOf(i.code);
             return (
-              <button
-                key={i.code}
-                className={cx(
-                  "wz-tile",
-                  k >= 0 ? "selected" : "",
-                  i.needsDeck ? styles.needsDeck : "",
-                  shown === i.code ? "focused" : "",
-                )}
-                aria-pressed={k >= 0}
-                disabled={i.needsDeck && k < 0}
-                onMouseEnter={() => setFocus(i.code)}
-                onFocus={() => setFocus(i.code)}
-                onClick={() => {
-                  setFocus(i.code);
-                  set(toggleInvestigator(db, s, i.code));
-                }}
-              >
-                <Avatar code={i.code} badge={k >= 0 ? `P${k + 1}` : undefined}>
-                  {i.needsDeck && <small className={styles.wzNote}>{tr("wizard.needsDeck")}</small>}
-                  {i.partlyImplemented && !i.needsDeck && (
-                    <small
-                      className={cx(styles.wzNote, styles.wzPartly)}
-                      title={tr("wizard.partly")}
-                    >
-                      ◐ {tr("wizard.partlyShort")}
-                    </small>
+              <div key={i.code} className={styles.wzTileWrap}>
+                <button
+                  className={cx(
+                    "wz-tile",
+                    k >= 0 ? "selected" : "",
+                    i.needsDeck ? styles.needsDeck : "",
+                    shown === i.code ? "focused" : "",
                   )}
-                </Avatar>
-              </button>
+                  aria-pressed={k >= 0}
+                  disabled={i.needsDeck && k < 0}
+                  onMouseEnter={() => setFocus(i.code)}
+                  onFocus={() => setFocus(i.code)}
+                  onClick={() => {
+                    setFocus(i.code);
+                    set(toggleInvestigator(db, s, i.code));
+                  }}
+                >
+                  <Avatar code={i.code} badge={k >= 0 ? `P${k + 1}` : undefined}>
+                    {i.needsDeck && (
+                      <small className={styles.wzNote}>{tr("wizard.needsDeck")}</small>
+                    )}
+                    {i.partlyImplemented && !i.needsDeck && (
+                      <small
+                        className={cx(styles.wzNote, styles.wzPartly)}
+                        title={tr("wizard.partly")}
+                      >
+                        ◐ {tr("wizard.partlyShort")}
+                      </small>
+                    )}
+                  </Avatar>
+                </button>
+                {phone && <DetailsButton label={i.name} onClick={() => setSheet(i.code)} />}
+              </div>
             );
           })}
         </div>
       </div>
-      {shown && (
+      {shown && !phone && (
         <aside className={styles.wzInvSide} aria-live="polite">
           <InvestigatorSheet key={shown} code={shown} />
         </aside>
+      )}
+      {phone && sheet && (
+        <BottomSheet
+          title={investigatorInfo(db, sheet, locale).name}
+          onClose={() => setSheet(null)}
+          testId="wz-investigator-sheet"
+          portal={false}
+        >
+          <InvestigatorSheet key={sheet} code={sheet} />
+        </BottomSheet>
       )}
     </div>
   );
@@ -339,6 +441,7 @@ function InvestigatorsStep({ s, set }: { s: WizardState; set: (w: WizardState) =
  */
 function DecksStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }) {
   const locale = useGame((s) => s.locale);
+  const phone = useLayoutMode() === "phone";
   const [active, setActive] = useState(s.picks[0]);
   const [renaming, setRenaming] = useState<{ id: string; name: string } | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
@@ -376,99 +479,105 @@ function DecksStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }
   };
   return (
     <div className={styles.dk}>
-      <div className={styles.dkInvs} role="tablist" aria-label={tr("wizard.decks.title")}>
-        {s.picks.map((c, k) => {
-          const problems = deckProblems(db, s, c);
-          return (
-            <button
-              key={c}
-              role="tab"
-              aria-selected={c === code}
-              className={`dk-inv ${c === code ? "on" : ""}`}
-              onClick={() => {
-                moment("tab");
-                setActive(c);
-              }}
-            >
-              <Avatar code={c} size={48} badge={`P${k + 1}`} />
-              <small className={problems.length ? "bad" : "ok"}>
-                {problems.length ? tr("deck.toFix", { n: problems.length }) : tr("deck.ready")}
-              </small>
-            </button>
-          );
-        })}
-      </div>
-      <div className={styles.dkTabs} role="tablist">
-        {tabs.map((x) => (
-          <div
-            key={x.id}
-            className={cx(
-              styles.dkTab,
-              x.id === tab?.id ? "on" : "",
-              x.problems.length ? "bad" : "",
-            )}
-            role="tab"
-            aria-selected={x.id === tab?.id}
-          >
-            {renaming?.id === x.id ? (
-              <input
-                autoFocus
-                className={styles.dkRename}
-                value={renaming.name}
-                maxLength={40}
-                aria-label={tr("deckEditor.name")}
-                onChange={(e) => setRenaming({ id: x.id, name: e.target.value })}
-                onBlur={() => setRenaming(null)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && renaming.name.trim()) {
-                    renameCustomDeck(safeStorage(), x.id, renaming.name.trim());
-                    setRenaming(null);
-                    bump((n) => n + 1);
-                  }
-                  if (e.key === "Escape") setRenaming(null);
-                }}
-              />
-            ) : (
+      <div className={styles.dkRow}>
+        <div className={styles.dkInvs} role="tablist" aria-label={tr("wizard.decks.title")}>
+          {s.picks.map((c, k) => {
+            const problems = deckProblems(db, s, c);
+            return (
               <button
-                className={styles.dkTabName}
+                key={c}
+                role="tab"
+                aria-selected={c === code}
+                className={`dk-inv ${c === code ? "on" : ""}`}
                 onClick={() => {
                   moment("tab");
-                  choose(x.id);
-                }}
-                onDoubleClick={() => x.kind === "custom" && setRenaming({ id: x.id, name: x.name })}
-                title={x.kind === "custom" ? tr("deck.renameHint") : undefined}
-              >
-                {x.problems.length ? "⚠ " : ""}
-                {x.name}
-              </button>
-            )}
-            {x.kind === "custom" && (
-              <button
-                className={cx(styles.dkTabClose, deleting === x.id ? styles.confirm : "")}
-                aria-label={tr("deckEditor.delete")}
-                title={deleting === x.id ? tr("deckEditor.confirmDelete") : tr("deckEditor.delete")}
-                onBlur={() => setDeleting(null)}
-                onClick={() => {
-                  if (deleting !== x.id) return setDeleting(x.id);
-                  deleteCustomDeck(safeStorage(), x.id);
-                  setDeleting(null);
-                  if (tab?.id === x.id) choose(tabs[0].id);
-                  bump((n) => n + 1);
+                  setActive(c);
                 }}
               >
-                <UiIcon name={deleting === x.id ? "check" : "none"} size={16} />
+                <Avatar code={c} size={phone ? 32 : 48} badge={`P${k + 1}`} />
+                <small className={problems.length ? "bad" : "ok"}>
+                  {problems.length ? tr("deck.toFix", { n: problems.length }) : tr("deck.ready")}
+                </small>
               </button>
-            )}
-          </div>
-        ))}
-        <button
-          className={cx(styles.dkTab, styles.dkTabAdd)}
-          onClick={addTab}
-          title={tr("deck.newTab")}
-          aria-label={tr("deck.newTab")}
-        >
-          +
-        </button>
+            );
+          })}
+        </div>
+        <div className={styles.dkTabs} role="tablist">
+          {tabs.map((x) => (
+            <div
+              key={x.id}
+              className={cx(
+                styles.dkTab,
+                x.id === tab?.id ? "on" : "",
+                x.problems.length ? "bad" : "",
+              )}
+              role="tab"
+              aria-selected={x.id === tab?.id}
+            >
+              {renaming?.id === x.id ? (
+                <input
+                  autoFocus
+                  className={styles.dkRename}
+                  value={renaming.name}
+                  maxLength={40}
+                  aria-label={tr("deckEditor.name")}
+                  onChange={(e) => setRenaming({ id: x.id, name: e.target.value })}
+                  onBlur={() => setRenaming(null)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && renaming.name.trim()) {
+                      renameCustomDeck(safeStorage(), x.id, renaming.name.trim());
+                      setRenaming(null);
+                      bump((n) => n + 1);
+                    }
+                    if (e.key === "Escape") setRenaming(null);
+                  }}
+                />
+              ) : (
+                <button
+                  className={styles.dkTabName}
+                  onClick={() => {
+                    moment("tab");
+                    choose(x.id);
+                  }}
+                  onDoubleClick={() =>
+                    x.kind === "custom" && setRenaming({ id: x.id, name: x.name })
+                  }
+                  title={x.kind === "custom" ? tr("deck.renameHint") : undefined}
+                >
+                  {x.problems.length ? "⚠ " : ""}
+                  {x.name}
+                </button>
+              )}
+              {x.kind === "custom" && (
+                <button
+                  className={cx(styles.dkTabClose, deleting === x.id ? styles.confirm : "")}
+                  aria-label={tr("deckEditor.delete")}
+                  title={
+                    deleting === x.id ? tr("deckEditor.confirmDelete") : tr("deckEditor.delete")
+                  }
+                  onBlur={() => setDeleting(null)}
+                  onClick={() => {
+                    if (deleting !== x.id) return setDeleting(x.id);
+                    deleteCustomDeck(safeStorage(), x.id);
+                    setDeleting(null);
+                    if (tab?.id === x.id) choose(tabs[0].id);
+                    bump((n) => n + 1);
+                  }}
+                >
+                  <UiIcon name={deleting === x.id ? "check" : "none"} size={16} />
+                </button>
+              )}
+            </div>
+          ))}
+          <button
+            className={cx(styles.dkTab, styles.dkTabAdd)}
+            onClick={addTab}
+            title={tr("deck.newTab")}
+            aria-label={tr("deck.newTab")}
+          >
+            +
+          </button>
+        </div>
       </div>
       {tab && tab.problems.length > 0 && (
         <div className={cx("problems", styles.dkProblems)} role="status">
@@ -508,6 +617,7 @@ function DifficultyStep({ s, set }: { s: WizardState; set: (w: WizardState) => v
 
 function ReadyStep({ s }: { s: WizardState }) {
   const locale = useGame((s) => s.locale);
+  const phone = useLayoutMode() === "phone";
   const c = db.campaigns[s.campaignId];
   const first = c.scenarios[0];
   const icon = scenarioIcon(first);
@@ -516,7 +626,7 @@ function ReadyStep({ s }: { s: WizardState }) {
       <h2 className={styles.wzReadyCamp}>{tileName(db, c, locale)}</h2>
       <div className={styles.wzOrder}>
         {s.picks.map((code, k) => (
-          <Avatar key={code} code={code} badge={`P${k + 1}`} />
+          <Avatar key={code} code={code} badge={`P${k + 1}`} size={phone ? 52 : undefined} />
         ))}
       </div>
       <BagCard bag={c.chaosBags[s.difficulty] ?? []} difficulty={s.difficulty} selected />
@@ -569,7 +679,8 @@ export function Wizard() {
           ))}
         </div>
       </header>
-      <div className="wz-body">
+      {/* keyed by step: a new body starts scrolled to the top (the list scrolled on one step would hide the next step's head) */}
+      <div className="wz-body" key={s.step}>
         {s.step === "campaign" && <CampaignStep s={s} set={set} />}
         {s.step === "investigators" && <InvestigatorsStep s={s} set={set} />}
         {s.step === "decks" && <DecksStep s={s} set={set} />}

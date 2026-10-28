@@ -18,7 +18,7 @@ export function neutral(r: Result): Result {
     r,
     p.options.some((o) => o.id === "pass")
       ? "pass"
-      : p.kind === "commit" || /^Done/.test(p.options[0].label)
+      : p.kind === "commit" || p.options[0].label.startsWith("Done")
         ? /^Done/
         : /./,
   );

@@ -20,9 +20,11 @@ import { TipLayer } from "../TipLayer";
 import { HoverCard } from "../HoverCard";
 import { Feed } from "../Feed";
 import { ActionFloats, HitFx, HIT_MS, ResourceFx } from "../Floats";
-import { Modals } from "../Modals";
+import { Modals, useCardOptions } from "../Modals";
+import { CardOptions } from "../CardOptions";
 import { RevealOverlay } from "../Reveal";
 import { ChaosBagButton } from "../ChaosBagButton";
+import { FullscreenButton } from "../../components/FullscreenButton";
 import { PileColumn } from "../PileColumn";
 import { PlayStrip } from "../PlayStrip";
 import { ScenarioPanel } from "../ScenarioPanel";
@@ -448,6 +450,7 @@ function TopBar({ phone }: { phone: boolean }) {
               <Glyph name="tomes" size={22} title="" />
             </button>
             <ChaosBagButton size={30} />
+            <FullscreenButton bare className="icon-btn" />
           </>
         ) : (
           <JournalButton />
@@ -749,14 +752,9 @@ export function Hud() {
           <StatBar />
         </>
       )}
-      {phone ? (
-        <PlayStrip />
-      ) : (
-        <>
-          <PlayStrip part="threats" />
-          <PlayStrip part="assets" />
-        </>
-      )}
+      {/* threats and assets apart on both layouts: on the phone the threats are a small row at the top, the assets a column on the right */}
+      <PlayStrip part="threats" />
+      <PlayStrip part="assets" />
       <MulliganRow />
       <div className={styles.centerCol} ref={centerCol}>
         <StepCaption />
@@ -798,6 +796,9 @@ function PhoneDrawers() {
   const offered = useChoicesOffered();
   // a deck waiting for a tap sits in the closed left drawer: its handle glows (the bar's Draw button answers too)
   const deckWaits = offered && deckOptions(game, viewerOf(game)).waiting;
+  // the act or agenda offers something (Advance act once its clues are in): the handle glows and the option sits beside it
+  const cardOffers = useCardOptions([game.act, game.agenda]).length > 0;
+  const left = useView((s) => s.drawer === "left");
   const right = useView((s) => s.drawer === "right");
   // the right drawer is the Journal: the full history while it is open
   useEffect(() => {
@@ -805,10 +806,11 @@ function PhoneDrawers() {
   }, [right]);
   return (
     <>
-      <Drawer edge="left" handle="›" label={tr("phone.panels")} glow={deckWaits}>
+      <Drawer edge="left" handle="›" label={tr("phone.panels")} glow={deckWaits || cardOffers}>
         <ScenarioPanel />
         <PileColumn />
       </Drawer>
+      {!left && <CardOptions ids={[game.act, game.agenda]} className={styles.actNudge} />}
       <Drawer edge="right" handle="‹" label={tr("hud.journal")}>
         {right && <Feed />}
       </Drawer>

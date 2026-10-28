@@ -615,3 +615,173 @@
     transform: none;
   }
 }
+
+/* a tile and its phone details control: the wrapper adds no box on the desktop (the grid sees the tile) */
+.wz-tile-wrap {
+  display: contents;
+}
+.wz-details {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 2;
+  width: 28px;
+  height: 28px;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--band);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  font: italic 700 15px/1 var(--f-body);
+}
+/* 28 px to look at, a 44 px tap */
+.wz-details::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+}
+.wz-filter-toggle {
+  margin: 0 0 6px;
+}
+
+/* the phone: three columns of tiles, each with its details control; the filters folded behind the chip */
+:global(.menus):global(.phone) .wz-tile-wrap {
+  position: relative;
+  display: block;
+  min-width: 0;
+}
+:global(.menus):global(.phone) .wz-tile-wrap > button:first-child {
+  width: 100%;
+  height: 100%;
+}
+:global(.menus):global(.phone) .wz-tiles,
+:global(.menus):global(.phone) .wz-ctiles {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+:global(.menus):global(.phone) .wz-filters {
+  gap: 6px;
+  margin: 0 0 6px;
+}
+
+/* the avatars and the deck tabs share a row; on the phone it is one row that scrolls sideways: investigator chips, a rule, deck pills */
+.dk-row {
+  display: contents;
+}
+:global(.menus):global(.phone) .dk {
+  gap: 4px;
+}
+:global(.menus):global(.phone) .dk-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  padding: 2px 0 4px;
+}
+:global(.menus):global(.phone) .dk-row > * {
+  flex: none;
+}
+:global(.menus):global(.phone) .dk-invs,
+:global(.menus):global(.phone) .dk-tabs {
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 6px;
+  overflow: visible;
+}
+:global(.menus):global(.phone) :global(.dk-inv) {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 2px 10px 2px 4px;
+  border-width: 2px;
+  border-radius: 999px;
+  scroll-snap-align: start;
+}
+/* the chip: the portrait and the name; the class line goes, the status stays as a short word */
+:global(.menus):global(.phone) :global(.dk-inv) > span > small {
+  display: none;
+}
+:global(.menus):global(.phone) :global(.dk-inv) > span > b {
+  font-size: 14px;
+}
+:global(.menus):global(.phone) :global(.dk-inv) > small {
+  font-size: 12px;
+}
+:global(.menus):global(.phone) .dk-tabs {
+  padding-left: 8px;
+  border-bottom: 0;
+  border-left: 1px solid var(--rule);
+}
+:global(.menus):global(.phone) .dk-tab {
+  min-height: 36px;
+  margin: 0;
+  padding: 0 2px 0 0;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  scroll-snap-align: start;
+}
+:global(.menus):global(.phone) .dk-tab:global(.on) {
+  border: 2px solid var(--paper-accent);
+}
+:global(.menus):global(.phone) .dk-tab .dk-tab-name,
+:global(.menus):global(.phone) .dk-tab .dk-tab-close {
+  min-height: 36px;
+}
+:global(.menus):global(.phone) .dk-tab-name {
+  max-width: 200px;
+  padding: 0 12px;
+  font-size: 15px;
+}
+:global(.menus):global(.phone) .dk-tab-add {
+  width: 36px;
+  min-width: 36px;
+  font-size: 20px;
+}
+/* the paper clip is the tall tile's mark; a chip shows its choice by its edge */
+:global(.menus):global(.phone) :global(.dk-inv):global(.on)::after {
+  display: none;
+}
+
+/* the phone: the case file in two columns (campaign, investigators and first scenario | the bag) so it fits the body */
+:global(.menus):global(.phone) :global(.wz-ready) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: auto auto 1fr;
+  align-items: center;
+  gap: 6px 16px;
+  width: 100%;
+  padding: 10px 16px;
+  outline-offset: -5px;
+}
+:global(.menus):global(.phone) :global(.wz-ready) > :global(.bag-card) {
+  grid-column: 2;
+  grid-row: 1 / span 3;
+  width: 100%;
+  align-self: stretch;
+}
+:global(.menus):global(.phone) .wz-ready-camp {
+  grid-column: 1;
+  font-size: 22px;
+}
+:global(.menus):global(.phone) .wz-order {
+  grid-column: 1;
+  gap: 14px;
+}
+:global(.menus):global(.phone) .wz-first {
+  grid-column: 1;
+}
+:global(.menus):global(.phone) .wz-first small {
+  font-size: 12px;
+}
+:global(.menus):global(.phone) .wz-first b {
+  font-size: 20px;
+}
+/* the class is on the ring's colour already: the line goes, so four investigators fit */
+:global(.menus):global(.phone) .wz-order small {
+  display: none;
+}

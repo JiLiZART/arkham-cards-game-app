@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useLayoutMode } from "../../state/layoutMode";
 import { cardText, t } from "../../../content/i18n";
 import type { CardDef, DeckDef } from "../../../content/schema";
 import { whyNot, whyNotReplace } from "../../../engine/decks";
@@ -13,7 +14,7 @@ import {
   withWeakness,
   type PoolFilter,
 } from "../../game/decks";
-import { Icon } from "../../components/Icon";
+import { Icon, UiIcon } from "../../components/Icon";
 import { isIcon } from "../../assets/icons";
 import { moment } from "../../hud/SoundLayer";
 import { cx } from "../../components/cx";
@@ -86,6 +87,9 @@ export function DeckEditArea({
   });
   const [shown, setShown] = useState(PAGE);
   const [replacing, setReplacing] = useState<string | null>(null);
+  // on the phone the pool is a full-screen layer opened from the deck's "Add cards" (view state, ADR-0004)
+  const phone = useLayoutMode() === "phone";
+  const [poolOpen, setPoolOpen] = useState(false);
   useEffect(() => setShown(PAGE), [filter]);
   useEffect(() => setReplacing(null), [deck.id]);
   // Escape leaves the replace mode
@@ -129,11 +133,140 @@ export function DeckEditArea({
     setReplacing(null);
   };
   const into = replacing ? db.cards[replacing] : null;
+  const poolSection = (
+    <section className={styles.dkPool}>
+      <header className={styles.dkFilters}>
+        <input
+          type="search"
+          value={filter.query}
+          placeholder={tr("deckEditor.search")}
+          aria-label={tr("deckEditor.search")}
+          onChange={(e) => setFilter({ ...filter, query: e.target.value })}
+        />
+        <div className="wz-chips" role="group" aria-label={tr("catalog.class")}>
+          {CLASSES.map((c) => (
+            <button
+              key={c}
+              className={`wz-chip wz-class ${filter.factions.includes(c) ? "on" : ""}`}
+              aria-pressed={filter.factions.includes(c)}
+              title={tr(`card.faction.${c}`)}
+              onClick={() =>
+                setFilter({
+                  ...filter,
+                  factions: filter.factions.includes(c)
+                    ? filter.factions.filter((x) => x !== c)
+                    : [...filter.factions, c],
+                })
+              }
+            >
+              {isIcon(c) ? <Icon name={c} size={22} title={tr(`card.faction.${c}`)} /> : c}
+            </button>
+          ))}
+        </div>
+        <div className="wz-chips" role="group" aria-label={tr("catalog.type")}>
+          {TYPES.map((x) => (
+            <button
+              key={x}
+              className={`wz-chip ${filter.types.includes(x) ? "on" : ""}`}
+              aria-pressed={filter.types.includes(x)}
+              onClick={() =>
+                setFilter({
+                  ...filter,
+                  types: filter.types.includes(x)
+                    ? filter.types.filter((y) => y !== x)
+                    : [...filter.types, x],
+                })
+              }
+            >
+              {tr(`card.type.${x}`)}
+            </button>
+          ))}
+        </div>
+        <div className="wz-chips" role="group" aria-label={tr("catalog.level")}>
+          {[0, 1, 2, 3, 4, 5].map((n) => (
+            <button
+              key={n}
+              className={`wz-chip ${filter.levels.includes(n) ? "on" : ""}`}
+              aria-pressed={filter.levels.includes(n)}
+              title={tr("card.level", { n })}
+              onClick={() =>
+                setFilter({
+                  ...filter,
+                  levels: filter.levels.includes(n)
+                    ? filter.levels.filter((y) => y !== n)
+                    : [...filter.levels, n],
+                })
+              }
+            >
+              {n}
+            </button>
+          ))}
+        </div>
+        <small className={styles.dkCount}>{tr("deckEditor.pool", { n: pool.length })}</small>
+      </header>
+      <div className={styles.dkGrid}>
+        {pool.slice(0, shown).map((card) => {
+          const why = reason(whyNot(db, deck, card.code));
+          return (
+            <GridCard
+              key={card.code}
+              card={card}
+              n={deck.cards[card.code]}
+              why={why}
+              dim={!!replacing && replacing !== card.code}
+              lit={replacing === card.code}
+            >
+              {!replacing && (
+                <>
+                  <button
+                    className="primary"
+                    disabled={!!why}
+                    onClick={() => {
+                      moment("builderAdd");
+                      change(changeCopies(deck.cards, card.code, 1));
+                    }}
+                    aria-label={tr("deckEditor.add", { card: nameOf(card) })}
+                  >
+                    + {tr("deck.add")}
+                  </button>
+                  <button
+                    onClick={() => {
+                      setReplacing(card.code);
+                      // the deck's cards to swap are behind the layer: close it to pick one
+                      setPoolOpen(false);
+                    }}
+                    aria-label={tr("deck.replaceWith", { card: nameOf(card) })}
+                  >
+                    ⇄ {tr("deck.replace")}
+                  </button>
+                </>
+              )}
+            </GridCard>
+          );
+        })}
+      </div>
+      {shown < pool.length && (
+        <button className={cx("link-btn", styles.dkMore)} onClick={() => setShown(shown + PAGE)}>
+          {tr("catalog.more", { n: shown, total: pool.length })}
+        </button>
+      )}
+    </section>
+  );
   return (
     <div className={cx(styles.dkArea, replacing ? "replacing" : "")}>
       <section className={styles.dkDeck}>
         <header className={styles.dkHead}>
           <b>{tr("deckEditor.size", { n: size, size: inv?.deckSize ?? 30 })}</b>
+          {phone && (
+            <button
+              type="button"
+              className="primary"
+              data-testid="dk-add-cards"
+              onClick={() => setPoolOpen(true)}
+            >
+              {tr("deckEditor.addCards")}
+            </button>
+          )}
           {weakness && (
             <label className={styles.dkWeakness}>
               {tr("deckEditor.weakness")}
@@ -211,119 +344,25 @@ export function DeckEditArea({
           </div>
         )}
       </section>
-      <section className={styles.dkPool}>
-        <header className={styles.dkFilters}>
-          <input
-            type="search"
-            value={filter.query}
-            placeholder={tr("deckEditor.search")}
-            aria-label={tr("deckEditor.search")}
-            onChange={(e) => setFilter({ ...filter, query: e.target.value })}
-          />
-          <div className="wz-chips" role="group" aria-label={tr("catalog.class")}>
-            {CLASSES.map((c) => (
-              <button
-                key={c}
-                className={`wz-chip wz-class ${filter.factions.includes(c) ? "on" : ""}`}
-                aria-pressed={filter.factions.includes(c)}
-                title={tr(`card.faction.${c}`)}
-                onClick={() =>
-                  setFilter({
-                    ...filter,
-                    factions: filter.factions.includes(c)
-                      ? filter.factions.filter((x) => x !== c)
-                      : [...filter.factions, c],
-                  })
-                }
-              >
-                {isIcon(c) ? <Icon name={c} size={22} title={tr(`card.faction.${c}`)} /> : c}
-              </button>
-            ))}
-          </div>
-          <div className="wz-chips" role="group" aria-label={tr("catalog.type")}>
-            {TYPES.map((x) => (
-              <button
-                key={x}
-                className={`wz-chip ${filter.types.includes(x) ? "on" : ""}`}
-                aria-pressed={filter.types.includes(x)}
-                onClick={() =>
-                  setFilter({
-                    ...filter,
-                    types: filter.types.includes(x)
-                      ? filter.types.filter((y) => y !== x)
-                      : [...filter.types, x],
-                  })
-                }
-              >
-                {tr(`card.type.${x}`)}
-              </button>
-            ))}
-          </div>
-          <div className="wz-chips" role="group" aria-label={tr("catalog.level")}>
-            {[0, 1, 2, 3, 4, 5].map((n) => (
-              <button
-                key={n}
-                className={`wz-chip ${filter.levels.includes(n) ? "on" : ""}`}
-                aria-pressed={filter.levels.includes(n)}
-                title={tr("card.level", { n })}
-                onClick={() =>
-                  setFilter({
-                    ...filter,
-                    levels: filter.levels.includes(n)
-                      ? filter.levels.filter((y) => y !== n)
-                      : [...filter.levels, n],
-                  })
-                }
-              >
-                {n}
-              </button>
-            ))}
-          </div>
-          <small className={styles.dkCount}>{tr("deckEditor.pool", { n: pool.length })}</small>
-        </header>
-        <div className={styles.dkGrid}>
-          {pool.slice(0, shown).map((card) => {
-            const why = reason(whyNot(db, deck, card.code));
-            return (
-              <GridCard
-                key={card.code}
-                card={card}
-                n={deck.cards[card.code]}
-                why={why}
-                dim={!!replacing && replacing !== card.code}
-                lit={replacing === card.code}
-              >
-                {!replacing && (
-                  <>
-                    <button
-                      className="primary"
-                      disabled={!!why}
-                      onClick={() => {
-                        moment("builderAdd");
-                        change(changeCopies(deck.cards, card.code, 1));
-                      }}
-                      aria-label={tr("deckEditor.add", { card: nameOf(card) })}
-                    >
-                      + {tr("deck.add")}
-                    </button>
-                    <button
-                      onClick={() => setReplacing(card.code)}
-                      aria-label={tr("deck.replaceWith", { card: nameOf(card) })}
-                    >
-                      ⇄ {tr("deck.replace")}
-                    </button>
-                  </>
-                )}
-              </GridCard>
-            );
-          })}
+      {!phone && poolSection}
+      {phone && poolOpen && (
+        <div className={styles.dkPoolFull} role="dialog" aria-modal="true" data-testid="dk-pool">
+          <header className={styles.dkPoolBar}>
+            <b>{tr("deckEditor.addCards")}</b>
+            <button
+              type="button"
+              className={styles.dkPoolClose}
+              data-testid="dk-pool-close"
+              onClick={() => setPoolOpen(false)}
+              title={tr("sheet.close")}
+              aria-label={tr("sheet.close")}
+            >
+              <UiIcon name="none" size={20} />
+            </button>
+          </header>
+          {poolSection}
         </div>
-        {shown < pool.length && (
-          <button className={cx("link-btn", styles.dkMore)} onClick={() => setShown(shown + PAGE)}>
-            {tr("catalog.more", { n: shown, total: pool.length })}
-          </button>
-        )}
-      </section>
+      )}
     </div>
   );
 }

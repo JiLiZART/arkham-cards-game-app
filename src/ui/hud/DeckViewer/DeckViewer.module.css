@@ -86,3 +86,33 @@
 :global(.dv-front) {
   position: relative;
 }
+
+/* the phone (ADR-0005): one column, each side of an act or agenda nearly the screen's height so it can be read;
+   the name and Close stay pinned at the top (the card itself carries its text) */
+:global(.game):global(.phone) .deck-viewer[open] {
+  flex-direction: column;
+  gap: 8px;
+}
+:global(.game):global(.phone) .dv-side {
+  order: -1;
+  z-index: 3;
+  width: 100%;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+  background: var(--panel);
+}
+:global(.game):global(.phone) .dv-side :global(.card-text),
+:global(.game):global(.phone) .dv-list > h2 {
+  display: none;
+}
+:global(.game):global(.phone) .dv-sides {
+  flex-wrap: wrap;
+}
+:global(.game):global(.phone) .dv-card:global(.landscape) {
+  width: min(calc(82dvh * 88 / 63), calc(100vw - 48px));
+}
+:global(.game):global(.phone) .dv-card:not(:global(.landscape)) {
+  width: min(calc(82dvh * 63 / 88), calc(100vw - 48px));
+}

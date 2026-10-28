@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from "vitest";
-import { loadCampaign, loadPack } from "../content/index";
+import { loadCampaign, loadPack } from "../content";
 import { applyScenarioEnd, scenarioSetup, startCampaign } from "./campaign";
 import { flatLog, record } from "./campaignLog";
 import {

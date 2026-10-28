@@ -173,3 +173,22 @@
       0 0 28px var(--playable);
   }
 }
+
+/* the phone (ADR-0005): the asset column stacks without the desktop row's overlap */
+:global(.game):global(.phone) :global(.play-strip):global(.column) .strip-slot + .strip-slot {
+  margin-left: 0;
+}
+:global(.game):global(.phone)
+  :global(.play-strip):global(.column)
+  :global(.mini-card)
+  :global(.tokens) {
+  left: auto;
+  right: -6px;
+}
+/* the threats: a small row under the top bar, between the drawers' handles and the act's nudge */
+:global(.game):global(.phone) :global(.play-strip).threats {
+  top: calc(40px + env(safe-area-inset-top, 0px));
+  max-width: calc(100vw - 2 * 120px);
+  gap: 6px;
+  padding: 6px 4px 2px;
+}

@@ -266,7 +266,8 @@
   padding: 2px 12px;
 }
 :global(.game):global(.phone) .st-placed {
-  left: calc(50% + 100px);
+  /* right of the draw stage (the centre and 60 px either side), measured in the zoomed box below */
+  left: calc(50% + 210px);
   right: auto;
   top: 44px;
   width: auto;

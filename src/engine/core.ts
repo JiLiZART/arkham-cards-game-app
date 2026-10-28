@@ -665,7 +665,7 @@ export function checkCondition(g: G, c: Condition, ctx: EffCtx): boolean {
   if ("failedBy" in c) return ctx.failBy !== undefined && ctx.failBy <= c.failedBy.max;
   if ("succeededBy" in c) return ctx.succeedBy !== undefined && ctx.succeedBy >= c.succeededBy.min;
   if ("tokenIs" in c) return !!ctx.token && c.tokenIs.includes(ctx.token);
-  if ("tokenNegative" in c) return !!ctx.token && /^-/.test(ctx.token);
+  if ("tokenNegative" in c) return !!ctx.token && ctx.token.startsWith("-");
   if ("resources" in c) return !!you && inv(g, you).resources >= c.resources.min;
   if ("assetInPlay" in c)
     return !!you && controlled(g, you).some((a) => matchesFilter(g, a.code, c.assetInPlay));

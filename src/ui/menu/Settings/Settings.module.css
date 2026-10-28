@@ -96,3 +96,35 @@
 .settings-screen > button:global(.primary) {
   margin-top: 18px;
 }
+
+/* the phone held sideways: a tighter note, the same 44 px rows (ADR-0005: the menus' root carries the mode) */
+:global(.menus):global(.phone) .settings-screen {
+  padding-top: 12px;
+  padding-bottom: 24px;
+}
+:global(.menus):global(.phone) .settings-screen h1 {
+  margin: 0 0 6px;
+  font-size: 26px;
+}
+:global(.menus):global(.phone) .settings-screen h1::after {
+  margin: 4px 0 8px;
+  height: 10px;
+}
+:global(.menus):global(.phone) .settings-screen .settings {
+  padding: 2px 16px 10px;
+}
+:global(.menus):global(.phone) .settings-screen .settings label {
+  padding: 0;
+  font-size: 16px;
+}
+:global(.menus):global(.phone) .settings-screen .settings legend {
+  padding: 8px 0 0;
+  font-size: 18px;
+}
+:global(.menus):global(.phone) .settings-screen .set-hint {
+  padding: 0 0 4px;
+  font-size: 13px;
+}
+:global(.menus):global(.phone) .settings-screen .settings select {
+  min-width: 140px;
+}

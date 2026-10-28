@@ -152,7 +152,8 @@ export function checkMoments(m: SoundManifest, moments: readonly string[]): Cont
       .map((k) => ({
         file: FILE,
         path: `moments.${k}`,
-        message: "no UI moment of this name is ever played (add it to MOMENTS in src/ui/assets/sounds.ts)",
+        message:
+          "no UI moment of this name is ever played (add it to MOMENTS in src/ui/assets/sounds.ts)",
       })),
     ...moments
       .filter((k) => !(k in m.moments))

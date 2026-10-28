@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from "vitest";
-import { loadPack } from "../content/index";
+import { loadPack } from "../content";
 import { card, createCard, inv, moveCard, type G } from "./core";
 import type { Result } from "./engine";
 import { preyCandidates } from "./rules/enemies";
@@ -267,11 +267,11 @@ describe("Nathaniel Cho", () => {
       enemyHere(g, N, PRIEST);
     });
     r = toTurn(pick(r, /^Play Monster Slayer/), win("dealDamage"));
-    expect(options(r).some((o) => /^Nathaniel Cho/.test(o))).toBe(true);
+    expect(options(r).some((o) => o.startsWith("Nathaniel Cho"))).toBe(true);
     r = finish(pick(r, /^Nathaniel Cho/));
     expect(enemyIn(r, PRIEST)!.damage).toBe(3);
     r = toTurn(pick(r, /^Play Monster Slayer/), win("dealDamage"));
-    expect(options(r).some((o) => /^Nathaniel Cho/.test(o))).toBe(false); // once per phase
+    expect(options(r).some((o) => o.startsWith("Nathaniel Cho"))).toBe(false); // once per phase
     r = finish(r);
     expect(enemyIn(r, PRIEST)).toBeUndefined(); // 3 + 2 = the Priest's 5 health: defeated
   });
@@ -282,12 +282,13 @@ describe("Nathaniel Cho", () => {
     });
     r = pick(r, /^Fight/);
     for (let k = 0; k < 20 && r.state.pending?.kind !== "turn"; k++) {
-      expect(options(r).some((o) => /^Nathaniel Cho/.test(o))).toBe(false);
+      expect(options(r).some((o) => o.startsWith("Nathaniel Cho"))).toBe(false);
       r = pick(
         r,
         r.state.pending!.options.some((o) => o.id === "pass")
           ? "pass"
-          : /^Done/.test(r.state.pending!.options[0].label) || r.state.pending!.kind === "commit"
+          : r.state.pending!.options[0].label.startsWith("Done") ||
+              r.state.pending!.kind === "commit"
             ? /^Done/
             : /./,
       );

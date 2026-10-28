@@ -66,9 +66,11 @@ export interface ViewState {
   spotlight: Spotlight | null;
 }
 
-/** a card at full size, an investigator, the chaos bag, or every act / agenda / the reference card */
+/** a card at full size, an investigator, the chaos bag, every act / agenda / the reference card, or (phone) an investigator's cards in play or threat area */
 export type Modal =
   | { card: InstId }
+  | { assets: InvId }
+  | { threats: InvId }
   | { inv: InvId }
   | { bag: true }
   | { deck: "act" | "agenda" | "reference" }

@@ -120,7 +120,7 @@ function soakers(g: G, i: InvId, kind: 0 | 1, assigned: Record<string, [number, 
 export const assignDamageHandler: Handler<"AssignDamage"> = (g, step) => {
   const me = inv(g, step.inv);
   if (me.status !== "playing") return;
-  const assigned = { ...(step.assigned ?? {}) };
+  const assigned = { ...step.assigned };
   let { damage, horror } = step;
   // what the attack's window prevented comes off once, before the first point is placed
   const prevented = step.key

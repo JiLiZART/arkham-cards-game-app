@@ -132,13 +132,21 @@ button.danger {
 }
 @media (max-height: 500px) and (orientation: landscape) {
   .title-body h1 {
-    font-size: 34px;
-    margin-bottom: 14px;
+    font-size: 30px;
+    margin-bottom: 4px;
+  }
+  .title-body h1::after {
+    height: 12px;
+    margin: 6px auto 10px;
+    background-size:
+      30px 12px,
+      30px 12px,
+      calc(100% - 60px) 1px;
   }
   .title-buttons {
     flex-direction: row;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
     width: min(560px, 92vw);
   }
   .title-buttons > * {
@@ -151,8 +159,8 @@ button.danger {
   }
   .title-buttons button:global(.big):not(:global(.link-btn)) {
     min-height: 44px;
-    font-size: 19px;
-    padding: 6px 14px;
+    font-size: 16px;
+    padding: 4px 12px;
   }
 }
 

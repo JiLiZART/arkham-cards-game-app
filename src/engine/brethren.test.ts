@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from "vitest";
-import { loadPack } from "../content/index";
+import { loadPack } from "../content";
 import { createGame, dispatch, run, type Result } from "./engine";
 import { next } from "./rng";
 import { db, gOf, mutate, options, pick, putEnemy, skipMulligans, start } from "./testkit";
@@ -133,7 +133,7 @@ describe("Spreading Flames", () => {
     r = mutate(r, (g) => {
       inv(g, R).clues = 2;
     });
-    r = endRound(r, (x) => options(x).some((o) => /^Advance act/.test(o)));
+    r = endRound(r, (x) => options(x).some((o) => o.startsWith("Advance act")));
     r = until(pick(r, /^Advance act/), () => false);
     expect(actCode(r)).toBe("12110");
     expect(codesIn(r, "location")).toEqual(expect.arrayContaining(["12113", "12116", "12117"]));
@@ -151,7 +151,7 @@ describe("Spreading Flames", () => {
     });
     r = until(
       pick(
-        endRound(r, (x) => options(x).some((o) => /^Advance act/.test(o))),
+        endRound(r, (x) => options(x).some((o) => o.startsWith("Advance act"))),
         /^Advance act/,
       ),
       () => false,
@@ -182,7 +182,7 @@ describe("Spreading Flames", () => {
       inv(g, R).location = findByCode(g, "12120", ["location"])!.id;
       inv(g, R).clues = 3;
     });
-    r = endRound(r, (x) => options(x).some((o) => /^Advance act/.test(o)));
+    r = endRound(r, (x) => options(x).some((o) => o.startsWith("Advance act")));
     r = toTurn(pick(r, /^Advance act/));
     expect(actCode(r)).toBe("12112");
     const armitage = Object.values(r.state.cards).find((c) => c.code === "12115")!;
@@ -255,7 +255,9 @@ describe("Smoke and Mirrors", () => {
     r = toTurn(pick(r, /^Augurs of Flame/));
     const cornelia = Object.values(r.state.cards).find((c) => c.code === "12140")!;
     expect(cornelia.zone).toBe("enemy");
-    r = until(pick(r, /^Evade Cornelia/), (x) => options(x).some((o) => /^Cornelia Akely/.test(o)));
+    r = until(pick(r, /^Evade Cornelia/), (x) =>
+      options(x).some((o) => o.startsWith("Cornelia Akely")),
+    );
     r = toTurn(pick(r, /^Cornelia Akely/));
     expect(r.state.flags.underAct).toEqual([cornelia.id]);
     expect(r.state.log.some((e) => e.type === "codex")).toBe(true);
@@ -298,7 +300,7 @@ describe("Queen of Ash", () => {
       tunnel.revealed = true;
       inv(g, R).location = tunnel.id;
     });
-    expect(options(r).some((o) => /^Move to Underground Cistern/.test(o))).toBe(false);
+    expect(options(r).some((o) => o.startsWith("Move to Underground Cistern"))).toBe(false);
     r = mutate(r, (g) => {
       inv(g, R).clues = 3;
     });

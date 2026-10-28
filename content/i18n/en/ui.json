@@ -848,5 +848,19 @@
   "prompt.healWhich": "heal damage or horror?",
   "instruction.healWhich": "Tap your choice",
   "option.healDamage": "Heal damage",
-  "option.healHorror": "Heal horror"
+  "option.healHorror": "Heal horror",
+  "fullscreen.enter": "Fullscreen",
+  "fullscreen.exit": "Exit fullscreen",
+  "fullscreen.ask": "Play fullscreen?",
+  "fullscreen.yes": "Enter",
+  "fullscreen.no": "Not now",
+  "fullscreen.homeScreen": "For a full-screen table, use Share → Add to Home Screen.",
+  "fullscreen.dismiss": "Got it",
+  "wizard.filter.toggle": "Filter",
+  "wizard.filter.count": "Filter ({n})",
+  "wizard.details": "Details",
+  "sheet.close": "Close",
+  "deckEditor.addCards": "Add cards",
+  "phone.exhausted": "Exhausted",
+  "phone.threats": "Your threat area"
 }

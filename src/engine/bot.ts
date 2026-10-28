@@ -50,14 +50,14 @@ export function botChoice(db: ContentDb, r: Result): string {
       const o = p.options.find((x) => {
         if (!re.test(x.label)) return false;
         if (/investigate/i.test(x.label) && clues === 0) return false;
-        if (/^Move/.test(x.label))
+        if (x.label.startsWith("Move"))
           return clues === 0 && (x.value as { to?: string }).to === goal(db, r, p.inv);
         return true;
       });
       if (o) return o.id;
     }
   }
-  if (p.kind === "commit") return p.options.find((o) => /^Commit/.test(o.label))?.id ?? "done";
+  if (p.kind === "commit") return p.options.find((o) => o.label.startsWith("Commit"))?.id ?? "done";
   if (p.kind === "assign") return p.options.at(-1)!.id; // soak with assets first
   return p.options[0].id;
 }

@@ -44,3 +44,10 @@
   top: -8px;
   right: -8px;
 }
+
+/* the phone's deck chip: portrait, turn badge and name on one line (the badge no longer sits over the name) */
+:global(.menus):global(.phone) :global(.dk-inv) .wz-badge {
+  position: static;
+  font-size: 12px;
+  padding: 0 5px;
+}

@@ -13,6 +13,8 @@ import styles from "./TipLayer.module.css";
 
 const W = 300;
 const GAP = 14;
+/** the tallest tip card (the phone's 44 px button included) */
+const H_MAX = 170;
 
 const readSeen = (): Set<string> => {
   try {
@@ -65,10 +67,11 @@ function place(r: Rect | null): { left: number; top: number; side: Side; arrow: 
     if (r.x0 - GAP - W > 8) return { left: r.x0 - GAP - W, top, side: "left", arrow };
   }
   const left = clamp(cx - W / 2, 8, innerWidth - W - 8);
-  const above = cy > innerHeight / 2;
+  // above only with room for the card; below stays on screen even when the anchor fills it (the open hand drawer)
+  const above = cy > innerHeight / 2 && r.y0 - GAP >= H_MAX;
   return {
     left,
-    top: above ? r.y0 - GAP : r.y1 + GAP,
+    top: above ? r.y0 - GAP : Math.min(r.y1 + GAP, innerHeight - H_MAX),
     side: above ? "above" : "below",
     arrow: clamp(cx - left, 16, W - 16),
   };

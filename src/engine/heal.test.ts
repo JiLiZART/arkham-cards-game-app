@@ -30,7 +30,7 @@ const turn = (
       r,
       r.state.pending.options.some((o) => o.id === "pass")
         ? "pass"
-        : /^Done/.test(r.state.pending.options[0].label)
+        : r.state.pending.options[0].label.startsWith("Done")
           ? /^Done/
           : /./,
     );

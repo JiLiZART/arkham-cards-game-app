@@ -95,7 +95,8 @@ export function CampaignSheet({
   onClose,
 }: {
   campaign: CampaignDef;
-  onClose: () => void;
+  /** the sidebar's × (a bottom sheet has its own Close, and passes none) */
+  onClose?: () => void;
 }) {
   const locale = useGame((s) => s.locale);
   const [more, setMore] = useState(false);
@@ -115,9 +116,11 @@ export function CampaignSheet({
           <b>{tileName(db, campaign, locale)}</b>
           <i>{scenarioCount(campaign.scenarios.length)}</i>
         </div>
-        <button className={styles.wzCampClose} onClick={onClose} aria-label={tr("wizard.close")}>
-          ×
-        </button>
+        {onClose && (
+          <button className={styles.wzCampClose} onClick={onClose} aria-label={tr("wizard.close")}>
+            ×
+          </button>
+        )}
       </div>
       {!campaignComplete(db, campaign.id) && (
         <small className="wz-generated">

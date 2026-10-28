@@ -374,8 +374,8 @@ export function createGameStore(
     return {
       screen: "title",
       locale: "en",
-      drawByHand: true,
-      tapDecks: true,
+      drawByHand: false,
+      tapDecks: false,
       pace: "normal",
       tipsOn: true,
       musicVolume: 50,
@@ -538,8 +538,8 @@ export function createGameStore(
         }
         const settings = {
           locale: save.settings?.locale ?? "en",
-          drawByHand: save.settings?.drawByHand ?? true,
-          tapDecks: save.settings?.tapDecks ?? true,
+          drawByHand: save.settings?.drawByHand ?? false,
+          tapDecks: save.settings?.tapDecks ?? false,
           pace: save.settings?.pace ?? "normal",
           tipsOn: save.settings?.tipsOn ?? true,
           musicVolume: save.settings?.musicVolume ?? 50,

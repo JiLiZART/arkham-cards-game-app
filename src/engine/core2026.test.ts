@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from "vitest";
-import { loadPack } from "../content/index";
+import { loadPack } from "../content";
 import { card, createCard, inv, moveCard, type G } from "./core";
 import type { Result } from "./engine";
 import {
@@ -333,8 +333,8 @@ describe("weaknesses", () => {
       hand(g, R, "12019");
       inv(g, R).resources = 5;
     });
-    expect(options(r).some((o) => /^Play M1911/.test(o))).toBe(false);
-    expect(options(r).some((o) => /^The Necronomicon/.test(o))).toBe(true);
+    expect(options(r).some((o) => o.startsWith("Play M1911"))).toBe(false);
+    expect(options(r).some((o) => o.startsWith("The Necronomicon"))).toBe(true);
   });
 
   it("The Gold Bug: -1 health and -1 sanity in the threat area", () => {
@@ -345,6 +345,6 @@ describe("weaknesses", () => {
     });
     const g = gOf(r);
     expect(g.s.invs[R]).toBeTruthy();
-    expect(options(r).some((o) => /^The Gold Bug/.test(o))).toBe(true);
+    expect(options(r).some((o) => o.startsWith("The Gold Bug"))).toBe(true);
   });
 });

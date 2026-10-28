@@ -135,3 +135,58 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* the phone: the pool is a full-screen layer with its own Close; the deck gets the body */
+.dk-pool-full {
+  position: fixed;
+  inset: 0;
+  z-index: 140;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px calc(12px + env(safe-area-inset-right, 0px)) env(safe-area-inset-bottom, 0px)
+    calc(12px + env(safe-area-inset-left, 0px));
+  overflow-y: auto;
+  /* a focused card scrolls clear of the sticky bars */
+  scroll-padding-top: 120px;
+  background: var(--paper-leaf);
+  color: var(--paper-ink);
+}
+.dk-pool-bar {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 2px 0;
+  background: var(--paper-leaf);
+}
+.dk-pool-bar b {
+  font: 18px var(--f-display);
+}
+/* the close is an icon: 36 px to look at, a 44 px tap */
+.dk-pool-close {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--paper-button);
+  border: 1px solid var(--paper-rule);
+  color: var(--paper-ink);
+}
+.dk-pool-close::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+}
+.dk-pool-close :global(.ui-icon) {
+  display: block;
+}

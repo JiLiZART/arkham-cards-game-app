@@ -50,7 +50,7 @@ export function railItem(o: ChoiceOption): RailItem {
     if (redraw)
       return { key: "rail.redraw", vars: { n: redraw[1] }, symbol: "redraw", primary: true };
     return {
-      key: /^Keep hand/.test(o.label) ? "rail.keep" : "rail.done",
+      key: o.label.startsWith("Keep hand") ? "rail.keep" : "rail.done",
       symbol: "check",
       primary: true,
     };
@@ -58,7 +58,7 @@ export function railItem(o: ChoiceOption): RailItem {
   // declining a reaction is never the polished default
   if (o.id === "pass") return { key: "rail.pass", symbol: "pass", primary: false };
   if (o.id === "none") return { key: "rail.nothing", symbol: "none", primary: false };
-  if (/^Resign/.test(o.label)) return { key: "rail.resign", symbol: "resign", primary: false };
+  if (o.label.startsWith("Resign")) return { key: "rail.resign", symbol: "resign", primary: false };
   if (typeof o.value === "string" && SKILLS.has(o.value))
     return { key: null, icon: o.value as IconName, primary: false };
   return { key: null, symbol: "dot", primary: false };

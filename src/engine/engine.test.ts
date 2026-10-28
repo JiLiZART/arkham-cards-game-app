@@ -420,7 +420,7 @@ describe("basic actions & enemies", () => {
       other = putEnemy(g, "01159", here, null);
       g.s.cards[other].exhausted = true;
     });
-    const target = r.state.pending!.options.find((o) => /^Move to Rivertown/.test(o.label))!;
+    const target = r.state.pending!.options.find((o) => o.label.startsWith("Move to Rivertown"))!;
     r = dispatch(db, r.state, { type: "choose", inv: ROLAND, option: target.id });
     while (r.state.pending?.kind === "reaction" || r.state.pending?.kind === "assign")
       r = pick(r, /^(Pass|Roland)/);

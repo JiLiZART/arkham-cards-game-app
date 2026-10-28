@@ -289,7 +289,7 @@ export function HandFan() {
     if (el) rememberRect(id, el);
     if (el && game.pending?.kind === "mulligan") noteLocalMove(id, el);
     const opts = optionsFor(id);
-    const play = opts.filter((o) => /^Play/.test(o.label));
+    const play = opts.filter((o) => o.label.startsWith("Play"));
     const list = preferPlay && play.length ? play : opts;
     if (list.length === 1) choose(list[0].id);
     else if (list.length > 1) openMenu(x, y, list);

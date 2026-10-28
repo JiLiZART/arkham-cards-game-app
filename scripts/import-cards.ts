@@ -45,7 +45,7 @@ export function parseKeywords(text: string, type: string): CardDefInput["keyword
       .filter(Boolean);
     for (const p of parts)
       for (const [re, kw] of KEYWORDS) if (re.test(p) && p.split(" ").length <= 2) out.add(kw);
-    if (/^Fast\./.test(line.trim()) && (type === "event" || type === "asset")) out.add("fast");
+    if (line.trim().startsWith("Fast.") && (type === "event" || type === "asset")) out.add("fast");
   }
   return [...out];
 }

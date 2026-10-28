@@ -470,3 +470,22 @@ describe("sorting the investigators", () => {
     expect(s.at(-1)!.code).toBe("02001");
   });
 });
+
+describe("the Filter chip's count (phone)", () => {
+  it("counts the campaign filters that are set, the empty ones not", async () => {
+    const { campaignFilterCount, NO_CAMPAIGN_FILTER } = await import("./wizard");
+    expect(campaignFilterCount(NO_CAMPAIGN_FILTER)).toBe(0);
+    expect(campaignFilterCount({ ...NO_CAMPAIGN_FILTER, kind: "side" })).toBe(1);
+    expect(
+      campaignFilterCount({ kind: "return", rules: "complete", length: "few", query: "  dun " }),
+    ).toBe(4);
+    expect(campaignFilterCount({ ...NO_CAMPAIGN_FILTER, query: "   " })).toBe(0);
+  });
+
+  it("counts the picker's class, cycle and name, not the order", async () => {
+    const { pickerFilterCount } = await import("./wizard");
+    expect(pickerFilterCount({ faction: null, cycle: null, query: "" })).toBe(0);
+    expect(pickerFilterCount({ faction: "seeker", cycle: null, query: "" })).toBe(1);
+    expect(pickerFilterCount({ faction: "seeker", cycle: "core", query: "ro" })).toBe(3);
+  });
+});

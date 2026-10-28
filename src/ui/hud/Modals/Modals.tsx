@@ -15,6 +15,7 @@ import { InvModal } from "../Investigators";
 import { ChaosBagModal } from "../ChaosBagModal";
 import { moment } from "../SoundLayer";
 import { DeckViewer } from "../DeckViewer";
+import { AssetsModal } from "../AssetsModal";
 import styles from "./Modals.module.css";
 
 /** a native modal dialog: Escape and focus trapping come from <dialog>; a click on the backdrop closes it */
@@ -190,5 +191,8 @@ export function Modals() {
   if ("card" in modal) return <CardModal key={modal.card} id={modal.card} />;
   if ("bag" in modal) return <ChaosBagModal />;
   if ("deck" in modal) return <DeckViewer key={modal.deck} kind={modal.deck} />;
+  if ("assets" in modal) return <AssetsModal key={modal.assets} inv={modal.assets} />;
+  if ("threats" in modal)
+    return <AssetsModal key={modal.threats} inv={modal.threats} part="threats" />;
   return <InvModal key={modal.inv} inv={modal.inv} />;
 }

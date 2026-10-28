@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { campaignLoaded, content, contentErrors, loadCampaign, loadPack, packsOf } from "./index";
+import { campaignLoaded, content, contentErrors, loadCampaign, loadPack, packsOf } from ".";
 import { cardText } from "./i18n";
 import { addCardText, addPack, buildContent, cardsOf, packLoaded, packOfCode } from "./loader";
 import { loadContentFromDisk } from "./node";

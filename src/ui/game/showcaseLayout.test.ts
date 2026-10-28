@@ -41,3 +41,22 @@ describe("showcaseLayout", () => {
     expect(at(4, 1366, 768).width).toBeLessThan(300);
   });
 });
+
+describe("showcaseLayout on the phone", () => {
+  const phone = (n: number) => showcaseLayout(n, 852, 393, true);
+
+  it("one or two cards stand at least 85 % of the screen's height, to be read", () => {
+    for (const n of [1, 2]) expect(phone(n).width * CARD_RATIO).toBeGreaterThanOrEqual(393 * 0.85);
+  });
+
+  it("leaves the help line its column beside the cards, and every card fits", () => {
+    for (const n of [1, 2, 3, 4, 6]) {
+      const l = phone(n);
+      const rows = Math.ceil(n / l.cols);
+      expect(l.cols * (l.width + 18), `${n} wide`).toBeLessThanOrEqual(852 - 240);
+      expect(rows * l.width * CARD_RATIO + (rows - 1) * 18, `${n} tall`).toBeLessThanOrEqual(
+        393 - 24,
+      );
+    }
+  });
+});

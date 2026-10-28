@@ -1,0 +1,44 @@
+.fs-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  background: var(--band);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  color: var(--ink);
+}
+.fs-btn :global(.ui-icon) {
+  display: block;
+}
+/* one line under the top edge, clear of the top bar and the hand; it covers no control of the screen below */
+.ask {
+  position: fixed;
+  left: 50%;
+  top: calc(44px + env(safe-area-inset-top, 0px));
+  transform: translateX(-50%);
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: calc(100vw - 32px);
+  padding: 4px 8px 4px 12px;
+  background: var(--band);
+  border: 1px solid var(--rule);
+  border-radius: 22px;
+  box-shadow: 0 6px 18px #000c;
+  color: var(--ink);
+  font: 14px/1.2 var(--f-body);
+}
+/* on a menu screen the heading and the buttons fill the top: the ask goes under them */
+.ask.bottom {
+  top: auto;
+  bottom: calc(6px + env(safe-area-inset-bottom, 0px));
+}
+.ask button {
+  min-height: 44px;
+  padding: 0 12px;
+  font-size: 14px;
+}

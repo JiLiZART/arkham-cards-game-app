@@ -1,3 +1,4 @@
+import { useLayoutMode } from "../../state/layoutMode";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { t } from "../../../content/i18n";
 import type { GameState, InstId } from "../../../engine/types";
@@ -34,7 +35,8 @@ export function Showcase() {
   // the middle of the screen is asked for once the events before these cards have played
   const holds = useStage(ids.length && !busy ? "showcase" : null);
   const root = useRef<HTMLDivElement>(null);
-  // the cards' size follows the window
+  // the cards' size follows the window; on the phone they take the height (the help line goes beside them)
+  const phone = useLayoutMode() === "phone";
   const [screen, setScreen] = useState({ w: innerWidth, h: innerHeight });
   useEffect(() => {
     const on = () => setScreen({ w: innerWidth, h: innerHeight });
@@ -103,7 +105,7 @@ export function Showcase() {
   }, [drawn.length, holds]);
 
   if (!ids.length || !holds) return null;
-  const layout = showcaseLayout(ids.length, screen.w, screen.h);
+  const layout = showcaseLayout(ids.length, screen.w, screen.h, phone);
   // the rightmost column's details go to its left, so they don't run off the screen
   const show = (id: InstId, i: number, el: HTMLElement) =>
     setDetail({

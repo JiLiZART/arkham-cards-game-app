@@ -1,5 +1,5 @@
 import { afterEach, beforeAll, describe, expect, it } from "vitest";
-import { loadPack } from "../content/index";
+import { loadPack } from "../content";
 import { createCard, inv, moveCard } from "./core";
 import type { Ability } from "../content/schema";
 import type { Result } from "./engine";
@@ -86,7 +86,7 @@ describe("player windows", () => {
         r,
         p.options.some((o) => o.id === "pass")
           ? "pass"
-          : /^Done/.test(p.options[0].label) || p.kind === "commit"
+          : p.options[0].label.startsWith("Done") || p.kind === "commit"
             ? /^Done/
             : /./,
       );
@@ -134,7 +134,7 @@ describe("player windows", () => {
           r,
           p.options.some((o) => o.id === "pass")
             ? "pass"
-            : /^Done/.test(p.options[0].label) || p.kind === "commit"
+            : p.options[0].label.startsWith("Done") || p.kind === "commit"
               ? /^Done/
               : /./,
         );
@@ -242,7 +242,11 @@ describe("the window before an enemy takes damage", () => {
       giveCard(g, ROLAND, "01023"); // Dodge
     });
     r = pick(r, "End turn");
-    for (let k = 0; k < 40 && r.state.pending && !options(r).some((o) => /^Dodge/.test(o)); k++)
+    for (
+      let k = 0;
+      k < 40 && r.state.pending && !options(r).some((o) => o.startsWith("Dodge"));
+      k++
+    )
       r = pick(r, r.state.pending.options.some((o) => o.id === "pass") ? "pass" : /./);
     r = pick(r, /^Dodge/);
     expect(r.state.pending?.step).toMatchObject({ trigger: "enemyAttacked" });

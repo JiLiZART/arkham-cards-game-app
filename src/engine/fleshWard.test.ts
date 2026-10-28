@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from "vitest";
-import { loadPacksFor } from "../content/index";
+import { loadPacksFor } from "../content";
 import { card, createCard, inv, moveCard, push } from "./core";
 import { run } from "./engine";
 import {
@@ -31,7 +31,7 @@ function attacked(opts: { uses?: number; exhausted?: boolean } = {}): { r: Resul
       r,
       r.state.pending.options.some((o) => o.id === "pass")
         ? "pass"
-        : /^Done/.test(r.state.pending.options[0].label)
+        : r.state.pending.options[0].label.startsWith("Done")
           ? /^Done/
           : /./,
     );
@@ -59,7 +59,7 @@ function attacked(opts: { uses?: number; exhausted?: boolean } = {}): { r: Resul
       r,
       p.options.some((o) => o.id === "pass")
         ? "pass"
-        : /^Done/.test(p.options[0].label)
+        : p.options[0].label.startsWith("Done")
           ? /^Done/
           : /./,
     );
@@ -75,7 +75,7 @@ const finish = (r: Result): Result => {
         ? new RegExp(`to ${inv(gOf(r), NATHANIEL).name}`)
         : p.options.some((o) => o.id === "pass")
           ? "pass"
-          : /^Done/.test(p.options[0].label)
+          : p.options[0].label.startsWith("Done")
             ? /^Done/
             : /./,
     );

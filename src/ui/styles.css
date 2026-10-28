@@ -6,7 +6,7 @@
  * Public hook classes: rendered as plain strings by their owner and reached from other modules only as
  * :global(.name). No other class is styled from outside its owner.
  *  bag-card, column, desk, dk-inv, dv-front, icon-img, instruction-bar, intent, lang-switch, log-inv,
- *  mulligan-cards, play-strip, removable, right-dock, sheet-open, st-placed-slot, st-stage, stat-dock,
+ *  menus, mulligan-cards, play-strip, removable, right-dock, sheet-open, st-placed-slot, st-stage, stat-dock,
  *  stat-who, text-face, topbar, ui-icon, wz-bags, wz-camp, wz-camp-sheet, wz-ready, wz-tile
  */
 :root {
@@ -586,7 +586,7 @@ footer {
   --feed-w: 300px;
 }
 .game.phone .play-strip.column.aside {
-  translate: 130% 0;
+  translate: -130% 0;
   pointer-events: none;
 }
 /* a strip card with something to do pulses: stronger than the hand's static ring, so it stands apart from idle and exhausted cards */
@@ -1013,6 +1013,10 @@ footer {
 
 /* title, settings and the new-game wizard: phone-first, every control at least 44 px */
 /* the cover painting fades into the dark; a scrim keeps the buttons readable (phone: the painting crops to its middle) */
+/* the menus' root carries the layout mode and adds no box of its own (ADR-0005) */
+.menus {
+  display: contents;
+}
 .screen.title {
   position: relative;
   min-height: 100dvh;
@@ -1117,6 +1121,58 @@ footer {
   margin: 14px 0;
 }
 
+/* the new-game wizard on the phone (ADR-0005): the step's body gets the screen: a one-row head, no hint line, a slim sticky footer */
+.menus.phone .screen.wizard {
+  padding: 6px calc(12px + env(safe-area-inset-right, 0px))
+    calc(4px + env(safe-area-inset-bottom, 0px)) calc(12px + env(safe-area-inset-left, 0px));
+}
+.menus.phone .wz-head {
+  justify-content: flex-start;
+  gap: 10px;
+  min-height: 40px;
+  /* clear of the corner's fullscreen and language buttons */
+  padding-right: 184px;
+}
+.menus.phone .wz-head h1 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.1;
+}
+.menus.phone .wz-head h1::after {
+  display: none;
+}
+/* the desk's ironwork rules above and below would cut across the tiles on a short screen */
+.menus.phone .desk .wz-head {
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+.menus.phone .desk .wz-head::after,
+.menus.phone .desk .wz-foot::before {
+  display: none;
+}
+.menus.phone .desk .wz-foot {
+  padding-top: 2px;
+}
+.menus.phone .wz-intro {
+  display: none;
+}
+.menus.phone .wz-body {
+  margin: 0;
+}
+.menus.phone .wz-foot {
+  position: sticky;
+  bottom: 0;
+  min-height: 48px;
+  margin: 0;
+  padding: 2px 0 0;
+  background: var(--bg);
+}
+.menus.phone .wz-foot button {
+  min-height: 44px;
+  min-width: 110px;
+  font-size: 16px;
+}
+
 /* ---------- the phone layout (ADR-0005): every rule below hangs off .game.phone ---------- */
 .game.phone {
   --safe-l: env(safe-area-inset-left, 0px);
@@ -1179,8 +1235,8 @@ footer {
   --sw: 44px;
   top: 88px;
   bottom: 132px;
-  left: auto;
-  right: calc(2px + var(--safe-r));
+  left: calc(2px + var(--safe-l));
+  right: auto;
   width: calc(var(--sw) + 10px);
   flex-direction: column;
   justify-content: flex-start;
@@ -1195,14 +1251,26 @@ footer {
   pointer-events: auto;
   z-index: 47;
 }
-.game.phone .play-strip.column.open {
-  width: calc(var(--sw) + 24px);
-}
 /* every overlay's buttons take a 44 px tap on the phone; modals take the whole screen with their Close */
 .game.phone .modal button,
 .game.phone .sc-help button {
   min-height: 44px;
   min-width: 44px;
+}
+/* the showcase on the phone: the cards take the height to be read, the help line stands in a column beside them
+   (showcaseLayout reserves its width) */
+.game.phone .showcase {
+  flex-direction: row;
+  gap: 12px;
+  padding: 0 calc(12px + var(--safe-r)) 0 calc(12px + var(--safe-l));
+}
+.game.phone .sc-cards {
+  padding: 4px;
+  gap: 12px;
+}
+.game.phone .sc-help {
+  max-width: 220px;
+  font-size: 16px;
 }
 .game.phone dialog.modal {
   width: 100vw;

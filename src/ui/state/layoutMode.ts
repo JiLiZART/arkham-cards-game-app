@@ -24,8 +24,8 @@ export const viewportOf = (w: { innerWidth: number; innerHeight: number }) => ({
 
 /** screen space (px) covered by fixed HUD around the map on the desktop; the camera centres things in what's left */
 export const DESKTOP_INSETS: Insets = { top: 86, right: 470, bottom: 170, left: 200 };
-/** on the phone: the 36 px bar, the strip's thumbnail column on the right, and the hand drawer's peek with the instruction bar above it */
-export const PHONE_INSETS: Insets = { top: 36, right: 56, bottom: 136, left: 0 };
+/** on the phone: the 36 px bar, the strip's thumbnail column on the left, and the hand drawer's peek with the instruction bar above it */
+export const PHONE_INSETS: Insets = { top: 36, right: 0, bottom: 120, left: 56 };
 
 /** the camera's insets for a mode; on the phone the notch and home-indicator areas are added */
 export function insetsFor(

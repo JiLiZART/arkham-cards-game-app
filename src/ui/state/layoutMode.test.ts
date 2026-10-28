@@ -33,6 +33,18 @@ describe("the desktop insets", () => {
   });
 });
 
+describe("the phone insets", () => {
+  it("frame the map above the compact instruction bar and the hand drawer's peek", () => {
+    expect(PHONE_INSETS.bottom).toBe(120); // bar top at 393 - 120 on a 393 px screen
+    expect(PHONE_INSETS.top).toBe(36);
+  });
+
+  it("keep the asset column free on the left; the right edge has only the small dock buttons", () => {
+    expect(PHONE_INSETS.left).toBe(56);
+    expect(PHONE_INSETS.right).toBe(0);
+  });
+});
+
 describe("insetsFor", () => {
   it("the desktop insets are the fixed panels'", () => {
     expect(insetsFor("desktop")).toEqual(DESKTOP_INSETS);
@@ -44,7 +56,7 @@ describe("insetsFor", () => {
       top: PHONE_INSETS.top,
       right: PHONE_INSETS.right + 47,
       bottom: PHONE_INSETS.bottom + 21,
-      left: 47,
+      left: PHONE_INSETS.left + 47,
     });
   });
 });

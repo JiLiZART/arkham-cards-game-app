@@ -17,6 +17,7 @@ import { useView } from "./state/view";
 import { useLayout } from "./state/layoutMode";
 import { installTouch } from "./game/touch";
 import { LangSwitch } from "./components/LangSwitch";
+import { FullscreenAsk, FullscreenButton } from "./components/FullscreenButton";
 import styles from "./App.module.css";
 
 /** a phone held upright: the table needs it sideways (nothing about the game changes while this shows) */
@@ -29,6 +30,16 @@ function RotateCard() {
       </div>
       <h2>{t(db, locale, "phone.rotate")}</h2>
       <p>{t(db, locale, "phone.rotateWhy")}</p>
+    </div>
+  );
+}
+
+/** the top-right corner of every menu screen: the fullscreen toggle (where the page can go fullscreen) and the language tabs */
+function Corner() {
+  return (
+    <div className={styles.langCorner}>
+      <FullscreenButton />
+      <LangSwitch />
     </div>
   );
 }
@@ -70,11 +81,12 @@ export function App() {
   }
   if (screen === "game" && game) {
     return (
-      <div className={`game ${mode} ${testing ? "testing" : ""}`}>
+      <div className={`game ${mode} ${testing ? "testing" : ""}`} data-layout={mode}>
         {rotate && <RotateCard />}
         <Table />
         <Hud />
         {mode === "phone" ? <HandDrawer /> : <HandFan />}
+        <FullscreenAsk />
       </div>
     );
   }
@@ -93,20 +105,22 @@ export function App() {
       <Title />
     );
   // every menu screen but the title is the desk at night: the night ground, paper notes for what is written down
+  // menus read the layout mode through this root (ADR-0005): their phone rules hang off `.menus.phone`
   return (
-    <>
+    <div className={`menus ${mode}`} data-layout={mode}>
       {rotate && <RotateCard />}
+      <FullscreenAsk at="bottom" />
       {screen === "title" ? (
         <>
           {page}
-          <LangSwitch className={styles.langCorner} />
+          <Corner />
         </>
       ) : (
         <div className="desk">
           {page}
-          <LangSwitch className={styles.langCorner} />
+          <Corner />
         </div>
       )}
-    </>
+    </div>
   );
 }

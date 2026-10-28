@@ -409,9 +409,22 @@ describe("cancelling a skill test before the draw", () => {
 });
 
 describe("the tap decks setting", () => {
-  it("is on by default and a new scenario's setup asks for tapped decks", () => {
+  /** a store with the setting turned on, as a player who wants to tap would have it */
+  const startTapping = (storage: Storage) => {
+    const s = createGameStore(db, storage);
+    s.getState().setTapDecks(true);
+    s.getState().newCampaign({
+      campaignId: "night-of-the-zealot",
+      difficulty: "standard",
+      seed: 9,
+      investigators: [{ code: "01001", deckId: "roland-starter" }],
+    });
+    return s;
+  };
+
+  it("is off by default and a new scenario's setup still asks for tapped decks", () => {
     const s = start(mem());
-    expect(s.getState().tapDecks).toBe(true);
+    expect(s.getState().tapDecks).toBe(false);
     expect(s.getState().setup?.tapDecks).toBe(true);
     expect(s.getState().game?.tapDecks).toBe(true);
   });
@@ -444,7 +457,7 @@ describe("the tap decks setting", () => {
   });
 
   it("on: a draw in play waits for the tap", () => {
-    const s = start(mem());
+    const s = startTapping(mem());
     play(s, waiting);
     expect(s.getState().game!.pending).toMatchObject({ kind: "draw" });
   });
@@ -466,7 +479,7 @@ describe("the tap decks setting", () => {
   });
 
   it("turned off while a deck waits: the draw happens at once; turned on again, the next one waits", () => {
-    const s = start(mem());
+    const s = startTapping(mem());
     play(s, waiting);
     const hand = s.getState().game!.invs["01001"].hand.length;
     s.getState().setTapDecks(false);
@@ -499,7 +512,7 @@ describe("the tap decks setting", () => {
 
   it("a save with a waiting draw, loaded with the setting off, draws on load; the replay is the same game", () => {
     const storage = mem();
-    const a = start(storage);
+    const a = startTapping(storage);
     play(a, waiting);
     const raw = JSON.parse(storage.getItem(SAVE_KEY)!);
     raw.settings.tapDecks = false;
@@ -516,7 +529,7 @@ describe("the tap decks setting", () => {
     expect(again.getState().game!.invs["01001"].hand).toEqual(g.invs["01001"].hand);
   });
 
-  it("is saved with the other settings, and a save from before it reads as on", () => {
+  it("is saved with the other settings, and a save without it reads as off", () => {
     const storage = mem();
     const a = start(storage);
     a.getState().setTapDecks(false);
@@ -529,7 +542,39 @@ describe("the tap decks setting", () => {
     storage.setItem(SAVE_KEY, JSON.stringify(raw));
     const c = createGameStore(db, storage);
     c.getState().resume();
-    expect(c.getState().tapDecks).toBe(true);
+    expect(c.getState().tapDecks).toBe(false);
+  });
+
+  it("a save that holds it on keeps it on", () => {
+    const storage = mem();
+    const a = startTapping(storage);
+    expect(JSON.parse(storage.getItem(SAVE_KEY)!).settings.tapDecks).toBe(true);
+    const b = createGameStore(db, storage);
+    b.getState().resume();
+    expect(b.getState().tapDecks).toBe(true);
+  });
+});
+
+describe("the draw chaos tokens by hand setting", () => {
+  it("is off by default, and a save without it reads as off", () => {
+    const storage = mem();
+    const a = start(storage);
+    expect(a.getState().drawByHand).toBe(false);
+    const raw = JSON.parse(storage.getItem(SAVE_KEY)!);
+    delete raw.settings.drawByHand;
+    storage.setItem(SAVE_KEY, JSON.stringify(raw));
+    const b = createGameStore(db, storage);
+    b.getState().resume();
+    expect(b.getState().drawByHand).toBe(false);
+  });
+
+  it("a save that holds it on keeps it on", () => {
+    const storage = mem();
+    const a = start(storage);
+    a.getState().setDrawByHand(true);
+    const b = createGameStore(db, storage);
+    b.getState().resume();
+    expect(b.getState().drawByHand).toBe(true);
   });
 });
 

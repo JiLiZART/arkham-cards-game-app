@@ -1,0 +1,1 @@
+export { AssetsModal } from "./AssetsModal";

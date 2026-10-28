@@ -61,7 +61,7 @@ function tokenNeeds(rest: string): ("x" | "onFail" | "revealAnother" | "effect")
     .filter(Boolean)) {
     if (/^[-+]?\d+$/.test(sentence)) continue; // the modifier
     if (/^-X$/.test(sentence) || /^-\d+ (for each|\(-\d+ instead)/.test(sentence)) needs.add("x");
-    else if (/^X is /.test(sentence)) continue;
+    else if (sentence.startsWith("X is ")) continue;
     else if (/^If you fail/i.test(sentence)) {
       needs.add("onFail");
       failing = true;

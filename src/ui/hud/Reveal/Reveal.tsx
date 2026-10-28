@@ -11,6 +11,7 @@ import { useView } from "../../state/view";
 import { riseAndArc, useFlyIn } from "../flights";
 import { DetailsColumn } from "../HandDetails";
 import { showcaseLayout } from "../../game/showcaseLayout";
+import { useLayoutMode } from "../../state/layoutMode";
 import { moment } from "../SoundLayer";
 import { cx } from "../../components/cx";
 import styles from "./Reveal.module.css";
@@ -46,6 +47,8 @@ function EncounterShowcase({
   const next = useGame((s) => s.nextEvent);
   const game = useGame((s) => s.game) as GameState;
   const card = useRef<HTMLButtonElement>(null);
+  // on the phone the card takes the height, its help line beside it (the showcase's phone shape)
+  const phone = useLayoutMode() === "phone";
   const [screen, setScreen] = useState({ w: innerWidth, h: innerHeight });
   const [detail, setDetail] = useState<DOMRect | null>(null);
   const press = useRef<ReturnType<typeof setTimeout>>();
@@ -81,7 +84,7 @@ function EncounterShowcase({
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
   });
-  const { width } = showcaseLayout(1, screen.w, screen.h);
+  const { width } = showcaseLayout(1, screen.w, screen.h, phone);
   return (
     <div
       className={cx("showcase", styles.encounterShowcase)}
@@ -129,9 +132,9 @@ function EncounterShowcase({
       </div>
       <div className="sc-help" data-testid="sc-help">
         {t(db, locale, "encounter.take")}{" "}
-        <button className="primary" onClick={send} autoFocus>
-          {t(db, locale, "draw.continue")}
-        </button>
+        {/*<button className="primary" onClick={send} autoFocus>*/}
+        {/*  {t(db, locale, "draw.continue")}*/}
+        {/*</button>*/}
       </div>
       {detail && (
         <DetailsColumn

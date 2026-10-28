@@ -1,6 +1,6 @@
 /** the engine against the Arkham Grimoire (ADR-0015): one describe per rule of the rules-alignment change */
 import { beforeAll, describe, expect, it } from "vitest";
-import { loadPack } from "../content/index";
+import { loadPack } from "../content";
 import { addTempMod, card, createCard, inv, moveCard } from "./core";
 import type { Ability } from "../content/schema";
 import type { Result } from "./engine";

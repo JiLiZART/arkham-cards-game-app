@@ -77,6 +77,11 @@ export const NO_CAMPAIGN_FILTER: CampaignFilter = {
   query: "",
 };
 
+/** how many campaign filters are set: the number on the phone's Filter chip */
+export const campaignFilterCount = (f: CampaignFilter): number =>
+  [f.kind !== "all", f.rules !== "all", f.length !== "all", f.query.trim() !== ""].filter(Boolean)
+    .length;
+
 export const campaignKind = (c: CampaignDef): "campaign" | "return" | "side" =>
   c.id.startsWith("side-") ? "side" : c.id.startsWith("return-to-") ? "return" : "campaign";
 const lengthOf = (c: CampaignDef): "one" | "few" | "many" =>
@@ -152,6 +157,10 @@ export interface PickerFilter {
   cycle: string | null;
   query: string;
 }
+
+/** how many picker filters are set (class, cycle, name; the order is not a filter) */
+export const pickerFilterCount = (f: PickerFilter): number =>
+  [f.faction !== null, f.cycle !== null, f.query.trim() !== ""].filter(Boolean).length;
 
 /** every investigator for the picker, filtered by class and cycle and by a search of the name (in the game's language and in English) */
 export function pickerList(db: ContentDb, locale: string, f: PickerFilter) {

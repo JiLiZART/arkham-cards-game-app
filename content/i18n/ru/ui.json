@@ -832,5 +832,19 @@
   "prompt.healWhich": "вылечить рану или ужас?",
   "instruction.healWhich": "Нажмите свой выбор",
   "option.healDamage": "Вылечить рану",
-  "option.healHorror": "Вылечить ужас"
+  "option.healHorror": "Вылечить ужас",
+  "fullscreen.enter": "На весь экран",
+  "fullscreen.exit": "Выйти из полного экрана",
+  "fullscreen.ask": "Играть на весь экран?",
+  "fullscreen.yes": "Включить",
+  "fullscreen.no": "Не сейчас",
+  "fullscreen.homeScreen": "Чтобы стол занял весь экран, нажмите «Поделиться» → «На экран Домой».",
+  "fullscreen.dismiss": "Понятно",
+  "wizard.filter.toggle": "Фильтр",
+  "wizard.filter.count": "Фильтр ({n})",
+  "wizard.details": "Подробнее",
+  "sheet.close": "Закрыть",
+  "deckEditor.addCards": "Добавить карты",
+  "phone.exhausted": "Истощена",
+  "phone.threats": "Ваша зона угроз"
 }

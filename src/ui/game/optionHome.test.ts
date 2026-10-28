@@ -123,7 +123,7 @@ describe("investigate on the rail", () => {
     expect(rail).toEqual(
       expect.arrayContaining(["Investigate Study", "Draw 1 card", "Gain 1 resource"]),
     );
-    const inv = r.state.pending!.options.find((o) => /^Investigate/.test(o.label))!;
+    const inv = r.state.pending!.options.find((o) => o.label.startsWith("Investigate"))!;
     expect(optionHome(inv, r.state, "01001")).toBe("board");
   });
 });
@@ -139,11 +139,11 @@ describe("the phone's instruction bar", () => {
     const labels = (mode: "phone" | "desktop") =>
       s.pending!.options.filter((o) => inBar(o, s, v, mode)).map((o) => o.label);
     expect(labels("desktop")).toEqual(expect.arrayContaining(["End turn"]));
-    expect(labels("desktop").some((l) => /^Draw/.test(l))).toBe(false);
+    expect(labels("desktop").some((l) => l.startsWith("Draw"))).toBe(false);
     expect(labels("phone")).toEqual(expect.arrayContaining(["End turn"]));
-    expect(labels("phone").some((l) => /^Draw/.test(l))).toBe(true);
-    expect(labels("phone").some((l) => /^Gain/.test(l))).toBe(true);
-    expect(labels("phone").some((l) => /^Investigate/.test(l))).toBe(true);
+    expect(labels("phone").some((l) => l.startsWith("Draw"))).toBe(true);
+    expect(labels("phone").some((l) => l.startsWith("Gain"))).toBe(true);
+    expect(labels("phone").some((l) => l.startsWith("Investigate"))).toBe(true);
     // hand cards stay in the hand drawer, not the bar
     expect(
       s

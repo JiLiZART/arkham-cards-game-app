@@ -21,6 +21,8 @@ import { viewerOf } from "../../state/store";
 import { isTouch } from "../../game/touch";
 import { useDimmed, useView } from "../../state/view";
 import { flyGhost, STAGGER_MS } from "../flights";
+import { BottomSheet } from "../../components/BottomSheet";
+import { useLayoutMode } from "../../state/layoutMode";
 import { RESOLVE_BOX } from "../Reveal";
 import { StatBody, useFlash } from "../Stats";
 import { cx } from "../../components/cx";
@@ -165,8 +167,11 @@ function Sheet({
   const options = (byCard.get(cardId) ?? []).filter((o) => abilities.some((x) => x.id === o.id));
   const dimmed = useDimmed(inv);
   const decider = viewerOf(game);
-  // outside taps and Escape close it
+  const phone = useLayoutMode() === "phone";
+  const locale = useGame((s) => s.locale);
+  // outside taps and Escape close the popover (the phone's bottom sheet has its own scrim and Escape)
   useEffect(() => {
+    if (phone) return;
     const key = (e: KeyboardEvent) => e.key === "Escape" && onClose();
     const down = (e: PointerEvent) =>
       !(e.target as Element).closest('[data-testid="pb-sheet"], [data-testid="pb-avatar"]') &&
@@ -177,18 +182,9 @@ function Sheet({
       window.removeEventListener("keydown", key);
       window.removeEventListener("pointerdown", down);
     };
-  }, [onClose]);
-  return (
-    <div
-      className={styles.pbSheet}
-      data-testid="pb-sheet"
-      onPointerEnter={onEnter}
-      onPointerLeave={onLeave}
-      style={{
-        left: Math.max(8, Math.min(anchor?.left ?? 8, innerWidth - 440)),
-        top: (anchor?.bottom ?? 60) + 6,
-      }}
-    >
+  }, [onClose, phone]);
+  const content = (
+    <>
       <StatBody
         inv={inv}
         legal={options.length > 0}
@@ -207,6 +203,27 @@ function Sheet({
           {tr("players.details")}
         </button>
       )}
+    </>
+  );
+  // on the phone the sheet is a bottom sheet (ADR-0017): the anchored popover would run off the short screen
+  if (phone)
+    return (
+      <BottomSheet title={cardText(db, inv, locale).name} onClose={onClose} testId="pb-sheet">
+        {content}
+      </BottomSheet>
+    );
+  return (
+    <div
+      className={styles.pbSheet}
+      data-testid="pb-sheet"
+      onPointerEnter={onEnter}
+      onPointerLeave={onLeave}
+      style={{
+        left: Math.max(8, Math.min(anchor?.left ?? 8, innerWidth - 440)),
+        top: (anchor?.bottom ?? 60) + 6,
+      }}
+    >
+      {content}
     </div>
   );
 }
@@ -228,6 +245,8 @@ export function PlayerBar() {
   const hovered = useRef<InvId | null>(null);
   const cancelOpen = useRef<(() => void) | null>(null);
   const cancelClose = useRef<(() => void) | null>(null);
+  // on the phone there is no hover: a tap opens the bottom sheet, with a finger or a mouse
+  const phone = useLayoutMode() === "phone";
   const model = barModel(game, { viewing });
   const decider = viewerOf(game);
   const shown = shownInv(game, { viewing });
@@ -253,14 +272,14 @@ export function PlayerBar() {
     if (a.canAct) return (useView.getState().setViewing(null), setOpen(null));
     if (a.shown)
       return setOpen((o) =>
-        o || !isTouch() ? null : { inv: a.inv, anchor: el.getBoundingClientRect() },
+        o || !(isTouch() || phone) ? null : { inv: a.inv, anchor: el.getBoundingClientRect() },
       );
     setOpen(null);
     useView.getState().setViewing(a.inv === decider ? null : a.inv);
   };
   // resting the mouse on another investigator's avatar opens their sheet; leaving the avatar and the sheet closes it after a moment
   const enter = (a: AvatarModel, el: HTMLElement, e: React.PointerEvent) => {
-    if (e.pointerType === "touch" || isTouch()) return;
+    if (e.pointerType === "touch" || isTouch() || phone) return;
     cancelClose.current?.();
     hovered.current = a.inv;
     cancelOpen.current?.();
@@ -280,7 +299,7 @@ export function PlayerBar() {
     cancelClose.current = delayed(
       SHEET_GRACE_MS,
       () => true,
-      () => setOpen((o) => (isTouch() ? o : null)),
+      () => setOpen((o) => (isTouch() || phone ? o : null)),
     );
   };
   // the sheet belongs to the table on screen: closed when the view moves on
