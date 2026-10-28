@@ -209,6 +209,10 @@ export class Session {
         if (this.mesh) this.mesh.signal(m.from, m.data);
         else this.signalsEarly.push([m.from, m.data]);
         return;
+      case "relay":
+        // the room stamped who sent it: the same checks as on a peer connection apply
+        this.onWire(m.from, m.w as Wire);
+        return;
       case "error":
         if (m.key === "net.error.version" || m.key === "net.error.protocol")
           this.net.setState({ phase: "refused" });
@@ -235,6 +239,10 @@ export class Session {
         .map((p) => p.id),
     );
     this.reportHave();
+    // without a peer connection nobody says `have` to this browser: the roster says how far the host is
+    const host = r.host;
+    if (host && host !== this.me && (r.have[host] ?? 0) > this.log.n && !this.asked.has(host))
+      this.ask(host);
     if (this.starting && r.mode === "game" && r.host === this.me && this.log.n === 0) {
       const kind = this.starting;
       this.starting = null;
@@ -312,7 +320,7 @@ export class Session {
         return;
       case "need": {
         const list = this.log.tail(w.from);
-        if (list.length) this.mesh?.send(from, { t: "moves", list });
+        if (list.length) this.sendTo(from, { t: "moves", list });
         return;
       }
       case "moves":
@@ -336,7 +344,21 @@ export class Session {
   }
 
   private ask(peer: string) {
-    if (this.mesh?.send(peer, { t: "need", from: this.log.n })) this.asked.add(peer);
+    if (this.sendTo(peer, { t: "need", from: this.log.n })) this.asked.add(peer);
+  }
+
+  /** to one player: over the peer connection when it is open, else through the room (ADR-0020) */
+  private sendTo(to: string, w: Wire): boolean {
+    if (this.mesh?.send(to, w)) return true;
+    if (!this.link || !this.net.getState().online) return false;
+    this.link.send({ t: "relay", to, w });
+    return true;
+  }
+
+  /** to every other player in the room, each by whichever way reaches them */
+  private sendAll(w: Wire) {
+    for (const p of Object.values(this.roster?.players ?? {}))
+      if (p.online && p.id !== this.me) this.sendTo(p.id, w);
   }
 
   // ---- moves
@@ -347,7 +369,7 @@ export class Session {
     if (this.isHost()) return this.hostHandle(p);
     if (this.waiting) return; // one at a time: the answer comes before the next question
     const host = this.roster?.host;
-    if (!host || !this.mesh?.send(host, { t: "propose", p })) {
+    if (!host || !this.sendTo(host, { t: "propose", p })) {
       this.notify("net.error.offline");
       return;
     }
@@ -396,7 +418,7 @@ export class Session {
     if (p.by === this.me) {
       this.clearWaiting();
       this.notify(key.startsWith("net.") ? key : "net.error.rejected", key);
-    } else this.mesh?.send(p.by, { t: "refused", at: p.at, key });
+    } else this.sendTo(p.by, { t: "refused", at: p.at, key });
   }
 
   /** the host: check, apply, number, tell everyone */
@@ -411,7 +433,7 @@ export class Session {
         .applyMove(p.move, this.roomSave([...this.log.moves, nm]));
       if (err) return this.refuse(p, err);
       this.log.receive(nm);
-      this.mesh?.broadcast({ t: "move", m: nm });
+      this.sendAll({ t: "move", m: nm });
       this.afterMove(nm);
     });
   }

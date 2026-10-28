@@ -52,4 +52,4 @@
 
 - [x] 8.1 Run `pnpm lint:fix`, `pnpm format:fix`, `pnpm typecheck`, `pnpm test`, `pnpm check:content`.
 - [x] 8.2 Review the phone screens with the `web-design-guidelines` skill for tap size, contrast and focus order; fix findings in the touched components.
-- [ ] 8.3 Run `openspec validate phone-ux --type change --strict`, then sync the delta specs (`/opsx:sync`) before archiving.
+- [x] 8.3 Run `openspec validate phone-ux --type change --strict`, then sync the delta specs (`/opsx:sync`) before archiving.

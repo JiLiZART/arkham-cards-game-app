@@ -72,13 +72,16 @@ export type ToRoom<Deck = unknown> =
   | { t: "have"; n: number }
   | { t: "rename"; name: string }
   /** connection setup for another player's peer connection */
-  | { t: "signal"; to: string; data: unknown };
+  | { t: "signal"; to: string; data: unknown }
+  /** a message for another player while no peer connection to them is open: forwarded unread (ADR-0020) */
+  | { t: "relay"; to: string; w: unknown };
 
 /** room to player */
 export type FromRoom<Deck = unknown> =
   | { t: "welcome"; you: string; roster: Roster<Deck> }
   | { t: "roster"; roster: Roster<Deck> }
   | { t: "signal"; from: string; data: unknown }
+  | { t: "relay"; from: string; w: unknown }
   | { t: "error"; key: RoomError; detail?: string };
 
 /** i18n keys (`net.error.*`) */

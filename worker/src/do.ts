@@ -131,6 +131,13 @@ export class Room extends DurableObject<Env> {
         if (to) this.send(to, { t: "signal", from: id, data: msg.data });
         return;
       }
+      // a player's message for another while no peer connection is open: passed on unread, the sender stamped from
+      // the socket, never from the message (ADR-0020)
+      case "relay": {
+        const to = typeof msg.to === "string" ? this.socketOf(msg.to) : null;
+        if (to) this.send(to, { t: "relay", from: id, w: msg.w });
+        return;
+      }
     }
   }
 

@@ -41,4 +41,36 @@ describe("iceServers", () => {
   it("falls back to STUN only when no key is configured", async () => {
     expect(await iceServers({}, fetchOk)).toEqual({ iceServers: PUBLIC_STUN, relay: false });
   });
+
+  const statics = {
+    TURN_URLS: "turn:relay.example.com:80, turns:relay.example.com:443?transport=tcp",
+    TURN_USERNAME: "user",
+    TURN_CREDENTIAL: "pass",
+  };
+
+  it("hands out a TURN provider's static credentials after public STUN", async () => {
+    const r = await iceServers(statics, fetchThrows);
+    expect(r.relay).toBe(true);
+    expect(r.iceServers.slice(0, PUBLIC_STUN.length)).toEqual(PUBLIC_STUN);
+    expect(r.iceServers.at(-1)).toEqual({
+      urls: ["turn:relay.example.com:80", "turns:relay.example.com:443?transport=tcp"],
+      username: "user",
+      credential: "pass",
+    });
+  });
+
+  it("prefers a Cloudflare TURN key when both are set", async () => {
+    const r = await iceServers({ ...statics, ...env }, fetchOk);
+    expect(r.iceServers.at(-1)).toEqual(creds.iceServers[0]);
+  });
+
+  it("uses the static credentials when the Cloudflare key fails", async () => {
+    const r = await iceServers({ ...statics, ...env }, fetchBad);
+    expect(r.iceServers.at(-1)?.username).toBe("user");
+  });
+
+  it("ignores static TURN with a part missing", async () => {
+    const { TURN_CREDENTIAL: _, ...partial } = statics;
+    expect(await iceServers(partial, fetchOk)).toEqual({ iceServers: PUBLIC_STUN, relay: false });
+  });
 });

@@ -10,7 +10,8 @@ import { Portrait } from "../../components/Portrait";
 import { cx } from "../../components/cx";
 import styles from "./NetIndicator.module.css";
 
-type Link = "ok" | "wait" | "gone";
+/** connected directly, through the room server (ADR-0020), reconnecting, or gone */
+type Link = "ok" | "via" | "wait" | "gone";
 
 /** the online room in the top bar: how many are connected, who holds which investigator, the invite link, the way out */
 export function NetIndicator() {
@@ -102,12 +103,14 @@ export function NetIndicator() {
   const state = (p: Player): Link => {
     if (!p.online) return "gone";
     if (p.id === net.me) return net.online ? "ok" : "wait";
-    return net.peers[p.id] === "open" ? "ok" : "wait";
+    if (net.peers[p.id] === "open") return "ok";
+    // no peer connection yet (or none possible on that network): moves still reach them through the room
+    return net.online ? "via" : "wait";
   };
   const players = roster
     ? Object.values(roster.players).sort((a, b) => a.joinedAt - b.joinedAt)
     : [];
-  const connected = players.filter((p) => state(p) === "ok").length;
+  const connected = players.filter((p) => state(p) === "ok" || state(p) === "via").length;
   const all: Link =
     !net.online || players.some((p) => p.online && state(p) === "wait") ? "wait" : "ok";
   const host = !!roster && roster.host === net.me;
@@ -118,7 +121,11 @@ export function NetIndicator() {
   const label = (p: Player) => {
     if (!p.online) return tr("net.away");
     const s = state(p);
-    return s === "ok" ? tr("net.connected") : tr("net.reconnecting");
+    return s === "ok"
+      ? tr("net.connected")
+      : s === "via"
+        ? tr("net.viaServer")
+        : tr("net.reconnecting");
   };
 
   // the pill says in words when this browser has lost the room
@@ -227,10 +234,6 @@ export function NetIndicator() {
                 ))}
               </ul>
             </>
-          )}
-          {/* without a relay only some networks connect: worth saying when a connection is actually stuck */}
-          {net.relay === false && all === "wait" && (
-            <p className={styles.warn}>{tr("net.noRelay")}</p>
           )}
           {copied === "failed" && <p className={styles.warn}>{tr("net.lobby.copyFailed")}</p>}
           <div className={styles.actions}>

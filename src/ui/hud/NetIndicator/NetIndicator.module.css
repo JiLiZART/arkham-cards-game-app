@@ -19,7 +19,8 @@
   border-radius: 50%;
   background: currentColor;
 }
-.ok {
+.ok,
+.via {
   color: var(--ok);
 }
 .wait {

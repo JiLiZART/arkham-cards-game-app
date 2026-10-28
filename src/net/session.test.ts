@@ -116,6 +116,12 @@ class FakeServer {
         return this.apply(link, noteHave(r, id, m.n));
       case "signal":
         return;
+      case "relay": {
+        // as the Durable Object does: to the addressed player, stamped with the sender's own id
+        for (const l of this.links)
+          if (l.id === m.to && !l.dead) l.deliver({ t: "relay", from: id, w: m.w });
+        return;
+      }
     }
   }
 
@@ -140,6 +146,8 @@ class FakeMesh implements Mesh {
     private hub: FakeHub,
   ) {}
   setPeers(ids: string[]) {
+    // networks where no direct link ever opens
+    if (this.hub.noLinks) return;
     for (const id of ids) {
       const other = this.hub.meshes.get(id);
       if (this.open.has(id) || !other || other.closed) continue;
@@ -176,6 +184,7 @@ class FakeMesh implements Mesh {
 
 class FakeHub {
   meshes = new Map<string, FakeMesh>();
+  constructor(readonly noLinks = false) {}
   create = (me: string, h: MeshHandlers): Mesh => {
     const m = new FakeMesh(me, h, this);
     this.meshes.set(me, m);
@@ -194,9 +203,9 @@ interface Player {
   seats: InvId[] | null;
 }
 
-const world = () => {
+const world = (opts: { noLinks?: boolean } = {}) => {
   const server = new FakeServer();
-  const hub = new FakeHub();
+  const hub = new FakeHub(opts.noLinks);
   const join = async (
     name: string,
     over: { storage?: Storage; prepare?: Prepare; tapDecks?: boolean } = {},
@@ -233,8 +242,8 @@ const world = () => {
 };
 
 /** Ana hosts Roland, Ben holds Agnes, and the campaign has started */
-const started = async () => {
-  const w = world();
+const started = async (opts: { noLinks?: boolean } = {}) => {
+  const w = world(opts);
   const ana = await w.join("ana");
   const ben = await w.join("ben");
   ana.session.setLobby({ campaignId: "night-of-the-zealot", difficulty: "standard" });
@@ -610,6 +619,43 @@ describe("who may send moves", () => {
       t: "moves",
       list: [nextMove(ben, ana)],
     });
+    await flush();
+    expect(ben.store.getState().room!.n).toBe(n);
+    same(ana, ben);
+  });
+});
+
+describe("without a direct link", () => {
+  it("plays a whole game through the room", async () => {
+    const { ana, ben, hub } = await started({ noLinks: true });
+    expect(hub.meshes.get(ana.session.net.getState().me!)!.open.size).toBe(0);
+    await playBot([ana, ben], 70);
+    expect(ana.store.getState().actions.length).toBeGreaterThan(30);
+    same(ana, ben);
+  });
+
+  it("catches a newcomer up through the room", async () => {
+    const { ana, ben, join } = await started({ noLinks: true });
+    await playBot([ana, ben], 10);
+    const cleo = await join("cleo");
+    await flush();
+    same(ana, cleo);
+    expect(cleo.store.getState().room!.n).toBe(ana.store.getState().room!.n);
+  });
+
+  it("ignores a numbered move relayed by a player who isn't the host", async () => {
+    const { ana, ben, join, server } = await started({ noLinks: true });
+    const cleo = await join("cleo");
+    await flush();
+    const n = ben.store.getState().room!.n;
+    const g = ben.store.getState().game!;
+    const forged: Numbered = {
+      n,
+      by: ana.session.net.getState().me!,
+      move: { t: "choose", inv: g.pending!.inv, option: g.pending!.options[0].id },
+    };
+    const link = [...server.links].find((l) => l.id === cleo.session.net.getState().me)!;
+    link.send({ t: "relay", to: ben.session.net.getState().me!, w: { t: "move", m: forged } });
     await flush();
     expect(ben.store.getState().room!.n).toBe(n);
     same(ana, ben);
