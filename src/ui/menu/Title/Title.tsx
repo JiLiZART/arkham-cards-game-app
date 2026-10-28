@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { t } from "../../../content/i18n";
 import { db, gameStore, useGame } from "../../state/context";
+import { createRoom, joinRoom, savedRoom, useOnline } from "../../state/online";
 import { SAVE_KEY, safeStorage } from "../../state/store";
 import styles from "./Title.module.css";
 
@@ -13,6 +14,9 @@ export function Title() {
   const campaign = useGame((s) => s.campaign);
   const game = useGame((s) => s.game);
   const { resume, abandon } = gameStore.getState();
+  const available = useOnline((s) => s.available);
+  const session = useOnline((s) => s.session);
+  const room = useGame((s) => s.room);
   // read on every render: Abandon clears the save while this screen stays mounted
   const hasSave = !!safeStorage().getItem(SAVE_KEY);
   // abandoning deletes the save for good: the link asks once, in place
@@ -43,6 +47,28 @@ export function Title() {
           >
             {tr("menu.newCampaign")}
           </button>
+          {session && !game && (
+            <button
+              className={`big ${campaign ? "" : "primary"}`}
+              onClick={() => gameStore.setState({ screen: "lobby" })}
+            >
+              {tr("net.lobby.title")}
+            </button>
+          )}
+          {available && !session && room && (
+            <button className="big" onClick={() => void joinRoom(savedRoom()!)}>
+              {tr("net.rejoin")}
+            </button>
+          )}
+          {available && !session && (
+            <button
+              className="big"
+              data-testid="play-online"
+              onClick={() => void createRoom({ saved: false })}
+            >
+              {tr("net.play")}
+            </button>
+          )}
           <button className="big" onClick={() => go("howto")}>
             {tr("menu.howto")}
           </button>

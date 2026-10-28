@@ -1,0 +1,239 @@
+/* The online room's lobby: paper notes on the desk, like Settings. */
+.lobby-screen {
+  max-width: 720px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.lobby-screen .note {
+  padding: 12px clamp(16px, 4vw, 28px) 16px;
+  background: var(--paper-leaf);
+  color: var(--paper-ink);
+  border-radius: 12px;
+  box-shadow:
+    inset 0 0 0 1px #f8f5edb0,
+    0 2px 8px #1d2a2f1a;
+}
+.lobby-screen .note h2 {
+  margin: 0 0 8px;
+  font: 600 20px/1.2 var(--f-body);
+  letter-spacing: 0.04em;
+}
+.lobby-screen .field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  padding: 4px 0;
+  border-bottom: 1px dotted var(--paper-rule);
+  font: 18px/1.3 var(--f-body);
+}
+.lobby-screen .field > label {
+  margin: 0;
+  flex: 0 0 9em;
+}
+.lobby-screen .field input,
+.lobby-screen .field select {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 40px;
+  padding: 0 10px;
+  border-radius: 6px;
+  font: inherit;
+}
+.lobby-screen .hint {
+  margin: 8px 0 0;
+  text-wrap: pretty;
+  color: var(--paper-muted);
+  font: 16px/1.35 var(--f-body);
+}
+.lobby-screen .warn {
+  margin: 0 0 8px;
+  color: var(--oxblood);
+  font: 600 17px/1.3 var(--f-body);
+}
+.lobby-screen .search {
+  width: 100%;
+  min-height: 40px;
+  margin-bottom: 8px;
+  padding: 0 10px;
+  border-radius: 6px;
+  font: 17px var(--f-body);
+}
+.lobby-screen .seats {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.lobby-screen .seat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  border-bottom: 1px dotted var(--paper-rule);
+}
+.lobby-screen .who {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
+  font: 18px/1.2 var(--f-body);
+}
+.lobby-screen .who small {
+  color: var(--paper-muted);
+}
+.lobby-screen .holder {
+  flex: none;
+  max-width: 8em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--paper-accent);
+  font: 600 16px/1.2 var(--f-body);
+}
+.lobby-screen .seat select {
+  min-height: 40px;
+  max-width: 11em;
+  border-radius: 6px;
+  font: inherit;
+}
+.lobby-screen .seat button,
+.lobby-screen .row button {
+  min-height: 44px;
+}
+.lobby-screen .row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.lobby-screen .value {
+  flex: 1 1 auto;
+  font-weight: 600;
+}
+/* how the room works, and what it shares: there once, folded away after */
+.lobby-screen .about {
+  margin-top: 10px;
+  font: 16px/1.35 var(--f-body);
+}
+.lobby-screen .about summary {
+  min-height: 32px;
+  color: var(--paper-accent);
+  cursor: pointer;
+}
+.lobby-screen .about p {
+  margin: 4px 0 0;
+  color: var(--paper-muted);
+  text-wrap: pretty;
+}
+/* who is here and the way on stay in reach at the bottom of the screen, however long the list of investigators */
+.lobby-screen .foot {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  margin-inline: -16px;
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+  background: #0d1317f0;
+  border-top: 1px solid var(--rule);
+  box-shadow: 0 -6px 18px #0009;
+}
+.lobby-screen .here {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font: 16px/1.35 var(--f-body);
+}
+.lobby-screen .here b {
+  color: var(--ink);
+  font-weight: 600;
+}
+.lobby-screen .leave {
+  margin-left: auto;
+}
+.lobby-screen .foot .hint {
+  margin: 0;
+  color: var(--muted);
+}
+/* the phone held sideways: a tighter heading and notes, short labels, and a one-line footer (ADR-0005) */
+:global(.menus):global(.phone) .lobby-screen {
+  gap: 8px;
+  padding-top: 12px;
+}
+:global(.menus):global(.phone) .lobby-screen > h1 {
+  margin: 0 0 6px;
+  font-size: 26px;
+}
+:global(.menus):global(.phone) .lobby-screen > h1::after {
+  height: 10px;
+}
+:global(.menus):global(.phone) .lobby-screen .note {
+  margin: 0;
+  padding: 4px 16px 8px;
+}
+:global(.menus):global(.phone) .lobby-screen .field {
+  font-size: 16px;
+}
+:global(.menus):global(.phone) .lobby-screen .field > label {
+  flex-basis: 7.5em;
+}
+:global(.menus):global(.phone) .lobby-screen .foot {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-block: 6px calc(6px + env(safe-area-inset-bottom, 0px));
+}
+:global(.menus):global(.phone) .lobby-screen .here {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 14px;
+}
+:global(.menus):global(.phone) .lobby-screen .foot .row {
+  flex-wrap: nowrap;
+}
+:global(.menus):global(.phone) .lobby-screen .foot .row {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+/* one line only: why Start waits beats who is here (the room menu lists them) */
+:global(.menus):global(.phone) .lobby-screen .foot:has(.hint) .here {
+  display: none;
+}
+:global(.menus):global(.phone) .lobby-screen .foot .hint {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 14px;
+}
+/* the table's four places: the claimed with their decks, then the empty chairs */
+.lobby-screen .strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+  gap: 6px 16px;
+  margin: 0 0 8px;
+  padding: 0;
+  list-style: none;
+}
+.lobby-screen .claimed {
+  min-height: 60px;
+  border-bottom: 1px solid var(--paper-rule);
+}
+.lobby-screen .empty {
+  min-height: 60px;
+  justify-content: center;
+  border: 1px dashed var(--paper-rule);
+  border-radius: 8px;
+  color: var(--paper-muted);
+  font: italic 17px/1.2 var(--f-body);
+}
+.lobby-screen .choose summary {
+  min-height: 36px;
+  color: var(--paper-accent);
+  font: 600 18px/1.4 var(--f-body);
+  cursor: pointer;
+}
+.lobby-screen .choose .seats {
+  margin-top: 4px;
+}

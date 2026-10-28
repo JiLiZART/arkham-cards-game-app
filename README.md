@@ -31,6 +31,17 @@ Every push to `main` deploys the game to GitHub Pages at **https://arkham.artkos
 - **Trying a deploy build locally:** `npm run build && npm run fetch:cards -- dist && npx vite preview`, then open http://localhost:4173/. Add `PAGES_BASE=/some-path/` to both commands to check a sub-path build.
 - In code, files under `public/` are referenced with `asset("…")` from `src/ui/assets/images.ts`, never with a leading `/`; a test enforces this.
 
+## Online play
+
+Two to four people can play one campaign from different devices (ADR-0018, ADR-0019). From the title screen, **Play online** opens a room and its link (`#g=…`); **Play this campaign online** (on the campaign screen) takes a saved campaign online. Everyone who opens the link takes an investigator and a deck in the lobby, or watches. A closed tab comes back through the same link, or through the prompt the title screen shows for a saved online game.
+
+Browsers talk to each other over WebRTC (public STUN, Cloudflare TURN as a fallback). They keep one game by sending moves to the host, who numbers them; every browser replays the numbered moves with the unchanged engine. A small Worker in `worker/` (one Durable Object per room, on `/net/*`) only introduces the browsers and hands out TURN credentials. It never sees a move. Every browser holds the whole game, hands and deck order included, so play with people you trust.
+
+- **Locally:** `pnpm net:dev` (the Worker, on 8787) beside `pnpm dev`; the dev server proxies `/net`. Without the Worker, online play is hidden.
+- **Deploying:** the workflow's `net` job runs `wrangler deploy`. Needs repository secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`, and the `arkham` DNS record **proxied** (orange cloud, SSL mode Full) so the Worker route `arkham.artkost.dev/net/*` is in front of Pages. Turn the proxy on after GitHub has issued the site's certificate.
+- **TURN:** create a Calls TURN key (Cloudflare dashboard → Realtime → TURN), then `pnpm exec wrangler secret put TURN_KEY_ID -c worker/wrangler.toml` and the same for `TURN_KEY_TOKEN`. Without them the game falls back to STUN only, and some networks can't connect.
+- **Tests:** the move log, session and room rules run in Node (`src/net/`, `worker/src/`); two real browsers were driven through Playwright against `pnpm dev` and `pnpm net:dev`.
+
 ## Layout
 
 ```
@@ -51,6 +62,8 @@ content/                         game data — no engine changes needed to add m
 scripts/import-cards.ts          ArkhamDB → cards.generated.json
 src/engine/                      rules engine (no React/three imports — enforced by oxlint, `.oxlintrc.json`)
 src/content/                     zod schemas, loader, i18n
+src/net/                         online play: moves, the move log, the session, WebRTC mesh, room socket
+worker/                          the net Worker (room Durable Object, TURN credentials), wrangler config
 src/ui/                          React HUD + R3F table: screen areas (hud, menu, scene, catalog, dev),
                                  components/, state/, game/, assets/; one folder and CSS Module per component
 ```

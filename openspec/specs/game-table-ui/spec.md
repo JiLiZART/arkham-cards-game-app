@@ -128,6 +128,8 @@ The HUD SHALL offer an Undo button, and Ctrl/Cmd+Z, whenever the last recorded c
 
 Undo cannot go past a choice that revealed hidden information: drawing a chaos token, drawing or revealing a card from any deck, looking at or searching a deck, shuffling, or anything else random. It also cannot go into the mulligan or the scenario introduction. When nothing can be undone the button is disabled, and its tooltip says why ("hidden information was revealed").
 
+In an online room, Undo is enabled only on the browser of the player whose choice is the last move, and only until another move follows it. On every other browser it is disabled, and its tooltip names the player who can undo. The undo travels as a move, so every browser takes the choice back (see online-play).
+
 After an undo:
 
 - cards that changed place fly back, for example a committed card to the hand or a played asset to the fan;
@@ -158,6 +160,12 @@ Undo is also recorded in the save, because the save holds the shortened list of 
 
 - **WHEN** the last commit window closes (the chaos token is drawn by that same choice, even while the draw animation is still to play)
 - **THEN** Undo is disabled, and the tooltip says hidden information was revealed
+
+#### Scenario: Online, another player's choice
+
+- **GIVEN** an online room where Ben's Agnes made the last choice
+- **WHEN** Ana looks at her Undo button
+- **THEN** it is disabled, and its tooltip says only Ben can undo it
 
 ### Requirement: Chaos bag entrance
 
@@ -293,10 +301,18 @@ Card movement, damage, clue and doom changes SHALL be animated in the order of e
 
 The UI SHALL support 1–4 investigators on one device. The deciding investigator's view (hand, play area, choices) is the default; any investigator can be looked at from the player bar. No screen SHALL stand between players: when the decision passes to another investigator, their view is shown at once, with the turn title (see Turn title) announcing them, and their hand is visible.
 
+In an online room, a device holds only its own seats. The decision passing to an investigator held on this device behaves as above. When it passes to one held elsewhere, the device stays on its own seat's table (a device holding none shows the board with every hand face down) with "Waiting for <player>: <investigator>" in the instruction bar, offers no choices and shows no table tips (see online-play). A device holding every seat plays exactly as hot-seat.
+
 #### Scenario: Turn handoff
 
 - **WHEN** Roland ends his turn and Agnes is next
 - **THEN** "Agnes's turn" plays across the middle and Agnes's hand and play area are shown with her avatar marked in the bar, with nothing to press
+
+#### Scenario: Turn passes to another device
+
+- **GIVEN** an online room where Ana holds Roland and Ben holds Agnes
+- **WHEN** Roland ends his turn
+- **THEN** "Agnes's turn" plays on both devices; Ben's device offers Agnes's choices and Ana's shows "Waiting for Agnes"
 
 ### Requirement: Game menus
 

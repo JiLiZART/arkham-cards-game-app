@@ -72,6 +72,8 @@ Move =
   | { t: "flow"; value: FlowValue }
   | { t: "upgrade"; inv: InvId; cards: Record<string, number> }
   | { t: "undo" }
+  | { t: "cancelTest" }                        // calling a skill test off
+  | { t: "finish" }                            // the scenario's end, applied to the campaign
   | { t: "load"; save: Save }                  // a saved campaign taken online: move 0
 Numbered = { n: number; by: playerKeyHash; move: Move }
 ```
@@ -92,7 +94,9 @@ The host also checks permission before applying:
 - `upgrade` only for the player's own investigator;
 - `new` and `load` only from the host.
 
-Every peer runs the same checks when applying a numbered move, so a faulty host cannot slip one through unnoticed.
+Every peer runs the same checks when applying a numbered move. A move that fails the check is still applied, because peers must not diverge, and the peer shows a warning that the host accepted a forbidden move.
+
+While "Tap decks to draw" is off, a browser answers the draw prompts of its own seats by sending those draws as moves. The store's local auto-answering is switched off in a room, because it would add choices that exist on one device only.
 
 Alternatives considered: the Durable Object numbering moves (it would then store logs and cost more per room), and no ordering with per-move indexes (undo and flow answers can race).
 

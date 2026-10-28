@@ -10,6 +10,7 @@ import {
 } from "../../state/fullscreen";
 import { useLayoutMode } from "../../state/layoutMode";
 import { safeStorage } from "../../state/store";
+import { useView } from "../../state/view";
 import { UiIcon } from "../Icon";
 import { cx } from "../cx";
 import styles from "./FullscreenButton.module.css";
@@ -59,7 +60,9 @@ export function FullscreenAsk({ at = "top" }: { at?: "top" | "bottom" }) {
   const active = useFullscreen();
   const [asked, setAsked] = useState(readAsked);
   const kind = askKind({ phone, supported: fullscreenSupported(), asked, active });
-  if (!kind) return null;
+  // the online room's menu has the corner while it is open
+  const roomMenu = useView((s) => s.netOpen);
+  if (!kind || roomMenu) return null;
   const done = () => {
     try {
       safeStorage().setItem(ASKED_KEY, "1");

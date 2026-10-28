@@ -4,6 +4,7 @@ import { db, gameStore, useGame } from "../../state/context";
 import { instructionParts } from "../../game/instruction";
 import { choicesOffered, delayed, investigatorChoice } from "../../state/players";
 import { Portrait } from "../../components/Portrait";
+import { useLooking } from "../../state/usePlayers";
 import { useView } from "../../state/view";
 import { Sentence } from "../Feed";
 import { moment } from "../SoundLayer";
@@ -24,7 +25,7 @@ export function InvestigatorChoiceOverlay() {
   const locale = useGame((s) => s.locale);
   const choose = useGame((s) => s.choose);
   const busy = useGame((s) => !!s.current || s.queue.length > 0);
-  const viewing = useView((s) => s.viewing);
+  const looking = useLooking();
   // the test screen and the paced pause don't stop it; a title, the introduction or drawn cards in the middle do
   const free = useView(
     (s) =>
@@ -33,7 +34,7 @@ export function InvestigatorChoiceOverlay() {
       s.showcase.length === 0,
   );
   const choice = investigatorChoice(game);
-  const show = !!choice && choicesOffered(game, { viewing }) && !busy && free;
+  const show = !!choice && choicesOffered(game, looking) && !busy && free;
   const seq = game.pending?.seq;
   const single = choice?.single ? choice.options[0].id : null;
   useEffect(() => {

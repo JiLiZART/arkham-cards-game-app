@@ -46,6 +46,7 @@ import { Portrait } from "../../components/Portrait";
 import { spotlightNow } from "../../game/spotlight";
 import { LangSwitch } from "../../components/LangSwitch";
 import { useStage, useView } from "../../state/view";
+import { NetIndicator } from "../NetIndicator";
 import { cx } from "../../components/cx";
 import styles from "./Hud.module.css";
 
@@ -313,14 +314,15 @@ function AutoSwitch() {
       !s.intro &&
       s.showcase.length === 0,
   );
-  const target = autoSwitchTarget(game, { viewing });
+  const mySeats = useView((s) => s.mySeats);
+  const target = autoSwitchTarget(game, { viewing, mySeats });
   useEffect(() => {
     if (!target || busy || !free) return;
     return delayed(
       AUTO_SWITCH_MS,
       () => {
         const g = gameStore.getState().game;
-        return !!g && autoSwitchTarget(g, { viewing: useView.getState().viewing }) === target;
+        return !!g && autoSwitchTarget(g, useView.getState()) === target;
       },
       () => useView.getState().setViewing(null),
     );
@@ -428,6 +430,7 @@ function TopBar({ phone }: { phone: boolean }) {
       <Ribbon />
       <PlayerBar />
       <div className={styles.buttons}>
+        <NetIndicator />
         <LangSwitch compact={phone} />
         <button
           className={cx(styles.muteBtn, muted ? "muted" : "")}

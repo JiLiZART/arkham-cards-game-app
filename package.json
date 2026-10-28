@@ -8,10 +8,10 @@
     "build": "tsc --noEmit && vite build",
     "test": "vitest run",
     "format": "oxfmt --check .",
-    "lint": "oxlint src scripts content",
+    "lint": "oxlint src scripts content worker",
     "format:fix": "oxfmt --write",
     "lint:fix": "oxlint --fix",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p worker",
     "import:investigators": "tsx scripts/import-investigators.ts",
     "coverage": "tsx scripts/coverage.ts",
     "import:cards": "tsx scripts/import-cards.ts",
@@ -24,7 +24,8 @@
     "import:campaigns": "tsx scripts/import-campaigns.ts",
     "import:art": "tsx scripts/import-art.ts",
     "sound-credits": "tsx scripts/sound-credits.ts",
-    "skills:link": "node scripts/link-claude-skills.mjs"
+    "skills:link": "node scripts/link-claude-skills.mjs",
+    "net:dev": "wrangler dev -c worker/wrangler.toml --port 8787"
   },
   "dependencies": {
     "@react-three/drei": "^9.122.0",
@@ -36,6 +37,7 @@
     "zustand": "^5.0.15"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261027.1",
     "@types/node": "^26.6.5",
     "@types/react": "^18.3.31",
     "@types/react-dom": "^18.3.7",

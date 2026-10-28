@@ -12,6 +12,8 @@ Key directories:
   - `rules/` — flow, skill tests, cards, enemies, investigators, scenario, chaos tokens.
   - `effects.ts` — the effect handlers card data refers to; `api.ts` — what card and scenario scripts may import.
 - `src/content/` — zod schemas (`schema.ts`), the loader, i18n (`i18n.ts`), coverage and content checks.
+- `src/net/` — online play (ADR-0018, ADR-0019): the session moves and their permission rules, the host-ordered log, the session that turns store calls into moves, the WebRTC mesh and the room socket. Depends on the engine and the stores only through the store's public calls; the pipes (`transport.ts`) are interfaces so the session is tested in Node.
+- `worker/` — the net Worker: a Durable Object per room (`room.ts` holds its rules as pure functions), TURN credentials, `wrangler.toml`. Own `tsconfig.json`; `pnpm typecheck` covers it. It never sees a move.
 - `src/ui/` — the screen areas: the React HUD (`hud/`), menus (`menu/`), the react-three-fiber table (`scene/`), the card catalog (`catalog/`) and dev-only tools (`dev/`); each component in a folder of its own. Beside them `components/` (shared presentational components such as `CardFace` and `Icon`), `state/` (the stores), `game/` (table logic: option placement, feed, arrivals, showcase) and `assets/` (images, icons, sounds). `styles.css` is the global base layer (ADR-0016).
 - `content/` — game data. Adding cards and scenarios needs no engine change.
   - `packs/<pack>/cards.generated.json` is imported from ArkhamDB: never edit it by hand. `cards.json` holds hand-written behavior, merged over it by card code. `scripts/<code>.ts` covers what the data format can't express.

@@ -1,0 +1,133 @@
+.net {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 10px;
+  font-variant-numeric: tabular-nums;
+}
+/* a link's state is told by shape as well as colour: a full disc connected, a ring waiting, a bar gone */
+.dot {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.ok {
+  color: var(--ok);
+}
+.wait {
+  color: var(--lamp);
+  background: transparent;
+  border: 2px solid currentColor;
+}
+.gone {
+  color: var(--bad);
+  height: 4px;
+  border-radius: 2px;
+}
+.panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 70;
+  width: min(400px, 92vw);
+  padding: 10px 14px 14px;
+  background: var(--panel);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  box-shadow: 0 8px 28px #000a;
+}
+.panel:focus {
+  outline: none;
+}
+.panel h3 {
+  margin: 8px 0 4px;
+  color: var(--muted);
+  font: 600 13px/1 var(--f-body);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.players {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.players li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  min-height: 36px;
+}
+.name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.held {
+  display: inline-flex;
+  gap: 2px;
+}
+.state {
+  flex: none;
+  color: var(--muted);
+  font-size: 14px;
+  white-space: nowrap;
+}
+.warn {
+  margin: 8px 0 0;
+  color: var(--lamp);
+  font-size: 14px;
+}
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+.leave {
+  margin-left: auto;
+}
+.leave.armed {
+  border-color: var(--bad);
+  color: var(--bad);
+}
+.toast {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 69;
+  width: max-content;
+  max-width: min(320px, 80vw);
+  padding: 8px 12px;
+  background: var(--panel);
+  color: var(--ink);
+  border: 1px solid var(--lamp);
+  border-radius: 8px;
+  box-shadow: 0 4px 16px #0009;
+  font: 15px/1.3 var(--f-body);
+}
+.sub {
+  flex-basis: 100%;
+  padding-left: 20px;
+  color: var(--muted);
+  font-size: 14px;
+}
+/* read out, not drawn */
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

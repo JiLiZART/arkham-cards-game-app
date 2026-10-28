@@ -5,6 +5,7 @@ import { createRoot } from "react-dom/client";
 import { App } from "./ui/App";
 import { gameStore } from "./ui/state/context";
 import { loadSprite } from "./ui/assets/icons";
+import { useOnline } from "./ui/state/online";
 import { useView } from "./ui/state/view";
 
 // the icon sprite is in the document before the first screen: icons never flash blank (without it, text badges)
@@ -19,4 +20,5 @@ loadSprite()
   );
 
 // dev-only handle for browser automation / debugging from the console
-if (import.meta.env.DEV) Object.assign(window, { __arkham: gameStore, __arkhamView: useView });
+if (import.meta.env.DEV)
+  Object.assign(window, { __arkham: gameStore, __arkhamView: useView, __arkhamNet: useOnline });

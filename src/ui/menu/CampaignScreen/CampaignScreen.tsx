@@ -9,6 +9,7 @@ import {
 } from "../../../content/i18n";
 import { currentScenarioId } from "../../../engine/campaign";
 import { db, gameStore, useGame } from "../../state/context";
+import { createRoom, useOnline } from "../../state/online";
 import { guideHtml } from "../../game/guideText";
 import { Portrait } from "../../components/Portrait";
 import { logView, readItems } from "../campaignView";
@@ -28,6 +29,8 @@ export function CampaignScreen() {
   const campaign = useGame((s) => s.campaign);
   const notice = useGame((s) => s.notice);
   const locale = useGame((s) => s.locale);
+  const online = useOnline((s) => s.available);
+  const inRoom = useOnline((s) => !!s.session);
   const [upgrading, setUpgrading] = useState<string | null>(null);
   if (!campaign) return null;
   const who = upgrading ? campaign.investigators.find((i) => i.code === upgrading) : undefined;
@@ -186,6 +189,15 @@ export function CampaignScreen() {
         <button className="big" onClick={() => gameStore.setState({ screen: "title" })}>
           {tr("hud.menu")}
         </button>
+        {online && !inRoom && (
+          <button
+            className="big"
+            data-testid="open-online"
+            onClick={() => void createRoom({ saved: true })}
+          >
+            {tr("net.open")}
+          </button>
+        )}
         {!campaign.result && waiting === "play" && next && (
           <button className="primary big" onClick={() => gameStore.getState().startScenario()}>
             {tr("log.next")}: {scenarioText(db, next, locale).name}

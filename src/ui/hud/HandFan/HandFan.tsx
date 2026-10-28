@@ -21,7 +21,8 @@ import {
   type Arrival,
 } from "../../game/arrivals";
 import { placeDetails } from "../../game/details";
-import { useChoicesOffered, useShown } from "../../state/usePlayers";
+import { useChoicesOffered, useLooking, useShown } from "../../state/usePlayers";
+import { handFaceUp } from "../../state/players";
 import { outsideSpotlight, useView } from "../../state/view";
 import { moment } from "../SoundLayer";
 import { GlanceBadge } from "../GlanceBadge";
@@ -61,8 +62,11 @@ export function useHand() {
   const game = useGame((s) => s.game) as GameState;
   const busy = useGame((s) => !!s.current || s.queue.length > 0);
   const viewer = useShown();
+  const looking = useLooking();
   const offered = useChoicesOffered();
   const visible = !!viewer;
+  // a hand held at another seat of the room is on the table face down: nothing to read, nothing to press
+  const faceUp = handFaceUp(looking, viewer);
   // cards picked for the mulligan sit on the "to redraw" row instead
   const picks = mulliganPicks(game, viewer);
   // cards just drawn wait in the showcase until sent on
@@ -73,7 +77,7 @@ export function useHand() {
       : [];
   const optionsFor = (id: InstId): ChoiceOption[] =>
     (!busy && offered && game.pending?.options.filter((o) => o.card === id)) || [];
-  return { viewer, visible, hand, optionsFor };
+  return { viewer, visible, faceUp, hand, optionsFor };
 }
 
 /**
@@ -102,7 +106,7 @@ export function HandFan() {
   // the card the Dock is centred on (nearest the pointer, or keyboard-focused): it gets the details column
   const [focus, setFocus] = useState<InstId | null>(null);
 
-  const { viewer, visible, hand, optionsFor } = useHand();
+  const { viewer, visible, faceUp, hand, optionsFor } = useHand();
 
   const width = fanWidth(vw, statBarW(vw, vh));
   const slots = fanLayout(hand.length, width);
@@ -319,7 +323,7 @@ export function HandFan() {
   const fi = focus && !drag ? hand.indexOf(focus) : -1;
   return (
     <>
-      {fi >= 0 && (
+      {fi >= 0 && faceUp && (
         <HandDetails
           id={hand[fi]}
           rect={dockRect(
@@ -338,7 +342,7 @@ export function HandFan() {
         data-testid="hand-fan"
         data-tip="hand"
         style={{ left: FAN_LEFT, width }}
-        aria-label="Your hand"
+        aria-label={faceUp ? "Your hand" : "Hand, face down"}
         onPointerMove={onMove}
         onPointerLeave={onLeave}
       >
@@ -354,6 +358,7 @@ export function HandFan() {
                 else els.current.delete(id);
               }}
               data-testid="fan-card"
+              disabled={!faceUp}
               className={cx(
                 styles.fanCard,
                 opts.length ? "legal" : "",
@@ -397,12 +402,15 @@ export function HandFan() {
                 if (pointerX.current === null) focusOn(null);
                 start();
               }}
-              title={cardText(db, game.cards[id].code, locale).name}
+              title={faceUp ? cardText(db, game.cards[id].code, locale).name : undefined}
             >
-              <span className={styles.fanFlip} data-testid="fan-flip">
+              <span
+                className={cx(styles.fanFlip, !faceUp && styles.faceDown)}
+                data-testid="fan-flip"
+              >
                 <span className={styles.ffFront}>
-                  <Face code={game.cards[id].code} locale={locale} />
-                  <GlanceBadge card={db.cards[game.cards[id].code]} />
+                  {faceUp && <Face code={game.cards[id].code} locale={locale} />}
+                  {faceUp && <GlanceBadge card={db.cards[game.cards[id].code]} />}
                 </span>
                 <img className={styles.ffBack} src={backUrl("player")} alt="" draggable={false} />
               </span>

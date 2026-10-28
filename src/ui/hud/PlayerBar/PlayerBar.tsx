@@ -247,9 +247,11 @@ export function PlayerBar() {
   const cancelClose = useRef<(() => void) | null>(null);
   // on the phone there is no hover: a tap opens the bottom sheet, with a finger or a mouse
   const phone = useLayoutMode() === "phone";
-  const model = barModel(game, { viewing });
-  const decider = viewerOf(game);
-  const shown = shownInv(game, { viewing });
+  const mySeats = useView((s) => s.mySeats);
+  const model = barModel(game, { viewing, mySeats });
+  // the table this device lands on by itself: the decider's, or in an online room this device's own seat
+  const home = shownInv(game, { viewing: null, mySeats });
+  const shown = shownInv(game, { viewing, mySeats });
   const { answers, abilities } = investigatorOptions(game);
   // an investigator whose own card offers an ability glows too: a tap opens the sheet with its button
   const hasAbility = (inv: InvId) =>
@@ -275,7 +277,7 @@ export function PlayerBar() {
         o || !(isTouch() || phone) ? null : { inv: a.inv, anchor: el.getBoundingClientRect() },
       );
     setOpen(null);
-    useView.getState().setViewing(a.inv === decider ? null : a.inv);
+    useView.getState().setViewing(a.inv === home ? null : a.inv);
   };
   // resting the mouse on another investigator's avatar opens their sheet; leaving the avatar and the sheet closes it after a moment
   const enter = (a: AvatarModel, el: HTMLElement, e: React.PointerEvent) => {
@@ -321,9 +323,9 @@ export function PlayerBar() {
           onLeave={leave}
         />
       ))}
-      {shown !== decider && decider && (
+      {shown !== home && home && (
         <button className={styles.pbBack} onClick={() => useView.getState().setViewing(null)}>
-          {tr("players.back", { name: cardText(db, decider, gameStore.getState().locale).name })}
+          {tr("players.back", { name: cardText(db, home, gameStore.getState().locale).name })}
         </button>
       )}
       {open && (

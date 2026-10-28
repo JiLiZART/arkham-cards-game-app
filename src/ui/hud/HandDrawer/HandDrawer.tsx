@@ -28,9 +28,10 @@ export function HandDrawer() {
   const open = useView((s) => s.drawer === "hand");
   const setDrawer = useView((s) => s.setDrawer);
   const openMenu = useView((s) => s.openMenu);
-  const { hand, optionsFor } = useHand();
+  const { hand, faceUp, optionsFor } = useHand();
   const swipe = useRef<number | null>(null);
-  if (!hand.length) return null;
+  // a hand held at another seat of the room is not drawn on the phone at all
+  if (!hand.length || !faceUp) return null;
   const legal = hand.map((id) => optionsFor(id).length > 0);
 
   const pick = (id: InstId, el: HTMLElement) => {

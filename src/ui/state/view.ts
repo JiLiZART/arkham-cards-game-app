@@ -58,6 +58,12 @@ export interface ViewState {
   drawer: "left" | "right" | "hand" | null;
   setDrawer(d: "left" | "right" | "hand" | null): void;
   setViewing(inv: InvId | null): void;
+  /** the investigators this device answers for in an online room; null: every one (hot-seat play) */
+  mySeats: InvId[] | null;
+  setMySeats(seats: InvId[] | null): void;
+  /** the online room's menu is open: what else wants the corner (the fullscreen ask) waits */
+  netOpen: boolean;
+  setNetOpen(open: boolean): void;
   /** the skill-test screen is up: the strip, the bar and the fan sit above it */
   testing: boolean;
   claimStage(key: string): void;
@@ -100,6 +106,10 @@ export const useView = create<ViewState>((set, get) => ({
   stage: [],
   viewing: null,
   setViewing: (viewing) => set({ viewing }),
+  mySeats: null,
+  setMySeats: (mySeats) => set({ mySeats }),
+  netOpen: false,
+  setNetOpen: (netOpen) => set({ netOpen }),
   drawer: null,
   setDrawer: (drawer) => set({ drawer }),
   testing: false,

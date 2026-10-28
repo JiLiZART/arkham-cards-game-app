@@ -13,6 +13,7 @@ import {
   holdsForTap,
   needsNext,
   SAVE_KEY,
+  startLocale,
   type Storage,
 } from "./store";
 
@@ -804,5 +805,19 @@ describe("campaigns whose cards load first", () => {
     const s = createGameStore(db, mem(), () => undefined);
     s.getState().newCampaign(opts);
     expect(s.getState().game).not.toBeNull();
+  });
+});
+
+describe("the language", () => {
+  it("a new browser starts in its own language when the app has it", () => {
+    expect(startLocale(mem(), "ru-RU")).toBe("ru");
+    expect(startLocale(mem(), "de-DE")).toBe("en");
+  });
+
+  it("a language chosen once is kept on its own, without a saved game", () => {
+    const storage = mem();
+    createGameStore(db, storage).getState().setLocale("ru");
+    expect(createGameStore(db, storage).getState().locale).toBe("ru");
+    expect(startLocale(storage, "en-US")).toBe("ru");
   });
 });

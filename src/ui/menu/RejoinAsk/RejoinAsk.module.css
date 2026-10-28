@@ -1,0 +1,34 @@
+.veil {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  background: #070c0ecc;
+}
+.card {
+  width: min(480px, 100%);
+  padding: 20px clamp(16px, 4vw, 28px) 22px;
+  background: var(--paper-leaf);
+  color: var(--paper-ink);
+  border-radius: 12px;
+  box-shadow: 0 10px 40px #000c;
+}
+.card h2 {
+  margin: 0 0 8px;
+  font: 600 24px/1.2 var(--f-display);
+}
+.card p {
+  margin: 0 0 16px;
+  font: 18px/1.4 var(--f-body);
+  color: var(--paper-muted);
+}
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.buttons button {
+  min-height: 48px;
+}

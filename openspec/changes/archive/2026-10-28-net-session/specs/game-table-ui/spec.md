@@ -49,7 +49,7 @@ Undo is also recorded in the save, because the save holds the shortened list of 
 
 The UI SHALL support 1–4 investigators on one device. The deciding investigator's view (hand, play area, choices) is the default; any investigator can be looked at from the player bar. No screen SHALL stand between players: when the decision passes to another investigator, their view is shown at once, with the turn title (see Turn title) announcing them, and their hand is visible.
 
-In an online room, a device holds only its own seats. The decision passing to an investigator held on this device behaves as above. When it passes to one held elsewhere, the device shows that investigator's table with "Waiting for <investigator>" in the instruction bar and offers no choices (see online-play). A device holding every seat plays exactly as hot-seat.
+In an online room, a device holds only its own seats. The decision passing to an investigator held on this device behaves as above. When it passes to one held elsewhere, the device stays on its own seat's table (a device holding none shows the board with every hand face down) with "Waiting for <player>: <investigator>" in the instruction bar, offers no choices and shows no table tips (see online-play). A device holding every seat plays exactly as hot-seat.
 
 #### Scenario: Turn handoff
 

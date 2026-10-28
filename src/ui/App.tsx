@@ -5,14 +5,19 @@ import { db, gameStore, useGame } from "./state/context";
 import { HandFan } from "./hud/HandFan";
 import { HandDrawer } from "./hud/HandDrawer";
 import { Hud } from "./hud/Hud";
+import { NetIndicator } from "./hud/NetIndicator";
 import { moment, useAudioLevels } from "./hud/SoundLayer";
 import { Catalog } from "./catalog/Catalog";
 import { CampaignScreen } from "./menu/CampaignScreen";
 import { HowTo } from "./menu/HowTo";
 import { Settings } from "./menu/Settings";
+import { Lobby } from "./menu/Lobby";
+import { RejoinAsk } from "./menu/RejoinAsk";
 import { Title } from "./menu/Title";
 import { Wizard } from "./menu/NewGame";
 import { Table } from "./scene/Table";
+import { checkOnline, joinRoom } from "./state/online";
+import { roomFromHash } from "../net/link";
 import { useView } from "./state/view";
 import { useLayout } from "./state/layoutMode";
 import { installTouch } from "./game/touch";
@@ -38,6 +43,7 @@ function RotateCard() {
 function Corner() {
   return (
     <div className={styles.langCorner}>
+      <NetIndicator />
       <FullscreenButton />
       <LangSwitch />
     </div>
@@ -57,6 +63,10 @@ export function App() {
   const rotate = mode === "phone" && portrait;
   useEffect(() => {
     gameStore.getState().resume();
+    // a link to a room opens it; the save's own room, if it is that one, comes back as the same player
+    void checkOnline();
+    const room = roomFromHash(location.hash);
+    if (room) void joinRoom(room);
   }, []);
   useAudioLevels();
   // a change of screen has its own soft sound (not the first paint)
@@ -82,6 +92,7 @@ export function App() {
   if (screen === "game" && game) {
     return (
       <div className={`game ${mode} ${testing ? "testing" : ""}`} data-layout={mode}>
+        <RejoinAsk />
         {rotate && <RotateCard />}
         <Table />
         <Hud />
@@ -101,6 +112,8 @@ export function App() {
       <Settings />
     ) : screen === "catalog" ? (
       <Catalog />
+    ) : screen === "lobby" ? (
+      <Lobby />
     ) : (
       <Title />
     );
@@ -109,7 +122,9 @@ export function App() {
   return (
     <div className={`menus ${mode}`} data-layout={mode}>
       {rotate && <RotateCard />}
-      <FullscreenAsk at="bottom" />
+      <RejoinAsk />
+      {/* the lobby keeps its bottom for Start: the ask goes over its heading instead */}
+      <FullscreenAsk at={screen === "lobby" ? "top" : "bottom"} />
       {screen === "title" ? (
         <>
           {page}

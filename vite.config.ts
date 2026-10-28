@@ -16,12 +16,17 @@ const cardProxy = {
   },
 };
 
-// the build's version, shown in bug reports (the Debug panel's Copy report)
-const appVersion = (
-  JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf8")) as {
-    version: string;
-  }
-).version;
+// online play: the net Worker (`pnpm net:dev`) answers under /net/, as it does on the deployed site
+const netProxy = { "/net": { target: "http://127.0.0.1:8787", ws: true } };
+
+// the build's version, shown in bug reports (the Debug panel's Copy report) and checked when joining an online room:
+// a deploy adds its commit, so a room never mixes two builds
+const appVersion =
+  (
+    JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf8")) as {
+      version: string;
+    }
+  ).version + (process.env.GITHUB_SHA ? `+${process.env.GITHUB_SHA.slice(0, 7)}` : "");
 
 // dev-only sound picker routes (ADR-0010): loaded through vite's own pipeline, so the build never sees them
 let dev: typeof import("./scripts/sounds-dev-server") | undefined;
@@ -48,10 +53,10 @@ export default defineConfig({
   // components' CSS Modules keep their kebab-case class names in CSS and read them as camelCase (ADR-0016); the
   // kebab-case keys stay too, for names built at runtime (styles[`tok-${kind}`])
   css: { modules: { localsConvention: "camelCase" } },
-  server: { proxy: cardProxy },
-  preview: { proxy: cardProxy },
+  server: { proxy: { ...cardProxy, ...netProxy } },
+  preview: { proxy: { ...cardProxy, ...netProxy } },
   test: {
-    include: ["src/**/*.test.ts", "scripts/**/*.test.ts"],
+    include: ["src/**/*.test.ts", "scripts/**/*.test.ts", "worker/**/*.test.ts"],
     // several tests load every pack from disk: under a full parallel run that takes longer than the 5s default
     testTimeout: 30_000,
   },

@@ -8,16 +8,31 @@ import { viewerOf } from "./store";
 /** the part of the view state that says whose table the player is looking at */
 export interface Looking {
   viewing: InvId | null;
+  /** the investigators this device answers for in an online room; null (or absent): every one, as in hot-seat play */
+  mySeats?: readonly InvId[] | null;
 }
 
-/** whose table is on screen: the one being looked at, else the deciding investigator's */
+/** whether this device answers for `inv` (every device does without a room) */
+export const holdsSeat = (view: Looking, inv: InvId | null): boolean =>
+  !view.mySeats || (!!inv && view.mySeats.includes(inv));
+
+/**
+ * Whose table is on screen: the one being looked at, else the deciding investigator's. In an online room, while the
+ * decider sits at another device, this device stays on its own seat; one with no seat is shown the board (null).
+ */
 export function shownInv(game: GameState, view: Looking): InvId | null {
-  return view.viewing && game.invs[view.viewing] ? view.viewing : viewerOf(game);
+  if (view.viewing && game.invs[view.viewing]) return view.viewing;
+  const decider = viewerOf(game);
+  if (holdsSeat(view, decider)) return decider;
+  return view.mySeats?.[0] ?? null;
 }
+
+/** a hand shows its cards only on a seat this device holds; in the room's other seats it lies face down */
+export const handFaceUp = (view: Looking, inv: InvId | null): boolean => holdsSeat(view, inv);
 
 /** choices are offered only while the deciding investigator's table is on screen */
 export const choicesOffered = (game: GameState, view: Looking): boolean =>
-  !!game.pending && shownInv(game, view) === viewerOf(game);
+  !!game.pending && shownInv(game, view) === viewerOf(game) && holdsSeat(view, viewerOf(game));
 
 /**
  * A decision that belongs to someone other than the investigator whose turn it is and helps another's play: a commit to
@@ -49,10 +64,14 @@ export const landingView = (game: GameState): InvId | null => (canAct(game) ? ga
  */
 export type BarAsk =
   | { kind: "choice"; buttons: boolean }
+  /** the decider sits at another device: nothing to press here */
+  | { kind: "waiting"; inv: InvId }
   | { kind: "handoff"; inv: InvId; key: "players.canCommit" | "players.mayReact" };
 export function barAsk(game: GameState, view: Looking): BarAsk {
+  const decider = viewerOf(game) ?? game.lead;
   const offered = choicesOffered(game, view);
   const can = canAct(game);
+  if (!holdsSeat(view, decider)) return { kind: "waiting", inv: decider };
   if (!offered && can) return { kind: "handoff", inv: can.inv, key: can.key };
   return { kind: "choice", buttons: offered };
 }
@@ -148,7 +167,7 @@ export function ownDecisionTitle(prev: GameState | null, game: GameState): InvId
 /** the investigator the table should switch to by itself: someone who can act now while their table is not on screen */
 export function autoSwitchTarget(game: GameState, view: Looking): InvId | null {
   const can = canAct(game);
-  return can && shownInv(game, view) !== can.inv ? can.inv : null;
+  return can && holdsSeat(view, can.inv) && shownInv(game, view) !== can.inv ? can.inv : null;
 }
 
 export interface InvestigatorChoice {

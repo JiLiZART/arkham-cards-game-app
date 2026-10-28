@@ -24,6 +24,7 @@ import {
   canAct,
   choicesOffered,
   delayed,
+  handFaceUp,
   investigatorChoice,
   investigatorOptions,
   landingView,
@@ -266,6 +267,79 @@ describe("abilityOptionsOf", () => {
 
   it("nothing pending, nothing offered", () => {
     expect(abilityOptionsOf({ ...turn().state, pending: null } as GameState, ROLAND)).toEqual([]);
+  });
+});
+
+describe("seats in an online room", () => {
+  const theirs = { viewing: null, mySeats: [DAISY] };
+  const mine = { viewing: null, mySeats: [ROLAND] };
+
+  it("offers the choices only on the browser that holds the deciding seat", () => {
+    const { state } = turn();
+    expect(choicesOffered(state, mine)).toBe(true);
+    expect(choicesOffered(state, theirs)).toBe(false);
+  });
+
+  it("offers nothing to a spectator", () => {
+    expect(choicesOffered(turn().state, { viewing: null, mySeats: [] })).toBe(false);
+  });
+
+  it("a browser stays on its own seat while another's investigator decides", () => {
+    expect(shownInv(turn().state, theirs)).toBe(DAISY);
+    expect(shownInv(turn().state, mine)).toBe(ROLAND);
+  });
+
+  it("a spectator is shown the board: no investigator's table", () => {
+    expect(shownInv(turn().state, { viewing: null, mySeats: [] })).toBeNull();
+  });
+
+  it("what a browser chose to look at stays, held seat or not", () => {
+    expect(shownInv(turn().state, { viewing: ROLAND, mySeats: [DAISY] })).toBe(ROLAND);
+  });
+
+  it("the deciding table is shown without a room", () => {
+    expect(shownInv(turn().state, { viewing: null, mySeats: null })).toBe(ROLAND);
+  });
+
+  it("hands are face up only on the seats this browser holds", () => {
+    expect(handFaceUp(mine, ROLAND)).toBe(true);
+    expect(handFaceUp(mine, DAISY)).toBe(false);
+    expect(handFaceUp({ viewing: null, mySeats: [] }, ROLAND)).toBe(false);
+    expect(handFaceUp(none, DAISY)).toBe(true);
+  });
+
+  it("every seat is held when there is no room", () => {
+    expect(choicesOffered(turn().state, { viewing: null, mySeats: null })).toBe(true);
+    expect(choicesOffered(turn().state, none)).toBe(true);
+  });
+
+  it("the bar says who it waits for when the decider sits elsewhere", () => {
+    expect(barAsk(turn().state, theirs)).toEqual({ kind: "waiting", inv: ROLAND });
+    expect(barAsk(turn().state, { viewing: ROLAND, mySeats: [] })).toEqual({
+      kind: "waiting",
+      inv: ROLAND,
+    });
+  });
+
+  it("the bar offers the choice when the decider sits here", () => {
+    expect(barAsk(turn().state, mine)).toEqual({ kind: "choice", buttons: true });
+  });
+
+  it("someone else can act and sits here: the hand-off is offered", () => {
+    const helping = {
+      ...turn().state,
+      skillTest: { inv: ROLAND },
+      pending: { ...turn().state.pending!, inv: DAISY, kind: "commit" },
+    } as unknown as GameState;
+    expect(barAsk(helping, { viewing: ROLAND, mySeats: [DAISY] })).toEqual({
+      kind: "handoff",
+      inv: DAISY,
+      key: "players.canCommit",
+    });
+    expect(barAsk(helping, { viewing: ROLAND, mySeats: [ROLAND] })).toEqual({
+      kind: "waiting",
+      inv: DAISY,
+    });
   });
 });
 

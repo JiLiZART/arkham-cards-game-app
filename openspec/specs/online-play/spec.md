@@ -1,4 +1,10 @@
-## ADDED Requirements
+# online-play Specification
+
+## Purpose
+
+Online play: a room of browsers on one game. The host orders the moves of a session, every browser replays them through the unchanged engine, and a rule-free Cloudflare Worker only relays signaling and room state (ADR-0018, ADR-0019).
+
+## Requirements
 
 ### Requirement: Online rooms and their link
 
@@ -52,7 +58,12 @@ The host SHALL be able to open a room on the campaign saved on their device, inc
 
 ### Requirement: Seats decide who answers
 
-Each browser in a room SHALL hold zero or more seats. A choice SHALL be offered only on the browser holding the seat of the investigator who decides it. On every other browser the instruction bar shows "Waiting for <investigator>", and the choice's buttons and hand actions are inert. Any browser MAY look at any investigator's table, as in hot-seat play. Campaign flow prompts between scenarios (choices, Continue, Begin) SHALL be answerable from any seated browser, and the first answer counts.
+Each browser in a room SHALL hold zero or more seats. A choice SHALL be offered only on the browser holding the seat of the investigator who decides it. On every other browser the instruction bar shows "Waiting for <investigator>", and the choice's buttons and hand actions are inert. A browser opens on its own seat's table, also while another browser's investigator decides; it MAY look at any investigator's table from the player bar, but cards in a hand it does not hold are shown face down. Campaign flow prompts between scenarios (choices, Continue, Begin) SHALL be answerable from any seated browser, and the first answer counts.
+
+#### Scenario: Another browser's investigator decides
+
+- **WHEN** it is Agnes's turn and Ben holds Agnes
+- **THEN** Ana's browser stays on Roland's table with her own hand face up, and its bar says "Waiting for Ben: Agnes"
 
 #### Scenario: Agnes decides on Ben's browser
 
@@ -113,7 +124,7 @@ Each browser SHALL keep, in its save, the room id, a random player key for that 
 
 ### Requirement: Spectators
 
-A browser that opens a room's link without a seat, when no seat is free, SHALL join as a spectator. A spectator sees the table, the feed and every animation, may look at any investigator, and has no choices offered.
+A browser that opens a room's link without a seat, when no seat is free, SHALL join as a spectator. A spectator sees the board, the feed and every animation, with every hand face down, may look at any investigator's play area, and has no choices offered.
 
 #### Scenario: Full room
 

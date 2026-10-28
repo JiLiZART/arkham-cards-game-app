@@ -6,6 +6,8 @@ import { db, useGame } from "../../state/context";
 import { mapProjector } from "../../scene/Table";
 import { canUndo, safeStorage, viewerOf } from "../../state/store";
 import { pickTip, TIPS_KEY, type TipAnchor, type TipContext } from "../../game/tips";
+import { holdsSeat } from "../../state/players";
+import { useLooking } from "../../state/usePlayers";
 import { useView } from "../../state/view";
 import { moment } from "../SoundLayer";
 import { cx } from "../../components/cx";
@@ -106,7 +108,9 @@ export function TipLayer() {
     drawing: playing?.type === "token" && byHand,
     phone,
   };
-  const tip = pickTip(game, c, seen, on);
+  // in an online room a tip addresses the browser that answers: while another browser decides there is only the wait
+  const looking = useLooking();
+  const tip = holdsSeat(looking, viewer) ? pickTip(game, c, seen, on) : null;
   const visible =
     !!tip && quiet && ((!playing && !queued && stageFree) || (!!tip.duringDraw && c.drawing));
 

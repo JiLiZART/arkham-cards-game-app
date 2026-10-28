@@ -65,6 +65,10 @@
 .ff-back {
   transform: rotateY(180deg);
 }
+/* a hand held at another seat of the room lies face down */
+.fan-flip.face-down {
+  transform: rotateY(180deg);
+}
 .fan-card:focus-visible {
   outline: none;
 }

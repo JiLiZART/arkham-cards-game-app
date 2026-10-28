@@ -9,11 +9,12 @@ import { instructionParts } from "../../game/instruction";
 import { inBar, onRail } from "../../game/optionHome";
 import { useLayoutMode } from "../../state/layoutMode";
 import { Sentence } from "../Feed";
-import { canUndo, viewerOf } from "../../state/store";
+import { canUndo, canUndoHere, viewerOf } from "../../state/store";
 import { barAsk } from "../../state/players";
 import { optionLabel } from "../../game/optionText";
-import { useChoicesOffered } from "../../state/usePlayers";
+import { useChoicesOffered, useLooking } from "../../state/usePlayers";
 import { useView } from "../../state/view";
+import { useNet } from "../../state/online";
 import { moment } from "../SoundLayer";
 import { useCaption, useHeld } from "../StepCaption";
 import { cx } from "../../components/cx";
@@ -182,15 +183,16 @@ export function InstructionBar() {
   const locale = useGame((s) => s.locale);
   const busy = useGame((s) => !!s.current || s.queue.length > 0);
   const p = useOwnChoice();
-  const viewing = useView((s) => s.viewing);
+  const looking = useLooking();
   const mode = useLayoutMode();
   // while a phase step plays out, its caption has this place
   const caption = useCaption();
   const held = useHeld();
+  const roster = useNet((s) => s.roster);
   // the pause before a phase speaks for itself (the phase title); while events play the bar shows no choice
   if (busy || caption !== null || held || !p || p.kind === "phase") return null;
   const viewer = viewerOf(game);
-  const ask = barAsk(game, { viewing });
+  const ask = barAsk(game, looking);
   // someone else can act and their table isn't on screen: who, and the switch to them (the avatar's tap)
   if (ask.kind === "handoff") {
     const name = cardText(db, ask.inv, locale).name;
@@ -215,6 +217,28 @@ export function InstructionBar() {
             {t(db, locale, "players.switchTo", { name })}
           </button>
         </div>
+      </div>
+    );
+  }
+  // the decider sits at another device: the player by name, their investigator, and nothing to press (and no tip)
+  if (ask.kind === "waiting") {
+    const name = cardText(db, ask.inv, locale).name;
+    const player = roster?.players[roster.seats[ask.inv] ?? ""]?.name;
+    return (
+      <div className="instruction-bar" data-testid="waiting-bar">
+        <Sentence
+          parts={[
+            {
+              t: "text",
+              s: player
+                ? t(db, locale, "net.waitingPlayer", { player })
+                : t(db, locale, "net.waiting", { name }).replace(name, "").trim(),
+            },
+            { t: "text", s: " " },
+            { t: "inv", id: ask.inv },
+          ]}
+          size={30}
+        />
       </div>
     );
   }
@@ -263,7 +287,12 @@ export function ActionRail() {
 /** take back the last choice (also Ctrl/Cmd+Z), down to the last reveal of hidden information */
 export function UndoButton() {
   const locale = useGame((s) => s.locale);
-  const able = useGame(canUndo);
+  const able = useGame(canUndoHere);
+  // in a room: the investigator whose choice it was, when someone else has to take it back
+  const otherInv = useGame((s) => {
+    const last = s.room?.moves.at(-1);
+    return canUndo(s) && !canUndoHere(s) && last?.move.t === "choose" ? last.move.inv : null;
+  });
   const ended = useGame((s) => s.game?.phase === "ended");
   const undoStore = useGame((s) => s.undo);
   const undo = () => {
@@ -289,7 +318,11 @@ export function UndoButton() {
       data-tip="undo"
       disabled={!able || intro}
       onClick={undo}
-      title={t(db, locale, able ? "undo.hint" : "undo.blocked")}
+      title={
+        otherInv
+          ? t(db, locale, "net.undoBy", { name: cardText(db, otherInv, locale).name })
+          : t(db, locale, able ? "undo.hint" : "undo.blocked")
+      }
     >
       <UiIcon name="undo" /> <span className={styles.btnWord}>{t(db, locale, "undo.label")}</span>
     </button>
