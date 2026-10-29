@@ -18,7 +18,12 @@ export type Wire =
   | { t: "have"; n: number }
   /** please send the moves from number `from` on */
   | { t: "need"; from: number }
-  | { t: "moves"; list: Numbered[] };
+  | { t: "moves"; list: Numbered[] }
+  /** this player opened a table card at full size: not a move, never logged */
+  | { t: "show"; m: ShownView };
+
+/** a full-size view of a table card that the room may be shown: a card by instance id, or the act / agenda / reference deck */
+export type ShownView = { card: string } | { deck: "act" | "agenda" | "reference" };
 
 export type PeerState = "connecting" | "open" | "reconnecting" | "closed";
 

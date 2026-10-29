@@ -4,6 +4,7 @@ import { create } from "zustand";
 import type { ChoiceOption, InstId, InvId } from "../../engine/types";
 import { reducedMotion } from "../game/arrivals";
 import type { ScreenRect } from "../game/hit";
+import type { SharedView } from "../game/sharedView";
 
 /** an investigator portrait being dragged to a location: legal targets map location → Move option id */
 export interface MoveDrag {
@@ -36,6 +37,10 @@ export interface ViewState {
   /** full-size detail of a card, or an investigator's stats / hand / play area */
   modal: Modal;
   setModal(m: Modal): void;
+  /** the name of the player who showed the open view to the room (online play); null: this player opened it */
+  shownBy: string | null;
+  /** open a view another player showed, unless this player is busy with something else; says whether it opened */
+  showFrom(name: string, view: SharedView): boolean;
   setMoveDrag(d: MoveDrag | null): void;
   setHovered(id: InstId | null): void;
   openMenu(x: number, y: number, options: ChoiceOption[]): void;
@@ -133,7 +138,15 @@ export const useView = create<ViewState>((set, get) => ({
   camTick: 0,
   bumpCamera: () => set({ camTick: get().camTick + 1 }),
   modal: null,
-  setModal: (modal) => set({ modal, menu: null }),
+  setModal: (modal) => set({ modal, menu: null, shownBy: null }),
+  shownBy: null,
+  showFrom: (name, view) => {
+    const s = get();
+    // this player's own view, menu or drag, and the scenario introduction, come first; a view that was itself shown may be replaced
+    if ((s.modal && !s.shownBy) || s.menu || s.moveDrag || s.intro) return false;
+    set({ modal: view, shownBy: name });
+    return true;
+  },
   setMoveDrag: (moveDrag) => set({ moveDrag }),
   setHovered: (hovered) => set({ hovered, hoverRect: null }),
   openMenu: (x, y, options) => set({ menu: { x, y, options } }),

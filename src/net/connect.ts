@@ -5,6 +5,7 @@ import { createMesh } from "./mesh";
 import { socketLink, roomSocketUrl } from "./signaling";
 import { Session } from "./session";
 import type { IceConfig } from "./transport";
+import { sharedView } from "../ui/game/sharedView";
 import { useView } from "../ui/state/view";
 
 /** public STUN only: what a browser can use when the room server can't mint relays */
@@ -33,6 +34,17 @@ export function openRoom(
   return new Session({
     store,
     setMySeats: (seats) => useView.getState().setMySeats(seats),
+    onShow: (from, view) => {
+      const game = store.getState().game;
+      if (game && sharedView(game, view)) useView.getState().showFrom(from, view);
+    },
+    // a view this player opened (not one shown to them) that the whole table may see
+    watchViews: (send) =>
+      useView.subscribe((s, prev) => {
+        const game = store.getState().game;
+        if (s.modal !== prev.modal && !s.shownBy && game && sharedView(game, s.modal))
+          send(s.modal);
+      }),
     link: (h) => socketLink(roomSocketUrl(location, roomId), h),
     mesh: (me, ice, h) => createMesh(me, ice, h),
     ice: fetchIce,

@@ -29,6 +29,8 @@ export function Modal({
   children: ReactNode;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
+  const shownBy = useView((s) => s.shownBy);
+  const locale = useGame((s) => s.locale);
   const onClose = () => {
     moment("close");
     close();
@@ -51,6 +53,11 @@ export function Modal({
       }}
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
+      {shownBy && (
+        <div className={styles.shownBy} data-testid="shown-by">
+          {t(db, locale, "net.showing", { name: shownBy })}
+        </div>
+      )}
       {children}
     </dialog>
   );

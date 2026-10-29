@@ -19,7 +19,7 @@ import type { InvId } from "../engine/types";
 import { canUndoHere, createGameStore, type Prepare, type Storage } from "../ui/state/store";
 import { Session, seatMap } from "./session";
 import { playerId, type FromRoom, type Roster, type ToRoom } from "./protocol";
-import type { Link, LinkHandlers, Mesh, MeshHandlers, Wire } from "./transport";
+import type { Link, LinkHandlers, Mesh, MeshHandlers, ShownView, Wire } from "./transport";
 import type { Numbered } from "./moves";
 
 const ROOM = "R".repeat(22);
@@ -201,6 +201,10 @@ interface Player {
   store: ReturnType<typeof createGameStore>;
   session: Session;
   seats: InvId[] | null;
+  /** views other players showed this browser: who, and what */
+  shown: [string, unknown][];
+  /** call to simulate this browser's player opening a view */
+  open?: (v: ShownView) => void;
 }
 
 const world = (opts: { noLinks?: boolean } = {}) => {
@@ -214,10 +218,22 @@ const world = (opts: { noLinks?: boolean } = {}) => {
     const store = createGameStore(db, storage, over.prepare);
     store.getState().setTapDecks(over.tapDecks ?? true);
     if (over.storage) store.getState().resume();
-    const p = { name, key: `key-${name}`, storage, store, seats: null } as Player;
+    const p = {
+      name,
+      key: `key-${name}`,
+      storage,
+      store,
+      seats: null,
+      shown: [] as [string, unknown][],
+    } as Player;
     p.session = new Session({
       store,
       setMySeats: (s) => (p.seats = s),
+      onShow: (from, m) => p.shown.push([from, m]),
+      watchViews: (send) => {
+        p.open = send;
+        return () => (p.open = undefined);
+      },
       link: server.link,
       mesh: (me, _ice, h) => hub.create(me, h),
       ice: async () => ({ iceServers: [], relay: false }),
@@ -659,5 +675,49 @@ describe("without a direct link", () => {
     await flush();
     expect(ben.store.getState().room!.n).toBe(n);
     same(ana, ben);
+  });
+});
+
+describe("showing a card to the room", () => {
+  for (const noLinks of [false, true]) {
+    it(`reaches the other players ${noLinks ? "through the room" : "over the data channel"}, named`, async () => {
+      const { ana, ben, join } = await started({ noLinks });
+      const dan = await join("dan");
+      await flush();
+      ana.session.show({ deck: "agenda" });
+      await flush();
+      expect(ben.shown).toEqual([["ana", { deck: "agenda" }]]);
+      expect(dan.shown).toEqual([["ana", { deck: "agenda" }]]);
+      expect(ana.shown).toEqual([]);
+    });
+  }
+
+  it("is not a move: no log grows", async () => {
+    const { ana, ben } = await started();
+    const n = ben.store.getState().room!.n;
+    ana.session.show({ card: "c1" });
+    await flush();
+    expect(ben.store.getState().room!.n).toBe(n);
+    expect(ana.store.getState().room!.n).toBe(n);
+  });
+
+  it("ignores a view that is not a card or a deck", async () => {
+    const { ana, ben, server } = await started({ noLinks: true });
+    const link = [...server.links].find((l) => l.id === ana.session.net.getState().me)!;
+    const to = ben.session.net.getState().me!;
+    link.send({ t: "relay", to, w: { t: "show", m: { inv: "01001" } } });
+    link.send({ t: "relay", to, w: { t: "show", m: { deck: "everything" } } });
+    link.send({ t: "relay", to, w: { t: "show", m: { card: 7 } } });
+    await flush();
+    expect(ben.shown).toEqual([]);
+  });
+
+  it("sends what the player opens, until they leave", async () => {
+    const { ana, ben } = await started();
+    ana.open!({ card: "c9" });
+    await flush();
+    expect(ben.shown).toEqual([["ana", { card: "c9" }]]);
+    ana.session.leave();
+    expect(ana.open).toBeUndefined();
   });
 });

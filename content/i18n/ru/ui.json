@@ -136,6 +136,7 @@
   "net.away": "нет на месте",
   "net.connected": "на связи",
   "net.viaServer": "на связи через сервер",
+  "net.showing": "{name} показывает",
   "net.reconnecting": "переподключается",
   "net.reconnectingNow": "Переподключаемся…",
   "net.releaseIn": "Место можно освободить через {time}",

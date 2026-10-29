@@ -142,6 +142,7 @@
   "net.away": "away",
   "net.connected": "connected",
   "net.viaServer": "connected via server",
+  "net.showing": "{name} is showing",
   "net.reconnecting": "reconnecting",
   "net.reconnectingNow": "Reconnecting…",
   "net.releaseIn": "Seat can be released in {time}",

@@ -19,6 +19,7 @@ import type {
   Mesh,
   MeshFactory,
   PeerState,
+  ShownView,
   Wire,
 } from "./transport";
 
@@ -42,6 +43,10 @@ export interface NetState {
 export interface SessionDeps {
   store: StoreApi<UiState>;
   setMySeats(seats: InvId[] | null): void;
+  /** another player opened a table card: `from` is their name in the room */
+  onShow?(from: string, view: ShownView): void;
+  /** the player's own full-size views, to show the room: `send` each one; returns what stops watching */
+  watchViews?(send: (view: ShownView) => void): () => void;
   link: LinkFactory;
   mesh: MeshFactory;
   ice(room: string): Promise<IceConfig>;
@@ -63,6 +68,12 @@ export function seatMap(r: Pick<Roster, "host" | "invs" | "seats">): Record<stri
   return { ...map, ...r.seats };
 }
 
+const isShownView = (m: unknown): m is ShownView => {
+  if (typeof m !== "object" || m === null) return false;
+  if ("card" in m) return typeof m.card === "string";
+  return "deck" in m && (m.deck === "act" || m.deck === "agenda" || m.deck === "reference");
+};
+
 export class Session {
   readonly net: StoreApi<NetState>;
   private log = new MoveLog();
@@ -83,6 +94,7 @@ export class Session {
   private asked = new Set<string>();
   private started = false;
   private unsubscribe: (() => void) | null = null;
+  private unwatchViews: (() => void) | null = null;
 
   constructor(private d: SessionDeps) {
     this.net = createStore<NetState>(() => ({
@@ -117,6 +129,7 @@ export class Session {
     this.store.getState().setNet({ propose: (m) => this.propose(m) });
     this.store.getState().setRoom(this.roomSave(this.log.moves));
     this.unsubscribe = this.store.subscribe(() => this.autoDraw());
+    this.unwatchViews = this.d.watchViews?.((v) => this.show(v)) ?? null;
     this.link = this.d.link({
       onMessage: (m) => this.onRoom(m),
       onState: (s) => this.onLink(s),
@@ -127,6 +140,7 @@ export class Session {
     this.stopped = true;
     if (this.waiting) clearTimeout(this.waiting);
     this.unsubscribe?.();
+    this.unwatchViews?.();
     this.link?.close();
     this.mesh?.close();
     if (this.started) {
@@ -340,6 +354,12 @@ export class Session {
       case "refused":
         this.clearWaiting();
         this.notify(w.key.startsWith("net.") ? w.key : "net.error.rejected", w.key);
+        return;
+      case "show": {
+        // a view comes from a player of this room, and says what it is by shape only
+        const name = this.roster?.players[from]?.name;
+        if (name !== undefined && isShownView(w.m)) this.d.onShow?.(name, w.m);
+      }
     }
   }
 
@@ -359,6 +379,11 @@ export class Session {
   private sendAll(w: Wire) {
     for (const p of Object.values(this.roster?.players ?? {}))
       if (p.online && p.id !== this.me) this.sendTo(p.id, w);
+  }
+
+  /** tell the room this player opened a table card at full size */
+  show(view: ShownView): void {
+    this.sendAll({ t: "show", m: view });
   }
 
   // ---- moves

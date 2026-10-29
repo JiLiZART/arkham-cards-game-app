@@ -26,3 +26,14 @@
     0 0 0 2px var(--accent),
     0 0 14px #73ada588;
 }
+
+/* whose card this is: a shown view says who is showing it, in the dialog's top padding */
+.shownBy {
+  position: absolute;
+  top: 3px;
+  left: 18px;
+  font-size: 12px;
+  line-height: 1;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+}
