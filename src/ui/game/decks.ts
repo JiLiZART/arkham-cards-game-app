@@ -1,6 +1,6 @@
 import { cardText, t } from "../../content/i18n";
 import type { CardDef, DeckDef, InvestigatorDef } from "../../content/schema";
-import { validateDeck, type DeckProblem } from "../../engine/decks";
+import { validateDeck, whyNotReplace, type DeckProblem } from "../../engine/decks";
 import type { ContentDb } from "../../engine/types";
 import { catalogCards, emptyFilters } from "../catalog/filter";
 import { safeStorage, type Storage } from "../state/store";
@@ -242,6 +242,14 @@ export const replaceCard = (
   out: string,
   into: string,
 ): Record<string, number> => changeCopies(changeCopies(cards, out, -1), into, 1);
+
+/** the cards of the pool that may stand in for one copy of `out`: the swap adds no deckbuilding problem */
+export const replacementsFor = (
+  db: ContentDb,
+  deck: DeckDef,
+  out: string,
+  pool: CardDef[],
+): CardDef[] => pool.filter((c) => c.code !== out && !whyNotReplace(db, deck, out, c.code));
 
 export interface DeckTab {
   id: string;

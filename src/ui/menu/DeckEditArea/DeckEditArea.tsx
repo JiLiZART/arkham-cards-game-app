@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useLayoutMode } from "../../state/layoutMode";
 import { cardText, t } from "../../../content/i18n";
 import type { CardDef, DeckDef } from "../../../content/schema";
-import { whyNot, whyNotReplace } from "../../../engine/decks";
+import { whyNot } from "../../../engine/decks";
 import { CardFace } from "../../components/CardFace";
 import { db, gameStore, useGame } from "../../state/context";
 import {
@@ -11,6 +11,7 @@ import {
   changeCopies,
   problemText,
   replaceCard,
+  replacementsFor,
   withWeakness,
   type PoolFilter,
 } from "../../game/decks";
@@ -30,16 +31,12 @@ const PAGE = 48;
 function GridCard({
   card,
   n,
-  lit,
-  dim,
   why,
   children,
   onClick,
 }: {
   card: CardDef;
   n?: number;
-  lit?: boolean;
-  dim?: boolean;
   why?: string | null;
   children?: React.ReactNode;
   onClick?: () => void;
@@ -47,7 +44,7 @@ function GridCard({
   const locale = useGame((s) => s.locale);
   return (
     <div
-      className={cx(styles.dkCard, lit ? styles.lit : "", dim ? styles.dim : "")}
+      className={cx(styles.dkCard, onClick ? styles.pick : "")}
       data-card-code={card.code}
       onClick={onClick}
       title={cardText(db, card.code, locale).name}
@@ -61,10 +58,11 @@ function GridCard({
 }
 
 /**
- * The editing area of a deck: on the left the deck itself as a grid of cards by type (the signature cards and the
- * weaknesses apart, fixed), a hover offering Remove; on the right the cards the investigator may add, with filters and
- * a search, a hover offering Add or Replace. Replace lights the deck's cards it may stand in for: a click on one swaps
- * them. Every change goes to `onChange` with the deck's new cards.
+ * The editing area of a deck: the deck itself across the whole width as a grid of cards by type (the signature cards and
+ * the weaknesses apart, fixed), a hover offering Replace and Remove. The cards the investigator may take open in a picker
+ * (a dialog on the desktop, full screen on the phone), with filters and a search: from "Add cards" each offers Add; from a
+ * deck card's Replace only the cards that may stand in for it, and a tap on one swaps them. Every change goes to
+ * `onChange` with the deck's new cards.
  */
 export function DeckEditArea({
   investigator,
@@ -86,19 +84,22 @@ export function DeckEditArea({
     levels: [],
   });
   const [shown, setShown] = useState(PAGE);
-  const [replacing, setReplacing] = useState<string | null>(null);
-  // on the phone the pool is a full-screen layer opened from the deck's "Add cards" (view state, ADR-0004)
+  // the card picker: closed, adding, or choosing what replaces one card of the deck (view state, ADR-0004)
+  const [picker, setPicker] = useState<null | { mode: "add" } | { mode: "replace"; out: string }>(
+    null,
+  );
   const phone = useLayoutMode() === "phone";
-  const [poolOpen, setPoolOpen] = useState(false);
-  useEffect(() => setShown(PAGE), [filter]);
-  useEffect(() => setReplacing(null), [deck.id]);
-  // Escape leaves the replace mode
+  const dialog = useRef<HTMLDivElement>(null);
+  useEffect(() => setShown(PAGE), [filter, picker]);
+  useEffect(() => setPicker(null), [deck.id]);
+  // the picker takes the focus and closes on Escape
   useEffect(() => {
-    if (!replacing) return;
-    const key = (e: KeyboardEvent) => e.key === "Escape" && setReplacing(null);
+    if (!picker) return;
+    dialog.current?.focus({ preventScroll: true });
+    const key = (e: KeyboardEvent) => e.key === "Escape" && setPicker(null);
     window.addEventListener("keydown", key);
     return () => window.removeEventListener("keydown", key);
-  }, [replacing]);
+  }, [picker]);
   const pool = useMemo(
     () => builderPool(db, locale, investigator, filter),
     [locale, investigator, filter],
@@ -126,13 +127,17 @@ export function DeckEditArea({
   const reason = (r: ReturnType<typeof whyNot>) =>
     r ? problemText(db, locale, { message: r.key, reason: r }) : null;
   const change = (cards: Record<string, number>) => onChange(cards, deck.randomBasicWeakness);
-  const swap = (out: string) => {
-    if (!replacing) return;
+  const outCard = picker?.mode === "replace" ? db.cards[picker.out] : null;
+  const offered = picker?.mode === "replace" ? replacementsFor(db, deck, picker.out, pool) : pool;
+  const swap = (into: string) => {
+    if (picker?.mode !== "replace") return;
     moment("builderReplace");
-    change(replaceCard(deck.cards, out, replacing));
-    setReplacing(null);
+    change(replaceCard(deck.cards, picker.out, into));
+    setPicker(null);
   };
-  const into = replacing ? db.cards[replacing] : null;
+  const title = outCard
+    ? tr("deckEditor.replaceTitle", { card: nameOf(outCard) })
+    : tr("deckEditor.addCards");
   const poolSection = (
     <section className={styles.dkPool}>
       <header className={styles.dkFilters}>
@@ -202,71 +207,80 @@ export function DeckEditArea({
             </button>
           ))}
         </div>
-        <small className={styles.dkCount}>{tr("deckEditor.pool", { n: pool.length })}</small>
+        <small className={styles.dkCount}>
+          {tr(outCard ? "deckEditor.canReplace" : "deckEditor.pool", { n: offered.length })}
+        </small>
       </header>
-      <div className={styles.dkGrid}>
-        {pool.slice(0, shown).map((card) => {
-          const why = reason(whyNot(db, deck, card.code));
-          return (
+      {outCard && !offered.length && (
+        <p className={styles.dkCount}>{tr("deckEditor.noReplacement")}</p>
+      )}
+      <div className={cx(styles.dkGrid, styles.dkPickGrid)}>
+        {offered.slice(0, shown).map((card) =>
+          outCard ? (
             <GridCard
               key={card.code}
               card={card}
               n={deck.cards[card.code]}
-              why={why}
-              dim={!!replacing && replacing !== card.code}
-              lit={replacing === card.code}
+              onClick={() => swap(card.code)}
             >
-              {!replacing && (
-                <>
-                  <button
-                    className="primary"
-                    disabled={!!why}
-                    onClick={() => {
-                      moment("builderAdd");
-                      change(changeCopies(deck.cards, card.code, 1));
-                    }}
-                    aria-label={tr("deckEditor.add", { card: nameOf(card) })}
-                  >
-                    + {tr("deck.add")}
-                  </button>
-                  <button
-                    onClick={() => {
-                      setReplacing(card.code);
-                      // the deck's cards to swap are behind the layer: close it to pick one
-                      setPoolOpen(false);
-                    }}
-                    aria-label={tr("deck.replaceWith", { card: nameOf(card) })}
-                  >
-                    ⇄ {tr("deck.replace")}
-                  </button>
-                </>
-              )}
+              <button
+                className="primary"
+                data-testid="dk-replace-with"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  swap(card.code);
+                }}
+                aria-label={tr("deckEditor.replaceWith", {
+                  card: nameOf(card),
+                  out: nameOf(outCard),
+                })}
+              >
+                ⇄ {tr("deck.replace")}
+              </button>
             </GridCard>
-          );
-        })}
+          ) : (
+            <GridCard
+              key={card.code}
+              card={card}
+              n={deck.cards[card.code]}
+              why={reason(whyNot(db, deck, card.code))}
+            >
+              <button
+                className="primary"
+                data-testid="dk-add"
+                disabled={!!whyNot(db, deck, card.code)}
+                onClick={() => {
+                  moment("builderAdd");
+                  change(changeCopies(deck.cards, card.code, 1));
+                }}
+                aria-label={tr("deckEditor.add", { card: nameOf(card) })}
+              >
+                + {tr("deck.add")}
+              </button>
+            </GridCard>
+          ),
+        )}
       </div>
-      {shown < pool.length && (
+      {shown < offered.length && (
         <button className={cx("link-btn", styles.dkMore)} onClick={() => setShown(shown + PAGE)}>
-          {tr("catalog.more", { n: shown, total: pool.length })}
+          {tr("catalog.more", { n: shown, total: offered.length })}
         </button>
       )}
     </section>
   );
   return (
-    <div className={cx(styles.dkArea, replacing ? "replacing" : "")}>
+    <div className={styles.dkArea}>
       <section className={styles.dkDeck}>
         <header className={styles.dkHead}>
           <b>{tr("deckEditor.size", { n: size, size: inv?.deckSize ?? 30 })}</b>
-          {phone && (
-            <button
-              type="button"
-              className="primary"
-              data-testid="dk-add-cards"
-              onClick={() => setPoolOpen(true)}
-            >
-              {tr("deckEditor.addCards")}
-            </button>
-          )}
+          <button
+            type="button"
+            className="primary"
+            data-testid="dk-add-cards"
+            onClick={() => setPicker({ mode: "add" })}
+          >
+            + {tr("deckEditor.addCards")}
+          </button>
           {weakness && (
             <label className={styles.dkWeakness}>
               {tr("deckEditor.weakness")}
@@ -287,12 +301,6 @@ export function DeckEditArea({
             </label>
           )}
         </header>
-        {into && (
-          <div className={styles.dkReplaceBar} role="status">
-            <span>{tr("deck.replaceWith", { card: nameOf(into) })}</span>
-            <button onClick={() => setReplacing(null)}>{tr("deckEditor.cancel")}</button>
-          </div>
-        )}
         {TYPES.map((type) => {
           const rows = entries.filter(
             (x) => x.card.type === type && !required.has(x.card.code) && !x.card.subtype,
@@ -304,31 +312,27 @@ export function DeckEditArea({
                 {tr(`deckEditor.${type}`)} · {rows.reduce((n, x) => n + x.n, 0)}
               </h4>
               <div className={styles.dkGrid}>
-                {rows.map(({ card, n }) => {
-                  const target = replacing ? !whyNotReplace(db, deck, card.code, replacing) : false;
-                  return (
-                    <GridCard
-                      key={card.code}
-                      card={card}
-                      n={n}
-                      lit={target}
-                      dim={!!replacing && !target}
-                      onClick={target ? () => swap(card.code) : undefined}
+                {rows.map(({ card, n }) => (
+                  <GridCard key={card.code} card={card} n={n}>
+                    <button
+                      data-testid="dk-replace"
+                      onClick={() => setPicker({ mode: "replace", out: card.code })}
+                      aria-label={tr("deckEditor.replace", { card: nameOf(card) })}
                     >
-                      {!replacing && (
-                        <button
-                          onClick={() => {
-                            moment("builderRemove");
-                            change(changeCopies(deck.cards, card.code, -1));
-                          }}
-                          aria-label={tr("deckEditor.remove", { card: nameOf(card) })}
-                        >
-                          − {tr("deck.remove")}
-                        </button>
-                      )}
-                    </GridCard>
-                  );
-                })}
+                      ⇄ {tr("deck.replace")}
+                    </button>
+                    <button
+                      data-testid="dk-remove"
+                      onClick={() => {
+                        moment("builderRemove");
+                        change(changeCopies(deck.cards, card.code, -1));
+                      }}
+                      aria-label={tr("deckEditor.remove", { card: nameOf(card) })}
+                    >
+                      − {tr("deck.remove")}
+                    </button>
+                  </GridCard>
+                ))}
               </div>
             </div>
           );
@@ -338,29 +342,41 @@ export function DeckEditArea({
             <h4>{tr("deckEditor.always")}</h4>
             <div className={styles.dkGrid}>
               {fixed.map(({ card, n }) => (
-                <GridCard key={card.code} card={card} n={n} dim={!!replacing} />
+                <GridCard key={card.code} card={card} n={n} />
               ))}
             </div>
           </div>
         )}
       </section>
-      {!phone && poolSection}
-      {phone && poolOpen && (
-        <div className={styles.dkPoolFull} role="dialog" aria-modal="true" data-testid="dk-pool">
-          <header className={styles.dkPoolBar}>
-            <b>{tr("deckEditor.addCards")}</b>
-            <button
-              type="button"
-              className={styles.dkPoolClose}
-              data-testid="dk-pool-close"
-              onClick={() => setPoolOpen(false)}
-              title={tr("sheet.close")}
-              aria-label={tr("sheet.close")}
-            >
-              <UiIcon name="none" size={20} />
-            </button>
-          </header>
-          {poolSection}
+      {picker && (
+        <div
+          className={cx(styles.dkScrim, phone ? styles.phone : "")}
+          onPointerDown={(e) => e.target === e.currentTarget && setPicker(null)}
+        >
+          <div
+            ref={dialog}
+            tabIndex={-1}
+            className={styles.dkPicker}
+            role="dialog"
+            aria-modal="true"
+            aria-label={title}
+            data-testid="dk-pool"
+          >
+            <header className={styles.dkPoolBar}>
+              <b>{title}</b>
+              <button
+                type="button"
+                className={styles.dkPoolClose}
+                data-testid="dk-pool-close"
+                onClick={() => setPicker(null)}
+                title={tr("sheet.close")}
+                aria-label={tr("sheet.close")}
+              >
+                <UiIcon name="none" size={20} />
+              </button>
+            </header>
+            {poolSection}
+          </div>
         </div>
       )}
     </div>

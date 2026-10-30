@@ -8,6 +8,7 @@ import {
   deckTabs,
   editDeck,
   replaceCard,
+  replacementsFor,
   customDecks,
   defaultDeckName,
   deleteCustomDeck,
@@ -242,5 +243,26 @@ describe("the deck step's tabs and edits", () => {
     expect(customDecks(db, ROLAND, store)).toHaveLength(1);
     expect(customDecks(db, ROLAND, store)[0].deck.cards).toEqual(base.cards);
     expect(customDecks(db, ROLAND, store)[0].problems).toEqual([]);
+  });
+});
+
+describe("the cards that may replace one of the deck", () => {
+  const pool = builderPool(db, "en", ROLAND, { query: "", factions: [], types: [], levels: [] });
+  const codes = (out: string) => replacementsFor(db, base, out, pool).map((c) => c.code);
+
+  it("offers the cards that keep the deck legal in its place: a second Machete for a Flashlight", () => {
+    expect(codes("01087")).toContain("01020");
+  });
+
+  it("never the card itself, nor a card the investigator can't take", () => {
+    expect(codes("01087")).not.toContain("01087");
+    const mystic = pool.find((c) => c.faction === "mystic");
+    expect(mystic).toBeUndefined();
+    expect(codes("01087").every((c) => db.cards[c].faction !== "mystic")).toBe(true);
+  });
+
+  it("not a card already at its copy limit", () => {
+    // Flashlight ×2 in the deck: a third can't come in for a Machete
+    expect(codes("01020")).not.toContain("01087");
   });
 });

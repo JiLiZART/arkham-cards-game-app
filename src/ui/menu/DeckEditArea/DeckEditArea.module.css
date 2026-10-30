@@ -1,7 +1,4 @@
 .dk-area {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  gap: 16px;
   min-height: 0;
 }
 .dk-deck,
@@ -52,7 +49,7 @@
 }
 .dk-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(118px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 10px;
 }
 .dk-card {
@@ -109,48 +106,61 @@
   min-height: 36px;
   font-size: 14px;
 }
-.dk-card.lit {
+.dk-card.pick {
   cursor: pointer;
-  box-shadow:
-    0 0 0 3px #2f9a3a,
-    0 0 16px #2f9a3acc;
-}
-.dk-card.dim {
-  filter: brightness(0.55) saturate(0.6);
-}
-.dk-replace-bar {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 6px 10px;
-  border: 2px solid #2f9a3a;
-  border-radius: 10px;
-  background: #e7f4e1;
 }
 .dk-more {
   align-self: center;
 }
-@media (max-width: 900px) {
-  .dk-area {
-    grid-template-columns: 1fr;
-  }
-}
 
-/* the phone: the pool is a full-screen layer with its own Close; the deck gets the body */
-.dk-pool-full {
+/* the card picker: a dialog over a scrim on the desktop, the whole screen on the phone */
+.dk-scrim {
   position: fixed;
   inset: 0;
   z-index: 140;
+  display: grid;
+  place-items: center;
+  padding: 3vh 3vw;
+  background: #000a;
+}
+.dk-picker {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding: 6px calc(12px + env(safe-area-inset-right, 0px)) env(safe-area-inset-bottom, 0px)
-    calc(12px + env(safe-area-inset-left, 0px));
+  width: min(1280px, 100%);
+  height: 100%;
+  padding: 10px 18px 14px;
   overflow-y: auto;
   /* a focused card scrolls clear of the sticky bars */
   scroll-padding-top: 120px;
+  border-radius: 14px;
   background: var(--paper-leaf);
   color: var(--paper-ink);
+  box-shadow: 0 20px 60px #000c;
+  outline: none;
+}
+/* the pool sits on the dialog's own paper: no second frame */
+.dk-picker > .dk-pool {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+/* the picker's cards are bigger than the deck's: they are being read */
+.dk-pick-grid {
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+.dk-scrim.phone {
+  padding: 0;
+}
+.dk-scrim.phone .dk-picker {
+  border-radius: 0;
+  padding: 6px calc(12px + env(safe-area-inset-right, 0px)) env(safe-area-inset-bottom, 0px)
+    calc(12px + env(safe-area-inset-left, 0px));
+}
+.dk-scrim.phone .dk-pick-grid {
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
 }
 .dk-pool-bar {
   position: sticky;
