@@ -1,1 +1,9 @@
-{}
+{
+  "09057": { "abilities": [
+    { "kind": "action", "designator": "investigate", "label": "Fingerprint Kit: investigate (+2 intellect, +2 clues)", "cost": { "uses": 1, "exhaust": true }, "effects": [{ "op": "investigate", "bonus": 2, "onSuccess": [{ "op": "discoverClues", "amount": 2 }] }] }
+  ] },
+  "09064": { "abilities": [
+    { "kind": "action", "designator": "investigate", "label": "Thieves' Kit: investigate with intellect (gain 1 resource)", "cost": { "uses": 1 }, "effects": [{ "op": "investigate", "onSuccess": [{ "op": "gainResources", "amount": 1 }] }] },
+    { "kind": "action", "designator": "investigate", "label": "Thieves' Kit: investigate with agility (gain 1 resource)", "cost": { "uses": 1 }, "effects": [{ "op": "investigate", "skill": "agility", "onSuccess": [{ "op": "gainResources", "amount": 1 }] }] }
+  ] }
+}

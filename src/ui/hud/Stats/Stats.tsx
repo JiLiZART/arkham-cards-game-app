@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { cardText, t } from "../../../content/i18n";
 import { SKILLS } from "../../../content/schema";
 import { maxHealth, maxSanity, skillValue } from "../../../engine/core";
-import { HAND_LIMIT } from "../../../engine/rules/investigators";
+import { handLimit } from "../../../engine/rules/investigators";
 import type { ChoiceOption, GameState, InvId } from "../../../engine/types";
 import { db, gameStore, useGame } from "../../state/context";
 import { Icon, Stat } from "../../components/Icon";
@@ -54,7 +54,7 @@ export function invNumbers(game: GameState, i: InvId) {
     resources: st.resources,
     clues: st.clues,
     hand: st.hand.length,
-    handLimit: HAND_LIMIT,
+    handLimit: handLimit(g, i),
     skills: SKILLS.map((s) => [s, skillValue(g, i, s)] as const),
   };
 }

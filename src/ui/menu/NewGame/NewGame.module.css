@@ -34,15 +34,7 @@
   min-height: 44px;
   cursor: pointer;
 }
-.wz-filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-  margin: 0 0 12px;
-}
-.wz-filters select,
-.wz-filters input {
+.wz-sort select {
   min-height: 44px;
   padding: 0 10px;
   border: 2px solid var(--ctl-line);
@@ -50,9 +42,6 @@
   background: var(--ctl-bg);
   color: var(--ink);
   font: inherit;
-}
-.wz-filters input {
-  flex: 1 1 160px;
 }
 :global(.wz-tile).needs-deck {
   opacity: 0.55;
@@ -122,11 +111,6 @@
   background: var(--paper-chosen);
   border-color: var(--paper-accent);
   box-shadow: 0 0 14px #1f575266;
-}
-:global(.desk) .wz-filters input {
-  background: var(--slate);
-  color: var(--ink);
-  border: 1px solid var(--rule);
 }
 
 /* the investigator step: the list with its filters, and the sidebar with the one hovered or last tapped */
@@ -370,9 +354,6 @@
   background: var(--paper-chosen);
   border-color: var(--paper-accent);
   box-shadow: 0 0 14px #354e5766;
-}
-:global(.wz-camp) .wz-filters input[type="search"] {
-  flex: 1 1 200px;
 }
 .wz-camp-side {
   flex-basis: 420px;
@@ -642,9 +623,6 @@
   position: absolute;
   inset: -8px;
 }
-.wz-filter-toggle {
-  margin: 0 0 6px;
-}
 
 /* the phone: three columns of tiles, each with its details control; the filters folded behind the chip */
 :global(.menus):global(.phone) .wz-tile-wrap {
@@ -660,10 +638,6 @@
 :global(.menus):global(.phone) .wz-ctiles {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
-}
-:global(.menus):global(.phone) .wz-filters {
-  gap: 6px;
-  margin: 0 0 6px;
 }
 
 /* the avatars and the deck tabs share a row; on the phone it is one row that scrolls sideways: investigator chips, a rule, deck pills */

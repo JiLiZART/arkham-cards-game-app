@@ -1,6 +1,7 @@
 import { shuffle } from "../rng";
 import {
   logStep,
+  modSum,
   abilitiesOf,
   activeInvs,
   ask,
@@ -131,6 +132,18 @@ export const assignDamageHandler: Handler<"AssignDamage"> = (g, step) => {
     damage = Math.max(0, damage - prevented[0]);
     horror = Math.max(0, horror - prevented[1]);
     if (!damage && !horror) return;
+  }
+  // what is about to be placed can still be cancelled, whatever dealt it (Delay the Inevitable)
+  if (!step.windowed && (damage || horror)) {
+    const key = step.key ?? `dmg:${step.inv}:${g.s.log.length}`;
+    push(g, win("damageDealt", { inv: step.inv, enemy: step.enemy ?? null, key, damage, horror }), {
+      ...step,
+      damage,
+      horror,
+      key,
+      windowed: true,
+    });
+    return;
   }
   // pending answer: assign one point
   if (step.choice !== undefined) {
@@ -535,10 +548,14 @@ export function drawOpeningCards(g: G, i: InvId, n: number) {
 /** most cards an investigator keeps at the end of upkeep */
 export const HAND_LIMIT = 8;
 
+/** an investigator's maximum hand size: 8, raised by modifiers (Laboratory Assistant) */
+export const handLimit = (g: G, i: InvId) => HAND_LIMIT + modSum(g, i, "handSize");
+
 export const handSizeHandler: Handler<"HandSize"> = (g, step) => {
   const me = inv(g, step.inv);
   if (me.status !== "playing") return;
-  const excess = me.hand.length - HAND_LIMIT;
+  const limit = handLimit(g, step.inv);
+  const excess = me.hand.length - limit;
   if (excess <= 0) return;
   if (!step.stepped && step.choice === undefined) logStep(g, "handSize", step.inv);
   const pick = ask<InstId>(
@@ -546,7 +563,7 @@ export const handSizeHandler: Handler<"HandSize"> = (g, step) => {
     step,
     step.inv,
     "generic",
-    `${me.name}: discard down to ${HAND_LIMIT} cards (${excess} more)`,
+    `${me.name}: discard down to ${limit} cards (${excess} more)`,
     me.hand.map((h) => ({ id: h, label: def(g, h).name, card: h, value: h })),
     { key: "discardDown", vars: { n: excess } },
   );

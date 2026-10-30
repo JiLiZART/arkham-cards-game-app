@@ -193,6 +193,8 @@ export interface EffCtx {
   from?: InstId | null;
   /** [damage, horror] an attack just dealt, in its attackDealsDamage window */
   dealt?: [number, number];
+  /** the card whose effect caused the event (horrorHealed) */
+  by?: InstId | null;
 }
 
 export interface ChoiceOption {
@@ -298,6 +300,8 @@ export type Step = { choice?: any } & (
       enemy?: InstId | null;
       /** the attack's key: what its window prevented waits under it */ key?: string;
       assigned?: Record<string, [number, number]>;
+      /** the damageDealt window has been opened for it */
+      windowed?: boolean;
     }
   | {
       t: "AfterDamage";
@@ -357,6 +361,8 @@ export type Step = { choice?: any } & (
 
 export interface EventData {
   inv?: InvId | null;
+  /** the card whose effect caused the event (horrorHealed) */
+  by?: InstId | null;
   enemy?: InstId | null;
   location?: InstId | null;
   card?: InstId | null;
@@ -440,6 +446,8 @@ export interface CardScript {
   fns?: Record<string, ScriptFn>;
   /** conditions named by `{ script: name }` in the card's (or scenario's) data */
   conditions?: Record<string, (g: any, ctx: EffCtx) => boolean>;
+  /** icons the card gains on top of its printed ones, while it is committed (Steadfast, Curiosity) */
+  icons?: (g: any, cardId: InstId) => Partial<Record<Skill | "wild", number>>;
   /** dynamic constant modifiers */
   modifiers?: (g: any, cardId: InstId) => { target: string; mod: Modifier }[];
   /** cards (e.g. top event of discard) the controller may additionally play */

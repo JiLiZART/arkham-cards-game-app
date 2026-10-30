@@ -128,8 +128,9 @@ const ownSkill = (g: G, i: InvId, s: Skill) => Math.max(0, baseSkill(g, i, s) + 
 
 /** icons a card contributes to a test */
 export function iconsFor(g: G, cardId: InstId, skill: Skill): number {
-  const icons = def(g, cardId).icons;
-  return (icons[skill] ?? 0) + (icons.wild ?? 0);
+  const d = def(g, cardId);
+  const extra = g.db.scripts[d.code]?.icons?.(g, cardId) ?? {};
+  return (d.icons[skill] ?? 0) + (d.icons.wild ?? 0) + (extra[skill] ?? 0) + (extra.wild ?? 0);
 }
 
 export function canCommit(g: G, who: InvId, cardId: InstId, t: SkillTestState): boolean {

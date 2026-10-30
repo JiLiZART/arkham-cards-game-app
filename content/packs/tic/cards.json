@@ -1,1 +1,8 @@
-{}
+{
+  "07114": { "abilities": [
+    { "kind": "onPlay", "designator": "investigate", "aoo": false, "effects": [{ "op": "investigate", "bonus": { "yourSkill": "agility" }, "onSuccess": [{ "op": "chooseOne", "options": [
+      { "label": "Automatically evade an enemy at this location", "condition": { "all": [{ "succeededBy": { "min": 2 } }, { "enemyAtYourLocation": true }] }, "effects": [{ "op": "evade", "auto": true }] },
+      { "label": "Don't evade", "effects": [] }
+    ] }] }] }
+  ] }
+}

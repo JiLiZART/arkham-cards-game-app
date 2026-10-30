@@ -72,5 +72,9 @@
         ]
       }
     ]
-  }
+  },
+  "02020": { "abilities": [
+    { "kind": "constant", "modifiers": [{ "stat": "handSize", "value": 2 }] },
+    { "kind": "reaction", "trigger": "enterPlay", "label": "Laboratory Assistant: draw 2 cards", "effects": [{ "op": "drawCards", "amount": 2 }] }
+  ] }
 }

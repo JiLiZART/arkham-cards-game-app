@@ -1,1 +1,11 @@
-{}
+{
+  "04103": { "abilities": [
+    { "kind": "onPlay", "aoo": false, "condition": { "firstAction": true }, "effects": [{ "op": "chooseOne", "options": [
+      { "label": "Discover 2 clues (an enemy is here)", "condition": { "enemyAtYourLocation": true }, "effects": [{ "op": "discoverClues", "amount": 2 }] },
+      { "label": "Discover 1 clue", "condition": { "not": { "enemyAtYourLocation": true } }, "effects": [{ "op": "discoverClues", "amount": 1 }] }
+    ] }] }
+  ] },
+  "04107": { "abilities": [
+    { "kind": "reaction", "trigger": "skillTestSucceeded", "label": "Lucky Cigarette Case: draw 1 card", "cost": { "exhaust": true }, "condition": { "all": [{ "eventInvestigatorIsYou": true }, { "succeededBy": { "min": 2 } }] }, "effects": [{ "op": "drawCards", "amount": 1 }] }
+  ] }
+}

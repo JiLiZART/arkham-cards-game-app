@@ -63,24 +63,53 @@ export function campaignProgress(
   return c && { works: c.cards.works, total: c.cards.total, unscripted: c.unscripted.length };
 }
 
-/** the filters over the campaign list: what kind, how complete, how long, and a name to look for */
+/** a filter chip under the toolbar: its value, and the filter without it */
+export interface Pill<F> {
+  key: string;
+  label: string;
+  clear(f: F): F;
+}
+type Tr = (key: string, vars?: Record<string, string | number>) => string;
+
+/** the filters over the campaign list: what kind, how complete, how long, and a name to look for; null is "all" */
 export interface CampaignFilter {
-  kind: "all" | "campaign" | "return" | "side";
-  rules: "all" | "complete" | "partial";
-  length: "all" | "one" | "few" | "many";
+  kind: "campaign" | "return" | "side" | null;
+  rules: "complete" | "partial" | null;
+  length: "one" | "few" | "many" | null;
   query: string;
 }
+/** nothing set: Clear all */
 export const NO_CAMPAIGN_FILTER: CampaignFilter = {
-  kind: "all",
-  rules: "all",
-  length: "all",
+  kind: null,
+  rules: null,
+  length: null,
   query: "",
 };
+/** what the app starts with: the campaigns that play well */
+export const DEFAULT_CAMPAIGN_FILTER: CampaignFilter = { ...NO_CAMPAIGN_FILTER, rules: "complete" };
 
-/** how many campaign filters are set: the number on the phone's Filter chip */
+/** how many campaign filters are set: the number on the Filters control */
 export const campaignFilterCount = (f: CampaignFilter): number =>
-  [f.kind !== "all", f.rules !== "all", f.length !== "all", f.query.trim() !== ""].filter(Boolean)
+  [f.kind !== null, f.rules !== null, f.length !== null, f.query.trim() !== ""].filter(Boolean)
     .length;
+
+/** the set filters that show as pills (the kind and the search show their own state) */
+export function campaignPills(f: CampaignFilter, tr: Tr): Pill<CampaignFilter>[] {
+  const pills: Pill<CampaignFilter>[] = [];
+  if (f.rules)
+    pills.push({
+      key: "rules",
+      label: tr(`wizard.rules.${f.rules}`),
+      clear: (g) => ({ ...g, rules: null }),
+    });
+  if (f.length)
+    pills.push({
+      key: "length",
+      label: tr(`wizard.length.${f.length}`),
+      clear: (g) => ({ ...g, length: null }),
+    });
+  return pills;
+}
 
 export const campaignKind = (c: CampaignDef): "campaign" | "return" | "side" =>
   c.id.startsWith("side-") ? "side" : c.id.startsWith("return-to-") ? "return" : "campaign";
@@ -98,9 +127,9 @@ export function tileName(db: ContentDb, c: CampaignDef, locale: string): string 
 export function filterCampaigns(db: ContentDb, locale: string, f: CampaignFilter): CampaignDef[] {
   const q = f.query.trim().toLowerCase();
   return campaignOrder(db).filter((c) => {
-    if (f.kind !== "all" && campaignKind(c) !== f.kind) return false;
-    if (f.rules !== "all" && (f.rules === "complete") !== campaignComplete(db, c.id)) return false;
-    if (f.length !== "all" && lengthOf(c) !== f.length) return false;
+    if (f.kind && campaignKind(c) !== f.kind) return false;
+    if (f.rules && (f.rules === "complete") !== campaignComplete(db, c.id)) return false;
+    if (f.length && lengthOf(c) !== f.length) return false;
     if (!q) return true;
     const names = [
       campaignName(db, c.id, locale),
@@ -152,19 +181,88 @@ export function investigatorInfo(
   };
 }
 
+export const STAT_KEYS = [
+  "health",
+  "sanity",
+  "willpower",
+  "intellect",
+  "combat",
+  "agility",
+] as const;
+export type StatKey = (typeof STAT_KEYS)[number];
+
 export interface PickerFilter {
   faction: string | null;
   cycle: string | null;
+  rules: "complete" | "partial" | null;
+  /** a minimum for each stat set */
+  stats: Partial<Record<StatKey, number>>;
   query: string;
 }
+/** nothing set: Clear all */
+export const NO_PICKER_FILTER: PickerFilter = {
+  faction: null,
+  cycle: null,
+  rules: null,
+  stats: {},
+  query: "",
+};
+/** what the app starts with: the investigators that play well */
+export const DEFAULT_PICKER_FILTER: PickerFilter = { ...NO_PICKER_FILTER, rules: "complete" };
 
-/** how many picker filters are set (class, cycle, name; the order is not a filter) */
+/** how many picker filters are set (class, cycle, rules, each stat, name; the order is not a filter) */
 export const pickerFilterCount = (f: PickerFilter): number =>
-  [f.faction !== null, f.cycle !== null, f.query.trim() !== ""].filter(Boolean).length;
+  [f.faction !== null, f.cycle !== null, f.rules !== null, f.query.trim() !== ""].filter(Boolean)
+    .length + Object.keys(f.stats).length;
 
-/** every investigator for the picker, filtered by class and cycle and by a search of the name (in the game's language and in English) */
+/** the set filters that show as pills (the class and the search show their own state) */
+export function pickerPills(
+  db: ContentDb,
+  locale: string,
+  f: PickerFilter,
+  tr: Tr,
+): Pill<PickerFilter>[] {
+  const pills: Pill<PickerFilter>[] = [];
+  if (f.rules)
+    pills.push({
+      key: "rules",
+      label: tr(`wizard.rules.${f.rules}`),
+      clear: (g) => ({ ...g, rules: null }),
+    });
+  if (f.cycle)
+    pills.push({
+      key: "cycle",
+      label: cycleName(db, locale, f.cycle),
+      clear: (g) => ({ ...g, cycle: null }),
+    });
+  for (const k of STAT_KEYS) {
+    const n = f.stats[k];
+    if (n === undefined) continue;
+    pills.push({
+      key: `stat:${k}`,
+      label: tr("wizard.stat.min", { stat: tr(`stat.${k}`), n }),
+      clear: (g) => {
+        const { [k]: _gone, ...stats } = g.stats;
+        return { ...g, stats };
+      },
+    });
+  }
+  return pills;
+}
+
+/** every investigator for the picker, filtered by class, cycle, rules, stat minimums and a search of the name (in the game's language and in English) */
 export function pickerList(db: ContentDb, locale: string, f: PickerFilter) {
   const words = f.query.toLowerCase().split(/\s+/).filter(Boolean);
+  const mins = Object.entries(f.stats) as [StatKey, number][];
+  const stat = (code: string, k: StatKey): number | null => {
+    const c = db.cards[code];
+    if (!c) return null;
+    return k === "health"
+      ? (c.health ?? null)
+      : k === "sanity"
+        ? (c.sanity ?? null)
+        : (c.skills?.[k] ?? null);
+  };
   return Object.values(db.investigators)
     .map((def) => {
       const info = investigatorInfo(db, def.code, locale);
@@ -184,6 +282,8 @@ export function pickerList(db: ContentDb, locale: string, f: PickerFilter) {
       (i) =>
         (!f.faction || i.faction === f.faction) &&
         (!f.cycle || i.pack === f.cycle) &&
+        (!f.rules || (f.rules === "partial") === i.partlyImplemented) &&
+        mins.every(([k, n]) => (stat(i.code, k) ?? -1) >= n) &&
         words.every((w) => i.haystack.includes(w)),
     )
     .sort((a, b) => a.code.localeCompare(b.code));

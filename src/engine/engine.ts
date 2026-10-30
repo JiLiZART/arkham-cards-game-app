@@ -367,6 +367,8 @@ export function createGame(db: ContentDb, setup: GameSetup): Result {
   for (const i of s.order) if (s.invs[i].location) revealLocation(g, s.invs[i].location!);
   // decks & opening hands
   for (const i of s.order) {
+    // the investigator's own setup, before the deck is shuffled (Joe Diamond's hunch deck)
+    db.scripts[i]?.hooks?.setup?.(g, { you: i, source: s.invs[i].cardId });
     shuffle(s, s.invs[i].deck);
     drawOpeningCards(g, i, 5);
   }

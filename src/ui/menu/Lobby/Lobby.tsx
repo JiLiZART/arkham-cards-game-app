@@ -21,10 +21,9 @@ import {
   investigatorInfo,
   MAX_INVESTIGATORS,
   pickerList,
+  NO_PICKER_FILTER,
 } from "../wizard";
 import styles from "./Lobby.module.css";
-
-const NO_FILTER = { faction: null, cycle: null, query: "" };
 
 /** the translated text of a notice or an error from the room */
 export const netText = (locale: string, key: string, detail?: string): string => {
@@ -48,7 +47,7 @@ export function Lobby() {
   const [name, setName] = useState(playerName());
   const [deckOf, setDeckOf] = useState<Record<string, string>>({});
   const rows = useMemo(
-    () => pickerList(db, locale, { ...NO_FILTER, query }).filter((i) => !i.needsDeck),
+    () => pickerList(db, locale, { ...NO_PICKER_FILTER, query }).filter((i) => !i.needsDeck),
     [locale, query],
   );
   const leave = () => {

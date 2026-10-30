@@ -1,1 +1,16 @@
-{}
+{
+  "05024": { "abilities": [
+    { "kind": "action", "designator": "investigate", "label": "Fingerprint Kit: investigate (+1 intellect, +1 clue)", "cost": { "uses": 1, "exhaust": true }, "effects": [{ "op": "investigate", "bonus": 1, "onSuccess": [{ "op": "discoverClues", "amount": 1 }] }] }
+  ] },
+  "05022": { "script": true },
+  "05026": { "script": true },
+  "05020": { "script": true },
+  "05025": { "script": true },
+  "05021": { "script": true },
+  "05002": { "script": true },
+  "05009": { "script": true },
+  "05010": { "script": true },
+  "05001": { "script": true },
+  "05007": { "script": true },
+  "05008": { "script": true }
+}

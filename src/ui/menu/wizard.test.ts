@@ -24,6 +24,11 @@ import {
   tileName,
   initialWizard,
   NO_CAMPAIGN_FILTER,
+  DEFAULT_CAMPAIGN_FILTER,
+  NO_PICKER_FILTER,
+  DEFAULT_PICKER_FILTER,
+  campaignPills,
+  pickerPills,
   type CampaignFilter,
   invalidDecksFor,
   next,
@@ -232,6 +237,15 @@ describe("filtering the campaign list", () => {
     expect(ids()).toEqual(campaignOrder(db).map((c) => c.id));
   });
 
+  it("starts with the rules filter at complete", () => {
+    expect(DEFAULT_CAMPAIGN_FILTER).toEqual({ ...NO_CAMPAIGN_FILTER, rules: "complete" });
+    expect(
+      filterCampaigns(db, "en", DEFAULT_CAMPAIGN_FILTER)
+        .map((c) => c.id)
+        .sort(),
+    ).toEqual(["brethren-of-ash", "night-of-the-zealot"]);
+  });
+
   it("by kind: campaigns, Return-to boxes, side scenarios", () => {
     expect(ids({ kind: "campaign" })).toEqual(
       expect.arrayContaining(["night-of-the-zealot", "the-dunwich-legacy"]),
@@ -349,7 +363,7 @@ describe("filtering the campaign list", () => {
 
 describe("choosing among all investigators", () => {
   const codes = (list: { code: string }[]) => list.map((i) => i.code);
-  const all = { faction: null, cycle: null, query: "" };
+  const all = NO_PICKER_FILTER;
 
   it("lists every defined investigator, the packs' cards loaded or not", () => {
     expect(codes(pickerList(db, "en", all))).toEqual(
@@ -439,7 +453,7 @@ describe("the decks of investigators from other cycles", () => {
 });
 
 describe("sorting the investigators", () => {
-  const all = { faction: null, cycle: null, query: "" };
+  const all = NO_PICKER_FILTER;
   const list = () => pickerList(db, "en", all).filter((i) => i.pack === "core" || !i.pack);
   it("by release (the default), by name, by class", () => {
     expect(SORTS[0]).toBe("release");
@@ -476,6 +490,7 @@ describe("the Filter chip's count (phone)", () => {
     const { campaignFilterCount, NO_CAMPAIGN_FILTER } = await import("./wizard");
     expect(campaignFilterCount(NO_CAMPAIGN_FILTER)).toBe(0);
     expect(campaignFilterCount({ ...NO_CAMPAIGN_FILTER, kind: "side" })).toBe(1);
+    expect(campaignFilterCount(DEFAULT_CAMPAIGN_FILTER)).toBe(1);
     expect(
       campaignFilterCount({ kind: "return", rules: "complete", length: "few", query: "  dun " }),
     ).toBe(4);
@@ -484,8 +499,80 @@ describe("the Filter chip's count (phone)", () => {
 
   it("counts the picker's class, cycle and name, not the order", async () => {
     const { pickerFilterCount } = await import("./wizard");
-    expect(pickerFilterCount({ faction: null, cycle: null, query: "" })).toBe(0);
-    expect(pickerFilterCount({ faction: "seeker", cycle: null, query: "" })).toBe(1);
-    expect(pickerFilterCount({ faction: "seeker", cycle: "core", query: "ro" })).toBe(3);
+    expect(pickerFilterCount(NO_PICKER_FILTER)).toBe(0);
+    expect(pickerFilterCount(DEFAULT_PICKER_FILTER)).toBe(1);
+    expect(pickerFilterCount({ ...NO_PICKER_FILTER, faction: "seeker" })).toBe(1);
+    expect(
+      pickerFilterCount({ ...NO_PICKER_FILTER, faction: "seeker", cycle: "core", query: "ro" }),
+    ).toBe(3);
+    expect(pickerFilterCount({ ...NO_PICKER_FILTER, stats: { combat: 4, agility: 3 } })).toBe(2);
+  });
+});
+
+describe("the rules and stat filters of the investigator picker", () => {
+  const codes = (f = {}) => pickerList(db, "en", { ...NO_PICKER_FILTER, ...f }).map((i) => i.code);
+
+  it("starts at complete: Roland is listed, an investigator with the partly-implemented note is not", () => {
+    const partly = pickerList(db, "en", NO_PICKER_FILTER).find((i) => i.partlyImplemented)!;
+    const list = pickerList(db, "en", DEFAULT_PICKER_FILTER).map((i) => i.code);
+    expect(list).toContain("01001");
+    expect(list).not.toContain(partly.code);
+  });
+
+  it("partial is the opposite of complete, and together they are everyone", () => {
+    expect(codes({ rules: "complete" }).length + codes({ rules: "partial" }).length).toBe(
+      codes().length,
+    );
+  });
+
+  it("a stat minimum keeps Zoey (combat 4) and drops Daisy (combat 2)", () => {
+    const list = codes({ stats: { combat: 4 } });
+    expect(list).toContain("02001");
+    expect(list).not.toContain("01002");
+  });
+
+  it("minimums combine", () => {
+    const list = codes({ stats: { combat: 4, sanity: 6 } });
+    expect(list).toContain("02001");
+    expect(list).not.toContain("01001");
+  });
+
+  it("an investigator whose card is not loaded fails a stat minimum", () => {
+    const bare = { ...db, cards: { ...db.cards, "02001": undefined as never } };
+    const list = pickerList(bare, "en", { ...NO_PICKER_FILTER, stats: { combat: 1 } });
+    expect(list.map((i) => i.code)).not.toContain("02001");
+  });
+});
+
+describe("the filter pills", () => {
+  const tr = (key: string, vars?: Record<string, string | number>) =>
+    vars ? `${key}:${Object.values(vars).join(",")}` : key;
+
+  it("the default is one Complete pill; the kind and the search have none", () => {
+    expect(campaignPills(DEFAULT_CAMPAIGN_FILTER, tr).map((p) => p.key)).toEqual(["rules"]);
+    expect(campaignPills({ ...NO_CAMPAIGN_FILTER, kind: "side", query: "carn" }, tr)).toEqual([]);
+  });
+
+  it("a pill's clear returns the filter without it", () => {
+    const f = { ...DEFAULT_CAMPAIGN_FILTER, length: "many" as const };
+    const pills = campaignPills(f, tr);
+    expect(pills.map((p) => p.key)).toEqual(["rules", "length"]);
+    expect(pills[1].clear(f)).toEqual({ ...f, length: null });
+  });
+
+  it("the picker's pills: rules, a cycle by name, a stat as 'Combat 4+'; the class and search have none", () => {
+    const f = {
+      ...NO_PICKER_FILTER,
+      faction: "seeker",
+      query: "z",
+      rules: "complete" as const,
+      cycle: "dwl",
+      stats: { combat: 4 },
+    };
+    const pills = pickerPills(db, "en", f, tr);
+    expect(pills.map((p) => p.key)).toEqual(["rules", "cycle", "stat:combat"]);
+    expect(pills[1].label).toBe(cycleName(db, "en", "dwl"));
+    expect(pills[2].label).toBe("wizard.stat.min:stat.combat,4");
+    expect(pills[2].clear(f).stats).toEqual({});
   });
 });

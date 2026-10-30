@@ -61,6 +61,23 @@ function amt(g: G, a: Amount, ctx: EffCtx): number {
   return Infinity; // "all"
 }
 
+/** horror a heal may remove from `target`, after the cards in play that restrict or redirect it (Rational Thought) */
+function horrorHealable(g: G, healer: InvId | null | undefined, target: InstId, n: number): number {
+  const req = { target, n };
+  for (const c of Object.values(g.s.cards))
+    if (c.zone === "threat" || c.zone === "play")
+      g.db.scripts[c.code]?.hooks?.healHorror?.(
+        g,
+        { source: c.id, you: c.controller, inv: healer ?? null },
+        req,
+      );
+  return req.n;
+}
+
+/** "after one of your card effects heals horror" (Carolyn Fern, Hypnotic Therapy) */
+const healedWindow = (ctx: EffCtx, healed: InstId, n: number) =>
+  win("horrorHealed", { inv: ctx.you ?? null, card: healed, by: ctx.source ?? null, amount: n });
+
 const opt = (g: G, id: InstId, label?: string) => ({
   id,
   label: label ?? def(g, id).name,
@@ -299,7 +316,7 @@ export const effHandler = (g: G, step: EffStep) => {
         const asset = g.s.cards[pick];
         if (asset) {
           const d = Math.min(e.damage ?? 0, asset.damage);
-          const h = Math.min(e.horror ?? 0, asset.horror);
+          const h = Math.min(horrorHealable(g, ctx.you, asset.id, e.horror ?? 0), asset.horror);
           asset.damage -= d;
           asset.horror -= h;
           if (d || h)
@@ -307,6 +324,7 @@ export const effHandler = (g: G, step: EffStep) => {
               card: asset.id,
               data: { damage: d, horror: h },
             });
+          if (h) push(g, healedWindow(ctx, asset.id, h));
           return;
         }
         push(g, {
@@ -322,7 +340,7 @@ export const effHandler = (g: G, step: EffStep) => {
       for (const i of ts) {
         const me = inv(g, i);
         const d = Math.min(e.damage ?? 0, me.damage);
-        const h = Math.min(e.horror ?? 0, me.horror);
+        const h = Math.min(horrorHealable(g, ctx.you, me.cardId, e.horror ?? 0), me.horror);
         me.damage -= d;
         me.horror -= h;
         if (d || h)
@@ -330,6 +348,7 @@ export const effHandler = (g: G, step: EffStep) => {
             inv: i,
             data: { damage: d, horror: h },
           });
+        if (h) push(g, healedWindow(ctx, me.cardId, h));
       }
       return;
     }

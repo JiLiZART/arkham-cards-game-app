@@ -1,0 +1,39 @@
+.toolbar {
+  margin: 0 0 10px;
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.search {
+  flex: 1 1 160px;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 2px solid var(--ctl-line);
+  border-radius: 10px;
+  background: var(--slate);
+  color: var(--ink);
+  font: inherit;
+}
+.anchor {
+  position: relative;
+  flex: none;
+}
+.under {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 0 0;
+}
+.pill {
+  min-height: 32px;
+  padding: 2px 10px;
+  font-size: 15px;
+}
+.match {
+  margin-left: auto;
+  color: var(--muted);
+}

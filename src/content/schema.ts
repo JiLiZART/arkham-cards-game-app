@@ -130,6 +130,8 @@ export const ModStat = z.enum([
   "attackDamage",
   "clueBonus",
   "testValue",
+  /** maximum hand size at the end of upkeep (Laboratory Assistant) */
+  "handSize",
 ]);
 export type ModStat = z.infer<typeof ModStat>;
 
@@ -923,6 +925,10 @@ export const TRIGGERS = [
   "cluesDiscovered",
   /** after doom is placed on a card (`card`) */
   "doomPlaced",
+  /** damage and/or horror is about to be placed on an investigator, from any source (`key`, `damage`, `horror`) */
+  "damageDealt",
+  /** after an effect heals horror (`inv`: whose effect, `card`: the healed investigator or asset, `by`: the effect's card, `amount`) */
+  "horrorHealed",
 ] as const;
 export const Trigger = z.enum(TRIGGERS);
 export type Trigger = z.infer<typeof Trigger>;

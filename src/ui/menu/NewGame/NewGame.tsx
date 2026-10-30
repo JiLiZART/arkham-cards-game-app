@@ -1,4 +1,7 @@
 import { useEffect, useState } from "react";
+import { FilterToolbar } from "../FilterToolbar";
+import { FilterChips } from "../FilterPanel";
+import { useWizardFilters } from "../wizardFilters";
 import { moment } from "../../hud/SoundLayer";
 import { campaignLoaded, loadAllPacks, loadCampaign, loadPacksFor } from "../../../content";
 import { cardText, scenarioText, t } from "../../../content/i18n";
@@ -37,8 +40,10 @@ import {
   setCampaign,
   filterCampaigns,
   tileName,
-  NO_CAMPAIGN_FILTER,
-  type CampaignFilter,
+  campaignPills,
+  pickerPills,
+  STAT_KEYS,
+  type StatKey,
   sortPicker,
   SORTS,
   type SortBy,
@@ -47,10 +52,10 @@ import {
   STEPS,
   campaignComplete,
   campaignFilterCount,
+  campaignOrder,
   pickerFilterCount,
   toggleInvestigator,
   toSetup,
-  type PickerFilter,
   type WizardState,
 } from "../wizard";
 import { cx } from "../../components/cx";
@@ -62,32 +67,18 @@ const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);
 const DIFFICULTIES: Difficulty[] = ["easy", "standard", "hard", "expert"];
 
-const KINDS = ["all", "campaign", "return", "side"] as const;
-const RULES = ["all", "complete", "partial"] as const;
-const LENGTHS = ["all", "one", "few", "many"] as const;
-
-/** the phone's one Filter chip: the filter row is folded behind it, with a count of the filters set */
-function FilterToggle({
-  open,
-  count,
-  onToggle,
-}: {
-  open: boolean;
-  count: number;
-  onToggle: () => void;
-}) {
-  return (
-    <button
-      type="button"
-      className={cx("wz-chip", styles.wzFilterToggle, open || count ? "on" : "")}
-      data-testid="wz-filter-toggle"
-      aria-expanded={open}
-      onClick={onToggle}
-    >
-      {count ? tr("wizard.filter.count", { n: count }) : tr("wizard.filter.toggle")}
-    </button>
-  );
-}
+const KINDS = ["campaign", "return", "side"] as const;
+const RULES = ["complete", "partial"] as const;
+const LENGTHS = ["one", "few", "many"] as const;
+/** the stat minimums offered: the printed ranges of the investigators' skills, health and sanity */
+const MINS: Record<StatKey, number[]> = {
+  health: [7, 8, 9],
+  sanity: [7, 8, 9],
+  willpower: [3, 4, 5],
+  intellect: [3, 4, 5],
+  combat: [3, 4, 5],
+  agility: [3, 4, 5],
+};
 
 /** the phone's details control on a tile: opens the bottom sheet; looks small, takes a 44 px tap */
 function DetailsButton({ label, onClick }: { label: string; onClick: () => void }) {
@@ -113,57 +104,66 @@ function DetailsButton({ label, onClick }: { label: string; onClick: () => void 
 function CampaignStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }) {
   const locale = useGame((s) => s.locale);
   const phone = useLayoutMode() === "phone";
-  const [filter, setFilter] = useState<CampaignFilter>(NO_CAMPAIGN_FILTER);
-  const [filtersOpen, setFiltersOpen] = useState(false);
+  const filter = useWizardFilters((f) => f.campaign);
+  const { setCampaign: setFilter, clearCampaign } = useWizardFilters.getState();
   const [sheet, setSheet] = useState(false);
   const list = filterCampaigns(db, locale, filter);
-  const chip = <K extends "kind" | "rules" | "length">(
-    key: K,
-    values: readonly CampaignFilter[K][],
-  ) => (
-    <div className="wz-chips" role="group" aria-label={tr(`wizard.${key}.${values[0]}`)}>
-      {values.map((v) => (
-        <button
-          key={v}
-          className={`wz-chip ${filter[key] === v ? "on" : ""}`}
-          aria-pressed={filter[key] === v}
-          onClick={() => {
-            moment("tab");
-            setFilter({ ...filter, [key]: v });
-          }}
-        >
-          {tr(`wizard.${key}.${v}`)}
-        </button>
-      ))}
-    </div>
+  const kind = (
+    <FilterChips
+      name="kind"
+      label={tr("wizard.filter.kind")}
+      all={tr("wizard.kind.all")}
+      value={filter.kind}
+      options={KINDS.map((v) => ({ value: v, label: tr(`wizard.kind.${v}`) }))}
+      onChange={(kind) => {
+        moment("tab");
+        setFilter({ kind });
+      }}
+    />
   );
   const picked = db.campaigns[s.campaignId];
   return (
     <div className={cx(styles.wzInv, "wz-camp", sheet ? "sheet-open" : "")}>
       <div className={styles.wzInvMain}>
         <p className="wz-hint wz-intro">{tr("wizard.campaign.hint")}</p>
-        {phone && (
-          <FilterToggle
-            open={filtersOpen}
-            count={campaignFilterCount(filter)}
-            onToggle={() => setFiltersOpen(!filtersOpen)}
+        <FilterToolbar
+          query={filter.query}
+          onQuery={(query) => setFilter({ query })}
+          inline={phone ? undefined : kind}
+          count={campaignFilterCount(filter)}
+          shown={list.length}
+          total={campaignOrder(db).length}
+          pills={campaignPills(filter, tr).map((p) => ({
+            key: p.key,
+            label: p.label,
+            clear: () => setFilter(p.clear(filter)),
+          }))}
+          onClear={clearCampaign}
+        >
+          {phone && kind}
+          <FilterChips
+            name="rules"
+            label={tr("wizard.filter.rules")}
+            value={filter.rules}
+            options={RULES.map((v) => ({ value: v, label: tr(`wizard.rules.${v}`) }))}
+            onChange={(rules) => setFilter({ rules })}
           />
+          <FilterChips
+            name="length"
+            label={tr("wizard.filter.length")}
+            value={filter.length}
+            options={LENGTHS.map((v) => ({ value: v, label: tr(`wizard.length.${v}`) }))}
+            onChange={(length) => setFilter({ length })}
+          />
+        </FilterToolbar>
+        {list.length === 0 && (
+          <p className="wz-hint">
+            {tr("wizard.noCampaigns")}{" "}
+            <button type="button" className="link-btn" onClick={clearCampaign}>
+              {tr("wizard.filter.clear")}
+            </button>
+          </p>
         )}
-        {(!phone || filtersOpen) && (
-          <div className={styles.wzFilters}>
-            {chip("kind", KINDS)}
-            {chip("rules", RULES)}
-            {chip("length", LENGTHS)}
-            <input
-              type="search"
-              placeholder={tr("wizard.filter.search")}
-              aria-label={tr("wizard.filter.search")}
-              value={filter.query}
-              onChange={(e) => setFilter({ ...filter, query: e.target.value })}
-            />
-          </div>
-        )}
-        {list.length === 0 && <p className="wz-hint">{tr("wizard.noCampaigns")}</p>}
         <div className={styles.wzCtiles}>
           {list.map((c) => {
             // the first chapter's art (the first agenda), found by code: a generated campaign's cards load only when it is chosen
@@ -297,10 +297,10 @@ function InvestigatorsStep({ s, set }: { s: WizardState; set: (w: WizardState) =
   const locale = useGame((s) => s.locale);
   // filters, the order and the investigator in the sidebar are view state (ADR-0004): they are not part of the picks
   const phone = useLayoutMode() === "phone";
-  const [filter, setFilter] = useState<PickerFilter>({ faction: null, cycle: null, query: "" });
-  const [sort, setSort] = useState<SortBy>("release");
+  const filter = useWizardFilters((f) => f.picker);
+  const sort = useWizardFilters((f) => f.sort);
+  const { setPicker: setFilter, setSort, clearPicker } = useWizardFilters.getState();
   const [focus, setFocus] = useState<string | null>(null);
-  const [filtersOpen, setFiltersOpen] = useState(false);
   // the phone shows the investigator in a bottom sheet from the tile's details control
   const [sheet, setSheet] = useState<string | null>(null);
   // every investigator's card (stats, ability, the language's text) comes with the packs: all of them, once
@@ -316,36 +316,61 @@ function InvestigatorsStep({ s, set }: { s: WizardState; set: (w: WizardState) =
   }, []);
   const list = sortPicker(db, pickerList(db, locale, filter), sort);
   const shown = focus ?? s.picks.at(-1) ?? list[0]?.code ?? null;
+  const classes = (
+    <div className="wz-chips" role="group" aria-label={tr("wizard.filter.class")}>
+      {CLASSES.map((c) => (
+        <button
+          key={c}
+          className={`wz-chip wz-class ${filter.faction === c ? "on" : ""}`}
+          aria-pressed={filter.faction === c}
+          title={tr(`card.faction.${c}`)}
+          data-testid={`wz-class-${c}`}
+          onClick={() => setFilter({ faction: filter.faction === c ? null : c })}
+        >
+          <Icon name={c} size={24} title={tr(`card.faction.${c}`)} />
+        </button>
+      ))}
+    </div>
+  );
   return (
     <div className={styles.wzInv}>
       <div className={styles.wzInvMain}>
         <p className="wz-hint wz-intro">{tr("wizard.investigators.hint")}</p>
-        {phone && (
-          <FilterToggle
-            open={filtersOpen}
-            count={pickerFilterCount(filter)}
-            onToggle={() => setFiltersOpen(!filtersOpen)}
-          />
-        )}
-        {(!phone || filtersOpen) && (
-          <div className={styles.wzFilters}>
-            <div className="wz-chips" role="group" aria-label={tr("wizard.filter.class")}>
-              {CLASSES.map((c) => (
-                <button
-                  key={c}
-                  className={`wz-chip wz-class ${filter.faction === c ? "on" : ""}`}
-                  aria-pressed={filter.faction === c}
-                  title={tr(`card.faction.${c}`)}
-                  onClick={() => setFilter({ ...filter, faction: filter.faction === c ? null : c })}
-                >
-                  <Icon name={c} size={24} title={tr(`card.faction.${c}`)} />
-                </button>
-              ))}
-            </div>
+        <FilterToolbar
+          query={filter.query}
+          onQuery={(query) => setFilter({ query })}
+          inline={phone ? undefined : classes}
+          count={pickerFilterCount(filter)}
+          shown={list.length}
+          total={Object.keys(db.investigators).length}
+          pills={pickerPills(db, locale, filter, tr).map((p) => ({
+            key: p.key,
+            label: p.label,
+            clear: () => setFilter(p.clear(filter)),
+          }))}
+          onClear={clearPicker}
+        >
+          {phone && classes}
+          <label className={styles.wzSort}>
+            <span>{tr("wizard.sort")}</span>
             <select
-              aria-label={tr("wizard.filter.cycle")}
+              data-testid="wz-sort"
+              value={sort}
+              onChange={(e) => setSort(e.target.value as SortBy)}
+            >
+              {SORTS.map((k) => (
+                <option key={k} value={k}>
+                  {tr(`wizard.sort.${k}`)}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className={styles.wzSort}>
+            <span>{tr("wizard.filter.cycle")}</span>
+            <select
+              data-testid="wz-cycle"
               value={filter.cycle ?? ""}
-              onChange={(e) => setFilter({ ...filter, cycle: e.target.value || null })}
+              onChange={(e) => setFilter({ cycle: e.target.value || null })}
             >
               <option value="">{tr("wizard.filter.allCycles")}</option>
               {cyclesOf(db).map((p) => (
@@ -354,26 +379,36 @@ function InvestigatorsStep({ s, set }: { s: WizardState; set: (w: WizardState) =
                 </option>
               ))}
             </select>
-            <label className={styles.wzSort}>
-              <span>{tr("wizard.sort")}</span>
-              <select value={sort} onChange={(e) => setSort(e.target.value as SortBy)}>
-                {SORTS.map((k) => (
-                  <option key={k} value={k}>
-                    {tr(`wizard.sort.${k}`)}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <input
-              type="search"
-              placeholder={tr("wizard.filter.search")}
-              aria-label={tr("wizard.filter.search")}
-              value={filter.query}
-              onChange={(e) => setFilter({ ...filter, query: e.target.value })}
+          </label>
+          <FilterChips
+            name="rules"
+            label={tr("wizard.filter.rules")}
+            value={filter.rules}
+            options={RULES.map((v) => ({ value: v, label: tr(`wizard.rules.${v}`) }))}
+            onChange={(rules) => setFilter({ rules })}
+          />
+          {STAT_KEYS.map((k) => (
+            <FilterChips
+              key={k}
+              name={`stat-${k}`}
+              label={`${tr("wizard.filter.stats")}: ${tr(`stat.${k}`)}`}
+              value={filter.stats[k] ?? null}
+              options={MINS[k].map((n) => ({ value: n, label: `${n}+` }))}
+              onChange={(n) => {
+                const { [k]: _gone, ...rest } = filter.stats;
+                setFilter({ stats: n === null ? rest : { ...rest, [k]: n } });
+              }}
             />
-          </div>
+          ))}
+        </FilterToolbar>
+        {!list.length && (
+          <p className="wz-hint">
+            {tr("wizard.noMatch")}{" "}
+            <button type="button" className="link-btn" onClick={clearPicker}>
+              {tr("wizard.filter.clear")}
+            </button>
+          </p>
         )}
-        {!list.length && <p className="wz-hint">{tr("wizard.noMatch")}</p>}
         <div className={styles.wzTiles}>
           {list.map((i) => {
             const k = s.picks.indexOf(i.code);

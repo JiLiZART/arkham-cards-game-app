@@ -230,6 +230,7 @@ export function ctxFor(data: EventData, source: InstId, you: InvId | null): EffC
     key: data.key,
     card: data.card ?? null,
     from: data.from,
+    by: data.by,
     token: data.token,
     testId: data.testId,
     failBy: data.margin !== undefined && data.margin < 0 ? -data.margin : undefined,
@@ -244,7 +245,7 @@ export function ctxFor(data: EventData, source: InstId, you: InvId | null): EffC
 
 /** the cards an investigator may play as if from hand: the hand, plus e.g. the top event of the discard pile (Wendy's Amulet) */
 export function playable(g: G, i: InvId): InstId[] {
-  const extra = controlled(g, i).flatMap(
+  const extra = [...controlled(g, i), card(g, inv(g, i).cardId)].flatMap(
     (c) => g.db.scripts[c.code]?.extraPlayable?.(g, c.id, i) ?? [],
   );
   return [...inv(g, i).hand, ...extra];
@@ -486,7 +487,8 @@ export const discardIfEmptyHandler: Handler<"DiscardIfEmpty"> = (g, step) => {
 export function playCost(g: G, i: InvId, cardId: InstId): number {
   const d = def(g, cardId);
   if (d.cost === "X") return Infinity; // ponytail: no X choice yet, so an X-cost card can't be played
-  let cost = d.cost ?? 0;
+  // a discount on this very card (Joe Diamond's revealed hunch: -2)
+  let cost = (d.cost ?? 0) + ((g.s.flags[`costMod:${cardId}`] as number | undefined) ?? 0);
   for (const m of allMods(g)) {
     if (m.target !== i || m.mod.stat !== "cost") continue;
     if (m.mod.filter && !matchesFilter(g, d.code, m.mod.filter)) continue;

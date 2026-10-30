@@ -19,5 +19,8 @@
         ]
       }
     ]
-  }
+  },
+  "03040": { "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "drawEncounterCard" }, { "op": "surge" }] }
+  ] }
 }

@@ -1,10 +1,13 @@
-import { describe, expect, it } from "vitest";
+import { beforeAll, describe, expect, it } from "vitest";
+import { loadPack } from "../content";
 import { card, def, findByCode, inv } from "./core";
 import { spendsOnlyUses } from "./rules/cards";
 import { commitDone, gOf, giveCard, mutate, pick, putEnemy, skipMulligans, start } from "./testkit";
 import type { CardDef } from "../content/schema";
 
 const ROLAND = "01001";
+
+beforeAll(() => loadPack("tcu"));
 
 /** The Gathering, solo Roland with the given asset in play holding `uses` uses */
 function withAsset(code: string, uses: number) {
@@ -39,6 +42,16 @@ describe("assets with uses leave play when empty", () => {
     // undo restores the state before the action: Flashlight in play with 1 supply
     expect(r0.state.cards[id].zone).toBe("play");
     expect(r0.state.cards[id].uses).toBe(1);
+  });
+
+  it("Fingerprint Kit: exhaust and spend 1 supply to investigate, discovering 1 additional clue", () => {
+    const { r: r0, id } = withAsset("05024", 3);
+    const before = r0.state.invs[ROLAND].clues;
+    let r = pick(r0, /^Fingerprint Kit: investigate/);
+    r = commitDone(r);
+    expect(r.state.invs[ROLAND].clues).toBe(before + 2);
+    expect(r.state.cards[id].uses).toBe(2);
+    expect(r.state.cards[id].exhausted).toBe(true);
   });
 
   it(".45 Automatic with ammo left stays in play", () => {
