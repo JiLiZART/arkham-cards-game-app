@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef, type RefObject } from "react";
+import { createPortal } from "react-dom";
 import { t } from "../../../content/i18n";
 import type { GameState, InstId } from "../../../engine/types";
 import { db, useGame } from "../../state/context";
@@ -206,7 +207,7 @@ export function Row({ r, locale }: { r: DetailRow; locale: string }) {
   }
 }
 
-/** a column of details rows beside a card (right, or left if no room; clamped to the window); never takes the pointer */
+/** a column of details rows beside a card (right, or left if no room; clamped to the window), on the body; never takes the pointer */
 export function DetailsColumn({
   rows,
   rect,
@@ -228,12 +229,14 @@ export function DetailsColumn({
     el.style.left = `${p.x}px`;
     el.style.top = `${p.y}px`;
   });
-  return (
+  // on the body: a transformed ancestor (the skill-test screen's centred column) would move and bury a fixed box
+  return createPortal(
     <div ref={ref} className="hand-details" style={{ width: DETAILS_W }}>
       {rows.map((r) => (
         <Row key={r.k} r={r} locale={locale} />
       ))}
-    </div>
+    </div>,
+    document.body,
   );
 }
 

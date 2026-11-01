@@ -2,7 +2,7 @@
 
 ### Requirement: Scenario music
 
-While a scenario is in play and the tab is visible, music SHALL play: the chapter's track, replaced by the tension track while the agenda is one doom from advancing or the enemy phase is playing, replaced by the fight track while any enemy is engaged with an investigator. Priority is fight, then tension, then the chapter's track. The chapter's track SHALL be the one keyed to the current agenda card, else the one keyed to the current act card, else the scenario's bed, else the default bed. The tension track SHALL be the scenario's own when it has one, else the shared one. A track MAY have an alternate take; each game SHALL start each track on the take its seed picks, so the same seed sounds the same. The menu screens (main menu, new game wizard, deck builder, campaign log, settings) SHALL play the menu theme, one take picked per page load; the scenario's end screen SHALL be silent. Track changes, between the menu and the table included, SHALL crossfade over about 1.5 seconds, and a looping track SHALL loop without an audible seam: its loop points are in the manifest and the content check SHALL fail when the track's level at the loop start and loop end differs by more than 6 dB. A track that does not loop (a composed piece with an intro and an ending) SHALL crossfade into its other take, or into itself when it has none, about 1.5 seconds before it ends, and so on for as long as it is wanted. Music SHALL pause when the tab is hidden and resume when it is shown. A scenario's music files SHALL load when they are first played, not with the menu.
+While a scenario is in play and the tab is visible, music SHALL play: the chapter's track, replaced by the tension track (the scenario's own, else the shared one) while the agenda is one doom from advancing or the enemy phase is playing, replaced by the fight track while any enemy is engaged with an investigator. Priority is fight, then tension, then the chapter's track. The chapter's track SHALL be the one keyed to the current agenda card, else the one keyed to the current act card, else the scenario's bed, else the default bed. A track marked silent in the manifest SHALL keep its slot, files and candidates but never play: the music that was on goes on. The shared tension track is silent, so a scenario without its own keeps the chapter's track through the enemy phase. A track MAY have an alternate take; each game SHALL start each track on the take its seed picks, so the same seed sounds the same. The menu screens (main menu, new game wizard, deck builder, campaign log, settings) SHALL play the menu theme, one take picked per page load; the scenario's end screen SHALL be silent. Track changes, between the menu and the table included, SHALL crossfade over about 1.5 seconds, and a looping track SHALL loop without an audible seam: its loop points are in the manifest and the content check SHALL fail when the track's level at the loop start and loop end differs by more than 6 dB. A track that does not loop (a composed piece with an intro and an ending) SHALL crossfade into its other take, or into itself when it has none, about 1.5 seconds before it ends, and so on for as long as it is wanted. Music SHALL pause when the tab is hidden and resume when it is shown. A scenario's music files SHALL load when they are first played, not with the menu.
 
 #### Scenario: Engagement
 
@@ -15,6 +15,11 @@ While a scenario is in play and the tab is visible, music SHALL play: the chapte
 
 - **WHEN** Roland evades the only enemy engaged with him
 - **THEN** the fight track fades out, though the enemy stays at his location
+
+#### Scenario: Silent tension
+
+- **WHEN** The Gathering's enemy phase begins, its tension being the shared track marked silent
+- **THEN** the chapter's track keeps playing
 
 #### Scenario: Chapter
 

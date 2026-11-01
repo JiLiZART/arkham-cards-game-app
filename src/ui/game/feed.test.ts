@@ -3,6 +3,7 @@ import { botChoice } from "../../engine/bot";
 import { dispatch } from "../../engine/engine";
 import { db, giveCard, mutate, pick, putEnemy, skipMulligans, start } from "../../engine/testkit";
 import type { GameEvent } from "../../engine/types";
+import { Duration, ModFlag, ModStat } from "../../content/schema";
 import {
   captionIndex,
   captionStageBusy,
@@ -34,6 +35,39 @@ describe("feed entries", () => {
     expect(f.parts.some((p) => p.t === "inv")).toBe(true);
     expect(JSON.stringify(f.parts)).toMatch(/prevented/);
     expect(JSON.stringify(feedEntry(ev, r.state, db, "ru")!.parts)).toMatch(/предотвращ/);
+  });
+
+  it("modify: what the investigator gets in words, never the modifier's id, in the game's language", () => {
+    const r = skipMulligans(start("the-gathering", ["01002"], 1));
+    const ev = (data: Record<string, unknown>) =>
+      ({ type: "modify", text: "", inv: "01002", card: null, data }) as unknown as GameEvent;
+    const text = (e: GameEvent, locale: string) =>
+      feedEntry(e, r.state, db, locale)!
+        .parts.map((p) => (p.t === "text" ? p.s : p.t === "inv" ? "[inv]" : ""))
+        .join("");
+    const flag = ev({ flag: "intellectForCombatAndAgility", until: "round" });
+    expect(text(flag, "en")).toBe(
+      "[inv] uses Intellect in place of Combat and Agility until the end of the round",
+    );
+    expect(text(flag, "ru")).toBe(
+      "[inv] использует интеллект вместо силы и ловкости до конца раунда",
+    );
+    expect(text(ev({ stat: "willpower", value: 2, until: "test" }), "en")).toBe(
+      "[inv] gets +2 Willpower until the end of the test",
+    );
+    expect(text(ev({ stat: "shroud", value: -1, until: "round" }), "ru")).toBe(
+      "[inv] получает −1 к маскировке до конца раунда",
+    );
+  });
+
+  it("modify: every stat, flag and duration has its words in both languages", () => {
+    const keys = [
+      ...ModStat.options.map((k) => `mod.stat.${k}`),
+      ...ModFlag.options.map((k) => `mod.flag.${k}`),
+      ...Duration.options.map((k) => `until.${k}`),
+    ];
+    for (const locale of ["en", "ru"])
+      expect(keys.filter((k) => !db.i18n[locale]?.ui?.[k])).toEqual([]);
   });
 
   it("resource: portrait, words, amount with the resource icon", () => {

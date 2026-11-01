@@ -95,6 +95,7 @@ describe("sound manifest in the content db", () => {
       expect(db.sounds.music[`bed:${id}`], id).toBeDefined();
     expect(db.sounds.music["bed:default"]).toBeDefined();
     expect(db.sounds.music.fight).toBeDefined();
+    expect(db.sounds.music.menu).toBeDefined();
     expect(db.sounds.music.tension).toBeDefined();
   });
 

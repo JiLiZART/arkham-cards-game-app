@@ -84,7 +84,7 @@ function take(id: string, seed: number, m: SoundManifest): string {
 }
 
 /**
- * which music track should play: fight while an enemy is engaged; tension (the scenario's own, else the shared one) in
+ * which music track should play: fight while an enemy is engaged; tension (the scenario's own, else the shared one, unless silent) in
  * the enemy phase or one doom from the agenda advancing; else the current agenda's track, the current act's, the
  * scenario's bed. Null when the scenario has ended or has none of these.
  */
@@ -94,7 +94,8 @@ export function musicFor(
   content: ContentDb = db,
 ): string | null {
   if (game.phase === "ended") return null;
-  const has = (id: string) => (m.music[id] ? id : null);
+  // a silent track keeps its slot but is never chosen: the music that was on goes on
+  const has = (id: string) => (m.music[id] && !m.music[id].silent ? id : null);
   const codeOf = (id: InstId | null) => (id ? game.cards[id]?.code : undefined);
   // a scenario without a bed of its own (a generated one, ADR-0007) plays the default bed
   const chapter =
@@ -103,7 +104,7 @@ export function musicFor(
     has(`bed:${game.scenarioId}`) ??
     has("bed:default");
   if (!chapter) return null;
-  if (m.music.fight && Object.values(game.cards).some((c) => c.zone === "enemy" && c.engagedWith))
+  if (has("fight") && Object.values(game.cards).some((c) => c.zone === "enemy" && c.engagedWith))
     return take("fight", game.seed, m);
   const tension = has(`tension:${game.scenarioId}`) ?? has("tension");
   if (tension) {

@@ -38,7 +38,8 @@
 :global(.desk) {
   min-height: 100dvh;
   background:
-    radial-gradient(ellipse at 50% 0%, #16303499 0%, transparent 60%), var(--grain), var(--bg);
+    radial-gradient(ellipse at 50% 0%, #16303499 0%, transparent 60%),
+    var(--grain), var(--bg);
   background-attachment: fixed;
   color: var(--ink);
 }
@@ -85,13 +86,16 @@
   font-size: 22px;
   line-height: 40px;
 }
-:global(.menus.phone) :global(.desk) :global(.screen):not(:global(.wizard)):not(:global(.catalog)) {
+:global(.menus.phone)
+  :global(.desk)
+  :global(.screen):not(:global(.wizard)):not(:global(.catalog)) {
   padding-top: 6px;
 }
 /* the catalog's grid takes the height, as the wizard's step does */
 :global(.menus.phone) :global(.desk) :global(.screen):global(.catalog) {
   padding: 6px calc(12px + env(safe-area-inset-right, 0px))
-    calc(4px + env(safe-area-inset-bottom, 0px)) calc(12px + env(safe-area-inset-left, 0px));
+    calc(4px + env(safe-area-inset-bottom, 0px))
+    calc(12px + env(safe-area-inset-left, 0px));
 }
 /* a dialog opened from a menu screen is the game's dark dialog: it keeps the night's colours even inside a paper note */
 :global(.desk) :global(.modal) {
@@ -121,11 +125,13 @@
 
 /* the desk shell: insets every screen keeps, cool scrollbars, an ironwork rule under the heading and over the footer */
 :global(.desk) {
-  --frame-y: clamp(20px, max(6vh, 3.2vw), 64px);
+  --frame-y: clamp(20px, max(6vh, 3.2vw), 10px);
   --frame-x: clamp(16px, 3.4vw, 56px);
   --iron-rule:
-    var(--curl) left center / 40px 16px no-repeat, var(--curl-r) right center / 40px 16px no-repeat,
-    linear-gradient(var(--iron-line), var(--iron-line)) center / calc(100% - 80px) 1px no-repeat;
+    var(--curl) left center / 40px 16px no-repeat,
+    var(--curl-r) right center / 40px 16px no-repeat,
+    linear-gradient(var(--iron-line), var(--iron-line)) center /
+      calc(100% - 80px) 1px no-repeat;
   scrollbar-color: var(--rule) transparent;
 }
 :global(.desk) :global(.screen):global(.wizard),
@@ -133,7 +139,9 @@
   padding: var(--frame-y) var(--frame-x);
 }
 :global(.desk) :global(.wz-head),
-:global(.desk) :global(.screen):not(:global(.wizard)):not(:global(.catalog)) > h1 {
+:global(.desk)
+  :global(.screen):not(:global(.wizard)):not(:global(.catalog))
+  > h1 {
   position: relative;
   padding-bottom: 18px;
   margin-bottom: 10px;
@@ -144,7 +152,9 @@
   margin-bottom: -8px;
 }
 :global(.desk) :global(.wz-head)::after,
-:global(.desk) :global(.screen):not(:global(.wizard)):not(:global(.catalog)) > h1::after {
+:global(.desk)
+  :global(.screen):not(:global(.wizard)):not(:global(.catalog))
+  > h1::after {
   content: "";
   position: absolute;
   left: 0;
@@ -160,7 +170,8 @@
   padding-right: min(112px, 30vw);
 }
 :global(.desk) :global(.wz-chip):global(.on):not(:global(.wz-class)),
-:global(.desk) :global(.wz-chip):global(.on):not(:global(.wz-class)):hover:not(:disabled) {
+:global(.desk)
+  :global(.wz-chip):global(.on):not(:global(.wz-class)):hover:not(:disabled) {
   background: var(--plate);
   color: var(--ink);
   border-color: var(--accent);
@@ -210,7 +221,9 @@
     var(--bevel),
     0 2px 4px #000a;
 }
-:global(.desk) :global(.wz-foot) button:not(:global(.primary)):hover:not(:disabled) {
+:global(.desk)
+  :global(.wz-foot)
+  button:not(:global(.primary)):hover:not(:disabled) {
   background: var(--tab-lit);
   border-color: var(--accent);
 }

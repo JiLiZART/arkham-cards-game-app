@@ -511,12 +511,6 @@
       "author": "unknown",
       "license": "provided",
       "original": "own/monster-appears.mp3"
-    },
-    "button-click": {
-      "file": "button-click.mp3",
-      "author": "unknown",
-      "license": "provided",
-      "original": "own/button-click.mp3"
     }
   },
   "music": {
@@ -596,7 +590,8 @@
         0,
         300
       ],
-      "loop": true
+      "loop": true,
+      "silent": true
     },
     "menu": {
       "file": "music-menu",
@@ -734,7 +729,7 @@
     "commit": "moment-commit",
     "shuffle": "shuffle",
     "phase": "moment-phase",
-    "button": "button-click",
+    "button": "click",
     "tip": "pop",
     "undo": "rewind",
     "move": "moment-move",

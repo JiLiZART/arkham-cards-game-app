@@ -16,7 +16,7 @@
   musicFor(game)
     phase ended ......................... null
     any enemy engaged ................... take("fight")
-    enemy phase / agenda one doom short . take("tension:<scenario>") | take("tension")
+    enemy phase / agenda one doom short . take("tension:<scenario>") | take("tension"), skipped when silent
     current agenda card ................. take("card:<agenda code>")
     current act card .................... take("card:<act code>")
     scenario bed ........................ take("bed:<scenario>") | take("bed:default")

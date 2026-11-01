@@ -99,7 +99,7 @@ export function templateKey(e: GameEvent): string {
  * Fill a template like "{inv} took {n:resource}" from an event. Placeholders:
  * {inv} {card} {at} {from} {to} {by} → portrait / card parts; {n:icon} → amount with icon (dropped when 0);
  * {n} → a bold number; {skill} → skill icon; {tokens}/{token} → chaos tokens; {outcome} → success / fail;
- * {phase} → translated phase name; {text} → the engine's text.
+ * {phase} → translated phase name; {mod} → a modifier in words; {until} → its duration; {text} → the engine's text.
  */
 export function fillTemplate(
   template: string,
@@ -142,6 +142,17 @@ export function fillTemplate(
       parts.push({ t: "outcome", ok: !!data.success });
     } else if (name === "phase") {
       parts.push({ t: "strong", s: t(db, locale, `phase.${String(value)}`) });
+    } else if (name === "mod") {
+      // a modifier in words: a flag's phrase, or a stat's signed bonus
+      const v = Number(data.value ?? 0);
+      parts.push({
+        t: "text",
+        s: data.flag
+          ? t(db, locale, `mod.flag.${String(data.flag)}`)
+          : t(db, locale, `mod.stat.${String(data.stat)}`, { v: v < 0 ? `−${-v}` : `+${v}` }),
+      });
+    } else if (name === "until") {
+      parts.push({ t: "text", s: t(db, locale, `until.${String(value)}`) });
     } else if (name === "text") {
       parts.push({ t: "text", s: e.text });
     } else if (typeof value === "string" && isIcon(value)) {

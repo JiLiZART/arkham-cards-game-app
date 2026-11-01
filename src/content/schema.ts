@@ -1847,6 +1847,8 @@ const SoundTrack = SoundClipShape.extend({
   loop: z.boolean().default(true),
   loopStart: z.number().min(0).optional(),
   loopEnd: z.number().min(0).optional(),
+  /** kept with its files and candidates, but never played: the moment keeps the music that was on */
+  silent: z.boolean().default(false),
 })
   .strict()
   .refine(sourced, NEEDS_SOURCE);

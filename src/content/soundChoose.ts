@@ -116,6 +116,8 @@ export function chooseSound(
       license: "CC0",
       original: c.original,
       trim: TRACK_TRIM,
+      // a new recording for a silenced role stays silenced
+      silent: old?.silent ?? false,
     };
     // the old stem goes unless another role still uses it
     const stale =

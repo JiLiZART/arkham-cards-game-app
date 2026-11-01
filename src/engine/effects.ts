@@ -605,12 +605,13 @@ export const effHandler = (g: G, step: EffStep) => {
         e.until === "test" && tester ? tester : invTargets(g, step, e.target, ctx)?.[0];
       if (!target) return;
       addTempMod(g, e.mod, target, e.until, ctx.source ?? null);
-      emit(
-        g,
-        "modify",
-        `${invName(g, target)} gets ${e.mod.stat ?? e.mod.flag}${e.mod.value !== undefined ? ` ${e.mod.value >= 0 ? "+" : ""}${e.mod.value}` : ""} until end of ${e.until}`,
-        { inv: target },
-      );
+      // the feed words it from data (mod.stat.* / mod.flag.*); the text is the log's plain English
+      const what = (e.mod.stat ?? e.mod.flag ?? "").replace(/[A-Z]/g, (c) => ` ${c.toLowerCase()}`);
+      const by = e.mod.value !== undefined ? ` ${e.mod.value >= 0 ? "+" : ""}${e.mod.value}` : "";
+      emit(g, "modify", `${invName(g, target)} gets ${what}${by} until the end of the ${e.until}`, {
+        inv: target,
+        data: { stat: e.mod.stat, flag: e.mod.flag, value: e.mod.value, until: e.until },
+      });
       return;
     }
     case "chooseOne": {

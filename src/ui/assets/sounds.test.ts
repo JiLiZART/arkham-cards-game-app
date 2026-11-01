@@ -89,6 +89,8 @@ describe("musicFor", () => {
     ),
   };
   const track = db.sounds.music["bed:default"];
+  // the shipped tension track is silent: an audible stand-in keeps the rule under test
+  m.music.tension = track;
   const scored = (...ids: string[]) => ({
     ...m,
     music: { ...m.music, ...Object.fromEntries(ids.map((id) => [id, track])) },
@@ -102,6 +104,17 @@ describe("musicFor", () => {
       `card:${agendaCode}`,
     );
     expect(musicFor(fresh, scored("card:01109"))).toBe("bed:the-gathering");
+  });
+
+  it("the shipped manifest: the shared tension is silent, so the enemy phase keeps the chapter's track", () => {
+    const enemyPhase = with_((s) => (s.phase = "enemy"));
+    expect(musicFor(enemyPhase, db.sounds)).toMatch(/^card:01108(:alt)?$/);
+  });
+
+  it("a silent track is never chosen: the enemy phase keeps the chapter's track", () => {
+    const enemyPhase = with_((s) => (s.phase = "enemy"));
+    const silent = { ...m, music: { ...m.music, tension: { ...track, silent: true } } };
+    expect(musicFor(enemyPhase, silent)).toBe("bed:the-gathering");
   });
 
   it("the scenario's own tension track before the shared one", () => {
