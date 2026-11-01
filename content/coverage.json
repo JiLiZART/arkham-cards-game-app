@@ -1157,14 +1157,14 @@
    },
    "player": {
     "total": 47,
-    "works": 1,
+    "works": 2,
     "rest": {
      "asset": 21,
      "enemy": 3,
      "event": 11,
      "skill": 2,
      "story": 4,
-     "treachery": 5
+     "treachery": 4
     }
    }
   },

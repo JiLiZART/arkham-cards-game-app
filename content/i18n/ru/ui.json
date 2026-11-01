@@ -992,5 +992,6 @@
   "mod.flag.firstActionNoAoO": "первым действием в раунде не провоцирует внеочередную атаку",
   "mod.flag.cannotPlayOrCommit": "не может разыгрывать или вкладывать некоторые карты",
   "mod.flag.noAttacksOfOpportunity": "не провоцирует внеочередных атак",
-  "mod.flag.cannotBeDamaged": "не получает урона"
+  "mod.flag.cannotBeDamaged": "не получает урона",
+  "ability.03041.2": "Сбросить «Рисуя Знак»"
 }
