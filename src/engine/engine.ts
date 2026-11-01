@@ -2,17 +2,24 @@ import { discardFromOpeningHands } from "./flags";
 import type { LogCondition, SetupStep } from "../content/schema";
 import {
   addCounter,
+  allCards,
+  cardOfIf,
   createCard,
   def,
   emit,
   findByCode,
   type G,
   inv,
+  invOf,
+  invOfIf,
   locationByName,
   moveCard,
+  pileOf,
   placeInvestigator,
   push,
+  shuffleDeck,
 } from "./core";
+import { newWorld, pileRec } from "./records";
 import { handlers as effectHandlers } from "./effects";
 import { randInt, shuffle } from "./rng";
 import { finishEvent, handlers as cardHandlers } from "./rules/cards";
@@ -55,7 +62,14 @@ import type {
   Step,
 } from "./types";
 
-export const ENGINE_VERSION = 5;
+export const ENGINE_VERSION = 6;
+
+/**
+ * Whether a save written by this engine version replays to the same game on this one. Version 6 changed only how the
+ * state is stored (ADR-0023), which the replay oracle proves: its choices replay as before. Any other version had
+ * different rules, so its scenario restarts.
+ */
+export const replaysSave = (version: number) => version === ENGINE_VERSION || version === 5;
 
 // ---------- internal script functions (code "__engine") ----------
 const ENGINE_FNS: Record<string, (g: G, ctx: EffCtx, step: Step) => void> = {
@@ -105,7 +119,7 @@ const scriptHandler = (g: G, step: Extract<Step, { t: "Script" }>) => {
   }
   // as for data effects: an investigator eliminated mid-effect (an attack of opportunity) resolves nothing more of it
   const you = step.ctx.you;
-  if (you && g.s.invs[you] && g.s.invs[you].status !== "playing") return;
+  if (you && invOfIf(g.s, you) && invOf(g.s, you).status !== "playing") return;
   const fn =
     g.db.scripts[step.code]?.fns?.[step.fn] ?? g.db.scripts[g.s.scenarioId]?.fns?.[step.fn];
   if (!fn) throw new Error(`missing script function ${step.code}.${step.fn}`);
@@ -183,18 +197,12 @@ function emptyState(setup: GameSetup): GameState {
     round: 0,
     phase: "setup",
     counters: { turn: 0, phase: 0, round: 0, test: 0, reveal: 0 },
-    cards: {},
-    invs: {},
+    world: newWorld(),
     order: [],
     lead: setup.investigators[0].code,
     active: null,
-    encounterDeck: [],
-    encounterDiscard: [],
-    sideDecks: {},
     act: null,
     agenda: null,
-    actDeck: [],
-    agendaDeck: [],
     chaosBag: [],
     skillTest: null,
     testStack: [],
@@ -221,7 +229,7 @@ function applySetupStep(g: G, st: SetupStep) {
   const s = g.s;
   if (!checkLog(s.campaignLog, st.when, s.order.length)) return;
   const take = (code: string) =>
-    Object.values(s.cards).find(
+    allCards(g).find(
       (c) => c.code === code && ["setAside", "encounterDeck", "sideDeck", "limbo"].includes(c.zone),
     );
   switch (st.do) {
@@ -245,7 +253,7 @@ function applySetupStep(g: G, st: SetupStep) {
     case "setAside":
       // a code listed n times sets n copies aside: a copy already set aside is not taken again
       for (const code of st.codes) {
-        const c = Object.values(s.cards).find(
+        const c = allCards(g).find(
           (x) => x.code === code && ["encounterDeck", "sideDeck", "limbo"].includes(x.zone),
         );
         if (c) moveCard(g, c.id, "setAside");
@@ -253,7 +261,7 @@ function applySetupStep(g: G, st: SetupStep) {
       return;
     case "remove":
       for (const code of st.codes) {
-        const c = Object.values(s.cards).find((x) => x.code === code && x.zone !== "removed");
+        const c = allCards(g).find((x) => x.code === code && x.zone !== "removed");
         if (c) moveCard(g, c.id, "removed");
       }
       return;
@@ -311,13 +319,10 @@ export function createGame(db: ContentDb, setup: GameSetup): Result {
   setup.investigators.forEach((x, player) => {
     const cardId = createCard(g, x.code, "investigator", x.code);
     s.order.push(x.code);
-    s.invs[x.code] = {
+    s.world.tables.investigator[x.code] = {
       id: x.code,
       cardId,
       name: db.cards[x.code].name,
-      deck: [],
-      hand: [],
-      discard: [],
       location: null,
       damage: x.physicalTrauma ?? 0,
       horror: x.mentalTrauma ?? 0,
@@ -334,6 +339,8 @@ export function createGame(db: ContentDb, setup: GameSetup): Result {
       mentalTrauma: 0,
       player,
     };
+    // an investigator's piles exist from the start, so reading one never has to make it
+    for (const kind of ["deck", "hand", "discard"] as const) pileRec(g, `${kind}:${x.code}`);
     for (const code of x.deck) {
       const id = createCard(g, code, "deck", x.code);
       // a permanent card starts the game in play (Grimoire, Permanent)
@@ -353,28 +360,29 @@ export function createGame(db: ContentDb, setup: GameSetup): Result {
     }
   }
   for (const [deck, deckSets] of Object.entries(scen.sideDecks)) {
-    s.sideDecks[deck] = [];
+    const side = pileRec(g, `sideDeck:${deck}`);
     for (const set of deckSets)
       for (const code of db.encounterSets[set] ?? []) {
         for (let k = 0; k < db.cards[code].quantity; k++)
-          s.sideDecks[deck].push(createCard(g, code, "sideDeck"));
+          side.push(createCard(g, code, "sideDeck"));
       }
-    shuffle(s, s.sideDecks[deck]);
+    shuffle(s, side);
   }
-  for (const code of scen.acts) s.actDeck.push(createCard(g, code, "actDeck"));
-  for (const code of scen.agendas) s.agendaDeck.push(createCard(g, code, "agendaDeck"));
-  moveCard(g, s.actDeck[0], "act");
-  moveCard(g, s.agendaDeck[0], "agenda");
+  // a card created in an act or agenda deck is put in that pile
+  for (const code of scen.acts) createCard(g, code, "actDeck");
+  for (const code of scen.agendas) createCard(g, code, "agendaDeck");
+  moveCard(g, pileOf(s, "actDeck")[0], "act");
+  moveCard(g, pileOf(s, "agendaDeck")[0], "agenda");
   s.chaosBag = [...(setup.chaosBag ?? campaign?.chaosBags[setup.difficulty] ?? [])];
   for (const st of scen.setup) applySetupStep(g, st);
-  shuffle(s, s.encounterDeck);
+  shuffleDeck(g, "encounter");
   // reveal starting locations where investigators are
-  for (const i of s.order) if (s.invs[i].location) revealLocation(g, s.invs[i].location!);
+  for (const i of s.order) if (inv(g, i).location) revealLocation(g, inv(g, i).location!);
   // decks & opening hands
   for (const i of s.order) {
     // the investigator's own setup, before the deck is shuffled (Joe Diamond's hunch deck)
-    db.scripts[i]?.hooks?.setup?.(g, { you: i, source: s.invs[i].cardId });
-    shuffle(s, s.invs[i].deck);
+    db.scripts[i]?.hooks?.setup?.(g, { you: i, source: inv(g, i).cardId });
+    shuffleDeck(g, i);
     drawOpeningCards(g, i, 5);
   }
   const discardN = discardFromOpeningHands.get(g) ?? 0;
@@ -417,14 +425,14 @@ export function dispatch(db: ContentDb, state: GameState, action: Action): Resul
 /** did this choice bring hidden information into play: the RNG used, a card left a deck, or deck cards were shown? */
 export function revealed(prev: GameState, next: GameState, events: GameEvent[]): boolean {
   if (next.rng !== prev.rng) return true;
-  const left = (a: InstId[], b: InstId[]) => a.some((id) => !b.includes(id));
-  if (left(prev.encounterDeck, next.encounterDeck)) return true;
-  for (const [i, me] of Object.entries(prev.invs))
-    if (left(me.deck, next.invs[i].deck)) return true;
+  const left = (a: readonly InstId[], b: readonly InstId[]) => a.some((id) => !b.includes(id));
+  if (left(pileOf(prev, "encounterDeck"), pileOf(next, "encounterDeck"))) return true;
+  for (const i of prev.order)
+    if (left(pileOf(prev, `deck:${i}`), pileOf(next, `deck:${i}`))) return true;
   if (events.some((e) => e.type === "look")) return true;
   const shown = (s: GameState) =>
     (s.pending?.options ?? []).some(
-      (o) => o.card && ["deck", "encounterDeck"].includes(s.cards[o.card]?.zone),
+      (o) => o.card && ["deck", "encounterDeck"].includes(cardOfIf(s, o.card)?.zone as string),
     );
   return shown(next) && !shown(prev);
 }

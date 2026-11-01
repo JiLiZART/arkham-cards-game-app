@@ -4,6 +4,7 @@ import { dispatch, run, type Result } from "./engine";
 import { db, pick, skipMulligans, start } from "./testkit";
 import type { G } from "./core";
 import type { GameState } from "./types";
+import { invStateIn, pileRecIn } from "./records";
 
 const ROLAND = "01001";
 const DAISY = "01002";
@@ -27,7 +28,7 @@ function until(r: Result, stop: (s: GameState) => boolean, max = 600): Result {
 }
 const draws = (deck: string) => (s: GameState) =>
   s.pending?.kind === "draw" && s.pending.promptVars?.deck === deck;
-const handSize = (s: GameState, i: string) => s.invs[i].hand.length;
+const handSize = (s: GameState, i: string) => invStateIn(s, i).hand.length;
 
 describe("tapped draws", () => {
   it("setup draws don't wait: the opening hands are dealt and the first choice is the mulligan", () => {
@@ -47,16 +48,16 @@ describe("tapped draws", () => {
     });
     expect(p.options.map((o) => o.label)).toEqual(["Draw"]);
     const before = handSize(r.state, ROLAND);
-    const deck = r.state.invs[ROLAND].deck.length;
+    const deck = invStateIn(r.state, ROLAND).deck.length;
     const next = pick(r, "draw");
     expect(handSize(next.state, ROLAND)).toBe(before + 1);
-    expect(next.state.invs[ROLAND].deck.length).toBe(deck - 1);
+    expect(invStateIn(next.state, ROLAND).deck.length).toBe(deck - 1);
   });
 
   it("the cards leave the deck only when the tap comes", () => {
     const r = until(tapped([ROLAND]), draws("player"));
     const s = r.state;
-    expect(s.invs[ROLAND].deck.length).toBeGreaterThan(0);
+    expect(invStateIn(s, ROLAND).deck.length).toBeGreaterThan(0);
     expect(s.pending!.step.t).toBe("Draw");
   });
 
@@ -64,9 +65,9 @@ describe("tapped draws", () => {
     let r = until(tapped(), draws("encounter"));
     const first = r.state.pending!.inv;
     expect([ROLAND, DAISY]).toContain(first);
-    const deck = r.state.encounterDeck.length;
+    const deck = pileRecIn(r.state, "encounterDeck").length;
     r = pick(r, "draw");
-    expect(r.state.encounterDeck.length).toBeLessThan(deck);
+    expect(pileRecIn(r.state, "encounterDeck").length).toBeLessThan(deck);
     r = until(r, draws("encounter"));
     expect(r.state.pending).toMatchObject({
       kind: "draw",

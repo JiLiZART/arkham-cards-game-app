@@ -24,13 +24,14 @@ import {
 const N = NATHANIEL;
 
 import { db, mutate, options, pick } from "./testkit";
+import { allCardRecsIn, cardRecIn, invStateIn } from "./records";
 
 beforeAll(async () => {
   await loadPack("nat");
 });
 
 const offered = (name: RegExp) => (x: Result) => options(x).some((o) => name.test(o));
-const dmg = (r: Result, i: string) => r.state.invs[i].damage;
+const dmg = (r: Result, i: string) => invStateIn(r.state, i).damage;
 
 describe("a failed attack on an enemy engaged with another investigator", () => {
   it("deals the enemy's damage to that investigator", () => {
@@ -78,7 +79,7 @@ describe("successful evasion", () => {
         inPlay(g, "01005", "01046"); // Pickpocketing: after an enemy is evaded
         hand(g, "01005", "01078"); // Cunning Distraction
         enemyHere(g, "01005", MINION);
-        g.s.invs["01005"].resources = 9;
+        invStateIn(g.s, "01005").resources = 9;
       });
       r = toTurn(pick(r, /^Play Cunning Distraction/), offered(/^Pickpocketing/));
       expect(offered(/^Slick/)(r)).toBe(false);
@@ -131,7 +132,7 @@ describe("automatic results", () => {
       ["autoFail"],
     );
     r = toTurn(pick(r, "End turn"), (x) => x.state.round === 2 && x.state.pending?.kind === "turn");
-    expect(r.state.invs[ROLAND].horror).toBe(3);
+    expect(invStateIn(r.state, ROLAND).horror).toBe(3);
   });
   it("a known automatic success reveals no token and counts the difficulty as 0", () => {
     let r = nathaniel((g) => {
@@ -153,28 +154,28 @@ describe("automatic results", () => {
 describe("elimination and the empty deck", () => {
   it("drawing with no deck and no discard pile defeats at once, with 1 mental trauma and no horror first", () => {
     let r = game([ROLAND], (g) => {
-      g.s.invs[ROLAND].deck = [];
-      g.s.invs[ROLAND].discard = [];
+      invStateIn(g.s, ROLAND).deck = [];
+      invStateIn(g.s, ROLAND).discard = [];
     });
     r = pick(r, /^Draw/);
-    expect(r.state.invs[ROLAND].status).toBe("defeated");
-    expect(r.state.invs[ROLAND].mentalTrauma).toBe(1);
-    expect(r.state.invs[ROLAND].horror).toBe(0);
+    expect(invStateIn(r.state, ROLAND).status).toBe("defeated");
+    expect(invStateIn(r.state, ROLAND).mentalTrauma).toBe(1);
+    expect(invStateIn(r.state, ROLAND).horror).toBe(0);
   });
   it("an eliminated investigator's Cover Up resolves its 'when the game ends' ability", () => {
     let r = game([ROLAND], (g) => {
       const id = createCard(g, "01007", "limbo", ROLAND);
       moveCard(g, id, "threat");
-      g.s.cards[id].controller = ROLAND;
-      g.s.cards[id].clues = 2;
-      g.s.invs[ROLAND].damage = 8;
+      cardRecIn(g.s, id).controller = ROLAND;
+      cardRecIn(g.s, id).clues = 2;
+      invStateIn(g.s, ROLAND).damage = 8;
       enemyHere(g, ROLAND);
     });
     r = toTurn(pick(r, "End turn"));
-    expect(r.state.invs[ROLAND].status).toBe("defeated");
-    expect(r.state.invs[ROLAND].physicalTrauma).toBe(1);
-    expect(r.state.invs[ROLAND].mentalTrauma).toBe(1); // Cover Up, with clues left
-    expect(Object.values(r.state.cards).find((c) => c.code === "01007")!.zone).toBe("removed");
+    expect(invStateIn(r.state, ROLAND).status).toBe("defeated");
+    expect(invStateIn(r.state, ROLAND).physicalTrauma).toBe(1);
+    expect(invStateIn(r.state, ROLAND).mentalTrauma).toBe(1); // Cover Up, with clues left
+    expect(allCardRecsIn(r.state).find((c) => c.code === "01007")!.zone).toBe("removed");
   });
 });
 
@@ -183,7 +184,7 @@ describe("unique cards, limits and victory", () => {
     const r = nathaniel((g) => {
       inPlay(g, N, "60107"); // Grete Wagner
       hand(g, N, "60128"); // Grete Wagner (3)
-      g.s.invs[N].resources = 9;
+      invStateIn(g.s, N).resources = 9;
     });
     expect(offered(/^Play Grete Wagner/)(r)).toBe(false);
   });
@@ -200,7 +201,7 @@ describe("unique cards, limits and victory", () => {
         pick(r, "End turn"),
         (x) => x.state.round === 2 && x.state.pending?.kind === "turn",
       );
-      const grete = Object.values(r.state.cards).find((c) => c.code === "60107")!;
+      const grete = allCardRecsIn(r.state).find((c) => c.code === "60107")!;
       expect(grete.zone).toBe("discard");
     } finally {
       Object.assign(db.cards[ACOLYTE], saved);
@@ -223,7 +224,7 @@ describe("unique cards, limits and victory", () => {
       r = pick(r, /^Once/);
       expect(offered(/^Once/)(r)).toBe(false);
       r = mutate(r, (g) => {
-        const id = Object.values(g.s.cards).find((c) => c.code === "01020")!.id;
+        const id = allCardRecsIn(g.s).find((c) => c.code === "01020")!.id;
         moveCard(g, id, "hand");
         moveCard(g, id, "play");
       });
@@ -247,8 +248,7 @@ describe("unique cards, limits and victory", () => {
         (x) => x.state.round === 2 && x.state.pending?.kind === "turn",
       );
       expect(
-        Object.values(r.state.cards).filter((c) => c.code === "01163" && c.zone === "victory")
-          .length,
+        allCardRecsIn(r.state).filter((c) => c.code === "01163" && c.zone === "victory").length,
       ).toBe(1);
     } finally {
       delete db.cards["01163"].victory;
@@ -264,7 +264,7 @@ describe("the enemy phase, upkeep and round end follow the chart", () => {
       enemyHere(g, ROLAND, ACOLYTE);
     });
     r = toTurn(pick(r, "End turn"), (x) => attacks(x) === 2 && x.state.pending?.kind === "assign");
-    const exhausted = Object.values(r.state.cards).filter(
+    const exhausted = allCardRecsIn(r.state).filter(
       (c) => c.zone === "enemy" && c.exhausted,
     ).length;
     expect(exhausted).toBe(1); // the first attacker; the second is attacking now
@@ -284,7 +284,7 @@ describe("the enemy phase, upkeep and round end follow the chart", () => {
     fastCache();
     try {
       let r = game([ROLAND], (g) => {
-        g.s.cards[inPlay(g, ROLAND, "01020")].exhausted = true; // Machete
+        cardRecIn(g.s, inPlay(g, ROLAND, "01020")).exhausted = true; // Machete
         hand(g, ROLAND, "01088");
       });
       r = toTurn(
@@ -293,7 +293,7 @@ describe("the enemy phase, upkeep and round end follow the chart", () => {
       );
       expect(r.state.pending?.promptKey).toBe("playerWindow");
       const machete = () =>
-        Object.values(r.state.cards).find((c) => c.code === "01020" && c.zone === "play")!;
+        allCardRecsIn(r.state).find((c) => c.code === "01020" && c.zone === "play")!;
       expect(machete().exhausted).toBe(true);
       r = toTurn(pick(r, "pass"));
       expect(machete().exhausted).toBe(false);
@@ -329,7 +329,7 @@ describe("the enemy phase, upkeep and round end follow the chart", () => {
 describe("advancing the act in a player window", () => {
   it("opens no window for it alone: it waits for the next turn", () => {
     let r = game([ROLAND], (g) => {
-      g.s.invs[ROLAND].clues = 2;
+      invStateIn(g.s, ROLAND).clues = 2;
     });
     r = pick(r, "End turn");
     for (let k = 0; k < 100 && r.state.pending && r.state.pending.kind !== "turn"; k++) {
@@ -340,7 +340,7 @@ describe("advancing the act in a player window", () => {
     const act = r.state.act;
     r = pick(r, /^Advance act/);
     expect(r.state.act).not.toBe(act);
-    expect(r.state.invs[ROLAND].clues).toBe(0);
+    expect(invStateIn(r.state, ROLAND).clues).toBe(0);
   });
   it("is not offered without the clues", () => {
     let r = game([ROLAND]);

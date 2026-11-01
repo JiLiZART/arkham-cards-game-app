@@ -1,6 +1,6 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { cardText, encounterSetName, t } from "../../../content/i18n";
-import type { ChoiceOption, GameState, InstId } from "../../../engine/types";
+import type { CardInst, ChoiceOption, GameState, InstId } from "../../../engine/types";
 import { CardFace } from "../../components/CardFace";
 import { cardDetails } from "../../game/details";
 import { db, useGame } from "../../state/context";
@@ -107,7 +107,7 @@ export function OptionButtons({
 }
 
 const TOKENS: [
-  keyof Pick<GameState["cards"][string], "damage" | "horror" | "clues" | "doom" | "resources">,
+  keyof Pick<CardInst, "damage" | "horror" | "clues" | "doom" | "resources">,
   IconName,
 ][] = [
   ["damage", "damage"],

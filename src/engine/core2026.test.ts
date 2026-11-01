@@ -19,6 +19,7 @@ import {
   zoneOf,
 } from "./natkit";
 import { gOf, options, pick } from "./testkit";
+import { allCardRecsIn, cardRecIn, invStateIn } from "./records";
 
 beforeAll(async () => {
   await loadPack("core_2026");
@@ -36,8 +37,7 @@ const lastResult = (r: Result) =>
     success: boolean;
   };
 const damageOn = (r: Result, code: string) => enemyIn(r, code)?.damage;
-const cardOf = (r: Result, code: string) =>
-  Object.values(r.state.cards).find((c) => c.code === code)!;
+const cardOf = (r: Result, code: string) => allCardRecsIn(r.state).find((c) => c.code === code)!;
 /** a card of `code` on top of the investigator's deck */
 function onDeck(g: G, i: string, code: string) {
   const id = createCard(g, code, "limbo", i);
@@ -72,11 +72,11 @@ describe("weapons", () => {
     let r = roland((g) => {
       hand(g, R, "12055");
       enemyHere(g, R, MINION);
-      g.s.invs[R].resources = 2;
+      invStateIn(g.s, R).resources = 2;
     });
     r = toTurn(pick(r, /^Play Decisive Strike/));
     expect(zoneOf(r, MINION)).not.toContain("enemy");
-    expect(r.state.invs[R].resources).toBe(5);
+    expect(invStateIn(r.state, R).resources).toBe(5);
   });
 
   it("Broken Bottle may be discarded after a success for +1 damage", () => {
@@ -109,11 +109,11 @@ describe("investigation", () => {
   it("Second Sight spends a charge after a success for 1 more clue", () => {
     let r = roland((g) => {
       inPlay(g, R, "12062");
-      g.s.cards[inv(g, R).location!].clues = 3;
+      cardRecIn(g.s, inv(g, R).location!).clues = 3;
     });
     r = toTurn(pick(r, /^Second Sight/), offered(/^Use Second Sight/));
     r = toTurn(pick(r, /^Use Second Sight/));
-    expect(r.state.invs[R].clues).toBe(2);
+    expect(invStateIn(r.state, R).clues).toBe(2);
     expect(cardOf(r, "12062").uses).toBe(2);
   });
 
@@ -122,12 +122,12 @@ describe("investigation", () => {
     let r = roland((g) => {
       inPlay(g, R, "12033");
       hall = addLocation(g, HALLWAY, [[STUDY, HALLWAY]]);
-      g.s.cards[hall].clues = 1;
+      cardRecIn(g.s, hall).clues = 1;
     });
     r = toTurn(pick(r, /^Local Map/), offered(/^Exhaust Local Map/));
     r = toTurn(pick(r, /^Exhaust Local Map/));
-    expect(r.state.invs[R].clues).toBe(1);
-    expect(r.state.invs[R].location).toBe(hall);
+    expect(invStateIn(r.state, R).clues).toBe(1);
+    expect(invStateIn(r.state, R).location).toBe(hall);
   });
 });
 
@@ -137,8 +137,8 @@ describe("evasion", () => {
       (g) => {
         hand(g, R, "12037");
         enemyHere(g, R, PRIEST);
-        g.s.invs[R].clues = 2;
-        g.s.invs[R].resources = 5;
+        invStateIn(g.s, R).clues = 2;
+        invStateIn(g.s, R).resources = 5;
       },
       ["0"],
     );
@@ -152,7 +152,7 @@ describe("evasion", () => {
       (g) => {
         hand(g, R, "12079");
         enemyHere(g, R, PRIEST);
-        g.s.invs[R].resources = 5;
+        invStateIn(g.s, R).resources = 5;
       },
       ["-2"],
     );
@@ -182,7 +182,7 @@ describe("committing", () => {
     });
     r = pick(r, /^Fight Ghoul Priest/);
     r = toTurn(pick(r, /^Commit Soul Link/), (x) => x.state.pending?.kind === "commit");
-    expect(r.state.invs[R].horror).toBe(1);
+    expect(invStateIn(r.state, R).horror).toBe(1);
   });
 
   it("Timely Intervention is committed after the reveal", () => {
@@ -205,7 +205,7 @@ describe("committing", () => {
       (g) => {
         hand(g, R, "12082");
         enemyHere(g, R, PRIEST);
-        g.s.invs[R].resources = 5;
+        invStateIn(g.s, R).resources = 5;
       },
       ["-3"],
     );
@@ -230,9 +230,9 @@ describe("allies and reactions", () => {
   it("Bodyguard takes another investigator's damage and, defeated, deals 1 damage", () => {
     let r = game([R, "01002"], (g) => {
       inPlay(g, R, "12016");
-      g.s.invs["01002"].location = inv(g, R).location;
+      invStateIn(g.s, "01002").location = inv(g, R).location;
       enemyHere(g, R, PRIEST, false);
-      g.s.cards[enemyIn({ state: g.s, events: [] }, PRIEST)!.id].exhausted = true;
+      cardRecIn(g.s, enemyIn({ state: g.s, events: [] }, PRIEST)!.id).exhausted = true;
       g.s.queue.push({
         t: "AssignDamage",
         inv: "01002",
@@ -246,7 +246,7 @@ describe("allies and reactions", () => {
     for (let k = 0; k < 2; k++) r = pick(r, /Bodyguard/);
     r = toTurn(r, offered(/^Bodyguard/));
     r = toTurn(pick(r, /^Bodyguard/));
-    expect(r.state.invs["01002"].damage).toBe(0);
+    expect(invStateIn(r.state, "01002").damage).toBe(0);
     expect(zoneOf(r, "12016")).toEqual(["discard"]);
     expect(damageOn(r, PRIEST)).toBe(1);
   });
@@ -257,23 +257,23 @@ describe("allies and reactions", () => {
       onDeck(g, R, "01088");
       onDeck(g, R, "12005");
     });
-    const n = r.state.invs[R].hand.length;
+    const n = invStateIn(r.state, R).hand.length;
     r = toTurn(pick(r, /^Draw 1 card/), offered(/^Detective's Intuition/));
     r = toTurn(pick(r, /^Detective's Intuition/));
-    expect(r.state.invs[R].hand.length).toBe(n + 3);
+    expect(invStateIn(r.state, R).hand.length).toBe(n + 3);
     expect(zoneOf(r, "12005")).toEqual(["hand"]);
   });
 
   it("Gather Intel draws 2 when an enemy spawns at your location", () => {
     let r = roland((g) => {
       hand(g, R, "12036");
-      g.s.invs[R].resources = 5;
+      invStateIn(g.s, R).resources = 5;
       g.s.queue.push({ t: "Spawn", enemy: createCard(g, ACOLYTE, "limbo"), inv: R });
     });
-    const n = r.state.invs[R].hand.length;
+    const n = invStateIn(r.state, R).hand.length;
     r = toTurn(pick(r, "End turn"), offered(/^Gather Intel/));
     r = toTurn(pick(r, /^Gather Intel/));
-    expect(r.state.invs[R].hand.length).toBe(n + 1);
+    expect(invStateIn(r.state, R).hand.length).toBe(n + 1);
   });
 });
 
@@ -288,7 +288,9 @@ describe("investigators", () => {
 
   it("Trish Scarborough has an extra action for evading", () => {
     const r = game([TRISH], (g) => enemyHere(g, TRISH, MINION));
-    expect(r.state.invs[TRISH].restrictedActions).toEqual([{ designator: "evade", left: 1 }]);
+    expect(invStateIn(r.state, TRISH).restrictedActions).toEqual([
+      { designator: "evade", left: 1 },
+    ]);
   });
 });
 
@@ -297,7 +299,7 @@ describe("weaknesses", () => {
     let r = roland((g) => {
       hand(g, R, "12023");
       onDeck(g, R, "12006");
-      g.s.invs[R].resources = 5;
+      invStateIn(g.s, R).resources = 5;
     });
     r = toTurn(pick(r, /^Play Right Tool for the Job/));
     expect(zoneOf(r, "12006")).toEqual(["hand"]);
@@ -308,30 +310,30 @@ describe("weaknesses", () => {
     let r = roland((g) => {
       const id = createCard(g, "12103", "limbo", R);
       moveCard(g, id, "threat");
-      g.s.cards[id].controller = R;
+      cardRecIn(g.s, id).controller = R;
       hand(g, R, "01088");
-      g.s.invs[R].resources = 5;
+      invStateIn(g.s, R).resources = 5;
     });
     r = toTurn(pick(r, /^Play Emergency Cache/));
-    expect(r.state.invs[R].damage).toBe(0); // Emergency Cache costs nothing
+    expect(invStateIn(r.state, R).damage).toBe(0); // Emergency Cache costs nothing
     r = roland((g) => {
       const id = createCard(g, "12103", "limbo", R);
       moveCard(g, id, "threat");
-      g.s.cards[id].controller = R;
+      cardRecIn(g.s, id).controller = R;
       hand(g, R, "12019");
-      g.s.invs[R].resources = 5;
+      invStateIn(g.s, R).resources = 5;
     });
     r = toTurn(pick(r, /^Play M1911/));
-    expect(r.state.invs[R].damage).toBe(1);
+    expect(invStateIn(r.state, R).damage).toBe(1);
   });
 
   it("The Necronomicon blocks playing assets", () => {
     const r = roland((g) => {
       const id = createCard(g, "12012", "limbo", R);
       moveCard(g, id, "threat");
-      g.s.cards[id].controller = R;
+      cardRecIn(g.s, id).controller = R;
       hand(g, R, "12019");
-      g.s.invs[R].resources = 5;
+      invStateIn(g.s, R).resources = 5;
     });
     expect(options(r).some((o) => o.startsWith("Play M1911"))).toBe(false);
     expect(options(r).some((o) => o.startsWith("The Necronomicon"))).toBe(true);
@@ -341,10 +343,10 @@ describe("weaknesses", () => {
     const r = roland((g) => {
       const id = createCard(g, "12098", "limbo", R);
       moveCard(g, id, "threat");
-      g.s.cards[id].controller = R;
+      cardRecIn(g.s, id).controller = R;
     });
     const g = gOf(r);
-    expect(g.s.invs[R]).toBeTruthy();
+    expect(invStateIn(g.s, R)).toBeTruthy();
     expect(options(r).some((o) => o.startsWith("The Gold Bug"))).toBe(true);
   });
 });

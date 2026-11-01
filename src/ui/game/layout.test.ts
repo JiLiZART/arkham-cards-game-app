@@ -3,6 +3,7 @@ import { autoPlay } from "../../engine/bot";
 import { moveCard } from "../../engine/core";
 import { db, giveCard, mutate, putEnemy, skipMulligans, start } from "../../engine/testkit";
 import { footprint, layout, type Bounds } from "./layout";
+import { cardRecIn, invStateIn } from "../../engine/records";
 
 const overlaps = (a: ReturnType<typeof footprint>, b: ReturnType<typeof footprint>) =>
   a.x0 < b.x1 - 1e-6 && b.x0 < a.x1 - 1e-6 && a.z0 < b.z1 - 1e-6 && b.z0 < a.z1 - 1e-6;
@@ -24,13 +25,13 @@ function check(scenario: string, seed: number, players = 4) {
       if (a.group === b.group) continue;
       if (overlaps(footprint(a), footprint(b)))
         bad.push(
-          `${db.cards[r.state.cards[ia].code].name}(${a.group}) × ${db.cards[r.state.cards[ib].code].name}(${b.group})`,
+          `${db.cards[cardRecIn(r.state, ia).code].name}(${a.group}) × ${db.cards[cardRecIn(r.state, ib).code].name}(${b.group})`,
         );
     }
   }
   const outside = placed
     .filter(([, p]) => !inside(footprint(p), L.bounds))
-    .map(([id]) => db.cards[r.state.cards[id].code].name);
+    .map(([id]) => db.cards[cardRecIn(r.state, id).code].name);
   return { r, L, viewer, bad, outside };
 }
 
@@ -58,16 +59,18 @@ describe("map layout", () => {
       for (const code of ["01016", "01020"]) {
         const id = giveCard(g, "01001", code);
         moveCard(g, id, "play");
-        g.s.cards[id].controller = "01001";
+        cardRecIn(g.s, id).controller = "01001";
       }
-      putEnemy(g, "01160", g.s.invs["01001"].location!, "01001");
+      putEnemy(g, "01160", invStateIn(g.s, "01001").location!, "01001");
     });
     const L = layout(db, r.state, "01001");
-    const zones = new Set([...L.cards.keys()].map((id) => r.state.cards[id].zone));
+    const zones = new Set([...L.cards.keys()].map((id) => cardRecIn(r.state, id).zone));
     expect([...zones].every((z) => ["location", "enemy", "attached"].includes(z))).toBe(true);
-    for (const i of r.state.order) expect(L.cards.has(r.state.invs[i].cardId)).toBe(false);
+    for (const i of r.state.order) expect(L.cards.has(invStateIn(r.state, i).cardId)).toBe(false);
     // the viewer's engaged enemy lives in the play area strip, not on the map
-    expect([...L.cards.keys()].some((id) => r.state.cards[id].engagedWith === "01001")).toBe(false);
+    expect([...L.cards.keys()].some((id) => cardRecIn(r.state, id).engagedWith === "01001")).toBe(
+      false,
+    );
     expect(L.minis.map((m) => m.inv).sort()).toEqual(["01001", "01002"]);
   });
 
@@ -75,11 +78,11 @@ describe("map layout", () => {
     let r = skipMulligans(start("the-gathering", ["01001", "01002"], 1));
     let enemy = "";
     r = mutate(r, (g) => {
-      enemy = putEnemy(g, "01160", g.s.invs["01002"].location!, "01002");
+      enemy = putEnemy(g, "01160", invStateIn(g.s, "01002").location!, "01002");
     });
     const L = layout(db, r.state, "01001");
     const p = L.cards.get(enemy)!;
     expect(p.badge).toBe("01002");
-    expect(p.group).toBe(`loc:${r.state.invs["01002"].location}`);
+    expect(p.group).toBe(`loc:${invStateIn(r.state, "01002").location}`);
   });
 });

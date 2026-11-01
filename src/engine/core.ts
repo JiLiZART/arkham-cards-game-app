@@ -11,7 +11,21 @@ import type {
   ModStat,
   Skill,
 } from "../content/schema";
-import { allCardRecs, cardRec, cardRecIf, invRec, invRecIf } from "./records";
+import {
+  allCardRecs,
+  allCardRecsIn,
+  allInvRecs,
+  cardRec,
+  cardRecIf,
+  cardRecIfIn,
+  invRec,
+  invRecIf,
+  invViewIn,
+  pileKey,
+  pileRead,
+  pileRec,
+  pilesNamed,
+} from "./records";
 import type {
   CardInst,
   CardView,
@@ -26,6 +40,7 @@ import type {
   InvState,
   PendingChoice,
   Step,
+  PileName,
   Zone,
 } from "./types";
 
@@ -48,45 +63,59 @@ export const defOf = (g: G, code: string): CardDef => {
   return d;
 };
 /** an investigator, read-only (ADR-0022): change them through the setters below */
-export const inv = (g: G, id: InvId): InvView => invRec(g, id);
+export const inv = (g: G, id: InvId): InvView => {
+  const v = invViewIn(g.s, id);
+  if (!v) throw new Error(`no investigator ${id}`);
+  return v;
+};
 export const name = (g: G, id: InstId) => def(g, id).name;
 
 // ---------- lookups over a state (for code that holds a state, not the engine context) ----------
-/** a card in a game state (or anything holding its `cards`), read-only: throws for an id the game doesn't have */
-export const cardOf = (s: Pick<GameState, "cards">, id: InstId): CardView => {
-  const c = s.cards[id];
+/** a card in a game state (or anything holding its `world`), read-only: throws for an id the game doesn't have */
+export const cardOf = (s: Pick<GameState, "world">, id: InstId): CardView => {
+  const c = cardRecIfIn(s, id);
   if (!c) throw new Error(`no card instance ${id}`);
   return c;
 };
 /** a card in a game state, or undefined when the id is absent or names no card */
 export const cardOfIf = (
-  s: Pick<GameState, "cards"> | null | undefined,
+  s: Pick<GameState, "world"> | null | undefined,
   id: InstId | null | undefined,
-): CardView | undefined => (s && id ? s.cards[id] : undefined);
-/** an investigator in a game state, read-only: throws for one the game doesn't have */
-export const invOf = (s: Pick<GameState, "invs">, id: InvId): InvView => {
-  const i = s.invs[id];
-  if (!i) throw new Error(`no investigator ${id}`);
-  return i;
+): CardView | undefined => (s ? cardRecIfIn(s, id) : undefined);
+/** an investigator in a game state, read-only and always current: throws for one the game doesn't have */
+export const invOf = (s: Pick<GameState, "world">, id: InvId): InvView => {
+  const v = invViewIn(s, id);
+  if (!v) throw new Error(`no investigator ${id}`);
+  return v;
 };
 export const invOfIf = (
-  s: Pick<GameState, "invs"> | null | undefined,
+  s: Pick<GameState, "world"> | null | undefined,
   id: InvId | null | undefined,
-): InvView | undefined => (s && id ? s.invs[id] : undefined);
+): InvView | undefined => (s && id ? invViewIn(s, id) : undefined);
 /** every card of a state, in creation order */
-export const cardsOf = (s: GameState): readonly CardView[] => Object.values(s.cards);
+export const cardsOf = (s: Pick<GameState, "world">): readonly CardView[] => allCardRecsIn(s);
 /** every investigator of a state, in turn order */
-export const invsOf = (s: GameState): readonly InvView[] => s.order.map((i) => s.invs[i]);
+export const invsOf = (s: Pick<GameState, "world" | "order">): readonly InvView[] =>
+  s.order.map((i) => invViewIn(s, i)!);
+
+export type { PileName } from "./types";
+/** every pile of a state by name, read-only, in order (the top of a deck first); only the piles the game has made */
+export const pileMap = (
+  s: Pick<GameState, "world">,
+): Readonly<Partial<Record<PileName, readonly InstId[]>>> => s.world.piles;
+/** one pile of a state by name; empty when the game has no such pile */
+export const pileOf = (s: Pick<GameState, "world">, name: PileName): readonly InstId[] =>
+  pileRead(s, name);
 
 /**
  * A copy of a state with some cards' fields overridden, for a view of the game that differs from the game (the table
  * while events wait to play). The state given is not changed; cards not patched are shared with it.
  */
 export function patchedState(s: GameState, patches: Record<InstId, Partial<CardInst>>): GameState {
-  const cards = { ...s.cards };
+  const card = { ...s.world.tables.card };
   for (const [id, patch] of Object.entries(patches))
-    if (cards[id]) cards[id] = { ...cards[id], ...patch };
-  return { ...s, cards };
+    if (card[id]) card[id] = { ...card[id], ...patch };
+  return { ...s, world: { ...s.world, tables: { ...s.world.tables, card } } };
 }
 
 // ---------- what scripts read about the scenario ----------
@@ -96,7 +125,7 @@ export const cardIf = (g: G, id: InstId | null | undefined): CardView | undefine
 /** every card instance, in creation order */
 export const allCards = (g: G): readonly CardView[] => allCardRecs(g);
 /** an investigator, or undefined when the id is absent or names none */
-export const invIf = (g: G, id: InvId | null | undefined): InvView | undefined => invRecIf(g, id);
+export const invIf = (g: G, id: InvId | null | undefined): InvView | undefined => invOfIf(g.s, id);
 export const currentAct = (g: G) => g.s.act;
 export const currentAgenda = (g: G) => g.s.agenda;
 export const leadInvestigator = (g: G) => g.s.lead;
@@ -152,8 +181,9 @@ export function endScenario(g: G, resolution: string) {
 export const pile = (
   g: G,
   name: "encounterDeck" | "encounterDiscard" | "actDeck" | "agendaDeck",
-): readonly InstId[] => g.s[name];
-export const sideDeck = (g: G, name: string): readonly InstId[] => g.s.sideDecks[name] ?? [];
+): readonly InstId[] => pileRead(g.s, name);
+export const sideDeck = (g: G, name: string): readonly InstId[] =>
+  pileRead(g.s, `sideDeck:${name}`);
 
 // ---------- what scripts change besides cards, counters and flags ----------
 /** the event under this key doesn't happen (an attack, a token's effect) */
@@ -181,7 +211,7 @@ export function shuffleList<T>(g: G, list: T[]) {
 }
 /** shuffle an investigator's deck or the encounter deck */
 export function shuffleDeck(g: G, owner: InvId | "encounter") {
-  shuffle(g.s, owner === "encounter" ? g.s.encounterDeck : invRec(g, owner).deck);
+  shuffle(g.s, pileRec(g, owner === "encounter" ? "encounterDeck" : `deck:${owner}`));
 }
 
 // ---------- counters ----------
@@ -209,12 +239,12 @@ const INV_ONLY: Counter[] = [
 
 /** the record a counter lives on: an investigator (by code) or a card instance */
 function holder(g: G, id: InvId | InstId, k: Counter): Record<Counter, number> {
-  const i = g.s.invs[id];
+  const i = invRecIf(g, id);
   if (i) {
     if (CARD_ONLY.includes(k)) throw new Error(`investigator ${id} holds no ${k}`);
     return i as unknown as Record<Counter, number>;
   }
-  const c = g.s.cards[id];
+  const c = cardRecIf(g, id);
   if (!c) throw new Error(`no card or investigator ${id}`);
   if (INV_ONLY.includes(k)) throw new Error(`card ${id} holds no ${k}`);
   return c as unknown as Record<Counter, number>;
@@ -280,13 +310,13 @@ export function noteAction(g: G, i: InvId, designator: string) {
   me.actionsTaken++;
 }
 export function clearRoundActions(g: G) {
-  for (const i of Object.values(g.s.invs)) i.actionsThisRound = [];
+  for (const i of allInvRecs(g)) i.actionsThisRound = [];
 }
 export function clearTurnDone(g: G) {
-  for (const i of Object.values(g.s.invs)) i.turnDone = false;
+  for (const i of allInvRecs(g)) i.turnDone = false;
 }
 export function clearDefeatedHealth(g: G) {
-  for (const i of Object.values(g.s.invs)) i.defeatedHealth = 0;
+  for (const i of allInvRecs(g)) i.defeatedHealth = 0;
 }
 export const setTurnDone = (g: G, i: InvId, done: boolean) => void (invRec(g, i).turnDone = done);
 /** an investigator resigns or is defeated (by damage or horror) */
@@ -299,14 +329,14 @@ export function setStatus(g: G, i: InvId, status: InvState["status"], by?: "dama
 // ---------- deck order ----------
 /** put cards on top of a deck in the order given (`ids[0]` on top), the rest of the deck below them in its order */
 export function arrangeOnTop(g: G, owner: InvId | "encounter", ids: readonly InstId[]) {
-  const deck = owner === "encounter" ? g.s.encounterDeck : invRec(g, owner).deck;
+  const deck = pileRec(g, owner === "encounter" ? "encounterDeck" : `deck:${owner}`);
   deck.splice(0, deck.length, ...ids, ...deck.filter((id) => !ids.includes(id)));
 }
 
-export const invName = (g: G, id: InvId) => g.s.invs[id]?.name ?? id;
+export const invName = (g: G, id: InvId) => invRecIf(g, id)?.name ?? id;
 
 export const activeInvs = (g: G): InvId[] =>
-  g.s.order.filter((i) => g.s.invs[i].status === "playing");
+  g.s.order.filter((i) => invRec(g, i).status === "playing");
 export const playerCount = (g: G) => g.s.order.length; // per-investigator values use starting count
 
 // ---------- events ----------
@@ -396,7 +426,7 @@ export function nextId(g: G) {
 export function createCard(g: G, code: string, zone: Zone, owner: InvId | null = null): InstId {
   if (!g.db.cards[code]) throw new Error(`unknown card ${code}`);
   const id = nextId(g);
-  g.s.cards[id] = {
+  g.s.world.tables.card[id] = {
     id,
     code,
     owner,
@@ -414,29 +444,37 @@ export function createCard(g: G, code: string, zone: Zone, owner: InvId | null =
     engagedWith: null,
     attachedTo: null,
   };
-  if (zone === "hand" && owner) invRec(g, owner).hand.push(id);
-  if (zone === "deck" && owner) invRec(g, owner).deck.push(id);
-  if (zone === "encounterDeck") g.s.encounterDeck.push(id);
+  g.s.world.entities.push(id);
+  const key = pileKey(zone, owner);
+  if (key) pileRec(g, key).push(id);
   return id;
 }
 
 // ---------- card movement ----------
-const PILES = ["deck", "hand", "discard"] as const;
-
-function removeFromPiles(g: G, id: InstId) {
-  const s = g.s;
-  const del = (arr: InstId[]) => {
-    const i = arr.indexOf(id);
-    if (i >= 0) arr.splice(i, 1);
+/** take a card out of the pile its zone says it sits in */
+function removeFromPile(g: G, id: InstId) {
+  const c = cardRec(g, id);
+  const piles = g.s.world.piles;
+  const take = (name: PileName | null) => {
+    const pile = name ? piles[name] : undefined;
+    const at = pile ? pile.indexOf(id) : -1;
+    if (at >= 0) pile!.splice(at, 1);
+    return at >= 0;
   };
-  for (const i of Object.values(s.invs)) for (const p of PILES) del(i[p]);
-  del(s.encounterDeck);
-  del(s.encounterDiscard);
-  del(s.actDeck);
-  del(s.agendaDeck);
-  for (const d of Object.values(s.sideDecks)) del(d);
-  if (s.act === id) s.act = null;
-  if (s.agenda === id) s.agenda = null;
+  // the pile the zone and owner name; a card put in another investigator's pile (or a side deck, whose name isn't in
+  // the zone) is found by its kind
+  const named = pileKey(c.zone, c.owner);
+  if (!take(named)) {
+    const kind =
+      c.zone === "deck" || c.zone === "hand" || c.zone === "discard"
+        ? `${c.zone}:`
+        : c.zone === "sideDeck"
+          ? "sideDeck:"
+          : null;
+    if (kind) for (const name of pilesNamed(g.s, kind)) if (take(name)) break;
+  }
+  if (g.s.act === id) g.s.act = null;
+  if (g.s.agenda === id) g.s.agenda = null;
 }
 
 const IN_PLAY: Zone[] = [
@@ -460,10 +498,10 @@ export function moveCard(
 ) {
   const c = cardRec(g, id);
   const leavingPlay = isInPlay(c) && !IN_PLAY.includes(zone);
-  removeFromPiles(g, id);
+  removeFromPile(g, id);
   if (leavingPlay) {
     // discard attachments
-    for (const other of Object.values(g.s.cards)) {
+    for (const other of allCardRecs(g)) {
       if (
         other.attachedTo === id ||
         (other.zone === "attached" && other.location === id && c.zone === "location")
@@ -498,15 +536,15 @@ export function moveCard(
     case "discard":
       if (!owner) throw new Error(`card ${id} has no owner for ${zone}`);
       // discard pile: last = top; deck: index 0 = top
-      if (zone === "deck") at(invRec(g, owner)[zone]);
-      else if (zone === "discard") invRec(g, owner).discard.push(id);
-      else invRec(g, owner).hand.push(id);
+      if (zone === "deck") at(pileRec(g, `deck:${owner}`));
+      else if (zone === "discard") pileRec(g, `discard:${owner}`).push(id);
+      else pileRec(g, `hand:${owner}`).push(id);
       break;
     case "encounterDeck":
-      at(g.s.encounterDeck);
+      at(pileRec(g, "encounterDeck"));
       break;
     case "encounterDiscard":
-      g.s.encounterDiscard.push(id);
+      pileRec(g, "encounterDiscard").push(id);
       break;
     case "act":
       g.s.act = id;
@@ -530,8 +568,16 @@ export function shuffleIntoDeck(g: G, id: InstId, owner: InvId) {
 /** an investigator's deck and discard pile, or the encounter deck and discard */
 const pilesOf = (g: G, owner: InvId | "encounter") =>
   owner === "encounter"
-    ? { deck: g.s.encounterDeck, discard: g.s.encounterDiscard, zone: "encounterDeck" as const }
-    : { deck: inv(g, owner).deck, discard: inv(g, owner).discard, zone: "deck" as const };
+    ? {
+        deck: pileRec(g, "encounterDeck"),
+        discard: pileRec(g, "encounterDiscard"),
+        zone: "encounterDeck" as const,
+      }
+    : {
+        deck: pileRec(g, `deck:${owner}`),
+        discard: pileRec(g, `discard:${owner}`),
+        zone: "deck" as const,
+      };
 
 /** the discard pile goes back into its deck, in its order, and the deck is shuffled */
 export function reshuffleDiscard(g: G, owner: InvId | "encounter") {
@@ -549,7 +595,7 @@ export function putOnTop(g: G, owner: InvId, ids: InstId[]) {
 /** take cards out of an investigator's deck, shuffle the rest, and put them back on top, `ids[0]` on top */
 export function shuffleThenTop(g: G, owner: InvId, ids: InstId[]) {
   for (const id of ids) moveCard(g, id, "limbo");
-  shuffle(g.s, invRec(g, owner).deck);
+  shuffleDeck(g, owner);
   putOnTop(g, owner, ids);
 }
 
@@ -572,10 +618,10 @@ export const engagedWith = (g: G, i: InvId) =>
   enemies(g).filter(
     (e) =>
       e.engagedWith === i ||
-      (isMassive(g, e.id) && e.location === g.s.invs[i]?.location && !e.exhausted),
+      (isMassive(g, e.id) && e.location === invRecIf(g, i)?.location && !e.exhausted),
   );
 export const invsAt = (g: G, loc: InstId | null) =>
-  activeInvs(g).filter((i) => g.s.invs[i].location === loc);
+  activeInvs(g).filter((i) => invRec(g, i).location === loc);
 export const findByCode = (g: G, code: string, zones?: Zone[]): CardView | undefined =>
   allCardRecs(g).find((c) => c.code === code && (!zones || zones.includes(c.zone)));
 export const locationByCode = (g: G, code: string) => findByCode(g, code, ["location"]);
@@ -587,13 +633,13 @@ export const hasKeyword = (g: G, id: InstId, kw: CardDef["keywords"][number]) =>
   def(g, id).keywords.includes(kw);
 /** an aloof enemy can only be attacked while it is engaged with an investigator */
 export const attackable = (g: G, id: InstId) =>
-  !hasKeyword(g, id, "aloof") || !!g.s.cards[id]?.engagedWith;
+  !hasKeyword(g, id, "aloof") || !!cardRecIf(g, id)?.engagedWith;
 /** a unique card cannot be played or put into play while a card with its title is in play (Grimoire, Unique) */
 export function uniqueInPlay(g: G, id: InstId): boolean {
   const d = def(g, id);
   return (
     !!d.unique &&
-    Object.values(g.s.cards).some(
+    allCardRecs(g).some(
       (c) =>
         c.id !== id &&
         ["play", "threat", "enemy", "attached"].includes(c.zone) &&
@@ -725,7 +771,7 @@ export function blankedCards(g: G): Set<InstId> {
   // blankText comes only from temporary effects (Mind Wipe) or card scripts (Stubborn Detective), never from constant abilities
   const out = new Set<InstId>();
   for (const t of g.s.tempMods) if (t.mod.flag === "blankText") out.add(t.target);
-  for (const c of Object.values(g.s.cards)) {
+  for (const c of allCardRecs(g)) {
     const fn = g.db.scripts[c.code]?.blanks;
     if (fn && MOD_ZONES.includes(c.zone)) for (const id of fn(g, c.id)) out.add(id);
   }
@@ -749,7 +795,7 @@ export function abilitiesOf(
 export function allMods(g: G): AppliedMod[] {
   const out: AppliedMod[] = [];
   const blanked = blankedCards(g);
-  for (const c of Object.values(g.s.cards)) {
+  for (const c of allCardRecs(g)) {
     if (!MOD_ZONES.includes(c.zone)) continue;
     const abilities = c.zone === "location" && !c.revealed ? [] : abilitiesOf(g, c.id, blanked);
     for (const a of abilities) {
@@ -773,7 +819,7 @@ function scopeTargets(g: G, c: CardInst, mod: Modifier): string[] {
       return c.controller ? [c.controller] : [];
     case "investigatorsAtLocation": {
       const loc = c.controller
-        ? g.s.invs[c.controller]?.location
+        ? invRecIf(g, c.controller)?.location
         : c.zone === "location"
           ? c.id
           : c.zone === "enemy" || c.zone === "attached"
@@ -908,7 +954,7 @@ export function canPay(g: G, i: InvId, cardId: InstId, cost: Cost | undefined): 
 
 export function checkCondition(g: G, c: Condition, ctx: EffCtx): boolean {
   const you = ctx.you ?? null;
-  const yourLoc = you ? (g.s.invs[you]?.location ?? null) : null;
+  const yourLoc = you ? (invRecIf(g, you)?.location ?? null) : null;
   if ("all" in c) return c.all.every((x) => checkCondition(g, x, ctx));
   if ("any" in c) return c.any.some((x) => checkCondition(g, x, ctx));
   if ("not" in c) return !checkCondition(g, c.not, ctx);
@@ -926,7 +972,7 @@ export function checkCondition(g: G, c: Condition, ctx: EffCtx): boolean {
     return enemiesAt(g, yourLoc).some((e) => f === true || matchesFilter(g, e.code, f));
   }
   if ("enemyInPlay" in c)
-    return Object.values(g.s.cards).some(
+    return allCardRecs(g).some(
       (x) => x.zone === "enemy" && matchesFilter(g, x.code, c.enemyInPlay),
     );
   if ("exhaustedEnemyAtYourLocation" in c) return enemiesAt(g, yourLoc).some((e) => e.exhausted);
@@ -936,7 +982,7 @@ export function checkCondition(g: G, c: Condition, ctx: EffCtx): boolean {
     return !!ctx.enemy && matchesFilter(g, card(g, ctx.enemy).code, c.eventEnemy);
   if ("eventInvestigatorIsYou" in c) return ctx.inv === you;
   if ("eventAtYourLocation" in c) {
-    const evLoc = ctx.location ?? (ctx.inv ? g.s.invs[ctx.inv]?.location : null);
+    const evLoc = ctx.location ?? (ctx.inv ? invRecIf(g, ctx.inv)?.location : null);
     return !!evLoc && evLoc === yourLoc;
   }
   if ("testKind" in c) return g.s.skillTest?.kind === c.testKind;
@@ -956,15 +1002,19 @@ export function checkCondition(g: G, c: Condition, ctx: EffCtx): boolean {
   if ("yourSkillTest" in c) return !!g.s.skillTest && g.s.skillTest.inv === you;
   if ("eventCard" in c)
     return (
-      !!ctx.card && !!g.s.cards[ctx.card] && matchesFilter(g, card(g, ctx.card).code, c.eventCard)
+      !!ctx.card &&
+      !!cardRecIf(g, ctx.card) &&
+      matchesFilter(g, card(g, ctx.card).code, c.eventCard)
     );
   if ("firstAction" in c) return !!you && g.s.active === you && inv(g, you).actionsTaken === 0;
   if ("eventSource" in c)
     return (
-      !!ctx.card && !!g.s.cards[ctx.card] && matchesFilter(g, card(g, ctx.card).code, c.eventSource)
+      !!ctx.card &&
+      !!cardRecIf(g, ctx.card) &&
+      matchesFilter(g, card(g, ctx.card).code, c.eventSource)
     );
   if ("eventFromYourLocation" in c) return !!ctx.from && ctx.from === yourLoc;
-  if ("eventEnemyInPlay" in c) return !!ctx.enemy && g.s.cards[ctx.enemy]?.zone === "enemy";
+  if ("eventEnemyInPlay" in c) return !!ctx.enemy && cardRecIf(g, ctx.enemy)?.zone === "enemy";
   if ("enemyNearby" in c) {
     if (!yourLoc) return false;
     const d = distances(g, yourLoc);
@@ -979,19 +1029,19 @@ export function checkCondition(g: G, c: Condition, ctx: EffCtx): boolean {
     return !!you && inv(g, you).defeatedHealth >= c.defeatedHealthThisTurn.min;
   if ("testSource" in c) {
     const src = g.s.skillTest?.source;
-    return !!src && !!g.s.cards[src] && matchesFilter(g, card(g, src).code, c.testSource);
+    return !!src && !!cardRecIf(g, src) && matchesFilter(g, card(g, src).code, c.testSource);
   }
   if ("remainingSanity" in c) return !!you && remainingSanity(g, you) <= c.remainingSanity.max;
-  if ("eventEnemyExhausted" in c) return !!ctx.enemy && !!g.s.cards[ctx.enemy]?.exhausted;
+  if ("eventEnemyExhausted" in c) return !!ctx.enemy && !!cardRecIf(g, ctx.enemy)?.exhausted;
   if ("eventEnemyAttackedYouThisRound" in c)
     return !!ctx.enemy && !!you && attacked.get(g, [ctx.enemy, you]) === g.s.round;
   if ("eventCardIsSelf" in c) return !!ctx.card && ctx.card === ctx.source;
   if ("canPay" in c) return !!you && !!ctx.source && canPay(g, you, ctx.source, c.canPay);
   if ("testTokens" in c) return !!g.s.skillTest?.tokens.some((t) => c.testTokens.includes(t));
   if ("eventAtThisLocation" in c)
-    return !!ctx.inv && !!ctx.source && g.s.invs[ctx.inv]?.location === ctx.source;
+    return !!ctx.inv && !!ctx.source && invRecIf(g, ctx.inv)?.location === ctx.source;
   if ("script" in c) {
-    const own = ctx.source ? g.s.cards[ctx.source]?.code : undefined;
+    const own = ctx.source ? cardRecIf(g, ctx.source)?.code : undefined;
     const fn =
       (own ? g.db.scripts[own]?.conditions?.[c.script] : undefined) ??
       g.db.scripts[g.s.scenarioId]?.conditions?.[c.script];

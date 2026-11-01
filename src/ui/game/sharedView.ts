@@ -7,7 +7,7 @@ import { cardOfIf } from "../../engine/core";
 export type SharedView = ShownView;
 
 /** the act, agenda and reference decks, and a card no investigator owns that is on this table */
-export function sharedView(game: Pick<GameState, "cards">, m: Modal): m is SharedView {
+export function sharedView(game: Pick<GameState, "world">, m: Modal): m is SharedView {
   if (!m) return false;
   if ("deck" in m) return true;
   return "card" in m && cardOfIf(game, m.card)?.owner === null;

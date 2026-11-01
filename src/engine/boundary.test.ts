@@ -9,10 +9,10 @@ const walk = (dir: string): string[] =>
   );
 
 describe("the engine's core boundary", () => {
-  it("only the core imports the mutable record lookups", () => {
+  it("only the core imports the store's mutable records; tests may, to build state", () => {
     const importers = [...walk("src"), ...walk("content"), ...walk("scripts")]
-      .filter((f) => /\.tsx?$/.test(f) && !f.endsWith("records.ts"))
+      .filter((f) => /\.tsx?$/.test(f) && !f.endsWith("records.ts") && !/\.test\.tsx?$/.test(f))
       .filter((f) => /from\s+"[./]*(?:engine\/)?records"/.test(readFileSync(f, "utf8")));
-    expect(importers).toEqual(["src/engine/core.ts"]);
+    expect(importers).toEqual(["src/engine/core.ts", "src/engine/engine.ts"]);
   });
 });

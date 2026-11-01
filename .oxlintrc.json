@@ -67,52 +67,77 @@
           {
             "object": "game",
             "property": "cards",
-            "message": "read cards and investigators through cardOf / invOf / cardsOf / invsOf (src/engine/core.ts, ADR-0022)"
+            "message": "read cards, investigators and piles through cardOf / invOf / cardsOf / invsOf / pileOf (src/engine/core.ts, ADR-0022, ADR-0023)"
           },
           {
             "object": "game",
             "property": "invs",
-            "message": "read cards and investigators through cardOf / invOf / cardsOf / invsOf (src/engine/core.ts, ADR-0022)"
+            "message": "read cards, investigators and piles through cardOf / invOf / cardsOf / invsOf / pileOf (src/engine/core.ts, ADR-0022, ADR-0023)"
           },
           {
             "object": "state",
             "property": "cards",
-            "message": "read cards and investigators through cardOf / invOf / cardsOf / invsOf (src/engine/core.ts, ADR-0022)"
+            "message": "read cards, investigators and piles through cardOf / invOf / cardsOf / invsOf / pileOf (src/engine/core.ts, ADR-0022, ADR-0023)"
           },
           {
             "object": "state",
             "property": "invs",
-            "message": "read cards and investigators through cardOf / invOf / cardsOf / invsOf (src/engine/core.ts, ADR-0022)"
+            "message": "read cards, investigators and piles through cardOf / invOf / cardsOf / invsOf / pileOf (src/engine/core.ts, ADR-0022, ADR-0023)"
           },
           {
             "object": "next",
             "property": "cards",
-            "message": "read cards and investigators through cardOf / invOf / cardsOf / invsOf (src/engine/core.ts, ADR-0022)"
+            "message": "read cards, investigators and piles through cardOf / invOf / cardsOf / invsOf / pileOf (src/engine/core.ts, ADR-0022, ADR-0023)"
           },
           {
             "object": "next",
             "property": "invs",
-            "message": "read cards and investigators through cardOf / invOf / cardsOf / invsOf (src/engine/core.ts, ADR-0022)"
+            "message": "read cards, investigators and piles through cardOf / invOf / cardsOf / invsOf / pileOf (src/engine/core.ts, ADR-0022, ADR-0023)"
           },
           {
             "object": "prev",
             "property": "cards",
-            "message": "read cards and investigators through cardOf / invOf / cardsOf / invsOf (src/engine/core.ts, ADR-0022)"
+            "message": "read cards, investigators and piles through cardOf / invOf / cardsOf / invsOf / pileOf (src/engine/core.ts, ADR-0022, ADR-0023)"
           },
           {
             "object": "prev",
             "property": "invs",
-            "message": "read cards and investigators through cardOf / invOf / cardsOf / invsOf (src/engine/core.ts, ADR-0022)"
+            "message": "read cards, investigators and piles through cardOf / invOf / cardsOf / invsOf / pileOf (src/engine/core.ts, ADR-0022, ADR-0023)"
           },
           {
             "object": "held",
             "property": "cards",
-            "message": "read cards and investigators through cardOf / invOf / cardsOf / invsOf (src/engine/core.ts, ADR-0022)"
+            "message": "read cards, investigators and piles through cardOf / invOf / cardsOf / invsOf / pileOf (src/engine/core.ts, ADR-0022, ADR-0023)"
           },
           {
             "object": "held",
             "property": "invs",
-            "message": "read cards and investigators through cardOf / invOf / cardsOf / invsOf (src/engine/core.ts, ADR-0022)"
+            "message": "read cards, investigators and piles through cardOf / invOf / cardsOf / invsOf / pileOf (src/engine/core.ts, ADR-0022, ADR-0023)"
+          },
+          {
+            "object": "game",
+            "property": "world",
+            "message": "read cards, investigators and piles through cardOf / invOf / cardsOf / invsOf / pileOf (src/engine/core.ts, ADR-0022, ADR-0023)"
+          },
+          {
+            "object": "state",
+            "property": "world",
+            "message": "read cards, investigators and piles through cardOf / invOf / cardsOf / invsOf / pileOf (src/engine/core.ts, ADR-0022, ADR-0023)"
+          },
+          {
+            "object": "next",
+            "property": "world",
+            "message": "read cards, investigators and piles through cardOf / invOf / cardsOf / invsOf / pileOf (src/engine/core.ts, ADR-0022, ADR-0023)"
+          },
+          {
+            "object": "prev",
+            "property": "world",
+            "message": "read cards, investigators and piles through cardOf / invOf / cardsOf / invsOf / pileOf (src/engine/core.ts, ADR-0022, ADR-0023)"
+          },
+          {
+            "object": "held",
+            "property": "world",
+            "message": "read cards, investigators and piles through cardOf / invOf / cardsOf / invsOf / pileOf (src/engine/core.ts, ADR-0022, ADR-0023)"
           }
         ]
       }

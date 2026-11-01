@@ -19,6 +19,7 @@ import {
   zoneOf,
 } from "./natkit";
 import { gOf, options, pick } from "./testkit";
+import { allCardRecsIn, cardRecIn, invStateIn } from "./records";
 
 const R = ROLAND;
 const roland = (prep: (g: G) => void = () => {}, bag?: string[]) => game([R], prep, bag);
@@ -43,9 +44,9 @@ describe("Guardian", () => {
 
   it("Police Badge gives +1 willpower and, discarded, 2 more actions", () => {
     let r = roland((g) => inPlay(g, R, "01027"));
-    const before = r.state.invs[R].actionsLeft;
+    const before = invStateIn(r.state, R).actionsLeft;
     r = pick(r, /^Police Badge/);
-    expect(r.state.invs[R].actionsLeft).toBe(before + 2);
+    expect(invStateIn(r.state, R).actionsLeft).toBe(before + 2);
     expect(zoneOf(r, "01027")).toEqual(["discard"]);
   });
 
@@ -56,7 +57,7 @@ describe("Guardian", () => {
     });
     r = toTurn(pick(r, /^Beat Cop/));
     expect(damageOn(r, MINION)).toBe(1);
-    const cop = Object.values(r.state.cards).find((c) => c.code === "01028")!;
+    const cop = allCardRecsIn(r.state).find((c) => c.code === "01028")!;
     expect(cop).toMatchObject({ zone: "play", damage: 1, exhausted: true });
   });
 
@@ -75,7 +76,7 @@ describe("Seeker", () => {
   it("Magnifying Glass returns to the hand when the location has no clues", () => {
     let r = roland((g) => {
       inPlay(g, R, "01040");
-      g.s.cards[inv(g, R).location!].clues = 0;
+      cardRecIn(g.s, inv(g, R).location!).clues = 0;
     });
     r = pick(r, /^Magnifying Glass/);
     expect(zoneOf(r, "01040")).toEqual(["hand"]);
@@ -104,11 +105,11 @@ describe("Seeker", () => {
   it("Cryptic Research: the chosen investigator draws 3", () => {
     let r = game([R, DAISY], (g) => {
       hand(g, R, "01043");
-      g.s.invs[DAISY].location = inv(g, R).location;
+      invStateIn(g.s, DAISY).location = inv(g, R).location;
     });
-    const n = r.state.invs[DAISY].hand.length;
+    const n = invStateIn(r.state, DAISY).hand.length;
     r = pick(pick(r, /^Play Cryptic Research/), "Daisy Walker");
-    expect(r.state.invs[DAISY].hand.length).toBe(n + 3);
+    expect(invStateIn(r.state, DAISY).hand.length).toBe(n + 3);
   });
 });
 
@@ -116,11 +117,11 @@ describe("Rogue", () => {
   it("Leo De Luca gives an action at once and one each turn", () => {
     let r = roland((g) => {
       hand(g, R, "01054");
-      g.s.invs[R].resources = 6;
+      invStateIn(g.s, R).resources = 6;
     });
-    const before = r.state.invs[R].actionsLeft;
+    const before = invStateIn(r.state, R).actionsLeft;
     r = pick(r, /^Play Leo De Luca/);
-    expect(r.state.invs[R].actionsLeft).toBe(before);
+    expect(invStateIn(r.state, R).actionsLeft).toBe(before);
   });
 
   it("Cat Burglar disengages and moves without an attack of opportunity", () => {
@@ -131,7 +132,7 @@ describe("Rogue", () => {
     });
     r = toTurn(pick(r, /^Cat Burglar/));
     expect(r.state.log.some((e) => e.type === "attack")).toBe(false);
-    expect(card(gOf(r), r.state.invs[R].location!).code).toBe(HALLWAY);
+    expect(card(gOf(r), invStateIn(r.state, R).location!).code).toBe(HALLWAY);
     expect(enemyIn(r, MINION)!.engagedWith).toBe(null);
   });
 
@@ -154,10 +155,10 @@ describe("Rogue", () => {
   it("Hot Streak gains 10 resources", () => {
     let r = roland((g) => {
       hand(g, R, "01057");
-      g.s.invs[R].resources = 5;
+      invStateIn(g.s, R).resources = 5;
     });
     r = pick(r, /^Play Hot Streak/);
-    expect(r.state.invs[R].resources).toBe(12); // 5 - 3 + 10
+    expect(invStateIn(r.state, R).resources).toBe(12); // 5 - 3 + 10
   });
 });
 
@@ -167,7 +168,7 @@ describe("Mystic", () => {
       (g) => {
         hand(g, R, "01069");
         enemyHere(g, R, PRIEST);
-        g.s.invs[R].resources = 5;
+        invStateIn(g.s, R).resources = 5;
       },
       ["+1"],
     );
@@ -180,7 +181,7 @@ describe("Mystic", () => {
     let r = roland((g) => {
       hand(g, R, "01068");
       enemyHere(g, R, MINION);
-      g.s.invs[R].resources = 5;
+      invStateIn(g.s, R).resources = 5;
     });
     r = toTurn(pick(r, "End turn"), (x) => options(x).some((o) => o.startsWith("Mind Wipe")));
     r = pick(r, /^Mind Wipe/);
@@ -215,7 +216,7 @@ describe("Mystic", () => {
     r = toTurn(r);
     expect(lastResult(r).tokens).toEqual(["+1"]);
     expect(r.state.chaosBag.sort()).toEqual(["+1", "-4"]);
-    expect(Object.values(r.state.cards).find((c) => c.code === "01071")!.uses).toBe(3);
+    expect(allCardRecsIn(r.state).find((c) => c.code === "01071")!.uses).toBe(3);
   });
 });
 
@@ -225,21 +226,21 @@ describe("Survivor", () => {
       inPlay(g, R, "01082");
       enemyHere(g, R, MINION);
       enemyHere(g, R, PRIEST, false);
-      g.s.cards[enemyIn({ state: g.s, events: [] }, PRIEST)!.id].exhausted = true;
+      cardRecIn(g.s, enemyIn({ state: g.s, events: [] }, PRIEST)!.id).exhausted = true;
     });
     // the Ghoul Minion's attack of opportunity on drawing
     r = toTurn(pick(r, /^Draw/), (x) => options(x).some((o) => o.startsWith("Aquinnah")));
     r = toTurn(pick(r, /^Aquinnah/));
     expect(damageOn(r, PRIEST)).toBe(1);
-    expect(r.state.invs[R].damage).toBe(0);
-    expect(r.state.invs[R].horror).toBe(1);
+    expect(invStateIn(r.state, R).damage).toBe(0);
+    expect(invStateIn(r.state, R).horror).toBe(1);
   });
 
   it("Close Call shuffles the evaded enemy into the encounter deck", () => {
     let r = roland((g) => {
       hand(g, R, "01083");
       enemyHere(g, R, ACOLYTE);
-      g.s.invs[R].resources = 5;
+      invStateIn(g.s, R).resources = 5;
     });
     r = toTurn(pick(r, /^Evade Acolyte/), (x) =>
       options(x).some((o) => o.startsWith("Close Call")),
@@ -256,13 +257,13 @@ describe("Survivor", () => {
       },
       ["-1"],
     );
-    const n = r.state.invs[R].hand.length;
+    const n = invStateIn(r.state, R).hand.length;
     r = toTurn(pick(r, /^Fight Ghoul Priest/), (x) =>
       options(x).some((o) => o.startsWith("Lucky")),
     );
     r = toTurn(pick(r, /^Lucky/));
     expect(lastResult(r).success).toBe(true);
-    expect(r.state.invs[R].hand.length).toBe(n);
+    expect(invStateIn(r.state, R).hand.length).toBe(n);
   });
 
   it("Will to Survive: no chaos token for the rest of the turn", () => {
@@ -270,7 +271,7 @@ describe("Survivor", () => {
       (g) => {
         hand(g, R, "01085");
         enemyHere(g, R, PRIEST);
-        g.s.invs[R].resources = 5;
+        invStateIn(g.s, R).resources = 5;
       },
       ["autoFail"],
     );

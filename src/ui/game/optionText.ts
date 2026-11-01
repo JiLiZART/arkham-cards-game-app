@@ -9,7 +9,7 @@ import { cardOfIf } from "../../engine/core";
  */
 export function abilityRef(
   o: ChoiceOption,
-  game: Pick<GameState, "cards">,
+  game: Pick<GameState, "world">,
 ): { code: string; index: number } | null {
   const v = o.value as
     | { kind?: string; card?: string; index?: number; ability?: { card: string; index: number } }
@@ -34,7 +34,7 @@ export function abilityRef(
  */
 export function optionLabel(
   o: ChoiceOption,
-  game: Pick<GameState, "cards">,
+  game: Pick<GameState, "world">,
   locale: string,
 ): string {
   // an option with a string of its own (who takes the damage): the card's name in the game's language goes into it

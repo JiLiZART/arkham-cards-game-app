@@ -11,6 +11,7 @@ import {
   momentClip,
   musicFor,
 } from "./sounds";
+import { allCardRecsIn, cardRecIn, invStateIn } from "../../engine/records";
 
 const R = "01001";
 const fresh = skipMulligans(start("the-gathering", [R], 1)).state;
@@ -20,7 +21,7 @@ const ev = (
   data: Record<string, unknown> = {},
   card: string | null = null,
 ): GameEvent => ({ type, text: type, inv: R, card, data });
-const codeOf = (code: string) => Object.values(fresh.cards).find((c) => c.code === code)!.id;
+const codeOf = (code: string) => allCardRecsIn(fresh).find((c) => c.code === code)!.id;
 const with_ = (patch: (s: GameState) => void): GameState => {
   const s = structuredClone(fresh);
   patch(s);
@@ -97,8 +98,8 @@ describe("musicFor", () => {
   });
 
   it("the current agenda's track, else the current act's, else the bed", () => {
-    const actCode = fresh.cards[fresh.act!].code;
-    const agendaCode = fresh.cards[fresh.agenda!].code;
+    const actCode = cardRecIn(fresh, fresh.act!).code;
+    const agendaCode = cardRecIn(fresh, fresh.agenda!).code;
     expect(musicFor(fresh, scored(`card:${actCode}`))).toBe(`card:${actCode}`);
     expect(musicFor(fresh, scored(`card:${actCode}`, `card:${agendaCode}`))).toBe(
       `card:${agendaCode}`,
@@ -152,10 +153,10 @@ describe("musicFor", () => {
       musicFor(
         with_((s) => {
           s.scenarioId = "extracurricular-activity";
-          s.cards[ghoul] = {
-            ...s.cards[ghoul],
+          s.world.tables.card[ghoul] = {
+            ...cardRecIn(s, ghoul),
             zone: "enemy",
-            location: s.invs[R].location,
+            location: invStateIn(s, R).location,
             engagedWith: R,
           };
         }),
@@ -168,16 +169,21 @@ describe("musicFor", () => {
     const ghoul = codeOf("01160");
     const engaged = with_(
       (s) =>
-        (s.cards[ghoul] = {
-          ...s.cards[ghoul],
+        (s.world.tables.card[ghoul] = {
+          ...cardRecIn(s, ghoul),
           zone: "enemy",
-          location: s.invs[R].location,
+          location: invStateIn(s, R).location,
           engagedWith: R,
         }),
     );
     expect(musicFor(engaged, m)).toBe("fight");
     const gone = with_(
-      (s) => (s.cards[ghoul] = { ...s.cards[ghoul], zone: "discard", engagedWith: null }),
+      (s) =>
+        (s.world.tables.card[ghoul] = {
+          ...cardRecIn(s, ghoul),
+          zone: "discard",
+          engagedWith: null,
+        }),
     );
     expect(musicFor(gone, m)).toBe("bed:the-gathering");
   });
@@ -189,16 +195,16 @@ describe("musicFor", () => {
         m,
       ),
     ).toBe("tension");
-    const threshold = db.cards[fresh.cards[fresh.agenda!].code].doom!;
-    const almost = with_((s) => (s.cards[s.agenda!].doom = threshold - 1));
+    const threshold = db.cards[cardRecIn(fresh, fresh.agenda!).code].doom!;
+    const almost = with_((s) => (cardRecIn(s, s.agenda!).doom = threshold - 1));
     expect(musicFor(almost, m)).toBe("tension");
     const ghoul = codeOf("01160");
     const both = with_((s) => {
       s.phase = "enemy";
-      s.cards[ghoul] = {
-        ...s.cards[ghoul],
+      s.world.tables.card[ghoul] = {
+        ...cardRecIn(s, ghoul),
         zone: "enemy",
-        location: s.invs[R].location,
+        location: invStateIn(s, R).location,
         engagedWith: R,
       };
     });

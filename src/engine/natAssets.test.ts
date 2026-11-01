@@ -22,6 +22,7 @@ import {
   toTurn,
 } from "./natkit";
 import { gOf, locId, options, pick } from "./testkit";
+import { allCardRecsIn, cardRecIn, invStateIn } from "./records";
 
 beforeAll(async () => {
   await loadPack("nat");
@@ -37,15 +38,14 @@ const win = (trigger: string) => (x: Result) =>
 const lastValue = (r: Result) =>
   (r.state.log.filter((e) => e.type === "testResult").at(-1)!.data as { value: number }).value;
 const inZone = (r: Result, code: string, zone: string) =>
-  Object.values(r.state.cards).some((c) => c.code === code && c.zone === zone);
-const cardOf = (r: Result, code: string) =>
-  Object.values(r.state.cards).find((c) => c.code === code)!;
+  allCardRecsIn(r.state).some((c) => c.code === code && c.zone === zone);
+const cardOf = (r: Result, code: string) => allCardRecsIn(r.state).find((c) => c.code === code)!;
 /** a card of `code` on top of the investigator's deck, `at` cards down */
 function onDeck(g: G, i: string, code: string, at = 0) {
   const id = createCard(g, code, "limbo", i);
   moveCard(g, id, "hand");
   moveCard(g, id, "deck");
-  const d = g.s.invs[i].deck;
+  const d = invStateIn(g.s, i).deck;
   d.splice(d.indexOf(id), 1);
   d.splice(at, 0, id);
   return id;
@@ -91,31 +91,31 @@ describe("Grete Wagner", () => {
     r = toTurn(pick(r, /^Fight/), offered(/^Grete Wagner/));
     expect(lastValue(r)).toBe(6);
     r = finish(pick(r, /^Grete Wagner/));
-    expect(r.state.invs[N].clues).toBe(1);
+    expect(invStateIn(r.state, N).clues).toBe(1);
     expect(cardOf(r, "60107").damage).toBe(1);
     expect(cardOf(r, "60107").exhausted).toBe(true);
   });
   it("(0) is discarded when the damage is her last point of health", () => {
     let r = nathaniel((g) => {
-      g.s.cards[inPlay(g, N, "60107")].damage = 2;
+      cardRecIn(g.s, inPlay(g, N, "60107")).damage = 2;
       enemyHere(g, N, ACOLYTE);
     });
     r = toTurn(pick(r, /^Fight/), offered(/^Grete Wagner/));
     r = finish(pick(r, /^Grete Wagner/));
-    expect(r.state.invs[N].clues).toBe(1);
+    expect(invStateIn(r.state, N).clues).toBe(1);
     expect(inZone(r, "60107", "discard")).toBe(true);
   });
   it("(3) +1 combat and +1 intellect; discovers a clue at a connecting location", () => {
     let r = nathaniel((g) => {
       inPlay(g, N, "60128");
       enemyHere(g, N, ACOLYTE);
-      g.s.cards[locId(g, STUDY)].clues = 0;
-      g.s.cards[addLocation(g, HALLWAY, [[STUDY, HALLWAY]])].clues = 1;
+      cardRecIn(g.s, locId(g, STUDY)).clues = 0;
+      cardRecIn(g.s, addLocation(g, HALLWAY, [[STUDY, HALLWAY]])).clues = 1;
     });
     r = toTurn(pick(r, /^Fight/), offered(/^Grete Wagner/));
     r = pick(r, /^Grete Wagner/);
     expect(card(gOf(r), locId(gOf(r), HALLWAY)).clues).toBe(0);
-    expect(r.state.invs[N].clues).toBe(1);
+    expect(invStateIn(r.state, N).clues).toBe(1);
   });
 });
 
@@ -132,9 +132,9 @@ describe("Relentless", () => {
     r = pick(r, /^Relentless/);
     r = finish(r);
     expect(cardOf(r, "60109").damage).toBe(2);
-    const before = r.state.invs[N].resources;
+    const before = invStateIn(r.state, N).resources;
     r = pick(r, /^Relentless: discard/);
-    expect(r.state.invs[N].resources).toBe(before + 2);
+    expect(invStateIn(r.state, N).resources).toBe(before + 2);
     expect(inZone(r, "60109", "discard")).toBe(true);
   });
 });
@@ -152,7 +152,7 @@ describe("Safeguard", () => {
     );
     r = toTurn(move(r, /^Move to Hallway/), offered(/^Safeguard/));
     r = pick(r, /^Safeguard/);
-    expect(r.state.invs[N].location).toBe(locId(gOf(r), HALLWAY));
+    expect(invStateIn(r.state, N).location).toBe(locId(gOf(r), HALLWAY));
     expect(cardOf(r, "60110").exhausted).toBe(true);
   });
   it("is not offered for a move from another location", () => {
@@ -160,7 +160,7 @@ describe("Safeguard", () => {
       inPlay(g, N, "60110");
       const h = addLocation(g, HALLWAY, [[STUDY, HALLWAY]]);
       addLocation(g, ATTIC, [[HALLWAY, ATTIC]]);
-      g.s.invs[DAISY].location = h;
+      invStateIn(g.s, DAISY).location = h;
     });
     r = toTurn(
       pick(r, "End turn"),
@@ -192,10 +192,10 @@ describe("Physical Training (4)", () => {
     for (const used of [1, 2]) {
       r = pick(r, /^Physical Training: \+1 combat/);
       expect(cardOf(r, "60131").uses).toBe(2 - used);
-      expect(r.state.invs[N].resources).toBe(5);
+      expect(invStateIn(r.state, N).resources).toBe(5);
     }
     r = pick(r, /^Physical Training: \+1 combat/);
-    expect(r.state.invs[N].resources).toBe(4);
+    expect(invStateIn(r.state, N).resources).toBe(4);
     expect(inZone(r, "60131", "play")).toBe(true);
     r = finish(pick(r, /^Done|^done/));
     r = toTurn(pick(r, "End turn"), (x) => x.state.round === 2 && x.state.pending?.kind === "turn");
@@ -208,11 +208,11 @@ describe("Randall Cho", () => {
   it("heals 3 damage", () => {
     let r = nathaniel((g) => {
       hand(g, N, "60102");
-      g.s.invs[N].damage = 3;
+      invStateIn(g.s, N).damage = 3;
     });
     r = pick(toTurn(pick(r, /^Play Randall Cho/), offered(/^Randall Cho/)), /^Randall Cho/);
     r = pick(r, /^Heal 3 damage/);
-    expect(r.state.invs[N].damage).toBe(0);
+    expect(invStateIn(r.state, N).damage).toBe(0);
   });
   it("plays a Weapon from the discard pile, paying its cost", () => {
     let r = nathaniel((g) => {
@@ -225,7 +225,7 @@ describe("Randall Cho", () => {
     r = pick(r, /^Boxing Gloves/);
     r = finish(r);
     expect(inZone(r, "60105", "play")).toBe(true);
-    expect(r.state.invs[N].resources).toBe(5 - 2 - 3);
+    expect(invStateIn(r.state, N).resources).toBe(5 - 2 - 3);
   });
 });
 
@@ -326,7 +326,7 @@ describe("Tommy Malloy", () => {
       enemyHere(g, N, "60103", false);
     });
     const g = gOf(r);
-    const tommy = Object.values(r.state.cards).find((c) => c.code === "60103")!;
+    const tommy = allCardRecsIn(r.state).find((c) => c.code === "60103")!;
     expect(preyCandidates(g, tommy.id, [DAISY, N])).toEqual([N]);
     expect(preyCandidates(g, tommy.id, [DAISY])).toEqual([]);
   });
@@ -346,20 +346,20 @@ describe("Self-Destructive", () => {
     nathaniel((g) => {
       const id = createCard(g, "60104", "limbo", N);
       moveCard(g, id, "threat");
-      g.s.cards[id].controller = N;
+      cardRecIn(g.s, id).controller = N;
       prep(g);
     });
   it("deals its bearer 1 damage each time they damage an enemy", () => {
     let r = bearing((g) => enemyHere(g, N, PRIEST));
     r = finish(pick(r, /^Fight/));
-    expect(r.state.invs[N].damage).toBe(1);
+    expect(invStateIn(r.state, N).damage).toBe(1);
     expect(enemyIn(r, PRIEST)!.damage).toBe(1);
   });
   it("is discarded for two actions", () => {
     let r = bearing();
     r = pick(r, /^Discard Self-Destructive/);
     expect(inZone(r, "60104", "discard")).toBe(true);
-    expect(r.state.invs[N].actionsLeft).toBe(1);
+    expect(invStateIn(r.state, N).actionsLeft).toBe(1);
   });
 });
 

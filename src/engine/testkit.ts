@@ -63,7 +63,7 @@ export function skipMulligans(r: Result): Result {
   return r;
 }
 
-import { card, createCard, def, findByCode, inv, moveCard, type G } from "./core";
+import { card, createCard, def, findByCode, type G, inv, moveCard, setEngaged } from "./core";
 import { run } from "./engine";
 
 export const gOf = (r: Result): G => ({ s: r.state, db, events: [] });
@@ -94,7 +94,7 @@ export function giveCard(g: G, i: string, code: string) {
 export function putEnemy(g: G, code: string, at: string, engagedWith: string | null = null) {
   const id = createCard(g, code, "limbo");
   moveCard(g, id, "enemy", { location: at });
-  g.s.cards[id].engagedWith = engagedWith;
+  setEngaged(g, id, engagedWith);
   return id;
 }
 

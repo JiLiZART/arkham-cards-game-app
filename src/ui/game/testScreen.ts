@@ -18,7 +18,7 @@ const gOf = (game: GameState, db: ContentDb): G => ({ s: game, db, events: [] })
 export type Subject = { kind: "card"; id: InstId } | { kind: "portrait"; inv: InvId };
 
 /** what the test is about: the card it is against (enemy, location), else the card that called for it, else the investigator */
-export function subjectOf(test: SkillTestState, game: Pick<GameState, "cards">): Subject {
+export function subjectOf(test: SkillTestState, game: Pick<GameState, "world">): Subject {
   const id = [test.target, test.source].find((c): c is InstId => !!c && !!cardOfIf(game, c));
   return id ? { kind: "card", id } : { kind: "portrait", inv: test.inv };
 }

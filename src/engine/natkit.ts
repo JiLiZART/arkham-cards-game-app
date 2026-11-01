@@ -1,6 +1,15 @@
 /** helpers for the nat pack's card tests (not used at runtime) */
 import { connections } from "./flags";
-import { createCard, type G, inv, moveCard, reveal, setController, setCounter } from "./core";
+import {
+  cardsOf,
+  createCard,
+  type G,
+  inv,
+  moveCard,
+  reveal,
+  setController,
+  setCounter,
+} from "./core";
 import { createGame, type Result } from "./engine";
 import type { GameSetup } from "./types";
 import { db, deckCodes, mutate, pick, putEnemy, skipMulligans } from "./testkit";
@@ -70,9 +79,9 @@ export const enemyHere = (g: G, i: string, code = MINION, engaged = true) =>
   putEnemy(g, code, inv(g, i).location!, engaged ? i : null);
 export const attacks = (r: Result) => r.state.log.filter((e) => e.type === "attack").length;
 export const enemyIn = (r: Result, code: string) =>
-  Object.values(r.state.cards).find((c) => c.code === code && c.zone === "enemy");
+  cardsOf(r.state).find((c) => c.code === code && c.zone === "enemy");
 export const zoneOf = (r: Result, code: string) =>
-  Object.values(r.state.cards)
+  cardsOf(r.state)
     .filter((c) => c.code === code)
     .map((c) => c.zone);
 

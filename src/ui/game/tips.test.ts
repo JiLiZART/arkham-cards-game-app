@@ -3,6 +3,7 @@ import { dispatch } from "../../engine/engine";
 import { db, skipMulligans, start } from "../../engine/testkit";
 import type { GameState } from "../../engine/types";
 import { pickTip, type TipContext } from "./tips";
+import { allCardRecsIn, cardRecIn, invStateIn, withCardsIn } from "../../engine/records";
 
 const R = "01001";
 const ctx = (patch: Partial<TipContext> = {}): TipContext => ({
@@ -75,15 +76,11 @@ describe("pickTip", () => {
   });
 
   it("an enemy with the viewer points at it", () => {
-    const study = fresh.invs[R].location!;
-    const ghoul = Object.values(fresh.cards).find((c) => c.code === "01160")!.id;
-    const g: GameState = {
-      ...fresh,
-      cards: {
-        ...fresh.cards,
-        [ghoul]: { ...fresh.cards[ghoul], zone: "enemy", location: study, engagedWith: R },
-      },
-    };
+    const study = invStateIn(fresh, R).location!;
+    const ghoul = allCardRecsIn(fresh).find((c) => c.code === "01160")!.id;
+    const g: GameState = withCardsIn(fresh, {
+      [ghoul]: { ...cardRecIn(fresh, ghoul), zone: "enemy", location: study, engagedWith: R },
+    });
     const tip = pickTip(g, ctx(), new Set(["start", "turn"]), true)!;
     expect(tip.id).toBe("enemy");
     expect(tip.anchor(g, ctx())).toEqual({ card: ghoul });

@@ -16,6 +16,7 @@ import {
   startLocale,
   type Storage,
 } from "./store";
+import { invStateIn } from "../../engine/records";
 
 const mem = (): Storage & { data: Map<string, string> } => {
   const data = new Map<string, string>();
@@ -51,9 +52,9 @@ describe("ui store", () => {
     expect(s.getState().screen).toBe("game");
     begin(s);
     s.getState().skipEvents();
-    const res = s.getState().game!.invs["01001"].resources;
+    const res = invStateIn(s.getState().game!, "01001").resources;
     s.getState().choose(JSON.stringify({ kind: "resource" }));
-    expect(s.getState().game!.invs["01001"].resources).toBe(res + 1);
+    expect(invStateIn(s.getState().game!, "01001").resources).toBe(res + 1);
   });
 
   it("blocks input while events are animating", () => {
@@ -288,7 +289,7 @@ describe("undo", () => {
     s.getState().choose(commit.id);
     expect(canUndo(s.getState())).toBe(true);
     s.getState().undo();
-    expect(s.getState().game!.invs["01001"].hand).toContain(commit.card);
+    expect(invStateIn(s.getState().game!, "01001").hand).toContain(commit.card);
     expect(s.getState().game!.pending!.kind).toBe("commit");
     s.getState().undo();
     expect(s.getState().game).toEqual(g0);
@@ -391,7 +392,7 @@ describe("cancelling a skill test before the draw", () => {
     expect(g.pending!.kind).toBe("turn");
     expect(g.skillTest).toBeNull();
     expect(s.getState().actions.length).toBe(before - 1);
-    expect(g.invs["01001"].actionsLeft).toBe(3);
+    expect(invStateIn(g, "01001").actionsLeft).toBe(3);
   });
 
   it("not once the test is past its commit window, nor when something hidden came out since it began", () => {
@@ -482,11 +483,11 @@ describe("the tap decks setting", () => {
   it("turned off while a deck waits: the draw happens at once; turned on again, the next one waits", () => {
     const s = startTapping(mem());
     play(s, waiting);
-    const hand = s.getState().game!.invs["01001"].hand.length;
+    const hand = invStateIn(s.getState().game!, "01001").hand.length;
     s.getState().setTapDecks(false);
     const g = s.getState().game!;
     expect(waiting(g)).toBe(false);
-    expect(g.invs["01001"].hand.length).toBe(hand + 1);
+    expect(invStateIn(g, "01001").hand.length).toBe(hand + 1);
     s.getState().setTapDecks(true);
     play(s, (x) => waiting(x) || x.round >= 4);
     expect(waiting(s.getState().game!)).toBe(true);
@@ -527,7 +528,7 @@ describe("the tap decks setting", () => {
     again
       .getState()
       .importLog(JSON.stringify({ setup: b.getState().setup, actions: b.getState().actions }));
-    expect(again.getState().game!.invs["01001"].hand).toEqual(g.invs["01001"].hand);
+    expect(invStateIn(again.getState().game!, "01001").hand).toEqual(invStateIn(g, "01001").hand);
   });
 
   it("is saved with the other settings, and a save without it reads as off", () => {
@@ -819,5 +820,36 @@ describe("the language", () => {
     createGameStore(db, storage).getState().setLocale("ru");
     expect(createGameStore(db, storage).getState().locale).toBe("ru");
     expect(startLocale(storage, "en-US")).toBe("ru");
+  });
+});
+
+describe("the component store (engine version 6)", () => {
+  it("a game saved under version 5 is replayed into the new store and goes on from the same point", () => {
+    const storage = mem();
+    start(storage);
+    const save = JSON.parse(storage.data.get(SAVE_KEY)!);
+    const now = createGameStore(db, storage);
+    now.getState().resume();
+    save.version = 5;
+    storage.setItem(SAVE_KEY, JSON.stringify(save));
+    const old = createGameStore(db, storage);
+    old.getState().resume();
+    expect(old.getState().screen).toBe("game");
+    expect(old.getState().notice).toBeNull();
+    expect(old.getState().game).toEqual(now.getState().game);
+    expect(old.getState().actions).toEqual(now.getState().actions);
+  });
+
+  it("a game saved under version 4, before a rules change, still restarts its scenario", () => {
+    const storage = mem();
+    start(storage);
+    const save = JSON.parse(storage.data.get(SAVE_KEY)!);
+    save.version = 4;
+    storage.setItem(SAVE_KEY, JSON.stringify(save));
+    const s = createGameStore(db, storage);
+    s.getState().resume();
+    expect(s.getState().screen).toBe("log");
+    expect(s.getState().game).toBeNull();
+    expect(s.getState().notice).toMatch(/restart/);
   });
 });

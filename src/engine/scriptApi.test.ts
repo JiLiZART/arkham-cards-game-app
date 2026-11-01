@@ -22,6 +22,7 @@ import {
   type G,
 } from "./core";
 import { gOf, putEnemy, skipMulligans, start } from "./testkit";
+import { cardRecIn, invStateIn, pileRecIn } from "./records";
 
 const R = "01001";
 const D = "01002";
@@ -49,8 +50,8 @@ describe("what scripts read about the scenario", () => {
     expect(cardIf(g, "c99999")).toBeUndefined();
     expect(invIf(g, R)?.name).toBe("Roland Banks");
     expect(invIf(g, null)).toBeUndefined();
-    expect(allCards(g)).toHaveLength(Object.keys(g.s.cards).length);
-    expect(pile(g, "encounterDeck")).toBe(g.s.encounterDeck);
+    expect(allCards(g)).toHaveLength(g.s.world.entities.length);
+    expect(pile(g, "encounterDeck")).toBe(pileRecIn(g.s, "encounterDeck"));
     expect(sideDeck(g, "nowhere")).toEqual([]);
   });
 });
@@ -65,9 +66,9 @@ describe("what scripts change outside the accessors for cards, counters and flag
     expect(g.s.chaosBag.slice(n)).toEqual(["-1", "skull"]);
     const hallway = findByCode(g, "01112", ["location"]) ?? findByCode(g, "01111", ["location"])!;
     placeInvestigator(g, D, hallway.id);
-    expect(g.s.invs[D].location).toBe(hallway.id);
+    expect(invStateIn(g.s, D).location).toBe(hallway.id);
     const ghoul = putEnemy(g, "01160", findByCode(g, "01111", ["location"])!.id);
     setEngaged(g, ghoul, R);
-    expect(g.s.cards[ghoul].engagedWith).toBe(R);
+    expect(cardRecIn(g.s, ghoul).engagedWith).toBe(R);
   });
 });

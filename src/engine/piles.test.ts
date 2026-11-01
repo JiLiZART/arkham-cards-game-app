@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { inv, moveCard, reshuffleDiscard, shuffleThenTop, type G } from "./core";
 import { gOf, skipMulligans, start } from "./testkit";
 import type { InstId } from "./types";
+import { cardRecIn, pileRecIn } from "./records";
 
 const R = "01001";
 const fresh = (): G => gOf(skipMulligans(start("the-gathering", [R], 1)));
@@ -13,8 +14,8 @@ function pilesOf(g: G, id: InstId): string[] {
     ["deck", me.deck],
     ["hand", me.hand],
     ["discard", me.discard],
-    ["encounterDeck", g.s.encounterDeck],
-    ["encounterDiscard", g.s.encounterDiscard],
+    ["encounterDeck", pileRecIn(g.s, "encounterDeck")],
+    ["encounterDiscard", pileRecIn(g.s, "encounterDiscard")],
   ];
   return piles.filter(([, p]) => p.includes(id)).map(([name]) => name);
 }
@@ -30,19 +31,19 @@ describe("reshuffleDiscard", () => {
     expect(me.discard).toEqual([]);
     expect(me.deck.length).toBe(size);
     for (const id of moved) {
-      expect(g.s.cards[id].zone).toBe("deck");
+      expect(cardRecIn(g.s, id).zone).toBe("deck");
       expect(pilesOf(g, id)).toEqual(["deck"]);
     }
   });
 
   it("the encounter discard pile goes back into the encounter deck the same way", () => {
     const g = fresh();
-    const moved = g.s.encounterDeck.slice(0, 2);
+    const moved = pileRecIn(g.s, "encounterDeck").slice(0, 2);
     for (const id of moved) moveCard(g, id, "encounterDiscard");
     reshuffleDiscard(g, "encounter");
-    expect(g.s.encounterDiscard).toEqual([]);
+    expect(pileRecIn(g.s, "encounterDiscard")).toEqual([]);
     for (const id of moved) {
-      expect(g.s.cards[id].zone).toBe("encounterDeck");
+      expect(cardRecIn(g.s, id).zone).toBe("encounterDeck");
       expect(pilesOf(g, id)).toEqual(["encounterDeck"]);
     }
   });
@@ -58,7 +59,7 @@ describe("shuffleThenTop", () => {
     expect(me.deck.slice(0, 2)).toEqual([a, b]);
     expect(me.deck.length).toBe(size);
     for (const id of [a, b]) {
-      expect(g.s.cards[id].zone).toBe("deck");
+      expect(cardRecIn(g.s, id).zone).toBe("deck");
       expect(pilesOf(g, id)).toEqual(["deck"]);
     }
   });
@@ -70,7 +71,7 @@ describe("shuffleThenTop", () => {
     moveCard(g, c, "discard");
     shuffleThenTop(g, R, [c]);
     expect(me.deck[0]).toBe(c);
-    expect(g.s.cards[c].zone).toBe("deck");
+    expect(cardRecIn(g.s, c).zone).toBe("deck");
     expect(pilesOf(g, c)).toEqual(["deck"]);
   });
 });

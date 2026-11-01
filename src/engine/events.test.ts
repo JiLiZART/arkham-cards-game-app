@@ -3,6 +3,7 @@ import { autoPlay, botChoice } from "./bot";
 import { dispatch } from "./engine";
 import { db, giveCard, mutate, pick, putEnemy, skipMulligans, start } from "./testkit";
 import type { GameEvent } from "./types";
+import { cardRecIn, invStateIn } from "./records";
 
 const last = (log: GameEvent[], type: string) => [...log].reverse().find((e) => e.type === type);
 
@@ -24,7 +25,7 @@ describe("event data (for the action feed)", () => {
     let r = skipMulligans(start("the-gathering", ["01001"], 1));
     let enemy = "";
     r = mutate(r, (g) => {
-      enemy = putEnemy(g, "01160", g.s.invs["01001"].location!, "01001"); // Ghoul Minion: 1 damage, 1 horror
+      enemy = putEnemy(g, "01160", invStateIn(g.s, "01001").location!, "01001"); // Ghoul Minion: 1 damage, 1 horror
     });
     // end the turn: the engaged Ghoul attacks in the enemy phase
     r = pick(r, /^End turn/);
@@ -38,7 +39,7 @@ describe("event data (for the action feed)", () => {
     const r = autoPlay(db, skipMulligans(start("the-gathering", ["01001"], 1)), 30);
     const e = r.state.log.find((x) => x.type === "clues")!;
     expect(e.data).toMatchObject({ n: expect.any(Number) });
-    expect(db.cards[r.state.cards[e.card!].code].type).toBe("location");
+    expect(db.cards[cardRecIn(r.state, e.card!).code].type).toBe("location");
   });
 });
 

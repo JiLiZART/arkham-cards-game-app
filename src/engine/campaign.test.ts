@@ -5,6 +5,7 @@ import { applyScenarioEnd, migrateCampaign, scenarioSetup, startCampaign } from 
 import { card, def, findByCode, inv, moveCard } from "./core";
 import { createGame } from "./engine";
 import { db, gOf, mutate, skipMulligans, start } from "./testkit";
+import { allCardRecsIn, allInvStatesIn, cardRecIn, invStateIn, pileRecIn } from "./records";
 
 const ROLAND = "01001";
 const AGNES = "01004";
@@ -94,14 +95,14 @@ describe("campaign", () => {
   it("The Gathering setup", () => {
     const r = skipMulligans(start("the-gathering", [ROLAND, AGNES], 1));
     const g = gOf(r);
-    const inPlay = Object.values(g.s.cards)
+    const inPlay = allCardRecsIn(g.s)
       .filter((c) => c.zone === "location")
       .map((c) => def(g, c.id).name);
     expect(inPlay).toEqual(["Study"]);
-    expect(Object.values(g.s.invs).every((i) => def(g, i.location!).name === "Study")).toBe(true);
+    expect(allInvStatesIn(g.s).every((i) => def(g, i.location!).name === "Study")).toBe(true);
     for (const code of ["01116", "01117"]) {
       expect(findByCode(g, code)!.zone).toBe("setAside");
-      expect(g.s.encounterDeck.some((id) => card(g, id).code === code)).toBe(false);
+      expect(pileRecIn(g.s, "encounterDeck").some((id) => card(g, id).code === code)).toBe(false);
     }
   });
 
@@ -150,12 +151,14 @@ describe("campaign", () => {
       const r = start("the-gathering", [ROLAND], seed);
       const aside = (r.state.flags[`aside:${ROLAND}`] as string[] | undefined) ?? [];
       if (!aside.length) continue;
-      expect(r.state.invs[ROLAND].hand).toHaveLength(5);
-      expect(r.state.invs[ROLAND].hand.some((id) => db.cards[r.state.cards[id].code].subtype)).toBe(
-        false,
-      );
+      expect(invStateIn(r.state, ROLAND).hand).toHaveLength(5);
+      expect(
+        invStateIn(r.state, ROLAND).hand.some(
+          (id) => db.cards[cardRecIn(r.state, id).code].subtype,
+        ),
+      ).toBe(false);
       const after = skipMulligans(r);
-      expect(after.state.invs[ROLAND].deck).toContain(aside[0]);
+      expect(invStateIn(after.state, ROLAND).deck).toContain(aside[0]);
       return;
     }
     throw new Error("no seed put a weakness in the opening hand");

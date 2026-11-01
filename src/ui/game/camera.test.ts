@@ -1,6 +1,7 @@
 import { skipMulligans, start } from "../../engine/testkit";
 import { describe, expect, it } from "vitest";
 import { clampCam, eventFocus, fitCam, focusCam, panBy, zoomAt, zoomLimits } from "./camera";
+import { cardRecIn, invStateIn, withCardsIn } from "../../engine/records";
 
 const bounds = { x0: -10, x1: 10, z0: -5, z1: 5 };
 const view = { w: 1000, h: 500 };
@@ -82,21 +83,17 @@ describe("map camera", () => {
 
 describe("eventFocus", () => {
   const game = skipMulligans(start("the-gathering", ["01001"], 1)).state;
-  const study = game.invs["01001"].location!;
+  const study = invStateIn(game, "01001").location!;
   const ghoul = "g1";
-  const withGhoul = {
-    ...game,
-    cards: {
-      ...game.cards,
-      [ghoul]: {
-        ...game.cards[study],
-        id: ghoul,
-        code: "01160",
-        zone: "enemy" as const,
-        location: study,
-      },
+  const withGhoul = withCardsIn(game, {
+    [ghoul]: {
+      ...cardRecIn(game, study),
+      id: ghoul,
+      code: "01160",
+      zone: "enemy" as const,
+      location: study,
     },
-  };
+  });
   const ev = (type: string, extra: object) => ({ type, text: "", ...extra });
 
   it("an enemy's event looks at the enemy's location", () => {

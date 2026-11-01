@@ -18,6 +18,7 @@ import {
   templateKey,
   type Part,
 } from "./feed";
+import { cardRecIn, invStateIn } from "../../engine/records";
 
 const last = (log: GameEvent[], type: string) => [...log].reverse().find((e) => e.type === type)!;
 const placeholders = (s: string) => (s.match(/\{[\w:]+\}/g) ?? []).sort();
@@ -87,7 +88,7 @@ describe("feed entries", () => {
     let r = skipMulligans(start("the-gathering", ["01001"], 1));
     let enemy = "";
     r = mutate(r, (g) => {
-      enemy = putEnemy(g, "01160", g.s.invs["01001"].location!, "01001");
+      enemy = putEnemy(g, "01160", invStateIn(g.s, "01001").location!, "01001");
     });
     r = pick(r, /^End turn/);
     const f = feedEntry(
@@ -221,8 +222,8 @@ describe("float kinds", () => {
 describe("merged live feed", () => {
   const game = skipMulligans(start("the-gathering", ["01001", "01002"], 1)).state;
   const [R, D] = game.order;
-  const [r1, r2, r3] = game.invs[R].hand;
-  const d1 = game.invs[D].hand[0];
+  const [r1, r2, r3] = invStateIn(game, R).hand;
+  const d1 = invStateIn(game, D).hand[0];
   const ev = (
     type: string,
     inv: string | null,
@@ -284,9 +285,9 @@ describe("merged live feed", () => {
     const [a, b] = g.order;
     const log = [
       { type: "step", text: "upkeep", data: { step: "upkeep" } },
-      { type: "draw", text: "", inv: a, card: g.invs[a].hand[0] },
+      { type: "draw", text: "", inv: a, card: invStateIn(g, a).hand[0] },
       { type: "step", text: "x", data: { step: "hunters" } },
-      { type: "draw", text: "", inv: b, card: g.invs[b].hand[0] },
+      { type: "draw", text: "", inv: b, card: invStateIn(g, b).hand[0] },
     ];
     const state = { ...g, log };
     const entries = new Map(log.map((e, i) => [i, feedEntry(e, state, db, "en")]));
@@ -375,7 +376,7 @@ describe("encounter set icons", () => {
   it("an encounter draw shows the card's set icon right before the card, in every language", () => {
     const r = untilEncounter();
     const e = last(r.state.log, "encounter");
-    const set = db.cards[r.state.cards[e.card!].code].encounterSet!;
+    const set = db.cards[cardRecIn(r.state, e.card!).code].encounterSet!;
     for (const locale of ["en", "ru"]) {
       const parts = feedEntry(e, r.state, db, locale)!.parts;
       const at = parts.findIndex((p) => p.t === "card");

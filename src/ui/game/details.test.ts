@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { db, giveCard, mutate, pick, putEnemy, skipMulligans, start } from "../../engine/testkit";
 import type { Result } from "../../engine/engine";
 import { cardDetails, commitRow, placeDetails } from "./details";
+import { allCardRecsIn, cardRecIn, invStateIn } from "../../engine/records";
 
 const rows = (code: string, locale = "en") =>
   Object.fromEntries(cardDetails(db, code, locale).map((r) => [r.k, r]));
@@ -39,11 +40,11 @@ describe("enemy details", () => {
     let r = skipMulligans(start("the-gathering", ["01001"], 1));
     let id = "";
     r = mutate(r, (g) => {
-      const ghoul = Object.values(g.s.cards).find((c) => c.code === "01160")!;
+      const ghoul = allCardRecsIn(g.s).find((c) => c.code === "01160")!;
       Object.assign(ghoul, { zone: "enemy", damage: 1 });
       id = ghoul.id;
     });
-    const inst = r.state.cards[id];
+    const inst = cardRecIn(r.state, id);
     const got = Object.fromEntries(
       cardDetails(db, "01160", "en", { inst, game: r.state }).map((x) => [x.k, x]),
     );
@@ -87,16 +88,16 @@ describe("placeDetails", () => {
 describe("cardDetails for map locations", () => {
   // The Gathering after the first act: Study gone, the Hallway and its neighbours in play
   const r = mutate(skipMulligans(start("the-gathering", ["01001", "01002"], 1)), (g) => {
-    for (const c of Object.values(g.s.cards))
+    for (const c of allCardRecsIn(g.s))
       if (["01112", "01113", "01114", "01115"].includes(c.code)) c.zone = "location";
-    const hall = Object.values(g.s.cards).find((c) => c.code === "01112")!;
+    const hall = allCardRecsIn(g.s).find((c) => c.code === "01112")!;
     hall.revealed = true;
     hall.clues = 1;
-    Object.values(g.s.cards).find((c) => c.code === "01113")!.revealed = true;
-    g.s.invs["01001"].location = hall.id;
+    allCardRecsIn(g.s).find((c) => c.code === "01113")!.revealed = true;
+    invStateIn(g.s, "01001").location = hall.id;
   });
   const at = (code: string) => ({
-    inst: Object.values(r.state.cards).find((c) => c.code === code)!,
+    inst: allCardRecsIn(r.state).find((c) => c.code === code)!,
     game: r.state,
   });
   const loc = (code: string, locale = "en") =>
@@ -142,7 +143,7 @@ describe("commitRow", () => {
     const ids: string[] = [];
     r = mutate(r, (g) => {
       for (const c of codes) ids.push(giveCard(g, "01001", c));
-      putEnemy(g, "01160", g.s.invs["01001"].location!, "01001");
+      putEnemy(g, "01160", invStateIn(g.s, "01001").location!, "01001");
     });
     r = pick(r, /^Fight Ghoul Minion/);
     expect(r.state.pending?.kind).toBe("commit");

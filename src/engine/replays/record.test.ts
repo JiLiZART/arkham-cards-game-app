@@ -11,11 +11,11 @@ describe("recording a game", () => {
       player: "bot",
       maxChoices: 3000,
     });
-    expect(rec.state.phase).toBe("ended");
+    expect(rec.snapshot.scenario.phase).toBe("ended");
     expect(rec.actions.length).toBeGreaterThan(20);
     const again = replayRecording(db, rec);
     expect(again.kind).toBe("game");
-    expect(again.games[0].state).toEqual(rec.state);
+    expect(again.games[0].snapshot).toEqual(rec.snapshot);
     expect(again.games[0].events).toEqual(rec.events);
   });
 
@@ -72,6 +72,6 @@ describe("recording a campaign", () => {
     ]);
     const again = replayRecording(db, rec);
     expect(again.campaign).toEqual(rec.campaign);
-    expect(again.games.map((g) => g.state)).toEqual(rec.games.map((g) => g.state));
+    expect(again.games.map((g) => g.snapshot)).toEqual(rec.games.map((g) => g.snapshot));
   });
 });

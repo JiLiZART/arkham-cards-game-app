@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { locId, mutate, pick, putEnemy, skipMulligans, start } from "../../engine/testkit";
 import { phaseIsEmpty } from "./phases";
+import { cardRecIn } from "../../engine/records";
 
 const ROLAND = "01001";
 const roland = () => {
@@ -23,7 +24,7 @@ describe("phaseIsEmpty", () => {
     const hunter = (exhausted: boolean) =>
       mutate(roland(), (g) => {
         const id = putEnemy(g, "01159", locId(g, "01111"), null); // Swarm of Rats is a hunter
-        g.s.cards[id].exhausted = exhausted;
+        cardRecIn(g.s, id).exhausted = exhausted;
       });
     expect(phaseIsEmpty(hunter(false).state, "enemy")).toBe(false);
     expect(phaseIsEmpty(hunter(true).state, "enemy")).toBe(true);

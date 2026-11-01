@@ -24,6 +24,7 @@ import {
   type G,
 } from "./core";
 import { gOf, putEnemy, skipMulligans, start } from "./testkit";
+import { cardRecIn, invStateIn, pileRecIn } from "./records";
 
 const R = "01001";
 const D = "01002";
@@ -35,23 +36,23 @@ describe("card field setters", () => {
     const g = fresh();
     const e = putEnemy(g, "01160", study(g));
     exhaust(g, e);
-    expect(g.s.cards[e].exhausted).toBe(true);
+    expect(cardRecIn(g.s, e).exhausted).toBe(true);
     ready(g, e);
-    expect(g.s.cards[e].exhausted).toBe(false);
+    expect(cardRecIn(g.s, e).exhausted).toBe(false);
     const loc = findByCode(g, "01112", ["location", "setAside"])!.id;
     setCardLocation(g, e, loc);
-    expect(g.s.cards[e].location).toBe(loc);
+    expect(cardRecIn(g.s, e).location).toBe(loc);
     reveal(g, loc);
-    expect(g.s.cards[loc].revealed).toBe(true);
+    expect(cardRecIn(g.s, loc).revealed).toBe(true);
     setController(g, e, R);
     setOwner(g, e, D);
-    expect(g.s.cards[e]).toMatchObject({ controller: R, owner: D });
+    expect(cardRecIn(g.s, e)).toMatchObject({ controller: R, owner: D });
     setController(g, e, null);
-    expect(g.s.cards[e].controller).toBeNull();
+    expect(cardRecIn(g.s, e).controller).toBeNull();
     setCode(g, e, "01159");
-    expect(g.s.cards[e].code).toBe("01159");
+    expect(cardRecIn(g.s, e).code).toBe("01159");
     attachTo(g, e, loc);
-    expect(g.s.cards[e].attachedTo).toBe(loc);
+    expect(cardRecIn(g.s, e).attachedTo).toBe(loc);
   });
 });
 
@@ -63,7 +64,7 @@ describe("investigator setters", () => {
     addCounter(g, R, "physicalTrauma", 1);
     addCounter(g, R, "mentalTrauma", 2);
     addCounter(g, R, "defeatedHealth", 4);
-    expect(g.s.invs[R]).toMatchObject({
+    expect(invStateIn(g.s, R)).toMatchObject({
       actionsLeft: 3,
       actionsTaken: 1,
       physicalTrauma: 1,
@@ -76,28 +77,28 @@ describe("investigator setters", () => {
   it("begin a turn's actions, grant and spend restricted ones, note an action, clear the round and the turn's marks", () => {
     const g = fresh();
     beginActions(g, R, 3, [{ trait: "Tome", left: 1 }]);
-    expect(g.s.invs[R]).toMatchObject({ actionsLeft: 3, actionsTaken: 0 });
+    expect(invStateIn(g.s, R)).toMatchObject({ actionsLeft: 3, actionsTaken: 0 });
     grantRestricted(g, R, { designator: "fight", left: 2 });
     expect(inv(g, R).restrictedActions).toHaveLength(2);
     spendRestricted(g, R, 1, 2);
     expect(inv(g, R).restrictedActions[1].left).toBe(0);
     noteAction(g, R, "fight");
-    expect(g.s.invs[R]).toMatchObject({ actionsTaken: 1, actionsThisRound: ["fight"] });
+    expect(invStateIn(g.s, R)).toMatchObject({ actionsTaken: 1, actionsThisRound: ["fight"] });
     clearRoundActions(g);
-    expect(g.s.invs[R].actionsThisRound).toEqual([]);
+    expect(invStateIn(g.s, R).actionsThisRound).toEqual([]);
     setTurnDone(g, R, true);
-    expect(g.s.invs[R].turnDone).toBe(true);
+    expect(invStateIn(g.s, R).turnDone).toBe(true);
     clearTurnDone(g);
-    expect(g.s.invs[R].turnDone).toBe(false);
+    expect(invStateIn(g.s, R).turnDone).toBe(false);
   });
 
   it("status, with how it was defeated", () => {
     const g = fresh();
     setStatus(g, R, "defeated", "damage");
-    expect(g.s.invs[R]).toMatchObject({ status: "defeated", defeatedBy: "damage" });
+    expect(invStateIn(g.s, R)).toMatchObject({ status: "defeated", defeatedBy: "damage" });
     setStatus(g, D, "resigned");
-    expect(g.s.invs[D].status).toBe("resigned");
-    expect(g.s.invs[D].defeatedBy).toBeUndefined();
+    expect(invStateIn(g.s, D).status).toBe("resigned");
+    expect(invStateIn(g.s, D).defeatedBy).toBeUndefined();
   });
 });
 
@@ -108,9 +109,9 @@ describe("arrangeOnTop", () => {
     arrangeOnTop(g, R, [deck[4], deck[2]]);
     expect(inv(g, R).deck.slice(0, 3)).toEqual([deck[4], deck[2], deck[0]]);
     expect(inv(g, R).deck).toHaveLength(deck.length);
-    const enc = [...g.s.encounterDeck];
+    const enc = [...pileRecIn(g.s, "encounterDeck")];
     arrangeOnTop(g, "encounter", [enc[3]]);
-    expect(g.s.encounterDeck[0]).toBe(enc[3]);
-    expect(g.s.encounterDeck).toHaveLength(enc.length);
+    expect(pileRecIn(g.s, "encounterDeck")[0]).toBe(enc[3]);
+    expect(pileRecIn(g.s, "encounterDeck")).toHaveLength(enc.length);
   });
 });

@@ -14,6 +14,7 @@ import {
 import { createGame, dispatch, type Result } from "../engine";
 import { advance, type FlowValue, test } from "../flow";
 import { next } from "../rng";
+import { type Snapshot, snapshotOf } from "./snapshot";
 import type { Action, ContentDb, GameEvent, GameSetup, GameState } from "../types";
 
 /** who makes the choices: the bot's preferences, seeded random legal choices (wider coverage, rarely an ending), or
@@ -42,7 +43,14 @@ export interface Played {
   events: GameEvent[];
 }
 
-export type GameRecording = GameRecipe & { kind: "game"; actions: Action[] } & Played;
+/** what a recording keeps of a game: the snapshot of its final state (shape-independent) and its events */
+export interface Stored {
+  snapshot: Snapshot;
+  events: GameEvent[];
+}
+const store = (p: Played): Stored => ({ snapshot: snapshotOf(p.state), events: p.events });
+
+export type GameRecording = GameRecipe & { kind: "game"; actions: Action[] } & Stored;
 
 /** a campaign move: an answer to the flow's prompt, or a scenario played from its Begin prompt with this seed */
 export type CampaignMove = { flow: FlowValue } | { play: { seed: number; actions: Action[] } };
@@ -51,7 +59,7 @@ export type CampaignRecording = CampaignRecipe & {
   kind: "campaign";
   moves: CampaignMove[];
   campaign: CampaignState;
-  games: Played[];
+  games: Stored[];
 };
 
 export type Recording = GameRecording | CampaignRecording;
@@ -59,7 +67,7 @@ export type Recording = GameRecording | CampaignRecording;
 /** what a recording produces when played: its games, for a campaign the campaign at the end, and the recorded choice the engine refused (the replay stops there) */
 export interface Replayed {
   kind: Recording["kind"];
-  games: Played[];
+  games: Stored[];
   campaign?: CampaignState;
   error?: string;
 }
@@ -129,7 +137,7 @@ export function recordGame(db: ContentDb, recipe: GameRecipe): GameRecording {
       recipe.maxChoices,
     ),
   );
-  return { ...recipe, kind: "game", actions, state, events };
+  return { ...recipe, kind: "game", actions, ...store({ state, events }) };
 }
 
 /** the bot's answer to the campaign flow's prompt: read on, take the first open choice, the least of a number */
@@ -167,7 +175,7 @@ const MAX_MOVES = 400;
 export function recordCampaign(db: ContentDb, recipe: CampaignRecipe): CampaignRecording {
   let c = startCampaign(db, recipe.start);
   const moves: CampaignMove[] = [];
-  const games: Played[] = [];
+  const games: Stored[] = [];
   for (let k = 0; c.flow.waiting && k < MAX_MOVES; k++) {
     if (c.flow.waiting.step.kind === "play") {
       c = advance(db, c, "continue");
@@ -185,7 +193,7 @@ export function recordCampaign(db: ContentDb, recipe: CampaignRecipe): CampaignR
         throw new Error(`${recipe.id}: ${c.flow.play} did not end in ${recipe.maxChoices} choices`);
       c = applyScenarioEnd(db, c, p.state);
       moves.push({ play: { seed, actions: p.actions } });
-      games.push({ state: p.state, events: p.events });
+      games.push(store(p));
     } else {
       const value = botFlowAnswer(db, c);
       c = advance(db, c, value);
@@ -201,12 +209,12 @@ export function replayRecording(db: ContentDb, rec: Recording): Replayed {
     const p = play(db, createGame(db, rec.setup), (_r, k) => rec.actions[k], Infinity);
     return {
       kind: "game",
-      games: [{ state: p.state, events: p.events }],
+      games: [store(p)],
       ...(p.error ? { error: p.error } : {}),
     };
   }
   let c = startCampaign(db, rec.start);
-  const games: Played[] = [];
+  const games: Stored[] = [];
   for (const move of rec.moves) {
     if ("flow" in move) {
       c = advance(db, c, move.flow);
@@ -219,7 +227,7 @@ export function replayRecording(db: ContentDb, rec: Recording): Replayed {
       (_r, k) => move.play.actions[k],
       Infinity,
     );
-    games.push({ state: p.state, events: p.events });
+    games.push(store(p));
     if (p.error)
       return {
         kind: "campaign",

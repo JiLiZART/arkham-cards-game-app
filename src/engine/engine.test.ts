@@ -29,6 +29,7 @@ import {
   start,
 } from "./testkit";
 import type { Action } from "./types";
+import { allCardRecsIn, cardRecIn, invStateIn, pileRecIn } from "./records";
 
 const ROLAND = "01001";
 const DAISY = "01002";
@@ -75,7 +76,7 @@ describe("state & determinism", () => {
       r = dispatch(db, r.state, actions.at(-1)!);
       if (r.error) throw new Error(r.error);
     };
-    const [a, b] = r.state.invs[ROLAND].hand;
+    const [a, b] = invStateIn(r.state, ROLAND).hand;
     choose(a);
     choose(b);
     expect(r.state.pending!.options.map((o) => o.id)).toEqual(
@@ -88,7 +89,7 @@ describe("state & determinism", () => {
     expect(p.options.map((o) => o.id)).not.toContain(`un:${a}`);
     expect(p.options.find((o) => o.id === "done")!.label).toBe("Redraw 1 card(s)");
     choose("done");
-    const hand = r.state.invs[ROLAND].hand;
+    const hand = invStateIn(r.state, ROLAND).hand;
     expect(hand).toContain(a);
     expect(hand).not.toContain(b);
     expect(hand).toHaveLength(5);
@@ -108,7 +109,7 @@ describe("state & determinism", () => {
       option: JSON.stringify({ kind: "resource" }),
     });
     expect(a.error).toBeUndefined();
-    expect(a.state.invs[ROLAND].resources).toBe(6);
+    expect(invStateIn(a.state, ROLAND).resources).toBe(6);
   });
 });
 
@@ -129,7 +130,7 @@ describe("action validation", () => {
   it("rejects a move with no actions left", () => {
     let r = gathering();
     r = mutate(r, (g) => {
-      g.s.invs[ROLAND].actionsLeft = 0;
+      invStateIn(g.s, ROLAND).actionsLeft = 0;
     });
     expect(options(r).some((l) => /^(Investigate|Draw|Gain)/.test(l))).toBe(false);
     expect(options(r)).toContain("End turn");
@@ -159,7 +160,7 @@ describe("round structure", () => {
     r = mutate(r, (g) => {
       for (const code of ["01088", "01088", "01089", "01089", "01092"]) giveCard(g, ROLAND, code);
       while (inv(g, ROLAND).hand.length < 10) giveCard(g, ROLAND, "01086");
-      g.s.invs[ROLAND].hand.length = 10;
+      invStateIn(g.s, ROLAND).hand.length = 10;
     });
     // end turn → enemy phase → upkeep draws 1 (11 cards) → discard 3
     r = pick(r, "End turn");
@@ -169,7 +170,7 @@ describe("round structure", () => {
       discards++;
     }
     expect(discards).toBe(3);
-    expect(r.state.invs[ROLAND].hand.length).toBe(8);
+    expect(invStateIn(r.state, ROLAND).hand.length).toBe(8);
   });
 });
 
@@ -182,7 +183,7 @@ describe("step events", () => {
   it("enemy phase: hunters, then attacks, each once and before their events", () => {
     let r = skipMulligans(start("the-midnight-masks", [ROLAND], 3, { chaosBag: ["0"] as never }));
     r = mutate(r, (g) => {
-      const downtown = Object.values(g.s.cards).find(
+      const downtown = allCardRecsIn(g.s).find(
         (c) => c.zone === "location" && def(g, c.id).name === "Downtown",
       )!.id;
       putEnemy(g, "01159", downtown);
@@ -280,13 +281,15 @@ describe("phase pacing", () => {
     r = mutate(r, (g) => void putEnemy(g, "01160", inv(g, ROLAND).location!, ROLAND));
     while (r.state.pending?.kind !== "phase") r = pick(r, /End turn|Roland|Daisy/);
     expect(r.state.pending!.step).toMatchObject({ t: "PhasePause", phase: "enemy" });
-    expect(r.state.invs[ROLAND].damage + r.state.invs[ROLAND].horror).toBe(0);
+    expect(invStateIn(r.state, ROLAND).damage + invStateIn(r.state, ROLAND).horror).toBe(0);
     r = pick(r, "continue");
     expect(r.state.log.some((e) => e.type === "phase" && e.data?.phase === "enemy")).toBe(true);
     // the enemy phase resolves (the Ghoul attacks), then upkeep waits
     while (r.state.pending?.kind !== "phase") r = pick(r, /./);
     expect(r.state.pending!.step).toMatchObject({ phase: "upkeep" });
-    expect(r.state.invs[ROLAND].damage + r.state.invs[ROLAND].horror).toBeGreaterThan(0);
+    expect(invStateIn(r.state, ROLAND).damage + invStateIn(r.state, ROLAND).horror).toBeGreaterThan(
+      0,
+    );
   });
 
   it("replays exactly; unpaced setups never pause", () => {
@@ -320,20 +323,20 @@ describe("skill tests", () => {
     expect(
       r.state.log.some((e) => e.type === "testResult" && /= 2 vs 2 → Success/.test(e.text)),
     ).toBe(true);
-    expect(r.state.invs[ROLAND].clues).toBe(1);
+    expect(invStateIn(r.state, ROLAND).clues).toBe(1);
   });
 
   it("auto-fail fails regardless of skill", () => {
     let r = gathering([ROLAND], ["autoFail"]);
     r = mutate(r, (g) => {
-      g.s.cards[locId(g, "01111")].clues = 2;
+      cardRecIn(g.s, locId(g, "01111")).clues = 2;
     });
     r = pick(r, "Investigate Study");
     r = commitDone(r);
     expect(
       r.state.log.some((e) => e.type === "testResult" && /Fail \(auto-fail\)/.test(e.text)),
     ).toBe(true);
-    expect(r.state.invs[ROLAND].clues).toBe(0);
+    expect(invStateIn(r.state, ROLAND).clues).toBe(0);
   });
 
   it("committed icons add to the skill value", () => {
@@ -354,7 +357,7 @@ describe("skill tests", () => {
           /3 \+ 3 \(committed\) − 4 \(-4\) = 2 vs 2 → Success/.test(e.text),
       ),
     ).toBe(true);
-    expect(r.state.invs[ROLAND].clues).toBe(2);
+    expect(invStateIn(r.state, ROLAND).clues).toBe(2);
   });
 
   it("skull in The Gathering counts Ghouls at your location", () => {
@@ -388,15 +391,15 @@ describe("basic actions & enemies", () => {
     r = mutate(r, (g) => {
       putEnemy(g, "01160", locId(g, "01111"), ROLAND);
     });
-    const hand = r.state.invs[ROLAND].hand.length;
+    const hand = invStateIn(r.state, ROLAND).hand.length;
     r = pick(r, "Draw 1 card");
     // damage/horror assignment may ask (no soaking assets in starting play area)
     const attack = r.state.log.findIndex((e) => e.type === "attack");
     const draw = r.state.log.findIndex((e, k) => k > attack && e.type === "draw");
     expect(attack).toBeGreaterThan(-1);
     expect(draw).toBeGreaterThan(attack);
-    expect(r.state.invs[ROLAND].damage).toBe(1);
-    expect(r.state.invs[ROLAND].hand.length).toBe(hand + 1);
+    expect(invStateIn(r.state, ROLAND).damage).toBe(1);
+    expect(invStateIn(r.state, ROLAND).hand.length).toBe(hand + 1);
   });
 
   it("fight does not provoke attacks of opportunity", () => {
@@ -418,7 +421,7 @@ describe("basic actions & enemies", () => {
       const here = inv(g, ROLAND).location!;
       engaged = putEnemy(g, "01160", here, ROLAND);
       other = putEnemy(g, "01159", here, null);
-      g.s.cards[other].exhausted = true;
+      cardRecIn(g.s, other).exhausted = true;
     });
     const target = r.state.pending!.options.find((o) => o.label.startsWith("Move to Rivertown"))!;
     r = dispatch(db, r.state, { type: "choose", inv: ROLAND, option: target.id });
@@ -440,11 +443,11 @@ describe("basic actions & enemies", () => {
       rats = putEnemy(
         g,
         "01159",
-        g.s.cards[
-          Object.values(g.s.cards).find(
-            (c) => c.zone === "location" && def(g, c.id).name === "Downtown",
-          )!.id
-        ].id,
+        cardRecIn(
+          g.s,
+          allCardRecsIn(g.s).find((c) => c.zone === "location" && def(g, c.id).name === "Downtown")!
+            .id,
+        ).id,
       );
     });
     r = pick(r, "End turn");
@@ -460,7 +463,9 @@ describe("basic actions & enemies", () => {
     r = pick(r, /^Fight Ghoul Priest/);
     r = commitDone(r);
     expect(r.state.log.some((e) => e.type === "retaliate")).toBe(true);
-    expect(r.state.invs[ROLAND].damage + r.state.invs[ROLAND].horror).toBeGreaterThan(0);
+    expect(invStateIn(r.state, ROLAND).damage + invStateIn(r.state, ROLAND).horror).toBeGreaterThan(
+      0,
+    );
   });
 
   it("Ghoul Priest exposes its stats and keywords", () => {
@@ -477,7 +482,7 @@ describe("basic actions & enemies", () => {
     expect(c.victory).toBe(2);
     const r = gathering([ROLAND, AGNES]);
     const g = gOf(r);
-    const priest = Object.values(g.s.cards).find((x) => x.code === "01116")!;
+    const priest = allCardRecsIn(g.s).find((x) => x.code === "01116")!;
     expect(enemyStat(g, priest.id, "health")).toBe(10);
   });
 });
@@ -494,15 +499,15 @@ describe("damage & defeat", () => {
   it("investigator defeated by horror", () => {
     let r = gathering([DAISY], ["0"]);
     r = mutate(r, (g) => {
-      g.s.invs[DAISY].horror = 8;
-      g.s.invs[DAISY].clues = 2;
+      invStateIn(g.s, DAISY).horror = 8;
+      invStateIn(g.s, DAISY).clues = 2;
       putEnemy(g, "01160", locId(g, "01111"), DAISY);
     });
     r = pick(r, "Draw 1 card"); // provokes: 1 damage 1 horror
     while (r.state.pending?.kind === "assign") r = pick(r, /investigator/);
     const g = gOf(r);
-    expect(r.state.invs[DAISY].status).toBe("defeated");
-    expect(r.state.invs[DAISY].mentalTrauma).toBe(1);
+    expect(invStateIn(r.state, DAISY).status).toBe("defeated");
+    expect(invStateIn(r.state, DAISY).mentalTrauma).toBe(1);
     expect(card(g, locId(g, "01111")).clues).toBeGreaterThanOrEqual(2);
     expect(r.state.phase === "ended" || !invsAt(g, locId(g, "01111")).includes(DAISY)).toBe(true);
     expect(r.state.resolution).toBe("none");
@@ -513,7 +518,7 @@ describe("act & agenda", () => {
   it("agenda advances when doom reaches its threshold in the mythos phase", () => {
     let r = gathering([ROLAND], ["0"]);
     r = mutate(r, (g) => {
-      g.s.cards[g.s.agenda!].doom = 2;
+      cardRecIn(g.s, g.s.agenda!).doom = 2;
     });
     const first = r.state.agenda;
     r = pick(r, "End turn");
@@ -522,17 +527,17 @@ describe("act & agenda", () => {
     r = pick(r, /lead investigator takes 2 horror/);
     expect(r.state.agenda).not.toBe(first);
     expect(def(gOf(r), r.state.agenda!).name).toBe("Rise of the Ghouls");
-    expect(
-      Object.values(r.state.cards).reduce((n, c) => n + (c.zone === "agenda" ? c.doom : 0), 0),
-    ).toBe(0);
+    expect(allCardRecsIn(r.state).reduce((n, c) => n + (c.zone === "agenda" ? c.doom : 0), 0)).toBe(
+      0,
+    );
   });
 
   it("group clue spend advances the act", () => {
     let r = skipMulligans(start("the-gathering", [ROLAND, AGNES], 1, { chaosBag: ["0"] as never }));
     r = pick(r, "Roland Banks");
     r = mutate(r, (g) => {
-      g.s.invs[ROLAND].clues = 3;
-      g.s.invs[AGNES].clues = 1;
+      invStateIn(g.s, ROLAND).clues = 3;
+      invStateIn(g.s, AGNES).clues = 1;
     });
     r = pick(r, /Advance act \(spend 4 clues/);
     const g = gOf(r);
@@ -546,11 +551,11 @@ describe("encounter deck", () => {
   it("reshuffles the discard pile when empty", () => {
     let r = gathering([ROLAND], ["0"]);
     r = mutate(r, (g) => {
-      for (const id of g.s.encounterDeck.slice()) {
-        g.s.cards[id].zone = "encounterDiscard";
-        g.s.encounterDiscard.push(id);
+      for (const id of pileRecIn(g.s, "encounterDeck").slice()) {
+        cardRecIn(g.s, id).zone = "encounterDiscard";
+        pileRecIn(g.s, "encounterDiscard").push(id);
       }
-      g.s.encounterDeck = [];
+      pileRecIn(g.s, "encounterDeck").length = 0;
     });
     r = pick(r, "End turn");
     expect(r.state.log.some((e) => e.type === "reshuffle" && /encounter/.test(e.text))).toBe(true);
@@ -561,7 +566,7 @@ describe("player cards", () => {
   it("slot limit: a third hand asset forces a discard", () => {
     let r = gathering([ROLAND], ["0"]);
     r = mutate(r, (g) => {
-      g.s.invs[ROLAND].resources = 20;
+      invStateIn(g.s, ROLAND).resources = 20;
       for (const code of ["01086", "01087", "01016"]) giveCard(g, ROLAND, code);
     });
     r = pick(r, /^Play Knife/);
@@ -570,7 +575,7 @@ describe("player cards", () => {
     expect(r.state.pending?.prompt).toMatch(/hand slots/);
     r = pick(r, "Knife");
     const g = gOf(r);
-    const inPlay = Object.values(g.s.cards)
+    const inPlay = allCardRecsIn(g.s)
       .filter((c) => c.zone === "play" && c.controller === ROLAND)
       .map((c) => def(g, c.id).name);
     expect(inPlay.sort()).toEqual([".45 Automatic", "Flashlight"]);
@@ -579,10 +584,10 @@ describe("player cards", () => {
   it("slot limit: an asset in the threat area holds its slot too", () => {
     let r = gathering([ROLAND], ["0"]);
     r = mutate(r, (g) => {
-      g.s.invs[ROLAND].resources = 20;
+      invStateIn(g.s, ROLAND).resources = 20;
       const knife = giveCard(g, ROLAND, "01086");
       moveCard(g, knife, "threat", { inv: ROLAND });
-      g.s.cards[knife].controller = ROLAND;
+      cardRecIn(g.s, knife).controller = ROLAND;
       for (const code of ["01087", "01016"]) giveCard(g, ROLAND, code);
     });
     r = pick(r, /^Play Flashlight/);
@@ -598,7 +603,7 @@ describe("player cards", () => {
     const ids = ["01087", "01016"].map((code) => {
       const id = giveCard(g, ROLAND, code);
       moveCard(g, id, "play");
-      g.s.cards[id].controller = ROLAND;
+      cardRecIn(g.s, id).controller = ROLAND;
       return id;
     });
     expect(overfullSlot(g, ROLAND, ids[1])).toBeNull();
@@ -610,38 +615,38 @@ describe("player cards", () => {
     const r = gathering([ROLAND], ["0"]);
     const g = gOf(r);
     const glass = giveCard(g, ROLAND, "01030");
-    g.s.invs[ROLAND].resources = 0;
+    invStateIn(g.s, ROLAND).resources = 0;
     expect(playBlock(g, ROLAND, glass)).toEqual({ reason: "resources", cost: 1 });
-    g.s.invs[ROLAND].resources = 5;
+    invStateIn(g.s, ROLAND).resources = 5;
     expect(playBlock(g, ROLAND, glass)).toBeNull();
     const voices = createCard(g, "01165", "limbo", null);
     moveCard(g, voices, "threat", { inv: ROLAND });
-    g.s.cards[voices].controller = ROLAND;
+    cardRecIn(g.s, voices).controller = ROLAND;
     expect(playBlock(g, ROLAND, glass)).toEqual({ reason: "forbidden", by: voices });
   });
 
   it("weakness drawn: revelation resolves immediately and it leaves the hand", () => {
     let r = gathering([ROLAND], ["0"]);
     r = mutate(r, (g) => {
-      g.s.invs[ROLAND].resources = 4;
-      const para = Object.values(g.s.cards).find((c) => c.code === "01097")!;
-      const me = g.s.invs[ROLAND];
+      invStateIn(g.s, ROLAND).resources = 4;
+      const para = allCardRecsIn(g.s).find((c) => c.code === "01097")!;
+      const me = invStateIn(g.s, ROLAND);
       for (const z of ["deck", "hand", "discard"] as const)
         me[z] = me[z].filter((x) => x !== para.id);
       me.deck.unshift(para.id);
       para.zone = "deck";
     });
-    const hand = r.state.invs[ROLAND].hand.length;
+    const hand = invStateIn(r.state, ROLAND).hand.length;
     r = pick(r, "Draw 1 card");
-    expect(r.state.invs[ROLAND].resources).toBe(0);
-    expect(r.state.invs[ROLAND].hand.length).toBe(hand);
+    expect(invStateIn(r.state, ROLAND).resources).toBe(0);
+    expect(invStateIn(r.state, ROLAND).hand.length).toBe(hand);
   });
 
   it("a drawn weakness is announced as a weakness, before its revelation; an ordinary draw stays a draw", () => {
     let r = gathering([ROLAND], ["0"]);
     r = mutate(r, (g) => {
-      const para = Object.values(g.s.cards).find((c) => c.code === "01097")!;
-      const me = g.s.invs[ROLAND];
+      const para = allCardRecsIn(g.s).find((c) => c.code === "01097")!;
+      const me = invStateIn(g.s, ROLAND);
       for (const z of ["deck", "hand", "discard"] as const)
         me[z] = me[z].filter((x) => x !== para.id);
       me.deck.unshift(para.id);
@@ -653,7 +658,7 @@ describe("player cards", () => {
     expect(types).toContain("weakness");
     expect(types).not.toContain("draw");
     const w = r.state.log.slice(from).find((e) => e.type === "weakness")!;
-    expect(r.state.cards[w.card!].code).toBe("01097");
+    expect(cardRecIn(r.state, w.card!).code).toBe("01097");
     const n = r.state.log.length;
     r = pick(r, "Draw 1 card");
     expect(r.state.log.slice(n).map((e) => e.type)).toContain("draw");
@@ -662,24 +667,24 @@ describe("player cards", () => {
   it("data-declared effect: Emergency Cache gains 3 resources", () => {
     let r = gathering([ROLAND], ["0"]);
     r = mutate(r, (g) => giveCard(g, ROLAND, "01088"));
-    const res = r.state.invs[ROLAND].resources;
+    const res = invStateIn(r.state, ROLAND).resources;
     r = pick(r, /^Play Emergency Cache/);
-    expect(r.state.invs[ROLAND].resources).toBe(res + 3);
+    expect(invStateIn(r.state, ROLAND).resources).toBe(res + 3);
   });
 
   it("scripted card: Dynamite Blast runs its script", () => {
     let r = gathering([ROLAND], ["0"]);
     let ghoul = "";
     r = mutate(r, (g) => {
-      g.s.invs[ROLAND].resources = 5;
+      invStateIn(g.s, ROLAND).resources = 5;
       giveCard(g, ROLAND, "01024");
       ghoul = putEnemy(g, "01160", locId(g, "01111"), null);
-      g.s.cards[ghoul].exhausted = true;
+      cardRecIn(g.s, ghoul).exhausted = true;
     });
     r = pick(r, /^Play Dynamite Blast/);
     while (r.state.pending?.kind === "assign") r = pick(r, /investigator/);
-    expect(r.state.cards[ghoul].zone).toBe("encounterDiscard");
-    expect(r.state.invs[ROLAND].damage).toBe(3);
+    expect(cardRecIn(r.state, ghoul).zone).toBe("encounterDiscard");
+    expect(invStateIn(r.state, ROLAND).damage).toBe(3);
   });
 
   it("Roland's reaction discovers a clue after defeating an enemy", () => {
@@ -691,12 +696,12 @@ describe("player cards", () => {
     r = commitDone(r);
     expect(r.state.pending?.kind).toBe("reaction");
     r = pick(r, /Roland: discover 1 clue/);
-    expect(r.state.invs[ROLAND].clues).toBe(1);
+    expect(invStateIn(r.state, ROLAND).clues).toBe(1);
   });
 
   it("Wendy can cancel a token by discarding a card and reveal a new one", () => {
     let r = gathering([WENDY], ["+1", "0"], 5);
-    const hand = r.state.invs[WENDY].hand.length;
+    const hand = invStateIn(r.state, WENDY).hand.length;
     r = pick(r, "Investigate Study");
     r = commitDone(r);
     expect(r.state.pending?.kind).toBe("reaction");
@@ -704,7 +709,7 @@ describe("player cards", () => {
     r = pick(r, /./); // card to discard
     expect(r.state.log.some((e) => e.type === "tokenCancelled")).toBe(true);
     expect(r.state.log.filter((e) => e.type === "token").length).toBe(2);
-    expect(r.state.invs[WENDY].hand.length).toBe(hand - 1);
+    expect(invStateIn(r.state, WENDY).hand.length).toBe(hand - 1);
   });
 
   it("Investigator stats: Roland Banks", () => {
@@ -754,10 +759,10 @@ describe("chosen investigators", () => {
     it(`Old Book of Lore searches and adds the picked card to hand (${invs.length} investigator${invs.length > 1 ? "s" : ""})`, () => {
       let r = skipMulligans(start("the-gathering", invs, 3));
       r = mutate(r, (g) => {
-        const book = Object.values(g.s.cards).find((c) => c.code === "01031")!;
+        const book = allCardRecsIn(g.s).find((c) => c.code === "01031")!;
         for (const i of g.s.order)
           for (const p of ["deck", "hand"] as const)
-            g.s.invs[i][p] = g.s.invs[i][p].filter((x) => x !== book.id);
+            invStateIn(g.s, i)[p] = invStateIn(g.s, i)[p].filter((x) => x !== book.id);
         Object.assign(book, { zone: "play", controller: "01002", owner: "01002" });
       });
       while (r.state.pending?.inv !== "01002" || r.state.pending.kind !== "turn")
@@ -767,7 +772,7 @@ describe("chosen investigators", () => {
       expect(r.state.pending?.prompt).toMatch(/Search your deck/);
       const wanted = r.state.pending!.options[0];
       r = pick(r, wanted.label);
-      expect(r.state.invs["01002"].hand).toContain(wanted.value);
+      expect(invStateIn(r.state, "01002").hand).toContain(wanted.value);
       expect(r.state.pending?.kind).toBe("turn");
     });
   }
@@ -779,15 +784,15 @@ describe("fast abilities during the commit window", () => {
     r = mutate(r, (g) => {
       const pt = createCard(g, "01017", "limbo", ROLAND);
       moveCard(g, pt, "play");
-      g.s.cards[pt].controller = ROLAND;
+      cardRecIn(g.s, pt).controller = ROLAND;
       putEnemy(g, "01160", locId(g, "01111"), ROLAND);
     });
     r = pick(r, /^Fight Ghoul Minion/);
-    const resources = r.state.invs[ROLAND].resources;
+    const resources = invStateIn(r.state, ROLAND).resources;
     expect(testValue(gOf(r), r.state.skillTest!)).toBe(4);
     r = pick(r, /Physical Training: \+1 combat/);
     expect(testValue(gOf(r), r.state.skillTest!)).toBe(5);
-    expect(r.state.invs[ROLAND].resources).toBe(resources - 1);
+    expect(invStateIn(r.state, ROLAND).resources).toBe(resources - 1);
     expect(r.state.pending?.kind).toBe("commit");
   });
 });
@@ -814,8 +819,8 @@ describe("taking back committed cards", () => {
     expect(value(r)).toBe(5);
     const blow = r.state.skillTest!.committed[0];
     r = pick(r, "Take back Vicious Blow");
-    expect(r.state.invs[ROLAND].hand).toContain(blow);
-    expect(r.state.cards[blow].zone).toBe("hand");
+    expect(invStateIn(r.state, ROLAND).hand).toContain(blow);
+    expect(cardRecIn(r.state, blow).zone).toBe("hand");
     expect(r.state.skillTest!.committed).toEqual([]);
     expect(value(r)).toBe(4);
     expect(r.state.pending?.kind).toBe("commit");
@@ -874,9 +879,9 @@ describe("reveal counter", () => {
   it("showing deck cards for a search reveals", () => {
     let r = skipMulligans(start("the-gathering", ["01002"], 3));
     r = mutate(r, (g) => {
-      const book = Object.values(g.s.cards).find((c) => c.code === "01031")!;
-      g.s.invs["01002"].deck = g.s.invs["01002"].deck.filter((x) => x !== book.id);
-      g.s.invs["01002"].hand = g.s.invs["01002"].hand.filter((x) => x !== book.id);
+      const book = allCardRecsIn(g.s).find((c) => c.code === "01031")!;
+      invStateIn(g.s, "01002").deck = invStateIn(g.s, "01002").deck.filter((x) => x !== book.id);
+      invStateIn(g.s, "01002").hand = invStateIn(g.s, "01002").hand.filter((x) => x !== book.id);
       Object.assign(book, { zone: "play", controller: "01002", owner: "01002" });
     });
     const n = rev(r);
@@ -899,9 +904,10 @@ describe("reveal counter", () => {
         const touched =
           next.state.rng !== r.state.rng ||
           next.state.chaosBag.length < r.state.chaosBag.length ||
-          next.state.encounterDeck.length < r.state.encounterDeck.length ||
-          Object.keys(r.state.invs).some(
-            (i) => next.state.invs[i].deck.length < r.state.invs[i].deck.length,
+          pileRecIn(next.state, "encounterDeck").length <
+            pileRecIn(r.state, "encounterDeck").length ||
+          r.state.order.some(
+            (i) => invStateIn(next.state, i).deck.length < invStateIn(r.state, i).deck.length,
           );
         if (touched) expect(rev(next)).toBe(rev(r) + 1);
         r = next;
@@ -920,8 +926,8 @@ describe("event sources", () => {
       attic = findByCode(g, "01113", ["setAside", "location"])!.id;
       moveCard(g, hall, "location");
       moveCard(g, attic, "location");
-      g.s.cards[hall].revealed = true;
-      g.s.invs[ROLAND].location = hall;
+      cardRecIn(g.s, hall).revealed = true;
+      invStateIn(g.s, ROLAND).location = hall;
     });
     r = pick(r, "Move to Attic");
     while (r.state.pending?.kind === "assign") r = pick(r, /./);
@@ -945,16 +951,16 @@ describe("looking at the top of a deck", () => {
       for (const code of ["01063", "01061"]) {
         const a = createCard(g, code, "limbo", AGNES);
         moveCard(g, a, "play");
-        g.s.cards[a].controller = AGNES;
-        g.s.cards[a].uses = 3;
+        cardRecIn(g.s, a).controller = AGNES;
+        cardRecIn(g.s, a).uses = 3;
       }
-      const d = g.s.invs[AGNES].deck;
+      const d = invStateIn(g.s, AGNES).deck;
       const plain = d.filter((id) => !def(g, id).traits.includes("Spell")).slice(0, 3);
       const spell = createCard(g, "01060", "limbo", AGNES);
       moveCard(g, spell, "deck");
       const top =
         spellAt < 0 ? plain : [...plain.slice(0, spellAt), spell, ...plain.slice(spellAt, 2)];
-      g.s.invs[AGNES].deck = [...top, ...d.filter((id) => !top.includes(id))];
+      invStateIn(g.s, AGNES).deck = [...top, ...d.filter((id) => !top.includes(id))];
     });
     while (r.state.pending?.inv !== AGNES || r.state.pending.kind !== "turn")
       r = pick(r, r.state.pending!.options.at(-1)!.label);
@@ -963,17 +969,17 @@ describe("looking at the top of a deck", () => {
 
   it("Arcane Initiate offers the Spell and shows the other top cards", () => {
     let r = pick(table(1), /Arcane Initiate/);
-    const top = r.state.invs[AGNES].deck.slice(0, 3);
+    const top = invStateIn(r.state, AGNES).deck.slice(0, 3);
     expect(r.state.pending?.options.map((o) => o.label)).toEqual(["Shrivelling", "Take nothing"]);
     expect(r.state.pending?.shown).toEqual([top[0], top[2]]);
     r = pick(r, "Shrivelling");
-    expect(r.state.invs[AGNES].hand).toContain(top[1]);
+    expect(invStateIn(r.state, AGNES).hand).toContain(top[1]);
   });
 
   it("Arcane Initiate with no Spell on top still shows the three cards", () => {
     const r = pick(table(-1), /Arcane Initiate/);
     expect(r.state.pending?.options.map((o) => o.id)).toEqual(["none"]);
-    expect(r.state.pending?.shown).toEqual(r.state.invs[AGNES].deck.slice(0, 3));
+    expect(r.state.pending?.shown).toEqual(invStateIn(r.state, AGNES).deck.slice(0, 3));
   });
 
   it("Old Book of Lore draws the card it finds: a weakness found resolves", () => {
@@ -981,17 +987,20 @@ describe("looking at the top of a deck", () => {
     r = mutate(r, (g) => {
       const book = createCard(g, "01031", "limbo", AGNES);
       moveCard(g, book, "play");
-      g.s.cards[book].controller = AGNES;
+      cardRecIn(g.s, book).controller = AGNES;
       const weak = createCard(g, "01097", "limbo", AGNES);
       moveCard(g, weak, "deck");
-      g.s.invs[AGNES].deck = [weak, ...g.s.invs[AGNES].deck.filter((x) => x !== weak)];
+      invStateIn(g.s, AGNES).deck = [
+        weak,
+        ...invStateIn(g.s, AGNES).deck.filter((x) => x !== weak),
+      ];
     });
-    const resources = r.state.invs[AGNES].resources;
+    const resources = invStateIn(r.state, AGNES).resources;
     r = pick(r, /Old Book/);
     if (r.state.pending?.kind === "target") r = pick(r, "Agnes Baker");
     r = pick(r, "Paranoia");
     // Paranoia's revelation: lose all resources
-    expect(r.state.invs[AGNES].resources).toBe(0);
+    expect(invStateIn(r.state, AGNES).resources).toBe(0);
     expect(resources).toBeGreaterThan(0);
   });
 
@@ -999,12 +1008,12 @@ describe("looking at the top of a deck", () => {
     let r = pick(table(0), /Scrying/);
     expect(r.state.pending?.options.map((o) => o.id)).toEqual([AGNES, ROLAND, "encounter"]);
     r = pick(r, "encounter");
-    const [a, b, c] = r.state.encounterDeck.slice(0, 3);
-    const rest = r.state.encounterDeck.slice(3);
+    const [a, b, c] = pileRecIn(r.state, "encounterDeck").slice(0, 3);
+    const rest = pileRecIn(r.state, "encounterDeck").slice(3);
     expect(r.state.pending?.options.map((o) => o.card)).toEqual([a, b, c]);
     r = pick(r, c);
     r = pick(r, a);
-    expect(r.state.encounterDeck).toEqual([c, a, b, ...rest]);
+    expect(pileRecIn(r.state, "encounterDeck")).toEqual([c, a, b, ...rest]);
     expect(r.state.pending?.kind).toBe("turn");
   });
 });

@@ -10,7 +10,7 @@ import {
   type NewCampaign,
 } from "../../engine/campaign";
 import { advance, type FlowValue } from "../../engine/flow";
-import { createGame, dispatch, ENGINE_VERSION, replay } from "../../engine/engine";
+import { createGame, dispatch, ENGINE_VERSION, replay, replaysSave } from "../../engine/engine";
 import { upgradeDeck, type UpgradeResult } from "../../engine/upgrade";
 import type { Move, RoomSave } from "../../net/moves";
 import { quietNextGame } from "../game/arrivals";
@@ -540,7 +540,7 @@ export function createGameStore(
       let save = input;
       const restore = () => {
         // a campaign saved before the flow gets one (a scenario in progress stays in progress)
-        const inGame = save.version === ENGINE_VERSION && !!save.setup;
+        const inGame = replaysSave(save.version) && !!save.setup;
         if (save.campaign)
           save = {
             ...save,
@@ -550,7 +550,7 @@ export function createGameStore(
               inGame,
             ),
           };
-        if (save.version !== ENGINE_VERSION || !save.setup) {
+        if (!replaysSave(save.version) || !save.setup) {
           // the rules changed since this save: keep the campaign, restart the scenario
           set({
             campaign: save.campaign,

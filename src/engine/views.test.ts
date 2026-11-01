@@ -63,6 +63,6 @@ describe("read-only views", () => {
     addCounter(x, study.id, "clues", -1);
     expect(card(x, study.id).clues).toBe(clues - 1);
     expect(inv(x, R).deck.length).toBeGreaterThan(0);
-    expect(allCards(x).length).toBe(Object.keys(x.s.cards).length);
+    expect(allCards(x).length).toBe(x.s.world.entities.length);
   });
 });

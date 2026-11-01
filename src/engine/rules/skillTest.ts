@@ -3,26 +3,31 @@ import type { Boost, Effect, Skill, SymbolToken } from "../../content/schema";
 import { randInt } from "../rng";
 import {
   abilitiesOf,
+  allCards,
   ask,
   baseSkill,
   card,
   cardBlocked,
   cardIf,
+  cardOfIf,
   checkCondition,
   def,
   emit,
   enemyStat,
+  exhaust,
   expireMods,
   type G,
   hasFlag,
   inv,
   invName,
+  invOfIf,
   invsAt,
   isMassive,
   modSum,
   moveCard,
   push,
   setController,
+  setEngaged,
   shroud,
 } from "../core";
 import type { EffCtx, InstId, InvId, SkillTestState, Step } from "../types";
@@ -82,7 +87,7 @@ export function setOnChoose(g: G, code: string, fn: string) {
 
 export function startTest(g: G, o: TestOpts) {
   // an eliminated investigator takes no further part in the scenario (Grimoire, Elimination)
-  if (g.s.invs[o.inv]?.status !== "playing") return;
+  if (invOfIf(g.s, o.inv)?.status !== "playing") return;
   if (g.s.skillTest) g.s.testStack.push(g.s.skillTest);
   g.s.counters.test++;
   const t: SkillTestState = {
@@ -467,9 +472,7 @@ function resolveTokensStage(g: G) {
           revealAnother = true;
         if (
           eff.revealAnother === "ifAncientOneInPlay" &&
-          Object.values(g.s.cards).some(
-            (c) => c.zone === "enemy" && def(g, c.id).traits.includes("Ancient One"),
-          )
+          allCards(g).some((c) => c.zone === "enemy" && def(g, c.id).traits.includes("Ancient One"))
         )
           revealAnother = true;
       }
@@ -651,7 +654,7 @@ function kindResultStage(g: G, step: Extract<Step, { t: "Test" }>) {
   // after a success, before its damage or clues: the test's source may be paid for more (Sledgehammer)
   if (t.success && t.boost && !t.boostDone) {
     const src = t.source;
-    if (src && g.s.cards[src] && canPay(g, t.inv, src, t.boost.cost)) {
+    if (src && cardOfIf(g.s, src) && canPay(g, t.inv, src, t.boost.cost)) {
       const yes = ask<boolean>(
         g,
         step,
@@ -735,10 +738,10 @@ function kindResultStage(g: G, step: Extract<Step, { t: "Test" }>) {
         });
     }
     if (t.kind === "evade" && t.target) {
-      const e = g.s.cards[t.target];
+      const e = cardOfIf(g.s, t.target);
       if (e?.zone === "enemy") {
-        e.exhausted = true;
-        e.engagedWith = null;
+        exhaust(g, e.id);
+        setEngaged(g, e.id, null);
         emit(g, "evade", `${invName(g, t.inv)} evades ${def(g, t.target).name}`, {
           inv: t.inv,
           card: t.target,
@@ -751,7 +754,7 @@ function kindResultStage(g: G, step: Extract<Step, { t: "Test" }>) {
     }
   }
   if (!t.success && t.target && (t.kind === "fight" || t.kind === "evade")) {
-    const e = g.s.cards[t.target];
+    const e = cardOfIf(g.s, t.target);
     // the attack's damage goes to the one other investigator the enemy is engaged with (Grimoire, Fight Action)
     if (
       t.kind === "fight" &&
@@ -784,7 +787,7 @@ function kindResultStage(g: G, step: Extract<Step, { t: "Test" }>) {
     }
   }
   // a ready elusive enemy slips away after it is attacked (after a retaliate attack, which slips it away itself)
-  const attacked = t.kind === "fight" && t.target ? g.s.cards[t.target] : undefined;
+  const attacked = t.kind === "fight" && t.target ? cardOfIf(g.s, t.target) : undefined;
   if (
     attacked?.zone === "enemy" &&
     !attacked.exhausted &&
@@ -796,7 +799,7 @@ function kindResultStage(g: G, step: Extract<Step, { t: "Test" }>) {
 
 function endStage(g: G) {
   const t = test(g);
-  for (const c of t.committed) if (g.s.cards[c]?.zone === "commit") moveCard(g, c, "discard");
+  for (const c of t.committed) if (cardOfIf(g.s, c)?.zone === "commit") moveCard(g, c, "discard");
   g.s.chaosBag.push(...t.tokens, ...(t.ignored ?? []));
   expireMods(g, "test");
   g.s.skillTest = g.s.testStack.pop() ?? null;

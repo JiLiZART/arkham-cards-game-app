@@ -33,7 +33,8 @@ describe("replay oracle", () => {
       traceScripts(content, ran);
       const now = replayRecording(content, rec);
       replayed++;
-      const was = rec.kind === "game" ? [{ state: rec.state, events: rec.events }] : rec.games;
+      const was =
+        rec.kind === "game" ? [{ snapshot: rec.snapshot, events: rec.events }] : rec.games;
       const where: string[] = now.error ? [`refused ${now.error}`] : [];
       if (now.games.length !== was.length)
         where.push(`games played: ${was.length} != ${now.games.length}`);
@@ -41,11 +42,13 @@ describe("replay oracle", () => {
         const game = rec.kind === "campaign" ? `game ${n}: ` : "";
         const events = firstEventDiff(g.events, now.games[n]?.events ?? []);
         if (events) where.push(`${game}${events}`);
-        const state = firstDiff(g.state, now.games[n]?.state);
-        if (state) where.push(`${game}state ${state}`);
+        const snap = firstDiff(g.snapshot, now.games[n]?.snapshot);
+        if (snap) where.push(`${game}state ${snap}`);
       });
       if (rec.kind === "campaign") {
-        const campaign = firstDiff(rec.campaign, now.campaign);
+        // the engine version is stamped on the campaign: it changes with the storage on purpose
+        const unversioned = (c: unknown) => ({ ...(c as object), version: undefined });
+        const campaign = firstDiff(unversioned(rec.campaign), unversioned(now.campaign));
         if (campaign) where.push(`campaign ${campaign}`);
       }
       expect(where, `${rec.id} first differs at`).toEqual([]);

@@ -21,24 +21,25 @@ import {
   toTurn,
 } from "./natkit";
 import { commitDone, db, deckCodes, mutate, options, pick, skipMulligans } from "./testkit";
+import { allCardRecsIn, cardRecIn, invStateIn } from "./records";
 
 beforeAll(async () => {
   await Promise.all(["dwl", "ptc", "tcu", "tfa", "tic", "tsk"].map(loadPack));
 });
 
 const g = (r: Result): G => ({ s: structuredClone(r.state), db, events: [] });
-const clues = (r: Result) => r.state.invs[ROLAND].clues;
+const clues = (r: Result) => invStateIn(r.state, ROLAND).clues;
 
 describe("Laboratory Assistant", () => {
   it("draws 2 cards when it enters play and raises the hand size by 2", () => {
     let r = game([ROLAND], (x) => {
       hand(x, ROLAND, "02020");
-      x.s.invs[ROLAND].resources = 5;
+      invStateIn(x.s, ROLAND).resources = 5;
     });
-    const before = r.state.invs[ROLAND].deck.length;
+    const before = invStateIn(r.state, ROLAND).deck.length;
     r = pick(r, /^Play Laboratory Assistant/);
     r = pick(r, /Laboratory Assistant: draw 2/);
-    expect(r.state.invs[ROLAND].deck.length).toBe(before - 2);
+    expect(invStateIn(r.state, ROLAND).deck.length).toBe(before - 2);
     expect(handLimit(g(r), ROLAND)).toBe(10);
   });
 });
@@ -47,10 +48,10 @@ describe("Lucky Cigarette Case", () => {
   it("draws 1 card after a test succeeded by 2 or more", () => {
     // Roland intellect 3 with a +1 token against the Study's shroud 2: succeeds by 2
     let r = game([ROLAND], (x) => void inPlay(x, ROLAND, "04107"), ["+1"]);
-    const before = r.state.invs[ROLAND].hand.length;
+    const before = invStateIn(r.state, ROLAND).hand.length;
     r = commitDone(pick(r, /^Investigate/));
     r = pick(r, /Lucky Cigarette Case/);
-    expect(r.state.invs[ROLAND].hand.length).toBe(before + 1);
+    expect(invStateIn(r.state, ROLAND).hand.length).toBe(before + 1);
   });
 
   it("is not offered when the test succeeds by only 1", () => {
@@ -64,13 +65,13 @@ describe("Thieves' Kit", () => {
   it("investigates with agility, spending a supply, and gains 1 resource on success", () => {
     let id = "";
     let r = game([ROLAND], (x) => (id = inPlay(x, ROLAND, "09064")));
-    const res = r.state.invs[ROLAND].resources;
+    const res = invStateIn(r.state, ROLAND).resources;
     expect(options(r).filter((o) => o.startsWith("Thieves' Kit"))).toHaveLength(2);
     r = commitDone(pick(r, /^Thieves' Kit: investigate with agility/));
     // Roland agility 2 vs shroud 2 with a 0 token: success
     expect(clues(r)).toBe(1);
-    expect(r.state.invs[ROLAND].resources).toBe(res + 1);
-    expect(r.state.cards[id].uses).toBe(5);
+    expect(invStateIn(r.state, ROLAND).resources).toBe(res + 1);
+    expect(cardRecIn(r.state, id).uses).toBe(5);
   });
 });
 
@@ -79,17 +80,17 @@ describe("Breaking and Entering", () => {
     let enemy = "";
     let r = game([ROLAND], (x) => {
       hand(x, ROLAND, "07114");
-      x.s.invs[ROLAND].resources = 5;
+      invStateIn(x.s, ROLAND).resources = 5;
       enemy = enemyHere(x, ROLAND);
     });
     r = commitDone(pick(r, /^Play Breaking and Entering/));
     r = pick(r, /Automatically evade/);
     if (r.state.pending?.options.some((o) => /Ghoul/.test(o.label))) r = pick(r, /Ghoul/);
     expect(clues(r)).toBe(1);
-    expect(r.state.cards[enemy].engagedWith).toBeNull();
-    expect(r.state.cards[enemy].exhausted).toBe(true);
+    expect(cardRecIn(r.state, enemy).engagedWith).toBeNull();
+    expect(cardRecIn(r.state, enemy).exhausted).toBe(true);
     // no attack of opportunity from the engaged Ghoul
-    expect(r.state.invs[ROLAND].damage).toBe(0);
+    expect(invStateIn(r.state, ROLAND).damage).toBe(0);
   });
 });
 
@@ -97,7 +98,7 @@ describe("Scene of the Crime", () => {
   const scene = (enemy: boolean) =>
     game([ROLAND], (x) => {
       hand(x, ROLAND, "04103");
-      x.s.invs[ROLAND].resources = 5;
+      invStateIn(x.s, ROLAND).resources = 5;
       if (enemy) enemyHere(x, ROLAND, undefined, false);
     });
 
@@ -121,9 +122,9 @@ describe("Overzealous", () => {
   it("draws the top encounter card, and that draw is followed by another", () => {
     let r = game([ROLAND], (x) => {
       const id = hand(x, ROLAND, "03040");
-      const me = x.s.invs[ROLAND];
+      const me = invStateIn(x.s, ROLAND);
       me.hand = me.hand.filter((h) => h !== id);
-      x.s.cards[id].zone = "deck";
+      cardRecIn(x.s, id).zone = "deck";
       me.deck.unshift(id);
     });
     const from = r.state.log.length;
@@ -142,23 +143,23 @@ describe("Steadfast and Curiosity", () => {
 
   it("Steadfast gains willpower and combat by total remaining health and sanity (Roland: 9 + 5)", () => {
     expect(icons("05022", "combat", () => {})).toBe(3);
-    expect(icons("05022", "combat", (x) => (x.s.invs[ROLAND].damage = 6))).toBe(2);
-    expect(icons("05022", "willpower", (x) => (x.s.invs[ROLAND].damage = 8))).toBe(2);
+    expect(icons("05022", "combat", (x) => (invStateIn(x.s, ROLAND).damage = 6))).toBe(2);
+    expect(icons("05022", "willpower", (x) => (invStateIn(x.s, ROLAND).damage = 8))).toBe(2);
     expect(
       icons("05022", "willpower", (x) => {
-        x.s.invs[ROLAND].damage = 8;
-        x.s.invs[ROLAND].horror = 2;
+        invStateIn(x.s, ROLAND).damage = 8;
+        invStateIn(x.s, ROLAND).horror = 2;
       }),
     ).toBe(1);
   });
 
   it("Curiosity gains willpower and intellect by cards in hand", () => {
     const handOf = (n: number) => (x: G) => {
-      const me = x.s.invs[ROLAND];
+      const me = invStateIn(x.s, ROLAND);
       while (me.hand.length < n + 1) hand(x, ROLAND, "01088");
       me.hand = [
-        ...me.hand.filter((h) => x.s.cards[h].code !== "05026").slice(0, n),
-        ...me.hand.filter((h) => x.s.cards[h].code === "05026"),
+        ...me.hand.filter((h) => cardRecIn(x.s, h).code !== "05026").slice(0, n),
+        ...me.hand.filter((h) => cardRecIn(x.s, h).code === "05026"),
       ];
     };
     expect(icons("05026", "intellect", handOf(3))).toBe(1);
@@ -172,20 +173,20 @@ describe("Interrogate", () => {
     let hall = "";
     let r = game([ROLAND], (x) => {
       hand(x, ROLAND, "05020");
-      x.s.invs[ROLAND].resources = 5;
+      invStateIn(x.s, ROLAND).resources = 5;
       enemyHere(x, ROLAND, ACOLYTE, false); // Humanoid, 1 damage: difficulty 4
       hall = addLocation(x, HALLWAY, [[STUDY, HALLWAY]]);
-      x.s.cards[hall].clues = 2;
+      cardRecIn(x.s, hall).clues = 2;
     });
     r = commitDone(pick(r, /^Play Interrogate/));
     expect(clues(r)).toBe(2); // Roland combat 4 with a 0 token
-    expect(r.state.cards[hall].clues).toBe(1);
+    expect(cardRecIn(r.state, hall).clues).toBe(1);
   });
 
   it("can't be played without a Humanoid enemy at your location", () => {
     const r = game([ROLAND], (x) => {
       hand(x, ROLAND, "05020");
-      x.s.invs[ROLAND].resources = 5;
+      invStateIn(x.s, ROLAND).resources = 5;
       enemyHere(x, ROLAND, "01159", false); // Swarm of Rats: a Creature
     });
     expect(options(r).some((o) => /Interrogate/.test(o))).toBe(false);
@@ -197,15 +198,15 @@ describe("Connect the Dots", () => {
     let low = "";
     let r = game([ROLAND], (x) => {
       hand(x, ROLAND, "05025");
-      x.s.invs[ROLAND].resources = 5;
-      x.s.cards[inv(x, ROLAND).location!].clues = 1;
+      invStateIn(x.s, ROLAND).resources = 5;
+      cardRecIn(x.s, inv(x, ROLAND).location!).clues = 1;
       low = addLocation(x, HALLWAY, [[STUDY, HALLWAY]]); // Hallway: shroud 1, the Study: 2
-      x.s.cards[low].clues = 3;
+      cardRecIn(x.s, low).clues = 3;
     });
     r = commitDone(pick(r, /^Investigate/));
     r = pick(r, /Connect the Dots/);
     expect(clues(r)).toBe(3);
-    expect(r.state.cards[low].clues).toBe(1);
+    expect(cardRecIn(r.state, low).clues).toBe(1);
   });
 });
 
@@ -213,12 +214,12 @@ describe("Delay the Inevitable", () => {
   const delayed = () => {
     let r = game([ROLAND], (x) => {
       hand(x, ROLAND, "05021");
-      x.s.invs[ROLAND].resources = 5;
+      invStateIn(x.s, ROLAND).resources = 5;
     });
     r = pick(r, /^Play Delay the Inevitable/);
     return r;
   };
-  const delay = (r: Result) => Object.values(r.state.cards).find((c) => c.code === "05021")!;
+  const delay = (r: Result) => allCardRecsIn(r.state).find((c) => c.code === "05021")!;
 
   it("attaches to an investigator at your location, under their control", () => {
     const d = delay(delayed());
@@ -230,21 +231,21 @@ describe("Delay the Inevitable", () => {
     let r = mutate(delayed(), (x) => void enemyHere(x, ROLAND));
     r = pick(r, /^Gain 1 resource/); // provokes the Ghoul's attack of opportunity
     r = pick(r, /Delay the Inevitable: cancel/);
-    expect(r.state.invs[ROLAND].damage).toBe(0);
-    expect(r.state.invs[ROLAND].horror).toBe(0);
+    expect(invStateIn(r.state, ROLAND).damage).toBe(0);
+    expect(invStateIn(r.state, ROLAND).horror).toBe(0);
     expect(delay(r).zone).toBe("discard");
   });
 
   it("when the mythos phase ends, costs 2 resources or is discarded", () => {
     let r = delayed();
-    const res = r.state.invs[ROLAND].resources;
+    const res = invStateIn(r.state, ROLAND).resources;
     r = toTurn(
       pick(r, /^End turn/),
       (x) => !!x.state.pending?.options.some((o) => /Spend 2 resources/.test(o.label)),
     );
     r = pick(r, /Spend 2 resources/);
     // the upkeep phase gave 1 resource before the mythos phase
-    expect(r.state.invs[ROLAND].resources).toBe(res + 1 - 2);
+    expect(invStateIn(r.state, ROLAND).resources).toBe(res + 1 - 2);
     expect(delay(r).zone).toBe("play");
   });
 });
@@ -276,9 +277,9 @@ describe("Joe Diamond", () => {
     const x = g(r);
     for (const id of all) {
       expect(def(x, id).traits).toContain("Insight");
-      expect(r.state.invs[JOE].deck).not.toContain(id);
+      expect(invStateIn(r.state, JOE).deck).not.toContain(id);
     }
-    expect(all.some((id) => r.state.cards[id].code === "05010")).toBe(true);
+    expect(all.some((id) => cardRecIn(r.state, id).code === "05010")).toBe(true);
   });
 
   it("reveals the top hunch card as the investigation phase begins, playable at -2 cost", () => {
@@ -297,8 +298,8 @@ describe("Joe Diamond", () => {
       pick(r, /^End turn/),
       (y) => y.state.round > r.state.round && y.state.pending?.kind === "turn",
     );
-    const zone = r.state.cards[top].zone;
-    if (r.state.cards[top].code === "05010") expect(zone).toBe("threat");
+    const zone = cardRecIn(r.state, top).zone;
+    if (cardRecIn(r.state, top).code === "05010") expect(zone).toBe("threat");
     else expect([...hunchOf(r), revealedOf(r)]).toContain(top);
   });
 });
@@ -309,17 +310,17 @@ describe("Unsolved Case", () => {
     let hall = "";
     let r = game([ROLAND], (x) => {
       id = hand(x, ROLAND, "05010");
-      x.s.invs[ROLAND].resources = 5;
-      x.s.invs[ROLAND].clues = 2;
+      invStateIn(x.s, ROLAND).resources = 5;
+      invStateIn(x.s, ROLAND).clues = 2;
       hall = addLocation(x, HALLWAY, [[STUDY, HALLWAY]]); // shroud 1, below the Study's 2
     });
-    const study = r.state.invs[ROLAND].location!;
-    const before = r.state.cards[study].clues;
+    const study = invStateIn(r.state, ROLAND).location!;
+    const before = cardRecIn(r.state, study).clues;
     r = pick(r, /^Play Unsolved Case/);
-    expect(r.state.invs[ROLAND].clues).toBe(1);
-    expect(r.state.cards[study].clues).toBe(before + 1);
-    expect(r.state.cards[hall].clues).toBe(0);
-    expect(r.state.cards[id].zone).toBe("removed");
+    expect(invStateIn(r.state, ROLAND).clues).toBe(1);
+    expect(cardRecIn(r.state, study).clues).toBe(before + 1);
+    expect(cardRecIn(r.state, hall).clues).toBe(0);
+    expect(cardRecIn(r.state, id).zone).toBe("removed");
   });
 });
 
@@ -336,7 +337,7 @@ describe("Detective's Colt 1911s", () => {
     r = commitDone(pick(r, /^Detective's Colt 1911s: fight/));
     if (r.state.pending?.options.some((o) => /Ghoul/.test(o.label))) r = pick(r, /Ghoul/);
     // Roland combat 4 + 1 vs Ghoul Minion fight 2; 2 damage defeats its 2 health
-    expect(r.state.cards[enemy].zone).not.toBe("enemy");
+    expect(cardRecIn(r.state, enemy).zone).not.toBe("enemy");
   });
 });
 
@@ -357,11 +358,11 @@ describe("Carolyn Fern, Hypnotic Therapy and Rational Thought", () => {
         ),
       ),
       (x) => {
-        x.s.invs[CAROLYN].horror = 3;
+        invStateIn(x.s, CAROLYN).horror = 3;
         prep(x);
       },
     );
-  const me = (r: Result) => r.state.invs[CAROLYN];
+  const me = (r: Result) => invStateIn(r.state, CAROLYN);
 
   it("Hypnotic Therapy heals 1 horror on a successful intellect test; Carolyn's reaction gives the healed investigator 1 resource", () => {
     let r = carolyn((x) => void inPlay(x, CAROLYN, "05007"));
@@ -389,17 +390,17 @@ describe("Carolyn Fern, Hypnotic Therapy and Rational Thought", () => {
     let r = carolyn((x) => {
       inPlay(x, CAROLYN, "02030");
       rt = hand(x, CAROLYN, "05008");
-      const m = x.s.invs[CAROLYN];
+      const m = invStateIn(x.s, CAROLYN);
       m.hand = m.hand.filter((h) => h !== rt);
-      x.s.cards[rt].zone = "deck";
+      cardRecIn(x.s, rt).zone = "deck";
       m.deck.unshift(rt);
     });
     r = pick(r, "Draw 1 card");
-    expect(r.state.cards[rt].zone).toBe("threat");
-    expect(r.state.cards[rt].horror).toBe(4);
+    expect(cardRecIn(r.state, rt).zone).toBe("threat");
+    expect(cardRecIn(r.state, rt).horror).toBe(4);
     r = pick(r, /^Clarity of Mind/);
     expect(me(r).horror).toBe(3);
-    expect(r.state.cards[rt].horror).toBe(3);
+    expect(cardRecIn(r.state, rt).horror).toBe(3);
     expect(options(r).some((o) => /Carolyn Fern:/.test(o))).toBe(false);
   });
 });

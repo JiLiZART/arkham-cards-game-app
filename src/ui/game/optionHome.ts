@@ -1,5 +1,5 @@
 import type { ChoiceOption, GameState, InstId, InvId } from "../../engine/types";
-import { cardOf, cardOfIf, invOf } from "../../engine/core";
+import { cardOf, cardOfIf, invOf, pileOf } from "../../engine/core";
 
 /** where an option of the pending choice is offered on screen (there is no option sidebar) */
 export type OptionHome =
@@ -81,7 +81,7 @@ export function deckPick(game: GameState, viewer: InvId | null): InstId[] {
   const cards = [...p.options.flatMap((o) => o.card ?? []), ...(p.shown ?? [])];
   const pile = (id: InstId) => {
     const c = cardOfIf(game, id);
-    if (c?.zone === "encounterDeck") return game.encounterDeck;
+    if (c?.zone === "encounterDeck") return pileOf(game, "encounterDeck");
     if (c?.zone === "deck" && c.owner) return invOf(game, c.owner).deck;
     return c?.zone === "discard" && c.owner === viewer ? invOf(game, viewer).discard : null;
   };

@@ -3,6 +3,7 @@ import { card, createCard, moveCard } from "./core";
 import { db, mutate, options, pick, skipMulligans, start } from "./testkit";
 import type { Ability } from "../content/schema";
 import type { Result } from "./engine";
+import { cardRecIn, invStateIn } from "./records";
 
 const ROLAND = "01001";
 const DAISY = "01002";
@@ -47,8 +48,8 @@ const beatCop = (
 ) => {
   const id = createCard(g, BEAT_COP, "limbo", owner);
   moveCard(g, id, "play");
-  g.s.cards[id].damage = damage;
-  g.s.cards[id].horror = horror;
+  cardRecIn(g.s, id).damage = damage;
+  cardRecIn(g.s, id).horror = horror;
   return id;
 };
 
@@ -62,12 +63,12 @@ describe("an ability's cost can take damage", () => {
 
   it("the controller takes it, then the ability resolves", () => {
     let r = turn(ab, (g) => {
-      g.s.invs[ROLAND].horror = 2;
+      invStateIn(g.s, ROLAND).horror = 2;
     });
     r = pick(r, "Patch up");
     while (r.state.pending && r.state.pending.kind !== "turn") r = pick(r, /./);
-    expect(r.state.invs[ROLAND].damage).toBe(1);
-    expect(r.state.invs[ROLAND].horror).toBe(1);
+    expect(invStateIn(r.state, ROLAND).damage).toBe(1);
+    expect(invStateIn(r.state, ROLAND).horror).toBe(1);
   });
 });
 
@@ -84,23 +85,23 @@ describe("a heal can target an Ally asset", () => {
     let cop = "";
     let r = turn(atLocation, (g) => {
       cop = beatCop(g, 1, 1);
-      g.s.invs[ROLAND].damage = 1;
+      invStateIn(g.s, ROLAND).damage = 1;
     });
     r = pick(r, "Mend");
     expect(options(r)).toEqual(["Roland Banks", "Beat Cop"]);
     r = pick(r, "Beat Cop");
     expect(card({ s: r.state, db, events: [] }, cop)).toMatchObject({ damage: 0, horror: 0 });
-    expect(r.state.invs[ROLAND].damage).toBe(1); // not Roland
+    expect(invStateIn(r.state, ROLAND).damage).toBe(1); // not Roland
   });
 
   it("choosing the investigator heals them as before", () => {
     let r = turn(atLocation, (g) => {
       beatCop(g, 1, 0);
-      g.s.invs[ROLAND].damage = 2;
+      invStateIn(g.s, ROLAND).damage = 2;
     });
     r = pick(r, "Mend");
     r = pick(r, "Roland Banks");
-    expect(r.state.invs[ROLAND].damage).toBe(1);
+    expect(invStateIn(r.state, ROLAND).damage).toBe(1);
   });
 
   it("an Ally at another location is not offered; a card that is not an Ally never is", () => {
@@ -108,7 +109,7 @@ describe("a heal can target an Ally asset", () => {
       atLocation,
       (g) => {
         beatCop(g, 1, 0, DAISY);
-        g.s.invs[DAISY].location = null;
+        invStateIn(g.s, DAISY).location = null;
       },
       [ROLAND, DAISY],
     );

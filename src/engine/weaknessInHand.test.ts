@@ -13,6 +13,7 @@ import { randInt } from "./rng";
 import { gOf, skipMulligans, start } from "./testkit";
 import type { InstId } from "./types";
 import { moveCard, type G } from "./core";
+import { cardRecIn, invStateIn } from "./records";
 
 const R = "01001";
 const ritual = () => gOf(skipMulligans(start("the-devourer-below", [R], 1)));
@@ -23,19 +24,19 @@ const madnessPool = (g: G) =>
 
 /** fail The Ritual Begins' test: its script adds the weakness, then the engine runs what that queued */
 function failRitual(g: G): InstId {
-  const before = new Set(Object.keys(g.s.cards));
+  const before = new Set(g.s.world.entities);
   g.s.pending = null;
   g.db.scripts["01144"].fns!.madness(g, { you: R });
   run(g);
-  return Object.keys(g.s.cards).find((id) => !before.has(id))!;
+  return g.s.world.entities.find((id) => !before.has(id))!;
 }
 
 describe("a Madness weakness The Ritual Begins puts into your hand", () => {
   it("resolves as if drawn: it doesn't stay in the hand", () => {
     const g = ritual();
     const id = failRitual(g);
-    expect(g.db.cards[g.s.cards[id].code].traits).toContain("Madness");
-    expect(g.s.cards[id].zone).not.toBe("hand");
+    expect(g.db.cards[cardRecIn(g.s, id).code].traits).toContain("Madness");
+    expect(cardRecIn(g.s, id).zone).not.toBe("hand");
     expect(g.events.some((e) => e.type === "weakness" && e.card === id)).toBe(true);
   });
 
@@ -52,9 +53,9 @@ describe("a Madness weakness The Ritual Begins puts into your hand", () => {
       while (pool[randInt({ rng }, pool.length)].code !== "03041") rng++;
       g.s.rng = rng;
       const id = failRitual(g);
-      expect(g.s.cards[id].code).toBe("03041");
-      expect(g.s.cards[id].zone).toBe("threat");
-      expect(g.s.invs[R].hand).not.toContain(id);
+      expect(cardRecIn(g.s, id).code).toBe("03041");
+      expect(cardRecIn(g.s, id).zone).toBe("threat");
+      expect(invStateIn(g.s, R).hand).not.toContain(id);
     });
 
     it("in the threat area: maximum hand size 5 less, and two actions discard it", () => {
@@ -65,7 +66,7 @@ describe("a Madness weakness The Ritual Begins puts into your hand", () => {
       expect(handLimit(g, R)).toBe(before - 5);
       g.s.phase = "investigation";
       g.s.active = R;
-      g.s.invs[R].actionsLeft = 3;
+      invStateIn(g.s, R).actionsLeft = 3;
       expect(legalTurnActions(g, R).map((o) => o.label)).toContain(
         "Discard Drawing the Sign [2 actions]",
       );

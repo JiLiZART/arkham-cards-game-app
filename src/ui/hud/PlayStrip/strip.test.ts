@@ -74,7 +74,9 @@ describe("strip buttons", () => {
 });
 
 describe("ability symbols", () => {
-  const game = { cards: { gun: { code: "01016" }, roland: { code: "01001" } } } as never;
+  const game = {
+    world: { tables: { card: { gun: { code: "01016" }, roland: { code: "01001" } } } },
+  } as never;
   const o = (value: unknown): ChoiceOption => ({ id: "x", label: "x", value }) as ChoiceOption;
   it("an action ability (.45 Automatic's fight) shows the action symbol", () => {
     expect(abilitySymbol(o({ kind: "ability", card: "gun", index: 0 }), game)).toBe("action");
@@ -93,7 +95,10 @@ describe("ability symbols", () => {
 });
 
 describe("encounter pile badges", () => {
-  const game = { scenarioId: "the-gathering", cards: { r: { code: "01163" } } } as never;
+  const game = {
+    scenarioId: "the-gathering",
+    world: { tables: { card: { r: { code: "01163" } } } },
+  } as never;
   it("a face-down pile shows the scenario's icon; a face-up one its top card's set", () => {
     expect(pileIcon(null, false, game)).toBe("the_gathering");
     expect(pileIcon("r", false, game)).toBe("the_gathering");

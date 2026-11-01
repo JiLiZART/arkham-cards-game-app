@@ -31,6 +31,7 @@ import {
   ownDecisionTitle,
   shownInv,
 } from "./players";
+import { invStateIn } from "../../engine/records";
 
 const ROLAND = "01001";
 const DAISY = "01002";
@@ -179,7 +180,7 @@ describe("barModel", () => {
   it("four players with one defeated: all four stay, the defeated one is grey with no pips", () => {
     const { state } = turn([ROLAND, DAISY, SKIDS, AGNES]);
     const s = structuredClone(state);
-    s.invs[SKIDS].status = "defeated" as never;
+    invStateIn(s, SKIDS).status = "defeated" as never;
     const bar = barModel(s, none);
     expect(bar.map((a) => a.inv)).toEqual(s.order);
     expect(bar.find((a) => a.inv === SKIDS)).toMatchObject({ grey: true, pips: 0, filled: 0 });
@@ -188,7 +189,7 @@ describe("barModel", () => {
 });
 
 describe("investigatorOptions", () => {
-  const card = (state: GameState, inv: string) => state.invs[inv].cardId;
+  const card = (state: GameState, inv: string) => invStateIn(state, inv).cardId;
   const withOptions = (state: GameState, inv: string, options: { id: string; card?: string }[]) =>
     ({
       ...state,
@@ -246,7 +247,7 @@ describe("abilityOptionsOf", () => {
         options: options.map((o) => ({ ...o, label: o.id, value: o.id })),
       },
     }) as GameState;
-  const cardOf = (state: GameState, i: string) => state.invs[i].cardId;
+  const cardOf = (state: GameState, i: string) => invStateIn(state, i).cardId;
 
   it("the investigator's own ability on their card is offered on their stat bar, and a pass is not", () => {
     const { state } = turn();
@@ -454,7 +455,7 @@ describe("autoSwitchTarget", () => {
 describe("investigatorChoice", () => {
   it("every option an investigator: their avatars, to tap", () => {
     const { state } = turn([ROLAND, DAISY, SKIDS]);
-    const own = new Map(state.order.map((i) => [state.invs[i].cardId, i]));
+    const own = new Map(state.order.map((i) => [invStateIn(state, i).cardId, i]));
     const pending = {
       ...state.pending!,
       options: [...own].map(([card, inv]) => ({ id: `pick:${inv}`, label: inv, card })),
@@ -466,7 +467,7 @@ describe("investigatorChoice", () => {
 
   it("exactly one option: it is the single choice to make by itself", () => {
     const { state } = turn();
-    const card = state.invs[DAISY].cardId;
+    const card = invStateIn(state, DAISY).cardId;
     const c = investigatorChoice({
       ...state,
       pending: { ...state.pending!, options: [{ id: "only", label: "Daisy", card }] },
@@ -477,7 +478,7 @@ describe("investigatorChoice", () => {
   it("any other option beside the investigators, or none at all: not an investigator choice", () => {
     const { state } = turn();
     expect(investigatorChoice(state)).toBeNull();
-    const card = state.invs[DAISY].cardId;
+    const card = invStateIn(state, DAISY).cardId;
     expect(
       investigatorChoice({
         ...state,

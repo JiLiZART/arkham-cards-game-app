@@ -12,6 +12,7 @@ import {
   start,
 } from "./testkit";
 import { TokenEffect } from "../content/schema";
+import { allCardRecsIn, invStateIn, pileRecIn } from "./records";
 
 const ROLAND = "01001";
 const GHOUL = "01161"; // Ravenous Ghoul
@@ -31,7 +32,7 @@ afterEach(() => {
 
 /** take every Ghoul enemy out of the encounter deck and its discard pile */
 const noGhouls = (g: G) => {
-  for (const id of [...g.s.encounterDeck, ...g.s.encounterDiscard])
+  for (const id of [...pileRecIn(g.s, "encounterDeck"), ...pileRecIn(g.s, "encounterDiscard")])
     if (matchesFilter(g, card(g, id).code, { type: "enemy", trait: "Ghoul" }))
       moveCard(g, id, "removed");
 };
@@ -60,7 +61,7 @@ describe("searchEncounterDraw: search the encounter deck and discard pile for an
     const g = gOf(r);
     expect(card(g, ghoul).zone).toBe("enemy");
     expect(card(g, ghoul).engagedWith).toBe(ROLAND);
-    expect(r.state.encounterDiscard).not.toContain(ghoul);
+    expect(pileRecIn(r.state, "encounterDiscard")).not.toContain(ghoul);
   });
 
   it("takes the enemy from the deck when it is there, and shuffles the deck", () => {
@@ -71,11 +72,11 @@ describe("searchEncounterDraw: search the encounter deck and discard pile for an
       noGhouls(g);
       ghoul = createCard(g, GHOUL, "encounterDeck");
     });
-    const before = [...r.state.encounterDeck];
+    const before = [...pileRecIn(r.state, "encounterDeck")];
     r = failInvestigate(r);
     const g = gOf(r);
     expect(card(g, ghoul).zone).toBe("enemy");
-    expect(r.state.encounterDeck).toHaveLength(before.length - 1);
+    expect(pileRecIn(r.state, "encounterDeck")).toHaveLength(before.length - 1);
     expect(r.state.log.some((e) => /shuffles the encounter deck/.test(e.text))).toBe(true);
   });
 
@@ -84,7 +85,7 @@ describe("searchEncounterDraw: search the encounter deck and discard pile for an
     let r = skipMulligans(start("the-gathering", [ROLAND], 1, { chaosBag: ["skull"] as never }));
     r = mutate(r, noGhouls);
     const enemies = (x: typeof r) =>
-      Object.values(x.state.cards).filter((c) => c.zone === "enemy").length;
+      allCardRecsIn(x.state).filter((c) => c.zone === "enemy").length;
     const before = enemies(r);
     r = failInvestigate(r);
     expect(enemies(r)).toBe(before);
@@ -178,7 +179,7 @@ describe("Night of the Zealot on Hard and Expert, from the backs of the referenc
       return {
         first: /cultist/.test(tokens[0].text),
         count: tokens.length,
-        horror: r.state.invs[ROLAND].horror,
+        horror: invStateIn(r.state, ROLAND).horror,
       };
     });
     expect(runs.some((x) => x.first)).toBe(true);
@@ -197,7 +198,7 @@ describe("Night of the Zealot on Hard and Expert, from the backs of the referenc
         }),
       );
       expect(
-        Object.values(r.state.cards).filter(
+        allCardRecsIn(r.state).filter(
           (c) => c.zone === "enemy" && db.cards[c.code].traits.includes("Cultist"),
         ),
       ).toEqual([]);

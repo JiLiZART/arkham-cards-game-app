@@ -4,6 +4,7 @@ import { inv, push, type G } from "./core";
 import { run, type Result } from "./engine";
 import { DAISY, ROLAND, game, hand, inPlay } from "./natkit";
 import { db, options, pick } from "./testkit";
+import { allCardRecsIn, cardRecIn, invStateIn } from "./records";
 
 const AGNES = "01004";
 const g = (r: Result): G => ({ s: structuredClone(r.state), db, events: [] });
@@ -12,7 +13,7 @@ describe("elimination", () => {
   it("the remaining investigators choose a new lead when the lead is eliminated", () => {
     const x = g(game([ROLAND, DAISY]));
     x.s.pending = null;
-    x.s.invs[ROLAND].damage = 9;
+    invStateIn(x.s, ROLAND).damage = 9;
     push(x, { t: "CheckDefeat", inv: ROLAND });
     run(x);
     expect(inv(x, ROLAND).status).toBe("defeated");
@@ -35,15 +36,13 @@ describe("weaknesses", () => {
   it("a player-type weakness drawn in play resolves its revelation", () => {
     let r = game([DAISY], (x) => {
       const id = hand(x, DAISY, "01009"); // The Necronomicon
-      const me = x.s.invs[DAISY];
+      const me = invStateIn(x.s, DAISY);
       me.hand = me.hand.filter((h) => h !== id);
-      x.s.cards[id].zone = "deck";
+      cardRecIn(x.s, id).zone = "deck";
       me.deck.unshift(id);
     });
     r = pick(r, "Draw 1 card");
-    const necro = Object.values(r.state.cards).find(
-      (c) => c.code === "01009" && c.zone !== "deck",
-    )!; // her deck's own copy stays below
+    const necro = allCardRecsIn(r.state).find((c) => c.code === "01009" && c.zone !== "deck")!; // her deck's own copy stays below
     expect(necro.zone).toBe("threat");
     expect(necro.horror).toBe(3);
   });
@@ -51,14 +50,14 @@ describe("weaknesses", () => {
   it("Hospital Debts moves exactly one resource per use, and needs one", () => {
     let r = game([ROLAND], (x) => {
       inPlay(x, ROLAND, "01011");
-      x.s.invs[ROLAND].resources = 5;
+      invStateIn(x.s, ROLAND).resources = 5;
     });
     r = pick(r, /Hospital Debts/);
     expect(inv(g(r), ROLAND).resources).toBe(4);
-    expect(Object.values(r.state.cards).find((c) => c.code === "01011")!.resources).toBe(1);
+    expect(allCardRecsIn(r.state).find((c) => c.code === "01011")!.resources).toBe(1);
     const broke = game([ROLAND], (x) => {
       inPlay(x, ROLAND, "01011");
-      x.s.invs[ROLAND].resources = 0;
+      invStateIn(x.s, ROLAND).resources = 0;
     });
     expect(options(broke).some((o) => /Hospital Debts/.test(o))).toBe(false);
   });
@@ -66,7 +65,7 @@ describe("weaknesses", () => {
   it("Dark Memory's Forced resolves at the end of the turn whatever the resources", () => {
     let r = game([AGNES], (x) => {
       hand(x, AGNES, "01013");
-      x.s.invs[AGNES].resources = 0;
+      invStateIn(x.s, AGNES).resources = 0;
     });
     r = pick(r, "End turn");
     expect(r.events.some((e) => /Dark Memory/.test(e.text))).toBe(true);

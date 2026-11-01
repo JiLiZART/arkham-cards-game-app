@@ -4,11 +4,8 @@ import { sharedView } from "./sharedView";
 
 /** just the cards the lookups read */
 const game = {
-  cards: {
-    enemy: { owner: null },
-    hand: { owner: "01001" },
-  },
-} as unknown as Pick<GameState, "cards">;
+  world: { tables: { card: { enemy: { owner: null }, hand: { owner: "01001" } } } },
+} as unknown as Pick<GameState, "world">;
 
 describe("sharedView", () => {
   it("shares the act, agenda and reference decks", () => {

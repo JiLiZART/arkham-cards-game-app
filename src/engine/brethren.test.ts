@@ -8,6 +8,7 @@ import { neutral, toTurn } from "./natkit";
 import { applyScenarioEnd, scenarioSetup, startCampaign, type CampaignState } from "./campaign";
 import { advance } from "./flow";
 import { hasEntry } from "./campaignLog";
+import { allCardRecsIn, cardRecIn, invStateIn, pileRecIn } from "./records";
 
 beforeAll(async () => {
   await loadPack("core_2026");
@@ -66,13 +67,13 @@ describe("Brethren of Ash, random play", () => {
 const R = "01001";
 const D = "01002";
 const codesIn = (r: Result, zone: string) =>
-  Object.values(r.state.cards)
+  allCardRecsIn(r.state)
     .filter((c) => c.zone === zone)
     .map((c) => c.code);
 const count = (r: Result, code: string, zone: string) =>
   codesIn(r, zone).filter((c) => c === code).length;
-const actCode = (r: Result) => (r.state.act ? r.state.cards[r.state.act].code : null);
-const agendaCode = (r: Result) => (r.state.agenda ? r.state.cards[r.state.agenda].code : null);
+const actCode = (r: Result) => (r.state.act ? cardRecIn(r.state, r.state.act).code : null);
+const agendaCode = (r: Result) => (r.state.agenda ? cardRecIn(r.state, r.state.agenda).code : null);
 /** the scenario at its first turn, with a neutral bag */
 const begin = (
   scenario: string,
@@ -102,7 +103,7 @@ function inject(r: Result, fn: (g: G) => void, ...steps: G["s"]["queue"]): Resul
 function toAct(g: G, code: string) {
   while (g.s.act && card(g, g.s.act).code !== code) {
     moveCard(g, g.s.act, "removed");
-    const nextAct = g.s.actDeck.shift();
+    const nextAct = pileRecIn(g.s, "actDeck").shift();
     if (nextAct) moveCard(g, nextAct, "act");
   }
 }
@@ -131,15 +132,15 @@ describe("Spreading Flames", () => {
   it("act 1 advances at the end of the round: the dorms and the quad, the Servant, Fire!", () => {
     let r = begin("spreading-flames", [R]);
     r = mutate(r, (g) => {
-      g.s.invs[R].clues = 2;
+      invStateIn(g.s, R).clues = 2;
     });
     r = endRound(r, (x) => options(x).some((o) => o.startsWith("Advance act")));
     r = until(pick(r, /^Advance act/), () => false);
     expect(actCode(r)).toBe("12110");
     expect(codesIn(r, "location")).toEqual(expect.arrayContaining(["12113", "12116", "12117"]));
-    const servant = Object.values(r.state.cards).find((c) => c.code === "12114")!;
+    const servant = allCardRecsIn(r.state).find((c) => c.code === "12114")!;
     expect(servant.zone).toBe("enemy");
-    expect(r.state.cards[servant.location!].code).toBe("12117");
+    expect(cardRecIn(r.state, servant.location!).code).toBe("12117");
     expect(count(r, "12129", "attached")).toBe(1);
     expect(count(r, "12129", "encounterDiscard")).toBe(4);
   });
@@ -147,7 +148,7 @@ describe("Spreading Flames", () => {
   it("act 2 advances when everyone is at the quad: the room goes, the campus opens", () => {
     let r = begin("spreading-flames", [R]);
     r = mutate(r, (g) => {
-      g.s.invs[R].clues = 2;
+      invStateIn(g.s, R).clues = 2;
     });
     r = until(
       pick(
@@ -159,7 +160,7 @@ describe("Spreading Flames", () => {
     r = inject(
       r,
       (g) => {
-        g.s.invs[R].location = findByCode(g, "12116", ["location"])!.id;
+        invStateIn(g.s, R).location = findByCode(g, "12116", ["location"])!.id;
       },
       { t: "CheckObjectives" },
     );
@@ -167,34 +168,34 @@ describe("Spreading Flames", () => {
     expect(actCode(r)).toBe("12111");
     expect(codesIn(r, "location")).not.toContain("12113");
     expect(codesIn(r, "location")).toEqual(expect.arrayContaining(["12118", "12119", "12120"]));
-    expect(Object.values(r.state.cards).find((c) => c.code === "12114")!.zone).toBe("setAside");
+    expect(allCardRecsIn(r.state).find((c) => c.code === "12114")!.zone).toBe("setAside");
   });
 
   it("act 3 advances from Orne Library: Armitage joins, the Servant returns, Fire! for the lead", () => {
     let r = begin("spreading-flames", [R]);
     r = mutate(r, (g) => {
       for (const code of ["12116", "12120"]) {
-        const l = Object.values(g.s.cards).find((c) => c.code === code)!;
+        const l = allCardRecsIn(g.s).find((c) => c.code === code)!;
         moveCard(g, l.id, "location");
         l.revealed = true;
       }
       toAct(g, "12111");
-      g.s.invs[R].location = findByCode(g, "12120", ["location"])!.id;
-      g.s.invs[R].clues = 3;
+      invStateIn(g.s, R).location = findByCode(g, "12120", ["location"])!.id;
+      invStateIn(g.s, R).clues = 3;
     });
     r = endRound(r, (x) => options(x).some((o) => o.startsWith("Advance act")));
     r = toTurn(pick(r, /^Advance act/));
     expect(actCode(r)).toBe("12112");
-    const armitage = Object.values(r.state.cards).find((c) => c.code === "12115")!;
+    const armitage = allCardRecsIn(r.state).find((c) => c.code === "12115")!;
     expect(armitage).toMatchObject({ zone: "play", controller: R });
-    expect(Object.values(r.state.cards).find((c) => c.code === "12114")!.zone).toBe("enemy");
+    expect(allCardRecsIn(r.state).find((c) => c.code === "12114")!.zone).toBe("enemy");
   });
 
   it("act 4 ends the scenario (R1) when the Servant is defeated", () => {
     let r = begin("spreading-flames", [R]);
     r = mutate(r, (g) => {
       toAct(g, "12112");
-      const s = Object.values(g.s.cards).find((c) => c.code === "12114")!;
+      const s = allCardRecsIn(g.s).find((c) => c.code === "12114")!;
       moveCard(g, s.id, "enemy", { location: inv(g, R).location });
       s.damage = 4;
       s.engagedWith = R;
@@ -209,7 +210,7 @@ describe("Spreading Flames", () => {
     r = inject(
       r,
       (g) => {
-        g.s.cards[g.s.agenda!].doom = 3;
+        cardRecIn(g.s, g.s.agenda!).doom = 3;
       },
       { t: "CheckDoom" },
     );
@@ -241,19 +242,19 @@ describe("Smoke and Mirrors", () => {
     let r = begin("smoke-and-mirrors", [R], {}, ["+1"]);
     r = mutate(r, (g) => {
       // Northside, with Cornelia Akely beneath it
-      const north = g.s.cards[findByCode(g, "12149", ["location"])!.id];
+      const north = cardRecIn(g.s, findByCode(g, "12149", ["location"])!.id);
       north.revealed = true;
-      g.s.invs[R].location = north.id;
-      g.s.invs[R].clues = 2;
+      invStateIn(g.s, R).location = north.id;
+      invStateIn(g.s, R).clues = 2;
       g.s.chaosBag = ["+1"];
-      const cornelia = Object.values(g.s.cards).find((c) => c.code === "12140")!;
+      const cornelia = allCardRecsIn(g.s).find((c) => c.code === "12140")!;
       for (const k of Object.keys(g.s.flags)) if (g.s.flags[k] === cornelia.id) delete g.s.flags[k];
       if (g.s.flags.harbinger === cornelia.id) g.s.flags.harbinger = "none";
       moveCard(g, cornelia.id, "setAside");
       g.s.flags[`beneath:${north.id}`] = cornelia.id;
     });
     r = toTurn(pick(r, /^Augurs of Flame/));
-    const cornelia = Object.values(r.state.cards).find((c) => c.code === "12140")!;
+    const cornelia = allCardRecsIn(r.state).find((c) => c.code === "12140")!;
     expect(cornelia.zone).toBe("enemy");
     r = until(pick(r, /^Evade Cornelia/), (x) =>
       options(x).some((o) => o.startsWith("Cornelia Akely")),
@@ -266,7 +267,7 @@ describe("Smoke and Mirrors", () => {
   it("records the harbinger and what the investigators found for the campaign log", () => {
     let r = begin("smoke-and-mirrors", [R]);
     r = inject(r, () => {}, { t: "Resolution", id: "R1" });
-    const h = r.state.cards[r.state.flags.harbinger as string].code;
+    const h = cardRecIn(r.state, r.state.flags.harbinger as string).code;
     const names: Record<string, string> = {
       "12139": "david",
       "12140": "cornelia",
@@ -289,25 +290,25 @@ describe("Queen of Ash", () => {
     expect(codesIn(r, "setAside")).toEqual(
       expect.arrayContaining(["12175", "12179", "12179b", "12180"]),
     );
-    expect(r.state.invs[R].clues).toBe(1);
+    expect(invStateIn(r.state, R).clues).toBe(1);
     expect(r.state.chaosBag.slice(-2)).toEqual(["elderThing", "tablet"]);
   });
 
   it("the cistern costs clues to enter; entering it advances the act and Elokoss stirs", () => {
     let r = begin("queen-of-ash", [R]);
     r = mutate(r, (g) => {
-      const tunnel = g.s.cards[findByCode(g, "12185", ["location"])!.id];
+      const tunnel = cardRecIn(g.s, findByCode(g, "12185", ["location"])!.id);
       tunnel.revealed = true;
-      g.s.invs[R].location = tunnel.id;
+      invStateIn(g.s, R).location = tunnel.id;
     });
     expect(options(r).some((o) => o.startsWith("Move to Underground Cistern"))).toBe(false);
     r = mutate(r, (g) => {
-      g.s.invs[R].clues = 3;
+      invStateIn(g.s, R).clues = 3;
     });
     r = until(pick(r, /^Move to Underground Cistern/), () => false);
-    expect(r.state.invs[R].clues).toBe(0);
+    expect(invStateIn(r.state, R).clues).toBe(0);
     expect(actCode(r)).toBe("12173");
-    expect(Object.values(r.state.cards).find((c) => c.code === "12179")!.zone).toBe("enemy");
+    expect(allCardRecsIn(r.state).find((c) => c.code === "12179")!.zone).toBe("enemy");
     expect(codesIn(r, "location")).toContain("12175");
   });
 
@@ -329,14 +330,14 @@ describe("Queen of Ash", () => {
       r,
       (g) => {
         moveCard(g, g.s.agenda!, "removed");
-        moveCard(g, g.s.agendaDeck.shift()!, "agenda");
+        moveCard(g, pileRecIn(g.s, "agendaDeck").shift()!, "agenda");
       },
       { t: "AdvanceAgenda" },
     );
     r = toTurn(r);
     expect(agendaCode(r)).toBe("12171");
     expect(r.state.act).toBe(null);
-    expect(Object.values(r.state.cards).find((c) => c.code === "12179b")!.zone).toBe("enemy");
+    expect(allCardRecsIn(r.state).find((c) => c.code === "12179b")!.zone).toBe("enemy");
     expect(cardsIn(gOf(r), "enemy").length).toBeGreaterThan(0);
   });
 });
@@ -395,14 +396,14 @@ describe("Brethren of Ash, the campaign", () => {
     const sm = createGame(db, scenarioSetup(db, c, 1));
     expect(codesIn(sm, "location")).toContain("12155");
     // Dr. Armitage comes into play with his bearer
-    expect(Object.values(sm.state.cards).find((x) => x.code === "12115")!.zone).toBe("play");
+    expect(allCardRecsIn(sm.state).find((x) => x.code === "12115")!.zone).toBe("play");
     c = walk(finish(c, "R1"));
     expect(c.chaosBag.filter((t) => t === "cultist")).toHaveLength(2);
     expect(hasEntry(c.log, "discovered_the_cults_whereabouts")).toBe(true);
     expect(c.flow.waiting?.step).toEqual({ kind: "play", scenario: "queen-of-ash" });
     const qa = createGame(db, scenarioSetup(db, c, 1));
     // the Servant of Flame was not killed: set aside
-    expect(Object.values(qa.state.cards).find((x) => x.code === "12180")!.zone).toBe("setAside");
+    expect(allCardRecsIn(qa.state).find((x) => x.code === "12180")!.zone).toBe("setAside");
     c = walk(finish(c, "R2"));
     expect(c.flow.waiting).toBeNull();
     expect(c.investigators.every((i) => i.physicalTrauma >= 2)).toBe(true);

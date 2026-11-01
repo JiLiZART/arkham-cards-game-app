@@ -21,6 +21,8 @@ import { Session, seatMap } from "./session";
 import { playerId, type FromRoom, type Roster, type ToRoom } from "./protocol";
 import type { Link, LinkHandlers, Mesh, MeshHandlers, ShownView, Wire } from "./transport";
 import type { Numbered } from "./moves";
+import { invStateIn } from "../engine/records";
+import { invOfIf } from "../engine/core";
 
 const ROOM = "R".repeat(22);
 const ROLAND = "01001";
@@ -305,8 +307,8 @@ describe("lobby and start", () => {
   it("starts the same campaign on every browser, with the seats the players took", async () => {
     const { ana, ben } = await started();
     expect(ana.store.getState().campaign).not.toBeNull();
-    expect(ana.store.getState().game?.invs[ROLAND]).toBeTruthy();
-    expect(ana.store.getState().game?.invs[AGNES]).toBeTruthy();
+    expect(invOfIf(ana.store.getState().game, ROLAND)).toBeTruthy();
+    expect(invOfIf(ana.store.getState().game, AGNES)).toBeTruthy();
     same(ana, ben);
     expect(ana.seats).toEqual([ROLAND]);
     expect(ben.seats).toEqual([AGNES]);

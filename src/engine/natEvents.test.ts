@@ -23,13 +23,14 @@ import {
   toTurn,
 } from "./natkit";
 import { gOf, locId, options, pick, putEnemy } from "./testkit";
+import { allCardRecsIn, cardRecIn, invStateIn } from "./records";
 
 beforeAll(async () => {
   await loadPack("nat");
 });
 
 const N = NATHANIEL;
-const res = (r: Result, i = N) => r.state.invs[i].resources;
+const res = (r: Result, i = N) => invStateIn(r.state, i).resources;
 /** the Nathaniel reaction window is passed, everything else neutral, until it is a turn again */
 const finish = (r: Result) => toTurn(r);
 const offered = (name: RegExp) => (x: Result) => options(x).some((o) => name.test(o));
@@ -39,7 +40,7 @@ describe("Clean Them Out", () => {
     let r = nathaniel((g) => {
       hand(g, N, "60111");
       enemyHere(g, N);
-      g.s.invs[N].resources = 0;
+      invStateIn(g.s, N).resources = 0;
     });
     r = pick(r, /^Play Clean Them Out/);
     expect(res(r)).toBe(2);
@@ -77,7 +78,7 @@ describe("Glory", () => {
     let r = nathaniel((g) => {
       hand(g, N, "60115");
       enemyHere(g, N, ACOLYTE);
-      g.s.invs[N].resources = 3;
+      invStateIn(g.s, N).resources = 3;
     });
     const draws = (x: Result) =>
       x.state.log.filter((e) => e.type === "draw" || e.type === "weakness").length;
@@ -134,7 +135,7 @@ describe('"Get over here!"', () => {
     });
     r = pick(r, /^Play .Get over here/);
     const e = enemyIn(r, MINION)!;
-    expect(e.location).toBe(r.state.invs[N].location);
+    expect(e.location).toBe(invStateIn(r.state, N).location);
     expect(r.state.skillTest?.kind).toBe("fight");
     expect(attacks(r)).toBe(0);
     expect(e.engagedWith).toBe(N);
@@ -158,7 +159,7 @@ describe('"Get over here!"', () => {
     });
     r = pick(r, /^Play .Get over here.*\(fast\)/);
     expect(enemyIn(r, MINION)!.engagedWith).toBe(N);
-    expect(r.state.invs[N].actionsLeft).toBe(3);
+    expect(invStateIn(r.state, N).actionsLeft).toBe(3);
   });
 });
 
@@ -195,7 +196,7 @@ describe("Stand Together", () => {
   it("gives 2 resources to the player and to the other investigator at the location, nobody else", () => {
     let r = game([N, DAISY, ROLAND], (g) => {
       hand(g, N, "60118");
-      g.s.invs[ROLAND].location = null; // elsewhere
+      invStateIn(g.s, ROLAND).location = null; // elsewhere
     });
     const before = [N, DAISY, ROLAND].map((i) => res(r, i));
     r = pick(r, /^Play Stand Together/);
@@ -212,7 +213,7 @@ describe("Evidence! (1)", () => {
     let r = nathaniel((g) => {
       hand(g, N, "60120");
       enemyHere(g, N, ACOLYTE);
-      g.s.invs[N].defeatedHealth = healthBefore;
+      invStateIn(g.s, N).defeatedHealth = healthBefore;
     });
     const clues = card(gOf(r), inv(gOf(r), N).location!).clues;
     r = toTurn(pick(r, /^Fight/), offered(/^Evidence!/));
@@ -231,13 +232,13 @@ describe("Galvanize", () => {
   it("readies a Guardian asset and gives an extra action that can only fight", () => {
     let r = nathaniel((g) => {
       hand(g, N, "60121");
-      g.s.cards[inPlay(g, N, "60105")].exhausted = true; // Boxing Gloves
+      cardRecIn(g.s, inPlay(g, N, "60105")).exhausted = true; // Boxing Gloves
       enemyHere(g, N, MINION, false);
     });
     r = pick(r, /^Play Galvanize/);
-    expect(Object.values(r.state.cards).find((c) => c.code === "60105")!.exhausted).toBe(false);
+    expect(allCardRecsIn(r.state).find((c) => c.code === "60105")!.exhausted).toBe(false);
     for (let k = 0; k < 3; k++) r = pick(r, /^Gain 1 resource/);
-    expect(r.state.invs[N].actionsLeft).toBe(0);
+    expect(invStateIn(r.state, N).actionsLeft).toBe(0);
     expect(options(r).some((o) => o.startsWith("Fight"))).toBe(true);
     expect(options(r).some((o) => /^Gain 1 resource|^Draw/.test(o))).toBe(false);
   });
@@ -250,9 +251,9 @@ describe("Lesson Learned", () => {
       enemyHere(g, N);
     });
     r = toTurn(pick(r, "End turn"), offered(/^Lesson Learned/));
-    const clues = r.state.invs[N].clues;
+    const clues = invStateIn(r.state, N).clues;
     r = pick(r, /^Lesson Learned/);
-    expect(r.state.invs[N].clues).toBe(clues + 2);
+    expect(invStateIn(r.state, N).clues).toBe(clues + 2);
   });
 });
 
@@ -284,7 +285,7 @@ describe("Taunt (3)", () => {
       const b = enemyHere(g, DAISY);
       void a;
       void b;
-      g.s.invs[N].resources = 5;
+      invStateIn(g.s, N).resources = 5;
     });
     const draws = (x: Result) =>
       x.state.log.filter((e) => e.type === "draw" || e.type === "weakness").length;
@@ -294,9 +295,7 @@ describe("Taunt (3)", () => {
     r = toTurn(r, offered(/^Ghoul Minion|^Done/));
     r = pick(r, /^Ghoul Minion/);
     r = toTurn(r);
-    const minions = Object.values(r.state.cards).filter(
-      (c) => c.code === MINION && c.zone === "enemy",
-    );
+    const minions = allCardRecsIn(r.state).filter((c) => c.code === MINION && c.zone === "enemy");
     expect(minions.map((m) => m.engagedWith)).toEqual([N, N]);
     expect(minions.map((m) => m.damage)).toEqual([1, 1]);
     expect(draws(r) - before).toBe(2);
@@ -336,6 +335,6 @@ describe("Dynamite Blast (3)", () => {
     r = pick(r, /Study/);
     r = finish(r);
     expect(enemyIn(r, MINION)).toBeUndefined();
-    expect(r.state.invs[N].damage).toBe(3);
+    expect(invStateIn(r.state, N).damage).toBe(3);
   });
 });

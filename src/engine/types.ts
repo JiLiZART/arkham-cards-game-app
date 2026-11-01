@@ -67,6 +67,30 @@ export interface CardInst {
   attachedTo: InstId | null;
 }
 
+/** an investigator's record in the store: everything but the piles, which live in the world's pile map */
+export type InvRecord = Omit<InvState, "deck" | "hand" | "discard">;
+
+/** the name of a pile: an investigator's deck, hand or discard, or one of the scenario's */
+export type PileName =
+  | `deck:${string}`
+  | `hand:${string}`
+  | `discard:${string}`
+  | `sideDeck:${string}`
+  | "encounterDeck"
+  | "encounterDiscard"
+  | "actDeck"
+  | "agendaDeck";
+
+/**
+ * The store (ADR-0023): the entities in creation order, one table per component, and every pile in one map keyed by
+ * its name. A card sits in at most one pile, the one its zone and owner name. Plain JSON.
+ */
+export interface World {
+  entities: InstId[];
+  tables: { card: Record<InstId, CardInst>; investigator: Record<InvId, InvRecord> };
+  piles: Partial<Record<PileName, InstId[]>>;
+}
+
 /** a card instance as code outside the core sees it: read, never written (ADR-0022) */
 export type CardView = Readonly<CardInst>;
 
@@ -409,8 +433,7 @@ export interface GameState {
   phase: "setup" | "mythos" | "investigation" | "enemy" | "upkeep" | "ended";
   /** `reveal`: bumped by every choice that brought hidden information into play (a random draw, a card leaving a deck, deck cards shown) */
   counters: { turn: number; phase: number; round: number; test: number; reveal: number };
-  cards: Record<InstId, CardInst>;
-  invs: Record<InvId, InvState>;
+  world: World;
   order: InvId[];
   lead: InvId;
   active: InvId | null;
@@ -418,13 +441,8 @@ export interface GameState {
   pacePhases?: boolean;
   /** set from the setup: every draw in play waits for the drawing investigator to tap the deck */
   tapDecks?: boolean;
-  encounterDeck: InstId[];
-  encounterDiscard: InstId[];
-  sideDecks: Record<string, InstId[]>;
   act: InstId | null;
   agenda: InstId | null;
-  actDeck: InstId[];
-  agendaDeck: InstId[];
   chaosBag: ChaosToken[];
   skillTest: SkillTestState | null;
   testStack: SkillTestState[];

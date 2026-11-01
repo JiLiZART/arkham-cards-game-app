@@ -13,6 +13,7 @@ import {
   start,
 } from "./testkit";
 import type { Result } from "./engine";
+import { cardRecIn, invStateIn } from "./records";
 
 const NATHANIEL = "60101";
 const WARD = "60106";
@@ -39,11 +40,11 @@ function attacked(opts: { uses?: number; exhausted?: boolean } = {}): { r: Resul
   r = mutate(r, (g) => {
     ward = createCard(g, WARD, "limbo", NATHANIEL);
     moveCard(g, ward, "play");
-    g.s.cards[ward].uses = opts.uses ?? 4;
-    g.s.cards[ward].exhausted = !!opts.exhausted;
+    cardRecIn(g.s, ward).uses = opts.uses ?? 4;
+    cardRecIn(g.s, ward).exhausted = !!opts.exhausted;
     const e = createCard(g, MINION, "limbo");
     moveCard(g, e, "enemy", { location: inv(g, NATHANIEL).location });
-    g.s.cards[e].engagedWith = NATHANIEL;
+    cardRecIn(g.s, e).engagedWith = NATHANIEL;
   });
   r = pick(r, "End turn");
   for (let k = 0; k < 40 && r.state.pending; k++) {
@@ -94,7 +95,7 @@ describe("Flesh Ward", () => {
     // paid when used (the upkeep readies it later)
     expect(card(gOf(r), ward)).toMatchObject({ exhausted: true, uses: 3, zone: "play" });
     r = finish(r);
-    expect(r.state.invs[NATHANIEL]).toMatchObject({ damage: 1, horror: 0 });
+    expect(invStateIn(r.state, NATHANIEL)).toMatchObject({ damage: 1, horror: 0 });
   });
 
   it("choosing damage leaves the horror", () => {
@@ -102,7 +103,7 @@ describe("Flesh Ward", () => {
     let r = pick(r0, /Flesh Ward/);
     r = pick(r, "Prevent damage");
     r = finish(r);
-    expect(r.state.invs[NATHANIEL]).toMatchObject({ damage: 0, horror: 1 });
+    expect(invStateIn(r.state, NATHANIEL)).toMatchObject({ damage: 0, horror: 1 });
   });
 
   it("is not offered when it is exhausted or has no charge", () => {
@@ -140,6 +141,6 @@ describe("Flesh Ward", () => {
     expect((g.s.pending as { kind?: string } | null)?.kind).toBe("assign");
     r = { state: g.s, events: [] };
     r = pick(r, new RegExp(`to ${inv(gOf(r), NATHANIEL).name}`));
-    expect(r.state.invs[NATHANIEL].horror).toBe(1);
+    expect(invStateIn(r.state, NATHANIEL).horror).toBe(1);
   });
 });

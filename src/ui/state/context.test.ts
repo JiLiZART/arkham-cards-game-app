@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { packLoaded } from "../../content/loader";
 import { gameStore, db } from "./context";
+import { allCardRecsIn } from "../../engine/records";
 
 describe("starting a campaign with an investigator whose pack is not loaded", () => {
   it("Zoey Samaras: the Dunwich pack loads first, then she is on the table with her deck", async () => {
@@ -24,11 +25,11 @@ describe("starting a campaign with an investigator whose pack is not loaded", ()
     expect(waits()).toBe("play");
     gameStore.getState().startScenario(1);
     const game = gameStore.getState().game!;
-    expect(Object.values(game.cards).some((c) => c.code === "02001")).toBe(true);
+    expect(allCardRecsIn(game).some((c) => c.code === "02001")).toBe(true);
     expect(game.order).toEqual(["02001"]);
     // her deck: the 30 cards less the opening hand are still to draw
     expect(
-      Object.values(game.cards).filter(
+      allCardRecsIn(game).filter(
         (c) => c.owner === "02001" && (c.zone === "deck" || c.zone === "hand"),
       ).length,
     ).toBeGreaterThan(25);

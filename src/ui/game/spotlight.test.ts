@@ -2,11 +2,12 @@ import { describe, expect, it } from "vitest";
 import { skipMulligans, start } from "../../engine/testkit";
 import type { ChoiceOption, GameEvent, GameState, PendingChoice } from "../../engine/types";
 import { heldGame, spotlightNow, spotlightOf, spotlightOfChoice } from "./spotlight";
+import { cardRecIn, invStateIn, withCardsIn } from "../../engine/records";
 
 describe("spotlight", () => {
   const game = skipMulligans(start("the-gathering", ["01001"], 1)).state;
-  const study = game.invs["01001"].location!;
-  const inHand = game.invs["01001"].hand[0];
+  const study = invStateIn(game, "01001").location!;
+  const inHand = invStateIn(game, "01001").hand[0];
   const ev = (type: string, inv: string | null, card: string | null): GameEvent => ({
     type,
     text: type,
@@ -37,27 +38,23 @@ describe("spotlight", () => {
 
   it("an enemy whose move is still queued stays where it came from, unengaged", () => {
     const enemy = "x1";
-    const moved = {
-      ...game,
-      cards: {
-        ...game.cards,
-        [enemy]: {
-          ...game.cards[study],
-          id: enemy,
-          code: "01159",
-          zone: "enemy" as const,
-          location: "dest",
-          engagedWith: "01001",
-        },
+    const moved = withCardsIn(game, {
+      [enemy]: {
+        ...cardRecIn(game, study),
+        id: enemy,
+        code: "01159",
+        zone: "enemy" as const,
+        location: "dest",
+        engagedWith: "01001",
       },
-    };
+    });
     const move: GameEvent = {
       type: "enemyMove",
       text: "",
       card: enemy,
       data: { from: study, to: "dest" },
     };
-    expect(heldGame(moved, [move]).cards[enemy]).toMatchObject({
+    expect(cardRecIn(heldGame(moved, [move]), enemy)).toMatchObject({
       location: study,
       engagedWith: null,
     });
@@ -70,9 +67,9 @@ describe("spotlight", () => {
 describe("choice spotlight", () => {
   const game = skipMulligans(start("the-gathering", ["01001"], 1)).state;
   const R = "01001";
-  const roland = game.invs[R].cardId;
-  const study = game.invs[R].location!;
-  const hand = game.invs[R].hand;
+  const roland = invStateIn(game, R).cardId;
+  const study = invStateIn(game, R).location!;
+  const hand = invStateIn(game, R).hand;
   const asking = (
     kind: PendingChoice["kind"],
     options: ChoiceOption[],
@@ -90,7 +87,7 @@ describe("choice spotlight", () => {
         R,
       ),
     ).toBeNull();
-    const deck = game.invs[R].deck.slice(0, 3);
+    const deck = invStateIn(game, R).deck.slice(0, 3);
     expect(spotlightOfChoice(asking("generic", deck.map(opt)), R)).toBeNull();
     // a question of no card has nothing to light
     expect(
@@ -102,9 +99,11 @@ describe("choice spotlight", () => {
     const dog = "dog";
     expect(
       spotlightOfChoice(
-        asking("assign", [opt(roland), opt(dog)], {
-          cards: { ...game.cards, [dog]: { ...game.cards[hand[0]], id: dog, zone: "play" } },
-        }),
+        asking(
+          "assign",
+          [opt(roland), opt(dog)],
+          withCardsIn(game, { [dog]: { ...cardRecIn(game, hand[0]), id: dog, zone: "play" } }),
+        ),
         R,
       ),
     ).toEqual({ cards: [dog], invs: [R], choice: true });

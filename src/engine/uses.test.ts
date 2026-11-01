@@ -4,6 +4,7 @@ import { def, findByCode, inv } from "./core";
 import { spendsOnlyUses } from "./rules/cards";
 import { commitDone, gOf, giveCard, mutate, pick, putEnemy, skipMulligans, start } from "./testkit";
 import type { CardDef } from "../content/schema";
+import { allCardRecsIn, cardRecIn, invStateIn } from "./records";
 
 const ROLAND = "01001";
 
@@ -13,7 +14,7 @@ beforeAll(() => loadPack("tcu"));
 function withAsset(code: string, uses: number) {
   let r = skipMulligans(start("the-gathering", [ROLAND], 1, { chaosBag: ["0"] as never }));
   r = mutate(r, (g) => {
-    g.s.invs[ROLAND].resources = 10;
+    invStateIn(g.s, ROLAND).resources = 10;
     giveCard(g, ROLAND, code);
   });
   r = pick(
@@ -22,36 +23,36 @@ function withAsset(code: string, uses: number) {
       `^Play ${def(gOf(r), findInHand(r, code)).name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`,
     ),
   );
-  const id = Object.values(r.state.cards).find((c) => c.code === code && c.zone === "play")!.id;
-  r = mutate(r, (g) => (g.s.cards[id].uses = uses));
+  const id = allCardRecsIn(r.state).find((c) => c.code === code && c.zone === "play")!.id;
+  r = mutate(r, (g) => (cardRecIn(g.s, id).uses = uses));
   return { r, id };
 }
 const findInHand = (r: ReturnType<typeof start>, code: string) =>
-  r.state.invs[ROLAND].hand.find((h) => r.state.cards[h].code === code)!;
+  invStateIn(r.state, ROLAND).hand.find((h) => cardRecIn(r.state, h).code === code)!;
 
 describe("assets with uses leave play when empty", () => {
   it("Flashlight's last supply: the investigation uses −2 shroud, then Flashlight is discarded", () => {
     const { r: r0, id } = withAsset("01087", 1);
-    const before = r0.state.invs[ROLAND].clues;
+    const before = invStateIn(r0.state, ROLAND).clues;
     let r = pick(r0, /^Flashlight: investigate/);
     // Study shroud 2 − 2 = 0: Roland's intellect 3 with a 0 token succeeds; the modifier applied while Flashlight was in play
     r = commitDone(r);
-    expect(r.state.invs[ROLAND].clues).toBe(before + 1);
-    expect(r.state.cards[id].zone).toBe("discard");
-    expect(r.state.invs[ROLAND].discard).toContain(id);
+    expect(invStateIn(r.state, ROLAND).clues).toBe(before + 1);
+    expect(cardRecIn(r.state, id).zone).toBe("discard");
+    expect(invStateIn(r.state, ROLAND).discard).toContain(id);
     // undo restores the state before the action: Flashlight in play with 1 supply
-    expect(r0.state.cards[id].zone).toBe("play");
-    expect(r0.state.cards[id].uses).toBe(1);
+    expect(cardRecIn(r0.state, id).zone).toBe("play");
+    expect(cardRecIn(r0.state, id).uses).toBe(1);
   });
 
   it("Fingerprint Kit: exhaust and spend 1 supply to investigate, discovering 1 additional clue", () => {
     const { r: r0, id } = withAsset("05024", 3);
-    const before = r0.state.invs[ROLAND].clues;
+    const before = invStateIn(r0.state, ROLAND).clues;
     let r = pick(r0, /^Fingerprint Kit: investigate/);
     r = commitDone(r);
-    expect(r.state.invs[ROLAND].clues).toBe(before + 2);
-    expect(r.state.cards[id].uses).toBe(2);
-    expect(r.state.cards[id].exhausted).toBe(true);
+    expect(invStateIn(r.state, ROLAND).clues).toBe(before + 2);
+    expect(cardRecIn(r.state, id).uses).toBe(2);
+    expect(cardRecIn(r.state, id).exhausted).toBe(true);
   });
 
   it(".45 Automatic with ammo left stays in play", () => {
@@ -64,8 +65,8 @@ describe("assets with uses leave play when empty", () => {
     )
       r = pick(r, /Ghoul/);
     r = commitDone(r);
-    expect(r.state.cards[id].zone).toBe("play");
-    expect(r.state.cards[id].uses).toBe(1);
+    expect(cardRecIn(r.state, id).zone).toBe("play");
+    expect(cardRecIn(r.state, id).uses).toBe(1);
   });
 
   it("only cards whose every ability spends uses, and that have no constant ability, count as used up", () => {

@@ -16,6 +16,7 @@ import {
   skipMulligans,
   start,
 } from "./testkit";
+import { allCardRecsIn, cardRecIn, invStateIn } from "./records";
 
 const ROLAND = "01001";
 const MINION = "01160"; // Ghoul Minion: fight 2, health 2, 1 damage, 1 horror
@@ -99,7 +100,7 @@ describe("player windows", () => {
     let r = turn((g) => {
       giveCard(g, ROLAND, CACHE);
     });
-    const before = r.state.invs[ROLAND].resources;
+    const before = invStateIn(r.state, ROLAND).resources;
     // the window of the turn's beginning has passed; end the turn: the enemy phase's window is next
     r = pick(r, "End turn");
     for (let k = 0; k < 40 && !windows(r); k++)
@@ -111,13 +112,15 @@ describe("player windows", () => {
       data: { phase: "enemy" },
     });
     r = pick(r, /^Emergency Cache/);
-    expect(r.state.invs[ROLAND].resources).toBe(before + 3);
+    expect(invStateIn(r.state, ROLAND).resources).toBe(before + 3);
     expect(
-      r.state.cards[
-        Object.keys(r.state.cards).find(
-          (id) => r.state.cards[id].code === CACHE && r.state.cards[id].zone === "discard",
-        )!
-      ],
+      cardRecIn(
+        r.state,
+        r.state.world.entities.find(
+          (id) =>
+            cardRecIn(r.state, id).code === CACHE && cardRecIn(r.state, id).zone === "discard",
+        )!,
+      ),
     ).toBeTruthy();
   });
 
@@ -179,8 +182,7 @@ describe("the window before an enemy takes damage", () => {
     r = pick(r, /^Fight/);
     return r.state.pending?.kind === "commit" ? pick(r, "done") : r;
   };
-  const enemyDamage = (r: Result) =>
-    Object.values(r.state.cards).find((c) => c.zone === "enemy")!.damage;
+  const enemyDamage = (r: Result) => allCardRecsIn(r.state).find((c) => c.zone === "enemy")!.damage;
 
   it("asks nothing when no card answers it", () => {
     const r = fight(withMachete([]));
@@ -220,18 +222,16 @@ describe("the window before an enemy takes damage", () => {
     );
     r = pick(r, "Ward"); // dealDamage first: 1 + 3 on a Minion with 2 health
     expect(r.state.pending?.step).toMatchObject({ trigger: "excessDamage", data: { amount: 2 } });
-    const before = r.state.invs[ROLAND].resources;
+    const before = invStateIn(r.state, ROLAND).resources;
     r = pick(r, "Ward");
-    expect(r.state.invs[ROLAND].resources).toBe(before + 1);
-    expect(Object.values(r.state.cards).some((c) => c.code === MINION && c.zone === "enemy")).toBe(
-      false,
-    );
+    expect(invStateIn(r.state, ROLAND).resources).toBe(before + 1);
+    expect(allCardRecsIn(r.state).some((c) => c.code === MINION && c.zone === "enemy")).toBe(false);
   });
 
   it("counts the printed health of the enemies defeated this turn", () => {
     const r = fight(withMachete([react("dealDamage", [{ op: "addDamage", amount: 1 }])]));
     const done = pick(r, "Ward");
-    expect(done.state.invs[ROLAND].defeatedHealth).toBe(2);
+    expect(invStateIn(done.state, ROLAND).defeatedHealth).toBe(2);
   });
 
   it("the attacked window opens after a cancelled attack", () => {

@@ -10,6 +10,7 @@ import { legalTurnActions } from "./rules/flow";
 import { startTest } from "./rules/skillTest";
 import { db, giveCard, gOf, skipMulligans, start } from "./testkit";
 import type { EffCtx, Step } from "./types";
+import { cardRecIn, invStateIn } from "./records";
 
 const R = "01001";
 const D = "01002";
@@ -27,8 +28,8 @@ function resolve(g: G, code: string, fn: string, ctx: EffCtx) {
 describe("an investigator defeated before their test starts", () => {
   it("takes no test (Roland's Elder Sign read the location he no longer had)", () => {
     const g = game([R, D]);
-    g.s.invs[R].status = "defeated";
-    g.s.invs[R].location = null;
+    invStateIn(g.s, R).status = "defeated";
+    invStateIn(g.s, R).location = null;
     startTest(g, {
       inv: R,
       skill: "willpower",
@@ -44,8 +45,8 @@ describe("an investigator defeated before their test starts", () => {
 describe("a card's effect after the action's attack of opportunity defeated its player", () => {
   const defeated = () => {
     const g = game([R, D]);
-    g.s.invs[R].status = "defeated";
-    g.s.invs[R].location = null;
+    invStateIn(g.s, R).status = "defeated";
+    invStateIn(g.s, R).location = null;
     return g;
   };
 
@@ -72,7 +73,7 @@ describe("with the expansion packs", () => {
   it("Interrogate (05020): no other location with a clue, no clue elsewhere and no crash", () => {
     const g = game();
     const here = inv(g, R).location;
-    for (const l of locations(g)) if (l.id !== here) g.s.cards[l.id].clues = 0;
+    for (const l of locations(g)) if (l.id !== here) cardRecIn(g.s, l.id).clues = 0;
     const n = g.s.queue.length;
     expect(() => call(g, "05020", "elsewhere", { you: R })).not.toThrow();
     expect(g.s.queue.length).toBe(n);
@@ -82,17 +83,17 @@ describe("with the expansion packs", () => {
     const g = game();
     const charm = giveCard(g, R, "12061");
     moveCard(g, charm, "play");
-    g.s.cards[charm].controller = R;
-    g.s.cards[charm].uses = 1;
+    cardRecIn(g.s, charm).controller = R;
+    cardRecIn(g.s, charm).uses = 1;
     const offered = () =>
       legalTurnActions(g, R).some((o) => o.label.startsWith("Lucky Charm: move 1 damage"));
     expect(offered()).toBe(false);
-    g.s.invs[R].damage = 1;
+    invStateIn(g.s, R).damage = 1;
     // the damage needs another card of yours with room for it
     expect(offered()).toBe(false);
     const cop = giveCard(g, R, "01018");
     moveCard(g, cop, "play");
-    g.s.cards[cop].controller = R;
+    cardRecIn(g.s, cop).controller = R;
     expect(offered()).toBe(true);
   });
 });

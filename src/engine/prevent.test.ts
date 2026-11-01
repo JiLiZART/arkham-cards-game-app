@@ -4,6 +4,7 @@ import { run } from "./engine";
 import { db, gOf, mutate, options, pick, skipMulligans, start } from "./testkit";
 import type { Ability } from "../content/schema";
 import type { Result } from "./engine";
+import { cardRecIn, invStateIn } from "./records";
 
 const ROLAND = "01001";
 const MACHETE = "01020";
@@ -37,7 +38,7 @@ function attacked(enemy: string, ability?: Ability): Result {
     moveCard(g, m, "play");
     const e = createCard(g, enemy, "limbo");
     moveCard(g, e, "enemy", { location: inv(g, ROLAND).location });
-    g.s.cards[e].engagedWith = ROLAND;
+    cardRecIn(g.s, e).engagedWith = ROLAND;
   });
   return untilAttack(pick(r, "End turn"));
 }
@@ -74,8 +75,8 @@ function finish(r: Result): Result {
 }
 const labels = (r: Result) => options(r);
 const hit = (r: Result) => ({
-  damage: r.state.invs[ROLAND].damage,
-  horror: r.state.invs[ROLAND].horror,
+  damage: invStateIn(r.state, ROLAND).damage,
+  horror: invStateIn(r.state, ROLAND).horror,
 });
 
 describe("an enemy attack deals damage: a window before it is assigned", () => {
@@ -140,7 +141,7 @@ describe("an enemy attack deals damage: a window before it is assigned", () => {
     push(g, { t: "AssignDamage", inv: ROLAND, damage: 1, horror: 0, direct: false, source: null });
     run(g);
     expect((g.s.pending as { kind?: string } | null)?.kind).not.toBe("reaction");
-    expect(g.s.invs[ROLAND].damage).toBe(1);
+    expect(invStateIn(g.s, ROLAND).damage).toBe(1);
   });
 });
 
@@ -152,7 +153,7 @@ describe("the assignment options say what they do", () => {
       for (const code of assets) moveCard(g, createCard(g, code, "limbo", ROLAND), "play");
       const e = createCard(g, RATS, "limbo");
       moveCard(g, e, "enemy", { location: inv(g, ROLAND).location });
-      g.s.cards[e].engagedWith = ROLAND;
+      cardRecIn(g.s, e).engagedWith = ROLAND;
     });
     r = untilAttack(pick(r, "End turn"));
     return r;

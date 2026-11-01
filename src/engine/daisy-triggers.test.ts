@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { card, createCard, def, findByCode, moveCard, type G } from "./core";
 import { db, gOf, giveCard, mutate, pick, putEnemy, skipMulligans, start } from "./testkit";
 import { run, type Result } from "./engine";
+import { allCardRecsIn, cardRecIn, invStateIn } from "./records";
 
 const DAISY = "01002";
 const ROLAND = "01001";
@@ -14,18 +15,18 @@ const toTurn = (r: Result, who = DAISY) => {
 const inPlay = (g: G, code: string, who = DAISY) => {
   const id = createCard(g, code, "limbo", who);
   moveCard(g, id, "play");
-  g.s.cards[id].controller = who;
-  if (g.db.cards[code].uses) g.s.cards[id].uses = g.db.cards[code].uses!.count;
+  cardRecIn(g.s, id).controller = who;
+  if (g.db.cards[code].uses) cardRecIn(g.s, id).uses = g.db.cards[code].uses!.count;
   return id;
 };
-const of = (r: Result, code: string) => Object.values(r.state.cards).filter((c) => c.code === code);
+const of = (r: Result, code: string) => allCardRecsIn(r.state).filter((c) => c.code === code);
 
 describe("Daisy's deck: triggers", () => {
   it("Research Librarian reacts to itself entering play, not to another asset", () => {
     let r = skipMulligans(start("the-gathering", [DAISY, ROLAND], 3));
     r = toTurn(
       mutate(r, (g) => {
-        g.s.invs[DAISY].resources = 10;
+        invStateIn(g.s, DAISY).resources = 10;
         giveCard(g, DAISY, "01032");
         giveCard(g, DAISY, "01031");
       }),
@@ -44,7 +45,7 @@ describe("Daisy's deck: triggers", () => {
     let r = skipMulligans(start("the-gathering", [DAISY, ROLAND], 3));
     r = toTurn(
       mutate(r, (g) => {
-        g.s.invs[DAISY].resources = 10;
+        invStateIn(g.s, DAISY).resources = 10;
         inPlay(g, "01063");
         giveCard(g, DAISY, "01031");
       }),
@@ -61,16 +62,16 @@ describe("Daisy's deck: triggers", () => {
     r = mutate(r, (g) => {
       ids = ["01112", "01114", "01115"].map((c) => findByCode(g, c, ["setAside", "location"])!.id);
       for (const id of ids) {
-        if (g.s.cards[id].zone !== "location") moveCard(g, id, "location");
-        g.s.cards[id].revealed = true;
+        if (cardRecIn(g.s, id).zone !== "location") moveCard(g, id, "location");
+        cardRecIn(g.s, id).revealed = true;
       }
       g.s.flags.connections = [
         ["01112", "01114"],
         ["01112", "01115"],
       ];
-      for (const e of Object.values(g.s.cards))
+      for (const e of allCardRecsIn(g.s))
         if (e.zone === "enemy") moveCard(g, e.id, "encounterDiscard");
-      g.s.invs[DAISY].location = ids[1];
+      invStateIn(g.s, DAISY).location = ids[1];
       b = createCard(g, "01038", "limbo", DAISY);
       moveCard(g, b, "attached", {
         location: ids[["01112", "01114", "01115"].indexOf(barricadeOn)],
@@ -83,12 +84,12 @@ describe("Daisy's deck: triggers", () => {
     let { r, b } = house("01115");
     r = pick(toTurn(r), /Move to Hallway/);
     while (r.state.pending?.kind !== "turn") r = pick(r, r.state.pending!.options[0].id);
-    expect(r.state.cards[b].zone).toBe("attached");
+    expect(cardRecIn(r.state, b).zone).toBe("attached");
 
     ({ r, b } = house("01114"));
     r = pick(toTurn(r), /Move to Hallway/);
     while (r.state.pending?.kind !== "turn") r = pick(r, r.state.pending!.options[0].id);
-    expect(r.state.cards[b].zone).toBe("discard");
+    expect(cardRecIn(r.state, b).zone).toBe("discard");
   });
 
   it("They're Getting Out! ghouls do not move into a barricaded location unless Elite", () => {
@@ -98,7 +99,7 @@ describe("Daisy's deck: triggers", () => {
     const r = mutate(h.r, (g) => {
       ghoul = putEnemy(g, "01160", h.cellar);
       priest = putEnemy(g, "01116", h.cellar);
-      g.s.invs[DAISY].location = h.parlor;
+      invStateIn(g.s, DAISY).location = h.parlor;
       (db.scripts["01107"] as unknown as { fns: Record<string, (g: G) => void> }).fns.ghoulsMove(g);
     });
     expect(card(gOf(r), ghoul).location).toBe(h.cellar);
@@ -110,9 +111,9 @@ describe("Daisy's deck: triggers", () => {
     let ghoul = "",
       hunter = "";
     const r = mutate(h.r, (g) => {
-      g.s.cards[h.parlor].revealed = false;
+      cardRecIn(g.s, h.parlor).revealed = false;
       ghoul = putEnemy(g, "01160", h.hall);
-      g.s.invs[DAISY].location = h.cellar;
+      invStateIn(g.s, DAISY).location = h.cellar;
       (db.scripts["01107"] as unknown as { fns: Record<string, (g: G) => void> }).fns.ghoulsMove(g);
     });
     expect(card(gOf(r), ghoul).location).toBe(h.parlor);
@@ -120,8 +121,8 @@ describe("Daisy's deck: triggers", () => {
     const g = gOf(r);
     moveCard(g, ghoul, "encounterDiscard");
     hunter = putEnemy(g, "01116", h.hall); // Ghoul Priest, hunter
-    g.s.invs[ROLAND].location = h.parlor;
-    g.s.invs[DAISY].location = h.parlor;
+    invStateIn(g.s, ROLAND).location = h.parlor;
+    invStateIn(g.s, DAISY).location = h.parlor;
     g.s.pending = null;
     g.s.queue = [{ t: "HunterMoves" }];
     run(g);
@@ -138,15 +139,15 @@ describe("Daisy's deck: triggers", () => {
         rosary = inPlay(g, "01059");
       }),
     );
-    const res = r.state.invs[DAISY].resources;
+    const res = invStateIn(r.state, DAISY).resources;
     r = pick(r, /Forbidden Knowledge: take/);
     expect(r.state.pending?.kind).toBe("assign");
-    expect(r.state.invs[DAISY].resources).toBe(res);
+    expect(invStateIn(r.state, DAISY).resources).toBe(res);
     r = pick(r, rosary);
     expect(r.state.pending?.kind).toBe("turn");
     expect(card(gOf(r), rosary).horror).toBe(1);
-    expect(r.state.invs[DAISY].horror).toBe(0);
-    expect(r.state.invs[DAISY].resources).toBe(res + 1);
+    expect(invStateIn(r.state, DAISY).horror).toBe(0);
+    expect(invStateIn(r.state, DAISY).resources).toBe(res + 1);
     expect(card(gOf(r), fk)).toMatchObject({ uses: 3, exhausted: true });
     expect(def(gOf(r), fk).name).toBe("Forbidden Knowledge");
   });

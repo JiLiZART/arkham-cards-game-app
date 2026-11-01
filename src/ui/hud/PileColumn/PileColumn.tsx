@@ -13,7 +13,7 @@ import { moment } from "../SoundLayer";
 import { hoverProps } from "../MiniCard";
 import { cx } from "../../components/cx";
 import styles from "./PileColumn.module.css";
-import { cardOf, cardOfIf, invOfIf, cardsOf } from "../../../engine/core";
+import { cardOf, cardOfIf, cardsOf, invOfIf, pileMap, pileOf } from "../../../engine/core";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);
@@ -21,7 +21,7 @@ const tr = (key: string, vars?: Record<string, string | number>) =>
 export function pileIcon(
   top: InstId | null,
   faceUp: boolean,
-  game: Pick<GameState, "scenarioId" | "cards">,
+  game: Pick<GameState, "scenarioId" | "world">,
 ): string {
   const set = faceUp && top ? db.cards[cardOf(game, top).code]?.encounterSet : undefined;
   return set ?? scenarioIcon(game.scenarioId);
@@ -107,12 +107,14 @@ export function PileColumn() {
     ? deckOptions(game, viewer)
     : { player: null, encounter: null, waiting: false };
   const victory = cardsOf(game).filter((c) => c.zone === "victory");
+  const encounterDeck = pileOf(game, "encounterDeck");
+  const encounterDiscard = pileOf(game, "encounterDiscard");
   return (
     <div className={styles.pileColumn} data-testid="pile-column">
       <Pile
         label={tr("pile.encounter")}
-        count={game.encounterDeck.length}
-        top={game.encounterDeck[0] ?? null}
+        count={encounterDeck.length}
+        top={encounterDeck[0] ?? null}
         faceUp={false}
         kind="encounter"
         id="encounter"
@@ -120,9 +122,9 @@ export function PileColumn() {
       />
       <Pile
         label={tr("pile.discard")}
-        count={game.encounterDiscard.length}
+        count={encounterDiscard.length}
         id="encounterDiscard"
-        top={game.encounterDiscard.at(-1) ?? null}
+        top={encounterDiscard.at(-1) ?? null}
         faceUp
         kind="encounter"
       />
@@ -134,7 +136,9 @@ export function PileColumn() {
         kind="encounter"
       />
       {/* a side deck named "_…" only holds cards for the setup to take (generated scenarios): not a pile */}
-      {Object.entries(game.sideDecks)
+      {Object.entries(pileMap(game))
+        .filter(([key]) => key.startsWith("sideDeck:"))
+        .map(([key, deck]) => [key.slice("sideDeck:".length), deck ?? []] as const)
         .filter(([name]) => !name.startsWith("_"))
         .map(([name, deck]) => (
           <Pile

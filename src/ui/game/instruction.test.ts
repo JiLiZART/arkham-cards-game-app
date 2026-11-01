@@ -5,7 +5,7 @@ import { instructionParts } from "./instruction";
 
 describe("instructionParts", () => {
   const game = skipMulligans(start("the-gathering", ["01001"], 1)).state;
-  const ghoul = Object.keys(game.cards)[0];
+  const ghoul = game.world.entities[0];
   const base = { inv: "01001", prompt: "Roland Banks: where does it move?" };
 
   it("fills the instruction's investigator and card vars", () => {

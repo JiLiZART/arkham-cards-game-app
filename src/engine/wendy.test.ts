@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { card, createCard, findByCode, inv, moveCard, type G } from "./core";
 import { commitDone, gOf, giveCard, mutate, options, pick, skipMulligans, start } from "./testkit";
 import type { Result } from "./engine";
+import { cardRecIn, invStateIn } from "./records";
 
 const WENDY = "01005";
 const AMULET = "01014";
@@ -15,7 +16,7 @@ function amuletInPlay(g: G) {
   const id =
     findByCode(g, AMULET, ["hand", "deck", "discard"])?.id ?? createCard(g, AMULET, "limbo", WENDY);
   moveCard(g, id, "play");
-  g.s.cards[id].controller = WENDY;
+  cardRecIn(g.s, id).controller = WENDY;
 }
 
 /** pass reaction windows until one offers an option matching `want` (or none is left) */
@@ -55,11 +56,11 @@ describe("Wendy's Amulet", () => {
       amuletInPlay(g);
       cache = toDiscard(g, "01088"); // Emergency Cache
     });
-    const res = r.state.invs[WENDY].resources;
+    const res = invStateIn(r.state, WENDY).resources;
     r = pick(r, "Play Emergency Cache");
-    expect(r.state.invs[WENDY].resources).toBe(res + 3);
-    expect(r.state.invs[WENDY].deck.at(-1)).toBe(cache);
-    expect(r.state.invs[WENDY].discard).not.toContain(cache);
+    expect(invStateIn(r.state, WENDY).resources).toBe(res + 3);
+    expect(invStateIn(r.state, WENDY).deck.at(-1)).toBe(cache);
+    expect(invStateIn(r.state, WENDY).discard).not.toContain(cache);
   });
 
   it("only the topmost event, and only while the Amulet is in play", () => {
@@ -83,7 +84,7 @@ describe("Wendy's Amulet", () => {
       cache = giveCard(g, WENDY, "01088");
     });
     r = pick(r, "Play Emergency Cache");
-    expect(r.state.invs[WENDY].deck.at(-1)).toBe(cache);
+    expect(invStateIn(r.state, WENDY).deck.at(-1)).toBe(cache);
   });
 
   it("Lucky! can be played from the discard pile when the test would fail", () => {
@@ -92,12 +93,12 @@ describe("Wendy's Amulet", () => {
     r = mutate(r, (g) => {
       amuletInPlay(g);
       lucky = toDiscard(g, "01080");
-      g.s.invs[WENDY].resources = 5;
+      invStateIn(g.s, WENDY).resources = 5;
     });
     r = passUntil(commitDone(pick(r, "Investigate Study")), /Lucky/); // intellect 3 - 2 vs shroud 2
     r = passUntil(pick(r, /Lucky/));
-    expect(r.state.invs[WENDY].clues).toBe(1);
-    expect(r.state.invs[WENDY].deck.at(-1)).toBe(lucky);
+    expect(invStateIn(r.state, WENDY).clues).toBe(1);
+    expect(invStateIn(r.state, WENDY).deck.at(-1)).toBe(lucky);
   });
 
   it("Look what I found! can be played from the discard pile after failing an investigation", () => {
@@ -105,7 +106,7 @@ describe("Wendy's Amulet", () => {
     r = mutate(r, (g) => {
       amuletInPlay(g);
       toDiscard(g, "01079");
-      g.s.invs[WENDY].resources = 5;
+      invStateIn(g.s, WENDY).resources = 5;
     });
     r = passUntil(commitDone(pick(r, "Investigate Study")), /Look what/);
     expect(options(r).some((o) => /Look what/.test(o))).toBe(true);

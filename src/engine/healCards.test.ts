@@ -4,6 +4,7 @@ import { card, createCard, inv, moveCard } from "./core";
 import type { G } from "./core";
 import type { Result } from "./engine";
 import { db, gOf, mutate, options, pick, skipMulligans, start } from "./testkit";
+import { cardRecIn, invStateIn } from "./records";
 
 const ROLAND = "01001";
 const DAISY = "01002";
@@ -30,9 +31,9 @@ function turn(code: string, setup: Setup = () => {}, invs = [ROLAND]): { r: Resu
   r = mutate(r, (g) => {
     id = createCard(g, code, "limbo", ROLAND);
     moveCard(g, id, "play");
-    g.s.cards[id].uses = db.cards[code].uses!.count;
-    g.s.invs[ROLAND].damage = 2;
-    g.s.invs[ROLAND].horror = 2;
+    cardRecIn(g.s, id).uses = db.cards[code].uses!.count;
+    invStateIn(g.s, ROLAND).damage = 2;
+    invStateIn(g.s, ROLAND).horror = 2;
     setup(g, id);
   });
   return { r, id };
@@ -40,8 +41,8 @@ function turn(code: string, setup: Setup = () => {}, invs = [ROLAND]): { r: Resu
 const use = (r: Result, name: string) => pick(r, new RegExp(`^${name}`));
 const state = (r: Result) => gOf(r);
 const hurt = (r: Result, i = ROLAND) => ({
-  damage: r.state.invs[i].damage,
-  horror: r.state.invs[i].horror,
+  damage: invStateIn(r.state, i).damage,
+  horror: invStateIn(r.state, i).horror,
 });
 
 describe("Clarity of Mind", () => {
@@ -56,8 +57,8 @@ describe("Clarity of Mind", () => {
     const { r: r0, id } = turn(
       "51008",
       (g) => {
-        g.s.invs[DAISY].horror = 1;
-        g.s.invs[DAISY].location = inv(g, ROLAND).location;
+        invStateIn(g.s, DAISY).horror = 1;
+        invStateIn(g.s, DAISY).location = inv(g, ROLAND).location;
       },
       [ROLAND, DAISY],
     );
@@ -104,8 +105,8 @@ describe("healing damage", () => {
     const { r: r0 } = turn(
       "08068",
       (g) => {
-        g.s.invs[DAISY].damage = 1;
-        g.s.invs[DAISY].location = inv(g, ROLAND).location;
+        invStateIn(g.s, DAISY).damage = 1;
+        invStateIn(g.s, DAISY).location = inv(g, ROLAND).location;
       },
       [ROLAND, DAISY],
     );
@@ -121,8 +122,8 @@ describe("healing an Ally too", () => {
   const cop = (g: G) => {
     const id = createCard(g, BEAT_COP, "limbo", ROLAND);
     moveCard(g, id, "play");
-    g.s.cards[id].damage = 1;
-    g.s.cards[id].horror = 1;
+    cardRecIn(g.s, id).damage = 1;
+    cardRecIn(g.s, id).horror = 1;
     return id;
   };
 
@@ -130,7 +131,7 @@ describe("healing an Ally too", () => {
     let ally = "";
     const { r: r0, id } = turn("03230", (g, aid) => {
       ally = cop(g);
-      g.s.cards[aid].uses = 1;
+      cardRecIn(g.s, aid).uses = 1;
     });
     let r = use(r0, "First Aid");
     expect(options(r)).toEqual(["Roland Banks", "Beat Cop"]);
@@ -155,7 +156,7 @@ describe("healing an Ally too", () => {
     let ally = "";
     const { r: r0, id } = turn("60570", (g, aid) => {
       ally = cop(g);
-      g.s.cards[aid].uses = 1;
+      cardRecIn(g.s, aid).uses = 1;
     });
     let r = use(r0, "Extra Rations");
     r = pick(r, "Beat Cop");

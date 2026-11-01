@@ -91,7 +91,7 @@ export function stripAction(
 /** the action, reaction or free symbol of an option that uses a card ability (from the ability's kind), else null */
 export function abilitySymbol(
   o: ChoiceOption,
-  game: Pick<GameState, "cards">,
+  game: Pick<GameState, "world">,
 ): "action" | "reaction" | "free" | null {
   const v = o.value as
     | { kind?: string; card?: string; index?: number; ability?: { ability: { kind: string } } }
