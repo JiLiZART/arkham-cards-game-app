@@ -493,6 +493,30 @@
         0,
         4
       ]
+    },
+    "monster-hit": {
+      "file": "monster-hit.mp3",
+      "author": "unknown",
+      "license": "provided",
+      "original": "own/monster-hit.mp3"
+    },
+    "horror-damage": {
+      "file": "horror-damage.mp3",
+      "author": "unknown",
+      "license": "provided",
+      "original": "own/horror-damage.mp3"
+    },
+    "monster-appears": {
+      "file": "monster-appears.mp3",
+      "author": "unknown",
+      "license": "provided",
+      "original": "own/monster-appears.mp3"
+    },
+    "button-click": {
+      "file": "button-click.mp3",
+      "author": "unknown",
+      "license": "provided",
+      "original": "own/button-click.mp3"
     }
   },
   "music": {
@@ -557,15 +581,10 @@
     },
     "fight": {
       "file": "music-fight",
-      "source": "https://opengameart.org/content/dark-cavern-ambient",
-      "author": "Paul Wortmann",
-      "license": "CC0",
-      "original": "music-dark-cavern.ogg",
-      "trim": [
-        0,
-        300
-      ],
-      "loop": true
+      "author": "Nikolay Kostyurin",
+      "license": "own",
+      "original": "own/fight.mp3",
+      "loop": false
     },
     "tension": {
       "file": "music-tension",
@@ -578,6 +597,111 @@
         300
       ],
       "loop": true
+    },
+    "menu": {
+      "file": "music-menu",
+      "author": "Nikolay Kostyurin",
+      "license": "own",
+      "original": "own/menu.mp3",
+      "loop": false
+    },
+    "menu:alt": {
+      "file": "music-menu-alt",
+      "author": "Nikolay Kostyurin",
+      "license": "own",
+      "original": "own/menu-alt.mp3",
+      "loop": false
+    },
+    "fight:alt": {
+      "file": "music-fight-alt",
+      "author": "Nikolay Kostyurin",
+      "license": "own",
+      "original": "own/fight-alt.mp3",
+      "loop": false
+    },
+    "card:01108": {
+      "file": "music-gathering-act1",
+      "author": "Nikolay Kostyurin",
+      "license": "own",
+      "original": "own/gathering-act1.mp3",
+      "loop": false
+    },
+    "card:01108:alt": {
+      "file": "music-gathering-act1-alt",
+      "author": "Nikolay Kostyurin",
+      "license": "own",
+      "original": "own/gathering-act1-alt.mp3",
+      "loop": false
+    },
+    "card:01109": {
+      "file": "music-gathering-act2",
+      "author": "Nikolay Kostyurin",
+      "license": "own",
+      "original": "own/gathering-act2.mp3",
+      "loop": false
+    },
+    "card:01109:alt": {
+      "file": "music-gathering-act2-alt",
+      "author": "Nikolay Kostyurin",
+      "license": "own",
+      "original": "own/gathering-act2-alt.mp3",
+      "loop": false
+    },
+    "card:01110": {
+      "file": "music-gathering-act3",
+      "author": "Nikolay Kostyurin",
+      "license": "own",
+      "original": "own/gathering-act3.mp3",
+      "loop": false
+    },
+    "card:01110:alt": {
+      "file": "music-gathering-act3-alt",
+      "author": "Nikolay Kostyurin",
+      "license": "own",
+      "original": "own/gathering-act3-alt.mp3",
+      "loop": false
+    },
+    "card:01121a": {
+      "file": "music-masks-agenda1",
+      "author": "Nikolay Kostyurin",
+      "license": "own",
+      "original": "own/masks-agenda1.mp3",
+      "loop": false
+    },
+    "card:01121a:alt": {
+      "file": "music-masks-agenda1-alt",
+      "author": "Nikolay Kostyurin",
+      "license": "own",
+      "original": "own/masks-agenda1-alt.mp3",
+      "loop": false
+    },
+    "card:01122": {
+      "file": "music-masks-agenda2",
+      "author": "Nikolay Kostyurin",
+      "license": "own",
+      "original": "own/masks-agenda2.mp3",
+      "loop": false
+    },
+    "card:01122:alt": {
+      "file": "music-masks-agenda2-alt",
+      "author": "Nikolay Kostyurin",
+      "license": "own",
+      "original": "own/masks-agenda2-alt.mp3",
+      "loop": false
+    },
+    "tension:the-midnight-masks": {
+      "file": "music-masks-act1",
+      "author": "Nikolay Kostyurin",
+      "license": "own",
+      "original": "own/masks-act1.mp3",
+      "loop": false
+    },
+    "tension:the-midnight-masks:alt": {
+      "file": "music-masks-act1-alt",
+      "author": "Nikolay Kostyurin",
+      "license": "own",
+      "original": "own/masks-act1-alt.mp3",
+      "loop": false
     }
   },
   "events": {
@@ -588,11 +712,11 @@
     "testResult": "chime",
     "testResult:fail": "event-testResult-fail",
     "encounter": "event-encounter",
-    "attack": "event-attack",
-    "spawn": "event-spawn",
+    "attack": "monster-hit",
+    "spawn": "monster-appears",
     "enemyMove": "event-enemyMove",
     "damage": "hit",
-    "damage:horror": "breath",
+    "damage:horror": "horror-damage",
     "clues": "event-clues",
     "doom": "event-doom",
     "agendaAdvance": "event-agendaAdvance",
@@ -610,7 +734,7 @@
     "commit": "moment-commit",
     "shuffle": "shuffle",
     "phase": "moment-phase",
-    "button": "click",
+    "button": "button-click",
     "tip": "pop",
     "undo": "rewind",
     "move": "moment-move",
@@ -653,7 +777,7 @@
     },
     "spawn": {
       "Ghoul": "growl-ghoul",
-      "Monster": "growl-monster",
+      "Monster": "monster-appears",
       "Humanoid": "footstep"
     }
   },

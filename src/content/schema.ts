@@ -1820,27 +1820,36 @@ export type CampaignDef = z.infer<typeof CampaignDef>;
 
 // ---------- sounds ----------
 
-/** one audio file with its provenance; every clip in the game is CC0 */
-const SoundClip = z
+/** CC0 from a public source, made by the project's author, or supplied by the author with no recorded origin */
+export const SoundLicense = z.enum(["CC0", "own", "provided"]);
+/** a CC0 clip names where it came from */
+const sourced = (c: { license: string; source?: string }) => c.license !== "CC0" || !!c.source;
+const NEEDS_SOURCE = { message: "a CC0 clip needs its source URL", path: ["source"] };
+
+/** one audio file with its provenance */
+const SoundClipShape = z
   .object({
     /** file name under public/sounds (effects: .mp3; music: the stem, served as .m4a and .webm) */
     file: z.string().min(1),
     /** a mix offset on top of the import's fixed loudness (ADR-0009) */
     gain: z.number().min(0.5).max(1.5).default(1),
-    source: z.string().url(),
+    source: z.string().url().optional(),
     author: z.string().min(1),
-    license: z.literal("CC0"),
+    license: SoundLicense,
     /** the original's path under sounds-src/, for the import script */
     original: z.string().optional(),
     /** seconds to keep of the original [start, end] */
     trim: z.tuple([z.number().min(0), z.number().min(0)]).optional(),
   })
   .strict();
-const SoundTrack = SoundClip.extend({
+const SoundClip = SoundClipShape.refine(sourced, NEEDS_SOURCE);
+const SoundTrack = SoundClipShape.extend({
   loop: z.boolean().default(true),
   loopStart: z.number().min(0).optional(),
   loopEnd: z.number().min(0).optional(),
-}).strict();
+})
+  .strict()
+  .refine(sourced, NEEDS_SOURCE);
 /** a moment's value that silences it while keeping its slot */
 export const NO_SOUND = "none";
 /** when a card's own sound replaces the generic one */
@@ -1856,7 +1865,7 @@ export type CardSoundWhen = z.infer<typeof CardSoundWhen>;
 export const SoundManifest = z
   .object({
     effects: z.record(z.string(), SoundClip),
-    /** "bed:<scenarioId>", "fight", "tension" */
+    /** "bed:<scenarioId>", "card:<act or agenda code>", "fight", "tension", "tension:<scenarioId>", "menu"; "<id>:alt" is another take */
     music: z.record(z.string(), SoundTrack),
     events: z.record(z.string(), z.union([z.string(), z.array(z.string())])),
     moments: z.record(z.string(), z.string()),

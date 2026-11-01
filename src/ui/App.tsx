@@ -6,7 +6,7 @@ import { HandFan } from "./hud/HandFan";
 import { HandDrawer } from "./hud/HandDrawer";
 import { Hud } from "./hud/Hud";
 import { NetIndicator } from "./hud/NetIndicator";
-import { moment, useAudioLevels } from "./hud/SoundLayer";
+import { moment, useAudioLevels, useMenuMusic } from "./hud/SoundLayer";
 import { Catalog } from "./catalog/Catalog";
 import { CampaignScreen } from "./menu/CampaignScreen";
 import { HowTo } from "./menu/HowTo";
@@ -69,6 +69,7 @@ export function App() {
     if (room) void joinRoom(room);
   }, []);
   useAudioLevels();
+  useMenuMusic(screen === "game" && !!game);
   // a change of screen has its own soft sound (not the first paint)
   const shown = useRef(screen);
   useEffect(() => {

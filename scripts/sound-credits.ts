@@ -9,9 +9,12 @@ const SITES: Record<string, string> = { "kenney.nl": "Kenney", "opengameart.org"
 const HEADING = "## Sound credits";
 
 export function soundCredits(m: SoundManifest): string {
+  const clips = [...Object.values(m.effects), ...Object.values(m.music)];
   const sources = new Map<string, string>();
-  for (const c of [...Object.values(m.effects), ...Object.values(m.music)])
-    if (!sources.has(c.source)) sources.set(c.source, c.author);
+  for (const c of clips)
+    if (c.license === "CC0" && c.source && !sources.has(c.source)) sources.set(c.source, c.author);
+  const own = [...new Set(clips.filter((c) => c.license === "own").map((c) => c.author))];
+  const provided = clips.some((c) => c.license === "provided");
   const sites = [
     ...new Set([...sources.keys()].map((u) => SITES[new URL(u).hostname] ?? new URL(u).hostname)),
   ];
@@ -20,10 +23,16 @@ export function soundCredits(m: SoundManifest): string {
       /-/g,
       " ",
     );
+  const cc0 = own.length || provided ? "The other sounds are CC0" : "All sounds are CC0";
   return [
-    `All sounds are CC0 (public domain), from ${sites.join(" and ")}:`,
+    `${cc0} (public domain), from ${sites.join(" and ")}:`,
     "",
     ...[...sources].map(([u, author]) => `- [${name(u)}](${u}) by ${author} (CC0)`),
+    ...(own.length || provided ? [""] : []),
+    ...own.map((a) => `Original music by ${a}.`),
+    ...(provided
+      ? ["Some effects were provided by the project's author; their origin is not recorded."]
+      : []),
   ].join("\n");
 }
 

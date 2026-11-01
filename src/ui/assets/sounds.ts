@@ -75,32 +75,53 @@ export function momentClip(
   return own ?? (generic === NO_SOUND ? null : (generic ?? null));
 }
 
-/** which music track should play: fight while an enemy is engaged, tension in the enemy phase or one doom from the agenda advancing, else the scenario's bed; null when the scenario has ended or has no bed */
+/** a track's take for this game: `<id>:alt` when the manifest has one and the seed picks it, so a replay sounds the same */
+function take(id: string, seed: number, m: SoundManifest): string {
+  if (!m.music[`${id}:alt`]) return id;
+  let h = seed | 0;
+  for (const ch of id) h = (Math.imul(h, 31) + ch.charCodeAt(0)) | 0;
+  return (h >>> 0) % 2 ? `${id}:alt` : id;
+}
+
+/**
+ * which music track should play: fight while an enemy is engaged; tension (the scenario's own, else the shared one) in
+ * the enemy phase or one doom from the agenda advancing; else the current agenda's track, the current act's, the
+ * scenario's bed. Null when the scenario has ended or has none of these.
+ */
 export function musicFor(
   game: GameState,
   m: SoundManifest,
   content: ContentDb = db,
 ): string | null {
   if (game.phase === "ended") return null;
+  const has = (id: string) => (m.music[id] ? id : null);
+  const codeOf = (id: InstId | null) => (id ? game.cards[id]?.code : undefined);
   // a scenario without a bed of its own (a generated one, ADR-0007) plays the default bed
-  const bed = m.music[`bed:${game.scenarioId}`]
-    ? `bed:${game.scenarioId}`
-    : m.music["bed:default"]
-      ? "bed:default"
-      : null;
-  if (!bed) return null;
+  const chapter =
+    has(`card:${codeOf(game.agenda)}`) ??
+    has(`card:${codeOf(game.act)}`) ??
+    has(`bed:${game.scenarioId}`) ??
+    has("bed:default");
+  if (!chapter) return null;
   if (m.music.fight && Object.values(game.cards).some((c) => c.zone === "enemy" && c.engagedWith))
-    return "fight";
-  if (m.music.tension) {
-    if (game.phase === "enemy") return "tension";
+    return take("fight", game.seed, m);
+  const tension = has(`tension:${game.scenarioId}`) ?? has("tension");
+  if (tension) {
     const threshold = game.agenda ? content.cards[game.cards[game.agenda].code]?.doom : undefined;
     if (
-      threshold !== undefined &&
-      doomInPlay({ s: game, db: content, events: [] }) === threshold - 1
+      game.phase === "enemy" ||
+      (threshold !== undefined &&
+        doomInPlay({ s: game, db: content, events: [] }) === threshold - 1)
     )
-      return "tension";
+      return take(tension, game.seed, m);
   }
-  return bed;
+  return take(chapter, game.seed, m);
+}
+
+/** the menu theme, or its other take when the coin (0 to 1, drawn once per page load) says so; null without one */
+export function menuMusic(m: SoundManifest, coin: number): string | null {
+  if (!m.music.menu) return null;
+  return coin >= 0.5 && m.music["menu:alt"] ? "menu:alt" : "menu";
 }
 
 /** the gain to play a clip at: its own gain scaled by the category's slider; 0 when muted */

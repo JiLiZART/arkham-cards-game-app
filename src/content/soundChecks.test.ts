@@ -195,6 +195,15 @@ describe("checkCandidates", () => {
     ]);
   });
 
+  it("asks no candidates for a slot whose clip is the author's own or provided", () => {
+    const own = {
+      ...manifest,
+      music: { ...manifest.music, fight: { ...manifest.music.fight, license: "own" as const } },
+    };
+    const some = SoundCandidates.parse({ slots: { "event:attack": slot, "moment:play": slot } });
+    expect(checkCandidates(own, some)).toEqual([]);
+  });
+
   it("is a schema error to have fewer than ten or more than fifteen candidates or a licence other than CC0", () => {
     expect(
       SoundCandidates.safeParse({

@@ -35,6 +35,21 @@ describe("soundCredits", () => {
   });
 });
 
+describe("soundCredits with the author's own clips", () => {
+  it("credits the author's own and the provided clips apart from the CC0 sources", () => {
+    const mixed = SoundManifest.parse({
+      ...m,
+      effects: { ...m.effects, d: { file: "d.mp3", author: "unknown", license: "provided" } },
+      music: { ...m.music, menu: { file: "menu", author: "Jane Doe", license: "own" } },
+    });
+    expect(soundCredits(mixed).split("\n").slice(-3)).toEqual([
+      "",
+      "Original music by Jane Doe.",
+      "Some effects were provided by the project's author; their origin is not recorded.",
+    ]);
+  });
+});
+
 describe("replaceCredits", () => {
   it("replaces the body of the Sound credits section and nothing else", () => {
     const readme = "# X\n\n## Sound credits\n\nold\n- [a](b)\n\n## Icon credits\n\nicons\n";

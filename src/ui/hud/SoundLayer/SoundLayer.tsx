@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import type { GameState, InstId } from "../../../engine/types";
 import { audio } from "../../assets/audio";
 import { db, gameStore, useGame } from "../../state/context";
-import { effectFor, gainOf, mayPlay, momentClip, musicFor } from "../../assets/sounds";
+import { effectFor, gainOf, mayPlay, menuMusic, momentClip, musicFor } from "../../assets/sounds";
 import { useView } from "../../state/view";
 import type { QueuedEvent } from "../../state/store";
 
@@ -18,6 +18,36 @@ export function useAudioLevels() {
     audio.setLevel("music", gainOf(settings, "music", 1));
     audio.setLevel("effects", gainOf(settings, "effects", 1));
   }, [musicVolume, sfxVolume, muted]);
+}
+
+/** ask the audio engine for a manifest track by id (null: silence); a change crossfades */
+export function playMusic(id: string | null) {
+  const track = id ? sounds().music[id] : null;
+  // a piece that ends hands over to its other take
+  const other = id && sounds().music[id.endsWith(":alt") ? id.slice(0, -4) : `${id}:alt`];
+  audio.music(
+    id,
+    track
+      ? {
+          stem: track.file,
+          loop: track.loop,
+          loopStart: track.loopStart,
+          loopEnd: track.loopEnd,
+          next: other ? other.file : undefined,
+        }
+      : null,
+    track?.gain ?? 1,
+  );
+}
+
+/** the menu theme's take for this page load */
+const menuTrack = menuMusic(db.sounds, Math.random());
+
+/** every screen but the table plays the menu theme; the table's SoundLayer takes over there */
+export function useMenuMusic(atTable: boolean) {
+  useEffect(() => {
+    if (!atTable) playMusic(menuTrack);
+  }, [atTable]);
 }
 
 const lastMoment = new Map<string, number>();
@@ -73,18 +103,10 @@ export function SoundLayer() {
   // the music follows the state of play, as shown
   useEffect(() => {
     if (!idle) return;
-    const id = musicFor(game, sounds());
-    const track = id ? sounds().music[id] : null;
-    audio.music(
-      id,
-      track
-        ? { stem: track.file, loop: track.loop, loopStart: track.loopStart, loopEnd: track.loopEnd }
-        : null,
-      track?.gain ?? 1,
-    );
+    playMusic(musicFor(game, sounds()));
   }, [game, idle]);
 
-  // leaving the table (menu, campaign log): silence
+  // leaving the table: silence, until the menu asks for its theme
   useEffect(() => () => audio.music(null, null, 0), []);
 
   return null;

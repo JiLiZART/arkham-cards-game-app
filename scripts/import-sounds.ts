@@ -26,7 +26,8 @@ export function encodeArgs(
       : kind === "aac"
         ? ["-c:a", "aac", "-b:a", "96k"]
         : ["-c:a", "libopus", "-b:a", "80k"];
-  return ["-y", ...input, ...cut, ...(filter ? ["-af", filter] : []), ...codec, out];
+  // -vn: an MP3's cover art is a video stream the audio containers can't hold
+  return ["-y", ...input, ...cut, ...(filter ? ["-af", filter] : []), "-vn", ...codec, out];
 }
 
 /** fixed levels (ADR-0009): integrated LUFS to reach, and the true-peak ceiling (under -1 dBTP once the encoder overshoots) */

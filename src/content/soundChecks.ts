@@ -1,10 +1,11 @@
 import type { ContentError } from "./loader";
 import type { SoundCandidates, SoundManifest } from "./schema";
+import { clipAt } from "./soundChoose";
 import { slotsOf } from "./soundSlots";
 
 /** bytes: effects stay small enough to ship with the first load; music loads after the game starts */
 export const EFFECTS_BUDGET = 1_500_000;
-export const MUSIC_BUDGET = 12_000_000;
+export const MUSIC_BUDGET = 50_000_000;
 /** the formats a music track ships in: AAC for Safari, Opus for the rest */
 export const MUSIC_FORMATS = ["m4a", "webm"] as const;
 
@@ -134,8 +135,14 @@ export function checkCandidates(
   c: SoundCandidates,
   required: readonly string[] = [],
 ): ContentError[] {
+  // the author's own and provided clips have no CC0 alternatives to audit
+  const licenseAt = (slot: string) => {
+    const id = clipAt(m, slot);
+    return slot.startsWith("music:") ? m.music[id ?? ""]?.license : m.effects[id ?? ""]?.license;
+  };
+  const own = new Set(slotsOf(m).filter((slot) => (licenseAt(slot) ?? "CC0") !== "CC0"));
   return [...new Set([...slotsOf(m), ...required])]
-    .filter((slot) => !c.slots[slot])
+    .filter((slot) => !c.slots[slot] && !own.has(slot))
     .map((slot) => ({
       file: "content/sounds/candidates.json",
       path: slot,

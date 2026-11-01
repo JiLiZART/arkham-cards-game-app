@@ -23,7 +23,23 @@ describe("sound manifest schema", () => {
     expect(SoundManifest.safeParse(sample).success).toBe(true);
   });
 
-  it("rejects any licence but CC0", () => {
+  it("accepts the author's own and provided clips without a source; a CC0 clip needs its source", () => {
+    const own = { file: "menu", author: "Nikolay Kostyurin", license: "own" };
+    const provided = { file: "hit.mp3", author: "unknown", license: "provided" };
+    expect(
+      SoundManifest.safeParse({
+        ...sample,
+        effects: { ...sample.effects, hit: provided },
+        music: { ...sample.music, fight: own },
+      }).success,
+    ).toBe(true);
+    const { source: _, ...bare } = clip;
+    expect(
+      SoundManifest.safeParse({ ...sample, effects: { ...sample.effects, snap: bare } }).success,
+    ).toBe(false);
+  });
+
+  it("rejects any other licence", () => {
     const r = SoundManifest.safeParse({
       ...sample,
       effects: { ...sample.effects, snap: { ...clip, license: "CC-BY" } },

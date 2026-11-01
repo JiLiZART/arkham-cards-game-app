@@ -1,7 +1,16 @@
 import { describe, expect, it } from "vitest";
 import { db, skipMulligans, start } from "../../engine/testkit";
 import type { GameEvent, GameState } from "../../engine/types";
-import { effectFor, gainOf, MOMENT_GAP, mayPlay, MOMENTS, momentClip, musicFor } from "./sounds";
+import {
+  effectFor,
+  gainOf,
+  MOMENT_GAP,
+  mayPlay,
+  menuMusic,
+  MOMENTS,
+  momentClip,
+  musicFor,
+} from "./sounds";
 
 const R = "01001";
 const fresh = skipMulligans(start("the-gathering", [R], 1)).state;
@@ -70,6 +79,54 @@ describe("momentClip", () => {
 });
 
 describe("musicFor", () => {
+  // the shared roles only: the chapter tracks and alternate takes have tests of their own
+  const m = {
+    ...db.sounds,
+    music: Object.fromEntries(
+      Object.entries(db.sounds.music).filter(
+        ([k]) => !k.startsWith("card:") && !k.startsWith("tension:") && !k.endsWith(":alt"),
+      ),
+    ),
+  };
+  const track = db.sounds.music["bed:default"];
+  const scored = (...ids: string[]) => ({
+    ...m,
+    music: { ...m.music, ...Object.fromEntries(ids.map((id) => [id, track])) },
+  });
+
+  it("the current agenda's track, else the current act's, else the bed", () => {
+    const actCode = fresh.cards[fresh.act!].code;
+    const agendaCode = fresh.cards[fresh.agenda!].code;
+    expect(musicFor(fresh, scored(`card:${actCode}`))).toBe(`card:${actCode}`);
+    expect(musicFor(fresh, scored(`card:${actCode}`, `card:${agendaCode}`))).toBe(
+      `card:${agendaCode}`,
+    );
+    expect(musicFor(fresh, scored("card:01109"))).toBe("bed:the-gathering");
+  });
+
+  it("the scenario's own tension track before the shared one", () => {
+    const enemyPhase = with_((s) => (s.phase = "enemy"));
+    expect(musicFor(enemyPhase, scored("tension:the-gathering"))).toBe("tension:the-gathering");
+    expect(musicFor(enemyPhase, scored("tension:the-midnight-masks"))).toBe("tension");
+  });
+
+  it("one take of each track per game, the same for the same seed, either take across seeds", () => {
+    const both = scored("bed:the-gathering:alt");
+    const takes = Array.from({ length: 20 }, (_, seed) =>
+      musicFor(
+        with_((s) => (s.seed = seed)),
+        both,
+      ),
+    );
+    expect(new Set(takes)).toEqual(new Set(["bed:the-gathering", "bed:the-gathering:alt"]));
+    expect(
+      musicFor(
+        with_((s) => (s.seed = 7)),
+        both,
+      ),
+    ).toBe(takes[7]);
+  });
+
   it("the scenario's bed while nothing is engaged", () => {
     expect(musicFor(fresh, m)).toBe("bed:the-gathering");
   });
@@ -149,6 +206,17 @@ describe("musicFor", () => {
         { ...m, music },
       ),
     ).toBeNull();
+  });
+});
+
+describe("menuMusic", () => {
+  it("the menu theme or its alternate by the coin, null without a menu theme", () => {
+    const track = db.sounds.music["bed:default"];
+    const music = { menu: track, "menu:alt": track };
+    expect(menuMusic({ ...db.sounds, music }, 0.2)).toBe("menu");
+    expect(menuMusic({ ...db.sounds, music }, 0.7)).toBe("menu:alt");
+    expect(menuMusic({ ...db.sounds, music: { menu: track } }, 0.7)).toBe("menu");
+    expect(menuMusic({ ...db.sounds, music: {} }, 0.2)).toBeNull();
   });
 });
 

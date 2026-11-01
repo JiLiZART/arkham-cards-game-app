@@ -1,7 +1,7 @@
 /**
  * The Web Audio wrapper: no game knowledge. One context created inside the first user gesture (browsers keep audio
- * suspended until then), a gain node per category, decoded buffers cached, music as one looping source at a time
- * with a crossfade between tracks, and a pause while the tab is hidden. A play before the unlock is dropped; a track
+ * suspended until then), a gain node per category, decoded buffers cached, music as one track at a time (looping,
+ * or a composed piece crossfading into its other take before it ends) with a crossfade between tracks, and a pause while the tab is hidden. A play before the unlock is dropped; a track
  * asked for before the unlock starts on it. In dev, `window.__arkhamAudio` logs what played for the browser scripts.
  */
 import { asset } from "./images";
@@ -13,6 +13,8 @@ export interface MusicFiles {
   loop: boolean;
   loopStart?: number;
   loopEnd?: number;
+  /** a track that doesn't loop (a composed piece with an ending): the stem crossfaded in before it ends, then back */
+  next?: string;
 }
 export interface AudioLogEntry {
   t: number;
@@ -25,7 +27,8 @@ const RAMP = 0.05;
 
 interface Playing {
   id: string;
-  source: AudioBufferSourceNode;
+  /** every source the track has scheduled (a take and the one crossfading in), stopped together */
+  sources: Set<AudioScheduledSourceNode>;
   gain: GainNode;
 }
 
@@ -97,11 +100,11 @@ class AudioEngine {
     g.linearRampToValueAtTime(level, this.ctx.currentTime + RAMP);
   }
 
-  private music_url(files: MusicFiles) {
+  private music_url(stem: string) {
     const aac =
       typeof document !== "undefined" &&
       document.createElement("audio").canPlayType('audio/mp4; codecs="mp4a.40.2"');
-    return asset(`sounds/${files.stem}.${aac ? "m4a" : "webm"}`);
+    return asset(`sounds/${stem}.${aac ? "m4a" : "webm"}`);
   }
 
   /** fetch and decode once; a missing or undecodable file resolves to null and is silent */
@@ -206,32 +209,71 @@ class AudioEngine {
 
   private stopMusic() {
     if (!this.ctx || !this.current) return;
-    const { source, gain } = this.current;
+    const { sources, gain } = this.current;
     const t = this.ctx.currentTime;
     gain.gain.cancelScheduledValues(t);
     gain.gain.setValueAtTime(gain.gain.value, t);
     gain.gain.linearRampToValueAtTime(0, t + CROSSFADE);
-    source.stop(t + CROSSFADE + 0.05);
+    for (const s of sources) s.stop(t + CROSSFADE + 0.05);
     this.current = null;
   }
 
+  /**
+   * One take of a track that doesn't loop, from `at` (ctx time), fading in when it follows another; a silent tick a
+   * second before its end schedules the following take to crossfade in (ctx time, so a hidden tab's pause holds it).
+   */
+  private playTake(playing: Playing, buf: AudioBuffer, at: number, stems: string[], n: number) {
+    const ctx = this.ctx;
+    if (!ctx || this.current !== playing) return;
+    const src = ctx.createBufferSource();
+    src.buffer = buf;
+    const g = ctx.createGain();
+    const end = at + buf.duration;
+    g.gain.setValueAtTime(n === 0 ? 1 : 0, at);
+    g.gain.linearRampToValueAtTime(1, at + (n === 0 ? 0 : CROSSFADE));
+    g.gain.setValueAtTime(1, end - CROSSFADE);
+    g.gain.linearRampToValueAtTime(0, end);
+    src.connect(g).connect(playing.gain);
+    src.start(at);
+    playing.sources.add(src);
+    src.onended = () => playing.sources.delete(src);
+    const following = this.buffer(this.music_url(stems[(n + 1) % stems.length]));
+    const tick = ctx.createConstantSource();
+    tick.offset.value = 0;
+    tick.connect(playing.gain);
+    tick.onended = () => {
+      playing.sources.delete(tick);
+      void following.then(
+        (next) => next && this.playTake(playing, next, end - CROSSFADE, stems, n + 1),
+      );
+    };
+    tick.start(Math.max(at, end - CROSSFADE - 1));
+    tick.stop(Math.max(at, end - CROSSFADE - 1) + 0.01);
+    playing.sources.add(tick);
+  }
+
   private async startMusic(id: string, files: MusicFiles, gain: number) {
-    const buf = await this.buffer(this.music_url(files));
+    const buf = await this.buffer(this.music_url(files.stem));
     // the wish may have changed while the file loaded
     if (!buf || !this.ctx || !this.bus || this.wanted?.id !== id || this.current?.id === id) return;
     this.stopMusic();
-    const src = this.ctx.createBufferSource();
-    src.buffer = buf;
-    src.loop = files.loop;
-    if (files.loopStart !== undefined) src.loopStart = files.loopStart;
-    if (files.loopEnd !== undefined) src.loopEnd = files.loopEnd;
     const g = this.ctx.createGain();
     const t = this.ctx.currentTime;
     g.gain.setValueAtTime(0, t);
     g.gain.linearRampToValueAtTime(gain, t + CROSSFADE);
-    src.connect(g).connect(this.bus.music);
-    src.start();
-    this.current = { id, source: src, gain: g };
+    g.connect(this.bus.music);
+    const playing: Playing = { id, sources: new Set(), gain: g };
+    this.current = playing;
+    if (files.loop) {
+      const src = this.ctx.createBufferSource();
+      src.buffer = buf;
+      src.loop = true;
+      if (files.loopStart !== undefined) src.loopStart = files.loopStart;
+      if (files.loopEnd !== undefined) src.loopEnd = files.loopEnd;
+      src.connect(g);
+      src.start();
+      playing.sources.add(src);
+    } else this.playTake(playing, buf, t, [files.stem, files.next ?? files.stem], 0);
     this.note("music", id);
   }
 
