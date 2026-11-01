@@ -43,7 +43,8 @@
   max-width: min(1200px, 92vw);
   max-height: 100dvh;
   box-sizing: border-box;
-  padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+  padding: max(16px, env(safe-area-inset-top)) 16px
+    max(16px, env(safe-area-inset-bottom));
 }
 .intro-title {
   margin: 0;
@@ -97,7 +98,7 @@
   max-height: calc(100dvh - 200px);
   overflow-y: auto;
   overscroll-behavior: contain;
-  font: 20px/1.45 var(--f-body);
+  font: 24px/1.45 var(--f-body);
   font-style: italic;
   color: #e0dcd2;
   text-shadow: 0 1px 4px #000;
