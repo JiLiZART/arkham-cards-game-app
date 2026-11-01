@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { cardText, t } from "../../../content/i18n";
+import { cardOfIf, invOf } from "../../../engine/core";
 import type { ChoiceOption, GameState } from "../../../engine/types";
 import { db, useGame } from "../../state/context";
 import { Icon, UiIcon, type UiIconName } from "../../components/Icon";
@@ -103,7 +104,7 @@ export function abilitySymbol(
     : typeof v === "object" && v?.kind === "ability"
       ? { card: v.card!, index: v.index! }
       : null;
-  const code = ref && game.cards[ref.card]?.code;
+  const code = ref && cardOfIf(game, ref.card)?.code;
   const kind =
     typeof v === "object" && v?.ability
       ? v.ability.ability.kind
@@ -137,7 +138,7 @@ function OptionButton({ o, game, busy }: { o: ChoiceOption; game: GameState; bus
     ? t(db, locale, it.key, it.vars) + (extra ? ` (${extra})` : "")
     : optionLabel(o, game, locale);
   // no actions left: End turn is the thing to do (paid actions are no longer offered, free ones stay)
-  const me = game.pending?.kind === "turn" ? game.invs[game.pending.inv] : null;
+  const me = game.pending?.kind === "turn" ? invOf(game, game.pending.inv) : null;
   const spent = !!me && me.actionsLeft + me.restrictedActions.reduce((n, r) => n + r.left, 0) === 0;
   return (
     <button

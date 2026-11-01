@@ -13,6 +13,7 @@ import { moment } from "../SoundLayer";
 import { hoverProps } from "../MiniCard";
 import { cx } from "../../components/cx";
 import styles from "./PileColumn.module.css";
+import { cardOf, cardOfIf, invOfIf, cardsOf } from "../../../engine/core";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);
@@ -22,7 +23,7 @@ export function pileIcon(
   faceUp: boolean,
   game: Pick<GameState, "scenarioId" | "cards">,
 ): string {
-  const set = faceUp && top ? db.cards[game.cards[top]?.code]?.encounterSet : undefined;
+  const set = faceUp && top ? db.cards[cardOf(game, top).code]?.encounterSet : undefined;
   return set ?? scenarioIcon(game.scenarioId);
 }
 
@@ -46,7 +47,7 @@ function Pile({
 }) {
   const locale = useGame((s) => s.locale);
   const game = useGame((s) => s.game) as GameState;
-  const showTop = faceUp && top && game.cards[top];
+  const showTop = faceUp && top && cardOfIf(game, top);
   const dimmed = useDimmed(top ?? "") && !option;
   const choose = useGame((s) => s.choose);
   return (
@@ -77,7 +78,7 @@ function Pile({
       >
         {count > 0 &&
           (showTop ? (
-            <CardFace code={game.cards[top!].code} locale={locale} />
+            <CardFace code={cardOf(game, top!).code} locale={locale} />
           ) : (
             <img src={backUrl(kind)} alt="" draggable={false} />
           ))}
@@ -99,13 +100,13 @@ export function PileColumn() {
   // the piles' names follow the language
   useGame((s) => s.locale);
   const viewer = viewerOf(game);
-  const me = viewer ? game.invs[viewer] : null;
+  const me = viewer ? invOfIf(game, viewer) : null;
   // a tap on a lit deck answers the pending choice, while the decider's table is on screen
   const offered = useChoicesOffered();
   const decks = offered
     ? deckOptions(game, viewer)
     : { player: null, encounter: null, waiting: false };
-  const victory = Object.values(game.cards).filter((c) => c.zone === "victory");
+  const victory = cardsOf(game).filter((c) => c.zone === "victory");
   return (
     <div className={styles.pileColumn} data-testid="pile-column">
       <Pile

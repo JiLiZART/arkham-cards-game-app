@@ -9,15 +9,16 @@ import { Modal, OptionButtons, useCardOptions } from "../Modals";
 import { StatBody } from "../Stats";
 import { cx } from "../../components/cx";
 import styles from "./Investigators.module.css";
+import { cardOf, invOf, invOfIf, cardsOf } from "../../../engine/core";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);
 
 /** every card of an investigator shown in their modal: investigator card, hand, play area, threat area */
-function cardsOf(game: GameState, i: InvId) {
-  const all = Object.values(game.cards);
+function investigatorCards(game: GameState, i: InvId) {
+  const all = cardsOf(game);
   return {
-    hand: game.invs[i].hand,
+    hand: invOf(game, i).hand,
     play: all.filter((c) => c.zone === "play" && c.controller === i).map((c) => c.id),
     threat: [
       ...all.filter((c) => c.zone === "threat" && c.controller === i),
@@ -29,14 +30,14 @@ function cardsOf(game: GameState, i: InvId) {
 /** pending options that belong in this investigator's modal */
 function useInvOptions(i: InvId) {
   const game = useGame((s) => s.game) as GameState;
-  const c = cardsOf(game, i);
+  const c = investigatorCards(game, i);
   const viewer = viewerOf(game);
-  return useCardOptions([game.invs[i].cardId, ...c.hand, ...c.play, ...c.threat]).filter(
+  return useCardOptions([invOf(game, i).cardId, ...c.hand, ...c.play, ...c.threat]).filter(
     (o) => optionHome(o, game, viewer) === "invModal" && optionOwner(o, game) === i,
   );
 }
 
-function CardRow({ title, ids }: { title: string; ids: InstId[] }) {
+function CardRow({ title, ids }: { title: string; ids: readonly InstId[] }) {
   const game = useGame((s) => s.game) as GameState;
   const locale = useGame((s) => s.locale);
   if (!ids.length) return null;
@@ -51,9 +52,9 @@ function CardRow({ title, ids }: { title: string; ids: InstId[] }) {
             key={id}
             className={styles.cardBtn}
             onClick={() => useView.getState().setModal({ card: id })}
-            title={cardText(db, game.cards[id].code, locale).name}
+            title={cardText(db, cardOf(game, id).code, locale).name}
           >
-            <CardFace code={game.cards[id].code} locale={locale} />
+            <CardFace code={cardOf(game, id).code} locale={locale} />
           </button>
         ))}
       </div>
@@ -67,9 +68,9 @@ export function InvModal({ inv }: { inv: InvId }) {
   const locale = useGame((s) => s.locale);
   const options = useInvOptions(inv);
   const close = () => useView.getState().setModal(null);
-  if (!game.invs[inv]) return null;
-  const c = cardsOf(game, inv);
-  const cardId = game.invs[inv].cardId;
+  if (!invOfIf(game, inv)) return null;
+  const c = investigatorCards(game, inv);
+  const cardId = invOf(game, inv).cardId;
   return (
     <Modal onClose={close} className={styles.invModal}>
       <div className={styles.invHead}>

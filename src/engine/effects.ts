@@ -4,41 +4,60 @@ import {
   activeInvs,
   addCounter,
   addTempMod,
+  allCards,
+  arrangeOnTop,
   ask,
   attackable,
+  cancelEvent,
   card,
+  cardIf,
   cardsIn,
   checkCondition,
   connections,
   controlled,
+  currentAgenda,
+  currentPhase,
+  currentTest,
   def,
   discard,
   distances,
-  findByCode,
-  type G,
-  inv,
-  invName,
-  invsAt,
-  isElite,
-  playerCount,
-  locationByName,
-  locations,
-  matchesFilter,
   emit,
-  moveCard,
   enemies,
   enemiesAt,
   engagedWith,
+  exhaust,
+  findByCode,
+  type G,
+  grantRestricted,
+  inv,
+  invIf,
+  invName,
+  invsAt,
+  isElite,
+  leadInvestigator,
+  locationByName,
+  locations,
+  matchesFilter,
+  moveCard,
+  pile,
+  playerCount,
+  push,
+  putOnTop,
+  randomInt,
+  ready,
   reshuffleDiscard,
+  scenarioIdOf,
+  setCardLocation,
+  setController,
   setCounter,
+  setEngaged,
+  shuffleDeck,
   shuffleIntoDeck,
   shuffleThenTop,
   skillValue,
+  spendRestricted,
   uniqueInPlay,
-  push,
-  putOnTop,
 } from "./core";
-import { randInt, shuffle } from "./rng";
 import { canPay, payCost, playCost, win } from "./rules/cards";
 import { canEnemyEnter } from "./rules/enemies";
 import { basicInvestigate } from "./rules/flow";
@@ -52,7 +71,7 @@ function amt(g: G, a: Amount, ctx: EffCtx): number {
   if (typeof a === "object")
     return "onSelf" in a
       ? ctx.source
-        ? (g.s.cards[ctx.source]?.[a.onSelf] ?? 0)
+        ? (cardIf(g, ctx.source)?.[a.onSelf] ?? 0)
         : 0
       : "yourClues" in a
         ? Math.min(a.max ?? Infinity, a.yourClues * (ctx.you ? inv(g, ctx.you).clues : 0))
@@ -70,7 +89,7 @@ function amt(g: G, a: Amount, ctx: EffCtx): number {
 /** horror a heal may remove from `target`, after the cards in play that restrict or redirect it (Rational Thought) */
 function horrorHealable(g: G, healer: InvId | null | undefined, target: InstId, n: number): number {
   const req = { target, n };
-  for (const c of Object.values(g.s.cards))
+  for (const c of allCards(g))
     if (c.zone === "threat" || c.zone === "play")
       g.db.scripts[c.code]?.hooks?.healHorror?.(
         g,
@@ -103,7 +122,7 @@ function invTargets(
     case "you":
       return you ? [you] : [];
     case "lead":
-      return [g.s.lead];
+      return [leadInvestigator(g)];
     case "each":
       return activeInvs(g);
     case "eachAtLocation":
@@ -163,7 +182,7 @@ function enemyTargets(
     const pick = ask<InstId>(
       g,
       step,
-      you ?? g.s.lead,
+      you ?? leadInvestigator(g),
       "target",
       prompt,
       ids.map((id) => opt(g, id)),
@@ -173,9 +192,9 @@ function enemyTargets(
   };
   switch (t) {
     case "self":
-      return ctx.source && g.s.cards[ctx.source]?.zone === "enemy" ? [ctx.source] : [];
+      return ctx.source && cardIf(g, ctx.source)?.zone === "enemy" ? [ctx.source] : [];
     case "eventEnemy":
-      return ctx.enemy && g.s.cards[ctx.enemy]?.zone === "enemy" ? [ctx.enemy] : [];
+      return ctx.enemy && cardIf(g, ctx.enemy)?.zone === "enemy" ? [ctx.enemy] : [];
     case "eachAtLocation":
       return enemiesAt(g, loc)
         .map((e) => e.id)
@@ -211,7 +230,7 @@ function enemyTargets(
 }
 
 /** a card that cancels a search of the deck it is found in, and is drawn instead (Dead Ends) */
-function searchBlocked(g: G, who: InvId, searched: InstId[]): boolean {
+function searchBlocked(g: G, who: InvId, searched: readonly InstId[]): boolean {
   const id = searched.find((x) => g.db.scripts[card(g, x).code]?.hooks?.searched);
   if (!id) return false;
   shuffleThenTop(g, who, [id]);
@@ -225,13 +244,13 @@ export const effectsHandler = (g: G, step: Extract<Step, { t: "Effects" }>) => {
 };
 
 export const effHandler = (g: G, step: EffStep) => {
-  if (g.s.phase === "ended") return;
+  if (currentPhase(g) === "ended") return;
   const e = step.effect;
   const ctx = step.ctx;
   // an investigator eliminated mid-effect (an attack of opportunity) resolves nothing more of it
-  if (ctx.you && g.s.invs[ctx.you] && g.s.invs[ctx.you].status !== "playing") return;
-  const you = ctx.you ?? g.s.lead;
-  const src = ctx.source ? g.s.cards[ctx.source] : undefined;
+  if (ctx.you && invIf(g, ctx.you) && inv(g, ctx.you).status !== "playing") return;
+  const you = ctx.you ?? leadInvestigator(g);
+  const src = ctx.source ? cardIf(g, ctx.source) : undefined;
   switch (e.op) {
     case "gainResources":
     case "loseResources":
@@ -298,7 +317,7 @@ export const effHandler = (g: G, step: EffStep) => {
       if (e.targetAlly && ctx.you) {
         const mine = ctx.you;
         const people = e.target === "you" ? [mine] : invsAt(g, inv(g, mine).location);
-        const allies = Object.values(g.s.cards).filter(
+        const allies = allCards(g).filter(
           (c) =>
             c.zone === "play" &&
             c.controller &&
@@ -316,7 +335,7 @@ export const effHandler = (g: G, step: EffStep) => {
           key: "chooseHealTarget",
         });
         if (pick === undefined) return;
-        const asset = g.s.cards[pick];
+        const asset = cardIf(g, pick);
         if (asset) {
           const d = Math.min(e.damage ?? 0, asset.damage);
           const h = Math.min(horrorHealable(g, ctx.you, asset.id, e.horror ?? 0), asset.horror);
@@ -376,7 +395,8 @@ export const effHandler = (g: G, step: EffStep) => {
     case "placeDoom": {
       const n = amt(g, e.amount, ctx);
       if (e.on === "agenda") {
-        if (g.s.agenda) push(g, { t: "PlaceDoom", card: g.s.agenda, n });
+        const agenda = currentAgenda(g);
+        if (agenda) push(g, { t: "PlaceDoom", card: agenda, n });
       } else if (e.on === "self") {
         if (ctx.source) push(g, { t: "PlaceDoom", card: ctx.source, n });
       } else if (e.on === "eachCultist") {
@@ -402,7 +422,7 @@ export const effHandler = (g: G, step: EffStep) => {
     case "putInThreatArea":
       if (!src) return;
       moveCard(g, src.id, "threat");
-      src.controller = you;
+      setController(g, src.id, you);
       emit(g, "threat", `${def(g, src.id).name} enters ${invName(g, you)}'s threat area`, {
         inv: you,
         card: src.id,
@@ -429,7 +449,7 @@ export const effHandler = (g: G, step: EffStep) => {
       const pick = ask<InstId>(
         g,
         step,
-        g.s.lead,
+        leadInvestigator(g),
         "target",
         `Attach ${def(g, src.id).name} to:`,
         cands.map((l) => opt(g, l)),
@@ -564,8 +584,8 @@ export const effHandler = (g: G, step: EffStep) => {
         }
         for (const id of ts) {
           const en = card(g, id);
-          en.exhausted = true;
-          en.engagedWith = null;
+          exhaust(g, en.id);
+          setEngaged(g, en.id, null);
           emit(g, "evade", `${invName(g, you)} evades ${def(g, id).name}`, { inv: you, card: id });
           push(g, win("enemyEvaded", { inv: you, enemy: id }));
         }
@@ -603,7 +623,7 @@ export const effHandler = (g: G, step: EffStep) => {
         if (loc) addTempMod(g, { ...e.mod, scope: undefined }, loc, e.until, ctx.source ?? null);
         return;
       }
-      const tester = g.s.skillTest?.inv;
+      const tester = currentTest(g)?.inv;
       const target =
         e.until === "test" && tester ? tester : invTargets(g, step, e.target, ctx)?.[0];
       if (!target) return;
@@ -620,7 +640,7 @@ export const effHandler = (g: G, step: EffStep) => {
     case "chooseOne": {
       const opts = e.options.filter((o) => !o.condition || checkCondition(g, o.condition, ctx));
       if (!opts.length) return;
-      const who = e.chooser === "lead" ? g.s.lead : you;
+      const who = e.chooser === "lead" ? leadInvestigator(g) : you;
       const pick = ask<number>(
         g,
         step,
@@ -644,7 +664,7 @@ export const effHandler = (g: G, step: EffStep) => {
         for (const t of ts) {
           const m = inv(g, t);
           for (let k = 0; k < n && m.hand.length; k++) {
-            const id = m.hand[randInt(g.s, m.hand.length)];
+            const id = m.hand[randomInt(g, m.hand.length)];
             discard(g, id);
           }
         }
@@ -719,20 +739,20 @@ export const effHandler = (g: G, step: EffStep) => {
       push(g, { t: "DrawEncounter", inv: you });
       return;
     case "gainActions":
-      if (e.onlyFor) inv(g, you).restrictedActions.push({ designator: e.onlyFor, left: e.amount });
-      else if (e.amount >= 0) inv(g, you).actionsLeft += e.amount;
+      if (e.onlyFor) grantRestricted(g, you, { designator: e.onlyFor, left: e.amount });
+      else if (e.amount >= 0) addCounter(g, you, "actionsLeft", e.amount);
       else {
         // losing actions: from normal actions first, then restricted ones, never below 0
         const me = inv(g, you);
         let lose = -e.amount;
         const n = Math.min(lose, me.actionsLeft);
-        me.actionsLeft -= n;
+        addCounter(g, me.id, "actionsLeft", -n);
         lose -= n;
-        for (const r of me.restrictedActions) {
+        me.restrictedActions.forEach((r, index) => {
           const k = Math.min(lose, r.left);
-          r.left -= k;
+          spendRestricted(g, you, index, k);
           lose -= k;
-        }
+        });
       }
       emit(g, "actions", `${invName(g, you)} gains ${e.amount} action(s)`, {
         inv: you,
@@ -740,12 +760,12 @@ export const effHandler = (g: G, step: EffStep) => {
       });
       return;
     case "cancel":
-      if (ctx.key) g.s.cancelled.push(ctx.key);
+      if (ctx.key) cancelEvent(g, ctx.key);
       return;
     case "disengageAll":
       for (const en of enemies(g)) {
         if (en.engagedWith === you && !(e.nonTrait && def(g, en.id).traits.includes(e.nonTrait)))
-          en.engagedWith = null;
+          setEngaged(g, en.id, null);
       }
       return;
     case "moveTo": {
@@ -815,7 +835,7 @@ export const effHandler = (g: G, step: EffStep) => {
       if (weak.length) {
         // the found card is shuffled with the deck, then lifted to the top with the weaknesses under it
         for (const id of weak) moveCard(g, id, "limbo");
-        shuffle(g.s, me.deck);
+        shuffleDeck(g, me.id);
         putOnTop(g, who, [...(pick !== "none" ? [pick] : []), ...weak]);
         push(g, { t: "Draw", inv: who, n: weak.length + (pick !== "none" ? 1 : 0), tapped: true });
         return;
@@ -833,7 +853,7 @@ export const effHandler = (g: G, step: EffStep) => {
           card: pick,
         });
       }
-      shuffle(g.s, me.deck);
+      shuffleDeck(g, me.id);
       if (pick === "none" && e.orDraw) push(g, { t: "Draw", inv: who, n: 1, tapped: true });
       return;
     }
@@ -849,7 +869,7 @@ export const effHandler = (g: G, step: EffStep) => {
                 key: "option.deckOf",
                 vars: { code: i },
               })),
-            ...(g.s.encounterDeck.length
+            ...(pile(g, "encounterDeck").length
               ? [
                   {
                     id: "encounter",
@@ -872,7 +892,7 @@ export const effHandler = (g: G, step: EffStep) => {
         { auto: true, key: "chooseDeck" },
       );
       if (deck === undefined) return;
-      const cards = (deck === "encounter" ? g.s.encounterDeck : inv(g, deck).deck).slice(
+      const cards = (deck === "encounter" ? pile(g, "encounterDeck") : inv(g, deck).deck).slice(
         0,
         e.amount,
       );
@@ -912,12 +932,12 @@ export const effHandler = (g: G, step: EffStep) => {
         push(g, { t: "Eff", effect: { op: "placeDoom", amount: 2, on: "nearestCultist" }, ctx });
         return;
       }
-      const pool = [...g.s.encounterDeck, ...g.s.encounterDiscard].find(
+      const pool = [...pile(g, "encounterDeck"), ...pile(g, "encounterDiscard")].find(
         (id) => def(g, id).type === "enemy" && def(g, id).traits.includes("Cultist"),
       );
       if (pool) {
         moveCard(g, pool, "resolving");
-        shuffle(g.s, g.s.encounterDeck);
+        shuffleDeck(g, "encounter");
         emit(g, "encounter", `${invName(g, you)} draws ${def(g, pool).name}`, {
           inv: you,
           card: pool,
@@ -944,14 +964,14 @@ export const effHandler = (g: G, step: EffStep) => {
       const id = ctx.enemy;
       if (!id) return;
       moveCard(g, id, "encounterDeck");
-      shuffle(g.s, g.s.encounterDeck);
+      shuffleDeck(g, "encounter");
       emit(g, "shuffle", `${def(g, id).name} is shuffled into the encounter deck`, { card: id });
       return;
     }
     case "takeControl":
       if (!src) return;
       moveCard(g, src.id, "play");
-      src.controller = you;
+      setController(g, src.id, you);
       emit(g, "control", `${invName(g, you)} takes control of ${def(g, src.id).name}`, {
         inv: you,
         card: src.id,
@@ -1036,7 +1056,7 @@ export const effHandler = (g: G, step: EffStep) => {
     }
     case "searchEncounterDraw": {
       // the encounter deck first, then its discard pile; the investigator resolving the effect draws the card
-      const id = [...g.s.encounterDeck, ...g.s.encounterDiscard].find((c) =>
+      const id = [...pile(g, "encounterDeck"), ...pile(g, "encounterDiscard")].find((c) =>
         matchesFilter(g, card(g, c).code, e.filter),
       );
       if (id) {
@@ -1047,7 +1067,7 @@ export const effHandler = (g: G, step: EffStep) => {
         });
         push(g, { t: "Spawn", enemy: id, inv: you });
       }
-      shuffle(g.s, g.s.encounterDeck);
+      shuffleDeck(g, "encounter");
       emit(g, "shuffle", `${invName(g, you)} shuffles the encounter deck`, { inv: you });
       return;
     }
@@ -1059,8 +1079,8 @@ export const effHandler = (g: G, step: EffStep) => {
       if (e.countIfPlayersAtLeast && playerCount(g) >= e.countIfPlayersAtLeast[0])
         want = e.countIfPlayersAtLeast[1];
       const found: InstId[] = [];
-      while (found.length < want && g.s.encounterDeck.length) {
-        const id = g.s.encounterDeck[0];
+      while (found.length < want && pile(g, "encounterDeck").length) {
+        const id = pile(g, "encounterDeck")[0];
         if (matchesFilter(g, card(g, id).code, e.filter)) {
           moveCard(g, id, "limbo");
           found.push(id);
@@ -1073,7 +1093,7 @@ export const effHandler = (g: G, step: EffStep) => {
       }
       for (const id of found) {
         if (e.then === "leadDraws" || e.then === "youDraw") {
-          const who = e.then === "youDraw" ? you : g.s.lead;
+          const who = e.then === "youDraw" ? you : leadInvestigator(g);
           emit(g, "encounter", `${invName(g, who)} draws ${def(g, id).name}`, {
             inv: who,
             card: id,
@@ -1141,8 +1161,8 @@ export const effHandler = (g: G, step: EffStep) => {
       );
       if (pick === undefined) return;
       const en = card(g, pick);
-      en.location = loc;
-      en.engagedWith = you;
+      setCardLocation(g, en.id, loc);
+      setEngaged(g, en.id, you);
       emit(g, "engage", `${def(g, pick).name} is pulled to ${invName(g, you)} and engages them`, {
         inv: you,
         card: pick,
@@ -1170,7 +1190,7 @@ export const effHandler = (g: G, step: EffStep) => {
         { key: "chooseEnemyEngage" },
       );
       if (pick === undefined || pick === "done") return;
-      card(g, pick).engagedWith = you;
+      setEngaged(g, pick, you);
       emit(g, "engage", `${invName(g, you)} engages ${def(g, pick).name}`, {
         inv: you,
         card: pick,
@@ -1199,7 +1219,7 @@ export const effHandler = (g: G, step: EffStep) => {
         { auto: true, key: "chooseReady" },
       );
       if (pick === undefined) return;
-      card(g, pick).exhausted = false;
+      ready(g, pick);
       emit(g, "ready", `${def(g, pick).name} is readied`, { inv: you, card: pick });
       return;
     }
@@ -1233,7 +1253,7 @@ export const effHandler = (g: G, step: EffStep) => {
           push(g, { t: "PlayCard", inv: you, card: pick, free: true });
         } else push(g, { t: "PlayCard", inv: you, card: pick });
       }
-      shuffle(g.s, me.deck);
+      shuffleDeck(g, me.id);
       return;
     }
     case "removeUses": {
@@ -1276,7 +1296,7 @@ export const effHandler = (g: G, step: EffStep) => {
       );
       if (kind === undefined) return;
       const n = Math.min(kind === "damage" ? e.damage! : e.horror!, src[kind]);
-      src[kind] -= n;
+      addCounter(g, src.id, kind, -n);
       emit(g, "heal", `${def(g, src.id).name} heals ${n} ${kind}`, {
         card: src.id,
         data: { damage: kind === "damage" ? n : 0, horror: kind === "horror" ? n : 0 },
@@ -1292,10 +1312,10 @@ export const effHandler = (g: G, step: EffStep) => {
       return;
     }
     case "script": {
-      const code = src?.code ?? g.s.scenarioId;
+      const code = src?.code ?? scenarioIdOf(g);
       push(g, {
         t: "Script",
-        code: g.db.scripts[code]?.fns?.[e.fn] ? code : g.s.scenarioId,
+        code: g.db.scripts[code]?.fns?.[e.fn] ? code : scenarioIdOf(g),
         fn: e.fn,
         ctx,
         args: e.args,
@@ -1326,8 +1346,7 @@ const arrangeTopHandler = (g: G, step: Extract<Step, { t: "ArrangeTop" }>) => {
     push(g, { ...step, placed, choice: undefined });
     return;
   }
-  const deck = step.deck === "encounter" ? g.s.encounterDeck : inv(g, step.deck).deck;
-  deck.splice(0, deck.length, ...placed, ...deck.filter((id) => !placed.includes(id)));
+  arrangeOnTop(g, step.deck, placed);
 };
 
 export const handlers = { Effects: effectsHandler, Eff: effHandler, ArrangeTop: arrangeTopHandler };

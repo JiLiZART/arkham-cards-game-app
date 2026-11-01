@@ -9,7 +9,7 @@ const fresh = (): G => gOf(skipMulligans(start("the-gathering", [R], 1)));
 /** every pile a card id sits in */
 function pilesOf(g: G, id: InstId): string[] {
   const me = inv(g, R);
-  const piles: [string, InstId[]][] = [
+  const piles: [string, readonly InstId[]][] = [
     ["deck", me.deck],
     ["hand", me.hand],
     ["discard", me.discard],

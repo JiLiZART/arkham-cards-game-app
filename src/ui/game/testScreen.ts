@@ -11,6 +11,7 @@ import type {
   SkillTestState,
 } from "../../engine/types";
 import { choicesOffered, type Looking } from "../state/players";
+import { cardOfIf } from "../../engine/core";
 
 const gOf = (game: GameState, db: ContentDb): G => ({ s: game, db, events: [] });
 
@@ -18,7 +19,7 @@ export type Subject = { kind: "card"; id: InstId } | { kind: "portrait"; inv: In
 
 /** what the test is about: the card it is against (enemy, location), else the card that called for it, else the investigator */
 export function subjectOf(test: SkillTestState, game: Pick<GameState, "cards">): Subject {
-  const id = [test.target, test.source].find((c): c is InstId => !!c && !!game.cards[c]);
+  const id = [test.target, test.source].find((c): c is InstId => !!c && !!cardOfIf(game, c));
   return id ? { kind: "card", id } : { kind: "portrait", inv: test.inv };
 }
 

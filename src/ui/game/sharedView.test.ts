@@ -1,12 +1,14 @@
 import { describe, expect, it } from "vitest";
+import type { GameState } from "../../engine/types";
 import { sharedView } from "./sharedView";
 
+/** just the cards the lookups read */
 const game = {
   cards: {
     enemy: { owner: null },
     hand: { owner: "01001" },
   },
-};
+} as unknown as Pick<GameState, "cards">;
 
 describe("sharedView", () => {
   it("shares the act, agenda and reference decks", () => {

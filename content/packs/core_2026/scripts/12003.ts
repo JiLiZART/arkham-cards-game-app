@@ -1,12 +1,12 @@
 // In Harm's Way — worn out at 3 damage; 1 physical trauma when the game ends
 import {
+  addCounter,
   card,
   cardIf,
   type CardScript,
   discard,
   type EffCtx,
   type G,
-  inv,
 } from "../../../../src/engine/api";
 
 export default {
@@ -19,7 +19,7 @@ export default {
   hooks: {
     gameEnd(g: G, ctx: EffCtx) {
       const c = card(g, ctx.source!);
-      if (c.zone === "threat" && c.controller) inv(g, c.controller).physicalTrauma++;
+      if (c.zone === "threat" && c.controller) addCounter(g, c.controller, "physicalTrauma", 1);
     },
   },
 } satisfies CardScript;

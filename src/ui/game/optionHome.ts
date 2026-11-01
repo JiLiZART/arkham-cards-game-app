@@ -1,4 +1,5 @@
 import type { ChoiceOption, GameState, InstId, InvId } from "../../engine/types";
+import { cardOf, cardOfIf, invOf } from "../../engine/core";
 
 /** where an option of the pending choice is offered on screen (there is no option sidebar) */
 export type OptionHome =
@@ -30,17 +31,17 @@ const BOARD_ZONES = new Set(["location", "enemy", "attached", "play", "threat", 
 
 /** the investigator whose card this is, if it is an investigator card */
 const investigatorOf = (s: GameState, card: string): InvId | undefined =>
-  s.order.find((i) => s.invs[i].cardId === card);
+  s.order.find((i) => invOf(s, i).cardId === card);
 
 export function optionHome(o: ChoiceOption, s: GameState, viewer: InvId | null): OptionHome {
   // the pause before a phase: Continue on the phase title
   if (s.pending?.kind === "phase") return "phase";
   // picking one of the viewer's deck or discard cards: the cards (and "none") in the showcase
   if (deckPick(s, viewer).length) return "showcase";
-  if (!o.card || !s.cards[o.card]) return RAIL_KINDS.has(kindOf(o) ?? "") ? "rail" : "bar";
+  if (!o.card || !cardOfIf(s, o.card)) return RAIL_KINDS.has(kindOf(o) ?? "") ? "rail" : "bar";
   // taking back a card picked for the mulligan: the "to redraw" row on the table
   if (s.pending?.kind === "mulligan" && o.id.startsWith("un:")) return "mulligan";
-  const c = s.cards[o.card];
+  const c = cardOf(s, o.card);
   const inv = investigatorOf(s, o.card);
   // an investigator card (a choice among investigators, or an ability on their card): the avatars in the player bar
   if (inv) return "avatar";
@@ -64,8 +65,8 @@ export const onRail = (o: ChoiceOption, s: GameState, viewer: InvId | null) =>
 
 /** the investigator whose modal shows an "invModal" option */
 export function optionOwner(o: ChoiceOption, s: GameState): InvId | null {
-  if (!o.card || !s.cards[o.card]) return null;
-  const c = s.cards[o.card];
+  if (!o.card || !cardOfIf(s, o.card)) return null;
+  const c = cardOf(s, o.card);
   return investigatorOf(s, o.card) ?? (c.zone === "hand" ? c.owner : c.controller) ?? null;
 }
 
@@ -79,10 +80,10 @@ export function deckPick(game: GameState, viewer: InvId | null): InstId[] {
   if (!p || p.inv !== viewer || p.kind !== "generic") return [];
   const cards = [...p.options.flatMap((o) => o.card ?? []), ...(p.shown ?? [])];
   const pile = (id: InstId) => {
-    const c = game.cards[id];
+    const c = cardOfIf(game, id);
     if (c?.zone === "encounterDeck") return game.encounterDeck;
-    if (c?.zone === "deck" && c.owner) return game.invs[c.owner].deck;
-    return c?.zone === "discard" && c.owner === viewer ? game.invs[viewer].discard : null;
+    if (c?.zone === "deck" && c.owner) return invOf(game, c.owner).deck;
+    return c?.zone === "discard" && c.owner === viewer ? invOf(game, viewer).discard : null;
   };
   if (!cards.length || !cards.every(pile)) return [];
   return cards.sort((a, b) => pile(a)!.indexOf(a) - pile(b)!.indexOf(b));

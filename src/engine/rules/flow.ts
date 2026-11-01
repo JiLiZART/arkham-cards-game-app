@@ -2,29 +2,50 @@ import { atTurnEnd, noReady } from "../flags";
 import type { Ability, Boost, Effect, OnTokens, Skill } from "../../content/schema";
 import {
   abilitiesOf as abilitiesOfCard,
+  activeInvestigator,
   activeInvs,
   addCounter,
+  allCards,
   allMods,
   ask,
   attackable,
+  beginActions,
+  bumpCounter,
   card,
   cardsIn,
+  clearDefeatedHealth,
+  clearRoundActions,
+  clearTurnDone,
+  currentAct,
+  currentAgenda,
+  currentPhase,
+  currentRound,
   def,
+  emit,
+  enemiesAt,
+  engagedWith,
+  expireMods,
   type G,
   hasFlag,
-  threatArea,
   inv,
   invName,
   isMassive,
+  leadInvestigator,
   logStep,
-  emit,
   modSum,
-  enemiesAt,
-  engagedWith,
-  setCounter,
-  spendableGroupClues,
+  noteAction,
+  pacesPhases,
   push,
-  expireMods,
+  ready,
+  setActive,
+  setCounter,
+  setPhase,
+  setTurnDone,
+  spendableGroupClues,
+  spendRestricted,
+  startRound,
+  threatArea,
+  turnOrder,
 } from "../core";
 import type { ChoiceOption, InvId, Step, TurnAction } from "../types";
 import { activatable, canPlay, playAbility, playable, spendGroupClues, win } from "./cards";
@@ -37,26 +58,24 @@ type Handler<T extends Step["t"]> = (g: G, step: Extract<Step, { t: T }>) => voi
 
 function beginPhase(g: G, phase: G["s"]["phase"]) {
   expireMods(g, "phase");
-  g.s.phase = phase;
-  g.s.counters.phase++;
-  emit(g, "phase", `${phase[0].toUpperCase()}${phase.slice(1)} phase (round ${g.s.round})`, {
-    data: { phase, round: g.s.round },
+  setPhase(g, phase);
+  emit(g, "phase", `${phase[0].toUpperCase()}${phase.slice(1)} phase (round ${currentRound(g)})`, {
+    data: { phase, round: currentRound(g) },
   });
 }
 
 // ---------- rounds ----------
 export const startRoundHandler: Handler<"StartRound"> = (g) => {
-  g.s.round++;
-  g.s.counters.round++;
-  for (const i of Object.values(g.s.invs)) i.actionsThisRound = [];
+  startRound(g);
+  clearRoundActions(g);
   for (const c of cardsIn(g, "play"))
     if (def(g, c.id).replenish === "round" && def(g, c.id).uses)
       setCounter(g, c.id, "uses", def(g, c.id).uses!.count);
   const paced = (phase: Extract<Step, { t: "PhasePause" }>["phase"], step: Step): Step[] =>
-    g.s.pacePhases ? [{ t: "PhasePause", phase }, step] : [step];
+    pacesPhases(g) ? [{ t: "PhasePause", phase }, step] : [step];
   push(
     g,
-    ...(g.s.round > 1 ? paced("mythos", { t: "MythosPhase" }) : []),
+    ...(currentRound(g) > 1 ? paced("mythos", { t: "MythosPhase" }) : []),
     ...paced("investigation", { t: "InvestigationPhase" }),
     ...paced("enemy", { t: "EnemyPhase" }),
     ...paced("upkeep", { t: "UpkeepPhase" }),
@@ -66,8 +85,8 @@ export const startRoundHandler: Handler<"StartRound"> = (g) => {
 
 /** a paced game waits for the lead investigator before each phase (a recorded choice, so replays stay exact) */
 export const phasePauseHandler: Handler<"PhasePause"> = (g, step) => {
-  if (g.s.phase === "ended" || !activeInvs(g).length) return;
-  const lead = activeInvs(g).includes(g.s.lead) ? g.s.lead : activeInvs(g)[0];
+  if (currentPhase(g) === "ended" || !activeInvs(g).length) return;
+  const lead = activeInvs(g).includes(leadInvestigator(g)) ? leadInvestigator(g) : activeInvs(g)[0];
   ask(
     g,
     step,
@@ -82,11 +101,12 @@ export const phasePauseHandler: Handler<"PhasePause"> = (g, step) => {
 export const mythosHandler: Handler<"MythosPhase"> = (g) => {
   beginPhase(g, "mythos");
   const steps: Step[] = [win("phaseBegins", { phase: "mythos" })];
-  if (g.s.agenda) {
+  const agenda = currentAgenda(g);
+  if (agenda) {
     logStep(g, "doom");
-    steps.push({ t: "PlaceDoom", card: g.s.agenda, n: 1 }, { t: "CheckDoom" });
+    steps.push({ t: "PlaceDoom", card: agenda, n: 1 }, { t: "CheckDoom" });
   }
-  for (const i of g.s.order) steps.push({ t: "MythosDraw", inv: i });
+  for (const i of turnOrder(g)) steps.push({ t: "MythosDraw", inv: i });
   steps.push(win("playerWindow", { phase: "mythos" }), win("mythosEnds", {}));
   push(g, ...steps);
 };
@@ -99,7 +119,7 @@ export const mythosDrawHandler: Handler<"MythosDraw"> = (g, step) => {
 
 export const investigationHandler: Handler<"InvestigationPhase"> = (g) => {
   beginPhase(g, "investigation");
-  for (const i of Object.values(g.s.invs)) i.turnDone = false;
+  clearTurnDone(g);
   push(
     g,
     win("phaseBegins", { phase: "investigation" }),
@@ -116,7 +136,7 @@ export const nextTurnHandler: Handler<"NextTurn"> = (g, step) => {
   const who = ask<InvId>(
     g,
     step,
-    g.s.lead,
+    leadInvestigator(g),
     "generic",
     "Who takes the next turn?",
     left.map((i) => ({ id: i, label: invName(g, i), card: inv(g, i).cardId, value: i })),
@@ -124,21 +144,23 @@ export const nextTurnHandler: Handler<"NextTurn"> = (g, step) => {
   );
   if (who === undefined) return;
   const me = inv(g, who);
-  g.s.active = who;
-  g.s.counters.turn++;
-  me.actionsTaken = 0;
-  for (const x of Object.values(g.s.invs)) x.defeatedHealth = 0;
-  me.actionsLeft =
+  setActive(g, who);
+  bumpCounter(g, "turn");
+  clearDefeatedHealth(g);
+  beginActions(
+    g,
+    who,
     3 +
-    modSum(
-      g,
-      who,
-      "additionalActions",
-      allMods(g).filter((m) => !m.mod.filter),
-    );
-  me.restrictedActions = allMods(g)
-    .filter((m) => m.target === who && m.mod.stat === "additionalActions" && m.mod.filter?.trait)
-    .map((m) => ({ trait: String(m.mod.filter!.trait), left: m.mod.value ?? 1 }));
+      modSum(
+        g,
+        who,
+        "additionalActions",
+        allMods(g).filter((m) => !m.mod.filter),
+      ),
+    allMods(g)
+      .filter((m) => m.target === who && m.mod.stat === "additionalActions" && m.mod.filter?.trait)
+      .map((m) => ({ trait: String(m.mod.filter!.trait), left: m.mod.value ?? 1 })),
+  );
   emit(g, "turn", `${me.name}'s turn`, { inv: who });
   push(
     g,
@@ -285,12 +307,13 @@ export function legalTurnActions(g: G, i: InvId): ChoiceOption[] {
   for (const e of engagedWith(g, i))
     if (def(g, e.id).enemy?.evade !== null)
       add({ kind: "evade", enemy: e.id }, `Evade ${def(g, e.id).name}`, e.id);
+  const act = currentAct(g);
   if (
-    g.s.act &&
-    (def(g, g.s.act).actAdvance ?? "turn") === "turn" &&
+    act &&
+    (def(g, act).actAdvance ?? "turn") === "turn" &&
     spendableGroupClues(g) >= actClueCost(g)
   ) {
-    add({ kind: "advanceAct" }, `Advance act (spend ${actClueCost(g)} clues as a group)`, g.s.act);
+    add({ kind: "advanceAct" }, `Advance act (spend ${actClueCost(g)} clues as a group)`, act);
   }
   out.push({
     id: JSON.stringify({ kind: "endTurn" }),
@@ -304,7 +327,7 @@ export { spendableGroupClues };
 
 export const turnHandler: Handler<"Turn"> = (g, step) => {
   const me = inv(g, step.inv);
-  if (me.status !== "playing" || g.s.phase === "ended" || me.turnDone) return;
+  if (me.status !== "playing" || currentPhase(g) === "ended" || me.turnDone) return;
   const opts = legalTurnActions(g, step.inv);
   const a = ask<TurnAction>(
     g,
@@ -326,7 +349,7 @@ export const turnHandler: Handler<"Turn"> = (g, step) => {
 export const endTurnHandler: Handler<"EndTurn"> = (g, step) => {
   const me = inv(g, step.inv);
   if (me.turnDone) return;
-  me.turnDone = true;
+  setTurnDone(g, me.id, true);
   push(g, win("turnEnds", { inv: step.inv }), {
     t: "Script",
     code: "__engine",
@@ -347,7 +370,7 @@ export function endTurnCleanup(g: G, i: InvId) {
     push(g, ...due.map((d): Step => ({ t: "Effects", effects: d.effects, ctx: d.ctx })));
   }
   expireMods(g, "turn");
-  if (g.s.active === i) g.s.active = null;
+  if (activeInvestigator(g) === i) setActive(g, null);
 }
 
 const NO_AOO = ["fight", "evade", "parley", "resign"];
@@ -359,18 +382,15 @@ export const performActionHandler: Handler<"PerformAction"> = (g, step) => {
   const designator = designatorOf(g, a);
   // spend actions (restricted actions first when they apply)
   let left = cost;
-  for (const r of me.restrictedActions) {
+  me.restrictedActions.forEach((r, index) => {
     if (left > 0 && restrictedFits(g, i, r, a, designator)) {
       const n = Math.min(left, r.left);
-      r.left -= n;
+      spendRestricted(g, i, index, n);
       left -= n;
     }
-  }
-  me.actionsLeft -= left;
-  if (cost > 0) {
-    me.actionsThisRound.push(designator);
-    me.actionsTaken++;
-  }
+  });
+  addCounter(g, me.id, "actionsLeft", -left);
+  if (cost > 0) noteAction(g, i, designator);
   const steps: Step[] = [];
   // Dr. Henry Armitage: the first action each round provokes none
   const firstFree = hasFlag(g, i, "firstActionNoAoO") && me.actionsThisRound.length === 1;
@@ -478,7 +498,7 @@ export function basicInvestigate(
 
 // ---------- enemy phase ----------
 export const enemyPhaseHandler: Handler<"EnemyPhase"> = (g) => {
-  if (g.s.phase === "ended") return;
+  if (currentPhase(g) === "ended") return;
   beginPhase(g, "enemy");
   push(
     g,
@@ -492,20 +512,20 @@ export const enemyPhaseHandler: Handler<"EnemyPhase"> = (g) => {
 
 // ---------- upkeep ----------
 export function readyAll(g: G) {
-  for (const c of Object.values(g.s.cards)) {
+  for (const c of allCards(g)) {
     // an enemy kept from readying this upkeep (Slippery)
     if (noReady.get(g, c.id)) {
       noReady.clear(g, c.id);
       continue;
     }
     if (["play", "enemy", "location", "attached", "investigator", "threat"].includes(c.zone))
-      c.exhausted = false;
+      ready(g, c.id);
   }
   emit(g, "ready", "All exhausted cards are readied");
 }
 
 export const upkeepHandler: Handler<"UpkeepPhase"> = (g) => {
-  if (g.s.phase === "ended") return;
+  if (currentPhase(g) === "ended") return;
   beginPhase(g, "upkeep");
   logStep(g, "upkeep");
   // the player window comes before exhausted cards ready (Grimoire, 4.1 to 4.3)
@@ -517,19 +537,19 @@ export const upkeepHandler: Handler<"UpkeepPhase"> = (g) => {
   // readied enemies at an investigator's location engage
   for (const i of activeInvs(g))
     steps.push({ t: "Script", code: "__engine", fn: "checkEngagement", ctx: { inv: i } });
-  for (const i of g.s.order) {
+  for (const i of turnOrder(g)) {
     if (inv(g, i).status !== "playing") continue;
     steps.push(
       { t: "Draw", inv: i, n: 1 },
       { t: "Script", code: "__engine", fn: "gainResource", ctx: { inv: i } },
     );
   }
-  for (const i of g.s.order) steps.push({ t: "HandSize", inv: i });
+  for (const i of turnOrder(g)) steps.push({ t: "HandSize", inv: i });
   push(g, ...steps);
 };
 
 export const endRoundHandler: Handler<"EndRound"> = (g) => {
-  if (g.s.phase === "ended") return;
+  if (currentPhase(g) === "ended") return;
   // "until the end of the round" effects expire before "at the end of the round" abilities (Grimoire, Lasting Effects)
   push(g, { t: "Script", code: "__engine", fn: "roundCleanup", ctx: {} }, win("roundEnds", {}), {
     t: "StartRound",

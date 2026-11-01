@@ -75,7 +75,7 @@ describe("Seeker", () => {
   it("Magnifying Glass returns to the hand when the location has no clues", () => {
     let r = roland((g) => {
       inPlay(g, R, "01040");
-      card(g, inv(g, R).location!).clues = 0;
+      g.s.cards[inv(g, R).location!].clues = 0;
     });
     r = pick(r, /^Magnifying Glass/);
     expect(zoneOf(r, "01040")).toEqual(["hand"]);
@@ -104,7 +104,7 @@ describe("Seeker", () => {
   it("Cryptic Research: the chosen investigator draws 3", () => {
     let r = game([R, DAISY], (g) => {
       hand(g, R, "01043");
-      inv(g, DAISY).location = inv(g, R).location;
+      g.s.invs[DAISY].location = inv(g, R).location;
     });
     const n = r.state.invs[DAISY].hand.length;
     r = pick(pick(r, /^Play Cryptic Research/), "Daisy Walker");
@@ -116,7 +116,7 @@ describe("Rogue", () => {
   it("Leo De Luca gives an action at once and one each turn", () => {
     let r = roland((g) => {
       hand(g, R, "01054");
-      inv(g, R).resources = 6;
+      g.s.invs[R].resources = 6;
     });
     const before = r.state.invs[R].actionsLeft;
     r = pick(r, /^Play Leo De Luca/);
@@ -154,7 +154,7 @@ describe("Rogue", () => {
   it("Hot Streak gains 10 resources", () => {
     let r = roland((g) => {
       hand(g, R, "01057");
-      inv(g, R).resources = 5;
+      g.s.invs[R].resources = 5;
     });
     r = pick(r, /^Play Hot Streak/);
     expect(r.state.invs[R].resources).toBe(12); // 5 - 3 + 10
@@ -167,7 +167,7 @@ describe("Mystic", () => {
       (g) => {
         hand(g, R, "01069");
         enemyHere(g, R, PRIEST);
-        inv(g, R).resources = 5;
+        g.s.invs[R].resources = 5;
       },
       ["+1"],
     );
@@ -180,7 +180,7 @@ describe("Mystic", () => {
     let r = roland((g) => {
       hand(g, R, "01068");
       enemyHere(g, R, MINION);
-      inv(g, R).resources = 5;
+      g.s.invs[R].resources = 5;
     });
     r = toTurn(pick(r, "End turn"), (x) => options(x).some((o) => o.startsWith("Mind Wipe")));
     r = pick(r, /^Mind Wipe/);
@@ -225,7 +225,7 @@ describe("Survivor", () => {
       inPlay(g, R, "01082");
       enemyHere(g, R, MINION);
       enemyHere(g, R, PRIEST, false);
-      card(g, enemyIn({ state: g.s, events: [] }, PRIEST)!.id).exhausted = true;
+      g.s.cards[enemyIn({ state: g.s, events: [] }, PRIEST)!.id].exhausted = true;
     });
     // the Ghoul Minion's attack of opportunity on drawing
     r = toTurn(pick(r, /^Draw/), (x) => options(x).some((o) => o.startsWith("Aquinnah")));
@@ -239,7 +239,7 @@ describe("Survivor", () => {
     let r = roland((g) => {
       hand(g, R, "01083");
       enemyHere(g, R, ACOLYTE);
-      inv(g, R).resources = 5;
+      g.s.invs[R].resources = 5;
     });
     r = toTurn(pick(r, /^Evade Acolyte/), (x) =>
       options(x).some((o) => o.startsWith("Close Call")),
@@ -270,7 +270,7 @@ describe("Survivor", () => {
       (g) => {
         hand(g, R, "01085");
         enemyHere(g, R, PRIEST);
-        inv(g, R).resources = 5;
+        g.s.invs[R].resources = 5;
       },
       ["autoFail"],
     );

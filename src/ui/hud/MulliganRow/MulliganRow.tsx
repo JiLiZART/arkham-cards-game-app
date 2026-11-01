@@ -17,6 +17,7 @@ import { RESOLVE_BOX } from "../Reveal";
 import { moment } from "../SoundLayer";
 import { cx } from "../../components/cx";
 import styles from "./MulliganRow.module.css";
+import { cardOfIf } from "../../../engine/core";
 
 /** the cards the viewer has picked for their mulligan redraw (they stay in the hand zone until confirmed) */
 export function mulliganPicks(game: GameState, viewer: InvId | null): InstId[] {
@@ -57,9 +58,9 @@ export function MulliganRow() {
     for (const [id, from] of rects.current) {
       if (els.has(id)) continue;
       rects.current.delete(id);
-      if (game.cards[id]?.zone === "deck" && !k) moment("shuffle");
+      if (cardOfIf(game, id)?.zone === "deck" && !k) moment("shuffle");
       const to = domPlace("deck", RESOLVE_BOX);
-      if (game.cards[id]?.zone === "deck" && to && !reducedMotion())
+      if (cardOfIf(game, id)?.zone === "deck" && to && !reducedMotion())
         flyGhost(backUrl("player"), from, to, k++ * STAGGER_MS);
     }
     // a card just picked flies in from its place in the fan

@@ -1,11 +1,12 @@
 // The Necronomicon — move 1 horror from it to Daisy; discard it when empty
 import {
+  addCounter,
   card,
-  discard,
-  push,
   type CardScript,
+  discard,
   type EffCtx,
   type G,
+  push,
 } from "../../../../src/engine/api";
 
 export default {
@@ -16,7 +17,7 @@ export default {
     moveHorror(g: G, ctx: EffCtx) {
       const c = card(g, ctx.source!);
       if (c.horror <= 0) return;
-      c.horror--;
+      addCounter(g, c.id, "horror", -1);
       push(g, {
         t: "AssignDamage",
         inv: ctx.you!,

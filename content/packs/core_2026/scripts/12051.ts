@@ -1,5 +1,6 @@
 // Paint the Town Red — draw a non-Elite enemy from the top 9 of the encounter deck; gain resources equal to its printed health
 import {
+  addCounter,
   ask,
   type CardScript,
   def,
@@ -39,7 +40,7 @@ export default {
       if (pick !== "none") {
         const health = def(g, pick).enemy?.health ?? 0;
         moveCard(g, pick, "limbo");
-        inv(g, you).resources += health;
+        addCounter(g, you, "resources", health);
         emit(
           g,
           "encounter",

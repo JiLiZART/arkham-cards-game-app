@@ -16,6 +16,8 @@ import {
   invsAt,
   isElite,
   push,
+  setCardLocation,
+  setEngaged,
   type Step,
   stepsToward,
 } from "../../../../src/engine/api";
@@ -51,8 +53,8 @@ export default {
       if (e.location !== to) {
         const next = stepsToward(g, e.location, [to]).filter((l) => canEnemyEnter(g, e.id, l))[0];
         if (!next) return;
-        e.location = next;
-        e.engagedWith = null;
+        setCardLocation(g, e.id, next);
+        setEngaged(g, e.id, null);
         emit(g, "enemyMove", `${def(g, e.id).name} moves to ${def(g, next).name}`, {
           card: e.id,
           data: { to: next },
@@ -61,7 +63,7 @@ export default {
       const here = invsAt(g, e.location);
       if (e.engagedWith || !here.length || def(g, e.id).keywords.includes("aloof")) return;
       const target = here.includes(you) ? you : here[0];
-      e.engagedWith = target;
+      setEngaged(g, e.id, target);
       emit(g, "engage", `${def(g, e.id).name} engages ${inv(g, target).name}`, {
         inv: target,
         card: e.id,

@@ -1,5 +1,6 @@
 import type { GameEvent, GameState, InstId } from "../../engine/types";
 import type { Bounds } from "./layout";
+import { cardOfIf, invOfIf } from "../../engine/core";
 
 /** camera centre (world x/z) and zoom (screen px per world unit) */
 export interface Cam {
@@ -120,11 +121,11 @@ export function fitCam(bounds: Bounds, view: View, insets: Insets): Cam {
 export function eventFocus(e: GameEvent | null, game: GameState): InstId | null {
   if (!e) return null;
   const isLoc = (id: unknown): id is InstId =>
-    typeof id === "string" && game.cards[id]?.zone === "location";
+    typeof id === "string" && cardOfIf(game, id)?.zone === "location";
   if (e.type === "spawn" && isLoc(e.data?.at)) return e.data.at;
-  const c = e.card ? game.cards[e.card] : null;
+  const c = e.card ? cardOfIf(game, e.card) : null;
   if (c?.zone === "enemy" && isLoc(c.location)) return c.location;
   if (c?.zone === "location") return c.id;
-  const at = e.inv ? game.invs[e.inv]?.location : null;
+  const at = e.inv ? invOfIf(game, e.inv)?.location : null;
   return isLoc(at) ? at : null;
 }

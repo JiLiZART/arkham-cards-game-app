@@ -15,6 +15,7 @@ import { abilitySymbol, stripAction } from "../ActionRail";
 import { DetailsColumn, LocationDetails } from "../HandDetails";
 import { stripButtonsFor } from "../PlayStrip";
 import styles from "./HoverCard.module.css";
+import { cardOf, cardOfIf } from "../../../engine/core";
 
 /**
  * Hovering any card (map, HUD panels, play strip) shows a copy at twice its on-screen size on the spot,
@@ -76,8 +77,8 @@ export function HoverCard() {
     el.style.top = `${p.y}px`;
   });
   boxNow.current = null;
-  if (!shownId || blocked || !game.cards[shownId]) return null;
-  const inst = game.cards[shownId];
+  if (!shownId || blocked || !cardOfIf(game, shownId)) return null;
+  const inst = cardOf(game, shownId);
   // hand cards have their own hover (the fan raises and enlarges them); locations get a details column, no copy
   if (inst.zone === "hand") return null;
   // a location on the map gets its details column beside it; an HTML copy of one (feed, chaos draw) gets the enlarged copy

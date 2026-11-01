@@ -1,5 +1,6 @@
 // Rogue Gangster — after it engages you: lose 1 resource, or it attacks you
 import {
+  addCounter,
   attackKey,
   type CardScript,
   type EffCtx,
@@ -17,7 +18,7 @@ export default {
       if (!who || !invIf(g, who)) return;
       const me = inv(g, who);
       if (me.resources > 0) {
-        me.resources--;
+        addCounter(g, me.id, "resources", -1);
         emit(g, "resource", `${me.name} loses 1 resources`, {
           inv: who,
           data: { n: 1, lost: true, source: ctx.source ?? null },

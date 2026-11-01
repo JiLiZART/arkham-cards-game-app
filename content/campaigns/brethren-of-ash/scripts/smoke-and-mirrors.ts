@@ -31,6 +31,11 @@ import {
   playerCount,
   push,
   randomInt,
+  ready,
+  setCardLocation,
+  setController,
+  setEngaged,
+  setOwner,
   shuffleList,
   type Step,
   turnOrder,
@@ -136,7 +141,7 @@ export default {
         const armitage = inv(g, i).deck.find((id) => card(g, id).code === "12115");
         if (!armitage) continue;
         moveCard(g, armitage, "play");
-        card(g, armitage).controller = i;
+        setController(g, armitage, i);
       }
     },
     drawBeneath(g: G, ctx: EffCtx) {
@@ -204,17 +209,17 @@ export default {
         const empty = near.filter((l) => !invsAt(g, l).length);
         const to = (empty.length ? empty : near)[0];
         if (to) {
-          e.location = to;
-          e.engagedWith = null;
+          setCardLocation(g, e.id, to);
+          setEngaged(g, e.id, null);
         }
       }
       if (n === 2) {
-        e.exhausted = false;
+        ready(g, e.id);
         push(g, { t: "Effects", effects: [{ op: "heal", horror: 1 }], ctx: { you } });
       }
       if (n === 4) push(g, { t: "Effects", effects: [{ op: "heal", damage: 1 }], ctx: { you } });
       if (n === 5) push(g, { t: "Draw", inv: you, n: 1 });
-      e.resources++;
+      addCounter(g, e.id, "resources", 1);
       emit(g, "lead", `A lead on ${def(g, id).name} (${e.resources}/${playerCount(g)})`, {
         card: id,
       });
@@ -255,7 +260,7 @@ export default {
     },
     abigailClue(g: G, ctx: EffCtx) {
       const loc = cardIf(g, ctx.source!)?.location;
-      if (loc) card(g, loc).clues++;
+      if (loc) addCounter(g, loc, "clues", 1);
     },
     northside(g: G, ctx: EffCtx, _args: unknown, step?: Step) {
       const pool = locations(g).filter(
@@ -302,7 +307,7 @@ export default {
         return;
       }
       flags.servantBeneath.set(g, true);
-      for (const i of activeInvs(g)) inv(g, i).clues++;
+      for (const i of activeInvs(g)) addCounter(g, i, "clues", 1);
       toAct(g, id);
     },
     /** Growing Flames: each investigator draws a set-aside Mark of Elokoss and becomes its bearer */
@@ -311,8 +316,8 @@ export default {
       activeInvs(g).forEach((i, k) => {
         const m = marks[k];
         if (!m) return;
-        m.owner = i;
-        m.controller = i;
+        setOwner(g, m.id, i);
+        setController(g, m.id, i);
         moveCard(g, m.id, "limbo");
         push(g, { t: "Revelation", inv: i, card: m.id });
       });

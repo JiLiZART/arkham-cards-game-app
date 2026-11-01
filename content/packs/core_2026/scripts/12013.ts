@@ -2,7 +2,6 @@
 import {
   ask,
   canCommit,
-  card,
   cardIf,
   type CardScript,
   currentTest,
@@ -15,6 +14,7 @@ import {
   inv,
   moveCard,
   push,
+  setController,
   shuffleIntoDeck,
   type Step,
 } from "../../../../src/engine/api";
@@ -40,7 +40,7 @@ export default {
       );
       if (pick === undefined) return;
       moveCard(g, pick, "commit");
-      card(g, pick).controller = you;
+      setController(g, pick, you);
       t.committed.push(pick);
       t.committers.push(you);
       flags.isabelle.set(g, String(t.id), pick);

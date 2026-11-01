@@ -49,6 +49,7 @@ import { mulliganPicks } from "../MulliganRow";
 import { RESOLVE_BOX } from "../Reveal";
 import { cx } from "../../components/cx";
 import styles from "./HandFan.module.css";
+import { cardOf, invOf } from "../../../engine/core";
 
 const DRAG_TO_PLAY = 110;
 /** easing time constant of the Dock magnification (ms) */
@@ -73,7 +74,7 @@ export function useHand() {
   const showcase = useView((s) => s.showcase);
   const hand =
     viewer && visible
-      ? game.invs[viewer].hand.filter((h) => !picks.includes(h) && !showcase.includes(h))
+      ? invOf(game, viewer).hand.filter((h) => !picks.includes(h) && !showcase.includes(h))
       : [];
   const optionsFor = (id: InstId): ChoiceOption[] =>
     (!busy && offered && game.pending?.options.filter((o) => o.card === id)) || [];
@@ -402,15 +403,15 @@ export function HandFan() {
                 if (pointerX.current === null) focusOn(null);
                 start();
               }}
-              title={faceUp ? cardText(db, game.cards[id].code, locale).name : undefined}
+              title={faceUp ? cardText(db, cardOf(game, id).code, locale).name : undefined}
             >
               <span
                 className={cx(styles.fanFlip, !faceUp && styles.faceDown)}
                 data-testid="fan-flip"
               >
                 <span className={styles.ffFront}>
-                  {faceUp && <Face code={game.cards[id].code} locale={locale} />}
-                  {faceUp && <GlanceBadge card={db.cards[game.cards[id].code]} />}
+                  {faceUp && <Face code={cardOf(game, id).code} locale={locale} />}
+                  {faceUp && <GlanceBadge card={db.cards[cardOf(game, id).code]} />}
                 </span>
                 <img className={styles.ffBack} src={backUrl("player")} alt="" draggable={false} />
               </span>

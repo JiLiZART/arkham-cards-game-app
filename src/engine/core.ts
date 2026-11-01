@@ -11,8 +11,11 @@ import type {
   ModStat,
   Skill,
 } from "../content/schema";
+import { allCardRecs, cardRec, cardRecIf, invRec, invRecIf } from "./records";
 import type {
   CardInst,
+  CardView,
+  InvView,
   ChoiceOption,
   ContentDb,
   EffCtx,
@@ -36,33 +39,64 @@ export interface G {
 export const LOG_LIMIT = 300;
 
 // ---------- basic accessors ----------
-export const card = (g: G, id: InstId): CardInst => {
-  const c = g.s.cards[id];
-  if (!c) throw new Error(`no card instance ${id}`);
-  return c;
-};
+/** a card instance, read-only (ADR-0022): change it through the setters below */
+export const card = (g: G, id: InstId): CardView => cardRec(g, id);
 export const def = (g: G, id: InstId): CardDef => defOf(g, card(g, id).code);
 export const defOf = (g: G, code: string): CardDef => {
   const d = g.db.cards[code];
   if (!d) throw new Error(`no card def ${code}`);
   return d;
 };
-export const inv = (g: G, id: InvId): InvState => {
-  const i = g.s.invs[id];
+/** an investigator, read-only (ADR-0022): change them through the setters below */
+export const inv = (g: G, id: InvId): InvView => invRec(g, id);
+export const name = (g: G, id: InstId) => def(g, id).name;
+
+// ---------- lookups over a state (for code that holds a state, not the engine context) ----------
+/** a card in a game state (or anything holding its `cards`), read-only: throws for an id the game doesn't have */
+export const cardOf = (s: Pick<GameState, "cards">, id: InstId): CardView => {
+  const c = s.cards[id];
+  if (!c) throw new Error(`no card instance ${id}`);
+  return c;
+};
+/** a card in a game state, or undefined when the id is absent or names no card */
+export const cardOfIf = (
+  s: Pick<GameState, "cards"> | null | undefined,
+  id: InstId | null | undefined,
+): CardView | undefined => (s && id ? s.cards[id] : undefined);
+/** an investigator in a game state, read-only: throws for one the game doesn't have */
+export const invOf = (s: Pick<GameState, "invs">, id: InvId): InvView => {
+  const i = s.invs[id];
   if (!i) throw new Error(`no investigator ${id}`);
   return i;
 };
-export const name = (g: G, id: InstId) => def(g, id).name;
+export const invOfIf = (
+  s: Pick<GameState, "invs"> | null | undefined,
+  id: InvId | null | undefined,
+): InvView | undefined => (s && id ? s.invs[id] : undefined);
+/** every card of a state, in creation order */
+export const cardsOf = (s: GameState): readonly CardView[] => Object.values(s.cards);
+/** every investigator of a state, in turn order */
+export const invsOf = (s: GameState): readonly InvView[] => s.order.map((i) => s.invs[i]);
+
+/**
+ * A copy of a state with some cards' fields overridden, for a view of the game that differs from the game (the table
+ * while events wait to play). The state given is not changed; cards not patched are shared with it.
+ */
+export function patchedState(s: GameState, patches: Record<InstId, Partial<CardInst>>): GameState {
+  const cards = { ...s.cards };
+  for (const [id, patch] of Object.entries(patches))
+    if (cards[id]) cards[id] = { ...cards[id], ...patch };
+  return { ...s, cards };
+}
 
 // ---------- what scripts read about the scenario ----------
 /** a card instance, or undefined when the id is absent or names no card */
-export const cardIf = (g: G, id: InstId | null | undefined): CardInst | undefined =>
-  id ? g.s.cards[id] : undefined;
+export const cardIf = (g: G, id: InstId | null | undefined): CardView | undefined =>
+  cardRecIf(g, id);
 /** every card instance, in creation order */
-export const allCards = (g: G): CardInst[] => Object.values(g.s.cards);
+export const allCards = (g: G): readonly CardView[] => allCardRecs(g);
 /** an investigator, or undefined when the id is absent or names none */
-export const invIf = (g: G, id: InvId | null | undefined): InvState | undefined =>
-  id ? g.s.invs[id] : undefined;
+export const invIf = (g: G, id: InvId | null | undefined): InvView | undefined => invRecIf(g, id);
 export const currentAct = (g: G) => g.s.act;
 export const currentAgenda = (g: G) => g.s.agenda;
 export const leadInvestigator = (g: G) => g.s.lead;
@@ -75,6 +109,45 @@ export const difficultyOf = (g: G) => g.s.difficulty;
 export const campaignLogOf = (g: G): Readonly<Record<string, unknown>> => g.s.campaignLog;
 /** the skill test under way, or null */
 export const currentTest = (g: G) => g.s.skillTest;
+export const activeInvestigator = (g: G) => g.s.active;
+export const scenarioIdOf = (g: G) => g.s.scenarioId;
+export const logLength = (g: G) => g.s.log.length;
+/** the game waits for the lead investigator before each phase (the UI's games) */
+export const pacesPhases = (g: G) => !!g.s.pacePhases;
+/** the event under this key was cancelled (an attack, a movement, a clue discovery) */
+export const isCancelled = (g: G, key: string) => g.s.cancelled.includes(key);
+
+/** a key no other event has: `prefix` and the next number of the scenario's one counter */
+export const nextKey = (g: G, prefix: string) => `${prefix}${g.s.seq++}`;
+
+/** how often a limited ability has been used in a period (the key names the card, the ability and the period) */
+export const limitUses = (g: G, key: string) => g.s.usage[key] ?? 0;
+export const recordLimitUse = (g: G, key: string) => void (g.s.usage[key] = limitUses(g, key) + 1);
+/** the number of the current turn, phase, round or test, for a limit's period */
+export const periodCounter = (g: G, per: "turn" | "phase" | "round" | "test") => g.s.counters[per];
+export const bumpCounter = (g: G, per: "turn" | "phase" | "round" | "test") =>
+  void g.s.counters[per]++;
+
+/** a new phase begins */
+export function setPhase(g: G, phase: GameState["phase"]) {
+  g.s.phase = phase;
+  bumpCounter(g, "phase");
+}
+/** a new round begins */
+export function startRound(g: G) {
+  g.s.round++;
+  bumpCounter(g, "round");
+}
+/** whose turn it is (null: no one's) */
+export const setActive = (g: G, who: InvId | null) => void (g.s.active = who);
+export const setLead = (g: G, who: InvId) => void (g.s.lead = who);
+/** the scenario ends with this resolution: nothing more resolves and no choice is pending */
+export function endScenario(g: G, resolution: string) {
+  g.s.phase = "ended";
+  g.s.resolution = resolution;
+  g.s.queue = [];
+  g.s.pending = null;
+}
 /** a scenario pile, top first for the decks (read-only: move cards with moveCard) */
 export const pile = (
   g: G,
@@ -92,11 +165,11 @@ export function addChaosTokens(g: G, tokens: ChaosToken[]) {
 }
 /** put an investigator at a location without moving (no move triggers) */
 export function placeInvestigator(g: G, i: InvId, loc: InstId | null) {
-  inv(g, i).location = loc;
+  invRec(g, i).location = loc;
 }
 /** the enemy is engaged with the investigator (null: no one), with no engage triggers */
 export function setEngaged(g: G, enemy: InstId, i: InvId | null) {
-  card(g, enemy).engagedWith = i;
+  cardRec(g, enemy).engagedWith = i;
 }
 
 // ---------- chance, from the scenario's seeded generator ----------
@@ -108,23 +181,43 @@ export function shuffleList<T>(g: G, list: T[]) {
 }
 /** shuffle an investigator's deck or the encounter deck */
 export function shuffleDeck(g: G, owner: InvId | "encounter") {
-  shuffle(g.s, owner === "encounter" ? g.s.encounterDeck : inv(g, owner).deck);
+  shuffle(g.s, owner === "encounter" ? g.s.encounterDeck : invRec(g, owner).deck);
 }
 
 // ---------- counters ----------
-/** the tokens a card or an investigator holds; investigators hold no doom or uses */
-export type Counter = "damage" | "horror" | "clues" | "doom" | "uses" | "resources";
+/** the tokens a card holds, and the ones an investigator holds; doom and uses are a card's only, the rest an investigator's only */
+export type Counter =
+  | "damage"
+  | "horror"
+  | "clues"
+  | "doom"
+  | "uses"
+  | "resources"
+  | "actionsLeft"
+  | "actionsTaken"
+  | "defeatedHealth"
+  | "physicalTrauma"
+  | "mentalTrauma";
+const CARD_ONLY: Counter[] = ["doom", "uses"];
+const INV_ONLY: Counter[] = [
+  "actionsLeft",
+  "actionsTaken",
+  "defeatedHealth",
+  "physicalTrauma",
+  "mentalTrauma",
+];
 
 /** the record a counter lives on: an investigator (by code) or a card instance */
 function holder(g: G, id: InvId | InstId, k: Counter): Record<Counter, number> {
   const i = g.s.invs[id];
   if (i) {
-    if (k === "doom" || k === "uses") throw new Error(`investigator ${id} holds no ${k}`);
+    if (CARD_ONLY.includes(k)) throw new Error(`investigator ${id} holds no ${k}`);
     return i as unknown as Record<Counter, number>;
   }
   const c = g.s.cards[id];
   if (!c) throw new Error(`no card or investigator ${id}`);
-  return c;
+  if (INV_ONLY.includes(k)) throw new Error(`card ${id} holds no ${k}`);
+  return c as unknown as Record<Counter, number>;
 }
 
 export const counter = (g: G, id: InvId | InstId, k: Counter): number => holder(g, id, k)[k];
@@ -140,6 +233,76 @@ export function addCounter(g: G, id: InvId | InstId, k: Counter, n: number): num
   h[k] += n;
   return h[k];
 }
+
+// ---------- card fields ----------
+export const exhaust = (g: G, id: InstId) => void (cardRec(g, id).exhausted = true);
+export const ready = (g: G, id: InstId) => void (cardRec(g, id).exhausted = false);
+/** turn a location (or anything revealed) face up */
+export const reveal = (g: G, id: InstId) => void (cardRec(g, id).revealed = true);
+/** where an enemy or an attachment is (the card of a location), without moving it through zones */
+export const setCardLocation = (g: G, id: InstId, loc: InstId | null) =>
+  void (cardRec(g, id).location = loc);
+/** the investigator who controls the card (null: no one) */
+export const setController = (g: G, id: InstId, who: InvId | null) =>
+  void (cardRec(g, id).controller = who);
+export const setOwner = (g: G, id: InstId, who: InvId | null) => void (cardRec(g, id).owner = who);
+/** the card is another card now (a story asset that transforms: Elokoss's two sides) */
+export const setCode = (g: G, id: InstId, code: string) => void (cardRec(g, id).code = code);
+/** the card is attached to another (null: to none) */
+export const attachTo = (g: G, id: InstId, to: InstId | null) =>
+  void (cardRec(g, id).attachedTo = to);
+
+// ---------- investigator fields ----------
+/** a new turn's actions: how many, and the restricted ones the investigator's cards grant */
+export function beginActions(
+  g: G,
+  i: InvId,
+  left: number,
+  restricted: InvState["restrictedActions"],
+) {
+  const me = invRec(g, i);
+  me.actionsTaken = 0;
+  me.actionsLeft = left;
+  me.restrictedActions = restricted.map((r) => ({ ...r }));
+}
+/** a restricted action only some cards can use (Daisy's Tome action) */
+export function grantRestricted(g: G, i: InvId, r: InvState["restrictedActions"][number]) {
+  invRec(g, i).restrictedActions.push({ ...r });
+}
+/** use up `n` of the investigator's restricted action at `index` */
+export function spendRestricted(g: G, i: InvId, index: number, n: number) {
+  invRec(g, i).restrictedActions[index].left -= n;
+}
+/** an action of this designator was taken: it counts for "first time each round" and "first action" */
+export function noteAction(g: G, i: InvId, designator: string) {
+  const me = invRec(g, i);
+  me.actionsThisRound.push(designator);
+  me.actionsTaken++;
+}
+export function clearRoundActions(g: G) {
+  for (const i of Object.values(g.s.invs)) i.actionsThisRound = [];
+}
+export function clearTurnDone(g: G) {
+  for (const i of Object.values(g.s.invs)) i.turnDone = false;
+}
+export function clearDefeatedHealth(g: G) {
+  for (const i of Object.values(g.s.invs)) i.defeatedHealth = 0;
+}
+export const setTurnDone = (g: G, i: InvId, done: boolean) => void (invRec(g, i).turnDone = done);
+/** an investigator resigns or is defeated (by damage or horror) */
+export function setStatus(g: G, i: InvId, status: InvState["status"], by?: "damage" | "horror") {
+  const me = invRec(g, i);
+  me.status = status;
+  if (by) me.defeatedBy = by;
+}
+
+// ---------- deck order ----------
+/** put cards on top of a deck in the order given (`ids[0]` on top), the rest of the deck below them in its order */
+export function arrangeOnTop(g: G, owner: InvId | "encounter", ids: readonly InstId[]) {
+  const deck = owner === "encounter" ? g.s.encounterDeck : invRec(g, owner).deck;
+  deck.splice(0, deck.length, ...ids, ...deck.filter((id) => !ids.includes(id)));
+}
+
 export const invName = (g: G, id: InvId) => g.s.invs[id]?.name ?? id;
 
 export const activeInvs = (g: G): InvId[] =>
@@ -251,8 +414,8 @@ export function createCard(g: G, code: string, zone: Zone, owner: InvId | null =
     engagedWith: null,
     attachedTo: null,
   };
-  if (zone === "hand" && owner) inv(g, owner).hand.push(id);
-  if (zone === "deck" && owner) inv(g, owner).deck.push(id);
+  if (zone === "hand" && owner) invRec(g, owner).hand.push(id);
+  if (zone === "deck" && owner) invRec(g, owner).deck.push(id);
   if (zone === "encounterDeck") g.s.encounterDeck.push(id);
   return id;
 }
@@ -295,7 +458,7 @@ export function moveCard(
   zone: Zone,
   opts: { inv?: InvId | null; top?: boolean; location?: InstId | null } = {},
 ) {
-  const c = card(g, id);
+  const c = cardRec(g, id);
   const leavingPlay = isInPlay(c) && !IN_PLAY.includes(zone);
   removeFromPiles(g, id);
   if (leavingPlay) {
@@ -335,9 +498,9 @@ export function moveCard(
     case "discard":
       if (!owner) throw new Error(`card ${id} has no owner for ${zone}`);
       // discard pile: last = top; deck: index 0 = top
-      if (zone === "deck") at(inv(g, owner)[zone]);
-      else if (zone === "discard") inv(g, owner).discard.push(id);
-      else inv(g, owner).hand.push(id);
+      if (zone === "deck") at(invRec(g, owner)[zone]);
+      else if (zone === "discard") invRec(g, owner).discard.push(id);
+      else invRec(g, owner).hand.push(id);
       break;
     case "encounterDeck":
       at(g.s.encounterDeck);
@@ -357,7 +520,7 @@ export function moveCard(
 /** shuffle a card into its owner's deck */
 export function shuffleIntoDeck(g: G, id: InstId, owner: InvId) {
   moveCard(g, id, "deck", { inv: owner });
-  shuffle(g.s, inv(g, owner).deck);
+  shuffleDeck(g, owner);
   emit(g, "shuffle", `${def(g, id).name} is shuffled into ${invName(g, owner)}'s deck`, {
     inv: owner,
     card: id,
@@ -375,7 +538,7 @@ export function reshuffleDiscard(g: G, owner: InvId | "encounter") {
   const p = pilesOf(g, owner);
   for (const id of p.discard.slice())
     moveCard(g, id, p.zone, owner === "encounter" ? {} : { inv: owner });
-  shuffle(g.s, p.deck);
+  shuffleDeck(g, owner);
 }
 
 /** put cards on top of an investigator's deck from wherever they are, `ids[0]` ending on top */
@@ -386,7 +549,7 @@ export function putOnTop(g: G, owner: InvId, ids: InstId[]) {
 /** take cards out of an investigator's deck, shuffle the rest, and put them back on top, `ids[0]` on top */
 export function shuffleThenTop(g: G, owner: InvId, ids: InstId[]) {
   for (const id of ids) moveCard(g, id, "limbo");
-  shuffle(g.s, inv(g, owner).deck);
+  shuffle(g.s, invRec(g, owner).deck);
   putOnTop(g, owner, ids);
 }
 
@@ -400,8 +563,8 @@ export function discard(g: G, id: InstId) {
 }
 
 // ---------- queries ----------
-export const cardsIn = (g: G, zone: Zone) =>
-  Object.values(g.s.cards).filter((c) => c.zone === zone);
+export const cardsIn = (g: G, zone: Zone): CardView[] =>
+  allCardRecs(g).filter((c) => c.zone === zone);
 export const locations = (g: G) => cardsIn(g, "location");
 export const enemies = (g: G) => cardsIn(g, "enemy");
 export const enemiesAt = (g: G, loc: InstId | null) => enemies(g).filter((e) => e.location === loc);
@@ -413,8 +576,8 @@ export const engagedWith = (g: G, i: InvId) =>
   );
 export const invsAt = (g: G, loc: InstId | null) =>
   activeInvs(g).filter((i) => g.s.invs[i].location === loc);
-export const findByCode = (g: G, code: string, zones?: Zone[]) =>
-  Object.values(g.s.cards).find((c) => c.code === code && (!zones || zones.includes(c.zone)));
+export const findByCode = (g: G, code: string, zones?: Zone[]): CardView | undefined =>
+  allCardRecs(g).find((c) => c.code === code && (!zones || zones.includes(c.zone)));
 export const locationByCode = (g: G, code: string) => findByCode(g, code, ["location"]);
 export const locationByName = (g: G, nm: string) =>
   locations(g).find((l) => def(g, l.id).name === nm);

@@ -1,6 +1,6 @@
 import { underAct } from "../flags";
 import type { TokenEffect } from "../../content/schema";
-import { card, cardsIn, def, enemies, enemiesAt, inv, type G } from "../core";
+import { allCards, card, cardsIn, currentAct, def, enemies, enemiesAt, type G, inv } from "../core";
 import type { InvId } from "../types";
 
 /** X values used by scenario reference cards */
@@ -19,11 +19,11 @@ export function tokenX(g: G, x: NonNullable<TokenEffect["x"]>, i: InvId): number
     case "monstersInPlay":
       return enemies(g).filter((e) => def(g, e.id).traits.includes("Monster")).length;
     case "totalDoomInPlay":
-      return Object.values(g.s.cards)
+      return allCards(g)
         .filter((c) => c.zone !== "removed")
         .reduce((n, c) => n + c.doom, 0);
     case "actStage":
-      return g.s.act ? (def(g, g.s.act).stage ?? 0) : 0;
+      return currentAct(g) ? (def(g, currentAct(g)!).stage ?? 0) : 0;
     case "elitesInVictoryOrUnderAct":
       return (
         cardsIn(g, "victory").filter(

@@ -6,13 +6,14 @@ import {
   ask,
   baseSkill,
   card,
-  cardIf,
   cardBlocked,
+  cardIf,
   checkCondition,
   def,
   emit,
   enemyStat,
   expireMods,
+  type G,
   hasFlag,
   inv,
   invName,
@@ -21,8 +22,8 @@ import {
   modSum,
   moveCard,
   push,
+  setController,
   shroud,
-  type G,
 } from "../core";
 import type { EffCtx, InstId, InvId, SkillTestState, Step } from "../types";
 import { activatable, canPay, canPlay, payCost, playable, win } from "./cards";
@@ -274,7 +275,7 @@ function commitStage(g: G, step: Extract<Step, { t: "Test" }>) {
   }
   if ("commit" in pick) {
     moveCard(g, pick.commit, "commit");
-    card(g, pick.commit).controller = who;
+    setController(g, pick.commit, who);
     t.committed.push(pick.commit);
     t.committers.push(who);
     emit(g, "commit", `${me.name} commits ${def(g, pick.commit).name}`, {
@@ -520,7 +521,7 @@ function resultStage(g: G, step: Extract<Step, { t: "Test" }>) {
       if (pick === undefined) return;
       if (pick !== "none") {
         moveCard(g, pick, "commit");
-        card(g, pick).controller = t.inv;
+        setController(g, pick, t.inv);
         t.committed.push(pick);
         t.committers.push(t.inv);
         emit(g, "commit", `${invName(g, t.inv)} commits ${def(g, pick).name}`, {

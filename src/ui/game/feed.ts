@@ -1,6 +1,7 @@
 import { t } from "../../content/i18n";
 import type { ContentDb, GameEvent, GameState, InstId, InvId } from "../../engine/types";
 import { isIcon, type IconName } from "../assets/icons";
+import { cardOf, cardOfIf, invOf, invOfIf } from "../../engine/core";
 
 /** one piece of a styled sentence */
 export type Part =
@@ -118,9 +119,9 @@ export function fillTemplate(
     const [, name, icon] = m;
     const value = name === "inv" ? e.inv : name === "card" ? e.card : data[name];
     if (name === "inv" || name === "by") {
-      if (typeof value === "string" && game.invs[value]) parts.push({ t: "inv", id: value });
+      if (typeof value === "string" && invOfIf(game, value)) parts.push({ t: "inv", id: value });
     } else if (["card", "at", "from", "to"].includes(name)) {
-      if (typeof value === "string" && game.cards[value]) parts.push({ t: "card", id: value });
+      if (typeof value === "string" && cardOfIf(game, value)) parts.push({ t: "card", id: value });
     } else if (NUMERIC.has(name)) {
       const n = Number(value ?? 0);
       if (icon === "action") parts.push({ t: "glyphs", name: "action", n });
@@ -132,7 +133,7 @@ export function fillTemplate(
         parts.push({ t: "icon", name: value as IconName });
     } else if (name === "cards") {
       for (const id of (value as InstId[] | undefined) ?? [])
-        if (game.cards[id]) parts.push({ t: "card", id });
+        if (cardOfIf(game, id)) parts.push({ t: "card", id });
     } else if (name === "tokens") {
       for (const tok of (value as string[] | undefined) ?? [])
         parts.push({ t: "token", token: tok });
@@ -180,17 +181,17 @@ export function feedEntry(
     template === key
       ? // no template: a styled generic entry (who or what, then the engine's text)
         [
-          ...(e.inv && game.invs[e.inv]
+          ...(e.inv && invOfIf(game, e.inv)
             ? [{ t: "inv", id: e.inv } as Part]
-            : e.card && game.cards[e.card]
+            : e.card && cardOfIf(game, e.card)
               ? [{ t: "card", id: e.card } as Part]
               : []),
           { t: "text", s: ` ${e.text}` } as Part,
         ]
       : fillTemplate(template, e, game, db, locale);
   const set =
-    SET_ICON.has(e.type) && e.card && game.cards[e.card]
-      ? db.cards[game.cards[e.card].code]?.encounterSet
+    SET_ICON.has(e.type) && e.card && cardOfIf(game, e.card)
+      ? db.cards[cardOf(game, e.card).code]?.encounterSet
       : undefined;
   if (set)
     parts = parts.flatMap((p) =>
@@ -198,7 +199,7 @@ export function feedEntry(
     );
   const tone: Tone = ENEMY.has(e.type) ? "enemy" : e.inv ? "player" : "game";
   const mapCard =
-    e.card && game.cards[e.card] && ["enemy", "location"].includes(game.cards[e.card].zone)
+    e.card && cardOfIf(game, e.card) && ["enemy", "location"].includes(cardOf(game, e.card).zone)
       ? e.card
       : undefined;
   const actor =
@@ -345,7 +346,7 @@ function mergedEntry(run: GameEvent[], game: GameState, db: ContentDb, locale: s
     byInv.set(e.inv, m);
   }
   const all = [...byInv.values()];
-  const playing = game.order.filter((i) => game.invs[i].status === "playing");
+  const playing = game.order.filter((i) => invOf(game, i).status === "playing");
   const each =
     all.length >= 2 &&
     all.length === playing.length &&

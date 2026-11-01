@@ -31,8 +31,8 @@ function turn(code: string, setup: Setup = () => {}, invs = [ROLAND]): { r: Resu
     id = createCard(g, code, "limbo", ROLAND);
     moveCard(g, id, "play");
     g.s.cards[id].uses = db.cards[code].uses!.count;
-    inv(g, ROLAND).damage = 2;
-    inv(g, ROLAND).horror = 2;
+    g.s.invs[ROLAND].damage = 2;
+    g.s.invs[ROLAND].horror = 2;
     setup(g, id);
   });
   return { r, id };
@@ -56,8 +56,8 @@ describe("Clarity of Mind", () => {
     const { r: r0, id } = turn(
       "51008",
       (g) => {
-        inv(g, DAISY).horror = 1;
-        inv(g, DAISY).location = inv(g, ROLAND).location;
+        g.s.invs[DAISY].horror = 1;
+        g.s.invs[DAISY].location = inv(g, ROLAND).location;
       },
       [ROLAND, DAISY],
     );
@@ -104,8 +104,8 @@ describe("healing damage", () => {
     const { r: r0 } = turn(
       "08068",
       (g) => {
-        inv(g, DAISY).damage = 1;
-        inv(g, DAISY).location = inv(g, ROLAND).location;
+        g.s.invs[DAISY].damage = 1;
+        g.s.invs[DAISY].location = inv(g, ROLAND).location;
       },
       [ROLAND, DAISY],
     );

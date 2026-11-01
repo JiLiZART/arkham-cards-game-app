@@ -1,5 +1,6 @@
 // The Barrier (The Gathering, act 2): at round end, investigators in the Hallway may spend 3 clues/investigator
 import {
+  addCounter,
   ask,
   type CardScript,
   def,
@@ -11,6 +12,7 @@ import {
   leadInvestigator,
   moveCard,
   push,
+  setController,
   type Step,
   turnOrder,
 } from "../../../../src/engine/api";
@@ -46,7 +48,7 @@ export default {
       let n = need;
       for (const i of there) {
         const take = Math.min(n, inv(g, i).clues);
-        inv(g, i).clues -= take;
+        addCounter(g, i, "clues", -take);
         n -= take;
       }
       push(g, { t: "AdvanceAct" });
@@ -63,7 +65,7 @@ export default {
       const lita = findByCode(g, "01117", ["setAside"]);
       if (lita) {
         moveCard(g, lita.id, "attached", { location: parlor.id });
-        lita.controller = null;
+        setController(g, lita.id, null);
         emit(g, "lita", `Lita Chantler is in the ${def(g, parlor.id).name}`, { card: lita.id });
       }
       const priest = findByCode(g, "01116", ["setAside"]);

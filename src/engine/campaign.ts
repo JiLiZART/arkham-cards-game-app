@@ -15,6 +15,7 @@ import { ENGINE_VERSION } from "./engine";
 import { advance, type FlowState, initFlow, settle, startResolution } from "./flow";
 import { randInt } from "./rng";
 import type { ContentDb, GameSetup, GameState, InvId } from "./types";
+import { cardsOf, invsOf } from "./core";
 
 export interface CampaignInvestigator {
   code: InvId;
@@ -172,7 +173,7 @@ export function scenarioSetup(db: ContentDb, c: CampaignState, seed: number): Ga
 /** victory display total, including clue-less revealed locations still in play */
 export function victoryTotal(db: ContentDb, s: GameState): number {
   let n = 0;
-  for (const c of Object.values(s.cards)) {
+  for (const c of cardsOf(s)) {
     const v = db.cards[c.code].victory;
     if (!v) continue;
     if (c.zone === "victory") n += v;
@@ -183,7 +184,7 @@ export function victoryTotal(db: ContentDb, s: GameState): number {
 
 function uniqueCultists(db: ContentDb, s: GameState, where: "victory" | "remaining"): string[] {
   const out = new Set<string>();
-  for (const c of Object.values(s.cards)) {
+  for (const c of cardsOf(s)) {
     const d = db.cards[c.code];
     if (!d.unique || !d.traits.includes("Cultist") || d.type !== "enemy") continue;
     const remaining = [
@@ -210,7 +211,7 @@ export function applyScenarioEnd(db: ContentDb, c0: CampaignState, s: GameState)
   const c = structuredClone(c0);
   const victory = victoryTotal(db, s);
   // trauma and adjustments that happened during play
-  for (const i of Object.values(s.invs)) {
+  for (const i of invsOf(s)) {
     const ci = c.investigators.find((x) => x.code === i.id)!;
     ci.physicalTrauma += i.physicalTrauma;
     ci.mentalTrauma += i.mentalTrauma;
@@ -230,12 +231,12 @@ export function applyScenarioEnd(db: ContentDb, c0: CampaignState, s: GameState)
     id: s.scenarioId,
     resolution: s.resolution,
     victory,
-    victoryCodes: Object.values(s.cards)
+    victoryCodes: cardsOf(s)
       .filter((x) => x.zone === "victory")
       .map((x) => x.code),
     cultistsVictory: uniqueCultists(db, s, "victory"),
     cultistsRemaining: uniqueCultists(db, s, "remaining"),
-    notResigned: Object.values(s.invs)
+    notResigned: invsOf(s)
       .filter((i) => i.status !== "resigned")
       .map((i) => i.id),
   });

@@ -131,7 +131,7 @@ describe("Spreading Flames", () => {
   it("act 1 advances at the end of the round: the dorms and the quad, the Servant, Fire!", () => {
     let r = begin("spreading-flames", [R]);
     r = mutate(r, (g) => {
-      inv(g, R).clues = 2;
+      g.s.invs[R].clues = 2;
     });
     r = endRound(r, (x) => options(x).some((o) => o.startsWith("Advance act")));
     r = until(pick(r, /^Advance act/), () => false);
@@ -147,7 +147,7 @@ describe("Spreading Flames", () => {
   it("act 2 advances when everyone is at the quad: the room goes, the campus opens", () => {
     let r = begin("spreading-flames", [R]);
     r = mutate(r, (g) => {
-      inv(g, R).clues = 2;
+      g.s.invs[R].clues = 2;
     });
     r = until(
       pick(
@@ -159,7 +159,7 @@ describe("Spreading Flames", () => {
     r = inject(
       r,
       (g) => {
-        inv(g, R).location = findByCode(g, "12116", ["location"])!.id;
+        g.s.invs[R].location = findByCode(g, "12116", ["location"])!.id;
       },
       { t: "CheckObjectives" },
     );
@@ -179,8 +179,8 @@ describe("Spreading Flames", () => {
         l.revealed = true;
       }
       toAct(g, "12111");
-      inv(g, R).location = findByCode(g, "12120", ["location"])!.id;
-      inv(g, R).clues = 3;
+      g.s.invs[R].location = findByCode(g, "12120", ["location"])!.id;
+      g.s.invs[R].clues = 3;
     });
     r = endRound(r, (x) => options(x).some((o) => o.startsWith("Advance act")));
     r = toTurn(pick(r, /^Advance act/));
@@ -209,7 +209,7 @@ describe("Spreading Flames", () => {
     r = inject(
       r,
       (g) => {
-        card(g, g.s.agenda!).doom = 3;
+        g.s.cards[g.s.agenda!].doom = 3;
       },
       { t: "CheckDoom" },
     );
@@ -241,10 +241,10 @@ describe("Smoke and Mirrors", () => {
     let r = begin("smoke-and-mirrors", [R], {}, ["+1"]);
     r = mutate(r, (g) => {
       // Northside, with Cornelia Akely beneath it
-      const north = findByCode(g, "12149", ["location"])!;
+      const north = g.s.cards[findByCode(g, "12149", ["location"])!.id];
       north.revealed = true;
-      inv(g, R).location = north.id;
-      inv(g, R).clues = 2;
+      g.s.invs[R].location = north.id;
+      g.s.invs[R].clues = 2;
       g.s.chaosBag = ["+1"];
       const cornelia = Object.values(g.s.cards).find((c) => c.code === "12140")!;
       for (const k of Object.keys(g.s.flags)) if (g.s.flags[k] === cornelia.id) delete g.s.flags[k];
@@ -296,13 +296,13 @@ describe("Queen of Ash", () => {
   it("the cistern costs clues to enter; entering it advances the act and Elokoss stirs", () => {
     let r = begin("queen-of-ash", [R]);
     r = mutate(r, (g) => {
-      const tunnel = findByCode(g, "12185", ["location"])!;
+      const tunnel = g.s.cards[findByCode(g, "12185", ["location"])!.id];
       tunnel.revealed = true;
-      inv(g, R).location = tunnel.id;
+      g.s.invs[R].location = tunnel.id;
     });
     expect(options(r).some((o) => o.startsWith("Move to Underground Cistern"))).toBe(false);
     r = mutate(r, (g) => {
-      inv(g, R).clues = 3;
+      g.s.invs[R].clues = 3;
     });
     r = until(pick(r, /^Move to Underground Cistern/), () => false);
     expect(r.state.invs[R].clues).toBe(0);

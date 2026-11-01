@@ -4,12 +4,13 @@ import {
   addCounter,
   createCard,
   def,
+  emit,
   findByCode,
   type G,
   inv,
   locationByName,
-  emit,
   moveCard,
+  placeInvestigator,
   push,
 } from "./core";
 import { handlers as effectHandlers } from "./effects";
@@ -259,7 +260,7 @@ function applySetupStep(g: G, st: SetupStep) {
     case "startAt": {
       const loc = locByRef(g, st.code);
       if (!loc) throw new Error(`startAt: ${st.code} not in play`);
-      for (const i of s.order) inv(g, i).location = loc.id;
+      for (const i of s.order) placeInvestigator(g, i, loc.id);
       return;
     }
     case "spawn": {

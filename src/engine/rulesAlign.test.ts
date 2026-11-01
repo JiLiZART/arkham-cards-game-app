@@ -1,7 +1,7 @@
 /** the engine against the Arkham Grimoire (ADR-0015): one describe per rule of the rules-alignment change */
 import { beforeAll, describe, expect, it } from "vitest";
 import { loadPack } from "../content";
-import { addTempMod, card, createCard, inv, moveCard } from "./core";
+import { addTempMod, card, createCard, moveCard } from "./core";
 import type { Ability } from "../content/schema";
 import type { Result } from "./engine";
 import {
@@ -78,7 +78,7 @@ describe("successful evasion", () => {
         inPlay(g, "01005", "01046"); // Pickpocketing: after an enemy is evaded
         hand(g, "01005", "01078"); // Cunning Distraction
         enemyHere(g, "01005", MINION);
-        inv(g, "01005").resources = 9;
+        g.s.invs["01005"].resources = 9;
       });
       r = toTurn(pick(r, /^Play Cunning Distraction/), offered(/^Pickpocketing/));
       expect(offered(/^Slick/)(r)).toBe(false);
@@ -153,8 +153,8 @@ describe("automatic results", () => {
 describe("elimination and the empty deck", () => {
   it("drawing with no deck and no discard pile defeats at once, with 1 mental trauma and no horror first", () => {
     let r = game([ROLAND], (g) => {
-      inv(g, ROLAND).deck = [];
-      inv(g, ROLAND).discard = [];
+      g.s.invs[ROLAND].deck = [];
+      g.s.invs[ROLAND].discard = [];
     });
     r = pick(r, /^Draw/);
     expect(r.state.invs[ROLAND].status).toBe("defeated");
@@ -165,9 +165,9 @@ describe("elimination and the empty deck", () => {
     let r = game([ROLAND], (g) => {
       const id = createCard(g, "01007", "limbo", ROLAND);
       moveCard(g, id, "threat");
-      card(g, id).controller = ROLAND;
-      card(g, id).clues = 2;
-      inv(g, ROLAND).damage = 8;
+      g.s.cards[id].controller = ROLAND;
+      g.s.cards[id].clues = 2;
+      g.s.invs[ROLAND].damage = 8;
       enemyHere(g, ROLAND);
     });
     r = toTurn(pick(r, "End turn"));
@@ -183,7 +183,7 @@ describe("unique cards, limits and victory", () => {
     const r = nathaniel((g) => {
       inPlay(g, N, "60107"); // Grete Wagner
       hand(g, N, "60128"); // Grete Wagner (3)
-      inv(g, N).resources = 9;
+      g.s.invs[N].resources = 9;
     });
     expect(offered(/^Play Grete Wagner/)(r)).toBe(false);
   });
@@ -284,7 +284,7 @@ describe("the enemy phase, upkeep and round end follow the chart", () => {
     fastCache();
     try {
       let r = game([ROLAND], (g) => {
-        card(g, inPlay(g, ROLAND, "01020")).exhausted = true; // Machete
+        g.s.cards[inPlay(g, ROLAND, "01020")].exhausted = true; // Machete
         hand(g, ROLAND, "01088");
       });
       r = toTurn(
@@ -329,7 +329,7 @@ describe("the enemy phase, upkeep and round end follow the chart", () => {
 describe("advancing the act in a player window", () => {
   it("opens no window for it alone: it waits for the next turn", () => {
     let r = game([ROLAND], (g) => {
-      inv(g, ROLAND).clues = 2;
+      g.s.invs[ROLAND].clues = 2;
     });
     r = pick(r, "End turn");
     for (let k = 0; k < 100 && r.state.pending && r.state.pending.kind !== "turn"; k++) {

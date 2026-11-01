@@ -1,5 +1,6 @@
 // Miskatonic University (In Flames) — when the investigation phase ends: 1 direct damage to each player card with health here
 import {
+  addCounter,
   type CardScript,
   cardsIn,
   currentPhase,
@@ -24,7 +25,8 @@ export default {
           source: ctx.source!,
         });
         for (const a of cardsIn(g, "play"))
-          if (a.controller === i && (def(g, a.id).health ?? 0) > 0) a.damage++;
+          if (a.controller === i && (def(g, a.id).health ?? 0) > 0)
+            addCounter(g, a.id, "damage", 1);
         push(g, { t: "Script", code: "__engine", fn: "assetDefeatCheck", ctx: { you: i } });
       }
     },

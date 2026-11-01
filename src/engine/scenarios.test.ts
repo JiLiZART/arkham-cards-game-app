@@ -34,12 +34,12 @@ describe("The Gathering", () => {
   it("plays through to Resolution 1", () => {
     let r = skipMulligans(start("the-gathering", [ROLAND], 2, { chaosBag: ["+1"] as never }));
     r = mutate(r, (g) => {
-      inv(g, ROLAND).clues = 2;
+      g.s.invs[ROLAND].clues = 2;
     });
     r = pick(r, /^Advance act/);
     expect(act(r)).toBe("The Barrier");
     r = mutate(r, (g) => {
-      inv(g, ROLAND).clues = 3;
+      g.s.invs[ROLAND].clues = 3;
     });
     r = pick(r, "End turn");
     r = settle(r, /Spend 3 clues and advance|^(Pass|done|Done)$/);
@@ -50,9 +50,9 @@ describe("The Gathering", () => {
     expect(def(g0, priest.location!).name).toBe("Hallway");
     expect(findByCode(g0, "01117")!.zone).toBe("attached"); // Lita waits in the Parlor
     r = mutate(r, (g) => {
-      card(g, priest.id).damage = enemyStat(g, priest.id, "health") - 1;
-      card(g, priest.id).engagedWith = ROLAND;
-      inv(g, ROLAND).location = priest.location;
+      g.s.cards[priest.id].damage = enemyStat(g, priest.id, "health") - 1;
+      g.s.cards[priest.id].engagedWith = ROLAND;
+      g.s.invs[ROLAND].location = priest.location;
     });
     r = pick(r, /^Fight Ghoul Priest/);
     r = commitDone(r);
@@ -71,7 +71,7 @@ describe("The Gathering", () => {
       for (const id of g.s.agendaDeck.slice(0, 1)) moveCard(g, id, "removed");
       moveCard(g, g.s.agenda!, "removed");
       moveCard(g, g.s.agendaDeck[0], "agenda");
-      card(g, g.s.agenda!).doom = 9;
+      g.s.cards[g.s.agenda!].doom = 9;
     });
     r = pick(r, "End turn");
     r = settle(r);
@@ -85,11 +85,11 @@ describe("The Midnight Masks", () => {
     let victoria = "";
     r = mutate(r, (g) => {
       const north = locationByName(g, "Northside")!;
-      inv(g, ROLAND).location = north.id;
-      inv(g, ROLAND).resources = 5;
+      g.s.invs[ROLAND].location = north.id;
+      g.s.invs[ROLAND].resources = 5;
       victoria = g.s.sideDecks.cultists.find((id) => card(g, id).code === "01140")!;
       moveCard(g, victoria, "enemy", { location: north.id });
-      card(g, victoria).exhausted = true;
+      g.s.cards[victoria].exhausted = true;
     });
     r = pick(r, /Victoria Devereux: spend 5 resources/);
     expect(r.state.cards[victoria].zone).toBe("victory");
@@ -134,7 +134,7 @@ describe("The Midnight Masks", () => {
     r = mutate(r, (g) => {
       moveCard(g, g.s.agenda!, "removed");
       moveCard(g, g.s.agendaDeck[0], "agenda");
-      card(g, g.s.agenda!).doom = 7;
+      g.s.cards[g.s.agenda!].doom = 7;
     });
     r = pick(r, "End turn");
     r = settle(r);
@@ -144,7 +144,7 @@ describe("The Midnight Masks", () => {
   it("the first agenda advancing spawns The Masked Hunter", () => {
     let r = skipMulligans(start("the-midnight-masks", [ROLAND], 2, { chaosBag: ["+1"] as never }));
     r = mutate(r, (g) => {
-      card(g, g.s.agenda!).doom = 5;
+      g.s.cards[g.s.agenda!].doom = 5;
     });
     r = pick(r, "End turn");
     r = settle(r);
@@ -168,7 +168,7 @@ describe("The Devourer Below", () => {
     r = settle(r);
     expect(card(gOf(r), r.state.agenda!).doom).toBe(1); // 2 cultists got away
     r = mutate(r, (g) => {
-      inv(g, ROLAND).clues = 3;
+      g.s.invs[ROLAND].clues = 3;
     });
     r = pick(r, /^Advance act/);
     r = settle(r);
@@ -179,14 +179,14 @@ describe("The Devourer Below", () => {
     expect(act(r)).toBe("Into the Darkness");
     r = mutate(r, (g) => {
       for (const e of Object.values(g.s.cards)) if (e.zone === "enemy") e.engagedWith = null;
-      inv(g, ROLAND).location = findByCode(g, "01156")!.id;
+      g.s.invs[ROLAND].location = findByCode(g, "01156")!.id;
     });
     r = pick(r, "Gain 1 resource");
     r = settle(r);
     expect(act(r)).toBe("Disrupting the Ritual");
     r = mutate(r, (g) => {
-      card(g, g.s.act!).clues = 1;
-      inv(g, ROLAND).clues = 1;
+      g.s.cards[g.s.act!].clues = 1;
+      g.s.invs[ROLAND].clues = 1;
       for (const e of Object.values(g.s.cards))
         if (e.zone === "enemy") moveCard(g, e.id, "encounterDiscard");
     });
@@ -202,7 +202,7 @@ describe("The Devourer Below", () => {
       moveCard(g, g.s.agenda!, "removed");
       moveCard(g, g.s.agendaDeck.shift()!, "removed");
       moveCard(g, g.s.agendaDeck.shift()!, "agenda");
-      card(g, g.s.agenda!).doom = 4;
+      g.s.cards[g.s.agenda!].doom = 4;
     });
     r = pick(r, "End turn");
     r = settle(r);
@@ -210,9 +210,9 @@ describe("The Devourer Below", () => {
     const u = findByCode(gOf(r), "01157", ["enemy"])!;
     expect(def(gOf(r), u.location!).name).toBe("Ritual Site");
     r = mutate(r, (g) => {
-      inv(g, ROLAND).location = u.location;
-      card(g, u.id).damage = enemyStat(g, u.id, "health") - 1;
-      inv(g, ROLAND).actionsLeft = 3;
+      g.s.invs[ROLAND].location = u.location;
+      g.s.cards[u.id].damage = enemyStat(g, u.id, "health") - 1;
+      g.s.invs[ROLAND].actionsLeft = 3;
     });
     // Umôrdhoth (fight 5): Roland 4 + 1 = 5
     r = pick(r, /^Fight Umôrdhoth/);
@@ -254,7 +254,7 @@ describe("a generated scenario ends at its last act or agenda", () => {
     let r = dunwich();
     r = mutate(r, (g) => {
       for (const id of g.s.actDeck.splice(0)) moveCard(g, id, "removed");
-      inv(g, g.s.lead).clues = 20;
+      g.s.invs[g.s.lead].clues = 20;
     });
     expect(act(r)).toBe("After Hours");
     r = pick(r, /^Advance act/);
@@ -269,7 +269,7 @@ describe("a generated scenario ends at its last act or agenda", () => {
       const last = g.s.agendaDeck.pop()!;
       for (const id of [...g.s.agendaDeck.splice(0), g.s.agenda!]) moveCard(g, id, "removed");
       moveCard(g, last, "agenda");
-      card(g, g.s.agenda!).doom = 20;
+      g.s.cards[g.s.agenda!].doom = 20;
     });
     r = pick(r, "End turn");
     r = settle(r);

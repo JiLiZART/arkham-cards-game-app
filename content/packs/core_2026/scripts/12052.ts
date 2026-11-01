@@ -1,5 +1,6 @@
 // Prestidigitation — play an Item asset from your hand for 2 less; when your turn ends, return an Item asset you control to your hand
 import {
+  addCounter,
   ask,
   card,
   type CardScript,
@@ -41,7 +42,7 @@ export default {
           { auto: true, key: "chooseOne" },
         );
         if (pick === undefined) return;
-        me.resources -= cost(pick);
+        addCounter(g, me.id, "resources", -cost(pick));
         push(g, { t: "PlayCard", inv: you, card: pick, free: true });
       }
       push(g, {

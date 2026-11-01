@@ -12,6 +12,7 @@ import { Portrait } from "../../components/Portrait";
 import { useView } from "../../state/view";
 import { cx } from "../../components/cx";
 import styles from "./Feed.module.css";
+import { cardOfIf } from "../../../engine/core";
 
 const LIVE_MAX = 4;
 const LIVE_MS = 12000;
@@ -39,7 +40,7 @@ function PartView({ p, size }: { p: Part; size: number }) {
         </span>
       );
     case "card": {
-      const inst = game.cards[p.id];
+      const inst = cardOfIf(game, p.id);
       if (!inst) return null;
       const d = db.cards[inst.code];
       const name =

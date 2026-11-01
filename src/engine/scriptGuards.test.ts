@@ -82,7 +82,7 @@ describe("Black Chamber Operative (12009)", () => {
   it("evaded: you place 1 of your clues on your location", () => {
     const g = game();
     const loc = inv(g, R).location!;
-    inv(g, R).clues = 1;
+    g.s.invs[R].clues = 1;
     const clues = g.s.cards[loc].clues;
     call(g, "12009", "evaded", { inv: R, source: putEnemy(g, "01160", loc) });
     expect(inv(g, R).clues).toBe(0);
@@ -106,7 +106,7 @@ describe("Unbridled Knowledge (12043)", () => {
     const deck = inv(g, R).deck;
     call(g, "12043", "reveal", { you: R });
     expect((top(g) as { args: { cards: string[] } }).args.cards).toEqual(deck.slice(0, 5));
-    inv(g, R).clues = 2;
+    g.s.invs[R].clues = 2;
     call(g, "12043", "reveal", { you: R });
     expect((top(g) as { args: { cards: string[] } }).args.cards).toEqual(deck.slice(0, 8));
     const pick = deck[3];
@@ -126,7 +126,7 @@ describe("Unbridled Knowledge (12043)", () => {
 describe("Lucky Charm (12061)", () => {
   it("moves 1 damage from you to an asset you control that can take it", () => {
     const g = game();
-    inv(g, R).damage = 1;
+    g.s.invs[R].damage = 1;
     const cop = giveCard(g, R, "01018");
     moveCard(g, cop, "play");
     g.s.cards[cop].controller = R;

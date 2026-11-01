@@ -1,6 +1,7 @@
 import { cardText, t } from "../../content/i18n";
 import type { ChoiceOption, GameState } from "../../engine/types";
 import { db } from "../state/context";
+import { cardOfIf } from "../../engine/core";
 
 /**
  * The card ability an option uses, by card code and the ability's place on it: a reaction is "card:index", a turn's
@@ -22,7 +23,7 @@ export function abilityRef(
       : typeof v === "object" && v?.ability
         ? v.ability
         : null;
-  const code = ref && game.cards[ref.card]?.code;
+  const code = ref && cardOfIf(game, ref.card)?.code;
   return code ? { code, index: ref!.index } : null;
 }
 

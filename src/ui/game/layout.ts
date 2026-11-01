@@ -1,4 +1,5 @@
 import type { ContentDb, GameState, InstId, InvId } from "../../engine/types";
+import { cardsOf, invOf } from "../../engine/core";
 
 /** card size in world units (poker ratio) */
 export const CARD_W = 1;
@@ -67,7 +68,7 @@ export function layout(db: ContentDb, s: GameState, viewer: InvId | null): Table
   };
 
   const scen = db.scenarios[s.scenarioId];
-  const locs = Object.values(s.cards).filter((c) => c.zone === "location");
+  const locs = cardsOf(s).filter((c) => c.zone === "location");
   const grid = new Map<InstId, [number, number]>();
   let spare = 0;
   for (const l of locs) grid.set(l.id, scen.layout[l.code] ?? [spare++, 3]);
@@ -98,7 +99,7 @@ export function layout(db: ContentDb, s: GameState, viewer: InvId | null): Table
   // (the viewer's engaged enemies are in the play area strip)
   for (const l of locs) {
     const p = locPos.get(l.id)!;
-    const here = Object.values(s.cards).filter(
+    const here = cardsOf(s).filter(
       (c) =>
         c.location === l.id &&
         ((c.zone === "enemy" && c.engagedWith !== viewer) || c.zone === "attached"),
@@ -117,7 +118,7 @@ export function layout(db: ContentDb, s: GameState, viewer: InvId | null): Table
     });
   }
   for (const i of s.order) {
-    const st = s.invs[i];
+    const st = invOf(s, i);
     if (st.location && st.status === "playing" && locPos.has(st.location))
       minis.push({ inv: i, pos: locPos.get(st.location)!, index: s.order.indexOf(i) });
   }

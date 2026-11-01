@@ -49,6 +49,7 @@ import { useStage, useView } from "../../state/view";
 import { NetIndicator } from "../NetIndicator";
 import { cx } from "../../components/cx";
 import styles from "./Hud.module.css";
+import { invsOf } from "../../../engine/core";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);
@@ -670,7 +671,7 @@ function ScenarioEnd() {
   const busy = useGame((s) => !!s.current || s.queue.length > 0);
   const locale = useGame((s) => s.locale);
   const over = game.phase === "ended" && !busy;
-  const won = over && Object.values(game.invs).some((i) => i.status !== "defeated");
+  const won = over && invsOf(game).some((i) => i.status !== "defeated");
   useEffect(() => {
     if (won) moment("victory");
   }, [won]);

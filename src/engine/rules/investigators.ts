@@ -1,35 +1,49 @@
 import { aside as asideFlag, dying, prevented as preventedFlag } from "../flags";
-import { shuffle } from "../rng";
 import {
   abilitiesOf,
+  activeInvestigator,
   activeInvs,
   addCounter,
-  tapToDraw,
+  allCards,
   ask,
   card,
+  cardIf,
   cardsIn,
   connections,
   controlled,
   def,
+  emit,
+  enemies,
+  engagedWith,
   type G,
   hasFlag,
   inv,
   invName,
   invsAt,
+  isCancelled,
   isMassive,
-  playerCount,
+  leadInvestigator,
+  logLength,
   logStep,
   maxHealth,
   maxSanity,
-  emit,
   modSum,
   moveCard,
-  enemies,
-  engagedWith,
-  reshuffleDiscard,
-  setCounter,
-  spendableGroupClues,
+  nextKey,
+  placeInvestigator,
+  playerCount,
   push,
+  reshuffleDiscard,
+  reveal,
+  setActive,
+  setCardLocation,
+  setCounter,
+  setEngaged,
+  setLead,
+  setStatus,
+  shuffleDeck,
+  spendableGroupClues,
+  tapToDraw,
 } from "../core";
 import type { InstId, InvId, Step } from "../types";
 import { win } from "./cards";
@@ -152,7 +166,7 @@ export const assignDamageHandler: Handler<"AssignDamage"> = (g, step) => {
   }
   // what is about to be placed can still be cancelled, whatever dealt it (Delay the Inevitable)
   if (!step.windowed && (damage || horror)) {
-    const key = step.key ?? `dmg:${step.inv}:${g.s.log.length}`;
+    const key = step.key ?? `dmg:${step.inv}:${logLength(g)}`;
     push(g, win("damageDealt", { inv: step.inv, enemy: step.enemy ?? null, key, damage, horror }), {
       ...step,
       damage,
@@ -264,7 +278,7 @@ export const afterDamageHandler: Handler<"AfterDamage"> = (g, step) => {
   const steps: Step[] = [];
   const enemy = step.enemy;
   for (const a of step.assets) {
-    const c = g.s.cards[a];
+    const c = cardIf(g, a);
     if (!c || c.zone !== "play") continue;
     if (enemy && c.damage > 0) steps.push(win("assetDamaged", { inv: step.inv, card: a, enemy }));
     if (c.horror > 0) steps.push(win("horrorOnAsset", { inv: c.controller, card: a }));
@@ -303,7 +317,7 @@ export function assetDefeatCheck(g: G, i: InvId) {
 
 export function removeDefeatedAsset(g: G, id: InstId) {
   dying.clear(g, id);
-  const c = g.s.cards[id];
+  const c = cardIf(g, id);
   if (c?.zone === "play")
     moveCard(g, id, c.owner ? "discard" : "encounterDiscard", { inv: c.owner });
 }
@@ -319,11 +333,15 @@ export const checkDefeatHandler: Handler<"CheckDefeat"> = (g, step) => {
 export const defeatedHandler: Handler<"Defeated"> = (g, step) => {
   const me = inv(g, step.inv);
   if (me.status !== "playing") return;
-  me.status = step.by === "resign" ? "resigned" : "defeated";
+  setStatus(
+    g,
+    me.id,
+    step.by === "resign" ? "resigned" : "defeated",
+    step.by === "resign" ? undefined : step.by,
+  );
   if (step.by !== "resign") {
-    me.defeatedBy = step.by;
-    if (step.by === "damage") me.physicalTrauma++;
-    else me.mentalTrauma++;
+    if (step.by === "damage") addCounter(g, me.id, "physicalTrauma", 1);
+    else addCounter(g, me.id, "mentalTrauma", 1);
   }
   emit(
     g,
@@ -337,31 +355,31 @@ export const defeatedHandler: Handler<"Defeated"> = (g, step) => {
   if (me.location && me.clues) addCounter(g, me.location, "clues", me.clues);
   setCounter(g, me.id, "clues", 0);
   // engaged enemies stay at the location, unengaged
-  for (const e of enemies(g)) if (e.engagedWith === step.inv) e.engagedWith = null;
+  for (const e of enemies(g)) if (e.engagedWith === step.inv) setEngaged(g, e.id, null);
   // their weaknesses' "when the game ends" abilities resolve now, before leaving the game (Grimoire, Elimination)
-  for (const c of Object.values(g.s.cards)) {
+  for (const c of allCards(g)) {
     if (c.owner === step.inv && ["play", "threat", "hand"].includes(c.zone) && def(g, c.id).subtype)
       g.db.scripts[c.code]?.hooks?.gameEnd?.(g, { source: c.id, you: c.controller });
   }
   // cards leave play: owned cards out of the game, encounter cards to encounter discard
-  for (const c of Object.values(g.s.cards)) {
+  for (const c of allCards(g)) {
     if (c.owner === step.inv && c.zone !== "removed" && c.zone !== "investigator")
       moveCard(g, c.id, "removed");
     else if (!c.owner && c.controller === step.inv && (c.zone === "threat" || c.zone === "play"))
       moveCard(g, c.id, "encounterDiscard");
   }
-  me.location = null;
-  if (g.s.active === step.inv) g.s.active = null;
+  placeInvestigator(g, me.id, null);
+  if (activeInvestigator(g) === step.inv) setActive(g, null);
   if (activeInvs(g).length === 0)
     push(g, { t: "Script", code: "__engine", fn: "allEliminated", ctx: {} });
-  else if (g.s.lead === step.inv)
+  else if (leadInvestigator(g) === step.inv)
     push(g, { t: "Script", code: "__engine", fn: "chooseLead", ctx: {} });
 };
 
 /** the remaining investigators choose a new lead when the lead is eliminated (Grimoire, Elimination) */
 export function chooseLead(g: G, step: Step) {
   const rest = activeInvs(g);
-  if (!rest.length || rest.includes(g.s.lead)) return;
+  if (!rest.length || rest.includes(leadInvestigator(g))) return;
   const pick = ask<InvId>(
     g,
     step,
@@ -372,7 +390,7 @@ export function chooseLead(g: G, step: Step) {
     { auto: true, key: "newLead" },
   );
   if (pick === undefined) return;
-  g.s.lead = pick;
+  setLead(g, pick);
   emit(g, "lead", `${invName(g, pick)} is the new lead investigator`, { inv: pick });
 }
 
@@ -394,7 +412,7 @@ export function enterCost(g: G, to: InstId): number {
 }
 
 export const moveHandler: Handler<"Move"> = (g, step) => {
-  const key = step.key ?? `move${g.s.seq++}`;
+  const key = step.key ?? nextKey(g, "move");
   const from = inv(g, step.inv).location;
   push(
     g,
@@ -409,14 +427,14 @@ export const moveHandler: Handler<"Move"> = (g, step) => {
 };
 
 export const arriveHandler: Handler<"Arrive"> = (g, step) => {
-  if (step.key && g.s.cancelled.includes(step.key)) return;
+  if (step.key && isCancelled(g, step.key)) return;
   const me = inv(g, step.inv);
   if (me.status !== "playing") return;
   const from = me.location;
-  me.location = step.to;
+  placeInvestigator(g, me.id, step.to);
   // engaged enemies move with the investigator (massive ones engage everyone at their location)
   for (const e of enemies(g))
-    if (e.engagedWith === step.inv && !isMassive(g, e.id)) e.location = step.to;
+    if (e.engagedWith === step.inv && !isMassive(g, e.id)) setCardLocation(g, e.id, step.to);
   emit(g, "move", `${me.name} moves to ${def(g, step.to).name}`, {
     inv: step.inv,
     card: step.to,
@@ -435,7 +453,7 @@ export const arriveHandler: Handler<"Arrive"> = (g, step) => {
 export function revealLocation(g: G, loc: InstId) {
   const c = card(g, loc);
   if (c.revealed) return;
-  c.revealed = true;
+  reveal(g, c.id);
   const d = def(g, loc);
   addCounter(g, c.id, "clues", (d.clues ?? 0) * (d.cluesPerInvestigator ? playerCount(g) : 1));
   emit(g, "reveal", `${d.name} is revealed (${c.clues} clues)`, {
@@ -454,7 +472,7 @@ export function checkEngagement(g: G, i: InvId) {
     const prey = preyCandidates(g, e.id, invsAt(g, me.location));
     const to = prey.includes(i) ? i : prey[0];
     if (!to) continue; // Prey - bearer only with no bearer here
-    e.engagedWith = to;
+    setEngaged(g, e.id, to);
     emit(g, "engage", `${def(g, e.id).name} engages ${invName(g, to)}`, { inv: to, card: e.id });
     push(g, win("enemyEngages", { inv: to, enemy: e.id }));
   }
@@ -465,7 +483,7 @@ export const discoverCluesHandler: Handler<"DiscoverClues"> = (g, step) => {
   const loc = card(g, step.location);
   const n = Math.min(step.n, loc.clues);
   if (n <= 0 || hasFlag(g, step.inv, "cannotDiscoverClues")) return;
-  const key = `clues${g.s.seq++}`;
+  const key = nextKey(g, "clues");
   push(g, win("wouldDiscoverClues", { inv: step.inv, location: step.location, key, amount: n }), {
     t: "GainClues",
     inv: step.inv,
@@ -476,7 +494,7 @@ export const discoverCluesHandler: Handler<"DiscoverClues"> = (g, step) => {
 };
 
 export const gainCluesHandler: Handler<"GainClues"> = (g, step) => {
-  if (g.s.cancelled.includes(step.key)) return;
+  if (isCancelled(g, step.key)) return;
   const loc = card(g, step.location);
   const n = Math.min(step.n, loc.clues);
   addCounter(g, loc.id, "clues", -n);
@@ -531,11 +549,11 @@ export const mulliganHandler: Handler<"Mulligan"> = (g, step) => {
   for (const h of chosen) moveCard(g, h, "limbo");
   drawOpeningCards(g, step.inv, chosen.length);
   for (const h of chosen) moveCard(g, h, "deck");
-  shuffle(g.s, me.deck);
+  shuffleDeck(g, me.id);
   // weaknesses set aside during opening draw go back in
   const setAside = asideFlag.get(g, step.inv) ?? [];
   for (const h of setAside) moveCard(g, h, "deck");
-  if (setAside.length) shuffle(g.s, me.deck);
+  if (setAside.length) shuffleDeck(g, me.id);
   asideFlag.clear(g, step.inv);
   if (chosen.length)
     emit(g, "mulligan", `${me.name} redraws ${chosen.length} card(s)`, {

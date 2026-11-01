@@ -27,6 +27,7 @@ import { RESOLVE_BOX } from "../Reveal";
 import { StatBody, useFlash } from "../Stats";
 import { cx } from "../../components/cx";
 import styles from "./PlayerBar.module.css";
+import { invOf } from "../../../engine/core";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);
@@ -55,12 +56,12 @@ function useGhostDraws(inv: InvId, ref: React.RefObject<HTMLElement>, skip: bool
   const setup = useGame((s) => s.setup);
   const known = useRef<{ setup: unknown; ids: Set<InstId> }>({
     setup,
-    ids: new Set(game.invs[inv].hand),
+    ids: new Set(invOf(game, inv).hand),
   });
   useLayoutEffect(() => {
     if (known.current.setup !== setup) known.current = { setup, ids: new Set() };
     const el = ref.current;
-    const hand = game.invs[inv].hand;
+    const hand = invOf(game, inv).hand;
     for (const id of hand) {
       if (known.current.ids.has(id)) continue;
       known.current.ids.add(id);
@@ -161,7 +162,7 @@ function Sheet({
   onLeave: () => void;
 }) {
   const game = useGame((s) => s.game) as GameState;
-  const cardId = game.invs[inv].cardId;
+  const cardId = invOf(game, inv).cardId;
   const byCard = useOptionsByCard();
   const { abilities } = investigatorOptions(game);
   const options = (byCard.get(cardId) ?? []).filter((o) => abilities.some((x) => x.id === o.id));
@@ -256,11 +257,11 @@ export function PlayerBar() {
   // an investigator whose own card offers an ability glows too: a tap opens the sheet with its button
   const hasAbility = (inv: InvId) =>
     abilities.some(
-      (o) => o.card === game.invs[inv].cardId && byCard.get(o.card!)?.some((x) => x.id === o.id),
+      (o) => o.card === invOf(game, inv).cardId && byCard.get(o.card!)?.some((x) => x.id === o.id),
     );
   const answerable = (inv: InvId) => {
     const o = answers.get(inv);
-    return o && byCard.get(game.invs[inv].cardId)?.some((x) => x.id === o.id) ? o : null;
+    return o && byCard.get(invOf(game, inv).cardId)?.some((x) => x.id === o.id) ? o : null;
   };
   const clearTimers = () => {
     cancelOpen.current?.();

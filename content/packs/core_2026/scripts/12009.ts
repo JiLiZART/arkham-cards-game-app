@@ -11,6 +11,7 @@ import {
   inv,
   invName,
   push,
+  ready,
   setEngaged,
 } from "../../../../src/engine/api";
 
@@ -31,7 +32,7 @@ export default {
       }
       const e = cardIf(g, ctx.source);
       if (e?.zone !== "enemy") return;
-      e.exhausted = false;
+      ready(g, e.id);
       setEngaged(g, e.id, who);
       emit(g, "engage", `${def(g, e.id).name} engages ${invName(g, who)}`, {
         inv: who,

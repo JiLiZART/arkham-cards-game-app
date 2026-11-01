@@ -12,6 +12,8 @@ import {
   type InstId,
   invName,
   push,
+  setCardLocation,
+  setEngaged,
   type Step,
   win,
 } from "../../../../src/engine/api";
@@ -37,8 +39,8 @@ export default {
       );
       if (pick === undefined) return;
       const e = card(g, pick);
-      e.location = here;
-      e.engagedWith = ctx.you!;
+      setCardLocation(g, e.id, here);
+      setEngaged(g, e.id, ctx.you!);
       emit(g, "engage", `${def(g, pick).name} moves here and engages ${invName(g, ctx.you!)}`, {
         inv: ctx.you!,
         card: pick,

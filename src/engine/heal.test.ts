@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { card, createCard, inv, moveCard } from "./core";
+import { card, createCard, moveCard } from "./core";
 import { db, mutate, options, pick, skipMulligans, start } from "./testkit";
 import type { Ability } from "../content/schema";
 import type { Result } from "./engine";
@@ -62,7 +62,7 @@ describe("an ability's cost can take damage", () => {
 
   it("the controller takes it, then the ability resolves", () => {
     let r = turn(ab, (g) => {
-      inv(g, ROLAND).horror = 2;
+      g.s.invs[ROLAND].horror = 2;
     });
     r = pick(r, "Patch up");
     while (r.state.pending && r.state.pending.kind !== "turn") r = pick(r, /./);
@@ -84,7 +84,7 @@ describe("a heal can target an Ally asset", () => {
     let cop = "";
     let r = turn(atLocation, (g) => {
       cop = beatCop(g, 1, 1);
-      inv(g, ROLAND).damage = 1;
+      g.s.invs[ROLAND].damage = 1;
     });
     r = pick(r, "Mend");
     expect(options(r)).toEqual(["Roland Banks", "Beat Cop"]);
@@ -96,7 +96,7 @@ describe("a heal can target an Ally asset", () => {
   it("choosing the investigator heals them as before", () => {
     let r = turn(atLocation, (g) => {
       beatCop(g, 1, 0);
-      inv(g, ROLAND).damage = 2;
+      g.s.invs[ROLAND].damage = 2;
     });
     r = pick(r, "Mend");
     r = pick(r, "Roland Banks");
@@ -108,7 +108,7 @@ describe("a heal can target an Ally asset", () => {
       atLocation,
       (g) => {
         beatCop(g, 1, 0, DAISY);
-        inv(g, DAISY).location = null;
+        g.s.invs[DAISY].location = null;
       },
       [ROLAND, DAISY],
     );

@@ -2,32 +2,45 @@ import { attackBonus, attacked, damageBonus, defeated, noAttack } from "../flags
 import {
   activeInvs,
   addCounter,
+  allCards,
   ask,
   card,
+  cardIf,
   connections,
+  currentAgenda,
+  currentRound,
   def,
   distances,
+  emit,
+  enemies,
+  enemyStat,
+  engagedWith,
+  exhaust,
   type G,
   hasFlag,
   hasKeyword,
   inv,
+  invIf,
   invName,
   invsAt,
+  isCancelled,
   isElite,
   isMassive,
+  leadInvestigator,
   locationByName,
   locations,
   logStep,
-  emit,
   moveCard,
-  enemies,
-  enemyStat,
-  engagedWith,
+  nextKey,
+  push,
   remainingHealth,
   remainingSanity,
+  scenarioIdOf,
+  setCardLocation,
+  setEngaged,
   skillValue,
   stepsToward,
-  push,
+  turnOrder,
 } from "../core";
 import type { InstId, InvId, Step } from "../types";
 import { win } from "./cards";
@@ -76,7 +89,7 @@ export const spawnHandler: Handler<"Spawn"> = (g, step) => {
   let at = step.at ?? null;
   let engage: InvId | null = null;
   const drawerLoc = step.inv ? inv(g, step.inv).location : null;
-  const hook = g.db.scripts[g.s.scenarioId]?.hooks?.spawnRedirect;
+  const hook = g.db.scripts[scenarioIdOf(g)]?.hooks?.spawnRedirect;
   if (!at && hook) {
     const ctx = { enemy: step.enemy, location: null as InstId | null };
     hook(g, ctx);
@@ -97,7 +110,7 @@ export const spawnHandler: Handler<"Spawn"> = (g, step) => {
         const pick = ask<InstId>(
           g,
           step,
-          g.s.lead,
+          leadInvestigator(g),
           "target",
           `Choose an empty location to spawn ${d.name}`,
           empty.map((l) => ({ id: l.id, label: def(g, l.id).name, card: l.id, value: l.id })),
@@ -118,7 +131,7 @@ export const spawnHandler: Handler<"Spawn"> = (g, step) => {
       const pick = ask<InvId>(
         g,
         step,
-        g.s.lead,
+        leadInvestigator(g),
         "target",
         `${d.name} spawns engaged with:`,
         cands.map((i) => ({ id: i, label: invName(g, i), card: inv(g, i).cardId, value: i })),
@@ -150,7 +163,7 @@ export const spawnHandler: Handler<"Spawn"> = (g, step) => {
   moveCard(g, step.enemy, "enemy", { location: at });
   // a unique encounter card entering play discards the player card with its title (Grimoire, Unique)
   if (d.unique)
-    for (const twin of Object.values(g.s.cards))
+    for (const twin of allCards(g))
       if (twin.owner && twin.zone === "play" && def(g, twin.id).name === d.name)
         moveCard(g, twin.id, "discard", { inv: twin.owner });
   emit(g, "spawn", `${d.name} spawns at ${def(g, at).name}`, { card: step.enemy, data: { at } });
@@ -160,7 +173,7 @@ export const spawnHandler: Handler<"Spawn"> = (g, step) => {
     engage = preyCandidates(g, step.enemy, invsAt(g, at))[0] ?? null;
   }
   if (engage && !aloof && !isMassive(g, step.enemy)) {
-    c.engagedWith = engage;
+    setEngaged(g, c.id, engage);
     emit(g, "engage", `${d.name} engages ${invName(g, engage)}`, { inv: engage, card: step.enemy });
   }
   push(
@@ -175,7 +188,7 @@ export const spawnHandler: Handler<"Spawn"> = (g, step) => {
 
 // ---------- attacks ----------
 export const enemyAttackHandler: Handler<"EnemyAttack"> = (g, step) => {
-  const e = g.s.cards[step.enemy];
+  const e = cardIf(g, step.enemy);
   push(
     g,
     win("enemyAttacks", { inv: step.inv, enemy: step.enemy, key: step.key }),
@@ -189,7 +202,7 @@ export const enemyAttackHandler: Handler<"EnemyAttack"> = (g, step) => {
 
 /** Elusive: the enemy disengages, moves to a connecting location (one with no investigators if able) and exhausts */
 export function elusive(g: G, id: InstId, step: Step) {
-  const e = g.s.cards[id];
+  const e = cardIf(g, id);
   if (!e || e.zone !== "enemy" || e.exhausted || !e.location) return;
   const near = connections(g, e.location).filter((l) => canEnemyEnter(g, id, l));
   const empty = near.filter((l) => !invsAt(g, l).length);
@@ -198,24 +211,24 @@ export function elusive(g: G, id: InstId, step: Step) {
     const to = ask<InstId>(
       g,
       step,
-      g.s.lead,
+      leadInvestigator(g),
       "target",
       `Where does ${def(g, id).name} move?`,
       opts.map((l) => ({ id: l, label: def(g, l).name, card: l, value: l })),
       { auto: true, key: "enemyMoveWhere", vars: { card: id } },
     );
     if (to === undefined) return;
-    e.location = to;
+    setCardLocation(g, e.id, to);
   }
-  e.engagedWith = null;
-  e.exhausted = true;
+  setEngaged(g, e.id, null);
+  exhaust(g, e.id);
   emit(g, "elusive", `${def(g, id).name} slips away`, { card: id, data: { to: e.location } });
 }
 
 export const resolveAttackHandler: Handler<"ResolveAttack"> = (g, step) => {
-  const e = g.s.cards[step.enemy];
+  const e = cardIf(g, step.enemy);
   if (!e || e.zone !== "enemy" || inv(g, step.inv).status !== "playing") return;
-  if (g.s.cancelled.includes(step.key)) {
+  if (isCancelled(g, step.key)) {
     emit(g, "attackCancelled", `${def(g, step.enemy).name}'s attack is cancelled`, {
       card: step.enemy,
     });
@@ -224,10 +237,10 @@ export const resolveAttackHandler: Handler<"ResolveAttack"> = (g, step) => {
   }
   if (!isElite(g, step.enemy) && hasFlag(g, step.inv, "nonEliteCannotAttack")) return;
   // "she cannot attack you for the remainder of the round" (Elokoss)
-  if (noAttack.get(g, [step.enemy, step.inv]) === g.s.round) return;
+  if (noAttack.get(g, [step.enemy, step.inv]) === currentRound(g)) return;
   const bonus = attackBonus.take(g, step.key) ?? 0;
   // "if this enemy attacked you this round" (Daniela's Wrench)
-  attacked.set(g, [step.enemy, step.inv], g.s.round);
+  attacked.set(g, [step.enemy, step.inv], currentRound(g));
   const damage = enemyStat(g, step.enemy, "damage") + bonus;
   const horror = enemyStat(g, step.enemy, "horror") + bonus;
   emit(
@@ -255,7 +268,7 @@ export const resolveAttackHandler: Handler<"ResolveAttack"> = (g, step) => {
 };
 
 export function attackKey(g: G) {
-  return `atk${g.s.seq++}`;
+  return nextKey(g, "atk");
 }
 
 /** attacks of opportunity from each ready engaged enemy */
@@ -272,7 +285,7 @@ export function attacksOfOpportunity(g: G, i: InvId): Step[] {
 
 // ---------- damage & defeat ----------
 export const damageEnemyHandler: Handler<"DamageEnemy"> = (g, step) => {
-  const e = g.s.cards[step.enemy];
+  const e = cardIf(g, step.enemy);
   if (!e || e.zone !== "enemy" || step.amount <= 0) return;
   if (hasFlag(g, step.enemy, "cannotBeDamaged")) {
     emit(g, "noDamage", `${def(g, step.enemy).name} cannot be damaged`, { card: step.enemy });
@@ -280,7 +293,7 @@ export const damageEnemyHandler: Handler<"DamageEnemy"> = (g, step) => {
   }
   // what an investigator deals can grow, or be capped, before it is placed (Nathaniel Cho, Tommy Malloy)
   if (step.by && !step.windowed) {
-    const key = step.key ?? `dmg${g.s.seq++}`;
+    const key = step.key ?? nextKey(g, "dmg");
     push(
       g,
       win("dealDamage", {
@@ -320,7 +333,7 @@ export const damageEnemyHandler: Handler<"DamageEnemy"> = (g, step) => {
 };
 
 export const defeatEnemyHandler: Handler<"DefeatEnemy"> = (g, step) => {
-  const e = g.s.cards[step.enemy];
+  const e = cardIf(g, step.enemy);
   if (!e || e.zone !== "enemy") return;
   if (!step.fired) {
     // "when defeated" forced abilities resolve while the enemy is still in play
@@ -328,7 +341,7 @@ export const defeatEnemyHandler: Handler<"DefeatEnemy"> = (g, step) => {
     return;
   }
   const d = def(g, step.enemy);
-  if (step.by && g.s.invs[step.by]) g.s.invs[step.by].defeatedHealth += d.enemy?.health ?? 0;
+  if (step.by && invIf(g, step.by)) addCounter(g, step.by, "defeatedHealth", d.enemy?.health ?? 0);
   emit(g, "enemyDefeated", `${d.name} is defeated${step.by ? ` by ${invName(g, step.by)}` : ""}`, {
     card: step.enemy,
     inv: step.by,
@@ -339,8 +352,9 @@ export const defeatEnemyHandler: Handler<"DefeatEnemy"> = (g, step) => {
   defeated.set(g, e.code, true);
   push(g, win("enemyDefeated", { inv: step.by }), { t: "CheckObjectives" });
   // Doomed: 1 doom on the current agenda, which can make it advance
-  if (d.keywords.includes("doomed") && g.s.agenda)
-    push(g, { t: "PlaceDoom", card: g.s.agenda, n: 1 }, { t: "CheckDoom" });
+  const agenda = currentAgenda(g);
+  if (d.keywords.includes("doomed") && agenda)
+    push(g, { t: "PlaceDoom", card: agenda, n: 1 }, { t: "CheckDoom" });
 };
 
 // ---------- enemy phase ----------
@@ -385,7 +399,7 @@ export const hunterMovesHandler: Handler<"HunterMoves"> = (g, step) => {
   const to = ask<InstId>(
     g,
     step,
-    g.s.lead,
+    leadInvestigator(g),
     "target",
     `Where does ${def(g, e.id).name} move?`,
     options.map((l) => ({ id: l, label: def(g, l).name, card: l, value: l })),
@@ -393,14 +407,14 @@ export const hunterMovesHandler: Handler<"HunterMoves"> = (g, step) => {
   );
   if (to === undefined) return;
   const from = e.location;
-  e.location = to;
+  setCardLocation(g, e.id, to);
   emit(g, "enemyMove", `${def(g, e.id).name} moves to ${def(g, to).name}`, {
     card: e.id,
     data: { from, to },
   });
   const p = preyCandidates(g, e.id, invsAt(g, to))[0];
   if (p && !def(g, e.id).keywords.includes("aloof") && !isMassive(g, e.id)) {
-    e.engagedWith = p;
+    setEngaged(g, e.id, p);
     emit(g, "engage", `${def(g, e.id).name} engages ${invName(g, p)}`, { inv: p, card: e.id });
     push(
       g,
@@ -413,7 +427,7 @@ export const hunterMovesHandler: Handler<"HunterMoves"> = (g, step) => {
 
 export const enemyAttacksHandler: Handler<"EnemyAttacks"> = (g, step) => {
   const done = step.done ?? [];
-  for (const i of g.s.order) {
+  for (const i of turnOrder(g)) {
     if (inv(g, i).status !== "playing") continue;
     for (const e of engagedWith(g, i)) {
       const key = `${i}|${e.id}`;
@@ -440,18 +454,18 @@ export const enemyAttacksHandler: Handler<"EnemyAttacks"> = (g, step) => {
   // each enemy that attacked exhausts
   for (const key of done) {
     const id = key.split("|")[1];
-    if (g.s.cards[id]?.zone === "enemy") g.s.cards[id].exhausted = true;
+    if (cardIf(g, id)?.zone === "enemy") exhaust(g, id);
   }
 };
 
 export function exhaustEnemy(g: G, id: InstId) {
-  if (g.s.cards[id]?.zone === "enemy") g.s.cards[id].exhausted = true;
+  if (cardIf(g, id)?.zone === "enemy") exhaust(g, id);
 }
 
 export const enemyEngageHandler: Handler<"EnemyEngage"> = (g, step) => {
   const e = card(g, step.enemy);
-  e.engagedWith = step.inv;
-  e.location = inv(g, step.inv).location;
+  setEngaged(g, e.id, step.inv);
+  setCardLocation(g, e.id, inv(g, step.inv).location);
   emit(g, "engage", `${invName(g, step.inv)} engages ${def(g, step.enemy).name}`, {
     inv: step.inv,
     card: step.enemy,

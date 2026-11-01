@@ -6,6 +6,7 @@ import { db, useGame } from "../../state/context";
 import { backUrl, isEncounterCard } from "../../assets/images";
 import { IntentBadge, TokenBadges } from "../../components/TokenBadges";
 import { useDimmed, useView } from "../../state/view";
+import { cardOfIf } from "../../../engine/core";
 
 /** hovering an HTML card shows the enlarged copy over it */
 export const hoverProps = (id: InstId | null) => ({
@@ -44,7 +45,7 @@ export function MiniCard({
   const game = useGame((s) => s.game) as GameState;
   const locale = useGame((s) => s.locale);
   const dimmed = useDimmed(id);
-  const inst = game.cards[id];
+  const inst = cardOfIf(game, id);
   if (!inst) return null;
   const d = db.cards[inst.code];
   return (

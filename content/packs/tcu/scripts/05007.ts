@@ -1,5 +1,6 @@
 // Hypnotic Therapy — test [intellect] (2) to heal 1 horror from an investigator here, who may draw 1; or add 1 horror to another of your heals
 import {
+  addCounter,
   ask,
   card,
   type CardScript,
@@ -90,7 +91,7 @@ export default {
     more(g: G, ctx: EffCtx) {
       const i = healedInv(g, ctx);
       if (!i || inv(g, i).horror < 1) return;
-      inv(g, i).horror--;
+      addCounter(g, i, "horror", -1);
       emit(g, "heal", `${invName(g, i)} heals 1 more horror (Hypnotic Therapy)`, {
         inv: i,
         card: card(g, ctx.source!).id,

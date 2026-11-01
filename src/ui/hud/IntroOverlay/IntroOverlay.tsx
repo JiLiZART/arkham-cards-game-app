@@ -10,6 +10,7 @@ import { useStage, useView } from "../../state/view";
 import { centreTransform, riseAndArc } from "../flights";
 import { cx } from "../../components/cx";
 import styles from "./IntroOverlay.module.css";
+import { cardOf } from "../../../engine/core";
 
 const FLY_MS = 650;
 
@@ -152,7 +153,7 @@ export function IntroOverlay() {
           >
             <div className={cx("flip", styles.flipped)} ref={flip}>
               <div className={styles.flipFront}>
-                <CardFace code={game.cards[id!].code} locale={locale} />
+                <CardFace code={cardOf(game, id!).code} locale={locale} />
               </div>
               <div className={styles.flipBack}>
                 <img src={backUrl("encounter")} alt="" draggable={false} />

@@ -1,5 +1,6 @@
 // Unsolved Case — place 1 of your clues on the location with the highest shroud; once in the threat area, Joe earns 2 fewer experience
 import {
+  addCounter,
   ask,
   card,
   type CardScript,
@@ -41,8 +42,8 @@ export default {
       if (loc === undefined) return;
       const me = inv(g, ctx.you!);
       if (me.clues < 1) return;
-      me.clues--;
-      card(g, loc).clues++;
+      addCounter(g, me.id, "clues", -1);
+      addCounter(g, loc, "clues", 1);
       emit(g, "clues", `${me.name} places 1 clue on ${def(g, loc).name}`, {
         inv: ctx.you!,
         card: loc,

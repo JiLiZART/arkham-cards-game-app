@@ -1,6 +1,6 @@
 /** helpers for the nat pack's card tests (not used at runtime) */
 import { connections } from "./flags";
-import { card, createCard, inv, moveCard, type G } from "./core";
+import { createCard, type G, inv, moveCard, reveal, setController, setCounter } from "./core";
 import { createGame, type Result } from "./engine";
 import type { GameSetup } from "./types";
 import { db, deckCodes, mutate, pick, putEnemy, skipMulligans } from "./testkit";
@@ -61,8 +61,8 @@ export function hand(g: G, i: string, code: string) {
 export function inPlay(g: G, i: string, code: string) {
   const id = createCard(g, code, "limbo", i);
   moveCard(g, id, "play");
-  card(g, id).controller = i;
-  if (g.db.cards[code].uses) card(g, id).uses = g.db.cards[code].uses!.count;
+  setController(g, id, i);
+  if (g.db.cards[code].uses) setCounter(g, id, "uses", g.db.cards[code].uses!.count);
   return id;
 }
 /** an enemy at the investigator's location, engaged with them or not */
@@ -80,8 +80,8 @@ export const zoneOf = (r: Result, code: string) =>
 export function addLocation(g: G, code: string, pairs: [string, string][]) {
   const id = createCard(g, code, "limbo");
   moveCard(g, id, "location");
-  card(g, id).revealed = true;
-  card(g, id).clues = 0;
+  reveal(g, id);
+  setCounter(g, id, "clues", 0);
   connections.set(g, [...(connections.get(g) ?? []), ...pairs]);
   return id;
 }

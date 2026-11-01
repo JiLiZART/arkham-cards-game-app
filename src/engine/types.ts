@@ -67,6 +67,9 @@ export interface CardInst {
   attachedTo: InstId | null;
 }
 
+/** a card instance as code outside the core sees it: read, never written (ADR-0022) */
+export type CardView = Readonly<CardInst>;
+
 export type InvStatus = "playing" | "resigned" | "defeated";
 
 export interface InvState {
@@ -97,6 +100,17 @@ export interface InvState {
   mentalTrauma: number;
   player: number;
 }
+
+/** an investigator as code outside the core sees it: read, never written, its piles and lists too (ADR-0022) */
+export type InvView = Readonly<
+  Omit<InvState, "deck" | "hand" | "discard" | "restrictedActions" | "actionsThisRound">
+> & {
+  readonly deck: readonly InstId[];
+  readonly hand: readonly InstId[];
+  readonly discard: readonly InstId[];
+  readonly restrictedActions: readonly Readonly<InvState["restrictedActions"][number]>[];
+  readonly actionsThisRound: readonly string[];
+};
 
 export interface TempMod {
   id: number;

@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import { loadPack } from "../content";
-import { card, createCard, inv, moveCard, type G } from "./core";
+import { createCard, inv, moveCard, type G } from "./core";
 import type { Result } from "./engine";
 import {
   ACOLYTE,
@@ -72,7 +72,7 @@ describe("weapons", () => {
     let r = roland((g) => {
       hand(g, R, "12055");
       enemyHere(g, R, MINION);
-      inv(g, R).resources = 2;
+      g.s.invs[R].resources = 2;
     });
     r = toTurn(pick(r, /^Play Decisive Strike/));
     expect(zoneOf(r, MINION)).not.toContain("enemy");
@@ -109,7 +109,7 @@ describe("investigation", () => {
   it("Second Sight spends a charge after a success for 1 more clue", () => {
     let r = roland((g) => {
       inPlay(g, R, "12062");
-      card(g, inv(g, R).location!).clues = 3;
+      g.s.cards[inv(g, R).location!].clues = 3;
     });
     r = toTurn(pick(r, /^Second Sight/), offered(/^Use Second Sight/));
     r = toTurn(pick(r, /^Use Second Sight/));
@@ -122,7 +122,7 @@ describe("investigation", () => {
     let r = roland((g) => {
       inPlay(g, R, "12033");
       hall = addLocation(g, HALLWAY, [[STUDY, HALLWAY]]);
-      card(g, hall).clues = 1;
+      g.s.cards[hall].clues = 1;
     });
     r = toTurn(pick(r, /^Local Map/), offered(/^Exhaust Local Map/));
     r = toTurn(pick(r, /^Exhaust Local Map/));
@@ -137,8 +137,8 @@ describe("evasion", () => {
       (g) => {
         hand(g, R, "12037");
         enemyHere(g, R, PRIEST);
-        inv(g, R).clues = 2;
-        inv(g, R).resources = 5;
+        g.s.invs[R].clues = 2;
+        g.s.invs[R].resources = 5;
       },
       ["0"],
     );
@@ -152,7 +152,7 @@ describe("evasion", () => {
       (g) => {
         hand(g, R, "12079");
         enemyHere(g, R, PRIEST);
-        inv(g, R).resources = 5;
+        g.s.invs[R].resources = 5;
       },
       ["-2"],
     );
@@ -205,7 +205,7 @@ describe("committing", () => {
       (g) => {
         hand(g, R, "12082");
         enemyHere(g, R, PRIEST);
-        inv(g, R).resources = 5;
+        g.s.invs[R].resources = 5;
       },
       ["-3"],
     );
@@ -230,9 +230,9 @@ describe("allies and reactions", () => {
   it("Bodyguard takes another investigator's damage and, defeated, deals 1 damage", () => {
     let r = game([R, "01002"], (g) => {
       inPlay(g, R, "12016");
-      inv(g, "01002").location = inv(g, R).location;
+      g.s.invs["01002"].location = inv(g, R).location;
       enemyHere(g, R, PRIEST, false);
-      card(g, enemyIn({ state: g.s, events: [] }, PRIEST)!.id).exhausted = true;
+      g.s.cards[enemyIn({ state: g.s, events: [] }, PRIEST)!.id].exhausted = true;
       g.s.queue.push({
         t: "AssignDamage",
         inv: "01002",
@@ -267,7 +267,7 @@ describe("allies and reactions", () => {
   it("Gather Intel draws 2 when an enemy spawns at your location", () => {
     let r = roland((g) => {
       hand(g, R, "12036");
-      inv(g, R).resources = 5;
+      g.s.invs[R].resources = 5;
       g.s.queue.push({ t: "Spawn", enemy: createCard(g, ACOLYTE, "limbo"), inv: R });
     });
     const n = r.state.invs[R].hand.length;
@@ -297,7 +297,7 @@ describe("weaknesses", () => {
     let r = roland((g) => {
       hand(g, R, "12023");
       onDeck(g, R, "12006");
-      inv(g, R).resources = 5;
+      g.s.invs[R].resources = 5;
     });
     r = toTurn(pick(r, /^Play Right Tool for the Job/));
     expect(zoneOf(r, "12006")).toEqual(["hand"]);
@@ -308,18 +308,18 @@ describe("weaknesses", () => {
     let r = roland((g) => {
       const id = createCard(g, "12103", "limbo", R);
       moveCard(g, id, "threat");
-      card(g, id).controller = R;
+      g.s.cards[id].controller = R;
       hand(g, R, "01088");
-      inv(g, R).resources = 5;
+      g.s.invs[R].resources = 5;
     });
     r = toTurn(pick(r, /^Play Emergency Cache/));
     expect(r.state.invs[R].damage).toBe(0); // Emergency Cache costs nothing
     r = roland((g) => {
       const id = createCard(g, "12103", "limbo", R);
       moveCard(g, id, "threat");
-      card(g, id).controller = R;
+      g.s.cards[id].controller = R;
       hand(g, R, "12019");
-      inv(g, R).resources = 5;
+      g.s.invs[R].resources = 5;
     });
     r = toTurn(pick(r, /^Play M1911/));
     expect(r.state.invs[R].damage).toBe(1);
@@ -329,9 +329,9 @@ describe("weaknesses", () => {
     const r = roland((g) => {
       const id = createCard(g, "12012", "limbo", R);
       moveCard(g, id, "threat");
-      card(g, id).controller = R;
+      g.s.cards[id].controller = R;
       hand(g, R, "12019");
-      inv(g, R).resources = 5;
+      g.s.invs[R].resources = 5;
     });
     expect(options(r).some((o) => o.startsWith("Play M1911"))).toBe(false);
     expect(options(r).some((o) => o.startsWith("The Necronomicon"))).toBe(true);
@@ -341,7 +341,7 @@ describe("weaknesses", () => {
     const r = roland((g) => {
       const id = createCard(g, "12098", "limbo", R);
       moveCard(g, id, "threat");
-      card(g, id).controller = R;
+      g.s.cards[id].controller = R;
     });
     const g = gOf(r);
     expect(g.s.invs[R]).toBeTruthy();

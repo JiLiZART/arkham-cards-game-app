@@ -1,6 +1,7 @@
 // Spreading Flames: Bystander parleys, the agendas' tests and Fire!, the acts' end-of-round advances and backs
 import {
   activeInvs,
+  addCounter,
   allCards,
   ask,
   card,
@@ -24,8 +25,11 @@ import {
   locationByName,
   moveCard,
   pile,
+  placeInvestigator,
   playerCount,
   push,
+  setController,
+  setCounter,
   shuffleDeck,
   spendableGroupClues,
   type Step,
@@ -122,7 +126,7 @@ export default {
         (x) => who.includes(x),
       )) {
         const take = Math.min(n, inv(g, i).clues);
-        inv(g, i).clues -= take;
+        addCounter(g, i, "clues", -take);
         n -= take;
       }
       push(g, { t: "AdvanceAct" });
@@ -160,8 +164,8 @@ export default {
       if (room) {
         const quad = findByCode(g, QUAD, ["location"]);
         for (const i of activeInvs(g))
-          if (inv(g, i).location === room.id && quad) inv(g, i).location = quad.id;
-        card(g, room.id).clues = 0;
+          if (inv(g, i).location === room.id && quad) placeInvestigator(g, i, quad.id);
+        setCounter(g, room.id, "clues", 0);
         moveCard(g, room.id, "removed");
       }
       for (const name of ["Orne Library", "Science Hall", "Warren Observatory"]) {
@@ -190,7 +194,7 @@ export default {
         if (who === undefined) return;
         // he takes up no ally slot during this scenario: no slot check
         moveCard(g, armitage.id, "play");
-        card(g, armitage.id).controller = who;
+        setController(g, armitage.id, who);
         emit(g, "control", `${invName(g, who)} takes control of Dr. Henry Armitage`, {
           inv: who,
           card: armitage.id,
@@ -199,11 +203,11 @@ export default {
       const quad = locationByName(g, "Miskatonic Quad");
       const servant = setAside(g, SERVANT)[0];
       if (servant && quad) {
-        card(g, servant.id).damage = 0;
+        setCounter(g, servant.id, "damage", 0);
         moveCard(g, servant.id, "limbo");
         push(g, { t: "Spawn", enemy: servant.id, inv: null, at: quad.id });
       }
-      if (quad) card(g, quad.id).clues += 3 * playerCount(g);
+      if (quad) addCounter(g, quad.id, "clues", 3 * playerCount(g));
       // the lead searches the encounter deck and discard pile for 1 Fire! per investigator and draws them
       const fires = [...pile(g, "encounterDeck"), ...pile(g, "encounterDiscard")]
         .filter((id) => card(g, id).code === FIRE)

@@ -14,6 +14,7 @@ import {
   invName,
   moveCard,
   push,
+  setController,
   shuffleList,
   type Step,
 } from "../../../../src/engine/api";
@@ -110,7 +111,7 @@ export default {
       // Unsolved Case: "If Unsolved Case would be shuffled into your hunch deck: add it to your threat area instead"
       if (card(g, id).code === UNSOLVED_CASE) {
         moveCard(g, id, "threat");
-        card(g, id).controller = you;
+        setController(g, id, you);
         emit(g, "threat", `Unsolved Case enters ${invName(g, you)}'s threat area`, {
           inv: you,
           card: id,

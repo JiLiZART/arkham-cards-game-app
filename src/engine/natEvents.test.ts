@@ -39,7 +39,7 @@ describe("Clean Them Out", () => {
     let r = nathaniel((g) => {
       hand(g, N, "60111");
       enemyHere(g, N);
-      inv(g, N).resources = 0;
+      g.s.invs[N].resources = 0;
     });
     r = pick(r, /^Play Clean Them Out/);
     expect(res(r)).toBe(2);
@@ -77,7 +77,7 @@ describe("Glory", () => {
     let r = nathaniel((g) => {
       hand(g, N, "60115");
       enemyHere(g, N, ACOLYTE);
-      inv(g, N).resources = 3;
+      g.s.invs[N].resources = 3;
     });
     const draws = (x: Result) =>
       x.state.log.filter((e) => e.type === "draw" || e.type === "weakness").length;
@@ -195,7 +195,7 @@ describe("Stand Together", () => {
   it("gives 2 resources to the player and to the other investigator at the location, nobody else", () => {
     let r = game([N, DAISY, ROLAND], (g) => {
       hand(g, N, "60118");
-      inv(g, ROLAND).location = null; // elsewhere
+      g.s.invs[ROLAND].location = null; // elsewhere
     });
     const before = [N, DAISY, ROLAND].map((i) => res(r, i));
     r = pick(r, /^Play Stand Together/);
@@ -212,7 +212,7 @@ describe("Evidence! (1)", () => {
     let r = nathaniel((g) => {
       hand(g, N, "60120");
       enemyHere(g, N, ACOLYTE);
-      inv(g, N).defeatedHealth = healthBefore;
+      g.s.invs[N].defeatedHealth = healthBefore;
     });
     const clues = card(gOf(r), inv(gOf(r), N).location!).clues;
     r = toTurn(pick(r, /^Fight/), offered(/^Evidence!/));
@@ -231,7 +231,7 @@ describe("Galvanize", () => {
   it("readies a Guardian asset and gives an extra action that can only fight", () => {
     let r = nathaniel((g) => {
       hand(g, N, "60121");
-      card(g, inPlay(g, N, "60105")).exhausted = true; // Boxing Gloves
+      g.s.cards[inPlay(g, N, "60105")].exhausted = true; // Boxing Gloves
       enemyHere(g, N, MINION, false);
     });
     r = pick(r, /^Play Galvanize/);
@@ -284,7 +284,7 @@ describe("Taunt (3)", () => {
       const b = enemyHere(g, DAISY);
       void a;
       void b;
-      inv(g, N).resources = 5;
+      g.s.invs[N].resources = 5;
     });
     const draws = (x: Result) =>
       x.state.log.filter((e) => e.type === "draw" || e.type === "weakness").length;

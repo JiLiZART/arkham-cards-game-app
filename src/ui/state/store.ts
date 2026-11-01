@@ -16,6 +16,7 @@ import type { Move, RoomSave } from "../../net/moves";
 import { quietNextGame } from "../game/arrivals";
 import { useView } from "./view";
 import type { Action, ContentDb, GameEvent, GameSetup, GameState, InvId } from "../../engine/types";
+import { invOfIf } from "../../engine/core";
 
 export const SAVE_KEY = "ah:save";
 const LOCALE_KEY = "ah:locale";
@@ -894,7 +895,7 @@ export function createGameStore(
           });
         get().importLog(text);
         const viewing = data.view?.viewing ?? null;
-        useView.setState({ viewing: viewing && get().game?.invs[viewing] ? viewing : null });
+        useView.setState({ viewing: viewing && invOfIf(get().game, viewing) ? viewing : null });
       },
 
       importLog(json) {

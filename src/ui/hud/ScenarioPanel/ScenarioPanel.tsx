@@ -12,6 +12,7 @@ import { CardOptions } from "../CardOptions";
 import { MiniCard } from "../MiniCard";
 import { cx } from "../../components/cx";
 import styles from "./ScenarioPanel.module.css";
+import { cardOf } from "../../../engine/core";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);
@@ -26,7 +27,7 @@ export function ScenarioPanel() {
   const open = (deck: "act" | "agenda" | "reference") => useView.getState().setModal({ deck });
   const ref = db.scenarios[game.scenarioId].card;
   const refDimmed = useDimmed("reference");
-  const agendaDef = game.agenda ? db.cards[game.cards[game.agenda].code] : null;
+  const agendaDef = game.agenda ? db.cards[cardOf(game, game.agenda).code] : null;
   const cost = actClueCost(g);
   // during the mulligan and the introduction the cards keep their place (the introduction flies them there) but hide
   const hides = introHides(

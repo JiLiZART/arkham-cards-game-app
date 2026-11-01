@@ -2,6 +2,7 @@
 import {
   activeInvs,
   addChaosTokens,
+  addCounter,
   allCards,
   ask,
   campaignLogOf,
@@ -29,6 +30,10 @@ import {
   pile,
   playerCount,
   push,
+  setCardLocation,
+  setCode,
+  setCounter,
+  setEngaged,
   shuffleDeck,
   shuffleList,
   type Step,
@@ -111,7 +116,7 @@ export default {
     setup(g: G) {
       addChaosTokens(g, BAG[difficultyOf(g)]);
       if (campaignLogOf(g).scoured_arkham_for_answers)
-        for (const i of turnOrder(g)) inv(g, i).clues++;
+        for (const i of turnOrder(g)) addCounter(g, i, "clues", 1);
       if (campaignLogOf(g).stirred_up_trouble) {
         // the cult has heard of your violence: 1 Cultist per investigator, each at a different Sewer Tunnels
         const cultists = allCards(g)
@@ -163,7 +168,7 @@ export default {
         }
       } else {
         // flipped: the same card, its damage and attachments kept
-        faint.code = "12179b";
+        setCode(g, faint.id, "12179b");
         emit(g, "flip", "Elokoss awakens: Mother of Flame", { card: faint.id });
       }
       if (currentAct(g)) moveCard(g, currentAct(g)!, "removed");
@@ -212,8 +217,8 @@ export default {
           continue;
         const next = stepsToward(g, e.location, [c.id])[0];
         if (!next) continue;
-        e.location = next;
-        e.engagedWith = null;
+        setCardLocation(g, e.id, next);
+        setEngaged(g, e.id, null);
         emit(g, "enemyMove", `${def(g, e.id).name} moves to ${def(g, next).name}`, {
           card: e.id,
           data: { to: next },
@@ -243,7 +248,7 @@ export default {
       const c = cistern(g);
       // its clues are always replenished
       if (c && card(g, c.id).revealed && card(g, c.id).clues === 0)
-        card(g, c.id).clues = 2 * playerCount(g);
+        setCounter(g, c.id, "clues", 2 * playerCount(g));
       const act = cardIf(g, currentAct(g))?.code ?? null;
       if (act === "12172" && c && activeInvs(g).some((i) => inv(g, i).location === c.id)) {
         push(g, { t: "AdvanceAct" });

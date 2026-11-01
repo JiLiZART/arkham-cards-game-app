@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import { loadPack } from "../content";
-import { card, createCard, inv, moveCard, type G } from "./core";
+import { card, createCard, moveCard, type G } from "./core";
 import type { Result } from "./engine";
 import { preyCandidates } from "./rules/enemies";
 import {
@@ -45,7 +45,7 @@ function onDeck(g: G, i: string, code: string, at = 0) {
   const id = createCard(g, code, "limbo", i);
   moveCard(g, id, "hand");
   moveCard(g, id, "deck");
-  const d = inv(g, i).deck;
+  const d = g.s.invs[i].deck;
   d.splice(d.indexOf(id), 1);
   d.splice(at, 0, id);
   return id;
@@ -97,7 +97,7 @@ describe("Grete Wagner", () => {
   });
   it("(0) is discarded when the damage is her last point of health", () => {
     let r = nathaniel((g) => {
-      card(g, inPlay(g, N, "60107")).damage = 2;
+      g.s.cards[inPlay(g, N, "60107")].damage = 2;
       enemyHere(g, N, ACOLYTE);
     });
     r = toTurn(pick(r, /^Fight/), offered(/^Grete Wagner/));
@@ -109,8 +109,8 @@ describe("Grete Wagner", () => {
     let r = nathaniel((g) => {
       inPlay(g, N, "60128");
       enemyHere(g, N, ACOLYTE);
-      card(g, locId(g, STUDY)).clues = 0;
-      card(g, addLocation(g, HALLWAY, [[STUDY, HALLWAY]])).clues = 1;
+      g.s.cards[locId(g, STUDY)].clues = 0;
+      g.s.cards[addLocation(g, HALLWAY, [[STUDY, HALLWAY]])].clues = 1;
     });
     r = toTurn(pick(r, /^Fight/), offered(/^Grete Wagner/));
     r = pick(r, /^Grete Wagner/);
@@ -160,7 +160,7 @@ describe("Safeguard", () => {
       inPlay(g, N, "60110");
       const h = addLocation(g, HALLWAY, [[STUDY, HALLWAY]]);
       addLocation(g, ATTIC, [[HALLWAY, ATTIC]]);
-      inv(g, DAISY).location = h;
+      g.s.invs[DAISY].location = h;
     });
     r = toTurn(
       pick(r, "End turn"),
@@ -208,7 +208,7 @@ describe("Randall Cho", () => {
   it("heals 3 damage", () => {
     let r = nathaniel((g) => {
       hand(g, N, "60102");
-      inv(g, N).damage = 3;
+      g.s.invs[N].damage = 3;
     });
     r = pick(toTurn(pick(r, /^Play Randall Cho/), offered(/^Randall Cho/)), /^Randall Cho/);
     r = pick(r, /^Heal 3 damage/);
@@ -346,7 +346,7 @@ describe("Self-Destructive", () => {
     nathaniel((g) => {
       const id = createCard(g, "60104", "limbo", N);
       moveCard(g, id, "threat");
-      card(g, id).controller = N;
+      g.s.cards[id].controller = N;
       prep(g);
     });
   it("deals its bearer 1 damage each time they damage an enemy", () => {

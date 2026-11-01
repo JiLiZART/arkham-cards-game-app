@@ -20,6 +20,7 @@ import { TokenPile } from "../../components/TokenPile";
 import { useView } from "../../state/view";
 import { formatText } from "../Hud";
 import styles from "./HandDetails.module.css";
+import { cardOf, cardOfIf } from "../../../engine/core";
 
 export const DETAILS_W = 280;
 
@@ -254,7 +255,7 @@ export function HandDetails({
 }) {
   const locale = useGame((s) => s.locale);
   const game = useGame((s) => s.game) as GameState;
-  const [name, ...rest] = cardDetails(db, game.cards[id].code, locale);
+  const [name, ...rest] = cardDetails(db, cardOf(game, id).code, locale);
   const blocked = blockedRow(db, game, id, locale);
   const commit = commitRow(db, game, id, locale);
   const body = commit && !commit.textApplies ? rest.map(dimText) : rest;
@@ -267,7 +268,7 @@ export function LocationDetails({ id }: { id: InstId }) {
   const game = useGame((s) => s.game) as GameState;
   const locale = useGame((s) => s.locale);
   useView((s) => s.camTick); // follow the map as it pans and zooms
-  const inst = game.cards[id];
+  const inst = cardOfIf(game, id);
   const rect = mapProjector.rect(id);
   if (!inst || !rect) return null;
   return <DetailsColumn rows={cardDetails(db, inst.code, locale, { inst, game })} rect={rect} />;

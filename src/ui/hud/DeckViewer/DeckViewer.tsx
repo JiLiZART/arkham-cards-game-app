@@ -11,6 +11,7 @@ import { Modal } from "../Modals";
 import { CardOptions } from "../CardOptions";
 import { cx } from "../../components/cx";
 import styles from "./DeckViewer.module.css";
+import { cardOf } from "../../../engine/core";
 
 export type DeckKind = "act" | "agenda" | "reference";
 
@@ -30,7 +31,11 @@ export function DeckViewer({ kind }: { kind: DeckKind }) {
   const currentId = kind === "act" ? game.act : kind === "agenda" ? game.agenda : null;
   const codes = kind === "act" ? sc.acts : kind === "agenda" ? sc.agendas : [sc.card];
   const cur =
-    kind === "reference" ? 0 : currentId ? codes.indexOf(game.cards[currentId].code) : codes.length;
+    kind === "reference"
+      ? 0
+      : currentId
+        ? codes.indexOf(cardOf(game, currentId).code)
+        : codes.length;
   const first = kind === "reference" ? referenceSide(game) : "front";
   const [focus, setFocus] = useState<{ code: string; side: "front" | "back" }>({
     code: codes[Math.min(cur, codes.length - 1)],

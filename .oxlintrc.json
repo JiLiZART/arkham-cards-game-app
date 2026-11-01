@@ -19,6 +19,14 @@
               }
             ]
           }
+        ],
+        "no-restricted-properties": [
+          "error",
+          {
+            "object": "g",
+            "property": "s",
+            "message": "engine modules reach the state only through the core's accessors, views and setters (src/engine/core.ts, ADR-0022)"
+          }
         ]
       }
     },
@@ -33,6 +41,86 @@
             "message": "scripts reach the game only through src/engine/api.ts (its accessors for cards, piles, counters, flags and the test)"
           }
         ]
+      }
+    },
+    {
+      "files": [
+        "src/engine/core.ts",
+        "src/engine/flags.ts",
+        "src/engine/records.ts",
+        "src/engine/engine.ts",
+        "src/engine/rules/skillTest.ts",
+        "src/engine/testkit.ts",
+        "src/engine/natkit.ts",
+        "src/engine/replays/**",
+        "src/engine/**/*.test.ts"
+      ],
+      "rules": {
+        "no-restricted-properties": "off"
+      }
+    },
+    {
+      "files": ["src/ui/**", "src/net/**"],
+      "rules": {
+        "no-restricted-properties": [
+          "error",
+          {
+            "object": "game",
+            "property": "cards",
+            "message": "read cards and investigators through cardOf / invOf / cardsOf / invsOf (src/engine/core.ts, ADR-0022)"
+          },
+          {
+            "object": "game",
+            "property": "invs",
+            "message": "read cards and investigators through cardOf / invOf / cardsOf / invsOf (src/engine/core.ts, ADR-0022)"
+          },
+          {
+            "object": "state",
+            "property": "cards",
+            "message": "read cards and investigators through cardOf / invOf / cardsOf / invsOf (src/engine/core.ts, ADR-0022)"
+          },
+          {
+            "object": "state",
+            "property": "invs",
+            "message": "read cards and investigators through cardOf / invOf / cardsOf / invsOf (src/engine/core.ts, ADR-0022)"
+          },
+          {
+            "object": "next",
+            "property": "cards",
+            "message": "read cards and investigators through cardOf / invOf / cardsOf / invsOf (src/engine/core.ts, ADR-0022)"
+          },
+          {
+            "object": "next",
+            "property": "invs",
+            "message": "read cards and investigators through cardOf / invOf / cardsOf / invsOf (src/engine/core.ts, ADR-0022)"
+          },
+          {
+            "object": "prev",
+            "property": "cards",
+            "message": "read cards and investigators through cardOf / invOf / cardsOf / invsOf (src/engine/core.ts, ADR-0022)"
+          },
+          {
+            "object": "prev",
+            "property": "invs",
+            "message": "read cards and investigators through cardOf / invOf / cardsOf / invsOf (src/engine/core.ts, ADR-0022)"
+          },
+          {
+            "object": "held",
+            "property": "cards",
+            "message": "read cards and investigators through cardOf / invOf / cardsOf / invsOf (src/engine/core.ts, ADR-0022)"
+          },
+          {
+            "object": "held",
+            "property": "invs",
+            "message": "read cards and investigators through cardOf / invOf / cardsOf / invsOf (src/engine/core.ts, ADR-0022)"
+          }
+        ]
+      }
+    },
+    {
+      "files": ["src/ui/**/*.test.ts", "src/ui/**/*.test.tsx", "src/net/**/*.test.ts"],
+      "rules": {
+        "no-restricted-properties": "off"
       }
     }
   ]

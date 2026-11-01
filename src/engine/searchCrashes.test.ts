@@ -27,8 +27,8 @@ function resolve(g: G, code: string, fn: string, ctx: EffCtx) {
 describe("an investigator defeated before their test starts", () => {
   it("takes no test (Roland's Elder Sign read the location he no longer had)", () => {
     const g = game([R, D]);
-    inv(g, R).status = "defeated";
-    inv(g, R).location = null;
+    g.s.invs[R].status = "defeated";
+    g.s.invs[R].location = null;
     startTest(g, {
       inv: R,
       skill: "willpower",
@@ -44,8 +44,8 @@ describe("an investigator defeated before their test starts", () => {
 describe("a card's effect after the action's attack of opportunity defeated its player", () => {
   const defeated = () => {
     const g = game([R, D]);
-    inv(g, R).status = "defeated";
-    inv(g, R).location = null;
+    g.s.invs[R].status = "defeated";
+    g.s.invs[R].location = null;
     return g;
   };
 
@@ -72,7 +72,7 @@ describe("with the expansion packs", () => {
   it("Interrogate (05020): no other location with a clue, no clue elsewhere and no crash", () => {
     const g = game();
     const here = inv(g, R).location;
-    for (const l of locations(g)) if (l.id !== here) l.clues = 0;
+    for (const l of locations(g)) if (l.id !== here) g.s.cards[l.id].clues = 0;
     const n = g.s.queue.length;
     expect(() => call(g, "05020", "elsewhere", { you: R })).not.toThrow();
     expect(g.s.queue.length).toBe(n);
@@ -87,7 +87,7 @@ describe("with the expansion packs", () => {
     const offered = () =>
       legalTurnActions(g, R).some((o) => o.label.startsWith("Lucky Charm: move 1 damage"));
     expect(offered()).toBe(false);
-    inv(g, R).damage = 1;
+    g.s.invs[R].damage = 1;
     // the damage needs another card of yours with room for it
     expect(offered()).toBe(false);
     const cop = giveCard(g, R, "01018");

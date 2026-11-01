@@ -1,5 +1,6 @@
 // Herald of Flame — after it attacks: heal 1 damage from each enemy at its location
 import {
+  addCounter,
   cardIf,
   type CardScript,
   def,
@@ -15,7 +16,7 @@ export default {
       if (ctx.enemy !== ctx.source) return;
       for (const e of enemiesAt(g, cardIf(g, ctx.source!)?.location ?? null))
         if (e.damage > 0) {
-          e.damage--;
+          addCounter(g, e.id, "damage", -1);
           emit(g, "heal", `${def(g, e.id).name} heals 1 damage`, {
             card: e.id,
             data: { damage: 1, horror: 0 },

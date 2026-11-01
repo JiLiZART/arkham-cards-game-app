@@ -1,7 +1,6 @@
 // Delay the Inevitable — attached to an investigator at your location; cancels the damage and horror just dealt to them, and costs 2 resources each mythos phase
 import {
   ask,
-  card,
   type CardScript,
   discard,
   type EffCtx,
@@ -13,6 +12,7 @@ import {
   invName,
   invsAt,
   moveCard,
+  setController,
   type Step,
 } from "../../../../src/engine/api";
 
@@ -62,7 +62,7 @@ export default {
       );
       if (who === undefined) return;
       moveCard(g, ctx.source!, "play");
-      card(g, ctx.source!).controller = who;
+      setController(g, ctx.source!, who);
       emit(g, "play", `Delay the Inevitable is attached to ${invName(g, who)}`, {
         inv: who,
         card: ctx.source!,

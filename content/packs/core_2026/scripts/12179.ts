@@ -1,5 +1,6 @@
 // Elokoss (Faint Embers) — spend clues to place 1 clue on her; 5 clues: (→R2)
 import {
+  addCounter,
   cardIf,
   type CardScript,
   type EffCtx,
@@ -13,7 +14,7 @@ export default {
     seal(g: G, ctx: EffCtx) {
       const e = cardIf(g, ctx.source!);
       if (e?.zone !== "enemy") return;
-      e.clues++;
+      addCounter(g, e.id, "clues", 1);
       emit(g, "clues", `1 clue is placed on Elokoss (${e.clues}/5)`, {
         card: e.id,
         data: { n: 1 },

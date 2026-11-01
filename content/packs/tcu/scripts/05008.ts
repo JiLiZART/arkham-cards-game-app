@@ -1,12 +1,13 @@
 // Rational Thought — 4 horror in Carolyn's threat area; her horror heals go on it alone, and it leaves when it has none
 import {
+  addCounter,
   card,
-  discard,
-  emit,
-  inv,
   type CardScript,
+  discard,
   type EffCtx,
+  emit,
   type G,
+  inv,
 } from "../../../../src/engine/api";
 
 export default {
@@ -24,7 +25,7 @@ export default {
       // ponytail: another investigator healing Carolyn heals Carolyn; the choice to heal Rational Thought instead isn't offered
       if (req.target === inv(g, ctx.you).cardId) {
         const take = Math.min(req.n, rt.horror);
-        rt.horror -= take;
+        addCounter(g, rt.id, "horror", -take);
         if (take)
           emit(g, "heal", `Rational Thought heals ${take} horror`, {
             inv: ctx.you,

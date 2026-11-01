@@ -15,7 +15,7 @@ function amuletInPlay(g: G) {
   const id =
     findByCode(g, AMULET, ["hand", "deck", "discard"])?.id ?? createCard(g, AMULET, "limbo", WENDY);
   moveCard(g, id, "play");
-  card(g, id).controller = WENDY;
+  g.s.cards[id].controller = WENDY;
 }
 
 /** pass reaction windows until one offers an option matching `want` (or none is left) */
@@ -92,7 +92,7 @@ describe("Wendy's Amulet", () => {
     r = mutate(r, (g) => {
       amuletInPlay(g);
       lucky = toDiscard(g, "01080");
-      inv(g, WENDY).resources = 5;
+      g.s.invs[WENDY].resources = 5;
     });
     r = passUntil(commitDone(pick(r, "Investigate Study")), /Lucky/); // intellect 3 - 2 vs shroud 2
     r = passUntil(pick(r, /Lucky/));
@@ -105,7 +105,7 @@ describe("Wendy's Amulet", () => {
     r = mutate(r, (g) => {
       amuletInPlay(g);
       toDiscard(g, "01079");
-      inv(g, WENDY).resources = 5;
+      g.s.invs[WENDY].resources = 5;
     });
     r = passUntil(commitDone(pick(r, "Investigate Study")), /Look what/);
     expect(options(r).some((o) => /Look what/.test(o))).toBe(true);

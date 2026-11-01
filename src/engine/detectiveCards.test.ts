@@ -1,7 +1,7 @@
 /** the Seeker/Rogue player cards of the starter decks that carry Fingerprint Kit (Joe Diamond, Carolyn Fern, Trish Scarborough) */
 import { beforeAll, describe, expect, it } from "vitest";
 import { loadPack } from "../content";
-import { card, def, inv, type G } from "./core";
+import { def, inv, type G } from "./core";
 import { createGame } from "./engine";
 import { overfullSlot, playCost, playable } from "./rules/cards";
 import type { Result } from "./engine";
@@ -33,7 +33,7 @@ describe("Laboratory Assistant", () => {
   it("draws 2 cards when it enters play and raises the hand size by 2", () => {
     let r = game([ROLAND], (x) => {
       hand(x, ROLAND, "02020");
-      inv(x, ROLAND).resources = 5;
+      x.s.invs[ROLAND].resources = 5;
     });
     const before = r.state.invs[ROLAND].deck.length;
     r = pick(r, /^Play Laboratory Assistant/);
@@ -79,7 +79,7 @@ describe("Breaking and Entering", () => {
     let enemy = "";
     let r = game([ROLAND], (x) => {
       hand(x, ROLAND, "07114");
-      inv(x, ROLAND).resources = 5;
+      x.s.invs[ROLAND].resources = 5;
       enemy = enemyHere(x, ROLAND);
     });
     r = commitDone(pick(r, /^Play Breaking and Entering/));
@@ -97,7 +97,7 @@ describe("Scene of the Crime", () => {
   const scene = (enemy: boolean) =>
     game([ROLAND], (x) => {
       hand(x, ROLAND, "04103");
-      inv(x, ROLAND).resources = 5;
+      x.s.invs[ROLAND].resources = 5;
       if (enemy) enemyHere(x, ROLAND, undefined, false);
     });
 
@@ -121,9 +121,9 @@ describe("Overzealous", () => {
   it("draws the top encounter card, and that draw is followed by another", () => {
     let r = game([ROLAND], (x) => {
       const id = hand(x, ROLAND, "03040");
-      const me = inv(x, ROLAND);
+      const me = x.s.invs[ROLAND];
       me.hand = me.hand.filter((h) => h !== id);
-      card(x, id).zone = "deck";
+      x.s.cards[id].zone = "deck";
       me.deck.unshift(id);
     });
     const from = r.state.log.length;
@@ -142,19 +142,19 @@ describe("Steadfast and Curiosity", () => {
 
   it("Steadfast gains willpower and combat by total remaining health and sanity (Roland: 9 + 5)", () => {
     expect(icons("05022", "combat", () => {})).toBe(3);
-    expect(icons("05022", "combat", (x) => (inv(x, ROLAND).damage = 6))).toBe(2);
-    expect(icons("05022", "willpower", (x) => (inv(x, ROLAND).damage = 8))).toBe(2);
+    expect(icons("05022", "combat", (x) => (x.s.invs[ROLAND].damage = 6))).toBe(2);
+    expect(icons("05022", "willpower", (x) => (x.s.invs[ROLAND].damage = 8))).toBe(2);
     expect(
       icons("05022", "willpower", (x) => {
-        inv(x, ROLAND).damage = 8;
-        inv(x, ROLAND).horror = 2;
+        x.s.invs[ROLAND].damage = 8;
+        x.s.invs[ROLAND].horror = 2;
       }),
     ).toBe(1);
   });
 
   it("Curiosity gains willpower and intellect by cards in hand", () => {
     const handOf = (n: number) => (x: G) => {
-      const me = inv(x, ROLAND);
+      const me = x.s.invs[ROLAND];
       while (me.hand.length < n + 1) hand(x, ROLAND, "01088");
       me.hand = [
         ...me.hand.filter((h) => x.s.cards[h].code !== "05026").slice(0, n),
@@ -172,10 +172,10 @@ describe("Interrogate", () => {
     let hall = "";
     let r = game([ROLAND], (x) => {
       hand(x, ROLAND, "05020");
-      inv(x, ROLAND).resources = 5;
+      x.s.invs[ROLAND].resources = 5;
       enemyHere(x, ROLAND, ACOLYTE, false); // Humanoid, 1 damage: difficulty 4
       hall = addLocation(x, HALLWAY, [[STUDY, HALLWAY]]);
-      card(x, hall).clues = 2;
+      x.s.cards[hall].clues = 2;
     });
     r = commitDone(pick(r, /^Play Interrogate/));
     expect(clues(r)).toBe(2); // Roland combat 4 with a 0 token
@@ -185,7 +185,7 @@ describe("Interrogate", () => {
   it("can't be played without a Humanoid enemy at your location", () => {
     const r = game([ROLAND], (x) => {
       hand(x, ROLAND, "05020");
-      inv(x, ROLAND).resources = 5;
+      x.s.invs[ROLAND].resources = 5;
       enemyHere(x, ROLAND, "01159", false); // Swarm of Rats: a Creature
     });
     expect(options(r).some((o) => /Interrogate/.test(o))).toBe(false);
@@ -197,10 +197,10 @@ describe("Connect the Dots", () => {
     let low = "";
     let r = game([ROLAND], (x) => {
       hand(x, ROLAND, "05025");
-      inv(x, ROLAND).resources = 5;
-      card(x, inv(x, ROLAND).location!).clues = 1;
+      x.s.invs[ROLAND].resources = 5;
+      x.s.cards[inv(x, ROLAND).location!].clues = 1;
       low = addLocation(x, HALLWAY, [[STUDY, HALLWAY]]); // Hallway: shroud 1, the Study: 2
-      card(x, low).clues = 3;
+      x.s.cards[low].clues = 3;
     });
     r = commitDone(pick(r, /^Investigate/));
     r = pick(r, /Connect the Dots/);
@@ -213,7 +213,7 @@ describe("Delay the Inevitable", () => {
   const delayed = () => {
     let r = game([ROLAND], (x) => {
       hand(x, ROLAND, "05021");
-      inv(x, ROLAND).resources = 5;
+      x.s.invs[ROLAND].resources = 5;
     });
     r = pick(r, /^Play Delay the Inevitable/);
     return r;
@@ -309,8 +309,8 @@ describe("Unsolved Case", () => {
     let hall = "";
     let r = game([ROLAND], (x) => {
       id = hand(x, ROLAND, "05010");
-      inv(x, ROLAND).resources = 5;
-      inv(x, ROLAND).clues = 2;
+      x.s.invs[ROLAND].resources = 5;
+      x.s.invs[ROLAND].clues = 2;
       hall = addLocation(x, HALLWAY, [[STUDY, HALLWAY]]); // shroud 1, below the Study's 2
     });
     const study = r.state.invs[ROLAND].location!;
@@ -357,7 +357,7 @@ describe("Carolyn Fern, Hypnotic Therapy and Rational Thought", () => {
         ),
       ),
       (x) => {
-        inv(x, CAROLYN).horror = 3;
+        x.s.invs[CAROLYN].horror = 3;
         prep(x);
       },
     );
@@ -389,9 +389,9 @@ describe("Carolyn Fern, Hypnotic Therapy and Rational Thought", () => {
     let r = carolyn((x) => {
       inPlay(x, CAROLYN, "02030");
       rt = hand(x, CAROLYN, "05008");
-      const m = inv(x, CAROLYN);
+      const m = x.s.invs[CAROLYN];
       m.hand = m.hand.filter((h) => h !== rt);
-      card(x, rt).zone = "deck";
+      x.s.cards[rt].zone = "deck";
       m.deck.unshift(rt);
     });
     r = pick(r, "Draw 1 card");

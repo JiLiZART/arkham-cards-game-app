@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import { loadPack } from "../content";
-import { card, def, findByCode, inv } from "./core";
+import { def, findByCode, inv } from "./core";
 import { spendsOnlyUses } from "./rules/cards";
 import { commitDone, gOf, giveCard, mutate, pick, putEnemy, skipMulligans, start } from "./testkit";
 import type { CardDef } from "../content/schema";
@@ -13,7 +13,7 @@ beforeAll(() => loadPack("tcu"));
 function withAsset(code: string, uses: number) {
   let r = skipMulligans(start("the-gathering", [ROLAND], 1, { chaosBag: ["0"] as never }));
   r = mutate(r, (g) => {
-    inv(g, ROLAND).resources = 10;
+    g.s.invs[ROLAND].resources = 10;
     giveCard(g, ROLAND, code);
   });
   r = pick(
@@ -23,7 +23,7 @@ function withAsset(code: string, uses: number) {
     ),
   );
   const id = Object.values(r.state.cards).find((c) => c.code === code && c.zone === "play")!.id;
-  r = mutate(r, (g) => (card(g, id).uses = uses));
+  r = mutate(r, (g) => (g.s.cards[id].uses = uses));
   return { r, id };
 }
 const findInHand = (r: ReturnType<typeof start>, code: string) =>

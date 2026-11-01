@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { cardText, t } from "../../../content/i18n";
 import { SKILLS } from "../../../content/schema";
-import { maxHealth, maxSanity, skillValue } from "../../../engine/core";
+import { invOf, invOfIf, maxHealth, maxSanity, skillValue } from "../../../engine/core";
 import { handLimit } from "../../../engine/rules/investigators";
 import type { ChoiceOption, GameState, InvId } from "../../../engine/types";
 import { db, gameStore, useGame } from "../../state/context";
@@ -45,7 +45,7 @@ export function FlashStat(props: Parameters<typeof Stat>[0]) {
 
 export function invNumbers(game: GameState, i: InvId) {
   const g = { s: game, db, events: [] };
-  const st = game.invs[i];
+  const st = invOf(game, i);
   return {
     health: maxHealth(g, i) - st.damage,
     maxHealth: maxHealth(g, i),
@@ -199,13 +199,13 @@ export function StatBody({
 export function StatBar() {
   const game = useGame((s) => s.game) as GameState;
   const shown = useShown();
-  const cardId = shown ? game.invs[shown]?.cardId : null;
+  const cardId = shown ? invOfIf(game, shown)?.cardId : null;
   const dimmed = useDimmed(shown ?? "");
   // the investigator's own ability, when the pending choice offers it (the sheet keeps the same buttons for the phone)
   const abilities = abilityOptionsOf(game, shown ?? "");
   const options = useCardOptions([cardId]).filter((o) => abilities.some((x) => x.id === o.id));
   const { width, height } = useViewport();
-  if (!shown || !game.invs[shown] || !cardId) return null;
+  if (!shown || !invOfIf(game, shown) || !cardId) return null;
   // full size at 1080p and up, smaller on a smaller window (the fan makes room for it at the same size)
   return (
     <div

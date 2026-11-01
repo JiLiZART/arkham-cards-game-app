@@ -17,6 +17,7 @@ import { moment } from "../SoundLayer";
 import { DeckViewer } from "../DeckViewer";
 import { AssetsModal } from "../AssetsModal";
 import styles from "./Modals.module.css";
+import { cardOfIf } from "../../../engine/core";
 
 /** a native modal dialog: Escape and focus trapping come from <dialog>; a click on the backdrop closes it */
 export function Modal({
@@ -138,7 +139,7 @@ export function CardModal({ id }: { id: InstId }) {
   const locale = useGame((s) => s.locale);
   const close = () => useView.getState().setModal(null);
   const options = useCardOptions([id]);
-  const inst = game.cards[id];
+  const inst = cardOfIf(game, id);
   if (!inst) return null;
   const d = db.cards[inst.code];
   const tx = cardText(db, inst.code, locale);

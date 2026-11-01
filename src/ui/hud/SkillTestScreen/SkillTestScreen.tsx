@@ -38,6 +38,7 @@ import { DrawStage } from "../TokenDraw";
 import { moment } from "../SoundLayer";
 import { cx } from "../../components/cx";
 import styles from "./SkillTestScreen.module.css";
+import { cardOf, cardOfIf } from "../../../engine/core";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);
@@ -80,7 +81,7 @@ function snapFromEvent(e: GameEvent, game: GameState): Snap {
   const base = isResult ? (d.base ?? 0) : (d.value ?? 0);
   const icons = isResult && d.icons ? [d.icons] : [];
   const value = isResult ? (d.value ?? base) : base;
-  const card = e.card && game.cards[e.card] ? e.card : null;
+  const card = e.card && cardOfIf(game, e.card) ? e.card : null;
   return {
     id: d.testId,
     inv: e.inv ?? game.order[0],
@@ -194,7 +195,7 @@ function SubjectView({ subject, finish }: { subject: Subject; finish: ChoiceOpti
       </div>
     );
   }
-  const inst = game.cards[subject.id];
+  const inst = cardOfIf(game, subject.id);
   if (!inst) return null;
   const back = db.cards[inst.code].type === "location" && !inst.revealed;
   return (
@@ -223,8 +224,8 @@ function SubjectView({ subject, finish }: { subject: Subject; finish: ChoiceOpti
 /** "Investigate: Study · shroud 2", "Willpower test · 3 vs 3" */
 function lineOf(snap: Snap, calc: CalcParts, game: GameState, locale: string): string {
   const name =
-    snap.subject.kind === "card" && game.cards[snap.subject.id]
-      ? cardText(db, game.cards[snap.subject.id].code, locale).name
+    snap.subject.kind === "card" && cardOfIf(game, snap.subject.id)
+      ? cardText(db, cardOf(game, snap.subject.id).code, locale).name
       : "";
   const skill = t(db, locale, `stat.${snap.skill}`);
   const key =

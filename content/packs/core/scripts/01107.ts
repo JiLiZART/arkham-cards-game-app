@@ -11,6 +11,7 @@ import {
   type G,
   inv,
   push,
+  setCardLocation,
   stepsToward,
   turnOrder,
 } from "../../../../src/engine/api";
@@ -32,7 +33,7 @@ export default {
         const next = stepsToward(g, e.location, [parlor.id]).find((l) => canEnemyEnter(g, e.id, l));
         if (next) {
           const from = e.location;
-          e.location = next;
+          setCardLocation(g, e.id, next);
           emit(g, "enemyMove", `${def(g, e.id).name} moves toward the Parlor`, {
             card: e.id,
             data: { from, to: next },

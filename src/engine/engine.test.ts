@@ -129,7 +129,7 @@ describe("action validation", () => {
   it("rejects a move with no actions left", () => {
     let r = gathering();
     r = mutate(r, (g) => {
-      inv(g, ROLAND).actionsLeft = 0;
+      g.s.invs[ROLAND].actionsLeft = 0;
     });
     expect(options(r).some((l) => /^(Investigate|Draw|Gain)/.test(l))).toBe(false);
     expect(options(r)).toContain("End turn");
@@ -159,7 +159,7 @@ describe("round structure", () => {
     r = mutate(r, (g) => {
       for (const code of ["01088", "01088", "01089", "01089", "01092"]) giveCard(g, ROLAND, code);
       while (inv(g, ROLAND).hand.length < 10) giveCard(g, ROLAND, "01086");
-      inv(g, ROLAND).hand.length = 10;
+      g.s.invs[ROLAND].hand.length = 10;
     });
     // end turn → enemy phase → upkeep draws 1 (11 cards) → discard 3
     r = pick(r, "End turn");
@@ -326,7 +326,7 @@ describe("skill tests", () => {
   it("auto-fail fails regardless of skill", () => {
     let r = gathering([ROLAND], ["autoFail"]);
     r = mutate(r, (g) => {
-      card(g, locId(g, "01111")).clues = 2;
+      g.s.cards[locId(g, "01111")].clues = 2;
     });
     r = pick(r, "Investigate Study");
     r = commitDone(r);
@@ -494,8 +494,8 @@ describe("damage & defeat", () => {
   it("investigator defeated by horror", () => {
     let r = gathering([DAISY], ["0"]);
     r = mutate(r, (g) => {
-      inv(g, DAISY).horror = 8;
-      inv(g, DAISY).clues = 2;
+      g.s.invs[DAISY].horror = 8;
+      g.s.invs[DAISY].clues = 2;
       putEnemy(g, "01160", locId(g, "01111"), DAISY);
     });
     r = pick(r, "Draw 1 card"); // provokes: 1 damage 1 horror
@@ -513,7 +513,7 @@ describe("act & agenda", () => {
   it("agenda advances when doom reaches its threshold in the mythos phase", () => {
     let r = gathering([ROLAND], ["0"]);
     r = mutate(r, (g) => {
-      card(g, g.s.agenda!).doom = 2;
+      g.s.cards[g.s.agenda!].doom = 2;
     });
     const first = r.state.agenda;
     r = pick(r, "End turn");
@@ -531,8 +531,8 @@ describe("act & agenda", () => {
     let r = skipMulligans(start("the-gathering", [ROLAND, AGNES], 1, { chaosBag: ["0"] as never }));
     r = pick(r, "Roland Banks");
     r = mutate(r, (g) => {
-      inv(g, ROLAND).clues = 3;
-      inv(g, AGNES).clues = 1;
+      g.s.invs[ROLAND].clues = 3;
+      g.s.invs[AGNES].clues = 1;
     });
     r = pick(r, /Advance act \(spend 4 clues/);
     const g = gOf(r);
@@ -561,7 +561,7 @@ describe("player cards", () => {
   it("slot limit: a third hand asset forces a discard", () => {
     let r = gathering([ROLAND], ["0"]);
     r = mutate(r, (g) => {
-      inv(g, ROLAND).resources = 20;
+      g.s.invs[ROLAND].resources = 20;
       for (const code of ["01086", "01087", "01016"]) giveCard(g, ROLAND, code);
     });
     r = pick(r, /^Play Knife/);
@@ -579,10 +579,10 @@ describe("player cards", () => {
   it("slot limit: an asset in the threat area holds its slot too", () => {
     let r = gathering([ROLAND], ["0"]);
     r = mutate(r, (g) => {
-      inv(g, ROLAND).resources = 20;
+      g.s.invs[ROLAND].resources = 20;
       const knife = giveCard(g, ROLAND, "01086");
       moveCard(g, knife, "threat", { inv: ROLAND });
-      card(g, knife).controller = ROLAND;
+      g.s.cards[knife].controller = ROLAND;
       for (const code of ["01087", "01016"]) giveCard(g, ROLAND, code);
     });
     r = pick(r, /^Play Flashlight/);
@@ -598,7 +598,7 @@ describe("player cards", () => {
     const ids = ["01087", "01016"].map((code) => {
       const id = giveCard(g, ROLAND, code);
       moveCard(g, id, "play");
-      card(g, id).controller = ROLAND;
+      g.s.cards[id].controller = ROLAND;
       return id;
     });
     expect(overfullSlot(g, ROLAND, ids[1])).toBeNull();
@@ -610,22 +610,22 @@ describe("player cards", () => {
     const r = gathering([ROLAND], ["0"]);
     const g = gOf(r);
     const glass = giveCard(g, ROLAND, "01030");
-    inv(g, ROLAND).resources = 0;
+    g.s.invs[ROLAND].resources = 0;
     expect(playBlock(g, ROLAND, glass)).toEqual({ reason: "resources", cost: 1 });
-    inv(g, ROLAND).resources = 5;
+    g.s.invs[ROLAND].resources = 5;
     expect(playBlock(g, ROLAND, glass)).toBeNull();
     const voices = createCard(g, "01165", "limbo", null);
     moveCard(g, voices, "threat", { inv: ROLAND });
-    card(g, voices).controller = ROLAND;
+    g.s.cards[voices].controller = ROLAND;
     expect(playBlock(g, ROLAND, glass)).toEqual({ reason: "forbidden", by: voices });
   });
 
   it("weakness drawn: revelation resolves immediately and it leaves the hand", () => {
     let r = gathering([ROLAND], ["0"]);
     r = mutate(r, (g) => {
-      inv(g, ROLAND).resources = 4;
+      g.s.invs[ROLAND].resources = 4;
       const para = Object.values(g.s.cards).find((c) => c.code === "01097")!;
-      const me = inv(g, ROLAND);
+      const me = g.s.invs[ROLAND];
       for (const z of ["deck", "hand", "discard"] as const)
         me[z] = me[z].filter((x) => x !== para.id);
       me.deck.unshift(para.id);
@@ -641,7 +641,7 @@ describe("player cards", () => {
     let r = gathering([ROLAND], ["0"]);
     r = mutate(r, (g) => {
       const para = Object.values(g.s.cards).find((c) => c.code === "01097")!;
-      const me = inv(g, ROLAND);
+      const me = g.s.invs[ROLAND];
       for (const z of ["deck", "hand", "discard"] as const)
         me[z] = me[z].filter((x) => x !== para.id);
       me.deck.unshift(para.id);
@@ -671,7 +671,7 @@ describe("player cards", () => {
     let r = gathering([ROLAND], ["0"]);
     let ghoul = "";
     r = mutate(r, (g) => {
-      inv(g, ROLAND).resources = 5;
+      g.s.invs[ROLAND].resources = 5;
       giveCard(g, ROLAND, "01024");
       ghoul = putEnemy(g, "01160", locId(g, "01111"), null);
       g.s.cards[ghoul].exhausted = true;
