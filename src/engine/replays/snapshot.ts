@@ -3,7 +3,8 @@
  * state's storage is (ADR-0023). Cards in creation order with every field, investigators in turn order without their
  * piles, every non-empty pile by name, and the scenario's own scalars, flags and pending choice.
  */
-import { cardsOf, invsOf, pileMap } from "../core";
+import { cardCopyOf, cardsOf, invsOf, pileMap } from "../core";
+import { flagsForSnapshot } from "../flags";
 import type { GameState } from "../types";
 
 export interface Snapshot {
@@ -28,7 +29,7 @@ const NOT_SCENARIO = new Set([
 
 export function snapshotOf(s: GameState): Snapshot {
   return {
-    cards: cardsOf(s).map((c) => ({ ...c })),
+    cards: cardsOf(s).map((c) => ({ ...cardCopyOf(s, c.id) })),
     investigators: invsOf(s).map((i) => {
       const { deck, hand, discard, ...fields } = { ...i };
       void [deck, hand, discard];
@@ -39,6 +40,9 @@ export function snapshotOf(s: GameState): Snapshot {
         .filter(([, ids]) => ids?.length)
         .map(([name, ids]) => [name, [...(ids ?? [])]]),
     ),
-    scenario: Object.fromEntries(Object.entries(s).filter(([key]) => !NOT_SCENARIO.has(key))),
+    scenario: {
+      ...Object.fromEntries(Object.entries(s).filter(([key]) => !NOT_SCENARIO.has(key))),
+      flags: flagsForSnapshot(s),
+    },
   };
 }

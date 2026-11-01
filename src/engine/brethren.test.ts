@@ -230,8 +230,7 @@ describe("Spreading Flames", () => {
 describe("Smoke and Mirrors", () => {
   it("deals the suspects beneath six locations and sets the harbinger aside", () => {
     const r = begin("smoke-and-mirrors", [R, D]);
-    const beneath = Object.keys(r.state.flags).filter((k) => k.startsWith("beneath:"));
-    expect(beneath).toHaveLength(6);
+    expect(Object.keys(r.state.world.tables.beneath)).toHaveLength(6);
     expect(r.state.flags.harbinger).toBeTruthy();
     expect(codesIn(r, "encounterDeck").some((c) => /^1213[89]$|^1214[0-4]$/.test(c))).toBe(false);
     expect(card(gOf(r), r.state.agenda!).doom).toBe(3); // 1 per investigator, 1 for the quiet campus
@@ -248,10 +247,11 @@ describe("Smoke and Mirrors", () => {
       invStateIn(g.s, R).clues = 2;
       g.s.chaosBag = ["+1"];
       const cornelia = allCardRecsIn(g.s).find((c) => c.code === "12140")!;
-      for (const k of Object.keys(g.s.flags)) if (g.s.flags[k] === cornelia.id) delete g.s.flags[k];
+      for (const [k, v] of Object.entries(g.s.world.tables.beneath))
+        if (v === cornelia.id) delete g.s.world.tables.beneath[k];
       if (g.s.flags.harbinger === cornelia.id) g.s.flags.harbinger = "none";
       moveCard(g, cornelia.id, "setAside");
-      g.s.flags[`beneath:${north.id}`] = cornelia.id;
+      g.s.world.tables.beneath[north.id] = cornelia.id;
     });
     r = toTurn(pick(r, /^Augurs of Flame/));
     const cornelia = allCardRecsIn(r.state).find((c) => c.code === "12140")!;

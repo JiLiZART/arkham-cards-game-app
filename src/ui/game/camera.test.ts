@@ -1,7 +1,7 @@
 import { skipMulligans, start } from "../../engine/testkit";
 import { describe, expect, it } from "vitest";
 import { clampCam, eventFocus, fitCam, focusCam, panBy, zoomAt, zoomLimits } from "./camera";
-import { cardRecIn, invStateIn, withCardsIn } from "../../engine/records";
+import { cardDataIn, cardRecIn, invStateIn, withCardsIn } from "../../engine/records";
 
 const bounds = { x0: -10, x1: 10, z0: -5, z1: 5 };
 const view = { w: 1000, h: 500 };
@@ -87,7 +87,7 @@ describe("eventFocus", () => {
   const ghoul = "g1";
   const withGhoul = withCardsIn(game, {
     [ghoul]: {
-      ...cardRecIn(game, study),
+      ...cardDataIn(game, study),
       id: ghoul,
       code: "01160",
       zone: "enemy" as const,

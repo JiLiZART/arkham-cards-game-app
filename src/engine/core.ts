@@ -15,16 +15,19 @@ import {
   allCardRecs,
   allCardRecsIn,
   allInvRecs,
+  cardDataIn,
   cardRec,
   cardRecIf,
   cardRecIfIn,
   invRec,
   invRecIf,
   invViewIn,
+  patchedCardsIn,
   pileKey,
   pileRead,
   pileRec,
   pilesNamed,
+  putCardIn,
 } from "./records";
 import type {
   CardInst,
@@ -94,6 +97,8 @@ export const invOfIf = (
 ): InvView | undefined => (s && id ? invViewIn(s, id) : undefined);
 /** every card of a state, in creation order */
 export const cardsOf = (s: Pick<GameState, "world">): readonly CardView[] => allCardRecsIn(s);
+/** a card's fields as a plain object, a copy (a view spreads to its id alone): for a recording, or a copy to edit */
+export const cardCopyOf = (s: Pick<GameState, "world">, id: InstId): CardInst => cardDataIn(s, id);
 /** every investigator of a state, in turn order */
 export const invsOf = (s: Pick<GameState, "world" | "order">): readonly InvView[] =>
   s.order.map((i) => invViewIn(s, i)!);
@@ -111,12 +116,8 @@ export const pileOf = (s: Pick<GameState, "world">, name: PileName): readonly In
  * A copy of a state with some cards' fields overridden, for a view of the game that differs from the game (the table
  * while events wait to play). The state given is not changed; cards not patched are shared with it.
  */
-export function patchedState(s: GameState, patches: Record<InstId, Partial<CardInst>>): GameState {
-  const card = { ...s.world.tables.card };
-  for (const [id, patch] of Object.entries(patches))
-    if (card[id]) card[id] = { ...card[id], ...patch };
-  return { ...s, world: { ...s.world, tables: { ...s.world.tables, card } } };
-}
+export const patchedState = (s: GameState, patches: Record<InstId, Partial<CardInst>>): GameState =>
+  patchedCardsIn(s, patches);
 
 // ---------- what scripts read about the scenario ----------
 /** a card instance, or undefined when the id is absent or names no card */
@@ -426,7 +427,7 @@ export function nextId(g: G) {
 export function createCard(g: G, code: string, zone: Zone, owner: InvId | null = null): InstId {
   if (!g.db.cards[code]) throw new Error(`unknown card ${code}`);
   const id = nextId(g);
-  g.s.world.tables.card[id] = {
+  putCardIn(g.s, {
     id,
     code,
     owner,
@@ -443,8 +444,7 @@ export function createCard(g: G, code: string, zone: Zone, owner: InvId | null =
     location: null,
     engagedWith: null,
     attachedTo: null,
-  };
-  g.s.world.entities.push(id);
+  });
   const key = pileKey(zone, owner);
   if (key) pileRec(g, key).push(id);
   return id;
@@ -609,8 +609,20 @@ export function discard(g: G, id: InstId) {
 }
 
 // ---------- queries ----------
-export const cardsIn = (g: G, zone: Zone): CardView[] =>
-  allCardRecs(g).filter((c) => c.zone === zone);
+/** the cards in a zone, in creation order: read off the zone table, so a view is made only for the cards that match */
+export function cardsIn(g: G, zone: Zone): CardView[] {
+  const zones = g.s.world.tables.zone;
+  const out: CardView[] = [];
+  for (const id in zones) if (zones[id] === zone) out.push(cardRec(g, id));
+  return out;
+}
+/** the cards in any of the zones, in creation order (as `cardsIn`, for several zones) */
+function cardsInAny(g: G, zones: ReadonlySet<Zone>): CardInst[] {
+  const table = g.s.world.tables.zone;
+  const out: CardInst[] = [];
+  for (const id in table) if (zones.has(table[id])) out.push(cardRec(g, id));
+  return out;
+}
 export const locations = (g: G) => cardsIn(g, "location");
 export const enemies = (g: G) => cardsIn(g, "enemy");
 export const enemiesAt = (g: G, loc: InstId | null) => enemies(g).filter((e) => e.location === loc);
@@ -745,7 +757,7 @@ export interface AppliedMod {
   source: InstId | null;
 }
 
-const MOD_ZONES: Zone[] = [
+const MOD_ZONES: ReadonlySet<Zone> = new Set<Zone>([
   "play",
   "threat",
   "attached",
@@ -754,7 +766,7 @@ const MOD_ZONES: Zone[] = [
   "act",
   "agenda",
   "investigator",
-];
+]);
 
 /** a card the investigator can't play or commit now (Languor) */
 export function cardBlocked(g: G, i: InvId, cardId: InstId): boolean {
@@ -771,9 +783,9 @@ export function blankedCards(g: G): Set<InstId> {
   // blankText comes only from temporary effects (Mind Wipe) or card scripts (Stubborn Detective), never from constant abilities
   const out = new Set<InstId>();
   for (const t of g.s.tempMods) if (t.mod.flag === "blankText") out.add(t.target);
-  for (const c of allCardRecs(g)) {
+  for (const c of cardsInAny(g, MOD_ZONES)) {
     const fn = g.db.scripts[c.code]?.blanks;
-    if (fn && MOD_ZONES.includes(c.zone)) for (const id of fn(g, c.id)) out.add(id);
+    if (fn) for (const id of fn(g, c.id)) out.add(id);
   }
   return out;
 }
@@ -795,8 +807,7 @@ export function abilitiesOf(
 export function allMods(g: G): AppliedMod[] {
   const out: AppliedMod[] = [];
   const blanked = blankedCards(g);
-  for (const c of allCardRecs(g)) {
-    if (!MOD_ZONES.includes(c.zone)) continue;
+  for (const c of cardsInAny(g, MOD_ZONES)) {
     const abilities = c.zone === "location" && !c.revealed ? [] : abilitiesOf(g, c.id, blanked);
     for (const a of abilities) {
       if (a.kind !== "constant" || !a.modifiers) continue;

@@ -8,7 +8,9 @@
  */
 import type { G } from "./core";
 import type {
+  CardIdentity,
   CardInst,
+  CardTables,
   GameState,
   InstId,
   InvId,
@@ -23,41 +25,200 @@ type HasWorld = { world: World };
 
 export const newWorld = (): World => ({
   entities: [],
-  tables: { card: {}, investigator: {} },
+  tables: {
+    card: {},
+    investigator: {},
+    zone: {},
+    owner: {},
+    controller: {},
+    exhausted: {},
+    revealed: {},
+    damage: {},
+    horror: {},
+    clues: {},
+    doom: {},
+    uses: {},
+    resources: {},
+    location: {},
+    engagedWith: {},
+    attachedTo: {},
+    noReady: {},
+    surge: {},
+    dying: {},
+    costMod: {},
+    beneath: {},
+    aside: {},
+    xp: {},
+    hunch: {},
+    hunchRevealed: {},
+    attacked: {},
+    noAttack: {},
+  },
   piles: {},
 });
 
 // ---------- cards ----------
-/** a card's record in a state (a record lookup, as indexing was: undefined at runtime for an id the game doesn't have) */
-export const cardRecIn = (s: HasWorld, id: InstId): CardInst => s.world.tables.card[id];
+type CardField = keyof CardTables;
+/** the value a field has when its table has no entry for a card (a zone has no default: every card has one) */
+const CARD_DEFAULT: { [F in CardField]: unknown } = {
+  zone: undefined,
+  owner: null,
+  controller: null,
+  exhausted: false,
+  revealed: false,
+  damage: 0,
+  horror: 0,
+  clues: 0,
+  doom: 0,
+  uses: 0,
+  resources: 0,
+  location: null,
+  engagedWith: null,
+  attachedTo: null,
+};
+const CARD_FIELDS = Object.keys(CARD_DEFAULT) as CardField[];
+
+/**
+ * A card as one object whose fields always show the tables: an accessor per field that reads its table (the default
+ * for an absent entry) and writes it (deleting the entry for the default). The accessors sit on the prototype, so
+ * making a view is cheap; `toJSON` gives the whole record. One per card and world (see `viewOf`). Not stored.
+ */
+class CardLiveBase {
+  readonly id: InstId;
+  #w: World;
+  constructor(w: World, id: InstId) {
+    this.#w = w;
+    this.id = id;
+  }
+  toJSON(): CardInst {
+    return cardData(this.#w, this.id);
+  }
+  static {
+    for (const f of CARD_FIELDS)
+      Object.defineProperty(CardLiveBase.prototype, f, {
+        get(this: CardLiveBase) {
+          const v = (this.#w.tables[f] as Record<InstId, unknown>)[this.id];
+          return v === undefined ? CARD_DEFAULT[f] : v;
+        },
+        set(this: CardLiveBase, v: unknown) {
+          const t = this.#w.tables[f] as Record<InstId, unknown>;
+          if (v === undefined || v === CARD_DEFAULT[f]) delete t[this.id];
+          else t[this.id] = v;
+        },
+      });
+    Object.defineProperty(CardLiveBase.prototype, "code", {
+      get(this: CardLiveBase) {
+        return this.#w.tables.card[this.id].code;
+      },
+      set(this: CardLiveBase, v: string) {
+        this.#w.tables.card[this.id].code = v;
+      },
+    });
+  }
+}
+type CardLive = CardInst & { toJSON(): CardInst };
+const CardLive = CardLiveBase as unknown as new (w: World, id: InstId) => CardLive;
+
+type ViewCache = { byId: Record<InstId, CardLive>; all: CardLive[]; count: number };
+const viewCaches = new WeakMap<World, ViewCache>();
+const cacheOf = (w: World): ViewCache => {
+  let c = viewCaches.get(w);
+  if (!c) viewCaches.set(w, (c = { byId: {}, all: [], count: -1 }));
+  return c;
+};
+/** a card's view, made once per card and world; undefined for an id the game doesn't have */
+const viewOf = (w: World, id: InstId): CardLive | undefined =>
+  w.tables.card[id] ? (cacheOf(w).byId[id] ??= new CardLive(w, id)) : undefined;
+
+/** a card's fields as a plain object, in the record's order (a spread of a view gives only its id) */
+function cardData(w: World, id: InstId): CardInst {
+  const c = viewOf(w, id)!;
+  return {
+    id,
+    code: c.code,
+    owner: c.owner,
+    controller: c.controller,
+    zone: c.zone,
+    exhausted: c.exhausted,
+    revealed: c.revealed,
+    damage: c.damage,
+    horror: c.horror,
+    clues: c.clues,
+    doom: c.doom,
+    uses: c.uses,
+    resources: c.resources,
+    location: c.location,
+    engagedWith: c.engagedWith,
+    attachedTo: c.attachedTo,
+  };
+}
+export const cardDataIn = (s: HasWorld, id: InstId): CardInst => cardData(s.world, id);
+
+/** a card's view in a state (as indexing was: undefined at runtime for an id the game doesn't have) */
+export const cardRecIn = (s: HasWorld, id: InstId): CardInst => viewOf(s.world, id) as CardInst;
 export const cardRecIfIn = (s: HasWorld, id: InstId | null | undefined): CardInst | undefined =>
-  id ? s.world.tables.card[id] : undefined;
+  id ? viewOf(s.world, id) : undefined;
 export const cardRec = (g: G, id: InstId): CardInst => {
-  const c = g.s.world.tables.card[id];
+  const c = viewOf(g.s.world, id);
   if (!c) throw new Error(`no card instance ${id}`);
   return c;
 };
 export const cardRecIf = (g: G, id: InstId | null | undefined): CardInst | undefined =>
   cardRecIfIn(g.s, id);
-/**
- * every card record, in creation order: the card table's own order, which is the entity list's (a card is added to both
- * together and never removed; a test holds the two equal). `Object.values` is much faster than looking each entity up.
- */
-export const allCardRecsIn = (s: HasWorld): CardInst[] => Object.values(s.world.tables.card);
+/** every card, in creation order; a new array each time, so a caller may sort it */
+export function allCardRecsIn(s: HasWorld): CardInst[] {
+  const w = s.world;
+  const c = cacheOf(w);
+  if (c.count !== w.entities.length) {
+    c.all = w.entities.map((id) => viewOf(w, id)!);
+    c.count = w.entities.length;
+  }
+  return c.all.slice();
+}
 export const allCardRecs = (g: G): CardInst[] => allCardRecsIn(g.s);
+
+/** put a card in a world, every field in its table (a card with this id already there is replaced); for core and tests */
+export function putCardIn(s: HasWorld, c: CardInst): void {
+  const { tables, entities } = s.world;
+  if (!tables.card[c.id]) entities.push(c.id);
+  tables.card[c.id] = { id: c.id, code: c.code } satisfies CardIdentity;
+  const v = viewOf(s.world, c.id) as unknown as Record<string, unknown>;
+  for (const f of CARD_FIELDS) v[f] = c[f];
+}
+
+/** the world with the tables named copied, so a change to them leaves the original alone */
+function withCopiedTables(w: World, names: Iterable<keyof World["tables"]>): World {
+  const tables = { ...w.tables };
+  for (const n of names) (tables[n] as object) = { ...tables[n] };
+  return { ...w, tables };
+}
+
+/** a copy of a state with changes to some cards' fields, for a what-if (a preview); the state given is not changed */
+export function patchedCardsIn<S extends HasWorld>(
+  s: S,
+  patches: Record<InstId, Partial<CardInst>>,
+): S {
+  const names = new Set<keyof World["tables"]>();
+  for (const patch of Object.values(patches))
+    for (const k of Object.keys(patch)) names.add(k === "code" ? "card" : (k as CardField));
+  names.delete("id" as never);
+  const out = { ...s, world: withCopiedTables(s.world, names) };
+  for (const [id, patch] of Object.entries(patches)) {
+    const v = cardRecIfIn(out, id) as unknown as Record<string, unknown> | undefined;
+    if (v) for (const [k, val] of Object.entries(patch)) if (k !== "id") v[k] = val;
+  }
+  return out;
+}
 
 /** a copy of a state with more cards in it (or some replaced), for fixtures; the state given is not changed */
 export function withCardsIn(s: GameState, cards: Record<InstId, CardInst>): GameState {
-  const card = { ...s.world.tables.card, ...cards };
-  const added = Object.keys(cards).filter((id) => !(id in s.world.tables.card));
-  return {
-    ...s,
-    world: {
-      ...s.world,
-      entities: [...s.world.entities, ...added],
-      tables: { ...s.world.tables, card },
-    },
-  };
+  const base = withCopiedTables(
+    s.world,
+    (Object.keys(s.world.tables) as (keyof World["tables"])[]).filter((n) => n !== "investigator"),
+  );
+  const out = { ...s, world: { ...base, entities: [...s.world.entities] } };
+  for (const c of Object.values(cards)) putCardIn(out, c);
+  return out;
 }
 
 // ---------- investigators ----------

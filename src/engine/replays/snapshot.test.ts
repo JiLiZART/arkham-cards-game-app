@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { cardCopyOf } from "../core";
 import { skipMulligans, start } from "../testkit";
 import { snapshotOf } from "./snapshot";
 
@@ -8,10 +9,10 @@ describe("snapshotOf", () => {
   it("lists every card in creation order with every one of its fields", () => {
     const s = state();
     const snap = snapshotOf(s);
-    const card = s.world.tables.card;
     expect(snap.cards.map((c) => c.id)).toEqual(s.world.entities);
-    expect(Object.keys(snap.cards[0]).sort()).toEqual(Object.keys(card[snap.cards[0].id]).sort());
-    expect(snap.cards[3]).toEqual(card[snap.cards[3].id]);
+    expect(Object.keys(snap.cards[0])).toEqual(Object.keys(cardCopyOf(s, snap.cards[0].id)));
+    expect(snap.cards[3]).toEqual(cardCopyOf(s, snap.cards[3].id));
+    expect(snap.cards[3]).toHaveProperty("zone");
   });
 
   it("lists every investigator in turn order with every field but its piles", () => {

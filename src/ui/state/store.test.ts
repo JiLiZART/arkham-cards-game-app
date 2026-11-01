@@ -853,3 +853,21 @@ describe("the component store (engine version 6)", () => {
     expect(s.getState().notice).toMatch(/restart/);
   });
 });
+
+describe("the field tables (engine version 7)", () => {
+  it("a game saved under version 6 is replayed into the new tables and goes on from the same point", () => {
+    const storage = mem();
+    start(storage);
+    const save = JSON.parse(storage.data.get(SAVE_KEY)!);
+    const now = createGameStore(db, storage);
+    now.getState().resume();
+    save.version = 6;
+    storage.setItem(SAVE_KEY, JSON.stringify(save));
+    const old = createGameStore(db, storage);
+    old.getState().resume();
+    expect(old.getState().screen).toBe("game");
+    expect(old.getState().notice).toBeNull();
+    expect(old.getState().game).toEqual(now.getState().game);
+    expect(old.getState().actions).toEqual(now.getState().actions);
+  });
+});

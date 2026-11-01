@@ -149,7 +149,7 @@ describe("campaign", () => {
     // put Paranoia on top of Roland's deck before the opening hand is drawn: use a seed search
     for (let seed = 1; seed < 200; seed++) {
       const r = start("the-gathering", [ROLAND], seed);
-      const aside = (r.state.flags[`aside:${ROLAND}`] as string[] | undefined) ?? [];
+      const aside = r.state.world.tables.aside[ROLAND] ?? [];
       if (!aside.length) continue;
       expect(invStateIn(r.state, ROLAND).hand).toHaveLength(5);
       expect(

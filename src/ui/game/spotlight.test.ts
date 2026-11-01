@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { skipMulligans, start } from "../../engine/testkit";
 import type { ChoiceOption, GameEvent, GameState, PendingChoice } from "../../engine/types";
 import { heldGame, spotlightNow, spotlightOf, spotlightOfChoice } from "./spotlight";
-import { cardRecIn, invStateIn, withCardsIn } from "../../engine/records";
+import { cardDataIn, cardRecIn, invStateIn, withCardsIn } from "../../engine/records";
 
 describe("spotlight", () => {
   const game = skipMulligans(start("the-gathering", ["01001"], 1)).state;
@@ -40,7 +40,7 @@ describe("spotlight", () => {
     const enemy = "x1";
     const moved = withCardsIn(game, {
       [enemy]: {
-        ...cardRecIn(game, study),
+        ...cardDataIn(game, study),
         id: enemy,
         code: "01159",
         zone: "enemy" as const,
@@ -102,7 +102,7 @@ describe("choice spotlight", () => {
         asking(
           "assign",
           [opt(roland), opt(dog)],
-          withCardsIn(game, { [dog]: { ...cardRecIn(game, hand[0]), id: dog, zone: "play" } }),
+          withCardsIn(game, { [dog]: { ...cardDataIn(game, hand[0]), id: dog, zone: "play" } }),
         ),
         R,
       ),

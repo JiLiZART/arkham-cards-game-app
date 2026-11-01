@@ -4,21 +4,44 @@
  * and write flags only through it. Each family is `prefix:id` (or `prefix:id:id`); a global is a fixed name.
  */
 import type { Effect } from "../content/schema";
-import type { EffCtx, GameState, InstId, InvId } from "./types";
+import type { EffCtx, FlagTables, GameState, InstId, InvId } from "./types";
 
 /** anything holding a game state: the engine context, or `{ s }` around a state */
 type HasState = { s: GameState };
 type Ids = string | readonly string[];
 
-/** a family of flags under `prefix:`, keyed by one id or several, each holding a `V` */
-function family<V, K extends Ids = string>(prefix: string) {
+/** the families about an entity, each stored in the table of its name (ADR-0024) */
+type FlagTable = keyof FlagTables;
+const MOVED: readonly FlagTable[] = [
+  "noReady",
+  "surge",
+  "dying",
+  "costMod",
+  "beneath",
+  "aside",
+  "xp",
+  "hunch",
+  "hunchRevealed",
+  "attacked",
+  "noAttack",
+];
+
+/**
+ * a family of flags under `prefix:`, keyed by one id or several, each holding a `V`: in the table of that name when
+ * the family is about an entity, else in the scenario's flags
+ */
+function family<V, K extends Ids = string>(prefix: string, table?: FlagTable) {
   const key = (k: K) => `${prefix}:${typeof k === "string" ? k : k.join(":")}`;
-  const get = (g: HasState, k: K) => g.s.flags[key(k)] as V | undefined;
+  const slot = (k: K) => (typeof k === "string" ? k : k.join(":"));
+  const store = (g: HasState) =>
+    (table ? g.s.world.tables[table] : g.s.flags) as Record<string, unknown>;
+  const at = table ? slot : key;
+  const get = (g: HasState, k: K) => store(g)[at(k)] as V | undefined;
   const set = (g: HasState, k: K, v: V) => {
-    g.s.flags[key(k)] = v;
+    store(g)[at(k)] = v;
   };
   const clear = (g: HasState, k: K) => {
-    delete g.s.flags[key(k)];
+    delete store(g)[at(k)];
   };
   /** read it and clear it: a value that lives until it is used once */
   const take = (g: HasState, k: K) => {
@@ -30,8 +53,8 @@ function family<V, K extends Ids = string>(prefix: string) {
 }
 
 /** a family of numbers that `add` counts up from nothing */
-function counts<K extends Ids = string>(prefix: string) {
-  const f = family<number, K>(prefix);
+function counts<K extends Ids = string>(prefix: string, table?: FlagTable) {
+  const f = family<number, K>(prefix, table);
   const add = (g: HasState, k: K, n: number) => {
     const v = (f.get(g, k) ?? 0) + n;
     f.set(g, k, v);
@@ -55,32 +78,32 @@ function global<V>(name: string) {
 
 // ---------- about a card ----------
 /** the enemy doesn't ready in the next upkeep */
-export const noReady = family<true, InstId>("noReady");
+export const noReady = family<true, InstId>("noReady", "noReady");
 /** the treachery drawn has surge */
-export const surge = family<true, InstId>("surge");
+export const surge = family<true, InstId>("surge", "surge");
 /** the asset is leaving play from damage or horror (its defeat already queued) */
-export const dying = family<true, InstId>("dying");
+export const dying = family<true, InstId>("dying", "dying");
 /** added to the card's cost while it is played */
-export const costMod = counts<InstId>("costMod");
+export const costMod = counts<InstId>("costMod", "costMod");
 /** the encounter card set beneath a location (Smoke and Mirrors), by location */
-export const beneath = family<InstId, InstId>("beneath");
+export const beneath = family<InstId, InstId>("beneath", "beneath");
 /** an enemy of this card code has been defeated this scenario */
 export const defeated = family<true, string>("defeated");
 
 // ---------- about an investigator ----------
 /** opening-hand weaknesses set aside until the mulligan is done */
-export const aside = family<InstId[], InvId>("aside");
+export const aside = family<InstId[], InvId>("aside", "aside");
 /** experience the scenario adds to the investigator's total (negative to take it away) */
-export const xp = counts<InvId>("xp");
+export const xp = counts<InvId>("xp", "xp");
 /** Joe Diamond's hunch deck, and its revealed card */
-export const hunch = family<InstId[], InvId>("hunch");
-export const hunchRevealed = family<InstId, InvId>("hunchRevealed");
+export const hunch = family<InstId[], InvId>("hunch", "hunch");
+export const hunchRevealed = family<InstId, InvId>("hunchRevealed", "hunchRevealed");
 
 // ---------- about an enemy and an investigator ----------
 /** the round the enemy last attacked the investigator */
-export const attacked = family<number, readonly [InstId, InvId]>("attacked");
+export const attacked = family<number, readonly [InstId, InvId]>("attacked", "attacked");
 /** the round in which the enemy can't attack the investigator */
-export const noAttack = family<number, readonly [InstId, InvId]>("noAttack");
+export const noAttack = family<number, readonly [InstId, InvId]>("noAttack", "noAttack");
 
 // ---------- about an event (an attack's or a test's key) ----------
 /** damage and horror an attack's window has prevented, to take off when it is placed */
@@ -129,5 +152,16 @@ export function campaignNotes(
     if (!m || value === undefined || value === false) continue;
     out.push({ kind: m[1] as "log" | "count", section: m[2], id: m[3], value });
   }
+  return out;
+}
+
+/**
+ * The scenario's flags as they were before the families about an entity moved into tables: every entry under its old
+ * `prefix:id` key. What a recording keeps, so the corpus doesn't depend on where the facts are stored.
+ */
+export function flagsForSnapshot(s: GameState): Record<string, unknown> {
+  const out: Record<string, unknown> = { ...s.flags };
+  for (const table of MOVED)
+    for (const [k, v] of Object.entries(s.world.tables[table])) out[`${table}:${k}`] = v;
   return out;
 }

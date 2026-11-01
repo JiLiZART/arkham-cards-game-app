@@ -1,6 +1,7 @@
 /** read-only lookups over a game state, for code that holds a state and not the engine context: the UI, online play, the bot */
 import { describe, expect, it } from "vitest";
 import {
+  cardCopyOf,
   cardOf,
   cardOfIf,
   cardsOf,
@@ -76,14 +77,17 @@ describe("lookups over a state", () => {
 });
 
 describe("patchedState", () => {
-  it("a copy with some cards' fields overridden: the original is untouched, the other cards are shared", () => {
+  it("a copy with some cards' fields overridden: the original is untouched, the tables it didn't change are shared", () => {
     const s = state();
     const [a, b] = s.world.entities;
     const before = cardRecIn(s, a).location;
     const copy = patchedState(s, { [a]: { location: "c9", engagedWith: null } });
     expect(cardOf(copy, a)).toMatchObject({ location: "c9", engagedWith: null });
     expect(cardOf(s, a).location).toBe(before);
-    expect(cardOf(copy, b)).toBe(cardOf(s, b));
+    expect(cardCopyOf(copy, b)).toEqual(cardCopyOf(s, b));
+    expect(copy.world.tables.damage).toBe(s.world.tables.damage);
+    expect(copy.world.tables.location).not.toBe(s.world.tables.location);
+    expect(copy.world.tables.card).toBe(s.world.tables.card);
     expect(copy.round).toBe(s.round);
   });
 
@@ -99,6 +103,7 @@ describe("the entity list", () => {
   it("is the creation order of the card table, through a whole game", () => {
     const s = state();
     expect(s.world.entities).toEqual(Object.keys(s.world.tables.card));
+    expect(Object.keys(s.world.tables.zone)).toEqual(s.world.entities);
     expect(new Set(s.world.entities).size).toBe(s.world.entities.length);
     expect(cardsOf(s).map((c) => c.id)).toEqual(s.world.entities);
   });

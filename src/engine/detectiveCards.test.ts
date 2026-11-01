@@ -267,8 +267,8 @@ describe("Joe Diamond", () => {
     );
     return r;
   };
-  const hunchOf = (r: Result) => (r.state.flags[`hunch:${JOE}`] as string[]) ?? [];
-  const revealedOf = (r: Result) => r.state.flags[`hunchRevealed:${JOE}`] as string | undefined;
+  const hunchOf = (r: Result) => r.state.world.tables.hunch[JOE] ?? [];
+  const revealedOf = (r: Result) => r.state.world.tables.hunchRevealed[JOE];
 
   it("builds an 11-card hunch deck of Insight events with Unsolved Case, outside his deck", () => {
     const r = joe();

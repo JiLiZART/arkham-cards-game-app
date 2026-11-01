@@ -3,7 +3,13 @@ import { dispatch } from "../../engine/engine";
 import { db, skipMulligans, start } from "../../engine/testkit";
 import type { GameState } from "../../engine/types";
 import { pickTip, type TipContext } from "./tips";
-import { allCardRecsIn, cardRecIn, invStateIn, withCardsIn } from "../../engine/records";
+import {
+  allCardRecsIn,
+  cardDataIn,
+  cardRecIn,
+  invStateIn,
+  withCardsIn,
+} from "../../engine/records";
 
 const R = "01001";
 const ctx = (patch: Partial<TipContext> = {}): TipContext => ({
@@ -79,7 +85,7 @@ describe("pickTip", () => {
     const study = invStateIn(fresh, R).location!;
     const ghoul = allCardRecsIn(fresh).find((c) => c.code === "01160")!.id;
     const g: GameState = withCardsIn(fresh, {
-      [ghoul]: { ...cardRecIn(fresh, ghoul), zone: "enemy", location: study, engagedWith: R },
+      [ghoul]: { ...cardDataIn(fresh, ghoul), zone: "enemy", location: study, engagedWith: R },
     });
     const tip = pickTip(g, ctx(), new Set(["start", "turn"]), true)!;
     expect(tip.id).toBe("enemy");

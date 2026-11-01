@@ -62,14 +62,15 @@ import type {
   Step,
 } from "./types";
 
-export const ENGINE_VERSION = 6;
+export const ENGINE_VERSION = 7;
 
 /**
- * Whether a save written by this engine version replays to the same game on this one. Version 6 changed only how the
- * state is stored (ADR-0023), which the replay oracle proves: its choices replay as before. Any other version had
- * different rules, so its scenario restarts.
+ * Whether a save written by this engine version replays to the same game on this one. Versions 6 and 7 changed only how
+ * the state is stored (ADR-0023, ADR-0024), which the replay oracle proves: their choices replay as before. Any older
+ * version had different rules, so its scenario restarts.
  */
-export const replaysSave = (version: number) => version === ENGINE_VERSION || version === 5;
+export const replaysSave = (version: number) =>
+  version === ENGINE_VERSION || version === 6 || version === 5;
 
 // ---------- internal script functions (code "__engine") ----------
 const ENGINE_FNS: Record<string, (g: G, ctx: EffCtx, step: Step) => void> = {

@@ -87,8 +87,61 @@ export type PileName =
  */
 export interface World {
   entities: InstId[];
-  tables: { card: Record<InstId, CardInst>; investigator: Record<InvId, InvRecord> };
+  tables: CardTables &
+    FlagTables & {
+      /** a card's identity: every card has one */
+      card: Record<InstId, CardIdentity>;
+      investigator: Record<InvId, InvRecord>;
+    };
   piles: Partial<Record<PileName, InstId[]>>;
+}
+
+/**
+ * One table per flag family about an entity (ADR-0024), keyed by the entity: a card, an investigator, or for the
+ * enemy-and-investigator families `enemy:investigator`. Set and read through `flags.ts`.
+ */
+export interface FlagTables {
+  noReady: Record<InstId, true>;
+  surge: Record<InstId, true>;
+  dying: Record<InstId, true>;
+  costMod: Record<InstId, number>;
+  /** the encounter card set beneath a location, by location */
+  beneath: Record<InstId, InstId>;
+  aside: Record<InvId, InstId[]>;
+  xp: Record<InvId, number>;
+  hunch: Record<InvId, InstId[]>;
+  hunchRevealed: Record<InvId, InstId>;
+  attacked: Record<string, number>;
+  noAttack: Record<string, number>;
+}
+
+/** what makes a card this card: its id never changes, its code does when a card is turned over or transformed */
+export interface CardIdentity {
+  id: InstId;
+  code: string;
+}
+
+/**
+ * One table per card field (ADR-0024), keyed by card id. A table holds an entry only for a value other than the field's
+ * default (none, false or 0); `zone` has an entry for every card. Read and written through a card view, never directly.
+ */
+export interface CardTables {
+  zone: Record<InstId, Zone>;
+  owner: Record<InstId, InvId>;
+  controller: Record<InstId, InvId>;
+  exhausted: Record<InstId, true>;
+  revealed: Record<InstId, true>;
+  damage: Record<InstId, number>;
+  horror: Record<InstId, number>;
+  clues: Record<InstId, number>;
+  doom: Record<InstId, number>;
+  uses: Record<InstId, number>;
+  resources: Record<InstId, number>;
+  /** enemies: location; attachments: location they are attached to */
+  location: Record<InstId, InstId>;
+  engagedWith: Record<InstId, InvId>;
+  /** cards attached to another card (not location) */
+  attachedTo: Record<InstId, InstId>;
 }
 
 /** a card instance as code outside the core sees it: read, never written (ADR-0022) */

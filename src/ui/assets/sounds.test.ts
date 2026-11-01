@@ -11,7 +11,7 @@ import {
   momentClip,
   musicFor,
 } from "./sounds";
-import { allCardRecsIn, cardRecIn, invStateIn } from "../../engine/records";
+import { allCardRecsIn, cardDataIn, cardRecIn, invStateIn, putCardIn } from "../../engine/records";
 
 const R = "01001";
 const fresh = skipMulligans(start("the-gathering", [R], 1)).state;
@@ -153,12 +153,12 @@ describe("musicFor", () => {
       musicFor(
         with_((s) => {
           s.scenarioId = "extracurricular-activity";
-          s.world.tables.card[ghoul] = {
-            ...cardRecIn(s, ghoul),
+          putCardIn(s, {
+            ...cardDataIn(s, ghoul),
             zone: "enemy",
             location: invStateIn(s, R).location,
             engagedWith: R,
-          };
+          });
         }),
         m,
       ),
@@ -167,23 +167,21 @@ describe("musicFor", () => {
 
   it("fight while an enemy is engaged, the bed again once it is gone", () => {
     const ghoul = codeOf("01160");
-    const engaged = with_(
-      (s) =>
-        (s.world.tables.card[ghoul] = {
-          ...cardRecIn(s, ghoul),
-          zone: "enemy",
-          location: invStateIn(s, R).location,
-          engagedWith: R,
-        }),
+    const engaged = with_((s) =>
+      putCardIn(s, {
+        ...cardDataIn(s, ghoul),
+        zone: "enemy",
+        location: invStateIn(s, R).location,
+        engagedWith: R,
+      }),
     );
     expect(musicFor(engaged, m)).toBe("fight");
-    const gone = with_(
-      (s) =>
-        (s.world.tables.card[ghoul] = {
-          ...cardRecIn(s, ghoul),
-          zone: "discard",
-          engagedWith: null,
-        }),
+    const gone = with_((s) =>
+      putCardIn(s, {
+        ...cardDataIn(s, ghoul),
+        zone: "discard",
+        engagedWith: null,
+      }),
     );
     expect(musicFor(gone, m)).toBe("bed:the-gathering");
   });
@@ -201,12 +199,12 @@ describe("musicFor", () => {
     const ghoul = codeOf("01160");
     const both = with_((s) => {
       s.phase = "enemy";
-      s.world.tables.card[ghoul] = {
-        ...cardRecIn(s, ghoul),
+      putCardIn(s, {
+        ...cardDataIn(s, ghoul),
         zone: "enemy",
         location: invStateIn(s, R).location,
         engagedWith: R,
-      };
+      });
     });
     expect(musicFor(both, m)).toBe("fight");
   });

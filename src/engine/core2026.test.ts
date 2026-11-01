@@ -170,7 +170,7 @@ describe("evasion", () => {
     r = pick(r, /^Evade Acolyte/);
     r = pick(r, /^Commit Slippery/);
     r = toTurn(pick(r, /^Done/));
-    expect(r.state.flags[`noReady:${enemyIn(r, ACOLYTE)!.id}`]).toBe(true);
+    expect(r.state.world.tables.noReady[enemyIn(r, ACOLYTE)!.id]).toBe(true);
   });
 });
 
