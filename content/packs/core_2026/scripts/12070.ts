@@ -1,10 +1,11 @@
 // Augur of Elokoss — a success with a symbol token revealed may discard a Terror or Hex treachery from any threat area
 import {
   ask,
+  type CardScript,
   cardsIn,
+  currentTest,
   def,
   discard,
-  type CardScript,
   type EffCtx,
   type G,
   type InstId,
@@ -16,7 +17,7 @@ const SYMBOLS = ["skull", "cultist", "tablet", "elderThing", "elderSign", "autoF
 export default {
   fns: {
     augur(g: G, ctx: EffCtx, _args: unknown, step?: Step) {
-      if (!g.s.skillTest?.tokens.some((t) => SYMBOLS.includes(t))) return;
+      if (!currentTest(g)?.tokens.some((t) => SYMBOLS.includes(t))) return;
       const pool = cardsIn(g, "threat").filter(
         (c) =>
           def(g, c.id).type === "treachery" &&

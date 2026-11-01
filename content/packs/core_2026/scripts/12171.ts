@@ -1,5 +1,12 @@
 // Brethren of Ash — doom that would be placed deals each investigator 1 direct damage instead
-import { activeInvs, emit, push, type CardScript, type G } from "../../../../src/engine/api";
+import {
+  activeInvs,
+  type CardScript,
+  currentAgenda,
+  emit,
+  type G,
+  push,
+} from "../../../../src/engine/api";
 
 export default {
   wouldPlaceDoom(g: G) {
@@ -11,7 +18,7 @@ export default {
         damage: 1,
         horror: 0,
         direct: true,
-        source: g.s.agenda,
+        source: currentAgenda(g),
       });
     return true;
   },

@@ -2,15 +2,16 @@
 import {
   ask,
   card,
+  type CardScript,
   def,
+  type EffCtx,
   emit,
+  flags,
+  type G,
+  type InstId,
   inv,
   locations,
   shroud,
-  type CardScript,
-  type EffCtx,
-  type G,
-  type InstId,
   type Step,
 } from "../../../../src/engine/api";
 
@@ -51,8 +52,7 @@ export default {
   hooks: {
     gameEnd(g: G, ctx: EffCtx) {
       const c = card(g, ctx.source!);
-      if (c.zone === "threat" && c.controller)
-        g.s.flags[`xp:${c.controller}`] = ((g.s.flags[`xp:${c.controller}`] as number) ?? 0) - 2;
+      if (c.zone === "threat" && c.controller) flags.xp.add(g, c.controller, -2);
     },
   },
 } satisfies CardScript;

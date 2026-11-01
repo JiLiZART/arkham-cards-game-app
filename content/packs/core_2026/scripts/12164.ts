@@ -1,11 +1,20 @@
 // Rogue Gangster — after it engages you: lose 1 resource, or it attacks you
-import { emit, inv, push, type CardScript, type EffCtx, type G } from "../../../../src/engine/api";
+import {
+  attackKey,
+  type CardScript,
+  type EffCtx,
+  emit,
+  type G,
+  inv,
+  invIf,
+  push,
+} from "../../../../src/engine/api";
 
 export default {
   fns: {
     shakedown(g: G, ctx: EffCtx) {
       const who = ctx.inv;
-      if (!who || !g.s.invs[who]) return;
+      if (!who || !invIf(g, who)) return;
       const me = inv(g, who);
       if (me.resources > 0) {
         me.resources--;
@@ -19,7 +28,7 @@ export default {
           enemy: ctx.source!,
           inv: who,
           aoo: false,
-          key: `atk${g.s.seq++}`,
+          key: attackKey(g),
         });
     },
   },

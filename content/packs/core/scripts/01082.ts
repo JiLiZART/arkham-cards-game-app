@@ -1,14 +1,15 @@
 // Aquinnah — the attack's damage goes to another enemy at your location instead (its horror is still taken)
 import {
   ask,
-  def,
-  enemiesAt,
-  inv,
-  push,
   type CardScript,
+  def,
   type EffCtx,
+  enemiesAt,
+  flags,
   type G,
   type InstId,
+  inv,
+  push,
   type Step,
 } from "../../../../src/engine/api";
 
@@ -28,10 +29,8 @@ export default {
         { auto: true, key: "chooseEnemy" },
       );
       if (pick === undefined) return;
-      const prevented = (g.s.flags[`prevented:${ctx.key}`] as [number, number] | undefined) ?? [
-        0, 0,
-      ];
-      g.s.flags[`prevented:${ctx.key}`] = [prevented[0] + damage, prevented[1]];
+      const prevented = flags.prevented.get(g, String(ctx.key)) ?? [0, 0];
+      flags.prevented.set(g, String(ctx.key), [prevented[0] + damage, prevented[1]]);
       push(g, { t: "DamageEnemy", enemy: pick, amount: damage, by: ctx.you!, source: ctx.source });
     },
   },

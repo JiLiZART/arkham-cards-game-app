@@ -1,16 +1,18 @@
 // The Barrier (The Gathering, act 2): at round end, investigators in the Hallway may spend 3 clues/investigator
 import {
   ask,
+  type CardScript,
   def,
+  type EffCtx,
   emit,
   findByCode,
+  type G,
   inv,
+  leadInvestigator,
   moveCard,
   push,
-  type CardScript,
-  type EffCtx,
-  type G,
   type Step,
+  turnOrder,
 } from "../../../../src/engine/api";
 
 export default {
@@ -22,16 +24,16 @@ export default {
     objective(g: G, _ctx: EffCtx, _args: unknown, step?: Step) {
       const hallway = findByCode(g, "01112", ["location"]);
       if (!hallway) return;
-      const there = g.s.order.filter(
+      const there = turnOrder(g).filter(
         (i) => inv(g, i).status === "playing" && inv(g, i).location === hallway.id,
       );
-      const need = 3 * g.s.order.length;
+      const need = 3 * turnOrder(g).length;
       const have = there.reduce((n, i) => n + inv(g, i).clues, 0);
       if (have < need) return;
       const yes = ask<boolean>(
         g,
         step!,
-        g.s.lead,
+        leadInvestigator(g),
         "generic",
         `The Barrier: spend ${need} clues (investigators in the Hallway) to advance?`,
         [

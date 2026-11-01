@@ -1,4 +1,5 @@
 /** helpers for the nat pack's card tests (not used at runtime) */
+import { connections } from "./flags";
 import { card, createCard, inv, moveCard, type G } from "./core";
 import { createGame, type Result } from "./engine";
 import type { GameSetup } from "./types";
@@ -81,10 +82,7 @@ export function addLocation(g: G, code: string, pairs: [string, string][]) {
   moveCard(g, id, "location");
   card(g, id).revealed = true;
   card(g, id).clues = 0;
-  g.s.flags.connections = [
-    ...((g.s.flags.connections as [string, string][] | undefined) ?? []),
-    ...pairs,
-  ];
+  connections.set(g, [...(connections.get(g) ?? []), ...pairs]);
   return id;
 }
 export const STUDY = "01111";

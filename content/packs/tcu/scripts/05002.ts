@@ -2,18 +2,19 @@
 import {
   ask,
   card,
+  type CardScript,
   def,
+  type EffCtx,
   emit,
+  flags,
+  type G,
+  type InstId,
   inv,
+  type InvId,
   invName,
   moveCard,
   push,
-  shuffle,
-  type CardScript,
-  type EffCtx,
-  type G,
-  type InstId,
-  type InvId,
+  shuffleList,
   type Step,
 } from "../../../../src/engine/api";
 
@@ -21,15 +22,14 @@ const UNSOLVED_CASE = "05010";
 const HUNCH_SIZE = 11;
 
 /** the hunch deck, top first (its cards wait set aside) */
-export const hunch = (g: G, i: InvId): InstId[] =>
-  (g.s.flags[`hunch:${i}`] as InstId[] | undefined) ?? [];
-const revealed = (g: G, i: InvId) => g.s.flags[`hunchRevealed:${i}`] as InstId | undefined;
+export const hunch = (g: G, i: InvId): InstId[] => flags.hunch.get(g, i) ?? [];
+const revealed = (g: G, i: InvId) => flags.hunchRevealed.get(g, i);
 const isInsightEvent = (g: G, id: InstId) =>
   def(g, id).type === "event" && def(g, id).traits.includes("Insight");
 
 /** you may move an Insight event from your discard pile to the bottom of your hunch deck (Joe's elder sign, Detective's Colt 1911s) */
 export function insightToHunch(g: G, you: InvId, step: Step | undefined) {
-  if (g.s.flags[`hunch:${you}`] === undefined) return;
+  if (flags.hunch.get(g, you) === undefined) return;
   const cands = inv(g, you).discard.filter((id) => isInsightEvent(g, id));
   if (!cands.length || !step) return;
   const pick = ask<InstId | "no">(
@@ -51,7 +51,7 @@ export function insightToHunch(g: G, you: InvId, step: Step | undefined) {
   );
   if (pick === undefined || pick === "no") return;
   moveCard(g, pick, "setAside");
-  g.s.flags[`hunch:${you}`] = [...hunch(g, you), pick];
+  flags.hunch.set(g, you, [...hunch(g, you), pick]);
   emit(g, "hunch", `${def(g, pick).name} goes to the bottom of ${invName(g, you)}'s hunch deck`, {
     inv: you,
     card: pick,
@@ -80,8 +80,8 @@ export default {
         ...insight.filter((id) => card(g, id).code !== UNSOLVED_CASE),
       ].slice(0, HUNCH_SIZE);
       for (const id of chosen) moveCard(g, id, "setAside");
-      shuffle(g.s, chosen);
-      g.s.flags[`hunch:${ctx.you}`] = chosen;
+      shuffleList(g, chosen);
+      flags.hunch.set(g, String(ctx.you), chosen);
     },
   },
   extraPlayable(g: G, _cardId: InstId, i: InvId) {
@@ -92,9 +92,9 @@ export default {
     reveal(g: G, ctx: EffCtx) {
       const [top, ...rest] = hunch(g, ctx.you!);
       if (!top) return;
-      g.s.flags[`hunch:${ctx.you}`] = rest;
-      g.s.flags[`hunchRevealed:${ctx.you}`] = top;
-      g.s.flags[`costMod:${top}`] = -2;
+      flags.hunch.set(g, String(ctx.you), rest);
+      flags.hunchRevealed.set(g, String(ctx.you), top);
+      flags.costMod.set(g, top, -2);
       emit(g, "hunch", `${invName(g, ctx.you!)} reveals a hunch: ${def(g, top).name}`, {
         inv: ctx.you!,
         card: top,
@@ -103,9 +103,9 @@ export default {
     putBack(g: G, ctx: EffCtx) {
       const you = ctx.you!;
       const id = revealed(g, you);
-      delete g.s.flags[`hunchRevealed:${you}`];
+      flags.hunchRevealed.clear(g, you);
       if (!id) return;
-      delete g.s.flags[`costMod:${id}`];
+      flags.costMod.clear(g, id);
       if (card(g, id).zone !== "setAside") return; // played
       // Unsolved Case: "If Unsolved Case would be shuffled into your hunch deck: add it to your threat area instead"
       if (card(g, id).code === UNSOLVED_CASE) {
@@ -118,8 +118,8 @@ export default {
         return;
       }
       const deck = [...hunch(g, you), id];
-      shuffle(g.s, deck);
-      g.s.flags[`hunch:${you}`] = deck;
+      shuffleList(g, deck);
+      flags.hunch.set(g, you, deck);
       emit(g, "hunch", `${def(g, id).name} is shuffled back into the hunch deck`, {
         inv: you,
         card: id,

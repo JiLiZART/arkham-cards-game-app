@@ -1,15 +1,17 @@
 // Unbridled Knowledge — reveal the top 5 cards (8 with 2+ clues), draw 3 of them, put each other one on the top or bottom
 import {
   ask,
+  cardIf,
+  type CardScript,
   def,
+  type EffCtx,
   emit,
+  type G,
+  type InstId,
   inv,
   moveCard,
   push,
-  type CardScript,
-  type EffCtx,
-  type G,
-  type InstId,
+  putOnTop,
   type Step,
 } from "../../../../src/engine/api";
 
@@ -29,7 +31,7 @@ export default {
     },
     take(g: G, ctx: EffCtx, args: Args, step?: Step) {
       const you = ctx.you!;
-      const left = args.cards.filter((id) => g.s.cards[id]?.zone === "deck");
+      const left = args.cards.filter((id) => cardIf(g, id)?.zone === "deck");
       if (args.drawn < 3 && left.length) {
         const pick = ask<InstId>(
           g,
@@ -41,9 +43,7 @@ export default {
           { auto: true, key: "searchTop", vars: { n: args.cards.length } },
         );
         if (pick === undefined) return;
-        const deck = inv(g, you).deck;
-        deck.splice(deck.indexOf(pick), 1);
-        deck.unshift(pick);
+        putOnTop(g, you, [pick]);
         push(
           g,
           { t: "Draw", inv: you, n: 1, tapped: true },

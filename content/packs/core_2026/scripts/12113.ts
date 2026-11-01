@@ -1,18 +1,19 @@
 // Your Friend's Room — an enemy at a connecting location moves here and engages you
 import {
   ask,
+  card,
+  type CardScript,
   connections,
   def,
+  type EffCtx,
   emit,
   enemiesAt,
-  invName,
-  push,
-  win,
-  type CardScript,
-  type EffCtx,
   type G,
   type InstId,
+  invName,
+  push,
   type Step,
+  win,
 } from "../../../../src/engine/api";
 
 export default {
@@ -35,7 +36,7 @@ export default {
         { auto: true, key: "chooseEnemy" },
       );
       if (pick === undefined) return;
-      const e = g.s.cards[pick];
+      const e = card(g, pick);
       e.location = here;
       e.engagedWith = ctx.you!;
       emit(g, "engage", `${def(g, pick).name} moves here and engages ${invName(g, ctx.you!)}`, {

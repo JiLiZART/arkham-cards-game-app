@@ -1,11 +1,15 @@
+import { costMod } from "../flags";
 import type { Ability, CardDef, Cost, Slot, Trigger } from "../../content/schema";
 import {
   abilitiesOf,
+  actClueCost,
   activeInvs,
+  addCounter,
   allMods,
-  canPay,
   ask,
   blankedCards,
+  canAdvanceAct,
+  canPay,
   card,
   cardBlocked,
   cardsIn,
@@ -13,20 +17,19 @@ import {
   controlled,
   def,
   discard,
-  emit,
+  type G,
   hasFlag,
   inv,
   invName,
   invsAt,
-  actClueCost,
-  canAdvanceAct,
+  playerCount,
   matchesFilter,
+  emit,
   modSum,
   moveCard,
-  playerCount,
-  push,
+  setCounter,
   uniqueInPlay,
-  type G,
+  push,
 } from "../core";
 import type { EffCtx, EventData, InstId, InvId, Step } from "../types";
 
@@ -58,17 +61,17 @@ export function payCost(g: G, i: InvId, cardId: InstId, cost: Cost | undefined):
   const c = card(g, cardId);
   const me = inv(g, i);
   if (cost.exhaust) c.exhausted = true;
-  if (cost.uses) c.uses -= cost.uses;
+  if (cost.uses) addCounter(g, c.id, "uses", -cost.uses);
   const spent = (cost.resources ?? 0) + (cost.resourcesPerInvestigator ?? 0) * playerCount(g);
-  me.resources -= spent;
+  addCounter(g, me.id, "resources", -spent);
   const take: Step[] = spent
     ? [win("resourcesSpent", { inv: i, card: cardId, amount: spent })]
     : [];
   if (cost.resourcesOrUses) {
-    if (c.uses >= cost.resourcesOrUses) c.uses -= cost.resourcesOrUses; // ponytail: the card first; a prompt if a card ever wants the pool spent first
-    else me.resources -= cost.resourcesOrUses;
+    if (c.uses >= cost.resourcesOrUses) addCounter(g, c.id, "uses", -cost.resourcesOrUses); // ponytail: the card first; a prompt if a card ever wants the pool spent first
+    else addCounter(g, me.id, "resources", -cost.resourcesOrUses);
   }
-  if (cost.clues) me.clues -= cost.clues;
+  if (cost.clues) addCounter(g, me.id, "clues", -cost.clues);
   if (cost.cluesPerInvestigator) spendGroupClues(g, cost.cluesPerInvestigator * playerCount(g));
   // damage or horror taken as a cost is not direct: it may go on assets (Holy Rosary)
   if (cost.takeDamage)
@@ -89,8 +92,8 @@ export function payCost(g: G, i: InvId, cardId: InstId, cost: Cost | undefined):
       direct: false,
       source: cardId,
     });
-  if (cost.horrorOnSelf) c.horror += cost.horrorOnSelf;
-  if (cost.damageOnSelf) c.damage += cost.damageOnSelf;
+  if (cost.horrorOnSelf) addCounter(g, c.id, "horror", cost.horrorOnSelf);
+  if (cost.damageOnSelf) addCounter(g, c.id, "damage", cost.damageOnSelf);
   if (cost.discardSelf) discard(g, cardId);
   return take;
 }
@@ -100,7 +103,7 @@ export function spendGroupClues(g: G, n: number) {
   const order = [g.s.lead, ...activeInvs(g).filter((x) => x !== g.s.lead)];
   for (const i of order) {
     const take = Math.min(n, inv(g, i).clues);
-    inv(g, i).clues -= take;
+    addCounter(g, i, "clues", -take);
     n -= take;
   }
 }
@@ -488,7 +491,7 @@ export function playCost(g: G, i: InvId, cardId: InstId): number {
   const d = def(g, cardId);
   if (d.cost === "X") return Infinity; // ponytail: no X choice yet, so an X-cost card can't be played
   // a discount on this very card (Joe Diamond's revealed hunch: -2)
-  let cost = (d.cost ?? 0) + ((g.s.flags[`costMod:${cardId}`] as number | undefined) ?? 0);
+  let cost = (d.cost ?? 0) + (costMod.get(g, cardId) ?? 0);
   for (const m of allMods(g)) {
     if (m.target !== i || m.mod.stat !== "cost") continue;
     if (m.mod.filter && !matchesFilter(g, d.code, m.mod.filter)) continue;
@@ -549,7 +552,7 @@ export const playCardHandler: Handler<"PlayCard"> = (g, step) => {
   const me = inv(g, step.inv);
   const c = card(g, step.card);
   const paid = step.free ? 0 : playCost(g, step.inv, step.card);
-  me.resources -= paid;
+  addCounter(g, me.id, "resources", -paid);
   emit(g, "play", `${me.name} plays ${d.name}`, { inv: step.inv, card: step.card });
   // after the card resolves (Syndicate Obligations)
   if (paid > 0) push(g, win("resourcesSpent", { inv: step.inv, card: step.card, amount: paid }));
@@ -608,7 +611,7 @@ export const enterPlayHandler: Handler<"EnterPlay"> = (g, step) => {
   const d = def(g, step.card);
   moveCard(g, step.card, "play");
   c.controller = step.inv;
-  if (d.uses) c.uses = d.uses.count;
+  if (d.uses) setCounter(g, c.id, "uses", d.uses.count);
   push(g, win("enterPlay", { inv: step.inv, card: step.card }));
 };
 

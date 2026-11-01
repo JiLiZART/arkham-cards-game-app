@@ -1,12 +1,13 @@
 // Yithian Observer — when it attacks you, discard a random card; if you cannot, +1 damage and +1 horror
 import {
-  discard,
-  emit,
-  inv,
-  randInt,
   type CardScript,
+  discard,
   type EffCtx,
+  emit,
+  flags,
   type G,
+  inv,
+  randomInt,
 } from "../../../../src/engine/api";
 
 export default {
@@ -14,9 +15,9 @@ export default {
   fns: {
     attack(g: G, ctx: EffCtx) {
       const me = inv(g, ctx.inv!);
-      if (me.hand.length) discard(g, me.hand[randInt(g.s, me.hand.length)]);
+      if (me.hand.length) discard(g, me.hand[randomInt(g, me.hand.length)]);
       else {
-        g.s.flags[`attackBonus:${ctx.key}`] = 1;
+        flags.attackBonus.set(g, String(ctx.key), 1);
         emit(
           g,
           "yithian",

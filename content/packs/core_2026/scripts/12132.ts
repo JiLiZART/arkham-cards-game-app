@@ -1,10 +1,17 @@
 // Mutated Experiment — defeated: each investigator at its location takes 1 horror
-import { invsAt, push, type CardScript, type EffCtx, type G } from "../../../../src/engine/api";
+import {
+  cardIf,
+  type CardScript,
+  type EffCtx,
+  type G,
+  invsAt,
+  push,
+} from "../../../../src/engine/api";
 
 export default {
   fns: {
     spill(g: G, ctx: EffCtx) {
-      const loc = g.s.cards[ctx.source!]?.location ?? null;
+      const loc = cardIf(g, ctx.source!)?.location ?? null;
       for (const i of invsAt(g, loc))
         push(g, {
           t: "AssignDamage",

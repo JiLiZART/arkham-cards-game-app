@@ -1,17 +1,15 @@
+import { attackBonus, attacked, damageBonus, defeated, noAttack } from "../flags";
 import {
-  logStep,
   activeInvs,
+  addCounter,
   ask,
   card,
+  connections,
   def,
   distances,
-  emit,
-  enemies,
-  enemyStat,
-  engagedWith,
+  type G,
   hasFlag,
   hasKeyword,
-  connections,
   inv,
   invName,
   invsAt,
@@ -19,13 +17,17 @@ import {
   isMassive,
   locationByName,
   locations,
+  logStep,
+  emit,
   moveCard,
-  push,
+  enemies,
+  enemyStat,
+  engagedWith,
   remainingHealth,
   remainingSanity,
   skillValue,
   stepsToward,
-  type G,
+  push,
 } from "../core";
 import type { InstId, InvId, Step } from "../types";
 import { win } from "./cards";
@@ -222,11 +224,10 @@ export const resolveAttackHandler: Handler<"ResolveAttack"> = (g, step) => {
   }
   if (!isElite(g, step.enemy) && hasFlag(g, step.inv, "nonEliteCannotAttack")) return;
   // "she cannot attack you for the remainder of the round" (Elokoss)
-  if (g.s.flags[`noAttack:${step.enemy}:${step.inv}`] === g.s.round) return;
-  const bonus = (g.s.flags[`attackBonus:${step.key}`] as number | undefined) ?? 0;
-  delete g.s.flags[`attackBonus:${step.key}`];
+  if (noAttack.get(g, [step.enemy, step.inv]) === g.s.round) return;
+  const bonus = attackBonus.take(g, step.key) ?? 0;
   // "if this enemy attacked you this round" (Daniela's Wrench)
-  g.s.flags[`attacked:${step.enemy}:${step.inv}`] = g.s.round;
+  attacked.set(g, [step.enemy, step.inv], g.s.round);
   const damage = enemyStat(g, step.enemy, "damage") + bonus;
   const horror = enemyStat(g, step.enemy, "horror") + bonus;
   emit(
@@ -293,12 +294,12 @@ export const damageEnemyHandler: Handler<"DamageEnemy"> = (g, step) => {
     );
     return;
   }
-  let amount = step.amount + ((g.s.flags[`damageBonus:${step.key}`] as number | undefined) ?? 0);
-  delete g.s.flags[`damageBonus:${step.key}`];
+  // no key gives the key "undefined", as before
+  let amount = step.amount + (damageBonus.take(g, String(step.key)) ?? 0);
   if (hasFlag(g, step.enemy, "damageCapOne")) amount = Math.min(amount, 1);
   const health = enemyStat(g, step.enemy, "health");
   const excess = e.damage + amount - health;
-  e.damage += amount;
+  addCounter(g, e.id, "damage", amount);
   emit(
     g,
     "enemyDamage",
@@ -335,7 +336,7 @@ export const defeatEnemyHandler: Handler<"DefeatEnemy"> = (g, step) => {
   });
   if (d.victory !== undefined) moveCard(g, step.enemy, "victory");
   else moveCard(g, step.enemy, e.owner ? "discard" : "encounterDiscard");
-  g.s.flags[`defeated:${e.code}`] = true;
+  defeated.set(g, e.code, true);
   push(g, win("enemyDefeated", { inv: step.by }), { t: "CheckObjectives" });
   // Doomed: 1 doom on the current agenda, which can make it advance
   if (d.keywords.includes("doomed") && g.s.agenda)

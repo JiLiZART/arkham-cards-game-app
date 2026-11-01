@@ -66,6 +66,7 @@ export default {
     elsewhere(g: G, ctx: EffCtx, _args: unknown, step?: Step) {
       const here = inv(g, ctx.you!).location;
       const cands = locations(g).filter((l) => l.id !== here && l.revealed && l.clues > 0);
+      if (!cands.length) return;
       const loc = ask<InstId>(
         g,
         step!,

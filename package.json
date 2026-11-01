@@ -17,6 +17,8 @@
     "import:cards": "tsx scripts/import-cards.ts",
     "import:i18n": "tsx scripts/import-i18n.ts",
     "check:content": "tsx scripts/check-content.ts",
+    "record:games": "RECORD_GAMES=1 vitest run scripts/record-games.test.ts",
+    "search:games": "SEARCH_GAMES=1 vitest run scripts/record-games.test.ts -t searches --reporter=verbose",
     "import:sounds": "tsx scripts/import-sounds.ts",
     "import:icons": "tsx scripts/import-icons.ts",
     "fetch:cards": "tsx scripts/fetch-card-images.ts",

@@ -3,23 +3,26 @@ import {
   ask,
   canCommit,
   card,
+  cardIf,
+  type CardScript,
+  currentTest,
   def,
+  type EffCtx,
   emit,
+  flags,
+  type G,
+  type InstId,
   inv,
   moveCard,
   push,
   shuffleIntoDeck,
-  type CardScript,
-  type EffCtx,
-  type G,
-  type InstId,
   type Step,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
     fromDiscard(g: G, ctx: EffCtx, _args: unknown, step?: Step) {
-      const t = g.s.skillTest;
+      const t = currentTest(g);
       const you = ctx.you!;
       if (!t) return;
       const skills = inv(g, you).discard.filter(
@@ -40,7 +43,7 @@ export default {
       card(g, pick).controller = you;
       t.committed.push(pick);
       t.committers.push(you);
-      g.s.flags[`isabelle:${t.id}`] = pick;
+      flags.isabelle.set(g, String(t.id), pick);
       emit(g, "commit", `${inv(g, you).name} commits ${def(g, pick).name} from the discard pile`, {
         inv: you,
         card: pick,
@@ -55,11 +58,10 @@ export default {
       });
     },
     reshuffle(g: G, ctx: EffCtx) {
-      const key = `isabelle:${ctx.testId}`;
-      const id = g.s.flags[key] as InstId | undefined;
+      const id = flags.isabelle.get(g, String(ctx.testId));
       if (!id) return;
-      delete g.s.flags[key];
-      const c = g.s.cards[id];
+      flags.isabelle.clear(g, String(ctx.testId));
+      const c = cardIf(g, id);
       if (c?.owner && c.zone === "discard") shuffleIntoDeck(g, id, c.owner);
     },
   },

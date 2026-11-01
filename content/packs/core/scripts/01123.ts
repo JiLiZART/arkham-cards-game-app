@@ -1,5 +1,14 @@
 // Uncovering the Conspiracy (Midnight Masks, act 1)
-import { def, emit, push, type CardScript, type EffCtx, type G } from "../../../../src/engine/api";
+import {
+  type CardScript,
+  def,
+  type EffCtx,
+  emit,
+  type G,
+  moveCard,
+  push,
+  sideDeck,
+} from "../../../../src/engine/api";
 
 export default {
   abilities: [
@@ -14,13 +23,13 @@ export default {
   ],
   fns: {
     drawCultist(g: G, ctx: EffCtx) {
-      const id = g.s.sideDecks.cultists?.shift();
+      const id = sideDeck(g, "cultists")[0];
       if (!id) {
         emit(g, "empty", "The Cultist deck is empty");
         return;
       }
       emit(g, "encounter", `Drawn from the Cultist deck: ${def(g, id).name}`, { card: id });
-      g.s.cards[id].zone = "limbo";
+      moveCard(g, id, "limbo");
       push(g, { t: "Spawn", enemy: id, inv: ctx.you! });
     },
   },

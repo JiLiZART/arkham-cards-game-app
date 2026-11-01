@@ -2,16 +2,17 @@
 import {
   ask,
   card,
+  type CardScript,
   discard,
+  type EffCtx,
   emit,
+  flags,
+  type G,
   inv,
+  type InvId,
   invName,
   invsAt,
   moveCard,
-  type CardScript,
-  type EffCtx,
-  type G,
-  type InvId,
   type Step,
 } from "../../../../src/engine/api";
 
@@ -69,7 +70,7 @@ export default {
     },
     cancel(g: G, ctx: EffCtx) {
       if (!ctx.key || !ctx.dealt) return;
-      g.s.flags[`prevented:${ctx.key}`] = [...ctx.dealt];
+      flags.prevented.set(g, ctx.key, [...ctx.dealt]);
       discard(g, ctx.source!);
       emit(
         g,

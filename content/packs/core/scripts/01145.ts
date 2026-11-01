@@ -1,13 +1,16 @@
 // Vengeance Awaits (Devourer Below, agenda 3)
 import {
+  type CardScript,
+  currentAct,
   discard,
   emit,
   enemiesAt,
   findByCode,
-  moveCard,
-  push,
-  type CardScript,
+  flags,
   type G,
+  moveCard,
+  pile,
+  push,
 } from "../../../../src/engine/api";
 
 export default {
@@ -28,10 +31,10 @@ export default {
     },
     back(g: G) {
       // The Devourer Below becomes both act and agenda: only defeating Umôrdhoth (→R2) remains
-      if (g.s.act) moveCard(g, g.s.act, "removed");
-      g.s.actDeck = [];
-      g.s.agendaDeck = [];
-      g.s.flags.devourer = true;
+      if (currentAct(g)) moveCard(g, currentAct(g)!, "removed");
+      for (const id of [...pile(g, "actDeck"), ...pile(g, "agendaDeck")])
+        moveCard(g, id, "removed");
+      flags.devourer.set(g, true);
       emit(g, "devourer", `The Devourer Below: defeat Umôrdhoth!`, {
         card: findByCode(g, "01157")?.id ?? null,
       });

@@ -1,21 +1,25 @@
 // Fire! — attaches to the nearest location without one; burns each non-Elite card with health there when the investigation phase ends
 import {
   ask,
+  card,
+  cardIf,
+  type CardScript,
   cardsIn,
+  currentPhase,
   def,
   distances,
+  type EffCtx,
   emit,
+  type G,
+  type InstId,
   inv,
+  type InvId,
   invsAt,
   isElite,
   locations,
   moveCard,
+  pile,
   push,
-  type CardScript,
-  type EffCtx,
-  type G,
-  type InstId,
-  type InvId,
   type Step,
 } from "../../../../src/engine/api";
 
@@ -25,7 +29,7 @@ const burning = (g: G, loc: InstId) =>
 
 /** the investigator draws the topmost Fire! of the encounter discard pile, if there is one */
 export function drawFire(g: G, who: InvId) {
-  const id = [...g.s.encounterDiscard].reverse().find((x) => g.s.cards[x].code === FIRE);
+  const id = [...pile(g, "encounterDiscard")].reverse().find((x) => card(g, x).code === FIRE);
   if (!id) return;
   moveCard(g, id, "limbo");
   emit(g, "encounter", `${inv(g, who).name} draws Fire!`, { inv: who, card: id });
@@ -66,8 +70,8 @@ export default {
       attachFire(g, ctx.source!, inv(g, ctx.you!).location, step!, ctx.you!);
     },
     burn(g: G, ctx: EffCtx) {
-      if (g.s.phase !== "investigation") return;
-      const loc = g.s.cards[ctx.source!]?.location;
+      if (currentPhase(g) !== "investigation") return;
+      const loc = cardIf(g, ctx.source!)?.location;
       if (!loc) return;
       for (const i of invsAt(g, loc)) {
         push(g, {

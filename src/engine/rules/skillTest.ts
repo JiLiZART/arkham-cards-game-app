@@ -1,3 +1,4 @@
+import { peril } from "../flags";
 import type { Boost, Effect, Skill, SymbolToken } from "../../content/schema";
 import { randInt } from "../rng";
 import {
@@ -5,6 +6,7 @@ import {
   ask,
   baseSkill,
   card,
+  cardIf,
   cardBlocked,
   checkCondition,
   def,
@@ -54,7 +56,32 @@ export interface TestOpts {
   ctx: EffCtx;
 }
 
+// ---------- what scripts may change about the test under way (each does nothing without one) ----------
+/** the next reveal draws one more token, one of which is chosen (Grotesque Statue, Mask of Silenus) */
+export function addExtraReveal(g: G) {
+  const t = g.s.skillTest;
+  if (t) t.extraReveal = (t.extraReveal ?? 0) + 1;
+}
+/** the test succeeds or fails whatever its total (Wendy's Amulet, a Ritual Site's tablet) */
+export function forceResult(g: G, result: "succeed" | "fail") {
+  const t = g.s.skillTest;
+  if (t && result === "succeed") t.autoSucceed = true;
+  if (t && result === "fail") t.autoFail = true;
+}
+/** the revealed tokens' "-" becomes a "+" (Sure Gamble) */
+export function flipNegativeTokens(g: G) {
+  const t = g.s.skillTest;
+  if (t) t.flipNegative = true;
+}
+/** a script run with the token chosen from several (Mask of Silenus) */
+export function setOnChoose(g: G, code: string, fn: string) {
+  const t = g.s.skillTest;
+  if (t) t.onChoose = { code, fn };
+}
+
 export function startTest(g: G, o: TestOpts) {
+  // an eliminated investigator takes no further part in the scenario (Grimoire, Elimination)
+  if (g.s.invs[o.inv]?.status !== "playing") return;
   if (g.s.skillTest) g.s.testStack.push(g.s.skillTest);
   g.s.counters.test++;
   const t: SkillTestState = {
@@ -173,9 +200,9 @@ export const testValue = (g: G, t: SkillTestState): number => testParts(g, t).to
 function commitStage(g: G, step: Extract<Step, { t: "Test" }>) {
   const t = test(g);
   const asked = step.asked ?? [];
-  const peril = !!g.s.flags.peril;
+  const perilous = !!peril.get(g);
   const loc = inv(g, t.inv).location;
-  const order = [t.inv, ...(peril ? [] : invsAt(g, loc).filter((i) => i !== t.inv))];
+  const order = [t.inv, ...(perilous ? [] : invsAt(g, loc).filter((i) => i !== t.inv))];
   const who = order.find((i) => !asked.includes(i));
   if (!who) {
     push(g, { t: "Test", stage: "reveal" });
@@ -414,7 +441,7 @@ function resolveTokensStage(g: G) {
         const v = es.tokenValue ?? 0;
         mod =
           v === "cluesOnLocation"
-            ? card(g, inv(g, t.inv).location!).clues
+            ? (cardIf(g, inv(g, t.inv).location)?.clues ?? 0)
             : v === "horrorOnYou"
               ? inv(g, t.inv).horror
               : v;
@@ -772,7 +799,7 @@ function endStage(g: G) {
   g.s.chaosBag.push(...t.tokens, ...(t.ignored ?? []));
   expireMods(g, "test");
   g.s.skillTest = g.s.testStack.pop() ?? null;
-  delete g.s.flags.peril;
+  peril.clear(g);
   push(g, win("skillTestEnds", { inv: t.inv, testId: t.id }));
 }
 

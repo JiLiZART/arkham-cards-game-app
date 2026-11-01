@@ -1,31 +1,35 @@
+import { aside as asideFlag, dying, prevented as preventedFlag } from "../flags";
 import { shuffle } from "../rng";
 import {
-  logStep,
-  modSum,
   abilitiesOf,
   activeInvs,
+  addCounter,
+  tapToDraw,
   ask,
   card,
   cardsIn,
   connections,
   controlled,
   def,
-  emit,
-  engagedWith,
-  enemies,
+  type G,
   hasFlag,
   inv,
   invName,
   invsAt,
   isMassive,
+  playerCount,
+  logStep,
   maxHealth,
   maxSanity,
+  emit,
+  modSum,
   moveCard,
-  playerCount,
-  push,
+  enemies,
+  engagedWith,
+  reshuffleDiscard,
+  setCounter,
   spendableGroupClues,
-  tapToDraw,
-  type G,
+  push,
 } from "../core";
 import type { InstId, InvId, Step } from "../types";
 import { win } from "./cards";
@@ -49,8 +53,7 @@ export const drawHandler: Handler<"Draw"> = (g, step) => {
   }
   if (me.deck.length === 0) {
     // empty deck: shuffle discard into deck, take 1 horror
-    me.deck.push(...me.discard.splice(0));
-    shuffle(g.s, me.deck);
+    reshuffleDiscard(g, step.inv);
     emit(
       g,
       "reshuffle",
@@ -67,12 +70,7 @@ export const drawHandler: Handler<"Draw"> = (g, step) => {
   const id = me.deck[0];
   const d = def(g, id);
   moveCard(g, id, "hand");
-  // an encounter-type weakness resolves as if drawn from the encounter deck; a player-type one resolves its revelation and stays in hand (Grimoire, Weakness)
-  const weakness =
-    !!d.subtype &&
-    (d.type === "treachery" ||
-      d.type === "enemy" ||
-      abilitiesOf(g, id).some((a) => a.kind === "revelation"));
+  const weakness = resolvesOnDraw(g, id);
   // a weakness that resolves on draw is public and announced as such (the table shows it before it resolves)
   if (weakness)
     emit(g, "weakness", `${me.name} draws the weakness ${d.name}`, { inv: step.inv, card: id });
@@ -87,12 +85,34 @@ export const drawHandler: Handler<"Draw"> = (g, step) => {
   if (!weakness) rest.unshift(win("cardDrawn", { inv: step.inv, card: id }));
   if (weakness) {
     // weaknesses resolve immediately
-    if (d.type === "enemy") push(g, { t: "Spawn", enemy: id, inv: step.inv }, ...rest);
-    else push(g, { t: "Revelation", inv: step.inv, card: id }, ...rest);
+    resolveWeakness(g, step.inv, id, ...rest);
     return;
   }
   push(g, ...rest);
 };
+
+/**
+ * A weakness that resolves when drawn: an encounter-type one (resolved as if drawn from the encounter deck), or a
+ * player-type one with a revelation, which then stays in hand (Grimoire, Weakness).
+ */
+export function resolvesOnDraw(g: G, id: InstId): boolean {
+  const d = def(g, id);
+  return (
+    !!d.subtype &&
+    (d.type === "treachery" ||
+      d.type === "enemy" ||
+      abilitiesOf(g, id).some((a) => a.kind === "revelation"))
+  );
+}
+
+/**
+ * Resolve a weakness as if just drawn, then `after`: an enemy spawns, anything else resolves its revelation. Also for a
+ * weakness put into a hand without being drawn, which "must resolve … as if they had just drawn it" (Grimoire, Weakness).
+ */
+export function resolveWeakness(g: G, i: InvId, id: InstId, ...after: Step[]) {
+  if (def(g, id).type === "enemy") push(g, { t: "Spawn", enemy: id, inv: i }, ...after);
+  else push(g, { t: "Revelation", inv: i, card: id }, ...after);
+}
 
 // ---------- damage & horror ----------
 /** assets that can soak damage (health) or horror (sanity) */
@@ -124,11 +144,8 @@ export const assignDamageHandler: Handler<"AssignDamage"> = (g, step) => {
   const assigned = { ...step.assigned };
   let { damage, horror } = step;
   // what the attack's window prevented comes off once, before the first point is placed
-  const prevented = step.key
-    ? (g.s.flags[`prevented:${step.key}`] as [number, number] | undefined)
-    : undefined;
+  const prevented = step.key ? preventedFlag.take(g, step.key) : undefined;
   if (prevented) {
-    delete g.s.flags[`prevented:${step.key}`];
     damage = Math.max(0, damage - prevented[0]);
     horror = Math.max(0, horror - prevented[1]);
     if (!damage && !horror) return;
@@ -211,14 +228,14 @@ export const assignDamageHandler: Handler<"AssignDamage"> = (g, step) => {
   let invHorror = 0;
   for (const [target, [d, h]] of Object.entries(assigned)) {
     if (target === step.inv) {
-      me.damage += d;
-      me.horror += h;
+      addCounter(g, me.id, "damage", d);
+      addCounter(g, me.id, "horror", h);
       invDamage += d;
       invHorror += h;
     } else {
       const c = card(g, target);
-      c.damage += d;
-      c.horror += h;
+      addCounter(g, c.id, "damage", d);
+      addCounter(g, c.id, "horror", h);
       if (d > 0 || h > 0) touchedAssets.push(target);
       emit(g, "assetDamage", `${def(g, target).name} takes ${d} damage, ${h} horror`, {
         card: target,
@@ -270,10 +287,10 @@ export function assetDefeatCheck(g: G, i: InvId) {
     if (!c.controller || (c.controller !== i && !def(g, c.id).soaksForLocation)) continue;
     const d = def(g, c.id);
     if ((d.health && c.damage >= d.health) || (d.sanity && c.horror >= d.sanity)) {
-      if (g.s.flags[`dying:${c.id}`]) continue;
+      if (dying.get(g, c.id)) continue;
       emit(g, "assetDefeated", `${d.name} is defeated`, { card: c.id });
       // "when defeated" reactions resolve while it is still in play, then it leaves
-      g.s.flags[`dying:${c.id}`] = true;
+      dying.set(g, c.id, true);
       push(g, win("assetDefeated", { inv: c.controller, card: c.id }), {
         t: "Script",
         code: "__engine",
@@ -285,7 +302,7 @@ export function assetDefeatCheck(g: G, i: InvId) {
 }
 
 export function removeDefeatedAsset(g: G, id: InstId) {
-  delete g.s.flags[`dying:${id}`];
+  dying.clear(g, id);
   const c = g.s.cards[id];
   if (c?.zone === "play")
     moveCard(g, id, c.owner ? "discard" : "encounterDiscard", { inv: c.owner });
@@ -317,8 +334,8 @@ export const defeatedHandler: Handler<"Defeated"> = (g, step) => {
     { inv: step.inv, data: { by: step.by } },
   );
   // clues drop at location
-  if (me.location && me.clues) card(g, me.location).clues += me.clues;
-  me.clues = 0;
+  if (me.location && me.clues) addCounter(g, me.location, "clues", me.clues);
+  setCounter(g, me.id, "clues", 0);
   // engaged enemies stay at the location, unengaged
   for (const e of enemies(g)) if (e.engagedWith === step.inv) e.engagedWith = null;
   // their weaknesses' "when the game ends" abilities resolve now, before leaving the game (Grimoire, Elimination)
@@ -420,7 +437,7 @@ export function revealLocation(g: G, loc: InstId) {
   if (c.revealed) return;
   c.revealed = true;
   const d = def(g, loc);
-  c.clues += (d.clues ?? 0) * (d.cluesPerInvestigator ? playerCount(g) : 1);
+  addCounter(g, c.id, "clues", (d.clues ?? 0) * (d.cluesPerInvestigator ? playerCount(g) : 1));
   emit(g, "reveal", `${d.name} is revealed (${c.clues} clues)`, {
     card: loc,
     data: { n: c.clues },
@@ -462,8 +479,8 @@ export const gainCluesHandler: Handler<"GainClues"> = (g, step) => {
   if (g.s.cancelled.includes(step.key)) return;
   const loc = card(g, step.location);
   const n = Math.min(step.n, loc.clues);
-  loc.clues -= n;
-  inv(g, step.inv).clues += n;
+  addCounter(g, loc.id, "clues", -n);
+  addCounter(g, step.inv, "clues", n);
   if (n > 0) push(g, win("cluesDiscovered", { inv: step.inv, location: step.location, amount: n }));
   emit(
     g,
@@ -516,10 +533,10 @@ export const mulliganHandler: Handler<"Mulligan"> = (g, step) => {
   for (const h of chosen) moveCard(g, h, "deck");
   shuffle(g.s, me.deck);
   // weaknesses set aside during opening draw go back in
-  const aside = (g.s.flags[`aside:${step.inv}`] as InstId[] | undefined) ?? [];
-  for (const h of aside) moveCard(g, h, "deck");
-  if (aside.length) shuffle(g.s, me.deck);
-  delete g.s.flags[`aside:${step.inv}`];
+  const setAside = asideFlag.get(g, step.inv) ?? [];
+  for (const h of setAside) moveCard(g, h, "deck");
+  if (setAside.length) shuffle(g.s, me.deck);
+  asideFlag.clear(g, step.inv);
   if (chosen.length)
     emit(g, "mulligan", `${me.name} redraws ${chosen.length} card(s)`, {
       inv: step.inv,
@@ -530,7 +547,7 @@ export const mulliganHandler: Handler<"Mulligan"> = (g, step) => {
 /** draw n opening cards, setting weaknesses aside and replacing them */
 export function drawOpeningCards(g: G, i: InvId, n: number) {
   const me = inv(g, i);
-  const aside = ((g.s.flags[`aside:${i}`] as InstId[] | undefined) ?? []).slice();
+  const aside = (asideFlag.get(g, i) ?? []).slice();
   let drawn = 0;
   while (drawn < n && me.deck.length) {
     const id = me.deck[0];
@@ -542,7 +559,7 @@ export function drawOpeningCards(g: G, i: InvId, n: number) {
     moveCard(g, id, "hand");
     drawn++;
   }
-  g.s.flags[`aside:${i}`] = aside;
+  asideFlag.set(g, i, aside);
 }
 
 /** most cards an investigator keeps at the end of upkeep */

@@ -1,18 +1,21 @@
-import { shuffle } from "../rng";
+import { peril, surge as surgeFlag } from "../flags";
 import {
   abilitiesOf,
-  activeInvs,
   actClueCost,
+  activeInvs,
+  addCounter,
+  tapToDraw,
   card,
   def,
-  emit,
+  type G,
   hasFlag,
   inv,
   invName,
+  emit,
   moveCard,
+  reshuffleDiscard,
+  setCounter,
   push,
-  tapToDraw,
-  type G,
 } from "../core";
 import type { InstId, Step } from "../types";
 import { win } from "./cards";
@@ -24,9 +27,7 @@ export const drawEncounterHandler: Handler<"DrawEncounter"> = (g, step) => {
   if (inv(g, step.inv).status !== "playing") return;
   if (!tapToDraw(g, step, step.inv, "encounter", 1)) return;
   if (g.s.encounterDeck.length === 0) {
-    g.s.encounterDeck.push(...g.s.encounterDiscard.splice(0));
-    for (const id of g.s.encounterDeck) g.s.cards[id].zone = "encounterDeck";
-    shuffle(g.s, g.s.encounterDeck);
+    reshuffleDiscard(g, "encounter");
     emit(g, "reshuffle", "The encounter discard pile is shuffled into a new encounter deck");
   }
   const id = g.s.encounterDeck[0];
@@ -61,7 +62,7 @@ export const revelationHandler: Handler<"Revelation"> = (g, step) => {
   }
   const d = def(g, step.card);
   moveCard(g, step.card, "resolving");
-  if (d.keywords.includes("peril")) g.s.flags.peril = true;
+  if (d.keywords.includes("peril")) peril.set(g, true);
   const ctx = { source: step.card, you: step.inv, inv: step.inv };
   const steps: Step[] = [];
   for (const a of abilitiesOf(g, step.card)) {
@@ -75,9 +76,8 @@ export const revelationHandler: Handler<"Revelation"> = (g, step) => {
 
 export function finishRevelation(g: G, cardId: InstId, invId: string) {
   const c = g.s.cards[cardId];
-  delete g.s.flags.peril;
-  const surge = g.s.flags[`surge:${cardId}`] || def(g, cardId).keywords.includes("surge");
-  delete g.s.flags[`surge:${cardId}`];
+  peril.clear(g);
+  const surges = surgeFlag.take(g, cardId) || def(g, cardId).keywords.includes("surge");
   // a treachery with Victory X is added to the victory display instead (Grimoire, Victory X)
   const d = def(g, cardId);
   const playerType = d.type === "asset" || d.type === "event" || d.type === "skill";
@@ -93,7 +93,7 @@ export function finishRevelation(g: G, cardId: InstId, invId: string) {
             : "discard"
           : "encounterDiscard",
     );
-  if (surge) push(g, { t: "DrawEncounter", inv: invId });
+  if (surges) push(g, { t: "DrawEncounter", inv: invId });
 }
 
 // ---------- doom, agenda, act ----------
@@ -109,7 +109,7 @@ export const placeDoomHandler: Handler<"PlaceDoom"> = (g, step) => {
   // the agenda may replace placing doom (Brethren of Ash)
   const agenda = g.s.agenda ? g.s.cards[g.s.agenda] : undefined;
   if (agenda && g.db.scripts[agenda.code]?.wouldPlaceDoom?.(g, agenda.id, step.n)) return;
-  c.doom += step.n;
+  addCounter(g, c.id, "doom", step.n);
   emit(g, "doom", `${step.n} doom placed on ${def(g, step.card).name}`, {
     card: step.card,
     data: { n: step.n },
@@ -141,7 +141,8 @@ export const advanceAgendaHandler: Handler<"AdvanceAgenda"> = (g, step) => {
     push(g, win("agendaAdvances", { card: id }), { ...step, fired: true });
     return;
   }
-  for (const c of Object.values(g.s.cards)) if (DOOM_ZONES.includes(c.zone)) c.doom = 0;
+  for (const c of Object.values(g.s.cards))
+    if (DOOM_ZONES.includes(c.zone)) setCounter(g, c.id, "doom", 0);
   emit(g, "agendaAdvance", `Agenda advances: ${def(g, id).backName ?? def(g, id).name}`, {
     card: id,
   });
@@ -157,7 +158,7 @@ export const advanceAgendaHandler: Handler<"AdvanceAgenda"> = (g, step) => {
 export function nextAgenda(g: G, prev: InstId) {
   if (g.s.phase === "ended") return;
   moveCard(g, prev, "removed");
-  const next = g.s.agendaDeck.shift();
+  const next = g.s.agendaDeck[0];
   if (next) {
     moveCard(g, next, "agenda");
     emit(g, "agenda", `New agenda: ${def(g, next).name}`, { card: next });
@@ -208,7 +209,7 @@ export const advanceActHandler: Handler<"AdvanceAct"> = (g, step) => {
     );
     for (const i of order) {
       const take = Math.min(n, inv(g, i).clues);
-      inv(g, i).clues -= take;
+      addCounter(g, i, "clues", -take);
       n -= take;
     }
   }
@@ -225,7 +226,7 @@ export const advanceActHandler: Handler<"AdvanceAct"> = (g, step) => {
 export function nextAct(g: G, prev: InstId) {
   if (g.s.phase === "ended") return;
   moveCard(g, prev, "removed");
-  const next = g.s.actDeck.shift();
+  const next = g.s.actDeck[0];
   if (next) {
     moveCard(g, next, "act");
     emit(g, "act", `New act: ${def(g, next).name}`, { card: next });

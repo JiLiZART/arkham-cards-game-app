@@ -21,6 +21,19 @@
           }
         ]
       }
+    },
+    {
+      "files": ["content/**/scripts/**"],
+      "rules": {
+        "no-restricted-properties": [
+          "error",
+          {
+            "object": "g",
+            "property": "s",
+            "message": "scripts reach the game only through src/engine/api.ts (its accessors for cards, piles, counters, flags and the test)"
+          }
+        ]
+      }
     }
   ]
 }

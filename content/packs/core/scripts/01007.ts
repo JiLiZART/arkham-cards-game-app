@@ -1,5 +1,13 @@
 // Cover Up — discard clues from Cover Up instead of discovering them; trauma if clues remain at game end
-import { card, emit, inv, type CardScript, type EffCtx, type G } from "../../../../src/engine/api";
+import {
+  cancelEvent,
+  card,
+  type CardScript,
+  type EffCtx,
+  emit,
+  type G,
+  inv,
+} from "../../../../src/engine/api";
 
 export default {
   abilities: [
@@ -16,7 +24,7 @@ export default {
       const c = card(g, ctx.source!);
       const n = Math.min(ctx.x ?? 1, c.clues);
       c.clues -= n;
-      if (ctx.key) g.s.cancelled.push(ctx.key);
+      if (ctx.key) cancelEvent(g, ctx.key);
       emit(g, "coverUp", `${n} clue(s) are discarded from Cover Up (${c.clues} left)`, {
         card: c.id,
         data: { n },

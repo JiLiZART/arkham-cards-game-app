@@ -1,26 +1,39 @@
 // Queen of Ash: the sewers and the cistern, Elokoss's two sides, the harbinger's codex, the sluice gate
 import {
   activeInvs,
+  addChaosTokens,
+  allCards,
   ask,
+  campaignLogOf,
   card,
+  cardIf,
+  type CardScript,
   cardsIn,
+  currentAct,
+  currentTest,
   def,
+  difficultyOf,
   discard,
+  type EffCtx,
   emit,
   enemies,
   findByCode,
-  inv,
-  invsAt,
-  moveCard,
-  playerCount,
-  push,
-  shuffle,
-  stepsToward,
-  type CardScript,
-  type EffCtx,
+  flags,
+  forceResult,
   type G,
   type InstId,
+  inv,
+  invsAt,
+  leadInvestigator,
+  moveCard,
+  pile,
+  playerCount,
+  push,
+  shuffleDeck,
+  shuffleList,
   type Step,
+  stepsToward,
+  turnOrder,
 } from "../../../../src/engine/api";
 import type { ChaosToken, Effect } from "../../../../src/content/schema";
 import { drawFire } from "../../../packs/core_2026/scripts/12129";
@@ -31,7 +44,7 @@ const SLUICE = "12175";
 const TUNNELS = ["12183", "12184", "12185", "12186", "12187"];
 
 const setAside = (g: G, code: string) =>
-  Object.values(g.s.cards).filter((c) => c.code === code && c.zone === "setAside");
+  allCards(g).filter((c) => c.code === code && c.zone === "setAside");
 const cistern = (g: G) => findByCode(g, CISTERN, ["location"]);
 const elokoss = (g: G) => enemies(g).find((e) => e.code === "12179" || e.code === "12179b");
 const firesAt = (g: G, loc: InstId | null) =>
@@ -96,11 +109,12 @@ export default {
   },
   fns: {
     setup(g: G) {
-      g.s.chaosBag.push(...BAG[g.s.difficulty]);
-      if (g.s.campaignLog.scoured_arkham_for_answers) for (const i of g.s.order) inv(g, i).clues++;
-      if (g.s.campaignLog.stirred_up_trouble) {
+      addChaosTokens(g, BAG[difficultyOf(g)]);
+      if (campaignLogOf(g).scoured_arkham_for_answers)
+        for (const i of turnOrder(g)) inv(g, i).clues++;
+      if (campaignLogOf(g).stirred_up_trouble) {
         // the cult has heard of your violence: 1 Cultist per investigator, each at a different Sewer Tunnels
-        const cultists = Object.values(g.s.cards)
+        const cultists = allCards(g)
           .filter(
             (c) =>
               c.zone === "encounterDeck" &&
@@ -108,7 +122,7 @@ export default {
               def(g, c.id).traits.includes("Cultist"),
           )
           .map((c) => c.id);
-        shuffle(g.s, cultists);
+        shuffleList(g, cultists);
         const tunnels = TUNNELS.map((t) => findByCode(g, t, ["location"])).filter(Boolean);
         cultists.slice(0, playerCount(g)).forEach((id, k) => {
           moveCard(g, id, "limbo");
@@ -117,13 +131,13 @@ export default {
       }
     },
     drawFire(g: G, ctx: EffCtx) {
-      drawFire(g, ctx.you ?? g.s.lead);
+      drawFire(g, ctx.you ?? leadInvestigator(g));
     },
     /** Expert and Hard: at a Ritual Site, the tablet fails the test */
     ritualSiteFails(g: G, ctx: EffCtx) {
       const loc = inv(g, ctx.you!).location;
-      if (g.s.skillTest && loc && def(g, loc).traits.includes("Ritual Site"))
-        g.s.skillTest.autoFail = true;
+      if (currentTest(g) && loc && def(g, loc).traits.includes("Ritual Site"))
+        forceResult(g, "fail");
     },
     flameInTheDark(g: G, ctx: EffCtx) {
       const servant = setAside(g, "12180")[0];
@@ -137,7 +151,7 @@ export default {
     /** The Mother Arrives: Elokoss on her Mother of Flame side; special agenda 3a is the act and the agenda */
     motherArrives(g: G) {
       const c = cistern(g);
-      const actOne = g.s.act && card(g, g.s.act).code === "12172";
+      const actOne = cardIf(g, currentAct(g))?.code === "12172";
       const faint = elokoss(g);
       if (actOne || !faint) {
         if (c && !card(g, c.id).revealed)
@@ -152,8 +166,8 @@ export default {
         faint.code = "12179b";
         emit(g, "flip", "Elokoss awakens: Mother of Flame", { card: faint.id });
       }
-      if (g.s.act) moveCard(g, g.s.act, "removed");
-      for (const id of g.s.actDeck.splice(0)) moveCard(g, id, "removed");
+      if (currentAct(g)) moveCard(g, currentAct(g)!, "removed");
+      for (const id of [...pile(g, "actDeck")]) moveCard(g, id, "removed");
     },
     /** The Ritual Site: Elokoss stirs, Fire! for the investigator there, the knights and heralds join the deck, the sluice */
     ritualSite(g: G) {
@@ -171,7 +185,7 @@ export default {
       }
       for (const x of [...setAside(g, FIRE), ...setAside(g, "12177"), ...setAside(g, "12178")])
         moveCard(g, x.id, "encounterDeck");
-      shuffle(g.s, g.s.encounterDeck);
+      shuffleDeck(g, "encounter");
       const sluice = setAside(g, SLUICE)[0];
       if (sluice) moveCard(g, sluice.id, "location");
     },
@@ -218,7 +232,7 @@ export default {
         "codex",
         "By defeating the Servant of Flame, you have brought them to their senses. As you take off their mask, they look up at you, confused.",
       );
-      const found = HARBINGER.find(([key]) => g.s.campaignLog[key]);
+      const found = HARBINGER.find(([key]) => campaignLogOf(g)[key]);
       if (!found) return;
       for (const i of activeInvs(g))
         push(g, { t: "Effects", effects: found[1], ctx: { ...ctx, you: i, inv: i } });
@@ -230,12 +244,12 @@ export default {
       // its clues are always replenished
       if (c && card(g, c.id).revealed && card(g, c.id).clues === 0)
         card(g, c.id).clues = 2 * playerCount(g);
-      const act = g.s.act ? card(g, g.s.act).code : null;
+      const act = cardIf(g, currentAct(g))?.code ?? null;
       if (act === "12172" && c && activeInvs(g).some((i) => inv(g, i).location === c.id)) {
         push(g, { t: "AdvanceAct" });
         return;
       }
-      if (g.s.flags["defeated:12179"] || g.s.flags["defeated:12179b"])
+      if (flags.defeated.get(g, "12179") || flags.defeated.get(g, "12179b"))
         push(g, { t: "Resolution", id: "R1" });
     },
   },

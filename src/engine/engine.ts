@@ -1,15 +1,16 @@
+import { discardFromOpeningHands } from "./flags";
 import type { LogCondition, SetupStep } from "../content/schema";
 import {
-  card,
+  addCounter,
   createCard,
   def,
-  emit,
   findByCode,
+  type G,
   inv,
   locationByName,
+  emit,
   moveCard,
   push,
-  type G,
 } from "./core";
 import { handlers as effectHandlers } from "./effects";
 import { randInt, shuffle } from "./rng";
@@ -85,7 +86,7 @@ const ENGINE_FNS: Record<string, (g: G, ctx: EffCtx, step: Step) => void> = {
     }),
   endTurnCleanup: (g, ctx) => endTurnCleanup(g, ctx.inv!),
   gainResource: (g, ctx) => {
-    inv(g, ctx.inv!).resources++;
+    addCounter(g, ctx.inv!, "resources", 1);
   },
   roundCleanup: (g) => roundCleanup(g),
   exhaustEnemy: (g, ctx) => exhaustEnemy(g, ctx.enemy!),
@@ -101,6 +102,9 @@ const scriptHandler = (g: G, step: Extract<Step, { t: "Script" }>) => {
     ENGINE_FNS[step.fn](g, step.ctx, step);
     return;
   }
+  // as for data effects: an investigator eliminated mid-effect (an attack of opportunity) resolves nothing more of it
+  const you = step.ctx.you;
+  if (you && g.s.invs[you] && g.s.invs[you].status !== "playing") return;
   const fn =
     g.db.scripts[step.code]?.fns?.[step.fn] ?? g.db.scripts[g.s.scenarioId]?.fns?.[step.fn];
   if (!fn) throw new Error(`missing script function ${step.code}.${step.fn}`);
@@ -275,14 +279,14 @@ function applySetupStep(g: G, st: SetupStep) {
       }
       return;
     case "placeDoomOnAgenda":
-      if (s.agenda) card(g, s.agenda).doom += st.amount;
+      if (s.agenda) addCounter(g, s.agenda, "doom", st.amount);
       return;
     case "addChaosToken":
       s.chaosBag.push(st.token);
       return;
     case "discardRandomFromHands":
       // applied after opening hands are drawn
-      s.flags.discardFromOpeningHands = st.amount;
+      discardFromOpeningHands.set(g, st.amount);
       return;
     case "script":
       g.db.scripts[s.scenarioId]?.fns?.[st.fn]?.(g, {}, undefined);
@@ -372,7 +376,7 @@ export function createGame(db: ContentDb, setup: GameSetup): Result {
     shuffle(s, s.invs[i].deck);
     drawOpeningCards(g, i, 5);
   }
-  const discardN = (s.flags.discardFromOpeningHands as number | undefined) ?? 0;
+  const discardN = discardFromOpeningHands.get(g) ?? 0;
   for (const i of s.order) {
     const me = inv(g, i);
     for (let k = 0; k < discardN && me.hand.length; k++)

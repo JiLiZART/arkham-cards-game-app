@@ -1,14 +1,18 @@
 // They're Getting Out! (The Gathering, agenda 3)
 import {
   canEnemyEnter,
+  type CardScript,
+  currentAct,
+  currentAgenda,
   def,
   emit,
   enemies,
   findByCode,
+  type G,
+  inv,
   push,
   stepsToward,
-  type CardScript,
-  type G,
+  turnOrder,
 } from "../../../../src/engine/api";
 
 const ghouls = (g: G) => enemies(g).filter((e) => def(g, e.id).traits.includes("Ghoul"));
@@ -41,17 +45,17 @@ export default {
         .map((c) => findByCode(g, c, ["location"])?.id)
         .filter(Boolean);
       const n = ghouls(g).filter((e) => rooms.includes(e.location!)).length;
-      if (n && g.s.agenda) push(g, { t: "PlaceDoom", card: g.s.agenda, n });
+      if (n && currentAgenda(g)) push(g, { t: "PlaceDoom", card: currentAgenda(g)!, n });
     },
     back(g: G) {
-      const act = g.s.act ? (def(g, g.s.act).stage ?? 1) : 3;
+      const act = currentAct(g) ? (def(g, currentAct(g)!).stage ?? 1) : 3;
       if (act < 3) {
         push(g, { t: "Resolution", id: "R3" });
         return;
       }
       // each investigator that has not resigned is defeated and suffers 1 physical trauma
-      for (const i of g.s.order)
-        if (g.s.invs[i].status === "playing") push(g, { t: "Defeated", inv: i, by: "damage" });
+      for (const i of turnOrder(g))
+        if (inv(g, i).status === "playing") push(g, { t: "Defeated", inv: i, by: "damage" });
     },
   },
 } satisfies CardScript;

@@ -1,18 +1,19 @@
 // Miskatonic University (In Flames) — when the investigation phase ends: 1 direct damage to each player card with health here
 import {
-  cardsIn,
-  def,
-  invsAt,
-  push,
   type CardScript,
+  cardsIn,
+  currentPhase,
+  def,
   type EffCtx,
   type G,
+  invsAt,
+  push,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
     inFlames(g: G, ctx: EffCtx) {
-      if (g.s.phase !== "investigation") return;
+      if (currentPhase(g) !== "investigation") return;
       for (const i of invsAt(g, ctx.source!)) {
         push(g, {
           t: "AssignDamage",

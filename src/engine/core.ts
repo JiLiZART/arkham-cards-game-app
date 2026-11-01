@@ -1,7 +1,9 @@
-import { shuffle } from "./rng";
+import { attacked, connections as connectionsAdded, named } from "./flags";
+import { randInt, shuffle } from "./rng";
 import type {
   Ability,
   CardDef,
+  ChaosToken,
   CardFilter,
   Condition,
   Cost,
@@ -24,7 +26,7 @@ import type {
   Zone,
 } from "./types";
 
-/** engine context passed to every rule: mutable (immer draft) state + static content */
+/** engine context passed to every rule: the state (mutated in place, one deep copy per choice) + static content */
 export interface G {
   s: GameState;
   db: ContentDb;
@@ -51,6 +53,93 @@ export const inv = (g: G, id: InvId): InvState => {
   return i;
 };
 export const name = (g: G, id: InstId) => def(g, id).name;
+
+// ---------- what scripts read about the scenario ----------
+/** a card instance, or undefined when the id is absent or names no card */
+export const cardIf = (g: G, id: InstId | null | undefined): CardInst | undefined =>
+  id ? g.s.cards[id] : undefined;
+/** every card instance, in creation order */
+export const allCards = (g: G): CardInst[] => Object.values(g.s.cards);
+/** an investigator, or undefined when the id is absent or names none */
+export const invIf = (g: G, id: InvId | null | undefined): InvState | undefined =>
+  id ? g.s.invs[id] : undefined;
+export const currentAct = (g: G) => g.s.act;
+export const currentAgenda = (g: G) => g.s.agenda;
+export const leadInvestigator = (g: G) => g.s.lead;
+/** every investigator in turn order, eliminated ones included */
+export const turnOrder = (g: G): readonly InvId[] => g.s.order;
+export const currentPhase = (g: G) => g.s.phase;
+export const currentRound = (g: G) => g.s.round;
+export const difficultyOf = (g: G) => g.s.difficulty;
+/** the campaign log as the scenario began (read-only for scripts) */
+export const campaignLogOf = (g: G): Readonly<Record<string, unknown>> => g.s.campaignLog;
+/** the skill test under way, or null */
+export const currentTest = (g: G) => g.s.skillTest;
+/** a scenario pile, top first for the decks (read-only: move cards with moveCard) */
+export const pile = (
+  g: G,
+  name: "encounterDeck" | "encounterDiscard" | "actDeck" | "agendaDeck",
+): readonly InstId[] => g.s[name];
+export const sideDeck = (g: G, name: string): readonly InstId[] => g.s.sideDecks[name] ?? [];
+
+// ---------- what scripts change besides cards, counters and flags ----------
+/** the event under this key doesn't happen (an attack, a token's effect) */
+export function cancelEvent(g: G, key: string) {
+  g.s.cancelled.push(key);
+}
+export function addChaosTokens(g: G, tokens: ChaosToken[]) {
+  g.s.chaosBag.push(...tokens);
+}
+/** put an investigator at a location without moving (no move triggers) */
+export function placeInvestigator(g: G, i: InvId, loc: InstId | null) {
+  inv(g, i).location = loc;
+}
+/** the enemy is engaged with the investigator (null: no one), with no engage triggers */
+export function setEngaged(g: G, enemy: InstId, i: InvId | null) {
+  card(g, enemy).engagedWith = i;
+}
+
+// ---------- chance, from the scenario's seeded generator ----------
+/** a random whole number from 0 to n - 1 */
+export const randomInt = (g: G, n: number) => randInt(g.s, n);
+/** shuffle a script's own list in place */
+export function shuffleList<T>(g: G, list: T[]) {
+  shuffle(g.s, list);
+}
+/** shuffle an investigator's deck or the encounter deck */
+export function shuffleDeck(g: G, owner: InvId | "encounter") {
+  shuffle(g.s, owner === "encounter" ? g.s.encounterDeck : inv(g, owner).deck);
+}
+
+// ---------- counters ----------
+/** the tokens a card or an investigator holds; investigators hold no doom or uses */
+export type Counter = "damage" | "horror" | "clues" | "doom" | "uses" | "resources";
+
+/** the record a counter lives on: an investigator (by code) or a card instance */
+function holder(g: G, id: InvId | InstId, k: Counter): Record<Counter, number> {
+  const i = g.s.invs[id];
+  if (i) {
+    if (k === "doom" || k === "uses") throw new Error(`investigator ${id} holds no ${k}`);
+    return i as unknown as Record<Counter, number>;
+  }
+  const c = g.s.cards[id];
+  if (!c) throw new Error(`no card or investigator ${id}`);
+  return c;
+}
+
+export const counter = (g: G, id: InvId | InstId, k: Counter): number => holder(g, id, k)[k];
+
+/** set a counter as given (no clamping: a rule clamps where it must) */
+export function setCounter(g: G, id: InvId | InstId, k: Counter, v: number) {
+  holder(g, id, k)[k] = v;
+}
+
+/** add to a counter (negative to remove) and return the new value */
+export function addCounter(g: G, id: InvId | InstId, k: Counter, n: number): number {
+  const h = holder(g, id, k);
+  h[k] += n;
+  return h[k];
+}
 export const invName = (g: G, id: InvId) => g.s.invs[id]?.name ?? id;
 
 export const activeInvs = (g: G): InvId[] =>
@@ -275,6 +364,32 @@ export function shuffleIntoDeck(g: G, id: InstId, owner: InvId) {
   });
 }
 
+/** an investigator's deck and discard pile, or the encounter deck and discard */
+const pilesOf = (g: G, owner: InvId | "encounter") =>
+  owner === "encounter"
+    ? { deck: g.s.encounterDeck, discard: g.s.encounterDiscard, zone: "encounterDeck" as const }
+    : { deck: inv(g, owner).deck, discard: inv(g, owner).discard, zone: "deck" as const };
+
+/** the discard pile goes back into its deck, in its order, and the deck is shuffled */
+export function reshuffleDiscard(g: G, owner: InvId | "encounter") {
+  const p = pilesOf(g, owner);
+  for (const id of p.discard.slice())
+    moveCard(g, id, p.zone, owner === "encounter" ? {} : { inv: owner });
+  shuffle(g.s, p.deck);
+}
+
+/** put cards on top of an investigator's deck from wherever they are, `ids[0]` ending on top */
+export function putOnTop(g: G, owner: InvId, ids: InstId[]) {
+  for (const id of ids.slice().reverse()) moveCard(g, id, "deck", { inv: owner, top: true });
+}
+
+/** take cards out of an investigator's deck, shuffle the rest, and put them back on top, `ids[0]` on top */
+export function shuffleThenTop(g: G, owner: InvId, ids: InstId[]) {
+  for (const id of ids) moveCard(g, id, "limbo");
+  shuffle(g.s, inv(g, owner).deck);
+  putOnTop(g, owner, ids);
+}
+
 /** discard a card to its owner's discard pile or the encounter discard */
 export function discard(g: G, id: InstId) {
   const c = card(g, id);
@@ -365,7 +480,7 @@ export function matchesFilter(g: G, code: string, f: CardFilter): boolean {
 export function connections(g: G, loc: InstId): InstId[] {
   const scen = g.db.scenarios[g.s.scenarioId];
   const code = card(g, loc).code;
-  const extra = (g.s.flags.connections as [string, string][] | undefined) ?? [];
+  const extra = connectionsAdded.get(g) ?? [];
   const codes = new Set<string>();
   for (const [a, b] of [...scen.connections, ...extra]) {
     if (a === code) codes.add(b);
@@ -671,7 +786,7 @@ export function checkCondition(g: G, c: Condition, ctx: EffCtx): boolean {
     return !!you && controlled(g, you).some((a) => matchesFilter(g, a.code, c.assetInPlay));
   if ("controlsCard" in c)
     return !!you && controlled(g, you).some((a) => a.code === c.controlsCard);
-  if ("scenarioFlag" in c) return !!g.s.flags[c.scenarioFlag];
+  if ("scenarioFlag" in c) return !!named(g, c.scenarioFlag);
   if ("phase" in c) return g.s.phase === c.phase;
   if ("selfHasClues" in c) return !!ctx.source && card(g, ctx.source).clues > 0;
   if ("engaged" in c) return !!you && engagedWith(g, you).length > 0;
@@ -706,7 +821,7 @@ export function checkCondition(g: G, c: Condition, ctx: EffCtx): boolean {
   if ("remainingSanity" in c) return !!you && remainingSanity(g, you) <= c.remainingSanity.max;
   if ("eventEnemyExhausted" in c) return !!ctx.enemy && !!g.s.cards[ctx.enemy]?.exhausted;
   if ("eventEnemyAttackedYouThisRound" in c)
-    return !!ctx.enemy && g.s.flags[`attacked:${ctx.enemy}:${you}`] === g.s.round;
+    return !!ctx.enemy && !!you && attacked.get(g, [ctx.enemy, you]) === g.s.round;
   if ("eventCardIsSelf" in c) return !!ctx.card && ctx.card === ctx.source;
   if ("canPay" in c) return !!you && !!ctx.source && canPay(g, you, ctx.source, c.canPay);
   if ("testTokens" in c) return !!g.s.skillTest?.tokens.some((t) => c.testTokens.includes(t));

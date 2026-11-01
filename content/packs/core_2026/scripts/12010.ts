@@ -3,24 +3,25 @@
 import {
   ask,
   canPlay,
+  cardIf,
+  type CardScript,
   controlled,
   def,
+  type EffCtx,
   emit,
+  type G,
+  type InstId,
   inv,
   invsAt,
   moveCard,
   push,
-  type CardScript,
-  type EffCtx,
-  type G,
-  type InstId,
   type Step,
 } from "../../../../src/engine/api";
 
 const story = (g: G, id: InstId) => def(g, id).traits.includes("Story");
 
 function returnToHand(g: G, id: InstId) {
-  const c = g.s.cards[id];
+  const c = cardIf(g, id);
   if (!c?.owner) return;
   moveCard(g, id, "hand", { inv: c.owner });
   emit(g, "returned", `${def(g, id).name} returns to its owner's hand`, { inv: c.owner, card: id });
@@ -82,7 +83,7 @@ export default {
         "Dexter Drake: return an asset at your location to its owner's hand?",
         [
           ...args
-            .filter((id) => g.s.cards[id]?.zone === "play")
+            .filter((id) => cardIf(g, id)?.zone === "play")
             .map((id) => ({ id, label: `Return ${def(g, id).name}`, card: id, value: id })),
           { id: "none", label: "No", value: "none" },
         ],

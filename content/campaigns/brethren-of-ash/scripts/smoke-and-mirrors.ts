@@ -1,30 +1,39 @@
 // Smoke and Mirrors: suspects dealt beneath locations, their codex entries and leads, the harbinger, the Servant of Flame
 import {
   activeInvs,
+  addCounter,
+  allCards,
   ask,
   card,
+  cardIf,
+  type CardScript,
   cardsIn,
   connections,
+  currentAct,
+  currentAgenda,
   def,
   discard,
+  type EffCtx,
   emit,
   enemies,
   findByCode,
+  flags,
+  type G,
+  type InstId,
   inv,
   invName,
   invsAt,
+  leadInvestigator,
   locationByName,
   locations,
   moveCard,
+  pile,
   playerCount,
   push,
-  randInt,
-  shuffle,
-  type CardScript,
-  type EffCtx,
-  type G,
-  type InstId,
+  randomInt,
+  shuffleList,
   type Step,
+  turnOrder,
 } from "../../../../src/engine/api";
 
 const SERVANT = "12138";
@@ -77,9 +86,8 @@ const CODEX: Record<string, [string, string]> = {
   ],
 };
 
-const underAct = (g: G): InstId[] => (g.s.flags.underAct as InstId[] | undefined) ?? [];
-const beneath = (g: G, loc: InstId | null) =>
-  loc ? (g.s.flags[`beneath:${loc}`] as InstId | undefined) : undefined;
+const underAct = (g: G): InstId[] => flags.underAct.get(g) ?? [];
+const beneath = (g: G, loc: InstId | null) => (loc ? flags.beneath.get(g, loc) : undefined);
 const elite = (g: G, id: InstId) => def(g, id).traits.includes("Elite");
 const eliteCount = (g: G) =>
   cardsIn(g, "victory").filter((c) => def(g, c.id).type === "enemy" && elite(g, c.id)).length +
@@ -91,7 +99,7 @@ const story = (g: G, text: string) => {
 /** a suspect interrogated: beneath the act, out of play */
 function toAct(g: G, id: InstId) {
   moveCard(g, id, "setAside");
-  g.s.flags.underAct = [...underAct(g), id];
+  flags.underAct.set(g, [...underAct(g), id]);
   emit(g, "underAct", `${def(g, id).name} is placed beneath the act`, { card: id });
   push(g, { t: "CheckObjectives" });
 }
@@ -104,27 +112,27 @@ export default {
   },
   fns: {
     setup(g: G) {
-      for (const c of Object.values(g.s.cards))
+      for (const c of allCards(g))
         if (c.code === "12137" && c.zone === "encounterDeck") moveCard(g, c.id, "setAside");
-      const people = Object.values(g.s.cards)
+      const people = allCards(g)
         .filter((c) => PEOPLE.includes(c.code) && c.zone === "encounterDeck")
         .map((c) => c.id);
-      shuffle(g.s, people);
+      shuffleList(g, people);
       const [harbinger, ...rest] = people;
       moveCard(g, harbinger, "setAside");
-      g.s.flags.harbinger = harbinger;
+      flags.harbinger.set(g, harbinger);
       const servant = findByCode(g, SERVANT, ["encounterDeck"]);
       const suspects = [...rest, ...(servant ? [servant.id] : [])];
-      shuffle(g.s, suspects);
+      shuffleList(g, suspects);
       UNDER.forEach((name, k) => {
         const loc = locationByName(g, name);
         if (!loc || !suspects[k]) return;
         moveCard(g, suspects[k], "setAside");
-        g.s.flags[`beneath:${loc.id}`] = suspects[k];
+        flags.beneath.set(g, loc.id, suspects[k]);
       });
-      if (g.s.agenda) card(g, g.s.agenda).doom += playerCount(g);
+      if (currentAgenda(g)) addCounter(g, currentAgenda(g)!, "doom", playerCount(g));
       // Dr. Armitage comes with his bearer, and takes up no ally slot
-      for (const i of g.s.order) {
+      for (const i of turnOrder(g)) {
         const armitage = inv(g, i).deck.find((id) => card(g, id).code === "12115");
         if (!armitage) continue;
         moveCard(g, armitage, "play");
@@ -135,7 +143,7 @@ export default {
       const loc = inv(g, ctx.you!).location;
       const id = beneath(g, loc);
       if (!id || !loc) return;
-      delete g.s.flags[`beneath:${loc}`];
+      flags.beneath.clear(g, loc);
       moveCard(g, id, "limbo");
       emit(g, "encounter", `${invName(g, ctx.you!)} draws ${def(g, id).name}`, {
         inv: ctx.you!,
@@ -146,7 +154,7 @@ export default {
     /** a suspect's codex entry: its effect, then a lead on them; enough leads and they are interrogated */
     codex(g: G, ctx: EffCtx, n: number, step?: Step) {
       const id = ctx.source!;
-      const e = g.s.cards[id];
+      const e = cardIf(g, id);
       if (e?.zone !== "enemy") return;
       const you = ctx.you!;
       if (n === 3) {
@@ -171,7 +179,7 @@ export default {
       }
       if (n === 6) {
         // Margaret Liu: look at the top card of the encounter deck; you may discard it
-        const top = g.s.encounterDeck[0];
+        const top = pile(g, "encounterDeck")[0];
         if (top) {
           const drop = ask<boolean>(
             g,
@@ -217,7 +225,7 @@ export default {
       }
     },
     earl(g: G, ctx: EffCtx) {
-      const e = g.s.cards[ctx.source!];
+      const e = cardIf(g, ctx.source!);
       push(g, {
         t: "Eff",
         effect: {
@@ -230,7 +238,7 @@ export default {
       });
     },
     abigail(g: G, ctx: EffCtx) {
-      const loc = g.s.cards[ctx.source!]?.location;
+      const loc = cardIf(g, ctx.source!)?.location;
       push(g, {
         t: "Eff",
         effect: {
@@ -246,7 +254,7 @@ export default {
       });
     },
     abigailClue(g: G, ctx: EffCtx) {
-      const loc = g.s.cards[ctx.source!]?.location;
+      const loc = cardIf(g, ctx.source!)?.location;
       if (loc) card(g, loc).clues++;
     },
     northside(g: G, ctx: EffCtx, _args: unknown, step?: Step) {
@@ -268,12 +276,12 @@ export default {
     /** codex Φ: the Servant of Flame is defeated — kill them, or hold them for questioning */
     codexPhi(g: G, ctx: EffCtx, _args: unknown, step?: Step) {
       const id = ctx.source!;
-      if (g.s.cards[id]?.zone !== "enemy") return;
+      if (cardIf(g, id)?.zone !== "enemy") return;
       story(g, CODEX.phi[0]);
       const kill = ask<boolean>(
         g,
         step!,
-        g.s.lead,
+        leadInvestigator(g),
         "generic",
         "The Servant of Flame lies at your feet",
         [
@@ -289,19 +297,17 @@ export default {
       );
       if (kill === undefined) return;
       if (kill) {
-        g.s.flags.killedServant = true;
+        flags.killedServant.set(g, true);
         for (const i of activeInvs(g)) push(g, { t: "Draw", inv: i, n: 3 });
         return;
       }
-      g.s.flags.servantBeneath = true;
+      flags.servantBeneath.set(g, true);
       for (const i of activeInvs(g)) inv(g, i).clues++;
       toAct(g, id);
     },
     /** Growing Flames: each investigator draws a set-aside Mark of Elokoss and becomes its bearer */
     growingFlames(g: G) {
-      const marks = Object.values(g.s.cards).filter(
-        (c) => c.code === "12137" && c.zone === "setAside",
-      );
+      const marks = allCards(g).filter((c) => c.code === "12137" && c.zone === "setAside");
       activeInvs(g).forEach((i, k) => {
         const m = marks[k];
         if (!m) return;
@@ -310,7 +316,7 @@ export default {
         moveCard(g, m.id, "limbo");
         push(g, { t: "Revelation", inv: i, card: m.id });
       });
-      g.s.flags["log:hidden:mark_of_elokoss"] = true;
+      flags.logEntry.set(g, ["hidden", "mark_of_elokoss"], true);
     },
     outtaTime(g: G) {
       for (const i of activeInvs(g)) push(g, { t: "Defeated", inv: i, by: "resign" });
@@ -321,16 +327,16 @@ export default {
   },
   hooks: {
     checkObjectives(g: G) {
-      if (g.s.act && card(g, g.s.act).code === "12136" && eliteCount(g) >= 6)
+      if (cardIf(g, currentAct(g))?.code === "12136" && eliteCount(g) >= 6)
         push(g, { t: "AdvanceAct" });
     },
     /** what the campaign log takes from this game (the guide asks the players; the game knows) */
     ended(g: G, ctx: EffCtx) {
       const log = (id: string, section = "campaign_notes") => {
-        g.s.flags[`log:${section}:${id}`] = true;
+        flags.logEntry.set(g, [section, id], true);
       };
-      const harbinger = g.s.flags.harbinger as InstId | undefined;
-      if (harbinger) log(`${NAMES[g.s.cards[harbinger].code]}_harbinger`);
+      const harbinger = flags.harbinger.get(g);
+      if (harbinger) log(`${NAMES[card(g, harbinger).code]}_harbinger`);
       if (ctx.x) log("discovered_the_cults_whereabouts");
       else {
         // the Elite enemies in play or beneath a location, with the harbinger: one drawn at random
@@ -343,11 +349,11 @@ export default {
             .filter((x): x is InstId => !!x),
           ...(harbinger ? [harbinger] : []),
         ];
-        const drawn = pool[randInt(g.s, pool.length)];
+        const drawn = pool[randomInt(g, pool.length)];
         log(drawn === harbinger ? "discovered_the_cults_whereabouts" : "failed_in_their_search");
       }
-      if (g.s.flags.killedServant) log("killed_the_servant_of_flame");
-      if (g.s.flags.servantBeneath) log("servant_of_flame_beneath_act", "hidden");
+      if (flags.killedServant.get(g)) log("killed_the_servant_of_flame");
+      if (flags.servantBeneath.get(g)) log("servant_of_flame_beneath_act", "hidden");
       if (ctx.x && underAct(g).filter((id) => elite(g, id)).length >= 6)
         log("scoured_arkham_for_answers");
       if (
@@ -357,10 +363,7 @@ export default {
       )
         log("stirred_up_trouble");
       // 1 bonus experience for each enemy beneath the act
-      for (const i of g.s.order) {
-        const k = `xp:${i}`;
-        g.s.flags[k] = ((g.s.flags[k] as number | undefined) ?? 0) + underAct(g).length;
-      }
+      for (const i of turnOrder(g)) flags.xp.add(g, i, underAct(g).length);
     },
   },
 } satisfies CardScript;

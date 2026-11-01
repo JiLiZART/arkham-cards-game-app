@@ -1,14 +1,15 @@
 // Mark of Elokoss — when your turn ends: 1 damage, on an asset you control if able
 import {
+  addCounter,
   ask,
+  type CardScript,
   controlled,
   def,
-  emit,
-  push,
-  type CardScript,
   type EffCtx,
+  emit,
   type G,
   type InstId,
+  push,
   type Step,
 } from "../../../../src/engine/api";
 
@@ -38,7 +39,7 @@ export default {
         { auto: true, key: "chooseAsset" },
       );
       if (pick === undefined) return;
-      g.s.cards[pick].damage++;
+      addCounter(g, pick, "damage", 1);
       emit(g, "assetDamage", `${def(g, pick).name} takes 1 damage`, {
         card: pick,
         inv: you,

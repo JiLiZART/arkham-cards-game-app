@@ -1,3 +1,4 @@
+import { underAct } from "../flags";
 import type { TokenEffect } from "../../content/schema";
 import { card, cardsIn, def, enemies, enemiesAt, inv, type G } from "../core";
 import type { InvId } from "../types";
@@ -27,7 +28,7 @@ export function tokenX(g: G, x: NonNullable<TokenEffect["x"]>, i: InvId): number
       return (
         cardsIn(g, "victory").filter(
           (c) => def(g, c.id).type === "enemy" && def(g, c.id).traits.includes("Elite"),
-        ).length + ((g.s.flags.underAct as string[] | undefined) ?? []).length
+        ).length + (underAct.get(g) ?? []).length
       );
     case "cluesYouControl":
       return inv(g, i).clues;

@@ -2,21 +2,24 @@
 import {
   ask,
   card,
+  type CardScript,
+  type EffCtx,
   emit,
+  type G,
   inv,
+  type InvId,
   invName,
   invsAt,
   push,
-  type CardScript,
-  type EffCtx,
-  type G,
-  type InvId,
   type Step,
+  turnOrder,
 } from "../../../../src/engine/api";
 
 /** the investigator whose card was healed, if it was an investigator */
 const healedInv = (g: G, ctx: EffCtx): InvId | undefined =>
-  Object.values(g.s.invs).find((i) => i.cardId === ctx.card)?.id;
+  turnOrder(g)
+    .map((i) => inv(g, i))
+    .find((i) => i.cardId === ctx.card)?.id;
 
 export default {
   abilities: [

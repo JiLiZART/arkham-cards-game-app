@@ -1,10 +1,11 @@
 // What Have You Done? (The Gathering, act 3) — back: burn it down (R1) or not (R2)
 import {
   ask,
-  push,
   type CardScript,
   type EffCtx,
   type G,
+  leadInvestigator,
+  push,
   type Step,
 } from "../../../../src/engine/api";
 
@@ -15,7 +16,7 @@ export default {
       const r = ask<string>(
         g,
         step!,
-        g.s.lead,
+        leadInvestigator(g),
         "generic",
         "Defending the Home — the lead investigator must decide:",
         [

@@ -1,16 +1,18 @@
 // Daniela's Wrench — an enemy at your location engages you and makes an immediate attack
 import {
   ask,
+  attackKey,
+  type CardScript,
   def,
+  type EffCtx,
   emit,
   enemiesAt,
+  type G,
+  type InstId,
   inv,
   invName,
   push,
-  type CardScript,
-  type EffCtx,
-  type G,
-  type InstId,
+  setEngaged,
   type Step,
 } from "../../../../src/engine/api";
 
@@ -30,12 +32,12 @@ export default {
         { auto: true, key: "chooseEnemy" },
       );
       if (pick === undefined) return;
-      g.s.cards[pick].engagedWith = you;
+      setEngaged(g, pick, you);
       emit(g, "engage", `${def(g, pick).name} engages ${invName(g, you)}`, {
         inv: you,
         card: pick,
       });
-      push(g, { t: "EnemyAttack", enemy: pick, inv: you, aoo: false, key: `atk${g.s.seq++}` });
+      push(g, { t: "EnemyAttack", enemy: pick, inv: you, aoo: false, key: attackKey(g) });
     },
   },
 } satisfies CardScript;

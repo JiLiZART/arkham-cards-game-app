@@ -1,5 +1,5 @@
 // Arcane Lock — entering or leaving the attached location costs 1 more action
-import { type CardScript, type G } from "../../../../src/engine/api";
+import { card, type CardScript, type G, inv } from "../../../../src/engine/api";
 
 export default {
   extraActionCost(
@@ -10,7 +10,7 @@ export default {
     action?: { kind: string; to?: string },
   ) {
     if (designator !== "move") return 0;
-    const loc = g.s.cards[cardId].location;
-    return loc && (g.s.invs[i].location === loc || action?.to === loc) ? 1 : 0;
+    const loc = card(g, cardId).location;
+    return loc && (inv(g, i).location === loc || action?.to === loc) ? 1 : 0;
   },
 } satisfies CardScript;

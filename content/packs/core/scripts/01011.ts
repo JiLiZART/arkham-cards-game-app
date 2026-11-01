@@ -1,12 +1,11 @@
 // Hospital Debts — earn 2 fewer experience if fewer than 6 resources on it at game end
-import { card, type CardScript, type EffCtx, type G } from "../../../../src/engine/api";
+import { card, type CardScript, type EffCtx, flags, type G } from "../../../../src/engine/api";
 
 export default {
   hooks: {
     gameEnd(g: G, ctx: EffCtx) {
       const c = card(g, ctx.source!);
-      if (c.resources < 6 && c.controller)
-        g.s.flags[`xp:${c.controller}`] = ((g.s.flags[`xp:${c.controller}`] as number) ?? 0) - 2;
+      if (c.resources < 6 && c.controller) flags.xp.add(g, c.controller, -2);
     },
   },
 } satisfies CardScript;

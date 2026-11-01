@@ -17,6 +17,7 @@ import type {
   SoundManifest,
   Trigger,
 } from "../content/schema";
+import type { G } from "./core";
 
 export type InstId = string;
 export type InvId = string;
@@ -330,13 +331,6 @@ export type Step = { choice?: any } & (
   | { t: "AdvanceAgenda"; fired?: boolean }
   | { t: "AdvanceAct"; spend?: boolean }
   | { t: "Resolution"; id: string }
-  | {
-      t: "Choose";
-      inv: InvId;
-      prompt: string;
-      options: { label: string; effects: Effect[] }[];
-      ctx: EffCtx;
-    }
   | { t: "CheckDefeat"; inv: InvId }
   | { t: "Defeated"; inv: InvId; by: "damage" | "horror" | "resign" }
   | {
@@ -445,29 +439,29 @@ export interface CardScript {
   abilities?: (Ability & { run?: string })[];
   fns?: Record<string, ScriptFn>;
   /** conditions named by `{ script: name }` in the card's (or scenario's) data */
-  conditions?: Record<string, (g: any, ctx: EffCtx) => boolean>;
+  conditions?: Record<string, (g: G, ctx: EffCtx) => boolean>;
   /** icons the card gains on top of its printed ones, while it is committed (Steadfast, Curiosity) */
-  icons?: (g: any, cardId: InstId) => Partial<Record<Skill | "wild", number>>;
+  icons?: (g: G, cardId: InstId) => Partial<Record<Skill | "wild", number>>;
   /** dynamic constant modifiers */
-  modifiers?: (g: any, cardId: InstId) => { target: string; mod: Modifier }[];
+  modifiers?: (g: G, cardId: InstId) => { target: string; mod: Modifier }[];
   /** cards (e.g. top event of discard) the controller may additionally play */
-  extraPlayable?: (g: any, cardId: InstId, inv: InvId) => InstId[];
+  extraPlayable?: (g: G, cardId: InstId, inv: InvId) => InstId[];
   /** card instances whose text is treated as blank while this card is in play */
-  blanks?: (g: any, cardId: InstId) => InstId[];
+  blanks?: (g: G, cardId: InstId) => InstId[];
   /** additional action cost for a designator (Frozen in Fear) */
   extraActionCost?: (
-    g: any,
+    g: G,
     cardId: InstId,
     inv: InvId,
     designator: string,
     action?: TurnAction,
   ) => number;
   /** when doom would be placed while this card is the agenda: true replaces it (Brethren of Ash) */
-  wouldPlaceDoom?: (g: any, cardId: InstId, n: number) => boolean;
+  wouldPlaceDoom?: (g: G, cardId: InstId, n: number) => boolean;
   /** called by the engine for special hooks */
   hooks?: Partial<Record<string, ScriptFn>>;
 }
-export type ScriptFn = (g: any, ctx: EffCtx, args?: any, step?: Step) => void;
+export type ScriptFn = (g: G, ctx: EffCtx, args?: any, step?: Step) => void;
 
 export interface ContentDb {
   cards: Record<string, CardDef>;

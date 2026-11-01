@@ -1,12 +1,19 @@
 // Scrape By — succeed by 0 instead; 1 horror if a token with a symbol was revealed
-import { addTempMod, push, type CardScript, type EffCtx, type G } from "../../../../src/engine/api";
+import {
+  addTempMod,
+  type CardScript,
+  currentTest,
+  type EffCtx,
+  type G,
+  push,
+} from "../../../../src/engine/api";
 
 const SYMBOLS = ["skull", "cultist", "tablet", "elderThing", "elderSign"];
 
 export default {
   fns: {
     scrape(g: G, ctx: EffCtx) {
-      const t = g.s.skillTest;
+      const t = currentTest(g);
       if (!t) return;
       addTempMod(
         g,

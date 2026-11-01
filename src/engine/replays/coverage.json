@@ -1,0 +1,130 @@
+[
+  {
+    "template": "the-gathering-01002-01004",
+    "seed": 11
+  },
+  {
+    "template": "the-gathering-01002-01004-mixed",
+    "seed": 1
+  },
+  {
+    "template": "the-gathering-01002-01004-mixed",
+    "seed": 2
+  },
+  {
+    "template": "the-gathering-01002-01004-mixed",
+    "seed": 10
+  },
+  {
+    "template": "the-gathering-01002-01004-mixed",
+    "seed": 29
+  },
+  {
+    "template": "the-gathering-01005-01001-01003",
+    "seed": 24
+  },
+  {
+    "template": "the-midnight-masks-01002-01004",
+    "seed": 6
+  },
+  {
+    "template": "the-devourer-below-01002-01004",
+    "seed": 4
+  },
+  {
+    "template": "the-devourer-below-01002-01004-mixed",
+    "seed": 30
+  },
+  {
+    "template": "the-devourer-below-01005-01001-01003",
+    "seed": 7
+  },
+  {
+    "template": "the-devourer-below-01005-01001-01003-mixed",
+    "seed": 12
+  },
+  {
+    "template": "spreading-flames-01002-01004-mixed",
+    "seed": 5
+  },
+  {
+    "template": "spreading-flames-01002-01004-mixed",
+    "seed": 6
+  },
+  {
+    "template": "spreading-flames-01002-01004-mixed",
+    "seed": 9
+  },
+  {
+    "template": "spreading-flames-01002-01004-mixed",
+    "seed": 19
+  },
+  {
+    "template": "spreading-flames-01002-01004-mixed",
+    "seed": 30
+  },
+  {
+    "template": "smoke-and-mirrors-01002-01004",
+    "seed": 25
+  },
+  {
+    "template": "smoke-and-mirrors-01002-01004-mixed",
+    "seed": 7
+  },
+  {
+    "template": "queen-of-ash-01002-01004",
+    "seed": 2
+  },
+  {
+    "template": "queen-of-ash-01002-01004",
+    "seed": 5
+  },
+  {
+    "template": "queen-of-ash-01002-01004-mixed",
+    "seed": 2
+  },
+  {
+    "template": "queen-of-ash-01002-01004-mixed",
+    "seed": 12
+  },
+  {
+    "template": "the-gathering-05001-05002",
+    "seed": 8
+  },
+  {
+    "template": "the-gathering-05001-05002",
+    "seed": 18
+  },
+  {
+    "template": "the-devourer-below-05001-05002-mixed",
+    "seed": 18
+  },
+  {
+    "template": "the-devourer-below-05001-05002-mixed",
+    "seed": 30
+  },
+  {
+    "template": "the-gathering-12001-12004",
+    "seed": 2
+  },
+  {
+    "template": "the-gathering-12001-12004",
+    "seed": 9
+  },
+  {
+    "template": "the-gathering-12007-12010-12013",
+    "seed": 2
+  },
+  {
+    "template": "the-gathering-12007-12010-12013",
+    "seed": 3
+  },
+  {
+    "template": "the-gathering-12007-12010-12013",
+    "seed": 14
+  },
+  {
+    "template": "queen-of-ash-12007-12010-12013-mixed",
+    "seed": 25
+  }
+]

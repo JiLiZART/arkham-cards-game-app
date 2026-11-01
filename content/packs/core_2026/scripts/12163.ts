@@ -1,21 +1,23 @@
 // Aerial Pursuit — the nearest non-Elite enemy moves once toward you; if it engages someone, it attacks
 import {
   ask,
+  attackKey,
+  canEnemyEnter,
+  cardIf,
+  type CardScript,
   def,
   distances,
+  type EffCtx,
   emit,
   enemies,
+  type G,
+  type InstId,
   inv,
   invsAt,
   isElite,
   push,
-  stepsToward,
-  canEnemyEnter,
-  type CardScript,
-  type EffCtx,
-  type G,
-  type InstId,
   type Step,
+  stepsToward,
 } from "../../../../src/engine/api";
 
 export default {
@@ -44,7 +46,7 @@ export default {
         push(g, { t: "Script", code: "12163", fn: "pursuit", ctx, args: { enemy: pick } });
         return;
       }
-      const e = g.s.cards[args.enemy];
+      const e = cardIf(g, args.enemy);
       if (e?.zone !== "enemy" || !e.location) return;
       if (e.location !== to) {
         const next = stepsToward(g, e.location, [to]).filter((l) => canEnemyEnter(g, e.id, l))[0];
@@ -64,7 +66,7 @@ export default {
         inv: target,
         card: e.id,
       });
-      push(g, { t: "EnemyAttack", enemy: e.id, inv: target, aoo: false, key: `atk${g.s.seq++}` });
+      push(g, { t: "EnemyAttack", enemy: e.id, inv: target, aoo: false, key: attackKey(g) });
     },
   },
 } satisfies CardScript;

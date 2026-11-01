@@ -1,29 +1,32 @@
+import { atTurnEnd, noReady } from "../flags";
 import type { Ability, Boost, Effect, OnTokens, Skill } from "../../content/schema";
 import {
   abilitiesOf as abilitiesOfCard,
   activeInvs,
+  addCounter,
   allMods,
   ask,
+  attackable,
   card,
   cardsIn,
   def,
-  emit,
-  enemiesAt,
-  engagedWith,
-  expireMods,
+  type G,
   hasFlag,
+  threatArea,
   inv,
   invName,
-  logStep,
-  attackable,
   isMassive,
+  logStep,
+  emit,
   modSum,
-  push,
+  enemiesAt,
+  engagedWith,
+  setCounter,
   spendableGroupClues,
-  threatArea,
-  type G,
+  push,
+  expireMods,
 } from "../core";
-import type { ChoiceOption, EffCtx, InvId, Step, TurnAction } from "../types";
+import type { ChoiceOption, InvId, Step, TurnAction } from "../types";
 import { activatable, canPlay, playAbility, playable, spendGroupClues, win } from "./cards";
 import { attacksOfOpportunity } from "./enemies";
 import { canMoveTo, checkEngagement, enterCost } from "./investigators";
@@ -47,7 +50,8 @@ export const startRoundHandler: Handler<"StartRound"> = (g) => {
   g.s.counters.round++;
   for (const i of Object.values(g.s.invs)) i.actionsThisRound = [];
   for (const c of cardsIn(g, "play"))
-    if (def(g, c.id).replenish === "round" && def(g, c.id).uses) c.uses = def(g, c.id).uses!.count;
+    if (def(g, c.id).replenish === "round" && def(g, c.id).uses)
+      setCounter(g, c.id, "uses", def(g, c.id).uses!.count);
   const paced = (phase: Extract<Step, { t: "PhasePause" }>["phase"], step: Step): Step[] =>
     g.s.pacePhases ? [{ t: "PhasePause", phase }, step] : [step];
   push(
@@ -333,11 +337,13 @@ export const endTurnHandler: Handler<"EndTurn"> = (g, step) => {
 
 export function endTurnCleanup(g: G, i: InvId) {
   // effects that waited for the end of this turn (Prestidigitation)
-  const due = (
-    (g.s.flags.atTurnEnd as { inv: InvId; effects: Effect[]; ctx: EffCtx }[]) ?? []
-  ).filter((d) => d.inv === i);
+  const waiting = atTurnEnd.get(g) ?? [];
+  const due = waiting.filter((d) => d.inv === i);
   if (due.length) {
-    g.s.flags.atTurnEnd = (g.s.flags.atTurnEnd as { inv: InvId }[]).filter((d) => d.inv !== i);
+    atTurnEnd.set(
+      g,
+      waiting.filter((d) => d.inv !== i),
+    );
     push(g, ...due.map((d): Step => ({ t: "Effects", effects: d.effects, ctx: d.ctx })));
   }
   expireMods(g, "turn");
@@ -399,7 +405,7 @@ export const performActionHandler: Handler<"PerformAction"> = (g, step) => {
       steps.push({ t: "Draw", inv: i, n: 1, tapped: true });
       break;
     case "resource":
-      me.resources++;
+      addCounter(g, me.id, "resources", 1);
       emit(g, "resource", `${me.name} gains 1 resource`, { inv: i, data: { n: 1 } });
       break;
     case "play":
@@ -488,8 +494,8 @@ export const enemyPhaseHandler: Handler<"EnemyPhase"> = (g) => {
 export function readyAll(g: G) {
   for (const c of Object.values(g.s.cards)) {
     // an enemy kept from readying this upkeep (Slippery)
-    if (g.s.flags[`noReady:${c.id}`]) {
-      delete g.s.flags[`noReady:${c.id}`];
+    if (noReady.get(g, c.id)) {
+      noReady.clear(g, c.id);
       continue;
     }
     if (["play", "enemy", "location", "attached", "investigator", "threat"].includes(c.zone))

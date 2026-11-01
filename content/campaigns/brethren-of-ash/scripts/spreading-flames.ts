@@ -1,27 +1,33 @@
 // Spreading Flames: Bystander parleys, the agendas' tests and Fire!, the acts' end-of-round advances and backs
 import {
   activeInvs,
+  allCards,
   ask,
   card,
+  cardIf,
+  type CardScript,
   cardsIn,
+  currentAct,
   def,
   discard,
+  type EffCtx,
   emit,
   enemiesAt,
   findByCode,
-  inv,
-  invName,
-  locationByName,
-  moveCard,
-  playerCount,
-  push,
-  shuffle,
-  spendableGroupClues,
-  type CardScript,
-  type EffCtx,
+  flags,
   type G,
   type InstId,
+  inv,
   type InvId,
+  invName,
+  leadInvestigator,
+  locationByName,
+  moveCard,
+  pile,
+  playerCount,
+  push,
+  shuffleDeck,
+  spendableGroupClues,
   type Step,
 } from "../../../../src/engine/api";
 import type { Effect, Skill } from "../../../../src/content/schema";
@@ -34,7 +40,7 @@ const QUAD = "12116";
 const DORMS = "12117";
 
 const setAside = (g: G, code: string) =>
-  Object.values(g.s.cards).filter((c) => c.code === code && c.zone === "setAside");
+  allCards(g).filter((c) => c.code === code && c.zone === "setAside");
 const discardEnemies = (g: G) => {
   for (const e of cardsIn(g, "enemy")) discard(g, e.id);
 };
@@ -81,10 +87,10 @@ export default {
       for (const c of setAside(g, FIRE).slice(0, n)) moveCard(g, c.id, "encounterDiscard");
     },
     drawFire(g: G, ctx: EffCtx) {
-      drawFire(g, ctx.you ?? g.s.lead);
+      drawFire(g, ctx.you ?? leadInvestigator(g));
     },
     leadDrawsFire(g: G) {
-      drawFire(g, g.s.lead);
+      drawFire(g, leadInvestigator(g));
     },
     /** Up in Flames: each investigator who has not resigned is defeated and suffers 1 physical trauma */
     upInFlames(g: G) {
@@ -92,8 +98,8 @@ export default {
     },
     /** an act advanced at the end of the round by spending clues (at Orne Library, for `at`) */
     endOfRoundAdvance(g: G, _ctx: EffCtx, at: string | undefined, step?: Step) {
-      if (!g.s.act) return;
-      const cost = (def(g, g.s.act).actClues ?? 0) * playerCount(g);
+      if (!currentAct(g)) return;
+      const cost = (def(g, currentAct(g)!).actClues ?? 0) * playerCount(g);
       const loc = at ? findByCode(g, at, ["location"])?.id : undefined;
       const who = activeInvs(g).filter((i) => !loc || inv(g, i).location === loc);
       const clues = at ? who.reduce((n, i) => n + inv(g, i).clues, 0) : spendableGroupClues(g);
@@ -101,7 +107,7 @@ export default {
       const yes = ask<boolean>(
         g,
         step!,
-        g.s.lead,
+        leadInvestigator(g),
         "generic",
         `Spend ${cost} clues as a group to advance the act?`,
         [
@@ -112,8 +118,8 @@ export default {
       );
       if (!yes) return;
       let n = cost;
-      for (const i of [g.s.lead, ...who.filter((x) => x !== g.s.lead)].filter((x) =>
-        who.includes(x),
+      for (const i of [leadInvestigator(g), ...who.filter((x) => x !== leadInvestigator(g))].filter(
+        (x) => who.includes(x),
       )) {
         const take = Math.min(n, inv(g, i).clues);
         inv(g, i).clues -= take;
@@ -144,11 +150,11 @@ export default {
     },
     /** In the Open: the Servant set aside, healed; enemies discarded; your friend's room gone; the campus opens */
     inTheOpen(g: G) {
-      const servant = Object.values(g.s.cards).find(
+      const servant = allCards(g).find(
         (c) => c.code === SERVANT && c.zone !== "setAside" && c.zone !== "removed",
       );
       if (servant) moveCard(g, servant.id, "setAside");
-      delete g.s.flags[`defeated:${SERVANT}`];
+      flags.defeated.clear(g, SERVANT);
       discardEnemies(g);
       const room = findByCode(g, ROOM, ["location"]);
       if (room) {
@@ -159,9 +165,7 @@ export default {
         moveCard(g, room.id, "removed");
       }
       for (const name of ["Orne Library", "Science Hall", "Warren Observatory"]) {
-        const c = Object.values(g.s.cards).find(
-          (x) => x.zone === "setAside" && def(g, x.id).name === name,
-        );
+        const c = allCards(g).find((x) => x.zone === "setAside" && def(g, x.id).name === name);
         if (c) moveCard(g, c.id, "location");
       }
     },
@@ -172,7 +176,7 @@ export default {
         const who = ask<InvId>(
           g,
           step!,
-          g.s.lead,
+          leadInvestigator(g),
           "target",
           "Who takes control of Dr. Henry Armitage?",
           activeInvs(g).map((i) => ({
@@ -201,26 +205,26 @@ export default {
       }
       if (quad) card(g, quad.id).clues += 3 * playerCount(g);
       // the lead searches the encounter deck and discard pile for 1 Fire! per investigator and draws them
-      const fires = [...g.s.encounterDeck, ...g.s.encounterDiscard]
-        .filter((id) => g.s.cards[id].code === FIRE)
+      const fires = [...pile(g, "encounterDeck"), ...pile(g, "encounterDiscard")]
+        .filter((id) => card(g, id).code === FIRE)
         .slice(0, playerCount(g));
       for (const id of fires) {
         moveCard(g, id, "limbo");
-        push(g, { t: "Revelation", inv: g.s.lead, card: id });
+        push(g, { t: "Revelation", inv: leadInvestigator(g), card: id });
       }
-      shuffle(g.s, g.s.encounterDeck);
+      shuffleDeck(g, "encounter");
     },
   },
   hooks: {
     checkObjectives(g: G) {
-      const act = g.s.act ? card(g, g.s.act).code : null;
+      const act = cardIf(g, currentAct(g))?.code ?? null;
       if (act === "12110") {
         const quad = findByCode(g, QUAD, ["location"]);
         const live = activeInvs(g);
         if (quad && live.length && live.every((i) => inv(g, i).location === quad.id))
           push(g, { t: "AdvanceAct" });
       }
-      if (act === "12112" && g.s.flags[`defeated:${SERVANT}`]) push(g, { t: "AdvanceAct" });
+      if (act === "12112" && flags.defeated.get(g, SERVANT)) push(g, { t: "AdvanceAct" });
     },
   },
 } satisfies CardScript;

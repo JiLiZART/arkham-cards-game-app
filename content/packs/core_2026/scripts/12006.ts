@@ -1,5 +1,5 @@
 // Dead Ends — found by a search of its deck, it is drawn and cancels the search (effects.ts); 2 fewer experience if it is in the hand when the game ends
-import { card, type CardScript, type EffCtx, type G } from "../../../../src/engine/api";
+import { card, type CardScript, type EffCtx, flags, type G } from "../../../../src/engine/api";
 
 export default {
   hooks: {
@@ -7,8 +7,7 @@ export default {
     gameEnd(g: G, ctx: EffCtx) {
       const c = card(g, ctx.source!);
       if (c.zone !== "hand" || !c.owner) return;
-      const key = `xp:${c.owner}`;
-      g.s.flags[key] = ((g.s.flags[key] as number | undefined) ?? 0) - 2;
+      flags.xp.add(g, c.owner, -2);
     },
   },
 } satisfies CardScript;

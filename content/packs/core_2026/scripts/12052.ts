@@ -1,19 +1,20 @@
 // Prestidigitation — play an Item asset from your hand for 2 less; when your turn ends, return an Item asset you control to your hand
 import {
   ask,
+  card,
+  type CardScript,
   controlled,
   def,
+  type EffCtx,
   emit,
+  type G,
+  type InstId,
   inv,
   moveCard,
   playCost,
   push,
-  uniqueInPlay,
-  type CardScript,
-  type EffCtx,
-  type G,
-  type InstId,
   type Step,
+  uniqueInPlay,
 } from "../../../../src/engine/api";
 
 const item = (g: G, id: InstId) =>
@@ -63,7 +64,7 @@ export default {
         { auto: true, key: "chooseOne" },
       );
       if (pick === undefined) return;
-      moveCard(g, pick, "hand", { inv: g.s.cards[pick].owner ?? you });
+      moveCard(g, pick, "hand", { inv: card(g, pick).owner ?? you });
       emit(g, "returned", `${def(g, pick).name} returns to the hand`, { inv: you, card: pick });
     },
   },
