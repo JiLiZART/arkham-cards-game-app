@@ -1,6 +1,7 @@
 :global(.instruction-bar) {
   display: flex;
   align-items: center;
+  flex-wrap: nowrap;
   gap: 14px;
   background: var(--panel);
   border: 1px solid var(--accent);
@@ -10,9 +11,6 @@
   text-align: center;
   text-wrap: balance;
   box-shadow: 0 3px 12px #000c;
-}
-:global(.instruction-bar) {
-  flex-wrap: wrap;
 }
 :global(.instruction-bar) > :first-child {
   min-width: 0;
@@ -52,11 +50,12 @@
   flex-wrap: nowrap;
   text-align: center;
   justify-content: center;
+  align-items: center;
   width: 100%;
 }
 .bar-buttons {
   display: flex;
-  width: 100%;
+  flex-direction: column;
   justify-content: center;
   gap: 6px;
   flex: none;
@@ -170,7 +169,10 @@
   min-width: 0;
 }
 :global(.game):global(.phone) :global(.instruction-bar) .rail-icon img,
-:global(.game):global(.phone) :global(.instruction-bar) .rail-icon :global(.svg-icon) {
+:global(.game):global(.phone)
+  :global(.instruction-bar)
+  .rail-icon
+  :global(.svg-icon) {
   width: 22px;
   height: 22px;
 }
