@@ -5,17 +5,17 @@ import {
   currentRound,
   type EffCtx,
   flags,
-  type G,
+  type GameContext,
   ready,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    unbowed(g: G, ctx: EffCtx) {
-      const e = cardIf(g, ctx.source!);
+    unbowed(game: GameContext, ctx: EffCtx) {
+      const e = cardIf(game, ctx.source!);
       if (e?.zone !== "enemy" || ctx.enemy !== e.id || !ctx.inv) return;
-      ready(g, e.id);
-      flags.noAttack.set(g, [e.id, ctx.inv], currentRound(g));
+      ready(game, e.id);
+      flags.noAttack.set(game, [e.id, ctx.inv], currentRound(game));
     },
   },
 } satisfies CardScript;

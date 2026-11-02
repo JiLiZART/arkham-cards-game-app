@@ -1,25 +1,27 @@
-import type { GameEvent, GameState, InvId } from "../../engine/types";
+import type { GameEvent, GameState, InvId } from "../../engine/world/types";
 import { deckPick } from "./optionHome";
 import type { Spotlight } from "../state/view";
-import { cardOfIf, invOf, invOfIf, patchedState } from "../../engine/core";
+import { cardOfIf, invOf, invOfIf, patchedState } from "../../engine/context";
+import { EVENT, type EventType } from "../../engine/events/event";
+import { ZONE, type Zone } from "../../engine/world/constants";
 
 /** animated events that spotlight what they are about (the chaos draw and test results don't) */
-const SPOT = new Set([
-  "enemyMove",
-  "attack",
-  "spawn",
-  "enemyDamage",
-  "enemyDefeated",
-  "defeated",
-  "damage",
-  "clues",
-  "doom",
-  "encounter",
-  "weakness",
-  "agendaAdvance",
-  "actAdvance",
+const SPOT = new Set<EventType>([
+  EVENT.EnemyMove,
+  EVENT.Attack,
+  EVENT.Spawn,
+  EVENT.EnemyDamage,
+  EVENT.EnemyDefeated,
+  EVENT.Defeated,
+  EVENT.Damage,
+  EVENT.Clues,
+  EVENT.Doom,
+  EVENT.Encounter,
+  EVENT.Weakness,
+  EVENT.AgendaAdvance,
+  EVENT.ActAdvance,
 ]);
-const ON_MAP = new Set(["location", "enemy"]);
+const ON_MAP = new Set<Zone>([ZONE.Location, ZONE.Enemy]);
 
 /** the map cards and investigator portraits an event is about, or null when none of them is on the map */
 export function spotlightOf(e: GameEvent | null, game: GameState): Spotlight | null {

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import type { ChoiceOption, GameState, InstId } from "../../engine/types";
+import type { ChoiceOption, GameState, InstId } from "../../engine/world/types";
 import { useGame } from "../state/context";
 import { useChoicesOffered } from "../state/usePlayers";
 import { useView } from "../state/view";

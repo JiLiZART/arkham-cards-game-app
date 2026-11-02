@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, type RefObject } from "react";
 import { domPlace, lastRects, originRect, takeArrival } from "../game/arrivals";
-import type { InstId, InvId } from "../../engine/types";
+import type { InstId, InvId } from "../../engine/world/types";
 import type { Box } from "./fan";
 
 const EASE = "cubic-bezier(.2,.8,.2,1)";

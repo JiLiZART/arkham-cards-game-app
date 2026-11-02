@@ -1,8 +1,17 @@
 import { describe, expect, it } from "vitest";
-import { db, giveCard, mutate, pick, putEnemy, skipMulligans, start } from "../../engine/testkit";
-import type { Result } from "../../engine/engine";
+import {
+  db,
+  giveCard,
+  mutate,
+  pick,
+  putEnemy,
+  skipMulligans,
+  start,
+} from "../../engine/kits/testkit";
+import type { Result } from "../../engine";
 import { cardDetails, commitRow, placeDetails } from "./details";
-import { allCardRecsIn, cardRecIn, invStateIn } from "../../engine/records";
+import { allCardRecsIn, cardRecIn, invStateIn } from "../../engine/world/store";
+import { ZONE } from "../../engine/world/constants";
 
 const rows = (code: string, locale = "en") =>
   Object.fromEntries(cardDetails(db, code, locale).map((r) => [r.k, r]));
@@ -39,8 +48,8 @@ describe("enemy details", () => {
   it("Ghoul Minion: fight, health, evade, attack and the damage on it", () => {
     let r = skipMulligans(start("the-gathering", ["01001"], 1));
     let id = "";
-    r = mutate(r, (g) => {
-      const ghoul = allCardRecsIn(g.s).find((c) => c.code === "01160")!;
+    r = mutate(r, (game) => {
+      const ghoul = allCardRecsIn(game.s).find((c) => c.code === "01160")!;
       Object.assign(ghoul, { zone: "enemy", damage: 1 });
       id = ghoul.id;
     });
@@ -87,14 +96,14 @@ describe("placeDetails", () => {
 
 describe("cardDetails for map locations", () => {
   // The Gathering after the first act: Study gone, the Hallway and its neighbours in play
-  const r = mutate(skipMulligans(start("the-gathering", ["01001", "01002"], 1)), (g) => {
-    for (const c of allCardRecsIn(g.s))
-      if (["01112", "01113", "01114", "01115"].includes(c.code)) c.zone = "location";
-    const hall = allCardRecsIn(g.s).find((c) => c.code === "01112")!;
+  const r = mutate(skipMulligans(start("the-gathering", ["01001", "01002"], 1)), (game) => {
+    for (const c of allCardRecsIn(game.s))
+      if (["01112", "01113", "01114", "01115"].includes(c.code)) c.zone = ZONE.Location;
+    const hall = allCardRecsIn(game.s).find((c) => c.code === "01112")!;
     hall.revealed = true;
     hall.clues = 1;
-    allCardRecsIn(g.s).find((c) => c.code === "01113")!.revealed = true;
-    invStateIn(g.s, "01001").location = hall.id;
+    allCardRecsIn(game.s).find((c) => c.code === "01113")!.revealed = true;
+    invStateIn(game.s, "01001").location = hall.id;
   });
   const at = (code: string) => ({
     inst: allCardRecsIn(r.state).find((c) => c.code === code)!,
@@ -141,9 +150,9 @@ describe("commitRow", () => {
     while (r.state.pending && r.state.pending.kind !== "turn")
       r = pick(r, r.state.pending.options.some((o) => o.id === "pass") ? "pass" : /./);
     const ids: string[] = [];
-    r = mutate(r, (g) => {
-      for (const c of codes) ids.push(giveCard(g, "01001", c));
-      putEnemy(g, "01160", invStateIn(g.s, "01001").location!, "01001");
+    r = mutate(r, (game) => {
+      for (const c of codes) ids.push(giveCard(game, "01001", c));
+      putEnemy(game, "01160", invStateIn(game.s, "01001").location!, "01001");
     });
     r = pick(r, /^Fight Ghoul Minion/);
     expect(r.state.pending?.kind).toBe("commit");

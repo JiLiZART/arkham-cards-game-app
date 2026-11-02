@@ -7,31 +7,33 @@ import {
   push,
   type CardScript,
   type EffCtx,
-  type G,
+  type GameContext,
   type InvId,
   type Step,
+  CHOICE,
+  STEP,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    share(g: G, ctx: EffCtx, left: number | undefined, step?: Step) {
+    share(game: GameContext, ctx: EffCtx, left: number | undefined, step?: Step) {
       const n = left ?? 3;
       if (n <= 0) return;
-      const here = invsAt(g, inv(g, ctx.you!).location);
+      const here = invsAt(game, inv(game, ctx.you!).location);
       const who = ask<InvId>(
-        g,
+        game,
         step!,
         ctx.you!,
-        "target",
+        CHOICE.Target,
         `Southside: who draws the next card? (${n} left)`,
-        here.map((i) => ({ id: i, label: invName(g, i), card: inv(g, i).cardId, value: i })),
+        here.map((i) => ({ id: i, label: invName(game, i), card: inv(game, i).cardId, value: i })),
         { auto: true, key: "chooseInvestigator" },
       );
       if (who === undefined) return;
       push(
-        g,
-        { t: "Draw", inv: who, n: 1 },
-        { t: "Script", code: "12153", fn: "share", ctx, args: n - 1 },
+        game,
+        { t: STEP.Draw, inv: who, n: 1 },
+        { t: STEP.Script, code: "12153", fn: "share", ctx, args: n - 1 },
       );
     },
   },

@@ -6,7 +6,7 @@ import {
   def,
   type EffCtx,
   emit,
-  type G,
+  type GameContext,
   type InstId,
   inv,
   isElite,
@@ -15,45 +15,49 @@ import {
   push,
   shuffleDeck,
   type Step,
+  EVENT,
+  ZONE,
+  CHOICE,
+  STEP,
 } from "../../../../src/engine/api";
 
 export default {
   abilities: [{ kind: "onPlay", designator: "parley", run: "paint" }],
   fns: {
-    paint(g: G, ctx: EffCtx, _args: unknown, step?: Step) {
+    paint(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
       const you = ctx.you!;
-      const top = pile(g, "encounterDeck").slice(0, 9);
-      const pool = top.filter((id) => def(g, id).type === "enemy" && !isElite(g, id));
+      const top = pile(game, ZONE.EncounterDeck).slice(0, 9);
+      const pool = top.filter((id) => def(game, id).type === "enemy" && !isElite(game, id));
       const pick = ask<InstId | "none">(
-        g,
+        game,
         step!,
         you,
-        "generic",
+        CHOICE.Generic,
         "Paint the Town Red: draw an enemy",
         [
-          ...pool.map((id) => ({ id, label: def(g, id).name, card: id, value: id })),
+          ...pool.map((id) => ({ id, label: def(game, id).name, card: id, value: id })),
           { id: "none", label: "Take nothing", value: "none" },
         ],
         { key: "searchTop", vars: { n: 9 }, shown: top.filter((id) => !pool.includes(id)) },
       );
       if (pick === undefined) return;
       if (pick !== "none") {
-        const health = def(g, pick).enemy?.health ?? 0;
-        moveCard(g, pick, "limbo");
-        addCounter(g, you, "resources", health);
+        const health = def(game, pick).enemy?.health ?? 0;
+        moveCard(game, pick, ZONE.Limbo);
+        addCounter(game, you, "resources", health);
         emit(
-          g,
-          "encounter",
-          `${inv(g, you).name} draws ${def(g, pick).name} and gains ${health} resources`,
+          game,
+          EVENT.Encounter,
+          `${inv(game, you).name} draws ${def(game, pick).name} and gains ${health} resources`,
           {
             inv: you,
             card: pick,
             data: { n: health },
           },
         );
-        push(g, { t: "Spawn", enemy: pick, inv: you });
+        push(game, { t: STEP.Spawn, enemy: pick, inv: you });
       }
-      shuffleDeck(g, "encounter");
+      shuffleDeck(game, "encounter");
     },
   },
 } satisfies CardScript;

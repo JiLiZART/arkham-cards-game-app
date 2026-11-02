@@ -7,10 +7,13 @@ import {
   enemiesAt,
   findByCode,
   flags,
-  type G,
+  type GameContext,
   moveCard,
   pile,
   push,
+  EVENT,
+  ZONE,
+  STEP,
 } from "../../../../src/engine/api";
 
 export default {
@@ -19,24 +22,24 @@ export default {
     { kind: "revelation", run: "back" },
   ],
   fns: {
-    umordhoth(g: G) {
-      let site = findByCode(g, "01156", ["location"]);
+    umordhoth(game: GameContext) {
+      let site = findByCode(game, "01156", [ZONE.Location]);
       if (!site) {
-        const aside = findByCode(g, "01156", ["setAside"]);
-        if (aside) moveCard(g, aside.id, "location");
+        const aside = findByCode(game, "01156", [ZONE.SetAside]);
+        if (aside) moveCard(game, aside.id, ZONE.Location);
         site = aside;
-      } else for (const e of enemiesAt(g, site.id)) discard(g, e.id);
-      const u = findByCode(g, "01157", ["setAside"]);
-      if (u && site) push(g, { t: "Spawn", enemy: u.id, inv: null, at: site.id });
+      } else for (const e of enemiesAt(game, site.id)) discard(game, e.id);
+      const u = findByCode(game, "01157", [ZONE.SetAside]);
+      if (u && site) push(game, { t: STEP.Spawn, enemy: u.id, inv: null, at: site.id });
     },
-    back(g: G) {
+    back(game: GameContext) {
       // The Devourer Below becomes both act and agenda: only defeating Umôrdhoth (→R2) remains
-      if (currentAct(g)) moveCard(g, currentAct(g)!, "removed");
-      for (const id of [...pile(g, "actDeck"), ...pile(g, "agendaDeck")])
-        moveCard(g, id, "removed");
-      flags.devourer.set(g, true);
-      emit(g, "devourer", `The Devourer Below: defeat Umôrdhoth!`, {
-        card: findByCode(g, "01157")?.id ?? null,
+      if (currentAct(game)) moveCard(game, currentAct(game)!, ZONE.Removed);
+      for (const id of [...pile(game, ZONE.ActDeck), ...pile(game, ZONE.AgendaDeck)])
+        moveCard(game, id, ZONE.Removed);
+      flags.devourer.set(game, true);
+      emit(game, EVENT.Devourer, `The Devourer Below: defeat Umôrdhoth!`, {
+        card: findByCode(game, "01157")?.id ?? null,
       });
     },
   },

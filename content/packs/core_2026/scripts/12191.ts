@@ -6,27 +6,29 @@ import {
   push,
   type CardScript,
   type EffCtx,
-  type G,
+  type GameContext,
   type InstId,
   type Step,
+  CHOICE,
+  STEP,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    decay(g: G, ctx: EffCtx, _args: unknown, step?: Step) {
-      const assets = controlled(g, ctx.you!);
+    decay(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
+      const assets = controlled(game, ctx.you!);
       if (!assets.length) return;
       const pick = ask<InstId>(
-        g,
+        game,
         step!,
         ctx.you!,
-        "target",
+        CHOICE.Target,
         "Unnatural Decay: place 1 doom on an asset",
-        assets.map((c) => ({ id: c.id, label: def(g, c.id).name, card: c.id, value: c.id })),
+        assets.map((c) => ({ id: c.id, label: def(game, c.id).name, card: c.id, value: c.id })),
         { auto: true, key: "chooseAsset" },
       );
       if (pick === undefined) return;
-      push(g, { t: "PlaceDoom", card: pick, n: 1 }, { t: "CheckDoom" });
+      push(game, { t: STEP.PlaceDoom, card: pick, n: 1 }, { t: STEP.CheckDoom });
     },
   },
 } satisfies CardScript;

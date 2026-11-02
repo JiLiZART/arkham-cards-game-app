@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { UiIcon } from "../../components/Icon";
 import { t } from "../../../content/i18n";
-import type { GameEvent } from "../../../engine/types";
+import type { GameEvent } from "../../../engine/world/types";
 import { captionIndex, captionStageBusy } from "../../game/feed";
 import { db, useGame } from "../../state/context";
 import { needsNext } from "../../state/store";

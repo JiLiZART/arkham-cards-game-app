@@ -9,32 +9,34 @@ import {
   push,
   type CardScript,
   type EffCtx,
-  type G,
+  type GameContext,
   type InstId,
   type Step,
+  CHOICE,
+  STEP,
 } from "../../../../src/engine/api";
 
 export default {
   abilities: [{ kind: "onPlay", run: "blast" }],
   fns: {
-    blast(g: G, ctx: EffCtx, _args: unknown, step?: Step) {
-      const here = inv(g, ctx.you!).location!;
-      const opts = [here, ...connections(g, here)];
+    blast(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
+      const here = inv(game, ctx.you!).location!;
+      const opts = [here, ...connections(game, here)];
       const loc = ask<InstId>(
-        g,
+        game,
         step!,
         ctx.you!,
-        "target",
+        CHOICE.Target,
         "Dynamite Blast: choose a location",
-        opts.map((l) => ({ id: l, label: def(g, l).name, card: l, value: l })),
+        opts.map((l) => ({ id: l, label: def(game, l).name, card: l, value: l })),
         { auto: true, key: "cardChooseLocation", vars: { card: ctx.source ?? null } },
       );
       if (loc === undefined) return;
-      for (const e of enemiesAt(g, loc))
-        push(g, { t: "DamageEnemy", enemy: e.id, amount: 3, by: ctx.you! });
-      for (const i of invsAt(g, loc))
-        push(g, {
-          t: "AssignDamage",
+      for (const e of enemiesAt(game, loc))
+        push(game, { t: STEP.DamageEnemy, enemy: e.id, amount: 3, by: ctx.you! });
+      for (const i of invsAt(game, loc))
+        push(game, {
+          t: STEP.AssignDamage,
           inv: i,
           damage: 3,
           horror: 0,

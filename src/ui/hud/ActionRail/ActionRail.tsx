@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { cardText, t } from "../../../content/i18n";
-import { cardOfIf, invOf } from "../../../engine/core";
-import type { ChoiceOption, GameState } from "../../../engine/types";
+import { cardOfIf, invOf } from "../../../engine/context";
+import type { ChoiceOption, GameState } from "../../../engine/world/types";
 import { db, useGame } from "../../state/context";
 import { Icon, UiIcon, type UiIconName } from "../../components/Icon";
 import type { IconName } from "../../assets/icons";
@@ -37,21 +37,13 @@ const SKILLS = new Set(["willpower", "intellect", "combat", "agility"]);
 /** icon and label for an option that has no card */
 export function railItem(o: ChoiceOption): RailItem {
   const kind = (o.value as { kind?: string } | null)?.kind;
-  if (kind === "draw")
-    return { key: "rail.draw", img: backUrl("player"), primary: false };
-  if (kind === "resource")
-    return { key: "rail.resource", icon: "resource", primary: false };
-  if (kind === "investigate")
-    return { key: "rail.investigate", icon: "intellect", primary: false };
+  if (kind === "draw") return { key: "rail.draw", img: backUrl("player"), primary: false };
+  if (kind === "resource") return { key: "rail.resource", icon: "resource", primary: false };
+  if (kind === "investigate") return { key: "rail.investigate", icon: "intellect", primary: false };
   // End turn takes the brass plate only once nothing is left to spend (OptionButton): before that it is a way out, not the move
-  if (kind === "endTurn")
-    return { key: "rail.endTurn", symbol: "enter", primary: false };
+  if (kind === "endTurn") return { key: "rail.endTurn", symbol: "enter", primary: false };
   // a draw waiting for a tap on a deck (the setting "Tap decks to draw"): the bar's button draws too
-  if (
-    o.id === "draw" &&
-    typeof o.value === "string" &&
-    o.value.startsWith("draw:")
-  )
+  if (o.id === "draw" && typeof o.value === "string" && o.value.startsWith("draw:"))
     return o.value === "draw:encounter"
       ? { key: "rail.drawEncounter", img: backUrl("encounter"), primary: true }
       : { key: "rail.draw", img: backUrl("player"), primary: true };
@@ -71,12 +63,9 @@ export function railItem(o: ChoiceOption): RailItem {
     };
   }
   // declining a reaction is never the polished default
-  if (o.id === "pass")
-    return { key: "rail.pass", symbol: "pass", primary: false };
-  if (o.id === "none")
-    return { key: "rail.nothing", symbol: "none", primary: false };
-  if (o.label.startsWith("Resign"))
-    return { key: "rail.resign", symbol: "resign", primary: false };
+  if (o.id === "pass") return { key: "rail.pass", symbol: "pass", primary: false };
+  if (o.id === "none") return { key: "rail.nothing", symbol: "none", primary: false };
+  if (o.label.startsWith("Resign")) return { key: "rail.resign", symbol: "resign", primary: false };
   if (typeof o.value === "string" && SKILLS.has(o.value))
     return { key: null, icon: o.value as IconName, primary: false };
   return { key: null, symbol: "dot", primary: false };
@@ -91,10 +80,8 @@ export function stripAction(
   const kind = (o.value as { kind?: string } | null)?.kind;
   // who takes the damage: the whole sentence is the button ("Assign 1 damage to Flesh Ward (defeated)")
   if (o.key?.startsWith("option.assign")) return { label: o.label };
-  if (kind === "fight")
-    return { label: t(db, locale, "strip.fight"), icon: "combat" };
-  if (kind === "evade")
-    return { label: t(db, locale, "strip.evade"), icon: "agility" };
+  if (kind === "fight") return { label: t(db, locale, "strip.fight"), icon: "combat" };
+  if (kind === "evade") return { label: t(db, locale, "strip.evade"), icon: "agility" };
   if (kind === "engage") return { label: t(db, locale, "strip.engage") };
   // the engine label without the card's own name: "Use .45 Automatic" → "Use", "Machete: fight" → "fight"
   const short = o.label
@@ -132,10 +119,8 @@ export function abilitySymbol(
     typeof v === "object" && v?.ability
       ? v.ability.ability.kind
       : code
-        ? [
-            ...(db.cards[code]?.abilities ?? []),
-            ...(db.scripts[code]?.abilities ?? []),
-          ][ref!.index]?.kind
+        ? [...(db.cards[code]?.abilities ?? []), ...(db.scripts[code]?.abilities ?? [])][ref!.index]
+            ?.kind
         : null;
   return kind === "action"
     ? "action"
@@ -153,15 +138,7 @@ const TIP_OF: Record<string, string> = {
 };
 
 /** a no-card option as an icon button; End turn glows when nothing is left to spend */
-function OptionButton({
-  o,
-  game,
-  busy,
-}: {
-  o: ChoiceOption;
-  game: GameState;
-  busy: boolean;
-}) {
+function OptionButton({ o, game, busy }: { o: ChoiceOption; game: GameState; busy: boolean }) {
   const locale = useGame((s) => s.locale);
   const choose = useGame((s) => s.choose);
   const it = railItem(o);
@@ -172,9 +149,7 @@ function OptionButton({
     : optionLabel(o, game, locale);
   // no actions left: End turn is the thing to do (paid actions are no longer offered, free ones stay)
   const me = game.pending?.kind === "turn" ? invOf(game, game.pending.inv) : null;
-  const spent =
-    !!me &&
-    me.actionsLeft + me.restrictedActions.reduce((n, r) => n + r.left, 0) === 0;
+  const spent = !!me && me.actionsLeft + me.restrictedActions.reduce((n, r) => n + r.left, 0) === 0;
   return (
     <button
       className={cx(
@@ -273,9 +248,7 @@ export function InstructionBar() {
               t: "text",
               s: player
                 ? t(db, locale, "net.waitingPlayer", { player })
-                : t(db, locale, "net.waiting", { name })
-                    .replace(name, "")
-                    .trim(),
+                : t(db, locale, "net.waiting", { name }).replace(name, "").trim(),
             },
             { t: "text", s: " " },
             { t: "inv", id: ask.inv },
@@ -287,9 +260,7 @@ export function InstructionBar() {
   }
   // the decider's instruction stays while looking at a teammate; its buttons come back with the decider's table
   // the phone's bar also takes the rail's actions and the act's and agenda's options (ADR-0005)
-  const buttons = ask.buttons
-    ? p.options.filter((o) => inBar(o, game, viewer, mode))
-    : [];
+  const buttons = ask.buttons ? p.options.filter((o) => inBar(o, game, viewer, mode)) : [];
   return (
     <div className="instruction-bar" data-tip="bar">
       <div className={styles.barText}>
@@ -338,9 +309,7 @@ export function UndoButton() {
   // in a room: the investigator whose choice it was, when someone else has to take it back
   const otherInv = useGame((s) => {
     const last = s.room?.moves.at(-1);
-    return canUndo(s) && !canUndoHere(s) && last?.move.t === "choose"
-      ? last.move.inv
-      : null;
+    return canUndo(s) && !canUndoHere(s) && last?.move.t === "choose" ? last.move.inv : null;
   });
   const ended = useGame((s) => s.game?.phase === "ended");
   const undoStore = useGame((s) => s.undo);
@@ -351,14 +320,8 @@ export function UndoButton() {
   const intro = useView((s) => !!s.intro);
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
-      if (
-        e.key.toLowerCase() !== "z" ||
-        !(e.ctrlKey || e.metaKey) ||
-        e.shiftKey
-      )
-        return;
-      if ((e.target as HTMLElement | null)?.closest?.("input, textarea"))
-        return;
+      if (e.key.toLowerCase() !== "z" || !(e.ctrlKey || e.metaKey) || e.shiftKey) return;
+      if ((e.target as HTMLElement | null)?.closest?.("input, textarea")) return;
       e.preventDefault();
       moment("undo");
       undoStore();
@@ -381,8 +344,7 @@ export function UndoButton() {
           : t(db, locale, able ? "undo.hint" : "undo.blocked")
       }
     >
-      <UiIcon name="undo" />{" "}
-      <span className={styles.btnWord}>{t(db, locale, "undo.label")}</span>
+      <UiIcon name="undo" /> <span className={styles.btnWord}>{t(db, locale, "undo.label")}</span>
     </button>
   );
 }
@@ -393,16 +355,11 @@ export function CameraButtons() {
   const cmd = useView((s) => s.cameraCommand);
   return (
     <div className={styles.cameraButtons}>
-      <button
-        onClick={() => cmd("focus")}
-        title={t(db, locale, "cam.focusHint")}
-      >
-        <UiIcon name="focus" />{" "}
-        <span className={styles.btnWord}>{t(db, locale, "cam.focus")}</span>
+      <button onClick={() => cmd("focus")} title={t(db, locale, "cam.focusHint")}>
+        <UiIcon name="focus" /> <span className={styles.btnWord}>{t(db, locale, "cam.focus")}</span>
       </button>
       <button onClick={() => cmd("fit")} title={t(db, locale, "cam.fitHint")}>
-        <UiIcon name="fit" />{" "}
-        <span className={styles.btnWord}>{t(db, locale, "cam.fit")}</span>
+        <UiIcon name="fit" /> <span className={styles.btnWord}>{t(db, locale, "cam.fit")}</span>
       </button>
     </div>
   );

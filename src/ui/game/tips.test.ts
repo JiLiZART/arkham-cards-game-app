@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { dispatch } from "../../engine/engine";
-import { db, skipMulligans, start } from "../../engine/testkit";
-import type { GameState } from "../../engine/types";
+import { dispatch } from "../../engine";
+import { db, skipMulligans, start } from "../../engine/kits/testkit";
+import type { GameState } from "../../engine/world/types";
 import { pickTip, type TipContext } from "./tips";
 import {
   allCardRecsIn,
@@ -9,7 +9,9 @@ import {
   cardRecIn,
   invStateIn,
   withCardsIn,
-} from "../../engine/records";
+} from "../../engine/world/store";
+import { ZONE, PHASE, CHOICE } from "../../engine/world/constants";
+import { STEP } from "../../engine/steps/step";
 
 const R = "01001";
 const ctx = (patch: Partial<TipContext> = {}): TipContext => ({
@@ -76,7 +78,11 @@ describe("pickTip", () => {
   it("the phase pause tips speak to everyone, even while hands are private", () => {
     const mythos: GameState = {
       ...fresh,
-      pending: { ...fresh.pending!, kind: "phase", step: { t: "PhasePause", phase: "mythos" } },
+      pending: {
+        ...fresh.pending!,
+        kind: CHOICE.Phase,
+        step: { t: STEP.PhasePause, phase: PHASE.Mythos },
+      },
     };
     expect(pick(mythos, [], ctx({ shown: false }))).toBe("mythos");
   });
@@ -85,7 +91,7 @@ describe("pickTip", () => {
     const study = invStateIn(fresh, R).location!;
     const ghoul = allCardRecsIn(fresh).find((c) => c.code === "01160")!.id;
     const g: GameState = withCardsIn(fresh, {
-      [ghoul]: { ...cardDataIn(fresh, ghoul), zone: "enemy", location: study, engagedWith: R },
+      [ghoul]: { ...cardDataIn(fresh, ghoul), zone: ZONE.Enemy, location: study, engagedWith: R },
     });
     const tip = pickTip(g, ctx(), new Set(["start", "turn"]), true)!;
     expect(tip.id).toBe("enemy");

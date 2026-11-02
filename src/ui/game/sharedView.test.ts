@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { GameState } from "../../engine/types";
+import type { GameState } from "../../engine/world/types";
 import { sharedView } from "./sharedView";
 
 /** just the cards the lookups read */

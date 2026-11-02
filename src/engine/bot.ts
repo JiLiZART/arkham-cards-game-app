@@ -1,7 +1,8 @@
 /** a simple scripted player used by playthrough tests and the debug "auto-play" button */
-import { dispatch, type Result } from "./engine";
-import { cardOf, invOf, locations, stepsToward } from "./core";
-import type { ContentDb } from "./types";
+import { dispatch, type Result } from "./index";
+import { cardOf, invOf } from "./context";
+import { locations, stepsToward } from "./queries";
+import type { ContentDb } from "./world/types";
 
 const PREFS: RegExp[] = [
   /^Advance act/,
@@ -25,18 +26,18 @@ const PREFS: RegExp[] = [
 /** next step toward the nearest location that is unrevealed or has clues */
 function goal(db: ContentDb, r: Result, i: string): string | undefined {
   const s = r.state;
-  const g = { s, db, events: [] };
+  const game = { s, db, events: [] };
   const here = invOf(s, i).location;
   if (!here) return undefined;
-  const wanted = locations(g)
+  const wanted = locations(game)
     .filter((l) => l.id !== here && (!l.revealed || l.clues > 0))
     .map((l) => l.id);
   const targets = wanted.length
     ? wanted
-    : locations(g)
+    : locations(game)
         .filter((l) => l.id !== here)
         .map((l) => l.id);
-  return stepsToward(g, here, targets)[0];
+  return stepsToward(game, here, targets)[0];
 }
 export function botChoice(db: ContentDb, r: Result): string {
   const p = r.state.pending!;

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { db, skipMulligans, start } from "../../engine/testkit";
-import type { GameEvent, GameState } from "../../engine/types";
+import { db, skipMulligans, start } from "../../engine/kits/testkit";
+import type { GameEvent, GameState } from "../../engine/world/types";
 import {
   effectFor,
   gainOf,
@@ -11,13 +11,22 @@ import {
   momentClip,
   musicFor,
 } from "./sounds";
-import { allCardRecsIn, cardDataIn, cardRecIn, invStateIn, putCardIn } from "../../engine/records";
+import {
+  allCardRecsIn,
+  cardDataIn,
+  cardRecIn,
+  invStateIn,
+  putCardIn,
+} from "../../engine/world/store";
+import type { EventType } from "../../engine/events/event";
+import { EVENT } from "../../engine/events/event";
+import { ZONE, PHASE } from "../../engine/world/constants";
 
 const R = "01001";
 const fresh = skipMulligans(start("the-gathering", [R], 1)).state;
 const m = db.sounds;
 const ev = (
-  type: string,
+  type: EventType,
   data: Record<string, unknown> = {},
   card: string | null = null,
 ): GameEvent => ({ type, text: type, inv: R, card, data });
@@ -30,31 +39,35 @@ const with_ = (patch: (s: GameState) => void): GameState => {
 
 describe("effectFor", () => {
   it("maps an animated event to its clip", () => {
-    expect(effectFor(ev("attack"), fresh, m)).toEqual([m.events.attack]);
-    expect(effectFor(ev("token"), fresh, m)).toEqual(m.events.token); // two layers
+    expect(effectFor(ev(EVENT.Attack), fresh, m)).toEqual([m.events.attack]);
+    expect(effectFor(ev(EVENT.Token), fresh, m)).toEqual(m.events.token); // two layers
   });
 
   it("picks the variant: a failed test, horror without damage, both when both", () => {
-    expect(effectFor(ev("testResult", { success: true }), fresh, m)).toEqual([m.events.testResult]);
-    expect(effectFor(ev("testResult", { success: false }), fresh, m)).toEqual([
+    expect(effectFor(ev(EVENT.TestResult, { success: true }), fresh, m)).toEqual([
+      m.events.testResult,
+    ]);
+    expect(effectFor(ev(EVENT.TestResult, { success: false }), fresh, m)).toEqual([
       m.events["testResult:fail"],
     ]);
-    expect(effectFor(ev("damage", { damage: 0, horror: 1 }), fresh, m)).toEqual([
+    expect(effectFor(ev(EVENT.Damage, { damage: 0, horror: 1 }), fresh, m)).toEqual([
       m.events["damage:horror"],
     ]);
-    expect(effectFor(ev("damage", { damage: 1, horror: 1 }), fresh, m)).toEqual([
+    expect(effectFor(ev(EVENT.Damage, { damage: 1, horror: 1 }), fresh, m)).toEqual([
       m.events.damage,
       m.events["damage:horror"],
     ]);
   });
 
   it("a spawning enemy growls by its traits (Ghoul before Monster, in the manifest's order)", () => {
-    expect(effectFor(ev("spawn", {}, codeOf("01160")), fresh, m)).toEqual([m.traits.spawn?.Ghoul]); // Ghoul Minion: Humanoid, Monster, Ghoul
-    expect(effectFor(ev("spawn", {}, codeOf("01159")), fresh, m)).toEqual([m.events.spawn]); // Swarm of Rats: Creature, no entry
+    expect(effectFor(ev(EVENT.Spawn, {}, codeOf("01160")), fresh, m)).toEqual([
+      m.traits.spawn?.Ghoul,
+    ]); // Ghoul Minion: Humanoid, Monster, Ghoul
+    expect(effectFor(ev(EVENT.Spawn, {}, codeOf("01159")), fresh, m)).toEqual([m.events.spawn]); // Swarm of Rats: Creature, no entry
   });
 
   it("nothing for an event without a sound", () => {
-    expect(effectFor(ev("resource"), fresh, m)).toBeNull();
+    expect(effectFor(ev(EVENT.Resource), fresh, m)).toBeNull();
   });
 });
 
@@ -108,18 +121,18 @@ describe("musicFor", () => {
   });
 
   it("the shipped manifest: the shared tension is silent, so the enemy phase keeps the chapter's track", () => {
-    const enemyPhase = with_((s) => (s.phase = "enemy"));
+    const enemyPhase = with_((s) => (s.phase = PHASE.Enemy));
     expect(musicFor(enemyPhase, db.sounds)).toMatch(/^card:01108(:alt)?$/);
   });
 
   it("a silent track is never chosen: the enemy phase keeps the chapter's track", () => {
-    const enemyPhase = with_((s) => (s.phase = "enemy"));
+    const enemyPhase = with_((s) => (s.phase = PHASE.Enemy));
     const silent = { ...m, music: { ...m.music, tension: { ...track, silent: true } } };
     expect(musicFor(enemyPhase, silent)).toBe("bed:the-gathering");
   });
 
   it("the scenario's own tension track before the shared one", () => {
-    const enemyPhase = with_((s) => (s.phase = "enemy"));
+    const enemyPhase = with_((s) => (s.phase = PHASE.Enemy));
     expect(musicFor(enemyPhase, scored("tension:the-gathering"))).toBe("tension:the-gathering");
     expect(musicFor(enemyPhase, scored("tension:the-midnight-masks"))).toBe("tension");
   });
@@ -155,7 +168,7 @@ describe("musicFor", () => {
           s.scenarioId = "extracurricular-activity";
           putCardIn(s, {
             ...cardDataIn(s, ghoul),
-            zone: "enemy",
+            zone: ZONE.Enemy,
             location: invStateIn(s, R).location,
             engagedWith: R,
           });
@@ -170,7 +183,7 @@ describe("musicFor", () => {
     const engaged = with_((s) =>
       putCardIn(s, {
         ...cardDataIn(s, ghoul),
-        zone: "enemy",
+        zone: ZONE.Enemy,
         location: invStateIn(s, R).location,
         engagedWith: R,
       }),
@@ -179,7 +192,7 @@ describe("musicFor", () => {
     const gone = with_((s) =>
       putCardIn(s, {
         ...cardDataIn(s, ghoul),
-        zone: "discard",
+        zone: ZONE.Discard,
         engagedWith: null,
       }),
     );
@@ -189,7 +202,7 @@ describe("musicFor", () => {
   it("tension in the enemy phase and when the agenda is one doom from advancing; fight wins over tension", () => {
     expect(
       musicFor(
-        with_((s) => (s.phase = "enemy")),
+        with_((s) => (s.phase = PHASE.Enemy)),
         m,
       ),
     ).toBe("tension");
@@ -198,10 +211,10 @@ describe("musicFor", () => {
     expect(musicFor(almost, m)).toBe("tension");
     const ghoul = codeOf("01160");
     const both = with_((s) => {
-      s.phase = "enemy";
+      s.phase = PHASE.Enemy;
       putCardIn(s, {
         ...cardDataIn(s, ghoul),
-        zone: "enemy",
+        zone: ZONE.Enemy,
         location: invStateIn(s, R).location,
         engagedWith: R,
       });
@@ -212,7 +225,7 @@ describe("musicFor", () => {
   it("silent once the scenario has ended, and for a scenario with no bed when there is no default bed either", () => {
     expect(
       musicFor(
-        with_((s) => (s.phase = "ended")),
+        with_((s) => (s.phase = PHASE.Ended)),
         m,
       ),
     ).toBeNull();

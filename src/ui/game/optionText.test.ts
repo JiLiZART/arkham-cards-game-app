@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { pick, skipMulligans, start } from "../../engine/testkit";
+import { pick, skipMulligans, start } from "../../engine/kits/testkit";
 import { abilityRef, optionLabel } from "./optionText";
-import { allCardRecsIn, invStateIn } from "../../engine/records";
+import { allCardRecsIn, invStateIn } from "../../engine/world/store";
 
 const ROLAND = "01001";
 const game = () => {

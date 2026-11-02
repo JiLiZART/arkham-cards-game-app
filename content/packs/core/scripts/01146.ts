@@ -4,23 +4,25 @@ import {
   type CardScript,
   createCard,
   findByCode,
-  type G,
+  type GameContext,
   locationByName,
   moveCard,
   push,
+  ZONE,
+  STEP,
 } from "../../../../src/engine/api";
 
 export default {
   abilities: [{ kind: "revelation", run: "back" }],
   fns: {
-    back(g: G) {
-      const aside = findByCode(g, "01156", ["setAside"]);
-      if (aside) moveCard(g, aside.id, "location");
-      const main = locationByName(g, "Main Path");
-      const escaped = (campaignLogOf(g).cultistsGotAway as string[] | undefined) ?? [];
+    back(game: GameContext) {
+      const aside = findByCode(game, "01156", [ZONE.SetAside]);
+      if (aside) moveCard(game, aside.id, ZONE.Location);
+      const main = locationByName(game, "Main Path");
+      const escaped = (campaignLogOf(game).cultistsGotAway as string[] | undefined) ?? [];
       for (const code of escaped) {
-        const id = createCard(g, code, "limbo");
-        push(g, { t: "Spawn", enemy: id, inv: null, at: main?.id ?? null });
+        const id = createCard(game, code, ZONE.Limbo);
+        push(game, { t: STEP.Spawn, enemy: id, inv: null, at: main?.id ?? null });
       }
     },
   },

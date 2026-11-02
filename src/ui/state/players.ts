@@ -1,6 +1,7 @@
 /** the player bar's pure parts: who is shown, who can act, what each avatar says (ADR-0004: viewing is view state) */
-import { invOf, invOfIf, maxHealth, maxSanity } from "../../engine/core";
-import type { ChoiceOption, GameState, InvId } from "../../engine/types";
+import { invOf, invOfIf } from "../../engine/context";
+import { maxHealth, maxSanity } from "../../engine/queries";
+import type { ChoiceOption, GameState, InvId } from "../../engine/world/types";
 import { db } from "./context";
 import { ribbonModel } from "../game/ribbon";
 import { viewerOf } from "./store";

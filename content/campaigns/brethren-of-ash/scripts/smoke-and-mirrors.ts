@@ -18,7 +18,7 @@ import {
   enemies,
   findByCode,
   flags,
-  type G,
+  type GameContext,
   type InstId,
   inv,
   invName,
@@ -39,6 +39,10 @@ import {
   shuffleList,
   type Step,
   turnOrder,
+  EVENT,
+  ZONE,
+  CHOICE,
+  STEP,
 } from "../../../../src/engine/api";
 
 const SERVANT = "12138";
@@ -91,148 +95,161 @@ const CODEX: Record<string, [string, string]> = {
   ],
 };
 
-const underAct = (g: G): InstId[] => flags.underAct.get(g) ?? [];
-const beneath = (g: G, loc: InstId | null) => (loc ? flags.beneath.get(g, loc) : undefined);
-const elite = (g: G, id: InstId) => def(g, id).traits.includes("Elite");
-const eliteCount = (g: G) =>
-  cardsIn(g, "victory").filter((c) => def(g, c.id).type === "enemy" && elite(g, c.id)).length +
-  underAct(g).length;
-const story = (g: G, text: string) => {
-  if (text) emit(g, "codex", text);
+const underAct = (game: GameContext): InstId[] => flags.underAct.get(game) ?? [];
+const beneath = (game: GameContext, loc: InstId | null) =>
+  loc ? flags.beneath.get(game, loc) : undefined;
+const elite = (game: GameContext, id: InstId) => def(game, id).traits.includes("Elite");
+const eliteCount = (game: GameContext) =>
+  cardsIn(game, ZONE.Victory).filter((c) => def(game, c.id).type === "enemy" && elite(game, c.id))
+    .length + underAct(game).length;
+const story = (game: GameContext, text: string) => {
+  if (text) emit(game, EVENT.Codex, text);
 };
 
 /** a suspect interrogated: beneath the act, out of play */
-function toAct(g: G, id: InstId) {
-  moveCard(g, id, "setAside");
-  flags.underAct.set(g, [...underAct(g), id]);
-  emit(g, "underAct", `${def(g, id).name} is placed beneath the act`, { card: id });
-  push(g, { t: "CheckObjectives" });
+function toAct(game: GameContext, id: InstId) {
+  moveCard(game, id, ZONE.SetAside);
+  flags.underAct.set(game, [...underAct(game), id]);
+  emit(game, EVENT.UnderAct, `${def(game, id).name} is placed beneath the act`, { card: id });
+  push(game, { t: STEP.CheckObjectives });
 }
 
 export default {
   conditions: {
-    oneOrTwoPlayers: (g: G) => playerCount(g) <= 2,
-    twoOrMoreClues: (g: G, ctx: EffCtx) => !!ctx.you && inv(g, ctx.you).clues >= 2,
-    cardBeneathYou: (g: G, ctx: EffCtx) => !!ctx.you && !!beneath(g, inv(g, ctx.you).location),
+    oneOrTwoPlayers: (game: GameContext) => playerCount(game) <= 2,
+    twoOrMoreClues: (game: GameContext, ctx: EffCtx) => !!ctx.you && inv(game, ctx.you).clues >= 2,
+    cardBeneathYou: (game: GameContext, ctx: EffCtx) =>
+      !!ctx.you && !!beneath(game, inv(game, ctx.you).location),
   },
   fns: {
-    setup(g: G) {
-      for (const c of allCards(g))
-        if (c.code === "12137" && c.zone === "encounterDeck") moveCard(g, c.id, "setAside");
-      const people = allCards(g)
+    setup(game: GameContext) {
+      for (const c of allCards(game))
+        if (c.code === "12137" && c.zone === "encounterDeck") moveCard(game, c.id, ZONE.SetAside);
+      const people = allCards(game)
         .filter((c) => PEOPLE.includes(c.code) && c.zone === "encounterDeck")
         .map((c) => c.id);
-      shuffleList(g, people);
+      shuffleList(game, people);
       const [harbinger, ...rest] = people;
-      moveCard(g, harbinger, "setAside");
-      flags.harbinger.set(g, harbinger);
-      const servant = findByCode(g, SERVANT, ["encounterDeck"]);
+      moveCard(game, harbinger, ZONE.SetAside);
+      flags.harbinger.set(game, harbinger);
+      const servant = findByCode(game, SERVANT, [ZONE.EncounterDeck]);
       const suspects = [...rest, ...(servant ? [servant.id] : [])];
-      shuffleList(g, suspects);
+      shuffleList(game, suspects);
       UNDER.forEach((name, k) => {
-        const loc = locationByName(g, name);
+        const loc = locationByName(game, name);
         if (!loc || !suspects[k]) return;
-        moveCard(g, suspects[k], "setAside");
-        flags.beneath.set(g, loc.id, suspects[k]);
+        moveCard(game, suspects[k], ZONE.SetAside);
+        flags.beneath.set(game, loc.id, suspects[k]);
       });
-      if (currentAgenda(g)) addCounter(g, currentAgenda(g)!, "doom", playerCount(g));
+      if (currentAgenda(game)) addCounter(game, currentAgenda(game)!, "doom", playerCount(game));
       // Dr. Armitage comes with his bearer, and takes up no ally slot
-      for (const i of turnOrder(g)) {
-        const armitage = inv(g, i).deck.find((id) => card(g, id).code === "12115");
+      for (const i of turnOrder(game)) {
+        const armitage = inv(game, i).deck.find((id) => card(game, id).code === "12115");
         if (!armitage) continue;
-        moveCard(g, armitage, "play");
-        setController(g, armitage, i);
+        moveCard(game, armitage, ZONE.Play);
+        setController(game, armitage, i);
       }
     },
-    drawBeneath(g: G, ctx: EffCtx) {
-      const loc = inv(g, ctx.you!).location;
-      const id = beneath(g, loc);
+    drawBeneath(game: GameContext, ctx: EffCtx) {
+      const loc = inv(game, ctx.you!).location;
+      const id = beneath(game, loc);
       if (!id || !loc) return;
-      flags.beneath.clear(g, loc);
-      moveCard(g, id, "limbo");
-      emit(g, "encounter", `${invName(g, ctx.you!)} draws ${def(g, id).name}`, {
+      flags.beneath.clear(game, loc);
+      moveCard(game, id, ZONE.Limbo);
+      emit(game, EVENT.Encounter, `${invName(game, ctx.you!)} draws ${def(game, id).name}`, {
         inv: ctx.you!,
         card: id,
       });
-      push(g, { t: "Spawn", enemy: id, inv: ctx.you! });
+      push(game, { t: STEP.Spawn, enemy: id, inv: ctx.you! });
     },
     /** a suspect's codex entry: its effect, then a lead on them; enough leads and they are interrogated */
-    codex(g: G, ctx: EffCtx, n: number, step?: Step) {
+    codex(game: GameContext, ctx: EffCtx, n: number, step?: Step) {
       const id = ctx.source!;
-      const e = cardIf(g, id);
+      const e = cardIf(game, id);
       if (e?.zone !== "enemy") return;
       const you = ctx.you!;
       if (n === 3) {
         // Naomi O'Bannion: you may defeat a non-Humanoid enemy at any location
-        const pool = enemies(g).filter((x) => !def(g, x.id).traits.includes("Humanoid"));
+        const pool = enemies(game).filter((x) => !def(game, x.id).traits.includes("Humanoid"));
         if (pool.length) {
           const pick = ask<InstId | "none">(
-            g,
+            game,
             step!,
             you,
-            "target",
+            CHOICE.Target,
             "Naomi O'Bannion: defeat a non-Humanoid enemy?",
             [
-              ...pool.map((x) => ({ id: x.id, label: def(g, x.id).name, card: x.id, value: x.id })),
+              ...pool.map((x) => ({
+                id: x.id,
+                label: def(game, x.id).name,
+                card: x.id,
+                value: x.id,
+              })),
               { id: "none", label: "No", value: "none" },
             ],
             { key: "chooseEnemy" },
           );
           if (pick === undefined) return;
-          if (pick !== "none") push(g, { t: "DefeatEnemy", enemy: pick, by: you });
+          if (pick !== "none") push(game, { t: STEP.DefeatEnemy, enemy: pick, by: you });
         }
       }
       if (n === 6) {
         // Margaret Liu: look at the top card of the encounter deck; you may discard it
-        const top = pile(g, "encounterDeck")[0];
+        const top = pile(game, ZONE.EncounterDeck)[0];
         if (top) {
           const drop = ask<boolean>(
-            g,
+            game,
             step!,
             you,
-            "generic",
-            `Margaret Liu: the top card of the encounter deck is ${def(g, top).name}. Discard it?`,
+            CHOICE.Generic,
+            `Margaret Liu: the top card of the encounter deck is ${def(game, top).name}. Discard it?`,
             [
-              { id: "yes", label: `Discard ${def(g, top).name}`, value: true, card: top },
+              { id: "yes", label: `Discard ${def(game, top).name}`, value: true, card: top },
               { id: "no", label: "Leave it", value: false },
             ],
             { key: "chooseOne" },
           );
           if (drop === undefined) return;
-          if (drop) discard(g, top);
+          if (drop) discard(game, top);
         }
       }
-      story(g, CODEX[String(n)][0]);
+      story(game, CODEX[String(n)][0]);
       if (n === 1 && e.location) {
         // David Renfield flees to a connecting location (with no investigators, if able)
-        const near = connections(g, e.location);
-        const empty = near.filter((l) => !invsAt(g, l).length);
+        const near = connections(game, e.location);
+        const empty = near.filter((l) => !invsAt(game, l).length);
         const to = (empty.length ? empty : near)[0];
         if (to) {
-          setCardLocation(g, e.id, to);
-          setEngaged(g, e.id, null);
+          setCardLocation(game, e.id, to);
+          setEngaged(game, e.id, null);
         }
       }
       if (n === 2) {
-        ready(g, e.id);
-        push(g, { t: "Effects", effects: [{ op: "heal", horror: 1 }], ctx: { you } });
+        ready(game, e.id);
+        push(game, { t: STEP.Effects, effects: [{ op: EVENT.Heal, horror: 1 }], ctx: { you } });
       }
-      if (n === 4) push(g, { t: "Effects", effects: [{ op: "heal", damage: 1 }], ctx: { you } });
-      if (n === 5) push(g, { t: "Draw", inv: you, n: 1 });
-      addCounter(g, e.id, "resources", 1);
-      emit(g, "lead", `A lead on ${def(g, id).name} (${e.resources}/${playerCount(g)})`, {
-        card: id,
-      });
-      if (e.resources >= playerCount(g)) {
-        story(g, CODEX[String(n)][1]);
-        emit(g, "interrogated", `${def(g, id).name} has been interrogated`, { card: id });
-        toAct(g, id);
+      if (n === 4)
+        push(game, { t: STEP.Effects, effects: [{ op: EVENT.Heal, damage: 1 }], ctx: { you } });
+      if (n === 5) push(game, { t: STEP.Draw, inv: you, n: 1 });
+      addCounter(game, e.id, "resources", 1);
+      emit(
+        game,
+        EVENT.Lead,
+        `A lead on ${def(game, id).name} (${e.resources}/${playerCount(game)})`,
+        {
+          card: id,
+        },
+      );
+      if (e.resources >= playerCount(game)) {
+        story(game, CODEX[String(n)][1]);
+        emit(game, EVENT.Interrogated, `${def(game, id).name} has been interrogated`, { card: id });
+        toAct(game, id);
       }
     },
-    earl(g: G, ctx: EffCtx) {
-      const e = cardIf(g, ctx.source!);
-      push(g, {
-        t: "Eff",
+    earl(game: GameContext, ctx: EffCtx) {
+      const e = cardIf(game, ctx.source!);
+      push(game, {
+        t: STEP.Eff,
         effect: {
           op: "skillTest",
           skill: "combat",
@@ -242,14 +259,14 @@ export default {
         ctx,
       });
     },
-    abigail(g: G, ctx: EffCtx) {
-      const loc = cardIf(g, ctx.source!)?.location;
-      push(g, {
-        t: "Eff",
+    abigail(game: GameContext, ctx: EffCtx) {
+      const loc = cardIf(game, ctx.source!)?.location;
+      push(game, {
+        t: STEP.Eff,
         effect: {
           op: "skillTest",
           skill: "intellect",
-          difficulty: loc ? card(g, loc).clues : 0,
+          difficulty: loc ? card(game, loc).clues : 0,
           onSuccess: [
             { op: "script", fn: "abigailClue" },
             { op: "script", fn: "codex", args: 5 },
@@ -258,36 +275,37 @@ export default {
         ctx,
       });
     },
-    abigailClue(g: G, ctx: EffCtx) {
-      const loc = cardIf(g, ctx.source!)?.location;
-      if (loc) addCounter(g, loc, "clues", 1);
+    abigailClue(game: GameContext, ctx: EffCtx) {
+      const loc = cardIf(game, ctx.source!)?.location;
+      if (loc) addCounter(game, loc, "clues", 1);
     },
-    northside(g: G, ctx: EffCtx, _args: unknown, step?: Step) {
-      const pool = locations(g).filter(
-        (l) => l.revealed && l.clues > 0 && def(g, l.id).traits.includes("Arkham"),
+    northside(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
+      const pool = locations(game).filter(
+        (l) => l.revealed && l.clues > 0 && def(game, l.id).traits.includes("Arkham"),
       );
       if (!pool.length) return;
       const pick = ask<InstId>(
-        g,
+        game,
         step!,
         ctx.you!,
-        "target",
+        CHOICE.Target,
         "Northside: discover 1 clue at a revealed Arkham location",
-        pool.map((l) => ({ id: l.id, label: def(g, l.id).name, card: l.id, value: l.id })),
+        pool.map((l) => ({ id: l.id, label: def(game, l.id).name, card: l.id, value: l.id })),
         { auto: true, key: "chooseClueLocation" },
       );
-      if (pick !== undefined) push(g, { t: "DiscoverClues", inv: ctx.you!, location: pick, n: 1 });
+      if (pick !== undefined)
+        push(game, { t: STEP.DiscoverClues, inv: ctx.you!, location: pick, n: 1 });
     },
     /** codex Φ: the Servant of Flame is defeated — kill them, or hold them for questioning */
-    codexPhi(g: G, ctx: EffCtx, _args: unknown, step?: Step) {
+    codexPhi(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
       const id = ctx.source!;
-      if (cardIf(g, id)?.zone !== "enemy") return;
-      story(g, CODEX.phi[0]);
+      if (cardIf(game, id)?.zone !== "enemy") return;
+      story(game, CODEX.phi[0]);
       const kill = ask<boolean>(
-        g,
+        game,
         step!,
-        leadInvestigator(g),
-        "generic",
+        leadInvestigator(game),
+        CHOICE.Generic,
         "The Servant of Flame lies at your feet",
         [
           {
@@ -302,73 +320,74 @@ export default {
       );
       if (kill === undefined) return;
       if (kill) {
-        flags.killedServant.set(g, true);
-        for (const i of activeInvs(g)) push(g, { t: "Draw", inv: i, n: 3 });
+        flags.killedServant.set(game, true);
+        for (const i of activeInvs(game)) push(game, { t: STEP.Draw, inv: i, n: 3 });
         return;
       }
-      flags.servantBeneath.set(g, true);
-      for (const i of activeInvs(g)) addCounter(g, i, "clues", 1);
-      toAct(g, id);
+      flags.servantBeneath.set(game, true);
+      for (const i of activeInvs(game)) addCounter(game, i, "clues", 1);
+      toAct(game, id);
     },
     /** Growing Flames: each investigator draws a set-aside Mark of Elokoss and becomes its bearer */
-    growingFlames(g: G) {
-      const marks = allCards(g).filter((c) => c.code === "12137" && c.zone === "setAside");
-      activeInvs(g).forEach((i, k) => {
+    growingFlames(game: GameContext) {
+      const marks = allCards(game).filter((c) => c.code === "12137" && c.zone === "setAside");
+      activeInvs(game).forEach((i, k) => {
         const m = marks[k];
         if (!m) return;
-        setOwner(g, m.id, i);
-        setController(g, m.id, i);
-        moveCard(g, m.id, "limbo");
-        push(g, { t: "Revelation", inv: i, card: m.id });
+        setOwner(game, m.id, i);
+        setController(game, m.id, i);
+        moveCard(game, m.id, ZONE.Limbo);
+        push(game, { t: STEP.Revelation, inv: i, card: m.id });
       });
-      flags.logEntry.set(g, ["hidden", "mark_of_elokoss"], true);
+      flags.logEntry.set(game, ["hidden", "mark_of_elokoss"], true);
     },
-    outtaTime(g: G) {
-      for (const i of activeInvs(g)) push(g, { t: "Defeated", inv: i, by: "resign" });
+    outtaTime(game: GameContext) {
+      for (const i of activeInvs(game)) push(game, { t: STEP.Defeated, inv: i, by: "resign" });
     },
-    backToVelmas(g: G) {
-      push(g, { t: "Resolution", id: "R1" });
+    backToVelmas(game: GameContext) {
+      push(game, { t: STEP.Resolution, id: "R1" });
     },
   },
   hooks: {
-    checkObjectives(g: G) {
-      if (cardIf(g, currentAct(g))?.code === "12136" && eliteCount(g) >= 6)
-        push(g, { t: "AdvanceAct" });
+    checkObjectives(game: GameContext) {
+      if (cardIf(game, currentAct(game))?.code === "12136" && eliteCount(game) >= 6)
+        push(game, { t: STEP.AdvanceAct });
     },
     /** what the campaign log takes from this game (the guide asks the players; the game knows) */
-    ended(g: G, ctx: EffCtx) {
+    ended(game: GameContext, ctx: EffCtx) {
       const log = (id: string, section = "campaign_notes") => {
-        flags.logEntry.set(g, [section, id], true);
+        flags.logEntry.set(game, [section, id], true);
       };
-      const harbinger = flags.harbinger.get(g);
-      if (harbinger) log(`${NAMES[card(g, harbinger).code]}_harbinger`);
+      const harbinger = flags.harbinger.get(game);
+      if (harbinger) log(`${NAMES[card(game, harbinger).code]}_harbinger`);
       if (ctx.x) log("discovered_the_cults_whereabouts");
       else {
         // the Elite enemies in play or beneath a location, with the harbinger: one drawn at random
         const pool = [
-          ...cardsIn(g, "enemy")
-            .filter((c) => elite(g, c.id))
+          ...cardsIn(game, ZONE.Enemy)
+            .filter((c) => elite(game, c.id))
             .map((c) => c.id),
-          ...locations(g)
-            .map((l) => beneath(g, l.id))
+          ...locations(game)
+            .map((l) => beneath(game, l.id))
             .filter((x): x is InstId => !!x),
           ...(harbinger ? [harbinger] : []),
         ];
-        const drawn = pool[randomInt(g, pool.length)];
+        const drawn = pool[randomInt(game, pool.length)];
         log(drawn === harbinger ? "discovered_the_cults_whereabouts" : "failed_in_their_search");
       }
-      if (flags.killedServant.get(g)) log("killed_the_servant_of_flame");
-      if (flags.servantBeneath.get(g)) log("servant_of_flame_beneath_act", "hidden");
-      if (ctx.x && underAct(g).filter((id) => elite(g, id)).length >= 6)
+      if (flags.killedServant.get(game)) log("killed_the_servant_of_flame");
+      if (flags.servantBeneath.get(game)) log("servant_of_flame_beneath_act", "hidden");
+      if (ctx.x && underAct(game).filter((id) => elite(game, id)).length >= 6)
         log("scoured_arkham_for_answers");
       if (
         ctx.x &&
-        cardsIn(g, "victory").filter((c) => def(g, c.id).type === "enemy" && elite(g, c.id))
-          .length >= 6
+        cardsIn(game, ZONE.Victory).filter(
+          (c) => def(game, c.id).type === "enemy" && elite(game, c.id),
+        ).length >= 6
       )
         log("stirred_up_trouble");
       // 1 bonus experience for each enemy beneath the act
-      for (const i of turnOrder(g)) flags.xp.add(g, i, underAct(g).length);
+      for (const i of turnOrder(game)) flags.xp.add(game, i, underAct(game).length);
     },
   },
 } satisfies CardScript;

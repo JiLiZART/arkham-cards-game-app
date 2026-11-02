@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { t } from "../../../content/i18n";
-import type { GameState, InstId, InvId } from "../../../engine/types";
+import type { GameState, InstId, InvId } from "../../../engine/world/types";
 import { domPlace, reducedMotion, rememberRect } from "../../game/arrivals";
 import { cardDetails } from "../../game/details";
 import { CardFace } from "../../components/CardFace";
@@ -15,7 +15,7 @@ import { layoutModeNow, useLayoutMode } from "../../state/layoutMode";
 import { moment } from "../SoundLayer";
 import { cx } from "../../components/cx";
 import styles from "./Reveal.module.css";
-import { cardOf, cardOfIf, cardsOf } from "../../../engine/core";
+import { cardOf, cardOfIf, cardsOf } from "../../../engine/context";
 
 interface Box {
   x: number;

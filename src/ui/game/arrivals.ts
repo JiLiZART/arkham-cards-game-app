@@ -1,8 +1,9 @@
 import { showcaseLayout } from "./showcaseLayout";
 import type { StoreApi } from "zustand";
-import type { GameState, InstId, InvId, Zone } from "../../engine/types";
+import type { GameState, InstId, InvId, Zone } from "../../engine/world/types";
 import type { UiState } from "../state/store";
-import { cardOf, cardOfIf, cardsOf, invOf } from "../../engine/core";
+import { cardOf, cardOfIf, cardsOf, invOf } from "../../engine/context";
+import { ZONE } from "../../engine/world/constants";
 
 /** a card that just arrived somewhere visible (hand, play area, threat area, map, resolve spot) */
 export interface Arrival {
@@ -22,14 +23,14 @@ export interface Arrival {
 }
 
 const SHOWN = new Set<Zone>([
-  "hand",
-  "play",
-  "threat",
-  "enemy",
-  "location",
-  "attached",
-  "resolving",
-  "commit",
+  ZONE.Hand,
+  ZONE.Play,
+  ZONE.Threat,
+  ZONE.Enemy,
+  ZONE.Location,
+  ZONE.Attached,
+  ZONE.Resolving,
+  ZONE.Commit,
 ]);
 
 /** every card that changed into a shown zone between two states (hand cards in hand order first) */
@@ -67,7 +68,7 @@ export function diffArrivals(prev: GameState | null, next: GameState): Arrival[]
   for (const i of next.order)
     for (const id of invOf(next, i).hand) {
       const before = cardOfIf(prev, id)?.zone;
-      if (before !== "hand") add(id, before ?? "deck", i);
+      if (before !== "hand") add(id, before ?? ZONE.Deck, i);
     }
   for (const c of cardsOf(next)) {
     if (seen.has(c.id) || !SHOWN.has(c.zone) || c.zone === "hand") continue;

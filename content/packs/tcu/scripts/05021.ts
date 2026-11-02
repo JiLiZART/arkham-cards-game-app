@@ -6,7 +6,7 @@ import {
   type EffCtx,
   emit,
   flags,
-  type G,
+  type GameContext,
   inv,
   type InvId,
   invName,
@@ -14,6 +14,9 @@ import {
   moveCard,
   setController,
   type Step,
+  EVENT,
+  ZONE,
+  CHOICE,
 } from "../../../../src/engine/api";
 
 export default {
@@ -45,37 +48,37 @@ export default {
     },
   ],
   fns: {
-    attach(g: G, ctx: EffCtx, _args: unknown, step?: Step) {
+    attach(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
       const who = ask<InvId>(
-        g,
+        game,
         step!,
         ctx.you!,
-        "target",
+        CHOICE.Target,
         "Delay the Inevitable: choose an investigator",
-        invsAt(g, inv(g, ctx.you!).location).map((i) => ({
+        invsAt(game, inv(game, ctx.you!).location).map((i) => ({
           id: i,
-          label: invName(g, i),
-          card: inv(g, i).cardId,
+          label: invName(game, i),
+          card: inv(game, i).cardId,
           value: i,
         })),
         { auto: true, key: "cardChooseInvestigator", vars: { card: ctx.source ?? null } },
       );
       if (who === undefined) return;
-      moveCard(g, ctx.source!, "play");
-      setController(g, ctx.source!, who);
-      emit(g, "play", `Delay the Inevitable is attached to ${invName(g, who)}`, {
+      moveCard(game, ctx.source!, ZONE.Play);
+      setController(game, ctx.source!, who);
+      emit(game, EVENT.Play, `Delay the Inevitable is attached to ${invName(game, who)}`, {
         inv: who,
         card: ctx.source!,
       });
     },
-    cancel(g: G, ctx: EffCtx) {
+    cancel(game: GameContext, ctx: EffCtx) {
       if (!ctx.key || !ctx.dealt) return;
-      flags.prevented.set(g, ctx.key, [...ctx.dealt]);
-      discard(g, ctx.source!);
+      flags.prevented.set(game, ctx.key, [...ctx.dealt]);
+      discard(game, ctx.source!);
       emit(
-        g,
-        "cancelled",
-        `Delay the Inevitable cancels the damage and horror dealt to ${invName(g, ctx.you!)}`,
+        game,
+        EVENT.Cancelled,
+        `Delay the Inevitable cancels the damage and horror dealt to ${invName(game, ctx.you!)}`,
         {
           inv: ctx.you!,
           card: ctx.source!,

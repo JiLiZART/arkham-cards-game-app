@@ -6,36 +6,43 @@ import {
   push,
   type CardScript,
   type EffCtx,
-  type G,
+  type GameContext,
   type InstId,
   type Step,
+  CHOICE,
+  STEP,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    blaspheme(g: G, ctx: EffCtx, args: { left: number; placed: number } | undefined, step?: Step) {
+    blaspheme(
+      game: GameContext,
+      ctx: EffCtx,
+      args: { left: number; placed: number } | undefined,
+      step?: Step,
+    ) {
       const left = args?.left ?? ctx.failBy ?? 0;
       const placed = args?.placed ?? 0;
-      const pool = enemies(g).filter(
-        (e) => e.doom === 0 && def(g, e.id).traits.includes("Cultist"),
+      const pool = enemies(game).filter(
+        (e) => e.doom === 0 && def(game, e.id).traits.includes("Cultist"),
       );
       if (left > 0 && pool.length) {
         const pick = ask<InstId>(
-          g,
+          game,
           step!,
           ctx.you!,
-          "target",
+          CHOICE.Target,
           "Blasphemous Invocation: place 1 doom on a Cultist",
-          pool.map((e) => ({ id: e.id, label: def(g, e.id).name, card: e.id, value: e.id })),
+          pool.map((e) => ({ id: e.id, label: def(game, e.id).name, card: e.id, value: e.id })),
           { auto: true, key: "chooseEnemy" },
         );
         if (pick === undefined) return;
         push(
-          g,
-          { t: "PlaceDoom", card: pick, n: 1 },
-          { t: "CheckDoom" },
+          game,
+          { t: STEP.PlaceDoom, card: pick, n: 1 },
+          { t: STEP.CheckDoom },
           {
-            t: "Script",
+            t: STEP.Script,
             code: "12190",
             fn: "blaspheme",
             ctx,
@@ -45,8 +52,8 @@ export default {
         return;
       }
       if (!placed)
-        push(g, {
-          t: "Eff",
+        push(game, {
+          t: STEP.Eff,
           effect: { op: "searchEncounterDraw", filter: { type: "enemy", trait: "Cultist" } },
           ctx,
         });

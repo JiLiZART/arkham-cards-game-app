@@ -6,7 +6,7 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import { cardText } from "../../../content/i18n";
-import type { ChoiceOption, GameState, InstId } from "../../../engine/types";
+import type { ChoiceOption, GameState, InstId } from "../../../engine/world/types";
 import { db, useGame } from "../../state/context";
 import { CardFace as Face } from "../../components/CardFace";
 import { backUrl } from "../../assets/images";
@@ -49,7 +49,7 @@ import { mulliganPicks } from "../MulliganRow";
 import { RESOLVE_BOX } from "../Reveal";
 import { cx } from "../../components/cx";
 import styles from "./HandFan.module.css";
-import { cardOf, invOf } from "../../../engine/core";
+import { cardOf, invOf } from "../../../engine/context";
 
 const DRAG_TO_PLAY = 110;
 /** easing time constant of the Dock magnification (ms) */

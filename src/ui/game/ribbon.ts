@@ -1,5 +1,5 @@
-import type { GameState, InvId } from "../../engine/types";
-import { invOf } from "../../engine/core";
+import type { GameState, InvId } from "../../engine/world/types";
+import { invOf } from "../../engine/context";
 
 export const PHASES = ["mythos", "investigation", "enemy", "upkeep"] as const;
 

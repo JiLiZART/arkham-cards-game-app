@@ -1,5 +1,5 @@
 import type { StoreApi } from "zustand";
-import type { GameState } from "../../engine/types";
+import type { GameState } from "../../engine/world/types";
 import { mapMoving, mapPending } from "./arrivals";
 import type { UiState } from "../state/store";
 import { useView, type IntroStep } from "../state/view";

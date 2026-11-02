@@ -3,9 +3,9 @@
  * state's storage is (ADR-0023). Cards in creation order with every field, investigators in turn order without their
  * piles, every non-empty pile by name, and the scenario's own scalars, flags and pending choice.
  */
-import { cardCopyOf, cardsOf, invsOf, pileMap } from "../core";
-import { flagsForSnapshot } from "../flags";
-import type { GameState } from "../types";
+import { cardCopyOf, cardsOf, invsOf, pileMap } from "../context";
+import { flagsForSnapshot } from "../world/flags";
+import type { GameState } from "../world/types";
 
 export interface Snapshot {
   cards: (Record<string, unknown> & { id: string })[];

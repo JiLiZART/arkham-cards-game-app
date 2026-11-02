@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef } from "react";
 import { t } from "../../../content/i18n";
-import type { GameState, InstId, InvId } from "../../../engine/types";
+import type { GameState, InstId, InvId } from "../../../engine/world/types";
 import {
   domPlace,
   noteLocalMove,
@@ -17,7 +17,7 @@ import { RESOLVE_BOX } from "../Reveal";
 import { moment } from "../SoundLayer";
 import { cx } from "../../components/cx";
 import styles from "./MulliganRow.module.css";
-import { cardOfIf } from "../../../engine/core";
+import { cardOfIf } from "../../../engine/context";
 
 /** the cards the viewer has picked for their mulligan redraw (they stay in the hand zone until confirmed) */
 export function mulliganPicks(game: GameState, viewer: InvId | null): InstId[] {

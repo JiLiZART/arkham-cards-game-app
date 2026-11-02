@@ -1,6 +1,6 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { cardText, encounterSetName, t } from "../../../content/i18n";
-import type { CardInst, ChoiceOption, GameState, InstId } from "../../../engine/types";
+import type { CardInst, ChoiceOption, GameState, InstId } from "../../../engine/world/types";
 import { CardFace } from "../../components/CardFace";
 import { cardDetails } from "../../game/details";
 import { db, useGame } from "../../state/context";
@@ -17,7 +17,7 @@ import { moment } from "../SoundLayer";
 import { DeckViewer } from "../DeckViewer";
 import { AssetsModal } from "../AssetsModal";
 import styles from "./Modals.module.css";
-import { cardOfIf } from "../../../engine/core";
+import { cardOfIf } from "../../../engine/context";
 
 /** a native modal dialog: Escape and focus trapping come from <dialog>; a click on the backdrop closes it */
 export function Modal({

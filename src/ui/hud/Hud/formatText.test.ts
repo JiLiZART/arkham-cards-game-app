@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { spriteIds } from "../../../../scripts/import-icons";
-import { db } from "../../../engine/testkit";
+import { db } from "../../../engine/kits/testkit";
 import { registerSymbols } from "../../assets/icons";
 import { formatText } from "./Hud";
 

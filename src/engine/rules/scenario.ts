@@ -1,7 +1,6 @@
-import { peril, surge as surgeFlag } from "../flags";
+import { peril, surge as surgeFlag } from "../world/flags";
+import { abilitiesOf, actClueCost, hasFlag } from "../queries";
 import {
-  abilitiesOf,
-  actClueCost,
   activeInvs,
   addCounter,
   allCards,
@@ -13,166 +12,193 @@ import {
   def,
   emit,
   endScenario,
-  type G,
-  hasFlag,
+  type GameContext,
   inv,
   invName,
   isCancelled,
   leadInvestigator,
-  moveCard,
   pile,
   push,
-  reshuffleDiscard,
   scenarioIdOf,
   setCounter,
   tapToDraw,
-} from "../core";
-import type { InstId, Step } from "../types";
+} from "../context";
+import { moveCard, reshuffleDiscard } from "../movement";
+import type { InstId, Step } from "../world/types";
 import { win } from "./cards";
+import { EVENT } from "../events/event";
+import { ZONE, type Zone } from "../world/constants";
+import { STEP } from "../steps/step";
 
-type Handler<T extends Step["t"]> = (g: G, step: Extract<Step, { t: T }>) => void;
+type Handler<T extends Step["t"]> = (game: GameContext, step: Extract<Step, { t: T }>) => void;
 
 // ---------- encounter deck ----------
-export const drawEncounterHandler: Handler<"DrawEncounter"> = (g, step) => {
-  if (inv(g, step.inv).status !== "playing") return;
-  if (!tapToDraw(g, step, step.inv, "encounter", 1)) return;
-  if (pile(g, "encounterDeck").length === 0) {
-    reshuffleDiscard(g, "encounter");
-    emit(g, "reshuffle", "The encounter discard pile is shuffled into a new encounter deck");
+export const drawEncounterHandler: Handler<"DrawEncounter"> = (game, step) => {
+  if (inv(game, step.inv).status !== "playing") return;
+  if (!tapToDraw(game, step, step.inv, "encounter", 1)) return;
+  if (pile(game, ZONE.EncounterDeck).length === 0) {
+    reshuffleDiscard(game, "encounter");
+    emit(game, EVENT.Reshuffle, "The encounter discard pile is shuffled into a new encounter deck");
   }
-  const id = pile(g, "encounterDeck")[0];
+  const id = pile(game, ZONE.EncounterDeck)[0];
   if (!id) return;
-  const d = def(g, id);
-  moveCard(g, id, "resolving");
-  emit(g, "encounter", `${invName(g, step.inv)} draws ${d.name}`, { inv: step.inv, card: id });
+  const d = def(game, id);
+  moveCard(game, id, ZONE.Resolving);
+  emit(game, EVENT.Encounter, `${invName(game, step.inv)} draws ${d.name}`, {
+    inv: step.inv,
+    card: id,
+  });
   if (d.type === "enemy") {
     push(
-      g,
-      { t: "Spawn", enemy: id, inv: step.inv },
-      ...(d.keywords.includes("surge") ? [{ t: "DrawEncounter", inv: step.inv } as Step] : []),
+      game,
+      { t: STEP.Spawn, enemy: id, inv: step.inv },
+      ...(d.keywords.includes("surge") ? [{ t: STEP.DrawEncounter, inv: step.inv } as Step] : []),
     );
     return;
   }
-  push(g, win("treacheryDrawn", { inv: step.inv, card: id, key: `rev:${id}` }), {
-    t: "Revelation",
+  push(game, win("treacheryDrawn", { inv: step.inv, card: id, key: `rev:${id}` }), {
+    t: STEP.Revelation,
     inv: step.inv,
     card: id,
   });
 };
 
-export const revelationHandler: Handler<"Revelation"> = (g, step) => {
-  const c = cardIf(g, step.card);
+export const revelationHandler: Handler<"Revelation"> = (game, step) => {
+  const c = cardIf(game, step.card);
   if (!c) return;
-  if (isCancelled(g, `rev:${step.card}`)) {
-    emit(g, "cancelled", `${def(g, step.card).name}'s revelation is cancelled`, {
+  if (isCancelled(game, `rev:${step.card}`)) {
+    emit(game, EVENT.Cancelled, `${def(game, step.card).name}'s revelation is cancelled`, {
       card: step.card,
     });
-    moveCard(g, step.card, c.owner ? "discard" : "encounterDiscard");
+    moveCard(game, step.card, c.owner ? ZONE.Discard : ZONE.EncounterDiscard);
     return;
   }
-  const d = def(g, step.card);
-  moveCard(g, step.card, "resolving");
-  if (d.keywords.includes("peril")) peril.set(g, true);
+  const d = def(game, step.card);
+  moveCard(game, step.card, ZONE.Resolving);
+  if (d.keywords.includes("peril")) peril.set(game, true);
   const ctx = { source: step.card, you: step.inv, inv: step.inv };
   const steps: Step[] = [];
-  for (const a of abilitiesOf(g, step.card)) {
+  for (const a of abilitiesOf(game, step.card)) {
     if (a.kind !== "revelation") continue;
-    if (a.run) steps.push({ t: "Script", code: c.code, fn: a.run, ctx });
-    else if (a.effects) steps.push({ t: "Effects", effects: a.effects, ctx });
+    if (a.run) steps.push({ t: STEP.Script, code: c.code, fn: a.run, ctx });
+    else if (a.effects) steps.push({ t: STEP.Effects, effects: a.effects, ctx });
   }
-  steps.push({ t: "Script", code: "__engine", fn: "finishRevelation", ctx });
-  push(g, ...steps);
+  steps.push({ t: STEP.Script, code: "__engine", fn: "finishRevelation", ctx });
+  push(game, ...steps);
 };
 
-export function finishRevelation(g: G, cardId: InstId, invId: string) {
-  const c = cardIf(g, cardId);
-  peril.clear(g);
-  const surges = surgeFlag.take(g, cardId) || def(g, cardId).keywords.includes("surge");
+export function finishRevelation(game: GameContext, cardId: InstId, invId: string) {
+  const c = cardIf(game, cardId);
+  peril.clear(game);
+  const surges = surgeFlag.take(game, cardId) || def(game, cardId).keywords.includes("surge");
   // a treachery with Victory X is added to the victory display instead (Grimoire, Victory X)
-  const d = def(g, cardId);
+  const d = def(game, cardId);
   const playerType = d.type === "asset" || d.type === "event" || d.type === "skill";
   if (c?.zone === "resolving")
     moveCard(
-      g,
+      game,
       cardId,
       !c.owner && d.victory !== undefined
-        ? "victory"
+        ? ZONE.Victory
         : c.owner
           ? playerType
-            ? "hand"
-            : "discard"
-          : "encounterDiscard",
+            ? ZONE.Hand
+            : ZONE.Discard
+          : ZONE.EncounterDiscard,
     );
-  if (surges) push(g, { t: "DrawEncounter", inv: invId });
+  if (surges) push(game, { t: STEP.DrawEncounter, inv: invId });
 }
 
 // ---------- doom, agenda, act ----------
-const DOOM_ZONES = ["agenda", "act", "enemy", "play", "location", "attached", "threat"];
-export const doomInPlay = (g: G) =>
-  allCards(g)
+const DOOM_ZONES: Zone[] = [
+  ZONE.Agenda,
+  ZONE.Act,
+  ZONE.Enemy,
+  ZONE.Play,
+  ZONE.Location,
+  ZONE.Attached,
+  ZONE.Threat,
+];
+export const doomInPlay = (game: GameContext) =>
+  allCards(game)
     .filter((c) => DOOM_ZONES.includes(c.zone))
     .reduce((n, c) => n + c.doom, 0);
 
-export const placeDoomHandler: Handler<"PlaceDoom"> = (g, step) => {
-  const c = cardIf(g, step.card);
+export const placeDoomHandler: Handler<"PlaceDoom"> = (game, step) => {
+  const c = cardIf(game, step.card);
   if (!c) return;
   // the agenda may replace placing doom (Brethren of Ash)
-  const agenda = currentAgenda(g) ? cardIf(g, currentAgenda(g)) : undefined;
-  if (agenda && g.db.scripts[agenda.code]?.wouldPlaceDoom?.(g, agenda.id, step.n)) return;
-  addCounter(g, c.id, "doom", step.n);
-  emit(g, "doom", `${step.n} doom placed on ${def(g, step.card).name}`, {
+  const agenda = currentAgenda(game) ? cardIf(game, currentAgenda(game)) : undefined;
+  if (agenda && game.db.scripts[agenda.code]?.wouldPlaceDoom?.(game, agenda.id, step.n)) return;
+  addCounter(game, c.id, "doom", step.n);
+  emit(game, EVENT.Doom, `${step.n} doom placed on ${def(game, step.card).name}`, {
     card: step.card,
     data: { n: step.n },
   });
-  push(g, win("doomPlaced", { card: step.card, amount: step.n }));
+  push(game, win("doomPlaced", { card: step.card, amount: step.n }));
 };
 
-export const checkDoomHandler: Handler<"CheckDoom"> = (g) => {
-  const agenda = currentAgenda(g);
-  if (!agenda || currentPhase(g) === "ended") return;
-  const threshold = def(g, agenda).doom ?? Infinity;
-  if (doomInPlay(g) >= threshold) push(g, { t: "AdvanceAgenda" });
+export const checkDoomHandler: Handler<"CheckDoom"> = (game) => {
+  const agenda = currentAgenda(game);
+  if (!agenda || currentPhase(game) === "ended") return;
+  const threshold = def(game, agenda).doom ?? Infinity;
+  if (doomInPlay(game) >= threshold) push(game, { t: STEP.AdvanceAgenda });
 };
 
-function backSide(g: G, id: InstId): Step[] {
-  const c = card(g, id);
-  return abilitiesOf(g, id)
+function backSide(game: GameContext, id: InstId): Step[] {
+  const c = card(game, id);
+  return abilitiesOf(game, id)
     .filter((a) => a.kind === "revelation")
     .map((a): Step =>
       a.run
-        ? { t: "Script", code: c.code, fn: a.run, ctx: { source: id, you: leadInvestigator(g) } }
-        : { t: "Effects", effects: a.effects ?? [], ctx: { source: id, you: leadInvestigator(g) } },
+        ? {
+            t: STEP.Script,
+            code: c.code,
+            fn: a.run,
+            ctx: { source: id, you: leadInvestigator(game) },
+          }
+        : {
+            t: STEP.Effects,
+            effects: a.effects ?? [],
+            ctx: { source: id, you: leadInvestigator(game) },
+          },
     );
 }
 
-export const advanceAgendaHandler: Handler<"AdvanceAgenda"> = (g, step) => {
-  const id = currentAgenda(g);
+export const advanceAgendaHandler: Handler<"AdvanceAgenda"> = (game, step) => {
+  const id = currentAgenda(game);
   if (!id) return;
   if (!step.fired) {
-    push(g, win("agendaAdvances", { card: id }), { ...step, fired: true });
+    push(game, win("agendaAdvances", { card: id }), { ...step, fired: true });
     return;
   }
-  for (const c of allCards(g)) if (DOOM_ZONES.includes(c.zone)) setCounter(g, c.id, "doom", 0);
-  emit(g, "agendaAdvance", `Agenda advances: ${def(g, id).backName ?? def(g, id).name}`, {
-    card: id,
-  });
-  moveCard(g, id, "limbo");
-  push(g, ...backSide(g, id), {
-    t: "Script",
+  for (const c of allCards(game))
+    if (DOOM_ZONES.includes(c.zone)) setCounter(game, c.id, "doom", 0);
+  emit(
+    game,
+    EVENT.AgendaAdvance,
+    `Agenda advances: ${def(game, id).backName ?? def(game, id).name}`,
+    {
+      card: id,
+    },
+  );
+  moveCard(game, id, ZONE.Limbo);
+  push(game, ...backSide(game, id), {
+    t: STEP.Script,
     code: "__engine",
     fn: "nextAgenda",
     ctx: { source: id },
   });
 };
 
-export function nextAgenda(g: G, prev: InstId) {
-  if (currentPhase(g) === "ended") return;
-  moveCard(g, prev, "removed");
-  const next = pile(g, "agendaDeck")[0];
+export function nextAgenda(game: GameContext, prev: InstId) {
+  if (currentPhase(game) === "ended") return;
+  moveCard(game, prev, ZONE.Removed);
+  const next = pile(game, ZONE.AgendaDeck)[0];
   if (next) {
-    moveCard(g, next, "agenda");
-    emit(g, "agenda", `New agenda: ${def(g, next).name}`, { card: next });
-  } else endUnscripted(g, prev, "agenda");
+    moveCard(game, next, ZONE.Agenda);
+    emit(game, EVENT.Agenda, `New agenda: ${def(game, next).name}`, { card: next });
+  } else endUnscripted(game, prev, EVENT.Agenda);
 }
 
 /**
@@ -195,13 +221,13 @@ export function finalResolution(
 }
 
 /** the deck ran out and the card's back did nothing (no written behaviour): the scenario ends rather than stalls */
-function endUnscripted(g: G, prev: InstId, kind: "act" | "agenda") {
-  if (backSide(g, prev).length) return;
-  push(g, {
-    t: "Resolution",
+function endUnscripted(game: GameContext, prev: InstId, kind: "act" | "agenda") {
+  if (backSide(game, prev).length) return;
+  push(game, {
+    t: STEP.Resolution,
     id: finalResolution(
-      def(g, prev).backText,
-      Object.keys(g.db.scenarios[scenarioIdOf(g)].resolutions),
+      def(game, prev).backText,
+      Object.keys(game.db.scenarios[scenarioIdOf(game)].resolutions),
       kind,
     ),
   });
@@ -209,65 +235,67 @@ function endUnscripted(g: G, prev: InstId, kind: "act" | "agenda") {
 
 export { actClueCost };
 
-export const advanceActHandler: Handler<"AdvanceAct"> = (g, step) => {
-  const id = currentAct(g);
+export const advanceActHandler: Handler<"AdvanceAct"> = (game, step) => {
+  const id = currentAct(game);
   if (!id) return;
   if (step.spend) {
-    let n = actClueCost(g);
+    let n = actClueCost(game);
     const order = [
-      leadInvestigator(g),
-      ...activeInvs(g).filter((x) => x !== leadInvestigator(g)),
-    ].filter((x) => !hasFlag(g, x, "cannotSpendClues"));
+      leadInvestigator(game),
+      ...activeInvs(game).filter((x) => x !== leadInvestigator(game)),
+    ].filter((x) => !hasFlag(game, x, "cannotSpendClues"));
     for (const i of order) {
-      const take = Math.min(n, inv(g, i).clues);
-      addCounter(g, i, "clues", -take);
+      const take = Math.min(n, inv(game, i).clues);
+      addCounter(game, i, "clues", -take);
       n -= take;
     }
   }
-  emit(g, "actAdvance", `Act advances: ${def(g, id).backName ?? def(g, id).name}`, { card: id });
-  moveCard(g, id, "limbo");
-  push(g, ...backSide(g, id), {
-    t: "Script",
+  emit(game, EVENT.ActAdvance, `Act advances: ${def(game, id).backName ?? def(game, id).name}`, {
+    card: id,
+  });
+  moveCard(game, id, ZONE.Limbo);
+  push(game, ...backSide(game, id), {
+    t: STEP.Script,
     code: "__engine",
     fn: "nextAct",
     ctx: { source: id },
   });
 };
 
-export function nextAct(g: G, prev: InstId) {
-  if (currentPhase(g) === "ended") return;
-  moveCard(g, prev, "removed");
-  const next = pile(g, "actDeck")[0];
+export function nextAct(game: GameContext, prev: InstId) {
+  if (currentPhase(game) === "ended") return;
+  moveCard(game, prev, ZONE.Removed);
+  const next = pile(game, ZONE.ActDeck)[0];
   if (next) {
-    moveCard(g, next, "act");
-    emit(g, "act", `New act: ${def(g, next).name}`, { card: next });
-  } else endUnscripted(g, prev, "act");
+    moveCard(game, next, ZONE.Act);
+    emit(game, EVENT.Act, `New act: ${def(game, next).name}`, { card: next });
+  } else endUnscripted(game, prev, EVENT.Act);
 }
 
-export const checkObjectivesHandler: Handler<"CheckObjectives"> = (g) => {
-  if (currentPhase(g) === "ended") return;
-  const hook = g.db.scripts[scenarioIdOf(g)]?.hooks?.checkObjectives;
-  if (hook) hook(g, {});
+export const checkObjectivesHandler: Handler<"CheckObjectives"> = (game) => {
+  if (currentPhase(game) === "ended") return;
+  const hook = game.db.scripts[scenarioIdOf(game)]?.hooks?.checkObjectives;
+  if (hook) hook(game, {});
 };
 
-export const resolutionHandler: Handler<"Resolution"> = (g, step) => {
-  if (currentPhase(g) === "ended") return;
-  endScenario(g, step.id);
+export const resolutionHandler: Handler<"Resolution"> = (game, step) => {
+  if (currentPhase(game) === "ended") return;
+  endScenario(game, step.id);
   // what the scenario's script records about the game, before its cards are gone (Smoke and Mirrors)
-  g.db.scripts[scenarioIdOf(g)]?.hooks?.ended?.(g, { x: step.id === "none" ? 0 : 1 });
+  game.db.scripts[scenarioIdOf(game)]?.hooks?.ended?.(game, { x: step.id === "none" ? 0 : 1 });
   // "when the game ends" effects (Cover Up, Hospital Debts; Dead Ends in the hand)
-  for (const c of allCards(g)) {
+  for (const c of allCards(game)) {
     if (c.zone !== "threat" && c.zone !== "play" && c.zone !== "hand") continue;
-    g.db.scripts[c.code]?.hooks?.gameEnd?.(g, { source: c.id, you: c.controller });
+    game.db.scripts[c.code]?.hooks?.gameEnd?.(game, { source: c.id, you: c.controller });
   }
-  const r = g.db.scenarios[scenarioIdOf(g)].resolutions[step.id];
-  emit(g, "resolution", `Scenario ends: ${r?.title ?? step.id}`, { data: { id: step.id } });
+  const r = game.db.scenarios[scenarioIdOf(game)].resolutions[step.id];
+  emit(game, EVENT.Resolution, `Scenario ends: ${r?.title ?? step.id}`, { data: { id: step.id } });
 };
 
-export function allEliminated(g: G) {
-  const hook = g.db.scripts[scenarioIdOf(g)]?.hooks?.allEliminated;
-  if (hook) hook(g, {});
-  else push(g, { t: "Resolution", id: "none" });
+export function allEliminated(game: GameContext) {
+  const hook = game.db.scripts[scenarioIdOf(game)]?.hooks?.allEliminated;
+  if (hook) hook(game, {});
+  else push(game, { t: STEP.Resolution, id: "none" });
 }
 
 export const handlers = {

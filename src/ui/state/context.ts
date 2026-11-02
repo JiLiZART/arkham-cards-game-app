@@ -44,9 +44,9 @@ export const gameStore = createGameStore(content, undefined, prepare);
 trackArrivals(gameStore);
 trackIntro(gameStore);
 trackShowcase(gameStore);
-export const GameContext = createContext<StoreApi<UiState>>(gameStore);
+export const GameStoreContext = createContext<StoreApi<UiState>>(gameStore);
 
 /** select from the game store (engine state + session) */
 export function useGame<T>(sel: (s: UiState) => T): T {
-  return useStore(useContext(GameContext), sel);
+  return useStore(useContext(GameStoreContext), sel);
 }

@@ -1,5 +1,5 @@
 import { cardText, t } from "../../../content/i18n";
-import type { GameState, InstId, InvId } from "../../../engine/types";
+import type { GameState, InstId, InvId } from "../../../engine/world/types";
 import { CardFace } from "../../components/CardFace";
 import { db, gameStore, useGame } from "../../state/context";
 import { optionHome, optionOwner } from "../../game/optionHome";
@@ -9,7 +9,7 @@ import { Modal, OptionButtons, useCardOptions } from "../Modals";
 import { StatBody } from "../Stats";
 import { cx } from "../../components/cx";
 import styles from "./Investigators.module.css";
-import { cardOf, invOf, invOfIf, cardsOf } from "../../../engine/core";
+import { cardOf, invOf, invOfIf, cardsOf } from "../../../engine/context";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);

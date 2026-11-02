@@ -1,11 +1,21 @@
 import { cardText, encounterSetName, t } from "../../content/i18n";
-import { cardOf, cardOfIf, cardsOf, connectionsOf, invOf } from "../../engine/core";
+import { cardOf, cardOfIf, cardsOf, invOf } from "../../engine/context";
+import { connectionsOf } from "../../engine/queries";
 import type { Slot } from "../../content/schema";
 import { playBlock } from "../../engine/rules/cards";
-import type { CardInst, CardView, ContentDb, GameState, InstId, InvId } from "../../engine/types";
+import type {
+  CardInst,
+  CardView,
+  ContentDb,
+  GameState,
+  InstId,
+  InvId,
+} from "../../engine/world/types";
 import type { Rect } from "./hover";
 import { keywordsOf } from "./glossary";
 import type { IconName } from "../assets/icons";
+import { EVENT } from "../../engine/events/event";
+import { ZONE } from "../../engine/world/constants";
 
 /** one line of the hand card details column */
 export type DetailRow =
@@ -103,7 +113,7 @@ export function commitRow(
   if (!icons.length) return null;
   const textApplies = d.type === "skill";
   return {
-    k: "commit",
+    k: EVENT.Commit,
     icons,
     n: icons.length,
     textApplies,
@@ -189,7 +199,7 @@ function locationDetails(
       label: t(db, locale, "card.shroud"),
     });
   rows.push({
-    k: "clues",
+    k: EVENT.Clues,
     now: inst.clues,
     printed: d.clues ?? null,
     perInv: !!d.cluesPerInvestigator,
@@ -197,7 +207,7 @@ function locationDetails(
     perInvLabel: t(db, locale, "card.perInvestigator"),
   });
   if (d.victory)
-    rows.push({ k: "victory", label: t(db, locale, "card.victory", { n: d.victory }) });
+    rows.push({ k: EVENT.Victory, label: t(db, locale, "card.victory", { n: d.victory }) });
   const names = connectionsOf(db, game, inst.id).map((id) =>
     shownName(db, cardOf(game, id), locale),
   );
@@ -247,7 +257,7 @@ export function cardDetails(
   if (d.type !== "investigator" && (d.health !== undefined || d.sanity !== undefined))
     rows.push({ k: "stats", health: d.health, sanity: d.sanity });
   if (d.uses)
-    rows.push({ k: "uses", n: d.uses.count, label: t(db, locale, `card.uses.${d.uses.type}`) });
+    rows.push({ k: EVENT.Uses, n: d.uses.count, label: t(db, locale, `card.uses.${d.uses.type}`) });
   if (d.enemy) {
     const e = d.enemy;
     const labels = {
@@ -257,7 +267,7 @@ export function cardDetails(
       perInv: t(db, locale, "card.perInvestigator"),
     };
     rows.push({
-      k: "enemy",
+      k: ZONE.Enemy,
       fight: e.fight ?? "–",
       health: e.health ?? "–",
       perInv: e.healthPerInvestigator,
@@ -265,7 +275,7 @@ export function cardDetails(
       labels,
     });
     rows.push({
-      k: "attack",
+      k: EVENT.Attack,
       damage: e.damage,
       horror: e.horror,
       label: t(db, locale, "card.attack"),

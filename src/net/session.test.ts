@@ -14,15 +14,16 @@ import {
 } from "../../worker/src/room";
 import type { DeckDef } from "../content/schema";
 import { botChoice } from "../engine/bot";
-import { db } from "../engine/testkit";
-import type { InvId } from "../engine/types";
+import { db } from "../engine/kits/testkit";
+import type { InvId } from "../engine/world/types";
 import { canUndoHere, createGameStore, type Prepare, type Storage } from "../ui/state/store";
 import { Session, seatMap } from "./session";
 import { playerId, type FromRoom, type Roster, type ToRoom } from "./protocol";
 import type { Link, LinkHandlers, Mesh, MeshHandlers, ShownView, Wire } from "./transport";
 import type { Numbered } from "./moves";
-import { invStateIn } from "../engine/records";
-import { invOfIf } from "../engine/core";
+import { invStateIn } from "../engine/world/store";
+import { invOfIf } from "../engine/context";
+import { EVENT } from "../engine/events/event";
 
 const ROOM = "R".repeat(22);
 const ROLAND = "01001";
@@ -620,7 +621,7 @@ describe("who may send moves", () => {
     await flush();
     const n = ben.store.getState().room!.n;
     hub.meshes.get(cleo.session.net.getState().me!)!.send(ben.session.net.getState().me!, {
-      t: "move",
+      t: EVENT.Move,
       m: nextMove(ben, ana),
     });
     await flush();

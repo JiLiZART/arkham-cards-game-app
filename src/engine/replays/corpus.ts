@@ -1,5 +1,5 @@
 /** where the replay corpus lives, and how recordings get the content they were made with */
-import type { ContentDb } from "../types";
+import type { ContentDb } from "../world/types";
 
 export const CORPUS = "src/engine/replays/corpus";
 

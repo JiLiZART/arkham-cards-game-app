@@ -1,5 +1,5 @@
 import { t } from "../../../content/i18n";
-import type { ChoiceOption, GameState, InstId } from "../../../engine/types";
+import type { ChoiceOption, GameState, InstId } from "../../../engine/world/types";
 import { CardFace } from "../../components/CardFace";
 import { db, gameStore, useGame } from "../../state/context";
 import { Glyph } from "../../components/Icon";
@@ -13,7 +13,8 @@ import { moment } from "../SoundLayer";
 import { hoverProps } from "../MiniCard";
 import { cx } from "../../components/cx";
 import styles from "./PileColumn.module.css";
-import { cardOf, cardOfIf, cardsOf, invOfIf, pileMap, pileOf } from "../../../engine/core";
+import { cardOf, cardOfIf, cardsOf, invOfIf, pileMap, pileOf } from "../../../engine/context";
+import { PILE } from "../../../engine/world/constants";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);
@@ -107,8 +108,8 @@ export function PileColumn() {
     ? deckOptions(game, viewer)
     : { player: null, encounter: null, waiting: false };
   const victory = cardsOf(game).filter((c) => c.zone === "victory");
-  const encounterDeck = pileOf(game, "encounterDeck");
-  const encounterDiscard = pileOf(game, "encounterDiscard");
+  const encounterDeck = pileOf(game, PILE.EncounterDeck);
+  const encounterDiscard = pileOf(game, PILE.EncounterDiscard);
   return (
     <div className={styles.pileColumn} data-testid="pile-column">
       <Pile

@@ -10,7 +10,7 @@ import { useStage, useView } from "../../state/view";
 import { centreTransform, riseAndArc } from "../flights";
 import { cx } from "../../components/cx";
 import styles from "./IntroOverlay.module.css";
-import { cardOf } from "../../../engine/core";
+import { cardOf } from "../../../engine/context";
 
 const FLY_MS = 650;
 

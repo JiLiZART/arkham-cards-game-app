@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { db, skipMulligans, start } from "../../engine/testkit";
-import type { ContentDb } from "../../engine/types";
+import { db, skipMulligans, start } from "../../engine/kits/testkit";
+import type { ContentDb } from "../../engine/world/types";
 import { instructionParts } from "./instruction";
 
 describe("instructionParts", () => {

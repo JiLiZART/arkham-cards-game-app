@@ -1,7 +1,7 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import { cardText } from "../../content/i18n";
 import { loadContentFromDisk } from "../../content/node";
-import type { ContentDb } from "../../engine/types";
+import type { ContentDb } from "../../engine/world/types";
 import {
   catalogCards,
   cyclesOfCards,

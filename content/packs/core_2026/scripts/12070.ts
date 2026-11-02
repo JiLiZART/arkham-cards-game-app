@@ -7,37 +7,39 @@ import {
   def,
   discard,
   type EffCtx,
-  type G,
+  type GameContext,
   type InstId,
   type Step,
+  ZONE,
+  CHOICE,
 } from "../../../../src/engine/api";
 
 const SYMBOLS = ["skull", "cultist", "tablet", "elderThing", "elderSign", "autoFail"];
 
 export default {
   fns: {
-    augur(g: G, ctx: EffCtx, _args: unknown, step?: Step) {
-      if (!currentTest(g)?.tokens.some((t) => SYMBOLS.includes(t))) return;
-      const pool = cardsIn(g, "threat").filter(
+    augur(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
+      if (!currentTest(game)?.tokens.some((t) => SYMBOLS.includes(t))) return;
+      const pool = cardsIn(game, ZONE.Threat).filter(
         (c) =>
-          def(g, c.id).type === "treachery" &&
-          def(g, c.id).traits.some((t) => t === "Terror" || t === "Hex"),
+          def(game, c.id).type === "treachery" &&
+          def(game, c.id).traits.some((t) => t === "Terror" || t === "Hex"),
       );
       if (!pool.length) return;
       const pick = ask<InstId | "none">(
-        g,
+        game,
         step!,
         ctx.you!,
-        "generic",
+        CHOICE.Generic,
         "Augur of Elokoss: discard a Terror or Hex treachery?",
         [
-          ...pool.map((c) => ({ id: c.id, label: def(g, c.id).name, card: c.id, value: c.id })),
+          ...pool.map((c) => ({ id: c.id, label: def(game, c.id).name, card: c.id, value: c.id })),
           { id: "none", label: "No", value: "none" },
         ],
         { key: "chooseOne" },
       );
       if (pick === undefined || pick === "none") return;
-      discard(g, pick);
+      discard(game, pick);
     },
   },
 } satisfies CardScript;

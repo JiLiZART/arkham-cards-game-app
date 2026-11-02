@@ -1,7 +1,7 @@
 import { useLayoutMode } from "../../state/layoutMode";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { t } from "../../../content/i18n";
-import type { GameState, InstId } from "../../../engine/types";
+import type { GameState, InstId } from "../../../engine/world/types";
 import { domPlace, noteLocalMove, reducedMotion } from "../../game/arrivals";
 import { CardFace } from "../../components/CardFace";
 import { db, useGame } from "../../state/context";
@@ -17,7 +17,7 @@ import { RESOLVE_BOX } from "../Reveal";
 import { moment } from "../SoundLayer";
 import { cx } from "../../components/cx";
 import styles from "./Showcase.module.css";
-import { cardOf, cardOfIf } from "../../../engine/core";
+import { cardOf, cardOfIf } from "../../../engine/context";
 
 /**
  * The showcase in the middle of the screen: cards just drawn into the on-screen hand rise out of the deck and arc here, face up, and

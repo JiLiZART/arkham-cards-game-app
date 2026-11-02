@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { db } from "../../engine/testkit";
+import { db } from "../../engine/kits/testkit";
 import { cardDetails } from "./details";
 import { keywordsOf } from "./glossary";
 

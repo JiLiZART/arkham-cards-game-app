@@ -4,18 +4,14 @@
  * plays them again and compares. Pure: no files, no pack loading (the caller loads `packs` first).
  */
 import { botChoice } from "../bot";
-import {
-  applyScenarioEnd,
-  type CampaignState,
-  type NewCampaign,
-  scenarioSetup,
-  startCampaign,
-} from "../campaign";
-import { createGame, dispatch, type Result } from "../engine";
-import { advance, type FlowValue, test } from "../flow";
-import { next } from "../rng";
+import { applyScenarioEnd, scenarioSetup, startCampaign } from "../campaign/campaign";
+import { type CampaignState, type NewCampaign } from "../campaign/types";
+import { createGame, dispatch, type Result } from "../index";
+import { advance, test } from "../campaign/flow";
+import { type FlowValue } from "../campaign/types";
+import { next } from "../world/rng";
 import { type Snapshot, snapshotOf } from "./snapshot";
-import type { Action, ContentDb, GameEvent, GameSetup, GameState } from "../types";
+import type { Action, ContentDb, GameEvent, GameSetup, GameState } from "../world/types";
 
 /** who makes the choices: the bot's preferences, seeded random legal choices (wider coverage, rarely an ending), or
  *  each choice the bot's or a random one by a coin (random variety that still advances acts and agendas) */

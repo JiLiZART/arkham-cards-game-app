@@ -7,37 +7,40 @@ import {
   type EffCtx,
   emit,
   enemiesAt,
-  type G,
+  type GameContext,
   type InstId,
   inv,
   invName,
   push,
   setEngaged,
   type Step,
+  EVENT,
+  CHOICE,
+  STEP,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    provoke(g: G, ctx: EffCtx, _args: unknown, step?: Step) {
+    provoke(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
       const you = ctx.you!;
-      const here = enemiesAt(g, inv(g, you).location);
+      const here = enemiesAt(game, inv(game, you).location);
       if (!here.length) return;
       const pick = ask<InstId>(
-        g,
+        game,
         step!,
         you,
-        "target",
+        CHOICE.Target,
         "Daniela's Wrench: choose an enemy",
-        here.map((e) => ({ id: e.id, label: def(g, e.id).name, card: e.id, value: e.id })),
+        here.map((e) => ({ id: e.id, label: def(game, e.id).name, card: e.id, value: e.id })),
         { auto: true, key: "chooseEnemy" },
       );
       if (pick === undefined) return;
-      setEngaged(g, pick, you);
-      emit(g, "engage", `${def(g, pick).name} engages ${invName(g, you)}`, {
+      setEngaged(game, pick, you);
+      emit(game, EVENT.Engage, `${def(game, pick).name} engages ${invName(game, you)}`, {
         inv: you,
         card: pick,
       });
-      push(g, { t: "EnemyAttack", enemy: pick, inv: you, aoo: false, key: attackKey(g) });
+      push(game, { t: STEP.EnemyAttack, enemy: pick, inv: you, aoo: false, key: attackKey(game) });
     },
   },
 } satisfies CardScript;

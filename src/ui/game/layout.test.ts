@@ -1,9 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { autoPlay } from "../../engine/bot";
-import { moveCard } from "../../engine/core";
-import { db, giveCard, mutate, putEnemy, skipMulligans, start } from "../../engine/testkit";
+import { moveCard } from "../../engine/movement";
+import { db, giveCard, mutate, putEnemy, skipMulligans, start } from "../../engine/kits/testkit";
 import { footprint, layout, type Bounds } from "./layout";
-import { cardRecIn, invStateIn } from "../../engine/records";
+import { cardRecIn, invStateIn } from "../../engine/world/store";
+import { ZONE, type Zone, isOneOf } from "../../engine/world/constants";
 
 const overlaps = (a: ReturnType<typeof footprint>, b: ReturnType<typeof footprint>) =>
   a.x0 < b.x1 - 1e-6 && b.x0 < a.x1 - 1e-6 && a.z0 < b.z1 - 1e-6 && b.z0 < a.z1 - 1e-6;
@@ -55,17 +56,19 @@ describe("map layout", () => {
 
   it("only map things: no act, agenda, piles, investigator cards, hands, or the viewer's play area", () => {
     let r = skipMulligans(start("the-midnight-masks", ["01001", "01002"], 4));
-    r = mutate(r, (g) => {
+    r = mutate(r, (game) => {
       for (const code of ["01016", "01020"]) {
-        const id = giveCard(g, "01001", code);
-        moveCard(g, id, "play");
-        cardRecIn(g.s, id).controller = "01001";
+        const id = giveCard(game, "01001", code);
+        moveCard(game, id, ZONE.Play);
+        cardRecIn(game.s, id).controller = "01001";
       }
-      putEnemy(g, "01160", invStateIn(g.s, "01001").location!, "01001");
+      putEnemy(game, "01160", invStateIn(game.s, "01001").location!, "01001");
     });
     const L = layout(db, r.state, "01001");
     const zones = new Set([...L.cards.keys()].map((id) => cardRecIn(r.state, id).zone));
-    expect([...zones].every((z) => ["location", "enemy", "attached"].includes(z))).toBe(true);
+    expect([...zones].every((z) => isOneOf(z, ZONE.Location, ZONE.Enemy, ZONE.Attached))).toBe(
+      true,
+    );
     for (const i of r.state.order) expect(L.cards.has(invStateIn(r.state, i).cardId)).toBe(false);
     // the viewer's engaged enemy lives in the play area strip, not on the map
     expect([...L.cards.keys()].some((id) => cardRecIn(r.state, id).engagedWith === "01001")).toBe(
@@ -77,8 +80,8 @@ describe("map layout", () => {
   it("an enemy engaged with another investigator sits at their location with their portrait badge", () => {
     let r = skipMulligans(start("the-gathering", ["01001", "01002"], 1));
     let enemy = "";
-    r = mutate(r, (g) => {
-      enemy = putEnemy(g, "01160", invStateIn(g.s, "01002").location!, "01002");
+    r = mutate(r, (game) => {
+      enemy = putEnemy(game, "01160", invStateIn(game.s, "01002").location!, "01002");
     });
     const L = layout(db, r.state, "01001");
     const p = L.cards.get(enemy)!;

@@ -3,7 +3,7 @@ import {
   card,
   type CardScript,
   type EffCtx,
-  type G,
+  type GameContext,
   setCounter,
   turnOrder,
 } from "../../../../src/engine/api";
@@ -11,10 +11,10 @@ import {
 export default {
   abilities: [{ kind: "forced", trigger: "roundEnds", run: "refill" }],
   fns: {
-    refill(g: G, ctx: EffCtx) {
-      const c = card(g, ctx.source!);
-      const want = 2 * turnOrder(g).length;
-      if (c.zone === "location" && c.clues < want) setCounter(g, c.id, "clues", want);
+    refill(game: GameContext, ctx: EffCtx) {
+      const c = card(game, ctx.source!);
+      const want = 2 * turnOrder(game).length;
+      if (c.zone === "location" && c.clues < want) setCounter(game, c.id, "clues", want);
     },
   },
 } satisfies CardScript;

@@ -6,32 +6,42 @@ import {
   type EffCtx,
   enemiesAt,
   flags,
-  type G,
+  type GameContext,
   type InstId,
   inv,
   push,
   type Step,
+  CHOICE,
+  STEP,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    redirect(g: G, ctx: EffCtx, _args: unknown, step?: Step) {
+    redirect(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
       const damage = ctx.dealt?.[0] ?? 0;
-      const others = enemiesAt(g, inv(g, ctx.you!).location).filter((e) => e.id !== ctx.enemy);
+      const others = enemiesAt(game, inv(game, ctx.you!).location).filter(
+        (e) => e.id !== ctx.enemy,
+      );
       if (!damage || !others.length || !ctx.key) return;
       const pick = ask<InstId>(
-        g,
+        game,
         step!,
         ctx.you!,
-        "target",
+        CHOICE.Target,
         "Aquinnah: choose an enemy to take the damage",
-        others.map((e) => ({ id: e.id, label: def(g, e.id).name, card: e.id, value: e.id })),
+        others.map((e) => ({ id: e.id, label: def(game, e.id).name, card: e.id, value: e.id })),
         { auto: true, key: "chooseEnemy" },
       );
       if (pick === undefined) return;
-      const prevented = flags.prevented.get(g, String(ctx.key)) ?? [0, 0];
-      flags.prevented.set(g, String(ctx.key), [prevented[0] + damage, prevented[1]]);
-      push(g, { t: "DamageEnemy", enemy: pick, amount: damage, by: ctx.you!, source: ctx.source });
+      const prevented = flags.prevented.get(game, String(ctx.key)) ?? [0, 0];
+      flags.prevented.set(game, String(ctx.key), [prevented[0] + damage, prevented[1]]);
+      push(game, {
+        t: STEP.DamageEnemy,
+        enemy: pick,
+        amount: damage,
+        by: ctx.you!,
+        source: ctx.source,
+      });
     },
   },
 } satisfies CardScript;

@@ -25,7 +25,7 @@ import {
 import { basename, extname, join, relative } from "node:path";
 import { promisify } from "node:util";
 import { loadContentFromDisk } from "../src/content/node";
-import type { ContentDb } from "../src/engine/types";
+import type { ContentDb } from "../src/engine/world/types";
 import { draftName, draftText, type PrintDraft } from "./ruText";
 import { pdfScope, resolveFolder, type CodeInfo } from "./ruFolders";
 import {

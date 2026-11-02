@@ -1,12 +1,12 @@
 import { type MouseEvent as ReactMouseEvent } from "react";
 import { cardText } from "../../../content/i18n";
-import type { GameState, InstId } from "../../../engine/types";
+import type { GameState, InstId } from "../../../engine/world/types";
 import { CardFace } from "../../components/CardFace";
 import { db, useGame } from "../../state/context";
 import { backUrl, isEncounterCard } from "../../assets/images";
 import { IntentBadge, TokenBadges } from "../../components/TokenBadges";
 import { useDimmed, useView } from "../../state/view";
-import { cardOfIf } from "../../../engine/core";
+import { cardOfIf } from "../../../engine/context";
 
 /** hovering an HTML card shows the enlarged copy over it */
 export const hoverProps = (id: InstId | null) => ({

@@ -1,5 +1,5 @@
-import type { ContentDb, GameState, InstId, InvId } from "../../engine/types";
-import { cardsOf, invOf } from "../../engine/core";
+import type { ContentDb, GameState, InstId, InvId } from "../../engine/world/types";
+import { cardsOf, invOf } from "../../engine/context";
 
 /** card size in world units (poker ratio) */
 export const CARD_W = 1;

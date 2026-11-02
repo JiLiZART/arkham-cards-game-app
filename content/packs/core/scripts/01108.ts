@@ -7,28 +7,31 @@ import {
   emit,
   enemiesAt,
   findByCode,
-  type G,
+  type GameContext,
   moveCard,
   placeInvestigator,
   push,
+  EVENT,
+  ZONE,
+  STEP,
 } from "../../../../src/engine/api";
 
 export default {
   abilities: [{ kind: "revelation", run: "back" }],
   fns: {
-    back(g: G) {
+    back(game: GameContext) {
       for (const code of ["01112", "01114", "01113", "01115"]) {
-        const c = findByCode(g, code, ["setAside"]);
-        if (c) moveCard(g, c.id, "location");
+        const c = findByCode(game, code, [ZONE.SetAside]);
+        if (c) moveCard(game, c.id, ZONE.Location);
       }
-      const study = findByCode(g, "01111", ["location"]);
-      const hallway = findByCode(g, "01112", ["location"])!;
-      if (study) for (const e of enemiesAt(g, study.id)) discard(g, e.id);
-      for (const i of activeInvs(g)) placeInvestigator(g, i, hallway.id);
-      if (study) moveCard(g, study.id, "removed");
-      emit(g, "place", `Each investigator is placed in the ${def(g, hallway.id).name}`);
-      push(g, {
-        t: "Script",
+      const study = findByCode(game, "01111", [ZONE.Location]);
+      const hallway = findByCode(game, "01112", [ZONE.Location])!;
+      if (study) for (const e of enemiesAt(game, study.id)) discard(game, e.id);
+      for (const i of activeInvs(game)) placeInvestigator(game, i, hallway.id);
+      if (study) moveCard(game, study.id, ZONE.Removed);
+      emit(game, EVENT.Place, `Each investigator is placed in the ${def(game, hallway.id).name}`);
+      push(game, {
+        t: STEP.Script,
         code: "__engine",
         fn: "revealLocation",
         ctx: { location: hallway.id },

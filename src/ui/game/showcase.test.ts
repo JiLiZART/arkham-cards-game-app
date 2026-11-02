@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { createStore } from "zustand/vanilla";
-import { pick, start } from "../../engine/testkit";
+import { pick, start } from "../../engine/kits/testkit";
 import { trackShowcase } from "./showcase";
 import type { UiState } from "../state/store";
 import { useView } from "../state/view";
-import { invStateIn } from "../../engine/records";
+import { invStateIn } from "../../engine/world/store";
 
 describe("trackShowcase", () => {
   it("a mulligan redraw stops in the showcase, on the redrawing investigator's table", () => {

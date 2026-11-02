@@ -3,7 +3,7 @@ import { useFrame, type ThreeEvent } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { cardText, t } from "../../../content/i18n";
-import type { CardInst } from "../../../engine/types";
+import type { CardInst } from "../../../engine/world/types";
 import { db, useGame } from "../../state/context";
 import { CARD_H, CARD_W, type Placement } from "../../game/layout";
 import { Portrait } from "../../components/Portrait";

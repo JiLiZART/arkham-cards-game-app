@@ -1,92 +1,102 @@
-import { costMod } from "../flags";
+import { costMod } from "../world/flags";
 import type { Ability, CardDef, Cost, Slot, Trigger } from "../../content/schema";
 import {
   abilitiesOf,
   actClueCost,
+  allMods,
+  blankedCards,
+  canAdvanceAct,
+  canPay,
+  cardBlocked,
+  cardsIn,
+  checkCondition,
+  controlled,
+  hasFlag,
+  invsAt,
+  matchesFilter,
+  modSum,
+  uniqueInPlay,
+} from "../queries";
+import {
   activeInvestigator,
   activeInvs,
   addCounter,
   allCards,
-  allMods,
   ask,
-  blankedCards,
-  canAdvanceAct,
-  canPay,
   card,
-  cardBlocked,
   cardIf,
-  cardsIn,
-  checkCondition,
-  controlled,
   currentAct,
   def,
-  discard,
   emit,
   exhaust,
-  type G,
-  hasFlag,
+  type GameContext,
   inv,
   invIf,
   invName,
-  invsAt,
   leadInvestigator,
   limitUses,
-  matchesFilter,
-  modSum,
-  moveCard,
   periodCounter,
   playerCount,
   push,
   recordLimitUse,
   setController,
   setCounter,
-  uniqueInPlay,
-} from "../core";
-import type { EffCtx, EventData, InstId, InvId, Step } from "../types";
+} from "../context";
+import { discard, moveCard } from "../movement";
+import type { EffCtx, EventData, InstId, InvId, Step } from "../world/types";
+import { EVENT } from "../events/event";
+import { ZONE, CHOICE, type Zone } from "../world/constants";
+import { STEP } from "../steps/step";
 
-type Handler<T extends Step["t"]> = (g: G, step: Extract<Step, { t: T }>) => void;
+type Handler<T extends Step["t"]> = (game: GameContext, step: Extract<Step, { t: T }>) => void;
 
 // ---------- limits ----------
-function periodKey(g: G, per: "test" | "turn" | "phase" | "round" | "game") {
-  return per === "game" ? "game" : `${per}${periodCounter(g, per)}`;
+function periodKey(game: GameContext, per: "test" | "turn" | "phase" | "round" | "game") {
+  return per === "game" ? "game" : `${per}${periodCounter(game, per)}`;
 }
-function limitKey(g: G, cardId: InstId, index: number, a: Ability) {
-  const c = card(g, cardId);
+function limitKey(game: GameContext, cardId: InstId, index: number, a: Ability) {
+  const c = card(game, cardId);
   const who = a.limit?.group ? c.code : cardId;
-  return `${who}:${index}:${periodKey(g, a.limit!.per)}`;
+  return `${who}:${index}:${periodKey(game, a.limit!.per)}`;
 }
-export function withinLimit(g: G, cardId: InstId, index: number, a: Ability) {
+export function withinLimit(game: GameContext, cardId: InstId, index: number, a: Ability) {
   if (!a.limit) return true;
-  return limitUses(g, limitKey(g, cardId, index, a)) < a.limit.count;
+  return limitUses(game, limitKey(game, cardId, index, a)) < a.limit.count;
 }
-function recordUse(g: G, cardId: InstId, index: number, a: Ability) {
+function recordUse(game: GameContext, cardId: InstId, index: number, a: Ability) {
   if (!a.limit) return;
-  recordLimitUse(g, limitKey(g, cardId, index, a));
+  recordLimitUse(game, limitKey(game, cardId, index, a));
 }
 
 // ---------- costs ----------
 /** pay non-interactive costs (discarding from hand is chosen beforehand); returns the damage/horror to take first */
-export function payCost(g: G, i: InvId, cardId: InstId, cost: Cost | undefined): Step[] {
+export function payCost(
+  game: GameContext,
+  i: InvId,
+  cardId: InstId,
+  cost: Cost | undefined,
+): Step[] {
   if (!cost) return [];
-  const c = card(g, cardId);
-  const me = inv(g, i);
-  if (cost.exhaust) exhaust(g, c.id);
-  if (cost.uses) addCounter(g, c.id, "uses", -cost.uses);
-  const spent = (cost.resources ?? 0) + (cost.resourcesPerInvestigator ?? 0) * playerCount(g);
-  addCounter(g, me.id, "resources", -spent);
+  const c = card(game, cardId);
+  const me = inv(game, i);
+  if (cost.exhaust) exhaust(game, c.id);
+  if (cost.uses) addCounter(game, c.id, "uses", -cost.uses);
+  const spent = (cost.resources ?? 0) + (cost.resourcesPerInvestigator ?? 0) * playerCount(game);
+  addCounter(game, me.id, "resources", -spent);
   const take: Step[] = spent
     ? [win("resourcesSpent", { inv: i, card: cardId, amount: spent })]
     : [];
   if (cost.resourcesOrUses) {
-    if (c.uses >= cost.resourcesOrUses) addCounter(g, c.id, "uses", -cost.resourcesOrUses); // ponytail: the card first; a prompt if a card ever wants the pool spent first
-    else addCounter(g, me.id, "resources", -cost.resourcesOrUses);
+    if (c.uses >= cost.resourcesOrUses) addCounter(game, c.id, "uses", -cost.resourcesOrUses); // ponytail: the card first; a prompt if a card ever wants the pool spent first
+    else addCounter(game, me.id, "resources", -cost.resourcesOrUses);
   }
-  if (cost.clues) addCounter(g, me.id, "clues", -cost.clues);
-  if (cost.cluesPerInvestigator) spendGroupClues(g, cost.cluesPerInvestigator * playerCount(g));
+  if (cost.clues) addCounter(game, me.id, "clues", -cost.clues);
+  if (cost.cluesPerInvestigator)
+    spendGroupClues(game, cost.cluesPerInvestigator * playerCount(game));
   // damage or horror taken as a cost is not direct: it may go on assets (Holy Rosary)
   if (cost.takeDamage)
     take.push({
-      t: "AssignDamage",
+      t: STEP.AssignDamage,
       inv: i,
       damage: cost.takeDamage,
       horror: 0,
@@ -95,25 +105,28 @@ export function payCost(g: G, i: InvId, cardId: InstId, cost: Cost | undefined):
     });
   if (cost.takeHorror)
     take.push({
-      t: "AssignDamage",
+      t: STEP.AssignDamage,
       inv: i,
       damage: 0,
       horror: cost.takeHorror,
       direct: false,
       source: cardId,
     });
-  if (cost.horrorOnSelf) addCounter(g, c.id, "horror", cost.horrorOnSelf);
-  if (cost.damageOnSelf) addCounter(g, c.id, "damage", cost.damageOnSelf);
-  if (cost.discardSelf) discard(g, cardId);
+  if (cost.horrorOnSelf) addCounter(game, c.id, "horror", cost.horrorOnSelf);
+  if (cost.damageOnSelf) addCounter(game, c.id, "damage", cost.damageOnSelf);
+  if (cost.discardSelf) discard(game, cardId);
   return take;
 }
 
 /** spend clues as a group, lead investigator first then player order */
-export function spendGroupClues(g: G, n: number) {
-  const order = [leadInvestigator(g), ...activeInvs(g).filter((x) => x !== leadInvestigator(g))];
+export function spendGroupClues(game: GameContext, n: number) {
+  const order = [
+    leadInvestigator(game),
+    ...activeInvs(game).filter((x) => x !== leadInvestigator(game)),
+  ];
   for (const i of order) {
-    const take = Math.min(n, inv(g, i).clues);
-    addCounter(g, i, "clues", -take);
+    const take = Math.min(n, inv(game, i).clues);
+    addCounter(game, i, "clues", -take);
     n -= take;
   }
 }
@@ -126,24 +139,24 @@ export interface AbilityRef {
   controller: InvId;
 }
 
-const ABILITY_ZONES = [
-  "play",
-  "threat",
-  "attached",
-  "location",
-  "enemy",
-  "act",
-  "agenda",
-  "investigator",
+const ABILITY_ZONES: Zone[] = [
+  ZONE.Play,
+  ZONE.Threat,
+  ZONE.Attached,
+  ZONE.Location,
+  ZONE.Enemy,
+  ZONE.Act,
+  ZONE.Agenda,
+  ZONE.Investigator,
 ];
 
 /** who may use an ability of this card */
-function usersOf(g: G, cardId: InstId, a: Ability): InvId[] {
-  const c = card(g, cardId);
+function usersOf(game: GameContext, cardId: InstId, a: Ability): InvId[] {
+  const c = card(game, cardId);
   const by = a.usableBy ?? (c.controller ? "controller" : "atLocation");
   if (by === "controller")
-    return c.controller && inv(g, c.controller).status === "playing" ? [c.controller] : [];
-  if (by === "anyone") return activeInvs(g);
+    return c.controller && inv(game, c.controller).status === "playing" ? [c.controller] : [];
+  if (by === "anyone") return activeInvs(game);
   if (by === "engaged") return c.engagedWith ? [c.engagedWith] : [];
   const loc =
     c.zone === "location"
@@ -151,17 +164,17 @@ function usersOf(g: G, cardId: InstId, a: Ability): InvId[] {
       : c.zone === "enemy" || c.zone === "attached"
         ? c.location
         : c.controller
-          ? inv(g, c.controller).location
+          ? inv(game, c.controller).location
           : null;
-  if (c.zone === "act" || c.zone === "agenda") return activeInvs(g);
-  return invsAt(g, loc);
+  if (c.zone === "act" || c.zone === "agenda") return activeInvs(game);
+  return invsAt(game, loc);
 }
 
 /** an asset whose abilities its controller can't trigger (The Necronomicon blocks the others) */
-function assetBlocked(g: G, cardId: InstId): boolean {
-  const c = card(g, cardId);
-  if (c.zone !== "play" || !c.controller || def(g, cardId).type !== "asset") return false;
-  return allMods(g).some(
+function assetBlocked(game: GameContext, cardId: InstId): boolean {
+  const c = card(game, cardId);
+  if (c.zone !== "play" || !c.controller || def(game, cardId).type !== "asset") return false;
+  return allMods(game).some(
     (m) =>
       m.target === c.controller &&
       m.mod.flag === "cannotUseOtherAssetAbilities" &&
@@ -170,27 +183,31 @@ function assetBlocked(g: G, cardId: InstId): boolean {
 }
 
 /** activatable abilities ([action] or [fast]) the investigator could use now */
-export function activatable(g: G, i: InvId, kinds: ("action" | "fast")[]): AbilityRef[] {
+export function activatable(
+  game: GameContext,
+  i: InvId,
+  kinds: ("action" | "fast")[],
+): AbilityRef[] {
   const out: AbilityRef[] = [];
-  const blanked = blankedCards(g);
-  for (const c of allCards(g)) {
+  const blanked = blankedCards(game);
+  for (const c of allCards(game)) {
     if (!ABILITY_ZONES.includes(c.zone)) continue;
     if (c.zone === "location" && !c.revealed) continue;
-    if (assetBlocked(g, c.id)) continue;
-    abilitiesOf(g, c.id, blanked).forEach((a, index) => {
+    if (assetBlocked(game, c.id)) continue;
+    abilitiesOf(game, c.id, blanked).forEach((a, index) => {
       if (!kinds.includes(a.kind as "action" | "fast")) return;
-      if (!usersOf(g, c.id, a).includes(i)) return;
-      if (!withinLimit(g, c.id, index, a)) return;
+      if (!usersOf(game, c.id, a).includes(i)) return;
+      if (!withinLimit(game, c.id, index, a)) return;
       if (
         a.condition &&
-        !checkCondition(g, a.condition, {
+        !checkCondition(game, a.condition, {
           source: c.id,
           you: i,
           enemy: c.zone === "enemy" ? c.id : null,
         })
       )
         return;
-      if (!canPay(g, i, c.id, a.cost)) return;
+      if (!canPay(game, i, c.id, a.cost)) return;
       out.push({ card: c.id, index, ability: a, controller: i });
     });
   }
@@ -199,8 +216,8 @@ export function activatable(g: G, i: InvId, kinds: ("action" | "fast")[]): Abili
 
 // ---------- triggers ----------
 /** triggers whose subject is a card; encounter cards only react to themselves */
-function isSubject(g: G, cardId: InstId, data: EventData) {
-  const c = card(g, cardId);
+function isSubject(game: GameContext, cardId: InstId, data: EventData) {
+  const c = card(game, cardId);
   return (
     data.card === cardId ||
     data.enemy === cardId ||
@@ -210,26 +227,26 @@ function isSubject(g: G, cardId: InstId, data: EventData) {
 }
 
 function triggerMatches(
-  g: G,
+  game: GameContext,
   cardId: InstId,
   a: Ability,
   you: InvId | null,
   data: EventData,
 ): boolean {
   const hasSubject = !!(data.card || data.enemy || data.location);
-  if (!you) return isSubject(g, cardId, data) || !hasSubject;
-  if (isSubject(g, cardId, data)) return true;
+  if (!you) return isSubject(game, cardId, data) || !hasSubject;
+  if (isSubject(game, cardId, data)) return true;
   // "after X enters play" is about the card itself; an attached card watches only its own location
   if (
     a.trigger === "enterPlay" ||
-    (card(g, cardId).zone === "attached" &&
+    (card(game, cardId).zone === "attached" &&
       (a.trigger === "enterLocation" || a.trigger === "leaveLocation"))
   )
     return false;
   if (!data.inv) return !hasSubject || a.usableBy === "anyone";
   if (data.inv === you) return true;
   if (a.usableBy === "anyone") return true;
-  if (a.usableBy === "atLocation") return inv(g, data.inv).location === inv(g, you).location;
+  if (a.usableBy === "atLocation") return inv(game, data.inv).location === inv(game, you).location;
   return false;
 }
 
@@ -257,65 +274,71 @@ export function ctxFor(data: EventData, source: InstId, you: InvId | null): EffC
 }
 
 /** the cards an investigator may play as if from hand: the hand, plus e.g. the top event of the discard pile (Wendy's Amulet) */
-export function playable(g: G, i: InvId): InstId[] {
-  const extra = [...controlled(g, i), card(g, inv(g, i).cardId)].flatMap(
-    (c) => g.db.scripts[c.code]?.extraPlayable?.(g, c.id, i) ?? [],
+export function playable(game: GameContext, i: InvId): InstId[] {
+  const extra = [...controlled(game, i), card(game, inv(game, i).cardId)].flatMap(
+    (c) => game.db.scripts[c.code]?.extraPlayable?.(game, c.id, i) ?? [],
   );
-  return [...inv(g, i).hand, ...extra];
+  return [...inv(game, i).hand, ...extra];
 }
 
-function triggered(g: G, trigger: Trigger, data: EventData): AbilityRef[] {
+function triggered(game: GameContext, trigger: Trigger, data: EventData): AbilityRef[] {
   const out: AbilityRef[] = [];
-  const blanked = blankedCards(g);
+  const blanked = blankedCards(game);
   const consider = (
     cardId: InstId,
     you: InvId | null,
     fromHand: boolean,
     only?: "reaction" | "forced",
   ) => {
-    abilitiesOf(g, cardId, blanked).forEach((a, index) => {
+    abilitiesOf(game, cardId, blanked).forEach((a, index) => {
       if (a.trigger !== trigger || (a.kind !== "reaction" && a.kind !== "forced")) return;
       if (only && a.kind !== only) return;
       // an encounter card's reaction belongs to each investigator who may use it (a location's, to those there)
-      if (only === "reaction" && (!you || !usersOf(g, cardId, a).includes(you))) return;
+      if (only === "reaction" && (!you || !usersOf(game, cardId, a).includes(you))) return;
       if (fromHand !== !!(a.fromHand || a.revealOnly)) return;
       // a card played from elsewhere (Wendy's Amulet) is played, never revealed, and its forced in-hand abilities stay quiet
-      if (fromHand && card(g, cardId).zone !== "hand" && (a.revealOnly || a.kind !== "reaction"))
+      if (fromHand && card(game, cardId).zone !== "hand" && (a.revealOnly || a.kind !== "reaction"))
         return;
-      if (!fromHand && assetBlocked(g, cardId)) return;
-      if (!triggerMatches(g, cardId, a, you, data)) return;
-      if (!withinLimit(g, cardId, index, a)) return;
-      if (a.condition && !checkCondition(g, a.condition, ctxFor(data, cardId, you))) return;
-      if (you && a.kind === "reaction" && !canPay(g, you, cardId, a.cost)) return;
+      if (!fromHand && assetBlocked(game, cardId)) return;
+      if (!triggerMatches(game, cardId, a, you, data)) return;
+      if (!withinLimit(game, cardId, index, a)) return;
+      if (a.condition && !checkCondition(game, a.condition, ctxFor(data, cardId, you))) return;
+      if (you && a.kind === "reaction" && !canPay(game, you, cardId, a.cost)) return;
       if (fromHand && you && a.kind === "reaction" && !a.revealOnly) {
-        const cost = playCost(g, you, cardId);
-        if (inv(g, you).resources < cost || hasFlag(g, you, "cannotPlayAssetsOrEvents")) return;
+        const cost = playCost(game, you, cardId);
+        if (inv(game, you).resources < cost || hasFlag(game, you, "cannotPlayAssetsOrEvents"))
+          return;
       }
       out.push({ card: cardId, index, ability: a, controller: you as InvId });
     });
   };
-  for (const c of allCards(g)) {
+  for (const c of allCards(game)) {
     if (ABILITY_ZONES.includes(c.zone)) {
       if (c.zone === "location" && !c.revealed && trigger !== "enterLocation") continue;
       if (c.controller) consider(c.id, c.controller, false);
       else {
         consider(c.id, null, false, "forced");
-        for (const i of activeInvs(g)) consider(c.id, i, false, "reaction");
+        for (const i of activeInvs(game)) consider(c.id, i, false, "reaction");
       }
     }
   }
-  for (const i of activeInvs(g)) for (const h of playable(g, i)) consider(h, i, true);
+  for (const i of activeInvs(game)) for (const h of playable(game, i)) consider(h, i, true);
   if (trigger === "playerWindow") {
     // fast events printed "play during any [fast] window" (ADR-0014)
-    for (const i of activeInvs(g)) {
-      for (const h of playable(g, i)) {
-        const a = abilitiesOf(g, h, blanked).findIndex((x) => x.kind === "onPlay" && x.anyWindow);
+    for (const i of activeInvs(game)) {
+      for (const h of playable(game, i)) {
+        const a = abilitiesOf(game, h, blanked).findIndex(
+          (x) => x.kind === "onPlay" && x.anyWindow,
+        );
         if (a < 0) continue;
-        const ab = abilitiesOf(g, h, blanked)[a];
-        if (def(g, h).type !== "event" || !def(g, h).keywords.includes("fast")) continue;
-        if (hasFlag(g, i, "cannotPlayAssetsOrEvents") || inv(g, i).resources < playCost(g, i, h))
+        const ab = abilitiesOf(game, h, blanked)[a];
+        if (def(game, h).type !== "event" || !def(game, h).keywords.includes("fast")) continue;
+        if (
+          hasFlag(game, i, "cannotPlayAssetsOrEvents") ||
+          inv(game, i).resources < playCost(game, i, h)
+        )
           continue;
-        if (ab.condition && !checkCondition(g, ab.condition, { source: h, you: i })) continue;
+        if (ab.condition && !checkCondition(game, ab.condition, { source: h, you: i })) continue;
         out.push({ card: h, index: a, ability: ab, controller: i });
       }
     }
@@ -324,18 +347,18 @@ function triggered(g: G, trigger: Trigger, data: EventData): AbilityRef[] {
 }
 
 /** a timing window: forced abilities resolve, then players may use reactions */
-export const windowHandler: Handler<"Window"> = (g, step) => {
-  const refs = triggered(g, step.trigger, step.data);
+export const windowHandler: Handler<"Window"> = (game, step) => {
+  const refs = triggered(game, step.trigger, step.data);
   if (!step.forcedDone) {
     const forced = refs.filter((r) => r.ability.kind === "forced");
     // an encounter card's forced ability resolves for the investigator the event is about (Hellhound's attack)
     const who = (r: AbilityRef) =>
-      r.controller ?? (step.data.inv && invIf(g, step.data.inv) ? step.data.inv : null);
+      r.controller ?? (step.data.inv && invIf(game, step.data.inv) ? step.data.inv : null);
     push(
-      g,
+      game,
       ...forced.map((r): Step => ({
-        t: "UseAbility",
-        inv: who(r) ?? leadInvestigator(g),
+        t: STEP.UseAbility,
+        inv: who(r) ?? leadInvestigator(game),
         card: r.card,
         index: r.index,
         ctx: ctxFor(step.data, r.card, who(r)),
@@ -353,8 +376,10 @@ export const windowHandler: Handler<"Window"> = (g, step) => {
   // nothing to play: no window (advancing the act alone is left to the turn's actions)
   if (reactions.length === 0) return;
   // the group may spend clues to advance the act in any player window (Grimoire, Act Deck and Agenda Deck)
-  const act = step.trigger === "playerWindow" && !offered.includes("act") && canAdvanceAct(g);
-  const lead = activeInvs(g).includes(leadInvestigator(g)) ? leadInvestigator(g) : activeInvs(g)[0];
+  const act = step.trigger === "playerWindow" && !offered.includes("act") && canAdvanceAct(game);
+  const lead = activeInvs(game).includes(leadInvestigator(game))
+    ? leadInvestigator(game)
+    : activeInvs(game)[0];
   const who = reactions.length ? reactions[0].controller : lead;
   const mine = reactions.filter((r) => r.controller === who);
   const opts = [
@@ -362,8 +387,8 @@ export const windowHandler: Handler<"Window"> = (g, step) => {
       ? [
           {
             id: "act",
-            label: `Advance act (spend ${actClueCost(g)} clues as a group)`,
-            card: currentAct(g)!,
+            label: `Advance act (spend ${actClueCost(game)} clues as a group)`,
+            card: currentAct(game)!,
             value: { kind: "advanceAct" },
           },
         ]
@@ -372,24 +397,24 @@ export const windowHandler: Handler<"Window"> = (g, step) => {
       id: `${r.card}:${r.index}`,
       label:
         r.ability.label ??
-        `${def(g, r.card).name}${r.ability.fromHand || r.ability.anyWindow ? " (play)" : ""}`,
+        `${def(game, r.card).name}${r.ability.fromHand || r.ability.anyWindow ? " (play)" : ""}`,
       card: r.card,
       value: `${r.card}:${r.index}`,
     })),
     { id: "pass", label: "Pass", value: "pass" },
   ];
   const pick = ask<string | { kind: "advanceAct" }>(
-    g,
+    game,
     step,
     who,
-    "reaction",
-    `${invName(g, who)}: use a reaction? (${step.trigger})`,
+    CHOICE.Reaction,
+    `${invName(game, who)}: use a reaction? (${step.trigger})`,
     opts,
     { key: step.trigger === "playerWindow" ? "playerWindow" : "reaction" },
   );
   if (pick === undefined) return;
   if (pick === "pass") {
-    push(g, {
+    push(game, {
       ...step,
       choice: undefined,
       offered: [...offered, ...mine.map((r) => `${r.card}:${r.index}`), ...(act ? ["act"] : [])],
@@ -398,25 +423,25 @@ export const windowHandler: Handler<"Window"> = (g, step) => {
   }
   if (typeof pick === "object") {
     push(
-      g,
-      { t: "AdvanceAct", spend: true },
+      game,
+      { t: STEP.AdvanceAct, spend: true },
       { ...step, choice: undefined, offered: [...offered, "act"] },
     );
     return;
   }
   const r = mine.find((x) => `${x.card}:${x.index}` === pick)!;
   push(
-    g,
+    game,
     (r.ability.fromHand || r.ability.anyWindow) && !r.ability.revealOnly
       ? {
-          t: "PlayCard",
+          t: STEP.PlayCard,
           inv: who,
           card: r.card,
           ctx: ctxFor(step.data, r.card, who),
           viaTrigger: true,
         }
       : {
-          t: "UseAbility",
+          t: STEP.UseAbility,
           inv: who,
           card: r.card,
           index: r.index,
@@ -426,52 +451,67 @@ export const windowHandler: Handler<"Window"> = (g, step) => {
   );
 };
 
-export const win = (trigger: Trigger, data: EventData): Step => ({ t: "Window", trigger, data });
+export const win = (trigger: Trigger, data: EventData): Step => ({ t: STEP.Window, trigger, data });
 
 // ---------- using abilities ----------
-export const useAbilityHandler: Handler<"UseAbility"> = (g, step) => {
-  const a = abilitiesOf(g, step.card)[step.index];
+export const useAbilityHandler: Handler<"UseAbility"> = (game, step) => {
+  const a = abilitiesOf(game, step.card)[step.index];
   if (!a) return;
   let take: Step[] = [];
   if (!step.paid) {
     const need = a.cost?.discardFromHand ?? 0;
     const chosen = step.discards ?? [];
     if (chosen.length < need) {
-      const opts = inv(g, step.inv).hand.filter((h) => h !== step.card && !chosen.includes(h));
+      const opts = inv(game, step.inv).hand.filter((h) => h !== step.card && !chosen.includes(h));
       const pick = ask<InstId>(
-        g,
+        game,
         step,
         step.inv,
-        "generic",
-        `Choose a card to discard (cost of ${def(g, step.card).name})`,
-        opts.map((h) => ({ id: h, label: def(g, h).name, card: h, value: h })),
+        CHOICE.Generic,
+        `Choose a card to discard (cost of ${def(game, step.card).name})`,
+        opts.map((h) => ({ id: h, label: def(game, h).name, card: h, value: h })),
         { key: "discardForCost", vars: { card: step.card } },
       );
       if (pick === undefined) return;
-      push(g, { ...step, choice: undefined, discards: [...chosen, pick] });
+      push(game, { ...step, choice: undefined, discards: [...chosen, pick] });
       return;
     }
-    for (const h of chosen) discard(g, h);
-    recordUse(g, step.card, step.index, a);
-    take = payCost(g, step.inv, step.card, a.cost);
+    for (const h of chosen) discard(game, h);
+    recordUse(game, step.card, step.index, a);
+    take = payCost(game, step.inv, step.card, a.cost);
   }
-  const c = cardIf(g, step.card);
+  const c = cardIf(game, step.card);
   const ctx: EffCtx = { ...step.ctx, source: step.card, you: step.ctx?.you ?? step.inv };
   if (c && c.zone === "location") ctx.location ??= c.id;
-  emit(g, "ability", `${invName(g, step.inv)} uses ${a.label ?? def(g, step.card).name}`, {
-    inv: step.inv,
-    card: step.card,
-  });
+  emit(
+    game,
+    EVENT.Ability,
+    `${invName(game, step.inv)} uses ${a.label ?? def(game, step.card).name}`,
+    {
+      inv: step.inv,
+      card: step.card,
+    },
+  );
   // an asset whose last use this spent leaves play once the ability has resolved (its own modifiers still apply)
   const after: Step[] =
-    !step.paid && a.cost?.uses ? [{ t: "DiscardIfEmpty", card: step.card }] : [];
+    !step.paid && a.cost?.uses ? [{ t: STEP.DiscardIfEmpty, card: step.card }] : [];
   // a cost that puts damage or horror on the asset itself can defeat it
   if (!step.paid && (a.cost?.damageOnSelf || a.cost?.horrorOnSelf))
-    after.push({ t: "Script", code: "__engine", fn: "assetDefeatCheck", ctx: { you: step.inv } });
+    after.push({
+      t: STEP.Script,
+      code: "__engine",
+      fn: "assetDefeatCheck",
+      ctx: { you: step.inv },
+    });
   if (a.run)
-    push(g, ...take, { t: "Script", code: card(g, step.card).code, fn: a.run, ctx }, ...after);
-  else if (a.effects) push(g, ...take, { t: "Effects", effects: a.effects, ctx }, ...after);
-  else push(g, ...take, ...after);
+    push(
+      game,
+      ...take,
+      { t: STEP.Script, code: card(game, step.card).code, fn: a.run, ctx },
+      ...after,
+    );
+  else if (a.effects) push(game, ...take, { t: STEP.Effects, effects: a.effects, ctx }, ...after);
+  else push(game, ...take, ...after);
 };
 
 /** every ability of the card spends its uses and it has no constant ability: with no uses left it can do nothing */
@@ -486,32 +526,35 @@ export function spendsOnlyUses(d: CardDef): boolean {
  * Deliberate deviation from the printed rules: a used-up asset that can do nothing more is discarded (Flashlight,
  * .45 Automatic, Shrivelling), as are cards marked discardWhenEmpty.
  */
-export const discardIfEmptyHandler: Handler<"DiscardIfEmpty"> = (g, step) => {
-  const c = cardIf(g, step.card);
+export const discardIfEmptyHandler: Handler<"DiscardIfEmpty"> = (game, step) => {
+  const c = cardIf(game, step.card);
   if (!c || c.zone !== "play" || c.uses > 0) return;
-  const d = def(g, step.card);
+  const d = def(game, step.card);
   // a card marked discardWhenEmpty: false stays (Flesh Ward still soaks a point with no charge)
   if (d.discardWhenEmpty === false || (!d.discardWhenEmpty && !spendsOnlyUses(d))) return;
-  emit(g, "usedUp", `${d.name} is used up`, { inv: c.controller ?? undefined, card: step.card });
-  discard(g, step.card);
+  emit(game, EVENT.UsedUp, `${d.name} is used up`, {
+    inv: c.controller ?? undefined,
+    card: step.card,
+  });
+  discard(game, step.card);
 };
 
 // ---------- playing cards ----------
-export function playCost(g: G, i: InvId, cardId: InstId): number {
-  const d = def(g, cardId);
+export function playCost(game: GameContext, i: InvId, cardId: InstId): number {
+  const d = def(game, cardId);
   if (d.cost === "X") return Infinity; // ponytail: no X choice yet, so an X-cost card can't be played
   // a discount on this very card (Joe Diamond's revealed hunch: -2)
-  let cost = (d.cost ?? 0) + (costMod.get(g, cardId) ?? 0);
-  for (const m of allMods(g)) {
+  let cost = (d.cost ?? 0) + (costMod.get(game, cardId) ?? 0);
+  for (const m of allMods(game)) {
     if (m.target !== i || m.mod.stat !== "cost") continue;
-    if (m.mod.filter && !matchesFilter(g, d.code, m.mod.filter)) continue;
+    if (m.mod.filter && !matchesFilter(game, d.code, m.mod.filter)) continue;
     cost += m.mod.value ?? 0;
   }
   return Math.max(0, cost);
 }
 
-export const playAbility = (g: G, cardId: InstId) =>
-  abilitiesOf(g, cardId).find((a) => a.kind === "onPlay");
+export const playAbility = (game: GameContext, cardId: InstId) =>
+  abilitiesOf(game, cardId).find((a) => a.kind === "onPlay");
 
 /** why an asset or event in hand can't be played whatever the timing, or null; `by` is the card that forbids it */
 export type PlayBlock =
@@ -519,111 +562,112 @@ export type PlayBlock =
   | { reason: "unique" }
   | { reason: "resources"; cost: number };
 
-export function playBlock(g: G, i: InvId, cardId: InstId): PlayBlock | null {
-  const d = def(g, cardId);
+export function playBlock(game: GameContext, i: InvId, cardId: InstId): PlayBlock | null {
+  const d = def(game, cardId);
   if (d.type !== "asset" && d.type !== "event") return null;
-  const code = card(g, cardId).code;
-  const ban = allMods(g).find(
+  const code = card(game, cardId).code;
+  const ban = allMods(game).find(
     (m) =>
       m.target === i &&
       (m.mod.flag === "cannotPlayAssetsOrEvents" ||
         (m.mod.flag === "cannotPlayAssets" && d.type === "asset") ||
         (m.mod.flag === "cannotPlayOrCommit" &&
-          (!m.mod.filter || matchesFilter(g, code, m.mod.filter)))),
+          (!m.mod.filter || matchesFilter(game, code, m.mod.filter)))),
   );
   if (ban)
-    return { reason: "forbidden", by: ban.source && cardIf(g, ban.source) ? ban.source : null };
-  if (uniqueInPlay(g, cardId)) return { reason: "unique" };
-  const cost = playCost(g, i, cardId);
-  if (inv(g, i).resources < cost) return { reason: "resources", cost };
+    return { reason: "forbidden", by: ban.source && cardIf(game, ban.source) ? ban.source : null };
+  if (uniqueInPlay(game, cardId)) return { reason: "unique" };
+  const cost = playCost(game, i, cardId);
+  if (inv(game, i).resources < cost) return { reason: "resources", cost };
   return null;
 }
 
 /** can the card be played from hand now, as an action (fast=false) or fast */
-export function canPlay(g: G, i: InvId, cardId: InstId, asFast: boolean): boolean {
-  const d = def(g, cardId);
+export function canPlay(game: GameContext, i: InvId, cardId: InstId, asFast: boolean): boolean {
+  const d = def(game, cardId);
   if (d.type !== "asset" && d.type !== "event") return false;
-  if (hasFlag(g, i, "cannotPlayAssetsOrEvents")) return false;
-  if (d.type === "asset" && hasFlag(g, i, "cannotPlayAssets")) return false;
-  if (cardBlocked(g, i, cardId)) return false;
-  if (uniqueInPlay(g, cardId)) return false;
+  if (hasFlag(game, i, "cannotPlayAssetsOrEvents")) return false;
+  if (d.type === "asset" && hasFlag(game, i, "cannotPlayAssets")) return false;
+  if (cardBlocked(game, i, cardId)) return false;
+  if (uniqueInPlay(game, cardId)) return false;
   const isFast = d.keywords.includes("fast");
   if (asFast !== isFast) return false;
   // events that are only playable in response to a trigger
-  const pa = playAbility(g, cardId);
+  const pa = playAbility(game, cardId);
   if (d.type === "event" && !pa) return false;
-  if (pa?.condition && !checkCondition(g, pa.condition, { source: cardId, you: i })) return false;
-  if (isFast && activeInvestigator(g) !== i && !(pa?.condition && "phase" in pa.condition))
+  if (pa?.condition && !checkCondition(game, pa.condition, { source: cardId, you: i }))
+    return false;
+  if (isFast && activeInvestigator(game) !== i && !(pa?.condition && "phase" in pa.condition))
     return false; // fast cards in own turn
-  return inv(g, i).resources >= playCost(g, i, cardId);
+  return inv(game, i).resources >= playCost(game, i, cardId);
 }
 
-export const playCardHandler: Handler<"PlayCard"> = (g, step) => {
-  const d = def(g, step.card);
-  const me = inv(g, step.inv);
-  const c = card(g, step.card);
-  const paid = step.free ? 0 : playCost(g, step.inv, step.card);
-  addCounter(g, me.id, "resources", -paid);
-  emit(g, "play", `${me.name} plays ${d.name}`, { inv: step.inv, card: step.card });
+export const playCardHandler: Handler<"PlayCard"> = (game, step) => {
+  const d = def(game, step.card);
+  const me = inv(game, step.inv);
+  const c = card(game, step.card);
+  const paid = step.free ? 0 : playCost(game, step.inv, step.card);
+  addCounter(game, me.id, "resources", -paid);
+  emit(game, EVENT.Play, `${me.name} plays ${d.name}`, { inv: step.inv, card: step.card });
   // after the card resolves (Syndicate Obligations)
-  if (paid > 0) push(g, win("resourcesSpent", { inv: step.inv, card: step.card, amount: paid }));
+  if (paid > 0) push(game, win("resourcesSpent", { inv: step.inv, card: step.card, amount: paid }));
   const ctx: EffCtx = { ...step.ctx, source: step.card, you: step.inv };
   if (d.type === "asset") {
-    moveCard(g, step.card, "limbo");
-    setController(g, c.id, step.inv);
+    moveCard(game, step.card, ZONE.Limbo);
+    setController(game, c.id, step.inv);
     push(
-      g,
-      { t: "SlotCheck", inv: step.inv, card: step.card },
-      { t: "EnterPlay", inv: step.inv, card: step.card },
+      game,
+      { t: STEP.SlotCheck, inv: step.inv, card: step.card },
+      { t: STEP.EnterPlay, inv: step.inv, card: step.card },
       win("cardPlayed", { inv: step.inv, card: step.card }),
     );
     return;
   }
   // event
-  moveCard(g, step.card, "resolving");
-  setController(g, c.id, step.inv);
+  moveCard(game, step.card, ZONE.Resolving);
+  setController(game, c.id, step.inv);
   const a = step.viaTrigger
-    ? (abilitiesOf(g, step.card).find((x) => x.fromHand) ?? playAbility(g, step.card))
-    : playAbility(g, step.card);
+    ? (abilitiesOf(game, step.card).find((x) => x.fromHand) ?? playAbility(game, step.card))
+    : playAbility(game, step.card);
   const after: Step = {
-    t: "Script",
+    t: STEP.Script,
     code: "__engine",
     fn: "finishEvent",
     ctx: { source: step.card, you: step.inv },
   };
   if (a?.run)
     push(
-      g,
-      { t: "Script", code: c.code, fn: a.run, ctx },
+      game,
+      { t: STEP.Script, code: c.code, fn: a.run, ctx },
       after,
       win("cardPlayed", { inv: step.inv, card: step.card }),
     );
   else
     push(
-      g,
-      { t: "Effects", effects: a?.effects ?? [], ctx },
+      game,
+      { t: STEP.Effects, effects: a?.effects ?? [], ctx },
       after,
       win("cardPlayed", { inv: step.inv, card: step.card }),
     );
 };
 
 /** after an event resolves, discard it unless an effect moved it */
-export function finishEvent(g: G, ctx: EffCtx) {
-  const c = cardIf(g, ctx.source!);
+export function finishEvent(game: GameContext, ctx: EffCtx) {
+  const c = cardIf(game, ctx.source!);
   if (c?.zone !== "resolving") return;
   // e.g. Wendy's Amulet puts events on the bottom of the deck instead
-  for (const a of controlled(g, ctx.you!))
-    g.db.scripts[a.code]?.hooks?.eventFinished?.(g, { ...ctx, card: c.id });
-  if (c.zone === "resolving") discard(g, c.id);
+  for (const a of controlled(game, ctx.you!))
+    game.db.scripts[a.code]?.hooks?.eventFinished?.(game, { ...ctx, card: c.id });
+  if (c.zone === "resolving") discard(game, c.id);
 }
 
-export const enterPlayHandler: Handler<"EnterPlay"> = (g, step) => {
-  const c = card(g, step.card);
-  const d = def(g, step.card);
-  moveCard(g, step.card, "play");
-  setController(g, c.id, step.inv);
-  if (d.uses) setCounter(g, c.id, "uses", d.uses.count);
-  push(g, win("enterPlay", { inv: step.inv, card: step.card }));
+export const enterPlayHandler: Handler<"EnterPlay"> = (game, step) => {
+  const c = card(game, step.card);
+  const d = def(game, step.card);
+  moveCard(game, step.card, ZONE.Play);
+  setController(game, c.id, step.inv);
+  if (d.uses) setCounter(game, c.id, "uses", d.uses.count);
+  push(game, win("enterPlay", { inv: step.inv, card: step.card }));
 };
 
 // ---------- slots ----------
@@ -647,16 +691,16 @@ const SLOT_MOD = {
 } as const;
 
 /** the assets an investigator's slots hold: those they control in their play area or threat area */
-const slotted = (g: G, i: InvId) =>
-  [...cardsIn(g, "play"), ...cardsIn(g, "threat")].filter(
-    (c) => c.controller === i && def(g, c.id).type === "asset",
+const slotted = (game: GameContext, i: InvId) =>
+  [...cardsIn(game, ZONE.Play), ...cardsIn(game, ZONE.Threat)].filter(
+    (c) => c.controller === i && def(game, c.id).type === "asset",
   );
 
 /** returns a slot type that is over capacity, if any; `incoming` counts once whether or not it is in play already */
-export function overfullSlot(g: G, i: InvId, incoming: InstId | null): Slot | null {
-  const assets = slotted(g, i).map((c) => c.id);
+export function overfullSlot(game: GameContext, i: InvId, incoming: InstId | null): Slot | null {
+  const assets = slotted(game, i).map((c) => c.id);
   if (incoming && !assets.includes(incoming)) assets.push(incoming);
-  const mods = allMods(g).filter((m) => m.target === i);
+  const mods = allMods(game).filter((m) => m.target === i);
   for (const slot of Object.keys(SLOT_BASE) as Slot[]) {
     const statName = SLOT_MOD[slot];
     let general = SLOT_BASE[slot];
@@ -669,9 +713,11 @@ export function overfullSlot(g: G, i: InvId, incoming: InstId | null): Slot | nu
     }
     let overflow = 0;
     for (const a of assets) {
-      const need = def(g, a).slots.filter((s) => s === slot).length;
+      const need = def(game, a).slots.filter((s) => s === slot).length;
       for (let k = 0; k < need; k++) {
-        const r = restricted.find((x) => x.n > 0 && matchesFilter(g, card(g, a).code, x.filter));
+        const r = restricted.find(
+          (x) => x.n > 0 && matchesFilter(game, card(game, a).code, x.filter),
+        );
         if (r) r.n--;
         else if (general > 0) general--;
         else overflow++;
@@ -682,25 +728,25 @@ export function overfullSlot(g: G, i: InvId, incoming: InstId | null): Slot | nu
   return null;
 }
 
-export const slotCheckHandler: Handler<"SlotCheck"> = (g, step) => {
-  const slot = overfullSlot(g, step.inv, step.card);
+export const slotCheckHandler: Handler<"SlotCheck"> = (game, step) => {
+  const slot = overfullSlot(game, step.inv, step.card);
   if (!slot) return;
   // another asset makes room for the new one: the one being played or taken is never discarded for itself
-  const victims = slotted(g, step.inv).filter(
-    (c) => c.id !== step.card && def(g, c.id).slots.includes(slot),
+  const victims = slotted(game, step.inv).filter(
+    (c) => c.id !== step.card && def(game, c.id).slots.includes(slot),
   );
   const pick = ask<InstId>(
-    g,
+    game,
     step,
     step.inv,
-    "generic",
+    CHOICE.Generic,
     `Not enough ${slot} slots: choose an asset to discard`,
-    victims.map((v) => ({ id: v.id, label: def(g, v.id).name, card: v.id, value: v.id })),
+    victims.map((v) => ({ id: v.id, label: def(game, v.id).name, card: v.id, value: v.id })),
     { auto: true, key: "slots", vars: { slot } },
   );
   if (pick === undefined) return;
-  discard(g, pick);
-  push(g, { ...step, choice: undefined });
+  discard(game, pick);
+  push(game, { ...step, choice: undefined });
 };
 
 export { canPay, modSum };

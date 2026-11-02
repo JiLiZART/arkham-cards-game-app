@@ -7,18 +7,20 @@ import {
   push,
   type CardScript,
   type EffCtx,
-  type G,
+  type GameContext,
   type InstId,
   type Step,
+  CHOICE,
+  STEP,
 } from "../../../../src/engine/api";
 
 /** revealed locations with clues whose printed shroud is lower than that of your location */
-function lower(g: G, you: string) {
-  const here = inv(g, you).location;
-  const mine = here ? (def(g, here).shroud ?? null) : null;
+function lower(game: GameContext, you: string) {
+  const here = inv(game, you).location;
+  const mine = here ? (def(game, here).shroud ?? null) : null;
   if (mine === null) return [];
-  return locations(g).filter(
-    (l) => l.revealed && l.clues > 0 && (def(g, l.id).shroud ?? Infinity) < mine,
+  return locations(game).filter(
+    (l) => l.revealed && l.clues > 0 && (def(game, l.id).shroud ?? Infinity) < mine,
   );
 }
 
@@ -40,26 +42,26 @@ export default {
     },
   ],
   conditions: {
-    lowerShroud: (g: G, ctx: EffCtx) => !!ctx.you && lower(g, ctx.you).length > 0,
+    lowerShroud: (game: GameContext, ctx: EffCtx) => !!ctx.you && lower(game, ctx.you).length > 0,
   },
   fns: {
-    connect(g: G, ctx: EffCtx, _args: unknown, step?: Step) {
+    connect(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
       const loc = ask<InstId>(
-        g,
+        game,
         step!,
         ctx.you!,
-        "target",
+        CHOICE.Target,
         "Connect the Dots: discover 2 clues at a location with a lower shroud",
-        lower(g, ctx.you!).map((l) => ({
+        lower(game, ctx.you!).map((l) => ({
           id: l.id,
-          label: def(g, l.id).name,
+          label: def(game, l.id).name,
           card: l.id,
           value: l.id,
         })),
         { auto: true, key: "cardChooseLocation", vars: { card: ctx.source ?? null } },
       );
       if (loc === undefined) return;
-      push(g, { t: "DiscoverClues", inv: ctx.you!, location: loc, n: 2 });
+      push(game, { t: STEP.DiscoverClues, inv: ctx.you!, location: loc, n: 2 });
     },
   },
 } satisfies CardScript;

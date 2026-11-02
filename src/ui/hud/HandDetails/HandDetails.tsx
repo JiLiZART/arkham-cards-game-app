@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef, type RefObject } from "react";
 import { createPortal } from "react-dom";
 import { t } from "../../../content/i18n";
-import type { GameState, InstId } from "../../../engine/types";
+import type { GameState, InstId } from "../../../engine/world/types";
 import { db, useGame } from "../../state/context";
 import {
   blockedRow,
@@ -20,7 +20,7 @@ import { TokenPile } from "../../components/TokenPile";
 import { useView } from "../../state/view";
 import { formatText } from "../Hud";
 import styles from "./HandDetails.module.css";
-import { cardOf, cardOfIf } from "../../../engine/core";
+import { cardOf, cardOfIf } from "../../../engine/context";
 
 export const DETAILS_W = 280;
 

@@ -1,15 +1,15 @@
 import { describe, expect, it } from "vitest";
 import { CampaignDef, CampaignFlow, I18nCampaigns } from "../../content/schema";
-import { startCampaign } from "../../engine/campaign";
+import { startCampaign } from "../../engine/campaign/campaign";
 import {
   addCards,
   crossOut,
   record,
   setCount,
   setInvestigatorCount,
-} from "../../engine/campaignLog";
-import { advance } from "../../engine/flow";
-import { db as base } from "../../engine/testkit";
+} from "../../engine/campaign/log";
+import { advance } from "../../engine/campaign/flow";
+import { db as base } from "../../engine/kits/testkit";
 import { logView, readItems, visibleChoices } from "./campaignView";
 
 const flow = CampaignFlow.parse({

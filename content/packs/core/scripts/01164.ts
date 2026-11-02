@@ -3,7 +3,7 @@ import {
   card,
   inv,
   type CardScript,
-  type G,
+  type GameContext,
   type InstId,
   type InvId,
 } from "../../../../src/engine/api";
@@ -11,13 +11,13 @@ import {
 const SLOWED = ["move", "fight", "evade"];
 
 export default {
-  extraActionCost(g: G, cardId: InstId, i: InvId, designator: string) {
+  extraActionCost(game: GameContext, cardId: InstId, i: InvId, designator: string) {
     if (
-      card(g, cardId).controller !== i ||
-      card(g, cardId).zone !== "threat" ||
+      card(game, cardId).controller !== i ||
+      card(game, cardId).zone !== "threat" ||
       !SLOWED.includes(designator)
     )
       return 0;
-    return inv(g, i).actionsThisRound.some((d) => SLOWED.includes(d)) ? 0 : 1;
+    return inv(game, i).actionsThisRound.some((d) => SLOWED.includes(d)) ? 0 : 1;
   },
 } satisfies CardScript;

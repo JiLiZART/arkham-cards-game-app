@@ -8,7 +8,7 @@ import type { Vec3 } from "../../game/layout";
 import { Icon } from "../../components/Icon";
 import type { IconName } from "../../assets/icons";
 import styles from "./EventFx.module.css";
-import { invOfIf } from "../../../engine/core";
+import { invOfIf } from "../../../engine/context";
 
 /** "−2 [damage]" style numbers floating up from a card */
 /** matches the HUD's hit streak (hud/Floats HIT_MS plus its start delay) */

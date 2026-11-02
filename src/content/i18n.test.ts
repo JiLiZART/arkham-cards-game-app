@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { db } from "../engine/testkit";
+import { db } from "../engine/kits/testkit";
 import { cardText, logLabel, scenarioText, t } from "./i18n";
 import { buildContent, checkPrintText } from "./loader";
 

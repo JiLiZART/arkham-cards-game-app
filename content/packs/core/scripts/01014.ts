@@ -7,24 +7,26 @@ import {
   moveCard,
   type CardScript,
   type EffCtx,
-  type G,
+  type GameContext,
   type InstId,
   type InvId,
+  EVENT,
+  ZONE,
 } from "../../../../src/engine/api";
 
 export default {
-  extraPlayable(g: G, _cardId: InstId, i: InvId) {
-    const top = inv(g, i).discard.at(-1);
-    return top && def(g, top).type === "event" ? [top] : [];
+  extraPlayable(game: GameContext, _cardId: InstId, i: InvId) {
+    const top = inv(game, i).discard.at(-1);
+    return top && def(game, top).type === "event" ? [top] : [];
   },
   hooks: {
-    eventFinished(g: G, ctx: EffCtx) {
-      const ev = card(g, ctx.card!);
-      moveCard(g, ev.id, "deck", { inv: ev.owner });
+    eventFinished(game: GameContext, ctx: EffCtx) {
+      const ev = card(game, ctx.card!);
+      moveCard(game, ev.id, ZONE.Deck, { inv: ev.owner });
       emit(
-        g,
-        "amulet",
-        `${def(g, ev.id).name} is placed on the bottom of the deck (Wendy's Amulet)`,
+        game,
+        EVENT.Amulet,
+        `${def(game, ev.id).name} is placed on the bottom of the deck (Wendy's Amulet)`,
         { card: ev.id },
       );
     },

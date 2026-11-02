@@ -1,6 +1,8 @@
 import { content } from "../../content";
-import { cardOf, def, enemyStat, invOfIf, invsAt } from "../../engine/core";
-import type { GameState, InstId } from "../../engine/types";
+import { cardOf, def, invOfIf } from "../../engine/context";
+import { enemyStat, invsAt } from "../../engine/queries";
+import type { GameState, InstId } from "../../engine/world/types";
+import { EVENT } from "../../engine/events/event";
 
 export type Intent =
   | { kind: "attack"; damage: number; horror: number }
@@ -15,7 +17,7 @@ export function intentOf(game: GameState, id: InstId): Intent {
   if (e.exhausted) return { kind: "rest" };
   if (e.engagedWith && invOfIf(game, e.engagedWith)?.status === "playing")
     return {
-      kind: "attack",
+      kind: EVENT.Attack,
       damage: enemyStat(g, id, "damage"),
       horror: enemyStat(g, id, "horror"),
     };

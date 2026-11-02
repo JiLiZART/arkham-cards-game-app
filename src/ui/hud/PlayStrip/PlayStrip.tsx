@@ -2,7 +2,7 @@ import { Fragment, useEffect, useLayoutEffect, useReducer, useRef } from "react"
 import { useLayoutMode } from "../../state/layoutMode";
 import { tapCard } from "../../game/touch";
 import { t } from "../../../content/i18n";
-import type { GameState, InstId } from "../../../engine/types";
+import type { GameState, InstId } from "../../../engine/world/types";
 import { rememberRect } from "../../game/arrivals";
 import { useCardClick } from "../../game/cardClick";
 import { db, gameStore, useGame } from "../../state/context";
@@ -18,7 +18,7 @@ import { stripDuringTest } from "../../game/testScreen";
 import { MiniCard } from "../MiniCard";
 import { cx } from "../../components/cx";
 import styles from "./PlayStrip.module.css";
-import { cardOf, cardsOf } from "../../../engine/core";
+import { cardOf, cardsOf } from "../../../engine/context";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);

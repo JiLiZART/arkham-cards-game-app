@@ -4,15 +4,15 @@ import {
   controlled,
   currentTest,
   forceResult,
-  type G,
+  type GameContext,
 } from "../../../../src/engine/api";
 
 export default {
   abilities: [{ kind: "elderSign", tokenValue: 0, run: "elderSign" }],
   fns: {
-    elderSign(g: G) {
-      const t = currentTest(g)!;
-      if (controlled(g, t.inv).some((c) => c.code === "01014")) forceResult(g, "succeed");
+    elderSign(game: GameContext) {
+      const t = currentTest(game)!;
+      if (controlled(game, t.inv).some((c) => c.code === "01014")) forceResult(game, "succeed");
     },
   },
 } satisfies CardScript;

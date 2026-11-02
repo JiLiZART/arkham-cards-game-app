@@ -4,24 +4,25 @@ import {
   type CardScript,
   currentTest,
   type EffCtx,
-  type G,
+  type GameContext,
   push,
   setOnChoose,
+  STEP,
 } from "../../../../src/engine/api";
 
 const SYMBOLS = ["skull", "cultist", "tablet", "elderThing", "elderSign", "autoFail"];
 
 export default {
   fns: {
-    mask(g: G) {
-      if (!currentTest(g)) return;
-      addExtraReveal(g);
-      setOnChoose(g, "12068", "symbol");
+    mask(game: GameContext) {
+      if (!currentTest(game)) return;
+      addExtraReveal(game);
+      setOnChoose(game, "12068", "symbol");
     },
-    symbol(g: G, ctx: EffCtx) {
+    symbol(game: GameContext, ctx: EffCtx) {
       if (ctx.token && SYMBOLS.includes(ctx.token))
-        push(g, {
-          t: "AssignDamage",
+        push(game, {
+          t: STEP.AssignDamage,
           inv: ctx.you!,
           damage: 0,
           horror: 1,

@@ -7,25 +7,31 @@ import {
   def,
   discard,
   type EffCtx,
-  type G,
+  type GameContext,
   isElite,
   push,
+  ZONE,
+  STEP,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    consume(g: G, ctx: EffCtx) {
-      if (currentPhase(g) !== "investigation" || !currentAgenda(g)) return;
-      const here = cardsIn(g, "enemy").filter(
+    consume(game: GameContext, ctx: EffCtx) {
+      if (currentPhase(game) !== "investigation" || !currentAgenda(game)) return;
+      const here = cardsIn(game, ZONE.Enemy).filter(
         (e) =>
           e.location === ctx.source &&
           !e.exhausted &&
-          !isElite(g, e.id) &&
-          def(g, e.id).traits.includes("Cultist"),
+          !isElite(game, e.id) &&
+          def(game, e.id).traits.includes("Cultist"),
       );
-      for (const e of here) discard(g, e.id);
+      for (const e of here) discard(game, e.id);
       if (here.length)
-        push(g, { t: "PlaceDoom", card: currentAgenda(g)!, n: here.length }, { t: "CheckDoom" });
+        push(
+          game,
+          { t: STEP.PlaceDoom, card: currentAgenda(game)!, n: here.length },
+          { t: STEP.CheckDoom },
+        );
     },
   },
 } satisfies CardScript;

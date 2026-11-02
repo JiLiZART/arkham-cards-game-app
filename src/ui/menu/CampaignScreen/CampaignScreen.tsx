@@ -7,7 +7,7 @@ import {
   scenarioText,
   t,
 } from "../../../content/i18n";
-import { currentScenarioId } from "../../../engine/campaign";
+import { currentScenarioId } from "../../../engine/campaign/campaign";
 import { db, gameStore, useGame } from "../../state/context";
 import { createRoom, useOnline } from "../../state/online";
 import { guideHtml } from "../../game/guideText";

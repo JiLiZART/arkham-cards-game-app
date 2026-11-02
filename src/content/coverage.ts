@@ -1,4 +1,4 @@
-import type { ContentDb } from "../engine/types";
+import type { ContentDb } from "../engine/world/types";
 import { implemented, tokensReal } from "./implemented";
 import type { CardCount, ContentCoverage } from "./schema";
 import type { ContentError } from "./loader";

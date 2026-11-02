@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { cardText } from "../../../content/i18n";
-import type { GameState, InstId } from "../../../engine/types";
+import type { GameState, InstId } from "../../../engine/world/types";
 import { CardFace } from "../../components/CardFace";
 import { db, useGame } from "../../state/context";
 import { centreOn, placeHover } from "../../game/hover";
@@ -15,7 +15,7 @@ import { abilitySymbol, stripAction } from "../ActionRail";
 import { DetailsColumn, LocationDetails } from "../HandDetails";
 import { stripButtonsFor } from "../PlayStrip";
 import styles from "./HoverCard.module.css";
-import { cardOf, cardOfIf } from "../../../engine/core";
+import { cardOf, cardOfIf } from "../../../engine/context";
 
 /**
  * Hovering any card (map, HUD panels, play strip) shows a copy at twice its on-screen size on the spot,

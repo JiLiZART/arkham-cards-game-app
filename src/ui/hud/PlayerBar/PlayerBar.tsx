@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { cardText, t } from "../../../content/i18n";
-import type { GameState, InstId, InvId } from "../../../engine/types";
+import type { GameState, InstId, InvId } from "../../../engine/world/types";
 import { domPlace, lastRects, originRect, takeArrival } from "../../game/arrivals";
 import { useOptionsByCard } from "../../game/cardClick";
 import { db, gameStore, useGame } from "../../state/context";
@@ -27,7 +27,7 @@ import { RESOLVE_BOX } from "../Reveal";
 import { StatBody, useFlash } from "../Stats";
 import { cx } from "../../components/cx";
 import styles from "./PlayerBar.module.css";
-import { invOf } from "../../../engine/core";
+import { invOf } from "../../../engine/context";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);

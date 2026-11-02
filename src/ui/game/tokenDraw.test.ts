@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { botChoice } from "../../engine/bot";
-import { dispatch, replay } from "../../engine/engine";
-import { db, setup, start } from "../../engine/testkit";
-import type { Action } from "../../engine/types";
+import { dispatch, replay } from "../../engine";
+import { db, setup, start } from "../../engine/kits/testkit";
+import type { Action } from "../../engine/world/types";
 
 describe("chaos token draw", () => {
   it("which circle is clicked can't matter: a replayed game reveals the same tokens", () => {

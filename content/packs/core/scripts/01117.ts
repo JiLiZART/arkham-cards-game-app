@@ -4,19 +4,19 @@ import {
   type CardScript,
   currentTest,
   def,
-  type G,
+  type GameContext,
   type InstId,
   invIf,
 } from "../../../../src/engine/api";
 
 export default {
-  modifiers(g: G, id: InstId) {
-    const lita = card(g, id);
-    const t = currentTest(g);
+  modifiers(game: GameContext, id: InstId) {
+    const lita = card(game, id);
+    const t = currentTest(game);
     if (lita.zone !== "play" || !lita.controller || !t || t.kind !== "fight" || !t.target)
       return [];
-    if (!def(g, t.target).traits.includes("Monster")) return [];
-    if (invIf(g, t.inv)?.location !== invIf(g, lita.controller)?.location) return [];
+    if (!def(game, t.target).traits.includes("Monster")) return [];
+    if (invIf(game, t.inv)?.location !== invIf(game, lita.controller)?.location) return [];
     return [{ target: t.inv, mod: { stat: "attackDamage" as const, value: 1 } }];
   },
 } satisfies CardScript;

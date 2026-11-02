@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { createCard, inv, moveCard } from "../../engine/core";
-import type { Result } from "../../engine/engine";
+import { createCard, moveCard } from "../../engine/movement";
+import { inv } from "../../engine/context";
+import type { Result } from "../../engine";
 import { canCommit, testValue } from "../../engine/rules/skillTest";
 import {
   gOf,
@@ -11,9 +12,10 @@ import {
   putEnemy,
   skipMulligans,
   start,
-} from "../../engine/testkit";
+} from "../../engine/kits/testkit";
 import { optionHome } from "./optionHome";
-import { cardRecIn, invStateIn } from "../../engine/records";
+import { cardRecIn, invStateIn } from "../../engine/world/store";
+import { ZONE } from "../../engine/world/constants";
 
 describe("fast cards and abilities in the skill test commit window", () => {
   const DAISY = "01002";
@@ -25,11 +27,11 @@ describe("fast cards and abilities in the skill test commit window", () => {
     return r;
   };
   const inPlay = (r: Result, code: string) =>
-    mutate(r, (g) => {
-      const a = createCard(g, code, "limbo", DAISY);
-      moveCard(g, a, "play");
-      cardRecIn(g.s, a).controller = DAISY;
-      if (g.db.cards[code].uses) cardRecIn(g.s, a).uses = g.db.cards[code].uses!.count;
+    mutate(r, (game) => {
+      const a = createCard(game, code, ZONE.Limbo, DAISY);
+      moveCard(game, a, ZONE.Play);
+      cardRecIn(game.s, a).controller = DAISY;
+      if (game.db.cards[code].uses) cardRecIn(game.s, a).uses = game.db.cards[code].uses!.count;
     });
   const tv = (r: Result) => testValue(gOf(r), r.state.skillTest!);
 
@@ -54,9 +56,9 @@ describe("fast cards and abilities in the skill test commit window", () => {
   it("Magnifying Glass played mid-investigate: paid, boosts this test, can't also be committed", () => {
     let r = table();
     let glass = "";
-    r = mutate(r, (g) => {
-      glass = giveCard(g, DAISY, "01030");
-      invStateIn(g.s, DAISY).resources = 3;
+    r = mutate(r, (game) => {
+      glass = giveCard(game, DAISY, "01030");
+      invStateIn(game.s, DAISY).resources = 3;
     });
     r = pick(r, /^Investigate/);
     const play = r.state.pending!.options.find((o) => o.id === `play:${glass}`)!;
@@ -76,11 +78,11 @@ describe("fast cards and abilities in the skill test commit window", () => {
     let mom = "";
     let deduction = "";
     let blow = "";
-    r = mutate(r, (g) => {
-      mom = giveCard(g, DAISY, "01036");
-      deduction = giveCard(g, DAISY, "01039"); // intellect icon
-      blow = giveCard(g, DAISY, "01025"); // combat icon
-      putEnemy(g, "01160", inv(g, DAISY).location!, DAISY);
+    r = mutate(r, (game) => {
+      mom = giveCard(game, DAISY, "01036");
+      deduction = giveCard(game, DAISY, "01039"); // intellect icon
+      blow = giveCard(game, DAISY, "01025"); // combat icon
+      putEnemy(game, "01160", inv(game, DAISY).location!, DAISY);
     });
     r = pick(r, /^Fight/);
     expect(tv(r)).toBe(2);
@@ -105,13 +107,13 @@ describe("fast cards and abilities in the skill test commit window", () => {
       over = "",
       b1 = "",
       b2 = "";
-    r = mutate(r, (g) => {
-      mom = giveCard(g, DAISY, "01036");
-      over = giveCard(g, DAISY, "01091"); // 2 combat icons
-      b1 = giveCard(g, DAISY, "01025");
-      b2 = giveCard(g, DAISY, "01025");
-      invStateIn(g.s, DAISY).resources = 5;
-      putEnemy(g, "01160", inv(g, DAISY).location!, DAISY);
+    r = mutate(r, (game) => {
+      mom = giveCard(game, DAISY, "01036");
+      over = giveCard(game, DAISY, "01091"); // 2 combat icons
+      b1 = giveCard(game, DAISY, "01025");
+      b2 = giveCard(game, DAISY, "01025");
+      invStateIn(game.s, DAISY).resources = 5;
+      putEnemy(game, "01160", inv(game, DAISY).location!, DAISY);
     });
     r = pick(r, /^Fight/);
     for (const c of [over, b1, b2]) r = pick(r, c);
@@ -125,10 +127,10 @@ describe("fast cards and abilities in the skill test commit window", () => {
     let r = table();
     let mom = "";
     let deduction = "";
-    r = mutate(r, (g) => {
-      mom = giveCard(g, DAISY, "01036");
-      deduction = giveCard(g, DAISY, "01039");
-      putEnemy(g, "01160", inv(g, DAISY).location!, DAISY);
+    r = mutate(r, (game) => {
+      mom = giveCard(game, DAISY, "01036");
+      deduction = giveCard(game, DAISY, "01039");
+      putEnemy(game, "01160", inv(game, DAISY).location!, DAISY);
     });
     r = pick(r, `{"kind":"play","card":"${mom}"}`);
     r = pick(r, /^Evade/);

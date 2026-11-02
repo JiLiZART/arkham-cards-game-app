@@ -1,7 +1,7 @@
 /** purely visual UI state (hover, pop-up menus, panels) — never saved */
 import { useEffect } from "react";
 import { create } from "zustand";
-import type { ChoiceOption, InstId, InvId } from "../../engine/types";
+import type { ChoiceOption, InstId, InvId } from "../../engine/world/types";
 import { reducedMotion } from "../game/arrivals";
 import type { ScreenRect } from "../game/hit";
 import type { SharedView } from "../game/sharedView";

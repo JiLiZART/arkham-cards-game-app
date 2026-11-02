@@ -6,13 +6,17 @@ import {
   def,
   type EffCtx,
   emit,
-  type G,
+  type GameContext,
   type InstId,
   inv,
   moveCard,
   push,
   putOnTop,
   type Step,
+  EVENT,
+  ZONE,
+  CHOICE,
+  STEP,
 } from "../../../../src/engine/api";
 
 type Args = { cards: InstId[]; drawn: number };
@@ -20,34 +24,40 @@ type Args = { cards: InstId[]; drawn: number };
 export default {
   abilities: [{ kind: "onPlay", run: "reveal" }],
   fns: {
-    reveal(g: G, ctx: EffCtx) {
-      const me = inv(g, ctx.you!);
+    reveal(game: GameContext, ctx: EffCtx) {
+      const me = inv(game, ctx.you!);
       const cards = me.deck.slice(0, me.clues >= 2 ? 8 : 5);
-      emit(g, "look", `${me.name} reveals the top ${cards.length} cards of their deck`, {
+      emit(game, EVENT.Look, `${me.name} reveals the top ${cards.length} cards of their deck`, {
         inv: ctx.you!,
         data: { n: cards.length },
       });
-      push(g, { t: "Script", code: "12043", fn: "take", ctx, args: { cards, drawn: 0 } });
+      push(game, { t: STEP.Script, code: "12043", fn: "take", ctx, args: { cards, drawn: 0 } });
     },
-    take(g: G, ctx: EffCtx, args: Args, step?: Step) {
+    take(game: GameContext, ctx: EffCtx, args: Args, step?: Step) {
       const you = ctx.you!;
-      const left = args.cards.filter((id) => cardIf(g, id)?.zone === "deck");
+      const left = args.cards.filter((id) => cardIf(game, id)?.zone === "deck");
       if (args.drawn < 3 && left.length) {
         const pick = ask<InstId>(
-          g,
+          game,
           step!,
           you,
-          "generic",
+          CHOICE.Generic,
           `Unbridled Knowledge: draw a card (${3 - args.drawn} left)`,
-          left.map((id) => ({ id, label: def(g, id).name, card: id, value: id })),
+          left.map((id) => ({ id, label: def(game, id).name, card: id, value: id })),
           { auto: true, key: "searchTop", vars: { n: args.cards.length } },
         );
         if (pick === undefined) return;
-        putOnTop(g, you, [pick]);
+        putOnTop(game, you, [pick]);
         push(
-          g,
-          { t: "Draw", inv: you, n: 1, tapped: true },
-          { t: "Script", code: "12043", fn: "take", ctx, args: { ...args, drawn: args.drawn + 1 } },
+          game,
+          { t: STEP.Draw, inv: you, n: 1, tapped: true },
+          {
+            t: STEP.Script,
+            code: "12043",
+            fn: "take",
+            ctx,
+            args: { ...args, drawn: args.drawn + 1 },
+          },
         );
         return;
       }
@@ -55,11 +65,11 @@ export default {
       // the rest, one at a time: on the top or the bottom of the deck
       const id = left[0];
       const where = ask<"top" | "bottom">(
-        g,
+        game,
         step!,
         you,
-        "generic",
-        `Unbridled Knowledge: put ${def(g, id).name} on the top or the bottom of your deck`,
+        CHOICE.Generic,
+        `Unbridled Knowledge: put ${def(game, id).name} on the top or the bottom of your deck`,
         [
           { id: "top", label: "Top", value: "top", card: id },
           { id: "bottom", label: "Bottom", value: "bottom", card: id },
@@ -67,10 +77,10 @@ export default {
         { key: "chooseOne" },
       );
       if (where === undefined) return;
-      moveCard(g, id, "limbo");
-      moveCard(g, id, "deck", { inv: you, top: where === "top" });
-      push(g, {
-        t: "Script",
+      moveCard(game, id, ZONE.Limbo);
+      moveCard(game, id, ZONE.Deck, { inv: you, top: where === "top" });
+      push(game, {
+        t: STEP.Script,
         code: "12043",
         fn: "take",
         ctx,

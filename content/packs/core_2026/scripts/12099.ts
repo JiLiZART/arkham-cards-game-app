@@ -4,21 +4,22 @@ import {
   type CardScript,
   currentPhase,
   type EffCtx,
-  type G,
+  type GameContext,
   push,
+  STEP,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    lurk(g: G, ctx: EffCtx) {
-      const e = cardIf(g, ctx.source!);
+    lurk(game: GameContext, ctx: EffCtx) {
+      const e = cardIf(game, ctx.source!);
       if (
-        currentPhase(g) === "investigation" &&
+        currentPhase(game) === "investigation" &&
         e?.zone === "enemy" &&
         !e.exhausted &&
         e.doom === 0
       )
-        push(g, { t: "PlaceDoom", card: e.id, n: 1 });
+        push(game, { t: STEP.PlaceDoom, card: e.id, n: 1 });
     },
   },
 } satisfies CardScript;

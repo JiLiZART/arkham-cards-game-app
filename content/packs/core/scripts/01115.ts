@@ -1,9 +1,9 @@
 // Parlor — unrevealed side: you cannot move into the Parlor
-import { card, type CardScript, type G, type InstId } from "../../../../src/engine/api";
+import { card, type CardScript, type GameContext, type InstId } from "../../../../src/engine/api";
 
 export default {
-  modifiers(g: G, id: InstId) {
-    return card(g, id).zone === "location" && !card(g, id).revealed
+  modifiers(game: GameContext, id: InstId) {
+    return card(game, id).zone === "location" && !card(game, id).revealed
       ? [{ target: id, mod: { flag: "cannotMoveInto" as const } }]
       : [];
   },

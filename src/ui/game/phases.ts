@@ -1,6 +1,6 @@
-import type { GameState } from "../../engine/types";
+import type { GameState } from "../../engine/world/types";
 import { db } from "../state/context";
-import { cardsOf } from "../../engine/core";
+import { cardsOf } from "../../engine/context";
 
 /**
  * A phase with nothing to show: its pause (the title and the lead's continue) is skipped. Only the enemy phase can be:

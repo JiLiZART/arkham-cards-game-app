@@ -4,15 +4,16 @@ import {
   type CardScript,
   currentAct,
   flags,
-  type G,
+  type GameContext,
   push,
+  STEP,
 } from "../../../../src/engine/api";
 
 export default {
   hooks: {
-    checkObjectives(g: G) {
-      if (cardIf(g, currentAct(g))?.code === "01110" && flags.defeated.get(g, "01116"))
-        push(g, { t: "AdvanceAct" });
+    checkObjectives(game: GameContext) {
+      if (cardIf(game, currentAct(game))?.code === "01110" && flags.defeated.get(game, "01116"))
+        push(game, { t: STEP.AdvanceAct });
     },
   },
 } satisfies CardScript;

@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
-import { createCard, type G } from "../../engine/core";
-import { run } from "../../engine/engine";
+import { createCard } from "../../engine/movement";
+import { type GameContext } from "../../engine/context";
+import { run } from "../../engine/steps/dispatch";
 import {
   commitDone,
   db,
@@ -11,8 +12,8 @@ import {
   putEnemy,
   skipMulligans,
   start,
-} from "../../engine/testkit";
-import type { GameState } from "../../engine/types";
+} from "../../engine/kits/testkit";
+import type { GameState } from "../../engine/world/types";
 import {
   abilityOptionsOf,
   autoSwitchTarget,
@@ -31,7 +32,9 @@ import {
   ownDecisionTitle,
   shownInv,
 } from "./players";
-import { invStateIn } from "../../engine/records";
+import { invStateIn } from "../../engine/world/store";
+import { ZONE, CHOICE } from "../../engine/world/constants";
+import { STEP } from "../../engine/steps/step";
 
 const ROLAND = "01001";
 const DAISY = "01002";
@@ -78,10 +81,10 @@ describe("canAct", () => {
 
   it("a commit window for Daisy during Roland's test: Daisy can commit", () => {
     let r = turn();
-    r = mutate(r, (g) => {
-      giveCard(g, ROLAND, "01025");
-      giveCard(g, DAISY, "01093");
-      putEnemy(g, "01160", locId(g, "01111"), ROLAND);
+    r = mutate(r, (game) => {
+      giveCard(game, ROLAND, "01025");
+      giveCard(game, DAISY, "01093");
+      putEnemy(game, "01160", locId(game, "01111"), ROLAND);
     });
     r = pick(r, /^Fight Ghoul Minion/);
     expect(canAct(r.state)).toBeNull();
@@ -93,15 +96,15 @@ describe("canAct", () => {
   it("Daisy's own treachery test during Roland's turn: no hand-off signal, the table goes to her", () => {
     const { state } = turn();
     const s = structuredClone(state);
-    const g: G = { s, db, events: [] };
+    const game: GameContext = { s, db, events: [] };
     const guts = Object.keys(db.cards).find((c) => db.cards[c].name === "Guts")!;
-    giveCard(g, DAISY, guts);
+    giveCard(game, DAISY, guts);
     // Rotting Remains (willpower 3) revealed for Daisy while Roland is the active investigator
-    const rr = createCard(g, "01163", "limbo", null);
+    const rr = createCard(game, "01163", ZONE.Limbo, null);
     const step = s.pending!.step;
     s.pending = null;
-    s.queue.push({ ...step, choice: undefined }, { t: "Revelation", inv: DAISY, card: rr });
-    run(g);
+    s.queue.push({ ...step, choice: undefined }, { t: STEP.Revelation, inv: DAISY, card: rr });
+    run(game);
     expect(s.active).toBe(ROLAND);
     expect(s.pending).toMatchObject({ inv: DAISY, kind: "commit" });
     expect(canAct(s)).toBeNull();
@@ -131,7 +134,7 @@ describe("landingView", () => {
     const { state } = turn();
     const daisyReacts = {
       ...state,
-      pending: { ...state.pending!, inv: DAISY, kind: "reaction" },
+      pending: { ...state.pending!, inv: DAISY, kind: CHOICE.Reaction },
     } as GameState;
     expect(landingView(daisyReacts)).toBe(ROLAND);
     expect(landingView(state)).toBeNull();
@@ -196,7 +199,7 @@ describe("investigatorOptions", () => {
       pending: {
         ...state.pending!,
         inv,
-        kind: "generic",
+        kind: CHOICE.Generic,
         options: options.map((o) => ({ ...o, label: o.id, value: o.id })),
       },
     }) as GameState;
@@ -243,7 +246,7 @@ describe("abilityOptionsOf", () => {
       pending: {
         ...state.pending!,
         inv: ROLAND,
-        kind: "reaction",
+        kind: CHOICE.Reaction,
         options: options.map((o) => ({ ...o, label: o.id, value: o.id })),
       },
     }) as GameState;
@@ -376,14 +379,14 @@ describe("barAsk", () => {
 /** Daisy's own treachery test (Rotting Remains) opens while Roland is the active investigator */
 const daisysTest = (base: GameState): GameState => {
   const s = structuredClone(base);
-  const g: G = { s, db, events: [] };
+  const game: GameContext = { s, db, events: [] };
   const guts = Object.keys(db.cards).find((c) => db.cards[c].name === "Guts")!;
-  giveCard(g, DAISY, guts);
-  const rr = createCard(g, "01163", "limbo", null);
+  giveCard(game, DAISY, guts);
+  const rr = createCard(game, "01163", ZONE.Limbo, null);
   const step = s.pending!.step;
   s.pending = null;
-  s.queue.push({ ...step, choice: undefined }, { t: "Revelation", inv: DAISY, card: rr });
-  run(g);
+  s.queue.push({ ...step, choice: undefined }, { t: STEP.Revelation, inv: DAISY, card: rr });
+  run(game);
   return s;
 };
 
@@ -408,10 +411,10 @@ describe("ownDecisionTitle", () => {
       ({ ...state, pending: { ...state.pending!, inv: DAISY, kind } }) as GameState;
     expect(ownDecisionTitle(state, help("reaction"))).toBeNull();
     let r = turn();
-    r = mutate(r, (g) => {
-      giveCard(g, ROLAND, "01025");
-      giveCard(g, DAISY, "01093");
-      putEnemy(g, "01160", locId(g, "01111"), ROLAND);
+    r = mutate(r, (game) => {
+      giveCard(game, ROLAND, "01025");
+      giveCard(game, DAISY, "01093");
+      putEnemy(game, "01160", locId(game, "01111"), ROLAND);
     });
     const before = pick(r, /^Fight Ghoul Minion/).state;
     const after = commitDone(pick(r, /^Fight Ghoul Minion/)).state;
@@ -435,10 +438,10 @@ describe("ownDecisionTitle", () => {
 describe("autoSwitchTarget", () => {
   it("while someone else can act and their table isn't on screen: them", () => {
     let r = turn();
-    r = mutate(r, (g) => {
-      giveCard(g, ROLAND, "01025");
-      giveCard(g, DAISY, "01093");
-      putEnemy(g, "01160", locId(g, "01111"), ROLAND);
+    r = mutate(r, (game) => {
+      giveCard(game, ROLAND, "01025");
+      giveCard(game, DAISY, "01093");
+      putEnemy(game, "01160", locId(game, "01111"), ROLAND);
     });
     const { state } = commitDone(pick(r, /^Fight Ghoul Minion/));
     expect(autoSwitchTarget(state, { viewing: ROLAND })).toBe(DAISY);

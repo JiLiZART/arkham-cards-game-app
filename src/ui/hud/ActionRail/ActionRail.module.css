@@ -170,10 +170,7 @@
   min-width: 0;
 }
 :global(.game):global(.phone) :global(.instruction-bar) .rail-icon img,
-:global(.game):global(.phone)
-  :global(.instruction-bar)
-  .rail-icon
-  :global(.svg-icon) {
+:global(.game):global(.phone) :global(.instruction-bar) .rail-icon :global(.svg-icon) {
   width: 22px;
   height: 22px;
 }

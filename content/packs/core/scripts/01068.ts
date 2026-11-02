@@ -9,30 +9,39 @@ import {
   isElite,
   type CardScript,
   type EffCtx,
-  type G,
+  type GameContext,
   type InstId,
   type Step,
+  EVENT,
+  CHOICE,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    wipe(g: G, ctx: EffCtx, _args: unknown, step?: Step) {
-      const here = enemiesAt(g, inv(g, ctx.you!).location).filter((e) => !isElite(g, e.id));
+    wipe(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
+      const here = enemiesAt(game, inv(game, ctx.you!).location).filter(
+        (e) => !isElite(game, e.id),
+      );
       if (!here.length) return;
       const pick = ask<InstId>(
-        g,
+        game,
         step!,
         ctx.you!,
-        "target",
+        CHOICE.Target,
         "Mind Wipe: choose an enemy",
-        here.map((e) => ({ id: e.id, label: def(g, e.id).name, card: e.id, value: e.id })),
+        here.map((e) => ({ id: e.id, label: def(game, e.id).name, card: e.id, value: e.id })),
         { auto: true, key: "chooseEnemy" },
       );
       if (pick === undefined) return;
-      addTempMod(g, { flag: "blankText" }, pick, "phase", ctx.source ?? null);
-      emit(g, "blank", `${def(g, pick).name}'s text box is blank until the end of the phase`, {
-        card: pick,
-      });
+      addTempMod(game, { flag: "blankText" }, pick, "phase", ctx.source ?? null);
+      emit(
+        game,
+        EVENT.Blank,
+        `${def(game, pick).name}'s text box is blank until the end of the phase`,
+        {
+          card: pick,
+        },
+      );
     },
   },
 } satisfies CardScript;

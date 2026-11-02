@@ -5,26 +5,29 @@ import {
   currentTest,
   type EffCtx,
   emit,
-  type G,
+  type GameContext,
   moveCard,
   push,
+  EVENT,
+  ZONE,
+  STEP,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    brink(g: G, ctx: EffCtx) {
-      const t = currentTest(g);
+    brink(game: GameContext, ctx: EffCtx) {
+      const t = currentTest(game);
       if (!t) return;
       for (const id of t.committed) {
-        const c = cardIf(g, id);
+        const c = cardIf(game, id);
         if (id === ctx.source || c?.zone !== "commit" || !c.owner) continue;
-        moveCard(g, id, "hand", { inv: c.owner });
-        emit(g, "returned", `${g.db.cards[c.code].name} returns to its owner's hand`, {
+        moveCard(game, id, ZONE.Hand, { inv: c.owner });
+        emit(game, EVENT.Returned, `${game.db.cards[c.code].name} returns to its owner's hand`, {
           inv: c.owner,
           card: id,
         });
       }
-      push(g, { t: "Draw", inv: ctx.you!, n: 1 });
+      push(game, { t: STEP.Draw, inv: ctx.you!, n: 1 });
     },
   },
 } satisfies CardScript;

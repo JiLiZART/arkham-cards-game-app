@@ -6,28 +6,30 @@ import {
   currentPhase,
   def,
   type EffCtx,
-  type G,
+  type GameContext,
   invsAt,
   push,
+  ZONE,
+  STEP,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    inFlames(g: G, ctx: EffCtx) {
-      if (currentPhase(g) !== "investigation") return;
-      for (const i of invsAt(g, ctx.source!)) {
-        push(g, {
-          t: "AssignDamage",
+    inFlames(game: GameContext, ctx: EffCtx) {
+      if (currentPhase(game) !== "investigation") return;
+      for (const i of invsAt(game, ctx.source!)) {
+        push(game, {
+          t: STEP.AssignDamage,
           inv: i,
           damage: 1,
           horror: 0,
           direct: true,
           source: ctx.source!,
         });
-        for (const a of cardsIn(g, "play"))
-          if (a.controller === i && (def(g, a.id).health ?? 0) > 0)
-            addCounter(g, a.id, "damage", 1);
-        push(g, { t: "Script", code: "__engine", fn: "assetDefeatCheck", ctx: { you: i } });
+        for (const a of cardsIn(game, ZONE.Play))
+          if (a.controller === i && (def(game, a.id).health ?? 0) > 0)
+            addCounter(game, a.id, "damage", 1);
+        push(game, { t: STEP.Script, code: "__engine", fn: "assetDefeatCheck", ctx: { you: i } });
       }
     },
   },

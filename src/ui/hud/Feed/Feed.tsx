@@ -1,18 +1,25 @@
 import type { CSSProperties } from "react";
 import { useEffect, useLayoutEffect, useMemo, useReducer, useRef } from "react";
 import { cardText, encounterSetName, t } from "../../../content/i18n";
-import type { GameState } from "../../../engine/types";
+import type { GameState } from "../../../engine/world/types";
 import { CardFace } from "../../components/CardFace";
 import { ChaosToken } from "../../components/ChaosToken";
 import { db, gameStore, useGame } from "../../state/context";
-import { feedEntry, mergeLive, shownCount, STEP, type FeedEntry, type Part } from "../../game/feed";
+import {
+  feedEntry,
+  mergeLive,
+  shownCount,
+  STEP_EVENT,
+  type FeedEntry,
+  type Part,
+} from "../../game/feed";
 import { Glyph, Icon } from "../../components/Icon";
 import { CLASS_COLORS, hasSymbol } from "../../assets/icons";
 import { Portrait } from "../../components/Portrait";
 import { useView } from "../../state/view";
 import { cx } from "../../components/cx";
 import styles from "./Feed.module.css";
-import { cardOfIf } from "../../../engine/core";
+import { cardOfIf } from "../../../engine/context";
 
 const LIVE_MAX = 4;
 const LIVE_MS = 12000;
@@ -238,7 +245,7 @@ export function Feed() {
       {items.map((i, k) => {
         const e = (mode === "live" ? lines.get(i) : entries.get(i))!;
         // the Journal: a phase's step is a section line between the entries it introduces
-        if (e.kind === STEP)
+        if (e.kind === STEP_EVENT)
           return (
             <div key={i} data-log={i} className={styles.feedStep}>
               <Sentence parts={e.parts} size={20} />

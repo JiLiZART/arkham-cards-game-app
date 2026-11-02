@@ -12,7 +12,7 @@ import { eventFocus } from "../../game/camera";
 import { heldCards, needsNext, type QueuedEvent } from "../../state/store";
 import * as THREE from "three";
 import { t } from "../../../content/i18n";
-import type { GameState, InstId } from "../../../engine/types";
+import type { GameState, InstId } from "../../../engine/world/types";
 import {
   domPlace,
   lastRects,
@@ -40,7 +40,7 @@ import { EventFx } from "../EventFx";
 import { camInput, MapCamera } from "../MapCamera";
 import { cx } from "../../components/cx";
 import styles from "./Table.module.css";
-import { cardOf, invOf, invOfIf } from "../../../engine/core";
+import { cardOf, invOf, invOfIf } from "../../../engine/context";
 
 /** on-screen rect of a card on the map (set by the scene; the HTML hover overlay uses it) */
 export const mapProjector: {

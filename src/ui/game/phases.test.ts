@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { locId, mutate, pick, putEnemy, skipMulligans, start } from "../../engine/testkit";
+import { locId, mutate, pick, putEnemy, skipMulligans, start } from "../../engine/kits/testkit";
 import { phaseIsEmpty } from "./phases";
-import { cardRecIn } from "../../engine/records";
+import { cardRecIn } from "../../engine/world/store";
 
 const ROLAND = "01001";
 const roland = () => {
@@ -16,15 +16,18 @@ describe("phaseIsEmpty", () => {
   });
 
   it("an engaged, ready enemy attacks: not empty", () => {
-    const r = mutate(roland(), (g) => void putEnemy(g, "01160", locId(g, "01111"), ROLAND));
+    const r = mutate(
+      roland(),
+      (game) => void putEnemy(game, "01160", locId(game, "01111"), ROLAND),
+    );
     expect(phaseIsEmpty(r.state, "enemy")).toBe(false);
   });
 
   it("a ready hunter moves: not empty; an exhausted one does nothing", () => {
     const hunter = (exhausted: boolean) =>
-      mutate(roland(), (g) => {
-        const id = putEnemy(g, "01159", locId(g, "01111"), null); // Swarm of Rats is a hunter
-        cardRecIn(g.s, id).exhausted = exhausted;
+      mutate(roland(), (game) => {
+        const id = putEnemy(game, "01159", locId(game, "01111"), null); // Swarm of Rats is a hunter
+        cardRecIn(game.s, id).exhausted = exhausted;
       });
     expect(phaseIsEmpty(hunter(false).state, "enemy")).toBe(false);
     expect(phaseIsEmpty(hunter(true).state, "enemy")).toBe(true);

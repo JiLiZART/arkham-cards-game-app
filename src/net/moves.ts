@@ -2,9 +2,9 @@
  * What travels between browsers in an online room (ADR-0018): session moves, numbered by the host, and the rules for
  * who may make them. Pure: no network, no store.
  */
-import type { NewCampaign } from "../engine/campaign";
-import type { FlowValue } from "../engine/flow";
-import type { GameState, InvId } from "../engine/types";
+import type { NewCampaign } from "../engine/campaign/types";
+import type { FlowValue } from "../engine/campaign/types";
+import type { GameState, InvId } from "../engine/world/types";
 import type { Save } from "../ui/state/store";
 
 /** one change to the shared game, in the shape the store already understands */

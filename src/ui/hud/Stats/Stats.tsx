@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { cardText, t } from "../../../content/i18n";
 import { SKILLS } from "../../../content/schema";
-import { invOf, invOfIf, maxHealth, maxSanity, skillValue } from "../../../engine/core";
+import { invOf, invOfIf } from "../../../engine/context";
+import { maxHealth, maxSanity, skillValue } from "../../../engine/queries";
 import { handLimit } from "../../../engine/rules/investigators";
-import type { ChoiceOption, GameState, InvId } from "../../../engine/types";
+import type { ChoiceOption, GameState, InvId } from "../../../engine/world/types";
 import { db, gameStore, useGame } from "../../state/context";
 import { Icon, Stat } from "../../components/Icon";
 import { isIcon } from "../../assets/icons";

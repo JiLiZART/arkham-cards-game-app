@@ -4,21 +4,23 @@ import {
   type CardScript,
   currentAgenda,
   emit,
-  type G,
+  type GameContext,
   push,
+  EVENT,
+  STEP,
 } from "../../../../src/engine/api";
 
 export default {
-  wouldPlaceDoom(g: G) {
-    emit(g, "noDoom", "Instead of doom, each investigator takes 1 direct damage");
-    for (const i of activeInvs(g))
-      push(g, {
-        t: "AssignDamage",
+  wouldPlaceDoom(game: GameContext) {
+    emit(game, EVENT.NoDoom, "Instead of doom, each investigator takes 1 direct damage");
+    for (const i of activeInvs(game))
+      push(game, {
+        t: STEP.AssignDamage,
         inv: i,
         damage: 1,
         horror: 0,
         direct: true,
-        source: currentAgenda(g),
+        source: currentAgenda(game),
       });
     return true;
   },

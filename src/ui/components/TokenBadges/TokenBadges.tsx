@@ -1,12 +1,12 @@
 import { t } from "../../../content/i18n";
-import type { CardInst } from "../../../engine/types";
+import type { CardInst } from "../../../engine/world/types";
 import { db, useGame } from "../../state/context";
 import { intentOf } from "../../game/intent";
 import { Glyph, Icon } from "../Icon";
 import type { IconName } from "../../assets/icons";
 import { cx } from "../cx";
 import styles from "./TokenBadges.module.css";
-import { cardOfIf } from "../../../engine/core";
+import { cardOfIf } from "../../../engine/context";
 
 const TOKEN_ICONS: Record<string, IconName | undefined> = {
   damage: "damage",

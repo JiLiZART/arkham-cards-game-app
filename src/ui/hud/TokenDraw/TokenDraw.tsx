@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { reducedMotion } from "../../game/arrivals";
 import { centreTransform } from "../flights";
 import { t } from "../../../content/i18n";
-import type { GameEvent, GameState } from "../../../engine/types";
+import type { GameEvent, GameState } from "../../../engine/world/types";
 import { db, gameStore, useGame } from "../../state/context";
 import { Icon } from "../../components/Icon";
 import { bagLanding, spillLayout, type Area } from "../../game/testScreen";

@@ -1,6 +1,6 @@
-import type { GameEvent, GameState, InstId } from "../../engine/types";
+import type { GameEvent, GameState, InstId } from "../../engine/world/types";
 import type { Bounds } from "./layout";
-import { cardOfIf, invOfIf } from "../../engine/core";
+import { cardOfIf, invOfIf } from "../../engine/context";
 
 /** camera centre (world x/z) and zoom (screen px per world unit) */
 export interface Cam {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { db, giveCard, mutate, pick, skipMulligans, start } from "../../engine/testkit";
+import { db, giveCard, mutate, pick, skipMulligans, start } from "../../engine/kits/testkit";
 import { createStore } from "zustand/vanilla";
 import {
   diffArrivals,
@@ -12,7 +12,8 @@ import {
   isSettled,
 } from "./arrivals";
 import type { UiState } from "../state/store";
-import { allCardRecsIn, cardRecIn, invStateIn } from "../../engine/records";
+import { allCardRecsIn, cardRecIn, invStateIn } from "../../engine/world/store";
+import { ZONE } from "../../engine/world/constants";
 
 describe("diffArrivals", () => {
   const base = skipMulligans(start("the-gathering", ["01001"], 1));
@@ -32,8 +33,8 @@ describe("diffArrivals", () => {
 
   it("playing an asset: hand → play", () => {
     let id = "";
-    const r0 = mutate(base, (g) => {
-      id = giveCard(g, "01001", "01020");
+    const r0 = mutate(base, (game) => {
+      id = giveCard(game, "01001", "01020");
     });
     const r = pick(r0, /^Play Machete/);
     expect(diffArrivals(r0.state, r.state)).toContainEqual(
@@ -43,13 +44,13 @@ describe("diffArrivals", () => {
 
   it("a spawn: encounter deck → enemy; staggered batch indexes", () => {
     const ids: string[] = [];
-    const r = mutate(base, (g) => {
-      const enc = allCardRecsIn(g.s)
+    const r = mutate(base, (game) => {
+      const enc = allCardRecsIn(game.s)
         .filter((c) => c.zone === "encounterDeck" && db.cards[c.code].type === "enemy")
         .slice(0, 2);
       for (const c of enc) {
-        c.zone = "enemy";
-        c.location = invStateIn(g.s, "01001").location;
+        c.zone = ZONE.Enemy;
+        c.location = invStateIn(game.s, "01001").location;
         ids.push(c.id);
       }
     });
@@ -61,13 +62,13 @@ describe("diffArrivals", () => {
   });
 
   it("a drawn weakness was shown in the showcase: it arrives from there", () => {
-    const r0 = mutate(base, (g) => {
-      const cover = allCardRecsIn(g.s).find((c) => c.code === "01007")!;
-      const me = invStateIn(g.s, "01001");
+    const r0 = mutate(base, (game) => {
+      const cover = allCardRecsIn(game.s).find((c) => c.code === "01007")!;
+      const me = invStateIn(game.s, "01001");
       for (const z of ["deck", "hand", "discard"] as const)
         me[z] = me[z].filter((x) => x !== cover.id);
       me.deck.unshift(cover.id);
-      cover.zone = "deck";
+      cover.zone = ZONE.Deck;
     });
     const r = pick(r0, /^Draw/);
     const a = diffArrivals(r0.state, r.state).find(
@@ -128,13 +129,13 @@ describe("recording", () => {
 
   it("a card shown in the showcase keeps its arrival until it leaves there, however long the player reads", () => {
     const store = fresh(true);
-    const r0 = mutate(base, (g) => {
-      const cover = allCardRecsIn(g.s).find((c) => c.code === "01007")!;
-      const me = invStateIn(g.s, "01001");
+    const r0 = mutate(base, (game) => {
+      const cover = allCardRecsIn(game.s).find((c) => c.code === "01007")!;
+      const me = invStateIn(game.s, "01001");
       for (const z of ["deck", "hand", "discard"] as const)
         me[z] = me[z].filter((x) => x !== cover.id);
       me.deck.unshift(cover.id);
-      cover.zone = "deck";
+      cover.zone = ZONE.Deck;
     });
     store.setState({ game: r0.state });
     const r = pick(r0, /^Draw/);
@@ -174,8 +175,8 @@ describe("originRect", () => {
   const none = () => null;
   const arr = (o: Partial<Arrival>): Arrival => ({
     id: "c1",
-    from: "deck",
-    to: "hand",
+    from: ZONE.Deck,
+    to: ZONE.Hand,
     owner: "01001",
     opening: false,
     batch: 0,

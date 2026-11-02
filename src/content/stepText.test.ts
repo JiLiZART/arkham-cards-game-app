@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { db } from "../engine/testkit";
+import { db } from "../engine/kits/testkit";
 import { interludeName, stepText } from "./i18n";
 import { CampaignFlow, I18nCampaigns } from "./schema";
 

@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { botChoice } from "../../engine/bot";
-import { db } from "../../engine/testkit";
-import type { GameState } from "../../engine/types";
-import { scenarioSetup } from "../../engine/campaign";
-import { ENGINE_VERSION } from "../../engine/engine";
+import { db } from "../../engine/kits/testkit";
+import type { GameState } from "../../engine/world/types";
+import { scenarioSetup } from "../../engine/campaign/campaign";
+import { ENGINE_VERSION } from "../../engine";
 import {
   ANIMATED,
   canUndo,
@@ -16,7 +16,9 @@ import {
   startLocale,
   type Storage,
 } from "./store";
-import { invStateIn } from "../../engine/records";
+import { invStateIn } from "../../engine/world/store";
+import type { EventType } from "../../engine/events/event";
+import { EVENT } from "../../engine/events/event";
 
 const mem = (): Storage & { data: Map<string, string> } => {
   const data = new Map<string, string>();
@@ -335,10 +337,10 @@ describe("log marks", () => {
 });
 
 describe("pace and held events", () => {
-  const ev = (type: string) => ({ type, text: type, inv: null, card: null, data: {} });
+  const ev = (type: EventType) => ({ type, text: type, inv: null, card: null, data: {} });
 
   it("a drawn encounter card or weakness is held at every pace, with no caption Next (the showcase has its own)", () => {
-    for (const type of ["encounter", "weakness"]) {
+    for (const type of ["encounter", "weakness"] as const) {
       expect(HELD.has(type), type).toBe(true);
       expect(ANIMATED.has(type), type).toBe(true);
       for (const pace of ["normal", "slow", "tap"] as const)
@@ -347,7 +349,7 @@ describe("pace and held events", () => {
   });
 
   it("the cards still waiting in (or for) the showcase: the playing one and the queued ones", () => {
-    const e = (type: string, card: string | null) => ({
+    const e = (type: EventType, card: string | null) => ({
       type,
       text: type,
       inv: null,
@@ -357,17 +359,17 @@ describe("pace and held events", () => {
     });
     expect([
       ...heldCards({
-        current: e("encounter", "c1"),
-        queue: [e("damage", "c9"), e("weakness", "c2"), e("encounter", null)],
+        current: e(EVENT.Encounter, "c1"),
+        queue: [e(EVENT.Damage, "c9"), e(EVENT.Weakness, "c2"), e(EVENT.Encounter, null)],
       }),
     ]).toEqual(["c1", "c2"]);
     expect(heldCards({ current: null, queue: [] }).size).toBe(0);
   });
 
   it("other big events still wait for Next only at the Tap pace", () => {
-    expect(needsNext(ev("attack"), "tap", false)).toBe(true);
-    expect(needsNext(ev("attack"), "normal", false)).toBe(false);
-    expect(holdsForTap(ev("attack"), "slow")).toBe(false);
+    expect(needsNext(ev(EVENT.Attack), "tap", false)).toBe(true);
+    expect(needsNext(ev(EVENT.Attack), "normal", false)).toBe(false);
+    expect(holdsForTap(ev(EVENT.Attack), "slow")).toBe(false);
   });
 });
 

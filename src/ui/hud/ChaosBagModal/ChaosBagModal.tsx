@@ -1,5 +1,5 @@
 import { t } from "../../../content/i18n";
-import type { GameState } from "../../../engine/types";
+import type { GameState } from "../../../engine/world/types";
 import { CardFace } from "../../components/CardFace";
 import { groupTokens } from "../../game/chaos";
 import { db, gameStore, useGame } from "../../state/context";

@@ -1,6 +1,6 @@
 import { useRef, type PointerEvent as ReactPointerEvent } from "react";
 import { cardText, t } from "../../../content/i18n";
-import type { GameState, InstId } from "../../../engine/types";
+import type { GameState, InstId } from "../../../engine/world/types";
 import { rememberRect } from "../../game/arrivals";
 import { CardFace } from "../../components/CardFace";
 import { db, useGame } from "../../state/context";
@@ -11,7 +11,7 @@ import { useHand } from "../HandFan";
 import { moment } from "../SoundLayer";
 import { cx } from "../../components/cx";
 import styles from "./HandDrawer.module.css";
-import { cardOf } from "../../../engine/core";
+import { cardOf } from "../../../engine/context";
 
 /** a swipe down this far closes the open drawer */
 const SWIPE_CLOSE = 40;

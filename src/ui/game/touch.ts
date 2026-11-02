@@ -1,4 +1,4 @@
-import type { InstId } from "../../engine/types";
+import type { InstId } from "../../engine/world/types";
 import { useView } from "../state/view";
 
 /**

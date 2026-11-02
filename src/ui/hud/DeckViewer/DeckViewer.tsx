@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { cardText, t } from "../../../content/i18n";
-import type { GameState } from "../../../engine/types";
+import type { GameState } from "../../../engine/world/types";
 import { CardFace } from "../../components/CardFace";
 import { groupTokens } from "../../game/chaos";
 import { db, useGame } from "../../state/context";
@@ -11,7 +11,7 @@ import { Modal } from "../Modals";
 import { CardOptions } from "../CardOptions";
 import { cx } from "../../components/cx";
 import styles from "./DeckViewer.module.css";
-import { cardOf } from "../../../engine/core";
+import { cardOf } from "../../../engine/context";
 
 export type DeckKind = "act" | "agenda" | "reference";
 

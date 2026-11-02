@@ -6,20 +6,20 @@ import {
   type CardScript,
   discard,
   type EffCtx,
-  type G,
+  type GameContext,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    worn(g: G, ctx: EffCtx) {
-      const c = cardIf(g, ctx.source!);
-      if (c?.zone === "threat" && c.damage >= 3) discard(g, c.id);
+    worn(game: GameContext, ctx: EffCtx) {
+      const c = cardIf(game, ctx.source!);
+      if (c?.zone === "threat" && c.damage >= 3) discard(game, c.id);
     },
   },
   hooks: {
-    gameEnd(g: G, ctx: EffCtx) {
-      const c = card(g, ctx.source!);
-      if (c.zone === "threat" && c.controller) addCounter(g, c.controller, "physicalTrauma", 1);
+    gameEnd(game: GameContext, ctx: EffCtx) {
+      const c = card(game, ctx.source!);
+      if (c.zone === "threat" && c.controller) addCounter(game, c.controller, "physicalTrauma", 1);
     },
   },
 } satisfies CardScript;

@@ -1,8 +1,8 @@
 import { doomInPlay } from "../../engine/rules/scenario";
-import type { ContentDb, GameEvent, GameState, InstId } from "../../engine/types";
+import type { ContentDb, GameEvent, GameState, InstId } from "../../engine/world/types";
 import { type CardSoundWhen, NO_SOUND, type SoundManifest } from "../../content/schema";
 import { db } from "../state/context";
-import { cardOf, cardOfIf, cardsOf } from "../../engine/core";
+import { cardOf, cardOfIf, cardsOf } from "../../engine/context";
 
 /** the settings the gains depend on (a slice of UiState) */
 export interface SoundSettings {

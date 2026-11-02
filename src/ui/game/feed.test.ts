@@ -1,8 +1,16 @@
 import { describe, expect, it } from "vitest";
 import { botChoice } from "../../engine/bot";
-import { dispatch } from "../../engine/engine";
-import { db, giveCard, mutate, pick, putEnemy, skipMulligans, start } from "../../engine/testkit";
-import type { GameEvent } from "../../engine/types";
+import { dispatch } from "../../engine";
+import {
+  db,
+  giveCard,
+  mutate,
+  pick,
+  putEnemy,
+  skipMulligans,
+  start,
+} from "../../engine/kits/testkit";
+import type { GameEvent } from "../../engine/world/types";
 import { Duration, ModFlag, ModStat } from "../../content/schema";
 import {
   captionIndex,
@@ -18,9 +26,12 @@ import {
   templateKey,
   type Part,
 } from "./feed";
-import { cardRecIn, invStateIn } from "../../engine/records";
+import { cardRecIn, invStateIn } from "../../engine/world/store";
+import type { EventType } from "../../engine/events/event";
+import { EVENT } from "../../engine/events/event";
 
-const last = (log: GameEvent[], type: string) => [...log].reverse().find((e) => e.type === type)!;
+const last = (log: GameEvent[], type: EventType) =>
+  [...log].reverse().find((e) => e.type === type)!;
 const placeholders = (s: string) => (s.match(/\{[\w:]+\}/g) ?? []).sort();
 
 describe("feed entries", () => {
@@ -74,7 +85,7 @@ describe("feed entries", () => {
   it("resource: portrait, words, amount with the resource icon", () => {
     let r = skipMulligans(start("the-gathering", ["01001"], 1));
     r = pick(r, /^Gain 1 resource/);
-    const f = feedEntry(last(r.state.log, "resource"), r.state, db, "en")!;
+    const f = feedEntry(last(r.state.log, EVENT.Resource), r.state, db, "en")!;
     expect(f.parts).toEqual([
       { t: "inv", id: "01001" },
       { t: "text", s: " took " },
@@ -87,8 +98,8 @@ describe("feed entries", () => {
   it("attack: enemy card, investigator, damage and horror icons; anchored on the enemy", () => {
     let r = skipMulligans(start("the-gathering", ["01001"], 1));
     let enemy = "";
-    r = mutate(r, (g) => {
-      enemy = putEnemy(g, "01160", invStateIn(g.s, "01001").location!, "01001");
+    r = mutate(r, (game) => {
+      enemy = putEnemy(game, "01160", invStateIn(game.s, "01001").location!, "01001");
     });
     r = pick(r, /^End turn/);
     const f = feedEntry(
@@ -110,7 +121,7 @@ describe("feed entries", () => {
     let r = skipMulligans(start("the-gathering", ["01001"], 1, { chaosBag: ["-2"] as never }));
     r = pick(r, /^Investigate/);
     r = pick(r, /^Done/);
-    const f = feedEntry(last(r.state.log, "testResult"), r.state, db, "en")!;
+    const f = feedEntry(last(r.state.log, EVENT.TestResult), r.state, db, "en")!;
     expect(f.parts).toContainEqual({ t: "icon", name: "intellect" });
     expect(f.parts).toContainEqual({ t: "token", token: "-2" });
     expect(f.parts).toContainEqual({ t: "outcome", ok: false });
@@ -118,8 +129,8 @@ describe("feed entries", () => {
 
   it("zero amounts are dropped and no placeholder is left unreplaced", () => {
     let r = skipMulligans(start("the-gathering", ["01001"], 1));
-    r = mutate(r, (g) => {
-      giveCard(g, "01001", "01088");
+    r = mutate(r, (game) => {
+      giveCard(game, "01001", "01088");
     });
     r = pick(r, /^Play Emergency Cache/);
     for (const e of r.state.log) {
@@ -225,7 +236,7 @@ describe("merged live feed", () => {
   const [r1, r2, r3] = invStateIn(game, R).hand;
   const d1 = invStateIn(game, D).hand[0];
   const ev = (
-    type: string,
+    type: EventType,
     inv: string | null,
     card: string | null = null,
     data: Record<string, unknown> = {},
@@ -253,41 +264,41 @@ describe("merged live feed", () => {
 
   it("upkeep with two investigators is one line", () => {
     const log = [
-      ev("ready", null),
-      ev("draw", R, r1),
-      ev("resource", R, null, { n: 1 }),
-      ev("draw", D, d1),
-      ev("resource", D, null, { n: 1 }),
+      ev(EVENT.Ready, null),
+      ev(EVENT.Draw, R, r1),
+      ev(EVENT.Resource, R, null, { n: 1 }),
+      ev(EVENT.Draw, D, d1),
+      ev(EVENT.Resource, D, null, { n: 1 }),
     ];
     expect(lines(log, [0])).toEqual(["Each investigator drew a card and took 1resource"]);
   });
 
   it("three draws by one investigator name the cards", () => {
-    expect(lines([ev("draw", R, r1), ev("draw", R, r2), ev("draw", R, r3)], [0])).toEqual([
-      `${R} drew [card][card][card]`,
-    ]);
+    expect(
+      lines([ev(EVENT.Draw, R, r1), ev(EVENT.Draw, R, r2), ev(EVENT.Draw, R, r3)], [0]),
+    ).toEqual([`${R} drew [card][card][card]`]);
   });
 
   it("an attack breaks the run", () => {
     const log = [
-      ev("draw", R, r1),
-      ev("attack", R, null, { damage: 1, horror: 0 }),
-      ev("draw", R, r2),
+      ev(EVENT.Draw, R, r1),
+      ev(EVENT.Attack, R, null, { damage: 1, horror: 0 }),
+      ev(EVENT.Draw, R, r2),
     ];
     expect(lines(log, [0])).toHaveLength(3);
   });
 
   it("two choices stay two lines", () => {
-    expect(lines([ev("draw", R, r1), ev("draw", R, r2)], [0, 1])).toHaveLength(2);
+    expect(lines([ev(EVENT.Draw, R, r1), ev(EVENT.Draw, R, r2)], [0, 1])).toHaveLength(2);
   });
   it("phase steps: hidden from the live feed (without breaking a run), kept for the Journal", () => {
     const g = start("the-gathering", ["01001", "01002"], 1).state;
     const [a, b] = g.order;
-    const log = [
-      { type: "step", text: "upkeep", data: { step: "upkeep" } },
-      { type: "draw", text: "", inv: a, card: invStateIn(g, a).hand[0] },
-      { type: "step", text: "x", data: { step: "hunters" } },
-      { type: "draw", text: "", inv: b, card: invStateIn(g, b).hand[0] },
+    const log: GameEvent[] = [
+      { type: EVENT.Step, text: "upkeep", data: { step: "upkeep" } },
+      { type: EVENT.Draw, text: "", inv: a, card: invStateIn(g, a).hand[0] },
+      { type: EVENT.Step, text: "x", data: { step: "hunters" } },
+      { type: EVENT.Draw, text: "", inv: b, card: invStateIn(g, b).hand[0] },
     ];
     const state = { ...g, log };
     const entries = new Map(log.map((e, i) => [i, feedEntry(e, state, db, "en")]));
@@ -303,23 +314,23 @@ describe("merged live feed", () => {
     expect(FLOAT_KINDS.has("step")).toBe(false);
   });
   it("caption: the latest step of the phase at or before the playing event", () => {
-    const ev = (type: string, step?: string): GameEvent => ({
+    const ev = (type: EventType, step?: string): GameEvent => ({
       type,
       text: "",
       data: step ? { step } : {},
     });
     const log = [
-      ev("step", "upkeep"),
-      ev("draw"),
-      ev("phase"),
-      ev("step", "hunters"),
-      ev("enemyMove"),
-      ev("step", "attacks"),
-      ev("attack"),
-      ev("damage"),
-      ev("phase"),
-      ev("turn"),
-      ev("attack"),
+      ev(EVENT.Step, "upkeep"),
+      ev(EVENT.Draw),
+      ev(EVENT.Phase),
+      ev(EVENT.Step, "hunters"),
+      ev(EVENT.EnemyMove),
+      ev(EVENT.Step, "attacks"),
+      ev(EVENT.Attack),
+      ev(EVENT.Damage),
+      ev(EVENT.Phase),
+      ev(EVENT.Turn),
+      ev(EVENT.Attack),
     ];
     // the hunter's move plays: "Hunters move", even though the feed already shows up to the attack
     expect(captionIndex(log, { logIndex: 4 }, [{ logIndex: 6 }], 6, false, "turn")).toBe(3);
@@ -336,7 +347,7 @@ describe("merged live feed", () => {
 });
 
 describe("captionStageBusy", () => {
-  const ev = (type: string, step?: string): GameEvent => ({
+  const ev = (type: EventType, step?: string): GameEvent => ({
     type,
     text: "",
     inv: null,
@@ -353,7 +364,7 @@ describe("captionStageBusy", () => {
 
   it("a mythos treachery test: once its commit window is offered the caption gives way to the bar (Done)", () => {
     // the log of a mythos draw: step caption, then the draw; the test screen holds the stage while the window waits
-    const log = [ev("phase"), ev("step", "mythos"), ev("encounter")];
+    const log = [ev(EVENT.Phase), ev(EVENT.Step, "mythos"), ev(EVENT.Encounter)];
     expect(captionIndex(log, null, [], 3, captionStageBusy(["test:1"]), "commit")).toBe(null);
     // the same stage with the hand showcase still up keeps its caption
     expect(captionIndex(log, null, [], 3, captionStageBusy(["showcase"]), "turn")).toBe(1);
@@ -375,7 +386,7 @@ describe("encounter set icons", () => {
 
   it("an encounter draw shows the card's set icon right before the card, in every language", () => {
     const r = untilEncounter();
-    const e = last(r.state.log, "encounter");
+    const e = last(r.state.log, EVENT.Encounter);
     const set = db.cards[cardRecIn(r.state, e.card!).code].encounterSet!;
     for (const locale of ["en", "ru"]) {
       const parts = feedEntry(e, r.state, db, locale)!.parts;
@@ -388,14 +399,16 @@ describe("encounter set icons", () => {
     let r = skipMulligans(start("the-gathering", ["01001"], 1));
     r = pick(r, /^Gain 1 resource/);
     expect(
-      feedEntry(last(r.state.log, "resource"), r.state, db, "en")!.parts.some((p) => p.t === "set"),
+      feedEntry(last(r.state.log, EVENT.Resource), r.state, db, "en")!.parts.some(
+        (p) => p.t === "set",
+      ),
     ).toBe(false);
   });
 });
 
 describe("gainOf", () => {
   const ev = (data: Record<string, unknown>, inv: string | null = "01001"): GameEvent => ({
-    type: "resource",
+    type: EVENT.Resource,
     text: "",
     inv,
     data,
@@ -409,6 +422,6 @@ describe("gainOf", () => {
     expect(gainOf(ev({ n: 1, lost: true }))).toBeNull();
     expect(gainOf(ev({ n: 0 }))).toBeNull();
     expect(gainOf(ev({ n: 1 }, null))).toBeNull();
-    expect(gainOf({ ...ev({ n: 1 }), type: "draw" })).toBeNull();
+    expect(gainOf({ ...ev({ n: 1 }), type: EVENT.Draw })).toBeNull();
   });
 });

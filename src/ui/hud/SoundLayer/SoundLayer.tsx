@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import type { GameState, InstId } from "../../../engine/types";
+import type { GameState, InstId } from "../../../engine/world/types";
 import { audio } from "../../assets/audio";
 import { db, gameStore, useGame } from "../../state/context";
 import { effectFor, gainOf, mayPlay, menuMusic, momentClip, musicFor } from "../../assets/sounds";

@@ -1,6 +1,6 @@
 /** what the replay oracle records: every hand-written scenario at one, two and four investigators, and whole campaigns */
-import { deckCodes, setup } from "../testkit";
-import type { GameSetup } from "../types";
+import { deckCodes, setup } from "../kits/testkit";
+import type { GameSetup } from "../world/types";
 import coverage from "./coverage.json";
 import type { CampaignRecipe, GameRecipe, Player } from "./record";
 

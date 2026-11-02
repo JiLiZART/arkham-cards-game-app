@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { validateDeck } from "../../engine/decks";
-import { db } from "../../engine/testkit";
+import { validateDeck } from "../../engine/campaign/decks";
+import { db } from "../../engine/kits/testkit";
 import {
   basicWeaknesses,
   builderPool,

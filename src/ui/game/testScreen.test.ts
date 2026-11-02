@@ -9,7 +9,7 @@ import {
   putEnemy,
   skipMulligans,
   start,
-} from "../../engine/testkit";
+} from "../../engine/kits/testkit";
 import {
   addTokens,
   bagLanding,
@@ -21,7 +21,7 @@ import {
   stripDuringTest,
   subjectOf,
 } from "./testScreen";
-import { allCardRecsIn, cardRecIn } from "../../engine/records";
+import { allCardRecsIn, cardRecIn } from "../../engine/world/store";
 
 const ROLAND = "01001";
 const DAISY = "01002";
@@ -29,10 +29,10 @@ const DAISY = "01002";
 const begin = (invs = [ROLAND]) => {
   let r = skipMulligans(start("the-gathering", invs, 1, { chaosBag: ["0"] as never }));
   if (r.state.pending?.options.some((o) => o.label === "Roland Banks")) r = pick(r, "Roland Banks");
-  return mutate(r, (g) => {
-    giveCard(g, ROLAND, "01025"); // Vicious Blow: 1 combat icon
-    if (invs.includes(DAISY)) giveCard(g, DAISY, "01093"); // Unexpected Courage: 2 wild icons
-    putEnemy(g, "01160", locId(g, "01111"), ROLAND);
+  return mutate(r, (game) => {
+    giveCard(game, ROLAND, "01025"); // Vicious Blow: 1 combat icon
+    if (invs.includes(DAISY)) giveCard(game, DAISY, "01093"); // Unexpected Courage: 2 wild icons
+    putEnemy(game, "01160", locId(game, "01111"), ROLAND);
   });
 };
 const fight = (invs = [ROLAND]) => pick(begin(invs), /^Fight Ghoul Minion/);

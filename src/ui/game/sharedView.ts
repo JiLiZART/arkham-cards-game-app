@@ -1,7 +1,7 @@
-import type { GameState, InstId } from "../../engine/types";
+import type { GameState, InstId } from "../../engine/world/types";
 import type { ShownView } from "../../net/transport";
 import type { Modal } from "../state/view";
-import { cardOfIf } from "../../engine/core";
+import { cardOfIf } from "../../engine/context";
 
 /** a full-size view the whole room may be shown (online play): table cards, never an investigator's own */
 export type SharedView = ShownView;

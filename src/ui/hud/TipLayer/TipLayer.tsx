@@ -1,7 +1,7 @@
 import { useLayoutMode } from "../../state/layoutMode";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { t } from "../../../content/i18n";
-import type { GameState } from "../../../engine/types";
+import type { GameState } from "../../../engine/world/types";
 import { db, useGame } from "../../state/context";
 import { mapProjector } from "../../scene/Table";
 import { canUndo, safeStorage, viewerOf } from "../../state/store";

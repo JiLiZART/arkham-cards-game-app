@@ -1,6 +1,6 @@
 import { t } from "../../../content/i18n";
 import { actClueCost, doomInPlay } from "../../../engine/rules/scenario";
-import type { GameState } from "../../../engine/types";
+import type { GameState } from "../../../engine/world/types";
 import { CardFace } from "../../components/CardFace";
 import { useCardClick } from "../../game/cardClick";
 import { db, gameStore, useGame } from "../../state/context";
@@ -12,7 +12,7 @@ import { CardOptions } from "../CardOptions";
 import { MiniCard } from "../MiniCard";
 import { cx } from "../../components/cx";
 import styles from "./ScenarioPanel.module.css";
-import { cardOf } from "../../../engine/core";
+import { cardOf } from "../../../engine/context";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);

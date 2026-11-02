@@ -1,4 +1,4 @@
-import type { InvId } from "../../../engine/types";
+import type { InvId } from "../../../engine/world/types";
 import { iconUrl } from "../../assets/icons";
 import { reducedMotion } from "../../game/arrivals";
 import styles from "./Stats.module.css";

@@ -6,8 +6,9 @@ import {
   discard,
   type EffCtx,
   emit,
-  type G,
+  type GameContext,
   inv,
+  EVENT,
 } from "../../../../src/engine/api";
 
 export default {
@@ -19,20 +20,20 @@ export default {
   ],
   hooks: {
     /** "You cannot heal horror from cards other than Rational Thought. Horror on it may be healed as if it were on Carolyn Fern." */
-    healHorror(g: G, ctx: EffCtx, req: { target: string; n: number }) {
-      const rt = card(g, ctx.source!);
+    healHorror(game: GameContext, ctx: EffCtx, req: { target: string; n: number }) {
+      const rt = card(game, ctx.source!);
       if (rt.zone !== "threat" || !ctx.you || ctx.inv !== ctx.you) return;
       // ponytail: another investigator healing Carolyn heals Carolyn; the choice to heal Rational Thought instead isn't offered
-      if (req.target === inv(g, ctx.you).cardId) {
+      if (req.target === inv(game, ctx.you).cardId) {
         const take = Math.min(req.n, rt.horror);
-        addCounter(g, rt.id, "horror", -take);
+        addCounter(game, rt.id, "horror", -take);
         if (take)
-          emit(g, "heal", `Rational Thought heals ${take} horror`, {
+          emit(game, EVENT.Heal, `Rational Thought heals ${take} horror`, {
             inv: ctx.you,
             card: rt.id,
             data: { damage: 0, horror: take },
           });
-        if (rt.horror === 0) discard(g, rt.id);
+        if (rt.horror === 0) discard(game, rt.id);
       }
       req.n = 0;
     },

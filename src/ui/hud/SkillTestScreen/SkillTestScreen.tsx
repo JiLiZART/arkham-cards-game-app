@@ -6,7 +6,7 @@ import type {
   GameState,
   InvId,
   SkillTestState,
-} from "../../../engine/types";
+} from "../../../engine/world/types";
 import { rememberRect } from "../../game/arrivals";
 import { useOptionsByCard } from "../../game/cardClick";
 import { CardFace } from "../../components/CardFace";
@@ -38,7 +38,7 @@ import { DrawStage } from "../TokenDraw";
 import { moment } from "../SoundLayer";
 import { cx } from "../../components/cx";
 import styles from "./SkillTestScreen.module.css";
-import { cardOf, cardOfIf } from "../../../engine/core";
+import { cardOf, cardOfIf } from "../../../engine/context";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);

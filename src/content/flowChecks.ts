@@ -1,4 +1,4 @@
-import type { ContentDb } from "../engine/types";
+import type { ContentDb } from "../engine/world/types";
 import { namedScenarios } from "./flow";
 import type { ContentError } from "./loader";
 import { type CampaignFlow, type FlowCondition, type FlowEffect, stepRefs } from "./schema";

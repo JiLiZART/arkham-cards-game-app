@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { packLoaded } from "../../content/loader";
 import { gameStore, db } from "./context";
-import { allCardRecsIn } from "../../engine/records";
+import { allCardRecsIn } from "../../engine/world/store";
 
 describe("starting a campaign with an investigator whose pack is not loaded", () => {
   it("Zoey Samaras: the Dunwich pack loads first, then she is on the table with her deck", async () => {

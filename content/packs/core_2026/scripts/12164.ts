@@ -5,31 +5,33 @@ import {
   type CardScript,
   type EffCtx,
   emit,
-  type G,
+  type GameContext,
   inv,
   invIf,
   push,
+  EVENT,
+  STEP,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    shakedown(g: G, ctx: EffCtx) {
+    shakedown(game: GameContext, ctx: EffCtx) {
       const who = ctx.inv;
-      if (!who || !invIf(g, who)) return;
-      const me = inv(g, who);
+      if (!who || !invIf(game, who)) return;
+      const me = inv(game, who);
       if (me.resources > 0) {
-        addCounter(g, me.id, "resources", -1);
-        emit(g, "resource", `${me.name} loses 1 resources`, {
+        addCounter(game, me.id, "resources", -1);
+        emit(game, EVENT.Resource, `${me.name} loses 1 resources`, {
           inv: who,
           data: { n: 1, lost: true, source: ctx.source ?? null },
         });
       } else
-        push(g, {
-          t: "EnemyAttack",
+        push(game, {
+          t: STEP.EnemyAttack,
           enemy: ctx.source!,
           inv: who,
           aoo: false,
-          key: attackKey(g),
+          key: attackKey(game),
         });
     },
   },

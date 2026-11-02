@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { loadPacksFor } from "../../content";
 import { campaignName } from "../../content/i18n";
-import { db } from "../../engine/testkit";
+import { db } from "../../engine/kits/testkit";
 import { saveCustomDeck } from "../game/decks";
 import type { Storage } from "../state/store";
 import {

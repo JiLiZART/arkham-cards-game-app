@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { skipMulligans, start } from "../../engine/testkit";
-import type { GameState } from "../../engine/types";
+import { skipMulligans, start } from "../../engine/kits/testkit";
+import type { GameState } from "../../engine/world/types";
 import { ribbonModel } from "./ribbon";
-import { invStateIn } from "../../engine/records";
+import { invStateIn } from "../../engine/world/store";
+import { PHASE, CHOICE, INV_STATUS } from "../../engine/world/constants";
+import { STEP } from "../../engine/steps/step";
 
 const two = skipMulligans(start("the-gathering", ["01001", "01002"], 1)).state;
 const at = (patch: Partial<GameState>, inv: (s: GameState) => void = () => {}) => {
@@ -38,7 +40,11 @@ describe("ribbonModel", () => {
     const s = at(
       { round: 2, phase: "upkeep" },
       (s) =>
-        (s.pending = { ...s.pending!, kind: "phase", step: { t: "PhasePause", phase: "mythos" } }),
+        (s.pending = {
+          ...s.pending!,
+          kind: CHOICE.Phase,
+          step: { t: STEP.PhasePause, phase: PHASE.Mythos },
+        }),
     );
     expect(states(s)).toEqual(["current", "todo", "todo", "todo"]);
   });
@@ -47,8 +53,8 @@ describe("ribbonModel", () => {
     const s = at({ round: 2, phase: "mythos", active: null }, (s) => {
       s.pending = {
         ...s.pending!,
-        kind: "phase",
-        step: { t: "PhasePause", phase: "investigation" },
+        kind: CHOICE.Phase,
+        step: { t: STEP.PhasePause, phase: PHASE.Investigation },
       };
       for (const i of s.order) invStateIn(s, i).turnDone = true;
     });
@@ -85,7 +91,10 @@ describe("ribbonModel", () => {
   });
 
   it("a resigned investigator is left out", () => {
-    const s = at({ phase: "investigation" }, (s) => (invStateIn(s, "01001").status = "resigned"));
+    const s = at(
+      { phase: "investigation" },
+      (s) => (invStateIn(s, "01001").status = INV_STATUS.Resigned),
+    );
     expect(ribbonModel(s).turns.map((t) => t.inv)).toEqual(["01002"]);
   });
 });

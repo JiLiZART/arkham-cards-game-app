@@ -6,7 +6,8 @@ import {
   type CardScript,
   type EffCtx,
   emit,
-  type G,
+  type GameContext,
+  EVENT,
 } from "../../../../src/engine/api";
 
 export default {
@@ -20,21 +21,21 @@ export default {
     },
   ],
   fns: {
-    coverUp(g: G, ctx: EffCtx) {
-      const c = card(g, ctx.source!);
+    coverUp(game: GameContext, ctx: EffCtx) {
+      const c = card(game, ctx.source!);
       const n = Math.min(ctx.x ?? 1, c.clues);
-      addCounter(g, c.id, "clues", -n);
-      if (ctx.key) cancelEvent(g, ctx.key);
-      emit(g, "coverUp", `${n} clue(s) are discarded from Cover Up (${c.clues} left)`, {
+      addCounter(game, c.id, "clues", -n);
+      if (ctx.key) cancelEvent(game, ctx.key);
+      emit(game, EVENT.CoverUp, `${n} clue(s) are discarded from Cover Up (${c.clues} left)`, {
         card: c.id,
         data: { n },
       });
     },
   },
   hooks: {
-    gameEnd(g: G, ctx: EffCtx) {
-      const c = card(g, ctx.source!);
-      if (c.clues > 0 && c.controller) addCounter(g, c.controller, "mentalTrauma", 1);
+    gameEnd(game: GameContext, ctx: EffCtx) {
+      const c = card(game, ctx.source!);
+      if (c.clues > 0 && c.controller) addCounter(game, c.controller, "mentalTrauma", 1);
     },
   },
 } satisfies CardScript;

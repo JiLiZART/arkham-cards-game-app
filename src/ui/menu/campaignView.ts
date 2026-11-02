@@ -1,9 +1,9 @@
 import { logLabel, stepText } from "../../content/i18n";
 import type { FlowChoice } from "../../content/schema";
-import type { CampaignState } from "../../engine/campaign";
-import { type CampaignLog, NOTES } from "../../engine/campaignLog";
-import { test } from "../../engine/flow";
-import type { ContentDb } from "../../engine/types";
+import type { CampaignState } from "../../engine/campaign/types";
+import { type CampaignLog, NOTES } from "../../engine/campaign/log";
+import { test } from "../../engine/campaign/flow";
+import type { ContentDb } from "../../engine/world/types";
 
 /** the guide writes log entries as sentence fragments ("the investigators rescued…"); shown as sentences */
 const sentence = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);

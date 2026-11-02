@@ -1,11 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { botChoice } from "../../engine/bot";
-import { dispatch } from "../../engine/engine";
-import { db, skipMulligans, start } from "../../engine/testkit";
+import { dispatch } from "../../engine";
+import { db, skipMulligans, start } from "../../engine/kits/testkit";
 import { layout } from "./layout";
 import { onRail, optionHome, optionOwner } from "./optionHome";
 import { viewerOf } from "../state/store";
-import { cardRecIn, invStateIn } from "../../engine/records";
+import { cardRecIn, invStateIn } from "../../engine/world/store";
+import { ZONE, type Zone, isOneOf } from "../../engine/world/constants";
 
 describe("every pending option is reachable without a sidebar", () => {
   for (const scenario of ["the-gathering", "the-midnight-masks", "the-devourer-below"]) {
@@ -37,8 +38,12 @@ describe("every pending option is reachable without a sidebar", () => {
                     ? !!c &&
                       (o.card === s.act ||
                         o.card === s.agenda ||
-                        ["victory", "encounterDiscard", "encounterDeck", "sideDeck"].includes(
+                        isOneOf(
                           c.zone,
+                          ZONE.Victory,
+                          ZONE.EncounterDiscard,
+                          ZONE.EncounterDeck,
+                          ZONE.SideDeck,
                         ))
                     : home === "skilltest"
                       ? c?.zone === "commit" && !!s.skillTest?.committed.includes(o.card!)
@@ -132,7 +137,7 @@ describe("investigate on the rail", () => {
 describe("the phone's instruction bar", () => {
   it("holds the bar's own options, the rail's (Draw, Resource, Investigate) and the act and agenda's, which sit in a closed drawer", async () => {
     const { inBar } = await import("./optionHome");
-    const { mutate, pick } = await import("../../engine/testkit");
+    const { mutate, pick } = await import("../../engine/kits/testkit");
     let r = skipMulligans(start("the-gathering", ["01001"], 1));
     if (r.state.pending?.kind === "phase") r = pick(r, "continue");
     const s = r.state;
@@ -152,7 +157,7 @@ describe("the phone's instruction bar", () => {
         .every((o) => !inBar(o, s, v, "phone")),
     ).toBe(true);
     // with clues enough, the act's Advance is in the phone's bar (the act sits in the closed left drawer)
-    const r2 = mutate(r, (g) => (invStateIn(g.s, "01001").clues = 9));
+    const r2 = mutate(r, (game) => (invStateIn(game.s, "01001").clues = 9));
     const s2 = r2.state;
     const adv = s2.pending!.options.find((o) => o.card === s2.act);
     expect(adv).toBeTruthy();

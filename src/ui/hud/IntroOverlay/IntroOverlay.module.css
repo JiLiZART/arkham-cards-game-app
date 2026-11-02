@@ -43,8 +43,7 @@
   max-width: min(1200px, 92vw);
   max-height: 100dvh;
   box-sizing: border-box;
-  padding: max(16px, env(safe-area-inset-top)) 16px
-    max(16px, env(safe-area-inset-bottom));
+  padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
 }
 .intro-title {
   margin: 0;

@@ -1,5 +1,5 @@
-import type { GameState, InstId, InvId } from "../../engine/types";
-import { invOf, invOfIf, cardsOf } from "../../engine/core";
+import type { GameState, InstId, InvId } from "../../engine/world/types";
+import { invOf, invOfIf, cardsOf } from "../../engine/context";
 
 /** what a tip points at: an element marked `data-tip="…"`, or a card (in the strip, the hand or on the map) */
 export type TipAnchor = { tip: string } | { card: InstId };

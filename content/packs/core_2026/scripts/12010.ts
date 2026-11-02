@@ -9,52 +9,59 @@ import {
   def,
   type EffCtx,
   emit,
-  type G,
+  type GameContext,
   type InstId,
   inv,
   invsAt,
   moveCard,
   push,
   type Step,
+  EVENT,
+  ZONE,
+  CHOICE,
+  STEP,
 } from "../../../../src/engine/api";
 
-const story = (g: G, id: InstId) => def(g, id).traits.includes("Story");
+const story = (game: GameContext, id: InstId) => def(game, id).traits.includes("Story");
 
-function returnToHand(g: G, id: InstId) {
-  const c = cardIf(g, id);
+function returnToHand(game: GameContext, id: InstId) {
+  const c = cardIf(game, id);
   if (!c?.owner) return;
-  moveCard(g, id, "hand", { inv: c.owner });
-  emit(g, "returned", `${def(g, id).name} returns to its owner's hand`, { inv: c.owner, card: id });
+  moveCard(game, id, ZONE.Hand, { inv: c.owner });
+  emit(game, EVENT.Returned, `${def(game, id).name} returns to its owner's hand`, {
+    inv: c.owner,
+    card: id,
+  });
 }
 
 export default {
   abilities: [{ kind: "elderSign", tokenValue: 1, run: "elder" }],
   fns: {
-    shuffleAssets(g: G, ctx: EffCtx, _args: unknown, step?: Step) {
+    shuffleAssets(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
       const you = ctx.you!;
-      const back = controlled(g, you).filter((c) => c.id !== ctx.card && !story(g, c.id));
-      const play = inv(g, you).hand.filter(
+      const back = controlled(game, you).filter((c) => c.id !== ctx.card && !story(game, c.id));
+      const play = inv(game, you).hand.filter(
         (h) =>
-          def(g, h).type === "asset" &&
-          def(g, h).name !== def(g, ctx.card!).name &&
-          (canPlay(g, you, h, false) || canPlay(g, you, h, true)),
+          def(game, h).type === "asset" &&
+          def(game, h).name !== def(game, ctx.card!).name &&
+          (canPlay(game, you, h, false) || canPlay(game, you, h, true)),
       );
       const pick = ask<InstId>(
-        g,
+        game,
         step!,
         you,
-        "generic",
+        CHOICE.Generic,
         "Dexter Drake: return an asset you control, or play an asset from your hand",
         [
           ...back.map((c) => ({
             id: `back:${c.id}`,
-            label: `Return ${def(g, c.id).name} to your hand`,
+            label: `Return ${def(game, c.id).name} to your hand`,
             card: c.id,
             value: `back:${c.id}`,
           })),
           ...play.map((h) => ({
             id: `play:${h}`,
-            label: `Play ${def(g, h).name}`,
+            label: `Play ${def(game, h).name}`,
             card: h,
             value: `play:${h}`,
           })),
@@ -64,33 +71,39 @@ export default {
       );
       if (pick === undefined || pick === "none") return;
       const [kind, id] = pick.split(":");
-      if (kind === "back") returnToHand(g, id);
-      else push(g, { t: "PlayCard", inv: you, card: id });
+      if (kind === "back") returnToHand(game, id);
+      else push(game, { t: STEP.PlayCard, inv: you, card: id });
     },
     // resolved with the token, which can't ask: the choice waits in a step of its own
-    elder(g: G, ctx: EffCtx) {
-      const here = invsAt(g, inv(g, ctx.you!).location);
-      const assets = here.flatMap((i) => controlled(g, i)).filter((c) => !story(g, c.id));
+    elder(game: GameContext, ctx: EffCtx) {
+      const here = invsAt(game, inv(game, ctx.you!).location);
+      const assets = here.flatMap((i) => controlled(game, i)).filter((c) => !story(game, c.id));
       if (!assets.length) return;
-      push(g, { t: "Script", code: "12010", fn: "elderPick", ctx, args: assets.map((a) => a.id) });
+      push(game, {
+        t: STEP.Script,
+        code: "12010",
+        fn: "elderPick",
+        ctx,
+        args: assets.map((a) => a.id),
+      });
     },
-    elderPick(g: G, ctx: EffCtx, args: InstId[], step?: Step) {
+    elderPick(game: GameContext, ctx: EffCtx, args: InstId[], step?: Step) {
       const pick = ask<InstId>(
-        g,
+        game,
         step!,
         ctx.you!,
-        "generic",
+        CHOICE.Generic,
         "Dexter Drake: return an asset at your location to its owner's hand?",
         [
           ...args
-            .filter((id) => cardIf(g, id)?.zone === "play")
-            .map((id) => ({ id, label: `Return ${def(g, id).name}`, card: id, value: id })),
+            .filter((id) => cardIf(game, id)?.zone === "play")
+            .map((id) => ({ id, label: `Return ${def(game, id).name}`, card: id, value: id })),
           { id: "none", label: "No", value: "none" },
         ],
         { key: "chooseOne" },
       );
       if (pick === undefined || pick === "none") return;
-      returnToHand(g, pick);
+      returnToHand(game, pick);
     },
   },
 } satisfies CardScript;

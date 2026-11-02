@@ -3,18 +3,19 @@ import {
   cardIf,
   type CardScript,
   type EffCtx,
-  type G,
+  type GameContext,
   invsAt,
   push,
+  STEP,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    spill(g: G, ctx: EffCtx) {
-      const loc = cardIf(g, ctx.source!)?.location ?? null;
-      for (const i of invsAt(g, loc))
-        push(g, {
-          t: "AssignDamage",
+    spill(game: GameContext, ctx: EffCtx) {
+      const loc = cardIf(game, ctx.source!)?.location ?? null;
+      for (const i of invsAt(game, loc))
+        push(game, {
+          t: STEP.AssignDamage,
           inv: i,
           damage: 0,
           horror: 1,

@@ -8,34 +8,36 @@ import {
   push,
   type CardScript,
   type EffCtx,
-  type G,
+  type GameContext,
   type InstId,
   type Step,
+  CHOICE,
+  STEP,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    suspicion(g: G, ctx: EffCtx, _args: unknown, step?: Step) {
-      const from = inv(g, ctx.you!).location;
-      const pool = enemies(g).filter((e) => e.doom === 0 && e.location);
+    suspicion(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
+      const from = inv(game, ctx.you!).location;
+      const pool = enemies(game).filter((e) => e.doom === 0 && e.location);
       if (!pool.length || !from) {
-        push(g, { t: "Eff", effect: { op: "surge" }, ctx });
+        push(game, { t: STEP.Eff, effect: { op: "surge" }, ctx });
         return;
       }
-      const d = distances(g, from);
+      const d = distances(game, from);
       const best = Math.min(...pool.map((e) => d.get(e.location!) ?? Infinity));
       const near = pool.filter((e) => (d.get(e.location!) ?? Infinity) === best);
       const pick = ask<InstId>(
-        g,
+        game,
         step!,
         ctx.you!,
-        "target",
+        CHOICE.Target,
         "Raising Suspicions: place 1 doom on",
-        near.map((e) => ({ id: e.id, label: def(g, e.id).name, card: e.id, value: e.id })),
+        near.map((e) => ({ id: e.id, label: def(game, e.id).name, card: e.id, value: e.id })),
         { auto: true, key: "chooseEnemy" },
       );
       if (pick === undefined) return;
-      push(g, { t: "PlaceDoom", card: pick, n: 1 }, { t: "CheckDoom" });
+      push(game, { t: STEP.PlaceDoom, card: pick, n: 1 }, { t: STEP.CheckDoom });
     },
   },
 } satisfies CardScript;
