@@ -7,8 +7,9 @@
   align-items: flex-start;
   flex-wrap: wrap;
 }
+/* the stat bar's layout width (STAT_BAR_LAYOUT_W): portrait, the name over the vitals and ability, a column of skills */
 .inv-stats {
-  width: 320px;
+  width: 500px;
   display: flex;
   flex-direction: column;
   gap: 6px;

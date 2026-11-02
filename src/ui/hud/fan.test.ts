@@ -12,6 +12,7 @@ import {
   HOVER_LIFT,
   hoverScale,
   showBox,
+  STAT_BAR_LAYOUT_W,
   statBarW,
   statBarZoom,
 } from "./fan";
@@ -158,7 +159,7 @@ describe("statBarZoom", () => {
     expect(statBarZoom(4000, 3000)).toBe(1.15);
   });
   it("the fan starts after the bar at that size", () => {
-    expect(statBarW(1920, 1080)).toBe(420);
+    expect(statBarW(1920, 1080)).toBe(STAT_BAR_LAYOUT_W);
     expect(fanWidth(1920, statBarW(1920, 1080))).toBeLessThan(fanWidth(1920, statBarW(1600, 900)));
   });
 });

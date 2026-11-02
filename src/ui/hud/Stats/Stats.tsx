@@ -14,7 +14,7 @@ import { abilityOptionsOf } from "../../state/players";
 import { useShown } from "../../state/usePlayers";
 import { useDimmed, useView } from "../../state/view";
 import { formatText } from "../Hud";
-import { statBarZoom } from "../fan";
+import { STAT_BAR_LAYOUT_W, statBarZoom } from "../fan";
 import { useViewport } from "../../state/layoutMode";
 import { OptionButtons, useCardOptions } from "../Modals";
 import { cx } from "../../components/cx";
@@ -156,6 +156,22 @@ export function StatBody({
             <div className={styles.statName}>
               {isIcon(d.faction) && <Icon name={d.faction} size={36} />} {tx.name}
             </div>
+            <div className={cx(styles.statRow, "vitals")}>
+              <FlashStat
+                icon="health"
+                value={n.health}
+                max={n.maxHealth}
+                size={44}
+                label={tr("stat.health")}
+              />
+              <FlashStat
+                icon="sanity"
+                value={n.sanity}
+                max={n.maxSanity}
+                size={44}
+                label={tr("stat.sanity")}
+              />
+            </div>
             {/* the investigator's ability, and its options when it can be used right now */}
             <div
               className={cx(styles.statAbility, "card-text")}
@@ -163,22 +179,6 @@ export function StatBody({
             />
             {options && options.length > 0 && <OptionButtons options={options} />}
           </div>
-        </div>
-        <div className={cx(styles.statRow, "vitals")}>
-          <FlashStat
-            icon="health"
-            value={n.health}
-            max={n.maxHealth}
-            size={44}
-            label={tr("stat.health")}
-          />
-          <FlashStat
-            icon="sanity"
-            value={n.sanity}
-            max={n.maxSanity}
-            size={44}
-            label={tr("stat.sanity")}
-          />
         </div>
         <div className={cx(styles.statRow, styles.skills)}>
           {n.skills.map(([s, v]) => (
@@ -191,8 +191,9 @@ export function StatBody({
 }
 
 /**
- * The investigator on screen (the one being looked at, else the decider), bottom-left at 75 %: portrait, ability, health
- * and sanity, skills; resources and clues as token stacks and the hand count above. The investigator's own ability options
+ * The investigator on screen (the one being looked at, else the decider), bottom-left at 75 %: the portrait on the left,
+ * the name, then health and sanity, then the ability, the skills in a column on the right; resources and clues as token stacks
+ * and the hand count above. The investigator's own ability options
  * are buttons under the ability text (and in the avatar sheet, which the phone uses); answers among investigators stay on
  * the avatars. The portrait opens the card.
  */
@@ -211,7 +212,7 @@ export function StatBar() {
     <div
       className="stat-dock"
       data-testid="stat-dock"
-      style={{ width: 420, zoom: statBarZoom(width, height) }}
+      style={{ width: STAT_BAR_LAYOUT_W, zoom: statBarZoom(width, height) }}
     >
       <StatBody
         inv={shown}

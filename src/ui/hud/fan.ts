@@ -6,14 +6,16 @@ export const FAN_REST_VISIBLE = 142;
 /** cards with an option in the pending choice rise this far above the others */
 export const FAN_LEGAL_RAISE = 27;
 /** room kept for the stat bar on the left of the hand and the action rail on the right */
-/** the bottom-left stat bar is drawn at 75 % (CSS zoom) of its 420 px layout width */
+/** the bottom-left stat bar's layout width, before its zoom: portrait, the name over the vitals and ability, a column of skills */
+export const STAT_BAR_LAYOUT_W = 500;
+/** the bottom-left stat bar is drawn at 75 % (CSS zoom) of its layout width */
 export const STAT_BAR_ZOOM = 0.75;
-export const STAT_BAR_W = 420 * STAT_BAR_ZOOM;
+export const STAT_BAR_W = STAT_BAR_LAYOUT_W * STAT_BAR_ZOOM;
 /** the stat bar's zoom for a window: full size at 1080p (the window's smaller ratio to it), between 0.75 and 1.15 */
 export const statBarZoom = (vw: number, vh: number) =>
   Math.min(1.15, Math.max(0.75, Math.min(vw / 1920, vh / 1080)));
 /** the stat bar's width on screen at that zoom */
-export const statBarW = (vw: number, vh: number) => 420 * statBarZoom(vw, vh);
+export const statBarW = (vw: number, vh: number) => STAT_BAR_LAYOUT_W * statBarZoom(vw, vh);
 export const RAIL_W = 172;
 
 export interface FanSlot {
