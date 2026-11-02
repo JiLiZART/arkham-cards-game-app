@@ -26,5 +26,14 @@ class_name = "Room"
 tag = "v1"
 new_sqlite_classes = ["Room"]
 
+# Branch previews (`wrangler preview`) inherit nothing from the top level. Each preview gets its own Room namespace;
+# the binding is repeated because the Worker reads env.ROOMS. TURN secrets need `wrangler preview secret put`.
+[previews.vars]
+APP_VERSION = "preview"
+
+[[previews.durable_objects.bindings]]
+name = "ROOMS"
+class_name = "Room"
+
 [observability]
 enabled = true
