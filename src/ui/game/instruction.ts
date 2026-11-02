@@ -1,4 +1,4 @@
-import type { ContentDb, GameState, PendingChoice } from "../../engine/types";
+import type { ContentDb, GameState, PendingChoice } from "../../engine/world/types";
 import { promptParts, type Part } from "./feed";
 
 /**

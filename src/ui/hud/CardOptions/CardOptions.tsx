@@ -1,5 +1,5 @@
 import { t } from "../../../content/i18n";
-import type { GameState, InstId } from "../../../engine/types";
+import type { GameState, InstId } from "../../../engine/world/types";
 import { db, gameStore, useGame } from "../../state/context";
 import { useView } from "../../state/view";
 import { useCardOptions } from "../Modals";

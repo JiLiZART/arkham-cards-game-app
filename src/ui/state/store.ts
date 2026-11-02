@@ -6,16 +6,25 @@ import {
   migrateCampaign,
   scenarioSetup,
   startCampaign,
-  type CampaignState,
-  type NewCampaign,
-} from "../../engine/campaign";
-import { advance, type FlowValue } from "../../engine/flow";
-import { createGame, dispatch, ENGINE_VERSION, replay } from "../../engine/engine";
-import { upgradeDeck, type UpgradeResult } from "../../engine/upgrade";
+} from "../../engine/campaign/campaign";
+import { type CampaignState, type NewCampaign } from "../../engine/campaign/types";
+import { advance } from "../../engine/campaign/flow";
+import { type FlowValue } from "../../engine/campaign/types";
+import { createGame, dispatch, ENGINE_VERSION, replay, replaysSave } from "../../engine";
+import { upgradeDeck, type UpgradeResult } from "../../engine/campaign/upgrade";
 import type { Move, RoomSave } from "../../net/moves";
 import { quietNextGame } from "../game/arrivals";
 import { useView } from "./view";
-import type { Action, ContentDb, GameEvent, GameSetup, GameState, InvId } from "../../engine/types";
+import type {
+  Action,
+  ContentDb,
+  GameEvent,
+  GameSetup,
+  GameState,
+  InvId,
+} from "../../engine/world/types";
+import { invOfIf } from "../../engine/context";
+import { EVENT, type EventType } from "../../engine/events/event";
 
 export const SAVE_KEY = "ah:save";
 const LOCALE_KEY = "ah:locale";
@@ -28,27 +37,27 @@ export function startLocale(storage: Storage, lang = globalThis.navigator?.langu
 export const APP_VERSION = (import.meta.env?.VITE_APP_VERSION as string | undefined) ?? "dev";
 
 /** events worth a beat of animation; the rest update the table instantly */
-export const ANIMATED = new Set([
-  "enemyMove",
-  "token",
-  "testResult",
-  "encounter",
-  "weakness",
-  "attack",
-  "spawn",
-  "agendaAdvance",
-  "actAdvance",
-  "resolution",
-  "enemyDefeated",
-  "defeated",
-  "damage",
-  "enemyDamage",
-  "clues",
-  "doom",
+export const ANIMATED = new Set<EventType>([
+  EVENT.EnemyMove,
+  EVENT.Token,
+  EVENT.TestResult,
+  EVENT.Encounter,
+  EVENT.Weakness,
+  EVENT.Attack,
+  EVENT.Spawn,
+  EVENT.AgendaAdvance,
+  EVENT.ActAdvance,
+  EVENT.Resolution,
+  EVENT.EnemyDefeated,
+  EVENT.Defeated,
+  EVENT.Damage,
+  EVENT.EnemyDamage,
+  EVENT.Clues,
+  EVENT.Doom,
 ]);
 
 /** a drawn encounter card or weakness waits in the showcase for the player's tap at every pace (its Continue is its own) */
-export const HELD = new Set(["encounter", "weakness"]);
+export const HELD = new Set<EventType>([EVENT.Encounter, EVENT.Weakness]);
 /** cards drawn but not yet sent on from the showcase (the playing event's and the queued ones'): the table doesn't show them yet */
 export function heldCards(s: { current: GameEvent | null; queue: GameEvent[] }): Set<string> {
   return new Set(
@@ -56,17 +65,17 @@ export function heldCards(s: { current: GameEvent | null; queue: GameEvent[] }):
   );
 }
 /** in Tap mode these hold until the player continues; follow-on events (damage, clues, doom) play on their timers */
-const TAP = new Set([
-  "token",
-  "testResult",
-  "attack",
-  "spawn",
-  "enemyMove",
-  "enemyDefeated",
-  "defeated",
-  "agendaAdvance",
-  "actAdvance",
-  "resolution",
+const TAP = new Set<EventType>([
+  EVENT.Token,
+  EVENT.TestResult,
+  EVENT.Attack,
+  EVENT.Spawn,
+  EVENT.EnemyMove,
+  EVENT.EnemyDefeated,
+  EVENT.Defeated,
+  EVENT.AgendaAdvance,
+  EVENT.ActAdvance,
+  EVENT.Resolution,
 ]);
 /** does this event wait for the player instead of a timer at this pace */
 export const holdsForTap = (e: GameEvent | null, pace: Pace) =>
@@ -539,7 +548,7 @@ export function createGameStore(
       let save = input;
       const restore = () => {
         // a campaign saved before the flow gets one (a scenario in progress stays in progress)
-        const inGame = save.version === ENGINE_VERSION && !!save.setup;
+        const inGame = replaysSave(save.version) && !!save.setup;
         if (save.campaign)
           save = {
             ...save,
@@ -549,7 +558,7 @@ export function createGameStore(
               inGame,
             ),
           };
-        if (save.version !== ENGINE_VERSION || !save.setup) {
+        if (!replaysSave(save.version) || !save.setup) {
           // the rules changed since this save: keep the campaign, restart the scenario
           set({
             campaign: save.campaign,
@@ -894,7 +903,7 @@ export function createGameStore(
           });
         get().importLog(text);
         const viewing = data.view?.viewing ?? null;
-        useView.setState({ viewing: viewing && get().game?.invs[viewing] ? viewing : null });
+        useView.setState({ viewing: viewing && invOfIf(get().game, viewing) ? viewing : null });
       },
 
       importLog(json) {

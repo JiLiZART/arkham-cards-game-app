@@ -1,6 +1,7 @@
 import { cardText, t } from "../../content/i18n";
-import type { ChoiceOption, GameState } from "../../engine/types";
+import type { ChoiceOption, GameState } from "../../engine/world/types";
 import { db } from "../state/context";
+import { cardOfIf } from "../../engine/context";
 
 /**
  * The card ability an option uses, by card code and the ability's place on it: a reaction is "card:index", a turn's
@@ -8,7 +9,7 @@ import { db } from "../state/context";
  */
 export function abilityRef(
   o: ChoiceOption,
-  game: Pick<GameState, "cards">,
+  game: Pick<GameState, "world">,
 ): { code: string; index: number } | null {
   const v = o.value as
     | { kind?: string; card?: string; index?: number; ability?: { card: string; index: number } }
@@ -22,7 +23,7 @@ export function abilityRef(
       : typeof v === "object" && v?.ability
         ? v.ability
         : null;
-  const code = ref && game.cards[ref.card]?.code;
+  const code = ref && cardOfIf(game, ref.card)?.code;
   return code ? { code, index: ref!.index } : null;
 }
 
@@ -33,7 +34,7 @@ export function abilityRef(
  */
 export function optionLabel(
   o: ChoiceOption,
-  game: Pick<GameState, "cards">,
+  game: Pick<GameState, "world">,
   locale: string,
 ): string {
   // an option with a string of its own (who takes the damage): the card's name in the game's language goes into it

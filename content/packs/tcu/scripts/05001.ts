@@ -5,7 +5,9 @@ import {
   threatArea,
   type CardScript,
   type EffCtx,
-  type G,
+  type GameContext,
+  EVENT,
+  STEP,
 } from "../../../../src/engine/api";
 
 export default {
@@ -23,23 +25,23 @@ export default {
   ],
   conditions: {
     /** Rational Thought: "You cannot gain resources from Carolyn Fern's [reaction] ability" */
-    rationalThought: (g: G, ctx: EffCtx) =>
-      !!ctx.you && threatArea(g, ctx.you).some((c) => c.code === "05008"),
+    rationalThought: (game: GameContext, ctx: EffCtx) =>
+      !!ctx.you && threatArea(game, ctx.you).some((c) => c.code === "05008"),
   },
   fns: {
-    gain(g: G, ctx: EffCtx) {
-      const healed = card(g, ctx.card!);
+    gain(game: GameContext, ctx: EffCtx) {
+      const healed = card(game, ctx.card!);
       const who = healed.controller ?? healed.owner;
       if (!who) return;
-      push(g, {
-        t: "Effects",
+      push(game, {
+        t: STEP.Effects,
         effects: [{ op: "gainResources", amount: 1, target: "eventInvestigator" }],
         ctx: { ...ctx, inv: who },
       });
     },
-    elder(g: G, ctx: EffCtx) {
-      push(g, {
-        t: "Effects",
+    elder(game: GameContext, ctx: EffCtx) {
+      push(game, {
+        t: STEP.Effects,
         effects: [
           {
             op: "chooseOne",
@@ -47,7 +49,12 @@ export default {
               {
                 label: "Heal 1 horror from an investigator or Ally asset at your location",
                 effects: [
-                  { op: "heal", horror: 1, target: "chooseAtLocation", targetAlly: "atLocation" },
+                  {
+                    op: EVENT.Heal,
+                    horror: 1,
+                    target: "chooseAtLocation",
+                    targetAlly: "atLocation",
+                  },
                 ],
               },
               { label: "Don't heal", effects: [] },

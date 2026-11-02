@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { cardText, t } from "../../../content/i18n";
-import type { ChoiceOption, GameState } from "../../../engine/types";
+import { cardOfIf, invOf } from "../../../engine/context";
+import type { ChoiceOption, GameState } from "../../../engine/world/types";
 import { db, useGame } from "../../state/context";
 import { Icon, UiIcon, type UiIconName } from "../../components/Icon";
 import type { IconName } from "../../assets/icons";
@@ -49,7 +50,12 @@ export function railItem(o: ChoiceOption): RailItem {
   if (o.id === "done") {
     const redraw = /^Redraw (\d+)/.exec(o.label);
     if (redraw)
-      return { key: "rail.redraw", vars: { n: redraw[1] }, symbol: "redraw", primary: true };
+      return {
+        key: "rail.redraw",
+        vars: { n: redraw[1] },
+        symbol: "redraw",
+        primary: true,
+      };
     return {
       key: o.label.startsWith("Keep hand") ? "rail.keep" : "rail.done",
       symbol: "check",
@@ -90,10 +96,15 @@ export function stripAction(
 /** the action, reaction or free symbol of an option that uses a card ability (from the ability's kind), else null */
 export function abilitySymbol(
   o: ChoiceOption,
-  game: Pick<GameState, "cards">,
+  game: Pick<GameState, "world">,
 ): "action" | "reaction" | "free" | null {
   const v = o.value as
-    | { kind?: string; card?: string; index?: number; ability?: { ability: { kind: string } } }
+    | {
+        kind?: string;
+        card?: string;
+        index?: number;
+        ability?: { ability: { kind: string } };
+      }
     | string
     | null;
   // a reaction choice is "card:index"; a turn option { kind: "ability", card, index }; a fast ability during a test carries its ability
@@ -103,7 +114,7 @@ export function abilitySymbol(
     : typeof v === "object" && v?.kind === "ability"
       ? { card: v.card!, index: v.index! }
       : null;
-  const code = ref && game.cards[ref.card]?.code;
+  const code = ref && cardOfIf(game, ref.card)?.code;
   const kind =
     typeof v === "object" && v?.ability
       ? v.ability.ability.kind
@@ -137,7 +148,7 @@ function OptionButton({ o, game, busy }: { o: ChoiceOption; game: GameState; bus
     ? t(db, locale, it.key, it.vars) + (extra ? ` (${extra})` : "")
     : optionLabel(o, game, locale);
   // no actions left: End turn is the thing to do (paid actions are no longer offered, free ones stay)
-  const me = game.pending?.kind === "turn" ? game.invs[game.pending.inv] : null;
+  const me = game.pending?.kind === "turn" ? invOf(game, game.pending.inv) : null;
   const spent = !!me && me.actionsLeft + me.restrictedActions.reduce((n, r) => n + r.left, 0) === 0;
   return (
     <button
@@ -198,14 +209,19 @@ export function InstructionBar() {
     const name = cardText(db, ask.inv, locale).name;
     return (
       <div className="instruction-bar" data-tip="bar">
-        <Sentence
-          parts={[
-            { t: "inv", id: ask.inv },
-            { t: "text", s: " " },
-            { t: "text", s: t(db, locale, ask.key, { name }).replace(name, "").trim() },
-          ]}
-          size={30}
-        />
+        <div className={styles.barText}>
+          <Sentence
+            parts={[
+              { t: "inv", id: ask.inv },
+              { t: "text", s: " " },
+              {
+                t: "text",
+                s: t(db, locale, ask.key, { name }).replace(name, "").trim(),
+              },
+            ]}
+            size={30}
+          />
+        </div>
         <div className={styles.barButtons}>
           <button
             className="primary"
@@ -247,14 +263,16 @@ export function InstructionBar() {
   const buttons = ask.buttons ? p.options.filter((o) => inBar(o, game, viewer, mode)) : [];
   return (
     <div className="instruction-bar" data-tip="bar">
-      <Sentence
-        parts={[
-          { t: "inv", id: p.inv },
-          { t: "text", s: ": " },
-          ...instructionParts(p, game, db, locale),
-        ]}
-        size={30}
-      />
+      <div className={styles.barText}>
+        <Sentence
+          parts={[
+            { t: "inv", id: p.inv },
+            { t: "text", s: ": " },
+            ...instructionParts(p, game, db, locale),
+          ]}
+          size={30}
+        />
+      </div>
       {buttons.length > 0 && (
         <div className={styles.barButtons}>
           {buttons.map((o) => (
@@ -320,7 +338,9 @@ export function UndoButton() {
       onClick={undo}
       title={
         otherInv
-          ? t(db, locale, "net.undoBy", { name: cardText(db, otherInv, locale).name })
+          ? t(db, locale, "net.undoBy", {
+              name: cardText(db, otherInv, locale).name,
+            })
           : t(db, locale, able ? "undo.hint" : "undo.blocked")
       }
     >

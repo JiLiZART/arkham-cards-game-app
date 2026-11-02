@@ -1,5 +1,5 @@
 import type { CampaignFlow, CampaignStep, FlowEffect } from "./schema";
-import type { ContentDb } from "../engine/types";
+import type { ContentDb } from "../engine/world/types";
 
 /**
  * A campaign's flow (ADR-0011): its own `flow.json`, or, for a campaign that has none, its scenarios one after the

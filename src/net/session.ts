@@ -4,9 +4,9 @@
  * The pipes (socket and peer connections) come in as dependencies, so the logic runs in Node under test.
  */
 import { createStore, type StoreApi } from "zustand/vanilla";
-import { ENGINE_VERSION } from "../engine/engine";
+import { ENGINE_VERSION } from "../engine";
 import type { DeckDef } from "../content/schema";
-import type { InvId } from "../engine/types";
+import type { InvId } from "../engine/world/types";
 import { canUndo, type Save, type UiState } from "../ui/state/store";
 import { MoveLog } from "./log";
 import { allowed, type Ctx, type Move, type Numbered, type Proposal, type RoomSave } from "./moves";
@@ -22,6 +22,7 @@ import type {
   ShownView,
   Wire,
 } from "./transport";
+import { EVENT } from "../engine/events/event";
 
 /** what the UI shows of a session */
 export interface NetState {
@@ -458,7 +459,7 @@ export class Session {
         .applyMove(p.move, this.roomSave([...this.log.moves, nm]));
       if (err) return this.refuse(p, err);
       this.log.receive(nm);
-      this.sendAll({ t: "move", m: nm });
+      this.sendAll({ t: EVENT.Move, m: nm });
       this.afterMove(nm);
     });
   }

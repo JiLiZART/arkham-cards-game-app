@@ -8,6 +8,7 @@ import type { Vec3 } from "../../game/layout";
 import { Icon } from "../../components/Icon";
 import type { IconName } from "../../assets/icons";
 import styles from "./EventFx.module.css";
+import { invOfIf } from "../../../engine/context";
 
 /** "−2 [damage]" style numbers floating up from a card */
 /** matches the HUD's hit streak (hud/Floats HIT_MS plus its start delay) */
@@ -62,7 +63,7 @@ export function EventFx({
   if (!current || !game || playing !== current) return null;
   if (started.current.e !== current) started.current = { e: current, at: performance.now() };
   const at = started.current.at;
-  if (current.type === "damage" && current.inv && game.invs[current.inv]) {
+  if (current.type === "damage" && current.inv && invOfIf(game, current.inv)) {
     // investigators are not on the board: numbers float up from their portrait on the map
     const p = minis.find((m) => m.inv === current.inv)?.pos;
     const d = current.data as { damage: number; horror: number };

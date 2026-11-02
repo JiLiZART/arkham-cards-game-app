@@ -1,4 +1,5 @@
-import type { GameState, InstId, InvId } from "../../engine/types";
+import type { GameState, InstId, InvId } from "../../engine/world/types";
+import { invOf, invOfIf, cardsOf } from "../../engine/context";
 
 /** what a tip points at: an element marked `data-tip="…"`, or a card (in the strip, the hand or on the map) */
 export type TipAnchor = { tip: string } | { card: InstId };
@@ -33,12 +34,12 @@ const kinds = (g: GameState) =>
 const turn = (g: GameState) => g.pending?.kind === "turn";
 const pause = (g: GameState, phase: string) =>
   g.pending?.kind === "phase" && (g.pending.step as { phase?: string }).phase === phase;
-const me = (g: GameState, c: TipContext) => (c.viewer ? g.invs[c.viewer] : null);
+const me = (g: GameState, c: TipContext) => (c.viewer ? invOfIf(g, c.viewer) : null);
 /** an enemy engaged with the viewer, or at their location */
 const enemyNear = (g: GameState, c: TipContext): InstId | null => {
   const at = me(g, c)?.location;
   return (
-    Object.values(g.cards).find(
+    cardsOf(g).find(
       (x) => x.zone === "enemy" && (x.engagedWith === c.viewer || (!!at && x.location === at)),
     )?.id ?? null
   );
@@ -85,7 +86,7 @@ export const TIPS: Tip[] = [
   },
   {
     id: "endTurn",
-    when: (g) => turn(g) && kinds(g).has("endTurn") && g.invs[g.pending!.inv].actionsLeft === 0,
+    when: (g) => turn(g) && kinds(g).has("endTurn") && invOf(g, g.pending!.inv).actionsLeft === 0,
     anchor: () => ({ tip: "endTurn" }),
   },
   {

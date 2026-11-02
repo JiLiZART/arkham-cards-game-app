@@ -1,7 +1,8 @@
 import { doomInPlay } from "../../engine/rules/scenario";
-import type { ContentDb, GameEvent, GameState, InstId } from "../../engine/types";
+import type { ContentDb, GameEvent, GameState, InstId } from "../../engine/world/types";
 import { type CardSoundWhen, NO_SOUND, type SoundManifest } from "../../content/schema";
 import { db } from "../state/context";
+import { cardOf, cardOfIf, cardsOf } from "../../engine/context";
 
 /** the settings the gains depend on (a slice of UiState) */
 export interface SoundSettings {
@@ -20,7 +21,7 @@ function cardClip(
   m: SoundManifest,
   content: ContentDb = db,
 ): string | null {
-  const inst = cardId && game ? game.cards[cardId] : null;
+  const inst = cardId && game ? cardOfIf(game, cardId) : null;
   if (!inst) return null;
   const own = m.cards[inst.code]?.[when];
   if (own) return own;
@@ -96,7 +97,7 @@ export function musicFor(
   if (game.phase === "ended") return null;
   // a silent track keeps its slot but is never chosen: the music that was on goes on
   const has = (id: string) => (m.music[id] && !m.music[id].silent ? id : null);
-  const codeOf = (id: InstId | null) => (id ? game.cards[id]?.code : undefined);
+  const codeOf = (id: InstId | null) => (id ? cardOfIf(game, id)?.code : undefined);
   // a scenario without a bed of its own (a generated one, ADR-0007) plays the default bed
   const chapter =
     has(`card:${codeOf(game.agenda)}`) ??
@@ -104,11 +105,11 @@ export function musicFor(
     has(`bed:${game.scenarioId}`) ??
     has("bed:default");
   if (!chapter) return null;
-  if (has("fight") && Object.values(game.cards).some((c) => c.zone === "enemy" && c.engagedWith))
+  if (has("fight") && cardsOf(game).some((c) => c.zone === "enemy" && c.engagedWith))
     return take("fight", game.seed, m);
   const tension = has(`tension:${game.scenarioId}`) ?? has("tension");
   if (tension) {
-    const threshold = game.agenda ? content.cards[game.cards[game.agenda].code]?.doom : undefined;
+    const threshold = game.agenda ? content.cards[cardOf(game, game.agenda).code]?.doom : undefined;
     if (
       game.phase === "enemy" ||
       (threshold !== undefined &&

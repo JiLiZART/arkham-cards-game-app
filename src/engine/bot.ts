@@ -1,7 +1,8 @@
 /** a simple scripted player used by playthrough tests and the debug "auto-play" button */
-import { dispatch, type Result } from "./engine";
-import { locations, stepsToward } from "./core";
-import type { ContentDb } from "./types";
+import { dispatch, type Result } from "./index";
+import { cardOf, invOf } from "./context";
+import { locations, stepsToward } from "./queries";
+import type { ContentDb } from "./world/types";
 
 const PREFS: RegExp[] = [
   /^Advance act/,
@@ -25,18 +26,18 @@ const PREFS: RegExp[] = [
 /** next step toward the nearest location that is unrevealed or has clues */
 function goal(db: ContentDb, r: Result, i: string): string | undefined {
   const s = r.state;
-  const g = { s, db, events: [] };
-  const here = s.invs[i].location;
+  const game = { s, db, events: [] };
+  const here = invOf(s, i).location;
   if (!here) return undefined;
-  const wanted = locations(g)
+  const wanted = locations(game)
     .filter((l) => l.id !== here && (!l.revealed || l.clues > 0))
     .map((l) => l.id);
   const targets = wanted.length
     ? wanted
-    : locations(g)
+    : locations(game)
         .filter((l) => l.id !== here)
         .map((l) => l.id);
-  return stepsToward(g, here, targets)[0];
+  return stepsToward(game, here, targets)[0];
 }
 export function botChoice(db: ContentDb, r: Result): string {
   const p = r.state.pending!;
@@ -44,8 +45,8 @@ export function botChoice(db: ContentDb, r: Result): string {
   if (p.kind === "reaction") return p.options.find((o) => o.id !== "pass")?.id ?? "pass";
   if (p.kind === "turn") {
     // move toward unexplored locations when there's nothing to investigate here
-    const here = r.state.invs[p.inv].location;
-    const clues = here ? r.state.cards[here].clues : 0;
+    const here = invOf(r.state, p.inv).location;
+    const clues = here ? cardOf(r.state, here).clues : 0;
     for (const re of PREFS) {
       const o = p.options.find((x) => {
         if (!re.test(x.label)) return false;

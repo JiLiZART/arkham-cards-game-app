@@ -9,52 +9,54 @@ import {
   push,
   type CardScript,
   type EffCtx,
-  type G,
+  type GameContext,
   type InstId,
   type Step,
+  CHOICE,
+  STEP,
 } from "../../../../src/engine/api";
 
 export default {
   abilities: [{ kind: "onPlay", run: "doom" }],
   fns: {
-    doom(g: G, ctx: EffCtx, _args: unknown, step?: Step) {
+    doom(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
       const you = ctx.you!;
-      const mine = [inv(g, you).cardId, ...controlled(g, you).map((c) => c.id)];
+      const mine = [inv(game, you).cardId, ...controlled(game, you).map((c) => c.id)];
       const pick = ask<InstId>(
-        g,
+        game,
         step!,
         you,
-        "target",
+        CHOICE.Target,
         "Will of the Cosmos: place 1 doom on a card you control",
-        mine.map((id) => ({ id, label: def(g, id).name, card: id, value: id })),
+        mine.map((id) => ({ id, label: def(game, id).name, card: id, value: id })),
         { auto: true, key: "chooseOne" },
       );
       if (pick === undefined) return;
       push(
-        g,
-        { t: "PlaceDoom", card: pick, n: 1 },
-        { t: "Effects", effects: [{ op: "discoverClues", amount: 1 }], ctx },
-        { t: "Script", code: "12066", fn: "elsewhere", ctx },
+        game,
+        { t: STEP.PlaceDoom, card: pick, n: 1 },
+        { t: STEP.Effects, effects: [{ op: "discoverClues", amount: 1 }], ctx },
+        { t: STEP.Script, code: "12066", fn: "elsewhere", ctx },
       );
     },
-    elsewhere(g: G, ctx: EffCtx, _args: unknown, step?: Step) {
+    elsewhere(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
       const you = ctx.you!;
-      const here = inv(g, you).location;
-      const there = locations(g).filter(
-        (l) => l.id !== here && l.revealed && card(g, l.id).clues > 0,
+      const here = inv(game, you).location;
+      const there = locations(game).filter(
+        (l) => l.id !== here && l.revealed && card(game, l.id).clues > 0,
       );
       if (!there.length) return;
       const pick = ask<InstId>(
-        g,
+        game,
         step!,
         you,
-        "target",
+        CHOICE.Target,
         "Will of the Cosmos: discover 1 clue at another revealed location",
-        there.map((l) => ({ id: l.id, label: def(g, l.id).name, card: l.id, value: l.id })),
+        there.map((l) => ({ id: l.id, label: def(game, l.id).name, card: l.id, value: l.id })),
         { auto: true, key: "chooseClueLocation" },
       );
       if (pick === undefined) return;
-      push(g, { t: "DiscoverClues", inv: you, location: pick, n: 1 });
+      push(game, { t: STEP.DiscoverClues, inv: you, location: pick, n: 1 });
     },
   },
 } satisfies CardScript;

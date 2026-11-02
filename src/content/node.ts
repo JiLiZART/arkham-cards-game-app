@@ -2,7 +2,7 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 import { pathToFileURL } from "node:url";
-import type { CardScript } from "../engine/types";
+import type { CardScript } from "../engine/world/types";
 import { buildContent } from "./loader";
 
 function walk(dir: string): string[] {

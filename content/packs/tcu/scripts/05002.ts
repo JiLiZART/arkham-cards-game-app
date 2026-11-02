@@ -2,46 +2,52 @@
 import {
   ask,
   card,
+  type CardScript,
   def,
+  type EffCtx,
   emit,
+  flags,
+  type GameContext,
+  type InstId,
   inv,
+  type InvId,
   invName,
   moveCard,
   push,
-  shuffle,
-  type CardScript,
-  type EffCtx,
-  type G,
-  type InstId,
-  type InvId,
+  setController,
+  shuffleList,
   type Step,
+  EVENT,
+  ZONE,
+  PHASE,
+  CHOICE,
+  STEP,
 } from "../../../../src/engine/api";
 
 const UNSOLVED_CASE = "05010";
 const HUNCH_SIZE = 11;
 
 /** the hunch deck, top first (its cards wait set aside) */
-export const hunch = (g: G, i: InvId): InstId[] =>
-  (g.s.flags[`hunch:${i}`] as InstId[] | undefined) ?? [];
-const revealed = (g: G, i: InvId) => g.s.flags[`hunchRevealed:${i}`] as InstId | undefined;
-const isInsightEvent = (g: G, id: InstId) =>
-  def(g, id).type === "event" && def(g, id).traits.includes("Insight");
+export const hunch = (game: GameContext, i: InvId): InstId[] => flags.hunch.get(game, i) ?? [];
+const revealed = (game: GameContext, i: InvId) => flags.hunchRevealed.get(game, i);
+const isInsightEvent = (game: GameContext, id: InstId) =>
+  def(game, id).type === "event" && def(game, id).traits.includes("Insight");
 
 /** you may move an Insight event from your discard pile to the bottom of your hunch deck (Joe's elder sign, Detective's Colt 1911s) */
-export function insightToHunch(g: G, you: InvId, step: Step | undefined) {
-  if (g.s.flags[`hunch:${you}`] === undefined) return;
-  const cands = inv(g, you).discard.filter((id) => isInsightEvent(g, id));
+export function insightToHunch(game: GameContext, you: InvId, step: Step | undefined) {
+  if (flags.hunch.get(game, you) === undefined) return;
+  const cands = inv(game, you).discard.filter((id) => isInsightEvent(game, id));
   if (!cands.length || !step) return;
   const pick = ask<InstId | "no">(
-    g,
+    game,
     step,
     you,
-    "generic",
+    CHOICE.Generic,
     "Move an Insight event from your discard pile to the bottom of your hunch deck?",
     [
       ...cands.map((id) => ({
         id,
-        label: `Move ${def(g, id).name} to the hunch deck`,
+        label: `Move ${def(game, id).name} to the hunch deck`,
         card: id,
         value: id,
       })),
@@ -50,12 +56,17 @@ export function insightToHunch(g: G, you: InvId, step: Step | undefined) {
     { key: "chooseOne" },
   );
   if (pick === undefined || pick === "no") return;
-  moveCard(g, pick, "setAside");
-  g.s.flags[`hunch:${you}`] = [...hunch(g, you), pick];
-  emit(g, "hunch", `${def(g, pick).name} goes to the bottom of ${invName(g, you)}'s hunch deck`, {
-    inv: you,
-    card: pick,
-  });
+  moveCard(game, pick, ZONE.SetAside);
+  flags.hunch.set(game, you, [...hunch(game, you), pick]);
+  emit(
+    game,
+    EVENT.Hunch,
+    `${def(game, pick).name} goes to the bottom of ${invName(game, you)}'s hunch deck`,
+    {
+      inv: you,
+      card: pick,
+    },
+  );
 }
 
 export default {
@@ -63,73 +74,83 @@ export default {
     {
       kind: "forced",
       trigger: "phaseBegins",
-      condition: { phase: "investigation" },
+      condition: { phase: PHASE.Investigation },
       run: "reveal",
     },
-    { kind: "forced", trigger: "phaseEnds", condition: { phase: "investigation" }, run: "putBack" },
+    {
+      kind: "forced",
+      trigger: "phaseEnds",
+      condition: { phase: PHASE.Investigation },
+      run: "putBack",
+    },
     { kind: "elderSign", tokenValue: 1, run: "elder" },
   ],
   hooks: {
     /** choose 11 Insight events, Unsolved Case among them, and shuffle them into the hunch deck */
-    setup(g: G, ctx: EffCtx) {
-      const me = inv(g, ctx.you!);
-      const insight = me.deck.filter((id) => isInsightEvent(g, id));
+    setup(game: GameContext, ctx: EffCtx) {
+      const me = inv(game, ctx.you!);
+      const insight = me.deck.filter((id) => isInsightEvent(game, id));
       // ponytail: the first Insight events of the decklist are taken; a choice at setup when deckbuilding needs it
       const chosen = [
-        ...insight.filter((id) => card(g, id).code === UNSOLVED_CASE).slice(0, 1),
-        ...insight.filter((id) => card(g, id).code !== UNSOLVED_CASE),
+        ...insight.filter((id) => card(game, id).code === UNSOLVED_CASE).slice(0, 1),
+        ...insight.filter((id) => card(game, id).code !== UNSOLVED_CASE),
       ].slice(0, HUNCH_SIZE);
-      for (const id of chosen) moveCard(g, id, "setAside");
-      shuffle(g.s, chosen);
-      g.s.flags[`hunch:${ctx.you}`] = chosen;
+      for (const id of chosen) moveCard(game, id, ZONE.SetAside);
+      shuffleList(game, chosen);
+      flags.hunch.set(game, String(ctx.you), chosen);
     },
   },
-  extraPlayable(g: G, _cardId: InstId, i: InvId) {
-    const id = revealed(g, i);
-    return id && card(g, id).zone === "setAside" ? [id] : [];
+  extraPlayable(game: GameContext, _cardId: InstId, i: InvId) {
+    const id = revealed(game, i);
+    return id && card(game, id).zone === "setAside" ? [id] : [];
   },
   fns: {
-    reveal(g: G, ctx: EffCtx) {
-      const [top, ...rest] = hunch(g, ctx.you!);
+    reveal(game: GameContext, ctx: EffCtx) {
+      const [top, ...rest] = hunch(game, ctx.you!);
       if (!top) return;
-      g.s.flags[`hunch:${ctx.you}`] = rest;
-      g.s.flags[`hunchRevealed:${ctx.you}`] = top;
-      g.s.flags[`costMod:${top}`] = -2;
-      emit(g, "hunch", `${invName(g, ctx.you!)} reveals a hunch: ${def(g, top).name}`, {
-        inv: ctx.you!,
-        card: top,
-      });
+      flags.hunch.set(game, String(ctx.you), rest);
+      flags.hunchRevealed.set(game, String(ctx.you), top);
+      flags.costMod.set(game, top, -2);
+      emit(
+        game,
+        EVENT.Hunch,
+        `${invName(game, ctx.you!)} reveals a hunch: ${def(game, top).name}`,
+        {
+          inv: ctx.you!,
+          card: top,
+        },
+      );
     },
-    putBack(g: G, ctx: EffCtx) {
+    putBack(game: GameContext, ctx: EffCtx) {
       const you = ctx.you!;
-      const id = revealed(g, you);
-      delete g.s.flags[`hunchRevealed:${you}`];
+      const id = revealed(game, you);
+      flags.hunchRevealed.clear(game, you);
       if (!id) return;
-      delete g.s.flags[`costMod:${id}`];
-      if (card(g, id).zone !== "setAside") return; // played
+      flags.costMod.clear(game, id);
+      if (card(game, id).zone !== "setAside") return; // played
       // Unsolved Case: "If Unsolved Case would be shuffled into your hunch deck: add it to your threat area instead"
-      if (card(g, id).code === UNSOLVED_CASE) {
-        moveCard(g, id, "threat");
-        card(g, id).controller = you;
-        emit(g, "threat", `Unsolved Case enters ${invName(g, you)}'s threat area`, {
+      if (card(game, id).code === UNSOLVED_CASE) {
+        moveCard(game, id, ZONE.Threat);
+        setController(game, id, you);
+        emit(game, EVENT.Threat, `Unsolved Case enters ${invName(game, you)}'s threat area`, {
           inv: you,
           card: id,
         });
         return;
       }
-      const deck = [...hunch(g, you), id];
-      shuffle(g.s, deck);
-      g.s.flags[`hunch:${you}`] = deck;
-      emit(g, "hunch", `${def(g, id).name} is shuffled back into the hunch deck`, {
+      const deck = [...hunch(game, you), id];
+      shuffleList(game, deck);
+      flags.hunch.set(game, you, deck);
+      emit(game, EVENT.Hunch, `${def(game, id).name} is shuffled back into the hunch deck`, {
         inv: you,
         card: id,
       });
     },
-    elder(g: G, ctx: EffCtx) {
-      push(g, { t: "Script", code: "05002", fn: "toHunch", ctx });
+    elder(game: GameContext, ctx: EffCtx) {
+      push(game, { t: STEP.Script, code: "05002", fn: "toHunch", ctx });
     },
-    toHunch(g: G, ctx: EffCtx, _args: unknown, step?: Step) {
-      insightToHunch(g, ctx.you!, step);
+    toHunch(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
+      insightToHunch(game, ctx.you!, step);
     },
   },
 } satisfies CardScript;

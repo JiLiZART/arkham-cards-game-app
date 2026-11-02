@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { content, loadAllPacks } from ".";
+import { content, loadAllPacks } from "./";
 import { packLoaded } from "./loader";
 
 describe("loadAllPacks", () => {

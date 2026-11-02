@@ -1,10 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { botChoice } from "../../engine/bot";
-import { dispatch } from "../../engine/engine";
-import { db, skipMulligans, start } from "../../engine/testkit";
+import { dispatch } from "../../engine";
+import { db, skipMulligans, start } from "../../engine/kits/testkit";
 import { layout } from "./layout";
 import { onRail, optionHome, optionOwner } from "./optionHome";
 import { viewerOf } from "../state/store";
+import { cardRecIn, invStateIn } from "../../engine/world/store";
+import { ZONE, type Zone, isOneOf } from "../../engine/world/constants";
 
 describe("every pending option is reachable without a sidebar", () => {
   for (const scenario of ["the-gathering", "the-midnight-masks", "the-devourer-below"]) {
@@ -19,12 +21,12 @@ describe("every pending option is reachable without a sidebar", () => {
         for (const o of s.pending!.options) {
           const home = optionHome(o, s, viewer);
           seen.add(home);
-          const c = o.card ? s.cards[o.card] : null;
+          const c = o.card ? cardRecIn(s, o.card) : null;
           const ok =
             home === "rail" || home === "bar"
               ? !o.card
               : home === "hand"
-                ? !!viewer && s.invs[viewer].hand.includes(o.card!)
+                ? !!viewer && invStateIn(s, viewer).hand.includes(o.card!)
                 : // "board": on the map, or the viewer's play area strip (assets, threat area, engaged enemies)
                   home === "board"
                   ? L.cards.has(o.card!) ||
@@ -36,8 +38,12 @@ describe("every pending option is reachable without a sidebar", () => {
                     ? !!c &&
                       (o.card === s.act ||
                         o.card === s.agenda ||
-                        ["victory", "encounterDiscard", "encounterDeck", "sideDeck"].includes(
+                        isOneOf(
                           c.zone,
+                          ZONE.Victory,
+                          ZONE.EncounterDiscard,
+                          ZONE.EncounterDeck,
+                          ZONE.SideDeck,
                         ))
                     : home === "skilltest"
                       ? c?.zone === "commit" && !!s.skillTest?.committed.includes(o.card!)
@@ -45,10 +51,10 @@ describe("every pending option is reachable without a sidebar", () => {
                         home === "showcase"
                         ? !o.card || ["deck", "discard"].includes(c?.zone ?? "")
                         : home === "avatar"
-                          ? s.order.some((i) => s.invs[i].cardId === o.card)
+                          ? s.order.some((i) => invStateIn(s, i).cardId === o.card)
                           : /* invModal */ (() => {
                               const w = optionOwner(o, s);
-                              return !!w && w !== viewer && !!s.invs[w];
+                              return !!w && w !== viewer && !!invStateIn(s, w);
                             })();
           if (!ok)
             problems.push(`${s.pending!.kind}: "${o.label}" → ${home} (${c?.zone ?? "no card"})`);
@@ -72,7 +78,7 @@ describe("every pending option is reachable without a sidebar", () => {
 describe("mulligan options", () => {
   it('picks are offered in the hand, take-backs on the "to redraw" row', () => {
     let r = start("the-gathering", ["01001"], 5);
-    const h = r.state.invs["01001"].hand[0];
+    const h = invStateIn(r.state, "01001").hand[0];
     r = dispatch(db, r.state, { type: "choose", inv: "01001", option: h });
     const homes = Object.fromEntries(
       r.state.pending!.options.map((o) => [o.id, optionHome(o, r.state, "01001")]),
@@ -131,7 +137,7 @@ describe("investigate on the rail", () => {
 describe("the phone's instruction bar", () => {
   it("holds the bar's own options, the rail's (Draw, Resource, Investigate) and the act and agenda's, which sit in a closed drawer", async () => {
     const { inBar } = await import("./optionHome");
-    const { mutate, pick } = await import("../../engine/testkit");
+    const { mutate, pick } = await import("../../engine/kits/testkit");
     let r = skipMulligans(start("the-gathering", ["01001"], 1));
     if (r.state.pending?.kind === "phase") r = pick(r, "continue");
     const s = r.state;
@@ -147,11 +153,11 @@ describe("the phone's instruction bar", () => {
     // hand cards stay in the hand drawer, not the bar
     expect(
       s
-        .pending!.options.filter((o) => o.card && s.cards[o.card].zone === "hand")
+        .pending!.options.filter((o) => o.card && cardRecIn(s, o.card).zone === "hand")
         .every((o) => !inBar(o, s, v, "phone")),
     ).toBe(true);
     // with clues enough, the act's Advance is in the phone's bar (the act sits in the closed left drawer)
-    const r2 = mutate(r, (g) => (g.s.invs["01001"].clues = 9));
+    const r2 = mutate(r, (game) => (invStateIn(game.s, "01001").clues = 9));
     const s2 = r2.state;
     const adv = s2.pending!.options.find((o) => o.card === s2.act);
     expect(adv).toBeTruthy();

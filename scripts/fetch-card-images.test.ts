@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { db } from "../src/engine/testkit";
+import { db } from "../src/engine/kits/testkit";
 import { cardFiles } from "./fetch-card-images";
 
 describe("card scans for the Pages build", () => {

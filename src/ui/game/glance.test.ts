@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { db } from "../../engine/testkit";
+import { db } from "../../engine/kits/testkit";
 import type { CardDef } from "../../content/schema";
 import { chipsFor, GLANCE_OVERRIDES, type Chip } from "./glance";
 

@@ -5,16 +5,17 @@ import {
   push,
   type CardScript,
   type EffCtx,
-  type G,
+  type GameContext,
+  STEP,
 } from "../../../../src/engine/api";
 
 export default {
   abilities: [{ kind: "forced", trigger: "enemyDefeatedSelf", run: "bleat" }],
   fns: {
-    bleat(g: G, ctx: EffCtx) {
-      for (const i of invsAt(g, card(g, ctx.source!).location)) {
-        push(g, {
-          t: "AssignDamage",
+    bleat(game: GameContext, ctx: EffCtx) {
+      for (const i of invsAt(game, card(game, ctx.source!).location)) {
+        push(game, {
+          t: STEP.AssignDamage,
           inv: i,
           damage: 0,
           horror: 1,

@@ -1,9 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { createStore } from "zustand/vanilla";
-import { pick, start } from "../../engine/testkit";
+import { pick, start } from "../../engine/kits/testkit";
 import { trackShowcase } from "./showcase";
 import type { UiState } from "../state/store";
 import { useView } from "../state/view";
+import { invStateIn } from "../../engine/world/store";
 
 describe("trackShowcase", () => {
   it("a mulligan redraw stops in the showcase, on the redrawing investigator's table", () => {
@@ -15,14 +16,14 @@ describe("trackShowcase", () => {
     }));
     trackShowcase(store as never);
     useView.setState({ showcase: [], viewing: null });
-    const [a, b] = r0.state.invs["01001"].hand;
+    const [a, b] = invStateIn(r0.state, "01001").hand;
     const r1 = pick(pick(r0, a), b);
     store.setState({ game: r1.state, actions: [{}, {}] as never });
     const r2 = pick(r1, "done");
     store.setState({ game: r2.state, actions: [{}, {}, {}] as never });
     // Daisy's mulligan is next, but Roland's two new cards wait for him
     expect(r2.state.pending?.inv).toBe("01002");
-    const hand = r2.state.invs["01001"].hand;
+    const hand = invStateIn(r2.state, "01001").hand;
     expect(useView.getState().showcase).toHaveLength(2);
     expect(useView.getState().showcase.every((id) => hand.includes(id))).toBe(true);
     expect(useView.getState().viewing).toBe("01001");

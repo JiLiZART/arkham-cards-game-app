@@ -1,7 +1,9 @@
 import { showcaseLayout } from "./showcaseLayout";
 import type { StoreApi } from "zustand";
-import type { GameState, InstId, InvId, Zone } from "../../engine/types";
+import type { GameState, InstId, InvId, Zone } from "../../engine/world/types";
 import type { UiState } from "../state/store";
+import { cardOf, cardOfIf, cardsOf, invOf } from "../../engine/context";
+import { ZONE } from "../../engine/world/constants";
 
 /** a card that just arrived somewhere visible (hand, play area, threat area, map, resolve spot) */
 export interface Arrival {
@@ -21,14 +23,14 @@ export interface Arrival {
 }
 
 const SHOWN = new Set<Zone>([
-  "hand",
-  "play",
-  "threat",
-  "enemy",
-  "location",
-  "attached",
-  "resolving",
-  "commit",
+  ZONE.Hand,
+  ZONE.Play,
+  ZONE.Threat,
+  ZONE.Enemy,
+  ZONE.Location,
+  ZONE.Attached,
+  ZONE.Resolving,
+  ZONE.Commit,
 ]);
 
 /** every card that changed into a shown zone between two states (hand cards in hand order first) */
@@ -46,7 +48,7 @@ export function diffArrivals(prev: GameState | null, next: GameState): Arrival[]
       .map((e) => e.card!),
   );
   const add = (id: InstId, from: Zone, owner: InvId | null) => {
-    const to = next.cards[id].zone;
+    const to = cardOf(next, id).zone;
     const k = `${to}:${owner}`;
     const batch = count.get(k) ?? 0;
     count.set(k, batch + 1);
@@ -64,13 +66,13 @@ export function diffArrivals(prev: GameState | null, next: GameState): Arrival[]
     });
   };
   for (const i of next.order)
-    for (const id of next.invs[i].hand) {
-      const before = prev?.cards[id]?.zone;
-      if (before !== "hand") add(id, before ?? "deck", i);
+    for (const id of invOf(next, i).hand) {
+      const before = cardOfIf(prev, id)?.zone;
+      if (before !== "hand") add(id, before ?? ZONE.Deck, i);
     }
-  for (const c of Object.values(next.cards)) {
+  for (const c of cardsOf(next)) {
     if (seen.has(c.id) || !SHOWN.has(c.zone) || c.zone === "hand") continue;
-    const before = prev?.cards[c.id]?.zone;
+    const before = cardOfIf(prev, c.id)?.zone;
     if (before && before !== c.zone) add(c.id, before, c.controller ?? c.owner);
   }
   return out;

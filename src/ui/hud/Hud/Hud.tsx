@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { cardText, scenarioText, t } from "../../../content/i18n";
-import type { GameEvent, GameState } from "../../../engine/types";
+import type { GameEvent, GameState } from "../../../engine/world/types";
 import { whenSettled } from "../../game/arrivals";
 import { db, gameStore, useGame } from "../../state/context";
 import { HELD, holdsForTap, viewerOf } from "../../state/store";
@@ -49,6 +49,8 @@ import { useStage, useView } from "../../state/view";
 import { NetIndicator } from "../NetIndicator";
 import { cx } from "../../components/cx";
 import styles from "./Hud.module.css";
+import { invsOf } from "../../../engine/context";
+import { EVENT, type EventType } from "../../../engine/events/event";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);
@@ -80,7 +82,7 @@ export const waitsForSettle = (e: GameEvent | null) =>
   e?.type === "token" || (e?.type === "damage" && !!e.data?.source);
 
 /** events that take the middle of the screen (the rest play only while nothing holds it) */
-const CENTER = new Set(["token", "testResult", "encounter", "weakness"]);
+const CENTER = new Set<EventType>([EVENT.Token, EVENT.TestResult, EVENT.Encounter, EVENT.Weakness]);
 
 /** plays queued events one by one; input is blocked meanwhile */
 function EventPlayer() {
@@ -670,7 +672,7 @@ function ScenarioEnd() {
   const busy = useGame((s) => !!s.current || s.queue.length > 0);
   const locale = useGame((s) => s.locale);
   const over = game.phase === "ended" && !busy;
-  const won = over && Object.values(game.invs).some((i) => i.status !== "defeated");
+  const won = over && invsOf(game).some((i) => i.status !== "defeated");
   useEffect(() => {
     if (won) moment("victory");
   }, [won]);

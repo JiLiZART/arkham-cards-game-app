@@ -4,14 +4,15 @@ import {
   push,
   type CardScript,
   type EffCtx,
-  type G,
+  type GameContext,
+  STEP,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    moveToRivertown(g: G, ctx: EffCtx) {
-      const r = locationByName(g, "Rivertown");
-      if (r) push(g, { t: "Move", inv: ctx.you!, to: r.id });
+    moveToRivertown(game: GameContext, ctx: EffCtx) {
+      const r = locationByName(game, "Rivertown");
+      if (r) push(game, { t: STEP.Move, inv: ctx.you!, to: r.id });
     },
   },
 } satisfies CardScript;

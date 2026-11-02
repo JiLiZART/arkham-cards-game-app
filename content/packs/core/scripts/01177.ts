@@ -1,25 +1,27 @@
 // Yithian Observer — when it attacks you, discard a random card; if you cannot, +1 damage and +1 horror
 import {
-  discard,
-  emit,
-  inv,
-  randInt,
   type CardScript,
+  discard,
   type EffCtx,
-  type G,
+  emit,
+  flags,
+  type GameContext,
+  inv,
+  randomInt,
+  EVENT,
 } from "../../../../src/engine/api";
 
 export default {
   abilities: [{ kind: "forced", trigger: "enemyAttacks", run: "attack" }],
   fns: {
-    attack(g: G, ctx: EffCtx) {
-      const me = inv(g, ctx.inv!);
-      if (me.hand.length) discard(g, me.hand[randInt(g.s, me.hand.length)]);
+    attack(game: GameContext, ctx: EffCtx) {
+      const me = inv(game, ctx.inv!);
+      if (me.hand.length) discard(game, me.hand[randomInt(game, me.hand.length)]);
       else {
-        g.s.flags[`attackBonus:${ctx.key}`] = 1;
+        flags.attackBonus.set(game, String(ctx.key), 1);
         emit(
-          g,
-          "yithian",
+          game,
+          EVENT.Yithian,
           `${me.name} has no cards: the Yithian Observer deals +1 damage and +1 horror`,
           { inv: ctx.inv },
         );

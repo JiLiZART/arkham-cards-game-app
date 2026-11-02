@@ -12,7 +12,7 @@
   box-shadow: 0 3px 12px #000c;
 }
 :global(.instruction-bar) {
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
 }
 :global(.instruction-bar) > :first-child {
   min-width: 0;
@@ -47,8 +47,17 @@
 .action-rail.busy {
   opacity: 0.6;
 }
+.bar-text {
+  display: flex;
+  flex-wrap: nowrap;
+  text-align: center;
+  justify-content: center;
+  width: 100%;
+}
 .bar-buttons {
   display: flex;
+  width: 100%;
+  justify-content: center;
   gap: 6px;
   flex: none;
 }

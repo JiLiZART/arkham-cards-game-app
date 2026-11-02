@@ -1,6 +1,6 @@
 import { useRef, type PointerEvent as ReactPointerEvent } from "react";
 import { cardText, t } from "../../../content/i18n";
-import type { GameState, InstId } from "../../../engine/types";
+import type { GameState, InstId } from "../../../engine/world/types";
 import { rememberRect } from "../../game/arrivals";
 import { CardFace } from "../../components/CardFace";
 import { db, useGame } from "../../state/context";
@@ -11,6 +11,7 @@ import { useHand } from "../HandFan";
 import { moment } from "../SoundLayer";
 import { cx } from "../../components/cx";
 import styles from "./HandDrawer.module.css";
+import { cardOf } from "../../../engine/context";
 
 /** a swipe down this far closes the open drawer */
 const SWIPE_CLOSE = 40;
@@ -88,7 +89,7 @@ export function HandDrawer() {
               bottom: peek[i].visible - peek[i].w * 1.4,
             }}
           >
-            <CardFace code={game.cards[id].code} locale={locale} />
+            <CardFace code={cardOf(game, id).code} locale={locale} />
           </span>
         ))}
       </button>
@@ -124,11 +125,11 @@ export function HandDrawer() {
                 transform: `rotate(${s.rotate}deg)`,
                 zIndex: i + 1,
               }}
-              title={cardText(db, game.cards[id].code, locale).name}
+              title={cardText(db, cardOf(game, id).code, locale).name}
               onClick={(e) => pick(id, e.currentTarget)}
             >
-              <CardFace code={game.cards[id].code} locale={locale} />
-              <GlanceBadge card={db.cards[game.cards[id].code]} />
+              <CardFace code={cardOf(game, id).code} locale={locale} />
+              <GlanceBadge card={db.cards[cardOf(game, id).code]} />
             </button>
           );
         })}

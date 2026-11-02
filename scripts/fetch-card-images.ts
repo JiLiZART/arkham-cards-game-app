@@ -10,7 +10,7 @@
 import { copyFileSync, existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { pathToFileURL } from "node:url";
-import type { ContentDb } from "../src/engine/types";
+import type { ContentDb } from "../src/engine/world/types";
 import { loadContentFromDisk } from "../src/content/node";
 import { asset, cardImage } from "../src/ui/assets/images";
 

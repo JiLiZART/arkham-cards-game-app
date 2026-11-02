@@ -1,17 +1,26 @@
 // They're Getting Out! (The Gathering, agenda 3)
 import {
   canEnemyEnter,
+  type CardScript,
+  currentAct,
+  currentAgenda,
   def,
   emit,
   enemies,
   findByCode,
+  type GameContext,
+  inv,
   push,
+  setCardLocation,
   stepsToward,
-  type CardScript,
-  type G,
+  turnOrder,
+  EVENT,
+  ZONE,
+  STEP,
 } from "../../../../src/engine/api";
 
-const ghouls = (g: G) => enemies(g).filter((e) => def(g, e.id).traits.includes("Ghoul"));
+const ghouls = (game: GameContext) =>
+  enemies(game).filter((e) => def(game, e.id).traits.includes("Ghoul"));
 
 export default {
   abilities: [
@@ -20,38 +29,42 @@ export default {
     { kind: "revelation", run: "back" },
   ],
   fns: {
-    ghoulsMove(g: G) {
-      const parlor = findByCode(g, "01115", ["location"]);
+    ghoulsMove(game: GameContext) {
+      const parlor = findByCode(game, "01115", [ZONE.Location]);
       if (!parlor) return;
-      for (const e of ghouls(g)) {
+      for (const e of ghouls(game)) {
         if (e.engagedWith || !e.location) continue;
-        const next = stepsToward(g, e.location, [parlor.id]).find((l) => canEnemyEnter(g, e.id, l));
+        const next = stepsToward(game, e.location, [parlor.id]).find((l) =>
+          canEnemyEnter(game, e.id, l),
+        );
         if (next) {
           const from = e.location;
-          e.location = next;
-          emit(g, "enemyMove", `${def(g, e.id).name} moves toward the Parlor`, {
+          setCardLocation(game, e.id, next);
+          emit(game, EVENT.EnemyMove, `${def(game, e.id).name} moves toward the Parlor`, {
             card: e.id,
             data: { from, to: next },
           });
         }
       }
     },
-    ghoulDoom(g: G) {
+    ghoulDoom(game: GameContext) {
       const rooms = ["01112", "01115"]
-        .map((c) => findByCode(g, c, ["location"])?.id)
+        .map((c) => findByCode(game, c, [ZONE.Location])?.id)
         .filter(Boolean);
-      const n = ghouls(g).filter((e) => rooms.includes(e.location!)).length;
-      if (n && g.s.agenda) push(g, { t: "PlaceDoom", card: g.s.agenda, n });
+      const n = ghouls(game).filter((e) => rooms.includes(e.location!)).length;
+      if (n && currentAgenda(game))
+        push(game, { t: STEP.PlaceDoom, card: currentAgenda(game)!, n });
     },
-    back(g: G) {
-      const act = g.s.act ? (def(g, g.s.act).stage ?? 1) : 3;
+    back(game: GameContext) {
+      const act = currentAct(game) ? (def(game, currentAct(game)!).stage ?? 1) : 3;
       if (act < 3) {
-        push(g, { t: "Resolution", id: "R3" });
+        push(game, { t: STEP.Resolution, id: "R3" });
         return;
       }
       // each investigator that has not resigned is defeated and suffers 1 physical trauma
-      for (const i of g.s.order)
-        if (g.s.invs[i].status === "playing") push(g, { t: "Defeated", inv: i, by: "damage" });
+      for (const i of turnOrder(game))
+        if (inv(game, i).status === "playing")
+          push(game, { t: STEP.Defeated, inv: i, by: "damage" });
     },
   },
 } satisfies CardScript;

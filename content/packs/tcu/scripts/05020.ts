@@ -11,13 +11,15 @@ import {
   startTest,
   type CardScript,
   type EffCtx,
-  type G,
+  type GameContext,
   type InstId,
   type Step,
+  CHOICE,
+  STEP,
 } from "../../../../src/engine/api";
 
-const humanoidsHere = (g: G, i: string) =>
-  enemiesAt(g, inv(g, i).location).filter((e) => def(g, e.id).traits.includes("Humanoid"));
+const humanoidsHere = (game: GameContext, i: string) =>
+  enemiesAt(game, inv(game, i).location).filter((e) => def(game, e.id).traits.includes("Humanoid"));
 
 export default {
   abilities: [
@@ -29,30 +31,31 @@ export default {
     },
   ],
   conditions: {
-    humanoidHere: (g: G, ctx: EffCtx) => !!ctx.you && humanoidsHere(g, ctx.you).length > 0,
+    humanoidHere: (game: GameContext, ctx: EffCtx) =>
+      !!ctx.you && humanoidsHere(game, ctx.you).length > 0,
   },
   fns: {
-    interrogate(g: G, ctx: EffCtx, _args: unknown, step?: Step) {
+    interrogate(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
       const enemy = ask<InstId>(
-        g,
+        game,
         step!,
         ctx.you!,
-        "target",
+        CHOICE.Target,
         "Interrogate: choose a Humanoid enemy",
-        humanoidsHere(g, ctx.you!).map((e) => ({
+        humanoidsHere(game, ctx.you!).map((e) => ({
           id: e.id,
-          label: def(g, e.id).name,
+          label: def(game, e.id).name,
           card: e.id,
           value: e.id,
         })),
         { auto: true, key: "chooseEnemy" },
       );
       if (enemy === undefined) return;
-      startTest(g, {
+      startTest(game, {
         inv: ctx.you!,
         skill: "combat",
         kind: "plain",
-        difficulty: 3 + enemyStat(g, enemy, "damage"),
+        difficulty: 3 + enemyStat(game, enemy, "damage"),
         source: ctx.source,
         target: enemy,
         ctx,
@@ -63,20 +66,21 @@ export default {
       });
     },
     /** 1 clue at another location of your choice */
-    elsewhere(g: G, ctx: EffCtx, _args: unknown, step?: Step) {
-      const here = inv(g, ctx.you!).location;
-      const cands = locations(g).filter((l) => l.id !== here && l.revealed && l.clues > 0);
+    elsewhere(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
+      const here = inv(game, ctx.you!).location;
+      const cands = locations(game).filter((l) => l.id !== here && l.revealed && l.clues > 0);
+      if (!cands.length) return;
       const loc = ask<InstId>(
-        g,
+        game,
         step!,
         ctx.you!,
-        "target",
+        CHOICE.Target,
         "Interrogate: discover 1 clue at another location",
-        cands.map((l) => ({ id: l.id, label: def(g, l.id).name, card: l.id, value: l.id })),
+        cands.map((l) => ({ id: l.id, label: def(game, l.id).name, card: l.id, value: l.id })),
         { auto: true, key: "cardChooseLocation", vars: { card: ctx.source ?? null } },
       );
-      if (loc === undefined || !card(g, loc)) return;
-      push(g, { t: "DiscoverClues", inv: ctx.you!, location: loc, n: 1 });
+      if (loc === undefined || !card(game, loc)) return;
+      push(game, { t: STEP.DiscoverClues, inv: ctx.you!, location: loc, n: 1 });
     },
   },
 } satisfies CardScript;

@@ -18,6 +18,7 @@ import { extname, normalize } from "node:path";
 import { z } from "zod";
 import { SoundCandidates, SoundManifest } from "../src/content/schema";
 import { type Choice, chooseSounds } from "../src/content/soundChoose";
+import { TEST_STAGE } from "../src/engine/world/constants";
 
 const run = promisify(execFile);
 const MANIFEST = "content/sounds/sounds.json";
@@ -87,7 +88,7 @@ function readBody(req: IncomingMessage, limit = 10_000): Promise<string> {
       body += d;
       if (body.length > limit) reject(new Error("body too large"));
     });
-    req.on("end", () => resolve(body));
+    req.on(TEST_STAGE.End, () => resolve(body));
     req.on("error", reject);
   });
 }

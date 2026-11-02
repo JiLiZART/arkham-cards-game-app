@@ -1,20 +1,28 @@
 // Mask of Silenus — reveal 1 additional token and resolve the one chosen; 1 horror if it has a symbol
-import { push, type CardScript, type EffCtx, type G } from "../../../../src/engine/api";
+import {
+  addExtraReveal,
+  type CardScript,
+  currentTest,
+  type EffCtx,
+  type GameContext,
+  push,
+  setOnChoose,
+  STEP,
+} from "../../../../src/engine/api";
 
 const SYMBOLS = ["skull", "cultist", "tablet", "elderThing", "elderSign", "autoFail"];
 
 export default {
   fns: {
-    mask(g: G) {
-      const t = g.s.skillTest;
-      if (!t) return;
-      t.extraReveal = (t.extraReveal ?? 0) + 1;
-      t.onChoose = { code: "12068", fn: "symbol" };
+    mask(game: GameContext) {
+      if (!currentTest(game)) return;
+      addExtraReveal(game);
+      setOnChoose(game, "12068", "symbol");
     },
-    symbol(g: G, ctx: EffCtx) {
+    symbol(game: GameContext, ctx: EffCtx) {
       if (ctx.token && SYMBOLS.includes(ctx.token))
-        push(g, {
-          t: "AssignDamage",
+        push(game, {
+          t: STEP.AssignDamage,
           inv: ctx.you!,
           damage: 0,
           horror: 1,

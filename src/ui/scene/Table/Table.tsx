@@ -12,7 +12,7 @@ import { eventFocus } from "../../game/camera";
 import { heldCards, needsNext, type QueuedEvent } from "../../state/store";
 import * as THREE from "three";
 import { t } from "../../../content/i18n";
-import type { GameState, InstId } from "../../../engine/types";
+import type { GameState, InstId } from "../../../engine/world/types";
 import {
   domPlace,
   lastRects,
@@ -40,6 +40,7 @@ import { EventFx } from "../EventFx";
 import { camInput, MapCamera } from "../MapCamera";
 import { cx } from "../../components/cx";
 import styles from "./Table.module.css";
+import { cardOf, invOf, invOfIf } from "../../../engine/context";
 
 /** on-screen rect of a card on the map (set by the scene; the HTML hover overlay uses it) */
 export const mapProjector: {
@@ -250,7 +251,7 @@ function SceneInner({ game }: { game: GameState }) {
 
   // the camera follows the deciding investigator's location
   const decider = game.pending?.inv ?? game.active ?? viewerOf(game);
-  const deciderLoc = decider ? game.invs[decider]?.location : null;
+  const deciderLoc = decider ? invOfIf(game, decider)?.location : null;
   // while an event plays, the camera looks at what it is about (the hunter that moves, the enemy that attacks)
   const playing = useView((st) => st.playing) as QueuedEvent | null;
   const eventLoc = eventFocus(playing, game);
@@ -276,7 +277,7 @@ function SceneInner({ game }: { game: GameState }) {
     const box = gl.domElement.getBoundingClientRect();
     return [...L.cards.entries()].map(([id, p]) => ({ id, ...projectRect(p, camera, box) }));
   };
-  const locationRects = () => cardRects().filter((r) => game.cards[r.id].zone === "location");
+  const locationRects = () => cardRects().filter((r) => cardOf(game, r.id).zone === "location");
   mapProjector.mini = (inv) => {
     const m = L.minis.find((x) => x.inv === inv);
     if (!m) return null;
@@ -358,8 +359,8 @@ function SceneInner({ game }: { game: GameState }) {
   if (intro?.step === "deal" && dealing.current.intro !== intro) {
     dealing.current = { intro, n: dealing.current.n + 1 };
     const o = domPlace("actAgenda", RESOLVE_BOX);
-    const starts = new Set(game.order.map((i) => game.invs[i].location));
-    const locs = [...L.cards.keys()].filter((id) => game.cards[id].zone === "location");
+    const starts = new Set(game.order.map((i) => invOf(game, i).location));
+    const locs = [...L.cards.keys()].filter((id) => cardOf(game, id).zone === "location");
     // the starting locations first, then the rest in layout order
     [...locs.filter((id) => starts.has(id)), ...locs.filter((id) => !starts.has(id))].forEach(
       (id, k) => {
@@ -380,7 +381,7 @@ function SceneInner({ game }: { game: GameState }) {
   // a long press finds the card under the finger here (enemies and attachments over the location they sit on)
   setMapCardAt((x, y) => {
     const hit = cardRects().filter((r) => x >= r.x0 && x <= r.x1 && y >= r.y0 && y <= r.y1);
-    return (hit.find((r) => game.cards[r.id].zone !== "location") ?? hit[0])?.id ?? null;
+    return (hit.find((r) => cardOf(game, r.id).zone !== "location") ?? hit[0])?.id ?? null;
   });
   const moveDrag = useView((st) => st.moveDrag);
   const spotlight = useView((st) => st.spotlight);
@@ -423,7 +424,7 @@ function SceneInner({ game }: { game: GameState }) {
           key={m.inv}
           pos={m.pos}
           code={m.inv}
-          at={game.invs[m.inv].location}
+          at={invOf(game, m.inv).location}
           hidden={hides.map}
           active={game.active === m.inv}
           dimmed={!!spotlight && !reducedMotion() && !spotlight.invs.includes(m.inv)}
@@ -431,14 +432,14 @@ function SceneInner({ game }: { game: GameState }) {
           moves={m.inv === game.pending?.inv ? moveTargets : null}
           rects={locationRects}
           onTap={(x, y) => {
-            const at = game.invs[m.inv].location;
+            const at = invOf(game, m.inv).location;
             // a finger peeks the marker's location first; a second tap chooses
             if (at) tapCard(at, () => click(at, x, y));
           }}
         />
       ))}
       {[...L.cards.entries()].map(([id, place]) => {
-        const inst = game.cards[id];
+        const inst = cardOf(game, id);
         const arr = arrivals.current.get(id);
         return (
           <CardMesh

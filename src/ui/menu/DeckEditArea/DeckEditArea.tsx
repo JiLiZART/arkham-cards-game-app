@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useLayoutMode } from "../../state/layoutMode";
 import { cardText, t } from "../../../content/i18n";
 import type { CardDef, DeckDef } from "../../../content/schema";
-import { whyNot } from "../../../engine/decks";
+import { whyNot } from "../../../engine/campaign/decks";
 import { CardFace } from "../../components/CardFace";
 import { db, gameStore, useGame } from "../../state/context";
 import {

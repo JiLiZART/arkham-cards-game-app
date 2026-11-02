@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { GameEvent, InstId, InvId } from "../../../engine/types";
+import type { GameEvent, InstId, InvId } from "../../../engine/world/types";
 import { reducedMotion, whenSettled, type ScreenBox } from "../../game/arrivals";
 import { FLOAT_KINDS, floatLife, gainOf, type FeedEntry } from "../../game/feed";
 import { mapProjector } from "../../scene/Table";

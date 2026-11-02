@@ -1,5 +1,5 @@
 /** the skill-test screen's pure parts: what is tested, what is placed, the calculation strip, where the discs spill */
-import type { G } from "../../engine/core";
+import type { GameContext } from "../../engine/context";
 import { testParts, tokenTotal } from "../../engine/rules/skillTest";
 import type {
   ChoiceOption,
@@ -9,16 +9,17 @@ import type {
   InvId,
   PendingChoice,
   SkillTestState,
-} from "../../engine/types";
+} from "../../engine/world/types";
 import { choicesOffered, type Looking } from "../state/players";
+import { cardOfIf } from "../../engine/context";
 
-const gOf = (game: GameState, db: ContentDb): G => ({ s: game, db, events: [] });
+const gOf = (game: GameState, db: ContentDb): GameContext => ({ s: game, db, events: [] });
 
 export type Subject = { kind: "card"; id: InstId } | { kind: "portrait"; inv: InvId };
 
 /** what the test is about: the card it is against (enemy, location), else the card that called for it, else the investigator */
-export function subjectOf(test: SkillTestState, game: Pick<GameState, "cards">): Subject {
-  const id = [test.target, test.source].find((c): c is InstId => !!c && !!game.cards[c]);
+export function subjectOf(test: SkillTestState, game: Pick<GameState, "world">): Subject {
+  const id = [test.target, test.source].find((c): c is InstId => !!c && !!cardOfIf(game, c));
   return id ? { kind: "card", id } : { kind: "portrait", inv: test.inv };
 }
 
@@ -34,11 +35,11 @@ export interface PlacedCard {
 /** the committed cards in placement order; removable when their owner is the one deciding and a take-back option is offered */
 export function placedCards(
   test: SkillTestState,
-  game: GameState,
+  state: GameState,
   db: ContentDb,
   pending: PendingChoice | null,
 ): PlacedCard[] {
-  const icons = new Map(testParts(gOf(game, db), test).icons.map((i) => [i.card, i.n]));
+  const icons = new Map(testParts(gOf(state, db), test).icons.map((i) => [i.card, i.n]));
   return test.committed.map((card, k) => {
     const owner = test.committers[k];
     return {
@@ -70,12 +71,12 @@ export interface CalcParts {
 /** the strip: skill, placed icons, modifiers and the first `revealed` tokens, summed against the difficulty */
 export function calcParts(
   test: SkillTestState,
-  game: GameState,
+  state: GameState,
   db: ContentDb,
   revealed: number,
 ): CalcParts {
-  const g = gOf(game, db);
-  const p = testParts(g, test);
+  const game = gOf(state, db);
+  const p = testParts(game, test);
   const shown = {
     ...test,
     tokens: test.tokens.slice(0, revealed),
@@ -89,7 +90,7 @@ export function calcParts(
     mods: p.mods,
     tokens: shown.tokens.map((token, k) => ({ token, mod: shown.tokenMods[k] ?? 0 })),
     autoFail,
-    total: autoFail ? 0 : Math.max(0, p.total + tokenTotal(g, shown)),
+    total: autoFail ? 0 : Math.max(0, p.total + tokenTotal(game, shown)),
     difficulty: p.difficulty,
   };
 }

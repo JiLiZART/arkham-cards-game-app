@@ -1,5 +1,5 @@
 import type { CardDef } from "./schema";
-import type { ContentDb } from "../engine/types";
+import type { ContentDb } from "../engine/world/types";
 
 export const DEFAULT_LOCALE = "en";
 export type CardText = Pick<CardDef, "name" | "text"> &

@@ -9,7 +9,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 import { loadContentFromDisk } from "../src/content/node";
 import type { ContentError } from "../src/content/loader";
-import type { ContentDb } from "../src/engine/types";
+import type { ContentDb } from "../src/engine/world/types";
 import { CHAOS_TOKENS, layersFor } from "../src/ui/assets/chaosTokens";
 import { ICON_SOURCES, MARKUP_ICONS, scenarioIcon, type IconSource } from "../src/ui/assets/icons";
 

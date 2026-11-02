@@ -1,12 +1,18 @@
 // Trish Scarborough — elder sign: after the test, you may disengage and move to a connecting location
-import { push, type CardScript, type EffCtx, type G } from "../../../../src/engine/api";
+import {
+  push,
+  type CardScript,
+  type EffCtx,
+  type GameContext,
+  STEP,
+} from "../../../../src/engine/api";
 
 export default {
   abilities: [{ kind: "elderSign", tokenValue: 0, run: "elder" }],
   fns: {
-    elder(g: G, ctx: EffCtx) {
-      push(g, {
-        t: "Effects",
+    elder(game: GameContext, ctx: EffCtx) {
+      push(game, {
+        t: STEP.Effects,
         effects: [
           {
             op: "chooseOne",

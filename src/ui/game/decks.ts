@@ -1,7 +1,7 @@
 import { cardText, t } from "../../content/i18n";
 import type { CardDef, DeckDef, InvestigatorDef } from "../../content/schema";
-import { validateDeck, whyNotReplace, type DeckProblem } from "../../engine/decks";
-import type { ContentDb } from "../../engine/types";
+import { validateDeck, whyNotReplace, type DeckProblem } from "../../engine/campaign/decks";
+import type { ContentDb } from "../../engine/world/types";
 import { catalogCards, emptyFilters } from "../catalog/filter";
 import { safeStorage, type Storage } from "../state/store";
 

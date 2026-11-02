@@ -9,7 +9,7 @@ import {
   putEnemy,
   skipMulligans,
   start,
-} from "../../engine/testkit";
+} from "../../engine/kits/testkit";
 import {
   addTokens,
   bagLanding,
@@ -21,6 +21,7 @@ import {
   stripDuringTest,
   subjectOf,
 } from "./testScreen";
+import { allCardRecsIn, cardRecIn } from "../../engine/world/store";
 
 const ROLAND = "01001";
 const DAISY = "01002";
@@ -28,10 +29,10 @@ const DAISY = "01002";
 const begin = (invs = [ROLAND]) => {
   let r = skipMulligans(start("the-gathering", invs, 1, { chaosBag: ["0"] as never }));
   if (r.state.pending?.options.some((o) => o.label === "Roland Banks")) r = pick(r, "Roland Banks");
-  return mutate(r, (g) => {
-    giveCard(g, ROLAND, "01025"); // Vicious Blow: 1 combat icon
-    if (invs.includes(DAISY)) giveCard(g, DAISY, "01093"); // Unexpected Courage: 2 wild icons
-    putEnemy(g, "01160", locId(g, "01111"), ROLAND);
+  return mutate(r, (game) => {
+    giveCard(game, ROLAND, "01025"); // Vicious Blow: 1 combat icon
+    if (invs.includes(DAISY)) giveCard(game, DAISY, "01093"); // Unexpected Courage: 2 wild icons
+    putEnemy(game, "01160", locId(game, "01111"), ROLAND);
   });
 };
 const fight = (invs = [ROLAND]) => pick(begin(invs), /^Fight Ghoul Minion/);
@@ -43,16 +44,16 @@ describe("subjectOf", () => {
       kind: "card",
       id: f.state.skillTest!.target,
     });
-    expect(f.state.cards[f.state.skillTest!.target!].code).toBe("01160");
+    expect(cardRecIn(f.state, f.state.skillTest!.target!).code).toBe("01160");
     const i = pick(begin(), /^Investigate/);
-    expect(i.state.cards[(subjectOf(i.state.skillTest!, i.state) as { id: string }).id].code).toBe(
-      "01111",
-    );
+    expect(
+      cardRecIn(i.state, (subjectOf(i.state.skillTest!, i.state) as { id: string }).id).code,
+    ).toBe("01111");
   });
 
   it("a test called by a card with no target: the card; a plain test: the investigator's portrait", () => {
     const f = fight();
-    const card = Object.values(f.state.cards).find((c) => c.code === "01111")!.id;
+    const card = allCardRecsIn(f.state).find((c) => c.code === "01111")!.id;
     const t = { ...f.state.skillTest!, target: null, source: card };
     expect(subjectOf(t, f.state)).toEqual({ kind: "card", id: card });
     expect(subjectOf({ ...t, source: null }, f.state)).toEqual({ kind: "portrait", inv: ROLAND });
@@ -65,7 +66,7 @@ describe("placedCards", () => {
     r = pick(r, /^Commit Vicious Blow/);
     const [c] = placedCards(r.state.skillTest!, r.state, db, r.state.pending);
     expect(c).toMatchObject({ owner: ROLAND, icons: 1, removable: true });
-    expect(r.state.cards[c.card].code).toBe("01025");
+    expect(cardRecIn(r.state, c.card).code).toBe("01025");
   });
 
   it("a card is not removable once the window has closed", () => {

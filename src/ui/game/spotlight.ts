@@ -1,24 +1,27 @@
-import type { GameEvent, GameState, InvId } from "../../engine/types";
+import type { GameEvent, GameState, InvId } from "../../engine/world/types";
 import { deckPick } from "./optionHome";
 import type { Spotlight } from "../state/view";
+import { cardOfIf, invOf, invOfIf, patchedState } from "../../engine/context";
+import { EVENT, type EventType } from "../../engine/events/event";
+import { ZONE, type Zone } from "../../engine/world/constants";
 
 /** animated events that spotlight what they are about (the chaos draw and test results don't) */
-const SPOT = new Set([
-  "enemyMove",
-  "attack",
-  "spawn",
-  "enemyDamage",
-  "enemyDefeated",
-  "defeated",
-  "damage",
-  "clues",
-  "doom",
-  "encounter",
-  "weakness",
-  "agendaAdvance",
-  "actAdvance",
+const SPOT = new Set<EventType>([
+  EVENT.EnemyMove,
+  EVENT.Attack,
+  EVENT.Spawn,
+  EVENT.EnemyDamage,
+  EVENT.EnemyDefeated,
+  EVENT.Defeated,
+  EVENT.Damage,
+  EVENT.Clues,
+  EVENT.Doom,
+  EVENT.Encounter,
+  EVENT.Weakness,
+  EVENT.AgendaAdvance,
+  EVENT.ActAdvance,
 ]);
-const ON_MAP = new Set(["location", "enemy"]);
+const ON_MAP = new Set<Zone>([ZONE.Location, ZONE.Enemy]);
 
 /** the map cards and investigator portraits an event is about, or null when none of them is on the map */
 export function spotlightOf(e: GameEvent | null, game: GameState): Spotlight | null {
@@ -26,8 +29,12 @@ export function spotlightOf(e: GameEvent | null, game: GameState): Spotlight | n
   const ids = [e.card, e.data?.source as string | null | undefined].filter(
     (id): id is string => !!id,
   );
-  const cards = [...new Set(ids)].filter((id) => ON_MAP.has(game.cards[id]?.zone));
-  const invs = e.inv && game.invs[e.inv]?.location ? [e.inv] : [];
+  const onMap = (id: string) => {
+    const zone = cardOfIf(game, id)?.zone;
+    return !!zone && ON_MAP.has(zone);
+  };
+  const cards = [...new Set(ids)].filter(onMap);
+  const invs = e.inv && invOfIf(game, e.inv)?.location ? [e.inv] : [];
   return cards.length || invs.length ? { cards, invs } : null;
 }
 
@@ -44,13 +51,15 @@ export function spotlightOfChoice(game: GameState, viewer: InvId | null): Spotli
   // a draw waiting for a tap on a deck: the piles are what to tap, everything else dims (the piles lift their own dim)
   if (p?.kind === "draw") return { cards: [], invs: [], choice: true };
   if (!p || NO_SPOT.has(p.kind) || deckPick(game, viewer).length) return null;
-  const ids = p.options.map((o) => o.card).filter((id): id is string => !!id && !!game.cards[id]);
+  const ids = p.options
+    .map((o) => o.card)
+    .filter((id): id is string => !!id && !!cardOfIf(game, id));
   const test = p.kind === "commit" ? game.skillTest : null;
   if (test?.target) ids.push(test.target);
   const invs = new Set<InvId>(test ? [test.inv] : []);
   const cards = new Set<string>();
   for (const id of ids) {
-    const inv = game.order.find((i) => game.invs[i].cardId === id);
+    const inv = game.order.find((i) => invOf(game, i).cardId === id);
     if (inv) invs.add(inv);
     else cards.add(id);
   }
@@ -83,8 +92,8 @@ export function heldGame(game: GameState, queue: GameEvent[]): GameState {
       held.set(e.card, from);
   }
   if (!held.size) return game;
-  const cards = { ...game.cards };
-  for (const [id, from] of held)
-    if (cards[id]) cards[id] = { ...cards[id], location: from, engagedWith: null };
-  return { ...game, cards };
+  return patchedState(
+    game,
+    Object.fromEntries([...held].map(([id, from]) => [id, { location: from, engagedWith: null }])),
+  );
 }

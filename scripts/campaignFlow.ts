@@ -13,6 +13,7 @@ import type {
 } from "../src/content/schema";
 import { namedScenarios } from "../src/content/flow";
 import { kebab, tokenName, type Raw } from "./campaignGuide";
+import { TEST_STAGE } from "../src/engine/world/constants";
 
 export interface FlowSource {
   /** the guide's campaign record */
@@ -253,7 +254,7 @@ class Compiler {
             return [{ do: "replayScenario", scenario }];
           case "result": {
             const r = RESULTS[String(e.value).toLowerCase()];
-            return r ? [{ do: "end", result: r }] : this.skipEffect(e);
+            return r ? [{ do: TEST_STAGE.End, result: r }] : this.skipEffect(e);
           }
           case "difficulty":
             return [];

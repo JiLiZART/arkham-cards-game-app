@@ -3,7 +3,7 @@ import { campaignBlurb, campaignName, cardText, t } from "../../content/i18n";
 import type { CampaignDef, DeckDef, Difficulty } from "../../content/schema";
 import { packsOf } from "../../content";
 import { packLoaded } from "../../content/loader";
-import type { ContentDb } from "../../engine/types";
+import type { ContentDb } from "../../engine/world/types";
 import { customDecks, deckTabs, type SavedDeck } from "../game/decks";
 import type { Storage } from "../state/store";
 

@@ -1,7 +1,7 @@
 import { useLayoutMode } from "../../state/layoutMode";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { t } from "../../../content/i18n";
-import type { GameState, InstId } from "../../../engine/types";
+import type { GameState, InstId } from "../../../engine/world/types";
 import { domPlace, noteLocalMove, reducedMotion } from "../../game/arrivals";
 import { CardFace } from "../../components/CardFace";
 import { db, useGame } from "../../state/context";
@@ -17,6 +17,7 @@ import { RESOLVE_BOX } from "../Reveal";
 import { moment } from "../SoundLayer";
 import { cx } from "../../components/cx";
 import styles from "./Showcase.module.css";
+import { cardOf, cardOfIf } from "../../../engine/context";
 
 /**
  * The showcase in the middle of the screen: cards just drawn into the on-screen hand rise out of the deck and arc here, face up, and
@@ -63,7 +64,7 @@ export function Showcase() {
       if (flown.current.has(id)) continue;
       flown.current.add(id);
       const pile = domPlace(
-        !drawn.includes(id) && game.cards[id]?.zone === "discard" ? "discard" : "deck",
+        !drawn.includes(id) && cardOfIf(game, id)?.zone === "discard" ? "discard" : "deck",
         RESOLVE_BOX,
       );
       if (!pile || reducedMotion()) continue;
@@ -186,11 +187,11 @@ export function Showcase() {
           >
             <span className="sc-flip" data-testid="sc-flip">
               <span className="sc-front">
-                <CardFace code={game.cards[id].code} locale={locale} />
+                <CardFace code={cardOf(game, id).code} locale={locale} />
               </span>
               <img
                 className="sc-back"
-                src={backUrl(game.cards[id].zone === "encounterDeck" ? "encounter" : "player")}
+                src={backUrl(cardOf(game, id).zone === "encounterDeck" ? "encounter" : "player")}
                 alt=""
                 draggable={false}
               />
@@ -201,9 +202,9 @@ export function Showcase() {
       <div className="sc-help" data-testid="sc-help">
         {help}
       </div>
-      {detail && game.cards[detail.id] && (
+      {detail && cardOfIf(game, detail.id) && (
         <DetailsColumn
-          rows={cardDetails(db, game.cards[detail.id].code, locale)}
+          rows={cardDetails(db, cardOf(game, detail.id).code, locale)}
           rect={{
             x0: detail.rect.left,
             y0: detail.rect.top,

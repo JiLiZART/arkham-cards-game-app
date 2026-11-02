@@ -1,4 +1,4 @@
-import type { CardScript, ContentDb } from "../engine/types";
+import type { CardScript, ContentDb } from "../engine/world/types";
 import {
   addCampaignFiles,
   addCardText,

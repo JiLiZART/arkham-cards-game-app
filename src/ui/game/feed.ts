@@ -1,6 +1,9 @@
 import { t } from "../../content/i18n";
-import type { ContentDb, GameEvent, GameState, InstId, InvId } from "../../engine/types";
+import type { ContentDb, GameEvent, GameState, InstId, InvId } from "../../engine/world/types";
 import { isIcon, type IconName } from "../assets/icons";
+import { cardOf, cardOfIf, invOf, invOfIf } from "../../engine/context";
+import { EVENT, type EventType } from "../../engine/events/event";
+import { ZONE, type Zone, isOneOf } from "../../engine/world/constants";
 
 /** one piece of a styled sentence */
 export type Part =
@@ -29,14 +32,14 @@ export interface FeedEntry {
 }
 
 /** events that would only be noise in the feed (they have their own display or say nothing new) */
-export const HIDDEN = new Set([
-  "setup",
-  "shuffle",
-  "ready",
-  "action",
-  "token",
-  "testStart",
-  "noToken",
+export const HIDDEN = new Set<EventType>([
+  EVENT.Setup,
+  EVENT.Shuffle,
+  EVENT.Ready,
+  EVENT.Action,
+  EVENT.Token,
+  EVENT.TestStart,
+  EVENT.NoToken,
 ]);
 /** the consequential events that also float up over the map; everything else is told by the feed alone */
 export const FLOAT_KINDS = new Set([
@@ -52,9 +55,15 @@ export const FLOAT_KINDS = new Set([
   "actAdvance",
 ]);
 /** a phase's automated step: the caption tells it live; the Journal shows it as a section line */
-export const STEP = "step";
+export const STEP_EVENT = EVENT.Step;
 /** events done by enemies (or the encounter deck) rather than an investigator */
-const ENEMY = new Set(["attack", "spawn", "enemyMove", "attackCancelled", "spawnFail"]);
+const ENEMY = new Set<EventType>([
+  EVENT.Attack,
+  EVENT.Spawn,
+  EVENT.EnemyMove,
+  EVENT.AttackCancelled,
+  EVENT.SpawnFail,
+]);
 const ICONS = new Set<string>([
   "resource",
   "clue",
@@ -70,7 +79,7 @@ const ICONS = new Set<string>([
   "wild",
 ]);
 /** entries that draw or reveal an encounter card: its set's icon goes before the card */
-const SET_ICON = new Set(["encounter", "reveal"]);
+const SET_ICON = new Set<EventType>([EVENT.Encounter, EVENT.Reveal]);
 const NUMERIC = new Set([
   "n",
   "damage",
@@ -118,9 +127,9 @@ export function fillTemplate(
     const [, name, icon] = m;
     const value = name === "inv" ? e.inv : name === "card" ? e.card : data[name];
     if (name === "inv" || name === "by") {
-      if (typeof value === "string" && game.invs[value]) parts.push({ t: "inv", id: value });
+      if (typeof value === "string" && invOfIf(game, value)) parts.push({ t: "inv", id: value });
     } else if (["card", "at", "from", "to"].includes(name)) {
-      if (typeof value === "string" && game.cards[value]) parts.push({ t: "card", id: value });
+      if (typeof value === "string" && cardOfIf(game, value)) parts.push({ t: "card", id: value });
     } else if (NUMERIC.has(name)) {
       const n = Number(value ?? 0);
       if (icon === "action") parts.push({ t: "glyphs", name: "action", n });
@@ -132,12 +141,12 @@ export function fillTemplate(
         parts.push({ t: "icon", name: value as IconName });
     } else if (name === "cards") {
       for (const id of (value as InstId[] | undefined) ?? [])
-        if (game.cards[id]) parts.push({ t: "card", id });
+        if (cardOfIf(game, id)) parts.push({ t: "card", id });
     } else if (name === "tokens") {
       for (const tok of (value as string[] | undefined) ?? [])
-        parts.push({ t: "token", token: tok });
+        parts.push({ t: EVENT.Token, token: tok });
     } else if (name === "token") {
-      if (value) parts.push({ t: "token", token: String(value) });
+      if (value) parts.push({ t: EVENT.Token, token: String(value) });
     } else if (name === "outcome") {
       parts.push({ t: "outcome", ok: !!data.success });
     } else if (name === "phase") {
@@ -180,17 +189,17 @@ export function feedEntry(
     template === key
       ? // no template: a styled generic entry (who or what, then the engine's text)
         [
-          ...(e.inv && game.invs[e.inv]
+          ...(e.inv && invOfIf(game, e.inv)
             ? [{ t: "inv", id: e.inv } as Part]
-            : e.card && game.cards[e.card]
+            : e.card && cardOfIf(game, e.card)
               ? [{ t: "card", id: e.card } as Part]
               : []),
           { t: "text", s: ` ${e.text}` } as Part,
         ]
       : fillTemplate(template, e, game, db, locale);
   const set =
-    SET_ICON.has(e.type) && e.card && game.cards[e.card]
-      ? db.cards[game.cards[e.card].code]?.encounterSet
+    SET_ICON.has(e.type) && e.card && cardOfIf(game, e.card)
+      ? db.cards[cardOf(game, e.card).code]?.encounterSet
       : undefined;
   if (set)
     parts = parts.flatMap((p) =>
@@ -198,7 +207,9 @@ export function feedEntry(
     );
   const tone: Tone = ENEMY.has(e.type) ? "enemy" : e.inv ? "player" : "game";
   const mapCard =
-    e.card && game.cards[e.card] && ["enemy", "location"].includes(game.cards[e.card].zone)
+    e.card &&
+    cardOfIf(game, e.card) &&
+    isOneOf(cardOf(game, e.card).zone, ZONE.Enemy, ZONE.Location)
       ? e.card
       : undefined;
   const actor =
@@ -263,7 +274,7 @@ export function captionIndex(
   if (!playing && (!stageBusy || pendingKind === "phase")) return null;
   const upTo = current ? current.logIndex : shown - 1;
   for (let i = Math.min(upTo, log.length - 1); i >= 0 && log[i].type !== "phase"; i--)
-    if (log[i].type === STEP) return i;
+    if (log[i].type === STEP_EVENT) return i;
   return null;
 }
 
@@ -286,7 +297,7 @@ export function promptParts(
   if (template === key) return null;
   const vars = p.promptVars ?? {};
   const e: GameEvent = {
-    type: "prompt",
+    type: EVENT.Prompt,
     text: p.prompt,
     inv: p.inv,
     card: typeof vars.card === "string" ? vars.card : null,
@@ -323,7 +334,7 @@ function mergedEntry(run: GameEvent[], game: GameState, db: ContentDb, locale: s
   const fill = (key: string, data: Record<string, unknown>, inv: InvId | null = null) =>
     fillTemplate(
       t(db, locale, key),
-      { type: "merged", text: "", inv, card: null, data },
+      { type: EVENT.Merged, text: "", inv, card: null, data },
       game,
       db,
       locale,
@@ -345,7 +356,7 @@ function mergedEntry(run: GameEvent[], game: GameState, db: ContentDb, locale: s
     byInv.set(e.inv, m);
   }
   const all = [...byInv.values()];
-  const playing = game.order.filter((i) => game.invs[i].status === "playing");
+  const playing = game.order.filter((i) => invOf(game, i).status === "playing");
   const each =
     all.length >= 2 &&
     all.length === playing.length &&
@@ -409,7 +420,7 @@ export function mergeLive(
   for (let i = Math.max(0, shown - window); i < shown; i++) {
     const entry = entries.get(i);
     // steps are told by the caption, not the live feed (and don't break a run)
-    if (!entry || entry.kind === STEP) continue;
+    if (!entry || entry.kind === STEP_EVENT) continue;
     const e = game.log[i];
     const kind = routineKind(e);
     const group = kind === "enemyMove" ? "enemyMove" : "routine";

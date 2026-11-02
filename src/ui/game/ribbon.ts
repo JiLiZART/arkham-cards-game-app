@@ -1,4 +1,5 @@
-import type { GameState, InvId } from "../../engine/types";
+import type { GameState, InvId } from "../../engine/world/types";
+import { invOf } from "../../engine/context";
 
 export const PHASES = ["mythos", "investigation", "enemy", "upkeep"] as const;
 
@@ -36,9 +37,9 @@ export function ribbonModel(game: GameState): RibbonModel {
   }));
   const investigating = phase === "investigation";
   const turns = game.order
-    .filter((i) => game.invs[i].status === "playing")
+    .filter((i) => invOf(game, i).status === "playing")
     .map((i) => {
-      const st = game.invs[i];
+      const st = invOf(game, i);
       if (!investigating) return { inv: i, state: "idle" as const, pips: 0, filled: 0 };
       if (game.active === i) {
         const left = st.actionsLeft + st.restrictedActions.reduce((n, r) => n + r.left, 0);

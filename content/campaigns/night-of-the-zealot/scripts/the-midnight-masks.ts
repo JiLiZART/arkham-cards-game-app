@@ -1,29 +1,34 @@
 // The Midnight Masks: Your House redirects the Ghoul Priest; 6 unique Cultists in the victory display advance the act
 import {
-  cardsIn,
-  def,
-  findByCode,
-  push,
+  card,
+  cardIf,
   type CardScript,
+  cardsIn,
+  currentAct,
+  def,
   type EffCtx,
-  type G,
+  findByCode,
+  type GameContext,
+  push,
+  ZONE,
+  STEP,
 } from "../../../../src/engine/api";
 
 export default {
   hooks: {
-    spawnRedirect(g: G, ctx: EffCtx) {
-      if (g.s.cards[ctx.enemy!].code !== "01116") return;
-      const house = findByCode(g, "01124", ["location"]);
+    spawnRedirect(game: GameContext, ctx: EffCtx) {
+      if (card(game, ctx.enemy!).code !== "01116") return;
+      const house = findByCode(game, "01124", [ZONE.Location]);
       if (house) ctx.location = house.id;
     },
-    checkObjectives(g: G) {
-      if (!g.s.act || g.s.cards[g.s.act].code !== "01123") return;
+    checkObjectives(game: GameContext) {
+      if (cardIf(game, currentAct(game))?.code !== "01123") return;
       const cultists = new Set(
-        cardsIn(g, "victory")
-          .filter((c) => def(g, c.id).unique && def(g, c.id).traits.includes("Cultist"))
+        cardsIn(game, ZONE.Victory)
+          .filter((c) => def(game, c.id).unique && def(game, c.id).traits.includes("Cultist"))
           .map((c) => c.code),
       );
-      if (cultists.size >= 6) push(g, { t: "AdvanceAct" });
+      if (cultists.size >= 6) push(game, { t: STEP.AdvanceAct });
     },
   },
 } satisfies CardScript;

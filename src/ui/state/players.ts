@@ -1,6 +1,7 @@
 /** the player bar's pure parts: who is shown, who can act, what each avatar says (ADR-0004: viewing is view state) */
-import { maxHealth, maxSanity } from "../../engine/core";
-import type { ChoiceOption, GameState, InvId } from "../../engine/types";
+import { invOf, invOfIf } from "../../engine/context";
+import { maxHealth, maxSanity } from "../../engine/queries";
+import type { ChoiceOption, GameState, InvId } from "../../engine/world/types";
 import { db } from "./context";
 import { ribbonModel } from "../game/ribbon";
 import { viewerOf } from "./store";
@@ -21,7 +22,7 @@ export const holdsSeat = (view: Looking, inv: InvId | null): boolean =>
  * decider sits at another device, this device stays on its own seat; one with no seat is shown the board (null).
  */
 export function shownInv(game: GameState, view: Looking): InvId | null {
-  if (view.viewing && game.invs[view.viewing]) return view.viewing;
+  if (view.viewing && invOfIf(game, view.viewing)) return view.viewing;
   const decider = viewerOf(game);
   if (holdsSeat(view, decider)) return decider;
   return view.mySeats?.[0] ?? null;
@@ -78,7 +79,7 @@ export function barAsk(game: GameState, view: Looking): BarAsk {
 
 /** the pending options that are an investigator's own ability (on their card, not an answer among investigators): the stat bar's and the sheet's buttons */
 export function abilityOptionsOf(game: GameState, inv: InvId): ChoiceOption[] {
-  const card = game.invs[inv]?.cardId;
+  const card = invOfIf(game, inv)?.cardId;
   return investigatorOptions(game).abilities.filter((o) => o.card === card);
 }
 
@@ -110,7 +111,7 @@ export function barModel(game: GameState, view: Looking): Avatar[] {
   const turns = new Map(ribbonModel(game).turns.map((t) => [t.inv, t]));
   const can = canAct(game);
   return game.order.map((inv) => {
-    const st = game.invs[inv];
+    const st = invOf(game, inv);
     const t = turns.get(inv);
     return {
       inv,
@@ -138,7 +139,7 @@ export function investigatorOptions(game: GameState): {
   answers: Map<InvId, ChoiceOption>;
   abilities: ChoiceOption[];
 } {
-  const own = new Map(game.order.map((i) => [game.invs[i].cardId, i]));
+  const own = new Map(game.order.map((i) => [invOf(game, i).cardId, i]));
   const mine = (game.pending?.options ?? []).filter((o) => o.card && own.has(o.card));
   const answers = new Map<InvId, ChoiceOption>();
   const abilities: ChoiceOption[] = [];
@@ -184,7 +185,7 @@ export interface InvestigatorChoice {
 export function investigatorChoice(game: GameState): InvestigatorChoice | null {
   const p = game.pending;
   if (!p || p.kind === "reaction" || p.kind === "commit" || !p.options.length) return null;
-  const own = new Map(game.order.map((i) => [game.invs[i].cardId, i]));
+  const own = new Map(game.order.map((i) => [invOf(game, i).cardId, i]));
   if (!p.options.every((o) => o.card && own.has(o.card))) return null;
   return {
     prompt: p.prompt,

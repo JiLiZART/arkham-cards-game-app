@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { pick, skipMulligans, start } from "../../engine/testkit";
+import { pick, skipMulligans, start } from "../../engine/kits/testkit";
 import { abilityRef, optionLabel } from "./optionText";
+import { allCardRecsIn, invStateIn } from "../../engine/world/store";
 
 const ROLAND = "01001";
 const game = () => {
@@ -12,7 +13,7 @@ const game = () => {
 describe("optionLabel", () => {
   it("an ability's button in the game's language, after the card's name in it", () => {
     const g = game();
-    const card = g.invs[ROLAND].cardId;
+    const card = invStateIn(g, ROLAND).cardId;
     const o = {
       id: `${card}:0`,
       label: "Roland: discover 1 clue at your location",
@@ -26,7 +27,7 @@ describe("optionLabel", () => {
 
   it("a turn's ability option and a fast ability in a test are found the same way", () => {
     const g = game();
-    const card = g.invs[ROLAND].cardId;
+    const card = invStateIn(g, ROLAND).cardId;
     expect(
       abilityRef({ id: "x", label: "x", value: { kind: "ability", card, index: 0 } }, g),
     ).toEqual({ code: ROLAND, index: 0 });
@@ -72,7 +73,7 @@ describe("optionLabel", () => {
 
   it("a label with no card name before it is translated whole", () => {
     const g = game();
-    const id = Object.values(g.cards).find((c) => c.code === "01122")?.id;
+    const id = allCardRecsIn(g).find((c) => c.code === "01122")?.id;
     if (!id) return;
     expect(
       optionLabel(

@@ -2,7 +2,7 @@ import { Fragment, useEffect, useLayoutEffect, useReducer, useRef } from "react"
 import { useLayoutMode } from "../../state/layoutMode";
 import { tapCard } from "../../game/touch";
 import { t } from "../../../content/i18n";
-import type { GameState, InstId } from "../../../engine/types";
+import type { GameState, InstId } from "../../../engine/world/types";
 import { rememberRect } from "../../game/arrivals";
 import { useCardClick } from "../../game/cardClick";
 import { db, gameStore, useGame } from "../../state/context";
@@ -18,6 +18,7 @@ import { stripDuringTest } from "../../game/testScreen";
 import { MiniCard } from "../MiniCard";
 import { cx } from "../../components/cx";
 import styles from "./PlayStrip.module.css";
+import { cardOf, cardsOf } from "../../../engine/context";
 
 const tr = (key: string, vars?: Record<string, string | number>) =>
   t(db, gameStore.getState().locale, key, vars);
@@ -90,7 +91,7 @@ export function PlayStrip({ part = "all" }: { part?: "all" | "threats" | "assets
   const current = useGame((s) => s.current);
   // an enemy whose move hasn't played yet isn't engaged on screen yet; a card still in (or waiting for) the showcase isn't here yet
   const waiting = heldCards({ current, queue });
-  const all = Object.values(heldGame(game, queue).cards).filter((c) => !waiting.has(c.id));
+  const all = cardsOf(heldGame(game, queue)).filter((c) => !waiting.has(c.id));
   const assets =
     part === "threats" ? [] : all.filter((c) => c.zone === "play" && c.controller === viewer);
   const threats =
@@ -210,7 +211,7 @@ export function PlayStrip({ part = "all" }: { part?: "all" | "threats" | "assets
         />
         {!phone && (
           <span className={styles.stripSlots}>
-            <SlotChips card={db.cards[game.cards[id].code]} className="slot-chip" />
+            <SlotChips card={db.cards[cardOf(game, id).code]} className="slot-chip" />
           </span>
         )}
       </div>

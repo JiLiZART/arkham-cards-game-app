@@ -1,22 +1,29 @@
 // Hypnotic Therapy — test [intellect] (2) to heal 1 horror from an investigator here, who may draw 1; or add 1 horror to another of your heals
 import {
+  addCounter,
   ask,
   card,
+  type CardScript,
+  type EffCtx,
   emit,
+  type GameContext,
   inv,
+  type InvId,
   invName,
   invsAt,
   push,
-  type CardScript,
-  type EffCtx,
-  type G,
-  type InvId,
   type Step,
+  turnOrder,
+  EVENT,
+  CHOICE,
+  STEP,
 } from "../../../../src/engine/api";
 
 /** the investigator whose card was healed, if it was an investigator */
-const healedInv = (g: G, ctx: EffCtx): InvId | undefined =>
-  Object.values(g.s.invs).find((i) => i.cardId === ctx.card)?.id;
+const healedInv = (game: GameContext, ctx: EffCtx): InvId | undefined =>
+  turnOrder(game)
+    .map((i) => inv(game, i))
+    .find((i) => i.cardId === ctx.card)?.id;
 
 export default {
   abilities: [
@@ -43,32 +50,32 @@ export default {
     },
   ],
   conditions: {
-    otherHealOnInvestigator: (g: G, ctx: EffCtx) => {
-      const i = healedInv(g, ctx);
-      return ctx.by !== ctx.source && !!i && inv(g, i).horror > 0;
+    otherHealOnInvestigator: (game: GameContext, ctx: EffCtx) => {
+      const i = healedInv(game, ctx);
+      return ctx.by !== ctx.source && !!i && inv(game, i).horror > 0;
     },
   },
   fns: {
-    treat(g: G, ctx: EffCtx, _args: unknown, step?: Step) {
+    treat(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
       const who = ask<InvId>(
-        g,
+        game,
         step!,
         ctx.you!,
-        "target",
+        CHOICE.Target,
         "Hypnotic Therapy: choose an investigator",
-        invsAt(g, inv(g, ctx.you!).location).map((i) => ({
+        invsAt(game, inv(game, ctx.you!).location).map((i) => ({
           id: i,
-          label: invName(g, i),
-          card: inv(g, i).cardId,
+          label: invName(game, i),
+          card: inv(game, i).cardId,
           value: i,
         })),
         { auto: true, key: "cardChooseInvestigator", vars: { card: ctx.source ?? null } },
       );
       if (who === undefined) return;
-      push(g, {
-        t: "Effects",
+      push(game, {
+        t: STEP.Effects,
         effects: [
-          { op: "heal", horror: 1, target: "eventInvestigator" },
+          { op: EVENT.Heal, horror: 1, target: "eventInvestigator" },
           {
             op: "chooseOne",
             options: [
@@ -84,13 +91,13 @@ export default {
       });
     },
     /** part of the heal that triggered it: no new "after horror is healed" window */
-    more(g: G, ctx: EffCtx) {
-      const i = healedInv(g, ctx);
-      if (!i || inv(g, i).horror < 1) return;
-      inv(g, i).horror--;
-      emit(g, "heal", `${invName(g, i)} heals 1 more horror (Hypnotic Therapy)`, {
+    more(game: GameContext, ctx: EffCtx) {
+      const i = healedInv(game, ctx);
+      if (!i || inv(game, i).horror < 1) return;
+      addCounter(game, i, "horror", -1);
+      emit(game, EVENT.Heal, `${invName(game, i)} heals 1 more horror (Hypnotic Therapy)`, {
         inv: i,
-        card: card(g, ctx.source!).id,
+        card: card(game, ctx.source!).id,
         data: { damage: 0, horror: 1 },
       });
     },

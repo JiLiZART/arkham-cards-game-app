@@ -1,6 +1,6 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { cardText, encounterSetName, t } from "../../../content/i18n";
-import type { ChoiceOption, GameState, InstId } from "../../../engine/types";
+import type { CardInst, ChoiceOption, GameState, InstId } from "../../../engine/world/types";
 import { CardFace } from "../../components/CardFace";
 import { cardDetails } from "../../game/details";
 import { db, useGame } from "../../state/context";
@@ -17,6 +17,7 @@ import { moment } from "../SoundLayer";
 import { DeckViewer } from "../DeckViewer";
 import { AssetsModal } from "../AssetsModal";
 import styles from "./Modals.module.css";
+import { cardOfIf } from "../../../engine/context";
 
 /** a native modal dialog: Escape and focus trapping come from <dialog>; a click on the backdrop closes it */
 export function Modal({
@@ -106,7 +107,7 @@ export function OptionButtons({
 }
 
 const TOKENS: [
-  keyof Pick<GameState["cards"][string], "damage" | "horror" | "clues" | "doom" | "resources">,
+  keyof Pick<CardInst, "damage" | "horror" | "clues" | "doom" | "resources">,
   IconName,
 ][] = [
   ["damage", "damage"],
@@ -138,7 +139,7 @@ export function CardModal({ id }: { id: InstId }) {
   const locale = useGame((s) => s.locale);
   const close = () => useView.getState().setModal(null);
   const options = useCardOptions([id]);
-  const inst = game.cards[id];
+  const inst = cardOfIf(game, id);
   if (!inst) return null;
   const d = db.cards[inst.code];
   const tx = cardText(db, inst.code, locale);

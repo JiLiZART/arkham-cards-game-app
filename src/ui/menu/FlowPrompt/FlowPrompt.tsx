@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { cardText, scenarioText, stepText, t } from "../../../content/i18n";
-import type { CampaignState } from "../../../engine/campaign";
+import type { CampaignState } from "../../../engine/campaign/types";
 import { db, gameStore, useGame } from "../../state/context";
 import { guideHtml } from "../../game/guideText";
 import { Portrait } from "../../components/Portrait";

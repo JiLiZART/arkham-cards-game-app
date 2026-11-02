@@ -1008,5 +1008,6 @@
   "mod.flag.firstActionNoAoO": "provokes no attack of opportunity with the first action each round",
   "mod.flag.cannotPlayOrCommit": "can't play or commit some cards",
   "mod.flag.noAttacksOfOpportunity": "provokes no attacks of opportunity",
-  "mod.flag.cannotBeDamaged": "can't be damaged"
+  "mod.flag.cannotBeDamaged": "can't be damaged",
+  "ability.03041.2": "Discard Drawing the Sign"
 }

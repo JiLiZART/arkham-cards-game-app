@@ -1,11 +1,21 @@
 import { cardText, encounterSetName, t } from "../../content/i18n";
-import { connectionsOf } from "../../engine/core";
+import { cardOf, cardOfIf, cardsOf, invOf } from "../../engine/context";
+import { connectionsOf } from "../../engine/queries";
 import type { Slot } from "../../content/schema";
 import { playBlock } from "../../engine/rules/cards";
-import type { CardInst, ContentDb, GameState, InstId, InvId } from "../../engine/types";
+import type {
+  CardInst,
+  CardView,
+  ContentDb,
+  GameState,
+  InstId,
+  InvId,
+} from "../../engine/world/types";
 import type { Rect } from "./hover";
 import { keywordsOf } from "./glossary";
 import type { IconName } from "../assets/icons";
+import { EVENT } from "../../engine/events/event";
+import { ZONE } from "../../engine/world/constants";
 
 /** one line of the hand card details column */
 export type DetailRow =
@@ -57,7 +67,7 @@ export function blockedRow(
   id: InstId,
   locale: string,
 ): DetailRow | null {
-  const inst = game.cards[id];
+  const inst = cardOfIf(game, id);
   if (!inst || inst.zone !== "hand" || !inst.owner) return null;
   const b = playBlock({ s: game, db, events: [] }, inst.owner, id);
   if (!b) return null;
@@ -65,14 +75,14 @@ export function blockedRow(
     b.reason === "forbidden"
       ? b.by
         ? t(db, locale, "card.blocked.forbidden", {
-            card: cardText(db, game.cards[b.by].code, locale).name,
+            card: cardText(db, cardOf(game, b.by).code, locale).name,
           })
         : t(db, locale, "card.blocked.forbiddenAny")
       : b.reason === "unique"
         ? t(db, locale, "card.blocked.unique")
         : t(db, locale, "card.blocked.resources", {
             cost: b.cost,
-            have: game.invs[inst.owner].resources,
+            have: invOf(game, inst.owner).resources,
           });
   return { k: "blocked", text };
 }
@@ -93,7 +103,7 @@ export function commitRow(
   const offered =
     game.pending?.kind === "commit" &&
     game.pending.options.some((o) => (o.value as { commit?: InstId } | null)?.commit === id);
-  const inst = game.cards[id];
+  const inst = cardOfIf(game, id);
   if (!test || !offered || !inst) return null;
   const d = db.cards[inst.code];
   const icons = [
@@ -103,7 +113,7 @@ export function commitRow(
   if (!icons.length) return null;
   const textApplies = d.type === "skill";
   return {
-    k: "commit",
+    k: EVENT.Commit,
     icons,
     n: icons.length,
     textApplies,
@@ -146,7 +156,7 @@ export function slotIcons(slots: readonly Slot[]): { slot: Slot; icon: IconName;
 const SKILLS = ["willpower", "intellect", "combat", "agility", "wild"] as const;
 
 /** a card as it shows on the map (an unrevealed location goes by its back name) */
-const shownName = (db: ContentDb, inst: CardInst, locale: string) => {
+const shownName = (db: ContentDb, inst: CardView, locale: string) => {
   const tx = cardText(db, inst.code, locale);
   return db.cards[inst.code].type === "location" && !inst.revealed
     ? (tx.backName ?? tx.name)
@@ -162,8 +172,8 @@ function locationDetails(
 ): DetailRow[] {
   const d = db.cards[inst.code];
   const tx = cardText(db, inst.code, locale);
-  const invs = game.order.filter((i) => game.invs[i].location === inst.id);
-  const enemies = Object.values(game.cards)
+  const invs = game.order.filter((i) => invOf(game, i).location === inst.id);
+  const enemies = cardsOf(game)
     .filter((c) => c.zone === "enemy" && c.location === inst.id)
     .map((c) => shownName(db, c, locale));
   const here: DetailRow[] =
@@ -189,7 +199,7 @@ function locationDetails(
       label: t(db, locale, "card.shroud"),
     });
   rows.push({
-    k: "clues",
+    k: EVENT.Clues,
     now: inst.clues,
     printed: d.clues ?? null,
     perInv: !!d.cluesPerInvestigator,
@@ -197,8 +207,10 @@ function locationDetails(
     perInvLabel: t(db, locale, "card.perInvestigator"),
   });
   if (d.victory)
-    rows.push({ k: "victory", label: t(db, locale, "card.victory", { n: d.victory }) });
-  const names = connectionsOf(db, game, inst.id).map((id) => shownName(db, game.cards[id], locale));
+    rows.push({ k: EVENT.Victory, label: t(db, locale, "card.victory", { n: d.victory }) });
+  const names = connectionsOf(db, game, inst.id).map((id) =>
+    shownName(db, cardOf(game, id), locale),
+  );
   if (names.length)
     rows.push({ k: "connections", names, label: t(db, locale, "card.connections") });
   rows.push(...here);
@@ -245,7 +257,7 @@ export function cardDetails(
   if (d.type !== "investigator" && (d.health !== undefined || d.sanity !== undefined))
     rows.push({ k: "stats", health: d.health, sanity: d.sanity });
   if (d.uses)
-    rows.push({ k: "uses", n: d.uses.count, label: t(db, locale, `card.uses.${d.uses.type}`) });
+    rows.push({ k: EVENT.Uses, n: d.uses.count, label: t(db, locale, `card.uses.${d.uses.type}`) });
   if (d.enemy) {
     const e = d.enemy;
     const labels = {
@@ -255,7 +267,7 @@ export function cardDetails(
       perInv: t(db, locale, "card.perInvestigator"),
     };
     rows.push({
-      k: "enemy",
+      k: ZONE.Enemy,
       fight: e.fight ?? "–",
       health: e.health ?? "–",
       perInv: e.healthPerInvestigator,
@@ -263,7 +275,7 @@ export function cardDetails(
       labels,
     });
     rows.push({
-      k: "attack",
+      k: EVENT.Attack,
       damage: e.damage,
       horror: e.horror,
       label: t(db, locale, "card.attack"),

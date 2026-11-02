@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { t } from "../../../content/i18n";
-import type { GameState, InstId, InvId } from "../../../engine/types";
+import type { GameState, InstId, InvId } from "../../../engine/world/types";
 import { domPlace, reducedMotion, rememberRect } from "../../game/arrivals";
 import { cardDetails } from "../../game/details";
 import { CardFace } from "../../components/CardFace";
@@ -15,6 +15,7 @@ import { layoutModeNow, useLayoutMode } from "../../state/layoutMode";
 import { moment } from "../SoundLayer";
 import { cx } from "../../components/cx";
 import styles from "./Reveal.module.css";
+import { cardOf, cardOfIf, cardsOf } from "../../../engine/context";
 
 interface Box {
   x: number;
@@ -150,7 +151,7 @@ function EncounterShowcase({
 
 /** cards in the "resolving" zone (a treachery, an event being played) shown over the middle of the screen */
 function Resolving({ game, locale }: { game: GameState; locale: string }) {
-  const cards = Object.values(game.cards).filter((c) => c.zone === "resolving");
+  const cards = cardsOf(game).filter((c) => c.zone === "resolving");
   // an event played from hand flies here from the fan
   const ref = useRef<HTMLDivElement>(null);
   const setup = useGame((s) => s.setup);
@@ -179,13 +180,13 @@ export function RevealOverlay() {
   const playing = useView((s) => s.playing) === current && !!current;
   const stageFree = useView((s) => s.stage.length === 0);
   const key = current ? `${current.type}:${game.log.length}:${current.card ?? ""}` : "";
-  if (current && HELD.has(current.type) && current.card && game.cards[current.card]) {
+  if (current && HELD.has(current.type) && current.card && cardOfIf(game, current.card)) {
     if (!playing) return null;
     return (
       <EncounterShowcase
         key={key}
         id={current.card}
-        code={game.cards[current.card].code}
+        code={cardOf(game, current.card).code}
         inv={current.inv ?? null}
         weakness={current.type === "weakness"}
         locale={locale}

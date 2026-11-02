@@ -1,21 +1,24 @@
 // Herald of Flame — after it attacks: heal 1 damage from each enemy at its location
 import {
+  addCounter,
+  cardIf,
+  type CardScript,
   def,
+  type EffCtx,
   emit,
   enemiesAt,
-  type CardScript,
-  type EffCtx,
-  type G,
+  type GameContext,
+  EVENT,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    herald(g: G, ctx: EffCtx) {
+    herald(game: GameContext, ctx: EffCtx) {
       if (ctx.enemy !== ctx.source) return;
-      for (const e of enemiesAt(g, g.s.cards[ctx.source!]?.location ?? null))
+      for (const e of enemiesAt(game, cardIf(game, ctx.source!)?.location ?? null))
         if (e.damage > 0) {
-          e.damage--;
-          emit(g, "heal", `${def(g, e.id).name} heals 1 damage`, {
+          addCounter(game, e.id, "damage", -1);
+          emit(game, EVENT.Heal, `${def(game, e.id).name} heals 1 damage`, {
             card: e.id,
             data: { damage: 1, horror: 0 },
           });

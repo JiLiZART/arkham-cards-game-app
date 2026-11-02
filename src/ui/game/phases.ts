@@ -1,5 +1,6 @@
-import type { GameState } from "../../engine/types";
+import type { GameState } from "../../engine/world/types";
 import { db } from "../state/context";
+import { cardsOf } from "../../engine/context";
 
 /**
  * A phase with nothing to show: its pause (the title and the lead's continue) is skipped. Only the enemy phase can be:
@@ -7,7 +8,7 @@ import { db } from "../state/context";
  */
 export function phaseIsEmpty(game: GameState, phase: string): boolean {
   if (phase !== "enemy") return false;
-  return !Object.values(game.cards).some(
+  return !cardsOf(game).some(
     (c) =>
       c.zone === "enemy" &&
       !c.exhausted &&

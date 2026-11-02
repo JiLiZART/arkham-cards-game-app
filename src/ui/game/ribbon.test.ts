@@ -1,7 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { skipMulligans, start } from "../../engine/testkit";
-import type { GameState } from "../../engine/types";
+import { skipMulligans, start } from "../../engine/kits/testkit";
+import type { GameState } from "../../engine/world/types";
 import { ribbonModel } from "./ribbon";
+import { invStateIn } from "../../engine/world/store";
+import { PHASE, CHOICE, INV_STATUS } from "../../engine/world/constants";
+import { STEP } from "../../engine/steps/step";
 
 const two = skipMulligans(start("the-gathering", ["01001", "01002"], 1)).state;
 const at = (patch: Partial<GameState>, inv: (s: GameState) => void = () => {}) => {
@@ -37,7 +40,11 @@ describe("ribbonModel", () => {
     const s = at(
       { round: 2, phase: "upkeep" },
       (s) =>
-        (s.pending = { ...s.pending!, kind: "phase", step: { t: "PhasePause", phase: "mythos" } }),
+        (s.pending = {
+          ...s.pending!,
+          kind: CHOICE.Phase,
+          step: { t: STEP.PhasePause, phase: PHASE.Mythos },
+        }),
     );
     expect(states(s)).toEqual(["current", "todo", "todo", "todo"]);
   });
@@ -46,10 +53,10 @@ describe("ribbonModel", () => {
     const s = at({ round: 2, phase: "mythos", active: null }, (s) => {
       s.pending = {
         ...s.pending!,
-        kind: "phase",
-        step: { t: "PhasePause", phase: "investigation" },
+        kind: CHOICE.Phase,
+        step: { t: STEP.PhasePause, phase: PHASE.Investigation },
       };
-      for (const i of s.order) s.invs[i].turnDone = true;
+      for (const i of s.order) invStateIn(s, i).turnDone = true;
     });
     expect(ribbonModel(s).turns.map((t) => t.state)).toEqual(["todo", "todo"]);
   });
@@ -61,8 +68,8 @@ describe("ribbonModel", () => {
 
   it("turns: active with its actions left, done dimmed and empty, to play full", () => {
     const s = at({ phase: "investigation", active: "01002" }, (s) => {
-      s.invs["01001"].turnDone = true;
-      s.invs["01002"].actionsLeft = 2;
+      invStateIn(s, "01001").turnDone = true;
+      invStateIn(s, "01002").actionsLeft = 2;
     });
     expect(ribbonModel(s).turns).toEqual([
       { inv: "01001", state: "done", pips: 3, filled: 0 },
@@ -70,21 +77,24 @@ describe("ribbonModel", () => {
     ]);
     const todo = at(
       { phase: "investigation", active: "01001" },
-      (s) => (s.invs["01001"].actionsLeft = 3),
+      (s) => (invStateIn(s, "01001").actionsLeft = 3),
     );
     expect(ribbonModel(todo).turns[1]).toEqual({ inv: "01002", state: "todo", pips: 3, filled: 3 });
   });
 
   it("an extra action (or a restricted one) adds a pip", () => {
     const s = at({ phase: "investigation", active: "01002" }, (s) => {
-      s.invs["01002"].actionsLeft = 3;
-      s.invs["01002"].restrictedActions = [{ trait: "Tome", left: 1 }];
+      invStateIn(s, "01002").actionsLeft = 3;
+      invStateIn(s, "01002").restrictedActions = [{ trait: "Tome", left: 1 }];
     });
     expect(ribbonModel(s).turns[1]).toMatchObject({ pips: 4, filled: 4 });
   });
 
   it("a resigned investigator is left out", () => {
-    const s = at({ phase: "investigation" }, (s) => (s.invs["01001"].status = "resigned"));
+    const s = at(
+      { phase: "investigation" },
+      (s) => (invStateIn(s, "01001").status = INV_STATUS.Resigned),
+    );
     expect(ribbonModel(s).turns.map((t) => t.inv)).toEqual(["01002"]);
   });
 });

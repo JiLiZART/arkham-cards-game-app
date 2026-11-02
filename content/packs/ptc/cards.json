@@ -22,5 +22,10 @@
   },
   "03040": { "abilities": [
     { "kind": "revelation", "effects": [{ "op": "drawEncounterCard" }, { "op": "surge" }] }
+  ] },
+  "03041": { "abilities": [
+    { "kind": "revelation", "effects": [{ "op": "putInThreatArea" }] },
+    { "kind": "constant", "modifiers": [{ "stat": "handSize", "value": -5 }] },
+    { "kind": "action", "actionCost": 2, "label": "Discard Drawing the Sign", "effects": [{ "op": "discardSelf" }] }
   ] }
 }

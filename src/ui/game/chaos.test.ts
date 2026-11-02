@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { db, start } from "../../engine/testkit";
+import { db, start } from "../../engine/kits/testkit";
 import { averageModifier, groupTokens } from "./chaos";
 
 describe("chaos bag grouping", () => {

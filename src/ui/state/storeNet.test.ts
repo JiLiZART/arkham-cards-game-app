@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { botChoice } from "../../engine/bot";
-import { db } from "../../engine/testkit";
-import type { NewCampaign } from "../../engine/campaign";
+import { db } from "../../engine/kits/testkit";
+import type { NewCampaign } from "../../engine/campaign/types";
 import type { Move, Numbered, RoomSave } from "../../net/moves";
 import {
   canUndoHere,

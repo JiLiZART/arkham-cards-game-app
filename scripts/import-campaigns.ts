@@ -31,6 +31,7 @@ import {
   type Raw,
 } from "./campaignGuide";
 import { readSnapshot, SNAPSHOT } from "./import-cards";
+import { ZONE } from "../src/engine/world/constants";
 
 const GUIDES = "inspired/ArkhamCards/assets/generated/all_campaigns.txt";
 /** generated campaigns live apart from the hand-written ones (content/campaigns): the browser loads their scenarios on demand */
@@ -214,7 +215,7 @@ function scenarioOf(
       )[0]) ||
     inPlay[0];
   const setup: SetupStep[] = [{ do: "putIntoPlay", codes: inPlay }];
-  if (setAside.length) setup.push({ do: "setAside", codes: setAside });
+  if (setAside.length) setup.push({ do: ZONE.SetAside, codes: setAside });
   setup.push({ do: "startAt", code: start });
   // chaos tokens: a hand-written scenario's tables when it plays with the same reference card (a Return-to scenario);
   // otherwise the reference card's front for easy/standard, its back for hard/expert

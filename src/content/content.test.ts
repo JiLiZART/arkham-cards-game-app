@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { mapCard, parseKeywords, parseSlots, parseUses } from "../../scripts/import-cards";
-import { db } from "../engine/testkit";
-import { shuffle } from "../engine/rng";
+import { db } from "../engine/kits/testkit";
+import { shuffle } from "../engine/world/rng";
 import { cardText, t } from "./i18n";
 import { buildContent } from "./loader";
 import { CampaignDef, CardDef, DeckDef, Effect, InvestigatorDef, ScenarioDef } from "./schema";

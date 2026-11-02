@@ -70,37 +70,38 @@
   box-shadow: var(--ring-playable);
 }
 
-/* stat bar: portrait + name; health, sanity, actions; skills — every number at least 48 px */
+/* stat bar: the portrait on the left; the name, health and sanity, and the ability; the skills in a column on the right */
 .stat-bar {
   background: var(--panel);
   border: 1px solid var(--accent);
   border-radius: 16px;
   padding: 10px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas: "portrait who skills";
+  column-gap: 12px;
 }
+/* the portrait and the name block are cells of the bar's grid */
 .stat-head {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  display: contents;
 }
-.stat-head {
-  align-items: flex-start;
+.portrait-btn {
+  grid-area: portrait;
+  align-self: center;
 }
 :global(.stat-who) {
+  grid-area: who;
   display: flex;
   flex-direction: column;
   gap: 4px;
   min-width: 0;
-  padding-top: 4px;
 }
 .stat-head .stat-name {
   font-size: 36px;
   line-height: 1.05;
 }
 .stat-ability {
-  font: 14px/1.3 var(--f-body);
+  font: 18px/1.3 var(--f-body);
   color: var(--ink);
 }
 .stat-row {
@@ -116,9 +117,13 @@
   font-size: 22px;
 }
 .stat-row.skills {
-  border-top: 1px solid var(--rule-dim);
-  padding-top: 8px;
+  grid-area: skills;
+  flex-direction: column;
+  align-items: flex-start;
   justify-content: space-between;
+  gap: 4px;
+  border-left: 1px solid var(--rule-dim);
+  padding-left: 12px;
 }
 :global(.stat-dock) b {
   font-variant-numeric: lining-nums;

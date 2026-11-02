@@ -1,6 +1,6 @@
 import { cardText } from "../../content/i18n";
 import type { CardDef } from "../../content/schema";
-import type { ContentDb } from "../../engine/types";
+import type { ContentDb } from "../../engine/world/types";
 import { implemented } from "../../content/implemented";
 
 export type Tab = "investigators" | "player" | "encounter";

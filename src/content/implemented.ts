@@ -1,4 +1,4 @@
-import type { ContentDb } from "../engine/types";
+import type { ContentDb } from "../engine/world/types";
 import type { CardDef } from "./schema";
 
 /** the keywords the engine acts on by themselves (CardDef.keywords) */

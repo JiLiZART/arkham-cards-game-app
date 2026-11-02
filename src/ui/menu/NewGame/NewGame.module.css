@@ -414,20 +414,10 @@
 }
 /* a chosen chip or tab is the teal plate on the night, an inked stamp on paper (the class chips keep a pressed well: their icons are coloured) */
 :global(.desk)
-  :is(
-    :global(.screen) section,
-    .wz-sheet,
-    :global(.wz-camp-sheet),
-    :global(.wz-ready)
-  )
+  :is(:global(.screen) section, .wz-sheet, :global(.wz-camp-sheet), :global(.wz-ready))
   :global(.wz-chip):global(.on):not(:global(.wz-class)),
 :global(.desk)
-  :is(
-    :global(.screen) section,
-    .wz-sheet,
-    :global(.wz-camp-sheet),
-    :global(.wz-ready)
-  )
+  :is(:global(.screen) section, .wz-sheet, :global(.wz-camp-sheet), :global(.wz-ready))
   :global(.wz-chip):global(.on):not(:global(.wz-class)):hover:not(:disabled) {
   background: var(--paper-ink);
   color: var(--paper-leaf);

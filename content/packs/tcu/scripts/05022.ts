@@ -4,14 +4,14 @@ import {
   remainingHealth,
   remainingSanity,
   type CardScript,
-  type G,
+  type GameContext,
 } from "../../../../src/engine/api";
 
 export default {
-  icons(g: G, id: string) {
-    const i = card(g, id).owner;
+  icons(game: GameContext, id: string) {
+    const i = card(game, id).owner;
     if (!i) return {};
-    const left = remainingHealth(g, i) + remainingSanity(g, i);
+    const left = remainingHealth(game, i) + remainingSanity(game, i);
     const n = left >= 10 ? 2 : left >= 5 ? 1 : 0;
     return { willpower: n, combat: n };
   },

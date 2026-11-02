@@ -16,6 +16,7 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { CardDef, I18nCards, type CardDefInput } from "../src/content/schema";
+import { EVENT } from "../src/engine/events/event";
 
 const ARKHAMDB_URL = "https://arkhamdb.com/api/public/cards/?encounter=1";
 
@@ -110,7 +111,7 @@ export function mapCard(c: Raw): CardDefInput {
   if ("cost" in c) card.cost = c.cost === -2 ? "X" : num(c.cost);
   if (c.faction2_code)
     card.factions = [c.faction_code, c.faction2_code, c.faction3_code].filter(Boolean);
-  opt("victory", c.victory);
+  opt(EVENT.Victory, c.victory);
   for (const s of ["willpower", "intellect", "combat", "agility", "wild"] as const) {
     if (c[`skill_${s}`] && type !== "investigator") card.icons![s] = c[`skill_${s}`];
   }
@@ -128,7 +129,7 @@ export function mapCard(c: Raw): CardDefInput {
     opt("health", c.health);
     opt("sanity", c.sanity);
   }
-  opt("uses", parseUses(text));
+  opt(EVENT.Uses, parseUses(text));
   if (type === "enemy" || type === "enemy_location") {
     card.enemy = {
       fight: num(c.enemy_fight),
@@ -162,7 +163,7 @@ export function mapCard(c: Raw): CardDefInput {
   }
   if (type === "agenda") {
     opt("stage", c.stage);
-    opt("doom", num(c.doom));
+    opt(EVENT.Doom, num(c.doom));
   }
   if (type === "treachery" && card.keywords!.length === 0)
     card.keywords = parseKeywords(text, type);

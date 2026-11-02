@@ -9,8 +9,11 @@ Arkham Table is a browser version of _Arkham Horror: The Card Game_ on a 3D tabl
 Key directories:
 
 - `src/engine/` — the rules engine, plain TypeScript. Deterministic: a seed plus the list of choices replays a game exactly. Must not import React, three, zustand or `src/ui` (enforced by oxlint, `.oxlintrc.json`).
-  - `rules/` — flow, skill tests, cards, enemies, investigators, scenario, chaos tokens.
-  - `effects.ts` — the effect handlers card data refers to; `api.ts` — what card and scenario scripts may import.
+  - `index.ts` — `createGame`, `dispatch`, `replay`, `ENGINE_VERSION`; `api.ts` — what card and scenario scripts may import (accessors, `EVENT`, `ZONE`, `STEP` and the other constants).
+  - `context.ts`, `movement.ts`, `queries.ts` — the core over the state: the engine context (`GameContext`, parameter `game`), cards and piles moving, questions about the game. The only code besides `world/store.ts`, `world/flags.ts`, `index.ts`, `steps/dispatch.ts` and `rules/skillTest.ts` that touches `game.s`.
+  - `world/` — the state's types, the closed sets of strings (`ZONE`, `PHASE`, `CHOICE`... in `constants.ts`), the store (tables, views, piles), flags, the random generator. `events/` — the event catalogue (`EVENT`). `steps/` — the step names (`STEP`) and the typed dispatch of the resolution stack.
+  - `rules/` — round, skill tests, cards, enemies, investigators, scenario, chaos tokens: each with its step handlers and the helpers it shares. `effects/` — the effect handlers card data refers to, by family. `campaign/` — the campaign flow, log, decks, upgrades. `kits/` — test and bot helpers. `replays/` — the recorded-games oracle.
+  - Imports run one way, from the entry points down to `world/`; `src/engine/__tests__/boundary.test.ts` checks the layers and that no modules import each other in a ring (ADR-0025).
 - `src/content/` — zod schemas (`schema.ts`), the loader, i18n (`i18n.ts`), coverage and content checks.
 - `src/net/` — online play (ADR-0018, ADR-0020): the session moves and their permission rules, the host-ordered log, the session that turns store calls into moves, the WebRTC mesh and the room socket. Depends on the engine and the stores only through the store's public calls; the pipes (`transport.ts`) are interfaces so the session is tested in Node.
 - `worker/` — the site's Worker, configured by the root `wrangler.toml`: the built site as static assets, a Durable Object per room under `/net/` (`room.ts` holds its rules as pure functions), TURN credentials, and the card scans proxied under `/cards/`. Own `tsconfig.json`; `pnpm typecheck` covers it. It knows no game rules; it forwards moves unread only between browsers with no direct link (ADR-0020).
@@ -38,7 +41,7 @@ Key directories:
 - Put every user-facing string in `content/i18n/{en,ru}/ui.json`, in both locales, and read it with `t(db, locale, key, vars)` from `src/content/i18n.ts`. Card text comes from `cardText()`. Engine prompts carry a `key` that the UI translates.
 - Keep game state in the engine and screen state in the zustand stores (`useGame` in `src/ui/state/context.ts`, `useView` in `src/ui/state/view.ts`); what is being looked at is view state, what is being decided is game state (ADR-0004)
 - When verifying UI in the browser, start your own dev server on another port (`pnpm dev --port 5174`) and stop it when done; port 5173 is the user's. Drive it with Playwright and save screenshots under `.playwright-mcp/`. In dev, `window.__arkham` is the game store and `window.__arkhamView` the view store.
-- Test engine and content changes with vitest. `src/engine/testkit.ts` starts a scenario (`start`, `skipMulligans`), picks options by label (`pick`), and edits the table (`mutate`, `giveCard`, `putEnemy`).
+- Test engine and content changes with vitest. `src/engine/kits/testkit.ts` starts a scenario (`start`, `skipMulligans`), picks options by label (`pick`), and edits the table (`mutate`, `giveCard`, `putEnemy`).
 - Check rules questions against the Arkham Grimoire, the engine's rules reference (ADR-0015)
 - Give a new component its own folder under its screen area: `Name.tsx`, `Name.module.css`, its tests and an `index.ts`, imported as the folder. Its styles go in its CSS Module (`styles.x`, joined with `cx()` from `src/ui/components/cx.ts`); `styles.css` takes only tokens, resets, root state classes and primitives several components share. Reach another component's element only through a public hook class listed at the top of `styles.css`, as `:global(.name)` (ADR-0016)
 - Find rendered elements by `data-testid`, never by class name (CSS Modules hash class names; `src/ui/noClassLookups.test.ts` enforces it)
@@ -91,8 +94,8 @@ Pass script arguments without `--` (`pnpm fetch:cards dist`); pnpm forwards a `-
 
 ## App architecture
 
-- **Engine.** `createGame(db, setup)` and `dispatch(db, state, action)` in `src/engine/engine.ts` return a new state plus events. The engine runs a stack of steps until it needs a decision, then sets `state.pending`: a prompt with options. The only action is choosing an option, so a game is its seed plus the list of choices (the Debug panel's report replays it).
-- **Content.** Cards are data first: abilities, costs, triggers and effects in `cards.json`, interpreted by `rules/cards.ts` and `effects.ts`. A card the data can't express gets a script in `content/packs/<pack>/scripts/<code>.ts`, importing only from `src/engine/api.ts`. Scenarios and campaign guides are data plus scripts in the same way (ADR-0007, ADR-0011).
+- **Engine.** `createGame(db, setup)` and `dispatch(db, state, action)` in `src/engine/index.ts` return a new state plus events. The engine runs a stack of steps until it needs a decision, then sets `state.pending`: a prompt with options. The only action is choosing an option, so a game is its seed plus the list of choices (the Debug panel's report replays it).
+- **Content.** Cards are data first: abilities, costs, triggers and effects in `cards.json`, interpreted by `rules/cards.ts` and `effects/`. A card the data can't express gets a script in `content/packs/<pack>/scripts/<code>.ts`, importing only from `src/engine/api.ts`. Scenarios and campaign guides are data plus scripts in the same way (ADR-0007, ADR-0011).
 - **Coverage.** A card "works" when every printed line is accounted for (ADR-0013). `pnpm coverage` computes it into `content/coverage.json`, and `check:content` fails when that file is stale (ADR-0012).
 - **UI.** `src/ui/state/context.ts` holds the game store. Each pending option is placed on screen by `optionHome()` (`src/ui/game/optionHome.ts`): hand, board, strip, rail, bar, skill-test panel or showcase. Animations follow the event clock, and choices wait while events play (ADR-0002). One layout mode, desktop or phone, is read by the components (ADR-0005).
 
@@ -104,7 +107,7 @@ Pass script arguments without `--` (`pnpm fetch:cards dist`); pnpm forwards a `-
 - On request, use [simplify](.agents/skills/simplify/SKILL.md) or [code-simplifier](.agents/skills/code-simplifier/SKILL.md) for scoped review and cleanup, and [deslop](.agents/skills/deslop/SKILL.md) for AI-flavored code and prose.
 - UI design work goes through [impeccable](.agents/skills/impeccable/SKILL.md); the design context is `.agents/context/design.md` and `.agents/context/product.md`, with the sidecar `.impeccable/design.json`.
 - Anti-slop rules initially report warnings so existing code can be inventoried without a bulk refactor. Resolve findings in new or modified code; promote rules only after reviewing their existing violations.
-- Tests sit next to the code as `*.test.ts`. Tests under `src/engine/` follow the engine's import rule; a test that also checks UI placement goes in `src/ui/`.
+- Tests sit next to the code as `*.test.ts`, except in `src/engine/`, where each folder keeps its tests in a `__tests__` folder of its own (`src/engine/world/__tests__/store.test.ts`; the boundary test checks it). Tests under `src/engine/` follow the engine's import rule; a test that also checks UI placement goes in `src/ui/`.
 
 ### Which skill when
 
@@ -114,7 +117,7 @@ Pass script arguments without `--` (`pnpm fetch:cards dist`); pnpm forwards a `-
 | A new feature                                | `openspec-propose` → `openspec-apply-change` → `openspec-archive-change`, with `openspec-git-discipline`; `openspec-explore` to think one through first, `openspec-update-change` / `openspec-sync-specs` to revise |
 | Specs written as executable acceptance tests | `spec-as-source`, `gherkin-authoring`, `acceptance-test-authoring`                                                                                                                                                  |
 | Wording in specs, ADRs and tasks             | `glossary`                                                                                                                                                                                                          |
-| Logic changes and bug fixes                  | `test-driven-development` (vitest, `src/engine/testkit.ts`)                                                                                                                                                         |
+| Logic changes and bug fixes                  | `test-driven-development` (vitest, `src/engine/kits/testkit.ts`)                                                                                                                                                    |
 | An architecture decision                     | `architectural-decision-records` (MADR minimal, in `adr/`); `c4-diagrams` to draw it                                                                                                                                |
 | Stress-testing a plan before building        | `grill-me`                                                                                                                                                                                                          |
 | HUD, menus, any screen design                | `impeccable` (design context in `.agents/context/`); `web-design-guidelines` to review UI for accessibility and UX                                                                                                  |

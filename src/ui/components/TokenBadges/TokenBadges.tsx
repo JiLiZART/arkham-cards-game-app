@@ -1,11 +1,12 @@
 import { t } from "../../../content/i18n";
-import type { CardInst } from "../../../engine/types";
+import type { CardInst } from "../../../engine/world/types";
 import { db, useGame } from "../../state/context";
 import { intentOf } from "../../game/intent";
 import { Glyph, Icon } from "../Icon";
 import type { IconName } from "../../assets/icons";
 import { cx } from "../cx";
 import styles from "./TokenBadges.module.css";
+import { cardOfIf } from "../../../engine/context";
 
 const TOKEN_ICONS: Record<string, IconName | undefined> = {
   damage: "damage",
@@ -61,7 +62,8 @@ const INTENT_MARK = { attack: "⚔", hunt: "»", rest: "z", wait: "…" } as con
 export function IntentBadge({ inst, words }: { inst: CardInst; words?: boolean }) {
   const game = useGame((s) => s.game);
   const locale = useGame((s) => s.locale);
-  if (inst.zone !== "enemy" || !game?.cards[inst.id] || game.phase === "ended") return null;
+  if (inst.zone !== "enemy" || !game || !cardOfIf(game, inst.id) || game.phase === "ended")
+    return null;
   const it = intentOf(game, inst.id);
   const tip = t(
     db,

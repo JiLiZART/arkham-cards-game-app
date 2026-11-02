@@ -1,5 +1,5 @@
 import { beforeAll, describe, expect, it } from "vitest";
-import type { ContentDb } from "../engine/types";
+import type { ContentDb } from "../engine/world/types";
 import {
   campaignCoverage,
   checkCampaignCards,

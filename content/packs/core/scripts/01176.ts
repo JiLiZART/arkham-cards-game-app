@@ -1,13 +1,15 @@
 // The Yellow Sign — fail: take 2 horror and draw a Madness weakness from your deck
 import {
+  type CardScript,
   def,
+  type EffCtx,
+  type GameContext,
   inv,
   moveCard,
   push,
-  shuffle,
-  type CardScript,
-  type EffCtx,
-  type G,
+  shuffleDeck,
+  ZONE,
+  STEP,
 } from "../../../../src/engine/api";
 
 export default {
@@ -28,15 +30,15 @@ export default {
     },
   ],
   fns: {
-    madness(g: G, ctx: EffCtx) {
-      const me = inv(g, ctx.you!);
+    madness(game: GameContext, ctx: EffCtx) {
+      const me = inv(game, ctx.you!);
       const found = me.deck.find(
-        (id) => def(g, id).subtype && def(g, id).traits.includes("Madness"),
+        (id) => def(game, id).subtype && def(game, id).traits.includes("Madness"),
       );
-      shuffle(g.s, me.deck);
+      shuffleDeck(game, me.id);
       if (!found) return;
-      moveCard(g, found, "deck", { top: true });
-      push(g, { t: "Draw", inv: ctx.you!, n: 1 });
+      moveCard(game, found, ZONE.Deck, { top: true });
+      push(game, { t: STEP.Draw, inv: ctx.you!, n: 1 });
     },
   },
 } satisfies CardScript;

@@ -1,6 +1,6 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import type { ContentDb } from "../src/engine/types";
+import type { ContentDb } from "../src/engine/world/types";
 import { readSnapshot, SNAPSHOT } from "./import-cards";
 
 type Raw = Record<string, any>;

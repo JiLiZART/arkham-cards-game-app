@@ -1,28 +1,33 @@
 // On the Brink — the test failed: each other committed card returns to its owner's hand, and you draw 1 card
 import {
+  cardIf,
+  type CardScript,
+  currentTest,
+  type EffCtx,
   emit,
+  type GameContext,
   moveCard,
   push,
-  type CardScript,
-  type EffCtx,
-  type G,
+  EVENT,
+  ZONE,
+  STEP,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    brink(g: G, ctx: EffCtx) {
-      const t = g.s.skillTest;
+    brink(game: GameContext, ctx: EffCtx) {
+      const t = currentTest(game);
       if (!t) return;
       for (const id of t.committed) {
-        const c = g.s.cards[id];
+        const c = cardIf(game, id);
         if (id === ctx.source || c?.zone !== "commit" || !c.owner) continue;
-        moveCard(g, id, "hand", { inv: c.owner });
-        emit(g, "returned", `${g.db.cards[c.code].name} returns to its owner's hand`, {
+        moveCard(game, id, ZONE.Hand, { inv: c.owner });
+        emit(game, EVENT.Returned, `${game.db.cards[c.code].name} returns to its owner's hand`, {
           inv: c.owner,
           card: id,
         });
       }
-      push(g, { t: "Draw", inv: ctx.you!, n: 1 });
+      push(game, { t: STEP.Draw, inv: ctx.you!, n: 1 });
     },
   },
 } satisfies CardScript;

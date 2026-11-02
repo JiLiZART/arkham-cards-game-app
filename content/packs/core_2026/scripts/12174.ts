@@ -1,29 +1,37 @@
 // Underground Cistern — when the investigation phase ends: each ready non-Elite Cultist here is discarded, 1 doom on the agenda for each
 import {
+  type CardScript,
   cardsIn,
+  currentAgenda,
+  currentPhase,
   def,
   discard,
+  type EffCtx,
+  type GameContext,
   isElite,
   push,
-  type CardScript,
-  type EffCtx,
-  type G,
+  ZONE,
+  STEP,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    consume(g: G, ctx: EffCtx) {
-      if (g.s.phase !== "investigation" || !g.s.agenda) return;
-      const here = cardsIn(g, "enemy").filter(
+    consume(game: GameContext, ctx: EffCtx) {
+      if (currentPhase(game) !== "investigation" || !currentAgenda(game)) return;
+      const here = cardsIn(game, ZONE.Enemy).filter(
         (e) =>
           e.location === ctx.source &&
           !e.exhausted &&
-          !isElite(g, e.id) &&
-          def(g, e.id).traits.includes("Cultist"),
+          !isElite(game, e.id) &&
+          def(game, e.id).traits.includes("Cultist"),
       );
-      for (const e of here) discard(g, e.id);
+      for (const e of here) discard(game, e.id);
       if (here.length)
-        push(g, { t: "PlaceDoom", card: g.s.agenda, n: here.length }, { t: "CheckDoom" });
+        push(
+          game,
+          { t: STEP.PlaceDoom, card: currentAgenda(game)!, n: here.length },
+          { t: STEP.CheckDoom },
+        );
     },
   },
 } satisfies CardScript;

@@ -8,50 +8,52 @@ import {
   push,
   type CardScript,
   type EffCtx,
-  type G,
+  type GameContext,
   type InstId,
   type Step,
+  CHOICE,
+  STEP,
 } from "../../../../src/engine/api";
 
 const TYPES = ["asset", "event", "skill"] as const;
 
 export default {
   fns: {
-    torment(g: G, ctx: EffCtx, _args: unknown, step?: Step) {
+    torment(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
       const type = ask<string>(
-        g,
+        game,
         step!,
         ctx.you!,
-        "generic",
+        CHOICE.Generic,
         "Torment: name a card type",
         TYPES.map((t) => ({ id: t, label: t[0].toUpperCase() + t.slice(1), value: t })),
         { key: "chooseOne" },
       );
       if (type === undefined) return;
-      for (const i of activeInvs(g))
-        push(g, {
-          t: "Script",
+      for (const i of activeInvs(game))
+        push(game, {
+          t: STEP.Script,
           code: "12195",
           fn: "discardOne",
           ctx: { ...ctx, inv: i },
           args: type,
         });
     },
-    discardOne(g: G, ctx: EffCtx, type: string, step?: Step) {
+    discardOne(game: GameContext, ctx: EffCtx, type: string, step?: Step) {
       const who = ctx.inv!;
-      const cards = inv(g, who).hand.filter((h) => def(g, h).type === type);
+      const cards = inv(game, who).hand.filter((h) => def(game, h).type === type);
       if (!cards.length) return;
       const pick = ask<InstId>(
-        g,
+        game,
         step!,
         who,
-        "generic",
+        CHOICE.Generic,
         `Torment: discard 1 ${type}`,
-        cards.map((h) => ({ id: h, label: def(g, h).name, card: h, value: h })),
+        cards.map((h) => ({ id: h, label: def(game, h).name, card: h, value: h })),
         { auto: true, key: "discardN", vars: { n: 1 } },
       );
       if (pick === undefined) return;
-      discard(g, pick);
+      discard(game, pick);
     },
   },
 } satisfies CardScript;
