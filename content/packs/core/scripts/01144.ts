@@ -6,15 +6,15 @@ import {
   emit,
   type GameContext,
   inv,
-  push,
   randomInt,
   resolveWeakness,
   resolvesOnDraw,
   turnOrder,
   EVENT,
   ZONE,
-  STEP,
   type ScriptRun,
+  queue,
+  resolveEffect,
 } from "../../../../src/engine/api";
 
 export default {
@@ -23,16 +23,18 @@ export default {
     back(game: GameContext, run: ScriptRun) {
       for (const i of turnOrder(game)) {
         if (inv(game, i).status !== "playing") continue;
-        push(game, {
-          t: STEP.Eff,
-          effect: {
-            op: "skillTest",
-            skill: "willpower",
-            difficulty: 6,
-            onFail: [{ op: "script", fn: "madness" }],
-          },
-          ctx: { you: i, source: run.ctx.source },
-        });
+        queue(
+          game,
+          resolveEffect({
+            effect: {
+              op: "skillTest",
+              skill: "willpower",
+              difficulty: 6,
+              onFail: [{ op: "script", fn: "madness" }],
+            },
+            ctx: { you: i, source: run.ctx.source },
+          }),
+        );
       }
     },
     madness(game: GameContext, run: ScriptRun) {

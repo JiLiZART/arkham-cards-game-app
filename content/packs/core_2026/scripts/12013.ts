@@ -11,14 +11,14 @@ import {
   type InstId,
   inv,
   moveCard,
-  push,
   setController,
   shuffleIntoDeck,
   EVENT,
   ZONE,
   CHOICE,
-  STEP,
   type ScriptRun,
+  queue,
+  dealDamage,
 } from "../../../../src/engine/api";
 
 export default {
@@ -50,14 +50,16 @@ export default {
           card: pick,
         },
       );
-      push(game, {
-        t: STEP.AssignDamage,
-        inv: you,
-        damage: 0,
-        horror: 1,
-        direct: true,
-        source: run.ctx.source ?? null,
-      });
+      queue(
+        game,
+        dealDamage({
+          inv: you,
+          damage: 0,
+          horror: 1,
+          direct: true,
+          source: run.ctx.source ?? null,
+        }),
+      );
     },
     reshuffle(game: GameContext, run: ScriptRun) {
       const id = flags.isabelle.get(game, String(run.ctx.testId));

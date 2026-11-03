@@ -3,12 +3,12 @@ import {
   def,
   inv,
   locations,
-  push,
   type CardScript,
   type EffCtx,
   type GameContext,
-  STEP,
   type ScriptRun,
+  queue,
+  discoverClues,
 } from "../../../../src/engine/api";
 
 /** revealed locations with clues whose printed shroud is lower than that of your location */
@@ -51,7 +51,7 @@ export default {
           vars: { card: run.ctx.source ?? null },
         },
       );
-      push(game, { t: STEP.DiscoverClues, inv: run.you, location: loc, n: 2 });
+      queue(game, discoverClues({ inv: run.you, location: loc, n: 2 }));
     },
   },
 } satisfies CardScript;

@@ -7,10 +7,10 @@ import {
   type GameContext,
   inv,
   invIf,
-  push,
   EVENT,
-  STEP,
   type ScriptRun,
+  queue,
+  enemyAttacks,
 } from "../../../../src/engine/api";
 
 export default {
@@ -26,13 +26,10 @@ export default {
           data: { n: 1, lost: true, source: run.ctx.source ?? null },
         });
       } else
-        push(game, {
-          t: STEP.EnemyAttack,
-          enemy: run.source,
-          inv: who,
-          aoo: false,
-          key: attackKey(game),
-        });
+        queue(
+          game,
+          enemyAttacks({ enemy: run.source, inv: who, aoo: false, key: attackKey(game) }),
+        );
     },
   },
 } satisfies CardScript;

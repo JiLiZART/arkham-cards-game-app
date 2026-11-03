@@ -8,10 +8,10 @@ import {
   def,
   findByCode,
   type GameContext,
-  push,
   ZONE,
-  STEP,
   type InstId,
+  queue,
+  advanceAct,
 } from "../../../../src/engine/api";
 
 export default {
@@ -28,7 +28,7 @@ export default {
           .filter((c) => def(game, c.id).unique && def(game, c.id).traits.includes("Cultist"))
           .map((c) => c.code),
       );
-      if (cultists.size >= 6) push(game, { t: STEP.AdvanceAct });
+      if (cultists.size >= 6) queue(game, advanceAct());
     },
   },
 } satisfies CardScript;

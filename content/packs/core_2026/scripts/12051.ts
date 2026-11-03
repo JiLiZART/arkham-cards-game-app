@@ -10,13 +10,13 @@ import {
   isElite,
   moveCard,
   pile,
-  push,
   shuffleDeck,
   EVENT,
   ZONE,
   CHOICE,
-  STEP,
   type ScriptRun,
+  queue,
+  spawn,
 } from "../../../../src/engine/api";
 
 export default {
@@ -53,7 +53,7 @@ export default {
             data: { n: health },
           },
         );
-        push(game, { t: STEP.Spawn, enemy: pick, inv: you });
+        queue(game, spawn({ enemy: pick, inv: you }));
       }
       shuffleDeck(game, "encounter");
     },

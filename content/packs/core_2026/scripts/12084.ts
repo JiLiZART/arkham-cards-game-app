@@ -6,11 +6,11 @@ import {
   emit,
   type GameContext,
   moveCard,
-  push,
   EVENT,
   ZONE,
-  STEP,
   type ScriptRun,
+  queue,
+  drawCards,
 } from "../../../../src/engine/api";
 
 export default {
@@ -27,7 +27,7 @@ export default {
           card: id,
         });
       }
-      push(game, { t: STEP.Draw, inv: run.you, n: 1 });
+      queue(game, drawCards({ inv: run.you, n: 1 }));
     },
   },
 } satisfies CardScript;

@@ -12,17 +12,16 @@ import {
   type InvId,
   invName,
   moveCard,
-  push,
   setController,
   shuffleList,
-  type Step,
   EVENT,
   ZONE,
   PHASE,
   CHOICE,
-  STEP,
   type ScriptRun,
   type HookRun,
+  queue,
+  runScript,
 } from "../../../../src/engine/api";
 
 const UNSOLVED_CASE = "05010";
@@ -35,7 +34,7 @@ const isInsightEvent = (game: GameContext, id: InstId) =>
   def(game, id).type === "event" && def(game, id).traits.includes("Insight");
 
 /** you may move an Insight event from your discard pile to the bottom of your hunch deck (Joe's elder sign, Detective's Colt 1911s) */
-export function insightToHunch(game: GameContext, you: InvId, step: Step | undefined) {
+export function insightToHunch(game: GameContext, you: InvId, step: ScriptRun["step"] | undefined) {
   if (flags.hunch.get(game, you) === undefined) return;
   const cands = inv(game, you).discard.filter((id) => isInsightEvent(game, id));
   if (!cands.length || !step) return;
@@ -143,7 +142,7 @@ export default {
       });
     },
     elder(game: GameContext, run: ScriptRun) {
-      push(game, { t: STEP.Script, code: "05002", fn: "toHunch", ctx: run.ctx });
+      queue(game, runScript({ code: "05002", fn: "toHunch", ctx: run.ctx }));
     },
     toHunch(game: GameContext, run: ScriptRun) {
       insightToHunch(game, run.you, run.step);

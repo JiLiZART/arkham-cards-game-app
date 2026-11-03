@@ -12,13 +12,14 @@ import {
   inv,
   invsAt,
   moveCard,
-  push,
   EVENT,
   ZONE,
   CHOICE,
-  STEP,
   type ScriptRun,
   asStrings,
+  queue,
+  playCard,
+  runScript,
 } from "../../../../src/engine/api";
 
 const story = (game: GameContext, id: InstId) => def(game, id).traits.includes("Story");
@@ -70,20 +71,17 @@ export default {
       if (pick === "none") return;
       const [kind, id] = pick.split(":");
       if (kind === "back") returnToHand(game, id);
-      else push(game, { t: STEP.PlayCard, inv: you, card: id });
+      else queue(game, playCard({ inv: you, card: id }));
     },
     // resolved with the token, which can't ask: the choice waits in a step of its own
     elder(game: GameContext, run: ScriptRun) {
       const here = invsAt(game, inv(game, run.you).location);
       const assets = here.flatMap((i) => controlled(game, i)).filter((c) => !story(game, c.id));
       if (!assets.length) return;
-      push(game, {
-        t: STEP.Script,
-        code: "12010",
-        fn: "elderPick",
-        ctx: run.ctx,
-        args: assets.map((a) => a.id),
-      });
+      queue(
+        game,
+        runScript({ code: "12010", fn: "elderPick", ctx: run.ctx, args: assets.map((a) => a.id) }),
+      );
     },
     elderPick(game: GameContext, run: ScriptRun) {
       const pick = run.choose<InstId>(

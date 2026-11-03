@@ -5,12 +5,15 @@ import {
   def,
   inv,
   locations,
-  push,
   type CardScript,
   type GameContext,
   type InstId,
-  STEP,
   type ScriptRun,
+  queue,
+  placeDoom,
+  resolveEffects,
+  runScript,
+  discoverClues,
 } from "../../../../src/engine/api";
 
 export default {
@@ -24,11 +27,11 @@ export default {
         { text: "Will of the Cosmos: place 1 doom on a card you control", key: "chooseOne" },
         { who: you },
       );
-      push(
+      queue(
         game,
-        { t: STEP.PlaceDoom, card: pick, n: 1 },
-        { t: STEP.Effects, effects: [{ op: "discoverClues", amount: 1 }], ctx: run.ctx },
-        { t: STEP.Script, code: "12066", fn: "elsewhere", ctx: run.ctx },
+        placeDoom({ card: pick, n: 1 }),
+        resolveEffects({ effects: [{ op: "discoverClues", amount: 1 }], ctx: run.ctx }),
+        runScript({ code: "12066", fn: "elsewhere", ctx: run.ctx }),
       );
     },
     elsewhere(game: GameContext, run: ScriptRun) {
@@ -46,7 +49,7 @@ export default {
         },
         { who: you },
       );
-      push(game, { t: STEP.DiscoverClues, inv: you, location: pick, n: 1 });
+      queue(game, discoverClues({ inv: you, location: pick, n: 1 }));
     },
   },
 } satisfies CardScript;

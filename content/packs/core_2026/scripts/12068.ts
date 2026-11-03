@@ -4,10 +4,10 @@ import {
   type CardScript,
   currentTest,
   type GameContext,
-  push,
   setOnChoose,
-  STEP,
   type ScriptRun,
+  queue,
+  dealDamage,
 } from "../../../../src/engine/api";
 
 const SYMBOLS = ["skull", "cultist", "tablet", "elderThing", "elderSign", "autoFail"];
@@ -21,14 +21,10 @@ export default {
     },
     symbol(game: GameContext, run: ScriptRun) {
       if (run.ctx.token && SYMBOLS.includes(run.ctx.token))
-        push(game, {
-          t: STEP.AssignDamage,
-          inv: run.you,
-          damage: 0,
-          horror: 1,
-          direct: false,
-          source: null,
-        });
+        queue(
+          game,
+          dealDamage({ inv: run.you, damage: 0, horror: 1, direct: false, source: null }),
+        );
     },
   },
 } satisfies CardScript;

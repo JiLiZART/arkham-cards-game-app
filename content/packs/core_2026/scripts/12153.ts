@@ -2,12 +2,13 @@
 import {
   inv,
   invsAt,
-  push,
   type CardScript,
   type GameContext,
-  STEP,
   type ScriptRun,
   asNumber,
+  queue,
+  drawCards,
+  runScript,
 } from "../../../../src/engine/api";
 
 export default {
@@ -20,10 +21,10 @@ export default {
         text: `Southside: who draws the next card? (${n} left)`,
         key: "chooseInvestigator",
       });
-      push(
+      queue(
         game,
-        { t: STEP.Draw, inv: who, n: 1 },
-        { t: STEP.Script, code: "12153", fn: "share", ctx: run.ctx, args: n - 1 },
+        drawCards({ inv: who, n: 1 }),
+        runScript({ code: "12153", fn: "share", ctx: run.ctx, args: n - 1 }),
       );
     },
   },

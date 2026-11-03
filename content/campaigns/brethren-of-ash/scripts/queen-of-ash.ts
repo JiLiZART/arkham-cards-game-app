@@ -28,7 +28,6 @@ import {
   moveCard,
   pile,
   playerCount,
-  push,
   setCardLocation,
   setCode,
   setCounter,
@@ -39,8 +38,14 @@ import {
   turnOrder,
   EVENT,
   ZONE,
-  STEP,
   type ScriptRun,
+  queue,
+  resolveEffects,
+  spawn,
+  revealLocation,
+  resolveRevelation,
+  endScenario,
+  advanceAct,
 } from "../../../../src/engine/api";
 import type { ChaosToken, Effect } from "../../../../src/content/schema";
 import { drawFire } from "../../../packs/core_2026/scripts/12129";
@@ -71,13 +76,14 @@ function eachTest(
   difficulty: number,
   onFail: Effect[],
 ) {
-  push(
+  queue(
     game,
-    ...activeInvs(game).map((i) => ({
-      t: "Effects" as const,
-      effects: [{ op: "skillTest" as const, skill, difficulty, onFail }],
-      ctx: { ...ctx, you: i, inv: i },
-    })),
+    ...activeInvs(game).map((i) =>
+      resolveEffects({
+        effects: [{ op: "skillTest" as const, skill, difficulty, onFail }],
+        ctx: { ...ctx, you: i, inv: i },
+      }),
+    ),
   );
 }
 
@@ -141,7 +147,7 @@ export default {
         const tunnels = TUNNELS.map((t) => findByCode(game, t, [ZONE.Location])).filter(Boolean);
         cultists.slice(0, playerCount(game)).forEach((id, k) => {
           moveCard(game, id, ZONE.Limbo);
-          push(game, { t: STEP.Spawn, enemy: id, inv: null, at: tunnels[k]!.id });
+          queue(game, spawn({ enemy: id, inv: null, at: tunnels[k]!.id }));
         });
       }
     },
@@ -159,7 +165,7 @@ export default {
       const c = cistern(game);
       if (servant && c) {
         moveCard(game, servant.id, ZONE.Limbo);
-        push(game, { t: STEP.Spawn, enemy: servant.id, inv: null, at: c.id });
+        queue(game, spawn({ enemy: servant.id, inv: null, at: c.id }));
       }
       eachTest(game, run.ctx, "willpower", 4, [{ op: "takeHorror", amount: 1, direct: true }]);
     },
@@ -169,17 +175,11 @@ export default {
       const actOne = cardIf(game, currentAct(game))?.code === "12172";
       const faint = elokoss(game);
       if (actOne || !faint) {
-        if (c && !card(game, c.id).revealed)
-          push(game, {
-            t: STEP.Script,
-            code: "__engine",
-            fn: "revealLocation",
-            ctx: { location: c.id },
-          });
+        if (c && !card(game, c.id).revealed) queue(game, revealLocation(c.id));
         const mother = setAside(game, "12179b")[0];
         if (mother && c) {
           moveCard(game, mother.id, ZONE.Limbo);
-          push(game, { t: STEP.Spawn, enemy: mother.id, inv: null, at: c.id });
+          queue(game, spawn({ enemy: mother.id, inv: null, at: c.id }));
         }
       } else {
         // flipped: the same card, its damage and attachments kept
@@ -195,13 +195,13 @@ export default {
       const faint = setAside(game, "12179")[0];
       if (faint && c) {
         moveCard(game, faint.id, ZONE.Limbo);
-        push(game, { t: STEP.Spawn, enemy: faint.id, inv: null, at: c.id });
+        queue(game, spawn({ enemy: faint.id, inv: null, at: c.id }));
       }
       const fires = setAside(game, FIRE);
       const there = c ? invsAt(game, c.id)[0] : undefined;
       if (fires[0] && there) {
         moveCard(game, fires[0].id, ZONE.Limbo);
-        push(game, { t: STEP.Revelation, inv: there, card: fires[0].id });
+        queue(game, resolveRevelation({ inv: there, card: fires[0].id }));
       }
       for (const x of [
         ...setAside(game, FIRE),
@@ -249,7 +249,7 @@ export default {
           e.id,
           def(game, e.id).victory !== undefined ? ZONE.Victory : ZONE.EncounterDiscard,
         );
-      push(game, { t: STEP.Resolution, id: "R3" });
+      queue(game, endScenario({ id: "R3" }));
     },
     codexPhi(game: GameContext, run: ScriptRun) {
       emit(
@@ -260,7 +260,7 @@ export default {
       const found = HARBINGER.find(([key]) => campaignLogOf(game)[key]);
       if (!found) return;
       for (const i of activeInvs(game))
-        push(game, { t: STEP.Effects, effects: found[1], ctx: { ...run.ctx, you: i, inv: i } });
+        queue(game, resolveEffects({ effects: found[1], ctx: { ...run.ctx, you: i, inv: i } }));
     },
   },
   hooks: {
@@ -271,11 +271,11 @@ export default {
         setCounter(game, c.id, "clues", 2 * playerCount(game));
       const act = cardIf(game, currentAct(game))?.code ?? null;
       if (act === "12172" && c && activeInvs(game).some((i) => inv(game, i).location === c.id)) {
-        push(game, { t: STEP.AdvanceAct });
+        queue(game, advanceAct());
         return;
       }
       if (flags.defeated.get(game, "12179") || flags.defeated.get(game, "12179b"))
-        push(game, { t: STEP.Resolution, id: "R1" });
+        queue(game, endScenario({ id: "R1" }));
     },
   },
 } satisfies CardScript;

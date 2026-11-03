@@ -8,10 +8,11 @@ import {
   discard,
   type GameContext,
   isElite,
-  push,
   ZONE,
-  STEP,
   type ScriptRun,
+  queue,
+  placeDoom,
+  checkDoom,
 } from "../../../../src/engine/api";
 
 export default {
@@ -27,11 +28,7 @@ export default {
       );
       for (const e of here) discard(game, e.id);
       if (here.length)
-        push(
-          game,
-          { t: STEP.PlaceDoom, card: currentAgenda(game)!, n: here.length },
-          { t: STEP.CheckDoom },
-        );
+        queue(game, placeDoom({ card: currentAgenda(game)!, n: here.length }), checkDoom());
     },
   },
 } satisfies CardScript;

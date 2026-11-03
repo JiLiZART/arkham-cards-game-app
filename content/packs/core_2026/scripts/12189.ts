@@ -6,9 +6,10 @@ import {
   enemies,
   type GameContext,
   leadInvestigator,
-  push,
-  STEP,
   type ScriptRun,
+  queue,
+  placeDoom,
+  checkDoom,
 } from "../../../../src/engine/api";
 
 export default {
@@ -26,7 +27,7 @@ export default {
         { text: "Dark Magician: place 1 doom on", key: "chooseEnemy" },
         { who: leadInvestigator(game) },
       );
-      push(game, { t: STEP.PlaceDoom, card: pick, n: 1 }, { t: STEP.CheckDoom });
+      queue(game, placeDoom({ card: pick, n: 1 }), checkDoom());
     },
   },
 } satisfies CardScript;

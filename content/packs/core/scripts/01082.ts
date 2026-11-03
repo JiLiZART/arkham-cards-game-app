@@ -5,9 +5,9 @@ import {
   flags,
   type GameContext,
   inv,
-  push,
-  STEP,
   type ScriptRun,
+  queue,
+  damageEnemy,
 } from "../../../../src/engine/api";
 
 export default {
@@ -24,13 +24,10 @@ export default {
       );
       const prevented = flags.prevented.get(game, String(run.ctx.key)) ?? [0, 0];
       flags.prevented.set(game, String(run.ctx.key), [prevented[0] + damage, prevented[1]]);
-      push(game, {
-        t: STEP.DamageEnemy,
-        enemy: pick,
-        amount: damage,
-        by: run.you,
-        source: run.ctx.source,
-      });
+      queue(
+        game,
+        damageEnemy({ enemy: pick, amount: damage, by: run.you, source: run.ctx.source }),
+      );
     },
   },
 } satisfies CardScript;

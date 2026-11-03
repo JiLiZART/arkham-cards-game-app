@@ -3,10 +3,10 @@ import {
   card,
   type CardScript,
   type GameContext,
-  push,
   threatArea,
-  STEP,
   type ScriptRun,
+  queue,
+  resolveEffect,
 } from "../../../../src/engine/api";
 
 export default {
@@ -14,7 +14,7 @@ export default {
     intoThreat(game: GameContext, run: ScriptRun) {
       const code = card(game, run.source).code;
       if (threatArea(game, run.you).some((c) => c.code === code)) return;
-      push(game, { t: STEP.Eff, effect: { op: "putInThreatArea" }, ctx: run.ctx });
+      queue(game, resolveEffect({ effect: { op: "putInThreatArea" }, ctx: run.ctx }));
     },
   },
 } satisfies CardScript;

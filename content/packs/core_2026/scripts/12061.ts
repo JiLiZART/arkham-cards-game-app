@@ -11,13 +11,13 @@ import {
   inv,
   invIf,
   invsAt,
-  push,
   EVENT,
   CHOICE,
-  STEP,
   type ScriptRun,
   argField,
   asString,
+  queue,
+  runScript,
 } from "../../../../src/engine/api";
 
 type Kind = "damage" | "horror";
@@ -92,7 +92,7 @@ export default {
           { text: "Lucky Charm: move damage or horror?", key: "chooseOne" },
           { kind: CHOICE.Generic, who: you },
         );
-        push(game, { t: STEP.Script, code: "12061", fn: "move", ctx: run.ctx, args: { kind } });
+        queue(game, runScript({ code: "12061", fn: "move", ctx: run.ctx, args: { kind } }));
         return;
       }
       const kind: Kind = argKind;
@@ -104,13 +104,7 @@ export default {
           { text: `Lucky Charm: move 1 ${kind} from`, key: "chooseOne" },
           { who: you },
         );
-        push(game, {
-          t: STEP.Script,
-          code: "12061",
-          fn: "move",
-          ctx: run.ctx,
-          args: { kind, from },
-        });
+        queue(game, runScript({ code: "12061", fn: "move", ctx: run.ctx, args: { kind, from } }));
         return;
       }
       const opts = holders(game, mine, kind).filter((h) => h.id !== argFrom && h.room > 0);

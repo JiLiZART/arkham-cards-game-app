@@ -5,9 +5,9 @@ import {
   type CardScript,
   discard,
   type GameContext,
-  push,
-  STEP,
   type ScriptRun,
+  queue,
+  dealDamage,
 } from "../../../../src/engine/api";
 
 export default {
@@ -19,14 +19,7 @@ export default {
       const c = card(game, run.source);
       if (c.horror <= 0) return;
       addCounter(game, c.id, "horror", -1);
-      push(game, {
-        t: STEP.AssignDamage,
-        inv: run.you,
-        damage: 0,
-        horror: 1,
-        direct: true,
-        source: c.id,
-      });
+      queue(game, dealDamage({ inv: run.you, damage: 0, horror: 1, direct: true, source: c.id }));
       if (c.horror === 0) discard(game, c.id);
     },
   },

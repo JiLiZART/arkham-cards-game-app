@@ -5,11 +5,11 @@ import {
   type GameContext,
   inv,
   moveCard,
-  push,
   shuffleDeck,
   ZONE,
-  STEP,
   type ScriptRun,
+  queue,
+  drawCards,
 } from "../../../../src/engine/api";
 
 export default {
@@ -38,7 +38,7 @@ export default {
       shuffleDeck(game, me.id);
       if (!found) return;
       moveCard(game, found, ZONE.Deck, { top: true });
-      push(game, { t: STEP.Draw, inv: run.you, n: 1 });
+      queue(game, drawCards({ inv: run.you, n: 1 }));
     },
   },
 } satisfies CardScript;

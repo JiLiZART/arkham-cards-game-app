@@ -21,7 +21,12 @@ import {
   type GameContext,
 } from "../context";
 import { findByCode } from "../queries";
-import { gOf, putEnemy, skipMulligans, start } from "../kits/testkit";
+import { db, gOf, putEnemy, skipMulligans, start } from "../kits/testkit";
+import * as api from "../api";
+import { queue } from "../api";
+import { run } from "../steps/dispatch";
+import { STEP } from "../steps/step";
+import type { Step } from "../world/types";
 import { cardRecIn, invStateIn, pileRecIn } from "../world/store";
 import { ZONE, PILE } from "../world/constants";
 
@@ -72,5 +77,260 @@ describe("what scripts change outside the accessors for cards, counters and flag
     const ghoul = putEnemy(game, "01160", findByCode(game, "01111", [ZONE.Location])!.id);
     setEngaged(game, ghoul, R);
     expect(cardRecIn(game.s, ghoul).engagedWith).toBe(R);
+  });
+});
+
+describe("the verbs scripts queue engine steps with", () => {
+  const CODE = "zz-api-order";
+  it("queue resolves its steps in the order given, as push does", () => {
+    const order: string[] = [];
+    db.scripts[CODE] = { fns: { a: () => void order.push("a"), b: () => void order.push("b") } };
+    try {
+      const game = fresh();
+      game.s = structuredClone(game.s);
+      game.s.pending = null;
+      queue(
+        game,
+        api.runScript({ code: CODE, fn: "a", ctx: {} }),
+        api.runScript({ code: CODE, fn: "b", ctx: {} }),
+      );
+      run(game);
+      expect(order).toEqual(["a", "b"]);
+    } finally {
+      delete db.scripts[CODE];
+    }
+  });
+
+  // each verb queues exactly the step a script spelled out before (one example per kind, from a script)
+  const same = (q: unknown, step: Step) => expect(q).toEqual(step);
+  it("each verb builds the step its kind names", () => {
+    same(api.runScript({ code: "12153", fn: "share", ctx: { you: R }, args: 2 }), {
+      t: STEP.Script,
+      code: "12153",
+      fn: "share",
+      ctx: { you: R },
+      args: 2,
+    });
+    same(api.spawn({ enemy: "e1", inv: null, at: "l1" }), {
+      t: STEP.Spawn,
+      enemy: "e1",
+      inv: null,
+      at: "l1",
+    });
+    same(api.dealDamage({ inv: R, damage: 1, horror: 0, direct: true, source: "a1" }), {
+      t: STEP.AssignDamage,
+      inv: R,
+      damage: 1,
+      horror: 0,
+      direct: true,
+      source: "a1",
+    });
+    same(api.resolveEffects({ effects: [{ op: "gainResources", amount: 1 }], ctx: { you: R } }), {
+      t: STEP.Effects,
+      effects: [{ op: "gainResources", amount: 1 }],
+      ctx: { you: R },
+    });
+    same(api.resolveEffect({ effect: { op: "gainResources", amount: 1 }, ctx: { you: R } }), {
+      t: STEP.Eff,
+      effect: { op: "gainResources", amount: 1 },
+      ctx: { you: R },
+    });
+    same(api.advanceAct(), { t: STEP.AdvanceAct });
+    same(api.placeDoom({ card: "c1", n: 1 }), { t: STEP.PlaceDoom, card: "c1", n: 1 });
+    same(api.endScenario({ id: "R1" }), { t: STEP.Resolution, id: "R1" });
+    same(api.drawCards({ inv: R, n: 1, tapped: true }), {
+      t: STEP.Draw,
+      inv: R,
+      n: 1,
+      tapped: true,
+    });
+    same(api.checkDoom(), { t: STEP.CheckDoom });
+    same(api.resolveRevelation({ inv: R, card: "c1" }), { t: STEP.Revelation, inv: R, card: "c1" });
+    same(api.enemyAttacks({ enemy: "e1", inv: R, aoo: false, key: "k1" }), {
+      t: STEP.EnemyAttack,
+      enemy: "e1",
+      inv: R,
+      aoo: false,
+      key: "k1",
+    });
+    same(api.discoverClues({ inv: R, location: "l1", n: 1 }), {
+      t: STEP.DiscoverClues,
+      inv: R,
+      location: "l1",
+      n: 1,
+    });
+    same(api.damageEnemy({ enemy: "e1", amount: 3, by: R }), {
+      t: STEP.DamageEnemy,
+      enemy: "e1",
+      amount: 3,
+      by: R,
+    });
+    same(api.defeatInvestigator({ inv: R, by: "resign" }), {
+      t: STEP.Defeated,
+      inv: R,
+      by: "resign",
+    });
+    same(api.playCard({ inv: R, card: "c1", free: true }), {
+      t: STEP.PlayCard,
+      inv: R,
+      card: "c1",
+      free: true,
+    });
+    same(api.useAbility({ inv: R, card: "c1", index: 0 }), {
+      t: STEP.UseAbility,
+      inv: R,
+      card: "c1",
+      index: 0,
+    });
+    same(api.moveInvestigator({ inv: R, to: "l1" }), { t: STEP.Move, inv: R, to: "l1" });
+    same(api.defeatEnemy({ enemy: "e1", by: R }), { t: STEP.DefeatEnemy, enemy: "e1", by: R });
+    same(api.checkObjectives(), { t: STEP.CheckObjectives });
+    same(api.openWindow("enemyEngages", { inv: R, enemy: "e1" }), {
+      t: STEP.Window,
+      trigger: "enemyEngages",
+      data: { inv: R, enemy: "e1" },
+    });
+    same(api.revealLocation("l1"), {
+      t: STEP.Script,
+      code: "__engine",
+      fn: "revealLocation",
+      ctx: { location: "l1" },
+    });
+    same(api.checkAssetDefeat(R), {
+      t: STEP.Script,
+      code: "__engine",
+      fn: "assetDefeatCheck",
+      ctx: { you: R },
+    });
+    same(api.basicFight({ you: R, enemy: "e1" }), {
+      t: STEP.Script,
+      code: "__engine",
+      fn: "basicFight",
+      ctx: { you: R, enemy: "e1" },
+    });
+  });
+});
+
+describe("what api.ts exports", () => {
+  it("exactly the names scripts use (a name added or dropped changes this list)", () => {
+    expect(Object.keys(api).sort()).toEqual([
+      "CHOICE",
+      "EVENT",
+      "PHASE",
+      "ZONE",
+      "abilitiesOf",
+      "activeInvs",
+      "addChaosTokens",
+      "addCounter",
+      "addExtraReveal",
+      "addTempMod",
+      "advanceAct",
+      "allCards",
+      "argField",
+      "asNumber",
+      "asString",
+      "asStrings",
+      "ask",
+      "attackKey",
+      "basicFight",
+      "campaignLogOf",
+      "canCommit",
+      "canEnemyEnter",
+      "canPay",
+      "canPlay",
+      "cancelEvent",
+      "card",
+      "cardIf",
+      "cardsIn",
+      "checkAssetDefeat",
+      "checkCondition",
+      "checkDoom",
+      "checkObjectives",
+      "connections",
+      "controlled",
+      "createCard",
+      "currentAct",
+      "currentAgenda",
+      "currentPhase",
+      "currentRound",
+      "currentTest",
+      "damageEnemy",
+      "dealDamage",
+      "def",
+      "defeatEnemy",
+      "defeatInvestigator",
+      "difficultyOf",
+      "discard",
+      "discoverClues",
+      "distances",
+      "drawCards",
+      "emit",
+      "endScenario",
+      "enemies",
+      "enemiesAt",
+      "enemyAttacks",
+      "enemyStat",
+      "findByCode",
+      "flags",
+      "flipNegativeTokens",
+      "forceResult",
+      "inv",
+      "invIf",
+      "invName",
+      "invsAt",
+      "isElite",
+      "leadInvestigator",
+      "locationByName",
+      "locations",
+      "moveCard",
+      "moveInvestigator",
+      "openWindow",
+      "pile",
+      "placeDoom",
+      "placeInvestigator",
+      "playCard",
+      "playCost",
+      "playerCount",
+      "putOnTop",
+      "queue",
+      "randomInt",
+      "ready",
+      "remainingHealth",
+      "remainingSanity",
+      "resolveEffect",
+      "resolveEffects",
+      "resolveRevelation",
+      "resolveWeakness",
+      "resolvesOnDraw",
+      "revealLocation",
+      "runScript",
+      "setCardLocation",
+      "setCode",
+      "setController",
+      "setCounter",
+      "setEngaged",
+      "setOnChoose",
+      "setOwner",
+      "shroud",
+      "shuffleDeck",
+      "shuffleIntoDeck",
+      "shuffleList",
+      "sideDeck",
+      "spawn",
+      "spendableGroupClues",
+      "startTest",
+      "stepsToward",
+      "threatArea",
+      "turnOrder",
+      "uniqueInPlay",
+      "useAbility",
+    ]);
+  });
+
+  it("a script can't queue a step it spelled out itself", () => {
+    const game = fresh();
+    game.s = structuredClone(game.s);
+    // @ts-expect-error: steps are queued through the verbs, not as literals
+    expect(() => queue(game, { t: "CheckDoom" })).not.toThrow();
   });
 });

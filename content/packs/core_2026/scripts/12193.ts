@@ -9,11 +9,12 @@ import {
   emit,
   type GameContext,
   inv,
-  push,
   threatArea,
   EVENT,
-  STEP,
   type ScriptRun,
+  queue,
+  resolveEffect,
+  drawCards,
 } from "../../../../src/engine/api";
 
 export default {
@@ -21,7 +22,7 @@ export default {
     intoThreat(game: GameContext, run: ScriptRun) {
       const code = card(game, run.source).code;
       if (threatArea(game, run.you).some((c) => c.code === code)) return;
-      push(game, { t: STEP.Eff, effect: { op: "putInThreatArea" }, ctx: run.ctx });
+      queue(game, resolveEffect({ effect: { op: "putInThreatArea" }, ctx: run.ctx }));
     },
     languor(game: GameContext, run: ScriptRun) {
       const me = inv(game, run.you);
@@ -29,7 +30,7 @@ export default {
       if (!top) return;
       const d = def(game, top);
       if (d.subtype) {
-        push(game, { t: STEP.Draw, inv: run.you, n: 1, tapped: true });
+        queue(game, drawCards({ inv: run.you, n: 1, tapped: true }));
         return;
       }
       discard(game, top);

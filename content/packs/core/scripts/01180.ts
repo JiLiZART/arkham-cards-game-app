@@ -2,11 +2,11 @@
 import {
   card,
   invsAt,
-  push,
   type CardScript,
   type GameContext,
-  STEP,
   type ScriptRun,
+  queue,
+  dealDamage,
 } from "../../../../src/engine/api";
 
 export default {
@@ -14,14 +14,16 @@ export default {
   fns: {
     bleat(game: GameContext, run: ScriptRun) {
       for (const i of invsAt(game, card(game, run.source).location)) {
-        push(game, {
-          t: STEP.AssignDamage,
-          inv: i,
-          damage: 0,
-          horror: 1,
-          direct: false,
-          source: run.ctx.source ?? null,
-        });
+        queue(
+          game,
+          dealDamage({
+            inv: i,
+            damage: 0,
+            horror: 1,
+            direct: false,
+            source: run.ctx.source ?? null,
+          }),
+        );
       }
     },
   },

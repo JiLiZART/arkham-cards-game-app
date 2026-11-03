@@ -9,12 +9,12 @@ import {
   type GameContext,
   inv,
   invName,
-  push,
   ready,
   setEngaged,
   EVENT,
-  STEP,
   type ScriptRun,
+  queue,
+  enemyAttacks,
 } from "../../../../src/engine/api";
 
 export default {
@@ -40,7 +40,7 @@ export default {
         inv: who,
         card: e.id,
       });
-      push(game, { t: STEP.EnemyAttack, enemy: e.id, inv: who, aoo: false, key: attackKey(game) });
+      queue(game, enemyAttacks({ enemy: e.id, inv: who, aoo: false, key: attackKey(game) }));
     },
   },
 } satisfies CardScript;

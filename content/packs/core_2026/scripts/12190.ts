@@ -2,13 +2,16 @@
 import {
   def,
   enemies,
-  push,
   type CardScript,
   type GameContext,
-  STEP,
   type ScriptRun,
   argField,
   asNumber,
+  queue,
+  placeDoom,
+  checkDoom,
+  runScript,
+  resolveEffect,
 } from "../../../../src/engine/api";
 
 export default {
@@ -24,26 +27,27 @@ export default {
           pool.map((e) => e.id),
           { text: "Blasphemous Invocation: place 1 doom on a Cultist", key: "chooseEnemy" },
         );
-        push(
+        queue(
           game,
-          { t: STEP.PlaceDoom, card: pick, n: 1 },
-          { t: STEP.CheckDoom },
-          {
-            t: STEP.Script,
+          placeDoom({ card: pick, n: 1 }),
+          checkDoom(),
+          runScript({
             code: "12190",
             fn: "blaspheme",
             ctx: run.ctx,
             args: { left: left - 1, placed: placed + 1 },
-          },
+          }),
         );
         return;
       }
       if (!placed)
-        push(game, {
-          t: STEP.Eff,
-          effect: { op: "searchEncounterDraw", filter: { type: "enemy", trait: "Cultist" } },
-          ctx: run.ctx,
-        });
+        queue(
+          game,
+          resolveEffect({
+            effect: { op: "searchEncounterDraw", filter: { type: "enemy", trait: "Cultist" } },
+            ctx: run.ctx,
+          }),
+        );
     },
   },
 } satisfies CardScript;

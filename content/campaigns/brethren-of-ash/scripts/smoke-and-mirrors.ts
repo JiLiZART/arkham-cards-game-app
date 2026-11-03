@@ -28,7 +28,6 @@ import {
   moveCard,
   pile,
   playerCount,
-  push,
   randomInt,
   ready,
   setCardLocation,
@@ -40,8 +39,19 @@ import {
   EVENT,
   ZONE,
   CHOICE,
-  STEP,
   type ScriptRun,
+  queue,
+  checkObjectives,
+  spawn,
+  defeatEnemy,
+  resolveEffects,
+  drawCards,
+  resolveEffect,
+  discoverClues,
+  resolveRevelation,
+  defeatInvestigator,
+  endScenario,
+  advanceAct,
 } from "../../../../src/engine/api";
 
 const SERVANT = "12138";
@@ -110,7 +120,7 @@ function toAct(game: GameContext, id: InstId) {
   moveCard(game, id, ZONE.SetAside);
   flags.underAct.set(game, [...underAct(game), id]);
   emit(game, EVENT.UnderAct, `${def(game, id).name} is placed beneath the act`, { card: id });
-  push(game, { t: STEP.CheckObjectives });
+  queue(game, checkObjectives());
 }
 
 export default {
@@ -159,7 +169,7 @@ export default {
         inv: run.you,
         card: id,
       });
-      push(game, { t: STEP.Spawn, enemy: id, inv: run.you });
+      queue(game, spawn({ enemy: id, inv: run.you }));
     },
     /** a suspect's codex entry: its effect, then a lead on them; enough leads and they are interrogated */
     codex(game: GameContext, run: ScriptRun) {
@@ -184,7 +194,7 @@ export default {
             { text: "Naomi O'Bannion: defeat a non-Humanoid enemy?", key: "chooseEnemy" },
             { auto: false, who: you },
           );
-          if (pick !== "none") push(game, { t: STEP.DefeatEnemy, enemy: pick, by: you });
+          if (pick !== "none") queue(game, defeatEnemy({ enemy: pick, by: you }));
         }
       }
       if (run.args === 6) {
@@ -218,11 +228,11 @@ export default {
       }
       if (run.args === 2) {
         ready(game, e.id);
-        push(game, { t: STEP.Effects, effects: [{ op: EVENT.Heal, horror: 1 }], ctx: { you } });
+        queue(game, resolveEffects({ effects: [{ op: EVENT.Heal, horror: 1 }], ctx: { you } }));
       }
       if (run.args === 4)
-        push(game, { t: STEP.Effects, effects: [{ op: EVENT.Heal, damage: 1 }], ctx: { you } });
-      if (run.args === 5) push(game, { t: STEP.Draw, inv: you, n: 1 });
+        queue(game, resolveEffects({ effects: [{ op: EVENT.Heal, damage: 1 }], ctx: { you } }));
+      if (run.args === 5) queue(game, drawCards({ inv: you, n: 1 }));
       addCounter(game, e.id, "resources", 1);
       emit(
         game,
@@ -240,32 +250,36 @@ export default {
     },
     earl(game: GameContext, run: ScriptRun) {
       const e = cardIf(game, run.source);
-      push(game, {
-        t: STEP.Eff,
-        effect: {
-          op: "skillTest",
-          skill: "combat",
-          difficulty: Math.max(0, 4 - (e?.damage ?? 0)),
-          onSuccess: [{ op: "script", fn: "codex", args: 4 }],
-        },
-        ctx: run.ctx,
-      });
+      queue(
+        game,
+        resolveEffect({
+          effect: {
+            op: "skillTest",
+            skill: "combat",
+            difficulty: Math.max(0, 4 - (e?.damage ?? 0)),
+            onSuccess: [{ op: "script", fn: "codex", args: 4 }],
+          },
+          ctx: run.ctx,
+        }),
+      );
     },
     abigail(game: GameContext, run: ScriptRun) {
       const loc = cardIf(game, run.source)?.location;
-      push(game, {
-        t: STEP.Eff,
-        effect: {
-          op: "skillTest",
-          skill: "intellect",
-          difficulty: loc ? card(game, loc).clues : 0,
-          onSuccess: [
-            { op: "script", fn: "abigailClue" },
-            { op: "script", fn: "codex", args: 5 },
-          ],
-        },
-        ctx: run.ctx,
-      });
+      queue(
+        game,
+        resolveEffect({
+          effect: {
+            op: "skillTest",
+            skill: "intellect",
+            difficulty: loc ? card(game, loc).clues : 0,
+            onSuccess: [
+              { op: "script", fn: "abigailClue" },
+              { op: "script", fn: "codex", args: 5 },
+            ],
+          },
+          ctx: run.ctx,
+        }),
+      );
     },
     abigailClue(game: GameContext, run: ScriptRun) {
       const loc = cardIf(game, run.source)?.location;
@@ -283,7 +297,7 @@ export default {
           key: "chooseClueLocation",
         },
       );
-      push(game, { t: STEP.DiscoverClues, inv: run.you, location: pick, n: 1 });
+      queue(game, discoverClues({ inv: run.you, location: pick, n: 1 }));
     },
     /** codex Φ: the Servant of Flame is defeated — kill them, or hold them for questioning */
     codexPhi(game: GameContext, run: ScriptRun) {
@@ -305,7 +319,7 @@ export default {
       );
       if (kill) {
         flags.killedServant.set(game, true);
-        for (const i of activeInvs(game)) push(game, { t: STEP.Draw, inv: i, n: 3 });
+        for (const i of activeInvs(game)) queue(game, drawCards({ inv: i, n: 3 }));
         return;
       }
       flags.servantBeneath.set(game, true);
@@ -321,21 +335,21 @@ export default {
         setOwner(game, m.id, i);
         setController(game, m.id, i);
         moveCard(game, m.id, ZONE.Limbo);
-        push(game, { t: STEP.Revelation, inv: i, card: m.id });
+        queue(game, resolveRevelation({ inv: i, card: m.id }));
       });
       flags.logEntry.set(game, ["hidden", "mark_of_elokoss"], true);
     },
     outtaTime(game: GameContext) {
-      for (const i of activeInvs(game)) push(game, { t: STEP.Defeated, inv: i, by: "resign" });
+      for (const i of activeInvs(game)) queue(game, defeatInvestigator({ inv: i, by: "resign" }));
     },
     backToVelmas(game: GameContext) {
-      push(game, { t: STEP.Resolution, id: "R1" });
+      queue(game, endScenario({ id: "R1" }));
     },
   },
   hooks: {
     checkObjectives(game: GameContext) {
       if (cardIf(game, currentAct(game))?.code === "12136" && eliteCount(game) >= 6)
-        push(game, { t: STEP.AdvanceAct });
+        queue(game, advanceAct());
     },
     /** what the campaign log takes from this game (the guide asks the players; the game knows) */
     ended(game: GameContext, won: boolean) {

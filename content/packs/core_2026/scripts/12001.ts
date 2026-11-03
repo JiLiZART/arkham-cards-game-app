@@ -5,12 +5,14 @@ import {
   checkCondition,
   controlled,
   def,
-  push,
   type CardScript,
   type GameContext,
   CHOICE,
-  STEP,
   type ScriptRun,
+  queue,
+  basicFight,
+  useAbility,
+  resolveEffects,
 } from "../../../../src/engine/api";
 
 type Pick = { basic: true } | { card: string; index: number };
@@ -44,21 +46,17 @@ export default {
         { text: `Daniela: fight ${def(game, run.ctx.enemy!).name}`, key: "chooseOne" },
         { kind: CHOICE.Generic, who: you },
       );
-      if ("basic" in pick)
-        push(game, {
-          t: STEP.Script,
-          code: "__engine",
-          fn: "basicFight",
-          ctx: { you, enemy: run.ctx.enemy },
-        });
-      else push(game, { t: STEP.UseAbility, inv: you, card: pick.card, index: pick.index });
+      if ("basic" in pick) queue(game, basicFight({ you, enemy: run.ctx.enemy }));
+      else queue(game, useAbility({ inv: you, card: pick.card, index: pick.index }));
     },
     elder(game: GameContext, run: ScriptRun) {
-      push(game, {
-        t: STEP.Effects,
-        effects: [{ op: "dealDamage", amount: 1, to: "chooseAtLocation" }],
-        ctx: { you: run.ctx.you, source: run.ctx.source },
-      });
+      queue(
+        game,
+        resolveEffects({
+          effects: [{ op: "dealDamage", amount: 1, to: "chooseAtLocation" }],
+          ctx: { you: run.ctx.you, source: run.ctx.source },
+        }),
+      );
     },
   },
 } satisfies CardScript;

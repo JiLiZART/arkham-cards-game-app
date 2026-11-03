@@ -12,15 +12,16 @@ import {
   inv,
   invsAt,
   isElite,
-  push,
   setCardLocation,
   setEngaged,
   stepsToward,
   EVENT,
-  STEP,
   type ScriptRun,
   argField,
   asString,
+  queue,
+  runScript,
+  enemyAttacks,
 } from "../../../../src/engine/api";
 
 export default {
@@ -42,13 +43,10 @@ export default {
           { text: "Aerial Pursuit: which enemy moves?", key: "chooseEnemy" },
           { who: you },
         );
-        push(game, {
-          t: STEP.Script,
-          code: "12163",
-          fn: "pursuit",
-          ctx: run.ctx,
-          args: { enemy: pick },
-        });
+        queue(
+          game,
+          runScript({ code: "12163", fn: "pursuit", ctx: run.ctx, args: { enemy: pick } }),
+        );
         return;
       }
       const e = cardIf(game, chosen);
@@ -73,13 +71,7 @@ export default {
         inv: target,
         card: e.id,
       });
-      push(game, {
-        t: STEP.EnemyAttack,
-        enemy: e.id,
-        inv: target,
-        aoo: false,
-        key: attackKey(game),
-      });
+      queue(game, enemyAttacks({ enemy: e.id, inv: target, aoo: false, key: attackKey(game) }));
     },
   },
 } satisfies CardScript;

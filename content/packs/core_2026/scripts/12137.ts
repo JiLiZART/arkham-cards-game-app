@@ -6,10 +6,11 @@ import {
   def,
   emit,
   type GameContext,
-  push,
   EVENT,
-  STEP,
   type ScriptRun,
+  queue,
+  dealDamage,
+  checkAssetDefeat,
 } from "../../../../src/engine/api";
 
 export default {
@@ -18,14 +19,16 @@ export default {
       const you = run.you;
       const assets = controlled(game, you).filter((c) => (def(game, c.id).health ?? 0) > c.damage);
       if (!assets.length) {
-        push(game, {
-          t: STEP.AssignDamage,
-          inv: you,
-          damage: 1,
-          horror: 0,
-          direct: false,
-          source: run.ctx.source ?? null,
-        });
+        queue(
+          game,
+          dealDamage({
+            inv: you,
+            damage: 1,
+            horror: 0,
+            direct: false,
+            source: run.ctx.source ?? null,
+          }),
+        );
         return;
       }
       const pick = run.chooseCard(
@@ -39,7 +42,7 @@ export default {
         inv: you,
         data: { damage: 1, horror: 0, source: run.ctx.source ?? null },
       });
-      push(game, { t: STEP.Script, code: "__engine", fn: "assetDefeatCheck", ctx: { you } });
+      queue(game, checkAssetDefeat(you));
     },
   },
 } satisfies CardScript;

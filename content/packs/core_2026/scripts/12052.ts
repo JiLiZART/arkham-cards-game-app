@@ -11,13 +11,14 @@ import {
   inv,
   moveCard,
   playCost,
-  push,
   uniqueInPlay,
   EVENT,
   ZONE,
   CHOICE,
-  STEP,
   type ScriptRun,
+  queue,
+  playCard,
+  resolveEffect,
 } from "../../../../src/engine/api";
 
 const item = (game: GameContext, id: InstId) =>
@@ -40,13 +41,15 @@ export default {
           { kind: CHOICE.Generic, who: you },
         );
         addCounter(game, me.id, "resources", -cost(pick));
-        push(game, { t: STEP.PlayCard, inv: you, card: pick, free: true });
+        queue(game, playCard({ inv: you, card: pick, free: true }));
       }
-      push(game, {
-        t: STEP.Eff,
-        effect: { op: "atTurnEnd", effects: [{ op: "script", fn: "returnItem" }] },
-        ctx: run.ctx,
-      });
+      queue(
+        game,
+        resolveEffect({
+          effect: { op: "atTurnEnd", effects: [{ op: "script", fn: "returnItem" }] },
+          ctx: run.ctx,
+        }),
+      );
     },
     returnItem(game: GameContext, run: ScriptRun) {
       const you = run.you;

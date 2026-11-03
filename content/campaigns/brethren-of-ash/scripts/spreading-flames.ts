@@ -23,7 +23,6 @@ import {
   pile,
   placeInvestigator,
   playerCount,
-  push,
   setController,
   setCounter,
   shuffleDeck,
@@ -31,11 +30,16 @@ import {
   EVENT,
   ZONE,
   CHOICE,
-  STEP,
   type ScriptRun,
   argField,
   asNumber,
   asString,
+  queue,
+  resolveEffects,
+  defeatInvestigator,
+  advanceAct,
+  spawn,
+  resolveRevelation,
 } from "../../../../src/engine/api";
 import type { Effect, Skill } from "../../../../src/content/schema";
 
@@ -70,20 +74,21 @@ export default {
         throw new Error(
           "spreading-flames.eachTest: args need a skill, a difficulty and onFail effects",
         );
-      push(
+      queue(
         game,
-        ...activeInvs(game).map((i) => ({
-          t: "Effects" as const,
-          effects: [
-            {
-              op: "skillTest" as const,
-              skill,
-              difficulty,
-              onFail: onFail as Effect[],
-            },
-          ],
-          ctx: { ...run.ctx, you: i, inv: i },
-        })),
+        ...activeInvs(game).map((i) =>
+          resolveEffects({
+            effects: [
+              {
+                op: "skillTest" as const,
+                skill,
+                difficulty,
+                onFail: onFail as Effect[],
+              },
+            ],
+            ctx: { ...run.ctx, you: i, inv: i },
+          }),
+        ),
       );
     },
     discardBystander(game: GameContext, run: ScriptRun) {
@@ -110,7 +115,7 @@ export default {
     },
     /** Up in Flames: each investigator who has not resigned is defeated and suffers 1 physical trauma */
     upInFlames(game: GameContext) {
-      for (const i of activeInvs(game)) push(game, { t: STEP.Defeated, inv: i, by: "damage" });
+      for (const i of activeInvs(game)) queue(game, defeatInvestigator({ inv: i, by: "damage" }));
     },
     /** an act advanced at the end of the round by spending clues (at Orne Library, for `at`) */
     endOfRoundAdvance(game: GameContext, run: ScriptRun) {
@@ -141,7 +146,7 @@ export default {
         addCounter(game, i, "clues", -take);
         n -= take;
       }
-      push(game, { t: STEP.AdvanceAct });
+      queue(game, advanceAct());
     },
     /** ...There's Fire: the dorms and the quad, the Servant of Flame, Fire! in your friend's room */
     thereIsFire(game: GameContext) {
@@ -154,7 +159,7 @@ export default {
       const dorms = findByCode(game, DORMS, [ZONE.Location]);
       if (servant && dorms) {
         moveCard(game, servant.id, ZONE.Limbo);
-        push(game, { t: STEP.Spawn, enemy: servant.id, inv: null, at: dorms.id });
+        queue(game, spawn({ enemy: servant.id, inv: null, at: dorms.id }));
       }
       const room = findByCode(game, ROOM, [ZONE.Location]);
       const fires = setAside(game, FIRE);
@@ -211,7 +216,7 @@ export default {
       if (servant && quad) {
         setCounter(game, servant.id, "damage", 0);
         moveCard(game, servant.id, ZONE.Limbo);
-        push(game, { t: STEP.Spawn, enemy: servant.id, inv: null, at: quad.id });
+        queue(game, spawn({ enemy: servant.id, inv: null, at: quad.id }));
       }
       if (quad) addCounter(game, quad.id, "clues", 3 * playerCount(game));
       // the lead searches the encounter deck and discard pile for 1 Fire! per investigator and draws them
@@ -220,7 +225,7 @@ export default {
         .slice(0, playerCount(game));
       for (const id of fires) {
         moveCard(game, id, ZONE.Limbo);
-        push(game, { t: STEP.Revelation, inv: leadInvestigator(game), card: id });
+        queue(game, resolveRevelation({ inv: leadInvestigator(game), card: id }));
       }
       shuffleDeck(game, "encounter");
     },
@@ -232,9 +237,9 @@ export default {
         const quad = findByCode(game, QUAD, [ZONE.Location]);
         const live = activeInvs(game);
         if (quad && live.length && live.every((i) => inv(game, i).location === quad.id))
-          push(game, { t: STEP.AdvanceAct });
+          queue(game, advanceAct());
       }
-      if (act === "12112" && flags.defeated.get(game, SERVANT)) push(game, { t: STEP.AdvanceAct });
+      if (act === "12112" && flags.defeated.get(game, SERVANT)) queue(game, advanceAct());
     },
   },
 } satisfies CardScript;

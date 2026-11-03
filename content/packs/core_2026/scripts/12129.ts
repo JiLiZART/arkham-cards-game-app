@@ -19,13 +19,15 @@ import {
   locations,
   moveCard,
   pile,
-  push,
-  type Step,
   EVENT,
   ZONE,
   CHOICE,
-  STEP,
   type ScriptRun,
+  queue,
+  resolveRevelation,
+  dealDamage,
+  checkAssetDefeat,
+  damageEnemy,
 } from "../../../../src/engine/api";
 
 const FIRE = "12129";
@@ -40,7 +42,7 @@ export function drawFire(game: GameContext, who: InvId) {
   if (!id) return;
   moveCard(game, id, ZONE.Limbo);
   emit(game, EVENT.Encounter, `${inv(game, who).name} draws Fire!`, { inv: who, card: id });
-  push(game, { t: STEP.Revelation, inv: who, card: id });
+  queue(game, resolveRevelation({ inv: who, card: id }));
 }
 
 /** attach a Fire! to the nearest location (from `from`) without one */
@@ -48,7 +50,7 @@ export function attachFire(
   game: GameContext,
   fire: InstId,
   from: InstId | null,
-  step: Step,
+  step: ScriptRun["step"],
   chooser: InvId,
 ) {
   let cands = locations(game).filter((l) => !burning(game, l.id));
@@ -87,28 +89,15 @@ export default {
       const loc = cardIf(game, run.source)?.location;
       if (!loc) return;
       for (const i of invsAt(game, loc)) {
-        push(game, {
-          t: STEP.AssignDamage,
-          inv: i,
-          damage: 1,
-          horror: 0,
-          direct: true,
-          source: run.source,
-        });
+        queue(game, dealDamage({ inv: i, damage: 1, horror: 0, direct: true, source: run.source }));
         for (const a of cardsIn(game, ZONE.Play))
           if (a.controller === i && (def(game, a.id).health ?? 0) > 0)
             addCounter(game, a.id, "damage", 1);
-        push(game, { t: STEP.Script, code: "__engine", fn: "assetDefeatCheck", ctx: { you: i } });
+        queue(game, checkAssetDefeat(i));
       }
       for (const e of cardsIn(game, ZONE.Enemy))
         if (e.location === loc && !isElite(game, e.id))
-          push(game, {
-            t: STEP.DamageEnemy,
-            enemy: e.id,
-            amount: 1,
-            by: null,
-            source: run.source,
-          });
+          queue(game, damageEnemy({ enemy: e.id, amount: 1, by: null, source: run.source }));
     },
   },
 } satisfies CardScript;

@@ -3,10 +3,10 @@ import {
   type CardScript,
   type GameContext,
   leadInvestigator,
-  push,
   CHOICE,
-  STEP,
   type ScriptRun,
+  queue,
+  endScenario,
 } from "../../../../src/engine/api";
 
 export default {
@@ -25,7 +25,7 @@ export default {
         { text: "Defending the Home — the lead investigator must decide:", key: "defendingHome" },
         { auto: false, kind: CHOICE.Generic, who: leadInvestigator(game) },
       );
-      push(game, { t: STEP.Resolution, id: r });
+      queue(game, endScenario({ id: r }));
     },
   },
 } satisfies CardScript;

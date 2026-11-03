@@ -10,10 +10,10 @@ import {
   type GameContext,
   moveCard,
   pile,
-  push,
   EVENT,
   ZONE,
-  STEP,
+  queue,
+  spawn,
 } from "../../../../src/engine/api";
 
 export default {
@@ -30,7 +30,7 @@ export default {
         site = aside;
       } else for (const e of enemiesAt(game, site.id)) discard(game, e.id);
       const u = findByCode(game, "01157", [ZONE.SetAside]);
-      if (u && site) push(game, { t: STEP.Spawn, enemy: u.id, inv: null, at: site.id });
+      if (u && site) queue(game, spawn({ enemy: u.id, inv: null, at: site.id }));
     },
     back(game: GameContext) {
       // The Devourer Below becomes both act and agenda: only defeating Umôrdhoth (→R2) remains

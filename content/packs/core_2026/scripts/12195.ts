@@ -4,13 +4,13 @@ import {
   def,
   discard,
   inv,
-  push,
   type CardScript,
   type GameContext,
   CHOICE,
-  STEP,
   type ScriptRun,
   asString,
+  queue,
+  runScript,
 } from "../../../../src/engine/api";
 
 const TYPES = ["asset", "event", "skill"] as const;
@@ -24,13 +24,10 @@ export default {
         { auto: false, kind: CHOICE.Generic },
       );
       for (const i of activeInvs(game))
-        push(game, {
-          t: STEP.Script,
-          code: "12195",
-          fn: "discardOne",
-          ctx: { ...run.ctx, inv: i },
-          args: type,
-        });
+        queue(
+          game,
+          runScript({ code: "12195", fn: "discardOne", ctx: { ...run.ctx, inv: i }, args: type }),
+        );
     },
     discardOne(game: GameContext, run: ScriptRun) {
       const who = run.ctx.inv!;

@@ -8,11 +8,11 @@ import {
   type GameContext,
   inv,
   invName,
-  push,
   setEngaged,
   EVENT,
-  STEP,
   type ScriptRun,
+  queue,
+  enemyAttacks,
 } from "../../../../src/engine/api";
 
 export default {
@@ -31,7 +31,7 @@ export default {
         inv: you,
         card: pick,
       });
-      push(game, { t: STEP.EnemyAttack, enemy: pick, inv: you, aoo: false, key: attackKey(game) });
+      queue(game, enemyAttacks({ enemy: pick, inv: you, aoo: false, key: attackKey(game) }));
     },
   },
 } satisfies CardScript;

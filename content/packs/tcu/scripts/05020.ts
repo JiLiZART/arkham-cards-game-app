@@ -6,13 +6,13 @@ import {
   enemyStat,
   inv,
   locations,
-  push,
   startTest,
   type CardScript,
   type EffCtx,
   type GameContext,
-  STEP,
   type ScriptRun,
+  queue,
+  discoverClues,
 } from "../../../../src/engine/api";
 
 const humanoidsHere = (game: GameContext, i: string) =>
@@ -65,7 +65,7 @@ export default {
         },
       );
       if (!card(game, loc)) return;
-      push(game, { t: STEP.DiscoverClues, inv: run.you, location: loc, n: 1 });
+      queue(game, discoverClues({ inv: run.you, location: loc, n: 1 }));
     },
   },
 } satisfies CardScript;

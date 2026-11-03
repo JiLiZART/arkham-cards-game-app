@@ -7,9 +7,9 @@ import {
   type GameContext,
   locationByName,
   moveCard,
-  push,
   ZONE,
-  STEP,
+  queue,
+  spawn,
 } from "../../../../src/engine/api";
 
 export default {
@@ -22,7 +22,7 @@ export default {
       const escaped = (campaignLogOf(game).cultistsGotAway as string[] | undefined) ?? [];
       for (const code of escaped) {
         const id = createCard(game, code, ZONE.Limbo);
-        push(game, { t: STEP.Spawn, enemy: id, inv: null, at: main?.id ?? null });
+        queue(game, spawn({ enemy: id, inv: null, at: main?.id ?? null }));
       }
     },
   },

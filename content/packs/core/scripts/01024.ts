@@ -4,11 +4,12 @@ import {
   enemiesAt,
   inv,
   invsAt,
-  push,
   type CardScript,
   type GameContext,
-  STEP,
   type ScriptRun,
+  queue,
+  damageEnemy,
+  dealDamage,
 } from "../../../../src/engine/api";
 
 export default {
@@ -23,16 +24,18 @@ export default {
         vars: { card: run.ctx.source ?? null },
       });
       for (const e of enemiesAt(game, loc))
-        push(game, { t: STEP.DamageEnemy, enemy: e.id, amount: 3, by: run.you });
+        queue(game, damageEnemy({ enemy: e.id, amount: 3, by: run.you }));
       for (const i of invsAt(game, loc))
-        push(game, {
-          t: STEP.AssignDamage,
-          inv: i,
-          damage: 3,
-          horror: 0,
-          direct: false,
-          source: run.ctx.source ?? null,
-        });
+        queue(
+          game,
+          dealDamage({
+            inv: i,
+            damage: 3,
+            horror: 0,
+            direct: false,
+            source: run.ctx.source ?? null,
+          }),
+        );
     },
   },
 } satisfies CardScript;

@@ -10,10 +10,10 @@ import {
   type GameContext,
   moveCard,
   placeInvestigator,
-  push,
   EVENT,
   ZONE,
-  STEP,
+  queue,
+  revealLocation,
 } from "../../../../src/engine/api";
 
 export default {
@@ -30,12 +30,7 @@ export default {
       for (const i of activeInvs(game)) placeInvestigator(game, i, hallway.id);
       if (study) moveCard(game, study.id, ZONE.Removed);
       emit(game, EVENT.Place, `Each investigator is placed in the ${def(game, hallway.id).name}`);
-      push(game, {
-        t: STEP.Script,
-        code: "__engine",
-        fn: "revealLocation",
-        ctx: { location: hallway.id },
-      });
+      queue(game, revealLocation(hallway.id));
     },
   },
 } satisfies CardScript;

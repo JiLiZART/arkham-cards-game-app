@@ -5,12 +5,12 @@ import {
   emit,
   type GameContext,
   moveCard,
-  push,
   sideDeck,
   EVENT,
   ZONE,
-  STEP,
   type ScriptRun,
+  queue,
+  spawn,
 } from "../../../../src/engine/api";
 
 export default {
@@ -35,7 +35,7 @@ export default {
         card: id,
       });
       moveCard(game, id, ZONE.Limbo);
-      push(game, { t: STEP.Spawn, enemy: id, inv: run.you });
+      queue(game, spawn({ enemy: id, inv: run.you }));
     },
   },
 } satisfies CardScript;

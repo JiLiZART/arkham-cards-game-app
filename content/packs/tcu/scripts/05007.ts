@@ -10,11 +10,11 @@ import {
   type InvId,
   invName,
   invsAt,
-  push,
   turnOrder,
   EVENT,
-  STEP,
   type ScriptRun,
+  queue,
+  resolveEffects,
 } from "../../../../src/engine/api";
 
 /** the investigator whose card was healed, if it was an investigator */
@@ -60,23 +60,25 @@ export default {
         key: "cardChooseInvestigator",
         vars: { card: run.ctx.source ?? null },
       });
-      push(game, {
-        t: STEP.Effects,
-        effects: [
-          { op: EVENT.Heal, horror: 1, target: "eventInvestigator" },
-          {
-            op: "chooseOne",
-            options: [
-              {
-                label: "Draw 1 card",
-                effects: [{ op: "drawCards", amount: 1, target: "eventInvestigator" }],
-              },
-              { label: "Don't draw", effects: [] },
-            ],
-          },
-        ],
-        ctx: { ...run.ctx, inv: who },
-      });
+      queue(
+        game,
+        resolveEffects({
+          effects: [
+            { op: EVENT.Heal, horror: 1, target: "eventInvestigator" },
+            {
+              op: "chooseOne",
+              options: [
+                {
+                  label: "Draw 1 card",
+                  effects: [{ op: "drawCards", amount: 1, target: "eventInvestigator" }],
+                },
+                { label: "Don't draw", effects: [] },
+              ],
+            },
+          ],
+          ctx: { ...run.ctx, inv: who },
+        }),
+      );
     },
     /** part of the heal that triggered it: no new "after horror is healed" window */
     more(game: GameContext, run: ScriptRun) {

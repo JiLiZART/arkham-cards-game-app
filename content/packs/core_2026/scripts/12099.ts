@@ -4,9 +4,9 @@ import {
   type CardScript,
   currentPhase,
   type GameContext,
-  push,
-  STEP,
   type ScriptRun,
+  queue,
+  placeDoom,
 } from "../../../../src/engine/api";
 
 export default {
@@ -19,7 +19,7 @@ export default {
         !e.exhausted &&
         e.doom === 0
       )
-        push(game, { t: STEP.PlaceDoom, card: e.id, n: 1 });
+        queue(game, placeDoom({ card: e.id, n: 1 }));
     },
   },
 } satisfies CardScript;

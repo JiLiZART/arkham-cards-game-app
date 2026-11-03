@@ -9,14 +9,16 @@ import {
   inv,
   leadInvestigator,
   moveCard,
-  push,
   setController,
   turnOrder,
   EVENT,
   ZONE,
   CHOICE,
-  STEP,
   type ScriptRun,
+  queue,
+  advanceAct,
+  revealLocation,
+  spawn,
 } from "../../../../src/engine/api";
 
 export default {
@@ -53,17 +55,12 @@ export default {
         addCounter(game, i, "clues", -take);
         n -= take;
       }
-      push(game, { t: STEP.AdvanceAct });
+      queue(game, advanceAct());
     },
     back(game: GameContext) {
       const parlor = findByCode(game, "01115", [ZONE.Location])!;
       const hallway = findByCode(game, "01112", [ZONE.Location])!;
-      push(game, {
-        t: STEP.Script,
-        code: "__engine",
-        fn: "revealLocation",
-        ctx: { location: parlor.id },
-      });
+      queue(game, revealLocation(parlor.id));
       const lita = findByCode(game, "01117", [ZONE.SetAside]);
       if (lita) {
         moveCard(game, lita.id, ZONE.Attached, { location: parlor.id });
@@ -73,7 +70,7 @@ export default {
         });
       }
       const priest = findByCode(game, "01116", [ZONE.SetAside]);
-      if (priest) push(game, { t: STEP.Spawn, enemy: priest.id, inv: null, at: hallway.id });
+      if (priest) queue(game, spawn({ enemy: priest.id, inv: null, at: hallway.id }));
     },
   },
 } satisfies CardScript;

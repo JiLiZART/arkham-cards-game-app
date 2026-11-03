@@ -10,13 +10,15 @@ import {
   findByCode,
   type GameContext,
   inv,
-  push,
   setCardLocation,
   stepsToward,
   turnOrder,
   EVENT,
   ZONE,
-  STEP,
+  queue,
+  placeDoom,
+  endScenario,
+  defeatInvestigator,
 } from "../../../../src/engine/api";
 
 const ghouls = (game: GameContext) =>
@@ -52,19 +54,18 @@ export default {
         .map((c) => findByCode(game, c, [ZONE.Location])?.id)
         .filter(Boolean);
       const n = ghouls(game).filter((e) => rooms.includes(e.location!)).length;
-      if (n && currentAgenda(game))
-        push(game, { t: STEP.PlaceDoom, card: currentAgenda(game)!, n });
+      if (n && currentAgenda(game)) queue(game, placeDoom({ card: currentAgenda(game)!, n }));
     },
     back(game: GameContext) {
       const act = currentAct(game) ? (def(game, currentAct(game)!).stage ?? 1) : 3;
       if (act < 3) {
-        push(game, { t: STEP.Resolution, id: "R3" });
+        queue(game, endScenario({ id: "R3" }));
         return;
       }
       // each investigator that has not resigned is defeated and suffers 1 physical trauma
       for (const i of turnOrder(game))
         if (inv(game, i).status === "playing")
-          push(game, { t: STEP.Defeated, inv: i, by: "damage" });
+          queue(game, defeatInvestigator({ inv: i, by: "damage" }));
     },
   },
 } satisfies CardScript;

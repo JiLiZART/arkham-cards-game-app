@@ -9,12 +9,12 @@ import {
   enemiesAt,
   type GameContext,
   invName,
-  push,
   setCardLocation,
   setEngaged,
-  win,
   EVENT,
   type ScriptRun,
+  queue,
+  openWindow,
 } from "../../../../src/engine/api";
 
 export default {
@@ -43,10 +43,10 @@ export default {
           card: pick,
         },
       );
-      push(
+      queue(
         game,
-        win("enemyEntersLocation", { enemy: pick, location: here }),
-        win("enemyEngages", { inv: run.you, enemy: pick }),
+        openWindow("enemyEntersLocation", { enemy: pick, location: here }),
+        openWindow("enemyEngages", { inv: run.you, enemy: pick }),
       );
     },
   },

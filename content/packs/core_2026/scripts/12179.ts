@@ -5,10 +5,10 @@ import {
   type CardScript,
   emit,
   type GameContext,
-  push,
   EVENT,
-  STEP,
   type ScriptRun,
+  queue,
+  endScenario,
 } from "../../../../src/engine/api";
 
 export default {
@@ -21,7 +21,7 @@ export default {
         card: e.id,
         data: { n: 1 },
       });
-      if (e.clues >= 5) push(game, { t: STEP.Resolution, id: "R2" });
+      if (e.clues >= 5) queue(game, endScenario({ id: "R2" }));
     },
   },
 } satisfies CardScript;

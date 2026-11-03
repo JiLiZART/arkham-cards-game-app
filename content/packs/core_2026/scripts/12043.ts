@@ -8,16 +8,17 @@ import {
   type InstId,
   inv,
   moveCard,
-  push,
   putOnTop,
   EVENT,
   ZONE,
   CHOICE,
-  STEP,
   type ScriptRun,
   argField,
   asNumber,
   asStrings,
+  queue,
+  runScript,
+  drawCards,
 } from "../../../../src/engine/api";
 
 type Args = { cards: InstId[]; drawn: number };
@@ -32,13 +33,10 @@ export default {
         inv: run.you,
         data: { n: cards.length },
       });
-      push(game, {
-        t: STEP.Script,
-        code: "12043",
-        fn: "take",
-        ctx: run.ctx,
-        args: { cards, drawn: 0 },
-      });
+      queue(
+        game,
+        runScript({ code: "12043", fn: "take", ctx: run.ctx, args: { cards, drawn: 0 } }),
+      );
     },
     take(game: GameContext, run: ScriptRun) {
       const you = run.you;
@@ -58,16 +56,15 @@ export default {
           { kind: CHOICE.Generic, who: you },
         );
         putOnTop(game, you, [pick]);
-        push(
+        queue(
           game,
-          { t: STEP.Draw, inv: you, n: 1, tapped: true },
-          {
-            t: STEP.Script,
+          drawCards({ inv: you, n: 1, tapped: true }),
+          runScript({
             code: "12043",
             fn: "take",
             ctx: run.ctx,
             args: { ...args, drawn: args.drawn + 1 },
-          },
+          }),
         );
         return;
       }
@@ -87,13 +84,15 @@ export default {
       );
       moveCard(game, id, ZONE.Limbo);
       moveCard(game, id, ZONE.Deck, { inv: you, top: where === "top" });
-      push(game, {
-        t: STEP.Script,
-        code: "12043",
-        fn: "take",
-        ctx: run.ctx,
-        args: { cards: left.slice(1), drawn: 3 },
-      });
+      queue(
+        game,
+        runScript({
+          code: "12043",
+          fn: "take",
+          ctx: run.ctx,
+          args: { cards: left.slice(1), drawn: 3 },
+        }),
+      );
     },
   },
 } satisfies CardScript;
