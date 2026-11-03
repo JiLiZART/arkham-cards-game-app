@@ -838,7 +838,7 @@ function kindResultStage(game: GameContext, step: Extract<Step, { t: "Test" }>) 
     !attacked.exhausted &&
     def(game, t.target!).keywords.includes("elusive")
   )
-    steps.push({ t: STEP.Script, code: "__engine", fn: "elusive", ctx: { enemy: t.target } });
+    steps.push({ t: STEP.Elusive, enemy: t.target! });
   push(game, ...steps);
 }
 

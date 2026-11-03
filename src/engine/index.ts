@@ -287,7 +287,7 @@ export function createGame(db: ContentDb, setup: GameSetup): Result {
   push(
     game,
     ...s.order.map((i): Step => ({ t: STEP.Mulligan, inv: i })),
-    { t: STEP.Script, code: "__engine", fn: "roundCleanup", ctx: {} },
+    { t: STEP.RoundCleanup },
     { t: STEP.StartRound },
   );
   // setup spawns pushed earlier resolve first

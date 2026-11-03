@@ -24,7 +24,7 @@ import {
   tapToDraw,
 } from "../context";
 import { moveCard, reshuffleDiscard } from "../movement";
-import type { InstId, Step } from "../world/types";
+import type { InstId, Step, StepOf } from "../world/types";
 import { win } from "./cards";
 import { EVENT } from "../events/event";
 import { ZONE, type Zone } from "../world/constants";
@@ -85,7 +85,7 @@ export const revelationHandler: Handler<"Revelation"> = (game, step) => {
     if (a.run) steps.push({ t: STEP.Script, code: c.code, fn: a.run, ctx });
     else if (a.effects) steps.push({ t: STEP.Effects, effects: a.effects, ctx });
   }
-  steps.push({ t: STEP.Script, code: "__engine", fn: "finishRevelation", ctx });
+  steps.push({ t: STEP.FinishRevelation, card: ctx.source!, inv: ctx.you! });
   push(game, ...steps);
 };
 
@@ -185,12 +185,7 @@ export const advanceAgendaHandler: Handler<"AdvanceAgenda"> = (game, step) => {
     },
   );
   moveCard(game, id, ZONE.Limbo);
-  push(game, ...backSide(game, id), {
-    t: STEP.Script,
-    code: "__engine",
-    fn: "nextAgenda",
-    ctx: { source: id },
-  });
+  push(game, ...backSide(game, id), { t: STEP.NextAgenda, card: id });
 };
 
 export function nextAgenda(game: GameContext, prev: InstId) {
@@ -256,12 +251,7 @@ export const advanceActHandler: Handler<"AdvanceAct"> = (game, step) => {
     card: id,
   });
   moveCard(game, id, ZONE.Limbo);
-  push(game, ...backSide(game, id), {
-    t: STEP.Script,
-    code: "__engine",
-    fn: "nextAct",
-    ctx: { source: id },
-  });
+  push(game, ...backSide(game, id), { t: STEP.NextAct, card: id });
 };
 
 export function nextAct(game: GameContext, prev: InstId) {
@@ -299,6 +289,11 @@ export function allEliminated(game: GameContext) {
 }
 
 export const handlers = {
+  FinishRevelation: (game: GameContext, step: StepOf<"FinishRevelation">) =>
+    finishRevelation(game, step.card, step.inv),
+  AllEliminated: (game: GameContext) => allEliminated(game),
+  NextAgenda: (game: GameContext, step: StepOf<"NextAgenda">) => nextAgenda(game, step.card),
+  NextAct: (game: GameContext, step: StepOf<"NextAct">) => nextAct(game, step.card),
   DrawEncounter: drawEncounterHandler,
   Revelation: revelationHandler,
   PlaceDoom: placeDoomHandler,

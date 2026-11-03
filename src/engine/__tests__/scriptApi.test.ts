@@ -190,22 +190,10 @@ describe("the verbs scripts queue engine steps with", () => {
       trigger: "enemyEngages",
       data: { inv: R, enemy: "e1" },
     });
-    same(api.revealLocation("l1"), {
-      t: STEP.Script,
-      code: "__engine",
-      fn: "revealLocation",
-      ctx: { location: "l1" },
-    });
-    same(api.checkAssetDefeat(R), {
-      t: STEP.Script,
-      code: "__engine",
-      fn: "assetDefeatCheck",
-      ctx: { you: R },
-    });
+    same(api.revealLocation("l1"), { t: STEP.RevealLocation, location: "l1" });
+    same(api.checkAssetDefeat(R), { t: STEP.AssetDefeatCheck, inv: R });
     same(api.basicFight({ you: R, enemy: "e1" }), {
-      t: STEP.Script,
-      code: "__engine",
-      fn: "basicFight",
+      t: STEP.BasicFight,
       ctx: { you: R, enemy: "e1" },
     });
   });

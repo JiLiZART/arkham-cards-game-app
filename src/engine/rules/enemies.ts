@@ -43,7 +43,7 @@ import {
   stepsToward,
 } from "../queries";
 import { moveCard } from "../movement";
-import type { InstId, InvId, Step } from "../world/types";
+import type { InstId, InvId, Step, StepOf } from "../world/types";
 import { win } from "./cards";
 import { EVENT } from "../events/event";
 import { ZONE, CHOICE } from "../world/constants";
@@ -202,7 +202,7 @@ export const enemyAttackHandler: Handler<"EnemyAttack"> = (game, step) => {
     { t: STEP.ResolveAttack, enemy: step.enemy, inv: step.inv, key: step.key },
     // a ready elusive enemy slips away after it attacks
     ...(e && !e.exhausted && hasKeyword(game, step.enemy, "elusive")
-      ? [{ t: STEP.Script, code: "__engine", fn: "elusive", ctx: { enemy: step.enemy } } as Step]
+      ? [{ t: STEP.Elusive, enemy: step.enemy } as Step]
       : []),
   );
 };
@@ -464,9 +464,7 @@ export const enemyAttacksHandler: Handler<"EnemyAttacks"> = (game, step) => {
         (x) => x.id !== e.id && !x.exhausted && !done.includes(`${i}|${x.id}`),
       );
       // a non-massive enemy exhausts as soon as its attack has resolved; a massive one after its last (the loop below)
-      const exhaust: Step[] = isMassive(game, e.id)
-        ? []
-        : [{ t: STEP.Script, code: "__engine", fn: "exhaustEnemy", ctx: { enemy: e.id } }];
+      const exhaust: Step[] = isMassive(game, e.id) ? [] : [{ t: STEP.ExhaustEnemy, enemy: e.id }];
       push(
         game,
         { t: STEP.EnemyAttack, enemy: e.id, inv: i, aoo: false, key: attackKey(game) },
@@ -501,6 +499,8 @@ export const enemyEngageHandler: Handler<"EnemyEngage"> = (game, step) => {
 };
 
 export const handlers = {
+  ExhaustEnemy: (game: GameContext, step: StepOf<"ExhaustEnemy">) => exhaustEnemy(game, step.enemy),
+  Elusive: (game: GameContext, step: StepOf<"Elusive">) => elusive(game, step.enemy, step),
   Spawn: spawnHandler,
   EnemyAttack: enemyAttackHandler,
   ResolveAttack: resolveAttackHandler,

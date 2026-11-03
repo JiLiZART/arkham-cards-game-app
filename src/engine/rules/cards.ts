@@ -43,7 +43,7 @@ import {
   setCounter,
 } from "../context";
 import { discard, moveCard } from "../movement";
-import type { EffCtx, EventData, InstId, InvId, Step } from "../world/types";
+import type { EffCtx, EventData, InstId, InvId, Step, StepOf } from "../world/types";
 import { EVENT } from "../events/event";
 import { ZONE, CHOICE, type Zone } from "../world/constants";
 import { STEP } from "../steps/step";
@@ -499,12 +499,7 @@ export const useAbilityHandler: Handler<"UseAbility"> = (game, step) => {
     !step.paid && a.cost?.uses ? [{ t: STEP.DiscardIfEmpty, card: step.card }] : [];
   // a cost that puts damage or horror on the asset itself can defeat it
   if (!step.paid && (a.cost?.damageOnSelf || a.cost?.horrorOnSelf))
-    after.push({
-      t: STEP.Script,
-      code: "__engine",
-      fn: "assetDefeatCheck",
-      ctx: { you: step.inv },
-    });
+    after.push({ t: STEP.AssetDefeatCheck, inv: step.inv });
   if (a.run)
     push(
       game,
@@ -631,12 +626,7 @@ export const playCardHandler: Handler<"PlayCard"> = (game, step) => {
   const a = step.viaTrigger
     ? (abilitiesOf(game, step.card).find((x) => x.fromHand) ?? playAbility(game, step.card))
     : playAbility(game, step.card);
-  const after: Step = {
-    t: STEP.Script,
-    code: "__engine",
-    fn: "finishEvent",
-    ctx: { source: step.card, you: step.inv },
-  };
+  const after: Step = { t: STEP.FinishEvent, ctx: { source: step.card, you: step.inv } };
   if (a?.run)
     push(
       game,
@@ -754,6 +744,7 @@ export const slotCheckHandler: Handler<"SlotCheck"> = (game, step) => {
 export { canPay, modSum };
 
 export const handlers = {
+  FinishEvent: (game: GameContext, step: StepOf<"FinishEvent">) => finishEvent(game, step.ctx),
   Window: windowHandler,
   UseAbility: useAbilityHandler,
   DiscardIfEmpty: discardIfEmptyHandler,

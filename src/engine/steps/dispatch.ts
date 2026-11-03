@@ -3,87 +3,25 @@
  * kind, until a choice is needed or the queue is empty. Every step kind has exactly one handler, taking that kind of
  * step; the rules modules and the effects own the handlers, this module only collects them.
  */
-import { addCounter, def, type GameContext, push } from "../context";
+import { type GameContext, push } from "../context";
 import { handlers as effectHandlers } from "../effects";
-import { finishEvent, handlers as cardHandlers } from "../rules/cards";
+import { handlers as cardHandlers } from "../rules/cards";
 import { runScript } from "../rules/scripts";
-import { elusive, exhaustEnemy, handlers as enemyHandlers } from "../rules/enemies";
-import {
-  basicInvestigate,
-  endTurnCleanup,
-  handlers as flowHandlers,
-  readyAll,
-  roundCleanup,
-} from "../rules/round";
-import {
-  assetDefeatCheck,
-  checkEngagement,
-  chooseLead,
-  handlers as invHandlers,
-  removeDefeatedAsset,
-  revealLocation,
-} from "../rules/investigators";
-import {
-  allEliminated,
-  finishRevelation,
-  handlers as scenarioHandlers,
-  nextAct,
-  nextAgenda,
-} from "../rules/scenario";
-import { handlers as testHandlers, startTest } from "../rules/skillTest";
-import type { EffCtx, Step } from "../world/types";
+import { handlers as enemyHandlers } from "../rules/enemies";
+import { handlers as flowHandlers } from "../rules/round";
+import { handlers as invHandlers } from "../rules/investigators";
+import { handlers as scenarioHandlers } from "../rules/scenario";
+import { handlers as testHandlers } from "../rules/skillTest";
+import type { Step } from "../world/types";
 
 /** one handler per step kind, each taking exactly its own kind of step */
 export type StepHandlers = {
   [K in Step["t"]]: (game: GameContext, step: Extract<Step, { t: K }>) => void;
 };
 
-// ---------- internal script functions (code "__engine") ----------
-const ENGINE_FNS: Record<string, (game: GameContext, ctx: EffCtx, step: Step) => void> = {
-  finishEvent: (game, ctx) => finishEvent(game, ctx),
-  finishRevelation: (game, ctx) => finishRevelation(game, ctx.source!, ctx.you!),
-  assetDefeatCheck: (game, ctx) => assetDefeatCheck(game, ctx.you!),
-  removeDefeatedAsset: (game, ctx) => removeDefeatedAsset(game, ctx.source!),
-  allEliminated: (game) => allEliminated(game),
-  revealLocation: (game, ctx) => revealLocation(game, ctx.location!),
-  checkEngagement: (game, ctx) => checkEngagement(game, ctx.inv!),
-  investigate: (game, ctx) => basicInvestigate(game, ctx.you!, ctx.location!),
-  basicFight: (game, ctx) =>
-    startTest(game, {
-      inv: ctx.you!,
-      skill: "combat",
-      kind: "fight",
-      target: ctx.enemy!,
-      label: `Fight ${def(game, ctx.enemy!).name}`,
-      ctx,
-    }),
-  basicEvade: (game, ctx) =>
-    startTest(game, {
-      inv: ctx.you!,
-      skill: "agility",
-      kind: "evade",
-      target: ctx.enemy!,
-      label: `Evade ${def(game, ctx.enemy!).name}`,
-      ctx,
-    }),
-  endTurnCleanup: (game, ctx) => endTurnCleanup(game, ctx.inv!),
-  gainResource: (game, ctx) => {
-    addCounter(game, ctx.inv!, "resources", 1);
-  },
-  roundCleanup: (game) => roundCleanup(game),
-  exhaustEnemy: (game, ctx) => exhaustEnemy(game, ctx.enemy!),
-  elusive: (game, ctx, step) => elusive(game, ctx.enemy!, step),
-  readyAll: (game) => readyAll(game),
-  chooseLead: (game, _ctx, step) => chooseLead(game, step),
-  nextAgenda: (game, ctx) => nextAgenda(game, ctx.source!),
-  nextAct: (game, ctx) => nextAct(game, ctx.source!),
-};
-
-/** the engine's own deferred functions run here; every content script goes through the adapter (rules/scripts.ts) */
-const scriptHandler = (game: GameContext, step: Extract<Step, { t: "Script" }>) => {
-  if (step.code === "__engine") ENGINE_FNS[step.fn](game, step.ctx, step);
-  else runScript(game, step);
-};
+/** a content script function, through the adapter (rules/scripts.ts); the engine's own deferred rules are step kinds */
+const scriptHandler = (game: GameContext, step: Extract<Step, { t: "Script" }>) =>
+  runScript(game, step);
 
 const forEachInvHandler = (game: GameContext, step: Extract<Step, { t: "ForEachInv" }>) => {
   push(game, ...step.invs.map((i) => ({ ...step.step, inv: i }) as Step));

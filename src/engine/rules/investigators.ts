@@ -46,7 +46,7 @@ import {
   tapToDraw,
 } from "../context";
 import { moveCard, reshuffleDiscard } from "../movement";
-import type { InstId, InvId, Step } from "../world/types";
+import type { InstId, InvId, Step, StepOf } from "../world/types";
 import { win } from "./cards";
 import { preyCandidates } from "./enemies";
 import { EVENT } from "../events/event";
@@ -301,7 +301,7 @@ export const afterDamageHandler: Handler<"AfterDamage"> = (game, step) => {
     if (c.horror > 0) steps.push(win("horrorOnAsset", { inv: c.controller, card: a }));
   }
   // asset defeat
-  steps.push({ t: STEP.Script, code: "__engine", fn: "assetDefeatCheck", ctx: { you: step.inv } });
+  steps.push({ t: STEP.AssetDefeatCheck, inv: step.inv });
   if (step.horror > 0) steps.push(win("horrorPlaced", { inv: step.inv, amount: step.horror }));
   if (step.damage > 0)
     steps.push(win("damageTaken", { inv: step.inv, amount: step.damage, enemy }));
@@ -323,10 +323,8 @@ export function assetDefeatCheck(game: GameContext, i: InvId) {
       // "when defeated" reactions resolve while it is still in play, then it leaves
       dying.set(game, c.id, true);
       push(game, win("assetDefeated", { inv: c.controller, card: c.id }), {
-        t: STEP.Script,
-        code: "__engine",
-        fn: "removeDefeatedAsset",
-        ctx: { source: c.id },
+        t: STEP.RemoveDefeatedAsset,
+        card: c.id,
       });
     }
   }
@@ -393,10 +391,8 @@ export const defeatedHandler: Handler<"Defeated"> = (game, step) => {
   }
   placeInvestigator(game, me.id, null);
   if (activeInvestigator(game) === step.inv) setActive(game, null);
-  if (activeInvs(game).length === 0)
-    push(game, { t: STEP.Script, code: "__engine", fn: "allEliminated", ctx: {} });
-  else if (leadInvestigator(game) === step.inv)
-    push(game, { t: STEP.Script, code: "__engine", fn: "chooseLead", ctx: {} });
+  if (activeInvs(game).length === 0) push(game, { t: STEP.AllEliminated });
+  else if (leadInvestigator(game) === step.inv) push(game, { t: STEP.ChooseLead });
 };
 
 /** the remaining investigators choose a new lead when the lead is eliminated (Grimoire, Elimination) */
@@ -465,15 +461,9 @@ export const arriveHandler: Handler<"Arrive"> = (game, step) => {
   });
   const steps: Step[] = [];
   const loc = card(game, step.to);
-  if (!loc.revealed)
-    steps.push({
-      t: STEP.Script,
-      code: "__engine",
-      fn: "revealLocation",
-      ctx: { location: step.to },
-    });
+  if (!loc.revealed) steps.push({ t: STEP.RevealLocation, location: step.to });
   steps.push(win("enterLocation", { inv: step.inv, location: step.to, from }));
-  steps.push({ t: STEP.Script, code: "__engine", fn: "checkEngagement", ctx: { inv: step.inv } });
+  steps.push({ t: STEP.CheckEngagement, inv: step.inv });
   steps.push({ t: STEP.CheckObjectives });
   push(game, ...steps);
 };
@@ -655,6 +645,15 @@ export const handSizeHandler: Handler<"HandSize"> = (game, step) => {
 export { cardsIn, engagedWith };
 
 export const handlers = {
+  AssetDefeatCheck: (game: GameContext, step: StepOf<"AssetDefeatCheck">) =>
+    assetDefeatCheck(game, step.inv),
+  RemoveDefeatedAsset: (game: GameContext, step: StepOf<"RemoveDefeatedAsset">) =>
+    removeDefeatedAsset(game, step.card),
+  RevealLocation: (game: GameContext, step: StepOf<"RevealLocation">) =>
+    revealLocation(game, step.location),
+  CheckEngagement: (game: GameContext, step: StepOf<"CheckEngagement">) =>
+    checkEngagement(game, step.inv),
+  ChooseLead: (game: GameContext, step: StepOf<"ChooseLead">) => chooseLead(game, step),
   Draw: drawHandler,
   AssignDamage: assignDamageHandler,
   AfterDamage: afterDamageHandler,

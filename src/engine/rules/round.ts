@@ -49,7 +49,7 @@ import {
   startRound,
   turnOrder,
 } from "../context";
-import type { ChoiceOption, InvId, Step, TurnAction } from "../world/types";
+import type { ChoiceOption, InvId, Step, TurnAction, StepOf, EffCtx } from "../world/types";
 import { activatable, canPlay, playAbility, playable, spendGroupClues, win } from "./cards";
 import { attacksOfOpportunity } from "./enemies";
 import { canMoveTo, checkEngagement, enterCost } from "./investigators";
@@ -364,12 +364,7 @@ export const endTurnHandler: Handler<"EndTurn"> = (game, step) => {
   const me = inv(game, step.inv);
   if (me.turnDone) return;
   setTurnDone(game, me.id, true);
-  push(game, win("turnEnds", { inv: step.inv }), {
-    t: STEP.Script,
-    code: "__engine",
-    fn: "endTurnCleanup",
-    ctx: { inv: step.inv },
-  });
+  push(game, win("turnEnds", { inv: step.inv }), { t: STEP.EndTurnCleanup, inv: step.inv });
 };
 
 export function endTurnCleanup(game: GameContext, i: InvId) {
@@ -419,12 +414,7 @@ export const performActionHandler: Handler<"PerformAction"> = (game, step) => {
   switch (a.kind) {
     case "investigate": {
       const loc = me.location!;
-      steps.push({
-        t: STEP.Script,
-        code: "__engine",
-        fn: "investigate",
-        ctx: { ...ctx, location: loc },
-      });
+      steps.push({ t: STEP.Investigate, inv: i, location: loc });
       break;
     }
     case "move": {
@@ -449,20 +439,10 @@ export const performActionHandler: Handler<"PerformAction"> = (game, step) => {
       steps.push({ t: STEP.UseAbility, inv: i, card: a.card, index: a.index });
       break;
     case "fight":
-      steps.push({
-        t: STEP.Script,
-        code: "__engine",
-        fn: "basicFight",
-        ctx: { ...ctx, enemy: a.enemy },
-      });
+      steps.push({ t: STEP.BasicFight, ctx: { ...ctx, enemy: a.enemy } });
       break;
     case "evade":
-      steps.push({
-        t: STEP.Script,
-        code: "__engine",
-        fn: "basicEvade",
-        ctx: { ...ctx, enemy: a.enemy },
-      });
+      steps.push({ t: STEP.BasicEvade, ctx: { ...ctx, enemy: a.enemy } });
       break;
     case "engage":
       steps.push({ t: STEP.EnemyEngage, enemy: a.enemy, inv: i });
@@ -556,17 +536,13 @@ export const upkeepHandler: Handler<"UpkeepPhase"> = (game) => {
   const steps: Step[] = [
     win("phaseBegins", { phase: "upkeep" }),
     win("playerWindow", { phase: "upkeep" }),
-    { t: STEP.Script, code: "__engine", fn: "readyAll", ctx: {} },
+    { t: STEP.ReadyAll },
   ];
   // readied enemies at an investigator's location engage
-  for (const i of activeInvs(game))
-    steps.push({ t: STEP.Script, code: "__engine", fn: "checkEngagement", ctx: { inv: i } });
+  for (const i of activeInvs(game)) steps.push({ t: STEP.CheckEngagement, inv: i });
   for (const i of turnOrder(game)) {
     if (inv(game, i).status !== "playing") continue;
-    steps.push(
-      { t: STEP.Draw, inv: i, n: 1 },
-      { t: STEP.Script, code: "__engine", fn: "gainResource", ctx: { inv: i } },
-    );
+    steps.push({ t: STEP.Draw, inv: i, n: 1 }, { t: STEP.GainResource, inv: i });
   }
   for (const i of turnOrder(game)) steps.push({ t: STEP.HandSize, inv: i });
   push(game, ...steps);
@@ -575,14 +551,9 @@ export const upkeepHandler: Handler<"UpkeepPhase"> = (game) => {
 export const endRoundHandler: Handler<"EndRound"> = (game) => {
   if (currentPhase(game) === "ended") return;
   // "until the end of the round" effects expire before "at the end of the round" abilities (Grimoire, Lasting Effects)
-  push(
-    game,
-    { t: STEP.Script, code: "__engine", fn: "roundCleanup", ctx: {} },
-    win("roundEnds", {}),
-    {
-      t: STEP.StartRound,
-    },
-  );
+  push(game, { t: STEP.RoundCleanup }, win("roundEnds", {}), {
+    t: STEP.StartRound,
+  });
 };
 
 export function roundCleanup(game: GameContext) {
@@ -591,7 +562,31 @@ export function roundCleanup(game: GameContext) {
 
 export { checkEngagement };
 
+/** the basic Fight or Evade action against the context's enemy */
+function basicTest(game: GameContext, ctx: EffCtx, kind: "fight" | "evade") {
+  const fight = kind === "fight";
+  startTest(game, {
+    inv: ctx.you!,
+    skill: fight ? "combat" : "agility",
+    kind,
+    target: ctx.enemy!,
+    label: `${fight ? "Fight" : "Evade"} ${def(game, ctx.enemy!).name}`,
+    ctx,
+  });
+}
+
 export const handlers = {
+  Investigate: (game: GameContext, step: StepOf<"Investigate">) =>
+    basicInvestigate(game, step.inv, step.location),
+  BasicFight: (game: GameContext, step: StepOf<"BasicFight">) => basicTest(game, step.ctx, "fight"),
+  BasicEvade: (game: GameContext, step: StepOf<"BasicEvade">) => basicTest(game, step.ctx, "evade"),
+  EndTurnCleanup: (game: GameContext, step: StepOf<"EndTurnCleanup">) =>
+    endTurnCleanup(game, step.inv),
+  GainResource: (game: GameContext, step: StepOf<"GainResource">) => {
+    addCounter(game, step.inv, "resources", 1);
+  },
+  RoundCleanup: (game: GameContext) => roundCleanup(game),
+  ReadyAll: (game: GameContext) => readyAll(game),
   StartRound: startRoundHandler,
   PhasePause: phasePauseHandler,
   MythosPhase: mythosHandler,

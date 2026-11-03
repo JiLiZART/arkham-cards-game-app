@@ -328,6 +328,26 @@ export type Step = { choice?: any } & (
   | { t: "EnterPlay"; inv: InvId; card: InstId }
   | { t: "ChooseTurnOrder" }
   | { t: "Script"; code: string; fn: string; ctx: EffCtx; args?: unknown }
+  // the engine's deferred rules: each runs after the steps queued before it
+  | { t: "ExhaustEnemy"; enemy: InstId }
+  | { t: "Elusive"; enemy: InstId }
+  | { t: "FinishRevelation"; card: InstId; inv: InvId }
+  | { t: "AllEliminated" }
+  | { t: "NextAgenda"; card: InstId }
+  | { t: "NextAct"; card: InstId }
+  | { t: "FinishEvent"; ctx: EffCtx }
+  | { t: "AssetDefeatCheck"; inv: InvId }
+  | { t: "RemoveDefeatedAsset"; card: InstId }
+  | { t: "RevealLocation"; location: InstId }
+  | { t: "CheckEngagement"; inv: InvId }
+  | { t: "ChooseLead" }
+  | { t: "Investigate"; inv: InvId; location: InstId }
+  | { t: "BasicFight"; ctx: EffCtx }
+  | { t: "BasicEvade"; ctx: EffCtx }
+  | { t: "EndTurnCleanup"; inv: InvId }
+  | { t: "GainResource"; inv: InvId }
+  | { t: "RoundCleanup" }
+  | { t: "ReadyAll" }
   | { t: "DiscardIfEmpty"; card: InstId }
   | {
       t: "UseAbility";
@@ -399,6 +419,8 @@ export type Step = { choice?: any } & (
   /** put looked-at cards back on top of a deck in the order chosen: `placed` from the top down, the last one goes under them */
   | { t: "ArrangeTop"; inv: InvId; deck: InvId | "encounter"; cards: InstId[]; placed: InstId[] }
 );
+/** the step of one kind */
+export type StepOf<K extends Step["t"]> = Extract<Step, { t: K }>;
 
 export interface EventData {
   inv?: InvId | null;

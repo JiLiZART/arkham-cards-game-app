@@ -155,13 +155,9 @@ export const checkObjectives = bare(STEP.CheckObjectives);
 /** a reaction window on `trigger` (an event the engine didn't raise itself) */
 export const openWindow = (trigger: Trigger, data: EventData): Queued =>
   ({ t: STEP.Window, trigger, data }) as unknown as Queued;
-// engine functions a script queues after its own steps (typed step kinds in engine-typed-continuations)
-const engineFn = (fn: string, ctx: EffCtx): Queued =>
-  ({ t: STEP.Script, code: "__engine", fn, ctx }) as unknown as Queued;
 /** reveal a location once the steps before it have resolved */
-export const revealLocation = (location: InstId) => engineFn("revealLocation", { location });
+export const revealLocation = (location: InstId): Queued => verb(STEP.RevealLocation)({ location });
 /** an investigator's assets with enough damage or horror on them are defeated */
-export const checkAssetDefeat = (you: InvId) => engineFn("assetDefeatCheck", { you });
-/** the basic Fight action against `enemy` */
-export const basicFight = (ctx: { you: InvId; enemy?: InstId | null }) =>
-  engineFn("basicFight", ctx);
+export const checkAssetDefeat = (inv: InvId): Queued => verb(STEP.AssetDefeatCheck)({ inv });
+/** the basic Fight action against the context's enemy */
+export const basicFight = (ctx: EffCtx): Queued => verb(STEP.BasicFight)({ ctx });
