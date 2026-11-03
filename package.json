@@ -21,7 +21,6 @@
     "search:games": "SEARCH_GAMES=1 vitest run scripts/record-games.test.ts -t searches --reporter=verbose",
     "import:sounds": "tsx scripts/import-sounds.ts",
     "import:icons": "tsx scripts/import-icons.ts",
-    "fetch:cards": "tsx scripts/fetch-card-images.ts",
     "import:ru-cards": "tsx scripts/import-ru-cards.ts",
     "import:campaigns": "tsx scripts/import-campaigns.ts",
     "import:art": "tsx scripts/import-art.ts",

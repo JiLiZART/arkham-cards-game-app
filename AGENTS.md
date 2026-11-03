@@ -4,7 +4,7 @@ This file provides guidance for AI coding agents (Claude Code, Cursor Agent, Cop
 
 ## Project Context
 
-Arkham Table is a browser version of _Arkham Horror: The Card Game_ on a 3D table. 1–4 investigators play hot-seat on one device, in English or Russian. It ships the Night of the Zealot campaign and the core investigators' starter decks; other packs, investigators and campaigns are imported and measured for completeness. Fan project for personal use, deployed to GitHub Pages (https://arkham.artkost.dev). [README.md](README.md) is the full reference.
+Arkham Table is a browser version of _Arkham Horror: The Card Game_ on a 3D table. 1–4 investigators play hot-seat on one device, in English or Russian. It ships the Night of the Zealot campaign and the core investigators' starter decks; other packs, investigators and campaigns are imported and measured for completeness. Fan project for personal use, deployed as a Cloudflare Worker (`wrangler.toml`). [README.md](README.md) is the full reference.
 
 Key directories:
 
@@ -72,7 +72,7 @@ Before the human submits your work, ensure:
 - three + @react-three/fiber + @react-three/drei for the table
 - zustand for UI state, zod for content schemas
 - vitest for tests, oxlint and oxfmt, tsx for scripts
-- pnpm 11, Node 22; deployed by `.github/workflows/deploy.yml` to GitHub Pages
+- pnpm 11, Node 22; deployed by Cloudflare's Git integration as one Worker (`wrangler.toml`: the built site, the rooms, the card scans)
 
 ## Commands
 
@@ -86,11 +86,10 @@ pnpm format / pnpm format:fix  # oxfmt: check / write
 pnpm check:content           # validate everything under content/
 pnpm coverage                # rewrite content/coverage.json after content changes
 pnpm build                   # typecheck + production build
-pnpm fetch:cards dist        # download card scans into a build
 pnpm import:cards | import:i18n | import:investigators | import:campaigns  # regenerate imported content
 ```
 
-Pass script arguments without `--` (`pnpm fetch:cards dist`); pnpm forwards a `--` to the script.
+Pass script arguments without `--` (`pnpm import:cards --pack dwl`); pnpm forwards a `--` to the script.
 
 ## App architecture
 

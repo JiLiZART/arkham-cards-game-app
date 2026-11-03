@@ -5,7 +5,7 @@
 name = "arkham-horror-app"
 main = "worker/src/index.ts"
 compatibility_date = "2026-10-01"
-# served on <name>.<account>.workers.dev until arkham.artkost.dev moves over from GitHub Pages
+# also served on <name>.<account>.workers.dev; arkham.artkost.dev is the Worker's custom domain (set in the dashboard)
 workers_dev = true
 
 [assets]

@@ -8,7 +8,7 @@ const walk = (dir: string): string[] =>
   );
 
 describe("asset paths", () => {
-  // the site runs under a sub-path on GitHub Pages: public files go through asset() (src/ui/assets/images.ts), never "/..."
+  // public files go through asset() (src/ui/assets/images.ts), never "/...", so the site can be served under a sub-path
   it("no hard-coded root paths to public files in src", () => {
     const bad: string[] = [];
     for (const f of walk("src").filter((f) => /\.tsx?$/.test(f) && !f.endsWith(".test.ts"))) {

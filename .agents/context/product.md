@@ -37,7 +37,7 @@ The engine is the authority on the rules. A card counts as working only when eve
 - Presentation follows the animation clock (ADR-0002). Sounds are keyed to it and normalised to fixed loudness.
 - Reduced motion is honoured: animations that fly cards collapse to instant placement.
 - Packs load lazily. The main bundle carries only the core pack.
-- Hosted on GitHub Pages at arkham.artkost.dev. Card scans are proxied in dev and downloaded into the build for deploys.
+- Hosted as a Cloudflare Worker at arkham.artkost.dev. Card scans are proxied from the arkham.build CDN, by the dev server locally and by the Worker when deployed.
 
 ## Brand Commitments
 

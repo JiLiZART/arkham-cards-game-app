@@ -1,7 +1,7 @@
 import type { CardDef } from "../../content/schema";
 import ruImages from "./ruImages.generated.json";
 
-/** a file under public/, at the site's base path ("/" locally, "/arkham-cards-game-app/" on GitHub Pages) */
+/** a file under public/, at the site's base path (Vite's `base`, "/" today) */
 export const asset = (path: string) =>
   `${(import.meta.env?.BASE_URL as string | undefined) ?? "/"}${path}`;
 
