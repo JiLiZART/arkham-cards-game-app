@@ -16,6 +16,7 @@ import { findByCode, locationByName } from "./queries";
 import { legalTurnActions } from "./rules/round";
 import { drawOpeningCards, revealLocation } from "./rules/investigators";
 import { run } from "./steps/dispatch";
+import { runScript } from "./rules/scripts";
 import { discardFromOpeningHands } from "./world/flags";
 import { randInt, shuffle } from "./world/rng";
 import { newWorld, pileRec } from "./world/store";
@@ -180,9 +181,16 @@ function applySetupStep(game: GameContext, st: SetupStep) {
       // applied after opening hands are drawn
       discardFromOpeningHands.set(game, st.amount);
       return;
-    case "script":
-      game.db.scripts[s.scenarioId]?.fns?.[st.fn]?.(game, {}, undefined);
+    case "script": {
+      const fn = game.db.scripts[s.scenarioId]?.fns?.[st.fn];
+      if (fn)
+        runScript(
+          game,
+          { t: STEP.Script, code: s.scenarioId, fn: st.fn, ctx: {} },
+          { fn, direct: true },
+        );
       return;
+    }
   }
 }
 

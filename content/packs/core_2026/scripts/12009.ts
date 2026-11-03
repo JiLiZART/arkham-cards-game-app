@@ -5,7 +5,6 @@ import {
   cardIf,
   type CardScript,
   def,
-  type EffCtx,
   emit,
   type GameContext,
   inv,
@@ -15,12 +14,13 @@ import {
   setEngaged,
   EVENT,
   STEP,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    evaded(game: GameContext, ctx: EffCtx) {
-      const who = ctx.inv!;
+    evaded(game: GameContext, run: ScriptRun) {
+      const who = run.ctx.inv!;
       const me = inv(game, who);
       if (me.clues > 0 && me.location) {
         addCounter(game, who, "clues", -1);
@@ -32,7 +32,7 @@ export default {
         });
         return;
       }
-      const e = cardIf(game, ctx.source);
+      const e = cardIf(game, run.ctx.source);
       if (e?.zone !== "enemy") return;
       ready(game, e.id);
       setEngaged(game, e.id, who);

@@ -22,6 +22,7 @@ import {
   PHASE,
   CHOICE,
   STEP,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 const UNSOLVED_CASE = "05010";
@@ -105,24 +106,19 @@ export default {
     return id && card(game, id).zone === "setAside" ? [id] : [];
   },
   fns: {
-    reveal(game: GameContext, ctx: EffCtx) {
-      const [top, ...rest] = hunch(game, ctx.you!);
+    reveal(game: GameContext, run: ScriptRun) {
+      const [top, ...rest] = hunch(game, run.you);
       if (!top) return;
-      flags.hunch.set(game, String(ctx.you), rest);
-      flags.hunchRevealed.set(game, String(ctx.you), top);
+      flags.hunch.set(game, String(run.ctx.you), rest);
+      flags.hunchRevealed.set(game, String(run.ctx.you), top);
       flags.costMod.set(game, top, -2);
-      emit(
-        game,
-        EVENT.Hunch,
-        `${invName(game, ctx.you!)} reveals a hunch: ${def(game, top).name}`,
-        {
-          inv: ctx.you!,
-          card: top,
-        },
-      );
+      emit(game, EVENT.Hunch, `${invName(game, run.you)} reveals a hunch: ${def(game, top).name}`, {
+        inv: run.you,
+        card: top,
+      });
     },
-    putBack(game: GameContext, ctx: EffCtx) {
-      const you = ctx.you!;
+    putBack(game: GameContext, run: ScriptRun) {
+      const you = run.you;
       const id = revealed(game, you);
       flags.hunchRevealed.clear(game, you);
       if (!id) return;
@@ -146,11 +142,11 @@ export default {
         card: id,
       });
     },
-    elder(game: GameContext, ctx: EffCtx) {
-      push(game, { t: STEP.Script, code: "05002", fn: "toHunch", ctx });
+    elder(game: GameContext, run: ScriptRun) {
+      push(game, { t: STEP.Script, code: "05002", fn: "toHunch", ctx: run.ctx });
     },
-    toHunch(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
-      insightToHunch(game, ctx.you!, step);
+    toHunch(game: GameContext, run: ScriptRun) {
+      insightToHunch(game, run.you, run.step);
     },
   },
 } satisfies CardScript;

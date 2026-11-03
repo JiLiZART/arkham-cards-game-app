@@ -36,6 +36,7 @@ import type { EffCtx, InstId, InvId, SkillTestState, Step } from "../world/types
 import { activatable, canPay, canPlay, payCost, playable, win } from "./cards";
 import { attackKey } from "./enemies";
 import { tokenX } from "./tokens";
+import { runScript } from "./scripts";
 import { EVENT } from "../events/event";
 import { ZONE, CHOICE, TEST_STAGE } from "../world/constants";
 import { STEP } from "../steps/step";
@@ -472,11 +473,14 @@ function resolveTokensStage(game: GameContext) {
               : v;
         if (es.effects) t.tokenOnSuccess.push(...es.effects);
         // runs now so it can adjust the current test (auto-succeed, extra on-success effects)
-        if (es.run)
-          game.db.scripts[card(game, invCard).code]?.fns?.[es.run]?.(game, {
-            ...ctx,
-            source: invCard,
-          });
+        const code = card(game, invCard).code;
+        const fn = es.run ? game.db.scripts[code]?.fns?.[es.run] : undefined;
+        if (fn)
+          runScript(
+            game,
+            { t: STEP.Script, code, fn: es.run!, ctx: { ...ctx, source: invCard } },
+            { fn, direct: true },
+          );
       }
     } else {
       const eff = scen.tokens[game.s.difficulty]?.[token as SymbolToken];

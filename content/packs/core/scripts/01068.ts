@@ -1,39 +1,27 @@
 // Mind Wipe — a non-Elite enemy at your location has a blank text box until the end of the phase
 import {
   addTempMod,
-  ask,
   def,
   emit,
   enemiesAt,
   inv,
   isElite,
   type CardScript,
-  type EffCtx,
   type GameContext,
-  type InstId,
-  type Step,
   EVENT,
-  CHOICE,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    wipe(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
-      const here = enemiesAt(game, inv(game, ctx.you!).location).filter(
-        (e) => !isElite(game, e.id),
-      );
+    wipe(game: GameContext, run: ScriptRun) {
+      const here = enemiesAt(game, inv(game, run.you).location).filter((e) => !isElite(game, e.id));
       if (!here.length) return;
-      const pick = ask<InstId>(
-        game,
-        step!,
-        ctx.you!,
-        CHOICE.Target,
-        "Mind Wipe: choose an enemy",
-        here.map((e) => ({ id: e.id, label: def(game, e.id).name, card: e.id, value: e.id })),
-        { auto: true, key: "chooseEnemy" },
+      const pick = run.chooseCard(
+        here.map((e) => e.id),
+        { text: "Mind Wipe: choose an enemy", key: "chooseEnemy" },
       );
-      if (pick === undefined) return;
-      addTempMod(game, { flag: "blankText" }, pick, "phase", ctx.source ?? null);
+      addTempMod(game, { flag: "blankText" }, pick, "phase", run.ctx.source ?? null);
       emit(
         game,
         EVENT.Blank,

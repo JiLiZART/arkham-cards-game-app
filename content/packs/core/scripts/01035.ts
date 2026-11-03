@@ -1,41 +1,31 @@
 // Medical Texts — test intellect (2) for an investigator at your location: heal 1 damage, or deal 1 on failure
 import {
-  ask,
   inv,
-  invName,
   invsAt,
   startTest,
   type CardScript,
-  type EffCtx,
   type GameContext,
-  type InvId,
-  type Step,
   EVENT,
-  CHOICE,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 export default {
   abilities: [{ kind: "action", label: "Medical Texts: treat an investigator", run: "treat" }],
   fns: {
-    treat(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
-      const here = invsAt(game, inv(game, ctx.you!).location);
-      const who = ask<InvId>(
-        game,
-        step!,
-        ctx.you!,
-        CHOICE.Target,
-        "Medical Texts: choose an investigator",
-        here.map((i) => ({ id: i, label: invName(game, i), card: inv(game, i).cardId, value: i })),
-        { auto: true, key: "cardChooseInvestigator", vars: { card: ctx.source ?? null } },
-      );
-      if (who === undefined) return;
+    treat(game: GameContext, run: ScriptRun) {
+      const here = invsAt(game, inv(game, run.you).location);
+      const who = run.chooseInvestigator(here, {
+        text: "Medical Texts: choose an investigator",
+        key: "cardChooseInvestigator",
+        vars: { card: run.ctx.source ?? null },
+      });
       startTest(game, {
-        inv: ctx.you!,
+        inv: run.you,
         skill: "intellect",
         kind: "plain",
         difficulty: 2,
-        source: ctx.source,
-        ctx: { ...ctx, inv: who },
+        source: run.ctx.source,
+        ctx: { ...run.ctx, inv: who },
         onSuccess: [{ op: EVENT.Heal, damage: 1, target: "eventInvestigator" }],
         onFail: [{ op: "takeDamage", amount: 1, target: "eventInvestigator" }],
       });

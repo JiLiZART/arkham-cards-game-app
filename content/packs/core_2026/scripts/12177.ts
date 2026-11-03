@@ -3,15 +3,15 @@ import {
   enemies,
   push,
   type CardScript,
-  type EffCtx,
   type GameContext,
   STEP,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    knight(game: GameContext, ctx: EffCtx) {
-      if (ctx.enemy !== ctx.source) return;
+    knight(game: GameContext, run: ScriptRun) {
+      if (run.ctx.enemy !== run.ctx.source) return;
       const queen = enemies(game).find((e) => e.code === "12179" || e.code === "12179b");
       if (queen)
         push(game, {
@@ -19,7 +19,7 @@ export default {
           enemy: queen.id,
           amount: 1,
           by: null,
-          source: ctx.source,
+          source: run.ctx.source,
         });
     },
   },

@@ -3,11 +3,11 @@ import {
   addExtraReveal,
   type CardScript,
   currentTest,
-  type EffCtx,
   type GameContext,
   push,
   setOnChoose,
   STEP,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 const SYMBOLS = ["skull", "cultist", "tablet", "elderThing", "elderSign", "autoFail"];
@@ -19,11 +19,11 @@ export default {
       addExtraReveal(game);
       setOnChoose(game, "12068", "symbol");
     },
-    symbol(game: GameContext, ctx: EffCtx) {
-      if (ctx.token && SYMBOLS.includes(ctx.token))
+    symbol(game: GameContext, run: ScriptRun) {
+      if (run.ctx.token && SYMBOLS.includes(run.ctx.token))
         push(game, {
           t: STEP.AssignDamage,
-          inv: ctx.you!,
+          inv: run.you,
           damage: 0,
           horror: 1,
           direct: false,

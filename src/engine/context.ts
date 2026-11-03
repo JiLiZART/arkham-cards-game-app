@@ -19,6 +19,7 @@ import type { EventType } from "./events/event";
 import type {
   CardInst,
   CardView,
+  EffCtx,
   GameContext,
   InvView,
   ChoiceOption,
@@ -377,6 +378,10 @@ export function push(game: GameContext, ...steps: Step[]) {
  * otherwise records a pending choice and returns undefined (handler must return).
  * With `auto`, a single option is chosen without asking.
  */
+/** an effect resolves for its investigator unless they have been eliminated mid-effect (an attack of opportunity) */
+export const resolvesFor = (game: GameContext, ctx: EffCtx): boolean =>
+  !ctx.you || !invOfIf(game.s, ctx.you) || invOf(game.s, ctx.you).status === "playing";
+
 export function ask<T = unknown>(
   game: GameContext,
   step: Step,

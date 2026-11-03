@@ -3,16 +3,16 @@ import {
   cardIf,
   type CardScript,
   currentPhase,
-  type EffCtx,
   type GameContext,
   push,
   STEP,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    lurk(game: GameContext, ctx: EffCtx) {
-      const e = cardIf(game, ctx.source!);
+    lurk(game: GameContext, run: ScriptRun) {
+      const e = cardIf(game, run.source);
       if (
         currentPhase(game) === "investigation" &&
         e?.zone === "enemy" &&

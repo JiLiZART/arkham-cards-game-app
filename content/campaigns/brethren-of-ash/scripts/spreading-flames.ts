@@ -3,7 +3,6 @@ import {
   activeInvs,
   addCounter,
   allCards,
-  ask,
   card,
   cardIf,
   type CardScript,
@@ -11,15 +10,12 @@ import {
   currentAct,
   def,
   discard,
-  type EffCtx,
   emit,
   enemiesAt,
   findByCode,
   flags,
   type GameContext,
-  type InstId,
   inv,
-  type InvId,
   invName,
   leadInvestigator,
   locationByName,
@@ -32,13 +28,19 @@ import {
   setCounter,
   shuffleDeck,
   spendableGroupClues,
-  type Step,
   EVENT,
   ZONE,
   CHOICE,
   STEP,
+  type ScriptRun,
+  argField,
+  asNumber,
+  asString,
 } from "../../../../src/engine/api";
 import type { Effect, Skill } from "../../../../src/content/schema";
+
+const SKILL_NAMES: readonly string[] = ["willpower", "intellect", "combat", "agility"];
+const isSkill = (v: string | undefined): v is Skill => v !== undefined && SKILL_NAMES.includes(v);
 import { drawFire } from "../../../packs/core_2026/scripts/12129";
 
 const FIRE = "12129";
@@ -59,11 +61,15 @@ export default {
   },
   fns: {
     /** each investigator, in player order, makes the test */
-    eachTest(
-      game: GameContext,
-      ctx: EffCtx,
-      args: { skill: Skill; difficulty: number; onFail: Effect[] },
-    ) {
+    eachTest(game: GameContext, run: ScriptRun) {
+      // the scenario's data gives the test: { skill, difficulty, onFail }
+      const skill = asString(argField(run.args, "skill"));
+      const difficulty = asNumber(argField(run.args, "difficulty"));
+      const onFail: unknown = argField(run.args, "onFail");
+      if (!isSkill(skill) || difficulty === undefined || !Array.isArray(onFail))
+        throw new Error(
+          "spreading-flames.eachTest: args need a skill, a difficulty and onFail effects",
+        );
       push(
         game,
         ...activeInvs(game).map((i) => ({
@@ -71,35 +77,33 @@ export default {
           effects: [
             {
               op: "skillTest" as const,
-              skill: args.skill,
-              difficulty: args.difficulty,
-              onFail: args.onFail,
+              skill,
+              difficulty,
+              onFail: onFail as Effect[],
             },
           ],
-          ctx: { ...ctx, you: i, inv: i },
+          ctx: { ...run.ctx, you: i, inv: i },
         })),
       );
     },
-    discardBystander(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
-      const here = enemiesAt(game, inv(game, ctx.you!).location).filter((e) => e.code === "12123");
+    discardBystander(game: GameContext, run: ScriptRun) {
+      const here = enemiesAt(game, inv(game, run.you).location).filter((e) => e.code === "12123");
       if (!here.length) return;
-      const pick = ask<InstId>(
+      discard(
         game,
-        step!,
-        ctx.you!,
-        CHOICE.Target,
-        "Discard a Bystander",
-        here.map((e) => ({ id: e.id, label: def(game, e.id).name, card: e.id, value: e.id })),
-        { auto: true, key: "chooseEnemy" },
+        run.chooseCard(
+          here.map((e) => e.id),
+          { text: "Discard a Bystander", key: "chooseEnemy" },
+        ),
       );
-      if (pick !== undefined) discard(game, pick);
     },
     /** Lit Up: if they are still set aside, n set-aside Fire! go to the encounter discard pile */
-    fireToDiscard(game: GameContext, _ctx: EffCtx, n: number) {
-      for (const c of setAside(game, FIRE).slice(0, n)) moveCard(game, c.id, ZONE.EncounterDiscard);
+    fireToDiscard(game: GameContext, run: ScriptRun) {
+      for (const c of setAside(game, FIRE).slice(0, asNumber(run.args)))
+        moveCard(game, c.id, ZONE.EncounterDiscard);
     },
-    drawFire(game: GameContext, ctx: EffCtx) {
-      drawFire(game, ctx.you ?? leadInvestigator(game));
+    drawFire(game: GameContext, run: ScriptRun) {
+      drawFire(game, run.ctx.you ?? leadInvestigator(game));
     },
     leadDrawsFire(game: GameContext) {
       drawFire(game, leadInvestigator(game));
@@ -109,26 +113,23 @@ export default {
       for (const i of activeInvs(game)) push(game, { t: STEP.Defeated, inv: i, by: "damage" });
     },
     /** an act advanced at the end of the round by spending clues (at Orne Library, for `at`) */
-    endOfRoundAdvance(game: GameContext, _ctx: EffCtx, at: string | undefined, step?: Step) {
+    endOfRoundAdvance(game: GameContext, run: ScriptRun) {
       if (!currentAct(game)) return;
       const cost = (def(game, currentAct(game)!).actClues ?? 0) * playerCount(game);
+      const at = asString(run.args);
       const loc = at ? findByCode(game, at, [ZONE.Location])?.id : undefined;
       const who = activeInvs(game).filter((i) => !loc || inv(game, i).location === loc);
       const clues = at
         ? who.reduce((n, i) => n + inv(game, i).clues, 0)
         : spendableGroupClues(game);
       if (!who.length || clues < cost) return;
-      const yes = ask<boolean>(
-        game,
-        step!,
-        leadInvestigator(game),
-        CHOICE.Generic,
-        `Spend ${cost} clues as a group to advance the act?`,
+      const yes = run.choose<boolean>(
         [
           { id: "yes", label: `Advance act (spend ${cost} clues)`, value: true },
           { id: "no", label: "Not yet", value: false },
         ],
-        { key: "chooseOne" },
+        { text: `Spend ${cost} clues as a group to advance the act?`, key: "chooseOne" },
+        { auto: false, kind: CHOICE.Generic, who: leadInvestigator(game) },
       );
       if (!yes) return;
       let n = cost;
@@ -189,24 +190,14 @@ export default {
       }
     },
     /** The Servant Unleashed: Dr. Armitage joins, the Servant returns to the quad, clues there, Fire! for the lead */
-    servantUnleashed(game: GameContext, _ctx: EffCtx, _args: unknown, step?: Step) {
+    servantUnleashed(game: GameContext, run: ScriptRun) {
       const armitage = setAside(game, "12115")[0];
       if (armitage) {
-        const who = ask<InvId>(
-          game,
-          step!,
-          leadInvestigator(game),
-          CHOICE.Target,
-          "Who takes control of Dr. Henry Armitage?",
-          activeInvs(game).map((i) => ({
-            id: i,
-            label: invName(game, i),
-            card: inv(game, i).cardId,
-            value: i,
-          })),
-          { auto: true, key: "chooseInvestigator" },
+        const who = run.chooseInvestigator(
+          activeInvs(game),
+          { text: "Who takes control of Dr. Henry Armitage?", key: "chooseInvestigator" },
+          { who: leadInvestigator(game) },
         );
-        if (who === undefined) return;
         // he takes up no ally slot during this scenario: no slot check
         moveCard(game, armitage.id, ZONE.Play);
         setController(game, armitage.id, who);

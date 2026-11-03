@@ -7,12 +7,13 @@ import {
   discard,
   type EffCtx,
   type GameContext,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    worn(game: GameContext, ctx: EffCtx) {
-      const c = cardIf(game, ctx.source!);
+    worn(game: GameContext, run: ScriptRun) {
+      const c = cardIf(game, run.source);
       if (c?.zone === "threat" && c.damage >= 3) discard(game, c.id);
     },
   },

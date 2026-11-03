@@ -17,5 +17,15 @@ export {
 export { canPlay, playCost, win } from "./rules/cards";
 export { attackKey, canEnemyEnter } from "./rules/enemies";
 export { shuffle, randInt } from "./world/rng";
-export type { CardScript, EffCtx, InstId, InvId, Step } from "./world/types";
+export type {
+  CardScript,
+  ChooseOpts,
+  EffCtx,
+  InstId,
+  InvId,
+  ScriptPrompt,
+  ScriptRun,
+  Step,
+} from "./world/types";
 export { resolveWeakness, resolvesOnDraw } from "./rules/investigators";
+export { argField, asNumber, asString, asStrings } from "./rules/scripts";

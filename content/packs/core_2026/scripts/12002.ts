@@ -1,40 +1,31 @@
 // Daniela's Wrench — an enemy at your location engages you and makes an immediate attack
 import {
-  ask,
   attackKey,
   type CardScript,
   def,
-  type EffCtx,
   emit,
   enemiesAt,
   type GameContext,
-  type InstId,
   inv,
   invName,
   push,
   setEngaged,
-  type Step,
   EVENT,
-  CHOICE,
   STEP,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    provoke(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
-      const you = ctx.you!;
+    provoke(game: GameContext, run: ScriptRun) {
+      const you = run.you;
       const here = enemiesAt(game, inv(game, you).location);
       if (!here.length) return;
-      const pick = ask<InstId>(
-        game,
-        step!,
-        you,
-        CHOICE.Target,
-        "Daniela's Wrench: choose an enemy",
-        here.map((e) => ({ id: e.id, label: def(game, e.id).name, card: e.id, value: e.id })),
-        { auto: true, key: "chooseEnemy" },
+      const pick = run.chooseCard(
+        here.map((e) => e.id),
+        { text: "Daniela's Wrench: choose an enemy", key: "chooseEnemy" },
+        { who: you },
       );
-      if (pick === undefined) return;
       setEngaged(game, pick, you);
       emit(game, EVENT.Engage, `${def(game, pick).name} engages ${invName(game, you)}`, {
         inv: you,

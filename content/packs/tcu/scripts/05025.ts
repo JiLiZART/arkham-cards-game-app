@@ -1,6 +1,5 @@
 // Connect the Dots — after you discover the last clue at your location: discover 2 clues at a location with a lower printed shroud
 import {
-  ask,
   def,
   inv,
   locations,
@@ -8,10 +7,8 @@ import {
   type CardScript,
   type EffCtx,
   type GameContext,
-  type InstId,
-  type Step,
-  CHOICE,
   STEP,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 /** revealed locations with clues whose printed shroud is lower than that of your location */
@@ -45,23 +42,16 @@ export default {
     lowerShroud: (game: GameContext, ctx: EffCtx) => !!ctx.you && lower(game, ctx.you).length > 0,
   },
   fns: {
-    connect(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
-      const loc = ask<InstId>(
-        game,
-        step!,
-        ctx.you!,
-        CHOICE.Target,
-        "Connect the Dots: discover 2 clues at a location with a lower shroud",
-        lower(game, ctx.you!).map((l) => ({
-          id: l.id,
-          label: def(game, l.id).name,
-          card: l.id,
-          value: l.id,
-        })),
-        { auto: true, key: "cardChooseLocation", vars: { card: ctx.source ?? null } },
+    connect(game: GameContext, run: ScriptRun) {
+      const loc = run.chooseCard(
+        lower(game, run.you).map((l) => l.id),
+        {
+          text: "Connect the Dots: discover 2 clues at a location with a lower shroud",
+          key: "cardChooseLocation",
+          vars: { card: run.ctx.source ?? null },
+        },
       );
-      if (loc === undefined) return;
-      push(game, { t: STEP.DiscoverClues, inv: ctx.you!, location: loc, n: 2 });
+      push(game, { t: STEP.DiscoverClues, inv: run.you, location: loc, n: 2 });
     },
   },
 } satisfies CardScript;

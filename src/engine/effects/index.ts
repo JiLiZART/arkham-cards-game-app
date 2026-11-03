@@ -5,9 +5,8 @@ import {
   cardIf,
   currentPhase,
   type GameContext,
-  inv,
-  invIf,
   leadInvestigator,
+  resolvesFor,
   push,
 } from "../context";
 import type { InstId, Step } from "../world/types";
@@ -69,8 +68,7 @@ export const effHandler = (game: GameContext, step: EffStep) => {
   if (currentPhase(game) === "ended") return;
   const e = step.effect;
   const ctx = step.ctx;
-  // an investigator eliminated mid-effect (an attack of opportunity) resolves nothing more of it
-  if (ctx.you && invIf(game, ctx.you) && inv(game, ctx.you).status !== "playing") return;
+  if (!resolvesFor(game, ctx)) return;
   const you = ctx.you ?? leadInvestigator(game);
   const src = ctx.source ? cardIf(game, ctx.source) : undefined;
   // TypeScript can't correlate the handler it indexes with the effect it was indexed by

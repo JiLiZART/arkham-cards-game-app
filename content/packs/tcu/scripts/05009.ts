@@ -1,11 +1,5 @@
 // Detective's Colt 1911s — up to 2 Tool assets take no hand slot; a defeat by its attack may send an Insight event to Joe's hunch deck
-import {
-  inv,
-  type CardScript,
-  type EffCtx,
-  type GameContext,
-  type Step,
-} from "../../../../src/engine/api";
+import { inv, type CardScript, type GameContext, type ScriptRun } from "../../../../src/engine/api";
 import { insightToHunch } from "./05002";
 
 export default {
@@ -23,8 +17,8 @@ export default {
     },
   ],
   fns: {
-    toHunch(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
-      if (inv(game, ctx.you!)) insightToHunch(game, ctx.you!, step);
+    toHunch(game: GameContext, run: ScriptRun) {
+      if (inv(game, run.you)) insightToHunch(game, run.you, run.step);
     },
   },
 } satisfies CardScript;

@@ -4,7 +4,6 @@ import {
   addChaosTokens,
   addCounter,
   allCards,
-  ask,
   campaignLogOf,
   card,
   cardIf,
@@ -36,13 +35,12 @@ import {
   setEngaged,
   shuffleDeck,
   shuffleList,
-  type Step,
   stepsToward,
   turnOrder,
   EVENT,
   ZONE,
-  CHOICE,
   STEP,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 import type { ChaosToken, Effect } from "../../../../src/content/schema";
 import { drawFire } from "../../../packs/core_2026/scripts/12129";
@@ -147,23 +145,23 @@ export default {
         });
       }
     },
-    drawFire(game: GameContext, ctx: EffCtx) {
-      drawFire(game, ctx.you ?? leadInvestigator(game));
+    drawFire(game: GameContext, run: ScriptRun) {
+      drawFire(game, run.ctx.you ?? leadInvestigator(game));
     },
     /** Expert and Hard: at a Ritual Site, the tablet fails the test */
-    ritualSiteFails(game: GameContext, ctx: EffCtx) {
-      const loc = inv(game, ctx.you!).location;
+    ritualSiteFails(game: GameContext, run: ScriptRun) {
+      const loc = inv(game, run.you).location;
       if (currentTest(game) && loc && def(game, loc).traits.includes("Ritual Site"))
         forceResult(game, "fail");
     },
-    flameInTheDark(game: GameContext, ctx: EffCtx) {
+    flameInTheDark(game: GameContext, run: ScriptRun) {
       const servant = setAside(game, "12180")[0];
       const c = cistern(game);
       if (servant && c) {
         moveCard(game, servant.id, ZONE.Limbo);
         push(game, { t: STEP.Spawn, enemy: servant.id, inv: null, at: c.id });
       }
-      eachTest(game, ctx, "willpower", 4, [{ op: "takeHorror", amount: 1, direct: true }]);
+      eachTest(game, run.ctx, "willpower", 4, [{ op: "takeHorror", amount: 1, direct: true }]);
     },
     /** The Mother Arrives: Elokoss on her Mother of Flame side; special agenda 3a is the act and the agenda */
     motherArrives(game: GameContext) {
@@ -215,19 +213,16 @@ export default {
       const sluice = setAside(game, SLUICE)[0];
       if (sluice) moveCard(game, sluice.id, ZONE.Location);
     },
-    douse(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
-      const here = firesAt(game, inv(game, ctx.you!).location);
+    douse(game: GameContext, run: ScriptRun) {
+      const here = firesAt(game, inv(game, run.you).location);
       if (!here.length) return;
-      const pick = ask<InstId>(
+      discard(
         game,
-        step!,
-        ctx.you!,
-        CHOICE.Target,
-        "Discard a Fire!",
-        here.map((f) => ({ id: f.id, label: def(game, f.id).name, card: f.id, value: f.id })),
-        { auto: true, key: "chooseOne" },
+        run.chooseCard(
+          here.map((f) => f.id),
+          { text: "Discard a Fire!", key: "chooseOne" },
+        ),
       );
-      if (pick !== undefined) discard(game, pick);
     },
     /** each Cultist enemy moves once toward Underground Cistern */
     cultistsGather(game: GameContext) {
@@ -256,7 +251,7 @@ export default {
         );
       push(game, { t: STEP.Resolution, id: "R3" });
     },
-    codexPhi(game: GameContext, ctx: EffCtx) {
+    codexPhi(game: GameContext, run: ScriptRun) {
       emit(
         game,
         EVENT.Codex,
@@ -265,7 +260,7 @@ export default {
       const found = HARBINGER.find(([key]) => campaignLogOf(game)[key]);
       if (!found) return;
       for (const i of activeInvs(game))
-        push(game, { t: STEP.Effects, effects: found[1], ctx: { ...ctx, you: i, inv: i } });
+        push(game, { t: STEP.Effects, effects: found[1], ctx: { ...run.ctx, you: i, inv: i } });
     },
   },
   hooks: {

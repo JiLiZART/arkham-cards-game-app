@@ -3,7 +3,6 @@ import {
   activeInvs,
   addCounter,
   allCards,
-  ask,
   card,
   cardIf,
   type CardScript,
@@ -37,12 +36,12 @@ import {
   setEngaged,
   setOwner,
   shuffleList,
-  type Step,
   turnOrder,
   EVENT,
   ZONE,
   CHOICE,
   STEP,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 const SERVANT = "12138";
@@ -150,34 +149,29 @@ export default {
         setController(game, armitage, i);
       }
     },
-    drawBeneath(game: GameContext, ctx: EffCtx) {
-      const loc = inv(game, ctx.you!).location;
+    drawBeneath(game: GameContext, run: ScriptRun) {
+      const loc = inv(game, run.you).location;
       const id = beneath(game, loc);
       if (!id || !loc) return;
       flags.beneath.clear(game, loc);
       moveCard(game, id, ZONE.Limbo);
-      emit(game, EVENT.Encounter, `${invName(game, ctx.you!)} draws ${def(game, id).name}`, {
-        inv: ctx.you!,
+      emit(game, EVENT.Encounter, `${invName(game, run.you)} draws ${def(game, id).name}`, {
+        inv: run.you,
         card: id,
       });
-      push(game, { t: STEP.Spawn, enemy: id, inv: ctx.you! });
+      push(game, { t: STEP.Spawn, enemy: id, inv: run.you });
     },
     /** a suspect's codex entry: its effect, then a lead on them; enough leads and they are interrogated */
-    codex(game: GameContext, ctx: EffCtx, n: number, step?: Step) {
-      const id = ctx.source!;
+    codex(game: GameContext, run: ScriptRun) {
+      const id = run.source;
       const e = cardIf(game, id);
       if (e?.zone !== "enemy") return;
-      const you = ctx.you!;
-      if (n === 3) {
+      const you = run.you;
+      if (run.args === 3) {
         // Naomi O'Bannion: you may defeat a non-Humanoid enemy at any location
         const pool = enemies(game).filter((x) => !def(game, x.id).traits.includes("Humanoid"));
         if (pool.length) {
-          const pick = ask<InstId | "none">(
-            game,
-            step!,
-            you,
-            CHOICE.Target,
-            "Naomi O'Bannion: defeat a non-Humanoid enemy?",
+          const pick = run.choose<InstId | "none">(
             [
               ...pool.map((x) => ({
                 id: x.id,
@@ -187,34 +181,32 @@ export default {
               })),
               { id: "none", label: "No", value: "none" },
             ],
-            { key: "chooseEnemy" },
+            { text: "Naomi O'Bannion: defeat a non-Humanoid enemy?", key: "chooseEnemy" },
+            { auto: false, who: you },
           );
-          if (pick === undefined) return;
           if (pick !== "none") push(game, { t: STEP.DefeatEnemy, enemy: pick, by: you });
         }
       }
-      if (n === 6) {
+      if (run.args === 6) {
         // Margaret Liu: look at the top card of the encounter deck; you may discard it
         const top = pile(game, ZONE.EncounterDeck)[0];
         if (top) {
-          const drop = ask<boolean>(
-            game,
-            step!,
-            you,
-            CHOICE.Generic,
-            `Margaret Liu: the top card of the encounter deck is ${def(game, top).name}. Discard it?`,
+          const drop = run.choose<boolean>(
             [
               { id: "yes", label: `Discard ${def(game, top).name}`, value: true, card: top },
               { id: "no", label: "Leave it", value: false },
             ],
-            { key: "chooseOne" },
+            {
+              text: `Margaret Liu: the top card of the encounter deck is ${def(game, top).name}. Discard it?`,
+              key: "chooseOne",
+            },
+            { auto: false, kind: CHOICE.Generic, who: you },
           );
-          if (drop === undefined) return;
           if (drop) discard(game, top);
         }
       }
-      story(game, CODEX[String(n)][0]);
-      if (n === 1 && e.location) {
+      story(game, CODEX[String(run.args)][0]);
+      if (run.args === 1 && e.location) {
         // David Renfield flees to a connecting location (with no investigators, if able)
         const near = connections(game, e.location);
         const empty = near.filter((l) => !invsAt(game, l).length);
@@ -224,13 +216,13 @@ export default {
           setEngaged(game, e.id, null);
         }
       }
-      if (n === 2) {
+      if (run.args === 2) {
         ready(game, e.id);
         push(game, { t: STEP.Effects, effects: [{ op: EVENT.Heal, horror: 1 }], ctx: { you } });
       }
-      if (n === 4)
+      if (run.args === 4)
         push(game, { t: STEP.Effects, effects: [{ op: EVENT.Heal, damage: 1 }], ctx: { you } });
-      if (n === 5) push(game, { t: STEP.Draw, inv: you, n: 1 });
+      if (run.args === 5) push(game, { t: STEP.Draw, inv: you, n: 1 });
       addCounter(game, e.id, "resources", 1);
       emit(
         game,
@@ -241,13 +233,13 @@ export default {
         },
       );
       if (e.resources >= playerCount(game)) {
-        story(game, CODEX[String(n)][1]);
+        story(game, CODEX[String(run.args)][1]);
         emit(game, EVENT.Interrogated, `${def(game, id).name} has been interrogated`, { card: id });
         toAct(game, id);
       }
     },
-    earl(game: GameContext, ctx: EffCtx) {
-      const e = cardIf(game, ctx.source!);
+    earl(game: GameContext, run: ScriptRun) {
+      const e = cardIf(game, run.source);
       push(game, {
         t: STEP.Eff,
         effect: {
@@ -256,11 +248,11 @@ export default {
           difficulty: Math.max(0, 4 - (e?.damage ?? 0)),
           onSuccess: [{ op: "script", fn: "codex", args: 4 }],
         },
-        ctx,
+        ctx: run.ctx,
       });
     },
-    abigail(game: GameContext, ctx: EffCtx) {
-      const loc = cardIf(game, ctx.source!)?.location;
+    abigail(game: GameContext, run: ScriptRun) {
+      const loc = cardIf(game, run.source)?.location;
       push(game, {
         t: STEP.Eff,
         effect: {
@@ -272,41 +264,33 @@ export default {
             { op: "script", fn: "codex", args: 5 },
           ],
         },
-        ctx,
+        ctx: run.ctx,
       });
     },
-    abigailClue(game: GameContext, ctx: EffCtx) {
-      const loc = cardIf(game, ctx.source!)?.location;
+    abigailClue(game: GameContext, run: ScriptRun) {
+      const loc = cardIf(game, run.source)?.location;
       if (loc) addCounter(game, loc, "clues", 1);
     },
-    northside(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
+    northside(game: GameContext, run: ScriptRun) {
       const pool = locations(game).filter(
         (l) => l.revealed && l.clues > 0 && def(game, l.id).traits.includes("Arkham"),
       );
       if (!pool.length) return;
-      const pick = ask<InstId>(
-        game,
-        step!,
-        ctx.you!,
-        CHOICE.Target,
-        "Northside: discover 1 clue at a revealed Arkham location",
-        pool.map((l) => ({ id: l.id, label: def(game, l.id).name, card: l.id, value: l.id })),
-        { auto: true, key: "chooseClueLocation" },
+      const pick = run.chooseCard(
+        pool.map((l) => l.id),
+        {
+          text: "Northside: discover 1 clue at a revealed Arkham location",
+          key: "chooseClueLocation",
+        },
       );
-      if (pick !== undefined)
-        push(game, { t: STEP.DiscoverClues, inv: ctx.you!, location: pick, n: 1 });
+      push(game, { t: STEP.DiscoverClues, inv: run.you, location: pick, n: 1 });
     },
     /** codex Φ: the Servant of Flame is defeated — kill them, or hold them for questioning */
-    codexPhi(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
-      const id = ctx.source!;
+    codexPhi(game: GameContext, run: ScriptRun) {
+      const id = run.source;
       if (cardIf(game, id)?.zone !== "enemy") return;
       story(game, CODEX.phi[0]);
-      const kill = ask<boolean>(
-        game,
-        step!,
-        leadInvestigator(game),
-        CHOICE.Generic,
-        "The Servant of Flame lies at your feet",
+      const kill = run.choose<boolean>(
         [
           {
             id: "kill",
@@ -316,9 +300,9 @@ export default {
           },
           { id: "hold", label: "Hold them for questioning later tonight.", value: false },
         ],
-        { key: "chooseOne" },
+        { text: "The Servant of Flame lies at your feet", key: "chooseOne" },
+        { auto: false, kind: CHOICE.Generic, who: leadInvestigator(game) },
       );
-      if (kill === undefined) return;
       if (kill) {
         flags.killedServant.set(game, true);
         for (const i of activeInvs(game)) push(game, { t: STEP.Draw, inv: i, n: 3 });

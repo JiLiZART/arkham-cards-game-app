@@ -5,26 +5,26 @@ import {
   cardsIn,
   currentPhase,
   def,
-  type EffCtx,
   type GameContext,
   invsAt,
   push,
   ZONE,
   STEP,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    inFlames(game: GameContext, ctx: EffCtx) {
+    inFlames(game: GameContext, run: ScriptRun) {
       if (currentPhase(game) !== "investigation") return;
-      for (const i of invsAt(game, ctx.source!)) {
+      for (const i of invsAt(game, run.source)) {
         push(game, {
           t: STEP.AssignDamage,
           inv: i,
           damage: 1,
           horror: 0,
           direct: true,
-          source: ctx.source!,
+          source: run.source,
         });
         for (const a of cardsIn(game, ZONE.Play))
           if (a.controller === i && (def(game, a.id).health ?? 0) > 0)

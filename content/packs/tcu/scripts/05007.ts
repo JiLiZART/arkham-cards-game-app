@@ -1,7 +1,6 @@
 // Hypnotic Therapy — test [intellect] (2) to heal 1 horror from an investigator here, who may draw 1; or add 1 horror to another of your heals
 import {
   addCounter,
-  ask,
   card,
   type CardScript,
   type EffCtx,
@@ -12,11 +11,10 @@ import {
   invName,
   invsAt,
   push,
-  type Step,
   turnOrder,
   EVENT,
-  CHOICE,
   STEP,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 /** the investigator whose card was healed, if it was an investigator */
@@ -56,22 +54,12 @@ export default {
     },
   },
   fns: {
-    treat(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
-      const who = ask<InvId>(
-        game,
-        step!,
-        ctx.you!,
-        CHOICE.Target,
-        "Hypnotic Therapy: choose an investigator",
-        invsAt(game, inv(game, ctx.you!).location).map((i) => ({
-          id: i,
-          label: invName(game, i),
-          card: inv(game, i).cardId,
-          value: i,
-        })),
-        { auto: true, key: "cardChooseInvestigator", vars: { card: ctx.source ?? null } },
-      );
-      if (who === undefined) return;
+    treat(game: GameContext, run: ScriptRun) {
+      const who = run.chooseInvestigator(invsAt(game, inv(game, run.you).location), {
+        text: "Hypnotic Therapy: choose an investigator",
+        key: "cardChooseInvestigator",
+        vars: { card: run.ctx.source ?? null },
+      });
       push(game, {
         t: STEP.Effects,
         effects: [
@@ -87,17 +75,17 @@ export default {
             ],
           },
         ],
-        ctx: { ...ctx, inv: who },
+        ctx: { ...run.ctx, inv: who },
       });
     },
     /** part of the heal that triggered it: no new "after horror is healed" window */
-    more(game: GameContext, ctx: EffCtx) {
-      const i = healedInv(game, ctx);
+    more(game: GameContext, run: ScriptRun) {
+      const i = healedInv(game, run.ctx);
       if (!i || inv(game, i).horror < 1) return;
       addCounter(game, i, "horror", -1);
       emit(game, EVENT.Heal, `${invName(game, i)} heals 1 more horror (Hypnotic Therapy)`, {
         inv: i,
-        card: card(game, ctx.source!).id,
+        card: card(game, run.source).id,
         data: { damage: 0, horror: 1 },
       });
     },

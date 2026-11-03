@@ -3,9 +3,10 @@
  * kind, until a choice is needed or the queue is empty. Every step kind has exactly one handler, taking that kind of
  * step; the rules modules and the effects own the handlers, this module only collects them.
  */
-import { addCounter, def, type GameContext, invOf, invOfIf, push } from "../context";
+import { addCounter, def, type GameContext, push } from "../context";
 import { handlers as effectHandlers } from "../effects";
 import { finishEvent, handlers as cardHandlers } from "../rules/cards";
+import { runScript } from "../rules/scripts";
 import { elusive, exhaustEnemy, handlers as enemyHandlers } from "../rules/enemies";
 import {
   basicInvestigate,
@@ -78,19 +79,10 @@ const ENGINE_FNS: Record<string, (game: GameContext, ctx: EffCtx, step: Step) =>
   nextAct: (game, ctx) => nextAct(game, ctx.source!),
 };
 
+/** the engine's own deferred functions run here; every content script goes through the adapter (rules/scripts.ts) */
 const scriptHandler = (game: GameContext, step: Extract<Step, { t: "Script" }>) => {
-  if (step.code === "__engine") {
-    ENGINE_FNS[step.fn](game, step.ctx, step);
-    return;
-  }
-  // as for data effects: an investigator eliminated mid-effect (an attack of opportunity) resolves nothing more of it
-  const you = step.ctx.you;
-  if (you && invOfIf(game.s, you) && invOf(game.s, you).status !== "playing") return;
-  const fn =
-    game.db.scripts[step.code]?.fns?.[step.fn] ??
-    game.db.scripts[game.s.scenarioId]?.fns?.[step.fn];
-  if (!fn) throw new Error(`missing script function ${step.code}.${step.fn}`);
-  fn(game, step.ctx, step.args, step);
+  if (step.code === "__engine") ENGINE_FNS[step.fn](game, step.ctx, step);
+  else runScript(game, step);
 };
 
 const forEachInvHandler = (game: GameContext, step: Extract<Step, { t: "ForEachInv" }>) => {

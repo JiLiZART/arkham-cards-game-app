@@ -2,7 +2,6 @@
 import {
   type CardScript,
   def,
-  type EffCtx,
   emit,
   type GameContext,
   moveCard,
@@ -11,6 +10,7 @@ import {
   EVENT,
   ZONE,
   STEP,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 export default {
@@ -25,7 +25,7 @@ export default {
     { kind: "revelation", effects: [{ op: EVENT.Resolution, id: "R1" }] },
   ],
   fns: {
-    drawCultist(game: GameContext, ctx: EffCtx) {
+    drawCultist(game: GameContext, run: ScriptRun) {
       const id = sideDeck(game, "cultists")[0];
       if (!id) {
         emit(game, EVENT.Empty, "The Cultist deck is empty");
@@ -35,7 +35,7 @@ export default {
         card: id,
       });
       moveCard(game, id, ZONE.Limbo);
-      push(game, { t: STEP.Spawn, enemy: id, inv: ctx.you! });
+      push(game, { t: STEP.Spawn, enemy: id, inv: run.you });
     },
   },
 } satisfies CardScript;

@@ -4,10 +4,10 @@ import {
   card,
   type CardScript,
   discard,
-  type EffCtx,
   type GameContext,
   push,
   STEP,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 export default {
@@ -15,13 +15,13 @@ export default {
     { kind: "action", label: "The Necronomicon: move 1 horror to yourself", run: "moveHorror" },
   ],
   fns: {
-    moveHorror(game: GameContext, ctx: EffCtx) {
-      const c = card(game, ctx.source!);
+    moveHorror(game: GameContext, run: ScriptRun) {
+      const c = card(game, run.source);
       if (c.horror <= 0) return;
       addCounter(game, c.id, "horror", -1);
       push(game, {
         t: STEP.AssignDamage,
-        inv: ctx.you!,
+        inv: run.you,
         damage: 0,
         horror: 1,
         direct: true,

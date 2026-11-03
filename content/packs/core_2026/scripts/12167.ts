@@ -3,24 +3,24 @@ import {
   inv,
   push,
   type CardScript,
-  type EffCtx,
   type GameContext,
   STEP,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 export default {
   abilities: [{ kind: "revelation", run: "eager" }],
   fns: {
-    eager(game: GameContext, ctx: EffCtx) {
+    eager(game: GameContext, run: ScriptRun) {
       push(game, {
         t: STEP.Eff,
         effect: {
           op: "skillTest",
           skill: "willpower",
-          difficulty: 2 + inv(game, ctx.you!).damage,
+          difficulty: 2 + inv(game, run.you).damage,
           onFail: [{ op: "takeHorror", amount: 2 }],
         },
-        ctx,
+        ctx: run.ctx,
       });
     },
   },

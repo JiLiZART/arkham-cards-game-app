@@ -1,12 +1,10 @@
 // Isabelle Barnes — take 1 direct horror to commit a skill from your discard pile; after the test it is shuffled into your deck
 import {
-  ask,
   canCommit,
   cardIf,
   type CardScript,
   currentTest,
   def,
-  type EffCtx,
   emit,
   flags,
   type GameContext,
@@ -16,33 +14,28 @@ import {
   push,
   setController,
   shuffleIntoDeck,
-  type Step,
   EVENT,
   ZONE,
   CHOICE,
   STEP,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    fromDiscard(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
+    fromDiscard(game: GameContext, run: ScriptRun) {
       const t = currentTest(game);
-      const you = ctx.you!;
+      const you = run.you;
       if (!t) return;
       const skills = inv(game, you).discard.filter(
         (id) => def(game, id).type === "skill" && canCommit(game, you, id, t),
       );
       if (!skills.length) return;
-      const pick = ask<InstId>(
-        game,
-        step!,
-        you,
-        CHOICE.Generic,
-        "Isabelle: commit a skill from your discard pile",
+      const pick = run.choose<InstId>(
         skills.map((id) => ({ id, label: def(game, id).name, card: id, value: id })),
-        { auto: true, key: "chooseFromDiscard" },
+        { text: "Isabelle: commit a skill from your discard pile", key: "chooseFromDiscard" },
+        { kind: CHOICE.Generic, who: you },
       );
-      if (pick === undefined) return;
       moveCard(game, pick, ZONE.Commit);
       setController(game, pick, you);
       t.committed.push(pick);
@@ -63,13 +56,13 @@ export default {
         damage: 0,
         horror: 1,
         direct: true,
-        source: ctx.source ?? null,
+        source: run.ctx.source ?? null,
       });
     },
-    reshuffle(game: GameContext, ctx: EffCtx) {
-      const id = flags.isabelle.get(game, String(ctx.testId));
+    reshuffle(game: GameContext, run: ScriptRun) {
+      const id = flags.isabelle.get(game, String(run.ctx.testId));
       if (!id) return;
-      flags.isabelle.clear(game, String(ctx.testId));
+      flags.isabelle.clear(game, String(run.ctx.testId));
       const c = cardIf(game, id);
       if (c?.owner && c.zone === "discard") shuffleIntoDeck(game, id, c.owner);
     },

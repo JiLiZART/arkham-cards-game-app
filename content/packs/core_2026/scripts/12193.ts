@@ -6,7 +6,6 @@ import {
   type CardScript,
   def,
   discard,
-  type EffCtx,
   emit,
   type GameContext,
   inv,
@@ -14,34 +13,35 @@ import {
   threatArea,
   EVENT,
   STEP,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    intoThreat(game: GameContext, ctx: EffCtx) {
-      const code = card(game, ctx.source!).code;
-      if (threatArea(game, ctx.you!).some((c) => c.code === code)) return;
-      push(game, { t: STEP.Eff, effect: { op: "putInThreatArea" }, ctx });
+    intoThreat(game: GameContext, run: ScriptRun) {
+      const code = card(game, run.source).code;
+      if (threatArea(game, run.you).some((c) => c.code === code)) return;
+      push(game, { t: STEP.Eff, effect: { op: "putInThreatArea" }, ctx: run.ctx });
     },
-    languor(game: GameContext, ctx: EffCtx) {
-      const me = inv(game, ctx.you!);
+    languor(game: GameContext, run: ScriptRun) {
+      const me = inv(game, run.you);
       const top = me.deck[0];
       if (!top) return;
       const d = def(game, top);
       if (d.subtype) {
-        push(game, { t: STEP.Draw, inv: ctx.you!, n: 1, tapped: true });
+        push(game, { t: STEP.Draw, inv: run.you, n: 1, tapped: true });
         return;
       }
       discard(game, top);
       addTempMod(
         game,
         { flag: "cannotPlayOrCommit", filter: { type: d.type } },
-        ctx.you!,
+        run.you,
         "round",
-        ctx.source!,
+        run.source,
       );
       emit(game, EVENT.Languor, `${me.name} cannot play or commit ${d.type} cards this round`, {
-        inv: ctx.you!,
+        inv: run.you,
       });
     },
   },

@@ -2,7 +2,6 @@
 import {
   type CardScript,
   def,
-  type EffCtx,
   type GameContext,
   inv,
   moveCard,
@@ -10,6 +9,7 @@ import {
   shuffleDeck,
   ZONE,
   STEP,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 export default {
@@ -30,15 +30,15 @@ export default {
     },
   ],
   fns: {
-    madness(game: GameContext, ctx: EffCtx) {
-      const me = inv(game, ctx.you!);
+    madness(game: GameContext, run: ScriptRun) {
+      const me = inv(game, run.you);
       const found = me.deck.find(
         (id) => def(game, id).subtype && def(game, id).traits.includes("Madness"),
       );
       shuffleDeck(game, me.id);
       if (!found) return;
       moveCard(game, found, ZONE.Deck, { top: true });
-      push(game, { t: STEP.Draw, inv: ctx.you!, n: 1 });
+      push(game, { t: STEP.Draw, inv: run.you, n: 1 });
     },
   },
 } satisfies CardScript;

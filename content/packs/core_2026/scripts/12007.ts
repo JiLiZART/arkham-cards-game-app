@@ -2,15 +2,15 @@
 import {
   push,
   type CardScript,
-  type EffCtx,
   type GameContext,
   STEP,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 export default {
   abilities: [{ kind: "elderSign", tokenValue: 0, run: "elder" }],
   fns: {
-    elder(game: GameContext, ctx: EffCtx) {
+    elder(game: GameContext, run: ScriptRun) {
       push(game, {
         t: STEP.Effects,
         effects: [
@@ -25,7 +25,7 @@ export default {
             ],
           },
         ],
-        ctx: { you: ctx.you, source: ctx.source },
+        ctx: { you: run.ctx.you, source: run.ctx.source },
       });
     },
   },

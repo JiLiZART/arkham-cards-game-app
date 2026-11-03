@@ -3,7 +3,6 @@ import {
   type CardScript,
   createCard,
   def,
-  type EffCtx,
   emit,
   type GameContext,
   inv,
@@ -15,12 +14,13 @@ import {
   EVENT,
   ZONE,
   STEP,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 export default {
   abilities: [{ kind: "revelation", run: "back" }],
   fns: {
-    back(game: GameContext, ctx: EffCtx) {
+    back(game: GameContext, run: ScriptRun) {
       for (const i of turnOrder(game)) {
         if (inv(game, i).status !== "playing") continue;
         push(game, {
@@ -31,28 +31,28 @@ export default {
             difficulty: 6,
             onFail: [{ op: "script", fn: "madness" }],
           },
-          ctx: { you: i, source: ctx.source },
+          ctx: { you: i, source: run.ctx.source },
         });
       }
     },
-    madness(game: GameContext, ctx: EffCtx) {
+    madness(game: GameContext, run: ScriptRun) {
       const pool = Object.values(game.db.cards).filter(
         (c) => c.subtype === "basicweakness" && c.traits.includes("Madness"),
       );
       if (!pool.length) return;
       const pick = pool[randomInt(game, pool.length)];
-      const id = createCard(game, pick.code, ZONE.Hand, ctx.you!);
+      const id = createCard(game, pick.code, ZONE.Hand, run.you);
       emit(
         game,
         EVENT.Weakness,
-        `${inv(game, ctx.you!).name} adds ${def(game, id).name} to their hand`,
+        `${inv(game, run.you).name} adds ${def(game, id).name} to their hand`,
         {
-          inv: ctx.you!,
+          inv: run.you,
           card: id,
         },
       );
       // a weakness that enters the hand without being drawn resolves as if drawn (Grimoire, Weakness)
-      if (resolvesOnDraw(game, id)) resolveWeakness(game, ctx.you!, id);
+      if (resolvesOnDraw(game, id)) resolveWeakness(game, run.you, id);
     },
   },
 } satisfies CardScript;

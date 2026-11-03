@@ -12,6 +12,8 @@ import { db, giveCard, gOf, locId, putEnemy, skipMulligans, start } from "../kit
 import type { EffCtx, SkillTestState, Step } from "../world/types";
 import { cardRecIn, invStateIn } from "../world/store";
 import { ZONE, PHASE } from "../world/constants";
+import { STEP } from "../steps/step";
+import { runScript } from "../rules/scripts";
 
 const R = "01001";
 const D = "01002";
@@ -27,8 +29,14 @@ function call(
   args?: unknown,
   choice?: unknown,
 ) {
-  const step = { t: "Script", code, fn, ctx, args, ...(choice === undefined ? {} : { choice }) };
-  db.scripts[code].fns![fn](game, ctx, args, step as Step);
+  runScript(game, {
+    t: STEP.Script,
+    code,
+    fn,
+    ctx,
+    args,
+    ...(choice === undefined ? {} : { choice }),
+  });
 }
 const top = (game: GameContext) => game.s.queue.at(-1);
 

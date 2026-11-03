@@ -1,58 +1,47 @@
 // Torment — name a card type: each investigator discards 1 card of that type
 import {
   activeInvs,
-  ask,
   def,
   discard,
   inv,
   push,
   type CardScript,
-  type EffCtx,
   type GameContext,
-  type InstId,
-  type Step,
   CHOICE,
   STEP,
+  type ScriptRun,
+  asString,
 } from "../../../../src/engine/api";
 
 const TYPES = ["asset", "event", "skill"] as const;
 
 export default {
   fns: {
-    torment(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
-      const type = ask<string>(
-        game,
-        step!,
-        ctx.you!,
-        CHOICE.Generic,
-        "Torment: name a card type",
+    torment(game: GameContext, run: ScriptRun) {
+      const type = run.choose<string>(
         TYPES.map((t) => ({ id: t, label: t[0].toUpperCase() + t.slice(1), value: t })),
-        { key: "chooseOne" },
+        { text: "Torment: name a card type", key: "chooseOne" },
+        { auto: false, kind: CHOICE.Generic },
       );
-      if (type === undefined) return;
       for (const i of activeInvs(game))
         push(game, {
           t: STEP.Script,
           code: "12195",
           fn: "discardOne",
-          ctx: { ...ctx, inv: i },
+          ctx: { ...run.ctx, inv: i },
           args: type,
         });
     },
-    discardOne(game: GameContext, ctx: EffCtx, type: string, step?: Step) {
-      const who = ctx.inv!;
+    discardOne(game: GameContext, run: ScriptRun) {
+      const who = run.ctx.inv!;
+      const type = asString(run.args);
       const cards = inv(game, who).hand.filter((h) => def(game, h).type === type);
       if (!cards.length) return;
-      const pick = ask<InstId>(
-        game,
-        step!,
-        who,
-        CHOICE.Generic,
-        `Torment: discard 1 ${type}`,
-        cards.map((h) => ({ id: h, label: def(game, h).name, card: h, value: h })),
-        { auto: true, key: "discardN", vars: { n: 1 } },
+      const pick = run.chooseCard(
+        cards,
+        { text: `Torment: discard 1 ${type}`, key: "discardN", vars: { n: 1 } },
+        { kind: CHOICE.Generic, who: who },
       );
-      if (pick === undefined) return;
       discard(game, pick);
     },
   },

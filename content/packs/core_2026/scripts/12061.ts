@@ -1,7 +1,6 @@
 // Lucky Charm — move 1 damage or 1 horror from a card at your location to a card you control
 import {
   addCounter,
-  ask,
   card,
   type CardScript,
   controlled,
@@ -13,10 +12,12 @@ import {
   invIf,
   invsAt,
   push,
-  type Step,
   EVENT,
   CHOICE,
   STEP,
+  type ScriptRun,
+  argField,
+  asString,
 } from "../../../../src/engine/api";
 
 type Kind = "damage" | "horror";
@@ -78,64 +79,52 @@ export default {
     canMove: (game: GameContext, ctx: EffCtx) => !!ctx.you && movable(game, ctx.you).length > 0,
   },
   fns: {
-    move(
-      game: GameContext,
-      ctx: EffCtx,
-      args: { kind?: Kind; from?: string } | undefined,
-      step?: Step,
-    ) {
-      const you = ctx.you!;
+    move(game: GameContext, run: ScriptRun) {
+      const you = run.you;
       const { atLocation, mine } = places(game, you);
-      if (!args?.kind) {
+      const argKind = asString(argField(run.args, "kind"));
+      const argFrom = asString(argField(run.args, "from"));
+      if (argKind !== "damage" && argKind !== "horror") {
         const kinds = movable(game, you);
         if (!kinds.length) return;
-        const kind = ask<Kind>(
-          game,
-          step!,
-          you,
-          CHOICE.Generic,
-          "Lucky Charm: move damage or horror?",
+        const kind = run.choose<Kind>(
           kinds.map((k) => ({ id: k, label: `Move 1 ${k}`, value: k })),
-          { auto: true, key: "chooseOne" },
+          { text: "Lucky Charm: move damage or horror?", key: "chooseOne" },
+          { kind: CHOICE.Generic, who: you },
         );
-        if (kind === undefined) return;
-        push(game, { t: STEP.Script, code: "12061", fn: "move", ctx, args: { kind } });
+        push(game, { t: STEP.Script, code: "12061", fn: "move", ctx: run.ctx, args: { kind } });
         return;
       }
-      const kind = args.kind;
-      if (!args.from) {
-        const from = ask<string>(
-          game,
-          step!,
-          you,
-          CHOICE.Target,
-          `Lucky Charm: move 1 ${kind} from`,
+      const kind: Kind = argKind;
+      if (!argFrom) {
+        const from = run.choose<string>(
           holders(game, atLocation, kind)
             .filter((h) => h.held > 0)
             .map((h) => ({ id: h.id, label: h.label, card: h.card, value: h.id })),
-          { auto: true, key: "chooseOne" },
+          { text: `Lucky Charm: move 1 ${kind} from`, key: "chooseOne" },
+          { who: you },
         );
-        if (from === undefined) return;
-        push(game, { t: STEP.Script, code: "12061", fn: "move", ctx, args: { kind, from } });
+        push(game, {
+          t: STEP.Script,
+          code: "12061",
+          fn: "move",
+          ctx: run.ctx,
+          args: { kind, from },
+        });
         return;
       }
-      const opts = holders(game, mine, kind).filter((h) => h.id !== args.from && h.room > 0);
+      const opts = holders(game, mine, kind).filter((h) => h.id !== argFrom && h.room > 0);
       if (!opts.length) return;
-      const to = ask<string>(
-        game,
-        step!,
-        you,
-        CHOICE.Target,
-        `Lucky Charm: move it to`,
+      const to = run.choose<string>(
         opts.map((h) => ({ id: h.id, label: h.label, card: h.card, value: h.id })),
-        { auto: true, key: "chooseOne" },
+        { text: `Lucky Charm: move it to`, key: "chooseOne" },
+        { who: you },
       );
-      if (to === undefined) return;
-      adjust(game, args.from, kind, -1);
+      adjust(game, argFrom, kind, -1);
       adjust(game, to, kind, 1);
       emit(game, EVENT.MoveTokens, `Lucky Charm moves 1 ${kind}`, {
         inv: you,
-        card: ctx.source ?? null,
+        card: run.ctx.source ?? null,
       });
     },
   },

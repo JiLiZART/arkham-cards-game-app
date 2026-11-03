@@ -6,21 +6,21 @@ import {
   currentPhase,
   def,
   discard,
-  type EffCtx,
   type GameContext,
   isElite,
   push,
   ZONE,
   STEP,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    consume(game: GameContext, ctx: EffCtx) {
+    consume(game: GameContext, run: ScriptRun) {
       if (currentPhase(game) !== "investigation" || !currentAgenda(game)) return;
       const here = cardsIn(game, ZONE.Enemy).filter(
         (e) =>
-          e.location === ctx.source &&
+          e.location === run.ctx.source &&
           !e.exhausted &&
           !isElite(game, e.id) &&
           def(game, e.id).traits.includes("Cultist"),

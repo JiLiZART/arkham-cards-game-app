@@ -1,57 +1,57 @@
 // Aerial Pursuit — the nearest non-Elite enemy moves once toward you; if it engages someone, it attacks
 import {
-  ask,
   attackKey,
   canEnemyEnter,
   cardIf,
   type CardScript,
   def,
   distances,
-  type EffCtx,
   emit,
   enemies,
   type GameContext,
-  type InstId,
   inv,
   invsAt,
   isElite,
   push,
   setCardLocation,
   setEngaged,
-  type Step,
   stepsToward,
   EVENT,
-  CHOICE,
   STEP,
+  type ScriptRun,
+  argField,
+  asString,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    pursuit(game: GameContext, ctx: EffCtx, args: { enemy?: InstId } | undefined, step?: Step) {
-      const you = ctx.you!;
+    pursuit(game: GameContext, run: ScriptRun) {
+      const you = run.you;
       const to = inv(game, you).location;
       if (!to) return;
-      if (!args?.enemy) {
+      const chosen = asString(argField(run.args, "enemy"));
+      if (!chosen) {
         const pool = enemies(game).filter((e) => !isElite(game, e.id) && e.location);
         if (!pool.length) return;
         const d = distances(game, to);
         const best = Math.min(...pool.map((e) => d.get(e.location!) ?? Infinity));
         if (best === Infinity) return;
         const near = pool.filter((e) => (d.get(e.location!) ?? Infinity) === best);
-        const pick = ask<InstId>(
-          game,
-          step!,
-          you,
-          CHOICE.Target,
-          "Aerial Pursuit: which enemy moves?",
-          near.map((e) => ({ id: e.id, label: def(game, e.id).name, card: e.id, value: e.id })),
-          { auto: true, key: "chooseEnemy" },
+        const pick = run.chooseCard(
+          near.map((e) => e.id),
+          { text: "Aerial Pursuit: which enemy moves?", key: "chooseEnemy" },
+          { who: you },
         );
-        if (pick === undefined) return;
-        push(game, { t: STEP.Script, code: "12163", fn: "pursuit", ctx, args: { enemy: pick } });
+        push(game, {
+          t: STEP.Script,
+          code: "12163",
+          fn: "pursuit",
+          ctx: run.ctx,
+          args: { enemy: pick },
+        });
         return;
       }
-      const e = cardIf(game, args.enemy);
+      const e = cardIf(game, chosen);
       if (e?.zone !== "enemy" || !e.location) return;
       if (e.location !== to) {
         const next = stepsToward(game, e.location, [to]).filter((l) =>

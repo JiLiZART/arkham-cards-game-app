@@ -8,6 +8,7 @@ import {
   emit,
   type GameContext,
   EVENT,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 export default {
@@ -21,11 +22,11 @@ export default {
     },
   ],
   fns: {
-    coverUp(game: GameContext, ctx: EffCtx) {
-      const c = card(game, ctx.source!);
-      const n = Math.min(ctx.x ?? 1, c.clues);
+    coverUp(game: GameContext, run: ScriptRun) {
+      const c = card(game, run.source);
+      const n = Math.min(run.ctx.x ?? 1, c.clues);
       addCounter(game, c.id, "clues", -n);
-      if (ctx.key) cancelEvent(game, ctx.key);
+      if (run.ctx.key) cancelEvent(game, run.ctx.key);
       emit(game, EVENT.CoverUp, `${n} clue(s) are discarded from Cover Up (${c.clues} left)`, {
         card: c.id,
         data: { n },

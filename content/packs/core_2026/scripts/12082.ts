@@ -3,34 +3,34 @@ import {
   addTempMod,
   type CardScript,
   currentTest,
-  type EffCtx,
   type GameContext,
   push,
   STEP,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 const SYMBOLS = ["skull", "cultist", "tablet", "elderThing", "elderSign"];
 
 export default {
   fns: {
-    scrape(game: GameContext, ctx: EffCtx) {
+    scrape(game: GameContext, run: ScriptRun) {
       const t = currentTest(game);
       if (!t) return;
       addTempMod(
         game,
-        { stat: "testValue", value: ctx.failBy ?? 0 },
+        { stat: "testValue", value: run.ctx.failBy ?? 0 },
         t.inv,
         "test",
-        ctx.source ?? null,
+        run.ctx.source ?? null,
       );
       if (t.tokens.some((x) => SYMBOLS.includes(x)))
         push(game, {
           t: STEP.AssignDamage,
-          inv: ctx.you!,
+          inv: run.you,
           damage: 0,
           horror: 1,
           direct: false,
-          source: ctx.source ?? null,
+          source: run.ctx.source ?? null,
         });
     },
   },

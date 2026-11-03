@@ -1,42 +1,31 @@
 // Raising Suspicions — 1 doom on the nearest enemy with no doom on it, or surge
 import {
-  ask,
-  def,
   distances,
   enemies,
   inv,
   push,
   type CardScript,
-  type EffCtx,
   type GameContext,
-  type InstId,
-  type Step,
-  CHOICE,
   STEP,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    suspicion(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
-      const from = inv(game, ctx.you!).location;
+    suspicion(game: GameContext, run: ScriptRun) {
+      const from = inv(game, run.you).location;
       const pool = enemies(game).filter((e) => e.doom === 0 && e.location);
       if (!pool.length || !from) {
-        push(game, { t: STEP.Eff, effect: { op: "surge" }, ctx });
+        push(game, { t: STEP.Eff, effect: { op: "surge" }, ctx: run.ctx });
         return;
       }
       const d = distances(game, from);
       const best = Math.min(...pool.map((e) => d.get(e.location!) ?? Infinity));
       const near = pool.filter((e) => (d.get(e.location!) ?? Infinity) === best);
-      const pick = ask<InstId>(
-        game,
-        step!,
-        ctx.you!,
-        CHOICE.Target,
-        "Raising Suspicions: place 1 doom on",
-        near.map((e) => ({ id: e.id, label: def(game, e.id).name, card: e.id, value: e.id })),
-        { auto: true, key: "chooseEnemy" },
+      const pick = run.chooseCard(
+        near.map((e) => e.id),
+        { text: "Raising Suspicions: place 1 doom on", key: "chooseEnemy" },
       );
-      if (pick === undefined) return;
       push(game, { t: STEP.PlaceDoom, card: pick, n: 1 }, { t: STEP.CheckDoom });
     },
   },

@@ -2,16 +2,16 @@
 import {
   push,
   type CardScript,
-  type EffCtx,
   type GameContext,
   STEP,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    heal2(game: GameContext, ctx: EffCtx) {
+    heal2(game: GameContext, run: ScriptRun) {
       const point = { op: "heal" as const, damage: 1, targetAlly: "atLocation" as const };
-      push(game, { t: STEP.Effects, effects: [point, point], ctx });
+      push(game, { t: STEP.Effects, effects: [point, point], ctx: run.ctx });
     },
   },
 } satisfies CardScript;

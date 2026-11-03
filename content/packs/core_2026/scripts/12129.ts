@@ -9,7 +9,6 @@ import {
   currentPhase,
   def,
   distances,
-  type EffCtx,
   emit,
   type GameContext,
   type InstId,
@@ -26,6 +25,7 @@ import {
   ZONE,
   CHOICE,
   STEP,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 const FIRE = "12129";
@@ -79,12 +79,12 @@ export function attachFire(
 export default {
   abilities: [{ kind: "revelation", run: "attach" }],
   fns: {
-    attach(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
-      attachFire(game, ctx.source!, inv(game, ctx.you!).location, step!, ctx.you!);
+    attach(game: GameContext, run: ScriptRun) {
+      attachFire(game, run.source, inv(game, run.you).location, run.step, run.you);
     },
-    burn(game: GameContext, ctx: EffCtx) {
+    burn(game: GameContext, run: ScriptRun) {
       if (currentPhase(game) !== "investigation") return;
-      const loc = cardIf(game, ctx.source!)?.location;
+      const loc = cardIf(game, run.source)?.location;
       if (!loc) return;
       for (const i of invsAt(game, loc)) {
         push(game, {
@@ -93,7 +93,7 @@ export default {
           damage: 1,
           horror: 0,
           direct: true,
-          source: ctx.source!,
+          source: run.source,
         });
         for (const a of cardsIn(game, ZONE.Play))
           if (a.controller === i && (def(game, a.id).health ?? 0) > 0)
@@ -107,7 +107,7 @@ export default {
             enemy: e.id,
             amount: 1,
             by: null,
-            source: ctx.source!,
+            source: run.source,
           });
     },
   },

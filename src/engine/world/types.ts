@@ -327,7 +327,7 @@ export type Step = { choice?: any } & (
   | { t: "SlotCheck"; inv: InvId; card: InstId }
   | { t: "EnterPlay"; inv: InvId; card: InstId }
   | { t: "ChooseTurnOrder" }
-  | { t: "Script"; code: string; fn: string; ctx: EffCtx; args?: any }
+  | { t: "Script"; code: string; fn: string; ctx: EffCtx; args?: unknown }
   | { t: "DiscardIfEmpty"; card: InstId }
   | {
       t: "UseAbility";
@@ -500,9 +500,47 @@ export interface CardScript {
   /** when doom would be placed while this card is the agenda: true replaces it (Brethren of Ash) */
   wouldPlaceDoom?: (game: GameContext, cardId: InstId, n: number) => boolean;
   /** called by the engine for special hooks */
-  hooks?: Partial<Record<string, ScriptFn>>;
+  hooks?: Partial<Record<string, ScriptHook>>;
 }
-export type ScriptFn = (game: GameContext, ctx: EffCtx, args?: any, step?: Step) => void;
+
+/** what a choice verb shows: the English prompt and the UI's translation key and values */
+export interface ScriptPrompt {
+  text: string;
+  key?: string;
+  vars?: Record<string, string | number | null>;
+}
+export interface ChooseOpts {
+  /** take a single option without asking (default true) */
+  auto?: boolean;
+  /** the kind of the pending choice (default `target`) */
+  kind?: ChoiceKind;
+  /** who chooses (default the run's investigator) */
+  who?: InvId;
+  /** deck cards shown beside the options */
+  shown?: InstId[];
+}
+
+/**
+ * What a script function is given (built only by the script adapter, `rules/scripts.ts`): the investigator it resolves
+ * for, the step, its context and arguments, and choice verbs. A verb returns the chosen value; when the player has to
+ * choose, the script stops there and the whole step runs again from the top once the choice is made, so code before
+ * the first choice must not change the game.
+ */
+export interface ScriptRun {
+  /** the context's investigator, else the lead */
+  readonly you: InvId;
+  /** the source card; reading it when the step has none throws, naming the script */
+  readonly source: InstId;
+  readonly step: Step;
+  readonly ctx: EffCtx;
+  readonly args: unknown;
+  chooseCard(ids: InstId[], prompt: ScriptPrompt, opts?: ChooseOpts): InstId;
+  chooseInvestigator(invs: InvId[], prompt: ScriptPrompt, opts?: ChooseOpts): InvId;
+  choose<T = unknown>(options: ChoiceOption[], prompt: ScriptPrompt, opts?: ChooseOpts): T;
+}
+export type ScriptFn = (game: GameContext, run: ScriptRun) => void;
+/** a hook the engine calls at a named moment (typed one by one in engine-script-registry) */
+export type ScriptHook = (game: GameContext, ctx: EffCtx, args?: unknown, step?: Step) => void;
 
 /** engine context passed to every rule: the state (mutated in place, one deep copy per choice) + static content */
 export interface GameContext {

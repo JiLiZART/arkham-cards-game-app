@@ -9,7 +9,13 @@ import {
   type GameContext,
   inv,
   EVENT,
+  argField,
+  asNumber,
+  asString,
 } from "../../../../src/engine/api";
+
+const isHealRequest = (v: unknown): v is { target: string; n: number } =>
+  asString(argField(v, "target")) !== undefined && asNumber(argField(v, "n")) !== undefined;
 
 export default {
   abilities: [
@@ -20,7 +26,10 @@ export default {
   ],
   hooks: {
     /** "You cannot heal horror from cards other than Rational Thought. Horror on it may be healed as if it were on Carolyn Fern." */
-    healHorror(game: GameContext, ctx: EffCtx, req: { target: string; n: number }) {
+    healHorror(game: GameContext, ctx: EffCtx, args: unknown) {
+      // the heal's request, written back: `n` is what may still be healed
+      if (!isHealRequest(args)) return;
+      const req = args;
       const rt = card(game, ctx.source!);
       if (rt.zone !== "threat" || !ctx.you || ctx.inv !== ctx.you) return;
       // ponytail: another investigator healing Carolyn heals Carolyn; the choice to heal Rational Thought instead isn't offered

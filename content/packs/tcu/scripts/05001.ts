@@ -8,6 +8,7 @@ import {
   type GameContext,
   EVENT,
   STEP,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 export default {
@@ -29,17 +30,17 @@ export default {
       !!ctx.you && threatArea(game, ctx.you).some((c) => c.code === "05008"),
   },
   fns: {
-    gain(game: GameContext, ctx: EffCtx) {
-      const healed = card(game, ctx.card!);
+    gain(game: GameContext, run: ScriptRun) {
+      const healed = card(game, run.ctx.card!);
       const who = healed.controller ?? healed.owner;
       if (!who) return;
       push(game, {
         t: STEP.Effects,
         effects: [{ op: "gainResources", amount: 1, target: "eventInvestigator" }],
-        ctx: { ...ctx, inv: who },
+        ctx: { ...run.ctx, inv: who },
       });
     },
-    elder(game: GameContext, ctx: EffCtx) {
+    elder(game: GameContext, run: ScriptRun) {
       push(game, {
         t: STEP.Effects,
         effects: [
@@ -61,7 +62,7 @@ export default {
             ],
           },
         ],
-        ctx: { you: ctx.you, source: ctx.source },
+        ctx: { you: run.ctx.you, source: run.ctx.source },
       });
     },
   },

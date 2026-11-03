@@ -120,6 +120,9 @@ export function windowData(r: Result): Record<string, unknown> | null {
   return step?.t === "Window" ? (step.data as Record<string, unknown>) : null;
 }
 
+/** the step the pending choice will resume (for tests of the step machinery itself, such as the script adapter) */
+export const pendingStep = (r: Result): Step | null => r.state.pending?.step ?? null;
+
 /** answer neutrally until a reaction window on `trigger` is open */
 export const untilWindow = (r: Result, trigger: string): Result =>
   until(r, (x) => windowOf(x) === trigger);

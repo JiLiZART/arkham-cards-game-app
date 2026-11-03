@@ -1,10 +1,8 @@
 // The Barrier (The Gathering, act 2): at round end, investigators in the Hallway may spend 3 clues/investigator
 import {
   addCounter,
-  ask,
   type CardScript,
   def,
-  type EffCtx,
   emit,
   findByCode,
   type GameContext,
@@ -13,12 +11,12 @@ import {
   moveCard,
   push,
   setController,
-  type Step,
   turnOrder,
   EVENT,
   ZONE,
   CHOICE,
   STEP,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 export default {
@@ -27,7 +25,7 @@ export default {
     { kind: "revelation", run: "back" },
   ],
   fns: {
-    objective(game: GameContext, _ctx: EffCtx, _args: unknown, step?: Step) {
+    objective(game: GameContext, run: ScriptRun) {
       const hallway = findByCode(game, "01112", [ZONE.Location]);
       if (!hallway) return;
       const there = turnOrder(game).filter(
@@ -36,17 +34,17 @@ export default {
       const need = 3 * turnOrder(game).length;
       const have = there.reduce((n, i) => n + inv(game, i).clues, 0);
       if (have < need) return;
-      const yes = ask<boolean>(
-        game,
-        step!,
-        leadInvestigator(game),
-        CHOICE.Generic,
-        `The Barrier: spend ${need} clues (investigators in the Hallway) to advance?`,
+      const yes = run.choose<boolean>(
         [
           { id: "yes", label: `Spend ${need} clues and advance`, value: true },
           { id: "no", label: "Not now", value: false },
         ],
-        { key: "barrier", vars: { n: need } },
+        {
+          text: `The Barrier: spend ${need} clues (investigators in the Hallway) to advance?`,
+          key: "barrier",
+          vars: { n: need },
+        },
+        { auto: false, kind: CHOICE.Generic, who: leadInvestigator(game) },
       );
       if (!yes) return;
       let n = need;

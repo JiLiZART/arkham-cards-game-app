@@ -1,26 +1,19 @@
 // What Have You Done? (The Gathering, act 3) — back: burn it down (R1) or not (R2)
 import {
-  ask,
   type CardScript,
-  type EffCtx,
   type GameContext,
   leadInvestigator,
   push,
-  type Step,
   CHOICE,
   STEP,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 export default {
   abilities: [{ kind: "revelation", run: "back" }],
   fns: {
-    back(game: GameContext, _ctx: EffCtx, _args: unknown, step?: Step) {
-      const r = ask<string>(
-        game,
-        step!,
-        leadInvestigator(game),
-        CHOICE.Generic,
-        "Defending the Home — the lead investigator must decide:",
+    back(game: GameContext, run: ScriptRun) {
+      const r = run.choose<string>(
         [
           { id: "R1", label: "It was never much of a home. Burn it down! (→R1)", value: "R1" },
           {
@@ -29,9 +22,10 @@ export default {
             value: "R2",
           },
         ],
-        { key: "defendingHome" },
+        { text: "Defending the Home — the lead investigator must decide:", key: "defendingHome" },
+        { auto: false, kind: CHOICE.Generic, who: leadInvestigator(game) },
       );
-      if (r) push(game, { t: STEP.Resolution, id: r });
+      push(game, { t: STEP.Resolution, id: r });
     },
   },
 } satisfies CardScript;

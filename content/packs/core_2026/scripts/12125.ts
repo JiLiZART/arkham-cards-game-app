@@ -2,19 +2,19 @@
 import {
   card,
   type CardScript,
-  type EffCtx,
   type GameContext,
   push,
   threatArea,
   STEP,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    intoThreat(game: GameContext, ctx: EffCtx) {
-      const code = card(game, ctx.source!).code;
-      if (threatArea(game, ctx.you!).some((c) => c.code === code)) return;
-      push(game, { t: STEP.Eff, effect: { op: "putInThreatArea" }, ctx });
+    intoThreat(game: GameContext, run: ScriptRun) {
+      const code = card(game, run.source).code;
+      if (threatArea(game, run.you).some((c) => c.code === code)) return;
+      push(game, { t: STEP.Eff, effect: { op: "putInThreatArea" }, ctx: run.ctx });
     },
   },
 } satisfies CardScript;

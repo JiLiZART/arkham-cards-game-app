@@ -3,18 +3,18 @@ import {
   addCounter,
   cardIf,
   type CardScript,
-  type EffCtx,
   emit,
   type GameContext,
   push,
   EVENT,
   STEP,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    seal(game: GameContext, ctx: EffCtx) {
-      const e = cardIf(game, ctx.source!);
+    seal(game: GameContext, run: ScriptRun) {
+      const e = cardIf(game, run.source);
       if (e?.zone !== "enemy") return;
       addCounter(game, e.id, "clues", 1);
       emit(game, EVENT.Clues, `1 clue is placed on Elokoss (${e.clues}/5)`, {

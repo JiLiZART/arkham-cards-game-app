@@ -3,6 +3,8 @@
  * investigator must resolve that card (including any revelation abilities) as if they had just drawn it."
  * (Grimoire, Weakness). The Ritual Begins puts a random Madness weakness into the hand of each investigator who fails.
  */
+import { runScript } from "../rules/scripts";
+import { STEP } from "../steps/step";
 import { beforeAll, describe, expect, it } from "vitest";
 import { loadPack } from "../../content";
 import { run } from "../steps/dispatch";
@@ -28,7 +30,7 @@ const madnessPool = (game: GameContext) =>
 function failRitual(game: GameContext): InstId {
   const before = new Set(game.s.world.entities);
   game.s.pending = null;
-  game.db.scripts["01144"].fns!.madness(game, { you: R });
+  runScript(game, { t: STEP.Script, code: "01144", fn: "madness", ctx: { you: R } });
   run(game);
   return game.s.world.entities.find((id) => !before.has(id))!;
 }

@@ -3,14 +3,15 @@ import {
   cardIf,
   type CardScript,
   discard,
-  type EffCtx,
   type GameContext,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 export default {
   fns: {
-    discardEnemy(game: GameContext, ctx: EffCtx) {
-      if (ctx.enemy && cardIf(game, ctx.enemy)?.zone === "enemy") discard(game, ctx.enemy);
+    discardEnemy(game: GameContext, run: ScriptRun) {
+      if (run.ctx.enemy && cardIf(game, run.ctx.enemy)?.zone === "enemy")
+        discard(game, run.ctx.enemy);
     },
   },
 } satisfies CardScript;

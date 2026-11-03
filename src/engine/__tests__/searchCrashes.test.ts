@@ -10,17 +10,18 @@ import { moveCard } from "../movement";
 import { run } from "../steps/dispatch";
 import { legalTurnActions } from "../rules/round";
 import { startTest } from "../rules/skillTest";
-import { db, giveCard, gOf, skipMulligans, start } from "../kits/testkit";
-import type { EffCtx, Step } from "../world/types";
+import { giveCard, gOf, skipMulligans, start } from "../kits/testkit";
+import type { EffCtx } from "../world/types";
 import { cardRecIn, invStateIn } from "../world/store";
 import { ZONE, INV_STATUS } from "../world/constants";
 import { STEP } from "../steps/step";
+import { runScript } from "../rules/scripts";
 
 const R = "01001";
 const D = "01002";
 const newGame = (invs = [R]): GameContext => gOf(skipMulligans(start("the-gathering", invs, 1)));
 function call(game: GameContext, code: string, fn: string, ctx: EffCtx) {
-  db.scripts[code].fns![fn](game, ctx, undefined, { t: STEP.Script, code, fn, ctx } as Step);
+  runScript(game, { t: STEP.Script, code, fn, ctx });
 }
 /** run a card script as the engine does: its Script step on the queue */
 function resolve(game: GameContext, code: string, fn: string, ctx: EffCtx) {

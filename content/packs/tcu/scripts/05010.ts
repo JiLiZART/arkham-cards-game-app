@@ -1,7 +1,6 @@
 // Unsolved Case — place 1 of your clues on the location with the highest shroud; once in the threat area, Joe earns 2 fewer experience
 import {
   addCounter,
-  ask,
   card,
   type CardScript,
   def,
@@ -9,13 +8,11 @@ import {
   emit,
   flags,
   type GameContext,
-  type InstId,
   inv,
   locations,
   shroud,
-  type Step,
   EVENT,
-  CHOICE,
+  type ScriptRun,
 } from "../../../../src/engine/api";
 
 export default {
@@ -27,27 +24,23 @@ export default {
     },
   ],
   fns: {
-    placeClue(game: GameContext, ctx: EffCtx, _args: unknown, step?: Step) {
+    placeClue(game: GameContext, run: ScriptRun) {
       const shown = locations(game).filter((l) => l.revealed && shroud(game, l.id) !== Infinity);
       const top = Math.max(...shown.map((l) => shroud(game, l.id)));
-      const loc = ask<InstId>(
-        game,
-        step!,
-        ctx.you!,
-        CHOICE.Target,
-        "Unsolved Case: place 1 clue on the location with the highest shroud",
-        shown
-          .filter((l) => shroud(game, l.id) === top)
-          .map((l) => ({ id: l.id, label: def(game, l.id).name, card: l.id, value: l.id })),
-        { auto: true, key: "cardChooseLocation", vars: { card: ctx.source ?? null } },
+      const loc = run.chooseCard(
+        shown.filter((l) => shroud(game, l.id) === top).map((l) => l.id),
+        {
+          text: "Unsolved Case: place 1 clue on the location with the highest shroud",
+          key: "cardChooseLocation",
+          vars: { card: run.ctx.source ?? null },
+        },
       );
-      if (loc === undefined) return;
-      const me = inv(game, ctx.you!);
+      const me = inv(game, run.you);
       if (me.clues < 1) return;
       addCounter(game, me.id, "clues", -1);
       addCounter(game, loc, "clues", 1);
       emit(game, EVENT.Clues, `${me.name} places 1 clue on ${def(game, loc).name}`, {
-        inv: ctx.you!,
+        inv: run.you,
         card: loc,
       });
     },
