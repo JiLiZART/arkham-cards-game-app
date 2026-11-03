@@ -40,6 +40,7 @@ import { runScript } from "./scripts";
 import { EVENT } from "../events/event";
 import { ZONE, CHOICE, TEST_STAGE } from "../world/constants";
 import { STEP } from "../steps/step";
+import { scriptOf } from "../world/scripts";
 
 type Handler<T extends Step["t"]> = (game: GameContext, step: Extract<Step, { t: T }>) => void;
 
@@ -170,7 +171,7 @@ const ownSkill = (game: GameContext, i: InvId, s: Skill) =>
 /** icons a card contributes to a test */
 export function iconsFor(game: GameContext, cardId: InstId, skill: Skill): number {
   const d = def(game, cardId);
-  const extra = game.db.scripts[d.code]?.icons?.(game, cardId) ?? {};
+  const extra = scriptOf(game.db, d.code)?.icons?.(game, cardId) ?? {};
   return (d.icons[skill] ?? 0) + (d.icons.wild ?? 0) + (extra[skill] ?? 0) + (extra.wild ?? 0);
 }
 
@@ -474,7 +475,7 @@ function resolveTokensStage(game: GameContext) {
         if (es.effects) t.tokenOnSuccess.push(...es.effects);
         // runs now so it can adjust the current test (auto-succeed, extra on-success effects)
         const code = card(game, invCard).code;
-        const fn = es.run ? game.db.scripts[code]?.fns?.[es.run] : undefined;
+        const fn = es.run ? scriptOf(game.db, code)?.fns?.[es.run] : undefined;
         if (fn)
           runScript(
             game,

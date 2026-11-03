@@ -1,12 +1,15 @@
 import { afterEach, describe, expect, it } from "vitest";
 import { dispatch } from "../../index";
-import { game, inject, pendingStep } from "../../kits/driver";
+import { game, hand, inject, inPlay, pendingStep } from "../../kits/driver";
+import { mutate } from "../../kits/testkit";
+import { cardOf, cardsOf, invOf } from "../../context";
+import { createCard, moveCard } from "../../movement";
 import { db } from "../../kits/testkit";
 import { CHOICE, ZONE } from "../../world/constants";
 import { STEP } from "../../steps/step";
 import { invStateIn } from "../../world/store";
 import { findByCode } from "../../queries";
-import type { CardScript, ScriptRun } from "../../world/types";
+import type { CardScript, HookRun, ScriptRun } from "../../world/types";
 import { runScript } from "../scripts";
 
 const ROLAND = "01001";
@@ -152,5 +155,105 @@ describe("the script run", () => {
     expect(() =>
       runScript(g, { t: STEP.Script, code: CODE, fn: "pick", ctx: {} }, { direct: true }),
     ).toThrow(/outside a Script step/);
+  });
+});
+
+describe("script hooks", () => {
+  const saved = new Map<string, CardScript | undefined>();
+  const override = (code: string, script: CardScript) => {
+    if (!saved.has(code)) saved.set(code, db.scripts[code]);
+    db.scripts[code] = script;
+  };
+  afterEach(() => {
+    for (const [code, s] of saved) {
+      if (s) db.scripts[code] = s;
+      else delete db.scripts[code];
+    }
+    saved.clear();
+  });
+
+  it("spawnRedirect's returned location is where the Ghoul Priest spawns in The Midnight Masks", () => {
+    let priest = "";
+    let r = mutate(game({ scenario: "the-midnight-masks", investigators: [ROLAND] }), (g) => {
+      priest = createCard(g, "01116", ZONE.Limbo);
+    });
+    r = inject(r, () => {}, { t: STEP.Spawn, enemy: priest, inv: null });
+    const at = cardOf(r.state, priest).location!;
+    expect(cardOf(r.state, at).code).toBe("01124");
+  });
+
+  it("healHorror hooks each lower the heal, in the order the cards are found", () => {
+    const order: string[] = [];
+    const lower = (name: string) => ({
+      hooks: {
+        healHorror: (_g: unknown, _run: unknown, _t: unknown, n: number) => (
+          order.push(name),
+          n - 1
+        ),
+      },
+    });
+    override("01020", lower("machete"));
+    override("01016", lower("45"));
+    const r = inject(
+      game({
+        investigators: [ROLAND],
+        prep: (g) => {
+          inPlay(g, ROLAND, "01020");
+          inPlay(g, ROLAND, "01016");
+          invStateIn(g.s, ROLAND).horror = 3;
+        },
+      }),
+      () => {},
+      { t: STEP.Effects, effects: [{ op: "heal", horror: 3 }], ctx: { you: ROLAND } },
+    );
+    expect(invOf(r.state, ROLAND).horror).toBe(2);
+    const found = cardsOf(r.state)
+      .filter((c) => c.zone === "play" && (c.code === "01020" || c.code === "01016"))
+      .map((c) => (c.code === "01020" ? "machete" : "45"));
+    expect(order).toEqual(found);
+  });
+
+  it("gameEnd fires for an eliminated investigator's weaknesses only, and at the resolution for cards in play, threat and hand", () => {
+    const fired: string[] = [];
+    const record = {
+      hooks: { gameEnd: (_g: unknown, run: HookRun) => void fired.push(run.source) },
+    };
+    override("01007", record); // Cover Up, a weakness
+    override("01020", record); // Machete, not one
+    let weakness = "";
+    let asset = "";
+    let r = game({
+      investigators: [ROLAND, DAISY],
+      prep: (g) => {
+        weakness = hand(g, DAISY, "01007");
+        asset = hand(g, DAISY, "01020");
+      },
+    });
+    r = inject(r, () => {}, { t: STEP.Defeated, inv: DAISY, by: "damage" });
+    expect(fired).toEqual([weakness]);
+
+    fired.length = 0;
+    let inPlayId = "";
+    let threat = "";
+    let held = "";
+    let gone = "";
+    r = inject(
+      game({
+        investigators: [ROLAND],
+        prep: (g) => {
+          inPlayId = inPlay(g, ROLAND, "01020");
+          threat = hand(g, ROLAND, "01007");
+          moveCard(g, threat, ZONE.Threat);
+          held = hand(g, ROLAND, "01020");
+          gone = hand(g, ROLAND, "01020");
+          moveCard(g, gone, ZONE.Discard);
+        },
+      }),
+      () => {},
+      { t: STEP.Resolution, id: "R1" },
+    );
+    expect(new Set(fired)).toEqual(new Set([inPlayId, threat, held]));
+    expect(fired).not.toContain(gone);
+    expect(asset).not.toBe("");
   });
 });

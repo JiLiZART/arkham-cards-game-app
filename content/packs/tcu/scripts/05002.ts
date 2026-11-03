@@ -4,7 +4,6 @@ import {
   card,
   type CardScript,
   def,
-  type EffCtx,
   emit,
   flags,
   type GameContext,
@@ -23,6 +22,7 @@ import {
   CHOICE,
   STEP,
   type ScriptRun,
+  type HookRun,
 } from "../../../../src/engine/api";
 
 const UNSOLVED_CASE = "05010";
@@ -88,8 +88,8 @@ export default {
   ],
   hooks: {
     /** choose 11 Insight events, Unsolved Case among them, and shuffle them into the hunch deck */
-    setup(game: GameContext, ctx: EffCtx) {
-      const me = inv(game, ctx.you!);
+    setup(game: GameContext, run: HookRun) {
+      const me = inv(game, run.you);
       const insight = me.deck.filter((id) => isInsightEvent(game, id));
       // ponytail: the first Insight events of the decklist are taken; a choice at setup when deckbuilding needs it
       const chosen = [
@@ -98,7 +98,7 @@ export default {
       ].slice(0, HUNCH_SIZE);
       for (const id of chosen) moveCard(game, id, ZONE.SetAside);
       shuffleList(game, chosen);
-      flags.hunch.set(game, String(ctx.you), chosen);
+      flags.hunch.set(game, run.you, chosen);
     },
   },
   extraPlayable(game: GameContext, _cardId: InstId, i: InvId) {

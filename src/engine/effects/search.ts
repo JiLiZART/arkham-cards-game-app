@@ -22,10 +22,11 @@ import type { EffectOf, EffectRun } from "./types";
 import { EVENT } from "../events/event";
 import { ZONE, CHOICE } from "../world/constants";
 import { STEP } from "../steps/step";
+import { scriptOf } from "../world/scripts";
 
 /** a card that cancels a search of the deck it is found in, and is drawn instead (Dead Ends) */
 function searchBlocked(game: GameContext, who: InvId, searched: readonly InstId[]): boolean {
-  const id = searched.find((x) => game.db.scripts[card(game, x).code]?.hooks?.searched);
+  const id = searched.find((x) => scriptOf(game.db, card(game, x).code)?.cancelsSearch);
   if (!id) return false;
   shuffleThenTop(game, who, [id]);
   emit(game, EVENT.SearchCancelled, `${def(game, id).name} cancels the search`, {

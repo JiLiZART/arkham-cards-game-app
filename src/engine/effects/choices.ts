@@ -12,6 +12,7 @@ import { checkCondition } from "../queries";
 import type { EffectOf, EffectRun } from "./types";
 import { CHOICE } from "../world/constants";
 import { STEP } from "../steps/step";
+import { scriptFnFor } from "../world/scripts";
 
 function chooseOneEffect(game: GameContext, run: EffectRun<EffectOf<"chooseOne">>) {
   const { step, ctx, you } = run;
@@ -70,7 +71,7 @@ function scriptEffect(game: GameContext, run: EffectRun<EffectOf<"script">>) {
   const code = src?.code ?? scenarioIdOf(game);
   push(game, {
     t: STEP.Script,
-    code: game.db.scripts[code]?.fns?.[e.fn] ? code : scenarioIdOf(game),
+    code: scriptFnFor(game.db, scenarioIdOf(game), code, e.fn)?.code ?? scenarioIdOf(game),
     fn: e.fn,
     ctx,
     args: e.args,

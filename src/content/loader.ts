@@ -17,6 +17,7 @@ import {
   SoundManifest,
   type Ability,
 } from "./schema";
+import { hasScript, scriptFnIn, scriptOf } from "../engine/world/scripts";
 
 export interface ContentError {
   file: string;
@@ -317,7 +318,7 @@ export function validateRefs(db: ContentDb, cardFile: Record<string, string> = {
     if (!has(code)) errors.push({ file, path, message: `missing ${what} ${code}` });
   };
   const fnExists = (code: string, fn: string, scenarioIds: string[]) =>
-    !!db.scripts[code]?.fns?.[fn] || scenarioIds.some((s) => db.scripts[s]?.fns?.[fn]);
+    scriptFnIn(db, code, fn, scenarioIds);
   const scenarioIds = Object.keys(db.scenarios);
   const checkEffects = (
     file: string,
@@ -339,7 +340,7 @@ export function validateRefs(db: ContentDb, cardFile: Record<string, string> = {
   };
   for (const c of Object.values(db.cards)) {
     const file = cardFile[c.code] ?? "cards";
-    if (c.script && !db.scripts[c.code])
+    if (c.script && !hasScript(db, c.code))
       errors.push({
         file,
         path: c.code,
@@ -347,10 +348,10 @@ export function validateRefs(db: ContentDb, cardFile: Record<string, string> = {
       });
     const abilities: (Ability & { run?: string })[] = [
       ...c.abilities,
-      ...(db.scripts[c.code]?.abilities ?? []),
+      ...(scriptOf(db, c.code)?.abilities ?? []),
     ];
     abilities.forEach((a, k) => {
-      if (a.run && !db.scripts[c.code]?.fns?.[a.run])
+      if (a.run && !scriptOf(db, c.code)?.fns?.[a.run])
         errors.push({
           file,
           path: `${c.code}.abilities.${k}`,
@@ -408,7 +409,7 @@ export function validateRefs(db: ContentDb, cardFile: Record<string, string> = {
     s.setup.forEach((st, k) => {
       if ("codes" in st) st.codes.forEach((c) => need(file, `setup.${k}`, c));
       if ("from" in st) st.from.forEach((c) => need(file, `setup.${k}`, c));
-      if (st.do === "script" && !db.scripts[s.id]?.fns?.[st.fn])
+      if (st.do === "script" && !scriptOf(db, s.id)?.fns?.[st.fn])
         errors.push({ file, path: `setup.${k}`, message: `missing script function ${st.fn}` });
     });
     for (const [diff, toks] of Object.entries(s.tokens))

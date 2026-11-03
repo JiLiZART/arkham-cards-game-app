@@ -23,6 +23,7 @@ import type {
 } from "./world/types";
 import { activeInvs, card, def, defOf, inv, playerCount } from "./context";
 import { ZONE, isOneOf } from "./world/constants";
+import { conditionFor, scriptOf } from "./world/scripts";
 
 /** Questions about the game: zones, the map, modifiers, costs and conditions (ADR-0025). */
 
@@ -206,7 +207,7 @@ export function blankedCards(game: GameContext): Set<InstId> {
   const out = new Set<InstId>();
   for (const t of game.s.tempMods) if (t.mod.flag === "blankText") out.add(t.target);
   for (const c of cardsInAny(game, MOD_ZONES)) {
-    const fn = game.db.scripts[c.code]?.blanks;
+    const fn = scriptOf(game.db, c.code)?.blanks;
     if (fn) for (const id of fn(game, c.id)) out.add(id);
   }
   return out;
@@ -222,8 +223,7 @@ export function abilitiesOf(
 ): (Ability & { run?: string })[] {
   if (isBlank(game, id, blanked)) return [];
   const c = card(game, id);
-  const script = game.db.scripts[c.code];
-  return [...def(game, id).abilities, ...(script?.abilities ?? [])];
+  return [...def(game, id).abilities, ...(scriptOf(game.db, c.code)?.abilities ?? [])];
 }
 
 /** all modifiers currently in effect */
@@ -239,7 +239,7 @@ export function allMods(game: GameContext): AppliedMod[] {
       for (const mod of a.modifiers)
         for (const target of scopeTargets(game, c, mod)) out.push({ target, mod, source: c.id });
     }
-    const script = game.db.scripts[c.code];
+    const script = scriptOf(game.db, c.code);
     if (script?.modifiers && !blanked.has(c.id))
       for (const m of script.modifiers(game, c.id)) out.push({ ...m, source: c.id });
   }
@@ -498,9 +498,7 @@ export function checkCondition(game: GameContext, c: Condition, ctx: EffCtx): bo
     return !!ctx.inv && !!ctx.source && invRecIf(game, ctx.inv)?.location === ctx.source;
   if ("script" in c) {
     const own = ctx.source ? cardRecIf(game, ctx.source)?.code : undefined;
-    const fn =
-      (own ? game.db.scripts[own]?.conditions?.[c.script] : undefined) ??
-      game.db.scripts[game.s.scenarioId]?.conditions?.[c.script];
+    const fn = conditionFor(game.db, game.s.scenarioId, own, c.script);
     return !!fn?.(game, ctx);
   }
   if ("controlled" in c)

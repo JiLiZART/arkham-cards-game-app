@@ -20,7 +20,6 @@ import {
   logStep,
   nextKey,
   push,
-  scenarioIdOf,
   setCardLocation,
   setEngaged,
   turnOrder,
@@ -49,6 +48,7 @@ import { win } from "./cards";
 import { EVENT } from "../events/event";
 import { ZONE, CHOICE } from "../world/constants";
 import { STEP } from "../steps/step";
+import { fireScenarioHook } from "./scripts";
 
 type Handler<T extends Step["t"]> = (game: GameContext, step: Extract<Step, { t: T }>) => void;
 
@@ -95,12 +95,7 @@ export const spawnHandler: Handler<"Spawn"> = (game, step) => {
   let at = step.at ?? null;
   let engage: InvId | null = null;
   const drawerLoc = step.inv ? inv(game, step.inv).location : null;
-  const hook = game.db.scripts[scenarioIdOf(game)]?.hooks?.spawnRedirect;
-  if (!at && hook) {
-    const ctx = { enemy: step.enemy, location: null as InstId | null };
-    hook(game, ctx);
-    at = ctx.location;
-  }
+  if (!at) at = fireScenarioHook(game, "spawnRedirect", step.enemy) ?? null;
   if (!at && d.spawn) {
     if (d.spawn === "emptyLocation" || d.spawn === "farthestEmptyLocation") {
       let empty = locations(game).filter(

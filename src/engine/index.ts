@@ -16,7 +16,7 @@ import { findByCode, locationByName } from "./queries";
 import { legalTurnActions } from "./rules/round";
 import { drawOpeningCards, revealLocation } from "./rules/investigators";
 import { run } from "./steps/dispatch";
-import { runScript } from "./rules/scripts";
+import { fireCardHook, runScript } from "./rules/scripts";
 import { discardFromOpeningHands } from "./world/flags";
 import { randInt, shuffle } from "./world/rng";
 import { newWorld, pileRec } from "./world/store";
@@ -31,8 +31,9 @@ import type {
   Step,
 } from "./world/types";
 import { EVENT } from "./events/event";
-import { ZONE, PHASE, INV_STATUS, PILE, type Zone, isOneOf } from "./world/constants";
+import { ZONE, PHASE, INV_STATUS, PILE, isOneOf } from "./world/constants";
 import { STEP } from "./steps/step";
+import { scriptOf } from "./world/scripts";
 
 export const ENGINE_VERSION = 7;
 
@@ -182,7 +183,7 @@ function applySetupStep(game: GameContext, st: SetupStep) {
       discardFromOpeningHands.set(game, st.amount);
       return;
     case "script": {
-      const fn = game.db.scripts[s.scenarioId]?.fns?.[st.fn];
+      const fn = scriptOf(game.db, s.scenarioId)?.fns?.[st.fn];
       if (fn)
         runScript(
           game,
@@ -272,7 +273,7 @@ export function createGame(db: ContentDb, setup: GameSetup): Result {
   // decks & opening hands
   for (const i of s.order) {
     // the investigator's own setup, before the deck is shuffled (Joe Diamond's hunch deck)
-    db.scripts[i]?.hooks?.setup?.(game, { you: i, source: inv(game, i).cardId });
+    fireCardHook(game, i, "setup", { you: i, source: inv(game, i).cardId });
     shuffleDeck(game, i);
     drawOpeningCards(game, i, 5);
   }

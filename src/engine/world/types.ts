@@ -500,7 +500,9 @@ export interface CardScript {
   /** when doom would be placed while this card is the agenda: true replaces it (Brethren of Ash) */
   wouldPlaceDoom?: (game: GameContext, cardId: InstId, n: number) => boolean;
   /** called by the engine for special hooks */
-  hooks?: Partial<Record<string, ScriptHook>>;
+  hooks?: Partial<ScriptHooks>;
+  /** a search that finds this card ends there: the rest of the search is not resolved (Dead Ends) */
+  cancelsSearch?: true;
 }
 
 /** what a choice verb shows: the English prompt and the UI's translation key and values */
@@ -539,8 +541,34 @@ export interface ScriptRun {
   choose<T = unknown>(options: ChoiceOption[], prompt: ScriptPrompt, opts?: ChooseOpts): T;
 }
 export type ScriptFn = (game: GameContext, run: ScriptRun) => void;
-/** a hook the engine calls at a named moment (typed one by one in engine-script-registry) */
-export type ScriptHook = (game: GameContext, ctx: EffCtx, args?: unknown, step?: Step) => void;
+/** what a card's or investigator's hook is given: no step, so a hook can't wait on a choice */
+export interface HookRun {
+  /** the card's controller, else the lead */
+  readonly you: InvId;
+  /** the card the hook belongs to; reading it when there is none throws */
+  readonly source: InstId;
+  readonly ctx: EffCtx;
+}
+
+/** every moment the engine fires a script hook at, each with its own signature (a misspelt name fails the typecheck) */
+export interface ScriptHooks {
+  /** an investigator's own setup, before their deck is shuffled (Joe Diamond's hunch deck) */
+  setup(game: GameContext, run: HookRun): void;
+  /** scenario: after anything that can complete an objective */
+  checkObjectives(game: GameContext): void;
+  /** scenario: what it records about the game as it ends, before its cards are gone; `won` unless no resolution */
+  ended(game: GameContext, won: boolean): void;
+  /** scenario: every investigator is eliminated (default: no resolution) */
+  allEliminated(game: GameContext): void;
+  /** scenario: where an enemy with no spawn location of its own spawns, if the scenario says */
+  spawnRedirect(game: GameContext, enemy: InstId): InstId | null | undefined;
+  /** card: "when the game ends" (Cover Up, Hospital Debts) */
+  gameEnd(game: GameContext, run: HookRun): void;
+  /** card: an event its controller played finished resolving (Wendy's Amulet) */
+  eventFinished(game: GameContext, run: HookRun, event: InstId): void;
+  /** card: a heal of `n` horror from `target` is about to happen; returns what may still be healed (Rational Thought) */
+  healHorror(game: GameContext, run: HookRun, target: InstId, n: number): number;
+}
 
 /** engine context passed to every rule: the state (mutated in place, one deep copy per choice) + static content */
 export interface GameContext {

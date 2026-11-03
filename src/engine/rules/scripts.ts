@@ -18,13 +18,17 @@ import { CHOICE } from "../world/constants";
 import type {
   ChoiceOption,
   ChooseOpts,
+  EffCtx,
+  HookRun,
   InstId,
   InvId,
   ScriptFn,
   ScriptPrompt,
   ScriptRun,
+  ScriptHooks,
   Step,
 } from "../world/types";
+import { scriptFnFor, scriptOf } from "../world/scripts";
 
 type ScriptStep = Extract<Step, { t: "Script" }>;
 
@@ -34,7 +38,7 @@ const WAITING = new Waiting();
 
 /** the script function a Script step names: the card's own, else the scenario's */
 export const scriptFn = (game: GameContext, code: string, fn: string): ScriptFn | undefined =>
-  game.db.scripts[code]?.fns?.[fn] ?? game.db.scripts[scenarioIdOf(game)]?.fns?.[fn];
+  scriptFnFor(game.db, scenarioIdOf(game), code, fn)?.fn;
 
 export interface RunOpts {
   /** the function to call, when the caller has found it itself (a token's `run`, a setup step) */
@@ -95,6 +99,64 @@ export function runScript(game: GameContext, step: ScriptStep, opts: RunOpts = {
   } catch (e) {
     if (e !== WAITING) throw e;
   }
+}
+
+type ScenarioHook = "checkObjectives" | "ended" | "allEliminated" | "spawnRedirect";
+type CardHook = "setup" | "gameEnd" | "eventFinished" | "healHorror";
+type AfterGame<F> = F extends (game: GameContext, ...a: infer A) => unknown ? A : never;
+type AfterRun<F> = F extends (game: GameContext, run: HookRun, ...a: infer A) => unknown
+  ? A
+  : never;
+type Returns<F> = F extends (...a: never[]) => infer R ? R : never;
+
+/** does the current scenario's script have this hook */
+export const hasScenarioHook = (game: GameContext, name: ScenarioHook): boolean =>
+  !!scriptOf(game.db, scenarioIdOf(game))?.hooks?.[name];
+
+/** fire a hook of the current scenario's script; undefined when it has none */
+export function fireScenarioHook<K extends ScenarioHook>(
+  game: GameContext,
+  name: K,
+  ...args: AfterGame<ScriptHooks[K]>
+): Returns<ScriptHooks[K]> | undefined {
+  const hook = scriptOf(game.db, scenarioIdOf(game))?.hooks?.[name];
+  if (!hook) return undefined;
+  // TypeScript can't correlate the hook it indexed with the arguments typed by the same name
+  return (hook as (game: GameContext, ...a: unknown[]) => Returns<ScriptHooks[K]>)(game, ...args);
+}
+
+/** fire a hook of the script of `code` (a card or an investigator); `ctx` names the card (`source`) and its controller */
+export function fireCardHook<K extends CardHook>(
+  game: GameContext,
+  code: string,
+  name: K,
+  ctx: EffCtx,
+  ...args: AfterRun<ScriptHooks[K]>
+): Returns<ScriptHooks[K]> | undefined {
+  const hook = scriptOf(game.db, code)?.hooks?.[name];
+  if (!hook) return undefined;
+  const run: HookRun = {
+    you: ctx.you ?? leadInvestigator(game),
+    get source(): InstId {
+      if (!ctx.source)
+        throw new Error(`${code}.hooks.${name} read its source card, but there is none`);
+      return ctx.source;
+    },
+    ctx,
+  };
+  return (hook as (game: GameContext, run: HookRun, ...a: unknown[]) => Returns<ScriptHooks[K]>)(
+    game,
+    run,
+    ...args,
+  );
+}
+
+/** "when the game ends" abilities of these cards: at the resolution, or for an eliminated investigator's weaknesses */
+export function fireGameEnd(
+  game: GameContext,
+  cards: readonly { id: InstId; code: string; controller: InvId | null }[],
+) {
+  for (const c of cards) fireCardHook(game, c.code, "gameEnd", { source: c.id, you: c.controller });
 }
 
 // a script's own continuation arguments arrive as `unknown` (typed in engine-typed-continuations); these narrow them

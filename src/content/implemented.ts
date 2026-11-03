@@ -1,5 +1,6 @@
 import type { ContentDb } from "../engine/world/types";
 import type { CardDef } from "./schema";
+import { hasScript } from "../engine/world/scripts";
 
 /** the keywords the engine acts on by themselves (CardDef.keywords) */
 const KEYWORD =
@@ -133,7 +134,7 @@ export function implemented(db: ContentDb, code: string): boolean {
   const c = db.cards[code];
   if (!c) return false;
   if (c.type === "scenario") return referenceCardWorks(db, c);
-  if (c.abilities.length || db.scripts[code]) return true;
+  if (c.abilities.length || hasScript(db, code)) return true;
   // both sides are printed text; a line break is printed as <br/> as often as a newline
   const lines = `${c.text}\n${c.backText ?? ""}`
     .replace(/<br\s*\/?>/g, "\n")

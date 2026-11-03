@@ -1,5 +1,6 @@
 /** where the replay corpus lives, and how recordings get the content they were made with */
 import type { ContentDb } from "../world/types";
+import { SCRIPT_MEMBERS, scriptCodes, scriptOf } from "../world/scripts";
 
 export const CORPUS = "src/engine/replays/corpus";
 
@@ -29,23 +30,14 @@ export const inPackOrder = <T extends { packs: string[] }>(xs: T[]): T[] =>
     .map(({ x }) => x);
 
 const traced = new WeakSet<object>();
-/** the CardScript members that are functions, and the ones that are maps of functions */
-const SCRIPT_FNS = [
-  "icons",
-  "modifiers",
-  "extraPlayable",
-  "blanks",
-  "extraActionCost",
-  "wouldPlaceDoom",
-];
-const SCRIPT_FN_MAPS = ["fns", "conditions", "hooks"];
 
 /**
  * Wrap every function of every loaded script so a call adds the script's code to `ran` (each script once; call again
  * after loading a pack). The replay test uses it to list the scripts no recording runs. It changes nothing a script does.
  */
 export function traceScripts(db: ContentDb, ran: Set<string>): void {
-  for (const [code, script] of Object.entries(db.scripts)) {
+  for (const code of scriptCodes(db)) {
+    const script = scriptOf(db, code)!;
     if (traced.has(script)) continue;
     traced.add(script);
     const wrap = <F>(f: F): F =>
@@ -56,10 +48,14 @@ export function traceScripts(db: ContentDb, ran: Set<string>): void {
             return (f as (...a: unknown[]) => unknown).apply(this, args);
           }) as F;
     const s = script as unknown as Record<string, unknown>;
-    for (const k of SCRIPT_FNS) if (s[k]) s[k] = wrap(s[k]);
-    for (const k of SCRIPT_FN_MAPS) {
-      const m = s[k] as Record<string, unknown> | undefined;
-      if (m) for (const name of Object.keys(m)) m[name] = wrap(m[name]);
+    // every member: a function is wrapped, a map of functions (fns, conditions, hooks) has each entry wrapped
+    for (const k of SCRIPT_MEMBERS) {
+      const v = s[k];
+      if (typeof v === "function") s[k] = wrap(v);
+      else if (v && typeof v === "object" && !Array.isArray(v)) {
+        const m = v as Record<string, unknown>;
+        for (const name of Object.keys(m)) m[name] = wrap(m[name]);
+      }
     }
   }
 }

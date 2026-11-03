@@ -6,12 +6,12 @@ import {
   inv,
   moveCard,
   type CardScript,
-  type EffCtx,
   type GameContext,
   type InstId,
   type InvId,
   EVENT,
   ZONE,
+  type HookRun,
 } from "../../../../src/engine/api";
 
 export default {
@@ -20,8 +20,8 @@ export default {
     return top && def(game, top).type === "event" ? [top] : [];
   },
   hooks: {
-    eventFinished(game: GameContext, ctx: EffCtx) {
-      const ev = card(game, ctx.card!);
+    eventFinished(game: GameContext, _run: HookRun, event: InstId) {
+      const ev = card(game, event);
       moveCard(game, ev.id, ZONE.Deck, { inv: ev.owner });
       emit(
         game,

@@ -233,3 +233,14 @@ describe("what engine tests read (ADR-0029)", () => {
     expect(clean).toEqual([]);
   });
 });
+
+describe("who reads the loaded scripts (engine-script-registry)", () => {
+  it("only the registry reads db.scripts; the loader fills it, tests may set it up", () => {
+    const readers = [...walk("src"), ...walk("content"), ...walk("scripts")]
+      .filter((f) => /\.tsx?$/.test(f) && !/\.test\.tsx?$/.test(f))
+      .map((f) => f.split("\\").join("/"))
+      .filter((f) => f !== "src/engine/world/scripts.ts" && f !== "src/content/loader.ts")
+      .filter((f) => /\bdb\.scripts\b/.test(readFileSync(f, "utf8")));
+    expect(readers).toEqual([]);
+  });
+});

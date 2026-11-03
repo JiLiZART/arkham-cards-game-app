@@ -21,10 +21,12 @@ export type {
   CardScript,
   ChooseOpts,
   EffCtx,
+  HookRun,
   InstId,
   InvId,
   ScriptPrompt,
   ScriptRun,
+  ScriptHooks,
   Step,
 } from "./world/types";
 export { resolveWeakness, resolvesOnDraw } from "./rules/investigators";

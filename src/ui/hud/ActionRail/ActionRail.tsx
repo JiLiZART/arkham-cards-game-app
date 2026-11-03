@@ -20,6 +20,7 @@ import { moment } from "../SoundLayer";
 import { useCaption, useHeld } from "../StepCaption";
 import { cx } from "../../components/cx";
 import styles from "./ActionRail.module.css";
+import { scriptOf } from "../../../engine/world/scripts";
 
 export interface RailItem {
   /** translation key, or null to show the engine's label */
@@ -119,8 +120,9 @@ export function abilitySymbol(
     typeof v === "object" && v?.ability
       ? v.ability.ability.kind
       : code
-        ? [...(db.cards[code]?.abilities ?? []), ...(db.scripts[code]?.abilities ?? [])][ref!.index]
-            ?.kind
+        ? [...(db.cards[code]?.abilities ?? []), ...(scriptOf(db, code)?.abilities ?? [])][
+            ref!.index
+          ]?.kind
         : null;
   return kind === "action"
     ? "action"

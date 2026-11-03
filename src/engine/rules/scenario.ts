@@ -29,6 +29,8 @@ import { win } from "./cards";
 import { EVENT } from "../events/event";
 import { ZONE, type Zone } from "../world/constants";
 import { STEP } from "../steps/step";
+import { scriptOf } from "../world/scripts";
+import { fireGameEnd, fireScenarioHook, hasScenarioHook } from "./scripts";
 
 type Handler<T extends Step["t"]> = (game: GameContext, step: Extract<Step, { t: T }>) => void;
 
@@ -129,7 +131,7 @@ export const placeDoomHandler: Handler<"PlaceDoom"> = (game, step) => {
   if (!c) return;
   // the agenda may replace placing doom (Brethren of Ash)
   const agenda = currentAgenda(game) ? cardIf(game, currentAgenda(game)) : undefined;
-  if (agenda && game.db.scripts[agenda.code]?.wouldPlaceDoom?.(game, agenda.id, step.n)) return;
+  if (agenda && scriptOf(game.db, agenda.code)?.wouldPlaceDoom?.(game, agenda.id, step.n)) return;
   addCounter(game, c.id, "doom", step.n);
   emit(game, EVENT.Doom, `${step.n} doom placed on ${def(game, step.card).name}`, {
     card: step.card,
@@ -274,27 +276,25 @@ export function nextAct(game: GameContext, prev: InstId) {
 
 export const checkObjectivesHandler: Handler<"CheckObjectives"> = (game) => {
   if (currentPhase(game) === "ended") return;
-  const hook = game.db.scripts[scenarioIdOf(game)]?.hooks?.checkObjectives;
-  if (hook) hook(game, {});
+  fireScenarioHook(game, "checkObjectives");
 };
 
 export const resolutionHandler: Handler<"Resolution"> = (game, step) => {
   if (currentPhase(game) === "ended") return;
   endScenario(game, step.id);
   // what the scenario's script records about the game, before its cards are gone (Smoke and Mirrors)
-  game.db.scripts[scenarioIdOf(game)]?.hooks?.ended?.(game, { x: step.id === "none" ? 0 : 1 });
+  fireScenarioHook(game, "ended", step.id !== "none");
   // "when the game ends" effects (Cover Up, Hospital Debts; Dead Ends in the hand)
-  for (const c of allCards(game)) {
-    if (c.zone !== "threat" && c.zone !== "play" && c.zone !== "hand") continue;
-    game.db.scripts[c.code]?.hooks?.gameEnd?.(game, { source: c.id, you: c.controller });
-  }
+  fireGameEnd(
+    game,
+    allCards(game).filter((c) => c.zone === "threat" || c.zone === "play" || c.zone === "hand"),
+  );
   const r = game.db.scenarios[scenarioIdOf(game)].resolutions[step.id];
   emit(game, EVENT.Resolution, `Scenario ends: ${r?.title ?? step.id}`, { data: { id: step.id } });
 };
 
 export function allEliminated(game: GameContext) {
-  const hook = game.db.scripts[scenarioIdOf(game)]?.hooks?.allEliminated;
-  if (hook) hook(game, {});
+  if (hasScenarioHook(game, "allEliminated")) fireScenarioHook(game, "allEliminated");
   else push(game, { t: STEP.Resolution, id: "none" });
 }
 

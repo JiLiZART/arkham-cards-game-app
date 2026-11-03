@@ -338,13 +338,13 @@ export default {
         push(game, { t: STEP.AdvanceAct });
     },
     /** what the campaign log takes from this game (the guide asks the players; the game knows) */
-    ended(game: GameContext, ctx: EffCtx) {
+    ended(game: GameContext, won: boolean) {
       const log = (id: string, section = "campaign_notes") => {
         flags.logEntry.set(game, [section, id], true);
       };
       const harbinger = flags.harbinger.get(game);
       if (harbinger) log(`${NAMES[card(game, harbinger).code]}_harbinger`);
-      if (ctx.x) log("discovered_the_cults_whereabouts");
+      if (won) log("discovered_the_cults_whereabouts");
       else {
         // the Elite enemies in play or beneath a location, with the harbinger: one drawn at random
         const pool = [
@@ -361,10 +361,10 @@ export default {
       }
       if (flags.killedServant.get(game)) log("killed_the_servant_of_flame");
       if (flags.servantBeneath.get(game)) log("servant_of_flame_beneath_act", "hidden");
-      if (ctx.x && underAct(game).filter((id) => elite(game, id)).length >= 6)
+      if (won && underAct(game).filter((id) => elite(game, id)).length >= 6)
         log("scoured_arkham_for_answers");
       if (
-        ctx.x &&
+        won &&
         cardsIn(game, ZONE.Victory).filter(
           (c) => def(game, c.id).type === "enemy" && elite(game, c.id),
         ).length >= 6

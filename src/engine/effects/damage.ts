@@ -22,6 +22,7 @@ import type { EffectOf, EffectRun } from "./types";
 import { EVENT } from "../events/event";
 import { CHOICE } from "../world/constants";
 import { STEP } from "../steps/step";
+import { fireCardHook } from "../rules/scripts";
 
 /** horror a heal may remove from `target`, after the cards in play that restrict or redirect it (Rational Thought) */
 function horrorHealable(
@@ -30,15 +31,19 @@ function horrorHealable(
   target: InstId,
   n: number,
 ): number {
-  const req = { target, n };
+  let left = n;
   for (const c of allCards(game))
     if (c.zone === "threat" || c.zone === "play")
-      game.db.scripts[c.code]?.hooks?.healHorror?.(
-        game,
-        { source: c.id, you: c.controller, inv: healer ?? null },
-        req,
-      );
-  return req.n;
+      left =
+        fireCardHook(
+          game,
+          c.code,
+          "healHorror",
+          { source: c.id, you: c.controller, inv: healer ?? null },
+          target,
+          left,
+        ) ?? left;
+  return left;
 }
 
 /** "after one of your card effects heals horror" (Carolyn Fern, Hypnotic Therapy) */

@@ -5,9 +5,9 @@ import {
   cardIf,
   type CardScript,
   discard,
-  type EffCtx,
   type GameContext,
   type ScriptRun,
+  type HookRun,
 } from "../../../../src/engine/api";
 
 export default {
@@ -18,8 +18,8 @@ export default {
     },
   },
   hooks: {
-    gameEnd(game: GameContext, ctx: EffCtx) {
-      const c = card(game, ctx.source!);
+    gameEnd(game: GameContext, run: HookRun) {
+      const c = card(game, run.source);
       if (c.zone === "threat" && c.controller) addCounter(game, c.controller, "physicalTrauma", 1);
     },
   },

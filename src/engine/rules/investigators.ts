@@ -50,8 +50,9 @@ import type { InstId, InvId, Step } from "../world/types";
 import { win } from "./cards";
 import { preyCandidates } from "./enemies";
 import { EVENT } from "../events/event";
-import { ZONE, CHOICE, INV_STATUS, type Zone, isOneOf } from "../world/constants";
+import { ZONE, CHOICE, INV_STATUS, isOneOf } from "../world/constants";
 import { STEP } from "../steps/step";
+import { fireGameEnd } from "./scripts";
 
 type Handler<T extends Step["t"]> = (game: GameContext, step: Extract<Step, { t: T }>) => void;
 
@@ -374,14 +375,15 @@ export const defeatedHandler: Handler<"Defeated"> = (game, step) => {
   // engaged enemies stay at the location, unengaged
   for (const e of enemies(game)) if (e.engagedWith === step.inv) setEngaged(game, e.id, null);
   // their weaknesses' "when the game ends" abilities resolve now, before leaving the game (Grimoire, Elimination)
-  for (const c of allCards(game)) {
-    if (
-      c.owner === step.inv &&
-      isOneOf(c.zone, ZONE.Play, ZONE.Threat, ZONE.Hand) &&
-      def(game, c.id).subtype
-    )
-      game.db.scripts[c.code]?.hooks?.gameEnd?.(game, { source: c.id, you: c.controller });
-  }
+  fireGameEnd(
+    game,
+    allCards(game).filter(
+      (c) =>
+        c.owner === step.inv &&
+        isOneOf(c.zone, ZONE.Play, ZONE.Threat, ZONE.Hand) &&
+        def(game, c.id).subtype,
+    ),
+  );
   // cards leave play: owned cards out of the game, encounter cards to encounter discard
   for (const c of allCards(game)) {
     if (c.owner === step.inv && c.zone !== "removed" && c.zone !== "investigator")

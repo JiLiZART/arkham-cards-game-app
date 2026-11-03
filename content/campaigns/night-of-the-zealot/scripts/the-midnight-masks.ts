@@ -6,20 +6,20 @@ import {
   cardsIn,
   currentAct,
   def,
-  type EffCtx,
   findByCode,
   type GameContext,
   push,
   ZONE,
   STEP,
+  type InstId,
 } from "../../../../src/engine/api";
 
 export default {
   hooks: {
-    spawnRedirect(game: GameContext, ctx: EffCtx) {
-      if (card(game, ctx.enemy!).code !== "01116") return;
-      const house = findByCode(game, "01124", [ZONE.Location]);
-      if (house) ctx.location = house.id;
+    /** the Ghoul Priest spawns at Your House */
+    spawnRedirect(game: GameContext, enemy: InstId) {
+      if (card(game, enemy).code !== "01116") return null;
+      return findByCode(game, "01124", [ZONE.Location])?.id ?? null;
     },
     checkObjectives(game: GameContext) {
       if (cardIf(game, currentAct(game))?.code !== "01123") return;

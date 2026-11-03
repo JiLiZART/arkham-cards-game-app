@@ -2,16 +2,16 @@
 import {
   card,
   type CardScript,
-  type EffCtx,
   flags,
   type GameContext,
+  type HookRun,
 } from "../../../../src/engine/api";
 
 export default {
+  cancelsSearch: true,
   hooks: {
-    searched() {},
-    gameEnd(game: GameContext, ctx: EffCtx) {
-      const c = card(game, ctx.source!);
+    gameEnd(game: GameContext, run: HookRun) {
+      const c = card(game, run.source);
       if (c.zone !== "hand" || !c.owner) return;
       flags.xp.add(game, c.owner, -2);
     },

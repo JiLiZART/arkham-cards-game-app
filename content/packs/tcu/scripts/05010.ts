@@ -4,7 +4,6 @@ import {
   card,
   type CardScript,
   def,
-  type EffCtx,
   emit,
   flags,
   type GameContext,
@@ -13,6 +12,7 @@ import {
   shroud,
   EVENT,
   type ScriptRun,
+  type HookRun,
 } from "../../../../src/engine/api";
 
 export default {
@@ -46,8 +46,8 @@ export default {
     },
   },
   hooks: {
-    gameEnd(game: GameContext, ctx: EffCtx) {
-      const c = card(game, ctx.source!);
+    gameEnd(game: GameContext, run: HookRun) {
+      const c = card(game, run.source);
       if (c.zone === "threat" && c.controller) flags.xp.add(game, c.controller, -2);
     },
   },

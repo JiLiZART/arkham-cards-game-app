@@ -56,8 +56,9 @@ import { canMoveTo, checkEngagement, enterCost } from "./investigators";
 import { actClueCost } from "./scenario";
 import { startTest } from "./skillTest";
 import { EVENT } from "../events/event";
-import { ZONE, PHASE, CHOICE, type Zone, isOneOf } from "../world/constants";
+import { ZONE, PHASE, CHOICE, isOneOf } from "../world/constants";
 import { STEP } from "../steps/step";
+import { scriptOf } from "../world/scripts";
 
 type Handler<T extends Step["t"]> = (game: GameContext, step: Extract<Step, { t: T }>) => void;
 
@@ -196,7 +197,7 @@ function extraCost(game: GameContext, i: InvId, designator: string, action?: Tur
     ...cardsIn(game, ZONE.Location),
     ...cardsIn(game, ZONE.Attached),
   ]) {
-    const fn = game.db.scripts[c.code]?.extraActionCost;
+    const fn = scriptOf(game.db, c.code)?.extraActionCost;
     if (fn) n += fn(game, c.id, i, designator, action);
   }
   return n;

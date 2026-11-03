@@ -4,11 +4,11 @@ import {
   cancelEvent,
   card,
   type CardScript,
-  type EffCtx,
   emit,
   type GameContext,
   EVENT,
   type ScriptRun,
+  type HookRun,
 } from "../../../../src/engine/api";
 
 export default {
@@ -34,8 +34,8 @@ export default {
     },
   },
   hooks: {
-    gameEnd(game: GameContext, ctx: EffCtx) {
-      const c = card(game, ctx.source!);
+    gameEnd(game: GameContext, run: HookRun) {
+      const c = card(game, run.source);
       if (c.clues > 0 && c.controller) addCounter(game, c.controller, "mentalTrauma", 1);
     },
   },

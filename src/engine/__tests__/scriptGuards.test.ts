@@ -8,12 +8,12 @@ import { loadPack } from "../../content";
 import { findByCode } from "../queries";
 import { inv, type GameContext } from "../context";
 import { moveCard } from "../movement";
-import { db, giveCard, gOf, locId, putEnemy, skipMulligans, start } from "../kits/testkit";
+import { giveCard, gOf, locId, putEnemy, skipMulligans, start } from "../kits/testkit";
 import type { EffCtx, SkillTestState, Step } from "../world/types";
 import { cardRecIn, invStateIn } from "../world/store";
 import { ZONE, PHASE } from "../world/constants";
 import { STEP } from "../steps/step";
-import { runScript } from "../rules/scripts";
+import { fireGameEnd, runScript } from "../rules/scripts";
 
 const R = "01001";
 const D = "01002";
@@ -91,7 +91,7 @@ describe("In Harm's Way (12003)", () => {
     const c = giveCard(game, R, "01097");
     moveCard(game, c, ZONE.Threat);
     cardRecIn(game.s, c).controller = R;
-    db.scripts["12003"].hooks!.gameEnd!(game, { source: c });
+    fireGameEnd(game, [{ id: c, code: "12003", controller: R }]);
     expect(inv(game, R).physicalTrauma).toBe(1);
     cardRecIn(game.s, c).damage = 3;
     call(game, "12003", "worn", { source: c });

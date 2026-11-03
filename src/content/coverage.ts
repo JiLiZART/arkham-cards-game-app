@@ -2,6 +2,7 @@ import type { ContentDb } from "../engine/world/types";
 import { implemented, tokensReal } from "./implemented";
 import type { CardCount, ContentCoverage } from "./schema";
 import type { ContentError } from "./loader";
+import { hasScript } from "../engine/world/scripts";
 
 /** how many of some cards work; `works` decides a card (a scenario's own reference card is judged by that scenario's tokens) */
 const count = (
@@ -56,7 +57,7 @@ export function scenarioCoverage(db: ContentDb, id: string): ContentCoverage["sc
   const cards = count(db, usedBy(db, s), (code) =>
     code === s.card ? tokens : implemented(db, code),
   );
-  const scripted = !!db.scripts[id];
+  const scripted = hasScript(db, id);
   return {
     campaign: Object.values(db.campaigns).find((c) => c.scenarios.includes(id))?.id ?? "",
     cards,
@@ -74,7 +75,7 @@ export function campaignCoverage(db: ContentDb, id: string): ContentCoverage["ca
     const mine = scenarios.filter((s) => s.card === code);
     return mine.length ? mine.every((s) => tokensReal(db, s.id)) : implemented(db, code);
   });
-  const unscripted = scenarios.filter((s) => !db.scripts[s.id]).map((s) => s.id);
+  const unscripted = scenarios.filter((s) => !hasScript(db, s.id)).map((s) => s.id);
   return {
     cards,
     unscripted,

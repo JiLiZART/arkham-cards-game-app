@@ -47,6 +47,8 @@ import type { EffCtx, EventData, InstId, InvId, Step } from "../world/types";
 import { EVENT } from "../events/event";
 import { ZONE, CHOICE, type Zone } from "../world/constants";
 import { STEP } from "../steps/step";
+import { scriptOf } from "../world/scripts";
+import { fireCardHook } from "./scripts";
 
 type Handler<T extends Step["t"]> = (game: GameContext, step: Extract<Step, { t: T }>) => void;
 
@@ -276,7 +278,7 @@ export function ctxFor(data: EventData, source: InstId, you: InvId | null): EffC
 /** the cards an investigator may play as if from hand: the hand, plus e.g. the top event of the discard pile (Wendy's Amulet) */
 export function playable(game: GameContext, i: InvId): InstId[] {
   const extra = [...controlled(game, i), card(game, inv(game, i).cardId)].flatMap(
-    (c) => game.db.scripts[c.code]?.extraPlayable?.(game, c.id, i) ?? [],
+    (c) => scriptOf(game.db, c.code)?.extraPlayable?.(game, c.id, i) ?? [],
   );
   return [...inv(game, i).hand, ...extra];
 }
@@ -657,7 +659,7 @@ export function finishEvent(game: GameContext, ctx: EffCtx) {
   if (c?.zone !== "resolving") return;
   // e.g. Wendy's Amulet puts events on the bottom of the deck instead
   for (const a of controlled(game, ctx.you!))
-    game.db.scripts[a.code]?.hooks?.eventFinished?.(game, { ...ctx, card: c.id });
+    fireCardHook(game, a.code, "eventFinished", { source: a.id, you: ctx.you, card: c.id }, c.id);
   if (c.zone === "resolving") discard(game, c.id);
 }
 
