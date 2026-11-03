@@ -1,26 +1,27 @@
 import { describe, expect, it } from "vitest";
 import { autoPlay, botChoice } from "../bot";
 import { dispatch, type Result } from "../index";
-import { run } from "../steps/dispatch";
+import { inject } from "../kits/driver";
+import type { ChaosToken } from "../../content/schema";
 import { db, pick, skipMulligans, start } from "../kits/testkit";
-import type { GameContext } from "../context";
 import type { GameState } from "../world/types";
 import { invStateIn, pileRecIn } from "../world/store";
 import { PHASE, PILE } from "../world/constants";
 import { STEP } from "../steps/step";
 
 const ROLAND = "01001";
+const ZERO: ChaosToken[] = ["0"];
 const DAISY = "01002";
 
 /** a game that asks for tapped decks, past the mulligans (and the choice of who plays first) */
 const tapped = (invs = [ROLAND, DAISY], extra: object = { tapDecks: true }) => {
-  let r = skipMulligans(start("the-gathering", invs, 1, { chaosBag: ["0"] as never, ...extra }));
+  let r = skipMulligans(start("the-gathering", invs, 1, { chaosBag: ZERO, ...extra }));
   if (r.state.pending?.options.some((o) => o.label === "Roland Banks")) r = pick(r, "Roland Banks");
   return r;
 };
 
-/** the bot answers until `stop` holds (or something is wrong) */
-function until(r: Result, stop: (s: GameState) => boolean, max = 600): Result {
+/** the bot (not the driver's neutral answer) plays until `stop` holds: a replay check needs real play */
+function botUntil(r: Result, stop: (s: GameState) => boolean, max = 600): Result {
   for (let k = 0; k < max && r.state.pending && !stop(r.state); k++) {
     const p = r.state.pending;
     const next = dispatch(db, r.state, { type: "choose", inv: p.inv, option: botChoice(db, r) });
@@ -41,7 +42,7 @@ describe("tapped draws", () => {
   });
 
   it("the upkeep draw waits for the drawing investigator, then draws one card", () => {
-    const r = until(tapped([ROLAND]), draws("player"));
+    const r = botUntil(tapped([ROLAND]), draws("player"));
     const p = r.state.pending!;
     expect(p).toMatchObject({
       kind: "draw",
@@ -58,20 +59,20 @@ describe("tapped draws", () => {
   });
 
   it("the cards leave the deck only when the tap comes", () => {
-    const r = until(tapped([ROLAND]), draws("player"));
+    const r = botUntil(tapped([ROLAND]), draws("player"));
     const s = r.state;
     expect(invStateIn(s, ROLAND).deck.length).toBeGreaterThan(0);
     expect(s.pending!.step.t).toBe("Draw");
   });
 
   it("the mythos draws come one investigator at a time, each tapping the encounter deck in turn", () => {
-    let r = until(tapped(), draws("encounter"));
+    let r = botUntil(tapped(), draws("encounter"));
     const first = r.state.pending!.inv;
     expect([ROLAND, DAISY]).toContain(first);
     const deck = pileRecIn(r.state, PILE.EncounterDeck).length;
     r = pick(r, "draw");
     expect(pileRecIn(r.state, PILE.EncounterDeck).length).toBeLessThan(deck);
-    r = until(r, draws("encounter"));
+    r = botUntil(r, draws("encounter"));
     expect(r.state.pending).toMatchObject({
       kind: "draw",
       inv: first === ROLAND ? DAISY : ROLAND,
@@ -80,13 +81,7 @@ describe("tapped draws", () => {
   });
 
   it("a draw of two cards from one effect is one tap", () => {
-    const { state } = tapped();
-    const s = structuredClone(state);
-    const game: GameContext = { s, db, events: [] };
-    const step = s.pending!.step;
-    s.pending = null;
-    s.queue.push({ ...step, choice: undefined }, { t: STEP.Draw, inv: DAISY, n: 2 });
-    run(game);
+    const s = inject(tapped(), () => {}, { t: STEP.Draw, inv: DAISY, n: 2 }).state;
     expect(s.pending).toMatchObject({
       kind: "draw",
       inv: DAISY,
@@ -123,20 +118,19 @@ describe("tapped draws", () => {
   });
 
   it("replaying the same choices gives the same game", () => {
-    const run1 = until(tapped(), (s) => s.round >= 3, 900);
-    const run2 = until(tapped(), (s) => s.round >= 3, 900);
+    const run1 = botUntil(tapped(), (s) => s.round >= 3, 900);
+    const run2 = botUntil(tapped(), (s) => s.round >= 3, 900);
     expect(run2.state).toEqual(run1.state);
   });
 
   it("a wait after the scenario has ended is skipped", () => {
-    const { state } = tapped([ROLAND]);
-    const s = structuredClone(state);
-    s.phase = PHASE.Ended;
-    const game: GameContext = { s, db, events: [] };
-    const step = s.pending!.step;
-    s.pending = null;
-    s.queue.push({ ...step, choice: undefined }, { t: STEP.Draw, inv: ROLAND, n: 1 });
-    run(game);
-    expect((s as GameState).pending?.kind).not.toBe("draw");
+    const s = inject(
+      tapped([ROLAND]),
+      (game) => {
+        game.s.phase = PHASE.Ended;
+      },
+      { t: STEP.Draw, inv: ROLAND, n: 1 },
+    ).state;
+    expect(s.pending?.kind).not.toBe("draw");
   });
 });

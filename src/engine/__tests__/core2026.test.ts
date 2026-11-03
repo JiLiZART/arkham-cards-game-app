@@ -1,24 +1,20 @@
 import { beforeAll, describe, expect, it } from "vitest";
+import type { ChaosToken } from "../../content/schema";
 import { loadPack } from "../../content";
 import { createCard, moveCard } from "../movement";
 import { inv, type GameContext } from "../context";
 import type { Result } from "../index";
+import { ACOLYTE, HALLWAY, MINION, PRIEST, ROLAND, STUDY, enemyIn, zoneOf } from "../kits/natkit";
 import {
-  ACOLYTE,
-  HALLWAY,
-  MINION,
-  PRIEST,
-  ROLAND,
-  STUDY,
   addLocation,
   enemyHere,
-  enemyIn,
-  natGame,
+  game,
   hand,
   inPlay,
+  injectStep,
+  offered,
   toTurn,
-  zoneOf,
-} from "../kits/natkit";
+} from "../kits/driver";
 import { gOf, options, pick } from "../kits/testkit";
 import { allCardRecsIn, cardRecIn, invStateIn } from "../world/store";
 import { ZONE } from "../world/constants";
@@ -31,9 +27,8 @@ beforeAll(async () => {
 const R = ROLAND;
 const DANIELA = "12001";
 const TRISH = "12007";
-const roland = (prep: (game: GameContext) => void = () => {}, bag?: string[]) =>
-  natGame([R], prep, bag);
-const offered = (name: RegExp) => (x: Result) => options(x).some((o) => name.test(o));
+const roland = (prep: (game: GameContext) => void = () => {}, bag: ChaosToken[] = ["0"]) =>
+  game({ investigators: [R], prep: prep, bag: bag });
 const lastResult = (r: Result) =>
   r.state.log.filter((e) => e.type === "testResult").at(-1)!.data as {
     value: number;
@@ -232,19 +227,23 @@ describe("allies and reactions", () => {
   });
 
   it("Bodyguard takes another investigator's damage and, defeated, deals 1 damage", () => {
-    let r = natGame([R, "01002"], (game) => {
-      inPlay(game, R, "12016");
-      invStateIn(game.s, "01002").location = inv(game, R).location;
-      enemyHere(game, R, PRIEST, false);
-      cardRecIn(game.s, enemyIn({ state: game.s, events: [] }, PRIEST)!.id).exhausted = true;
-      game.s.queue.push({
-        t: STEP.AssignDamage,
-        inv: "01002",
-        damage: 2,
-        horror: 0,
-        direct: false,
-        source: null,
-      });
+    let r = game({
+      investigators: [R, "01002"],
+      prep: (game) => {
+        inPlay(game, R, "12016");
+        invStateIn(game.s, "01002").location = inv(game, R).location;
+        enemyHere(game, R, PRIEST, false);
+        cardRecIn(game.s, enemyIn({ state: game.s, events: [] }, PRIEST)!.id).exhausted = true;
+        injectStep(game, {
+          t: STEP.AssignDamage,
+          inv: "01002",
+          damage: 2,
+          horror: 0,
+          direct: false,
+          source: null,
+        });
+      },
+      bag: ["0"],
     });
     r = pick(r, "End turn");
     for (let k = 0; k < 2; k++) r = pick(r, /Bodyguard/);
@@ -272,7 +271,7 @@ describe("allies and reactions", () => {
     let r = roland((game) => {
       hand(game, R, "12036");
       invStateIn(game.s, R).resources = 5;
-      game.s.queue.push({ t: STEP.Spawn, enemy: createCard(game, ACOLYTE, ZONE.Limbo), inv: R });
+      injectStep(game, { t: STEP.Spawn, enemy: createCard(game, ACOLYTE, ZONE.Limbo), inv: R });
     });
     const n = invStateIn(r.state, R).hand.length;
     r = toTurn(pick(r, "End turn"), offered(/^Gather Intel/));
@@ -283,7 +282,11 @@ describe("allies and reactions", () => {
 
 describe("investigators", () => {
   it("Daniela Reyes fights back after an enemy attacks", () => {
-    let r = natGame([DANIELA], (game) => enemyHere(game, DANIELA, PRIEST));
+    let r = game({
+      investigators: [DANIELA],
+      prep: (game) => enemyHere(game, DANIELA, PRIEST),
+      bag: ["0"],
+    });
     r = toTurn(pick(r, /^Draw 1 card/), offered(/^Daniela/));
     r = pick(r, /^Daniela/);
     r = toTurn(r);
@@ -291,7 +294,11 @@ describe("investigators", () => {
   });
 
   it("Trish Scarborough has an extra action for evading", () => {
-    const r = natGame([TRISH], (game) => enemyHere(game, TRISH, MINION));
+    const r = game({
+      investigators: [TRISH],
+      prep: (game) => enemyHere(game, TRISH, MINION),
+      bag: ["0"],
+    });
     expect(invStateIn(r.state, TRISH).restrictedActions).toEqual([
       { designator: "evade", left: 1 },
     ]);

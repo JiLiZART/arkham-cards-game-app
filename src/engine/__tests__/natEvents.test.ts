@@ -12,16 +12,23 @@ import {
   PRIEST,
   ROLAND,
   STUDY,
-  addLocation,
   attacks,
-  enemyHere,
   enemyIn,
-  natGame,
+  nathaniel,
+} from "../kits/natkit";
+import {
+  addLocation,
+  enemyHere,
+  game,
   hand,
   inPlay,
-  nathaniel,
+  offered,
   toTurn,
-} from "../kits/natkit";
+  until,
+  untilWindow,
+  windowData,
+  windowOf,
+} from "../kits/driver";
 import { gOf, locId, options, pick, putEnemy } from "../kits/testkit";
 import { allCardRecsIn, cardRecIn, invStateIn } from "../world/store";
 
@@ -32,8 +39,6 @@ beforeAll(async () => {
 const N = NATHANIEL;
 const res = (r: Result, i = N) => invStateIn(r.state, i).resources;
 /** the Nathaniel reaction window is passed, everything else neutral, until it is a turn again */
-const finish = (r: Result) => toTurn(r);
-const offered = (name: RegExp) => (x: Result) => options(x).some((o) => name.test(o));
 
 describe("Clean Them Out", () => {
   it("gains 2 resources as the action begins, then fights, with no attack of opportunity", () => {
@@ -60,15 +65,10 @@ describe("Monster Slayer", () => {
       enemyHere(game, N, PRIEST);
     });
     r = pick(r, /^Play Monster Slayer/);
-    r = toTurn(
-      r,
-      (x) =>
-        x.state.pending?.step.t === "Window" &&
-        (x.state.pending.step as { trigger?: string }).trigger === "dealDamage",
-    );
-    expect((r.state.pending?.step as { data: { amount: number } }).data.amount).toBe(2); // 1 + 1
+    r = untilWindow(r, "dealDamage");
+    expect(windowData(r)!.amount).toBe(2); // 1 + 1
     r = pick(r, /^Nathaniel Cho/);
-    r = finish(r);
+    r = toTurn(r);
     expect(enemyIn(r, PRIEST)!.damage).toBe(3);
   });
 });
@@ -84,13 +84,7 @@ describe("Glory", () => {
       x.state.log.filter((e) => e.type === "draw" || e.type === "weakness").length;
     const before = draws(r);
     r = pick(r, /^Fight/);
-    r = toTurn(
-      r,
-      (x) =>
-        x.state.pending?.step.t === "Window" &&
-        (x.state.pending.step as { trigger?: string }).trigger === "enemyDefeated" &&
-        options(x).some((o) => /Glory/.test(o)),
-    );
+    r = until(r, (x) => windowOf(x) === "enemyDefeated" && offered(/Glory/)(x));
     r = pick(r, /^Glory/);
     expect(draws(r) - before).toBe(2);
   });
@@ -109,7 +103,7 @@ describe("Counterpunch", () => {
     expect(attacks(r)).toBe(0);
     r = toTurn(r, offered(/^Counterpunch/));
     r = pick(r, /^Counterpunch/);
-    r = finish(r);
+    r = toTurn(r);
     expect(enemyIn(r, MINION)!.damage).toBe(1);
   });
   it("(2) fights the attacker before its attack with +2 combat and +1 damage, defeating it", () => {
@@ -119,7 +113,7 @@ describe("Counterpunch", () => {
     });
     r = endTurnIntoAttack(r, /^Counterpunch/);
     r = pick(r, /^Counterpunch/);
-    r = finish(r);
+    r = toTurn(r);
     expect(enemyIn(r, MINION)).toBeUndefined();
     expect(attacks(r)).toBe(0);
   });
@@ -180,24 +174,28 @@ describe("One-Two Punch", () => {
   it("(0) may fight again at +2 combat for +1 damage", () => {
     let r = punch("60117");
     expect(options(r)).toEqual(["Fight that enemy again", "Stop"]);
-    r = finish(pick(r, /^Fight that enemy again/));
+    r = toTurn(pick(r, /^Fight that enemy again/));
     expect(enemyIn(r, PRIEST)!.damage).toBe(1 + 2);
   });
   it("(0) may stop after the first attack", () => {
-    const r = finish(pick(punch("60117"), "Stop"));
+    const r = toTurn(pick(punch("60117"), "Stop"));
     expect(enemyIn(r, PRIEST)!.damage).toBe(1);
   });
   it("(5) succeeds automatically for +1 damage, then again for +2", () => {
-    const r = finish(pick(punch("60132"), /^Fight that enemy again/));
+    const r = toTurn(pick(punch("60132"), /^Fight that enemy again/));
     expect(enemyIn(r, PRIEST)).toBeUndefined(); // 2 + 3 = the Priest's 5 health
   });
 });
 
 describe("Stand Together", () => {
   it("gives 2 resources to the player and to the other investigator at the location, nobody else", () => {
-    let r = natGame([N, DAISY, ROLAND], (game) => {
-      hand(game, N, "60118");
-      invStateIn(game.s, ROLAND).location = null; // elsewhere
+    let r = game({
+      investigators: [N, DAISY, ROLAND],
+      prep: (game) => {
+        hand(game, N, "60118");
+        invStateIn(game.s, ROLAND).location = null; // elsewhere
+      },
+      bag: ["0"],
     });
     const before = [N, DAISY, ROLAND].map((i) => res(r, i));
     r = pick(r, /^Play Stand Together/);
@@ -264,7 +262,7 @@ describe("Mano a Mano", () => {
       hand(game, N, "60125");
       enemyHere(game, N);
     });
-    r = finish(pick(r, /^Play Mano a Mano/));
+    r = toTurn(pick(r, /^Play Mano a Mano/));
     expect(attacks(r)).toBe(0);
     expect(enemyIn(r, MINION)).toBeUndefined();
   });
@@ -280,13 +278,17 @@ describe("Mano a Mano", () => {
 
 describe("Taunt (3)", () => {
   it("engages enemies one at a time, each taking 1 damage and drawing a card", () => {
-    let r = natGame([N, DAISY], (game) => {
-      hand(game, N, "60130");
-      const a = enemyHere(game, DAISY);
-      const b = enemyHere(game, DAISY);
-      void a;
-      void b;
-      invStateIn(game.s, N).resources = 5;
+    let r = game({
+      investigators: [N, DAISY],
+      prep: (game) => {
+        hand(game, N, "60130");
+        const a = enemyHere(game, DAISY);
+        const b = enemyHere(game, DAISY);
+        void a;
+        void b;
+        invStateIn(game.s, N).resources = 5;
+      },
+      bag: ["0"],
     });
     const draws = (x: Result) =>
       x.state.log.filter((e) => e.type === "draw" || e.type === "weakness").length;
@@ -302,10 +304,14 @@ describe("Taunt (3)", () => {
     expect(draws(r) - before).toBe(2);
   });
   it("is offered in the enemy phase's player window, and the enemies then attack its player", () => {
-    let r = natGame([N, DAISY], (game) => {
-      hand(game, N, "60130");
-      enemyHere(game, DAISY);
-      enemyHere(game, DAISY);
+    let r = game({
+      investigators: [N, DAISY],
+      prep: (game) => {
+        hand(game, N, "60130");
+        enemyHere(game, DAISY);
+        enemyHere(game, DAISY);
+      },
+      bag: ["0"],
     });
     r = toTurn(pick(r, "End turn"));
     r = toTurn(
@@ -319,7 +325,7 @@ describe("Taunt (3)", () => {
     r = pick(r, /^Ghoul Minion/);
     r = toTurn(r, offered(/^Ghoul Minion|^Done/));
     r = pick(r, /^Ghoul Minion/);
-    r = finish(r);
+    r = toTurn(r);
     const hits = r.state.log.filter((e) => e.type === "attack");
     expect(hits.length).toBe(2);
     expect(hits.every((e) => e.inv === N)).toBe(true);
@@ -334,7 +340,7 @@ describe("Dynamite Blast (3)", () => {
     });
     r = pick(r, /^Play Dynamite Blast.*\(fast\)/);
     r = pick(r, /Study/);
-    r = finish(r);
+    r = toTurn(r);
     expect(enemyIn(r, MINION)).toBeUndefined();
     expect(invStateIn(r.state, N).damage).toBe(3);
   });

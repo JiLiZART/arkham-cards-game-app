@@ -1,18 +1,9 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import { loadPacksFor } from "../../content";
-import { card, inv, push } from "../context";
+import { card, inv } from "../context";
+import { game, inject, offered, until } from "../kits/driver";
 import { createCard, moveCard } from "../movement";
-import { run } from "../steps/dispatch";
-import {
-  DECK_BY_INV,
-  deckCodes,
-  gOf,
-  mutate,
-  options,
-  pick,
-  skipMulligans,
-  start,
-} from "../kits/testkit";
+import { DECK_BY_INV, deckCodes, gOf, options, pick, skipMulligans, start } from "../kits/testkit";
 import type { Result } from "../index";
 import { cardRecIn, invStateIn } from "../world/store";
 import { ZONE } from "../world/constants";
@@ -29,45 +20,33 @@ beforeAll(async () => {
 
 /** Nathaniel with Flesh Ward in play (4 charges unless `uses`), a Ghoul Minion engaged, his turn ended: the attack is next */
 function attacked(opts: { uses?: number; exhausted?: boolean } = {}): { r: Result; ward: string } {
-  let r = skipMulligans(start("the-gathering", [NATHANIEL], 1, { chaosBag: ["0"] as never }));
-  while (r.state.pending && r.state.pending.kind !== "turn")
-    r = pick(
-      r,
-      r.state.pending.options.some((o) => o.id === "pass")
-        ? "pass"
-        : r.state.pending.options[0].label.startsWith("Done")
-          ? /^Done/
-          : /./,
-    );
   let ward = "";
-  r = mutate(r, (game) => {
-    ward = createCard(game, WARD, ZONE.Limbo, NATHANIEL);
-    moveCard(game, ward, ZONE.Play);
-    cardRecIn(game.s, ward).uses = opts.uses ?? 4;
-    cardRecIn(game.s, ward).exhausted = !!opts.exhausted;
-    const e = createCard(game, MINION, ZONE.Limbo);
-    moveCard(game, e, ZONE.Enemy, { location: inv(game, NATHANIEL).location });
-    cardRecIn(game.s, e).engagedWith = NATHANIEL;
+  let r = game({
+    investigators: [NATHANIEL],
+    bag: ["0"],
+    prep: (game) => {
+      ward = createCard(game, WARD, ZONE.Limbo, NATHANIEL);
+      moveCard(game, ward, ZONE.Play);
+      cardRecIn(game.s, ward).uses = opts.uses ?? 4;
+      cardRecIn(game.s, ward).exhausted = !!opts.exhausted;
+      const e = createCard(game, MINION, ZONE.Limbo);
+      moveCard(game, e, ZONE.Enemy, { location: inv(game, NATHANIEL).location });
+      cardRecIn(game.s, e).engagedWith = NATHANIEL;
+    },
   });
-  r = pick(r, "End turn");
-  for (let k = 0; k < 40 && r.state.pending; k++) {
-    const p = r.state.pending;
-    if (
-      p.kind === "turn" ||
-      p.kind === "assign" ||
-      p.options.some((o) => /Flesh Ward/.test(o.label) && p.kind === "reaction")
-    )
-      break;
-    if (r.state.log.some((e) => e.type === "attack")) break;
-    r = pick(
-      r,
-      p.options.some((o) => o.id === "pass")
-        ? "pass"
-        : p.options[0].label.startsWith("Done")
-          ? /^Done/
-          : /./,
-    );
-  }
+  r = until(
+    pick(r, "End turn"),
+    (x) => {
+      const p = x.state.pending!;
+      return (
+        p.kind === "turn" ||
+        p.kind === "assign" ||
+        (p.kind === "reaction" && offered(/Flesh Ward/)(x)) ||
+        x.state.log.some((e) => e.type === "attack")
+      );
+    },
+    40,
+  );
   return { r, ward };
 }
 const finish = (r: Result): Result => {
@@ -125,24 +104,13 @@ describe("Flesh Ward", () => {
   });
 
   it("is not offered for damage that is not from an attack", () => {
-    let r = skipMulligans(start("the-gathering", [NATHANIEL], 1, { chaosBag: ["0"] as never }));
-    const game = gOf(r);
-    game.s = structuredClone(r.state);
-    moveCard(game, createCard(game, WARD, ZONE.Limbo, NATHANIEL), ZONE.Play);
-    game.s.pending = null;
-    game.s.queue.length = 0;
-    push(game, {
-      t: STEP.AssignDamage,
-      inv: NATHANIEL,
-      damage: 0,
-      horror: 1,
-      direct: false,
-      source: null,
-    });
-    run(game);
+    let r = inject(
+      skipMulligans(start("the-gathering", [NATHANIEL], 1, { chaosBag: ["0"] })),
+      (game) => void moveCard(game, createCard(game, WARD, ZONE.Limbo, NATHANIEL), ZONE.Play),
+      { t: STEP.AssignDamage, inv: NATHANIEL, damage: 0, horror: 1, direct: false, source: null },
+    );
     // straight to who takes the horror: no window for the ward
-    expect((game.s.pending as { kind?: string } | null)?.kind).toBe("assign");
-    r = { state: game.s, events: [] };
+    expect(r.state.pending?.kind).toBe("assign");
     r = pick(r, new RegExp(`to ${inv(gOf(r), NATHANIEL).name}`));
     expect(invStateIn(r.state, NATHANIEL).horror).toBe(1);
   });

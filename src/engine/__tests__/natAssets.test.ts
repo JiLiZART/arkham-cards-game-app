@@ -1,4 +1,5 @@
 import { beforeAll, describe, expect, it } from "vitest";
+import type { ChaosToken } from "../../content/schema";
 import { loadPack } from "../../content";
 import { card, type GameContext } from "../context";
 import { createCard, moveCard } from "../movement";
@@ -13,15 +14,19 @@ import {
   NATHANIEL,
   PRIEST,
   STUDY,
+  enemyIn,
+  nathaniel,
+} from "../kits/natkit";
+import {
   addLocation,
   enemyHere,
-  enemyIn,
-  natGame,
+  game,
   hand,
   inPlay,
-  nathaniel,
+  offered,
   toTurn,
-} from "../kits/natkit";
+  untilWindow,
+} from "../kits/driver";
 import { gOf, locId, options, pick } from "../kits/testkit";
 import { allCardRecsIn, cardRecIn, invStateIn } from "../world/store";
 import { ZONE } from "../world/constants";
@@ -31,11 +36,6 @@ beforeAll(async () => {
 });
 
 const N = NATHANIEL;
-const offered = (name: RegExp) => (x: Result) => options(x).some((o) => name.test(o));
-const finish = (r: Result) => toTurn(r);
-const win = (trigger: string) => (x: Result) =>
-  x.state.pending?.step.t === "Window" &&
-  (x.state.pending.step as { trigger?: string }).trigger === trigger;
 /** the combat the last fight test was made with */
 const lastValue = (r: Result) =>
   (r.state.log.filter((e) => e.type === "testResult").at(-1)!.data as { value: number }).value;
@@ -92,7 +92,7 @@ describe("Grete Wagner", () => {
     });
     r = toTurn(pick(r, /^Fight/), offered(/^Grete Wagner/));
     expect(lastValue(r)).toBe(6);
-    r = finish(pick(r, /^Grete Wagner/));
+    r = toTurn(pick(r, /^Grete Wagner/));
     expect(invStateIn(r.state, N).clues).toBe(1);
     expect(cardOf(r, "60107").damage).toBe(1);
     expect(cardOf(r, "60107").exhausted).toBe(true);
@@ -103,7 +103,7 @@ describe("Grete Wagner", () => {
       enemyHere(game, N, ACOLYTE);
     });
     r = toTurn(pick(r, /^Fight/), offered(/^Grete Wagner/));
-    r = finish(pick(r, /^Grete Wagner/));
+    r = toTurn(pick(r, /^Grete Wagner/));
     expect(invStateIn(r.state, N).clues).toBe(1);
     expect(inZone(r, "60107", "discard")).toBe(true);
   });
@@ -128,11 +128,11 @@ describe("Relentless", () => {
       hand(game, N, "60116");
       enemyHere(game, N, ACOLYTE);
     });
-    r = toTurn(pick(r, /^Play Monster Slayer/), win("dealDamage"));
+    r = untilWindow(pick(r, /^Play Monster Slayer/), "dealDamage");
     r = pick(r, /^Nathaniel Cho/); // 1 + 1 + 1 = 3 on 1 health
-    r = toTurn(r, win("excessDamage"));
+    r = untilWindow(r, "excessDamage");
     r = pick(r, /^Relentless/);
-    r = finish(r);
+    r = toTurn(r);
     expect(cardOf(r, "60109").damage).toBe(2);
     const before = invStateIn(r.state, N).resources;
     r = pick(r, /^Relentless: discard/);
@@ -144,9 +144,13 @@ describe("Relentless", () => {
 describe("Safeguard", () => {
   const move = (r: Result, to: RegExp) => pick(r, to);
   it("follows another investigator moving from its location", () => {
-    let r = natGame([N, DAISY], (game) => {
-      inPlay(game, N, "60110");
-      addLocation(game, HALLWAY, [[STUDY, HALLWAY]]);
+    let r = game({
+      investigators: [N, DAISY],
+      prep: (game) => {
+        inPlay(game, N, "60110");
+        addLocation(game, HALLWAY, [[STUDY, HALLWAY]]);
+      },
+      bag: ["0"],
     });
     r = toTurn(
       pick(r, "End turn"),
@@ -158,11 +162,15 @@ describe("Safeguard", () => {
     expect(cardOf(r, "60110").exhausted).toBe(true);
   });
   it("is not offered for a move from another location", () => {
-    let r = natGame([N, DAISY], (game) => {
-      inPlay(game, N, "60110");
-      const h = addLocation(game, HALLWAY, [[STUDY, HALLWAY]]);
-      addLocation(game, ATTIC, [[HALLWAY, ATTIC]]);
-      invStateIn(game.s, DAISY).location = h;
+    let r = game({
+      investigators: [N, DAISY],
+      prep: (game) => {
+        inPlay(game, N, "60110");
+        const h = addLocation(game, HALLWAY, [[STUDY, HALLWAY]]);
+        addLocation(game, ATTIC, [[HALLWAY, ATTIC]]);
+        invStateIn(game.s, DAISY).location = h;
+      },
+      bag: ["0"],
     });
     r = toTurn(
       pick(r, "End turn"),
@@ -199,7 +207,7 @@ describe("Physical Training (4)", () => {
     r = pick(r, /^Physical Training: \+1 combat/);
     expect(invStateIn(r.state, N).resources).toBe(4);
     expect(inZone(r, "60131", "play")).toBe(true);
-    r = finish(pick(r, /^Done|^done/));
+    r = toTurn(pick(r, /^Done|^done/));
     r = toTurn(pick(r, "End turn"), (x) => x.state.round === 2 && x.state.pending?.kind === "turn");
     expect(cardOf(r, "60131").uses).toBe(2);
     expect(inZone(r, "60131", "play")).toBe(true);
@@ -225,14 +233,14 @@ describe("Randall Cho", () => {
     r = pick(toTurn(pick(r, /^Play Randall Cho/), offered(/^Randall Cho/)), /^Randall Cho/);
     r = pick(r, /^Search/);
     r = pick(r, /^Boxing Gloves/);
-    r = finish(r);
+    r = toTurn(r);
     expect(inZone(r, "60105", "play")).toBe(true);
     expect(invStateIn(r.state, N).resources).toBe(5 - 2 - 3);
   });
 });
 
 describe("Overpower (2)", () => {
-  const fightWith = (token: string, enemy: string) => {
+  const fightWith = (token: ChaosToken, enemy: string) => {
     let r = nathaniel(
       (game) => {
         hand(game, N, "60126");
@@ -245,7 +253,7 @@ describe("Overpower (2)", () => {
       x.state.log.filter((e) => e.type === "draw" || e.type === "weakness").length;
     const before = draws(r);
     r = pick(r, /^Fight/);
-    r = finish(
+    r = toTurn(
       pick(r, /^Commit Overpower/).state.pending?.kind === "commit"
         ? pick(pick(r, /^Commit Overpower/), "done")
         : pick(r, /^Commit Overpower/),
@@ -268,13 +276,13 @@ describe("Nathaniel Cho", () => {
       inPlay(game, N, "60105");
       enemyHere(game, N, PRIEST);
     });
-    r = toTurn(pick(r, /^Play Monster Slayer/), win("dealDamage"));
+    r = untilWindow(pick(r, /^Play Monster Slayer/), "dealDamage");
     expect(options(r).some((o) => o.startsWith("Nathaniel Cho"))).toBe(true);
-    r = finish(pick(r, /^Nathaniel Cho/));
+    r = toTurn(pick(r, /^Nathaniel Cho/));
     expect(enemyIn(r, PRIEST)!.damage).toBe(3);
-    r = toTurn(pick(r, /^Play Monster Slayer/), win("dealDamage"));
+    r = untilWindow(pick(r, /^Play Monster Slayer/), "dealDamage");
     expect(options(r).some((o) => o.startsWith("Nathaniel Cho"))).toBe(false); // once per phase
-    r = finish(r);
+    r = toTurn(r);
     expect(enemyIn(r, PRIEST)).toBeUndefined(); // 3 + 2 = the Priest's 5 health: defeated
   });
   it("is not offered for a weapon's attack", () => {
@@ -305,7 +313,7 @@ describe("Nathaniel Cho", () => {
       [],
       ["elderSign"],
     );
-    r = finish(pick(r, /^Fight/));
+    r = toTurn(pick(r, /^Fight/));
     expect(lastValue(r)).toBe(5);
     expect(inZone(r, "60111", "hand")).toBe(true);
   });
@@ -317,28 +325,32 @@ describe("Nathaniel Cho", () => {
       [],
       ["elderSign"],
     );
-    r = finish(pick(r, /^Investigate/));
+    r = toTurn(pick(r, /^Investigate/));
     expect(inZone(r, "60111", "discard")).toBe(true);
   });
 });
 
 describe("Tommy Malloy", () => {
   it("is prey to Nathaniel only", () => {
-    const r = natGame([DAISY, N], (game) => {
-      enemyHere(game, N, "60103", false);
+    const r = game({
+      investigators: [DAISY, N],
+      prep: (game) => {
+        enemyHere(game, N, "60103", false);
+      },
+      bag: ["0"],
     });
-    const game = gOf(r);
+    const g = gOf(r);
     const tommy = allCardRecsIn(r.state).find((c) => c.code === "60103")!;
-    expect(preyCandidates(game, tommy.id, [DAISY, N])).toEqual([N]);
-    expect(preyCandidates(game, tommy.id, [DAISY])).toEqual([]);
+    expect(preyCandidates(g, tommy.id, [DAISY, N])).toEqual([N]);
+    expect(preyCandidates(g, tommy.id, [DAISY])).toEqual([]);
   });
   it("takes only 1 of any damage", () => {
     let r = nathaniel((game) => {
       hand(game, N, "60116");
       enemyHere(game, N, "60103");
     });
-    r = toTurn(pick(r, /^Play Monster Slayer/), win("dealDamage"));
-    r = finish(pick(r, /^Nathaniel Cho/)); // 3 dealt
+    r = untilWindow(pick(r, /^Play Monster Slayer/), "dealDamage");
+    r = toTurn(pick(r, /^Nathaniel Cho/)); // 3 dealt
     expect(enemyIn(r, "60103")!.damage).toBe(1);
   });
 });
@@ -353,7 +365,7 @@ describe("Self-Destructive", () => {
     });
   it("deals its bearer 1 damage each time they damage an enemy", () => {
     let r = bearing((game) => enemyHere(game, N, PRIEST));
-    r = finish(pick(r, /^Fight/));
+    r = toTurn(pick(r, /^Fight/));
     expect(invStateIn(r.state, N).damage).toBe(1);
     expect(enemyIn(r, PRIEST)!.damage).toBe(1);
   });

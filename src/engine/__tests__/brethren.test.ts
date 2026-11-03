@@ -1,13 +1,13 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import { loadPack } from "../../content";
 import { createGame, dispatch, type Result } from "../index";
-import { run } from "../steps/dispatch";
 import { next } from "../world/rng";
 import { db, gOf, mutate, options, pick, putEnemy, skipMulligans, start } from "../kits/testkit";
 import { card, inv, type GameContext } from "../context";
 import { cardsIn, findByCode } from "../queries";
 import { moveCard } from "../movement";
-import { neutral, toTurn } from "../kits/natkit";
+import { game, inject, neutral, toTurn } from "../kits/driver";
+import type { ChaosToken } from "../../content/schema";
 import { applyScenarioEnd, scenarioSetup, startCampaign } from "../campaign/campaign";
 import { type CampaignState } from "../campaign/types";
 import { advance } from "../campaign/flow";
@@ -85,30 +85,8 @@ const begin = (
   scenario: string,
   invs: string[],
   log: Record<string, unknown> = {},
-  bag: string[] = ["0"],
-) =>
-  toTurn(
-    skipMulligans(
-      start(scenario, invs, 1, { ...CAMPAIGN, campaignLog: log, chaosBag: bag as never }),
-    ),
-  );
-/** change the state, then resolve `steps` before the choice that was pending is asked again */
-function inject(
-  r: Result,
-  fn: (game: GameContext) => void,
-  ...steps: GameContext["s"]["queue"]
-): Result {
-  const s = structuredClone(r.state);
-  const game: GameContext = { s, db, events: [] };
-  fn(game);
-  if (s.pending) {
-    s.queue.push({ ...s.pending.step, choice: undefined });
-    s.pending = null;
-  }
-  s.queue.push(...steps.reverse());
-  run(game);
-  return { state: s, events: game.events };
-}
+  bag: ChaosToken[] = ["0"],
+) => game({ scenario, investigators: invs, bag, extra: { ...CAMPAIGN, campaignLog: log } });
 /** jump the act deck forward to `code` */
 function toAct(game: GameContext, code: string) {
   while (game.s.act && card(game, game.s.act).code !== code) {
@@ -117,8 +95,6 @@ function toAct(game: GameContext, code: string) {
     if (nextAct) moveCard(game, nextAct, ZONE.Act);
   }
 }
-/** answer until the predicate holds or a turn comes */
-const until = (r: Result, stop: (r: Result) => boolean) => toTurn(r, stop);
 /** end every turn until the round ends and the next turn begins */
 function endRound(r: Result, stop: (r: Result) => boolean = () => false): Result {
   const round = r.state.round;
@@ -145,7 +121,7 @@ describe("Spreading Flames", () => {
       invStateIn(game.s, R).clues = 2;
     });
     r = endRound(r, (x) => options(x).some((o) => o.startsWith("Advance act")));
-    r = until(pick(r, /^Advance act/), () => false);
+    r = toTurn(pick(r, /^Advance act/), () => false);
     expect(actCode(r)).toBe("12110");
     expect(codesIn(r, "location")).toEqual(expect.arrayContaining(["12113", "12116", "12117"]));
     const servant = allCardRecsIn(r.state).find((c) => c.code === "12114")!;
@@ -160,7 +136,7 @@ describe("Spreading Flames", () => {
     r = mutate(r, (game) => {
       invStateIn(game.s, R).clues = 2;
     });
-    r = until(
+    r = toTurn(
       pick(
         endRound(r, (x) => options(x).some((o) => o.startsWith("Advance act"))),
         /^Advance act/,
@@ -210,7 +186,7 @@ describe("Spreading Flames", () => {
       s.damage = 4;
       s.engagedWith = R;
     });
-    r = until(pick(r, /^Fight Servant of Flame/), (x) => x.state.phase === "ended");
+    r = toTurn(pick(r, /^Fight Servant of Flame/), (x) => x.state.phase === "ended");
     expect(r.state.log.some((e) => e.type === "enemyDefeated")).toBe(true);
     expect(r.state.resolution).toBe("R1");
   });
@@ -266,7 +242,7 @@ describe("Smoke and Mirrors", () => {
     r = toTurn(pick(r, /^Augurs of Flame/));
     const cornelia = allCardRecsIn(r.state).find((c) => c.code === "12140")!;
     expect(cornelia.zone).toBe("enemy");
-    r = until(pick(r, /^Evade Cornelia/), (x) =>
+    r = toTurn(pick(r, /^Evade Cornelia/), (x) =>
       options(x).some((o) => o.startsWith("Cornelia Akely")),
     );
     r = toTurn(pick(r, /^Cornelia Akely/));
@@ -315,7 +291,7 @@ describe("Queen of Ash", () => {
     r = mutate(r, (game) => {
       invStateIn(game.s, R).clues = 3;
     });
-    r = until(pick(r, /^Move to Underground Cistern/), () => false);
+    r = toTurn(pick(r, /^Move to Underground Cistern/), () => false);
     expect(invStateIn(r.state, R).clues).toBe(0);
     expect(actCode(r)).toBe("12173");
     expect(allCardRecsIn(r.state).find((c) => c.code === "12179")!.zone).toBe("enemy");

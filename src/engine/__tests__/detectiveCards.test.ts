@@ -8,18 +8,8 @@ import type { Result } from "../index";
 import { handLimit } from "../rules/investigators";
 import { iconsFor } from "../rules/skillTest";
 import type { Skill } from "../../content/schema";
-import {
-  ACOLYTE,
-  HALLWAY,
-  ROLAND,
-  STUDY,
-  addLocation,
-  enemyHere,
-  natGame,
-  hand,
-  inPlay,
-  toTurn,
-} from "../kits/natkit";
+import { ACOLYTE, HALLWAY, ROLAND, STUDY } from "../kits/natkit";
+import { addLocation, enemyHere, game, hand, inPlay, toTurn } from "../kits/driver";
 import { commitDone, db, deckCodes, mutate, options, pick, skipMulligans } from "../kits/testkit";
 import { allCardRecsIn, cardRecIn, invStateIn } from "../world/store";
 import { ZONE } from "../world/constants";
@@ -33,9 +23,13 @@ const clues = (r: Result) => invStateIn(r.state, ROLAND).clues;
 
 describe("Laboratory Assistant", () => {
   it("draws 2 cards when it enters play and raises the hand size by 2", () => {
-    let r = natGame([ROLAND], (x) => {
-      hand(x, ROLAND, "02020");
-      invStateIn(x.s, ROLAND).resources = 5;
+    let r = game({
+      investigators: [ROLAND],
+      prep: (x) => {
+        hand(x, ROLAND, "02020");
+        invStateIn(x.s, ROLAND).resources = 5;
+      },
+      bag: ["0"],
     });
     const before = invStateIn(r.state, ROLAND).deck.length;
     r = pick(r, /^Play Laboratory Assistant/);
@@ -48,7 +42,11 @@ describe("Laboratory Assistant", () => {
 describe("Lucky Cigarette Case", () => {
   it("draws 1 card after a test succeeded by 2 or more", () => {
     // Roland intellect 3 with a +1 token against the Study's shroud 2: succeeds by 2
-    let r = natGame([ROLAND], (x) => void inPlay(x, ROLAND, "04107"), ["+1"]);
+    let r = game({
+      investigators: [ROLAND],
+      prep: (x) => void inPlay(x, ROLAND, "04107"),
+      bag: ["+1"],
+    });
     const before = invStateIn(r.state, ROLAND).hand.length;
     r = commitDone(pick(r, /^Investigate/));
     r = pick(r, /Lucky Cigarette Case/);
@@ -56,7 +54,11 @@ describe("Lucky Cigarette Case", () => {
   });
 
   it("is not offered when the test succeeds by only 1", () => {
-    let r = natGame([ROLAND], (x) => void inPlay(x, ROLAND, "04107"));
+    let r = game({
+      investigators: [ROLAND],
+      prep: (x) => void inPlay(x, ROLAND, "04107"),
+      bag: ["0"],
+    });
     r = commitDone(pick(r, /^Investigate/));
     expect(options(r).some((o) => /Lucky Cigarette Case/.test(o))).toBe(false);
   });
@@ -65,7 +67,11 @@ describe("Lucky Cigarette Case", () => {
 describe("Thieves' Kit", () => {
   it("investigates with agility, spending a supply, and gains 1 resource on success", () => {
     let id = "";
-    let r = natGame([ROLAND], (x) => (id = inPlay(x, ROLAND, "09064")));
+    let r = game({
+      investigators: [ROLAND],
+      prep: (x) => (id = inPlay(x, ROLAND, "09064")),
+      bag: ["0"],
+    });
     const res = invStateIn(r.state, ROLAND).resources;
     expect(options(r).filter((o) => o.startsWith("Thieves' Kit"))).toHaveLength(2);
     r = commitDone(pick(r, /^Thieves' Kit: investigate with agility/));
@@ -79,10 +85,14 @@ describe("Thieves' Kit", () => {
 describe("Breaking and Entering", () => {
   it("adds agility to the investigation and may evade an enemy here on a success by 2", () => {
     let enemy = "";
-    let r = natGame([ROLAND], (x) => {
-      hand(x, ROLAND, "07114");
-      invStateIn(x.s, ROLAND).resources = 5;
-      enemy = enemyHere(x, ROLAND);
+    let r = game({
+      investigators: [ROLAND],
+      prep: (x) => {
+        hand(x, ROLAND, "07114");
+        invStateIn(x.s, ROLAND).resources = 5;
+        enemy = enemyHere(x, ROLAND);
+      },
+      bag: ["0"],
     });
     r = commitDone(pick(r, /^Play Breaking and Entering/));
     r = pick(r, /Automatically evade/);
@@ -97,10 +107,14 @@ describe("Breaking and Entering", () => {
 
 describe("Scene of the Crime", () => {
   const scene = (enemy: boolean) =>
-    natGame([ROLAND], (x) => {
-      hand(x, ROLAND, "04103");
-      invStateIn(x.s, ROLAND).resources = 5;
-      if (enemy) enemyHere(x, ROLAND, undefined, false);
+    game({
+      investigators: [ROLAND],
+      prep: (x) => {
+        hand(x, ROLAND, "04103");
+        invStateIn(x.s, ROLAND).resources = 5;
+        if (enemy) enemyHere(x, ROLAND, undefined, false);
+      },
+      bag: ["0"],
     });
 
   it("discovers 1 clue as the first action", () => {
@@ -121,12 +135,16 @@ describe("Scene of the Crime", () => {
 
 describe("Overzealous", () => {
   it("draws the top encounter card, and that draw is followed by another", () => {
-    let r = natGame([ROLAND], (x) => {
-      const id = hand(x, ROLAND, "03040");
-      const me = invStateIn(x.s, ROLAND);
-      me.hand = me.hand.filter((h) => h !== id);
-      cardRecIn(x.s, id).zone = ZONE.Deck;
-      me.deck.unshift(id);
+    let r = game({
+      investigators: [ROLAND],
+      prep: (x) => {
+        const id = hand(x, ROLAND, "03040");
+        const me = invStateIn(x.s, ROLAND);
+        me.hand = me.hand.filter((h) => h !== id);
+        cardRecIn(x.s, id).zone = ZONE.Deck;
+        me.deck.unshift(id);
+      },
+      bag: ["0"],
     });
     const from = r.state.log.length;
     r = toTurn(pick(r, "Draw 1 card"));
@@ -136,7 +154,7 @@ describe("Overzealous", () => {
 
 describe("Steadfast and Curiosity", () => {
   const icons = (code: string, skill: Skill, prep: (x: GameContext) => void) => {
-    const x = gameOf(natGame([ROLAND]));
+    const x = gameOf(game({ investigators: [ROLAND], bag: ["0"] }));
     const id = hand(x, ROLAND, code);
     prep(x);
     return iconsFor(x, id, skill);
@@ -172,12 +190,16 @@ describe("Steadfast and Curiosity", () => {
 describe("Interrogate", () => {
   it("tests combat against 3 + the Humanoid's damage, then discovers a clue here and one elsewhere", () => {
     let hall = "";
-    let r = natGame([ROLAND], (x) => {
-      hand(x, ROLAND, "05020");
-      invStateIn(x.s, ROLAND).resources = 5;
-      enemyHere(x, ROLAND, ACOLYTE, false); // Humanoid, 1 damage: difficulty 4
-      hall = addLocation(x, HALLWAY, [[STUDY, HALLWAY]]);
-      cardRecIn(x.s, hall).clues = 2;
+    let r = game({
+      investigators: [ROLAND],
+      prep: (x) => {
+        hand(x, ROLAND, "05020");
+        invStateIn(x.s, ROLAND).resources = 5;
+        enemyHere(x, ROLAND, ACOLYTE, false); // Humanoid, 1 damage: difficulty 4
+        hall = addLocation(x, HALLWAY, [[STUDY, HALLWAY]]);
+        cardRecIn(x.s, hall).clues = 2;
+      },
+      bag: ["0"],
     });
     r = commitDone(pick(r, /^Play Interrogate/));
     expect(clues(r)).toBe(2); // Roland combat 4 with a 0 token
@@ -185,10 +207,14 @@ describe("Interrogate", () => {
   });
 
   it("can't be played without a Humanoid enemy at your location", () => {
-    const r = natGame([ROLAND], (x) => {
-      hand(x, ROLAND, "05020");
-      invStateIn(x.s, ROLAND).resources = 5;
-      enemyHere(x, ROLAND, "01159", false); // Swarm of Rats: a Creature
+    const r = game({
+      investigators: [ROLAND],
+      prep: (x) => {
+        hand(x, ROLAND, "05020");
+        invStateIn(x.s, ROLAND).resources = 5;
+        enemyHere(x, ROLAND, "01159", false); // Swarm of Rats: a Creature
+      },
+      bag: ["0"],
     });
     expect(options(r).some((o) => /Interrogate/.test(o))).toBe(false);
   });
@@ -197,12 +223,16 @@ describe("Interrogate", () => {
 describe("Connect the Dots", () => {
   it("after the last clue here is discovered, discovers 2 clues at a location with a lower printed shroud", () => {
     let low = "";
-    let r = natGame([ROLAND], (x) => {
-      hand(x, ROLAND, "05025");
-      invStateIn(x.s, ROLAND).resources = 5;
-      cardRecIn(x.s, inv(x, ROLAND).location!).clues = 1;
-      low = addLocation(x, HALLWAY, [[STUDY, HALLWAY]]); // Hallway: shroud 1, the Study: 2
-      cardRecIn(x.s, low).clues = 3;
+    let r = game({
+      investigators: [ROLAND],
+      prep: (x) => {
+        hand(x, ROLAND, "05025");
+        invStateIn(x.s, ROLAND).resources = 5;
+        cardRecIn(x.s, inv(x, ROLAND).location!).clues = 1;
+        low = addLocation(x, HALLWAY, [[STUDY, HALLWAY]]); // Hallway: shroud 1, the Study: 2
+        cardRecIn(x.s, low).clues = 3;
+      },
+      bag: ["0"],
     });
     r = commitDone(pick(r, /^Investigate/));
     r = pick(r, /Connect the Dots/);
@@ -213,9 +243,13 @@ describe("Connect the Dots", () => {
 
 describe("Delay the Inevitable", () => {
   const delayed = () => {
-    let r = natGame([ROLAND], (x) => {
-      hand(x, ROLAND, "05021");
-      invStateIn(x.s, ROLAND).resources = 5;
+    let r = game({
+      investigators: [ROLAND],
+      prep: (x) => {
+        hand(x, ROLAND, "05021");
+        invStateIn(x.s, ROLAND).resources = 5;
+      },
+      bag: ["0"],
     });
     r = pick(r, /^Play Delay the Inevitable/);
     return r;
@@ -309,11 +343,15 @@ describe("Unsolved Case", () => {
   it("places one of your clues on the location with the highest shroud and is removed from the game", () => {
     let id = "";
     let hall = "";
-    let r = natGame([ROLAND], (x) => {
-      id = hand(x, ROLAND, "05010");
-      invStateIn(x.s, ROLAND).resources = 5;
-      invStateIn(x.s, ROLAND).clues = 2;
-      hall = addLocation(x, HALLWAY, [[STUDY, HALLWAY]]); // shroud 1, below the Study's 2
+    let r = game({
+      investigators: [ROLAND],
+      prep: (x) => {
+        id = hand(x, ROLAND, "05010");
+        invStateIn(x.s, ROLAND).resources = 5;
+        invStateIn(x.s, ROLAND).clues = 2;
+        hall = addLocation(x, HALLWAY, [[STUDY, HALLWAY]]); // shroud 1, below the Study's 2
+      },
+      bag: ["0"],
     });
     const study = invStateIn(r.state, ROLAND).location!;
     const before = cardRecIn(r.state, study).clues;
@@ -328,11 +366,15 @@ describe("Unsolved Case", () => {
 describe("Detective's Colt 1911s", () => {
   it("fights at +1 combat for +1 damage, and lets 2 Tool assets take no hand slot", () => {
     let enemy = "";
-    let r = natGame([ROLAND], (x) => {
-      inPlay(x, ROLAND, "05009");
-      inPlay(x, ROLAND, "05024");
-      inPlay(x, ROLAND, "05024");
-      enemy = enemyHere(x, ROLAND);
+    let r = game({
+      investigators: [ROLAND],
+      prep: (x) => {
+        inPlay(x, ROLAND, "05009");
+        inPlay(x, ROLAND, "05024");
+        inPlay(x, ROLAND, "05024");
+        enemy = enemyHere(x, ROLAND);
+      },
+      bag: ["0"],
     });
     expect(overfullSlot(gameOf(r), ROLAND, null)).toBeNull();
     r = commitDone(pick(r, /^Detective's Colt 1911s: fight/));

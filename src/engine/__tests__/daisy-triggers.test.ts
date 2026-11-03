@@ -4,7 +4,7 @@ import { createCard, moveCard } from "../movement";
 import { findByCode } from "../queries";
 import { db, gOf, giveCard, mutate, pick, putEnemy, skipMulligans, start } from "../kits/testkit";
 import { type Result } from "../index";
-import { run } from "../steps/dispatch";
+import { inject, toTurn as driverToTurn } from "../kits/driver";
 import { allCardRecsIn, cardRecIn, invStateIn } from "../world/store";
 import { ZONE } from "../world/constants";
 import { STEP } from "../steps/step";
@@ -12,11 +12,7 @@ import { STEP } from "../steps/step";
 const DAISY = "01002";
 const ROLAND = "01001";
 
-const toTurn = (r: Result, who = DAISY) => {
-  while (r.state.pending?.inv !== who || r.state.pending.kind !== "turn")
-    r = pick(r, r.state.pending!.options.at(-1)!.label);
-  return r;
-};
+const toTurn = (r: Result, who = DAISY) => driverToTurn(r, who);
 const inPlay = (game: GameContext, code: string, who = DAISY) => {
   const id = createCard(game, code, ZONE.Limbo, who);
   moveCard(game, id, ZONE.Play);
@@ -63,7 +59,7 @@ describe("Daisy's deck: triggers", () => {
   const house = (barricadeOn: string) => {
     let ids: string[] = [];
     let b = "";
-    let r = skipMulligans(start("the-gathering", [DAISY, ROLAND], 3, { chaosBag: ["0"] as never }));
+    let r = skipMulligans(start("the-gathering", [DAISY, ROLAND], 3, { chaosBag: ["0"] }));
     r = mutate(r, (game) => {
       ids = ["01112", "01114", "01115"].map(
         (c) => findByCode(game, c, [ZONE.SetAside, ZONE.Location])!.id,
@@ -90,12 +86,12 @@ describe("Daisy's deck: triggers", () => {
   it("Barricade stays when an investigator leaves another location, goes when one leaves its own", () => {
     let { r, b } = house("01115");
     r = pick(toTurn(r), /Move to Hallway/);
-    while (r.state.pending?.kind !== "turn") r = pick(r, r.state.pending!.options[0].id);
+    r = driverToTurn(r);
     expect(cardRecIn(r.state, b).zone).toBe("attached");
 
     ({ r, b } = house("01114"));
     r = pick(toTurn(r), /Move to Hallway/);
-    while (r.state.pending?.kind !== "turn") r = pick(r, r.state.pending!.options[0].id);
+    r = driverToTurn(r);
     expect(cardRecIn(r.state, b).zone).toBe("discard");
   });
 
@@ -129,15 +125,17 @@ describe("Daisy's deck: triggers", () => {
     });
     expect(card(gOf(r), ghoul).location).toBe(h.parlor);
     // a hunter heading for the investigators in the Parlor steps in too
-    const game = gOf(r);
-    moveCard(game, ghoul, ZONE.EncounterDiscard);
-    hunter = putEnemy(game, "01116", h.hall); // Ghoul Priest, hunter
-    invStateIn(game.s, ROLAND).location = h.parlor;
-    invStateIn(game.s, DAISY).location = h.parlor;
-    game.s.pending = null;
-    game.s.queue = [{ t: STEP.HunterMoves }];
-    run(game);
-    expect(card(game, hunter).location).toBe(h.parlor);
+    const after = inject(
+      r,
+      (game) => {
+        moveCard(game, ghoul, ZONE.EncounterDiscard);
+        hunter = putEnemy(game, "01116", h.hall); // Ghoul Priest, hunter
+        invStateIn(game.s, ROLAND).location = h.parlor;
+        invStateIn(game.s, DAISY).location = h.parlor;
+      },
+      { t: STEP.HunterMoves },
+    );
+    expect(card(gOf(after), hunter).location).toBe(h.parlor);
   });
 
   it("Forbidden Knowledge's horror cost can go on Holy Rosary, then the resource is gained", () => {

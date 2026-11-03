@@ -13,15 +13,10 @@ import {
   NATHANIEL,
   ROLAND,
   attacks,
-  enemyHere,
   enemyIn,
-  natGame,
-  hand,
-  inPlay,
   nathaniel,
-  neutral,
-  toTurn,
 } from "../kits/natkit";
+import { enemyHere, game, hand, inPlay, neutral, offered, toTurn } from "../kits/driver";
 
 const N = NATHANIEL;
 
@@ -33,18 +28,25 @@ beforeAll(async () => {
   await loadPack("nat");
 });
 
-const offered = (name: RegExp) => (x: Result) => options(x).some((o) => name.test(o));
 const dmg = (r: Result, i: string) => invStateIn(r.state, i).damage;
 
 describe("a failed attack on an enemy engaged with another investigator", () => {
   it("deals the enemy's damage to that investigator", () => {
-    let r = natGame([ROLAND, DAISY], (game) => enemyHere(game, DAISY), ["-4"]);
+    let r = game({
+      investigators: [ROLAND, DAISY],
+      prep: (game) => enemyHere(game, DAISY),
+      bag: ["-4"],
+    });
     r = toTurn(pick(r, /^Fight/));
     expect(dmg(r, DAISY)).toBe(1);
     expect(dmg(r, ROLAND)).toBe(0);
   });
   it("is not dealt when the enemy is engaged with the attacker", () => {
-    let r = natGame([ROLAND, DAISY], (game) => enemyHere(game, ROLAND), ["-4"]);
+    let r = game({
+      investigators: [ROLAND, DAISY],
+      prep: (game) => enemyHere(game, ROLAND),
+      bag: ["-4"],
+    });
     r = toTurn(pick(r, /^Fight/));
     expect(dmg(r, ROLAND)).toBe(0);
     expect(dmg(r, DAISY)).toBe(0);
@@ -56,7 +58,11 @@ describe("an unengaged aloof enemy", () => {
   it("can be engaged but not fought", () => {
     db.cards[MINION].keywords = ["aloof"];
     try {
-      const r = natGame([ROLAND], (game) => enemyHere(game, ROLAND, MINION, false));
+      const r = game({
+        investigators: [ROLAND],
+        prep: (game) => enemyHere(game, ROLAND, MINION, false),
+        bag: ["0"],
+      });
       expect(offered(/^Engage/)(r)).toBe(true);
       expect(offered(/^Fight/)(r)).toBe(false);
     } finally {
@@ -77,12 +83,16 @@ describe("successful evasion", () => {
   it("automatic evasion triggers 'evaded' but not 'successfully evaded'", () => {
     db.cards["01020"].abilities = [onSuccess()];
     try {
-      let r = natGame(["01005"], (game) => {
-        inPlay(game, "01005", "01020");
-        inPlay(game, "01005", "01046"); // Pickpocketing: after an enemy is evaded
-        hand(game, "01005", "01078"); // Cunning Distraction
-        enemyHere(game, "01005", MINION);
-        invStateIn(game.s, "01005").resources = 9;
+      let r = game({
+        investigators: ["01005"],
+        prep: (game) => {
+          inPlay(game, "01005", "01020");
+          inPlay(game, "01005", "01046"); // Pickpocketing: after an enemy is evaded
+          hand(game, "01005", "01078"); // Cunning Distraction
+          enemyHere(game, "01005", MINION);
+          invStateIn(game.s, "01005").resources = 9;
+        },
+        bag: ["0"],
       });
       r = toTurn(pick(r, /^Play Cunning Distraction/), offered(/^Pickpocketing/));
       expect(offered(/^Slick/)(r)).toBe(false);
@@ -94,9 +104,13 @@ describe("successful evasion", () => {
   it("a tested evasion triggers both", () => {
     db.cards["01020"].abilities = [onSuccess()];
     try {
-      let r = natGame(["01005"], (game) => {
-        inPlay(game, "01005", "01020");
-        enemyHere(game, "01005", MINION);
+      let r = game({
+        investigators: ["01005"],
+        prep: (game) => {
+          inPlay(game, "01005", "01020");
+          enemyHere(game, "01005", MINION);
+        },
+        bag: ["0"],
       });
       r = toTurn(pick(r, /^Evade/), offered(/^Slick/));
       expect(offered(/^Slick/)(r)).toBe(true);
@@ -108,10 +122,14 @@ describe("successful evasion", () => {
 
 describe("a helper's commit", () => {
   it("is one card; the window then offers only Done and taking it back", () => {
-    let r = natGame([ROLAND, DAISY], (game) => {
-      hand(game, DAISY, "01025");
-      hand(game, DAISY, "01025"); // two Vicious Blows
-      enemyHere(game, ROLAND, MINION, false);
+    let r = game({
+      investigators: [ROLAND, DAISY],
+      prep: (game) => {
+        hand(game, DAISY, "01025");
+        hand(game, DAISY, "01025"); // two Vicious Blows
+        enemyHere(game, ROLAND, MINION, false);
+      },
+      bag: ["0"],
     });
     r = pick(r, /^Fight/);
     while (r.state.pending?.kind === "commit" && r.state.pending.inv === ROLAND)
@@ -127,15 +145,15 @@ describe("a helper's commit", () => {
 
 describe("automatic results", () => {
   it("an auto-fail counts the skill value as 0: Rotting Remains fails by its whole difficulty", () => {
-    let r = natGame(
-      [ROLAND],
-      (game) => {
+    let r = game({
+      investigators: [ROLAND],
+      prep: (game) => {
         moveCard(game, createCard(game, "01163", ZONE.Limbo, null), ZONE.EncounterDeck, {
           top: true,
         }); // the next mythos phase draws it
       },
-      ["autoFail"],
-    );
+      bag: ["autoFail"],
+    });
     r = toTurn(pick(r, "End turn"), (x) => x.state.round === 2 && x.state.pending?.kind === "turn");
     expect(invStateIn(r.state, ROLAND).horror).toBe(3);
   });
@@ -158,9 +176,13 @@ describe("automatic results", () => {
 
 describe("elimination and the empty deck", () => {
   it("drawing with no deck and no discard pile defeats at once, with 1 mental trauma and no horror first", () => {
-    let r = natGame([ROLAND], (game) => {
-      invStateIn(game.s, ROLAND).deck = [];
-      invStateIn(game.s, ROLAND).discard = [];
+    let r = game({
+      investigators: [ROLAND],
+      prep: (game) => {
+        invStateIn(game.s, ROLAND).deck = [];
+        invStateIn(game.s, ROLAND).discard = [];
+      },
+      bag: ["0"],
     });
     r = pick(r, /^Draw/);
     expect(invStateIn(r.state, ROLAND).status).toBe("defeated");
@@ -168,13 +190,17 @@ describe("elimination and the empty deck", () => {
     expect(invStateIn(r.state, ROLAND).horror).toBe(0);
   });
   it("an eliminated investigator's Cover Up resolves its 'when the game ends' ability", () => {
-    let r = natGame([ROLAND], (game) => {
-      const id = createCard(game, "01007", ZONE.Limbo, ROLAND);
-      moveCard(game, id, ZONE.Threat);
-      cardRecIn(game.s, id).controller = ROLAND;
-      cardRecIn(game.s, id).clues = 2;
-      invStateIn(game.s, ROLAND).damage = 8;
-      enemyHere(game, ROLAND);
+    let r = game({
+      investigators: [ROLAND],
+      prep: (game) => {
+        const id = createCard(game, "01007", ZONE.Limbo, ROLAND);
+        moveCard(game, id, ZONE.Threat);
+        cardRecIn(game.s, id).controller = ROLAND;
+        cardRecIn(game.s, id).clues = 2;
+        invStateIn(game.s, ROLAND).damage = 8;
+        enemyHere(game, ROLAND);
+      },
+      bag: ["0"],
     });
     r = toTurn(pick(r, "End turn"));
     expect(invStateIn(r.state, ROLAND).status).toBe("defeated");
@@ -225,8 +251,12 @@ describe("unique cards, limits and victory", () => {
       },
     ] as never;
     try {
-      let r = natGame([ROLAND], (game) => {
-        inPlay(game, ROLAND, "01020");
+      let r = game({
+        investigators: [ROLAND],
+        prep: (game) => {
+          inPlay(game, ROLAND, "01020");
+        },
+        bag: ["0"],
       });
       r = pick(r, /^Once/);
       expect(offered(/^Once/)(r)).toBe(false);
@@ -243,15 +273,15 @@ describe("unique cards, limits and victory", () => {
   it("a resolved treachery with Victory X goes to the victory display", () => {
     db.cards["01163"].victory = 1;
     try {
-      let r = natGame(
-        [ROLAND],
-        (game) => {
+      let r = game({
+        investigators: [ROLAND],
+        prep: (game) => {
           moveCard(game, createCard(game, "01163", ZONE.Limbo, null), ZONE.EncounterDeck, {
             top: true,
           });
         },
-        ["0"],
-      );
+        bag: ["0"],
+      });
       r = toTurn(
         pick(r, "End turn"),
         (x) => x.state.round === 2 && x.state.pending?.kind === "turn",
@@ -267,10 +297,14 @@ describe("unique cards, limits and victory", () => {
 
 describe("the enemy phase, upkeep and round end follow the chart", () => {
   it("an enemy exhausts after its own attack, before the next enemy attacks", () => {
-    let r = natGame([ROLAND], (game) => {
-      inPlay(game, ROLAND, "01028"); // Beat Cop: an asset that can soak, so each attack asks who takes it
-      enemyHere(game, ROLAND, MINION);
-      enemyHere(game, ROLAND, ACOLYTE);
+    let r = game({
+      investigators: [ROLAND],
+      prep: (game) => {
+        inPlay(game, ROLAND, "01028"); // Beat Cop: an asset that can soak, so each attack asks who takes it
+        enemyHere(game, ROLAND, MINION);
+        enemyHere(game, ROLAND, ACOLYTE);
+      },
+      bag: ["0"],
     });
     r = toTurn(pick(r, "End turn"), (x) => attacks(x) === 2 && x.state.pending?.kind === "assign");
     const exhausted = allCardRecsIn(r.state).filter(
@@ -292,9 +326,13 @@ describe("the enemy phase, upkeep and round end follow the chart", () => {
   it("the upkeep player window comes before cards ready", () => {
     fastCache();
     try {
-      let r = natGame([ROLAND], (game) => {
-        cardRecIn(game.s, inPlay(game, ROLAND, "01020")).exhausted = true; // Machete
-        hand(game, ROLAND, "01088");
+      let r = game({
+        investigators: [ROLAND],
+        prep: (game) => {
+          cardRecIn(game.s, inPlay(game, ROLAND, "01020")).exhausted = true; // Machete
+          hand(game, ROLAND, "01088");
+        },
+        bag: ["0"],
       });
       r = toTurn(
         pick(r, "End turn"),
@@ -322,9 +360,13 @@ describe("the enemy phase, upkeep and round end follow the chart", () => {
       },
     ] as never;
     try {
-      let r = natGame([ROLAND], (game) => {
-        inPlay(game, ROLAND, "01020");
-        addTempMod(game, { flag: "nonEliteCannotAttack" }, ROLAND, "round");
+      let r = game({
+        investigators: [ROLAND],
+        prep: (game) => {
+          inPlay(game, ROLAND, "01020");
+          addTempMod(game, { flag: "nonEliteCannotAttack" }, ROLAND, "round");
+        },
+        bag: ["0"],
       });
       r = toTurn(pick(r, "End turn"), offered(/^Slick/));
       expect(offered(/^Slick/)(r)).toBe(true);
@@ -337,8 +379,12 @@ describe("the enemy phase, upkeep and round end follow the chart", () => {
 
 describe("advancing the act in a player window", () => {
   it("opens no window for it alone: it waits for the next turn", () => {
-    let r = natGame([ROLAND], (game) => {
-      invStateIn(game.s, ROLAND).clues = 2;
+    let r = game({
+      investigators: [ROLAND],
+      prep: (game) => {
+        invStateIn(game.s, ROLAND).clues = 2;
+      },
+      bag: ["0"],
     });
     r = pick(r, "End turn");
     for (let k = 0; k < 100 && r.state.pending && r.state.pending.kind !== "turn"; k++) {
@@ -352,7 +398,7 @@ describe("advancing the act in a player window", () => {
     expect(invStateIn(r.state, ROLAND).clues).toBe(0);
   });
   it("is not offered without the clues", () => {
-    let r = natGame([ROLAND]);
+    let r = game({ investigators: [ROLAND], bag: ["0"] });
     r = pick(r, "End turn");
     for (let k = 0; k < 100 && r.state.pending && r.state.pending.kind !== "turn"; k++) {
       expect(offered(/^Advance act/)(r)).toBe(false);

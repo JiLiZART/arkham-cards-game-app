@@ -1,3 +1,4 @@
+import type { ChaosToken } from "../../content/schema";
 import { describe, expect, it } from "vitest";
 import { card, inv, type GameContext } from "../context";
 import { createCard } from "../movement";
@@ -10,23 +11,18 @@ import {
   PRIEST,
   ROLAND,
   STUDY,
-  addLocation,
-  enemyHere,
   enemyIn,
-  natGame,
-  hand,
-  inPlay,
-  toTurn,
   zoneOf,
 } from "../kits/natkit";
+import { addLocation, enemyHere, game, hand, inPlay, toTurn } from "../kits/driver";
 import { gOf, options, pick } from "../kits/testkit";
 import { allCardRecsIn, cardRecIn, invStateIn } from "../world/store";
 import { ZONE } from "../world/constants";
 import { STEP } from "../steps/step";
 
 const R = ROLAND;
-const roland = (prep: (game: GameContext) => void = () => {}, bag?: string[]) =>
-  natGame([R], prep, bag);
+const roland = (prep: (game: GameContext) => void = () => {}, bag: ChaosToken[] = ["0"]) =>
+  game({ investigators: [R], prep: prep, bag: bag });
 const lastResult = (r: Result) =>
   r.state.log.filter((e) => e.type === "testResult").at(-1)!.data as {
     value: number;
@@ -107,9 +103,13 @@ describe("Seeker", () => {
   });
 
   it("Cryptic Research: the chosen investigator draws 3", () => {
-    let r = natGame([R, DAISY], (game) => {
-      hand(game, R, "01043");
-      invStateIn(game.s, DAISY).location = inv(game, R).location;
+    let r = game({
+      investigators: [R, DAISY],
+      prep: (game) => {
+        hand(game, R, "01043");
+        invStateIn(game.s, DAISY).location = inv(game, R).location;
+      },
+      bag: ["0"],
     });
     const n = invStateIn(r.state, DAISY).hand.length;
     r = pick(pick(r, /^Play Cryptic Research/), "Daisy Walker");

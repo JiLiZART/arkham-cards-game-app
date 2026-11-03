@@ -1,22 +1,12 @@
 import { afterEach, beforeAll, describe, expect, it } from "vitest";
 import { loadPack } from "../../content";
 import { createCard, moveCard } from "../movement";
-import { inv } from "../context";
-import type { Ability } from "../../content/schema";
+import { currentTest, inv } from "../context";
+import type { Ability, ChaosToken } from "../../content/schema";
 import type { Result } from "../index";
-import { toTurn } from "../kits/natkit";
+import { game, until, windowData, windowOf } from "../kits/driver";
 import { checkCondition } from "../queries";
-import {
-  db,
-  giveCard,
-  gOf,
-  mutate,
-  options,
-  pick,
-  putEnemy,
-  skipMulligans,
-  start,
-} from "../kits/testkit";
+import { db, giveCard, gOf, options, pick, putEnemy } from "../kits/testkit";
 import { allCardRecsIn, cardRecIn, invStateIn } from "../world/store";
 import { ZONE } from "../world/constants";
 
@@ -31,12 +21,9 @@ beforeAll(async () => {
 function turn(
   setup: (game: ReturnType<typeof gOf>) => void = () => {},
   invs = [ROLAND],
-  bag = ["0"],
+  bag: ChaosToken[] = ["0"],
 ): Result {
-  const r = toTurn(skipMulligans(start("the-gathering", invs, 1, { chaosBag: bag as never })));
-  return mutate(r, (game) => {
-    setup(game);
-  });
+  return game({ investigators: invs, prep: setup, bag });
 }
 
 const attacksSoFar = (r: Result) => r.state.log.filter((e) => e.type === "attack").length;
@@ -49,7 +36,7 @@ describe("an event's designator", () => {
     };
     const fight = pick(turn(set), /^Play Backstab/);
     expect(attacksSoFar(fight)).toBe(0);
-    expect(fight.state.skillTest?.kind).toBe("fight");
+    expect(currentTest(gOf(fight))?.kind).toBe("fight");
     const draw = pick(turn(set), /^Draw/);
     expect(attacksSoFar(draw)).toBe(1);
   });
@@ -105,14 +92,11 @@ describe("player windows", () => {
     const before = invStateIn(r.state, ROLAND).resources;
     // the window of the turn's beginning has passed; end the turn: the enemy phase's window is next
     r = pick(r, "End turn");
-    for (let k = 0; k < 40 && !windows(r); k++)
-      r = pick(r, r.state.pending!.options.some((o) => o.id === "pass") ? "pass" : /./);
+    r = until(r, windows, 40);
     expect(windows(r)).toBe(true);
     expect(options(r)).toContain("Emergency Cache (play)");
-    expect(r.state.pending?.step).toMatchObject({
-      trigger: "playerWindow",
-      data: { phase: "enemy" },
-    });
+    expect(windowOf(r)).toBe("playerWindow");
+    expect(windowData(r)).toMatchObject({ phase: "enemy" });
     r = pick(r, /^Emergency Cache/);
     expect(invStateIn(r.state, ROLAND).resources).toBe(before + 3);
     expect(
@@ -195,7 +179,8 @@ describe("the window before an enemy takes damage", () => {
   it("an effect in the window adds to the damage", () => {
     let r = fight(withMachete([react("dealDamage", [{ op: "addDamage", amount: 2 }])], PRIEST));
     expect(r.state.pending?.kind).toBe("reaction");
-    expect(r.state.pending?.step).toMatchObject({ trigger: "dealDamage", data: { amount: 1 } });
+    expect(windowOf(r)).toBe("dealDamage");
+    expect(windowData(r)).toMatchObject({ amount: 1 });
     r = pick(r, "Ward");
     expect(enemyDamage(r)).toBe(3);
   });
@@ -223,7 +208,8 @@ describe("the window before an enemy takes damage", () => {
       ]),
     );
     r = pick(r, "Ward"); // dealDamage first: 1 + 3 on a Minion with 2 health
-    expect(r.state.pending?.step).toMatchObject({ trigger: "excessDamage", data: { amount: 2 } });
+    expect(windowOf(r)).toBe("excessDamage");
+    expect(windowData(r)).toMatchObject({ amount: 2 });
     const before = invStateIn(r.state, ROLAND).resources;
     r = pick(r, "Ward");
     expect(invStateIn(r.state, ROLAND).resources).toBe(before + 1);
@@ -251,7 +237,7 @@ describe("the window before an enemy takes damage", () => {
     )
       r = pick(r, r.state.pending.options.some((o) => o.id === "pass") ? "pass" : /./);
     r = pick(r, /^Dodge/);
-    expect(r.state.pending?.step).toMatchObject({ trigger: "enemyAttacked" });
+    expect(windowOf(r)).toBe("enemyAttacked");
     expect(options(r)).toContain("Ward");
   });
 });

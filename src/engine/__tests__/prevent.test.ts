@@ -1,8 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { createCard, moveCard } from "../movement";
-import { inv, push } from "../context";
-import { run } from "../steps/dispatch";
-import { db, gOf, mutate, options, pick, skipMulligans, start } from "../kits/testkit";
+import { inv } from "../context";
+import { game, inject, offered, toTurn, until } from "../kits/driver";
+import { db, options, pick, skipMulligans, start } from "../kits/testkit";
 import type { Ability } from "../../content/schema";
 import type { Result } from "../index";
 import { cardRecIn, invStateIn } from "../world/store";
@@ -35,47 +35,37 @@ afterEach(() => {
 /** Roland with the Machete in play, an enemy engaged with him, and his turn ended: the enemy phase attack is next */
 function attacked(enemy: string, ability?: Ability): Result {
   if (ability) db.cards[MACHETE].abilities = [ability];
-  let r = skipMulligans(start("the-gathering", [ROLAND], 1, { chaosBag: ["0"] as never }));
-  r = mutate(r, (game) => {
-    const m = createCard(game, MACHETE, ZONE.Limbo, ROLAND);
-    moveCard(game, m, ZONE.Play);
-    const e = createCard(game, enemy, ZONE.Limbo);
-    moveCard(game, e, ZONE.Enemy, { location: inv(game, ROLAND).location });
-    cardRecIn(game.s, e).engagedWith = ROLAND;
+  const r = game({
+    investigators: [ROLAND],
+    bag: ["0"],
+    prep: (game) => {
+      const m = createCard(game, MACHETE, ZONE.Limbo, ROLAND);
+      moveCard(game, m, ZONE.Play);
+      const e = createCard(game, enemy, ZONE.Limbo);
+      moveCard(game, e, ZONE.Enemy, { location: inv(game, ROLAND).location });
+      cardRecIn(game.s, e).engagedWith = ROLAND;
+    },
   });
   return untilAttack(pick(r, "End turn"));
 }
 /** answer everything with its neutral option until the ward is offered, a turn begins again, or the attack was resolved */
 function untilAttack(r: Result): Result {
-  for (let k = 0; k < 60 && r.state.pending; k++) {
-    const p = r.state.pending;
-    if (p.kind === "turn" || p.kind === "assign" || p.options.some((o) => o.label === "Ward"))
-      break;
-    if (r.state.log.some((e) => e.type === "attack")) break;
-    r = pick(
-      r,
-      p.options.some((o) => o.id === "pass")
-        ? "pass"
-        : p.options[0].label.startsWith("Done") || p.kind === "commit"
-          ? /^Done/
-          : /./,
-    );
-  }
-  return r;
+  return until(
+    r,
+    (x) => {
+      const p = x.state.pending!;
+      return (
+        p.kind === "turn" ||
+        p.kind === "assign" ||
+        offered("Ward")(x) ||
+        x.state.log.some((e) => e.type === "attack")
+      );
+    },
+    60,
+  );
 }
 /** answer what is left of the attack with neutral options until the next turn */
-function finish(r: Result): Result {
-  for (let k = 0; k < 60 && r.state.pending && r.state.pending.kind !== "turn"; k++)
-    r = pick(
-      r,
-      r.state.pending.options.some((o) => o.id === "pass")
-        ? "pass"
-        : r.state.pending.options[0].label.startsWith("Done")
-          ? /^Done/
-          : /./,
-    );
-  return r;
-}
+const finish = (r: Result): Result => toTurn(r);
 const labels = (r: Result) => options(r);
 const hit = (r: Result) => ({
   damage: invStateIn(r.state, ROLAND).damage,
@@ -134,37 +124,29 @@ describe("an enemy attack deals damage: a window before it is assigned", () => {
 
   it("damage that is not from an attack opens no window", () => {
     db.cards[MACHETE].abilities = [ward("either")];
-    const r = skipMulligans(start("the-gathering", [ROLAND], 1, { chaosBag: ["0"] as never }));
-    const game = gOf(r);
-    game.s = structuredClone(r.state);
-    const m = createCard(game, MACHETE, ZONE.Limbo, ROLAND);
-    moveCard(game, m, ZONE.Play);
-    game.s.pending = null;
-    game.s.queue.length = 0;
-    push(game, {
-      t: STEP.AssignDamage,
-      inv: ROLAND,
-      damage: 1,
-      horror: 0,
-      direct: false,
-      source: null,
-    });
-    run(game);
-    expect((game.s.pending as { kind?: string } | null)?.kind).not.toBe("reaction");
-    expect(invStateIn(game.s, ROLAND).damage).toBe(1);
+    const r = inject(
+      skipMulligans(start("the-gathering", [ROLAND], 1, { chaosBag: ["0"] })),
+      (game) => void moveCard(game, createCard(game, MACHETE, ZONE.Limbo, ROLAND), ZONE.Play),
+      { t: STEP.AssignDamage, inv: ROLAND, damage: 1, horror: 0, direct: false, source: null },
+    );
+    expect(r.state.pending?.kind).not.toBe("reaction");
+    expect(invStateIn(r.state, ROLAND).damage).toBe(1);
   });
 });
 
 describe("the assignment options say what they do", () => {
   /** Roland with the given assets in play is dealt 1 damage by Swarm of Rats; the assignment prompt is open */
   const assigning = (assets: string[]) => {
-    let r = skipMulligans(start("the-gathering", [ROLAND], 1, { chaosBag: ["0"] as never }));
-    r = mutate(r, (game) => {
-      for (const code of assets)
-        moveCard(game, createCard(game, code, ZONE.Limbo, ROLAND), ZONE.Play);
-      const e = createCard(game, RATS, ZONE.Limbo);
-      moveCard(game, e, ZONE.Enemy, { location: inv(game, ROLAND).location });
-      cardRecIn(game.s, e).engagedWith = ROLAND;
+    let r = game({
+      investigators: [ROLAND],
+      bag: ["0"],
+      prep: (game) => {
+        for (const code of assets)
+          moveCard(game, createCard(game, code, ZONE.Limbo, ROLAND), ZONE.Play);
+        const e = createCard(game, RATS, ZONE.Limbo);
+        moveCard(game, e, ZONE.Enemy, { location: inv(game, ROLAND).location });
+        cardRecIn(game.s, e).engagedWith = ROLAND;
+      },
     });
     r = untilAttack(pick(r, "End turn"));
     return r;

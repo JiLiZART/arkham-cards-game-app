@@ -199,3 +199,37 @@ describe("where the engine's tests sit", () => {
     expect({ loose, notTests }).toEqual({ loose: [], notTests: [] });
   });
 });
+
+describe("what engine tests read (ADR-0029)", () => {
+  // engine tests assert on prompts, events and views; these still read or write the step stack and may only leave
+  // the list. The step stack's own tests (steps/__tests__) are exempt: the stack is what they test.
+  const STILL_READ_THE_STACK = [
+    "src/engine/__tests__/coreCards.test.ts",
+    "src/engine/__tests__/daisy-prey.test.ts",
+    "src/engine/__tests__/scenarioState.test.ts",
+    "src/engine/__tests__/scriptGuards.test.ts",
+    "src/engine/__tests__/searchCrashes.test.ts",
+  ];
+  const readsTheStack = (text: string) =>
+    /\.queue\b|pending\??\.step\b|skillTest\s*=[^=]/.test(text);
+  const tests = walk("src/engine")
+    .filter(
+      (f) =>
+        /__tests__[\\/][^\\/]+\.test\.ts$/.test(f) &&
+        !/steps[\\/]__tests__/.test(f) &&
+        !f.endsWith("boundary.test.ts"),
+    )
+    .map((f) => f.split("\\").join("/"));
+
+  it("no test outside the list reads the step stack", () => {
+    const offenders = tests.filter(
+      (f) => !STILL_READ_THE_STACK.includes(f) && readsTheStack(readFileSync(f, "utf8")),
+    );
+    expect(offenders).toEqual([]);
+  });
+
+  it("a listed test that no longer reads the stack is taken off the list", () => {
+    const clean = STILL_READ_THE_STACK.filter((f) => !readsTheStack(readFileSync(f, "utf8")));
+    expect(clean).toEqual([]);
+  });
+});
