@@ -1,0 +1,82 @@
+## Context
+
+The engine sets a scenario up from `ScenarioDef` (`src/content/schema.ts` ~1420: `encounterSets`, `sideDecks` of whole sets, `setup` steps run by `applySetupStep` in `src/engine/index.ts` ~105, `connections` as code pairs, `tokens` per difficulty). Actions carry a designator (`designatorOf`, `src/engine/rules/round.ts:205`; the schema enum at `schema.ts:959` is fight/investigate/evade/parley/resign/move/engage). Token X is computed in `tokenX` (`src/engine/rules/tokens.ts:9`) from a closed enum (`schema.ts:1311`), scaled by `xTimes`/`xPlus`. A treachery with Victory X goes to the victory display in `finishRevelation` (`src/engine/rules/scenario.ts:96`); enemies with Victory X already do on defeat. Location connections are read by `connections()` (`src/engine/queries.ts:123`) from `scen.connections` plus the `connections` flag (`src/engine/world/flags.ts:130`). The campaign log is sectioned (`LOG_SECTION_KINDS` at `schema.ts:1782`: entries, count, cards, investigatorCount; `src/engine/campaign/log.ts`), the flow is a typed step language (ADR-0011; `src/engine/campaign/flow.ts`, compiled by `scripts/campaignFlow.ts`, which lists the guide steps it cannot express as `unsupported`), and a scenario's record keeps `xp` and `victory` (`src/engine/campaign/types.ts:87`). Setup can `setAside` by code (one copy per listing) and `putRandomIntoPlay`.
+
+The TFA guide (p.10–11) defines Explore as an activate-action designator over a separate deck of single-sided locations and treacheries; p.14–15 and p.98 define supply points and the two supply lists; p.9 defines Vengeance X as a Victory X that counts for the serpents instead of the investigators. 20 cards in the snapshot carry `vengeance` (ArkhamDB key dropped by `scripts/import-cards.ts:114`; `scenario-import-fixes` restores it). The Return-to box adds a rule to every scenario: after a successful exploration, shuffle the top card of the encounter deck into the exploration deck.
+
+In-force ADRs this touches: 0011 (flow steps), 0013 (line rules for the new data-driven lines), 0021–0026 (store, views, closed constant sets, one-way imports), 0028/0034 (scripts reach the new steps through verbs), 0033 (the Explore step is a typed step kind).
+
+## Goals / Non-Goals
+
+**Goals:** every mechanic a TFA scenario, interlude or card needs that no other change owns, as data vocabulary with one engine implementation; the exploration deck reusable by any scenario that lists cards for it; supplies and vengeance flowing from the campaign log into the scenario and back without the player copying numbers; the four unsupported supply step kinds and `record_vengeance` lifted off the flow compiler's unsupported list.
+
+**Non-Goals:** any scenario script, token table or connection transcription (the campaign changes); seal; several act decks and story cards; the Depths of Yoth pursuit area beyond the named counter it reads; Harbinger damage carried in the log (an entries-with-number log record the campaign change writes); UI components beyond what the presented table and option placement already draw.
+
+## Diagram (C4-inspired, component level, ASCII; the engine is pure, the browser app the only container)
+
+```
+ content/packs/tfa/cards.json                 content/campaigns*/<id>/scenarios/<s>.json          content/campaigns*/<id>/flow.json
+  symbol, connectsTo, vengeance, abilities     setup: buildExploration {cards, pick}, setAside     buySupplies {list, rate}, checkSupply,
+  hasSupply / poisoned / explored conditions   poisoned; tokens: x, xMin, xMax, autoFail           crossOffSupply, count {value: vengeance}
+            |                                              |                                                   |
+            v                                              v                                                   v
+ +-------------------------------------------------------------------------------------------------------------------------+
+ | src/engine                                                                                                               |
+ |  rules/scenario.ts                           rules/round.ts            rules/tokens.ts           campaign/                 |
+ |  +------------------------------------+     +-------------------+     +--------------------+     +---------------------+ |
+ |  | setup: exploration pile            |     | designator        |     | tokenX: vengeance  |     | log.ts: supplies    | |
+ |  |   ZONE.Exploration, picks by       |     |   "explore";      |     |   InVictory,       |     |   section kind,     | |
+ |  |   symbol; Poisoned pool; supplies  |     |   NO_AOO stays    |     |   explorationDeck  |     |   addSupply /       | |
+ |  |   copied into s.supplies           |     +-------------------+     |   Size, locations  |     |   crossOffSupply    | |
+ |  | Explore step (STEP.Explore):       |                               |   WithDoom, doomOn |     | flow.ts: buy, check,| |
+ |  |   draw -> match by symbol/trait -> |     queries.ts                |   Locations,       |     |   crossOff steps;   | |
+ |  |   putIntoPlay+clues+move | aside   |     +-------------------+     |   scenarioCounter; |     |   amount "vengeance"| |
+ |  |   | treachery; shuffle aside back; |     | connections():    |     |   clamp; autoFail  |     |   from the record   | |
+ |  |   win("explored",{ok})             |     |   + symbol table  |     +--------------------+     | types.ts: Scenario  | |
+ |  | finishRevelation / DefeatEnemy /   |     | vengeanceInVictory|                                |   Record.vengeance, | |
+ |  |   end: vengeance -> ZONE.Victory   |     | hasSupply         |     effects/: explore,         |   investigator      | |
+ |  | end: s.supplies -> log, record     |     | consideredIn      |       crossOffSupply, poison,  |   .supplies         | |
+ |  |   .vengeance                       |     |   Victory statics |       flipClueToDoom, ...      +---------------------+ |
+ |  +------------------------------------+     +-------------------+                                                        |
+ |  bot.ts: explore when an Explore ability is usable and no clue is here     api.ts: explore, poison, reads                 |
+ +-------------------------------------------------------------------------------------------------------------------------+
+            |  PendingChoice (prompt.explore, prompt.buySupplies ...)            |  content check: every exploration location
+            v                                                                    v  reaches the start by symbols
+ src/ui (scenario panel: exploration deck; rail: Explore; flow screen: supplies)  src/content/check.ts
+```
+
+## Decisions
+
+1. **The exploration deck is a scenario pile, built by a setup step.** `ZONE.Exploration` joins `ZONE` (`world/constants.ts`), one pile `exploration`. `SetupStep` gains `{ do: "buildExploration", cards: string[], pick?: { from: string[], count: number }[], bySymbol?: string[] }`: `cards` lists codes, repeated for copies, taken from the encounter deck, set-aside cards or side decks (`take` in `applySetupStep`); each `pick` shuffles its codes and takes `count` (one Ruins of three, HotE 1); `bySymbol` lists codes of which one per connection symbol is taken at random and the rest removed (the Return-to rule). `shuffle(s, pile)` uses the seeded RNG, so a replay rebuilds the same deck. _Alternative:_ `sideDecks` by set — rejected: the deck is specific cards and copies, not sets. _Why a step:_ Depths of Yoth builds a new deck per depth level through the same step from a script.
+
+2. **Connection symbols live on the location card.** `CardDef` (location) gains `symbol?: string` and `connectsTo?: string[]` (symbol names: `purpleMoon`, `blueTriangle`, `redSquare`, `orangeHeart`, `greenDiamond`, plus the base cycle's other glyphs, a closed set in `constants.ts`), written in `cards.json` from the scans once per card. `connections()` (`queries.ts:123`) adds pairs whose symbols match, for locations in play; the Explore step matches a drawn location against the explorer's location by `connectsTo` without it being in play. `scen.connections` stays for printed maps. `check:content` fails a scenario with an exploration deck in which some location reaches no start location by symbols (the report's risk: a transcription error would otherwise fail silently). `engine-location-instances-grid` keeps this table as its source for symbol connections.
+
+3. **Explore is an action designator and one typed step** (ADR-0033). `designator` gains `explore`; an ability `{ designator: "explore", effects: [{ do: "explore", match: { connecting: true } | { trait } | { any } }] }` queues `STEP.Explore { inv, match, drawn: InstId[] }`, handled in `rules/scenario.ts`: draw the top card; a location matching → `moveCard` to `ZONE.Location`, clues per `clueValue × players` (the existing reveal path), move the investigator (the existing `Move` step so enter-location windows fire), `win("explored", { inv, ok: true, location })`, then shuffle `drawn` back; a location not matching → push to `drawn`, re-queue the step; a treachery → the existing revelation path (`Revelation` step with the exploration deck as origin, discard to the encounter discard), `win("explored", { ok: false })`, shuffle back; an enemy (Return-to) → spawn as drawn. The Return-to "after a successful exploration ends, shuffle the top encounter card into the exploration deck" is a scenario-level `afterExplore` effect list in `ScenarioDef`. Conditions: `explored: { ok?: boolean, thisTurn?: true }`, `cannotExplore` as a flag family on locations and investigators (Lost in the Wilds 04081, Overgrowth 04076). Effects: `lookAtExploration { top, then: "reorder" | "discardTreacheries" }`, `shuffleIntoExploration { card }`, `revealExplorationUntil { type: "location" }`, `rebuildExploration` (the step of decision 1 from a script). Token X `explorationDeckSize`. The bot (`bot.ts`) takes a usable Explore ability when its location has no clues and no move leads to clues, so every TFA scenario is winnable by it. _Alternative:_ a script per Explore ability — rejected: 30 abilities with the same loop.
+
+4. **Supplies are a campaign-log section kind.** `LOG_SECTION_KINDS` gains `supplies`: per investigator, a multiset `Record<supply, number>` (`log.ts`: `addSupply`, `crossOffSupply`, `hasSupply(log, inv | "any", supply)`). `FlowStep` gains `buySupplies { section, list: { id, cost, limit?: 1 }[], points: Record<players, number>, xpRate?: number, record?: boolean }` (a per-investigator prompt with the balance; `xpRate` 2 lets a Return-to investigator convert up to 10 XP; `record: false` keeps Relics' list in the scenario only), `checkSupply { supply, who: "any" | "each" | "chosen", then, else }` (a `FlowCondition` too, so `all`/`any` compose it for the `multi` steps), `crossOffSupply { supply, who: "eachOrRead" | "anyOne", missing: StepIds }` (provisions per investigator with "Low on Rations" per missing one; gasoline by any one, else "Out of Gas"; medicine per investigator removing a Poisoned, else "The Poison Spreads"). The flow compiler maps `supplies`, `check_supplies`, `use_supplies`, `investigator_choice_supplies` and the supply branches of `multi`. At scenario start `s.supplies` is the log's copy (`GameSetup.supplies`); the card condition `hasSupply { supply, who: "you" | "atYourLocation" | "any" }` and the effect `crossOffSupply { supply, who }` read and write it; at the end the record carries `supplies` back to the log (as `xp` does). `uses: supplies` on player cards is untouched; the supply ids are their own set (`SUPPLY` in `constants.ts`, 16 names: the 11 of Supply Point 1, gasoline, pocketknife, pickaxe, journal, satchel, and `keyOfEztli`). _Alternative:_ `investigatorCount` keyed `supply:<name>` — rejected: the screen would show 16 counters per investigator and the step kinds would still be new.
+
+5. **Vengeance is counted from the victory display.** `CardDef.vengeance?: number` (next to `victory`, `schema.ts:1103`). `finishRevelation` sends a resolving encounter card with `vengeance` to `ZONE.Victory` as it does for `victory`; `DefeatEnemy` likewise; at scenario end, revealed locations with vengeance and no clues (and none for "considered" statics) join it before the record is written. A constant modifier `consideredInVictory` with a condition (Underground Ruins 04066 while an enemy is there, City of the Serpents 04287 with no clues, Hall of Heresy 04288 with an investigator, Throne Room 53023 with doom) makes `vengeanceInVictory` count a card in play. `vengeanceInVictory` is an `Amount`, a condition `{ min }`, and a token X. `ScenarioRecord.vengeance` is written at the end; `FlowAmount` gains `"vengeance"` (the last record's), and the compiler maps `record_vengeance` to it. `recordCards.source` gains `vengeanceInVictory` (HotE 1 "the jungle watches"); the effect `returnVengeanceCard` (Time-Wracked Woods 04217) moves a chosen non-Elite vengeance card from the victory display to the encounter discard. Vengeful Serpent 53078 (V0) counts as a vengeance card with 0 points: the field is set, the amount adds 0.
+
+6. **Poisoned is a Permanent weakness in play.** Setup step `setAsidePoisoned` (or `setAside` with `all: true`, once `scenario-import-fixes` lands copies) moves every Poisoned 04102 not in a deck to `ZONE.SetAside`. Effect `poison { who }`: if the investigator has no Poisoned in play, a set-aside copy enters their threat area (nothing when none is left, the printed "if able"). Condition `poisoned { who }` reads the threat area; prey `poisoned` for Fang of Yig 04098. At scenario end a Poisoned in a threat area is added to its investigator's campaign deck (`addWeakness`); at the next setup it starts in play as any Permanent card. Flow effect `removePoisoned { who }` for the interludes and St. Mary's. Token outcome `autoFail: Condition` on `TokenEffect`: when it holds on reveal the test fails instead of applying the modifier (the four TFA reference cards and Depths' vengeance ≥ 3).
+
+7. **Token X sources and clamps.** `TokenEffect.x` gains `vengeanceInVictory`, `locationsInPlay`, `explorationDeckSize`, `locationsWithDoom`, `doomOnLocations`, `scenarioCounter` (with `counter: string`); `xMin`/`xMax` clamp after `xTimes`/`xPlus` (Wilds: tablet max 5 / min 3). The conditional modifier form ("−1, −3 if there is doom on your location") is `engine-scenario-structure`'s.
+
+8. **Small shared vocabulary.** Effect `flipClueToDoom { at }` (one clue on the location becomes one doom: Ancient Hall 04063, Grand Chamber 04064, Padma 04186, Yuggoth 04327, act 04347, Moment of Doom). A named scenario counter: flag family `counter` (`flags.ts`), effects `setCounter`/`addCounter { name, amount }`, condition `counter { name, min, max }`, token X `scenarioCounter`; Depths' depth level, Bad Blood's collected memories. Amounts `locationsWithDoom`, `doomOnLocations`. Each is a one-line op in `effects/` with a unit test.
+
+9. **Versions.** `ENGINE_VERSION` bumps (new zone, step, prompts); `CampaignState.version` bumps with a migration adding an empty supplies section and `vengeance: 0` to old records.
+
+## Risks / Trade-offs
+
+- [Symbols transcribed by hand] → the reachability check and a test per scenario in the campaign change that explores to every location; the UI draws the symbol glyph on the card frame so a wrong one is visible.
+- [Explore as a loop step could draw the whole deck] → the step stops at a treachery or a match; an empty deck ends the exploration with nothing drawn (the guide has no rule; a test pins it).
+- [Supplies in two places (log and state)] → the state's copy is written back only by the scenario end; a scenario abandoned mid-way keeps the log as it was, as for XP.
+- [Vengeance locations at the end] → counted once, by the end-of-scenario pass, so a replay is deterministic.
+- [Bot explores blindly into treacheries] → acceptable: the bot is a playthrough gate, not a player.
+
+## Migration Plan
+
+Engine, schema and compiler in one change; `ENGINE_VERSION` bump restarts a scenario in progress, the campaign save migration adds the supplies section. The campaign changes then fill the content. Rollback: revert; the generated content does not reference the new fields until they do.
+
+## Open Questions
+
+- The glyph set of the base cycle's connection symbols (the Return-to cards name five; the base cards use more) is read off the scans in `campaign-the-forgotten-age`; the constant set is extended there.

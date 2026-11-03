@@ -1,0 +1,34 @@
+## Why
+
+Edge of the Earth (`content/packs/eoe/`, 403 cards; campaign `edge-of-the-earth`, 248 campaign cards, 7 working) rests on four mechanics the engine does not have: the frost chaos token, the Tekeli-li weakness deck, the nine Expedition Team partners and the camp's shelter value. Every one of its seven scenarios reads them, about 70% of its encounter cards do, and the campaign flow drops what it cannot say: `flow.json` has 10 `unsupported` steps and 23 `unsupported` branches (all partner counts and statuses), 41 frost add/remove effects skipped by the compiler, and the frost tokens left out of every difficulty's bag. The visible result: Fatal Mirage, a third of the campaign's cards, is never offered on a first run (its "three or more names crossed off" branch always takes `else`), and Ice and Death I gives 0 bonus XP instead of the camp's shelter. `campaign-edge-of-the-earth` and `player-cards-eoe` cannot start before this lands.
+
+## What Changes
+
+- **Frost token.** `"frost"` joins the chaos tokens: in a skill test the first frost is "−1, reveal another", a second frost in the same test ends the reveal step as an automatic failure; a frost revealed outside a test does nothing; no more than eight frost in the bag and sealed together. Cards can say "after you reveal 1+ frost this test", "the first frost is −3 instead", "for each frost revealed", "cancel that token and reveal a new one", "treat this token as frost". The campaign bags of `edge-of-the-earth` get their frost (Easy 0, Standard 1, Hard 2, Expert 3), from the importer, not by hand.
+- **Changes that outlive the scenario.** A card op `addChaosToken`/`removeChaosToken` (today only setup and flow have them), and ops that move cards into or out of an investigator's deck for the campaign, are written to a ledger in game state; `applyScenarioEnd` applies the ledger to the campaign's bag and decks. Frost "remains in the chaos bag from scenario to scenario" (guide p.9), and a Tekeli-li that leaves a deck leaves it for good.
+- **Tekeli-li deck.** A side deck built at setup from the 16 Tekeli-li cards (08723–08729) not already in investigator decks, and the ops the cards use: shuffle the top N into your deck without looking (or else…), draw the top card, return a resolved Tekeli-li to the bottom, search your deck or top N for Tekeli-li and return them. Generic over side decks: `deck` is a parameter.
+- **Partners.** A campaign log section kind `partner`: per partner a status (alive, crossed off, MIA, safe, resolute) plus damage and horror. A scenario setup step `choosePartner` asks each investigator for one alive, non-MIA partner (the Resolute copy when checkmarked; `uses: +1` for a named group), put into play with its recorded tokens. The `Partner` keyword in the engine: cannot leave play unless defeated; defeated means removed from the game; a defeated investigator's partner is defeated; a resigned investigator's partner leaves play undefeated. At scenario end the engine reports each partner's fate as facts the flow writes to the log. Flow vocabulary: conditions `partnerStatus` and `partnerCount` (with `atLeast` counting on `multi`), effects `partnerStatus` and `recordPartnerTrauma`, inputs `partnerChoice` (random N safe, rest MIA) and `investigatorChoicePartner`. The compiler emits them instead of `unsupported`.
+- **Shelter and camp.** A location's `shelter` value in data; X sources `shelterOfYourLocation` and `halfShelterOfYourLocation`; setup steps `startAtCamp` and `startingResources {count}`; XP bonus from a log count with a minimum (`bonus: {count: "camp_shelter", min: 3}`); a flow condition `victoryHas` on the victory display, which five guide checklists need.
+- **Recompiled flow** for `edge-of-the-earth`: 0 unsupported steps, the Fatal Mirage offer reachable on a first run, the epilogue's partner-pair passages reachable, the shelter XP bonus.
+- `ENGINE_VERSION` bump: saved scenarios restart, campaign logs migrate (the `expedition_team` section becomes `partner`).
+
+## Capabilities
+
+### New Capabilities
+
+None.
+
+### Modified Capabilities
+
+- `game-engine`: Chaos bag (the frost token and its reveal rule, the cap, the per-test frost count); Skill tests (frost hooks); Player cards in play (the Partner keyword); a ledger of campaign-persistent bag and deck changes; side-deck ops for the Tekeli-li deck; shelter as an X source.
+- `campaign-flow`: Sectioned campaign log (the `partner` section kind); Campaign flow as data (partner conditions, effects and inputs, `atLeast`, `victoryHas`, count-valued XP bonus); Flow compiled from the campaign guides (partner and frost steps compile; `edge-of-the-earth` has no unsupported step).
+- `campaign-play`: Data-defined scenario setup (`choosePartner`, `startAtCamp`, `startingResources`); Experience and trauma (partner tokens recorded, bag and deck changes kept); the campaign bag holds frost by difficulty.
+- `card-content`: Data-driven card effects (the ops, conditions and X sources above; `CardDef.shelter`); Campaigns imported from the campaign guides (frost is a known token).
+
+## Impact
+
+- `src/content/schema.ts` (`CHAOS_TOKENS`, `TokenEffect.x`, `SetupStep`, `Effect` ops, `Condition`, `FlowCondition`/`FlowEffect`/`FlowInput`, `LOG_SECTION_KINDS`, `CardDef.shelter`, `Resolution.effects` xp bonus), `src/content/implemented.ts` (the `Partner` keyword line, the shelter line).
+- `src/engine/rules/skillTest.ts` (frost reveal), `src/engine/effects/tokens.ts` (bag ops, the ledger), `src/engine/effects/search.ts` or a new `effects/sideDecks.ts` (Tekeli-li ops), `src/engine/rules/investigators.ts` and `rules/cards.ts` (partner defeat and leave-play rules), `src/engine/rules/scenario.ts` (setup steps), `src/engine/campaign/campaign.ts` (`applyScenarioEnd` ledger and partner facts, `scenarioSetup` partner choice), `src/engine/campaign/flow.ts` and `log.ts` (partner section, new conditions, effects and inputs), `src/engine/campaign/types.ts`, `src/engine/world/types.ts`.
+- `scripts/campaignGuide.ts` (`tokenName` knows frost), `scripts/campaignFlow.ts` (partner and frost steps, `multi` counts, the `partner` section kind, count-valued `earn_xp`), `scripts/import-campaigns.ts`; regenerated `content/campaigns-generated/edge-of-the-earth/{campaign,flow}.json`.
+- `src/ui`: the frost token face in the bag and the reveal strip, the partner choice prompt, the log screen's partner section (status, damage, horror, checkmark), the Tekeli-li side deck on the table; strings in `content/i18n/{en,ru}/ui.json`.
+- Neighbours: `campaign-flow-compiler-fixes` (the compiler file; land first), `engine-scenario-structure` (named tokens: City keys and HoM seals are not here), `engine-tic-keys-flooding`/`engine-tsk-keys-concealed` (keys), `engine-location-instances-grid` (grid adjacency). `campaign-edge-of-the-earth` and `player-cards-eoe` depend on this change.
