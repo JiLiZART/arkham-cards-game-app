@@ -101,8 +101,14 @@ export function runScript(game: GameContext, step: ScriptStep, opts: RunOpts = {
   }
 }
 
-type ScenarioHook = "checkObjectives" | "ended" | "allEliminated" | "spawnRedirect";
-type CardHook = "setup" | "gameEnd" | "eventFinished" | "healHorror";
+type ScenarioHook =
+  | "checkObjectives"
+  | "ended"
+  | "allEliminated"
+  | "spawnRedirect"
+  | "locationLeavesPlay"
+  | "wouldBeDefeated";
+type CardHook = "setup" | "gameEnd" | "eventFinished" | "healHorror" | "storyResolved";
 type AfterGame<F> = F extends (game: GameContext, ...a: infer A) => unknown ? A : never;
 type AfterRun<F> = F extends (game: GameContext, run: HookRun, ...a: infer A) => unknown
   ? A

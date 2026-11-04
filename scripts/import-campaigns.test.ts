@@ -1,7 +1,7 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { bagsOf, scenarioOf } from "./import-campaigns";
+import { bagsOf, oneCardPerFace, scenarioOf } from "./import-campaigns";
 
 type Card = {
   code: string;
@@ -295,5 +295,26 @@ describe("the generated flows (campaign-flow-compiler-fixes)", () => {
     const sides = readdirSync(G).filter((d) => d.startsWith("side-"));
     expect(sides.filter((d) => "fortune-and-folly-checkpoint" in flowOf(d).interludes)).toEqual([]);
     expect(flowOf("fortune-and-folly").interludes).toHaveProperty("fortune-and-folly-checkpoint");
+  });
+});
+
+describe("oneCardPerFace", () => {
+  const card = (code: string, type: string) =>
+    [code, { code, name: code, type, pack: "x" }] as const;
+  const cards = new Map([
+    card("03076a", "asset"),
+    card("03076b", "story"),
+    card("05262", "location"),
+    card("05262b", "location"),
+    card("01121a", "agenda"),
+    card("01121b", "enemy"),
+  ]);
+  it("keeps a double-faced card's front when both faces are named, and an act's or agenda's other card", () => {
+    expect(
+      oneCardPerFace(["03076a", "03076b", "05262", "05262b", "01121a", "01121b"], cards),
+    ).toEqual(["03076a", "05262", "01121a", "01121b"]);
+  });
+  it("keeps a back named on its own (the card set aside with that side up)", () => {
+    expect(oneCardPerFace(["03076b"], cards)).toEqual(["03076b"]);
   });
 });

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { cardText, t } from "../../../content/i18n";
+import { deckCodes } from "../../../content/schema";
 import type { GameState } from "../../../engine/world/types";
 import { CardFace } from "../../components/CardFace";
 import { groupTokens } from "../../game/chaos";
@@ -28,8 +29,9 @@ export function DeckViewer({ kind }: { kind: DeckKind }) {
   const locale = useGame((s) => s.locale);
   const close = () => useView.getState().setModal(null);
   const sc = db.scenarios[game.scenarioId];
-  const currentId = kind === "act" ? game.act : kind === "agenda" ? game.agenda : null;
-  const codes = kind === "act" ? sc.acts : kind === "agenda" ? sc.agendas : [sc.card];
+  const currentId = kind === "act" ? game.acts.a : kind === "agenda" ? game.agendas.a : null;
+  const codes =
+    kind === "act" ? deckCodes(sc.acts) : kind === "agenda" ? deckCodes(sc.agendas) : [sc.card];
   const cur =
     kind === "reference"
       ? 0

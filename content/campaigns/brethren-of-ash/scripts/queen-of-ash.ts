@@ -176,7 +176,9 @@ export default {
       const faint = elokoss(game);
       if (actOne || !faint) {
         if (c && !card(game, c.id).revealed) queue(game, revealLocation(c.id));
-        const mother = setAside(game, "12179b")[0];
+        // Elokoss is one card: set aside on her faint side, she arrives turned to the Mother of Flame
+        const mother = setAside(game, "12179")[0];
+        if (mother) setCode(game, mother.id, "12179b");
         if (mother && c) {
           moveCard(game, mother.id, ZONE.Limbo);
           queue(game, spawn({ enemy: mother.id, inv: null, at: c.id }));

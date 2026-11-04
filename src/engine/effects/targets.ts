@@ -11,8 +11,18 @@ import {
   leadInvestigator,
   playerCount,
   push,
+  tokensOn,
 } from "../context";
-import { distances, enemies, enemiesAt, engagedWith, invsAt, skillValue } from "../queries";
+import {
+  beneathCount,
+  tokenHolder,
+  distances,
+  enemies,
+  enemiesAt,
+  engagedWith,
+  invsAt,
+  skillValue,
+} from "../queries";
 import type { EffCtx, InstId, InvId } from "../world/types";
 import type { EffStep } from "./types";
 import { CHOICE } from "../world/constants";
@@ -30,7 +40,14 @@ export function amt(game: GameContext, a: Amount, ctx: EffCtx): number {
           ? ctx.you
             ? skillValue(game, ctx.you, a.yourSkill)
             : 0
-          : a.perInvestigator * playerCount(game);
+          : "beneathCount" in a
+            ? beneathCount(game, a.beneathCount, ctx)
+            : "tokensOn" in a
+              ? (() => {
+                  const h = tokenHolder(game, a.tokensOn.on, ctx);
+                  return h ? tokensOn(game, h, a.tokensOn.name) : 0;
+                })()
+              : a.perInvestigator * playerCount(game);
   if (a === "failBy") return ctx.failBy ?? 0;
   if (a === "succeedBy") return ctx.succeedBy ?? 0;
   if (a === "X") return ctx.x ?? 0;

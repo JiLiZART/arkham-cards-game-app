@@ -17,7 +17,7 @@ const MOVED: readonly FlagTable[] = [
   "surge",
   "dying",
   "costMod",
-  "beneath",
+  "tokens",
   "aside",
   "xp",
   "hunch",
@@ -85,8 +85,6 @@ export const surge = family<true, InstId>("surge", "surge");
 export const dying = family<true, InstId>("dying", "dying");
 /** added to the card's cost while it is played */
 export const costMod = counts<InstId>("costMod", "costMod");
-/** the encounter card set beneath a location (Smoke and Mirrors), by location */
-export const beneath = family<InstId, InstId>("beneath", "beneath");
 /** an enemy of this card code has been defeated this scenario */
 export const defeated = family<true, string>("defeated");
 
@@ -130,8 +128,10 @@ export const atTurnEnd = global<{ inv: InvId; effects: Effect[]; ctx: EffCtx }[]
 export const connections = global<[string, string][]>("connections");
 /** how many cards each investigator discards at random from the opening hand */
 export const discardFromOpeningHands = global<number>("discardFromOpeningHands");
-/** cards set beneath the act (Smoke and Mirrors) */
-export const underAct = global<InstId[]>("underAct");
+/** no vehicle may be entered: anywhere (true), or at these locations */
+export const noVehicles = global<true | InstId[]>("noVehicles");
+/** the round an investigator last entered (`<inv>:enter`) or left (`<inv>:leave`) a vehicle */
+export const vehicleUsed = family<number>("vehicleUsed");
 /** Smoke and Mirrors: the harbinger, and where the servant of flame went */
 export const harbinger = global<InstId>("harbinger");
 export const killedServant = global<true>("killedServant");

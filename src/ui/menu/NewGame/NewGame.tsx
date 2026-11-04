@@ -5,7 +5,7 @@ import { useWizardFilters } from "../wizardFilters";
 import { moment } from "../../hud/SoundLayer";
 import { campaignLoaded, loadAllPacks, loadCampaign, loadPacksFor } from "../../../content";
 import { cardText, scenarioText, t } from "../../../content/i18n";
-import type { Difficulty } from "../../../content/schema";
+import { deckCodes, type Difficulty } from "../../../content/schema";
 import { db, gameStore, useGame } from "../../state/context";
 import { Glyph, Icon, Stat, UiIcon } from "../../components/Icon";
 import { CardFace } from "../../components/CardFace";
@@ -168,7 +168,8 @@ function CampaignStep({ s, set }: { s: WizardState; set: (w: WizardState) => voi
         <div className={styles.wzCtiles}>
           {list.map((c) => {
             // the first chapter's art (the first agenda), found by code: a generated campaign's cards load only when it is chosen
-            const card = c.cover ?? db.scenarios[c.scenarios[0]]?.agendas[0] ?? c.card;
+            const card =
+              c.cover ?? deckCodes(db.scenarios[c.scenarios[0]]?.agendas ?? [])[0] ?? c.card;
             const art = card ? (db.cards[card] ?? { code: card }) : null;
             const on = s.campaignId === c.id;
             return (

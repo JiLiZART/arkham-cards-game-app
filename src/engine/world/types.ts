@@ -55,6 +55,10 @@ export type PileName =
   | `hand:${string}`
   | `discard:${string}`
   | `sideDeck:${string}`
+  | `actDeck:${string}`
+  | `agendaDeck:${string}`
+  /** the facedown cards beneath a card, top first */
+  | `beneath:${string}`
   | FixedPile;
 
 /**
@@ -81,8 +85,8 @@ export interface FlagTables {
   surge: Record<InstId, true>;
   dying: Record<InstId, true>;
   costMod: Record<InstId, number>;
-  /** the encounter card set beneath a location, by location */
-  beneath: Record<InstId, InstId>;
+  /** named tokens (wards, scrap, seals) by `holder:name`: the holder a card or an investigator */
+  tokens: Record<string, number>;
   aside: Record<InvId, InstId[]>;
   xp: Record<InvId, number>;
   hunch: Record<InvId, InstId[]>;
@@ -131,6 +135,8 @@ export interface InvState {
   hand: InstId[];
   discard: InstId[];
   location: InstId | null;
+  /** the vehicle they are in, at its location (absent: none) */
+  vehicle?: InstId | null;
   damage: number;
   horror: number;
   clues: number;
@@ -298,7 +304,11 @@ export type TurnAction =
   | { kind: "fight"; enemy: InstId }
   | { kind: "engage"; enemy: InstId }
   | { kind: "evade"; enemy: InstId }
-  | { kind: "advanceAct" }
+  /** `deck`: another act deck than `a` */
+  | { kind: "advanceAct"; deck?: string }
+  /** a vehicle at your location: getting in, getting out (fast, once each per round) */
+  | { kind: "enterVehicle"; vehicle: InstId }
+  | { kind: "leaveVehicle" }
   | { kind: "endTurn" };
 
 /** engine steps; resolved LIFO from state.queue */
@@ -333,12 +343,13 @@ export type Step = { choice?: any } & (
   | { t: "Elusive"; enemy: InstId }
   | { t: "FinishRevelation"; card: InstId; inv: InvId }
   | { t: "AllEliminated" }
-  | { t: "NextAgenda"; card: InstId }
-  | { t: "NextAct"; card: InstId }
+  | { t: "NextAgenda"; card: InstId; deck?: string }
+  | { t: "NextAct"; card: InstId; deck?: string }
   | { t: "FinishEvent"; ctx: EffCtx }
   | { t: "AssetDefeatCheck"; inv: InvId }
   | { t: "RemoveDefeatedAsset"; card: InstId }
-  | { t: "RevealLocation"; location: InstId }
+  /** `by`: the investigator who revealed it (by entering), for its "after you reveal" abilities */
+  | { t: "RevealLocation"; location: InstId; by?: InvId }
   | { t: "CheckEngagement"; inv: InvId }
   | { t: "ChooseLead" }
   | { t: "Investigate"; inv: InvId; location: InstId }
@@ -361,7 +372,8 @@ export type Step = { choice?: any } & (
   | { t: "PlayCard"; inv: InvId; card: InstId; ctx?: EffCtx; free?: boolean; viaTrigger?: boolean }
   /** `tapped`: the draw was asked for by tapping the deck already (the Draw action, or the second card of a draw of several) */
   | { t: "Draw"; inv: InvId; n: number; tapped?: boolean }
-  | { t: "DrawEncounter"; inv: InvId }
+  /** `card`: that card is drawn as the encounter card (from beneath a card), not the deck's top */
+  | { t: "DrawEncounter"; inv: InvId; card?: InstId }
   | { t: "Revelation"; inv: InvId; card: InstId }
   | { t: "Spawn"; enemy: InstId; inv: InvId | null; at?: InstId | null }
   | { t: "EnemyAttack"; enemy: InstId; inv: InvId; aoo: boolean; key: string }
@@ -397,17 +409,26 @@ export type Step = { choice?: any } & (
       key?: string;
       windowed?: boolean;
     }
-  | { t: "DefeatEnemy"; enemy: InstId; by: InvId | null; fired?: boolean }
+  | {
+      t: "DefeatEnemy";
+      enemy: InstId;
+      by: InvId | null;
+      fired?: boolean;
+      checked?: boolean;
+      key?: string;
+    }
   | { t: "Move"; inv: InvId; to: InstId; key?: string }
   | { t: "Arrive"; inv: InvId; to: InstId; key?: string }
   | { t: "DiscoverClues"; inv: InvId; location: InstId; n: number }
-  | { t: "PlaceDoom"; card: InstId; n: number }
+  /** `agenda`: on the current agenda, the lead choosing when there are several decks */
+  | { t: "PlaceDoom"; card: InstId | "agenda"; n: number }
   | { t: "CheckDoom" }
-  | { t: "AdvanceAgenda"; fired?: boolean }
-  | { t: "AdvanceAct"; spend?: boolean }
+  | { t: "AdvanceAgenda"; fired?: boolean; deck?: string }
+  | { t: "AdvanceAct"; spend?: boolean; deck?: string }
   | { t: "Resolution"; id: string }
   | { t: "CheckDefeat"; inv: InvId }
-  | { t: "Defeated"; inv: InvId; by: "damage" | "horror" | "resign" }
+  /** `effect`: a card or the scenario defeats them (a location removed with them in it): no trauma */
+  | { t: "Defeated"; inv: InvId; by: "damage" | "horror" | "resign" | "effect"; key?: string }
   | {
       t: "Test";
       stage: TestStage;
@@ -418,6 +439,18 @@ export type Step = { choice?: any } & (
   | { t: "ForEachInv"; invs: InvId[]; step: Step }
   /** put looked-at cards back on top of a deck in the order chosen: `placed` from the top down, the last one goes under them */
   | { t: "ArrangeTop"; inv: InvId; deck: InvId | "encounter"; cards: InstId[]; placed: InstId[] }
+  /** turn a card to its other printed face (engine-scenario-structure) */
+  | { t: "Flip"; card: InstId }
+  /** a story face: shown, its abilities run, then what the card says (flip back, leave the game, stay) */
+  | { t: "ResolveStory"; card: InstId; you: InvId; shown?: boolean }
+  /** a location leaves play: the investigators there defeated (or moved `to`), its enemies discarded, the scenario told */
+  | { t: "RemoveLocation"; location: InstId; investigators?: "defeat" | "move"; to?: InstId }
+  | { t: "EnterVehicle"; inv: InvId; vehicle: InstId }
+  | { t: "LeaveVehicle"; inv: InvId }
+  /** a vehicle moves, the investigators in it with it (arriving, without a move action) */
+  | { t: "MoveVehicle"; vehicle: InstId; to: InstId }
+  /** the scenario pauses on one of its interludes; the lead answers its choice */
+  | { t: "ReadInterlude"; id: string }
 );
 /** the step of one kind */
 export type StepOf<K extends Step["t"]> = Extract<Step, { t: K }>;
@@ -426,6 +459,8 @@ export interface EventData {
   inv?: InvId | null;
   /** the card whose effect caused the event (horrorHealed) */
   by?: InstId | null;
+  /** what would defeat an investigator or enemy (a wouldBeDefeated window) */
+  cause?: "damage" | "horror" | "both" | "effect";
   enemy?: InstId | null;
   location?: InstId | null;
   card?: InstId | null;
@@ -472,8 +507,10 @@ export interface GameState {
   pacePhases?: boolean;
   /** set from the setup: every draw in play waits for the drawing investigator to tap the deck */
   tapDecks?: boolean;
-  act: InstId | null;
-  agenda: InstId | null;
+  /** each act deck's current card, by deck name in deck order; a one-deck scenario's deck is `a` */
+  acts: Record<string, InstId | null>;
+  /** each agenda deck's current card, as `acts` */
+  agendas: Record<string, InstId | null>;
   chaosBag: ChaosToken[];
   skillTest: SkillTestState | null;
   testStack: SkillTestState[];
@@ -590,6 +627,16 @@ export interface ScriptHooks {
   eventFinished(game: GameContext, run: HookRun, event: InstId): void;
   /** card: a heal of `n` horror from `target` is about to happen; returns what may still be healed (Rational Thought) */
   healHorror(game: GameContext, run: HookRun, target: InstId, n: number): number;
+  /** card: its story face was resolved, after its abilities and before what the card says to do next */
+  storyResolved(game: GameContext, run: HookRun, card: InstId): void;
+  /** scenario: a location is leaving play (removed), before it goes */
+  locationLeavesPlay(game: GameContext, location: InstId): void;
+  /** scenario: an investigator (or an enemy) would be defeated; `true` cancels the defeat (Dim Carcosa's sanity rule) */
+  wouldBeDefeated(
+    game: GameContext,
+    who: InvId | InstId,
+    by: "damage" | "horror" | "both" | "effect",
+  ): boolean;
 }
 
 /** engine context passed to every rule: the state (mutated in place, one deep copy per choice) + static content */

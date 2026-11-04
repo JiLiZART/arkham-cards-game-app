@@ -111,8 +111,8 @@ describe("musicFor", () => {
   });
 
   it("the current agenda's track, else the current act's, else the bed", () => {
-    const actCode = cardRecIn(fresh, fresh.act!).code;
-    const agendaCode = cardRecIn(fresh, fresh.agenda!).code;
+    const actCode = cardRecIn(fresh, fresh.acts.a!).code;
+    const agendaCode = cardRecIn(fresh, fresh.agendas.a!).code;
     expect(musicFor(fresh, scored(`card:${actCode}`))).toBe(`card:${actCode}`);
     expect(musicFor(fresh, scored(`card:${actCode}`, `card:${agendaCode}`))).toBe(
       `card:${agendaCode}`,
@@ -206,8 +206,8 @@ describe("musicFor", () => {
         m,
       ),
     ).toBe("tension");
-    const threshold = db.cards[cardRecIn(fresh, fresh.agenda!).code].doom!;
-    const almost = with_((s) => (cardRecIn(s, s.agenda!).doom = threshold - 1));
+    const threshold = db.cards[cardRecIn(fresh, fresh.agendas.a!).code].doom!;
+    const almost = with_((s) => (cardRecIn(s, s.agendas.a!).doom = threshold - 1));
     expect(musicFor(almost, m)).toBe("tension");
     const ghoul = codeOf("01160");
     const both = with_((s) => {

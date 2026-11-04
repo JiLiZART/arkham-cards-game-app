@@ -1,14 +1,22 @@
 import type { ContentDb } from "../engine/world/types";
-import type { CardDef } from "./schema";
+import type { CardDef, Spawn } from "./schema";
 import { hasScript } from "../engine/world/scripts";
 
 /** the keywords the engine acts on by themselves (CardDef.keywords) */
 const KEYWORD =
-  /^(hunter|retaliate|aloof|alert|massive|surge|peril|fast|exceptional|doomed|elusive)(\s*\(\d+\))?$/i;
+  /^(hunter|retaliate|aloof|alert|massive|surge|peril|fast|exceptional|doomed|elusive|vehicle)(\s*\(\d+\))?$/i;
 
 /** the spawn values the engine resolves (rules/enemies.ts): the two keywords, or the name of a location in the content */
-function spawnResolves(db: ContentDb, spawn: string | undefined): boolean {
+function spawnResolves(db: ContentDb, spawn: Spawn | undefined): boolean {
   if (!spawn) return false;
+  // an expression resolves when every location it names by name is in the content
+  if (typeof spawn === "object")
+    return [spawn, ...(spawn.or ?? [])].every((x) =>
+      typeof x === "string"
+        ? spawnResolves(db, x)
+        : !x.name ||
+          Object.values(db.cards).some((c) => c.type === "location" && c.name === x.name),
+    );
   if (
     spawn === "emptyLocation" ||
     spawn === "farthestEmptyLocation" ||
@@ -53,15 +61,19 @@ const SYMBOLS: Record<string, string> = {
 };
 
 /** what a printed token line needs from the scenario's token entry, read off its sentences */
-function tokenNeeds(rest: string): ("x" | "onFail" | "revealAnother" | "effect")[] {
-  const needs = new Set<"x" | "onFail" | "revealAnother" | "effect">();
+type TokenNeed = "x" | "instead" | "onFail" | "revealAnother" | "effect";
+function tokenNeeds(rest: string): TokenNeed[] {
+  const needs = new Set<TokenNeed>();
   let failing = false; // the sentences after "If you fail, …" that don't start a new condition go on being the failure effect
   for (const sentence of rest
     .split(/\.\s+|\.$/)
     .map((p) => p.trim())
     .filter(Boolean)) {
     if (/^[-+]?\d+$/.test(sentence)) continue; // the modifier
-    if (/^-X$/.test(sentence) || /^-\d+ (for each|\(-\d+ instead)/.test(sentence)) needs.add("x");
+    if (/^-X$/.test(sentence) || /^-\d+ for each/.test(sentence)) needs.add("x");
+    // "-2 (-4 instead if …)", "-3 instead if …": the other modifier under a condition
+    else if (/^-\d+ \(-\d+ instead/.test(sentence) || /^-\d+ instead if/.test(sentence))
+      needs.add("instead");
     else if (sentence.startsWith("X is ")) continue;
     else if (/^If you fail/i.test(sentence)) {
       needs.add("onFail");
@@ -107,11 +119,13 @@ export function tokensReal(db: ContentDb, scenarioId: string): boolean {
           const ok =
             need === "x"
               ? e.x !== undefined
-              : need === "onFail"
-                ? !!e.onFail?.length
-                : need === "revealAnother"
-                  ? !!e.revealAnother
-                  : !!(e.onReveal?.length || e.condition);
+              : need === "instead"
+                ? e.instead !== undefined || e.x !== undefined
+                : need === "onFail"
+                  ? !!e.onFail?.length
+                  : need === "revealAnother"
+                    ? !!e.revealAnother
+                    : !!(e.onReveal?.length || e.condition);
           if (!ok) return false;
         }
       }

@@ -146,7 +146,7 @@ describe("live investigator views", () => {
     const w = world();
     const spread = { ...invViewIn({ world: w }, "01001")! };
     expect(Object.keys(spread).sort()).toEqual(
-      [...Object.keys(record("x")), "defeatedBy", "deck", "hand", "discard"].sort(),
+      [...Object.keys(record("x")), "defeatedBy", "vehicle", "deck", "hand", "discard"].sort(),
     );
     expect(spread.deck).toEqual(["c3", "c4"]);
   });

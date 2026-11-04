@@ -28,7 +28,7 @@ describe("round structure", () => {
     const r = gathering();
     expect(r.state.round).toBe(1);
     expect(r.state.phase).toBe("investigation");
-    expect(card(gOf(r), r.state.agenda!).doom).toBe(0);
+    expect(card(gOf(r), r.state.agendas.a!).doom).toBe(0);
     expect(r.state.log.some((e) => e.type === "phase" && /Mythos/.test(e.text))).toBe(false);
   });
 

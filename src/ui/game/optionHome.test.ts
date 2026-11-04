@@ -36,8 +36,8 @@ describe("every pending option is reachable without a sidebar", () => {
                         (c.zone === "enemy" && c.engagedWith === viewer)))
                   : home === "strip"
                     ? !!c &&
-                      (o.card === s.act ||
-                        o.card === s.agenda ||
+                      (o.card === s.acts.a ||
+                        o.card === s.agendas.a ||
                         isOneOf(
                           c.zone,
                           ZONE.Victory,
@@ -159,7 +159,7 @@ describe("the phone's instruction bar", () => {
     // with clues enough, the act's Advance is in the phone's bar (the act sits in the closed left drawer)
     const r2 = mutate(r, (game) => (invStateIn(game.s, "01001").clues = 9));
     const s2 = r2.state;
-    const adv = s2.pending!.options.find((o) => o.card === s2.act);
+    const adv = s2.pending!.options.find((o) => o.card === s2.acts.a);
     expect(adv).toBeTruthy();
     expect(inBar(adv!, s2, v, "phone")).toBe(true);
     expect(inBar(adv!, s2, v, "desktop")).toBe(false);

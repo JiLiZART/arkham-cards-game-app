@@ -37,8 +37,8 @@ const fresh = (): GameContext => gOf(skipMulligans(start("the-gathering", [R, D]
 describe("what scripts read about the scenario", () => {
   it("the act, agenda, lead, order, phase, round, difficulty, campaign log and test", () => {
     const game = fresh();
-    expect(currentAct(game)).toBe(game.s.act);
-    expect(currentAgenda(game)).toBe(game.s.agenda);
+    expect(currentAct(game)).toBe(game.s.acts.a);
+    expect(currentAgenda(game)).toBe(game.s.agendas.a);
     expect(leadInvestigator(game)).toBe(R);
     expect(turnOrder(game)).toEqual([R, D]);
     expect(currentPhase(game)).toBe(game.s.phase);
@@ -136,6 +136,15 @@ describe("the verbs scripts queue engine steps with", () => {
       ctx: { you: R },
     });
     same(api.advanceAct(), { t: STEP.AdvanceAct });
+    same(api.flip("c1"), { t: STEP.Flip, card: "c1" });
+    same(api.removeLocation({ location: "c1" }), { t: STEP.RemoveLocation, location: "c1" });
+    same(api.toVoid("c1"), { t: STEP.Eff, effect: { op: "toVoid" }, ctx: { source: "c1" } });
+    same(api.drawBeneath("scenario", { you: R }, true), {
+      t: STEP.Eff,
+      effect: { op: "drawBeneath", from: "scenario", random: true },
+      ctx: { you: R },
+    });
+    same(api.resolveStory({ card: "c1", you: R }), { t: STEP.ResolveStory, card: "c1", you: R });
     same(api.placeDoom({ card: "c1", n: 1 }), { t: STEP.PlaceDoom, card: "c1", n: 1 });
     same(api.endScenario({ id: "R1" }), { t: STEP.Resolution, id: "R1" });
     same(api.drawCards({ inv: R, n: 1, tapped: true }), {
@@ -229,6 +238,7 @@ describe("what api.ts exports", () => {
       "cancelEvent",
       "card",
       "cardIf",
+      "cardsBeneath",
       "cardsIn",
       "checkAssetDefeat",
       "checkCondition",
@@ -239,12 +249,15 @@ describe("what api.ts exports", () => {
       "controlled",
       "createCard",
       "currentAct",
+      "currentActs",
       "currentAgenda",
+      "currentAgendas",
       "currentPhase",
       "currentRound",
       "currentTest",
       "damageEnemy",
       "dealDamage",
+      "deckCards",
       "def",
       "defeatEnemy",
       "defeatInvestigator",
@@ -252,6 +265,7 @@ describe("what api.ts exports", () => {
       "discard",
       "discoverClues",
       "distances",
+      "drawBeneath",
       "drawCards",
       "emit",
       "endScenario",
@@ -259,38 +273,50 @@ describe("what api.ts exports", () => {
       "enemiesAt",
       "enemyAttacks",
       "enemyStat",
+      "enterVehicle",
       "findByCode",
       "flags",
+      "flip",
       "flipNegativeTokens",
       "forceResult",
+      "fromVoid",
+      "inVehicle",
       "inv",
       "invIf",
       "invName",
       "invsAt",
       "isElite",
       "leadInvestigator",
+      "leaveVehicle",
       "locationByName",
       "locations",
       "moveCard",
       "moveInvestigator",
+      "moveVehicle",
       "openWindow",
       "pile",
       "placeDoom",
       "placeInvestigator",
+      "placeTokens",
       "playCard",
       "playCost",
       "playerCount",
+      "putBeneath",
       "putOnTop",
       "queue",
       "randomInt",
+      "readInterlude",
       "ready",
       "remainingHealth",
       "remainingSanity",
+      "removeLocation",
       "resolveEffect",
       "resolveEffects",
       "resolveRevelation",
+      "resolveStory",
       "resolveWeakness",
       "resolvesOnDraw",
+      "revealBeneath",
       "revealLocation",
       "runScript",
       "setCardLocation",
@@ -306,10 +332,13 @@ describe("what api.ts exports", () => {
       "shuffleList",
       "sideDeck",
       "spawn",
+      "spawnTargets",
       "spendableGroupClues",
       "startTest",
       "stepsToward",
       "threatArea",
+      "toVoid",
+      "tokensOn",
       "turnOrder",
       "uniqueInPlay",
       "useAbility",

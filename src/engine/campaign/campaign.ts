@@ -1,15 +1,15 @@
 import { campaignNotes, xp } from "../world/flags";
-import { emptyLog, flatLog, migrateLog, NOTES, record, setCount } from "./log";
+import { addCards, emptyLog, flatLog, migrateLog, NOTES, record, setCount } from "./log";
 import { flowOf } from "../../content/flow";
 import { expandDeck, validateDeck } from "./decks";
 import { ENGINE_VERSION } from "../index";
 import { advance, initFlow, settle, startResolution } from "./flow";
 import { randInt } from "../world/rng";
 import type { ContentDb, GameSetup, GameState } from "../world/types";
-import { cardsOf, invsOf } from "../context";
-import type { CampaignState, NewCampaign } from "./types";
+import { cardOf, cardsOf, invsOf, namedTokensOf, pileOf } from "../context";
+import type { CampaignState, NewCampaign, ScenarioFacts } from "./types";
 import { EVENT } from "../events/event";
-import { isOneOf, ZONE } from "../world/constants";
+import { isOneOf, SCENARIO_CARD, ZONE } from "../world/constants";
 
 const basicWeaknesses = (db: ContentDb, trait?: string) =>
   Object.values(db.cards).filter(
@@ -162,6 +162,74 @@ function uniqueCultists(db: ContentDb, s: GameState, where: "victory" | "remaini
  * investigators), then the resolution's steps through the campaign flow (ADR-0011), which goes on to the next prompt,
  * the next scenario or the end of the campaign. Returns the new campaign state.
  */
+/** what the flow needs of a finished scenario, kept as data once its state is gone */
+export function scenarioFacts(
+  db: ContentDb,
+  s: GameState,
+  victory = victoryTotal(db, s),
+): ScenarioFacts {
+  return {
+    id: s.scenarioId,
+    resolution: s.resolution!,
+    victory,
+    victoryCodes: cardsOf(s)
+      .filter((x) => x.zone === "victory")
+      .map((x) => x.code),
+    cultistsVictory: uniqueCultists(db, s, "victory"),
+    cultistsRemaining: uniqueCultists(db, s, "remaining"),
+    notResigned: invsOf(s)
+      .filter((i) => i.status !== "resigned")
+      .map((i) => i.id),
+    resigned: invsOf(s)
+      .filter((i) => i.status === "resigned")
+      .map((i) => i.id),
+    defeated: invsOf(s)
+      .filter((i) => i.status === "defeated")
+      .map((i) => i.id),
+    ...(db.scenarios[s.scenarioId].resolutions[s.resolution!]?.checkpoint
+      ? { checkpoint: true }
+      : {}),
+  };
+}
+
+const CHECKPOINT = "checkpoint";
+/**
+ * A checkpoint writes the table into the campaign log for the next part's setup (`fromCheckpoint`): the locations in play
+ * with their clues and named tokens, each investigator's story assets and named tokens, the cards beneath the scenario
+ * card. What the guide's "take a break" list doesn't name is not carried.
+ */
+function recordCheckpoint(c: CampaignState, s: GameState) {
+  const named = (holder: string) => namedTokensOf(s, holder);
+  const locs = cardsOf(s).filter((x) => x.zone === "location");
+  c.log = addCards(
+    c.log,
+    "checkpoint:locations",
+    locs.map((l) => l.code),
+    false,
+    CHECKPOINT,
+  );
+  for (const l of locs) {
+    c.log = setCount(c.log, `checkpoint:clues:${l.code}`, "set", l.clues, CHECKPOINT);
+    for (const [name, n] of named(l.id))
+      c.log = setCount(c.log, `checkpoint:tokens:${l.code}:${name}`, "set", n, CHECKPOINT);
+  }
+  for (const i of invsOf(s)) {
+    const assets = cardsOf(s).filter((x) => x.zone === "play" && !x.owner && x.controller === i.id);
+    if (assets.length)
+      c.log = addCards(
+        c.log,
+        `checkpoint:assets:${i.id}`,
+        assets.map((a) => a.code),
+        false,
+        CHECKPOINT,
+      );
+    for (const [name, n] of named(i.id))
+      c.log = setCount(c.log, `checkpoint:tokens:${i.id}:${name}`, "set", n, CHECKPOINT);
+  }
+  const under = pileOf(s, `beneath:${SCENARIO_CARD}`).map((id) => cardOf(s, id).code);
+  if (under.length) c.log = addCards(c.log, "checkpoint:beneathScenario", under, false, CHECKPOINT);
+}
+
 export function applyScenarioEnd(db: ContentDb, c0: CampaignState, s: GameState): CampaignState {
   if (s.phase !== "ended" || !s.resolution) throw new Error("scenario has not ended");
   const c = structuredClone(c0);
@@ -178,22 +246,11 @@ export function applyScenarioEnd(db: ContentDb, c0: CampaignState, s: GameState)
     if (n.kind === "log") c.log = record(c.log, n.id, n.section || NOTES);
     else c.log = setCount(c.log, n.id, "add", Number(n.value), n.section || NOTES);
   }
+  if (db.scenarios[s.scenarioId].resolutions[s.resolution]?.checkpoint) recordCheckpoint(c, s);
   // permanent bag additions from this scenario's setup
   for (const st of db.scenarios[s.scenarioId].setup)
     if (st.do === "addChaosToken") c.chaosBag.push(st.token);
   c.history.push({ scenarioId: s.scenarioId, resolution: s.resolution, xp: 0, victory });
   settle(db, c);
-  return startResolution(db, c, {
-    id: s.scenarioId,
-    resolution: s.resolution,
-    victory,
-    victoryCodes: cardsOf(s)
-      .filter((x) => x.zone === "victory")
-      .map((x) => x.code),
-    cultistsVictory: uniqueCultists(db, s, "victory"),
-    cultistsRemaining: uniqueCultists(db, s, "remaining"),
-    notResigned: invsOf(s)
-      .filter((i) => i.status !== "resigned")
-      .map((i) => i.id),
-  });
+  return startResolution(db, c, scenarioFacts(db, s, victory));
 }

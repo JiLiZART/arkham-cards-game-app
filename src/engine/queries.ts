@@ -1,6 +1,9 @@
 import { attacked, connections as connectionsAdded, named } from "./world/flags";
 import type {
   Ability,
+  BeneathOf,
+  Spawn,
+  TokenHolder,
   CardDef,
   CardFilter,
   Condition,
@@ -21,8 +24,21 @@ import type {
   InvId,
   Zone,
 } from "./world/types";
-import { activeInvs, card, def, defOf, inv, playerCount } from "./context";
-import { ZONE, isOneOf } from "./world/constants";
+import {
+  activeInvs,
+  allCards,
+  card,
+  cardsBeneath,
+  tokensOn,
+  currentAct,
+  currentActs,
+  currentAgenda,
+  def,
+  defOf,
+  inv,
+  playerCount,
+} from "./context";
+import { SCENARIO_CARD, ZONE, isOneOf } from "./world/constants";
 import { conditionFor, scriptOf } from "./world/scripts";
 
 /** Questions about the game: zones, the map, modifiers, costs and conditions (ADR-0025). */
@@ -81,10 +97,11 @@ export function uniqueInPlay(game: GameContext, id: InstId): boolean {
     )
   );
 }
-/** clues the act asks for, as a group (Infinity when it has none to spend) */
-export function actClueCost(game: GameContext): number {
-  if (!game.s.act) return Infinity;
-  const d = def(game, game.s.act);
+/** clues an act deck's current act asks for, as a group (Infinity when it has none to spend) */
+export function actClueCost(game: GameContext, deck = "a"): number {
+  const act = currentAct(game, deck);
+  if (!act) return Infinity;
+  const d = def(game, act);
   if (!d.actClues) return Infinity;
   return d.actClues * (d.actCluesPerInvestigator ? game.s.order.length : 1);
 }
@@ -94,11 +111,18 @@ export function spendableGroupClues(game: GameContext) {
     .filter((x) => !hasFlag(game, x, "cannotSpendClues"))
     .reduce((n, x) => n + inv(game, x).clues, 0);
 }
-/** the group can advance the act by spending clues, in any player window (Grimoire, Act Deck and Agenda Deck) */
-export const canAdvanceAct = (game: GameContext) =>
-  !!game.s.act &&
-  (def(game, game.s.act).actAdvance ?? "turn") === "turn" &&
-  spendableGroupClues(game) >= actClueCost(game);
+/** the act decks the group can advance by spending clues, in deck order (Grimoire, Act Deck and Agenda Deck) */
+export const advanceableActs = (game: GameContext): string[] =>
+  Object.entries(currentActs(game))
+    .filter(
+      ([deck, act]) =>
+        !!act &&
+        (def(game, act).actAdvance ?? "turn") === "turn" &&
+        spendableGroupClues(game) >= actClueCost(game, deck),
+    )
+    .map(([deck]) => deck);
+/** the group can advance an act by spending clues, in any player window */
+export const canAdvanceAct = (game: GameContext) => advanceableActs(game).length > 0;
 export const isMassive = (game: GameContext, id: InstId) => hasKeyword(game, id, "massive");
 export const controlled = (game: GameContext, i: InvId) =>
   cardsIn(game, ZONE.Play).filter((c) => c.controller === i);
@@ -493,6 +517,19 @@ export function checkCondition(game: GameContext, c: Condition, ctx: EffCtx): bo
     return !!ctx.enemy && !!you && attacked.get(game, [ctx.enemy, you]) === game.s.round;
   if ("eventCardIsSelf" in c) return !!ctx.card && ctx.card === ctx.source;
   if ("canPay" in c) return !!you && !!ctx.source && canPay(game, you, ctx.source, c.canPay);
+  if ("tokens" in c) {
+    const h = tokenHolder(game, c.tokens.on, ctx);
+    const n = h ? tokensOn(game, h, c.tokens.name) : 0;
+    return n >= (c.tokens.min ?? 0) && n <= (c.tokens.max ?? Infinity);
+  }
+  if ("horror" in c) {
+    const n = you ? inv(game, you).horror : 0;
+    return !!you && n >= (c.horror.min ?? 0) && n <= (c.horror.max ?? Infinity);
+  }
+  if ("beneath" in c) {
+    const n = beneathCount(game, c.beneath.of, ctx);
+    return n >= (c.beneath.min ?? 0) && n <= (c.beneath.max ?? Infinity);
+  }
   if ("testTokens" in c) return !!game.s.skillTest?.tokens.some((t) => c.testTokens.includes(t));
   if ("eventAtThisLocation" in c)
     return !!ctx.inv && !!ctx.source && invRecIf(game, ctx.inv)?.location === ctx.source;
@@ -506,3 +543,95 @@ export function checkCondition(game: GameContext, c: Condition, ctx: EffCtx): bo
   if ("exhausted" in c) return !!ctx.source && card(game, ctx.source).exhausted === c.exhausted;
   return false;
 }
+
+/** the card a beneath pile is named by: this card, the current act or agenda, the scenario card, your location */
+export function holderOf(game: GameContext, of: BeneathOf, ctx: EffCtx): InstId | null {
+  switch (of) {
+    case "self":
+      return ctx.source ?? null;
+    case "act":
+      return currentAct(game);
+    case "agenda":
+      return currentAgenda(game);
+    case "scenario":
+      return SCENARIO_CARD;
+    case "yourLocation":
+      return ctx.you ? inv(game, ctx.you).location : null;
+  }
+}
+/** who holds named tokens: this card, you, your location */
+export function tokenHolder(game: GameContext, on: TokenHolder, ctx: EffCtx): string | null {
+  if (on === "self") return ctx.source ?? null;
+  if (on === "you") return ctx.you ?? null;
+  return ctx.you ? inv(game, ctx.you).location : null;
+}
+/** how many cards lie beneath the card a pile is named by */
+export const beneathCount = (game: GameContext, of: BeneathOf, ctx: EffCtx): number => {
+  const h = holderOf(game, of, ctx);
+  return h ? cardsBeneath(game, h).length : 0;
+};
+
+/** the locations an enemy may spawn at by a spawn expression, from the drawer's location (shared with Patrol) */
+export function spawnTargets(
+  game: GameContext,
+  expr: Exclude<Spawn, string>,
+  from: InstId | null,
+): InstId[] {
+  if (expr.or)
+    return [
+      ...new Set(
+        expr.or.flatMap((x) => (typeof x === "string" ? [] : spawnTargets(game, x, from))),
+      ),
+    ];
+  let out = locations(game).filter(
+    (l) =>
+      (!expr.name || def(game, l.id).name === expr.name) &&
+      (!expr.trait || def(game, l.id).traits.includes(expr.trait)) &&
+      (!expr.empty || (invsAt(game, l.id).length === 0 && !enemiesAt(game, l.id).length)) &&
+      (!expr.connected || (!!from && connections(game, from).includes(l.id))),
+  );
+  if (expr.unrevealed === "ifAble" && out.some((l) => !l.revealed))
+    out = out.filter((l) => !l.revealed);
+  if ((expr.nearest || expr.farthest) && out.length) {
+    const to = expr.to ?? "you";
+    // the places measured from: the drawer's location, or every location holding (or being) a card of that code or trait
+    const origins =
+      to === "you"
+        ? from
+          ? [from]
+          : []
+        : allCards(game)
+            .filter((c) =>
+              "code" in to ? c.code === to.code : def(game, c.id).traits.includes(to.trait),
+            )
+            .map((c) => (c.zone === ZONE.Location ? c.id : c.location))
+            .filter((x): x is InstId => !!x);
+    const maps = origins.map((o) => distances(game, o));
+    const d = (l: InstId) => Math.min(...maps.map((m) => m.get(l) ?? Infinity));
+    if (maps.length) {
+      const best = expr.nearest
+        ? Math.min(...out.map((l) => d(l.id)))
+        : Math.max(...out.map((l) => d(l.id)));
+      out = out.filter((l) => d(l.id) === best);
+    }
+  }
+  return out.map((l) => l.id);
+}
+
+/** of these investigators, those nearest to a card in play matching the filter (Prey - nearest to a Cultist) */
+export function nearestTo(game: GameContext, filter: CardFilter, candidates: InvId[]): InvId[] {
+  const places = allCards(game)
+    .filter((c) => isInPlayZone(c.zone) && matchesFilter(game, c.code, filter))
+    .map((c) => (c.zone === ZONE.Location ? c.id : c.location))
+    .filter((x): x is InstId => !!x);
+  if (!places.length) return candidates;
+  const maps = places.map((p) => distances(game, p));
+  const d = (i: InvId) => {
+    const loc = inv(game, i).location;
+    return loc ? Math.min(...maps.map((m) => m.get(loc) ?? Infinity)) : Infinity;
+  };
+  const best = Math.min(...candidates.map(d));
+  return candidates.filter((i) => d(i) === best);
+}
+const isInPlayZone = (z: string) =>
+  z === ZONE.Enemy || z === ZONE.Location || z === ZONE.Play || z === ZONE.Attached;

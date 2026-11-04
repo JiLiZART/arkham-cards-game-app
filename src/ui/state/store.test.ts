@@ -364,6 +364,8 @@ describe("pace and held events", () => {
       }),
     ]).toEqual(["c1", "c2"]);
     expect(heldCards({ current: null, queue: [] }).size).toBe(0);
+    // a story face being resolved waits in the showcase too
+    expect([...heldCards({ current: e(EVENT.StoryShown, "c3"), queue: [] })]).toEqual(["c3"]);
   });
 
   it("other big events still wait for Next only at the Tap pace", () => {
@@ -825,23 +827,7 @@ describe("the language", () => {
   });
 });
 
-describe("the component store (engine version 6)", () => {
-  it("a game saved under version 5 is replayed into the new store and goes on from the same point", () => {
-    const storage = mem();
-    start(storage);
-    const save = JSON.parse(storage.data.get(SAVE_KEY)!);
-    const now = createGameStore(db, storage);
-    now.getState().resume();
-    save.version = 5;
-    storage.setItem(SAVE_KEY, JSON.stringify(save));
-    const old = createGameStore(db, storage);
-    old.getState().resume();
-    expect(old.getState().screen).toBe("game");
-    expect(old.getState().notice).toBeNull();
-    expect(old.getState().game).toEqual(now.getState().game);
-    expect(old.getState().actions).toEqual(now.getState().actions);
-  });
-
+describe("the scenario structure (engine version 8)", () => {
   it("a game saved under version 4, before a rules change, still restarts its scenario", () => {
     const storage = mem();
     start(storage);
@@ -854,22 +840,17 @@ describe("the component store (engine version 6)", () => {
     expect(s.getState().game).toBeNull();
     expect(s.getState().notice).toMatch(/restart/);
   });
-});
 
-describe("the field tables (engine version 7)", () => {
-  it("a game saved under version 6 is replayed into the new tables and goes on from the same point", () => {
+  it("a game saved under version 7 restarts its scenario too: its choices may name other cards", () => {
     const storage = mem();
     start(storage);
     const save = JSON.parse(storage.data.get(SAVE_KEY)!);
-    const now = createGameStore(db, storage);
-    now.getState().resume();
-    save.version = 6;
+    save.version = 7;
     storage.setItem(SAVE_KEY, JSON.stringify(save));
-    const old = createGameStore(db, storage);
-    old.getState().resume();
-    expect(old.getState().screen).toBe("game");
-    expect(old.getState().notice).toBeNull();
-    expect(old.getState().game).toEqual(now.getState().game);
-    expect(old.getState().actions).toEqual(now.getState().actions);
+    const s = createGameStore(db, storage);
+    s.getState().resume();
+    expect(s.getState().screen).toBe("log");
+    expect(s.getState().game).toBeNull();
+    expect(s.getState().notice).toMatch(/restart/);
   });
 });

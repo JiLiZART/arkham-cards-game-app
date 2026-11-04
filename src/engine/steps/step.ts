@@ -79,4 +79,11 @@ export const STEP = {
   CheckObjectives: "CheckObjectives",
   ForEachInv: "ForEachInv",
   ArrangeTop: "ArrangeTop",
+  Flip: "Flip",
+  ResolveStory: "ResolveStory",
+  RemoveLocation: "RemoveLocation",
+  EnterVehicle: "EnterVehicle",
+  LeaveVehicle: "LeaveVehicle",
+  MoveVehicle: "MoveVehicle",
+  ReadInterlude: "ReadInterlude",
 } as const satisfies { [K in StepKind]: K };

@@ -6,7 +6,6 @@ import {
   ask,
   card,
   cardIf,
-  currentAgenda,
   currentRound,
   def,
   emit,
@@ -28,6 +27,7 @@ import {
   connections,
   distances,
   enemies,
+  abilitiesOf,
   enemyStat,
   engagedWith,
   hasFlag,
@@ -37,6 +37,8 @@ import {
   isMassive,
   locationByName,
   locations,
+  nearestTo,
+  spawnTargets,
   remainingHealth,
   remainingSanity,
   skillValue,
@@ -60,6 +62,7 @@ export function preyCandidates(game: GameContext, enemy: InstId, candidates: Inv
   if (prey === "bearer") return candidates.filter((i) => i === card(game, enemy).owner);
   if ("only" in prey)
     return candidates.filter((i) => card(game, inv(game, i).cardId).code === prey.only);
+  if ("nearestTo" in prey) return nearestTo(game, prey.nearestTo, candidates);
   if (candidates.length <= 1) return candidates;
   const [dir, stat] = "highest" in prey ? [1, prey.highest] : [-1, prey.lowest];
   const val = (i: InvId) => {
@@ -96,7 +99,28 @@ export const spawnHandler: Handler<"Spawn"> = (game, step) => {
   let engage: InvId | null = null;
   const drawerLoc = step.inv ? inv(game, step.inv).location : null;
   if (!at) at = fireScenarioHook(game, "spawnRedirect", step.enemy) ?? null;
-  if (!at && d.spawn) {
+  if (!at && d.spawn && typeof d.spawn === "object") {
+    // a spawn expression: the drawer chooses among the locations it names; none in play, the enemy is discarded
+    const cands = spawnTargets(game, d.spawn, drawerLoc);
+    if (!cands.length) {
+      emit(game, EVENT.SpawnFail, `${d.name} has no spawn location in play and is discarded`, {
+        card: step.enemy,
+      });
+      moveCard(game, step.enemy, c.owner ? ZONE.Discard : ZONE.EncounterDiscard);
+      return;
+    }
+    const pick = ask<InstId>(
+      game,
+      step,
+      step.inv ?? leadInvestigator(game),
+      CHOICE.Target,
+      `Choose where ${d.name} spawns`,
+      cands.map((l) => ({ id: l, label: def(game, l).name, card: l, value: l })),
+      { auto: true, key: "spawnAt", vars: { card: step.enemy } },
+    );
+    if (pick === undefined) return;
+    at = pick;
+  } else if (!at && typeof d.spawn === "string" && d.spawn) {
     if (d.spawn === "emptyLocation" || d.spawn === "farthestEmptyLocation") {
       let empty = locations(game).filter(
         (l) => invsAt(game, l.id).length === 0 && !enemies(game).some((e) => e.location === l.id),
@@ -347,6 +371,20 @@ export const damageEnemyHandler: Handler<"DamageEnemy"> = (game, step) => {
 export const defeatEnemyHandler: Handler<"DefeatEnemy"> = (game, step) => {
   const e = cardIf(game, step.enemy);
   if (!e || e.zone !== "enemy") return;
+  // a replacement may take the defeat's place: the scenario's (a hook), or the enemy's own in a window (The Thing That Follows)
+  if (!step.checked) {
+    if (fireScenarioHook(game, "wouldBeDefeated", step.enemy, "damage") === true) return;
+    if (abilitiesOf(game, step.enemy).some((a) => a.trigger === "wouldBeDefeated")) {
+      const key = nextKey(game, "defeat:");
+      push(game, win("wouldBeDefeated", { enemy: step.enemy, key, cause: "damage" }), {
+        ...step,
+        checked: true,
+        key,
+      });
+      return;
+    }
+  }
+  if (step.key && isCancelled(game, step.key)) return;
   if (!step.fired) {
     // "when defeated" forced abilities resolve while the enemy is still in play
     push(game, win("enemyDefeatedSelf", { enemy: step.enemy, inv: null }), {
@@ -373,9 +411,8 @@ export const defeatEnemyHandler: Handler<"DefeatEnemy"> = (game, step) => {
   defeated.set(game, e.code, true);
   push(game, win("enemyDefeated", { inv: step.by }), { t: STEP.CheckObjectives });
   // Doomed: 1 doom on the current agenda, which can make it advance
-  const agenda = currentAgenda(game);
-  if (d.keywords.includes("doomed") && agenda)
-    push(game, { t: STEP.PlaceDoom, card: agenda, n: 1 }, { t: STEP.CheckDoom });
+  if (d.keywords.includes("doomed"))
+    push(game, { t: STEP.PlaceDoom, card: "agenda", n: 1 }, { t: STEP.CheckDoom });
 };
 
 // ---------- enemy phase ----------

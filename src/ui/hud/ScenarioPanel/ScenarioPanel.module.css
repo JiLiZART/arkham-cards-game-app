@@ -46,3 +46,11 @@
 :global(.drawer) .scenario-panel {
   flex-wrap: wrap;
 }
+
+/* the void: cards out of play that keep what is on them, dimmed beside the scenario cards */
+.void-shelf {
+  display: flex;
+  gap: 4px;
+  opacity: 0.55;
+  filter: grayscale(0.6);
+}

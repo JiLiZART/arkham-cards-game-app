@@ -12,6 +12,7 @@ import {
   invRecIf,
   invViewIn,
   patchedCardsIn,
+  deckPile,
   pileRead,
   pileRec,
 } from "./world/store";
@@ -113,8 +114,18 @@ export const allCards = (game: GameContext): readonly CardView[] => allCardRecs(
 /** an investigator, or undefined when the id is absent or names none */
 export const invIf = (game: GameContext, id: InvId | null | undefined): InvView | undefined =>
   invOfIf(game.s, id);
-export const currentAct = (game: GameContext) => game.s.act;
-export const currentAgenda = (game: GameContext) => game.s.agenda;
+/** an act deck's current card (deck `a`: a one-deck scenario's act) */
+export const currentAct = (game: GameContext, deck = "a"): InstId | null =>
+  game.s.acts[deck] ?? null;
+/** an agenda deck's current card (deck `a`: a one-deck scenario's agenda) */
+export const currentAgenda = (game: GameContext, deck = "a"): InstId | null =>
+  game.s.agendas[deck] ?? null;
+/** every act deck's current card, by deck name in deck order */
+export const currentActs = (game: GameContext): Readonly<Record<string, InstId | null>> =>
+  game.s.acts;
+/** every agenda deck's current card, by deck name in deck order */
+export const currentAgendas = (game: GameContext): Readonly<Record<string, InstId | null>> =>
+  game.s.agendas;
 export const leadInvestigator = (game: GameContext) => game.s.lead;
 /** every investigator in turn order, eliminated ones included */
 export const turnOrder = (game: GameContext): readonly InvId[] => game.s.order;
@@ -172,6 +183,44 @@ export const pile = (
   game: GameContext,
   name: "encounterDeck" | "encounterDiscard" | "actDeck" | "agendaDeck",
 ): readonly InstId[] => pileRead(game.s, name);
+/** an act or agenda deck's cards under its current one, top first (deck `a`: a one-deck scenario's) */
+export const deckCards = (
+  game: GameContext,
+  kind: "act" | "agenda",
+  deck = "a",
+): readonly InstId[] => pileRead(game.s, deckPile(kind, deck));
+/** the named tokens (`ward`, `scrap`) a card or an investigator holds */
+export const tokensOn = (game: GameContext, holder: InstId | InvId, name: string): number =>
+  game.s.world.tables.tokens[`${holder}:${name}`] ?? 0;
+/** every name of named token a card or an investigator holds, with how many (a state read, for the UI and the log) */
+export const namedTokensOf = (
+  s: Pick<GameState, "world">,
+  holder: InstId | InvId,
+): [string, number][] =>
+  Object.entries(s.world.tables.tokens)
+    .filter(([k, n]) => k.startsWith(`${holder}:`) && n > 0)
+    .map(([k, n]) => [k.slice(holder.length + 1), n]);
+/** add (or with a negative `n`, take) named tokens; never below none; returns how many it holds now */
+export function addTokens(
+  game: GameContext,
+  holder: InstId | InvId,
+  name: string,
+  n: number,
+): number {
+  const t = game.s.world.tables.tokens;
+  const now = Math.max(0, (t[`${holder}:${name}`] ?? 0) + n);
+  if (now) t[`${holder}:${name}`] = now;
+  else delete t[`${holder}:${name}`];
+  return now;
+}
+/** a card leaving play loses its named tokens */
+export function clearTokens(game: GameContext, holder: InstId) {
+  const t = game.s.world.tables.tokens;
+  for (const k of Object.keys(t)) if (k.startsWith(`${holder}:`)) delete t[k];
+}
+/** the facedown cards beneath a card, top first (none: an empty list) */
+export const cardsBeneath = (game: GameContext, holder: InstId): readonly InstId[] =>
+  pileRead(game.s, `beneath:${holder}`);
 export const sideDeck = (game: GameContext, name: string): readonly InstId[] =>
   pileRead(game.s, `sideDeck:${name}`);
 
@@ -186,6 +235,15 @@ export function addChaosTokens(game: GameContext, tokens: ChaosToken[]) {
 /** put an investigator at a location without moving (no move triggers) */
 export function placeInvestigator(game: GameContext, i: InvId, loc: InstId | null) {
   invRec(game, i).location = loc;
+}
+/** the vehicle an investigator is in (null: none) */
+export const inVehicle = (game: GameContext, i: InvId): InstId | null =>
+  invRec(game, i).vehicle ?? null;
+/** the vehicle an investigator is in (null: none) */
+export function setVehicle(game: GameContext, i: InvId, vehicle: InstId | null) {
+  const me = invRec(game, i);
+  if (vehicle) me.vehicle = vehicle;
+  else delete me.vehicle;
 }
 /** the enemy is engaged with the investigator (null: no one), with no engage triggers */
 export function setEngaged(game: GameContext, enemy: InstId, i: InvId | null) {

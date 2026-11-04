@@ -26,10 +26,19 @@ export const ZONE = {
   SetAside: "setAside",
   Removed: "removed",
   Investigator: "investigator",
+  /** the scenario reference card, an instance so cards can lie beneath it */
+  Scenario: "scenario",
+  /** facedown beneath another card, out of play: its `location` is the card it lies beneath */
+  Beneath: "beneath",
+  /** out of play, keeping its attachments and tokens (the Hunting Horror) */
+  Void: "void",
   Resolving: "resolving",
   Limbo: "limbo",
 } as const;
 export type Zone = (typeof ZONE)[keyof typeof ZONE];
+
+/** the scenario reference card's instance id: fixed, outside the card sequence */
+export const SCENARIO_CARD = "scenario";
 
 /** The scenario's phase: the setup, the four phases of a round, and the end. */
 export const PHASE = {

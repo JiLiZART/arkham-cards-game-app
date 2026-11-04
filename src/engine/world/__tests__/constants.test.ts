@@ -41,8 +41,8 @@ describe("the closed sets of strings (ADR-0026)", () => {
     ]);
   });
 
-  it("there are 22 zones, and the encounter's and the act and agenda decks' are among them", () => {
-    expect(Object.values(ZONE)).toHaveLength(22);
+  it("there are 25 zones (the scenario card's, beneath a card and the void among them), and the encounter's and the act and agenda decks' are among them", () => {
+    expect(Object.values(ZONE)).toHaveLength(25);
     for (const pile of Object.values(PILE)) expect(Object.values(ZONE)).toContain(pile);
   });
 

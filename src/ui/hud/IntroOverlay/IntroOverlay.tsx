@@ -49,7 +49,7 @@ export function IntroOverlay() {
       ? campaignBlurb(db, campaign.campaignId, locale).prologue
       : undefined;
   const story = [opening, sc.intro].filter(Boolean).join("\n\n");
-  const id = step === "agenda" ? game.agenda : step === "act" ? game.act : null;
+  const id = step === "agenda" ? game.agendas.a : step === "act" ? game.acts.a : null;
   const shown = holds && (step === "story" ? !!story : !!id);
 
   const next = () =>

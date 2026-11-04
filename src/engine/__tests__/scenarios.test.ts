@@ -24,7 +24,7 @@ function settle(r: Result, prefer: RegExp = /^(Pass|done|Keep hand|Done|Not now)
   return r;
 }
 
-const act = (r: Result) => (r.state.act ? def(gOf(r), r.state.act).name : null);
+const act = (r: Result) => (r.state.acts.a ? def(gOf(r), r.state.acts.a).name : null);
 
 describe("The Gathering", () => {
   it("plays through to Resolution 1", () => {
@@ -66,9 +66,9 @@ describe("The Gathering", () => {
     r = mutate(r, (game) => {
       for (const id of pileRecIn(game.s, PILE.AgendaDeck).slice(0, 1))
         moveCard(game, id, ZONE.Removed);
-      moveCard(game, game.s.agenda!, ZONE.Removed);
+      moveCard(game, game.s.agendas.a!, ZONE.Removed);
       moveCard(game, pileRecIn(game.s, PILE.AgendaDeck)[0], ZONE.Agenda);
-      cardRecIn(game.s, game.s.agenda!).doom = 9;
+      cardRecIn(game.s, game.s.agendas.a!).doom = 9;
     });
     r = pick(r, "End turn");
     r = settle(r);
@@ -131,9 +131,9 @@ describe("The Midnight Masks", () => {
   it("the second agenda advancing ends the scenario at midnight (Resolution 2)", () => {
     let r = skipMulligans(start("the-midnight-masks", [ROLAND], 2, { chaosBag: ["+1"] as never }));
     r = mutate(r, (game) => {
-      moveCard(game, game.s.agenda!, ZONE.Removed);
+      moveCard(game, game.s.agendas.a!, ZONE.Removed);
       moveCard(game, pileRecIn(game.s, PILE.AgendaDeck)[0], ZONE.Agenda);
-      cardRecIn(game.s, game.s.agenda!).doom = 7;
+      cardRecIn(game.s, game.s.agendas.a!).doom = 7;
     });
     r = pick(r, "End turn");
     r = settle(r);
@@ -143,7 +143,7 @@ describe("The Midnight Masks", () => {
   it("the first agenda advancing spawns The Masked Hunter", () => {
     let r = skipMulligans(start("the-midnight-masks", [ROLAND], 2, { chaosBag: ["+1"] as never }));
     r = mutate(r, (game) => {
-      cardRecIn(game.s, game.s.agenda!).doom = 5;
+      cardRecIn(game.s, game.s.agendas.a!).doom = 5;
     });
     r = pick(r, "End turn");
     r = settle(r);
@@ -165,7 +165,7 @@ describe("The Devourer Below", () => {
       }),
     );
     r = settle(r);
-    expect(card(gOf(r), r.state.agenda!).doom).toBe(1); // 2 cultists got away
+    expect(card(gOf(r), r.state.agendas.a!).doom).toBe(1); // 2 cultists got away
     r = mutate(r, (game) => {
       invStateIn(game.s, ROLAND).clues = 3;
     });
@@ -184,7 +184,7 @@ describe("The Devourer Below", () => {
     r = settle(r);
     expect(act(r)).toBe("Disrupting the Ritual");
     r = mutate(r, (game) => {
-      cardRecIn(game.s, game.s.act!).clues = 1;
+      cardRecIn(game.s, game.s.acts.a!).clues = 1;
       invStateIn(game.s, ROLAND).clues = 1;
       for (const e of allCardRecsIn(game.s))
         if (e.zone === "enemy") moveCard(game, e.id, ZONE.EncounterDiscard);
@@ -198,10 +198,10 @@ describe("The Devourer Below", () => {
     let r = skipMulligans(start("the-devourer-below", [ROLAND], 2, { chaosBag: ["+1"] as never }));
     r = settle(r);
     r = mutate(r, (game) => {
-      moveCard(game, game.s.agenda!, ZONE.Removed);
+      moveCard(game, game.s.agendas.a!, ZONE.Removed);
       moveCard(game, pileRecIn(game.s, PILE.AgendaDeck).shift()!, ZONE.Removed);
       moveCard(game, pileRecIn(game.s, PILE.AgendaDeck).shift()!, ZONE.Agenda);
-      cardRecIn(game.s, game.s.agenda!).doom = 4;
+      cardRecIn(game.s, game.s.agendas.a!).doom = 4;
     });
     r = pick(r, "End turn");
     r = settle(r);
@@ -266,10 +266,10 @@ describe("a generated scenario ends at its last act or agenda", () => {
     let r = dunwich();
     r = mutate(r, (game) => {
       const last = pileRecIn(game.s, PILE.AgendaDeck).pop()!;
-      for (const id of [...pileRecIn(game.s, PILE.AgendaDeck).splice(0), game.s.agenda!])
+      for (const id of [...pileRecIn(game.s, PILE.AgendaDeck).splice(0), game.s.agendas.a!])
         moveCard(game, id, ZONE.Removed);
       moveCard(game, last, ZONE.Agenda);
-      cardRecIn(game.s, game.s.agenda!).doom = 20;
+      cardRecIn(game.s, game.s.agendas.a!).doom = 20;
     });
     r = pick(r, "End turn");
     r = settle(r);

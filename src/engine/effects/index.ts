@@ -18,6 +18,7 @@ import { encounterEffects } from "./encounter";
 import { searchEffects } from "./search";
 import { testsEffects } from "./tests";
 import { choicesEffects } from "./choices";
+import { structureEffects } from "./structure";
 import type { EffectHandlers, EffectRun, EffStep } from "./types";
 import { opt } from "./targets";
 import { CHOICE } from "../world/constants";
@@ -58,6 +59,7 @@ export const EFFECT_HANDLERS: EffectHandlers = {
   ...damageEffects,
   ...tokensEffects,
   ...placementEffects,
+  ...structureEffects,
   ...encounterEffects,
   ...searchEffects,
   ...testsEffects,

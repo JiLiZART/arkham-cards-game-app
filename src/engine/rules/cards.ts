@@ -5,7 +5,7 @@ import {
   actClueCost,
   allMods,
   blankedCards,
-  canAdvanceAct,
+  advanceableActs,
   canPay,
   cardBlocked,
   cardsIn,
@@ -378,23 +378,21 @@ export const windowHandler: Handler<"Window"> = (game, step) => {
   // nothing to play: no window (advancing the act alone is left to the turn's actions)
   if (reactions.length === 0) return;
   // the group may spend clues to advance the act in any player window (Grimoire, Act Deck and Agenda Deck)
-  const act = step.trigger === "playerWindow" && !offered.includes("act") && canAdvanceAct(game);
+  const decks =
+    step.trigger === "playerWindow" && !offered.includes("act") ? advanceableActs(game) : [];
+  const act = decks.length > 0;
   const lead = activeInvs(game).includes(leadInvestigator(game))
     ? leadInvestigator(game)
     : activeInvs(game)[0];
   const who = reactions.length ? reactions[0].controller : lead;
   const mine = reactions.filter((r) => r.controller === who);
   const opts = [
-    ...(act
-      ? [
-          {
-            id: "act",
-            label: `Advance act (spend ${actClueCost(game)} clues as a group)`,
-            card: currentAct(game)!,
-            value: { kind: "advanceAct" },
-          },
-        ]
-      : []),
+    ...decks.map((deck) => ({
+      id: deck === "a" ? "act" : `act:${deck}`,
+      label: `Advance act (spend ${actClueCost(game, deck)} clues as a group)`,
+      card: currentAct(game, deck)!,
+      value: deck === "a" ? { kind: "advanceAct" } : { kind: "advanceAct", deck },
+    })),
     ...mine.map((r) => ({
       id: `${r.card}:${r.index}`,
       label:
@@ -405,7 +403,7 @@ export const windowHandler: Handler<"Window"> = (game, step) => {
     })),
     { id: "pass", label: "Pass", value: "pass" },
   ];
-  const pick = ask<string | { kind: "advanceAct" }>(
+  const pick = ask<string | { kind: "advanceAct"; deck?: string }>(
     game,
     step,
     who,
@@ -426,7 +424,9 @@ export const windowHandler: Handler<"Window"> = (game, step) => {
   if (typeof pick === "object") {
     push(
       game,
-      { t: STEP.AdvanceAct, spend: true },
+      pick.deck
+        ? { t: STEP.AdvanceAct, spend: true, deck: pick.deck }
+        : { t: STEP.AdvanceAct, spend: true },
       { ...step, choice: undefined, offered: [...offered, "act"] },
     );
     return;

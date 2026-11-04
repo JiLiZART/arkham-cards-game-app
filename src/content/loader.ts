@@ -16,6 +16,7 @@ import {
   ScenarioDef,
   SoundManifest,
   type Ability,
+  deckCodes,
 } from "./schema";
 import { hasScript, scriptFnIn, scriptOf } from "../engine/world/scripts";
 
@@ -111,6 +112,17 @@ export function addPack(
         path: code,
         message: `override for unknown card ${code}`,
       });
+  }
+  // a `b` code beside its front (`X` or `Xa`) is the front's other face, not a card of its own
+  for (const code of codes) {
+    if (!code.endsWith("b")) continue;
+    const front = [code.slice(0, -1), `${code.slice(0, -1)}a`].find((f) => db.cards[f]);
+    if (!front) continue;
+    db.cards[front].back = code;
+    // an act's or agenda's other side is its back text as it advances; a b card of another type it turns into
+    // (Midnight Masks' Masked Hunter, played as a card of its own) stays a card until a scenario flips the act
+    if (db.cards[front].type !== "act" && db.cards[front].type !== "agenda")
+      db.cards[code].front = front;
   }
   db.packs[pack] = { loaded: true, cards: codes };
   for (const code of codes) {
@@ -392,8 +404,8 @@ export function validateRefs(db: ContentDb, cardFile: Record<string, string> = {
     if (waiting.has(s.id)) continue;
     const file = `scenarios/${s.id}.json`;
     need(file, "card", s.card);
-    s.acts.forEach((c, k) => need(file, `acts.${k}`, c));
-    s.agendas.forEach((c, k) => need(file, `agendas.${k}`, c));
+    deckCodes(s.acts).forEach((c, k) => need(file, `acts.${k}`, c));
+    deckCodes(s.agendas).forEach((c, k) => need(file, `agendas.${k}`, c));
     s.setupCards.forEach((c, k) => need(file, `setupCards.${k}`, c));
     for (const set of [
       ...s.encounterSets,
@@ -409,7 +421,16 @@ export function validateRefs(db: ContentDb, cardFile: Record<string, string> = {
     });
     s.setup.forEach((st, k) => {
       if ("codes" in st) st.codes.forEach((c) => need(file, `setup.${k}`, c));
-      if ("from" in st) st.from.forEach((c) => need(file, `setup.${k}`, c));
+      // a back face is its front's other side, one card: a step naming both would ask for two
+      if ((st.do === "setAside" || st.do === "putIntoPlay") && "codes" in st)
+        for (const c of st.codes.filter((x) => st.codes.includes(db.cards[x]?.front ?? "")))
+          errors.push({
+            file,
+            path: `setup.${k}`,
+            message: `${c} is the back of ${db.cards[c].front}, also listed`,
+          });
+      if ("from" in st && Array.isArray(st.from))
+        st.from.forEach((c) => need(file, `setup.${k}`, c));
       if (st.do === "script" && !scriptOf(db, s.id)?.fns?.[st.fn])
         errors.push({ file, path: `setup.${k}`, message: `missing script function ${st.fn}` });
     });

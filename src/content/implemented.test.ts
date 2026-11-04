@@ -52,6 +52,16 @@ describe("a card works when every printed line is accounted for", () => {
     expect(implemented(db(""), "c")).toBe(true);
     expect(implemented(db("Hunter. Retaliate."), "c")).toBe(true);
   });
+
+  it("a Spawn line is accounted for by a spawn expression (Waterfront Civilian: any empty Arkham location)", () => {
+    expect(
+      implemented(
+        db("Spawn - Any empty [[Arkham]] location.", { spawn: { trait: "Arkham", empty: true } }),
+        "c",
+      ),
+    ).toBe(true);
+    expect(implemented(db("Spawn - Any empty [[Arkham]] location."), "c")).toBe(false);
+  });
 });
 
 /** a scenario "s" whose reference card "r" prints these lines, with these token tables */
@@ -114,6 +124,18 @@ describe("a scenario reference card works when its token lines are real", () => 
         "r",
       ),
     ).toBe(false);
+  });
+
+  it("a '-3 instead if' line is covered by the entry's `instead`, not by a bare modifier", () => {
+    const text =
+      "Easy / Standard\n[skull] -1. -3 instead if you have 3 or more horror.\n[cultist] -1.\n[tablet] -2.";
+    const entry = (skull: object) => {
+      const t = { skull, cultist: { modifier: -1 }, tablet: { modifier: -2 } };
+      return { easy: t, standard: t, hard: t, expert: t };
+    };
+    const instead = { modifier: -1, instead: { when: { horror: { min: 3 } }, modifier: -3 } };
+    expect(implemented(scenario(text, undefined, entry(instead)), "r")).toBe(true);
+    expect(implemented(scenario(text, undefined, entry({ modifier: -1 })), "r")).toBe(false);
   });
 
   it("a bare modifier line needs only the modifier", () => {

@@ -13,6 +13,7 @@ import {
   isMassive,
   modSum,
   shroud,
+  tokenHolder,
 } from "../queries";
 import {
   allCards,
@@ -30,6 +31,7 @@ import {
   push,
   setController,
   setEngaged,
+  tokensOn,
 } from "../context";
 import { moveCard } from "../movement";
 import type { EffCtx, InstId, InvId, SkillTestState, Step } from "../world/types";
@@ -486,10 +488,15 @@ function resolveTokensStage(game: GameContext) {
     } else {
       const eff = scen.tokens[game.s.difficulty]?.[token as SymbolToken];
       if (eff) {
-        mod =
-          eff.modifier === "X"
-            ? -(tokenX(game, eff.x!, t.inv) * (eff.xTimes ?? 1) + (eff.xPlus ?? 0))
-            : eff.modifier;
+        const xOf = () =>
+          eff.x === "tokensOn" && eff.xTokens
+            ? tokensOn(game, tokenHolder(game, eff.xTokens.on, ctx) ?? "", eff.xTokens.name)
+            : tokenX(game, eff.x!, t.inv);
+        const x = () => -(xOf() * (eff.xTimes ?? 1) + (eff.xPlus ?? 0));
+        mod = eff.modifier === "X" ? x() : eff.modifier;
+        // "−3 instead if …": the other modifier while its condition holds for the investigator testing
+        if (eff.instead && checkCondition(game, eff.instead.when, ctx))
+          mod = typeof eff.instead.modifier === "number" ? eff.instead.modifier : x();
         const condOk = !eff.condition || checkCondition(game, eff.condition, ctx);
         if (condOk && eff.onReveal)
           push(game, { t: STEP.Effects, effects: eff.onReveal, ctx: { ...ctx, token } });

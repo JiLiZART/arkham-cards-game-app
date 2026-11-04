@@ -1,5 +1,6 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import type { ContentDb } from "../engine/world/types";
+import { deckCodes } from "./schema";
 import {
   campaignCoverage,
   checkCampaignCards,
@@ -248,8 +249,8 @@ describe("the real content", () => {
       c.scenarios.map((id) => [
         id,
         db.scenarios[id].card,
-        db.scenarios[id].agendas[0],
-        db.scenarios[id].acts[0],
+        deckCodes(db.scenarios[id].agendas)[0],
+        deckCodes(db.scenarios[id].acts)[0],
       ]),
     );
   });

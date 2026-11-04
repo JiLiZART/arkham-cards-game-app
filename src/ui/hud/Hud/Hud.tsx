@@ -802,7 +802,8 @@ function PhoneDrawers() {
   // a deck waiting for a tap sits in the closed left drawer: its handle glows (the bar's Draw button answers too)
   const deckWaits = offered && deckOptions(game, viewerOf(game)).waiting;
   // the act or agenda offers something (Advance act once its clues are in): the handle glows and the option sits beside it
-  const cardOffers = useCardOptions([game.act, game.agenda]).length > 0;
+  const cardOffers =
+    useCardOptions([...Object.values(game.acts), ...Object.values(game.agendas)]).length > 0;
   const left = useView((s) => s.drawer === "left");
   const right = useView((s) => s.drawer === "right");
   // the right drawer is the Journal: the full history while it is open
@@ -815,7 +816,12 @@ function PhoneDrawers() {
         <ScenarioPanel />
         <PileColumn />
       </Drawer>
-      {!left && <CardOptions ids={[game.act, game.agenda]} className={styles.actNudge} />}
+      {!left && (
+        <CardOptions
+          ids={[...Object.values(game.acts), ...Object.values(game.agendas)]}
+          className={styles.actNudge}
+        />
+      )}
       <Drawer edge="right" handle="‹" label={tr("hud.journal")}>
         {right && <Feed />}
       </Drawer>

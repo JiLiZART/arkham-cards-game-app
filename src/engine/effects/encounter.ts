@@ -17,6 +17,7 @@ import {
   shuffleDeck,
 } from "../context";
 import {
+  cardsIn,
   distances,
   enemies,
   enemiesAt,
@@ -134,10 +135,17 @@ function searchEncounterDrawEffect(
   const { you } = run;
   const e = run.effect;
 
-  // the encounter deck first, then its discard pile; the investigator resolving the effect draws the card
-  const id = [...pile(game, ZONE.EncounterDeck), ...pile(game, ZONE.EncounterDiscard)].find((c) =>
-    matchesFilter(game, card(game, c).code, e.filter),
+  // the encounter deck first, then its discard pile (then the void, when the card says); the investigator resolving
+  // the effect draws the card
+  const where = e.zones ?? ["deck", "discard"];
+  const pool = where.flatMap((z) =>
+    z === "deck"
+      ? pile(game, ZONE.EncounterDeck)
+      : z === "discard"
+        ? pile(game, ZONE.EncounterDiscard)
+        : cardsIn(game, ZONE.Void).map((c) => c.id),
   );
+  const id = pool.find((c) => matchesFilter(game, card(game, c).code, e.filter));
   if (id) {
     moveCard(game, id, ZONE.Limbo);
     emit(game, EVENT.Encounter, `${invName(game, you)} finds and draws ${def(game, id).name}`, {
@@ -178,6 +186,15 @@ function discardEncounterUntilEffect(
     }
   }
   for (const id of found) {
+    // a location found enters play as an encounter card does (Lost in Time and Space)
+    if (def(game, id).type === "location") {
+      push(game, {
+        t: STEP.DrawEncounter,
+        inv: e.then === "leadDraws" ? leadInvestigator(game) : you,
+        card: id,
+      });
+      continue;
+    }
     if (e.then === "leadDraws" || e.then === "youDraw") {
       const who = e.then === "youDraw" ? you : leadInvestigator(game);
       emit(game, EVENT.Encounter, `${invName(game, who)} draws ${def(game, id).name}`, {

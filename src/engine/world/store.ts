@@ -47,7 +47,7 @@ export const newWorld = (): World => ({
     surge: {},
     dying: {},
     costMod: {},
-    beneath: {},
+    tokens: {},
     aside: {},
     xp: {},
     hunch: {},
@@ -260,6 +260,10 @@ export const PILED_ZONES: Zone[] = [
  * The pile a card in this zone sits in, or null when the zone has none (or the pile needs an owner the card doesn't
  * have). A side deck's name isn't in the zone: those piles are found by the `sideDeck:` prefix.
  */
+/** an act or agenda deck's pile: deck `a` is the scenario's one deck (`actDeck`), another `actDeck:<deck>` */
+export const deckPile = (kind: "act" | "agenda", deck = "a"): PileName =>
+  deck === "a" ? `${kind}Deck` : `${kind}Deck:${deck}`;
+
 export function pileKey(zone: Zone, owner: InvId | null): PileName | null {
   switch (zone) {
     case "deck":
@@ -306,6 +310,7 @@ const RECORD_FIELDS = Object.keys({
   defeatedHealth: true,
   status: true,
   defeatedBy: true,
+  vehicle: true,
   turnDone: true,
   physicalTrauma: true,
   mentalTrauma: true,

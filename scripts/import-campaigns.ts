@@ -16,6 +16,7 @@ import type {
   SymbolToken,
   TokenEffect,
 } from "../src/content/schema";
+import { deckCodes } from "../src/content/schema";
 import { compileFlow } from "./campaignFlow";
 import {
   actsAndAgendas,
@@ -134,6 +135,14 @@ const withoutBackFaces = (pool: Card[]) =>
   pool.filter((c) => {
     const front = /^(\d{5})b$/.exec(c.code)?.[1];
     return !front || !pool.some((x) => x.code === front && x.name === c.name);
+  });
+
+/** a double-faced card named by both its faces is one card: its front (an act's or agenda's other card stays its own) */
+export const oneCardPerFace = (codes: string[], cards: Map<string, Card>): string[] =>
+  codes.filter((code) => {
+    const front = [code.slice(0, -1), `${code.slice(0, -1)}a`].find((f) => cards.has(f));
+    const t = front && cards.get(front)!.type;
+    return !(code.endsWith("b") && front && codes.includes(front) && t !== "act" && t !== "agenda");
   });
 
 const report: string[] = [];
@@ -292,8 +301,8 @@ export function scenarioOf(
         locations.filter((c) => inPlay.includes(c.code)),
       )[0]) ||
     inPlay[0];
-  const setup: SetupStep[] = [{ do: "putIntoPlay", codes: inPlay }];
-  if (setAside.length) setup.push({ do: ZONE.SetAside, codes: setAside });
+  const setup: SetupStep[] = [{ do: "putIntoPlay", codes: oneCardPerFace(inPlay, cards) }];
+  if (setAside.length) setup.push({ do: ZONE.SetAside, codes: oneCardPerFace(setAside, cards) });
   const putOut = new Set([...inPlay, ...setAside]);
   const removed = setSteps.flatMap((st: Raw) => partialRemovals(st, sets, bySet, putOut, where));
   if (removed.length) setup.push({ do: "remove", codes: removed });
@@ -368,8 +377,8 @@ export function scenarioOf(
 function packsOf(s: ScenarioDef, cards: Map<string, Card>, bySet: Map<string, Card[]>): string[] {
   const codes = [
     s.card,
-    ...s.acts,
-    ...s.agendas,
+    ...deckCodes(s.acts),
+    ...deckCodes(s.agendas),
     ...s.setup.flatMap((st) => ("codes" in st ? st.codes : "code" in st ? [st.code] : [])),
     ...s.encounterSets.flatMap((x) => bySet.get(x)!.map((c) => c.code)),
   ];
@@ -495,8 +504,8 @@ export function main() {
               scenario: id,
               name: d.name,
               code: d.card,
-              ...(d.agendas[0] ? { agenda: d.agendas[0] } : {}),
-              ...(d.acts[0] ? { act: d.acts[0] } : {}),
+              ...(deckCodes(d.agendas)[0] ? { agenda: deckCodes(d.agendas)[0] } : {}),
+              ...(deckCodes(d.acts)[0] ? { act: deckCodes(d.acts)[0] } : {}),
             }
           : { scenario: id, name: flow.interludes[id]?.name, interlude: true as const };
       });
@@ -528,7 +537,7 @@ export function main() {
         // the tile's art: the first agenda of the first scenario the players play (the order may open with an interlude)
         ...(() => {
           const first = flow.order.map((id) => byDef.get(id)).find(Boolean) ?? defs[0];
-          return first.agendas[0] ? { cover: first.agendas[0] } : {};
+          return deckCodes(first.agendas)[0] ? { cover: deckCodes(first.agendas)[0] } : {};
         })(),
         // a side scenario has no campaign prologue: its tile shows the scenario's own intro
         ...((c.id === "side" ? introLead(defs[0].intro) : prologueOf(c))

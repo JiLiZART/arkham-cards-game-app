@@ -6,7 +6,7 @@ import { Glyph, Icon } from "../Icon";
 import type { IconName } from "../../assets/icons";
 import { cx } from "../cx";
 import styles from "./TokenBadges.module.css";
-import { cardOfIf } from "../../../engine/context";
+import { cardOfIf, namedTokensOf, pileOf } from "../../../engine/context";
 
 const TOKEN_ICONS: Record<string, IconName | undefined> = {
   damage: "damage",
@@ -26,6 +26,12 @@ export function TokenBadges({
   size?: number;
   skip?: string[];
 }) {
+  const game = useGame((s) => s.game);
+  const locale = useGame((s) => s.locale);
+  // the facedown cards lying beneath it (Blood on the Altar's sacrifices, Smoke and Mirrors' suspects)
+  const beneath = game ? pileOf(game, `beneath:${inst.id}`).length : 0;
+  // named tokens on it (wards, scrap, seals): each name with its count
+  const named = game ? namedTokensOf(game, inst.id) : [];
   const tokens = (
     [
       ["damage", inst.damage],
@@ -36,9 +42,29 @@ export function TokenBadges({
       ["resources", inst.resources],
     ] as const
   ).filter(([k, n]) => n > 0 && !skip.includes(k));
-  if (!tokens.length) return null;
+  if (!tokens.length && !beneath && !named.length) return null;
   return (
     <div className="tokens">
+      {named.map(([name, n]) => (
+        <span
+          key={name}
+          className={cx("tok", styles.tokNamed)}
+          title={`${name} ${n}`}
+          data-testid="tok-named"
+        >
+          {name} {n}
+        </span>
+      ))}
+      {beneath > 0 && (
+        <span
+          className={cx("tok", styles.tokBeneath)}
+          title={`${t(db, locale, "stat.beneath")} ${beneath}`}
+          data-testid="tok-beneath"
+        >
+          <Glyph name="bullet" size={12} title={t(db, locale, "stat.beneath")} />
+          {beneath}
+        </span>
+      )}
       {tokens.map(([k, n]) =>
         TOKEN_ICONS[k] ? (
           <span key={k} className={styles.tokIcon} title={`${k} ${n}`}>

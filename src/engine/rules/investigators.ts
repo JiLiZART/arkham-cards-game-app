@@ -1,4 +1,4 @@
-import { aside as asideFlag, dying, prevented as preventedFlag } from "../world/flags";
+import { aside as asideFlag, dying, prevented as preventedFlag, vehicleUsed } from "../world/flags";
 import {
   abilitiesOf,
   cardsIn,
@@ -33,6 +33,8 @@ import {
   logStep,
   nextKey,
   placeInvestigator,
+  currentRound,
+  setVehicle,
   playerCount,
   push,
   reveal,
@@ -45,14 +47,14 @@ import {
   shuffleDeck,
   tapToDraw,
 } from "../context";
-import { moveCard, reshuffleDiscard } from "../movement";
+import { isInPlay, moveCard, reshuffleDiscard } from "../movement";
 import type { InstId, InvId, Step, StepOf } from "../world/types";
 import { win } from "./cards";
 import { preyCandidates } from "./enemies";
 import { EVENT } from "../events/event";
 import { ZONE, CHOICE, INV_STATUS, isOneOf } from "../world/constants";
 import { STEP } from "../steps/step";
-import { fireGameEnd } from "./scripts";
+import { fireGameEnd, fireScenarioHook } from "./scripts";
 
 type Handler<T extends Step["t"]> = (game: GameContext, step: Extract<Step, { t: T }>) => void;
 
@@ -340,22 +342,46 @@ export function removeDefeatedAsset(game: GameContext, id: InstId) {
 export const checkDefeatHandler: Handler<"CheckDefeat"> = (game, step) => {
   const me = inv(game, step.inv);
   if (me.status !== "playing") return;
-  if (me.damage >= maxHealth(game, step.inv))
-    push(game, { t: STEP.Defeated, inv: step.inv, by: "damage" });
-  else if (me.horror >= maxSanity(game, step.inv))
-    push(game, { t: STEP.Defeated, inv: step.inv, by: "horror" });
+  const byDamage = me.damage >= maxHealth(game, step.inv);
+  const byHorror = me.horror >= maxSanity(game, step.inv);
+  if (!byDamage && !byHorror) return;
+  const by = byDamage ? "damage" : "horror";
+  const cause = byDamage && byHorror ? "both" : by;
+  // the scenario may replace the defeat (Dim Carcosa); a card may, in a window before it (St. Hubert's Key)
+  if (fireScenarioHook(game, "wouldBeDefeated", step.inv, cause) === true) return;
+  if (!hasReplacement(game)) {
+    push(game, { t: STEP.Defeated, inv: step.inv, by });
+    return;
+  }
+  const key = nextKey(game, "defeat:");
+  push(game, win("wouldBeDefeated", { inv: step.inv, key, cause }), {
+    t: STEP.Defeated,
+    inv: step.inv,
+    by,
+    key,
+  });
 };
+
+/** a card in play with a "would be defeated" replacement: only then is the window opened */
+export const hasReplacement = (game: GameContext) =>
+  allCards(game).some(
+    (c) =>
+      (isInPlay(c) || c.zone === "hand") &&
+      abilitiesOf(game, c.id).some((a) => a.trigger === "wouldBeDefeated"),
+  );
 
 export const defeatedHandler: Handler<"Defeated"> = (game, step) => {
   const me = inv(game, step.inv);
   if (me.status !== "playing") return;
+  // a replacement took its place
+  if (step.key && isCancelled(game, step.key)) return;
   setStatus(
     game,
     me.id,
     step.by === "resign" ? INV_STATUS.Resigned : INV_STATUS.Defeated,
-    step.by === "resign" ? undefined : step.by,
+    step.by === "resign" || step.by === "effect" ? undefined : step.by,
   );
-  if (step.by !== "resign") {
+  if (step.by === "damage" || step.by === "horror") {
     if (step.by === "damage") addCounter(game, me.id, "physicalTrauma", 1);
     else addCounter(game, me.id, "mentalTrauma", 1);
   }
@@ -364,7 +390,9 @@ export const defeatedHandler: Handler<"Defeated"> = (game, step) => {
     step.by === "resign" ? EVENT.Resign : EVENT.Defeated,
     step.by === "resign"
       ? `${me.name} resigns`
-      : `${me.name} is defeated (${step.by === "damage" ? "physical" : "mental"} trauma)`,
+      : step.by === "effect"
+        ? `${me.name} is defeated`
+        : `${me.name} is defeated (${step.by === "damage" ? "physical" : "mental"} trauma)`,
     { inv: step.inv, data: { by: step.by } },
   );
   // clues drop at location
@@ -431,6 +459,8 @@ export function enterCost(game: GameContext, to: InstId): number {
 }
 
 export const moveHandler: Handler<"Move"> = (game, step) => {
+  // moving on your own takes you out of any vehicle you were in
+  setVehicle(game, step.inv, null);
   const key = step.key ?? nextKey(game, "move");
   const from = inv(game, step.inv).location;
   push(
@@ -442,6 +472,37 @@ export const moveHandler: Handler<"Move"> = (game, step) => {
         ]
       : []),
     { t: STEP.Arrive, inv: step.inv, to: step.to, key },
+  );
+};
+
+export const enterVehicleHandler: Handler<"EnterVehicle"> = (game, step) => {
+  setVehicle(game, step.inv, step.vehicle);
+  vehicleUsed.set(game, `${step.inv}:enter`, currentRound(game));
+  emit(game, EVENT.Vehicle, `${invName(game, step.inv)} enters ${def(game, step.vehicle).name}`, {
+    inv: step.inv,
+    card: step.vehicle,
+  });
+};
+
+export const leaveVehicleHandler: Handler<"LeaveVehicle"> = (game, step) => {
+  const was = inv(game, step.inv).vehicle;
+  if (!was) return;
+  setVehicle(game, step.inv, null);
+  vehicleUsed.set(game, `${step.inv}:leave`, currentRound(game));
+  emit(game, EVENT.Vehicle, `${invName(game, step.inv)} leaves ${def(game, was).name}`, {
+    inv: step.inv,
+    card: was,
+  });
+};
+
+/** the vehicle goes to `to`, and each investigator in it arrives there (enter windows, no move action, no leaving) */
+export const moveVehicleHandler: Handler<"MoveVehicle"> = (game, step) => {
+  setCardLocation(game, step.vehicle, step.to);
+  push(
+    game,
+    ...activeInvs(game)
+      .filter((i) => inv(game, i).vehicle === step.vehicle)
+      .map((i): Step => ({ t: STEP.Arrive, inv: i, to: step.to })),
   );
 };
 
@@ -461,7 +522,7 @@ export const arriveHandler: Handler<"Arrive"> = (game, step) => {
   });
   const steps: Step[] = [];
   const loc = card(game, step.to);
-  if (!loc.revealed) steps.push({ t: STEP.RevealLocation, location: step.to });
+  if (!loc.revealed) steps.push({ t: STEP.RevealLocation, location: step.to, by: step.inv });
   steps.push(win("enterLocation", { inv: step.inv, location: step.to, from }));
   steps.push({ t: STEP.CheckEngagement, inv: step.inv });
   steps.push({ t: STEP.CheckObjectives });
@@ -483,6 +544,14 @@ export function revealLocation(game: GameContext, loc: InstId) {
     card: loc,
     data: { n: c.clues },
   });
+}
+
+/** reveal a location, then its "after you reveal this location" abilities, for the investigator who revealed it */
+function revealLocationHandler(game: GameContext, step: StepOf<"RevealLocation">) {
+  if (card(game, step.location).revealed) return;
+  revealLocation(game, step.location);
+  if (abilitiesOf(game, step.location).some((a) => a.trigger === "revealed"))
+    push(game, win("revealed", { location: step.location, ...(step.by ? { inv: step.by } : {}) }));
 }
 
 /** ready unengaged non-aloof enemies at an investigator's location engage by prey among everyone there (the mover on a tie) */
@@ -649,8 +718,7 @@ export const handlers = {
     assetDefeatCheck(game, step.inv),
   RemoveDefeatedAsset: (game: GameContext, step: StepOf<"RemoveDefeatedAsset">) =>
     removeDefeatedAsset(game, step.card),
-  RevealLocation: (game: GameContext, step: StepOf<"RevealLocation">) =>
-    revealLocation(game, step.location),
+  RevealLocation: revealLocationHandler,
   CheckEngagement: (game: GameContext, step: StepOf<"CheckEngagement">) =>
     checkEngagement(game, step.inv),
   ChooseLead: (game: GameContext, step: StepOf<"ChooseLead">) => chooseLead(game, step),
@@ -661,6 +729,9 @@ export const handlers = {
   Defeated: defeatedHandler,
   Move: moveHandler,
   Arrive: arriveHandler,
+  EnterVehicle: enterVehicleHandler,
+  LeaveVehicle: leaveVehicleHandler,
+  MoveVehicle: moveVehicleHandler,
   DiscoverClues: discoverCluesHandler,
   GainClues: gainCluesHandler,
   Mulligan: mulliganHandler,

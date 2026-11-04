@@ -1,4 +1,4 @@
-import { atTurnEnd, noReady } from "../world/flags";
+import { atTurnEnd, noReady, noVehicles, vehicleUsed } from "../world/flags";
 import type { Ability, Boost, Effect, OnTokens, Skill } from "../../content/schema";
 import {
   abilitiesOf as abilitiesOfCard,
@@ -11,8 +11,10 @@ import {
   hasFlag,
   isMassive,
   modSum,
+  advanceableActs,
   spendableGroupClues,
   threatArea,
+  hasKeyword,
 } from "../queries";
 import {
   activeInvestigator,
@@ -27,7 +29,7 @@ import {
   clearRoundActions,
   clearTurnDone,
   currentAct,
-  currentAgenda,
+  currentAgendas,
   currentPhase,
   currentRound,
   def,
@@ -114,10 +116,9 @@ export const phasePauseHandler: Handler<"PhasePause"> = (game, step) => {
 export const mythosHandler: Handler<"MythosPhase"> = (game) => {
   beginPhase(game, PHASE.Mythos);
   const steps: Step[] = [win("phaseBegins", { phase: "mythos" })];
-  const agenda = currentAgenda(game);
-  if (agenda) {
+  if (Object.values(currentAgendas(game)).some(Boolean)) {
     logStep(game, "doom");
-    steps.push({ t: STEP.PlaceDoom, card: agenda, n: 1 }, { t: STEP.CheckDoom });
+    steps.push({ t: STEP.PlaceDoom, card: "agenda", n: 1 }, { t: STEP.CheckDoom });
   }
   for (const i of turnOrder(game)) steps.push({ t: STEP.MythosDraw, inv: i });
   steps.push(win("playerWindow", { phase: "mythos" }), win("mythosEnds", {}));
@@ -260,6 +261,8 @@ export function actionCost(game: GameContext, i: InvId, a: TurnAction): number {
   switch (a.kind) {
     case "endTurn":
     case "advanceAct":
+    case "enterVehicle":
+    case "leaveVehicle":
       return 0;
     case "play":
       return def(game, a.card).keywords.includes("fast") ? 0 : 1 + extraCost(game, i, "play");
@@ -277,7 +280,7 @@ export function actionCost(game: GameContext, i: InvId, a: TurnAction): number {
 export function legalTurnActions(game: GameContext, i: InvId): ChoiceOption[] {
   const me = inv(game, i);
   const out: ChoiceOption[] = [];
-  const add = (a: TurnAction, label: string, cardId?: string) => {
+  const add = (a: TurnAction, label: string, cardId?: string, key?: string) => {
     const cost = actionCost(game, i, a);
     if (cost > actionsFor(game, i, a, designatorOf(game, a))) return;
     const id = JSON.stringify(a);
@@ -286,6 +289,7 @@ export function legalTurnActions(game: GameContext, i: InvId): ChoiceOption[] {
       label: cost > 1 ? `${label} [${cost} actions]` : label,
       card: cardId,
       value: a,
+      ...(key && cardId ? { key, vars: { code: card(game, cardId).code } } : {}),
     });
   };
   const loc = me.location;
@@ -321,14 +325,37 @@ export function legalTurnActions(game: GameContext, i: InvId): ChoiceOption[] {
   for (const e of engagedWith(game, i))
     if (def(game, e.id).enemy?.evade !== null)
       add({ kind: EVENT.Evade, enemy: e.id }, `Evade ${def(game, e.id).name}`, e.id);
-  const act = currentAct(game);
-  if (
-    act &&
-    (def(game, act).actAdvance ?? "turn") === "turn" &&
-    spendableGroupClues(game) >= actClueCost(game)
-  ) {
-    add({ kind: "advanceAct" }, `Advance act (spend ${actClueCost(game)} clues as a group)`, act);
-  }
+  // a vehicle here: in (unless forbidden) or out, once each per round
+  const blocked = noVehicles.get(game);
+  if (me.vehicle) {
+    if (vehicleUsed.get(game, `${i}:leave`) !== currentRound(game))
+      add(
+        { kind: "leaveVehicle" },
+        `Leave ${def(game, me.vehicle).name}`,
+        me.vehicle,
+        "option.leaveVehicle",
+      );
+  } else if (vehicleUsed.get(game, `${i}:enter`) !== currentRound(game) && blocked !== true)
+    for (const v of cardsIn(game, ZONE.Play).filter(
+      (c) =>
+        c.location === loc &&
+        !!loc &&
+        hasKeyword(game, c.id, "vehicle") &&
+        !(Array.isArray(blocked) && blocked.includes(loc)),
+    ))
+      add(
+        { kind: "enterVehicle", vehicle: v.id },
+        `Enter ${def(game, v.id).name}`,
+        v.id,
+        "option.enterVehicle",
+      );
+  // each act deck the group can advance by spending clues (Threads of Fate's three)
+  for (const deck of advanceableActs(game))
+    add(
+      deck === "a" ? { kind: "advanceAct" } : { kind: "advanceAct", deck },
+      `Advance act (spend ${actClueCost(game, deck)} clues as a group)`,
+      currentAct(game, deck)!,
+    );
   out.push({
     id: JSON.stringify({ kind: "endTurn" }),
     label: "End turn",
@@ -448,7 +475,17 @@ export const performActionHandler: Handler<"PerformAction"> = (game, step) => {
       steps.push({ t: STEP.EnemyEngage, enemy: a.enemy, inv: i });
       break;
     case "advanceAct":
-      steps.push({ t: STEP.AdvanceAct, spend: true });
+      steps.push(
+        a.deck
+          ? { t: STEP.AdvanceAct, spend: true, deck: a.deck }
+          : { t: STEP.AdvanceAct, spend: true },
+      );
+      break;
+    case "enterVehicle":
+      steps.push({ t: STEP.EnterVehicle, inv: i, vehicle: a.vehicle });
+      break;
+    case "leaveVehicle":
+      steps.push({ t: STEP.LeaveVehicle, inv: i });
       break;
   }
   steps.push({ t: STEP.CheckObjectives });

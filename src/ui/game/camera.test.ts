@@ -106,7 +106,7 @@ describe("eventFocus", () => {
     expect(eventFocus(ev(EVENT.Damage, { inv: "01001" }), game)).toBe(study);
   });
   it("nothing on the map: stays on the decider", () => {
-    expect(eventFocus(ev(EVENT.AgendaAdvance, { card: game.agenda }), game)).toBeNull();
+    expect(eventFocus(ev(EVENT.AgendaAdvance, { card: game.agendas.a }), game)).toBeNull();
     expect(eventFocus(null, game)).toBeNull();
   });
 });

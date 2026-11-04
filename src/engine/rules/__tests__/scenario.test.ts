@@ -27,15 +27,15 @@ describe("act & agenda", () => {
   it("agenda advances when doom reaches its threshold in the mythos phase", () => {
     let r = gathering([ROLAND], ["0"]);
     r = mutate(r, (game) => {
-      cardRecIn(game.s, game.s.agenda!).doom = 2;
+      cardRecIn(game.s, game.s.agendas.a!).doom = 2;
     });
-    const first = r.state.agenda;
+    const first = r.state.agendas.a;
     r = pick(r, "End turn");
     // round 2 mythos: doom 3 → agenda 1 advances, lead chooses
     expect(r.state.pending?.prompt).toMatch(/Choose one/);
     r = pick(r, /lead investigator takes 2 horror/);
-    expect(r.state.agenda).not.toBe(first);
-    expect(def(gOf(r), r.state.agenda!).name).toBe("Rise of the Ghouls");
+    expect(r.state.agendas.a).not.toBe(first);
+    expect(def(gOf(r), r.state.agendas.a!).name).toBe("Rise of the Ghouls");
     expect(allCardRecsIn(r.state).reduce((n, c) => n + (c.zone === "agenda" ? c.doom : 0), 0)).toBe(
       0,
     );
@@ -51,7 +51,7 @@ describe("act & agenda", () => {
     r = pick(r, /Advance act \(spend 4 clues/);
     const game = gOf(r);
     expect(inv(game, ROLAND).clues + inv(game, AGNES).clues).toBe(0);
-    expect(def(game, game.s.act!).name).toBe("The Barrier");
+    expect(def(game, game.s.acts.a!).name).toBe("The Barrier");
     expect(def(game, inv(game, ROLAND).location!).name).toBe("Hallway");
   });
 });

@@ -100,8 +100,8 @@ export function musicFor(
   const codeOf = (id: InstId | null) => (id ? cardOfIf(game, id)?.code : undefined);
   // a scenario without a bed of its own (a generated one, ADR-0007) plays the default bed
   const chapter =
-    has(`card:${codeOf(game.agenda)}`) ??
-    has(`card:${codeOf(game.act)}`) ??
+    has(`card:${codeOf(game.agendas.a)}`) ??
+    has(`card:${codeOf(game.acts.a)}`) ??
     has(`bed:${game.scenarioId}`) ??
     has("bed:default");
   if (!chapter) return null;
@@ -109,7 +109,9 @@ export function musicFor(
     return take("fight", game.seed, m);
   const tension = has(`tension:${game.scenarioId}`) ?? has("tension");
   if (tension) {
-    const threshold = game.agenda ? content.cards[cardOf(game, game.agenda).code]?.doom : undefined;
+    const threshold = game.agendas.a
+      ? content.cards[cardOf(game, game.agendas.a).code]?.doom
+      : undefined;
     if (
       game.phase === "enemy" ||
       (threshold !== undefined &&

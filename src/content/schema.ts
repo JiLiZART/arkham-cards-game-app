@@ -53,6 +53,14 @@ export type CardType = z.infer<typeof CardType>;
 export const Slot = z.enum([ZONE.Hand, "arcane", "accessory", "body", "ally", "tarot", "head"]);
 export type Slot = z.infer<typeof Slot>;
 
+/** the card a pile of facedown cards lies beneath: this card, the current act or agenda, the scenario card, your location */
+export const BeneathOf = z.enum(["self", "act", "agenda", "scenario", "yourLocation"]);
+export type BeneathOf = z.infer<typeof BeneathOf>;
+
+/** who holds named tokens: this card, you, your location */
+export const TokenHolder = z.enum(["self", "you", "yourLocation"]);
+export type TokenHolder = z.infer<typeof TokenHolder>;
+
 /** a number, or something computed from the effect context */
 export const Amount = z.union([
   z.number(),
@@ -64,6 +72,10 @@ export const Amount = z.union([
   z.object({ yourClues: z.number(), max: z.number().optional() }),
   /** your skill value (Augur of Elokoss) */
   z.object({ yourSkill: z.enum(SKILLS) }),
+  /** the cards beneath a card */
+  z.object({ beneathCount: BeneathOf }),
+  /** the named tokens a card or you hold */
+  z.object({ tokensOn: z.object({ name: z.string(), on: TokenHolder }).strict() }),
 ]);
 export type Amount = z.infer<typeof Amount>;
 
@@ -258,6 +270,12 @@ export type Condition =
   | { eventEnemyAttackedYouThisRound: true }
   | { eventCardIsSelf: true }
   | { canPay: Cost }
+  /** how many cards lie beneath a card */
+  | { beneath: { of: BeneathOf; min?: number; max?: number } }
+  /** the horror on you */
+  | { horror: { min?: number; max?: number } }
+  /** named tokens held */
+  | { tokens: { name: string; on: TokenHolder; min?: number; max?: number } }
   | { testTokens: ChaosToken[] }
   | { eventAtThisLocation: true }
   /** a condition a card or scenario script decides (`CardScript.conditions`) */
@@ -310,6 +328,30 @@ export const Condition: z.ZodType<Condition> = z.lazy(() =>
     z.object({ eventEnemyAttackedYouThisRound: z.literal(true) }).strict(),
     z.object({ eventCardIsSelf: z.literal(true) }).strict(),
     z.object({ canPay: Cost }).strict(),
+    z
+      .object({
+        beneath: z
+          .object({ of: BeneathOf, min: z.number().optional(), max: z.number().optional() })
+          .strict(),
+      })
+      .strict(),
+    z
+      .object({
+        horror: z.object({ min: z.number().optional(), max: z.number().optional() }).strict(),
+      })
+      .strict(),
+    z
+      .object({
+        tokens: z
+          .object({
+            name: z.string(),
+            on: TokenHolder,
+            min: z.number().optional(),
+            max: z.number().optional(),
+          })
+          .strict(),
+      })
+      .strict(),
     z.object({ testTokens: z.array(ChaosToken) }).strict(),
     z.object({ eventAtThisLocation: z.literal(true) }).strict(),
     z.object({ script: z.string() }).strict(),
@@ -346,12 +388,16 @@ export type Effect =
     }
   | {
       op: "placeTokens";
-      on: "self";
+      /** this card, you, or your location; `you` and `yourLocation` take named tokens only */
+      on: TokenHolder;
       clues?: number;
       horror?: number;
       damage?: Amount;
       doom?: number;
       resources?: number;
+      /** named tokens (wards, scrap, seals): `amount` of them by this name */
+      name?: string;
+      amount?: Amount;
     }
   | { op: "putInThreatArea" }
   | { op: "attachToLocation"; where: "yours" | "mostClues"; limitOnePerLocation?: boolean }
@@ -470,7 +516,8 @@ export type Effect =
   | { op: "resolution"; id: string }
   | { op: "resign" }
   | { op: "takeFromDiscard"; filter: CardFilter }
-  | { op: "searchEncounterDraw"; filter: CardFilter }
+  /** `zones`: where to look, in order (the encounter deck and its discard by default; the void when the card says) */
+  | { op: "searchEncounterDraw"; filter: CardFilter; zones?: ("deck" | "discard" | "void")[] }
   | { op: "preventDamage"; amount: number; kind: "damage" | "horror" | "either" } // in an attackDealsDamage window: cancel points of what the attack just dealt
   | {
       op: "discardEncounterUntil";
@@ -509,6 +556,68 @@ export type Effect =
   | { op: "healSelf"; damage?: number; horror?: number }
   /** the event enemy does not ready during the next upkeep phase (Slippery) */
   | { op: "skipNextReady" }
+  | /** the scenario pauses on one of its interludes: its text and choices, the answer recorded for the campaign log */ {
+      op: "readInterlude";
+      id: string;
+    }
+  | /** named tokens moved from one holder to another */ {
+      op: "moveTokens";
+      name: string;
+      amount: Amount;
+      from: TokenHolder;
+      to: TokenHolder;
+    }
+  | /** named tokens taken off a card or you */ {
+      op: "removeTokens";
+      name: string;
+      amount: Amount;
+      on: TokenHolder;
+    }
+  | /** this location (or your location) leaves play: its investigators defeated, or moved to `to` (a location name) */ {
+      op: "removeLocation";
+      location?: "self" | "yourLocation";
+      to?: string;
+    }
+  | /** a card of this code in the void comes back: an enemy spawns (at `at`, a location name, else as its spawn says) */ {
+      op: "fromVoid";
+      code: string;
+      at?: string;
+    }
+  | /** this card leaves play to the void, keeping its attachments and tokens */ { op: "toVoid" }
+  | /** every card beneath a card moved elsewhere */ {
+      op: "moveBeneath";
+      from: BeneathOf;
+      to: "encounterDeck" | "encounterDiscard" | "setAside" | "removed";
+    }
+  | /** the pile beneath a card shuffled */ { op: "shuffleBeneath"; of: BeneathOf }
+  | /** the top card beneath a card turned faceup, staying there */ {
+      op: "revealBeneath";
+      from: BeneathOf;
+    }
+  | /** the top card beneath a card (or one at random) drawn by you as an encounter card */ {
+      op: "drawBeneath";
+      from: BeneathOf;
+      random?: boolean;
+    }
+  | /** a card (this one, or a set-aside card of that code) facedown beneath another, at the bottom of its pile */ {
+      op: "putBeneath";
+      under: BeneathOf;
+      card?: string;
+    }
+  | /** resolve this card's story face (turning it to that face first when `flip`) */ {
+      op: "resolveStory";
+      flip?: boolean;
+    }
+  | /** this card becomes a set-aside card of `with` (its tokens kept), that copy leaving the game (the Bystander swap) */ {
+      op: "swap";
+      with: string;
+    }
+  | /** turn the card (this one) to its other printed face */ { op: "flip" }
+  | /** an act or agenda deck back to its first card, the others in order beneath it (Children of Blood) */ {
+      op: "resetDeck";
+      kind: "act" | "agenda";
+      deck?: string;
+    }
   /** effects that resolve when your turn ends (Prestidigitation, "Shove off!") */
   | { op: "atTurnEnd"; effects: Effect[] }
   | { op: "script"; fn: string; args?: unknown };
@@ -581,12 +690,14 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
     z
       .object({
         op: z.literal("placeTokens"),
-        on: z.literal("self"),
+        on: TokenHolder,
         clues: z.number().optional(),
         horror: z.number().optional(),
         damage: Amount.optional(),
         doom: z.number().optional(),
         resources: z.number().optional(),
+        name: z.string().optional(),
+        amount: Amount.optional(),
       })
       .strict(),
     z.object({ op: z.literal("putInThreatArea") }).strict(),
@@ -741,7 +852,13 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
     z.object({ op: z.literal(EVENT.Resolution), id: z.string() }).strict(),
     z.object({ op: z.literal(EVENT.Resign) }).strict(),
     z.object({ op: z.literal("takeFromDiscard"), filter: CardFilter }).strict(),
-    z.object({ op: z.literal("searchEncounterDraw"), filter: CardFilter }).strict(),
+    z
+      .object({
+        op: z.literal("searchEncounterDraw"),
+        filter: CardFilter,
+        zones: z.array(z.enum(["deck", "discard", "void"])).optional(),
+      })
+      .strict(),
     z
       .object({
         op: z.literal("preventDamage"),
@@ -804,6 +921,53 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
       })
       .strict(),
     z.object({ op: z.literal("skipNextReady") }).strict(),
+    z.object({ op: z.literal("readInterlude"), id: z.string() }).strict(),
+    z
+      .object({
+        op: z.literal("moveTokens"),
+        name: z.string(),
+        amount: Amount,
+        from: TokenHolder,
+        to: TokenHolder,
+      })
+      .strict(),
+    z
+      .object({ op: z.literal("removeTokens"), name: z.string(), amount: Amount, on: TokenHolder })
+      .strict(),
+    z
+      .object({
+        op: z.literal("removeLocation"),
+        location: z.enum(["self", "yourLocation"]).optional(),
+        to: z.string().optional(),
+      })
+      .strict(),
+    z.object({ op: z.literal("fromVoid"), code: z.string(), at: z.string().optional() }).strict(),
+    z.object({ op: z.literal("toVoid") }).strict(),
+    z
+      .object({
+        op: z.literal("moveBeneath"),
+        from: BeneathOf,
+        to: z.enum(["encounterDeck", "encounterDiscard", "setAside", "removed"]),
+      })
+      .strict(),
+    z.object({ op: z.literal("shuffleBeneath"), of: BeneathOf }).strict(),
+    z.object({ op: z.literal("revealBeneath"), from: BeneathOf }).strict(),
+    z
+      .object({ op: z.literal("drawBeneath"), from: BeneathOf, random: z.boolean().optional() })
+      .strict(),
+    z
+      .object({ op: z.literal("putBeneath"), under: BeneathOf, card: z.string().optional() })
+      .strict(),
+    z.object({ op: z.literal("resolveStory"), flip: z.boolean().optional() }).strict(),
+    z.object({ op: z.literal("swap"), with: z.string() }).strict(),
+    z.object({ op: z.literal("flip") }).strict(),
+    z
+      .object({
+        op: z.literal("resetDeck"),
+        kind: z.enum(["act", "agenda"]),
+        deck: z.string().optional(),
+      })
+      .strict(),
     z.object({ op: z.literal("atTurnEnd"), effects: effectsArr() }).strict(),
     z.object({ op: z.literal("script"), fn: z.string(), args: z.unknown().optional() }).strict(),
   ]),
@@ -869,6 +1033,21 @@ export const EFFECT_OPS = [
   "shuffleSelfIntoDeck",
   "healSelf",
   "skipNextReady",
+  "readInterlude",
+  "moveTokens",
+  "removeTokens",
+  "removeLocation",
+  "fromVoid",
+  "toVoid",
+  "moveBeneath",
+  "shuffleBeneath",
+  "revealBeneath",
+  "drawBeneath",
+  "putBeneath",
+  "resolveStory",
+  "swap",
+  "flip",
+  "resetDeck",
   "atTurnEnd",
   "script",
 ] as const;
@@ -901,6 +1080,10 @@ export const TRIGGERS = [
   "mythosEnds",
   "enemyPhaseEnds",
   "enterLocation",
+  /** a location's "after you reveal this location", after its clues are placed */
+  "revealed",
+  /** before an investigator or an enemy is defeated: a replacement cancels it (`cancel`) and does something else */
+  "wouldBeDefeated",
   "leaveLocation",
   "locationInvestigated",
   "assetDamaged",
@@ -1000,6 +1183,49 @@ export const Icons = z
   })
   .partial();
 
+/**
+ * Where an enemy spawns, as an expression: locations narrowed by name, trait, empty, connected to the drawer's location;
+ * the nearest or farthest of them to the drawer (or to a card of a code or trait); unrevealed ones if any; or the
+ * candidates of several expressions. The drawer chooses among what is left.
+ */
+export type Spawn =
+  | string
+  | {
+      name?: string;
+      trait?: string;
+      empty?: boolean;
+      connected?: boolean;
+      nearest?: boolean;
+      farthest?: boolean;
+      to?: "you" | { code: string } | { trait: string };
+      unrevealed?: "ifAble";
+      or?: Spawn[];
+    };
+export const Spawn: z.ZodType<Spawn> = z.lazy(() =>
+  z.union([
+    z.string(),
+    z
+      .object({
+        name: z.string().optional(),
+        trait: z.string().optional(),
+        empty: z.boolean().optional(),
+        connected: z.boolean().optional(),
+        nearest: z.boolean().optional(),
+        farthest: z.boolean().optional(),
+        to: z
+          .union([
+            z.literal("you"),
+            z.object({ code: z.string() }).strict(),
+            z.object({ trait: z.string() }).strict(),
+          ])
+          .optional(),
+        unrevealed: z.literal("ifAble").optional(),
+        or: z.array(Spawn).optional(),
+      })
+      .strict(),
+  ]),
+);
+
 export const CardDef = z
   .object({
     code: z.string(),
@@ -1031,6 +1257,17 @@ export const CardDef = z
     backText: z.string().optional(),
     flavor: z.string().optional(),
     doubleSided: z.boolean().default(false),
+    /** the code of its other printed face, a card of its own in ArkhamDB (`03078` → `03078b`); set by the loader */
+    back: z.string().optional(),
+    /** on a `b` face: the code of the face it is the back of; set by the loader. A back is never a deck card */
+    front: z.string().optional(),
+    /** a story card: what it does once resolved */
+    story: z
+      .object({ after: z.enum(["flipBack", "remove", "stay"]) })
+      .strict()
+      .optional(),
+    /** what lies beneath it when it leaves play: discarded (the default) or kept with it */
+    beneathOnLeave: z.enum(["discard", "stay"]).optional(),
     // asset / investigator
     health: z.number().optional(),
     sanity: z.number().optional(),
@@ -1054,7 +1291,8 @@ export const CardDef = z
         horror: z.number(),
       })
       .optional(),
-    spawn: z.string().optional(), // location name or "emptyLocation" / "engagedWithPrey"
+    /** a location name, "emptyLocation", "farthestEmptyLocation", "Engaged with Prey", or an expression */
+    spawn: Spawn.optional(),
     prey: z
       .union([
         z.object({
@@ -1085,6 +1323,8 @@ export const CardDef = z
         z.literal("bearer"),
         /** only this investigator (by card code) is prey: Tommy Malloy */
         z.object({ only: z.string() }),
+        /** the investigator nearest to a card in play matching the filter */
+        z.object({ nearestTo: CardFilter }),
       ])
       .optional(),
     // location (shroud null: the text defines it; the location can't be investigated)
@@ -1119,6 +1359,8 @@ export const CardDef = z
           "exceptional",
           "doomed",
           EVENT.Elusive,
+          /** an asset at a location the investigators get in and out of (Fishing Vessel, the Rocket Ship) */
+          "vehicle",
         ]),
       )
       .default([]),
@@ -1244,6 +1486,45 @@ export const LogCondition: z.ZodType<LogCondition> = z.lazy(() =>
 
 /** scenario setup steps, performed in order */
 export const SetupStep = z.discriminatedUnion("do", [
+  /** `n` of these codes at random (the seed's): into play, set aside, or as the act or agenda (on top of its deck,
+   * current); the rest removed, set aside or left; `backs`: the chosen cards' separate backs set aside */
+  z
+    .object({
+      do: z.literal("chooseRandom"),
+      from: z.array(z.string()).min(2),
+      n: z.number().int().positive().optional(),
+      then: z.enum(["putIntoPlay", "setAside", "act", "agenda"]),
+      deck: z.string().optional(),
+      rest: z.enum(["remove", "setAside", "keep"]),
+      backs: z.literal("setAside").optional(),
+      when: LogCondition.optional(),
+    })
+    .strict(),
+  /** `n` cards at random out of a pile (the set-aside cards, the encounter deck, a side deck) leave the game */
+  z
+    .object({
+      do: z.literal("removeRandom"),
+      from: z.union([z.enum(["setAside", "encounterDeck"]), z.string().regex(/^sideDeck:/)]),
+      n: z.number().int().positive(),
+      filter: CardFilter.optional(),
+      when: LogCondition.optional(),
+    })
+    .strict(),
+  /** the table a checkpoint recorded rebuilt: its locations with their clues and tokens, story assets, tokens, beneath */
+  z.object({ do: z.literal("fromCheckpoint"), when: LogCondition.optional() }).strict(),
+  /** the set-aside cards matching the filter shuffled into the encounter deck */
+  z
+    .object({ do: z.literal("shuffleSetAside"), filter: CardFilter, when: LogCondition.optional() })
+    .strict(),
+  /** each code's copies facedown beneath a card: the scenario card, the act, the agenda, or a location by code */
+  z
+    .object({
+      do: z.literal("putBeneath"),
+      codes: z.array(z.string()),
+      under: z.string(),
+      when: LogCondition.optional(),
+    })
+    .strict(),
   z
     .object({
       do: z.literal("putIntoPlay"),
@@ -1254,7 +1535,9 @@ export const SetupStep = z.discriminatedUnion("do", [
   z
     .object({
       do: z.literal("putRandomIntoPlay"),
-      from: z.array(z.string()),
+      /** the codes to pick among; or, with `filter`, the set-aside cards matching it */
+      from: z.array(z.string()).default([]),
+      filter: CardFilter.optional(),
       count: z.number(),
       removeRest: z.boolean().default(true),
       when: LogCondition.optional(),
@@ -1326,11 +1609,28 @@ export const TokenEffect = z
         "totalDoomInPlay",
         "actStage",
         "elitesInVictoryOrUnderAct",
+        /** the cards beneath the act, the agenda, the scenario card; the locations with none beneath them */
+        "beneathAct",
+        "beneathAgenda",
+        "beneathScenario",
+        "locationsWithoutCardBeneath",
+        /** the named tokens `xTokens` names */
+        "tokensOn",
         "cluesYouControl",
         "fireInPlay",
         "atRitualSite",
       ])
       .optional(),
+    /** the modifier while a condition holds, for the investigator testing ("−3 instead if you have 3 or more horror") */
+    instead: z
+      .object({
+        when: Condition,
+        modifier: z.union([z.number(), z.object({ x: z.literal(true) }).strict()]),
+      })
+      .strict()
+      .optional(),
+    /** for `x: "tokensOn"`: whose tokens of which name */
+    xTokens: z.object({ name: z.string(), on: TokenHolder }).strict().optional(),
     /** X becomes X × xTimes + xPlus */
     xTimes: z.number().optional(),
     xPlus: z.number().optional(),
@@ -1417,9 +1717,28 @@ export const Resolution = z
     text: z.string(),
     effects: z.array(CampaignEffect),
     when: LogCondition.optional(),
+    /** a break between two parts: the table goes into the campaign log, no experience, no upgrade (Fortune and Folly) */
+    checkpoint: z.boolean().optional(),
   })
   .strict();
 export type Resolution = z.infer<typeof Resolution>;
+
+/** an act or agenda deck's card: a code, or versions of it, the first whose `when` holds, else one at random */
+export const DeckEntry = z.union([
+  z.string(),
+  z.object({ oneOf: z.array(z.string()).min(1), when: LogCondition.optional() }).strict(),
+]);
+export type DeckEntry = z.infer<typeof DeckEntry>;
+export const Decks = z.union([z.array(DeckEntry), z.record(z.string(), z.array(DeckEntry))]);
+export type Decks = z.infer<typeof Decks>;
+/** the decks by name: a plain list is deck `a` */
+export const decksByName = (d: Decks): Record<string, DeckEntry[]> =>
+  Array.isArray(d) ? { a: d } : d;
+/** every code an act or agenda deck may hold, versions included, in deck order */
+export const deckCodes = (d: Decks): string[] =>
+  Object.values(decksByName(d)).flatMap((es) =>
+    es.flatMap((e) => (typeof e === "string" ? [e] : e.oneOf)),
+  );
 
 export const ScenarioDef = z
   .object({
@@ -1430,10 +1749,38 @@ export const ScenarioDef = z
     encounterSets: z.array(z.string()),
     /** encounter sets that form a separate deck (e.g. Midnight Masks Cultist deck) */
     sideDecks: z.record(z.string(), z.array(z.string())).default({}),
+    /** interludes read in the middle of play (an agenda's back says when): text, and the choices with what each records */
+    interludes: z
+      .record(
+        z.string(),
+        z
+          .object({
+            text: z.string(),
+            choices: z
+              .array(
+                z
+                  .object({
+                    id: z.string(),
+                    label: z.string(),
+                    record: z
+                      .object({ id: z.string(), section: z.string().optional() })
+                      .strict()
+                      .optional(),
+                  })
+                  .strict(),
+              )
+              .min(1),
+          })
+          .strict(),
+      )
+      .optional(),
+    /** encounter sets whose locations go into the encounter deck, not set aside (Lost in Time and Space) */
+    encounterLocations: z.array(z.string()).optional(),
     /** pick one of these sets at random and add to encounter deck */
     randomEncounterSet: z.array(z.string()).optional(),
-    acts: z.array(z.string()),
-    agendas: z.array(z.string()),
+    /** one deck (deck `a`) or named decks (Black Stars Rise's two agendas, Threads of Fate's three acts) */
+    acts: Decks,
+    agendas: Decks,
     /** a Return-to box's setup card, played beside the base reference card (`card`) */
     setupCards: z.array(z.string()).default([]),
     setup: z.array(SetupStep),
@@ -1534,6 +1881,10 @@ export type FlowCondition =
   | { kind: "trauma"; inv: WhoInv; physical?: number; mental?: number }
   | { kind: "hasCard"; card: string; inv: WhoInv }
   | { kind: "data"; key: string; equals?: boolean | number | string; min?: number }
+  /** the scenario just played: an investigator resigned, was defeated; every investigator resigned */
+  | { kind: "anyResigned" }
+  | { kind: "anyDefeated" }
+  | { kind: "allResigned" }
   | { kind: "not"; condition: FlowCondition }
   | { kind: "all"; conditions: FlowCondition[] }
   | { kind: "any"; conditions: FlowCondition[] }
@@ -1542,6 +1893,7 @@ export type FlowCondition =
 const WhoInv = z.enum(["any", "input", EVENT.Lead]);
 export const FlowCondition: z.ZodType<FlowCondition> = z.lazy(() =>
   z.union([
+    z.object({ kind: z.enum(["anyResigned", "anyDefeated", "allResigned"]) }).strict(),
     z
       .object({ kind: z.literal("logHas"), id: z.string(), section: z.string().optional() })
       .strict(),

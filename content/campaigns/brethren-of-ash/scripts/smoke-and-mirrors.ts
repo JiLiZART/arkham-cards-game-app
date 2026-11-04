@@ -6,6 +6,7 @@ import {
   card,
   cardIf,
   type CardScript,
+  cardsBeneath,
   cardsIn,
   connections,
   currentAct,
@@ -28,6 +29,7 @@ import {
   moveCard,
   pile,
   playerCount,
+  putBeneath,
   randomInt,
   ready,
   setCardLocation,
@@ -104,9 +106,12 @@ const CODEX: Record<string, [string, string]> = {
   ],
 };
 
-const underAct = (game: GameContext): InstId[] => flags.underAct.get(game) ?? [];
-const beneath = (game: GameContext, loc: InstId | null) =>
-  loc ? flags.beneath.get(game, loc) : undefined;
+const underAct = (game: GameContext): readonly InstId[] => {
+  const act = currentAct(game);
+  return act ? cardsBeneath(game, act) : [];
+};
+const beneath = (game: GameContext, loc: InstId | null): InstId | undefined =>
+  loc ? cardsBeneath(game, loc)[0] : undefined;
 const elite = (game: GameContext, id: InstId) => def(game, id).traits.includes("Elite");
 const eliteCount = (game: GameContext) =>
   cardsIn(game, ZONE.Victory).filter((c) => def(game, c.id).type === "enemy" && elite(game, c.id))
@@ -117,8 +122,9 @@ const story = (game: GameContext, text: string) => {
 
 /** a suspect interrogated: beneath the act, out of play */
 function toAct(game: GameContext, id: InstId) {
-  moveCard(game, id, ZONE.SetAside);
-  flags.underAct.set(game, [...underAct(game), id]);
+  const act = currentAct(game);
+  if (act) putBeneath(game, id, act);
+  else moveCard(game, id, ZONE.SetAside);
   emit(game, EVENT.UnderAct, `${def(game, id).name} is placed beneath the act`, { card: id });
   queue(game, checkObjectives());
 }
@@ -147,8 +153,7 @@ export default {
       UNDER.forEach((name, k) => {
         const loc = locationByName(game, name);
         if (!loc || !suspects[k]) return;
-        moveCard(game, suspects[k], ZONE.SetAside);
-        flags.beneath.set(game, loc.id, suspects[k]);
+        putBeneath(game, suspects[k], loc.id);
       });
       if (currentAgenda(game)) addCounter(game, currentAgenda(game)!, "doom", playerCount(game));
       // Dr. Armitage comes with his bearer, and takes up no ally slot
@@ -163,7 +168,6 @@ export default {
       const loc = inv(game, run.you).location;
       const id = beneath(game, loc);
       if (!id || !loc) return;
-      flags.beneath.clear(game, loc);
       moveCard(game, id, ZONE.Limbo);
       emit(game, EVENT.Encounter, `${invName(game, run.you)} draws ${def(game, id).name}`, {
         inv: run.you,

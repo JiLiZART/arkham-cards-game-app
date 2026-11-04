@@ -125,6 +125,12 @@ export function test(
       return cond.equals !== undefined
         ? c.flow.data[cond.key] === cond.equals
         : Number(c.flow.data[cond.key] ?? 0) >= (cond.min ?? 1);
+    case "anyResigned":
+      return (c.flow.scenario?.resigned ?? []).length > 0;
+    case "anyDefeated":
+      return (c.flow.scenario?.defeated ?? []).length > 0;
+    case "allResigned":
+      return !!c.flow.scenario && c.flow.scenario.notResigned.length === 0;
     case "not":
       return !test(db, c, cond.condition, input);
     case "all":
@@ -207,6 +213,8 @@ function apply(
         );
       return;
     case "xp": {
+      // a checkpoint between two parts earns nothing yet
+      if (facts?.checkpoint) return;
       const n = e.bonus + (e.victory ? (facts?.victory ?? 0) : 0);
       for (const i of who(e.who)) i.xp += n;
       const last = c.history.at(-1);
@@ -428,6 +436,8 @@ function run(db: ContentDb, c: CampaignState) {
           else c.result ??= "win";
           break;
         default:
+          // a checkpoint between two parts runs no upgrade
+          if (st.kind === "upgradeDecks" && f.scenario?.checkpoint) break;
           if (PROMPTS.has(st.kind)) f.waiting = { id, step: st as WaitingStep };
       }
     }

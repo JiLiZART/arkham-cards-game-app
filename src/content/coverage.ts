@@ -1,6 +1,6 @@
 import type { ContentDb } from "../engine/world/types";
 import { implemented, tokensReal } from "./implemented";
-import type { CardCount, ContentCoverage } from "./schema";
+import { deckCodes, type CardCount, type ContentCoverage } from "./schema";
 import type { ContentError } from "./loader";
 import { hasScript } from "../engine/world/scripts";
 
@@ -49,7 +49,7 @@ function usedBy(db: ContentDb, s: ContentDb["scenarios"][string]): string[] {
   const used = new Set<string>();
   for (const set of [...s.encounterSets, ...Object.values(s.sideDecks).flat()])
     for (const c of db.encounterSets[set] ?? []) used.add(c);
-  for (const c of [s.card, ...s.acts, ...s.agendas, ...(s.setupCards ?? [])])
+  for (const c of [s.card, ...deckCodes(s.acts), ...deckCodes(s.agendas), ...(s.setupCards ?? [])])
     if (db.cards[c]) used.add(c);
   for (const st of s.setup ?? [])
     if (st.do === "remove" && !st.when) for (const c of st.codes) used.delete(c);
@@ -139,8 +139,8 @@ export function checkCampaignCards(db: ContentDb): ContentError[] {
       if (!s) return;
       for (const [field, want] of [
         ["code", s.card],
-        ["agenda", s.agendas[0]],
-        ["act", s.acts[0]],
+        ["agenda", deckCodes(s.agendas)[0]],
+        ["act", deckCodes(s.acts)[0]],
       ] as const)
         if (ch[field] !== want)
           errors.push({

@@ -5,7 +5,7 @@
  */
 import { push, type GameContext } from "./context";
 import { STEP } from "./steps/step";
-import type { Trigger } from "../content/schema";
+import type { BeneathOf, TokenHolder, Trigger } from "../content/schema";
 import type { EffCtx, EventData, InstId, InvId, ScriptHooks, Step } from "./world/types";
 
 // ---------- reading the game ----------
@@ -16,7 +16,13 @@ export {
   card,
   cardIf,
   currentAct,
+  currentActs,
   currentAgenda,
+  currentAgendas,
+  deckCards,
+  cardsBeneath,
+  tokensOn,
+  inVehicle,
   currentPhase,
   currentRound,
   currentTest,
@@ -78,7 +84,8 @@ export {
   shuffleDeck,
   shuffleList,
 } from "./context";
-export { createCard, discard, moveCard, putOnTop, shuffleIntoDeck } from "./movement";
+export { createCard, discard, moveCard, putBeneath, putOnTop, shuffleIntoDeck } from "./movement";
+export { spawnTargets } from "./queries";
 export { addTempMod } from "./queries";
 export {
   addExtraReveal,
@@ -152,6 +159,34 @@ export const useAbility = verb(STEP.UseAbility);
 export const moveInvestigator = verb(STEP.Move);
 export const defeatEnemy = verb(STEP.DefeatEnemy);
 export const checkObjectives = bare(STEP.CheckObjectives);
+/** turn a card to its other printed face, keeping what is on it (engine-scenario-structure) */
+export const flip = (card: InstId): Queued => verb(STEP.Flip)({ card });
+/** resolve a story face: shown, its abilities run, then what the card says */
+export const resolveStory = verb(STEP.ResolveStory);
+/** the top card beneath a card (or one at random) drawn by `ctx.you` as an encounter card */
+export const drawBeneath = (from: BeneathOf, ctx: EffCtx, random?: boolean): Queued =>
+  verb(STEP.Eff)({ effect: { op: "drawBeneath", from, ...(random ? { random } : {}) }, ctx });
+/** a location leaves play: its investigators defeated (or moved `to`), its enemies discarded, the scenario told */
+export const removeLocation = verb(STEP.RemoveLocation);
+/** a card leaves play to the void, keeping its attachments and tokens */
+export const toVoid = (card: InstId): Queued =>
+  verb(STEP.Eff)({ effect: { op: "toVoid" }, ctx: { source: card } });
+/** a card of this code comes back from the void: an enemy spawns */
+export const fromVoid = (code: string, ctx: EffCtx): Queued =>
+  verb(STEP.Eff)({ effect: { op: "fromVoid", code }, ctx });
+/** named tokens (wards, scrap) placed on this card, on you or on your location */
+export const placeTokens = (name: string, amount: number, on: TokenHolder, ctx: EffCtx): Queued =>
+  verb(STEP.Eff)({ effect: { op: "placeTokens", on, name, amount }, ctx });
+/** an investigator gets into a vehicle at their location, or out of the one they are in */
+export const enterVehicle = verb(STEP.EnterVehicle);
+export const leaveVehicle = verb(STEP.LeaveVehicle);
+/** a vehicle moves, the investigators in it with it */
+export const moveVehicle = verb(STEP.MoveVehicle);
+/** the scenario pauses on one of its interludes; the lead answers it */
+export const readInterlude = (id: string): Queued => verb(STEP.ReadInterlude)({ id });
+/** the top card beneath a card turned faceup */
+export const revealBeneath = (from: BeneathOf, ctx: EffCtx): Queued =>
+  verb(STEP.Eff)({ effect: { op: "revealBeneath", from }, ctx });
 /** a reaction window on `trigger` (an event the engine didn't raise itself) */
 export const openWindow = (trigger: Trigger, data: EventData): Queued =>
   ({ t: STEP.Window, trigger, data }) as unknown as Queued;

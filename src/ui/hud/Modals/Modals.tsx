@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { cardText, encounterSetName, t } from "../../../content/i18n";
 import type { CardInst, ChoiceOption, GameState, InstId } from "../../../engine/world/types";
 import { CardFace } from "../../components/CardFace";
@@ -17,7 +17,7 @@ import { moment } from "../SoundLayer";
 import { DeckViewer } from "../DeckViewer";
 import { AssetsModal } from "../AssetsModal";
 import styles from "./Modals.module.css";
-import { cardOfIf } from "../../../engine/context";
+import { cardOf, cardOfIf, pileOf } from "../../../engine/context";
 
 /** a native modal dialog: Escape and focus trapping come from <dialog>; a click on the backdrop closes it */
 export function Modal({
@@ -139,10 +139,16 @@ export function CardModal({ id }: { id: InstId }) {
   const locale = useGame((s) => s.locale);
   const close = () => useView.getState().setModal(null);
   const options = useCardOptions([id]);
+  // a double-faced card (an asset with a story side, a story card that becomes an enemy): its other face on request
+  const [otherSide, setOtherSide] = useState(false);
   const inst = cardOfIf(game, id);
   if (!inst) return null;
-  const d = db.cards[inst.code];
-  const tx = cardText(db, inst.code, locale);
+  const otherFace = db.cards[inst.code].back ?? db.cards[inst.code].front;
+  // the facedown cards beneath it, listed for the table (facedown to others isn't enforced online)
+  const beneath = pileOf(game, `beneath:${id}`);
+  const code = otherSide && otherFace ? otherFace : inst.code;
+  const d = db.cards[code];
+  const tx = cardText(db, code, locale);
   const back = d.type === "location" && !inst.revealed;
   // act and agenda: both sides side by side (the back holds what happens when it advances)
   const both = (d.type === "act" || d.type === "agenda") && d.doubleSided;
@@ -161,7 +167,7 @@ export function CardModal({ id }: { id: InstId }) {
         <div
           className={`modal-card ${["act", "agenda", "investigator"].includes(d.type) ? "landscape" : ""}`}
         >
-          <CardFace code={inst.code} locale={locale} side={back ? "back" : "front"} />
+          <CardFace code={code} locale={locale} side={back ? "back" : "front"} />
         </div>
       )}
       <div className="modal-side">
@@ -178,11 +184,22 @@ export function CardModal({ id }: { id: InstId }) {
             </span>
           ))}
         </div>
+        {beneath.length > 0 && (
+          <div className="muted" data-testid="modal-beneath">
+            {t(db, locale, "stat.beneath")}:{" "}
+            {beneath.map((b) => cardText(db, cardOf(game, b).code, locale).name).join(", ")}
+          </div>
+        )}
         <p
           className="card-text"
           dangerouslySetInnerHTML={{ __html: formatText(back ? (tx.backText ?? "") : tx.text) }}
         />
-        {!back && <Keywords code={inst.code} locale={locale} />}
+        {!back && <Keywords code={code} locale={locale} />}
+        {otherFace && !both && (
+          <button data-testid="modal-other-face" onClick={() => setOtherSide(!otherSide)}>
+            {t(db, locale, "modal.otherFace")}
+          </button>
+        )}
         <OptionButtons options={options} onChosen={close} />
         <button className="modal-close" onClick={close}>
           {t(db, locale, "modal.close")}

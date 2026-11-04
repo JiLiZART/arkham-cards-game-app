@@ -3,9 +3,9 @@ import { loadPack } from "../../content";
 import { createGame, dispatch, type Result } from "../index";
 import { next } from "../world/rng";
 import { db, gOf, mutate, options, pick, putEnemy, skipMulligans, start } from "../kits/testkit";
-import { card, inv, type GameContext } from "../context";
-import { cardsIn, findByCode } from "../queries";
-import { moveCard } from "../movement";
+import { card, cardsBeneath, currentAct, inv, type GameContext } from "../context";
+import { cardsIn, findByCode, locations } from "../queries";
+import { moveCard, putBeneath } from "../movement";
 import { game, inject, neutral, toTurn } from "../kits/driver";
 import type { ChaosToken } from "../../content/schema";
 import { applyScenarioEnd, scenarioSetup, startCampaign } from "../campaign/campaign";
@@ -78,8 +78,9 @@ const codesIn = (r: Result, zone: string) =>
     .map((c) => c.code);
 const count = (r: Result, code: string, zone: string) =>
   codesIn(r, zone).filter((c) => c === code).length;
-const actCode = (r: Result) => (r.state.act ? cardRecIn(r.state, r.state.act).code : null);
-const agendaCode = (r: Result) => (r.state.agenda ? cardRecIn(r.state, r.state.agenda).code : null);
+const actCode = (r: Result) => (r.state.acts.a ? cardRecIn(r.state, r.state.acts.a).code : null);
+const agendaCode = (r: Result) =>
+  r.state.agendas.a ? cardRecIn(r.state, r.state.agendas.a).code : null;
 /** the scenario at its first turn, with a neutral bag */
 const begin = (
   scenario: string,
@@ -89,8 +90,8 @@ const begin = (
 ) => game({ scenario, investigators: invs, bag, extra: { ...CAMPAIGN, campaignLog: log } });
 /** jump the act deck forward to `code` */
 function toAct(game: GameContext, code: string) {
-  while (game.s.act && card(game, game.s.act).code !== code) {
-    moveCard(game, game.s.act, ZONE.Removed);
+  while (game.s.acts.a && card(game, game.s.acts.a).code !== code) {
+    moveCard(game, game.s.acts.a, ZONE.Removed);
     const nextAct = pileRecIn(game.s, PILE.ActDeck).shift();
     if (nextAct) moveCard(game, nextAct, ZONE.Act);
   }
@@ -196,7 +197,7 @@ describe("Spreading Flames", () => {
     r = inject(
       r,
       (game) => {
-        cardRecIn(game.s, game.s.agenda!).doom = 3;
+        cardRecIn(game.s, game.s.agendas.a!).doom = 3;
       },
       { t: STEP.CheckDoom },
     );
@@ -209,17 +210,19 @@ describe("Spreading Flames", () => {
       bystander = putEnemy(game, "12123", inv(game, R).location!, R);
     });
     r = toTurn(inject(r, () => {}, { t: STEP.DefeatEnemy, enemy: bystander, by: R }));
-    expect(card(gOf(r), r.state.agenda!).doom).toBe(1);
+    expect(card(gOf(r), r.state.agendas.a!).doom).toBe(1);
   });
 });
 
 describe("Smoke and Mirrors", () => {
   it("deals the suspects beneath six locations and sets the harbinger aside", () => {
     const r = begin("smoke-and-mirrors", [R, D]);
-    expect(Object.keys(r.state.world.tables.beneath)).toHaveLength(6);
+    expect(locations(gOf(r)).filter((l) => cardsBeneath(gOf(r), l.id).length === 1)).toHaveLength(
+      6,
+    );
     expect(r.state.flags.harbinger).toBeTruthy();
     expect(codesIn(r, "encounterDeck").some((c) => /^1213[89]$|^1214[0-4]$/.test(c))).toBe(false);
-    expect(card(gOf(r), r.state.agenda!).doom).toBe(3); // 1 per investigator, 1 for the quiet campus
+    expect(card(gOf(r), r.state.agendas.a!).doom).toBe(3); // 1 per investigator, 1 for the quiet campus
     expect(r.state.chaosBag.filter((t) => t === "cultist")).toHaveLength(2);
   });
 
@@ -233,11 +236,13 @@ describe("Smoke and Mirrors", () => {
       invStateIn(game.s, R).clues = 2;
       game.s.chaosBag = ["+1"];
       const cornelia = allCardRecsIn(game.s).find((c) => c.code === "12140")!;
-      for (const [k, v] of Object.entries(game.s.world.tables.beneath))
-        if (v === cornelia.id) delete game.s.world.tables.beneath[k];
       if (game.s.flags.harbinger === cornelia.id) game.s.flags.harbinger = "none";
-      moveCard(game, cornelia.id, ZONE.SetAside);
-      game.s.world.tables.beneath[north.id] = cornelia.id;
+      // whatever lay beneath Northside goes where Cornelia was, and she lies beneath it alone
+      const before = cornelia.zone === "beneath" ? cornelia.location : null;
+      for (const other of [...cardsBeneath(game, north.id)])
+        if (before) putBeneath(game, other, before);
+        else moveCard(game, other, ZONE.SetAside);
+      putBeneath(game, cornelia.id, north.id);
     });
     r = toTurn(pick(r, /^Augurs of Flame/));
     const cornelia = allCardRecsIn(r.state).find((c) => c.code === "12140")!;
@@ -246,7 +251,7 @@ describe("Smoke and Mirrors", () => {
       options(x).some((o) => o.startsWith("Cornelia Akely")),
     );
     r = toTurn(pick(r, /^Cornelia Akely/));
-    expect(r.state.flags.underAct).toEqual([cornelia.id]);
+    expect(cardsBeneath(gOf(r), currentAct(gOf(r))!)).toEqual([cornelia.id]);
     expect(r.state.log.some((e) => e.type === "codex")).toBe(true);
   });
 
@@ -273,9 +278,9 @@ describe("Queen of Ash", () => {
     expect(codesIn(r, "location").sort()).toEqual(
       ["12174", "12182", "12183", "12184", "12185", "12186", "12187"].sort(),
     );
-    expect(codesIn(r, "setAside")).toEqual(
-      expect.arrayContaining(["12175", "12179", "12179b", "12180"]),
-    );
+    expect(codesIn(r, "setAside")).toEqual(expect.arrayContaining(["12175", "12179", "12180"]));
+    // Elokoss is one card, her Mother of Flame side its back
+    expect(codesIn(r, "setAside")).not.toContain("12179b");
     expect(invStateIn(r.state, R).clues).toBe(1);
     expect(r.state.chaosBag.slice(-2)).toEqual(["elderThing", "tablet"]);
   });
@@ -315,14 +320,14 @@ describe("Queen of Ash", () => {
     r = inject(
       r,
       (game) => {
-        moveCard(game, game.s.agenda!, ZONE.Removed);
+        moveCard(game, game.s.agendas.a!, ZONE.Removed);
         moveCard(game, pileRecIn(game.s, PILE.AgendaDeck).shift()!, ZONE.Agenda);
       },
       { t: STEP.AdvanceAgenda },
     );
     r = toTurn(r);
     expect(agendaCode(r)).toBe("12171");
-    expect(r.state.act).toBe(null);
+    expect(r.state.acts.a).toBe(null);
     expect(allCardRecsIn(r.state).find((c) => c.code === "12179b")!.zone).toBe("enemy");
     expect(cardsIn(gOf(r), ZONE.Enemy).length).toBeGreaterThan(0);
   });

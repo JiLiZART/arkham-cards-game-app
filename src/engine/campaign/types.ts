@@ -46,6 +46,11 @@ export interface ScenarioFacts {
   cultistsRemaining: string[];
   /** investigators who did not resign */
   notResigned: string[];
+  /** investigators who resigned, and who were defeated (absent from a resolution started before the engine kept them) */
+  resigned?: string[];
+  defeated?: string[];
+  /** the resolution is a checkpoint between two parts: no experience, no upgrade */
+  checkpoint?: boolean;
 }
 
 export type Shown = { story: string } | { recorded: { id: string; section: string } };

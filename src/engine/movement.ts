@@ -1,6 +1,15 @@
-import { allCardRecs, cardRec, pileKey, pileRec, pilesNamed, putCardIn } from "./world/store";
+import {
+  allCardRecs,
+  cardRec,
+  deckPile,
+  pileKey,
+  pileRead,
+  pileRec,
+  pilesNamed,
+  putCardIn,
+} from "./world/store";
 import type { CardInst, GameContext, InstId, InvId, PileName, Zone } from "./world/types";
-import { card, def, emit, invName, nextId, shuffleDeck } from "./context";
+import { card, clearTokens, def, emit, invName, nextId, shuffleDeck } from "./context";
 import { EVENT } from "./events/event";
 import { ZONE, PILE } from "./world/constants";
 
@@ -12,9 +21,11 @@ export function createCard(
   code: string,
   zone: Zone,
   owner: InvId | null = null,
+  /** a fixed id outside the sequence (the scenario card), so the cards after it keep theirs */
+  fixed?: InstId,
 ): InstId {
   if (!game.db.cards[code]) throw new Error(`unknown card ${code}`);
-  const id = nextId(game);
+  const id = fixed ?? nextId(game);
   putCardIn(game.s, {
     id,
     code,
@@ -49,20 +60,33 @@ function removeFromPile(game: GameContext, id: InstId) {
     if (at >= 0) pile!.splice(at, 1);
     return at >= 0;
   };
-  // the pile the zone and owner name; a card put in another investigator's pile (or a side deck, whose name isn't in
-  // the zone) is found by its kind
-  const named = pileKey(c.zone, c.owner);
+  // the pile the zone and owner name (beneath: the card it lies beneath); a card put in another investigator's pile (or
+  // a side deck, whose name isn't in the zone) is found by its kind
+  const named: PileName | null =
+    c.zone === "beneath" ? `beneath:${c.location}` : pileKey(c.zone, c.owner);
   if (!take(named)) {
     const kind =
       c.zone === "deck" || c.zone === "hand" || c.zone === "discard"
         ? `${c.zone}:`
         : c.zone === "sideDeck"
           ? "sideDeck:"
-          : null;
+          : c.zone === "actDeck" || c.zone === "agendaDeck"
+            ? `${c.zone}:`
+            : null;
     if (kind) for (const name of pilesNamed(game.s, kind)) if (take(name)) break;
   }
-  if (game.s.act === id) game.s.act = null;
-  if (game.s.agenda === id) game.s.agenda = null;
+  for (const decks of [game.s.acts, game.s.agendas])
+    for (const [deck, cur] of Object.entries(decks)) if (cur === id) decks[deck] = null;
+}
+
+/** the act or agenda deck a card is in (as its pile or its current card), else deck `a` */
+function deckOf(game: GameContext, id: InstId, kind: "act" | "agenda"): string {
+  const current = Object.entries(kind === "act" ? game.s.acts : game.s.agendas).find(
+    ([, c]) => c === id,
+  );
+  if (current) return current[0];
+  const name = pilesNamed(game.s, `${kind}Deck`).find((n) => game.s.world.piles[n]?.includes(id));
+  return name?.includes(":") ? name.slice(name.indexOf(":") + 1) : "a";
 }
 
 const IN_PLAY: Zone[] = [
@@ -82,11 +106,36 @@ export function moveCard(
   game: GameContext,
   id: InstId,
   zone: Zone,
-  opts: { inv?: InvId | null; top?: boolean; location?: InstId | null } = {},
+  opts: {
+    inv?: InvId | null;
+    top?: boolean;
+    location?: InstId | null;
+    deck?: string;
+    /** the same card changing place, not leaving play: its tokens and attachments stay (a flip, the void) */
+    keep?: boolean;
+  } = {},
 ) {
   const c = cardRec(game, id);
-  const leavingPlay = isInPlay(c) && !IN_PLAY.includes(zone);
+  const kind =
+    zone === "act" || zone === "actDeck"
+      ? "act"
+      : zone === "agenda" || zone === "agendaDeck"
+        ? "agenda"
+        : null;
+  const deck = kind ? (opts.deck ?? deckOf(game, id, kind)) : "a";
+  // to the void a card keeps its attachments and tokens (the Hunting Horror)
+  const leavingPlay = isInPlay(c) && !IN_PLAY.includes(zone) && !opts.keep && zone !== ZONE.Void;
   removeFromPile(game, id);
+  // what lies beneath it is discarded when it goes for good (not while it resolves, nor to the void)
+  if (
+    isInPlay(c) &&
+    !IN_PLAY.includes(zone) &&
+    zone !== ZONE.Limbo &&
+    zone !== ZONE.Void &&
+    def(game, id).beneathOnLeave !== "stay"
+  )
+    for (const under of [...pileRead(game.s, `beneath:${id}`)])
+      moveCard(game, under, card(game, under).owner ? ZONE.Discard : ZONE.EncounterDiscard);
   if (leavingPlay) {
     // discard attachments
     for (const other of allCardRecs(game)) {
@@ -99,6 +148,7 @@ export function moveCard(
         });
       }
     }
+    clearTokens(game, id);
     // a card that re-enters play is a new copy: its "limit per period" starts unused (Grimoire, Limits and Maximums)
     for (const k of Object.keys(game.s.usage)) if (k.startsWith(`${id}:`)) delete game.s.usage[k];
     Object.assign(c, {
@@ -137,10 +187,18 @@ export function moveCard(
       pileRec(game, PILE.EncounterDiscard).push(id);
       break;
     case "act":
-      game.s.act = id;
+      game.s.acts[deck] = id;
       break;
     case "agenda":
-      game.s.agenda = id;
+      game.s.agendas[deck] = id;
+      break;
+    case "actDeck":
+    case "agendaDeck":
+      at(pileRec(game, deckPile(kind!, deck)));
+      break;
+    case "beneath":
+      if (!opts.location) throw new Error(`card ${id} put beneath no card`);
+      at(pileRec(game, `beneath:${opts.location}`));
       break;
   }
 }
@@ -201,4 +259,59 @@ export function discard(game: GameContext, id: InstId) {
   if (c.owner) moveCard(game, id, ZONE.Discard, { inv: c.owner });
   else moveCard(game, id, ZONE.EncounterDiscard);
   emit(game, EVENT.Discard, `${d.name} is discarded`, { card: id });
+}
+
+/** the code of a card's other printed face (`X` ↔ `Xb`, `Xa` ↔ `Xb`), when the content has one */
+export const otherFace = (game: GameContext, code: string): string | undefined =>
+  game.db.cards[code]?.back ?? game.db.cards[code]?.front;
+
+/** the zone a card's new face lives in, from the zone it was in */
+function zoneForFace(type: string, from: Zone): Zone {
+  switch (type) {
+    case "enemy":
+      return ZONE.Enemy;
+    case "location":
+      return ZONE.Location;
+    case "asset":
+      return from === ZONE.Play || from === ZONE.Threat ? from : ZONE.Play;
+    case "story":
+      // out of the play area, still where it was
+      return ZONE.SetAside;
+    default:
+      return from;
+  }
+}
+
+/**
+ * Turn a card to its other printed face: the same instance, its tokens, attachments, place and controller kept, moved
+ * to the zone the new face's type lives in (a story card that becomes an enemy, an asset that becomes a story card).
+ */
+export function flip(game: GameContext, id: InstId): boolean {
+  const other = otherFace(game, card(game, id).code);
+  if (!other) return false;
+  becomes(game, id, other);
+  return true;
+}
+
+/** the same instance shows another card (a face, a swap), moved to the zone that card's type lives in, nothing lost */
+export function becomes(game: GameContext, id: InstId, code: string) {
+  const c = card(game, id);
+  const { location, controller } = c;
+  const from = c.code;
+  cardRec(game, id).code = code;
+  const zone = zoneForFace(game.db.cards[code].type, c.zone);
+  if (zone !== c.zone) moveCard(game, id, zone, { keep: true, location, inv: controller });
+  cardRec(game, id).controller = controller;
+  emit(game, EVENT.Flip, `${game.db.cards[from].name} flips: ${game.db.cards[code].name}`, {
+    card: id,
+  });
+}
+
+/** put a card facedown beneath another (at the bottom of its pile), out of play */
+export const putBeneath = (game: GameContext, id: InstId, holder: InstId) =>
+  moveCard(game, id, ZONE.Beneath, { location: holder });
+
+/** the pile beneath one card goes beneath another (an act's or agenda's pile passing to the next one) */
+export function passBeneath(game: GameContext, from: InstId, to: InstId) {
+  for (const id of [...pileRead(game.s, `beneath:${from}`)]) putBeneath(game, id, to);
 }

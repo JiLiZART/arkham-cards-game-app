@@ -56,8 +56,11 @@ export const ANIMATED = new Set<EventType>([
   EVENT.Doom,
 ]);
 
-/** a drawn encounter card or weakness waits in the showcase for the player's tap at every pace (its Continue is its own) */
-export const HELD = new Set<EventType>([EVENT.Encounter, EVENT.Weakness]);
+/**
+ * a drawn encounter card or weakness, or a story face being resolved, waits in the showcase for the player's tap at every
+ * pace (its Continue is its own)
+ */
+export const HELD = new Set<EventType>([EVENT.Encounter, EVENT.Weakness, EVENT.StoryShown]);
 /** cards drawn but not yet sent on from the showcase (the playing event's and the queued ones'): the table doesn't show them yet */
 export function heldCards(s: { current: GameEvent | null; queue: GameEvent[] }): Set<string> {
   return new Set(

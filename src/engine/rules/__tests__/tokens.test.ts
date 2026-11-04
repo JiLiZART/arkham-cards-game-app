@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { card, type GameContext } from "../../context";
+import { addCounter, addTokens, card, inv, type GameContext } from "../../context";
+import { game, investigate, lastTest } from "../../kits/driver";
 import { createCard, moveCard } from "../../movement";
 import { findByCode, matchesFilter } from "../../queries";
 import {
@@ -214,5 +215,39 @@ describe("Night of the Zealot on Hard and Expert, from the backs of the referenc
     });
     expect(runs.some((x) => x.first)).toBe(true);
     for (const x of runs) expect(x.count).toBe(x.first ? 2 : 1);
+  });
+});
+
+describe("a token line's `instead`", () => {
+  it("reads its other modifier while the condition holds (−3 at 3 horror, −1 at 2)", () => {
+    setSkull({ modifier: -1, instead: { when: { horror: { min: 3 } }, modifier: -3 } });
+    const at = (horror: number) => {
+      const r = investigate(
+        game({
+          investigators: [ROLAND],
+          bag: ["skull"],
+          prep: (g) => addCounter(g, ROLAND, "horror", horror),
+        }),
+      );
+      const t = lastTest(r)!;
+      return t.total - t.base;
+    };
+    expect(at(3)).toBe(-3);
+    expect(at(2)).toBe(-1);
+  });
+});
+
+describe("a token X counting named tokens", () => {
+  it("−X, X the wards on your location", () => {
+    setSkull({ modifier: "X", x: "tokensOn", xTokens: { name: "ward", on: "yourLocation" } });
+    const r = investigate(
+      game({
+        investigators: [ROLAND],
+        bag: ["skull"],
+        prep: (g) => void addTokens(g, inv(g, ROLAND).location!, "ward", 2),
+      }),
+    );
+    const t = lastTest(r)!;
+    expect(t.total - t.base).toBe(-2);
   });
 });

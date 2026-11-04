@@ -1,16 +1,17 @@
 /** Effects that put clues, doom, tokens and uses on cards, or take them off. */
 import {
   addCounter,
+  addTokens,
   ask,
   card,
-  currentAgenda,
   def,
   emit,
   type GameContext,
   inv,
   push,
+  tokensOn,
 } from "../context";
-import { cardsIn, connections, enemies, invsAt, matchesFilter } from "../queries";
+import { cardsIn, connections, enemies, invsAt, matchesFilter, tokenHolder } from "../queries";
 import type { InstId } from "../world/types";
 import { amt, enemyTargets, opt } from "./targets";
 import type { EffectOf, EffectRun } from "./types";
@@ -50,8 +51,7 @@ function placeDoomEffect(game: GameContext, run: EffectRun<EffectOf<"placeDoom">
 
   const n = amt(game, e.amount, ctx);
   if (e.on === "agenda") {
-    const agenda = currentAgenda(game);
-    if (agenda) push(game, { t: STEP.PlaceDoom, card: agenda, n });
+    push(game, { t: STEP.PlaceDoom, card: "agenda", n });
   } else if (e.on === "self") {
     if (ctx.source) push(game, { t: STEP.PlaceDoom, card: ctx.source, n });
   } else if (e.on === "eachCultist") {
@@ -69,6 +69,12 @@ function placeTokensEffect(game: GameContext, run: EffectRun<EffectOf<"placeToke
   const { ctx, you, src } = run;
   const e = run.effect;
 
+  // named tokens on this card, on you or on your location
+  if (e.name) {
+    const h = tokenHolder(game, e.on, ctx);
+    if (h) addTokens(game, h, e.name, amt(game, e.amount ?? 1, ctx));
+    return;
+  }
   if (!src) return;
   addCounter(game, src.id, "clues", e.clues ?? 0);
   addCounter(game, src.id, "horror", e.horror ?? 0);
@@ -144,7 +150,25 @@ function removeUsesEffect(game: GameContext, run: EffectRun<EffectOf<"removeUses
   return;
 }
 
+function removeTokensEffect(game: GameContext, run: EffectRun<EffectOf<"removeTokens">>) {
+  const h = tokenHolder(game, run.effect.on, run.ctx);
+  if (h) addTokens(game, h, run.effect.name, -amt(game, run.effect.amount, run.ctx));
+}
+
+/** at most what the giver holds */
+function moveTokensEffect(game: GameContext, run: EffectRun<EffectOf<"moveTokens">>) {
+  const { effect: e, ctx } = run;
+  const from = tokenHolder(game, e.from, ctx);
+  const to = tokenHolder(game, e.to, ctx);
+  if (!from || !to) return;
+  const n = Math.min(tokensOn(game, from, e.name), amt(game, e.amount, ctx));
+  addTokens(game, from, e.name, -n);
+  addTokens(game, to, e.name, n);
+}
+
 export const tokensEffects = {
+  removeTokens: removeTokensEffect,
+  moveTokens: moveTokensEffect,
   discoverClues: discoverCluesEffect,
   placeDoom: placeDoomEffect,
   placeTokens: placeTokensEffect,

@@ -80,6 +80,20 @@ What the campaign changes ask of this change, by name: `campaign-the-dunwich-leg
 
 15. **Hooks added to `ScriptHooks`:** `locationLeavesPlay(game, location)`, `wouldBeDefeated(game, who: InvId | InstId, by): boolean`, `storyResolved(game, run, card)`. Verbs added to `api.ts`: `flip`, `resolveStory`, `removeLocation`, `readInterlude`, `putBeneath`, `drawBeneath`, `revealBeneath`, `toVoid`, `placeTokens`, `enterVehicle`, `leaveVehicle`; reads: `currentActs`, `currentAgendas`, `cardsBeneath`, `tokensOn`, `spawnTargets`, `inVehicle`.
 
+## Implementation notes
+
+What the implementation settled that the decisions above left open or that changed on contact with the code:
+
+- **Decks (1).** Deck `a` keeps the `actDeck`/`agendaDeck` piles; another deck is `actDeck:<name>`. The scenario card is an instance with the fixed id `scenario`, outside the card sequence, so no recorded card id shifts. An agenda counts its own doom and every non-agenda card's; advancing clears that doom only.
+- **Faces (3).** The face is the instance's code (`03078` or `03078b`), not a separate field: `flip` swaps the code and moves the card by the new type, keeping tokens, attachments and controller (`movement.ts flip`, `becomes`). The loader sets `back` on a front and `front` on its back. An act's or agenda's `b` card of another type (Midnight Masks' Masked Hunter, played as a card of its own today) keeps being created; only its front gets `back`, so a campaign change can flip the act. A setup step naming a back alone turns its front over (Midnight Masks' `01121b`); `check:content` fails a step naming both faces, and the importer keeps one (`oneCardPerFace`). Queen of Ash now turns Elokoss over instead of swapping two instances.
+- **Story page (2.4, 8.2).** A story face waits in the encounter showcase (`StoryShown` is a held event); an interlude is the pending prompt with its text and choices. No new component.
+- **Beneath (4).** An act's or agenda's pile passes to the deck's next card as it advances. Token X sources: `beneathAct`, `beneathAgenda`, `beneathScenario`, `locationsWithoutCardBeneath`.
+- **Random setup (7).** `shuffleSetAside { filter }` shuffles the matching set-aside cards into the encounter deck; `chooseRandom … backs: "setAside"` sets aside the chosen card's separate back.
+- **Spawn (13).** The expression has no `at` discriminator: it narrows by `name`, `trait`, `empty`, `connected`, then `nearest`/`farthest` to `to`, `unrevealed: "ifAble"`, or the union of `or` (as `13027`'s `{ trait: "Arkham", empty: true }` writes it).
+- **Named tokens (12).** One store table keyed `holder:name` (holder a card or an investigator); `placeTokens` gains `name`/`amount` and holders `you`/`yourLocation`.
+- **Interludes (10).** An answer records a `log:<section>:<id>` note, read by the campaign log at the scenario's end. A checkpoint writes section `checkpoint` (`checkpoint:locations`, `checkpoint:clues:<code>`, `checkpoint:tokens:<holder>:<name>`, `checkpoint:assets:<inv>`, `checkpoint:beneathScenario`); `fromCheckpoint` reads them back.
+- **Saves.** Version 8 refuses older saves' scenarios (their choices may name other cards); the corpus is re-recorded. Every recording outside Brethren of Ash replayed identically once `acts`/`agendas` and the scenario card were normalized; Smoke and Mirrors differed only in its suspects' zone (`beneath`, was `setAside`) and Queen of Ash by the one fewer Elokoss instance.
+
 ## Risks / Trade-offs
 
 - [Every caller of `game.s.act`/`agenda` changes] → `currentAct(game)` keeps the one-deck meaning; the boundary test's `game.s` list is unchanged; the corpus replays unchanged (no recorded game has two decks).

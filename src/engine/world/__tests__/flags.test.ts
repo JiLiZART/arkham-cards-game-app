@@ -4,7 +4,6 @@ import { newWorld } from "../store";
 import {
   aside,
   attacked,
-  beneath,
   campaignNotes,
   connections,
   costMod,
@@ -75,15 +74,13 @@ describe("flag families", () => {
   it("each family about an entity has a table of its own", () => {
     const x = gameOf();
     dying.set(x, "c1", true);
-    beneath.set(x, "c2", "c9");
     aside.set(x, "01002", ["c5"]);
     hunch.set(x, "01001", ["c6"]);
     hunchRevealed.set(x, "01001", "c6");
     noAttack.set(x, ["c3", "01001"], 4);
     const t = x.s.world.tables;
-    expect([t.dying, t.beneath, t.aside, t.hunch, t.hunchRevealed, t.noAttack]).toEqual([
+    expect([t.dying, t.aside, t.hunch, t.hunchRevealed, t.noAttack]).toEqual([
       { c1: true },
-      { c2: "c9" },
       { "01002": ["c5"] },
       { "01001": ["c6"] },
       { "01001": "c6" },

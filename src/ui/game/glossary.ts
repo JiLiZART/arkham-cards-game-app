@@ -15,6 +15,7 @@ export const KEYWORDS = [
   "fast",
   "patrol",
   "elusive",
+  "vehicle",
   "swarming",
   "concealed",
   "exceptional",

@@ -1,9 +1,21 @@
-import { underAct } from "../world/flags";
 import type { TokenEffect } from "../../content/schema";
-import { allCards, card, currentAct, def, type GameContext, inv } from "../context";
-import { cardsIn, enemies, enemiesAt } from "../queries";
+import {
+  allCards,
+  card,
+  cardsBeneath,
+  currentAct,
+  currentAgenda,
+  def,
+  type GameContext,
+  inv,
+} from "../context";
+
+/** how many cards lie beneath a card (none: 0) */
+const beneathOf = (game: GameContext, holder: string | null) =>
+  holder ? cardsBeneath(game, holder).length : 0;
+import { cardsIn, enemies, enemiesAt, locations } from "../queries";
 import type { InvId } from "../world/types";
-import { ZONE } from "../world/constants";
+import { SCENARIO_CARD, ZONE } from "../world/constants";
 
 /** X values used by scenario reference cards */
 export function tokenX(game: GameContext, x: NonNullable<TokenEffect["x"]>, i: InvId): number {
@@ -31,8 +43,18 @@ export function tokenX(game: GameContext, x: NonNullable<TokenEffect["x"]>, i: I
       return (
         cardsIn(game, ZONE.Victory).filter(
           (c) => def(game, c.id).type === "enemy" && def(game, c.id).traits.includes("Elite"),
-        ).length + (underAct.get(game) ?? []).length
+        ).length + beneathOf(game, currentAct(game))
       );
+    case "beneathAct":
+      return beneathOf(game, currentAct(game));
+    case "beneathAgenda":
+      return beneathOf(game, currentAgenda(game));
+    case "beneathScenario":
+      return beneathOf(game, SCENARIO_CARD);
+    case "locationsWithoutCardBeneath":
+      return locations(game).filter((l) => !cardsBeneath(game, l.id).length).length;
+    case "tokensOn":
+      return 0; // read with the line's `xTokens` (rules/skillTest.ts)
     case "cluesYouControl":
       return inv(game, i).clues;
     case "fireInPlay":

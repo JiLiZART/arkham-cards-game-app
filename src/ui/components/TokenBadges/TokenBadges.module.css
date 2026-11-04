@@ -62,3 +62,17 @@
     0 0 3px #000,
     0 0 2px #000;
 }
+
+/* the facedown cards beneath the card: a dark chip, the backs of cards */
+.tokBeneath {
+  background: var(--abyss);
+  color: var(--iron);
+  border: 1px solid var(--rule);
+}
+
+/* a named token (ward, scrap, seal): its name and count */
+.tokNamed {
+  background: var(--slate-lit);
+  color: var(--lamp);
+  border: 1px solid var(--edge-lit);
+}

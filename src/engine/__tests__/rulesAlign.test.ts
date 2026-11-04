@@ -392,9 +392,9 @@ describe("advancing the act in a player window", () => {
       r = neutral(r);
     }
     expect(offered(/^Advance act/)(r)).toBe(true);
-    const act = r.state.act;
+    const act = r.state.acts.a;
     r = pick(r, /^Advance act/);
-    expect(r.state.act).not.toBe(act);
+    expect(r.state.acts.a).not.toBe(act);
     expect(invStateIn(r.state, ROLAND).clues).toBe(0);
   });
   it("is not offered without the clues", () => {
