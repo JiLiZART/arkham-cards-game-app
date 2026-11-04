@@ -174,7 +174,11 @@ export function moveCard(
     });
     if (c.owner) c.controller = c.owner;
   }
+  // a location leaving the map forgets its cell and its links; one entering it takes a cell
+  if (c.zone === ZONE.Location && zone !== ZONE.Location) forgetPlace(game, id);
+  const entersMap = c.zone !== ZONE.Location && zone === ZONE.Location;
   c.zone = zone;
+  if (entersMap) takeCell(game, id);
   if (zone !== "enemy" && zone !== "attached") c.location = opts.location ?? null;
   else if (opts.location !== undefined) c.location = opts.location;
   if (zone !== "enemy") c.engagedWith = null;
@@ -324,4 +328,73 @@ export const putBeneath = (game: GameContext, id: InstId, holder: InstId) =>
 /** the pile beneath one card goes beneath another (an act's or agenda's pile passing to the next one) */
 export function passBeneath(game: GameContext, from: InstId, to: InstId) {
   for (const id of [...pileRead(game.s, `beneath:${from}`)]) putBeneath(game, id, to);
+}
+
+// ---------- the map (engine-location-instances-grid) ----------
+const sameCell = (a: [number, number], b: [number, number]) => a[0] === b[0] && a[1] === b[1];
+/** is a cell held by a location in play (other than `but`) */
+function cellTaken(game: GameContext, cell: [number, number], but?: InstId): boolean {
+  const t = game.s.world.tables;
+  return Object.entries(t.cell).some(
+    ([id, c]) => id !== but && sameCell(c, cell) && card(game, id).zone === ZONE.Location,
+  );
+}
+/**
+ * A location entering play takes a cell: the one asked for when it is free, else its card's cell in the scenario's
+ * layout when free, else the next free cell of the spare row below the map.
+ */
+export function takeCell(game: GameContext, id: InstId, want?: [number, number]) {
+  const t = game.s.world.tables;
+  const scen = game.db.scenarios[game.s.scenarioId];
+  const printed = scen?.layout?.[card(game, id).code];
+  const pick = [want, printed].find((c): c is [number, number] => !!c && !cellTaken(game, c, id));
+  if (pick) {
+    t.cell[id] = [pick[0], pick[1]];
+    return;
+  }
+  const row = Math.max(3, ...Object.values(scen?.layout ?? {}).map((c) => c[1] + 1));
+  let col = 0;
+  while (cellTaken(game, [col, row], id)) col++;
+  t.cell[id] = [col, row];
+}
+/** the location moves to a cell (free or not: the caller checks) */
+export const setCell = (game: GameContext, id: InstId, cell: [number, number]) =>
+  void (game.s.world.tables.cell[id] = [cell[0], cell[1]]);
+/** a location leaving the map: its cell is free again and its links are gone, at both ends */
+export function forgetPlace(game: GameContext, id: InstId) {
+  const t = game.s.world.tables;
+  delete t.cell[id];
+  for (const table of [t.links, t.oneWay]) {
+    delete table[id];
+    for (const [k, v] of Object.entries(table)) {
+      const rest = v.filter((x) => x !== id);
+      if (rest.length) table[k] = rest;
+      else delete table[k];
+    }
+  }
+}
+/** a two-way link between two location instances */
+export function link(game: GameContext, a: InstId, b: InstId) {
+  const t = game.s.world.tables.links;
+  if (a === b) return;
+  t[a] = [...new Set([...(t[a] ?? []), b])];
+  t[b] = [...new Set([...(t[b] ?? []), a])];
+}
+/** a one-way link: from `a` to `b` only */
+export function linkOneWay(game: GameContext, a: InstId, b: InstId) {
+  const t = game.s.world.tables.oneWay;
+  if (a !== b) t[a] = [...new Set([...(t[a] ?? []), b])];
+}
+/** remove the links between two location instances, both ways */
+export function unlink(game: GameContext, a: InstId, b: InstId) {
+  const t = game.s.world.tables;
+  for (const table of [t.links, t.oneWay])
+    for (const [x, y] of [
+      [a, b],
+      [b, a],
+    ]) {
+      const rest = (table[x] ?? []).filter((z) => z !== y);
+      if (rest.length) table[x] = rest;
+      else delete table[x];
+    }
 }

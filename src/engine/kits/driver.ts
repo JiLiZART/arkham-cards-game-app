@@ -7,9 +7,9 @@ import type { ChaosToken } from "../../content/schema";
 import { card, inv, push, reveal, setController, setCounter, type GameContext } from "../context";
 import { createGame, type Result } from "../index";
 import { run } from "../steps/dispatch";
-import { createCard, moveCard } from "../movement";
+import { createCard, link, moveCard } from "../movement";
+import { cardsIn } from "../queries";
 import { ZONE } from "../world/constants";
-import { connections } from "../world/flags";
 import type { GameSetup, InvId, Step, TurnAction } from "../world/types";
 import { db, DECK_BY_INV, deckCodes, gOf, mutate, pick, putEnemy, skipMulligans } from "./testkit";
 
@@ -222,6 +222,12 @@ export function addLocation(game: GameContext, code: string, pairs: [string, str
   moveCard(game, id, ZONE.Location);
   reveal(game, id);
   setCounter(game, id, "clues", 0);
-  connections.set(game, [...(connections.get(game) ?? []), ...pairs]);
+  for (const [a, b] of pairs) linkCodes(game, a, b);
   return id;
+}
+
+/** link every location in play of one code to every one of another (a test's map) */
+export function linkCodes(game: GameContext, a: string, b: string) {
+  const of = (code: string) => cardsIn(game, ZONE.Location).filter((l) => l.code === code);
+  for (const x of of(a)) for (const y of of(b)) link(game, x.id, y.id);
 }

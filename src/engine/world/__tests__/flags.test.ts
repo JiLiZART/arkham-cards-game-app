@@ -5,7 +5,6 @@ import {
   aside,
   attacked,
   campaignNotes,
-  connections,
   costMod,
   damageBonus,
   defeated,
@@ -125,7 +124,6 @@ describe("global flags", () => {
     expect(peril.get(x)).toBe(true);
     peril.clear(x);
     expect("peril" in x.s.flags).toBe(false);
-    expect(connections.get(x)).toBeUndefined();
   });
 });
 

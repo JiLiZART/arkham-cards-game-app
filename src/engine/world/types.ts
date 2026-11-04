@@ -93,6 +93,11 @@ export interface FlagTables {
   hunchRevealed: Record<InvId, InstId>;
   attacked: Record<string, number>;
   noAttack: Record<string, number>;
+  /** the map: each location instance's cell, `[col, row]` (not in a recording's snapshot: it is where, not what) */
+  cell: Record<InstId, [number, number]>;
+  /** links added between location instances at runtime: two-way (both ends listed), and one-way from → to */
+  links: Record<InstId, InstId[]>;
+  oneWay: Record<InstId, InstId[]>;
 }
 
 /** what makes a card this card: its id never changes, its code does when a card is turned over or transformed */

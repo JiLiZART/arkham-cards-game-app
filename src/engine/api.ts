@@ -5,7 +5,7 @@
  */
 import { push, type GameContext } from "./context";
 import { STEP } from "./steps/step";
-import type { BeneathOf, TokenHolder, Trigger } from "../content/schema";
+import type { BeneathOf, Effect, Placement, TokenHolder, Trigger } from "../content/schema";
 import type { EffCtx, EventData, InstId, InvId, ScriptHooks, Step } from "./world/types";
 
 // ---------- reading the game ----------
@@ -84,8 +84,30 @@ export {
   shuffleDeck,
   shuffleList,
 } from "./context";
-export { createCard, discard, moveCard, putBeneath, putOnTop, shuffleIntoDeck } from "./movement";
-export { bondedOf, isHidden, keywordArg, spawnTargets, swarmOf } from "./queries";
+export {
+  createCard,
+  discard,
+  link,
+  linkOneWay,
+  moveCard,
+  putBeneath,
+  putOnTop,
+  shuffleIntoDeck,
+  unlink,
+} from "./movement";
+export {
+  adjacent,
+  bondedOf,
+  cellOf,
+  freeCellsAround,
+  inColumn,
+  inRow,
+  isHidden,
+  keywordArg,
+  locationAt,
+  spawnTargets,
+  swarmOf,
+} from "./queries";
 export { addTempMod } from "./queries";
 export {
   addExtraReveal,
@@ -190,6 +212,17 @@ export const addSwarm = (amount: number, ctx: EffCtx): Queued =>
 /** this card leaves the game and its owner's campaign deck */
 export const exile = (card: InstId): Queued =>
   verb(STEP.Eff)({ effect: { op: "exile" }, ctx: { source: card } });
+/** a set-aside location into play at a place on the map (`else` when the place is taken) */
+export const placeLocation = (
+  code: string,
+  at: Placement,
+  ctx: EffCtx,
+  orElse?: Effect[],
+): Queued =>
+  verb(STEP.Eff)({
+    effect: { op: "placeLocation", code, at, ...(orElse ? { else: orElse } : {}) },
+    ctx,
+  });
 /** the top card beneath a card turned faceup */
 export const revealBeneath = (from: BeneathOf, ctx: EffCtx): Queued =>
   verb(STEP.Eff)({ effect: { op: "revealBeneath", from }, ctx });

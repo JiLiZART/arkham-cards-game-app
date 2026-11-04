@@ -53,6 +53,15 @@
 
 7. **Setup data.** `ScenarioDef.adjacency?: "orthogonal"`, `ScenarioDef.layout` unchanged (by code, first instance), setup steps `placeLocation { code, copy?: n, at }` and `link { a, b, oneWay?: true }` (by code, first instance each; `copy` names the n-th); `check:content` reports two codes on one cell and a `link` to a code not in play at setup.
 
+## Implementation notes
+
+- **Store shape (2).** The map is three store tables keyed by location instance (`cell`, `links` with both ends listed, `oneWay` from → to), not a `GameState.map` field. `links` and `oneWay` are in a recording's snapshot (none exist in the corpus); `cell` is not, since every location has one and it says where, not what. The corpus replays unchanged.
+- **Cells (3).** A location takes a cell as it enters play: its layout cell if free (The Gathering puts the Study and the Hallway on [0,0] in turn), else the next free cell of a spare row below the map (row 3, or below the layout's lowest row). Leaving play frees the cell and drops the links at both ends.
+- **Placement (3, 7).** `placeLocation { code, at, else }` takes a set-aside location of that code; `at` is a cell, `{ direction, of }` with `of` "self", "yourLocation" or a code in play, `"free"`, or `{ choose: cells }`. `link`/`unlink` name locations the same way. In setup, `placeLocation { code, copy?, at }` and `link { a, b, oneWay? }`; there is no `putIntoPlay { at }`, the `placeLocation` step covers it.
+- **Content check (7).** Two codes put into play on one cell, and a `link` to a code not put into play before it, are errors; steps behind a log condition are versions of the setup and are skipped (Smoke and Mirrors' two campuses share a cell).
+- **UI (6).** `layout()` reads `cellsOf(s)` and draws one line per connected pair from `connectionsOf`, an arrow where it connects one way. Holding a removed location on the table until its event has played waits for `ui-presented-table`.
+- **Symbols.** `CardDef.symbol`/`connectsTo` have not landed; `connections()` reads code pairs, instance links and the grid, and the symbol read is one more source when they do.
+
 ## Risks / Trade-offs
 
 - [Scripts that read `flags.connections`] → removed from `flags.ts`, so the typecheck finds every one; `link`/`unlink` replace them.

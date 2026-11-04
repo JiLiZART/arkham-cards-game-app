@@ -68,10 +68,7 @@ describe("Daisy's deck: triggers", () => {
         if (cardRecIn(game.s, id).zone !== "location") moveCard(game, id, ZONE.Location);
         cardRecIn(game.s, id).revealed = true;
       }
-      game.s.flags.connections = [
-        ["01112", "01114"],
-        ["01112", "01115"],
-      ];
+      // the Hallway's printed connections reach the Cellar and the Parlor
       for (const e of allCardRecsIn(game.s))
         if (e.zone === "enemy") moveCard(game, e.id, ZONE.EncounterDiscard);
       invStateIn(game.s, DAISY).location = ids[1];

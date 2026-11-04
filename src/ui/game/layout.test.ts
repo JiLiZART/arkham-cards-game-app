@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { autoPlay } from "../../engine/bot";
-import { moveCard } from "../../engine/movement";
+import { createCard, link, moveCard } from "../../engine/movement";
 import { db, giveCard, mutate, putEnemy, skipMulligans, start } from "../../engine/kits/testkit";
 import { footprint, layout, type Bounds } from "./layout";
 import { cardRecIn, invStateIn } from "../../engine/world/store";
@@ -87,5 +87,40 @@ describe("map layout", () => {
     const p = L.cards.get(enemy)!;
     expect(p.badge).toBe("01002");
     expect(p.group).toBe(`loc:${invStateIn(r.state, "01002").location}`);
+  });
+});
+
+describe("the live map", () => {
+  it("two copies of one card get two cells and their own lines; a location without a cell goes to the spare row", () => {
+    let r = skipMulligans(start("the-gathering", ["01001"], 1));
+    let h1 = "";
+    let h2 = "";
+    r = mutate(r, (game) => {
+      for (const k of [0, 1]) {
+        const id = createCard(game, "01112", ZONE.Limbo);
+        moveCard(game, id, ZONE.Location);
+        if (k) h2 = id;
+        else h1 = id;
+      }
+      link(game, h1, invStateIn(game.s, "01001").location!);
+    });
+    const L = layout(db, r.state, "01001");
+    const p1 = L.cards.get(h1)!.pos;
+    const p2 = L.cards.get(h2)!.pos;
+    expect(p1).not.toEqual(p2);
+    const study = L.cards.get(invStateIn(r.state, "01001").location!)!.pos;
+    const touches = (p: number[]) =>
+      L.links.some((l) => (l.a === p && l.b === study) || (l.b === p && l.a === study));
+    expect(touches(p1)).toBe(true);
+    expect(touches(p2)).toBe(false);
+  });
+
+  it("Night of the Zealot draws as before: each starting location at its layout cell", () => {
+    const r = skipMulligans(start("the-midnight-masks", ["01001"], 1));
+    const scen = db.scenarios["the-midnight-masks"];
+    for (const c of Object.values(r.state.world.tables.card).filter(
+      (x) => cardRecIn(r.state, x.id).zone === "location",
+    ))
+      if (scen.layout[c.code]) expect(r.state.world.tables.cell[c.id]).toEqual(scen.layout[c.code]);
   });
 });

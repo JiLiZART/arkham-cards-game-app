@@ -1,4 +1,4 @@
-import { attacked, connections as connectionsAdded, named } from "./world/flags";
+import { attacked, named } from "./world/flags";
 import { keywordName, type Keyword } from "../content/schema";
 import type {
   Amount,
@@ -6,6 +6,7 @@ import type {
   BeneathOf,
   Spawn,
   TokenHolder,
+  Placement,
   CardDef,
   CardFilter,
   Condition,
@@ -178,19 +179,84 @@ export function matchesFilter(game: GameContext, code: string, f: CardFilter): b
 }
 
 // ---------- map ----------
+/**
+ * The locations connected to a location instance (ADR: engine-location-instances-grid): the printed connections of its
+ * card, which hold for every copy (the scenario's code pairs and one-way pairs); the links added to this instance at
+ * runtime (two-way and one-way); and, when the scenario's adjacency is orthogonal, the locations on cells sharing a
+ * side with its cell. Only locations in play.
+ */
 export function connections(game: GameContext, loc: InstId): InstId[] {
   const scen = game.db.scenarios[game.s.scenarioId];
   const code = card(game, loc).code;
-  const extra = connectionsAdded.get(game) ?? [];
   const codes = new Set<string>();
-  for (const [a, b] of [...scen.connections, ...extra]) {
+  for (const [a, b] of scen.connections) {
     if (a === code) codes.add(b);
     if (b === code) codes.add(a);
   }
   for (const [a, b] of scen.oneWay ?? []) if (a === code) codes.add(b);
+  const t = game.s.world.tables;
+  const linked = new Set([...(t.links[loc] ?? []), ...(t.oneWay[loc] ?? [])]);
+  const here = t.cell[loc];
+  const side = (l: InstId) => {
+    const c = t.cell[l];
+    return !!here && !!c && Math.abs(c[0] - here[0]) + Math.abs(c[1] - here[1]) === 1;
+  };
+  const grid = scen.adjacency === "orthogonal";
   return locations(game)
-    .filter((l) => codes.has(l.code) && l.id !== loc)
+    .filter((l) => l.id !== loc && (codes.has(l.code) || linked.has(l.id) || (grid && side(l.id))))
     .map((l) => l.id);
+}
+
+/** a location instance's cell on the map, `[col, row]` (null: none, out of play) */
+export const cellOf = (game: GameContext, loc: InstId): [number, number] | null =>
+  game.s.world.tables.cell[loc] ?? null;
+/** the location in play at a cell */
+export const locationAt = (game: GameContext, cell: [number, number]): InstId | null =>
+  locations(game).find((l) => {
+    const c = cellOf(game, l.id);
+    return !!c && c[0] === cell[0] && c[1] === cell[1];
+  })?.id ?? null;
+/** the locations on cells sharing a side with this one's, whatever the scenario's adjacency */
+export function adjacent(game: GameContext, loc: InstId): InstId[] {
+  const c = cellOf(game, loc);
+  if (!c) return [];
+  return locations(game)
+    .filter((l) => {
+      const o = cellOf(game, l.id);
+      return !!o && Math.abs(o[0] - c[0]) + Math.abs(o[1] - c[1]) === 1;
+    })
+    .map((l) => l.id);
+}
+/** the locations in a row, or a column, left to right / top to bottom */
+export const inRow = (game: GameContext, row: number): InstId[] =>
+  locations(game)
+    .filter((l) => cellOf(game, l.id)?.[1] === row)
+    .sort((a, b) => cellOf(game, a.id)![0] - cellOf(game, b.id)![0])
+    .map((l) => l.id);
+export const inColumn = (game: GameContext, col: number): InstId[] =>
+  locations(game)
+    .filter((l) => cellOf(game, l.id)?.[0] === col)
+    .sort((a, b) => cellOf(game, a.id)![1] - cellOf(game, b.id)![1])
+    .map((l) => l.id);
+/** the cell one step in a direction from a cell */
+export const cellToward = (
+  c: [number, number],
+  dir: "left" | "right" | "above" | "below",
+): [number, number] =>
+  dir === "left"
+    ? [c[0] - 1, c[1]]
+    : dir === "right"
+      ? [c[0] + 1, c[1]]
+      : dir === "above"
+        ? [c[0], c[1] - 1]
+        : [c[0], c[1] + 1];
+/** the free cells sharing a side with a location's cell */
+export function freeCellsAround(game: GameContext, loc: InstId): [number, number][] {
+  const c = cellOf(game, loc);
+  if (!c) return [];
+  return (["left", "right", "above", "below"] as const)
+    .map((d) => cellToward(c, d))
+    .filter((x) => !locationAt(game, x));
 }
 
 /** connections() for read-only callers (the UI) that hold a state rather than an engine context */
@@ -694,3 +760,24 @@ export const bondedOf = (game: GameContext, i: InvId, code?: string) =>
       (!code || c.code === code) &&
       def(game, c.id).keywords.some((k) => typeof k === "object" && "bonded" in k),
   );
+
+/** a location named in data: this card ("self"), your location ("yourLocation"), or the first location in play of a code */
+export function locationRef(game: GameContext, ref: string, ctx: EffCtx): InstId | null {
+  if (ref === "self") return ctx.source ?? null;
+  if (ref === "yourLocation") return ctx.you ? inv(game, ctx.you).location : null;
+  return locations(game).find((l) => l.code === ref)?.id ?? null;
+}
+/** the cell a placement names, when it names one cell (not a choice, not "free"); null when it can't be had */
+export function placementCell(
+  game: GameContext,
+  at: Placement,
+  ctx: EffCtx,
+): [number, number] | null {
+  if (Array.isArray(at)) return at;
+  if (typeof at === "object" && "direction" in at) {
+    const of = locationRef(game, at.of, ctx);
+    const c = of ? cellOf(game, of) : null;
+    return c ? cellToward(c, at.direction) : null;
+  }
+  return null;
+}

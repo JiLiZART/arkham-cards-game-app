@@ -218,6 +218,9 @@ export function clearTokens(game: GameContext, holder: InstId) {
   const t = game.s.world.tables.tokens;
   for (const k of Object.keys(t)) if (k.startsWith(`${holder}:`)) delete t[k];
 }
+/** every location instance's cell on the map, `[col, row]` (a state read, for the UI) */
+export const cellsOf = (s: Pick<GameState, "world">): Readonly<Record<InstId, [number, number]>> =>
+  s.world.tables.cell;
 /** the facedown cards beneath a card, top first (none: an empty list) */
 export const cardsBeneath = (game: GameContext, holder: InstId): readonly InstId[] =>
   pileRead(game.s, `beneath:${holder}`);

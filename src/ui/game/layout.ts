@@ -1,5 +1,6 @@
 import type { ContentDb, GameState, InstId, InvId } from "../../engine/world/types";
-import { cardsOf, invOf } from "../../engine/context";
+import { cardsOf, cellsOf, invOf } from "../../engine/context";
+import { connectionsOf } from "../../engine/queries";
 
 /** card size in world units (poker ratio) */
 export const CARD_W = 1;
@@ -67,11 +68,13 @@ export function layout(db: ContentDb, s: GameState, viewer: InvId | null): Table
     cards.set(id, { pos, yaw: 0, faceUp: true, landscape: false, group, from: pos, ...o });
   };
 
-  const scen = db.scenarios[s.scenarioId];
   const locs = cardsOf(s).filter((c) => c.zone === "location");
+  // each location at the cell the engine's map gives its instance; one without a cell in a spare row below the map
+  const cells = cellsOf(s);
   const grid = new Map<InstId, [number, number]>();
+  const below = Math.max(3, ...locs.map((l) => (cells[l.id]?.[1] ?? 0) + 1));
   let spare = 0;
-  for (const l of locs) grid.set(l.id, scen.layout[l.code] ?? [spare++, 3]);
+  for (const l of locs) grid.set(l.id, cells[l.id] ?? [spare++, below]);
   const cols = [...grid.values()].map((g) => g[0]);
   const rows = [...grid.values()].map((g) => g[1]);
   const [c0, c1, q0, q1] = locs.length
@@ -87,13 +90,15 @@ export function layout(db: ContentDb, s: GameState, viewer: InvId | null): Table
     locPos.set(l.id, p);
     put(l.id, p, `loc:${l.id}`, { from: p, scale: ls });
   }
-  const link = (a: string, b: string, oneWay: boolean) => {
-    for (const la of locs.filter((l) => l.code === a))
-      for (const lb of locs.filter((l) => l.code === b))
-        links.push({ a: locPos.get(la.id)!, b: locPos.get(lb.id)!, oneWay });
-  };
-  for (const [a, b] of scen.connections) link(a, b, false);
-  for (const [a, b] of scen.oneWay ?? []) link(a, b, true);
+  // the lines are the engine's connections per instance: one line for a pair that connects both ways, an arrow for one way
+  const done = new Set<string>();
+  for (const la of locs)
+    for (const to of connectionsOf(db, s, la.id)) {
+      if (!locPos.has(to) || done.has(`${to}|${la.id}`)) continue;
+      const back = connectionsOf(db, s, to).includes(la.id);
+      done.add(`${la.id}|${to}`);
+      links.push({ a: locPos.get(la.id)!, b: locPos.get(to)!, oneWay: !back });
+    }
 
   // things at locations: unengaged enemies, attachments, and enemies engaged with other investigators
   // (the viewer's engaged enemies are in the play area strip)

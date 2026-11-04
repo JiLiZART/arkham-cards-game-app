@@ -1,12 +1,11 @@
 import { afterEach, describe, expect, it } from "vitest";
 import type { CardDef } from "../../content/schema";
 import { card, inv, placeInvestigator, type GameContext } from "../context";
-import { addLocation, game, inject, toTurn } from "../kits/driver";
+import { addLocation, game, inject, toTurn, linkCodes } from "../kits/driver";
 import { db, gOf } from "../kits/testkit";
 import { createCard, moveCard } from "../movement";
 import { STEP } from "../steps/step";
 import { ZONE } from "../world/constants";
-import { connections } from "../world/flags";
 
 const ROLAND = "01001";
 const DAISY = "01002";
@@ -89,7 +88,7 @@ describe("spawn expressions", () => {
       prep: (g) => {
         house(g);
         parlor = createCard(g, PARLOR, ZONE.Location);
-        connections.set(g, [...(connections.get(g) ?? []), [STUDY, PARLOR]]);
+        linkCodes(g, STUDY, PARLOR);
         minion = createCard(g, MINION, ZONE.Limbo);
       },
     });

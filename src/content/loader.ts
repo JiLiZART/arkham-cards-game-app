@@ -439,6 +439,38 @@ export function validateRefs(db: ContentDb, cardFile: Record<string, string> = {
         checkEffects(file, `tokens.${diff}.${tok}.onReveal`, s.id, te.onReveal);
         checkEffects(file, `tokens.${diff}.${tok}.onFail`, s.id, te.onFail);
       }
+    // the map at setup: two locations put into play on one cell, a link to a location not put into play
+    const atSetup = new Set<string>();
+    const cells = new Map<string, string>();
+    for (const [k, st] of s.setup.entries()) {
+      // a step behind a log condition is one version of the setup, not both (Smoke and Mirrors' two Miskatonic campuses)
+      const codes = st.when
+        ? []
+        : st.do === "putIntoPlay"
+          ? st.codes
+          : st.do === "placeLocation"
+            ? [st.code]
+            : [];
+      for (const code of codes) {
+        atSetup.add(code);
+        const cell = st.do === "placeLocation" && Array.isArray(st.at) ? st.at : s.layout[code];
+        const key = cell?.join(",");
+        if (key && cells.has(key) && cells.get(key) !== code)
+          errors.push({
+            file,
+            path: `setup.${k}`,
+            message: `${code} and ${cells.get(key)} are put into play on one cell (${key})`,
+          });
+        if (key) cells.set(key, code);
+      }
+      if (st.do === "link")
+        for (const code of [st.a, st.b].filter((x) => !atSetup.has(x)))
+          errors.push({
+            file,
+            path: `setup.${k}`,
+            message: `link to ${code}, which is not put into play before it`,
+          });
+    }
     if (!s.resolutions.none)
       errors.push({ file, path: "resolutions", message: `scenario needs a "none" resolution` });
   }

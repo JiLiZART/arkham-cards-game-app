@@ -54,6 +54,9 @@ export const newWorld = (): World => ({
     hunchRevealed: {},
     attacked: {},
     noAttack: {},
+    cell: {},
+    links: {},
+    oneWay: {},
   },
   piles: {},
 });

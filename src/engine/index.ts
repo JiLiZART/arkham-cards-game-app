@@ -22,8 +22,15 @@ import {
   setController,
   setCounter,
 } from "./context";
-import { createCard, moveCard, putBeneath } from "./movement";
-import { findByCode, locationByName, matchesFilter } from "./queries";
+import { createCard, link, linkOneWay, moveCard, putBeneath, setCell } from "./movement";
+import {
+  findByCode,
+  locationAt,
+  locationByName,
+  locationRef,
+  matchesFilter,
+  placementCell,
+} from "./queries";
 import { legalTurnActions } from "./rules/round";
 import { drawOpeningCards, revealLocation } from "./rules/investigators";
 import { run } from "./steps/dispatch";
@@ -46,13 +53,14 @@ import { ZONE, PHASE, INV_STATUS, PILE, SCENARIO_CARD, isOneOf } from "./world/c
 import { STEP } from "./steps/step";
 import { scriptOf } from "./world/scripts";
 
-export const ENGINE_VERSION = 9;
+export const ENGINE_VERSION = 10;
 
 /**
  * Whether a save written by this engine version replays to the same game on this one. Version 8 changed the setup (a
  * card's back face is no longer a card of its own, the scenario card is an instance: engine-scenario-structure) and
- * version 9 the enemy phase and bonded cards (engine-generic-keywords), so an older save's choices may name other cards
- * or steps: its scenario restarts, its campaign kept.
+ * version 9 the enemy phase and bonded cards (engine-generic-keywords), version 10 the map's connections by location
+ * instance (engine-location-instances-grid), so an older save's choices may name other cards or steps: its scenario
+ * restarts, its campaign kept.
  */
 export const replaysSave = (version: number) => version === ENGINE_VERSION;
 
@@ -311,6 +319,25 @@ function applySetupStep(game: GameContext, st: SetupStep) {
         const c = take(code) ?? cardOf(s, createCard(game, code, ZONE.Limbo));
         putBeneath(game, c.id, SCENARIO_CARD);
       }
+      return;
+    }
+    case "placeLocation": {
+      const copies = allCards(game).filter(
+        (c) =>
+          c.code === st.code &&
+          isOneOf(c.zone, ZONE.SetAside, ZONE.EncounterDeck, ZONE.SideDeck, ZONE.Limbo),
+      );
+      const c = copies[(st.copy ?? 1) - 1];
+      if (!c) return;
+      const cell = placementCell(game, st.at, {});
+      moveCard(game, c.id, ZONE.Location);
+      if (cell && !locationAt(game, cell)) setCell(game, c.id, cell);
+      return;
+    }
+    case "link": {
+      const a = locationRef(game, st.a, {});
+      const b = locationRef(game, st.b, {});
+      if (a && b) (st.oneWay ? linkOneWay : link)(game, a, b);
       return;
     }
     case "putBeneath": {

@@ -1,9 +1,4 @@
-import {
-  connections as connectionsAdded,
-  logEntry,
-  peril,
-  surge as surgeFlag,
-} from "../world/flags";
+import { logEntry, peril, surge as surgeFlag } from "../world/flags";
 import { abilitiesOf, actClueCost, enemies, hasFlag, hasKeyword, invsAt } from "../queries";
 import {
   activeInvs,
@@ -33,7 +28,7 @@ import {
   setCounter,
   tapToDraw,
 } from "../context";
-import { flip, moveCard, passBeneath, reshuffleDiscard } from "../movement";
+import { flip, link, moveCard, passBeneath, reshuffleDiscard } from "../movement";
 import type { InstId, Step, StepOf } from "../world/types";
 import { win } from "./cards";
 import { EVENT } from "../events/event";
@@ -70,11 +65,7 @@ export const drawEncounterHandler: Handler<"DrawEncounter"> = (game, step) => {
     // a location drawn as an encounter card enters play connected to the drawer's location (Lost in Time and Space)
     const here = inv(game, step.inv).location;
     moveCard(game, id, ZONE.Location);
-    if (here)
-      connectionsAdded.set(game, [
-        ...(connectionsAdded.get(game) ?? []),
-        [d.code, def(game, here).code],
-      ]);
+    if (here) link(game, id, here);
     push(game, { t: STEP.RevealLocation, location: id });
     return;
   }

@@ -1,11 +1,10 @@
 import { afterEach, describe, expect, it } from "vitest";
 import type { Ability } from "../../content/schema";
 import { card, cardsOf, inv } from "../context";
-import { game, move, toTurn } from "../kits/driver";
+import { game, move, toTurn, linkCodes } from "../kits/driver";
 import { db, gOf, options, pick } from "../kits/testkit";
 import { moveCard } from "../movement";
 import { ZONE } from "../world/constants";
-import { connections } from "../world/flags";
 
 const ROLAND = "01001";
 const HALLWAY = "01112";
@@ -22,7 +21,7 @@ function withHallway(ability: Ability) {
     prep: (g) => {
       const hall = cardsOf(g.s).find((c) => c.code === HALLWAY)!;
       if (hall.zone !== ZONE.Location) moveCard(g, hall.id, ZONE.Location);
-      connections.set(g, [...(connections.get(g) ?? []), ["01111", HALLWAY]]);
+      linkCodes(g, "01111", HALLWAY);
     },
   });
 }

@@ -2,6 +2,7 @@
 import { decksByName } from "../../content/schema";
 import {
   allCards,
+  ask,
   card,
   cardsBeneath,
   currentAct,
@@ -19,12 +20,19 @@ import {
   shuffleDeck,
   shuffleList,
 } from "../context";
-import { bondedOf, holderOf, locationByName } from "../queries";
+import {
+  bondedOf,
+  holderOf,
+  locationAt,
+  locationByName,
+  locationRef,
+  placementCell,
+} from "../queries";
 import { STEP } from "../steps/step";
 import { exiled } from "../world/flags";
-import { becomes, moveCard, putBeneath } from "../movement";
+import { becomes, link, linkOneWay, moveCard, putBeneath, setCell, unlink } from "../movement";
 import { EVENT } from "../events/event";
-import { ZONE } from "../world/constants";
+import { CHOICE, ZONE } from "../world/constants";
 import type { InstId } from "../world/types";
 import type { EffectOf, EffectRun } from "./types";
 import { amt } from "./targets";
@@ -206,7 +214,68 @@ function takeBonded(
   );
 }
 
+// ---------- the map ----------
+/** a set-aside location into play at a place on the map; a place that is taken (or doesn't exist) runs `else` */
+function placeLocationEffect(game: GameContext, run: EffectRun<EffectOf<"placeLocation">>) {
+  const { effect: e, ctx, step } = run;
+  const loc = allCards(game).find(
+    (c) => c.code === e.code && c.zone !== ZONE.Location && c.zone !== ZONE.Removed && !c.owner,
+  );
+  const fail = () => {
+    emit(
+      game,
+      EVENT.PlacementFailed,
+      `${game.db.cards[e.code]?.name ?? e.code} cannot be placed`,
+      {},
+    );
+    if (e.else?.length) push(game, { t: STEP.Effects, effects: e.else, ctx });
+  };
+  if (!loc) return fail();
+  let cell: [number, number] | null = null;
+  if (typeof e.at === "object" && "choose" in e.at) {
+    const free = e.at.choose.filter((c) => !locationAt(game, c));
+    if (!free.length) return fail();
+    const pick = ask<string>(
+      game,
+      step,
+      run.you,
+      CHOICE.Target,
+      `Where does ${def(game, loc.id).name} go?`,
+      free.map((c) => ({ id: c.join(","), label: `${c[0]}, ${c[1]}`, value: c.join(",") })),
+      { auto: true, key: "placeWhere", vars: { card: loc.id } },
+    );
+    if (pick === undefined) return;
+    cell = pick.split(",").map(Number) as [number, number];
+  } else if (e.at !== "free") {
+    cell = placementCell(game, e.at, ctx);
+    if (!cell || locationAt(game, cell)) return fail();
+  }
+  moveCard(game, loc.id, ZONE.Location);
+  if (cell) setCell(game, loc.id, cell);
+  emit(game, EVENT.Location, `${def(game, loc.id).name} is put into play`, { card: loc.id });
+}
+
+function linkEffect(game: GameContext, run: EffectRun<EffectOf<"link">>) {
+  const a = locationRef(game, run.effect.a, run.ctx);
+  const b = locationRef(game, run.effect.b, run.ctx);
+  if (!a || !b) return;
+  if (run.effect.oneWay) linkOneWay(game, a, b);
+  else link(game, a, b);
+  emit(game, EVENT.Linked, `${def(game, a).name} and ${def(game, b).name} are connected`, {
+    card: a,
+  });
+}
+
+function unlinkEffect(game: GameContext, run: EffectRun<EffectOf<"unlink">>) {
+  const a = locationRef(game, run.effect.a, run.ctx);
+  const b = locationRef(game, run.effect.b, run.ctx);
+  if (a && b) unlink(game, a, b);
+}
+
 export const structureEffects = {
+  placeLocation: placeLocationEffect,
+  link: linkEffect,
+  unlink: unlinkEffect,
   putBondedInHand: (game: GameContext, run: EffectRun<EffectOf<"putBondedInHand">>) =>
     takeBonded(game, run, "hand"),
   putBondedIntoPlay: (game: GameContext, run: EffectRun<EffectOf<"putBondedIntoPlay">>) =>

@@ -61,6 +61,24 @@ export type BeneathOf = z.infer<typeof BeneathOf>;
 export const TokenHolder = z.enum(["self", "you", "yourLocation"]);
 export type TokenHolder = z.infer<typeof TokenHolder>;
 
+/** a location named in an effect: this card, your location, or the first location in play of a code */
+export const LocationRef = z.string();
+/**
+ * Where a location goes on the map: a cell `[col, row]`; a direction from a location; the next free cell; or a cell the
+ * investigator chooses among several
+ */
+export type Placement =
+  | [number, number]
+  | { direction: "left" | "right" | "above" | "below"; of: string }
+  | "free"
+  | { choose: [number, number][] };
+export const Placement: z.ZodType<Placement> = z.union([
+  z.tuple([z.number(), z.number()]),
+  z.object({ direction: z.enum(["left", "right", "above", "below"]), of: LocationRef }).strict(),
+  z.literal("free"),
+  z.object({ choose: z.array(z.tuple([z.number(), z.number()])).min(1) }).strict(),
+]);
+
 /** a number, or something computed from the effect context */
 export const Amount = z.union([
   z.number(),
@@ -563,6 +581,19 @@ export type Effect =
   | { op: "healSelf"; damage?: number; horror?: number }
   /** the event enemy does not ready during the next upkeep phase (Slippery) */
   | { op: "skipNextReady" }
+  | /** the links between two locations removed */ { op: "unlink"; a: string; b: string }
+  | /** a link between two locations (this card, your location, or a code in play); one-way from `a` to `b` */ {
+      op: "link";
+      a: string;
+      b: string;
+      oneWay?: boolean;
+    }
+  | /** a set-aside location of this code put into play at a place on the map; `else` when the place is taken */ {
+      op: "placeLocation";
+      code: string;
+      at: Placement;
+      else?: Effect[];
+    }
   | /** one of your bonded cards (of this code) from where it waits set aside into play */ {
       op: "putBondedIntoPlay";
       code?: string;
@@ -941,6 +972,23 @@ export const Effect: z.ZodType<Effect> = z.lazy(() =>
       })
       .strict(),
     z.object({ op: z.literal("skipNextReady") }).strict(),
+    z.object({ op: z.literal("unlink"), a: LocationRef, b: LocationRef }).strict(),
+    z
+      .object({
+        op: z.literal("link"),
+        a: LocationRef,
+        b: LocationRef,
+        oneWay: z.boolean().optional(),
+      })
+      .strict(),
+    z
+      .object({
+        op: z.literal("placeLocation"),
+        code: z.string(),
+        at: Placement,
+        else: effectsArr().optional(),
+      })
+      .strict(),
     z.object({ op: z.literal("putBondedIntoPlay"), code: z.string().optional() }).strict(),
     z.object({ op: z.literal("putBondedInHand"), code: z.string().optional() }).strict(),
     z.object({ op: z.literal("exile") }).strict(),
@@ -1057,6 +1105,9 @@ export const EFFECT_OPS = [
   "shuffleSelfIntoDeck",
   "healSelf",
   "skipNextReady",
+  "unlink",
+  "link",
+  "placeLocation",
   "putBondedIntoPlay",
   "putBondedInHand",
   "exile",
@@ -1548,6 +1599,26 @@ export const LogCondition: z.ZodType<LogCondition> = z.lazy(() =>
 
 /** scenario setup steps, performed in order */
 export const SetupStep = z.discriminatedUnion("do", [
+  /** a set-aside location (its `copy`-th, from 1) put into play at a place on the map */
+  z
+    .object({
+      do: z.literal("placeLocation"),
+      code: z.string(),
+      copy: z.number().int().positive().optional(),
+      at: Placement,
+      when: LogCondition.optional(),
+    })
+    .strict(),
+  /** a link between the first locations in play of two codes (one-way: from `a` to `b`) */
+  z
+    .object({
+      do: z.literal("link"),
+      a: z.string(),
+      b: z.string(),
+      oneWay: z.boolean().optional(),
+      when: LogCondition.optional(),
+    })
+    .strict(),
   /** `n` of these codes at random (the seed's): into play, set aside, or as the act or agenda (on top of its deck,
    * current); the rest removed, set aside or left; `backs`: the chosen cards' separate backs set aside */
   z
@@ -1858,6 +1929,8 @@ export const ScenarioDef = z
     connections: z.array(z.tuple([z.string(), z.string()])),
     /** one-way connections [from, to] by card code: only `from` → `to` is a move */
     oneWay: z.array(z.tuple([z.string(), z.string()])).default([]),
+    /** "orthogonal": locations on cells that share a side are connected (Tidal Tunnels, In Too Deep) */
+    adjacency: z.literal("orthogonal").optional(),
     /** location layout for rendering: code -> [col,row] grid */
     layout: z.record(z.string(), z.tuple([z.number(), z.number()])).default({}),
     script: z.boolean().optional(),

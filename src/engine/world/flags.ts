@@ -24,6 +24,8 @@ const MOVED: readonly FlagTable[] = [
   "hunchRevealed",
   "attacked",
   "noAttack",
+  "links",
+  "oneWay",
 ];
 
 /**
@@ -124,8 +126,6 @@ export const countEntry = family<number, readonly [string, string]>("count");
 export const peril = global<true>("peril");
 /** effects to resolve when an investigator's turn ends */
 export const atTurnEnd = global<{ inv: InvId; effects: Effect[]; ctx: EffCtx }[]>("atTurnEnd");
-/** connections a scenario added between locations, by card code */
-export const connections = global<[string, string][]>("connections");
 /** how many cards each investigator discards at random from the opening hand */
 export const discardFromOpeningHands = global<number>("discardFromOpeningHands");
 /** the codes an investigator exiled this scenario: out of their campaign deck */
