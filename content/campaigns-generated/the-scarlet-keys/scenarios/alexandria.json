@@ -164,23 +164,6 @@
         }
       ]
     },
-    "R4": {
-      "title": "Resolution 4",
-      "text": "You lay low for a few days in one of Agent Sirry’s safehouses outside the city, then meet with him later that week. Heavy bags hang under his eyes, and his beard looks messy and unkempt. His gaze darts warily to you as you enter. He gloomily sums up what transpired after you went dark. “The knight and his entourage are still entrenched in Alexandria. He and that hideous creature are in all-out war now, and of course, my people are the ones who suffer.” He slams his fist on the table in anger. “That’s how it always is with these bastards. They’ll do whatever they can to stay in power, innocents be damned. Frankly, I can’t even tell which of them is worse.”\nYou apologize that you weren’t able to help more, and he shakes his head. “No, don’t apologize. You did everything you could. What will you do now?” Your window of opportunity in Alexandria has passed, so you tell Agent Sirry you’ll be taking the next train out to search for more Keys elsewhere. You wonder aloud if he might come with you. “I have a new assignment as well, but…” he scratches his beard thoughtfully. “I fear what may come to pass in my beloved city with this feud going on. I might end up staying. Orders or no orders.” He stands and shakes your hand, and you fear it may be the last time. “I hope to see you again some time. Until then… I have work to do.”",
-      "effects": [
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 0,
-          "who": "each"
-        },
-        {
-          "do": "record",
-          "key": "haveNotSeenTheLastOfTheClaretKnight",
-          "value": true
-        }
-      ]
-    },
     "R5": {
       "title": "Resolution 5",
       "text": "You are escorted by agents in red back to your patron’s office safehouse within the Bourse. The place has been cleaned up significantly since you were last there, and a brand new vault sits next to the grand painting of the familiar scarlet-clad knight. You hand over the Key as agreed, and it is placed back inside the vault and sealed shut. There is a rush of air, and a sensation of building pressure throughout the room as the door shuts tight. Your ears pop with a painful change of pressure—no doubt the work of their so-called “locuses.”\nThe Claret Knight looks on with pride as his agents handle the ancient relic. “Once again, forces have conspired to oust us from our rightful place, but once again we stand victorious,” he declares. If there was any semblance of fear or worry on his face before, it has vanished, replaced with the calm resolve of one who has faced many such foes before. With the Key now safely secure in his vault, he turns his attention to you, shaking your hand and gesturing to his desk. “Come, sit. You have done your part, now allow me to do mine. I promised answers, and answers you shall receive.”",
@@ -206,45 +189,6 @@
         {
           "do": "record",
           "key": "haveNotSeenTheLastOfTheClaretKnight",
-          "value": true
-        },
-        {
-          "do": "record",
-          "key": "haveNotSeenTheLastOfTheBeast",
-          "value": true
-        }
-      ]
-    },
-    "R7": {
-      "title": "Resolution 7",
-      "text": "With terrifying creatures and agents in red embroiled in all-out war, it has become far too dangerous for you to continue operating in Alexandria. You hate to leave such a volatile situation behind, but you don’t seem to have a choice. You find it ironic that the Coterie, who claim to only want to protect humanity, would put the people of Alexandria in such danger. It seems there is a wide range of personalities within the organization. Perhaps some may even be swayed to your side. But for now, those in Alexandria seem to be a lost cause. You leave the city in a dour mood, hoping your next assignment goes more smoothly.",
-      "effects": [
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 0,
-          "who": "each"
-        },
-        {
-          "do": "record",
-          "key": "dogsAreAtWar",
-          "value": true
-        }
-      ]
-    },
-    "R8": {
-      "title": "Resolution 8",
-      "text": "You ask the knight what the Red Coterie is truly about. So far, you have seen its members be both brutal and reasonable. And why all the secrecy? “I have not lied to you. We seek only to protect humanity.” He points to the vault wherein the Light of Pharos is still safely sealed away. “These objects, they are too powerful to be wielded by just anyone, and too precious to be kept unaccounted. I’m sure by now you have noticed the influence of other entities upon our world. Outsiders, we call them. These relics are the only line of defense against such entities. The Coterie keeps them safe, to be used only to do battle with the Outsiders. That is why I could not suffer this artifact to fall into the hands of that beast. Aliki is the one who does most of our research regarding the Outsiders—if you wish to know more, perhaps find her. Last anyone heard from her was around Kathmandu, I believe. But you will need to find a translator if you wish to speak with her. She is cryptic and difficult to understand.” He glances at the portrait of the knight clad in crimson armor that looms behind him. “As for all the red… handling relics of an otherworldly nature is both dangerous and conspicuous. So, we have bound them to one or more articles of clothing, to better blend in with society. The process, for whatever reason, turns them red. Of course, there are other benefits too. Think of it as a… secret handshake, if you will.” He raises an eyebrow as he appraises you. “We have, in the past, inducted new members into our ranks, should they prove themselves both trustworthy and capable, as you have. Perhaps one day you shall bear red upon your person, as well. Now, I believe I have fulfilled my end of this bargain. I once again thank you for your aid. My people will compensate your travel expenses.” With that, the conversation comes to a friendly, if abrupt end.",
-      "effects": [
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 0,
-          "who": "each"
-        },
-        {
-          "do": "record",
-          "key": "cellAidedTheKnight",
           "value": true
         },
         {

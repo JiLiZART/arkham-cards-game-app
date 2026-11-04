@@ -94,17 +94,6 @@
         "beyond-the-gates-of-sleep:maybe_proceed_campaign_b"
       ]
     },
-    "dark-side-of-the-moon": {
-      "R1": [
-        "dark-side-of-the-moon:travelled_to_the_cold_wastes",
-        "dark-side-of-the-moon:randolph_survived_the_voyage",
-        "dark-side-of-the-moon:earn_xp",
-        "dark-side-of-the-moon:record_3_evidence_of_kadath:text",
-        "dark-side-of-the-moon:record_3_evidence_of_kadath",
-        "dark-side-of-the-moon:maybe_upgrade_decks",
-        "dark-side-of-the-moon:maybe_skip_interlude"
-      ]
-    },
     "the-search-for-kadath": {
       "R1": [
         "the-search-for-kadath:someone_escaped",
@@ -115,17 +104,37 @@
         "the-search-for-kadath:upgradeDecks",
         "the-search-for-kadath:maybe_skip_interlude"
       ],
-      "R2": [
-        "the-search-for-kadath:everyone_captured",
-        "the-search-for-kadath:earn_xp",
-        "the-search-for-kadath:record_evidence_of_kadath",
-        "the-search-for-kadath:virgil_was_captured",
-        "the-search-for-kadath:randolph_was_captured",
-        "the-search-for-kadath:upgradeDecks",
-        "the-search-for-kadath:maybe_skip_interlude"
+      "none": [
+        "the-search-for-kadath:none"
+      ]
+    },
+    "dark-side-of-the-moon": {
+      "none": [
+        "dark-side-of-the-moon:carried_to_the_cold_wastes",
+        "dark-side-of-the-moon:randolph_did_not_survive_the_voyage:text",
+        "dark-side-of-the-moon:randolph_did_not_survive_the_voyage",
+        "dark-side-of-the-moon:lead_investigator_gains_false_awakening:text",
+        "dark-side-of-the-moon:lead_investigator_gains_false_awakening",
+        "dark-side-of-the-moon:earn_xp",
+        "dark-side-of-the-moon:maybe_upgrade_decks",
+        "dark-side-of-the-moon:maybe_skip_interlude"
+      ],
+      "R1": [
+        "dark-side-of-the-moon:travelled_to_the_cold_wastes",
+        "dark-side-of-the-moon:randolph_survived_the_voyage",
+        "dark-side-of-the-moon:earn_xp",
+        "dark-side-of-the-moon:record_3_evidence_of_kadath:text",
+        "dark-side-of-the-moon:record_3_evidence_of_kadath",
+        "dark-side-of-the-moon:maybe_upgrade_decks",
+        "dark-side-of-the-moon:maybe_skip_interlude"
       ]
     },
     "where-gods-dwell": {
+      "none": [
+        "where-gods-dwell:nyarlathoteps_invasion_has_begun",
+        "where-gods-dwell:send_nyarlathoteps_invasion_has_begun",
+        "where-gods-dwell:maybe_lose_campaign"
+      ],
       "R1": [
         "where-gods-dwell:dreamers_escaped_nyarlathoteps_grasp",
         "where-gods-dwell:earn_xp",
@@ -139,20 +148,6 @@
         "where-gods-dwell:two_mental_trauma:text",
         "where-gods-dwell:two_mental_trauma",
         "where-gods-dwell:choose_fate"
-      ],
-      "R3": [
-        "where-gods-dwell:dreamers_awoke",
-        "where-gods-dwell:send_dreamers_awoke",
-        "where-gods-dwell:maybe_win_campaign"
-      ],
-      "R4": [
-        "where-gods-dwell:dreamers_stayed_in_dreamlands_forever",
-        "where-gods-dwell:send_dreamers_stayed_in_dreamlands_forever",
-        "where-gods-dwell:maybe_win_never_seen_again"
-      ],
-      "R5": [
-        "where-gods-dwell:dreamers_traveled_beneath_the_monastery",
-        "where-gods-dwell:send_dreamers_traveled_beneath_the_monastery"
       ]
     }
   },
@@ -241,6 +236,999 @@
       ],
       "else": [
         "campaign:ask_8_part_campaign"
+      ]
+    },
+    "beyond-the-gates-of-sleep:strayed_from_the_path:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>the dreamers strayed from the path.</i>",
+      "bullets": []
+    },
+    "beyond-the-gates-of-sleep:strayed_from_the_path": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "strayedFromThePath",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "beyond-the-gates-of-sleep:check_final_act": {
+      "kind": "chooseOne",
+      "text": "What act was in play when the scenario ended?",
+      "choices": [
+        {
+          "id": "act_1",
+          "text": "Act 1, 2, or 3",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "act_4",
+          "text": "Act 4",
+          "effects": [],
+          "steps": [
+            "beyond-the-gates-of-sleep:strayed_from_the_path:text",
+            "beyond-the-gates-of-sleep:strayed_from_the_path"
+          ]
+        }
+      ]
+    },
+    "beyond-the-gates-of-sleep:maybe_check_final_act": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "strayedFromThePath",
+        "section": "campaign_notes"
+      },
+      "then": [],
+      "else": [
+        "beyond-the-gates-of-sleep:check_final_act"
+      ]
+    },
+    "beyond-the-gates-of-sleep:saved_by_randolph_carter": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "savedByRandolphCarter",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "beyond-the-gates-of-sleep:gain_randolph_carter:text": {
+      "kind": "story",
+      "text": "Any one investigator may choose to add Randolph Carter <i>(Expert Dreamer)</i> (<i>The Dream-Eaters</i> card #59) to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "beyond-the-gates-of-sleep:gain_randolph_carter": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "06059",
+          "who": "choice"
+        }
+      ]
+    },
+    "beyond-the-gates-of-sleep:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "beyond-the-gates-of-sleep:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "beyond-the-gates-of-sleep:send_beyond_the_gates_of_sleep_done": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "beyond-the-gates-of-sleep:proceed_campaign_b_v2": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "beyond-the-gates-of-sleep:proceed_campaign_b_v1": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "beyond-the-gates-of-sleep:check_campaign_version_proceed": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "version",
+        "take": true
+      },
+      "then": [
+        "beyond-the-gates-of-sleep:proceed_campaign_b_v2"
+      ],
+      "else": [
+        "beyond-the-gates-of-sleep:proceed_campaign_b_v1"
+      ]
+    },
+    "beyond-the-gates-of-sleep:maybe_proceed_campaign_b": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_data",
+        "take": false
+      },
+      "then": [
+        "beyond-the-gates-of-sleep:check_campaign_version_proceed"
+      ],
+      "else": []
+    },
+    "beyond-the-gates-of-sleep:cats_collected_their_tribute": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "catsCollectedTheirTribute",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "beyond-the-gates-of-sleep:parleyed_with_zoogs": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "parleyedWithZoogs",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "beyond-the-gates-of-sleep:choose_dreams": {
+      "kind": "unsupported",
+      "name": "investigator_choice",
+      "text": "Choose a dream (different if able):",
+      "effects": [],
+      "steps": []
+    },
+    "the-search-for-kadath:someone_escaped": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "someoneEscaped",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-search-for-kadath:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "the-search-for-kadath:record_evidence_of_kadath": {
+      "kind": "counter",
+      "text": "For each Sign of the Gods the investigators unveiled during this scenario, record 1 tally mark next to “Evidence of Kadath” in your Campaign Log.",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "evidenceOfKadath",
+          "section": "evidenceOfKadath",
+          "op": "add",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "the-search-for-kadath:virgil_was_captured": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "virgilWasCaptured",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-search-for-kadath:randolph_eluded_capture": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "randolphEludedCapture",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-search-for-kadath:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "the-search-for-kadath:skip_interlude:text": {
+      "kind": "story",
+      "text": "Skip <b>Interlude II: The Oneironauts</b>.",
+      "bullets": []
+    },
+    "the-search-for-kadath:skip_interlude": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "the-oneironauts"
+        }
+      ]
+    },
+    "the-search-for-kadath:send_kadath_done": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-search-for-kadath:maybe_proceed_campaign_b": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "the-search-for-kadath:maybe_skip_interlude": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "halfCampaign",
+        "section": "hidden"
+      },
+      "then": [
+        "the-search-for-kadath:skip_interlude:text",
+        "the-search-for-kadath:skip_interlude"
+      ],
+      "else": [
+        "the-search-for-kadath:send_kadath_done",
+        "the-search-for-kadath:maybe_proceed_campaign_b"
+      ]
+    },
+    "the-search-for-kadath:everyone_captured": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "everyoneCaptured",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-search-for-kadath:randolph_was_captured": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "randolphWasCaptured",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-search-for-kadath:none": {
+      "kind": "chooseOne",
+      "text": "Did the investigators resign, or were they all defeated?",
+      "choices": [
+        {
+          "id": "resigned",
+          "text": "They resigned",
+          "effects": [],
+          "steps": [
+            "the-search-for-kadath:someone_escaped",
+            "the-search-for-kadath:earn_xp",
+            "the-search-for-kadath:record_evidence_of_kadath",
+            "the-search-for-kadath:virgil_was_captured",
+            "the-search-for-kadath:randolph_eluded_capture",
+            "the-search-for-kadath:upgradeDecks",
+            "the-search-for-kadath:maybe_skip_interlude"
+          ]
+        },
+        {
+          "id": "defeated",
+          "text": "They were all defeated",
+          "effects": [],
+          "steps": [
+            "the-search-for-kadath:everyone_captured",
+            "the-search-for-kadath:earn_xp",
+            "the-search-for-kadath:record_evidence_of_kadath",
+            "the-search-for-kadath:virgil_was_captured",
+            "the-search-for-kadath:randolph_was_captured",
+            "the-search-for-kadath:upgradeDecks",
+            "the-search-for-kadath:maybe_skip_interlude"
+          ]
+        }
+      ]
+    },
+    "the-search-for-kadath:intro_5": {
+      "kind": "story",
+      "text": "“Well, too bad,” the cat says, tail stiff and straight. More cats flank you from the sides, several hissing loudly. Their fur puffs up, and their eyes flare with anger. “It’s our duty to guard this place from impetuous outsiders like yerself. Yeh ain’t wanted here.”\n“Be reasonable,” Randolph implores. “We are only trying to speak with Atal. We mean no harm.”\n“Yeh can mean one thing and do another.” The scarred cat paces. “Now get outta here and don’t come back.”",
+      "bullets": []
+    },
+    "the-search-for-kadath:intro_7": {
+      "kind": "story",
+      "text": "Resigned, you leave the temple on the hilltop behind. “I suppose we shall have to make do without Atal’s wisdom,” Randolph says with a sigh. “In any event, it is likely our destination is far from here—perhaps on another continent altogether. We will need to secure passage by sea. I suggest we travel south, to the port city of Dylath-Leen. We can figure out our next step from there.” You nod and take one last look at the stone temple, wondering at the knowledge you may have left behind.",
+      "bullets": []
+    },
+    "the-search-for-kadath:intro_8": {
+      "kind": "story",
+      "text": "You inform the cat you are entering the temple one way or another, and that a simple cat will not stand in your way. “Wanna bet?” he growls, lowering his body and preparing to pounce. Noticing the commotion, several cats guarding the temple surround you. You don’t wish to harm these cats, but you won’t let them block you from your objective, either. Nodding to your companions, you make a mad dash for the temple gates. A storm of hisses and angry screeches erupts all around you as the cats mount a desperate defense. A wall of tiny claws and teeth meets you, but you push through, defiant. You slam the stone door shut behind you and hear the old cat yelling from the other side: “Fine then, human! See your priest! But do not think this transgression will be forgiven!”",
+      "bullets": []
+    },
+    "the-search-for-kadath:forced_way_into_temple": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "forcedWayIntoTemple",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-search-for-kadath:intro_9": {
+      "kind": "story",
+      "text": "At the top of the temple, seated on an ivory dais, the high priest Atal awaits you. He is a frail, wiry man with a long, wispy black beard, caved-in cheeks, and the pale, milky eyes of one afflicted by blindness. “Do not let your eyes deceive you,” Randolph whispers as you seat yourselves in front of the dais. “Atal is over three centuries old, but his memory is sharp as a tack.”\nYou ask the priest about your quest and about your destination: the castle Randolph described from his dreams. “You speak of the resting place of the Great Ones, high above unknown Kadath. Even I know not its true location. And that is all well and good, for the fruits of attempting to ascend to such a place would be bitter indeed. My companion Barzai once scaled a peak only a fraction as sacred, and he was never seen nor heard from again. The gods of Kadath may seem powerless, but they are protected by the Other Gods from the Outside, whom it is better not to discuss. It would be wiser to let all the gods alone and leave this folly behind.”\nAtal’s use of the word “gods” has you curious. You wonder aloud what kind of god might exist in a place like this.\nThe priest shakes his head. “They are not our gods, but the gods of Earth, for this land is but a reflection of yours.”\nYou attempt to pry deeper into Atal’s wisdom with your questioning, but his advice does not budge. “I have already said more than I should,” he insists. “Please, for your sake, pursue this madness no further.”",
+      "bullets": []
+    },
+    "the-search-for-kadath:one_evidence_of_kadath:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, next to “Evidence of Kadath,” record 1 tally mark.",
+      "bullets": []
+    },
+    "the-search-for-kadath:one_evidence_of_kadath": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "evidenceOfKadath",
+          "section": "evidenceOfKadath",
+          "op": "add",
+          "value": 1
+        }
+      ]
+    },
+    "the-search-for-kadath:intro_10": {
+      "kind": "story",
+      "text": "A flash of inspiration strikes you, and you remember the moon-wine given to you by the Zoogs in the Enchanted Woods. You offer some to Atal, and he accepts graciously. You pretend to partake of the wine yourself while offering draught after draught to the priest. Eventually, Atal’s lips loosen, and he speaks of forbidden things he would never discuss were it not for the wine. He tells of an image carved into the face of the mountain Ngranek on the isle of Oriab—the likeness of the gods, or so he claims. He tells of the pillars of Kadatheron wherein the history of Earth’s Dreamlands is recorded. He tells of those slain by the hordes of Night itself and interred in the crypts of Zulan-Thek, the city of the dead. He tells of a baleful star above a forgotten city that appears on no map. “If you absolutely must seek Kadath in the Cold Wastes,” he says drowsily, “there is a city along the coast to the south: Dylath-Leen. You may secure passage there.”",
+      "bullets": []
+    },
+    "the-search-for-kadath:one_evidence_of_kadath_and_2_xp:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, next to “Evidence of Kadath,” record 1 tally mark. Each investigator earns 2 experience.",
+      "bullets": []
+    },
+    "the-search-for-kadath:one_evidence_of_kadath_and_2_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "evidenceOfKadath",
+          "section": "evidenceOfKadath",
+          "op": "add",
+          "value": 1
+        },
+        {
+          "do": "xp",
+          "bonus": 2,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-search-for-kadath:intro_11": {
+      "kind": "story",
+      "text": "Atal refuses to give you any more advice, so you decide to leave the temple on the hilltop behind. “We have learned much, but we are still no closer to knowing the location of Kadath,” Randolph says with a sigh. “It is likely that our destination is far from here—perhaps on another continent altogether. We shall need to secure passage by sea if we are to travel such great distances. I suggest we begin by traveling south, to the port city of Dylath-Leen. We can figure out our next step from there.”",
+      "bullets": []
+    },
+    "the-search-for-kadath:check_cats_or_randolph": {
+      "kind": "branch",
+      "condition": {
+        "kind": "any",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "catsCollectedTheirTribute",
+            "section": "campaign_notes"
+          },
+          {
+            "kind": "logHas",
+            "id": "savedByRandolphCarter",
+            "section": "campaign_notes"
+          }
+        ]
+      },
+      "then": [
+        "the-search-for-kadath:intro_11"
+      ],
+      "else": []
+    },
+    "the-search-for-kadath:check_parleyed_with_zoogs": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "parleyedWithZoogs",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-search-for-kadath:intro_10",
+        "the-search-for-kadath:one_evidence_of_kadath_and_2_xp:text",
+        "the-search-for-kadath:one_evidence_of_kadath_and_2_xp"
+      ],
+      "else": [
+        "the-search-for-kadath:check_cats_or_randolph"
+      ]
+    },
+    "the-search-for-kadath:choose_temple": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "leave_empty_handed",
+          "text": "<i>Leave empty-handed,</i>",
+          "effects": [],
+          "steps": [
+            "the-search-for-kadath:intro_7"
+          ]
+        },
+        {
+          "id": "forced_way_into_temple",
+          "text": "<i>Force your way into the temple.</i>",
+          "effects": [],
+          "steps": [
+            "the-search-for-kadath:intro_8",
+            "the-search-for-kadath:forced_way_into_temple",
+            "the-search-for-kadath:intro_9",
+            "the-search-for-kadath:one_evidence_of_kadath:text",
+            "the-search-for-kadath:one_evidence_of_kadath",
+            "the-search-for-kadath:check_parleyed_with_zoogs"
+          ]
+        }
+      ]
+    },
+    "the-search-for-kadath:intro_6": {
+      "kind": "story",
+      "text": "You tell the cat that you are merely here to speak with Atal, and that you mean no harm. “Ah, no worries, human,” the cat says with a gaping yawn—the kind only a cat can perform and still look regal in the act. “You don’t seem the type to make trouble. ’Sides, I ain’t goin’ nowhere.” You see a small lump in front of the cat: a bloodied, half-eaten pheasant. You resist the urge to turn up your nose and count yourself lucky you are on this cat’s good side. “Go on in,” he says, then licks his chops as he prepares to finish his meal.",
+      "bullets": []
+    },
+    "the-search-for-kadath:check_cats_collected_their_tribute": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "catsCollectedTheirTribute",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-search-for-kadath:intro_6",
+        "the-search-for-kadath:intro_9",
+        "the-search-for-kadath:one_evidence_of_kadath:text",
+        "the-search-for-kadath:one_evidence_of_kadath",
+        "the-search-for-kadath:check_parleyed_with_zoogs"
+      ],
+      "else": []
+    },
+    "the-search-for-kadath:check_zoogs": {
+      "kind": "branch",
+      "condition": {
+        "kind": "any",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "parleyedWithZoogs",
+            "section": "campaign_notes"
+          },
+          {
+            "kind": "logHas",
+            "id": "savedByRandolphCarter",
+            "section": "campaign_notes"
+          }
+        ]
+      },
+      "then": [
+        "the-search-for-kadath:intro_5",
+        "the-search-for-kadath:choose_temple"
+      ],
+      "else": [
+        "the-search-for-kadath:check_cats_collected_their_tribute"
+      ]
+    },
+    "dark-side-of-the-moon:carried_to_the_cold_wastes": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "carriedToTheColdWastes",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "dark-side-of-the-moon:randolph_did_not_survive_the_voyage:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record <i>Randolph Carter did not survive the voyage</i>. If an investigator’s deck contains Randolph Carter <i>(Expert Dreamer)</i> <i>(The Dream-Eaters card #59)</i>, remove him from that deck for the remainder of the campaign.",
+      "bullets": []
+    },
+    "dark-side-of-the-moon:randolph_did_not_survive_the_voyage": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "randolphDidNotSurviveTheVoyage",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "removeCard",
+          "code": "06059"
+        }
+      ]
+    },
+    "dark-side-of-the-moon:lead_investigator_gains_false_awakening:text": {
+      "kind": "story",
+      "text": "The lead investigator has earned the False Awakening weakness <i>(The Dream-Eaters #233)</i> (does not count toward deck size). Add this card to the lead investigator’s deck.",
+      "bullets": []
+    },
+    "dark-side-of-the-moon:lead_investigator_gains_false_awakening": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "06233",
+          "who": "lead"
+        }
+      ]
+    },
+    "dark-side-of-the-moon:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "dark-side-of-the-moon:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "dark-side-of-the-moon:maybe_upgrade_decks": {
+      "kind": "branch",
+      "condition": {
+        "kind": "any",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "halfCampaign",
+            "section": "hidden"
+          },
+          {
+            "kind": "unsupported",
+            "name": "version",
+            "take": true
+          }
+        ]
+      },
+      "then": [
+        "dark-side-of-the-moon:upgradeDecks"
+      ],
+      "else": []
+    },
+    "dark-side-of-the-moon:skip_interlude:text": {
+      "kind": "story",
+      "text": "Skip <b>Interlude III: The Great Ones</b>.",
+      "bullets": []
+    },
+    "dark-side-of-the-moon:skip_interlude": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "the-great-ones"
+        }
+      ]
+    },
+    "dark-side-of-the-moon:send_moon_done": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "dark-side-of-the-moon:maybe_proceed_campaign_b": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "dark-side-of-the-moon:maybe_skip_interlude": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "halfCampaign",
+        "section": "hidden"
+      },
+      "then": [
+        "dark-side-of-the-moon:skip_interlude:text",
+        "dark-side-of-the-moon:skip_interlude"
+      ],
+      "else": [
+        "dark-side-of-the-moon:send_moon_done",
+        "dark-side-of-the-moon:maybe_proceed_campaign_b"
+      ]
+    },
+    "dark-side-of-the-moon:travelled_to_the_cold_wastes": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "travelledToTheColdWastes",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "dark-side-of-the-moon:randolph_survived_the_voyage": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "randolphSurvivedTheVoyage",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "dark-side-of-the-moon:record_3_evidence_of_kadath:text": {
+      "kind": "story",
+      "text": "Record 3 tally marks next to “Evidence of Kadath” in your Campaign Log.",
+      "bullets": []
+    },
+    "dark-side-of-the-moon:record_3_evidence_of_kadath": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "evidenceOfKadath",
+          "section": "evidenceOfKadath",
+          "op": "add",
+          "value": 3
+        }
+      ]
+    },
+    "where-gods-dwell:nyarlathoteps_invasion_has_begun": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "nyarlathotepsInvasionHasBegun",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "where-gods-dwell:send_nyarlathoteps_invasion_has_begun": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "where-gods-dwell:maybe_lose_campaign:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "tde-epilogue"
+        }
+      ]
+    },
+    "where-gods-dwell:lose:text": {
+      "kind": "story",
+      "text": "The investigators lose the campaign.",
+      "bullets": []
+    },
+    "where-gods-dwell:lose": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "lose"
+        }
+      ]
+    },
+    "where-gods-dwell:send_where_the_gods_dwell_done": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "where-gods-dwell:maybe_proceed_campaign_b": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "where-gods-dwell:maybe_lose_campaign": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "halfCampaign",
+        "section": "hidden"
+      },
+      "then": [
+        "where-gods-dwell:maybe_lose_campaign:yes:fx",
+        "where-gods-dwell:lose:text",
+        "where-gods-dwell:lose"
+      ],
+      "else": [
+        "where-gods-dwell:send_where_the_gods_dwell_done",
+        "where-gods-dwell:maybe_proceed_campaign_b"
+      ]
+    },
+    "where-gods-dwell:dreamers_escaped_nyarlathoteps_grasp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "dreamersEscapedNyarlathotepsGrasp",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "where-gods-dwell:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "where-gods-dwell:two_mental_trauma:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 2 mental trauma from the battle between truth and fiction within their own dreams.",
+      "bullets": []
+    },
+    "where-gods-dwell:two_mental_trauma": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 0,
+          "mental": 2
+        }
+      ]
+    },
+    "where-gods-dwell:dreamers_awoke": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "dreamersAwoke",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "where-gods-dwell:send_dreamers_awoke": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "where-gods-dwell:maybe_win_campaign:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "tde-epilogue"
+        }
+      ]
+    },
+    "where-gods-dwell:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "where-gods-dwell:win:text": {
+      "kind": "story",
+      "text": "The investigators win the campaign.",
+      "bullets": []
+    },
+    "where-gods-dwell:win": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "win"
+        }
+      ]
+    },
+    "where-gods-dwell:maybe_upgrade_decks": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "version",
+        "take": true
+      },
+      "then": [
+        "where-gods-dwell:upgradeDecks"
+      ],
+      "else": []
+    },
+    "where-gods-dwell:maybe_win_campaign": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "halfCampaign",
+        "section": "hidden"
+      },
+      "then": [
+        "where-gods-dwell:maybe_win_campaign:yes:fx",
+        "where-gods-dwell:upgradeDecks",
+        "where-gods-dwell:win:text",
+        "where-gods-dwell:win"
+      ],
+      "else": [
+        "where-gods-dwell:maybe_upgrade_decks",
+        "where-gods-dwell:send_where_the_gods_dwell_done",
+        "where-gods-dwell:maybe_proceed_campaign_b"
+      ]
+    },
+    "where-gods-dwell:dreamers_stayed_in_dreamlands_forever": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "dreamersStayedInDreamlandsForever",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "where-gods-dwell:send_dreamers_stayed_in_dreamlands_forever": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "where-gods-dwell:maybe_win_never_seen_again:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "tde-epilogue"
+        }
+      ]
+    },
+    "where-gods-dwell:win_never_seen_again:text": {
+      "kind": "story",
+      "text": "The investigators win the campaign… and are never seen or heard from in the waking world again.",
+      "bullets": []
+    },
+    "where-gods-dwell:win_never_seen_again": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "win"
+        }
+      ]
+    },
+    "where-gods-dwell:maybe_win_never_seen_again": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "halfCampaign",
+        "section": "hidden"
+      },
+      "then": [
+        "where-gods-dwell:maybe_win_never_seen_again:yes:fx",
+        "where-gods-dwell:win_never_seen_again:text",
+        "where-gods-dwell:win_never_seen_again"
+      ],
+      "else": [
+        "where-gods-dwell:maybe_upgrade_decks",
+        "where-gods-dwell:send_where_the_gods_dwell_done",
+        "where-gods-dwell:maybe_proceed_campaign_b"
+      ]
+    },
+    "where-gods-dwell:dreamers_traveled_beneath_the_monastery": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "dreamersTraveledBeneathTheMonastery",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "where-gods-dwell:send_dreamers_traveled_beneath_the_monastery": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "where-gods-dwell:choose_fate": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "wake_up",
+          "text": "<i>Wake up.</i>",
+          "effects": [],
+          "steps": [
+            "where-gods-dwell:dreamers_awoke",
+            "where-gods-dwell:send_dreamers_awoke",
+            "where-gods-dwell:maybe_win_campaign"
+          ]
+        },
+        {
+          "id": "remain_in_dreamlands",
+          "text": "<i>Remain on the surface of the Dreamlands.</i>",
+          "effects": [],
+          "steps": [
+            "where-gods-dwell:dreamers_stayed_in_dreamlands_forever",
+            "where-gods-dwell:send_dreamers_stayed_in_dreamlands_forever",
+            "where-gods-dwell:maybe_win_never_seen_again"
+          ]
+        },
+        {
+          "id": "know_another_path",
+          "text": "<i>Venture into the Underworld to find your companions.</i>",
+          "effects": [],
+          "steps": [
+            "where-gods-dwell:dreamers_traveled_beneath_the_monastery",
+            "where-gods-dwell:send_dreamers_traveled_beneath_the_monastery"
+          ],
+          "when": {
+            "kind": "logHas",
+            "id": "dreamersKnowOfAnotherPath",
+            "section": "campaign_notes"
+          }
+        }
+      ]
+    },
+    "where-gods-dwell:dreamers_banished_nyarlathotep": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "dreamersBanishedNyarlathotep",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "where-gods-dwell:earn_xp_plus_5": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 5,
+          "who": "each",
+          "victory": true
+        }
       ]
     },
     "the-black-cat:check_dreamers_grow_weaker": {
@@ -1208,845 +2196,10 @@
         "the-oneironauts:check_black_cat_has_a_hunch_and_randolph_eluded_capture"
       ]
     },
-    "beyond-the-gates-of-sleep:strayed_from_the_path:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, record that <i>the dreamers strayed from the path.</i>",
-      "bullets": []
-    },
-    "beyond-the-gates-of-sleep:strayed_from_the_path": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "strayedFromThePath",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "beyond-the-gates-of-sleep:check_final_act": {
-      "kind": "chooseOne",
-      "text": "What act was in play when the scenario ended?",
-      "choices": [
-        {
-          "id": "act_1",
-          "text": "Act 1, 2, or 3",
-          "effects": [],
-          "steps": []
-        },
-        {
-          "id": "act_4",
-          "text": "Act 4",
-          "effects": [],
-          "steps": [
-            "beyond-the-gates-of-sleep:strayed_from_the_path:text",
-            "beyond-the-gates-of-sleep:strayed_from_the_path"
-          ]
-        }
-      ]
-    },
-    "beyond-the-gates-of-sleep:maybe_check_final_act": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "strayedFromThePath",
-        "section": "campaign_notes"
-      },
-      "then": [],
-      "else": [
-        "beyond-the-gates-of-sleep:check_final_act"
-      ]
-    },
-    "beyond-the-gates-of-sleep:saved_by_randolph_carter": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "savedByRandolphCarter",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "beyond-the-gates-of-sleep:gain_randolph_carter:text": {
-      "kind": "story",
-      "text": "Any one investigator may choose to add Randolph Carter <i>(Expert Dreamer)</i> (<i>The Dream-Eaters</i> card #59) to their deck. This card does not count toward that investigator’s deck size.",
-      "bullets": []
-    },
-    "beyond-the-gates-of-sleep:gain_randolph_carter": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "earnCard",
-          "code": "06059",
-          "who": "choice"
-        }
-      ]
-    },
-    "beyond-the-gates-of-sleep:earn_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 0,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "beyond-the-gates-of-sleep:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "beyond-the-gates-of-sleep:send_beyond_the_gates_of_sleep_done": {
-      "kind": "unsupported",
-      "name": "send_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "beyond-the-gates-of-sleep:proceed_campaign_b_v2": {
-      "kind": "unsupported",
-      "name": "receive_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "beyond-the-gates-of-sleep:proceed_campaign_b_v1": {
-      "kind": "unsupported",
-      "name": "receive_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "beyond-the-gates-of-sleep:check_campaign_version_proceed": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "campaign_data",
-        "take": true
-      },
-      "then": [
-        "beyond-the-gates-of-sleep:proceed_campaign_b_v2"
-      ],
-      "else": [
-        "beyond-the-gates-of-sleep:proceed_campaign_b_v1"
-      ]
-    },
-    "beyond-the-gates-of-sleep:maybe_proceed_campaign_b": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "campaign_data",
-        "take": false
-      },
-      "then": [
-        "beyond-the-gates-of-sleep:check_campaign_version_proceed"
-      ],
-      "else": []
-    },
-    "beyond-the-gates-of-sleep:cats_collected_their_tribute": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "catsCollectedTheirTribute",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "beyond-the-gates-of-sleep:parleyed_with_zoogs": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "parleyedWithZoogs",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "beyond-the-gates-of-sleep:choose_dreams": {
-      "kind": "unsupported",
-      "name": "investigator_choice",
-      "text": "Choose a dream (different if able):",
-      "effects": [],
-      "steps": []
-    },
-    "dark-side-of-the-moon:travelled_to_the_cold_wastes": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "travelledToTheColdWastes",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "dark-side-of-the-moon:randolph_survived_the_voyage": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "randolphSurvivedTheVoyage",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "dark-side-of-the-moon:earn_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 0,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "dark-side-of-the-moon:record_3_evidence_of_kadath:text": {
-      "kind": "story",
-      "text": "Record 3 tally marks next to “Evidence of Kadath” in your Campaign Log.",
-      "bullets": []
-    },
-    "dark-side-of-the-moon:record_3_evidence_of_kadath": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "count",
-          "id": "evidenceOfKadath",
-          "section": "evidenceOfKadath",
-          "op": "add",
-          "value": 3
-        }
-      ]
-    },
-    "dark-side-of-the-moon:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "dark-side-of-the-moon:maybe_upgrade_decks": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "multi",
-        "take": false
-      },
-      "then": [
-        "dark-side-of-the-moon:upgradeDecks"
-      ],
-      "else": []
-    },
-    "dark-side-of-the-moon:skip_interlude:text": {
-      "kind": "story",
-      "text": "Skip <b>Interlude III: The Great Ones</b>.",
-      "bullets": []
-    },
-    "dark-side-of-the-moon:skip_interlude": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "skipScenario",
-          "scenario": "the-great-ones"
-        }
-      ]
-    },
-    "dark-side-of-the-moon:send_moon_done": {
-      "kind": "unsupported",
-      "name": "send_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "dark-side-of-the-moon:maybe_proceed_campaign_b": {
-      "kind": "unsupported",
-      "name": "receive_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "dark-side-of-the-moon:maybe_skip_interlude": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "halfCampaign",
-        "section": "hidden"
-      },
-      "then": [
-        "dark-side-of-the-moon:skip_interlude:text",
-        "dark-side-of-the-moon:skip_interlude"
-      ],
-      "else": [
-        "dark-side-of-the-moon:send_moon_done",
-        "dark-side-of-the-moon:maybe_proceed_campaign_b"
-      ]
-    },
     "tde-prologue:intro": {
       "kind": "story",
       "text": "<fancy>Friday, February 13th, 1925</fancy>\nSomething odd was happening in Arkham, Massachusetts.\nTypically, this would not be a surprise to the residents of the dreary New England town. Indeed, Arkham has always been well-known for its strange—some would say supernatural—occurrences. The nature of this particular circumstance, however, was anything but typical.\nIt all began in the latest issue of <i>Tales from Nevermore</i>. A writer by the name of Virgil Gray described a journey he had taken in his dreams—a journey he claimed was not a work of fiction on his part. He wrote of a long, spiraling staircase, an unbearably hot pillar of sentient fire, a tree that came from the moon, and a curious talking cat…among other things equally difficult to believe. But it wasn’t this extraordinary tale that first drew your attention. Soon after Virgil’s tale was published, <i>Tales from Nevermore</i> began to receive and publish letter after letter from those who had read Virgil’s story and claimed to have experienced the same exact dream. Before long, the Arkham Advertiser picked up the story, and news of this strange phenomenon reached the ears of experts.\nVirgil Gray was convinced to undergo therapy at the local asylum, and many more who shared in the writer’s psychosis were committed as well. The prevailing theory among academics is that Virgil’s dream felt so real that he could not separate fact from fiction, and his writings spread his delusions to others like a form of shared hysteria. You remain unconvinced. After all, there is much that is not known about the simple act of dreaming. Medical experts have wildly differing theories on the state of one’s brain during sleep. Recently, experts like Sigmund Freud have proposed that dreams are manifestations of one’s subconscious desires, fears, or obsessions. Fortune tellers, for their part, have long believed that dreams can be sifted and interpreted in order to tell the dreamer’s past or future. But if these theories are true, how could multiple parties—all from very different walks of life—have the same shared experiences in their dreams? What if our modern understanding of sleep is all wrong? What if there really is a place our consciousness travels to when we sleep—a land of dreams that exists beyond our waking world?\nYou and your companions have gathered together to get to the bottom of this strange phenomenon. If others in town can travel to another world in their dreams, perhaps you can, too. You’ve re-created the circumstances of Virgil’s journey perfectly. If all goes well, half of you will take the trip to this “dreamland” and back. The rest will stay in the waking world, studying your companions’ sleep patterns to ensure nothing goes wrong…",
       "bullets": []
-    },
-    "the-search-for-kadath:someone_escaped": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "someoneEscaped",
-          "section": "hidden",
-          "value": true
-        }
-      ]
-    },
-    "the-search-for-kadath:earn_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 0,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "the-search-for-kadath:record_evidence_of_kadath": {
-      "kind": "counter",
-      "text": "For each Sign of the Gods the investigators unveiled during this scenario, record 1 tally mark next to “Evidence of Kadath” in your Campaign Log.",
-      "min": 0,
-      "effects": [
-        {
-          "do": "count",
-          "id": "evidenceOfKadath",
-          "section": "evidenceOfKadath",
-          "op": "add",
-          "value": "input"
-        }
-      ],
-      "steps": []
-    },
-    "the-search-for-kadath:virgil_was_captured": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "virgilWasCaptured",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-search-for-kadath:randolph_eluded_capture": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "randolphEludedCapture",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-search-for-kadath:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "the-search-for-kadath:skip_interlude:text": {
-      "kind": "story",
-      "text": "Skip <b>Interlude II: The Oneironauts</b>.",
-      "bullets": []
-    },
-    "the-search-for-kadath:skip_interlude": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "skipScenario",
-          "scenario": "the-oneironauts"
-        }
-      ]
-    },
-    "the-search-for-kadath:send_kadath_done": {
-      "kind": "unsupported",
-      "name": "send_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "the-search-for-kadath:maybe_proceed_campaign_b": {
-      "kind": "unsupported",
-      "name": "receive_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "the-search-for-kadath:maybe_skip_interlude": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "halfCampaign",
-        "section": "hidden"
-      },
-      "then": [
-        "the-search-for-kadath:skip_interlude:text",
-        "the-search-for-kadath:skip_interlude"
-      ],
-      "else": [
-        "the-search-for-kadath:send_kadath_done",
-        "the-search-for-kadath:maybe_proceed_campaign_b"
-      ]
-    },
-    "the-search-for-kadath:everyone_captured": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "everyoneCaptured",
-          "section": "hidden",
-          "value": true
-        }
-      ]
-    },
-    "the-search-for-kadath:randolph_was_captured": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "randolphWasCaptured",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-search-for-kadath:intro_5": {
-      "kind": "story",
-      "text": "“Well, too bad,” the cat says, tail stiff and straight. More cats flank you from the sides, several hissing loudly. Their fur puffs up, and their eyes flare with anger. “It’s our duty to guard this place from impetuous outsiders like yerself. Yeh ain’t wanted here.”\n“Be reasonable,” Randolph implores. “We are only trying to speak with Atal. We mean no harm.”\n“Yeh can mean one thing and do another.” The scarred cat paces. “Now get outta here and don’t come back.”",
-      "bullets": []
-    },
-    "the-search-for-kadath:intro_7": {
-      "kind": "story",
-      "text": "Resigned, you leave the temple on the hilltop behind. “I suppose we shall have to make do without Atal’s wisdom,” Randolph says with a sigh. “In any event, it is likely our destination is far from here—perhaps on another continent altogether. We will need to secure passage by sea. I suggest we travel south, to the port city of Dylath-Leen. We can figure out our next step from there.” You nod and take one last look at the stone temple, wondering at the knowledge you may have left behind.",
-      "bullets": []
-    },
-    "the-search-for-kadath:intro_8": {
-      "kind": "story",
-      "text": "You inform the cat you are entering the temple one way or another, and that a simple cat will not stand in your way. “Wanna bet?” he growls, lowering his body and preparing to pounce. Noticing the commotion, several cats guarding the temple surround you. You don’t wish to harm these cats, but you won’t let them block you from your objective, either. Nodding to your companions, you make a mad dash for the temple gates. A storm of hisses and angry screeches erupts all around you as the cats mount a desperate defense. A wall of tiny claws and teeth meets you, but you push through, defiant. You slam the stone door shut behind you and hear the old cat yelling from the other side: “Fine then, human! See your priest! But do not think this transgression will be forgiven!”",
-      "bullets": []
-    },
-    "the-search-for-kadath:forced_way_into_temple": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "forcedWayIntoTemple",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-search-for-kadath:intro_9": {
-      "kind": "story",
-      "text": "At the top of the temple, seated on an ivory dais, the high priest Atal awaits you. He is a frail, wiry man with a long, wispy black beard, caved-in cheeks, and the pale, milky eyes of one afflicted by blindness. “Do not let your eyes deceive you,” Randolph whispers as you seat yourselves in front of the dais. “Atal is over three centuries old, but his memory is sharp as a tack.”\nYou ask the priest about your quest and about your destination: the castle Randolph described from his dreams. “You speak of the resting place of the Great Ones, high above unknown Kadath. Even I know not its true location. And that is all well and good, for the fruits of attempting to ascend to such a place would be bitter indeed. My companion Barzai once scaled a peak only a fraction as sacred, and he was never seen nor heard from again. The gods of Kadath may seem powerless, but they are protected by the Other Gods from the Outside, whom it is better not to discuss. It would be wiser to let all the gods alone and leave this folly behind.”\nAtal’s use of the word “gods” has you curious. You wonder aloud what kind of god might exist in a place like this.\nThe priest shakes his head. “They are not our gods, but the gods of Earth, for this land is but a reflection of yours.”\nYou attempt to pry deeper into Atal’s wisdom with your questioning, but his advice does not budge. “I have already said more than I should,” he insists. “Please, for your sake, pursue this madness no further.”",
-      "bullets": []
-    },
-    "the-search-for-kadath:one_evidence_of_kadath:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, next to “Evidence of Kadath,” record 1 tally mark.",
-      "bullets": []
-    },
-    "the-search-for-kadath:one_evidence_of_kadath": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "count",
-          "id": "evidenceOfKadath",
-          "section": "evidenceOfKadath",
-          "op": "add",
-          "value": 1
-        }
-      ]
-    },
-    "the-search-for-kadath:intro_10": {
-      "kind": "story",
-      "text": "A flash of inspiration strikes you, and you remember the moon-wine given to you by the Zoogs in the Enchanted Woods. You offer some to Atal, and he accepts graciously. You pretend to partake of the wine yourself while offering draught after draught to the priest. Eventually, Atal’s lips loosen, and he speaks of forbidden things he would never discuss were it not for the wine. He tells of an image carved into the face of the mountain Ngranek on the isle of Oriab—the likeness of the gods, or so he claims. He tells of the pillars of Kadatheron wherein the history of Earth’s Dreamlands is recorded. He tells of those slain by the hordes of Night itself and interred in the crypts of Zulan-Thek, the city of the dead. He tells of a baleful star above a forgotten city that appears on no map. “If you absolutely must seek Kadath in the Cold Wastes,” he says drowsily, “there is a city along the coast to the south: Dylath-Leen. You may secure passage there.”",
-      "bullets": []
-    },
-    "the-search-for-kadath:one_evidence_of_kadath_and_2_xp:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, next to “Evidence of Kadath,” record 1 tally mark. Each investigator earns 2 experience.",
-      "bullets": []
-    },
-    "the-search-for-kadath:one_evidence_of_kadath_and_2_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "count",
-          "id": "evidenceOfKadath",
-          "section": "evidenceOfKadath",
-          "op": "add",
-          "value": 1
-        },
-        {
-          "do": "xp",
-          "bonus": 2,
-          "who": "each",
-          "victory": false
-        }
-      ]
-    },
-    "the-search-for-kadath:intro_11": {
-      "kind": "story",
-      "text": "Atal refuses to give you any more advice, so you decide to leave the temple on the hilltop behind. “We have learned much, but we are still no closer to knowing the location of Kadath,” Randolph says with a sigh. “It is likely that our destination is far from here—perhaps on another continent altogether. We shall need to secure passage by sea if we are to travel such great distances. I suggest we begin by traveling south, to the port city of Dylath-Leen. We can figure out our next step from there.”",
-      "bullets": []
-    },
-    "the-search-for-kadath:check_cats_or_randolph": {
-      "kind": "branch",
-      "condition": {
-        "kind": "any",
-        "conditions": [
-          {
-            "kind": "logHas",
-            "id": "catsCollectedTheirTribute",
-            "section": "campaign_notes"
-          },
-          {
-            "kind": "logHas",
-            "id": "savedByRandolphCarter",
-            "section": "campaign_notes"
-          }
-        ]
-      },
-      "then": [
-        "the-search-for-kadath:intro_11"
-      ],
-      "else": []
-    },
-    "the-search-for-kadath:check_parleyed_with_zoogs": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "parleyedWithZoogs",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "the-search-for-kadath:intro_10",
-        "the-search-for-kadath:one_evidence_of_kadath_and_2_xp:text",
-        "the-search-for-kadath:one_evidence_of_kadath_and_2_xp"
-      ],
-      "else": [
-        "the-search-for-kadath:check_cats_or_randolph"
-      ]
-    },
-    "the-search-for-kadath:choose_temple": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "leave_empty_handed",
-          "text": "<i>Leave empty-handed,</i>",
-          "effects": [],
-          "steps": [
-            "the-search-for-kadath:intro_7"
-          ]
-        },
-        {
-          "id": "forced_way_into_temple",
-          "text": "<i>Force your way into the temple.</i>",
-          "effects": [],
-          "steps": [
-            "the-search-for-kadath:intro_8",
-            "the-search-for-kadath:forced_way_into_temple",
-            "the-search-for-kadath:intro_9",
-            "the-search-for-kadath:one_evidence_of_kadath:text",
-            "the-search-for-kadath:one_evidence_of_kadath",
-            "the-search-for-kadath:check_parleyed_with_zoogs"
-          ]
-        }
-      ]
-    },
-    "the-search-for-kadath:intro_6": {
-      "kind": "story",
-      "text": "You tell the cat that you are merely here to speak with Atal, and that you mean no harm. “Ah, no worries, human,” the cat says with a gaping yawn—the kind only a cat can perform and still look regal in the act. “You don’t seem the type to make trouble. ’Sides, I ain’t goin’ nowhere.” You see a small lump in front of the cat: a bloodied, half-eaten pheasant. You resist the urge to turn up your nose and count yourself lucky you are on this cat’s good side. “Go on in,” he says, then licks his chops as he prepares to finish his meal.",
-      "bullets": []
-    },
-    "the-search-for-kadath:check_cats_collected_their_tribute": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "catsCollectedTheirTribute",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "the-search-for-kadath:intro_6",
-        "the-search-for-kadath:intro_9",
-        "the-search-for-kadath:one_evidence_of_kadath:text",
-        "the-search-for-kadath:one_evidence_of_kadath",
-        "the-search-for-kadath:check_parleyed_with_zoogs"
-      ],
-      "else": []
-    },
-    "the-search-for-kadath:check_zoogs": {
-      "kind": "branch",
-      "condition": {
-        "kind": "any",
-        "conditions": [
-          {
-            "kind": "logHas",
-            "id": "parleyedWithZoogs",
-            "section": "campaign_notes"
-          },
-          {
-            "kind": "logHas",
-            "id": "savedByRandolphCarter",
-            "section": "campaign_notes"
-          }
-        ]
-      },
-      "then": [
-        "the-search-for-kadath:intro_5",
-        "the-search-for-kadath:choose_temple"
-      ],
-      "else": [
-        "the-search-for-kadath:check_cats_collected_their_tribute"
-      ]
-    },
-    "where-gods-dwell:dreamers_escaped_nyarlathoteps_grasp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "dreamersEscapedNyarlathotepsGrasp",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "where-gods-dwell:earn_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 0,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "where-gods-dwell:two_mental_trauma:text": {
-      "kind": "story",
-      "text": "Each investigator suffers 2 mental trauma from the battle between truth and fiction within their own dreams.",
-      "bullets": []
-    },
-    "where-gods-dwell:two_mental_trauma": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "trauma",
-          "who": "each",
-          "physical": 0,
-          "mental": 2
-        }
-      ]
-    },
-    "where-gods-dwell:choose_fate": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "wake_up",
-          "text": "<i>Wake up.</i>",
-          "effects": [],
-          "steps": []
-        },
-        {
-          "id": "remain_in_dreamlands",
-          "text": "<i>Remain on the surface of the Dreamlands.</i>",
-          "effects": [],
-          "steps": []
-        },
-        {
-          "id": "know_another_path",
-          "text": "<i>Venture into the Underworld to find your companions.</i>",
-          "effects": [],
-          "steps": [],
-          "when": {
-            "kind": "logHas",
-            "id": "dreamersKnowOfAnotherPath",
-            "section": "campaign_notes"
-          }
-        }
-      ]
-    },
-    "where-gods-dwell:dreamers_banished_nyarlathotep": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "dreamersBanishedNyarlathotep",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "where-gods-dwell:earn_xp_plus_5": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 5,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "where-gods-dwell:dreamers_awoke": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "dreamersAwoke",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "where-gods-dwell:send_dreamers_awoke": {
-      "kind": "unsupported",
-      "name": "send_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "where-gods-dwell:maybe_win_campaign:yes:fx": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "skipScenario",
-          "scenario": "tde-epilogue"
-        }
-      ]
-    },
-    "where-gods-dwell:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "where-gods-dwell:win:text": {
-      "kind": "story",
-      "text": "The investigators win the campaign.",
-      "bullets": []
-    },
-    "where-gods-dwell:win": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "end",
-          "result": "win"
-        }
-      ]
-    },
-    "where-gods-dwell:maybe_upgrade_decks": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "campaign_data",
-        "take": true
-      },
-      "then": [
-        "where-gods-dwell:upgradeDecks"
-      ],
-      "else": []
-    },
-    "where-gods-dwell:send_where_the_gods_dwell_done": {
-      "kind": "unsupported",
-      "name": "send_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "where-gods-dwell:maybe_proceed_campaign_b": {
-      "kind": "unsupported",
-      "name": "receive_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "where-gods-dwell:maybe_win_campaign": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "halfCampaign",
-        "section": "hidden"
-      },
-      "then": [
-        "where-gods-dwell:maybe_win_campaign:yes:fx",
-        "where-gods-dwell:upgradeDecks",
-        "where-gods-dwell:win:text",
-        "where-gods-dwell:win"
-      ],
-      "else": [
-        "where-gods-dwell:maybe_upgrade_decks",
-        "where-gods-dwell:send_where_the_gods_dwell_done",
-        "where-gods-dwell:maybe_proceed_campaign_b"
-      ]
-    },
-    "where-gods-dwell:dreamers_stayed_in_dreamlands_forever": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "dreamersStayedInDreamlandsForever",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "where-gods-dwell:send_dreamers_stayed_in_dreamlands_forever": {
-      "kind": "unsupported",
-      "name": "send_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "where-gods-dwell:maybe_win_never_seen_again:yes:fx": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "skipScenario",
-          "scenario": "tde-epilogue"
-        }
-      ]
-    },
-    "where-gods-dwell:win_never_seen_again:text": {
-      "kind": "story",
-      "text": "The investigators win the campaign… and are never seen or heard from in the waking world again.",
-      "bullets": []
-    },
-    "where-gods-dwell:win_never_seen_again": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "end",
-          "result": "win"
-        }
-      ]
-    },
-    "where-gods-dwell:maybe_win_never_seen_again": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "halfCampaign",
-        "section": "hidden"
-      },
-      "then": [
-        "where-gods-dwell:maybe_win_never_seen_again:yes:fx",
-        "where-gods-dwell:win_never_seen_again:text",
-        "where-gods-dwell:win_never_seen_again"
-      ],
-      "else": [
-        "where-gods-dwell:maybe_upgrade_decks",
-        "where-gods-dwell:send_where_the_gods_dwell_done",
-        "where-gods-dwell:maybe_proceed_campaign_b"
-      ]
-    },
-    "where-gods-dwell:dreamers_traveled_beneath_the_monastery": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "dreamersTraveledBeneathTheMonastery",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "where-gods-dwell:send_dreamers_traveled_beneath_the_monastery": {
-      "kind": "unsupported",
-      "name": "send_campaign_link",
-      "effects": [],
-      "steps": []
     }
   }
 }

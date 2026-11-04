@@ -37,7 +37,11 @@
       ]
     },
     "the-nights-usurper": {
-      "none": [],
+      "none": [
+        "the-nights-usurper:day_of_reckoning_is_coming",
+        "the-nights-usurper:earn_xp",
+        "the-nights-usurper:upgradeDecks"
+      ],
       "R1": [
         "the-nights-usurper:day_of_reckoning_is_coming",
         "the-nights-usurper:earn_xp",

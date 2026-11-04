@@ -143,24 +143,6 @@
           "who": "each"
         }
       ]
-    },
-    "R4": {
-      "title": "Resolution 4",
-      "text": "“That’s enough,” Dr. Marquez strides past the grinning revelers and strikes Mother Rachel with her cane. She turns to exhort the crowd. “It’s not too late! We can still leave!” You shout your support. Mother Rachel lurches to her feet, drunkenly holding the ceremonial knife, and swings weakly at the professor. Marquez pushes her away with a well-timed kick.\nThe earth around the effigy cracks with prismatic light, then turns blindingly bright as the pillar collapses into crystalline shards. A blinding pillar of light shoots out of the nearby well. All you hear as the crossroads collapse is Mother Rachel’s empty laughter.",
-      "effects": [
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 0,
-          "who": "each"
-        },
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 0,
-          "who": "each"
-        }
-      ]
     }
   },
   "i18nId": "the_final_evening",

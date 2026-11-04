@@ -312,7 +312,8 @@ export function scenarioOf(
       for (const d of diffs) tokens[d] = t.effects as Record<SymbolToken, TokenEffect>;
     }
   const resolutions: Record<string, Resolution> = {};
-  for (const r of s.resolutions ?? []) {
+  // a hidden resolution is a tail another proceeds to, not an ending of its own
+  for (const r of (s.resolutions ?? []).filter((x: Raw) => !x.hidden)) {
     const key = r.id === "no_resolution" ? "none" : /^R\d+$/.test(r.id) ? r.id : null;
     if (!key) continue;
     const { effects, labels: l } = resolutionEffects(r.steps ?? [], steps);
@@ -469,10 +470,18 @@ export function main() {
       rmSync(join(OUT, grp.id), { recursive: true, force: true });
       for (const d of defs) write(join(OUT, grp.id, "scenarios", `${d.id}.json`), d);
       // what happens between the scenarios: the campaign guide's flow (a side scenario has no campaign setup of its own)
+      // the group's own scenarios and the guide's interludes and epilogues (the flow keeps those it reaches), with the
+      // guide's shared steps
+      const core = g.scenarios.find((s: Raw) => s.type === "core");
       const { flow, unsupported, logLabels } = compileFlow({
         campaign: c.id === "side" ? { ...c, setup: [] } : c,
-        scenarios: g.scenarios,
+        scenarios: [
+          ...grp.scenarios,
+          ...g.scenarios.filter((s: Raw) => s.type === "interlude" || s.type === "epilogue"),
+        ],
         ids,
+        shared: new Map((core?.steps ?? []).map((st: Raw) => [st.id, st])),
+        cards: new Set(cards.keys()),
       });
       Object.assign(labels, logLabels);
       for (const [kind, n] of Object.entries(unsupported).sort())

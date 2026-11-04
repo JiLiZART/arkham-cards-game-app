@@ -1,18 +1,20 @@
 {
   "setup": [
-    "campaign:prologue",
-    "campaign:check_reprint_version"
+    "campaign:prologue"
   ],
   "order": [
     "ptc-prologue",
     "return-to-curtain-call",
     "return-to-the-last-king",
+    "ptc-interlude1",
+    "return-to-echoes-of-the-past",
+    "return-to-the-unspeakable-oath",
+    "ptc-interlude2",
     "return-to-a-phantom-of-truth",
+    "return-to-the-pallid-mask",
     "return-to-black-stars-rise",
     "return-to-dim-carcosa",
-    "return-to-echoes-of-the-past",
-    "return-to-the-pallid-mask",
-    "return-to-the-unspeakable-oath"
+    "ptc-epilogue"
   ],
   "interludes": {
     "ptc-epilogue": {
@@ -45,17 +47,59 @@
       "steps": [
         "ptc-prologue:intro"
       ]
-    },
-    "ptc-interlude1-reprint": {
-      "kind": "interlude",
-      "name": "Reality's Shadow",
-      "steps": [
-        "ptc-interlude1-reprint:house_choice",
-        "ptc-interlude1-reprint:upgradeDecks"
-      ]
     }
   },
   "resolutions": {
+    "return-to-curtain-call": {
+      "none": [
+        "return-to-curtain-call:stranger_is_on_to_you:text",
+        "return-to-curtain-call:stranger_is_on_to_you",
+        "return-to-curtain-call:chasing_the_stranger",
+        "return-to-curtain-call:maybe_ask_mid_game_tokens",
+        "return-to-curtain-call:earn_xp",
+        "return-to-curtain-call:upgradeDecks"
+      ],
+      "R1": [
+        "return-to-curtain-call:police_unhelpful:text",
+        "return-to-curtain-call:tried_to_warn_police:text",
+        "return-to-curtain-call:tried_to_warn_police",
+        "return-to-curtain-call:stole_from_box_office",
+        "return-to-curtain-call:stranger_is_on_to_you:text",
+        "return-to-curtain-call:stranger_is_on_to_you",
+        "return-to-curtain-call:chasing_the_stranger_2:text",
+        "return-to-curtain-call:chasing_the_stranger_2",
+        "return-to-curtain-call:maybe_ask_mid_game_tokens",
+        "return-to-curtain-call:earn_xp",
+        "return-to-curtain-call:upgradeDecks"
+      ],
+      "R2": [
+        "return-to-curtain-call:wise_not_to_warn:text",
+        "return-to-curtain-call:chose_not_to_warn_police:text",
+        "return-to-curtain-call:chose_not_to_warn_police",
+        "return-to-curtain-call:stranger_is_on_to_you:text",
+        "return-to-curtain-call:stranger_is_on_to_you",
+        "return-to-curtain-call:chasing_the_stranger_2:text",
+        "return-to-curtain-call:chasing_the_stranger_2",
+        "return-to-curtain-call:maybe_ask_mid_game_tokens",
+        "return-to-curtain-call:earn_xp",
+        "return-to-curtain-call:upgradeDecks"
+      ]
+    },
+    "return-to-the-last-king": {
+      "R3": [
+        "return-to-the-last-king:vips_interviewed",
+        "return-to-the-last-king:check_vips_slain",
+        "return-to-the-last-king:earn_xp",
+        "return-to-the-last-king:earn_clue_xp",
+        "return-to-the-last-king:adjust_chaos_tokens:text",
+        "return-to-the-last-king:adjust_chaos_tokens",
+        "return-to-the-last-king:upgradeDecks",
+        "return-to-the-last-king:skip_lunacys_reward"
+      ],
+      "none": [
+        "return-to-the-last-king:none"
+      ]
+    },
     "return-to-a-phantom-of-truth": {
       "none": [
         "return-to-a-phantom-of-truth:did_not_escape_gaze",
@@ -92,7 +136,13 @@
       ]
     },
     "return-to-black-stars-rise": {
-      "none": [],
+      "none": [
+        "return-to-black-stars-rise:terrible_fate:text",
+        "return-to-black-stars-rise:carcosa_merged",
+        "return-to-black-stars-rise:all_insane:text",
+        "return-to-black-stars-rise:lose:text",
+        "return-to-black-stars-rise:lose"
+      ],
       "R1": [
         "return-to-black-stars-rise:opened_path_below",
         "return-to-black-stars-rise:add_cultists_tablets:text",
@@ -115,41 +165,6 @@
         "return-to-black-stars-rise:all_insane:text",
         "return-to-black-stars-rise:lose:text",
         "return-to-black-stars-rise:lose"
-      ]
-    },
-    "return-to-curtain-call": {
-      "none": [
-        "return-to-curtain-call:stranger_is_on_to_you:text",
-        "return-to-curtain-call:stranger_is_on_to_you",
-        "return-to-curtain-call:chasing_the_stranger",
-        "return-to-curtain-call:maybe_ask_mid_game_tokens",
-        "return-to-curtain-call:earn_xp",
-        "return-to-curtain-call:upgradeDecks"
-      ],
-      "R1": [
-        "return-to-curtain-call:police_unhelpful:text",
-        "return-to-curtain-call:tried_to_warn_police:text",
-        "return-to-curtain-call:tried_to_warn_police",
-        "return-to-curtain-call:stole_from_box_office",
-        "return-to-curtain-call:stranger_is_on_to_you:text",
-        "return-to-curtain-call:stranger_is_on_to_you",
-        "return-to-curtain-call:chasing_the_stranger_2:text",
-        "return-to-curtain-call:chasing_the_stranger_2",
-        "return-to-curtain-call:maybe_ask_mid_game_tokens",
-        "return-to-curtain-call:earn_xp",
-        "return-to-curtain-call:upgradeDecks"
-      ],
-      "R2": [
-        "return-to-curtain-call:wise_not_to_warn:text",
-        "return-to-curtain-call:chose_not_to_warn_police:text",
-        "return-to-curtain-call:chose_not_to_warn_police",
-        "return-to-curtain-call:stranger_is_on_to_you:text",
-        "return-to-curtain-call:stranger_is_on_to_you",
-        "return-to-curtain-call:chasing_the_stranger_2:text",
-        "return-to-curtain-call:chasing_the_stranger_2",
-        "return-to-curtain-call:maybe_ask_mid_game_tokens",
-        "return-to-curtain-call:earn_xp",
-        "return-to-curtain-call:upgradeDecks"
       ]
     },
     "return-to-dim-carcosa": {
@@ -200,7 +215,14 @@
       ]
     },
     "return-to-echoes-of-the-past": {
-      "none": [],
+      "none": [
+        "return-to-echoes-of-the-past:followers_of_sign_found_way",
+        "return-to-echoes-of-the-past:earn_1_xp",
+        "return-to-echoes-of-the-past:ask_sebastien_moreau",
+        "return-to-echoes-of-the-past:add_mixed_tokens:text",
+        "return-to-echoes-of-the-past:add_mixed_tokens",
+        "return-to-echoes-of-the-past:upgradeDecks"
+      ],
       "R1": [
         "return-to-echoes-of-the-past:took_onyx_clasp:text",
         "return-to-echoes-of-the-past:took_onyx_clasp",
@@ -237,34 +259,6 @@
         "return-to-echoes-of-the-past:upgradeDecks"
       ]
     },
-    "return-to-the-last-king": {
-      "R1": [
-        "return-to-the-last-king:vips_interviewed",
-        "return-to-the-last-king:check_vips_slain",
-        "return-to-the-last-king:earn_xp",
-        "return-to-the-last-king:earn_clue_xp"
-      ],
-      "R2": [
-        "return-to-the-last-king:vips_interviewed",
-        "return-to-the-last-king:check_vips_slain",
-        "return-to-the-last-king:earn_xp",
-        "return-to-the-last-king:earn_clue_xp",
-        "return-to-the-last-king:adjust_chaos_tokens:text",
-        "return-to-the-last-king:adjust_chaos_tokens",
-        "return-to-the-last-king:upgradeDecks",
-        "return-to-the-last-king:skip_lunacys_reward"
-      ],
-      "R3": [
-        "return-to-the-last-king:vips_interviewed",
-        "return-to-the-last-king:check_vips_slain",
-        "return-to-the-last-king:earn_xp",
-        "return-to-the-last-king:earn_clue_xp",
-        "return-to-the-last-king:adjust_chaos_tokens:text",
-        "return-to-the-last-king:adjust_chaos_tokens",
-        "return-to-the-last-king:upgradeDecks",
-        "return-to-the-last-king:skip_lunacys_reward"
-      ]
-    },
     "return-to-the-pallid-mask": {
       "none": [
         "return-to-the-pallid-mask:maybe_ask_conviction_or_doubt",
@@ -297,8 +291,7 @@
       ]
     },
     "return-to-the-unspeakable-oath": {
-      "none": [],
-      "R1": [
+      "none": [
         "return-to-the-unspeakable-oath:king_claimed_victims",
         "return-to-the-unspeakable-oath:check_took_onyx_clasp",
         "return-to-the-unspeakable-oath:earn_xp",
@@ -327,6 +320,9 @@
     }
   },
   "before": {
+    "return-to-the-last-king": [
+      "return-to-the-last-king:check_for_mitpm"
+    ],
     "return-to-a-phantom-of-truth": [
       "return-to-a-phantom-of-truth:earn_lost_soul",
       "return-to-a-phantom-of-truth:dream_2_test",
@@ -346,9 +342,6 @@
     "return-to-echoes-of-the-past": [
       "return-to-echoes-of-the-past:check_for_mitpm"
     ],
-    "return-to-the-last-king": [
-      "return-to-the-last-king:check_for_mitpm"
-    ],
     "return-to-the-pallid-mask": [
       "return-to-the-pallid-mask:check_intro_condition",
       "return-to-the-pallid-mask:check_for_mitpm",
@@ -367,407 +360,205 @@
       "text": "“He mentioned the establishment of the Dynasty in Carcosa, the lakes which connected Hastur, Aldebaran, and the mystery of the Hyades. He spoke of Cassilda and Camilla, and sounded the cloudy depths of Demhe and the Lake of Hali.” – Robert W. Chambers, “The Repairer of Reputations”",
       "bullets": []
     },
-    "campaign:describe_reprint:text": {
+    "return-to-curtain-call:stranger_is_on_to_you:text": {
       "kind": "story",
-      "text": "The reprinted version of this campaign that is packaged in a single box <i>(The Path to Carcosa Campaign Expansion)</i> contains updated names and traits on many encounter cards. To help minimize confusion, this app can provide setup matching either version.",
+      "text": "In your Campaign Log, record <i>the Stranger is on to you</i>. Add The Man in the Pallid Mask weakness to the lead investigator’s deck (does not count towards deck size). For the remainder of this campaign, any time the bearer of The Man in the Pallid Mask leaves the campaign for any reason, choose a new investigator to become the bearer of The Man in the Pallid Mask weakness, and add it to that investigator’s deck.",
       "bullets": []
     },
-    "campaign:ask_reprint": {
+    "return-to-curtain-call:stranger_is_on_to_you": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "strangerIsOnToYou",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "earnCard",
+          "code": "03059",
+          "who": "lead"
+        }
+      ]
+    },
+    "return-to-curtain-call:chasing_the_stranger": {
+      "kind": "counter",
+      "text": "In your Campaign Log, under “Chasing the Stranger,” place one tally mark for each time The Man in the Pallid Mask was defeated during this scenario. For the remainder of the campaign, keep a running tally of the number of times The Man in the Pallid Mask is defeated during a game. Each tally will bring you one step closer to the truth.",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "chasingTheStranger",
+          "section": "chasingTheStranger",
+          "op": "add",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "return-to-curtain-call:ask_which_mid_game_token": {
       "kind": "chooseOne",
-      "text": "Which version would you like to use?",
+      "text": "Which version of Act 2b was advanced?",
       "choices": [
         {
-          "id": "original",
-          "text": "Original",
-          "effects": [],
+          "id": "a_city_aflame",
+          "text": "A City Aflame",
+          "effects": [
+            {
+              "do": "addChaosToken",
+              "token": "cultist"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "cultist"
+            }
+          ],
           "steps": []
         },
         {
-          "id": "reprint",
-          "text": "Reprint",
+          "id": "the_path_is_mine",
+          "text": "The Path is Mine",
           "effects": [
             {
-              "do": "record",
-              "key": "reprintLanguage",
-              "section": "hidden",
-              "value": true
+              "do": "addChaosToken",
+              "token": "tablet"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "tablet"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "the_shores_of_hali",
+          "text": "The Shores of Hali",
+          "effects": [
+            {
+              "do": "addChaosToken",
+              "token": "elderThing"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "elderThing"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "alaran_mists",
+          "text": "Alaran Mists",
+          "effects": [
+            {
+              "do": "addChaosToken",
+              "token": "cultist"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "tablet"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "under_the_city",
+          "text": "Under the City",
+          "effects": [
+            {
+              "do": "addChaosToken",
+              "token": "cultist"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "elderThing"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "here_is_my_reply",
+          "text": "Here Is My Reply",
+          "effects": [
+            {
+              "do": "addChaosToken",
+              "token": "tablet"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "elderThing"
             }
           ],
           "steps": []
         }
       ]
     },
-    "campaign:check_reprint_version": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "campaign_data",
-        "take": true
-      },
-      "then": [
-        "campaign:describe_reprint:text",
-        "campaign:ask_reprint"
-      ],
-      "else": []
+    "return-to-curtain-call:ask_mid_game_tokens": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "While playing the scenario, were you instructed to add any tokens to the chaos bag?",
+          "effects": [],
+          "steps": [
+            "return-to-curtain-call:ask_which_mid_game_token"
+          ]
+        }
+      ]
     },
-    "ptc-epilogue:possessed": {
-      "kind": "story",
-      "text": "It has taken months of preparation, but you are finally ready to unveil your latest work to the world. Gathering financial investments was your first task, of course. That hadn’t taken too long given the connections you’d made during your stay in Paris. You have been assured that the cast assembled is the finest that money could afford, but still you strive to make everything perfect. It must be perfect. The story must be told, so that the world knows. You’ve heard the troupe whisper behind your back: the remarks about your bizarre passion, the concern about your piercing yellow eyes. It matters not to you. All you care about is the performance. The pronunciation of the words. The melody of Cassilda’s song. The design of the Stranger’s mask.\nThis would be the greatest performance of <u>The King in Yellow</u> ever.",
-      "bullets": []
-    },
-    "ptc-epilogue:check_epilogue": {
+    "return-to-curtain-call:check_ask_mid_game_tokens": {
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "possessed",
+        "id": "ccaAddChaosToken",
         "section": "hidden"
       },
+      "then": [],
+      "else": [
+        "return-to-curtain-call:ask_mid_game_tokens"
+      ]
+    },
+    "return-to-curtain-call:maybe_ask_mid_game_tokens": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "version",
+        "take": true
+      },
       "then": [
-        "ptc-epilogue:possessed"
+        "return-to-curtain-call:check_ask_mid_game_tokens"
       ],
       "else": []
     },
-    "ptc-interlude2:daniel_survived": {
-      "kind": "story",
-      "text": "You decide to lay low for some time in Ma’s Boarding House and hide Daniel from the authorities, although you’re unsure how long you’ll be able to stay in Arkham with an escaped asylum patient. Daniel is a loose cannon, dazed and unresponsive one moment, and screaming for his life the next. It takes several days for him to realize he’s no longer institutionalized, which for some reason makes him even more terrified. “He’s coming for me, he’s coming for me!” he rambles, sometimes for hours at a time. Finally, during an unusually warm and starry night, Daniel is calm enough to open up to you. “The King in Yellow, it’s not just a play,” he explains. “It’s a being named Hastur, and He’s already claimed me. But there’s still time for you. You are not yet possessed. You have yet to speak the Oath. Whatever you do, speak not his name. Do not give in.” You ask him about the strange events that have been happening across town, and of the cultists and creatures you’ve encountered. “They are trying to find Carcosa,” he says matter-of-factly. You recognize the name as the fictional city from the play, the one The King in Yellow rules over. “They want to release Hastur from His prison. But you!—You can open the way to Carcosa before they do! You can seal Hastur for good!” He grips you tightly as he rants. “Quickly, before the Stranger discovers our plan!”\nHours later, Daniel is incoherent and unresponsive once more. You take a long walk to ease your thoughts, mulling over this new information. You’re unsure what to make of his wild claims. Before you can make a decision about what to do next, you return to find the door to your room broken open. Daniel lies in a heap on the ground, his face colorless and body limp. Judging from the bruising around his neck, you surmise that he has been choked to death.",
-      "bullets": []
-    },
-    "ptc-interlude2:earn_2_xp:text": {
-      "kind": "story",
-      "text": "Each investigator earns 2 additional experience as they gain insight into the machinations of the Tattered King.",
-      "bullets": []
-    },
-    "ptc-interlude2:earn_2_xp": {
+    "return-to-curtain-call:earn_xp": {
       "kind": "effects",
       "effects": [
         {
           "do": "xp",
-          "bonus": 2,
+          "bonus": 0,
           "who": "each",
-          "victory": false
+          "victory": true
         }
       ]
     },
-    "ptc-interlude2:daniel_possessed": {
-      "kind": "story",
-      "text": "You decide to lay low for some time in Ma’s Boarding House, unsure whether news of the events at the asylum will get out to the general public. You take this time to make extensive notes of the events you’ve experienced thus far, including the brief dialogue between you and Daniel. He’d spoke of The King in Yellow as if it were an actual being, and even named it. “Hastur.” He’d rambled and muttered and screeched other phrases, as well. You doubt you’ll ever forget them. “He made us speak the Oath.” “The price was paid.” “They are opening the path to Carcosa.”\nOn the third night, you return to your room to find the door broken open. You enter cautiously, wondering if the police are onto you. Or worse, the Stranger. You are surprised to find the body of Daniel Chesterfield instead, lying on the ground with a pained, wide-eyed expression on his face. He is dead. His eyes are bloodshot and yellow, and he clutches a copy of The King in Yellow in his stiff hands. You pry the playbook from his deathly grasp and examine it. Daniel has scribbled notes in the margins of each page, mostly incomprehensible, but with a few lucid standouts. The first time the fictional city of Carcosa is mentioned, scrawled next to it Daniel has written:\n<center><fancy>[elder_sign]Carcosa is real</fancy></center>\n<center><fancy>Do not let them open the path</fancy></center>\nWhen Cassilda speaks of the tattered king, Daniel has written:\n<center><fancy>Hastur is the king in tatters</fancy></center>\n<center><fancy>locked in his prison in the stars</fancy></center>\n<center><fancy>seal him away and stop this madness!</fancy></center>\nYour mind swims with questions. How did he escape the asylum? How did he die? And why does he appear human to your eyes now? With little time to spare, you clean the room of your belongings and flee. Daniel’s words, which he begged you to heed, play out in your mind over and over again.",
-      "bullets": []
-    },
-    "ptc-interlude2:daniel_did_not_survive": {
-      "kind": "story",
-      "text": "You decide to lay low for some time in Ma’s Boarding House, unsure whether news of the events at the asylum will get out to the general public. You take this time to make extensive notes of the events you’ve experienced thus far, including the brief dialogue between you and Daniel. He’d spoke of The King in Yellow as if it were an actual being, and even named it. “Hastur.” He’d rambled and muttered and screeched other phrases, as well. You doubt you’ll ever forget them. “He made us speak the Oath.” “The price was paid.” “They are opening the path to Carcosa.” For hours, you think about Daniel’s warning to you, which he begged you to heed: “Do not speak His name.” His final moments play out in your mind over and over again.",
-      "bullets": []
-    },
-    "ptc-interlude2:daniel_choice": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "survived",
-          "text": "If an investigator resigned with the asset version of Daniel Chesterfield under their control.",
-          "effects": [],
-          "steps": [
-            "ptc-interlude2:daniel_survived",
-            "ptc-interlude2:earn_2_xp:text",
-            "ptc-interlude2:earn_2_xp"
-          ]
-        },
-        {
-          "id": "possessed",
-          "text": "If the enemy version of Daniel Chesterfield was in play when the scenario ended.",
-          "effects": [],
-          "steps": [
-            "ptc-interlude2:daniel_possessed"
-          ]
-        },
-        {
-          "id": "neither",
-          "text": "If neither of the above are true.",
-          "effects": [],
-          "steps": [
-            "ptc-interlude2:daniel_did_not_survive"
-          ]
-        }
-      ]
-    },
-    "ptc-interlude2:ignore_the_warning": {
-      "kind": "story",
-      "text": "For hours, you struggle with this insight into <u>The King in Yellow</u>. What is true? What is real? Only you can sort through this madness.",
-      "bullets": []
-    },
-    "ptc-interlude2:ignored_daniels_warning": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "ignoredDanielsWarning",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "ptc-interlude2:mark_2_doubt:text": {
-      "kind": "story",
-      "text": "Mark two <b>Doubt</b> in your Campaign Log.",
-      "bullets": []
-    },
-    "ptc-interlude2:mark_2_doubt": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "count",
-          "id": "doubt",
-          "section": "doubt",
-          "op": "add",
-          "value": 2
-        }
-      ]
-    },
-    "ptc-interlude2:heed_the_warning": {
-      "kind": "story",
-      "text": "For hours, you struggle with this insight into <u>The King in Yellow</u>. What is true? What is real? Only you can sort through this madness.",
-      "bullets": []
-    },
-    "ptc-interlude2:heeded_daniels_warning": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "heededDanielsWarning",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "ptc-interlude2:mark_2_conviction:text": {
-      "kind": "story",
-      "text": "Mark two <b>Conviction</b> in your Campaign Log.",
-      "bullets": []
-    },
-    "ptc-interlude2:mark_2_conviction": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "count",
-          "id": "conviction",
-          "section": "conviction",
-          "op": "add",
-          "value": 2
-        }
-      ]
-    },
-    "ptc-interlude2:earn_1_xp:text": {
-      "kind": "story",
-      "text": "Each investigator earns 1 additional experience as they gain insight into the machinations of the Tattered King.",
-      "bullets": []
-    },
-    "ptc-interlude2:earn_1_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 1,
-          "who": "each",
-          "victory": false
-        }
-      ]
-    },
-    "ptc-interlude2:forbidden_name:text": {
-      "kind": "story",
-      "text": "For the remainder of the campaign, any time an investigator speaks the name of HASTUR aloud during a scenario (or during the setup of a scenario), that investigator must immediately take 1 horror.",
-      "bullets": []
-    },
-    "ptc-interlude2:warning_choice": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "ignore",
-          "text": "<i>Possession? Oaths? There must be another explanation for all of this.</i>",
-          "effects": [],
-          "steps": [
-            "ptc-interlude2:ignore_the_warning",
-            "ptc-interlude2:ignored_daniels_warning",
-            "ptc-interlude2:mark_2_doubt:text",
-            "ptc-interlude2:mark_2_doubt"
-          ]
-        },
-        {
-          "id": "heed",
-          "text": "<i>We must heed Daniel’s warning. We must not speak the name of the King in Yellow.</i>",
-          "effects": [],
-          "steps": [
-            "ptc-interlude2:heed_the_warning",
-            "ptc-interlude2:heeded_daniels_warning",
-            "ptc-interlude2:mark_2_conviction:text",
-            "ptc-interlude2:mark_2_conviction",
-            "ptc-interlude2:earn_1_xp:text",
-            "ptc-interlude2:earn_1_xp",
-            "ptc-interlude2:forbidden_name:text"
-          ]
-        }
-      ]
-    },
-    "ptc-interlude2:upgradeDecks": {
+    "return-to-curtain-call:upgradeDecks": {
       "kind": "upgradeDecks"
     },
-    "ptc-interlude1:reward_1": {
+    "return-to-curtain-call:police_unhelpful:text": {
       "kind": "story",
-      "text": "The change in the atmosphere has you curious. What if it was all a trick of your mind? What if the hauntings that follow The King in Yellow are but transitory? The answers to all of your questions might lie inside. Cautiously, you open the front door to the manor once again. Reassuring jazz and the clamor of casual conversation grow louder as you step inside. The enticing smell of roasted pork wafts through the air. As you suspected, the signs of struggle and oddities you noticed before have vanished without explanation. Then, as you turn the corner into the dining room, you find the Stranger speaking with another man—tall, mustached, wearing a fine black suit, and holding a silver-handled cane. The Stranger turns to you, his gaze drills through your mind, and your vision swims with agony. Before you realize it, you are running as fast as you can, toppling through the front doorway in a haze of pain and disorientation. Without time to catch your breath, you race to your vehicle and speed away, hands trembling upon the steering wheel.",
+      "text": "Did you really think the police would help you?",
       "bullets": []
     },
-    "ptc-interlude1:why_go_back:text": {
+    "return-to-curtain-call:tried_to_warn_police:text": {
       "kind": "story",
-      "text": "Why would you go back inside?",
+      "text": "In your Campaign Log, record that <i>you tried to warn the police</i>. Mark one <b>Conviction</b> in your Campaign Log.",
       "bullets": []
     },
-    "ptc-interlude1:intruded_on_secret_meeting:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, record that <i>you intruded on a secret meeting</i>. Mark one <b>Doubt</b> in your Campaign Log.",
-      "bullets": []
-    },
-    "ptc-interlude1:intruded_on_secret_meeting": {
+    "return-to-curtain-call:tried_to_warn_police": {
       "kind": "effects",
       "effects": [
         {
           "do": "record",
-          "key": "intrudedOnSecretMeeting",
-          "section": "campaign_notes",
-          "value": true
-        },
-        {
-          "do": "count",
-          "id": "doubt",
-          "section": "doubt",
-          "op": "add",
-          "value": 1
-        }
-      ]
-    },
-    "ptc-interlude1:add_elder_things:text": {
-      "kind": "story",
-      "text": "Remove all [cultist], [tablet], and [elder_thing] tokens from the chaos bag. Then, add 2 [elder_thing] tokens to the chaos bag.",
-      "bullets": []
-    },
-    "ptc-interlude1:add_elder_things": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "removeChaosToken",
-          "token": "cultist"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "cultist"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "tablet"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "tablet"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "elderThing"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "elderThing"
-        },
-        {
-          "do": "addChaosToken",
-          "token": "elderThing"
-        },
-        {
-          "do": "addChaosToken",
-          "token": "elderThing"
-        }
-      ]
-    },
-    "ptc-interlude1:reward_2": {
-      "kind": "story",
-      "text": "You can’t trust your senses. This is all a trick, an attempt to lure you back inside. You’re no safer now than you were before. Swallowing your fear, you set to work barricading the front door of the manor using several of the heavy stone benches lining the cobblestone path in the front yard. You hope it’s enough, but you aren’t willing to stick around to find out. As soon as you’re done, you head back to your vehicle and drive toward Southside, where you hope to find answers.",
-      "bullets": []
-    },
-    "ptc-interlude1:door_wont_stop_them:text": {
-      "kind": "story",
-      "text": "That door isn't going to stop them.",
-      "bullets": []
-    },
-    "ptc-interlude1:fled_dinner_party": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "fledDinnerParty",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "ptc-interlude1:add_tablets:text": {
-      "kind": "story",
-      "text": "Remove all [cultist], [tablet], and [elder_thing] tokens from the chaos bag. Then, add 2 [tablet] tokens to the chaos bag.",
-      "bullets": []
-    },
-    "ptc-interlude1:add_tablets": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "removeChaosToken",
-          "token": "cultist"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "cultist"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "tablet"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "tablet"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "elderThing"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "elderThing"
-        },
-        {
-          "do": "addChaosToken",
-          "token": "tablet"
-        },
-        {
-          "do": "addChaosToken",
-          "token": "tablet"
-        }
-      ]
-    },
-    "ptc-interlude1:reward_3": {
-      "kind": "story",
-      "text": "You dare not risk stepping back inside that madhouse. But you can’t let the monstrosities run amok, either. You root through the open garage for a few supplies, finding an old hose, an empty gasoline canister, and some matches. Knowing what you must do, you first siphon some gas from Mrs. Dumaine’s Oakland 6-54A. You spread the gasoline across the front porch, inside the garage, and around the manor’s outer walls. From there, all it takes is several matches to start the blaze. You watch from the front yard as the manor is eventually consumed by the flames. The sounds of crackling fire and snapping wood and the screeching of dying horrors fills the street. Satisfied, you head back to your vehicle and tear off toward Southside, full of grim determination.",
-      "bullets": []
-    },
-    "ptc-interlude1:did_what_had_to_be_done:text": {
-      "kind": "story",
-      "text": "You did what had to be done… Right?",
-      "bullets": []
-    },
-    "ptc-interlude1:slayed_the_monsters:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, record that <i>you slayed the monsters at the dinner party</i>. Mark one <b>Conviction</b> in your Campaign Log.",
-      "bullets": []
-    },
-    "ptc-interlude1:slayed_the_monsters": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "slayedTheMonsters",
+          "key": "triedToWarnPolice",
           "section": "campaign_notes",
           "value": true
         },
@@ -780,218 +571,335 @@
         }
       ]
     },
-    "ptc-interlude1:maybe_slay_constance:no:fx": {
+    "return-to-curtain-call:police_are_suspicious": {
       "kind": "effects",
       "effects": [
         {
           "do": "record",
-          "key": "03065b",
-          "section": "vipsSlain",
+          "key": "policeAreSuspicious",
+          "section": "campaign_notes",
           "value": true
         }
       ]
     },
-    "ptc-interlude1:maybe_slay_constance": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logCards",
-        "id": "03065b",
-        "section": "vipsSlain"
-      },
-      "then": [],
-      "else": [
-        "ptc-interlude1:maybe_slay_constance:no:fx"
-      ]
-    },
-    "ptc-interlude1:maybe_slay_jordan:no:fx": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "03066b",
-          "section": "vipsSlain",
-          "value": true
-        }
-      ]
-    },
-    "ptc-interlude1:maybe_slay_jordan": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logCards",
-        "id": "03066b",
-        "section": "vipsSlain"
-      },
-      "then": [],
-      "else": [
-        "ptc-interlude1:maybe_slay_jordan:no:fx"
-      ]
-    },
-    "ptc-interlude1:maybe_slay_haruko:no:fx": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "03067b",
-          "section": "vipsSlain",
-          "value": true
-        }
-      ]
-    },
-    "ptc-interlude1:maybe_slay_haruko": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logCards",
-        "id": "03067b",
-        "section": "vipsSlain"
-      },
-      "then": [],
-      "else": [
-        "ptc-interlude1:maybe_slay_haruko:no:fx"
-      ]
-    },
-    "ptc-interlude1:maybe_slay_sebastien:no:fx": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "03068b",
-          "section": "vipsSlain",
-          "value": true
-        }
-      ]
-    },
-    "ptc-interlude1:maybe_slay_sebastien": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logCards",
-        "id": "03068b",
-        "section": "vipsSlain"
-      },
-      "then": [],
-      "else": [
-        "ptc-interlude1:maybe_slay_sebastien:no:fx"
-      ]
-    },
-    "ptc-interlude1:maybe_slay_ashleigh:no:fx": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "03069b",
-          "section": "vipsSlain",
-          "value": true
-        }
-      ]
-    },
-    "ptc-interlude1:maybe_slay_ashleigh": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logCards",
-        "id": "03069b",
-        "section": "vipsSlain"
-      },
-      "then": [],
-      "else": [
-        "ptc-interlude1:maybe_slay_ashleigh:no:fx"
-      ]
-    },
-    "ptc-interlude1:add_cultists:text": {
-      "kind": "story",
-      "text": "Remove all [cultist], [tablet], and [elder_thing] tokens from the chaos bag. Then, add 2 [cultist] tokens to the chaos bag.",
-      "bullets": []
-    },
-    "ptc-interlude1:add_cultists": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "removeChaosToken",
-          "token": "cultist"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "cultist"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "tablet"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "tablet"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "elderThing"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "elderThing"
-        },
-        {
-          "do": "addChaosToken",
-          "token": "cultist"
-        },
-        {
-          "do": "addChaosToken",
-          "token": "cultist"
-        }
-      ]
-    },
-    "ptc-interlude1:house_choice": {
+    "return-to-curtain-call:stole_from_box_office": {
       "kind": "chooseOne",
       "choices": [
         {
-          "id": "go_back_in",
-          "text": "<i>Things seem to have calmed down. Perhaps we should go back inside and investigate further.</i>",
+          "id": "steal",
+          "text": "Did anyone “steal from the box office?”",
           "effects": [],
           "steps": [
-            "ptc-interlude1:reward_1",
-            "ptc-interlude1:why_go_back:text",
-            "ptc-interlude1:intruded_on_secret_meeting:text",
-            "ptc-interlude1:intruded_on_secret_meeting",
-            "ptc-interlude1:add_elder_things:text",
-            "ptc-interlude1:add_elder_things"
-          ]
-        },
-        {
-          "id": "block_door",
-          "text": "<i>I don’t trust this place one bit. Let’s block the door and get the hell out of here!</i>",
-          "effects": [],
-          "steps": [
-            "ptc-interlude1:reward_2",
-            "ptc-interlude1:door_wont_stop_them:text",
-            "ptc-interlude1:fled_dinner_party",
-            "ptc-interlude1:add_tablets:text",
-            "ptc-interlude1:add_tablets"
-          ]
-        },
-        {
-          "id": "burn_house",
-          "text": "<i>If these people are allowed to live, these horrors will only repeat themselves. We have to put an end to this. We have to <b>kill them.</b></i>",
-          "effects": [],
-          "steps": [
-            "ptc-interlude1:reward_3",
-            "ptc-interlude1:did_what_had_to_be_done:text",
-            "ptc-interlude1:slayed_the_monsters:text",
-            "ptc-interlude1:slayed_the_monsters",
-            "ptc-interlude1:maybe_slay_constance",
-            "ptc-interlude1:maybe_slay_jordan",
-            "ptc-interlude1:maybe_slay_haruko",
-            "ptc-interlude1:maybe_slay_sebastien",
-            "ptc-interlude1:maybe_slay_ashleigh",
-            "ptc-interlude1:add_cultists:text",
-            "ptc-interlude1:add_cultists"
+            "return-to-curtain-call:police_are_suspicious"
           ]
         }
       ]
     },
-    "ptc-interlude1:upgradeDecks": {
+    "return-to-curtain-call:chasing_the_stranger_2:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, under “Chasing the Stranger,” place two tally marks. For the remainder of the campaign, keep a running tally of the number of times The Man in the Pallid Mask is defeated during a game. Each tally will bring you one step closer to the truth.",
+      "bullets": []
+    },
+    "return-to-curtain-call:chasing_the_stranger_2": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "chasingTheStranger",
+          "section": "chasingTheStranger",
+          "op": "add",
+          "value": 2
+        }
+      ]
+    },
+    "return-to-curtain-call:wise_not_to_warn:text": {
+      "kind": "story",
+      "text": "Do you think it was wise not to warn anyone?",
+      "bullets": []
+    },
+    "return-to-curtain-call:chose_not_to_warn_police:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>you chose not to go to the police</i>. Mark one <b>Doubt</b> in your Campaign Log.",
+      "bullets": []
+    },
+    "return-to-curtain-call:chose_not_to_warn_police": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "choseNotToWarnPolice",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "count",
+          "id": "doubt",
+          "section": "doubt",
+          "op": "add",
+          "value": 1
+        }
+      ]
+    },
+    "return-to-the-last-king:vips_interviewed": {
+      "kind": "cardChoice",
+      "text": "In your Campaign Log, under “VIPs Interviewed,” record the name of each character you “interviewed.”",
+      "codes": [
+        "03076a",
+        "03077",
+        "03078",
+        "03079",
+        "03080"
+      ],
+      "min": 1,
+      "max": 1,
+      "effects": [
+        {
+          "do": "listCards",
+          "id": "vipsInterviewed",
+          "section": "vipsInterviewed",
+          "codes": [
+            "$input"
+          ],
+          "remove": false
+        }
+      ],
+      "steps": []
+    },
+    "return-to-the-last-king:vips_slain_reprint": {
+      "kind": "cardChoice",
+      "text": "In your Campaign Log, under “VIPs Slain,” record the name of each unique [[Possessed]] or [[Lunatic]] enemy in the victory display.",
+      "codes": [
+        "03065b",
+        "03066b",
+        "03067b",
+        "03068b",
+        "03069b",
+        "52023"
+      ],
+      "min": 1,
+      "max": 1,
+      "effects": [
+        {
+          "do": "listCards",
+          "id": "vipsSlain",
+          "section": "vipsSlain",
+          "codes": [
+            "$input"
+          ],
+          "remove": false
+        }
+      ],
+      "steps": []
+    },
+    "return-to-the-last-king:vips_slain": {
+      "kind": "cardChoice",
+      "text": "In your Campaign Log, under “VIPs Slain,” record the name of each unique [[Lunatic]] enemy in the victory display.",
+      "codes": [
+        "03065b",
+        "03066b",
+        "03067b",
+        "03068b",
+        "03069b",
+        "52023"
+      ],
+      "min": 1,
+      "max": 1,
+      "effects": [
+        {
+          "do": "listCards",
+          "id": "vipsSlain",
+          "section": "vipsSlain",
+          "codes": [
+            "$input"
+          ],
+          "remove": false
+        }
+      ],
+      "steps": []
+    },
+    "return-to-the-last-king:check_vips_slain": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "reprintLanguage",
+        "section": "hidden"
+      },
+      "then": [
+        "return-to-the-last-king:vips_slain_reprint"
+      ],
+      "else": [
+        "return-to-the-last-king:vips_slain"
+      ]
+    },
+    "return-to-the-last-king:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "return-to-the-last-king:earn_clue_xp": {
+      "kind": "unsupported",
+      "name": "investigator_counter",
+      "text": "For every 2 clues that were on the act deck when the game ended, choose an investigator to earn 1 additional experience point. Experience from this reward must be divided as evenly among the investigators as possible.",
+      "effects": [],
+      "steps": []
+    },
+    "return-to-the-last-king:adjust_chaos_tokens:text": {
+      "kind": "story",
+      "text": "Remove all [cultist], [tablet], and [elder_thing] tokens from the chaos bag. Then, add 1 [cultist] token, 1 [tablet] token, and 1 [elder_thing] token to the chaos bag.",
+      "bullets": []
+    },
+    "return-to-the-last-king:adjust_chaos_tokens": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "elderThing"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "elderThing"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        }
+      ]
+    },
+    "return-to-the-last-king:upgradeDecks": {
       "kind": "upgradeDecks"
     },
-    "ptc-prologue:intro": {
+    "return-to-the-last-king:skip_skeptics_reward:text": {
       "kind": "story",
-      "text": "You turn over the folded program in your hand, reading it for what seems like the hundredth time. “Miskatonic Playhouse presents: The King in Yellow,” it reads. “A special one-night engagement at Arkham’s very own Ward Theatre. An irresistible drama in two acts. Production staged and directed by Nigel Engram.” The cast is a small ensemble, with one unattributed credit at the end: “The Stranger.”\nTo have such a highly anticipated play come to Arkham all the way from Paris is a noteworthy event, even if it is just for one night. For weeks leading up to the show, it was the talk of the town. It seemed so unassuming…and yet, you have evidence something sinister is at work. It started with the disappearance of one of the stagehands at the theatre—a boy of only seventeen who missed rehearsal one night and was never seen again. Then, less than two weeks before the performance, there was the musician whose corpse was found with a gun in its mouth. Perhaps most chilling was the crazed man the coppers had picked up in Independence Square who had been ranting and raving about the “King’s return.” He was brought to Arkham Asylum, and you were surprised to discover that he was not alone in his delusions.\nFinding these events suspicious, you and your companions have delved deeper into the matter. Although no connection can be proven, these weren’t the only strange events surrounding the up-and-coming play. Instances of suicide and madness have followed in its wake, and you are determined to discover why.\nThe lights in the auditorium dim, and a spotlight shines on the stage. What unfolds is not quite what you expected. Slow-paced and monotonous, the first act of The King in Yellow is a tedious bore. The setting and characters are compelling, but the meandering and nonsensical story does little to entertain or inform. You begin to wonder whether the dreadful events surrounding The King in Yellow aren’t connected, after all. Perhaps it was just your overactive imagination; how could such a trivial and unassuming show cause such pandemonium? You are surprised when the first act closes without any rising action or revelation. The lights rise for the intermission, and you consider leaving early, stifling a yawn. Before you are able to decide, however, you find yourself drifting…drifting…to sleep.",
+      "text": "Skip <b>Interlude I: Reality's Shadow</b>.",
       "bullets": []
+    },
+    "return-to-the-last-king:skip_skeptics_reward": {
+      "kind": "effects",
+      "effects": []
+    },
+    "return-to-the-last-king:really_skip_lunacys_reward:text": {
+      "kind": "story",
+      "text": "Skip <b>Interlude I: Lunacy's Reward</b>.",
+      "bullets": []
+    },
+    "return-to-the-last-king:really_skip_lunacys_reward": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "ptc-interlude1"
+        }
+      ]
+    },
+    "return-to-the-last-king:skip_lunacys_reward": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "reprintLanguage",
+        "section": "hidden"
+      },
+      "then": [
+        "return-to-the-last-king:skip_skeptics_reward:text",
+        "return-to-the-last-king:skip_skeptics_reward"
+      ],
+      "else": [
+        "return-to-the-last-king:really_skip_lunacys_reward:text",
+        "return-to-the-last-king:really_skip_lunacys_reward"
+      ]
+    },
+    "return-to-the-last-king:none": {
+      "kind": "chooseOne",
+      "text": "Did the investigators resign, or were they all defeated?",
+      "choices": [
+        {
+          "id": "resigned",
+          "text": "They resigned",
+          "effects": [],
+          "steps": [
+            "return-to-the-last-king:vips_interviewed",
+            "return-to-the-last-king:check_vips_slain",
+            "return-to-the-last-king:earn_xp",
+            "return-to-the-last-king:earn_clue_xp"
+          ]
+        },
+        {
+          "id": "defeated",
+          "text": "They were all defeated",
+          "effects": [],
+          "steps": [
+            "return-to-the-last-king:vips_interviewed",
+            "return-to-the-last-king:check_vips_slain",
+            "return-to-the-last-king:earn_xp",
+            "return-to-the-last-king:earn_clue_xp",
+            "return-to-the-last-king:adjust_chaos_tokens:text",
+            "return-to-the-last-king:adjust_chaos_tokens",
+            "return-to-the-last-king:upgradeDecks",
+            "return-to-the-last-king:skip_lunacys_reward"
+          ]
+        }
+      ]
+    },
+    "return-to-the-last-king:transfer_mitpm:text": {
+      "kind": "story",
+      "text": "Because the original bearer of The Man in the Pallid Mask weakness is not playing this scenario, another investigator must become the bearer.",
+      "bullets": []
+    },
+    "return-to-the-last-king:transfer_mitpm": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "03059"
+        },
+        {
+          "do": "earnCard",
+          "code": "03059",
+          "who": "choice"
+        }
+      ]
+    },
+    "return-to-the-last-king:check_for_mitpm": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "03059",
+        "inv": "any"
+      },
+      "then": [],
+      "else": [
+        "return-to-the-last-king:transfer_mitpm:text",
+        "return-to-the-last-king:transfer_mitpm"
+      ]
     },
     "return-to-a-phantom-of-truth:did_not_escape_gaze": {
       "kind": "effects",
@@ -1585,6 +1493,45 @@
       ],
       "else": []
     },
+    "return-to-black-stars-rise:terrible_fate:text": {
+      "kind": "story",
+      "text": "You’ve met with a terrible fate, haven’t you?",
+      "bullets": []
+    },
+    "return-to-black-stars-rise:carcosa_merged": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "carcosaMerged",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-black-stars-rise:all_insane:text": {
+      "kind": "story",
+      "text": "Each investigator is driven <b>insane</b>.",
+      "bullets": []
+    },
+    "return-to-black-stars-rise:lose:text": {
+      "kind": "story",
+      "text": "The investigators lose the campaign.",
+      "bullets": []
+    },
+    "return-to-black-stars-rise:lose": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "ptc-epilogue"
+        },
+        {
+          "do": "end",
+          "result": "lose"
+        }
+      ]
+    },
     "return-to-black-stars-rise:opened_path_below": {
       "kind": "effects",
       "effects": [
@@ -1760,45 +1707,6 @@
         {
           "do": "addChaosToken",
           "token": "elderThing"
-        }
-      ]
-    },
-    "return-to-black-stars-rise:terrible_fate:text": {
-      "kind": "story",
-      "text": "You’ve met with a terrible fate, haven’t you?",
-      "bullets": []
-    },
-    "return-to-black-stars-rise:carcosa_merged": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "carcosaMerged",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "return-to-black-stars-rise:all_insane:text": {
-      "kind": "story",
-      "text": "Each investigator is driven <b>insane</b>.",
-      "bullets": []
-    },
-    "return-to-black-stars-rise:lose:text": {
-      "kind": "story",
-      "text": "The investigators lose the campaign.",
-      "bullets": []
-    },
-    "return-to-black-stars-rise:lose": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "skipScenario",
-          "scenario": "ptc-epilogue"
-        },
-        {
-          "do": "end",
-          "result": "lose"
         }
       ]
     },
@@ -1980,286 +1888,6 @@
         "return-to-black-stars-rise:check_missing_onyx_clasp"
       ],
       "else": []
-    },
-    "return-to-curtain-call:stranger_is_on_to_you:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, record <i>the Stranger is on to you</i>. Add The Man in the Pallid Mask weakness to the lead investigator’s deck (does not count towards deck size). For the remainder of this campaign, any time the bearer of The Man in the Pallid Mask leaves the campaign for any reason, choose a new investigator to become the bearer of The Man in the Pallid Mask weakness, and add it to that investigator’s deck.",
-      "bullets": []
-    },
-    "return-to-curtain-call:stranger_is_on_to_you": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "strangerIsOnToYou",
-          "section": "campaign_notes",
-          "value": true
-        },
-        {
-          "do": "earnCard",
-          "code": "03059",
-          "who": "lead"
-        }
-      ]
-    },
-    "return-to-curtain-call:chasing_the_stranger": {
-      "kind": "counter",
-      "text": "In your Campaign Log, under “Chasing the Stranger,” place one tally mark for each time The Man in the Pallid Mask was defeated during this scenario. For the remainder of the campaign, keep a running tally of the number of times The Man in the Pallid Mask is defeated during a game. Each tally will bring you one step closer to the truth.",
-      "min": 0,
-      "effects": [
-        {
-          "do": "count",
-          "id": "chasingTheStranger",
-          "section": "chasingTheStranger",
-          "op": "add",
-          "value": "input"
-        }
-      ],
-      "steps": []
-    },
-    "return-to-curtain-call:ask_which_mid_game_token": {
-      "kind": "chooseOne",
-      "text": "Which version of Act 2b was advanced?",
-      "choices": [
-        {
-          "id": "a_city_aflame",
-          "text": "A City Aflame",
-          "effects": [
-            {
-              "do": "addChaosToken",
-              "token": "cultist"
-            },
-            {
-              "do": "addChaosToken",
-              "token": "cultist"
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "the_path_is_mine",
-          "text": "The Path is Mine",
-          "effects": [
-            {
-              "do": "addChaosToken",
-              "token": "tablet"
-            },
-            {
-              "do": "addChaosToken",
-              "token": "tablet"
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "the_shores_of_hali",
-          "text": "The Shores of Hali",
-          "effects": [
-            {
-              "do": "addChaosToken",
-              "token": "elderThing"
-            },
-            {
-              "do": "addChaosToken",
-              "token": "elderThing"
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "alaran_mists",
-          "text": "Alaran Mists",
-          "effects": [
-            {
-              "do": "addChaosToken",
-              "token": "cultist"
-            },
-            {
-              "do": "addChaosToken",
-              "token": "tablet"
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "under_the_city",
-          "text": "Under the City",
-          "effects": [
-            {
-              "do": "addChaosToken",
-              "token": "cultist"
-            },
-            {
-              "do": "addChaosToken",
-              "token": "elderThing"
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "here_is_my_reply",
-          "text": "Here Is My Reply",
-          "effects": [
-            {
-              "do": "addChaosToken",
-              "token": "tablet"
-            },
-            {
-              "do": "addChaosToken",
-              "token": "elderThing"
-            }
-          ],
-          "steps": []
-        }
-      ]
-    },
-    "return-to-curtain-call:ask_mid_game_tokens": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "yes",
-          "text": "While playing the scenario, were you instructed to add any tokens to the chaos bag?",
-          "effects": [],
-          "steps": [
-            "return-to-curtain-call:ask_which_mid_game_token"
-          ]
-        }
-      ]
-    },
-    "return-to-curtain-call:check_ask_mid_game_tokens": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "ccaAddChaosToken",
-        "section": "hidden"
-      },
-      "then": [],
-      "else": [
-        "return-to-curtain-call:ask_mid_game_tokens"
-      ]
-    },
-    "return-to-curtain-call:maybe_ask_mid_game_tokens": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "campaign_data",
-        "take": true
-      },
-      "then": [
-        "return-to-curtain-call:check_ask_mid_game_tokens"
-      ],
-      "else": []
-    },
-    "return-to-curtain-call:earn_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 0,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "return-to-curtain-call:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "return-to-curtain-call:police_unhelpful:text": {
-      "kind": "story",
-      "text": "Did you really think the police would help you?",
-      "bullets": []
-    },
-    "return-to-curtain-call:tried_to_warn_police:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, record that <i>you tried to warn the police</i>. Mark one <b>Conviction</b> in your Campaign Log.",
-      "bullets": []
-    },
-    "return-to-curtain-call:tried_to_warn_police": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "triedToWarnPolice",
-          "section": "campaign_notes",
-          "value": true
-        },
-        {
-          "do": "count",
-          "id": "conviction",
-          "section": "conviction",
-          "op": "add",
-          "value": 1
-        }
-      ]
-    },
-    "return-to-curtain-call:police_are_suspicious": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "policeAreSuspicious",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "return-to-curtain-call:stole_from_box_office": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "steal",
-          "text": "Did anyone “steal from the box office?”",
-          "effects": [],
-          "steps": [
-            "return-to-curtain-call:police_are_suspicious"
-          ]
-        }
-      ]
-    },
-    "return-to-curtain-call:chasing_the_stranger_2:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, under “Chasing the Stranger,” place two tally marks. For the remainder of the campaign, keep a running tally of the number of times The Man in the Pallid Mask is defeated during a game. Each tally will bring you one step closer to the truth.",
-      "bullets": []
-    },
-    "return-to-curtain-call:chasing_the_stranger_2": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "count",
-          "id": "chasingTheStranger",
-          "section": "chasingTheStranger",
-          "op": "add",
-          "value": 2
-        }
-      ]
-    },
-    "return-to-curtain-call:wise_not_to_warn:text": {
-      "kind": "story",
-      "text": "Do you think it was wise not to warn anyone?",
-      "bullets": []
-    },
-    "return-to-curtain-call:chose_not_to_warn_police:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, record that <i>you chose not to go to the police</i>. Mark one <b>Doubt</b> in your Campaign Log.",
-      "bullets": []
-    },
-    "return-to-curtain-call:chose_not_to_warn_police": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "choseNotToWarnPolice",
-          "section": "campaign_notes",
-          "value": true
-        },
-        {
-          "do": "count",
-          "id": "doubt",
-          "section": "doubt",
-          "op": "add",
-          "value": 1
-        }
-      ]
     },
     "return-to-dim-carcosa:prevented_hasturs_escape": {
       "kind": "effects",
@@ -2507,40 +2135,23 @@
         "return-to-dim-carcosa:transfer_mitpm"
       ]
     },
-    "return-to-echoes-of-the-past:took_onyx_clasp:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, record that <i>you took the onyx clasp</i>. Mark one <b>Conviction</b> in your Campaign Log. For the remainder of the campaign, one investigator must include the Clasp of Black Onyx weakness in their deck. This card does not count toward that investigator’s deck size.",
-      "bullets": []
-    },
-    "return-to-echoes-of-the-past:took_onyx_clasp": {
+    "return-to-echoes-of-the-past:followers_of_sign_found_way": {
       "kind": "effects",
       "effects": [
         {
           "do": "record",
-          "key": "tookOnyxClasp",
+          "key": "followersOfSignFoundWay",
           "section": "campaign_notes",
           "value": true
-        },
-        {
-          "do": "count",
-          "id": "conviction",
-          "section": "conviction",
-          "op": "add",
-          "value": 1
-        },
-        {
-          "do": "earnCard",
-          "code": "03142",
-          "who": "choice"
         }
       ]
     },
-    "return-to-echoes-of-the-past:earn_xp": {
+    "return-to-echoes-of-the-past:earn_1_xp": {
       "kind": "effects",
       "effects": [
         {
           "do": "xp",
-          "bonus": 0,
+          "bonus": 1,
           "who": "each",
           "victory": true
         }
@@ -2588,6 +2199,94 @@
         "return-to-echoes-of-the-past:prompt_sebastien_moreau"
       ]
     },
+    "return-to-echoes-of-the-past:add_mixed_tokens:text": {
+      "kind": "story",
+      "text": "Remove all [cultist], [tablet], and [elder_thing] tokens from the chaos bag. Then, add 1 [cultist] token, 1 [tablet] token, and 1 [elder_thing] token to the chaos bag.",
+      "bullets": []
+    },
+    "return-to-echoes-of-the-past:add_mixed_tokens": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "elderThing"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "elderThing"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        }
+      ]
+    },
+    "return-to-echoes-of-the-past:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "return-to-echoes-of-the-past:took_onyx_clasp:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>you took the onyx clasp</i>. Mark one <b>Conviction</b> in your Campaign Log. For the remainder of the campaign, one investigator must include the Clasp of Black Onyx weakness in their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "return-to-echoes-of-the-past:took_onyx_clasp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "tookOnyxClasp",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "count",
+          "id": "conviction",
+          "section": "conviction",
+          "op": "add",
+          "value": 1
+        },
+        {
+          "do": "earnCard",
+          "code": "03142",
+          "who": "choice"
+        }
+      ]
+    },
+    "return-to-echoes-of-the-past:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
     "return-to-echoes-of-the-past:add_cultists:text": {
       "kind": "story",
       "text": "Remove all [cultist], [tablet], and [elder_thing] tokens from the chaos bag. Then, add 2 [cultist] tokens to the chaos bag.",
@@ -2629,9 +2328,6 @@
           "token": "cultist"
         }
       ]
-    },
-    "return-to-echoes-of-the-past:upgradeDecks": {
-      "kind": "upgradeDecks"
     },
     "return-to-echoes-of-the-past:left_onyx_clasp:text": {
       "kind": "story",
@@ -2761,74 +2457,6 @@
         }
       ]
     },
-    "return-to-echoes-of-the-past:followers_of_sign_found_way": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "followersOfSignFoundWay",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "return-to-echoes-of-the-past:earn_1_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 1,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "return-to-echoes-of-the-past:add_mixed_tokens:text": {
-      "kind": "story",
-      "text": "Remove all [cultist], [tablet], and [elder_thing] tokens from the chaos bag. Then, add 1 [cultist] token, 1 [tablet] token, and 1 [elder_thing] token to the chaos bag.",
-      "bullets": []
-    },
-    "return-to-echoes-of-the-past:add_mixed_tokens": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "removeChaosToken",
-          "token": "cultist"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "cultist"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "tablet"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "tablet"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "elderThing"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "elderThing"
-        },
-        {
-          "do": "addChaosToken",
-          "token": "cultist"
-        },
-        {
-          "do": "addChaosToken",
-          "token": "tablet"
-        },
-        {
-          "do": "addChaosToken",
-          "token": "elderThing"
-        }
-      ]
-    },
     "return-to-echoes-of-the-past:transfer_mitpm:text": {
       "kind": "story",
       "text": "Because the original bearer of The Man in the Pallid Mask weakness is not playing this scenario, another investigator must become the bearer.",
@@ -2859,240 +2487,6 @@
       "else": [
         "return-to-echoes-of-the-past:transfer_mitpm:text",
         "return-to-echoes-of-the-past:transfer_mitpm"
-      ]
-    },
-    "return-to-the-last-king:vips_interviewed": {
-      "kind": "cardChoice",
-      "text": "In your Campaign Log, under “VIPs Interviewed,” record the name of each character you “interviewed.”",
-      "codes": [
-        "03076a",
-        "03077",
-        "03078",
-        "03079",
-        "03080"
-      ],
-      "min": 1,
-      "max": 1,
-      "effects": [
-        {
-          "do": "listCards",
-          "id": "vipsInterviewed",
-          "section": "vipsInterviewed",
-          "codes": [
-            "$input"
-          ],
-          "remove": false
-        }
-      ],
-      "steps": []
-    },
-    "return-to-the-last-king:vips_slain_reprint": {
-      "kind": "cardChoice",
-      "text": "In your Campaign Log, under “VIPs Slain,” record the name of each unique [[Possessed]] or [[Lunatic]] enemy in the victory display.",
-      "codes": [
-        "03065b",
-        "03066b",
-        "03067b",
-        "03068b",
-        "03069b",
-        "52023"
-      ],
-      "min": 1,
-      "max": 1,
-      "effects": [
-        {
-          "do": "listCards",
-          "id": "vipsSlain",
-          "section": "vipsSlain",
-          "codes": [
-            "$input"
-          ],
-          "remove": false
-        }
-      ],
-      "steps": []
-    },
-    "return-to-the-last-king:vips_slain": {
-      "kind": "cardChoice",
-      "text": "In your Campaign Log, under “VIPs Slain,” record the name of each unique [[Lunatic]] enemy in the victory display.",
-      "codes": [
-        "03065b",
-        "03066b",
-        "03067b",
-        "03068b",
-        "03069b",
-        "52023"
-      ],
-      "min": 1,
-      "max": 1,
-      "effects": [
-        {
-          "do": "listCards",
-          "id": "vipsSlain",
-          "section": "vipsSlain",
-          "codes": [
-            "$input"
-          ],
-          "remove": false
-        }
-      ],
-      "steps": []
-    },
-    "return-to-the-last-king:check_vips_slain": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "reprintLanguage",
-        "section": "hidden"
-      },
-      "then": [
-        "return-to-the-last-king:vips_slain_reprint"
-      ],
-      "else": [
-        "return-to-the-last-king:vips_slain"
-      ]
-    },
-    "return-to-the-last-king:earn_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 0,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "return-to-the-last-king:earn_clue_xp": {
-      "kind": "unsupported",
-      "name": "investigator_counter",
-      "text": "For every 2 clues that were on the act deck when the game ended, choose an investigator to earn 1 additional experience point. Experience from this reward must be divided as evenly among the investigators as possible.",
-      "effects": [],
-      "steps": []
-    },
-    "return-to-the-last-king:adjust_chaos_tokens:text": {
-      "kind": "story",
-      "text": "Remove all [cultist], [tablet], and [elder_thing] tokens from the chaos bag. Then, add 1 [cultist] token, 1 [tablet] token, and 1 [elder_thing] token to the chaos bag.",
-      "bullets": []
-    },
-    "return-to-the-last-king:adjust_chaos_tokens": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "removeChaosToken",
-          "token": "cultist"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "cultist"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "tablet"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "tablet"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "elderThing"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "elderThing"
-        },
-        {
-          "do": "addChaosToken",
-          "token": "cultist"
-        },
-        {
-          "do": "addChaosToken",
-          "token": "tablet"
-        },
-        {
-          "do": "addChaosToken",
-          "token": "elderThing"
-        }
-      ]
-    },
-    "return-to-the-last-king:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "return-to-the-last-king:skip_skeptics_reward:text": {
-      "kind": "story",
-      "text": "Skip <b>Interlude I: Reality's Shadow</b>.",
-      "bullets": []
-    },
-    "return-to-the-last-king:skip_skeptics_reward": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "skipScenario",
-          "scenario": "ptc-interlude1-reprint"
-        }
-      ]
-    },
-    "return-to-the-last-king:really_skip_lunacys_reward:text": {
-      "kind": "story",
-      "text": "Skip <b>Interlude I: Lunacy's Reward</b>.",
-      "bullets": []
-    },
-    "return-to-the-last-king:really_skip_lunacys_reward": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "skipScenario",
-          "scenario": "ptc-interlude1"
-        }
-      ]
-    },
-    "return-to-the-last-king:skip_lunacys_reward": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "reprintLanguage",
-        "section": "hidden"
-      },
-      "then": [
-        "return-to-the-last-king:skip_skeptics_reward:text",
-        "return-to-the-last-king:skip_skeptics_reward"
-      ],
-      "else": [
-        "return-to-the-last-king:really_skip_lunacys_reward:text",
-        "return-to-the-last-king:really_skip_lunacys_reward"
-      ]
-    },
-    "return-to-the-last-king:transfer_mitpm:text": {
-      "kind": "story",
-      "text": "Because the original bearer of The Man in the Pallid Mask weakness is not playing this scenario, another investigator must become the bearer.",
-      "bullets": []
-    },
-    "return-to-the-last-king:transfer_mitpm": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "removeCard",
-          "code": "03059"
-        },
-        {
-          "do": "earnCard",
-          "code": "03059",
-          "who": "choice"
-        }
-      ]
-    },
-    "return-to-the-last-king:check_for_mitpm": {
-      "kind": "branch",
-      "condition": {
-        "kind": "hasCard",
-        "card": "03059",
-        "inv": "any"
-      },
-      "then": [],
-      "else": [
-        "return-to-the-last-king:transfer_mitpm:text",
-        "return-to-the-last-king:transfer_mitpm"
       ]
     },
     "return-to-the-pallid-mask:ask_conviction_or_doubt_resolution": {
@@ -3138,9 +2532,19 @@
     "return-to-the-pallid-mask:maybe_ask_conviction_or_doubt": {
       "kind": "branch",
       "condition": {
-        "kind": "unsupported",
-        "name": "multi",
-        "take": false
+        "kind": "all",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "tpmConvictionOrDoubt",
+            "section": "hidden"
+          },
+          {
+            "kind": "unsupported",
+            "name": "version",
+            "take": true
+          }
+        ]
       },
       "then": [
         "return-to-the-pallid-mask:ask_conviction_or_doubt_resolution"
@@ -4020,22 +3424,221 @@
       ],
       "else": []
     },
-    "ptc-interlude1-reprint:reward_1": {
+    "ptc-epilogue:possessed": {
+      "kind": "story",
+      "text": "It has taken months of preparation, but you are finally ready to unveil your latest work to the world. Gathering financial investments was your first task, of course. That hadn’t taken too long given the connections you’d made during your stay in Paris. You have been assured that the cast assembled is the finest that money could afford, but still you strive to make everything perfect. It must be perfect. The story must be told, so that the world knows. You’ve heard the troupe whisper behind your back: the remarks about your bizarre passion, the concern about your piercing yellow eyes. It matters not to you. All you care about is the performance. The pronunciation of the words. The melody of Cassilda’s song. The design of the Stranger’s mask.\nThis would be the greatest performance of <u>The King in Yellow</u> ever.",
+      "bullets": []
+    },
+    "ptc-epilogue:check_epilogue": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "possessed",
+        "section": "hidden"
+      },
+      "then": [
+        "ptc-epilogue:possessed"
+      ],
+      "else": []
+    },
+    "ptc-interlude2:daniel_survived": {
+      "kind": "story",
+      "text": "You decide to lay low for some time in Ma’s Boarding House and hide Daniel from the authorities, although you’re unsure how long you’ll be able to stay in Arkham with an escaped asylum patient. Daniel is a loose cannon, dazed and unresponsive one moment, and screaming for his life the next. It takes several days for him to realize he’s no longer institutionalized, which for some reason makes him even more terrified. “He’s coming for me, he’s coming for me!” he rambles, sometimes for hours at a time. Finally, during an unusually warm and starry night, Daniel is calm enough to open up to you. “The King in Yellow, it’s not just a play,” he explains. “It’s a being named Hastur, and He’s already claimed me. But there’s still time for you. You are not yet possessed. You have yet to speak the Oath. Whatever you do, speak not his name. Do not give in.” You ask him about the strange events that have been happening across town, and of the cultists and creatures you’ve encountered. “They are trying to find Carcosa,” he says matter-of-factly. You recognize the name as the fictional city from the play, the one The King in Yellow rules over. “They want to release Hastur from His prison. But you!—You can open the way to Carcosa before they do! You can seal Hastur for good!” He grips you tightly as he rants. “Quickly, before the Stranger discovers our plan!”\nHours later, Daniel is incoherent and unresponsive once more. You take a long walk to ease your thoughts, mulling over this new information. You’re unsure what to make of his wild claims. Before you can make a decision about what to do next, you return to find the door to your room broken open. Daniel lies in a heap on the ground, his face colorless and body limp. Judging from the bruising around his neck, you surmise that he has been choked to death.",
+      "bullets": []
+    },
+    "ptc-interlude2:earn_2_xp:text": {
+      "kind": "story",
+      "text": "Each investigator earns 2 additional experience as they gain insight into the machinations of the Tattered King.",
+      "bullets": []
+    },
+    "ptc-interlude2:earn_2_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 2,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "ptc-interlude2:daniel_possessed": {
+      "kind": "story",
+      "text": "You decide to lay low for some time in Ma’s Boarding House, unsure whether news of the events at the asylum will get out to the general public. You take this time to make extensive notes of the events you’ve experienced thus far, including the brief dialogue between you and Daniel. He’d spoke of The King in Yellow as if it were an actual being, and even named it. “Hastur.” He’d rambled and muttered and screeched other phrases, as well. You doubt you’ll ever forget them. “He made us speak the Oath.” “The price was paid.” “They are opening the path to Carcosa.”\nOn the third night, you return to your room to find the door broken open. You enter cautiously, wondering if the police are onto you. Or worse, the Stranger. You are surprised to find the body of Daniel Chesterfield instead, lying on the ground with a pained, wide-eyed expression on his face. He is dead. His eyes are bloodshot and yellow, and he clutches a copy of The King in Yellow in his stiff hands. You pry the playbook from his deathly grasp and examine it. Daniel has scribbled notes in the margins of each page, mostly incomprehensible, but with a few lucid standouts. The first time the fictional city of Carcosa is mentioned, scrawled next to it Daniel has written:\n<center><fancy>[elder_sign]Carcosa is real</fancy></center>\n<center><fancy>Do not let them open the path</fancy></center>\nWhen Cassilda speaks of the tattered king, Daniel has written:\n<center><fancy>Hastur is the king in tatters</fancy></center>\n<center><fancy>locked in his prison in the stars</fancy></center>\n<center><fancy>seal him away and stop this madness!</fancy></center>\nYour mind swims with questions. How did he escape the asylum? How did he die? And why does he appear human to your eyes now? With little time to spare, you clean the room of your belongings and flee. Daniel’s words, which he begged you to heed, play out in your mind over and over again.",
+      "bullets": []
+    },
+    "ptc-interlude2:daniel_did_not_survive": {
+      "kind": "story",
+      "text": "You decide to lay low for some time in Ma’s Boarding House, unsure whether news of the events at the asylum will get out to the general public. You take this time to make extensive notes of the events you’ve experienced thus far, including the brief dialogue between you and Daniel. He’d spoke of The King in Yellow as if it were an actual being, and even named it. “Hastur.” He’d rambled and muttered and screeched other phrases, as well. You doubt you’ll ever forget them. “He made us speak the Oath.” “The price was paid.” “They are opening the path to Carcosa.” For hours, you think about Daniel’s warning to you, which he begged you to heed: “Do not speak His name.” His final moments play out in your mind over and over again.",
+      "bullets": []
+    },
+    "ptc-interlude2:daniel_choice": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "survived",
+          "text": "If an investigator resigned with the asset version of Daniel Chesterfield under their control.",
+          "effects": [],
+          "steps": [
+            "ptc-interlude2:daniel_survived",
+            "ptc-interlude2:earn_2_xp:text",
+            "ptc-interlude2:earn_2_xp"
+          ]
+        },
+        {
+          "id": "possessed",
+          "text": "If the enemy version of Daniel Chesterfield was in play when the scenario ended.",
+          "effects": [],
+          "steps": [
+            "ptc-interlude2:daniel_possessed"
+          ]
+        },
+        {
+          "id": "neither",
+          "text": "If neither of the above are true.",
+          "effects": [],
+          "steps": [
+            "ptc-interlude2:daniel_did_not_survive"
+          ]
+        }
+      ]
+    },
+    "ptc-interlude2:ignore_the_warning": {
+      "kind": "story",
+      "text": "For hours, you struggle with this insight into <u>The King in Yellow</u>. What is true? What is real? Only you can sort through this madness.",
+      "bullets": []
+    },
+    "ptc-interlude2:ignored_daniels_warning": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "ignoredDanielsWarning",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "ptc-interlude2:mark_2_doubt:text": {
+      "kind": "story",
+      "text": "Mark two <b>Doubt</b> in your Campaign Log.",
+      "bullets": []
+    },
+    "ptc-interlude2:mark_2_doubt": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "doubt",
+          "section": "doubt",
+          "op": "add",
+          "value": 2
+        }
+      ]
+    },
+    "ptc-interlude2:heed_the_warning": {
+      "kind": "story",
+      "text": "For hours, you struggle with this insight into <u>The King in Yellow</u>. What is true? What is real? Only you can sort through this madness.",
+      "bullets": []
+    },
+    "ptc-interlude2:heeded_daniels_warning": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "heededDanielsWarning",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "ptc-interlude2:mark_2_conviction:text": {
+      "kind": "story",
+      "text": "Mark two <b>Conviction</b> in your Campaign Log.",
+      "bullets": []
+    },
+    "ptc-interlude2:mark_2_conviction": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "conviction",
+          "section": "conviction",
+          "op": "add",
+          "value": 2
+        }
+      ]
+    },
+    "ptc-interlude2:earn_1_xp:text": {
+      "kind": "story",
+      "text": "Each investigator earns 1 additional experience as they gain insight into the machinations of the Tattered King.",
+      "bullets": []
+    },
+    "ptc-interlude2:earn_1_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "ptc-interlude2:forbidden_name:text": {
+      "kind": "story",
+      "text": "For the remainder of the campaign, any time an investigator speaks the name of HASTUR aloud during a scenario (or during the setup of a scenario), that investigator must immediately take 1 horror.",
+      "bullets": []
+    },
+    "ptc-interlude2:warning_choice": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "ignore",
+          "text": "<i>Possession? Oaths? There must be another explanation for all of this.</i>",
+          "effects": [],
+          "steps": [
+            "ptc-interlude2:ignore_the_warning",
+            "ptc-interlude2:ignored_daniels_warning",
+            "ptc-interlude2:mark_2_doubt:text",
+            "ptc-interlude2:mark_2_doubt"
+          ]
+        },
+        {
+          "id": "heed",
+          "text": "<i>We must heed Daniel’s warning. We must not speak the name of the King in Yellow.</i>",
+          "effects": [],
+          "steps": [
+            "ptc-interlude2:heed_the_warning",
+            "ptc-interlude2:heeded_daniels_warning",
+            "ptc-interlude2:mark_2_conviction:text",
+            "ptc-interlude2:mark_2_conviction",
+            "ptc-interlude2:earn_1_xp:text",
+            "ptc-interlude2:earn_1_xp",
+            "ptc-interlude2:forbidden_name:text"
+          ]
+        }
+      ]
+    },
+    "ptc-interlude2:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "ptc-interlude1:reward_1": {
       "kind": "story",
       "text": "The change in the atmosphere has you curious. What if it was all a trick of your mind? What if the hauntings that follow The King in Yellow are but transitory? The answers to all of your questions might lie inside. Cautiously, you open the front door to the manor once again. Reassuring jazz and the clamor of casual conversation grow louder as you step inside. The enticing smell of roasted pork wafts through the air. As you suspected, the signs of struggle and oddities you noticed before have vanished without explanation. Then, as you turn the corner into the dining room, you find the Stranger speaking with another man—tall, mustached, wearing a fine black suit, and holding a silver-handled cane. The Stranger turns to you, his gaze drills through your mind, and your vision swims with agony. Before you realize it, you are running as fast as you can, toppling through the front doorway in a haze of pain and disorientation. Without time to catch your breath, you race to your vehicle and speed away, hands trembling upon the steering wheel.",
       "bullets": []
     },
-    "ptc-interlude1-reprint:why_go_back:text": {
+    "ptc-interlude1:why_go_back:text": {
       "kind": "story",
       "text": "Why would you go back inside?",
       "bullets": []
     },
-    "ptc-interlude1-reprint:intruded_on_secret_meeting:text": {
+    "ptc-interlude1:intruded_on_secret_meeting:text": {
       "kind": "story",
       "text": "In your Campaign Log, record that <i>you intruded on a secret meeting</i>. Mark one <b>Doubt</b> in your Campaign Log.",
       "bullets": []
     },
-    "ptc-interlude1-reprint:intruded_on_secret_meeting": {
+    "ptc-interlude1:intruded_on_secret_meeting": {
       "kind": "effects",
       "effects": [
         {
@@ -4053,12 +3656,12 @@
         }
       ]
     },
-    "ptc-interlude1-reprint:add_elder_things:text": {
+    "ptc-interlude1:add_elder_things:text": {
       "kind": "story",
       "text": "Remove all [cultist], [tablet], and [elder_thing] tokens from the chaos bag. Then, add 2 [elder_thing] tokens to the chaos bag.",
       "bullets": []
     },
-    "ptc-interlude1-reprint:add_elder_things": {
+    "ptc-interlude1:add_elder_things": {
       "kind": "effects",
       "effects": [
         {
@@ -4095,17 +3698,17 @@
         }
       ]
     },
-    "ptc-interlude1-reprint:reward_2": {
+    "ptc-interlude1:reward_2": {
       "kind": "story",
       "text": "You can’t trust your senses. This is all a trick, an attempt to lure you back inside. You’re no safer now than you were before. Swallowing your fear, you set to work barricading the front door of the manor using several of the heavy stone benches lining the cobblestone path in the front yard. You hope it’s enough, but you aren’t willing to stick around to find out. As soon as you’re done, you head back to your vehicle and drive toward Southside, where you hope to find answers.",
       "bullets": []
     },
-    "ptc-interlude1-reprint:door_wont_stop_them:text": {
+    "ptc-interlude1:door_wont_stop_them:text": {
       "kind": "story",
       "text": "That door isn't going to stop them.",
       "bullets": []
     },
-    "ptc-interlude1-reprint:fled_dinner_party": {
+    "ptc-interlude1:fled_dinner_party": {
       "kind": "effects",
       "effects": [
         {
@@ -4116,12 +3719,12 @@
         }
       ]
     },
-    "ptc-interlude1-reprint:add_tablets:text": {
+    "ptc-interlude1:add_tablets:text": {
       "kind": "story",
       "text": "Remove all [cultist], [tablet], and [elder_thing] tokens from the chaos bag. Then, add 2 [tablet] tokens to the chaos bag.",
       "bullets": []
     },
-    "ptc-interlude1-reprint:add_tablets": {
+    "ptc-interlude1:add_tablets": {
       "kind": "effects",
       "effects": [
         {
@@ -4158,22 +3761,22 @@
         }
       ]
     },
-    "ptc-interlude1-reprint:reward_3": {
+    "ptc-interlude1:reward_3": {
       "kind": "story",
       "text": "You dare not risk stepping back inside that madhouse. But you can’t let the monstrosities run amok, either. You root through the open garage for a few supplies, finding an old hose, an empty gasoline canister, and some matches. Knowing what you must do, you first siphon some gas from Mrs. Dumaine’s Oakland 6-54A. You spread the gasoline across the front porch, inside the garage, and around the manor’s outer walls. From there, all it takes is several matches to start the blaze. You watch from the front yard as the manor is eventually consumed by the flames. The sounds of crackling fire and snapping wood and the screeching of dying horrors fills the street. Satisfied, you head back to your vehicle and tear off toward Southside, full of grim determination.",
       "bullets": []
     },
-    "ptc-interlude1-reprint:did_what_had_to_be_done:text": {
+    "ptc-interlude1:did_what_had_to_be_done:text": {
       "kind": "story",
       "text": "You did what had to be done… Right?",
       "bullets": []
     },
-    "ptc-interlude1-reprint:slayed_the_monsters:text": {
+    "ptc-interlude1:slayed_the_monsters:text": {
       "kind": "story",
       "text": "In your Campaign Log, record that <i>you slayed the monsters at the dinner party</i>. Mark one <b>Conviction</b> in your Campaign Log.",
       "bullets": []
     },
-    "ptc-interlude1-reprint:slayed_the_monsters": {
+    "ptc-interlude1:slayed_the_monsters": {
       "kind": "effects",
       "effects": [
         {
@@ -4191,7 +3794,7 @@
         }
       ]
     },
-    "ptc-interlude1-reprint:maybe_slay_constance:no:fx": {
+    "ptc-interlude1:maybe_slay_constance:no:fx": {
       "kind": "effects",
       "effects": [
         {
@@ -4202,7 +3805,7 @@
         }
       ]
     },
-    "ptc-interlude1-reprint:maybe_slay_constance": {
+    "ptc-interlude1:maybe_slay_constance": {
       "kind": "branch",
       "condition": {
         "kind": "logCards",
@@ -4211,10 +3814,10 @@
       },
       "then": [],
       "else": [
-        "ptc-interlude1-reprint:maybe_slay_constance:no:fx"
+        "ptc-interlude1:maybe_slay_constance:no:fx"
       ]
     },
-    "ptc-interlude1-reprint:maybe_slay_jordan:no:fx": {
+    "ptc-interlude1:maybe_slay_jordan:no:fx": {
       "kind": "effects",
       "effects": [
         {
@@ -4225,7 +3828,7 @@
         }
       ]
     },
-    "ptc-interlude1-reprint:maybe_slay_jordan": {
+    "ptc-interlude1:maybe_slay_jordan": {
       "kind": "branch",
       "condition": {
         "kind": "logCards",
@@ -4234,10 +3837,10 @@
       },
       "then": [],
       "else": [
-        "ptc-interlude1-reprint:maybe_slay_jordan:no:fx"
+        "ptc-interlude1:maybe_slay_jordan:no:fx"
       ]
     },
-    "ptc-interlude1-reprint:maybe_slay_haruko:no:fx": {
+    "ptc-interlude1:maybe_slay_haruko:no:fx": {
       "kind": "effects",
       "effects": [
         {
@@ -4248,7 +3851,7 @@
         }
       ]
     },
-    "ptc-interlude1-reprint:maybe_slay_haruko": {
+    "ptc-interlude1:maybe_slay_haruko": {
       "kind": "branch",
       "condition": {
         "kind": "logCards",
@@ -4257,10 +3860,10 @@
       },
       "then": [],
       "else": [
-        "ptc-interlude1-reprint:maybe_slay_haruko:no:fx"
+        "ptc-interlude1:maybe_slay_haruko:no:fx"
       ]
     },
-    "ptc-interlude1-reprint:maybe_slay_sebastien:no:fx": {
+    "ptc-interlude1:maybe_slay_sebastien:no:fx": {
       "kind": "effects",
       "effects": [
         {
@@ -4271,7 +3874,7 @@
         }
       ]
     },
-    "ptc-interlude1-reprint:maybe_slay_sebastien": {
+    "ptc-interlude1:maybe_slay_sebastien": {
       "kind": "branch",
       "condition": {
         "kind": "logCards",
@@ -4280,10 +3883,10 @@
       },
       "then": [],
       "else": [
-        "ptc-interlude1-reprint:maybe_slay_sebastien:no:fx"
+        "ptc-interlude1:maybe_slay_sebastien:no:fx"
       ]
     },
-    "ptc-interlude1-reprint:maybe_slay_ashleigh:no:fx": {
+    "ptc-interlude1:maybe_slay_ashleigh:no:fx": {
       "kind": "effects",
       "effects": [
         {
@@ -4294,7 +3897,7 @@
         }
       ]
     },
-    "ptc-interlude1-reprint:maybe_slay_ashleigh": {
+    "ptc-interlude1:maybe_slay_ashleigh": {
       "kind": "branch",
       "condition": {
         "kind": "logCards",
@@ -4303,15 +3906,15 @@
       },
       "then": [],
       "else": [
-        "ptc-interlude1-reprint:maybe_slay_ashleigh:no:fx"
+        "ptc-interlude1:maybe_slay_ashleigh:no:fx"
       ]
     },
-    "ptc-interlude1-reprint:add_cultists:text": {
+    "ptc-interlude1:add_cultists:text": {
       "kind": "story",
       "text": "Remove all [cultist], [tablet], and [elder_thing] tokens from the chaos bag. Then, add 2 [cultist] tokens to the chaos bag.",
       "bullets": []
     },
-    "ptc-interlude1-reprint:add_cultists": {
+    "ptc-interlude1:add_cultists": {
       "kind": "effects",
       "effects": [
         {
@@ -4348,7 +3951,7 @@
         }
       ]
     },
-    "ptc-interlude1-reprint:house_choice": {
+    "ptc-interlude1:house_choice": {
       "kind": "chooseOne",
       "choices": [
         {
@@ -4356,12 +3959,12 @@
           "text": "<i>Things seem to have calmed down. Perhaps we should go back inside and investigate further.</i>",
           "effects": [],
           "steps": [
-            "ptc-interlude1-reprint:reward_1",
-            "ptc-interlude1-reprint:why_go_back:text",
-            "ptc-interlude1-reprint:intruded_on_secret_meeting:text",
-            "ptc-interlude1-reprint:intruded_on_secret_meeting",
-            "ptc-interlude1-reprint:add_elder_things:text",
-            "ptc-interlude1-reprint:add_elder_things"
+            "ptc-interlude1:reward_1",
+            "ptc-interlude1:why_go_back:text",
+            "ptc-interlude1:intruded_on_secret_meeting:text",
+            "ptc-interlude1:intruded_on_secret_meeting",
+            "ptc-interlude1:add_elder_things:text",
+            "ptc-interlude1:add_elder_things"
           ]
         },
         {
@@ -4369,11 +3972,11 @@
           "text": "<i>I don’t trust this place one bit. Let’s block the door and get the hell out of here!</i>",
           "effects": [],
           "steps": [
-            "ptc-interlude1-reprint:reward_2",
-            "ptc-interlude1-reprint:door_wont_stop_them:text",
-            "ptc-interlude1-reprint:fled_dinner_party",
-            "ptc-interlude1-reprint:add_tablets:text",
-            "ptc-interlude1-reprint:add_tablets"
+            "ptc-interlude1:reward_2",
+            "ptc-interlude1:door_wont_stop_them:text",
+            "ptc-interlude1:fled_dinner_party",
+            "ptc-interlude1:add_tablets:text",
+            "ptc-interlude1:add_tablets"
           ]
         },
         {
@@ -4381,23 +3984,28 @@
           "text": "<i>If these people are allowed to live, these horrors will only repeat themselves. We have to put an end to this. We have to <b>kill them.</b></i>",
           "effects": [],
           "steps": [
-            "ptc-interlude1-reprint:reward_3",
-            "ptc-interlude1-reprint:did_what_had_to_be_done:text",
-            "ptc-interlude1-reprint:slayed_the_monsters:text",
-            "ptc-interlude1-reprint:slayed_the_monsters",
-            "ptc-interlude1-reprint:maybe_slay_constance",
-            "ptc-interlude1-reprint:maybe_slay_jordan",
-            "ptc-interlude1-reprint:maybe_slay_haruko",
-            "ptc-interlude1-reprint:maybe_slay_sebastien",
-            "ptc-interlude1-reprint:maybe_slay_ashleigh",
-            "ptc-interlude1-reprint:add_cultists:text",
-            "ptc-interlude1-reprint:add_cultists"
+            "ptc-interlude1:reward_3",
+            "ptc-interlude1:did_what_had_to_be_done:text",
+            "ptc-interlude1:slayed_the_monsters:text",
+            "ptc-interlude1:slayed_the_monsters",
+            "ptc-interlude1:maybe_slay_constance",
+            "ptc-interlude1:maybe_slay_jordan",
+            "ptc-interlude1:maybe_slay_haruko",
+            "ptc-interlude1:maybe_slay_sebastien",
+            "ptc-interlude1:maybe_slay_ashleigh",
+            "ptc-interlude1:add_cultists:text",
+            "ptc-interlude1:add_cultists"
           ]
         }
       ]
     },
-    "ptc-interlude1-reprint:upgradeDecks": {
+    "ptc-interlude1:upgradeDecks": {
       "kind": "upgradeDecks"
+    },
+    "ptc-prologue:intro": {
+      "kind": "story",
+      "text": "You turn over the folded program in your hand, reading it for what seems like the hundredth time. “Miskatonic Playhouse presents: The King in Yellow,” it reads. “A special one-night engagement at Arkham’s very own Ward Theatre. An irresistible drama in two acts. Production staged and directed by Nigel Engram.” The cast is a small ensemble, with one unattributed credit at the end: “The Stranger.”\nTo have such a highly anticipated play come to Arkham all the way from Paris is a noteworthy event, even if it is just for one night. For weeks leading up to the show, it was the talk of the town. It seemed so unassuming…and yet, you have evidence something sinister is at work. It started with the disappearance of one of the stagehands at the theatre—a boy of only seventeen who missed rehearsal one night and was never seen again. Then, less than two weeks before the performance, there was the musician whose corpse was found with a gun in its mouth. Perhaps most chilling was the crazed man the coppers had picked up in Independence Square who had been ranting and raving about the “King’s return.” He was brought to Arkham Asylum, and you were surprised to discover that he was not alone in his delusions.\nFinding these events suspicious, you and your companions have delved deeper into the matter. Although no connection can be proven, these weren’t the only strange events surrounding the up-and-coming play. Instances of suicide and madness have followed in its wake, and you are determined to discover why.\nThe lights in the auditorium dim, and a spotlight shines on the stage. What unfolds is not quite what you expected. Slow-paced and monotonous, the first act of The King in Yellow is a tedious bore. The setting and characters are compelling, but the meandering and nonsensical story does little to entertain or inform. You begin to wonder whether the dreadful events surrounding The King in Yellow aren’t connected, after all. Perhaps it was just your overactive imagination; how could such a trivial and unassuming show cause such pandemonium? You are surprised when the first act closes without any rising action or revelation. The lights rise for the intermission, and you consider leaving early, stifling a yawn. Before you are able to decide, however, you find yourself drifting…drifting…to sleep.",
+      "bullets": []
     }
   }
 }

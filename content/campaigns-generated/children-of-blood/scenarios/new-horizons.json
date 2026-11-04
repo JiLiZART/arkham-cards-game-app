@@ -171,18 +171,6 @@
           "who": "each"
         }
       ]
-    },
-    "R5": {
-      "title": "Resolution 5",
-      "text": "You regroup with Detective Reynolds, ready to investigate this Howard Wilkes, and make him answer for what’s been happening at his facility.",
-      "effects": [
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 0,
-          "who": "each"
-        }
-      ]
     }
   },
   "i18nId": "new_horizons",

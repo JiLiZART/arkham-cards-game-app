@@ -67,6 +67,9 @@ export function checkFlow(db: ContentDb, campaignId: string): ContentError[] {
   });
   // a scenario outside the guide's order is played when a step names it; one nothing names is never played
   const named = namedScenarios(flow);
+  for (const id of Object.keys(flow.interludes))
+    if (!flow.order.includes(id) && !named.has(id))
+      err(`interludes.${id}`, `interlude ${id} is in neither the order nor a step`);
   for (const id of c.scenarios)
     if (!flow.order.includes(id) && !named.has(id))
       err("order", `scenario ${id} is not in the order and no step sends play to it`);

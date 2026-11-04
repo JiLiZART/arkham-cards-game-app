@@ -159,11 +159,42 @@
       "act": "03064"
     },
     {
+      "scenario": "ptc-interlude1",
+      "name": "Lunacy's Reward",
+      "interlude": true
+    },
+    {
+      "scenario": "return-to-echoes-of-the-past",
+      "name": "Return to Echoes of the Past",
+      "code": "03120",
+      "agenda": "03121",
+      "act": "03124"
+    },
+    {
+      "scenario": "return-to-the-unspeakable-oath",
+      "name": "Return to The Unspeakable Oath",
+      "code": "03159",
+      "agenda": "03160",
+      "act": "52035"
+    },
+    {
+      "scenario": "ptc-interlude2",
+      "name": "Lost Soul",
+      "interlude": true
+    },
+    {
       "scenario": "return-to-a-phantom-of-truth",
       "name": "Return to A Phantom of Truth",
       "code": "03200",
       "agenda": "03201",
       "act": "03204"
+    },
+    {
+      "scenario": "return-to-the-pallid-mask",
+      "name": "Return to The Pallid Mask",
+      "code": "03240",
+      "agenda": "03241",
+      "act": "03243"
     },
     {
       "scenario": "return-to-black-stars-rise",
@@ -180,25 +211,9 @@
       "act": "03320"
     },
     {
-      "scenario": "return-to-echoes-of-the-past",
-      "name": "Return to Echoes of the Past",
-      "code": "03120",
-      "agenda": "03121",
-      "act": "03124"
-    },
-    {
-      "scenario": "return-to-the-pallid-mask",
-      "name": "Return to The Pallid Mask",
-      "code": "03240",
-      "agenda": "03241",
-      "act": "03243"
-    },
-    {
-      "scenario": "return-to-the-unspeakable-oath",
-      "name": "Return to The Unspeakable Oath",
-      "code": "03159",
-      "agenda": "03160",
-      "act": "52035"
+      "scenario": "ptc-epilogue",
+      "name": "Epilogue",
+      "interlude": true
     }
   ]
 }

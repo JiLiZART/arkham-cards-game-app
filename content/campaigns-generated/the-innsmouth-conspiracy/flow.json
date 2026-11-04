@@ -87,159 +87,19 @@
     }
   },
   "resolutions": {
-    "a-light-in-the-fog": {
-      "R1": [
-        "a-light-in-the-fog:maybe_return_deep_one:text",
-        "a-light-in-the-fog:ask_moon_room_resigned",
-        "a-light-in-the-fog:ask_black_key_on_act",
-        "a-light-in-the-fog:ask_red_key_on_act",
-        "a-light-in-the-fog:ask_story_relics:text",
-        "a-light-in-the-fog:maybe_ask_idol",
-        "a-light-in-the-fog:maybe_ask_mantle",
-        "a-light-in-the-fog:maybe_ask_headdress",
-        "a-light-in-the-fog:maybe_upgrade_decks"
-      ],
-      "R2": [
-        "a-light-in-the-fog:maybe_return_deep_one:text",
-        "a-light-in-the-fog:ask_black_key_on_act",
-        "a-light-in-the-fog:ask_red_key_on_act",
-        "a-light-in-the-fog:ask_story_relics:text",
-        "a-light-in-the-fog:maybe_ask_idol",
-        "a-light-in-the-fog:maybe_ask_mantle",
-        "a-light-in-the-fog:maybe_ask_headdress",
-        "a-light-in-the-fog:maybe_upgrade_decks"
-      ],
-      "R3": [
-        "a-light-in-the-fog:all_killed:text",
-        "a-light-in-the-fog:all_killed",
-        "a-light-in-the-fog:lose_campaign:text",
-        "a-light-in-the-fog:lose_campaign"
-      ],
-      "R4": [
-        "a-light-in-the-fog:maybe_return_deep_one:text",
-        "a-light-in-the-fog:ask_black_key_on_act",
-        "a-light-in-the-fog:ask_red_key_on_act",
-        "a-light-in-the-fog:ask_story_relics:text",
-        "a-light-in-the-fog:maybe_ask_idol",
-        "a-light-in-the-fog:maybe_ask_mantle",
-        "a-light-in-the-fog:maybe_ask_headdress",
-        "a-light-in-the-fog:maybe_upgrade_decks"
-      ]
-    },
-    "devil-reef": {
-      "none": [],
-      "R1": [
-        "devil-reef:maybe_ask_tide_has_grown_stronger",
-        "devil-reef:ask_terror_of_devil_reef",
-        "devil-reef:proceed_keys:text"
-      ]
-    },
-    "horror-in-high-gear": {
-      "none": [
-        "horror-in-high-gear:reached_falcon_point_after_sunrise",
-        "horror-in-high-gear:earn_xp",
-        "horror-in-high-gear:upgradeDecks"
-      ],
-      "R1": [
-        "horror-in-high-gear:reached_falcon_point_before_sunrise",
-        "horror-in-high-gear:earn_xp",
-        "horror-in-high-gear:upgradeDecks"
-      ]
-    },
-    "in-too-deep": {
-      "R1": [
-        "in-too-deep:maybe_ask_consumed_by_rising_tide",
-        "in-too-deep:check_made_it_safely_to_their_vehicles",
-        "in-too-deep:maybe_upgrade_decks"
-      ]
-    },
-    "into-the-maelstrom": {
-      "none": [],
-      "R1": [
-        "into-the-maelstrom:escaped_yhanthlei",
-        "into-the-maelstrom:add_dagon_and_hydra_to_victory_display",
-        "into-the-maelstrom:2_physical_trauma:text",
-        "into-the-maelstrom:2_physical_trauma",
-        "into-the-maelstrom:check_shattering_the_alignment"
-      ],
-      "R2": [
-        "into-the-maelstrom:plot_of_the_deep_ones_was_thwarted",
-        "into-the-maelstrom:delayed_win:text",
-        "into-the-maelstrom:check_successful_conspiracy_4_5"
-      ],
-      "R3": [
-        "into-the-maelstrom:flood_has_begun",
-        "into-the-maelstrom:check_successful_conspiracy_6_7"
-      ],
-      "R4": [
-        "into-the-maelstrom:agent_harpers_mission_is_complete",
-        "into-the-maelstrom:3_bonus_xp:text",
-        "into-the-maelstrom:3_bonus_xp",
-        "into-the-maelstrom:upgradeDecks",
-        "into-the-maelstrom:win"
-      ],
-      "R5": [
-        "into-the-maelstrom:riches_of_the_deep_are_lost_forever",
-        "into-the-maelstrom:3_bonus_xp:text",
-        "into-the-maelstrom:3_bonus_xp",
-        "into-the-maelstrom:upgradeDecks",
-        "into-the-maelstrom:win"
-      ],
-      "R6": [
-        "into-the-maelstrom:agent_harpers_mission_is_complete_at_what_cost",
-        "into-the-maelstrom:2_mental_trauma:text",
-        "into-the-maelstrom:2_mental_trauma",
-        "into-the-maelstrom:skip_epilogue",
-        "into-the-maelstrom:upgradeDecks",
-        "into-the-maelstrom:win_maybe:text",
-        "into-the-maelstrom:win_maybe"
-      ],
-      "R7": [
-        "into-the-maelstrom:riches_of_the_deep_are_destroyed_at_what_cost",
-        "into-the-maelstrom:2_mental_trauma:text",
-        "into-the-maelstrom:2_mental_trauma",
-        "into-the-maelstrom:skip_epilogue",
-        "into-the-maelstrom:upgradeDecks",
-        "into-the-maelstrom:win_maybe:text",
-        "into-the-maelstrom:win_maybe"
-      ],
-      "R8": [
-        "into-the-maelstrom:deep_ones_have_flooded_the_earth",
-        "into-the-maelstrom:all_killed:text",
-        "into-the-maelstrom:all_killed",
-        "into-the-maelstrom:skip_epilogue",
-        "into-the-maelstrom:lose:text",
-        "into-the-maelstrom:lose"
-      ]
-    },
-    "the-lair-of-dagon": {
-      "none": [
-        "the-lair-of-dagon:dagon_has_awakened"
-      ],
-      "R1": [
-        "the-lair-of-dagon:maybe_ask_suspect_defeated",
-        "the-lair-of-dagon:ask_oceiros"
-      ],
-      "R2": [
-        "the-lair-of-dagon:add_elder_thing:text",
-        "the-lair-of-dagon:add_elder_thing"
-      ],
-      "R3": [
-        "the-lair-of-dagon:add_tablet:text",
-        "the-lair-of-dagon:add_tablet"
-      ],
-      "R4": [
-        "the-lair-of-dagon:add_cultist:text",
-        "the-lair-of-dagon:add_cultist"
-      ]
-    },
     "the-pit-of-despair": {
+      "none": [
+        "the-pit-of-despair:maybe_upgrade_decks"
+      ],
       "R1": [
         "the-pit-of-despair:maybe_upgrade_decks"
       ]
     },
     "the-vanishing-of-elina-harper": {
-      "none": [],
+      "none": [
+        "the-vanishing-of-elina-harper:maybe_return_xp:text",
+        "the-vanishing-of-elina-harper:mission_failed"
+      ],
       "R1": [
         "the-vanishing-of-elina-harper:maybe_return_xp:text",
         "the-vanishing-of-elina-harper:mission_failed"
@@ -267,6 +127,111 @@
       "R7": [
         "the-vanishing-of-elina-harper:maybe_return_xp:text",
         "the-vanishing-of-elina-harper:mission_succeeded"
+      ]
+    },
+    "in-too-deep": {
+      "none": [
+        "in-too-deep:ask_consumed_by_rising_tide",
+        "in-too-deep:maybe_ask_consumed_by_rising_tide",
+        "in-too-deep:check_made_it_safely_to_their_vehicles",
+        "in-too-deep:maybe_upgrade_decks"
+      ],
+      "R1": [
+        "in-too-deep:maybe_ask_consumed_by_rising_tide",
+        "in-too-deep:check_made_it_safely_to_their_vehicles",
+        "in-too-deep:maybe_upgrade_decks"
+      ]
+    },
+    "devil-reef": {
+      "none": [
+        "devil-reef:maybe_ask_tide_has_grown_stronger",
+        "devil-reef:ask_terror_of_devil_reef",
+        "devil-reef:proceed_keys:text"
+      ],
+      "R1": [
+        "devil-reef:maybe_ask_tide_has_grown_stronger",
+        "devil-reef:ask_terror_of_devil_reef",
+        "devil-reef:proceed_keys:text"
+      ]
+    },
+    "horror-in-high-gear": {
+      "none": [
+        "horror-in-high-gear:reached_falcon_point_after_sunrise",
+        "horror-in-high-gear:earn_xp",
+        "horror-in-high-gear:upgradeDecks"
+      ],
+      "R1": [
+        "horror-in-high-gear:reached_falcon_point_before_sunrise",
+        "horror-in-high-gear:earn_xp",
+        "horror-in-high-gear:upgradeDecks"
+      ]
+    },
+    "a-light-in-the-fog": {
+      "none": [
+        "a-light-in-the-fog:ask_final_agenda"
+      ],
+      "R1": [
+        "a-light-in-the-fog:maybe_return_deep_one:text",
+        "a-light-in-the-fog:ask_moon_room_resigned",
+        "a-light-in-the-fog:ask_black_key_on_act",
+        "a-light-in-the-fog:ask_red_key_on_act",
+        "a-light-in-the-fog:ask_story_relics:text",
+        "a-light-in-the-fog:maybe_ask_idol",
+        "a-light-in-the-fog:maybe_ask_mantle",
+        "a-light-in-the-fog:maybe_ask_headdress",
+        "a-light-in-the-fog:maybe_upgrade_decks"
+      ],
+      "R2": [
+        "a-light-in-the-fog:maybe_return_deep_one:text",
+        "a-light-in-the-fog:ask_black_key_on_act",
+        "a-light-in-the-fog:ask_red_key_on_act",
+        "a-light-in-the-fog:ask_story_relics:text",
+        "a-light-in-the-fog:maybe_ask_idol",
+        "a-light-in-the-fog:maybe_ask_mantle",
+        "a-light-in-the-fog:maybe_ask_headdress",
+        "a-light-in-the-fog:maybe_upgrade_decks"
+      ],
+      "R3": [
+        "a-light-in-the-fog:all_killed:text",
+        "a-light-in-the-fog:all_killed",
+        "a-light-in-the-fog:lose_campaign:text",
+        "a-light-in-the-fog:lose_campaign"
+      ]
+    },
+    "the-lair-of-dagon": {
+      "none": [
+        "the-lair-of-dagon:dagon_has_awakened",
+        "the-lair-of-dagon:maybe_ask_suspect_defeated",
+        "the-lair-of-dagon:ask_oceiros"
+      ],
+      "R1": [
+        "the-lair-of-dagon:maybe_ask_suspect_defeated",
+        "the-lair-of-dagon:ask_oceiros"
+      ]
+    },
+    "into-the-maelstrom": {
+      "none": [
+        "into-the-maelstrom:deep_ones_have_flooded_the_earth",
+        "into-the-maelstrom:all_killed:text",
+        "into-the-maelstrom:all_killed",
+        "into-the-maelstrom:skip_epilogue",
+        "into-the-maelstrom:lose:text",
+        "into-the-maelstrom:lose"
+      ],
+      "R1": [
+        "into-the-maelstrom:escaped_yhanthlei",
+        "into-the-maelstrom:add_dagon_and_hydra_to_victory_display",
+        "into-the-maelstrom:2_physical_trauma:text",
+        "into-the-maelstrom:2_physical_trauma",
+        "into-the-maelstrom:check_shattering_the_alignment"
+      ],
+      "R8": [
+        "into-the-maelstrom:deep_ones_have_flooded_the_earth",
+        "into-the-maelstrom:all_killed:text",
+        "into-the-maelstrom:all_killed",
+        "into-the-maelstrom:skip_epilogue",
+        "into-the-maelstrom:lose:text",
+        "into-the-maelstrom:lose"
       ]
     }
   },
@@ -365,17 +330,257 @@
       "text": "“It was a town of wide extent and dense construction, yet one with a portentous dearth of visible life.”\n–H. P. Lovecraft, “The Shadow Over Innsmouth”",
       "bullets": []
     },
-    "a-light-in-the-fog:maybe_return_deep_one:text": {
+    "the-pit-of-despair:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "the-pit-of-despair:maybe_upgrade_decks": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "version",
+        "take": true
+      },
+      "then": [
+        "the-pit-of-despair:upgradeDecks"
+      ],
+      "else": []
+    },
+    "the-vanishing-of-elina-harper:maybe_return_xp:text": {
       "kind": "story",
       "text": "dummy",
       "bullets": []
     },
-    "a-light-in-the-fog:ask_moon_room_resigned": {
-      "kind": "unsupported",
-      "name": "investigator_choice",
-      "text": "Which location did each investigator resign at?",
-      "effects": [],
-      "steps": []
+    "the-vanishing-of-elina-harper:mission_failed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "missionFailed",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-vanishing-of-elina-harper:mission_succeeded": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "missionSucceeded",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-vanishing-of-elina-harper:investigator_setup": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-vanishing-of-elina-harper:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "in-too-deep:ask_consumed_by_rising_tide": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Was <i>Innsmouth consumed by the rising tide</i>?",
+          "effects": [
+            {
+              "do": "record",
+              "key": "innsmouthWasConsumedByTheRisingTide",
+              "section": "campaign_notes",
+              "value": true
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "in-too-deep:maybe_ask_consumed_by_rising_tide": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "version",
+        "take": true
+      },
+      "then": [
+        "in-too-deep:ask_consumed_by_rising_tide"
+      ],
+      "else": []
+    },
+    "in-too-deep:vehicle_xp:text": {
+      "kind": "story",
+      "text": "Each investigator records 2 additional experience under \"Unspent Experience.\"",
+      "bullets": []
+    },
+    "in-too-deep:check_made_it_safely_to_their_vehicles": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "madeItSafelyToTheirVehicles",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "in-too-deep:vehicle_xp:text"
+      ],
+      "else": []
+    },
+    "in-too-deep:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "in-too-deep:maybe_upgrade_decks": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "version",
+        "take": true
+      },
+      "then": [
+        "in-too-deep:upgradeDecks"
+      ],
+      "else": []
+    },
+    "devil-reef:record_tide_has_grown_stronger": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "tideHasGrownStronger",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "devil-reef:ask_tide_has_grown_stronger": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "cheat",
+          "text": "Did you reach <b>Resolution 1</b> by advancing Agenda 2b?",
+          "effects": [],
+          "steps": [
+            "devil-reef:record_tide_has_grown_stronger"
+          ]
+        }
+      ]
+    },
+    "devil-reef:maybe_ask_tide_has_grown_stronger": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "devil-reef:ask_tide_has_grown_stronger"
+      ],
+      "else": []
+    },
+    "devil-reef:terror_of_devil_reef_is_still_alive": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "terrorOfDevilReefIsStillAlive",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "devil-reef:terror_of_devil_reef_is_dead": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "terrorOfDevilReefIsDead",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "devil-reef:ask_terror_of_devil_reef": {
+      "kind": "chooseOne",
+      "text": "Find the Terror of Devil Reef. Then choose one of the following options:",
+      "choices": [
+        {
+          "id": "agenda_1",
+          "text": "It was agenda 1a when the game ended.",
+          "effects": [],
+          "steps": [
+            "devil-reef:terror_of_devil_reef_is_still_alive"
+          ]
+        },
+        {
+          "id": "in_play",
+          "text": "The Terror of Devil Reef is in play.",
+          "effects": [],
+          "steps": [
+            "devil-reef:terror_of_devil_reef_is_still_alive"
+          ]
+        },
+        {
+          "id": "victory_display",
+          "text": "The Terror of Devil Reef is in the victory display.",
+          "effects": [],
+          "steps": [
+            "devil-reef:terror_of_devil_reef_is_dead"
+          ]
+        }
+      ]
+    },
+    "devil-reef:proceed_keys:text": {
+      "kind": "story",
+      "text": "Do not move the purple, black, or white keys from their current position just yet—the location of each of these keys will be important during <b>Interlude III: Beneath the Waves</b>.",
+      "bullets": []
+    },
+    "horror-in-high-gear:reached_falcon_point_after_sunrise": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "reachedFalconPointAfterSunrise",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "horror-in-high-gear:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "horror-in-high-gear:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "horror-in-high-gear:reached_falcon_point_before_sunrise": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "reachedFalconPointBeforeSunrise",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "a-light-in-the-fog:maybe_return_deep_one:text": {
+      "kind": "story",
+      "text": "dummy",
+      "bullets": []
     },
     "a-light-in-the-fog:ask_black_key_on_act": {
       "kind": "chooseOne",
@@ -512,7 +717,7 @@
       "kind": "branch",
       "condition": {
         "kind": "unsupported",
-        "name": "campaign_data",
+        "name": "version",
         "take": true
       },
       "then": [
@@ -549,6 +754,509 @@
         {
           "do": "end",
           "result": "lose"
+        }
+      ]
+    },
+    "a-light-in-the-fog:ask_final_agenda": {
+      "kind": "chooseOne",
+      "text": "What agenda was active when the scenario ended?",
+      "choices": [
+        {
+          "id": "agenda_1",
+          "text": "Agenda 1",
+          "effects": [],
+          "steps": [
+            "a-light-in-the-fog:maybe_return_deep_one:text",
+            "a-light-in-the-fog:ask_black_key_on_act",
+            "a-light-in-the-fog:ask_red_key_on_act",
+            "a-light-in-the-fog:ask_story_relics:text",
+            "a-light-in-the-fog:maybe_ask_idol",
+            "a-light-in-the-fog:maybe_ask_mantle",
+            "a-light-in-the-fog:maybe_ask_headdress",
+            "a-light-in-the-fog:maybe_upgrade_decks"
+          ]
+        },
+        {
+          "id": "agenda_2",
+          "text": "Agenda 2",
+          "effects": [],
+          "steps": [
+            "a-light-in-the-fog:maybe_return_deep_one:text",
+            "a-light-in-the-fog:ask_black_key_on_act",
+            "a-light-in-the-fog:ask_red_key_on_act",
+            "a-light-in-the-fog:ask_story_relics:text",
+            "a-light-in-the-fog:maybe_ask_idol",
+            "a-light-in-the-fog:maybe_ask_mantle",
+            "a-light-in-the-fog:maybe_ask_headdress",
+            "a-light-in-the-fog:maybe_upgrade_decks"
+          ]
+        },
+        {
+          "id": "agenda_3",
+          "text": "Agenda 3",
+          "effects": [],
+          "steps": [
+            "a-light-in-the-fog:maybe_return_deep_one:text",
+            "a-light-in-the-fog:ask_black_key_on_act",
+            "a-light-in-the-fog:ask_red_key_on_act",
+            "a-light-in-the-fog:ask_story_relics:text",
+            "a-light-in-the-fog:maybe_ask_idol",
+            "a-light-in-the-fog:maybe_ask_mantle",
+            "a-light-in-the-fog:maybe_ask_headdress",
+            "a-light-in-the-fog:maybe_upgrade_decks"
+          ]
+        },
+        {
+          "id": "agenda_4",
+          "text": "Agenda 4",
+          "effects": [],
+          "steps": [
+            "a-light-in-the-fog:all_killed:text",
+            "a-light-in-the-fog:all_killed",
+            "a-light-in-the-fog:lose_campaign:text",
+            "a-light-in-the-fog:lose_campaign"
+          ]
+        }
+      ]
+    },
+    "a-light-in-the-fog:ask_moon_room_resigned": {
+      "kind": "unsupported",
+      "name": "investigator_choice",
+      "text": "Which location did each investigator resign at?",
+      "effects": [],
+      "steps": []
+    },
+    "the-lair-of-dagon:dagon_has_awakened": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "dagonHasAwakened",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-lair-of-dagon:gatekeeper_has_been_defeated": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "gatekeeperHasBeenDefeated",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-lair-of-dagon:ask_suspect_defeated": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "suspect_defeated",
+          "text": "Is a [[Suspect]] enemy in the victory display?",
+          "effects": [],
+          "steps": [
+            "the-lair-of-dagon:gatekeeper_has_been_defeated"
+          ]
+        }
+      ]
+    },
+    "the-lair-of-dagon:maybe_ask_suspect_defeated": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "aJailbreak",
+        "section": "memoriesRecovered"
+      },
+      "then": [
+        "the-lair-of-dagon:ask_suspect_defeated"
+      ],
+      "else": []
+    },
+    "the-lair-of-dagon:add_elder_thing:text": {
+      "kind": "story",
+      "text": "Add 1 [elder_thing] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-lair-of-dagon:add_elder_thing": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        }
+      ]
+    },
+    "the-lair-of-dagon:add_tablet:text": {
+      "kind": "story",
+      "text": "Add 1 [tablet] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-lair-of-dagon:add_tablet": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        }
+      ]
+    },
+    "the-lair-of-dagon:add_cultist:text": {
+      "kind": "story",
+      "text": "Add 1 [cultist] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-lair-of-dagon:add_cultist": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        }
+      ]
+    },
+    "the-lair-of-dagon:ask_oceiros": {
+      "kind": "chooseOne",
+      "text": "The lead investigator must decide:",
+      "choices": [
+        {
+          "id": "nothing",
+          "text": "Tell Oceiros nothing.",
+          "effects": [],
+          "steps": [
+            "the-lair-of-dagon:add_elder_thing:text",
+            "the-lair-of-dagon:add_elder_thing"
+          ]
+        },
+        {
+          "id": "lying",
+          "text": "Lie to Oceiros.",
+          "effects": [],
+          "steps": [
+            "the-lair-of-dagon:add_tablet:text",
+            "the-lair-of-dagon:add_tablet"
+          ]
+        },
+        {
+          "id": "truth",
+          "text": "Tell Oceiros everything.",
+          "effects": [],
+          "steps": [
+            "the-lair-of-dagon:add_cultist:text",
+            "the-lair-of-dagon:add_cultist"
+          ]
+        }
+      ]
+    },
+    "into-the-maelstrom:deep_ones_have_flooded_the_earth": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "deepOnesHaveFloodedTheEarth",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "into-the-maelstrom:all_killed:text": {
+      "kind": "story",
+      "text": "Each investigator is <b>killed</b>.",
+      "bullets": []
+    },
+    "into-the-maelstrom:all_killed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "kill",
+          "who": "each"
+        }
+      ]
+    },
+    "into-the-maelstrom:skip_epilogue": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "tic-epilogue"
+        }
+      ]
+    },
+    "into-the-maelstrom:lose:text": {
+      "kind": "story",
+      "text": "The investigators lose the campaign.",
+      "bullets": []
+    },
+    "into-the-maelstrom:lose": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "lose"
+        }
+      ]
+    },
+    "into-the-maelstrom:escaped_yhanthlei": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "escapedYhanthlei",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "into-the-maelstrom:add_dagon_and_hydra_to_victory_display": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "into-the-maelstrom:2_physical_trauma:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 2 physical trauma from their ordeal beneath the waves.",
+      "bullets": []
+    },
+    "into-the-maelstrom:2_physical_trauma": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 2,
+          "mental": 0
+        }
+      ]
+    },
+    "into-the-maelstrom:plot_of_the_deep_ones_was_thwarted": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "plotOfTheDeepOnesWasThwarted",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "into-the-maelstrom:delayed_win:text": {
+      "kind": "story",
+      "text": "The investigators win the campaign!",
+      "bullets": []
+    },
+    "into-the-maelstrom:agent_harpers_mission_is_complete": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "agentHarpersMissionIsComplete",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "into-the-maelstrom:3_bonus_xp:text": {
+      "kind": "story",
+      "text": "Each investigator earns 3 bonus experience.",
+      "bullets": []
+    },
+    "into-the-maelstrom:3_bonus_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 3,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "into-the-maelstrom:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "into-the-maelstrom:win": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "win"
+        }
+      ]
+    },
+    "into-the-maelstrom:riches_of_the_deep_are_lost_forever": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "richesOfTheDeepAreLostForever",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "into-the-maelstrom:check_successful_conspiracy_4_5": {
+      "kind": "chooseOne",
+      "text": "Check if another act card is in the victory display:",
+      "choices": [
+        {
+          "id": "fulfilled",
+          "text": "Act 2b—\"Conspiracy Fulfilled\"",
+          "effects": [],
+          "steps": [
+            "into-the-maelstrom:agent_harpers_mission_is_complete",
+            "into-the-maelstrom:3_bonus_xp:text",
+            "into-the-maelstrom:3_bonus_xp",
+            "into-the-maelstrom:upgradeDecks",
+            "into-the-maelstrom:win"
+          ]
+        },
+        {
+          "id": "dismantled",
+          "text": "Act 2b—\"Conspiracy Dismantled\"",
+          "effects": [],
+          "steps": [
+            "into-the-maelstrom:riches_of_the_deep_are_lost_forever",
+            "into-the-maelstrom:3_bonus_xp:text",
+            "into-the-maelstrom:3_bonus_xp",
+            "into-the-maelstrom:upgradeDecks",
+            "into-the-maelstrom:win"
+          ]
+        },
+        {
+          "id": "neither",
+          "text": "Neither",
+          "effects": [],
+          "steps": [
+            "into-the-maelstrom:upgradeDecks"
+          ]
+        }
+      ]
+    },
+    "into-the-maelstrom:flood_has_begun": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "floodHasBegun",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "into-the-maelstrom:agent_harpers_mission_is_complete_at_what_cost": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "agentHarpersMissionIsCompleteAtWhatCost",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "into-the-maelstrom:2_mental_trauma:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 2 mental trauma as they realize the world will never be the same.",
+      "bullets": []
+    },
+    "into-the-maelstrom:2_mental_trauma": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 0,
+          "mental": 2
+        }
+      ]
+    },
+    "into-the-maelstrom:win_maybe:text": {
+      "kind": "story",
+      "text": "The investigators win the campaign…?",
+      "bullets": []
+    },
+    "into-the-maelstrom:win_maybe": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "win"
+        }
+      ]
+    },
+    "into-the-maelstrom:riches_of_the_deep_are_destroyed_at_what_cost": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "richesOfTheDeepAreDestroyedAtWhatCost",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "into-the-maelstrom:check_successful_conspiracy_6_7": {
+      "kind": "chooseOne",
+      "text": "Check if another act card is in the victory display:",
+      "choices": [
+        {
+          "id": "fulfilled",
+          "text": "Act 2b—\"Conspiracy Fulfilled\"",
+          "effects": [],
+          "steps": [
+            "into-the-maelstrom:agent_harpers_mission_is_complete_at_what_cost",
+            "into-the-maelstrom:2_mental_trauma:text",
+            "into-the-maelstrom:2_mental_trauma",
+            "into-the-maelstrom:skip_epilogue",
+            "into-the-maelstrom:upgradeDecks",
+            "into-the-maelstrom:win_maybe:text",
+            "into-the-maelstrom:win_maybe"
+          ]
+        },
+        {
+          "id": "dismantled",
+          "text": "Act 2b—\"Conspiracy Dismantled\"",
+          "effects": [],
+          "steps": [
+            "into-the-maelstrom:riches_of_the_deep_are_destroyed_at_what_cost",
+            "into-the-maelstrom:2_mental_trauma:text",
+            "into-the-maelstrom:2_mental_trauma",
+            "into-the-maelstrom:skip_epilogue",
+            "into-the-maelstrom:upgradeDecks",
+            "into-the-maelstrom:win_maybe:text",
+            "into-the-maelstrom:win_maybe"
+          ]
+        }
+      ]
+    },
+    "into-the-maelstrom:check_shattering_the_alignment": {
+      "kind": "chooseOne",
+      "text": "Is Act 2b—\"Shattering the Alignment\" in the victory display?",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Yes",
+          "effects": [],
+          "steps": [
+            "into-the-maelstrom:plot_of_the_deep_ones_was_thwarted",
+            "into-the-maelstrom:delayed_win:text",
+            "into-the-maelstrom:check_successful_conspiracy_4_5"
+          ]
+        },
+        {
+          "id": "no",
+          "text": "No",
+          "effects": [],
+          "steps": [
+            "into-the-maelstrom:flood_has_begun",
+            "into-the-maelstrom:check_successful_conspiracy_6_7"
+          ]
         }
       ]
     },
@@ -792,99 +1500,6 @@
     "beneath-the-waves:upgradeDecks": {
       "kind": "upgradeDecks"
     },
-    "devil-reef:record_tide_has_grown_stronger": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "tideHasGrownStronger",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "devil-reef:ask_tide_has_grown_stronger": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "cheat",
-          "text": "Did you reach <b>Resolution 1</b> by advancing Agenda 2b?",
-          "effects": [],
-          "steps": [
-            "devil-reef:record_tide_has_grown_stronger"
-          ]
-        }
-      ]
-    },
-    "devil-reef:maybe_ask_tide_has_grown_stronger": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "multi",
-        "take": false
-      },
-      "then": [
-        "devil-reef:ask_tide_has_grown_stronger"
-      ],
-      "else": []
-    },
-    "devil-reef:terror_of_devil_reef_is_still_alive": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "terrorOfDevilReefIsStillAlive",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "devil-reef:terror_of_devil_reef_is_dead": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "terrorOfDevilReefIsDead",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "devil-reef:ask_terror_of_devil_reef": {
-      "kind": "chooseOne",
-      "text": "Find the Terror of Devil Reef. Then choose one of the following options:",
-      "choices": [
-        {
-          "id": "agenda_1",
-          "text": "It was agenda 1a when the game ended.",
-          "effects": [],
-          "steps": [
-            "devil-reef:terror_of_devil_reef_is_still_alive"
-          ]
-        },
-        {
-          "id": "in_play",
-          "text": "The Terror of Devil Reef is in play.",
-          "effects": [],
-          "steps": [
-            "devil-reef:terror_of_devil_reef_is_still_alive"
-          ]
-        },
-        {
-          "id": "victory_display",
-          "text": "The Terror of Devil Reef is in the victory display.",
-          "effects": [],
-          "steps": [
-            "devil-reef:terror_of_devil_reef_is_dead"
-          ]
-        }
-      ]
-    },
-    "devil-reef:proceed_keys:text": {
-      "kind": "story",
-      "text": "Do not move the purple, black, or white keys from their current position just yet—the location of each of these keys will be important during <b>Interlude III: Beneath the Waves</b>.",
-      "bullets": []
-    },
     "hidden-truths:intro": {
       "kind": "story",
       "text": "As soon as your mind returned to the present, you began formulating your plan. A plan to enter the realm of the Deep Ones and end their conspiracy once and for all. \"This is ridiculous, you know that, right?\" Harper asks. You nod. Of course it's ridiculous. You've spent the last two days on the run. Chased. Hunted. Tormented.\nBut you've also spent the last two days recovering the memories you've forgotten. And what you've seen is something you can't possibly ignore. You have seen the deity the Esoteric Order of Dagon is named for, and you understand what the Order plans to do. The alignment of the celestial bodies in the sky, the steadily rising tides, the tumultuous fluctuating weather, the creatures emerging from the deep, all of it is tied together. You have seen it. There will come a flood, a great disaster to wipe out humanity, so only the deep remains. The great city in the reef shall rise once more and become the beating heart of all life on Earth.\nThere are still gaps in your memory, but all this you know to be true. All of Innsmouth is consumed by this conspiracy. The Order controlled the town through its oaths and the secret wealth it hoarded from the deep. It was no wonder they treated outsiders like yourself with such scorn.\nYou give Harper a knowing glare. She sighs and nods. \"I know. It's the only way.\" Together, the two of you plot your course. Abandoned ships still litter the harbor of Innsmouth. Under the cover of night, you must commandeer one of them, sail to Devil Reef, and descend once more into the antediluvian ruins in the depths below the forsaken islands. That is where the other entrance to the city lies. Y'ha-nthlei.\nYour skin prickles with cold shivers as you utter the word aloud. Harper grimaces, though you can sense the determination behind her steely gaze. \"I'm going to see this mission through, Dawson. For you.\"\nYou lay out all of the information you've uncovered and the relics you've obtained despite the horrors arrayed against you. You know the way to Y'ha-nthlei is sealed tight. There must be a way to gain entrance. Perhaps you already have the answers you seek…",
@@ -1047,381 +1662,6 @@
     "hidden-truths:upgradeDecks": {
       "kind": "upgradeDecks"
     },
-    "horror-in-high-gear:reached_falcon_point_after_sunrise": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "reachedFalconPointAfterSunrise",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "horror-in-high-gear:earn_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 0,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "horror-in-high-gear:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "horror-in-high-gear:reached_falcon_point_before_sunrise": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "reachedFalconPointBeforeSunrise",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "in-too-deep:ask_consumed_by_rising_tide": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "yes",
-          "text": "Was <i>Innsmouth consumed by the rising tide</i>?",
-          "effects": [
-            {
-              "do": "record",
-              "key": "innsmouthWasConsumedByTheRisingTide",
-              "section": "campaign_notes",
-              "value": true
-            }
-          ],
-          "steps": []
-        }
-      ]
-    },
-    "in-too-deep:maybe_ask_consumed_by_rising_tide": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "campaign_data",
-        "take": true
-      },
-      "then": [
-        "in-too-deep:ask_consumed_by_rising_tide"
-      ],
-      "else": []
-    },
-    "in-too-deep:vehicle_xp:text": {
-      "kind": "story",
-      "text": "Each investigator records 2 additional experience under \"Unspent Experience.\"",
-      "bullets": []
-    },
-    "in-too-deep:check_made_it_safely_to_their_vehicles": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "madeItSafelyToTheirVehicles",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "in-too-deep:vehicle_xp:text"
-      ],
-      "else": []
-    },
-    "in-too-deep:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "in-too-deep:maybe_upgrade_decks": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "campaign_data",
-        "take": true
-      },
-      "then": [
-        "in-too-deep:upgradeDecks"
-      ],
-      "else": []
-    },
-    "into-the-maelstrom:escaped_yhanthlei": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "escapedYhanthlei",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "into-the-maelstrom:add_dagon_and_hydra_to_victory_display": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 0,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "into-the-maelstrom:2_physical_trauma:text": {
-      "kind": "story",
-      "text": "Each investigator suffers 2 physical trauma from their ordeal beneath the waves.",
-      "bullets": []
-    },
-    "into-the-maelstrom:2_physical_trauma": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "trauma",
-          "who": "each",
-          "physical": 2,
-          "mental": 0
-        }
-      ]
-    },
-    "into-the-maelstrom:check_shattering_the_alignment": {
-      "kind": "chooseOne",
-      "text": "Is Act 2b—\"Shattering the Alignment\" in the victory display?",
-      "choices": [
-        {
-          "id": "yes",
-          "text": "Yes",
-          "effects": [],
-          "steps": []
-        },
-        {
-          "id": "no",
-          "text": "No",
-          "effects": [],
-          "steps": []
-        }
-      ]
-    },
-    "into-the-maelstrom:plot_of_the_deep_ones_was_thwarted": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "plotOfTheDeepOnesWasThwarted",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "into-the-maelstrom:delayed_win:text": {
-      "kind": "story",
-      "text": "The investigators win the campaign!",
-      "bullets": []
-    },
-    "into-the-maelstrom:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "into-the-maelstrom:check_successful_conspiracy_4_5": {
-      "kind": "chooseOne",
-      "text": "Check if another act card is in the victory display:",
-      "choices": [
-        {
-          "id": "fulfilled",
-          "text": "Act 2b—\"Conspiracy Fulfilled\"",
-          "effects": [],
-          "steps": []
-        },
-        {
-          "id": "dismantled",
-          "text": "Act 2b—\"Conspiracy Dismantled\"",
-          "effects": [],
-          "steps": []
-        },
-        {
-          "id": "neither",
-          "text": "Neither",
-          "effects": [],
-          "steps": [
-            "into-the-maelstrom:upgradeDecks"
-          ]
-        }
-      ]
-    },
-    "into-the-maelstrom:flood_has_begun": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "floodHasBegun",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "into-the-maelstrom:check_successful_conspiracy_6_7": {
-      "kind": "chooseOne",
-      "text": "Check if another act card is in the victory display:",
-      "choices": [
-        {
-          "id": "fulfilled",
-          "text": "Act 2b—\"Conspiracy Fulfilled\"",
-          "effects": [],
-          "steps": []
-        },
-        {
-          "id": "dismantled",
-          "text": "Act 2b—\"Conspiracy Dismantled\"",
-          "effects": [],
-          "steps": []
-        }
-      ]
-    },
-    "into-the-maelstrom:agent_harpers_mission_is_complete": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "agentHarpersMissionIsComplete",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "into-the-maelstrom:3_bonus_xp:text": {
-      "kind": "story",
-      "text": "Each investigator earns 3 bonus experience.",
-      "bullets": []
-    },
-    "into-the-maelstrom:3_bonus_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 3,
-          "who": "each",
-          "victory": false
-        }
-      ]
-    },
-    "into-the-maelstrom:win": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "end",
-          "result": "win"
-        }
-      ]
-    },
-    "into-the-maelstrom:riches_of_the_deep_are_lost_forever": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "richesOfTheDeepAreLostForever",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "into-the-maelstrom:agent_harpers_mission_is_complete_at_what_cost": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "agentHarpersMissionIsCompleteAtWhatCost",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "into-the-maelstrom:2_mental_trauma:text": {
-      "kind": "story",
-      "text": "Each investigator suffers 2 mental trauma as they realize the world will never be the same.",
-      "bullets": []
-    },
-    "into-the-maelstrom:2_mental_trauma": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "trauma",
-          "who": "each",
-          "physical": 0,
-          "mental": 2
-        }
-      ]
-    },
-    "into-the-maelstrom:skip_epilogue": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "skipScenario",
-          "scenario": "tic-epilogue"
-        }
-      ]
-    },
-    "into-the-maelstrom:win_maybe:text": {
-      "kind": "story",
-      "text": "The investigators win the campaign…?",
-      "bullets": []
-    },
-    "into-the-maelstrom:win_maybe": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "end",
-          "result": "win"
-        }
-      ]
-    },
-    "into-the-maelstrom:riches_of_the_deep_are_destroyed_at_what_cost": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "richesOfTheDeepAreDestroyedAtWhatCost",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "into-the-maelstrom:deep_ones_have_flooded_the_earth": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "deepOnesHaveFloodedTheEarth",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "into-the-maelstrom:all_killed:text": {
-      "kind": "story",
-      "text": "Each investigator is <b>killed</b>.",
-      "bullets": []
-    },
-    "into-the-maelstrom:all_killed": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "kill",
-          "who": "each"
-        }
-      ]
-    },
-    "into-the-maelstrom:lose:text": {
-      "kind": "story",
-      "text": "The investigators lose the campaign.",
-      "bullets": []
-    },
-    "into-the-maelstrom:lose": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "end",
-          "result": "lose"
-        }
-      ]
-    },
     "puzzle-pieces:intro": {
       "kind": "story",
       "text": "You have no idea who this woman is or how she knows you, yet she seems comfortable and familiar with you. You strain your memory trying to think of how you might have met, but it's no use. You're certain she is a complete stranger. Having woken up in a cold, wet prison with no memories, you aren't feeling very sociable. Your fear and distrust must show, because the woman backs off and narrows her eyes. \"What is it? What's wrong?\"\nYou respond by asking the woman if you know her. \"You truly don't remember? Well, that's going to complicate things. What do you recall? Do you remember anything?\"\nYou relate to the woman the flashes of recollection that you experienced earlier…",
@@ -1546,134 +1786,6 @@
       "text": "You point to the strange, crimson horizon behind Agent Harper and note aloud the alignment of the sun and the moon. \"That began just after you and Agent Dawson entered the Order's headquarters,\" she explains. \"That was almost three days ago. I have no idea what it means, but I can't imagine it is anything good. All of Innsmouth's been locked tight lately. Not a soul in sight. You're lucky I figured out where to look for you.\"\nYour mind reels. The last thing you remember before waking up in that dank pit was enjoying a pleasant late-summer's eve in Arkham. Now you're in another town altogether, and your memory is filled with gaping holes. You wonder aloud what the date is, and Agent Harper replies: \"It's the twenty-fourth of September. I don't know when exactly you arrived in Innsmouth or how much of your memory is missing. Isn't there anything else you remember? Anything at all?\"\nThe water sloshes against your feet as you struggle to remember. In minutes, the tide has risen several inches, and there's no sign of it slowing down. You fix your gaze on the woman who stands before you—her weary eyes, her disheveled clothes, the red marks on her wrists—and something triggers in your recollection.\n\"Wake up. We're almost there.\" The memory lurks at the precipice of your consciousness, threatening to draw you into the darkness. \"Hey. Wake up, I said.\" You clutch your forehead as searing pain bounces throughout your skull. \"Wake up, dammit!\"\nDarkness pulls at the edges of your vision. More memories come flooding back…",
       "bullets": []
     },
-    "the-lair-of-dagon:dagon_has_awakened": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "dagonHasAwakened",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-lair-of-dagon:gatekeeper_has_been_defeated": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "gatekeeperHasBeenDefeated",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-lair-of-dagon:ask_suspect_defeated": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "suspect_defeated",
-          "text": "Is a [[Suspect]] enemy in the victory display?",
-          "effects": [],
-          "steps": [
-            "the-lair-of-dagon:gatekeeper_has_been_defeated"
-          ]
-        }
-      ]
-    },
-    "the-lair-of-dagon:maybe_ask_suspect_defeated": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "aJailbreak",
-        "section": "memoriesRecovered"
-      },
-      "then": [
-        "the-lair-of-dagon:ask_suspect_defeated"
-      ],
-      "else": []
-    },
-    "the-lair-of-dagon:ask_oceiros": {
-      "kind": "chooseOne",
-      "text": "The lead investigator must decide:",
-      "choices": [
-        {
-          "id": "nothing",
-          "text": "Tell Oceiros nothing.",
-          "effects": [],
-          "steps": []
-        },
-        {
-          "id": "lying",
-          "text": "Lie to Oceiros.",
-          "effects": [],
-          "steps": []
-        },
-        {
-          "id": "truth",
-          "text": "Tell Oceiros everything.",
-          "effects": [],
-          "steps": []
-        }
-      ]
-    },
-    "the-lair-of-dagon:add_elder_thing:text": {
-      "kind": "story",
-      "text": "Add 1 [elder_thing] token to the chaos bag for the remainder of the campaign.",
-      "bullets": []
-    },
-    "the-lair-of-dagon:add_elder_thing": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "addChaosToken",
-          "token": "elderThing"
-        }
-      ]
-    },
-    "the-lair-of-dagon:add_tablet:text": {
-      "kind": "story",
-      "text": "Add 1 [tablet] token to the chaos bag for the remainder of the campaign.",
-      "bullets": []
-    },
-    "the-lair-of-dagon:add_tablet": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "addChaosToken",
-          "token": "tablet"
-        }
-      ]
-    },
-    "the-lair-of-dagon:add_cultist:text": {
-      "kind": "story",
-      "text": "Add 1 [cultist] token to the chaos bag for the remainder of the campaign.",
-      "bullets": []
-    },
-    "the-lair-of-dagon:add_cultist": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "addChaosToken",
-          "token": "cultist"
-        }
-      ]
-    },
-    "the-pit-of-despair:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "the-pit-of-despair:maybe_upgrade_decks": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "campaign_data",
-        "take": true
-      },
-      "then": [
-        "the-pit-of-despair:upgradeDecks"
-      ],
-      "else": []
-    },
     "the-syzygy:syzygy_1": {
       "kind": "story",
       "text": "Light flashes in your mind. Shadows drown your thoughts as the memory fades. You are lying once again on the rocky beach off the coast, your skull pounding in agony. Agent Harper leans over you with worry etched in her brow. \"Hey! Hey, you finally awake?\"\nYou sit up, your muscles aching. It looks like the tide rose several more inches while you were out. The cold water laps at your ankles and soaks into your shoes. \"What happened?\" she says. \"What did you see?\"",
@@ -1754,47 +1866,6 @@
       ]
     },
     "the-syzygy:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "the-vanishing-of-elina-harper:maybe_return_xp:text": {
-      "kind": "story",
-      "text": "dummy",
-      "bullets": []
-    },
-    "the-vanishing-of-elina-harper:mission_failed": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "missionFailed",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-vanishing-of-elina-harper:mission_succeeded": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "missionSucceeded",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-vanishing-of-elina-harper:investigator_setup": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 0,
-          "who": "each",
-          "victory": false
-        }
-      ]
-    },
-    "the-vanishing-of-elina-harper:upgradeDecks": {
       "kind": "upgradeDecks"
     },
     "tic-epilogue:epilogue_1": {

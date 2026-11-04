@@ -62,7 +62,63 @@
     }
   },
   "resolutions": {
+    "waking-nightmare": {
+      "R1": [
+        "waking-nightmare:doctor_is_alive",
+        "waking-nightmare:dreamers_grow_weaker:text",
+        "waking-nightmare:maybe_send_dreamers_grow_weaker",
+        "waking-nightmare:randolph_escaped_hospital_with_investigators:text",
+        "waking-nightmare:randolph_escaped_hospital_with_investigators",
+        "waking-nightmare:earn_xp",
+        "waking-nightmare:remove_infestation_bag:text",
+        "waking-nightmare:upgradeDecks",
+        "waking-nightmare:send_waking_nightmare_done",
+        "waking-nightmare:maybe_proceed_campaign_a"
+      ],
+      "R2": [
+        "waking-nightmare:doctor_is_missing:text",
+        "waking-nightmare:doctor_is_missing",
+        "waking-nightmare:dreamers_grow_weaker:text",
+        "waking-nightmare:maybe_send_dreamers_grow_weaker",
+        "waking-nightmare:randolph_escaped_hospital_with_investigators:text",
+        "waking-nightmare:randolph_escaped_hospital_with_investigators",
+        "waking-nightmare:earn_xp",
+        "waking-nightmare:remove_infestation_bag:text",
+        "waking-nightmare:upgradeDecks",
+        "waking-nightmare:send_waking_nightmare_done",
+        "waking-nightmare:maybe_proceed_campaign_a"
+      ],
+      "R3": [
+        "waking-nightmare:doctor_is_alive",
+        "waking-nightmare:maybe_send_dreamers_are_strong",
+        "waking-nightmare:randolph_escaped_hospital_with_investigators:text",
+        "waking-nightmare:randolph_escaped_hospital_with_investigators",
+        "waking-nightmare:earn_xp",
+        "waking-nightmare:remove_infestation_bag:text",
+        "waking-nightmare:upgradeDecks",
+        "waking-nightmare:send_waking_nightmare_done",
+        "waking-nightmare:maybe_proceed_campaign_a"
+      ],
+      "R4": [
+        "waking-nightmare:doctor_is_missing:text",
+        "waking-nightmare:doctor_is_missing",
+        "waking-nightmare:maybe_send_dreamers_are_strong",
+        "waking-nightmare:randolph_escaped_hospital_alone:text",
+        "waking-nightmare:randolph_escaped_hospital_alone",
+        "waking-nightmare:earn_xp",
+        "waking-nightmare:remove_infestation_bag:text",
+        "waking-nightmare:upgradeDecks",
+        "waking-nightmare:send_waking_nightmare_done",
+        "waking-nightmare:maybe_proceed_campaign_a"
+      ],
+      "none": [
+        "waking-nightmare:none"
+      ]
+    },
     "a-thousand-shapes-of-horror": {
+      "none": [
+        "a-thousand-shapes-of-horror:ask_recovered_strange_key"
+      ],
       "R1": [
         "a-thousand-shapes-of-horror:randolph_survived_descent",
         "a-thousand-shapes-of-horror:possess_silver_key:text",
@@ -75,24 +131,17 @@
       ],
       "R2": [
         "a-thousand-shapes-of-horror:ask_recovered_strange_key"
-      ],
-      "R3": [
-        "a-thousand-shapes-of-horror:randolph_survived_descent",
-        "a-thousand-shapes-of-horror:earn_xp",
-        "a-thousand-shapes-of-horror:add_skull:text",
-        "a-thousand-shapes-of-horror:add_skull",
-        "a-thousand-shapes-of-horror:upgradeDecks",
-        "a-thousand-shapes-of-horror:maybe_skip_interlude"
-      ],
-      "R4": [
-        "a-thousand-shapes-of-horror:randolph_did_not_survive_descent:text",
-        "a-thousand-shapes-of-horror:randolph_did_not_survive_descent",
-        "a-thousand-shapes-of-horror:earn_xp",
-        "a-thousand-shapes-of-horror:upgradeDecks",
-        "a-thousand-shapes-of-horror:maybe_skip_interlude"
       ]
     },
     "point-of-no-return": {
+      "none": [
+        "point-of-no-return:lead_investigator_gains_false_awakening:text",
+        "point-of-no-return:lead_investigator_gains_false_awakening",
+        "point-of-no-return:record_steps_of_the_bridge",
+        "point-of-no-return:earn_xp",
+        "point-of-no-return:maybe_upgrade_decks",
+        "point-of-no-return:maybe_skip_interlude"
+      ],
       "R1": [
         "point-of-no-return:record_steps_of_the_bridge",
         "point-of-no-return:earn_xp",
@@ -108,43 +157,6 @@
         "point-of-no-return:maybe_skip_interlude"
       ]
     },
-    "waking-nightmare": {
-      "R1": [
-        "waking-nightmare:doctor_is_alive",
-        "waking-nightmare:dreamers_grow_weaker:text",
-        "waking-nightmare:maybe_send_dreamers_grow_weaker",
-        "waking-nightmare:randolph_escaped_hospital_with_investigators:text",
-        "waking-nightmare:randolph_escaped_hospital_with_investigators"
-      ],
-      "R2": [
-        "waking-nightmare:doctor_is_missing:text",
-        "waking-nightmare:doctor_is_missing",
-        "waking-nightmare:dreamers_grow_weaker:text",
-        "waking-nightmare:maybe_send_dreamers_grow_weaker",
-        "waking-nightmare:randolph_escaped_hospital_with_investigators:text",
-        "waking-nightmare:randolph_escaped_hospital_with_investigators"
-      ],
-      "R3": [
-        "waking-nightmare:doctor_is_alive",
-        "waking-nightmare:maybe_send_dreamers_are_strong",
-        "waking-nightmare:randolph_escaped_hospital_with_investigators:text",
-        "waking-nightmare:randolph_escaped_hospital_with_investigators"
-      ],
-      "R4": [
-        "waking-nightmare:doctor_is_missing:text",
-        "waking-nightmare:doctor_is_missing",
-        "waking-nightmare:maybe_send_dreamers_are_strong",
-        "waking-nightmare:randolph_escaped_hospital_alone:text",
-        "waking-nightmare:randolph_escaped_hospital_alone"
-      ],
-      "R5": [
-        "waking-nightmare:earn_xp",
-        "waking-nightmare:remove_infestation_bag:text",
-        "waking-nightmare:upgradeDecks",
-        "waking-nightmare:send_waking_nightmare_done",
-        "waking-nightmare:maybe_proceed_campaign_a"
-      ]
-    },
     "weaver-of-the-cosmos": {
       "none": [
         "weaver-of-the-cosmos:bridge_was_completed",
@@ -156,33 +168,14 @@
       "R1": [
         "weaver-of-the-cosmos:bridge_was_destroyed",
         "weaver-of-the-cosmos:earn_xp_plus_5",
-        "weaver-of-the-cosmos:resolution_1_branch:text"
+        "weaver-of-the-cosmos:resolution_1_branch:text",
+        "weaver-of-the-cosmos:check_found_a_way_out_of_the_underworld"
       ],
       "R2": [
         "weaver-of-the-cosmos:bridge_was_completed",
         "weaver-of-the-cosmos:send_bridge_was_completed",
         "weaver-of-the-cosmos:all_insane:text",
         "weaver-of-the-cosmos:maybe_lose_campaign"
-      ],
-      "R3": [
-        "weaver-of-the-cosmos:returned_to_reality",
-        "weaver-of-the-cosmos:send_returned_to_reality",
-        "weaver-of-the-cosmos:two_physical_trauma:text",
-        "weaver-of-the-cosmos:two_physical_trauma",
-        "weaver-of-the-cosmos:maybe_win_campaign"
-      ],
-      "R4": [
-        "weaver-of-the-cosmos:never_escaped",
-        "weaver-of-the-cosmos:send_never_escaped",
-        "weaver-of-the-cosmos:all_insane:text",
-        "weaver-of-the-cosmos:maybe_win_never_seen_again"
-      ],
-      "R5": [
-        "weaver-of-the-cosmos:still_in_the_dreamlands",
-        "weaver-of-the-cosmos:send_still_in_the_dreamlands",
-        "weaver-of-the-cosmos:two_physical_trauma:text",
-        "weaver-of-the-cosmos:two_physical_trauma",
-        "weaver-of-the-cosmos:maybe_win_campaign"
       ]
     }
   },
@@ -270,6 +263,288 @@
         "campaign:ask_8_part_campaign"
       ]
     },
+    "waking-nightmare:doctor_is_alive": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "doctorIsAlive",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "waking-nightmare:dreamers_grow_weaker:text": {
+      "kind": "story",
+      "text": "Your companions’ condition has worsened.",
+      "bullets": []
+    },
+    "waking-nightmare:send_dreamers_grow_weaker": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "text": "Record in Campaign A’s Campaign Log <i>the dreamers grow weaker</i>.",
+      "effects": [],
+      "steps": []
+    },
+    "waking-nightmare:maybe_send_dreamers_grow_weaker": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "interconnectedCampaign",
+        "section": "hidden"
+      },
+      "then": [
+        "waking-nightmare:send_dreamers_grow_weaker"
+      ],
+      "else": []
+    },
+    "waking-nightmare:randolph_escaped_hospital_with_investigators:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record <i>Randolph escaped the hospital with the investigators</i>. Any one investigator may choose to add Randolph Carter <i>(Chained to the Waking World)</i> (The Dream-Eaters card #79) to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "waking-nightmare:randolph_escaped_hospital_with_investigators": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "randolphEscapedHospitalWithInvestigators",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "earnCard",
+          "code": "06079",
+          "who": "choice"
+        }
+      ]
+    },
+    "waking-nightmare:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "waking-nightmare:remove_infestation_bag:text": {
+      "kind": "story",
+      "text": "Remove the infestation bag and all infestation tokens from the game. <i>(There is no need to keep or record them.)</i>",
+      "bullets": []
+    },
+    "waking-nightmare:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "waking-nightmare:send_waking_nightmare_done": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "waking-nightmare:proceed_campaign_a": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "waking-nightmare:maybe_proceed_campaign_a": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_data",
+        "take": false
+      },
+      "then": [
+        "waking-nightmare:proceed_campaign_a"
+      ],
+      "else": []
+    },
+    "waking-nightmare:doctor_is_missing:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record <i>Dr. Maheswaran is missing</i>. Perhaps you could have saved her. The lead investigator suffers 1 mental trauma.",
+      "bullets": []
+    },
+    "waking-nightmare:doctor_is_missing": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "doctorIsMissing",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "trauma",
+          "who": "lead",
+          "physical": 0,
+          "mental": 1
+        }
+      ]
+    },
+    "waking-nightmare:send_dreamers_are_strong": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "waking-nightmare:maybe_send_dreamers_are_strong": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "interconnectedCampaign",
+        "section": "hidden"
+      },
+      "then": [
+        "waking-nightmare:send_dreamers_are_strong"
+      ],
+      "else": []
+    },
+    "waking-nightmare:randolph_escaped_hospital_alone:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record <i>Randolph escaped the hospital on his own</i>. Any one investigator may choose to add Randolph Carter <i>(Chained to the Waking World)</i> (The Dream-Eaters card #79) to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "waking-nightmare:randolph_escaped_hospital_alone": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "randolphEscapedHospitalAlone",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "earnCard",
+          "code": "06079",
+          "who": "choice"
+        }
+      ]
+    },
+    "waking-nightmare:record_steps_of_the_bridge": {
+      "kind": "counter",
+      "text": "For each location that was infested when the game ended, record 1 tally mark next to “Steps of the Bridge” in your Campaign Log.",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "stepsOfTheBridge",
+          "section": "stepsOfTheBridge",
+          "op": "set",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "waking-nightmare:doctors_fate_unknown": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "doctorsFateUnknown",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "waking-nightmare:none": {
+      "kind": "chooseOne",
+      "text": "Did the investigators resign, or were they all defeated?",
+      "choices": [
+        {
+          "id": "resigned",
+          "text": "They resigned",
+          "effects": [],
+          "steps": [
+            "waking-nightmare:record_steps_of_the_bridge",
+            "waking-nightmare:doctors_fate_unknown",
+            "waking-nightmare:maybe_send_dreamers_are_strong",
+            "waking-nightmare:randolph_escaped_hospital_alone:text",
+            "waking-nightmare:randolph_escaped_hospital_alone",
+            "waking-nightmare:earn_xp",
+            "waking-nightmare:remove_infestation_bag:text",
+            "waking-nightmare:upgradeDecks",
+            "waking-nightmare:send_waking_nightmare_done",
+            "waking-nightmare:maybe_proceed_campaign_a"
+          ]
+        },
+        {
+          "id": "defeated",
+          "text": "They were all defeated",
+          "effects": [],
+          "steps": [
+            "waking-nightmare:record_steps_of_the_bridge",
+            "waking-nightmare:doctor_is_missing:text",
+            "waking-nightmare:doctor_is_missing",
+            "waking-nightmare:maybe_send_dreamers_are_strong",
+            "waking-nightmare:randolph_escaped_hospital_alone:text",
+            "waking-nightmare:randolph_escaped_hospital_alone",
+            "waking-nightmare:earn_xp",
+            "waking-nightmare:remove_infestation_bag:text",
+            "waking-nightmare:upgradeDecks",
+            "waking-nightmare:send_waking_nightmare_done",
+            "waking-nightmare:maybe_proceed_campaign_a"
+          ]
+        }
+      ]
+    },
+    "waking-nightmare:intro_2": {
+      "kind": "story",
+      "text": "“Yes, I suppose that makes sense. There has been no change in their condition for the past few hours, anyway.” Doctor Maheswaran’s gaze shifts nervously to and fro, searching for more spiders. “Also, I’d very much like to get out of this room now, so…lead the way,” she adds. You nod and venture back into the hospital’s waiting room.",
+      "bullets": []
+    },
+    "waking-nightmare:doctor_joined_investigation": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "doctorJoinedInvestigation",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "waking-nightmare:intro_3": {
+      "kind": "story",
+      "text": "“Yes, of course. Their safety is paramount. But do come back and tell me what is going on, please.” She shivers. “I really hate this place after dark…” You nod and venture back into the hospital’s waiting room.",
+      "bullets": []
+    },
+    "waking-nightmare:doctor_stayed_with_patients": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "doctorStayedWithPatients",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "waking-nightmare:choose_doctor": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "doctor_come",
+          "text": "<i>Convince Doctor Maheswaran to come with you while you investigate, for her safety and yours.</i>",
+          "effects": [],
+          "steps": [
+            "waking-nightmare:intro_2",
+            "waking-nightmare:doctor_joined_investigation"
+          ]
+        },
+        {
+          "id": "doctor_stay",
+          "text": "<i>Convince Doctor Maheswaran to stay with the patients and keep them safe while you investigate.</i>",
+          "effects": [],
+          "steps": [
+            "waking-nightmare:intro_3",
+            "waking-nightmare:doctor_stayed_with_patients"
+          ]
+        }
+      ]
+    },
     "a-thousand-shapes-of-horror:randolph_survived_descent": {
       "kind": "effects",
       "effects": [
@@ -278,27 +553,6 @@
           "key": "randolphSurvivedDescent",
           "section": "campaign_notes",
           "value": true
-        }
-      ]
-    },
-    "a-thousand-shapes-of-horror:possess_silver_key:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, record <i>the investigators possess the Silver Key</i>. Any one investigator may choose to add The Silver Key <i>(Key to the Gate of Dreams)</i> to their deck. This card does not count toward that investigator’s deck size.",
-      "bullets": []
-    },
-    "a-thousand-shapes-of-horror:possess_silver_key": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "possessSilverKey",
-          "section": "campaign_notes",
-          "value": true
-        },
-        {
-          "do": "earnCard",
-          "code": "06189",
-          "who": "choice"
         }
       ]
     },
@@ -372,24 +626,6 @@
         "a-thousand-shapes-of-horror:maybe_proceed_campaign_a"
       ]
     },
-    "a-thousand-shapes-of-horror:ask_recovered_strange_key": {
-      "kind": "chooseOne",
-      "text": "Did the investigators “recover a strange key”?",
-      "choices": [
-        {
-          "id": "yes",
-          "text": "Yes",
-          "effects": [],
-          "steps": []
-        },
-        {
-          "id": "no",
-          "text": "No",
-          "effects": [],
-          "steps": []
-        }
-      ]
-    },
     "a-thousand-shapes-of-horror:randolph_did_not_survive_descent:text": {
       "kind": "story",
       "text": "In your Campaign Log, record <i>Randolph did not survive the descent</i>. If an investigator’s deck contains Randolph Carter <i>(Chained to the Waking World)</i> (<i>The DreamEaters</i> card #79), remove him from that deck for the remainder of the campaign.",
@@ -408,6 +644,479 @@
           "do": "removeCard",
           "code": "06079"
         }
+      ]
+    },
+    "a-thousand-shapes-of-horror:ask_recovered_strange_key": {
+      "kind": "chooseOne",
+      "text": "Did the investigators “recover a strange key”?",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Yes",
+          "effects": [],
+          "steps": [
+            "a-thousand-shapes-of-horror:randolph_survived_descent",
+            "a-thousand-shapes-of-horror:earn_xp",
+            "a-thousand-shapes-of-horror:add_skull:text",
+            "a-thousand-shapes-of-horror:add_skull",
+            "a-thousand-shapes-of-horror:upgradeDecks",
+            "a-thousand-shapes-of-horror:maybe_skip_interlude"
+          ]
+        },
+        {
+          "id": "no",
+          "text": "No",
+          "effects": [],
+          "steps": [
+            "a-thousand-shapes-of-horror:randolph_did_not_survive_descent:text",
+            "a-thousand-shapes-of-horror:randolph_did_not_survive_descent",
+            "a-thousand-shapes-of-horror:earn_xp",
+            "a-thousand-shapes-of-horror:upgradeDecks",
+            "a-thousand-shapes-of-horror:maybe_skip_interlude"
+          ]
+        }
+      ]
+    },
+    "a-thousand-shapes-of-horror:possess_silver_key:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record <i>the investigators possess the Silver Key</i>. Any one investigator may choose to add The Silver Key <i>(Key to the Gate of Dreams)</i> to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "a-thousand-shapes-of-horror:possess_silver_key": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "possessSilverKey",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "earnCard",
+          "code": "06189",
+          "who": "choice"
+        }
+      ]
+    },
+    "point-of-no-return:lead_investigator_gains_false_awakening:text": {
+      "kind": "story",
+      "text": "The lead investigator has earned the False Awakening weakness <i>(The Dream-Eaters #275)</i> (does not count toward deck size). Add this card to the lead investigator’s deck.",
+      "bullets": []
+    },
+    "point-of-no-return:lead_investigator_gains_false_awakening": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "06275",
+          "who": "lead"
+        }
+      ]
+    },
+    "point-of-no-return:record_steps_of_the_bridge": {
+      "kind": "counter",
+      "text": "For each damage on the scenario reference card, record 1 tally mark next to “Steps of the Bridge” in your Campaign Log",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "stepsOfTheBridge",
+          "section": "stepsOfTheBridge",
+          "op": "add",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "point-of-no-return:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "point-of-no-return:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "point-of-no-return:maybe_upgrade_decks": {
+      "kind": "branch",
+      "condition": {
+        "kind": "any",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "halfCampaign",
+            "section": "hidden"
+          },
+          {
+            "kind": "unsupported",
+            "name": "version",
+            "take": true
+          }
+        ]
+      },
+      "then": [
+        "point-of-no-return:upgradeDecks"
+      ],
+      "else": []
+    },
+    "point-of-no-return:skip_interlude:text": {
+      "kind": "story",
+      "text": "Skip <b>Interlude III: The Great Ones</b>.",
+      "bullets": []
+    },
+    "point-of-no-return:skip_interlude": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "the-great-ones"
+        }
+      ]
+    },
+    "point-of-no-return:send_point_of_no_return_done": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "point-of-no-return:maybe_proceed_campaign_a": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "point-of-no-return:maybe_skip_interlude": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "halfCampaign",
+        "section": "hidden"
+      },
+      "then": [
+        "point-of-no-return:skip_interlude:text",
+        "point-of-no-return:skip_interlude"
+      ],
+      "else": [
+        "point-of-no-return:send_point_of_no_return_done",
+        "point-of-no-return:maybe_proceed_campaign_a"
+      ]
+    },
+    "weaver-of-the-cosmos:bridge_was_completed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "bridgeWasCompleted",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "weaver-of-the-cosmos:send_bridge_was_completed": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "weaver-of-the-cosmos:all_killed:text": {
+      "kind": "story",
+      "text": "Each investigator is <b>killed</b>",
+      "bullets": []
+    },
+    "weaver-of-the-cosmos:all_killed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "kill",
+          "who": "each"
+        }
+      ]
+    },
+    "weaver-of-the-cosmos:maybe_lose_campaign:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "tde-epilogue"
+        }
+      ]
+    },
+    "weaver-of-the-cosmos:lose:text": {
+      "kind": "story",
+      "text": "The investigators lose the campaign.",
+      "bullets": []
+    },
+    "weaver-of-the-cosmos:lose": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "lose"
+        }
+      ]
+    },
+    "weaver-of-the-cosmos:send_weaver_of_the_cosmos_done": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "weaver-of-the-cosmos:maybe_proceed_campaign_a": {
+      "kind": "unsupported",
+      "name": "receive_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "weaver-of-the-cosmos:maybe_lose_campaign": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "halfCampaign",
+        "section": "hidden"
+      },
+      "then": [
+        "weaver-of-the-cosmos:maybe_lose_campaign:yes:fx",
+        "weaver-of-the-cosmos:lose:text",
+        "weaver-of-the-cosmos:lose"
+      ],
+      "else": [
+        "weaver-of-the-cosmos:send_weaver_of_the_cosmos_done",
+        "weaver-of-the-cosmos:maybe_proceed_campaign_a"
+      ]
+    },
+    "weaver-of-the-cosmos:bridge_was_destroyed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "bridgeWasDestroyed",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "weaver-of-the-cosmos:earn_xp_plus_5": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 5,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "weaver-of-the-cosmos:resolution_1_branch:text": {
+      "kind": "story",
+      "text": "Check Campaign Log. Resolve the topmost option that applies.",
+      "bullets": []
+    },
+    "weaver-of-the-cosmos:returned_to_reality": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "returnedToReality",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "weaver-of-the-cosmos:send_returned_to_reality": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "weaver-of-the-cosmos:two_physical_trauma:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 2 physical trauma from their fierce fight with the spider god.",
+      "bullets": []
+    },
+    "weaver-of-the-cosmos:two_physical_trauma": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 2,
+          "mental": 0
+        }
+      ]
+    },
+    "weaver-of-the-cosmos:maybe_win_campaign:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "tde-epilogue"
+        }
+      ]
+    },
+    "weaver-of-the-cosmos:win_text:text": {
+      "kind": "story",
+      "text": "The investigators win the campaign.",
+      "bullets": []
+    },
+    "weaver-of-the-cosmos:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "weaver-of-the-cosmos:win": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "win"
+        }
+      ]
+    },
+    "weaver-of-the-cosmos:maybe_upgrade_decks": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "version",
+        "take": true
+      },
+      "then": [
+        "weaver-of-the-cosmos:upgradeDecks"
+      ],
+      "else": []
+    },
+    "weaver-of-the-cosmos:maybe_win_campaign": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "halfCampaign",
+        "section": "hidden"
+      },
+      "then": [
+        "weaver-of-the-cosmos:maybe_win_campaign:yes:fx",
+        "weaver-of-the-cosmos:win_text:text",
+        "weaver-of-the-cosmos:upgradeDecks",
+        "weaver-of-the-cosmos:win"
+      ],
+      "else": [
+        "weaver-of-the-cosmos:maybe_upgrade_decks",
+        "weaver-of-the-cosmos:send_weaver_of_the_cosmos_done",
+        "weaver-of-the-cosmos:maybe_proceed_campaign_a"
+      ]
+    },
+    "weaver-of-the-cosmos:never_escaped": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "neverEscaped",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "weaver-of-the-cosmos:send_never_escaped": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "weaver-of-the-cosmos:all_insane:text": {
+      "kind": "story",
+      "text": "Each investigator is driven <b>insane</b>",
+      "bullets": []
+    },
+    "weaver-of-the-cosmos:win_never_seen_again:text": {
+      "kind": "story",
+      "text": "The investigators win the campaign… and are never seen or heard from again.",
+      "bullets": []
+    },
+    "weaver-of-the-cosmos:win_never_seen_again": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "tde-epilogue"
+        },
+        {
+          "do": "end",
+          "result": "win"
+        }
+      ]
+    },
+    "weaver-of-the-cosmos:maybe_win_never_seen_again": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "halfCampaign",
+        "section": "hidden"
+      },
+      "then": [
+        "weaver-of-the-cosmos:win_never_seen_again:text",
+        "weaver-of-the-cosmos:win_never_seen_again"
+      ],
+      "else": [
+        "weaver-of-the-cosmos:maybe_upgrade_decks",
+        "weaver-of-the-cosmos:send_weaver_of_the_cosmos_done",
+        "weaver-of-the-cosmos:maybe_proceed_campaign_a"
+      ]
+    },
+    "weaver-of-the-cosmos:still_in_the_dreamlands": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "stillInTheDreamlands",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "weaver-of-the-cosmos:send_still_in_the_dreamlands": {
+      "kind": "unsupported",
+      "name": "send_campaign_link",
+      "effects": [],
+      "steps": []
+    },
+    "weaver-of-the-cosmos:check_trapped_in_atlach_nachas_realm": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "trappedInAtlachNachasRealm",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "weaver-of-the-cosmos:never_escaped",
+        "weaver-of-the-cosmos:send_never_escaped",
+        "weaver-of-the-cosmos:all_insane:text",
+        "weaver-of-the-cosmos:maybe_win_never_seen_again"
+      ],
+      "else": [
+        "weaver-of-the-cosmos:still_in_the_dreamlands",
+        "weaver-of-the-cosmos:send_still_in_the_dreamlands",
+        "weaver-of-the-cosmos:two_physical_trauma:text",
+        "weaver-of-the-cosmos:two_physical_trauma",
+        "weaver-of-the-cosmos:maybe_win_campaign"
+      ]
+    },
+    "weaver-of-the-cosmos:check_found_a_way_out_of_the_underworld": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "foundAWayOutOfTheUnderworld",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "weaver-of-the-cosmos:returned_to_reality",
+        "weaver-of-the-cosmos:send_returned_to_reality",
+        "weaver-of-the-cosmos:two_physical_trauma:text",
+        "weaver-of-the-cosmos:two_physical_trauma",
+        "weaver-of-the-cosmos:maybe_win_campaign"
+      ],
+      "else": [
+        "weaver-of-the-cosmos:check_trapped_in_atlach_nachas_realm"
       ]
     },
     "the-black-cat:check_beyond_the_gates_of_sleep": {
@@ -1008,597 +1717,10 @@
         "the-oneironauts:check_black_cat_has_a_hunch"
       ]
     },
-    "point-of-no-return:record_steps_of_the_bridge": {
-      "kind": "counter",
-      "text": "For each damage on the scenario reference card, record 1 tally mark next to “Steps of the Bridge” in your Campaign Log",
-      "min": 0,
-      "effects": [
-        {
-          "do": "count",
-          "id": "stepsOfTheBridge",
-          "section": "stepsOfTheBridge",
-          "op": "add",
-          "value": "input"
-        }
-      ],
-      "steps": []
-    },
-    "point-of-no-return:earn_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 0,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "point-of-no-return:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "point-of-no-return:maybe_upgrade_decks": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "multi",
-        "take": false
-      },
-      "then": [
-        "point-of-no-return:upgradeDecks"
-      ],
-      "else": []
-    },
-    "point-of-no-return:skip_interlude:text": {
-      "kind": "story",
-      "text": "Skip <b>Interlude III: The Great Ones</b>.",
-      "bullets": []
-    },
-    "point-of-no-return:skip_interlude": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "skipScenario",
-          "scenario": "the-great-ones"
-        }
-      ]
-    },
-    "point-of-no-return:send_point_of_no_return_done": {
-      "kind": "unsupported",
-      "name": "send_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "point-of-no-return:maybe_proceed_campaign_a": {
-      "kind": "unsupported",
-      "name": "receive_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "point-of-no-return:maybe_skip_interlude": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "halfCampaign",
-        "section": "hidden"
-      },
-      "then": [
-        "point-of-no-return:skip_interlude:text",
-        "point-of-no-return:skip_interlude"
-      ],
-      "else": [
-        "point-of-no-return:send_point_of_no_return_done",
-        "point-of-no-return:maybe_proceed_campaign_a"
-      ]
-    },
-    "point-of-no-return:lead_investigator_gains_false_awakening:text": {
-      "kind": "story",
-      "text": "The lead investigator has earned the False Awakening weakness <i>(The Dream-Eaters #275)</i> (does not count toward deck size). Add this card to the lead investigator’s deck.",
-      "bullets": []
-    },
-    "point-of-no-return:lead_investigator_gains_false_awakening": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "earnCard",
-          "code": "06275",
-          "who": "lead"
-        }
-      ]
-    },
     "tde-prologue:intro": {
       "kind": "story",
       "text": "<fancy>Friday, February 13th, 1925</fancy>\nSomething odd was happening in Arkham, Massachusetts.\nTypically, this would not be a surprise to the residents of the dreary New England town. Indeed, Arkham has always been well-known for its strange—some would say supernatural—occurrences. The nature of this particular circumstance, however, was anything but typical.\nIt all began in the latest issue of <i>Tales from Nevermore</i>. A writer by the name of Virgil Gray described a journey he had taken in his dreams—a journey he claimed was not a work of fiction on his part. He wrote of a long, spiraling staircase, an unbearably hot pillar of sentient fire, a tree that came from the moon, and a curious talking cat…among other things equally difficult to believe. But it wasn’t this extraordinary tale that first drew your attention. Soon after Virgil’s tale was published, <i>Tales from Nevermore</i> began to receive and publish letter after letter from those who had read Virgil’s story and claimed to have experienced the same exact dream. Before long, the Arkham Advertiser picked up the story, and news of this strange phenomenon reached the ears of experts.\nVirgil Gray was convinced to undergo therapy at the local asylum, and many more who shared in the writer’s psychosis were committed as well. The prevailing theory among academics is that Virgil’s dream felt so real that he could not separate fact from fiction, and his writings spread his delusions to others like a form of shared hysteria. You remain unconvinced. After all, there is much that is not known about the simple act of dreaming. Medical experts have wildly differing theories on the state of one’s brain during sleep. Recently, experts like Sigmund Freud have proposed that dreams are manifestations of one’s subconscious desires, fears, or obsessions. Fortune tellers, for their part, have long believed that dreams can be sifted and interpreted in order to tell the dreamer’s past or future. But if these theories are true, how could multiple parties—all from very different walks of life—have the same shared experiences in their dreams? What if our modern understanding of sleep is all wrong? What if there really is a place our consciousness travels to when we sleep—a land of dreams that exists beyond our waking world?\nYou and your companions have gathered together to get to the bottom of this strange phenomenon. If others in town can travel to another world in their dreams, perhaps you can, too. You’ve re-created the circumstances of Virgil’s journey perfectly. If all goes well, half of you will take the trip to this “dreamland” and back. The rest will stay in the waking world, studying your companions’ sleep patterns to ensure nothing goes wrong…",
       "bullets": []
-    },
-    "waking-nightmare:doctor_is_alive": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "doctorIsAlive",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "waking-nightmare:dreamers_grow_weaker:text": {
-      "kind": "story",
-      "text": "Your companions’ condition has worsened.",
-      "bullets": []
-    },
-    "waking-nightmare:send_dreamers_grow_weaker": {
-      "kind": "unsupported",
-      "name": "send_campaign_link",
-      "text": "Record in Campaign A’s Campaign Log <i>the dreamers grow weaker</i>.",
-      "effects": [],
-      "steps": []
-    },
-    "waking-nightmare:maybe_send_dreamers_grow_weaker": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "interconnectedCampaign",
-        "section": "hidden"
-      },
-      "then": [
-        "waking-nightmare:send_dreamers_grow_weaker"
-      ],
-      "else": []
-    },
-    "waking-nightmare:randolph_escaped_hospital_with_investigators:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, record <i>Randolph escaped the hospital with the investigators</i>. Any one investigator may choose to add Randolph Carter <i>(Chained to the Waking World)</i> (The Dream-Eaters card #79) to their deck. This card does not count toward that investigator’s deck size.",
-      "bullets": []
-    },
-    "waking-nightmare:randolph_escaped_hospital_with_investigators": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "randolphEscapedHospitalWithInvestigators",
-          "section": "campaign_notes",
-          "value": true
-        },
-        {
-          "do": "earnCard",
-          "code": "06079",
-          "who": "choice"
-        }
-      ]
-    },
-    "waking-nightmare:doctor_is_missing:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, record <i>Dr. Maheswaran is missing</i>. Perhaps you could have saved her. The lead investigator suffers 1 mental trauma.",
-      "bullets": []
-    },
-    "waking-nightmare:doctor_is_missing": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "doctorIsMissing",
-          "section": "campaign_notes",
-          "value": true
-        },
-        {
-          "do": "trauma",
-          "who": "lead",
-          "physical": 0,
-          "mental": 1
-        }
-      ]
-    },
-    "waking-nightmare:send_dreamers_are_strong": {
-      "kind": "unsupported",
-      "name": "send_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "waking-nightmare:maybe_send_dreamers_are_strong": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "interconnectedCampaign",
-        "section": "hidden"
-      },
-      "then": [
-        "waking-nightmare:send_dreamers_are_strong"
-      ],
-      "else": []
-    },
-    "waking-nightmare:randolph_escaped_hospital_alone:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, record <i>Randolph escaped the hospital on his own</i>. Any one investigator may choose to add Randolph Carter <i>(Chained to the Waking World)</i> (The Dream-Eaters card #79) to their deck. This card does not count toward that investigator’s deck size.",
-      "bullets": []
-    },
-    "waking-nightmare:randolph_escaped_hospital_alone": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "randolphEscapedHospitalAlone",
-          "section": "campaign_notes",
-          "value": true
-        },
-        {
-          "do": "earnCard",
-          "code": "06079",
-          "who": "choice"
-        }
-      ]
-    },
-    "waking-nightmare:earn_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 0,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "waking-nightmare:remove_infestation_bag:text": {
-      "kind": "story",
-      "text": "Remove the infestation bag and all infestation tokens from the game. <i>(There is no need to keep or record them.)</i>",
-      "bullets": []
-    },
-    "waking-nightmare:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "waking-nightmare:send_waking_nightmare_done": {
-      "kind": "unsupported",
-      "name": "send_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "waking-nightmare:proceed_campaign_a": {
-      "kind": "unsupported",
-      "name": "receive_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "waking-nightmare:maybe_proceed_campaign_a": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "campaign_data",
-        "take": false
-      },
-      "then": [
-        "waking-nightmare:proceed_campaign_a"
-      ],
-      "else": []
-    },
-    "waking-nightmare:intro_2": {
-      "kind": "story",
-      "text": "“Yes, I suppose that makes sense. There has been no change in their condition for the past few hours, anyway.” Doctor Maheswaran’s gaze shifts nervously to and fro, searching for more spiders. “Also, I’d very much like to get out of this room now, so…lead the way,” she adds. You nod and venture back into the hospital’s waiting room.",
-      "bullets": []
-    },
-    "waking-nightmare:doctor_joined_investigation": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "doctorJoinedInvestigation",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "waking-nightmare:intro_3": {
-      "kind": "story",
-      "text": "“Yes, of course. Their safety is paramount. But do come back and tell me what is going on, please.” She shivers. “I really hate this place after dark…” You nod and venture back into the hospital’s waiting room.",
-      "bullets": []
-    },
-    "waking-nightmare:doctor_stayed_with_patients": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "doctorStayedWithPatients",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "waking-nightmare:choose_doctor": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "doctor_come",
-          "text": "<i>Convince Doctor Maheswaran to come with you while you investigate, for her safety and yours.</i>",
-          "effects": [],
-          "steps": [
-            "waking-nightmare:intro_2",
-            "waking-nightmare:doctor_joined_investigation"
-          ]
-        },
-        {
-          "id": "doctor_stay",
-          "text": "<i>Convince Doctor Maheswaran to stay with the patients and keep them safe while you investigate.</i>",
-          "effects": [],
-          "steps": [
-            "waking-nightmare:intro_3",
-            "waking-nightmare:doctor_stayed_with_patients"
-          ]
-        }
-      ]
-    },
-    "weaver-of-the-cosmos:bridge_was_completed": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "bridgeWasCompleted",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "weaver-of-the-cosmos:send_bridge_was_completed": {
-      "kind": "unsupported",
-      "name": "send_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "weaver-of-the-cosmos:all_killed:text": {
-      "kind": "story",
-      "text": "Each investigator is <b>killed</b>",
-      "bullets": []
-    },
-    "weaver-of-the-cosmos:all_killed": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "kill",
-          "who": "each"
-        }
-      ]
-    },
-    "weaver-of-the-cosmos:maybe_lose_campaign:yes:fx": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "skipScenario",
-          "scenario": "tde-epilogue"
-        }
-      ]
-    },
-    "weaver-of-the-cosmos:lose:text": {
-      "kind": "story",
-      "text": "The investigators lose the campaign.",
-      "bullets": []
-    },
-    "weaver-of-the-cosmos:lose": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "end",
-          "result": "lose"
-        }
-      ]
-    },
-    "weaver-of-the-cosmos:send_weaver_of_the_cosmos_done": {
-      "kind": "unsupported",
-      "name": "send_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "weaver-of-the-cosmos:maybe_proceed_campaign_a": {
-      "kind": "unsupported",
-      "name": "receive_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "weaver-of-the-cosmos:maybe_lose_campaign": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "halfCampaign",
-        "section": "hidden"
-      },
-      "then": [
-        "weaver-of-the-cosmos:maybe_lose_campaign:yes:fx",
-        "weaver-of-the-cosmos:lose:text",
-        "weaver-of-the-cosmos:lose"
-      ],
-      "else": [
-        "weaver-of-the-cosmos:send_weaver_of_the_cosmos_done",
-        "weaver-of-the-cosmos:maybe_proceed_campaign_a"
-      ]
-    },
-    "weaver-of-the-cosmos:bridge_was_destroyed": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "bridgeWasDestroyed",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "weaver-of-the-cosmos:earn_xp_plus_5": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 5,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "weaver-of-the-cosmos:resolution_1_branch:text": {
-      "kind": "story",
-      "text": "Check Campaign Log. Resolve the topmost option that applies.",
-      "bullets": []
-    },
-    "weaver-of-the-cosmos:all_insane:text": {
-      "kind": "story",
-      "text": "Each investigator is driven <b>insane</b>",
-      "bullets": []
-    },
-    "weaver-of-the-cosmos:returned_to_reality": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "returnedToReality",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "weaver-of-the-cosmos:send_returned_to_reality": {
-      "kind": "unsupported",
-      "name": "send_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "weaver-of-the-cosmos:two_physical_trauma:text": {
-      "kind": "story",
-      "text": "Each investigator suffers 2 physical trauma from their fierce fight with the spider god.",
-      "bullets": []
-    },
-    "weaver-of-the-cosmos:two_physical_trauma": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "trauma",
-          "who": "each",
-          "physical": 2,
-          "mental": 0
-        }
-      ]
-    },
-    "weaver-of-the-cosmos:maybe_win_campaign:yes:fx": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "skipScenario",
-          "scenario": "tde-epilogue"
-        }
-      ]
-    },
-    "weaver-of-the-cosmos:win_text:text": {
-      "kind": "story",
-      "text": "The investigators win the campaign.",
-      "bullets": []
-    },
-    "weaver-of-the-cosmos:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "weaver-of-the-cosmos:win": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "end",
-          "result": "win"
-        }
-      ]
-    },
-    "weaver-of-the-cosmos:maybe_upgrade_decks": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "campaign_data",
-        "take": true
-      },
-      "then": [
-        "weaver-of-the-cosmos:upgradeDecks"
-      ],
-      "else": []
-    },
-    "weaver-of-the-cosmos:maybe_win_campaign": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "halfCampaign",
-        "section": "hidden"
-      },
-      "then": [
-        "weaver-of-the-cosmos:maybe_win_campaign:yes:fx",
-        "weaver-of-the-cosmos:win_text:text",
-        "weaver-of-the-cosmos:upgradeDecks",
-        "weaver-of-the-cosmos:win"
-      ],
-      "else": [
-        "weaver-of-the-cosmos:maybe_upgrade_decks",
-        "weaver-of-the-cosmos:send_weaver_of_the_cosmos_done",
-        "weaver-of-the-cosmos:maybe_proceed_campaign_a"
-      ]
-    },
-    "weaver-of-the-cosmos:never_escaped": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "neverEscaped",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "weaver-of-the-cosmos:send_never_escaped": {
-      "kind": "unsupported",
-      "name": "send_campaign_link",
-      "effects": [],
-      "steps": []
-    },
-    "weaver-of-the-cosmos:win_never_seen_again:text": {
-      "kind": "story",
-      "text": "The investigators win the campaign… and are never seen or heard from again.",
-      "bullets": []
-    },
-    "weaver-of-the-cosmos:win_never_seen_again": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "skipScenario",
-          "scenario": "tde-epilogue"
-        },
-        {
-          "do": "end",
-          "result": "win"
-        }
-      ]
-    },
-    "weaver-of-the-cosmos:maybe_win_never_seen_again": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "halfCampaign",
-        "section": "hidden"
-      },
-      "then": [
-        "weaver-of-the-cosmos:win_never_seen_again:text",
-        "weaver-of-the-cosmos:win_never_seen_again"
-      ],
-      "else": [
-        "weaver-of-the-cosmos:maybe_upgrade_decks",
-        "weaver-of-the-cosmos:send_weaver_of_the_cosmos_done",
-        "weaver-of-the-cosmos:maybe_proceed_campaign_a"
-      ]
-    },
-    "weaver-of-the-cosmos:still_in_the_dreamlands": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "stillInTheDreamlands",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "weaver-of-the-cosmos:send_still_in_the_dreamlands": {
-      "kind": "unsupported",
-      "name": "send_campaign_link",
-      "effects": [],
-      "steps": []
     }
   }
 }

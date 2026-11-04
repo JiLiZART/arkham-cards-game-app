@@ -134,33 +134,6 @@
         }
       ]
     },
-    "R2": {
-      "title": "Resolution 2",
-      "text": "As you examine your surroundings, you notice that your other companions, including Virgil and Randolph, have been captured as well. They are unconscious at the moment, but maybe when they awaken you can formulate a plan to free yourselves. After all, despite this setback, you have learned much of the Dreamlands and of the gods who dwell atop unknown Kadath. Though you still don’t know its precise location, if you are able to escape from this wretched galley, perhaps there is hope for your quest. You swallow a ball of despair and hope that this is not the end of your journey…",
-      "effects": [
-        {
-          "do": "record",
-          "key": "everyoneCaptured",
-          "value": true
-        },
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 0,
-          "who": "each"
-        },
-        {
-          "do": "record",
-          "key": "virgilWasCaptured",
-          "value": true
-        },
-        {
-          "do": "record",
-          "key": "randolphWasCaptured",
-          "value": true
-        }
-      ]
-    },
     "none": {
       "title": "No resolution was reached",
       "text": "",

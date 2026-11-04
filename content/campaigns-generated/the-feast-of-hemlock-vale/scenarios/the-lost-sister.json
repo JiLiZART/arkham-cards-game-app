@@ -89,46 +89,6 @@
           "value": true
         }
       ]
-    },
-    "R3": {
-      "title": "Resolution 3",
-      "text": "“I’ll start making preparations soon and hopefully we’ll be off the island in a few more days,” Helen tells you. “I suggest you leave soon, as well.” You tell her the survey is far from over, and there’s still more you have to do. Helen scoffs. “Your funeral,” she says, then after a brief silence she looks at you again. “Sorry. I don’t know why I said that,” she says. “Thank you for your help. Nobody from the Vale would have helped.” She looks down the black sanded shore toward Akwan. “Gideon used to fish here often, but not anymore. The Vale took him from us. Now they’ve taken Theo.”\nShe looks back to you. “I have another favor to ask. Please. Look after Theo. He means well, even if he’s a little thick in the head. Make sure he’s okay. No matter what he thinks, he’s still family.”",
-      "effects": [
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 2,
-          "who": "each"
-        },
-        {
-          "do": "record",
-          "key": "elizabethPetersWasSaved",
-          "value": true
-        }
-      ]
-    },
-    "R4": {
-      "title": "Resolution 4",
-      "text": "“Miskatonic Survey, June 1926. Members Marquez, Musgrave, et alii. Northern shore and coastal caves extremely dangerous. Identified dozens of hitherto undocumented species of bioluminescent fungus. An exceedingly hostile ecosystem with extreme sensitivity to light. <strike>Further analysis and observation recommended. Future expeditions should come prepared with appropriate gear and extreme caution.</strike> Avoid the Akwan caves, if at all possible.”",
-      "effects": [
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 0,
-          "who": "each"
-        },
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 0,
-          "who": "each"
-        },
-        {
-          "do": "record",
-          "key": "akwanShoreline",
-          "value": true
-        }
-      ]
     }
   },
   "i18nId": "the_lost_sister",

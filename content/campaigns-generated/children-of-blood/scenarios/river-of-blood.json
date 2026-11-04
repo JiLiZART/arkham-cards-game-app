@@ -141,23 +141,6 @@
           "who": "each"
         }
       ]
-    },
-    "R4": {
-      "title": "Resolution 4",
-      "text": "Back at Detective Reynolds’ office, you explain what you’ve learned. He tells you that his leads also pointed towards the New Horizons meat packing facility, and a suspicious group that had been seen around the building, dressed in robes instead of the more standard aprons and coveralls of the workers. “The same place where Julia worked,” Reynolds says. “Seems like that place is worth a visit.”",
-      "effects": [
-        {
-          "do": "earnCard",
-          "code": "13029",
-          "who": "choice"
-        },
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 0,
-          "who": "each"
-        }
-      ]
     }
   },
   "i18nId": "river_of_blood",

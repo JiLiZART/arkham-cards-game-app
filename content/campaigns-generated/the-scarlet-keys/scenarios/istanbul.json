@@ -155,64 +155,6 @@
         }
       ]
     },
-    "R2": {
-      "title": "Resolution 2",
-      "text": "You take a moment to look out over the sea and appreciate the beauty in the gentle waves, glimmering with the reflection of the now-shining sun. As you leave Istanbul behind, you allow yourself a bit of hope. Perhaps you could have trusted Ece more, but… you shake your head, filled with grim resolve. No—this relic is something you must protect yourself. Someone else might use it for ill. At least in your hands, you know it’s safe.",
-      "effects": [
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 0,
-          "who": "each"
-        }
-      ]
-    },
-    "R3": {
-      "title": "Resolution 3",
-      "text": "Ece breathes an unsure sigh, worry still etched in her expression. “Well, in case they saw me, I should probably leave Istanbul for a short while. I’ll have to put in a leave of absence at the museum. In the meantime…” she turns to face you, eyebrows raised. “As for our agreement…?”",
-      "effects": [
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 0,
-          "who": "each"
-        }
-      ]
-    },
-    "R4": {
-      "title": "Resolution 4",
-      "text": "You hand over the talisman, trusting that Ece will keep it safe in her possession as promised. She breathes a sigh of relief as she stores it safely in her side pack. “Thank you. For trusting me,” she says. “I’ll keep it on my person at all times.” You take a moment to look out over the sea and appreciate the beauty in the gentle waves, glimmering with the reflection of the now-shining sun. Finally, you ask Ece where she will go now that her position in Istanbul is compromised. “There is a place where the Coterie meets in secret. To go over… important happenings. We do not consort often, but I believe these events warrant a caucus. I will have to call the rest to assemble.” She sneaks a furtive glance in your direction. “Perhaps, when that times comes, we will meet again.” As you leave Istanbul behind, you allow yourself a bit of hope.",
-      "effects": [
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 0,
-          "who": "each"
-        },
-        {
-          "do": "record",
-          "key": "eceTrustsTheCell",
-          "value": true
-        }
-      ]
-    },
-    "R5": {
-      "title": "Resolution 5",
-      "text": "You lock eyes with Ece and apologize, explaining that you cannot give it to her. Especially after seeing the havoc it could wreak when unsealed. Her expression sours into cold anger. “I see.” She narrows her eyes. “…you had no intention of ever giving it to me,” she guesses correctly. You try to explain, but she stops you. “No, I understand. Really, I do.” She takes a step back, her posture wary, defensive. “You’re just like the others. You’ll do anything to get your hands on the Keys, won’t you?” You protest—it’s not that you want them for yourself, it’s just that you need to keep watch over them. In your possession, they’ll be safe, and only ever used to protect humanity. “And what do you suppose the rest of them say?” She barks. “Tzu? Amaranth? Álvarez? The very same. ‘It’s for the good of humanity,’ they claim, and to that end, all means are justified.” She turns and departs, her final words lingering in the air: “You would fit in nicely with the Coterie.” As you leave Istanbul behind, you reflect on your decision, turning the sealed case over and over in your hands. You know it was the right thing to do, but still, Ece’s words haunt you. Perhaps you’ll be able to reconcile some other time… if she’ll even hear you out.",
-      "effects": [
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 0,
-          "who": "each"
-        },
-        {
-          "do": "record",
-          "key": "eceDoesNotTrustTheCell",
-          "value": true
-        }
-      ]
-    },
     "R6": {
       "title": "Resolution 6",
       "text": "You managed to find the location of the talisman, but the cult was one step ahead of you, swooping in and snatching it for themselves. Before you knew it, they had escaped the city with the entity unsealed. Who knows what horrors they’ve unleashed upon the world. You hope that some day the Foundation may be able to recover the talisman and prevent whatever entity it binds from causing too much harm, but until then… you shudder and put such thoughts away for the time being. If Ece was right about one of her cohorts being behind this cult’s actions, you’ll surely see the talisman again.",

@@ -150,18 +150,6 @@
         }
       ]
     },
-    "R2": {
-      "title": "Resolution 2",
-      "text": "You race down the ruined corridor, the hissing of pursuing snake monstrosities echoing off the stone behind you. Your path leads you to a deep pit, and you are faced with a choice: try to cross the gap, or turn around to face your pursuers. You reach to your belt and retrieve your bullwhip, deciding to use it to cross the chasm. You lash the whip at an exposed tree root near the ceiling, and start your swing.\nWith a heart-wrenching crack, the root snaps under your weight and you plummet into the chasm. You bounce off of sharp rocks as you tumble down, eventually landing in a shallow stream at the bottom. You spit blood, and then look up to see the eyes of the serpent-people peering down at you from far above, before they retreat back the way they came.\nYou struggle to stand, and consider the stream at your feet. You stumble along, following its path, hoping it will eventually lead you out.",
-      "effects": [
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 0,
-          "who": "each"
-        }
-      ]
-    },
     "none": {
       "title": "No resolution was reached",
       "text": "",

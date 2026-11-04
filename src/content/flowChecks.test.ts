@@ -186,3 +186,12 @@ describe("checkFlow and a scenario's own setup steps (before)", () => {
     expect(run(f).join("\n")).toMatch(/before\.ghost.*not a scenario/);
   });
 });
+
+describe("checkFlow and an interlude nothing reaches", () => {
+  it("reports an interlude in neither the order nor a step", () => {
+    const f = flow({
+      interludes: { ...flow().interludes, dead: { kind: "interlude", steps: ["intro"] } },
+    });
+    expect(run(f).join("\n")).toMatch(/interludes\.dead.*neither the order nor a step/);
+  });
+});

@@ -710,3 +710,246 @@ describe("a scenario's own setup steps run before it (flow.before)", () => {
     expect(flow.before["lost-in-time-and-space"]).toBeUndefined();
   });
 });
+
+describe("the flow compiler's fixes (campaign-flow-compiler-fixes)", () => {
+  const camp = (over: object = {}) => ({
+    id: "x",
+    scenarios: ["s_one"],
+    setup: [],
+    steps: [],
+    ...over,
+  });
+  const scen = (over: object = {}) => ({
+    id: "s_one",
+    setup: [],
+    steps: [],
+    resolutions: [],
+    ...over,
+  });
+  const sids = new Map([["s_one", "s-one"]]);
+  const run = (
+    campaignOver: object,
+    scenarioOver: object,
+    more: object[] = [],
+    shared?: object[],
+  ) =>
+    compileFlow({
+      campaign: camp(campaignOver),
+      scenarios: [scen(scenarioOver), ...more],
+      ids: sids,
+      ...(shared ? { shared: new Map(shared.map((s) => [(s as { id: string }).id, s])) } : {}),
+    }).flow;
+  const record = (id: string, key: string) => ({
+    id,
+    effects: [{ type: "campaign_log", section: "campaign_notes", id: key }],
+  });
+  const keysOf = (flow: CampaignFlow, ids: string[]): string[] =>
+    ids.flatMap((id) => {
+      const st = flow.steps[id];
+      return st?.kind === "effects" ? st.effects.flatMap((e) => ("key" in e ? [e.key] : [])) : [];
+    });
+
+  it("a resolution step expands the named resolution in place, and a hidden resolution is not an ending", () => {
+    const flow = run(
+      {},
+      {
+        steps: [
+          record("r1_rec", "r1"),
+          { id: "go_r6", type: "resolution", resolution: "R6" },
+          record("r6_rec", "r6"),
+        ],
+        resolutions: [
+          { id: "R1", steps: ["r1_rec", "go_r6"] },
+          { id: "R6", hidden: true, steps: ["r6_rec"] },
+        ],
+      },
+    );
+    expect(Object.keys(flow.resolutions["s-one"])).toEqual(["R1"]);
+    expect(keysOf(flow, flow.resolutions["s-one"].R1)).toEqual(["r1", "r6"]);
+  });
+
+  it("a step the linked resolution already ran is not run twice (Essex County Express: Resolution 2, then upgrade)", () => {
+    const flow = run(
+      {},
+      {
+        steps: [record("r2_rec", "r2"), { id: "go_r2", type: "resolution", resolution: "R2" }],
+        resolutions: [
+          { id: "no_resolution", steps: ["go_r2", "$upgrade_decks"] },
+          { id: "R2", steps: ["r2_rec", "$upgrade_decks"] },
+        ],
+      },
+    );
+    const none = flow.resolutions["s-one"].none;
+    expect(none.filter((id) => flow.steps[id]?.kind === "upgradeDecks")).toHaveLength(1);
+    expect(keysOf(flow, none)).toEqual(["r2"]);
+  });
+
+  it("a defeated / resigned pair is the none resolution, asked as one question", () => {
+    const flow = run(
+      {},
+      {
+        steps: [record("d", "defeated"), record("r", "resigned")],
+        resolutions: [
+          { id: "no_resolution_defeated", steps: ["d"] },
+          { id: "no_resolution_resigned", steps: ["r"] },
+        ],
+      },
+    );
+    const none = flow.resolutions["s-one"].none;
+    expect(none).toHaveLength(1);
+    const ask = flow.steps[none[0]];
+    expect(ask.kind).toBe("chooseOne");
+    expect(ask.kind === "chooseOne" && ask.choices.flatMap((c) => keysOf(flow, c.steps))).toEqual([
+      "resigned",
+      "defeated",
+    ]);
+  });
+
+  it("a $ step is found among the guide's shared steps, after the owner's own", () => {
+    const flow = run(
+      {},
+      { resolutions: [{ id: "R1", steps: ["$advance_time"] }] },
+      [],
+      [record("$advance_time", "dayAdvanced")],
+    );
+    expect(keysOf(flow, flow.resolutions["s-one"].R1)).toEqual(["dayAdvanced"]);
+    // $upgrade_decks stays the game's own deck upgrade
+    const up = run({}, { resolutions: [{ id: "R1", steps: ["$upgrade_decks"] }] });
+    expect(up.resolutions["s-one"].R1.map((id) => up.steps[id].kind)).toEqual(["upgradeDecks"]);
+  });
+
+  it("the guide's version check is true", () => {
+    const flow = run(
+      {
+        setup: ["check"],
+        steps: [
+          {
+            id: "check",
+            type: "branch",
+            condition: {
+              type: "multi",
+              count: 1,
+              conditions: [{ type: "campaign_data", campaign_data: "version", min_version: 3 }],
+              options: [
+                { boolCondition: true, steps: ["yes"] },
+                { boolCondition: false, steps: ["no"] },
+              ],
+            },
+          },
+          record("yes", "versionTrue"),
+          record("no", "versionFalse"),
+        ],
+      },
+      {},
+    );
+    const reach = (ids: string[]): string[] =>
+      ids.flatMap((id) => {
+        const st = flow.steps[id];
+        return [id, ...(st?.kind === "branch" ? reach(st.then) : [])];
+      });
+    expect(keysOf(flow, reach(flow.setup))).toEqual(["versionTrue"]);
+  });
+
+  it("a campaign's set_scenarios gives the order, its first list, and the question that sets it is not asked", () => {
+    const flow = run(
+      {
+        scenarios: [],
+        setup: ["ask"],
+        steps: [
+          {
+            id: "ask",
+            type: "input",
+            input: {
+              type: "choose_one",
+              choices: [
+                {
+                  id: "a",
+                  text: "A",
+                  effects: [
+                    {
+                      type: "campaign_data",
+                      setting: "set_scenarios",
+                      scenarios: ["s_one", "mid"],
+                    },
+                  ],
+                },
+                {
+                  id: "b",
+                  text: "B",
+                  effects: [
+                    {
+                      type: "campaign_data",
+                      setting: "set_scenarios",
+                      scenarios: ["mid", "s_one"],
+                    },
+                  ],
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {},
+      [{ id: "mid", type: "interlude", setup: [] }],
+    );
+    expect(flow.order).toEqual(["s-one", "mid"]);
+    expect(Object.values(flow.steps).some((s) => s.kind === "chooseOne")).toBe(false);
+  });
+
+  it("an interlude neither in the order nor named by a step is dropped; one a step names stays", () => {
+    const flow = run(
+      {
+        scenarios: ["s_one"],
+        steps: [],
+      },
+      {
+        resolutions: [{ id: "R1", steps: ["send"] }],
+        steps: [
+          {
+            id: "send",
+            effects: [{ type: "campaign_data", setting: "next_scenario", scenario: "kept" }],
+          },
+        ],
+      },
+      [
+        { id: "kept", type: "interlude", setup: ["k"], steps: [{ id: "k", text: "kept" }] },
+        { id: "dead", type: "interlude", setup: ["d"], steps: [{ id: "d", text: "dead" }] },
+      ],
+    );
+    expect(Object.keys(flow.interludes)).toEqual(["kept"]);
+    expect(Object.keys(flow.steps).some((k) => k.startsWith("dead:"))).toBe(false);
+  });
+
+  it("a step's own follow-on steps are compiled after its effects ($advance_time then $update_day)", () => {
+    const flow = run(
+      {},
+      {
+        resolutions: [{ id: "R1", steps: ["$advance_time"] }],
+      },
+      [],
+      [
+        {
+          id: "$advance_time",
+          effects: [{ type: "campaign_log", section: "campaign_notes", id: "advanced" }],
+          steps: ["$update_day"],
+        },
+        record("$update_day", "dayUpdated"),
+      ],
+    );
+    expect(keysOf(flow, flow.resolutions["s-one"].R1)).toEqual(["advanced", "dayUpdated"]);
+  });
+
+  it("a guide note about the app is not campaign text", () => {
+    const flow = run(
+      {
+        setup: ["note", "story"],
+        steps: [
+          { id: "note", text: "Note: this app can do X." },
+          { id: "story", type: "story", text: "Once upon a time." },
+        ],
+      },
+      {},
+    );
+    expect(flow.setup.map((id) => flow.steps[id].kind)).toEqual(["story"]);
+  });
+});

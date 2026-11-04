@@ -152,18 +152,6 @@
           "who": "each"
         }
       ]
-    },
-    "R3": {
-      "title": "Resolution 3",
-      "text": "You urge your companions to take the time to prepare and collect yourself for your final stand.",
-      "effects": [
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 0,
-          "who": "each"
-        }
-      ]
     }
   },
   "i18nId": "the_doom_of_arkham_part_1",

@@ -120,18 +120,6 @@
         }
       ]
     },
-    "R2": {
-      "title": "Resolution 2",
-      "text": "With a final hiss of air and a primordial screech, the immense gateway bursts open. Tendrils of prismatic color reach forth, slithering along the floor and walls. The chaos is over in mere seconds. The miasma grips you with impossible strength, clawing and tugging at your limbs. Terrible shapes, familiar sights, and untold nightmares play out along the surface of the entity as it pulls you screaming through the gateway and into the other side.",
-      "effects": [
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 0,
-          "who": "each"
-        }
-      ]
-    },
     "R3": {
       "title": "Resolution 3",
       "text": "The pulse of energy induced by your catastrophic mistake wipes all organic life from the face of the Earth.",

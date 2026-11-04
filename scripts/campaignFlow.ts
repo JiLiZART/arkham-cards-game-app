@@ -23,7 +23,15 @@ export interface FlowSource {
   scenarios: Raw[];
   /** guide scenario id → the id of the scenario file written for it (the playable ones) */
   ids: Map<string, string>;
+  /** the guide's shared steps (its `core` scenario: `$advance_time`, `$update_day`...), by id */
+  shared?: Map<string, Raw>;
+  /** the codes of the real cards: a guide's own made-up cards (The Scarlet Keys' "ztsk_" thieves) are not among them */
+  cards?: Set<string>;
 }
+
+const isSetScenarios = (e: Raw) => e?.type === "campaign_data" && e.setting === "set_scenarios";
+/** a choice that sets the order of play (Carcosa's original or reprint printing) */
+const setsOrder = (c: Raw) => (c.effects ?? []).some(isSetScenarios);
 
 export interface FlowResult {
   flow: CampaignFlow;
@@ -79,6 +87,9 @@ class Compiler {
   private scenarioId(guide: string): string {
     return this.src.ids.get(guide) ?? kebab(guide);
   }
+
+  /** each scenario's guide resolutions by owner id, for a step that sends play to another resolution */
+  private resolutionsOf = new Map<string, Raw[]>();
 
   private add(owner: string, base: string, step: CampaignStep): string {
     let id = `${owner}:${base}`;
@@ -157,6 +168,12 @@ class Compiler {
       }
       case "campaign_log_cards": {
         const section = e.section ?? NOTES;
+        // a list of the guide's own made-up cards, which no card data has, is left to the campaign's change
+        if (
+          this.src.cards &&
+          (e.codes ?? []).some((c: string) => !c.startsWith("$") && !this.src.cards!.has(c))
+        )
+          return this.skipEffect({ type: "campaign_log_cards:custom-card" });
         // a card the players picked is listed under the section's own name
         if (e.id === "$input_value")
           return [{ do: "listCards", id: section, section, codes: ["$input"], remove: false }];
@@ -258,6 +275,8 @@ class Compiler {
             return r ? [{ do: TEST_STAGE.End, result: r }] : this.skipEffect(e);
           }
           case "difficulty":
+          // the order of play is the flow's own (compile() reads the first set_scenarios on the setup's default path)
+          case "set_scenarios":
             return [];
           default:
             return this.skipEffect(e);
@@ -315,6 +334,9 @@ class Compiler {
       case "campaign_data":
         if (c.campaign_data === "scenario_completed" && c.scenario)
           return { kind: "scenarioCompleted", scenario: this.scenarioId(c.scenario) };
+        // the guide's app version: the game plays the current guide
+        if (c.campaign_data === "version")
+          return { kind: "unsupported", name: "version", take: true };
         return null;
       case "multi": {
         const parts = (c.conditions ?? []).map((x: Raw) => this.test(x));
@@ -476,6 +498,20 @@ class Compiler {
           )
         )
           return [];
+        // a question that only picks the order of play (Carcosa's printing): the first answer, not asked
+        const chs: Raw[] = i.choices ?? [];
+        if (chs.length && chs.every(setsOrder)) {
+          const first = chs[0];
+          return [
+            ...this.effectSteps(
+              owner,
+              byId,
+              `${st.id}:${first.id}`,
+              (first.effects ?? []).filter((e: Raw) => !isSetScenarios(e)),
+            ),
+            ...this.expand(owner, byId, first.steps ?? []),
+          ];
+        }
         return [
           this.add(owner, st.id, {
             kind: "chooseOne",
@@ -592,9 +628,9 @@ class Compiler {
 
   // ---------- steps ----------
 
-  /** the game's steps for a list of guide step ids, in order */
+  /** the game's steps for a list of guide step ids, in order; a step a linked resolution already ran is not run again */
   expand(owner: string, byId: Map<string, Raw>, ids: string[]): string[] {
-    return ids.flatMap((id) => this.one(owner, byId, id));
+    return [...new Set(ids.flatMap((id) => this.one(owner, byId, id)))];
   }
 
   private one(owner: string, byId: Map<string, Raw>, id: string): string[] {
@@ -609,10 +645,15 @@ class Compiler {
 
   private compileStep(owner: string, byId: Map<string, Raw>, id: string): string[] {
     if (id === "$upgrade_decks") return [this.add(owner, "upgradeDecks", { kind: "upgradeDecks" })];
-    if (id.startsWith("$")) return [];
-    const st = byId.get(id);
+    // the owner's own step, else the guide's shared one; a $ id found nowhere is a rule reminder
+    const st = byId.get(id) ?? this.src.shared?.get(id);
     if (!st) return [];
     switch (st.type) {
+      case "resolution": {
+        // "Proceed to Resolution 6": that resolution's steps, here
+        const r = this.resolutionsOf.get(owner)?.find((x: Raw) => x.id === st.resolution);
+        return r ? this.expand(owner, byId, r.steps ?? []) : [];
+      }
       case "branch":
         return st.condition ? this.branch(owner, byId, id, st.condition) : [];
       case "input":
@@ -626,14 +667,21 @@ class Compiler {
             bullets: [],
           }),
           ...this.effectSteps(owner, byId, `${id}:fx`, st.effects ?? []),
+          ...this.expand(owner, byId, st.steps ?? []),
         ];
       case undefined:
       case null:
+        // a note about the ArkhamCards app is not the campaign's text
+        if (!st.effects?.length && /\b(this|the) app\b/i.test(st.text ?? "")) return [];
+        // a shared rule reminder ($day_and_night_rule) is the rulebook's, not the campaign's text
+        if (!st.effects?.length && /^\$.*_rule$/.test(id)) return [];
         return [
           ...(st.text
             ? [this.add(owner, `${id}:text`, { kind: "story", text: st.text, bullets: [] })]
             : []),
           ...this.effectSteps(owner, byId, id, st.effects ?? []),
+          // the steps it leads on to ($advance_time then $update_day)
+          ...this.expand(owner, byId, st.steps ?? []),
         ];
       default:
         // encounter sets, location setup, rule reminders, borders, tables: the scenario's setup, not the campaign's flow
@@ -670,11 +718,43 @@ class Compiler {
       const id = this.scenarioId(s.id);
       const byId = new Map<string, Raw>((s.steps ?? []).map((x: Raw) => [x.id, x]));
       if (ids.has(s.id)) {
+        this.resolutionsOf.set(id, s.resolutions ?? []);
         const res: Record<string, string[]> = {};
-        for (const r of s.resolutions ?? []) {
-          const k = r.id === "no_resolution" ? "none" : /^R\d+$/.test(r.id) ? r.id : null;
-          if (k) res[k] = this.expand(id, byId, r.steps ?? []);
+        // a hidden resolution is a tail another one proceeds to, never an ending of its own
+        const shown: Raw[] = (s.resolutions ?? []).filter((r: Raw) => !r.hidden);
+        const defeated = shown.find((r) => r.id === "no_resolution_defeated");
+        const resigned = shown.find((r) => r.id === "no_resolution_resigned");
+        for (const r of shown) {
+          const k =
+            r.id === "no_resolution" ||
+            (r.id.startsWith("no_resolution_") && !(defeated && resigned))
+              ? "none"
+              : /^R\d+$/.test(r.id)
+                ? r.id
+                : null;
+          if (k && !res[k]) res[k] = this.expand(id, byId, r.steps ?? []);
         }
+        if (defeated && resigned)
+          res.none = [
+            this.add(id, "none", {
+              kind: "chooseOne",
+              text: "Did the investigators resign, or were they all defeated?",
+              choices: [
+                {
+                  id: "resigned",
+                  text: "They resigned",
+                  effects: [],
+                  steps: this.expand(id, byId, resigned.steps ?? []),
+                },
+                {
+                  id: "defeated",
+                  text: "They were all defeated",
+                  effects: [],
+                  steps: this.expand(id, byId, defeated.steps ?? []),
+                },
+              ],
+            }),
+          ];
         if (Object.keys(res).length) flow.resolutions[id] = res;
         // its own setup steps that change the campaign or ask the players (difficulty tokens, an intro choice); the intro
         // and the setup instructions are the scenario's to show and to do
@@ -710,7 +790,72 @@ class Compiler {
       const id = this.scenarioId(s.id);
       if (ids.has(s.id) && !flow.order.includes(id) && !named.has(id)) flow.order.push(id);
     }
+    // the guide's own order of play, where its setup sets one (Carcosa): the first list on the setup's default path
+    const set = this.setScenarios(campaignSteps, campaign.setup ?? []);
+    if (set)
+      flow.order = set
+        .map((gid) => this.scenarioId(gid))
+        .filter(
+          (id, k, all) => all.indexOf(id) === k && (this.knownFile(id) || flow.interludes[id]),
+        );
+    // an interlude nothing reaches (in neither the order nor a step) goes, with its steps
+    const reached = namedScenarios(flow);
+    for (const id of Object.keys(flow.interludes))
+      if (!flow.order.includes(id) && !reached.has(id)) {
+        delete flow.interludes[id];
+        for (const k of Object.keys(this.steps)) if (k.startsWith(`${id}:`)) delete this.steps[k];
+      }
+    // skipping an interlude that isn't played (the reprint's Interlude I) does nothing
+    const playable = (id: string) =>
+      flow.order.includes(id) || !!flow.interludes[id] || this.knownFile(id);
+    for (const st of Object.values(this.steps))
+      if (st.kind === "effects")
+        st.effects = st.effects.filter((e) => e.do !== "skipScenario" || playable(e.scenario));
     return flow;
+  }
+
+  /** is `id` a scenario file of this group */
+  private knownFile(id: string): boolean {
+    return [...this.src.ids.values()].includes(id);
+  }
+
+  /**
+   * The first `set_scenarios` list on the setup's default path: a branch takes its true option for the guide's version
+   * check and its default otherwise, a question its first answer
+   */
+  private setScenarios(
+    steps: Map<string, Raw>,
+    ids: string[],
+    seen = new Set<string>(),
+  ): string[] | null {
+    const inEffects = (effects: Raw[] | undefined) =>
+      (effects ?? []).find(isSetScenarios)?.scenarios ?? null;
+    for (const id of ids) {
+      if (seen.has(id)) continue;
+      seen.add(id);
+      const st = steps.get(id) ?? this.src.shared?.get(id);
+      if (!st) continue;
+      const own = inEffects(st.effects);
+      if (own) return own;
+      const c = st.condition;
+      const opts: Raw[] = c?.options ?? [];
+      const option =
+        st.type === "branch"
+          ? c?.campaign_data === "version" ||
+            (c?.type === "multi" &&
+              (c.conditions ?? []).some((x: Raw) => x.campaign_data === "version"))
+            ? opts.find((o) => o.boolCondition === true)
+            : (c?.defaultOption ?? opts[0])
+          : st.type === "input"
+            ? st.input?.choices?.[0]
+            : null;
+      if (option) {
+        const found =
+          inEffects(option.effects) ?? this.setScenarios(steps, option.steps ?? [], seen);
+        if (found) return found;
+      }
+    }
+    return null;
   }
 }
 

@@ -26,19 +26,19 @@ describe("the generated flows", () => {
 
   it("hold the interludes, the resolutions and the prompts the guides give, and as many as can't be offered as the census says", () => {
     const steps = flows.flatMap((f) => Object.values(f.flow.steps));
-    expect(flows.reduce((n, f) => n + Object.keys(f.flow.interludes).length, 0)).toBe(122); // Hemlock Vale's prologue is a scenario, not an interlude
+    expect(flows.reduce((n, f) => n + Object.keys(f.flow.interludes).length, 0)).toBe(79); // only the interludes a flow reaches (no side flow carries another campaign's)
     expect(
       flows.reduce(
         (n, f) =>
           n + Object.values(f.flow.resolutions).reduce((m, r) => m + Object.keys(r).length, 0),
         0,
       ),
-    ).toBe(605); // with the scenarios the import used to skip (Sepulchre, the preludes, Rougarou)
-    expect(steps.filter((s) => s.kind === "unsupported").length).toBe(188);
+    ).toBe(535); // hidden resolutions are tails, not endings; a defeated/resigned pair is one none
+    expect(steps.filter((s) => s.kind === "unsupported").length).toBe(154); // guide inputs the engine lacks: campaign links, supplies, partners, investigator choices
     expect(
       steps.reduce((n, s) => n + (s.kind === "branch" ? unsupportedTests(s.condition) : 0), 0),
-    ).toBe(278); // 101 of them in the scenarios' own setup steps (flow.before), defaulting as elsewhere
-    expect(steps.filter((s) => s.kind === "upgradeDecks").length).toBe(167);
+    ).toBe(392); // The Scarlet Keys' $embark compiled per scenario (127); with the scenarios' own setup steps (flow.before) and the version check (always true)
+    expect(steps.filter((s) => s.kind === "upgradeDecks").length).toBe(166);
   });
 
   it("list their scenario reference cards in the campaign's order, the interludes marked, as the picker needs", () => {

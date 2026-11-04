@@ -54,6 +54,35 @@
 
 6. **The program document.** `docs/campaign-program.md` becomes: a short head (what the program is, ADR-0012, how a change is done); a table of the 65 changes in landing order, grouped as the brief orders them (foundations: `scenario-import-fixes`, `campaign-flow-compiler-fixes`, `engine-scenario-structure`, `engine-generic-keywords`, `engine-location-instances-grid`, `engine-bless-curse`; cycle engine: the nine `engine-<cycle>-*`; `i18n-all-locales`; the 36 `campaign-*` with each base before its Return-to and the side scenarios after their cycle; the 13 `player-cards-*`), columns: change, status (from `openspec/changes/` vs `archive/`), what it completes (packs or scenarios); then the existing pack and per-scenario coverage tables, regenerated from `content/coverage.json` by the same hand procedure as today, each pack row naming its change. A test (`scripts/program.test.ts`, new) asserts every `campaign-*`, `player-cards-*` and listed engine change under `openspec/changes/` appears once.
 
+## Unsupported constructs after this change (task 2.3)
+
+The import's flow notes (`.cache/import-campaigns.log`), summed per campaign, before this change (after `scenario-import-fixes`) and after. A construct is counted each time a scenario's flow compiles it, so a shared step reached by many scenarios counts many times. The rise in The Scarlet Keys and Hemlock Vale is their shared steps (`$embark`, `$advance_time`) now compiled where they were dropped: The Scarlet Keys' 1,853 are mostly its made-up "ztsk_" cards (660, skipped) and Scarlet Key effects (440), both `engine-tsk-*` and `campaign-the-scarlet-keys` scope. The side scenarios not listed are unchanged.
+
+| Campaign | Before | After |
+| --- | --- | --- |
+| `children-of-blood` | 10 | 10 |
+| `edge-of-the-earth` | 163 | 173 |
+| `fortune-and-folly` | 11 | 11 |
+| `guardians-of-the-abyss` | 2 | 0 |
+| `return-to-the-circle-undone` | 39 | 30 |
+| `return-to-the-dunwich-legacy` | 3 | 2 |
+| `return-to-the-forgotten-age` | 83 | 79 |
+| `return-to-the-night-of-the-zealot` | 4 | 3 |
+| `return-to-the-path-to-carcosa` | 18 | 9 |
+| `side-the-midwinter-gala` | 10 | 11 |
+| `the-circle-undone` | 38 | 30 |
+| `the-dream-quest` | 49 | 46 |
+| `the-drowned-city` | 77 | 78 |
+| `the-dunwich-legacy` | 3 | 2 |
+| `the-feast-of-hemlock-vale` | 49 | 80 |
+| `the-forgotten-age` | 54 | 51 |
+| `the-innsmouth-conspiracy` | 25 | 20 |
+| `the-path-to-carcosa` | 17 | 8 |
+| `the-scarlet-keys` | 112 | 1853 |
+| `the-web-of-dreams` | 49 | 46 |
+
+Also found while applying: a plain step's own follow-on `steps` were never compiled (47 guide steps, `$advance_time` → `$update_day` among them), now expanded; a guide note about the ArkhamCards app and a shared `$…_rule` reminder are not campaign text; skipping an interlude the flow doesn't play (the reprint's Interlude I) is dropped. A resolution that links to another and then names a step the linked one already ran (Essex County Express: "Resolution 2", then `$upgrade_decks`) ran it twice, awarding XP twice; an expansion now lists each step once.
+
 ## Risks / Trade-offs
 
 - [Expanding resolution links duplicates a shared tail's steps under each resolution's owner] → step ids are `<owner>:<base>` and `add()` suffixes duplicates with `#n`; the tail compiles once per link (five times for Written in Rock); `stepTexts` keeps texts per id so translations follow. Accepted over a shared-step reference the language doesn't have.

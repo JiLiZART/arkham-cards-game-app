@@ -158,11 +158,42 @@
       "act": "03064"
     },
     {
+      "scenario": "ptc-interlude1",
+      "name": "Lunacy's Reward",
+      "interlude": true
+    },
+    {
+      "scenario": "echoes-of-the-past",
+      "name": "Echoes of the Past",
+      "code": "03120",
+      "agenda": "03121",
+      "act": "03124"
+    },
+    {
+      "scenario": "the-unspeakable-oath",
+      "name": "The Unspeakable Oath",
+      "code": "03159",
+      "agenda": "03160",
+      "act": "03163"
+    },
+    {
+      "scenario": "ptc-interlude2",
+      "name": "Lost Soul",
+      "interlude": true
+    },
+    {
       "scenario": "a-phantom-of-truth",
       "name": "A Phantom of Truth",
       "code": "03200",
       "agenda": "03201",
       "act": "03204"
+    },
+    {
+      "scenario": "the-pallid-mask",
+      "name": "The Pallid Mask",
+      "code": "03240",
+      "agenda": "03241",
+      "act": "03243"
     },
     {
       "scenario": "black-stars-rise",
@@ -179,25 +210,9 @@
       "act": "03320"
     },
     {
-      "scenario": "echoes-of-the-past",
-      "name": "Echoes of the Past",
-      "code": "03120",
-      "agenda": "03121",
-      "act": "03124"
-    },
-    {
-      "scenario": "the-pallid-mask",
-      "name": "The Pallid Mask",
-      "code": "03240",
-      "agenda": "03241",
-      "act": "03243"
-    },
-    {
-      "scenario": "the-unspeakable-oath",
-      "name": "The Unspeakable Oath",
-      "code": "03159",
-      "agenda": "03160",
-      "act": "03163"
+      "scenario": "ptc-epilogue",
+      "name": "Epilogue",
+      "interlude": true
     }
   ]
 }

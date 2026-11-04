@@ -82,175 +82,6 @@
         "disappearance-at-the-twilight-estate:maybe_ask_being_hunted"
       ]
     },
-    "return-to-at-deaths-doorstep": {
-      "none": [
-        "return-to-at-deaths-doorstep:check_final_act"
-      ],
-      "R1": [
-        "return-to-at-deaths-doorstep:investigators_escaped_the_spectral_realm",
-        "return-to-at-deaths-doorstep:earn_xp"
-      ],
-      "R2": [
-        "return-to-at-deaths-doorstep:learned_nothing_of_the_lodges_schemes",
-        "return-to-at-deaths-doorstep:earn_xp",
-        "return-to-at-deaths-doorstep:upgradeDecks",
-        "return-to-at-deaths-doorstep:skip_price_of_progress:text",
-        "return-to-at-deaths-doorstep:skip_price_of_progress",
-        "return-to-at-deaths-doorstep:check_being_hunted"
-      ],
-      "R3": [
-        "return-to-at-deaths-doorstep:never_seen_again",
-        "return-to-at-deaths-doorstep:earn_xp",
-        "return-to-at-deaths-doorstep:kill_not_resigned:text",
-        "return-to-at-deaths-doorstep:upgradeDecks",
-        "return-to-at-deaths-doorstep:skip_price_of_progress:text",
-        "return-to-at-deaths-doorstep:skip_price_of_progress",
-        "return-to-at-deaths-doorstep:check_being_hunted"
-      ]
-    },
-    "return-to-before-the-black-throne": {
-      "none": [],
-      "R1": [
-        "return-to-before-the-black-throne:azathoth_devoured_the_universe",
-        "return-to-before-the-black-throne:all_killed:text",
-        "return-to-before-the-black-throne:all_killed",
-        "return-to-before-the-black-throne:lose:text",
-        "return-to-before-the-black-throne:lose"
-      ],
-      "R2": [
-        "return-to-before-the-black-throne:lead_investigator_joins_pipers:text",
-        "return-to-before-the-black-throne:lead_investigator_joins_pipers",
-        "return-to-before-the-black-throne:azathoth_slumbers",
-        "return-to-before-the-black-throne:lead_investigator_insane:text",
-        "return-to-before-the-black-throne:earn_xp_bonus_5",
-        "return-to-before-the-black-throne:two_mental_trauma:text",
-        "return-to-before-the-black-throne:two_mental_trauma",
-        "return-to-before-the-black-throne:upgradeDecks",
-        "return-to-before-the-black-throne:win:text",
-        "return-to-before-the-black-throne:win"
-      ],
-      "R3": [
-        "return-to-before-the-black-throne:azathoth_slumbers",
-        "return-to-before-the-black-throne:earn_xp_bonus_5",
-        "return-to-before-the-black-throne:two_physical_trauma:text",
-        "return-to-before-the-black-throne:two_physical_trauma",
-        "return-to-before-the-black-throne:upgradeDecks",
-        "return-to-before-the-black-throne:win:text",
-        "return-to-before-the-black-throne:win"
-      ],
-      "R4": [
-        "return-to-before-the-black-throne:choose_final_resolution"
-      ],
-      "R5": [
-        "return-to-before-the-black-throne:azathoth_slumbers",
-        "return-to-before-the-black-throne:signed_the_black_book",
-        "return-to-before-the-black-throne:earn_xp_bonus_10",
-        "return-to-before-the-black-throne:two_physical_and_mental_trauma:text",
-        "return-to-before-the-black-throne:two_physical_and_mental_trauma",
-        "return-to-before-the-black-throne:upgradeDecks",
-        "return-to-before-the-black-throne:win_question_mark:text",
-        "return-to-before-the-black-throne:win_question_mark"
-      ],
-      "R6": [
-        "return-to-before-the-black-throne:azathoth_slumbers",
-        "return-to-before-the-black-throne:earn_xp_bonus_5",
-        "return-to-before-the-black-throne:split_trauma:text",
-        "return-to-before-the-black-throne:split_trauma",
-        "return-to-before-the-black-throne:upgradeDecks",
-        "return-to-before-the-black-throne:win:text",
-        "return-to-before-the-black-throne:win"
-      ]
-    },
-    "return-to-for-the-greater-good": {
-      "none": [
-        "return-to-for-the-greater-good:guardian_of_the_trap_emerged",
-        "return-to-for-the-greater-good:earn_xp",
-        "return-to-for-the-greater-good:upgradeDecks",
-        "return-to-for-the-greater-good:skip_inner_circle:text",
-        "return-to-for-the-greater-good:skip_inner_circle"
-      ],
-      "R1": [
-        "return-to-for-the-greater-good:discovered_how_to_open_the_puzzle_box:text",
-        "return-to-for-the-greater-good:discovered_how_to_open_the_puzzle_box",
-        "return-to-for-the-greater-good:earn_xp"
-      ],
-      "R2": [
-        "return-to-for-the-greater-good:discovered_how_to_open_the_puzzle_box:text",
-        "return-to-for-the-greater-good:discovered_how_to_open_the_puzzle_box",
-        "return-to-for-the-greater-good:earn_xp",
-        "return-to-for-the-greater-good:upgradeDecks",
-        "return-to-for-the-greater-good:skip_inner_circle:text",
-        "return-to-for-the-greater-good:skip_inner_circle"
-      ],
-      "R3": [
-        "return-to-for-the-greater-good:guardian_of_the_trap_defeated",
-        "return-to-for-the-greater-good:earn_xp",
-        "return-to-for-the-greater-good:upgradeDecks",
-        "return-to-for-the-greater-good:skip_inner_circle:text",
-        "return-to-for-the-greater-good:skip_inner_circle"
-      ]
-    },
-    "return-to-in-the-clutches-of-chaos": {
-      "none": [],
-      "R1": [
-        "return-to-in-the-clutches-of-chaos:choose_anettes_fate",
-        "return-to-in-the-clutches-of-chaos:earn_xp"
-      ],
-      "R2": [
-        "return-to-in-the-clutches-of-chaos:choose_carls_fate",
-        "return-to-in-the-clutches-of-chaos:earn_xp"
-      ],
-      "R3": [
-        "return-to-in-the-clutches-of-chaos:doom_draws_ever_closer",
-        "return-to-in-the-clutches-of-chaos:earn_xp"
-      ],
-      "R4": [
-        "return-to-in-the-clutches-of-chaos:doom_draws_ever_closer",
-        "return-to-in-the-clutches-of-chaos:earn_xp"
-      ]
-    },
-    "return-to-the-secret-name": {
-      "none": [],
-      "R1": [
-        "return-to-the-secret-name:earn_xp",
-        "return-to-the-secret-name:check_brown_jenkin_xp",
-        "return-to-the-secret-name:check_nahab_xp",
-        "return-to-the-secret-name:check_act_deck",
-        "return-to-the-secret-name:upgradeDecks"
-      ],
-      "R2": [
-        "return-to-the-secret-name:earn_xp_bonus_2",
-        "return-to-the-secret-name:all_mementos:text",
-        "return-to-the-secret-name:all_mementos",
-        "return-to-the-secret-name:choose_black_book_prompt:text",
-        "return-to-the-secret-name:choose_black_book",
-        "return-to-the-secret-name:upgradeDecks"
-      ]
-    },
-    "return-to-the-wages-of-sin": {
-      "R1": [
-        "return-to-the-wages-of-sin:record_heretics_released",
-        "return-to-the-wages-of-sin:check_earned_wisp",
-        "return-to-the-wages-of-sin:earn_xp",
-        "return-to-the-wages-of-sin:upgradeDecks"
-      ],
-      "R2": [
-        "return-to-the-wages-of-sin:survived_the_watchers_embrace",
-        "return-to-the-wages-of-sin:record_heretics_released",
-        "return-to-the-wages-of-sin:check_earned_wisp",
-        "return-to-the-wages-of-sin:earn_xp",
-        "return-to-the-wages-of-sin:upgradeDecks"
-      ],
-      "R3": [
-        "return-to-the-wages-of-sin:1_heretic_released:text",
-        "return-to-the-wages-of-sin:1_heretic_released",
-        "return-to-the-wages-of-sin:earned_bloody_tree_carvings",
-        "return-to-the-wages-of-sin:earn_erynn:text",
-        "return-to-the-wages-of-sin:earn_erynn",
-        "return-to-the-wages-of-sin:earn_xp",
-        "return-to-the-wages-of-sin:upgradeDecks"
-      ]
-    },
     "return-to-the-witching-hour": {
       "none": [
         "return-to-the-witching-hour:check_final_act"
@@ -291,18 +122,113 @@
         "return-to-the-witching-hour:upgradeDecks"
       ]
     },
-    "return-to-union-and-disillusion": {
-      "none": [],
-      "R1": [
-        "return-to-union-and-disillusion:maybe_choose_if_sanford_is_good"
+    "return-to-at-deaths-doorstep": {
+      "none": [
+        "return-to-at-deaths-doorstep:check_final_act"
       ],
-      "R2": [
-        "return-to-union-and-disillusion:true_work_of_silver_twilight_lodge_has_begun",
-        "return-to-union-and-disillusion:silver_twilight_wins_campaign:text",
-        "return-to-union-and-disillusion:silver_twilight_wins_campaign"
+      "R1": [
+        "return-to-at-deaths-doorstep:investigators_escaped_the_spectral_realm",
+        "return-to-at-deaths-doorstep:earn_xp"
       ],
       "R3": [
-        "return-to-union-and-disillusion:carl_sanford_possesses_the_secrets_of_the_universe"
+        "return-to-at-deaths-doorstep:never_seen_again",
+        "return-to-at-deaths-doorstep:earn_xp",
+        "return-to-at-deaths-doorstep:kill_not_resigned:text",
+        "return-to-at-deaths-doorstep:upgradeDecks",
+        "return-to-at-deaths-doorstep:skip_price_of_progress:text",
+        "return-to-at-deaths-doorstep:skip_price_of_progress",
+        "return-to-at-deaths-doorstep:check_being_hunted"
+      ]
+    },
+    "return-to-the-secret-name": {
+      "none": [
+        "return-to-the-secret-name:earn_xp",
+        "return-to-the-secret-name:check_brown_jenkin_xp",
+        "return-to-the-secret-name:check_nahab_xp",
+        "return-to-the-secret-name:check_act_deck",
+        "return-to-the-secret-name:upgradeDecks"
+      ],
+      "R1": [
+        "return-to-the-secret-name:earn_xp",
+        "return-to-the-secret-name:check_brown_jenkin_xp",
+        "return-to-the-secret-name:check_nahab_xp",
+        "return-to-the-secret-name:check_act_deck",
+        "return-to-the-secret-name:upgradeDecks"
+      ],
+      "R2": [
+        "return-to-the-secret-name:earn_xp_bonus_2",
+        "return-to-the-secret-name:all_mementos:text",
+        "return-to-the-secret-name:all_mementos",
+        "return-to-the-secret-name:choose_black_book_prompt:text",
+        "return-to-the-secret-name:choose_black_book",
+        "return-to-the-secret-name:upgradeDecks"
+      ]
+    },
+    "return-to-the-wages-of-sin": {
+      "R1": [
+        "return-to-the-wages-of-sin:record_heretics_released",
+        "return-to-the-wages-of-sin:check_earned_wisp",
+        "return-to-the-wages-of-sin:earn_xp",
+        "return-to-the-wages-of-sin:upgradeDecks"
+      ],
+      "R2": [
+        "return-to-the-wages-of-sin:survived_the_watchers_embrace",
+        "return-to-the-wages-of-sin:record_heretics_released",
+        "return-to-the-wages-of-sin:check_earned_wisp",
+        "return-to-the-wages-of-sin:earn_xp",
+        "return-to-the-wages-of-sin:upgradeDecks"
+      ],
+      "R3": [
+        "return-to-the-wages-of-sin:1_heretic_released:text",
+        "return-to-the-wages-of-sin:1_heretic_released",
+        "return-to-the-wages-of-sin:earned_bloody_tree_carvings",
+        "return-to-the-wages-of-sin:earn_erynn:text",
+        "return-to-the-wages-of-sin:earn_erynn",
+        "return-to-the-wages-of-sin:earn_xp",
+        "return-to-the-wages-of-sin:upgradeDecks"
+      ],
+      "none": [
+        "return-to-the-wages-of-sin:none"
+      ]
+    },
+    "return-to-for-the-greater-good": {
+      "none": [
+        "return-to-for-the-greater-good:guardian_of_the_trap_emerged",
+        "return-to-for-the-greater-good:earn_xp",
+        "return-to-for-the-greater-good:upgradeDecks",
+        "return-to-for-the-greater-good:skip_inner_circle:text",
+        "return-to-for-the-greater-good:skip_inner_circle"
+      ],
+      "R1": [
+        "return-to-for-the-greater-good:discovered_how_to_open_the_puzzle_box:text",
+        "return-to-for-the-greater-good:discovered_how_to_open_the_puzzle_box",
+        "return-to-for-the-greater-good:earn_xp"
+      ],
+      "R2": [
+        "return-to-for-the-greater-good:discovered_how_to_open_the_puzzle_box:text",
+        "return-to-for-the-greater-good:discovered_how_to_open_the_puzzle_box",
+        "return-to-for-the-greater-good:earn_xp",
+        "return-to-for-the-greater-good:upgradeDecks",
+        "return-to-for-the-greater-good:skip_inner_circle:text",
+        "return-to-for-the-greater-good:skip_inner_circle"
+      ],
+      "R3": [
+        "return-to-for-the-greater-good:guardian_of_the_trap_defeated",
+        "return-to-for-the-greater-good:earn_xp",
+        "return-to-for-the-greater-good:upgradeDecks",
+        "return-to-for-the-greater-good:skip_inner_circle:text",
+        "return-to-for-the-greater-good:skip_inner_circle"
+      ]
+    },
+    "return-to-union-and-disillusion": {
+      "none": [
+        "return-to-union-and-disillusion:maybe_ask_act_1",
+        "return-to-union-and-disillusion:compare_columns_explanation:text",
+        "return-to-union-and-disillusion:compare_columns",
+        "return-to-union-and-disillusion:right_result"
+      ],
+      "R1": [
+        "return-to-union-and-disillusion:maybe_choose_if_sanford_is_good"
       ],
       "R4": [
         "return-to-union-and-disillusion:maybe_adjust_chaos_bag",
@@ -313,31 +239,76 @@
         "return-to-union-and-disillusion:compare_columns_explanation:text",
         "return-to-union-and-disillusion:compare_columns",
         "return-to-union-and-disillusion:right_result"
+      ]
+    },
+    "return-to-in-the-clutches-of-chaos": {
+      "none": [
+        "return-to-in-the-clutches-of-chaos:check_anette_mason_resolution"
+      ],
+      "R1": [
+        "return-to-in-the-clutches-of-chaos:choose_anettes_fate",
+        "return-to-in-the-clutches-of-chaos:earn_xp"
+      ],
+      "R2": [
+        "return-to-in-the-clutches-of-chaos:choose_carls_fate",
+        "return-to-in-the-clutches-of-chaos:earn_xp"
+      ],
+      "R3": [
+        "return-to-in-the-clutches-of-chaos:doom_draws_ever_closer",
+        "return-to-in-the-clutches-of-chaos:earn_xp"
+      ],
+      "R4": [
+        "return-to-in-the-clutches-of-chaos:doom_draws_ever_closer",
+        "return-to-in-the-clutches-of-chaos:earn_xp"
+      ]
+    },
+    "return-to-before-the-black-throne": {
+      "none": [
+        "return-to-before-the-black-throne:azathoth_devoured_the_universe",
+        "return-to-before-the-black-throne:all_killed:text",
+        "return-to-before-the-black-throne:all_killed",
+        "return-to-before-the-black-throne:lose:text",
+        "return-to-before-the-black-throne:lose"
+      ],
+      "R1": [
+        "return-to-before-the-black-throne:azathoth_devoured_the_universe",
+        "return-to-before-the-black-throne:all_killed:text",
+        "return-to-before-the-black-throne:all_killed",
+        "return-to-before-the-black-throne:lose:text",
+        "return-to-before-the-black-throne:lose"
+      ],
+      "R2": [
+        "return-to-before-the-black-throne:lead_investigator_joins_pipers:text",
+        "return-to-before-the-black-throne:lead_investigator_joins_pipers",
+        "return-to-before-the-black-throne:azathoth_slumbers",
+        "return-to-before-the-black-throne:lead_investigator_insane:text",
+        "return-to-before-the-black-throne:earn_xp_bonus_5",
+        "return-to-before-the-black-throne:two_mental_trauma:text",
+        "return-to-before-the-black-throne:two_mental_trauma",
+        "return-to-before-the-black-throne:upgradeDecks",
+        "return-to-before-the-black-throne:win:text",
+        "return-to-before-the-black-throne:win"
+      ],
+      "R3": [
+        "return-to-before-the-black-throne:azathoth_slumbers",
+        "return-to-before-the-black-throne:earn_xp_bonus_5",
+        "return-to-before-the-black-throne:two_physical_trauma:text",
+        "return-to-before-the-black-throne:two_physical_trauma",
+        "return-to-before-the-black-throne:upgradeDecks",
+        "return-to-before-the-black-throne:win:text",
+        "return-to-before-the-black-throne:win"
+      ],
+      "R4": [
+        "return-to-before-the-black-throne:choose_final_resolution"
       ],
       "R6": [
-        "return-to-union-and-disillusion:carl_sanford_possesses_the_secrets_of_the_universe"
-      ],
-      "R7": [
-        "return-to-union-and-disillusion:anette_mason_is_possessed_by_evil"
-      ],
-      "R8": [
-        "return-to-union-and-disillusion:remove_puzzle_box:text",
-        "return-to-union-and-disillusion:remove_puzzle_box",
-        "return-to-union-and-disillusion:check_missing_persons_alive:text",
-        "return-to-union-and-disillusion:check_gavriella_in_game",
-        "return-to-union-and-disillusion:check_jerome_in_game",
-        "return-to-union-and-disillusion:check_penny_in_game",
-        "return-to-union-and-disillusion:check_valentino_in_game",
-        "return-to-union-and-disillusion:earn_xp",
-        "return-to-union-and-disillusion:upgradeDecks"
-      ],
-      "R9": [
-        "return-to-union-and-disillusion:coven_of_keziah_holds_the_world_in_its_grasp",
-        "return-to-union-and-disillusion:coven_wins_campaign:text",
-        "return-to-union-and-disillusion:coven_wins_campaign"
-      ],
-      "R10": [
-        "return-to-union-and-disillusion:anette_mason_is_possessed_by_evil"
+        "return-to-before-the-black-throne:azathoth_slumbers",
+        "return-to-before-the-black-throne:earn_xp_bonus_5",
+        "return-to-before-the-black-throne:split_trauma:text",
+        "return-to-before-the-black-throne:split_trauma",
+        "return-to-before-the-black-throne:upgradeDecks",
+        "return-to-before-the-black-throne:win:text",
+        "return-to-before-the-black-throne:win"
       ]
     }
   },
@@ -345,11 +316,11 @@
     "disappearance-at-the-twilight-estate": [
       "disappearance-at-the-twilight-estate:maybe_check_unplayed_investigators"
     ],
-    "return-to-the-secret-name": [
-      "return-to-the-secret-name:check_members_of_the_lodge"
-    ],
     "return-to-the-witching-hour": [
       "return-to-the-witching-hour:choose_fate"
+    ],
+    "return-to-the-secret-name": [
+      "return-to-the-secret-name:check_members_of_the_lodge"
     ],
     "return-to-union-and-disillusion": [
       "return-to-union-and-disillusion:point_of_no_return",
@@ -416,7 +387,7 @@
       "kind": "branch",
       "condition": {
         "kind": "unsupported",
-        "name": "campaign_data",
+        "name": "version",
         "take": true
       },
       "then": [
@@ -662,7 +633,7 @@
       "kind": "branch",
       "condition": {
         "kind": "unsupported",
-        "name": "campaign_data",
+        "name": "version",
         "take": true
       },
       "then": [
@@ -688,7 +659,7 @@
       "kind": "branch",
       "condition": {
         "kind": "unsupported",
-        "name": "campaign_data",
+        "name": "version",
         "take": true
       },
       "then": [
@@ -1421,7 +1392,7 @@
       "kind": "branch",
       "condition": {
         "kind": "unsupported",
-        "name": "campaign_data",
+        "name": "version",
         "take": true
       },
       "then": [
@@ -1439,7 +1410,7 @@
       "kind": "branch",
       "condition": {
         "kind": "unsupported",
-        "name": "campaign_data",
+        "name": "version",
         "take": true
       },
       "then": [],
@@ -1470,7 +1441,11 @@
         "disappearance-at-the-twilight-estate:setup_investigators:text",
         "disappearance-at-the-twilight-estate:encounter_deck:text",
         "disappearance-at-the-twilight-estate:return_placeholder:text",
-        "disappearance-at-the-twilight-estate:check_latest_campaign_version"
+        "disappearance-at-the-twilight-estate:check_latest_campaign_version",
+        "disappearance-at-the-twilight-estate:no_experience:text",
+        "disappearance-at-the-twilight-estate:pieces_of_evidence",
+        "disappearance-at-the-twilight-estate:return_player_cards:text",
+        "disappearance-at-the-twilight-estate:maybe_ask_being_hunted"
       ]
     },
     "disappearance-at-the-twilight-estate:record_missing_investigators": {
@@ -1504,7 +1479,7 @@
       "kind": "branch",
       "condition": {
         "kind": "unsupported",
-        "name": "campaign_data",
+        "name": "version",
         "take": true
       },
       "then": [
@@ -1526,140 +1501,89 @@
         "disappearance-at-the-twilight-estate:setup_investigators:text",
         "disappearance-at-the-twilight-estate:encounter_deck:text",
         "disappearance-at-the-twilight-estate:return_placeholder:text",
-        "disappearance-at-the-twilight-estate:check_latest_campaign_version"
+        "disappearance-at-the-twilight-estate:check_latest_campaign_version",
+        "disappearance-at-the-twilight-estate:no_experience:text",
+        "disappearance-at-the-twilight-estate:pieces_of_evidence",
+        "disappearance-at-the-twilight-estate:return_player_cards:text",
+        "disappearance-at-the-twilight-estate:maybe_ask_being_hunted"
       ]
     },
-    "tcu-epilogue:anette_story": {
-      "kind": "story",
-      "text": "“Gone? What do you mean she’s gone?!” Sheriff Engle demands.\n“See for yourself,” the officer replies. He guides the sheriff through a long hallway flanked by holding cells. “She was guarded at all hours, trust me. One moment she was there, the next…” He stops in front of Anette’s cell, and watches as Sheriff Engle’s jaw drops. Smeared along the walls of the cell is a sticky red substance, painted in a delicate pattern. The woman is nowhere to be seen.",
-      "bullets": []
-    },
-    "tcu-epilogue:check_anette_arrested": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "arrestedAnette",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "tcu-epilogue:anette_story"
-      ],
-      "else": []
-    },
-    "tcu-epilogue:lodge_story": {
-      "kind": "story",
-      "text": "You nod to the knight as he places the file you had requested onto your hardwood desk. Finding all of Carl Sanford’s records hadn’t been easy, but now all of the secrets of the Order were within your grasp. “What is the next step?” he asks, eager to serve. You inform him that there is to be a meeting in the sanctum this very night. “Very well. I will summon our most loyal members.” You dismiss him and turn to look out the window of your new office. The city of Arkham is as grim and moody as ever…but at least now you can protect it from the forces that lay beyond the Earth.",
-      "bullets": []
-    },
-    "tcu-epilogue:check_assumed_control_of_the_silver_twilight_lodge": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "assumedControlOfTheSilverTwilightLodge",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "tcu-epilogue:lodge_story"
-      ],
-      "else": []
-    },
-    "tcu-epilogue:watcher_story": {
-      "kind": "story",
-      "text": "Anna regards you calmly as you enter. As always, her prescience is disconcerting, but by now you have gotten used to it. “I’ve been expecting you for some time,” she admits. “I suppose you have questions for me. Very well. Ask away. Though I imagine that by now you must know the answer.” She neither offers you a seat nor a drink. You begin to describe your situation, though the truth of your condition is plain to see for somebody with her gifts (and few else). You had hoped for another explanation— any explanation at all—but it was only a desperate clinging to hope, without justification. Anna gives you a pitying grimace and shakes her head. “Surely by now you must understand. You have completed your task. Your business here has concluded. Now is the time for you to rest and be at peace.”\nPeace? No, you cannot be at peace! There is still so much left for you to do…!",
-      "bullets": []
-    },
-    "tcu-epilogue:cross_out_survived_the_watchers_embrace": {
+    "return-to-the-witching-hour:witches_spell_cast": {
       "kind": "effects",
       "effects": [
         {
-          "do": "crossOut",
-          "key": "survivedTheWatchersEmbrace",
-          "section": "campaign_notes"
+          "do": "record",
+          "key": "witchesSpellCast",
+          "section": "campaign_notes",
+          "value": true
         }
       ]
     },
-    "tcu-epilogue:check_survived_the_watchers_embrace": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "survivedTheWatchersEmbrace",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "tcu-epilogue:watcher_story",
-        "tcu-epilogue:cross_out_survived_the_watchers_embrace"
-      ],
-      "else": []
-    },
-    "tcu-epilogue:black_book_story": {
+    "return-to-the-witching-hour:no_record:text": {
       "kind": "story",
-      "text": "In your dream, a tall man approaches. His grin is full of malice. “It is time to pay your due,” he announces. “You got what you wanted. Now it is my turn.”",
+      "text": "No record is made.",
       "bullets": []
     },
-    "tcu-epilogue:check_signed_the_black_book": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "signedTheBlackBook",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "tcu-epilogue:black_book_story"
-      ],
-      "else": []
-    },
-    "tcu-epilogue:arrested_sanford_story": {
+    "return-to-the-witching-hour:mementos_flute:text": {
       "kind": "story",
-      "text": "“You’re a fool,” Carl Sanford says from behind bars, his tone confident. “How long do you expect this to stand?”\nYou know he is right. The charges brought against Sanford are flimsy at best. No judge or jury is going to believe any story about dark rituals and eldritch beings. Even if you could convince others of Sanford’s dangerous ideologies, his considerable influence and political clout ensures he’ll be released sooner than you would like. Even so, you had to separate him from his lackeys while you cleaned up his mess. You tell Sanford that you’ll be keeping an eye on him once he is out.\n“And I, you,” he retorts.",
+      "text": "In your Campaign Log, under “Mementos Discovered,” record <i>Mesmerizing Flute</i>. Each investigator earns 1 bonus experience, as they gain insight into Arkham’s mysterious past.",
       "bullets": []
     },
-    "tcu-epilogue:check_arrested_sanford": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "arrestedSanford",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "tcu-epilogue:arrested_sanford_story"
-      ],
-      "else": []
+    "return-to-the-witching-hour:mementos_flute": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "mesmerizingFlute",
+          "section": "mementos",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
     },
-    "tcu-epilogue:anette_taught_story": {
-      "kind": "story",
-      "text": "A cold wind blows through the silent woods, the clearing bathed in a silver glow bestowed by the full moon. “We have new blood joining our circle,” Erynn states from the center of the clearing, where Anette once stood to lead her sisters. She beckons you forward. “Our coven is bound by much more than simple association. We are a family. And we are proud to welcome you into our midst.”\nWith your new understanding of the universe and the forces that hold it together, you promise to use your knowledge only to maintain the balance of the world. Erynn and the others nod in agreement.\n“This city is already stained with much blood,” she says. “Spilling more is not an act of cleansing. Let us be shields, and blades of vengeance no longer.”",
-      "bullets": []
+    "return-to-the-witching-hour:mementos_check_act": {
+      "kind": "chooseOne",
+      "text": "Check the act deck.",
+      "choices": [
+        {
+          "id": "act_1_or_2",
+          "text": "It was act 1 or 2 when the scenario ended.",
+          "effects": [],
+          "steps": [
+            "return-to-the-witching-hour:no_record:text"
+          ]
+        },
+        {
+          "id": "act_3",
+          "text": "It was act 3 when the scenario ended.",
+          "effects": [],
+          "steps": [
+            "return-to-the-witching-hour:mementos_flute:text",
+            "return-to-the-witching-hour:mementos_flute"
+          ]
+        }
+      ]
     },
-    "tcu-epilogue:check_anette_taught_you_the_spells_of_old": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "anetteTaughtYouTheSpellsOfOld",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "tcu-epilogue:anette_taught_story"
-      ],
-      "else": []
+    "return-to-the-witching-hour:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
     },
-    "tcu-epilogue:being_hunted": {
-      "kind": "story",
-      "text": "No matter what you do, the creature’s assault on your mind never ceases. Its gaze haunts you everywhere you look. It controls your every thought—your hopes, your bonds, your fears, your ambitions. A reminder of your futile existence. Each night, you toss and turn, unable to wrench free from this sensation of worthlessness. Your thoughts turn to a grim, uncertain future. A future without life. A future without <i>you</i>. It is the one ordeal every mortal must endure, and yet the one experience no mortal could possibly describe. Ghosts? Realms beyond our mortal coil? Nothing but a last resort for a mind desperate to cling to life.\nWhen the creature next invades, you have come to a new conclusion. An icy draft surrounds you as the thing coalesces before you. Your throat constricts and tears well in your eyes, but you stand tall. You are unafraid. The creature gazes at you curiously, and the piping of infernal flutes fades into silence. It extends its clawed hand, and you shake it. You will never truly be free from its grasp, but perhaps you and the creature can work in agreement. Perhaps you can tame your fear. It doesn’t matter if the world has no point. It’s yours, damnit, and nothing will stop you from altering it to your liking.",
-      "bullets": []
+    "return-to-the-witching-hour:upgradeDecks": {
+      "kind": "upgradeDecks"
     },
-    "tcu-epilogue:check_being_hunted": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "beingHunted",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "tcu-epilogue:being_hunted"
-      ],
-      "else": []
-    },
-    "return-to-at-deaths-doorstep:check_final_act": {
+    "return-to-the-witching-hour:check_final_act": {
       "kind": "chooseOne",
       "text": "What act was in play when the scenario ended?",
       "choices": [
@@ -1667,28 +1591,424 @@
           "id": "act_1",
           "text": "Act 1",
           "effects": [],
-          "steps": []
+          "steps": [
+            "return-to-the-witching-hour:witches_spell_cast",
+            "return-to-the-witching-hour:mementos_check_act",
+            "return-to-the-witching-hour:earn_xp",
+            "return-to-the-witching-hour:upgradeDecks"
+          ]
         },
         {
           "id": "act_2",
           "text": "Act 2",
           "effects": [],
-          "steps": []
+          "steps": [
+            "return-to-the-witching-hour:witches_spell_cast",
+            "return-to-the-witching-hour:mementos_check_act",
+            "return-to-the-witching-hour:earn_xp",
+            "return-to-the-witching-hour:upgradeDecks"
+          ]
         },
         {
           "id": "act_3",
           "text": "Act 3",
           "effects": [],
-          "steps": []
+          "steps": [
+            "return-to-the-witching-hour:witches_spell_cast",
+            "return-to-the-witching-hour:mementos_check_act",
+            "return-to-the-witching-hour:earn_xp",
+            "return-to-the-witching-hour:upgradeDecks"
+          ]
+        },
+        {
+          "id": "act_4",
+          "text": "Act 4",
+          "effects": [],
+          "steps": [
+            "return-to-the-witching-hour:witches_spell_cast",
+            "return-to-the-witching-hour:mementos_flute:text",
+            "return-to-the-witching-hour:mementos_flute",
+            "return-to-the-witching-hour:earn_xp",
+            "return-to-the-witching-hour:upgradeDecks"
+          ]
         }
       ]
     },
-    "return-to-at-deaths-doorstep:investigators_escaped_the_spectral_realm": {
+    "return-to-the-witching-hour:witches_spell_broken": {
       "kind": "effects",
       "effects": [
         {
           "do": "record",
-          "key": "investigatorsEscapedTheSpectralRealm",
+          "key": "witchesSpellBroken",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-the-witching-hour:mementos_flute_and_ritual_components:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, under “Mementos Discovered,” record <i>Mesmerizing Flute</i> and <i>Ritual Components</i>. Each investigator earns 1 bonus experience, as they gain insight into Arkham’s mysterious past.",
+      "bullets": []
+    },
+    "return-to-the-witching-hour:mementos_flute_and_ritual_components": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "mesmerizingFlute",
+          "section": "mementos",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "ritualComponents",
+          "section": "mementos",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "return-to-the-witching-hour:mementos_flute_and_scrap_of_torn_shadow:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, under “Mementos Discovered,” record <i>Mesmerizing Flute</i> and <i>Scrap of Torn Shadow</i>. Each investigator earns 1 bonus experience, as they gain insight into Arkham’s mysterious past.",
+      "bullets": []
+    },
+    "return-to-the-witching-hour:mementos_flute_and_scrap_of_torn_shadow": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "mesmerizingFlute",
+          "section": "mementos",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "scrapOfTornShadow",
+          "section": "mementos",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "return-to-the-witching-hour:erynn_wants_to_meet": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "erynnWantsToMeet",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-the-witching-hour:mementos_flute_and_strange_incantation:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, under “Mementos Discovered,” record <i>Mesmerizing Flute</i> and <i>Strange Incantation</i>. Each investigator earns 3 bonus experience, as they gain insight into Arkham’s mysterious past.",
+      "bullets": []
+    },
+    "return-to-the-witching-hour:mementos_flute_and_strange_incantation": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "mesmerizingFlute",
+          "section": "mementos",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "strangeIncantation",
+          "section": "mementos",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "bonus": 3,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "return-to-the-witching-hour:intro_2": {
+      "kind": "story",
+      "text": "The woman nods and draws the top card of the deck with a steady hand, revealing it to you without looking at it herself. Depicted on the card is a single wooden wand, surrounded by a pattern of broken stained glass. It reads: ACE OF RODS. “You must be ready to act,” she advises. “Without hesitation. Without regret. When the opportunity arises, you must set into motion the events that will change this fate.”",
+      "bullets": []
+    },
+    "return-to-the-witching-hour:accepted_fate:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>you have accepted your fate</i>. Add 2 [tablet] tokens to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "return-to-the-witching-hour:accepted_fate": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "acceptedFate",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        }
+      ]
+    },
+    "return-to-the-witching-hour:campaign_reading_intro:text": {
+      "kind": "story",
+      "text": "Instead of adding 1 copy of The Tower · XVI and 1 copy of Ace of Rods to your deck, the lead investigator may decide to perform a Campaign Reading (\"Destiny\") with a predetermined set of cards from the Tarot Deck.",
+      "bullets": []
+    },
+    "return-to-the-witching-hour:ask_campaign_reading": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "tarot_reading",
+          "text": "Would you like to perform a campaign reading?",
+          "effects": [
+            {
+              "do": "record",
+              "key": "campaignReading",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "return-to-the-witching-hour:perform_campaign_reading:text": {
+      "kind": "story",
+      "text": "Using the Tarot Deck, perform an 8-card Campaign Reading with these specific 8 cards, in this order: Temperance, Justice, Hermit, Hanged Man, Hierophant, Lovers, Chariot, Wheel of Fortune.",
+      "bullets": []
+    },
+    "return-to-the-witching-hour:ask_reversed": {
+      "kind": "checklist",
+      "text": "Choose and reverse four of the cards:",
+      "min": 4,
+      "max": 4,
+      "choices": [
+        {
+          "id": "temperance",
+          "text": "Temperance · XIV",
+          "effects": [
+            {
+              "do": "record",
+              "key": "campaignReadingTemperanceReversed",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "justice",
+          "text": "Justice · XI",
+          "effects": [
+            {
+              "do": "record",
+              "key": "campaignReadingJusticeReversed",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "hermit",
+          "text": "The Hermit · IX",
+          "effects": [
+            {
+              "do": "record",
+              "key": "campaignReadingHermitReversed",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "hanged_man",
+          "text": "The Hanged Man · XII",
+          "effects": [
+            {
+              "do": "record",
+              "key": "campaignReadingHangedManReversed",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "hierophant",
+          "text": "The Hierophant · V",
+          "effects": [
+            {
+              "do": "record",
+              "key": "campaignReadingHierophantReversed",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "lovers",
+          "text": "The Lovers · VI",
+          "effects": [
+            {
+              "do": "record",
+              "key": "campaignReadingLoversReversed",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "chariot",
+          "text": "The Chariot · VII",
+          "effects": [
+            {
+              "do": "record",
+              "key": "campaignReadingChariotReversed",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "wheel_of_fortune",
+          "text": "Wheel of Fortune · X",
+          "effects": [
+            {
+              "do": "record",
+              "key": "campaignReadingWheelOfFortuneReversed",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "return-to-the-witching-hour:add_tarot:text": {
+      "kind": "story",
+      "text": "Before drawing their opening hand for this scenario, the lead investigator searches the collection for 1 copy of The Tower · XVI and 1 copy of Ace of Rods and adds each of them to their deck, if able. The lead investigator has earned these cards. They do not count toward their deck size. (If one or both of these cards are not available, skip this step.)",
+      "bullets": []
+    },
+    "return-to-the-witching-hour:add_tarot": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "05042",
+          "who": "lead"
+        },
+        {
+          "do": "earnCard",
+          "code": "05040",
+          "who": "lead"
+        }
+      ]
+    },
+    "return-to-the-witching-hour:check_campaign_reading": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "campaignReading",
+        "section": "hidden"
+      },
+      "then": [
+        "return-to-the-witching-hour:perform_campaign_reading:text",
+        "return-to-the-witching-hour:ask_reversed"
+      ],
+      "else": [
+        "return-to-the-witching-hour:add_tarot:text",
+        "return-to-the-witching-hour:add_tarot"
+      ]
+    },
+    "return-to-the-witching-hour:intro_3": {
+      "kind": "story",
+      "text": "The woman smirks. “Yes, in a sense, I suppose it is,” she responds. With a single swift motion, she picks up each of the cards displayed before you, save for The Tower card, and shuffles them back into the deck. “The cards only reveal and advise. They cannot influence or impose.” She locks eyes with you, and her smile vanishes from her face. “In other words, though your fate is not set in stone, I assure you the danger you face is not ‘bullshit.’ It is real.” Her eyes narrow. “It is very real.”",
+      "bullets": []
+    },
+    "return-to-the-witching-hour:rejected_fate:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>you have rejected your fate</i>. Add 2 [elder_thing] tokens to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "return-to-the-witching-hour:rejected_fate": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "rejectedFate",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        }
+      ]
+    },
+    "return-to-the-witching-hour:choose_fate": {
+      "kind": "chooseOne",
+      "text": "The lead investigator must decide (choose one):",
+      "choices": [
+        {
+          "id": "accept_fate",
+          "text": "<i>“What can I do to avoid this fate?”</i>",
+          "effects": [],
+          "steps": [
+            "return-to-the-witching-hour:intro_2",
+            "return-to-the-witching-hour:accepted_fate:text",
+            "return-to-the-witching-hour:accepted_fate",
+            "return-to-the-witching-hour:campaign_reading_intro:text",
+            "return-to-the-witching-hour:ask_campaign_reading",
+            "return-to-the-witching-hour:check_campaign_reading"
+          ]
+        },
+        {
+          "id": "reject_fate",
+          "text": "<i>“This is bullshit.”</i>",
+          "effects": [],
+          "steps": [
+            "return-to-the-witching-hour:intro_3",
+            "return-to-the-witching-hour:rejected_fate:text",
+            "return-to-the-witching-hour:rejected_fate"
+          ]
+        }
+      ]
+    },
+    "return-to-at-deaths-doorstep:learned_nothing_of_the_lodges_schemes": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "learnedNothingOfTheLodgesSchemes",
           "section": "campaign_notes",
           "value": true
         }
@@ -1702,17 +2022,6 @@
           "bonus": 0,
           "who": "each",
           "victory": true
-        }
-      ]
-    },
-    "return-to-at-deaths-doorstep:learned_nothing_of_the_lodges_schemes": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "learnedNothingOfTheLodgesSchemes",
-          "section": "campaign_notes",
-          "value": true
         }
       ]
     },
@@ -1766,430 +2075,56 @@
       "text": "Each investigator who has not resigned is <b>killed</b>. If there are not enough investigators in the pool of available investigators to continue the campaign, the campaign is over, and the players lose.",
       "bullets": []
     },
-    "return-to-before-the-black-throne:azathoth_devoured_the_universe": {
+    "return-to-at-deaths-doorstep:investigators_escaped_the_spectral_realm": {
       "kind": "effects",
       "effects": [
         {
           "do": "record",
-          "key": "azathothDevouredTheUniverse",
+          "key": "investigatorsEscapedTheSpectralRealm",
           "section": "campaign_notes",
           "value": true
         }
       ]
     },
-    "return-to-before-the-black-throne:all_killed:text": {
-      "kind": "story",
-      "text": "Each investigator is <b>killed</b>.",
-      "bullets": []
-    },
-    "return-to-before-the-black-throne:all_killed": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "kill",
-          "who": "each"
-        }
-      ]
-    },
-    "return-to-before-the-black-throne:lose:text": {
-      "kind": "story",
-      "text": "The investigators lose the campaign.",
-      "bullets": []
-    },
-    "return-to-before-the-black-throne:lose": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "skipScenario",
-          "scenario": "tcu-epilogue"
-        },
-        {
-          "do": "end",
-          "result": "lose"
-        }
-      ]
-    },
-    "return-to-before-the-black-throne:lead_investigator_joins_pipers:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, record <i>the lead investigator has joined the pipers of Azathoth</i>.",
-      "bullets": []
-    },
-    "return-to-before-the-black-throne:lead_investigator_joins_pipers": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "leadInvestigatorJoinsPipers",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "return-to-before-the-black-throne:azathoth_slumbers": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "azathothSlumbers",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "return-to-before-the-black-throne:lead_investigator_insane:text": {
-      "kind": "story",
-      "text": "The lead investigator is driven <b>insane</b>.",
-      "bullets": []
-    },
-    "return-to-before-the-black-throne:earn_xp_bonus_5": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 5,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "return-to-before-the-black-throne:two_mental_trauma:text": {
-      "kind": "story",
-      "text": "Each investigator suffers 2 mental trauma, as they understand that one day Azathoth will inevitably wake.",
-      "bullets": []
-    },
-    "return-to-before-the-black-throne:two_mental_trauma": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "trauma",
-          "who": "each",
-          "physical": 0,
-          "mental": 2
-        }
-      ]
-    },
-    "return-to-before-the-black-throne:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "return-to-before-the-black-throne:win:text": {
-      "kind": "story",
-      "text": "The investigators win the campaign!",
-      "bullets": []
-    },
-    "return-to-before-the-black-throne:win": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "end",
-          "result": "win"
-        }
-      ]
-    },
-    "return-to-before-the-black-throne:two_physical_trauma:text": {
-      "kind": "story",
-      "text": "Each investigator suffers 2 physical trauma, as their nightmarish journey home takes its toll on their bodies.",
-      "bullets": []
-    },
-    "return-to-before-the-black-throne:two_physical_trauma": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "trauma",
-          "who": "each",
-          "physical": 2,
-          "mental": 0
-        }
-      ]
-    },
-    "return-to-before-the-black-throne:choose_final_resolution": {
+    "return-to-at-deaths-doorstep:check_final_act": {
       "kind": "chooseOne",
+      "text": "What act was in play when the scenario ended?",
       "choices": [
         {
-          "id": "doom_self",
-          "text": "<i>“It must be done.”</i>",
+          "id": "act_1",
+          "text": "Act 1",
           "effects": [],
-          "steps": []
+          "steps": [
+            "return-to-at-deaths-doorstep:learned_nothing_of_the_lodges_schemes",
+            "return-to-at-deaths-doorstep:earn_xp",
+            "return-to-at-deaths-doorstep:upgradeDecks",
+            "return-to-at-deaths-doorstep:skip_price_of_progress:text",
+            "return-to-at-deaths-doorstep:skip_price_of_progress",
+            "return-to-at-deaths-doorstep:check_being_hunted"
+          ]
         },
         {
-          "id": "doom_all",
-          "text": "<i>“I refuse!”</i>",
+          "id": "act_2",
+          "text": "Act 2",
           "effects": [],
-          "steps": []
-        }
-      ]
-    },
-    "return-to-before-the-black-throne:signed_the_black_book": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "signedTheBlackBook",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "return-to-before-the-black-throne:earn_xp_bonus_10": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 10,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "return-to-before-the-black-throne:two_physical_and_mental_trauma:text": {
-      "kind": "story",
-      "text": "Each investigator suffers 2 physical trauma and 2 mental trauma—the consequences of their pact with Azathoth’s messenger.",
-      "bullets": []
-    },
-    "return-to-before-the-black-throne:two_physical_and_mental_trauma": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "trauma",
-          "who": "each",
-          "physical": 2,
-          "mental": 2
-        }
-      ]
-    },
-    "return-to-before-the-black-throne:win_question_mark:text": {
-      "kind": "story",
-      "text": "The investigators win the campaign…?",
-      "bullets": []
-    },
-    "return-to-before-the-black-throne:win_question_mark": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "end",
-          "result": "win"
-        }
-      ]
-    },
-    "return-to-before-the-black-throne:split_trauma:text": {
-      "kind": "story",
-      "text": "Each investigator suffers 1 physical trauma and 1 mental trauma, as the nightmarish work takes its toll on their bodies and minds.",
-      "bullets": []
-    },
-    "return-to-before-the-black-throne:split_trauma": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "trauma",
-          "who": "each",
-          "physical": 1,
-          "mental": 1
-        }
-      ]
-    },
-    "return-to-for-the-greater-good:guardian_of_the_trap_emerged": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "guardianOfTheTrapEmerged",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "return-to-for-the-greater-good:earn_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 0,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "return-to-for-the-greater-good:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "return-to-for-the-greater-good:skip_inner_circle:text": {
-      "kind": "story",
-      "text": "Skip <b>Interlude III: The Inner Circle</b>.",
-      "bullets": []
-    },
-    "return-to-for-the-greater-good:skip_inner_circle": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "skipScenario",
-          "scenario": "the-inner-circle"
-        }
-      ]
-    },
-    "return-to-for-the-greater-good:discovered_how_to_open_the_puzzle_box:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, record <i>the investigators discovered how to open the puzzle box</i>. Any one investigator may choose to add the Puzzle Box story asset to their deck. This card does not count toward that investigator’s deck size.",
-      "bullets": []
-    },
-    "return-to-for-the-greater-good:discovered_how_to_open_the_puzzle_box": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "discoveredHowToOpenThePuzzleBox",
-          "section": "campaign_notes",
-          "value": true
+          "steps": [
+            "return-to-at-deaths-doorstep:never_seen_again",
+            "return-to-at-deaths-doorstep:earn_xp",
+            "return-to-at-deaths-doorstep:kill_not_resigned:text",
+            "return-to-at-deaths-doorstep:upgradeDecks",
+            "return-to-at-deaths-doorstep:skip_price_of_progress:text",
+            "return-to-at-deaths-doorstep:skip_price_of_progress",
+            "return-to-at-deaths-doorstep:check_being_hunted"
+          ]
         },
         {
-          "do": "earnCard",
-          "code": "05228",
-          "who": "choice"
-        }
-      ]
-    },
-    "return-to-for-the-greater-good:guardian_of_the_trap_defeated": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "guardianOfTheTrapDefeated",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "return-to-in-the-clutches-of-chaos:choose_anettes_fate": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "alone",
-          "text": "<i>“You’ve done enough harm. We’ll handle this from here.”</i>",
-          "effects": [
-            {
-              "do": "record",
-              "key": "continuedAlone",
-              "section": "campaign_notes",
-              "value": true
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "ask_for_help",
-          "text": "<i>“We will need your help to fix this.”</i>",
-          "effects": [
-            {
-              "do": "record",
-              "key": "askedAnetteForAssistance",
-              "section": "campaign_notes",
-              "value": true
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "under_arrest",
-          "text": "<i>“You are under arrest.”</i>",
-          "effects": [
-            {
-              "do": "record",
-              "key": "arrestedAnette",
-              "section": "campaign_notes",
-              "value": true
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "learn_spells",
-          "text": "<i>“Then teach me how to be stronger.”</i>",
-          "effects": [
-            {
-              "do": "record",
-              "key": "anetteTaughtYouTheSpellsOfOld",
-              "section": "campaign_notes",
-              "value": true
-            }
-          ],
-          "steps": []
-        }
-      ]
-    },
-    "return-to-in-the-clutches-of-chaos:earn_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 0,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "return-to-in-the-clutches-of-chaos:choose_carls_fate": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "alone",
-          "text": "<i>“You’ve done enough harm. We’ll handle this from here.”</i>",
-          "effects": [
-            {
-              "do": "record",
-              "key": "continuedAlone",
-              "section": "campaign_notes",
-              "value": true
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "ask_for_help",
-          "text": "<i>“We will need your help to fix this.”</i>",
-          "effects": [
-            {
-              "do": "record",
-              "key": "askedSanfordForAssistance",
-              "section": "campaign_notes",
-              "value": true
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "under_arrest",
-          "text": "<i>“You are under arrest.”</i>",
-          "effects": [
-            {
-              "do": "record",
-              "key": "arrestedSanford",
-              "section": "campaign_notes",
-              "value": true
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "seize_control",
-          "text": "<i>“You don't deserve to lead us.”</i>",
-          "effects": [
-            {
-              "do": "record",
-              "key": "assumedControlOfTheSilverTwilightLodge",
-              "section": "campaign_notes",
-              "value": true
-            }
-          ],
-          "steps": []
-        }
-      ]
-    },
-    "return-to-in-the-clutches-of-chaos:doom_draws_ever_closer": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "doomDrawsEverCloser",
-          "section": "campaign_notes",
-          "value": true
+          "id": "act_3",
+          "text": "Act 3",
+          "effects": [],
+          "steps": [
+            "return-to-at-deaths-doorstep:investigators_escaped_the_spectral_realm",
+            "return-to-at-deaths-doorstep:earn_xp"
+          ]
         }
       ]
     },
@@ -2712,76 +2647,47 @@
         }
       ]
     },
-    "return-to-the-witching-hour:check_final_act": {
+    "return-to-the-wages-of-sin:none": {
       "kind": "chooseOne",
-      "text": "What act was in play when the scenario ended?",
+      "text": "Did the investigators resign, or were they all defeated?",
       "choices": [
         {
-          "id": "act_1",
-          "text": "Act 1",
+          "id": "resigned",
+          "text": "They resigned",
           "effects": [],
-          "steps": []
+          "steps": [
+            "return-to-the-wages-of-sin:record_heretics_released",
+            "return-to-the-wages-of-sin:check_earned_wisp",
+            "return-to-the-wages-of-sin:earn_xp",
+            "return-to-the-wages-of-sin:upgradeDecks"
+          ]
         },
         {
-          "id": "act_2",
-          "text": "Act 2",
+          "id": "defeated",
+          "text": "They were all defeated",
           "effects": [],
-          "steps": []
-        },
-        {
-          "id": "act_3",
-          "text": "Act 3",
-          "effects": [],
-          "steps": []
-        },
-        {
-          "id": "act_4",
-          "text": "Act 4",
-          "effects": [],
-          "steps": []
+          "steps": [
+            "return-to-the-wages-of-sin:survived_the_watchers_embrace",
+            "return-to-the-wages-of-sin:record_heretics_released",
+            "return-to-the-wages-of-sin:check_earned_wisp",
+            "return-to-the-wages-of-sin:earn_xp",
+            "return-to-the-wages-of-sin:upgradeDecks"
+          ]
         }
       ]
     },
-    "return-to-the-witching-hour:witches_spell_broken": {
+    "return-to-for-the-greater-good:guardian_of_the_trap_emerged": {
       "kind": "effects",
       "effects": [
         {
           "do": "record",
-          "key": "witchesSpellBroken",
+          "key": "guardianOfTheTrapEmerged",
           "section": "campaign_notes",
           "value": true
         }
       ]
     },
-    "return-to-the-witching-hour:mementos_flute_and_ritual_components:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, under “Mementos Discovered,” record <i>Mesmerizing Flute</i> and <i>Ritual Components</i>. Each investigator earns 1 bonus experience, as they gain insight into Arkham’s mysterious past.",
-      "bullets": []
-    },
-    "return-to-the-witching-hour:mementos_flute_and_ritual_components": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "mesmerizingFlute",
-          "section": "mementos",
-          "value": true
-        },
-        {
-          "do": "record",
-          "key": "ritualComponents",
-          "section": "mementos",
-          "value": true
-        },
-        {
-          "do": "xp",
-          "bonus": 1,
-          "who": "each",
-          "victory": false
-        }
-      ]
-    },
-    "return-to-the-witching-hour:earn_xp": {
+    "return-to-for-the-greater-good:earn_xp": {
       "kind": "effects",
       "effects": [
         {
@@ -2792,625 +2698,53 @@
         }
       ]
     },
-    "return-to-the-witching-hour:upgradeDecks": {
+    "return-to-for-the-greater-good:upgradeDecks": {
       "kind": "upgradeDecks"
     },
-    "return-to-the-witching-hour:mementos_flute_and_scrap_of_torn_shadow:text": {
+    "return-to-for-the-greater-good:skip_inner_circle:text": {
       "kind": "story",
-      "text": "In your Campaign Log, under “Mementos Discovered,” record <i>Mesmerizing Flute</i> and <i>Scrap of Torn Shadow</i>. Each investigator earns 1 bonus experience, as they gain insight into Arkham’s mysterious past.",
+      "text": "Skip <b>Interlude III: The Inner Circle</b>.",
       "bullets": []
     },
-    "return-to-the-witching-hour:mementos_flute_and_scrap_of_torn_shadow": {
+    "return-to-for-the-greater-good:skip_inner_circle": {
       "kind": "effects",
       "effects": [
         {
-          "do": "record",
-          "key": "mesmerizingFlute",
-          "section": "mementos",
-          "value": true
-        },
-        {
-          "do": "record",
-          "key": "scrapOfTornShadow",
-          "section": "mementos",
-          "value": true
-        },
-        {
-          "do": "xp",
-          "bonus": 1,
-          "who": "each",
-          "victory": false
+          "do": "skipScenario",
+          "scenario": "the-inner-circle"
         }
       ]
     },
-    "return-to-the-witching-hour:witches_spell_cast": {
+    "return-to-for-the-greater-good:discovered_how_to_open_the_puzzle_box:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record <i>the investigators discovered how to open the puzzle box</i>. Any one investigator may choose to add the Puzzle Box story asset to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "return-to-for-the-greater-good:discovered_how_to_open_the_puzzle_box": {
       "kind": "effects",
       "effects": [
         {
           "do": "record",
-          "key": "witchesSpellCast",
+          "key": "discoveredHowToOpenThePuzzleBox",
           "section": "campaign_notes",
           "value": true
-        }
-      ]
-    },
-    "return-to-the-witching-hour:no_record:text": {
-      "kind": "story",
-      "text": "No record is made.",
-      "bullets": []
-    },
-    "return-to-the-witching-hour:mementos_flute:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, under “Mementos Discovered,” record <i>Mesmerizing Flute</i>. Each investigator earns 1 bonus experience, as they gain insight into Arkham’s mysterious past.",
-      "bullets": []
-    },
-    "return-to-the-witching-hour:mementos_flute": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "mesmerizingFlute",
-          "section": "mementos",
-          "value": true
-        },
-        {
-          "do": "xp",
-          "bonus": 1,
-          "who": "each",
-          "victory": false
-        }
-      ]
-    },
-    "return-to-the-witching-hour:mementos_check_act": {
-      "kind": "chooseOne",
-      "text": "Check the act deck.",
-      "choices": [
-        {
-          "id": "act_1_or_2",
-          "text": "It was act 1 or 2 when the scenario ended.",
-          "effects": [],
-          "steps": [
-            "return-to-the-witching-hour:no_record:text"
-          ]
-        },
-        {
-          "id": "act_3",
-          "text": "It was act 3 when the scenario ended.",
-          "effects": [],
-          "steps": [
-            "return-to-the-witching-hour:mementos_flute:text",
-            "return-to-the-witching-hour:mementos_flute"
-          ]
-        }
-      ]
-    },
-    "return-to-the-witching-hour:erynn_wants_to_meet": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "erynnWantsToMeet",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "return-to-the-witching-hour:mementos_flute_and_strange_incantation:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, under “Mementos Discovered,” record <i>Mesmerizing Flute</i> and <i>Strange Incantation</i>. Each investigator earns 3 bonus experience, as they gain insight into Arkham’s mysterious past.",
-      "bullets": []
-    },
-    "return-to-the-witching-hour:mementos_flute_and_strange_incantation": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "mesmerizingFlute",
-          "section": "mementos",
-          "value": true
-        },
-        {
-          "do": "record",
-          "key": "strangeIncantation",
-          "section": "mementos",
-          "value": true
-        },
-        {
-          "do": "xp",
-          "bonus": 3,
-          "who": "each",
-          "victory": false
-        }
-      ]
-    },
-    "return-to-the-witching-hour:intro_2": {
-      "kind": "story",
-      "text": "The woman nods and draws the top card of the deck with a steady hand, revealing it to you without looking at it herself. Depicted on the card is a single wooden wand, surrounded by a pattern of broken stained glass. It reads: ACE OF RODS. “You must be ready to act,” she advises. “Without hesitation. Without regret. When the opportunity arises, you must set into motion the events that will change this fate.”",
-      "bullets": []
-    },
-    "return-to-the-witching-hour:accepted_fate:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, record that <i>you have accepted your fate</i>. Add 2 [tablet] tokens to the chaos bag for the remainder of the campaign.",
-      "bullets": []
-    },
-    "return-to-the-witching-hour:accepted_fate": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "acceptedFate",
-          "section": "campaign_notes",
-          "value": true
-        },
-        {
-          "do": "addChaosToken",
-          "token": "tablet"
-        },
-        {
-          "do": "addChaosToken",
-          "token": "tablet"
-        }
-      ]
-    },
-    "return-to-the-witching-hour:campaign_reading_intro:text": {
-      "kind": "story",
-      "text": "Instead of adding 1 copy of The Tower · XVI and 1 copy of Ace of Rods to your deck, the lead investigator may decide to perform a Campaign Reading (\"Destiny\") with a predetermined set of cards from the Tarot Deck.",
-      "bullets": []
-    },
-    "return-to-the-witching-hour:ask_campaign_reading": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "tarot_reading",
-          "text": "Would you like to perform a campaign reading?",
-          "effects": [
-            {
-              "do": "record",
-              "key": "campaignReading",
-              "section": "hidden",
-              "value": true
-            }
-          ],
-          "steps": []
-        }
-      ]
-    },
-    "return-to-the-witching-hour:perform_campaign_reading:text": {
-      "kind": "story",
-      "text": "Using the Tarot Deck, perform an 8-card Campaign Reading with these specific 8 cards, in this order: Temperance, Justice, Hermit, Hanged Man, Hierophant, Lovers, Chariot, Wheel of Fortune.",
-      "bullets": []
-    },
-    "return-to-the-witching-hour:ask_reversed": {
-      "kind": "checklist",
-      "text": "Choose and reverse four of the cards:",
-      "min": 4,
-      "max": 4,
-      "choices": [
-        {
-          "id": "temperance",
-          "text": "Temperance · XIV",
-          "effects": [
-            {
-              "do": "record",
-              "key": "campaignReadingTemperanceReversed",
-              "section": "hidden",
-              "value": true
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "justice",
-          "text": "Justice · XI",
-          "effects": [
-            {
-              "do": "record",
-              "key": "campaignReadingJusticeReversed",
-              "section": "hidden",
-              "value": true
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "hermit",
-          "text": "The Hermit · IX",
-          "effects": [
-            {
-              "do": "record",
-              "key": "campaignReadingHermitReversed",
-              "section": "hidden",
-              "value": true
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "hanged_man",
-          "text": "The Hanged Man · XII",
-          "effects": [
-            {
-              "do": "record",
-              "key": "campaignReadingHangedManReversed",
-              "section": "hidden",
-              "value": true
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "hierophant",
-          "text": "The Hierophant · V",
-          "effects": [
-            {
-              "do": "record",
-              "key": "campaignReadingHierophantReversed",
-              "section": "hidden",
-              "value": true
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "lovers",
-          "text": "The Lovers · VI",
-          "effects": [
-            {
-              "do": "record",
-              "key": "campaignReadingLoversReversed",
-              "section": "hidden",
-              "value": true
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "chariot",
-          "text": "The Chariot · VII",
-          "effects": [
-            {
-              "do": "record",
-              "key": "campaignReadingChariotReversed",
-              "section": "hidden",
-              "value": true
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "wheel_of_fortune",
-          "text": "Wheel of Fortune · X",
-          "effects": [
-            {
-              "do": "record",
-              "key": "campaignReadingWheelOfFortuneReversed",
-              "section": "hidden",
-              "value": true
-            }
-          ],
-          "steps": []
-        }
-      ]
-    },
-    "return-to-the-witching-hour:add_tarot:text": {
-      "kind": "story",
-      "text": "Before drawing their opening hand for this scenario, the lead investigator searches the collection for 1 copy of The Tower · XVI and 1 copy of Ace of Rods and adds each of them to their deck, if able. The lead investigator has earned these cards. They do not count toward their deck size. (If one or both of these cards are not available, skip this step.)",
-      "bullets": []
-    },
-    "return-to-the-witching-hour:add_tarot": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "earnCard",
-          "code": "05042",
-          "who": "lead"
         },
         {
           "do": "earnCard",
-          "code": "05040",
-          "who": "lead"
+          "code": "05228",
+          "who": "choice"
         }
       ]
     },
-    "return-to-the-witching-hour:check_campaign_reading": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "campaignReading",
-        "section": "hidden"
-      },
-      "then": [
-        "return-to-the-witching-hour:perform_campaign_reading:text",
-        "return-to-the-witching-hour:ask_reversed"
-      ],
-      "else": [
-        "return-to-the-witching-hour:add_tarot:text",
-        "return-to-the-witching-hour:add_tarot"
-      ]
-    },
-    "return-to-the-witching-hour:intro_3": {
-      "kind": "story",
-      "text": "The woman smirks. “Yes, in a sense, I suppose it is,” she responds. With a single swift motion, she picks up each of the cards displayed before you, save for The Tower card, and shuffles them back into the deck. “The cards only reveal and advise. They cannot influence or impose.” She locks eyes with you, and her smile vanishes from her face. “In other words, though your fate is not set in stone, I assure you the danger you face is not ‘bullshit.’ It is real.” Her eyes narrow. “It is very real.”",
-      "bullets": []
-    },
-    "return-to-the-witching-hour:rejected_fate:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, record that <i>you have rejected your fate</i>. Add 2 [elder_thing] tokens to the chaos bag for the remainder of the campaign.",
-      "bullets": []
-    },
-    "return-to-the-witching-hour:rejected_fate": {
+    "return-to-for-the-greater-good:guardian_of_the_trap_defeated": {
       "kind": "effects",
       "effects": [
         {
           "do": "record",
-          "key": "rejectedFate",
-          "section": "campaign_notes",
-          "value": true
-        },
-        {
-          "do": "addChaosToken",
-          "token": "elderThing"
-        },
-        {
-          "do": "addChaosToken",
-          "token": "elderThing"
-        }
-      ]
-    },
-    "return-to-the-witching-hour:choose_fate": {
-      "kind": "chooseOne",
-      "text": "The lead investigator must decide (choose one):",
-      "choices": [
-        {
-          "id": "accept_fate",
-          "text": "<i>“What can I do to avoid this fate?”</i>",
-          "effects": [],
-          "steps": [
-            "return-to-the-witching-hour:intro_2",
-            "return-to-the-witching-hour:accepted_fate:text",
-            "return-to-the-witching-hour:accepted_fate",
-            "return-to-the-witching-hour:campaign_reading_intro:text",
-            "return-to-the-witching-hour:ask_campaign_reading",
-            "return-to-the-witching-hour:check_campaign_reading"
-          ]
-        },
-        {
-          "id": "reject_fate",
-          "text": "<i>“This is bullshit.”</i>",
-          "effects": [],
-          "steps": [
-            "return-to-the-witching-hour:intro_3",
-            "return-to-the-witching-hour:rejected_fate:text",
-            "return-to-the-witching-hour:rejected_fate"
-          ]
-        }
-      ]
-    },
-    "return-to-union-and-disillusion:choose_if_sanford_is_good_v8": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "yes",
-          "text": "<i>“Yes.”</i>",
-          "effects": [],
-          "steps": [],
-          "when": {
-            "kind": "all",
-            "conditions": [
-              {
-                "kind": "logHas",
-                "id": "inductedIntoTheInnerCircle",
-                "section": "campaign_notes"
-              },
-              {
-                "kind": "logHas",
-                "id": "deceivingTheLodge",
-                "section": "campaign_notes"
-              }
-            ]
-          }
-        },
-        {
-          "id": "no",
-          "text": "<i>“No.”</i>",
-          "effects": [],
-          "steps": []
-        }
-      ]
-    },
-    "return-to-union-and-disillusion:choose_if_sanford_is_good": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "yes",
-          "text": "<i>“Yes.”</i>",
-          "effects": [],
-          "steps": []
-        },
-        {
-          "id": "no",
-          "text": "<i>“No.”</i>",
-          "effects": [],
-          "steps": []
-        }
-      ]
-    },
-    "return-to-union-and-disillusion:maybe_choose_if_sanford_is_good": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "campaign_data",
-        "take": true
-      },
-      "then": [
-        "return-to-union-and-disillusion:choose_if_sanford_is_good_v8"
-      ],
-      "else": [
-        "return-to-union-and-disillusion:choose_if_sanford_is_good"
-      ]
-    },
-    "return-to-union-and-disillusion:true_work_of_silver_twilight_lodge_has_begun": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "trueWorkOfSilverTwilightLodgeHasBegun",
+          "key": "guardianOfTheTrapDefeated",
           "section": "campaign_notes",
           "value": true
         }
-      ]
-    },
-    "return-to-union-and-disillusion:silver_twilight_wins_campaign:text": {
-      "kind": "story",
-      "text": "The Silver Twilight Lodge wins the campaign. (Investigators who are truly loyal to the Lodge win the campaign.)",
-      "bullets": []
-    },
-    "return-to-union-and-disillusion:silver_twilight_wins_campaign": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "skipScenario",
-          "scenario": "return-to-in-the-clutches-of-chaos"
-        },
-        {
-          "do": "skipScenario",
-          "scenario": "twist-of-fate"
-        },
-        {
-          "do": "skipScenario",
-          "scenario": "return-to-before-the-black-throne"
-        },
-        {
-          "do": "skipScenario",
-          "scenario": "tcu-epilogue"
-        },
-        {
-          "do": "end",
-          "result": "win"
-        }
-      ]
-    },
-    "return-to-union-and-disillusion:carl_sanford_possesses_the_secrets_of_the_universe": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "carlSanfordPossessesTheSecretsOfTheUniverse",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "return-to-union-and-disillusion:fix_remove_all_cultist_tokens:text": {
-      "kind": "story",
-      "text": "While playing the scenario, there was an instruction to remove all [cultist] tokens from the chaos bag.",
-      "bullets": []
-    },
-    "return-to-union-and-disillusion:fix_remove_all_cultist_tokens": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "removeChaosToken",
-          "token": "cultist"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "cultist"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "cultist"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "cultist"
-        }
-      ]
-    },
-    "return-to-union-and-disillusion:maybe_adjust_chaos_bag": {
-      "kind": "branch",
-      "condition": {
-        "kind": "all",
-        "conditions": [
-          {
-            "kind": "logHas",
-            "id": "uadAddChaosToken",
-            "section": "hidden"
-          },
-          {
-            "kind": "logHas",
-            "id": "act3V2",
-            "section": "hidden"
-          }
-        ]
-      },
-      "then": [
-        "return-to-union-and-disillusion:fix_remove_all_cultist_tokens:text",
-        "return-to-union-and-disillusion:fix_remove_all_cultist_tokens"
-      ],
-      "else": []
-    },
-    "return-to-union-and-disillusion:choose_if_anette_is_good_v8": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "yes",
-          "text": "<i>Step forward and accept Keziah's offer</i>",
-          "effects": [],
-          "steps": [],
-          "when": {
-            "kind": "all",
-            "conditions": [
-              {
-                "kind": "hasCard",
-                "card": "05150",
-                "inv": "any"
-              },
-              {
-                "kind": "logHas",
-                "id": "erynnJoinedInvestigators",
-                "section": "campaign_notes"
-              }
-            ]
-          }
-        },
-        {
-          "id": "no",
-          "text": "<i>Escape with Sanford and the Lodge.</i>",
-          "effects": [],
-          "steps": []
-        }
-      ]
-    },
-    "return-to-union-and-disillusion:choose_if_anette_is_good": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "yes",
-          "text": "<i>Step forward and accept Keziah's offer</i>",
-          "effects": [],
-          "steps": []
-        },
-        {
-          "id": "no",
-          "text": "<i>Escape with Sanford and the Lodge.</i>",
-          "effects": [],
-          "steps": []
-        }
-      ]
-    },
-    "return-to-union-and-disillusion:maybe_choose_if_anette_is_good": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "campaign_data",
-        "take": true
-      },
-      "then": [
-        "return-to-union-and-disillusion:choose_if_anette_is_good_v8"
-      ],
-      "else": [
-        "return-to-union-and-disillusion:choose_if_anette_is_good"
       ]
     },
     "return-to-union-and-disillusion:ask_final_act": {
@@ -3620,25 +2954,6 @@
       "kind": "story",
       "text": "Because the second bullet has more true statements, proceed to <b>Resolution 7</b>",
       "bullets": []
-    },
-    "return-to-union-and-disillusion:left_has_more:text": {
-      "kind": "story",
-      "text": "Because the first bullet has more true statements, proceed to <b>Resolution 6</b>",
-      "bullets": []
-    },
-    "return-to-union-and-disillusion:right_result": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "rightColumn",
-        "section": "hidden"
-      },
-      "then": [
-        "return-to-union-and-disillusion:right_has_more:text"
-      ],
-      "else": [
-        "return-to-union-and-disillusion:left_has_more:text"
-      ]
     },
     "return-to-union-and-disillusion:anette_mason_is_possessed_by_evil": {
       "kind": "effects",
@@ -4076,6 +3391,239 @@
     "return-to-union-and-disillusion:upgradeDecks": {
       "kind": "upgradeDecks"
     },
+    "return-to-union-and-disillusion:left_has_more:text": {
+      "kind": "story",
+      "text": "Because the first bullet has more true statements, proceed to <b>Resolution 6</b>",
+      "bullets": []
+    },
+    "return-to-union-and-disillusion:carl_sanford_possesses_the_secrets_of_the_universe": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "carlSanfordPossessesTheSecretsOfTheUniverse",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-union-and-disillusion:right_result": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "rightColumn",
+        "section": "hidden"
+      },
+      "then": [
+        "return-to-union-and-disillusion:right_has_more:text",
+        "return-to-union-and-disillusion:anette_mason_is_possessed_by_evil",
+        "return-to-union-and-disillusion:remove_puzzle_box:text",
+        "return-to-union-and-disillusion:remove_puzzle_box",
+        "return-to-union-and-disillusion:check_missing_persons_alive:text",
+        "return-to-union-and-disillusion:check_gavriella_in_game",
+        "return-to-union-and-disillusion:check_jerome_in_game",
+        "return-to-union-and-disillusion:check_penny_in_game",
+        "return-to-union-and-disillusion:check_valentino_in_game",
+        "return-to-union-and-disillusion:earn_xp",
+        "return-to-union-and-disillusion:upgradeDecks"
+      ],
+      "else": [
+        "return-to-union-and-disillusion:left_has_more:text",
+        "return-to-union-and-disillusion:carl_sanford_possesses_the_secrets_of_the_universe",
+        "return-to-union-and-disillusion:remove_puzzle_box:text",
+        "return-to-union-and-disillusion:remove_puzzle_box",
+        "return-to-union-and-disillusion:check_missing_persons_alive:text",
+        "return-to-union-and-disillusion:check_gavriella_in_game",
+        "return-to-union-and-disillusion:check_jerome_in_game",
+        "return-to-union-and-disillusion:check_penny_in_game",
+        "return-to-union-and-disillusion:check_valentino_in_game",
+        "return-to-union-and-disillusion:earn_xp",
+        "return-to-union-and-disillusion:upgradeDecks"
+      ]
+    },
+    "return-to-union-and-disillusion:true_work_of_silver_twilight_lodge_has_begun": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "trueWorkOfSilverTwilightLodgeHasBegun",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-union-and-disillusion:silver_twilight_wins_campaign:text": {
+      "kind": "story",
+      "text": "The Silver Twilight Lodge wins the campaign. (Investigators who are truly loyal to the Lodge win the campaign.)",
+      "bullets": []
+    },
+    "return-to-union-and-disillusion:silver_twilight_wins_campaign": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "return-to-in-the-clutches-of-chaos"
+        },
+        {
+          "do": "skipScenario",
+          "scenario": "twist-of-fate"
+        },
+        {
+          "do": "skipScenario",
+          "scenario": "return-to-before-the-black-throne"
+        },
+        {
+          "do": "skipScenario",
+          "scenario": "tcu-epilogue"
+        },
+        {
+          "do": "end",
+          "result": "win"
+        }
+      ]
+    },
+    "return-to-union-and-disillusion:choose_if_sanford_is_good_v8": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "<i>“Yes.”</i>",
+          "effects": [],
+          "steps": [
+            "return-to-union-and-disillusion:true_work_of_silver_twilight_lodge_has_begun",
+            "return-to-union-and-disillusion:silver_twilight_wins_campaign:text",
+            "return-to-union-and-disillusion:silver_twilight_wins_campaign"
+          ],
+          "when": {
+            "kind": "all",
+            "conditions": [
+              {
+                "kind": "logHas",
+                "id": "inductedIntoTheInnerCircle",
+                "section": "campaign_notes"
+              },
+              {
+                "kind": "logHas",
+                "id": "deceivingTheLodge",
+                "section": "campaign_notes"
+              }
+            ]
+          }
+        },
+        {
+          "id": "no",
+          "text": "<i>“No.”</i>",
+          "effects": [],
+          "steps": [
+            "return-to-union-and-disillusion:carl_sanford_possesses_the_secrets_of_the_universe",
+            "return-to-union-and-disillusion:remove_puzzle_box:text",
+            "return-to-union-and-disillusion:remove_puzzle_box",
+            "return-to-union-and-disillusion:check_missing_persons_alive:text",
+            "return-to-union-and-disillusion:check_gavriella_in_game",
+            "return-to-union-and-disillusion:check_jerome_in_game",
+            "return-to-union-and-disillusion:check_penny_in_game",
+            "return-to-union-and-disillusion:check_valentino_in_game",
+            "return-to-union-and-disillusion:earn_xp",
+            "return-to-union-and-disillusion:upgradeDecks"
+          ]
+        }
+      ]
+    },
+    "return-to-union-and-disillusion:choose_if_sanford_is_good": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "<i>“Yes.”</i>",
+          "effects": [],
+          "steps": [
+            "return-to-union-and-disillusion:true_work_of_silver_twilight_lodge_has_begun",
+            "return-to-union-and-disillusion:silver_twilight_wins_campaign:text",
+            "return-to-union-and-disillusion:silver_twilight_wins_campaign"
+          ]
+        },
+        {
+          "id": "no",
+          "text": "<i>“No.”</i>",
+          "effects": [],
+          "steps": [
+            "return-to-union-and-disillusion:carl_sanford_possesses_the_secrets_of_the_universe",
+            "return-to-union-and-disillusion:remove_puzzle_box:text",
+            "return-to-union-and-disillusion:remove_puzzle_box",
+            "return-to-union-and-disillusion:check_missing_persons_alive:text",
+            "return-to-union-and-disillusion:check_gavriella_in_game",
+            "return-to-union-and-disillusion:check_jerome_in_game",
+            "return-to-union-and-disillusion:check_penny_in_game",
+            "return-to-union-and-disillusion:check_valentino_in_game",
+            "return-to-union-and-disillusion:earn_xp",
+            "return-to-union-and-disillusion:upgradeDecks"
+          ]
+        }
+      ]
+    },
+    "return-to-union-and-disillusion:maybe_choose_if_sanford_is_good": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "version",
+        "take": true
+      },
+      "then": [
+        "return-to-union-and-disillusion:choose_if_sanford_is_good_v8"
+      ],
+      "else": [
+        "return-to-union-and-disillusion:choose_if_sanford_is_good"
+      ]
+    },
+    "return-to-union-and-disillusion:fix_remove_all_cultist_tokens:text": {
+      "kind": "story",
+      "text": "While playing the scenario, there was an instruction to remove all [cultist] tokens from the chaos bag.",
+      "bullets": []
+    },
+    "return-to-union-and-disillusion:fix_remove_all_cultist_tokens": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "cultist"
+        }
+      ]
+    },
+    "return-to-union-and-disillusion:maybe_adjust_chaos_bag": {
+      "kind": "branch",
+      "condition": {
+        "kind": "all",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "uadAddChaosToken",
+            "section": "hidden"
+          },
+          {
+            "kind": "logHas",
+            "id": "act3V2",
+            "section": "hidden"
+          }
+        ]
+      },
+      "then": [
+        "return-to-union-and-disillusion:fix_remove_all_cultist_tokens:text",
+        "return-to-union-and-disillusion:fix_remove_all_cultist_tokens"
+      ],
+      "else": []
+    },
     "return-to-union-and-disillusion:coven_of_keziah_holds_the_world_in_its_grasp": {
       "kind": "effects",
       "effects": [
@@ -4115,6 +3663,99 @@
           "do": "end",
           "result": "win"
         }
+      ]
+    },
+    "return-to-union-and-disillusion:choose_if_anette_is_good_v8": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "<i>Step forward and accept Keziah's offer</i>",
+          "effects": [],
+          "steps": [
+            "return-to-union-and-disillusion:coven_of_keziah_holds_the_world_in_its_grasp",
+            "return-to-union-and-disillusion:coven_wins_campaign:text",
+            "return-to-union-and-disillusion:coven_wins_campaign"
+          ],
+          "when": {
+            "kind": "all",
+            "conditions": [
+              {
+                "kind": "hasCard",
+                "card": "05150",
+                "inv": "any"
+              },
+              {
+                "kind": "logHas",
+                "id": "erynnJoinedInvestigators",
+                "section": "campaign_notes"
+              }
+            ]
+          }
+        },
+        {
+          "id": "no",
+          "text": "<i>Escape with Sanford and the Lodge.</i>",
+          "effects": [],
+          "steps": [
+            "return-to-union-and-disillusion:anette_mason_is_possessed_by_evil",
+            "return-to-union-and-disillusion:remove_puzzle_box:text",
+            "return-to-union-and-disillusion:remove_puzzle_box",
+            "return-to-union-and-disillusion:check_missing_persons_alive:text",
+            "return-to-union-and-disillusion:check_gavriella_in_game",
+            "return-to-union-and-disillusion:check_jerome_in_game",
+            "return-to-union-and-disillusion:check_penny_in_game",
+            "return-to-union-and-disillusion:check_valentino_in_game",
+            "return-to-union-and-disillusion:earn_xp",
+            "return-to-union-and-disillusion:upgradeDecks"
+          ]
+        }
+      ]
+    },
+    "return-to-union-and-disillusion:choose_if_anette_is_good": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "<i>Step forward and accept Keziah's offer</i>",
+          "effects": [],
+          "steps": [
+            "return-to-union-and-disillusion:coven_of_keziah_holds_the_world_in_its_grasp",
+            "return-to-union-and-disillusion:coven_wins_campaign:text",
+            "return-to-union-and-disillusion:coven_wins_campaign"
+          ]
+        },
+        {
+          "id": "no",
+          "text": "<i>Escape with Sanford and the Lodge.</i>",
+          "effects": [],
+          "steps": [
+            "return-to-union-and-disillusion:anette_mason_is_possessed_by_evil",
+            "return-to-union-and-disillusion:remove_puzzle_box:text",
+            "return-to-union-and-disillusion:remove_puzzle_box",
+            "return-to-union-and-disillusion:check_missing_persons_alive:text",
+            "return-to-union-and-disillusion:check_gavriella_in_game",
+            "return-to-union-and-disillusion:check_jerome_in_game",
+            "return-to-union-and-disillusion:check_penny_in_game",
+            "return-to-union-and-disillusion:check_valentino_in_game",
+            "return-to-union-and-disillusion:earn_xp",
+            "return-to-union-and-disillusion:upgradeDecks"
+          ]
+        }
+      ]
+    },
+    "return-to-union-and-disillusion:maybe_choose_if_anette_is_good": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "version",
+        "take": true
+      },
+      "then": [
+        "return-to-union-and-disillusion:choose_if_anette_is_good_v8"
+      ],
+      "else": [
+        "return-to-union-and-disillusion:choose_if_anette_is_good"
       ]
     },
     "return-to-union-and-disillusion:sided_with_the_lodge": {
@@ -4300,6 +3941,535 @@
       "else": [
         "return-to-union-and-disillusion:check_sided_with_lodge"
       ]
+    },
+    "return-to-in-the-clutches-of-chaos:doom_draws_ever_closer": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "doomDrawsEverCloser",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-in-the-clutches-of-chaos:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "return-to-in-the-clutches-of-chaos:check_carl_sanford_resolution": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "carlSanfordPossessesTheSecretsOfTheUniverse",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "return-to-in-the-clutches-of-chaos:doom_draws_ever_closer",
+        "return-to-in-the-clutches-of-chaos:earn_xp"
+      ],
+      "else": []
+    },
+    "return-to-in-the-clutches-of-chaos:check_anette_mason_resolution": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "anetteMasonIsPossessedByEvil",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "return-to-in-the-clutches-of-chaos:doom_draws_ever_closer",
+        "return-to-in-the-clutches-of-chaos:earn_xp"
+      ],
+      "else": [
+        "return-to-in-the-clutches-of-chaos:check_carl_sanford_resolution"
+      ]
+    },
+    "return-to-in-the-clutches-of-chaos:choose_anettes_fate": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "alone",
+          "text": "<i>“You’ve done enough harm. We’ll handle this from here.”</i>",
+          "effects": [
+            {
+              "do": "record",
+              "key": "continuedAlone",
+              "section": "campaign_notes",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "ask_for_help",
+          "text": "<i>“We will need your help to fix this.”</i>",
+          "effects": [
+            {
+              "do": "record",
+              "key": "askedAnetteForAssistance",
+              "section": "campaign_notes",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "under_arrest",
+          "text": "<i>“You are under arrest.”</i>",
+          "effects": [
+            {
+              "do": "record",
+              "key": "arrestedAnette",
+              "section": "campaign_notes",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "learn_spells",
+          "text": "<i>“Then teach me how to be stronger.”</i>",
+          "effects": [
+            {
+              "do": "record",
+              "key": "anetteTaughtYouTheSpellsOfOld",
+              "section": "campaign_notes",
+              "value": true
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "return-to-in-the-clutches-of-chaos:choose_carls_fate": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "alone",
+          "text": "<i>“You’ve done enough harm. We’ll handle this from here.”</i>",
+          "effects": [
+            {
+              "do": "record",
+              "key": "continuedAlone",
+              "section": "campaign_notes",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "ask_for_help",
+          "text": "<i>“We will need your help to fix this.”</i>",
+          "effects": [
+            {
+              "do": "record",
+              "key": "askedSanfordForAssistance",
+              "section": "campaign_notes",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "under_arrest",
+          "text": "<i>“You are under arrest.”</i>",
+          "effects": [
+            {
+              "do": "record",
+              "key": "arrestedSanford",
+              "section": "campaign_notes",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "seize_control",
+          "text": "<i>“You don't deserve to lead us.”</i>",
+          "effects": [
+            {
+              "do": "record",
+              "key": "assumedControlOfTheSilverTwilightLodge",
+              "section": "campaign_notes",
+              "value": true
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "return-to-before-the-black-throne:azathoth_devoured_the_universe": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "azathothDevouredTheUniverse",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-before-the-black-throne:all_killed:text": {
+      "kind": "story",
+      "text": "Each investigator is <b>killed</b>.",
+      "bullets": []
+    },
+    "return-to-before-the-black-throne:all_killed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "kill",
+          "who": "each"
+        }
+      ]
+    },
+    "return-to-before-the-black-throne:lose:text": {
+      "kind": "story",
+      "text": "The investigators lose the campaign.",
+      "bullets": []
+    },
+    "return-to-before-the-black-throne:lose": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "tcu-epilogue"
+        },
+        {
+          "do": "end",
+          "result": "lose"
+        }
+      ]
+    },
+    "return-to-before-the-black-throne:lead_investigator_joins_pipers:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record <i>the lead investigator has joined the pipers of Azathoth</i>.",
+      "bullets": []
+    },
+    "return-to-before-the-black-throne:lead_investigator_joins_pipers": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "leadInvestigatorJoinsPipers",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-before-the-black-throne:azathoth_slumbers": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "azathothSlumbers",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-before-the-black-throne:lead_investigator_insane:text": {
+      "kind": "story",
+      "text": "The lead investigator is driven <b>insane</b>.",
+      "bullets": []
+    },
+    "return-to-before-the-black-throne:earn_xp_bonus_5": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 5,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "return-to-before-the-black-throne:two_mental_trauma:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 2 mental trauma, as they understand that one day Azathoth will inevitably wake.",
+      "bullets": []
+    },
+    "return-to-before-the-black-throne:two_mental_trauma": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 0,
+          "mental": 2
+        }
+      ]
+    },
+    "return-to-before-the-black-throne:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "return-to-before-the-black-throne:win:text": {
+      "kind": "story",
+      "text": "The investigators win the campaign!",
+      "bullets": []
+    },
+    "return-to-before-the-black-throne:win": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "win"
+        }
+      ]
+    },
+    "return-to-before-the-black-throne:two_physical_trauma:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 2 physical trauma, as their nightmarish journey home takes its toll on their bodies.",
+      "bullets": []
+    },
+    "return-to-before-the-black-throne:two_physical_trauma": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 2,
+          "mental": 0
+        }
+      ]
+    },
+    "return-to-before-the-black-throne:signed_the_black_book": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "signedTheBlackBook",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-before-the-black-throne:earn_xp_bonus_10": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 10,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "return-to-before-the-black-throne:two_physical_and_mental_trauma:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 2 physical trauma and 2 mental trauma—the consequences of their pact with Azathoth’s messenger.",
+      "bullets": []
+    },
+    "return-to-before-the-black-throne:two_physical_and_mental_trauma": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 2,
+          "mental": 2
+        }
+      ]
+    },
+    "return-to-before-the-black-throne:win_question_mark:text": {
+      "kind": "story",
+      "text": "The investigators win the campaign…?",
+      "bullets": []
+    },
+    "return-to-before-the-black-throne:win_question_mark": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "win"
+        }
+      ]
+    },
+    "return-to-before-the-black-throne:choose_final_resolution": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "doom_self",
+          "text": "<i>“It must be done.”</i>",
+          "effects": [],
+          "steps": [
+            "return-to-before-the-black-throne:azathoth_slumbers",
+            "return-to-before-the-black-throne:signed_the_black_book",
+            "return-to-before-the-black-throne:earn_xp_bonus_10",
+            "return-to-before-the-black-throne:two_physical_and_mental_trauma:text",
+            "return-to-before-the-black-throne:two_physical_and_mental_trauma",
+            "return-to-before-the-black-throne:upgradeDecks",
+            "return-to-before-the-black-throne:win_question_mark:text",
+            "return-to-before-the-black-throne:win_question_mark"
+          ]
+        },
+        {
+          "id": "doom_all",
+          "text": "<i>“I refuse!”</i>",
+          "effects": [],
+          "steps": [
+            "return-to-before-the-black-throne:azathoth_devoured_the_universe",
+            "return-to-before-the-black-throne:all_killed:text",
+            "return-to-before-the-black-throne:all_killed",
+            "return-to-before-the-black-throne:lose:text",
+            "return-to-before-the-black-throne:lose"
+          ]
+        }
+      ]
+    },
+    "return-to-before-the-black-throne:split_trauma:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 1 physical trauma and 1 mental trauma, as the nightmarish work takes its toll on their bodies and minds.",
+      "bullets": []
+    },
+    "return-to-before-the-black-throne:split_trauma": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 1,
+          "mental": 1
+        }
+      ]
+    },
+    "tcu-epilogue:anette_story": {
+      "kind": "story",
+      "text": "“Gone? What do you mean she’s gone?!” Sheriff Engle demands.\n“See for yourself,” the officer replies. He guides the sheriff through a long hallway flanked by holding cells. “She was guarded at all hours, trust me. One moment she was there, the next…” He stops in front of Anette’s cell, and watches as Sheriff Engle’s jaw drops. Smeared along the walls of the cell is a sticky red substance, painted in a delicate pattern. The woman is nowhere to be seen.",
+      "bullets": []
+    },
+    "tcu-epilogue:check_anette_arrested": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "arrestedAnette",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tcu-epilogue:anette_story"
+      ],
+      "else": []
+    },
+    "tcu-epilogue:lodge_story": {
+      "kind": "story",
+      "text": "You nod to the knight as he places the file you had requested onto your hardwood desk. Finding all of Carl Sanford’s records hadn’t been easy, but now all of the secrets of the Order were within your grasp. “What is the next step?” he asks, eager to serve. You inform him that there is to be a meeting in the sanctum this very night. “Very well. I will summon our most loyal members.” You dismiss him and turn to look out the window of your new office. The city of Arkham is as grim and moody as ever…but at least now you can protect it from the forces that lay beyond the Earth.",
+      "bullets": []
+    },
+    "tcu-epilogue:check_assumed_control_of_the_silver_twilight_lodge": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "assumedControlOfTheSilverTwilightLodge",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tcu-epilogue:lodge_story"
+      ],
+      "else": []
+    },
+    "tcu-epilogue:watcher_story": {
+      "kind": "story",
+      "text": "Anna regards you calmly as you enter. As always, her prescience is disconcerting, but by now you have gotten used to it. “I’ve been expecting you for some time,” she admits. “I suppose you have questions for me. Very well. Ask away. Though I imagine that by now you must know the answer.” She neither offers you a seat nor a drink. You begin to describe your situation, though the truth of your condition is plain to see for somebody with her gifts (and few else). You had hoped for another explanation— any explanation at all—but it was only a desperate clinging to hope, without justification. Anna gives you a pitying grimace and shakes her head. “Surely by now you must understand. You have completed your task. Your business here has concluded. Now is the time for you to rest and be at peace.”\nPeace? No, you cannot be at peace! There is still so much left for you to do…!",
+      "bullets": []
+    },
+    "tcu-epilogue:cross_out_survived_the_watchers_embrace": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "survivedTheWatchersEmbrace",
+          "section": "campaign_notes"
+        }
+      ]
+    },
+    "tcu-epilogue:check_survived_the_watchers_embrace": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "survivedTheWatchersEmbrace",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tcu-epilogue:watcher_story",
+        "tcu-epilogue:cross_out_survived_the_watchers_embrace"
+      ],
+      "else": []
+    },
+    "tcu-epilogue:black_book_story": {
+      "kind": "story",
+      "text": "In your dream, a tall man approaches. His grin is full of malice. “It is time to pay your due,” he announces. “You got what you wanted. Now it is my turn.”",
+      "bullets": []
+    },
+    "tcu-epilogue:check_signed_the_black_book": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "signedTheBlackBook",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tcu-epilogue:black_book_story"
+      ],
+      "else": []
+    },
+    "tcu-epilogue:arrested_sanford_story": {
+      "kind": "story",
+      "text": "“You’re a fool,” Carl Sanford says from behind bars, his tone confident. “How long do you expect this to stand?”\nYou know he is right. The charges brought against Sanford are flimsy at best. No judge or jury is going to believe any story about dark rituals and eldritch beings. Even if you could convince others of Sanford’s dangerous ideologies, his considerable influence and political clout ensures he’ll be released sooner than you would like. Even so, you had to separate him from his lackeys while you cleaned up his mess. You tell Sanford that you’ll be keeping an eye on him once he is out.\n“And I, you,” he retorts.",
+      "bullets": []
+    },
+    "tcu-epilogue:check_arrested_sanford": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "arrestedSanford",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tcu-epilogue:arrested_sanford_story"
+      ],
+      "else": []
+    },
+    "tcu-epilogue:anette_taught_story": {
+      "kind": "story",
+      "text": "A cold wind blows through the silent woods, the clearing bathed in a silver glow bestowed by the full moon. “We have new blood joining our circle,” Erynn states from the center of the clearing, where Anette once stood to lead her sisters. She beckons you forward. “Our coven is bound by much more than simple association. We are a family. And we are proud to welcome you into our midst.”\nWith your new understanding of the universe and the forces that hold it together, you promise to use your knowledge only to maintain the balance of the world. Erynn and the others nod in agreement.\n“This city is already stained with much blood,” she says. “Spilling more is not an act of cleansing. Let us be shields, and blades of vengeance no longer.”",
+      "bullets": []
+    },
+    "tcu-epilogue:check_anette_taught_you_the_spells_of_old": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "anetteTaughtYouTheSpellsOfOld",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tcu-epilogue:anette_taught_story"
+      ],
+      "else": []
+    },
+    "tcu-epilogue:being_hunted": {
+      "kind": "story",
+      "text": "No matter what you do, the creature’s assault on your mind never ceases. Its gaze haunts you everywhere you look. It controls your every thought—your hopes, your bonds, your fears, your ambitions. A reminder of your futile existence. Each night, you toss and turn, unable to wrench free from this sensation of worthlessness. Your thoughts turn to a grim, uncertain future. A future without life. A future without <i>you</i>. It is the one ordeal every mortal must endure, and yet the one experience no mortal could possibly describe. Ghosts? Realms beyond our mortal coil? Nothing but a last resort for a mind desperate to cling to life.\nWhen the creature next invades, you have come to a new conclusion. An icy draft surrounds you as the thing coalesces before you. Your throat constricts and tears well in your eyes, but you stand tall. You are unafraid. The creature gazes at you curiously, and the piping of infernal flutes fades into silence. It extends its clawed hand, and you shake it. You will never truly be free from its grasp, but perhaps you and the creature can work in agreement. Perhaps you can tame your fear. It doesn’t matter if the world has no point. It’s yours, damnit, and nothing will stop you from altering it to your liking.",
+      "bullets": []
+    },
+    "tcu-epilogue:check_being_hunted": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "beingHunted",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "tcu-epilogue:being_hunted"
+      ],
+      "else": []
     },
     "the-inner-circle:ic_1": {
       "kind": "story",

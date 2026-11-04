@@ -184,29 +184,6 @@
           "who": "each"
         }
       ]
-    },
-    "R5": {
-      "title": "Resolution 5",
-      "text": "“Miskatonic Survey, June 1926. Members Marquez, Musgrave, et alii. Area surveyed: Eastwick Bog. Numerous abnormally sized flora, parasitic variety capable of controlling its host. Oppressively abundant ecosystem. Aggressive water life. More jungle than forest. Not your average bog. Will need to return with more funding.”",
-      "effects": [
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 0,
-          "who": "each"
-        },
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 0,
-          "who": "each"
-        },
-        {
-          "do": "record",
-          "key": "eastwickBog",
-          "value": true
-        }
-      ]
     }
   },
   "i18nId": "the_thing_in_the_depths",

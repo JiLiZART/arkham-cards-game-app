@@ -131,29 +131,6 @@
           "who": "each"
         }
       ]
-    },
-    "R2": {
-      "title": "Resolution 2",
-      "text": "“Miskatonic Survey, June 1926. Members Marquez, Musgrave, et alii. Survey of Hemlock House complete. Organism defies comprehension. Colony of octopodial and gastropodial species infested the entire house. Creature(s) appear to have evolved in the house proper. Further observation needed.”",
-      "effects": [
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 0,
-          "who": "each"
-        },
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 0,
-          "who": "each"
-        },
-        {
-          "do": "record",
-          "key": "hemlockHarbor",
-          "value": true
-        }
-      ]
     }
   },
   "i18nId": "hemlock_house",

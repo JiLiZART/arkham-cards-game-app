@@ -184,29 +184,6 @@
           "value": true
         }
       ]
-    },
-    "R5": {
-      "title": "Resolution 5",
-      "text": "You find many “Latif”s listed among the innumerable dead as the city reckons with its losses. Rather than try to find your contact, you take stock of the situation and read over the dossier. You have little doubt that this was the work of the Coterie. What Amaranth did here claimed thousands of lives and wreaked havoc on a scale you could have scarcely foreseen. Whatever her reasons, she apparently has the ability to bring calamity on an apocalyptic scale.\nAs the people of Marrakesh carry out the grim arithmetic of counting survivors, you use what time you have to help the civilians rebuild. Over the course of many days, the awful vines dessicate and blow away as ash, and the dead are cleansed and wrapped for burial. Despite the devastation, there is hope for the city to become what it once was, if not even better. With a heavy heart, you prepare to leave.",
-      "effects": [
-        {
-          "do": "record",
-          "key": "haveNotSeenTheLastOfAmaranth",
-          "value": true
-        },
-        {
-          "do": "trauma",
-          "who": "each",
-          "physical": 0,
-          "mental": 1
-        },
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 3,
-          "who": "each"
-        }
-      ]
     }
   },
   "i18nId": "marrakesh",

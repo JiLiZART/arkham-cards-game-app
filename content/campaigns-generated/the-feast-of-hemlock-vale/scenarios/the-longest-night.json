@@ -185,39 +185,6 @@
           "who": "each"
         }
       ]
-    },
-    "R4": {
-      "title": "Resolution 4",
-      "text": "The morning sun beats down, blindingly bright, as you cut through the fields back to the Vale. Flecks of slick, dark liquid drip from the withered stalks as you push through. Dr. Marquez stops and runs a hand under the brittle leaves. “The fields are painted with blood. But why?” She wipes the blood on a handkerchief and surveys the dripping field. “What kind of monster would do this? Sentencing her followers—her own daughter—to death. It’s almost biblical.”\nRebecca pulls back her mask and shakes her head. “Mother says it’s our way. And she doesn’t want me to die. She told me to hide. She said we were playing a game. ‘Make yourself very small and hide near the barrels of kerosene. The animals won’t smell you there’.”\n“But why bring you here at all?” the professor asks.\n“Some people didn’t want to come to the barn. But when mama told them I would be there too, they said it was okay.”\nThe group falls silent as you pass from one field and back into view of the Vale, veiled in gold under the radiant dawn. Suddenly, Dr. Marquez stops and takes you aside. “We may be able to use this as leverage. Rebecca is living proof of Mother Rachel’s hypocrisy, as horrible as that sounds. Everyone on Hemlock Isle will be at the Feast tonight. If we ask Rebecca to tell them what Mother Rachel said to her, we may be able to sway at least some of them to leave. And if that doesn’t work, we can high-tail it back to the mainland and get the law involved.”\nThe professor turns to Rebecca. “Can we play a game? Like last night? Your mother told me she wants you to hide until the Feast.” The young girl nods. Dr. Marquez lets out a manic giggle: strangely out of character for her usual controlled affect. You can’t help but suppress a grin, too, despite the horrors you just witnessed.",
-      "effects": [
-        {
-          "do": "earnCard",
-          "code": "10702",
-          "who": "choice"
-        },
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 0,
-          "who": "each"
-        },
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 0,
-          "who": "each"
-        },
-        {
-          "do": "record",
-          "key": "drMarquezHasAPlan",
-          "value": true
-        },
-        {
-          "do": "record",
-          "key": "southernFields",
-          "value": true
-        }
-      ]
     }
   },
   "i18nId": "the_longest_night",

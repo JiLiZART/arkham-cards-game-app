@@ -199,34 +199,6 @@
           "who": "each"
         }
       ]
-    },
-    "R5": {
-      "title": "Resolution 5",
-      "text": "Pricking your arm with the quill, you sign in blood.",
-      "effects": [
-        {
-          "do": "record",
-          "key": "azathothSlumbers",
-          "value": true
-        },
-        {
-          "do": "record",
-          "key": "signedTheBlackBook",
-          "value": true
-        },
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 10,
-          "who": "each"
-        },
-        {
-          "do": "trauma",
-          "who": "each",
-          "physical": 2,
-          "mental": 2
-        }
-      ]
     }
   },
   "i18nId": "before_the_black_throne",

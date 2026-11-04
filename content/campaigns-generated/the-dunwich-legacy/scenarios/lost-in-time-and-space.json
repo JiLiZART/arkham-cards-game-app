@@ -137,18 +137,6 @@
         }
       ]
     },
-    "R2": {
-      "title": "Resolution 2",
-      "text": "Several of the villagers from Dunwich heard the ruckus on Sentinel Hill and went to investigate. What they found there answered none of their questions.\n“What d’you think happened?” a frightened Curtis Whateley asks as they examine the hilltop. The other villagers shake their heads, unable to say. “Last thing I saw, the sky’d open’d up an’ there was a bright flash,” one of them says, looking up at the starry sky from the top of Sentinel Hill.\n“Those Arkham fellas ain’t nowhere to be seen,” Curtis adds, looking down at the cracked stone altar. “Not even of a hint of ‘em. Mr. Bishop and his pals, now, that’s a diff’rent story.” The young man motions toward several corpses on the ground.\n“Think we should get ahold of those coppers outta Aylesbury?”\n“Why, so they can laugh at us again?” Curtis spits. “They ain’t never gonna believe us ‘bout all this anyway.” He glances at the stone altar, fidgeting nervously. “Better t’ forget about the whole thing. C’mon, let’s bury the dead and get outta here.”",
-      "effects": [
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 0,
-          "who": "each"
-        }
-      ]
-    },
     "R3": {
       "title": "Resolution 3",
       "text": "The creature erupts in a cosmic fury of sound, color, and distorted space, hurling you back and away from it. You watch in horror as one of its arms tears through the fabric of the world, and its amorphous shape funnels through the rift, pulling the threads of the world along with it. You try to cling to something, but you are inexorably sucked into the rift. You feel as if your body is stretching and your mind is being crushed. Then, everything goes black.",
@@ -156,29 +144,6 @@
         {
           "do": "record",
           "key": "yogSothothFled",
-          "value": true
-        },
-        {
-          "do": "trauma",
-          "who": "each",
-          "physical": 0,
-          "mental": 0
-        },
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 0,
-          "who": "each"
-        }
-      ]
-    },
-    "R4": {
-      "title": "Resolution 4",
-      "text": "The sorcerers from Dunwich, seeking arcane power from beyond this realm, have accomplished what Wilbur and Old Whateley could not. Through blood sacrifice and indescribable experiments, the dark power the sorcerers sought is now within their reach. However, they will never get the chance to truly wield this power. In beseeching Wilbur’s father for knowledge, they have drawn the creature forth from its extradimensional realm. Yog-Sothoth emerges from the open rift above Sentinel Hill, blotting out the sky and enveloping the world. Now it has come to Earth, and it rules where humanity once tread.",
-      "effects": [
-        {
-          "do": "record",
-          "key": "yogSothothBecameOneWithReality",
           "value": true
         },
         {

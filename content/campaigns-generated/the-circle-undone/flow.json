@@ -70,6 +70,33 @@
     }
   },
   "resolutions": {
+    "the-circle-undone-disappearance-at-the-twilight-estate": {
+      "none": [
+        "the-circle-undone-disappearance-at-the-twilight-estate:no_experience:text",
+        "the-circle-undone-disappearance-at-the-twilight-estate:pieces_of_evidence",
+        "the-circle-undone-disappearance-at-the-twilight-estate:return_player_cards:text",
+        "the-circle-undone-disappearance-at-the-twilight-estate:maybe_ask_being_hunted"
+      ]
+    },
+    "the-witching-hour": {
+      "none": [
+        "the-witching-hour:check_final_act"
+      ],
+      "R1": [
+        "the-witching-hour:witches_spell_broken",
+        "the-witching-hour:mementos_flute_and_ritual_components:text",
+        "the-witching-hour:mementos_flute_and_ritual_components",
+        "the-witching-hour:earn_xp",
+        "the-witching-hour:upgradeDecks"
+      ],
+      "R2": [
+        "the-witching-hour:witches_spell_broken",
+        "the-witching-hour:mementos_flute_and_scrap_of_torn_shadow:text",
+        "the-witching-hour:mementos_flute_and_scrap_of_torn_shadow",
+        "the-witching-hour:earn_xp",
+        "the-witching-hour:upgradeDecks"
+      ]
+    },
     "at-deaths-doorstep": {
       "none": [
         "at-deaths-doorstep:check_final_act"
@@ -77,14 +104,6 @@
       "R1": [
         "at-deaths-doorstep:investigators_escaped_the_spectral_realm",
         "at-deaths-doorstep:earn_xp"
-      ],
-      "R2": [
-        "at-deaths-doorstep:learned_nothing_of_the_lodges_schemes",
-        "at-deaths-doorstep:earn_xp",
-        "at-deaths-doorstep:upgradeDecks",
-        "at-deaths-doorstep:skip_price_of_progress:text",
-        "at-deaths-doorstep:skip_price_of_progress",
-        "at-deaths-doorstep:check_being_hunted"
       ],
       "R3": [
         "at-deaths-doorstep:never_seen_again",
@@ -96,56 +115,46 @@
         "at-deaths-doorstep:check_being_hunted"
       ]
     },
-    "before-the-black-throne": {
-      "none": [],
+    "the-secret-name": {
+      "none": [
+        "the-secret-name:earn_xp",
+        "the-secret-name:check_brown_jenkin_xp",
+        "the-secret-name:check_nahab_xp",
+        "the-secret-name:check_act_deck",
+        "the-secret-name:upgradeDecks"
+      ],
       "R1": [
-        "before-the-black-throne:azathoth_devoured_the_universe",
-        "before-the-black-throne:all_killed:text",
-        "before-the-black-throne:all_killed",
-        "before-the-black-throne:lose:text",
-        "before-the-black-throne:lose"
+        "the-secret-name:earn_xp",
+        "the-secret-name:check_brown_jenkin_xp",
+        "the-secret-name:check_nahab_xp",
+        "the-secret-name:check_act_deck",
+        "the-secret-name:upgradeDecks"
       ],
       "R2": [
-        "before-the-black-throne:lead_investigator_joins_pipers:text",
-        "before-the-black-throne:lead_investigator_joins_pipers",
-        "before-the-black-throne:azathoth_slumbers",
-        "before-the-black-throne:lead_investigator_insane:text",
-        "before-the-black-throne:earn_xp_bonus_5",
-        "before-the-black-throne:two_mental_trauma:text",
-        "before-the-black-throne:two_mental_trauma",
-        "before-the-black-throne:upgradeDecks",
-        "before-the-black-throne:win:text",
-        "before-the-black-throne:win"
-      ],
-      "R3": [
-        "before-the-black-throne:azathoth_slumbers",
-        "before-the-black-throne:earn_xp_bonus_5",
-        "before-the-black-throne:two_physical_trauma:text",
-        "before-the-black-throne:two_physical_trauma",
-        "before-the-black-throne:upgradeDecks",
-        "before-the-black-throne:win:text",
-        "before-the-black-throne:win"
-      ],
-      "R4": [
-        "before-the-black-throne:choose_final_resolution"
-      ],
-      "R5": [
-        "before-the-black-throne:azathoth_slumbers",
-        "before-the-black-throne:signed_the_black_book",
-        "before-the-black-throne:earn_xp_bonus_10",
-        "before-the-black-throne:two_physical_and_mental_trauma:text",
-        "before-the-black-throne:two_physical_and_mental_trauma",
-        "before-the-black-throne:upgradeDecks",
-        "before-the-black-throne:win_question_mark:text",
-        "before-the-black-throne:win_question_mark"
+        "the-secret-name:earn_xp_bonus_2",
+        "the-secret-name:all_mementos:text",
+        "the-secret-name:all_mementos",
+        "the-secret-name:choose_black_book_prompt:text",
+        "the-secret-name:choose_black_book",
+        "the-secret-name:upgradeDecks"
       ]
     },
-    "the-circle-undone-disappearance-at-the-twilight-estate": {
+    "the-wages-of-sin": {
+      "R1": [
+        "the-wages-of-sin:record_heretics_released",
+        "the-wages-of-sin:check_earned_wisp",
+        "the-wages-of-sin:earn_xp",
+        "the-wages-of-sin:upgradeDecks"
+      ],
+      "R2": [
+        "the-wages-of-sin:survived_the_watchers_embrace",
+        "the-wages-of-sin:record_heretics_released",
+        "the-wages-of-sin:check_earned_wisp",
+        "the-wages-of-sin:earn_xp",
+        "the-wages-of-sin:upgradeDecks"
+      ],
       "none": [
-        "the-circle-undone-disappearance-at-the-twilight-estate:no_experience:text",
-        "the-circle-undone-disappearance-at-the-twilight-estate:pieces_of_evidence",
-        "the-circle-undone-disappearance-at-the-twilight-estate:return_player_cards:text",
-        "the-circle-undone-disappearance-at-the-twilight-estate:maybe_ask_being_hunted"
+        "the-wages-of-sin:none"
       ]
     },
     "for-the-greater-good": {
@@ -177,8 +186,40 @@
         "for-the-greater-good:skip_inner_circle"
       ]
     },
+    "union-and-disillusion": {
+      "none": [
+        "union-and-disillusion:maybe_ask_act_1",
+        "union-and-disillusion:compare_columns_explanation:text",
+        "union-and-disillusion:compare_columns",
+        "union-and-disillusion:right_result"
+      ],
+      "R1": [
+        "union-and-disillusion:maybe_choose_if_sanford_is_good"
+      ],
+      "R4": [
+        "union-and-disillusion:maybe_adjust_chaos_bag",
+        "union-and-disillusion:anette_mason_is_possessed_by_evil",
+        "union-and-disillusion:remove_puzzle_box:text",
+        "union-and-disillusion:remove_puzzle_box",
+        "union-and-disillusion:check_missing_persons_alive:text",
+        "union-and-disillusion:check_gavriella_in_game",
+        "union-and-disillusion:check_jerome_in_game",
+        "union-and-disillusion:check_penny_in_game",
+        "union-and-disillusion:check_valentino_in_game",
+        "union-and-disillusion:earn_xp",
+        "union-and-disillusion:upgradeDecks"
+      ],
+      "R5": [
+        "union-and-disillusion:maybe_ask_act_1",
+        "union-and-disillusion:compare_columns_explanation:text",
+        "union-and-disillusion:compare_columns",
+        "union-and-disillusion:right_result"
+      ]
+    },
     "in-the-clutches-of-chaos": {
-      "none": [],
+      "none": [
+        "in-the-clutches-of-chaos:check_anette_mason_resolution"
+      ],
       "R1": [
         "in-the-clutches-of-chaos:choose_anettes_fate",
         "in-the-clutches-of-chaos:earn_xp"
@@ -196,110 +237,44 @@
         "in-the-clutches-of-chaos:earn_xp"
       ]
     },
-    "the-secret-name": {
-      "none": [],
-      "R1": [
-        "the-secret-name:earn_xp",
-        "the-secret-name:check_brown_jenkin_xp",
-        "the-secret-name:check_nahab_xp",
-        "the-secret-name:check_act_deck",
-        "the-secret-name:upgradeDecks"
-      ],
-      "R2": [
-        "the-secret-name:earn_xp_bonus_2",
-        "the-secret-name:all_mementos:text",
-        "the-secret-name:all_mementos",
-        "the-secret-name:choose_black_book_prompt:text",
-        "the-secret-name:choose_black_book",
-        "the-secret-name:upgradeDecks"
-      ]
-    },
-    "the-wages-of-sin": {
-      "R1": [
-        "the-wages-of-sin:record_heretics_released",
-        "the-wages-of-sin:check_earned_wisp",
-        "the-wages-of-sin:earn_xp",
-        "the-wages-of-sin:upgradeDecks"
-      ],
-      "R2": [
-        "the-wages-of-sin:survived_the_watchers_embrace",
-        "the-wages-of-sin:record_heretics_released",
-        "the-wages-of-sin:check_earned_wisp",
-        "the-wages-of-sin:earn_xp",
-        "the-wages-of-sin:upgradeDecks"
-      ]
-    },
-    "the-witching-hour": {
+    "before-the-black-throne": {
       "none": [
-        "the-witching-hour:check_final_act"
+        "before-the-black-throne:azathoth_devoured_the_universe",
+        "before-the-black-throne:all_killed:text",
+        "before-the-black-throne:all_killed",
+        "before-the-black-throne:lose:text",
+        "before-the-black-throne:lose"
       ],
       "R1": [
-        "the-witching-hour:witches_spell_broken",
-        "the-witching-hour:mementos_flute_and_ritual_components:text",
-        "the-witching-hour:mementos_flute_and_ritual_components",
-        "the-witching-hour:earn_xp",
-        "the-witching-hour:upgradeDecks"
+        "before-the-black-throne:azathoth_devoured_the_universe",
+        "before-the-black-throne:all_killed:text",
+        "before-the-black-throne:all_killed",
+        "before-the-black-throne:lose:text",
+        "before-the-black-throne:lose"
       ],
       "R2": [
-        "the-witching-hour:witches_spell_broken",
-        "the-witching-hour:mementos_flute_and_scrap_of_torn_shadow:text",
-        "the-witching-hour:mementos_flute_and_scrap_of_torn_shadow",
-        "the-witching-hour:earn_xp",
-        "the-witching-hour:upgradeDecks"
+        "before-the-black-throne:lead_investigator_joins_pipers:text",
+        "before-the-black-throne:lead_investigator_joins_pipers",
+        "before-the-black-throne:azathoth_slumbers",
+        "before-the-black-throne:lead_investigator_insane:text",
+        "before-the-black-throne:earn_xp_bonus_5",
+        "before-the-black-throne:two_mental_trauma:text",
+        "before-the-black-throne:two_mental_trauma",
+        "before-the-black-throne:upgradeDecks",
+        "before-the-black-throne:win:text",
+        "before-the-black-throne:win"
       ],
       "R3": [
-        "the-witching-hour:witches_spell_cast",
-        "the-witching-hour:mementos_check_act",
-        "the-witching-hour:earn_xp",
-        "the-witching-hour:upgradeDecks"
+        "before-the-black-throne:azathoth_slumbers",
+        "before-the-black-throne:earn_xp_bonus_5",
+        "before-the-black-throne:two_physical_trauma:text",
+        "before-the-black-throne:two_physical_trauma",
+        "before-the-black-throne:upgradeDecks",
+        "before-the-black-throne:win:text",
+        "before-the-black-throne:win"
       ],
       "R4": [
-        "the-witching-hour:witches_spell_cast",
-        "the-witching-hour:mementos_flute:text",
-        "the-witching-hour:mementos_flute",
-        "the-witching-hour:earn_xp",
-        "the-witching-hour:upgradeDecks"
-      ]
-    },
-    "union-and-disillusion": {
-      "none": [],
-      "R1": [
-        "union-and-disillusion:maybe_choose_if_sanford_is_good"
-      ],
-      "R2": [
-        "union-and-disillusion:true_work_of_silver_twilight_lodge_has_begun",
-        "union-and-disillusion:silver_twilight_wins_campaign:text",
-        "union-and-disillusion:silver_twilight_wins_campaign"
-      ],
-      "R3": [
-        "union-and-disillusion:carl_sanford_possesses_the_secrets_of_the_universe"
-      ],
-      "R4": [
-        "union-and-disillusion:maybe_adjust_chaos_bag",
-        "union-and-disillusion:anette_mason_is_possessed_by_evil"
-      ],
-      "R5": [
-        "union-and-disillusion:maybe_ask_act_1",
-        "union-and-disillusion:compare_columns_explanation:text",
-        "union-and-disillusion:compare_columns",
-        "union-and-disillusion:right_result"
-      ],
-      "R6": [
-        "union-and-disillusion:carl_sanford_possesses_the_secrets_of_the_universe"
-      ],
-      "R7": [
-        "union-and-disillusion:anette_mason_is_possessed_by_evil"
-      ],
-      "R8": [
-        "union-and-disillusion:remove_puzzle_box:text",
-        "union-and-disillusion:remove_puzzle_box",
-        "union-and-disillusion:check_missing_persons_alive:text",
-        "union-and-disillusion:check_gavriella_in_game",
-        "union-and-disillusion:check_jerome_in_game",
-        "union-and-disillusion:check_penny_in_game",
-        "union-and-disillusion:check_valentino_in_game",
-        "union-and-disillusion:earn_xp",
-        "union-and-disillusion:upgradeDecks"
+        "before-the-black-throne:choose_final_resolution"
       ]
     }
   },
@@ -307,11 +282,11 @@
     "the-circle-undone-disappearance-at-the-twilight-estate": [
       "the-circle-undone-disappearance-at-the-twilight-estate:maybe_check_unplayed_investigators"
     ],
-    "the-secret-name": [
-      "the-secret-name:check_members_of_the_lodge"
-    ],
     "the-witching-hour": [
       "the-witching-hour:choose_fate"
+    ],
+    "the-secret-name": [
+      "the-secret-name:check_members_of_the_lodge"
     ],
     "union-and-disillusion": [
       "union-and-disillusion:point_of_no_return",
@@ -324,317 +299,6 @@
       "title": "Death Is Only the Beginning",
       "text": "“The hidden cults to which these witches belonged often guarded and handed down surprising secrets from elder, forgotten aeons; and it was by no means impossible that Keziah had actually mastered the art of passing through dimensional gates.”\n– H. P. Lovecraft, The Dreams in the Witch House",
       "bullets": []
-    },
-    "at-deaths-doorstep:check_final_act": {
-      "kind": "chooseOne",
-      "text": "What act was in play when the scenario ended?",
-      "choices": [
-        {
-          "id": "act_1",
-          "text": "Act 1",
-          "effects": [],
-          "steps": []
-        },
-        {
-          "id": "act_2",
-          "text": "Act 2",
-          "effects": [],
-          "steps": []
-        },
-        {
-          "id": "act_3",
-          "text": "Act 3",
-          "effects": [],
-          "steps": []
-        }
-      ]
-    },
-    "at-deaths-doorstep:investigators_escaped_the_spectral_realm": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "investigatorsEscapedTheSpectralRealm",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "at-deaths-doorstep:earn_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 0,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "at-deaths-doorstep:learned_nothing_of_the_lodges_schemes": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "learnedNothingOfTheLodgesSchemes",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "at-deaths-doorstep:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "at-deaths-doorstep:skip_price_of_progress:text": {
-      "kind": "story",
-      "text": "Skip <b>Interlude II: The Price of Progress</b>.",
-      "bullets": []
-    },
-    "at-deaths-doorstep:skip_price_of_progress": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "skipScenario",
-          "scenario": "the-price-of-progress"
-        }
-      ]
-    },
-    "at-deaths-doorstep:being_hunted": {
-      "kind": "story",
-      "text": "You are startled from your reverie by the sensation of something crawling up your chest, an icy hand that clasps around your throat. It grips until your breath is trapped and your windpipe starts to crack. Only there is nothing there—just a chilly draft entering the room through the open window. The wind shrill, whistling wind rattles your window frame, penetrating the safety of your home. It almost sounds like the dissonant notes of a dreadful flute: a mindless, haunting music that fills you with inexplicable terror. You rush to the window and slam it shut, hands trembling. Still, the thin, discordant notes echo around you. <i>This can’t be real</i>, you think. <i>Not here, not now</i>. But denial provides no asylum.\nThe cold creeps its way up your back once again. A thin, grey mist pours into the room, seeping beneath your front door and through the cracks around your window. It crawls along the ground and coils slowly around your ankles, sending shivers up your body. You run into your bedroom, slam the door, and lock it. A few seconds of respite are all you receive before the invader resumes its assault. Over and over, a heavy force slams against the door, shaking the entire room. You press against the door, trying to hold it shut. With each pounding crash, dark mist seeps through cracks appearing in the wood. With a final crash, the door shatters. You are hurled back, landing not on the floor but in a cloud of mist, gripped by a hundred spectral arms that cling into your flesh and tear you limb from limb.\nNO!—That can’t be right. You are here, reading this very text. A wave of relief washes over you as you realize it is all in your head. Even so, the words compel your mind to torment you with visions of a macabre death. You find yourself glancing at your window, searching for dark mist that is not there. What if the text is trying to tell you something? Maybe—no, that’s impossible.\n“Real or imagined, your fate approaches all the same.”",
-      "bullets": []
-    },
-    "at-deaths-doorstep:check_being_hunted": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "beingHunted",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "at-deaths-doorstep:being_hunted"
-      ],
-      "else": []
-    },
-    "at-deaths-doorstep:never_seen_again": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "neverSeenAgain",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "at-deaths-doorstep:kill_not_resigned:text": {
-      "kind": "story",
-      "text": "Each investigator who has not resigned is <b>killed</b>. If there are not enough investigators in the pool of available investigators to continue the campaign, the campaign is over, and the players lose.",
-      "bullets": []
-    },
-    "before-the-black-throne:azathoth_devoured_the_universe": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "azathothDevouredTheUniverse",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "before-the-black-throne:all_killed:text": {
-      "kind": "story",
-      "text": "Each investigator is <b>killed</b>.",
-      "bullets": []
-    },
-    "before-the-black-throne:all_killed": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "kill",
-          "who": "each"
-        }
-      ]
-    },
-    "before-the-black-throne:lose:text": {
-      "kind": "story",
-      "text": "The investigators lose the campaign.",
-      "bullets": []
-    },
-    "before-the-black-throne:lose": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "skipScenario",
-          "scenario": "tcu-epilogue"
-        },
-        {
-          "do": "end",
-          "result": "lose"
-        }
-      ]
-    },
-    "before-the-black-throne:lead_investigator_joins_pipers:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, record <i>the lead investigator has joined the pipers of Azathoth</i>.",
-      "bullets": []
-    },
-    "before-the-black-throne:lead_investigator_joins_pipers": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "leadInvestigatorJoinsPipers",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "before-the-black-throne:azathoth_slumbers": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "azathothSlumbers",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "before-the-black-throne:lead_investigator_insane:text": {
-      "kind": "story",
-      "text": "The lead investigator is driven <b>insane</b>.",
-      "bullets": []
-    },
-    "before-the-black-throne:earn_xp_bonus_5": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 5,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "before-the-black-throne:two_mental_trauma:text": {
-      "kind": "story",
-      "text": "Each investigator suffers 2 mental trauma, as they understand that one day Azathoth will inevitably wake.",
-      "bullets": []
-    },
-    "before-the-black-throne:two_mental_trauma": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "trauma",
-          "who": "each",
-          "physical": 0,
-          "mental": 2
-        }
-      ]
-    },
-    "before-the-black-throne:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "before-the-black-throne:win:text": {
-      "kind": "story",
-      "text": "The investigators win the campaign!",
-      "bullets": []
-    },
-    "before-the-black-throne:win": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "end",
-          "result": "win"
-        }
-      ]
-    },
-    "before-the-black-throne:two_physical_trauma:text": {
-      "kind": "story",
-      "text": "Each investigator suffers 2 physical trauma, as their nightmarish journey home takes its toll on their bodies.",
-      "bullets": []
-    },
-    "before-the-black-throne:two_physical_trauma": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "trauma",
-          "who": "each",
-          "physical": 2,
-          "mental": 0
-        }
-      ]
-    },
-    "before-the-black-throne:choose_final_resolution": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "doom_self",
-          "text": "<i>“It must be done.”</i>",
-          "effects": [],
-          "steps": []
-        },
-        {
-          "id": "doom_all",
-          "text": "<i>“I refuse!”</i>",
-          "effects": [],
-          "steps": []
-        }
-      ]
-    },
-    "before-the-black-throne:signed_the_black_book": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "signedTheBlackBook",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "before-the-black-throne:earn_xp_bonus_10": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 10,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "before-the-black-throne:two_physical_and_mental_trauma:text": {
-      "kind": "story",
-      "text": "Each investigator suffers 2 physical trauma and 2 mental trauma—the consequences of their pact with Azathoth’s messenger.",
-      "bullets": []
-    },
-    "before-the-black-throne:two_physical_and_mental_trauma": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "trauma",
-          "who": "each",
-          "physical": 2,
-          "mental": 2
-        }
-      ]
-    },
-    "before-the-black-throne:win_question_mark:text": {
-      "kind": "story",
-      "text": "The investigators win the campaign…?",
-      "bullets": []
-    },
-    "before-the-black-throne:win_question_mark": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "end",
-          "result": "win"
-        }
-      ]
     },
     "the-circle-undone-disappearance-at-the-twilight-estate:no_experience:text": {
       "kind": "story",
@@ -689,7 +353,7 @@
       "kind": "branch",
       "condition": {
         "kind": "unsupported",
-        "name": "campaign_data",
+        "name": "version",
         "take": true
       },
       "then": [
@@ -935,7 +599,7 @@
       "kind": "branch",
       "condition": {
         "kind": "unsupported",
-        "name": "campaign_data",
+        "name": "version",
         "take": true
       },
       "then": [
@@ -961,7 +625,7 @@
       "kind": "branch",
       "condition": {
         "kind": "unsupported",
-        "name": "campaign_data",
+        "name": "version",
         "take": true
       },
       "then": [
@@ -1689,7 +1353,7 @@
       "kind": "branch",
       "condition": {
         "kind": "unsupported",
-        "name": "campaign_data",
+        "name": "version",
         "take": true
       },
       "then": [
@@ -1707,7 +1371,7 @@
       "kind": "branch",
       "condition": {
         "kind": "unsupported",
-        "name": "campaign_data",
+        "name": "version",
         "take": true
       },
       "then": [],
@@ -1737,7 +1401,11 @@
         "the-circle-undone-disappearance-at-the-twilight-estate:spectral_watcher:text",
         "the-circle-undone-disappearance-at-the-twilight-estate:setup_investigators:text",
         "the-circle-undone-disappearance-at-the-twilight-estate:encounter_deck:text",
-        "the-circle-undone-disappearance-at-the-twilight-estate:check_latest_campaign_version"
+        "the-circle-undone-disappearance-at-the-twilight-estate:check_latest_campaign_version",
+        "the-circle-undone-disappearance-at-the-twilight-estate:no_experience:text",
+        "the-circle-undone-disappearance-at-the-twilight-estate:pieces_of_evidence",
+        "the-circle-undone-disappearance-at-the-twilight-estate:return_player_cards:text",
+        "the-circle-undone-disappearance-at-the-twilight-estate:maybe_ask_being_hunted"
       ]
     },
     "the-circle-undone-disappearance-at-the-twilight-estate:record_missing_investigators": {
@@ -1771,7 +1439,7 @@
       "kind": "branch",
       "condition": {
         "kind": "unsupported",
-        "name": "campaign_data",
+        "name": "version",
         "take": true
       },
       "then": [
@@ -1792,7 +1460,2420 @@
         "the-circle-undone-disappearance-at-the-twilight-estate:spectral_watcher:text",
         "the-circle-undone-disappearance-at-the-twilight-estate:setup_investigators:text",
         "the-circle-undone-disappearance-at-the-twilight-estate:encounter_deck:text",
-        "the-circle-undone-disappearance-at-the-twilight-estate:check_latest_campaign_version"
+        "the-circle-undone-disappearance-at-the-twilight-estate:check_latest_campaign_version",
+        "the-circle-undone-disappearance-at-the-twilight-estate:no_experience:text",
+        "the-circle-undone-disappearance-at-the-twilight-estate:pieces_of_evidence",
+        "the-circle-undone-disappearance-at-the-twilight-estate:return_player_cards:text",
+        "the-circle-undone-disappearance-at-the-twilight-estate:maybe_ask_being_hunted"
+      ]
+    },
+    "the-witching-hour:witches_spell_cast": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "witchesSpellCast",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-witching-hour:no_record:text": {
+      "kind": "story",
+      "text": "No record is made.",
+      "bullets": []
+    },
+    "the-witching-hour:mementos_flute:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, under “Mementos Discovered,” record <i>Mesmerizing Flute</i>. Each investigator earns 1 bonus experience, as they gain insight into Arkham’s mysterious past.",
+      "bullets": []
+    },
+    "the-witching-hour:mementos_flute": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "mesmerizingFlute",
+          "section": "mementos",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-witching-hour:mementos_check_act": {
+      "kind": "chooseOne",
+      "text": "Check the act deck.",
+      "choices": [
+        {
+          "id": "act_1_or_2",
+          "text": "It was act 1 or 2 when the scenario ended.",
+          "effects": [],
+          "steps": [
+            "the-witching-hour:no_record:text"
+          ]
+        },
+        {
+          "id": "act_3",
+          "text": "It was act 3 when the scenario ended.",
+          "effects": [],
+          "steps": [
+            "the-witching-hour:mementos_flute:text",
+            "the-witching-hour:mementos_flute"
+          ]
+        }
+      ]
+    },
+    "the-witching-hour:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "the-witching-hour:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "the-witching-hour:check_final_act": {
+      "kind": "chooseOne",
+      "text": "What act was in play when the scenario ended?",
+      "choices": [
+        {
+          "id": "act_1",
+          "text": "Act 1",
+          "effects": [],
+          "steps": [
+            "the-witching-hour:witches_spell_cast",
+            "the-witching-hour:mementos_check_act",
+            "the-witching-hour:earn_xp",
+            "the-witching-hour:upgradeDecks"
+          ]
+        },
+        {
+          "id": "act_2",
+          "text": "Act 2",
+          "effects": [],
+          "steps": [
+            "the-witching-hour:witches_spell_cast",
+            "the-witching-hour:mementos_check_act",
+            "the-witching-hour:earn_xp",
+            "the-witching-hour:upgradeDecks"
+          ]
+        },
+        {
+          "id": "act_3",
+          "text": "Act 3",
+          "effects": [],
+          "steps": [
+            "the-witching-hour:witches_spell_cast",
+            "the-witching-hour:mementos_check_act",
+            "the-witching-hour:earn_xp",
+            "the-witching-hour:upgradeDecks"
+          ]
+        },
+        {
+          "id": "act_4",
+          "text": "Act 4",
+          "effects": [],
+          "steps": [
+            "the-witching-hour:witches_spell_cast",
+            "the-witching-hour:mementos_flute:text",
+            "the-witching-hour:mementos_flute",
+            "the-witching-hour:earn_xp",
+            "the-witching-hour:upgradeDecks"
+          ]
+        }
+      ]
+    },
+    "the-witching-hour:witches_spell_broken": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "witchesSpellBroken",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-witching-hour:mementos_flute_and_ritual_components:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, under “Mementos Discovered,” record <i>Mesmerizing Flute</i> and <i>Ritual Components</i>. Each investigator earns 1 bonus experience, as they gain insight into Arkham’s mysterious past.",
+      "bullets": []
+    },
+    "the-witching-hour:mementos_flute_and_ritual_components": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "mesmerizingFlute",
+          "section": "mementos",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "ritualComponents",
+          "section": "mementos",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-witching-hour:mementos_flute_and_scrap_of_torn_shadow:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, under “Mementos Discovered,” record <i>Mesmerizing Flute</i> and <i>Scrap of Torn Shadow</i>. Each investigator earns 1 bonus experience, as they gain insight into Arkham’s mysterious past.",
+      "bullets": []
+    },
+    "the-witching-hour:mementos_flute_and_scrap_of_torn_shadow": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "mesmerizingFlute",
+          "section": "mementos",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "scrapOfTornShadow",
+          "section": "mementos",
+          "value": true
+        },
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-witching-hour:intro_2": {
+      "kind": "story",
+      "text": "The woman nods and draws the top card of the deck with a steady hand, revealing it to you without looking at it herself. Depicted on the card is a single wooden wand, surrounded by a pattern of broken stained glass. It reads: ACE OF RODS. “You must be ready to act,” she advises. “Without hesitation. Without regret. When the opportunity arises, you must set into motion the events that will change this fate.”",
+      "bullets": []
+    },
+    "the-witching-hour:accepted_fate:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>you have accepted your fate</i>. Add 2 [tablet] tokens to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-witching-hour:accepted_fate": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "acceptedFate",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        }
+      ]
+    },
+    "the-witching-hour:add_tarot:text": {
+      "kind": "story",
+      "text": "Before drawing their opening hand for this scenario, the lead investigator searches the collection for 1 copy of The Tower · XVI and 1 copy of Ace of Rods and adds each of them to their deck, if able. The lead investigator has earned these cards. They do not count toward their deck size. (If one or both of these cards are not available, skip this step.)",
+      "bullets": []
+    },
+    "the-witching-hour:add_tarot": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "05042",
+          "who": "lead"
+        },
+        {
+          "do": "earnCard",
+          "code": "05040",
+          "who": "lead"
+        }
+      ]
+    },
+    "the-witching-hour:intro_3": {
+      "kind": "story",
+      "text": "The woman smirks. “Yes, in a sense, I suppose it is,” she responds. With a single swift motion, she picks up each of the cards displayed before you, save for The Tower card, and shuffles them back into the deck. “The cards only reveal and advise. They cannot influence or impose.” She locks eyes with you, and her smile vanishes from her face. “In other words, though your fate is not set in stone, I assure you the danger you face is not ‘bullshit.’ It is real.” Her eyes narrow. “It is very real.”",
+      "bullets": []
+    },
+    "the-witching-hour:rejected_fate:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>you have rejected your fate</i>. Add 2 [elder_thing] tokens to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-witching-hour:rejected_fate": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "rejectedFate",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        }
+      ]
+    },
+    "the-witching-hour:choose_fate": {
+      "kind": "chooseOne",
+      "text": "The lead investigator must decide (choose one):",
+      "choices": [
+        {
+          "id": "accept_fate",
+          "text": "<i>“What can I do to avoid this fate?”</i>",
+          "effects": [],
+          "steps": [
+            "the-witching-hour:intro_2",
+            "the-witching-hour:accepted_fate:text",
+            "the-witching-hour:accepted_fate",
+            "the-witching-hour:add_tarot:text",
+            "the-witching-hour:add_tarot"
+          ]
+        },
+        {
+          "id": "reject_fate",
+          "text": "<i>“This is bullshit.”</i>",
+          "effects": [],
+          "steps": [
+            "the-witching-hour:intro_3",
+            "the-witching-hour:rejected_fate:text",
+            "the-witching-hour:rejected_fate"
+          ]
+        }
+      ]
+    },
+    "at-deaths-doorstep:learned_nothing_of_the_lodges_schemes": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "learnedNothingOfTheLodgesSchemes",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "at-deaths-doorstep:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "at-deaths-doorstep:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "at-deaths-doorstep:skip_price_of_progress:text": {
+      "kind": "story",
+      "text": "Skip <b>Interlude II: The Price of Progress</b>.",
+      "bullets": []
+    },
+    "at-deaths-doorstep:skip_price_of_progress": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "the-price-of-progress"
+        }
+      ]
+    },
+    "at-deaths-doorstep:being_hunted": {
+      "kind": "story",
+      "text": "You are startled from your reverie by the sensation of something crawling up your chest, an icy hand that clasps around your throat. It grips until your breath is trapped and your windpipe starts to crack. Only there is nothing there—just a chilly draft entering the room through the open window. The wind shrill, whistling wind rattles your window frame, penetrating the safety of your home. It almost sounds like the dissonant notes of a dreadful flute: a mindless, haunting music that fills you with inexplicable terror. You rush to the window and slam it shut, hands trembling. Still, the thin, discordant notes echo around you. <i>This can’t be real</i>, you think. <i>Not here, not now</i>. But denial provides no asylum.\nThe cold creeps its way up your back once again. A thin, grey mist pours into the room, seeping beneath your front door and through the cracks around your window. It crawls along the ground and coils slowly around your ankles, sending shivers up your body. You run into your bedroom, slam the door, and lock it. A few seconds of respite are all you receive before the invader resumes its assault. Over and over, a heavy force slams against the door, shaking the entire room. You press against the door, trying to hold it shut. With each pounding crash, dark mist seeps through cracks appearing in the wood. With a final crash, the door shatters. You are hurled back, landing not on the floor but in a cloud of mist, gripped by a hundred spectral arms that cling into your flesh and tear you limb from limb.\nNO!—That can’t be right. You are here, reading this very text. A wave of relief washes over you as you realize it is all in your head. Even so, the words compel your mind to torment you with visions of a macabre death. You find yourself glancing at your window, searching for dark mist that is not there. What if the text is trying to tell you something? Maybe—no, that’s impossible.\n“Real or imagined, your fate approaches all the same.”",
+      "bullets": []
+    },
+    "at-deaths-doorstep:check_being_hunted": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "beingHunted",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "at-deaths-doorstep:being_hunted"
+      ],
+      "else": []
+    },
+    "at-deaths-doorstep:never_seen_again": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "neverSeenAgain",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "at-deaths-doorstep:kill_not_resigned:text": {
+      "kind": "story",
+      "text": "Each investigator who has not resigned is <b>killed</b>. If there are not enough investigators in the pool of available investigators to continue the campaign, the campaign is over, and the players lose.",
+      "bullets": []
+    },
+    "at-deaths-doorstep:investigators_escaped_the_spectral_realm": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "investigatorsEscapedTheSpectralRealm",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "at-deaths-doorstep:check_final_act": {
+      "kind": "chooseOne",
+      "text": "What act was in play when the scenario ended?",
+      "choices": [
+        {
+          "id": "act_1",
+          "text": "Act 1",
+          "effects": [],
+          "steps": [
+            "at-deaths-doorstep:learned_nothing_of_the_lodges_schemes",
+            "at-deaths-doorstep:earn_xp",
+            "at-deaths-doorstep:upgradeDecks",
+            "at-deaths-doorstep:skip_price_of_progress:text",
+            "at-deaths-doorstep:skip_price_of_progress",
+            "at-deaths-doorstep:check_being_hunted"
+          ]
+        },
+        {
+          "id": "act_2",
+          "text": "Act 2",
+          "effects": [],
+          "steps": [
+            "at-deaths-doorstep:never_seen_again",
+            "at-deaths-doorstep:earn_xp",
+            "at-deaths-doorstep:kill_not_resigned:text",
+            "at-deaths-doorstep:upgradeDecks",
+            "at-deaths-doorstep:skip_price_of_progress:text",
+            "at-deaths-doorstep:skip_price_of_progress",
+            "at-deaths-doorstep:check_being_hunted"
+          ]
+        },
+        {
+          "id": "act_3",
+          "text": "Act 3",
+          "effects": [],
+          "steps": [
+            "at-deaths-doorstep:investigators_escaped_the_spectral_realm",
+            "at-deaths-doorstep:earn_xp"
+          ]
+        }
+      ]
+    },
+    "the-secret-name:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "the-secret-name:brown_jenkin_xp:text": {
+      "kind": "story",
+      "text": "Each investigator earns 1 bonus experience.",
+      "bullets": []
+    },
+    "the-secret-name:brown_jenkin_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-secret-name:check_brown_jenkin_xp": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "brown_jenkin_defeated",
+          "text": "Was Brown Jenkin defeated at least once?",
+          "effects": [],
+          "steps": [
+            "the-secret-name:brown_jenkin_xp:text",
+            "the-secret-name:brown_jenkin_xp"
+          ]
+        }
+      ]
+    },
+    "the-secret-name:nahab_xp:text": {
+      "kind": "story",
+      "text": "Each investigator earns 1 bonus experience.",
+      "bullets": []
+    },
+    "the-secret-name:nahab_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-secret-name:check_nahab_xp": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "nehab_defeated",
+          "text": "Was Nahab defeated at least once?",
+          "effects": [],
+          "steps": [
+            "the-secret-name:nahab_xp:text",
+            "the-secret-name:nahab_xp"
+          ]
+        }
+      ]
+    },
+    "the-secret-name:record_gilmans_journal": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "gilmansJournal",
+          "section": "mementos",
+          "value": true
+        }
+      ]
+    },
+    "the-secret-name:choose_black_book_small_prompt:text": {
+      "kind": "story",
+      "text": "Additionally, any one investigator may choose to add The Black Book story asset to their deck. This card does not count toward that investigator’s deck size. If an investigator chooses to include The Black Book in their deck, add 1 [skull] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-secret-name:choose_black_book_small": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "keep_book",
+          "text": "Keep the Black Book?",
+          "effects": [
+            {
+              "do": "addChaosToken",
+              "token": "skull"
+            },
+            {
+              "do": "earnCard",
+              "code": "05150",
+              "who": "choice"
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "the-secret-name:record_journal_and_formulae:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, under “Mementos Discovered,” record <i>Gilman’s Journal</i> and <i>Keziah’s Formulae</i>.",
+      "bullets": []
+    },
+    "the-secret-name:record_journal_and_formulae": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "gilmansJournal",
+          "section": "mementos",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "keziahsFormulae",
+          "section": "mementos",
+          "value": true
+        }
+      ]
+    },
+    "the-secret-name:check_act_deck": {
+      "kind": "chooseOne",
+      "text": "Check the act deck. What act was in play when the scenario ended?",
+      "choices": [
+        {
+          "id": "act_1",
+          "text": "Act 1",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "act_2",
+          "text": "Act 2",
+          "effects": [],
+          "steps": [
+            "the-secret-name:record_gilmans_journal",
+            "the-secret-name:choose_black_book_small_prompt:text",
+            "the-secret-name:choose_black_book_small"
+          ]
+        },
+        {
+          "id": "act_3",
+          "text": "Act 3",
+          "effects": [],
+          "steps": [
+            "the-secret-name:record_journal_and_formulae:text",
+            "the-secret-name:record_journal_and_formulae",
+            "the-secret-name:choose_black_book_small_prompt:text",
+            "the-secret-name:choose_black_book_small"
+          ]
+        }
+      ]
+    },
+    "the-secret-name:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "the-secret-name:earn_xp_bonus_2": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 2,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "the-secret-name:all_mementos:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, under “Mementos Discovered,” record <i>Gilman’s Journal</i>, <i>Keziah’s Formulae</i>, and <i>Worn Crucifix</i>.",
+      "bullets": []
+    },
+    "the-secret-name:all_mementos": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "gilmansJournal",
+          "section": "mementos",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "keziahsFormulae",
+          "section": "mementos",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "wornCrucific",
+          "section": "mementos",
+          "value": true
+        }
+      ]
+    },
+    "the-secret-name:choose_black_book_prompt:text": {
+      "kind": "story",
+      "text": "Additionally, any one investigator may choose to add The Black Book story asset to their deck. This card does not count toward that investigator’s deck size. If an investigator chooses to include The Black Book in their deck, add 1 [skull] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-secret-name:choose_black_book": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "keep_book",
+          "text": "Keep the Black Book?",
+          "effects": [
+            {
+              "do": "addChaosToken",
+              "token": "skull"
+            },
+            {
+              "do": "earnCard",
+              "code": "05150",
+              "who": "choice"
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "the-secret-name:intro_1": {
+      "kind": "story",
+      "text": "The upstairs study of the Silver Twilight Lodge is cozy, if a little cramped. The floor is covered in a plush carpet, and several comfortable sofas and small round tables fill the warmly lit room. Portraits of world-weary Lodge members line the walls around you. Carl Sanford, president of the Lodge, sits across from you, idly swirling a glass of Merlot in his wrinkled hand.\n“The Silver Twilight Lodge pursues knowledge that can help us elevate our understanding of the universe,” Mr. Sanford explains, pausing to take a sip from his wine. “The creature you encountered in Josef Meiger’s estate—its appearance is not the only peculiar happening in Arkham as of late. Tell me: have you experienced anything else recently that might be connected to these events?”",
+      "bullets": []
+    },
+    "the-secret-name:intro_2": {
+      "kind": "story",
+      "text": "You tell Mr. Sanford about your experience last week—waking up in the middle of the woods, the strange mist that weaved throughout the trees, the witches and their spell. He leans forward and listens intently as you explain the night’s strange events, your memories still somewhat of a haze. You conclude your story, and the elderly man considers your words. “Interesting,” he says at last. “I know of this coven. They are led by a witch named Anette Mason. Their magic is no trivial thing. They have passed down arcane secrets that can manipulate the energies of the universe. It is dangerous knowledge they possess—knowledge I believe they derived from a powerful witch who fled from Salem over two hundred years ago. Does the name ‘Keziah’ mean anything to you?”\nYou nod. Everyone in Arkham has at least some passing knowledge of the witch whose ghost supposedly haunts the old condemned “Witch House” in French Hill. Most believe her to be a work of fiction; a tall tale meant to scare young children away from the decrepit house. Mr. Sanford’s steely gaze and humorless tone makes it clear to you that this is not the case. “Perhaps this Anette is a true descendant of Keziah, or perhaps she is simply using her name. In any event, I believe these events are connected. To that end, I have a task for you, on behalf of the Silver Twilight Lodge.” Carl Sanford rises to his feet, using his cane more for show than for balance. You rise as well, ready to perform whatever duties are necessary to get to the bottom of this mystery.\n“We need as much information about this coven as we can obtain. If there is any place that will have these answers, it is the house where Keziah herself lived all those years ago.” You nod in agreement—there are too many questions you need answered. What spell were the witches casting that night in the woods? What is their motive? And what is their connection to the creature that kidnapped those four unfortunate souls? You shake Mr. Sanford’s hand and depart for the Witch House.",
+      "bullets": []
+    },
+    "the-secret-name:told_lodge_about_coven": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "toldLodgeAboutCoven",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-secret-name:add_cultist_token:text": {
+      "kind": "story",
+      "text": "Add 1 [cultist] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-secret-name:add_cultist_token": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        }
+      ]
+    },
+    "the-secret-name:intro_3": {
+      "kind": "story",
+      "text": "You shake your head. You’re not sure if the events that took place in the woods are connected, or if they even really happened—some part of you still believes it was all a strange dream. Mr. Sanford examines you with a cold, piercing glare. You get the feeling that he is looking directly through you. “Very well,” he says. “Out of curiosity, does the name ‘Keziah Mason’ mean anything to you?”\nYou nod. Everyone in Arkham has at least some passing knowledge of the witch whose ghost supposedly haunts the old condemned “Witch House” in French Hill. Most believe her to be a work of fiction; a tall tale meant to scare young children away from the decrepit house. Mr. Sanford’s steely gaze and humorless tone makes it clear to you that this is not the case. He motions to an old, worn tome which lies on the table in front of you, open to a page filled with strange inscriptions and arcane glyphs. “I believe the creature you encountered in Josef ’s manor is tied to Keziah and the secret knowledge she possessed. See for yourself.” You pick up the tome and examine the markings on the page closely.",
+      "bullets": []
+    },
+    "the-secret-name:no_mystic:text": {
+      "kind": "story",
+      "text": "Because no investigator is a Mystic ([mystic]):",
+      "bullets": []
+    },
+    "the-secret-name:read_gibberish": {
+      "kind": "story",
+      "text": "It all looks like gibberish to you.",
+      "bullets": []
+    },
+    "the-secret-name:check_mystic_investigator": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_data",
+        "take": false
+      },
+      "then": [],
+      "else": [
+        "the-secret-name:no_mystic:text",
+        "the-secret-name:read_gibberish"
+      ]
+    },
+    "the-secret-name:intro_3_continued": {
+      "kind": "story",
+      "text": "“To this end, I have a task for you, on behalf of the Silver Twilight Lodge.” Carl Sanford rises to his feet, using his cane more for show than for balance. You rise as well, ready to perform whatever duties are necessary to get to the bottom of this mystery.\n“We need as much information about this creature as we can obtain. If there is any place that will have these answers, it is the house where Keziah herself lived all those years ago.” You nod in agreement—there are too many questions you need answered. Perhaps this is connected to the spell the witches were casting that night in the woods, after all. If so, what is their motive? And what does this have to do with the creature that kidnapped those four unfortunate souls? You nod to Mr. Sanford and depart for the Witch House.",
+      "bullets": []
+    },
+    "the-secret-name:hid_knowledge_of_coven": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "hidKnowledgeOfCoven",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-secret-name:choose_tell_lodge_about_witches": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "tell_lodge",
+          "text": "Tell the Lodge of the witches in the woods.",
+          "effects": [],
+          "steps": [
+            "the-secret-name:intro_2",
+            "the-secret-name:told_lodge_about_coven",
+            "the-secret-name:add_cultist_token:text",
+            "the-secret-name:add_cultist_token"
+          ]
+        },
+        {
+          "id": "lie",
+          "text": "Tell him you know of no possible connection. (You are lying.)",
+          "effects": [],
+          "steps": [
+            "the-secret-name:intro_3",
+            "the-secret-name:check_mystic_investigator",
+            "the-secret-name:intro_3_continued",
+            "the-secret-name:hid_knowledge_of_coven"
+          ]
+        }
+      ]
+    },
+    "the-secret-name:intro_4": {
+      "kind": "story",
+      "text": "After your confrontation with the president of the Silver Twilight Lodge, you travel to the manor of the Arkham Historical Society in Southside. You are positive that the events you experienced in the woods last week have something to do with the creature that kidnapped those four unfortunate souls. It’s just a hunch—a feeling that crawls along the back of your neck, imploring you to look away—but you’re sure that everything is connected. You’re just not sure how.\nAs you enter, one of the Historical Society’s many researchers greets you and asks if she can help in any way. You give a cursory description of the information you’re looking for; just enough that she can direct you where to look, but vague enough to leave your motives at the door. “I don’t know why you are researching such morbid affairs, but the records you are looking for should be in the library on the third floor,” the researcher says.\nYou thank her and head to the third floor, where you begin to study the history of witchcraft in Arkham. In the late 17th century, Arkham was one of the New England towns caught up in the hysteria of witch trials. Accusations of witchcraft spread like wildfire, and many of the accused were executed by hanging or burning, guilty and innocent alike. But there was one witch whose infamy rose above the rest, and whose mystical power was never in question: Keziah Mason.\nYou recognize the name as the ghost who supposedly haunts the old Witch House in French Hill. You had always thought her to be a work of fiction; a tall tale meant to scare young children away from the condemned house. But the Historical Society’s records indicate that Keziah was a real person: a powerful witch who had fled from Salem over two hundred years ago.\nYou are no stranger to real witchcraft. If Keziah Mason has anything to do with the coven you encountered in the woods, you must discover that connection. You leave the manor and head toward French Hill, where the Witch House awaits…",
+      "bullets": []
+    },
+    "the-secret-name:intro_5": {
+      "kind": "story",
+      "text": "Your lead regarding the Silver Twilight Lodge’s charity gala turned out to be a bust, but Anna Kaslow’s reading still plays out over and over in your mind. You cannot help but feel as though you are missing a piece of this puzzle—something you can use to avoid the dire fate the tarot reader described. Turning your attention back to the coven of witches you encountered in the woods last week, you travel to the manor of the Arkham Historical Society in Southside. Perhaps there is some piece of information you have overlooked that will shed light on their identity, or their motives.\nAs you enter, one of the Historical Society’s many researchers greets you and asks if she can help in any way. You give a cursory description of the information you’re looking for; just enough that she can direct you where to look, but vague enough to leave your motives at the door. “I don’t know why you are researching such morbid affairs, but the records you are looking for should be in the library on the third floor,” the researcher says.\nYou thank her and head to the third floor, where you begin to study the history of witchcraft in Arkham. In the late 17th century, Arkham was one of the New England towns caught up in the hysteria of witch trials. Accusations of witchcraft spread like wildfire, and many of the accused were executed by hanging or burning, guilty and innocent alike. But there was one witch whose infamy rose above the rest, and whose mystical power was never in question: Keziah Mason.\nYou recognize the name as the ghost who supposedly haunts the old Witch House in French Hill. You had always thought her to be a work of fiction; a tall tale meant to scare young children away from the condemned house. But the Historical Society’s records indicate that Keziah was a real person: a powerful witch who had fled from Salem over two hundred years ago.\nYou are no stranger to real witchcraft. If Keziah Mason has anything to do with the coven you encountered in the woods, you must discover that connection. You leave the manor and head toward French Hill, where the Witch House awaits…",
+      "bullets": []
+    },
+    "the-secret-name:intro_6": {
+      "kind": "story",
+      "text": "You pin the newspaper article up on your wall along with the rest of the evidence you’ve found. Whatever is happening in Josef Meiger’s manor, it’s getting out of hand. First, there were the four disappearances on the twenty-second, at the Silver Twilight Lodge’s annual charity gala. Now more have gone missing after a second event at the same estate. Is the Lodge somehow involved? Why else would they move this dinner to Mr. Meiger’s estate?\nThat’s not the only headline, either. Strange sightings have been occuring throughout the city: ghostly figures, an ashen mist, and a hunched, cloaked figure whose identity is hotly debated by the community. The name on the tips of everybody’s tongues is Keziah Mason—the ghost who supposedly haunts the old Witch House in French Hill. You had always thought her to be a work of fiction; a tall tale meant to scare young children away from the condemned house. But with all of the disappearances and odd sightings occuring throughout town, you’re not so sure. Perhaps there is something to this old ghost story, after all.",
+      "bullets": []
+    },
+    "the-secret-name:check_never_seen_again": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "neverSeenAgain",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-secret-name:intro_6"
+      ],
+      "else": []
+    },
+    "the-secret-name:check_learned_nothing_of_the_lodges_schemes": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "learnedNothingOfTheLodgesSchemes",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-secret-name:intro_5"
+      ],
+      "else": [
+        "the-secret-name:check_never_seen_again"
+      ]
+    },
+    "the-secret-name:check_enemies_of_the_lodge": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "enemiesOfTheLodge",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-secret-name:intro_4"
+      ],
+      "else": [
+        "the-secret-name:check_learned_nothing_of_the_lodges_schemes"
+      ]
+    },
+    "the-secret-name:check_members_of_the_lodge": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "membersOfTheLodge",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-secret-name:intro_1",
+        "the-secret-name:choose_tell_lodge_about_witches"
+      ],
+      "else": [
+        "the-secret-name:check_enemies_of_the_lodge"
+      ]
+    },
+    "the-wages-of-sin:record_heretics_released": {
+      "kind": "counter",
+      "text": "In your Campaign Log, record <i>X heretics were unleashed unto Arkham</i>. X is the number of Heretic enemies in play. (If it is act 1, instead record <i>4 heretics were unleashed unto Arkham</i>.)",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "hereticsReleased",
+          "section": "campaign_notes",
+          "op": "set",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "the-wages-of-sin:record_wisp_of_spectral_mist": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "wispOfSpectralMist",
+          "section": "mementos",
+          "value": true
+        }
+      ]
+    },
+    "the-wages-of-sin:check_earned_wisp": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "the-wages-of-sin:record_wisp_of_spectral_mist"
+      ],
+      "else": []
+    },
+    "the-wages-of-sin:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "the-wages-of-sin:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "the-wages-of-sin:survived_the_watchers_embrace": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "survivedTheWatchersEmbrace",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-wages-of-sin:none": {
+      "kind": "chooseOne",
+      "text": "Did the investigators resign, or were they all defeated?",
+      "choices": [
+        {
+          "id": "resigned",
+          "text": "They resigned",
+          "effects": [],
+          "steps": [
+            "the-wages-of-sin:record_heretics_released",
+            "the-wages-of-sin:check_earned_wisp",
+            "the-wages-of-sin:earn_xp",
+            "the-wages-of-sin:upgradeDecks"
+          ]
+        },
+        {
+          "id": "defeated",
+          "text": "They were all defeated",
+          "effects": [],
+          "steps": [
+            "the-wages-of-sin:survived_the_watchers_embrace",
+            "the-wages-of-sin:record_heretics_released",
+            "the-wages-of-sin:check_earned_wisp",
+            "the-wages-of-sin:earn_xp",
+            "the-wages-of-sin:upgradeDecks"
+          ]
+        }
+      ]
+    },
+    "for-the-greater-good:guardian_of_the_trap_emerged": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "guardianOfTheTrapEmerged",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "for-the-greater-good:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "for-the-greater-good:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "for-the-greater-good:skip_inner_circle:text": {
+      "kind": "story",
+      "text": "Skip <b>Interlude III: The Inner Circle</b>.",
+      "bullets": []
+    },
+    "for-the-greater-good:skip_inner_circle": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "the-inner-circle"
+        }
+      ]
+    },
+    "for-the-greater-good:discovered_how_to_open_the_puzzle_box:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record <i>the investigators discovered how to open the puzzle box</i>. Any one investigator may choose to add the Puzzle Box story asset to their deck. This card does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "for-the-greater-good:discovered_how_to_open_the_puzzle_box": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "discoveredHowToOpenThePuzzleBox",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "earnCard",
+          "code": "05228",
+          "who": "choice"
+        }
+      ]
+    },
+    "for-the-greater-good:guardian_of_the_trap_defeated": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "guardianOfTheTrapDefeated",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "union-and-disillusion:ask_final_act": {
+      "kind": "chooseOne",
+      "text": "What act were the investigators on when the scenario ended?",
+      "choices": [
+        {
+          "id": "act_1",
+          "text": "Act 1",
+          "effects": [
+            {
+              "do": "record",
+              "key": "uadNoInvestigatorsAlive",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "act_2",
+          "text": "Act 2",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "act_3",
+          "text": "Act 3",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "act_4",
+          "text": "Act 4",
+          "effects": [],
+          "steps": []
+        }
+      ]
+    },
+    "union-and-disillusion:maybe_ask_act_1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "any",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "alive",
+            "section": "05046"
+          },
+          {
+            "kind": "logHas",
+            "id": "alive",
+            "section": "05047"
+          },
+          {
+            "kind": "logHas",
+            "id": "alive",
+            "section": "05048"
+          },
+          {
+            "kind": "logHas",
+            "id": "alive",
+            "section": "05049"
+          }
+        ]
+      },
+      "then": [],
+      "else": [
+        "union-and-disillusion:ask_final_act"
+      ]
+    },
+    "union-and-disillusion:compare_columns_explanation:text": {
+      "kind": "story",
+      "text": "Check Campaign Log. Compare the following two bullets to see which has the most true statements.",
+      "bullets": []
+    },
+    "union-and-disillusion:josef_disappeared_L0R1:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "rightColumn",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "union-and-disillusion:2_or_more_heretics_released:default:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "rightColumn",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "union-and-disillusion:2_or_more_heretics_released:0:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "leftColumn",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "union-and-disillusion:2_or_more_heretics_released:1:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "leftColumn",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "union-and-disillusion:2_or_more_heretics_released#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "hereticsReleased",
+        "section": "campaign_notes",
+        "min": 1,
+        "max": 1
+      },
+      "then": [
+        "union-and-disillusion:2_or_more_heretics_released:1:fx"
+      ],
+      "else": [
+        "union-and-disillusion:2_or_more_heretics_released:default:fx"
+      ]
+    },
+    "union-and-disillusion:2_or_more_heretics_released": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "hereticsReleased",
+        "section": "campaign_notes",
+        "min": 0,
+        "max": 0
+      },
+      "then": [
+        "union-and-disillusion:2_or_more_heretics_released:0:fx"
+      ],
+      "else": [
+        "union-and-disillusion:2_or_more_heretics_released#1"
+      ]
+    },
+    "union-and-disillusion:josef_disappeared_L0R1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "josefDisappearedIntoTheMist",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "union-and-disillusion:josef_disappeared_L0R1:yes:fx"
+      ],
+      "else": [
+        "union-and-disillusion:2_or_more_heretics_released"
+      ]
+    },
+    "union-and-disillusion:josef_disappeared_L1R0:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "leftColumn",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "union-and-disillusion:josef_disappeared_L1R0": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "josefDisappearedIntoTheMist",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "union-and-disillusion:2_or_more_heretics_released"
+      ],
+      "else": [
+        "union-and-disillusion:josef_disappeared_L1R0:no:fx"
+      ]
+    },
+    "union-and-disillusion:compare_columns": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "witchesSpellCast",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "union-and-disillusion:josef_disappeared_L0R1"
+      ],
+      "else": [
+        "union-and-disillusion:josef_disappeared_L1R0"
+      ]
+    },
+    "union-and-disillusion:right_has_more:text": {
+      "kind": "story",
+      "text": "Because the second bullet has more true statements, proceed to <b>Resolution 7</b>",
+      "bullets": []
+    },
+    "union-and-disillusion:anette_mason_is_possessed_by_evil": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "anetteMasonIsPossessedByEvil",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "union-and-disillusion:remove_puzzle_box:text": {
+      "kind": "story",
+      "text": "If an investigator’s deck contains the Puzzle Box card, remove it from that investigator’s deck.",
+      "bullets": []
+    },
+    "union-and-disillusion:remove_puzzle_box": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "05228"
+        }
+      ]
+    },
+    "union-and-disillusion:check_missing_persons_alive:text": {
+      "kind": "story",
+      "text": "Check the “Missing Persons” section of your Campaign Log.",
+      "bullets": []
+    },
+    "union-and-disillusion:add_gavriella_prompt:text": {
+      "kind": "story",
+      "text": "Any one investigator may choose to add the Gavriella Mizrah asset to their deck. She does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "union-and-disillusion:check_gavriella_alive:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "05258",
+          "who": "choice"
+        }
+      ]
+    },
+    "union-and-disillusion:maybe_record_gavriella_alive:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "alive",
+          "section": "05046",
+          "value": true
+        }
+      ]
+    },
+    "union-and-disillusion:maybe_record_gavriella_alive": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "alive",
+        "section": "05046"
+      },
+      "then": [],
+      "else": [
+        "union-and-disillusion:maybe_record_gavriella_alive:no:fx"
+      ]
+    },
+    "union-and-disillusion:gavriella_is_dead:text": {
+      "kind": "story",
+      "text": "Record that <i>Gavriella Mizrah is dead</i>.",
+      "bullets": []
+    },
+    "union-and-disillusion:gavriella_is_dead": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "dead",
+          "section": "05046",
+          "value": true
+        }
+      ]
+    },
+    "union-and-disillusion:check_gavriella_alive": {
+      "kind": "branch",
+      "condition": {
+        "kind": "all",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "uadNoInvestigatorsAlive",
+            "section": "hidden"
+          },
+          {
+            "kind": "logHas",
+            "id": "disappearedIntoTheMist",
+            "section": "05046"
+          },
+          {
+            "kind": "logHas",
+            "id": "onGavriellasTrail",
+            "section": "05046"
+          }
+        ]
+      },
+      "then": [
+        "union-and-disillusion:add_gavriella_prompt:text",
+        "union-and-disillusion:check_gavriella_alive:yes:fx",
+        "union-and-disillusion:maybe_record_gavriella_alive"
+      ],
+      "else": [
+        "union-and-disillusion:gavriella_is_dead:text",
+        "union-and-disillusion:gavriella_is_dead"
+      ]
+    },
+    "union-and-disillusion:check_gavriella_in_game": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_section_exists",
+        "take": false
+      },
+      "then": [
+        "union-and-disillusion:check_gavriella_alive"
+      ],
+      "else": []
+    },
+    "union-and-disillusion:add_jerome_prompt:text": {
+      "kind": "story",
+      "text": "Any one investigator may choose to add the Jerome Davids asset to their deck. He does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "union-and-disillusion:check_jerome_alive:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "05259",
+          "who": "choice"
+        }
+      ]
+    },
+    "union-and-disillusion:maybe_record_jerome_alive:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "alive",
+          "section": "05047",
+          "value": true
+        }
+      ]
+    },
+    "union-and-disillusion:maybe_record_jerome_alive": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "alive",
+        "section": "05047"
+      },
+      "then": [],
+      "else": [
+        "union-and-disillusion:maybe_record_jerome_alive:no:fx"
+      ]
+    },
+    "union-and-disillusion:jerome_is_dead:text": {
+      "kind": "story",
+      "text": "Record that <i>Jerome Davids is dead</i>.",
+      "bullets": []
+    },
+    "union-and-disillusion:jerome_is_dead": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "dead",
+          "section": "05047",
+          "value": true
+        }
+      ]
+    },
+    "union-and-disillusion:check_jerome_alive": {
+      "kind": "branch",
+      "condition": {
+        "kind": "all",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "uadNoInvestigatorsAlive",
+            "section": "hidden"
+          },
+          {
+            "kind": "logHas",
+            "id": "disappearedIntoTheMist",
+            "section": "05047"
+          },
+          {
+            "kind": "logHas",
+            "id": "onJeromesTrail",
+            "section": "05047"
+          }
+        ]
+      },
+      "then": [
+        "union-and-disillusion:add_jerome_prompt:text",
+        "union-and-disillusion:check_jerome_alive:yes:fx",
+        "union-and-disillusion:maybe_record_jerome_alive"
+      ],
+      "else": [
+        "union-and-disillusion:jerome_is_dead:text",
+        "union-and-disillusion:jerome_is_dead"
+      ]
+    },
+    "union-and-disillusion:check_jerome_in_game": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_section_exists",
+        "take": false
+      },
+      "then": [
+        "union-and-disillusion:check_jerome_alive"
+      ],
+      "else": []
+    },
+    "union-and-disillusion:add_penny_prompt:text": {
+      "kind": "story",
+      "text": "Any one investigator may choose to add the Penny White asset to their deck. She does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "union-and-disillusion:check_penny_alive:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "05260",
+          "who": "choice"
+        }
+      ]
+    },
+    "union-and-disillusion:maybe_record_penny_alive:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "alive",
+          "section": "05049",
+          "value": true
+        }
+      ]
+    },
+    "union-and-disillusion:maybe_record_penny_alive": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "alive",
+        "section": "05049"
+      },
+      "then": [],
+      "else": [
+        "union-and-disillusion:maybe_record_penny_alive:no:fx"
+      ]
+    },
+    "union-and-disillusion:penny_is_dead:text": {
+      "kind": "story",
+      "text": "Record that <i>Penny White is dead</i>.",
+      "bullets": []
+    },
+    "union-and-disillusion:penny_is_dead": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "dead",
+          "section": "05049",
+          "value": true
+        }
+      ]
+    },
+    "union-and-disillusion:check_penny_alive": {
+      "kind": "branch",
+      "condition": {
+        "kind": "all",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "uadNoInvestigatorsAlive",
+            "section": "hidden"
+          },
+          {
+            "kind": "logHas",
+            "id": "disappearedIntoTheMist",
+            "section": "05049"
+          },
+          {
+            "kind": "logHas",
+            "id": "onPennysTrail",
+            "section": "05049"
+          }
+        ]
+      },
+      "then": [
+        "union-and-disillusion:add_penny_prompt:text",
+        "union-and-disillusion:check_penny_alive:yes:fx",
+        "union-and-disillusion:maybe_record_penny_alive"
+      ],
+      "else": [
+        "union-and-disillusion:penny_is_dead:text",
+        "union-and-disillusion:penny_is_dead"
+      ]
+    },
+    "union-and-disillusion:check_penny_in_game": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_section_exists",
+        "take": false
+      },
+      "then": [
+        "union-and-disillusion:check_penny_alive"
+      ],
+      "else": []
+    },
+    "union-and-disillusion:add_valentino_prompt:text": {
+      "kind": "story",
+      "text": "Any one investigator may choose to add the Valentino Rivas asset to their deck. He does not count toward that investigator’s deck size.",
+      "bullets": []
+    },
+    "union-and-disillusion:check_valentino_alive:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "05261",
+          "who": "choice"
+        }
+      ]
+    },
+    "union-and-disillusion:maybe_record_valentino_alive:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "alive",
+          "section": "05048",
+          "value": true
+        }
+      ]
+    },
+    "union-and-disillusion:maybe_record_valentino_alive": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "alive",
+        "section": "05048"
+      },
+      "then": [],
+      "else": [
+        "union-and-disillusion:maybe_record_valentino_alive:no:fx"
+      ]
+    },
+    "union-and-disillusion:valentino_is_dead:text": {
+      "kind": "story",
+      "text": "Record that <i>Valentino Rivas is dead</i>.",
+      "bullets": []
+    },
+    "union-and-disillusion:valentino_is_dead": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "dead",
+          "section": "05048",
+          "value": true
+        }
+      ]
+    },
+    "union-and-disillusion:check_valentino_alive": {
+      "kind": "branch",
+      "condition": {
+        "kind": "all",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "uadNoInvestigatorsAlive",
+            "section": "hidden"
+          },
+          {
+            "kind": "logHas",
+            "id": "disappearedIntoTheMist",
+            "section": "05048"
+          },
+          {
+            "kind": "logHas",
+            "id": "onValentinosTrail",
+            "section": "05048"
+          }
+        ]
+      },
+      "then": [
+        "union-and-disillusion:add_valentino_prompt:text",
+        "union-and-disillusion:check_valentino_alive:yes:fx",
+        "union-and-disillusion:maybe_record_valentino_alive"
+      ],
+      "else": [
+        "union-and-disillusion:valentino_is_dead:text",
+        "union-and-disillusion:valentino_is_dead"
+      ]
+    },
+    "union-and-disillusion:check_valentino_in_game": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_section_exists",
+        "take": false
+      },
+      "then": [
+        "union-and-disillusion:check_valentino_alive"
+      ],
+      "else": []
+    },
+    "union-and-disillusion:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "union-and-disillusion:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "union-and-disillusion:left_has_more:text": {
+      "kind": "story",
+      "text": "Because the first bullet has more true statements, proceed to <b>Resolution 6</b>",
+      "bullets": []
+    },
+    "union-and-disillusion:carl_sanford_possesses_the_secrets_of_the_universe": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "carlSanfordPossessesTheSecretsOfTheUniverse",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "union-and-disillusion:right_result": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "rightColumn",
+        "section": "hidden"
+      },
+      "then": [
+        "union-and-disillusion:right_has_more:text",
+        "union-and-disillusion:anette_mason_is_possessed_by_evil",
+        "union-and-disillusion:remove_puzzle_box:text",
+        "union-and-disillusion:remove_puzzle_box",
+        "union-and-disillusion:check_missing_persons_alive:text",
+        "union-and-disillusion:check_gavriella_in_game",
+        "union-and-disillusion:check_jerome_in_game",
+        "union-and-disillusion:check_penny_in_game",
+        "union-and-disillusion:check_valentino_in_game",
+        "union-and-disillusion:earn_xp",
+        "union-and-disillusion:upgradeDecks"
+      ],
+      "else": [
+        "union-and-disillusion:left_has_more:text",
+        "union-and-disillusion:carl_sanford_possesses_the_secrets_of_the_universe",
+        "union-and-disillusion:remove_puzzle_box:text",
+        "union-and-disillusion:remove_puzzle_box",
+        "union-and-disillusion:check_missing_persons_alive:text",
+        "union-and-disillusion:check_gavriella_in_game",
+        "union-and-disillusion:check_jerome_in_game",
+        "union-and-disillusion:check_penny_in_game",
+        "union-and-disillusion:check_valentino_in_game",
+        "union-and-disillusion:earn_xp",
+        "union-and-disillusion:upgradeDecks"
+      ]
+    },
+    "union-and-disillusion:true_work_of_silver_twilight_lodge_has_begun": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "trueWorkOfSilverTwilightLodgeHasBegun",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "union-and-disillusion:silver_twilight_wins_campaign:text": {
+      "kind": "story",
+      "text": "The Silver Twilight Lodge wins the campaign. (Investigators who are truly loyal to the Lodge win the campaign.)",
+      "bullets": []
+    },
+    "union-and-disillusion:silver_twilight_wins_campaign": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "in-the-clutches-of-chaos"
+        },
+        {
+          "do": "skipScenario",
+          "scenario": "twist-of-fate"
+        },
+        {
+          "do": "skipScenario",
+          "scenario": "before-the-black-throne"
+        },
+        {
+          "do": "skipScenario",
+          "scenario": "tcu-epilogue"
+        },
+        {
+          "do": "end",
+          "result": "win"
+        }
+      ]
+    },
+    "union-and-disillusion:choose_if_sanford_is_good_v8": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "<i>“Yes.”</i>",
+          "effects": [],
+          "steps": [
+            "union-and-disillusion:true_work_of_silver_twilight_lodge_has_begun",
+            "union-and-disillusion:silver_twilight_wins_campaign:text",
+            "union-and-disillusion:silver_twilight_wins_campaign"
+          ],
+          "when": {
+            "kind": "all",
+            "conditions": [
+              {
+                "kind": "logHas",
+                "id": "inductedIntoTheInnerCircle",
+                "section": "campaign_notes"
+              },
+              {
+                "kind": "logHas",
+                "id": "deceivingTheLodge",
+                "section": "campaign_notes"
+              }
+            ]
+          }
+        },
+        {
+          "id": "no",
+          "text": "<i>“No.”</i>",
+          "effects": [],
+          "steps": [
+            "union-and-disillusion:carl_sanford_possesses_the_secrets_of_the_universe",
+            "union-and-disillusion:remove_puzzle_box:text",
+            "union-and-disillusion:remove_puzzle_box",
+            "union-and-disillusion:check_missing_persons_alive:text",
+            "union-and-disillusion:check_gavriella_in_game",
+            "union-and-disillusion:check_jerome_in_game",
+            "union-and-disillusion:check_penny_in_game",
+            "union-and-disillusion:check_valentino_in_game",
+            "union-and-disillusion:earn_xp",
+            "union-and-disillusion:upgradeDecks"
+          ]
+        }
+      ]
+    },
+    "union-and-disillusion:choose_if_sanford_is_good": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "<i>“Yes.”</i>",
+          "effects": [],
+          "steps": [
+            "union-and-disillusion:true_work_of_silver_twilight_lodge_has_begun",
+            "union-and-disillusion:silver_twilight_wins_campaign:text",
+            "union-and-disillusion:silver_twilight_wins_campaign"
+          ]
+        },
+        {
+          "id": "no",
+          "text": "<i>“No.”</i>",
+          "effects": [],
+          "steps": [
+            "union-and-disillusion:carl_sanford_possesses_the_secrets_of_the_universe",
+            "union-and-disillusion:remove_puzzle_box:text",
+            "union-and-disillusion:remove_puzzle_box",
+            "union-and-disillusion:check_missing_persons_alive:text",
+            "union-and-disillusion:check_gavriella_in_game",
+            "union-and-disillusion:check_jerome_in_game",
+            "union-and-disillusion:check_penny_in_game",
+            "union-and-disillusion:check_valentino_in_game",
+            "union-and-disillusion:earn_xp",
+            "union-and-disillusion:upgradeDecks"
+          ]
+        }
+      ]
+    },
+    "union-and-disillusion:maybe_choose_if_sanford_is_good": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "version",
+        "take": true
+      },
+      "then": [
+        "union-and-disillusion:choose_if_sanford_is_good_v8"
+      ],
+      "else": [
+        "union-and-disillusion:choose_if_sanford_is_good"
+      ]
+    },
+    "union-and-disillusion:fix_remove_all_cultist_tokens:text": {
+      "kind": "story",
+      "text": "While playing the scenario, there was an instruction to remove all [cultist] tokens from the chaos bag.",
+      "bullets": []
+    },
+    "union-and-disillusion:fix_remove_all_cultist_tokens": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "removeChaosToken",
+          "token": "cultist"
+        }
+      ]
+    },
+    "union-and-disillusion:maybe_adjust_chaos_bag": {
+      "kind": "branch",
+      "condition": {
+        "kind": "all",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "uadAddChaosToken",
+            "section": "hidden"
+          },
+          {
+            "kind": "logHas",
+            "id": "act3V2",
+            "section": "hidden"
+          }
+        ]
+      },
+      "then": [
+        "union-and-disillusion:fix_remove_all_cultist_tokens:text",
+        "union-and-disillusion:fix_remove_all_cultist_tokens"
+      ],
+      "else": []
+    },
+    "union-and-disillusion:sided_with_the_lodge": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "sidedWithTheLodge",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "union-and-disillusion:sided_with_the_coven": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "sidedWithTheCoven",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "union-and-disillusion:point_of_no_return": {
+      "kind": "chooseOne",
+      "text": "This is a point of no return—you will not get the chance to change your mind later. The investigators must decide (choose one):",
+      "choices": [
+        {
+          "id": "help_ritual",
+          "text": "<i>“We have to help complete the Lodge’s ritual.”</i>",
+          "effects": [],
+          "steps": [
+            "union-and-disillusion:sided_with_the_lodge"
+          ]
+        },
+        {
+          "id": "thwart_ritual",
+          "text": "<i>“We have to stop the Lodge’s ritual.”</i>",
+          "effects": [],
+          "steps": [
+            "union-and-disillusion:sided_with_the_coven"
+          ]
+        }
+      ]
+    },
+    "union-and-disillusion:act_3_v1:text": {
+      "kind": "story",
+      "text": "Use Act 3—“Beyond the Mist (v. I)” and Act 4—“The Binding Rite.”",
+      "bullets": []
+    },
+    "union-and-disillusion:act_3_v2:text": {
+      "kind": "story",
+      "text": "Use Act 3—“Beyond the Mist (v. II)” and Act 4—“The Broken Rite.”",
+      "bullets": []
+    },
+    "union-and-disillusion:act_3_v2": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "act3V2",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "union-and-disillusion:act_3_v3:text": {
+      "kind": "story",
+      "text": "Use Act 3—“Beyond the Mist (v. III)” and Act 4—“The Broken Rite.”",
+      "bullets": []
+    },
+    "union-and-disillusion:act_3_v4:text": {
+      "kind": "story",
+      "text": "Use Act 3—“Beyond the Mist (v. IV)” and Act 4—“The Broken Rite.”",
+      "bullets": []
+    },
+    "union-and-disillusion:check_sided_with_the_coven": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "sidedWithTheCoven",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "union-and-disillusion:act_3_v4:text"
+      ],
+      "else": []
+    },
+    "union-and-disillusion:check_sided_with_the_coven_and_deceiving": {
+      "kind": "branch",
+      "condition": {
+        "kind": "any",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "deceivingTheLodge",
+            "section": "campaign_notes"
+          },
+          {
+            "kind": "logHas",
+            "id": "hidKnowledgeOfCoven",
+            "section": "campaign_notes"
+          },
+          {
+            "kind": "logHas",
+            "id": "keptMementosHidden",
+            "section": "campaign_notes"
+          }
+        ]
+      },
+      "then": [
+        "union-and-disillusion:act_3_v3:text"
+      ],
+      "else": [
+        "union-and-disillusion:check_sided_with_the_coven"
+      ]
+    },
+    "union-and-disillusion:check_sided_with_the_coven_and_inner_circle": {
+      "kind": "branch",
+      "condition": {
+        "kind": "all",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "deceivingTheLodge",
+            "section": "campaign_notes"
+          },
+          {
+            "kind": "logHas",
+            "id": "inductedIntoTheInnerCircle",
+            "section": "campaign_notes"
+          }
+        ]
+      },
+      "then": [
+        "union-and-disillusion:act_3_v2:text",
+        "union-and-disillusion:act_3_v2"
+      ],
+      "else": [
+        "union-and-disillusion:check_sided_with_the_coven_and_deceiving"
+      ]
+    },
+    "union-and-disillusion:check_sided_with_lodge": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "sidedWithTheLodge",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "union-and-disillusion:act_3_v1:text"
+      ],
+      "else": [
+        "union-and-disillusion:check_sided_with_the_coven_and_inner_circle"
+      ]
+    },
+    "in-the-clutches-of-chaos:doom_draws_ever_closer": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "doomDrawsEverCloser",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "in-the-clutches-of-chaos:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "in-the-clutches-of-chaos:check_carl_sanford_resolution": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "carlSanfordPossessesTheSecretsOfTheUniverse",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "in-the-clutches-of-chaos:doom_draws_ever_closer",
+        "in-the-clutches-of-chaos:earn_xp"
+      ],
+      "else": []
+    },
+    "in-the-clutches-of-chaos:check_anette_mason_resolution": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "anetteMasonIsPossessedByEvil",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "in-the-clutches-of-chaos:doom_draws_ever_closer",
+        "in-the-clutches-of-chaos:earn_xp"
+      ],
+      "else": [
+        "in-the-clutches-of-chaos:check_carl_sanford_resolution"
+      ]
+    },
+    "in-the-clutches-of-chaos:choose_anettes_fate": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "alone",
+          "text": "<i>“You’ve done enough harm. We’ll handle this from here.”</i>",
+          "effects": [
+            {
+              "do": "record",
+              "key": "continuedAlone",
+              "section": "campaign_notes",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "ask_for_help",
+          "text": "<i>“We will need your help to fix this.”</i>",
+          "effects": [
+            {
+              "do": "record",
+              "key": "askedAnetteForAssistance",
+              "section": "campaign_notes",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "under_arrest",
+          "text": "<i>“You are under arrest.”</i>",
+          "effects": [
+            {
+              "do": "record",
+              "key": "arrestedAnette",
+              "section": "campaign_notes",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "learn_spells",
+          "text": "<i>“Then teach me how to be stronger.”</i>",
+          "effects": [
+            {
+              "do": "record",
+              "key": "anetteTaughtYouTheSpellsOfOld",
+              "section": "campaign_notes",
+              "value": true
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "in-the-clutches-of-chaos:choose_carls_fate": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "alone",
+          "text": "<i>“You’ve done enough harm. We’ll handle this from here.”</i>",
+          "effects": [
+            {
+              "do": "record",
+              "key": "continuedAlone",
+              "section": "campaign_notes",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "ask_for_help",
+          "text": "<i>“We will need your help to fix this.”</i>",
+          "effects": [
+            {
+              "do": "record",
+              "key": "askedSanfordForAssistance",
+              "section": "campaign_notes",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "under_arrest",
+          "text": "<i>“You are under arrest.”</i>",
+          "effects": [
+            {
+              "do": "record",
+              "key": "arrestedSanford",
+              "section": "campaign_notes",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "seize_control",
+          "text": "<i>“You don't deserve to lead us.”</i>",
+          "effects": [
+            {
+              "do": "record",
+              "key": "assumedControlOfTheSilverTwilightLodge",
+              "section": "campaign_notes",
+              "value": true
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "before-the-black-throne:azathoth_devoured_the_universe": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "azathothDevouredTheUniverse",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "before-the-black-throne:all_killed:text": {
+      "kind": "story",
+      "text": "Each investigator is <b>killed</b>.",
+      "bullets": []
+    },
+    "before-the-black-throne:all_killed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "kill",
+          "who": "each"
+        }
+      ]
+    },
+    "before-the-black-throne:lose:text": {
+      "kind": "story",
+      "text": "The investigators lose the campaign.",
+      "bullets": []
+    },
+    "before-the-black-throne:lose": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "tcu-epilogue"
+        },
+        {
+          "do": "end",
+          "result": "lose"
+        }
+      ]
+    },
+    "before-the-black-throne:lead_investigator_joins_pipers:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record <i>the lead investigator has joined the pipers of Azathoth</i>.",
+      "bullets": []
+    },
+    "before-the-black-throne:lead_investigator_joins_pipers": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "leadInvestigatorJoinsPipers",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "before-the-black-throne:azathoth_slumbers": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "azathothSlumbers",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "before-the-black-throne:lead_investigator_insane:text": {
+      "kind": "story",
+      "text": "The lead investigator is driven <b>insane</b>.",
+      "bullets": []
+    },
+    "before-the-black-throne:earn_xp_bonus_5": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 5,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "before-the-black-throne:two_mental_trauma:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 2 mental trauma, as they understand that one day Azathoth will inevitably wake.",
+      "bullets": []
+    },
+    "before-the-black-throne:two_mental_trauma": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 0,
+          "mental": 2
+        }
+      ]
+    },
+    "before-the-black-throne:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "before-the-black-throne:win:text": {
+      "kind": "story",
+      "text": "The investigators win the campaign!",
+      "bullets": []
+    },
+    "before-the-black-throne:win": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "win"
+        }
+      ]
+    },
+    "before-the-black-throne:two_physical_trauma:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 2 physical trauma, as their nightmarish journey home takes its toll on their bodies.",
+      "bullets": []
+    },
+    "before-the-black-throne:two_physical_trauma": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 2,
+          "mental": 0
+        }
+      ]
+    },
+    "before-the-black-throne:signed_the_black_book": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "signedTheBlackBook",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "before-the-black-throne:earn_xp_bonus_10": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 10,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "before-the-black-throne:two_physical_and_mental_trauma:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 2 physical trauma and 2 mental trauma—the consequences of their pact with Azathoth’s messenger.",
+      "bullets": []
+    },
+    "before-the-black-throne:two_physical_and_mental_trauma": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 2,
+          "mental": 2
+        }
+      ]
+    },
+    "before-the-black-throne:win_question_mark:text": {
+      "kind": "story",
+      "text": "The investigators win the campaign…?",
+      "bullets": []
+    },
+    "before-the-black-throne:win_question_mark": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "win"
+        }
+      ]
+    },
+    "before-the-black-throne:choose_final_resolution": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "doom_self",
+          "text": "<i>“It must be done.”</i>",
+          "effects": [],
+          "steps": [
+            "before-the-black-throne:azathoth_slumbers",
+            "before-the-black-throne:signed_the_black_book",
+            "before-the-black-throne:earn_xp_bonus_10",
+            "before-the-black-throne:two_physical_and_mental_trauma:text",
+            "before-the-black-throne:two_physical_and_mental_trauma",
+            "before-the-black-throne:upgradeDecks",
+            "before-the-black-throne:win_question_mark:text",
+            "before-the-black-throne:win_question_mark"
+          ]
+        },
+        {
+          "id": "doom_all",
+          "text": "<i>“I refuse!”</i>",
+          "effects": [],
+          "steps": [
+            "before-the-black-throne:azathoth_devoured_the_universe",
+            "before-the-black-throne:all_killed:text",
+            "before-the-black-throne:all_killed",
+            "before-the-black-throne:lose:text",
+            "before-the-black-throne:lose"
+          ]
+        }
       ]
     },
     "tcu-epilogue:anette_story": {
@@ -1924,213 +4005,6 @@
         "tcu-epilogue:being_hunted"
       ],
       "else": []
-    },
-    "for-the-greater-good:guardian_of_the_trap_emerged": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "guardianOfTheTrapEmerged",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "for-the-greater-good:earn_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 0,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "for-the-greater-good:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "for-the-greater-good:skip_inner_circle:text": {
-      "kind": "story",
-      "text": "Skip <b>Interlude III: The Inner Circle</b>.",
-      "bullets": []
-    },
-    "for-the-greater-good:skip_inner_circle": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "skipScenario",
-          "scenario": "the-inner-circle"
-        }
-      ]
-    },
-    "for-the-greater-good:discovered_how_to_open_the_puzzle_box:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, record <i>the investigators discovered how to open the puzzle box</i>. Any one investigator may choose to add the Puzzle Box story asset to their deck. This card does not count toward that investigator’s deck size.",
-      "bullets": []
-    },
-    "for-the-greater-good:discovered_how_to_open_the_puzzle_box": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "discoveredHowToOpenThePuzzleBox",
-          "section": "campaign_notes",
-          "value": true
-        },
-        {
-          "do": "earnCard",
-          "code": "05228",
-          "who": "choice"
-        }
-      ]
-    },
-    "for-the-greater-good:guardian_of_the_trap_defeated": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "guardianOfTheTrapDefeated",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "in-the-clutches-of-chaos:choose_anettes_fate": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "alone",
-          "text": "<i>“You’ve done enough harm. We’ll handle this from here.”</i>",
-          "effects": [
-            {
-              "do": "record",
-              "key": "continuedAlone",
-              "section": "campaign_notes",
-              "value": true
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "ask_for_help",
-          "text": "<i>“We will need your help to fix this.”</i>",
-          "effects": [
-            {
-              "do": "record",
-              "key": "askedAnetteForAssistance",
-              "section": "campaign_notes",
-              "value": true
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "under_arrest",
-          "text": "<i>“You are under arrest.”</i>",
-          "effects": [
-            {
-              "do": "record",
-              "key": "arrestedAnette",
-              "section": "campaign_notes",
-              "value": true
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "learn_spells",
-          "text": "<i>“Then teach me how to be stronger.”</i>",
-          "effects": [
-            {
-              "do": "record",
-              "key": "anetteTaughtYouTheSpellsOfOld",
-              "section": "campaign_notes",
-              "value": true
-            }
-          ],
-          "steps": []
-        }
-      ]
-    },
-    "in-the-clutches-of-chaos:earn_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 0,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "in-the-clutches-of-chaos:choose_carls_fate": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "alone",
-          "text": "<i>“You’ve done enough harm. We’ll handle this from here.”</i>",
-          "effects": [
-            {
-              "do": "record",
-              "key": "continuedAlone",
-              "section": "campaign_notes",
-              "value": true
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "ask_for_help",
-          "text": "<i>“We will need your help to fix this.”</i>",
-          "effects": [
-            {
-              "do": "record",
-              "key": "askedSanfordForAssistance",
-              "section": "campaign_notes",
-              "value": true
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "under_arrest",
-          "text": "<i>“You are under arrest.”</i>",
-          "effects": [
-            {
-              "do": "record",
-              "key": "arrestedSanford",
-              "section": "campaign_notes",
-              "value": true
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "seize_control",
-          "text": "<i>“You don't deserve to lead us.”</i>",
-          "effects": [
-            {
-              "do": "record",
-              "key": "assumedControlOfTheSilverTwilightLodge",
-              "section": "campaign_notes",
-              "value": true
-            }
-          ],
-          "steps": []
-        }
-      ]
-    },
-    "in-the-clutches-of-chaos:doom_draws_ever_closer": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "doomDrawsEverCloser",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
     },
     "the-inner-circle:ic_1": {
       "kind": "story",
@@ -2965,754 +4839,6 @@
       ],
       "else": []
     },
-    "the-secret-name:earn_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 0,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "the-secret-name:brown_jenkin_xp:text": {
-      "kind": "story",
-      "text": "Each investigator earns 1 bonus experience.",
-      "bullets": []
-    },
-    "the-secret-name:brown_jenkin_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 1,
-          "who": "each",
-          "victory": false
-        }
-      ]
-    },
-    "the-secret-name:check_brown_jenkin_xp": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "brown_jenkin_defeated",
-          "text": "Was Brown Jenkin defeated at least once?",
-          "effects": [],
-          "steps": [
-            "the-secret-name:brown_jenkin_xp:text",
-            "the-secret-name:brown_jenkin_xp"
-          ]
-        }
-      ]
-    },
-    "the-secret-name:nahab_xp:text": {
-      "kind": "story",
-      "text": "Each investigator earns 1 bonus experience.",
-      "bullets": []
-    },
-    "the-secret-name:nahab_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 1,
-          "who": "each",
-          "victory": false
-        }
-      ]
-    },
-    "the-secret-name:check_nahab_xp": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "nehab_defeated",
-          "text": "Was Nahab defeated at least once?",
-          "effects": [],
-          "steps": [
-            "the-secret-name:nahab_xp:text",
-            "the-secret-name:nahab_xp"
-          ]
-        }
-      ]
-    },
-    "the-secret-name:record_gilmans_journal": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "gilmansJournal",
-          "section": "mementos",
-          "value": true
-        }
-      ]
-    },
-    "the-secret-name:choose_black_book_small_prompt:text": {
-      "kind": "story",
-      "text": "Additionally, any one investigator may choose to add The Black Book story asset to their deck. This card does not count toward that investigator’s deck size. If an investigator chooses to include The Black Book in their deck, add 1 [skull] token to the chaos bag for the remainder of the campaign.",
-      "bullets": []
-    },
-    "the-secret-name:choose_black_book_small": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "keep_book",
-          "text": "Keep the Black Book?",
-          "effects": [
-            {
-              "do": "addChaosToken",
-              "token": "skull"
-            },
-            {
-              "do": "earnCard",
-              "code": "05150",
-              "who": "choice"
-            }
-          ],
-          "steps": []
-        }
-      ]
-    },
-    "the-secret-name:record_journal_and_formulae:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, under “Mementos Discovered,” record <i>Gilman’s Journal</i> and <i>Keziah’s Formulae</i>.",
-      "bullets": []
-    },
-    "the-secret-name:record_journal_and_formulae": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "gilmansJournal",
-          "section": "mementos",
-          "value": true
-        },
-        {
-          "do": "record",
-          "key": "keziahsFormulae",
-          "section": "mementos",
-          "value": true
-        }
-      ]
-    },
-    "the-secret-name:check_act_deck": {
-      "kind": "chooseOne",
-      "text": "Check the act deck. What act was in play when the scenario ended?",
-      "choices": [
-        {
-          "id": "act_1",
-          "text": "Act 1",
-          "effects": [],
-          "steps": []
-        },
-        {
-          "id": "act_2",
-          "text": "Act 2",
-          "effects": [],
-          "steps": [
-            "the-secret-name:record_gilmans_journal",
-            "the-secret-name:choose_black_book_small_prompt:text",
-            "the-secret-name:choose_black_book_small"
-          ]
-        },
-        {
-          "id": "act_3",
-          "text": "Act 3",
-          "effects": [],
-          "steps": [
-            "the-secret-name:record_journal_and_formulae:text",
-            "the-secret-name:record_journal_and_formulae",
-            "the-secret-name:choose_black_book_small_prompt:text",
-            "the-secret-name:choose_black_book_small"
-          ]
-        }
-      ]
-    },
-    "the-secret-name:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "the-secret-name:earn_xp_bonus_2": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 2,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "the-secret-name:all_mementos:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, under “Mementos Discovered,” record <i>Gilman’s Journal</i>, <i>Keziah’s Formulae</i>, and <i>Worn Crucifix</i>.",
-      "bullets": []
-    },
-    "the-secret-name:all_mementos": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "gilmansJournal",
-          "section": "mementos",
-          "value": true
-        },
-        {
-          "do": "record",
-          "key": "keziahsFormulae",
-          "section": "mementos",
-          "value": true
-        },
-        {
-          "do": "record",
-          "key": "wornCrucific",
-          "section": "mementos",
-          "value": true
-        }
-      ]
-    },
-    "the-secret-name:choose_black_book_prompt:text": {
-      "kind": "story",
-      "text": "Additionally, any one investigator may choose to add The Black Book story asset to their deck. This card does not count toward that investigator’s deck size. If an investigator chooses to include The Black Book in their deck, add 1 [skull] token to the chaos bag for the remainder of the campaign.",
-      "bullets": []
-    },
-    "the-secret-name:choose_black_book": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "keep_book",
-          "text": "Keep the Black Book?",
-          "effects": [
-            {
-              "do": "addChaosToken",
-              "token": "skull"
-            },
-            {
-              "do": "earnCard",
-              "code": "05150",
-              "who": "choice"
-            }
-          ],
-          "steps": []
-        }
-      ]
-    },
-    "the-secret-name:intro_1": {
-      "kind": "story",
-      "text": "The upstairs study of the Silver Twilight Lodge is cozy, if a little cramped. The floor is covered in a plush carpet, and several comfortable sofas and small round tables fill the warmly lit room. Portraits of world-weary Lodge members line the walls around you. Carl Sanford, president of the Lodge, sits across from you, idly swirling a glass of Merlot in his wrinkled hand.\n“The Silver Twilight Lodge pursues knowledge that can help us elevate our understanding of the universe,” Mr. Sanford explains, pausing to take a sip from his wine. “The creature you encountered in Josef Meiger’s estate—its appearance is not the only peculiar happening in Arkham as of late. Tell me: have you experienced anything else recently that might be connected to these events?”",
-      "bullets": []
-    },
-    "the-secret-name:intro_2": {
-      "kind": "story",
-      "text": "You tell Mr. Sanford about your experience last week—waking up in the middle of the woods, the strange mist that weaved throughout the trees, the witches and their spell. He leans forward and listens intently as you explain the night’s strange events, your memories still somewhat of a haze. You conclude your story, and the elderly man considers your words. “Interesting,” he says at last. “I know of this coven. They are led by a witch named Anette Mason. Their magic is no trivial thing. They have passed down arcane secrets that can manipulate the energies of the universe. It is dangerous knowledge they possess—knowledge I believe they derived from a powerful witch who fled from Salem over two hundred years ago. Does the name ‘Keziah’ mean anything to you?”\nYou nod. Everyone in Arkham has at least some passing knowledge of the witch whose ghost supposedly haunts the old condemned “Witch House” in French Hill. Most believe her to be a work of fiction; a tall tale meant to scare young children away from the decrepit house. Mr. Sanford’s steely gaze and humorless tone makes it clear to you that this is not the case. “Perhaps this Anette is a true descendant of Keziah, or perhaps she is simply using her name. In any event, I believe these events are connected. To that end, I have a task for you, on behalf of the Silver Twilight Lodge.” Carl Sanford rises to his feet, using his cane more for show than for balance. You rise as well, ready to perform whatever duties are necessary to get to the bottom of this mystery.\n“We need as much information about this coven as we can obtain. If there is any place that will have these answers, it is the house where Keziah herself lived all those years ago.” You nod in agreement—there are too many questions you need answered. What spell were the witches casting that night in the woods? What is their motive? And what is their connection to the creature that kidnapped those four unfortunate souls? You shake Mr. Sanford’s hand and depart for the Witch House.",
-      "bullets": []
-    },
-    "the-secret-name:told_lodge_about_coven": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "toldLodgeAboutCoven",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-secret-name:add_cultist_token:text": {
-      "kind": "story",
-      "text": "Add 1 [cultist] token to the chaos bag for the remainder of the campaign.",
-      "bullets": []
-    },
-    "the-secret-name:add_cultist_token": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "addChaosToken",
-          "token": "cultist"
-        }
-      ]
-    },
-    "the-secret-name:intro_3": {
-      "kind": "story",
-      "text": "You shake your head. You’re not sure if the events that took place in the woods are connected, or if they even really happened—some part of you still believes it was all a strange dream. Mr. Sanford examines you with a cold, piercing glare. You get the feeling that he is looking directly through you. “Very well,” he says. “Out of curiosity, does the name ‘Keziah Mason’ mean anything to you?”\nYou nod. Everyone in Arkham has at least some passing knowledge of the witch whose ghost supposedly haunts the old condemned “Witch House” in French Hill. Most believe her to be a work of fiction; a tall tale meant to scare young children away from the decrepit house. Mr. Sanford’s steely gaze and humorless tone makes it clear to you that this is not the case. He motions to an old, worn tome which lies on the table in front of you, open to a page filled with strange inscriptions and arcane glyphs. “I believe the creature you encountered in Josef ’s manor is tied to Keziah and the secret knowledge she possessed. See for yourself.” You pick up the tome and examine the markings on the page closely.",
-      "bullets": []
-    },
-    "the-secret-name:no_mystic:text": {
-      "kind": "story",
-      "text": "Because no investigator is a Mystic ([mystic]):",
-      "bullets": []
-    },
-    "the-secret-name:read_gibberish": {
-      "kind": "story",
-      "text": "It all looks like gibberish to you.",
-      "bullets": []
-    },
-    "the-secret-name:check_mystic_investigator": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "campaign_data",
-        "take": false
-      },
-      "then": [],
-      "else": [
-        "the-secret-name:no_mystic:text",
-        "the-secret-name:read_gibberish"
-      ]
-    },
-    "the-secret-name:intro_3_continued": {
-      "kind": "story",
-      "text": "“To this end, I have a task for you, on behalf of the Silver Twilight Lodge.” Carl Sanford rises to his feet, using his cane more for show than for balance. You rise as well, ready to perform whatever duties are necessary to get to the bottom of this mystery.\n“We need as much information about this creature as we can obtain. If there is any place that will have these answers, it is the house where Keziah herself lived all those years ago.” You nod in agreement—there are too many questions you need answered. Perhaps this is connected to the spell the witches were casting that night in the woods, after all. If so, what is their motive? And what does this have to do with the creature that kidnapped those four unfortunate souls? You nod to Mr. Sanford and depart for the Witch House.",
-      "bullets": []
-    },
-    "the-secret-name:hid_knowledge_of_coven": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "hidKnowledgeOfCoven",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-secret-name:choose_tell_lodge_about_witches": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "tell_lodge",
-          "text": "Tell the Lodge of the witches in the woods.",
-          "effects": [],
-          "steps": [
-            "the-secret-name:intro_2",
-            "the-secret-name:told_lodge_about_coven",
-            "the-secret-name:add_cultist_token:text",
-            "the-secret-name:add_cultist_token"
-          ]
-        },
-        {
-          "id": "lie",
-          "text": "Tell him you know of no possible connection. (You are lying.)",
-          "effects": [],
-          "steps": [
-            "the-secret-name:intro_3",
-            "the-secret-name:check_mystic_investigator",
-            "the-secret-name:intro_3_continued",
-            "the-secret-name:hid_knowledge_of_coven"
-          ]
-        }
-      ]
-    },
-    "the-secret-name:intro_4": {
-      "kind": "story",
-      "text": "After your confrontation with the president of the Silver Twilight Lodge, you travel to the manor of the Arkham Historical Society in Southside. You are positive that the events you experienced in the woods last week have something to do with the creature that kidnapped those four unfortunate souls. It’s just a hunch—a feeling that crawls along the back of your neck, imploring you to look away—but you’re sure that everything is connected. You’re just not sure how.\nAs you enter, one of the Historical Society’s many researchers greets you and asks if she can help in any way. You give a cursory description of the information you’re looking for; just enough that she can direct you where to look, but vague enough to leave your motives at the door. “I don’t know why you are researching such morbid affairs, but the records you are looking for should be in the library on the third floor,” the researcher says.\nYou thank her and head to the third floor, where you begin to study the history of witchcraft in Arkham. In the late 17th century, Arkham was one of the New England towns caught up in the hysteria of witch trials. Accusations of witchcraft spread like wildfire, and many of the accused were executed by hanging or burning, guilty and innocent alike. But there was one witch whose infamy rose above the rest, and whose mystical power was never in question: Keziah Mason.\nYou recognize the name as the ghost who supposedly haunts the old Witch House in French Hill. You had always thought her to be a work of fiction; a tall tale meant to scare young children away from the condemned house. But the Historical Society’s records indicate that Keziah was a real person: a powerful witch who had fled from Salem over two hundred years ago.\nYou are no stranger to real witchcraft. If Keziah Mason has anything to do with the coven you encountered in the woods, you must discover that connection. You leave the manor and head toward French Hill, where the Witch House awaits…",
-      "bullets": []
-    },
-    "the-secret-name:intro_5": {
-      "kind": "story",
-      "text": "Your lead regarding the Silver Twilight Lodge’s charity gala turned out to be a bust, but Anna Kaslow’s reading still plays out over and over in your mind. You cannot help but feel as though you are missing a piece of this puzzle—something you can use to avoid the dire fate the tarot reader described. Turning your attention back to the coven of witches you encountered in the woods last week, you travel to the manor of the Arkham Historical Society in Southside. Perhaps there is some piece of information you have overlooked that will shed light on their identity, or their motives.\nAs you enter, one of the Historical Society’s many researchers greets you and asks if she can help in any way. You give a cursory description of the information you’re looking for; just enough that she can direct you where to look, but vague enough to leave your motives at the door. “I don’t know why you are researching such morbid affairs, but the records you are looking for should be in the library on the third floor,” the researcher says.\nYou thank her and head to the third floor, where you begin to study the history of witchcraft in Arkham. In the late 17th century, Arkham was one of the New England towns caught up in the hysteria of witch trials. Accusations of witchcraft spread like wildfire, and many of the accused were executed by hanging or burning, guilty and innocent alike. But there was one witch whose infamy rose above the rest, and whose mystical power was never in question: Keziah Mason.\nYou recognize the name as the ghost who supposedly haunts the old Witch House in French Hill. You had always thought her to be a work of fiction; a tall tale meant to scare young children away from the condemned house. But the Historical Society’s records indicate that Keziah was a real person: a powerful witch who had fled from Salem over two hundred years ago.\nYou are no stranger to real witchcraft. If Keziah Mason has anything to do with the coven you encountered in the woods, you must discover that connection. You leave the manor and head toward French Hill, where the Witch House awaits…",
-      "bullets": []
-    },
-    "the-secret-name:intro_6": {
-      "kind": "story",
-      "text": "You pin the newspaper article up on your wall along with the rest of the evidence you’ve found. Whatever is happening in Josef Meiger’s manor, it’s getting out of hand. First, there were the four disappearances on the twenty-second, at the Silver Twilight Lodge’s annual charity gala. Now more have gone missing after a second event at the same estate. Is the Lodge somehow involved? Why else would they move this dinner to Mr. Meiger’s estate?\nThat’s not the only headline, either. Strange sightings have been occuring throughout the city: ghostly figures, an ashen mist, and a hunched, cloaked figure whose identity is hotly debated by the community. The name on the tips of everybody’s tongues is Keziah Mason—the ghost who supposedly haunts the old Witch House in French Hill. You had always thought her to be a work of fiction; a tall tale meant to scare young children away from the condemned house. But with all of the disappearances and odd sightings occuring throughout town, you’re not so sure. Perhaps there is something to this old ghost story, after all.",
-      "bullets": []
-    },
-    "the-secret-name:check_never_seen_again": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "neverSeenAgain",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "the-secret-name:intro_6"
-      ],
-      "else": []
-    },
-    "the-secret-name:check_learned_nothing_of_the_lodges_schemes": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "learnedNothingOfTheLodgesSchemes",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "the-secret-name:intro_5"
-      ],
-      "else": [
-        "the-secret-name:check_never_seen_again"
-      ]
-    },
-    "the-secret-name:check_enemies_of_the_lodge": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "enemiesOfTheLodge",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "the-secret-name:intro_4"
-      ],
-      "else": [
-        "the-secret-name:check_learned_nothing_of_the_lodges_schemes"
-      ]
-    },
-    "the-secret-name:check_members_of_the_lodge": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "membersOfTheLodge",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "the-secret-name:intro_1",
-        "the-secret-name:choose_tell_lodge_about_witches"
-      ],
-      "else": [
-        "the-secret-name:check_enemies_of_the_lodge"
-      ]
-    },
-    "the-wages-of-sin:record_heretics_released": {
-      "kind": "counter",
-      "text": "In your Campaign Log, record <i>X heretics were unleashed unto Arkham</i>. X is the number of Heretic enemies in play. (If it is act 1, instead record <i>4 heretics were unleashed unto Arkham</i>.)",
-      "min": 0,
-      "effects": [
-        {
-          "do": "count",
-          "id": "hereticsReleased",
-          "section": "campaign_notes",
-          "op": "set",
-          "value": "input"
-        }
-      ],
-      "steps": []
-    },
-    "the-wages-of-sin:record_wisp_of_spectral_mist": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "wispOfSpectralMist",
-          "section": "mementos",
-          "value": true
-        }
-      ]
-    },
-    "the-wages-of-sin:check_earned_wisp": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "multi",
-        "take": false
-      },
-      "then": [
-        "the-wages-of-sin:record_wisp_of_spectral_mist"
-      ],
-      "else": []
-    },
-    "the-wages-of-sin:earn_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 0,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "the-wages-of-sin:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "the-wages-of-sin:survived_the_watchers_embrace": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "survivedTheWatchersEmbrace",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-witching-hour:check_final_act": {
-      "kind": "chooseOne",
-      "text": "What act was in play when the scenario ended?",
-      "choices": [
-        {
-          "id": "act_1",
-          "text": "Act 1",
-          "effects": [],
-          "steps": []
-        },
-        {
-          "id": "act_2",
-          "text": "Act 2",
-          "effects": [],
-          "steps": []
-        },
-        {
-          "id": "act_3",
-          "text": "Act 3",
-          "effects": [],
-          "steps": []
-        },
-        {
-          "id": "act_4",
-          "text": "Act 4",
-          "effects": [],
-          "steps": []
-        }
-      ]
-    },
-    "the-witching-hour:witches_spell_broken": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "witchesSpellBroken",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-witching-hour:mementos_flute_and_ritual_components:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, under “Mementos Discovered,” record <i>Mesmerizing Flute</i> and <i>Ritual Components</i>. Each investigator earns 1 bonus experience, as they gain insight into Arkham’s mysterious past.",
-      "bullets": []
-    },
-    "the-witching-hour:mementos_flute_and_ritual_components": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "mesmerizingFlute",
-          "section": "mementos",
-          "value": true
-        },
-        {
-          "do": "record",
-          "key": "ritualComponents",
-          "section": "mementos",
-          "value": true
-        },
-        {
-          "do": "xp",
-          "bonus": 1,
-          "who": "each",
-          "victory": false
-        }
-      ]
-    },
-    "the-witching-hour:earn_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 0,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "the-witching-hour:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "the-witching-hour:mementos_flute_and_scrap_of_torn_shadow:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, under “Mementos Discovered,” record <i>Mesmerizing Flute</i> and <i>Scrap of Torn Shadow</i>. Each investigator earns 1 bonus experience, as they gain insight into Arkham’s mysterious past.",
-      "bullets": []
-    },
-    "the-witching-hour:mementos_flute_and_scrap_of_torn_shadow": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "mesmerizingFlute",
-          "section": "mementos",
-          "value": true
-        },
-        {
-          "do": "record",
-          "key": "scrapOfTornShadow",
-          "section": "mementos",
-          "value": true
-        },
-        {
-          "do": "xp",
-          "bonus": 1,
-          "who": "each",
-          "victory": false
-        }
-      ]
-    },
-    "the-witching-hour:witches_spell_cast": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "witchesSpellCast",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-witching-hour:no_record:text": {
-      "kind": "story",
-      "text": "No record is made.",
-      "bullets": []
-    },
-    "the-witching-hour:mementos_flute:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, under “Mementos Discovered,” record <i>Mesmerizing Flute</i>. Each investigator earns 1 bonus experience, as they gain insight into Arkham’s mysterious past.",
-      "bullets": []
-    },
-    "the-witching-hour:mementos_flute": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "mesmerizingFlute",
-          "section": "mementos",
-          "value": true
-        },
-        {
-          "do": "xp",
-          "bonus": 1,
-          "who": "each",
-          "victory": false
-        }
-      ]
-    },
-    "the-witching-hour:mementos_check_act": {
-      "kind": "chooseOne",
-      "text": "Check the act deck.",
-      "choices": [
-        {
-          "id": "act_1_or_2",
-          "text": "It was act 1 or 2 when the scenario ended.",
-          "effects": [],
-          "steps": [
-            "the-witching-hour:no_record:text"
-          ]
-        },
-        {
-          "id": "act_3",
-          "text": "It was act 3 when the scenario ended.",
-          "effects": [],
-          "steps": [
-            "the-witching-hour:mementos_flute:text",
-            "the-witching-hour:mementos_flute"
-          ]
-        }
-      ]
-    },
-    "the-witching-hour:intro_2": {
-      "kind": "story",
-      "text": "The woman nods and draws the top card of the deck with a steady hand, revealing it to you without looking at it herself. Depicted on the card is a single wooden wand, surrounded by a pattern of broken stained glass. It reads: ACE OF RODS. “You must be ready to act,” she advises. “Without hesitation. Without regret. When the opportunity arises, you must set into motion the events that will change this fate.”",
-      "bullets": []
-    },
-    "the-witching-hour:accepted_fate:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, record that <i>you have accepted your fate</i>. Add 2 [tablet] tokens to the chaos bag for the remainder of the campaign.",
-      "bullets": []
-    },
-    "the-witching-hour:accepted_fate": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "acceptedFate",
-          "section": "campaign_notes",
-          "value": true
-        },
-        {
-          "do": "addChaosToken",
-          "token": "tablet"
-        },
-        {
-          "do": "addChaosToken",
-          "token": "tablet"
-        }
-      ]
-    },
-    "the-witching-hour:add_tarot:text": {
-      "kind": "story",
-      "text": "Before drawing their opening hand for this scenario, the lead investigator searches the collection for 1 copy of The Tower · XVI and 1 copy of Ace of Rods and adds each of them to their deck, if able. The lead investigator has earned these cards. They do not count toward their deck size. (If one or both of these cards are not available, skip this step.)",
-      "bullets": []
-    },
-    "the-witching-hour:add_tarot": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "earnCard",
-          "code": "05042",
-          "who": "lead"
-        },
-        {
-          "do": "earnCard",
-          "code": "05040",
-          "who": "lead"
-        }
-      ]
-    },
-    "the-witching-hour:intro_3": {
-      "kind": "story",
-      "text": "The woman smirks. “Yes, in a sense, I suppose it is,” she responds. With a single swift motion, she picks up each of the cards displayed before you, save for The Tower card, and shuffles them back into the deck. “The cards only reveal and advise. They cannot influence or impose.” She locks eyes with you, and her smile vanishes from her face. “In other words, though your fate is not set in stone, I assure you the danger you face is not ‘bullshit.’ It is real.” Her eyes narrow. “It is very real.”",
-      "bullets": []
-    },
-    "the-witching-hour:rejected_fate:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, record that <i>you have rejected your fate</i>. Add 2 [elder_thing] tokens to the chaos bag for the remainder of the campaign.",
-      "bullets": []
-    },
-    "the-witching-hour:rejected_fate": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "rejectedFate",
-          "section": "campaign_notes",
-          "value": true
-        },
-        {
-          "do": "addChaosToken",
-          "token": "elderThing"
-        },
-        {
-          "do": "addChaosToken",
-          "token": "elderThing"
-        }
-      ]
-    },
-    "the-witching-hour:choose_fate": {
-      "kind": "chooseOne",
-      "text": "The lead investigator must decide (choose one):",
-      "choices": [
-        {
-          "id": "accept_fate",
-          "text": "<i>“What can I do to avoid this fate?”</i>",
-          "effects": [],
-          "steps": [
-            "the-witching-hour:intro_2",
-            "the-witching-hour:accepted_fate:text",
-            "the-witching-hour:accepted_fate",
-            "the-witching-hour:add_tarot:text",
-            "the-witching-hour:add_tarot"
-          ]
-        },
-        {
-          "id": "reject_fate",
-          "text": "<i>“This is bullshit.”</i>",
-          "effects": [],
-          "steps": [
-            "the-witching-hour:intro_3",
-            "the-witching-hour:rejected_fate:text",
-            "the-witching-hour:rejected_fate"
-          ]
-        }
-      ]
-    },
     "twist-of-fate:tof_1": {
       "kind": "story",
       "text": "You stand underneath the breach, in awe of its presence. Everything the soothsayer predicted has come to pass. “This is a matter of life and death,” she had told you. How right she was. Beyond the cosmic ingress, the nucleus of the cosmos awaits. Now you understand what dwells on the other side, gnawing hungrily at the fabric of reality: the doom of all humanity; no, not just humanity. The doom of all life in the universe.\nThere is a bitter taste in your mouth. Tears well in your eyes. You close your fist so hard your nails dig into your flesh. If you have to die, then die you will. But you’re not going to die sitting down.",
@@ -4122,988 +5248,6 @@
     },
     "twist-of-fate:upgradeDecks": {
       "kind": "upgradeDecks"
-    },
-    "union-and-disillusion:choose_if_sanford_is_good_v8": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "yes",
-          "text": "<i>“Yes.”</i>",
-          "effects": [],
-          "steps": [],
-          "when": {
-            "kind": "all",
-            "conditions": [
-              {
-                "kind": "logHas",
-                "id": "inductedIntoTheInnerCircle",
-                "section": "campaign_notes"
-              },
-              {
-                "kind": "logHas",
-                "id": "deceivingTheLodge",
-                "section": "campaign_notes"
-              }
-            ]
-          }
-        },
-        {
-          "id": "no",
-          "text": "<i>“No.”</i>",
-          "effects": [],
-          "steps": []
-        }
-      ]
-    },
-    "union-and-disillusion:choose_if_sanford_is_good": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "yes",
-          "text": "<i>“Yes.”</i>",
-          "effects": [],
-          "steps": []
-        },
-        {
-          "id": "no",
-          "text": "<i>“No.”</i>",
-          "effects": [],
-          "steps": []
-        }
-      ]
-    },
-    "union-and-disillusion:maybe_choose_if_sanford_is_good": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "campaign_data",
-        "take": true
-      },
-      "then": [
-        "union-and-disillusion:choose_if_sanford_is_good_v8"
-      ],
-      "else": [
-        "union-and-disillusion:choose_if_sanford_is_good"
-      ]
-    },
-    "union-and-disillusion:true_work_of_silver_twilight_lodge_has_begun": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "trueWorkOfSilverTwilightLodgeHasBegun",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "union-and-disillusion:silver_twilight_wins_campaign:text": {
-      "kind": "story",
-      "text": "The Silver Twilight Lodge wins the campaign. (Investigators who are truly loyal to the Lodge win the campaign.)",
-      "bullets": []
-    },
-    "union-and-disillusion:silver_twilight_wins_campaign": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "skipScenario",
-          "scenario": "in-the-clutches-of-chaos"
-        },
-        {
-          "do": "skipScenario",
-          "scenario": "twist-of-fate"
-        },
-        {
-          "do": "skipScenario",
-          "scenario": "before-the-black-throne"
-        },
-        {
-          "do": "skipScenario",
-          "scenario": "tcu-epilogue"
-        },
-        {
-          "do": "end",
-          "result": "win"
-        }
-      ]
-    },
-    "union-and-disillusion:carl_sanford_possesses_the_secrets_of_the_universe": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "carlSanfordPossessesTheSecretsOfTheUniverse",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "union-and-disillusion:fix_remove_all_cultist_tokens:text": {
-      "kind": "story",
-      "text": "While playing the scenario, there was an instruction to remove all [cultist] tokens from the chaos bag.",
-      "bullets": []
-    },
-    "union-and-disillusion:fix_remove_all_cultist_tokens": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "removeChaosToken",
-          "token": "cultist"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "cultist"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "cultist"
-        },
-        {
-          "do": "removeChaosToken",
-          "token": "cultist"
-        }
-      ]
-    },
-    "union-and-disillusion:maybe_adjust_chaos_bag": {
-      "kind": "branch",
-      "condition": {
-        "kind": "all",
-        "conditions": [
-          {
-            "kind": "logHas",
-            "id": "uadAddChaosToken",
-            "section": "hidden"
-          },
-          {
-            "kind": "logHas",
-            "id": "act3V2",
-            "section": "hidden"
-          }
-        ]
-      },
-      "then": [
-        "union-and-disillusion:fix_remove_all_cultist_tokens:text",
-        "union-and-disillusion:fix_remove_all_cultist_tokens"
-      ],
-      "else": []
-    },
-    "union-and-disillusion:anette_mason_is_possessed_by_evil": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "anetteMasonIsPossessedByEvil",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "union-and-disillusion:ask_final_act": {
-      "kind": "chooseOne",
-      "text": "What act were the investigators on when the scenario ended?",
-      "choices": [
-        {
-          "id": "act_1",
-          "text": "Act 1",
-          "effects": [
-            {
-              "do": "record",
-              "key": "uadNoInvestigatorsAlive",
-              "section": "hidden",
-              "value": true
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "act_2",
-          "text": "Act 2",
-          "effects": [],
-          "steps": []
-        },
-        {
-          "id": "act_3",
-          "text": "Act 3",
-          "effects": [],
-          "steps": []
-        },
-        {
-          "id": "act_4",
-          "text": "Act 4",
-          "effects": [],
-          "steps": []
-        }
-      ]
-    },
-    "union-and-disillusion:maybe_ask_act_1": {
-      "kind": "branch",
-      "condition": {
-        "kind": "any",
-        "conditions": [
-          {
-            "kind": "logHas",
-            "id": "alive",
-            "section": "05046"
-          },
-          {
-            "kind": "logHas",
-            "id": "alive",
-            "section": "05047"
-          },
-          {
-            "kind": "logHas",
-            "id": "alive",
-            "section": "05048"
-          },
-          {
-            "kind": "logHas",
-            "id": "alive",
-            "section": "05049"
-          }
-        ]
-      },
-      "then": [],
-      "else": [
-        "union-and-disillusion:ask_final_act"
-      ]
-    },
-    "union-and-disillusion:compare_columns_explanation:text": {
-      "kind": "story",
-      "text": "Check Campaign Log. Compare the following two bullets to see which has the most true statements.",
-      "bullets": []
-    },
-    "union-and-disillusion:josef_disappeared_L0R1:yes:fx": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "rightColumn",
-          "section": "hidden",
-          "value": true
-        }
-      ]
-    },
-    "union-and-disillusion:2_or_more_heretics_released:default:fx": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "rightColumn",
-          "section": "hidden",
-          "value": true
-        }
-      ]
-    },
-    "union-and-disillusion:2_or_more_heretics_released:0:fx": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "leftColumn",
-          "section": "hidden",
-          "value": true
-        }
-      ]
-    },
-    "union-and-disillusion:2_or_more_heretics_released:1:fx": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "leftColumn",
-          "section": "hidden",
-          "value": true
-        }
-      ]
-    },
-    "union-and-disillusion:2_or_more_heretics_released#1": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logCount",
-        "id": "hereticsReleased",
-        "section": "campaign_notes",
-        "min": 1,
-        "max": 1
-      },
-      "then": [
-        "union-and-disillusion:2_or_more_heretics_released:1:fx"
-      ],
-      "else": [
-        "union-and-disillusion:2_or_more_heretics_released:default:fx"
-      ]
-    },
-    "union-and-disillusion:2_or_more_heretics_released": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logCount",
-        "id": "hereticsReleased",
-        "section": "campaign_notes",
-        "min": 0,
-        "max": 0
-      },
-      "then": [
-        "union-and-disillusion:2_or_more_heretics_released:0:fx"
-      ],
-      "else": [
-        "union-and-disillusion:2_or_more_heretics_released#1"
-      ]
-    },
-    "union-and-disillusion:josef_disappeared_L0R1": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "josefDisappearedIntoTheMist",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "union-and-disillusion:josef_disappeared_L0R1:yes:fx"
-      ],
-      "else": [
-        "union-and-disillusion:2_or_more_heretics_released"
-      ]
-    },
-    "union-and-disillusion:josef_disappeared_L1R0:no:fx": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "leftColumn",
-          "section": "hidden",
-          "value": true
-        }
-      ]
-    },
-    "union-and-disillusion:josef_disappeared_L1R0": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "josefDisappearedIntoTheMist",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "union-and-disillusion:2_or_more_heretics_released"
-      ],
-      "else": [
-        "union-and-disillusion:josef_disappeared_L1R0:no:fx"
-      ]
-    },
-    "union-and-disillusion:compare_columns": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "witchesSpellCast",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "union-and-disillusion:josef_disappeared_L0R1"
-      ],
-      "else": [
-        "union-and-disillusion:josef_disappeared_L1R0"
-      ]
-    },
-    "union-and-disillusion:right_has_more:text": {
-      "kind": "story",
-      "text": "Because the second bullet has more true statements, proceed to <b>Resolution 7</b>",
-      "bullets": []
-    },
-    "union-and-disillusion:left_has_more:text": {
-      "kind": "story",
-      "text": "Because the first bullet has more true statements, proceed to <b>Resolution 6</b>",
-      "bullets": []
-    },
-    "union-and-disillusion:right_result": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "rightColumn",
-        "section": "hidden"
-      },
-      "then": [
-        "union-and-disillusion:right_has_more:text"
-      ],
-      "else": [
-        "union-and-disillusion:left_has_more:text"
-      ]
-    },
-    "union-and-disillusion:remove_puzzle_box:text": {
-      "kind": "story",
-      "text": "If an investigator’s deck contains the Puzzle Box card, remove it from that investigator’s deck.",
-      "bullets": []
-    },
-    "union-and-disillusion:remove_puzzle_box": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "removeCard",
-          "code": "05228"
-        }
-      ]
-    },
-    "union-and-disillusion:check_missing_persons_alive:text": {
-      "kind": "story",
-      "text": "Check the “Missing Persons” section of your Campaign Log.",
-      "bullets": []
-    },
-    "union-and-disillusion:add_gavriella_prompt:text": {
-      "kind": "story",
-      "text": "Any one investigator may choose to add the Gavriella Mizrah asset to their deck. She does not count toward that investigator’s deck size.",
-      "bullets": []
-    },
-    "union-and-disillusion:check_gavriella_alive:yes:fx": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "earnCard",
-          "code": "05258",
-          "who": "choice"
-        }
-      ]
-    },
-    "union-and-disillusion:maybe_record_gavriella_alive:no:fx": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "alive",
-          "section": "05046",
-          "value": true
-        }
-      ]
-    },
-    "union-and-disillusion:maybe_record_gavriella_alive": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "alive",
-        "section": "05046"
-      },
-      "then": [],
-      "else": [
-        "union-and-disillusion:maybe_record_gavriella_alive:no:fx"
-      ]
-    },
-    "union-and-disillusion:gavriella_is_dead:text": {
-      "kind": "story",
-      "text": "Record that <i>Gavriella Mizrah is dead</i>.",
-      "bullets": []
-    },
-    "union-and-disillusion:gavriella_is_dead": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "dead",
-          "section": "05046",
-          "value": true
-        }
-      ]
-    },
-    "union-and-disillusion:check_gavriella_alive": {
-      "kind": "branch",
-      "condition": {
-        "kind": "all",
-        "conditions": [
-          {
-            "kind": "logHas",
-            "id": "uadNoInvestigatorsAlive",
-            "section": "hidden"
-          },
-          {
-            "kind": "logHas",
-            "id": "disappearedIntoTheMist",
-            "section": "05046"
-          },
-          {
-            "kind": "logHas",
-            "id": "onGavriellasTrail",
-            "section": "05046"
-          }
-        ]
-      },
-      "then": [
-        "union-and-disillusion:add_gavriella_prompt:text",
-        "union-and-disillusion:check_gavriella_alive:yes:fx",
-        "union-and-disillusion:maybe_record_gavriella_alive"
-      ],
-      "else": [
-        "union-and-disillusion:gavriella_is_dead:text",
-        "union-and-disillusion:gavriella_is_dead"
-      ]
-    },
-    "union-and-disillusion:check_gavriella_in_game": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "campaign_log_section_exists",
-        "take": false
-      },
-      "then": [
-        "union-and-disillusion:check_gavriella_alive"
-      ],
-      "else": []
-    },
-    "union-and-disillusion:add_jerome_prompt:text": {
-      "kind": "story",
-      "text": "Any one investigator may choose to add the Jerome Davids asset to their deck. He does not count toward that investigator’s deck size.",
-      "bullets": []
-    },
-    "union-and-disillusion:check_jerome_alive:yes:fx": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "earnCard",
-          "code": "05259",
-          "who": "choice"
-        }
-      ]
-    },
-    "union-and-disillusion:maybe_record_jerome_alive:no:fx": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "alive",
-          "section": "05047",
-          "value": true
-        }
-      ]
-    },
-    "union-and-disillusion:maybe_record_jerome_alive": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "alive",
-        "section": "05047"
-      },
-      "then": [],
-      "else": [
-        "union-and-disillusion:maybe_record_jerome_alive:no:fx"
-      ]
-    },
-    "union-and-disillusion:jerome_is_dead:text": {
-      "kind": "story",
-      "text": "Record that <i>Jerome Davids is dead</i>.",
-      "bullets": []
-    },
-    "union-and-disillusion:jerome_is_dead": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "dead",
-          "section": "05047",
-          "value": true
-        }
-      ]
-    },
-    "union-and-disillusion:check_jerome_alive": {
-      "kind": "branch",
-      "condition": {
-        "kind": "all",
-        "conditions": [
-          {
-            "kind": "logHas",
-            "id": "uadNoInvestigatorsAlive",
-            "section": "hidden"
-          },
-          {
-            "kind": "logHas",
-            "id": "disappearedIntoTheMist",
-            "section": "05047"
-          },
-          {
-            "kind": "logHas",
-            "id": "onJeromesTrail",
-            "section": "05047"
-          }
-        ]
-      },
-      "then": [
-        "union-and-disillusion:add_jerome_prompt:text",
-        "union-and-disillusion:check_jerome_alive:yes:fx",
-        "union-and-disillusion:maybe_record_jerome_alive"
-      ],
-      "else": [
-        "union-and-disillusion:jerome_is_dead:text",
-        "union-and-disillusion:jerome_is_dead"
-      ]
-    },
-    "union-and-disillusion:check_jerome_in_game": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "campaign_log_section_exists",
-        "take": false
-      },
-      "then": [
-        "union-and-disillusion:check_jerome_alive"
-      ],
-      "else": []
-    },
-    "union-and-disillusion:add_penny_prompt:text": {
-      "kind": "story",
-      "text": "Any one investigator may choose to add the Penny White asset to their deck. She does not count toward that investigator’s deck size.",
-      "bullets": []
-    },
-    "union-and-disillusion:check_penny_alive:yes:fx": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "earnCard",
-          "code": "05260",
-          "who": "choice"
-        }
-      ]
-    },
-    "union-and-disillusion:maybe_record_penny_alive:no:fx": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "alive",
-          "section": "05049",
-          "value": true
-        }
-      ]
-    },
-    "union-and-disillusion:maybe_record_penny_alive": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "alive",
-        "section": "05049"
-      },
-      "then": [],
-      "else": [
-        "union-and-disillusion:maybe_record_penny_alive:no:fx"
-      ]
-    },
-    "union-and-disillusion:penny_is_dead:text": {
-      "kind": "story",
-      "text": "Record that <i>Penny White is dead</i>.",
-      "bullets": []
-    },
-    "union-and-disillusion:penny_is_dead": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "dead",
-          "section": "05049",
-          "value": true
-        }
-      ]
-    },
-    "union-and-disillusion:check_penny_alive": {
-      "kind": "branch",
-      "condition": {
-        "kind": "all",
-        "conditions": [
-          {
-            "kind": "logHas",
-            "id": "uadNoInvestigatorsAlive",
-            "section": "hidden"
-          },
-          {
-            "kind": "logHas",
-            "id": "disappearedIntoTheMist",
-            "section": "05049"
-          },
-          {
-            "kind": "logHas",
-            "id": "onPennysTrail",
-            "section": "05049"
-          }
-        ]
-      },
-      "then": [
-        "union-and-disillusion:add_penny_prompt:text",
-        "union-and-disillusion:check_penny_alive:yes:fx",
-        "union-and-disillusion:maybe_record_penny_alive"
-      ],
-      "else": [
-        "union-and-disillusion:penny_is_dead:text",
-        "union-and-disillusion:penny_is_dead"
-      ]
-    },
-    "union-and-disillusion:check_penny_in_game": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "campaign_log_section_exists",
-        "take": false
-      },
-      "then": [
-        "union-and-disillusion:check_penny_alive"
-      ],
-      "else": []
-    },
-    "union-and-disillusion:add_valentino_prompt:text": {
-      "kind": "story",
-      "text": "Any one investigator may choose to add the Valentino Rivas asset to their deck. He does not count toward that investigator’s deck size.",
-      "bullets": []
-    },
-    "union-and-disillusion:check_valentino_alive:yes:fx": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "earnCard",
-          "code": "05261",
-          "who": "choice"
-        }
-      ]
-    },
-    "union-and-disillusion:maybe_record_valentino_alive:no:fx": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "alive",
-          "section": "05048",
-          "value": true
-        }
-      ]
-    },
-    "union-and-disillusion:maybe_record_valentino_alive": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "alive",
-        "section": "05048"
-      },
-      "then": [],
-      "else": [
-        "union-and-disillusion:maybe_record_valentino_alive:no:fx"
-      ]
-    },
-    "union-and-disillusion:valentino_is_dead:text": {
-      "kind": "story",
-      "text": "Record that <i>Valentino Rivas is dead</i>.",
-      "bullets": []
-    },
-    "union-and-disillusion:valentino_is_dead": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "dead",
-          "section": "05048",
-          "value": true
-        }
-      ]
-    },
-    "union-and-disillusion:check_valentino_alive": {
-      "kind": "branch",
-      "condition": {
-        "kind": "all",
-        "conditions": [
-          {
-            "kind": "logHas",
-            "id": "uadNoInvestigatorsAlive",
-            "section": "hidden"
-          },
-          {
-            "kind": "logHas",
-            "id": "disappearedIntoTheMist",
-            "section": "05048"
-          },
-          {
-            "kind": "logHas",
-            "id": "onValentinosTrail",
-            "section": "05048"
-          }
-        ]
-      },
-      "then": [
-        "union-and-disillusion:add_valentino_prompt:text",
-        "union-and-disillusion:check_valentino_alive:yes:fx",
-        "union-and-disillusion:maybe_record_valentino_alive"
-      ],
-      "else": [
-        "union-and-disillusion:valentino_is_dead:text",
-        "union-and-disillusion:valentino_is_dead"
-      ]
-    },
-    "union-and-disillusion:check_valentino_in_game": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "campaign_log_section_exists",
-        "take": false
-      },
-      "then": [
-        "union-and-disillusion:check_valentino_alive"
-      ],
-      "else": []
-    },
-    "union-and-disillusion:earn_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 0,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "union-and-disillusion:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "union-and-disillusion:sided_with_the_lodge": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "sidedWithTheLodge",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "union-and-disillusion:sided_with_the_coven": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "sidedWithTheCoven",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "union-and-disillusion:point_of_no_return": {
-      "kind": "chooseOne",
-      "text": "This is a point of no return—you will not get the chance to change your mind later. The investigators must decide (choose one):",
-      "choices": [
-        {
-          "id": "help_ritual",
-          "text": "<i>“We have to help complete the Lodge’s ritual.”</i>",
-          "effects": [],
-          "steps": [
-            "union-and-disillusion:sided_with_the_lodge"
-          ]
-        },
-        {
-          "id": "thwart_ritual",
-          "text": "<i>“We have to stop the Lodge’s ritual.”</i>",
-          "effects": [],
-          "steps": [
-            "union-and-disillusion:sided_with_the_coven"
-          ]
-        }
-      ]
-    },
-    "union-and-disillusion:act_3_v1:text": {
-      "kind": "story",
-      "text": "Use Act 3—“Beyond the Mist (v. I)” and Act 4—“The Binding Rite.”",
-      "bullets": []
-    },
-    "union-and-disillusion:act_3_v2:text": {
-      "kind": "story",
-      "text": "Use Act 3—“Beyond the Mist (v. II)” and Act 4—“The Broken Rite.”",
-      "bullets": []
-    },
-    "union-and-disillusion:act_3_v2": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "act3V2",
-          "section": "hidden",
-          "value": true
-        }
-      ]
-    },
-    "union-and-disillusion:act_3_v3:text": {
-      "kind": "story",
-      "text": "Use Act 3—“Beyond the Mist (v. III)” and Act 4—“The Broken Rite.”",
-      "bullets": []
-    },
-    "union-and-disillusion:act_3_v4:text": {
-      "kind": "story",
-      "text": "Use Act 3—“Beyond the Mist (v. IV)” and Act 4—“The Broken Rite.”",
-      "bullets": []
-    },
-    "union-and-disillusion:check_sided_with_the_coven": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "sidedWithTheCoven",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "union-and-disillusion:act_3_v4:text"
-      ],
-      "else": []
-    },
-    "union-and-disillusion:check_sided_with_the_coven_and_deceiving": {
-      "kind": "branch",
-      "condition": {
-        "kind": "any",
-        "conditions": [
-          {
-            "kind": "logHas",
-            "id": "deceivingTheLodge",
-            "section": "campaign_notes"
-          },
-          {
-            "kind": "logHas",
-            "id": "hidKnowledgeOfCoven",
-            "section": "campaign_notes"
-          },
-          {
-            "kind": "logHas",
-            "id": "keptMementosHidden",
-            "section": "campaign_notes"
-          }
-        ]
-      },
-      "then": [
-        "union-and-disillusion:act_3_v3:text"
-      ],
-      "else": [
-        "union-and-disillusion:check_sided_with_the_coven"
-      ]
-    },
-    "union-and-disillusion:check_sided_with_the_coven_and_inner_circle": {
-      "kind": "branch",
-      "condition": {
-        "kind": "all",
-        "conditions": [
-          {
-            "kind": "logHas",
-            "id": "deceivingTheLodge",
-            "section": "campaign_notes"
-          },
-          {
-            "kind": "logHas",
-            "id": "inductedIntoTheInnerCircle",
-            "section": "campaign_notes"
-          }
-        ]
-      },
-      "then": [
-        "union-and-disillusion:act_3_v2:text",
-        "union-and-disillusion:act_3_v2"
-      ],
-      "else": [
-        "union-and-disillusion:check_sided_with_the_coven_and_deceiving"
-      ]
-    },
-    "union-and-disillusion:check_sided_with_lodge": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "sidedWithTheLodge",
-        "section": "campaign_notes"
-      },
-      "then": [
-        "union-and-disillusion:act_3_v1:text"
-      ],
-      "else": [
-        "union-and-disillusion:check_sided_with_the_coven_and_inner_circle"
-      ]
     }
   }
 }

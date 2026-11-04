@@ -17,7 +17,11 @@
   },
   "resolutions": {
     "fortune-and-folly-part-1": {
-      "none": [],
+      "none": [
+        "fortune-and-folly-part-1:raise_non_resigned_alarm:text",
+        "fortune-and-folly-part-1:proceed_to_checkpoint:text",
+        "fortune-and-folly-part-1:proceed_to_checkpoint"
+      ],
       "R1": [
         "fortune-and-folly-part-1:raise_non_resigned_alarm:text",
         "fortune-and-folly-part-1:proceed_to_checkpoint:text",
@@ -29,7 +33,9 @@
       ]
     },
     "fortune-and-folly-part-2": {
-      "none": [],
+      "none": [
+        "fortune-and-folly-part-2:check_any_resigned"
+      ],
       "R1": [
         "fortune-and-folly-part-2:check_playing_tsk_got_key",
         "fortune-and-folly-part-2:earn_xp",
@@ -75,6 +81,562 @@
       "title": "Care to Try Your Luck?",
       "text": "A casino in Monte Carlo is using probability-manipulating powers to accumulate wealth at the cost of endangering the populace. In <i>Fortune and Folly</i>, a unique scenario for <i>Arkham Horror: The Card Game</i>, 1-4 investigators must plan and execute a daring heist in order to capture the source of this cult's power and put a stop to their nefarious work. But will their meddling turn fortune in their favor? Or will their luck run out?",
       "bullets": []
+    },
+    "fortune-and-folly-part-1:raise_non_resigned_alarm:text": {
+      "kind": "story",
+      "text": "Each investigator who did not resign raises their alarm level by 2.",
+      "bullets": []
+    },
+    "fortune-and-folly-part-1:proceed_to_checkpoint:text": {
+      "kind": "story",
+      "text": "Investigators cannot spend experience or alter their decks in between Fortune and Folly, Part I and Fortune and Folly, Part II.",
+      "bullets": []
+    },
+    "fortune-and-folly-part-1:proceed_to_checkpoint": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "fortune-and-folly-checkpoint"
+        }
+      ]
+    },
+    "fortune-and-folly-part-1:ask_skip_part_1": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "skip",
+          "text": "Would you like to skip the stakeout and jump straight to the heist? <i>(Warning: Skipping the stakeout will dramatically increase the difficulty of Part II.)</i>",
+          "effects": [
+            {
+              "do": "record",
+              "key": "fofSkipPart1",
+              "section": "hidden",
+              "value": true
+            },
+            {
+              "do": "nextScenario",
+              "scenario": "fortune-and-folly-part-2"
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "fortune-and-folly-part-1:check_skip_part_1:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "fofPlayPart1",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "fortune-and-folly-part-1:intro_5": {
+      "kind": "story",
+      "text": "Several days later, you meet with Isamara to discuss a plan for staking out the casino in advance of the heist. Isamara explains what you need to look for as the night of the stakeout approaches, warning that you will not have time to accomplish everything:",
+      "bullets": []
+    },
+    "fortune-and-folly-part-1:act_agenda_1:text": {
+      "kind": "story",
+      "text": "Build the agenda deck using only agenda 1 and the act deck using only act 1. Set the remaining agenda and act cards aside, out of play.",
+      "bullets": []
+    },
+    "fortune-and-folly-part-1:setup_locations:text": {
+      "kind": "story",
+      "text": "Put Casino Floor, Casino Lounge, and High Roller's Table into play with the <i>Calm Night</i> side faceup. Put each other [[Public]] location into play.",
+      "bullets": []
+    },
+    "fortune-and-folly-part-1:setup_isamara:text": {
+      "kind": "story",
+      "text": "Put the Isamar Ordoñez <i>(Lounge Singer)</i> story asset into play at Baccarat Table, Inconspicuous side faceup.",
+      "bullets": []
+    },
+    "fortune-and-folly-part-1:setup_abarran:text": {
+      "kind": "story",
+      "text": "Spawn Abarran Arrigorriagakoa enemy at High Roller's Table <i>(The Man with the Ruby Ring)</i> side faceup.",
+      "bullets": []
+    },
+    "fortune-and-folly-part-1:spawn_casino_guard:text": {
+      "kind": "story",
+      "text": "Spawn 1 copy of Casino Guard at Roulette Wheel. Attach the If the Uniform Fits... story card to it <i>(If the Uniform Fits... is on the reverse side of the Package Delivery story card).</i>",
+      "bullets": []
+    },
+    "fortune-and-folly-part-1:choose_role:text": {
+      "kind": "story",
+      "text": "Each investigator chooses one of the [[Role]] story assets and takes control of it, [[Unpracticed]] side faceup. If there is exactly one investigator in the game, that investigator chooses and takes control of an additional [[Role]] story asset, [[Unpracticed]] side faceup.",
+      "bullets": []
+    },
+    "fortune-and-folly-part-1:setup_wellspring:text": {
+      "kind": "story",
+      "text": "Attach The Wellspring of Fortune key, Stable side faceup, to the act deck. Place 7 [per_investigator] clues on it. Its text box is considered to be blank for the duration of this scenario.",
+      "bullets": []
+    },
+    "fortune-and-folly-part-1:set_aside_cards:text": {
+      "kind": "story",
+      "text": "Set the following cards aside, out of play: the three Fortune's Disfavor story cards, the Cash Cart story asset, the Deck of Possibilities story asset, and the Isamara Ordoñez <i>(The Torch Singer)</i> story asset.",
+      "bullets": []
+    },
+    "fortune-and-folly-part-1:place_alert_doom:text": {
+      "kind": "story",
+      "text": "Place 1 doom next to each investigator card. This doom represents that investigator's current alarm level (see \"Alarm Level\" below). It does not count as doom and does not count toward the current agendas doom threshold.",
+      "bullets": []
+    },
+    "fortune-and-folly-part-1:encounter_deck:text": {
+      "kind": "story",
+      "text": "Shuffle the remainder of the encounter cards to form the encounter deck.",
+      "bullets": []
+    },
+    "fortune-and-folly-part-1:check_skip_part_1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "fofSkipPart1",
+        "section": "hidden"
+      },
+      "then": [],
+      "else": [
+        "fortune-and-folly-part-1:check_skip_part_1:no:fx",
+        "fortune-and-folly-part-1:intro_5",
+        "fortune-and-folly-part-1:act_agenda_1:text",
+        "fortune-and-folly-part-1:setup_locations:text",
+        "fortune-and-folly-part-1:setup_isamara:text",
+        "fortune-and-folly-part-1:setup_abarran:text",
+        "fortune-and-folly-part-1:spawn_casino_guard:text",
+        "fortune-and-folly-part-1:choose_role:text",
+        "fortune-and-folly-part-1:setup_wellspring:text",
+        "fortune-and-folly-part-1:set_aside_cards:text",
+        "fortune-and-folly-part-1:place_alert_doom:text",
+        "fortune-and-folly-part-1:encounter_deck:text"
+      ]
+    },
+    "fortune-and-folly-part-2:cell_meddled_in_abarrans_affairs": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "cellMeddledInAbarransAffairs",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "fortune-and-folly-part-2:abarran_has_wellspring:text": {
+      "kind": "story",
+      "text": "Abarran Arrigorriagakoa is the bearer of The Wellspring of Fortune. Update the Campaign Log accordingly.",
+      "bullets": []
+    },
+    "fortune-and-folly-part-2:check_playing_tsk_lost_key": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "fortune-and-folly-part-2:cell_meddled_in_abarrans_affairs",
+        "fortune-and-folly-part-2:abarran_has_wellspring:text"
+      ],
+      "else": []
+    },
+    "fortune-and-folly-part-2:fortunes_chosen_bound_you_with_bad_luck:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>Fortune's Chosen have bound you with bad luck.</i> Choose any number token in the chaos bag. Replace it with a number token of a value 2 lower <i>(e.g. You may replace a 0 token with a -2 token, or a -3 token with a -5 token).</i>",
+      "bullets": []
+    },
+    "fortune-and-folly-part-2:bad_token_swap": {
+      "kind": "chooseOne",
+      "text": "Which token do you want to replace?",
+      "choices": [
+        {
+          "id": "+1",
+          "text": "+1",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "+1"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-1"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "0",
+          "text": "0",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "0"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-2"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-1",
+          "text": "−1",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-1"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-3"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-2",
+          "text": "−2",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-2"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-4"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-3",
+          "text": "−3",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-3"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-5"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-4",
+          "text": "−4",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-4"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-6"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-5",
+          "text": "−5",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-5"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-7"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-6",
+          "text": "−6",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-6"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-8"
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "fortune-and-folly-part-2:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "fortune-and-folly-part-2:ask_completed_tasks": {
+      "kind": "counter",
+      "title": "Additional Rewards",
+      "text": "Check the number of tasks on The Heist story card that were completed during this scenario.",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "fofHeistTasks",
+          "section": "hidden",
+          "op": "set",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "fortune-and-folly-part-2:check_skipped_part_1_tasks:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "fofHeistTasks",
+          "section": "hidden",
+          "op": "add",
+          "value": 2
+        }
+      ]
+    },
+    "fortune-and-folly-part-2:add_2_completed_tasks:text": {
+      "kind": "story",
+      "text": "Treat the number of tasks completed as two more than what was completed during the scenario <i>(this is handled automatically)</i>.",
+      "bullets": []
+    },
+    "fortune-and-folly-part-2:check_skipped_part_1_tasks": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "fofSkipPart1",
+        "section": "hidden"
+      },
+      "then": [
+        "fortune-and-folly-part-2:check_skipped_part_1_tasks:yes:fx",
+        "fortune-and-folly-part-2:add_2_completed_tasks:text"
+      ],
+      "else": []
+    },
+    "fortune-and-folly-part-2:task_bonus_experience:default:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": -4,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "fortune-and-folly-part-2:task_bonus_experience#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "fofHeistTasks",
+        "section": "hidden",
+        "min": 3,
+        "max": 3
+      },
+      "then": [],
+      "else": [
+        "fortune-and-folly-part-2:task_bonus_experience:default:fx"
+      ]
+    },
+    "fortune-and-folly-part-2:task_bonus_experience#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "fofHeistTasks",
+        "section": "hidden",
+        "min": 2,
+        "max": 2
+      },
+      "then": [],
+      "else": [
+        "fortune-and-folly-part-2:task_bonus_experience#3"
+      ]
+    },
+    "fortune-and-folly-part-2:task_bonus_experience#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "fofHeistTasks",
+        "section": "hidden",
+        "min": 1,
+        "max": 1
+      },
+      "then": [],
+      "else": [
+        "fortune-and-folly-part-2:task_bonus_experience#2"
+      ]
+    },
+    "fortune-and-folly-part-2:task_bonus_experience": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "fofHeistTasks",
+        "section": "hidden",
+        "min": 0,
+        "max": 0
+      },
+      "then": [],
+      "else": [
+        "fortune-and-folly-part-2:task_bonus_experience#1"
+      ]
+    },
+    "fortune-and-folly-part-2:no_additional_rewards:text": {
+      "kind": "story",
+      "text": "No additional rewards are granted.",
+      "bullets": []
+    },
+    "fortune-and-folly-part-2:earn_isamara:text": {
+      "kind": "story",
+      "text": "The investigators have earned Isamara Ordoñez. Any one investigator may choose to add Isamara Ordoñez <i>(The Torch Singer)</i> to their deck. This card does not count toward that investigator's deck size.",
+      "bullets": []
+    },
+    "fortune-and-folly-part-2:earn_isamara": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "88044",
+          "who": "choice"
+        }
+      ]
+    },
+    "fortune-and-folly-part-2:ask_isamara_in_play": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Was Isamara Ordoñez in play at the end of the scenario?",
+          "effects": [],
+          "steps": [
+            "fortune-and-folly-part-2:earn_isamara:text",
+            "fortune-and-folly-part-2:earn_isamara"
+          ]
+        }
+      ]
+    },
+    "fortune-and-folly-part-2:earn_deck_of_possibilities:text": {
+      "kind": "story",
+      "text": "If 6 or more tasks were completed, the investigators have earned the Deck of Possibilities. Any one investigator may choose to add the Deck of Possibilities to their deck. This card does not count toward that investigator's deck size. During the setup of each scenario, that investigator gathers the encounter cards from Fortune and Folly with the following game icons: J♠, J♥, J♦, J♣, Q♦, Q♠, K♣, K♥, A♠. These cards are shuffled into a separate \"possibilities deck.\" <i>(Alternatively, you may use standard playing cards instead of encounter cards from</i> Fortune and Folly.<i>)</i>",
+      "bullets": []
+    },
+    "fortune-and-folly-part-2:earn_deck_of_possibilities": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "88043",
+          "who": "choice"
+        }
+      ]
+    },
+    "fortune-and-folly-part-2:check_6_or_more_tasks": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "fortune-and-folly-part-2:earn_deck_of_possibilities:text",
+        "fortune-and-folly-part-2:earn_deck_of_possibilities"
+      ],
+      "else": []
+    },
+    "fortune-and-folly-part-2:check_5_or_more_tasks": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "fortune-and-folly-part-2:ask_isamara_in_play",
+        "fortune-and-folly-part-2:check_6_or_more_tasks"
+      ],
+      "else": []
+    },
+    "fortune-and-folly-part-2:check_4_or_fewer_tasks": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "fortune-and-folly-part-2:no_additional_rewards:text"
+      ],
+      "else": [
+        "fortune-and-folly-part-2:check_5_or_more_tasks"
+      ]
+    },
+    "fortune-and-folly-part-2:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "fortune-and-folly-part-2:check_any_resigned": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "scenario_data",
+        "take": false
+      },
+      "then": [
+        "fortune-and-folly-part-2:check_playing_tsk_lost_key",
+        "fortune-and-folly-part-2:fortunes_chosen_bound_you_with_bad_luck:text",
+        "fortune-and-folly-part-2:bad_token_swap",
+        "fortune-and-folly-part-2:earn_xp",
+        "fortune-and-folly-part-2:ask_completed_tasks",
+        "fortune-and-folly-part-2:check_skipped_part_1_tasks",
+        "fortune-and-folly-part-2:task_bonus_experience",
+        "fortune-and-folly-part-2:check_4_or_fewer_tasks",
+        "fortune-and-folly-part-2:upgradeDecks"
+      ],
+      "else": [
+        "fortune-and-folly-part-2:check_playing_tsk_lost_key",
+        "fortune-and-folly-part-2:fortunes_chosen_bound_you_with_bad_luck:text",
+        "fortune-and-folly-part-2:bad_token_swap",
+        "fortune-and-folly-part-2:earn_xp",
+        "fortune-and-folly-part-2:ask_completed_tasks",
+        "fortune-and-folly-part-2:check_skipped_part_1_tasks",
+        "fortune-and-folly-part-2:task_bonus_experience",
+        "fortune-and-folly-part-2:check_4_or_fewer_tasks",
+        "fortune-and-folly-part-2:upgradeDecks"
+      ]
+    },
+    "fortune-and-folly-part-2:choose_bearer_of_the_wellspring_of_fortune": {
+      "kind": "investigatorChoice",
+      "text": "Choose an investigator to be the bearer of The Wellspring of Fortune and update the Campaign Log accordingly.",
+      "optional": false,
+      "effects": [],
+      "steps": []
+    },
+    "fortune-and-folly-part-2:check_playing_tsk_got_key": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "fortune-and-folly-part-2:cell_meddled_in_abarrans_affairs",
+        "fortune-and-folly-part-2:choose_bearer_of_the_wellspring_of_fortune"
+      ],
+      "else": []
     },
     "fortune-and-folly-checkpoint:checkpoint": {
       "kind": "story",
@@ -475,532 +1037,6 @@
             "fortune-and-folly-checkpoint:record_stashed_assets",
             "fortune-and-folly-checkpoint:clean_up_game:text"
           ]
-        }
-      ]
-    },
-    "fortune-and-folly-part-1:raise_non_resigned_alarm:text": {
-      "kind": "story",
-      "text": "Each investigator who did not resign raises their alarm level by 2.",
-      "bullets": []
-    },
-    "fortune-and-folly-part-1:proceed_to_checkpoint:text": {
-      "kind": "story",
-      "text": "Investigators cannot spend experience or alter their decks in between Fortune and Folly, Part I and Fortune and Folly, Part II.",
-      "bullets": []
-    },
-    "fortune-and-folly-part-1:proceed_to_checkpoint": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "nextScenario",
-          "scenario": "fortune-and-folly-checkpoint"
-        }
-      ]
-    },
-    "fortune-and-folly-part-1:ask_skip_part_1": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "skip",
-          "text": "Would you like to skip the stakeout and jump straight to the heist? <i>(Warning: Skipping the stakeout will dramatically increase the difficulty of Part II.)</i>",
-          "effects": [
-            {
-              "do": "record",
-              "key": "fofSkipPart1",
-              "section": "hidden",
-              "value": true
-            },
-            {
-              "do": "nextScenario",
-              "scenario": "fortune-and-folly-part-2"
-            }
-          ],
-          "steps": []
-        }
-      ]
-    },
-    "fortune-and-folly-part-1:check_skip_part_1:no:fx": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "fofPlayPart1",
-          "section": "hidden",
-          "value": true
-        }
-      ]
-    },
-    "fortune-and-folly-part-1:intro_5": {
-      "kind": "story",
-      "text": "Several days later, you meet with Isamara to discuss a plan for staking out the casino in advance of the heist. Isamara explains what you need to look for as the night of the stakeout approaches, warning that you will not have time to accomplish everything:",
-      "bullets": []
-    },
-    "fortune-and-folly-part-1:act_agenda_1:text": {
-      "kind": "story",
-      "text": "Build the agenda deck using only agenda 1 and the act deck using only act 1. Set the remaining agenda and act cards aside, out of play.",
-      "bullets": []
-    },
-    "fortune-and-folly-part-1:setup_locations:text": {
-      "kind": "story",
-      "text": "Put Casino Floor, Casino Lounge, and High Roller's Table into play with the <i>Calm Night</i> side faceup. Put each other [[Public]] location into play.",
-      "bullets": []
-    },
-    "fortune-and-folly-part-1:setup_isamara:text": {
-      "kind": "story",
-      "text": "Put the Isamar Ordoñez <i>(Lounge Singer)</i> story asset into play at Baccarat Table, Inconspicuous side faceup.",
-      "bullets": []
-    },
-    "fortune-and-folly-part-1:setup_abarran:text": {
-      "kind": "story",
-      "text": "Spawn Abarran Arrigorriagakoa enemy at High Roller's Table <i>(The Man with the Ruby Ring)</i> side faceup.",
-      "bullets": []
-    },
-    "fortune-and-folly-part-1:spawn_casino_guard:text": {
-      "kind": "story",
-      "text": "Spawn 1 copy of Casino Guard at Roulette Wheel. Attach the If the Uniform Fits... story card to it <i>(If the Uniform Fits... is on the reverse side of the Package Delivery story card).</i>",
-      "bullets": []
-    },
-    "fortune-and-folly-part-1:choose_role:text": {
-      "kind": "story",
-      "text": "Each investigator chooses one of the [[Role]] story assets and takes control of it, [[Unpracticed]] side faceup. If there is exactly one investigator in the game, that investigator chooses and takes control of an additional [[Role]] story asset, [[Unpracticed]] side faceup.",
-      "bullets": []
-    },
-    "fortune-and-folly-part-1:setup_wellspring:text": {
-      "kind": "story",
-      "text": "Attach The Wellspring of Fortune key, Stable side faceup, to the act deck. Place 7 [per_investigator] clues on it. Its text box is considered to be blank for the duration of this scenario.",
-      "bullets": []
-    },
-    "fortune-and-folly-part-1:set_aside_cards:text": {
-      "kind": "story",
-      "text": "Set the following cards aside, out of play: the three Fortune's Disfavor story cards, the Cash Cart story asset, the Deck of Possibilities story asset, and the Isamara Ordoñez <i>(The Torch Singer)</i> story asset.",
-      "bullets": []
-    },
-    "fortune-and-folly-part-1:place_alert_doom:text": {
-      "kind": "story",
-      "text": "Place 1 doom next to each investigator card. This doom represents that investigator's current alarm level (see \"Alarm Level\" below). It does not count as doom and does not count toward the current agendas doom threshold.",
-      "bullets": []
-    },
-    "fortune-and-folly-part-1:encounter_deck:text": {
-      "kind": "story",
-      "text": "Shuffle the remainder of the encounter cards to form the encounter deck.",
-      "bullets": []
-    },
-    "fortune-and-folly-part-1:check_skip_part_1": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "fofSkipPart1",
-        "section": "hidden"
-      },
-      "then": [],
-      "else": [
-        "fortune-and-folly-part-1:check_skip_part_1:no:fx",
-        "fortune-and-folly-part-1:intro_5",
-        "fortune-and-folly-part-1:act_agenda_1:text",
-        "fortune-and-folly-part-1:setup_locations:text",
-        "fortune-and-folly-part-1:setup_isamara:text",
-        "fortune-and-folly-part-1:setup_abarran:text",
-        "fortune-and-folly-part-1:spawn_casino_guard:text",
-        "fortune-and-folly-part-1:choose_role:text",
-        "fortune-and-folly-part-1:setup_wellspring:text",
-        "fortune-and-folly-part-1:set_aside_cards:text",
-        "fortune-and-folly-part-1:place_alert_doom:text",
-        "fortune-and-folly-part-1:encounter_deck:text"
-      ]
-    },
-    "fortune-and-folly-part-2:cell_meddled_in_abarrans_affairs": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "cellMeddledInAbarransAffairs",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "fortune-and-folly-part-2:choose_bearer_of_the_wellspring_of_fortune": {
-      "kind": "investigatorChoice",
-      "text": "Choose an investigator to be the bearer of The Wellspring of Fortune and update the Campaign Log accordingly.",
-      "optional": false,
-      "effects": [],
-      "steps": []
-    },
-    "fortune-and-folly-part-2:check_playing_tsk_got_key": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "multi",
-        "take": false
-      },
-      "then": [
-        "fortune-and-folly-part-2:cell_meddled_in_abarrans_affairs",
-        "fortune-and-folly-part-2:choose_bearer_of_the_wellspring_of_fortune"
-      ],
-      "else": []
-    },
-    "fortune-and-folly-part-2:earn_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 0,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "fortune-and-folly-part-2:ask_completed_tasks": {
-      "kind": "counter",
-      "title": "Additional Rewards",
-      "text": "Check the number of tasks on The Heist story card that were completed during this scenario.",
-      "min": 0,
-      "effects": [
-        {
-          "do": "count",
-          "id": "fofHeistTasks",
-          "section": "hidden",
-          "op": "set",
-          "value": "input"
-        }
-      ],
-      "steps": []
-    },
-    "fortune-and-folly-part-2:check_skipped_part_1_tasks:yes:fx": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "count",
-          "id": "fofHeistTasks",
-          "section": "hidden",
-          "op": "add",
-          "value": 2
-        }
-      ]
-    },
-    "fortune-and-folly-part-2:add_2_completed_tasks:text": {
-      "kind": "story",
-      "text": "Treat the number of tasks completed as two more than what was completed during the scenario <i>(this is handled automatically)</i>.",
-      "bullets": []
-    },
-    "fortune-and-folly-part-2:check_skipped_part_1_tasks": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "fofSkipPart1",
-        "section": "hidden"
-      },
-      "then": [
-        "fortune-and-folly-part-2:check_skipped_part_1_tasks:yes:fx",
-        "fortune-and-folly-part-2:add_2_completed_tasks:text"
-      ],
-      "else": []
-    },
-    "fortune-and-folly-part-2:task_bonus_experience:default:fx": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": -4,
-          "who": "each",
-          "victory": false
-        }
-      ]
-    },
-    "fortune-and-folly-part-2:task_bonus_experience#3": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logCount",
-        "id": "fofHeistTasks",
-        "section": "hidden",
-        "min": 3,
-        "max": 3
-      },
-      "then": [],
-      "else": [
-        "fortune-and-folly-part-2:task_bonus_experience:default:fx"
-      ]
-    },
-    "fortune-and-folly-part-2:task_bonus_experience#2": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logCount",
-        "id": "fofHeistTasks",
-        "section": "hidden",
-        "min": 2,
-        "max": 2
-      },
-      "then": [],
-      "else": [
-        "fortune-and-folly-part-2:task_bonus_experience#3"
-      ]
-    },
-    "fortune-and-folly-part-2:task_bonus_experience#1": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logCount",
-        "id": "fofHeistTasks",
-        "section": "hidden",
-        "min": 1,
-        "max": 1
-      },
-      "then": [],
-      "else": [
-        "fortune-and-folly-part-2:task_bonus_experience#2"
-      ]
-    },
-    "fortune-and-folly-part-2:task_bonus_experience": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logCount",
-        "id": "fofHeistTasks",
-        "section": "hidden",
-        "min": 0,
-        "max": 0
-      },
-      "then": [],
-      "else": [
-        "fortune-and-folly-part-2:task_bonus_experience#1"
-      ]
-    },
-    "fortune-and-folly-part-2:no_additional_rewards:text": {
-      "kind": "story",
-      "text": "No additional rewards are granted.",
-      "bullets": []
-    },
-    "fortune-and-folly-part-2:earn_isamara:text": {
-      "kind": "story",
-      "text": "The investigators have earned Isamara Ordoñez. Any one investigator may choose to add Isamara Ordoñez <i>(The Torch Singer)</i> to their deck. This card does not count toward that investigator's deck size.",
-      "bullets": []
-    },
-    "fortune-and-folly-part-2:earn_isamara": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "earnCard",
-          "code": "88044",
-          "who": "choice"
-        }
-      ]
-    },
-    "fortune-and-folly-part-2:ask_isamara_in_play": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "yes",
-          "text": "Was Isamara Ordoñez in play at the end of the scenario?",
-          "effects": [],
-          "steps": [
-            "fortune-and-folly-part-2:earn_isamara:text",
-            "fortune-and-folly-part-2:earn_isamara"
-          ]
-        }
-      ]
-    },
-    "fortune-and-folly-part-2:earn_deck_of_possibilities:text": {
-      "kind": "story",
-      "text": "If 6 or more tasks were completed, the investigators have earned the Deck of Possibilities. Any one investigator may choose to add the Deck of Possibilities to their deck. This card does not count toward that investigator's deck size. During the setup of each scenario, that investigator gathers the encounter cards from Fortune and Folly with the following game icons: J♠, J♥, J♦, J♣, Q♦, Q♠, K♣, K♥, A♠. These cards are shuffled into a separate \"possibilities deck.\" <i>(Alternatively, you may use standard playing cards instead of encounter cards from</i> Fortune and Folly.<i>)</i>",
-      "bullets": []
-    },
-    "fortune-and-folly-part-2:earn_deck_of_possibilities": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "earnCard",
-          "code": "88043",
-          "who": "choice"
-        }
-      ]
-    },
-    "fortune-and-folly-part-2:check_6_or_more_tasks": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "multi",
-        "take": false
-      },
-      "then": [
-        "fortune-and-folly-part-2:earn_deck_of_possibilities:text",
-        "fortune-and-folly-part-2:earn_deck_of_possibilities"
-      ],
-      "else": []
-    },
-    "fortune-and-folly-part-2:check_5_or_more_tasks": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "multi",
-        "take": false
-      },
-      "then": [
-        "fortune-and-folly-part-2:ask_isamara_in_play",
-        "fortune-and-folly-part-2:check_6_or_more_tasks"
-      ],
-      "else": []
-    },
-    "fortune-and-folly-part-2:check_4_or_fewer_tasks": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "multi",
-        "take": false
-      },
-      "then": [
-        "fortune-and-folly-part-2:no_additional_rewards:text"
-      ],
-      "else": [
-        "fortune-and-folly-part-2:check_5_or_more_tasks"
-      ]
-    },
-    "fortune-and-folly-part-2:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "fortune-and-folly-part-2:abarran_has_wellspring:text": {
-      "kind": "story",
-      "text": "Abarran Arrigorriagakoa is the bearer of The Wellspring of Fortune. Update the Campaign Log accordingly.",
-      "bullets": []
-    },
-    "fortune-and-folly-part-2:check_playing_tsk_lost_key": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "multi",
-        "take": false
-      },
-      "then": [
-        "fortune-and-folly-part-2:cell_meddled_in_abarrans_affairs",
-        "fortune-and-folly-part-2:abarran_has_wellspring:text"
-      ],
-      "else": []
-    },
-    "fortune-and-folly-part-2:fortunes_chosen_bound_you_with_bad_luck:text": {
-      "kind": "story",
-      "text": "In your Campaign Log, record that <i>Fortune's Chosen have bound you with bad luck.</i> Choose any number token in the chaos bag. Replace it with a number token of a value 2 lower <i>(e.g. You may replace a 0 token with a -2 token, or a -3 token with a -5 token).</i>",
-      "bullets": []
-    },
-    "fortune-and-folly-part-2:bad_token_swap": {
-      "kind": "chooseOne",
-      "text": "Which token do you want to replace?",
-      "choices": [
-        {
-          "id": "+1",
-          "text": "+1",
-          "effects": [
-            {
-              "do": "removeChaosToken",
-              "token": "+1"
-            },
-            {
-              "do": "addChaosToken",
-              "token": "-1"
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "0",
-          "text": "0",
-          "effects": [
-            {
-              "do": "removeChaosToken",
-              "token": "0"
-            },
-            {
-              "do": "addChaosToken",
-              "token": "-2"
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "-1",
-          "text": "−1",
-          "effects": [
-            {
-              "do": "removeChaosToken",
-              "token": "-1"
-            },
-            {
-              "do": "addChaosToken",
-              "token": "-3"
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "-2",
-          "text": "−2",
-          "effects": [
-            {
-              "do": "removeChaosToken",
-              "token": "-2"
-            },
-            {
-              "do": "addChaosToken",
-              "token": "-4"
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "-3",
-          "text": "−3",
-          "effects": [
-            {
-              "do": "removeChaosToken",
-              "token": "-3"
-            },
-            {
-              "do": "addChaosToken",
-              "token": "-5"
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "-4",
-          "text": "−4",
-          "effects": [
-            {
-              "do": "removeChaosToken",
-              "token": "-4"
-            },
-            {
-              "do": "addChaosToken",
-              "token": "-6"
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "-5",
-          "text": "−5",
-          "effects": [
-            {
-              "do": "removeChaosToken",
-              "token": "-5"
-            },
-            {
-              "do": "addChaosToken",
-              "token": "-7"
-            }
-          ],
-          "steps": []
-        },
-        {
-          "id": "-6",
-          "text": "−6",
-          "effects": [
-            {
-              "do": "removeChaosToken",
-              "token": "-6"
-            },
-            {
-              "do": "addChaosToken",
-              "token": "-8"
-            }
-          ],
-          "steps": []
         }
       ]
     }

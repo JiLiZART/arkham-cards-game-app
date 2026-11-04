@@ -127,31 +127,6 @@
         }
       ]
     },
-    "R1": {
-      "title": "Resolution 1",
-      "text": "…And so ended the madness of The King in Yellow.",
-      "effects": [
-        {
-          "do": "record",
-          "key": "kingClaimedVictims",
-          "value": true
-        },
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 0,
-          "who": "each"
-        },
-        {
-          "do": "addChaosToken",
-          "token": "cultist"
-        },
-        {
-          "do": "addChaosToken",
-          "token": "cultist"
-        }
-      ]
-    },
     "R2": {
       "title": "Resolution 2",
       "text": "You are confronted by a number of orderlies and security guards, who bar your escape. Feeling cornered and trapped, you have no choice but to fight your way through them. As you struggle to escape, several of the patients nearby see their opportunity, and attack the guards with a crazed fury. Nurse Heather shrieks and retreats, and in the ruckus you are able to escape, bruised and battered but free once more. It will take some time for your wounds to heal, but you have no time for that yet.",

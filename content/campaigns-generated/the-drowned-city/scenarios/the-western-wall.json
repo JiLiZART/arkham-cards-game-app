@@ -151,18 +151,6 @@
           "who": "each"
         }
       ]
-    },
-    "R3": {
-      "title": "Resolution 3",
-      "text": "An ancient dome shimmers enticingly on the sea floor. As you marvel at the strange sights, a chunk of obsidian loosens and falls from up above onto the seafloor dome. Rather than shatter, the dome ripples, pliant, as the rock falls through with a thunderous crash. Something in the center projects a barrier that repels water, but allows solid things to pass through.\nWhatever strange technology is in the dome, Tillinghast will likely be interested in it. However, you could also proceed into R’lyeh: a round door in the base of the wall, contained under the same shimmering field as the dome, beckons you into the city.",
-      "effects": [
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 0,
-          "who": "each"
-        }
-      ]
     }
   },
   "i18nId": "the_western_wall",

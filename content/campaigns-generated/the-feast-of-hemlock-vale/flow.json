@@ -56,37 +56,76 @@
       ],
       "R1": [
         "written-in-rock:simeon_survived:text",
-        "written-in-rock:simeon_survived"
-      ],
-      "R2": [
-        "written-in-rock:leah_saw_something:text",
-        "written-in-rock:leah_saw_something"
-      ],
-      "R3": [
-        "written-in-rock:simeon_disappeared:text",
-        "written-in-rock:simeon_disappeared"
-      ],
-      "R4": [
-        "written-in-rock:leah_and_simeon_reunited:text",
-        "written-in-rock:leah_and_simeon_reunited"
-      ],
-      "R5": [
-        "written-in-rock:survived_the_horrors_in_the_rock"
-      ],
-      "R6": [
+        "written-in-rock:simeon_survived",
         "written-in-rock:ask_prismatic_shard",
         "written-in-rock:check_helped_river",
         "written-in-rock:earn_xp",
         "written-in-rock:transfer_xp",
         "written-in-rock:upgradeDecks",
         "written-in-rock:update_areas_surveyed:text",
-        "written-in-rock:update_areas_surveyed"
+        "written-in-rock:update_areas_surveyed",
+        "written-in-rock:$find_next_scenario",
+        "written-in-rock:$advance_time",
+        "written-in-rock:$update_day"
+      ],
+      "R2": [
+        "written-in-rock:leah_saw_something:text",
+        "written-in-rock:leah_saw_something",
+        "written-in-rock:ask_prismatic_shard",
+        "written-in-rock:check_helped_river",
+        "written-in-rock:earn_xp",
+        "written-in-rock:transfer_xp",
+        "written-in-rock:upgradeDecks",
+        "written-in-rock:update_areas_surveyed:text",
+        "written-in-rock:update_areas_surveyed",
+        "written-in-rock:$find_next_scenario",
+        "written-in-rock:$advance_time",
+        "written-in-rock:$update_day"
+      ],
+      "R3": [
+        "written-in-rock:simeon_disappeared:text",
+        "written-in-rock:simeon_disappeared",
+        "written-in-rock:ask_prismatic_shard",
+        "written-in-rock:check_helped_river",
+        "written-in-rock:earn_xp",
+        "written-in-rock:transfer_xp",
+        "written-in-rock:upgradeDecks",
+        "written-in-rock:update_areas_surveyed:text",
+        "written-in-rock:update_areas_surveyed",
+        "written-in-rock:$find_next_scenario",
+        "written-in-rock:$advance_time",
+        "written-in-rock:$update_day"
+      ],
+      "R4": [
+        "written-in-rock:leah_and_simeon_reunited:text",
+        "written-in-rock:leah_and_simeon_reunited",
+        "written-in-rock:ask_prismatic_shard",
+        "written-in-rock:check_helped_river",
+        "written-in-rock:earn_xp",
+        "written-in-rock:transfer_xp",
+        "written-in-rock:upgradeDecks",
+        "written-in-rock:update_areas_surveyed:text",
+        "written-in-rock:update_areas_surveyed",
+        "written-in-rock:$find_next_scenario",
+        "written-in-rock:$advance_time",
+        "written-in-rock:$update_day"
+      ],
+      "R5": [
+        "written-in-rock:survived_the_horrors_in_the_rock",
+        "written-in-rock:ask_prismatic_shard",
+        "written-in-rock:check_helped_river",
+        "written-in-rock:earn_xp",
+        "written-in-rock:transfer_xp",
+        "written-in-rock:upgradeDecks",
+        "written-in-rock:update_areas_surveyed:text",
+        "written-in-rock:update_areas_surveyed",
+        "written-in-rock:$find_next_scenario",
+        "written-in-rock:$advance_time",
+        "written-in-rock:$update_day"
       ]
     },
     "hemlock-house": {
-      "none": [],
-      "R1": [],
-      "R2": [
+      "none": [
         "hemlock-house:predation_bag_stuff:text",
         "hemlock-house:check_earn_little_sylvie",
         "hemlock-house:check_victory_display_intro:text",
@@ -99,101 +138,171 @@
         "hemlock-house:transfer_xp",
         "hemlock-house:upgradeDecks",
         "hemlock-house:update_areas_surveyed:text",
-        "hemlock-house:update_areas_surveyed"
+        "hemlock-house:update_areas_surveyed",
+        "hemlock-house:$find_next_scenario",
+        "hemlock-house:$advance_time",
+        "hemlock-house:$update_day"
+      ],
+      "R1": [
+        "hemlock-house:predation_bag_stuff:text",
+        "hemlock-house:check_earn_little_sylvie",
+        "hemlock-house:check_victory_display_intro:text",
+        "hemlock-house:ask_seals_in_play",
+        "hemlock-house:check_seals_in_play",
+        "hemlock-house:ask_enemy_locations_in_victory_display",
+        "hemlock-house:check_enemy_locations_in_victory_display",
+        "hemlock-house:maybe_ask_judith_remodeling",
+        "hemlock-house:earn_xp",
+        "hemlock-house:transfer_xp",
+        "hemlock-house:upgradeDecks",
+        "hemlock-house:update_areas_surveyed:text",
+        "hemlock-house:update_areas_surveyed",
+        "hemlock-house:$find_next_scenario",
+        "hemlock-house:$advance_time",
+        "hemlock-house:$update_day"
       ]
     },
     "the-silent-heath": {
       "none": [
-        "the-silent-heath:ask_crystal_remains"
+        "the-silent-heath:ask_crystal_remains",
+        "the-silent-heath:check_cyrstal_remains"
       ],
       "R1": [
-        "the-silent-heath:laid_the_pearl_family_to_rest"
-      ],
-      "R2": [
-        "the-silent-heath:remains_were_partially_recovered"
-      ],
-      "R3": [
-        "the-silent-heath:madame_pearls_diary_was_recovered"
-      ],
-      "R4": [
+        "the-silent-heath:laid_the_pearl_family_to_rest",
+        "the-silent-heath:madame_pearls_diary_was_recovered",
         "the-silent-heath:earn_xp",
         "the-silent-heath:transfer_xp",
         "the-silent-heath:upgradeDecks",
         "the-silent-heath:update_areas_surveyed:text",
-        "the-silent-heath:update_areas_surveyed"
+        "the-silent-heath:update_areas_surveyed",
+        "the-silent-heath:$find_next_scenario",
+        "the-silent-heath:$advance_time",
+        "the-silent-heath:$update_day"
+      ],
+      "R2": [
+        "the-silent-heath:remains_were_partially_recovered",
+        "the-silent-heath:madame_pearls_diary_was_recovered",
+        "the-silent-heath:earn_xp",
+        "the-silent-heath:transfer_xp",
+        "the-silent-heath:upgradeDecks",
+        "the-silent-heath:update_areas_surveyed:text",
+        "the-silent-heath:update_areas_surveyed",
+        "the-silent-heath:$find_next_scenario",
+        "the-silent-heath:$advance_time",
+        "the-silent-heath:$update_day"
       ]
     },
     "the-lost-sister": {
       "none": [
         "the-lost-sister:no_resolution_bonus_xp:text",
-        "the-lost-sister:no_resolution_bonus_xp"
-      ],
-      "R1": [],
-      "R2": [
-        "the-lost-sister:two_bonus_xp_saving_sister:text",
-        "the-lost-sister:two_bonus_xp_saving_sister",
-        "the-lost-sister:the_peters_family_was_reunited"
-      ],
-      "R3": [
-        "the-lost-sister:two_bonus_xp_saving_sister:text",
-        "the-lost-sister:two_bonus_xp_saving_sister",
-        "the-lost-sister:elizabeth_peters_was_saved"
-      ],
-      "R4": [
+        "the-lost-sister:no_resolution_bonus_xp",
         "the-lost-sister:check_gideon_searching_for_an_heirloom",
         "the-lost-sister:earn_xp",
         "the-lost-sister:transfer_xp",
         "the-lost-sister:upgradeDecks",
         "the-lost-sister:update_areas_surveyed:text",
-        "the-lost-sister:update_areas_surveyed"
+        "the-lost-sister:update_areas_surveyed",
+        "the-lost-sister:$find_next_scenario",
+        "the-lost-sister:$advance_time",
+        "the-lost-sister:$update_day"
+      ],
+      "R1": [
+        "the-lost-sister:check_resolution_theo_reconciled_with_helen"
+      ],
+      "R2": [
+        "the-lost-sister:two_bonus_xp_saving_sister:text",
+        "the-lost-sister:two_bonus_xp_saving_sister",
+        "the-lost-sister:the_peters_family_was_reunited",
+        "the-lost-sister:check_gideon_searching_for_an_heirloom",
+        "the-lost-sister:earn_xp",
+        "the-lost-sister:transfer_xp",
+        "the-lost-sister:upgradeDecks",
+        "the-lost-sister:update_areas_surveyed:text",
+        "the-lost-sister:update_areas_surveyed",
+        "the-lost-sister:$find_next_scenario",
+        "the-lost-sister:$advance_time",
+        "the-lost-sister:$update_day"
       ]
     },
     "the-thing-in-the-depths": {
       "none": [
         "the-thing-in-the-depths:no_resolution_bonus_xp:text",
-        "the-thing-in-the-depths:no_resolution_bonus_xp"
-      ],
-      "R1": [
-        "the-thing-in-the-depths:chelydran_hybrid_perished",
-        "the-thing-in-the-depths:study_bonus_xp:text",
-        "the-thing-in-the-depths:study_bonus_xp"
-      ],
-      "R2": [
-        "the-thing-in-the-depths:chelydran_hybrid_lived",
-        "the-thing-in-the-depths:lived_bonus_xp:text",
-        "the-thing-in-the-depths:lived_bonus_xp"
-      ],
-      "R3": [
-        "the-thing-in-the-depths:chelydran_hybrid_devoured",
-        "the-thing-in-the-depths:mental_trauma:text",
-        "the-thing-in-the-depths:mental_trauma",
-        "the-thing-in-the-depths:devoured_bonus_xp:text",
-        "the-thing-in-the-depths:devoured_bonus_xp"
-      ],
-      "R4": [
-        "the-thing-in-the-depths:thing_in_the_depths_was_defeated"
-      ],
-      "R5": [
+        "the-thing-in-the-depths:no_resolution_bonus_xp",
         "the-thing-in-the-depths:check_river_asked_for_help",
         "the-thing-in-the-depths:check_judith_shared_a_grudge_resolution",
         "the-thing-in-the-depths:earn_xp",
         "the-thing-in-the-depths:transfer_xp",
         "the-thing-in-the-depths:upgradeDecks",
         "the-thing-in-the-depths:update_areas_surveyed:text",
-        "the-thing-in-the-depths:update_areas_surveyed"
+        "the-thing-in-the-depths:update_areas_surveyed",
+        "the-thing-in-the-depths:$find_next_scenario",
+        "the-thing-in-the-depths:$advance_time",
+        "the-thing-in-the-depths:$update_day"
+      ],
+      "R1": [
+        "the-thing-in-the-depths:chelydran_hybrid_perished",
+        "the-thing-in-the-depths:study_bonus_xp:text",
+        "the-thing-in-the-depths:study_bonus_xp",
+        "the-thing-in-the-depths:check_river_asked_for_help",
+        "the-thing-in-the-depths:check_judith_shared_a_grudge_resolution",
+        "the-thing-in-the-depths:earn_xp",
+        "the-thing-in-the-depths:transfer_xp",
+        "the-thing-in-the-depths:upgradeDecks",
+        "the-thing-in-the-depths:update_areas_surveyed:text",
+        "the-thing-in-the-depths:update_areas_surveyed",
+        "the-thing-in-the-depths:$find_next_scenario",
+        "the-thing-in-the-depths:$advance_time",
+        "the-thing-in-the-depths:$update_day"
+      ],
+      "R2": [
+        "the-thing-in-the-depths:chelydran_hybrid_lived",
+        "the-thing-in-the-depths:lived_bonus_xp:text",
+        "the-thing-in-the-depths:lived_bonus_xp",
+        "the-thing-in-the-depths:check_river_asked_for_help",
+        "the-thing-in-the-depths:check_judith_shared_a_grudge_resolution",
+        "the-thing-in-the-depths:earn_xp",
+        "the-thing-in-the-depths:transfer_xp",
+        "the-thing-in-the-depths:upgradeDecks",
+        "the-thing-in-the-depths:update_areas_surveyed:text",
+        "the-thing-in-the-depths:update_areas_surveyed",
+        "the-thing-in-the-depths:$find_next_scenario",
+        "the-thing-in-the-depths:$advance_time",
+        "the-thing-in-the-depths:$update_day"
+      ],
+      "R3": [
+        "the-thing-in-the-depths:chelydran_hybrid_devoured",
+        "the-thing-in-the-depths:mental_trauma:text",
+        "the-thing-in-the-depths:mental_trauma",
+        "the-thing-in-the-depths:devoured_bonus_xp:text",
+        "the-thing-in-the-depths:devoured_bonus_xp",
+        "the-thing-in-the-depths:check_river_asked_for_help",
+        "the-thing-in-the-depths:check_judith_shared_a_grudge_resolution",
+        "the-thing-in-the-depths:earn_xp",
+        "the-thing-in-the-depths:transfer_xp",
+        "the-thing-in-the-depths:upgradeDecks",
+        "the-thing-in-the-depths:update_areas_surveyed:text",
+        "the-thing-in-the-depths:update_areas_surveyed",
+        "the-thing-in-the-depths:$find_next_scenario",
+        "the-thing-in-the-depths:$advance_time",
+        "the-thing-in-the-depths:$update_day"
+      ],
+      "R4": [
+        "the-thing-in-the-depths:thing_in_the_depths_was_defeated",
+        "the-thing-in-the-depths:check_river_asked_for_help",
+        "the-thing-in-the-depths:check_judith_shared_a_grudge_resolution",
+        "the-thing-in-the-depths:earn_xp",
+        "the-thing-in-the-depths:transfer_xp",
+        "the-thing-in-the-depths:upgradeDecks",
+        "the-thing-in-the-depths:update_areas_surveyed:text",
+        "the-thing-in-the-depths:update_areas_surveyed",
+        "the-thing-in-the-depths:$find_next_scenario",
+        "the-thing-in-the-depths:$advance_time",
+        "the-thing-in-the-depths:$update_day"
       ]
     },
     "the-twisted-hollow": {
       "none": [
-        "the-twisted-hollow:bertie_was_lost_in_the_woods"
-      ],
-      "R1": [
-        "the-twisted-hollow:bertie_was_rescued"
-      ],
-      "R2": [
-        "the-twisted-hollow:bertie_was_lost_in_the_woods"
-      ],
-      "R3": [
+        "the-twisted-hollow:bertie_was_lost_in_the_woods",
         "the-twisted-hollow:bonus_xp:text",
         "the-twisted-hollow:bonus_xp",
         "the-twisted-hollow:check_bertie_resigned",
@@ -203,38 +312,66 @@
         "the-twisted-hollow:upgradeDecks",
         "the-twisted-hollow:update_areas_surveyed:text",
         "the-twisted-hollow:update_areas_surveyed",
-        "the-twisted-hollow:set_next_scenario"
+        "the-twisted-hollow:set_next_scenario",
+        "the-twisted-hollow:$advance_time",
+        "the-twisted-hollow:$update_day"
+      ],
+      "R1": [
+        "the-twisted-hollow:bertie_was_rescued",
+        "the-twisted-hollow:bonus_xp:text",
+        "the-twisted-hollow:bonus_xp",
+        "the-twisted-hollow:check_bertie_resigned",
+        "the-twisted-hollow:ask_ursine_hybrid_in_victory_display",
+        "the-twisted-hollow:earn_xp",
+        "the-twisted-hollow:transfer_xp",
+        "the-twisted-hollow:upgradeDecks",
+        "the-twisted-hollow:update_areas_surveyed:text",
+        "the-twisted-hollow:update_areas_surveyed",
+        "the-twisted-hollow:set_next_scenario",
+        "the-twisted-hollow:$advance_time",
+        "the-twisted-hollow:$update_day"
+      ],
+      "R2": [
+        "the-twisted-hollow:bertie_was_lost_in_the_woods",
+        "the-twisted-hollow:bonus_xp:text",
+        "the-twisted-hollow:bonus_xp",
+        "the-twisted-hollow:check_bertie_resigned",
+        "the-twisted-hollow:ask_ursine_hybrid_in_victory_display",
+        "the-twisted-hollow:earn_xp",
+        "the-twisted-hollow:transfer_xp",
+        "the-twisted-hollow:upgradeDecks",
+        "the-twisted-hollow:update_areas_surveyed:text",
+        "the-twisted-hollow:update_areas_surveyed",
+        "the-twisted-hollow:set_next_scenario",
+        "the-twisted-hollow:$advance_time",
+        "the-twisted-hollow:$update_day"
       ]
     },
     "dawn-of-the-second-day": {
-      "R1": [],
-      "R2": [],
+      "R1": [
+        "dawn-of-the-second-day:no_xp:text",
+        "dawn-of-the-second-day:survey_preparations:text",
+        "dawn-of-the-second-day:next_scenario:text",
+        "dawn-of-the-second-day:$choose_next_scenario_day"
+      ],
+      "R2": [
+        "dawn-of-the-second-day:no_xp:text",
+        "dawn-of-the-second-day:survey_preparations:text",
+        "dawn-of-the-second-day:next_scenario:text",
+        "dawn-of-the-second-day:$choose_next_scenario_day"
+      ],
       "R3": [
         "dawn-of-the-second-day:no_xp:text",
         "dawn-of-the-second-day:survey_preparations:text",
-        "dawn-of-the-second-day:next_scenario:text"
+        "dawn-of-the-second-day:next_scenario:text",
+        "dawn-of-the-second-day:$choose_next_scenario_day"
       ]
     },
     "the-longest-night": {
-      "none": [],
-      "R1": [
-        "the-longest-night:maybe_ask_agenda_flip",
-        "the-longest-night:ask_damage_on_captives",
-        "the-longest-night:check_damage_on_captives",
-        "the-longest-night:captives_were_saved"
-      ],
-      "R2": [
-        "the-longest-night:maybe_ask_agenda_flip",
-        "the-longest-night:ask_damage_on_captives_bad",
-        "the-longest-night:check_damage_on_captives",
-        "the-longest-night:many_captives_were_lost"
-      ],
-      "R3": [
+      "none": [
         "the-longest-night:guilt_madness_weakness:text",
         "the-longest-night:guilt_madness_weakness",
-        "the-longest-night:all_the_captives_were_lost"
-      ],
-      "R4": [
+        "the-longest-night:all_the_captives_were_lost",
         "the-longest-night:maybe_check_ajax",
         "the-longest-night:earn_marquez:text",
         "the-longest-night:earn_marquez",
@@ -243,39 +380,108 @@
         "the-longest-night:upgradeDecks",
         "the-longest-night:update_areas_surveyed:text",
         "the-longest-night:update_areas_surveyed",
-        "the-longest-night:set_next_scenario"
+        "the-longest-night:set_next_scenario",
+        "the-longest-night:$advance_time",
+        "the-longest-night:$update_day"
+      ],
+      "R1": [
+        "the-longest-night:maybe_ask_agenda_flip",
+        "the-longest-night:ask_damage_on_captives",
+        "the-longest-night:check_damage_on_captives",
+        "the-longest-night:captives_were_saved",
+        "the-longest-night:maybe_check_ajax",
+        "the-longest-night:earn_marquez:text",
+        "the-longest-night:earn_marquez",
+        "the-longest-night:earn_xp",
+        "the-longest-night:transfer_xp",
+        "the-longest-night:upgradeDecks",
+        "the-longest-night:update_areas_surveyed:text",
+        "the-longest-night:update_areas_surveyed",
+        "the-longest-night:set_next_scenario",
+        "the-longest-night:$advance_time",
+        "the-longest-night:$update_day"
+      ],
+      "R2": [
+        "the-longest-night:maybe_ask_agenda_flip",
+        "the-longest-night:ask_damage_on_captives_bad",
+        "the-longest-night:check_damage_on_captives",
+        "the-longest-night:many_captives_were_lost",
+        "the-longest-night:maybe_check_ajax",
+        "the-longest-night:earn_marquez:text",
+        "the-longest-night:earn_marquez",
+        "the-longest-night:earn_xp",
+        "the-longest-night:transfer_xp",
+        "the-longest-night:upgradeDecks",
+        "the-longest-night:update_areas_surveyed:text",
+        "the-longest-night:update_areas_surveyed",
+        "the-longest-night:set_next_scenario",
+        "the-longest-night:$advance_time",
+        "the-longest-night:$update_day"
+      ],
+      "R3": [
+        "the-longest-night:guilt_madness_weakness:text",
+        "the-longest-night:guilt_madness_weakness",
+        "the-longest-night:all_the_captives_were_lost",
+        "the-longest-night:maybe_check_ajax",
+        "the-longest-night:earn_marquez:text",
+        "the-longest-night:earn_marquez",
+        "the-longest-night:earn_xp",
+        "the-longest-night:transfer_xp",
+        "the-longest-night:upgradeDecks",
+        "the-longest-night:update_areas_surveyed:text",
+        "the-longest-night:update_areas_surveyed",
+        "the-longest-night:set_next_scenario",
+        "the-longest-night:$advance_time",
+        "the-longest-night:$update_day"
       ]
     },
     "dawn-of-the-final-day": {
       "none": [
-        "dawn-of-the-final-day:doon_lead_investigator:text"
+        "dawn-of-the-final-day:doon_lead_investigator:text",
+        "dawn-of-the-final-day:check_simeon_fireworks",
+        "dawn-of-the-final-day:earn_xp:text",
+        "dawn-of-the-final-day:survey_preparations:text",
+        "dawn-of-the-final-day:next_scenario:text",
+        "dawn-of-the-final-day:$choose_next_scenario_day"
       ],
       "R1": [
         "dawn-of-the-final-day:dr_marquez_has_a_hunch",
-        "dawn-of-the-final-day:hidden_check_dr_marquez_has_a_plan"
+        "dawn-of-the-final-day:hidden_check_dr_marquez_has_a_plan",
+        "dawn-of-the-final-day:check_simeon_fireworks",
+        "dawn-of-the-final-day:earn_xp:text",
+        "dawn-of-the-final-day:survey_preparations:text",
+        "dawn-of-the-final-day:next_scenario:text",
+        "dawn-of-the-final-day:$choose_next_scenario_day"
       ],
       "R2": [
         "dawn-of-the-final-day:check_simeon_fireworks",
         "dawn-of-the-final-day:earn_xp:text",
         "dawn-of-the-final-day:survey_preparations:text",
-        "dawn-of-the-final-day:next_scenario:text"
+        "dawn-of-the-final-day:next_scenario:text",
+        "dawn-of-the-final-day:$choose_next_scenario_day"
       ]
     },
     "the-final-evening": {
-      "none": [],
-      "R1": [],
-      "R2": [],
-      "R3": [
+      "none": [
+        "the-final-evening:check_investigators_believed_resolution"
+      ],
+      "R1": [
+        "the-final-evening:earn_xp",
+        "the-final-evening:transfer_xp",
+        "the-final-evening:upgradeDecks",
+        "the-final-evening:set_next_scenario"
+      ],
+      "R2": [
         "the-final-evening:devoured_by_colour:text",
         "the-final-evening:explain_replay:text",
         "the-final-evening:ask_replay",
         "the-final-evening:check_replay"
       ],
-      "R4": [
-        "the-final-evening:earn_xp",
-        "the-final-evening:transfer_xp",
-        "the-final-evening:upgradeDecks",
-        "the-final-evening:set_next_scenario"
+      "R3": [
+        "the-final-evening:devoured_by_colour:text",
+        "the-final-evening:explain_replay:text",
+        "the-final-evening:ask_replay",
+        "the-final-evening:check_replay"
       ]
     },
     "fate-of-the-vale": {
@@ -362,12 +568,42 @@
       "the-twisted-hollow:check_theo",
       "the-twisted-hollow:check_judith"
     ],
+    "dawn-of-the-second-day": [
+      "dawn-of-the-second-day:$fatigue_tokens_1",
+      "dawn-of-the-second-day:$fatigue_tokens_2",
+      "dawn-of-the-second-day:check_simeon"
+    ],
     "the-longest-night": [
       "the-longest-night:choose_confront",
-      "the-longest-night:check_shared_dance"
+      "the-longest-night:check_shared_dance",
+      "the-longest-night:check_leah_shared_a_dance",
+      "the-longest-night:check_simeon_shared_a_dance",
+      "the-longest-night:check_william_shared_a_dance",
+      "the-longest-night:check_river_shared_a_dance",
+      "the-longest-night:check_gideon_shared_a_dance",
+      "the-longest-night:check_judith_shared_a_dance",
+      "the-longest-night:check_theo_shared_a_dance"
+    ],
+    "dawn-of-the-final-day": [
+      "dawn-of-the-final-day:$fatigue_tokens_1",
+      "dawn-of-the-final-day:$fatigue_tokens_2",
+      "dawn-of-the-final-day:check_leah",
+      "dawn-of-the-final-day:check_river",
+      "dawn-of-the-final-day:check_judith",
+      "dawn-of-the-final-day:check_william",
+      "dawn-of-the-final-day:check_theo",
+      "dawn-of-the-final-day:check_gideon"
     ],
     "the-final-evening": [
-      "the-final-evening:check_dr_marquez_has_a_plan"
+      "the-final-evening:check_dr_marquez_has_a_plan",
+      "the-final-evening:check_leah",
+      "the-final-evening:check_simeon",
+      "the-final-evening:check_river",
+      "the-final-evening:check_judith",
+      "the-final-evening:check_william",
+      "the-final-evening:check_theo",
+      "the-final-evening:check_gideon",
+      "the-final-evening:check_bertie_had_an_epiphany"
     ]
   },
   "steps": {
@@ -579,171 +815,6 @@
       "text": "Check your Campaign Log. Because it is <b>Day 1</b> or <b>Day 2</b>:",
       "bullets": []
     },
-    "written-in-rock:no_resolution_night:text": {
-      "kind": "story",
-      "text": "Check your Campaign Log. Because it is <b>Night 1</b> or <b>Night 2</b>:",
-      "bullets": []
-    },
-    "written-in-rock:cross_out_simeon:text": {
-      "kind": "story",
-      "text": "Cross out Simeon Atwood’s name.",
-      "bullets": []
-    },
-    "written-in-rock:cross_out_simeon": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "crossOut",
-          "key": "simeonPlanIsUnderway",
-          "section": "hidden"
-        }
-      ]
-    },
-    "written-in-rock:no_resolution_day_3:text": {
-      "kind": "story",
-      "text": "Check your Campaign Log. Because it is <b>Day 3</b>:",
-      "bullets": []
-    },
-    "written-in-rock:check_no_resolution_day#4": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logCount",
-        "id": "day",
-        "section": "hidden",
-        "min": 5,
-        "max": 5
-      },
-      "then": [
-        "written-in-rock:no_resolution_day_3:text"
-      ],
-      "else": []
-    },
-    "written-in-rock:check_no_resolution_day#3": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logCount",
-        "id": "day",
-        "section": "hidden",
-        "min": 4,
-        "max": 4
-      },
-      "then": [
-        "written-in-rock:no_resolution_night:text",
-        "written-in-rock:cross_out_simeon:text",
-        "written-in-rock:cross_out_simeon"
-      ],
-      "else": [
-        "written-in-rock:check_no_resolution_day#4"
-      ]
-    },
-    "written-in-rock:check_no_resolution_day#2": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logCount",
-        "id": "day",
-        "section": "hidden",
-        "min": 3,
-        "max": 3
-      },
-      "then": [
-        "written-in-rock:no_resolution_day_1_or_2:text"
-      ],
-      "else": [
-        "written-in-rock:check_no_resolution_day#3"
-      ]
-    },
-    "written-in-rock:check_no_resolution_day#1": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logCount",
-        "id": "day",
-        "section": "hidden",
-        "min": 2,
-        "max": 2
-      },
-      "then": [
-        "written-in-rock:no_resolution_night:text",
-        "written-in-rock:cross_out_simeon:text",
-        "written-in-rock:cross_out_simeon"
-      ],
-      "else": [
-        "written-in-rock:check_no_resolution_day#2"
-      ]
-    },
-    "written-in-rock:check_no_resolution_day": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logCount",
-        "id": "day",
-        "section": "hidden",
-        "min": 1,
-        "max": 1
-      },
-      "then": [
-        "written-in-rock:no_resolution_day_1_or_2:text"
-      ],
-      "else": [
-        "written-in-rock:check_no_resolution_day#1"
-      ]
-    },
-    "written-in-rock:simeon_survived:text": {
-      "kind": "story",
-      "text": "Update your Campaign Log.",
-      "bullets": []
-    },
-    "written-in-rock:simeon_survived": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "simeonSurvived",
-          "section": "simeon",
-          "value": true
-        },
-        {
-          "do": "count",
-          "id": "$relationship",
-          "section": "simeon",
-          "op": "add",
-          "value": 2
-        },
-        {
-          "do": "xp",
-          "bonus": 2,
-          "who": "each",
-          "victory": false
-        }
-      ]
-    },
-    "written-in-rock:leah_saw_something:text": {
-      "kind": "story",
-      "text": "Update your Campaign Log.",
-      "bullets": []
-    },
-    "written-in-rock:leah_saw_something": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "leahSawSomethingInTheMine",
-          "section": "leah",
-          "value": true
-        },
-        {
-          "do": "count",
-          "id": "$relationship",
-          "section": "leah",
-          "op": "add",
-          "value": 1
-        },
-        {
-          "do": "xp",
-          "bonus": 2,
-          "who": "each",
-          "victory": false
-        }
-      ]
-    },
     "written-in-rock:simeon_disappeared:text": {
       "kind": "story",
       "text": "Update your Campaign Log.",
@@ -762,33 +833,6 @@
           "do": "crossOut",
           "key": "simeonPlanIsUnderway",
           "section": "hidden"
-        }
-      ]
-    },
-    "written-in-rock:leah_and_simeon_reunited:text": {
-      "kind": "story",
-      "text": "Update your Campaign Log.",
-      "bullets": []
-    },
-    "written-in-rock:leah_and_simeon_reunited": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "leahAndSimeonWereReunited",
-          "section": "leah",
-          "value": true
-        }
-      ]
-    },
-    "written-in-rock:survived_the_horrors_in_the_rock": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "survivedTheHorrorsInTheRock",
-          "section": "campaign_notes",
-          "value": true
         }
       ]
     },
@@ -965,6 +1009,552 @@
           "do": "record",
           "key": "northPointMine",
           "section": "areasSurveyed",
+          "value": true
+        }
+      ]
+    },
+    "written-in-rock:$find_next_scenario:1:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "the-first-evening"
+        }
+      ]
+    },
+    "written-in-rock:$find_next_scenario:2:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "dawn-of-the-second-day"
+        }
+      ]
+    },
+    "written-in-rock:$find_next_scenario:3:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "the-second-evening"
+        }
+      ]
+    },
+    "written-in-rock:$find_next_scenario:4:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "dawn-of-the-final-day"
+        }
+      ]
+    },
+    "written-in-rock:$find_next_scenario:5:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "the-final-evening"
+        }
+      ]
+    },
+    "written-in-rock:$find_next_scenario#4": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 5,
+        "max": 5
+      },
+      "then": [
+        "written-in-rock:$find_next_scenario:5:fx"
+      ],
+      "else": []
+    },
+    "written-in-rock:$find_next_scenario#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "written-in-rock:$find_next_scenario:4:fx"
+      ],
+      "else": [
+        "written-in-rock:$find_next_scenario#4"
+      ]
+    },
+    "written-in-rock:$find_next_scenario#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "written-in-rock:$find_next_scenario:3:fx"
+      ],
+      "else": [
+        "written-in-rock:$find_next_scenario#3"
+      ]
+    },
+    "written-in-rock:$find_next_scenario#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "written-in-rock:$find_next_scenario:2:fx"
+      ],
+      "else": [
+        "written-in-rock:$find_next_scenario#2"
+      ]
+    },
+    "written-in-rock:$find_next_scenario": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 1,
+        "max": 1
+      },
+      "then": [
+        "written-in-rock:$find_next_scenario:1:fx"
+      ],
+      "else": [
+        "written-in-rock:$find_next_scenario#1"
+      ]
+    },
+    "written-in-rock:$advance_time": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "day",
+          "section": "hidden",
+          "op": "add",
+          "value": 1
+        }
+      ]
+    },
+    "written-in-rock:$update_day:2:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day1Day",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day1Night",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "written-in-rock:$update_day:3:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day1Night",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day2Day",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "written-in-rock:$update_day:4:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day2Day",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day2Night",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "written-in-rock:$update_day:5:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day2Night",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day3Day",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "written-in-rock:$update_day:6:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day3Day",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day3Night",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "written-in-rock:$update_day#4": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 6,
+        "max": 6
+      },
+      "then": [
+        "written-in-rock:$update_day:6:fx"
+      ],
+      "else": []
+    },
+    "written-in-rock:$update_day#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 5,
+        "max": 5
+      },
+      "then": [
+        "written-in-rock:$update_day:5:fx"
+      ],
+      "else": [
+        "written-in-rock:$update_day#4"
+      ]
+    },
+    "written-in-rock:$update_day#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "written-in-rock:$update_day:4:fx"
+      ],
+      "else": [
+        "written-in-rock:$update_day#3"
+      ]
+    },
+    "written-in-rock:$update_day#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "written-in-rock:$update_day:3:fx"
+      ],
+      "else": [
+        "written-in-rock:$update_day#2"
+      ]
+    },
+    "written-in-rock:$update_day": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "written-in-rock:$update_day:2:fx"
+      ],
+      "else": [
+        "written-in-rock:$update_day#1"
+      ]
+    },
+    "written-in-rock:no_resolution_night:text": {
+      "kind": "story",
+      "text": "Check your Campaign Log. Because it is <b>Night 1</b> or <b>Night 2</b>:",
+      "bullets": []
+    },
+    "written-in-rock:cross_out_simeon:text": {
+      "kind": "story",
+      "text": "Cross out Simeon Atwood’s name.",
+      "bullets": []
+    },
+    "written-in-rock:cross_out_simeon": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "simeonPlanIsUnderway",
+          "section": "hidden"
+        }
+      ]
+    },
+    "written-in-rock:no_resolution_day_3:text": {
+      "kind": "story",
+      "text": "Check your Campaign Log. Because it is <b>Day 3</b>:",
+      "bullets": []
+    },
+    "written-in-rock:leah_and_simeon_reunited:text": {
+      "kind": "story",
+      "text": "Update your Campaign Log.",
+      "bullets": []
+    },
+    "written-in-rock:leah_and_simeon_reunited": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "leahAndSimeonWereReunited",
+          "section": "leah",
+          "value": true
+        }
+      ]
+    },
+    "written-in-rock:check_no_resolution_day#4": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 5,
+        "max": 5
+      },
+      "then": [
+        "written-in-rock:no_resolution_day_3:text",
+        "written-in-rock:leah_and_simeon_reunited:text",
+        "written-in-rock:leah_and_simeon_reunited",
+        "written-in-rock:ask_prismatic_shard",
+        "written-in-rock:check_helped_river",
+        "written-in-rock:earn_xp",
+        "written-in-rock:transfer_xp",
+        "written-in-rock:upgradeDecks",
+        "written-in-rock:update_areas_surveyed:text",
+        "written-in-rock:update_areas_surveyed",
+        "written-in-rock:$find_next_scenario",
+        "written-in-rock:$advance_time",
+        "written-in-rock:$update_day"
+      ],
+      "else": []
+    },
+    "written-in-rock:check_no_resolution_day#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "written-in-rock:no_resolution_night:text",
+        "written-in-rock:cross_out_simeon:text",
+        "written-in-rock:cross_out_simeon",
+        "written-in-rock:ask_prismatic_shard",
+        "written-in-rock:check_helped_river",
+        "written-in-rock:earn_xp",
+        "written-in-rock:transfer_xp",
+        "written-in-rock:upgradeDecks",
+        "written-in-rock:update_areas_surveyed:text",
+        "written-in-rock:update_areas_surveyed",
+        "written-in-rock:$find_next_scenario",
+        "written-in-rock:$advance_time",
+        "written-in-rock:$update_day"
+      ],
+      "else": [
+        "written-in-rock:check_no_resolution_day#4"
+      ]
+    },
+    "written-in-rock:check_no_resolution_day#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "written-in-rock:no_resolution_day_1_or_2:text",
+        "written-in-rock:simeon_disappeared:text",
+        "written-in-rock:simeon_disappeared",
+        "written-in-rock:ask_prismatic_shard",
+        "written-in-rock:check_helped_river",
+        "written-in-rock:earn_xp",
+        "written-in-rock:transfer_xp",
+        "written-in-rock:upgradeDecks",
+        "written-in-rock:update_areas_surveyed:text",
+        "written-in-rock:update_areas_surveyed",
+        "written-in-rock:$find_next_scenario",
+        "written-in-rock:$advance_time",
+        "written-in-rock:$update_day"
+      ],
+      "else": [
+        "written-in-rock:check_no_resolution_day#3"
+      ]
+    },
+    "written-in-rock:check_no_resolution_day#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "written-in-rock:no_resolution_night:text",
+        "written-in-rock:cross_out_simeon:text",
+        "written-in-rock:cross_out_simeon",
+        "written-in-rock:ask_prismatic_shard",
+        "written-in-rock:check_helped_river",
+        "written-in-rock:earn_xp",
+        "written-in-rock:transfer_xp",
+        "written-in-rock:upgradeDecks",
+        "written-in-rock:update_areas_surveyed:text",
+        "written-in-rock:update_areas_surveyed",
+        "written-in-rock:$find_next_scenario",
+        "written-in-rock:$advance_time",
+        "written-in-rock:$update_day"
+      ],
+      "else": [
+        "written-in-rock:check_no_resolution_day#2"
+      ]
+    },
+    "written-in-rock:check_no_resolution_day": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 1,
+        "max": 1
+      },
+      "then": [
+        "written-in-rock:no_resolution_day_1_or_2:text",
+        "written-in-rock:simeon_disappeared:text",
+        "written-in-rock:simeon_disappeared",
+        "written-in-rock:ask_prismatic_shard",
+        "written-in-rock:check_helped_river",
+        "written-in-rock:earn_xp",
+        "written-in-rock:transfer_xp",
+        "written-in-rock:upgradeDecks",
+        "written-in-rock:update_areas_surveyed:text",
+        "written-in-rock:update_areas_surveyed",
+        "written-in-rock:$find_next_scenario",
+        "written-in-rock:$advance_time",
+        "written-in-rock:$update_day"
+      ],
+      "else": [
+        "written-in-rock:check_no_resolution_day#1"
+      ]
+    },
+    "written-in-rock:simeon_survived:text": {
+      "kind": "story",
+      "text": "Update your Campaign Log.",
+      "bullets": []
+    },
+    "written-in-rock:simeon_survived": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "simeonSurvived",
+          "section": "simeon",
+          "value": true
+        },
+        {
+          "do": "count",
+          "id": "$relationship",
+          "section": "simeon",
+          "op": "add",
+          "value": 2
+        },
+        {
+          "do": "xp",
+          "bonus": 2,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "written-in-rock:leah_saw_something:text": {
+      "kind": "story",
+      "text": "Update your Campaign Log.",
+      "bullets": []
+    },
+    "written-in-rock:leah_saw_something": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "leahSawSomethingInTheMine",
+          "section": "leah",
+          "value": true
+        },
+        {
+          "do": "count",
+          "id": "$relationship",
+          "section": "leah",
+          "op": "add",
+          "value": 1
+        },
+        {
+          "do": "xp",
+          "bonus": 2,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "written-in-rock:survived_the_horrors_in_the_rock": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "survivedTheHorrorsInTheRock",
+          "section": "campaign_notes",
           "value": true
         }
       ]
@@ -1338,6 +1928,304 @@
         }
       ]
     },
+    "hemlock-house:$find_next_scenario:1:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "the-first-evening"
+        }
+      ]
+    },
+    "hemlock-house:$find_next_scenario:2:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "dawn-of-the-second-day"
+        }
+      ]
+    },
+    "hemlock-house:$find_next_scenario:3:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "the-second-evening"
+        }
+      ]
+    },
+    "hemlock-house:$find_next_scenario:4:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "dawn-of-the-final-day"
+        }
+      ]
+    },
+    "hemlock-house:$find_next_scenario:5:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "the-final-evening"
+        }
+      ]
+    },
+    "hemlock-house:$find_next_scenario#4": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 5,
+        "max": 5
+      },
+      "then": [
+        "hemlock-house:$find_next_scenario:5:fx"
+      ],
+      "else": []
+    },
+    "hemlock-house:$find_next_scenario#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "hemlock-house:$find_next_scenario:4:fx"
+      ],
+      "else": [
+        "hemlock-house:$find_next_scenario#4"
+      ]
+    },
+    "hemlock-house:$find_next_scenario#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "hemlock-house:$find_next_scenario:3:fx"
+      ],
+      "else": [
+        "hemlock-house:$find_next_scenario#3"
+      ]
+    },
+    "hemlock-house:$find_next_scenario#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "hemlock-house:$find_next_scenario:2:fx"
+      ],
+      "else": [
+        "hemlock-house:$find_next_scenario#2"
+      ]
+    },
+    "hemlock-house:$find_next_scenario": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 1,
+        "max": 1
+      },
+      "then": [
+        "hemlock-house:$find_next_scenario:1:fx"
+      ],
+      "else": [
+        "hemlock-house:$find_next_scenario#1"
+      ]
+    },
+    "hemlock-house:$advance_time": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "day",
+          "section": "hidden",
+          "op": "add",
+          "value": 1
+        }
+      ]
+    },
+    "hemlock-house:$update_day:2:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day1Day",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day1Night",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "hemlock-house:$update_day:3:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day1Night",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day2Day",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "hemlock-house:$update_day:4:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day2Day",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day2Night",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "hemlock-house:$update_day:5:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day2Night",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day3Day",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "hemlock-house:$update_day:6:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day3Day",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day3Night",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "hemlock-house:$update_day#4": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 6,
+        "max": 6
+      },
+      "then": [
+        "hemlock-house:$update_day:6:fx"
+      ],
+      "else": []
+    },
+    "hemlock-house:$update_day#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 5,
+        "max": 5
+      },
+      "then": [
+        "hemlock-house:$update_day:5:fx"
+      ],
+      "else": [
+        "hemlock-house:$update_day#4"
+      ]
+    },
+    "hemlock-house:$update_day#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "hemlock-house:$update_day:4:fx"
+      ],
+      "else": [
+        "hemlock-house:$update_day#3"
+      ]
+    },
+    "hemlock-house:$update_day#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "hemlock-house:$update_day:3:fx"
+      ],
+      "else": [
+        "hemlock-house:$update_day#2"
+      ]
+    },
+    "hemlock-house:$update_day": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "hemlock-house:$update_day:2:fx"
+      ],
+      "else": [
+        "hemlock-house:$update_day#1"
+      ]
+    },
     "hemlock-house:setup_gideon:text": {
       "kind": "story",
       "text": "Place Gideon Mizrah into play at the Parlor location. Put the Little Sylvie story asset into play at a Bedroom location on the lowest floor.",
@@ -1503,39 +2391,6 @@
         }
       ]
     },
-    "the-silent-heath:laid_the_pearl_family_to_rest": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "laidThePearlFamilyToRest",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-silent-heath:remains_were_partially_recovered": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "remainsWerePartiallyRecovered",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-silent-heath:madame_pearls_diary_was_recovered": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "madamePearlsDiaryWasRecovered",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
     "the-silent-heath:earn_xp": {
       "kind": "effects",
       "effects": [
@@ -1575,6 +2430,419 @@
           "section": "areasSurveyed",
           "value": true
         }
+      ]
+    },
+    "the-silent-heath:$find_next_scenario:1:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "the-first-evening"
+        }
+      ]
+    },
+    "the-silent-heath:$find_next_scenario:2:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "dawn-of-the-second-day"
+        }
+      ]
+    },
+    "the-silent-heath:$find_next_scenario:3:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "the-second-evening"
+        }
+      ]
+    },
+    "the-silent-heath:$find_next_scenario:4:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "dawn-of-the-final-day"
+        }
+      ]
+    },
+    "the-silent-heath:$find_next_scenario:5:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "the-final-evening"
+        }
+      ]
+    },
+    "the-silent-heath:$find_next_scenario#4": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 5,
+        "max": 5
+      },
+      "then": [
+        "the-silent-heath:$find_next_scenario:5:fx"
+      ],
+      "else": []
+    },
+    "the-silent-heath:$find_next_scenario#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "the-silent-heath:$find_next_scenario:4:fx"
+      ],
+      "else": [
+        "the-silent-heath:$find_next_scenario#4"
+      ]
+    },
+    "the-silent-heath:$find_next_scenario#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "the-silent-heath:$find_next_scenario:3:fx"
+      ],
+      "else": [
+        "the-silent-heath:$find_next_scenario#3"
+      ]
+    },
+    "the-silent-heath:$find_next_scenario#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "the-silent-heath:$find_next_scenario:2:fx"
+      ],
+      "else": [
+        "the-silent-heath:$find_next_scenario#2"
+      ]
+    },
+    "the-silent-heath:$find_next_scenario": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 1,
+        "max": 1
+      },
+      "then": [
+        "the-silent-heath:$find_next_scenario:1:fx"
+      ],
+      "else": [
+        "the-silent-heath:$find_next_scenario#1"
+      ]
+    },
+    "the-silent-heath:$advance_time": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "day",
+          "section": "hidden",
+          "op": "add",
+          "value": 1
+        }
+      ]
+    },
+    "the-silent-heath:$update_day:2:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day1Day",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day1Night",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-silent-heath:$update_day:3:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day1Night",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day2Day",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-silent-heath:$update_day:4:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day2Day",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day2Night",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-silent-heath:$update_day:5:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day2Night",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day3Day",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-silent-heath:$update_day:6:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day3Day",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day3Night",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-silent-heath:$update_day#4": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 6,
+        "max": 6
+      },
+      "then": [
+        "the-silent-heath:$update_day:6:fx"
+      ],
+      "else": []
+    },
+    "the-silent-heath:$update_day#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 5,
+        "max": 5
+      },
+      "then": [
+        "the-silent-heath:$update_day:5:fx"
+      ],
+      "else": [
+        "the-silent-heath:$update_day#4"
+      ]
+    },
+    "the-silent-heath:$update_day#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "the-silent-heath:$update_day:4:fx"
+      ],
+      "else": [
+        "the-silent-heath:$update_day#3"
+      ]
+    },
+    "the-silent-heath:$update_day#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "the-silent-heath:$update_day:3:fx"
+      ],
+      "else": [
+        "the-silent-heath:$update_day#2"
+      ]
+    },
+    "the-silent-heath:$update_day": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "the-silent-heath:$update_day:2:fx"
+      ],
+      "else": [
+        "the-silent-heath:$update_day#1"
+      ]
+    },
+    "the-silent-heath:laid_the_pearl_family_to_rest": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "laidThePearlFamilyToRest",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-silent-heath:madame_pearls_diary_was_recovered": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "madamePearlsDiaryWasRecovered",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-silent-heath:remains_were_partially_recovered": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "remainsWerePartiallyRecovered",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-silent-heath:check_cyrstal_remains#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "silentHeathCrystalRemains",
+        "section": "hidden",
+        "min": 1,
+        "max": 1
+      },
+      "then": [
+        "the-silent-heath:remains_were_partially_recovered",
+        "the-silent-heath:madame_pearls_diary_was_recovered",
+        "the-silent-heath:earn_xp",
+        "the-silent-heath:transfer_xp",
+        "the-silent-heath:upgradeDecks",
+        "the-silent-heath:update_areas_surveyed:text",
+        "the-silent-heath:update_areas_surveyed",
+        "the-silent-heath:$find_next_scenario",
+        "the-silent-heath:$advance_time",
+        "the-silent-heath:$update_day"
+      ],
+      "else": [
+        "the-silent-heath:earn_xp",
+        "the-silent-heath:transfer_xp",
+        "the-silent-heath:upgradeDecks",
+        "the-silent-heath:update_areas_surveyed:text",
+        "the-silent-heath:update_areas_surveyed",
+        "the-silent-heath:$find_next_scenario",
+        "the-silent-heath:$advance_time",
+        "the-silent-heath:$update_day"
+      ]
+    },
+    "the-silent-heath:check_cyrstal_remains#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "silentHeathCrystalRemains",
+        "section": "hidden",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "the-silent-heath:remains_were_partially_recovered",
+        "the-silent-heath:madame_pearls_diary_was_recovered",
+        "the-silent-heath:earn_xp",
+        "the-silent-heath:transfer_xp",
+        "the-silent-heath:upgradeDecks",
+        "the-silent-heath:update_areas_surveyed:text",
+        "the-silent-heath:update_areas_surveyed",
+        "the-silent-heath:$find_next_scenario",
+        "the-silent-heath:$advance_time",
+        "the-silent-heath:$update_day"
+      ],
+      "else": [
+        "the-silent-heath:check_cyrstal_remains#2"
+      ]
+    },
+    "the-silent-heath:check_cyrstal_remains": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "silentHeathCrystalRemains",
+        "section": "hidden",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "the-silent-heath:laid_the_pearl_family_to_rest",
+        "the-silent-heath:madame_pearls_diary_was_recovered",
+        "the-silent-heath:earn_xp",
+        "the-silent-heath:transfer_xp",
+        "the-silent-heath:upgradeDecks",
+        "the-silent-heath:update_areas_surveyed:text",
+        "the-silent-heath:update_areas_surveyed",
+        "the-silent-heath:$find_next_scenario",
+        "the-silent-heath:$advance_time",
+        "the-silent-heath:$update_day"
+      ],
+      "else": [
+        "the-silent-heath:check_cyrstal_remains#1"
       ]
     },
     "the-silent-heath:setup_leah:text": {
@@ -1715,44 +2983,6 @@
         }
       ]
     },
-    "the-lost-sister:two_bonus_xp_saving_sister:text": {
-      "kind": "story",
-      "text": "Each investigator earns 2 bonus experience for helping Helen save her sister.",
-      "bullets": []
-    },
-    "the-lost-sister:two_bonus_xp_saving_sister": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 2,
-          "who": "each",
-          "victory": false
-        }
-      ]
-    },
-    "the-lost-sister:the_peters_family_was_reunited": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "thePetersFamilyWasReunited",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-lost-sister:elizabeth_peters_was_saved": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "elizabethPetersWasSaved",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
     "the-lost-sister:gideon_relationship:text": {
       "kind": "story",
       "text": "Increase Gideon Mizrah’s Relationship Level. Each investigator earns 1 bonus experience. In Gideon Mizrah’s notes, record <i>Gideon found his treasure</i>.",
@@ -1847,6 +3077,378 @@
           "section": "areasSurveyed",
           "value": true
         }
+      ]
+    },
+    "the-lost-sister:$find_next_scenario:1:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "the-first-evening"
+        }
+      ]
+    },
+    "the-lost-sister:$find_next_scenario:2:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "dawn-of-the-second-day"
+        }
+      ]
+    },
+    "the-lost-sister:$find_next_scenario:3:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "the-second-evening"
+        }
+      ]
+    },
+    "the-lost-sister:$find_next_scenario:4:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "dawn-of-the-final-day"
+        }
+      ]
+    },
+    "the-lost-sister:$find_next_scenario:5:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "the-final-evening"
+        }
+      ]
+    },
+    "the-lost-sister:$find_next_scenario#4": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 5,
+        "max": 5
+      },
+      "then": [
+        "the-lost-sister:$find_next_scenario:5:fx"
+      ],
+      "else": []
+    },
+    "the-lost-sister:$find_next_scenario#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "the-lost-sister:$find_next_scenario:4:fx"
+      ],
+      "else": [
+        "the-lost-sister:$find_next_scenario#4"
+      ]
+    },
+    "the-lost-sister:$find_next_scenario#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "the-lost-sister:$find_next_scenario:3:fx"
+      ],
+      "else": [
+        "the-lost-sister:$find_next_scenario#3"
+      ]
+    },
+    "the-lost-sister:$find_next_scenario#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "the-lost-sister:$find_next_scenario:2:fx"
+      ],
+      "else": [
+        "the-lost-sister:$find_next_scenario#2"
+      ]
+    },
+    "the-lost-sister:$find_next_scenario": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 1,
+        "max": 1
+      },
+      "then": [
+        "the-lost-sister:$find_next_scenario:1:fx"
+      ],
+      "else": [
+        "the-lost-sister:$find_next_scenario#1"
+      ]
+    },
+    "the-lost-sister:$advance_time": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "day",
+          "section": "hidden",
+          "op": "add",
+          "value": 1
+        }
+      ]
+    },
+    "the-lost-sister:$update_day:2:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day1Day",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day1Night",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-lost-sister:$update_day:3:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day1Night",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day2Day",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-lost-sister:$update_day:4:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day2Day",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day2Night",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-lost-sister:$update_day:5:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day2Night",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day3Day",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-lost-sister:$update_day:6:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day3Day",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day3Night",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-lost-sister:$update_day#4": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 6,
+        "max": 6
+      },
+      "then": [
+        "the-lost-sister:$update_day:6:fx"
+      ],
+      "else": []
+    },
+    "the-lost-sister:$update_day#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 5,
+        "max": 5
+      },
+      "then": [
+        "the-lost-sister:$update_day:5:fx"
+      ],
+      "else": [
+        "the-lost-sister:$update_day#4"
+      ]
+    },
+    "the-lost-sister:$update_day#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "the-lost-sister:$update_day:4:fx"
+      ],
+      "else": [
+        "the-lost-sister:$update_day#3"
+      ]
+    },
+    "the-lost-sister:$update_day#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "the-lost-sister:$update_day:3:fx"
+      ],
+      "else": [
+        "the-lost-sister:$update_day#2"
+      ]
+    },
+    "the-lost-sister:$update_day": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "the-lost-sister:$update_day:2:fx"
+      ],
+      "else": [
+        "the-lost-sister:$update_day#1"
+      ]
+    },
+    "the-lost-sister:two_bonus_xp_saving_sister:text": {
+      "kind": "story",
+      "text": "Each investigator earns 2 bonus experience for helping Helen save her sister.",
+      "bullets": []
+    },
+    "the-lost-sister:two_bonus_xp_saving_sister": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 2,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-lost-sister:the_peters_family_was_reunited": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "thePetersFamilyWasReunited",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-lost-sister:elizabeth_peters_was_saved": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "elizabethPetersWasSaved",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-lost-sister:check_resolution_theo_reconciled_with_helen": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "theoReconciledWithHelen",
+        "section": "theo"
+      },
+      "then": [
+        "the-lost-sister:two_bonus_xp_saving_sister:text",
+        "the-lost-sister:two_bonus_xp_saving_sister",
+        "the-lost-sister:the_peters_family_was_reunited",
+        "the-lost-sister:check_gideon_searching_for_an_heirloom",
+        "the-lost-sister:earn_xp",
+        "the-lost-sister:transfer_xp",
+        "the-lost-sister:upgradeDecks",
+        "the-lost-sister:update_areas_surveyed:text",
+        "the-lost-sister:update_areas_surveyed",
+        "the-lost-sister:$find_next_scenario",
+        "the-lost-sister:$advance_time",
+        "the-lost-sister:$update_day"
+      ],
+      "else": [
+        "the-lost-sister:two_bonus_xp_saving_sister:text",
+        "the-lost-sister:two_bonus_xp_saving_sister",
+        "the-lost-sister:elizabeth_peters_was_saved",
+        "the-lost-sister:check_gideon_searching_for_an_heirloom",
+        "the-lost-sister:earn_xp",
+        "the-lost-sister:transfer_xp",
+        "the-lost-sister:upgradeDecks",
+        "the-lost-sister:update_areas_surveyed:text",
+        "the-lost-sister:update_areas_surveyed",
+        "the-lost-sister:$find_next_scenario",
+        "the-lost-sister:$advance_time",
+        "the-lost-sister:$update_day"
       ]
     },
     "the-lost-sister:setup_helen:text": {
@@ -1981,114 +3583,6 @@
           "bonus": 1,
           "who": "each",
           "victory": false
-        }
-      ]
-    },
-    "the-thing-in-the-depths:chelydran_hybrid_perished": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "chelydranHybridPerished",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-thing-in-the-depths:study_bonus_xp:text": {
-      "kind": "story",
-      "text": "Each investigator earns 1 bonus experience as they study a part of Eastwick Bog’s unique flora and fauna.",
-      "bullets": []
-    },
-    "the-thing-in-the-depths:study_bonus_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 1,
-          "who": "each",
-          "victory": false
-        }
-      ]
-    },
-    "the-thing-in-the-depths:chelydran_hybrid_lived": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "chelydranHybridLived",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-thing-in-the-depths:lived_bonus_xp:text": {
-      "kind": "story",
-      "text": "Each investigator earns 3 bonus experience, as they witness a part of Eastwick Bog’s unique flora and fauna.",
-      "bullets": []
-    },
-    "the-thing-in-the-depths:lived_bonus_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 3,
-          "who": "each",
-          "victory": false
-        }
-      ]
-    },
-    "the-thing-in-the-depths:chelydran_hybrid_devoured": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "chelydranHybridDevoured",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-thing-in-the-depths:mental_trauma:text": {
-      "kind": "story",
-      "text": "Each investigator suffers 1 mental trauma.",
-      "bullets": []
-    },
-    "the-thing-in-the-depths:mental_trauma": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "trauma",
-          "who": "each",
-          "physical": 0,
-          "mental": 1
-        }
-      ]
-    },
-    "the-thing-in-the-depths:devoured_bonus_xp:text": {
-      "kind": "story",
-      "text": "Each investigator earns 1 bonus experience, as they gain insight into the unique ecosystem of Hemlock Isle.",
-      "bullets": []
-    },
-    "the-thing-in-the-depths:devoured_bonus_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 1,
-          "who": "each",
-          "victory": false
-        }
-      ]
-    },
-    "the-thing-in-the-depths:thing_in_the_depths_was_defeated": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "thingInTheDepthsWasDefeated",
-          "section": "campaign_notes",
-          "value": true
         }
       ]
     },
@@ -2257,6 +3751,412 @@
           "do": "record",
           "key": "eastwickBog",
           "section": "areasSurveyed",
+          "value": true
+        }
+      ]
+    },
+    "the-thing-in-the-depths:$find_next_scenario:1:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "the-first-evening"
+        }
+      ]
+    },
+    "the-thing-in-the-depths:$find_next_scenario:2:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "dawn-of-the-second-day"
+        }
+      ]
+    },
+    "the-thing-in-the-depths:$find_next_scenario:3:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "the-second-evening"
+        }
+      ]
+    },
+    "the-thing-in-the-depths:$find_next_scenario:4:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "dawn-of-the-final-day"
+        }
+      ]
+    },
+    "the-thing-in-the-depths:$find_next_scenario:5:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "the-final-evening"
+        }
+      ]
+    },
+    "the-thing-in-the-depths:$find_next_scenario#4": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 5,
+        "max": 5
+      },
+      "then": [
+        "the-thing-in-the-depths:$find_next_scenario:5:fx"
+      ],
+      "else": []
+    },
+    "the-thing-in-the-depths:$find_next_scenario#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "the-thing-in-the-depths:$find_next_scenario:4:fx"
+      ],
+      "else": [
+        "the-thing-in-the-depths:$find_next_scenario#4"
+      ]
+    },
+    "the-thing-in-the-depths:$find_next_scenario#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "the-thing-in-the-depths:$find_next_scenario:3:fx"
+      ],
+      "else": [
+        "the-thing-in-the-depths:$find_next_scenario#3"
+      ]
+    },
+    "the-thing-in-the-depths:$find_next_scenario#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "the-thing-in-the-depths:$find_next_scenario:2:fx"
+      ],
+      "else": [
+        "the-thing-in-the-depths:$find_next_scenario#2"
+      ]
+    },
+    "the-thing-in-the-depths:$find_next_scenario": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 1,
+        "max": 1
+      },
+      "then": [
+        "the-thing-in-the-depths:$find_next_scenario:1:fx"
+      ],
+      "else": [
+        "the-thing-in-the-depths:$find_next_scenario#1"
+      ]
+    },
+    "the-thing-in-the-depths:$advance_time": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "day",
+          "section": "hidden",
+          "op": "add",
+          "value": 1
+        }
+      ]
+    },
+    "the-thing-in-the-depths:$update_day:2:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day1Day",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day1Night",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-thing-in-the-depths:$update_day:3:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day1Night",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day2Day",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-thing-in-the-depths:$update_day:4:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day2Day",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day2Night",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-thing-in-the-depths:$update_day:5:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day2Night",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day3Day",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-thing-in-the-depths:$update_day:6:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day3Day",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day3Night",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-thing-in-the-depths:$update_day#4": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 6,
+        "max": 6
+      },
+      "then": [
+        "the-thing-in-the-depths:$update_day:6:fx"
+      ],
+      "else": []
+    },
+    "the-thing-in-the-depths:$update_day#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 5,
+        "max": 5
+      },
+      "then": [
+        "the-thing-in-the-depths:$update_day:5:fx"
+      ],
+      "else": [
+        "the-thing-in-the-depths:$update_day#4"
+      ]
+    },
+    "the-thing-in-the-depths:$update_day#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "the-thing-in-the-depths:$update_day:4:fx"
+      ],
+      "else": [
+        "the-thing-in-the-depths:$update_day#3"
+      ]
+    },
+    "the-thing-in-the-depths:$update_day#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "the-thing-in-the-depths:$update_day:3:fx"
+      ],
+      "else": [
+        "the-thing-in-the-depths:$update_day#2"
+      ]
+    },
+    "the-thing-in-the-depths:$update_day": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "the-thing-in-the-depths:$update_day:2:fx"
+      ],
+      "else": [
+        "the-thing-in-the-depths:$update_day#1"
+      ]
+    },
+    "the-thing-in-the-depths:chelydran_hybrid_perished": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "chelydranHybridPerished",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-thing-in-the-depths:study_bonus_xp:text": {
+      "kind": "story",
+      "text": "Each investigator earns 1 bonus experience as they study a part of Eastwick Bog’s unique flora and fauna.",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:study_bonus_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-thing-in-the-depths:chelydran_hybrid_lived": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "chelydranHybridLived",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-thing-in-the-depths:lived_bonus_xp:text": {
+      "kind": "story",
+      "text": "Each investigator earns 3 bonus experience, as they witness a part of Eastwick Bog’s unique flora and fauna.",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:lived_bonus_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 3,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-thing-in-the-depths:chelydran_hybrid_devoured": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "chelydranHybridDevoured",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-thing-in-the-depths:mental_trauma:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 1 mental trauma.",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:mental_trauma": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 0,
+          "mental": 1
+        }
+      ]
+    },
+    "the-thing-in-the-depths:devoured_bonus_xp:text": {
+      "kind": "story",
+      "text": "Each investigator earns 1 bonus experience, as they gain insight into the unique ecosystem of Hemlock Isle.",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:devoured_bonus_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-thing-in-the-depths:thing_in_the_depths_was_defeated": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "thingInTheDepthsWasDefeated",
+          "section": "campaign_notes",
           "value": true
         }
       ]
@@ -2599,113 +4499,12 @@
       ],
       "else": []
     },
-    "the-first-evening:intro": {
-      "kind": "story",
-      "text": "As you return to Hemlock Vale, a young red-headed girl in a rabbit mask introduces herself as Rebecca, Mother Rachel’s daughter, and leads you by the hand to dinner in the Commons. The long building’s large barn doors are open to let out the rich scent of roasted vegetables and savory meat. The people of the Vale sit and eat in lively conversation, each of them in their white-gold cloaks. At the head of the room, Mother Rachel stands up and calls for attention. Rebecca leads you to the now-picked-over dinner spread as the room falls silent.\n“<i>Meine lieben Freunde.</i> What a blessing that all of us have come here, on the threshold of infinity. And what a greater blessing still that pilgrims have come here, so full of light and curiosity!” Mother Rachel gestures to Dr. Marquez to her right, and to you. “We have waited for the right moment to open our community. Our community which is truly the ‘Sanctuary of Transfiguration’ we long dreamed of. For each of us yearns to be remade as we wait to join our light with the light of the cosmos.”\nThe room bursts into applause as Leah Atwood and several locals place trays of honeyed cakes topped with robust red fruit in the center of each table. Your stomach grumbles as you take a bite of shriveled greens. It has a faint bitter taste, and a sharp smell.",
-      "bullets": []
-    },
-    "the-first-evening:choose_feast_prompt:text": {
-      "kind": "story",
-      "text": "One at a time, each investigator must decide individually:",
-      "bullets": []
-    },
-    "the-first-evening:choose_feast": {
-      "kind": "unsupported",
-      "name": "investigator_choice",
-      "effects": [],
-      "steps": []
-    },
-    "the-first-evening:conversation_explanation:text": {
-      "kind": "story",
-      "text": "You may choose where to sit for the community meal. One at a time, each investigator may choose a different codex entry from the following. (If there is only one investigator, you may choose two to resolve instead).",
-      "bullets": []
-    },
-    "the-first-evening:choose_conversation_solo": {
-      "kind": "unsupported",
-      "name": "investigator_choice",
-      "text": "Choose where to sit:",
-      "effects": [],
-      "steps": []
-    },
-    "the-first-evening:choose_conversation": {
-      "kind": "unsupported",
-      "name": "investigator_choice",
-      "text": "Choose where to sit:",
-      "effects": [],
-      "steps": []
-    },
-    "the-first-evening:choose_conversation_count#3": {
-      "kind": "branch",
-      "condition": {
-        "kind": "playerCount",
-        "min": 4,
-        "max": 4
-      },
-      "then": [
-        "the-first-evening:choose_conversation"
-      ],
-      "else": []
-    },
-    "the-first-evening:choose_conversation_count#2": {
-      "kind": "branch",
-      "condition": {
-        "kind": "playerCount",
-        "min": 3,
-        "max": 3
-      },
-      "then": [
-        "the-first-evening:choose_conversation"
-      ],
-      "else": [
-        "the-first-evening:choose_conversation_count#3"
-      ]
-    },
-    "the-first-evening:choose_conversation_count#1": {
-      "kind": "branch",
-      "condition": {
-        "kind": "playerCount",
-        "min": 2,
-        "max": 2
-      },
-      "then": [
-        "the-first-evening:choose_conversation"
-      ],
-      "else": [
-        "the-first-evening:choose_conversation_count#2"
-      ]
-    },
-    "the-first-evening:choose_conversation_count": {
-      "kind": "branch",
-      "condition": {
-        "kind": "playerCount",
-        "min": 1,
-        "max": 1
-      },
-      "then": [
-        "the-first-evening:choose_conversation_solo",
-        "the-first-evening:choose_conversation"
-      ],
-      "else": [
-        "the-first-evening:choose_conversation_count#1"
-      ]
-    },
     "the-twisted-hollow:bertie_was_lost_in_the_woods": {
       "kind": "effects",
       "effects": [
         {
           "do": "record",
           "key": "bertieWasLostInTheWoods",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-twisted-hollow:bertie_was_rescued": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "bertieWasRescued",
           "section": "campaign_notes",
           "value": true
         }
@@ -2828,6 +4627,192 @@
         {
           "do": "nextScenario",
           "scenario": "dawn-of-the-second-day"
+        }
+      ]
+    },
+    "the-twisted-hollow:$advance_time": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "day",
+          "section": "hidden",
+          "op": "add",
+          "value": 1
+        }
+      ]
+    },
+    "the-twisted-hollow:$update_day:2:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day1Day",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day1Night",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-twisted-hollow:$update_day:3:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day1Night",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day2Day",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-twisted-hollow:$update_day:4:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day2Day",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day2Night",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-twisted-hollow:$update_day:5:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day2Night",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day3Day",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-twisted-hollow:$update_day:6:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day3Day",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day3Night",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-twisted-hollow:$update_day#4": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 6,
+        "max": 6
+      },
+      "then": [
+        "the-twisted-hollow:$update_day:6:fx"
+      ],
+      "else": []
+    },
+    "the-twisted-hollow:$update_day#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 5,
+        "max": 5
+      },
+      "then": [
+        "the-twisted-hollow:$update_day:5:fx"
+      ],
+      "else": [
+        "the-twisted-hollow:$update_day#4"
+      ]
+    },
+    "the-twisted-hollow:$update_day#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "the-twisted-hollow:$update_day:4:fx"
+      ],
+      "else": [
+        "the-twisted-hollow:$update_day#3"
+      ]
+    },
+    "the-twisted-hollow:$update_day#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "the-twisted-hollow:$update_day:3:fx"
+      ],
+      "else": [
+        "the-twisted-hollow:$update_day#2"
+      ]
+    },
+    "the-twisted-hollow:$update_day": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "the-twisted-hollow:$update_day:2:fx"
+      ],
+      "else": [
+        "the-twisted-hollow:$update_day#1"
+      ]
+    },
+    "the-twisted-hollow:bertie_was_rescued": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "bertieWasRescued",
+          "section": "campaign_notes",
+          "value": true
         }
       ]
     },
@@ -2991,135 +4976,713 @@
       "text": "When setting up the next scenario, skip steps 1-8 of ‘Setting Up the Game” on page 27 of the Rules Reference.",
       "bullets": []
     },
-    "the-second-evening:intro_1": {
-      "kind": "story",
-      "text": "The rain continues through the day. When you arrive at the Commons for dinner, the tables have been pushed to the sides of the room and warm lamps are hung from colorful ribbons. Dozens of new faces peer out from the crowd of cloaked locals: visitors from the mainland. A large sculpture looms in the center of the room, festooned with violet and white blossoms that seem to palpitate in the soft light. The room goes silent as Mother Rachel addresses the assembly. “Friends. Brethren. Each of you is a miracle of time and light. You are the promise of your true self—” The matron stops mid-sentence.",
-      "bullets": []
+    "dawn-of-the-second-day:$choose_next_scenario_day": {
+      "kind": "chooseOne",
+      "text": "Check the “Areas Surveyed” section of your Campaign Log and choose a scenario that has not yet been checked off.",
+      "choices": [
+        {
+          "id": "written_in_rock",
+          "text": "Brave the decaying North Point Mine in <b>Written in Rock</b>.",
+          "effects": [
+            {
+              "do": "nextScenario",
+              "scenario": "written-in-rock"
+            }
+          ],
+          "steps": [],
+          "when": {
+            "kind": "logHas",
+            "id": "northPointMine",
+            "section": "areasSurveyed"
+          }
+        },
+        {
+          "id": "hemlock_house",
+          "text": "Investigate the long-abandoned <b>Hemlock House</b>.",
+          "effects": [
+            {
+              "do": "nextScenario",
+              "scenario": "hemlock-house"
+            }
+          ],
+          "steps": [],
+          "when": {
+            "kind": "logHas",
+            "id": "hemlockHarbor",
+            "section": "areasSurveyed"
+          }
+        },
+        {
+          "id": "the_silent_heath",
+          "text": "Explore the eerily quiet Pearl Ridge in <b>The Silent Heath</b>.",
+          "effects": [
+            {
+              "do": "nextScenario",
+              "scenario": "the-silent-heath"
+            }
+          ],
+          "steps": [],
+          "when": {
+            "kind": "logHas",
+            "id": "pearlRidge",
+            "section": "areasSurveyed"
+          }
+        },
+        {
+          "id": "the_lost_sister",
+          "text": "Explore the Akwan Shoreline up north in <b>The Lost Sister</b>.",
+          "effects": [
+            {
+              "do": "nextScenario",
+              "scenario": "the-lost-sister"
+            }
+          ],
+          "steps": [],
+          "when": {
+            "kind": "logHas",
+            "id": "akwanShoreline",
+            "section": "areasSurveyed"
+          }
+        },
+        {
+          "id": "the_thing_in_the_depths",
+          "text": "Survey Eastwick Bog and risk an encounter with <b>The Thing in the Depths</b>.",
+          "effects": [
+            {
+              "do": "nextScenario",
+              "scenario": "the-thing-in-the-depths"
+            }
+          ],
+          "steps": [],
+          "when": {
+            "kind": "logHas",
+            "id": "eastwickBog",
+            "section": "areasSurveyed"
+          }
+        }
+      ]
     },
-    "the-second-evening:intro_2": {
-      "kind": "story",
-      "text": "A shadow passes over the matron’s face as she sways, looking for a moment as though she might faint. The air in the room swirls thickly. Oily patterns dance in the light as you feel a now-familiar light-headedness. Someone steps forward to help Mother Rachel, but she holds up one hand and steadies herself.",
-      "bullets": []
+    "dawn-of-the-second-day:$fatigue_tokens_1": {
+      "kind": "chooseOne",
+      "text": "First token:",
+      "choices": [
+        {
+          "id": "+1",
+          "text": "+1",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "+1"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "0"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "0",
+          "text": "0",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "0"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-1"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-1",
+          "text": "−1",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-1"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-2"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-2",
+          "text": "−2",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-2"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-3"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-3",
+          "text": "−3",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-3"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-4"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-4",
+          "text": "−4",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-4"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-5"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-5",
+          "text": "−5",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-5"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-6"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-6",
+          "text": "−6",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-6"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-7"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-7",
+          "text": "−7",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-7"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-8"
+            }
+          ],
+          "steps": []
+        }
+      ]
     },
-    "the-second-evening:intro_3": {
-      "kind": "story",
-      "text": "A sturdy figure cuts through the crowd. “Has anyone seen Simeon?” Leah Atwood asks in a trembling voice. She looks at the assembly with wide, searching eyes. “Please. Simeon. Now’s not the time for pranks,” she addresses her son, but to no response. The air in the room swirls thickly. “Enough,” Mother Rachel shoos her sister away. Oily patterns dance in the light as you feel a now-familiar light-headedness.",
-      "bullets": []
+    "dawn-of-the-second-day:$fatigue_tokens_2": {
+      "kind": "chooseOne",
+      "text": "Second token:",
+      "choices": [
+        {
+          "id": "+1",
+          "text": "+1",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "+1"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "0"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "0",
+          "text": "0",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "0"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-1"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-1",
+          "text": "−1",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-1"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-2"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-2",
+          "text": "−2",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-2"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-3"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-3",
+          "text": "−3",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-3"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-4"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-4",
+          "text": "−4",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-4"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-5"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-5",
+          "text": "−5",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-5"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-6"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-6",
+          "text": "−6",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-6"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-7"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-7",
+          "text": "−7",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-7"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-8"
+            }
+          ],
+          "steps": []
+        }
+      ]
     },
-    "the-second-evening:leah_is_searching_for_simeon:text": {
-      "kind": "story",
-      "text": "Update your Campaign Log.",
-      "bullets": []
-    },
-    "the-second-evening:leah_is_searching_for_simeon": {
+    "dawn-of-the-second-day:check_simeon:no:fx": {
       "kind": "effects",
       "effects": [
         {
           "do": "record",
-          "key": "leahIsSearchingForSimeon",
-          "section": "leah",
+          "key": "fhvSecondDayCodex3",
+          "section": "hidden",
           "value": true
-        },
-        {
-          "do": "crossOut",
-          "key": "simeonPlanIsUnderway",
-          "section": "hidden"
         }
       ]
     },
-    "the-second-evening:check_simeon_survived": {
+    "dawn-of-the-second-day:remove_simeon:text": {
+      "kind": "story",
+      "text": "Remove Simeon Atwood from the game.",
+      "bullets": []
+    },
+    "dawn-of-the-second-day:check_simeon": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_section_exists",
+        "take": false
+      },
+      "then": [],
+      "else": [
+        "dawn-of-the-second-day:check_simeon:no:fx",
+        "dawn-of-the-second-day:remove_simeon:text"
+      ]
+    },
+    "the-longest-night:guilt_madness_weakness:text": {
+      "kind": "story",
+      "text": "The guilt from failing to help those in need haunts you forever. Each investigator must search the collection for a random basic [[Madness]] weakness and add it to their deck.",
+      "bullets": []
+    },
+    "the-longest-night:guilt_madness_weakness": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addWeakness",
+          "trait": "Madness"
+        }
+      ]
+    },
+    "the-longest-night:all_the_captives_were_lost": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "allTheCaptivesWereLost",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-longest-night:earn_ajax:text": {
+      "kind": "story",
+      "text": "Choose an investigator to add it to their deck for the remainder of the campaign. It does not count toward their deck size.",
+      "bullets": []
+    },
+    "the-longest-night:earn_ajax": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "10642",
+          "who": "choice"
+        }
+      ]
+    },
+    "the-longest-night:ask_ajax": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "yes",
+          "text": "Was the Ajax story asset under the control of an investigator at the end of this scenario?",
+          "effects": [],
+          "steps": [
+            "the-longest-night:earn_ajax:text",
+            "the-longest-night:earn_ajax"
+          ]
+        }
+      ]
+    },
+    "the-longest-night:maybe_check_ajax": {
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "simeonSurvived",
-        "section": "simeon"
+        "id": "tookAjax",
+        "section": "hidden"
       },
       "then": [
-        "the-second-evening:intro_2"
+        "the-longest-night:ask_ajax"
       ],
-      "else": [
-        "the-second-evening:intro_3",
-        "the-second-evening:leah_is_searching_for_simeon:text",
-        "the-second-evening:leah_is_searching_for_simeon"
+      "else": []
+    },
+    "the-longest-night:earn_marquez:text": {
+      "kind": "story",
+      "text": "Choose an investigator to add the Dr. Rosa Marquez story asset to their deck for the remainder of the campaign. It does not count toward their deck size.",
+      "bullets": []
+    },
+    "the-longest-night:earn_marquez": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "10702",
+          "who": "choice"
+        }
       ]
     },
-    "the-second-evening:intro_4": {
+    "the-longest-night:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "the-longest-night:transfer_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-longest-night:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "the-longest-night:update_areas_surveyed:text": {
       "kind": "story",
-      "text": "Mother Rachel regains her composure. “Tonight is the shortest night of the year. And tomorrow is the beginning of eternity. So on this night, let us dance.” The assembly bursts into rapturous applause. A ragtag band in the corner starts playing as the dance begins. Several friendly faces beckon you to join.",
+      "text": "Update your Campaign Log.",
       "bullets": []
     },
-    "the-second-evening:dance_explanation:text": {
-      "kind": "story",
-      "text": "You may choose whom you would like to dance with. One at a time, each investigator may choose a different codex entry from the following (if there is only one investigator, you may choose two to resolve instead). If a resident’s name is crossed out, you cannot choose their codex.",
-      "bullets": []
+    "the-longest-night:update_areas_surveyed": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "drMarquezHasAPlan",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "southernFields",
+          "section": "areasSurveyed",
+          "value": true
+        }
+      ]
     },
-    "the-second-evening:choose_dance_solo": {
-      "kind": "unsupported",
-      "name": "investigator_choice",
-      "text": "Choose dance:",
-      "effects": [],
-      "steps": []
+    "the-longest-night:set_next_scenario": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "dawn-of-the-final-day"
+        }
+      ]
     },
-    "the-second-evening:choose_dance": {
-      "kind": "unsupported",
-      "name": "investigator_choice",
-      "text": "Choose dance:",
-      "effects": [],
-      "steps": []
+    "the-longest-night:$advance_time": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "day",
+          "section": "hidden",
+          "op": "add",
+          "value": 1
+        }
+      ]
     },
-    "the-second-evening:choose_dance_count#3": {
+    "the-longest-night:$update_day:2:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day1Day",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day1Night",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-longest-night:$update_day:3:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day1Night",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day2Day",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-longest-night:$update_day:4:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day2Day",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day2Night",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-longest-night:$update_day:5:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day2Night",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day3Day",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-longest-night:$update_day:6:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "day3Day",
+          "section": "hidden",
+          "erase": true
+        },
+        {
+          "do": "record",
+          "key": "day3Night",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-longest-night:$update_day#4": {
       "kind": "branch",
       "condition": {
-        "kind": "playerCount",
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 6,
+        "max": 6
+      },
+      "then": [
+        "the-longest-night:$update_day:6:fx"
+      ],
+      "else": []
+    },
+    "the-longest-night:$update_day#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 5,
+        "max": 5
+      },
+      "then": [
+        "the-longest-night:$update_day:5:fx"
+      ],
+      "else": [
+        "the-longest-night:$update_day#4"
+      ]
+    },
+    "the-longest-night:$update_day#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
         "min": 4,
         "max": 4
       },
       "then": [
-        "the-second-evening:choose_dance"
+        "the-longest-night:$update_day:4:fx"
       ],
-      "else": []
+      "else": [
+        "the-longest-night:$update_day#3"
+      ]
     },
-    "the-second-evening:choose_dance_count#2": {
+    "the-longest-night:$update_day#1": {
       "kind": "branch",
       "condition": {
-        "kind": "playerCount",
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
         "min": 3,
         "max": 3
       },
       "then": [
-        "the-second-evening:choose_dance"
+        "the-longest-night:$update_day:3:fx"
       ],
       "else": [
-        "the-second-evening:choose_dance_count#3"
+        "the-longest-night:$update_day#2"
       ]
     },
-    "the-second-evening:choose_dance_count#1": {
+    "the-longest-night:$update_day": {
       "kind": "branch",
       "condition": {
-        "kind": "playerCount",
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
         "min": 2,
         "max": 2
       },
       "then": [
-        "the-second-evening:choose_dance"
+        "the-longest-night:$update_day:2:fx"
       ],
       "else": [
-        "the-second-evening:choose_dance_count#2"
-      ]
-    },
-    "the-second-evening:choose_dance_count": {
-      "kind": "branch",
-      "condition": {
-        "kind": "playerCount",
-        "min": 1,
-        "max": 1
-      },
-      "then": [
-        "the-second-evening:choose_dance_solo",
-        "the-second-evening:choose_dance"
-      ],
-      "else": [
-        "the-second-evening:choose_dance_count#1"
+        "the-longest-night:$update_day#1"
       ]
     },
     "the-longest-night:leah_sacrificed:text": {
@@ -3413,9 +5976,19 @@
     "the-longest-night:maybe_ask_agenda_flip": {
       "kind": "branch",
       "condition": {
-        "kind": "unsupported",
-        "name": "multi",
-        "take": false
+        "kind": "all",
+        "conditions": [
+          {
+            "kind": "unsupported",
+            "name": "version",
+            "take": true
+          },
+          {
+            "kind": "logHas",
+            "id": "fhvLongestNightAgendaFlip",
+            "section": "hidden"
+          }
+        ]
       },
       "then": [
         "the-longest-night:ask_agenda_flip"
@@ -3738,143 +6311,6 @@
         }
       ]
     },
-    "the-longest-night:guilt_madness_weakness:text": {
-      "kind": "story",
-      "text": "The guilt from failing to help those in need haunts you forever. Each investigator must search the collection for a random basic [[Madness]] weakness and add it to their deck.",
-      "bullets": []
-    },
-    "the-longest-night:guilt_madness_weakness": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "addWeakness",
-          "trait": "Madness"
-        }
-      ]
-    },
-    "the-longest-night:all_the_captives_were_lost": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "allTheCaptivesWereLost",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "the-longest-night:earn_ajax:text": {
-      "kind": "story",
-      "text": "Choose an investigator to add it to their deck for the remainder of the campaign. It does not count toward their deck size.",
-      "bullets": []
-    },
-    "the-longest-night:earn_ajax": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "earnCard",
-          "code": "10642",
-          "who": "choice"
-        }
-      ]
-    },
-    "the-longest-night:ask_ajax": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "yes",
-          "text": "Was the Ajax story asset under the control of an investigator at the end of this scenario?",
-          "effects": [],
-          "steps": [
-            "the-longest-night:earn_ajax:text",
-            "the-longest-night:earn_ajax"
-          ]
-        }
-      ]
-    },
-    "the-longest-night:maybe_check_ajax": {
-      "kind": "branch",
-      "condition": {
-        "kind": "logHas",
-        "id": "tookAjax",
-        "section": "hidden"
-      },
-      "then": [
-        "the-longest-night:ask_ajax"
-      ],
-      "else": []
-    },
-    "the-longest-night:earn_marquez:text": {
-      "kind": "story",
-      "text": "Choose an investigator to add the Dr. Rosa Marquez story asset to their deck for the remainder of the campaign. It does not count toward their deck size.",
-      "bullets": []
-    },
-    "the-longest-night:earn_marquez": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "earnCard",
-          "code": "10702",
-          "who": "choice"
-        }
-      ]
-    },
-    "the-longest-night:earn_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 0,
-          "who": "each",
-          "victory": true
-        }
-      ]
-    },
-    "the-longest-night:transfer_xp": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "xp",
-          "bonus": 0,
-          "who": "each",
-          "victory": false
-        }
-      ]
-    },
-    "the-longest-night:upgradeDecks": {
-      "kind": "upgradeDecks"
-    },
-    "the-longest-night:update_areas_surveyed:text": {
-      "kind": "story",
-      "text": "Update your Campaign Log.",
-      "bullets": []
-    },
-    "the-longest-night:update_areas_surveyed": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "drMarquezHasAPlan",
-          "section": "campaign_notes",
-          "value": true
-        },
-        {
-          "do": "record",
-          "key": "southernFields",
-          "section": "areasSurveyed",
-          "value": true
-        }
-      ]
-    },
-    "the-longest-night:set_next_scenario": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "nextScenario",
-          "scenario": "dawn-of-the-final-day"
-        }
-      ]
-    },
     "the-longest-night:intro_2": {
       "kind": "story",
       "text": "You step out from your hiding place with Dr. Marquez. “This is barbaric. These people belong in a hospital!” The professor snarls at the matron.",
@@ -4045,44 +6481,220 @@
         "the-longest-night:check_1_dance"
       ]
     },
-    "dawn-of-the-final-day:doon_lead_investigator:text": {
+    "the-longest-night:take_leah:text": {
       "kind": "story",
-      "text": "Place 1 doom on the lead investigator’s investigator card.",
+      "text": "Leah Atwood",
       "bullets": []
     },
-    "dawn-of-the-final-day:dr_marquez_has_a_hunch": {
+    "the-longest-night:check_leah_shared_a_dance:no:fx": {
       "kind": "effects",
       "effects": [
         {
           "do": "record",
-          "key": "drMarquezHasAHunch",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "dawn-of-the-final-day:hidden_check_dr_marquez_has_a_plan:yes:fx": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "drMarquezReadyForFateOfVale",
+          "key": "longestNightCodex2",
           "section": "hidden",
           "value": true
         }
       ]
     },
-    "dawn-of-the-final-day:hidden_check_dr_marquez_has_a_plan": {
+    "the-longest-night:check_leah_shared_a_dance": {
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "drMarquezHasAPlan",
-        "section": "campaign_notes"
+        "id": "leahSharedADance",
+        "section": "leah"
       },
       "then": [
-        "dawn-of-the-final-day:hidden_check_dr_marquez_has_a_plan:yes:fx"
+        "the-longest-night:take_leah:text"
       ],
-      "else": []
+      "else": [
+        "the-longest-night:check_leah_shared_a_dance:no:fx"
+      ]
+    },
+    "the-longest-night:take_simeon:text": {
+      "kind": "story",
+      "text": "Simeon Atwood",
+      "bullets": []
+    },
+    "the-longest-night:check_simeon_shared_a_dance:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "longestNightCodex3",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-longest-night:check_simeon_shared_a_dance": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "simeonSharedADance",
+        "section": "simeon"
+      },
+      "then": [
+        "the-longest-night:take_simeon:text"
+      ],
+      "else": [
+        "the-longest-night:check_simeon_shared_a_dance:no:fx"
+      ]
+    },
+    "the-longest-night:take_william:text": {
+      "kind": "story",
+      "text": "William Hemlock",
+      "bullets": []
+    },
+    "the-longest-night:check_william_shared_a_dance:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "longestNightCodex4",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-longest-night:check_william_shared_a_dance": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "williamSharedADance",
+        "section": "william"
+      },
+      "then": [
+        "the-longest-night:take_william:text"
+      ],
+      "else": [
+        "the-longest-night:check_william_shared_a_dance:no:fx"
+      ]
+    },
+    "the-longest-night:take_river:text": {
+      "kind": "story",
+      "text": "River Hawthorne",
+      "bullets": []
+    },
+    "the-longest-night:check_river_shared_a_dance:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "longestNightCodex5",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-longest-night:check_river_shared_a_dance": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "riverSharedADance",
+        "section": "river"
+      },
+      "then": [
+        "the-longest-night:take_river:text"
+      ],
+      "else": [
+        "the-longest-night:check_river_shared_a_dance:no:fx"
+      ]
+    },
+    "the-longest-night:take_gideon:text": {
+      "kind": "story",
+      "text": "Gideon Mizrah",
+      "bullets": []
+    },
+    "the-longest-night:check_gideon_shared_a_dance:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "longestNightCodex6",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-longest-night:check_gideon_shared_a_dance": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "gideonSharedADance",
+        "section": "gideon"
+      },
+      "then": [
+        "the-longest-night:take_gideon:text"
+      ],
+      "else": [
+        "the-longest-night:check_gideon_shared_a_dance:no:fx"
+      ]
+    },
+    "the-longest-night:take_judith:text": {
+      "kind": "story",
+      "text": "Judith Park",
+      "bullets": []
+    },
+    "the-longest-night:check_judith_shared_a_dance:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "longestNightCodex7",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-longest-night:check_judith_shared_a_dance": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "judithSharedADance",
+        "section": "judith"
+      },
+      "then": [
+        "the-longest-night:take_judith:text"
+      ],
+      "else": [
+        "the-longest-night:check_judith_shared_a_dance:no:fx"
+      ]
+    },
+    "the-longest-night:take_theo:text": {
+      "kind": "story",
+      "text": "Theo Peters",
+      "bullets": []
+    },
+    "the-longest-night:check_theo_shared_a_dance:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "longestNightCodex8",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-longest-night:check_theo_shared_a_dance": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "theoSharedADance",
+        "section": "theo"
+      },
+      "then": [
+        "the-longest-night:take_theo:text"
+      ],
+      "else": [
+        "the-longest-night:check_theo_shared_a_dance:no:fx"
+      ]
+    },
+    "dawn-of-the-final-day:doon_lead_investigator:text": {
+      "kind": "story",
+      "text": "Place 1 doom on the lead investigator’s investigator card.",
+      "bullets": []
     },
     "dawn-of-the-final-day:the_vale_is_full_of_fireworks": {
       "kind": "effects",
@@ -4121,6 +6733,582 @@
       "kind": "story",
       "text": "When setting up the next scenario, skip steps 1-8 of ‘Setting Up the Game” on page 27 of the Rules Reference.",
       "bullets": []
+    },
+    "dawn-of-the-final-day:$choose_next_scenario_day": {
+      "kind": "chooseOne",
+      "text": "Check the “Areas Surveyed” section of your Campaign Log and choose a scenario that has not yet been checked off.",
+      "choices": [
+        {
+          "id": "written_in_rock",
+          "text": "Brave the decaying North Point Mine in <b>Written in Rock</b>.",
+          "effects": [
+            {
+              "do": "nextScenario",
+              "scenario": "written-in-rock"
+            }
+          ],
+          "steps": [],
+          "when": {
+            "kind": "logHas",
+            "id": "northPointMine",
+            "section": "areasSurveyed"
+          }
+        },
+        {
+          "id": "hemlock_house",
+          "text": "Investigate the long-abandoned <b>Hemlock House</b>.",
+          "effects": [
+            {
+              "do": "nextScenario",
+              "scenario": "hemlock-house"
+            }
+          ],
+          "steps": [],
+          "when": {
+            "kind": "logHas",
+            "id": "hemlockHarbor",
+            "section": "areasSurveyed"
+          }
+        },
+        {
+          "id": "the_silent_heath",
+          "text": "Explore the eerily quiet Pearl Ridge in <b>The Silent Heath</b>.",
+          "effects": [
+            {
+              "do": "nextScenario",
+              "scenario": "the-silent-heath"
+            }
+          ],
+          "steps": [],
+          "when": {
+            "kind": "logHas",
+            "id": "pearlRidge",
+            "section": "areasSurveyed"
+          }
+        },
+        {
+          "id": "the_lost_sister",
+          "text": "Explore the Akwan Shoreline up north in <b>The Lost Sister</b>.",
+          "effects": [
+            {
+              "do": "nextScenario",
+              "scenario": "the-lost-sister"
+            }
+          ],
+          "steps": [],
+          "when": {
+            "kind": "logHas",
+            "id": "akwanShoreline",
+            "section": "areasSurveyed"
+          }
+        },
+        {
+          "id": "the_thing_in_the_depths",
+          "text": "Survey Eastwick Bog and risk an encounter with <b>The Thing in the Depths</b>.",
+          "effects": [
+            {
+              "do": "nextScenario",
+              "scenario": "the-thing-in-the-depths"
+            }
+          ],
+          "steps": [],
+          "when": {
+            "kind": "logHas",
+            "id": "eastwickBog",
+            "section": "areasSurveyed"
+          }
+        }
+      ]
+    },
+    "dawn-of-the-final-day:dr_marquez_has_a_hunch": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "drMarquezHasAHunch",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "dawn-of-the-final-day:hidden_check_dr_marquez_has_a_plan:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "drMarquezReadyForFateOfVale",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "dawn-of-the-final-day:hidden_check_dr_marquez_has_a_plan": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "drMarquezHasAPlan",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "dawn-of-the-final-day:hidden_check_dr_marquez_has_a_plan:yes:fx"
+      ],
+      "else": []
+    },
+    "dawn-of-the-final-day:$fatigue_tokens_1": {
+      "kind": "chooseOne",
+      "text": "First token:",
+      "choices": [
+        {
+          "id": "+1",
+          "text": "+1",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "+1"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "0"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "0",
+          "text": "0",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "0"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-1"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-1",
+          "text": "−1",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-1"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-2"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-2",
+          "text": "−2",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-2"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-3"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-3",
+          "text": "−3",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-3"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-4"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-4",
+          "text": "−4",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-4"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-5"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-5",
+          "text": "−5",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-5"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-6"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-6",
+          "text": "−6",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-6"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-7"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-7",
+          "text": "−7",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-7"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-8"
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "dawn-of-the-final-day:$fatigue_tokens_2": {
+      "kind": "chooseOne",
+      "text": "Second token:",
+      "choices": [
+        {
+          "id": "+1",
+          "text": "+1",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "+1"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "0"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "0",
+          "text": "0",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "0"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-1"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-1",
+          "text": "−1",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-1"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-2"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-2",
+          "text": "−2",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-2"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-3"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-3",
+          "text": "−3",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-3"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-4"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-4",
+          "text": "−4",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-4"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-5"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-5",
+          "text": "−5",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-5"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-6"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-6",
+          "text": "−6",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-6"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-7"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "-7",
+          "text": "−7",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "-7"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "-8"
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "dawn-of-the-final-day:check_leah:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "fhvFinalDayCodex2",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "dawn-of-the-final-day:remove_leah:text": {
+      "kind": "story",
+      "text": "Remove Leah Atwood from the game.",
+      "bullets": []
+    },
+    "dawn-of-the-final-day:check_leah": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_section_exists",
+        "take": false
+      },
+      "then": [],
+      "else": [
+        "dawn-of-the-final-day:check_leah:no:fx",
+        "dawn-of-the-final-day:remove_leah:text"
+      ]
+    },
+    "dawn-of-the-final-day:check_river:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "fhvFinalDayCodex5",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "dawn-of-the-final-day:remove_river:text": {
+      "kind": "story",
+      "text": "Remove River Hawthorne from the game.",
+      "bullets": []
+    },
+    "dawn-of-the-final-day:check_river": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_section_exists",
+        "take": false
+      },
+      "then": [],
+      "else": [
+        "dawn-of-the-final-day:check_river:no:fx",
+        "dawn-of-the-final-day:remove_river:text"
+      ]
+    },
+    "dawn-of-the-final-day:check_judith:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "fhvFinalDayCodex7",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "dawn-of-the-final-day:remove_judith:text": {
+      "kind": "story",
+      "text": "Remove Judith Park from the game.",
+      "bullets": []
+    },
+    "dawn-of-the-final-day:check_judith": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_section_exists",
+        "take": false
+      },
+      "then": [],
+      "else": [
+        "dawn-of-the-final-day:check_judith:no:fx",
+        "dawn-of-the-final-day:remove_judith:text"
+      ]
+    },
+    "dawn-of-the-final-day:check_william:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "fhvFinalDayCodex4",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "dawn-of-the-final-day:remove_william:text": {
+      "kind": "story",
+      "text": "Remove William Hemlock from the game.",
+      "bullets": []
+    },
+    "dawn-of-the-final-day:check_william": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_section_exists",
+        "take": false
+      },
+      "then": [],
+      "else": [
+        "dawn-of-the-final-day:check_william:no:fx",
+        "dawn-of-the-final-day:remove_william:text"
+      ]
+    },
+    "dawn-of-the-final-day:check_theo:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "fhvFinalDayCodex8",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "dawn-of-the-final-day:remove_theo:text": {
+      "kind": "story",
+      "text": "Remove Theo Peters from the game.",
+      "bullets": []
+    },
+    "dawn-of-the-final-day:check_theo": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_section_exists",
+        "take": false
+      },
+      "then": [],
+      "else": [
+        "dawn-of-the-final-day:check_theo:no:fx",
+        "dawn-of-the-final-day:remove_theo:text"
+      ]
+    },
+    "dawn-of-the-final-day:check_gideon:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "fhvFinalDayCodex6",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "dawn-of-the-final-day:remove_gideon:text": {
+      "kind": "story",
+      "text": "Remove Gideon Mizrah from the game.",
+      "bullets": []
+    },
+    "dawn-of-the-final-day:check_gideon": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_section_exists",
+        "take": false
+      },
+      "then": [],
+      "else": [
+        "dawn-of-the-final-day:check_gideon:no:fx",
+        "dawn-of-the-final-day:remove_gideon:text"
+      ]
     },
     "the-final-evening:devoured_by_colour:text": {
       "kind": "story",
@@ -4237,6 +7425,26 @@
           "do": "nextScenario",
           "scenario": "fate-of-the-vale"
         }
+      ]
+    },
+    "the-final-evening:check_investigators_believed_resolution": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "believed",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-final-evening:devoured_by_colour:text",
+        "the-final-evening:explain_replay:text",
+        "the-final-evening:ask_replay",
+        "the-final-evening:check_replay"
+      ],
+      "else": [
+        "the-final-evening:earn_xp",
+        "the-final-evening:transfer_xp",
+        "the-final-evening:upgradeDecks",
+        "the-final-evening:set_next_scenario"
       ]
     },
     "the-final-evening:intro_2": {
@@ -4414,6 +7622,239 @@
         "the-final-evening:add_tablet_and_elder_thing:text",
         "the-final-evening:add_tablet_and_elder_thing",
         "the-final-evening:interrupted_the_feast"
+      ]
+    },
+    "the-final-evening:check_leah:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "fhvFinalEveningCodex2",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-final-evening:remove_leah:text": {
+      "kind": "story",
+      "text": "Remove Leah Atwood from the game.",
+      "bullets": []
+    },
+    "the-final-evening:check_leah": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_section_exists",
+        "take": false
+      },
+      "then": [],
+      "else": [
+        "the-final-evening:check_leah:no:fx",
+        "the-final-evening:remove_leah:text"
+      ]
+    },
+    "the-final-evening:check_simeon:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "fhvFinalEveningCodex3",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-final-evening:remove_simeon:text": {
+      "kind": "story",
+      "text": "Remove Simeon Atwood from the game.",
+      "bullets": []
+    },
+    "the-final-evening:check_simeon": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_section_exists",
+        "take": false
+      },
+      "then": [],
+      "else": [
+        "the-final-evening:check_simeon:no:fx",
+        "the-final-evening:remove_simeon:text"
+      ]
+    },
+    "the-final-evening:check_river:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "fhvFinalEveningCodex5",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-final-evening:remove_river:text": {
+      "kind": "story",
+      "text": "Remove River Hawthorne from the game.",
+      "bullets": []
+    },
+    "the-final-evening:check_river": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_section_exists",
+        "take": false
+      },
+      "then": [],
+      "else": [
+        "the-final-evening:check_river:no:fx",
+        "the-final-evening:remove_river:text"
+      ]
+    },
+    "the-final-evening:check_judith:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "fhvFinalEveningCodex7",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-final-evening:remove_judith:text": {
+      "kind": "story",
+      "text": "Remove Judith Park from the game.",
+      "bullets": []
+    },
+    "the-final-evening:check_judith": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_section_exists",
+        "take": false
+      },
+      "then": [],
+      "else": [
+        "the-final-evening:check_judith:no:fx",
+        "the-final-evening:remove_judith:text"
+      ]
+    },
+    "the-final-evening:check_william:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "fhvFinalEveningCodex4",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-final-evening:remove_william:text": {
+      "kind": "story",
+      "text": "Remove William Hemlock from the game.",
+      "bullets": []
+    },
+    "the-final-evening:check_william": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_section_exists",
+        "take": false
+      },
+      "then": [],
+      "else": [
+        "the-final-evening:check_william:no:fx",
+        "the-final-evening:remove_william:text"
+      ]
+    },
+    "the-final-evening:check_theo:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "fhvFinalEveningCodex8",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-final-evening:remove_theo:text": {
+      "kind": "story",
+      "text": "Remove Theo Peters from the game.",
+      "bullets": []
+    },
+    "the-final-evening:check_theo": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_section_exists",
+        "take": false
+      },
+      "then": [],
+      "else": [
+        "the-final-evening:check_theo:no:fx",
+        "the-final-evening:remove_theo:text"
+      ]
+    },
+    "the-final-evening:check_gideon:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "fhvFinalEveningCodex6",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-final-evening:remove_gideon:text": {
+      "kind": "story",
+      "text": "Remove Gideon Mizrah from the game.",
+      "bullets": []
+    },
+    "the-final-evening:check_gideon": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_section_exists",
+        "take": false
+      },
+      "then": [],
+      "else": [
+        "the-final-evening:check_gideon:no:fx",
+        "the-final-evening:remove_gideon:text"
+      ]
+    },
+    "the-final-evening:bertie_at_crossroads:text": {
+      "kind": "story",
+      "text": "Put Bertie Musgrave into play at The Crossroads, enemy side faceup.",
+      "bullets": []
+    },
+    "the-final-evening:check_bertie_had_an_epiphany:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "fhvFinalEveningCodexOmega",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-final-evening:check_bertie_had_an_epiphany": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "bertieHadAnEpiphany",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-final-evening:bertie_at_crossroads:text"
+      ],
+      "else": [
+        "the-final-evening:check_bertie_had_an_epiphany:no:fx"
       ]
     },
     "fate-of-the-vale:became_the_true_feast_of_hemlock_vale": {
@@ -4812,6 +8253,227 @@
       "kind": "story",
       "text": "The investigators win the campaign...but nobody else did.",
       "bullets": []
+    },
+    "the-first-evening:intro": {
+      "kind": "story",
+      "text": "As you return to Hemlock Vale, a young red-headed girl in a rabbit mask introduces herself as Rebecca, Mother Rachel’s daughter, and leads you by the hand to dinner in the Commons. The long building’s large barn doors are open to let out the rich scent of roasted vegetables and savory meat. The people of the Vale sit and eat in lively conversation, each of them in their white-gold cloaks. At the head of the room, Mother Rachel stands up and calls for attention. Rebecca leads you to the now-picked-over dinner spread as the room falls silent.\n“<i>Meine lieben Freunde.</i> What a blessing that all of us have come here, on the threshold of infinity. And what a greater blessing still that pilgrims have come here, so full of light and curiosity!” Mother Rachel gestures to Dr. Marquez to her right, and to you. “We have waited for the right moment to open our community. Our community which is truly the ‘Sanctuary of Transfiguration’ we long dreamed of. For each of us yearns to be remade as we wait to join our light with the light of the cosmos.”\nThe room bursts into applause as Leah Atwood and several locals place trays of honeyed cakes topped with robust red fruit in the center of each table. Your stomach grumbles as you take a bite of shriveled greens. It has a faint bitter taste, and a sharp smell.",
+      "bullets": []
+    },
+    "the-first-evening:choose_feast_prompt:text": {
+      "kind": "story",
+      "text": "One at a time, each investigator must decide individually:",
+      "bullets": []
+    },
+    "the-first-evening:choose_feast": {
+      "kind": "unsupported",
+      "name": "investigator_choice",
+      "effects": [],
+      "steps": []
+    },
+    "the-first-evening:conversation_explanation:text": {
+      "kind": "story",
+      "text": "You may choose where to sit for the community meal. One at a time, each investigator may choose a different codex entry from the following. (If there is only one investigator, you may choose two to resolve instead).",
+      "bullets": []
+    },
+    "the-first-evening:choose_conversation_solo": {
+      "kind": "unsupported",
+      "name": "investigator_choice",
+      "text": "Choose where to sit:",
+      "effects": [],
+      "steps": []
+    },
+    "the-first-evening:choose_conversation": {
+      "kind": "unsupported",
+      "name": "investigator_choice",
+      "text": "Choose where to sit:",
+      "effects": [],
+      "steps": []
+    },
+    "the-first-evening:choose_conversation_count#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "the-first-evening:choose_conversation"
+      ],
+      "else": []
+    },
+    "the-first-evening:choose_conversation_count#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "the-first-evening:choose_conversation"
+      ],
+      "else": [
+        "the-first-evening:choose_conversation_count#3"
+      ]
+    },
+    "the-first-evening:choose_conversation_count#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "the-first-evening:choose_conversation"
+      ],
+      "else": [
+        "the-first-evening:choose_conversation_count#2"
+      ]
+    },
+    "the-first-evening:choose_conversation_count": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 1,
+        "max": 1
+      },
+      "then": [
+        "the-first-evening:choose_conversation_solo",
+        "the-first-evening:choose_conversation"
+      ],
+      "else": [
+        "the-first-evening:choose_conversation_count#1"
+      ]
+    },
+    "the-second-evening:intro_1": {
+      "kind": "story",
+      "text": "The rain continues through the day. When you arrive at the Commons for dinner, the tables have been pushed to the sides of the room and warm lamps are hung from colorful ribbons. Dozens of new faces peer out from the crowd of cloaked locals: visitors from the mainland. A large sculpture looms in the center of the room, festooned with violet and white blossoms that seem to palpitate in the soft light. The room goes silent as Mother Rachel addresses the assembly. “Friends. Brethren. Each of you is a miracle of time and light. You are the promise of your true self—” The matron stops mid-sentence.",
+      "bullets": []
+    },
+    "the-second-evening:intro_2": {
+      "kind": "story",
+      "text": "A shadow passes over the matron’s face as she sways, looking for a moment as though she might faint. The air in the room swirls thickly. Oily patterns dance in the light as you feel a now-familiar light-headedness. Someone steps forward to help Mother Rachel, but she holds up one hand and steadies herself.",
+      "bullets": []
+    },
+    "the-second-evening:intro_3": {
+      "kind": "story",
+      "text": "A sturdy figure cuts through the crowd. “Has anyone seen Simeon?” Leah Atwood asks in a trembling voice. She looks at the assembly with wide, searching eyes. “Please. Simeon. Now’s not the time for pranks,” she addresses her son, but to no response. The air in the room swirls thickly. “Enough,” Mother Rachel shoos her sister away. Oily patterns dance in the light as you feel a now-familiar light-headedness.",
+      "bullets": []
+    },
+    "the-second-evening:leah_is_searching_for_simeon:text": {
+      "kind": "story",
+      "text": "Update your Campaign Log.",
+      "bullets": []
+    },
+    "the-second-evening:leah_is_searching_for_simeon": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "leahIsSearchingForSimeon",
+          "section": "leah",
+          "value": true
+        },
+        {
+          "do": "crossOut",
+          "key": "simeonPlanIsUnderway",
+          "section": "hidden"
+        }
+      ]
+    },
+    "the-second-evening:check_simeon_survived": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "simeonSurvived",
+        "section": "simeon"
+      },
+      "then": [
+        "the-second-evening:intro_2"
+      ],
+      "else": [
+        "the-second-evening:intro_3",
+        "the-second-evening:leah_is_searching_for_simeon:text",
+        "the-second-evening:leah_is_searching_for_simeon"
+      ]
+    },
+    "the-second-evening:intro_4": {
+      "kind": "story",
+      "text": "Mother Rachel regains her composure. “Tonight is the shortest night of the year. And tomorrow is the beginning of eternity. So on this night, let us dance.” The assembly bursts into rapturous applause. A ragtag band in the corner starts playing as the dance begins. Several friendly faces beckon you to join.",
+      "bullets": []
+    },
+    "the-second-evening:dance_explanation:text": {
+      "kind": "story",
+      "text": "You may choose whom you would like to dance with. One at a time, each investigator may choose a different codex entry from the following (if there is only one investigator, you may choose two to resolve instead). If a resident’s name is crossed out, you cannot choose their codex.",
+      "bullets": []
+    },
+    "the-second-evening:choose_dance_solo": {
+      "kind": "unsupported",
+      "name": "investigator_choice",
+      "text": "Choose dance:",
+      "effects": [],
+      "steps": []
+    },
+    "the-second-evening:choose_dance": {
+      "kind": "unsupported",
+      "name": "investigator_choice",
+      "text": "Choose dance:",
+      "effects": [],
+      "steps": []
+    },
+    "the-second-evening:choose_dance_count#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "the-second-evening:choose_dance"
+      ],
+      "else": []
+    },
+    "the-second-evening:choose_dance_count#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "the-second-evening:choose_dance"
+      ],
+      "else": [
+        "the-second-evening:choose_dance_count#3"
+      ]
+    },
+    "the-second-evening:choose_dance_count#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "the-second-evening:choose_dance"
+      ],
+      "else": [
+        "the-second-evening:choose_dance_count#2"
+      ]
+    },
+    "the-second-evening:choose_dance_count": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 1,
+        "max": 1
+      },
+      "then": [
+        "the-second-evening:choose_dance_solo",
+        "the-second-evening:choose_dance"
+      ],
+      "else": [
+        "the-second-evening:choose_dance_count#1"
+      ]
     },
     "fhv-epilogue:epilogue_1": {
       "kind": "story",

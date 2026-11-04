@@ -195,3 +195,105 @@ describe("the generated campaigns (pnpm import:campaigns output)", () => {
     ).toEqual([]);
   });
 });
+
+describe("the generated flows (campaign-flow-compiler-fixes)", () => {
+  const G = "content/campaigns-generated";
+  type Flow = {
+    order: string[];
+    resolutions: Record<string, Record<string, string[]>>;
+    interludes: Record<string, unknown>;
+    steps: Record<
+      string,
+      {
+        kind: string;
+        effects?: { do: string; [k: string]: unknown }[];
+        then?: string[];
+        else?: string[];
+        choices?: { steps: string[]; effects?: { do: string; [k: string]: unknown }[] }[];
+        steps_?: string[];
+      }
+    >;
+  };
+  const flowOf = (c: string): Flow => JSON.parse(readFileSync(join(G, c, "flow.json"), "utf8"));
+  const reach = (f: Flow, ids: string[], seen = new Set<string>()): string[] =>
+    ids.flatMap((id) => {
+      if (seen.has(id) || !f.steps[id]) return [];
+      seen.add(id);
+      const st = f.steps[id];
+      const kids = [
+        ...(st.then ?? []),
+        ...(st.else ?? []),
+        ...(st.choices ?? []).flatMap((c) => c.steps),
+      ];
+      return [id, ...reach(f, kids, seen)];
+    });
+  const effects = (f: Flow, ids: string[]) =>
+    reach(f, ids).flatMap((id) => [
+      ...(f.steps[id].kind === "effects" ? (f.steps[id].effects ?? []) : []),
+      ...(f.steps[id].choices ?? []).flatMap((c) => c.effects ?? []),
+    ]);
+
+  it("Carcosa plays in the guide's order, with the original Interlude I", () => {
+    expect(flowOf("the-path-to-carcosa").order).toEqual([
+      "ptc-prologue",
+      "curtain-call",
+      "the-last-king",
+      "ptc-interlude1",
+      "echoes-of-the-past",
+      "the-unspeakable-oath",
+      "ptc-interlude2",
+      "a-phantom-of-truth",
+      "the-pallid-mask",
+      "black-stars-rise",
+      "dim-carcosa",
+      "ptc-epilogue",
+    ]);
+    expect(flowOf("return-to-the-path-to-carcosa").order.slice(0, 4)).toEqual([
+      "ptc-prologue",
+      "return-to-curtain-call",
+      "return-to-the-last-king",
+      "ptc-interlude1",
+    ]);
+  });
+
+  it("The House Always Wins with no resolution runs Resolution 1's steps", () => {
+    const f = flowOf("the-dunwich-legacy");
+    const keys = (ids: string[]) =>
+      effects(f, ids)
+        .filter((e) => e.do === "record")
+        .map((e) => e.key);
+    const r = f.resolutions["the-house-always-wins"];
+    expect(keys(r.none)).toEqual(keys(r.R1));
+    expect(keys(r.none)).toContain("boneToPick");
+  });
+
+  it("Written in Rock's resolutions end with its hidden Resolution 6, advance the day and go to The First Evening", () => {
+    const f = flowOf("the-feast-of-hemlock-vale");
+    const r = f.resolutions["written-in-rock"];
+    expect(Object.keys(r)).not.toContain("R6");
+    const file = JSON.parse(
+      readFileSync(join(G, "the-feast-of-hemlock-vale/scenarios/written-in-rock.json"), "utf8"),
+    );
+    expect(Object.keys(file.resolutions)).not.toContain("R6");
+    const fx = effects(f, r.R1);
+    expect(fx).toContainEqual({ do: "count", id: "day", section: "hidden", op: "add", value: 1 });
+    expect(fx).toContainEqual({ do: "nextScenario", scenario: "the-first-evening" });
+  });
+
+  it("The Dream-Eaters' halves upgrade decks after Dark Side of the Moon and Point of No Return", () => {
+    for (const [c, sc] of [
+      ["the-dream-quest", "dark-side-of-the-moon"],
+      ["the-web-of-dreams", "point-of-no-return"],
+    ] as const) {
+      const f = flowOf(c);
+      for (const ids of Object.values(f.resolutions[sc]))
+        expect(reach(f, ids).some((id) => f.steps[id].kind === "upgradeDecks")).toBe(true);
+    }
+  });
+
+  it("only Fortune and Folly holds its checkpoint interlude", () => {
+    const sides = readdirSync(G).filter((d) => d.startsWith("side-"));
+    expect(sides.filter((d) => "fortune-and-folly-checkpoint" in flowOf(d).interludes)).toEqual([]);
+    expect(flowOf("fortune-and-folly").interludes).toHaveProperty("fortune-and-folly-checkpoint");
+  });
+});

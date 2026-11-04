@@ -149,35 +149,6 @@
           "who": "each"
         }
       ]
-    },
-    "R3": {
-      "title": "Resolution 3",
-      "text": "“Miskatonic Survey, June 1926. Members Marquez, Musgrave, et alii. An unplanned foray into the Western Woods, at night. Local flora and fauna have evolved highly specialized behavior patterns after dark, likely dictated by extreme circadian rhythms and aggressive predation. A highly toxic environment. Identified a hitherto unknown symbiosis with a new strain of parasitic fungus. Further observation necessary.”",
-      "effects": [
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 1,
-          "who": "each"
-        },
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 0,
-          "who": "each"
-        },
-        {
-          "do": "xp",
-          "victory": true,
-          "bonus": 0,
-          "who": "each"
-        },
-        {
-          "do": "record",
-          "key": "westernWoods",
-          "value": true
-        }
-      ]
     }
   },
   "i18nId": "the_twisted_hollow",
