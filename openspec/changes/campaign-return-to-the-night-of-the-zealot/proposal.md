@@ -10,11 +10,11 @@ Return to the Night of the Zealot is the first Return-to box and the only one wh
 - **Return to The Devourer Below** (01142 + 50032a): Main Path plus 4 random of 10 woods (01150–01155, 50033–50036); 50032b Vault of Earthly Demise attached to the set-aside Umôrdhoth; `randomEncounterSet` of the four Agents sets as base; doom from `cultistsGotAway`, past midnight and the Ghoul Priest as base. Its 13 cards work: locations 50033–50036, treachery 50037, 50032b, and the shared 50038–50043. Connections as the cards print: the Main Path to every woods in play and to the Ritual Site; the Ritual Site to the Main Path only; each woods to its printed partner woods when in play (Great Willow 50033 with Lakeside 50034, Corpse-Ridden Clearing 50035 with Wooden Bridge 50036; the base woods in their printed ring 01150–01152–01151–01154–01155–01153–01150).
 - **Scenario scripts** composed from the base ones, plus card scripts where the vocabulary ends: 50012, 50013, 50016, 50024, 50028, 50030, 50031, 50032b, 50037, 50039, 50040, 50041, 50042, 50043.
 - **Vocabulary additions**, each used by two cards or reused by later Return boxes: an ordered spawn fallback (`spawn: ["Your House", "Rivertown"]`); a `cannotDrawAction` flag scoped to investigators at a location; a `cannotParley` flag scoped to Cultists at or connecting to a location; prey `nearestTo` a card filter; a `revealAnotherToken` op with limit once per test; an `endTurn` op; the `damageCapOne` flag scoped to enemies at a location; a `gainClues` op from the token pool; `addUses` on a chosen controlled asset with a given use type; conditions `leadInvestigator` and `agendaStage`.
-- **The base campaign can use the replacement sets.** Night of the Zealot's `campaign.json` declares the option `rtnotz-replacement-sets` (the `CampaignDef.options` / `replaceSets` shape of `campaign-return-to-the-dunwich-legacy`): Ghouls of Umôrdhoth for Ghouls, The Devourer's Cult for Dark Cult. Cult of Umôrdhoth (`return_cult`) replaces nothing: the bookmark says the cultist deck draws from both sets, so it is not part of the option.
+- **The base campaign can use the replacement sets.** Night of the Zealot's `campaign.json` declares the option `rtnotz-replacement-sets` (the `CampaignDef.options` / `replaceSets` shape of `scenario-import-fixes`, ADR-0038): Ghouls of Umôrdhoth for Ghouls, The Devourer's Cult for Dark Cult. Cult of Umôrdhoth (`return_cult`) replaces nothing: the bookmark says the cultist deck draws from both sets, so it is not part of the option.
 - Coverage: `return-to-the-night-of-the-zealot` and its 3 scenarios complete; `docs/campaign-program.md` rtnotz row at 0 encounter cards left.
 - `ENGINE_VERSION` bump: a saved scenario in progress restarts, campaign logs are kept.
 
-Not in this change: the "after you reveal this location" trigger and the random setup ops (`engine-scenario-structure`); `setupCards`, the script composition helper and `CampaignDef.options` (`campaign-return-to-the-dunwich-legacy`, decisions 1, 2 and 6; whichever of the two Return changes lands first carries them); the three base NotZ fixes (The Devourer Below's elder thing token, Gathering R3's Lita for a killed lead, `01109.ts` finding the Hallway by code: a separate bug fix this change depends on); the 10 player cards (`player-cards-notz-return`); By the Book (`campaign-side-by-the-book`); the bookmark's "shuffle old and new sets together" optional variant.
+Not in this change: the "after you reveal this location" trigger and the random setup ops (`engine-scenario-structure`); `setupCards`, `compose()` and `CampaignDef.options` (`scenario-import-fixes`, ADR-0038); the three base NotZ fixes (The Devourer Below's elder thing token, Gathering R3's Lita for a killed lead, `01109.ts` finding the Hallway by code: a separate bug fix this change depends on); the 10 player cards (`player-cards-notz-return`); By the Book (`campaign-side-by-the-book`); the bookmark's "shuffle old and new sets together" optional variant.
 
 ## Capabilities
 
@@ -36,7 +36,7 @@ None.
 - `src/content/schema.ts` (`CardDef.spawn` list, the flags, scopes, ops and conditions), `src/content/implemented.ts` (`spawnResolves` over a list), `src/engine/effects/` (new ops), `src/engine/rules/` (flags and scopes read where draw, parley, damage and prey are decided), `src/engine/index.ts` (`ENGINE_VERSION`).
 - `content/i18n/{en,ru}/ui.json` (ability labels, script prompts, the option label); `content/i18n/ru/campaign-texts/return-to-the-night-of-the-zealot.json` regenerated and keyed by the base log keys.
 - `content/coverage.json`, `docs/campaign-program.md`, README's campaign list.
-- Depends on `engine-scenario-structure` (reveal trigger, random setup ops), the shared pieces of `campaign-return-to-the-dunwich-legacy` (`setupCards`, composition, options) and the base NotZ bug fix.
+- Depends on `engine-scenario-structure` (reveal trigger, random setup ops), `scenario-import-fixes` (`setupCards`, `compose()`, `CampaignDef.options`, the camelCase log keys) and the base NotZ bug fix.
 
 ## Decided (assumed)
 
@@ -48,7 +48,7 @@ None.
 
 ## Decided (user)
 
-- **Each base campaign offers its Return-to replacement sets as an option at campaign creation**, with the `CampaignDef.options` / `replaceSets` shape from `campaign-return-to-the-dunwich-legacy` (design decision 6, its spec requirement and task group 10). Night of the Zealot's `campaign.json` gets `rtnotz-replacement-sets`. The bookmark (`inspired/AHC_CYOA-main/Return To Bookmarks/Return To Bookmarks - For Reading.pdf`) prints the pairs backwards ("Ghouls replaces Ghouls of Umôrdhoth"); per the setup cards and ArkhamCards the new sets replace the old:
+- **Each base campaign offers its Return-to replacement sets as an option at campaign creation**, with the `CampaignDef.options` / `replaceSets` shape from `scenario-import-fixes` (its design decision 11 and campaign-play requirement "Campaign options chosen at creation"). Night of the Zealot's `campaign.json` gets `rtnotz-replacement-sets`. The bookmark (`inspired/AHC_CYOA-main/Return To Bookmarks/Return To Bookmarks - For Reading.pdf`) prints the pairs backwards ("Ghouls replaces Ghouls of Umôrdhoth"); per the setup cards and ArkhamCards the new sets replace the old:
 
   | Replacement set | Replaces |
   | --- | --- |

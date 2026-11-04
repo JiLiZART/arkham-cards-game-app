@@ -56,7 +56,7 @@
 ## 10. Replacement sets option on the base campaign
 
 - [ ] 10.1 Failing test first: a The Path to Carcosa campaign created with `rtptc-replacement-sets` starts Curtain Call with Maddening Delusions and Neurotic Fear in place of Delusions and Striking Fear; with the option off no replacement card is in the deck.
-- [ ] 10.2 `content/campaigns/the-path-to-carcosa/campaign.json` declares the option with the bookmark's five pairs in the `CampaignDef.options` shape of `campaign-return-to-the-dunwich-legacy`; strings `campaign.option.rtptc-replacement-sets` in `content/i18n/{en,ru}/ui.json`; the content check of the Dunwich change validates the set codes.
+- [ ] 10.2 `content/campaigns/the-path-to-carcosa/campaign.json` declares the option with the bookmark's five pairs in the `CampaignDef.options` shape of `scenario-import-fixes`; strings `campaign.option.rtptc-replacement-sets` in `content/i18n/{en,ru}/ui.json`; `check:content` validates the set codes.
 
 ## 11. Flow and translations
 

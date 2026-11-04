@@ -2,7 +2,7 @@
 
 `content/campaigns-generated/return-to-the-forgotten-age/` holds 9 scenario files (Return to The Depths of Yoth is skipped by the importer: its setup puts a random location into play, so it finds "no location"; `scenario-import-fixes` generates it). Each file's `card` is the base scenario card (04043…04344) and its `encounterSets` name the Return-to sets, but the setups are the base setups' copies plus the Return-to cards put into play beside the originals (both 04060 and 53019 Entryways; both Harbingers and both Chambers set aside), `acts` are one card per stage across decks (53029, 53031, 53035 for four decks of Threads; 53054 alone for The City of Archives), and no "one of two per symbol" deck exists. The rttfa pack (`content/packs/return/cards.generated.json`: 85 cards, 67 encounter, 15 player, 3 scenario-set player-side) has an empty `cards.json` for these codes. The box's rules beyond the setup cards are three: the exploration rule after a successful exploration, the resupply changes, and the Key of Eztli (RtTFA guide ll.1728–1747, 3454).
 
-After `campaign-the-forgotten-age` the base campaign is hand-written with one script per scenario exporting its hooks, symbols on every base location, real token tables and a hand-fixed flow; after `campaign-return-to-the-dunwich-legacy`, `ScenarioDef.setupCards`, `compose()` in `src/engine/api.ts` and `CampaignDef.options` with `replaceSets` exist. The TFA engine change gives `buildExploration.bySymbol`, `ScenarioDef.afterExplore` and `buySupplies.xpRate`.
+After `campaign-the-forgotten-age` the base campaign is hand-written with one script per scenario exporting its hooks, symbols on every base location, real token tables and a hand-fixed flow; after `scenario-import-fixes`, `ScenarioDef.setupCards`, `compose()` in `src/engine/api.ts` and `CampaignDef.options` with `replaceSets` and `addSets` exist (ADR-0038), and `return-to-the-depths-of-yoth.json` is generated. The TFA engine change gives `buildExploration.bySymbol`, `ScenarioDef.afterExplore` and `buySupplies.xpRate`.
 
 In-force ADRs as in the base change; 0007, 0013, 0028, 0034, 0052, 0053 constrain this one.
 
@@ -40,7 +40,7 @@ In-force ADRs as in the base change; 0007, 0013, 0028, 0034, 0052, 0053 constrai
 
 ## Decisions
 
-1. **A Return scenario's script composes the base's** with `compose()` as the Dunwich Return-to does; setup hooks run after the base's, objective hooks before. Return to Turn Back Time composes Return to The Doom of Eztli's.
+1. **A Return scenario's script composes the base's** with `compose()` from `scenario-import-fixes` (ADR-0038); setup hooks run after the base's, objective hooks before. Return to Turn Back Time composes Return to The Doom of Eztli's.
 
 2. **The scenario file carries both cards** (`card` = base, `setupCards` = the Return-to card), the token table copied from the base file (ADR-0013 measures the file).
 
@@ -52,11 +52,11 @@ In-force ADRs as in the base change; 0007, 0013, 0028, 0034, 0052, 0053 constrai
 
 6. **The Key of Eztli is a supply id** in the engine change's `SUPPLY` set, recorded by the Depths' resolution with `addSupply` for a chosen investigator and read by 53020's check; it is not a card.
 
-7. **The replacement sets option on the base campaign** reuses `CampaignDef.options` with `replaceSets` (the four pairs); Return to the Rainforest's addition is the open question (an `addSets` list on the same option if the user wants it).
+7. **The replacement sets option on the base campaign** reuses `CampaignDef.options`: `replaceSets` with the four pairs and `addSets: ["return_to_the_rainforest"]`, declared on `content/campaigns/the-forgotten-age/campaign.json` as `rttfa-replacement-sets`; the mechanism is `scenario-import-fixes`' decision 11.
 
 ## Risks / Trade-offs
 
-- [The base scripts' hook shapes change] → the composition helper is the Dunwich change's; a test asserts every Return script's hook list is a superset of its base's.
+- [The base scripts' hook shapes change] → the composition helper is `scenario-import-fixes`' `compose()`; a test asserts every Return script's hook list is a superset of its base's.
 - [`bySymbol` over two sets picks by the transcribed symbols] → the engine change's reachability check runs over the Return-to decks too; a test per Return scenario explores to every location.
 - [Return to The Depths of Yoth depends on an importer fix] → ordered after `scenario-import-fixes`; until then the group's first task fails on a missing file.
 - [Perils of Yoth into each new deck hooks the base's depth advance] → the base script exports `onDepthAdvance`; a test advances depth and finds 53060 in the new deck.
@@ -67,4 +67,4 @@ Content only, plus the base campaign's option declaration; the generated folder 
 
 ## Open Questions
 
-- Return to the Rainforest in the base option (proposal). No in-force ADR needs revisiting.
+- None; Return to the Rainforest is in the option through `addSets` (proposal). No in-force ADR needs revisiting.

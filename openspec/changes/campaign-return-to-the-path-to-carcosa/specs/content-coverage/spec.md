@@ -2,7 +2,7 @@
 
 ### Requirement: Return to The Path to Carcosa is complete
 
-Each Return scenario SHALL list its box's setup card in `setupCards` beside the base reference card, so the setup card counts as real with no token lines as `campaign-return-to-the-dunwich-legacy` defines, and its token effects SHALL be real when the base card's are; a content check SHALL fail when a Return scenario's token table differs from its base scenario's. `content/coverage.json` SHALL report `return-to-the-path-to-carcosa` and each of its 8 scenarios complete, and `docs/campaign-program.md` the rtptc row with 0 encounter cards left.
+Each Return scenario SHALL list its box's setup card in `setupCards` beside the base reference card, so the setup card counts as real with no token lines as `scenario-import-fixes` defines, and its token effects SHALL be real when the base card's are; a content check SHALL fail when a Return scenario's token table differs from its base scenario's. `content/coverage.json` SHALL report `return-to-the-path-to-carcosa` and each of its 8 scenarios complete, and `docs/campaign-program.md` the rtptc row with 0 encounter cards left.
 
 #### Scenario: A setup card without token lines
 

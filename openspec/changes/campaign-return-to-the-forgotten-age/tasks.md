@@ -65,8 +65,7 @@
 ## 12. Replacement sets option on the base campaign
 
 - [ ] 12.1 Failing test first: a Forgotten Age campaign created with `rttfa-replacement-sets` starts The Untamed Wilds with Doomed Expedition in place of Expedition and, in Eztli, Venomous Hate and Temporal Hunters in place of Yig's Venom and Temporal Flux; with the option off no rttfa card is in any deck.
-- [ ] 12.2 `content/campaigns/the-forgotten-age/campaign.json` declares the option with the bookmark's four pairs through `CampaignDef.options.replaceSets`; label `campaign.option.rttfa-replacement-sets` en/ru; `check:content` validates the set ids.
-- [ ] 12.3 If the user wants Return to the Rainforest in the option: `addSets` beside `replaceSets` (schema, setup gathering, check), the option lists `return_to_the_rainforest`; test that the four cards join the Rainforest set with the option on.
+- [ ] 12.2 `content/campaigns/the-forgotten-age/campaign.json` declares the option with the bookmark's four pairs under `replaceSets` and `return_to_the_rainforest` under `addSets` (the `CampaignDef.options` shape of `scenario-import-fixes`); label `campaign.option.rttfa-replacement-sets` en/ru; `check:content` validates the set ids; test that the four Rainforest cards join the Rainforest set with the option on and are absent with it off.
 
 ## 13. Flow and translations
 

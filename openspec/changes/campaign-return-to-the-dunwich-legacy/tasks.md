@@ -1,8 +1,8 @@
 ## 1. The move and the shared pieces
 
-- [ ] 1.1 `git mv content/campaigns-generated/return-to-the-dunwich-legacy content/campaigns/return-to-the-dunwich-legacy`; `generated: false`; the importer skips it; `check:content` passes unchanged.
-- [ ] 1.2 `ScenarioDef.setupCards` in `src/content/schema.ts`; `tokensReal` and `src/content/coverage.ts` count a setup card without token lines as real; test: Return to Extracurricular Activity with 02041 + 51012 reports tokens real once 02041's table is real.
-- [ ] 1.3 `compose()` for scenario hooks in `src/engine/api.ts` with a test; the 8 base scripts export their hooks object; a test asserts each Return script's hooks are a superset of its base's.
+- [ ] 1.1 Confirm `scenario-import-fixes` has landed (`ScenarioDef.setupCards`, `compose()` in `src/engine/api.ts`, `CampaignDef.options`, the camelCase log keys); `git mv content/campaigns-generated/return-to-the-dunwich-legacy content/campaigns/return-to-the-dunwich-legacy`; `generated: false`; the importer skips it; `check:content` passes unchanged.
+- [ ] 1.2 Each Return scenario file: `card` = the base card, `setupCards` = the box's card, `tokens` copied from the base file; test: Return to Extracurricular Activity with 02041 + 51012 reports tokens real once 02041's table is real.
+- [ ] 1.3 The 8 base scripts export their hooks object; `scripts/return-to-<id>.ts` composed through `compose()`; a test asserts each Return script's hooks are a superset of its base's.
 - [ ] 1.4 Replacement sets in `content/packs/return/cards.json`, test per card: data 51064, 51068, 51069, 51071; new vocabulary with a test each: attach where most investigators + `cannotLeave` (51065), per-point choice discard-or-damage (51066), difficulty from clues with horror or a dropped clue per point (51070); scripts 51061, 51062, 51063, 51067, 51072.
 
 ## 2. Return to Extracurricular Activity (51012)
@@ -56,9 +56,7 @@
 ## 10. Replacement sets option on the base campaign
 
 - [ ] 10.1 Failing test first: a Dunwich campaign created with `rtdwl-replacement-sets` starts Extracurricular Activity with Beyond the Threshold, Resurgent Evils, Secret Doors and Yog-Sothoth's Emissaries in place of the base sets; with the option off, no replacement card is in the deck.
-- [ ] 10.2 `CampaignDef.options` (`{ id, labelKey, replaceSets }`) in `src/content/schema.ts`; the chosen ids in the campaign state and save (`src/engine/campaign/campaign.ts`); the scenario setup applies `replaceSets` when it gathers encounter sets, and skips a set already replaced by one in the list.
-- [ ] 10.3 `content/campaigns/the-dunwich-legacy/campaign.json` declares the option with the bookmark's six pairs; a content check validates that every `replaceSets` key and value is a known encounter set.
-- [ ] 10.4 New-campaign menu: one toggle per declared option, off by default, read-only once the campaign exists; strings `campaign.option.rtdwl-replacement-sets` in `content/i18n/{en,ru}/ui.json`; a UI test that the toggle reaches `createCampaign`.
+- [ ] 10.2 `content/campaigns/the-dunwich-legacy/campaign.json` declares the option with the bookmark's six pairs in the `CampaignDef.options` shape of `scenario-import-fixes` (set ids verified against the snapshot); strings `campaign.option.rtdwl-replacement-sets` in `content/i18n/{en,ru}/ui.json`; `check:content` validates the set ids; the new-game toggle reaches `createCampaign`.
 
 ## 11. Flow and translations
 

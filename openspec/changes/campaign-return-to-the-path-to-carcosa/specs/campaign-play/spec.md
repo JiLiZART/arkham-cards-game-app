@@ -48,7 +48,7 @@ The content SHALL hold Return to The Path to Carcosa as a hand-kept campaign und
 
 ### Requirement: Replacement encounter sets as a Carcosa option
 
-A new The Path to Carcosa campaign SHALL offer the option to use the Return to The Path to Carcosa replacement encounter sets, through the campaign option mechanism `campaign-return-to-the-dunwich-legacy` defines: chosen at creation, off by default, fixed for the campaign. With the option on, each scenario SHALL gather Delusory Evils for Ancient Evils, Neurotic Fear for Striking Fear, Hastur's Envoys for Agents of Hastur, Decaying Reality for Decay and Filth, and Maddening Delusions for Delusions.
+A new The Path to Carcosa campaign SHALL offer the option to use the Return to The Path to Carcosa replacement encounter sets, through the campaign option mechanism `scenario-import-fixes` defines: chosen at creation, off by default, fixed for the campaign. With the option on, each scenario SHALL gather Delusory Evils for Ancient Evils, Neurotic Fear for Striking Fear, Hastur's Envoys for Agents of Hastur, Decaying Reality for Decay and Filth, and Maddening Delusions for Delusions.
 
 #### Scenario: Option on
 

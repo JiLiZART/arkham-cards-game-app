@@ -2,7 +2,7 @@
 
 ### Requirement: Return to The Dunwich Legacy is complete
 
-A scenario whose cards include a setup card beside its reference card (a Return-to scenario: the base scenario card and the box's setup card) SHALL count the setup card as real when it prints no token lines, and its token effects SHALL be real when the reference card's are. `content/coverage.json` SHALL report `return-to-the-dunwich-legacy` and each of its 8 scenarios complete, and `docs/campaign-program.md` the rtdwl row with 0 encounter cards left.
+Each Return scenario SHALL list its box's setup card in `setupCards` beside the base reference card, so the setup card counts as real with no token lines as `scenario-import-fixes` defines, and its token effects SHALL be real when the base card's are. `content/coverage.json` SHALL report `return-to-the-dunwich-legacy` and each of its 8 scenarios complete, and `docs/campaign-program.md` the rtdwl row with 0 encounter cards left.
 
 #### Scenario: A setup card without token lines
 

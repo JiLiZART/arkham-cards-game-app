@@ -1,6 +1,6 @@
 ## 1. The move and the shared pieces
 
-- [ ] 1.1 Confirm the base NotZ bug fix is in (`01109.ts` finds the Hallway by name; The Devourer Below adds the elder thing token; Gathering R3 gives Lita to a chosen investigator when the lead was killed) and `engine-scenario-structure`'s reveal trigger and random setup ops; note which of `setupCards`, `compose()` and `CampaignDef.options` `campaign-return-to-the-dunwich-legacy` has landed and carry the rest here (its tasks 1.2, 1.3, 10.2).
+- [ ] 1.1 Confirm the base NotZ bug fix is in (`01109.ts` finds the Hallway by name; The Devourer Below adds the elder thing token; Gathering R3 gives Lita to a chosen investigator when the lead was killed) and `engine-scenario-structure`'s reveal trigger and random setup ops; confirm `scenario-import-fixes` has landed (`setupCards`, `compose()`, `CampaignDef.options`, the camelCase log keys).
 - [ ] 1.2 Create `content/campaigns/return-to-the-night-of-the-zealot/` by hand: `campaign.json` from the base one (`i18nId: "rtnotz"`, `packs: ["core", "return"]`, `card: "50011"`, the base `logLabels`, `logSections`, `chaosBags`, `cards` with the Return act and agenda codes), `flow.json` `{}`; `git rm -r content/campaigns-generated/return-to-the-night-of-the-zealot`; `check:content` passes.
 - [ ] 1.3 The three base scripts in `content/campaigns/night-of-the-zealot/scripts/` export their hooks object; `scripts/return-to-<id>.ts` composes each; a test asserts each Return script's hooks are a superset of its base's.
 - [ ] 1.4 Vocabulary, failing test first (`src/engine/rules/__tests__/`, `effects/__tests__/`): `CardDef.spawn` as an ordered list in `spawnResolves` and the spawn step; `cannotDrawAction` flag, scope `investigatorsAtLocation`, read by `actionsFor`; `cannotParley` flag, scope `enemiesAtOrConnectingLocation` with a filter; prey `nearestTo` in `preyCandidates()`; `revealAnotherToken` op with limit once per test; `endTurn` op; `damageCapOne` scope `enemiesAtLocation`; `gainClues` from the pool; `addUses {type, target: chooseControlled}`; conditions `leadInvestigator` and `agendaStage`; schema, `EFFECT_OPS`, validation.
@@ -30,7 +30,7 @@
 ## 5. Replacement sets option on Night of the Zealot
 
 - [ ] 5.1 Failing test first: a Night of the Zealot campaign created with `rtnotz-replacement-sets` starts The Gathering with Ghouls of Umôrdhoth in place of Ghouls and The Midnight Masks with The Devourer's Cult in place of Dark Cult; with the option off no replacement card is in the deck.
-- [ ] 5.2 `content/campaigns/night-of-the-zealot/campaign.json` declares the option with the two pairs (`ghouls_of_umôrdhoth` → `ghouls`, `the_devourers_cult` → `pentagram`); the mechanism from `campaign-return-to-the-dunwich-legacy` task group 10 (carried here if not landed); strings `campaign.option.rtnotz-replacement-sets` in `content/i18n/{en,ru}/ui.json`; the new-game toggle reaches `createCampaign`.
+- [ ] 5.2 `content/campaigns/night-of-the-zealot/campaign.json` declares the option with the two pairs (`ghouls_of_umôrdhoth` → `ghouls`, `the_devourers_cult` → `pentagram`); in the `CampaignDef.options` shape of `scenario-import-fixes`; strings `campaign.option.rtnotz-replacement-sets` in `content/i18n/{en,ru}/ui.json`; the new-game toggle reaches `createCampaign`.
 
 ## 6. Translations
 

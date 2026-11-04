@@ -2,7 +2,7 @@
 
 `content/campaigns-generated/return-to-the-dunwich-legacy/` holds 8 scenario files whose `card` is the base scenario card (02041…02311), whose `encounterSets` already name the replacement sets, and whose `acts`/`agendas` are wrong where the box replaces a card (Return to Essex keeps 02160; Return to Lost in Time and Space lists only 51054 and 51055). Coverage counts the setup card (51012…51053) as a second `scenario` card per Return scenario, so `tokensReal` (`src/content/implemented.ts:84`) can never be true for them today. The rtdwl pack (`content/packs/return/cards.generated.json`, 73 cards: 60 encounter, 13 player) has an empty `cards.json`. `docs/campaign-program.md` says a Return-to scenario plays with its base scenario's reference card and starts from the base scenario's script and token tables.
 
-After `campaign-the-dunwich-legacy`, the base campaign is hand-written at `content/campaigns/the-dunwich-legacy/` with one script per scenario (`scripts/<id>.ts`) and one per card (`content/packs/dwl/scripts/<code>.ts`), the token tables real, and the flow hand-fixed. In-force ADRs as in that change; 0007 (hand-written campaigns kept), 0013 (a reference card works by its token lines), 0028 (typed hooks) and 0034 (explicit script API) constrain this one.
+After `campaign-the-dunwich-legacy`, the base campaign is hand-written at `content/campaigns/the-dunwich-legacy/` with one script per scenario (`scripts/<id>.ts`) and one per card (`content/packs/dwl/scripts/<code>.ts`), the token tables real, and the flow hand-fixed. After `scenario-import-fixes`, `ScenarioDef.setupCards`, `compose()` in `src/engine/api.ts`, the setup-card coverage rule and `CampaignDef.options` (`replaceSets`, `addSets`) exist (ADR-0038); this change uses them. In-force ADRs as in that change; 0007 (hand-written campaigns kept), 0013 (a reference card works by its token lines), 0028 (typed hooks), 0034 (explicit script API) and 0038 constrain this one.
 
 ## Goals / Non-Goals
 
@@ -36,9 +36,9 @@ After `campaign-the-dunwich-legacy`, the base campaign is hand-written at `conte
 
 ## Decisions
 
-1. **A Return scenario's script composes the base's.** Each base scenario script exports its hooks as a named object; `scripts/return-to-<id>.ts` imports it and exports `{ hooks: { setup: [base.setup, returnTo.setup], checkObjectives: first(returnTo, base), ended: base.ended, … } }` through a small `compose()` in `src/engine/api.ts` (the registry's typed hooks make the shape checkable). _Alternative:_ copy the base script — rejected: a base fix would have to be made twice, and the program says Return-to starts from the base script.
+1. **A Return scenario's script composes the base's** through `compose()` (`scenario-import-fixes`, ADR-0038). Each base scenario script exports its hooks as a named object; `scripts/return-to-<id>.ts` imports it and exports `compose(base, returnTo)`: setup after the base's, objectives and endings asked of the Return hooks first. _Alternative:_ copy the base script — rejected: a base fix would have to be made twice, and the program says Return-to starts from the base script.
 
-2. **The scenario file carries both cards.** `ScenarioDef` gains `setupCards: string[]` (the box's setup card), `card` staying the base scenario card so the token table and the tile's art are the base's; `tokensReal` and `coverage.ts` count a setup card without token lines as real. The token table is copied from the base file, not referenced, so a scenario file is complete on its own (ADR-0013 measures the file).
+2. **The scenario file carries both cards** (`card` = base, `setupCards` = the box's, as `scenario-import-fixes` defines), so the token table and the tile's art are the base's and the setup card is real without token lines. The token table is copied from the base file, not referenced, so a scenario file is complete on its own (ADR-0013 measures the file).
 
 3. **Return-to setup is data where the ops exist, script where it does not.** Random copies (`putRandomIntoPlay`), set-asides and the replacement set swaps are setup steps; the Exhibit changes, the 10-car and 4-engine pools, the three-copy village, the Brood variants and Realms Beyond are the `returnTo.setup` hook, after the base's setup has run. Full act and agenda decks are listed in the file; the `ritual_completed` choice of 02317 or 51055 is a setup step with `when: logHas`.
 
@@ -46,24 +46,19 @@ After `campaign-the-dunwich-legacy`, the base campaign is hand-written at `conte
 
 5. **Return to The Miskatonic Museum's "next agenda's Forced is active while resolving the back"** is a scenario flag the Return scenario script sets while an agenda back resolves, read by the base agenda scripts 02119–02121 through a shared helper; no engine rule.
 
-6. **The replacement sets are a campaign option on the base campaign.**
-   - **Data:** `CampaignDef.options` is new in `src/content/schema.ts`: `{ id, labelKey, replaceSets: Record<newSet, oldSet> }`. The base `content/campaigns/the-dunwich-legacy/campaign.json` declares `rtdwl-replacement-sets` with the bookmark's six pairs.
-   - **State:** the new-campaign menu shows the options as toggles, off by default. The chosen ids go into the campaign state (`src/engine/campaign/campaign.ts`) and the save, so they can't change mid-campaign.
-   - **Setup:** when a scenario gathers its encounter sets, the scenario setup reads `replaceSets` and swaps each listed old set for its new one. It also drops any set that a set already in the list replaces, so Return-to scenario files that list the new sets are unaffected.
-   - **Reuse:** the other Return-to boxes use the same shape for their own options.
-   - _Alternative:_ a second campaign entry, "The Dunwich Legacy (replacement sets)", rejected: it doubles the campaign list and the flow file for a six-line difference.
+6. **The replacement sets are a campaign option on the base campaign.** `content/campaigns/the-dunwich-legacy/campaign.json` declares `options: [{ id: "rtdwl-replacement-sets", labelKey: "campaign.option.rtdwl-replacement-sets", replaceSets: { beyond_the_threshold: "the_beyond", resurgent_evils: "ancient_evils", erratic_fear: "striking_fear", creeping_cold: "chilling_cold", secret_doors: "locked_doors", yog_sothoths_emissaries: "agents_of_yog_sothoth" } }]` (set ids checked against the snapshot in task 10.3). The mechanism (schema, state, toggles, the swap when sets are gathered, the content check) is `scenario-import-fixes`' decision 11; nothing is added to it here. Return to The Dunwich Legacy lists the replacement sets directly in its scenario files.
 
 ## Risks / Trade-offs
 
-- [The base scripts' hook shapes change under `engine-script-registry`] → the composition is one helper in `api.ts`; a test asserts every Return script's hook list is a superset of its base's.
+- [The base scripts' hook shapes change under `engine-script-registry`] → the composition is `scenario-import-fixes`' `compose()`; a test asserts every Return script's hook list is a superset of its base's.
 - [Return to Lost in Time and Space's deck by `ritual_completed` and Realms Beyond's redirect from Another Dimension interact with the base's location-leaves-play rule] → a test runs a location removal with both in play.
 - [Return-to Blood on the Altar's three copies per location make the random pool 18 cards] → the pool is built by the script from codes, no new op.
 
 ## Migration Plan
 
-Content and a small schema addition (`setupCards`); the generated folder deleted and skipped by the importer. No engine version bump beyond the base change's. Rollback: revert.
+Content only; the generated folder deleted and skipped by the importer. No engine version bump beyond the base change's. Rollback: revert.
 
 ## Open Questions
 
 - None open. 51020's reading and the base campaign's replacement-sets option are decided (proposal).
-- No in-force ADR needs revisiting.
+- No in-force ADR needs revisiting; the shared Return-to shape is ADR-0038.

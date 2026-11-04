@@ -2,7 +2,7 @@
 
 `content/campaigns-generated/return-to-the-path-to-carcosa/` holds 8 scenario files whose `card` is the base scenario card (03043 … 03316), whose `encounterSets` already name the replacement sets (the swaps match ArkhamCards and the bookmark), whose `tokens` are copies of the base placeholders, and whose `acts`/`agendas`/`setup` are the base's or wrong where the box replaces a card (report `ptc.md`, "Return to The Path to Carcosa"). The rtptc cards live in `content/packs/return/` (84 cards mixed with the other Return boxes; `cards.json` has one entry, 51008). Coverage counts each setup card as a second `scenario` card its scenario can never make real. `flow.json` is the base flow with renamed ids plus a six-way `ask_which_mid_game_token` and `vips_slain` variants, so it inherits every base flow fix.
 
-After `campaign-the-path-to-carcosa`, the base campaign is hand-kept at `content/campaigns/the-path-to-carcosa/` with one script per scenario, real token tables, the flow fixed and the scenario recording what the guide asks (ADR-0050). `campaign-return-to-the-dunwich-legacy` adds `ScenarioDef.setupCards`, `compose()` in `src/engine/api.ts`, the setup-card coverage rule and `CampaignDef.options { id, labelKey, replaceSets }`; this change reuses all four. In-force ADRs: 0001–0036 and 0050; 0007, 0013, 0028, 0034, 0050 constrain this one.
+After `campaign-the-path-to-carcosa`, the base campaign is hand-kept at `content/campaigns/the-path-to-carcosa/` with one script per scenario, real token tables, the flow fixed and the scenario recording what the guide asks (ADR-0050). `scenario-import-fixes` adds `ScenarioDef.setupCards`, `compose()` in `src/engine/api.ts`, the setup-card coverage rule and `CampaignDef.options { id, labelKey, replaceSets, addSets }` (ADR-0038); this change reuses all four. In-force ADRs: 0001–0038 and 0050; 0007, 0013, 0028, 0034, 0038, 0050 constrain this one.
 
 ## Goals / Non-Goals
 
@@ -38,9 +38,9 @@ After `campaign-the-path-to-carcosa`, the base campaign is hand-kept at `content
 
 ## Decisions
 
-1. **A Return scenario's script composes the base's** through `compose()` (Dunwich decision 1): `scripts/return-to-<id>.ts` imports the base hooks and exports `{ setup: [base.setup, returnTo.setup], checkObjectives: first(returnTo, base), onActAdvance: [base, returnTo], … }`. Where the box replaces a base rule outright (The Unspeakable Oath's act 2 choice, Dim Carcosa's Palace), the Return hook runs first and marks the base rule skipped through a scenario flag the base script reads. _Alternative:_ copy the base script — rejected, as in the Dunwich change.
+1. **A Return scenario's script composes the base's** through `compose()` (`scenario-import-fixes` decision 10): `scripts/return-to-<id>.ts` imports the base hooks and exports `{ setup: [base.setup, returnTo.setup], checkObjectives: first(returnTo, base), onActAdvance: [base, returnTo], … }`. Where the box replaces a base rule outright (The Unspeakable Oath's act 2 choice, Dim Carcosa's Palace), the Return hook runs first and marks the base rule skipped through a scenario flag the base script reads. _Alternative:_ copy the base script — rejected (ADR-0038).
 
-2. **The scenario file carries both cards** (`card` = base, `setupCards` = the box's); the token table is copied from the base file. A content check asserts a Return scenario's table equals its base's so the copies can't drift. _Alternative:_ a `tokens` reference to the base scenario — rejected: ADR-0013 measures the file, and the Dunwich change already chose the copy.
+2. **The scenario file carries both cards** (`card` = base, `setupCards` = the box's); the token table is copied from the base file. A content check asserts a Return scenario's table equals its base's so the copies can't drift. _Alternative:_ a `tokens` reference to the base scenario — rejected: ADR-0013 measures the file, and ADR-0038 chose the copy.
 
 3. **Return-to setup is data where the ops exist, script where it does not.** Data: the six-way random act 2 of Curtain Call (`putRandomIntoPlay`-style act pick as `engine-scenario-structure` gives it), agenda `[52022, 03063]`, set-asides (52027, 52033 ×2, 52037, 52038, 52047 ×2, 52061–52063), the Basement floor in Echoes' per-floor random pools, act 2 by `logCompare` in the Oath, Phantom's six base-or-new picks, BSR's pile pick, the Palace swap. Script: 52014's attachment to Royal Emissary and its warnings, the eight-card Sickening Reality pile, the doorway pools with 52018/52019, Keeper of the Oath's spawn on act advance, Figure in the Shadows after The Organist enters play, the four extra Catacombs and the four unseen removals, Hastur's health floor and 52060b's version-keyed location, MitPM held in the Tomb.
 
@@ -48,11 +48,11 @@ After `campaign-the-path-to-carcosa`, the base campaign is hand-kept at `content
 
 5. **"Forget" a remembered fact** (52039 Clouded Memory) is a `forget` op over the remembered-flags store the base change adds (`rules/scenario.ts`), no new state.
 
-6. **The replacement sets option** is declared on `content/campaigns/the-path-to-carcosa/campaign.json` as `rtptc-replacement-sets` with the bookmark's five pairs, in the shape the Dunwich change defines; nothing else is added to the option mechanism. Return to The Path to Carcosa lists the replacement sets directly in its scenario files, as today.
+6. **The replacement sets option** is declared on `content/campaigns/the-path-to-carcosa/campaign.json` as `rtptc-replacement-sets` with the bookmark's five pairs, in the shape `scenario-import-fixes` defines; nothing else is added to the option mechanism. Return to The Path to Carcosa lists the replacement sets directly in its scenario files, as today.
 
 ## Risks / Trade-offs
 
-- [The base scripts' hook shapes change under `engine-script-registry`] → the composition is the Dunwich `compose()`; a test asserts every Return script's hook list is a superset of its base's.
+- [The base scripts' hook shapes change under `engine-script-registry`] → the composition is `scenario-import-fixes`' `compose()`; a test asserts every Return script's hook list is a superset of its base's.
 - [Return to Dim Carcosa's three set-aside locations enter through 52060b by Hastur's version and must take the Palace's connections] → the slot keeps its edges (base decision 9); a test flips 52060 under each version.
 - [Return to The Pallid Mask's four unseen removals change which Catacombs exist] → the catacombs deck is built by the base script from a code list the Return hook edits before the build; no new op.
 - [Six-way act 2 in Return to Curtain Call feeds the flow's `cca_add_chaos_token` record] → the base script records the version code; the flow's six-way step reads it (ADR-0050).

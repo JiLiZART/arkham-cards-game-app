@@ -38,7 +38,7 @@ The content SHALL hold Return to The Dunwich Legacy as a hand-written campaign u
 
 ### Requirement: Replacement encounter sets as a base-campaign option
 
-A new The Dunwich Legacy campaign SHALL offer the option to use the Return to The Dunwich Legacy replacement encounter sets. The option is chosen when the campaign is created, is off by default, and SHALL NOT change for the rest of the campaign. With the option on, each scenario SHALL gather each replacement set in place of the set it replaces: Beyond the Threshold for The Beyond, Resurgent Evils for Ancient Evils, Erratic Fear for Striking Fear, Creeping Cold for Chilling Cold, Secret Doors for Locked Doors, and Yog-Sothoth's Emissaries for Agents of Yog-Sothoth.
+A new The Dunwich Legacy campaign SHALL offer the option to use the Return to The Dunwich Legacy replacement encounter sets, through the campaign option mechanism `scenario-import-fixes` defines: chosen at creation, off by default, fixed for the campaign. With the option on, each scenario SHALL gather each replacement set in place of the set it replaces: Beyond the Threshold for The Beyond, Resurgent Evils for Ancient Evils, Erratic Fear for Striking Fear, Creeping Cold for Chilling Cold, Secret Doors for Locked Doors, and Yog-Sothoth's Emissaries for Agents of Yog-Sothoth.
 
 #### Scenario: Option on
 
