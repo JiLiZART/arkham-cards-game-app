@@ -23,6 +23,7 @@
     "08551",
     "08552"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",

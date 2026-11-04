@@ -4,11 +4,7 @@
     "campaign:set_current_day"
   ],
   "order": [
-    "written-in-rock",
-    "hemlock-house",
-    "the-silent-heath",
-    "the-lost-sister",
-    "the-thing-in-the-depths",
+    "fhv-prologue",
     "the-twisted-hollow",
     "the-longest-night"
   ],
@@ -45,6 +41,15 @@
     }
   },
   "resolutions": {
+    "fhv-prologue": {
+      "R1": [
+        "fhv-prologue:survey_preparations:text",
+        "fhv-prologue:add_auto_fail:text",
+        "fhv-prologue:add_auto_fail",
+        "fhv-prologue:next_scenario:text",
+        "fhv-prologue:choose_first_scenario"
+      ]
+    },
     "written-in-rock": {
       "none": [
         "written-in-rock:check_no_resolution_day"
@@ -197,7 +202,17 @@
         "the-twisted-hollow:transfer_xp",
         "the-twisted-hollow:upgradeDecks",
         "the-twisted-hollow:update_areas_surveyed:text",
-        "the-twisted-hollow:update_areas_surveyed"
+        "the-twisted-hollow:update_areas_surveyed",
+        "the-twisted-hollow:set_next_scenario"
+      ]
+    },
+    "dawn-of-the-second-day": {
+      "R1": [],
+      "R2": [],
+      "R3": [
+        "dawn-of-the-second-day:no_xp:text",
+        "dawn-of-the-second-day:survey_preparations:text",
+        "dawn-of-the-second-day:next_scenario:text"
       ]
     },
     "the-longest-night": {
@@ -322,6 +337,39 @@
       ]
     }
   },
+  "before": {
+    "fhv-prologue": [
+      "fhv-prologue:intro_choice"
+    ],
+    "written-in-rock": [
+      "written-in-rock:check_day_residents"
+    ],
+    "hemlock-house": [
+      "hemlock-house:check_day_residents"
+    ],
+    "the-silent-heath": [
+      "the-silent-heath:check_day_residents"
+    ],
+    "the-lost-sister": [
+      "the-lost-sister:check_day_residents"
+    ],
+    "the-thing-in-the-depths": [
+      "the-thing-in-the-depths:check_night_intro",
+      "the-thing-in-the-depths:check_day_residents"
+    ],
+    "the-twisted-hollow": [
+      "the-twisted-hollow:decide_intro",
+      "the-twisted-hollow:check_theo",
+      "the-twisted-hollow:check_judith"
+    ],
+    "the-longest-night": [
+      "the-longest-night:choose_confront",
+      "the-longest-night:check_shared_dance"
+    ],
+    "the-final-evening": [
+      "the-final-evening:check_dr_marquez_has_a_plan"
+    ]
+  },
   "steps": {
     "campaign:prologue": {
       "kind": "story",
@@ -334,7 +382,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "day_1_day",
+          "key": "day1Day",
           "section": "hidden",
           "value": true
         },
@@ -347,9 +395,182 @@
         },
         {
           "do": "record",
-          "key": "always_true",
+          "key": "alwaysTrue",
           "section": "hidden",
           "value": true
+        }
+      ]
+    },
+    "fhv-prologue:survey_preparations:text": {
+      "kind": "story",
+      "text": "Make preparations for your first survey.",
+      "bullets": []
+    },
+    "fhv-prologue:add_auto_fail:text": {
+      "kind": "story",
+      "text": "Exploring the Isle is allegedly dangerous. Add 1 [auto_fail] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "fhv-prologue:add_auto_fail": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "autoFail"
+        }
+      ]
+    },
+    "fhv-prologue:next_scenario:text": {
+      "kind": "story",
+      "text": "When setting up the next scenario, skip steps 1-8 of ‘Setting Up the Game” on page 27 of the Rules Reference.",
+      "bullets": []
+    },
+    "fhv-prologue:choose_first_scenario": {
+      "kind": "chooseOne",
+      "text": "The investigators must choose where to survey today! You will have the opportunity to survey multiple areas over the course of the campaign.",
+      "choices": [
+        {
+          "id": "written_in_rock",
+          "text": "<i>To the north, the abandoned North Point Mine lies empty and overrun with strange wildlife.</i>",
+          "effects": [
+            {
+              "do": "nextScenario",
+              "scenario": "written-in-rock"
+            }
+          ],
+          "steps": [],
+          "when": {
+            "kind": "logHas",
+            "id": "northPointMine",
+            "section": "areasSurveyed"
+          }
+        },
+        {
+          "id": "hemlock_house",
+          "text": "<i>To the south, the old Hemlock House is said to be host to a strange infestation.</i>",
+          "effects": [
+            {
+              "do": "nextScenario",
+              "scenario": "hemlock-house"
+            }
+          ],
+          "steps": [],
+          "when": {
+            "kind": "logHas",
+            "id": "hemlockHarbor",
+            "section": "areasSurveyed"
+          }
+        },
+        {
+          "id": "the_silent_heath",
+          "text": "<i>The devastated Pearl Ridge up northwest is covered in a persistent layer of white ash.</i>",
+          "effects": [
+            {
+              "do": "nextScenario",
+              "scenario": "the-silent-heath"
+            }
+          ],
+          "steps": [],
+          "when": {
+            "kind": "logHas",
+            "id": "pearlRidge",
+            "section": "areasSurveyed"
+          }
+        },
+        {
+          "id": "the_lost_sister",
+          "text": "<i>Northeast is Akwan: a dwindling settlement of Abenaki and mariners on the desolate coastline.</i>",
+          "effects": [
+            {
+              "do": "nextScenario",
+              "scenario": "the-lost-sister"
+            }
+          ],
+          "steps": [],
+          "when": {
+            "kind": "logHas",
+            "id": "akwanShoreline",
+            "section": "areasSurveyed"
+          }
+        },
+        {
+          "id": "the_thing_in_the_depths",
+          "text": "<i>Dr. Marquez believes Eastwick Bog to the southeast may be the origin of the sample that drew you here.</i>",
+          "effects": [
+            {
+              "do": "nextScenario",
+              "scenario": "the-thing-in-the-depths"
+            }
+          ],
+          "steps": [],
+          "when": {
+            "kind": "logHas",
+            "id": "eastwickBog",
+            "section": "areasSurveyed"
+          }
+        }
+      ]
+    },
+    "fhv-prologue:intro_2": {
+      "kind": "story",
+      "text": "You introduce yourself and the members of the survey by name, along with your backing from Miskatonic University. Dr. Marquez leans heavily on her cane as she extends one hand to shake.",
+      "bullets": []
+    },
+    "fhv-prologue:add_tablet:text": {
+      "kind": "story",
+      "text": "Add 1 [tablet] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "fhv-prologue:add_tablet": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        }
+      ]
+    },
+    "fhv-prologue:intro_3": {
+      "kind": "story",
+      "text": "The matron smiles benevolently. “And we are overjoyed to have you. Our food and shelter are yours. The Feast is in three days’ time; we ask only that you open your heart and mind to experience our way of life.”\nDr. Marquez shoots you a sharp look as she leans forward on her cane. “Actually, we’re here on a survey from Miskatonic University.”",
+      "bullets": []
+    },
+    "fhv-prologue:add_elder_thing:text": {
+      "kind": "story",
+      "text": "Add 1 [elder_thing] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "fhv-prologue:add_elder_thing": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        }
+      ]
+    },
+    "fhv-prologue:intro_choice": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "work",
+          "text": "<i>“We’re here on a survey from Miskatonic University.”</i>",
+          "effects": [],
+          "steps": [
+            "fhv-prologue:intro_2",
+            "fhv-prologue:add_tablet:text",
+            "fhv-prologue:add_tablet"
+          ]
+        },
+        {
+          "id": "feast",
+          "text": "<i>“We’re here for the Feast.” </i>",
+          "effects": [],
+          "steps": [
+            "fhv-prologue:intro_3",
+            "fhv-prologue:add_elder_thing:text",
+            "fhv-prologue:add_elder_thing"
+          ]
         }
       ]
     },
@@ -373,7 +594,7 @@
       "effects": [
         {
           "do": "crossOut",
-          "key": "simeon_plan_is_underway",
+          "key": "simeonPlanIsUnderway",
           "section": "hidden"
         }
       ]
@@ -475,7 +696,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "simeon_survived",
+          "key": "simeonSurvived",
           "section": "simeon",
           "value": true
         },
@@ -504,7 +725,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "leah_saw_something_in_the_mine",
+          "key": "leahSawSomethingInTheMine",
           "section": "leah",
           "value": true
         },
@@ -533,13 +754,13 @@
       "effects": [
         {
           "do": "record",
-          "key": "simeon_disappeared",
+          "key": "simeonDisappeared",
           "section": "simeon",
           "value": true
         },
         {
           "do": "crossOut",
-          "key": "simeon_plan_is_underway",
+          "key": "simeonPlanIsUnderway",
           "section": "hidden"
         }
       ]
@@ -554,7 +775,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "leah_and_simeon_were_reunited",
+          "key": "leahAndSimeonWereReunited",
           "section": "leah",
           "value": true
         }
@@ -565,7 +786,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "survived_the_horrors_in_the_rock",
+          "key": "survivedTheHorrorsInTheRock",
           "section": "campaign_notes",
           "value": true
         }
@@ -614,7 +835,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "wir_helped_river",
+              "key": "wirHelpedRiver",
               "section": "hidden",
               "value": true
             }
@@ -669,7 +890,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "wir_helped_river",
+        "id": "wirHelpedRiver",
         "section": "hidden"
       },
       "then": [
@@ -699,7 +920,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "written_in_rock_codex_5",
+        "id": "writtenInRockCodex5",
         "section": "hidden"
       },
       "then": [
@@ -742,11 +963,121 @@
       "effects": [
         {
           "do": "record",
-          "key": "north_point_mine",
-          "section": "areas_surveyed",
+          "key": "northPointMine",
+          "section": "areasSurveyed",
           "value": true
         }
       ]
+    },
+    "written-in-rock:setup_river:text": {
+      "kind": "story",
+      "text": "Place River Hawthorne at the location in column 3.",
+      "bullets": []
+    },
+    "written-in-rock:check_residents_river:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "writtenInRockCodex5",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "written-in-rock:check_residents_river": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "written-in-rock:setup_river:text"
+      ],
+      "else": [
+        "written-in-rock:check_residents_river:no:fx"
+      ]
+    },
+    "written-in-rock:set_aside_simeon:text": {
+      "kind": "story",
+      "text": "Set Simeon Atwood aside, out of play.",
+      "bullets": []
+    },
+    "written-in-rock:check_residents_simeon:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "writtenInRockCodex3",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "written-in-rock:check_residents_simeon": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "written-in-rock:set_aside_simeon:text"
+      ],
+      "else": [
+        "written-in-rock:check_residents_simeon:no:fx"
+      ]
+    },
+    "written-in-rock:set_aside_leah:text": {
+      "kind": "story",
+      "text": "Set Leah Atwood aside, out of play.",
+      "bullets": []
+    },
+    "written-in-rock:check_residents_leah:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "writtenInRockCodex2",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "written-in-rock:check_residents_leah": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "written-in-rock:set_aside_leah:text"
+      ],
+      "else": [
+        "written-in-rock:check_residents_leah:no:fx"
+      ]
+    },
+    "written-in-rock:remove_other_residents:text": {
+      "kind": "story",
+      "text": "Remove the rest of the <i>Residents</i> encounter set from the game.",
+      "bullets": []
+    },
+    "written-in-rock:check_day_residents": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "written-in-rock:check_residents_river",
+        "written-in-rock:check_residents_simeon",
+        "written-in-rock:check_residents_leah",
+        "written-in-rock:remove_other_residents:text"
+      ],
+      "else": []
     },
     "hemlock-house:predation_bag_stuff:text": {
       "kind": "story",
@@ -772,7 +1103,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "found_little_sylvie",
+        "id": "foundLittleSylvie",
         "section": "hidden"
       },
       "then": [
@@ -793,7 +1124,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "hemlock_house_seals",
+          "id": "hemlockHouseSeals",
           "section": "hidden",
           "op": "set",
           "value": "input"
@@ -865,7 +1196,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "hemlock_house_enemy_locations",
+          "id": "hemlockHouseEnemyLocations",
           "section": "hidden",
           "op": "set",
           "value": "input"
@@ -908,7 +1239,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "hemlock_house_control_judith",
+              "key": "hemlockHouseControlJudith",
               "section": "hidden",
               "value": true
             }
@@ -944,7 +1275,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "hemlock_house_control_judith",
+        "id": "hemlockHouseControlJudith",
         "section": "hidden"
       },
       "then": [
@@ -1001,18 +1332,171 @@
       "effects": [
         {
           "do": "record",
-          "key": "hemlock_harbor",
-          "section": "areas_surveyed",
+          "key": "hemlockHarbor",
+          "section": "areasSurveyed",
           "value": true
         }
       ]
+    },
+    "hemlock-house:setup_gideon:text": {
+      "kind": "story",
+      "text": "Place Gideon Mizrah into play at the Parlor location. Put the Little Sylvie story asset into play at a Bedroom location on the lowest floor.",
+      "bullets": []
+    },
+    "hemlock-house:check_residents_gideon:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "hemlockHouseCodex6",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "hemlock-house:check_residents_gideon": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "hemlock-house:setup_gideon:text"
+      ],
+      "else": [
+        "hemlock-house:check_residents_gideon:no:fx"
+      ]
+    },
+    "hemlock-house:setup_william:text": {
+      "kind": "story",
+      "text": "Put William Hemlock into play at the Bedroom location on the 4th Floor.",
+      "bullets": []
+    },
+    "hemlock-house:check_residents_william:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "hemlockHouseCodex4",
+          "section": "hidden",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "hemlockHouseCodexSigma",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "hemlock-house:check_residents_william": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "hemlock-house:setup_william:text"
+      ],
+      "else": [
+        "hemlock-house:check_residents_william:no:fx"
+      ]
+    },
+    "hemlock-house:setup_judith:text": {
+      "kind": "story",
+      "text": "Put Judith Park into play at the Parlor location.",
+      "bullets": []
+    },
+    "hemlock-house:check_residents_judith:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "hemlockHouseCodex7",
+          "section": "hidden",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "hemlockHouseCodexSigma",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "hemlock-house:check_residents_judith": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "hemlock-house:setup_judith:text"
+      ],
+      "else": [
+        "hemlock-house:check_residents_judith:no:fx"
+      ]
+    },
+    "hemlock-house:setup_theo:text": {
+      "kind": "story",
+      "text": "Put Theo Peters into play at the Foyer location.",
+      "bullets": []
+    },
+    "hemlock-house:check_residents_theo:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "hemlockHouseCodex8",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "hemlock-house:check_residents_theo": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "hemlock-house:setup_theo:text"
+      ],
+      "else": [
+        "hemlock-house:check_residents_theo:no:fx"
+      ]
+    },
+    "hemlock-house:remove_other_residents:text": {
+      "kind": "story",
+      "text": "Remove the rest of the <i>Residents</i> encounter set from the game.",
+      "bullets": []
+    },
+    "hemlock-house:check_day_residents": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "hemlock-house:check_residents_gideon",
+        "hemlock-house:check_residents_william",
+        "hemlock-house:check_residents_judith",
+        "hemlock-house:check_residents_theo",
+        "hemlock-house:remove_other_residents:text"
+      ],
+      "else": []
     },
     "the-silent-heath:ask_crystal_remains": {
       "kind": "effects",
       "effects": [
         {
           "do": "count",
-          "id": "silent_heath_crystal_remains",
+          "id": "silentHeathCrystalRemains",
           "section": "hidden",
           "op": "set",
           "value": "input"
@@ -1024,7 +1508,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "laid_the_pearl_family_to_rest",
+          "key": "laidThePearlFamilyToRest",
           "section": "campaign_notes",
           "value": true
         }
@@ -1035,7 +1519,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "remains_were_partially_recovered",
+          "key": "remainsWerePartiallyRecovered",
           "section": "campaign_notes",
           "value": true
         }
@@ -1046,7 +1530,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "madame_pearls_diary_was_recovered",
+          "key": "madamePearlsDiaryWasRecovered",
           "section": "campaign_notes",
           "value": true
         }
@@ -1087,11 +1571,133 @@
       "effects": [
         {
           "do": "record",
-          "key": "pearl_ridge",
-          "section": "areas_surveyed",
+          "key": "pearlRidge",
+          "section": "areasSurveyed",
           "value": true
         }
       ]
+    },
+    "the-silent-heath:setup_leah:text": {
+      "kind": "story",
+      "text": "Place Leah Atwood at the Pearl Estate Ruins location.",
+      "bullets": []
+    },
+    "the-silent-heath:check_residents_leah:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "silentHeathCodex2",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-silent-heath:check_residents_leah": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "the-silent-heath:setup_leah:text"
+      ],
+      "else": [
+        "the-silent-heath:check_residents_leah:no:fx"
+      ]
+    },
+    "the-silent-heath:setup_marquez:text": {
+      "kind": "story",
+      "text": "Place Dr. Rosa Marquez at the Crystal Grove location.",
+      "bullets": []
+    },
+    "the-silent-heath:maybe_hide_codex_theta:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "silentHeathCodexTheta",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-silent-heath:maybe_hide_codex_theta": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "10702",
+        "inv": "any"
+      },
+      "then": [],
+      "else": [
+        "the-silent-heath:maybe_hide_codex_theta:no:fx"
+      ]
+    },
+    "the-silent-heath:check_residents_marquez": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "the-silent-heath:setup_marquez:text"
+      ],
+      "else": [
+        "the-silent-heath:maybe_hide_codex_theta"
+      ]
+    },
+    "the-silent-heath:setup_rachel:text": {
+      "kind": "story",
+      "text": "Place Mother Rachel at the Ashen Slope location.",
+      "bullets": []
+    },
+    "the-silent-heath:check_residents_rachel:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "silentHeathCodex1",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-silent-heath:check_residents_rachel": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "the-silent-heath:setup_rachel:text"
+      ],
+      "else": [
+        "the-silent-heath:check_residents_rachel:no:fx"
+      ]
+    },
+    "the-silent-heath:remove_other_residents:text": {
+      "kind": "story",
+      "text": "Remove the rest of the <i>Residents</i> encounter set from the game.",
+      "bullets": []
+    },
+    "the-silent-heath:check_day_residents": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "the-silent-heath:check_residents_leah",
+        "the-silent-heath:check_residents_marquez",
+        "the-silent-heath:check_residents_rachel",
+        "the-silent-heath:remove_other_residents:text"
+      ],
+      "else": []
     },
     "the-lost-sister:no_resolution_bonus_xp:text": {
       "kind": "story",
@@ -1130,7 +1736,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "the_peters_family_was_reunited",
+          "key": "thePetersFamilyWasReunited",
           "section": "campaign_notes",
           "value": true
         }
@@ -1141,7 +1747,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "elizabeth_peters_was_saved",
+          "key": "elizabethPetersWasSaved",
           "section": "campaign_notes",
           "value": true
         }
@@ -1170,7 +1776,7 @@
         },
         {
           "do": "record",
-          "key": "gideon_found_his_treasure",
+          "key": "gideonFoundHisTreasure",
           "section": "gideon",
           "value": true
         }
@@ -1194,7 +1800,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "lost_sister_gideon_is_searching_for_an_heirloom",
+        "id": "lostSisterGideonIsSearchingForAnHeirloom",
         "section": "hidden"
       },
       "then": [
@@ -1237,10 +1843,129 @@
       "effects": [
         {
           "do": "record",
-          "key": "akwan_shoreline",
-          "section": "areas_surveyed",
+          "key": "akwanShoreline",
+          "section": "areasSurveyed",
           "value": true
         }
+      ]
+    },
+    "the-lost-sister:setup_helen:text": {
+      "kind": "story",
+      "text": "Put Helen Peters into play under the control of an investigator. She does not take up an ally slot during this scenario.",
+      "bullets": []
+    },
+    "the-lost-sister:setup_theo:text": {
+      "kind": "story",
+      "text": "Put Theo Peters into play under the control of an investigator.",
+      "bullets": []
+    },
+    "the-lost-sister:check_residents_theo:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "lostSisterCodex8",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-lost-sister:check_residents_theo": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "the-lost-sister:setup_theo:text"
+      ],
+      "else": [
+        "the-lost-sister:check_residents_theo:no:fx"
+      ]
+    },
+    "the-lost-sister:setup_gideon:text": {
+      "kind": "story",
+      "text": "Put Gideon Mizrah into play under the control of an investigator.",
+      "bullets": []
+    },
+    "the-lost-sister:check_residents_gideon:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "lostSisterCodex6",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-lost-sister:check_residents_gideon": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "the-lost-sister:setup_gideon:text"
+      ],
+      "else": [
+        "the-lost-sister:check_residents_gideon:no:fx"
+      ]
+    },
+    "the-lost-sister:setup_william:text": {
+      "kind": "story",
+      "text": "Put William Hemlock into play at Akwan.",
+      "bullets": []
+    },
+    "the-lost-sister:check_residents_william:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "lostSisterCodex4",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-lost-sister:check_residents_william": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "the-lost-sister:setup_william:text"
+      ],
+      "else": [
+        "the-lost-sister:check_residents_william:no:fx"
+      ]
+    },
+    "the-lost-sister:remove_other_residents:text": {
+      "kind": "story",
+      "text": "Remove the rest of the <i>Residents</i> encounter set from the game.",
+      "bullets": []
+    },
+    "the-lost-sister:check_day_residents": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "the-lost-sister:setup_helen:text",
+        "the-lost-sister:check_residents_theo",
+        "the-lost-sister:check_residents_gideon",
+        "the-lost-sister:check_residents_william",
+        "the-lost-sister:remove_other_residents:text"
+      ],
+      "else": [
+        "the-lost-sister:setup_helen:text",
+        "the-lost-sister:remove_other_residents:text"
       ]
     },
     "the-thing-in-the-depths:no_resolution_bonus_xp:text": {
@@ -1264,7 +1989,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "chelydran_hybrid_perished",
+          "key": "chelydranHybridPerished",
           "section": "campaign_notes",
           "value": true
         }
@@ -1291,7 +2016,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "chelydran_hybrid_lived",
+          "key": "chelydranHybridLived",
           "section": "campaign_notes",
           "value": true
         }
@@ -1318,7 +2043,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "chelydran_hybrid_devoured",
+          "key": "chelydranHybridDevoured",
           "section": "campaign_notes",
           "value": true
         }
@@ -1361,7 +2086,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "thing_in_the_depths_was_defeated",
+          "key": "thingInTheDepthsWasDefeated",
           "section": "campaign_notes",
           "value": true
         }
@@ -1376,7 +2101,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "thing_depths_controlled_river",
+              "key": "thingDepthsControlledRiver",
               "section": "hidden",
               "value": true
             }
@@ -1406,7 +2131,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "thing_depths_controlled_river",
+        "id": "thingDepthsControlledRiver",
         "section": "hidden"
       },
       "then": [
@@ -1419,7 +2144,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "thing_depths_river_asked_for_help",
+        "id": "thingDepthsRiverAskedForHelp",
         "section": "hidden"
       },
       "then": [
@@ -1437,7 +2162,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "thing_depths_in_victory",
+              "key": "thingDepthsInVictory",
               "section": "hidden",
               "value": true
             }
@@ -1473,7 +2198,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "thing_depths_in_victory",
+        "id": "thingDepthsInVictory",
         "section": "hidden"
       },
       "then": [
@@ -1486,7 +2211,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "judith_shared_a_grudge",
+        "id": "judithSharedAGrudge",
         "section": "judith"
       },
       "then": [
@@ -1530,11 +2255,349 @@
       "effects": [
         {
           "do": "record",
-          "key": "eastwick_bog",
-          "section": "areas_surveyed",
+          "key": "eastwickBog",
+          "section": "areasSurveyed",
           "value": true
         }
       ]
+    },
+    "the-thing-in-the-depths:intro_day_1:text": {
+      "kind": "story",
+      "text": "Check Campaign Log. Because it is <b>Day 1</b>:",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:intro_1": {
+      "kind": "story",
+      "text": "The road to Eastwick Bog branches sharply off from the same road you took in from Akwan. The landscape is incredibly vibrant, almost tropical, with rainbow-patterned tree trunks standing guard at the edge of black mirrored ponds. Dr. Marquez and Judith trade friendly barbs in the truckbed, occasionally swatting away gnats. As the conversation turns sour, you attempt to break the tension by asking Judith for a hunting story.",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:intro_2": {
+      "kind": "story",
+      "text": "Judith doesn’t miss a beat. “See this scar? I got it in a fight at a speakeasy. Some rich kid cut me with a broken bottle. A friendly scuffle, y’know. His family was from this area, and very rich, I’ll add again, and they were so afraid a scandal’d break out that they offered me a job. Not that I woulda ratted on him.”\n“I don’t know what I expected to hear from a bodyguard, but it wasn’t that,” says Dr. Marquez, possibly annoyed. An acrid breeze, smelling sweetly of death, blows off the bog and ends the conversation. The truck comes to a stop. Judith rolls her eyes, pulls on a pair of old waders, and walks out onto the bog, rifle slung over her shoulder.\n“Believe me or don’t. I’m just here for the money.”",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:increase_judith_relationship:text": {
+      "kind": "story",
+      "text": "Increase Judith Park’s Relationship Level. Each investigator earns 1 bonus experience.",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:increase_judith_relationship": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "$relationship",
+          "section": "judith",
+          "op": "add",
+          "value": 1
+        },
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-thing-in-the-depths:intro_3": {
+      "kind": "story",
+      "text": "The young woman’s steely demeanor relaxes. “Something big lives in Eastwick Bog. An apex predator the size of a killer whale, with razor sharp teeth and too many eyes. Smells like rotten seaweed.” You tell her it sounds like she has personal experience with the creature, and she nods. “I owe it. Or it owes me. See this?” She points to the wicked scar on her cheek. “That thing almost took my eye. I plan to settle the score.” Dr. Marquez is nonplussed. “I guess you think an academic will buy up any story, but if you expect me to believe—” An acrid breeze, smelling sweetly of death, blows off the bog and stops Judith mid-retort. The truck comes to a stop. Judith pulls a bandana over her nose and mouth, slides into a pair of old waders and walks out onto the bog, rifle slung over her shoulder.\n“Maybe if you meet it, you’ll think differently.”",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:judith_shared_a_grudge:text": {
+      "kind": "story",
+      "text": "In Judith Park’s Notes, record <i>Judith shared a grudge</i>.",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:judith_shared_a_grudge": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "judithSharedAGrudge",
+          "section": "judith",
+          "value": true
+        }
+      ]
+    },
+    "the-thing-in-the-depths:check_judith_relationship": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "the-thing-in-the-depths:intro_2",
+        "the-thing-in-the-depths:increase_judith_relationship:text",
+        "the-thing-in-the-depths:increase_judith_relationship"
+      ],
+      "else": [
+        "the-thing-in-the-depths:intro_3",
+        "the-thing-in-the-depths:judith_shared_a_grudge:text",
+        "the-thing-in-the-depths:judith_shared_a_grudge"
+      ]
+    },
+    "the-thing-in-the-depths:intro_night:text": {
+      "kind": "story",
+      "text": "Check Campaign Log. Because it is <b>Night 1</b> or <b>Night 2</b>:",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:intro_8": {
+      "kind": "story",
+      "text": "The moonlight is as bright as day, illuminating the desolate landscape around the truck like something in a Grimm fairy tale. An acrid breeze blows off the bog, smelling sweetly of death, as you pull to a stop on the shoreline and look up at the moon, veiled in gathering clouds. A single thin tree stands silhouetted against the moon, reaching up like a grasping hand. You hoist your supplies out of the truck and look back. The thin tree has disappeared, leaving a dark ripple in its wake.",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:intro_day_2:text": {
+      "kind": "story",
+      "text": "Check Campaign Log. Because it is <b>Day 2</b>:",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:intro_4": {
+      "kind": "story",
+      "text": "“I really didn’t get what everyone else liked about Journey to the Center of the Earth. A hollow earth? It sounds insane,” Theo chatters as rain hammers down on the truck cabin. The landscape is incredibly vibrant, almost tropical, with rainbow-patterned tree trunks standing guard at the edge of black mirrored ponds. The truck suddenly hits a patch of deep mud and squelches to a halt. “I think I need some help,” Theo says.",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:intro_5": {
+      "kind": "story",
+      "text": "After some struggle, you coax the truck out of the pothole and point Theo through a mess of other potholes onto a rocky bank. Several bags of supplies fall out of the truckbed. Theo waves dismissively. “I can get those on the way back. I’ve got some family stuff back in Akwan to take care of.” Theo leaves you at the edge of the bog, wreathed in mist in the chill rain.",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:two_fewer_resources:text": {
+      "kind": "story",
+      "text": "Each investigator begins the next scenario with 2 fewer resources.",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:intro_6": {
+      "kind": "story",
+      "text": "Theo presses his shoulder to the rear of the truck as you rev the gas. The vehicle lurches forward only to bury the front tire in another pothole. Theo jumps into the truck next to you and lets out an exhasperated sigh. “I think you’ll have to continue on foot from here. It’s not that far.”",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:one_fewer_action:text": {
+      "kind": "story",
+      "text": "Each investigator begins the next scenario with 1 fewer action.",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:decide_car_trouble": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "push",
+          "text": "<i>“We can push!”</i>",
+          "effects": [],
+          "steps": [
+            "the-thing-in-the-depths:intro_5",
+            "the-thing-in-the-depths:two_fewer_resources:text"
+          ]
+        },
+        {
+          "id": "rev",
+          "text": "<i>“We’ll rev the engine.”</i>",
+          "effects": [],
+          "steps": [
+            "the-thing-in-the-depths:intro_6",
+            "the-thing-in-the-depths:one_fewer_action:text"
+          ]
+        }
+      ]
+    },
+    "the-thing-in-the-depths:intro_day_3:text": {
+      "kind": "story",
+      "text": "Check Campaign Log. Because it is <b>Day 3</b>:",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:intro_7": {
+      "kind": "story",
+      "text": "The road to Eastwick Bog is covered in rough potholes that reflect a brilliant, prismatic sheen in the sky above. Theo stops the truck as the road grows treacherous. “I’m sorry to do this, but this old girl can’t make the trip through all that mud,” Theo says. You step off the truckbed, say goodbye to Theo, and walk down the muddy road past a close thicket of gaudy, colored trees riven with cracks of light.",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:check_night_intro#4": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 5,
+        "max": 5
+      },
+      "then": [
+        "the-thing-in-the-depths:intro_day_3:text",
+        "the-thing-in-the-depths:intro_7"
+      ],
+      "else": []
+    },
+    "the-thing-in-the-depths:check_night_intro#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "the-thing-in-the-depths:intro_night:text",
+        "the-thing-in-the-depths:intro_8"
+      ],
+      "else": [
+        "the-thing-in-the-depths:check_night_intro#4"
+      ]
+    },
+    "the-thing-in-the-depths:check_night_intro#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "the-thing-in-the-depths:intro_day_2:text",
+        "the-thing-in-the-depths:intro_4",
+        "the-thing-in-the-depths:decide_car_trouble"
+      ],
+      "else": [
+        "the-thing-in-the-depths:check_night_intro#3"
+      ]
+    },
+    "the-thing-in-the-depths:check_night_intro#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "the-thing-in-the-depths:intro_night:text",
+        "the-thing-in-the-depths:intro_8"
+      ],
+      "else": [
+        "the-thing-in-the-depths:check_night_intro#2"
+      ]
+    },
+    "the-thing-in-the-depths:check_night_intro": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "day",
+        "section": "hidden",
+        "min": 1,
+        "max": 1
+      },
+      "then": [
+        "the-thing-in-the-depths:intro_day_1:text",
+        "the-thing-in-the-depths:intro_1",
+        "the-thing-in-the-depths:check_judith_relationship"
+      ],
+      "else": [
+        "the-thing-in-the-depths:check_night_intro#1"
+      ]
+    },
+    "the-thing-in-the-depths:setup_juidth_and_rosa:text": {
+      "kind": "story",
+      "text": "Place Judith Park at the North Shore location. Put Dr. Rosa Marquez into play under the control of an investigator. She does not take up an ally slot during this scenario.",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:check_residents_judith:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "thingDepthsCodex7",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-thing-in-the-depths:maybe_hide_codex_theta:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "thingDepthsCodexTheta",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-thing-in-the-depths:maybe_hide_codex_theta": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "10702",
+        "inv": "any"
+      },
+      "then": [],
+      "else": [
+        "the-thing-in-the-depths:maybe_hide_codex_theta:no:fx"
+      ]
+    },
+    "the-thing-in-the-depths:check_residents_judith": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "the-thing-in-the-depths:setup_juidth_and_rosa:text"
+      ],
+      "else": [
+        "the-thing-in-the-depths:check_residents_judith:no:fx",
+        "the-thing-in-the-depths:maybe_hide_codex_theta"
+      ]
+    },
+    "the-thing-in-the-depths:setup_river:text": {
+      "kind": "story",
+      "text": "Place River Hawthorne at the North Shore location.",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:check_residents_river:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "thingDepthsCodex5",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-thing-in-the-depths:check_residents_river": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "the-thing-in-the-depths:setup_river:text"
+      ],
+      "else": [
+        "the-thing-in-the-depths:check_residents_river:no:fx"
+      ]
+    },
+    "the-thing-in-the-depths:remove_other_residents:text": {
+      "kind": "story",
+      "text": "Remove the rest of the <i>Residents</i> encounter set from the game.",
+      "bullets": []
+    },
+    "the-thing-in-the-depths:check_day_residents": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "the-thing-in-the-depths:check_residents_judith",
+        "the-thing-in-the-depths:check_residents_river",
+        "the-thing-in-the-depths:remove_other_residents:text"
+      ],
+      "else": []
     },
     "the-first-evening:intro": {
       "kind": "story",
@@ -1631,7 +2694,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "bertie_was_lost_in_the_woods",
+          "key": "bertieWasLostInTheWoods",
           "section": "campaign_notes",
           "value": true
         }
@@ -1642,7 +2705,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "bertie_was_rescued",
+          "key": "bertieWasRescued",
           "section": "campaign_notes",
           "value": true
         }
@@ -1699,7 +2762,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "the_bear_was_wounded",
+          "key": "theBearWasWounded",
           "section": "campaign_notes",
           "value": true
         }
@@ -1753,11 +2816,180 @@
       "effects": [
         {
           "do": "record",
-          "key": "western_woods",
-          "section": "areas_surveyed",
+          "key": "westernWoods",
+          "section": "areasSurveyed",
           "value": true
         }
       ]
+    },
+    "the-twisted-hollow:set_next_scenario": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "dawn-of-the-second-day"
+        }
+      ]
+    },
+    "the-twisted-hollow:intro_2": {
+      "kind": "story",
+      "text": "As you share the dire situation, the elderly woman nods gravely. “As I said when you arrived in the Vale, we do not venture out at night. However, your friend will likely not survive the night if left alone.” She eyes Dr. Marquez’s old lantern. “Please, take my lantern. Stay in the light, and you will find the way much safer.” She leads you to the edge of the forest as the sun sets. The forest air is unnaturally thick, and you find it hard to breathe, but you follow the matron nonetheless. Eventually, Mother Rachel leads you to a broad, open field and gestures to the tenebrous shadows. “From here, you take your lives into your own hands. The people of the Vale will pray for your safe return.”\nHazy lights dance above the meadow’s yarrow and asters. Mother Rachel points into the murky abyss. “If all else fails, return to the fireflies.”",
+      "bullets": []
+    },
+    "the-twisted-hollow:mother_rachel_showed_the_way": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "motherRachelShowedTheWay",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-twisted-hollow:add_cultist:text": {
+      "kind": "story",
+      "text": "Add 1 [cultist] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-twisted-hollow:add_cultist": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        }
+      ]
+    },
+    "the-twisted-hollow:intro_3": {
+      "kind": "story",
+      "text": "Mother Rachel nods along to your paper-thin story. “I see. Understand that the Vale is here to help. I wish you the best on your survey.” After more polite conversation, the matron leaves you and Dr. Marquez to scour the shed. Finally, you find a chipped mason jar with just a fifth of oil. “We can make it if we portion every bit,” the professor says. You follow the dim lantern light into the maw of gnarled trees toward a quiet stream, then further up and further into the dark.\nEventually, you reach a collapsed bridge and overgrown cobblestones in the ruins of an old village. The trees overhead rustle. “Something’s there,” Dr. Marquez raises her lantern. A pair of beady eyes reflect the light, but quickly vanish in the murk.\n“Watch yourself and keep close. There’s no telling what’s out here.”",
+      "bullets": []
+    },
+    "the-twisted-hollow:lost_the_path": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "lostThePath",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-twisted-hollow:add_elder_thing:text": {
+      "kind": "story",
+      "text": "Add 1 [elder_thing] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-twisted-hollow:add_elder_thing": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        }
+      ]
+    },
+    "the-twisted-hollow:decide_intro": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "truth",
+          "text": "<i>Tell the truth.</i>",
+          "effects": [],
+          "steps": [
+            "the-twisted-hollow:intro_2",
+            "the-twisted-hollow:mother_rachel_showed_the_way",
+            "the-twisted-hollow:add_cultist:text",
+            "the-twisted-hollow:add_cultist"
+          ]
+        },
+        {
+          "id": "lie",
+          "text": "<i>Lie to her.</i>",
+          "effects": [],
+          "steps": [
+            "the-twisted-hollow:intro_3",
+            "the-twisted-hollow:lost_the_path",
+            "the-twisted-hollow:add_elder_thing:text",
+            "the-twisted-hollow:add_elder_thing"
+          ]
+        }
+      ]
+    },
+    "the-twisted-hollow:check_theo:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "twistedHollowTheoSetAside",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-twisted-hollow:set_aside_theo:text": {
+      "kind": "story",
+      "text": "Set Theo Peters aside, out of play.",
+      "bullets": []
+    },
+    "the-twisted-hollow:check_theo": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "the-twisted-hollow:check_theo:yes:fx",
+        "the-twisted-hollow:set_aside_theo:text"
+      ],
+      "else": []
+    },
+    "the-twisted-hollow:set_aside_judith:text": {
+      "kind": "story",
+      "text": "Set Judith Park aside, out of play.",
+      "bullets": []
+    },
+    "the-twisted-hollow:set_aside_judith": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "twistedHollowJudithSetAside",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-twisted-hollow:check_judith": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "the-twisted-hollow:set_aside_judith:text",
+        "the-twisted-hollow:set_aside_judith"
+      ],
+      "else": []
+    },
+    "dawn-of-the-second-day:no_xp:text": {
+      "kind": "story",
+      "text": "Do not record the Victory X value of each card in the victory display. Each investigator earns the bonus experience awarded during this prelude. Record each bonus experience earned under “Unspent Experience” in your Campaign Log, <b>but do not spend any of it until the end of the next scenario.</b>",
+      "bullets": []
+    },
+    "dawn-of-the-second-day:survey_preparations:text": {
+      "kind": "story",
+      "text": "Make preparations for your next survey.",
+      "bullets": []
+    },
+    "dawn-of-the-second-day:next_scenario:text": {
+      "kind": "story",
+      "text": "When setting up the next scenario, skip steps 1-8 of ‘Setting Up the Game” on page 27 of the Rules Reference.",
+      "bullets": []
     },
     "the-second-evening:intro_1": {
       "kind": "story",
@@ -1784,13 +3016,13 @@
       "effects": [
         {
           "do": "record",
-          "key": "leah_is_searching_for_simeon",
+          "key": "leahIsSearchingForSimeon",
           "section": "leah",
           "value": true
         },
         {
           "do": "crossOut",
-          "key": "simeon_plan_is_underway",
+          "key": "simeonPlanIsUnderway",
           "section": "hidden"
         }
       ]
@@ -1799,7 +3031,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "simeon_survived",
+        "id": "simeonSurvived",
         "section": "simeon"
       },
       "then": [
@@ -1900,7 +3132,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "leah_sacrificed_himself",
+          "key": "leahSacrificedHimself",
           "section": "leah",
           "value": true
         }
@@ -1916,7 +3148,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "simeon_sacrificed_himself",
+          "key": "simeonSacrificedHimself",
           "section": "simeon",
           "value": true
         }
@@ -1932,7 +3164,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "william_sacrificed_himself",
+          "key": "williamSacrificedHimself",
           "section": "william",
           "value": true
         }
@@ -1948,7 +3180,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "river_sacrificed_himself",
+          "key": "riverSacrificedHimself",
           "section": "river",
           "value": true
         }
@@ -1964,7 +3196,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "gideon_sacrificed_himself",
+          "key": "gideonSacrificedHimself",
           "section": "gideon",
           "value": true
         }
@@ -1980,7 +3212,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "judith_sacrificed_himself",
+          "key": "judithSacrificedHimself",
           "section": "judith",
           "value": true
         }
@@ -1996,7 +3228,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "theo_sacrificed_himself",
+          "key": "theoSacrificedHimself",
           "section": "theo",
           "value": true
         }
@@ -2016,7 +3248,7 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "leah_shared_a_dance",
+            "id": "leahSharedADance",
             "section": "leah"
           }
         },
@@ -2030,7 +3262,7 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "simeon_shared_a_dance",
+            "id": "simeonSharedADance",
             "section": "simeon"
           }
         },
@@ -2044,7 +3276,7 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "william_shared_a_dance",
+            "id": "williamSharedADance",
             "section": "william"
           }
         },
@@ -2058,7 +3290,7 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "river_shared_a_dance",
+            "id": "riverSharedADance",
             "section": "river"
           }
         },
@@ -2072,7 +3304,7 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "gideon_shared_a_dance",
+            "id": "gideonSharedADance",
             "section": "gideon"
           }
         },
@@ -2086,7 +3318,7 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "judith_shared_a_dance",
+            "id": "judithSharedADance",
             "section": "judith"
           }
         },
@@ -2100,7 +3332,7 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "theo_shared_a_dance",
+            "id": "theoSharedADance",
             "section": "theo"
           }
         }
@@ -2135,42 +3367,42 @@
             "conditions": [
               {
                 "kind": "logHas",
-                "id": "leah_shared_a_dance",
+                "id": "leahSharedADance",
                 "section": "leah"
               },
               {
                 "kind": "logHas",
-                "id": "simeon_shared_a_dance",
+                "id": "simeonSharedADance",
                 "section": "simeon"
               },
               {
                 "kind": "logHas",
-                "id": "william_shared_a_dance",
+                "id": "williamSharedADance",
                 "section": "william"
               },
               {
                 "kind": "logHas",
-                "id": "river_shared_a_dance",
+                "id": "riverSharedADance",
                 "section": "river"
               },
               {
                 "kind": "logHas",
-                "id": "gideon_shared_a_dance",
+                "id": "gideonSharedADance",
                 "section": "gideon"
               },
               {
                 "kind": "logHas",
-                "id": "judith_shared_a_dance",
+                "id": "judithSharedADance",
                 "section": "judith"
               },
               {
                 "kind": "logHas",
-                "id": "theo_shared_a_dance",
+                "id": "theoSharedADance",
                 "section": "theo"
               },
               {
                 "kind": "logHas",
-                "id": "helen_shared_a_dance",
+                "id": "helenSharedADance",
                 "section": "campaign_notes"
               }
             ]
@@ -2197,7 +3429,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "damage_on_captives",
+          "id": "damageOnCaptives",
           "section": "hidden",
           "op": "set",
           "value": "input"
@@ -2305,7 +3537,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCount",
-        "id": "damage_on_captives",
+        "id": "damageOnCaptives",
         "section": "hidden",
         "min": 9,
         "max": 9
@@ -2320,7 +3552,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCount",
-        "id": "damage_on_captives",
+        "id": "damageOnCaptives",
         "section": "hidden",
         "min": 8,
         "max": 8
@@ -2337,7 +3569,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCount",
-        "id": "damage_on_captives",
+        "id": "damageOnCaptives",
         "section": "hidden",
         "min": 7,
         "max": 7
@@ -2354,7 +3586,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCount",
-        "id": "damage_on_captives",
+        "id": "damageOnCaptives",
         "section": "hidden",
         "min": 6,
         "max": 6
@@ -2371,7 +3603,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCount",
-        "id": "damage_on_captives",
+        "id": "damageOnCaptives",
         "section": "hidden",
         "min": 5,
         "max": 5
@@ -2388,7 +3620,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCount",
-        "id": "damage_on_captives",
+        "id": "damageOnCaptives",
         "section": "hidden",
         "min": 4,
         "max": 4
@@ -2405,7 +3637,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCount",
-        "id": "damage_on_captives",
+        "id": "damageOnCaptives",
         "section": "hidden",
         "min": 3,
         "max": 3
@@ -2422,7 +3654,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCount",
-        "id": "damage_on_captives",
+        "id": "damageOnCaptives",
         "section": "hidden",
         "min": 2,
         "max": 2
@@ -2439,7 +3671,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCount",
-        "id": "damage_on_captives",
+        "id": "damageOnCaptives",
         "section": "hidden",
         "min": 1,
         "max": 1
@@ -2456,7 +3688,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCount",
-        "id": "damage_on_captives",
+        "id": "damageOnCaptives",
         "section": "hidden",
         "min": 0,
         "max": 0
@@ -2474,7 +3706,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "captives_were_saved",
+          "key": "captivesWereSaved",
           "section": "campaign_notes",
           "value": true
         }
@@ -2487,7 +3719,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "damage_on_captives",
+          "id": "damageOnCaptives",
           "section": "hidden",
           "op": "set",
           "value": "input"
@@ -2500,7 +3732,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "many_captives_were_lost",
+          "key": "manyCaptivesWereLost",
           "section": "campaign_notes",
           "value": true
         }
@@ -2525,7 +3757,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "all_the_captives_were_lost",
+          "key": "allTheCaptivesWereLost",
           "section": "campaign_notes",
           "value": true
         }
@@ -2564,7 +3796,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "took_ajax",
+        "id": "tookAjax",
         "section": "hidden"
       },
       "then": [
@@ -2622,14 +3854,14 @@
       "effects": [
         {
           "do": "record",
-          "key": "dr_marquez_has_a_plan",
+          "key": "drMarquezHasAPlan",
           "section": "campaign_notes",
           "value": true
         },
         {
           "do": "record",
-          "key": "southern_fields",
-          "section": "areas_surveyed",
+          "key": "southernFields",
+          "section": "areasSurveyed",
           "value": true
         }
       ]
@@ -2643,6 +3875,176 @@
         }
       ]
     },
+    "the-longest-night:intro_2": {
+      "kind": "story",
+      "text": "You step out from your hiding place with Dr. Marquez. “This is barbaric. These people belong in a hospital!” The professor snarls at the matron.",
+      "bullets": []
+    },
+    "the-longest-night:add_tablet:text": {
+      "kind": "story",
+      "text": "Add 1 [tablet] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-longest-night:add_tablet": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        }
+      ]
+    },
+    "the-longest-night:intro_3": {
+      "kind": "story",
+      "text": "You wait in silence as a fetid breeze blows stirs the heavy air. Tad saunters forward to address Mother Rachel. “The witnesses are here,” he gestures to your hiding place. In moments, you and the professor are dragged roughly out into the open.",
+      "bullets": []
+    },
+    "the-longest-night:add_skull:text": {
+      "kind": "story",
+      "text": "Add 1 [skull] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-longest-night:add_skull": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "skull"
+        }
+      ]
+    },
+    "the-longest-night:choose_confront": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "confront",
+          "text": "<i>Confront Mother Rachel.</i>",
+          "effects": [],
+          "steps": [
+            "the-longest-night:intro_2",
+            "the-longest-night:add_tablet:text",
+            "the-longest-night:add_tablet"
+          ]
+        },
+        {
+          "id": "hide",
+          "text": "<i>Keep hidden.</i>",
+          "effects": [],
+          "steps": [
+            "the-longest-night:intro_3",
+            "the-longest-night:add_skull:text",
+            "the-longest-night:add_skull"
+          ]
+        }
+      ]
+    },
+    "the-longest-night:intro_5": {
+      "kind": "story",
+      "text": "Several hooded figures pull back their hoods and stand behind you: they are the friends you danced with just hours ago. Mother Rachel regards you each in turn. “So be it, then. We are the wheat; you the chaff.”",
+      "bullets": []
+    },
+    "the-longest-night:add_cultist:text": {
+      "kind": "story",
+      "text": "Add 1 [cultist] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-longest-night:add_cultist": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        }
+      ]
+    },
+    "the-longest-night:intro_6": {
+      "kind": "story",
+      "text": "A single figure steps out from behind Mother Rachel and comes to your side. It is the friend you danced with just hours ago. Mother Rachel regards them bitterly. “So be it, then. We are the wheat, and you the chaff.”",
+      "bullets": []
+    },
+    "the-longest-night:add_cultist_and_elder_thing:text": {
+      "kind": "story",
+      "text": "Add 1 [cultist] token and 1 [elder_thing] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-longest-night:add_cultist_and_elder_thing": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        }
+      ]
+    },
+    "the-longest-night:intro_7": {
+      "kind": "story",
+      "text": "Dr. Marquez’s plea hangs in the air, unanswered. The captives and the hooded figures remain silent as Mother Rachel regards you with a careworn smile. “Oh, my children. The people of the Vale are family. We each know our place. You may yet learn yours.”",
+      "bullets": []
+    },
+    "the-longest-night:faced_the_night_alone": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "facedTheNightAlone",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-longest-night:add_elder_thing:text": {
+      "kind": "story",
+      "text": "Add 1 [elder_thing] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-longest-night:add_elder_thing": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        }
+      ]
+    },
+    "the-longest-night:check_1_dance": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "the-longest-night:intro_6",
+        "the-longest-night:add_cultist_and_elder_thing:text",
+        "the-longest-night:add_cultist_and_elder_thing"
+      ],
+      "else": [
+        "the-longest-night:intro_7",
+        "the-longest-night:faced_the_night_alone",
+        "the-longest-night:add_elder_thing:text",
+        "the-longest-night:add_elder_thing"
+      ]
+    },
+    "the-longest-night:check_shared_dance": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "the-longest-night:intro_5",
+        "the-longest-night:add_cultist:text",
+        "the-longest-night:add_cultist"
+      ],
+      "else": [
+        "the-longest-night:check_1_dance"
+      ]
+    },
     "dawn-of-the-final-day:doon_lead_investigator:text": {
       "kind": "story",
       "text": "Place 1 doom on the lead investigator’s investigator card.",
@@ -2653,7 +4055,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "dr_marquez_has_a_hunch",
+          "key": "drMarquezHasAHunch",
           "section": "campaign_notes",
           "value": true
         }
@@ -2664,7 +4066,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "dr_marquez_ready_for_fate_of_vale",
+          "key": "drMarquezReadyForFateOfVale",
           "section": "hidden",
           "value": true
         }
@@ -2674,7 +4076,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "dr_marquez_has_a_plan",
+        "id": "drMarquezHasAPlan",
         "section": "campaign_notes"
       },
       "then": [
@@ -2687,7 +4089,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "the_vale_is_full_of_fireworks",
+          "key": "theValeIsFullOfFireworks",
           "section": "campaign_notes",
           "value": true
         }
@@ -2739,7 +4141,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "replay_final_evening",
+              "key": "replayFinalEvening",
               "section": "hidden",
               "value": true
             }
@@ -2790,7 +4192,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "replay_final_evening",
+        "id": "replayFinalEvening",
         "section": "hidden"
       },
       "then": [
@@ -2837,12 +4239,189 @@
         }
       ]
     },
+    "the-final-evening:intro_2": {
+      "kind": "story",
+      "text": "The professor strides forward, holding Rebecca’s hand. All festivities cease as Mother Rachel turns around. “Everyone listen! Last night, Mother Rachel condemned a house full of sick people to death. I was there. They were not in their right mind.” Dr. Marquez entreats the revelers. “But that’s not all. There’s something living underneath this island. It’s sucking the life out of everything around it, and could devastate this entire village. We need to leave the island at once!” Mother Rachel looks at you, wounded. “What do you accuse me of? I gave my daughter as a sacrifice, and she was given back to me.”",
+      "bullets": []
+    },
+    "the-final-evening:intro_3": {
+      "kind": "story",
+      "text": "Dr. Marquez lets out an audible gasp as you step forward and lay yourself at Mother Rachel’s feet. The matron regards you warmly. “You are more than welcome to join us around the table. You may sit at my right hand so that you see what miracle awaits us on this day.” She grasps your hands firmly in an iron grip to lead you to the feast. You follow her dutifully.",
+      "bullets": []
+    },
+    "the-final-evening:add_cultist:text": {
+      "kind": "story",
+      "text": "Add 1 [cultist] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-final-evening:add_cultist": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        }
+      ]
+    },
+    "the-final-evening:remove_dr_marquez:text": {
+      "kind": "story",
+      "text": "Search each investigator’s deck for the Dr. Rosa Marquez story asset and remove it from the game.",
+      "bullets": []
+    },
+    "the-final-evening:remove_dr_marquez": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "10702"
+        }
+      ]
+    },
+    "the-final-evening:believed:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record <i>the investigators believed</i>.",
+      "bullets": []
+    },
+    "the-final-evening:intro_4": {
+      "kind": "story",
+      "text": "You give a signal to Dr. Marquez before stepping forward to bow before Mother Rachel. The matron regards you warmly. “You are more than welcome to join us around the table. You may sit at my right hand so that you see what miracle awaits us on this day.” She grasps your hands firmly in an iron grip to lead you to the feast. You follow her warily.",
+      "bullets": []
+    },
+    "the-final-evening:add_cultist_and_elder_thing:text": {
+      "kind": "story",
+      "text": "Add 1 [cultist] token and 1 [elder_thing] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-final-evening:add_cultist_and_elder_thing": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        }
+      ]
+    },
+    "the-final-evening:lied_to_mother_rachel": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "liedToMotherRachel",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-final-evening:intro_5": {
+      "kind": "story",
+      "text": "The professor strides forward and shouts above the revelry. “The food here is poison! You’re all in grave danger: whatever this is, it’s changing everything around it. See?” Dr. Marquez tears mask after mask off each reveler, exposing frenzied, grinning faces. The surrounding crowd goes silent. Then, a clapping sounds, along with the sound of laughter. Mother Rachel raises her arms to silence them. “Cast out these slanderers! But let it not keep us from our celebration. The heavens beckon us! Let us feast!”\nThe last thing you see as you are pushed away from the clamor is the matron’s triumphant smile.",
+      "bullets": []
+    },
+    "the-final-evening:add_tablet_and_elder_thing:text": {
+      "kind": "story",
+      "text": "Add 1 [tablet] token and 1 [elder_thing] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-final-evening:add_tablet_and_elder_thing": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        }
+      ]
+    },
+    "the-final-evening:interrupted_the_feast": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "interruptedTheFeast",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-final-evening:intro_choice": {
+      "kind": "chooseOne",
+      "text": "Check your Campaign Log. The investigators must decide (choose one):",
+      "choices": [
+        {
+          "id": "good",
+          "text": "“You have done nothing wrong.”",
+          "effects": [
+            {
+              "do": "record",
+              "key": "believed",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": [
+            "the-final-evening:intro_3",
+            "the-final-evening:add_cultist:text",
+            "the-final-evening:add_cultist",
+            "the-final-evening:remove_dr_marquez:text",
+            "the-final-evening:remove_dr_marquez",
+            "the-final-evening:believed:text"
+          ]
+        },
+        {
+          "id": "good_lie",
+          "text": "“You have done nothing wrong.” <i>(You are lying.)</i>",
+          "effects": [],
+          "steps": [
+            "the-final-evening:intro_4",
+            "the-final-evening:add_cultist_and_elder_thing:text",
+            "the-final-evening:add_cultist_and_elder_thing",
+            "the-final-evening:lied_to_mother_rachel"
+          ]
+        },
+        {
+          "id": "death",
+          "text": "“You have sentenced this village to death.”",
+          "effects": [],
+          "steps": [
+            "the-final-evening:intro_5",
+            "the-final-evening:add_tablet_and_elder_thing:text",
+            "the-final-evening:add_tablet_and_elder_thing",
+            "the-final-evening:interrupted_the_feast"
+          ]
+        }
+      ]
+    },
+    "the-final-evening:check_dr_marquez_has_a_plan": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "drMarquezHasAPlan",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-final-evening:intro_2",
+        "the-final-evening:intro_choice"
+      ],
+      "else": [
+        "the-final-evening:intro_5",
+        "the-final-evening:add_tablet_and_elder_thing:text",
+        "the-final-evening:add_tablet_and_elder_thing",
+        "the-final-evening:interrupted_the_feast"
+      ]
+    },
     "fate-of-the-vale:became_the_true_feast_of_hemlock_vale": {
       "kind": "effects",
       "effects": [
         {
           "do": "record",
-          "key": "became_the_true_feast_of_hemlock_vale",
+          "key": "becameTheTrueFeastOfHemlockVale",
           "section": "campaign_notes",
           "value": true
         }
@@ -2887,7 +4466,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fate_of_the_vale_saved_rachel",
+              "key": "fateOfTheValeSavedRachel",
               "section": "hidden",
               "value": true
             }
@@ -2900,7 +4479,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fate_of_the_vale_saved_leah",
+              "key": "fateOfTheValeSavedLeah",
               "section": "hidden",
               "value": true
             }
@@ -2913,7 +4492,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fate_of_the_vale_saved_simeon",
+              "key": "fateOfTheValeSavedSimeon",
               "section": "hidden",
               "value": true
             }
@@ -2926,7 +4505,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fate_of_the_vale_saved_william",
+              "key": "fateOfTheValeSavedWilliam",
               "section": "hidden",
               "value": true
             }
@@ -2939,7 +4518,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fate_of_the_vale_saved_river",
+              "key": "fateOfTheValeSavedRiver",
               "section": "hidden",
               "value": true
             }
@@ -2952,7 +4531,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fate_of_the_vale_saved_gideon",
+              "key": "fateOfTheValeSavedGideon",
               "section": "hidden",
               "value": true
             }
@@ -2965,7 +4544,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fate_of_the_vale_saved_judith",
+              "key": "fateOfTheValeSavedJudith",
               "section": "hidden",
               "value": true
             }
@@ -2978,7 +4557,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fate_of_the_vale_saved_theo",
+              "key": "fateOfTheValeSavedTheo",
               "section": "hidden",
               "value": true
             }
@@ -2992,7 +4571,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "dr_marquez_sacrificed_herself_for_the_vale",
+          "key": "drMarquezSacrificedHerselfForTheVale",
           "section": "campaign_notes",
           "value": true
         }
@@ -3065,7 +4644,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "investigators_sacrificed_themselves_for_the_vale",
+          "key": "investigatorsSacrificedThemselvesForTheVale",
           "section": "campaign_notes",
           "value": true
         }
@@ -3136,7 +4715,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "the_vale_was_saved",
+          "key": "theValeWasSaved",
           "section": "campaign_notes",
           "value": true
         }
@@ -3174,7 +4753,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "the_vale_burned",
+          "key": "theValeBurned",
           "section": "campaign_notes",
           "value": true
         }
@@ -3196,7 +4775,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "barely_survived",
+          "key": "barelySurvived",
           "section": "campaign_notes",
           "value": true
         }
@@ -3253,7 +4832,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "investigators_sacrificed_themselves_for_the_vale",
+        "id": "investigatorsSacrificedThemselvesForTheVale",
         "section": "campaign_notes"
       },
       "then": [
@@ -3267,7 +4846,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "dr_marquez_sacrificed_herself_for_the_vale",
+        "id": "drMarquezSacrificedHerselfForTheVale",
         "section": "campaign_notes"
       },
       "then": [

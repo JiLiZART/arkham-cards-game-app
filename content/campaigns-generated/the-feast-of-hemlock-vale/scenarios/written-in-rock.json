@@ -20,6 +20,9 @@
     "10503",
     "10504"
   ],
+  "setupCards": [
+    "10502"
+  ],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -31,9 +34,7 @@
       "do": "setAside",
       "codes": [
         "10695",
-        "10695b",
         "10694",
-        "10694b",
         "10721"
       ]
     },
@@ -119,7 +120,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "simeon_survived",
+          "key": "simeonSurvived",
           "value": true
         },
         {
@@ -136,7 +137,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "leah_saw_something_in_the_mine",
+          "key": "leahSawSomethingInTheMine",
           "value": true
         },
         {
@@ -153,12 +154,12 @@
       "effects": [
         {
           "do": "record",
-          "key": "simeon_disappeared",
+          "key": "simeonDisappeared",
           "value": true
         },
         {
           "do": "record",
-          "key": "simeon_plan_is_underway",
+          "key": "simeonPlanIsUnderway",
           "value": true
         },
         {
@@ -175,7 +176,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "leah_and_simeon_were_reunited",
+          "key": "leahAndSimeonWereReunited",
           "value": true
         },
         {
@@ -192,7 +193,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "survived_the_horrors_in_the_rock",
+          "key": "survivedTheHorrorsInTheRock",
           "value": true
         },
         {
@@ -221,7 +222,7 @@
         },
         {
           "do": "record",
-          "key": "north_point_mine",
+          "key": "northPointMine",
           "value": true
         }
       ]

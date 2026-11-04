@@ -85,6 +85,7 @@
       "elderSign"
     ]
   },
+  "options": [],
   "logLabels": {},
   "packs": [
     "core",

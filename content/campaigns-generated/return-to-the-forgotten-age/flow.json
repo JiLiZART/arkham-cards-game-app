@@ -15,6 +15,7 @@
     "return-to-heart-of-the-elders-part-2",
     "return-to-the-city-of-archives",
     "tfa-interlude4",
+    "return-to-the-depths-of-yoth",
     "tfa-interlude5",
     "return-to-shattered-aeons",
     "tfa-epilogue"
@@ -222,6 +223,28 @@
         "return-to-the-city-of-archives:earn_xp"
       ]
     },
+    "return-to-the-depths-of-yoth": {
+      "none": [],
+      "R1": [
+        "return-to-the-depths-of-yoth:fell_into_depths",
+        "return-to-the-depths-of-yoth:record_final_depth",
+        "return-to-the-depths-of-yoth:check_final_depth",
+        "return-to-the-depths-of-yoth:ask_collected_strange_liquid",
+        "return-to-the-depths-of-yoth:maybe_check_harbinger",
+        "return-to-the-depths-of-yoth:record_yigs_fury",
+        "return-to-the-depths-of-yoth:earn_xp",
+        "return-to-the-depths-of-yoth:check_investigators_poisoned"
+      ],
+      "R2": [
+        "return-to-the-depths-of-yoth:nexus_is_near",
+        "return-to-the-depths-of-yoth:maybe_ask_win_depth",
+        "return-to-the-depths-of-yoth:maybe_check_harbinger",
+        "return-to-the-depths-of-yoth:ask_collected_strange_liquid",
+        "return-to-the-depths-of-yoth:record_yigs_fury",
+        "return-to-the-depths-of-yoth:earn_xp_full_depth",
+        "return-to-the-depths-of-yoth:check_investigators_poisoned"
+      ]
+    },
     "return-to-the-doom-of-eztli": {
       "R1": [
         "return-to-the-doom-of-eztli:investigators_recovered_relic:text",
@@ -328,6 +351,36 @@
       ]
     }
   },
+  "before": {
+    "return-to-heart-of-the-elders-part-1": [
+      "return-to-heart-of-the-elders-part-1:maybe_do_intro",
+      "return-to-heart-of-the-elders-part-1:check_paths_known"
+    ],
+    "return-to-the-boundary-beyond": [
+      "return-to-the-boundary-beyond:check_found_missing_relic",
+      "return-to-the-boundary-beyond:use_gasoline"
+    ],
+    "return-to-the-city-of-archives": [
+      "return-to-the-city-of-archives:choose_to_cooperate"
+    ],
+    "return-to-the-depths-of-yoth": [
+      "return-to-the-depths-of-yoth:check_forging_own_path",
+      "return-to-the-depths-of-yoth:check_yigs_fury",
+      "return-to-the-depths-of-yoth:check_no_provisions",
+      "return-to-the-depths-of-yoth:check_no_mulligan"
+    ],
+    "return-to-threads-of-fate": [
+      "return-to-threads-of-fate:choose_talk_to_ichtaca",
+      "return-to-threads-of-fate:setup_act_cd",
+      "return-to-threads-of-fate:setup_act_gh"
+    ],
+    "return-to-turn-back-time": [
+      "return-to-turn-back-time:cross_off_everything",
+      "return-to-turn-back-time:cross_off_new_things",
+      "return-to-turn-back-time:remove_relic_from_deck",
+      "return-to-turn-back-time:add_elder_thing_token"
+    ]
+  },
   "steps": {
     "campaign:prologue": {
       "kind": "story",
@@ -362,7 +415,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "turned_back_time",
+        "id": "turnedBackTime",
         "section": "campaign_notes"
       },
       "then": [
@@ -388,7 +441,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "gave_relic_to_alejandro",
+          "key": "gaveRelicToAlejandro",
           "section": "campaign_notes",
           "value": true
         }
@@ -399,7 +452,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "earned_alejandros_trust",
+          "key": "earnedAlejandrosTrust",
           "section": "campaign_notes",
           "value": true
         }
@@ -457,7 +510,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "gave_relic_to_harlan",
+          "key": "gaveRelicToHarlan",
           "section": "campaign_notes",
           "value": true
         }
@@ -473,7 +526,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "alejandro_on_his_own",
+          "key": "alejandroOnHisOwn",
           "section": "campaign_notes",
           "value": true
         },
@@ -523,7 +576,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "alejandro_recovered_relic",
+        "id": "alejandroRecoveredRelic",
         "section": "campaign_notes"
       },
       "then": [
@@ -535,7 +588,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "investigators_recovered_relic",
+        "id": "investigatorsRecoveredRelic",
         "section": "campaign_notes"
       },
       "then": [
@@ -577,7 +630,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "mapped_way_forward",
+          "key": "mappedWayForward",
           "section": "campaign_notes",
           "value": true
         }
@@ -662,13 +715,13 @@
       "effects": [
         {
           "do": "record",
-          "key": "hote_start_with_clue_true",
+          "key": "hoteStartWithClueTrue",
           "section": "hidden",
           "value": true
         },
         {
           "do": "record",
-          "key": "hote_start_with_clue",
+          "key": "hoteStartWithClue",
           "section": "hidden",
           "value": true
         }
@@ -723,7 +776,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "ichtacas_faith_restored",
+          "key": "ichtacasFaithRestored",
           "section": "campaign_notes",
           "value": true
         },
@@ -865,7 +918,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "paths_known",
+          "id": "pathsKnown",
           "section": "campaign_notes",
           "op": "set",
           "value": "input"
@@ -927,7 +980,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "jungle_watches",
+          "key": "jungleWatches",
           "section": "campaign_notes",
           "value": true
         }
@@ -972,8 +1025,8 @@
       "effects": [
         {
           "do": "count",
-          "id": "yigs_fury",
-          "section": "yigs_fury",
+          "id": "yigsFury",
+          "section": "yigsFury",
           "op": "add",
           "value": 12
         }
@@ -989,8 +1042,8 @@
       "effects": [
         {
           "do": "count",
-          "id": "yigs_fury",
-          "section": "yigs_fury",
+          "id": "yigsFury",
+          "section": "yigsFury",
           "op": "add",
           "value": 10
         }
@@ -1006,8 +1059,8 @@
       "effects": [
         {
           "do": "count",
-          "id": "yigs_fury",
-          "section": "yigs_fury",
+          "id": "yigsFury",
+          "section": "yigsFury",
           "op": "add",
           "value": 8
         }
@@ -1023,8 +1076,8 @@
       "effects": [
         {
           "do": "count",
-          "id": "yigs_fury",
-          "section": "yigs_fury",
+          "id": "yigsFury",
+          "section": "yigsFury",
           "op": "add",
           "value": 6
         }
@@ -1040,8 +1093,8 @@
       "effects": [
         {
           "do": "count",
-          "id": "yigs_fury",
-          "section": "yigs_fury",
+          "id": "yigsFury",
+          "section": "yigsFury",
           "op": "add",
           "value": 4
         }
@@ -1057,8 +1110,8 @@
       "effects": [
         {
           "do": "count",
-          "id": "yigs_fury",
-          "section": "yigs_fury",
+          "id": "yigsFury",
+          "section": "yigsFury",
           "op": "add",
           "value": 2
         }
@@ -1068,7 +1121,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCount",
-        "id": "paths_known",
+        "id": "pathsKnown",
         "section": "campaign_notes",
         "min": 5,
         "max": 5
@@ -1083,7 +1136,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCount",
-        "id": "paths_known",
+        "id": "pathsKnown",
         "section": "campaign_notes",
         "min": 4,
         "max": 4
@@ -1100,7 +1153,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCount",
-        "id": "paths_known",
+        "id": "pathsKnown",
         "section": "campaign_notes",
         "min": 3,
         "max": 3
@@ -1117,7 +1170,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCount",
-        "id": "paths_known",
+        "id": "pathsKnown",
         "section": "campaign_notes",
         "min": 2,
         "max": 2
@@ -1134,7 +1187,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCount",
-        "id": "paths_known",
+        "id": "pathsKnown",
         "section": "campaign_notes",
         "min": 1,
         "max": 1
@@ -1151,7 +1204,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCount",
-        "id": "paths_known",
+        "id": "pathsKnown",
         "section": "campaign_notes",
         "min": 0,
         "max": 0
@@ -1209,6 +1262,344 @@
       "text": "Proceed to <b>Resolution 1</b>.",
       "bullets": []
     },
+    "return-to-heart-of-the-elders-part-1:start_with_ichtaca:text": {
+      "kind": "story",
+      "text": "Begin this scenario with Ichtaca in play.",
+      "bullets": []
+    },
+    "return-to-heart-of-the-elders-part-1:maybe_consult_ichtaca": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "hoteConsultIchtaca",
+        "section": "hidden"
+      },
+      "then": [
+        "return-to-heart-of-the-elders-part-1:start_with_ichtaca:text"
+      ],
+      "else": []
+    },
+    "return-to-heart-of-the-elders-part-1:start_with_alejandro:text": {
+      "kind": "story",
+      "text": "Begin this scenario with Alejandro Vela in play.",
+      "bullets": []
+    },
+    "return-to-heart-of-the-elders-part-1:maybe_consult_alejandro": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "hoteConsultAlejandro",
+        "section": "hidden"
+      },
+      "then": [
+        "return-to-heart-of-the-elders-part-1:start_with_alejandro:text"
+      ],
+      "else": []
+    },
+    "return-to-heart-of-the-elders-part-1:start_with_expedition_journal:text": {
+      "kind": "story",
+      "text": "Begin this scenario with Expedition Journal in play.",
+      "bullets": []
+    },
+    "return-to-heart-of-the-elders-part-1:maybe_consult_journal": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "hoteConsultJournal",
+        "section": "hidden"
+      },
+      "then": [
+        "return-to-heart-of-the-elders-part-1:start_with_expedition_journal:text"
+      ],
+      "else": []
+    },
+    "return-to-heart-of-the-elders-part-1:intro_1": {
+      "kind": "story",
+      "text": "It has been several days since your party ventured forth into the rainforest once more, and each day, the hazards you face grow more dangerous and frequent. Securing enough food and supplies for the journey is a constant struggle, and you are harrassed at every turn by the jungle’s inhabitants. Fortunately, you have seen no sign yet of the serpent people who attacked the previous expedition, but you’re positive they are out there. Watching. Waiting.\nOn the morning of the sixth day, you find the entrance. It is a huge cave opening, partially obscured by trees, brush, and vines. You nearly missed the great cavern maw altogether, despite its enormity. Surrounding the cavern’s entrance are six stone pillars, each covered in strange grooves and carvings that glow with a dim red hue. Perhaps one of your guides will understand what this means?",
+      "bullets": []
+    },
+    "return-to-heart-of-the-elders-part-1:intro_2": {
+      "kind": "story",
+      "text": "“The entrance is warded against intruders,” Ichtaca says cryptically, her eyes closed as though probing the cavern with unnatural senses. “These pillars are the key. Each is a test of wit and will.” She steps toward one of them and touches it with her palm, and its glow brightens. You notice now that the grooves along the pillar’s foundation depict a pattern you have seen somewhere before. If Ichtaca believes this place to be warded, you trust her opinion—there must be some way to break these wards…",
+      "bullets": []
+    },
+    "return-to-heart-of-the-elders-part-1:intro_3": {
+      "kind": "story",
+      "text": "Alejandro examines each of the pillars studiously. “It is a lock of some sort. Look here, see? The grooves do not line up perfectly.” He twists one of the pillars, and you can see the pattern along its side shifting. “I wager if we entered the cave, we would not get very far without these pillars in the correct formation. Just a hunch, I suppose…But I think we should examine this area further before we proceed.” You know Alejandro well enough by now to know that his hunches tend to be correct.",
+      "bullets": []
+    },
+    "return-to-heart-of-the-elders-part-1:intro_4": {
+      "kind": "story",
+      "text": "The previous expedition’s journal doesn’t have all the answers, but as you browse its pages, you are struck by a familiar diagram—one drawn by Lorenzo, an expedition member who never made it back to Arkham. It is a delicate recreation of a carving that was on the wall of one of the Eztli ruins. Many of the patterns and hieroglyphs you see in this drawing are shared among these pillars. It cannot simply be a coincidence. These pillars are surely the key to finding your way to N’kai…",
+      "bullets": []
+    },
+    "return-to-heart-of-the-elders-part-1:choose_who_to_consult": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "ichtaca",
+          "text": "<i>Let’s consult with Ichtaca.</i>",
+          "effects": [
+            {
+              "do": "record",
+              "key": "hoteConsultIchtaca",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": [
+            "return-to-heart-of-the-elders-part-1:intro_2",
+            "return-to-heart-of-the-elders-part-1:start_with_ichtaca:text"
+          ],
+          "when": {
+            "kind": "hasCard",
+            "card": "04147",
+            "inv": "any"
+          }
+        },
+        {
+          "id": "alejandro",
+          "text": "<i>Let’s consult with Alejandro.</i>",
+          "effects": [
+            {
+              "do": "record",
+              "key": "hoteConsultAlejandro",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": [
+            "return-to-heart-of-the-elders-part-1:intro_3",
+            "return-to-heart-of-the-elders-part-1:start_with_alejandro:text"
+          ],
+          "when": {
+            "kind": "hasCard",
+            "card": "04051",
+            "inv": "any"
+          }
+        },
+        {
+          "id": "journal",
+          "text": "<i>Let’s consult the expedition journal.</i>",
+          "effects": [
+            {
+              "do": "record",
+              "key": "hoteConsultJournal",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": [
+            "return-to-heart-of-the-elders-part-1:intro_4",
+            "return-to-heart-of-the-elders-part-1:start_with_expedition_journal:text"
+          ],
+          "when": {
+            "kind": "hasCard",
+            "card": "04148",
+            "inv": "any"
+          }
+        },
+        {
+          "id": "nothing",
+          "text": "<i>I wish we knew more about this…</i>",
+          "effects": [],
+          "steps": []
+        }
+      ]
+    },
+    "return-to-heart-of-the-elders-part-1:maybe_do_intro": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_data",
+        "take": false
+      },
+      "then": [
+        "return-to-heart-of-the-elders-part-1:maybe_consult_ichtaca",
+        "return-to-heart-of-the-elders-part-1:maybe_consult_alejandro",
+        "return-to-heart-of-the-elders-part-1:maybe_consult_journal"
+      ],
+      "else": [
+        "return-to-heart-of-the-elders-part-1:intro_1",
+        "return-to-heart-of-the-elders-part-1:choose_who_to_consult"
+      ]
+    },
+    "return-to-heart-of-the-elders-part-1:remove_act_1a:text": {
+      "kind": "story",
+      "text": "Remove the Act 1a—\"Search for the Pattern\" from the game and replace it with the new Act 1a—\"A Familiar Pattern.\"",
+      "bullets": []
+    },
+    "return-to-heart-of-the-elders-part-1:setup_locations:text": {
+      "kind": "story",
+      "text": "Put the Mouth of K’n-yan into play, <i>(The Cavern’s Maw)</i> side faceup. Each investigator begins play at the Mouth of K’n-yan <i>(The Cavern’s Maw)</i>.",
+      "bullets": []
+    },
+    "return-to-heart-of-the-elders-part-1:setup_paths:text": {
+      "kind": "story",
+      "text": "Check Campaign Log. Your journey beyond the boundary of time has granted you insight into how to enter K’n-yan. For each path that is known to you, place 1 resource on the Mouth of K’n-yan, as a pillar token.",
+      "bullets": []
+    },
+    "return-to-heart-of-the-elders-part-1:replay_maybe_flip_act_2:text": {
+      "kind": "story",
+      "text": "If you have reached act 2 before, flip act 1a over and place it in the Mouth of K’n-yan.",
+      "bullets": []
+    },
+    "return-to-heart-of-the-elders-part-1:check_replay": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_data",
+        "take": false
+      },
+      "then": [
+        "return-to-heart-of-the-elders-part-1:replay_maybe_flip_act_2:text"
+      ],
+      "else": []
+    },
+    "return-to-heart-of-the-elders-part-1:choose_ruins_and_start_in_play:text": {
+      "kind": "story",
+      "text": "Randomly choose one of the following 3 [[Ruins]] locations: Overgrown Ruins, Temple of the Fang, and Stone Altar. Put this location into play. Remove the other 2 from the game.",
+      "bullets": []
+    },
+    "return-to-heart-of-the-elders-part-1:choose_ruins:text": {
+      "kind": "story",
+      "text": "Randomly choose one of the following 3 [[Ruins]] locations: Overgrown Ruins, Temple of the Fang, and Stone Altar. Shuffle the randomly chosen location into the exploration deck. Remove the other 2 from the game.",
+      "bullets": []
+    },
+    "return-to-heart-of-the-elders-part-1:check_mapped_way_forward": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "mappedWayForward",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "return-to-heart-of-the-elders-part-1:choose_ruins_and_start_in_play:text"
+      ],
+      "else": [
+        "return-to-heart-of-the-elders-part-1:choose_ruins:text"
+      ]
+    },
+    "return-to-heart-of-the-elders-part-1:set_aside_poisoned:text": {
+      "kind": "story",
+      "text": "Set aside each Poisoned weakness that is not already in an investigator’s deck.",
+      "bullets": []
+    },
+    "return-to-heart-of-the-elders-part-1:check_no_provisions:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "jungleBeckonsReminder",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "return-to-heart-of-the-elders-part-1:jungle_beckons_reminder:text": {
+      "kind": "story",
+      "text": "Based on the events of <b>Interlude III: The Jungle Beckons:</b>",
+      "bullets": []
+    },
+    "return-to-heart-of-the-elders-part-1:check_no_provisions": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCards",
+        "id": "hoteFewerResources",
+        "section": "hidden"
+      },
+      "then": [
+        "return-to-heart-of-the-elders-part-1:check_no_provisions:yes:fx",
+        "return-to-heart-of-the-elders-part-1:jungle_beckons_reminder:text"
+      ],
+      "else": []
+    },
+    "return-to-heart-of-the-elders-part-1:maybe_jungle_beckons_reminder:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "jungleBeckonsReminder",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "return-to-heart-of-the-elders-part-1:maybe_jungle_beckons_reminder": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "jungleBeckonsReminder",
+        "section": "hidden"
+      },
+      "then": [],
+      "else": [
+        "return-to-heart-of-the-elders-part-1:maybe_jungle_beckons_reminder:no:fx",
+        "return-to-heart-of-the-elders-part-1:jungle_beckons_reminder:text"
+      ]
+    },
+    "return-to-heart-of-the-elders-part-1:check_start_with_clue": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCards",
+        "id": "hoteStartWithClueTrue",
+        "section": "hidden"
+      },
+      "then": [
+        "return-to-heart-of-the-elders-part-1:maybe_jungle_beckons_reminder"
+      ],
+      "else": []
+    },
+    "return-to-heart-of-the-elders-part-1:no_mulligan_reminder:text": {
+      "kind": "story",
+      "text": "Investigators cannot take a mulligan.",
+      "bullets": []
+    },
+    "return-to-heart-of-the-elders-part-1:check_no_mulligan": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "hoteNoMulligan",
+        "section": "hidden"
+      },
+      "then": [
+        "return-to-heart-of-the-elders-part-1:maybe_jungle_beckons_reminder",
+        "return-to-heart-of-the-elders-part-1:no_mulligan_reminder:text"
+      ],
+      "else": []
+    },
+    "return-to-heart-of-the-elders-part-1:encounter_deck:text": {
+      "kind": "story",
+      "text": "Shuffle the remainder of the encounter cards to form the encounter deck.",
+      "bullets": []
+    },
+    "return-to-heart-of-the-elders-part-1:additional_return_rules:text": {
+      "kind": "story",
+      "text": "For the duration of this scenario, the following additional rules apply:",
+      "bullets": []
+    },
+    "return-to-heart-of-the-elders-part-1:check_paths_known": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "math",
+        "take": false
+      },
+      "then": [],
+      "else": [
+        "return-to-heart-of-the-elders-part-1:remove_act_1a:text",
+        "return-to-heart-of-the-elders-part-1:setup_locations:text",
+        "return-to-heart-of-the-elders-part-1:setup_paths:text",
+        "return-to-heart-of-the-elders-part-1:check_replay",
+        "return-to-heart-of-the-elders-part-1:check_mapped_way_forward",
+        "return-to-heart-of-the-elders-part-1:set_aside_poisoned:text",
+        "return-to-heart-of-the-elders-part-1:check_no_provisions",
+        "return-to-heart-of-the-elders-part-1:check_start_with_clue",
+        "return-to-heart-of-the-elders-part-1:check_no_mulligan",
+        "return-to-heart-of-the-elders-part-1:encounter_deck:text",
+        "return-to-heart-of-the-elders-part-1:additional_return_rules:text"
+      ]
+    },
     "return-to-heart-of-the-elders-part-2:record_harbinger": {
       "kind": "counter",
       "text": "Record in your campaign log next to <i>“the Harbinger is still alive”</i>, record in parentheses how much damage is on the Harbinger of Valusia, replacing the number that was previously in parentheses.",
@@ -1216,7 +1607,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "harbinger_alive",
+          "id": "harbingerAlive",
           "section": "campaign_notes",
           "op": "set",
           "value": "input"
@@ -1240,7 +1631,7 @@
           "effects": [
             {
               "do": "crossOut",
-              "key": "harbinger_alive",
+              "key": "harbingerAlive",
               "section": "campaign_notes"
             }
           ],
@@ -1260,7 +1651,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "harbinger_alive",
+        "id": "harbingerAlive",
         "section": "campaign_notes"
       },
       "then": [
@@ -1273,8 +1664,8 @@
       "effects": [
         {
           "do": "count",
-          "id": "yigs_fury",
-          "section": "yigs_fury",
+          "id": "yigsFury",
+          "section": "yigsFury",
           "op": "add",
           "value": "input"
         }
@@ -1309,7 +1700,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "mended_tear_in_time",
+          "key": "mendedTearInTime",
           "section": "campaign_notes",
           "value": true
         }
@@ -1378,7 +1769,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "investigators_saved_serpents",
+          "key": "investigatorsSavedSerpents",
           "section": "campaign_notes",
           "value": true
         }
@@ -1408,7 +1799,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "investigators_saved_yithians",
+          "key": "investigatorsSavedYithians",
           "section": "campaign_notes",
           "value": true
         }
@@ -1419,7 +1810,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "fabric_of_time_unwoven",
+          "key": "fabricOfTimeUnwoven",
           "section": "campaign_notes",
           "value": true
         }
@@ -1449,7 +1840,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "turned_back_time",
+          "key": "turnedBackTime",
           "section": "campaign_notes",
           "value": true
         }
@@ -1476,7 +1867,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "paths_known",
+          "id": "pathsKnown",
           "section": "campaign_notes",
           "op": "set",
           "value": "input"
@@ -1496,7 +1887,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "harbinger_alive",
+          "id": "harbingerAlive",
           "section": "campaign_notes",
           "op": "set",
           "value": "input"
@@ -1520,7 +1911,7 @@
           "effects": [
             {
               "do": "crossOut",
-              "key": "harbinger_alive",
+              "key": "harbingerAlive",
               "section": "campaign_notes"
             }
           ],
@@ -1540,7 +1931,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "harbinger_alive",
+        "id": "harbingerAlive",
         "section": "campaign_notes"
       },
       "then": [
@@ -1553,8 +1944,8 @@
       "effects": [
         {
           "do": "count",
-          "id": "yigs_fury",
-          "section": "yigs_fury",
+          "id": "yigsFury",
+          "section": "yigsFury",
           "op": "add",
           "value": "input"
         }
@@ -1581,12 +1972,81 @@
         }
       ]
     },
+    "return-to-the-boundary-beyond:arcane_thrumming": {
+      "kind": "story",
+      "title": "Arcane Thrumming",
+      "text": "Throughout the journey south, the device you recovered from the clutches of the Brotherhood continues its endless humming, wrapped in a thin bedsheet on the back seat of your car. Your understanding of the relic’s nature is deepening.",
+      "bullets": []
+    },
+    "return-to-the-boundary-beyond:replace_relic_of_ages:text": {
+      "kind": "story",
+      "text": "The investigator with Relic of Ages <i>(…A Device, of Some Sort)</i> in their deck swaps it with the new version of Relic of Ages included in this Mythos Pack: Relic of Ages <i>(Forestalling the Future)</i>.",
+      "bullets": []
+    },
+    "return-to-the-boundary-beyond:check_found_missing_relic:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "replaceCard",
+          "old": "04061",
+          "new": "04191",
+          "who": "each"
+        }
+      ]
+    },
+    "return-to-the-boundary-beyond:growing_concern": {
+      "kind": "story",
+      "title": "Growing Concern",
+      "text": "The loss of the Eztli relic weighs heavily on your mind. Clearly, its value is more than simply academic. It holds a power within it that you cannot yet begin to fathom. You are certain that the shadowy Brotherhood is behind its disappearance, but for what purpose?",
+      "bullets": []
+    },
+    "return-to-the-boundary-beyond:remove_relic_of_ages_from_game:text": {
+      "kind": "story",
+      "text": "Remove Relic of Ages <i>(Forestalling the Future)</i> from the game.",
+      "bullets": []
+    },
+    "return-to-the-boundary-beyond:check_relic_is_missing": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "relicIsMissing",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "return-to-the-boundary-beyond:growing_concern",
+        "return-to-the-boundary-beyond:remove_relic_of_ages_from_game:text"
+      ],
+      "else": []
+    },
+    "return-to-the-boundary-beyond:check_found_missing_relic": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "foundMissingRelic",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "return-to-the-boundary-beyond:arcane_thrumming",
+        "return-to-the-boundary-beyond:replace_relic_of_ages:text",
+        "return-to-the-boundary-beyond:check_found_missing_relic:yes:fx"
+      ],
+      "else": [
+        "return-to-the-boundary-beyond:check_relic_is_missing"
+      ]
+    },
+    "return-to-the-boundary-beyond:use_gasoline": {
+      "kind": "unsupported",
+      "name": "use_supplies",
+      "text": "Check your supplies. Any one investigator must cross off one gasoline from their supplies. If no gasoline was crossed off, read <b>Out of Gas</b>.",
+      "effects": [],
+      "steps": []
+    },
     "return-to-the-city-of-archives:had_memories_expunged": {
       "kind": "effects",
       "effects": [
         {
           "do": "record",
-          "key": "had_memories_expunged",
+          "key": "hadMemoriesExpunged",
           "section": "campaign_notes",
           "value": true
         }
@@ -1622,7 +2082,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "tasks_completed",
+          "id": "tasksCompleted",
           "section": "hidden",
           "op": "set",
           "value": "input"
@@ -1640,7 +2100,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "process_was_perfected",
+          "key": "processWasPerfected",
           "section": "campaign_notes",
           "value": true
         },
@@ -1662,7 +2122,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "process_was_successful",
+          "key": "processWasSuccessful",
           "section": "campaign_notes",
           "value": true
         },
@@ -1684,7 +2144,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "process_backfired",
+          "key": "processBackfired",
           "section": "campaign_notes",
           "value": true
         },
@@ -1706,7 +2166,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "process_backfired_spectacularly",
+          "key": "processBackfiredSpectacularly",
           "section": "campaign_notes",
           "value": true
         }
@@ -1716,7 +2176,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCount",
-        "id": "tasks_completed",
+        "id": "tasksCompleted",
         "section": "hidden",
         "min": 3,
         "max": 3
@@ -1731,7 +2191,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCount",
-        "id": "tasks_completed",
+        "id": "tasksCompleted",
         "section": "hidden",
         "min": 4,
         "max": 4
@@ -1748,7 +2208,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCount",
-        "id": "tasks_completed",
+        "id": "tasksCompleted",
         "section": "hidden",
         "min": 5,
         "max": 5
@@ -1765,7 +2225,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCount",
-        "id": "tasks_completed",
+        "id": "tasksCompleted",
         "section": "hidden",
         "min": 6
       },
@@ -1781,7 +2241,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCount",
-        "id": "tasks_completed",
+        "id": "tasksCompleted",
         "section": "hidden",
         "min": 7
       },
@@ -1797,7 +2257,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCount",
-        "id": "tasks_completed",
+        "id": "tasksCompleted",
         "section": "hidden",
         "min": 8
       },
@@ -1820,6 +2280,1199 @@
         }
       ]
     },
+    "return-to-the-city-of-archives:intro_2": {
+      "kind": "story",
+      "text": "You cooperate with the creatures, hoping to earn your freedom. You are sick of captivity, and perhaps you will be able to find a way home if you are able to roam the city at will. The creatures seem pleased that you are answering their questions, though their mannerisms are still completely alien to you. Days turn to weeks, perhaps even longer. It is difficult to tell. Finally, one of the creatures informs you that you are free to roam the halls of the city, with several restrictions: You are not allowed to do harm to your new body, for it belongs to another of their race, and you are not allowed to leave the city. Your restraints are lifted, and the creature watches with keen interest as you get used to your conical body.",
+      "bullets": []
+    },
+    "return-to-the-city-of-archives:cooperated_with_yithians": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "cooperatedWithYithians",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-the-city-of-archives:intro_3": {
+      "kind": "story",
+      "text": "These creatures abducted you and even stole you from your own body. You refuse to give your captors even a single answer. You’d spit in their faces if you could—if you knew how to spit with such body, and if you knew which one of the creatures’ four distensible appendages was a face. Breaking free of your restraints is a hopeless endeavor, but you struggle to escape regardless. Your efforts do not go unnoticed, and one of the creatures is assigned to watch you. It seems more concerned with preventing you from harming your body than preventing you from escaping. After many days of captivity, you find a way to use this to your advantage. You struggle so hard against your restraints that they pierce into your leathery, cold flesh, drawing out a bit of viscous slime-blood. Your guard quickly apporoaches, clicking its claws together repeatedly. It undoes your restraints, and the moment it does, your claw appendages strike at what you believe to be the creature’s throat. It collapses to the floor, writhing in pain.",
+      "bullets": []
+    },
+    "return-to-the-city-of-archives:resisted_captivity": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "resistedCaptivity",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-the-city-of-archives:choose_to_cooperate": {
+      "kind": "chooseOne",
+      "text": "The investigators must decide (choose one):",
+      "choices": [
+        {
+          "id": "cooperate",
+          "text": "<i>Cooperate and tell the creatures everything you know.</i>",
+          "effects": [],
+          "steps": [
+            "return-to-the-city-of-archives:intro_2",
+            "return-to-the-city-of-archives:cooperated_with_yithians"
+          ]
+        },
+        {
+          "id": "resist",
+          "text": "<i>Refuse and resist captivity.</i>",
+          "effects": [],
+          "steps": [
+            "return-to-the-city-of-archives:intro_3",
+            "return-to-the-city-of-archives:resisted_captivity"
+          ]
+        }
+      ]
+    },
+    "return-to-the-depths-of-yoth:fell_into_depths": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "fellIntoDepths",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-the-depths-of-yoth:record_final_depth": {
+      "kind": "counter",
+      "text": "Depth level when the scenario ended:",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "finalDepth",
+          "section": "hidden",
+          "op": "set",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "return-to-the-depths-of-yoth:check_final_depth:default:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "return-to-the-depths-of-yoth:warn_standalone_depths:text": {
+      "kind": "story",
+      "text": "Note: when playing in campaign mode, reaching depth 5+ should always lead to <b>Resolution 2</b>",
+      "bullets": []
+    },
+    "return-to-the-depths-of-yoth:maybe_warn_standalone_depth": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_data",
+        "take": false
+      },
+      "then": [],
+      "else": [
+        "return-to-the-depths-of-yoth:warn_standalone_depths:text"
+      ]
+    },
+    "return-to-the-depths-of-yoth:depth_1_fall:text": {
+      "kind": "story",
+      "text": "Because the current depth level is 1, the fall is fatal, and the darkness of N’kai devours the shattered corpses. Each investigator is <b>killed</b>. The investigators lose the campaign.",
+      "bullets": []
+    },
+    "return-to-the-depths-of-yoth:depth_1_fall": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "kill",
+          "who": "each"
+        },
+        {
+          "do": "skipScenario",
+          "scenario": "tfa-epilogue"
+        },
+        {
+          "do": "end",
+          "result": "lose"
+        }
+      ]
+    },
+    "return-to-the-depths-of-yoth:depth_2_fall:text": {
+      "kind": "story",
+      "text": "Because the current depth level is 2, each investigator suffers 2 physical trauma and searches the collection for a random basic Injury weakness, adding it to their deck.",
+      "bullets": []
+    },
+    "return-to-the-depths-of-yoth:depth_2_fall": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 2,
+          "mental": 0
+        },
+        {
+          "do": "addWeakness",
+          "trait": "Injury"
+        },
+        {
+          "do": "xp",
+          "bonus": 2,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "return-to-the-depths-of-yoth:lose:text": {
+      "kind": "story",
+      "text": "Because all investigators have been killed by the fall trauma, the investigators <b>lose</b> the campaign.",
+      "bullets": []
+    },
+    "return-to-the-depths-of-yoth:lose": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "skipScenario",
+          "scenario": "tfa-epilogue"
+        },
+        {
+          "do": "end",
+          "result": "lose"
+        }
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_all_killed": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "trauma",
+        "take": false
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:lose:text",
+        "return-to-the-depths-of-yoth:lose"
+      ],
+      "else": []
+    },
+    "return-to-the-depths-of-yoth:depth_3_fall:text": {
+      "kind": "story",
+      "text": "Because the current depth level is 3, each investigator suffers 1 physical trauma.",
+      "bullets": []
+    },
+    "return-to-the-depths-of-yoth:depth_3_fall": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 1,
+          "mental": 0
+        },
+        {
+          "do": "xp",
+          "bonus": 3,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "return-to-the-depths-of-yoth:depth_4_fall:text": {
+      "kind": "story",
+      "text": "Because the current depth level is 4, you suffer no ill effects.",
+      "bullets": []
+    },
+    "return-to-the-depths-of-yoth:depth_4_fall": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 4,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_final_depth#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "finalDepth",
+        "section": "hidden",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:depth_4_fall:text",
+        "return-to-the-depths-of-yoth:depth_4_fall"
+      ],
+      "else": [
+        "return-to-the-depths-of-yoth:check_final_depth:default:fx",
+        "return-to-the-depths-of-yoth:maybe_warn_standalone_depth"
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_final_depth#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "finalDepth",
+        "section": "hidden",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:depth_3_fall:text",
+        "return-to-the-depths-of-yoth:depth_3_fall",
+        "return-to-the-depths-of-yoth:check_all_killed"
+      ],
+      "else": [
+        "return-to-the-depths-of-yoth:check_final_depth#3"
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_final_depth#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "finalDepth",
+        "section": "hidden",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:depth_2_fall:text",
+        "return-to-the-depths-of-yoth:depth_2_fall",
+        "return-to-the-depths-of-yoth:check_all_killed"
+      ],
+      "else": [
+        "return-to-the-depths-of-yoth:check_final_depth#2"
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_final_depth": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "finalDepth",
+        "section": "hidden",
+        "min": 1,
+        "max": 1
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:depth_1_fall:text",
+        "return-to-the-depths-of-yoth:depth_1_fall"
+      ],
+      "else": [
+        "return-to-the-depths-of-yoth:check_final_depth#1"
+      ]
+    },
+    "return-to-the-depths-of-yoth:key_of_eztli_story": {
+      "kind": "story",
+      "text": "The liquid from the fountain dissolves the viscous substance, revealing a solid object beneath the ooze. Record \"Key of Eztli\" in any one investigator's supplies.",
+      "bullets": []
+    },
+    "return-to-the-depths-of-yoth:gain_key_of_eztli": {
+      "kind": "investigatorChoice",
+      "optional": false,
+      "effects": [],
+      "steps": []
+    },
+    "return-to-the-depths-of-yoth:check_goop": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "check_supplies",
+        "take": false
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:key_of_eztli_story",
+        "return-to-the-depths-of-yoth:gain_key_of_eztli"
+      ],
+      "else": []
+    },
+    "return-to-the-depths-of-yoth:ask_collected_strange_liquid": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "strange_liquid",
+          "text": "Do you remember that you “collected a strange liquid”?",
+          "effects": [],
+          "steps": [
+            "return-to-the-depths-of-yoth:check_goop"
+          ]
+        }
+      ]
+    },
+    "return-to-the-depths-of-yoth:record_harbinger": {
+      "kind": "counter",
+      "text": "Record in your campaign log next to <i>“the Harbinger is still alive”</i>, record in parentheses how much damage is on the Harbinger of Valusia, replacing the number that was previously in parentheses.",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "harbingerAlive",
+          "section": "campaign_notes",
+          "op": "set",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "return-to-the-depths-of-yoth:check_harbinger": {
+      "kind": "chooseOne",
+      "text": "Which of the following is true?",
+      "choices": [
+        {
+          "id": "no_harbinger",
+          "text": "Harbinger did not enter play.",
+          "effects": [],
+          "steps": []
+        },
+        {
+          "id": "victory_display",
+          "text": "Harbinger is in the victory display.",
+          "effects": [
+            {
+              "do": "crossOut",
+              "key": "harbingerAlive",
+              "section": "campaign_notes"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "alive",
+          "text": "Harbinger is still in play or set aside.",
+          "effects": [],
+          "steps": [
+            "return-to-the-depths-of-yoth:record_harbinger"
+          ]
+        }
+      ]
+    },
+    "return-to-the-depths-of-yoth:maybe_check_harbinger": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "harbingerAlive",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:check_harbinger"
+      ],
+      "else": []
+    },
+    "return-to-the-depths-of-yoth:record_yigs_fury": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "yigsFury",
+          "section": "yigsFury",
+          "op": "add",
+          "value": "input"
+        }
+      ]
+    },
+    "return-to-the-depths-of-yoth:earn_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_investigators_poisoned": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "04102",
+          "who": "each"
+        }
+      ]
+    },
+    "return-to-the-depths-of-yoth:nexus_is_near": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "nexusIsNear",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-the-depths-of-yoth:record_win_depth": {
+      "kind": "counter",
+      "text": "Depth level when the scenario ended:",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "finalDepth",
+          "section": "hidden",
+          "op": "set",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "return-to-the-depths-of-yoth:earn_depth_6_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 1,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_win_depth": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "finalDepth",
+        "section": "hidden",
+        "min": 6
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:earn_depth_6_xp"
+      ],
+      "else": []
+    },
+    "return-to-the-depths-of-yoth:maybe_ask_win_depth": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_data",
+        "take": true
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:record_win_depth",
+        "return-to-the-depths-of-yoth:check_win_depth"
+      ],
+      "else": []
+    },
+    "return-to-the-depths-of-yoth:earn_xp_full_depth": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 5,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "return-to-the-depths-of-yoth:intro_2": {
+      "kind": "story",
+      "text": "You realize now that Ichtaca has her own agenda. Alejandro, as well—both have been using you for their own ends, keeping you from the truth. You raise a weapon and demand answers from her, catching her by surprise. “Yig demands the relic be brought to the Nexus,” she responds anxiously. Her eyes glow brightly, and her skin starts to scale over. Your eyes narrow, and you move to corner her against the edge of the precipice, so she cannot escape. “The relic cannot be trusted to the hands of Brotherhood: this much is true…For it is Valusia that shall be restored to glory. Yig has called, and I must answer.” Before you can react, she throws herself off the edge and into the depths below.",
+      "bullets": []
+    },
+    "return-to-the-depths-of-yoth:ichtaca_set_against_forging_own_path:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>Ichtaca is set against you</i>. Add 1 [elder_thing] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "return-to-the-depths-of-yoth:ichtaca_set_against_forging_own_path": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "ichtacaSetAgainst",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        }
+      ]
+    },
+    "return-to-the-depths-of-yoth:intro_3": {
+      "kind": "story",
+      "text": "You approach Ichtaca and rest a hand on her shoulder. Your companion takes a deep breath and turns to face you. Her eyes are cast downward in shame, and they have returned to their normal color. “I…I’m sorry. I have brought you to your ruin. He called out to me, long ago, told me of my heritage, of my people. I did his bidding willingly.”\nShe clenches her fists, her gaze meeting yours. “But now I realize I was wrong. Humanity deserves its time on Earth. You may have inherited it from far more powerful forces, but it is humanity’s time, not theirs.” You don’t completely understand what she is saying, but you understand the implication. Whatever Ichtaca truly is, she is on your side. A calm silence lingers between you, an unspoken bond that joins you as one. “We must get to the Nexus and prevent the serpents from recovering the relic,” she explains after a few moments, breaking the silence. You nod in agreement.",
+      "bullets": []
+    },
+    "return-to-the-depths-of-yoth:intro_4": {
+      "kind": "story",
+      "text": "You hesitate, unsure what to do next. What are Ichtaca’s true motives? Why has she led you here? Before you have the chance to react, she draws her bow and aims an arrow at your heart. “Thank you for aiding me this far,” Ichtaca says curtly, “but the time has come for us to part ways. Yig has called, and I must answer.” Her yellow eyes narrow and shine brightly.",
+      "bullets": []
+    },
+    "return-to-the-depths-of-yoth:ichtaca_set_against": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "ichtacaSetAgainst",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-the-depths-of-yoth:lose_ichtaca:text": {
+      "kind": "story",
+      "text": "Remove Ichtaca from all investigator’s deck for the remainder of the campaign.",
+      "bullets": []
+    },
+    "return-to-the-depths-of-yoth:lose_ichtaca": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "04147"
+        }
+      ]
+    },
+    "return-to-the-depths-of-yoth:maybe_lose_ichtaca": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "04147",
+        "inv": "any"
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:lose_ichtaca:text",
+        "return-to-the-depths-of-yoth:lose_ichtaca"
+      ],
+      "else": []
+    },
+    "return-to-the-depths-of-yoth:intro_5": {
+      "kind": "story",
+      "text": "“You must leave this place at once. This is not humanity’s battle. It is ours. We cannot let you or the Brotherhood foil our plans. Not now, not when we are so close.” Her hand wavers for a moment, and her eyes flicker again. You can tell that something is tearing at her, weighing on her mind. Finally, she speaks again. “Go now. Before I change my mind. And if you wish to live, do not follow. I will not give you a second chance.” Ichtaca swiftly departs, eyes trained on you until she leaves your sight. Despite her warning, you feel that you have no choice but to follow. If you don’t, who will protect humanity?",
+      "bullets": []
+    },
+    "return-to-the-depths-of-yoth:intro_6": {
+      "kind": "story",
+      "text": "Now drop your weapons.” The betrayal stings your chest, and you are gripped with anger and despair. Thoughts of escape flash across your mind, but you have seen her skill with a bow—with her steady aim, you would be dead before you took two steps. You have no choice but to comply. Your weapons clatter to the ground, one at a time. “Good. Now the relic: hand it to me.” Grimacing, you take a few steps forward and offer the relic to Ichtaca.",
+      "bullets": []
+    },
+    "return-to-the-depths-of-yoth:intro_7": {
+      "kind": "story",
+      "text": "As Ichtaca reaches out to grab the relic, you pull out your concealed pocketknife and quickly attack, catching her by surprise. The blade cuts deeply across her forearm. Blood sprays across your chest, and she staggers with pain, gripping her arm. Her heel clips a rock near the edge of the precipice, and she tumbles over the side of the ledge, her scream growing distant as she falls. You barely have time to recover from the shock of what just happened, as another colossal roar fills the cavern, and the ground shakes. You gather your belongings and continue your descent.",
+      "bullets": []
+    },
+    "return-to-the-depths-of-yoth:intro_8": {
+      "kind": "story",
+      "text": "Ichtaca grabs the relic. You can see the skin on the back of her hand growing hard and scaly. You take a few steps back, knuckles white with anger. “Go now. Before I change my mind,” she says. “And if you wish to live, do not follow. I will not give you a second chance.” Ichtaca swiftly departs, eyes trained on you until she leaves your sight. Despite her warning, you feel that you have no choice but to follow. If you don’t, who will protect humanity?",
+      "bullets": []
+    },
+    "return-to-the-depths-of-yoth:lost_relic:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, cross off <i>the investigators found the missing relic</i> and record <i>the relic is missing</i>.",
+      "bullets": []
+    },
+    "return-to-the-depths-of-yoth:lost_relic": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "foundMissingRelic",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "record",
+          "key": "relicIsMissing",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-the-depths-of-yoth:remove_relic:text": {
+      "kind": "story",
+      "text": "Remove The Relic of Ages from all investigator’s decks for the remainder of the campaign.",
+      "bullets": []
+    },
+    "return-to-the-depths-of-yoth:remove_relic": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "04191"
+        }
+      ]
+    },
+    "return-to-the-depths-of-yoth:maybe_remove_relic": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "04191",
+        "inv": "any"
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:remove_relic:text",
+        "return-to-the-depths-of-yoth:remove_relic"
+      ],
+      "else": []
+    },
+    "return-to-the-depths-of-yoth:check_pocketknife": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "check_supplies",
+        "take": false
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:intro_7"
+      ],
+      "else": [
+        "return-to-the-depths-of-yoth:intro_8",
+        "return-to-the-depths-of-yoth:lost_relic:text",
+        "return-to-the-depths-of-yoth:lost_relic",
+        "return-to-the-depths-of-yoth:maybe_remove_relic"
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_found_missing_relic": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "foundMissingRelic",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:intro_6",
+        "return-to-the-depths-of-yoth:check_pocketknife"
+      ],
+      "else": []
+    },
+    "return-to-the-depths-of-yoth:check_relic_missing": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "relicIsMissing",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:intro_5"
+      ],
+      "else": [
+        "return-to-the-depths-of-yoth:check_found_missing_relic"
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_ichtacas_faith": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "ichtacasFaithRestored",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:intro_3"
+      ],
+      "else": [
+        "return-to-the-depths-of-yoth:intro_4",
+        "return-to-the-depths-of-yoth:ichtaca_set_against",
+        "return-to-the-depths-of-yoth:maybe_lose_ichtaca",
+        "return-to-the-depths-of-yoth:check_relic_missing"
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_forging_own_path": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "forgingOwnPath",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:intro_2",
+        "return-to-the-depths-of-yoth:ichtaca_set_against_forging_own_path:text",
+        "return-to-the-depths-of-yoth:ichtaca_set_against_forging_own_path"
+      ],
+      "else": [
+        "return-to-the-depths-of-yoth:check_ichtacas_faith"
+      ]
+    },
+    "return-to-the-depths-of-yoth:fury_21:text": {
+      "kind": "story",
+      "text": "Because Yig's Fury is 21 or higher, remove agendas 1a, 2a, 3a, 4a, and 5a from the game. The game begins at agenda 6a.",
+      "bullets": []
+    },
+    "return-to-the-depths-of-yoth:fury_21": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "agenda5",
+          "section": "hidden",
+          "value": true
+        },
+        {
+          "do": "record",
+          "key": "agenda6",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "return-to-the-depths-of-yoth:fury_0:text": {
+      "kind": "story",
+      "text": "Because Yig's Fury is 0, search the gathered encounter cards for Yig and each copy of Pit Warden. Remove those cards from the game.",
+      "bullets": []
+    },
+    "return-to-the-depths-of-yoth:fury_1_to_5:text": {
+      "kind": "story",
+      "text": "Because Yig's Fury is between 1 and 5, no changes are made.",
+      "bullets": []
+    },
+    "return-to-the-depths-of-yoth:fury_6_to_10:text": {
+      "kind": "story",
+      "text": "Because Yig's Fury is between 6 and 10, remove agenda 1a from the game. The game begins at agenda 2a.",
+      "bullets": []
+    },
+    "return-to-the-depths-of-yoth:fury_11_to_14:text": {
+      "kind": "story",
+      "text": "Because Yig's Fury is between 11 and 14, remove agendas 1a and 2a from the game. The game begins at agenda 3a.",
+      "bullets": []
+    },
+    "return-to-the-depths-of-yoth:fury_15_to_17:text": {
+      "kind": "story",
+      "text": "Because Yig's Fury is between 15 and 17, remove agendas 1a, 2a, and 3a from the game. The game begins at agenda 4a.",
+      "bullets": []
+    },
+    "return-to-the-depths-of-yoth:fury_18_to_20:text": {
+      "kind": "story",
+      "text": "Because Yig's Fury is between 18 and 20, remove agendas 1a, 2a, 3a, and 4a from the game. The game begins at agenda 5a.",
+      "bullets": []
+    },
+    "return-to-the-depths-of-yoth:fury_18_to_20": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "agenda5",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_yigs_fury#20": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "$count",
+        "section": "yigsFury",
+        "min": 20,
+        "max": 20
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:fury_18_to_20:text",
+        "return-to-the-depths-of-yoth:fury_18_to_20"
+      ],
+      "else": [
+        "return-to-the-depths-of-yoth:fury_21:text",
+        "return-to-the-depths-of-yoth:fury_21"
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_yigs_fury#19": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "$count",
+        "section": "yigsFury",
+        "min": 19,
+        "max": 19
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:fury_18_to_20:text",
+        "return-to-the-depths-of-yoth:fury_18_to_20"
+      ],
+      "else": [
+        "return-to-the-depths-of-yoth:check_yigs_fury#20"
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_yigs_fury#18": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "$count",
+        "section": "yigsFury",
+        "min": 18,
+        "max": 18
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:fury_18_to_20:text",
+        "return-to-the-depths-of-yoth:fury_18_to_20"
+      ],
+      "else": [
+        "return-to-the-depths-of-yoth:check_yigs_fury#19"
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_yigs_fury#17": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "$count",
+        "section": "yigsFury",
+        "min": 17,
+        "max": 17
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:fury_15_to_17:text"
+      ],
+      "else": [
+        "return-to-the-depths-of-yoth:check_yigs_fury#18"
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_yigs_fury#16": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "$count",
+        "section": "yigsFury",
+        "min": 16,
+        "max": 16
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:fury_15_to_17:text"
+      ],
+      "else": [
+        "return-to-the-depths-of-yoth:check_yigs_fury#17"
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_yigs_fury#15": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "$count",
+        "section": "yigsFury",
+        "min": 15,
+        "max": 15
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:fury_15_to_17:text"
+      ],
+      "else": [
+        "return-to-the-depths-of-yoth:check_yigs_fury#16"
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_yigs_fury#14": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "$count",
+        "section": "yigsFury",
+        "min": 14,
+        "max": 14
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:fury_11_to_14:text"
+      ],
+      "else": [
+        "return-to-the-depths-of-yoth:check_yigs_fury#15"
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_yigs_fury#13": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "$count",
+        "section": "yigsFury",
+        "min": 13,
+        "max": 13
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:fury_11_to_14:text"
+      ],
+      "else": [
+        "return-to-the-depths-of-yoth:check_yigs_fury#14"
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_yigs_fury#12": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "$count",
+        "section": "yigsFury",
+        "min": 12,
+        "max": 12
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:fury_11_to_14:text"
+      ],
+      "else": [
+        "return-to-the-depths-of-yoth:check_yigs_fury#13"
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_yigs_fury#11": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "$count",
+        "section": "yigsFury",
+        "min": 11,
+        "max": 11
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:fury_11_to_14:text"
+      ],
+      "else": [
+        "return-to-the-depths-of-yoth:check_yigs_fury#12"
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_yigs_fury#10": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "$count",
+        "section": "yigsFury",
+        "min": 10,
+        "max": 10
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:fury_6_to_10:text"
+      ],
+      "else": [
+        "return-to-the-depths-of-yoth:check_yigs_fury#11"
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_yigs_fury#9": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "$count",
+        "section": "yigsFury",
+        "min": 9,
+        "max": 9
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:fury_6_to_10:text"
+      ],
+      "else": [
+        "return-to-the-depths-of-yoth:check_yigs_fury#10"
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_yigs_fury#8": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "$count",
+        "section": "yigsFury",
+        "min": 8,
+        "max": 8
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:fury_6_to_10:text"
+      ],
+      "else": [
+        "return-to-the-depths-of-yoth:check_yigs_fury#9"
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_yigs_fury#7": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "$count",
+        "section": "yigsFury",
+        "min": 7,
+        "max": 7
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:fury_6_to_10:text"
+      ],
+      "else": [
+        "return-to-the-depths-of-yoth:check_yigs_fury#8"
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_yigs_fury#6": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "$count",
+        "section": "yigsFury",
+        "min": 6,
+        "max": 6
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:fury_6_to_10:text"
+      ],
+      "else": [
+        "return-to-the-depths-of-yoth:check_yigs_fury#7"
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_yigs_fury#5": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "$count",
+        "section": "yigsFury",
+        "min": 5,
+        "max": 5
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:fury_1_to_5:text"
+      ],
+      "else": [
+        "return-to-the-depths-of-yoth:check_yigs_fury#6"
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_yigs_fury#4": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "$count",
+        "section": "yigsFury",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:fury_1_to_5:text"
+      ],
+      "else": [
+        "return-to-the-depths-of-yoth:check_yigs_fury#5"
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_yigs_fury#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "$count",
+        "section": "yigsFury",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:fury_1_to_5:text"
+      ],
+      "else": [
+        "return-to-the-depths-of-yoth:check_yigs_fury#4"
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_yigs_fury#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "$count",
+        "section": "yigsFury",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:fury_1_to_5:text"
+      ],
+      "else": [
+        "return-to-the-depths-of-yoth:check_yigs_fury#3"
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_yigs_fury#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "$count",
+        "section": "yigsFury",
+        "min": 1,
+        "max": 1
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:fury_1_to_5:text"
+      ],
+      "else": [
+        "return-to-the-depths-of-yoth:check_yigs_fury#2"
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_yigs_fury": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "$count",
+        "section": "yigsFury",
+        "min": 0,
+        "max": 0
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:fury_0:text"
+      ],
+      "else": [
+        "return-to-the-depths-of-yoth:check_yigs_fury#1"
+      ]
+    },
+    "return-to-the-depths-of-yoth:check_no_provisions:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "thcReminder",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "return-to-the-depths-of-yoth:thc_reminder:text": {
+      "kind": "story",
+      "text": "Based on the events of <b>Interlude IV: Those Held Captive</b>:",
+      "bullets": []
+    },
+    "return-to-the-depths-of-yoth:check_no_provisions": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCards",
+        "id": "doyFewerResources",
+        "section": "hidden"
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:check_no_provisions:yes:fx",
+        "return-to-the-depths-of-yoth:thc_reminder:text"
+      ],
+      "else": []
+    },
+    "return-to-the-depths-of-yoth:maybe_thc_reminder:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "thcReminder",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "return-to-the-depths-of-yoth:maybe_thc_reminder": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "thcReminder",
+        "section": "hidden"
+      },
+      "then": [],
+      "else": [
+        "return-to-the-depths-of-yoth:maybe_thc_reminder:no:fx",
+        "return-to-the-depths-of-yoth:thc_reminder:text"
+      ]
+    },
+    "return-to-the-depths-of-yoth:no_mulligan_reminder:text": {
+      "kind": "story",
+      "text": "Investigators cannot take a mulligan.",
+      "bullets": []
+    },
+    "return-to-the-depths-of-yoth:check_no_mulligan": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "doyNoMulligan",
+        "section": "hidden"
+      },
+      "then": [
+        "return-to-the-depths-of-yoth:maybe_thc_reminder",
+        "return-to-the-depths-of-yoth:no_mulligan_reminder:text"
+      ],
+      "else": []
+    },
     "return-to-the-doom-of-eztli:investigators_recovered_relic:text": {
       "kind": "story",
       "text": "In your Campaign Log, record that <i>the investigators recovered the Relic of Ages</i>. One investigator must add the Relic of Ages to their deck. This card does not count toward that investigator’s deck size.",
@@ -1830,7 +3483,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "investigators_recovered_relic",
+          "key": "investigatorsRecoveredRelic",
           "section": "campaign_notes",
           "value": true
         },
@@ -1848,7 +3501,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "harbinger_alive",
+          "id": "harbingerAlive",
           "section": "campaign_notes",
           "op": "set",
           "value": "input"
@@ -1916,8 +3569,8 @@
       "effects": [
         {
           "do": "count",
-          "id": "yigs_fury",
-          "section": "yigs_fury",
+          "id": "yigsFury",
+          "section": "yigsFury",
           "op": "add",
           "value": "input"
         }
@@ -1949,7 +3602,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "alejandro_recovered_relic",
+          "key": "alejandroRecoveredRelic",
           "section": "campaign_notes",
           "value": true
         }
@@ -2002,15 +3655,15 @@
       "effects": [
         {
           "do": "count",
-          "id": "yigs_fury",
-          "section": "yigs_fury",
+          "id": "yigsFury",
+          "section": "yigsFury",
           "op": "add",
           "value": "input"
         },
         {
           "do": "count",
-          "id": "yigs_fury",
-          "section": "yigs_fury",
+          "id": "yigsFury",
+          "section": "yigsFury",
           "op": "add",
           "value": 10
         }
@@ -2021,7 +3674,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "wait_for_additional_supplies",
+          "key": "waitForAdditionalSupplies",
           "section": "campaign_notes",
           "value": true
         }
@@ -2032,7 +3685,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "ichtaca_observed_progress",
+          "key": "ichtacaObservedProgress",
           "section": "campaign_notes",
           "value": true
         }
@@ -2048,7 +3701,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "alejandro_followed_to_ruins",
+          "key": "alejandroFollowedToRuins",
           "section": "campaign_notes",
           "value": true
         },
@@ -2064,7 +3717,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "ichtaca_is_wary",
+          "key": "ichtacaIsWary",
           "section": "campaign_notes",
           "value": true
         }
@@ -2075,7 +3728,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "earned_ichtacas_trust",
+          "key": "earnedIchtacasTrust",
           "section": "campaign_notes",
           "value": true
         }
@@ -2091,7 +3744,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "alejandro_remained_at_camp",
+          "key": "alejandroRemainedAtCamp",
           "section": "campaign_notes",
           "value": true
         }
@@ -2138,8 +3791,8 @@
       "effects": [
         {
           "do": "count",
-          "id": "yigs_fury",
-          "section": "yigs_fury",
+          "id": "yigsFury",
+          "section": "yigsFury",
           "op": "add",
           "value": "input"
         }
@@ -2171,7 +3824,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "cleared_path_to_temple",
+          "key": "clearedPathToTemple",
           "section": "campaign_notes",
           "value": true
         }
@@ -2182,7 +3835,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "relic_is_missing",
+          "key": "relicIsMissing",
           "section": "campaign_notes",
           "value": true
         }
@@ -2220,7 +3873,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "found_missing_relic",
+          "key": "foundMissingRelic",
           "section": "campaign_notes",
           "value": true
         }
@@ -2301,7 +3954,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "alejandro_is_missing",
+          "key": "alejandroIsMissing",
           "section": "campaign_notes",
           "value": true
         }
@@ -2339,7 +3992,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "rescued_alejandro",
+          "key": "rescuedAlejandro",
           "section": "campaign_notes",
           "value": true
         }
@@ -2380,7 +4033,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "forging_own_path",
+        "id": "forgingOwnPath",
         "section": "campaign_notes"
       },
       "then": [
@@ -2451,7 +4104,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "ichtaca_in_the_dark",
+          "key": "ichtacaInTheDark",
           "section": "campaign_notes",
           "value": true
         }
@@ -2462,7 +4115,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "forged_bond_with_ichtaca",
+          "key": "forgedBondWithIchtaca",
           "section": "campaign_notes",
           "value": true
         }
@@ -2503,7 +4156,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "forging_own_path",
+        "id": "forgingOwnPath",
         "section": "campaign_notes"
       },
       "then": [
@@ -2559,7 +4212,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "recruited_help_of_another_expedition",
+          "key": "recruitedHelpOfAnotherExpedition",
           "section": "campaign_notes",
           "value": true
         }
@@ -2636,7 +4289,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "harbinger_alive",
+          "id": "harbingerAlive",
           "section": "campaign_notes",
           "op": "set",
           "value": "input"
@@ -2660,7 +4313,7 @@
           "effects": [
             {
               "do": "crossOut",
-              "key": "harbinger_alive",
+              "key": "harbingerAlive",
               "section": "campaign_notes"
             }
           ],
@@ -2680,7 +4333,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "harbinger_alive",
+        "id": "harbingerAlive",
         "section": "campaign_notes"
       },
       "then": [
@@ -2693,8 +4346,8 @@
       "effects": [
         {
           "do": "count",
-          "id": "yigs_fury",
-          "section": "yigs_fury",
+          "id": "yigsFury",
+          "section": "yigsFury",
           "op": "add",
           "value": "input"
         }
@@ -2857,12 +4510,220 @@
     "return-to-threads-of-fate:upgradeDecks": {
       "kind": "upgradeDecks"
     },
+    "return-to-threads-of-fate:intro_4": {
+      "kind": "story",
+      "text": "Ichtaca grits her teeth and pauses. You expect her to refuse and leave without answering your questions, but surprisingly, she relents. According to Ichtaca, her people have spent ages protecting the relic from interlopers who would use it for nefarious purposes. She speaks cryptically, in half-riddles and tall tales, although she refuses to explain where her people come from and how they have remained hidden for so long. When pressed about the relic, all she says is that it controls the flow of time, and that it must not be tampered with.\n“It must return to its rightful place,” she explains. Her gaze is relentless, unwavering. “Do you understand? It cannot fall into the wrong hands. If you help me recover it, I will aid you in return. Just promise me you will not use it.”",
+      "bullets": []
+    },
+    "return-to-threads-of-fate:listened_to_ichtaca:text": {
+      "kind": "story",
+      "text": "Remember that “you listened to Ichtaca’s tale.”",
+      "bullets": []
+    },
+    "return-to-threads-of-fate:listened_to_ichtaca": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "listenedToIchtaca",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "return-to-threads-of-fate:add_cultist:text": {
+      "kind": "story",
+      "text": "Add 1 [cultist] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "return-to-threads-of-fate:add_cultist": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        }
+      ]
+    },
+    "return-to-threads-of-fate:intro_5": {
+      "kind": "story",
+      "text": "Ichtaca strings her ornately decorated bow with frightening speed and slams your door on her way out.",
+      "bullets": []
+    },
+    "return-to-threads-of-fate:ichtaca_left_without_you:text": {
+      "kind": "story",
+      "text": "Remember that “Ichtaca left without you.”",
+      "bullets": []
+    },
+    "return-to-threads-of-fate:ichtaca_left_without_you": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "ichtacaLeftWithoutYou",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "return-to-threads-of-fate:intro_6": {
+      "kind": "story",
+      "text": "Once Ichtaca has left, you consider her words carefully and recall the events that have led to this point. You did not trust Alejandro with the Eztli relic, and you let Ichtaca leave without questioning her. Are you just being paranoid?…",
+      "bullets": []
+    },
+    "return-to-threads-of-fate:choose_forging_own_path": {
+      "kind": "chooseOne",
+      "text": "The investigators must decide (choose one):",
+      "choices": [
+        {
+          "id": "on_your_own",
+          "text": "“We should be wary of them.”",
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "cultist"
+            },
+            {
+              "do": "removeChaosToken",
+              "token": "tablet"
+            },
+            {
+              "do": "removeChaosToken",
+              "token": "tablet"
+            },
+            {
+              "do": "addChaosToken",
+              "token": "elderThing"
+            },
+            {
+              "do": "record",
+              "key": "forgingOwnPath",
+              "section": "campaign_notes",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "listen",
+          "text": "“Maybe I should listen to them after all…”",
+          "effects": [],
+          "steps": []
+        }
+      ]
+    },
+    "return-to-threads-of-fate:check_ignored_ichtaca_and_gave_relic_to_harlan": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "gaveRelicToHarlan",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "return-to-threads-of-fate:intro_6",
+        "return-to-threads-of-fate:choose_forging_own_path"
+      ],
+      "else": []
+    },
+    "return-to-threads-of-fate:choose_talk_to_ichtaca": {
+      "kind": "chooseOne",
+      "text": "The lead investigator must decide (choose one):",
+      "choices": [
+        {
+          "id": "stop_her",
+          "text": "<i>“You’re not going anywhere until you tell me what is going on.”</i>",
+          "effects": [],
+          "steps": [
+            "return-to-threads-of-fate:intro_4",
+            "return-to-threads-of-fate:listened_to_ichtaca:text",
+            "return-to-threads-of-fate:listened_to_ichtaca",
+            "return-to-threads-of-fate:add_cultist:text",
+            "return-to-threads-of-fate:add_cultist"
+          ]
+        },
+        {
+          "id": "let_her_leave",
+          "text": "<i>“Have it your way.”</i>",
+          "effects": [],
+          "steps": [
+            "return-to-threads-of-fate:intro_5",
+            "return-to-threads-of-fate:ichtaca_left_without_you:text",
+            "return-to-threads-of-fate:ichtaca_left_without_you",
+            "return-to-threads-of-fate:check_ignored_ichtaca_and_gave_relic_to_harlan"
+          ]
+        }
+      ]
+    },
+    "return-to-threads-of-fate:go_to_police:text": {
+      "kind": "story",
+      "text": "Remove the following act cards from the “c/d” deck: Search for Alejandro, both copies of Friends in High Places, and one of the two copies of At the Station, at random.",
+      "bullets": []
+    },
+    "return-to-threads-of-fate:search_for_alejandro_alone:text": {
+      "kind": "story",
+      "text": "Remove the following act cards from the “c/d” deck: Missing Persons, both copies of At the Station, and one of the two copies of Friends in High Places, at random.",
+      "bullets": []
+    },
+    "return-to-threads-of-fate:setup_act_cd": {
+      "kind": "chooseOne",
+      "text": "The investigators must choose one of the following options, and adjust the contents of the “c/d” deck accordingly:",
+      "choices": [
+        {
+          "id": "police",
+          "text": "If you wish to go to the police to inform them about Alejandro’s disappearance.",
+          "effects": [],
+          "steps": [
+            "return-to-threads-of-fate:go_to_police:text"
+          ]
+        },
+        {
+          "id": "search_alone",
+          "text": "If you wish to look for Alejandro on your own.",
+          "effects": [],
+          "steps": [
+            "return-to-threads-of-fate:search_for_alejandro_alone:text"
+          ]
+        }
+      ]
+    },
+    "return-to-threads-of-fate:find_advertiser_source:text": {
+      "kind": "story",
+      "text": "Remove the following act cards from the “g/h” deck: Search for the Meaning, both copies of The Overgrown Estate, and 1 of the 2 copies of Seeking Trouble, at random.",
+      "bullets": []
+    },
+    "return-to-threads-of-fate:find_root_of_problem:text": {
+      "kind": "story",
+      "text": "Remove the following act cards from the “g/h” deck: Search for the Source, both copies of Seeking Trouble, and 1 of the 2 copies of The Overgrown Estate, at random.",
+      "bullets": []
+    },
+    "return-to-threads-of-fate:setup_act_gh": {
+      "kind": "chooseOne",
+      "text": "The investigators must choose one of the following options, and adjust the contents of the “g/h” deck accordingly:",
+      "choices": [
+        {
+          "id": "police",
+          "text": "If you wish to find the source named in the <i>Advertiser's</i> story.",
+          "effects": [],
+          "steps": [
+            "return-to-threads-of-fate:find_advertiser_source:text"
+          ]
+        },
+        {
+          "id": "search_alone",
+          "text": "If you wish to find the root of the problem.",
+          "effects": [],
+          "steps": [
+            "return-to-threads-of-fate:find_root_of_problem:text"
+          ]
+        }
+      ]
+    },
     "return-to-turn-back-time:fabric_of_time_unwoven": {
       "kind": "effects",
       "effects": [
         {
           "do": "record",
-          "key": "fabric_of_time_unwoven",
+          "key": "fabricOfTimeUnwoven",
           "section": "campaign_notes",
           "value": true
         }
@@ -2892,7 +4753,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "sealed_relic_of_ages_forever",
+          "key": "sealedRelicOfAgesForever",
           "section": "campaign_notes",
           "value": true
         }
@@ -2926,6 +4787,229 @@
         }
       ]
     },
+    "return-to-turn-back-time:cross_off_everything": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "turnedBackTime",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "alejandroIsMissing",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "alejandroOnHisOwn",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "alejandroRecoveredRelic",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "alejandroRemembersEverything",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "alejandroSetAgainst",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "braziersAreLit",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "braziersRemainUnlit",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "cooperatedWithYithians",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "earnedAlejandrosTrust",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "fabricOfTimeUnwoven",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "fellIntoDepths",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "forgedBondWithIchtaca",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "forgingOwnPath",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "foundMissingRelic",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "gaveRelicToAlejandro",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "gaveRelicToHarlan",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "hadMemoriesExpunged",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "harbingerAlive",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "ichtacaHasConfidence",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "ichtacaInTheDark",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "ichtacaSetAgainst",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "ichtacasFaithRestored",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "investigatorsRecoveredRelic",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "investigatorsSavedSerpents",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "investigatorsSavedYithians",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "jungleWatches",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "mappedWayForward",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "mendedTearInTime",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "nexusIsNear",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "pathsKnown",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "processBackfired",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "processBackfiredSpectacularly",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "processWasPerfected",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "processWasSuccessful",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "relicIsMissing",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "rescuedAlejandro",
+          "section": "campaign_notes"
+        },
+        {
+          "do": "crossOut",
+          "key": "resistedCaptivity",
+          "section": "campaign_notes"
+        }
+      ]
+    },
+    "return-to-turn-back-time:cross_off_new_things": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "recruitedHelpOfAnotherExpedition",
+          "section": "campaign_notes"
+        }
+      ]
+    },
+    "return-to-turn-back-time:remove_relic_from_deck": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "04303"
+        }
+      ]
+    },
+    "return-to-turn-back-time:add_elder_thing_token": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        }
+      ]
+    },
     "tfa-interlude5:darkness_1": {
       "kind": "story",
       "text": "You stir awake, lying facedown on the cold, hard stone of the cavern. You are bruised and battered but, somehow, alive. It takes several minutes before you regain enough of your strength to stand. You are absolutely and hopelessly lost within the impossibly vast caverns, enveloped by pitch-black darkness. Have you survived all this way only to perish here, lost to all humanity?",
@@ -2940,7 +5024,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "nexus_is_near",
+        "id": "nexusIsNear",
         "section": "campaign_notes"
       },
       "then": [
@@ -2952,7 +5036,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "fell_into_depths",
+        "id": "fellIntoDepths",
         "section": "campaign_notes"
       },
       "then": [
@@ -2998,12 +5082,12 @@
         "conditions": [
           {
             "kind": "logHas",
-            "id": "investigators_recovered_relic",
+            "id": "investigatorsRecoveredRelic",
             "section": "campaign_notes"
           },
           {
             "kind": "logHas",
-            "id": "forging_own_path",
+            "id": "forgingOwnPath",
             "section": "campaign_notes"
           }
         ]
@@ -3039,7 +5123,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "relic_is_missing",
+        "id": "relicIsMissing",
         "section": "campaign_notes"
       },
       "then": [
@@ -3067,7 +5151,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "relic_is_missing",
+        "id": "relicIsMissing",
         "section": "campaign_notes"
       },
       "then": [
@@ -3095,7 +5179,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "relic_is_missing",
+        "id": "relicIsMissing",
         "section": "campaign_notes"
       },
       "then": [
@@ -3123,7 +5207,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "relic_is_missing",
+        "id": "relicIsMissing",
         "section": "campaign_notes"
       },
       "then": [
@@ -3195,7 +5279,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "found_missing_relic",
+        "id": "foundMissingRelic",
         "section": "campaign_notes"
       },
       "then": [
@@ -3227,7 +5311,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "braziers_are_lit",
+          "key": "braziersAreLit",
           "section": "campaign_notes",
           "value": true
         }
@@ -3285,7 +5369,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "braziers_remain_unlit",
+          "key": "braziersRemainUnlit",
           "section": "campaign_notes",
           "value": true
         }
@@ -3341,7 +5425,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "process_backfired_spectacularly",
+        "id": "processBackfiredSpectacularly",
         "section": "campaign_notes"
       },
       "then": [
@@ -3353,7 +5437,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "process_backfired",
+        "id": "processBackfired",
         "section": "campaign_notes"
       },
       "then": [
@@ -3377,7 +5461,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "rescued_custodian",
+              "key": "rescuedCustodian",
               "section": "hidden",
               "value": true
             }
@@ -3402,7 +5486,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "alejandro_remembers_everything",
+          "key": "alejandroRemembersEverything",
           "section": "campaign_notes",
           "value": true
         },
@@ -3428,7 +5512,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "alejandro_set_against",
+          "key": "alejandroSetAgainst",
           "section": "campaign_notes",
           "value": true
         },
@@ -3488,7 +5572,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "doy_no_mulligan",
+          "key": "doyNoMulligan",
           "section": "hidden",
           "value": true
         }

@@ -63,6 +63,9 @@ export function startCampaign(db: ContentDb, opts: NewCampaign): CampaignState {
     history: [],
     result: null,
   };
+  // only when some are chosen, so a campaign without options keeps the state it always had
+  const options = (opts.options ?? []).filter((id) => c.options.some((o) => o.id === id));
+  if (options.length) state.options = options;
   // the campaign's setup and its first interlude run up to the first prompt, or to the first scenario
   return advance(db, state);
 }
@@ -112,6 +115,7 @@ export function scenarioSetup(db: ContentDb, c: CampaignState, seed: number): Ga
     seed,
     campaignLog: flatLog(c.log),
     chaosBag: [...c.chaosBag],
+    ...(c.options?.length ? { options: [...c.options] } : {}),
     investigators: ordered.map((i) => ({
       code: i.code,
       deck: i.deck,

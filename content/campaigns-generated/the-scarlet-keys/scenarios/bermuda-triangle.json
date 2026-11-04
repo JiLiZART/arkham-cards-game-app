@@ -22,6 +22,7 @@
     "09683",
     "09684"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -108,7 +109,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "cell_was_hollowed",
+          "key": "cellWasHollowed",
           "value": true
         },
         {
@@ -131,12 +132,12 @@
         },
         {
           "do": "record",
-          "key": "cell_knows_the_true_nature_of_the_coterie",
+          "key": "cellKnowsTheTrueNatureOfTheCoterie",
           "value": true
         },
         {
           "do": "record",
-          "key": "aliki_is_on_your_side",
+          "key": "alikiIsOnYourSide",
           "value": true
         }
       ]
@@ -153,12 +154,12 @@
         },
         {
           "do": "record",
-          "key": "cell_knows_the_true_nature_of_the_coterie",
+          "key": "cellKnowsTheTrueNatureOfTheCoterie",
           "value": true
         },
         {
           "do": "record",
-          "key": "have_not_seen_the_last_of_aliki_zoni_uperetria",
+          "key": "haveNotSeenTheLastOfAlikiZoniUperetria",
           "value": true
         }
       ]
@@ -175,7 +176,7 @@
         },
         {
           "do": "record",
-          "key": "aliki_is_on_your_side",
+          "key": "alikiIsOnYourSide",
           "value": true
         }
       ]
@@ -192,7 +193,7 @@
         },
         {
           "do": "record",
-          "key": "have_not_seen_the_last_of_aliki_zoni_uperetria",
+          "key": "haveNotSeenTheLastOfAlikiZoniUperetria",
           "value": true
         }
       ]

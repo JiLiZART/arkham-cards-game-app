@@ -26,6 +26,7 @@
     "07313",
     "07314"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -127,7 +128,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "escaped_yhanthlei",
+          "key": "escapedYhanthlei",
           "value": true
         },
         {
@@ -150,7 +151,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "plot_of_the_deep_ones_was_thwarted",
+          "key": "plotOfTheDeepOnesWasThwarted",
           "value": true
         },
         {
@@ -167,7 +168,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "flood_has_begun",
+          "key": "floodHasBegun",
           "value": true
         },
         {
@@ -184,7 +185,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "agent_harpers_mission_is_complete",
+          "key": "agentHarpersMissionIsComplete",
           "value": true
         },
         {
@@ -201,7 +202,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "riches_of_the_deep_are_lost_forever",
+          "key": "richesOfTheDeepAreLostForever",
           "value": true
         },
         {
@@ -218,7 +219,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "agent_harpers_mission_is_complete_at_what_cost",
+          "key": "agentHarpersMissionIsCompleteAtWhatCost",
           "value": true
         },
         {
@@ -241,7 +242,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "riches_of_the_deep_are_destroyed_at_what_cost",
+          "key": "richesOfTheDeepAreDestroyedAtWhatCost",
           "value": true
         },
         {
@@ -264,7 +265,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "deep_ones_have_flooded_the_earth",
+          "key": "deepOnesHaveFloodedTheEarth",
           "value": true
         },
         {

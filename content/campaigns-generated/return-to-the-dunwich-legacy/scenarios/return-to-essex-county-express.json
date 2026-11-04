@@ -23,6 +23,7 @@
     "02163",
     "02164"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -132,7 +133,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "investigators_delayed",
+          "key": "investigatorsDelayed",
           "value": true
         },
         {

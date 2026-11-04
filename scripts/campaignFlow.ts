@@ -11,6 +11,7 @@ import type {
   FlowCondition,
   FlowEffect,
 } from "../src/content/schema";
+import { stepRefs } from "../src/content/schema";
 import { namedScenarios } from "../src/content/flow";
 import { kebab, tokenName, type Raw } from "./campaignGuide";
 import { TEST_STAGE } from "../src/engine/world/constants";
@@ -642,6 +643,16 @@ class Compiler {
 
   // ---------- the flow ----------
 
+  /** does a step do something beyond showing text: an effect, a question, or a branch that leads to one */
+  private acts(id: string, seen = new Set<string>()): boolean {
+    const st = this.steps[id];
+    if (!st || seen.has(id)) return false;
+    seen.add(id);
+    if (st.kind === "story") return false;
+    if (st.kind === "branch") return stepRefs(st).some((x) => this.acts(x, seen));
+    return true;
+  }
+
   compile(): CampaignFlow {
     const { campaign, scenarios, ids } = this.src;
     const flow: CampaignFlow = {
@@ -649,6 +660,7 @@ class Compiler {
       order: [],
       interludes: {},
       resolutions: {},
+      before: {},
       steps: this.steps,
     };
     const campaignSteps = new Map<string, Raw>((campaign.steps ?? []).map((s: Raw) => [s.id, s]));
@@ -664,6 +676,21 @@ class Compiler {
           if (k) res[k] = this.expand(id, byId, r.steps ?? []);
         }
         if (Object.keys(res).length) flow.resolutions[id] = res;
+        // its own setup steps that change the campaign or ask the players (difficulty tokens, an intro choice); the intro
+        // and the setup instructions are the scenario's to show and to do
+        const had = new Set(Object.keys(this.steps));
+        const before = this.expand(id, byId, s.setup ?? []).filter((x) => this.acts(x));
+        if (before.length) flow.before[id] = before;
+        // the steps that expansion made and nothing kept leads to (the setup's texts) go
+        const kept = new Set<string>();
+        const keep = (x: string) => {
+          if (kept.has(x) || !this.steps[x]) return;
+          kept.add(x);
+          stepRefs(this.steps[x]).forEach(keep);
+        };
+        before.forEach(keep);
+        for (const k of Object.keys(this.steps))
+          if (!had.has(k) && !kept.has(k)) delete this.steps[k];
       } else if (s.type === "interlude" || s.type === "epilogue") {
         flow.interludes[id] = {
           kind: s.type,

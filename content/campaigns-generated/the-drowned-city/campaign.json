@@ -9,6 +9,7 @@
     "the-grand-vault",
     "court-of-the-ancients",
     "obsidian-canyons",
+    "sepulchre-of-the-sleeper",
     "the-doom-of-arkham-part-1",
     "the-doom-of-arkham-part-2"
   ],
@@ -90,6 +91,7 @@
       "elderSign"
     ]
   },
+  "options": [],
   "logLabels": {},
   "packs": [
     "core",
@@ -107,6 +109,7 @@
     "The Grand Vault",
     "Court of the Ancients",
     "Obsidian Canyons",
+    "Sepulchre of the Sleeper",
     "The Doom of Arkham: Part I",
     "The Doom of Arkham: Part II"
   ],
@@ -122,12 +125,12 @@
       "label": "Alien Glyphs"
     },
     {
-      "id": "task_progress",
+      "id": "taskProgress",
       "kind": "investigatorCount",
       "label": "Task progress"
     },
     {
-      "id": "artifacts_earned",
+      "id": "artifactsEarned",
       "kind": "entries",
       "label": "Artifacts Earned"
     },
@@ -137,7 +140,7 @@
       "label": "Locations of R'lyeh"
     },
     {
-      "id": "flooded_neighborhoods",
+      "id": "floodedNeighborhoods",
       "kind": "entries",
       "label": "Flooded Neighborhoods"
     }

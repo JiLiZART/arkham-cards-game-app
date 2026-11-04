@@ -23,6 +23,7 @@
     "06288",
     "06289"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -121,7 +122,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "dreamers_escaped_nyarlathoteps_grasp",
+          "key": "dreamersEscapedNyarlathotepsGrasp",
           "value": true
         },
         {
@@ -144,7 +145,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "dreamers_banished_nyarlathotep",
+          "key": "dreamersBanishedNyarlathotep",
           "value": true
         },
         {
@@ -167,7 +168,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "dreamers_awoke",
+          "key": "dreamersAwoke",
           "value": true
         },
         {
@@ -184,7 +185,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "dreamers_stayed_in_dreamlands_forever",
+          "key": "dreamersStayedInDreamlandsForever",
           "value": true
         },
         {
@@ -201,7 +202,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "dreamers_traveled_beneath_the_monastery",
+          "key": "dreamersTraveledBeneathTheMonastery",
           "value": true
         },
         {

@@ -15,6 +15,7 @@
   "wizard.investigators.title": "Choose your investigators",
   "wizard.decks.title": "Choose a deck for each",
   "wizard.difficulty.title": "Choose the difficulty",
+  "wizard.options": "Options",
   "wizard.ready.title": "Ready?",
   "wizard.investigators.hint": "Tap up to four. The order you tap is the turn order.",
   "wizard.deckSize": "{n} cards",

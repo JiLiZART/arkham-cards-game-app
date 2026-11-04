@@ -24,6 +24,7 @@
     "02043",
     "02044"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -107,12 +108,12 @@
       "effects": [
         {
           "do": "record",
-          "key": "warren_rice_kidnapped",
+          "key": "warrenRiceKidnapped",
           "value": true
         },
         {
           "do": "record",
-          "key": "failed_to_save_students",
+          "key": "failedToSaveStudents",
           "value": true
         },
         {
@@ -133,7 +134,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "warren_rice_rescued",
+          "key": "warrenRiceRescued",
           "value": true
         },
         {
@@ -143,7 +144,7 @@
         },
         {
           "do": "record",
-          "key": "failed_to_save_students",
+          "key": "failedToSaveStudents",
           "value": true
         },
         {
@@ -164,12 +165,12 @@
       "effects": [
         {
           "do": "record",
-          "key": "warren_rice_kidnapped",
+          "key": "warrenRiceKidnapped",
           "value": true
         },
         {
           "do": "record",
-          "key": "students_rescued",
+          "key": "studentsRescued",
           "value": true
         },
         {
@@ -186,12 +187,12 @@
       "effects": [
         {
           "do": "record",
-          "key": "warren_rice_kidnapped",
+          "key": "warrenRiceKidnapped",
           "value": true
         },
         {
           "do": "record",
-          "key": "experiment_defeated",
+          "key": "experimentDefeated",
           "value": true
         },
         {
@@ -208,12 +209,12 @@
       "effects": [
         {
           "do": "record",
-          "key": "unconscious_for_several_hours",
+          "key": "unconsciousForSeveralHours",
           "value": true
         },
         {
           "do": "record",
-          "key": "warren_rice_kidnapped",
+          "key": "warrenRiceKidnapped",
           "value": true
         },
         {
@@ -224,7 +225,7 @@
         },
         {
           "do": "record",
-          "key": "failed_to_save_students",
+          "key": "failedToSaveStudents",
           "value": true
         },
         {

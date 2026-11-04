@@ -394,6 +394,7 @@ export function validateRefs(db: ContentDb, cardFile: Record<string, string> = {
     need(file, "card", s.card);
     s.acts.forEach((c, k) => need(file, `acts.${k}`, c));
     s.agendas.forEach((c, k) => need(file, `agendas.${k}`, c));
+    s.setupCards.forEach((c, k) => need(file, `setupCards.${k}`, c));
     for (const set of [
       ...s.encounterSets,
       ...(s.randomEncounterSet ?? []),
@@ -431,6 +432,17 @@ export function validateRefs(db: ContentDb, cardFile: Record<string, string> = {
           message: `missing scenario ${id}`,
         });
     });
+    // an option's sets: what it swaps out, what it swaps in, what it adds
+    if (!c.packs.some((p) => db.packs[p] && !db.packs[p].loaded))
+      c.options.forEach((o, k) => {
+        for (const set of [...Object.entries(o.replaceSets).flat(), ...o.addSets])
+          if (!db.encounterSets[set])
+            errors.push({
+              file: `campaigns/${c.id}/campaign.json`,
+              path: `options.${k}`,
+              message: `missing encounter set ${set}`,
+            });
+      });
   }
   return errors;
 }

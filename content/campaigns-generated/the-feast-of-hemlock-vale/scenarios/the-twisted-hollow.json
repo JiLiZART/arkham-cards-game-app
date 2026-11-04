@@ -19,6 +19,7 @@
     "10606",
     "10609"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -30,11 +31,8 @@
       "do": "setAside",
       "codes": [
         "10700",
-        "10700b",
         "10699",
-        "10699b",
-        "10701",
-        "10701b"
+        "10701"
       ]
     },
     {
@@ -107,7 +105,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "bertie_was_lost_in_the_woods",
+          "key": "bertieWasLostInTheWoods",
           "value": true
         },
         {
@@ -124,7 +122,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "bertie_was_rescued",
+          "key": "bertieWasRescued",
           "value": true
         },
         {
@@ -141,7 +139,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "bertie_was_lost_in_the_woods",
+          "key": "bertieWasLostInTheWoods",
           "value": true
         },
         {
@@ -176,7 +174,7 @@
         },
         {
           "do": "record",
-          "key": "western_woods",
+          "key": "westernWoods",
           "value": true
         }
       ]

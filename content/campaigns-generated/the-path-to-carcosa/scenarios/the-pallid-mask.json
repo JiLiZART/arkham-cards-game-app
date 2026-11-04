@@ -19,6 +19,7 @@
     "03241",
     "03242"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -103,7 +104,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "know_site_of_gate",
+          "key": "knowSiteOfGate",
           "value": true
         },
         {
@@ -128,7 +129,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "know_site_of_gate",
+          "key": "knowSiteOfGate",
           "value": true
         },
         {
@@ -153,7 +154,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "know_site_of_gate",
+          "key": "knowSiteOfGate",
           "value": true
         },
         {

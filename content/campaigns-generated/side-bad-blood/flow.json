@@ -32,6 +32,11 @@
       ]
     }
   },
+  "before": {
+    "bad-blood": [
+      "bad-blood:xp_cost"
+    ]
+  },
   "steps": {
     "bad-blood:ask_agnes_memories": {
       "kind": "counter",
@@ -40,7 +45,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "bb_memories",
+          "id": "bbMemories",
           "section": "hidden",
           "op": "set",
           "value": "input"
@@ -53,7 +58,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "bb_victory_display",
+          "id": "bbVictoryDisplay",
           "section": "hidden",
           "op": "set",
           "value": "input"
@@ -160,6 +165,17 @@
         }
       ]
     },
+    "bad-blood:xp_cost": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": -2,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
     "fortune-and-folly-checkpoint:checkpoint": {
       "kind": "story",
       "text": "With the stakeout completed, the time has come to plan out the actual heist. There are only a few days until Saturday night at Défis de la Roulette, the busiest night of the week and the perfect time to get lost in a crowd. The plan for the heist is simple, at least in theory. With the casino staff and security occupied by the Saturday crowd, you will first enter the public areas, just as you did last time. There, you will try to avoid notice as much as you can while completing any needed tasks. Once that's done, you will slip into the restricted areas in the back of the casino that are reserved for staff. This area holds the vault itself, where the Wellspring of Fortune is located. According to Isamara, the vault door is not only secured by solid steel, but also held shut by some kind of energy. If that wasn't enough, it is constantly monitored by guards, patrols, and the cultists of the Fortune's Chosen. It will take a carefully executed plan, and some improvisation, to succeed against all odds. With only a short time to gather supplies and practice the approach, there may not be enough time to rest and recuperate from your first tangle with the casino.",
@@ -181,7 +197,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_found_a_vent",
+              "key": "fofFoundAVent",
               "section": "hidden",
               "value": true
             }
@@ -194,7 +210,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_impersonated_a_high_roller",
+              "key": "fofImpersonatedAHighRoller",
               "section": "hidden",
               "value": true
             }
@@ -207,7 +223,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_convinced_isamara",
+              "key": "fofConvincedIsamara",
               "section": "hidden",
               "value": true
             }
@@ -220,7 +236,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_obtained_an_uniform",
+              "key": "fofObtainedAnUniform",
               "section": "hidden",
               "value": true
             }
@@ -233,7 +249,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_stole_keys",
+              "key": "fofStoleKeys",
               "section": "hidden",
               "value": true
             }
@@ -246,7 +262,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_cleaned_out_the_house",
+              "key": "fofCleanedOutTheHouse",
               "section": "hidden",
               "value": true
             }
@@ -270,7 +286,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_need_time_to_rest",
+              "key": "fofNeedTimeToRest",
               "section": "hidden",
               "value": true
             }
@@ -312,13 +328,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_found_a_vent",
+              "key": "fofFoundAVent",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_found_a_vent",
+              "key": "fofFoundAVent",
               "section": "hidden",
               "value": true
             }
@@ -331,13 +347,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_impersonated_a_high_roller",
+              "key": "fofImpersonatedAHighRoller",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_impersonated_a_high_roller",
+              "key": "fofImpersonatedAHighRoller",
               "section": "hidden",
               "value": true
             }
@@ -350,13 +366,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_convinced_isamara",
+              "key": "fofConvincedIsamara",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_convinced_isamara",
+              "key": "fofConvincedIsamara",
               "section": "hidden",
               "value": true
             }
@@ -369,13 +385,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_obtained_an_uniform",
+              "key": "fofObtainedAnUniform",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_obtained_an_uniform",
+              "key": "fofObtainedAnUniform",
               "section": "hidden",
               "value": true
             }
@@ -388,13 +404,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_stole_keys",
+              "key": "fofStoleKeys",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_stole_keys",
+              "key": "fofStoleKeys",
               "section": "hidden",
               "value": true
             }
@@ -407,13 +423,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_cleaned_out_the_house",
+              "key": "fofCleanedOutTheHouse",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_cleaned_out_the_house",
+              "key": "fofCleanedOutTheHouse",
               "section": "hidden",
               "value": true
             }
@@ -427,7 +443,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "fof_need_time_to_rest",
+          "key": "fofNeedTimeToRest",
           "section": "campaign_notes",
           "value": true
         }
@@ -443,7 +459,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_need_time_to_rest",
+              "key": "fofNeedTimeToRest",
               "section": "hidden",
               "value": true
             }
@@ -480,7 +496,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "fof_wellspring_clues",
+          "id": "fofWellspringClues",
           "section": "campaign_notes",
           "op": "set",
           "value": "input"
@@ -497,7 +513,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "fof_stashed",
+          "key": "fofStashed",
           "section": "campaign_notes",
           "value": true
         }
@@ -519,7 +535,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "continue_fortune_and_folly_part_2",
+              "key": "continueFortuneAndFollyPart2",
               "section": "hidden",
               "value": true
             }

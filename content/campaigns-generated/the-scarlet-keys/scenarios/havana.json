@@ -22,6 +22,7 @@
     "09593",
     "09594"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -110,12 +111,12 @@
         },
         {
           "do": "record",
-          "key": "cell_did_not_discover_the_truth_in_havana",
+          "key": "cellDidNotDiscoverTheTruthInHavana",
           "value": true
         },
         {
           "do": "record",
-          "key": "have_not_seen_the_last_of_desi",
+          "key": "haveNotSeenTheLastOfDesi",
           "value": true
         }
       ]
@@ -132,12 +133,12 @@
         },
         {
           "do": "record",
-          "key": "desi_is_in_your_debt",
+          "key": "desiIsInYourDebt",
           "value": true
         },
         {
           "do": "record",
-          "key": "know_the_passphrase",
+          "key": "knowThePassphrase",
           "value": true
         }
       ]
@@ -154,12 +155,12 @@
         },
         {
           "do": "record",
-          "key": "cell_did_not_discover_the_truth_in_havana",
+          "key": "cellDidNotDiscoverTheTruthInHavana",
           "value": true
         },
         {
           "do": "record",
-          "key": "have_not_seen_the_last_of_desi",
+          "key": "haveNotSeenTheLastOfDesi",
           "value": true
         }
       ]

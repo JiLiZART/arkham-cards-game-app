@@ -171,3 +171,18 @@ describe("checkFlow", () => {
     );
   });
 });
+
+describe("checkFlow and a scenario's own setup steps (before)", () => {
+  const tokenStep = { kind: "effects", effects: [{ do: "addChaosToken", token: "-4" }] };
+
+  it("a step only `before` leads to is reached", () => {
+    expect(
+      run(flow({ before: { b: ["tok"] }, steps: { ...flow().steps, tok: tokenStep } })),
+    ).toEqual([]);
+  });
+
+  it("a `before` key that is not a scenario of the campaign is an error", () => {
+    const f = flow({ before: { ghost: ["tok"] }, steps: { ...flow().steps, tok: tokenStep } });
+    expect(run(f).join("\n")).toMatch(/before\.ghost.*not a scenario/);
+  });
+});

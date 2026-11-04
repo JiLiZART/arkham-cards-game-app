@@ -63,6 +63,12 @@
       ]
     }
   },
+  "before": {
+    "fortune-and-folly-part-1": [
+      "fortune-and-folly-part-1:ask_skip_part_1",
+      "fortune-and-folly-part-1:check_skip_part_1"
+    ]
+  },
   "steps": {
     "campaign:intro": {
       "kind": "story",
@@ -91,7 +97,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_found_a_vent",
+              "key": "fofFoundAVent",
               "section": "hidden",
               "value": true
             }
@@ -104,7 +110,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_impersonated_a_high_roller",
+              "key": "fofImpersonatedAHighRoller",
               "section": "hidden",
               "value": true
             }
@@ -117,7 +123,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_convinced_isamara",
+              "key": "fofConvincedIsamara",
               "section": "hidden",
               "value": true
             }
@@ -130,7 +136,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_obtained_an_uniform",
+              "key": "fofObtainedAnUniform",
               "section": "hidden",
               "value": true
             }
@@ -143,7 +149,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_stole_keys",
+              "key": "fofStoleKeys",
               "section": "hidden",
               "value": true
             }
@@ -156,7 +162,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_cleaned_out_the_house",
+              "key": "fofCleanedOutTheHouse",
               "section": "hidden",
               "value": true
             }
@@ -180,7 +186,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_need_time_to_rest",
+              "key": "fofNeedTimeToRest",
               "section": "hidden",
               "value": true
             }
@@ -222,13 +228,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_found_a_vent",
+              "key": "fofFoundAVent",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_found_a_vent",
+              "key": "fofFoundAVent",
               "section": "hidden",
               "value": true
             }
@@ -241,13 +247,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_impersonated_a_high_roller",
+              "key": "fofImpersonatedAHighRoller",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_impersonated_a_high_roller",
+              "key": "fofImpersonatedAHighRoller",
               "section": "hidden",
               "value": true
             }
@@ -260,13 +266,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_convinced_isamara",
+              "key": "fofConvincedIsamara",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_convinced_isamara",
+              "key": "fofConvincedIsamara",
               "section": "hidden",
               "value": true
             }
@@ -279,13 +285,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_obtained_an_uniform",
+              "key": "fofObtainedAnUniform",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_obtained_an_uniform",
+              "key": "fofObtainedAnUniform",
               "section": "hidden",
               "value": true
             }
@@ -298,13 +304,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_stole_keys",
+              "key": "fofStoleKeys",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_stole_keys",
+              "key": "fofStoleKeys",
               "section": "hidden",
               "value": true
             }
@@ -317,13 +323,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_cleaned_out_the_house",
+              "key": "fofCleanedOutTheHouse",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_cleaned_out_the_house",
+              "key": "fofCleanedOutTheHouse",
               "section": "hidden",
               "value": true
             }
@@ -337,7 +343,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "fof_need_time_to_rest",
+          "key": "fofNeedTimeToRest",
           "section": "campaign_notes",
           "value": true
         }
@@ -353,7 +359,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_need_time_to_rest",
+              "key": "fofNeedTimeToRest",
               "section": "hidden",
               "value": true
             }
@@ -390,7 +396,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "fof_wellspring_clues",
+          "id": "fofWellspringClues",
           "section": "campaign_notes",
           "op": "set",
           "value": "input"
@@ -407,7 +413,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "fof_stashed",
+          "key": "fofStashed",
           "section": "campaign_notes",
           "value": true
         }
@@ -429,7 +435,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "continue_fortune_and_folly_part_2",
+              "key": "continueFortuneAndFollyPart2",
               "section": "hidden",
               "value": true
             },
@@ -491,12 +497,123 @@
         }
       ]
     },
+    "fortune-and-folly-part-1:ask_skip_part_1": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "skip",
+          "text": "Would you like to skip the stakeout and jump straight to the heist? <i>(Warning: Skipping the stakeout will dramatically increase the difficulty of Part II.)</i>",
+          "effects": [
+            {
+              "do": "record",
+              "key": "fofSkipPart1",
+              "section": "hidden",
+              "value": true
+            },
+            {
+              "do": "nextScenario",
+              "scenario": "fortune-and-folly-part-2"
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "fortune-and-folly-part-1:check_skip_part_1:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "fofPlayPart1",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "fortune-and-folly-part-1:intro_5": {
+      "kind": "story",
+      "text": "Several days later, you meet with Isamara to discuss a plan for staking out the casino in advance of the heist. Isamara explains what you need to look for as the night of the stakeout approaches, warning that you will not have time to accomplish everything:",
+      "bullets": []
+    },
+    "fortune-and-folly-part-1:act_agenda_1:text": {
+      "kind": "story",
+      "text": "Build the agenda deck using only agenda 1 and the act deck using only act 1. Set the remaining agenda and act cards aside, out of play.",
+      "bullets": []
+    },
+    "fortune-and-folly-part-1:setup_locations:text": {
+      "kind": "story",
+      "text": "Put Casino Floor, Casino Lounge, and High Roller's Table into play with the <i>Calm Night</i> side faceup. Put each other [[Public]] location into play.",
+      "bullets": []
+    },
+    "fortune-and-folly-part-1:setup_isamara:text": {
+      "kind": "story",
+      "text": "Put the Isamar Ordoñez <i>(Lounge Singer)</i> story asset into play at Baccarat Table, Inconspicuous side faceup.",
+      "bullets": []
+    },
+    "fortune-and-folly-part-1:setup_abarran:text": {
+      "kind": "story",
+      "text": "Spawn Abarran Arrigorriagakoa enemy at High Roller's Table <i>(The Man with the Ruby Ring)</i> side faceup.",
+      "bullets": []
+    },
+    "fortune-and-folly-part-1:spawn_casino_guard:text": {
+      "kind": "story",
+      "text": "Spawn 1 copy of Casino Guard at Roulette Wheel. Attach the If the Uniform Fits... story card to it <i>(If the Uniform Fits... is on the reverse side of the Package Delivery story card).</i>",
+      "bullets": []
+    },
+    "fortune-and-folly-part-1:choose_role:text": {
+      "kind": "story",
+      "text": "Each investigator chooses one of the [[Role]] story assets and takes control of it, [[Unpracticed]] side faceup. If there is exactly one investigator in the game, that investigator chooses and takes control of an additional [[Role]] story asset, [[Unpracticed]] side faceup.",
+      "bullets": []
+    },
+    "fortune-and-folly-part-1:setup_wellspring:text": {
+      "kind": "story",
+      "text": "Attach The Wellspring of Fortune key, Stable side faceup, to the act deck. Place 7 [per_investigator] clues on it. Its text box is considered to be blank for the duration of this scenario.",
+      "bullets": []
+    },
+    "fortune-and-folly-part-1:set_aside_cards:text": {
+      "kind": "story",
+      "text": "Set the following cards aside, out of play: the three Fortune's Disfavor story cards, the Cash Cart story asset, the Deck of Possibilities story asset, and the Isamara Ordoñez <i>(The Torch Singer)</i> story asset.",
+      "bullets": []
+    },
+    "fortune-and-folly-part-1:place_alert_doom:text": {
+      "kind": "story",
+      "text": "Place 1 doom next to each investigator card. This doom represents that investigator's current alarm level (see \"Alarm Level\" below). It does not count as doom and does not count toward the current agendas doom threshold.",
+      "bullets": []
+    },
+    "fortune-and-folly-part-1:encounter_deck:text": {
+      "kind": "story",
+      "text": "Shuffle the remainder of the encounter cards to form the encounter deck.",
+      "bullets": []
+    },
+    "fortune-and-folly-part-1:check_skip_part_1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "fofSkipPart1",
+        "section": "hidden"
+      },
+      "then": [],
+      "else": [
+        "fortune-and-folly-part-1:check_skip_part_1:no:fx",
+        "fortune-and-folly-part-1:intro_5",
+        "fortune-and-folly-part-1:act_agenda_1:text",
+        "fortune-and-folly-part-1:setup_locations:text",
+        "fortune-and-folly-part-1:setup_isamara:text",
+        "fortune-and-folly-part-1:setup_abarran:text",
+        "fortune-and-folly-part-1:spawn_casino_guard:text",
+        "fortune-and-folly-part-1:choose_role:text",
+        "fortune-and-folly-part-1:setup_wellspring:text",
+        "fortune-and-folly-part-1:set_aside_cards:text",
+        "fortune-and-folly-part-1:place_alert_doom:text",
+        "fortune-and-folly-part-1:encounter_deck:text"
+      ]
+    },
     "fortune-and-folly-part-2:cell_meddled_in_abarrans_affairs": {
       "kind": "effects",
       "effects": [
         {
           "do": "record",
-          "key": "cell_meddled_in_abarrans_affairs",
+          "key": "cellMeddledInAbarransAffairs",
           "section": "campaign_notes",
           "value": true
         }
@@ -541,7 +658,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "fof_heist_tasks",
+          "id": "fofHeistTasks",
           "section": "hidden",
           "op": "set",
           "value": "input"
@@ -554,7 +671,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "fof_heist_tasks",
+          "id": "fofHeistTasks",
           "section": "hidden",
           "op": "add",
           "value": 2
@@ -570,7 +687,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "fof_skip_part_1",
+        "id": "fofSkipPart1",
         "section": "hidden"
       },
       "then": [
@@ -594,7 +711,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCount",
-        "id": "fof_heist_tasks",
+        "id": "fofHeistTasks",
         "section": "hidden",
         "min": 3,
         "max": 3
@@ -608,7 +725,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCount",
-        "id": "fof_heist_tasks",
+        "id": "fofHeistTasks",
         "section": "hidden",
         "min": 2,
         "max": 2
@@ -622,7 +739,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCount",
-        "id": "fof_heist_tasks",
+        "id": "fofHeistTasks",
         "section": "hidden",
         "min": 1,
         "max": 1
@@ -636,7 +753,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCount",
-        "id": "fof_heist_tasks",
+        "id": "fofHeistTasks",
         "section": "hidden",
         "min": 0,
         "max": 0

@@ -2,7 +2,7 @@ import { logLabel, stepText } from "../../content/i18n";
 import type { FlowChoice } from "../../content/schema";
 import type { CampaignState } from "../../engine/campaign/types";
 import { type CampaignLog, NOTES } from "../../engine/campaign/log";
-import { test } from "../../engine/campaign/flow";
+import { openChoices } from "../../engine/campaign/flow";
 import type { ContentDb } from "../../engine/world/types";
 
 /** the guide writes log entries as sentence fragments ("the investigators rescued…"); shown as sentences */
@@ -23,12 +23,12 @@ export function readItems(db: ContentDb, c: CampaignState, locale: string): Read
   });
 }
 
-/** the choices whose own test passes */
+/** the choices whose own test passes, or all of them when none does (the engine's rule) */
 export const visibleChoices = (
   db: ContentDb,
   c: CampaignState,
   choices: FlowChoice[],
-): FlowChoice[] => choices.filter((x) => !x.when || test(db, c, x.when));
+): FlowChoice[] => openChoices(db, c, choices);
 
 export interface LogViewSection {
   id: string;

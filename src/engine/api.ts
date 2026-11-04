@@ -6,7 +6,7 @@
 import { push, type GameContext } from "./context";
 import { STEP } from "./steps/step";
 import type { Trigger } from "../content/schema";
-import type { EffCtx, EventData, InstId, InvId, Step } from "./world/types";
+import type { EffCtx, EventData, InstId, InvId, ScriptHooks, Step } from "./world/types";
 
 // ---------- reading the game ----------
 export {
@@ -161,3 +161,33 @@ export const revealLocation = (location: InstId): Queued => verb(STEP.RevealLoca
 export const checkAssetDefeat = (inv: InvId): Queued => verb(STEP.AssetDefeatCheck)({ inv });
 /** the basic Fight action against the context's enemy */
 export const basicFight = (ctx: EffCtx): Queued => verb(STEP.BasicFight)({ ctx });
+
+// ---------- a Return-to scenario's script over its base's ----------
+/**
+ * The hooks of a Return-to scenario: its base's and its own together. `setup` and the card hooks run base then extra;
+ * `checkObjectives` and `ended` run extra then base; `spawnRedirect` takes extra's answer, else base's; `healHorror`
+ * lowers the heal through both.
+ */
+export function compose(
+  base: Partial<ScriptHooks>,
+  extra: Partial<ScriptHooks>,
+): Partial<ScriptHooks> {
+  const out: Partial<ScriptHooks> = { ...base, ...extra };
+  const both = <K extends "setup" | "gameEnd" | "eventFinished" | "allEliminated">(k: K) => {
+    const a = base[k] as ((...x: unknown[]) => void) | undefined;
+    const b = extra[k] as ((...x: unknown[]) => void) | undefined;
+    if (a && b) out[k] = ((...x: unknown[]) => (a(...x), b(...x))) as ScriptHooks[K];
+  };
+  both("setup");
+  both("gameEnd");
+  both("eventFinished");
+  both("allEliminated");
+  const { checkObjectives: bc, ended: be, spawnRedirect: bs, healHorror: bh } = base;
+  const { checkObjectives: xc, ended: xe, spawnRedirect: xs, healHorror: xh } = extra;
+  if (bc && xc) out.checkObjectives = (game) => (xc(game), bc(game));
+  if (be && xe) out.ended = (game, won) => (xe(game, won), be(game, won));
+  if (bs && xs) out.spawnRedirect = (game, enemy) => xs(game, enemy) ?? bs(game, enemy);
+  if (bh && xh)
+    out.healHorror = (game, run, target, n) => xh(game, run, target, bh(game, run, target, n));
+  return out;
+}

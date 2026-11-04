@@ -41,12 +41,18 @@ export function packCoverage(db: ContentDb): ContentCoverage["packs"] {
   );
 }
 
-/** the cards a scenario uses: its encounter sets, side decks, acts, agendas and reference card */
+/**
+ * The cards a scenario uses: its encounter sets, side decks, acts, agendas, reference card and setup cards, less the
+ * cards a `remove` step always takes out (a set of which the guide gathers only some cards)
+ */
 function usedBy(db: ContentDb, s: ContentDb["scenarios"][string]): string[] {
   const used = new Set<string>();
   for (const set of [...s.encounterSets, ...Object.values(s.sideDecks).flat()])
     for (const c of db.encounterSets[set] ?? []) used.add(c);
-  for (const c of [s.card, ...s.acts, ...s.agendas]) if (db.cards[c]) used.add(c);
+  for (const c of [s.card, ...s.acts, ...s.agendas, ...(s.setupCards ?? [])])
+    if (db.cards[c]) used.add(c);
+  for (const st of s.setup ?? [])
+    if (st.do === "remove" && !st.when) for (const c of st.codes) used.delete(c);
   return [...used].sort();
 }
 

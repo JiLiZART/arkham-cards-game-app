@@ -23,6 +23,9 @@
     "03318",
     "03319"
   ],
+  "setupCards": [
+    "52059"
+  ],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -136,7 +139,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "prevented_hasturs_escape",
+          "key": "preventedHastursEscape",
           "value": true
         },
         {
@@ -159,7 +162,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "prevented_hasturs_escape",
+          "key": "preventedHastursEscape",
           "value": true
         },
         {
@@ -182,7 +185,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "prevented_hasturs_escape",
+          "key": "preventedHastursEscape",
           "value": true
         },
         {
@@ -205,7 +208,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "carcosa_merged",
+          "key": "carcosaMerged",
           "value": true
         },
         {
@@ -228,7 +231,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "hastur_has_you",
+          "key": "hasturHasYou",
           "value": true
         },
         {

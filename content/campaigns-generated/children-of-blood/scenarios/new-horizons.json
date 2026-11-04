@@ -23,6 +23,7 @@
     "13032",
     "13034"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -64,6 +65,10 @@
       "text": "“Things got pretty rough in there.”\n You awaken to the voice of Detective Reynolds. Blinking in the light of the morning, you sit up, waves of pain shooting through your stiff joints. Reynolds puts a hand on your shoulder. “Let’s not push it,” he says. “Besides, I’ve been watching the back of the factory, to see whether anyone—or anything—is going to follow us out.”",
       "effects": [
         {
+          "do": "addChaosToken",
+          "token": "blood"
+        },
+        {
           "do": "xp",
           "victory": true,
           "bonus": 0,
@@ -77,12 +82,12 @@
       "effects": [
         {
           "do": "record",
-          "key": "did_not_complete_their_search",
+          "key": "didNotCompleteTheirSearch",
           "value": true
         },
         {
           "do": "record",
-          "key": "left_zburamoarte_alive",
+          "key": "leftZburamoarteAlive",
           "value": true
         },
         {
@@ -99,12 +104,12 @@
       "effects": [
         {
           "do": "record",
-          "key": "completed_their_search",
+          "key": "completedTheirSearch",
           "value": true
         },
         {
           "do": "record",
-          "key": "left_zburamoarte_alive",
+          "key": "leftZburamoarteAlive",
           "value": true
         },
         {
@@ -121,12 +126,12 @@
       "effects": [
         {
           "do": "record",
-          "key": "completed_their_search",
+          "key": "completedTheirSearch",
           "value": true
         },
         {
           "do": "record",
-          "key": "defeated_zburamoarte",
+          "key": "defeatedZburamoarte",
           "value": true
         },
         {
@@ -143,12 +148,20 @@
       "effects": [
         {
           "do": "record",
-          "key": "left_to_the_cults_mercy",
+          "key": "leftToTheCultsMercy",
           "value": true
         },
         {
+          "do": "addChaosToken",
+          "token": "blood"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "blood"
+        },
+        {
           "do": "record",
-          "key": "defeated_zburamoarte",
+          "key": "defeatedZburamoarte",
           "value": true
         },
         {

@@ -21,6 +21,7 @@
     "03202",
     "03203"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -41,8 +42,27 @@
       "do": "setAside",
       "codes": [
         "03221",
-        "03221b",
         "03227"
+      ]
+    },
+    {
+      "do": "remove",
+      "codes": [
+        "01121a",
+        "01121b",
+        "01122",
+        "01123",
+        "01124",
+        "01125",
+        "01126",
+        "01127",
+        "01128",
+        "01129",
+        "01130",
+        "01131",
+        "01132",
+        "01133",
+        "01134"
       ]
     },
     {
@@ -115,7 +135,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "did_not_escape_gaze",
+          "key": "didNotEscapeGaze",
           "value": true
         },
         {
@@ -140,7 +160,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "found_nigels_home",
+          "key": "foundNigelsHome",
           "value": true
         },
         {
@@ -165,7 +185,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "found_nigel_engram",
+          "key": "foundNigelEngram",
           "value": true
         },
         {
@@ -202,7 +222,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "unable_to_find_nigel",
+          "key": "unableToFindNigel",
           "value": true
         },
         {

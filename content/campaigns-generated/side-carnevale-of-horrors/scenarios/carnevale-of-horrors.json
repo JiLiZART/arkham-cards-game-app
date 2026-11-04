@@ -17,6 +17,7 @@
     "82003",
     "82004"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -104,7 +105,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "coh_many_were_sacrificed_to_cnidathqua",
+          "key": "cohManyWereSacrificedToCnidathqua",
           "value": true
         },
         {
@@ -121,7 +122,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "coh_sun_banished_cnidathqua",
+          "key": "cohSunBanishedCnidathqua",
           "value": true
         },
         {
@@ -138,7 +139,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "coh_cnidathqua_retreated",
+          "key": "cohCnidathquaRetreated",
           "value": true
         },
         {

@@ -23,6 +23,7 @@
     "10526",
     "10528"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -149,7 +150,7 @@
         },
         {
           "do": "record",
-          "key": "hemlock_harbor",
+          "key": "hemlockHarbor",
           "value": true
         }
       ]

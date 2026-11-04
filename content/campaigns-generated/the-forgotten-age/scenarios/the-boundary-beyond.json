@@ -21,6 +21,7 @@
     "04163",
     "04164"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",

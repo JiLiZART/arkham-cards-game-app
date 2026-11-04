@@ -18,6 +18,7 @@
     "88004",
     "88005"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",

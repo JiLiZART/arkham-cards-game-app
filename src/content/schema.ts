@@ -24,10 +24,12 @@ export const CHAOS_TOKENS = [
   "elderThing",
   "autoFail",
   "elderSign",
+  // Children of Blood
+  "blood",
 ] as const;
 export const ChaosToken = z.enum(CHAOS_TOKENS);
 export type ChaosToken = z.infer<typeof ChaosToken>;
-export const SYMBOL_TOKENS = ["skull", "cultist", "tablet", "elderThing"] as const;
+export const SYMBOL_TOKENS = ["skull", "cultist", "tablet", "elderThing", "blood"] as const;
 export type SymbolToken = (typeof SYMBOL_TOKENS)[number];
 
 export const CardType = z.enum([
@@ -1101,6 +1103,8 @@ export const CardDef = z
     /** location investigated with a different skill */
     investigateSkill: Skill.optional(),
     victory: z.number().optional(),
+    /** Vengeance X: the vengeance points it adds to the campaign while in the victory display (The Forgotten Age) */
+    vengeance: z.number().optional(),
     keywords: z
       .array(
         z.enum([
@@ -1260,6 +1264,8 @@ export const SetupStep = z.discriminatedUnion("do", [
     .object({
       do: z.literal(ZONE.SetAside),
       codes: z.array(z.string()),
+      /** how many copies of each code; every copy when absent */
+      count: z.number().int().positive().optional(),
       when: LogCondition.optional(),
     })
     .strict(),
@@ -1428,10 +1434,12 @@ export const ScenarioDef = z
     randomEncounterSet: z.array(z.string()).optional(),
     acts: z.array(z.string()),
     agendas: z.array(z.string()),
+    /** a Return-to box's setup card, played beside the base reference card (`card`) */
+    setupCards: z.array(z.string()).default([]),
     setup: z.array(SetupStep),
     tokens: z.record(
       z.enum(["easy", "standard", "hard", "expert"]),
-      z.record(z.enum(["skull", "cultist", "tablet", "elderThing"]), TokenEffect),
+      z.record(z.enum(SYMBOL_TOKENS), TokenEffect),
     ),
     /** id -> resolution; "none" for no resolution reached */
     resolutions: z.record(z.string(), Resolution),
@@ -1759,6 +1767,8 @@ export const CampaignFlow = z
       )
       .default({}),
     resolutions: z.record(z.string(), z.record(z.string(), StepIds)).default({}),
+    /** a scenario's own setup steps (difficulty tokens, an intro choice), run when the order reaches it, before it sets up */
+    before: z.record(z.string(), StepIds).default({}),
     steps: z.record(z.string(), CampaignStep),
   })
   .strict()
@@ -1773,6 +1783,8 @@ export const CampaignFlow = z
     for (const [sc, byRes] of Object.entries(f.resolutions))
       for (const [r, ids] of Object.entries(byRes))
         ids.forEach((id, n) => need(["resolutions", sc, r, n], id));
+    for (const [sc, ids] of Object.entries(f.before))
+      ids.forEach((id, n) => need(["before", sc, n], id));
     for (const [k, st] of Object.entries(f.steps))
       stepRefs(st).forEach((id, n) => need(["steps", k, n], id));
   });
@@ -1795,6 +1807,21 @@ export const CampaignDef = z
     chaosBags: z.record(Difficulty, z.array(ChaosToken)),
     /** human-readable labels for log keys */
     logLabels: z.record(z.string(), z.string()).default({}),
+    /** choices made when the campaign is created, fixed after (a Return-to box's encounter sets in its base campaign) */
+    options: z
+      .array(
+        z
+          .object({
+            id: z.string(),
+            labelKey: z.string(),
+            /** new set -> the set it replaces */
+            replaceSets: z.record(z.string(), z.string()).default({}),
+            /** sets gathered beside the others */
+            addSets: z.array(z.string()).default([]),
+          })
+          .strict(),
+      )
+      .default([]),
     /** the card packs its scenarios use; loaded before the campaign starts or restores */
     packs: z.array(z.string()).default(["core"]),
     /** generated from the campaign guides (ADR-0007): cards without written behaviour have no effect */

@@ -21,6 +21,7 @@
     "06208",
     "06209"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -111,12 +112,12 @@
       "effects": [
         {
           "do": "record",
-          "key": "travelled_to_the_cold_wastes",
+          "key": "travelledToTheColdWastes",
           "value": true
         },
         {
           "do": "record",
-          "key": "randolph_survived_the_voyage",
+          "key": "randolphSurvivedTheVoyage",
           "value": true
         },
         {

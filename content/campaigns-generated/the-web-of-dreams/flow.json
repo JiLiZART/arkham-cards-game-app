@@ -186,6 +186,11 @@
       ]
     }
   },
+  "before": {
+    "waking-nightmare": [
+      "waking-nightmare:choose_doctor"
+    ]
+  },
   "steps": {
     "campaign:prologue": {
       "kind": "story",
@@ -198,7 +203,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "interconnected_campaign",
+          "key": "interconnectedCampaign",
           "section": "hidden",
           "value": true
         }
@@ -224,7 +229,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "interconnected_campaign",
+              "key": "interconnectedCampaign",
               "section": "hidden",
               "value": true
             }
@@ -240,7 +245,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "half_campaign",
+              "key": "halfCampaign",
               "section": "hidden",
               "value": true
             }
@@ -270,7 +275,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "randolph_survived_descent",
+          "key": "randolphSurvivedDescent",
           "section": "campaign_notes",
           "value": true
         }
@@ -286,7 +291,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "possess_silver_key",
+          "key": "possessSilverKey",
           "section": "campaign_notes",
           "value": true
         },
@@ -355,7 +360,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "half_campaign",
+        "id": "halfCampaign",
         "section": "hidden"
       },
       "then": [
@@ -395,7 +400,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "randolph_did_not_survive_descent",
+          "key": "randolphDidNotSurviveDescent",
           "section": "campaign_notes",
           "value": true
         },
@@ -421,7 +426,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "interconnected_campaign",
+        "id": "interconnectedCampaign",
         "section": "hidden"
       },
       "then": [
@@ -445,7 +450,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "on_your_own",
+          "key": "onYourOwn",
           "section": "campaign_notes",
           "value": true
         }
@@ -467,7 +472,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "half_campaign",
+        "id": "halfCampaign",
         "section": "hidden"
       },
       "then": [
@@ -513,7 +518,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "still_in_the_dreamlands",
+        "id": "stillInTheDreamlands",
         "section": "campaign_notes"
       },
       "then": [
@@ -525,7 +530,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "never_escaped",
+        "id": "neverEscaped",
         "section": "campaign_notes"
       },
       "then": [
@@ -539,7 +544,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "returned_to_reality",
+        "id": "returnedToReality",
         "section": "campaign_notes"
       },
       "then": [
@@ -553,7 +558,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "bridge_was_completed",
+        "id": "bridgeWasCompleted",
         "section": "campaign_notes"
       },
       "then": [
@@ -585,7 +590,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "black_cat_is_searching_for_the_truth",
+        "id": "blackCatIsSearchingForTheTruth",
         "section": "campaign_notes"
       },
       "then": [
@@ -623,7 +628,7 @@
       "effects": [
         {
           "do": "crossOut",
-          "key": "possess_silver_key",
+          "key": "possessSilverKey",
           "section": "campaign_notes"
         },
         {
@@ -648,7 +653,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "possess_silver_key",
+        "id": "possessSilverKey",
         "section": "campaign_notes"
       },
       "then": [
@@ -677,7 +682,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "black_cat_knows_the_truth",
+          "key": "blackCatKnowsTheTruth",
           "section": "campaign_notes",
           "value": true
         }
@@ -698,7 +703,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "black_cat_is_searching_for_the_truth",
+        "id": "blackCatIsSearchingForTheTruth",
         "section": "campaign_notes"
       },
       "then": [
@@ -715,7 +720,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "you_asked_for_it",
+        "id": "youAskedForIt",
         "section": "campaign_notes"
       },
       "then": [
@@ -756,7 +761,7 @@
       "effects": [
         {
           "do": "crossOut",
-          "key": "black_cat_has_a_hunch",
+          "key": "blackCatHasAHunch",
           "section": "campaign_notes"
         }
       ]
@@ -766,7 +771,7 @@
       "effects": [
         {
           "do": "crossOut",
-          "key": "black_cat_has_a_hunch",
+          "key": "blackCatHasAHunch",
           "section": "campaign_notes"
         }
       ]
@@ -787,7 +792,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "black_cat_has_a_hunch",
+        "id": "blackCatHasAHunch",
         "section": "campaign_notes"
       },
       "then": [
@@ -802,12 +807,12 @@
         "conditions": [
           {
             "kind": "logHas",
-            "id": "randolph_did_not_survive_descent",
+            "id": "randolphDidNotSurviveDescent",
             "section": "campaign_notes"
           },
           {
             "kind": "logHas",
-            "id": "black_cat_has_a_hunch",
+            "id": "blackCatHasAHunch",
             "section": "campaign_notes"
           }
         ]
@@ -871,7 +876,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "black_cat_has_a_hunch",
+        "id": "blackCatHasAHunch",
         "section": "campaign_notes"
       },
       "then": [
@@ -886,7 +891,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "black_cat_requested_aid",
+          "key": "blackCatRequestedAid",
           "section": "campaign_notes",
           "value": true
         }
@@ -903,7 +908,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "black_cat_shared_knowledge_of_the_underworld",
+          "key": "blackCatSharedKnowledgeOfTheUnderworld",
           "section": "campaign_notes",
           "value": true
         }
@@ -920,7 +925,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "black_cat_warned_the_others",
+          "key": "blackCatWarnedTheOthers",
           "section": "campaign_notes",
           "value": true
         }
@@ -972,7 +977,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "black_cat_has_a_hunch",
+        "id": "blackCatHasAHunch",
         "section": "campaign_notes"
       },
       "then": [
@@ -990,7 +995,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "you_asked_for_it",
+        "id": "youAskedForIt",
         "section": "campaign_notes"
       },
       "then": [
@@ -1010,8 +1015,8 @@
       "effects": [
         {
           "do": "count",
-          "id": "steps_of_the_bridge",
-          "section": "steps_of_the_bridge",
+          "id": "stepsOfTheBridge",
+          "section": "stepsOfTheBridge",
           "op": "add",
           "value": "input"
         }
@@ -1074,7 +1079,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "half_campaign",
+        "id": "halfCampaign",
         "section": "hidden"
       },
       "then": [
@@ -1111,7 +1116,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "doctor_is_alive",
+          "key": "doctorIsAlive",
           "section": "campaign_notes",
           "value": true
         }
@@ -1133,7 +1138,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "interconnected_campaign",
+        "id": "interconnectedCampaign",
         "section": "hidden"
       },
       "then": [
@@ -1151,7 +1156,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "randolph_escaped_hospital_with_investigators",
+          "key": "randolphEscapedHospitalWithInvestigators",
           "section": "campaign_notes",
           "value": true
         },
@@ -1172,7 +1177,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "doctor_is_missing",
+          "key": "doctorIsMissing",
           "section": "campaign_notes",
           "value": true
         },
@@ -1194,7 +1199,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "interconnected_campaign",
+        "id": "interconnectedCampaign",
         "section": "hidden"
       },
       "then": [
@@ -1212,7 +1217,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "randolph_escaped_hospital_alone",
+          "key": "randolphEscapedHospitalAlone",
           "section": "campaign_notes",
           "value": true
         },
@@ -1266,12 +1271,67 @@
       ],
       "else": []
     },
+    "waking-nightmare:intro_2": {
+      "kind": "story",
+      "text": "“Yes, I suppose that makes sense. There has been no change in their condition for the past few hours, anyway.” Doctor Maheswaran’s gaze shifts nervously to and fro, searching for more spiders. “Also, I’d very much like to get out of this room now, so…lead the way,” she adds. You nod and venture back into the hospital’s waiting room.",
+      "bullets": []
+    },
+    "waking-nightmare:doctor_joined_investigation": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "doctorJoinedInvestigation",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "waking-nightmare:intro_3": {
+      "kind": "story",
+      "text": "“Yes, of course. Their safety is paramount. But do come back and tell me what is going on, please.” She shivers. “I really hate this place after dark…” You nod and venture back into the hospital’s waiting room.",
+      "bullets": []
+    },
+    "waking-nightmare:doctor_stayed_with_patients": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "doctorStayedWithPatients",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "waking-nightmare:choose_doctor": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "doctor_come",
+          "text": "<i>Convince Doctor Maheswaran to come with you while you investigate, for her safety and yours.</i>",
+          "effects": [],
+          "steps": [
+            "waking-nightmare:intro_2",
+            "waking-nightmare:doctor_joined_investigation"
+          ]
+        },
+        {
+          "id": "doctor_stay",
+          "text": "<i>Convince Doctor Maheswaran to stay with the patients and keep them safe while you investigate.</i>",
+          "effects": [],
+          "steps": [
+            "waking-nightmare:intro_3",
+            "waking-nightmare:doctor_stayed_with_patients"
+          ]
+        }
+      ]
+    },
     "weaver-of-the-cosmos:bridge_was_completed": {
       "kind": "effects",
       "effects": [
         {
           "do": "record",
-          "key": "bridge_was_completed",
+          "key": "bridgeWasCompleted",
           "section": "campaign_notes",
           "value": true
         }
@@ -1336,7 +1396,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "half_campaign",
+        "id": "halfCampaign",
         "section": "hidden"
       },
       "then": [
@@ -1354,7 +1414,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "bridge_was_destroyed",
+          "key": "bridgeWasDestroyed",
           "section": "campaign_notes",
           "value": true
         }
@@ -1386,7 +1446,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "returned_to_reality",
+          "key": "returnedToReality",
           "section": "campaign_notes",
           "value": true
         }
@@ -1456,7 +1516,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "half_campaign",
+        "id": "halfCampaign",
         "section": "hidden"
       },
       "then": [
@@ -1476,7 +1536,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "never_escaped",
+          "key": "neverEscaped",
           "section": "campaign_notes",
           "value": true
         }
@@ -1510,7 +1570,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "half_campaign",
+        "id": "halfCampaign",
         "section": "hidden"
       },
       "then": [
@@ -1528,7 +1588,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "still_in_the_dreamlands",
+          "key": "stillInTheDreamlands",
           "section": "campaign_notes",
           "value": true
         }

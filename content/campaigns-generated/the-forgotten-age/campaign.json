@@ -81,6 +81,7 @@
       "elderSign"
     ]
   },
+  "options": [],
   "logLabels": {},
   "packs": [
     "core",
@@ -109,7 +110,7 @@
       "label": "Campaign Notes"
     },
     {
-      "id": "yigs_fury",
+      "id": "yigsFury",
       "kind": "count",
       "label": "Yig's Fury"
     },

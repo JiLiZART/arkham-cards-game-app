@@ -21,6 +21,7 @@
     "08622",
     "08623"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -110,7 +111,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "team_found_the_hidden_tunnel",
+          "key": "teamFoundTheHiddenTunnel",
           "value": true
         },
         {
@@ -127,7 +128,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "team_was_guided_to_the_hidden_tunnel",
+          "key": "teamWasGuidedToTheHiddenTunnel",
           "value": true
         },
         {

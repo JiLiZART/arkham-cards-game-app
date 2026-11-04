@@ -258,6 +258,18 @@
       ]
     }
   },
+  "before": {
+    "essex-county-express": [
+      "essex-county-express:add_chaos_token"
+    ],
+    "undimensioned-and-unseen": [
+      "undimensioned-and-unseen:warn_or_calm_choice",
+      "undimensioned-and-unseen:add_weakness"
+    ],
+    "where-doom-awaits": [
+      "where-doom-awaits:add_chaos_token"
+    ]
+  },
   "steps": {
     "campaign:prologue": {
       "kind": "story",
@@ -275,7 +287,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "henry_armitage_kidnapped",
+          "key": "henryArmitageKidnapped",
           "section": "campaign_notes",
           "value": true
         }
@@ -307,7 +319,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "henry_armitage_rescued",
+          "key": "henryArmitageRescued",
           "section": "campaign_notes",
           "value": true
         }
@@ -332,7 +344,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "unconscious_for_several_hours",
+        "id": "unconsciousForSeveralHours",
         "section": "campaign_notes"
       },
       "then": [
@@ -356,7 +368,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "ritual_completed",
+          "key": "ritualCompleted",
           "section": "campaign_notes",
           "value": true
         }
@@ -401,7 +413,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "henry_armitage_survived",
+          "key": "henryArmitageSurvived",
           "section": "campaign_notes",
           "value": true
         }
@@ -424,7 +436,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "necronomicon_stolen",
+          "key": "necronomiconStolen",
           "section": "campaign_notes",
           "value": true
         }
@@ -486,7 +498,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "killed_silas_bishop",
+          "key": "killedSilasBishop",
           "section": "campaign_notes",
           "value": true
         }
@@ -497,7 +509,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "restored_silas_bishop",
+          "key": "restoredSilasBishop",
           "section": "campaign_notes",
           "value": true
         }
@@ -508,7 +520,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "banished_silas_bishop",
+          "key": "banishedSilasBishop",
           "section": "campaign_notes",
           "value": true
         }
@@ -560,7 +572,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "calmed_townsfolk",
+        "id": "calmedTownsfolk",
         "section": "campaign_notes"
       },
       "then": [
@@ -589,10 +601,104 @@
       "effects": [
         {
           "do": "record",
-          "key": "investigators_delayed",
+          "key": "investigatorsDelayed",
           "section": "campaign_notes",
           "value": true
         }
+      ]
+    },
+    "essex-county-express:add_chaos_token:easy:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "-2"
+        }
+      ]
+    },
+    "essex-county-express:add_chaos_token:standard:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "-3"
+        }
+      ]
+    },
+    "essex-county-express:add_chaos_token:hard:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "-4"
+        }
+      ]
+    },
+    "essex-county-express:add_chaos_token:expert:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "-5"
+        }
+      ]
+    },
+    "essex-county-express:add_chaos_token#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "expert"
+        ]
+      },
+      "then": [
+        "essex-county-express:add_chaos_token:expert:fx"
+      ],
+      "else": []
+    },
+    "essex-county-express:add_chaos_token#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "hard"
+        ]
+      },
+      "then": [
+        "essex-county-express:add_chaos_token:hard:fx"
+      ],
+      "else": [
+        "essex-county-express:add_chaos_token#3"
+      ]
+    },
+    "essex-county-express:add_chaos_token#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "standard"
+        ]
+      },
+      "then": [
+        "essex-county-express:add_chaos_token:standard:fx"
+      ],
+      "else": [
+        "essex-county-express:add_chaos_token#2"
+      ]
+    },
+    "essex-county-express:add_chaos_token": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "easy"
+        ]
+      },
+      "then": [
+        "essex-county-express:add_chaos_token:easy:fx"
+      ],
+      "else": [
+        "essex-county-express:add_chaos_token#1"
       ]
     },
     "extracurricular-activity:warren_rice_kidnapped": {
@@ -600,7 +706,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "warren_rice_kidnapped",
+          "key": "warrenRiceKidnapped",
           "section": "campaign_notes",
           "value": true
         }
@@ -616,7 +722,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "failed_to_save_students",
+          "key": "failedToSaveStudents",
           "section": "campaign_notes",
           "value": true
         },
@@ -677,7 +783,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "warren_rice_rescued",
+          "key": "warrenRiceRescued",
           "section": "campaign_notes",
           "value": true
         }
@@ -714,7 +820,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "students_rescued",
+          "key": "studentsRescued",
           "section": "campaign_notes",
           "value": true
         }
@@ -725,7 +831,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "experiment_defeated",
+          "key": "experimentDefeated",
           "section": "campaign_notes",
           "value": true
         }
@@ -736,7 +842,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "unconscious_for_several_hours",
+          "key": "unconsciousForSeveralHours",
           "section": "campaign_notes",
           "value": true
         }
@@ -777,7 +883,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "closed_tear",
+          "key": "closedTear",
           "section": "campaign_notes",
           "value": true
         }
@@ -846,7 +952,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "yog_sothoth_fled",
+          "key": "yogSothothFled",
           "section": "campaign_notes",
           "value": true
         }
@@ -871,7 +977,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "yog_sothoth_became_one_with_reality",
+          "key": "yogSothothBecameOneWithReality",
           "section": "campaign_notes",
           "value": true
         }
@@ -915,7 +1021,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "henry_armitage_survived",
+          "key": "henryArmitageSurvived",
           "section": "campaign_notes",
           "value": true
         }
@@ -1002,7 +1108,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "warren_rice_survived",
+          "key": "warrenRiceSurvived",
           "section": "campaign_notes",
           "value": true
         }
@@ -1061,7 +1167,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "francis_morgan_survived",
+          "key": "francisMorganSurvived",
           "section": "campaign_notes",
           "value": true
         }
@@ -1120,7 +1226,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "zebulon_whateley_survived",
+          "key": "zebulonWhateleySurvived",
           "section": "campaign_notes",
           "value": true
         }
@@ -1166,7 +1272,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "earl_sawyer_survived",
+          "key": "earlSawyerSurvived",
           "section": "campaign_notes",
           "value": true
         }
@@ -1210,7 +1316,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "bone_to_pick",
+          "key": "boneToPick",
           "section": "campaign_notes",
           "value": true
         }
@@ -1221,7 +1327,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "francis_morgan_kidnapped",
+          "key": "francisMorganKidnapped",
           "section": "campaign_notes",
           "value": true
         }
@@ -1300,7 +1406,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "francis_morgan_rescued",
+          "key": "francisMorganRescued",
           "section": "campaign_notes",
           "value": true
         },
@@ -1327,7 +1433,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "naomi_has_back",
+          "key": "naomiHasBack",
           "section": "campaign_notes",
           "value": true
         }
@@ -1354,7 +1460,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "unconscious_for_several_hours",
+          "key": "unconsciousForSeveralHours",
           "section": "campaign_notes",
           "value": true
         }
@@ -1369,7 +1475,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "tmm_add_chaos_token",
+        "id": "tmmAddChaosToken",
         "section": "hidden"
       },
       "then": [],
@@ -1382,7 +1488,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "failed_to_recover_necronomicon",
+          "key": "failedToRecoverNecronomicon",
           "section": "campaign_notes",
           "value": true
         }
@@ -1407,7 +1513,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "destroyed_necronomicon",
+          "key": "destroyedNecronomicon",
           "section": "campaign_notes",
           "value": true
         }
@@ -1418,7 +1524,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "took_necronomicon",
+          "key": "tookNecronomicon",
           "section": "campaign_notes",
           "value": true
         }
@@ -1460,7 +1566,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "brood_escaped",
+          "id": "broodEscaped",
           "section": "campaign_notes",
           "op": "set",
           "value": "input"
@@ -1501,9 +1607,73 @@
       "effects": [
         {
           "do": "record",
-          "key": "no_brood_escaped",
+          "key": "noBroodEscaped",
           "section": "campaign_notes",
           "value": true
+        }
+      ]
+    },
+    "undimensioned-and-unseen:part1": {
+      "kind": "story",
+      "text": "You aim to calm the townsfolk so they can explain to you what is going on. They inform you that there was a rumbling to the north, and when they went to investigate they found the Bishops’ farmhouse had been torn to shreds. A trail of heavy tracks led into nearby Cold Spring Glen. “You know what to do, right? You Arkham folk stopped that thing last time,” one of the townsfolk says. Curtis shakes his head and bites at his lip.\n“We couldn’t even see that hellish thing until the old professor sprayed that there powder on it,” He says. “To this day,I wish I hadn’t seen it at all…” Something must be done to stop the monster’s rampage. But, if the documents you found are true, there may be more than one such creature on the loose….",
+      "bullets": []
+    },
+    "undimensioned-and-unseen:calmed_townsfolk": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "calmedTownsfolk",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "undimensioned-and-unseen:part2": {
+      "kind": "story",
+      "text": "You warn the townsfolk that they are in grave danger, and urge them to flee Dunwich while they can. Several of them immediately heed your advice, remembering the terrible monstrosity that had previously endangered the town. Curtis drops to his knees in despair, sweating feverishly. “It’s that <b>thing</b> again, ain’t it? It’s come back fer us,” Curtis stutters. “I hope you’ve got some of that powder the old professor had last time. We couldn’t even see the damned thing until he sprayed it. To this day, I wish I hadn’t seen it at all…” Something must be done to stop the monster’s rampage. But, if the documents you found are true, there may be more than one such creature on the loose….",
+      "bullets": []
+    },
+    "undimensioned-and-unseen:warned_townsfolk": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "warnedTownsfolk",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "undimensioned-and-unseen:warn_or_calm_choice": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "calmed",
+          "text": "<i>You try to calm down the townsfolk in order to learn more.</i>",
+          "effects": [],
+          "steps": [
+            "undimensioned-and-unseen:part1",
+            "undimensioned-and-unseen:calmed_townsfolk"
+          ]
+        },
+        {
+          "id": "warned",
+          "text": "<i>You try to warn the townsfolk and convince them to evacuate.</i>",
+          "effects": [],
+          "steps": [
+            "undimensioned-and-unseen:part2",
+            "undimensioned-and-unseen:warned_townsfolk"
+          ]
+        }
+      ]
+    },
+    "undimensioned-and-unseen:add_weakness": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addWeakness",
+          "trait": "Madness"
         }
       ]
     },
@@ -1512,7 +1682,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "entered_the_gate",
+          "key": "enteredTheGate",
           "section": "campaign_notes",
           "value": true
         }
@@ -1537,7 +1707,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "yog_sothoth_escaped",
+          "key": "yogSothothEscaped",
           "section": "campaign_notes",
           "value": true
         }
@@ -1564,6 +1734,100 @@
           "do": "end",
           "result": "lose"
         }
+      ]
+    },
+    "where-doom-awaits:add_chaos_token:easy:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "-3"
+        }
+      ]
+    },
+    "where-doom-awaits:add_chaos_token:standard:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "-5"
+        }
+      ]
+    },
+    "where-doom-awaits:add_chaos_token:hard:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "-6"
+        }
+      ]
+    },
+    "where-doom-awaits:add_chaos_token:expert:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "-7"
+        }
+      ]
+    },
+    "where-doom-awaits:add_chaos_token#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "expert"
+        ]
+      },
+      "then": [
+        "where-doom-awaits:add_chaos_token:expert:fx"
+      ],
+      "else": []
+    },
+    "where-doom-awaits:add_chaos_token#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "hard"
+        ]
+      },
+      "then": [
+        "where-doom-awaits:add_chaos_token:hard:fx"
+      ],
+      "else": [
+        "where-doom-awaits:add_chaos_token#3"
+      ]
+    },
+    "where-doom-awaits:add_chaos_token#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "standard"
+        ]
+      },
+      "then": [
+        "where-doom-awaits:add_chaos_token:standard:fx"
+      ],
+      "else": [
+        "where-doom-awaits:add_chaos_token#2"
+      ]
+    },
+    "where-doom-awaits:add_chaos_token": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "easy"
+        ]
+      },
+      "then": [
+        "where-doom-awaits:add_chaos_token:easy:fx"
+      ],
+      "else": [
+        "where-doom-awaits:add_chaos_token#1"
       ]
     }
   }

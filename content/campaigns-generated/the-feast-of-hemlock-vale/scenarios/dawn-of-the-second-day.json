@@ -1,0 +1,149 @@
+{
+  "id": "dawn-of-the-second-day",
+  "name": "Dawn of the Second Day",
+  "card": "10704",
+  "intro": "You wake up feeling utterly drained. A light rain falls as you walk outside, but even the rain doesn’t seem to dampen the Vale’s spirits: A ring of children in animal masks sing a lilting melody as they continue decorating.",
+  "encounterSets": [
+    "the_second_day",
+    "day_of_rain",
+    "residents",
+    "the_vale"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "10684"
+  ],
+  "agendas": [
+    "10683"
+  ],
+  "setupCards": [],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "10705a"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "10705a"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": 1
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -1
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": 1
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -1
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    }
+  },
+  "resolutions": {
+    "R1": {
+      "title": "Resolution 1",
+      "text": "Dr. Marquez emerges from upstairs with a stony look on her face. Bertie follows, nursing a bandaged arm. His face is ashen as he recounts his experience: “I was walking at the edge of the woods—I think at midday—when I felt the most delicious, erm.” He struggles to put it into words. “An absolute joy. And then I suppose I lost myself. When I came to, it was night and I was quite lost. And now that I’ve returned, I can’t help but reflect on that breathless feeling. ‘Emotion recollected in tranquility,’ eh?” The professor rolls her eyes but doesn’t comment.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R2": {
+      "title": "Resolution 2",
+      "text": "Dr. Marquez slams the screen door as she enters. “Mother Rachel told me she found Bertie wandering around this morning. I saw him recovering at the Atwood House, and he looks just fine. Babbling nonsense and reading some of the local poetry.”",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "R3": {
+      "title": "Resolution 3",
+      "text": "Dr. Marquez pours herself a strong cup of coffee. “I’m going to take advantage of the cooling rain and head up to Pearl Ridge. Join me if you like,” she takes a bite of her eggs and wrinkles her nose. “Is that a metal taste?” She discretely spits the eggs into a handkerchief as Ms. Olmstead emerges from the kitchen with a stack of flapjacks and serves several hungry guests.",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "none": {
+      "title": "No resolution was reached",
+      "text": "",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "dawn_of_the_second_day",
+  "connections": [],
+  "oneWay": [],
+  "layout": {
+    "10705a": [
+      0,
+      0
+    ]
+  }
+}

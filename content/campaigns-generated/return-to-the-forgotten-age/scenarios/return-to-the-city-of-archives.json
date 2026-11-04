@@ -20,6 +20,9 @@
     "04239",
     "04240"
   ],
+  "setupCards": [
+    "53053"
+  ],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -83,7 +86,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "had_memories_expunged",
+          "key": "hadMemoriesExpunged",
           "value": true
         },
         {

@@ -69,6 +69,8 @@ export interface FlowState {
   scenario: ScenarioFacts | null;
   /** the interlude or epilogue being read, for the heading */
   item: string | null;
+  /** the scenario whose own setup steps (`flow.before`) are running: it is offered to play once they have; absent in older saves */
+  next?: string | null;
 }
 
 export type FlowValue = string | number | string[] | null;
@@ -106,6 +108,8 @@ export interface CampaignState {
   investigators: CampaignInvestigator[];
   history: ScenarioRecord[];
   result: "win" | "lose" | "survived" | null;
+  /** the options chosen when the campaign was created (`CampaignDef.options` ids); absent in older saves */
+  options?: string[];
 }
 
 export interface NewCampaign {
@@ -114,4 +118,6 @@ export interface NewCampaign {
   seed: number;
   /** `deck` is a custom deck (saved on the device) used as given instead of the content's deck `deckId` */
   investigators: { code: InvId; deckId: string; deck?: DeckDef }[];
+  /** the campaign's options to turn on (`CampaignDef.options` ids); fixed for the campaign */
+  options?: string[];
 }

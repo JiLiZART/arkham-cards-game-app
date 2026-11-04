@@ -17,6 +17,7 @@
   "agendas": [
     "09636"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -130,7 +131,7 @@
         },
         {
           "do": "record",
-          "key": "have_not_seen_the_last_of_the_claret_knight",
+          "key": "haveNotSeenTheLastOfTheClaretKnight",
           "value": true
         }
       ]
@@ -153,12 +154,12 @@
         },
         {
           "do": "record",
-          "key": "cell_failed_to_fend_off_the_beast",
+          "key": "cellFailedToFendOffTheBeast",
           "value": true
         },
         {
           "do": "record",
-          "key": "have_not_seen_the_last_of_the_beast",
+          "key": "haveNotSeenTheLastOfTheBeast",
           "value": true
         }
       ]
@@ -175,7 +176,7 @@
         },
         {
           "do": "record",
-          "key": "have_not_seen_the_last_of_the_claret_knight",
+          "key": "haveNotSeenTheLastOfTheClaretKnight",
           "value": true
         }
       ]
@@ -204,12 +205,12 @@
         },
         {
           "do": "record",
-          "key": "have_not_seen_the_last_of_the_claret_knight",
+          "key": "haveNotSeenTheLastOfTheClaretKnight",
           "value": true
         },
         {
           "do": "record",
-          "key": "have_not_seen_the_last_of_the_beast",
+          "key": "haveNotSeenTheLastOfTheBeast",
           "value": true
         }
       ]
@@ -226,7 +227,7 @@
         },
         {
           "do": "record",
-          "key": "dogs_are_at_war",
+          "key": "dogsAreAtWar",
           "value": true
         }
       ]
@@ -243,12 +244,12 @@
         },
         {
           "do": "record",
-          "key": "cell_aided_the_knight",
+          "key": "cellAidedTheKnight",
           "value": true
         },
         {
           "do": "record",
-          "key": "have_not_seen_the_last_of_the_beast",
+          "key": "haveNotSeenTheLastOfTheBeast",
           "value": true
         }
       ]

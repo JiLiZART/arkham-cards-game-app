@@ -271,3 +271,12 @@ describe("ArkhamDB's placeholders and extra classes", () => {
     ).toBe("Engaged with Prey");
   });
 });
+
+describe("the vengeance field (The Forgotten Age)", () => {
+  it("is imported from the snapshot: Harbinger of Valusia (04062) has Vengeance 5", () => {
+    const tfa = readSnapshot("inspired/arkhamdb-json-data").get("tfa")!;
+    const harbinger = mapCard(tfa.find((r) => r.code === "04062")!);
+    expect(harbinger.vengeance).toBe(5);
+    expect(CardDef.safeParse(harbinger).success).toBe(true);
+  });
+});

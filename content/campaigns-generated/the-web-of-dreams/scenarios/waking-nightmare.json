@@ -21,6 +21,7 @@
     "06065",
     "06066"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -97,12 +98,12 @@
       "effects": [
         {
           "do": "record",
-          "key": "doctor_is_alive",
+          "key": "doctorIsAlive",
           "value": true
         },
         {
           "do": "record",
-          "key": "randolph_escaped_hospital_with_investigators",
+          "key": "randolphEscapedHospitalWithInvestigators",
           "value": true
         },
         {
@@ -124,7 +125,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "doctor_is_missing",
+          "key": "doctorIsMissing",
           "value": true
         },
         {
@@ -135,7 +136,7 @@
         },
         {
           "do": "record",
-          "key": "randolph_escaped_hospital_with_investigators",
+          "key": "randolphEscapedHospitalWithInvestigators",
           "value": true
         },
         {
@@ -157,12 +158,12 @@
       "effects": [
         {
           "do": "record",
-          "key": "doctor_is_alive",
+          "key": "doctorIsAlive",
           "value": true
         },
         {
           "do": "record",
-          "key": "randolph_escaped_hospital_with_investigators",
+          "key": "randolphEscapedHospitalWithInvestigators",
           "value": true
         },
         {
@@ -184,7 +185,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "doctor_is_missing",
+          "key": "doctorIsMissing",
           "value": true
         },
         {
@@ -195,7 +196,7 @@
         },
         {
           "do": "record",
-          "key": "randolph_escaped_hospital_alone",
+          "key": "randolphEscapedHospitalAlone",
           "value": true
         },
         {

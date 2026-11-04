@@ -5057,6 +5057,7 @@
   "icons": {},
   "subname": "The Sleeper Returns",
   "encounterSet": "return_to_the_doom_of_eztli",
+  "vengeance": 5,
   "enemy": {
    "fight": 2,
    "health": 10,
@@ -5174,6 +5175,7 @@
   "icons": {},
   "encounterSet": "return_to_the_doom_of_eztli",
   "victory": 1,
+  "vengeance": 1,
   "shroud": 5,
   "clues": 1,
   "cluesPerInvestigator": true
@@ -5242,6 +5244,7 @@
   "icons": {},
   "subname": "Rearranged by Time",
   "encounterSet": "return_to_the_doom_of_eztli",
+  "vengeance": 1,
   "shroud": 2,
   "clues": 1,
   "cluesPerInvestigator": true
@@ -5267,6 +5270,7 @@
   "flavor": "The floor of this central chamber is intricately carved and glows strangely...",
   "encounterSet": "return_to_the_doom_of_eztli",
   "victory": 2,
+  "vengeance": 2,
   "shroud": 4,
   "clues": 2,
   "cluesPerInvestigator": true
@@ -5800,6 +5804,7 @@
   "slots": [],
   "icons": {},
   "encounterSet": "return_to_pillars_of_judgment",
+  "vengeance": 1,
   "enemy": {
    "fight": null,
    "health": 3,
@@ -6389,7 +6394,8 @@
   "keywords": [],
   "slots": [],
   "icons": {},
-  "encounterSet": "doomed_expedition"
+  "encounterSet": "doomed_expedition",
+  "vengeance": 1
  },
  {
   "code": "53075",
@@ -6481,6 +6487,7 @@
   "slots": [],
   "icons": {},
   "encounterSet": "venomous_hate",
+  "vengeance": 0,
   "enemy": {
    "fight": 2,
    "health": 2,

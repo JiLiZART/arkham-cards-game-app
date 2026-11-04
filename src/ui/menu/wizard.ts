@@ -20,6 +20,8 @@ export interface WizardState {
   /** the chosen deck of each picked investigator */
   decks: Record<string, string>;
   difficulty: Difficulty;
+  /** the campaign's options turned on (`CampaignDef.options` ids); off until toggled */
+  options: string[];
 }
 
 /** the decks an investigator can bring: the starter decks, then the saved custom ones that still validate */
@@ -148,11 +150,20 @@ export function initialWizard(db: ContentDb): WizardState {
     picks: [],
     decks: {},
     difficulty: "standard",
+    options: [],
   };
 }
 
 export function setCampaign(s: WizardState, id: string, db?: ContentDb): WizardState {
-  return db && !db.campaigns[id] ? s : { ...s, campaignId: id };
+  if (db && !db.campaigns[id]) return s;
+  return id === s.campaignId ? s : { ...s, campaignId: id, options: [] };
+}
+
+/** turn one of the campaign's options on or off; an id the campaign doesn't declare changes nothing */
+export function toggleOption(s: WizardState, id: string, db: ContentDb): WizardState {
+  if (!db.campaigns[s.campaignId]?.options.some((o) => o.id === id)) return s;
+  const on = s.options.includes(id);
+  return { ...s, options: on ? s.options.filter((x) => x !== id) : [...s.options, id] };
 }
 
 /** what the picker shows of an investigator: from the card when its pack is loaded, from the definition (with the other languages' names) until then */
@@ -433,6 +444,7 @@ export function toSetup(s: WizardState, seed: number, db?: ContentDb, storage?: 
     campaignId: s.campaignId,
     difficulty: s.difficulty,
     seed,
+    options: [...(s.options ?? [])],
     // a custom deck goes along as the deck itself (the content knows only the starter decks)
     investigators: s.picks.map((code) => {
       const deckId = s.decks[code];

@@ -23,6 +23,7 @@
   "agendas": [
     "11641"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -34,9 +35,7 @@
       "do": "setAside",
       "codes": [
         "11663",
-        "11663b",
         "11664",
-        "11664b",
         "11672a",
         "11672b"
       ]
@@ -111,7 +110,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "obsidian_canyons",
+          "key": "obsidianCanyons",
           "value": true
         },
         {
@@ -132,7 +131,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "obsidian_canyons",
+          "key": "obsidianCanyons",
           "value": true
         },
         {
@@ -149,7 +148,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "obsidian_canyons",
+          "key": "obsidianCanyons",
           "value": true
         },
         {

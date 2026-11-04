@@ -85,6 +85,7 @@
       "elderSign"
     ]
   },
+  "options": [],
   "logLabels": {},
   "packs": [
     "core",
@@ -112,17 +113,17 @@
       "label": "Campaign Notes"
     },
     {
-      "id": "chasing_the_stranger",
+      "id": "chasingTheStranger",
       "kind": "count",
       "label": "Chasing the Stranger"
     },
     {
-      "id": "vips_interviewed",
+      "id": "vipsInterviewed",
       "kind": "entries",
       "label": "VIPs Interviewed"
     },
     {
-      "id": "vips_slain",
+      "id": "vipsSlain",
       "kind": "entries",
       "label": "VIPs Slain"
     },

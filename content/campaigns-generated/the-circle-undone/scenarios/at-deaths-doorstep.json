@@ -21,6 +21,7 @@
     "05066",
     "05067"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -110,7 +111,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "investigators_escaped_the_spectral_realm",
+          "key": "investigatorsEscapedTheSpectralRealm",
           "value": true
         },
         {
@@ -127,7 +128,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "learned_nothing_of_the_lodges_schemes",
+          "key": "learnedNothingOfTheLodgesSchemes",
           "value": true
         },
         {
@@ -144,7 +145,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "never_seen_again",
+          "key": "neverSeenAgain",
           "value": true
         },
         {

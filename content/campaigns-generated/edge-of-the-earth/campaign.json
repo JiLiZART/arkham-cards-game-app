@@ -87,6 +87,7 @@
       "elderSign"
     ]
   },
+  "options": [],
   "logLabels": {},
   "packs": [
     "core",
@@ -115,52 +116,52 @@
       "label": "Campaign Notes"
     },
     {
-      "id": "ice_and_death",
+      "id": "iceAndDeath",
       "kind": "entries",
       "label": "Ice and Death"
     },
     {
-      "id": "locations_revealed",
+      "id": "locationsRevealed",
       "kind": "entries",
       "label": "Locations Revealed"
     },
     {
-      "id": "supplies_recovered",
+      "id": "suppliesRecovered",
       "kind": "entries",
       "label": "Supplies Recovered"
     },
     {
-      "id": "fatal_mirage",
+      "id": "fatalMirage",
       "kind": "entries",
       "label": "Fatal Mirage"
     },
     {
-      "id": "memories_discovered",
+      "id": "memoriesDiscovered",
       "kind": "entries",
       "label": "Memories Discovered"
     },
     {
-      "id": "memories_banished",
+      "id": "memoriesBanished",
       "kind": "entries",
       "label": "Memories Banished"
     },
     {
-      "id": "the_heart_of_madness",
+      "id": "theHeartOfMadness",
       "kind": "entries",
       "label": "The Heart of Madness"
     },
     {
-      "id": "seals_placed",
+      "id": "sealsPlaced",
       "kind": "entries",
       "label": "Seals Placed"
     },
     {
-      "id": "seals_recovered",
+      "id": "sealsRecovered",
       "kind": "entries",
       "label": "Seals Recovered"
     },
     {
-      "id": "expedition_team",
+      "id": "expeditionTeam",
       "kind": "entries",
       "label": "Expedition Team"
     }

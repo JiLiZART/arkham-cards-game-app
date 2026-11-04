@@ -23,6 +23,7 @@
     "07234",
     "07235"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",

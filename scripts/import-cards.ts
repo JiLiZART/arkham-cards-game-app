@@ -112,6 +112,7 @@ export function mapCard(c: Raw): CardDefInput {
   if (c.faction2_code)
     card.factions = [c.faction_code, c.faction2_code, c.faction3_code].filter(Boolean);
   opt(EVENT.Victory, c.victory);
+  opt("vengeance", c.vengeance);
   for (const s of ["willpower", "intellect", "combat", "agility", "wild"] as const) {
     if (c[`skill_${s}`] && type !== "investigator") card.icons![s] = c[`skill_${s}`];
   }
@@ -202,7 +203,11 @@ export function snapshotTarget(folder: string, packCode: string): string {
  */
 export function readSnapshot(root: string, cycle?: string): Map<string, Raw[]> {
   const dir = join(root, "pack");
-  const folders = readdirSync(dir).sort();
+  // the cycle folders (a stray file such as macOS's .DS_Store is not one)
+  const folders = readdirSync(dir, { withFileTypes: true })
+    .filter((e) => e.isDirectory())
+    .map((e) => e.name)
+    .sort();
   if (cycle && !folders.includes(cycle))
     throw new Error(`no cycle ${cycle} in ${dir}; there are: ${folders.join(", ")}`);
   const packs = new Map<string, Raw[]>();

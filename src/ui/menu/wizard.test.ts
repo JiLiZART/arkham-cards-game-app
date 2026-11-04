@@ -39,6 +39,7 @@ import {
   toggleInvestigator,
   toSetup,
   type WizardState,
+  toggleOption,
 } from "./wizard";
 
 const ROLAND = "01001";
@@ -137,13 +138,14 @@ describe("wizard steps", () => {
 });
 
 describe("toSetup", () => {
-  it("is what newCampaign takes: campaign, difficulty, a seed and the investigators with their decks in order", () => {
+  it("is what newCampaign takes: campaign, difficulty, a seed, the options and the investigators with their decks in order", () => {
     let s = tap(initialWizard(db), DAISY, ROLAND);
     s = setDifficulty(s, "expert");
     expect(toSetup(s, 42)).toEqual({
       campaignId: "night-of-the-zealot",
       difficulty: "expert",
       seed: 42,
+      options: [],
       investigators: [
         { code: DAISY, deckId: "daisy-starter" },
         { code: ROLAND, deckId: "roland-starter" },
@@ -575,4 +577,35 @@ describe("the filter pills", () => {
     expect(pills[2].label).toBe("wizard.stat.min:stat.combat,4");
     expect(pills[2].clear(f).stats).toEqual({});
   });
+});
+
+describe("campaign options in the wizard", () => {
+  const NOTZ = "night-of-the-zealot";
+  const OPTION = { id: "zz-sets", labelKey: "x", replaceSets: {}, addSets: ["agents_of_yog"] };
+  const withOption = <T>(f: () => T): T => {
+    const saved = db.campaigns[NOTZ].options;
+    db.campaigns[NOTZ].options = [OPTION];
+    try {
+      return f();
+    } finally {
+      db.campaigns[NOTZ].options = saved;
+    }
+  };
+  const start = () => ({ ...initialWizard(db), campaignId: NOTZ });
+
+  it("are off until toggled, and a toggled option reaches the new campaign's setup", () =>
+    withOption(() => {
+      const s = start();
+      expect(toSetup(s, 1).options).toEqual([]);
+      const on = toggleOption(s, "zz-sets", db);
+      expect(toSetup(on, 1).options).toEqual(["zz-sets"]);
+      expect(toSetup(toggleOption(on, "zz-sets", db), 1).options).toEqual([]);
+    }));
+
+  it("only the campaign's own options can be toggled, and another campaign clears them", () =>
+    withOption(() => {
+      const s = toggleOption(start(), "zz-sets", db);
+      expect(toggleOption(s, "not-declared", db)).toBe(s);
+      expect(setCampaign(s, "brethren-of-ash", db).options).toEqual([]);
+    }));
 });

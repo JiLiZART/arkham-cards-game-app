@@ -20,6 +20,7 @@
     "09521",
     "09522"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -31,7 +32,6 @@
       "do": "setAside",
       "codes": [
         "09537",
-        "09537b",
         "09538",
         "09541",
         "09540",
@@ -129,7 +129,7 @@
         },
         {
           "do": "record",
-          "key": "lovers_are_reunited",
+          "key": "loversAreReunited",
           "value": true
         }
       ]
@@ -146,7 +146,7 @@
         },
         {
           "do": "record",
-          "key": "have_not_seen_the_last_of_amaranth",
+          "key": "haveNotSeenTheLastOfAmaranth",
           "value": true
         }
       ]
@@ -163,7 +163,7 @@
         },
         {
           "do": "record",
-          "key": "amaranth_has_left_the_coterie",
+          "key": "amaranthHasLeftTheCoterie",
           "value": true
         }
       ]
@@ -180,7 +180,7 @@
         },
         {
           "do": "record",
-          "key": "have_not_seen_the_last_of_amaranth",
+          "key": "haveNotSeenTheLastOfAmaranth",
           "value": true
         }
       ]
@@ -191,7 +191,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "have_not_seen_the_last_of_amaranth",
+          "key": "haveNotSeenTheLastOfAmaranth",
           "value": true
         },
         {

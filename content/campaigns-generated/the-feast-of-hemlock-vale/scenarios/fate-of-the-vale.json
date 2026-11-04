@@ -26,6 +26,7 @@
     "10653",
     "10654"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -37,7 +38,6 @@
       "do": "setAside",
       "codes": [
         "10670",
-        "10670b",
         "10743"
       ]
     },
@@ -111,7 +111,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "became_the_true_feast_of_hemlock_vale",
+          "key": "becameTheTrueFeastOfHemlockVale",
           "value": true
         },
         {
@@ -134,7 +134,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "dr_marquez_sacrificed_herself_for_the_vale",
+          "key": "drMarquezSacrificedHerselfForTheVale",
           "value": true
         },
         {
@@ -161,7 +161,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "investigators_sacrificed_themselves_for_the_vale",
+          "key": "investigatorsSacrificedThemselvesForTheVale",
           "value": true
         },
         {
@@ -184,7 +184,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "the_vale_was_saved",
+          "key": "theValeWasSaved",
           "value": true
         },
         {
@@ -207,7 +207,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "the_vale_burned",
+          "key": "theValeBurned",
           "value": true
         },
         {
@@ -230,7 +230,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "barely_survived",
+          "key": "barelySurvived",
           "value": true
         },
         {

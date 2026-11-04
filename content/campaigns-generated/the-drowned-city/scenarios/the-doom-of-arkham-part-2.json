@@ -20,6 +20,7 @@
     "11689",
     "11691b"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -30,6 +31,18 @@
         "01129",
         "01128",
         "01126"
+      ]
+    },
+    {
+      "do": "remove",
+      "codes": [
+        "01120",
+        "01121a",
+        "01121b",
+        "01122",
+        "01123",
+        "01135",
+        "01136"
       ]
     },
     {
@@ -102,7 +115,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "cthulhu_annihilated_the_city_of_arkham",
+          "key": "cthulhuAnnihilatedTheCityOfArkham",
           "value": true
         },
         {
@@ -125,7 +138,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "cthulhu_was_driven_away",
+          "key": "cthulhuWasDrivenAway",
           "value": true
         },
         {
@@ -148,7 +161,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "cthulhu_was_banished",
+          "key": "cthulhuWasBanished",
           "value": true
         },
         {
@@ -171,7 +184,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "cthulhu_was_banished_but_arkham_was_destroyed",
+          "key": "cthulhuWasBanishedButArkhamWasDestroyed",
           "value": true
         },
         {

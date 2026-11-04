@@ -26,6 +26,9 @@
     "01144",
     "01145"
   ],
+  "setupCards": [
+    "50032a"
+  ],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -224,7 +227,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "arkham_succumbed",
+          "key": "arkhamSuccumbed",
           "value": true
         },
         {
@@ -247,7 +250,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "ritual_broken",
+          "key": "ritualBroken",
           "value": true
         },
         {
@@ -270,7 +273,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "umordhoth_repelled",
+          "key": "umordhothRepelled",
           "value": true
         },
         {
@@ -293,7 +296,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "lita_sacrificed",
+          "key": "litaSacrificed",
           "value": true
         },
         {

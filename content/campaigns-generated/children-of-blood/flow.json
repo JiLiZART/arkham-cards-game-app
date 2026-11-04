@@ -41,6 +41,7 @@
       "none": [
         "river-of-blood:failed_to_stop_julia_stern",
         "river-of-blood:add_1_blood_token:text",
+        "river-of-blood:add_1_blood_token",
         "river-of-blood:earn_blood_blight:text",
         "river-of-blood:earn_blood_blight",
         "river-of-blood:earn_xp_failure"
@@ -53,6 +54,7 @@
       "R2": [
         "river-of-blood:killed_julia_stern",
         "river-of-blood:remove_blood_token:text",
+        "river-of-blood:remove_blood_token",
         "river-of-blood:earn_xp"
       ],
       "R3": [
@@ -71,6 +73,7 @@
     "new-horizons": {
       "none": [
         "new-horizons:add_1_blood_token:text",
+        "new-horizons:add_1_blood_token",
         "new-horizons:earn_xp"
       ],
       "R1": [
@@ -89,11 +92,13 @@
         "new-horizons:completed_their_search",
         "new-horizons:defeated_zburamoarte",
         "new-horizons:remove_blood_token:text",
+        "new-horizons:remove_blood_token",
         "new-horizons:earn_xp"
       ],
       "R4": [
         "new-horizons:left_to_the_cults_mercy",
         "new-horizons:add_2_blood_tokens:text",
+        "new-horizons:add_2_blood_tokens",
         "new-horizons:all_earn_blood_blight:text",
         "new-horizons:actually_all_earn_blood_blight",
         "new-horizons:defeated_zburamoarte",
@@ -141,6 +146,15 @@
       ]
     }
   },
+  "before": {
+    "new-horizons": [
+      "new-horizons:add_cultist",
+      "new-horizons:choose_setup"
+    ],
+    "blood-money": [
+      "blood-money:add_cultist"
+    ]
+  },
   "steps": {
     "campaign:prologue": {
       "kind": "story",
@@ -176,7 +190,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "hard_or_expert",
+        "id": "hardOrExpert",
         "section": "hidden"
       },
       "then": [
@@ -191,7 +205,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "failed_to_stop_julia_stern",
+          "key": "failedToStopJuliaStern",
           "section": "campaign_notes",
           "value": true
         }
@@ -201,6 +215,15 @@
       "kind": "story",
       "text": "Add 1 [blood] token to the chaos bag for the remainder of the campaign.",
       "bullets": []
+    },
+    "river-of-blood:add_1_blood_token": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "blood"
+        }
+      ]
     },
     "river-of-blood:earn_blood_blight:text": {
       "kind": "story",
@@ -233,7 +256,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "spared_julia_stern",
+          "key": "sparedJuliaStern",
           "section": "campaign_notes",
           "value": true
         }
@@ -342,7 +365,12 @@
         {
           "id": "yes",
           "text": "The investigators may decide to spend 2 [per_investigator] total experience, as a group, to remove 1 [blood] token from the chaos bag. Would you like to do this?",
-          "effects": [],
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "blood"
+            }
+          ],
           "steps": [
             "river-of-blood:lose_xp_branch"
           ]
@@ -354,7 +382,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "killed_julia_stern",
+          "key": "killedJuliaStern",
           "section": "campaign_notes",
           "value": true
         }
@@ -364,6 +392,15 @@
       "kind": "story",
       "text": "Remove 1 [blood] token from the chaos bag for the remainder of the campaign.",
       "bullets": []
+    },
+    "river-of-blood:remove_blood_token": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeChaosToken",
+          "token": "blood"
+        }
+      ]
     },
     "river-of-blood:earn_xp_plus_2": {
       "kind": "effects",
@@ -443,6 +480,15 @@
       "text": "Add 1 [blood] token to the chaos bag for the remainder of the campaign.",
       "bullets": []
     },
+    "new-horizons:add_1_blood_token": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "blood"
+        }
+      ]
+    },
     "new-horizons:earn_xp": {
       "kind": "effects",
       "effects": [
@@ -459,7 +505,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "did_not_complete_their_search",
+          "key": "didNotCompleteTheirSearch",
           "section": "campaign_notes",
           "value": true
         }
@@ -470,7 +516,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "left_zburamoarte_alive",
+          "key": "leftZburamoarteAlive",
           "section": "campaign_notes",
           "value": true
         }
@@ -568,7 +614,12 @@
         {
           "id": "yes",
           "text": "The investigators may decide to spend 2 [per_investigator] total experience, as a group, to remove 1 [blood] token from the chaos bag. Would you like to do this?",
-          "effects": [],
+          "effects": [
+            {
+              "do": "removeChaosToken",
+              "token": "blood"
+            }
+          ],
           "steps": [
             "new-horizons:lose_xp_branch"
           ]
@@ -580,7 +631,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "completed_their_search",
+          "key": "completedTheirSearch",
           "section": "campaign_notes",
           "value": true
         }
@@ -591,7 +642,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "defeated_zburamoarte",
+          "key": "defeatedZburamoarte",
           "section": "campaign_notes",
           "value": true
         }
@@ -602,12 +653,21 @@
       "text": "Remove 1 [blood] token from the chaos bag for the remainder of the campaign.",
       "bullets": []
     },
+    "new-horizons:remove_blood_token": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeChaosToken",
+          "token": "blood"
+        }
+      ]
+    },
     "new-horizons:left_to_the_cults_mercy": {
       "kind": "effects",
       "effects": [
         {
           "do": "record",
-          "key": "left_to_the_cults_mercy",
+          "key": "leftToTheCultsMercy",
           "section": "campaign_notes",
           "value": true
         }
@@ -617,6 +677,19 @@
       "kind": "story",
       "text": "Add 2 [blood] tokens to the chaos bag for the remainder of the campaign.",
       "bullets": []
+    },
+    "new-horizons:add_2_blood_tokens": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "blood"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "blood"
+        }
+      ]
     },
     "new-horizons:all_earn_blood_blight:text": {
       "kind": "story",
@@ -730,6 +803,289 @@
       "text": "Release each sealed [blood] token and return them to the chaos bag.",
       "bullets": []
     },
+    "new-horizons:add_cultist": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        }
+      ]
+    },
+    "new-horizons:standard_setup_v1:text": {
+      "kind": "story",
+      "text": "Gather each location in the <b>New Horizons</b> encounter set.",
+      "bullets": []
+    },
+    "new-horizons:hard_setup_v1:text": {
+      "kind": "story",
+      "text": "Gather each location in the <b>New Horizons</b> encounter set.",
+      "bullets": []
+    },
+    "new-horizons:location_setup_v1#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "expert"
+        ]
+      },
+      "then": [
+        "new-horizons:hard_setup_v1:text"
+      ],
+      "else": []
+    },
+    "new-horizons:location_setup_v1#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "hard"
+        ]
+      },
+      "then": [
+        "new-horizons:hard_setup_v1:text"
+      ],
+      "else": [
+        "new-horizons:location_setup_v1#3"
+      ]
+    },
+    "new-horizons:location_setup_v1#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "standard"
+        ]
+      },
+      "then": [
+        "new-horizons:standard_setup_v1:text"
+      ],
+      "else": [
+        "new-horizons:location_setup_v1#2"
+      ]
+    },
+    "new-horizons:location_setup_v1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "easy"
+        ]
+      },
+      "then": [
+        "new-horizons:standard_setup_v1:text"
+      ],
+      "else": [
+        "new-horizons:location_setup_v1#1"
+      ]
+    },
+    "new-horizons:setup_agenda_v1:text": {
+      "kind": "story",
+      "text": "Construct the agenda deck using agenda 1a—“Busy Day” and agenda 2a—“Digging Deeper (v. I).” Remove each other agenda from the game.",
+      "bullets": []
+    },
+    "new-horizons:spawn_factory_workers:text": {
+      "kind": "story",
+      "text": "Spawn 1 Factory Worker enemy at each Factory Floor location.",
+      "bullets": []
+    },
+    "new-horizons:easy_boss:text": {
+      "kind": "story",
+      "text": "Because you are playing on Easy difficulty, set Zburamoarte <i>(Lethargic Beast)</i> aside, out of play. Remove each other copy of Zburamoarte from the game.",
+      "bullets": []
+    },
+    "new-horizons:standard_boss:text": {
+      "kind": "story",
+      "text": "Because you are playing on Standard difficulty, set Zburamoarte <i>(Source of the Blight)</i> aside, out of play. Remove each other copy of Zburamoarte from the game.",
+      "bullets": []
+    },
+    "new-horizons:hard_boss:text": {
+      "kind": "story",
+      "text": "Because you are playing on Hard or Expert difficulty, set Zburamoarte <i>(Progenitor of Monsters)</i> aside, out of play. Remove each other copy of Zburamoarte from the game.",
+      "bullets": []
+    },
+    "new-horizons:check_boss_difficulty#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "expert"
+        ]
+      },
+      "then": [
+        "new-horizons:hard_boss:text"
+      ],
+      "else": []
+    },
+    "new-horizons:check_boss_difficulty#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "hard"
+        ]
+      },
+      "then": [
+        "new-horizons:hard_boss:text"
+      ],
+      "else": [
+        "new-horizons:check_boss_difficulty#3"
+      ]
+    },
+    "new-horizons:check_boss_difficulty#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "standard"
+        ]
+      },
+      "then": [
+        "new-horizons:standard_boss:text"
+      ],
+      "else": [
+        "new-horizons:check_boss_difficulty#2"
+      ]
+    },
+    "new-horizons:check_boss_difficulty": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "easy"
+        ]
+      },
+      "then": [
+        "new-horizons:easy_boss:text"
+      ],
+      "else": [
+        "new-horizons:check_boss_difficulty#1"
+      ]
+    },
+    "new-horizons:set_aside_v1:text": {
+      "kind": "story",
+      "text": "Set the following cards aside, out of play: the Javier Rivera enemy, each copy of the Blighted Worker enemy, each copy of the Echoing in Darkness treachery, the <b>Infected</b> and <b>Flying Terrors</b> encounter sets, and the Forged Permit and Sanguine Song story assets.",
+      "bullets": []
+    },
+    "new-horizons:remove_night_watchman:text": {
+      "kind": "story",
+      "text": "Remove the Night Watchman enemy from the game.",
+      "bullets": []
+    },
+    "new-horizons:standard_setup_v2:text": {
+      "kind": "story",
+      "text": "Gather each location in the <b>New Horizons</b> encounter set.",
+      "bullets": []
+    },
+    "new-horizons:hard_setup_v2:text": {
+      "kind": "story",
+      "text": "Gather each location in the <b>New Horizons</b> encounter set.",
+      "bullets": []
+    },
+    "new-horizons:location_setup_v2#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "expert"
+        ]
+      },
+      "then": [
+        "new-horizons:hard_setup_v2:text"
+      ],
+      "else": []
+    },
+    "new-horizons:location_setup_v2#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "hard"
+        ]
+      },
+      "then": [
+        "new-horizons:hard_setup_v2:text"
+      ],
+      "else": [
+        "new-horizons:location_setup_v2#3"
+      ]
+    },
+    "new-horizons:location_setup_v2#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "standard"
+        ]
+      },
+      "then": [
+        "new-horizons:standard_setup_v2:text"
+      ],
+      "else": [
+        "new-horizons:location_setup_v2#2"
+      ]
+    },
+    "new-horizons:location_setup_v2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "easy"
+        ]
+      },
+      "then": [
+        "new-horizons:standard_setup_v2:text"
+      ],
+      "else": [
+        "new-horizons:location_setup_v2#1"
+      ]
+    },
+    "new-horizons:setup_agenda_v2:text": {
+      "kind": "story",
+      "text": "Construct the agenda deck using agenda 1a—“Quiet Night” and agenda 2a—“Digging Deeper (v. II).” Remove each other agenda from the game.",
+      "bullets": []
+    },
+    "new-horizons:set_aside_v2:text": {
+      "kind": "story",
+      "text": "Set the following cards aside, out of play: the Night Watchman enemy, each copy of the Blighted Worker enemy, each copy of the Echoing in Darkness treachery, the <b>Infected</b> and <b>Flying Terrors</b> encounter sets, and the Forged Permit and Sanguine Song story assets.",
+      "bullets": []
+    },
+    "new-horizons:remove_javier:text": {
+      "kind": "story",
+      "text": "Remove the Javier Rivera enemy and each copy of Factory Worker from the game.",
+      "bullets": []
+    },
+    "new-horizons:choose_setup": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "day",
+          "text": "Search during the day",
+          "effects": [],
+          "steps": [
+            "new-horizons:location_setup_v1",
+            "new-horizons:setup_agenda_v1:text",
+            "new-horizons:spawn_factory_workers:text",
+            "new-horizons:check_boss_difficulty",
+            "new-horizons:set_aside_v1:text",
+            "new-horizons:remove_night_watchman:text"
+          ]
+        },
+        {
+          "id": "night",
+          "text": "Search after dark",
+          "effects": [],
+          "steps": [
+            "new-horizons:location_setup_v2",
+            "new-horizons:setup_agenda_v2:text",
+            "new-horizons:check_boss_difficulty",
+            "new-horizons:set_aside_v2:text",
+            "new-horizons:remove_javier:text"
+          ]
+        }
+      ]
+    },
     "friends-in-low-places:intro": {
       "kind": "story",
       "text": "You and Detective Reynolds meet up at Velma’s Diner in the early morning to discuss what’s next. With the police department alerted to the situation at the meat packing facility, the detective has his eyes set on the person responsible.\n“We managed to get a name from those damned yahoos,” Reynolds says in low tones over his steaming mug of coffee. “Wilkes. Howard Wilkes. I looked into him some, and he’s a powerful guy. Lots of money. Lots of friends. Just built himself a brand new apartment in Northside. Calls it his penthouse. Apparently it’s some French design.” Reynolds shrugs. “Anyway, while the people at his factory have been either becoming cultists or becoming monsters, he’s been a bit of a recluse. Hasn’t left his place for weeks, and doesn’t let anyone in. At least, until tonight.”\nReynolds tells you how Mr. Wilkes is apparently throwing a party at his penthouse, an opportunity to throw his money around and impress some other businesspeople from outside of Arkham. “He wants to expand his distribution area, get that dirty meat of his to places outside of town. We can’t let that happen. We’ll need to get into that party. And I know just the guy to get us there.”\nAs if on cue, the bell above the diner door rings. You follow Detective Reynolds’s gaze to see a familiar face enter. A disheveled man with a round face and a bald head, wearing a fraying gray suit and green tie. Charlie Kane nods with familiarity to the waitress as he makes his way to your booth, sliding in beside Reynolds.\n“Glad you could make it, mayor,” the detective says.\nCharlie scowls at the remark. “This will need to be quick,” he says, looking over his shoulder.\n“Worried they’re still after you?” Reynolds asks.\nCharlie turns a serious look on the detective. “They always are.”\nTogether you go over the plan: Kane will get your names on the guest list for the party. You’ll arrive, where you and the detective will attempt to detain Wilkes. When Reynolds suggests having police backup on standby, Charlie shakes his head. “Wilkes will know what you’re planning,” the former mayor says. “If he gets wind the fuzz are waiting for him, there’s no telling what he’ll do.”\nCharlie glances out the windows of the diner, scanning the dark street outside as he speaks. “There’s one person in particular you should keep an eye out for: Priscilla Thomas. She’s a savvy businesswoman from Boston looking to make a distribution deal with Wilkes to get his product shipped throughout the state. It would be best to try and convince her this is a bad idea, however you need to. But, according to my contacts, Miss Thomas isn’t part of Wilkes’s organization, so… well, try using words, not fists.”",
@@ -809,17 +1165,17 @@
           },
           {
             "kind": "logHas",
-            "id": "completed_their_search",
+            "id": "completedTheirSearch",
             "section": "campaign_notes"
           },
           {
             "kind": "logHas",
-            "id": "spared_julia_stern",
+            "id": "sparedJuliaStern",
             "section": "campaign_notes"
           },
           {
             "kind": "logHas",
-            "id": "killed_julia_stern",
+            "id": "killedJuliaStern",
             "section": "campaign_notes"
           }
         ]
@@ -881,7 +1237,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "failed_to_stop_the_children_of_blood",
+          "key": "failedToStopTheChildrenOfBlood",
           "section": "campaign_notes",
           "value": true
         }
@@ -958,7 +1314,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "stopped_the_children_of_blood",
+          "key": "stoppedTheChildrenOfBlood",
           "section": "campaign_notes",
           "value": true
         }
@@ -1033,6 +1389,15 @@
         }
       ]
     },
+    "blood-money:add_cultist": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        }
+      ]
+    },
     "cob-epilogue:intro_1": {
       "kind": "story",
       "text": "With no other choice, you put the penthouse of Arkham’s Northside district behind you. No matter how far you go, you worry there won’t be enough distance between you and the monsters that ravaged the party and turned it into a bloodbath. It doesn’t take long for word of those events to spread throughout Arkham, and for more disappearances to take place as the creatures continue to hunt and feed in the dead of night. Eventually you decide to leave the city, relocating to Boston and thinking that at long last you can try and forget about the calamity on the Miskatonic.\nBut no matter how far you go, no matter how close you are to forgetting everything, in a matter of months you hear reports similar to those that led up to the chaos that plagued Arkham. The tainted blood of Zburamoarte and the machinations of the Cult of the Sanguine Order are spreading across New England. How long will it be before you have nowhere else to run?",
@@ -1052,7 +1417,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "spared_julia_stern",
+        "id": "sparedJuliaStern",
         "section": "campaign_notes"
       },
       "then": [
@@ -1069,7 +1434,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "stopped_the_children_of_blood",
+        "id": "stoppedTheChildrenOfBlood",
         "section": "campaign_notes"
       },
       "then": [
@@ -1084,12 +1449,12 @@
         "conditions": [
           {
             "kind": "logHas",
-            "id": "stopped_the_children_of_blood",
+            "id": "stoppedTheChildrenOfBlood",
             "section": "campaign_notes"
           },
           {
             "kind": "logHas",
-            "id": "defeated_zburamoarte",
+            "id": "defeatedZburamoarte",
             "section": "campaign_notes"
           }
         ]
@@ -1106,7 +1471,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "failed_to_stop_the_children_of_blood",
+        "id": "failedToStopTheChildrenOfBlood",
         "section": "campaign_notes"
       },
       "then": [

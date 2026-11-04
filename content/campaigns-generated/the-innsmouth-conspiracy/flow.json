@@ -270,6 +270,12 @@
       ]
     }
   },
+  "before": {
+    "the-vanishing-of-elina-harper": [
+      "the-vanishing-of-elina-harper:investigator_setup",
+      "the-vanishing-of-elina-harper:upgradeDecks"
+    ]
+  },
   "steps": {
     "campaign:setup_campaign_log:text": {
       "kind": "story",
@@ -282,73 +288,73 @@
         {
           "do": "record",
           "key": "burnham",
-          "section": "possible_suspects",
+          "section": "possibleSuspects",
           "value": true
         },
         {
           "do": "record",
           "key": "gilman",
-          "section": "possible_suspects",
+          "section": "possibleSuspects",
           "value": true
         },
         {
           "do": "record",
           "key": "little",
-          "section": "possible_suspects",
+          "section": "possibleSuspects",
           "value": true
         },
         {
           "do": "record",
           "key": "marsh",
-          "section": "possible_suspects",
+          "section": "possibleSuspects",
           "value": true
         },
         {
           "do": "record",
           "key": "allen",
-          "section": "possible_suspects",
+          "section": "possibleSuspects",
           "value": true
         },
         {
           "do": "record",
           "key": "friendly",
-          "section": "possible_suspects",
+          "section": "possibleSuspects",
           "value": true
         },
         {
           "do": "record",
-          "key": "innsmouth_jail",
-          "section": "possible_hideouts",
+          "key": "innsmouthJail",
+          "section": "possibleHideouts",
           "value": true
         },
         {
           "do": "record",
-          "key": "shoreward_slums",
-          "section": "possible_hideouts",
+          "key": "shorewardSlums",
+          "section": "possibleHideouts",
           "value": true
         },
         {
           "do": "record",
-          "key": "sawbone_alley",
-          "section": "possible_hideouts",
+          "key": "sawboneAlley",
+          "section": "possibleHideouts",
           "value": true
         },
         {
           "do": "record",
-          "key": "house_on_water_street",
-          "section": "possible_hideouts",
+          "key": "houseOnWaterStreet",
+          "section": "possibleHideouts",
           "value": true
         },
         {
           "do": "record",
-          "key": "order_of_dagon",
-          "section": "possible_hideouts",
+          "key": "orderOfDagon",
+          "section": "possibleHideouts",
           "value": true
         },
         {
           "do": "record",
-          "key": "new_church_green",
-          "section": "possible_hideouts",
+          "key": "newChurchGreen",
+          "section": "possibleHideouts",
           "value": true
         }
       ]
@@ -380,7 +386,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "possess_a_map_of_yhanthlei",
+              "key": "possessAMapOfYhanthlei",
               "section": "campaign_notes",
               "value": true
             }
@@ -398,7 +404,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "possess_the_key_to_yhanthlei",
+              "key": "possessTheKeyToYhanthlei",
               "section": "campaign_notes",
               "value": true
             }
@@ -433,7 +439,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "idol_brought_to_the_lighthouse",
+        "id": "idolBroughtToTheLighthouse",
         "section": "campaign_notes"
       },
       "then": [
@@ -462,7 +468,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "mantle_brought_to_the_lighthouse",
+        "id": "mantleBroughtToTheLighthouse",
         "section": "campaign_notes"
       },
       "then": [
@@ -491,7 +497,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "headdress_brought_to_the_lighthouse",
+        "id": "headdressBroughtToTheLighthouse",
         "section": "campaign_notes"
       },
       "then": [
@@ -585,7 +591,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "idol_brought_to_the_lighthouse",
+          "key": "idolBroughtToTheLighthouse",
           "section": "campaign_notes",
           "value": true
         }
@@ -643,7 +649,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "mantle_brought_to_the_lighthouse",
+          "key": "mantleBroughtToTheLighthouse",
           "section": "campaign_notes",
           "value": true
         }
@@ -701,7 +707,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "headdress_brought_to_the_lighthouse",
+          "key": "headdressBroughtToTheLighthouse",
           "section": "campaign_notes",
           "value": true
         }
@@ -737,17 +743,17 @@
         "conditions": [
           {
             "kind": "logHas",
-            "id": "headdress_brought_to_the_lighthouse",
+            "id": "headdressBroughtToTheLighthouse",
             "section": "campaign_notes"
           },
           {
             "kind": "logHas",
-            "id": "mantle_brought_to_the_lighthouse",
+            "id": "mantleBroughtToTheLighthouse",
             "section": "campaign_notes"
           },
           {
             "kind": "logHas",
-            "id": "idol_brought_to_the_lighthouse",
+            "id": "idolBroughtToTheLighthouse",
             "section": "campaign_notes"
           }
         ]
@@ -791,7 +797,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "tide_has_grown_stronger",
+          "key": "tideHasGrownStronger",
           "section": "campaign_notes",
           "value": true
         }
@@ -827,7 +833,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "terror_of_devil_reef_is_still_alive",
+          "key": "terrorOfDevilReefIsStillAlive",
           "section": "campaign_notes",
           "value": true
         }
@@ -838,7 +844,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "terror_of_devil_reef_is_dead",
+          "key": "terrorOfDevilReefIsDead",
           "section": "campaign_notes",
           "value": true
         }
@@ -904,7 +910,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "guardian_of_yhanthlei_is_dispatched",
+          "key": "guardianOfYhanthleiIsDispatched",
           "section": "campaign_notes",
           "value": true
         }
@@ -917,13 +923,13 @@
         "conditions": [
           {
             "kind": "logHas",
-            "id": "terror_of_devil_reef_is_dead",
+            "id": "terrorOfDevilReefIsDead",
             "section": "campaign_notes"
           },
           {
             "kind": "logHas",
-            "id": "lifecycle_of_a_deep_one",
-            "section": "memories_recovered"
+            "id": "lifecycleOfADeepOne",
+            "section": "memoriesRecovered"
           }
         ]
       },
@@ -949,7 +955,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "gateway_to_yhanthlei_recognizes_you_as_its_rightful_keeper",
+          "key": "gatewayToYhanthleiRecognizesYouAsItsRightfulKeeper",
           "section": "campaign_notes",
           "value": true
         }
@@ -959,7 +965,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "gatekeeper_has_been_defeated",
+        "id": "gatekeeperHasBeenDefeated",
         "section": "campaign_notes"
       },
       "then": [
@@ -976,7 +982,7 @@
         "conditions": [
           {
             "kind": "logHas",
-            "id": "gatekeeper_has_been_defeated",
+            "id": "gatekeeperHasBeenDefeated",
             "section": "campaign_notes"
           }
         ]
@@ -1046,7 +1052,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "reached_falcon_point_after_sunrise",
+          "key": "reachedFalconPointAfterSunrise",
           "section": "campaign_notes",
           "value": true
         }
@@ -1071,7 +1077,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "reached_falcon_point_before_sunrise",
+          "key": "reachedFalconPointBeforeSunrise",
           "section": "campaign_notes",
           "value": true
         }
@@ -1086,7 +1092,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "innsmouth_was_consumed_by_the_rising_tide",
+              "key": "innsmouthWasConsumedByTheRisingTide",
               "section": "campaign_notes",
               "value": true
             }
@@ -1116,7 +1122,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "made_it_safely_to_their_vehicles",
+        "id": "madeItSafelyToTheirVehicles",
         "section": "campaign_notes"
       },
       "then": [
@@ -1144,7 +1150,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "escaped_yhanthlei",
+          "key": "escapedYhanthlei",
           "section": "campaign_notes",
           "value": true
         }
@@ -1200,7 +1206,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "plot_of_the_deep_ones_was_thwarted",
+          "key": "plotOfTheDeepOnesWasThwarted",
           "section": "campaign_notes",
           "value": true
         }
@@ -1245,7 +1251,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "flood_has_begun",
+          "key": "floodHasBegun",
           "section": "campaign_notes",
           "value": true
         }
@@ -1274,7 +1280,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "agent_harpers_mission_is_complete",
+          "key": "agentHarpersMissionIsComplete",
           "section": "campaign_notes",
           "value": true
         }
@@ -1310,7 +1316,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "riches_of_the_deep_are_lost_forever",
+          "key": "richesOfTheDeepAreLostForever",
           "section": "campaign_notes",
           "value": true
         }
@@ -1321,7 +1327,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "agent_harpers_mission_is_complete_at_what_cost",
+          "key": "agentHarpersMissionIsCompleteAtWhatCost",
           "section": "campaign_notes",
           "value": true
         }
@@ -1371,7 +1377,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "riches_of_the_deep_are_destroyed_at_what_cost",
+          "key": "richesOfTheDeepAreDestroyedAtWhatCost",
           "section": "campaign_notes",
           "value": true
         }
@@ -1382,7 +1388,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "deep_ones_have_flooded_the_earth",
+          "key": "deepOnesHaveFloodedTheEarth",
           "section": "campaign_notes",
           "value": true
         }
@@ -1440,8 +1446,8 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "meeting_with_thomas_dawson",
-        "section": "memories_recovered"
+        "id": "meetingWithThomasDawson",
+        "section": "memoriesRecovered"
       },
       "then": [
         "puzzle-pieces:thomas_dawson_story",
@@ -1480,8 +1486,8 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "battle_with_a_horrifying_devil",
-        "section": "memories_recovered"
+        "id": "battleWithAHorrifyingDevil",
+        "section": "memoriesRecovered"
       },
       "then": [
         "puzzle-pieces:devil_fight_story",
@@ -1503,8 +1509,8 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "decision_to_stick_together",
-        "section": "memories_recovered"
+        "id": "decisionToStickTogether",
+        "section": "memoriesRecovered"
       },
       "then": [
         "puzzle-pieces:stayed_together_story",
@@ -1526,8 +1532,8 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "encounter_with_a_secret_cult",
-        "section": "memories_recovered"
+        "id": "encounterWithASecretCult",
+        "section": "memoriesRecovered"
       },
       "then": [
         "puzzle-pieces:encounter_with_a_secret_cult_story",
@@ -1545,7 +1551,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "dagon_has_awakened",
+          "key": "dagonHasAwakened",
           "section": "campaign_notes",
           "value": true
         }
@@ -1556,7 +1562,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "gatekeeper_has_been_defeated",
+          "key": "gatekeeperHasBeenDefeated",
           "section": "campaign_notes",
           "value": true
         }
@@ -1579,8 +1585,8 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "a_jailbreak",
-        "section": "memories_recovered"
+        "id": "aJailbreak",
+        "section": "memoriesRecovered"
       },
       "then": [
         "the-lair-of-dagon:ask_suspect_defeated"
@@ -1702,7 +1708,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "mission_succeeded",
+        "id": "missionSucceeded",
         "section": "campaign_notes"
       },
       "then": [
@@ -1716,7 +1722,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "mission_failed",
+        "id": "missionFailed",
         "section": "campaign_notes"
       },
       "then": [
@@ -1760,7 +1766,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "mission_failed",
+          "key": "missionFailed",
           "section": "campaign_notes",
           "value": true
         }
@@ -1771,11 +1777,25 @@
       "effects": [
         {
           "do": "record",
-          "key": "mission_succeeded",
+          "key": "missionSucceeded",
           "section": "campaign_notes",
           "value": true
         }
       ]
+    },
+    "the-vanishing-of-elina-harper:investigator_setup": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 0,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-vanishing-of-elina-harper:upgradeDecks": {
+      "kind": "upgradeDecks"
     },
     "tic-epilogue:epilogue_1": {
       "kind": "story",
@@ -1803,8 +1823,8 @@
       "effects": [
         {
           "do": "record",
-          "key": "horrific_truth",
-          "section": "memories_recovered",
+          "key": "horrificTruth",
+          "section": "memoriesRecovered",
           "value": true
         }
       ]
@@ -1814,7 +1834,7 @@
       "condition": {
         "kind": "logCount",
         "id": "$num_entries",
-        "section": "memories_recovered",
+        "section": "memoriesRecovered",
         "min": 14,
         "max": 14
       },

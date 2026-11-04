@@ -32,6 +32,7 @@
       ]
     }
   },
+  "before": {},
   "steps": {
     "fortune-and-folly-checkpoint:checkpoint": {
       "kind": "story",
@@ -54,7 +55,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_found_a_vent",
+              "key": "fofFoundAVent",
               "section": "hidden",
               "value": true
             }
@@ -67,7 +68,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_impersonated_a_high_roller",
+              "key": "fofImpersonatedAHighRoller",
               "section": "hidden",
               "value": true
             }
@@ -80,7 +81,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_convinced_isamara",
+              "key": "fofConvincedIsamara",
               "section": "hidden",
               "value": true
             }
@@ -93,7 +94,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_obtained_an_uniform",
+              "key": "fofObtainedAnUniform",
               "section": "hidden",
               "value": true
             }
@@ -106,7 +107,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_stole_keys",
+              "key": "fofStoleKeys",
               "section": "hidden",
               "value": true
             }
@@ -119,7 +120,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_cleaned_out_the_house",
+              "key": "fofCleanedOutTheHouse",
               "section": "hidden",
               "value": true
             }
@@ -143,7 +144,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_need_time_to_rest",
+              "key": "fofNeedTimeToRest",
               "section": "hidden",
               "value": true
             }
@@ -185,13 +186,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_found_a_vent",
+              "key": "fofFoundAVent",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_found_a_vent",
+              "key": "fofFoundAVent",
               "section": "hidden",
               "value": true
             }
@@ -204,13 +205,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_impersonated_a_high_roller",
+              "key": "fofImpersonatedAHighRoller",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_impersonated_a_high_roller",
+              "key": "fofImpersonatedAHighRoller",
               "section": "hidden",
               "value": true
             }
@@ -223,13 +224,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_convinced_isamara",
+              "key": "fofConvincedIsamara",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_convinced_isamara",
+              "key": "fofConvincedIsamara",
               "section": "hidden",
               "value": true
             }
@@ -242,13 +243,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_obtained_an_uniform",
+              "key": "fofObtainedAnUniform",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_obtained_an_uniform",
+              "key": "fofObtainedAnUniform",
               "section": "hidden",
               "value": true
             }
@@ -261,13 +262,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_stole_keys",
+              "key": "fofStoleKeys",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_stole_keys",
+              "key": "fofStoleKeys",
               "section": "hidden",
               "value": true
             }
@@ -280,13 +281,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_cleaned_out_the_house",
+              "key": "fofCleanedOutTheHouse",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_cleaned_out_the_house",
+              "key": "fofCleanedOutTheHouse",
               "section": "hidden",
               "value": true
             }
@@ -300,7 +301,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "fof_need_time_to_rest",
+          "key": "fofNeedTimeToRest",
           "section": "campaign_notes",
           "value": true
         }
@@ -316,7 +317,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_need_time_to_rest",
+              "key": "fofNeedTimeToRest",
               "section": "hidden",
               "value": true
             }
@@ -353,7 +354,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "fof_wellspring_clues",
+          "id": "fofWellspringClues",
           "section": "campaign_notes",
           "op": "set",
           "value": "input"
@@ -370,7 +371,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "fof_stashed",
+          "key": "fofStashed",
           "section": "campaign_notes",
           "value": true
         }
@@ -392,7 +393,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "continue_fortune_and_folly_part_2",
+              "key": "continueFortuneAndFollyPart2",
               "section": "hidden",
               "value": true
             }

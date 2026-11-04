@@ -22,6 +22,7 @@
     "07277",
     "07279"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -39,7 +40,6 @@
         "07101",
         "07100",
         "07300",
-        "07300b",
         "07293",
         "07292a",
         "07292b"
@@ -115,7 +115,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "dagon_has_awakened",
+          "key": "dagonHasAwakened",
           "value": true
         },
         {

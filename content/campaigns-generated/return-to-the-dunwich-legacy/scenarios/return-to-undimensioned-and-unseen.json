@@ -21,6 +21,9 @@
     "02238",
     "02239"
   ],
+  "setupCards": [
+    "51041"
+  ],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -142,7 +145,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "no_brood_escaped",
+          "key": "noBroodEscaped",
           "value": true
         },
         {

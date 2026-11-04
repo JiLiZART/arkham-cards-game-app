@@ -28,6 +28,7 @@
     "13004",
     "13005"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -70,8 +71,12 @@
       "effects": [
         {
           "do": "record",
-          "key": "failed_to_stop_julia_stern",
+          "key": "failedToStopJuliaStern",
           "value": true
+        },
+        {
+          "do": "addChaosToken",
+          "token": "blood"
         },
         {
           "do": "earnCard",
@@ -92,7 +97,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "spared_julia_stern",
+          "key": "sparedJuliaStern",
           "value": true
         },
         {
@@ -109,7 +114,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "killed_julia_stern",
+          "key": "killedJuliaStern",
           "value": true
         },
         {
@@ -126,7 +131,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "failed_to_stop_julia_stern",
+          "key": "failedToStopJuliaStern",
           "value": true
         },
         {

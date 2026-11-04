@@ -22,6 +22,7 @@
   "agendas": [
     "90005"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",

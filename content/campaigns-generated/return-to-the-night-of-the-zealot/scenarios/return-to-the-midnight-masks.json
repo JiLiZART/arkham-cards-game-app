@@ -20,6 +20,9 @@
   "agendas": [
     "50026a"
   ],
+  "setupCards": [
+    "50025"
+  ],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -191,7 +194,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "past_midnight",
+          "key": "pastMidnight",
           "value": true
         },
         {

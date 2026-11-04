@@ -206,6 +206,7 @@ describe("resolutionSteps", () => {
           order: ["the-gathering"],
           interludes: {},
           resolutions: { "the-gathering": { R1: ["a"] } },
+          before: {},
           steps: { a: { kind: "story" as const, text: "x", bullets: [] } },
         },
       },

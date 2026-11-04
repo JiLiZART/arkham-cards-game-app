@@ -317,3 +317,55 @@ describe("checkCampaignCards", () => {
     expect(e.map((x) => x.path)).toEqual(["cards.0.agenda"]);
   });
 });
+
+describe("Return-to setup cards and removed cards in coverage", () => {
+  let disk: ContentDb;
+  beforeAll(async () => {
+    disk = (await loadContentFromDisk()).db;
+  });
+  const RTG = "return-to-the-gathering";
+
+  it("a scenario's setup card is one of the cards it uses, and works when it prints no token line", () => {
+    const s = disk.scenarios[RTG];
+    expect(s.setupCards).toEqual(["50011"]); // the import lists it
+    disk.scenarios[RTG] = { ...s, setupCards: [] };
+    const before = scenarioCoverage(disk, RTG).cards;
+    disk.scenarios[RTG] = { ...s, setupCards: ["50011"] };
+    try {
+      // 50011 is already a card of a set it gathers: listed as its setup card, it works
+      const after = scenarioCoverage(disk, RTG).cards;
+      expect(after.total).toBe(before.total);
+      expect(after.works).toBe(before.works + 1);
+    } finally {
+      disk.scenarios[RTG] = s;
+    }
+  });
+
+  it("cards a remove step takes out of the scenario are not counted as used by it", () => {
+    const s = disk.scenarios[RTG];
+    const before = scenarioCoverage(disk, RTG).cards.total;
+    // three cards of a set it gathers
+    const gone = (disk.encounterSets[s.encounterSets[0]] ?? []).slice(0, 3);
+    disk.scenarios[RTG] = { ...s, setup: [...s.setup, { do: "remove", codes: gone }] };
+    try {
+      expect(scenarioCoverage(disk, RTG).cards.total).toBe(before - gone.length);
+    } finally {
+      disk.scenarios[RTG] = s;
+    }
+  });
+
+  it("a conditional removal still counts the card: the scenario sometimes plays it", () => {
+    const s = disk.scenarios[RTG];
+    const before = scenarioCoverage(disk, RTG).cards.total;
+    const gone = (disk.encounterSets[s.encounterSets[0]] ?? []).slice(0, 1);
+    disk.scenarios[RTG] = {
+      ...s,
+      setup: [...s.setup, { do: "remove", codes: gone, when: { logHas: "zz" } }],
+    };
+    try {
+      expect(scenarioCoverage(disk, RTG).cards.total).toBe(before);
+    } finally {
+      disk.scenarios[RTG] = s;
+    }
+  });
+});

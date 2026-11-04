@@ -105,6 +105,7 @@
       "elderSign"
     ]
   },
+  "options": [],
   "logLabels": {},
   "packs": [
     "core",
@@ -131,17 +132,17 @@
       "label": "Campaign Notes"
     },
     {
-      "id": "memories_recovered",
+      "id": "memoriesRecovered",
       "kind": "entries",
       "label": "Memories Recovered"
     },
     {
-      "id": "possible_suspects",
+      "id": "possibleSuspects",
       "kind": "entries",
       "label": "Possible Suspects"
     },
     {
-      "id": "possible_hideouts",
+      "id": "possibleHideouts",
       "kind": "entries",
       "label": "Possible Hideouts"
     }

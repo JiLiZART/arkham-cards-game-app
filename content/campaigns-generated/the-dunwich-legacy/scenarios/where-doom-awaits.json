@@ -23,6 +23,7 @@
     "02275",
     "02276"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -120,7 +121,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "entered_the_gate",
+          "key": "enteredTheGate",
           "value": true
         },
         {
@@ -137,7 +138,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "yog_sothoth_escaped",
+          "key": "yogSothothEscaped",
           "value": true
         },
         {

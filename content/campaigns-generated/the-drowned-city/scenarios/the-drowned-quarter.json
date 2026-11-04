@@ -21,6 +21,7 @@
     "11537",
     "11538"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -33,9 +34,7 @@
       "codes": [
         "11552",
         "11549",
-        "11549b",
-        "11550",
-        "11550b"
+        "11550"
       ]
     },
     {
@@ -120,7 +119,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "barrier_node",
+          "key": "barrierNode",
           "value": true
         },
         {
@@ -137,7 +136,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "the_power_was_diverted",
+          "key": "thePowerWasDiverted",
           "value": true
         },
         {
@@ -154,7 +153,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "the_drowned_quarter",
+          "key": "theDrownedQuarter",
           "value": true
         },
         {

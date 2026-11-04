@@ -22,6 +22,7 @@
     "06170",
     "06171"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -118,12 +119,12 @@
       "effects": [
         {
           "do": "record",
-          "key": "randolph_survived_descent",
+          "key": "randolphSurvivedDescent",
           "value": true
         },
         {
           "do": "record",
-          "key": "possess_silver_key",
+          "key": "possessSilverKey",
           "value": true
         },
         {
@@ -161,7 +162,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "randolph_survived_descent",
+          "key": "randolphSurvivedDescent",
           "value": true
         },
         {
@@ -182,7 +183,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "randolph_did_not_survive_descent",
+          "key": "randolphDidNotSurviveDescent",
           "value": true
         },
         {

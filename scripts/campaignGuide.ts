@@ -13,10 +13,11 @@ const TOKEN: Record<string, ChaosToken> = {
   elder_thing: "elderThing",
   auto_fail: "autoFail",
   elder_sign: "elderSign",
+  blood: "blood",
 };
 const NUMBER = /^([+-]?\d+)$/;
 
-/** a guide token as the engine's token, or null for the ones it doesn't know (frost, blood, bless, curse) */
+/** a guide token as the engine's token, or null for the ones it doesn't know (frost, bless, curse) */
 export function tokenName(t: string): ChaosToken | null {
   if (TOKEN[t]) return TOKEN[t];
   const m = NUMBER.exec(t);
@@ -37,6 +38,46 @@ export function chaosBag(tokens: string[]): { bag: ChaosToken[]; dropped: string
 }
 
 const CODE = /^(\d{5}[a-z]?)(?:_back)?$/;
+
+/** log keys a hand-written base campaign names otherwise than its Return-to box's guide, by guide campaign id */
+export const LOG_ALIASES: Record<string, Record<string, string>> = {
+  rtnotz: { cultists_escaped: "cultistsGotAway" },
+};
+/** the section ids the engine itself names, kept as they are */
+const ENGINE_SECTIONS = new Set(["campaign_notes", "hidden"]);
+
+/** a guide's campaign log id as the game's key: camelCase, or the base campaign's word for it */
+export function logKey(id: string, guideCampaign?: string): string {
+  if (id.startsWith("$") || ENGINE_SECTIONS.has(id)) return id;
+  return (
+    (guideCampaign && LOG_ALIASES[guideCampaign]?.[id]) ??
+    id.replace(/_([a-z0-9])/g, (_, c: string) => c.toUpperCase())
+  );
+}
+
+/**
+ * A guide (campaign and scenarios) with every campaign log id and section id as the game's key, so a generated flow,
+ * its scenarios' resolutions and the campaign's log sections all agree with the hand-written campaigns' camelCase
+ */
+export function camelizeGuide(guide: Raw): Raw {
+  const id: string = guide.campaign.id;
+  const walk = (x: Raw): Raw => {
+    if (Array.isArray(x)) return x.map(walk);
+    if (!x || typeof x !== "object") return x;
+    const out: Raw = {};
+    for (const [k, v] of Object.entries(x)) out[k] = walk(v);
+    if (typeof x.type === "string" && x.type.startsWith("campaign_log")) {
+      if (typeof x.id === "string") out.id = logKey(x.id, id);
+      if (typeof x.section === "string") out.section = logKey(x.section, id);
+    }
+    return out;
+  };
+  const g = walk(guide);
+  g.campaign.campaign_log = (g.campaign.campaign_log ?? []).map((sec: Raw) =>
+    typeof sec.id === "string" ? { ...sec, id: logKey(sec.id, id) } : sec,
+  );
+  return g;
+}
 
 /** the guide's location grid: each code's [column, row], connections between orthogonal neighbours, codes in reading order */
 export function layoutOf(grid: string[][]): {

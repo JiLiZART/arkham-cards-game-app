@@ -27,6 +27,7 @@
     "09504",
     "09505"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -40,6 +41,26 @@
         "09518",
         "09519a",
         "09519b"
+      ]
+    },
+    {
+      "do": "remove",
+      "codes": [
+        "01121a",
+        "01121b",
+        "01122",
+        "01123",
+        "01124",
+        "01125",
+        "01126",
+        "01127",
+        "01128",
+        "01129",
+        "01130",
+        "01131",
+        "01132",
+        "01133",
+        "01134"
       ]
     },
     {
@@ -118,7 +139,7 @@
         },
         {
           "do": "record",
-          "key": "have_not_seen_the_last_of_the_red_gloved_man",
+          "key": "haveNotSeenTheLastOfTheRedGlovedMan",
           "value": true
         }
       ]
@@ -135,7 +156,7 @@
         },
         {
           "do": "record",
-          "key": "have_not_seen_the_last_of_the_red_gloved_man",
+          "key": "haveNotSeenTheLastOfTheRedGlovedMan",
           "value": true
         }
       ]
@@ -152,7 +173,7 @@
         },
         {
           "do": "record",
-          "key": "have_not_seen_the_last_of_the_red_gloved_man",
+          "key": "haveNotSeenTheLastOfTheRedGlovedMan",
           "value": true
         }
       ]
@@ -169,7 +190,7 @@
         },
         {
           "do": "record",
-          "key": "have_not_seen_the_last_of_the_red_gloved_man",
+          "key": "haveNotSeenTheLastOfTheRedGlovedMan",
           "value": true
         }
       ]

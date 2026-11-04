@@ -23,6 +23,7 @@
     "03161",
     "03162"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -130,7 +131,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "king_claimed_victims",
+          "key": "kingClaimedVictims",
           "value": true
         },
         {
@@ -155,7 +156,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "attacked_as_you_escaped_arkham",
+          "key": "attackedAsYouEscapedArkham",
           "value": true
         },
         {
@@ -186,7 +187,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "escaped_the_asylum",
+          "key": "escapedTheAsylum",
           "value": true
         },
         {

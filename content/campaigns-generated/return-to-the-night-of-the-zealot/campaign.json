@@ -84,6 +84,7 @@
       "elderSign"
     ]
   },
+  "options": [],
   "logLabels": {},
   "packs": [
     "core",
@@ -105,12 +106,12 @@
       "label": "Campaign Notes"
     },
     {
-      "id": "cultists_interrogated",
+      "id": "cultistsInterrogated",
       "kind": "entries",
       "label": "Cultists We Interrogated"
     },
     {
-      "id": "cultists_escaped",
+      "id": "cultistsGotAway",
       "kind": "entries",
       "label": "Cultists Who Got Away"
     }

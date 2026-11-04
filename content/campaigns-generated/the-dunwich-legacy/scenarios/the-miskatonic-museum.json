@@ -22,6 +22,7 @@
     "02120",
     "02121"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -119,7 +120,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "failed_to_recover_necronomicon",
+          "key": "failedToRecoverNecronomicon",
           "value": true
         },
         {
@@ -136,7 +137,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "destroyed_necronomicon",
+          "key": "destroyedNecronomicon",
           "value": true
         },
         {
@@ -153,7 +154,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "took_necronomicon",
+          "key": "tookNecronomicon",
           "value": true
         },
         {

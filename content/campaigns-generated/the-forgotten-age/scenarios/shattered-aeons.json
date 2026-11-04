@@ -22,6 +22,7 @@
     "04316",
     "04317"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -119,7 +120,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "mended_tear_in_time",
+          "key": "mendedTearInTime",
           "value": true
         },
         {
@@ -142,7 +143,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "investigators_saved_serpents",
+          "key": "investigatorsSavedSerpents",
           "value": true
         },
         {
@@ -159,7 +160,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "investigators_saved_yithians",
+          "key": "investigatorsSavedYithians",
           "value": true
         },
         {
@@ -176,7 +177,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "fabric_of_time_unwoven",
+          "key": "fabricOfTimeUnwoven",
           "value": true
         },
         {
@@ -199,7 +200,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "turned_back_time",
+          "key": "turnedBackTime",
           "value": true
         },
         {

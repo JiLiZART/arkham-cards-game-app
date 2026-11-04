@@ -21,6 +21,7 @@
   "agendas": [
     "06040"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -96,7 +97,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "saved_by_randolph_carter",
+          "key": "savedByRandolphCarter",
           "value": true
         },
         {
@@ -118,7 +119,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "cats_collected_their_tribute",
+          "key": "catsCollectedTheirTribute",
           "value": true
         },
         {
@@ -140,7 +141,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "parleyed_with_zoogs",
+          "key": "parleyedWithZoogs",
           "value": true
         },
         {

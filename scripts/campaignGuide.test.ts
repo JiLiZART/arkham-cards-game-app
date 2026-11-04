@@ -10,6 +10,9 @@ import {
   layoutOf,
   resolutionEffects,
   tokenEffects,
+  camelizeGuide,
+  logKey,
+  tokenName,
 } from "./campaignGuide";
 
 describe("chaosBag", () => {
@@ -227,5 +230,62 @@ describe("isOfficial and kebab", () => {
   });
   it("guide ids become file ids", () => {
     expect(kebab("extracurricular_activity")).toBe("extracurricular-activity");
+  });
+});
+
+describe("campaign log keys in camelCase", () => {
+  it("logKey camelCases a guide id, keeps the engine's sections and inputs, and takes a base campaign's alias", () => {
+    expect(logKey("house_standing")).toBe("houseStanding");
+    expect(logKey("act_2_reached")).toBe("act2Reached");
+    expect(logKey("campaign_notes")).toBe("campaign_notes");
+    expect(logKey("hidden")).toBe("hidden");
+    expect(logKey("$input_value")).toBe("$input_value");
+    expect(logKey("cultists_escaped", "rtnotz")).toBe("cultistsGotAway");
+    expect(logKey("cultists_escaped", "dwl")).toBe("cultistsEscaped");
+  });
+
+  it("camelizeGuide rewrites the ids and sections of every campaign log effect and condition, and the sections", () => {
+    const g = camelizeGuide({
+      campaign: {
+        id: "rtnotz",
+        campaign_log: [{ id: "cultists_escaped", title: "x" }, { id: "campaign_notes" }],
+      },
+      scenarios: [
+        {
+          steps: [
+            {
+              id: "s1",
+              effects: [{ type: "campaign_log", id: "house_burned", section: "campaign_notes" }],
+            },
+            {
+              id: "s2",
+              condition: {
+                type: "campaign_log_cards",
+                section: "cultists_escaped",
+                id: "$input_value",
+              },
+            },
+            { id: "s3", effects: [{ type: "add_chaos_token", id: "not_a_log_id" }] },
+          ],
+        },
+      ],
+    });
+    expect(g.campaign.campaign_log.map((s: { id: string }) => s.id)).toEqual([
+      "cultistsGotAway",
+      "campaign_notes",
+    ]);
+    expect(g.scenarios[0].steps[0].effects[0]).toMatchObject({
+      id: "houseBurned",
+      section: "campaign_notes",
+    });
+    expect(g.scenarios[0].steps[1].condition).toMatchObject({
+      section: "cultistsGotAway",
+      id: "$input_value",
+    });
+    expect(g.scenarios[0].steps[2].effects[0].id).toBe("not_a_log_id");
+  });
+
+  it("the blood token is a chaos token", () => {
+    expect(tokenName("blood")).toBe("blood");
   });
 });

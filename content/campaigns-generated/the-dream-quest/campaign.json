@@ -77,6 +77,7 @@
       "elderSign"
     ]
   },
+  "options": [],
   "logLabels": {},
   "packs": [
     "core",
@@ -99,7 +100,7 @@
       "label": "Campaign Notes"
     },
     {
-      "id": "evidence_of_kadath",
+      "id": "evidenceOfKadath",
       "kind": "count",
       "label": "Evidence of Kadath"
     }

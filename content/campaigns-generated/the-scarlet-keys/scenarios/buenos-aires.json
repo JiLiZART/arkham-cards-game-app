@@ -21,6 +21,7 @@
     "09562",
     "09546"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -137,7 +138,7 @@
         },
         {
           "do": "record",
-          "key": "have_not_seen_the_last_of_la_chica_roja",
+          "key": "haveNotSeenTheLastOfLaChicaRoja",
           "value": true
         }
       ]
@@ -154,12 +155,12 @@
         },
         {
           "do": "record",
-          "key": "have_not_seen_the_last_of_the_sanguine_watcher",
+          "key": "haveNotSeenTheLastOfTheSanguineWatcher",
           "value": true
         },
         {
           "do": "record",
-          "key": "chica_roja_is_on_your_side",
+          "key": "chicaRojaIsOnYourSide",
           "value": true
         }
       ]
@@ -182,7 +183,7 @@
         },
         {
           "do": "record",
-          "key": "have_not_seen_the_last_of_la_chica_roja",
+          "key": "haveNotSeenTheLastOfLaChicaRoja",
           "value": true
         }
       ]

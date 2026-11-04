@@ -20,6 +20,7 @@
     "06120",
     "06121"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -112,7 +113,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "someone_escaped",
+          "key": "someoneEscaped",
           "value": true
         },
         {
@@ -123,12 +124,12 @@
         },
         {
           "do": "record",
-          "key": "virgil_was_captured",
+          "key": "virgilWasCaptured",
           "value": true
         },
         {
           "do": "record",
-          "key": "randolph_eluded_capture",
+          "key": "randolphEludedCapture",
           "value": true
         }
       ]
@@ -139,7 +140,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "everyone_captured",
+          "key": "everyoneCaptured",
           "value": true
         },
         {
@@ -150,12 +151,12 @@
         },
         {
           "do": "record",
-          "key": "virgil_was_captured",
+          "key": "virgilWasCaptured",
           "value": true
         },
         {
           "do": "record",
-          "key": "randolph_was_captured",
+          "key": "randolphWasCaptured",
           "value": true
         }
       ]

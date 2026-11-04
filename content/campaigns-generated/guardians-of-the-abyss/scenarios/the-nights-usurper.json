@@ -19,6 +19,7 @@
     "83017",
     "83018"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -118,7 +119,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "tnu_day_of_reckoning_is_coming",
+          "key": "tnuDayOfReckoningIsComing",
           "value": true
         },
         {
@@ -135,17 +136,17 @@
       "effects": [
         {
           "do": "record",
-          "key": "tnu_the_abyss_was_saved",
+          "key": "tnuTheAbyssWasSaved",
           "value": true
         },
         {
           "do": "record",
-          "key": "tes_taken_by_the_abyss",
+          "key": "tesTakenByTheAbyss",
           "value": true
         },
         {
           "do": "record",
-          "key": "tnu_taken_by_the_abyss",
+          "key": "tnuTakenByTheAbyss",
           "value": true
         },
         {
@@ -167,7 +168,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "tnu_joined_xzharah",
+          "key": "tnuJoinedXzharah",
           "value": true
         },
         {

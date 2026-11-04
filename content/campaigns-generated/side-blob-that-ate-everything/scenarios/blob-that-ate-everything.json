@@ -16,6 +16,7 @@
     "85003",
     "85004"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -118,7 +119,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "blob_devoured_universe",
+          "key": "blobDevouredUniverse",
           "value": true
         },
         {
@@ -135,7 +136,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "blob_contained",
+          "key": "blobContained",
           "value": true
         },
         {

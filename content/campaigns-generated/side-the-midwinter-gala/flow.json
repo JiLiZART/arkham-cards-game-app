@@ -34,6 +34,11 @@
       ]
     }
   },
+  "before": {
+    "the-midwinter-gala": [
+      "the-midwinter-gala:choose_faction"
+    ]
+  },
   "steps": {
     "fortune-and-folly-checkpoint:checkpoint": {
       "kind": "story",
@@ -56,7 +61,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_found_a_vent",
+              "key": "fofFoundAVent",
               "section": "hidden",
               "value": true
             }
@@ -69,7 +74,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_impersonated_a_high_roller",
+              "key": "fofImpersonatedAHighRoller",
               "section": "hidden",
               "value": true
             }
@@ -82,7 +87,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_convinced_isamara",
+              "key": "fofConvincedIsamara",
               "section": "hidden",
               "value": true
             }
@@ -95,7 +100,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_obtained_an_uniform",
+              "key": "fofObtainedAnUniform",
               "section": "hidden",
               "value": true
             }
@@ -108,7 +113,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_stole_keys",
+              "key": "fofStoleKeys",
               "section": "hidden",
               "value": true
             }
@@ -121,7 +126,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_cleaned_out_the_house",
+              "key": "fofCleanedOutTheHouse",
               "section": "hidden",
               "value": true
             }
@@ -145,7 +150,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_need_time_to_rest",
+              "key": "fofNeedTimeToRest",
               "section": "hidden",
               "value": true
             }
@@ -187,13 +192,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_found_a_vent",
+              "key": "fofFoundAVent",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_found_a_vent",
+              "key": "fofFoundAVent",
               "section": "hidden",
               "value": true
             }
@@ -206,13 +211,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_impersonated_a_high_roller",
+              "key": "fofImpersonatedAHighRoller",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_impersonated_a_high_roller",
+              "key": "fofImpersonatedAHighRoller",
               "section": "hidden",
               "value": true
             }
@@ -225,13 +230,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_convinced_isamara",
+              "key": "fofConvincedIsamara",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_convinced_isamara",
+              "key": "fofConvincedIsamara",
               "section": "hidden",
               "value": true
             }
@@ -244,13 +249,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_obtained_an_uniform",
+              "key": "fofObtainedAnUniform",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_obtained_an_uniform",
+              "key": "fofObtainedAnUniform",
               "section": "hidden",
               "value": true
             }
@@ -263,13 +268,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_stole_keys",
+              "key": "fofStoleKeys",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_stole_keys",
+              "key": "fofStoleKeys",
               "section": "hidden",
               "value": true
             }
@@ -282,13 +287,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_cleaned_out_the_house",
+              "key": "fofCleanedOutTheHouse",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_cleaned_out_the_house",
+              "key": "fofCleanedOutTheHouse",
               "section": "hidden",
               "value": true
             }
@@ -302,7 +307,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "fof_need_time_to_rest",
+          "key": "fofNeedTimeToRest",
           "section": "campaign_notes",
           "value": true
         }
@@ -318,7 +323,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_need_time_to_rest",
+              "key": "fofNeedTimeToRest",
               "section": "hidden",
               "value": true
             }
@@ -355,7 +360,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "fof_wellspring_clues",
+          "id": "fofWellspringClues",
           "section": "campaign_notes",
           "op": "set",
           "value": "input"
@@ -372,7 +377,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "fof_stashed",
+          "key": "fofStashed",
           "section": "campaign_notes",
           "value": true
         }
@@ -394,7 +399,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "continue_fortune_and_folly_part_2",
+              "key": "continueFortuneAndFollyPart2",
               "section": "hidden",
               "value": true
             }
@@ -444,7 +449,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "tmg_side_story_mode",
+        "id": "tmgSideStoryMode",
         "section": "hidden"
       },
       "then": [],
@@ -472,7 +477,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "tmg_calculate_score",
+              "key": "tmgCalculateScore",
               "section": "hidden",
               "value": true
             }
@@ -488,7 +493,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "tmg_score_tally",
+          "id": "tmgScoreTally",
           "section": "hidden",
           "op": "add",
           "value": "input"
@@ -503,7 +508,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "tmg_score_tally",
+          "id": "tmgScoreTally",
           "section": "hidden",
           "op": "add",
           "value": "input"
@@ -520,7 +525,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "tmg_score_tally_spellbound",
+              "key": "tmgScoreTallySpellbound",
               "section": "hidden",
               "value": true
             }
@@ -534,7 +539,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "tmg_score_tally",
+          "id": "tmgScoreTally",
           "section": "hidden",
           "op": "add",
           "value": 4
@@ -550,7 +555,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "tmg_score_tally_spellbound",
+        "id": "tmgScoreTallySpellbound",
         "section": "hidden"
       },
       "then": [],
@@ -574,7 +579,7 @@
           "effects": [
             {
               "do": "count",
-              "id": "tmg_score_tally",
+              "id": "tmgScoreTally",
               "section": "hidden",
               "op": "add",
               "value": 5
@@ -590,7 +595,7 @@
           "effects": [
             {
               "do": "count",
-              "id": "tmg_score_tally",
+              "id": "tmgScoreTally",
               "section": "hidden",
               "op": "add",
               "value": 5
@@ -617,7 +622,7 @@
           "effects": [
             {
               "do": "count",
-              "id": "tmg_score_tally",
+              "id": "tmgScoreTally",
               "section": "hidden",
               "op": "add",
               "value": 4
@@ -643,7 +648,7 @@
           "effects": [
             {
               "do": "count",
-              "id": "tmg_score_tally",
+              "id": "tmgScoreTally",
               "section": "hidden",
               "op": "add",
               "value": 3
@@ -664,7 +669,7 @@
           "effects": [
             {
               "do": "count",
-              "id": "tmg_score_tally",
+              "id": "tmgScoreTally",
               "section": "hidden",
               "op": "add",
               "value": 3
@@ -685,7 +690,7 @@
           "effects": [
             {
               "do": "count",
-              "id": "tmg_score_tally",
+              "id": "tmgScoreTally",
               "section": "hidden",
               "op": "add",
               "value": 4
@@ -706,7 +711,7 @@
           "effects": [
             {
               "do": "count",
-              "id": "tmg_score_tally",
+              "id": "tmgScoreTally",
               "section": "hidden",
               "op": "add",
               "value": 3
@@ -727,7 +732,7 @@
           "effects": [
             {
               "do": "count",
-              "id": "tmg_score_tally",
+              "id": "tmgScoreTally",
               "section": "hidden",
               "op": "add",
               "value": 3
@@ -767,7 +772,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "tmg_score_tally",
+          "id": "tmgScoreTally",
           "section": "hidden",
           "op": "add",
           "value": 3
@@ -784,7 +789,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "tmg_score_tally",
+          "id": "tmgScoreTally",
           "section": "hidden",
           "op": "add",
           "value": 6
@@ -863,7 +868,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "tmg_score_tally",
+          "id": "tmgScoreTally",
           "section": "hidden",
           "op": "add",
           "value": "input"
@@ -878,7 +883,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "tmg_score_tally",
+          "id": "tmgScoreTally",
           "section": "hidden",
           "op": "set",
           "value": "input"
@@ -890,7 +895,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "tmg_calculate_score",
+        "id": "tmgCalculateScore",
         "section": "hidden"
       },
       "then": [
@@ -918,6 +923,117 @@
     },
     "the-midwinter-gala:upgradeDecks": {
       "kind": "upgradeDecks"
+    },
+    "the-midwinter-gala:foundation_story": {
+      "kind": "story",
+      "text": "\"Ah, you came,\" the woman says in a light Russian accent. \"I am agent Valeriya Antonova. I am here on behalf of the authorities.\" When you ask which authorities, she simply nods. \"Yes. The authorities.\" She explains that she and her \"authorities\" are investigating strange disappearances in the area and abroad, and they suspect the Lantern Club and Declan Pearce are to be blamed. The agent seems to loosen up as she knocks back a flute of champagne. \"We also believe this Jewel may be the source of some highly unusual paracausal phenomena. Be prepared for anything.\"",
+      "bullets": []
+    },
+    "the-midwinter-gala:university_story": {
+      "kind": "story",
+      "text": "You approach Dean Phillips and introduce yourself. The painting he was examining is erily lifelike, depicting a humanoid creature covered in fur, with multiple arms, each with a clawed talon. \"Quite imaginative, these Lantern Club folks,\" he laughs. \"I see you received my missive. Thank you for coming, I must admit, the university is more than a little curious to study this ancient gem. The Jewel was rumored to have been housed in a Tibetan monastery until it vanished in the twelfth century. I simply couldn't pass up the opportunity!\" he exclaims. \"Of course, if there were some way to examine the Jewel more thoroughly...\"",
+      "bullets": []
+    },
+    "the-midwinter-gala:syndicate_story": {
+      "kind": "story",
+      "text": "The man raises his glass in a mock toast as you approach. \"Johnny Valone. Glad you could make it to this mutually beneficial business arrangement.\" The man finishes his drink and casually hands the empty glass to a nearby socialite, who looks equal parts confused and offended. Valone is seemingly deaf to their protest as he leads you to a deserted study. \"Your reputation precedes you. Or rather, it doesn't precede you. Nobody'll suspect your involvement, which is why I've asked for your help in procuring this Jewel of Something-Or-Another. Its a big score. I can promise you we'll make it worth your while.\"",
+      "bullets": []
+    },
+    "the-midwinter-gala:lodge_story": {
+      "kind": "story",
+      "text": "Carl Sanford makes no introduction as you approach. \"Very good,\" he says matter-of-factly, then waves his masked guests away. \"As I am sure you are aware, rumors of the Jewel of Sarnath are quite prevalent amongst the occult circles of Arkham. Given the Jewel's... colorful history, it would make quite the addition to the Lodge's collection.\" The patriarch stares down his nose at you \"Although I suspect that there is far more at play here than meets the eye. That is why I have asked you here. Acquire the Jewel for the Lodge, and you shall be rewarded with knowledge and riches beyond your wildest dreams.\" You ask him why the Lodge deserves the Jewel more than any other, and he smirks. \"We will keep it safe. Far safer than it would be in the hands of others. You cannot even begin to comprehend its power.\"",
+      "bullets": []
+    },
+    "the-midwinter-gala:locals_story": {
+      "kind": "story",
+      "text": "\"The name's Bain. William Bain,\" the stalwart man shakes your hand with a firm grip. \"I'm glad you came to this fancy little party. Truth be told, I'm not really a local; I just happen to have a soft spot for this old port.\" The man deftly avoids your questions about his origins before pointing at the silent masked figure in the corner of the room. \"He is the reason I invited you here. They call him 'The Bloodless Man. Whatever the Lantern Club has planned for this evening is certainly his design.\" The captain sighs. \"No good can come of that strange Jewel. Only ruin. At least, so long as the Lantern Club has it.\" After further discussion, you agree to help Bain recover the Jewel.",
+      "bullets": []
+    },
+    "the-midwinter-gala:choose_faction": {
+      "kind": "chooseOne",
+      "text": "The investigators must choose which faction requested their assistance.",
+      "choices": [
+        {
+          "id": "foundation",
+          "text": "The Foundation ([guardian])",
+          "effects": [
+            {
+              "do": "count",
+              "id": "tmgChosenFaction",
+              "section": "hidden",
+              "op": "set",
+              "value": 0
+            }
+          ],
+          "steps": [
+            "the-midwinter-gala:foundation_story"
+          ]
+        },
+        {
+          "id": "university",
+          "text": "Miskatonic University ([seeker])",
+          "effects": [
+            {
+              "do": "count",
+              "id": "tmgChosenFaction",
+              "section": "hidden",
+              "op": "set",
+              "value": 1
+            }
+          ],
+          "steps": [
+            "the-midwinter-gala:university_story"
+          ]
+        },
+        {
+          "id": "syndicate",
+          "text": "The Syndicate ([rogue])",
+          "effects": [
+            {
+              "do": "count",
+              "id": "tmgChosenFaction",
+              "section": "hidden",
+              "op": "set",
+              "value": 2
+            }
+          ],
+          "steps": [
+            "the-midwinter-gala:syndicate_story"
+          ]
+        },
+        {
+          "id": "lodge",
+          "text": "The Silver Twilight Lodge ([mystic])",
+          "effects": [
+            {
+              "do": "count",
+              "id": "tmgChosenFaction",
+              "section": "hidden",
+              "op": "set",
+              "value": 3
+            }
+          ],
+          "steps": [
+            "the-midwinter-gala:lodge_story"
+          ]
+        },
+        {
+          "id": "locals",
+          "text": "Locals of Kingsport ([survivor])",
+          "effects": [
+            {
+              "do": "count",
+              "id": "tmgChosenFaction",
+              "section": "hidden",
+              "op": "set",
+              "value": 4
+            }
+          ],
+          "steps": [
+            "the-midwinter-gala:locals_story"
+          ]
+        }
+      ]
     }
   }
 }

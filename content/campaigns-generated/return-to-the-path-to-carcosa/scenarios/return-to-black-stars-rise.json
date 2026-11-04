@@ -23,6 +23,9 @@
     "03275",
     "03277"
   ],
+  "setupCards": [
+    "52054"
+  ],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -131,7 +134,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "opened_path_below",
+          "key": "openedPathBelow",
           "value": true
         },
         {
@@ -164,7 +167,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "opened_path_above",
+          "key": "openedPathAbove",
           "value": true
         },
         {
@@ -197,7 +200,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "carcosa_merged",
+          "key": "carcosaMerged",
           "value": true
         },
         {

@@ -57,6 +57,7 @@ import {
   toggleInvestigator,
   toSetup,
   type WizardState,
+  toggleOption,
 } from "../wizard";
 import { cx } from "../../components/cx";
 import { BottomSheet } from "../../components/BottomSheet";
@@ -633,20 +634,38 @@ function DecksStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }
   );
 }
 
-function DifficultyStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }) {
+export function DifficultyStep({ s, set }: { s: WizardState; set: (w: WizardState) => void }) {
   const bags = db.campaigns[s.campaignId]?.chaosBags ?? {};
+  const options = db.campaigns[s.campaignId]?.options ?? [];
   return (
-    <div className="wz-bags">
-      {DIFFICULTIES.filter((d) => bags[d]).map((d) => (
-        <BagCard
-          key={d}
-          bag={bags[d]!}
-          difficulty={d}
-          selected={s.difficulty === d}
-          onSelect={() => set(setDifficulty(s, d, db))}
-        />
-      ))}
-    </div>
+    <>
+      <div className="wz-bags">
+        {DIFFICULTIES.filter((d) => bags[d]).map((d) => (
+          <BagCard
+            key={d}
+            bag={bags[d]!}
+            difficulty={d}
+            selected={s.difficulty === d}
+            onSelect={() => set(setDifficulty(s, d, db))}
+          />
+        ))}
+      </div>
+      {options.length > 0 && (
+        <fieldset className={styles.options} data-testid="campaign-options">
+          <legend>{tr("wizard.options")}</legend>
+          {options.map((o) => (
+            <label key={o.id}>
+              <input
+                type="checkbox"
+                checked={s.options.includes(o.id)}
+                onChange={() => set(toggleOption(s, o.id, db))}
+              />{" "}
+              {tr(o.labelKey)}
+            </label>
+          ))}
+        </fieldset>
+      )}
+    </>
   );
 }
 

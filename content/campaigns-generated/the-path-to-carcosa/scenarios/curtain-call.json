@@ -22,6 +22,7 @@
     "03044",
     "03045"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -109,7 +110,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "stranger_is_on_to_you",
+          "key": "strangerIsOnToYou",
           "value": true
         },
         {
@@ -131,12 +132,12 @@
       "effects": [
         {
           "do": "record",
-          "key": "tried_to_warn_police",
+          "key": "triedToWarnPolice",
           "value": true
         },
         {
           "do": "record",
-          "key": "stranger_is_on_to_you",
+          "key": "strangerIsOnToYou",
           "value": true
         },
         {
@@ -158,12 +159,12 @@
       "effects": [
         {
           "do": "record",
-          "key": "chose_not_to_warn_police",
+          "key": "choseNotToWarnPolice",
           "value": true
         },
         {
           "do": "record",
-          "key": "stranger_is_on_to_you",
+          "key": "strangerIsOnToYou",
           "value": true
         },
         {

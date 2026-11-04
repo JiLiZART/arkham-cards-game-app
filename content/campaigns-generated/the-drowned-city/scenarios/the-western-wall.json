@@ -21,6 +21,7 @@
   "agendas": [
     "11518"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -33,7 +34,6 @@
       "codes": [
         "11535",
         "11531",
-        "11531b",
         "11727"
       ]
     },
@@ -107,7 +107,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "the_western_wall",
+          "key": "theWesternWall",
           "value": true
         },
         {
@@ -124,7 +124,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "the_western_wall",
+          "key": "theWesternWall",
           "value": true
         },
         {
@@ -141,7 +141,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "the_western_wall",
+          "key": "theWesternWall",
           "value": true
         },
         {

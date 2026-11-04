@@ -22,6 +22,9 @@
     "05162",
     "05163"
   ],
+  "setupCards": [
+    "54034"
+  ],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -132,7 +135,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "survived_the_watchers_embrace",
+          "key": "survivedTheWatchersEmbrace",
           "value": true
         },
         {
@@ -149,12 +152,12 @@
       "effects": [
         {
           "do": "record",
-          "key": "bloody_tree_carvings",
+          "key": "bloodyTreeCarvings",
           "value": true
         },
         {
           "do": "record",
-          "key": "erynn_joined_investigators",
+          "key": "erynnJoinedInvestigators",
           "value": true
         },
         {

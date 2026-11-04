@@ -21,6 +21,7 @@
     "09567",
     "09570"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -44,6 +45,26 @@
         "09585",
         "09739",
         "09572"
+      ]
+    },
+    {
+      "do": "remove",
+      "codes": [
+        "01121a",
+        "01121b",
+        "01122",
+        "01123",
+        "01124",
+        "01125",
+        "01126",
+        "01127",
+        "01128",
+        "01129",
+        "01130",
+        "01131",
+        "01132",
+        "01133",
+        "01134"
       ]
     },
     {
@@ -170,7 +191,7 @@
         },
         {
           "do": "record",
-          "key": "ece_trusts_the_cell",
+          "key": "eceTrustsTheCell",
           "value": true
         }
       ]
@@ -187,7 +208,7 @@
         },
         {
           "do": "record",
-          "key": "ece_does_not_trust_the_cell",
+          "key": "eceDoesNotTrustTheCell",
           "value": true
         }
       ]

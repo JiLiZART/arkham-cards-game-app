@@ -23,6 +23,7 @@
     "02314",
     "02315"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -119,7 +120,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "closed_tear",
+          "key": "closedTear",
           "value": true
         },
         {
@@ -154,7 +155,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "yog_sothoth_fled",
+          "key": "yogSothothFled",
           "value": true
         },
         {
@@ -177,7 +178,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "yog_sothoth_became_one_with_reality",
+          "key": "yogSothothBecameOneWithReality",
           "value": true
         },
         {

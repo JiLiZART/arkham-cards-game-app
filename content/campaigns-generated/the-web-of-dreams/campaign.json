@@ -89,6 +89,7 @@
       "elderSign"
     ]
   },
+  "options": [],
   "logLabels": {},
   "packs": [
     "core",
@@ -111,7 +112,7 @@
       "label": "Campaign Notes"
     },
     {
-      "id": "steps_of_the_bridge",
+      "id": "stepsOfTheBridge",
       "kind": "count",
       "label": "Steps of the Bridge"
     }

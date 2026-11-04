@@ -20,6 +20,9 @@
     "05327",
     "05328"
   ],
+  "setupCards": [
+    "54056"
+  ],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -117,7 +120,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "azathoth_devoured_the_universe",
+          "key": "azathothDevouredTheUniverse",
           "value": true
         },
         {
@@ -140,7 +143,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "azathoth_slumbers",
+          "key": "azathothSlumbers",
           "value": true
         },
         {
@@ -169,7 +172,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "azathoth_slumbers",
+          "key": "azathothSlumbers",
           "value": true
         },
         {
@@ -204,12 +207,12 @@
       "effects": [
         {
           "do": "record",
-          "key": "azathoth_slumbers",
+          "key": "azathothSlumbers",
           "value": true
         },
         {
           "do": "record",
-          "key": "signed_the_black_book",
+          "key": "signedTheBlackBook",
           "value": true
         },
         {
@@ -232,7 +235,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "azathoth_slumbers",
+          "key": "azathothSlumbers",
           "value": true
         },
         {

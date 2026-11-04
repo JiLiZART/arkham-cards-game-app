@@ -25,6 +25,7 @@
     "13070",
     "13072"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -69,7 +70,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "failed_to_stop_the_children_of_blood",
+          "key": "failedToStopTheChildrenOfBlood",
           "value": true
         },
         {
@@ -92,7 +93,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "stopped_the_children_of_blood",
+          "key": "stoppedTheChildrenOfBlood",
           "value": true
         },
         {
@@ -115,7 +116,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "failed_to_stop_the_children_of_blood",
+          "key": "failedToStopTheChildrenOfBlood",
           "value": true
         },
         {

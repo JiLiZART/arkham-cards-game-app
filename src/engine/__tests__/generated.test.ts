@@ -25,7 +25,8 @@ describe("generated scenarios", () => {
   for (const { campaign, scenario } of generated) {
     it(`${campaign} / ${scenario}`, () => {
       let r = start(scenario, ["01001", "01002"], 1, { campaignId: campaign });
-      expect(r.state.act).not.toBeNull();
+      // a scenario may have no act deck (Sepulchre of the Sleeper ends through its agendas)
+      if (db.scenarios[scenario].acts.length) expect(r.state.act).not.toBeNull();
       expect(r.state.agenda).not.toBeNull();
       const rng = { rng: 7919 };
       for (let steps = 0; r.state.pending && r.state.round <= 3 && steps < 1500; steps++) {

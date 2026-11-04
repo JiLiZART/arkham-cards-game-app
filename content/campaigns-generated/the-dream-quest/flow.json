@@ -156,6 +156,14 @@
       ]
     }
   },
+  "before": {
+    "beyond-the-gates-of-sleep": [
+      "beyond-the-gates-of-sleep:choose_dreams"
+    ],
+    "the-search-for-kadath": [
+      "the-search-for-kadath:check_zoogs"
+    ]
+  },
   "steps": {
     "campaign:prologue": {
       "kind": "story",
@@ -168,7 +176,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "interconnected_campaign",
+          "key": "interconnectedCampaign",
           "section": "hidden",
           "value": true
         }
@@ -194,7 +202,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "interconnected_campaign",
+              "key": "interconnectedCampaign",
               "section": "hidden",
               "value": true
             }
@@ -210,7 +218,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "half_campaign",
+              "key": "halfCampaign",
               "section": "hidden",
               "value": true
             }
@@ -245,7 +253,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "interconnected_campaign",
+        "id": "interconnectedCampaign",
         "section": "hidden"
       },
       "then": [
@@ -268,7 +276,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "black_cat_delivered_news",
+          "key": "blackCatDeliveredNews",
           "section": "campaign_notes",
           "value": true
         }
@@ -291,7 +299,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "black_cat_at_your_side",
+          "key": "blackCatAtYourSide",
           "section": "campaign_notes",
           "value": true
         }
@@ -316,7 +324,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "black_cat_shared_knowledge_of_the_dreamlands",
+          "key": "blackCatSharedKnowledgeOfTheDreamlands",
           "section": "campaign_notes",
           "value": true
         }
@@ -338,7 +346,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "black_cat_has_a_hunch",
+          "key": "blackCatHasAHunch",
           "section": "campaign_notes",
           "value": true
         }
@@ -349,7 +357,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "black_cat_warned_the_others",
+          "key": "blackCatWarnedTheOthers",
           "section": "campaign_notes",
           "value": true
         }
@@ -380,7 +388,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "threaten_black_cat",
+          "key": "threatenBlackCat",
           "section": "campaign_notes",
           "value": true
         }
@@ -397,7 +405,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "you_asked_for_it",
+          "key": "youAskedForIt",
           "section": "campaign_notes",
           "value": true
         }
@@ -466,7 +474,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "interconnected_campaign",
+        "id": "interconnectedCampaign",
         "section": "hidden"
       },
       "then": [
@@ -511,7 +519,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "dreamers_traveled_beneath_the_monastery",
+        "id": "dreamersTraveledBeneathTheMonastery",
         "section": "campaign_notes"
       },
       "then": [
@@ -523,7 +531,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "dreamers_stayed_in_dreamlands_forever",
+        "id": "dreamersStayedInDreamlandsForever",
         "section": "campaign_notes"
       },
       "then": [
@@ -537,7 +545,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "dreamers_awoke",
+        "id": "dreamersAwoke",
         "section": "campaign_notes"
       },
       "then": [
@@ -551,7 +559,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "nyarlathoteps_invasion_has_begun",
+        "id": "nyarlathotepsInvasionHasBegun",
         "section": "campaign_notes"
       },
       "then": [
@@ -575,7 +583,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCards",
-        "id": "broken_the_law_of_ulthar",
+        "id": "brokenTheLawOfUlthar",
         "section": "campaign_notes"
       },
       "then": [
@@ -618,7 +626,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "dreamers_grow_weaker",
+        "id": "dreamersGrowWeaker",
         "section": "campaign_notes"
       },
       "then": [
@@ -646,7 +654,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "dreamers_grow_weaker",
+        "id": "dreamersGrowWeaker",
         "section": "campaign_notes"
       },
       "then": [
@@ -674,7 +682,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "dreamers_grow_weaker",
+        "id": "dreamersGrowWeaker",
         "section": "campaign_notes"
       },
       "then": [
@@ -702,7 +710,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "dreamers_grow_weaker",
+        "id": "dreamersGrowWeaker",
         "section": "campaign_notes"
       },
       "then": [
@@ -785,7 +793,7 @@
       "effects": [
         {
           "do": "crossOut",
-          "key": "black_cat_is_searching_for_the_truth",
+          "key": "blackCatIsSearchingForTheTruth",
           "section": "campaign_notes"
         }
       ]
@@ -806,7 +814,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "black_cat_is_searching_for_the_truth",
+        "id": "blackCatIsSearchingForTheTruth",
         "section": "campaign_notes"
       },
       "then": [
@@ -821,12 +829,12 @@
         "conditions": [
           {
             "kind": "logHas",
-            "id": "black_cat_is_searching_for_the_truth",
+            "id": "blackCatIsSearchingForTheTruth",
             "section": "campaign_notes"
           },
           {
             "kind": "logHas",
-            "id": "randolph_did_not_survive_the_voyage",
+            "id": "randolphDidNotSurviveTheVoyage",
             "section": "campaign_notes"
           }
         ]
@@ -889,7 +897,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "black_cat_knows_the_truth",
+          "key": "blackCatKnowsTheTruth",
           "section": "campaign_notes",
           "value": true
         }
@@ -899,7 +907,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "black_cat_is_searching_for_the_truth",
+        "id": "blackCatIsSearchingForTheTruth",
         "section": "campaign_notes"
       },
       "then": [
@@ -913,7 +921,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "black_cat_spoke_of_nyarlathotep",
+          "key": "blackCatSpokeOfNyarlathotep",
           "section": "campaign_notes",
           "value": true
         }
@@ -930,7 +938,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "black_cat_spoke_of_atlach_nacha",
+          "key": "blackCatSpokeOfAtlachNacha",
           "section": "campaign_notes",
           "value": true
         }
@@ -970,7 +978,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "black_cat_has_a_hunch",
+        "id": "blackCatHasAHunch",
         "section": "campaign_notes"
       },
       "then": [
@@ -989,7 +997,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "you_asked_for_it",
+        "id": "youAskedForIt",
         "section": "campaign_notes"
       },
       "then": [
@@ -1027,7 +1035,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "black_cat_has_a_hunch",
+        "id": "blackCatHasAHunch",
         "section": "campaign_notes"
       },
       "then": [
@@ -1054,7 +1062,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "someone_escaped",
+        "id": "someoneEscaped",
         "section": "hidden"
       },
       "then": [
@@ -1071,7 +1079,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "everyone_captured",
+        "id": "everyoneCaptured",
         "section": "hidden"
       },
       "then": [
@@ -1094,7 +1102,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "black_cat_is_searching_for_the_truth",
+          "key": "blackCatIsSearchingForTheTruth",
           "section": "campaign_notes",
           "value": true
         }
@@ -1116,7 +1124,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "black_cat_has_a_hunch",
+        "id": "blackCatHasAHunch",
         "section": "campaign_notes"
       },
       "then": [
@@ -1144,7 +1152,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "black_cat_has_a_hunch",
+        "id": "blackCatHasAHunch",
         "section": "campaign_notes"
       },
       "then": [
@@ -1162,12 +1170,12 @@
         "conditions": [
           {
             "kind": "logHas",
-            "id": "randolph_eluded_capture",
+            "id": "randolphEludedCapture",
             "section": "campaign_notes"
           },
           {
             "kind": "logHas",
-            "id": "black_cat_has_a_hunch",
+            "id": "blackCatHasAHunch",
             "section": "campaign_notes"
           }
         ]
@@ -1187,7 +1195,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "you_asked_for_it",
+        "id": "youAskedForIt",
         "section": "campaign_notes"
       },
       "then": [
@@ -1210,7 +1218,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "strayed_from_the_path",
+          "key": "strayedFromThePath",
           "section": "campaign_notes",
           "value": true
         }
@@ -1241,7 +1249,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "strayed_from_the_path",
+        "id": "strayedFromThePath",
         "section": "campaign_notes"
       },
       "then": [],
@@ -1254,7 +1262,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "saved_by_randolph_carter",
+          "key": "savedByRandolphCarter",
           "section": "campaign_notes",
           "value": true
         }
@@ -1338,7 +1346,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "cats_collected_their_tribute",
+          "key": "catsCollectedTheirTribute",
           "section": "campaign_notes",
           "value": true
         }
@@ -1349,18 +1357,25 @@
       "effects": [
         {
           "do": "record",
-          "key": "parleyed_with_zoogs",
+          "key": "parleyedWithZoogs",
           "section": "campaign_notes",
           "value": true
         }
       ]
+    },
+    "beyond-the-gates-of-sleep:choose_dreams": {
+      "kind": "unsupported",
+      "name": "investigator_choice",
+      "text": "Choose a dream (different if able):",
+      "effects": [],
+      "steps": []
     },
     "dark-side-of-the-moon:travelled_to_the_cold_wastes": {
       "kind": "effects",
       "effects": [
         {
           "do": "record",
-          "key": "travelled_to_the_cold_wastes",
+          "key": "travelledToTheColdWastes",
           "section": "campaign_notes",
           "value": true
         }
@@ -1371,7 +1386,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "randolph_survived_the_voyage",
+          "key": "randolphSurvivedTheVoyage",
           "section": "campaign_notes",
           "value": true
         }
@@ -1398,8 +1413,8 @@
       "effects": [
         {
           "do": "count",
-          "id": "evidence_of_kadath",
-          "section": "evidence_of_kadath",
+          "id": "evidenceOfKadath",
+          "section": "evidenceOfKadath",
           "op": "add",
           "value": 3
         }
@@ -1450,7 +1465,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "half_campaign",
+        "id": "halfCampaign",
         "section": "hidden"
       },
       "then": [
@@ -1472,7 +1487,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "someone_escaped",
+          "key": "someoneEscaped",
           "section": "hidden",
           "value": true
         }
@@ -1496,8 +1511,8 @@
       "effects": [
         {
           "do": "count",
-          "id": "evidence_of_kadath",
-          "section": "evidence_of_kadath",
+          "id": "evidenceOfKadath",
+          "section": "evidenceOfKadath",
           "op": "add",
           "value": "input"
         }
@@ -1509,7 +1524,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "virgil_was_captured",
+          "key": "virgilWasCaptured",
           "section": "campaign_notes",
           "value": true
         }
@@ -1520,7 +1535,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "randolph_eluded_capture",
+          "key": "randolphEludedCapture",
           "section": "campaign_notes",
           "value": true
         }
@@ -1559,7 +1574,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "half_campaign",
+        "id": "halfCampaign",
         "section": "hidden"
       },
       "then": [
@@ -1576,7 +1591,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "everyone_captured",
+          "key": "everyoneCaptured",
           "section": "hidden",
           "value": true
         }
@@ -1587,10 +1602,201 @@
       "effects": [
         {
           "do": "record",
-          "key": "randolph_was_captured",
+          "key": "randolphWasCaptured",
           "section": "campaign_notes",
           "value": true
         }
+      ]
+    },
+    "the-search-for-kadath:intro_5": {
+      "kind": "story",
+      "text": "“Well, too bad,” the cat says, tail stiff and straight. More cats flank you from the sides, several hissing loudly. Their fur puffs up, and their eyes flare with anger. “It’s our duty to guard this place from impetuous outsiders like yerself. Yeh ain’t wanted here.”\n“Be reasonable,” Randolph implores. “We are only trying to speak with Atal. We mean no harm.”\n“Yeh can mean one thing and do another.” The scarred cat paces. “Now get outta here and don’t come back.”",
+      "bullets": []
+    },
+    "the-search-for-kadath:intro_7": {
+      "kind": "story",
+      "text": "Resigned, you leave the temple on the hilltop behind. “I suppose we shall have to make do without Atal’s wisdom,” Randolph says with a sigh. “In any event, it is likely our destination is far from here—perhaps on another continent altogether. We will need to secure passage by sea. I suggest we travel south, to the port city of Dylath-Leen. We can figure out our next step from there.” You nod and take one last look at the stone temple, wondering at the knowledge you may have left behind.",
+      "bullets": []
+    },
+    "the-search-for-kadath:intro_8": {
+      "kind": "story",
+      "text": "You inform the cat you are entering the temple one way or another, and that a simple cat will not stand in your way. “Wanna bet?” he growls, lowering his body and preparing to pounce. Noticing the commotion, several cats guarding the temple surround you. You don’t wish to harm these cats, but you won’t let them block you from your objective, either. Nodding to your companions, you make a mad dash for the temple gates. A storm of hisses and angry screeches erupts all around you as the cats mount a desperate defense. A wall of tiny claws and teeth meets you, but you push through, defiant. You slam the stone door shut behind you and hear the old cat yelling from the other side: “Fine then, human! See your priest! But do not think this transgression will be forgiven!”",
+      "bullets": []
+    },
+    "the-search-for-kadath:forced_way_into_temple": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "forcedWayIntoTemple",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-search-for-kadath:intro_9": {
+      "kind": "story",
+      "text": "At the top of the temple, seated on an ivory dais, the high priest Atal awaits you. He is a frail, wiry man with a long, wispy black beard, caved-in cheeks, and the pale, milky eyes of one afflicted by blindness. “Do not let your eyes deceive you,” Randolph whispers as you seat yourselves in front of the dais. “Atal is over three centuries old, but his memory is sharp as a tack.”\nYou ask the priest about your quest and about your destination: the castle Randolph described from his dreams. “You speak of the resting place of the Great Ones, high above unknown Kadath. Even I know not its true location. And that is all well and good, for the fruits of attempting to ascend to such a place would be bitter indeed. My companion Barzai once scaled a peak only a fraction as sacred, and he was never seen nor heard from again. The gods of Kadath may seem powerless, but they are protected by the Other Gods from the Outside, whom it is better not to discuss. It would be wiser to let all the gods alone and leave this folly behind.”\nAtal’s use of the word “gods” has you curious. You wonder aloud what kind of god might exist in a place like this.\nThe priest shakes his head. “They are not our gods, but the gods of Earth, for this land is but a reflection of yours.”\nYou attempt to pry deeper into Atal’s wisdom with your questioning, but his advice does not budge. “I have already said more than I should,” he insists. “Please, for your sake, pursue this madness no further.”",
+      "bullets": []
+    },
+    "the-search-for-kadath:one_evidence_of_kadath:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, next to “Evidence of Kadath,” record 1 tally mark.",
+      "bullets": []
+    },
+    "the-search-for-kadath:one_evidence_of_kadath": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "evidenceOfKadath",
+          "section": "evidenceOfKadath",
+          "op": "add",
+          "value": 1
+        }
+      ]
+    },
+    "the-search-for-kadath:intro_10": {
+      "kind": "story",
+      "text": "A flash of inspiration strikes you, and you remember the moon-wine given to you by the Zoogs in the Enchanted Woods. You offer some to Atal, and he accepts graciously. You pretend to partake of the wine yourself while offering draught after draught to the priest. Eventually, Atal’s lips loosen, and he speaks of forbidden things he would never discuss were it not for the wine. He tells of an image carved into the face of the mountain Ngranek on the isle of Oriab—the likeness of the gods, or so he claims. He tells of the pillars of Kadatheron wherein the history of Earth’s Dreamlands is recorded. He tells of those slain by the hordes of Night itself and interred in the crypts of Zulan-Thek, the city of the dead. He tells of a baleful star above a forgotten city that appears on no map. “If you absolutely must seek Kadath in the Cold Wastes,” he says drowsily, “there is a city along the coast to the south: Dylath-Leen. You may secure passage there.”",
+      "bullets": []
+    },
+    "the-search-for-kadath:one_evidence_of_kadath_and_2_xp:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, next to “Evidence of Kadath,” record 1 tally mark. Each investigator earns 2 experience.",
+      "bullets": []
+    },
+    "the-search-for-kadath:one_evidence_of_kadath_and_2_xp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "evidenceOfKadath",
+          "section": "evidenceOfKadath",
+          "op": "add",
+          "value": 1
+        },
+        {
+          "do": "xp",
+          "bonus": 2,
+          "who": "each",
+          "victory": false
+        }
+      ]
+    },
+    "the-search-for-kadath:intro_11": {
+      "kind": "story",
+      "text": "Atal refuses to give you any more advice, so you decide to leave the temple on the hilltop behind. “We have learned much, but we are still no closer to knowing the location of Kadath,” Randolph says with a sigh. “It is likely that our destination is far from here—perhaps on another continent altogether. We shall need to secure passage by sea if we are to travel such great distances. I suggest we begin by traveling south, to the port city of Dylath-Leen. We can figure out our next step from there.”",
+      "bullets": []
+    },
+    "the-search-for-kadath:check_cats_or_randolph": {
+      "kind": "branch",
+      "condition": {
+        "kind": "any",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "catsCollectedTheirTribute",
+            "section": "campaign_notes"
+          },
+          {
+            "kind": "logHas",
+            "id": "savedByRandolphCarter",
+            "section": "campaign_notes"
+          }
+        ]
+      },
+      "then": [
+        "the-search-for-kadath:intro_11"
+      ],
+      "else": []
+    },
+    "the-search-for-kadath:check_parleyed_with_zoogs": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "parleyedWithZoogs",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-search-for-kadath:intro_10",
+        "the-search-for-kadath:one_evidence_of_kadath_and_2_xp:text",
+        "the-search-for-kadath:one_evidence_of_kadath_and_2_xp"
+      ],
+      "else": [
+        "the-search-for-kadath:check_cats_or_randolph"
+      ]
+    },
+    "the-search-for-kadath:choose_temple": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "leave_empty_handed",
+          "text": "<i>Leave empty-handed,</i>",
+          "effects": [],
+          "steps": [
+            "the-search-for-kadath:intro_7"
+          ]
+        },
+        {
+          "id": "forced_way_into_temple",
+          "text": "<i>Force your way into the temple.</i>",
+          "effects": [],
+          "steps": [
+            "the-search-for-kadath:intro_8",
+            "the-search-for-kadath:forced_way_into_temple",
+            "the-search-for-kadath:intro_9",
+            "the-search-for-kadath:one_evidence_of_kadath:text",
+            "the-search-for-kadath:one_evidence_of_kadath",
+            "the-search-for-kadath:check_parleyed_with_zoogs"
+          ]
+        }
+      ]
+    },
+    "the-search-for-kadath:intro_6": {
+      "kind": "story",
+      "text": "You tell the cat that you are merely here to speak with Atal, and that you mean no harm. “Ah, no worries, human,” the cat says with a gaping yawn—the kind only a cat can perform and still look regal in the act. “You don’t seem the type to make trouble. ’Sides, I ain’t goin’ nowhere.” You see a small lump in front of the cat: a bloodied, half-eaten pheasant. You resist the urge to turn up your nose and count yourself lucky you are on this cat’s good side. “Go on in,” he says, then licks his chops as he prepares to finish his meal.",
+      "bullets": []
+    },
+    "the-search-for-kadath:check_cats_collected_their_tribute": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "catsCollectedTheirTribute",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-search-for-kadath:intro_6",
+        "the-search-for-kadath:intro_9",
+        "the-search-for-kadath:one_evidence_of_kadath:text",
+        "the-search-for-kadath:one_evidence_of_kadath",
+        "the-search-for-kadath:check_parleyed_with_zoogs"
+      ],
+      "else": []
+    },
+    "the-search-for-kadath:check_zoogs": {
+      "kind": "branch",
+      "condition": {
+        "kind": "any",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "parleyedWithZoogs",
+            "section": "campaign_notes"
+          },
+          {
+            "kind": "logHas",
+            "id": "savedByRandolphCarter",
+            "section": "campaign_notes"
+          }
+        ]
+      },
+      "then": [
+        "the-search-for-kadath:intro_5",
+        "the-search-for-kadath:choose_temple"
+      ],
+      "else": [
+        "the-search-for-kadath:check_cats_collected_their_tribute"
       ]
     },
     "where-gods-dwell:dreamers_escaped_nyarlathoteps_grasp": {
@@ -1598,7 +1804,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "dreamers_escaped_nyarlathoteps_grasp",
+          "key": "dreamersEscapedNyarlathotepsGrasp",
           "section": "campaign_notes",
           "value": true
         }
@@ -1653,7 +1859,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "dreamers_know_of_another_path",
+            "id": "dreamersKnowOfAnotherPath",
             "section": "campaign_notes"
           }
         }
@@ -1664,7 +1870,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "dreamers_banished_nyarlathotep",
+          "key": "dreamersBanishedNyarlathotep",
           "section": "campaign_notes",
           "value": true
         }
@@ -1686,7 +1892,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "dreamers_awoke",
+          "key": "dreamersAwoke",
           "section": "campaign_notes",
           "value": true
         }
@@ -1752,7 +1958,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "half_campaign",
+        "id": "halfCampaign",
         "section": "hidden"
       },
       "then": [
@@ -1772,7 +1978,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "dreamers_stayed_in_dreamlands_forever",
+          "key": "dreamersStayedInDreamlandsForever",
           "section": "campaign_notes",
           "value": true
         }
@@ -1811,7 +2017,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "half_campaign",
+        "id": "halfCampaign",
         "section": "hidden"
       },
       "then": [
@@ -1830,7 +2036,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "dreamers_traveled_beneath_the_monastery",
+          "key": "dreamersTraveledBeneathTheMonastery",
           "section": "campaign_notes",
           "value": true
         }

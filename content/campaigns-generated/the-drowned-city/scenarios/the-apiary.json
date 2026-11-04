@@ -21,12 +21,12 @@
     "11554",
     "11555"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
       "codes": [
-        "11559",
-        "11559b"
+        "11559"
       ]
     },
     {
@@ -34,10 +34,8 @@
       "codes": [
         "11574",
         "11580",
-        "11580b",
         "11568",
         "11581",
-        "11581b",
         "11582",
         "11744",
         "11583",
@@ -120,7 +118,7 @@
         },
         {
           "do": "record",
-          "key": "the_apiary",
+          "key": "theApiary",
           "value": true
         },
         {
@@ -137,12 +135,12 @@
       "effects": [
         {
           "do": "record",
-          "key": "pilgrims_were_saved",
+          "key": "pilgrimsWereSaved",
           "value": true
         },
         {
           "do": "record",
-          "key": "the_apiary",
+          "key": "theApiary",
           "value": true
         },
         {
@@ -164,12 +162,12 @@
         },
         {
           "do": "record",
-          "key": "pilgrims_were_devoured",
+          "key": "pilgrimsWereDevoured",
           "value": true
         },
         {
           "do": "record",
-          "key": "the_apiary",
+          "key": "theApiary",
           "value": true
         },
         {
@@ -186,12 +184,12 @@
       "effects": [
         {
           "do": "record",
-          "key": "exterminated_the_alien_parasites",
+          "key": "exterminatedTheAlienParasites",
           "value": true
         },
         {
           "do": "record",
-          "key": "the_apiary",
+          "key": "theApiary",
           "value": true
         },
         {
@@ -226,18 +224,6 @@
       "11562"
     ],
     [
-      "11559",
-      "11559b"
-    ],
-    [
-      "11559b",
-      "11560"
-    ],
-    [
-      "11559b",
-      "11562"
-    ],
-    [
       "11562",
       "11560"
     ]
@@ -249,14 +235,10 @@
       0
     ],
     "11560": [
-      3,
-      0
-    ],
-    "11562": [
       2,
       0
     ],
-    "11559b": [
+    "11562": [
       1,
       0
     ]

@@ -18,6 +18,7 @@
     "08597",
     "08598"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -114,7 +115,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "team_climbed_to_the_summit",
+          "key": "teamClimbedToTheSummit",
           "value": true
         },
         {
@@ -131,7 +132,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "team_found_another_way_through_the_mountains",
+          "key": "teamFoundAnotherWayThroughTheMountains",
           "value": true
         },
         {
@@ -142,12 +143,12 @@
         },
         {
           "do": "record",
-          "key": "green_soapstone",
+          "key": "greenSoapstone",
           "value": true
         },
         {
           "do": "record",
-          "key": "wooden_sledge",
+          "key": "woodenSledge",
           "value": true
         },
         {
@@ -157,22 +158,22 @@
         },
         {
           "do": "record",
-          "key": "miasmic_crystal",
+          "key": "miasmicCrystal",
           "value": true
         },
         {
           "do": "record",
-          "key": "mineral_specimen",
+          "key": "mineralSpecimen",
           "value": true
         },
         {
           "do": "record",
-          "key": "small_radio",
+          "key": "smallRadio",
           "value": true
         },
         {
           "do": "record",
-          "key": "spare_parts",
+          "key": "spareParts",
           "value": true
         }
       ]

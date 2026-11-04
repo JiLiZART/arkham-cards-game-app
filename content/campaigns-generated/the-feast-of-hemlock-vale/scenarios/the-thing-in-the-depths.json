@@ -19,6 +19,7 @@
     "10589",
     "10590"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -116,7 +117,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "chelydran_hybrid_perished",
+          "key": "chelydranHybridPerished",
           "value": true
         },
         {
@@ -133,7 +134,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "chelydran_hybrid_lived",
+          "key": "chelydranHybridLived",
           "value": true
         },
         {
@@ -150,7 +151,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "chelydran_hybrid_devoured",
+          "key": "chelydranHybridDevoured",
           "value": true
         },
         {
@@ -173,7 +174,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "thing_in_the_depths_was_defeated",
+          "key": "thingInTheDepthsWasDefeated",
           "value": true
         },
         {
@@ -202,7 +203,7 @@
         },
         {
           "do": "record",
-          "key": "eastwick_bog",
+          "key": "eastwickBog",
           "value": true
         }
       ]

@@ -23,6 +23,9 @@
     "02064",
     "02065"
   ],
+  "setupCards": [
+    "51015"
+  ],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -111,12 +114,12 @@
       "effects": [
         {
           "do": "record",
-          "key": "bone_to_pick",
+          "key": "boneToPick",
           "value": true
         },
         {
           "do": "record",
-          "key": "francis_morgan_kidnapped",
+          "key": "francisMorganKidnapped",
           "value": true
         },
         {
@@ -133,12 +136,12 @@
       "effects": [
         {
           "do": "record",
-          "key": "bone_to_pick",
+          "key": "boneToPick",
           "value": true
         },
         {
           "do": "record",
-          "key": "francis_morgan_rescued",
+          "key": "francisMorganRescued",
           "value": true
         },
         {
@@ -160,12 +163,12 @@
       "effects": [
         {
           "do": "record",
-          "key": "naomi_has_back",
+          "key": "naomiHasBack",
           "value": true
         },
         {
           "do": "record",
-          "key": "francis_morgan_kidnapped",
+          "key": "francisMorganKidnapped",
           "value": true
         },
         {
@@ -182,12 +185,12 @@
       "effects": [
         {
           "do": "record",
-          "key": "bone_to_pick",
+          "key": "boneToPick",
           "value": true
         },
         {
           "do": "record",
-          "key": "francis_morgan_kidnapped",
+          "key": "francisMorganKidnapped",
           "value": true
         },
         {
@@ -198,7 +201,7 @@
         },
         {
           "do": "record",
-          "key": "unconscious_for_several_hours",
+          "key": "unconsciousForSeveralHours",
           "value": true
         },
         {

@@ -25,6 +25,7 @@
     "08671",
     "08672"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -114,7 +115,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "nameless_madness_escaped",
+          "key": "namelessMadnessEscaped",
           "value": true
         },
         {
@@ -137,12 +138,12 @@
       "effects": [
         {
           "do": "record",
-          "key": "nameless_madness_is_contained_safely_within_its_host_for_now",
+          "key": "namelessMadnessIsContainedSafelyWithinItsHostForNow",
           "value": true
         },
         {
           "do": "record",
-          "key": "surviving_members_header",
+          "key": "survivingMembersHeader",
           "value": true
         },
         {
@@ -159,12 +160,12 @@
       "effects": [
         {
           "do": "record",
-          "key": "facility_was_destroyed",
+          "key": "facilityWasDestroyed",
           "value": true
         },
         {
           "do": "record",
-          "key": "surviving_members_header",
+          "key": "survivingMembersHeader",
           "value": true
         },
         {
@@ -187,12 +188,12 @@
       "effects": [
         {
           "do": "record",
-          "key": "team_escaped_the_facility",
+          "key": "teamEscapedTheFacility",
           "value": true
         },
         {
           "do": "record",
-          "key": "surviving_members_header",
+          "key": "survivingMembersHeader",
           "value": true
         },
         {

@@ -20,6 +20,7 @@
     "83003",
     "83004"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -124,7 +125,7 @@
         },
         {
           "do": "record",
-          "key": "tes_brotherhood_schemes_continue",
+          "key": "tesBrotherhoodSchemesContinue",
           "value": true
         }
       ]
@@ -135,12 +136,12 @@
       "effects": [
         {
           "do": "record",
-          "key": "tes_curse_of_slumber_lifted",
+          "key": "tesCurseOfSlumberLifted",
           "value": true
         },
         {
           "do": "record",
-          "key": "tes_taken_by_the_abyss",
+          "key": "tesTakenByTheAbyss",
           "value": true
         },
         {
@@ -162,7 +163,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "tes_aware_of_xzharahs_plan",
+          "key": "tesAwareOfXzharahsPlan",
           "value": true
         },
         {

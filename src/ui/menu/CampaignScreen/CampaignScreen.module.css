@@ -78,3 +78,9 @@
   text-decoration: line-through;
   opacity: 0.65;
 }
+
+/* the options chosen when the campaign was created, read-only */
+.options {
+  margin: 0 0 12px;
+  opacity: 0.85;
+}

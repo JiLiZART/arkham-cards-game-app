@@ -23,6 +23,7 @@
     "08660",
     "08661"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -137,7 +138,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "the_seal_was_used_improperly",
+          "key": "theSealWasUsedImproperly",
           "value": true
         },
         {

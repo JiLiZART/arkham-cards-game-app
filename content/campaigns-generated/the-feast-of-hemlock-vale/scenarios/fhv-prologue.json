@@ -1,0 +1,129 @@
+{
+  "id": "fhv-prologue",
+  "name": "Welcome to Hemlock Vale!",
+  "card": "10704",
+  "intro": "<blockquote><fancy>June 1926</fancy>\nMiskatonic Survey, June 1926. Members Marquez, Musgrave, et alii.\nAfter three separate reviews by Miskatonic University’s board and grant commitee, we have reached Hemlock Isle. Our driver took us across a natural land-bridge they call the “causeway”—only traversible at low tide—to a small fishing village called Akwan. Bertie showed the locals several sketches and photographs of the alkaline blossom, but the locals would have none of it. Or maybe none of him. Bertie is exceedingly chipper.\nThe survey consists of myself, my assistant Bertie Musgrave, and some contacts of Dr. Armitage. He insisted they accompany me as part of the terms of the grant. I just hope they don’t get in the way. The island is private property and has been off-limits to visitors for some time—until now. The locals are advertising some kind of festival throughout New England, even as far south as Boston and Arkham.\nThere were no lodgings in Akwan, and according to local rumors, camping on the island is a risky affair. The locals were unresponsive when I pressed further, but I was at least able to procure a map of the island as well as some basic supplies. We were all but resigned to pitching a tent west of Akwan, but then we met a young man named Theo who offered us lodging in a village called ‘Hemlock Vale’.\n<right><fancy>Dr. Rosa Marquez</fancy></right>\n</blockquote>\n“But really, I think you’re gonna love it here,” Theo shouts from the truck window. Dr. Marquez—athletic and well-tanned at 40—closes her survey journal and looks up at the sky. “I don’t know anyone who doesn’t love Hemlock Isle,” Theo continues. “And I don’t know why we haven’t invited folks sooner! I assume you’re here for the Feast.”\n“Is this feast some sort of local tradition?” Bertie says in a crisp British accent. The breeze stirs the round man’s shock of thick hair as he leans forward eagerly.\n“This is the first one ever! Everyone in the Vale’s pulled out all the stops so everyone feels welcome. We’re just so excited to have visitors!” The young man laughs as your truck crests the hilltop. Hemlock Isle stretches away in every direction.\nTo the south, glistening black lakes dot a tangled marsh all the way to the coast. Up north, whitecapped hills gather around jutting obsidian rocks, resembling an exposed spine. Past a huddle of hills, the dense western forest grows up the rocky hillside, bisected by a wide river. And even further north, past the white hills, is a bleak rocky coastline at the edge of the slatey Atlantic waters.\nThe road takes you past lush farmland into a village nestled in the hills. Gaudy floral arrangments and brilliant ribbons hang from rooftops and fenceposts. A prismatic rainbow shimmers in a cloudless sky, lending the scene an idyllic air. As the truck rolls to a stop in the crossroads, locals and children in white-gold cloaks and wooden animal masks gather around you, grinning from ear to ear.\n“Willkommen!” An imposing woman with steel-gray hair and a white-gold cloak cuts through the crowd. “Welcome to Hemlock Vale. I am Mother Rachel, and these are my people. What brings you here?”",
+  "encounterSets": [
+    "the_first_day",
+    "day_of_rest",
+    "residents",
+    "the_vale"
+  ],
+  "sideDecks": {},
+  "acts": [
+    "10682"
+  ],
+  "agendas": [
+    "10681"
+  ],
+  "setupCards": [],
+  "setup": [
+    {
+      "do": "putIntoPlay",
+      "codes": [
+        "10705a"
+      ]
+    },
+    {
+      "do": "startAt",
+      "code": "10705a"
+    }
+  ],
+  "tokens": {
+    "easy": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": 1
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -1
+      }
+    },
+    "standard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": 1
+      },
+      "tablet": {
+        "modifier": -2
+      },
+      "elderThing": {
+        "modifier": -1
+      }
+    },
+    "hard": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    },
+    "expert": {
+      "skull": {
+        "modifier": -2
+      },
+      "cultist": {
+        "modifier": -1
+      },
+      "tablet": {
+        "modifier": -4
+      },
+      "elderThing": {
+        "modifier": -3
+      }
+    }
+  },
+  "resolutions": {
+    "R1": {
+      "title": "Resolution 1",
+      "text": "You meet Dr. Marquez and Bertie back at the Crossroads. After you each share some possible leads for the survey, the professor lays out the map of Hemlock Isle. “I didn’t expect the village to be so religious,” says Dr. Marquez. Bertie lights up in response. “They almost seem to be living in some transcendentalist ideal. I have no idea what they actually believe, mind you, but they seem friendly enough.”\n“Friendly’s a word for it,” Dr. Marquez smiles grimly. “We have a good three days before the island is overrun with tourists. I hate tourists.”\n“That sounds rather ill-natured given the celebration!” Bertie ventures. Dr. Marquez gives him a withering look. “What I mean is that they’ll disrupt the local habitats, so our time is limited. We can split up to cover more ground, or we can stick together. Theo has volunteered to drive us anywhere we need to go, and even said we could take his truck at night—though we aren’t to tell Mother Rachel. Given the stories of deadly wildlife, I’ve hired Judith to accompany me to Eastwick Bog. Either of you are welcome to join. Just be back by sundown.”\n“I plan to take a walk to the Western Woods,” Bertie says. “Alone, if you don’t mind. If Ms. Olmstead’s descriptions are to be believed, they shall be quite stunning.” You consider your options.",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "autoFail"
+        },
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    },
+    "none": {
+      "title": "No resolution was reached",
+      "text": "",
+      "effects": [
+        {
+          "do": "xp",
+          "victory": true,
+          "bonus": 0,
+          "who": "each"
+        }
+      ]
+    }
+  },
+  "i18nId": "fhv_prologue",
+  "connections": [],
+  "oneWay": [],
+  "layout": {
+    "10705a": [
+      0,
+      0
+    ]
+  }
+}

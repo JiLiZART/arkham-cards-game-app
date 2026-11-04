@@ -8,6 +8,7 @@
   "settings.title": "Настройки",
   "wizard.back": "Назад",
   "wizard.next": "Продолжить",
+  "wizard.options": "Опции",
   "difficulty.hard": "Сложный",
   "difficulty.expert": "Экстремальный",
   "menu.language": "Язык",
@@ -29,6 +30,13 @@
   "stat.sanity": "Рассудок",
   "stat.resources": "Ресурсы",
   "stat.clues": "Улики",
+  "net.lobby.campaign": "Кампания",
+  "net.lobby.difficulty": "Сложность",
+  "net.lobby.seats": "Сыщики",
+  "net.lobby.deck": "Колода",
+  "net.lobby.take": "Сыграть карту",
+  "net.lobby.start": "Начать",
+  "net.takeSeat": "Сыграть карту",
   "glance.willpower": "Воля",
   "glance.intellect": "Интеллект",
   "glance.combat": "Сила",
@@ -146,5 +154,10 @@
   "wizard.kind.campaign": "Кампании",
   "wizard.interlude": "Интерлюдия",
   "wizard.close": "Закрыть",
-  "option.boostNo": "Нет"
+  "option.boostNo": "Нет",
+  "fullscreen.no": "Не сейчас",
+  "wizard.filter.toggle": "Фильтры",
+  "wizard.filter.rules": "Правила",
+  "sheet.close": "Закрыть",
+  "deckEditor.addCards": "Добавить карты"
 }

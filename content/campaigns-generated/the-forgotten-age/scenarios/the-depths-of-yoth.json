@@ -24,6 +24,7 @@
     "04283",
     "04284"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -122,7 +123,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "fell_into_depths",
+          "key": "fellIntoDepths",
           "value": true
         },
         {
@@ -139,7 +140,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "nexus_is_near",
+          "key": "nexusIsNear",
           "value": true
         },
         {

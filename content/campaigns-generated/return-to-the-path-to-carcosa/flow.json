@@ -326,6 +326,40 @@
       ]
     }
   },
+  "before": {
+    "return-to-a-phantom-of-truth": [
+      "return-to-a-phantom-of-truth:earn_lost_soul",
+      "return-to-a-phantom-of-truth:dream_2_test",
+      "return-to-a-phantom-of-truth:check_for_mitpm",
+      "return-to-a-phantom-of-truth:check_for_onyx_clasp"
+    ],
+    "return-to-black-stars-rise": [
+      "return-to-black-stars-rise:add_chaos_token",
+      "return-to-black-stars-rise:add_weakness",
+      "return-to-black-stars-rise:check_for_mitpm",
+      "return-to-black-stars-rise:check_for_onyx_clasp"
+    ],
+    "return-to-dim-carcosa": [
+      "return-to-dim-carcosa:check_for_onyx_clasp",
+      "return-to-dim-carcosa:check_for_mitpm"
+    ],
+    "return-to-echoes-of-the-past": [
+      "return-to-echoes-of-the-past:check_for_mitpm"
+    ],
+    "return-to-the-last-king": [
+      "return-to-the-last-king:check_for_mitpm"
+    ],
+    "return-to-the-pallid-mask": [
+      "return-to-the-pallid-mask:check_intro_condition",
+      "return-to-the-pallid-mask:check_for_mitpm",
+      "return-to-the-pallid-mask:check_for_onyx_clasp"
+    ],
+    "return-to-the-unspeakable-oath": [
+      "return-to-the-unspeakable-oath:add_chaos_token",
+      "return-to-the-unspeakable-oath:check_for_mitpm",
+      "return-to-the-unspeakable-oath:check_for_onyx_clasp"
+    ]
+  },
   "steps": {
     "campaign:prologue": {
       "kind": "story",
@@ -354,7 +388,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "reprint_language",
+              "key": "reprintLanguage",
               "section": "hidden",
               "value": true
             }
@@ -465,7 +499,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "ignored_daniels_warning",
+          "key": "ignoredDanielsWarning",
           "section": "campaign_notes",
           "value": true
         }
@@ -498,7 +532,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "heeded_daniels_warning",
+          "key": "heededDanielsWarning",
           "section": "campaign_notes",
           "value": true
         }
@@ -595,7 +629,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "intruded_on_secret_meeting",
+          "key": "intrudedOnSecretMeeting",
           "section": "campaign_notes",
           "value": true
         },
@@ -665,7 +699,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "fled_dinner_party",
+          "key": "fledDinnerParty",
           "section": "campaign_notes",
           "value": true
         }
@@ -733,7 +767,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "slayed_the_monsters",
+          "key": "slayedTheMonsters",
           "section": "campaign_notes",
           "value": true
         },
@@ -752,7 +786,7 @@
         {
           "do": "record",
           "key": "03065b",
-          "section": "vips_slain",
+          "section": "vipsSlain",
           "value": true
         }
       ]
@@ -762,7 +796,7 @@
       "condition": {
         "kind": "logCards",
         "id": "03065b",
-        "section": "vips_slain"
+        "section": "vipsSlain"
       },
       "then": [],
       "else": [
@@ -775,7 +809,7 @@
         {
           "do": "record",
           "key": "03066b",
-          "section": "vips_slain",
+          "section": "vipsSlain",
           "value": true
         }
       ]
@@ -785,7 +819,7 @@
       "condition": {
         "kind": "logCards",
         "id": "03066b",
-        "section": "vips_slain"
+        "section": "vipsSlain"
       },
       "then": [],
       "else": [
@@ -798,7 +832,7 @@
         {
           "do": "record",
           "key": "03067b",
-          "section": "vips_slain",
+          "section": "vipsSlain",
           "value": true
         }
       ]
@@ -808,7 +842,7 @@
       "condition": {
         "kind": "logCards",
         "id": "03067b",
-        "section": "vips_slain"
+        "section": "vipsSlain"
       },
       "then": [],
       "else": [
@@ -821,7 +855,7 @@
         {
           "do": "record",
           "key": "03068b",
-          "section": "vips_slain",
+          "section": "vipsSlain",
           "value": true
         }
       ]
@@ -831,7 +865,7 @@
       "condition": {
         "kind": "logCards",
         "id": "03068b",
-        "section": "vips_slain"
+        "section": "vipsSlain"
       },
       "then": [],
       "else": [
@@ -844,7 +878,7 @@
         {
           "do": "record",
           "key": "03069b",
-          "section": "vips_slain",
+          "section": "vipsSlain",
           "value": true
         }
       ]
@@ -854,7 +888,7 @@
       "condition": {
         "kind": "logCards",
         "id": "03069b",
-        "section": "vips_slain"
+        "section": "vipsSlain"
       },
       "then": [],
       "else": [
@@ -964,7 +998,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "did_not_escape_gaze",
+          "key": "didNotEscapeGaze",
           "section": "campaign_notes",
           "value": true
         }
@@ -1023,7 +1057,7 @@
         {
           "do": "record",
           "key": "03066b",
-          "section": "vips_slain",
+          "section": "vipsSlain",
           "value": true
         }
       ]
@@ -1047,7 +1081,7 @@
       "condition": {
         "kind": "logHas",
         "id": "03066b",
-        "section": "vips_slain"
+        "section": "vipsSlain"
       },
       "then": [],
       "else": [
@@ -1073,7 +1107,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "found_nigels_home",
+          "key": "foundNigelsHome",
           "section": "campaign_notes",
           "value": true
         }
@@ -1131,7 +1165,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "found_nigel_engram",
+          "key": "foundNigelEngram",
           "section": "campaign_notes",
           "value": true
         },
@@ -1196,18 +1230,367 @@
       "effects": [
         {
           "do": "record",
-          "key": "unable_to_find_nigel",
+          "key": "unableToFindNigel",
           "section": "campaign_notes",
           "value": true
         }
       ]
+    },
+    "return-to-a-phantom-of-truth:earn_lost_soul": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "03227",
+          "who": "each"
+        }
+      ]
+    },
+    "return-to-a-phantom-of-truth:dream_8": {
+      "kind": "story",
+      "text": "You peer in the mirror, and the Stranger peers back at you. His gaze drills into your mind. The mirror shatters.",
+      "bullets": []
+    },
+    "return-to-a-phantom-of-truth:dream_10": {
+      "kind": "story",
+      "text": "You chase the Stranger up a steep staircase of broken stone, a torrent of rain crashing upon your back as you run. Lightning flashes in the distance. A vortex of swirling black clouds looms above you, threatening to swallow the world whole. The masked man dashes through a wide set of doors atop the stairs, and you follow close behind. The sound of crashing thunder is muffled as the doors close behind you. Looking up, you see a familiar depiction in stained glass. “Beautiful, is it not?” the Stranger says quietly.",
+      "bullets": []
+    },
+    "return-to-a-phantom-of-truth:dream_11": {
+      "kind": "story",
+      "text": "You avoid looking at the stained glass. If this vile man considers it to be beautiful, it is probably some trap meant to ensnare your mind. You clench your fist until your knuckles are white and step forward to confront the Stranger.",
+      "bullets": []
+    },
+    "return-to-a-phantom-of-truth:mark_one_conviction:text": {
+      "kind": "story",
+      "text": "Mark one <b>Conviction</b> in your Campaign Log.",
+      "bullets": []
+    },
+    "return-to-a-phantom-of-truth:mark_one_conviction": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "conviction",
+          "section": "conviction",
+          "op": "add",
+          "value": 1
+        }
+      ]
+    },
+    "return-to-a-phantom-of-truth:dream_12": {
+      "kind": "story",
+      "text": "You peer up at the stained glass, curious. What is the shape of the shadow along the window? What is the meaning behind this strange design?",
+      "bullets": []
+    },
+    "return-to-a-phantom-of-truth:mark_one_doubt:text": {
+      "kind": "story",
+      "text": "Mark one <b>Doubt</b> in your Campaign Log.",
+      "bullets": []
+    },
+    "return-to-a-phantom-of-truth:mark_one_doubt": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "count",
+          "id": "doubt",
+          "section": "doubt",
+          "op": "add",
+          "value": 1
+        }
+      ]
+    },
+    "return-to-a-phantom-of-truth:dream_10_choice": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "beautiful",
+          "text": "<i>“How could any of this be beautiful to you?”</i>",
+          "effects": [],
+          "steps": [
+            "return-to-a-phantom-of-truth:dream_11",
+            "return-to-a-phantom-of-truth:mark_one_conviction:text",
+            "return-to-a-phantom-of-truth:mark_one_conviction"
+          ]
+        },
+        {
+          "id": "confused",
+          "text": "<i>“What exactly am I looking at?”</i>",
+          "effects": [],
+          "steps": [
+            "return-to-a-phantom-of-truth:dream_12",
+            "return-to-a-phantom-of-truth:mark_one_doubt:text",
+            "return-to-a-phantom-of-truth:mark_one_doubt"
+          ]
+        }
+      ]
+    },
+    "return-to-a-phantom-of-truth:dream_9": {
+      "kind": "story",
+      "text": "You chase the Stranger through dark, chilly passageways composed of hundreds of thousands of skeletal bodies. Skulls watch as you run, their mouths rattling a mocking taunt as you pass. The Stranger reaches a solid wall of bone, and is grabbed by bony hands and pulled into the wall. Their mocking laughs reach an awful crescendo.",
+      "bullets": []
+    },
+    "return-to-a-phantom-of-truth:dream_8_test#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "$count",
+        "section": "chasingTheStranger",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "return-to-a-phantom-of-truth:dream_9"
+      ],
+      "else": [
+        "return-to-a-phantom-of-truth:dream_10",
+        "return-to-a-phantom-of-truth:dream_10_choice"
+      ]
+    },
+    "return-to-a-phantom-of-truth:dream_8_test#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "$count",
+        "section": "chasingTheStranger",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "return-to-a-phantom-of-truth:dream_9"
+      ],
+      "else": [
+        "return-to-a-phantom-of-truth:dream_8_test#3"
+      ]
+    },
+    "return-to-a-phantom-of-truth:dream_8_test#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "$count",
+        "section": "chasingTheStranger",
+        "min": 1,
+        "max": 1
+      },
+      "then": [
+        "return-to-a-phantom-of-truth:dream_9"
+      ],
+      "else": [
+        "return-to-a-phantom-of-truth:dream_8_test#2"
+      ]
+    },
+    "return-to-a-phantom-of-truth:dream_8_test": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logCount",
+        "id": "$count",
+        "section": "chasingTheStranger",
+        "min": 0,
+        "max": 0
+      },
+      "then": [
+        "return-to-a-phantom-of-truth:dream_9"
+      ],
+      "else": [
+        "return-to-a-phantom-of-truth:dream_8_test#1"
+      ]
+    },
+    "return-to-a-phantom-of-truth:dream_3": {
+      "kind": "story",
+      "text": "“Ah, if it isn’t our esteemed guest,” the man with the mustache and the silver-handled cane says. He grabs a bottle of wine from the nearby countertop and pours you a glass. “I hear you have taken quite the interest in our little production,” he says with a smile. “Tell me: how are you enjoying Act 2, so far?”",
+      "bullets": []
+    },
+    "return-to-a-phantom-of-truth:dream_6": {
+      "kind": "story",
+      "text": "The lights of the theatre dim and a spotlight shines on the stage. “Welcome, ladies and gentleman!” the creature exclaims. Its many tentacles reach across the stage, up into the rafters, and throughout the aisles. It tears the curtains down, and tattered red cloth falls over its bulbous form.",
+      "bullets": []
+    },
+    "return-to-a-phantom-of-truth:dream_7": {
+      "kind": "story",
+      "text": "You find yourself inside the Arkham Police Department, desperately trying to explain to the desk sergeant what happened in the Ward Theatre. He scoffs and refuses to believe you. “We know what you’re really up to,” he says, and claps a pair of handcuffs over your wrists. “You’re under arrest for larceny. Boys, take ‘em away.” Several other cops flank you and prevent any escape. Your protests go unheard as you are firmly escorted down a flight of concrete stairs and hurled into a cold jail cell. “Maybe some time in lockup will change your story,” the desk sergeant shouts. He slams the door behind him, leaving you with your spiraling thoughts. How did they find out? How could they possibly know?",
+      "bullets": []
+    },
+    "return-to-a-phantom-of-truth:earn_paranoia:text": {
+      "kind": "story",
+      "text": "Choose an investigator. The chosen investigator has earned the Paranoia weakness (Core 97) (does not count toward deck size). Shuffle 1 copy of this weakness into that investigator’s deck, if able.",
+      "bullets": []
+    },
+    "return-to-a-phantom-of-truth:earn_paranoia": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "01097",
+          "who": "choice"
+        }
+      ]
+    },
+    "return-to-a-phantom-of-truth:dream_6_test": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "policeAreSuspicious",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "return-to-a-phantom-of-truth:dream_7",
+        "return-to-a-phantom-of-truth:earn_paranoia:text",
+        "return-to-a-phantom-of-truth:earn_paranoia",
+        "return-to-a-phantom-of-truth:dream_8",
+        "return-to-a-phantom-of-truth:dream_8_test"
+      ],
+      "else": [
+        "return-to-a-phantom-of-truth:dream_8",
+        "return-to-a-phantom-of-truth:dream_8_test"
+      ]
+    },
+    "return-to-a-phantom-of-truth:dream_4": {
+      "kind": "story",
+      "text": "Smoke and embers float upwards into the starless night sky. The screams of burning creatures fill you with a horrid sense of accomplishment. They almost sound human, you consider. But you know that isn’t true.",
+      "bullets": []
+    },
+    "return-to-a-phantom-of-truth:one_mental_trauma": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 0,
+          "mental": 1
+        }
+      ]
+    },
+    "return-to-a-phantom-of-truth:check_slayed_monsters": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "slayedTheMonsters",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "return-to-a-phantom-of-truth:dream_4",
+        "return-to-a-phantom-of-truth:one_mental_trauma",
+        "return-to-a-phantom-of-truth:dream_6",
+        "return-to-a-phantom-of-truth:dream_6_test"
+      ],
+      "else": [
+        "return-to-a-phantom-of-truth:dream_6",
+        "return-to-a-phantom-of-truth:dream_6_test"
+      ]
+    },
+    "return-to-a-phantom-of-truth:check_secret_meeting": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "intrudedOnSecretMeeting",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "return-to-a-phantom-of-truth:dream_3",
+        "return-to-a-phantom-of-truth:dream_6",
+        "return-to-a-phantom-of-truth:dream_6_test"
+      ],
+      "else": [
+        "return-to-a-phantom-of-truth:check_slayed_monsters"
+      ]
+    },
+    "return-to-a-phantom-of-truth:dream_2_test": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "kingClaimedVictims",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "return-to-a-phantom-of-truth:dream_8",
+        "return-to-a-phantom-of-truth:dream_8_test"
+      ],
+      "else": [
+        "return-to-a-phantom-of-truth:check_secret_meeting"
+      ]
+    },
+    "return-to-a-phantom-of-truth:transfer_mitpm:text": {
+      "kind": "story",
+      "text": "Because the original bearer of The Man in the Pallid Mask weakness is not playing this scenario, another investigator must become the bearer.",
+      "bullets": []
+    },
+    "return-to-a-phantom-of-truth:transfer_mitpm": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "03059"
+        },
+        {
+          "do": "earnCard",
+          "code": "03059",
+          "who": "choice"
+        }
+      ]
+    },
+    "return-to-a-phantom-of-truth:check_for_mitpm": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "03059",
+        "inv": "any"
+      },
+      "then": [],
+      "else": [
+        "return-to-a-phantom-of-truth:transfer_mitpm:text",
+        "return-to-a-phantom-of-truth:transfer_mitpm"
+      ]
+    },
+    "return-to-a-phantom-of-truth:transfer_onyx_clasp:text": {
+      "kind": "story",
+      "text": "Because <i>you took the onyx clasp</i> and the original bearer of the Clasp of Black Onyx weakness is not playing this scenario, another investigator must become the bearer.",
+      "bullets": []
+    },
+    "return-to-a-phantom-of-truth:transfer_onyx_clasp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "03142"
+        },
+        {
+          "do": "earnCard",
+          "code": "03142",
+          "who": "choice"
+        }
+      ]
+    },
+    "return-to-a-phantom-of-truth:check_missing_onyx_clasp": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "03142",
+        "inv": "any"
+      },
+      "then": [],
+      "else": [
+        "return-to-a-phantom-of-truth:transfer_onyx_clasp:text",
+        "return-to-a-phantom-of-truth:transfer_onyx_clasp"
+      ]
+    },
+    "return-to-a-phantom-of-truth:check_for_onyx_clasp": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "tookOnyxClasp",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "return-to-a-phantom-of-truth:check_missing_onyx_clasp"
+      ],
+      "else": []
     },
     "return-to-black-stars-rise:opened_path_below": {
       "kind": "effects",
       "effects": [
         {
           "do": "record",
-          "key": "opened_path_below",
+          "key": "openedPathBelow",
           "section": "campaign_notes",
           "value": true
         }
@@ -1274,7 +1657,7 @@
         {
           "do": "record",
           "key": "03069b",
-          "section": "vips_slain",
+          "section": "vipsSlain",
           "value": true
         }
       ]
@@ -1298,7 +1681,7 @@
       "condition": {
         "kind": "logHas",
         "id": "03069b",
-        "section": "vips_slain"
+        "section": "vipsSlain"
       },
       "then": [],
       "else": [
@@ -1324,7 +1707,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "opened_path_above",
+          "key": "openedPathAbove",
           "section": "campaign_notes",
           "value": true
         }
@@ -1390,7 +1773,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "carcosa_merged",
+          "key": "carcosaMerged",
           "section": "campaign_notes",
           "value": true
         }
@@ -1419,6 +1802,185 @@
         }
       ]
     },
+    "return-to-black-stars-rise:add_chaos_token:easy:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "-3"
+        }
+      ]
+    },
+    "return-to-black-stars-rise:add_chaos_token:standard:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "-5"
+        }
+      ]
+    },
+    "return-to-black-stars-rise:add_chaos_token:hard:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "-6"
+        }
+      ]
+    },
+    "return-to-black-stars-rise:add_chaos_token:expert:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "-7"
+        }
+      ]
+    },
+    "return-to-black-stars-rise:add_chaos_token#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "expert"
+        ]
+      },
+      "then": [
+        "return-to-black-stars-rise:add_chaos_token:expert:fx"
+      ],
+      "else": []
+    },
+    "return-to-black-stars-rise:add_chaos_token#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "hard"
+        ]
+      },
+      "then": [
+        "return-to-black-stars-rise:add_chaos_token:hard:fx"
+      ],
+      "else": [
+        "return-to-black-stars-rise:add_chaos_token#3"
+      ]
+    },
+    "return-to-black-stars-rise:add_chaos_token#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "standard"
+        ]
+      },
+      "then": [
+        "return-to-black-stars-rise:add_chaos_token:standard:fx"
+      ],
+      "else": [
+        "return-to-black-stars-rise:add_chaos_token#2"
+      ]
+    },
+    "return-to-black-stars-rise:add_chaos_token": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "easy"
+        ]
+      },
+      "then": [
+        "return-to-black-stars-rise:add_chaos_token:easy:fx"
+      ],
+      "else": [
+        "return-to-black-stars-rise:add_chaos_token#1"
+      ]
+    },
+    "return-to-black-stars-rise:add_weakness": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addWeakness",
+          "trait": "Madness"
+        }
+      ]
+    },
+    "return-to-black-stars-rise:transfer_mitpm:text": {
+      "kind": "story",
+      "text": "Because the original bearer of The Man in the Pallid Mask weakness is not playing this scenario, another investigator must become the bearer.",
+      "bullets": []
+    },
+    "return-to-black-stars-rise:transfer_mitpm": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "03059"
+        },
+        {
+          "do": "earnCard",
+          "code": "03059",
+          "who": "choice"
+        }
+      ]
+    },
+    "return-to-black-stars-rise:check_for_mitpm": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "03059",
+        "inv": "any"
+      },
+      "then": [],
+      "else": [
+        "return-to-black-stars-rise:transfer_mitpm:text",
+        "return-to-black-stars-rise:transfer_mitpm"
+      ]
+    },
+    "return-to-black-stars-rise:transfer_onyx_clasp:text": {
+      "kind": "story",
+      "text": "Because <i>you took the onyx clasp</i> and the original bearer of the Clasp of Black Onyx weakness is not playing this scenario, another investigator must become the bearer.",
+      "bullets": []
+    },
+    "return-to-black-stars-rise:transfer_onyx_clasp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "03142"
+        },
+        {
+          "do": "earnCard",
+          "code": "03142",
+          "who": "choice"
+        }
+      ]
+    },
+    "return-to-black-stars-rise:check_missing_onyx_clasp": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "03142",
+        "inv": "any"
+      },
+      "then": [],
+      "else": [
+        "return-to-black-stars-rise:transfer_onyx_clasp:text",
+        "return-to-black-stars-rise:transfer_onyx_clasp"
+      ]
+    },
+    "return-to-black-stars-rise:check_for_onyx_clasp": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "tookOnyxClasp",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "return-to-black-stars-rise:check_missing_onyx_clasp"
+      ],
+      "else": []
+    },
     "return-to-curtain-call:stranger_is_on_to_you:text": {
       "kind": "story",
       "text": "In your Campaign Log, record <i>the Stranger is on to you</i>. Add The Man in the Pallid Mask weakness to the lead investigator’s deck (does not count towards deck size). For the remainder of this campaign, any time the bearer of The Man in the Pallid Mask leaves the campaign for any reason, choose a new investigator to become the bearer of The Man in the Pallid Mask weakness, and add it to that investigator’s deck.",
@@ -1429,7 +1991,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "stranger_is_on_to_you",
+          "key": "strangerIsOnToYou",
           "section": "campaign_notes",
           "value": true
         },
@@ -1447,8 +2009,8 @@
       "effects": [
         {
           "do": "count",
-          "id": "chasing_the_stranger",
-          "section": "chasing_the_stranger",
+          "id": "chasingTheStranger",
+          "section": "chasingTheStranger",
           "op": "add",
           "value": "input"
         }
@@ -1568,7 +2130,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "cca_add_chaos_token",
+        "id": "ccaAddChaosToken",
         "section": "hidden"
       },
       "then": [],
@@ -1617,7 +2179,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "tried_to_warn_police",
+          "key": "triedToWarnPolice",
           "section": "campaign_notes",
           "value": true
         },
@@ -1635,7 +2197,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "police_are_suspicious",
+          "key": "policeAreSuspicious",
           "section": "campaign_notes",
           "value": true
         }
@@ -1664,8 +2226,8 @@
       "effects": [
         {
           "do": "count",
-          "id": "chasing_the_stranger",
-          "section": "chasing_the_stranger",
+          "id": "chasingTheStranger",
+          "section": "chasingTheStranger",
           "op": "add",
           "value": 2
         }
@@ -1686,7 +2248,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "chose_not_to_warn_police",
+          "key": "choseNotToWarnPolice",
           "section": "campaign_notes",
           "value": true
         },
@@ -1704,7 +2266,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "prevented_hasturs_escape",
+          "key": "preventedHastursEscape",
           "section": "campaign_notes",
           "value": true
         }
@@ -1824,7 +2386,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "carcosa_merged",
+          "key": "carcosaMerged",
           "section": "campaign_notes",
           "value": true
         }
@@ -1863,10 +2425,86 @@
       "effects": [
         {
           "do": "record",
-          "key": "hastur_has_you",
+          "key": "hasturHasYou",
           "section": "campaign_notes",
           "value": true
         }
+      ]
+    },
+    "return-to-dim-carcosa:transfer_onyx_clasp:text": {
+      "kind": "story",
+      "text": "Because <i>you took the onyx clasp</i> and the original bearer of the Clasp of Black Onyx weakness is not playing this scenario, another investigator must become the bearer.",
+      "bullets": []
+    },
+    "return-to-dim-carcosa:transfer_onyx_clasp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "03142"
+        },
+        {
+          "do": "earnCard",
+          "code": "03142",
+          "who": "choice"
+        }
+      ]
+    },
+    "return-to-dim-carcosa:check_missing_onyx_clasp": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "03142",
+        "inv": "any"
+      },
+      "then": [],
+      "else": [
+        "return-to-dim-carcosa:transfer_onyx_clasp:text",
+        "return-to-dim-carcosa:transfer_onyx_clasp"
+      ]
+    },
+    "return-to-dim-carcosa:check_for_onyx_clasp": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "tookOnyxClasp",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "return-to-dim-carcosa:check_missing_onyx_clasp"
+      ],
+      "else": []
+    },
+    "return-to-dim-carcosa:transfer_mitpm:text": {
+      "kind": "story",
+      "text": "Because the original bearer of The Man in the Pallid Mask weakness is not playing this scenario, another investigator must become the bearer.",
+      "bullets": []
+    },
+    "return-to-dim-carcosa:transfer_mitpm": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "03059"
+        },
+        {
+          "do": "earnCard",
+          "code": "03059",
+          "who": "choice"
+        }
+      ]
+    },
+    "return-to-dim-carcosa:check_for_mitpm": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "03059",
+        "inv": "any"
+      },
+      "then": [],
+      "else": [
+        "return-to-dim-carcosa:transfer_mitpm:text",
+        "return-to-dim-carcosa:transfer_mitpm"
       ]
     },
     "return-to-echoes-of-the-past:took_onyx_clasp:text": {
@@ -1879,7 +2517,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "took_onyx_clasp",
+          "key": "tookOnyxClasp",
           "section": "campaign_notes",
           "value": true
         },
@@ -1919,7 +2557,7 @@
         {
           "do": "record",
           "key": "03068b",
-          "section": "vips_slain",
+          "section": "vipsSlain",
           "value": true
         }
       ]
@@ -1943,7 +2581,7 @@
       "condition": {
         "kind": "logHas",
         "id": "03068b",
-        "section": "vips_slain"
+        "section": "vipsSlain"
       },
       "then": [],
       "else": [
@@ -2005,7 +2643,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "left_onyx_clasp",
+          "key": "leftOnyxClasp",
           "section": "campaign_notes",
           "value": true
         },
@@ -2070,7 +2708,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "destroyed_the_oathspeaker",
+          "key": "destroyedTheOathspeaker",
           "section": "campaign_notes",
           "value": true
         },
@@ -2128,7 +2766,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "followers_of_sign_found_way",
+          "key": "followersOfSignFoundWay",
           "section": "campaign_notes",
           "value": true
         }
@@ -2191,6 +2829,38 @@
         }
       ]
     },
+    "return-to-echoes-of-the-past:transfer_mitpm:text": {
+      "kind": "story",
+      "text": "Because the original bearer of The Man in the Pallid Mask weakness is not playing this scenario, another investigator must become the bearer.",
+      "bullets": []
+    },
+    "return-to-echoes-of-the-past:transfer_mitpm": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "03059"
+        },
+        {
+          "do": "earnCard",
+          "code": "03059",
+          "who": "choice"
+        }
+      ]
+    },
+    "return-to-echoes-of-the-past:check_for_mitpm": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "03059",
+        "inv": "any"
+      },
+      "then": [],
+      "else": [
+        "return-to-echoes-of-the-past:transfer_mitpm:text",
+        "return-to-echoes-of-the-past:transfer_mitpm"
+      ]
+    },
     "return-to-the-last-king:vips_interviewed": {
       "kind": "cardChoice",
       "text": "In your Campaign Log, under “VIPs Interviewed,” record the name of each character you “interviewed.”",
@@ -2206,8 +2876,8 @@
       "effects": [
         {
           "do": "listCards",
-          "id": "vips_interviewed",
-          "section": "vips_interviewed",
+          "id": "vipsInterviewed",
+          "section": "vipsInterviewed",
           "codes": [
             "$input"
           ],
@@ -2232,8 +2902,8 @@
       "effects": [
         {
           "do": "listCards",
-          "id": "vips_slain",
-          "section": "vips_slain",
+          "id": "vipsSlain",
+          "section": "vipsSlain",
           "codes": [
             "$input"
           ],
@@ -2258,8 +2928,8 @@
       "effects": [
         {
           "do": "listCards",
-          "id": "vips_slain",
-          "section": "vips_slain",
+          "id": "vipsSlain",
+          "section": "vipsSlain",
           "codes": [
             "$input"
           ],
@@ -2272,7 +2942,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "reprint_language",
+        "id": "reprintLanguage",
         "section": "hidden"
       },
       "then": [
@@ -2381,7 +3051,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "reprint_language",
+        "id": "reprintLanguage",
         "section": "hidden"
       },
       "then": [
@@ -2391,6 +3061,38 @@
       "else": [
         "return-to-the-last-king:really_skip_lunacys_reward:text",
         "return-to-the-last-king:really_skip_lunacys_reward"
+      ]
+    },
+    "return-to-the-last-king:transfer_mitpm:text": {
+      "kind": "story",
+      "text": "Because the original bearer of The Man in the Pallid Mask weakness is not playing this scenario, another investigator must become the bearer.",
+      "bullets": []
+    },
+    "return-to-the-last-king:transfer_mitpm": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "03059"
+        },
+        {
+          "do": "earnCard",
+          "code": "03059",
+          "who": "choice"
+        }
+      ]
+    },
+    "return-to-the-last-king:check_for_mitpm": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "03059",
+        "inv": "any"
+      },
+      "then": [],
+      "else": [
+        "return-to-the-last-king:transfer_mitpm:text",
+        "return-to-the-last-king:transfer_mitpm"
       ]
     },
     "return-to-the-pallid-mask:ask_conviction_or_doubt_resolution": {
@@ -2450,7 +3152,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "know_site_of_gate",
+          "key": "knowSiteOfGate",
           "section": "campaign_notes",
           "value": true
         }
@@ -2463,7 +3165,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "read_act_2",
+          "key": "readAct2",
           "section": "campaign_notes",
           "value": true
         },
@@ -2534,7 +3236,7 @@
         {
           "do": "record",
           "key": "03067b",
-          "section": "vips_slain",
+          "section": "vipsSlain",
           "value": true
         }
       ]
@@ -2558,7 +3260,7 @@
       "condition": {
         "kind": "logHas",
         "id": "03067b",
-        "section": "vips_slain"
+        "section": "vipsSlain"
       },
       "then": [],
       "else": [
@@ -2600,7 +3302,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "tpm_conviction_or_doubt",
+        "id": "tpmConvictionOrDoubt",
         "section": "hidden"
       },
       "then": [],
@@ -2672,7 +3374,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "tpm_conviction_or_doubt",
+        "id": "tpmConvictionOrDoubt",
         "section": "hidden"
       },
       "then": [],
@@ -2691,14 +3393,14 @@
       "effects": [
         {
           "do": "record",
-          "key": "know_site_of_gate",
+          "key": "knowSiteOfGate",
           "section": "campaign_notes",
           "value": true
         },
         {
           "do": "count",
-          "id": "chasing_the_stranger",
-          "section": "chasing_the_stranger",
+          "id": "chasingTheStranger",
+          "section": "chasingTheStranger",
           "op": "add",
           "value": 2
         }
@@ -2746,12 +3448,146 @@
         }
       ]
     },
+    "return-to-the-pallid-mask:intro_1": {
+      "kind": "story",
+      "text": "You are stirred awake by dirty, stale air and dust in your throat. You are lying on a slab of cold stone inside a lightless underground passageway. How did you get here? And where is “here” exactly? A shiver courses up your body, and your hair stands on end. Rising to your feet, you take stock of your surroundings. Bones decorate the walls and ceiling around you, open-mouthed skulls peering back at you everywhere you look.",
+      "bullets": []
+    },
+    "return-to-the-pallid-mask:awoke_inside_catacombs": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "awokeInsideCatacombs",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-the-pallid-mask:intro_2": {
+      "kind": "story",
+      "text": "The contents of Nigel Engram’s home answer none of your questions about The King in Yellow, but do hint at where you should head next. The old, tattered map you found on his coffee table depicts a section of the infamous Catacombs of Paris. One particular room on the map has been circled with pen, and next to it is written: “The key to opening the Path lies here!” You swallow your fear and head immediately for the entrance to the catacombs underneath Rue de la Tombe-Issoire.",
+      "bullets": []
+    },
+    "return-to-the-pallid-mask:entered_catacombs": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "enteredCatacombs",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-the-pallid-mask:check_intro_condition": {
+      "kind": "branch",
+      "condition": {
+        "kind": "any",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "unableToFindNigel",
+            "section": "campaign_notes"
+          },
+          {
+            "kind": "logHas",
+            "id": "didNotEscapeGaze",
+            "section": "campaign_notes"
+          }
+        ]
+      },
+      "then": [
+        "return-to-the-pallid-mask:intro_1",
+        "return-to-the-pallid-mask:awoke_inside_catacombs"
+      ],
+      "else": [
+        "return-to-the-pallid-mask:intro_2",
+        "return-to-the-pallid-mask:entered_catacombs"
+      ]
+    },
+    "return-to-the-pallid-mask:transfer_mitpm:text": {
+      "kind": "story",
+      "text": "Because the original bearer of The Man in the Pallid Mask weakness is not playing this scenario, another investigator must become the bearer.",
+      "bullets": []
+    },
+    "return-to-the-pallid-mask:transfer_mitpm": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "03059"
+        },
+        {
+          "do": "earnCard",
+          "code": "03059",
+          "who": "choice"
+        }
+      ]
+    },
+    "return-to-the-pallid-mask:check_for_mitpm": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "03059",
+        "inv": "any"
+      },
+      "then": [],
+      "else": [
+        "return-to-the-pallid-mask:transfer_mitpm:text",
+        "return-to-the-pallid-mask:transfer_mitpm"
+      ]
+    },
+    "return-to-the-pallid-mask:transfer_onyx_clasp:text": {
+      "kind": "story",
+      "text": "Because <i>you took the onyx clasp</i> and the original bearer of the Clasp of Black Onyx weakness is not playing this scenario, another investigator must become the bearer.",
+      "bullets": []
+    },
+    "return-to-the-pallid-mask:transfer_onyx_clasp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "03142"
+        },
+        {
+          "do": "earnCard",
+          "code": "03142",
+          "who": "choice"
+        }
+      ]
+    },
+    "return-to-the-pallid-mask:check_missing_onyx_clasp": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "03142",
+        "inv": "any"
+      },
+      "then": [],
+      "else": [
+        "return-to-the-pallid-mask:transfer_onyx_clasp:text",
+        "return-to-the-pallid-mask:transfer_onyx_clasp"
+      ]
+    },
+    "return-to-the-pallid-mask:check_for_onyx_clasp": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "tookOnyxClasp",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "return-to-the-pallid-mask:check_missing_onyx_clasp"
+      ],
+      "else": []
+    },
     "return-to-the-unspeakable-oath:king_claimed_victims": {
       "kind": "effects",
       "effects": [
         {
           "do": "record",
-          "key": "king_claimed_victims",
+          "key": "kingClaimedVictims",
           "section": "campaign_notes",
           "value": true
         }
@@ -2776,7 +3612,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "took_onyx_clasp",
+        "id": "tookOnyxClasp",
         "section": "campaign_notes"
       },
       "then": [
@@ -2807,7 +3643,7 @@
         {
           "do": "record",
           "key": "03065b",
-          "section": "vips_slain",
+          "section": "vipsSlain",
           "value": true
         }
       ]
@@ -2831,7 +3667,7 @@
       "condition": {
         "kind": "logHas",
         "id": "03065b",
-        "section": "vips_slain"
+        "section": "vipsSlain"
       },
       "then": [],
       "else": [
@@ -2897,7 +3733,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "attacked_as_you_escaped_arkham",
+          "key": "attackedAsYouEscapedArkham",
           "section": "campaign_notes",
           "value": true
         }
@@ -2966,7 +3802,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "escaped_the_asylum",
+          "key": "escapedTheAsylum",
           "section": "campaign_notes",
           "value": true
         }
@@ -3014,6 +3850,176 @@
         }
       ]
     },
+    "return-to-the-unspeakable-oath:add_chaos_token:easy:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "-2"
+        }
+      ]
+    },
+    "return-to-the-unspeakable-oath:add_chaos_token:standard:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "-3"
+        }
+      ]
+    },
+    "return-to-the-unspeakable-oath:add_chaos_token:hard:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "-4"
+        }
+      ]
+    },
+    "return-to-the-unspeakable-oath:add_chaos_token:expert:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "-5"
+        }
+      ]
+    },
+    "return-to-the-unspeakable-oath:add_chaos_token#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "expert"
+        ]
+      },
+      "then": [
+        "return-to-the-unspeakable-oath:add_chaos_token:expert:fx"
+      ],
+      "else": []
+    },
+    "return-to-the-unspeakable-oath:add_chaos_token#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "hard"
+        ]
+      },
+      "then": [
+        "return-to-the-unspeakable-oath:add_chaos_token:hard:fx"
+      ],
+      "else": [
+        "return-to-the-unspeakable-oath:add_chaos_token#3"
+      ]
+    },
+    "return-to-the-unspeakable-oath:add_chaos_token#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "standard"
+        ]
+      },
+      "then": [
+        "return-to-the-unspeakable-oath:add_chaos_token:standard:fx"
+      ],
+      "else": [
+        "return-to-the-unspeakable-oath:add_chaos_token#2"
+      ]
+    },
+    "return-to-the-unspeakable-oath:add_chaos_token": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "easy"
+        ]
+      },
+      "then": [
+        "return-to-the-unspeakable-oath:add_chaos_token:easy:fx"
+      ],
+      "else": [
+        "return-to-the-unspeakable-oath:add_chaos_token#1"
+      ]
+    },
+    "return-to-the-unspeakable-oath:transfer_mitpm:text": {
+      "kind": "story",
+      "text": "Because the original bearer of The Man in the Pallid Mask weakness is not playing this scenario, another investigator must become the bearer.",
+      "bullets": []
+    },
+    "return-to-the-unspeakable-oath:transfer_mitpm": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "03059"
+        },
+        {
+          "do": "earnCard",
+          "code": "03059",
+          "who": "choice"
+        }
+      ]
+    },
+    "return-to-the-unspeakable-oath:check_for_mitpm": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "03059",
+        "inv": "any"
+      },
+      "then": [],
+      "else": [
+        "return-to-the-unspeakable-oath:transfer_mitpm:text",
+        "return-to-the-unspeakable-oath:transfer_mitpm"
+      ]
+    },
+    "return-to-the-unspeakable-oath:transfer_onyx_clasp:text": {
+      "kind": "story",
+      "text": "Because <i>you took the onyx clasp</i> and the original bearer of the Clasp of Black Onyx weakness is not playing this scenario, another investigator must become the bearer.",
+      "bullets": []
+    },
+    "return-to-the-unspeakable-oath:transfer_onyx_clasp": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "removeCard",
+          "code": "03142"
+        },
+        {
+          "do": "earnCard",
+          "code": "03142",
+          "who": "choice"
+        }
+      ]
+    },
+    "return-to-the-unspeakable-oath:check_missing_onyx_clasp": {
+      "kind": "branch",
+      "condition": {
+        "kind": "hasCard",
+        "card": "03142",
+        "inv": "any"
+      },
+      "then": [],
+      "else": [
+        "return-to-the-unspeakable-oath:transfer_onyx_clasp:text",
+        "return-to-the-unspeakable-oath:transfer_onyx_clasp"
+      ]
+    },
+    "return-to-the-unspeakable-oath:check_for_onyx_clasp": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "tookOnyxClasp",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "return-to-the-unspeakable-oath:check_missing_onyx_clasp"
+      ],
+      "else": []
+    },
     "ptc-interlude1-reprint:reward_1": {
       "kind": "story",
       "text": "The change in the atmosphere has you curious. What if it was all a trick of your mind? What if the hauntings that follow The King in Yellow are but transitory? The answers to all of your questions might lie inside. Cautiously, you open the front door to the manor once again. Reassuring jazz and the clamor of casual conversation grow louder as you step inside. The enticing smell of roasted pork wafts through the air. As you suspected, the signs of struggle and oddities you noticed before have vanished without explanation. Then, as you turn the corner into the dining room, you find the Stranger speaking with another man—tall, mustached, wearing a fine black suit, and holding a silver-handled cane. The Stranger turns to you, his gaze drills through your mind, and your vision swims with agony. Before you realize it, you are running as fast as you can, toppling through the front doorway in a haze of pain and disorientation. Without time to catch your breath, you race to your vehicle and speed away, hands trembling upon the steering wheel.",
@@ -3034,7 +4040,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "intruded_on_secret_meeting",
+          "key": "intrudedOnSecretMeeting",
           "section": "campaign_notes",
           "value": true
         },
@@ -3104,7 +4110,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "fled_dinner_party",
+          "key": "fledDinnerParty",
           "section": "campaign_notes",
           "value": true
         }
@@ -3172,7 +4178,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "slayed_the_monsters",
+          "key": "slayedTheMonsters",
           "section": "campaign_notes",
           "value": true
         },
@@ -3191,7 +4197,7 @@
         {
           "do": "record",
           "key": "03065b",
-          "section": "vips_slain",
+          "section": "vipsSlain",
           "value": true
         }
       ]
@@ -3201,7 +4207,7 @@
       "condition": {
         "kind": "logCards",
         "id": "03065b",
-        "section": "vips_slain"
+        "section": "vipsSlain"
       },
       "then": [],
       "else": [
@@ -3214,7 +4220,7 @@
         {
           "do": "record",
           "key": "03066b",
-          "section": "vips_slain",
+          "section": "vipsSlain",
           "value": true
         }
       ]
@@ -3224,7 +4230,7 @@
       "condition": {
         "kind": "logCards",
         "id": "03066b",
-        "section": "vips_slain"
+        "section": "vipsSlain"
       },
       "then": [],
       "else": [
@@ -3237,7 +4243,7 @@
         {
           "do": "record",
           "key": "03067b",
-          "section": "vips_slain",
+          "section": "vipsSlain",
           "value": true
         }
       ]
@@ -3247,7 +4253,7 @@
       "condition": {
         "kind": "logCards",
         "id": "03067b",
-        "section": "vips_slain"
+        "section": "vipsSlain"
       },
       "then": [],
       "else": [
@@ -3260,7 +4266,7 @@
         {
           "do": "record",
           "key": "03068b",
-          "section": "vips_slain",
+          "section": "vipsSlain",
           "value": true
         }
       ]
@@ -3270,7 +4276,7 @@
       "condition": {
         "kind": "logCards",
         "id": "03068b",
-        "section": "vips_slain"
+        "section": "vipsSlain"
       },
       "then": [],
       "else": [
@@ -3283,7 +4289,7 @@
         {
           "do": "record",
           "key": "03069b",
-          "section": "vips_slain",
+          "section": "vipsSlain",
           "value": true
         }
       ]
@@ -3293,7 +4299,7 @@
       "condition": {
         "kind": "logCards",
         "id": "03069b",
-        "section": "vips_slain"
+        "section": "vipsSlain"
       },
       "then": [],
       "else": [

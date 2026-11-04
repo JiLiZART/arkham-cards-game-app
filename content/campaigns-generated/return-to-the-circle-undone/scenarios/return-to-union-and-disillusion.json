@@ -20,6 +20,9 @@
     "05239",
     "05240"
   ],
+  "setupCards": [
+    "54046"
+  ],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -142,7 +145,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "true_work_of_silver_twilight_lodge_has_begun",
+          "key": "trueWorkOfSilverTwilightLodgeHasBegun",
           "value": true
         },
         {
@@ -159,7 +162,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "carl_sanford_possesses_the_secrets_of_the_universe",
+          "key": "carlSanfordPossessesTheSecretsOfTheUniverse",
           "value": true
         },
         {
@@ -200,7 +203,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "carl_sanford_possesses_the_secrets_of_the_universe",
+          "key": "carlSanfordPossessesTheSecretsOfTheUniverse",
           "value": true
         },
         {
@@ -217,7 +220,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "anette_mason_is_possessed_by_evil",
+          "key": "anetteMasonIsPossessedByEvil",
           "value": true
         },
         {
@@ -250,7 +253,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "coven_of_keziah_holds_the_world_in_its_grasp",
+          "key": "covenOfKeziahHoldsTheWorldInItsGrasp",
           "value": true
         },
         {
@@ -267,7 +270,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "anette_mason_is_possessed_by_evil",
+          "key": "anetteMasonIsPossessedByEvil",
           "value": true
         },
         {

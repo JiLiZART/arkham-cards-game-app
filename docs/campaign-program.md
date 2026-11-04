@@ -149,11 +149,13 @@ The campaign boxes by scenario. A row is done when the scenario is complete: its
 
 | Done | Scenario | Cards left | Tokens | Script |
 | --- | --- | --- | --- | --- |
+| [ ] | scenario `fhv-prologue` | 41 of 41 | not yet | no |
 | [ ] | scenario `written-in-rock` | 54 of 59 | not yet | no |
 | [ ] | scenario `hemlock-house` | 65 of 68 | not yet | no |
 | [ ] | scenario `the-silent-heath` | 56 of 59 | not yet | no |
 | [ ] | scenario `the-lost-sister` | 57 of 57 | not yet | no |
 | [ ] | scenario `the-thing-in-the-depths` | 53 of 54 | not yet | no |
+| [ ] | scenario `dawn-of-the-second-day` | 42 of 42 | not yet | no |
 | [ ] | scenario `the-twisted-hollow` | 55 of 55 | not yet | no |
 | [ ] | scenario `the-longest-night` | 59 of 81 | not yet | no |
 | [ ] | scenario `dawn-of-the-final-day` | 50 of 50 | not yet | no |
@@ -171,6 +173,7 @@ The campaign boxes by scenario. A row is done when the scenario is complete: its
 | [ ] | scenario `the-grand-vault` | 40 of 40 | not yet | no |
 | [ ] | scenario `court-of-the-ancients` | 42 of 43 | not yet | no |
 | [ ] | scenario `obsidian-canyons` | 48 of 56 | not yet | no |
+| [ ] | scenario `sepulchre-of-the-sleeper` | 21 of 25 | not yet | no |
 | [ ] | scenario `the-doom-of-arkham-part-1` | 20 of 39 | not yet | no |
 | [ ] | scenario `the-doom-of-arkham-part-2` | 49 of 68 | not yet | no |
 

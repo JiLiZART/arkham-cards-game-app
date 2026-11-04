@@ -23,6 +23,9 @@
     "05051",
     "05052"
   ],
+  "setupCards": [
+    "54017"
+  ],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -43,6 +46,19 @@
         "01154",
         "01155",
         "05057"
+      ]
+    },
+    {
+      "do": "remove",
+      "codes": [
+        "01143",
+        "01144",
+        "01145",
+        "01146",
+        "01147",
+        "01148",
+        "01157",
+        "01158"
       ]
     },
     {
@@ -115,17 +131,17 @@
       "effects": [
         {
           "do": "record",
-          "key": "witches_spell_broken",
+          "key": "witchesSpellBroken",
           "value": true
         },
         {
           "do": "record",
-          "key": "mesmerizing_flute",
+          "key": "mesmerizingFlute",
           "value": true
         },
         {
           "do": "record",
-          "key": "ritual_components",
+          "key": "ritualComponents",
           "value": true
         },
         {
@@ -148,17 +164,17 @@
       "effects": [
         {
           "do": "record",
-          "key": "witches_spell_broken",
+          "key": "witchesSpellBroken",
           "value": true
         },
         {
           "do": "record",
-          "key": "mesmerizing_flute",
+          "key": "mesmerizingFlute",
           "value": true
         },
         {
           "do": "record",
-          "key": "scrap_of_torn_shadow",
+          "key": "scrapOfTornShadow",
           "value": true
         },
         {
@@ -181,7 +197,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "witches_spell_cast",
+          "key": "witchesSpellCast",
           "value": true
         },
         {
@@ -198,12 +214,12 @@
       "effects": [
         {
           "do": "record",
-          "key": "witches_spell_cast",
+          "key": "witchesSpellCast",
           "value": true
         },
         {
           "do": "record",
-          "key": "mesmerizing_flute",
+          "key": "mesmerizingFlute",
           "value": true
         },
         {
@@ -226,22 +242,22 @@
       "effects": [
         {
           "do": "record",
-          "key": "witches_spell_cast",
+          "key": "witchesSpellCast",
           "value": true
         },
         {
           "do": "record",
-          "key": "erynn_wants_to_meet",
+          "key": "erynnWantsToMeet",
           "value": true
         },
         {
           "do": "record",
-          "key": "mesmerizing_flute",
+          "key": "mesmerizingFlute",
           "value": true
         },
         {
           "do": "record",
-          "key": "strange_incantation",
+          "key": "strangeIncantation",
           "value": true
         },
         {

@@ -22,6 +22,7 @@
     "90033a",
     "90034"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",

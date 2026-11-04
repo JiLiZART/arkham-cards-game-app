@@ -60,6 +60,7 @@
       ]
     }
   },
+  "before": {},
   "steps": {
     "campaign:intro": {
       "kind": "story",
@@ -84,7 +85,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "tes_dreamers_in_the_abyss",
+          "id": "tesDreamersInTheAbyss",
           "section": "campaign_notes",
           "op": "set",
           "value": "input"
@@ -101,7 +102,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "tes_escaped_brotherhood",
+          "key": "tesEscapedBrotherhood",
           "section": "campaign_notes",
           "value": true
         }
@@ -113,7 +114,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "tes_brotherhood_schemes_continue",
+          "key": "tesBrotherhoodSchemesContinue",
           "section": "campaign_notes",
           "value": true
         }
@@ -132,13 +133,13 @@
       "effects": [
         {
           "do": "record",
-          "key": "tes_curse_of_slumber_lifted",
+          "key": "tesCurseOfSlumberLifted",
           "section": "campaign_notes",
           "value": true
         },
         {
           "do": "crossOut",
-          "key": "tes_taken_by_the_abyss",
+          "key": "tesTakenByTheAbyss",
           "section": "campaign_notes"
         }
       ]
@@ -163,7 +164,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "tes_aware_of_xzharahs_plan",
+          "key": "tesAwareOfXzharahsPlan",
           "section": "campaign_notes",
           "value": true
         }
@@ -189,7 +190,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "tnu_day_of_reckoning_is_coming",
+          "key": "tnuDayOfReckoningIsComing",
           "section": "campaign_notes",
           "value": true
         }
@@ -219,18 +220,18 @@
       "effects": [
         {
           "do": "record",
-          "key": "tnu_the_abyss_was_saved",
+          "key": "tnuTheAbyssWasSaved",
           "section": "campaign_notes",
           "value": true
         },
         {
           "do": "crossOut",
-          "key": "tes_taken_by_the_abyss",
+          "key": "tesTakenByTheAbyss",
           "section": "campaign_notes"
         },
         {
           "do": "crossOut",
-          "key": "tnu_taken_by_the_abyss",
+          "key": "tnuTakenByTheAbyss",
           "section": "campaign_notes"
         }
       ]
@@ -255,7 +256,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "tnu_joined_xzharah",
+          "key": "tnuJoinedXzharah",
           "section": "campaign_notes",
           "value": true
         }

@@ -25,6 +25,9 @@
     "04044",
     "04045"
   ],
+  "setupCards": [
+    "53016"
+  ],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -110,7 +113,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "wait_for_additional_supplies",
+          "key": "waitForAdditionalSupplies",
           "value": true
         },
         {
@@ -127,17 +130,17 @@
       "effects": [
         {
           "do": "record",
-          "key": "cleared_path_to_temple",
+          "key": "clearedPathToTemple",
           "value": true
         },
         {
           "do": "record",
-          "key": "alejandro_remained_at_camp",
+          "key": "alejandroRemainedAtCamp",
           "value": true
         },
         {
           "do": "record",
-          "key": "earned_ichtacas_trust",
+          "key": "earnedIchtacasTrust",
           "value": true
         },
         {
@@ -154,12 +157,12 @@
       "effects": [
         {
           "do": "record",
-          "key": "cleared_path_to_temple",
+          "key": "clearedPathToTemple",
           "value": true
         },
         {
           "do": "record",
-          "key": "alejandro_followed_to_ruins",
+          "key": "alejandroFollowedToRuins",
           "value": true
         },
         {
@@ -169,7 +172,7 @@
         },
         {
           "do": "record",
-          "key": "ichtaca_is_wary",
+          "key": "ichtacaIsWary",
           "value": true
         },
         {

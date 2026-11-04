@@ -642,4 +642,6 @@ export interface GameSetup {
   pacePhases?: boolean;
   /** wait for the drawing investigator to tap the deck before each draw in play (the UI's games; engine tests and old saves don't) */
   tapDecks?: boolean;
+  /** the campaign's options chosen when it was created (`CampaignDef.options` ids): the encounter sets they swap in */
+  options?: string[];
 }

@@ -23,6 +23,7 @@
     "09662",
     "09663"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -122,7 +123,7 @@
         },
         {
           "do": "record",
-          "key": "have_not_seen_the_last_of_tzu_san_niang",
+          "key": "haveNotSeenTheLastOfTzuSanNiang",
           "value": true
         }
       ]
@@ -151,7 +152,7 @@
         },
         {
           "do": "record",
-          "key": "tzu_san_niang_is_under_your_sway",
+          "key": "tzuSanNiangIsUnderYourSway",
           "value": true
         }
       ]
@@ -168,7 +169,7 @@
         },
         {
           "do": "record",
-          "key": "have_not_seen_the_last_of_tzu_san_niang",
+          "key": "haveNotSeenTheLastOfTzuSanNiang",
           "value": true
         }
       ]
@@ -185,7 +186,7 @@
         },
         {
           "do": "record",
-          "key": "tzu_san_niang_has_you_under_her_sway",
+          "key": "tzuSanNiangHasYouUnderHerSway",
           "value": true
         }
       ]

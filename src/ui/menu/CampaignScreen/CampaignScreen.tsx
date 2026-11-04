@@ -86,6 +86,15 @@ export function CampaignScreen() {
       </header>
       <div className="wz-body">
         {notice && <div className={styles.notice}>{notice}</div>}
+        {(campaign.options?.length ?? 0) > 0 && (
+          <p className={styles.options} data-testid="campaign-options">
+            {tr("wizard.options")}:{" "}
+            {def.options
+              .filter((o) => campaign.options!.includes(o.id))
+              .map((o) => tr(o.labelKey))
+              .join(", ")}
+          </p>
+        )}
         {campaign.result && (
           <h2 className={styles[`result-${campaign.result}`]}>{tr(`result.${campaign.result}`)}</h2>
         )}

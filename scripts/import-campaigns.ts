@@ -29,6 +29,7 @@ import {
   resolutionEffects,
   tokenEffects,
   type Raw,
+  camelizeGuide,
 } from "./campaignGuide";
 import { readSnapshot, SNAPSHOT } from "./import-cards";
 import { ZONE } from "../src/engine/world/constants";
@@ -66,12 +67,84 @@ interface Card {
   backText?: string;
 }
 
+/** encounter set code -> its printed name ("arkham" -> "The Midnight Masks"), for the guide's notes that name a set */
+const SET_NAMES: Map<string, string> = new Map(
+  (
+    JSON.parse(readFileSync("inspired/arkhamdb-json-data/encounters.json", "utf8")) as {
+      code: string;
+      name: string;
+    }[]
+  ).map((e) => [e.code, e.name]),
+);
+const norm = (t: string) =>
+  t
+    .replace(/<[^>]+>/g, "")
+    .replace(/[’']/g, "'")
+    .toLowerCase()
+    .trim();
+
+const KEPT_TYPES: [RegExp, string][] = [
+  [/\blocations?\b/i, "location"],
+  [/\btreacher(y|ies)\b/i, "treachery"],
+  [/\benem(y|ies)\b/i, "enemy"],
+  [/\bassets?\b/i, "asset"],
+];
+
+/**
+ * A gathering step's note that takes only some of a set's cards ("only gather the 5 treachery cards (2x False Lead and
+ * 3x Hunting Shadow)", "only gather the location and treachery cards"): the set's other cards, removed at setup. The
+ * kinds the note keeps and the cards it names stay, and so does any card the setup itself puts out (`named`).
+ */
+function partialRemovals(
+  st: Raw,
+  sets: string[],
+  bySet: Map<string, Card[]>,
+  named: Set<string>,
+  where: string,
+): string[] {
+  const text: string = st.subtext ?? "";
+  const only = /only gather (the )?([^.]*)/i.exec(text)?.[2];
+  if (!only) return [];
+  const setName = /When gathering (?:the )?<i>([^<]+)<\/i>/i.exec(text)?.[1];
+  const set = setName
+    ? sets.find(
+        (x) =>
+          norm(SET_NAMES.get(x) ?? "").replace(/^the /, "") === norm(setName).replace(/^the /, ""),
+      )
+    : undefined;
+  const cards = set ? (bySet.get(set) ?? []) : [];
+  const types = KEPT_TYPES.filter(([re]) => re.test(only.replace(/\([^)]*\)/g, ""))).map(
+    ([, t]) => t,
+  );
+  const byName = codesByName(text, cards);
+  if (!set || (!types.length && !byName.length)) {
+    note(`${where}: partial set left whole (${norm(text).slice(0, 70)}…)`);
+    return [];
+  }
+  const keep = new Set([
+    ...cards.filter((c) => types.includes(c.type)).map((c) => c.code),
+    ...byName,
+    ...named,
+  ]);
+  return cards.filter((c) => !keep.has(c.code)).map((c) => c.code);
+}
+
+/** a back face listed beside its front (72008 / 72008b): only the front is a card of the pool */
+const withoutBackFaces = (pool: Card[]) =>
+  pool.filter((c) => {
+    const front = /^(\d{5})b$/.exec(c.code)?.[1];
+    return !front || !pool.some((x) => x.code === front && x.name === c.name);
+  });
+
 const report: string[] = [];
 const note = (s: string) => report.push(s);
 
-/** the campaign's difficulty choices, with their tokens */
-function bagsOf(campaign: Raw): Partial<Record<Difficulty, ChaosToken[]>> | null {
-  for (const st of campaign.steps ?? []) {
+/** the difficulty choices, with their tokens: the campaign's steps first, then a scenario's (a side scenario names its own) */
+export function bagsOf(
+  where: string,
+  stepLists: Raw[][],
+): Partial<Record<Difficulty, ChaosToken[]>> | null {
+  for (const st of stepLists.flat()) {
     const choices = st.input?.type === "choose_one" ? st.input.choices : null;
     if (!choices?.some((c: Raw) => Array.isArray(c.tokens))) continue;
     const out: Partial<Record<Difficulty, ChaosToken[]>> = {};
@@ -79,7 +152,7 @@ function bagsOf(campaign: Raw): Partial<Record<Difficulty, ChaosToken[]>> | null
       if (!DIFFICULTIES.includes(c.id) || !c.tokens) continue;
       const { bag, dropped } = chaosBag(c.tokens);
       out[c.id as Difficulty] = bag;
-      if (dropped.length) note(`${campaign.id}: ${c.id} bag without ${dropped.join(", ")}`);
+      if (dropped.length) note(`${where}: ${c.id} bag without ${dropped.join(", ")}`);
     }
     return out;
   }
@@ -115,7 +188,7 @@ function refCode(s: Raw, cards: Map<string, Card>): string | undefined {
   return undefined;
 }
 
-function scenarioOf(
+export function scenarioOf(
   s: Raw,
   campaignId: string,
   cards: Map<string, Card>,
@@ -147,7 +220,7 @@ function scenarioOf(
     [own, ...sets].map((x) => actsAndAgendas(bySet.get(x)!, x)[kind]).find((l) => l.length) ?? [];
   const acts = deck("acts");
   const agendas = deck("agendas");
-  const pool = sets.flatMap((x) => bySet.get(x)!);
+  const pool = withoutBackFaces(sets.flatMap((x) => bySet.get(x)!));
   const locations = pool.filter((c) => c.type === "location");
   const texts = sentences(
     run.map((st) => st.text).filter((t): t is string => typeof t === "string"),
@@ -184,17 +257,22 @@ function scenarioOf(
     ].filter((c) => !setAside.includes(c));
   }
   if (!inPlay.length) {
-    // ponytail: nothing named; the scenario set's first location keeps the scenario playable
-    const first = locations.find((c) => c.set === own && !setAside.includes(c.code));
+    // nothing named (a random start, or a setup the walk doesn't reach): the first location of the gathered sets, own set
+    // first, keeps the scenario playable; the campaign change writes the real start
+    const first =
+      locations.find((c) => c.set === own && !setAside.includes(c.code)) ??
+      locations.find((c) => !setAside.includes(c.code));
     if (first) inPlay = [first.code];
-    note(`${where}: no locations found in the setup text, starting with ${first?.name ?? "none"}`);
-  }
-  if (!inPlay.length || !acts.length || !agendas.length) {
     note(
-      `${where}: skipped (${!inPlay.length ? "no location" : !acts.length ? "no act" : "no agenda"})`,
+      `${where}: no locations found in the setup text (random start?), starting with ${first?.name ?? "none"}`,
     );
+  }
+  // a scenario may have no act deck (Sepulchre of the Sleeper ends through its agendas)
+  if (!inPlay.length || (!acts.length && !agendas.length)) {
+    note(`${where}: skipped (${!inPlay.length ? "no location" : "no act or agenda"})`);
     return null;
   }
+  if (!acts.length) note(`${where}: no act deck`);
   // locations without a place on the grid: a row below it, connected to every location (no source has the symbols)
   const loose = [
     ...new Set([...inPlay, ...setAside.filter((c) => cards.get(c)?.type === "location")]),
@@ -216,6 +294,9 @@ function scenarioOf(
     inPlay[0];
   const setup: SetupStep[] = [{ do: "putIntoPlay", codes: inPlay }];
   if (setAside.length) setup.push({ do: ZONE.SetAside, codes: setAside });
+  const putOut = new Set([...inPlay, ...setAside]);
+  const removed = setSteps.flatMap((st: Raw) => partialRemovals(st, sets, bySet, putOut, where));
+  if (removed.length) setup.push({ do: "remove", codes: removed });
   setup.push({ do: "startAt", code: start });
   // chaos tokens: a hand-written scenario's tables when it plays with the same reference card (a Return-to scenario);
   // otherwise the reference card's front for easy/standard, its back for hard/expert
@@ -268,6 +349,10 @@ function scenarioOf(
     sideDecks: outside.length ? { _setAside: outside } : {},
     acts,
     agendas,
+    // a Return-to box's setup card: the scenario cards of its own set other than the reference card
+    setupCards: (bySet.get(own) ?? [])
+      .filter((c) => c.type === "scenario" && c.code !== ref.code)
+      .map((c) => c.code),
     setup,
     tokens,
     resolutions,
@@ -299,7 +384,8 @@ const write = (file: string, v: unknown) => {
 const handWritten = (id: string) => existsSync(join(HAND, id, "campaign.json"));
 
 export function main() {
-  const guides: Raw[] = JSON.parse(readFileSync(GUIDES, "utf8"));
+  // every campaign log id and section in camelCase, as the hand-written campaigns write them
+  const guides: Raw[] = JSON.parse(readFileSync(GUIDES, "utf8")).map(camelizeGuide);
   const cards = new Map<string, Card>();
   for (const [pack, raws] of readSnapshot(SNAPSHOT))
     for (const r of raws)
@@ -328,7 +414,6 @@ export function main() {
       if (!isOfficial(c.id)) note(`${c.id} (${c.name}): fan-made, skipped`);
       continue;
     }
-    const bags = bagsOf(c) ?? CORE_BAGS;
     const byId = new Map<string, Raw>(g.scenarios.map((s: Raw) => [s.id, s]));
     const ordered: Raw[] = [
       ...(c.scenarios ?? []).map((id: string) => byId.get(id)).filter(Boolean),
@@ -359,6 +444,9 @@ export function main() {
           ];
     for (const grp of groups) {
       if (handWritten(grp.id)) continue;
+      const bags =
+        bagsOf(grp.id, [c.steps ?? [], ...grp.scenarios.map((s: Raw) => s.steps ?? [])]) ??
+        CORE_BAGS;
       const labels: Record<string, string> = {};
       const defs: ScenarioDef[] = [];
       /** guide scenario id → the file's id, for the flow */
@@ -423,6 +511,7 @@ export function main() {
         scenarios: defs.map((d) => d.id),
         i18nId: grp.i18nId,
         chaosBags: bags as CampaignDef["chaosBags"],
+        options: [],
         logLabels: {},
         packs: [...new Set(["core", ...defs.flatMap((d) => packsOf(d, cards, bySet))])].sort(),
         generated: true,

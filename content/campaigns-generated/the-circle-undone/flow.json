@@ -3,7 +3,7 @@
     "campaign:prologue"
   ],
   "order": [
-    "disappearance-at-the-twilight-estate",
+    "the-circle-undone-disappearance-at-the-twilight-estate",
     "the-witching-hour",
     "at-deaths-doorstep",
     "the-price-of-progress",
@@ -18,16 +18,6 @@
     "tcu-epilogue"
   ],
   "interludes": {
-    "disappearance-at-the-twilight-estate": {
-      "kind": "interlude",
-      "name": "Disappearance at the Twilight Estate",
-      "steps": [
-        "disappearance-at-the-twilight-estate:pre_intro",
-        "disappearance-at-the-twilight-estate:choose_neutral_investigators:text",
-        "disappearance-at-the-twilight-estate:no_decks:text",
-        "disappearance-at-the-twilight-estate:maybe_check_unplayed_investigators"
-      ]
-    },
     "tcu-epilogue": {
       "kind": "epilogue",
       "name": "Epilogue",
@@ -148,6 +138,14 @@
         "before-the-black-throne:upgradeDecks",
         "before-the-black-throne:win_question_mark:text",
         "before-the-black-throne:win_question_mark"
+      ]
+    },
+    "the-circle-undone-disappearance-at-the-twilight-estate": {
+      "none": [
+        "the-circle-undone-disappearance-at-the-twilight-estate:no_experience:text",
+        "the-circle-undone-disappearance-at-the-twilight-estate:pieces_of_evidence",
+        "the-circle-undone-disappearance-at-the-twilight-estate:return_player_cards:text",
+        "the-circle-undone-disappearance-at-the-twilight-estate:maybe_ask_being_hunted"
       ]
     },
     "for-the-greater-good": {
@@ -305,6 +303,21 @@
       ]
     }
   },
+  "before": {
+    "the-circle-undone-disappearance-at-the-twilight-estate": [
+      "the-circle-undone-disappearance-at-the-twilight-estate:maybe_check_unplayed_investigators"
+    ],
+    "the-secret-name": [
+      "the-secret-name:check_members_of_the_lodge"
+    ],
+    "the-witching-hour": [
+      "the-witching-hour:choose_fate"
+    ],
+    "union-and-disillusion": [
+      "union-and-disillusion:point_of_no_return",
+      "union-and-disillusion:check_sided_with_lodge"
+    ]
+  },
   "steps": {
     "campaign:prologue": {
       "kind": "story",
@@ -341,7 +354,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "investigators_escaped_the_spectral_realm",
+          "key": "investigatorsEscapedTheSpectralRealm",
           "section": "campaign_notes",
           "value": true
         }
@@ -363,7 +376,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "learned_nothing_of_the_lodges_schemes",
+          "key": "learnedNothingOfTheLodgesSchemes",
           "section": "campaign_notes",
           "value": true
         }
@@ -395,7 +408,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "being_hunted",
+        "id": "beingHunted",
         "section": "campaign_notes"
       },
       "then": [
@@ -408,7 +421,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "never_seen_again",
+          "key": "neverSeenAgain",
           "section": "campaign_notes",
           "value": true
         }
@@ -424,7 +437,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "azathoth_devoured_the_universe",
+          "key": "azathothDevouredTheUniverse",
           "section": "campaign_notes",
           "value": true
         }
@@ -472,7 +485,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "lead_investigator_joins_pipers",
+          "key": "leadInvestigatorJoinsPipers",
           "section": "campaign_notes",
           "value": true
         }
@@ -483,7 +496,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "azathoth_slumbers",
+          "key": "azathothSlumbers",
           "section": "campaign_notes",
           "value": true
         }
@@ -576,7 +589,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "signed_the_black_book",
+          "key": "signedTheBlackBook",
           "section": "campaign_notes",
           "value": true
         }
@@ -623,22 +636,68 @@
         }
       ]
     },
-    "disappearance-at-the-twilight-estate:pre_intro": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:no_experience:text": {
       "kind": "story",
-      "text": "Sunday, November 22nd, 1925. Arkham, Massachusetts.\nThough All Hallows’ Eve is nearly a month past, a grim melancholy lingers throughout the town. Each morning, a thick fog permeates the streets. Nights are beginning to grow longer, and if you ask around town, you’ll hear people swear that it’s getting darker, too. But despite the gloomy mood, progress continues in the sleepy town of Arkham. The election of Nathaniel Rhodes to the United States Senate has upstanding members of the community feeling optimistic about the town’s future. And tonight, at his well-appointed estate in French Hill, a man named Josef Meiger hosts the Silver Twilight Lodge’s charity gala, an annual members-only event that will turn deadly for several attendees…",
+      "text": "No experience is earned for this prologue.",
       "bullets": []
     },
-    "disappearance-at-the-twilight-estate:choose_neutral_investigators:text": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:pieces_of_evidence": {
+      "kind": "counter",
+      "text": "In your Campaign Log, record <i>X pieces of evidence were left behind</i>. X is the total number of clues on Act 1a—“The Disappearance.”",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "piecesOfEvidence",
+          "section": "campaign_notes",
+          "op": "set",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "the-circle-undone-disappearance-at-the-twilight-estate:return_player_cards:text": {
       "kind": "story",
-      "text": "Each player must choose one of the following neutral investigators to control for the duration of this prologue: Gavriella Mizrah, Jerome Davids, Penny White, or Valentino Rivas. Throughout this prologue, you will play through this character’s story and make choices that will determine their fate. Your choice of investigator has no direct effect on your standard investigator deck, though the results of the prologue will influence the story.",
+      "text": "Return each of the player cards used in this scenario to the collection.",
       "bullets": []
     },
-    "disappearance-at-the-twilight-estate:no_decks:text": {
-      "kind": "story",
-      "text": "Do not assemble an investigator deck for any neutral investigator. Instead, gather the cards listed on its reverse side—these cards will be used in that investigator’s unique setup. (All listed cards are level 0 unless otherwise noted.)",
-      "bullets": []
+    "the-circle-undone-disappearance-at-the-twilight-estate:being_hunted": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "beingHunted",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
     },
-    "disappearance-at-the-twilight-estate:new_missing_investigators_1": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:ask_being_hunted": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "being_hunted",
+          "text": "Are you being hunted?",
+          "effects": [],
+          "steps": [
+            "the-circle-undone-disappearance-at-the-twilight-estate:being_hunted"
+          ]
+        }
+      ]
+    },
+    "the-circle-undone-disappearance-at-the-twilight-estate:maybe_ask_being_hunted": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_data",
+        "take": true
+      },
+      "then": [
+        "the-circle-undone-disappearance-at-the-twilight-estate:ask_being_hunted"
+      ],
+      "else": []
+    },
+    "the-circle-undone-disappearance-at-the-twilight-estate:new_missing_investigators_1": {
       "kind": "cardChoice",
       "codes": [
         "05046",
@@ -661,17 +720,17 @@
       ],
       "steps": []
     },
-    "disappearance-at-the-twilight-estate:cross_off_prompt:text": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:cross_off_prompt:text": {
       "kind": "story",
       "text": "In the “Missing Persons” section of your Campaign Log, cross off the profiles of any of the neutral investigators who were not chosen.",
       "bullets": []
     },
-    "disappearance-at-the-twilight-estate:cross_off_05046:text": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:cross_off_05046:text": {
       "kind": "story",
       "text": "Cross off <i>Gavriella Mizrah</i> from the <i>Missing Persons</i> section of your Campaign Log.",
       "bullets": []
     },
-    "disappearance-at-the-twilight-estate:maybe_cross_off_05046": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:maybe_cross_off_05046": {
       "kind": "branch",
       "condition": {
         "kind": "logCards",
@@ -680,15 +739,15 @@
       },
       "then": [],
       "else": [
-        "disappearance-at-the-twilight-estate:cross_off_05046:text"
+        "the-circle-undone-disappearance-at-the-twilight-estate:cross_off_05046:text"
       ]
     },
-    "disappearance-at-the-twilight-estate:cross_off_05047:text": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:cross_off_05047:text": {
       "kind": "story",
       "text": "Cross off <i>Jerome Davids</i> from the <i>Missing Persons</i> section of your Campaign Log.",
       "bullets": []
     },
-    "disappearance-at-the-twilight-estate:maybe_cross_off_05047": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:maybe_cross_off_05047": {
       "kind": "branch",
       "condition": {
         "kind": "logCards",
@@ -697,15 +756,15 @@
       },
       "then": [],
       "else": [
-        "disappearance-at-the-twilight-estate:cross_off_05047:text"
+        "the-circle-undone-disappearance-at-the-twilight-estate:cross_off_05047:text"
       ]
     },
-    "disappearance-at-the-twilight-estate:cross_off_05049:text": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:cross_off_05049:text": {
       "kind": "story",
       "text": "Cross off <i>Penny White</i> from the <i>Missing Persons</i> section of your Campaign Log.",
       "bullets": []
     },
-    "disappearance-at-the-twilight-estate:maybe_cross_off_05049": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:maybe_cross_off_05049": {
       "kind": "branch",
       "condition": {
         "kind": "logCards",
@@ -714,15 +773,15 @@
       },
       "then": [],
       "else": [
-        "disappearance-at-the-twilight-estate:cross_off_05049:text"
+        "the-circle-undone-disappearance-at-the-twilight-estate:cross_off_05049:text"
       ]
     },
-    "disappearance-at-the-twilight-estate:cross_off_05048:text": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:cross_off_05048:text": {
       "kind": "story",
       "text": "Cross off <i>Valentino Rivas</i> from the <i>Missing Persons</i> section of your Campaign Log.",
       "bullets": []
     },
-    "disappearance-at-the-twilight-estate:maybe_cross_off_05048": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:maybe_cross_off_05048": {
       "kind": "branch",
       "condition": {
         "kind": "logCards",
@@ -731,10 +790,10 @@
       },
       "then": [],
       "else": [
-        "disappearance-at-the-twilight-estate:cross_off_05048:text"
+        "the-circle-undone-disappearance-at-the-twilight-estate:cross_off_05048:text"
       ]
     },
-    "disappearance-at-the-twilight-estate:new_missing_investigators_2": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:new_missing_investigators_2": {
       "kind": "cardChoice",
       "codes": [
         "05046",
@@ -757,7 +816,7 @@
       ],
       "steps": []
     },
-    "disappearance-at-the-twilight-estate:new_missing_investigators_3": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:new_missing_investigators_3": {
       "kind": "cardChoice",
       "codes": [
         "05046",
@@ -780,7 +839,7 @@
       ],
       "steps": []
     },
-    "disappearance-at-the-twilight-estate:ask_player_count": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:ask_player_count": {
       "kind": "chooseOne",
       "text": "How many players are there?",
       "choices": [
@@ -789,12 +848,12 @@
           "text": "One",
           "effects": [],
           "steps": [
-            "disappearance-at-the-twilight-estate:new_missing_investigators_1",
-            "disappearance-at-the-twilight-estate:cross_off_prompt:text",
-            "disappearance-at-the-twilight-estate:maybe_cross_off_05046",
-            "disappearance-at-the-twilight-estate:maybe_cross_off_05047",
-            "disappearance-at-the-twilight-estate:maybe_cross_off_05049",
-            "disappearance-at-the-twilight-estate:maybe_cross_off_05048"
+            "the-circle-undone-disappearance-at-the-twilight-estate:new_missing_investigators_1",
+            "the-circle-undone-disappearance-at-the-twilight-estate:cross_off_prompt:text",
+            "the-circle-undone-disappearance-at-the-twilight-estate:maybe_cross_off_05046",
+            "the-circle-undone-disappearance-at-the-twilight-estate:maybe_cross_off_05047",
+            "the-circle-undone-disappearance-at-the-twilight-estate:maybe_cross_off_05049",
+            "the-circle-undone-disappearance-at-the-twilight-estate:maybe_cross_off_05048"
           ]
         },
         {
@@ -802,12 +861,12 @@
           "text": "Two",
           "effects": [],
           "steps": [
-            "disappearance-at-the-twilight-estate:new_missing_investigators_2",
-            "disappearance-at-the-twilight-estate:cross_off_prompt:text",
-            "disappearance-at-the-twilight-estate:maybe_cross_off_05046",
-            "disappearance-at-the-twilight-estate:maybe_cross_off_05047",
-            "disappearance-at-the-twilight-estate:maybe_cross_off_05049",
-            "disappearance-at-the-twilight-estate:maybe_cross_off_05048"
+            "the-circle-undone-disappearance-at-the-twilight-estate:new_missing_investigators_2",
+            "the-circle-undone-disappearance-at-the-twilight-estate:cross_off_prompt:text",
+            "the-circle-undone-disappearance-at-the-twilight-estate:maybe_cross_off_05046",
+            "the-circle-undone-disappearance-at-the-twilight-estate:maybe_cross_off_05047",
+            "the-circle-undone-disappearance-at-the-twilight-estate:maybe_cross_off_05049",
+            "the-circle-undone-disappearance-at-the-twilight-estate:maybe_cross_off_05048"
           ]
         },
         {
@@ -815,12 +874,12 @@
           "text": "Three",
           "effects": [],
           "steps": [
-            "disappearance-at-the-twilight-estate:new_missing_investigators_3",
-            "disappearance-at-the-twilight-estate:cross_off_prompt:text",
-            "disappearance-at-the-twilight-estate:maybe_cross_off_05046",
-            "disappearance-at-the-twilight-estate:maybe_cross_off_05047",
-            "disappearance-at-the-twilight-estate:maybe_cross_off_05049",
-            "disappearance-at-the-twilight-estate:maybe_cross_off_05048"
+            "the-circle-undone-disappearance-at-the-twilight-estate:new_missing_investigators_3",
+            "the-circle-undone-disappearance-at-the-twilight-estate:cross_off_prompt:text",
+            "the-circle-undone-disappearance-at-the-twilight-estate:maybe_cross_off_05046",
+            "the-circle-undone-disappearance-at-the-twilight-estate:maybe_cross_off_05047",
+            "the-circle-undone-disappearance-at-the-twilight-estate:maybe_cross_off_05049",
+            "the-circle-undone-disappearance-at-the-twilight-estate:maybe_cross_off_05048"
           ]
         },
         {
@@ -831,12 +890,12 @@
         }
       ]
     },
-    "disappearance-at-the-twilight-estate:explain_skip_prologue:text": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:explain_skip_prologue:text": {
       "kind": "story",
       "text": "As an alternative to playing the Prologue, you may have each character draw a random tarot card to determine their fate.",
       "bullets": []
     },
-    "disappearance-at-the-twilight-estate:ask_skip_prologue_new": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:ask_skip_prologue_new": {
       "kind": "chooseOne",
       "choices": [
         {
@@ -845,7 +904,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "skip_prologue",
+              "key": "skipPrologue",
               "section": "hidden",
               "value": true
             }
@@ -854,7 +913,7 @@
         }
       ]
     },
-    "disappearance-at-the-twilight-estate:ask_skip_prologue": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:ask_skip_prologue": {
       "kind": "chooseOne",
       "choices": [
         {
@@ -863,7 +922,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "skip_prologue",
+              "key": "skipPrologue",
               "section": "hidden",
               "value": true
             }
@@ -872,7 +931,7 @@
         }
       ]
     },
-    "disappearance-at-the-twilight-estate:maybe_ask_skip_prologue": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:maybe_ask_skip_prologue": {
       "kind": "branch",
       "condition": {
         "kind": "unsupported",
@@ -880,25 +939,25 @@
         "take": true
       },
       "then": [
-        "disappearance-at-the-twilight-estate:ask_skip_prologue_new"
+        "the-circle-undone-disappearance-at-the-twilight-estate:ask_skip_prologue_new"
       ],
       "else": [
-        "disappearance-at-the-twilight-estate:ask_skip_prologue"
+        "the-circle-undone-disappearance-at-the-twilight-estate:ask_skip_prologue"
       ]
     },
-    "disappearance-at-the-twilight-estate:randomizer_new": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:randomizer_new": {
       "kind": "unsupported",
       "name": "prologue_randomizer",
       "effects": [],
       "steps": []
     },
-    "disappearance-at-the-twilight-estate:randomizer": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:randomizer": {
       "kind": "unsupported",
       "name": "prologue_randomizer",
       "effects": [],
       "steps": []
     },
-    "disappearance-at-the-twilight-estate:maybe_randomizer": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:maybe_randomizer": {
       "kind": "branch",
       "condition": {
         "kind": "unsupported",
@@ -906,66 +965,30 @@
         "take": true
       },
       "then": [
-        "disappearance-at-the-twilight-estate:randomizer_new"
+        "the-circle-undone-disappearance-at-the-twilight-estate:randomizer_new"
       ],
       "else": [
-        "disappearance-at-the-twilight-estate:randomizer"
+        "the-circle-undone-disappearance-at-the-twilight-estate:randomizer"
       ]
     },
-    "disappearance-at-the-twilight-estate:being_hunted": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "being_hunted",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "disappearance-at-the-twilight-estate:ask_being_hunted": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "being_hunted",
-          "text": "Are you being hunted?",
-          "effects": [],
-          "steps": [
-            "disappearance-at-the-twilight-estate:being_hunted"
-          ]
-        }
-      ]
-    },
-    "disappearance-at-the-twilight-estate:maybe_ask_being_hunted": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "campaign_data",
-        "take": true
-      },
-      "then": [
-        "disappearance-at-the-twilight-estate:ask_being_hunted"
-      ],
-      "else": []
-    },
-    "disappearance-at-the-twilight-estate:intro": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:intro": {
       "kind": "story",
       "title": "Intro",
       "text": "“Ladies and gentlemen,” Josef Meiger announces, raising a glass of champagne in a toast. A hush descends on the room, until only the crackle of the fireplace and whispers of gossip can be heard. “Allow me to welcome you all into my home for this year’s charity gala. We have some very upstanding citizens here tonight, and I thank all of you for your hard work and generosity.” Cheers and murmurs of agreement fill the room. Many of the guests raise their glasses to Valentino, one of the most esteemed members of the Lodge this year, who sits at the Guest of Honor table, which is nearest to the fireplace.\nJosef ’s assistant, Jerome, blends into the wall behind Josef, discreetly checking his pocket watch. In another corner of the room, the head housekeeper, Penny, walks from table to table, filling empty glasses and collecting dirty salad plates. “Each of you has done great deeds in the name of the Silver Twilight Lodge and our historic city,” Josef continues. “Next year, we will continue to shoulder this burden and do what must be done for the sake of progress.” Jerome steps forward quietly, interrupting Josef ’s speech with the unassuming confidence that comes from years of trusted service. He taps Josef lightly on his shoulder and shows him the time. “I’m afraid I am already out of time. Thank you all very much for attending,” Josef concludes, bowing. Polite applause rises from the audience, and Josef walks briskly toward the parlor, followed closely by his assistant. Two servants collect coats as latecomers trickle into the manor, and Gavriella—Josef ’s head of security—watches over the entrance with hard eyes and a clenched jaw. “Has Mr. Sanford arrived?” Josef asks curtly, tapping his polished leather shoe on the floor.\nI’m afraid not,” Jerome replies, flipping through the last pages of the estate’s guest book. “But he should be here any minute, Mr. Meiger.”\n“Good. I want there to be no problems whatsoever when he arrives; am I understood?” Josef calls out to Gavriella: “Make sure he is well protected.” Gavriella nods, patting the handle of her .45 in her shoulder holster. Josef turns his attention back to his assistant. “And have Penny make sure the main course is kept good and hot while we wait for Mr. Sanford’s arrival. Not a single slice is to be served without his presence.”\n“Not even for Mr. Rivas, sir?” Jerome asks, glancing at Josef over the rim of his thick glasses. Josef pauses for a moment, considering.\n“Pour Mr. Rivas another glass of champagne, and I am sure he will not complain. Also, I’m still waiting on those accounts I asked you about earlier today. Don’t forget,” Josef says, clapping his assistant on the shoulder before walking back into the banquet hall. Jerome nods obediently and heads upstairs.\nSoon after, the dark mist would appear, and nothing would be the same.",
       "bullets": []
     },
-    "disappearance-at-the-twilight-estate:read_intros:text": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:read_intros:text": {
       "kind": "story",
       "text": "One at a time, each player must proceed to the intro for their chosen character and read that section aloud.",
       "bullets": []
     },
-    "disappearance-at-the-twilight-estate:gavriella_intro": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:gavriella_intro": {
       "kind": "story",
       "title": "Gavriella Intro",
       "text": "You stand guard as instructed, waiting for Mr. Sanford to appear. By now, the remaining guests have filed into the banquet hall, and you can hear the sounds of merriment and drinking coming from beyond the wooden door behind you. You pay them no mind, remaining vigilant. Years of fighting and discipline have taught you to be ready for anything, even at a harmless banquet like this. Just as you begin to ponder whether your talents are being wasted under Mr. Meiger’s employ, a dark mist invades the parlor through the front door and the window frames, flooding the room. At first, you believe it to be only the evening fog seeping through the manor’s entryway, until you begin to notice that everything the mist touches seems to have decayed as though aged hundreds of years.\nYou step back cautiously, keeping a hand on the grip of your weapon just in case. Never in all your years have you seen something like this. An unnatural chill spreads throughout the room, and shivers run up your spine. As the ashen mist finishes pouring in, it coalesces into a singular form: a humanoid figure wrapped in shadows. It raises its hand and points at you with a charred, blackened finger.\nYou unholster your firearm and point it at the creature, allowing your training to take over. “Don’t come any closer!” you shout. The thing watching you from the entrance is unfazed. Its ethereal form begins to glide toward you, dark mist crawling over the carpet in its wake. “I warned you,” you growl, and a thunderous shot echoes through the parlor as you squeeze the trigger. The bullet rips a hole in the figure’s head like a rush of air billowing through a column of smoke. The mist stitches itself together, and the thing continues to drift your way, reaching out menacingly.\nNothing could have prepared you for combat with such an unnatural enemy. Faced with no other option, you turn and flee up the staircase nearby, pausing to squeeze off several more shots at the top. The bullets that make their target simply pass harmlessly through the ghostly figure, striking the door behind it. A few stray shots shatter a column of the staircase’s wooden balustrade.",
       "bullets": []
     },
-    "disappearance-at-the-twilight-estate:check_gavriella_intro": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:check_gavriella_intro": {
       "kind": "branch",
       "condition": {
         "kind": "unsupported",
@@ -973,17 +996,17 @@
         "take": false
       },
       "then": [
-        "disappearance-at-the-twilight-estate:gavriella_intro"
+        "the-circle-undone-disappearance-at-the-twilight-estate:gavriella_intro"
       ],
       "else": []
     },
-    "disappearance-at-the-twilight-estate:jerome_intro": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:jerome_intro": {
       "kind": "story",
       "title": "Jerome Intro",
       "text": "You carefully flip through the pages of Mr. Meiger’s ledger, looking for the accounts he inquired about. You have served Mr. Meiger faithfully for almost a decade, and he trusts you with sensitive information like this—a point of pride for you. While you are often curious about your employer’s business, you have never pried into his personal matters. Not until tonight, anyway.\nYou adjust your glasses and lean forward as you turn to the page regarding Mr. Meiger’s request. Some of the names on the list you recognize: Rivas, Gensler, Fairmont, Rhodes, Wick. But many are names you have never heard of before, let alone seen affiliated with Mr. Meiger’s work: Lindquist, Konstantinov, Magro, Atkinson, Lamar…Just how deep do Mr. Meiger’s connections go?\nStrange as that may seem, it is the list of names on the page afterward that raises your hackles. While it was clear that the names on the previous page are associates of Mr. Meiger’s, or at least prominent members of the Lodge, you can only assume that this next series of names is of people your employer is…targeting. For what, you cannot say.\nYou stand next to Josef ’s desk and record the list in your pocket journal carefully, making sure to keep the names in the exact order they appear in Mr. Meiger’s ledger. You hope that your suspicion is nothing more than the absurd imagination of an overworked secretary. Still, something about all of this has you concerned. That, and the sudden draft of frigid air that has somehow wafted into the room. Your gaze naturally drifts to the window, at which point you scream out in shock and lose your balance, stumbling backward into Mr. Meiger’s desk.\nPressed up against the office window is a host of screaming faces emerging from the mist, or perhaps composed of it. Their ghostly hands press against the glass, their eyes hollow and empty. Your reading glasses clatter to the ground and shatter under your heel as you scramble to the other side of the office. You don’t realize that you dropped your pocket journal in the chaos until it is too late.",
       "bullets": []
     },
-    "disappearance-at-the-twilight-estate:check_jerome_intro": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:check_jerome_intro": {
       "kind": "branch",
       "condition": {
         "kind": "unsupported",
@@ -991,17 +1014,17 @@
         "take": false
       },
       "then": [
-        "disappearance-at-the-twilight-estate:jerome_intro"
+        "the-circle-undone-disappearance-at-the-twilight-estate:jerome_intro"
       ],
       "else": []
     },
-    "disappearance-at-the-twilight-estate:penny_intro": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:penny_intro": {
       "kind": "story",
       "title": "Penny Intro",
       "text": "You sigh as the cool New England air embraces you. It has been a very stressful night: stressful enough that you’ve decided to sneak away from the clamor to grab a quick smoke before heading back to work. You rest your arms along the metal railing of the balcony, your fingers trembling as they hold your cigarette. The dreary gambrel rooftops and Victorian manors of French Hill span the view below you, the unlit windows hiding countless secrets.\nYou can’t remember a night in which your employer was as concerned with every little detail as he is tonight. He is normally so calm, so collected. There’s something special about tonight that has him on edge. Is it Mr. Sanford? A shudder crawls through you. For some reason, something about that man gives you the creeps. But Josef has interacted with Mr. Sanford many times before, so that cannot be the reason. What could it be that has Mr. Meiger so worried?\nYou are torn from your thoughts by the gathering of grey clouds overhead, swiftly blotting out the night sky. As the clouds grow ever closer, you begin to see shapes emerging from the vapor. You squint and lean over the railing for a better view. That is when you notice the true forms of the shapes in the mist: their screaming faces, their clawing hands, all writhing in torment and coming straight for you. You cry out in terror and back up against the wall as the mist envelops the building. A spectral shape emerges from the haze beyond the railing, dressed in bloodstained rags. It begs for rest in a croaking, gasping voice. Your only hope for escape is to retreat back into the manor and call for help…",
       "bullets": []
     },
-    "disappearance-at-the-twilight-estate:check_penny_intro": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:check_penny_intro": {
       "kind": "branch",
       "condition": {
         "kind": "unsupported",
@@ -1009,17 +1032,17 @@
         "take": false
       },
       "then": [
-        "disappearance-at-the-twilight-estate:penny_intro"
+        "the-circle-undone-disappearance-at-the-twilight-estate:penny_intro"
       ],
       "else": []
     },
-    "disappearance-at-the-twilight-estate:valentino_intro": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:valentino_intro": {
       "kind": "story",
       "title": "Valentino Intro",
       "text": "“Are you going to break, or are you going to sit there admiring the cue ball all night?” you ask with a mocking smile. Your opponent sets the ivory ball back on the table with a sigh.\n“I can’t help myself around ivory. You know that, Tino,” Adam replies. You rarely see Adam Gensler except during Lodge functions, but you prefer his company to that of the stuffy business types who make up most of the Lodge these days. He makes his shot, the sudden clattering interrupting the din of conversation. “Your shot, Tino. And do try to avoid hitting the nine ball first. You’re always so overeager.” Adam chuckles as he moves to the other side of the table, making way for you.\n“That was one time, my friend, one time.” You roll your eyes. Truth be told, you’ve enjoyed coming to these events for the opportunity to give back to the community, not to hobnob with Arkham’s gentry. But hobnobbing has had its perks.\nYou lean over the table and clear your mind as you line up your shot. The room falls silent as you block out the clamor and the music, focusing all of your attention on the one ball and the corner pocket. You hold your breath and strike the cue ball. It clacks as it hits its target, and the one ball drops effortlessly into the corner pocket. “There, you see?”\nIt is only then that you realize the silence around you is not just in your mind. All of the light and warmth has been sucked out of the room. Adam is gone, along with everyone else who was present just moments before you took your shot. “Hello?” you call out. A dark mist coils about your ankles as you walk around the billiards table. “If this is a practical joke of some kind, it’s in awfully poor taste,” you remark. The only response is the deep growl that emerges from beneath the table. Morbid curiosity compels you to look underneath it, at which point a dark hound pounces onto your chest, savagely clawing at your torso. You react instinctively, pushing it off of your body as hard as you can. It lands on the billiards table, causing it to collapse under the creature’s weight. You slowly back up as the creature rises to its feet once again and jumps off the broken table, its hollow eyes gazing into your soul.",
       "bullets": []
     },
-    "disappearance-at-the-twilight-estate:check_valentino_intro": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:check_valentino_intro": {
       "kind": "branch",
       "condition": {
         "kind": "unsupported",
@@ -1027,36 +1050,36 @@
         "take": false
       },
       "then": [
-        "disappearance-at-the-twilight-estate:valentino_intro"
+        "the-circle-undone-disappearance-at-the-twilight-estate:valentino_intro"
       ],
       "else": []
     },
-    "disappearance-at-the-twilight-estate:setup_locations:text": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:setup_locations:text": {
       "kind": "story",
       "text": "Put the seven [[Spectral]] locations into play.",
       "bullets": []
     },
-    "disappearance-at-the-twilight-estate:spectral_watcher:text": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:spectral_watcher:text": {
       "kind": "story",
       "text": "Put The Spectral Watcher enemy into play in the Entry Hall.",
       "bullets": []
     },
-    "disappearance-at-the-twilight-estate:setup_investigators:text": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:setup_investigators:text": {
       "kind": "story",
       "text": "Each player follows the setup instructions on the back of their investigator card.",
       "bullets": []
     },
-    "disappearance-at-the-twilight-estate:encounter_deck:text": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:encounter_deck:text": {
       "kind": "story",
       "text": "Shuffle the remaining encounter cards to build the encounter deck.",
       "bullets": []
     },
-    "disappearance-at-the-twilight-estate:choose_fate_intro:text": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:choose_fate_intro:text": {
       "kind": "story",
       "text": "As investigators are eliminated, record their fate here:",
       "bullets": []
     },
-    "disappearance-at-the-twilight-estate:choose_05046_fate": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:choose_05046_fate": {
       "kind": "chooseOne",
       "text": "What happened to Gavriella Mizrah?",
       "choices": [
@@ -1066,7 +1089,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "taken_by_the_watcher",
+              "id": "takenByTheWatcher",
               "section": "05046",
               "codes": [
                 "05046"
@@ -1075,7 +1098,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05046",
+              "key": "prologue05046",
               "section": "hidden",
               "value": true
             }
@@ -1088,7 +1111,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "claimed_by_specters",
+              "id": "claimedBySpecters",
               "section": "05046",
               "codes": [
                 "05046"
@@ -1097,7 +1120,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05046",
+              "key": "prologue05046",
               "section": "hidden",
               "value": true
             }
@@ -1110,7 +1133,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "disappeared_into_the_mist",
+              "id": "disappearedIntoTheMist",
               "section": "05046",
               "codes": [
                 "05046"
@@ -1119,7 +1142,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05046",
+              "key": "prologue05046",
               "section": "hidden",
               "value": true
             }
@@ -1132,7 +1155,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "pulled_into_the_spectral_realm",
+              "id": "pulledIntoTheSpectralRealm",
               "section": "05046",
               "codes": [
                 "05046"
@@ -1141,7 +1164,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05046",
+              "key": "prologue05046",
               "section": "hidden",
               "value": true
             }
@@ -1150,7 +1173,7 @@
         }
       ]
     },
-    "disappearance-at-the-twilight-estate:choose_05047_fate": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:choose_05047_fate": {
       "kind": "chooseOne",
       "text": "What happened to Jerome Davids?",
       "choices": [
@@ -1160,7 +1183,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "taken_by_the_watcher",
+              "id": "takenByTheWatcher",
               "section": "05047",
               "codes": [
                 "05047"
@@ -1169,7 +1192,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05047",
+              "key": "prologue05047",
               "section": "hidden",
               "value": true
             }
@@ -1182,7 +1205,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "claimed_by_specters",
+              "id": "claimedBySpecters",
               "section": "05047",
               "codes": [
                 "05047"
@@ -1191,7 +1214,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05047",
+              "key": "prologue05047",
               "section": "hidden",
               "value": true
             }
@@ -1204,7 +1227,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "disappeared_into_the_mist",
+              "id": "disappearedIntoTheMist",
               "section": "05047",
               "codes": [
                 "05047"
@@ -1213,7 +1236,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05047",
+              "key": "prologue05047",
               "section": "hidden",
               "value": true
             }
@@ -1226,7 +1249,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "pulled_into_the_spectral_realm",
+              "id": "pulledIntoTheSpectralRealm",
               "section": "05047",
               "codes": [
                 "05047"
@@ -1235,7 +1258,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05047",
+              "key": "prologue05047",
               "section": "hidden",
               "value": true
             }
@@ -1244,7 +1267,7 @@
         }
       ]
     },
-    "disappearance-at-the-twilight-estate:choose_05048_fate": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:choose_05048_fate": {
       "kind": "chooseOne",
       "text": "What happened to Valentino Rivas?",
       "choices": [
@@ -1254,7 +1277,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "taken_by_the_watcher",
+              "id": "takenByTheWatcher",
               "section": "05048",
               "codes": [
                 "05048"
@@ -1263,7 +1286,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05048",
+              "key": "prologue05048",
               "section": "hidden",
               "value": true
             }
@@ -1276,7 +1299,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "claimed_by_specters",
+              "id": "claimedBySpecters",
               "section": "05048",
               "codes": [
                 "05048"
@@ -1285,7 +1308,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05048",
+              "key": "prologue05048",
               "section": "hidden",
               "value": true
             }
@@ -1298,7 +1321,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "disappeared_into_the_mist",
+              "id": "disappearedIntoTheMist",
               "section": "05048",
               "codes": [
                 "05048"
@@ -1307,7 +1330,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05048",
+              "key": "prologue05048",
               "section": "hidden",
               "value": true
             }
@@ -1320,7 +1343,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "pulled_into_the_spectral_realm",
+              "id": "pulledIntoTheSpectralRealm",
               "section": "05048",
               "codes": [
                 "05048"
@@ -1329,7 +1352,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05048",
+              "key": "prologue05048",
               "section": "hidden",
               "value": true
             }
@@ -1338,7 +1361,7 @@
         }
       ]
     },
-    "disappearance-at-the-twilight-estate:choose_05049_fate": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:choose_05049_fate": {
       "kind": "chooseOne",
       "text": "What happened to Penny White?",
       "choices": [
@@ -1348,7 +1371,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "taken_by_the_watcher",
+              "id": "takenByTheWatcher",
               "section": "05049",
               "codes": [
                 "05049"
@@ -1357,7 +1380,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05049",
+              "key": "prologue05049",
               "section": "hidden",
               "value": true
             }
@@ -1370,7 +1393,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "claimed_by_specters",
+              "id": "claimedBySpecters",
               "section": "05049",
               "codes": [
                 "05049"
@@ -1379,7 +1402,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05049",
+              "key": "prologue05049",
               "section": "hidden",
               "value": true
             }
@@ -1392,7 +1415,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "disappeared_into_the_mist",
+              "id": "disappearedIntoTheMist",
               "section": "05049",
               "codes": [
                 "05049"
@@ -1401,7 +1424,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05049",
+              "key": "prologue05049",
               "section": "hidden",
               "value": true
             }
@@ -1414,7 +1437,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "pulled_into_the_spectral_realm",
+              "id": "pulledIntoTheSpectralRealm",
               "section": "05049",
               "codes": [
                 "05049"
@@ -1423,7 +1446,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05049",
+              "key": "prologue05049",
               "section": "hidden",
               "value": true
             }
@@ -1432,7 +1455,7 @@
         }
       ]
     },
-    "disappearance-at-the-twilight-estate:choose_fate": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:choose_fate": {
       "kind": "chooseOne",
       "text": "Who was eliminated?",
       "choices": [
@@ -1442,13 +1465,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "05046_fate_decided",
+              "key": "05046FateDecided",
               "section": "hidden",
               "value": true
             }
           ],
           "steps": [
-            "disappearance-at-the-twilight-estate:choose_05046_fate"
+            "the-circle-undone-disappearance-at-the-twilight-estate:choose_05046_fate"
           ]
         },
         {
@@ -1457,13 +1480,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "05047_fate_decided",
+              "key": "05047FateDecided",
               "section": "hidden",
               "value": true
             }
           ],
           "steps": [
-            "disappearance-at-the-twilight-estate:choose_05047_fate"
+            "the-circle-undone-disappearance-at-the-twilight-estate:choose_05047_fate"
           ]
         },
         {
@@ -1472,13 +1495,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "05048_fate_decided",
+              "key": "05048FateDecided",
               "section": "hidden",
               "value": true
             }
           ],
           "steps": [
-            "disappearance-at-the-twilight-estate:choose_05048_fate"
+            "the-circle-undone-disappearance-at-the-twilight-estate:choose_05048_fate"
           ]
         },
         {
@@ -1487,18 +1510,18 @@
           "effects": [
             {
               "do": "record",
-              "key": "05049_fate_decided",
+              "key": "05049FateDecided",
               "section": "hidden",
               "value": true
             }
           ],
           "steps": [
-            "disappearance-at-the-twilight-estate:choose_05049_fate"
+            "the-circle-undone-disappearance-at-the-twilight-estate:choose_05049_fate"
           ]
         }
       ]
     },
-    "disappearance-at-the-twilight-estate:choose_fate_2": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:choose_fate_2": {
       "kind": "chooseOne",
       "text": "Who was eliminated?",
       "choices": [
@@ -1507,7 +1530,7 @@
           "text": "Gavriella Mizrah",
           "effects": [],
           "steps": [
-            "disappearance-at-the-twilight-estate:choose_05046_fate"
+            "the-circle-undone-disappearance-at-the-twilight-estate:choose_05046_fate"
           ]
         },
         {
@@ -1515,7 +1538,7 @@
           "text": "Jerome Davids",
           "effects": [],
           "steps": [
-            "disappearance-at-the-twilight-estate:choose_05047_fate"
+            "the-circle-undone-disappearance-at-the-twilight-estate:choose_05047_fate"
           ]
         },
         {
@@ -1523,7 +1546,7 @@
           "text": "Valentino Rivas",
           "effects": [],
           "steps": [
-            "disappearance-at-the-twilight-estate:choose_05048_fate"
+            "the-circle-undone-disappearance-at-the-twilight-estate:choose_05048_fate"
           ]
         },
         {
@@ -1531,12 +1554,12 @@
           "text": "Penny White",
           "effects": [],
           "steps": [
-            "disappearance-at-the-twilight-estate:choose_05049_fate"
+            "the-circle-undone-disappearance-at-the-twilight-estate:choose_05049_fate"
           ]
         }
       ]
     },
-    "disappearance-at-the-twilight-estate:maybe_choose_fate_2": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:maybe_choose_fate_2": {
       "kind": "branch",
       "condition": {
         "kind": "unsupported",
@@ -1544,11 +1567,11 @@
         "take": false
       },
       "then": [
-        "disappearance-at-the-twilight-estate:choose_fate_2"
+        "the-circle-undone-disappearance-at-the-twilight-estate:choose_fate_2"
       ],
       "else": []
     },
-    "disappearance-at-the-twilight-estate:choose_fate_3": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:choose_fate_3": {
       "kind": "chooseOne",
       "text": "Who was eliminated?",
       "choices": [
@@ -1557,7 +1580,7 @@
           "text": "Gavriella Mizrah",
           "effects": [],
           "steps": [
-            "disappearance-at-the-twilight-estate:choose_05046_fate"
+            "the-circle-undone-disappearance-at-the-twilight-estate:choose_05046_fate"
           ]
         },
         {
@@ -1565,7 +1588,7 @@
           "text": "Jerome Davids",
           "effects": [],
           "steps": [
-            "disappearance-at-the-twilight-estate:choose_05047_fate"
+            "the-circle-undone-disappearance-at-the-twilight-estate:choose_05047_fate"
           ]
         },
         {
@@ -1573,7 +1596,7 @@
           "text": "Valentino Rivas",
           "effects": [],
           "steps": [
-            "disappearance-at-the-twilight-estate:choose_05048_fate"
+            "the-circle-undone-disappearance-at-the-twilight-estate:choose_05048_fate"
           ]
         },
         {
@@ -1581,12 +1604,12 @@
           "text": "Penny White",
           "effects": [],
           "steps": [
-            "disappearance-at-the-twilight-estate:choose_05049_fate"
+            "the-circle-undone-disappearance-at-the-twilight-estate:choose_05049_fate"
           ]
         }
       ]
     },
-    "disappearance-at-the-twilight-estate:maybe_choose_fate_3": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:maybe_choose_fate_3": {
       "kind": "branch",
       "condition": {
         "kind": "unsupported",
@@ -1594,11 +1617,11 @@
         "take": false
       },
       "then": [
-        "disappearance-at-the-twilight-estate:choose_fate_3"
+        "the-circle-undone-disappearance-at-the-twilight-estate:choose_fate_3"
       ],
       "else": []
     },
-    "disappearance-at-the-twilight-estate:choose_fate_4": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:choose_fate_4": {
       "kind": "chooseOne",
       "text": "Who was eliminated?",
       "choices": [
@@ -1607,7 +1630,7 @@
           "text": "Gavriella Mizrah",
           "effects": [],
           "steps": [
-            "disappearance-at-the-twilight-estate:choose_05046_fate"
+            "the-circle-undone-disappearance-at-the-twilight-estate:choose_05046_fate"
           ]
         },
         {
@@ -1615,7 +1638,7 @@
           "text": "Jerome Davids",
           "effects": [],
           "steps": [
-            "disappearance-at-the-twilight-estate:choose_05047_fate"
+            "the-circle-undone-disappearance-at-the-twilight-estate:choose_05047_fate"
           ]
         },
         {
@@ -1623,7 +1646,7 @@
           "text": "Valentino Rivas",
           "effects": [],
           "steps": [
-            "disappearance-at-the-twilight-estate:choose_05048_fate"
+            "the-circle-undone-disappearance-at-the-twilight-estate:choose_05048_fate"
           ]
         },
         {
@@ -1631,12 +1654,12 @@
           "text": "Penny White",
           "effects": [],
           "steps": [
-            "disappearance-at-the-twilight-estate:choose_05049_fate"
+            "the-circle-undone-disappearance-at-the-twilight-estate:choose_05049_fate"
           ]
         }
       ]
     },
-    "disappearance-at-the-twilight-estate:maybe_choose_fate_4": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:maybe_choose_fate_4": {
       "kind": "branch",
       "condition": {
         "kind": "unsupported",
@@ -1644,11 +1667,11 @@
         "take": false
       },
       "then": [
-        "disappearance-at-the-twilight-estate:choose_fate_4"
+        "the-circle-undone-disappearance-at-the-twilight-estate:choose_fate_4"
       ],
       "else": []
     },
-    "disappearance-at-the-twilight-estate:agenda_1_results": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:agenda_1_results": {
       "kind": "cardChoice",
       "text": "As investigators are eliminated, record their fate here:",
       "codes": [
@@ -1662,7 +1685,7 @@
       "effects": [],
       "steps": []
     },
-    "disappearance-at-the-twilight-estate:maybe_agenda_1_results": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:maybe_agenda_1_results": {
       "kind": "branch",
       "condition": {
         "kind": "unsupported",
@@ -1670,17 +1693,17 @@
         "take": true
       },
       "then": [
-        "disappearance-at-the-twilight-estate:choose_fate_intro:text",
-        "disappearance-at-the-twilight-estate:choose_fate",
-        "disappearance-at-the-twilight-estate:maybe_choose_fate_2",
-        "disappearance-at-the-twilight-estate:maybe_choose_fate_3",
-        "disappearance-at-the-twilight-estate:maybe_choose_fate_4"
+        "the-circle-undone-disappearance-at-the-twilight-estate:choose_fate_intro:text",
+        "the-circle-undone-disappearance-at-the-twilight-estate:choose_fate",
+        "the-circle-undone-disappearance-at-the-twilight-estate:maybe_choose_fate_2",
+        "the-circle-undone-disappearance-at-the-twilight-estate:maybe_choose_fate_3",
+        "the-circle-undone-disappearance-at-the-twilight-estate:maybe_choose_fate_4"
       ],
       "else": [
-        "disappearance-at-the-twilight-estate:agenda_1_results"
+        "the-circle-undone-disappearance-at-the-twilight-estate:agenda_1_results"
       ]
     },
-    "disappearance-at-the-twilight-estate:check_latest_campaign_version": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:check_latest_campaign_version": {
       "kind": "branch",
       "condition": {
         "kind": "unsupported",
@@ -1689,35 +1712,35 @@
       },
       "then": [],
       "else": [
-        "disappearance-at-the-twilight-estate:maybe_agenda_1_results"
+        "the-circle-undone-disappearance-at-the-twilight-estate:maybe_agenda_1_results"
       ]
     },
-    "disappearance-at-the-twilight-estate:check_skip_prologue": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:check_skip_prologue": {
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "skip_prologue",
+        "id": "skipPrologue",
         "section": "hidden"
       },
       "then": [
-        "disappearance-at-the-twilight-estate:maybe_randomizer",
-        "disappearance-at-the-twilight-estate:maybe_ask_being_hunted"
+        "the-circle-undone-disappearance-at-the-twilight-estate:maybe_randomizer",
+        "the-circle-undone-disappearance-at-the-twilight-estate:maybe_ask_being_hunted"
       ],
       "else": [
-        "disappearance-at-the-twilight-estate:intro",
-        "disappearance-at-the-twilight-estate:read_intros:text",
-        "disappearance-at-the-twilight-estate:check_gavriella_intro",
-        "disappearance-at-the-twilight-estate:check_jerome_intro",
-        "disappearance-at-the-twilight-estate:check_penny_intro",
-        "disappearance-at-the-twilight-estate:check_valentino_intro",
-        "disappearance-at-the-twilight-estate:setup_locations:text",
-        "disappearance-at-the-twilight-estate:spectral_watcher:text",
-        "disappearance-at-the-twilight-estate:setup_investigators:text",
-        "disappearance-at-the-twilight-estate:encounter_deck:text",
-        "disappearance-at-the-twilight-estate:check_latest_campaign_version"
+        "the-circle-undone-disappearance-at-the-twilight-estate:intro",
+        "the-circle-undone-disappearance-at-the-twilight-estate:read_intros:text",
+        "the-circle-undone-disappearance-at-the-twilight-estate:check_gavriella_intro",
+        "the-circle-undone-disappearance-at-the-twilight-estate:check_jerome_intro",
+        "the-circle-undone-disappearance-at-the-twilight-estate:check_penny_intro",
+        "the-circle-undone-disappearance-at-the-twilight-estate:check_valentino_intro",
+        "the-circle-undone-disappearance-at-the-twilight-estate:setup_locations:text",
+        "the-circle-undone-disappearance-at-the-twilight-estate:spectral_watcher:text",
+        "the-circle-undone-disappearance-at-the-twilight-estate:setup_investigators:text",
+        "the-circle-undone-disappearance-at-the-twilight-estate:encounter_deck:text",
+        "the-circle-undone-disappearance-at-the-twilight-estate:check_latest_campaign_version"
       ]
     },
-    "disappearance-at-the-twilight-estate:record_missing_investigators": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:record_missing_investigators": {
       "kind": "cardChoice",
       "text": "In the “Missing Persons” section of your Campaign Log, cross off the profiles of any of the neutral investigators who were not chosen.",
       "codes": [
@@ -1731,7 +1754,7 @@
       "effects": [],
       "steps": []
     },
-    "disappearance-at-the-twilight-estate:check_unplayed_investigators": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:check_unplayed_investigators": {
       "kind": "chooseOne",
       "choices": [
         {
@@ -1739,12 +1762,12 @@
           "text": "Are there fewer than 4 players in this campaign?",
           "effects": [],
           "steps": [
-            "disappearance-at-the-twilight-estate:record_missing_investigators"
+            "the-circle-undone-disappearance-at-the-twilight-estate:record_missing_investigators"
           ]
         }
       ]
     },
-    "disappearance-at-the-twilight-estate:maybe_check_unplayed_investigators": {
+    "the-circle-undone-disappearance-at-the-twilight-estate:maybe_check_unplayed_investigators": {
       "kind": "branch",
       "condition": {
         "kind": "unsupported",
@@ -1752,24 +1775,24 @@
         "take": true
       },
       "then": [
-        "disappearance-at-the-twilight-estate:ask_player_count",
-        "disappearance-at-the-twilight-estate:explain_skip_prologue:text",
-        "disappearance-at-the-twilight-estate:maybe_ask_skip_prologue",
-        "disappearance-at-the-twilight-estate:check_skip_prologue"
+        "the-circle-undone-disappearance-at-the-twilight-estate:ask_player_count",
+        "the-circle-undone-disappearance-at-the-twilight-estate:explain_skip_prologue:text",
+        "the-circle-undone-disappearance-at-the-twilight-estate:maybe_ask_skip_prologue",
+        "the-circle-undone-disappearance-at-the-twilight-estate:check_skip_prologue"
       ],
       "else": [
-        "disappearance-at-the-twilight-estate:check_unplayed_investigators",
-        "disappearance-at-the-twilight-estate:intro",
-        "disappearance-at-the-twilight-estate:read_intros:text",
-        "disappearance-at-the-twilight-estate:check_gavriella_intro",
-        "disappearance-at-the-twilight-estate:check_jerome_intro",
-        "disappearance-at-the-twilight-estate:check_penny_intro",
-        "disappearance-at-the-twilight-estate:check_valentino_intro",
-        "disappearance-at-the-twilight-estate:setup_locations:text",
-        "disappearance-at-the-twilight-estate:spectral_watcher:text",
-        "disappearance-at-the-twilight-estate:setup_investigators:text",
-        "disappearance-at-the-twilight-estate:encounter_deck:text",
-        "disappearance-at-the-twilight-estate:check_latest_campaign_version"
+        "the-circle-undone-disappearance-at-the-twilight-estate:check_unplayed_investigators",
+        "the-circle-undone-disappearance-at-the-twilight-estate:intro",
+        "the-circle-undone-disappearance-at-the-twilight-estate:read_intros:text",
+        "the-circle-undone-disappearance-at-the-twilight-estate:check_gavriella_intro",
+        "the-circle-undone-disappearance-at-the-twilight-estate:check_jerome_intro",
+        "the-circle-undone-disappearance-at-the-twilight-estate:check_penny_intro",
+        "the-circle-undone-disappearance-at-the-twilight-estate:check_valentino_intro",
+        "the-circle-undone-disappearance-at-the-twilight-estate:setup_locations:text",
+        "the-circle-undone-disappearance-at-the-twilight-estate:spectral_watcher:text",
+        "the-circle-undone-disappearance-at-the-twilight-estate:setup_investigators:text",
+        "the-circle-undone-disappearance-at-the-twilight-estate:encounter_deck:text",
+        "the-circle-undone-disappearance-at-the-twilight-estate:check_latest_campaign_version"
       ]
     },
     "tcu-epilogue:anette_story": {
@@ -1781,7 +1804,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "arrested_anette",
+        "id": "arrestedAnette",
         "section": "campaign_notes"
       },
       "then": [
@@ -1798,7 +1821,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "assumed_control_of_the_silver_twilight_lodge",
+        "id": "assumedControlOfTheSilverTwilightLodge",
         "section": "campaign_notes"
       },
       "then": [
@@ -1816,7 +1839,7 @@
       "effects": [
         {
           "do": "crossOut",
-          "key": "survived_the_watchers_embrace",
+          "key": "survivedTheWatchersEmbrace",
           "section": "campaign_notes"
         }
       ]
@@ -1825,7 +1848,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "survived_the_watchers_embrace",
+        "id": "survivedTheWatchersEmbrace",
         "section": "campaign_notes"
       },
       "then": [
@@ -1843,7 +1866,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "signed_the_black_book",
+        "id": "signedTheBlackBook",
         "section": "campaign_notes"
       },
       "then": [
@@ -1860,7 +1883,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "arrested_sanford",
+        "id": "arrestedSanford",
         "section": "campaign_notes"
       },
       "then": [
@@ -1877,7 +1900,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "anette_taught_you_the_spells_of_old",
+        "id": "anetteTaughtYouTheSpellsOfOld",
         "section": "campaign_notes"
       },
       "then": [
@@ -1894,7 +1917,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "being_hunted",
+        "id": "beingHunted",
         "section": "campaign_notes"
       },
       "then": [
@@ -1907,7 +1930,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "guardian_of_the_trap_emerged",
+          "key": "guardianOfTheTrapEmerged",
           "section": "campaign_notes",
           "value": true
         }
@@ -1951,7 +1974,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "discovered_how_to_open_the_puzzle_box",
+          "key": "discoveredHowToOpenThePuzzleBox",
           "section": "campaign_notes",
           "value": true
         },
@@ -1967,7 +1990,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "guardian_of_the_trap_defeated",
+          "key": "guardianOfTheTrapDefeated",
           "section": "campaign_notes",
           "value": true
         }
@@ -1982,7 +2005,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "continued_alone",
+              "key": "continuedAlone",
               "section": "campaign_notes",
               "value": true
             }
@@ -1995,7 +2018,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "asked_anette_for_assistance",
+              "key": "askedAnetteForAssistance",
               "section": "campaign_notes",
               "value": true
             }
@@ -2008,7 +2031,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "arrested_anette",
+              "key": "arrestedAnette",
               "section": "campaign_notes",
               "value": true
             }
@@ -2021,7 +2044,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "anette_taught_you_the_spells_of_old",
+              "key": "anetteTaughtYouTheSpellsOfOld",
               "section": "campaign_notes",
               "value": true
             }
@@ -2050,7 +2073,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "continued_alone",
+              "key": "continuedAlone",
               "section": "campaign_notes",
               "value": true
             }
@@ -2063,7 +2086,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "asked_sanford_for_assistance",
+              "key": "askedSanfordForAssistance",
               "section": "campaign_notes",
               "value": true
             }
@@ -2076,7 +2099,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "arrested_sanford",
+              "key": "arrestedSanford",
               "section": "campaign_notes",
               "value": true
             }
@@ -2089,7 +2112,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "assumed_control_of_the_silver_twilight_lodge",
+              "key": "assumedControlOfTheSilverTwilightLodge",
               "section": "campaign_notes",
               "value": true
             }
@@ -2103,7 +2126,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "doom_draws_ever_closer",
+          "key": "doomDrawsEverCloser",
           "section": "campaign_notes",
           "value": true
         }
@@ -2129,42 +2152,42 @@
       "effects": [
         {
           "do": "crossOut",
-          "key": "gilmans_journal",
+          "key": "gilmansJournal",
           "section": "mementos"
         },
         {
           "do": "crossOut",
-          "key": "keziahs_formulae",
+          "key": "keziahsFormulae",
           "section": "mementos"
         },
         {
           "do": "crossOut",
-          "key": "worn_crucific",
+          "key": "wornCrucific",
           "section": "mementos"
         },
         {
           "do": "crossOut",
-          "key": "wisp_of_spectral_mist",
+          "key": "wispOfSpectralMist",
           "section": "mementos"
         },
         {
           "do": "crossOut",
-          "key": "mesmerizing_flute",
+          "key": "mesmerizingFlute",
           "section": "mementos"
         },
         {
           "do": "crossOut",
-          "key": "ritual_components",
+          "key": "ritualComponents",
           "section": "mementos"
         },
         {
           "do": "crossOut",
-          "key": "scrap_of_torn_shadow",
+          "key": "scrapOfTornShadow",
           "section": "mementos"
         },
         {
           "do": "crossOut",
-          "key": "corn_husk_doll",
+          "key": "cornHuskDoll",
           "section": "mementos"
         }
       ]
@@ -2189,7 +2212,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "answer_1",
+          "key": "answer1",
           "section": "hidden",
           "value": true
         }
@@ -2205,7 +2228,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "answer_2",
+          "key": "answer2",
           "section": "hidden",
           "value": true
         }
@@ -2221,7 +2244,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "answer_3",
+          "key": "answer3",
           "section": "hidden",
           "value": true
         }
@@ -2237,7 +2260,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "answer_4",
+          "key": "answer4",
           "section": "hidden",
           "value": true
         }
@@ -2253,7 +2276,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "answer_5",
+          "key": "answer5",
           "section": "hidden",
           "value": true
         }
@@ -2269,7 +2292,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "answer_6",
+          "key": "answer6",
           "section": "hidden",
           "value": true
         }
@@ -2289,7 +2312,7 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "answer_1",
+            "id": "answer1",
             "section": "hidden"
           }
         },
@@ -2303,7 +2326,7 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "answer_2",
+            "id": "answer2",
             "section": "hidden"
           }
         },
@@ -2317,7 +2340,7 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "answer_3",
+            "id": "answer3",
             "section": "hidden"
           }
         },
@@ -2331,7 +2354,7 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "answer_4",
+            "id": "answer4",
             "section": "hidden"
           }
         },
@@ -2345,7 +2368,7 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "answer_5",
+            "id": "answer5",
             "section": "hidden"
           }
         },
@@ -2362,12 +2385,12 @@
             "conditions": [
               {
                 "kind": "logHas",
-                "id": "survived_the_watchers_embrace",
+                "id": "survivedTheWatchersEmbrace",
                 "section": "campaign_notes"
               },
               {
                 "kind": "logHas",
-                "id": "answer_6",
+                "id": "answer6",
                 "section": "hidden"
               }
             ]
@@ -2396,7 +2419,7 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "answer_1",
+            "id": "answer1",
             "section": "hidden"
           }
         },
@@ -2411,7 +2434,7 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "answer_2",
+            "id": "answer2",
             "section": "hidden"
           }
         },
@@ -2426,7 +2449,7 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "answer_3",
+            "id": "answer3",
             "section": "hidden"
           }
         },
@@ -2441,7 +2464,7 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "answer_4",
+            "id": "answer4",
             "section": "hidden"
           }
         },
@@ -2456,7 +2479,7 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "answer_5",
+            "id": "answer5",
             "section": "hidden"
           }
         },
@@ -2474,12 +2497,12 @@
             "conditions": [
               {
                 "kind": "logHas",
-                "id": "survived_the_watchers_embrace",
+                "id": "survivedTheWatchersEmbrace",
                 "section": "campaign_notes"
               },
               {
                 "kind": "logHas",
-                "id": "answer_6",
+                "id": "answer6",
                 "section": "hidden"
               }
             ]
@@ -2558,7 +2581,7 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "survived_the_watchers_embrace",
+            "id": "survivedTheWatchersEmbrace",
             "section": "campaign_notes"
           }
         },
@@ -2580,7 +2603,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "inducted_into_the_inner_circle",
+          "key": "inductedIntoTheInnerCircle",
           "section": "campaign_notes",
           "value": true
         }
@@ -2598,12 +2621,12 @@
         "conditions": [
           {
             "kind": "logHas",
-            "id": "rescued_josef",
+            "id": "rescuedJosef",
             "section": "campaign_notes"
           },
           {
             "kind": "logHas",
-            "id": "told_lodge_about_coven",
+            "id": "toldLodgeAboutCoven",
             "section": "campaign_notes"
           }
         ]
@@ -2629,7 +2652,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "kept_mementos_hidden",
+          "key": "keptMementosHidden",
           "section": "campaign_notes",
           "value": true
         }
@@ -2701,13 +2724,13 @@
       "effects": [
         {
           "do": "record",
-          "key": "josef_disappeared_into_the_mist",
+          "key": "josefDisappearedIntoTheMist",
           "section": "campaign_notes",
           "value": true
         },
         {
           "do": "record",
-          "key": "enemies_of_the_lodge",
+          "key": "enemiesOfTheLodge",
           "section": "campaign_notes",
           "value": true
         }
@@ -2723,7 +2746,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "rescued_josef",
+          "key": "rescuedJosef",
           "section": "campaign_notes",
           "value": true
         }
@@ -2755,7 +2778,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "enemies_of_the_lodge",
+          "key": "enemiesOfTheLodge",
           "section": "campaign_notes",
           "value": true
         }
@@ -2776,7 +2799,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "members_of_the_lodge",
+          "key": "membersOfTheLodge",
           "section": "campaign_notes",
           "value": true
         },
@@ -2796,7 +2819,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "deceiving_the_lodge",
+          "key": "deceivingTheLodge",
           "section": "campaign_notes",
           "value": true
         }
@@ -2847,7 +2870,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "josef_is_alive",
+          "key": "josefIsAlive",
           "section": "campaign_notes",
           "value": true
         }
@@ -2934,7 +2957,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "being_hunted",
+        "id": "beingHunted",
         "section": "campaign_notes"
       },
       "then": [
@@ -3018,7 +3041,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "gilmans_journal",
+          "key": "gilmansJournal",
           "section": "mementos",
           "value": true
         }
@@ -3060,13 +3083,13 @@
       "effects": [
         {
           "do": "record",
-          "key": "gilmans_journal",
+          "key": "gilmansJournal",
           "section": "mementos",
           "value": true
         },
         {
           "do": "record",
-          "key": "keziahs_formulae",
+          "key": "keziahsFormulae",
           "section": "mementos",
           "value": true
         }
@@ -3129,19 +3152,19 @@
       "effects": [
         {
           "do": "record",
-          "key": "gilmans_journal",
+          "key": "gilmansJournal",
           "section": "mementos",
           "value": true
         },
         {
           "do": "record",
-          "key": "keziahs_formulae",
+          "key": "keziahsFormulae",
           "section": "mementos",
           "value": true
         },
         {
           "do": "record",
-          "key": "worn_crucific",
+          "key": "wornCrucific",
           "section": "mementos",
           "value": true
         }
@@ -3173,6 +3196,182 @@
         }
       ]
     },
+    "the-secret-name:intro_1": {
+      "kind": "story",
+      "text": "The upstairs study of the Silver Twilight Lodge is cozy, if a little cramped. The floor is covered in a plush carpet, and several comfortable sofas and small round tables fill the warmly lit room. Portraits of world-weary Lodge members line the walls around you. Carl Sanford, president of the Lodge, sits across from you, idly swirling a glass of Merlot in his wrinkled hand.\n“The Silver Twilight Lodge pursues knowledge that can help us elevate our understanding of the universe,” Mr. Sanford explains, pausing to take a sip from his wine. “The creature you encountered in Josef Meiger’s estate—its appearance is not the only peculiar happening in Arkham as of late. Tell me: have you experienced anything else recently that might be connected to these events?”",
+      "bullets": []
+    },
+    "the-secret-name:intro_2": {
+      "kind": "story",
+      "text": "You tell Mr. Sanford about your experience last week—waking up in the middle of the woods, the strange mist that weaved throughout the trees, the witches and their spell. He leans forward and listens intently as you explain the night’s strange events, your memories still somewhat of a haze. You conclude your story, and the elderly man considers your words. “Interesting,” he says at last. “I know of this coven. They are led by a witch named Anette Mason. Their magic is no trivial thing. They have passed down arcane secrets that can manipulate the energies of the universe. It is dangerous knowledge they possess—knowledge I believe they derived from a powerful witch who fled from Salem over two hundred years ago. Does the name ‘Keziah’ mean anything to you?”\nYou nod. Everyone in Arkham has at least some passing knowledge of the witch whose ghost supposedly haunts the old condemned “Witch House” in French Hill. Most believe her to be a work of fiction; a tall tale meant to scare young children away from the decrepit house. Mr. Sanford’s steely gaze and humorless tone makes it clear to you that this is not the case. “Perhaps this Anette is a true descendant of Keziah, or perhaps she is simply using her name. In any event, I believe these events are connected. To that end, I have a task for you, on behalf of the Silver Twilight Lodge.” Carl Sanford rises to his feet, using his cane more for show than for balance. You rise as well, ready to perform whatever duties are necessary to get to the bottom of this mystery.\n“We need as much information about this coven as we can obtain. If there is any place that will have these answers, it is the house where Keziah herself lived all those years ago.” You nod in agreement—there are too many questions you need answered. What spell were the witches casting that night in the woods? What is their motive? And what is their connection to the creature that kidnapped those four unfortunate souls? You shake Mr. Sanford’s hand and depart for the Witch House.",
+      "bullets": []
+    },
+    "the-secret-name:told_lodge_about_coven": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "toldLodgeAboutCoven",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-secret-name:add_cultist_token:text": {
+      "kind": "story",
+      "text": "Add 1 [cultist] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-secret-name:add_cultist_token": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        }
+      ]
+    },
+    "the-secret-name:intro_3": {
+      "kind": "story",
+      "text": "You shake your head. You’re not sure if the events that took place in the woods are connected, or if they even really happened—some part of you still believes it was all a strange dream. Mr. Sanford examines you with a cold, piercing glare. You get the feeling that he is looking directly through you. “Very well,” he says. “Out of curiosity, does the name ‘Keziah Mason’ mean anything to you?”\nYou nod. Everyone in Arkham has at least some passing knowledge of the witch whose ghost supposedly haunts the old condemned “Witch House” in French Hill. Most believe her to be a work of fiction; a tall tale meant to scare young children away from the decrepit house. Mr. Sanford’s steely gaze and humorless tone makes it clear to you that this is not the case. He motions to an old, worn tome which lies on the table in front of you, open to a page filled with strange inscriptions and arcane glyphs. “I believe the creature you encountered in Josef ’s manor is tied to Keziah and the secret knowledge she possessed. See for yourself.” You pick up the tome and examine the markings on the page closely.",
+      "bullets": []
+    },
+    "the-secret-name:no_mystic:text": {
+      "kind": "story",
+      "text": "Because no investigator is a Mystic ([mystic]):",
+      "bullets": []
+    },
+    "the-secret-name:read_gibberish": {
+      "kind": "story",
+      "text": "It all looks like gibberish to you.",
+      "bullets": []
+    },
+    "the-secret-name:check_mystic_investigator": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_data",
+        "take": false
+      },
+      "then": [],
+      "else": [
+        "the-secret-name:no_mystic:text",
+        "the-secret-name:read_gibberish"
+      ]
+    },
+    "the-secret-name:intro_3_continued": {
+      "kind": "story",
+      "text": "“To this end, I have a task for you, on behalf of the Silver Twilight Lodge.” Carl Sanford rises to his feet, using his cane more for show than for balance. You rise as well, ready to perform whatever duties are necessary to get to the bottom of this mystery.\n“We need as much information about this creature as we can obtain. If there is any place that will have these answers, it is the house where Keziah herself lived all those years ago.” You nod in agreement—there are too many questions you need answered. Perhaps this is connected to the spell the witches were casting that night in the woods, after all. If so, what is their motive? And what does this have to do with the creature that kidnapped those four unfortunate souls? You nod to Mr. Sanford and depart for the Witch House.",
+      "bullets": []
+    },
+    "the-secret-name:hid_knowledge_of_coven": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "hidKnowledgeOfCoven",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-secret-name:choose_tell_lodge_about_witches": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "tell_lodge",
+          "text": "Tell the Lodge of the witches in the woods.",
+          "effects": [],
+          "steps": [
+            "the-secret-name:intro_2",
+            "the-secret-name:told_lodge_about_coven",
+            "the-secret-name:add_cultist_token:text",
+            "the-secret-name:add_cultist_token"
+          ]
+        },
+        {
+          "id": "lie",
+          "text": "Tell him you know of no possible connection. (You are lying.)",
+          "effects": [],
+          "steps": [
+            "the-secret-name:intro_3",
+            "the-secret-name:check_mystic_investigator",
+            "the-secret-name:intro_3_continued",
+            "the-secret-name:hid_knowledge_of_coven"
+          ]
+        }
+      ]
+    },
+    "the-secret-name:intro_4": {
+      "kind": "story",
+      "text": "After your confrontation with the president of the Silver Twilight Lodge, you travel to the manor of the Arkham Historical Society in Southside. You are positive that the events you experienced in the woods last week have something to do with the creature that kidnapped those four unfortunate souls. It’s just a hunch—a feeling that crawls along the back of your neck, imploring you to look away—but you’re sure that everything is connected. You’re just not sure how.\nAs you enter, one of the Historical Society’s many researchers greets you and asks if she can help in any way. You give a cursory description of the information you’re looking for; just enough that she can direct you where to look, but vague enough to leave your motives at the door. “I don’t know why you are researching such morbid affairs, but the records you are looking for should be in the library on the third floor,” the researcher says.\nYou thank her and head to the third floor, where you begin to study the history of witchcraft in Arkham. In the late 17th century, Arkham was one of the New England towns caught up in the hysteria of witch trials. Accusations of witchcraft spread like wildfire, and many of the accused were executed by hanging or burning, guilty and innocent alike. But there was one witch whose infamy rose above the rest, and whose mystical power was never in question: Keziah Mason.\nYou recognize the name as the ghost who supposedly haunts the old Witch House in French Hill. You had always thought her to be a work of fiction; a tall tale meant to scare young children away from the condemned house. But the Historical Society’s records indicate that Keziah was a real person: a powerful witch who had fled from Salem over two hundred years ago.\nYou are no stranger to real witchcraft. If Keziah Mason has anything to do with the coven you encountered in the woods, you must discover that connection. You leave the manor and head toward French Hill, where the Witch House awaits…",
+      "bullets": []
+    },
+    "the-secret-name:intro_5": {
+      "kind": "story",
+      "text": "Your lead regarding the Silver Twilight Lodge’s charity gala turned out to be a bust, but Anna Kaslow’s reading still plays out over and over in your mind. You cannot help but feel as though you are missing a piece of this puzzle—something you can use to avoid the dire fate the tarot reader described. Turning your attention back to the coven of witches you encountered in the woods last week, you travel to the manor of the Arkham Historical Society in Southside. Perhaps there is some piece of information you have overlooked that will shed light on their identity, or their motives.\nAs you enter, one of the Historical Society’s many researchers greets you and asks if she can help in any way. You give a cursory description of the information you’re looking for; just enough that she can direct you where to look, but vague enough to leave your motives at the door. “I don’t know why you are researching such morbid affairs, but the records you are looking for should be in the library on the third floor,” the researcher says.\nYou thank her and head to the third floor, where you begin to study the history of witchcraft in Arkham. In the late 17th century, Arkham was one of the New England towns caught up in the hysteria of witch trials. Accusations of witchcraft spread like wildfire, and many of the accused were executed by hanging or burning, guilty and innocent alike. But there was one witch whose infamy rose above the rest, and whose mystical power was never in question: Keziah Mason.\nYou recognize the name as the ghost who supposedly haunts the old Witch House in French Hill. You had always thought her to be a work of fiction; a tall tale meant to scare young children away from the condemned house. But the Historical Society’s records indicate that Keziah was a real person: a powerful witch who had fled from Salem over two hundred years ago.\nYou are no stranger to real witchcraft. If Keziah Mason has anything to do with the coven you encountered in the woods, you must discover that connection. You leave the manor and head toward French Hill, where the Witch House awaits…",
+      "bullets": []
+    },
+    "the-secret-name:intro_6": {
+      "kind": "story",
+      "text": "You pin the newspaper article up on your wall along with the rest of the evidence you’ve found. Whatever is happening in Josef Meiger’s manor, it’s getting out of hand. First, there were the four disappearances on the twenty-second, at the Silver Twilight Lodge’s annual charity gala. Now more have gone missing after a second event at the same estate. Is the Lodge somehow involved? Why else would they move this dinner to Mr. Meiger’s estate?\nThat’s not the only headline, either. Strange sightings have been occuring throughout the city: ghostly figures, an ashen mist, and a hunched, cloaked figure whose identity is hotly debated by the community. The name on the tips of everybody’s tongues is Keziah Mason—the ghost who supposedly haunts the old Witch House in French Hill. You had always thought her to be a work of fiction; a tall tale meant to scare young children away from the condemned house. But with all of the disappearances and odd sightings occuring throughout town, you’re not so sure. Perhaps there is something to this old ghost story, after all.",
+      "bullets": []
+    },
+    "the-secret-name:check_never_seen_again": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "neverSeenAgain",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-secret-name:intro_6"
+      ],
+      "else": []
+    },
+    "the-secret-name:check_learned_nothing_of_the_lodges_schemes": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "learnedNothingOfTheLodgesSchemes",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-secret-name:intro_5"
+      ],
+      "else": [
+        "the-secret-name:check_never_seen_again"
+      ]
+    },
+    "the-secret-name:check_enemies_of_the_lodge": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "enemiesOfTheLodge",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-secret-name:intro_4"
+      ],
+      "else": [
+        "the-secret-name:check_learned_nothing_of_the_lodges_schemes"
+      ]
+    },
+    "the-secret-name:check_members_of_the_lodge": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "membersOfTheLodge",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-secret-name:intro_1",
+        "the-secret-name:choose_tell_lodge_about_witches"
+      ],
+      "else": [
+        "the-secret-name:check_enemies_of_the_lodge"
+      ]
+    },
     "the-wages-of-sin:record_heretics_released": {
       "kind": "counter",
       "text": "In your Campaign Log, record <i>X heretics were unleashed unto Arkham</i>. X is the number of Heretic enemies in play. (If it is act 1, instead record <i>4 heretics were unleashed unto Arkham</i>.)",
@@ -3180,7 +3379,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "heretics_released",
+          "id": "hereticsReleased",
           "section": "campaign_notes",
           "op": "set",
           "value": "input"
@@ -3193,7 +3392,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "wisp_of_spectral_mist",
+          "key": "wispOfSpectralMist",
           "section": "mementos",
           "value": true
         }
@@ -3230,7 +3429,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "survived_the_watchers_embrace",
+          "key": "survivedTheWatchersEmbrace",
           "section": "campaign_notes",
           "value": true
         }
@@ -3271,7 +3470,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "witches_spell_broken",
+          "key": "witchesSpellBroken",
           "section": "campaign_notes",
           "value": true
         }
@@ -3287,13 +3486,13 @@
       "effects": [
         {
           "do": "record",
-          "key": "mesmerizing_flute",
+          "key": "mesmerizingFlute",
           "section": "mementos",
           "value": true
         },
         {
           "do": "record",
-          "key": "ritual_components",
+          "key": "ritualComponents",
           "section": "mementos",
           "value": true
         },
@@ -3329,13 +3528,13 @@
       "effects": [
         {
           "do": "record",
-          "key": "mesmerizing_flute",
+          "key": "mesmerizingFlute",
           "section": "mementos",
           "value": true
         },
         {
           "do": "record",
-          "key": "scrap_of_torn_shadow",
+          "key": "scrapOfTornShadow",
           "section": "mementos",
           "value": true
         },
@@ -3352,7 +3551,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "witches_spell_cast",
+          "key": "witchesSpellCast",
           "section": "campaign_notes",
           "value": true
         }
@@ -3373,7 +3572,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "mesmerizing_flute",
+          "key": "mesmerizingFlute",
           "section": "mementos",
           "value": true
         },
@@ -3408,6 +3607,112 @@
         }
       ]
     },
+    "the-witching-hour:intro_2": {
+      "kind": "story",
+      "text": "The woman nods and draws the top card of the deck with a steady hand, revealing it to you without looking at it herself. Depicted on the card is a single wooden wand, surrounded by a pattern of broken stained glass. It reads: ACE OF RODS. “You must be ready to act,” she advises. “Without hesitation. Without regret. When the opportunity arises, you must set into motion the events that will change this fate.”",
+      "bullets": []
+    },
+    "the-witching-hour:accepted_fate:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>you have accepted your fate</i>. Add 2 [tablet] tokens to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-witching-hour:accepted_fate": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "acceptedFate",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        }
+      ]
+    },
+    "the-witching-hour:add_tarot:text": {
+      "kind": "story",
+      "text": "Before drawing their opening hand for this scenario, the lead investigator searches the collection for 1 copy of The Tower · XVI and 1 copy of Ace of Rods and adds each of them to their deck, if able. The lead investigator has earned these cards. They do not count toward their deck size. (If one or both of these cards are not available, skip this step.)",
+      "bullets": []
+    },
+    "the-witching-hour:add_tarot": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "05042",
+          "who": "lead"
+        },
+        {
+          "do": "earnCard",
+          "code": "05040",
+          "who": "lead"
+        }
+      ]
+    },
+    "the-witching-hour:intro_3": {
+      "kind": "story",
+      "text": "The woman smirks. “Yes, in a sense, I suppose it is,” she responds. With a single swift motion, she picks up each of the cards displayed before you, save for The Tower card, and shuffles them back into the deck. “The cards only reveal and advise. They cannot influence or impose.” She locks eyes with you, and her smile vanishes from her face. “In other words, though your fate is not set in stone, I assure you the danger you face is not ‘bullshit.’ It is real.” Her eyes narrow. “It is very real.”",
+      "bullets": []
+    },
+    "the-witching-hour:rejected_fate:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>you have rejected your fate</i>. Add 2 [elder_thing] tokens to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-witching-hour:rejected_fate": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "rejectedFate",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        }
+      ]
+    },
+    "the-witching-hour:choose_fate": {
+      "kind": "chooseOne",
+      "text": "The lead investigator must decide (choose one):",
+      "choices": [
+        {
+          "id": "accept_fate",
+          "text": "<i>“What can I do to avoid this fate?”</i>",
+          "effects": [],
+          "steps": [
+            "the-witching-hour:intro_2",
+            "the-witching-hour:accepted_fate:text",
+            "the-witching-hour:accepted_fate",
+            "the-witching-hour:add_tarot:text",
+            "the-witching-hour:add_tarot"
+          ]
+        },
+        {
+          "id": "reject_fate",
+          "text": "<i>“This is bullshit.”</i>",
+          "effects": [],
+          "steps": [
+            "the-witching-hour:intro_3",
+            "the-witching-hour:rejected_fate:text",
+            "the-witching-hour:rejected_fate"
+          ]
+        }
+      ]
+    },
     "twist-of-fate:tof_1": {
       "kind": "story",
       "text": "You stand underneath the breach, in awe of its presence. Everything the soothsayer predicted has come to pass. “This is a matter of life and death,” she had told you. How right she was. Beyond the cosmic ingress, the nucleus of the cosmos awaits. Now you understand what dwells on the other side, gnawing hungrily at the fabric of reality: the doom of all humanity; no, not just humanity. The doom of all life in the universe.\nThere is a bitter taste in your mouth. Tears well in your eyes. You close your fist so hard your nails dig into your flesh. If you have to die, then die you will. But you’re not going to die sitting down.",
@@ -3423,7 +3728,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "path_winds_before_you",
+          "id": "pathWindsBeforeYou",
           "section": "campaign_notes",
           "op": "set",
           "value": 0
@@ -3440,7 +3745,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "path_winds_before_you",
+          "id": "pathWindsBeforeYou",
           "section": "campaign_notes",
           "op": "add",
           "value": 1
@@ -3451,7 +3756,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "accepted_fate",
+        "id": "acceptedFate",
         "section": "campaign_notes"
       },
       "then": [
@@ -3475,7 +3780,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "path_winds_before_you",
+          "id": "pathWindsBeforeYou",
           "section": "campaign_notes",
           "op": "add",
           "value": 2
@@ -3580,7 +3885,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "asked_anette_for_assistance",
+        "id": "askedAnetteForAssistance",
         "section": "campaign_notes"
       },
       "then": [
@@ -3600,7 +3905,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "asked_sanford_for_assistance",
+        "id": "askedSanfordForAssistance",
         "section": "campaign_notes"
       },
       "then": [
@@ -3621,7 +3926,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "path_winds_before_you",
+          "id": "pathWindsBeforeYou",
           "section": "campaign_notes",
           "op": "add",
           "value": 2
@@ -3643,7 +3948,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "path_winds_before_you",
+          "id": "pathWindsBeforeYou",
           "section": "campaign_notes",
           "op": "add",
           "value": 1
@@ -3760,7 +4065,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "path_winds_before_you",
+          "id": "pathWindsBeforeYou",
           "section": "campaign_notes",
           "op": "add",
           "value": 1
@@ -3790,7 +4095,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "path_winds_before_you",
+          "id": "pathWindsBeforeYou",
           "section": "campaign_notes",
           "op": "add",
           "value": 2
@@ -3801,7 +4106,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "doom_draws_ever_closer",
+        "id": "doomDrawsEverCloser",
         "section": "campaign_notes"
       },
       "then": [
@@ -3831,12 +4136,12 @@
             "conditions": [
               {
                 "kind": "logHas",
-                "id": "inducted_into_the_inner_circle",
+                "id": "inductedIntoTheInnerCircle",
                 "section": "campaign_notes"
               },
               {
                 "kind": "logHas",
-                "id": "deceiving_the_lodge",
+                "id": "deceivingTheLodge",
                 "section": "campaign_notes"
               }
             ]
@@ -3886,7 +4191,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "true_work_of_silver_twilight_lodge_has_begun",
+          "key": "trueWorkOfSilverTwilightLodgeHasBegun",
           "section": "campaign_notes",
           "value": true
         }
@@ -3927,7 +4232,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "carl_sanford_possesses_the_secrets_of_the_universe",
+          "key": "carlSanfordPossessesTheSecretsOfTheUniverse",
           "section": "campaign_notes",
           "value": true
         }
@@ -3966,12 +4271,12 @@
         "conditions": [
           {
             "kind": "logHas",
-            "id": "uad_add_chaos_token",
+            "id": "uadAddChaosToken",
             "section": "hidden"
           },
           {
             "kind": "logHas",
-            "id": "act_3_v2",
+            "id": "act3V2",
             "section": "hidden"
           }
         ]
@@ -3987,7 +4292,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "anette_mason_is_possessed_by_evil",
+          "key": "anetteMasonIsPossessedByEvil",
           "section": "campaign_notes",
           "value": true
         }
@@ -4003,7 +4308,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "uad_no_investigators_alive",
+              "key": "uadNoInvestigatorsAlive",
               "section": "hidden",
               "value": true
             }
@@ -4072,7 +4377,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "right_column",
+          "key": "rightColumn",
           "section": "hidden",
           "value": true
         }
@@ -4083,7 +4388,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "right_column",
+          "key": "rightColumn",
           "section": "hidden",
           "value": true
         }
@@ -4094,7 +4399,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "left_column",
+          "key": "leftColumn",
           "section": "hidden",
           "value": true
         }
@@ -4105,7 +4410,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "left_column",
+          "key": "leftColumn",
           "section": "hidden",
           "value": true
         }
@@ -4115,7 +4420,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCount",
-        "id": "heretics_released",
+        "id": "hereticsReleased",
         "section": "campaign_notes",
         "min": 1,
         "max": 1
@@ -4131,7 +4436,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCount",
-        "id": "heretics_released",
+        "id": "hereticsReleased",
         "section": "campaign_notes",
         "min": 0,
         "max": 0
@@ -4147,7 +4452,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "josef_disappeared_into_the_mist",
+        "id": "josefDisappearedIntoTheMist",
         "section": "campaign_notes"
       },
       "then": [
@@ -4162,7 +4467,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "left_column",
+          "key": "leftColumn",
           "section": "hidden",
           "value": true
         }
@@ -4172,7 +4477,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "josef_disappeared_into_the_mist",
+        "id": "josefDisappearedIntoTheMist",
         "section": "campaign_notes"
       },
       "then": [
@@ -4186,7 +4491,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "witches_spell_cast",
+        "id": "witchesSpellCast",
         "section": "campaign_notes"
       },
       "then": [
@@ -4210,7 +4515,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "right_column",
+        "id": "rightColumn",
         "section": "hidden"
       },
       "then": [
@@ -4300,17 +4605,17 @@
         "conditions": [
           {
             "kind": "logHas",
-            "id": "uad_no_investigators_alive",
+            "id": "uadNoInvestigatorsAlive",
             "section": "hidden"
           },
           {
             "kind": "logHas",
-            "id": "disappeared_into_the_mist",
+            "id": "disappearedIntoTheMist",
             "section": "05046"
           },
           {
             "kind": "logHas",
-            "id": "on_gavriellas_trail",
+            "id": "onGavriellasTrail",
             "section": "05046"
           }
         ]
@@ -4398,17 +4703,17 @@
         "conditions": [
           {
             "kind": "logHas",
-            "id": "uad_no_investigators_alive",
+            "id": "uadNoInvestigatorsAlive",
             "section": "hidden"
           },
           {
             "kind": "logHas",
-            "id": "disappeared_into_the_mist",
+            "id": "disappearedIntoTheMist",
             "section": "05047"
           },
           {
             "kind": "logHas",
-            "id": "on_jeromes_trail",
+            "id": "onJeromesTrail",
             "section": "05047"
           }
         ]
@@ -4496,17 +4801,17 @@
         "conditions": [
           {
             "kind": "logHas",
-            "id": "uad_no_investigators_alive",
+            "id": "uadNoInvestigatorsAlive",
             "section": "hidden"
           },
           {
             "kind": "logHas",
-            "id": "disappeared_into_the_mist",
+            "id": "disappearedIntoTheMist",
             "section": "05049"
           },
           {
             "kind": "logHas",
-            "id": "on_pennys_trail",
+            "id": "onPennysTrail",
             "section": "05049"
           }
         ]
@@ -4594,17 +4899,17 @@
         "conditions": [
           {
             "kind": "logHas",
-            "id": "uad_no_investigators_alive",
+            "id": "uadNoInvestigatorsAlive",
             "section": "hidden"
           },
           {
             "kind": "logHas",
-            "id": "disappeared_into_the_mist",
+            "id": "disappearedIntoTheMist",
             "section": "05048"
           },
           {
             "kind": "logHas",
-            "id": "on_valentinos_trail",
+            "id": "onValentinosTrail",
             "section": "05048"
           }
         ]
@@ -4644,6 +4949,161 @@
     },
     "union-and-disillusion:upgradeDecks": {
       "kind": "upgradeDecks"
+    },
+    "union-and-disillusion:sided_with_the_lodge": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "sidedWithTheLodge",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "union-and-disillusion:sided_with_the_coven": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "sidedWithTheCoven",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "union-and-disillusion:point_of_no_return": {
+      "kind": "chooseOne",
+      "text": "This is a point of no return—you will not get the chance to change your mind later. The investigators must decide (choose one):",
+      "choices": [
+        {
+          "id": "help_ritual",
+          "text": "<i>“We have to help complete the Lodge’s ritual.”</i>",
+          "effects": [],
+          "steps": [
+            "union-and-disillusion:sided_with_the_lodge"
+          ]
+        },
+        {
+          "id": "thwart_ritual",
+          "text": "<i>“We have to stop the Lodge’s ritual.”</i>",
+          "effects": [],
+          "steps": [
+            "union-and-disillusion:sided_with_the_coven"
+          ]
+        }
+      ]
+    },
+    "union-and-disillusion:act_3_v1:text": {
+      "kind": "story",
+      "text": "Use Act 3—“Beyond the Mist (v. I)” and Act 4—“The Binding Rite.”",
+      "bullets": []
+    },
+    "union-and-disillusion:act_3_v2:text": {
+      "kind": "story",
+      "text": "Use Act 3—“Beyond the Mist (v. II)” and Act 4—“The Broken Rite.”",
+      "bullets": []
+    },
+    "union-and-disillusion:act_3_v2": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "act3V2",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "union-and-disillusion:act_3_v3:text": {
+      "kind": "story",
+      "text": "Use Act 3—“Beyond the Mist (v. III)” and Act 4—“The Broken Rite.”",
+      "bullets": []
+    },
+    "union-and-disillusion:act_3_v4:text": {
+      "kind": "story",
+      "text": "Use Act 3—“Beyond the Mist (v. IV)” and Act 4—“The Broken Rite.”",
+      "bullets": []
+    },
+    "union-and-disillusion:check_sided_with_the_coven": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "sidedWithTheCoven",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "union-and-disillusion:act_3_v4:text"
+      ],
+      "else": []
+    },
+    "union-and-disillusion:check_sided_with_the_coven_and_deceiving": {
+      "kind": "branch",
+      "condition": {
+        "kind": "any",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "deceivingTheLodge",
+            "section": "campaign_notes"
+          },
+          {
+            "kind": "logHas",
+            "id": "hidKnowledgeOfCoven",
+            "section": "campaign_notes"
+          },
+          {
+            "kind": "logHas",
+            "id": "keptMementosHidden",
+            "section": "campaign_notes"
+          }
+        ]
+      },
+      "then": [
+        "union-and-disillusion:act_3_v3:text"
+      ],
+      "else": [
+        "union-and-disillusion:check_sided_with_the_coven"
+      ]
+    },
+    "union-and-disillusion:check_sided_with_the_coven_and_inner_circle": {
+      "kind": "branch",
+      "condition": {
+        "kind": "all",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "deceivingTheLodge",
+            "section": "campaign_notes"
+          },
+          {
+            "kind": "logHas",
+            "id": "inductedIntoTheInnerCircle",
+            "section": "campaign_notes"
+          }
+        ]
+      },
+      "then": [
+        "union-and-disillusion:act_3_v2:text",
+        "union-and-disillusion:act_3_v2"
+      ],
+      "else": [
+        "union-and-disillusion:check_sided_with_the_coven_and_deceiving"
+      ]
+    },
+    "union-and-disillusion:check_sided_with_lodge": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "sidedWithTheLodge",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "union-and-disillusion:act_3_v1:text"
+      ],
+      "else": [
+        "union-and-disillusion:check_sided_with_the_coven_and_inner_circle"
+      ]
     }
   }
 }

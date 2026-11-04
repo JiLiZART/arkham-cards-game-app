@@ -30,6 +30,7 @@
     "09696",
     "09697"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -126,7 +127,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "outsiders_were_stopped",
+          "key": "outsidersWereStopped",
           "value": true
         },
         {
@@ -149,7 +150,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "cell_was_hollowed",
+          "key": "cellWasHollowed",
           "value": true
         },
         {

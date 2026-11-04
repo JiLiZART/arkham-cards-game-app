@@ -21,6 +21,7 @@
     "06335",
     "06336"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -114,7 +115,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "bridge_was_completed",
+          "key": "bridgeWasCompleted",
           "value": true
         },
         {
@@ -137,7 +138,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "bridge_was_destroyed",
+          "key": "bridgeWasDestroyed",
           "value": true
         },
         {
@@ -154,7 +155,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "bridge_was_completed",
+          "key": "bridgeWasCompleted",
           "value": true
         },
         {
@@ -177,7 +178,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "returned_to_reality",
+          "key": "returnedToReality",
           "value": true
         },
         {
@@ -200,7 +201,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "never_escaped",
+          "key": "neverEscaped",
           "value": true
         },
         {
@@ -223,7 +224,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "still_in_the_dreamlands",
+          "key": "stillInTheDreamlands",
           "value": true
         },
         {

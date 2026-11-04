@@ -21,6 +21,7 @@
     "11589",
     "11590"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -106,7 +107,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "the_grand_vault",
+          "key": "theGrandVault",
           "value": true
         },
         {
@@ -123,7 +124,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "the_grand_vault",
+          "key": "theGrandVault",
           "value": true
         },
         {
@@ -140,7 +141,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "the_grand_vault",
+          "key": "theGrandVault",
           "value": true
         },
         {

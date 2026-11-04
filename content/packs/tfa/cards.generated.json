@@ -1520,6 +1520,7 @@
   "icons": {},
   "subname": "The Sleeper Awakens",
   "encounterSet": "eztli",
+  "vengeance": 5,
   "enemy": {
    "fight": 3,
    "health": 10,
@@ -1618,6 +1619,7 @@
   "slots": [],
   "icons": {},
   "encounterSet": "eztli",
+  "vengeance": 1,
   "shroud": 2,
   "clues": 1,
   "cluesPerInvestigator": true
@@ -1666,6 +1668,7 @@
   "flavor": "The floor of this central chamber is intricately carved and glows strangely…",
   "encounterSet": "eztli",
   "victory": 2,
+  "vengeance": 2,
   "shroud": 4,
   "clues": 2,
   "cluesPerInvestigator": true
@@ -1882,6 +1885,7 @@
   "icons": {},
   "flavor": "Deadlier than it seems.",
   "encounterSet": "serpents",
+  "vengeance": 1,
   "enemy": {
    "fight": 3,
    "health": 1,
@@ -1912,6 +1916,7 @@
   "icons": {},
   "flavor": "Fourteen feet of scaled hunger.",
   "encounterSet": "serpents",
+  "vengeance": 2,
   "enemy": {
    "fight": 4,
    "health": 4,
@@ -2222,7 +2227,8 @@
   ],
   "slots": [],
   "icons": {},
-  "encounterSet": "ruins"
+  "encounterSet": "ruins",
+  "vengeance": 1
  },
  {
   "code": "04094",
@@ -4492,6 +4498,7 @@
   "subname": "Cold-Blooded Charmer",
   "encounterSet": "the_boundary_beyond",
   "victory": 2,
+  "vengeance": 2,
   "enemy": {
    "fight": 5,
    "health": 3,
@@ -4521,6 +4528,7 @@
   "icons": {},
   "encounterSet": "the_boundary_beyond",
   "victory": 1,
+  "vengeance": 1,
   "enemy": {
    "fight": 3,
    "health": 5,
@@ -5362,6 +5370,7 @@
   "slots": [],
   "icons": {},
   "encounterSet": "pillars_of_judgment",
+  "vengeance": 2,
   "enemy": {
    "fight": 4,
    "health": 4,
@@ -5527,6 +5536,7 @@
   "icons": {},
   "encounterSet": "knyan",
   "victory": 2,
+  "vengeance": 2,
   "shroud": 3,
   "clues": 0,
   "cluesPerInvestigator": false
@@ -6941,6 +6951,7 @@
   "icons": {},
   "flavor": "This much was known from the very few manuscripts and carvings found in the vaults of Zin, beneath the largest ruined city of Yoth.- H. P. Lovecraft and Zealia Bishop, <u>The Mound</u>",
   "encounterSet": "the_depths_of_yoth",
+  "vengeance": 2,
   "shroud": 3,
   "clues": 1,
   "cluesPerInvestigator": true
@@ -6965,6 +6976,7 @@
   "icons": {},
   "flavor": "It had been built in imitation of certain temples depicted in the vaults of Zin, to house a very terrible black toad-idol… - H. P. Lovecraft and Zealia Bishop, <u>The Mound</u>",
   "encounterSet": "the_depths_of_yoth",
+  "vengeance": 2,
   "shroud": 4,
   "clues": 1,
   "cluesPerInvestigator": true
@@ -7189,6 +7201,7 @@
   "slots": [],
   "icons": {},
   "encounterSet": "the_depths_of_yoth",
+  "vengeance": 1,
   "enemy": {
    "fight": 4,
    "health": 4,

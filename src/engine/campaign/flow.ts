@@ -8,7 +8,7 @@
  * players are looking at; `pos` is where the order of play stands; `play` is the scenario to play (or being played).
  */
 import { flowOf, resolutionSteps } from "../../content/flow";
-import type { CampaignStep, FlowCondition, FlowEffect } from "../../content/schema";
+import type { CampaignStep, FlowChoice, FlowCondition, FlowEffect } from "../../content/schema";
 import type { CampaignState, FlowState, FlowValue, ScenarioFacts, WaitingStep } from "./types";
 import {
   addCards,
@@ -336,6 +336,19 @@ const stepOf = (db: ContentDb, c: CampaignState, id: string): CampaignStep | und
   return m ? resolutionSteps(db, c.campaignId, m[1], m[2]).steps[id] : undefined;
 };
 
+/**
+ * The answers a choice offers: those whose own test passes, or every answer when none does (a test whose record no
+ * script makes yet, as after Hemlock Vale's prologue), so the campaign never waits on a choice with nothing to choose
+ */
+export function openChoices<T extends Pick<FlowChoice, "when">>(
+  db: ContentDb,
+  c: CampaignState,
+  choices: T[],
+): T[] {
+  const open = choices.filter((x) => !x.when || test(db, c, x.when));
+  return open.length ? open : choices;
+}
+
 const PROMPTS = new Set([
   "chooseOne",
   "counter",
@@ -367,6 +380,13 @@ function run(db: ContentDb, c: CampaignState) {
           return;
         }
         f.scenario = null;
+        // a scenario whose own setup steps have just run is offered now
+        if (f.next) {
+          f.play = f.next;
+          f.next = null;
+          f.waiting = { id: "play", step: { kind: EVENT.Play, scenario: f.play } };
+          return;
+        }
         const id = nextItem(db, c);
         f.item = null;
         if (id === null) {
@@ -377,6 +397,13 @@ function run(db: ContentDb, c: CampaignState) {
         if (interlude) {
           f.item = id;
           f.queue.push(...interlude.steps);
+          continue;
+        }
+        // its own setup steps first (difficulty tokens, an intro choice), then it is offered
+        const before = flow.before?.[id] ?? [];
+        if (before.length) {
+          f.next = id;
+          f.queue.push(...before);
           continue;
         }
         f.play = id;
@@ -438,7 +465,7 @@ function answer(db: ContentDb, c: CampaignState, value: FlowValue) {
       case "chooseOne": {
         // a single choice is a "do this, if it applies": it can be declined
         if (value === null && st.choices.length === 1) return;
-        const ch = st.choices.find((x) => x.id === text(value) && (!x.when || test(db, c, x.when)));
+        const ch = openChoices(db, c, st.choices).find((x) => x.id === text(value));
         need(!!ch, `${text(value)} is not a choice here`);
         after(ch!.steps);
         runEffects(db, c, ch!.effects, {}, rng);
@@ -490,9 +517,10 @@ function answer(db: ContentDb, c: CampaignState, value: FlowValue) {
           ids.length >= st.min && (st.max === undefined || ids.length <= st.max),
           "that many can't be ticked",
         );
-        const chosen = ids.map((id) => st.choices.find((x) => x.id === id));
+        const open = openChoices(db, c, st.choices);
+        const chosen = ids.map((id) => open.find((x) => x.id === id));
         need(
-          chosen.every((x) => !!x && (!x.when || test(db, c, x.when))),
+          chosen.every((x) => !!x),
           "that is not on the list",
         );
         after(chosen.flatMap((x) => x!.steps));

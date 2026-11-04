@@ -19,8 +19,11 @@
       "-2",
       "skull",
       "skull",
+      "skull",
+      "cultist",
       "cultist",
       "tablet",
+      "elderThing",
       "autoFail",
       "elderSign"
     ],
@@ -37,13 +40,15 @@
       "-4",
       "skull",
       "skull",
+      "skull",
+      "cultist",
       "cultist",
       "tablet",
+      "elderThing",
       "autoFail",
       "elderSign"
     ],
     "hard": [
-      "0",
       "0",
       "0",
       "-1",
@@ -56,8 +61,11 @@
       "-5",
       "skull",
       "skull",
+      "skull",
+      "cultist",
       "cultist",
       "tablet",
+      "elderThing",
       "autoFail",
       "elderSign"
     ],
@@ -76,12 +84,16 @@
       "-8",
       "skull",
       "skull",
+      "skull",
+      "cultist",
       "cultist",
       "tablet",
+      "elderThing",
       "autoFail",
       "elderSign"
     ]
   },
+  "options": [],
   "logLabels": {},
   "packs": [
     "core",

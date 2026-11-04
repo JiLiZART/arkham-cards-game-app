@@ -1,4 +1,4 @@
-import type { LogCondition, SetupStep } from "../content/schema";
+import type { CampaignDef, LogCondition, SetupStep } from "../content/schema";
 import {
   addCounter,
   allCards,
@@ -104,6 +104,24 @@ function locByRef(game: GameContext, ref: string) {
   return findByCode(game, ref, [ZONE.Location]) ?? locationByName(game, ref);
 }
 
+/**
+ * The sets a scenario gathers with the chosen options: each replaced set swapped for its replacement (dropped when the
+ * replacement is already listed), and the added sets appended to the encounter deck's.
+ */
+export function gatherSets(declared: CampaignDef["options"], chosen: readonly string[]) {
+  const on = declared.filter((o) => chosen.includes(o.id));
+  const replacing = new Map(
+    on.flatMap((o) => Object.entries(o.replaceSets).map(([n, old]) => [old, n] as const)),
+  );
+  const added = on.flatMap((o) => o.addSets);
+  return (sets: readonly string[], encounterDeck: boolean): string[] => {
+    const out: string[] = [];
+    for (const set of [...sets.map((x) => replacing.get(x) ?? x), ...(encounterDeck ? added : [])])
+      if (!out.includes(set)) out.push(set);
+    return out;
+  };
+}
+
 function applySetupStep(game: GameContext, st: SetupStep) {
   const s = game.s;
   if (!checkLog(s.campaignLog, st.when, s.order.length)) return;
@@ -136,19 +154,20 @@ function applySetupStep(game: GameContext, st: SetupStep) {
       return;
     }
     case "setAside":
-      // a code listed n times sets n copies aside: a copy already set aside is not taken again
-      for (const code of st.codes) {
-        const c = allCards(game).find(
+      // every copy of each code (or `count` of them) out of the decks; a copy already set aside is not taken again
+      for (const code of new Set(st.codes)) {
+        const copies = allCards(game).filter(
           (x) => x.code === code && isOneOf(x.zone, ZONE.EncounterDeck, ZONE.SideDeck, ZONE.Limbo),
         );
-        if (c) moveCard(game, c.id, ZONE.SetAside);
+        for (const c of copies.slice(0, st.count ?? copies.length))
+          moveCard(game, c.id, ZONE.SetAside);
       }
       return;
     case "remove":
-      for (const code of st.codes) {
-        const c = allCards(game).find((x) => x.code === code && x.zone !== "removed");
-        if (c) moveCard(game, c.id, ZONE.Removed);
-      }
+      // every copy of each code leaves the game
+      for (const code of new Set(st.codes))
+        for (const c of allCards(game).filter((x) => x.code === code && x.zone !== "removed"))
+          moveCard(game, c.id, ZONE.Removed);
       return;
     case "startAt": {
       const loc = locByRef(game, st.code);
@@ -239,8 +258,9 @@ export function createGame(db: ContentDb, setup: GameSetup): Result {
       if (db.cards[code].text.startsWith("Permanent.")) moveCard(game, id, ZONE.Play);
     }
   });
-  // encounter cards
-  const sets = [...scen.encounterSets];
+  // encounter cards, through the campaign's chosen options (a Return-to box's sets in its base campaign)
+  const gather = gatherSets(campaign?.options ?? [], setup.options ?? []);
+  const sets = gather(scen.encounterSets, true);
   if (scen.randomEncounterSet?.length)
     sets.push(scen.randomEncounterSet[randInt(s, scen.randomEncounterSet.length)]);
   for (const set of sets) {
@@ -253,7 +273,7 @@ export function createGame(db: ContentDb, setup: GameSetup): Result {
   }
   for (const [deck, deckSets] of Object.entries(scen.sideDecks)) {
     const side = pileRec(game, `sideDeck:${deck}`);
-    for (const set of deckSets)
+    for (const set of gather(deckSets, false))
       for (const code of db.encounterSets[set] ?? []) {
         for (let k = 0; k < db.cards[code].quantity; k++)
           side.push(createCard(game, code, ZONE.SideDeck));
@@ -263,7 +283,9 @@ export function createGame(db: ContentDb, setup: GameSetup): Result {
   // a card created in an act or agenda deck is put in that pile
   for (const code of scen.acts) createCard(game, code, ZONE.ActDeck);
   for (const code of scen.agendas) createCard(game, code, ZONE.AgendaDeck);
-  moveCard(game, pileOf(s, PILE.ActDeck)[0], ZONE.Act);
+  // a scenario may have no act deck (Sepulchre of the Sleeper): it ends through its agendas
+  const firstAct = pileOf(s, PILE.ActDeck)[0];
+  if (firstAct) moveCard(game, firstAct, ZONE.Act);
   moveCard(game, pileOf(s, PILE.AgendaDeck)[0], ZONE.Agenda);
   s.chaosBag = [...(setup.chaosBag ?? campaign?.chaosBags[setup.difficulty] ?? [])];
   for (const st of scen.setup) applySetupStep(game, st);

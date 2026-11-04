@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { CampaignFlow } from "../src/content/schema";
+import { readFileSync } from "node:fs";
+import { camelizeGuide } from "./campaignGuide";
 import { compileFlow, stepTexts, type FlowSource } from "./campaignFlow";
 
 const ids = new Map([
@@ -656,5 +658,55 @@ describe("stepTexts", () => {
   it("leaves out steps with no words", () => {
     const t = stepTexts(compiled().flow);
     expect(Object.keys(t.steps)).not.toContain("armitages-fate:kidnapped");
+  });
+});
+
+describe("a scenario's own setup steps run before it (flow.before)", () => {
+  const guides = JSON.parse(
+    readFileSync("inspired/ArkhamCards/assets/generated/all_campaigns.txt", "utf8"),
+  ).map(camelizeGuide);
+  const dwl = guides.find((g: { campaign: { id: string } }) => g.campaign.id === "dwl");
+  const ids = new Map<string, string>(
+    dwl.scenarios
+      .filter((s: { type?: string }) => s.type !== "interlude" && s.type !== "epilogue")
+      .map((s: { id: string }) => [s.id, s.id.replace(/_/g, "-")]),
+  );
+  const { flow } = compileFlow({ campaign: dwl.campaign, scenarios: dwl.scenarios, ids });
+  const reach = (id: string, seen = new Set<string>()): string[] => {
+    if (seen.has(id)) return [];
+    seen.add(id);
+    const st = flow.steps[id];
+    const kids =
+      "then" in st
+        ? [...st.then, ...st.else]
+        : "choices" in st
+          ? st.choices.flatMap((c) => c.steps)
+          : [];
+    return [id, ...kids.flatMap((k) => reach(k, seen))];
+  };
+  const effectsOf = (sc: string) =>
+    (flow.before[sc] ?? [])
+      .flatMap((id) => reach(id))
+      .flatMap((id) => {
+        const st = flow.steps[id];
+        return st.kind === "effects"
+          ? st.effects
+          : st.kind === "chooseOne"
+            ? st.choices.flatMap((c) => c.effects ?? [])
+            : [];
+      });
+
+  it("The Essex County Express adds its difficulty token", () => {
+    expect(effectsOf("essex-county-express").some((e) => e.do === "addChaosToken")).toBe(true);
+  });
+
+  it("Undimensioned and Unseen's intro choice records calmedTownsfolk or warnedTownsfolk", () => {
+    const keys = effectsOf("undimensioned-and-unseen").flatMap((e) => ("key" in e ? [e.key] : []));
+    expect(keys).toEqual(expect.arrayContaining(["calmedTownsfolk", "warnedTownsfolk"]));
+  });
+
+  it("a scenario whose setup only gathers sets, places locations and shows text has no entry", () => {
+    expect(flow.before["the-house-always-wins"]).toBeUndefined();
+    expect(flow.before["lost-in-time-and-space"]).toBeUndefined();
   });
 });

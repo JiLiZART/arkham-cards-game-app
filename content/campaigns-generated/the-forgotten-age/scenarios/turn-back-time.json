@@ -25,6 +25,7 @@
     "04055",
     "04056"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -87,7 +88,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "fabric_of_time_unwoven",
+          "key": "fabricOfTimeUnwoven",
           "value": true
         },
         {
@@ -110,7 +111,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "sealed_relic_of_ages_forever",
+          "key": "sealedRelicOfAgesForever",
           "value": true
         },
         {

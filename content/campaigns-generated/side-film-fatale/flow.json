@@ -29,6 +29,13 @@
       "R5": []
     }
   },
+  "before": {
+    "film-fatale": [
+      "film-fatale:dummy_entry",
+      "film-fatale:swap_chaos_bag",
+      "film-fatale:setup_chaos_bag"
+    ]
+  },
   "steps": {
     "film-fatale:earn_madness_flaw_weakness:text": {
       "kind": "story",
@@ -54,10 +61,222 @@
       "effects": [
         {
           "do": "record",
-          "key": "film_fatale_no_andre",
+          "key": "filmFataleNoAndre",
           "section": "hidden",
           "value": true
         }
+      ]
+    },
+    "film-fatale:dummy_entry": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "alwaysTrue",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "film-fatale:swap_chaos_bag": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "filmFataleSwapChaosBag",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "film-fatale:add_standard_bag:text": {
+      "kind": "story",
+      "text": "Use following tokens for your chaos bag: +1, 0, 0, -1, -1, -1, -2, -2, -3, -4, [skull], [skull], [auto_fail], [elder_sign]",
+      "bullets": []
+    },
+    "film-fatale:add_standard_bag": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "+1"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "0"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "0"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "-1"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "-1"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "-1"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "-2"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "-2"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "-3"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "-4"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "skull"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "skull"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "autoFail"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "elderSign"
+        }
+      ]
+    },
+    "film-fatale:add_hard_bag:text": {
+      "kind": "story",
+      "text": "Use the following tokens for your chaos bag: 0, 0, -1, -1, -1, -2, -3, -4, -6, [skull], [skull], [auto_fail], [elder_sign]",
+      "bullets": []
+    },
+    "film-fatale:add_hard_bag": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "0"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "0"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "-1"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "-1"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "-1"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "-2"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "-3"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "-4"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "-6"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "skull"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "skull"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "autoFail"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "elderSign"
+        }
+      ]
+    },
+    "film-fatale:setup_chaos_bag#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "expert"
+        ]
+      },
+      "then": [
+        "film-fatale:add_hard_bag:text",
+        "film-fatale:add_hard_bag"
+      ],
+      "else": []
+    },
+    "film-fatale:setup_chaos_bag#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "hard"
+        ]
+      },
+      "then": [
+        "film-fatale:add_hard_bag:text",
+        "film-fatale:add_hard_bag"
+      ],
+      "else": [
+        "film-fatale:setup_chaos_bag#3"
+      ]
+    },
+    "film-fatale:setup_chaos_bag#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "standard"
+        ]
+      },
+      "then": [
+        "film-fatale:add_standard_bag:text",
+        "film-fatale:add_standard_bag"
+      ],
+      "else": [
+        "film-fatale:setup_chaos_bag#2"
+      ]
+    },
+    "film-fatale:setup_chaos_bag": {
+      "kind": "branch",
+      "condition": {
+        "kind": "difficulty",
+        "is": [
+          "easy"
+        ]
+      },
+      "then": [
+        "film-fatale:add_standard_bag:text",
+        "film-fatale:add_standard_bag"
+      ],
+      "else": [
+        "film-fatale:setup_chaos_bag#1"
       ]
     },
     "fortune-and-folly-checkpoint:checkpoint": {
@@ -81,7 +300,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_found_a_vent",
+              "key": "fofFoundAVent",
               "section": "hidden",
               "value": true
             }
@@ -94,7 +313,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_impersonated_a_high_roller",
+              "key": "fofImpersonatedAHighRoller",
               "section": "hidden",
               "value": true
             }
@@ -107,7 +326,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_convinced_isamara",
+              "key": "fofConvincedIsamara",
               "section": "hidden",
               "value": true
             }
@@ -120,7 +339,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_obtained_an_uniform",
+              "key": "fofObtainedAnUniform",
               "section": "hidden",
               "value": true
             }
@@ -133,7 +352,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_stole_keys",
+              "key": "fofStoleKeys",
               "section": "hidden",
               "value": true
             }
@@ -146,7 +365,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_cleaned_out_the_house",
+              "key": "fofCleanedOutTheHouse",
               "section": "hidden",
               "value": true
             }
@@ -170,7 +389,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_need_time_to_rest",
+              "key": "fofNeedTimeToRest",
               "section": "hidden",
               "value": true
             }
@@ -212,13 +431,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_found_a_vent",
+              "key": "fofFoundAVent",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_found_a_vent",
+              "key": "fofFoundAVent",
               "section": "hidden",
               "value": true
             }
@@ -231,13 +450,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_impersonated_a_high_roller",
+              "key": "fofImpersonatedAHighRoller",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_impersonated_a_high_roller",
+              "key": "fofImpersonatedAHighRoller",
               "section": "hidden",
               "value": true
             }
@@ -250,13 +469,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_convinced_isamara",
+              "key": "fofConvincedIsamara",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_convinced_isamara",
+              "key": "fofConvincedIsamara",
               "section": "hidden",
               "value": true
             }
@@ -269,13 +488,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_obtained_an_uniform",
+              "key": "fofObtainedAnUniform",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_obtained_an_uniform",
+              "key": "fofObtainedAnUniform",
               "section": "hidden",
               "value": true
             }
@@ -288,13 +507,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_stole_keys",
+              "key": "fofStoleKeys",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_stole_keys",
+              "key": "fofStoleKeys",
               "section": "hidden",
               "value": true
             }
@@ -307,13 +526,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_cleaned_out_the_house",
+              "key": "fofCleanedOutTheHouse",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_cleaned_out_the_house",
+              "key": "fofCleanedOutTheHouse",
               "section": "hidden",
               "value": true
             }
@@ -327,7 +546,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "fof_need_time_to_rest",
+          "key": "fofNeedTimeToRest",
           "section": "campaign_notes",
           "value": true
         }
@@ -343,7 +562,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_need_time_to_rest",
+              "key": "fofNeedTimeToRest",
               "section": "hidden",
               "value": true
             }
@@ -380,7 +599,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "fof_wellspring_clues",
+          "id": "fofWellspringClues",
           "section": "campaign_notes",
           "op": "set",
           "value": "input"
@@ -397,7 +616,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "fof_stashed",
+          "key": "fofStashed",
           "section": "campaign_notes",
           "value": true
         }
@@ -419,7 +638,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "continue_fortune_and_folly_part_2",
+              "key": "continueFortuneAndFollyPart2",
               "section": "hidden",
               "value": true
             }

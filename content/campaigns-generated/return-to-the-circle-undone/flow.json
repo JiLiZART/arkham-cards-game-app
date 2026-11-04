@@ -18,16 +18,6 @@
     "tcu-epilogue"
   ],
   "interludes": {
-    "disappearance-at-the-twilight-estate": {
-      "kind": "interlude",
-      "name": "Return to Disappearance at the Twilight Estate",
-      "steps": [
-        "disappearance-at-the-twilight-estate:pre_intro",
-        "disappearance-at-the-twilight-estate:choose_neutral_investigators:text",
-        "disappearance-at-the-twilight-estate:no_decks:text",
-        "disappearance-at-the-twilight-estate:maybe_check_unplayed_investigators"
-      ]
-    },
     "tcu-epilogue": {
       "kind": "epilogue",
       "name": "Epilogue",
@@ -84,6 +74,14 @@
     }
   },
   "resolutions": {
+    "disappearance-at-the-twilight-estate": {
+      "none": [
+        "disappearance-at-the-twilight-estate:no_experience:text",
+        "disappearance-at-the-twilight-estate:pieces_of_evidence",
+        "disappearance-at-the-twilight-estate:return_player_cards:text",
+        "disappearance-at-the-twilight-estate:maybe_ask_being_hunted"
+      ]
+    },
     "return-to-at-deaths-doorstep": {
       "none": [
         "return-to-at-deaths-doorstep:check_final_act"
@@ -343,6 +341,21 @@
       ]
     }
   },
+  "before": {
+    "disappearance-at-the-twilight-estate": [
+      "disappearance-at-the-twilight-estate:maybe_check_unplayed_investigators"
+    ],
+    "return-to-the-secret-name": [
+      "return-to-the-secret-name:check_members_of_the_lodge"
+    ],
+    "return-to-the-witching-hour": [
+      "return-to-the-witching-hour:choose_fate"
+    ],
+    "return-to-union-and-disillusion": [
+      "return-to-union-and-disillusion:point_of_no_return",
+      "return-to-union-and-disillusion:check_sided_with_lodge_and_erynn"
+    ]
+  },
   "steps": {
     "campaign:prologue": {
       "kind": "story",
@@ -350,20 +363,66 @@
       "text": "“The hidden cults to which these witches belonged often guarded and handed down surprising secrets from elder, forgotten aeons; and it was by no means impossible that Keziah had actually mastered the art of passing through dimensional gates.”\n– H. P. Lovecraft, The Dreams in the Witch House",
       "bullets": []
     },
-    "disappearance-at-the-twilight-estate:pre_intro": {
+    "disappearance-at-the-twilight-estate:no_experience:text": {
       "kind": "story",
-      "text": "Sunday, November 22nd, 1925. Arkham, Massachusetts.\nThough All Hallows’ Eve is nearly a month past, a grim melancholy lingers throughout the town. Each morning, a thick fog permeates the streets. Nights are beginning to grow longer, and if you ask around town, you’ll hear people swear that it’s getting darker, too. But despite the gloomy mood, progress continues in the sleepy town of Arkham. The election of Nathaniel Rhodes to the United States Senate has upstanding members of the community feeling optimistic about the town’s future. And tonight, at his well-appointed estate in French Hill, a man named Josef Meiger hosts the Silver Twilight Lodge’s charity gala, an annual members-only event that will turn deadly for several attendees…",
+      "text": "No experience is earned for this prologue.",
       "bullets": []
     },
-    "disappearance-at-the-twilight-estate:choose_neutral_investigators:text": {
+    "disappearance-at-the-twilight-estate:pieces_of_evidence": {
+      "kind": "counter",
+      "text": "In your Campaign Log, record <i>X pieces of evidence were left behind</i>. X is the total number of clues on Act 1a—“The Disappearance.”",
+      "min": 0,
+      "effects": [
+        {
+          "do": "count",
+          "id": "piecesOfEvidence",
+          "section": "campaign_notes",
+          "op": "set",
+          "value": "input"
+        }
+      ],
+      "steps": []
+    },
+    "disappearance-at-the-twilight-estate:return_player_cards:text": {
       "kind": "story",
-      "text": "Each player must choose one of the following neutral investigators to control for the duration of this prologue: Gavriella Mizrah, Jerome Davids, Penny White, or Valentino Rivas. Throughout this prologue, you will play through this character’s story and make choices that will determine their fate. Your choice of investigator has no direct effect on your standard investigator deck, though the results of the prologue will influence the story.",
+      "text": "Return each of the player cards used in this scenario to the collection.",
       "bullets": []
     },
-    "disappearance-at-the-twilight-estate:no_decks:text": {
-      "kind": "story",
-      "text": "Do not assemble an investigator deck for any neutral investigator. Instead, gather the cards listed on its reverse side—these cards will be used in that investigator’s unique setup. (All listed cards are level 0 unless otherwise noted.)",
-      "bullets": []
+    "disappearance-at-the-twilight-estate:being_hunted": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "beingHunted",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "disappearance-at-the-twilight-estate:ask_being_hunted": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "being_hunted",
+          "text": "Are you being hunted?",
+          "effects": [],
+          "steps": [
+            "disappearance-at-the-twilight-estate:being_hunted"
+          ]
+        }
+      ]
+    },
+    "disappearance-at-the-twilight-estate:maybe_ask_being_hunted": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_data",
+        "take": true
+      },
+      "then": [
+        "disappearance-at-the-twilight-estate:ask_being_hunted"
+      ],
+      "else": []
     },
     "disappearance-at-the-twilight-estate:new_missing_investigators_1": {
       "kind": "cardChoice",
@@ -572,7 +631,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "skip_prologue",
+              "key": "skipPrologue",
               "section": "hidden",
               "value": true
             }
@@ -590,7 +649,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "skip_prologue",
+              "key": "skipPrologue",
               "section": "hidden",
               "value": true
             }
@@ -638,42 +697,6 @@
       "else": [
         "disappearance-at-the-twilight-estate:randomizer"
       ]
-    },
-    "disappearance-at-the-twilight-estate:being_hunted": {
-      "kind": "effects",
-      "effects": [
-        {
-          "do": "record",
-          "key": "being_hunted",
-          "section": "campaign_notes",
-          "value": true
-        }
-      ]
-    },
-    "disappearance-at-the-twilight-estate:ask_being_hunted": {
-      "kind": "chooseOne",
-      "choices": [
-        {
-          "id": "being_hunted",
-          "text": "Are you being hunted?",
-          "effects": [],
-          "steps": [
-            "disappearance-at-the-twilight-estate:being_hunted"
-          ]
-        }
-      ]
-    },
-    "disappearance-at-the-twilight-estate:maybe_ask_being_hunted": {
-      "kind": "branch",
-      "condition": {
-        "kind": "unsupported",
-        "name": "campaign_data",
-        "take": true
-      },
-      "then": [
-        "disappearance-at-the-twilight-estate:ask_being_hunted"
-      ],
-      "else": []
     },
     "disappearance-at-the-twilight-estate:intro": {
       "kind": "story",
@@ -798,7 +821,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "taken_by_the_watcher",
+              "id": "takenByTheWatcher",
               "section": "05046",
               "codes": [
                 "05046"
@@ -807,7 +830,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05046",
+              "key": "prologue05046",
               "section": "hidden",
               "value": true
             }
@@ -820,7 +843,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "claimed_by_specters",
+              "id": "claimedBySpecters",
               "section": "05046",
               "codes": [
                 "05046"
@@ -829,7 +852,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05046",
+              "key": "prologue05046",
               "section": "hidden",
               "value": true
             }
@@ -842,7 +865,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "disappeared_into_the_mist",
+              "id": "disappearedIntoTheMist",
               "section": "05046",
               "codes": [
                 "05046"
@@ -851,7 +874,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05046",
+              "key": "prologue05046",
               "section": "hidden",
               "value": true
             }
@@ -864,7 +887,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "pulled_into_the_spectral_realm",
+              "id": "pulledIntoTheSpectralRealm",
               "section": "05046",
               "codes": [
                 "05046"
@@ -873,7 +896,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05046",
+              "key": "prologue05046",
               "section": "hidden",
               "value": true
             }
@@ -892,7 +915,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "taken_by_the_watcher",
+              "id": "takenByTheWatcher",
               "section": "05047",
               "codes": [
                 "05047"
@@ -901,7 +924,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05047",
+              "key": "prologue05047",
               "section": "hidden",
               "value": true
             }
@@ -914,7 +937,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "claimed_by_specters",
+              "id": "claimedBySpecters",
               "section": "05047",
               "codes": [
                 "05047"
@@ -923,7 +946,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05047",
+              "key": "prologue05047",
               "section": "hidden",
               "value": true
             }
@@ -936,7 +959,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "disappeared_into_the_mist",
+              "id": "disappearedIntoTheMist",
               "section": "05047",
               "codes": [
                 "05047"
@@ -945,7 +968,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05047",
+              "key": "prologue05047",
               "section": "hidden",
               "value": true
             }
@@ -958,7 +981,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "pulled_into_the_spectral_realm",
+              "id": "pulledIntoTheSpectralRealm",
               "section": "05047",
               "codes": [
                 "05047"
@@ -967,7 +990,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05047",
+              "key": "prologue05047",
               "section": "hidden",
               "value": true
             }
@@ -986,7 +1009,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "taken_by_the_watcher",
+              "id": "takenByTheWatcher",
               "section": "05048",
               "codes": [
                 "05048"
@@ -995,7 +1018,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05048",
+              "key": "prologue05048",
               "section": "hidden",
               "value": true
             }
@@ -1008,7 +1031,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "claimed_by_specters",
+              "id": "claimedBySpecters",
               "section": "05048",
               "codes": [
                 "05048"
@@ -1017,7 +1040,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05048",
+              "key": "prologue05048",
               "section": "hidden",
               "value": true
             }
@@ -1030,7 +1053,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "disappeared_into_the_mist",
+              "id": "disappearedIntoTheMist",
               "section": "05048",
               "codes": [
                 "05048"
@@ -1039,7 +1062,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05048",
+              "key": "prologue05048",
               "section": "hidden",
               "value": true
             }
@@ -1052,7 +1075,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "pulled_into_the_spectral_realm",
+              "id": "pulledIntoTheSpectralRealm",
               "section": "05048",
               "codes": [
                 "05048"
@@ -1061,7 +1084,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05048",
+              "key": "prologue05048",
               "section": "hidden",
               "value": true
             }
@@ -1080,7 +1103,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "taken_by_the_watcher",
+              "id": "takenByTheWatcher",
               "section": "05049",
               "codes": [
                 "05049"
@@ -1089,7 +1112,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05049",
+              "key": "prologue05049",
               "section": "hidden",
               "value": true
             }
@@ -1102,7 +1125,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "claimed_by_specters",
+              "id": "claimedBySpecters",
               "section": "05049",
               "codes": [
                 "05049"
@@ -1111,7 +1134,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05049",
+              "key": "prologue05049",
               "section": "hidden",
               "value": true
             }
@@ -1124,7 +1147,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "disappeared_into_the_mist",
+              "id": "disappearedIntoTheMist",
               "section": "05049",
               "codes": [
                 "05049"
@@ -1133,7 +1156,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05049",
+              "key": "prologue05049",
               "section": "hidden",
               "value": true
             }
@@ -1146,7 +1169,7 @@
           "effects": [
             {
               "do": "listCards",
-              "id": "pulled_into_the_spectral_realm",
+              "id": "pulledIntoTheSpectralRealm",
               "section": "05049",
               "codes": [
                 "05049"
@@ -1155,7 +1178,7 @@
             },
             {
               "do": "record",
-              "key": "prologue_05049",
+              "key": "prologue05049",
               "section": "hidden",
               "value": true
             }
@@ -1174,7 +1197,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "05046_fate_decided",
+              "key": "05046FateDecided",
               "section": "hidden",
               "value": true
             }
@@ -1189,7 +1212,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "05047_fate_decided",
+              "key": "05047FateDecided",
               "section": "hidden",
               "value": true
             }
@@ -1204,7 +1227,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "05048_fate_decided",
+              "key": "05048FateDecided",
               "section": "hidden",
               "value": true
             }
@@ -1219,7 +1242,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "05049_fate_decided",
+              "key": "05049FateDecided",
               "section": "hidden",
               "value": true
             }
@@ -1428,7 +1451,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "skip_prologue",
+        "id": "skipPrologue",
         "section": "hidden"
       },
       "then": [
@@ -1515,7 +1538,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "arrested_anette",
+        "id": "arrestedAnette",
         "section": "campaign_notes"
       },
       "then": [
@@ -1532,7 +1555,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "assumed_control_of_the_silver_twilight_lodge",
+        "id": "assumedControlOfTheSilverTwilightLodge",
         "section": "campaign_notes"
       },
       "then": [
@@ -1550,7 +1573,7 @@
       "effects": [
         {
           "do": "crossOut",
-          "key": "survived_the_watchers_embrace",
+          "key": "survivedTheWatchersEmbrace",
           "section": "campaign_notes"
         }
       ]
@@ -1559,7 +1582,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "survived_the_watchers_embrace",
+        "id": "survivedTheWatchersEmbrace",
         "section": "campaign_notes"
       },
       "then": [
@@ -1577,7 +1600,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "signed_the_black_book",
+        "id": "signedTheBlackBook",
         "section": "campaign_notes"
       },
       "then": [
@@ -1594,7 +1617,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "arrested_sanford",
+        "id": "arrestedSanford",
         "section": "campaign_notes"
       },
       "then": [
@@ -1611,7 +1634,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "anette_taught_you_the_spells_of_old",
+        "id": "anetteTaughtYouTheSpellsOfOld",
         "section": "campaign_notes"
       },
       "then": [
@@ -1628,7 +1651,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "being_hunted",
+        "id": "beingHunted",
         "section": "campaign_notes"
       },
       "then": [
@@ -1665,7 +1688,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "investigators_escaped_the_spectral_realm",
+          "key": "investigatorsEscapedTheSpectralRealm",
           "section": "campaign_notes",
           "value": true
         }
@@ -1687,7 +1710,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "learned_nothing_of_the_lodges_schemes",
+          "key": "learnedNothingOfTheLodgesSchemes",
           "section": "campaign_notes",
           "value": true
         }
@@ -1719,7 +1742,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "being_hunted",
+        "id": "beingHunted",
         "section": "campaign_notes"
       },
       "then": [
@@ -1732,7 +1755,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "never_seen_again",
+          "key": "neverSeenAgain",
           "section": "campaign_notes",
           "value": true
         }
@@ -1748,7 +1771,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "azathoth_devoured_the_universe",
+          "key": "azathothDevouredTheUniverse",
           "section": "campaign_notes",
           "value": true
         }
@@ -1796,7 +1819,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "lead_investigator_joins_pipers",
+          "key": "leadInvestigatorJoinsPipers",
           "section": "campaign_notes",
           "value": true
         }
@@ -1807,7 +1830,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "azathoth_slumbers",
+          "key": "azathothSlumbers",
           "section": "campaign_notes",
           "value": true
         }
@@ -1900,7 +1923,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "signed_the_black_book",
+          "key": "signedTheBlackBook",
           "section": "campaign_notes",
           "value": true
         }
@@ -1968,7 +1991,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "guardian_of_the_trap_emerged",
+          "key": "guardianOfTheTrapEmerged",
           "section": "campaign_notes",
           "value": true
         }
@@ -2012,7 +2035,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "discovered_how_to_open_the_puzzle_box",
+          "key": "discoveredHowToOpenThePuzzleBox",
           "section": "campaign_notes",
           "value": true
         },
@@ -2028,7 +2051,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "guardian_of_the_trap_defeated",
+          "key": "guardianOfTheTrapDefeated",
           "section": "campaign_notes",
           "value": true
         }
@@ -2043,7 +2066,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "continued_alone",
+              "key": "continuedAlone",
               "section": "campaign_notes",
               "value": true
             }
@@ -2056,7 +2079,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "asked_anette_for_assistance",
+              "key": "askedAnetteForAssistance",
               "section": "campaign_notes",
               "value": true
             }
@@ -2069,7 +2092,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "arrested_anette",
+              "key": "arrestedAnette",
               "section": "campaign_notes",
               "value": true
             }
@@ -2082,7 +2105,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "anette_taught_you_the_spells_of_old",
+              "key": "anetteTaughtYouTheSpellsOfOld",
               "section": "campaign_notes",
               "value": true
             }
@@ -2111,7 +2134,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "continued_alone",
+              "key": "continuedAlone",
               "section": "campaign_notes",
               "value": true
             }
@@ -2124,7 +2147,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "asked_sanford_for_assistance",
+              "key": "askedSanfordForAssistance",
               "section": "campaign_notes",
               "value": true
             }
@@ -2137,7 +2160,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "arrested_sanford",
+              "key": "arrestedSanford",
               "section": "campaign_notes",
               "value": true
             }
@@ -2150,7 +2173,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "assumed_control_of_the_silver_twilight_lodge",
+              "key": "assumedControlOfTheSilverTwilightLodge",
               "section": "campaign_notes",
               "value": true
             }
@@ -2164,7 +2187,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "doom_draws_ever_closer",
+          "key": "doomDrawsEverCloser",
           "section": "campaign_notes",
           "value": true
         }
@@ -2246,7 +2269,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "gilmans_journal",
+          "key": "gilmansJournal",
           "section": "mementos",
           "value": true
         }
@@ -2288,13 +2311,13 @@
       "effects": [
         {
           "do": "record",
-          "key": "gilmans_journal",
+          "key": "gilmansJournal",
           "section": "mementos",
           "value": true
         },
         {
           "do": "record",
-          "key": "keziahs_formulae",
+          "key": "keziahsFormulae",
           "section": "mementos",
           "value": true
         }
@@ -2357,19 +2380,19 @@
       "effects": [
         {
           "do": "record",
-          "key": "gilmans_journal",
+          "key": "gilmansJournal",
           "section": "mementos",
           "value": true
         },
         {
           "do": "record",
-          "key": "keziahs_formulae",
+          "key": "keziahsFormulae",
           "section": "mementos",
           "value": true
         },
         {
           "do": "record",
-          "key": "worn_crucific",
+          "key": "wornCrucific",
           "section": "mementos",
           "value": true
         }
@@ -2401,6 +2424,182 @@
         }
       ]
     },
+    "return-to-the-secret-name:intro_1": {
+      "kind": "story",
+      "text": "The upstairs study of the Silver Twilight Lodge is cozy, if a little cramped. The floor is covered in a plush carpet, and several comfortable sofas and small round tables fill the warmly lit room. Portraits of world-weary Lodge members line the walls around you. Carl Sanford, president of the Lodge, sits across from you, idly swirling a glass of Merlot in his wrinkled hand.\n“The Silver Twilight Lodge pursues knowledge that can help us elevate our understanding of the universe,” Mr. Sanford explains, pausing to take a sip from his wine. “The creature you encountered in Josef Meiger’s estate—its appearance is not the only peculiar happening in Arkham as of late. Tell me: have you experienced anything else recently that might be connected to these events?”",
+      "bullets": []
+    },
+    "return-to-the-secret-name:intro_2": {
+      "kind": "story",
+      "text": "You tell Mr. Sanford about your experience last week—waking up in the middle of the woods, the strange mist that weaved throughout the trees, the witches and their spell. He leans forward and listens intently as you explain the night’s strange events, your memories still somewhat of a haze. You conclude your story, and the elderly man considers your words. “Interesting,” he says at last. “I know of this coven. They are led by a witch named Anette Mason. Their magic is no trivial thing. They have passed down arcane secrets that can manipulate the energies of the universe. It is dangerous knowledge they possess—knowledge I believe they derived from a powerful witch who fled from Salem over two hundred years ago. Does the name ‘Keziah’ mean anything to you?”\nYou nod. Everyone in Arkham has at least some passing knowledge of the witch whose ghost supposedly haunts the old condemned “Witch House” in French Hill. Most believe her to be a work of fiction; a tall tale meant to scare young children away from the decrepit house. Mr. Sanford’s steely gaze and humorless tone makes it clear to you that this is not the case. “Perhaps this Anette is a true descendant of Keziah, or perhaps she is simply using her name. In any event, I believe these events are connected. To that end, I have a task for you, on behalf of the Silver Twilight Lodge.” Carl Sanford rises to his feet, using his cane more for show than for balance. You rise as well, ready to perform whatever duties are necessary to get to the bottom of this mystery.\n“We need as much information about this coven as we can obtain. If there is any place that will have these answers, it is the house where Keziah herself lived all those years ago.” You nod in agreement—there are too many questions you need answered. What spell were the witches casting that night in the woods? What is their motive? And what is their connection to the creature that kidnapped those four unfortunate souls? You shake Mr. Sanford’s hand and depart for the Witch House.",
+      "bullets": []
+    },
+    "return-to-the-secret-name:told_lodge_about_coven": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "toldLodgeAboutCoven",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-the-secret-name:add_cultist_token:text": {
+      "kind": "story",
+      "text": "Add 1 [cultist] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "return-to-the-secret-name:add_cultist_token": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        }
+      ]
+    },
+    "return-to-the-secret-name:intro_3": {
+      "kind": "story",
+      "text": "You shake your head. You’re not sure if the events that took place in the woods are connected, or if they even really happened—some part of you still believes it was all a strange dream. Mr. Sanford examines you with a cold, piercing glare. You get the feeling that he is looking directly through you. “Very well,” he says. “Out of curiosity, does the name ‘Keziah Mason’ mean anything to you?”\nYou nod. Everyone in Arkham has at least some passing knowledge of the witch whose ghost supposedly haunts the old condemned “Witch House” in French Hill. Most believe her to be a work of fiction; a tall tale meant to scare young children away from the decrepit house. Mr. Sanford’s steely gaze and humorless tone makes it clear to you that this is not the case. He motions to an old, worn tome which lies on the table in front of you, open to a page filled with strange inscriptions and arcane glyphs. “I believe the creature you encountered in Josef ’s manor is tied to Keziah and the secret knowledge she possessed. See for yourself.” You pick up the tome and examine the markings on the page closely.",
+      "bullets": []
+    },
+    "return-to-the-secret-name:no_mystic:text": {
+      "kind": "story",
+      "text": "Because no investigator is a Mystic ([mystic]):",
+      "bullets": []
+    },
+    "return-to-the-secret-name:read_gibberish": {
+      "kind": "story",
+      "text": "It all looks like gibberish to you.",
+      "bullets": []
+    },
+    "return-to-the-secret-name:check_mystic_investigator": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_data",
+        "take": false
+      },
+      "then": [],
+      "else": [
+        "return-to-the-secret-name:no_mystic:text",
+        "return-to-the-secret-name:read_gibberish"
+      ]
+    },
+    "return-to-the-secret-name:intro_3_continued": {
+      "kind": "story",
+      "text": "“To this end, I have a task for you, on behalf of the Silver Twilight Lodge.” Carl Sanford rises to his feet, using his cane more for show than for balance. You rise as well, ready to perform whatever duties are necessary to get to the bottom of this mystery.\n“We need as much information about this creature as we can obtain. If there is any place that will have these answers, it is the house where Keziah herself lived all those years ago.” You nod in agreement—there are too many questions you need answered. Perhaps this is connected to the spell the witches were casting that night in the woods, after all. If so, what is their motive? And what does this have to do with the creature that kidnapped those four unfortunate souls? You nod to Mr. Sanford and depart for the Witch House.",
+      "bullets": []
+    },
+    "return-to-the-secret-name:hid_knowledge_of_coven": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "hidKnowledgeOfCoven",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-the-secret-name:choose_tell_lodge_about_witches": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "tell_lodge",
+          "text": "Tell the Lodge of the witches in the woods.",
+          "effects": [],
+          "steps": [
+            "return-to-the-secret-name:intro_2",
+            "return-to-the-secret-name:told_lodge_about_coven",
+            "return-to-the-secret-name:add_cultist_token:text",
+            "return-to-the-secret-name:add_cultist_token"
+          ]
+        },
+        {
+          "id": "lie",
+          "text": "Tell him you know of no possible connection. (You are lying.)",
+          "effects": [],
+          "steps": [
+            "return-to-the-secret-name:intro_3",
+            "return-to-the-secret-name:check_mystic_investigator",
+            "return-to-the-secret-name:intro_3_continued",
+            "return-to-the-secret-name:hid_knowledge_of_coven"
+          ]
+        }
+      ]
+    },
+    "return-to-the-secret-name:intro_4": {
+      "kind": "story",
+      "text": "After your confrontation with the president of the Silver Twilight Lodge, you travel to the manor of the Arkham Historical Society in Southside. You are positive that the events you experienced in the woods last week have something to do with the creature that kidnapped those four unfortunate souls. It’s just a hunch—a feeling that crawls along the back of your neck, imploring you to look away—but you’re sure that everything is connected. You’re just not sure how.\nAs you enter, one of the Historical Society’s many researchers greets you and asks if she can help in any way. You give a cursory description of the information you’re looking for; just enough that she can direct you where to look, but vague enough to leave your motives at the door. “I don’t know why you are researching such morbid affairs, but the records you are looking for should be in the library on the third floor,” the researcher says.\nYou thank her and head to the third floor, where you begin to study the history of witchcraft in Arkham. In the late 17th century, Arkham was one of the New England towns caught up in the hysteria of witch trials. Accusations of witchcraft spread like wildfire, and many of the accused were executed by hanging or burning, guilty and innocent alike. But there was one witch whose infamy rose above the rest, and whose mystical power was never in question: Keziah Mason.\nYou recognize the name as the ghost who supposedly haunts the old Witch House in French Hill. You had always thought her to be a work of fiction; a tall tale meant to scare young children away from the condemned house. But the Historical Society’s records indicate that Keziah was a real person: a powerful witch who had fled from Salem over two hundred years ago.\nYou are no stranger to real witchcraft. If Keziah Mason has anything to do with the coven you encountered in the woods, you must discover that connection. You leave the manor and head toward French Hill, where the Witch House awaits…",
+      "bullets": []
+    },
+    "return-to-the-secret-name:intro_5": {
+      "kind": "story",
+      "text": "Your lead regarding the Silver Twilight Lodge’s charity gala turned out to be a bust, but Anna Kaslow’s reading still plays out over and over in your mind. You cannot help but feel as though you are missing a piece of this puzzle—something you can use to avoid the dire fate the tarot reader described. Turning your attention back to the coven of witches you encountered in the woods last week, you travel to the manor of the Arkham Historical Society in Southside. Perhaps there is some piece of information you have overlooked that will shed light on their identity, or their motives.\nAs you enter, one of the Historical Society’s many researchers greets you and asks if she can help in any way. You give a cursory description of the information you’re looking for; just enough that she can direct you where to look, but vague enough to leave your motives at the door. “I don’t know why you are researching such morbid affairs, but the records you are looking for should be in the library on the third floor,” the researcher says.\nYou thank her and head to the third floor, where you begin to study the history of witchcraft in Arkham. In the late 17th century, Arkham was one of the New England towns caught up in the hysteria of witch trials. Accusations of witchcraft spread like wildfire, and many of the accused were executed by hanging or burning, guilty and innocent alike. But there was one witch whose infamy rose above the rest, and whose mystical power was never in question: Keziah Mason.\nYou recognize the name as the ghost who supposedly haunts the old Witch House in French Hill. You had always thought her to be a work of fiction; a tall tale meant to scare young children away from the condemned house. But the Historical Society’s records indicate that Keziah was a real person: a powerful witch who had fled from Salem over two hundred years ago.\nYou are no stranger to real witchcraft. If Keziah Mason has anything to do with the coven you encountered in the woods, you must discover that connection. You leave the manor and head toward French Hill, where the Witch House awaits…",
+      "bullets": []
+    },
+    "return-to-the-secret-name:intro_6": {
+      "kind": "story",
+      "text": "You pin the newspaper article up on your wall along with the rest of the evidence you’ve found. Whatever is happening in Josef Meiger’s manor, it’s getting out of hand. First, there were the four disappearances on the twenty-second, at the Silver Twilight Lodge’s annual charity gala. Now more have gone missing after a second event at the same estate. Is the Lodge somehow involved? Why else would they move this dinner to Mr. Meiger’s estate?\nThat’s not the only headline, either. Strange sightings have been occuring throughout the city: ghostly figures, an ashen mist, and a hunched, cloaked figure whose identity is hotly debated by the community. The name on the tips of everybody’s tongues is Keziah Mason—the ghost who supposedly haunts the old Witch House in French Hill. You had always thought her to be a work of fiction; a tall tale meant to scare young children away from the condemned house. But with all of the disappearances and odd sightings occuring throughout town, you’re not so sure. Perhaps there is something to this old ghost story, after all.",
+      "bullets": []
+    },
+    "return-to-the-secret-name:check_never_seen_again": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "neverSeenAgain",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "return-to-the-secret-name:intro_6"
+      ],
+      "else": []
+    },
+    "return-to-the-secret-name:check_learned_nothing_of_the_lodges_schemes": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "learnedNothingOfTheLodgesSchemes",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "return-to-the-secret-name:intro_5"
+      ],
+      "else": [
+        "return-to-the-secret-name:check_never_seen_again"
+      ]
+    },
+    "return-to-the-secret-name:check_enemies_of_the_lodge": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "enemiesOfTheLodge",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "return-to-the-secret-name:intro_4"
+      ],
+      "else": [
+        "return-to-the-secret-name:check_learned_nothing_of_the_lodges_schemes"
+      ]
+    },
+    "return-to-the-secret-name:check_members_of_the_lodge": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "membersOfTheLodge",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "return-to-the-secret-name:intro_1",
+        "return-to-the-secret-name:choose_tell_lodge_about_witches"
+      ],
+      "else": [
+        "return-to-the-secret-name:check_enemies_of_the_lodge"
+      ]
+    },
     "return-to-the-wages-of-sin:record_heretics_released": {
       "kind": "counter",
       "text": "In your Campaign Log, record <i>X heretics were unleashed unto Arkham</i>. X is the number of Heretic enemies in play. (If it is act 1, instead record <i>4 heretics were unleashed unto Arkham</i>.)",
@@ -2408,7 +2607,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "heretics_released",
+          "id": "hereticsReleased",
           "section": "campaign_notes",
           "op": "set",
           "value": "input"
@@ -2421,7 +2620,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "wisp_of_spectral_mist",
+          "key": "wispOfSpectralMist",
           "section": "mementos",
           "value": true
         }
@@ -2458,7 +2657,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "survived_the_watchers_embrace",
+          "key": "survivedTheWatchersEmbrace",
           "section": "campaign_notes",
           "value": true
         }
@@ -2474,7 +2673,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "heretics_released",
+          "id": "hereticsReleased",
           "section": "campaign_notes",
           "op": "set",
           "value": 1
@@ -2486,7 +2685,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "bloody_tree_carvings",
+          "key": "bloodyTreeCarvings",
           "section": "mementos",
           "value": true
         }
@@ -2502,7 +2701,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "erynn_joined_investigators",
+          "key": "erynnJoinedInvestigators",
           "section": "campaign_notes",
           "value": true
         },
@@ -2548,7 +2747,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "witches_spell_broken",
+          "key": "witchesSpellBroken",
           "section": "campaign_notes",
           "value": true
         }
@@ -2564,13 +2763,13 @@
       "effects": [
         {
           "do": "record",
-          "key": "mesmerizing_flute",
+          "key": "mesmerizingFlute",
           "section": "mementos",
           "value": true
         },
         {
           "do": "record",
-          "key": "ritual_components",
+          "key": "ritualComponents",
           "section": "mementos",
           "value": true
         },
@@ -2606,13 +2805,13 @@
       "effects": [
         {
           "do": "record",
-          "key": "mesmerizing_flute",
+          "key": "mesmerizingFlute",
           "section": "mementos",
           "value": true
         },
         {
           "do": "record",
-          "key": "scrap_of_torn_shadow",
+          "key": "scrapOfTornShadow",
           "section": "mementos",
           "value": true
         },
@@ -2629,7 +2828,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "witches_spell_cast",
+          "key": "witchesSpellCast",
           "section": "campaign_notes",
           "value": true
         }
@@ -2650,7 +2849,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "mesmerizing_flute",
+          "key": "mesmerizingFlute",
           "section": "mementos",
           "value": true
         },
@@ -2690,7 +2889,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "erynn_wants_to_meet",
+          "key": "erynnWantsToMeet",
           "section": "campaign_notes",
           "value": true
         }
@@ -2706,13 +2905,13 @@
       "effects": [
         {
           "do": "record",
-          "key": "mesmerizing_flute",
+          "key": "mesmerizingFlute",
           "section": "mementos",
           "value": true
         },
         {
           "do": "record",
-          "key": "strange_incantation",
+          "key": "strangeIncantation",
           "section": "mementos",
           "value": true
         },
@@ -2721,6 +2920,269 @@
           "bonus": 3,
           "who": "each",
           "victory": false
+        }
+      ]
+    },
+    "return-to-the-witching-hour:intro_2": {
+      "kind": "story",
+      "text": "The woman nods and draws the top card of the deck with a steady hand, revealing it to you without looking at it herself. Depicted on the card is a single wooden wand, surrounded by a pattern of broken stained glass. It reads: ACE OF RODS. “You must be ready to act,” she advises. “Without hesitation. Without regret. When the opportunity arises, you must set into motion the events that will change this fate.”",
+      "bullets": []
+    },
+    "return-to-the-witching-hour:accepted_fate:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>you have accepted your fate</i>. Add 2 [tablet] tokens to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "return-to-the-witching-hour:accepted_fate": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "acceptedFate",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        }
+      ]
+    },
+    "return-to-the-witching-hour:campaign_reading_intro:text": {
+      "kind": "story",
+      "text": "Instead of adding 1 copy of The Tower · XVI and 1 copy of Ace of Rods to your deck, the lead investigator may decide to perform a Campaign Reading (\"Destiny\") with a predetermined set of cards from the Tarot Deck.",
+      "bullets": []
+    },
+    "return-to-the-witching-hour:ask_campaign_reading": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "tarot_reading",
+          "text": "Would you like to perform a campaign reading?",
+          "effects": [
+            {
+              "do": "record",
+              "key": "campaignReading",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "return-to-the-witching-hour:perform_campaign_reading:text": {
+      "kind": "story",
+      "text": "Using the Tarot Deck, perform an 8-card Campaign Reading with these specific 8 cards, in this order: Temperance, Justice, Hermit, Hanged Man, Hierophant, Lovers, Chariot, Wheel of Fortune.",
+      "bullets": []
+    },
+    "return-to-the-witching-hour:ask_reversed": {
+      "kind": "checklist",
+      "text": "Choose and reverse four of the cards:",
+      "min": 4,
+      "max": 4,
+      "choices": [
+        {
+          "id": "temperance",
+          "text": "Temperance · XIV",
+          "effects": [
+            {
+              "do": "record",
+              "key": "campaignReadingTemperanceReversed",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "justice",
+          "text": "Justice · XI",
+          "effects": [
+            {
+              "do": "record",
+              "key": "campaignReadingJusticeReversed",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "hermit",
+          "text": "The Hermit · IX",
+          "effects": [
+            {
+              "do": "record",
+              "key": "campaignReadingHermitReversed",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "hanged_man",
+          "text": "The Hanged Man · XII",
+          "effects": [
+            {
+              "do": "record",
+              "key": "campaignReadingHangedManReversed",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "hierophant",
+          "text": "The Hierophant · V",
+          "effects": [
+            {
+              "do": "record",
+              "key": "campaignReadingHierophantReversed",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "lovers",
+          "text": "The Lovers · VI",
+          "effects": [
+            {
+              "do": "record",
+              "key": "campaignReadingLoversReversed",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "chariot",
+          "text": "The Chariot · VII",
+          "effects": [
+            {
+              "do": "record",
+              "key": "campaignReadingChariotReversed",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "wheel_of_fortune",
+          "text": "Wheel of Fortune · X",
+          "effects": [
+            {
+              "do": "record",
+              "key": "campaignReadingWheelOfFortuneReversed",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "return-to-the-witching-hour:add_tarot:text": {
+      "kind": "story",
+      "text": "Before drawing their opening hand for this scenario, the lead investigator searches the collection for 1 copy of The Tower · XVI and 1 copy of Ace of Rods and adds each of them to their deck, if able. The lead investigator has earned these cards. They do not count toward their deck size. (If one or both of these cards are not available, skip this step.)",
+      "bullets": []
+    },
+    "return-to-the-witching-hour:add_tarot": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "05042",
+          "who": "lead"
+        },
+        {
+          "do": "earnCard",
+          "code": "05040",
+          "who": "lead"
+        }
+      ]
+    },
+    "return-to-the-witching-hour:check_campaign_reading": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "campaignReading",
+        "section": "hidden"
+      },
+      "then": [
+        "return-to-the-witching-hour:perform_campaign_reading:text",
+        "return-to-the-witching-hour:ask_reversed"
+      ],
+      "else": [
+        "return-to-the-witching-hour:add_tarot:text",
+        "return-to-the-witching-hour:add_tarot"
+      ]
+    },
+    "return-to-the-witching-hour:intro_3": {
+      "kind": "story",
+      "text": "The woman smirks. “Yes, in a sense, I suppose it is,” she responds. With a single swift motion, she picks up each of the cards displayed before you, save for The Tower card, and shuffles them back into the deck. “The cards only reveal and advise. They cannot influence or impose.” She locks eyes with you, and her smile vanishes from her face. “In other words, though your fate is not set in stone, I assure you the danger you face is not ‘bullshit.’ It is real.” Her eyes narrow. “It is very real.”",
+      "bullets": []
+    },
+    "return-to-the-witching-hour:rejected_fate:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record that <i>you have rejected your fate</i>. Add 2 [elder_thing] tokens to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "return-to-the-witching-hour:rejected_fate": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "rejectedFate",
+          "section": "campaign_notes",
+          "value": true
+        },
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        },
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        }
+      ]
+    },
+    "return-to-the-witching-hour:choose_fate": {
+      "kind": "chooseOne",
+      "text": "The lead investigator must decide (choose one):",
+      "choices": [
+        {
+          "id": "accept_fate",
+          "text": "<i>“What can I do to avoid this fate?”</i>",
+          "effects": [],
+          "steps": [
+            "return-to-the-witching-hour:intro_2",
+            "return-to-the-witching-hour:accepted_fate:text",
+            "return-to-the-witching-hour:accepted_fate",
+            "return-to-the-witching-hour:campaign_reading_intro:text",
+            "return-to-the-witching-hour:ask_campaign_reading",
+            "return-to-the-witching-hour:check_campaign_reading"
+          ]
+        },
+        {
+          "id": "reject_fate",
+          "text": "<i>“This is bullshit.”</i>",
+          "effects": [],
+          "steps": [
+            "return-to-the-witching-hour:intro_3",
+            "return-to-the-witching-hour:rejected_fate:text",
+            "return-to-the-witching-hour:rejected_fate"
+          ]
         }
       ]
     },
@@ -2737,12 +3199,12 @@
             "conditions": [
               {
                 "kind": "logHas",
-                "id": "inducted_into_the_inner_circle",
+                "id": "inductedIntoTheInnerCircle",
                 "section": "campaign_notes"
               },
               {
                 "kind": "logHas",
-                "id": "deceiving_the_lodge",
+                "id": "deceivingTheLodge",
                 "section": "campaign_notes"
               }
             ]
@@ -2792,7 +3254,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "true_work_of_silver_twilight_lodge_has_begun",
+          "key": "trueWorkOfSilverTwilightLodgeHasBegun",
           "section": "campaign_notes",
           "value": true
         }
@@ -2833,7 +3295,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "carl_sanford_possesses_the_secrets_of_the_universe",
+          "key": "carlSanfordPossessesTheSecretsOfTheUniverse",
           "section": "campaign_notes",
           "value": true
         }
@@ -2872,12 +3334,12 @@
         "conditions": [
           {
             "kind": "logHas",
-            "id": "uad_add_chaos_token",
+            "id": "uadAddChaosToken",
             "section": "hidden"
           },
           {
             "kind": "logHas",
-            "id": "act_3_v2",
+            "id": "act3V2",
             "section": "hidden"
           }
         ]
@@ -2906,7 +3368,7 @@
               },
               {
                 "kind": "logHas",
-                "id": "erynn_joined_investigators",
+                "id": "erynnJoinedInvestigators",
                 "section": "campaign_notes"
               }
             ]
@@ -2961,7 +3423,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "uad_no_investigators_alive",
+              "key": "uadNoInvestigatorsAlive",
               "section": "hidden",
               "value": true
             }
@@ -3030,7 +3492,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "right_column",
+          "key": "rightColumn",
           "section": "hidden",
           "value": true
         }
@@ -3041,7 +3503,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "right_column",
+          "key": "rightColumn",
           "section": "hidden",
           "value": true
         }
@@ -3052,7 +3514,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "left_column",
+          "key": "leftColumn",
           "section": "hidden",
           "value": true
         }
@@ -3063,7 +3525,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "left_column",
+          "key": "leftColumn",
           "section": "hidden",
           "value": true
         }
@@ -3073,7 +3535,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCount",
-        "id": "heretics_released",
+        "id": "hereticsReleased",
         "section": "campaign_notes",
         "min": 1,
         "max": 1
@@ -3089,7 +3551,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logCount",
-        "id": "heretics_released",
+        "id": "hereticsReleased",
         "section": "campaign_notes",
         "min": 0,
         "max": 0
@@ -3105,7 +3567,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "josef_disappeared_into_the_mist",
+        "id": "josefDisappearedIntoTheMist",
         "section": "campaign_notes"
       },
       "then": [
@@ -3120,7 +3582,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "left_column",
+          "key": "leftColumn",
           "section": "hidden",
           "value": true
         }
@@ -3130,7 +3592,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "josef_disappeared_into_the_mist",
+        "id": "josefDisappearedIntoTheMist",
         "section": "campaign_notes"
       },
       "then": [
@@ -3144,7 +3606,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "witches_spell_cast",
+        "id": "witchesSpellCast",
         "section": "campaign_notes"
       },
       "then": [
@@ -3168,7 +3630,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "right_column",
+        "id": "rightColumn",
         "section": "hidden"
       },
       "then": [
@@ -3183,7 +3645,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "anette_mason_is_possessed_by_evil",
+          "key": "anetteMasonIsPossessedByEvil",
           "section": "campaign_notes",
           "value": true
         }
@@ -3269,17 +3731,17 @@
         "conditions": [
           {
             "kind": "logHas",
-            "id": "uad_no_investigators_alive",
+            "id": "uadNoInvestigatorsAlive",
             "section": "hidden"
           },
           {
             "kind": "logHas",
-            "id": "disappeared_into_the_mist",
+            "id": "disappearedIntoTheMist",
             "section": "05046"
           },
           {
             "kind": "logHas",
-            "id": "on_gavriellas_trail",
+            "id": "onGavriellasTrail",
             "section": "05046"
           }
         ]
@@ -3367,17 +3829,17 @@
         "conditions": [
           {
             "kind": "logHas",
-            "id": "uad_no_investigators_alive",
+            "id": "uadNoInvestigatorsAlive",
             "section": "hidden"
           },
           {
             "kind": "logHas",
-            "id": "disappeared_into_the_mist",
+            "id": "disappearedIntoTheMist",
             "section": "05047"
           },
           {
             "kind": "logHas",
-            "id": "on_jeromes_trail",
+            "id": "onJeromesTrail",
             "section": "05047"
           }
         ]
@@ -3465,17 +3927,17 @@
         "conditions": [
           {
             "kind": "logHas",
-            "id": "uad_no_investigators_alive",
+            "id": "uadNoInvestigatorsAlive",
             "section": "hidden"
           },
           {
             "kind": "logHas",
-            "id": "disappeared_into_the_mist",
+            "id": "disappearedIntoTheMist",
             "section": "05049"
           },
           {
             "kind": "logHas",
-            "id": "on_pennys_trail",
+            "id": "onPennysTrail",
             "section": "05049"
           }
         ]
@@ -3563,17 +4025,17 @@
         "conditions": [
           {
             "kind": "logHas",
-            "id": "uad_no_investigators_alive",
+            "id": "uadNoInvestigatorsAlive",
             "section": "hidden"
           },
           {
             "kind": "logHas",
-            "id": "disappeared_into_the_mist",
+            "id": "disappearedIntoTheMist",
             "section": "05048"
           },
           {
             "kind": "logHas",
-            "id": "on_valentinos_trail",
+            "id": "onValentinosTrail",
             "section": "05048"
           }
         ]
@@ -3619,7 +4081,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "coven_of_keziah_holds_the_world_in_its_grasp",
+          "key": "covenOfKeziahHoldsTheWorldInItsGrasp",
           "section": "campaign_notes",
           "value": true
         }
@@ -3655,6 +4117,190 @@
         }
       ]
     },
+    "return-to-union-and-disillusion:sided_with_the_lodge": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "sidedWithTheLodge",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-union-and-disillusion:sided_with_the_coven": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "sidedWithTheCoven",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "return-to-union-and-disillusion:point_of_no_return": {
+      "kind": "chooseOne",
+      "text": "This is a point of no return—you will not get the chance to change your mind later. The investigators must decide (choose one):",
+      "choices": [
+        {
+          "id": "help_ritual",
+          "text": "<i>“We have to help complete the Lodge’s ritual.”</i>",
+          "effects": [],
+          "steps": [
+            "return-to-union-and-disillusion:sided_with_the_lodge"
+          ]
+        },
+        {
+          "id": "thwart_ritual",
+          "text": "<i>“We have to stop the Lodge’s ritual.”</i>",
+          "effects": [],
+          "steps": [
+            "return-to-union-and-disillusion:sided_with_the_coven"
+          ]
+        }
+      ]
+    },
+    "return-to-union-and-disillusion:act_3_v5:text": {
+      "kind": "story",
+      "text": "Use Act 3—“Beyond the Mist (v. V)” and Act 4—“The Binding Rite.”",
+      "bullets": []
+    },
+    "return-to-union-and-disillusion:act_3_v1:text": {
+      "kind": "story",
+      "text": "Use Act 3—“Beyond the Mist (v. I)” and Act 4—“The Binding Rite.”",
+      "bullets": []
+    },
+    "return-to-union-and-disillusion:act_3_v2:text": {
+      "kind": "story",
+      "text": "Use Act 3—“Beyond the Mist (v. II)” and Act 4—“The Broken Rite.”",
+      "bullets": []
+    },
+    "return-to-union-and-disillusion:act_3_v2": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "act3V2",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "return-to-union-and-disillusion:act_3_v3:text": {
+      "kind": "story",
+      "text": "Use Act 3—“Beyond the Mist (v. III)” and Act 4—“The Broken Rite.”",
+      "bullets": []
+    },
+    "return-to-union-and-disillusion:act_3_v4:text": {
+      "kind": "story",
+      "text": "Use Act 3—“Beyond the Mist (v. IV)” and Act 4—“The Broken Rite.”",
+      "bullets": []
+    },
+    "return-to-union-and-disillusion:check_sided_with_the_coven": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "sidedWithTheCoven",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "return-to-union-and-disillusion:act_3_v4:text"
+      ],
+      "else": []
+    },
+    "return-to-union-and-disillusion:check_sided_with_the_coven_and_deceiving": {
+      "kind": "branch",
+      "condition": {
+        "kind": "any",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "deceivingTheLodge",
+            "section": "campaign_notes"
+          },
+          {
+            "kind": "logHas",
+            "id": "hidKnowledgeOfCoven",
+            "section": "campaign_notes"
+          },
+          {
+            "kind": "logHas",
+            "id": "keptMementosHidden",
+            "section": "campaign_notes"
+          }
+        ]
+      },
+      "then": [
+        "return-to-union-and-disillusion:act_3_v3:text"
+      ],
+      "else": [
+        "return-to-union-and-disillusion:check_sided_with_the_coven"
+      ]
+    },
+    "return-to-union-and-disillusion:check_sided_with_the_coven_and_inner_circle": {
+      "kind": "branch",
+      "condition": {
+        "kind": "all",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "deceivingTheLodge",
+            "section": "campaign_notes"
+          },
+          {
+            "kind": "logHas",
+            "id": "inductedIntoTheInnerCircle",
+            "section": "campaign_notes"
+          }
+        ]
+      },
+      "then": [
+        "return-to-union-and-disillusion:act_3_v2:text",
+        "return-to-union-and-disillusion:act_3_v2"
+      ],
+      "else": [
+        "return-to-union-and-disillusion:check_sided_with_the_coven_and_deceiving"
+      ]
+    },
+    "return-to-union-and-disillusion:check_sided_with_lodge": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "sidedWithTheLodge",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "return-to-union-and-disillusion:act_3_v1:text"
+      ],
+      "else": [
+        "return-to-union-and-disillusion:check_sided_with_the_coven_and_inner_circle"
+      ]
+    },
+    "return-to-union-and-disillusion:check_sided_with_lodge_and_erynn": {
+      "kind": "branch",
+      "condition": {
+        "kind": "all",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "sidedWithTheLodge",
+            "section": "campaign_notes"
+          },
+          {
+            "kind": "logHas",
+            "id": "erynnJoinedInvestigators",
+            "section": "campaign_notes"
+          }
+        ]
+      },
+      "then": [
+        "return-to-union-and-disillusion:act_3_v5:text"
+      ],
+      "else": [
+        "return-to-union-and-disillusion:check_sided_with_lodge"
+      ]
+    },
     "the-inner-circle:ic_1": {
       "kind": "story",
       "text": "You have been brought deep into the inner sanctum, where only the highest-ranking members of the Lodge are allowed. Mr. Sanford explains that the Order of the Silver Twilight is far older and more important than the public-facing Silver Twilight Lodge, and that their knowledge extends into the realm of the arcane and the obscure. “For many decades, the Order of the Silver Twilight has pursued knowledge that can elevate humanity. We have defended against threats to our very existence. We have sacrificed everything for this sacred cause. Now, one of these threats terrorizes our city, and we are the only ones who can stop it. You know the creature I speak of.” You nod in affirmation.\n“Here is what we know: it was the witches who brought this abomination upon Arkham. We tried to stop their ritual, but unfortunately, we were unsuccessful in binding it. Now it is loose, and we must finish what we started before the witches are able to do the same. But first, I understand you may have some information for us, as well. Please, hand over what you have found. It is important that we collaborate in order to understand this situation.”",
@@ -3675,52 +4321,52 @@
       "effects": [
         {
           "do": "crossOut",
-          "key": "gilmans_journal",
+          "key": "gilmansJournal",
           "section": "mementos"
         },
         {
           "do": "crossOut",
-          "key": "keziahs_formulae",
+          "key": "keziahsFormulae",
           "section": "mementos"
         },
         {
           "do": "crossOut",
-          "key": "worn_crucific",
+          "key": "wornCrucific",
           "section": "mementos"
         },
         {
           "do": "crossOut",
-          "key": "wisp_of_spectral_mist",
+          "key": "wispOfSpectralMist",
           "section": "mementos"
         },
         {
           "do": "crossOut",
-          "key": "mesmerizing_flute",
+          "key": "mesmerizingFlute",
           "section": "mementos"
         },
         {
           "do": "crossOut",
-          "key": "ritual_components",
+          "key": "ritualComponents",
           "section": "mementos"
         },
         {
           "do": "crossOut",
-          "key": "scrap_of_torn_shadow",
+          "key": "scrapOfTornShadow",
           "section": "mementos"
         },
         {
           "do": "crossOut",
-          "key": "corn_husk_doll",
+          "key": "cornHuskDoll",
           "section": "mementos"
         },
         {
           "do": "crossOut",
-          "key": "strange_incantation",
+          "key": "strangeIncantation",
           "section": "mementos"
         },
         {
           "do": "crossOut",
-          "key": "bloody_tree_carvings",
+          "key": "bloodyTreeCarvings",
           "section": "mementos"
         }
       ]
@@ -3745,7 +4391,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "answer_1",
+          "key": "answer1",
           "section": "hidden",
           "value": true
         }
@@ -3761,7 +4407,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "answer_2",
+          "key": "answer2",
           "section": "hidden",
           "value": true
         }
@@ -3777,7 +4423,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "answer_3",
+          "key": "answer3",
           "section": "hidden",
           "value": true
         }
@@ -3793,7 +4439,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "answer_4",
+          "key": "answer4",
           "section": "hidden",
           "value": true
         }
@@ -3809,7 +4455,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "answer_5",
+          "key": "answer5",
           "section": "hidden",
           "value": true
         }
@@ -3825,7 +4471,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "answer_6",
+          "key": "answer6",
           "section": "hidden",
           "value": true
         }
@@ -3845,7 +4491,7 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "answer_1",
+            "id": "answer1",
             "section": "hidden"
           }
         },
@@ -3859,7 +4505,7 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "answer_2",
+            "id": "answer2",
             "section": "hidden"
           }
         },
@@ -3873,7 +4519,7 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "answer_3",
+            "id": "answer3",
             "section": "hidden"
           }
         },
@@ -3887,7 +4533,7 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "answer_4",
+            "id": "answer4",
             "section": "hidden"
           }
         },
@@ -3901,7 +4547,7 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "answer_5",
+            "id": "answer5",
             "section": "hidden"
           }
         },
@@ -3918,12 +4564,12 @@
             "conditions": [
               {
                 "kind": "logHas",
-                "id": "survived_the_watchers_embrace",
+                "id": "survivedTheWatchersEmbrace",
                 "section": "campaign_notes"
               },
               {
                 "kind": "logHas",
-                "id": "answer_6",
+                "id": "answer6",
                 "section": "hidden"
               }
             ]
@@ -3952,7 +4598,7 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "answer_1",
+            "id": "answer1",
             "section": "hidden"
           }
         },
@@ -3967,7 +4613,7 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "answer_2",
+            "id": "answer2",
             "section": "hidden"
           }
         },
@@ -3982,7 +4628,7 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "answer_3",
+            "id": "answer3",
             "section": "hidden"
           }
         },
@@ -3997,7 +4643,7 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "answer_4",
+            "id": "answer4",
             "section": "hidden"
           }
         },
@@ -4012,7 +4658,7 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "answer_5",
+            "id": "answer5",
             "section": "hidden"
           }
         },
@@ -4030,12 +4676,12 @@
             "conditions": [
               {
                 "kind": "logHas",
-                "id": "survived_the_watchers_embrace",
+                "id": "survivedTheWatchersEmbrace",
                 "section": "campaign_notes"
               },
               {
                 "kind": "logHas",
-                "id": "answer_6",
+                "id": "answer6",
                 "section": "hidden"
               }
             ]
@@ -4114,7 +4760,7 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "survived_the_watchers_embrace",
+            "id": "survivedTheWatchersEmbrace",
             "section": "campaign_notes"
           }
         },
@@ -4136,7 +4782,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "inducted_into_the_inner_circle",
+          "key": "inductedIntoTheInnerCircle",
           "section": "campaign_notes",
           "value": true
         }
@@ -4154,12 +4800,12 @@
         "conditions": [
           {
             "kind": "logHas",
-            "id": "rescued_josef",
+            "id": "rescuedJosef",
             "section": "campaign_notes"
           },
           {
             "kind": "logHas",
-            "id": "told_lodge_about_coven",
+            "id": "toldLodgeAboutCoven",
             "section": "campaign_notes"
           }
         ]
@@ -4185,7 +4831,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "kept_mementos_hidden",
+          "key": "keptMementosHidden",
           "section": "campaign_notes",
           "value": true
         }
@@ -4257,13 +4903,13 @@
       "effects": [
         {
           "do": "record",
-          "key": "josef_disappeared_into_the_mist",
+          "key": "josefDisappearedIntoTheMist",
           "section": "campaign_notes",
           "value": true
         },
         {
           "do": "record",
-          "key": "enemies_of_the_lodge",
+          "key": "enemiesOfTheLodge",
           "section": "campaign_notes",
           "value": true
         }
@@ -4279,7 +4925,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "rescued_josef",
+          "key": "rescuedJosef",
           "section": "campaign_notes",
           "value": true
         }
@@ -4311,7 +4957,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "enemies_of_the_lodge",
+          "key": "enemiesOfTheLodge",
           "section": "campaign_notes",
           "value": true
         }
@@ -4332,7 +4978,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "members_of_the_lodge",
+          "key": "membersOfTheLodge",
           "section": "campaign_notes",
           "value": true
         },
@@ -4352,7 +4998,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "deceiving_the_lodge",
+          "key": "deceivingTheLodge",
           "section": "campaign_notes",
           "value": true
         }
@@ -4403,7 +5049,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "josef_is_alive",
+          "key": "josefIsAlive",
           "section": "campaign_notes",
           "value": true
         }
@@ -4490,7 +5136,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "being_hunted",
+        "id": "beingHunted",
         "section": "campaign_notes"
       },
       "then": [
@@ -4513,7 +5159,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "path_winds_before_you",
+          "id": "pathWindsBeforeYou",
           "section": "campaign_notes",
           "op": "set",
           "value": 0
@@ -4530,7 +5176,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "path_winds_before_you",
+          "id": "pathWindsBeforeYou",
           "section": "campaign_notes",
           "op": "add",
           "value": 1
@@ -4541,7 +5187,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "accepted_fate",
+        "id": "acceptedFate",
         "section": "campaign_notes"
       },
       "then": [
@@ -4565,7 +5211,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "path_winds_before_you",
+          "id": "pathWindsBeforeYou",
           "section": "campaign_notes",
           "op": "add",
           "value": 2
@@ -4670,7 +5316,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "asked_anette_for_assistance",
+        "id": "askedAnetteForAssistance",
         "section": "campaign_notes"
       },
       "then": [
@@ -4690,7 +5336,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "asked_sanford_for_assistance",
+        "id": "askedSanfordForAssistance",
         "section": "campaign_notes"
       },
       "then": [
@@ -4711,7 +5357,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "path_winds_before_you",
+          "id": "pathWindsBeforeYou",
           "section": "campaign_notes",
           "op": "add",
           "value": 2
@@ -4733,7 +5379,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "path_winds_before_you",
+          "id": "pathWindsBeforeYou",
           "section": "campaign_notes",
           "op": "add",
           "value": 1
@@ -4850,7 +5496,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "path_winds_before_you",
+          "id": "pathWindsBeforeYou",
           "section": "campaign_notes",
           "op": "add",
           "value": 1
@@ -4880,7 +5526,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "path_winds_before_you",
+          "id": "pathWindsBeforeYou",
           "section": "campaign_notes",
           "op": "add",
           "value": 2
@@ -4891,7 +5537,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "doom_draws_ever_closer",
+        "id": "doomDrawsEverCloser",
         "section": "campaign_notes"
       },
       "then": [
@@ -4910,7 +5556,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "path_winds_before_you",
+          "id": "pathWindsBeforeYou",
           "section": "campaign_notes",
           "op": "add",
           "value": -1
@@ -4925,7 +5571,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "arrested_anette",
+        "id": "arrestedAnette",
         "section": "campaign_notes"
       },
       "then": [
@@ -4957,7 +5603,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "anette_taught_you_the_spells_of_old",
+        "id": "anetteTaughtYouTheSpellsOfOld",
         "section": "campaign_notes"
       },
       "then": [
@@ -4975,7 +5621,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "path_winds_before_you",
+          "id": "pathWindsBeforeYou",
           "section": "campaign_notes",
           "op": "add",
           "value": -1
@@ -4990,7 +5636,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "arrested_sanford",
+        "id": "arrestedSanford",
         "section": "campaign_notes"
       },
       "then": [
@@ -5021,7 +5667,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "assumed_control_of_the_silver_twilight_lodge",
+        "id": "assumedControlOfTheSilverTwilightLodge",
         "section": "campaign_notes"
       },
       "then": [

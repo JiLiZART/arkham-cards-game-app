@@ -234,6 +234,7 @@ describe("what api.ts exports", () => {
       "checkCondition",
       "checkDoom",
       "checkObjectives",
+      "compose",
       "connections",
       "controlled",
       "createCard",

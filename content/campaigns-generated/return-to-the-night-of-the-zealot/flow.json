@@ -99,6 +99,11 @@
       ]
     }
   },
+  "before": {
+    "return-to-the-devourer-below": [
+      "return-to-the-devourer-below:add_elder_thing"
+    ]
+  },
   "steps": {
     "campaign:prologue": {
       "kind": "story",
@@ -110,7 +115,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "arkham_succumbed",
+          "key": "arkhamSuccumbed",
           "section": "campaign_notes",
           "value": true
         }
@@ -149,7 +154,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "ritual_broken",
+          "key": "ritualBroken",
           "section": "campaign_notes",
           "value": true
         }
@@ -204,7 +209,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "umordhoth_repelled",
+          "key": "umordhothRepelled",
           "section": "campaign_notes",
           "value": true
         }
@@ -242,7 +247,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "lita_sacrificed",
+          "key": "litaSacrificed",
           "section": "campaign_notes",
           "value": true
         },
@@ -307,12 +312,21 @@
         }
       ]
     },
+    "return-to-the-devourer-below:add_elder_thing": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        }
+      ]
+    },
     "return-to-the-gathering:house_standing": {
       "kind": "effects",
       "effects": [
         {
           "do": "record",
-          "key": "house_standing",
+          "key": "houseStanding",
           "section": "campaign_notes",
           "value": true
         }
@@ -323,7 +337,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "ghoul_priest_alive",
+          "key": "ghoulPriestAlive",
           "section": "campaign_notes",
           "value": true
         }
@@ -363,7 +377,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "house_burned",
+          "key": "houseBurned",
           "section": "campaign_notes",
           "value": true
         }
@@ -406,7 +420,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "lita_finds_others",
+          "key": "litaFindsOthers",
           "section": "campaign_notes",
           "value": true
         }
@@ -455,8 +469,8 @@
       "effects": [
         {
           "do": "listCards",
-          "id": "cultists_interrogated",
-          "section": "cultists_interrogated",
+          "id": "cultistsInterrogated",
+          "section": "cultistsInterrogated",
           "codes": [
             "$input"
           ],
@@ -474,8 +488,8 @@
       "effects": [
         {
           "do": "listCards",
-          "id": "cultists_escaped",
-          "section": "cultists_escaped",
+          "id": "cultistsGotAway",
+          "section": "cultistsGotAway",
           "codes": [
             "$input"
           ],
@@ -493,7 +507,7 @@
           "effects": [
             {
               "do": "crossOut",
-              "key": "ghoul_priest_alive",
+              "key": "ghoulPriestAlive",
               "section": "campaign_notes"
             }
           ],
@@ -505,7 +519,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "ghoul_priest_alive",
+        "id": "ghoulPriestAlive",
         "section": "campaign_notes"
       },
       "then": [
@@ -536,8 +550,8 @@
       "effects": [
         {
           "do": "listCards",
-          "id": "cultists_escaped",
-          "section": "cultists_escaped",
+          "id": "cultistsGotAway",
+          "section": "cultistsGotAway",
           "codes": [
             "$input"
           ],
@@ -551,7 +565,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "past_midnight",
+          "key": "pastMidnight",
           "section": "campaign_notes",
           "value": true
         }

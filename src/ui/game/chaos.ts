@@ -14,6 +14,7 @@ const ORDER = [
   "cultist",
   "tablet",
   "elderThing",
+  "blood",
   "autoFail",
   "elderSign",
   "bless",

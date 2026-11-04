@@ -120,10 +120,15 @@ export function tokensReal(db: ContentDb, scenarioId: string): boolean {
   return true;
 }
 
-/** a reference card works when it is real for every scenario that plays with it (a Return-to scenario plays with its base scenario's card) */
+/**
+ * A reference card works when it is real for every scenario that plays with it (a Return-to scenario plays with its base
+ * scenario's card); a Return-to box's setup card, played beside it, works when it prints no symbol token line.
+ */
 function referenceCardWorks(db: ContentDb, c: CardDef): boolean {
   const users = Object.values(db.scenarios).filter((s) => s.card === c.code);
-  return users.length > 0 && users.every((s) => tokensReal(db, s.id));
+  if (users.length) return users.every((s) => tokensReal(db, s.id));
+  const setup = Object.values(db.scenarios).some((s) => s.setupCards?.includes(c.code));
+  return setup && !/\[(skull|cultist|tablet|elder_thing)\]/.test(`${c.text}\n${c.backText ?? ""}`);
 }
 
 /**

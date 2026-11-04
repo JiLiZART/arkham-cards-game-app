@@ -22,6 +22,7 @@
     "10550",
     "10551"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -124,7 +125,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "laid_the_pearl_family_to_rest",
+          "key": "laidThePearlFamilyToRest",
           "value": true
         },
         {
@@ -141,7 +142,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "remains_were_partially_recovered",
+          "key": "remainsWerePartiallyRecovered",
           "value": true
         },
         {
@@ -158,7 +159,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "madame_pearls_diary_was_recovered",
+          "key": "madamePearlsDiaryWasRecovered",
           "value": true
         },
         {
@@ -187,7 +188,7 @@
         },
         {
           "do": "record",
-          "key": "pearl_ridge",
+          "key": "pearlRidge",
           "value": true
         }
       ]

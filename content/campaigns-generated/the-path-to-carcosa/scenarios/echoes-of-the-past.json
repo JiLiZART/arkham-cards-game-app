@@ -22,6 +22,7 @@
     "03122",
     "03123"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -39,6 +40,26 @@
       "codes": [
         "03139",
         "03140"
+      ]
+    },
+    {
+      "do": "remove",
+      "codes": [
+        "01121a",
+        "01121b",
+        "01122",
+        "01123",
+        "01124",
+        "01125",
+        "01126",
+        "01127",
+        "01128",
+        "01129",
+        "01130",
+        "01131",
+        "01132",
+        "01133",
+        "01134"
       ]
     },
     {
@@ -123,7 +144,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "took_onyx_clasp",
+          "key": "tookOnyxClasp",
           "value": true
         },
         {
@@ -153,7 +174,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "left_onyx_clasp",
+          "key": "leftOnyxClasp",
           "value": true
         },
         {
@@ -178,7 +199,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "destroyed_the_oathspeaker",
+          "key": "destroyedTheOathspeaker",
           "value": true
         },
         {
@@ -208,7 +229,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "followers_of_sign_found_way",
+          "key": "followersOfSignFoundWay",
           "value": true
         },
         {

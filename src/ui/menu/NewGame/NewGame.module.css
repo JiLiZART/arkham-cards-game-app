@@ -767,3 +767,13 @@
 :global(.menus):global(.phone) .wz-order small {
   display: none;
 }
+
+/* a campaign's options (a Return-to box's encounter sets), under the difficulty */
+.options {
+  display: grid;
+  gap: 8px;
+  margin: 16px 0 0;
+  padding: 12px 16px;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+}

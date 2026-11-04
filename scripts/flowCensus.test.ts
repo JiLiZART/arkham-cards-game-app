@@ -20,25 +20,25 @@ const unsupportedTests = (c: FlowCondition): number =>
 
 describe("the generated flows", () => {
   it("are one per generated campaign, each valid", () => {
-    expect(ids.length).toBe(36);
-    expect(flows.length).toBe(36);
+    expect(ids.length).toBe(37); // Curse of the Rougarou now imports (its setup names no location)
+    expect(flows.length).toBe(37);
   });
 
   it("hold the interludes, the resolutions and the prompts the guides give, and as many as can't be offered as the census says", () => {
     const steps = flows.flatMap((f) => Object.values(f.flow.steps));
-    expect(flows.reduce((n, f) => n + Object.keys(f.flow.interludes).length, 0)).toBe(123);
+    expect(flows.reduce((n, f) => n + Object.keys(f.flow.interludes).length, 0)).toBe(122); // Hemlock Vale's prologue is a scenario, not an interlude
     expect(
       flows.reduce(
         (n, f) =>
           n + Object.values(f.flow.resolutions).reduce((m, r) => m + Object.keys(r).length, 0),
         0,
       ),
-    ).toBe(590);
-    expect(steps.filter((s) => s.kind === "unsupported").length).toBe(173);
+    ).toBe(605); // with the scenarios the import used to skip (Sepulchre, the preludes, Rougarou)
+    expect(steps.filter((s) => s.kind === "unsupported").length).toBe(188);
     expect(
       steps.reduce((n, s) => n + (s.kind === "branch" ? unsupportedTests(s.condition) : 0), 0),
-    ).toBe(199);
-    expect(steps.filter((s) => s.kind === "upgradeDecks").length).toBe(164);
+    ).toBe(278); // 101 of them in the scenarios' own setup steps (flow.before), defaulting as elsewhere
+    expect(steps.filter((s) => s.kind === "upgradeDecks").length).toBe(167);
   });
 
   it("list their scenario reference cards in the campaign's order, the interludes marked, as the picker needs", () => {
@@ -94,7 +94,7 @@ describe("the generated flows", () => {
     const first = flow.steps[flow.interludes["armitages-fate"].steps[0]];
     expect(first).toMatchObject({
       kind: "branch",
-      condition: { kind: "logHas", id: "unconscious_for_several_hours" },
+      condition: { kind: "logHas", id: "unconsciousForSeveralHours" },
     });
   });
 
@@ -108,9 +108,9 @@ describe("the generated flows", () => {
     );
     expect(effects.filter((e) => e.do === "record").map((e) => (e as { key: string }).key)).toEqual(
       expect.arrayContaining([
-        "unconscious_for_several_hours",
-        "warren_rice_kidnapped",
-        "failed_to_save_students",
+        "unconsciousForSeveralHours",
+        "warrenRiceKidnapped",
+        "failedToSaveStudents",
       ]),
     );
   });

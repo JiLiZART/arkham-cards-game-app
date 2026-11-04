@@ -69,6 +69,10 @@ The four Return-to changes each assumed three shared pieces defined in `campaign
 
 12. **Epic Multiplayer.** The first-option walk takes the standalone branch of War of the Outer Gods and the Blobs; a test asserts no generated scenario gathers an `epic_multiplayer` set.
 
+13. **A choice none of whose answers qualifies offers them all** (user decision, found while applying). Importing Hemlock Vale's prologue as a scenario left its "which area first" choice with every answer gated on an area the prologue records, which no script does yet. `openChoices` in `src/engine/campaign/flow.ts` gives the answers whose test passes, or every answer when none does; the flow's answer checks and the campaign screen read it, so no generated campaign waits on a choice with nothing to choose.
+
+14. **A partial set keeps the kinds its note names and every card the setup puts out.** The Doom of Arkham Part 1 gathers The Midnight Masks' "location and treachery cards" and places its locations; the rule reads the kinds (locations, treacheries, enemies, assets) and the cards a note names, never removing a card the setup puts into play or sets aside. A note that names neither is left whole and listed in the import's notes.
+
 ## Risks / Trade-offs
 
 - [The camelCase keys change every generated flow and campaign text at once] → one regeneration in one commit; no script reads a generated key yet (task 4.1 greps to prove it).

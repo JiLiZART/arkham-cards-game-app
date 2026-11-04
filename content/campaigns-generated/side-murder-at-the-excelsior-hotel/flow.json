@@ -34,6 +34,7 @@
       ]
     }
   },
+  "before": {},
   "steps": {
     "fortune-and-folly-checkpoint:checkpoint": {
       "kind": "story",
@@ -56,7 +57,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_found_a_vent",
+              "key": "fofFoundAVent",
               "section": "hidden",
               "value": true
             }
@@ -69,7 +70,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_impersonated_a_high_roller",
+              "key": "fofImpersonatedAHighRoller",
               "section": "hidden",
               "value": true
             }
@@ -82,7 +83,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_convinced_isamara",
+              "key": "fofConvincedIsamara",
               "section": "hidden",
               "value": true
             }
@@ -95,7 +96,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_obtained_an_uniform",
+              "key": "fofObtainedAnUniform",
               "section": "hidden",
               "value": true
             }
@@ -108,7 +109,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_stole_keys",
+              "key": "fofStoleKeys",
               "section": "hidden",
               "value": true
             }
@@ -121,7 +122,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_cleaned_out_the_house",
+              "key": "fofCleanedOutTheHouse",
               "section": "hidden",
               "value": true
             }
@@ -145,7 +146,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_need_time_to_rest",
+              "key": "fofNeedTimeToRest",
               "section": "hidden",
               "value": true
             }
@@ -187,13 +188,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_found_a_vent",
+              "key": "fofFoundAVent",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_found_a_vent",
+              "key": "fofFoundAVent",
               "section": "hidden",
               "value": true
             }
@@ -206,13 +207,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_impersonated_a_high_roller",
+              "key": "fofImpersonatedAHighRoller",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_impersonated_a_high_roller",
+              "key": "fofImpersonatedAHighRoller",
               "section": "hidden",
               "value": true
             }
@@ -225,13 +226,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_convinced_isamara",
+              "key": "fofConvincedIsamara",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_convinced_isamara",
+              "key": "fofConvincedIsamara",
               "section": "hidden",
               "value": true
             }
@@ -244,13 +245,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_obtained_an_uniform",
+              "key": "fofObtainedAnUniform",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_obtained_an_uniform",
+              "key": "fofObtainedAnUniform",
               "section": "hidden",
               "value": true
             }
@@ -263,13 +264,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_stole_keys",
+              "key": "fofStoleKeys",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_stole_keys",
+              "key": "fofStoleKeys",
               "section": "hidden",
               "value": true
             }
@@ -282,13 +283,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_cleaned_out_the_house",
+              "key": "fofCleanedOutTheHouse",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_cleaned_out_the_house",
+              "key": "fofCleanedOutTheHouse",
               "section": "hidden",
               "value": true
             }
@@ -302,7 +303,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "fof_need_time_to_rest",
+          "key": "fofNeedTimeToRest",
           "section": "campaign_notes",
           "value": true
         }
@@ -318,7 +319,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_need_time_to_rest",
+              "key": "fofNeedTimeToRest",
               "section": "hidden",
               "value": true
             }
@@ -355,7 +356,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "fof_wellspring_clues",
+          "id": "fofWellspringClues",
           "section": "campaign_notes",
           "op": "set",
           "value": "input"
@@ -372,7 +373,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "fof_stashed",
+          "key": "fofStashed",
           "section": "campaign_notes",
           "value": true
         }
@@ -394,7 +395,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "continue_fortune_and_folly_part_2",
+              "key": "continueFortuneAndFollyPart2",
               "section": "hidden",
               "value": true
             }
@@ -433,7 +434,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "meh_fled_scene_of_the_crime",
+          "key": "mehFledSceneOfTheCrime",
           "section": "campaign_notes",
           "value": true
         }
@@ -449,7 +450,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "meh_excelsior_is_quiet_for_now",
+          "key": "mehExcelsiorIsQuietForNow",
           "section": "campaign_notes",
           "value": true
         },
@@ -484,7 +485,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "meh_police_are_on_your_side",
+        "id": "mehPoliceAreOnYourSide",
         "section": "hidden"
       },
       "then": [
@@ -531,7 +532,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "meh_police_dont_believe_you",
+        "id": "mehPoliceDontBelieveYou",
         "section": "hidden"
       },
       "then": [
@@ -559,7 +560,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "meh_murders_continue_unsolved",
+          "key": "mehMurdersContinueUnsolved",
           "section": "campaign_notes",
           "value": true
         }
@@ -594,55 +595,55 @@
         },
         {
           "do": "crossOut",
-          "key": "meh_excelsior_claims_another_victim",
+          "key": "mehExcelsiorClaimsAnotherVictim",
           "section": "campaign_notes",
           "erase": true
         },
         {
           "do": "crossOut",
-          "key": "meh_fled_scene_of_the_crime",
+          "key": "mehFledSceneOfTheCrime",
           "section": "campaign_notes",
           "erase": true
         },
         {
           "do": "crossOut",
-          "key": "meh_police_are_on_your_side",
+          "key": "mehPoliceAreOnYourSide",
           "section": "hidden",
           "erase": true
         },
         {
           "do": "crossOut",
-          "key": "meh_police_dont_believe_you",
+          "key": "mehPoliceDontBelieveYou",
           "section": "hidden",
           "erase": true
         },
         {
           "do": "crossOut",
-          "key": "meh_did_cover_up",
+          "key": "mehDidCoverUp",
           "section": "hidden",
           "erase": true
         },
         {
           "do": "crossOut",
-          "key": "meh_did_not_cover_up",
+          "key": "mehDidNotCoverUp",
           "section": "hidden",
           "erase": true
         },
         {
           "do": "crossOut",
-          "key": "meh_have_clues",
+          "key": "mehHaveClues",
           "section": "hidden",
           "erase": true
         },
         {
           "do": "crossOut",
-          "key": "meh_no_innocents_killed",
+          "key": "mehNoInnocentsKilled",
           "section": "hidden",
           "erase": true
         },
         {
           "do": "crossOut",
-          "key": "meh_the_truth",
+          "key": "mehTheTruth",
           "section": "hidden",
           "erase": true
         },

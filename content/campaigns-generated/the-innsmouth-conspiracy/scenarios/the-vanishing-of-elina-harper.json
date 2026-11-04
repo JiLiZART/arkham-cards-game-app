@@ -23,6 +23,7 @@
     "07058",
     "07059"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -43,6 +44,26 @@
         "07083",
         "01172",
         "07094"
+      ]
+    },
+    {
+      "do": "remove",
+      "codes": [
+        "01121a",
+        "01121b",
+        "01122",
+        "01123",
+        "01124",
+        "01125",
+        "01126",
+        "01127",
+        "01128",
+        "01129",
+        "01130",
+        "01131",
+        "01132",
+        "01133",
+        "01134"
       ]
     },
     {
@@ -133,7 +154,7 @@
         },
         {
           "do": "record",
-          "key": "mission_failed",
+          "key": "missionFailed",
           "value": true
         }
       ]
@@ -150,7 +171,7 @@
         },
         {
           "do": "record",
-          "key": "mission_succeeded",
+          "key": "missionSucceeded",
           "value": true
         }
       ]
@@ -167,7 +188,7 @@
         },
         {
           "do": "record",
-          "key": "mission_succeeded",
+          "key": "missionSucceeded",
           "value": true
         }
       ]
@@ -184,7 +205,7 @@
         },
         {
           "do": "record",
-          "key": "mission_succeeded",
+          "key": "missionSucceeded",
           "value": true
         }
       ]
@@ -201,7 +222,7 @@
         },
         {
           "do": "record",
-          "key": "mission_succeeded",
+          "key": "missionSucceeded",
           "value": true
         }
       ]
@@ -218,7 +239,7 @@
         },
         {
           "do": "record",
-          "key": "mission_succeeded",
+          "key": "missionSucceeded",
           "value": true
         }
       ]
@@ -235,7 +256,7 @@
         },
         {
           "do": "record",
-          "key": "mission_succeeded",
+          "key": "missionSucceeded",
           "value": true
         }
       ]

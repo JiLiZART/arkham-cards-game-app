@@ -2,12 +2,14 @@
   "id": "the-feast-of-hemlock-vale",
   "name": "The Feast of Hemlock Vale",
   "scenarios": [
+    "fhv-prologue",
     "written-in-rock",
     "hemlock-house",
     "the-silent-heath",
     "the-lost-sister",
     "the-thing-in-the-depths",
     "the-twisted-hollow",
+    "dawn-of-the-second-day",
     "the-longest-night",
     "dawn-of-the-final-day",
     "the-final-evening",
@@ -83,22 +85,25 @@
       "elderSign"
     ]
   },
+  "options": [],
   "logLabels": {},
   "packs": [
     "core",
     "fhv"
   ],
   "generated": true,
-  "card": "10501",
-  "cover": "10503",
+  "card": "10704",
+  "cover": "10681",
   "prologue": "“It was just a colour out of space—a frightful messenger from unformed realms of infinity beyond all Nature as we know it; from realms whose mere existence stuns the brain and numbs us with the black extra-cosmic gulfs it throws open before our frenzied eyes.”\n– H. P. Lovecraft, “The Colour Out of Space”",
   "scenarioNames": [
+    "Welcome to Hemlock Vale!",
     "Written in Rock",
     "Hemlock House",
     "The Silent Heath",
     "The Lost Sister",
     "The Thing in the Depths",
     "The Twisted Hollow",
+    "Dawn of the Second Day",
     "The Longest Night",
     "Dawn of the Final Day",
     "The Final Evening",
@@ -151,51 +156,23 @@
       "label": "Theo Peters"
     },
     {
-      "id": "areas_surveyed",
+      "id": "areasSurveyed",
       "kind": "entries",
       "label": "Areas Surveyed"
     },
     {
-      "id": "current_day",
+      "id": "currentDay",
       "kind": "entries",
       "label": "Day / Time"
     }
   ],
   "cards": [
     {
-      "scenario": "written-in-rock",
-      "name": "Written in Rock",
-      "code": "10501",
-      "agenda": "10503",
-      "act": "10505"
-    },
-    {
-      "scenario": "hemlock-house",
-      "name": "Hemlock House",
-      "code": "10523",
-      "agenda": "10525",
-      "act": "10529"
-    },
-    {
-      "scenario": "the-silent-heath",
-      "name": "The Silent Heath",
-      "code": "10549",
-      "agenda": "10550",
-      "act": "10553"
-    },
-    {
-      "scenario": "the-lost-sister",
-      "name": "The Lost Sister",
-      "code": "10528",
-      "agenda": "10570",
-      "act": "10572"
-    },
-    {
-      "scenario": "the-thing-in-the-depths",
-      "name": "The Thing in the Depths",
-      "code": "10588",
-      "agenda": "10589",
-      "act": "10591"
+      "scenario": "fhv-prologue",
+      "name": "Welcome to Hemlock Vale!",
+      "code": "10704",
+      "agenda": "10681",
+      "act": "10682"
     },
     {
       "scenario": "the-twisted-hollow",

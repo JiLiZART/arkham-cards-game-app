@@ -22,6 +22,7 @@
     "11502",
     "11503"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -39,6 +40,17 @@
         "11510",
         "11511",
         "11513"
+      ]
+    },
+    {
+      "do": "remove",
+      "codes": [
+        "01121a",
+        "01121b",
+        "01122",
+        "01123",
+        "01135",
+        "01136"
       ]
     },
     {
@@ -99,7 +111,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "ruby_won_the_bet",
+          "key": "rubyWonTheBet",
           "value": true
         },
         {
@@ -116,7 +128,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "ruby_lost_the_bet",
+          "key": "rubyLostTheBet",
           "value": true
         },
         {

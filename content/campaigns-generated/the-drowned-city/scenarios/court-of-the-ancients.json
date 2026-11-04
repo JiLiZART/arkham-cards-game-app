@@ -21,6 +21,7 @@
     "11613",
     "11615"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -106,7 +107,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "court_of_the_ancients",
+          "key": "courtOfTheAncients",
           "value": true
         },
         {
@@ -123,7 +124,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "court_of_the_ancients",
+          "key": "courtOfTheAncients",
           "value": true
         },
         {
@@ -140,7 +141,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "court_of_the_ancients",
+          "key": "courtOfTheAncients",
           "value": true
         },
         {

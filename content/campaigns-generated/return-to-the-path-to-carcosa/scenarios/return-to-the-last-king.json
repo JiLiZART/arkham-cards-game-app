@@ -18,6 +18,9 @@
   "agendas": [
     "52022"
   ],
+  "setupCards": [
+    "52021"
+  ],
   "setup": [
     {
       "do": "putIntoPlay",

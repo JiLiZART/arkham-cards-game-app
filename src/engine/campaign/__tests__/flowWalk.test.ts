@@ -2,7 +2,7 @@ import { beforeAll, describe, expect, it } from "vitest";
 import { loadCampaign } from "../../../content";
 import { startCampaign } from "../campaign";
 import { type CampaignState } from "../types";
-import { advance, startResolution, test } from "../flow";
+import { advance, openChoices, startResolution } from "../flow";
 import { db } from "../../kits/testkit";
 
 // every generated campaign's real flow, walked with automatic answers and scenarios that end at once: none may strand
@@ -21,7 +21,7 @@ function answerFor(c: CampaignState): string | number | string[] | null {
   const active = c.investigators.filter((i) => i.status === "active").map((i) => i.code);
   switch (st.kind) {
     case "chooseOne":
-      return st.choices.find((x) => !x.when || test(db, c, x.when))!.id;
+      return openChoices(db, c, st.choices)[0].id;
     case "counter":
       return st.min;
     case "investigatorChoice":

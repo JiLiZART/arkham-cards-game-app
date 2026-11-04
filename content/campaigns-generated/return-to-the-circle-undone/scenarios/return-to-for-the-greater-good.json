@@ -22,6 +22,9 @@
     "05198",
     "05199"
   ],
+  "setupCards": [
+    "54042"
+  ],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -39,8 +42,7 @@
         "05228",
         "05220",
         "05227",
-        "05217",
-        "05217b"
+        "05217"
       ]
     },
     {
@@ -113,7 +115,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "guardian_of_the_trap_emerged",
+          "key": "guardianOfTheTrapEmerged",
           "value": true
         },
         {
@@ -130,7 +132,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "discovered_how_to_open_the_puzzle_box",
+          "key": "discoveredHowToOpenThePuzzleBox",
           "value": true
         },
         {
@@ -152,7 +154,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "discovered_how_to_open_the_puzzle_box",
+          "key": "discoveredHowToOpenThePuzzleBox",
           "value": true
         },
         {
@@ -174,7 +176,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "guardian_of_the_trap_defeated",
+          "key": "guardianOfTheTrapDefeated",
           "value": true
         },
         {

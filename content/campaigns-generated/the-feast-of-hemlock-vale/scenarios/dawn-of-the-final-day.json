@@ -18,6 +18,7 @@
     "10686",
     "10689"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -114,7 +115,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "dr_marquez_has_a_hunch",
+          "key": "drMarquezHasAHunch",
           "value": true
         },
         {

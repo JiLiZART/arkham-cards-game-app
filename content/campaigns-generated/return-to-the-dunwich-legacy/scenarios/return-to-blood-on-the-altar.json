@@ -22,6 +22,9 @@
     "02197",
     "02198"
   ],
+  "setupCards": [
+    "51032"
+  ],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -115,7 +118,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "ritual_completed",
+          "key": "ritualCompleted",
           "value": true
         },
         {
@@ -132,7 +135,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "killed_silas_bishop",
+          "key": "killedSilasBishop",
           "value": true
         },
         {
@@ -149,7 +152,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "restored_silas_bishop",
+          "key": "restoredSilasBishop",
           "value": true
         },
         {
@@ -166,7 +169,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "banished_silas_bishop",
+          "key": "banishedSilasBishop",
           "value": true
         },
         {

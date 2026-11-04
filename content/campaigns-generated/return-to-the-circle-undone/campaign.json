@@ -2,6 +2,7 @@
   "id": "return-to-the-circle-undone",
   "name": "Return to The Circle Undone",
   "scenarios": [
+    "disappearance-at-the-twilight-estate",
     "return-to-the-witching-hour",
     "return-to-at-deaths-doorstep",
     "return-to-the-secret-name",
@@ -74,6 +75,7 @@
       "elderSign"
     ]
   },
+  "options": [],
   "logLabels": {},
   "packs": [
     "core",
@@ -81,10 +83,11 @@
     "tcu"
   ],
   "generated": true,
-  "card": "05050",
-  "cover": "05051",
+  "card": "05043",
+  "cover": "05044",
   "prologue": "“The hidden cults to which these witches belonged often guarded and handed down surprising secrets from elder, forgotten aeons; and it was by no means impossible that Keziah had actually mastered the art of passing through dimensional gates.”\n– H. P. Lovecraft, The Dreams in the Witch House",
   "scenarioNames": [
+    "Return to Disappearance at the Twilight Estate",
     "Return to The Witching Hour",
     "Return to At Death's Doorstep",
     "Return to The Secret Name",
@@ -106,7 +109,7 @@
       "label": "Mementos Discovered"
     },
     {
-      "id": "missing_persons",
+      "id": "missingPersons",
       "kind": "entries",
       "label": "Missing Persons"
     },
@@ -135,7 +138,9 @@
     {
       "scenario": "disappearance-at-the-twilight-estate",
       "name": "Return to Disappearance at the Twilight Estate",
-      "interlude": true
+      "code": "05043",
+      "agenda": "05044",
+      "act": "05045"
     },
     {
       "scenario": "return-to-the-witching-hour",

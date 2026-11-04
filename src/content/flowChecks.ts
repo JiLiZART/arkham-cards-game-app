@@ -55,6 +55,7 @@ export function checkFlow(db: ContentDb, campaignId: string): ContentError[] {
   for (const i of Object.values(flow.interludes)) visit(i.steps);
   for (const byRes of Object.values(flow.resolutions))
     for (const ids of Object.values(byRes)) visit(ids);
+  for (const ids of Object.values(flow.before ?? {})) visit(ids);
   for (const id of Object.keys(flow.steps))
     if (!reached.has(id)) err(`steps.${id}`, "unreachable step: nothing leads to it");
 
@@ -69,6 +70,8 @@ export function checkFlow(db: ContentDb, campaignId: string): ContentError[] {
   for (const id of c.scenarios)
     if (!flow.order.includes(id) && !named.has(id))
       err("order", `scenario ${id} is not in the order and no step sends play to it`);
+  for (const sc of Object.keys(flow.before ?? {}))
+    if (!c.scenarios.includes(sc)) err(`before.${sc}`, `${sc} is not a scenario of the campaign`);
   for (const sc of Object.keys(flow.resolutions)) {
     if (!c.scenarios.includes(sc))
       err(`resolutions.${sc}`, `${sc} is not a scenario of the campaign`);

@@ -9,6 +9,7 @@
     "return-to-heart-of-the-elders-part-1",
     "return-to-heart-of-the-elders-part-2",
     "return-to-the-city-of-archives",
+    "return-to-the-depths-of-yoth",
     "return-to-shattered-aeons",
     "return-to-turn-back-time"
   ],
@@ -80,6 +81,7 @@
       "elderSign"
     ]
   },
+  "options": [],
   "logLabels": {},
   "packs": [
     "core",
@@ -98,6 +100,7 @@
     "Return to Heart of the Elders, Part 1",
     "Return to Heart of the Elders, Part 2",
     "Return to The City of Archives",
+    "Return to The Depths of Yoth",
     "Return to Shattered Aeons",
     "Return to Turn Back Time"
   ],
@@ -108,7 +111,7 @@
       "label": "Campaign Notes"
     },
     {
-      "id": "yigs_fury",
+      "id": "yigsFury",
       "kind": "count",
       "label": "Yig's Fury"
     },
@@ -192,6 +195,13 @@
       "scenario": "tfa-interlude4",
       "name": "Those Held Captive",
       "interlude": true
+    },
+    {
+      "scenario": "return-to-the-depths-of-yoth",
+      "name": "Return to The Depths of Yoth",
+      "code": "04277",
+      "agenda": "04278",
+      "act": "04285"
     },
     {
       "scenario": "tfa-interlude5",

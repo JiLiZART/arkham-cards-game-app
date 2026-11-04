@@ -15,7 +15,7 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync
 import { join } from "node:path";
 import { I18nCards } from "../src/content/schema";
 import { compileFlow, stepTexts } from "./campaignFlow";
-import { introLead, prologueOf } from "./campaignGuide";
+import { introLead, logKey, prologueOf } from "./campaignGuide";
 import { SNAPSHOT, translationsByPack } from "./snapshotText";
 
 const AC = "inspired/ArkhamCards/assets";
@@ -25,15 +25,11 @@ if (!locale || process.argv.indexOf("--locale") < 0) {
   process.exit(1);
 }
 const read = (f: string) => JSON.parse(readFileSync(f, "utf8"));
-const camel = (s: string) => s.replace(/_([a-z])/g, (_, c: string) => c.toUpperCase());
 /** ArkhamCards log entries are lower-case sentence fragments; ours are full sentences */
 const sentence = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 const clean = (s: string) => s.replace(/\r/g, "").trim();
 
 type Raw = Record<string, any>;
-
-/** our log keys that don't follow ArkhamCards' ids */
-const LOG_ALIASES: Record<string, string> = { cultists_escaped: "cultistsGotAway" };
 
 const missingSteps: string[] = [];
 const campaignsOut: { campaigns: Raw; scenarios: Raw; encounterSets: Record<string, string> } = {
@@ -67,8 +63,8 @@ for (const dirPath of campaignDirs) {
   }
   const logLabels: Record<string, string> = {};
   const addLog = (id: string, text: string) => {
-    // hand-written campaigns name their log keys in camelCase; generated ones keep the guide's ids
-    const key = LOG_ALIASES[id] ?? (id in campaign.logLabels ? id : camel(id));
+    // every campaign names its log keys in camelCase (scripts/campaignGuide.ts logKey), a base's alias where it has one
+    const key = id in campaign.logLabels ? id : logKey(id, ac.campaign.id);
     if (key in campaign.logLabels && text) logLabels[key] = sentence(clean(text));
   };
   for (const section of ac.campaign.campaign_log ?? []) addLog(section.id, section.title);

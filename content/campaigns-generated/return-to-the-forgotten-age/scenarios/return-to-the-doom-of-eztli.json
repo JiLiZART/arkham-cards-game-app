@@ -24,6 +24,9 @@
     "04055",
     "04056"
   ],
+  "setupCards": [
+    "53017"
+  ],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -113,7 +116,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "investigators_recovered_relic",
+          "key": "investigatorsRecoveredRelic",
           "value": true
         },
         {
@@ -135,7 +138,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "alejandro_recovered_relic",
+          "key": "alejandroRecoveredRelic",
           "value": true
         },
         {
@@ -176,7 +179,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "investigators_recovered_relic",
+          "key": "investigatorsRecoveredRelic",
           "value": true
         },
         {

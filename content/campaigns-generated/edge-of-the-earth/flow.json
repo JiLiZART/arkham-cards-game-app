@@ -352,6 +352,45 @@
       ]
     }
   },
+  "before": {
+    "city-of-the-elder-things": [
+      "city-of-the-elder-things:check_mala",
+      "city-of-the-elder-things:check_dyer",
+      "city-of-the-elder-things:check_group_one"
+    ],
+    "fatal-mirage-2": [
+      "fatal-mirage-2:choose_partners"
+    ],
+    "fatal-mirage-3": [
+      "fatal-mirage-3:choose_partners"
+    ],
+    "fatal-mirage": [
+      "fatal-mirage:choose_partners"
+    ],
+    "ice-and-death-part-1": [
+      "ice-and-death-part-1:choose_plane_crash",
+      "ice-and-death-part-1:choose_partners"
+    ],
+    "ice-and-death-part-2": [
+      "ice-and-death-part-2:check_continue"
+    ],
+    "ice-and-death-part-3": [
+      "ice-and-death-part-3:check_continue"
+    ],
+    "the-heart-of-madness-part-1": [
+      "the-heart-of-madness-part-1:played_part_1",
+      "the-heart-of-madness-part-1:check_interlude_danforth",
+      "the-heart-of-madness-part-1:choose_partners"
+    ],
+    "the-heart-of-madness-part-2": [
+      "the-heart-of-madness-part-2:check_kensler_understands",
+      "the-heart-of-madness-part-2:check_continue"
+    ],
+    "to-the-forbidden-peaks": [
+      "to-the-forbidden-peaks:choose_partners",
+      "to-the-forbidden-peaks:add_elder_thing"
+    ]
+  },
   "steps": {
     "campaign:prologue": {
       "kind": "story",
@@ -364,7 +403,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "team_found_the_hidden_tunnel",
+          "key": "teamFoundTheHiddenTunnel",
           "section": "campaign_notes",
           "value": true
         }
@@ -410,10 +449,290 @@
       "effects": [
         {
           "do": "record",
-          "key": "team_was_guided_to_the_hidden_tunnel",
+          "key": "teamWasGuidedToTheHiddenTunnel",
           "section": "campaign_notes",
           "value": true
         }
+      ]
+    },
+    "city-of-the-elder-things:mala_yes_story": {
+      "kind": "story",
+      "text": "\"Remember, stay covered at all times. Where we are headed, the wind can flash freeze your skin almost instantly. And stay hydrated,\" Dr. Sinha reminds you. \"The air here is dryer than you think.\" The remainder of the party nods in understanding. None of you have come this far just to catch hypothermia… but it's almost as likely as death by anything else in this damnable place.",
+      "bullets": []
+    },
+    "city-of-the-elder-things:no_ill_effects:text": {
+      "kind": "story",
+      "text": "The investigators suffer no ill effects.",
+      "bullets": []
+    },
+    "city-of-the-elder-things:mala_no_story": {
+      "kind": "story",
+      "text": "You were briefed many times on the dangers of the Antarctic environment, but without Dr. Sinha, you're at a disadvantage braving the harsh weather. What she lacked in bedside manner, she made up in expertise. Wishing you could have saved her, you grit your teeth and trudge on, watching your companions for any sign of hypothermia.",
+      "bullets": []
+    },
+    "city-of-the-elder-things:earn_frostbitten:text": {
+      "kind": "story",
+      "text": "Each investigator adds a Frostbitten weakness to their deck. It does not count toward that investigator's deck size.",
+      "bullets": []
+    },
+    "city-of-the-elder-things:check_mala:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "08646",
+          "who": "each"
+        }
+      ]
+    },
+    "city-of-the-elder-things:check_mala": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "partner_status",
+        "take": false
+      },
+      "then": [
+        "city-of-the-elder-things:mala_yes_story",
+        "city-of-the-elder-things:no_ill_effects:text"
+      ],
+      "else": [
+        "city-of-the-elder-things:mala_no_story",
+        "city-of-the-elder-things:earn_frostbitten:text",
+        "city-of-the-elder-things:check_mala:no:fx"
+      ]
+    },
+    "city-of-the-elder-things:dyer_yes_story": {
+      "kind": "story",
+      "text": "\"Be careful,\" the professor warns. You are keen to heed his wisdom, earned as it is through hard experience. \"The glyphs inscribed here depict much about the history of this place. It is ancient. Far more ancient than anything our species has built.\"\n\"What is your point?\" someone chimes in.\n\"Do you know the old phrase, 'the walls have ears and the doors have eyes?'\" Dyer replies. \"We have no idea what could be hiding within these walls. What dwells under the ice and stone. Be on alert… and do not let any voices but our own rattle in your skull. Do you understand?\"\nYou nod in agreement, gulping down a wave of nausea. You cannot help but take the meaning of Dyer's idiom literally.",
+      "bullets": []
+    },
+    "city-of-the-elder-things:dyer_no_story": {
+      "kind": "story",
+      "text": "As you enter the tower, the cold dwindles, but the sense of unease you felt observing the city from a distance only grows. Without Dyer's wisdom to guide you through this place, you feel completely unprepared. Every drop of water, every shifting pebble, every hushed breath causes your throat to clench and your heart to race. It's not long before you hear whispering in the walls—voices that don't belong to you, or anyone in your party. The more you try to deny it, the stronger the voices become. A choir in your mind. A warning?",
+      "bullets": []
+    },
+    "city-of-the-elder-things:earn_possessed:text": {
+      "kind": "story",
+      "text": "Each investigator adds a Possessed weakness to their deck. It does not count toward that investigator's deck size.",
+      "bullets": []
+    },
+    "city-of-the-elder-things:check_dyer:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "08647",
+          "who": "each"
+        }
+      ]
+    },
+    "city-of-the-elder-things:check_dyer": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "partner_status",
+        "take": false
+      },
+      "then": [
+        "city-of-the-elder-things:dyer_yes_story",
+        "city-of-the-elder-things:no_ill_effects:text"
+      ],
+      "else": [
+        "city-of-the-elder-things:dyer_no_story",
+        "city-of-the-elder-things:earn_possessed:text",
+        "city-of-the-elder-things:check_dyer:no:fx"
+      ]
+    },
+    "city-of-the-elder-things:group_one_wins:text": {
+      "kind": "story",
+      "text": "Because Group One has the most team members alive, the group votes to venture into the heart of the city where lie its greatest structures. Each partner from this group chosen to accompany an investigator enters play with one additional use.",
+      "bullets": []
+    },
+    "city-of-the-elder-things:interlude_danforth:text": {
+      "kind": "story",
+      "text": "Because you talked to Danforth during the interlude, any one investigator gets two additional cards drawn in their opening hand.",
+      "bullets": []
+    },
+    "city-of-the-elder-things:interlude_takada:text": {
+      "kind": "story",
+      "text": "Because you talked to Hiroko Takada during the interlude, any one investigator gets 3 additional starting resources.",
+      "bullets": []
+    },
+    "city-of-the-elder-things:check_interlude_takada": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "cityElderThingsTakada",
+        "section": "hidden"
+      },
+      "then": [
+        "city-of-the-elder-things:interlude_takada:text"
+      ],
+      "else": []
+    },
+    "city-of-the-elder-things:interlude_takada_with_title:text": {
+      "kind": "story",
+      "text": "Because you talked to Hiroko Takada during the interlude, any one investigator gets 3 additional starting resources.",
+      "bullets": []
+    },
+    "city-of-the-elder-things:check_interlude_takada_with_title": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "cityElderThingsTakada",
+        "section": "hidden"
+      },
+      "then": [
+        "city-of-the-elder-things:interlude_takada_with_title:text"
+      ],
+      "else": []
+    },
+    "city-of-the-elder-things:check_interlude_danforth": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "cityElderThingsDanforth",
+        "section": "hidden"
+      },
+      "then": [
+        "city-of-the-elder-things:interlude_danforth:text",
+        "city-of-the-elder-things:check_interlude_takada"
+      ],
+      "else": [
+        "city-of-the-elder-things:check_interlude_takada_with_title"
+      ]
+    },
+    "city-of-the-elder-things:setup_v1": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "cityOfTheElderThingsV1",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "city-of-the-elder-things:group_two_wins:text": {
+      "kind": "story",
+      "text": "Because Group Two has the most team members alive, the group votes to travel along the mountain ridge, toward the region Dyer and Danforth never explored. Each partner from this group chosen to accompany an investigator enters play with one additional use.",
+      "bullets": []
+    },
+    "city-of-the-elder-things:setup_v2": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "cityOfTheElderThingsV2",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "city-of-the-elder-things:group_three_wins:text": {
+      "kind": "story",
+      "text": "Because Group Three has the most team members alive, the group votes to follow the trail left behind by whatever creatures massacred the Elder Things. Each partner from this group chosen to accompany an investigator enters play with one additional use.",
+      "bullets": []
+    },
+    "city-of-the-elder-things:setup_v3": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "cityOfTheElderThingsV3",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "city-of-the-elder-things:partner_bonus:text": {
+      "kind": "story",
+      "text": "Each partner from this group chosen to accompany an investigator enters play with one additional use.",
+      "bullets": []
+    },
+    "city-of-the-elder-things:choose_tie_breaker": {
+      "kind": "chooseOne",
+      "text": "Because two or more groups are tied, the lead investigator casts the tiebreaking vote.",
+      "choices": [
+        {
+          "id": "group_1",
+          "text": "<b>Group One:</b> Dr. Amy Kensler, Roald Ellsworth, Dr. Mala Sinha.",
+          "effects": [],
+          "steps": [
+            "city-of-the-elder-things:partner_bonus:text",
+            "city-of-the-elder-things:check_interlude_danforth",
+            "city-of-the-elder-things:setup_v1"
+          ]
+        },
+        {
+          "id": "group_2",
+          "text": "<b>Group Two:</b> Danforth, Takada Hiroko, Eliyah Ashevak.",
+          "effects": [],
+          "steps": [
+            "city-of-the-elder-things:partner_bonus:text",
+            "city-of-the-elder-things:check_interlude_danforth",
+            "city-of-the-elder-things:setup_v2"
+          ]
+        },
+        {
+          "id": "group_3",
+          "text": "<b>Group Three:</b> Professor William Dyer, Avery Claypool, James \"Cookie\" Fredericks.",
+          "effects": [],
+          "steps": [
+            "city-of-the-elder-things:partner_bonus:text",
+            "city-of-the-elder-things:check_interlude_danforth",
+            "city-of-the-elder-things:setup_v3"
+          ]
+        }
+      ]
+    },
+    "city-of-the-elder-things:check_group_three": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "city-of-the-elder-things:group_three_wins:text",
+        "city-of-the-elder-things:check_interlude_danforth",
+        "city-of-the-elder-things:setup_v3"
+      ],
+      "else": [
+        "city-of-the-elder-things:choose_tie_breaker"
+      ]
+    },
+    "city-of-the-elder-things:check_group_two": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "city-of-the-elder-things:group_two_wins:text",
+        "city-of-the-elder-things:check_interlude_danforth",
+        "city-of-the-elder-things:setup_v2"
+      ],
+      "else": [
+        "city-of-the-elder-things:check_group_three"
+      ]
+    },
+    "city-of-the-elder-things:check_group_one": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "city-of-the-elder-things:group_one_wins:text",
+        "city-of-the-elder-things:check_interlude_danforth",
+        "city-of-the-elder-things:setup_v1"
+      ],
+      "else": [
+        "city-of-the-elder-things:check_group_two"
       ]
     },
     "endless-night:intro": {
@@ -431,7 +750,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "endless_night_conversations",
+          "id": "endlessNightConversations",
           "section": "hidden",
           "op": "set",
           "value": 4
@@ -443,7 +762,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "endless_night_conversations",
+          "id": "endlessNightConversations",
           "section": "hidden",
           "op": "set",
           "value": 3
@@ -454,7 +773,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "team_found_another_way_through_the_mountains",
+        "id": "teamFoundAnotherWayThroughTheMountains",
         "section": "campaign_notes"
       },
       "then": [
@@ -683,7 +1002,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "convinced_dyer_to_allow_the_expedition",
+          "key": "convincedDyerToAllowTheExpedition",
           "section": "campaign_notes",
           "value": true
         }
@@ -713,7 +1032,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "did_not_believe_dyers_report",
+          "key": "didNotBelieveDyersReport",
           "section": "campaign_notes",
           "value": true
         }
@@ -785,7 +1104,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "ellsworth_has_confronted_his_demons",
+          "key": "ellsworthHasConfrontedHisDemons",
           "section": "campaign_notes",
           "value": true
         }
@@ -795,7 +1114,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "elsworth_has_confronted_his_demons",
+        "id": "elsworthHasConfrontedHisDemons",
         "section": "campaign_notes"
       },
       "then": [],
@@ -808,7 +1127,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "eliyah_has_confronted_his_demons",
+          "key": "eliyahHasConfrontedHisDemons",
           "section": "campaign_notes",
           "value": true
         }
@@ -818,7 +1137,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "eliyah_has_confronted_his_demons",
+        "id": "eliyahHasConfrontedHisDemons",
         "section": "campaign_notes"
       },
       "then": [],
@@ -831,7 +1150,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "dr_sinha_has_confronted_her_demons",
+          "key": "drSinhaHasConfrontedHerDemons",
           "section": "campaign_notes",
           "value": true
         }
@@ -841,7 +1160,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "dr_sinha_has_confronted_her_demons",
+        "id": "drSinhaHasConfrontedHerDemons",
         "section": "campaign_notes"
       },
       "then": [],
@@ -854,7 +1173,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "takada_has_confronted_her_demons",
+          "key": "takadaHasConfrontedHerDemons",
           "section": "campaign_notes",
           "value": true
         }
@@ -864,7 +1183,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "takada_has_confronted_her_demons",
+        "id": "takadaHasConfrontedHerDemons",
         "section": "campaign_notes"
       },
       "then": [],
@@ -877,7 +1196,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "cookie_has_confronted_his_demons",
+          "key": "cookieHasConfrontedHisDemons",
           "section": "campaign_notes",
           "value": true
         }
@@ -887,7 +1206,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "cookie_has_confronted_his_demons",
+        "id": "cookieHasConfrontedHisDemons",
         "section": "campaign_notes"
       },
       "then": [],
@@ -900,7 +1219,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "dyer_has_confronted_his_demons",
+          "key": "dyerHasConfrontedHisDemons",
           "section": "campaign_notes",
           "value": true
         }
@@ -910,7 +1229,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "dyer_has_confronted_his_demons",
+        "id": "dyerHasConfrontedHisDemons",
         "section": "campaign_notes"
       },
       "then": [],
@@ -923,7 +1242,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "claypool_has_confronted_his_demons",
+          "key": "claypoolHasConfrontedHisDemons",
           "section": "campaign_notes",
           "value": true
         }
@@ -933,7 +1252,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "claypool_has_confronted_his_demons",
+        "id": "claypoolHasConfrontedHisDemons",
         "section": "campaign_notes"
       },
       "then": [],
@@ -946,7 +1265,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "dr_kensler_has_confronted_her_demons",
+          "key": "drKenslerHasConfrontedHerDemons",
           "section": "campaign_notes",
           "value": true
         }
@@ -956,7 +1275,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "dr_kensler_has_confronted_her_demons",
+        "id": "drKenslerHasConfrontedHerDemons",
         "section": "campaign_notes"
       },
       "then": [],
@@ -969,7 +1288,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "danforth_has_confronted_his_demons",
+          "key": "danforthHasConfrontedHisDemons",
           "section": "campaign_notes",
           "value": true
         }
@@ -979,7 +1298,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "danforth_has_confronted_his_demons",
+        "id": "danforthHasConfrontedHisDemons",
         "section": "campaign_notes"
       },
       "then": [],
@@ -999,7 +1318,7 @@
             {
               "do": "record",
               "key": "airfield",
-              "section": "memories_banished",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -1010,21 +1329,21 @@
             },
             {
               "do": "record",
-              "key": "discovered_airfield",
+              "key": "discoveredAirfield",
               "section": "hidden",
               "value": true
             },
             {
               "do": "crossOut",
               "key": "airfield",
-              "section": "memories_discovered"
+              "section": "memoriesDiscovered"
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
             "id": "airfield",
-            "section": "memories_banished"
+            "section": "memoriesBanished"
           }
         },
         {
@@ -1033,8 +1352,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "alaskan_wilds",
-              "section": "memories_banished",
+              "key": "alaskanWilds",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -1045,21 +1364,21 @@
             },
             {
               "do": "record",
-              "key": "discovered_alaskan_wilds",
+              "key": "discoveredAlaskanWilds",
               "section": "hidden",
               "value": true
             },
             {
               "do": "crossOut",
-              "key": "alaskan_wilds",
-              "section": "memories_discovered"
+              "key": "alaskanWilds",
+              "section": "memoriesDiscovered"
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "alaskan_wilds",
-            "section": "memories_banished"
+            "id": "alaskanWilds",
+            "section": "memoriesBanished"
           }
         },
         {
@@ -1068,8 +1387,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "cluttered_dormitory",
-              "section": "memories_banished",
+              "key": "clutteredDormitory",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -1080,21 +1399,21 @@
             },
             {
               "do": "record",
-              "key": "discovered_cluttered_dormitory",
+              "key": "discoveredClutteredDormitory",
               "section": "hidden",
               "value": true
             },
             {
               "do": "crossOut",
-              "key": "cluttered_dormitory",
-              "section": "memories_discovered"
+              "key": "clutteredDormitory",
+              "section": "memoriesDiscovered"
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "cluttered_dormitory",
-            "section": "memories_banished"
+            "id": "clutteredDormitory",
+            "section": "memoriesBanished"
           }
         },
         {
@@ -1103,8 +1422,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "dyers_classroom",
-              "section": "memories_banished",
+              "key": "dyersClassroom",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -1115,21 +1434,21 @@
             },
             {
               "do": "record",
-              "key": "discovered_dyers_classroom",
+              "key": "discoveredDyersClassroom",
               "section": "hidden",
               "value": true
             },
             {
               "do": "crossOut",
-              "key": "dyers_classroom",
-              "section": "memories_discovered"
+              "key": "dyersClassroom",
+              "section": "memoriesDiscovered"
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "dyers_classroom",
-            "section": "memories_banished"
+            "id": "dyersClassroom",
+            "section": "memoriesBanished"
           }
         },
         {
@@ -1139,7 +1458,7 @@
             {
               "do": "record",
               "key": "infirmary",
-              "section": "memories_banished",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -1150,21 +1469,21 @@
             },
             {
               "do": "record",
-              "key": "discovered_infirmary",
+              "key": "discoveredInfirmary",
               "section": "hidden",
               "value": true
             },
             {
               "do": "crossOut",
               "key": "infirmary",
-              "section": "memories_discovered"
+              "section": "memoriesDiscovered"
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
             "id": "infirmary",
-            "section": "memories_banished"
+            "section": "memoriesBanished"
           }
         },
         {
@@ -1173,8 +1492,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "dr_kenslers_office",
-              "section": "memories_banished",
+              "key": "drKenslersOffice",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -1185,21 +1504,21 @@
             },
             {
               "do": "record",
-              "key": "discovered_dr_kenslers_office",
+              "key": "discoveredDrKenslersOffice",
               "section": "hidden",
               "value": true
             },
             {
               "do": "crossOut",
-              "key": "dr_kenslers_office",
-              "section": "memories_discovered"
+              "key": "drKenslersOffice",
+              "section": "memoriesDiscovered"
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "dr_kenslers_office",
-            "section": "memories_banished"
+            "id": "drKenslersOffice",
+            "section": "memoriesBanished"
           }
         },
         {
@@ -1208,8 +1527,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "moai_statues",
-              "section": "memories_banished",
+              "key": "moaiStatues",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -1220,21 +1539,21 @@
             },
             {
               "do": "record",
-              "key": "discovered_moai_statues",
+              "key": "discoveredMoaiStatues",
               "section": "hidden",
               "value": true
             },
             {
               "do": "crossOut",
-              "key": "moai_statue",
-              "section": "memories_discovered"
+              "key": "moaiStatue",
+              "section": "memoriesDiscovered"
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "moai_statues",
-            "section": "memories_banished"
+            "id": "moaiStatues",
+            "section": "memoriesBanished"
           }
         },
         {
@@ -1243,8 +1562,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "ottoman_front",
-              "section": "memories_banished",
+              "key": "ottomanFront",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -1255,21 +1574,21 @@
             },
             {
               "do": "record",
-              "key": "discovered_ottoman_front",
+              "key": "discoveredOttomanFront",
               "section": "hidden",
               "value": true
             },
             {
               "do": "crossOut",
-              "key": "ottoman_front",
-              "section": "memories_discovered"
+              "key": "ottomanFront",
+              "section": "memoriesDiscovered"
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "ottoman_front",
-            "section": "memories_banished"
+            "id": "ottomanFront",
+            "section": "memoriesBanished"
           }
         },
         {
@@ -1278,8 +1597,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "the_black_stone",
-              "section": "memories_banished",
+              "key": "theBlackStone",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -1290,21 +1609,21 @@
             },
             {
               "do": "record",
-              "key": "discovered_the_black_stone",
+              "key": "discoveredTheBlackStone",
               "section": "hidden",
               "value": true
             },
             {
               "do": "crossOut",
-              "key": "the_black_stone",
-              "section": "memories_discovered"
+              "key": "theBlackStone",
+              "section": "memoriesDiscovered"
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "the_black_stone",
-            "section": "memories_banished"
+            "id": "theBlackStone",
+            "section": "memoriesBanished"
           }
         },
         {
@@ -1313,8 +1632,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "alien_translation",
-              "section": "memories_banished",
+              "key": "alienTranslation",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -1334,8 +1653,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "hunt_gone_awry",
-              "section": "memories_banished",
+              "key": "huntGoneAwry",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -1355,8 +1674,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "lost_patient",
-              "section": "memories_banished",
+              "key": "lostPatient",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -1376,8 +1695,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "missing_father",
-              "section": "memories_banished",
+              "key": "missingFather",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -1397,8 +1716,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "ravaged_country",
-              "section": "memories_banished",
+              "key": "ravagedCountry",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -1418,8 +1737,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "regretful_voyage",
-              "section": "memories_banished",
+              "key": "regretfulVoyage",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -1439,8 +1758,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "terrible_discovery",
-              "section": "memories_banished",
+              "key": "terribleDiscovery",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -1460,8 +1779,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "unrequited_love",
-              "section": "memories_banished",
+              "key": "unrequitedLove",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -1481,8 +1800,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "unspeakable_evil",
-              "section": "memories_banished",
+              "key": "unspeakableEvil",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -1509,13 +1828,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "base_camp",
-              "section": "memories_discovered",
+              "key": "baseCamp",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_base_camp",
+              "key": "discoveredBaseCamp",
               "section": "hidden",
               "value": true
             }
@@ -1523,7 +1842,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_base_camp",
+            "id": "discoveredBaseCamp",
             "section": "hidden"
           }
         },
@@ -1533,13 +1852,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "deck_of_the_theodosia",
-              "section": "memories_discovered",
+              "key": "deckOfTheTheodosia",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_deck_of_the_theodosia",
+              "key": "discoveredDeckOfTheTheodosia",
               "section": "hidden",
               "value": true
             }
@@ -1547,7 +1866,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_deck_of_the_theodosia",
+            "id": "discoveredDeckOfTheTheodosia",
             "section": "hidden"
           }
         },
@@ -1557,13 +1876,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "university_halls",
-              "section": "memories_discovered",
+              "key": "universityHalls",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_university_halls",
+              "key": "discoveredUniversityHalls",
               "section": "hidden",
               "value": true
             }
@@ -1571,7 +1890,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_university_halls",
+            "id": "discoveredUniversityHalls",
             "section": "hidden"
           }
         },
@@ -1581,13 +1900,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "hedge_maze",
-              "section": "memories_discovered",
+              "key": "hedgeMaze",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_hedge_maze",
+              "key": "discoveredHedgeMaze",
               "section": "hidden",
               "value": true
             }
@@ -1595,7 +1914,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_hedge_maze",
+            "id": "discoveredHedgeMaze",
             "section": "hidden"
           }
         },
@@ -1605,13 +1924,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "deserted_station",
-              "section": "memories_discovered",
+              "key": "desertedStation",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_deserted_station",
+              "key": "discoveredDesertedStation",
               "section": "hidden",
               "value": true
             }
@@ -1619,7 +1938,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_deserted_station",
+            "id": "discoveredDesertedStation",
             "section": "hidden"
           }
         },
@@ -1629,13 +1948,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "coastal_waters",
-              "section": "memories_discovered",
+              "key": "coastalWaters",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_coastal_waters",
+              "key": "discoveredCoastalWaters",
               "section": "hidden",
               "value": true
             }
@@ -1643,7 +1962,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_coastal_waters",
+            "id": "discoveredCoastalWaters",
             "section": "hidden"
           }
         },
@@ -1653,13 +1972,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "elder_chamber",
-              "section": "memories_discovered",
+              "key": "elderChamber",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_elder_chamber",
+              "key": "discoveredElderChamber",
               "section": "hidden",
               "value": true
             }
@@ -1667,7 +1986,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_elder_chamber",
+            "id": "discoveredElderChamber",
             "section": "hidden"
           }
         },
@@ -1677,13 +1996,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "riverview_theatre",
-              "section": "memories_discovered",
+              "key": "riverviewTheatre",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_riverview_theatre",
+              "key": "discoveredRiverviewTheatre",
               "section": "hidden",
               "value": true
             }
@@ -1691,7 +2010,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_riverview_theatre",
+            "id": "discoveredRiverviewTheatre",
             "section": "hidden"
           }
         },
@@ -1701,13 +2020,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "standing_stones",
-              "section": "memories_discovered",
+              "key": "standingStones",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_standing_stones",
+              "key": "discoveredStandingStones",
               "section": "hidden",
               "value": true
             }
@@ -1715,7 +2034,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_standing_stones",
+            "id": "discoveredStandingStones",
             "section": "hidden"
           }
         },
@@ -1726,12 +2045,12 @@
             {
               "do": "record",
               "key": "airfield",
-              "section": "memories_discovered",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_airfield",
+              "key": "discoveredAirfield",
               "section": "hidden",
               "value": true
             }
@@ -1739,7 +2058,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_airfield",
+            "id": "discoveredAirfield",
             "section": "hidden"
           }
         },
@@ -1749,13 +2068,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "alaskan_wilds",
-              "section": "memories_discovered",
+              "key": "alaskanWilds",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_alaskan_wilds",
+              "key": "discoveredAlaskanWilds",
               "section": "hidden",
               "value": true
             }
@@ -1763,7 +2082,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_alaskan_wilds",
+            "id": "discoveredAlaskanWilds",
             "section": "hidden"
           }
         },
@@ -1773,13 +2092,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "cluttered_dormitory",
-              "section": "memories_discovered",
+              "key": "clutteredDormitory",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_cluttered_dormitory",
+              "key": "discoveredClutteredDormitory",
               "section": "hidden",
               "value": true
             }
@@ -1787,7 +2106,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_cluttered_dormitory",
+            "id": "discoveredClutteredDormitory",
             "section": "hidden"
           }
         },
@@ -1797,13 +2116,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "dyers_classroom",
-              "section": "memories_discovered",
+              "key": "dyersClassroom",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_dyers_classroom",
+              "key": "discoveredDyersClassroom",
               "section": "hidden",
               "value": true
             }
@@ -1811,7 +2130,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_dyers_classroom",
+            "id": "discoveredDyersClassroom",
             "section": "hidden"
           }
         },
@@ -1822,12 +2141,12 @@
             {
               "do": "record",
               "key": "infirmary",
-              "section": "memories_discovered",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_infirmary",
+              "key": "discoveredInfirmary",
               "section": "hidden",
               "value": true
             }
@@ -1835,7 +2154,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_infirmary",
+            "id": "discoveredInfirmary",
             "section": "hidden"
           }
         },
@@ -1845,13 +2164,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "dr_kenslers_office",
-              "section": "memories_discovered",
+              "key": "drKenslersOffice",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_dr_kenslers_office",
+              "key": "discoveredDrKenslersOffice",
               "section": "hidden",
               "value": true
             }
@@ -1859,7 +2178,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_dr_kenslers_office",
+            "id": "discoveredDrKenslersOffice",
             "section": "hidden"
           }
         },
@@ -1869,13 +2188,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "moai_statues",
-              "section": "memories_discovered",
+              "key": "moaiStatues",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_moai_statues",
+              "key": "discoveredMoaiStatues",
               "section": "hidden",
               "value": true
             }
@@ -1883,7 +2202,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_moai_statues",
+            "id": "discoveredMoaiStatues",
             "section": "hidden"
           }
         },
@@ -1893,13 +2212,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "ottoman_front",
-              "section": "memories_discovered",
+              "key": "ottomanFront",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_ottoman_front",
+              "key": "discoveredOttomanFront",
               "section": "hidden",
               "value": true
             }
@@ -1907,7 +2226,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_ottoman_front",
+            "id": "discoveredOttomanFront",
             "section": "hidden"
           }
         },
@@ -1917,13 +2236,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "the_black_stone",
-              "section": "memories_discovered",
+              "key": "theBlackStone",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_the_black_stone",
+              "key": "discoveredTheBlackStone",
               "section": "hidden",
               "value": true
             }
@@ -1931,7 +2250,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_the_black_stone",
+            "id": "discoveredTheBlackStone",
             "section": "hidden"
           }
         }
@@ -1985,6 +2304,13 @@
       "effects": [],
       "steps": []
     },
+    "fatal-mirage-2:choose_partners": {
+      "kind": "unsupported",
+      "name": "investigator_choice_partner",
+      "text": "Each investigator may choose one available member of the expedition team who is not crossed off to join them. Put the story asset for the chosen character into play in that investigator's play area. (These story assets can be found in the <i>Expedition Team</i> encounter set. If there is a checkmark next to the character's name, instead use the [[Resolute]] version found in the <i>Fatal Mirage</i> encounter set.) Place damage and horror on that character as indicated in the \"Expedition Team\" section of the Campaign Log.",
+      "effects": [],
+      "steps": []
+    },
     "fatal-mirage-3:no_say_in_the_matter:text": {
       "kind": "story",
       "text": "But you have no say in the matter.",
@@ -1995,7 +2321,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "ellsworth_has_confronted_his_demons",
+          "key": "ellsworthHasConfrontedHisDemons",
           "section": "campaign_notes",
           "value": true
         }
@@ -2005,7 +2331,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "elsworth_has_confronted_his_demons",
+        "id": "elsworthHasConfrontedHisDemons",
         "section": "campaign_notes"
       },
       "then": [],
@@ -2018,7 +2344,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "eliyah_has_confronted_his_demons",
+          "key": "eliyahHasConfrontedHisDemons",
           "section": "campaign_notes",
           "value": true
         }
@@ -2028,7 +2354,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "eliyah_has_confronted_his_demons",
+        "id": "eliyahHasConfrontedHisDemons",
         "section": "campaign_notes"
       },
       "then": [],
@@ -2041,7 +2367,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "dr_sinha_has_confronted_her_demons",
+          "key": "drSinhaHasConfrontedHerDemons",
           "section": "campaign_notes",
           "value": true
         }
@@ -2051,7 +2377,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "dr_sinha_has_confronted_her_demons",
+        "id": "drSinhaHasConfrontedHerDemons",
         "section": "campaign_notes"
       },
       "then": [],
@@ -2064,7 +2390,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "takada_has_confronted_her_demons",
+          "key": "takadaHasConfrontedHerDemons",
           "section": "campaign_notes",
           "value": true
         }
@@ -2074,7 +2400,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "takada_has_confronted_her_demons",
+        "id": "takadaHasConfrontedHerDemons",
         "section": "campaign_notes"
       },
       "then": [],
@@ -2087,7 +2413,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "cookie_has_confronted_his_demons",
+          "key": "cookieHasConfrontedHisDemons",
           "section": "campaign_notes",
           "value": true
         }
@@ -2097,7 +2423,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "cookie_has_confronted_his_demons",
+        "id": "cookieHasConfrontedHisDemons",
         "section": "campaign_notes"
       },
       "then": [],
@@ -2110,7 +2436,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "dyer_has_confronted_his_demons",
+          "key": "dyerHasConfrontedHisDemons",
           "section": "campaign_notes",
           "value": true
         }
@@ -2120,7 +2446,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "dyer_has_confronted_his_demons",
+        "id": "dyerHasConfrontedHisDemons",
         "section": "campaign_notes"
       },
       "then": [],
@@ -2133,7 +2459,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "claypool_has_confronted_his_demons",
+          "key": "claypoolHasConfrontedHisDemons",
           "section": "campaign_notes",
           "value": true
         }
@@ -2143,7 +2469,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "claypool_has_confronted_his_demons",
+        "id": "claypoolHasConfrontedHisDemons",
         "section": "campaign_notes"
       },
       "then": [],
@@ -2156,7 +2482,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "dr_kensler_has_confronted_her_demons",
+          "key": "drKenslerHasConfrontedHerDemons",
           "section": "campaign_notes",
           "value": true
         }
@@ -2166,7 +2492,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "dr_kensler_has_confronted_her_demons",
+        "id": "drKenslerHasConfrontedHerDemons",
         "section": "campaign_notes"
       },
       "then": [],
@@ -2179,7 +2505,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "danforth_has_confronted_his_demons",
+          "key": "danforthHasConfrontedHisDemons",
           "section": "campaign_notes",
           "value": true
         }
@@ -2189,7 +2515,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "danforth_has_confronted_his_demons",
+        "id": "danforthHasConfrontedHisDemons",
         "section": "campaign_notes"
       },
       "then": [],
@@ -2209,7 +2535,7 @@
             {
               "do": "record",
               "key": "airfield",
-              "section": "memories_banished",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -2220,21 +2546,21 @@
             },
             {
               "do": "record",
-              "key": "discovered_airfield",
+              "key": "discoveredAirfield",
               "section": "hidden",
               "value": true
             },
             {
               "do": "crossOut",
               "key": "airfield",
-              "section": "memories_discovered"
+              "section": "memoriesDiscovered"
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
             "id": "airfield",
-            "section": "memories_banished"
+            "section": "memoriesBanished"
           }
         },
         {
@@ -2243,8 +2569,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "alaskan_wilds",
-              "section": "memories_banished",
+              "key": "alaskanWilds",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -2255,21 +2581,21 @@
             },
             {
               "do": "record",
-              "key": "discovered_alaskan_wilds",
+              "key": "discoveredAlaskanWilds",
               "section": "hidden",
               "value": true
             },
             {
               "do": "crossOut",
-              "key": "alaskan_wilds",
-              "section": "memories_discovered"
+              "key": "alaskanWilds",
+              "section": "memoriesDiscovered"
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "alaskan_wilds",
-            "section": "memories_banished"
+            "id": "alaskanWilds",
+            "section": "memoriesBanished"
           }
         },
         {
@@ -2278,8 +2604,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "cluttered_dormitory",
-              "section": "memories_banished",
+              "key": "clutteredDormitory",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -2290,21 +2616,21 @@
             },
             {
               "do": "record",
-              "key": "discovered_cluttered_dormitory",
+              "key": "discoveredClutteredDormitory",
               "section": "hidden",
               "value": true
             },
             {
               "do": "crossOut",
-              "key": "cluttered_dormitory",
-              "section": "memories_discovered"
+              "key": "clutteredDormitory",
+              "section": "memoriesDiscovered"
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "cluttered_dormitory",
-            "section": "memories_banished"
+            "id": "clutteredDormitory",
+            "section": "memoriesBanished"
           }
         },
         {
@@ -2313,8 +2639,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "dyers_classroom",
-              "section": "memories_banished",
+              "key": "dyersClassroom",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -2325,21 +2651,21 @@
             },
             {
               "do": "record",
-              "key": "discovered_dyers_classroom",
+              "key": "discoveredDyersClassroom",
               "section": "hidden",
               "value": true
             },
             {
               "do": "crossOut",
-              "key": "dyers_classroom",
-              "section": "memories_discovered"
+              "key": "dyersClassroom",
+              "section": "memoriesDiscovered"
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "dyers_classroom",
-            "section": "memories_banished"
+            "id": "dyersClassroom",
+            "section": "memoriesBanished"
           }
         },
         {
@@ -2349,7 +2675,7 @@
             {
               "do": "record",
               "key": "infirmary",
-              "section": "memories_banished",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -2360,21 +2686,21 @@
             },
             {
               "do": "record",
-              "key": "discovered_infirmary",
+              "key": "discoveredInfirmary",
               "section": "hidden",
               "value": true
             },
             {
               "do": "crossOut",
               "key": "infirmary",
-              "section": "memories_discovered"
+              "section": "memoriesDiscovered"
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
             "id": "infirmary",
-            "section": "memories_banished"
+            "section": "memoriesBanished"
           }
         },
         {
@@ -2383,8 +2709,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "dr_kenslers_office",
-              "section": "memories_banished",
+              "key": "drKenslersOffice",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -2395,21 +2721,21 @@
             },
             {
               "do": "record",
-              "key": "discovered_dr_kenslers_office",
+              "key": "discoveredDrKenslersOffice",
               "section": "hidden",
               "value": true
             },
             {
               "do": "crossOut",
-              "key": "dr_kenslers_office",
-              "section": "memories_discovered"
+              "key": "drKenslersOffice",
+              "section": "memoriesDiscovered"
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "dr_kenslers_office",
-            "section": "memories_banished"
+            "id": "drKenslersOffice",
+            "section": "memoriesBanished"
           }
         },
         {
@@ -2418,8 +2744,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "moai_statues",
-              "section": "memories_banished",
+              "key": "moaiStatues",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -2430,21 +2756,21 @@
             },
             {
               "do": "record",
-              "key": "discovered_moai_statues",
+              "key": "discoveredMoaiStatues",
               "section": "hidden",
               "value": true
             },
             {
               "do": "crossOut",
-              "key": "moai_statue",
-              "section": "memories_discovered"
+              "key": "moaiStatue",
+              "section": "memoriesDiscovered"
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "moai_statues",
-            "section": "memories_banished"
+            "id": "moaiStatues",
+            "section": "memoriesBanished"
           }
         },
         {
@@ -2453,8 +2779,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "ottoman_front",
-              "section": "memories_banished",
+              "key": "ottomanFront",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -2465,21 +2791,21 @@
             },
             {
               "do": "record",
-              "key": "discovered_ottoman_front",
+              "key": "discoveredOttomanFront",
               "section": "hidden",
               "value": true
             },
             {
               "do": "crossOut",
-              "key": "ottoman_front",
-              "section": "memories_discovered"
+              "key": "ottomanFront",
+              "section": "memoriesDiscovered"
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "ottoman_front",
-            "section": "memories_banished"
+            "id": "ottomanFront",
+            "section": "memoriesBanished"
           }
         },
         {
@@ -2488,8 +2814,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "the_black_stone",
-              "section": "memories_banished",
+              "key": "theBlackStone",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -2500,21 +2826,21 @@
             },
             {
               "do": "record",
-              "key": "discovered_the_black_stone",
+              "key": "discoveredTheBlackStone",
               "section": "hidden",
               "value": true
             },
             {
               "do": "crossOut",
-              "key": "the_black_stone",
-              "section": "memories_discovered"
+              "key": "theBlackStone",
+              "section": "memoriesDiscovered"
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "the_black_stone",
-            "section": "memories_banished"
+            "id": "theBlackStone",
+            "section": "memoriesBanished"
           }
         },
         {
@@ -2523,8 +2849,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "alien_translation",
-              "section": "memories_banished",
+              "key": "alienTranslation",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -2544,8 +2870,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "hunt_gone_awry",
-              "section": "memories_banished",
+              "key": "huntGoneAwry",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -2565,8 +2891,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "lost_patient",
-              "section": "memories_banished",
+              "key": "lostPatient",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -2586,8 +2912,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "missing_father",
-              "section": "memories_banished",
+              "key": "missingFather",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -2607,8 +2933,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "ravaged_country",
-              "section": "memories_banished",
+              "key": "ravagedCountry",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -2628,8 +2954,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "regretful_voyage",
-              "section": "memories_banished",
+              "key": "regretfulVoyage",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -2649,8 +2975,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "terrible_discovery",
-              "section": "memories_banished",
+              "key": "terribleDiscovery",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -2670,8 +2996,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "unrequited_love",
-              "section": "memories_banished",
+              "key": "unrequitedLove",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -2691,8 +3017,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "unspeakable_evil",
-              "section": "memories_banished",
+              "key": "unspeakableEvil",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -2719,13 +3045,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "base_camp",
-              "section": "memories_discovered",
+              "key": "baseCamp",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_base_camp",
+              "key": "discoveredBaseCamp",
               "section": "hidden",
               "value": true
             }
@@ -2733,7 +3059,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_base_camp",
+            "id": "discoveredBaseCamp",
             "section": "hidden"
           }
         },
@@ -2743,13 +3069,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "deck_of_the_theodosia",
-              "section": "memories_discovered",
+              "key": "deckOfTheTheodosia",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_deck_of_the_theodosia",
+              "key": "discoveredDeckOfTheTheodosia",
               "section": "hidden",
               "value": true
             }
@@ -2757,7 +3083,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_deck_of_the_theodosia",
+            "id": "discoveredDeckOfTheTheodosia",
             "section": "hidden"
           }
         },
@@ -2767,13 +3093,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "university_halls",
-              "section": "memories_discovered",
+              "key": "universityHalls",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_university_halls",
+              "key": "discoveredUniversityHalls",
               "section": "hidden",
               "value": true
             }
@@ -2781,7 +3107,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_university_halls",
+            "id": "discoveredUniversityHalls",
             "section": "hidden"
           }
         },
@@ -2791,13 +3117,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "hedge_maze",
-              "section": "memories_discovered",
+              "key": "hedgeMaze",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_hedge_maze",
+              "key": "discoveredHedgeMaze",
               "section": "hidden",
               "value": true
             }
@@ -2805,7 +3131,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_hedge_maze",
+            "id": "discoveredHedgeMaze",
             "section": "hidden"
           }
         },
@@ -2815,13 +3141,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "deserted_station",
-              "section": "memories_discovered",
+              "key": "desertedStation",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_deserted_station",
+              "key": "discoveredDesertedStation",
               "section": "hidden",
               "value": true
             }
@@ -2829,7 +3155,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_deserted_station",
+            "id": "discoveredDesertedStation",
             "section": "hidden"
           }
         },
@@ -2839,13 +3165,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "coastal_waters",
-              "section": "memories_discovered",
+              "key": "coastalWaters",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_coastal_waters",
+              "key": "discoveredCoastalWaters",
               "section": "hidden",
               "value": true
             }
@@ -2853,7 +3179,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_coastal_waters",
+            "id": "discoveredCoastalWaters",
             "section": "hidden"
           }
         },
@@ -2863,13 +3189,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "elder_chamber",
-              "section": "memories_discovered",
+              "key": "elderChamber",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_elder_chamber",
+              "key": "discoveredElderChamber",
               "section": "hidden",
               "value": true
             }
@@ -2877,7 +3203,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_elder_chamber",
+            "id": "discoveredElderChamber",
             "section": "hidden"
           }
         },
@@ -2887,13 +3213,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "riverview_theatre",
-              "section": "memories_discovered",
+              "key": "riverviewTheatre",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_riverview_theatre",
+              "key": "discoveredRiverviewTheatre",
               "section": "hidden",
               "value": true
             }
@@ -2901,7 +3227,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_riverview_theatre",
+            "id": "discoveredRiverviewTheatre",
             "section": "hidden"
           }
         },
@@ -2911,13 +3237,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "standing_stones",
-              "section": "memories_discovered",
+              "key": "standingStones",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_standing_stones",
+              "key": "discoveredStandingStones",
               "section": "hidden",
               "value": true
             }
@@ -2925,7 +3251,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_standing_stones",
+            "id": "discoveredStandingStones",
             "section": "hidden"
           }
         },
@@ -2936,12 +3262,12 @@
             {
               "do": "record",
               "key": "airfield",
-              "section": "memories_discovered",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_airfield",
+              "key": "discoveredAirfield",
               "section": "hidden",
               "value": true
             }
@@ -2949,7 +3275,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_airfield",
+            "id": "discoveredAirfield",
             "section": "hidden"
           }
         },
@@ -2959,13 +3285,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "alaskan_wilds",
-              "section": "memories_discovered",
+              "key": "alaskanWilds",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_alaskan_wilds",
+              "key": "discoveredAlaskanWilds",
               "section": "hidden",
               "value": true
             }
@@ -2973,7 +3299,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_alaskan_wilds",
+            "id": "discoveredAlaskanWilds",
             "section": "hidden"
           }
         },
@@ -2983,13 +3309,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "cluttered_dormitory",
-              "section": "memories_discovered",
+              "key": "clutteredDormitory",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_cluttered_dormitory",
+              "key": "discoveredClutteredDormitory",
               "section": "hidden",
               "value": true
             }
@@ -2997,7 +3323,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_cluttered_dormitory",
+            "id": "discoveredClutteredDormitory",
             "section": "hidden"
           }
         },
@@ -3007,13 +3333,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "dyers_classroom",
-              "section": "memories_discovered",
+              "key": "dyersClassroom",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_dyers_classroom",
+              "key": "discoveredDyersClassroom",
               "section": "hidden",
               "value": true
             }
@@ -3021,7 +3347,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_dyers_classroom",
+            "id": "discoveredDyersClassroom",
             "section": "hidden"
           }
         },
@@ -3032,12 +3358,12 @@
             {
               "do": "record",
               "key": "infirmary",
-              "section": "memories_discovered",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_infirmary",
+              "key": "discoveredInfirmary",
               "section": "hidden",
               "value": true
             }
@@ -3045,7 +3371,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_infirmary",
+            "id": "discoveredInfirmary",
             "section": "hidden"
           }
         },
@@ -3055,13 +3381,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "dr_kenslers_office",
-              "section": "memories_discovered",
+              "key": "drKenslersOffice",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_dr_kenslers_office",
+              "key": "discoveredDrKenslersOffice",
               "section": "hidden",
               "value": true
             }
@@ -3069,7 +3395,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_dr_kenslers_office",
+            "id": "discoveredDrKenslersOffice",
             "section": "hidden"
           }
         },
@@ -3079,13 +3405,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "moai_statues",
-              "section": "memories_discovered",
+              "key": "moaiStatues",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_moai_statues",
+              "key": "discoveredMoaiStatues",
               "section": "hidden",
               "value": true
             }
@@ -3093,7 +3419,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_moai_statues",
+            "id": "discoveredMoaiStatues",
             "section": "hidden"
           }
         },
@@ -3103,13 +3429,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "ottoman_front",
-              "section": "memories_discovered",
+              "key": "ottomanFront",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_ottoman_front",
+              "key": "discoveredOttomanFront",
               "section": "hidden",
               "value": true
             }
@@ -3117,7 +3443,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_ottoman_front",
+            "id": "discoveredOttomanFront",
             "section": "hidden"
           }
         },
@@ -3127,13 +3453,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "the_black_stone",
-              "section": "memories_discovered",
+              "key": "theBlackStone",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_the_black_stone",
+              "key": "discoveredTheBlackStone",
               "section": "hidden",
               "value": true
             }
@@ -3141,7 +3467,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_the_black_stone",
+            "id": "discoveredTheBlackStone",
             "section": "hidden"
           }
         }
@@ -3195,6 +3521,13 @@
       "effects": [],
       "steps": []
     },
+    "fatal-mirage-3:choose_partners": {
+      "kind": "unsupported",
+      "name": "investigator_choice_partner",
+      "text": "Each investigator may choose one available member of the expedition team who is not crossed off to join them. Put the story asset for the chosen character into play in that investigator's play area. (These story assets can be found in the <i>Expedition Team</i> encounter set. If there is a checkmark next to the character's name, instead use the [[Resolute]] version found in the <i>Fatal Mirage</i> encounter set.) Place damage and horror on that character as indicated in the \"Expedition Team\" section of the Campaign Log.",
+      "effects": [],
+      "steps": []
+    },
     "fatal-mirage:no_say_in_the_matter:text": {
       "kind": "story",
       "text": "But you have no say in the matter.",
@@ -3205,7 +3538,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "ellsworth_has_confronted_his_demons",
+          "key": "ellsworthHasConfrontedHisDemons",
           "section": "campaign_notes",
           "value": true
         }
@@ -3215,7 +3548,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "elsworth_has_confronted_his_demons",
+        "id": "elsworthHasConfrontedHisDemons",
         "section": "campaign_notes"
       },
       "then": [],
@@ -3228,7 +3561,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "eliyah_has_confronted_his_demons",
+          "key": "eliyahHasConfrontedHisDemons",
           "section": "campaign_notes",
           "value": true
         }
@@ -3238,7 +3571,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "eliyah_has_confronted_his_demons",
+        "id": "eliyahHasConfrontedHisDemons",
         "section": "campaign_notes"
       },
       "then": [],
@@ -3251,7 +3584,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "dr_sinha_has_confronted_her_demons",
+          "key": "drSinhaHasConfrontedHerDemons",
           "section": "campaign_notes",
           "value": true
         }
@@ -3261,7 +3594,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "dr_sinha_has_confronted_her_demons",
+        "id": "drSinhaHasConfrontedHerDemons",
         "section": "campaign_notes"
       },
       "then": [],
@@ -3274,7 +3607,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "takada_has_confronted_her_demons",
+          "key": "takadaHasConfrontedHerDemons",
           "section": "campaign_notes",
           "value": true
         }
@@ -3284,7 +3617,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "takada_has_confronted_her_demons",
+        "id": "takadaHasConfrontedHerDemons",
         "section": "campaign_notes"
       },
       "then": [],
@@ -3297,7 +3630,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "cookie_has_confronted_his_demons",
+          "key": "cookieHasConfrontedHisDemons",
           "section": "campaign_notes",
           "value": true
         }
@@ -3307,7 +3640,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "cookie_has_confronted_his_demons",
+        "id": "cookieHasConfrontedHisDemons",
         "section": "campaign_notes"
       },
       "then": [],
@@ -3320,7 +3653,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "dyer_has_confronted_his_demons",
+          "key": "dyerHasConfrontedHisDemons",
           "section": "campaign_notes",
           "value": true
         }
@@ -3330,7 +3663,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "dyer_has_confronted_his_demons",
+        "id": "dyerHasConfrontedHisDemons",
         "section": "campaign_notes"
       },
       "then": [],
@@ -3343,7 +3676,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "claypool_has_confronted_his_demons",
+          "key": "claypoolHasConfrontedHisDemons",
           "section": "campaign_notes",
           "value": true
         }
@@ -3353,7 +3686,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "claypool_has_confronted_his_demons",
+        "id": "claypoolHasConfrontedHisDemons",
         "section": "campaign_notes"
       },
       "then": [],
@@ -3366,7 +3699,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "dr_kensler_has_confronted_her_demons",
+          "key": "drKenslerHasConfrontedHerDemons",
           "section": "campaign_notes",
           "value": true
         }
@@ -3376,7 +3709,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "dr_kensler_has_confronted_her_demons",
+        "id": "drKenslerHasConfrontedHerDemons",
         "section": "campaign_notes"
       },
       "then": [],
@@ -3389,7 +3722,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "danforth_has_confronted_his_demons",
+          "key": "danforthHasConfrontedHisDemons",
           "section": "campaign_notes",
           "value": true
         }
@@ -3399,7 +3732,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "danforth_has_confronted_his_demons",
+        "id": "danforthHasConfrontedHisDemons",
         "section": "campaign_notes"
       },
       "then": [],
@@ -3419,7 +3752,7 @@
             {
               "do": "record",
               "key": "airfield",
-              "section": "memories_banished",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -3430,21 +3763,21 @@
             },
             {
               "do": "record",
-              "key": "discovered_airfield",
+              "key": "discoveredAirfield",
               "section": "hidden",
               "value": true
             },
             {
               "do": "crossOut",
               "key": "airfield",
-              "section": "memories_discovered"
+              "section": "memoriesDiscovered"
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
             "id": "airfield",
-            "section": "memories_banished"
+            "section": "memoriesBanished"
           }
         },
         {
@@ -3453,8 +3786,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "alaskan_wilds",
-              "section": "memories_banished",
+              "key": "alaskanWilds",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -3465,21 +3798,21 @@
             },
             {
               "do": "record",
-              "key": "discovered_alaskan_wilds",
+              "key": "discoveredAlaskanWilds",
               "section": "hidden",
               "value": true
             },
             {
               "do": "crossOut",
-              "key": "alaskan_wilds",
-              "section": "memories_discovered"
+              "key": "alaskanWilds",
+              "section": "memoriesDiscovered"
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "alaskan_wilds",
-            "section": "memories_banished"
+            "id": "alaskanWilds",
+            "section": "memoriesBanished"
           }
         },
         {
@@ -3488,8 +3821,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "cluttered_dormitory",
-              "section": "memories_banished",
+              "key": "clutteredDormitory",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -3500,21 +3833,21 @@
             },
             {
               "do": "record",
-              "key": "discovered_cluttered_dormitory",
+              "key": "discoveredClutteredDormitory",
               "section": "hidden",
               "value": true
             },
             {
               "do": "crossOut",
-              "key": "cluttered_dormitory",
-              "section": "memories_discovered"
+              "key": "clutteredDormitory",
+              "section": "memoriesDiscovered"
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "cluttered_dormitory",
-            "section": "memories_banished"
+            "id": "clutteredDormitory",
+            "section": "memoriesBanished"
           }
         },
         {
@@ -3523,8 +3856,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "dyers_classroom",
-              "section": "memories_banished",
+              "key": "dyersClassroom",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -3535,21 +3868,21 @@
             },
             {
               "do": "record",
-              "key": "discovered_dyers_classroom",
+              "key": "discoveredDyersClassroom",
               "section": "hidden",
               "value": true
             },
             {
               "do": "crossOut",
-              "key": "dyers_classroom",
-              "section": "memories_discovered"
+              "key": "dyersClassroom",
+              "section": "memoriesDiscovered"
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "dyers_classroom",
-            "section": "memories_banished"
+            "id": "dyersClassroom",
+            "section": "memoriesBanished"
           }
         },
         {
@@ -3559,7 +3892,7 @@
             {
               "do": "record",
               "key": "infirmary",
-              "section": "memories_banished",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -3570,21 +3903,21 @@
             },
             {
               "do": "record",
-              "key": "discovered_infirmary",
+              "key": "discoveredInfirmary",
               "section": "hidden",
               "value": true
             },
             {
               "do": "crossOut",
               "key": "infirmary",
-              "section": "memories_discovered"
+              "section": "memoriesDiscovered"
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
             "id": "infirmary",
-            "section": "memories_banished"
+            "section": "memoriesBanished"
           }
         },
         {
@@ -3593,8 +3926,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "dr_kenslers_office",
-              "section": "memories_banished",
+              "key": "drKenslersOffice",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -3605,21 +3938,21 @@
             },
             {
               "do": "record",
-              "key": "discovered_dr_kenslers_office",
+              "key": "discoveredDrKenslersOffice",
               "section": "hidden",
               "value": true
             },
             {
               "do": "crossOut",
-              "key": "dr_kenslers_office",
-              "section": "memories_discovered"
+              "key": "drKenslersOffice",
+              "section": "memoriesDiscovered"
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "dr_kenslers_office",
-            "section": "memories_banished"
+            "id": "drKenslersOffice",
+            "section": "memoriesBanished"
           }
         },
         {
@@ -3628,8 +3961,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "moai_statues",
-              "section": "memories_banished",
+              "key": "moaiStatues",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -3640,21 +3973,21 @@
             },
             {
               "do": "record",
-              "key": "discovered_moai_statues",
+              "key": "discoveredMoaiStatues",
               "section": "hidden",
               "value": true
             },
             {
               "do": "crossOut",
-              "key": "moai_statue",
-              "section": "memories_discovered"
+              "key": "moaiStatue",
+              "section": "memoriesDiscovered"
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "moai_statues",
-            "section": "memories_banished"
+            "id": "moaiStatues",
+            "section": "memoriesBanished"
           }
         },
         {
@@ -3663,8 +3996,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "ottoman_front",
-              "section": "memories_banished",
+              "key": "ottomanFront",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -3675,21 +4008,21 @@
             },
             {
               "do": "record",
-              "key": "discovered_ottoman_front",
+              "key": "discoveredOttomanFront",
               "section": "hidden",
               "value": true
             },
             {
               "do": "crossOut",
-              "key": "ottoman_front",
-              "section": "memories_discovered"
+              "key": "ottomanFront",
+              "section": "memoriesDiscovered"
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "ottoman_front",
-            "section": "memories_banished"
+            "id": "ottomanFront",
+            "section": "memoriesBanished"
           }
         },
         {
@@ -3698,8 +4031,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "the_black_stone",
-              "section": "memories_banished",
+              "key": "theBlackStone",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -3710,21 +4043,21 @@
             },
             {
               "do": "record",
-              "key": "discovered_the_black_stone",
+              "key": "discoveredTheBlackStone",
               "section": "hidden",
               "value": true
             },
             {
               "do": "crossOut",
-              "key": "the_black_stone",
-              "section": "memories_discovered"
+              "key": "theBlackStone",
+              "section": "memoriesDiscovered"
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "the_black_stone",
-            "section": "memories_banished"
+            "id": "theBlackStone",
+            "section": "memoriesBanished"
           }
         },
         {
@@ -3733,8 +4066,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "alien_translation",
-              "section": "memories_banished",
+              "key": "alienTranslation",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -3754,8 +4087,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "hunt_gone_awry",
-              "section": "memories_banished",
+              "key": "huntGoneAwry",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -3775,8 +4108,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "lost_patient",
-              "section": "memories_banished",
+              "key": "lostPatient",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -3796,8 +4129,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "missing_father",
-              "section": "memories_banished",
+              "key": "missingFather",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -3817,8 +4150,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "ravaged_country",
-              "section": "memories_banished",
+              "key": "ravagedCountry",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -3838,8 +4171,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "regretful_voyage",
-              "section": "memories_banished",
+              "key": "regretfulVoyage",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -3859,8 +4192,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "terrible_discovery",
-              "section": "memories_banished",
+              "key": "terribleDiscovery",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -3880,8 +4213,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "unrequited_love",
-              "section": "memories_banished",
+              "key": "unrequitedLove",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -3901,8 +4234,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "unspeakable_evil",
-              "section": "memories_banished",
+              "key": "unspeakableEvil",
+              "section": "memoriesBanished",
               "value": true
             },
             {
@@ -3929,13 +4262,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "base_camp",
-              "section": "memories_discovered",
+              "key": "baseCamp",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_base_camp",
+              "key": "discoveredBaseCamp",
               "section": "hidden",
               "value": true
             }
@@ -3943,7 +4276,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_base_camp",
+            "id": "discoveredBaseCamp",
             "section": "hidden"
           }
         },
@@ -3953,13 +4286,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "deck_of_the_theodosia",
-              "section": "memories_discovered",
+              "key": "deckOfTheTheodosia",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_deck_of_the_theodosia",
+              "key": "discoveredDeckOfTheTheodosia",
               "section": "hidden",
               "value": true
             }
@@ -3967,7 +4300,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_deck_of_the_theodosia",
+            "id": "discoveredDeckOfTheTheodosia",
             "section": "hidden"
           }
         },
@@ -3977,13 +4310,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "university_halls",
-              "section": "memories_discovered",
+              "key": "universityHalls",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_university_halls",
+              "key": "discoveredUniversityHalls",
               "section": "hidden",
               "value": true
             }
@@ -3991,7 +4324,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_university_halls",
+            "id": "discoveredUniversityHalls",
             "section": "hidden"
           }
         },
@@ -4001,13 +4334,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "hedge_maze",
-              "section": "memories_discovered",
+              "key": "hedgeMaze",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_hedge_maze",
+              "key": "discoveredHedgeMaze",
               "section": "hidden",
               "value": true
             }
@@ -4015,7 +4348,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_hedge_maze",
+            "id": "discoveredHedgeMaze",
             "section": "hidden"
           }
         },
@@ -4025,13 +4358,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "deserted_station",
-              "section": "memories_discovered",
+              "key": "desertedStation",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_deserted_station",
+              "key": "discoveredDesertedStation",
               "section": "hidden",
               "value": true
             }
@@ -4039,7 +4372,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_deserted_station",
+            "id": "discoveredDesertedStation",
             "section": "hidden"
           }
         },
@@ -4049,13 +4382,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "coastal_waters",
-              "section": "memories_discovered",
+              "key": "coastalWaters",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_coastal_waters",
+              "key": "discoveredCoastalWaters",
               "section": "hidden",
               "value": true
             }
@@ -4063,7 +4396,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_coastal_waters",
+            "id": "discoveredCoastalWaters",
             "section": "hidden"
           }
         },
@@ -4073,13 +4406,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "elder_chamber",
-              "section": "memories_discovered",
+              "key": "elderChamber",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_elder_chamber",
+              "key": "discoveredElderChamber",
               "section": "hidden",
               "value": true
             }
@@ -4087,7 +4420,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_elder_chamber",
+            "id": "discoveredElderChamber",
             "section": "hidden"
           }
         },
@@ -4097,13 +4430,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "riverview_theatre",
-              "section": "memories_discovered",
+              "key": "riverviewTheatre",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_riverview_theatre",
+              "key": "discoveredRiverviewTheatre",
               "section": "hidden",
               "value": true
             }
@@ -4111,7 +4444,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_riverview_theatre",
+            "id": "discoveredRiverviewTheatre",
             "section": "hidden"
           }
         },
@@ -4121,13 +4454,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "standing_stones",
-              "section": "memories_discovered",
+              "key": "standingStones",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_standing_stones",
+              "key": "discoveredStandingStones",
               "section": "hidden",
               "value": true
             }
@@ -4135,7 +4468,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_standing_stones",
+            "id": "discoveredStandingStones",
             "section": "hidden"
           }
         },
@@ -4146,12 +4479,12 @@
             {
               "do": "record",
               "key": "airfield",
-              "section": "memories_discovered",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_airfield",
+              "key": "discoveredAirfield",
               "section": "hidden",
               "value": true
             }
@@ -4159,7 +4492,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_airfield",
+            "id": "discoveredAirfield",
             "section": "hidden"
           }
         },
@@ -4169,13 +4502,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "alaskan_wilds",
-              "section": "memories_discovered",
+              "key": "alaskanWilds",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_alaskan_wilds",
+              "key": "discoveredAlaskanWilds",
               "section": "hidden",
               "value": true
             }
@@ -4183,7 +4516,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_alaskan_wilds",
+            "id": "discoveredAlaskanWilds",
             "section": "hidden"
           }
         },
@@ -4193,13 +4526,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "cluttered_dormitory",
-              "section": "memories_discovered",
+              "key": "clutteredDormitory",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_cluttered_dormitory",
+              "key": "discoveredClutteredDormitory",
               "section": "hidden",
               "value": true
             }
@@ -4207,7 +4540,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_cluttered_dormitory",
+            "id": "discoveredClutteredDormitory",
             "section": "hidden"
           }
         },
@@ -4217,13 +4550,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "dyers_classroom",
-              "section": "memories_discovered",
+              "key": "dyersClassroom",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_dyers_classroom",
+              "key": "discoveredDyersClassroom",
               "section": "hidden",
               "value": true
             }
@@ -4231,7 +4564,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_dyers_classroom",
+            "id": "discoveredDyersClassroom",
             "section": "hidden"
           }
         },
@@ -4242,12 +4575,12 @@
             {
               "do": "record",
               "key": "infirmary",
-              "section": "memories_discovered",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_infirmary",
+              "key": "discoveredInfirmary",
               "section": "hidden",
               "value": true
             }
@@ -4255,7 +4588,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_infirmary",
+            "id": "discoveredInfirmary",
             "section": "hidden"
           }
         },
@@ -4265,13 +4598,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "dr_kenslers_office",
-              "section": "memories_discovered",
+              "key": "drKenslersOffice",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_dr_kenslers_office",
+              "key": "discoveredDrKenslersOffice",
               "section": "hidden",
               "value": true
             }
@@ -4279,7 +4612,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_dr_kenslers_office",
+            "id": "discoveredDrKenslersOffice",
             "section": "hidden"
           }
         },
@@ -4289,13 +4622,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "moai_statues",
-              "section": "memories_discovered",
+              "key": "moaiStatues",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_moai_statues",
+              "key": "discoveredMoaiStatues",
               "section": "hidden",
               "value": true
             }
@@ -4303,7 +4636,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_moai_statues",
+            "id": "discoveredMoaiStatues",
             "section": "hidden"
           }
         },
@@ -4313,13 +4646,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "ottoman_front",
-              "section": "memories_discovered",
+              "key": "ottomanFront",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_ottoman_front",
+              "key": "discoveredOttomanFront",
               "section": "hidden",
               "value": true
             }
@@ -4327,7 +4660,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_ottoman_front",
+            "id": "discoveredOttomanFront",
             "section": "hidden"
           }
         },
@@ -4337,13 +4670,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "the_black_stone",
-              "section": "memories_discovered",
+              "key": "theBlackStone",
+              "section": "memoriesDiscovered",
               "value": true
             },
             {
               "do": "record",
-              "key": "discovered_the_black_stone",
+              "key": "discoveredTheBlackStone",
               "section": "hidden",
               "value": true
             }
@@ -4351,7 +4684,7 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "discovered_the_black_stone",
+            "id": "discoveredTheBlackStone",
             "section": "hidden"
           }
         }
@@ -4405,6 +4738,13 @@
       "effects": [],
       "steps": []
     },
+    "fatal-mirage:choose_partners": {
+      "kind": "unsupported",
+      "name": "investigator_choice_partner",
+      "text": "Each investigator may choose one available member of the expedition team who is not crossed off to join them. Put the story asset for the chosen character into play in that investigator's play area. Place damage and horror on that character as indicated in the \"Expedition Team\" section of the Campaign Log.",
+      "effects": [],
+      "steps": []
+    },
     "final-night:intro": {
       "kind": "story",
       "text": "You would hesitate to call the darkened pit you find yourself in \"safe\" by any means, but you feel as though this is as good a place as any to rest. It was hard enough to tell the time with the sun always lingering in the Antarctic sky—now, deep underground with no sunlight to speak of, it is impossible. When one of your companions checks their pocketwatch and informs the team that fourteen hours have passed since you went underground, the response is one of utter disbelief. You do not remember traveling that long, but your body is weary enough to prove it.\nIn gloomy silence, you and the others set up camp once more. Your numbers have dwindled to only yourself and the few experts who remain from those originally introduced to you by Dr. Kensler. The rest of the students and researchers are either back at the barrier camp where you first disembarked from the Theodosia, or… no longer with you.\nThe cavern is easily large enough for what few of you remain, and the icy floor brittle enough to stake down your tents. Even so, it does not truly feel safe. You wonder if you will ever feel safe again.",
@@ -4420,7 +4760,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "final_night_conversations",
+          "id": "finalNightConversations",
           "section": "hidden",
           "op": "set",
           "value": 4
@@ -4432,7 +4772,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "final_night_conversations",
+          "id": "finalNightConversations",
           "section": "hidden",
           "op": "set",
           "value": 3
@@ -4443,7 +4783,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "team_was_guided_to_the_hidden_tunnel",
+        "id": "teamWasGuidedToTheHiddenTunnel",
         "section": "campaign_notes"
       },
       "then": [
@@ -4592,13 +4932,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "camp_icebreaker_landing",
+              "key": "campIcebreakerLanding",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "count",
-              "id": "camp_shelter",
+              "id": "campShelter",
               "section": "hidden",
               "op": "set",
               "value": 5
@@ -4618,13 +4958,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "camp_icy_wastes",
+              "key": "campIcyWastes",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "count",
-              "id": "camp_shelter",
+              "id": "campShelter",
               "section": "hidden",
               "op": "set",
               "value": 4
@@ -4644,13 +4984,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "camp_barrier_camp",
+              "key": "campBarrierCamp",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "count",
-              "id": "camp_shelter",
+              "id": "campShelter",
               "section": "hidden",
               "op": "set",
               "value": 7
@@ -4670,13 +5010,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "camp_rocky_crags",
+              "key": "campRockyCrags",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "count",
-              "id": "camp_shelter",
+              "id": "campShelter",
               "section": "hidden",
               "op": "set",
               "value": 3
@@ -4696,13 +5036,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "camp_frigid_cave",
+              "key": "campFrigidCave",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "count",
-              "id": "camp_shelter",
+              "id": "campShelter",
               "section": "hidden",
               "op": "set",
               "value": 6
@@ -4722,13 +5062,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "camp_precarious_ice_sheet",
+              "key": "campPrecariousIceSheet",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "count",
-              "id": "camp_shelter",
+              "id": "campShelter",
               "section": "hidden",
               "op": "set",
               "value": 2
@@ -4748,13 +5088,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "camp_treacherous_path",
+              "key": "campTreacherousPath",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "count",
-              "id": "camp_shelter",
+              "id": "campShelter",
               "section": "hidden",
               "op": "set",
               "value": 1
@@ -4774,13 +5114,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "camp_crash_site",
+              "key": "campCrashSite",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "count",
-              "id": "camp_shelter",
+              "id": "campShelter",
               "section": "hidden",
               "op": "set",
               "value": 0
@@ -4800,13 +5140,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "camp_remnants_of_lakes_camp",
+              "key": "campRemnantsOfLakesCamp",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "count",
-              "id": "camp_shelter",
+              "id": "campShelter",
               "section": "hidden",
               "op": "set",
               "value": 7
@@ -4826,13 +5166,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "camp_frozen_shores",
+              "key": "campFrozenShores",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "count",
-              "id": "camp_shelter",
+              "id": "campShelter",
               "section": "hidden",
               "op": "set",
               "value": 2
@@ -4852,13 +5192,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "camp_crystalline_cavern",
+              "key": "campCrystallineCavern",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "count",
-              "id": "camp_shelter",
+              "id": "campShelter",
               "section": "hidden",
               "op": "set",
               "value": 8
@@ -4878,13 +5218,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "camp_broad_snowdrifts",
+              "key": "campBroadSnowdrifts",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "count",
-              "id": "camp_shelter",
+              "id": "campShelter",
               "section": "hidden",
               "op": "set",
               "value": 4
@@ -4904,13 +5244,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "camp_snow_graves",
+              "key": "campSnowGraves",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "count",
-              "id": "camp_shelter",
+              "id": "campShelter",
               "section": "hidden",
               "op": "set",
               "value": 5
@@ -4968,6 +5308,19 @@
       "kind": "unsupported",
       "name": "partner_trauma",
       "text": "In the \"Expedition Team\" section of the Campaign Log, record the amount of damage and horror on each partner asset in play.",
+      "effects": [],
+      "steps": []
+    },
+    "ice-and-death-part-1:choose_plane_crash": {
+      "kind": "unsupported",
+      "name": "partner_choice",
+      "effects": [],
+      "steps": []
+    },
+    "ice-and-death-part-1:choose_partners": {
+      "kind": "unsupported",
+      "name": "investigator_choice_partner",
+      "text": "Each investigator may choose one available member of the expedition team who is not crossed off to join them. Put the story asset for the chosen character into play in that investigator's play area. (These story assets can be found in the <i>Expedition Team</i> encounter set.)",
       "effects": [],
       "steps": []
     },
@@ -5070,12 +5423,99 @@
       "text": "Do not clean up the game yet.",
       "bullets": []
     },
+    "ice-and-death-part-2:choose_partners": {
+      "kind": "unsupported",
+      "name": "investigator_choice_partner",
+      "text": "Each investigator may choose one available member of the expedition team who is not crossed off or marked \"MIA\" to join them. Put the story asset for the chosen character into play in that investigator's play area. Place damage and horror on that character as indicated in the \"Expedition Team\" section of the Campaign Log.",
+      "effects": [],
+      "steps": []
+    },
+    "ice-and-death-part-2:build_agenda_deck:text": {
+      "kind": "story",
+      "text": "Build the agenda deck using agendas 4-6 and the act deck using act 2. (These cards can be found in the <i>Lost in the Night</i> encounter set.",
+      "bullets": []
+    },
+    "ice-and-death-part-2:setup_locations:text": {
+      "kind": "story",
+      "text": "Put each remaining set-aside [[Uncharted]] location into play.",
+      "bullets": []
+    },
+    "ice-and-death-part-2:place_clues:text": {
+      "kind": "story",
+      "text": "Place clues on each revealed location equal to its clue value.",
+      "bullets": []
+    },
+    "ice-and-death-part-2:missing_partners:text": {
+      "kind": "story",
+      "text": "Several members of the expedition go missing in the night!",
+      "bullets": []
+    },
+    "ice-and-death-part-2:set_aside_partner_enemies_intro:text": {
+      "kind": "story",
+      "text": "Find each [[Possessed]] enemy from the <i>Lost in the Night</i> encounter set whose title matches one of the Expedition Team members marked \"MIA\" in your Campaign Log. Set each of these enemies aside, facedown. Remove the rest from the game.",
+      "bullets": []
+    },
+    "ice-and-death-part-2:add_story_cards:text": {
+      "kind": "story",
+      "text": "Find the story cards from the <i>Lost in the Night</i> encounter set and shuffle them. One at a time, add one of these cards facedown to the previously set-aside enemies, until there are a total of exactly nine enemy and story cards set aside in this way. Remove the unused story cards from the game.",
+      "bullets": []
+    },
+    "ice-and-death-part-2:shuffle_missing_story:text": {
+      "kind": "story",
+      "text": "Shuffle these nine set-aside cards and place one facedown beneach each of the nine [[Uncharted]] locations in play.",
+      "bullets": []
+    },
+    "ice-and-death-part-2:begin_play_at_camp:text": {
+      "kind": "story",
+      "text": "Each investigator begins play at the camp.",
+      "bullets": []
+    },
+    "ice-and-death-part-2:setup_locations_scratch:text": {
+      "kind": "story",
+      "text": "In the \"Ice and Death\" section of the Campaign Log, find each location under Locations Revealed. Put each of those locations into play, revealed <i>(with clues equal to its clue value)</i>.",
+      "bullets": []
+    },
+    "ice-and-death-part-2:setup_tekeli_li:text": {
+      "kind": "story",
+      "text": "Shuffle each Tekeli-li! weakness card that is not already part of an investigator's deck together to form the Tekeli-li deck. Place this deck near the agenda deck.",
+      "bullets": []
+    },
+    "ice-and-death-part-2:check_continue": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "continueIceAndDeathPart2",
+        "section": "hidden"
+      },
+      "then": [
+        "ice-and-death-part-2:choose_partners",
+        "ice-and-death-part-2:build_agenda_deck:text",
+        "ice-and-death-part-2:setup_locations:text",
+        "ice-and-death-part-2:place_clues:text",
+        "ice-and-death-part-2:missing_partners:text",
+        "ice-and-death-part-2:set_aside_partner_enemies_intro:text",
+        "ice-and-death-part-2:add_story_cards:text",
+        "ice-and-death-part-2:shuffle_missing_story:text",
+        "ice-and-death-part-2:begin_play_at_camp:text"
+      ],
+      "else": [
+        "ice-and-death-part-2:choose_partners",
+        "ice-and-death-part-2:build_agenda_deck:text",
+        "ice-and-death-part-2:setup_locations_scratch:text",
+        "ice-and-death-part-2:missing_partners:text",
+        "ice-and-death-part-2:set_aside_partner_enemies_intro:text",
+        "ice-and-death-part-2:add_story_cards:text",
+        "ice-and-death-part-2:shuffle_missing_story:text",
+        "ice-and-death-part-2:begin_play_at_camp:text",
+        "ice-and-death-part-2:setup_tekeli_li:text"
+      ]
+    },
     "ice-and-death-part-3:team_barely_escaped_the_ice_shelf": {
       "kind": "effects",
       "effects": [
         {
           "do": "record",
-          "key": "team_barely_escaped_the_ice_shelf",
+          "key": "teamBarelyEscapedTheIceShelf",
           "section": "campaign_notes",
           "value": true
         }
@@ -5090,7 +5530,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "killed_seeping_nightmare",
+              "key": "killedSeepingNightmare",
               "section": "hidden",
               "value": true
             }
@@ -5125,7 +5565,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "killed_seeping_nightmare",
+        "id": "killedSeepingNightmare",
         "section": "hidden"
       },
       "then": [
@@ -5162,7 +5602,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "team_defeated_the_hunting_creatures",
+          "key": "teamDefeatedTheHuntingCreatures",
           "section": "campaign_notes",
           "value": true
         }
@@ -5191,10 +5631,754 @@
       "effects": [
         {
           "do": "record",
-          "key": "team_fled_to_the_mountains",
+          "key": "teamFledToTheMountains",
           "section": "campaign_notes",
           "value": true
         }
+      ]
+    },
+    "ice-and-death-part-3:choose_partners": {
+      "kind": "unsupported",
+      "name": "investigator_choice_partner",
+      "text": "Each investigator may choose one available member of the expedition team who is not crossed off to join them. Put the story asset for the chosen character into play in that investigator's play area (These story assets can be found in the <i>Expedition Team</i> encounter set.). Place damage and horror on that character as indicated in the \"Expedition Team\" section of the Campaign Log.",
+      "effects": [],
+      "steps": []
+    },
+    "ice-and-death-part-3:build_agenda_deck:text": {
+      "kind": "story",
+      "text": "Build the agenda deck using agendas 7-8 and the act deck using act 3. (These cards can be found in the <i>Seeping Nightmares</i> encounter set.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:setup_locations:text": {
+      "kind": "story",
+      "text": "Put each remaining set-aside [[Uncharted]] location into play.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:place_clues:text": {
+      "kind": "story",
+      "text": "Place clues on each revealed location equal to its clue value.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:find_seeping_nightmares:text": {
+      "kind": "story",
+      "text": "Find 1 [per_investigator] Seeping Nightmare enemies. These enemies can be found in the <i>Seeping Nightmares</i> encounter set.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:spawn_1_1:text": {
+      "kind": "story",
+      "text": "<b>Because you are camped at either Crash Site, Treacherous Path, Precarious Ice Sheet, or Frozen Shores</b>: Spawn a Seeping Nightmare at Icy Wastes.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:spawn_1_2:text": {
+      "kind": "story",
+      "text": "<b>Because you are camped at either Crash Site, Treacherous Path, Precarious Ice Sheet, or Frozen Shores</b>: Spawn Seeping Nightmares at Icy Wastes and Broad Snowdrifts.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:spawn_1_3:text": {
+      "kind": "story",
+      "text": "<b>Because you are camped at either Crash Site, Treacherous Path, Precarious Ice Sheet, or Frozen Shores</b>: Spawn Seeping Nightmares at Icy Wastes, Broad Snowdrifts, and  Rocky Crags.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:spawn_1_4:text": {
+      "kind": "story",
+      "text": "<b>Because you are camped at either Crash Site, Treacherous Path, Precarious Ice Sheet, or Frozen Shores</b>: Spawn Seeping Nightmares at Icy Wastes, Broad Snowdrifts, Rocky Crags, and Icebreaker Landing.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:spawn_1#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_1_4:text"
+      ],
+      "else": []
+    },
+    "ice-and-death-part-3:spawn_1#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_1_3:text"
+      ],
+      "else": [
+        "ice-and-death-part-3:spawn_1#3"
+      ]
+    },
+    "ice-and-death-part-3:spawn_1#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_1_2:text"
+      ],
+      "else": [
+        "ice-and-death-part-3:spawn_1#2"
+      ]
+    },
+    "ice-and-death-part-3:spawn_1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 1,
+        "max": 1
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_1_1:text"
+      ],
+      "else": [
+        "ice-and-death-part-3:spawn_1#1"
+      ]
+    },
+    "ice-and-death-part-3:spawn_2_1:text": {
+      "kind": "story",
+      "text": "<b>Because you are camped at either Icy Wastes or Icebreaker Landing</b>: Spawn a Seeping Nightmare at Snow Graves.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:spawn_2_2:text": {
+      "kind": "story",
+      "text": "<b>Because you are camped at either Icy Wastes or Icebreaker Landing</b>: Spawn Seeping Nightmares at Snow Graves and Frigid Cave.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:spawn_2_3:text": {
+      "kind": "story",
+      "text": "<b>Because you are camped at either Icy Wastes or Icebreaker Landing</b>: Spawn Seeping Nightmares at Snow Graves, Frigid Cave, and Remnants of Lake's Camp.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:spawn_2_4:text": {
+      "kind": "story",
+      "text": "<b>Because you are camped at either Icy Wastes or Icebreaker Landing</b>: Spawn Seeping Nightmares at Snow Graves, Frigid Cave, Remnants of Lake's Camp, and Barrier Camp.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:spawn_2#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_2_4:text"
+      ],
+      "else": []
+    },
+    "ice-and-death-part-3:spawn_2#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_2_3:text"
+      ],
+      "else": [
+        "ice-and-death-part-3:spawn_2#3"
+      ]
+    },
+    "ice-and-death-part-3:spawn_2#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_2_2:text"
+      ],
+      "else": [
+        "ice-and-death-part-3:spawn_2#2"
+      ]
+    },
+    "ice-and-death-part-3:spawn_2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 1,
+        "max": 1
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_2_1:text"
+      ],
+      "else": [
+        "ice-and-death-part-3:spawn_2#1"
+      ]
+    },
+    "ice-and-death-part-3:spawn_3_1:text": {
+      "kind": "story",
+      "text": "<b>Because you are camped at either Broad Snowdrifts or Snow Graves</b>: Spawn a Seeping Nightmare at Icebreaker Landing.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:spawn_3_2:text": {
+      "kind": "story",
+      "text": "<b>Because you are camped at either Broad Snowdrifts or Snow Graves</b>: Spawn Seeping Nightmares at Icebreaker Landing and Frigid Cave.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:spawn_3_3:text": {
+      "kind": "story",
+      "text": "<b>Because you are camped at either Broad Snowdrifts or Snow Graves</b>: Spawn Seeping Nightmares at Icebreaker Landing, Frigid Cave, and Remnants of Lake's Camp.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:spawn_3_4:text": {
+      "kind": "story",
+      "text": "<b>Because you are camped at either Broad Snowdrifts or Snow Graves</b>: Spawn Seeping Nightmares at Icebreaker Landing, Frigid Cave, Remnants of Lake's Camp, and Crystalline Cavern.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:spawn_3#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_3_4:text"
+      ],
+      "else": []
+    },
+    "ice-and-death-part-3:spawn_3#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_3_3:text"
+      ],
+      "else": [
+        "ice-and-death-part-3:spawn_3#3"
+      ]
+    },
+    "ice-and-death-part-3:spawn_3#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_3_2:text"
+      ],
+      "else": [
+        "ice-and-death-part-3:spawn_3#2"
+      ]
+    },
+    "ice-and-death-part-3:spawn_3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 1,
+        "max": 1
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_3_1:text"
+      ],
+      "else": [
+        "ice-and-death-part-3:spawn_3#1"
+      ]
+    },
+    "ice-and-death-part-3:spawn_4_1:text": {
+      "kind": "story",
+      "text": "<b>Because you are camped at either Frigid Cave or Rocky Crags</b>: Spawn a Seeping Nightmare at Icebreaker Landing.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:spawn_4_2:text": {
+      "kind": "story",
+      "text": "<b>Because you are camped at either Frigid Cave or Rocky Crags</b>: Spawn Seeping Nightmares at Icebreaker Landing, and Snow Graves.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:spawn_4_3:text": {
+      "kind": "story",
+      "text": "<b>Because you are camped at either Frigid Cave or Rocky Crags</b>: Spawn Seeping Nightmares at Icebreaker Landing, Snow Graves, and Barrier Camp.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:spawn_4_4:text": {
+      "kind": "story",
+      "text": "<b>Because you are camped at either Frigid Cave or Rocky Crags</b>: Spawn Seeping Nightmares at Icebreaker Landing, Snow Graves, Barrier Camp, and Crystalline Cavern.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:spawn_4#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_4_4:text"
+      ],
+      "else": []
+    },
+    "ice-and-death-part-3:spawn_4#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_4_3:text"
+      ],
+      "else": [
+        "ice-and-death-part-3:spawn_4#3"
+      ]
+    },
+    "ice-and-death-part-3:spawn_4#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_4_2:text"
+      ],
+      "else": [
+        "ice-and-death-part-3:spawn_4#2"
+      ]
+    },
+    "ice-and-death-part-3:spawn_4": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 1,
+        "max": 1
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_4_1:text"
+      ],
+      "else": [
+        "ice-and-death-part-3:spawn_4#1"
+      ]
+    },
+    "ice-and-death-part-3:spawn_5_1:text": {
+      "kind": "story",
+      "text": "<b>Because you are camped at Crystalline Cavern</b>: Spawn a Seeping Nightmare at Remnants of Lake's Camp.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:spawn_5_2:text": {
+      "kind": "story",
+      "text": "<b>Because you are camped at Crystalline Cavern</b>: Spawn Seeping Nightmares at Remnants of Lake's Camp and Barrier Camp.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:spawn_5_3:text": {
+      "kind": "story",
+      "text": "<b>Because you are camped at Crystalline Cavern</b>: Spawn Seeping Nightmares at Remnants of Lake's Camp, Barrier Camp, and Icebreaker Landing.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:spawn_5_4:text": {
+      "kind": "story",
+      "text": "<b>Because you are camped at Crystalline Cavern</b>: Spawn Seeping Nightmares at Remnants of Lake's Camp, Barrier Camp, Icebreaker Landing, and Crash Site.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:spawn_5#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_5_4:text"
+      ],
+      "else": []
+    },
+    "ice-and-death-part-3:spawn_5#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_5_3:text"
+      ],
+      "else": [
+        "ice-and-death-part-3:spawn_5#3"
+      ]
+    },
+    "ice-and-death-part-3:spawn_5#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_5_2:text"
+      ],
+      "else": [
+        "ice-and-death-part-3:spawn_5#2"
+      ]
+    },
+    "ice-and-death-part-3:spawn_5": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 1,
+        "max": 1
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_5_1:text"
+      ],
+      "else": [
+        "ice-and-death-part-3:spawn_5#1"
+      ]
+    },
+    "ice-and-death-part-3:spawn_6_1:text": {
+      "kind": "story",
+      "text": "<b>Because you are camped at Barrier Camp</b>: Spawn a Seeping Nightmare at Remnants of Lake's Camp.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:spawn_6_2:text": {
+      "kind": "story",
+      "text": "<b>Because you are camped at Barrier Camp</b>: Spawn Seeping Nightmares at Remnants of Lake's Camp and Crystalline Cavern.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:spawn_6_3:text": {
+      "kind": "story",
+      "text": "<b>Because you are camped at Barrier Camp</b>: Spawn Seeping Nightmares at Remnants of Lake's Camp, Crystalline Cavern, and Snow Graves.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:spawn_6_4:text": {
+      "kind": "story",
+      "text": "<b>Because you are camped at Barrier Camp</b>: Spawn Seeping Nightmares at Remnants of Lake's Camp, Crystalline Cavern, Snow Graves, Crash Site.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:spawn_6#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_6_4:text"
+      ],
+      "else": []
+    },
+    "ice-and-death-part-3:spawn_6#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_6_3:text"
+      ],
+      "else": [
+        "ice-and-death-part-3:spawn_6#3"
+      ]
+    },
+    "ice-and-death-part-3:spawn_6#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_6_2:text"
+      ],
+      "else": [
+        "ice-and-death-part-3:spawn_6#2"
+      ]
+    },
+    "ice-and-death-part-3:spawn_6": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 1,
+        "max": 1
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_6_1:text"
+      ],
+      "else": [
+        "ice-and-death-part-3:spawn_6#1"
+      ]
+    },
+    "ice-and-death-part-3:spawn_7_1:text": {
+      "kind": "story",
+      "text": "<b>Because you are camped at Remnants of Lake's Camp</b>: Spawn a Seeping Nightmare at Barrier Camp.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:spawn_7_2:text": {
+      "kind": "story",
+      "text": "<b>Because you are camped at Remnants of Lake's Camp</b>: Spawn Seeping Nightmares at Barrier Camp and Crystalline Cavern.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:spawn_7_3:text": {
+      "kind": "story",
+      "text": "<b>Because you are camped at Remnants of Lake's Camp</b>: Spawn Seeping Nightmares at Barrier Camp, Crystalline Cavern, and Frigid Cave.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:spawn_7_4:text": {
+      "kind": "story",
+      "text": "<b>Because you are camped at Remnants of Lake's Camp</b>: Spawn Seeping Nightmares at Barrier Camp, Crystalline Cavern, Frigid Cave, and Crash Site.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:spawn_7#3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 4,
+        "max": 4
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_7_4:text"
+      ],
+      "else": []
+    },
+    "ice-and-death-part-3:spawn_7#2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 3,
+        "max": 3
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_7_3:text"
+      ],
+      "else": [
+        "ice-and-death-part-3:spawn_7#3"
+      ]
+    },
+    "ice-and-death-part-3:spawn_7#1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 2,
+        "max": 2
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_7_2:text"
+      ],
+      "else": [
+        "ice-and-death-part-3:spawn_7#2"
+      ]
+    },
+    "ice-and-death-part-3:spawn_7": {
+      "kind": "branch",
+      "condition": {
+        "kind": "playerCount",
+        "min": 1,
+        "max": 1
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_7_1:text"
+      ],
+      "else": [
+        "ice-and-death-part-3:spawn_7#1"
+      ]
+    },
+    "ice-and-death-part-3:check_spawn_6": {
+      "kind": "branch",
+      "condition": {
+        "kind": "all",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "campBarrierCamp",
+            "section": "campaign_notes"
+          }
+        ]
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_6"
+      ],
+      "else": [
+        "ice-and-death-part-3:spawn_7"
+      ]
+    },
+    "ice-and-death-part-3:check_spawn_5": {
+      "kind": "branch",
+      "condition": {
+        "kind": "all",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "campCrystallineCavern",
+            "section": "campaign_notes"
+          }
+        ]
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_5"
+      ],
+      "else": [
+        "ice-and-death-part-3:check_spawn_6"
+      ]
+    },
+    "ice-and-death-part-3:check_spawn_4": {
+      "kind": "branch",
+      "condition": {
+        "kind": "any",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "campFrigidCave",
+            "section": "campaign_notes"
+          },
+          {
+            "kind": "logHas",
+            "id": "campRockyCrags",
+            "section": "campaign_notes"
+          }
+        ]
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_4"
+      ],
+      "else": [
+        "ice-and-death-part-3:check_spawn_5"
+      ]
+    },
+    "ice-and-death-part-3:check_spawn_3": {
+      "kind": "branch",
+      "condition": {
+        "kind": "any",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "campBroadSnowdrifts",
+            "section": "campaign_notes"
+          },
+          {
+            "kind": "logHas",
+            "id": "campSnowGraves",
+            "section": "campaign_notes"
+          }
+        ]
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_3"
+      ],
+      "else": [
+        "ice-and-death-part-3:check_spawn_4"
+      ]
+    },
+    "ice-and-death-part-3:check_spawn_2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "any",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "campIcyWastes",
+            "section": "campaign_notes"
+          },
+          {
+            "kind": "logHas",
+            "id": "campIcebreakerLanding",
+            "section": "campaign_notes"
+          }
+        ]
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_2"
+      ],
+      "else": [
+        "ice-and-death-part-3:check_spawn_3"
+      ]
+    },
+    "ice-and-death-part-3:place_seeping_nightmares": {
+      "kind": "branch",
+      "condition": {
+        "kind": "any",
+        "conditions": [
+          {
+            "kind": "logHas",
+            "id": "campCrashSite",
+            "section": "campaign_notes"
+          },
+          {
+            "kind": "logHas",
+            "id": "campTreacherousPath",
+            "section": "campaign_notes"
+          },
+          {
+            "kind": "logHas",
+            "id": "campPrecariousIceSheet",
+            "section": "campaign_notes"
+          },
+          {
+            "kind": "logHas",
+            "id": "campFrozenShores",
+            "section": "campaign_notes"
+          }
+        ]
+      },
+      "then": [
+        "ice-and-death-part-3:spawn_1"
+      ],
+      "else": [
+        "ice-and-death-part-3:check_spawn_2"
+      ]
+    },
+    "ice-and-death-part-3:remove_remaining_seeping_nightmares:text": {
+      "kind": "story",
+      "text": "Remove all remaining Seeping Nightmares enemies from the game.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:setup_eidolon:text": {
+      "kind": "story",
+      "text": "Find the eight [[Eidolon]] enemies from the <i>Ice and Death</i> and <i>Creatures in the Ice</i> encounter sets. Shuffle them and place them facedown beneath each Seeping Nightmare enemy in play, divided as evenly as possible.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:begin_play_at_camp:text": {
+      "kind": "story",
+      "text": "Each investigator begins play at the camp.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:setup_locations_scratch:text": {
+      "kind": "story",
+      "text": "In the \"Ice and Death\" section of the Campaign Log, find each location under Locations Revealed. Put each of those locations into play, revealed <i>(with clues equal to its clue value)</i>.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:setup_tekeli_li:text": {
+      "kind": "story",
+      "text": "Shuffle each Tekeli-li! weakness card that is not already part of an investigator's deck together to form the Tekeli-li deck. Place this deck near the agenda deck.",
+      "bullets": []
+    },
+    "ice-and-death-part-3:check_continue": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "continueIceAndDeathPart3",
+        "section": "hidden"
+      },
+      "then": [
+        "ice-and-death-part-3:choose_partners",
+        "ice-and-death-part-3:build_agenda_deck:text",
+        "ice-and-death-part-3:setup_locations:text",
+        "ice-and-death-part-3:place_clues:text",
+        "ice-and-death-part-3:find_seeping_nightmares:text",
+        "ice-and-death-part-3:place_seeping_nightmares",
+        "ice-and-death-part-3:remove_remaining_seeping_nightmares:text",
+        "ice-and-death-part-3:setup_eidolon:text",
+        "ice-and-death-part-3:begin_play_at_camp:text"
+      ],
+      "else": [
+        "ice-and-death-part-3:choose_partners",
+        "ice-and-death-part-3:build_agenda_deck:text",
+        "ice-and-death-part-3:setup_locations_scratch:text",
+        "ice-and-death-part-3:begin_play_at_camp:text",
+        "ice-and-death-part-3:find_seeping_nightmares:text",
+        "ice-and-death-part-3:place_seeping_nightmares",
+        "ice-and-death-part-3:remove_remaining_seeping_nightmares:text",
+        "ice-and-death-part-3:setup_eidolon:text",
+        "ice-and-death-part-3:setup_tekeli_li:text"
       ]
     },
     "ice-and-death:intro": {
@@ -5217,7 +6401,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "restful_night_conversations",
+          "id": "restfulNightConversations",
           "section": "hidden",
           "op": "set",
           "value": 4
@@ -5229,7 +6413,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "restful_night_conversations",
+          "id": "restfulNightConversations",
           "section": "hidden",
           "op": "set",
           "value": 3
@@ -5240,7 +6424,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "team_fled_to_the_mountains",
+        "id": "teamFledToTheMountains",
         "section": "campaign_notes"
       },
       "then": [
@@ -5327,7 +6511,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "team_fled_to_the_mountains",
+          "key": "teamFledToTheMountains",
           "section": "campaign_notes",
           "value": true
         }
@@ -5364,16 +6548,16 @@
           "effects": [
             {
               "do": "record",
-              "key": "icebreaker_landing",
-              "section": "locations_revealed",
+              "key": "icebreakerLanding",
+              "section": "locationsRevealed",
               "value": true
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "icebreaker_landing",
-            "section": "locations_revealed"
+            "id": "icebreakerLanding",
+            "section": "locationsRevealed"
           }
         },
         {
@@ -5382,16 +6566,16 @@
           "effects": [
             {
               "do": "record",
-              "key": "icy_wastes",
-              "section": "locations_revealed",
+              "key": "icyWastes",
+              "section": "locationsRevealed",
               "value": true
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "icy_wastes",
-            "section": "locations_revealed"
+            "id": "icyWastes",
+            "section": "locationsRevealed"
           }
         },
         {
@@ -5400,16 +6584,16 @@
           "effects": [
             {
               "do": "record",
-              "key": "barrier_camp",
-              "section": "locations_revealed",
+              "key": "barrierCamp",
+              "section": "locationsRevealed",
               "value": true
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "barrier_camp",
-            "section": "locations_revealed"
+            "id": "barrierCamp",
+            "section": "locationsRevealed"
           }
         },
         {
@@ -5418,16 +6602,16 @@
           "effects": [
             {
               "do": "record",
-              "key": "rocky_crags",
-              "section": "locations_revealed",
+              "key": "rockyCrags",
+              "section": "locationsRevealed",
               "value": true
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "rocky_crags",
-            "section": "locations_revealed"
+            "id": "rockyCrags",
+            "section": "locationsRevealed"
           }
         },
         {
@@ -5436,16 +6620,16 @@
           "effects": [
             {
               "do": "record",
-              "key": "frigid_cave",
-              "section": "locations_revealed",
+              "key": "frigidCave",
+              "section": "locationsRevealed",
               "value": true
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "frigid_cave",
-            "section": "locations_revealed"
+            "id": "frigidCave",
+            "section": "locationsRevealed"
           }
         },
         {
@@ -5454,16 +6638,16 @@
           "effects": [
             {
               "do": "record",
-              "key": "precarious_ice_sheet",
-              "section": "locations_revealed",
+              "key": "precariousIceSheet",
+              "section": "locationsRevealed",
               "value": true
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "precarious_ice_sheet",
-            "section": "locations_revealed"
+            "id": "precariousIceSheet",
+            "section": "locationsRevealed"
           }
         },
         {
@@ -5472,16 +6656,16 @@
           "effects": [
             {
               "do": "record",
-              "key": "treacherous_path",
-              "section": "locations_revealed",
+              "key": "treacherousPath",
+              "section": "locationsRevealed",
               "value": true
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "treacherous_path",
-            "section": "locations_revealed"
+            "id": "treacherousPath",
+            "section": "locationsRevealed"
           }
         },
         {
@@ -5490,16 +6674,16 @@
           "effects": [
             {
               "do": "record",
-              "key": "crash_site",
-              "section": "locations_revealed",
+              "key": "crashSite",
+              "section": "locationsRevealed",
               "value": true
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "crash_site",
-            "section": "locations_revealed"
+            "id": "crashSite",
+            "section": "locationsRevealed"
           }
         },
         {
@@ -5508,16 +6692,16 @@
           "effects": [
             {
               "do": "record",
-              "key": "remnants_of_lakes_camp",
-              "section": "locations_revealed",
+              "key": "remnantsOfLakesCamp",
+              "section": "locationsRevealed",
               "value": true
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "remnants_of_lakes_camp",
-            "section": "locations_revealed"
+            "id": "remnantsOfLakesCamp",
+            "section": "locationsRevealed"
           }
         },
         {
@@ -5526,16 +6710,16 @@
           "effects": [
             {
               "do": "record",
-              "key": "frozen_shores",
-              "section": "locations_revealed",
+              "key": "frozenShores",
+              "section": "locationsRevealed",
               "value": true
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "frozen_shores",
-            "section": "locations_revealed"
+            "id": "frozenShores",
+            "section": "locationsRevealed"
           }
         },
         {
@@ -5544,16 +6728,16 @@
           "effects": [
             {
               "do": "record",
-              "key": "crystalline_cavern",
-              "section": "locations_revealed",
+              "key": "crystallineCavern",
+              "section": "locationsRevealed",
               "value": true
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "crystalline_cavern",
-            "section": "locations_revealed"
+            "id": "crystallineCavern",
+            "section": "locationsRevealed"
           }
         },
         {
@@ -5562,16 +6746,16 @@
           "effects": [
             {
               "do": "record",
-              "key": "broad_snowdrifts",
-              "section": "locations_revealed",
+              "key": "broadSnowdrifts",
+              "section": "locationsRevealed",
               "value": true
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "broad_snowdrifts",
-            "section": "locations_revealed"
+            "id": "broadSnowdrifts",
+            "section": "locationsRevealed"
           }
         },
         {
@@ -5580,16 +6764,16 @@
           "effects": [
             {
               "do": "record",
-              "key": "snow_graves",
-              "section": "locations_revealed",
+              "key": "snowGraves",
+              "section": "locationsRevealed",
               "value": true
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "snow_graves",
-            "section": "locations_revealed"
+            "id": "snowGraves",
+            "section": "locationsRevealed"
           }
         }
       ]
@@ -5609,7 +6793,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "continue_ice_and_death_part_3",
+              "key": "continueIceAndDeathPart3",
               "section": "hidden",
               "value": true
             }
@@ -5711,7 +6895,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "partner_missing",
+          "key": "partnerMissing",
           "section": "hidden",
           "value": true
         }
@@ -5758,8 +6942,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "icebreaker_landing",
-              "section": "locations_revealed",
+              "key": "icebreakerLanding",
+              "section": "locationsRevealed",
               "value": true
             }
           ],
@@ -5771,8 +6955,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "icy_wastes",
-              "section": "locations_revealed",
+              "key": "icyWastes",
+              "section": "locationsRevealed",
               "value": true
             }
           ],
@@ -5784,8 +6968,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "barrier_camp",
-              "section": "locations_revealed",
+              "key": "barrierCamp",
+              "section": "locationsRevealed",
               "value": true
             }
           ],
@@ -5797,8 +6981,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "rocky_crags",
-              "section": "locations_revealed",
+              "key": "rockyCrags",
+              "section": "locationsRevealed",
               "value": true
             }
           ],
@@ -5810,8 +6994,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "frigid_cave",
-              "section": "locations_revealed",
+              "key": "frigidCave",
+              "section": "locationsRevealed",
               "value": true
             }
           ],
@@ -5823,8 +7007,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "precarious_ice_sheet",
-              "section": "locations_revealed",
+              "key": "precariousIceSheet",
+              "section": "locationsRevealed",
               "value": true
             }
           ],
@@ -5836,8 +7020,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "treacherous_path",
-              "section": "locations_revealed",
+              "key": "treacherousPath",
+              "section": "locationsRevealed",
               "value": true
             }
           ],
@@ -5849,8 +7033,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "crash_site",
-              "section": "locations_revealed",
+              "key": "crashSite",
+              "section": "locationsRevealed",
               "value": true
             }
           ],
@@ -5862,8 +7046,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "remnants_of_lakes_camp",
-              "section": "locations_revealed",
+              "key": "remnantsOfLakesCamp",
+              "section": "locationsRevealed",
               "value": true
             }
           ],
@@ -5875,8 +7059,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "frozen_shores",
-              "section": "locations_revealed",
+              "key": "frozenShores",
+              "section": "locationsRevealed",
               "value": true
             }
           ],
@@ -5888,8 +7072,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "crystalline_cavern",
-              "section": "locations_revealed",
+              "key": "crystallineCavern",
+              "section": "locationsRevealed",
               "value": true
             }
           ],
@@ -5901,8 +7085,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "broad_snowdrifts",
-              "section": "locations_revealed",
+              "key": "broadSnowdrifts",
+              "section": "locationsRevealed",
               "value": true
             }
           ],
@@ -5914,8 +7098,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "snow_graves",
-              "section": "locations_revealed",
+              "key": "snowGraves",
+              "section": "locationsRevealed",
               "value": true
             }
           ],
@@ -5938,7 +7122,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "continue_ice_and_death_part_2",
+              "key": "continueIceAndDeathPart2",
               "section": "hidden",
               "value": true
             }
@@ -6054,7 +7238,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "the_seal_was_used_improperly",
+          "key": "theSealWasUsedImproperly",
           "section": "campaign_notes",
           "value": true
         }
@@ -6092,12 +7276,117 @@
         }
       ]
     },
+    "the-heart-of-madness-part-1:played_part_1": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "playedTheHeartOfMadnessPart1",
+          "section": "hidden",
+          "value": true
+        }
+      ]
+    },
+    "the-heart-of-madness-part-1:check_interlude_danforth:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "heartOfMadnessDanforth",
+          "section": "hidden"
+        }
+      ]
+    },
+    "the-heart-of-madness-part-1:interlude_danforth:text": {
+      "kind": "story",
+      "text": "Because you talked to Danforth during the interlude, any one investigator gets two additional cards drawn in their opening hand.",
+      "bullets": []
+    },
+    "the-heart-of-madness-part-1:check_interlude_takada:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "heartOfMadnessTakada",
+          "section": "hidden"
+        }
+      ]
+    },
+    "the-heart-of-madness-part-1:interlude_takada:text": {
+      "kind": "story",
+      "text": "Because you talked to Hiroko Takada during the interlude, any one investigator gets 3 additional starting resources.",
+      "bullets": []
+    },
+    "the-heart-of-madness-part-1:check_interlude_takada": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "heartOfMadnessTakada",
+        "section": "hidden"
+      },
+      "then": [
+        "the-heart-of-madness-part-1:check_interlude_takada:yes:fx",
+        "the-heart-of-madness-part-1:interlude_takada:text"
+      ],
+      "else": []
+    },
+    "the-heart-of-madness-part-1:check_interlude_takada_with_title:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "crossOut",
+          "key": "heartOfMadnessTakada",
+          "section": "hidden"
+        }
+      ]
+    },
+    "the-heart-of-madness-part-1:interlude_takada_with_title:text": {
+      "kind": "story",
+      "text": "Because you talked to Hiroko Takada during the interlude, any one investigator gets 3 additional starting resources.",
+      "bullets": []
+    },
+    "the-heart-of-madness-part-1:check_interlude_takada_with_title": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "heartOfMadnessTakada",
+        "section": "hidden"
+      },
+      "then": [
+        "the-heart-of-madness-part-1:check_interlude_takada_with_title:yes:fx",
+        "the-heart-of-madness-part-1:interlude_takada_with_title:text"
+      ],
+      "else": []
+    },
+    "the-heart-of-madness-part-1:check_interlude_danforth": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "heartOfMadnessDanforth",
+        "section": "hidden"
+      },
+      "then": [
+        "the-heart-of-madness-part-1:check_interlude_danforth:yes:fx",
+        "the-heart-of-madness-part-1:interlude_danforth:text",
+        "the-heart-of-madness-part-1:check_interlude_takada"
+      ],
+      "else": [
+        "the-heart-of-madness-part-1:check_interlude_takada_with_title"
+      ]
+    },
+    "the-heart-of-madness-part-1:choose_partners": {
+      "kind": "unsupported",
+      "name": "investigator_choice_partner",
+      "text": "Each investigator may choose one available member of the expedition team who is not crossed off to join them. Put the story asset for the chosen character into play in that investigator's play area. (These story assets can be found in the <i>Expedition Team</i> encounter set. If there is a checkmark next to the character's name, instead use the [[Resolute]] version found in the <i>Fatal Mirage</i> encounter set.) Place damage and horror on that character as indicated in the \"Expedition Team\" section of the Campaign Log.",
+      "effects": [],
+      "steps": []
+    },
     "the-heart-of-madness-part-2:nameless_madness_escaped": {
       "kind": "effects",
       "effects": [
         {
           "do": "record",
-          "key": "nameless_madness_escaped",
+          "key": "namelessMadnessEscaped",
           "section": "campaign_notes",
           "value": true
         }
@@ -6136,7 +7425,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "nameless_madness_is_contained_safely_within_its_host_for_now",
+          "key": "namelessMadnessIsContainedSafelyWithinItsHostForNow",
           "section": "campaign_notes",
           "value": true
         }
@@ -6181,7 +7470,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "surviving_members_header",
+          "key": "survivingMembersHeader",
           "section": "campaign_notes",
           "value": true
         }
@@ -6192,7 +7481,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "surviving_partners",
+          "key": "survivingPartners",
           "section": "campaign_notes",
           "value": true
         }
@@ -6215,13 +7504,13 @@
       "effects": [
         {
           "do": "record",
-          "key": "surviving_investigators",
+          "key": "survivingInvestigators",
           "section": "campaign_notes",
           "value": true
         },
         {
           "do": "record",
-          "key": "investigator_survived",
+          "key": "investigatorSurvived",
           "section": "hidden",
           "value": true
         }
@@ -6272,7 +7561,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "facility_was_destroyed",
+          "key": "facilityWasDestroyed",
           "section": "campaign_notes",
           "value": true
         }
@@ -6299,7 +7588,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "team_escaped_the_facility",
+          "key": "teamEscapedTheFacility",
           "section": "campaign_notes",
           "value": true
         }
@@ -6344,6 +7633,174 @@
           "do": "end",
           "result": "win"
         }
+      ]
+    },
+    "the-heart-of-madness-part-2:intro_2": {
+      "kind": "story",
+      "text": "Dr. Kensler explains everything as she studies the ancient murals. \"The Elder Things were travelers. Colonizers. They came to the Earth over a billion years ago,\" she says, citing Professor Dyer's own notes. \"But they were not the first ones here. This place, all of this—it was ancient even then.\" She runs her hands along the mural as she explains what she has learned. \"But it is not an entity trapped within.\"\nYou ask what she means, alarmed by this new understanding. She turns to face you, her eyes aflame with inspiration. \"I had been studying their physiology, attempting to discern how they could exist the way they do, without shape, without matter, without state. But I was going about it all wrong. One cannot study the biology of something inorganic. See, it is not a creature, not truly. It is more akin to…\" she hesitates, attempting to find the right words. \"It is an alternate dimension. Another reality, superimposed on ours. A sentient microcosm of all that is. Not composed of organic life, but a mockery of it.\"\nThis newfound understanding of the phantasms you have encountered and the mirages you have seen put everything into context. They were not monsters you were slaying, they were figments of a false reality. One that may yet come to pass. You ask Dr. Kensler if there is any hope to stop such a force from escaping.\n\"It is not a living thing. It cannot be killed. Only contained. The Elder Thing's facility held five pylons that used its essence to power their civilization, but after this long, I cannot imagine they still function. But perhaps…\" she trails off, formulating a plan. Finally, her eyes widen with realization. \"I know what must be done. I know how to stop it. You must find these pylons and destroy them—doing so will bring the entire compound down. In the meantime…\" she hefts her backpack off of her shoulder, dropping it to the ground. \"I… I must be off now. There is no time to spare.\"\nYou object to her sudden departure, but her mind is made up. She backs away, giving one last lingering glance at her companions, before sprinting away. You hope she knows what she's doing… for all of your sakes.",
+      "bullets": []
+    },
+    "the-heart-of-madness-part-2:dr_kensler_has_a_plan:text": {
+      "kind": "story",
+      "text": "In your Campaign Log, record <i>Dr. Kensler has a plan.</i> Dr. Amy Kensler cannot be chosen to accompany an investigator this game.",
+      "bullets": []
+    },
+    "the-heart-of-madness-part-2:dr_kensler_has_a_plan": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "drKenslerHasAPlan",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-heart-of-madness-part-2:intro_3": {
+      "kind": "story",
+      "text": "You can glean only a fraction of the truth hidden within these ancient murals, but what you discover is almost too impossible to believe. When the Elder Things came to the Earth over a billion years ago, they colonized not just Antarctica, but the entirety of the planet. And when they did, this place—and the entity that dwells within—was already here.\nThey built their complex around it, to study the primordial being within, to greater understand it, and in doing so, attracted forces beyond even their ken. The gateway and its seals were constructed to contain it, but ages of disrepair have left it weak and ineffective. You suspect it was the presence of intelligent life on Antarctica—the humans who began to explore its long-dead peaks and icy plains—that stirred the entity within.\nThe murals tell of the facility's structure, of five pylons created not only to contain the creature's essence, but to power the whole of Elder Thing civilization. You can only imagine that destroying these pylons would reduce the entire compound—perhaps even the entirety of the mountain it is built beneath—to rubble. You don't know if you can truly destroy or contain this nameless horror, but you have no choice but to try. If it continues to escape, the very concept of reality will be rewritten to its whim. There will be nothing left but the mirage. Nothing left but twisted, horrid imagination. A nightmare from which there is no awakening.",
+      "bullets": []
+    },
+    "the-heart-of-madness-part-2:truth_of_the_mirage_eludes_you": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "truthOfTheMirageEludesYou",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-heart-of-madness-part-2:check_kensler_understands": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "the-heart-of-madness-part-2:intro_2",
+        "the-heart-of-madness-part-2:dr_kensler_has_a_plan:text",
+        "the-heart-of-madness-part-2:dr_kensler_has_a_plan"
+      ],
+      "else": [
+        "the-heart-of-madness-part-2:intro_3",
+        "the-heart-of-madness-part-2:truth_of_the_mirage_eludes_you"
+      ]
+    },
+    "the-heart-of-madness-part-2:choose_partners": {
+      "kind": "unsupported",
+      "name": "investigator_choice_partner",
+      "text": "Each investigator may choose one available member of the expedition team who is not crossed off to join them. Put the story asset for the chosen character into play in that investigator's play area. (These story assets can be found in the <i>Expedition Team</i> encounter set. If there is a checkmark next to the character's name, instead use the [[Resolute]] version found in the <i>Fatal Mirage</i> encounter set.) Place damage and horror on that character as indicated in the \"Expedition Team\" section of the Campaign Log.",
+      "effects": [],
+      "steps": []
+    },
+    "the-heart-of-madness-part-2:build_agenda_deck:text": {
+      "kind": "story",
+      "text": "Build the agenda deck using agendas 4-5 and the act deck using act 3. (These cards can be found in the <i>Stirrings in the Deep</i> encounter set.",
+      "bullets": []
+    },
+    "the-heart-of-madness-part-2:flip_gate:text": {
+      "kind": "story",
+      "text": "Flip The Gate of Y'quaa to its unrevealed side.",
+      "bullets": []
+    },
+    "the-heart-of-madness-part-2:setup_locations:text": {
+      "kind": "story",
+      "text": "Take the five Mist-Pylon locations and the ten remaining Ancient Facility locations (from <i>The Heart of Madness</i> encounter set), shuffle them together, and put them into play at random using the <b>Location Setup</b>, except that five of the randomly placed Ancient Facility locations will instead be Mist-Pylon locations.",
+      "bullets": []
+    },
+    "the-heart-of-madness-part-2:set_aside_cards:text": {
+      "kind": "story",
+      "text": "Set the following cards aside, out of play: All fifteen copies of The Nameless Madness enemy, The Final Mirage act, the four Titanic Ramp locations, and the Hidden Tunnel location.",
+      "bullets": []
+    },
+    "the-heart-of-madness-part-2:place_seals:text": {
+      "kind": "story",
+      "text": "Place the seal tokens, as follows:",
+      "bullets": []
+    },
+    "the-heart-of-madness-part-2:setup_gate:text": {
+      "kind": "story",
+      "text": "Put The Gate of Y'quaa into play, unrevealed side faceup.",
+      "bullets": []
+    },
+    "the-heart-of-madness-part-2:setup_locations_scratch:text": {
+      "kind": "story",
+      "text": "Take the five Mist-Pylon locations and the ten remaining Ancient Facility locations (from <i>The Heart of Madness</i> encounter set), shuffle them together, and put them into play at random using the <b>Location Setup</b>, except that five of the randomly placed Ancient Facility locations will instead be Mist-Pylon locations.",
+      "bullets": []
+    },
+    "the-heart-of-madness-part-2:restore_seals_from_log:text": {
+      "kind": "story",
+      "text": "Place each of the five seal tokens as follows:",
+      "bullets": []
+    },
+    "the-heart-of-madness-part-2:restore_seals_placed:text": {
+      "kind": "story",
+      "text": "Check which seals are drawn under \"Seals Placed.\" For each one there, choose an investigator to take control of that seal, activated side faceup.",
+      "bullets": []
+    },
+    "the-heart-of-madness-part-2:restore_seals_recovered:text": {
+      "kind": "story",
+      "text": "Check which seals are drawn under \"Seals Recovered.\" For each one there, choose an investigator to take control of that seal, dormant side faceup.",
+      "bullets": []
+    },
+    "the-heart-of-madness-part-2:remove_other_seals:text": {
+      "kind": "story",
+      "text": "Remove each other seal from the game.",
+      "bullets": []
+    },
+    "the-heart-of-madness-part-2:remove_all_seals:text": {
+      "kind": "story",
+      "text": "Remove all five seals from the game.",
+      "bullets": []
+    },
+    "the-heart-of-madness-part-2:check_played_part_1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "playedTheHeartOfMadnessPart1",
+        "section": "hidden"
+      },
+      "then": [
+        "the-heart-of-madness-part-2:restore_seals_from_log:text",
+        "the-heart-of-madness-part-2:restore_seals_placed:text",
+        "the-heart-of-madness-part-2:restore_seals_recovered:text",
+        "the-heart-of-madness-part-2:remove_other_seals:text"
+      ],
+      "else": [
+        "the-heart-of-madness-part-2:remove_all_seals:text"
+      ]
+    },
+    "the-heart-of-madness-part-2:setup_tekeli_li:text": {
+      "kind": "story",
+      "text": "Shuffle each Tekeli-li! weakness card that is not already part of an investigator's deck together to form the Tekeli-li deck. Place this deck near the agenda deck.",
+      "bullets": []
+    },
+    "the-heart-of-madness-part-2:check_continue": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "continueTheHeardOfMadness2",
+        "section": "hidden"
+      },
+      "then": [
+        "the-heart-of-madness-part-2:choose_partners",
+        "the-heart-of-madness-part-2:build_agenda_deck:text",
+        "the-heart-of-madness-part-2:flip_gate:text",
+        "the-heart-of-madness-part-2:setup_locations:text",
+        "the-heart-of-madness-part-2:set_aside_cards:text",
+        "the-heart-of-madness-part-2:place_seals:text"
+      ],
+      "else": [
+        "the-heart-of-madness-part-2:choose_partners",
+        "the-heart-of-madness-part-2:build_agenda_deck:text",
+        "the-heart-of-madness-part-2:setup_gate:text",
+        "the-heart-of-madness-part-2:setup_locations_scratch:text",
+        "the-heart-of-madness-part-2:set_aside_cards:text",
+        "the-heart-of-madness-part-2:check_played_part_1",
+        "the-heart-of-madness-part-2:setup_tekeli_li:text"
       ]
     },
     "the-heart-of-madness:check_campaign_log:text": {
@@ -6484,8 +7941,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "seal_a",
-              "section": "seals_placed",
+              "key": "sealA",
+              "section": "sealsPlaced",
               "value": true
             }
           ],
@@ -6497,8 +7954,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "seal_b",
-              "section": "seals_placed",
+              "key": "sealB",
+              "section": "sealsPlaced",
               "value": true
             }
           ],
@@ -6510,8 +7967,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "seal_c",
-              "section": "seals_placed",
+              "key": "sealC",
+              "section": "sealsPlaced",
               "value": true
             }
           ],
@@ -6523,8 +7980,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "seal_d",
-              "section": "seals_placed",
+              "key": "sealD",
+              "section": "sealsPlaced",
               "value": true
             }
           ],
@@ -6536,8 +7993,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "seal_e",
-              "section": "seals_placed",
+              "key": "sealE",
+              "section": "sealsPlaced",
               "value": true
             }
           ],
@@ -6556,16 +8013,16 @@
           "effects": [
             {
               "do": "record",
-              "key": "seal_a",
-              "section": "seals_recovered",
+              "key": "sealA",
+              "section": "sealsRecovered",
               "value": true
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "seal_a",
-            "section": "seals_placed"
+            "id": "sealA",
+            "section": "sealsPlaced"
           }
         },
         {
@@ -6574,16 +8031,16 @@
           "effects": [
             {
               "do": "record",
-              "key": "seal_b",
-              "section": "seals_recovered",
+              "key": "sealB",
+              "section": "sealsRecovered",
               "value": true
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "seal_b",
-            "section": "seals_placed"
+            "id": "sealB",
+            "section": "sealsPlaced"
           }
         },
         {
@@ -6592,16 +8049,16 @@
           "effects": [
             {
               "do": "record",
-              "key": "seal_c",
-              "section": "seals_recovered",
+              "key": "sealC",
+              "section": "sealsRecovered",
               "value": true
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "seal_c",
-            "section": "seals_placed"
+            "id": "sealC",
+            "section": "sealsPlaced"
           }
         },
         {
@@ -6610,16 +8067,16 @@
           "effects": [
             {
               "do": "record",
-              "key": "seal_d",
-              "section": "seals_recovered",
+              "key": "sealD",
+              "section": "sealsRecovered",
               "value": true
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "seal_d",
-            "section": "seals_placed"
+            "id": "sealD",
+            "section": "sealsPlaced"
           }
         },
         {
@@ -6628,16 +8085,16 @@
           "effects": [
             {
               "do": "record",
-              "key": "seal_e",
-              "section": "seals_recovered",
+              "key": "sealE",
+              "section": "sealsRecovered",
               "value": true
             }
           ],
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "seal_e",
-            "section": "seals_placed"
+            "id": "sealE",
+            "section": "sealsPlaced"
           }
         }
       ]
@@ -6657,7 +8114,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "continue_the_heard_of_madness_2",
+              "key": "continueTheHeardOfMadness2",
               "section": "hidden",
               "value": true
             }
@@ -6688,7 +8145,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "team_climbed_to_the_summit",
+          "key": "teamClimbedToTheSummit",
           "section": "campaign_notes",
           "value": true
         }
@@ -6821,7 +8278,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "green_soapstone_recovered",
+              "key": "greenSoapstoneRecovered",
               "section": "hidden",
               "value": true
             }
@@ -6832,8 +8289,8 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "green_soapstone",
-            "section": "supplies_recovered"
+            "id": "greenSoapstone",
+            "section": "suppliesRecovered"
           }
         },
         {
@@ -6842,7 +8299,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "wooden_sledge_recovered",
+              "key": "woodenSledgeRecovered",
               "section": "hidden",
               "value": true
             }
@@ -6853,8 +8310,8 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "wooden_sledge",
-            "section": "supplies_recovered"
+            "id": "woodenSledge",
+            "section": "suppliesRecovered"
           }
         },
         {
@@ -6863,7 +8320,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "dynamite_recovered",
+              "key": "dynamiteRecovered",
               "section": "hidden",
               "value": true
             }
@@ -6875,7 +8332,7 @@
           "when": {
             "kind": "logHas",
             "id": "dynamite",
-            "section": "supplies_recovered"
+            "section": "suppliesRecovered"
           }
         },
         {
@@ -6884,7 +8341,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "miasmic_crystal_recovered",
+              "key": "miasmicCrystalRecovered",
               "section": "hidden",
               "value": true
             }
@@ -6895,8 +8352,8 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "miasmic_crystal",
-            "section": "supplies_recovered"
+            "id": "miasmicCrystal",
+            "section": "suppliesRecovered"
           }
         },
         {
@@ -6905,7 +8362,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "mineral_specimen_recovered",
+              "key": "mineralSpecimenRecovered",
               "section": "hidden",
               "value": true
             }
@@ -6916,8 +8373,8 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "mineral_specimen",
-            "section": "supplies_recovered"
+            "id": "mineralSpecimen",
+            "section": "suppliesRecovered"
           }
         },
         {
@@ -6926,7 +8383,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "small_radio_recovered",
+              "key": "smallRadioRecovered",
               "section": "hidden",
               "value": true
             }
@@ -6937,8 +8394,8 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "small_radio",
-            "section": "supplies_recovered"
+            "id": "smallRadio",
+            "section": "suppliesRecovered"
           }
         },
         {
@@ -6947,7 +8404,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "spare_parts_recovered",
+              "key": "sparePartsRecovered",
               "section": "hidden",
               "value": true
             }
@@ -6958,8 +8415,8 @@
           ],
           "when": {
             "kind": "logHas",
-            "id": "spare_parts",
-            "section": "supplies_recovered"
+            "id": "spareParts",
+            "section": "suppliesRecovered"
           }
         }
       ]
@@ -6998,7 +8455,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "team_found_another_way_through_the_mountains",
+          "key": "teamFoundAnotherWayThroughTheMountains",
           "section": "campaign_notes",
           "value": true
         }
@@ -7014,38 +8471,54 @@
       "effects": [
         {
           "do": "crossOut",
-          "key": "green_soapstone",
-          "section": "supplies_recovered"
+          "key": "greenSoapstone",
+          "section": "suppliesRecovered"
         },
         {
           "do": "crossOut",
-          "key": "wooden_sledge",
-          "section": "supplies_recovered"
+          "key": "woodenSledge",
+          "section": "suppliesRecovered"
         },
         {
           "do": "crossOut",
           "key": "dynamite",
-          "section": "supplies_recovered"
+          "section": "suppliesRecovered"
         },
         {
           "do": "crossOut",
-          "key": "miasmic_crystal",
-          "section": "supplies_recovered"
+          "key": "miasmicCrystal",
+          "section": "suppliesRecovered"
         },
         {
           "do": "crossOut",
-          "key": "mineral_specimen",
-          "section": "supplies_recovered"
+          "key": "mineralSpecimen",
+          "section": "suppliesRecovered"
         },
         {
           "do": "crossOut",
-          "key": "small_radio",
-          "section": "supplies_recovered"
+          "key": "smallRadio",
+          "section": "suppliesRecovered"
         },
         {
           "do": "crossOut",
-          "key": "spare_parts",
-          "section": "supplies_recovered"
+          "key": "spareParts",
+          "section": "suppliesRecovered"
+        }
+      ]
+    },
+    "to-the-forbidden-peaks:choose_partners": {
+      "kind": "unsupported",
+      "name": "investigator_choice_partner",
+      "text": "Each investigator may choose one available member of the expedition team who is not crossed off to join them. Put the story asset for the chosen character into play in that investigator's play area. (These story assets can be found in the <i>Expedition Team</i> encounter set. If there is a checkmark next to the character's name, instead use the [[Resolute]] version found in the <i>Fatal Mirage</i> encounter set.) Place damage and horror on that character as indicated in the \"Expedition Team\" section of the Campaign Log.",
+      "effects": [],
+      "steps": []
+    },
+    "to-the-forbidden-peaks:add_elder_thing": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
         }
       ]
     }

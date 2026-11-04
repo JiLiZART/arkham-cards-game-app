@@ -61,7 +61,8 @@
       "tablet",
       "elderThing",
       "autoFail",
-      "elderSign"
+      "elderSign",
+      "blood"
     ],
     "expert": [
       "0",
@@ -81,9 +82,12 @@
       "tablet",
       "elderThing",
       "autoFail",
-      "elderSign"
+      "elderSign",
+      "blood",
+      "blood"
     ]
   },
+  "options": [],
   "logLabels": {},
   "packs": [
     "cob",

@@ -25,6 +25,7 @@
     "09611",
     "09612"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -123,7 +124,7 @@
         },
         {
           "do": "record",
-          "key": "void_chimera_escaped",
+          "key": "voidChimeraEscaped",
           "value": true
         }
       ]
@@ -152,7 +153,7 @@
         },
         {
           "do": "record",
-          "key": "have_not_seen_the_last_of_thorne",
+          "key": "haveNotSeenTheLastOfThorne",
           "value": true
         }
       ]
@@ -169,7 +170,7 @@
         },
         {
           "do": "record",
-          "key": "thorne_disappeared",
+          "key": "thorneDisappeared",
           "value": true
         }
       ]
@@ -180,12 +181,12 @@
       "effects": [
         {
           "do": "record",
-          "key": "nothing_of_note_in_anchorage",
+          "key": "nothingOfNoteInAnchorage",
           "value": true
         },
         {
           "do": "record",
-          "key": "cell_made_a_deal_with_thorne",
+          "key": "cellMadeADealWithThorne",
           "value": true
         },
         {

@@ -21,6 +21,7 @@
   "agendas": [
     "10628"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -32,6 +33,26 @@
       "do": "setAside",
       "codes": [
         "10642"
+      ]
+    },
+    {
+      "do": "remove",
+      "codes": [
+        "01121a",
+        "01121b",
+        "01122",
+        "01123",
+        "01124",
+        "01125",
+        "01126",
+        "01127",
+        "01128",
+        "01129",
+        "01130",
+        "01131",
+        "01132",
+        "01133",
+        "01134"
       ]
     },
     {
@@ -116,7 +137,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "captives_were_saved",
+          "key": "captivesWereSaved",
           "value": true
         },
         {
@@ -133,7 +154,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "many_captives_were_lost",
+          "key": "manyCaptivesWereLost",
           "value": true
         },
         {
@@ -154,7 +175,7 @@
         },
         {
           "do": "record",
-          "key": "all_the_captives_were_lost",
+          "key": "allTheCaptivesWereLost",
           "value": true
         },
         {
@@ -188,12 +209,12 @@
         },
         {
           "do": "record",
-          "key": "dr_marquez_has_a_plan",
+          "key": "drMarquezHasAPlan",
           "value": true
         },
         {
           "do": "record",
-          "key": "southern_fields",
+          "key": "southernFields",
           "value": true
         }
       ]

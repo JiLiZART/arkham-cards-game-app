@@ -41,6 +41,11 @@
       ]
     }
   },
+  "before": {
+    "machinations-through-time": [
+      "machinations-through-time:do_setup"
+    ]
+  },
   "steps": {
     "fortune-and-folly-checkpoint:checkpoint": {
       "kind": "story",
@@ -63,7 +68,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_found_a_vent",
+              "key": "fofFoundAVent",
               "section": "hidden",
               "value": true
             }
@@ -76,7 +81,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_impersonated_a_high_roller",
+              "key": "fofImpersonatedAHighRoller",
               "section": "hidden",
               "value": true
             }
@@ -89,7 +94,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_convinced_isamara",
+              "key": "fofConvincedIsamara",
               "section": "hidden",
               "value": true
             }
@@ -102,7 +107,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_obtained_an_uniform",
+              "key": "fofObtainedAnUniform",
               "section": "hidden",
               "value": true
             }
@@ -115,7 +120,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_stole_keys",
+              "key": "fofStoleKeys",
               "section": "hidden",
               "value": true
             }
@@ -128,7 +133,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_cleaned_out_the_house",
+              "key": "fofCleanedOutTheHouse",
               "section": "hidden",
               "value": true
             }
@@ -152,7 +157,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_need_time_to_rest",
+              "key": "fofNeedTimeToRest",
               "section": "hidden",
               "value": true
             }
@@ -194,13 +199,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_found_a_vent",
+              "key": "fofFoundAVent",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_found_a_vent",
+              "key": "fofFoundAVent",
               "section": "hidden",
               "value": true
             }
@@ -213,13 +218,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_impersonated_a_high_roller",
+              "key": "fofImpersonatedAHighRoller",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_impersonated_a_high_roller",
+              "key": "fofImpersonatedAHighRoller",
               "section": "hidden",
               "value": true
             }
@@ -232,13 +237,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_convinced_isamara",
+              "key": "fofConvincedIsamara",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_convinced_isamara",
+              "key": "fofConvincedIsamara",
               "section": "hidden",
               "value": true
             }
@@ -251,13 +256,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_obtained_an_uniform",
+              "key": "fofObtainedAnUniform",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_obtained_an_uniform",
+              "key": "fofObtainedAnUniform",
               "section": "hidden",
               "value": true
             }
@@ -270,13 +275,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_stole_keys",
+              "key": "fofStoleKeys",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_stole_keys",
+              "key": "fofStoleKeys",
               "section": "hidden",
               "value": true
             }
@@ -289,13 +294,13 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_cleaned_out_the_house",
+              "key": "fofCleanedOutTheHouse",
               "section": "campaign_notes",
               "value": true
             },
             {
               "do": "record",
-              "key": "fof_cleaned_out_the_house",
+              "key": "fofCleanedOutTheHouse",
               "section": "hidden",
               "value": true
             }
@@ -309,7 +314,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "fof_need_time_to_rest",
+          "key": "fofNeedTimeToRest",
           "section": "campaign_notes",
           "value": true
         }
@@ -325,7 +330,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "fof_need_time_to_rest",
+              "key": "fofNeedTimeToRest",
               "section": "hidden",
               "value": true
             }
@@ -362,7 +367,7 @@
       "effects": [
         {
           "do": "count",
-          "id": "fof_wellspring_clues",
+          "id": "fofWellspringClues",
           "section": "campaign_notes",
           "op": "set",
           "value": "input"
@@ -379,7 +384,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "fof_stashed",
+          "key": "fofStashed",
           "section": "campaign_notes",
           "value": true
         }
@@ -401,7 +406,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "continue_fortune_and_folly_part_2",
+              "key": "continueFortuneAndFollyPart2",
               "section": "hidden",
               "value": true
             }
@@ -556,6 +561,160 @@
     },
     "machinations-through-time:upgradeDecks": {
       "kind": "upgradeDecks"
+    },
+    "machinations-through-time:setup_locations_past:text": {
+      "kind": "story",
+      "text": "Put the Tindalos location into play, using the side with the <i>Epic Multiplayer Mode</i> encounter set icon. Put the five [[Past]] locations into play. Remove the remaining locations from the game.",
+      "bullets": []
+    },
+    "machinations-through-time:setup_story_past:text": {
+      "kind": "story",
+      "text": "Put the A Noble Legacy (Past) story card into play and resolve its <b>Setup</b> text. Remove the other two A Noble Legacy story cards from the game.",
+      "bullets": []
+    },
+    "machinations-through-time:remove_eras_past:text": {
+      "kind": "story",
+      "text": "Remove all [[Present]] and [[Future]] story assets from the game.",
+      "bullets": []
+    },
+    "machinations-through-time:choose_machination_past:text": {
+      "kind": "story",
+      "text": "Choose one of the three [[Machination]] story cards at random, announce its title, put it into play, and resolve its <b>Setup</b> text. Remove the other two [[Machination]] story cards from the game.",
+      "bullets": []
+    },
+    "machinations-through-time:choose_plot_past:text": {
+      "kind": "story",
+      "text": "Choose one of the three [[Plot]] story cards at random, announce its title, put it into play, and resolve its <b>Setup</b> text. Remove the other two [[Plot]] story cards from the game.",
+      "bullets": []
+    },
+    "machinations-through-time:setup_locations_present:text": {
+      "kind": "story",
+      "text": "Put the Tindalos location into play, using the side with the <i>Epic Multiplayer Mode</i> encounter set icon. Put the five [[Present]] locations into play. Remove the remaining locations from the game.",
+      "bullets": []
+    },
+    "machinations-through-time:setup_story_present:text": {
+      "kind": "story",
+      "text": "Put the A Noble Legacy (Present) story card into play and resolve its <b>Setup</b> text. Remove the other two A Noble Legacy story cards from the game.",
+      "bullets": []
+    },
+    "machinations-through-time:remove_eras_present:text": {
+      "kind": "story",
+      "text": "Remove all [[Past]] and [[Future]] story assets from the game.",
+      "bullets": []
+    },
+    "machinations-through-time:machination_present:text": {
+      "kind": "story",
+      "text": "Put the announced [[Machination]] story card into play and resolve its <b>Setup</b> text. Remove the other two [[Machination]] story cards from the game.",
+      "bullets": []
+    },
+    "machinations-through-time:plot_present:text": {
+      "kind": "story",
+      "text": "Put the announced [[Plot]] story card into play and resolve its <b>Setup</b> text. Remove the other two [[Plot]] story cards from the game.",
+      "bullets": []
+    },
+    "machinations-through-time:setup_locations_future:text": {
+      "kind": "story",
+      "text": "Put the Tindalos location into play, using the side with the <i>Epic Multiplayer Mode</i> encounter set icon. Set the Corrigan Industries location aside, out of play. Put the four [[Future]] locations into play. Remove the remaining locations from the game.",
+      "bullets": []
+    },
+    "machinations-through-time:setup_story_future:text": {
+      "kind": "story",
+      "text": "Put the A Noble Legacy (Future) story card into play and resolve its <b>Setup</b> text. Remove the other two A Noble Legacy story cards from the game.",
+      "bullets": []
+    },
+    "machinations-through-time:remove_eras_future:text": {
+      "kind": "story",
+      "text": "Remove all [[Past]] and [[Present]] story assets from the game.",
+      "bullets": []
+    },
+    "machinations-through-time:machination_future:text": {
+      "kind": "story",
+      "text": "Put the announced [[Machination]] story card into play and resolve its <b>Setup</b> text. Remove the other two [[Machination]] story cards from the game.",
+      "bullets": []
+    },
+    "machinations-through-time:plot_future:text": {
+      "kind": "story",
+      "text": "Put the announced [[Plot]] story card into play and resolve its <b>Setup</b> text. Remove the other two [[Plot]] story cards from the game.",
+      "bullets": []
+    },
+    "machinations-through-time:ask_epic_group": {
+      "kind": "chooseOne",
+      "text": "Which era is your group playing?",
+      "choices": [
+        {
+          "id": "past",
+          "text": "Past",
+          "effects": [],
+          "steps": [
+            "machinations-through-time:setup_locations_past:text",
+            "machinations-through-time:setup_story_past:text",
+            "machinations-through-time:remove_eras_past:text",
+            "machinations-through-time:choose_machination_past:text",
+            "machinations-through-time:choose_plot_past:text"
+          ]
+        },
+        {
+          "id": "present",
+          "text": "Present",
+          "effects": [],
+          "steps": [
+            "machinations-through-time:setup_locations_present:text",
+            "machinations-through-time:setup_story_present:text",
+            "machinations-through-time:remove_eras_present:text",
+            "machinations-through-time:machination_present:text",
+            "machinations-through-time:plot_present:text"
+          ]
+        },
+        {
+          "id": "future",
+          "text": "Future",
+          "effects": [],
+          "steps": [
+            "machinations-through-time:setup_locations_future:text",
+            "machinations-through-time:setup_story_future:text",
+            "machinations-through-time:remove_eras_future:text",
+            "machinations-through-time:machination_future:text",
+            "machinations-through-time:plot_future:text"
+          ]
+        }
+      ]
+    },
+    "machinations-through-time:setup_locations_sg:text": {
+      "kind": "story",
+      "text": "Set the Corrigan Industries location aside, out of play. Put the Tindalos location into play, using the side with the Single Group Mode encounter set icon. Put the remaining fourteen locations into play",
+      "bullets": []
+    },
+    "machinations-through-time:setup_story_sg:text": {
+      "kind": "story",
+      "text": "Put the A Noble Legacy (Past), A Noble Legacy (Present), and A Noble Legacy (Future) story cards into play, one at a time, and resolve the <b>Setup</b> text on each of them. <i>(Hint-When playing, first focus on completing A Noble Legacy (Past), then focus on A Noble Legacy (Present), and, lastly, A Noble Legacy (Future).)</i>",
+      "bullets": []
+    },
+    "machinations-through-time:choose_machination_sg:text": {
+      "kind": "story",
+      "text": "Choose one of the three [[Machination]] story cards at random, put it into play, and resolve its <b>Setup</b> text. Remove the other two [[Machination]] story cards from the game.",
+      "bullets": []
+    },
+    "machinations-through-time:choose_plot_sg:text": {
+      "kind": "story",
+      "text": "Choose one of the three [[Plot]] story cards at random, put it into play, and resolve its <b>Setup</b> text. Remove the other two [[Plot]] story cards from the game.",
+      "bullets": []
+    },
+    "machinations-through-time:do_setup": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "epicMultiplayer",
+        "section": "hidden"
+      },
+      "then": [
+        "machinations-through-time:ask_epic_group"
+      ],
+      "else": [
+        "machinations-through-time:setup_locations_sg:text",
+        "machinations-through-time:setup_story_sg:text",
+        "machinations-through-time:choose_machination_sg:text",
+        "machinations-through-time:choose_plot_sg:text"
+      ]
     }
   }
 }

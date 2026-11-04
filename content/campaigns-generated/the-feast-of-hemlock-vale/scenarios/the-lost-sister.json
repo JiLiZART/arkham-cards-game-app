@@ -21,6 +21,9 @@
     "10570",
     "10571"
   ],
+  "setupCards": [
+    "10569"
+  ],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -82,7 +85,7 @@
         },
         {
           "do": "record",
-          "key": "the_peters_family_was_reunited",
+          "key": "thePetersFamilyWasReunited",
           "value": true
         }
       ]
@@ -99,7 +102,7 @@
         },
         {
           "do": "record",
-          "key": "elizabeth_peters_was_saved",
+          "key": "elizabethPetersWasSaved",
           "value": true
         }
       ]
@@ -122,7 +125,7 @@
         },
         {
           "do": "record",
-          "key": "akwan_shoreline",
+          "key": "akwanShoreline",
           "value": true
         }
       ]

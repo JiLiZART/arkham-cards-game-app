@@ -105,7 +105,8 @@
         "the-western-wall:cross_out_western_wall",
         "the-western-wall:check_do_no_harm_resolution",
         "the-western-wall:earn_xp",
-        "the-western-wall:upgradeDecks"
+        "the-western-wall:upgradeDecks",
+        "the-western-wall:check_resolution_west"
       ],
       "R1": [
         "the-western-wall:cross_out_western_wall:text",
@@ -119,7 +120,8 @@
         "the-western-wall:cross_out_western_wall",
         "the-western-wall:check_do_no_harm_resolution",
         "the-western-wall:earn_xp",
-        "the-western-wall:upgradeDecks"
+        "the-western-wall:upgradeDecks",
+        "the-western-wall:next_sepulchre_of_the_sleeper"
       ],
       "R3": [
         "the-western-wall:choose_west_path"
@@ -266,7 +268,8 @@
         "obsidian-canyons:cross_out_obsidian_canyons",
         "obsidian-canyons:check_prove_your_worth_resolution",
         "obsidian-canyons:earn_xp",
-        "obsidian-canyons:upgradeDecks"
+        "obsidian-canyons:upgradeDecks",
+        "obsidian-canyons:next_sleepers_tomb"
       ],
       "R2": [
         "obsidian-canyons:ask_obsidian_claw",
@@ -276,6 +279,19 @@
         "obsidian-canyons:earn_xp",
         "obsidian-canyons:upgradeDecks",
         "obsidian-canyons:next_court_of_the_ancients"
+      ]
+    },
+    "sepulchre-of-the-sleeper": {
+      "none": [],
+      "R1": [
+        "sepulchre-of-the-sleeper:halted_cthulhus_awakening",
+        "sepulchre-of-the-sleeper:earn_xp_10",
+        "sepulchre-of-the-sleeper:two_mental_trauma:text",
+        "sepulchre-of-the-sleeper:two_mental_trauma",
+        "sepulchre-of-the-sleeper:setup_epilogue",
+        "sepulchre-of-the-sleeper:upgradeDecks",
+        "sepulchre-of-the-sleeper:win_campaign:text",
+        "sepulchre-of-the-sleeper:win_campaign"
       ]
     },
     "the-doom-of-arkham-part-1": {
@@ -348,6 +364,38 @@
       ]
     }
   },
+  "before": {
+    "the-western-wall": [
+      "the-western-wall:check_west"
+    ],
+    "the-drowned-quarter": [
+      "the-drowned-quarter:check_no_place_like_home"
+    ],
+    "the-apiary": [
+      "the-apiary:check_west"
+    ],
+    "the-grand-vault": [
+      "the-grand-vault:add_elder_thing",
+      "the-grand-vault:check_toe_the_line"
+    ],
+    "court-of-the-ancients": [
+      "court-of-the-ancients:check_west",
+      "court-of-the-ancients:check_plumb_the_depths"
+    ],
+    "obsidian-canyons": [
+      "obsidian-canyons:check_dreams_of_destruction",
+      "obsidian-canyons:check_prove_your_worth"
+    ],
+    "sepulchre-of-the-sleeper": [
+      "sepulchre-of-the-sleeper:actually_check_artifacts_1"
+    ],
+    "the-doom-of-arkham-part-1": [
+      "the-doom-of-arkham-part-1:earn_john"
+    ],
+    "the-doom-of-arkham-part-2": [
+      "the-doom-of-arkham-part-2:choose_approach"
+    ]
+  },
   "steps": {
     "campaign:prologue": {
       "kind": "story",
@@ -364,7 +412,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "ruby_won_the_bet",
+          "key": "rubyWonTheBet",
           "section": "campaign_notes",
           "value": true
         }
@@ -391,7 +439,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "tdc_rune_a",
+          "key": "tdcRuneA",
           "section": "glyphs",
           "value": true
         }
@@ -401,7 +449,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "discovered_an_alien_language",
+        "id": "discoveredAnAlienLanguage",
         "section": "campaign_notes"
       },
       "then": [
@@ -415,7 +463,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "discovered_an_alien_language",
+          "key": "discoveredAnAlienLanguage",
           "section": "campaign_notes",
           "value": true
         }
@@ -440,7 +488,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "discovered_an_alien_language",
+        "id": "discoveredAnAlienLanguage",
         "section": "campaign_notes"
       },
       "then": [
@@ -458,7 +506,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "ruby_lost_the_bet",
+          "key": "rubyLostTheBet",
           "section": "campaign_notes",
           "value": true
         }
@@ -565,7 +613,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "tasks_active",
+          "key": "tasksActive",
           "section": "hidden",
           "value": true
         }
@@ -586,7 +634,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "expedition_headed_west",
+          "key": "expeditionHeadedWest",
           "section": "campaign_notes",
           "value": true
         }
@@ -629,7 +677,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "expedition_headed_east",
+          "key": "expeditionHeadedEast",
           "section": "campaign_notes",
           "value": true
         }
@@ -677,43 +725,43 @@
       "effects": [
         {
           "do": "record",
-          "key": "the_western_wall",
+          "key": "theWesternWall",
           "section": "hidden",
           "value": true
         },
         {
           "do": "record",
-          "key": "the_drowned_quarter",
+          "key": "theDrownedQuarter",
           "section": "hidden",
           "value": true
         },
         {
           "do": "record",
-          "key": "the_apiary",
+          "key": "theApiary",
           "section": "hidden",
           "value": true
         },
         {
           "do": "record",
-          "key": "the_grand_vault",
+          "key": "theGrandVault",
           "section": "hidden",
           "value": true
         },
         {
           "do": "record",
-          "key": "court_of_the_ancients",
+          "key": "courtOfTheAncients",
           "section": "hidden",
           "value": true
         },
         {
           "do": "record",
-          "key": "obsidian_canyons",
+          "key": "obsidianCanyons",
           "section": "hidden",
           "value": true
         },
         {
           "do": "record",
-          "key": "sepulchre_of_the_sleeper",
+          "key": "sepulchreOfTheSleeper",
           "section": "hidden",
           "value": true
         }
@@ -729,7 +777,7 @@
       "effects": [
         {
           "do": "crossOut",
-          "key": "the_western_wall",
+          "key": "theWesternWall",
           "section": "locations"
         }
       ]
@@ -755,7 +803,7 @@
         {
           "do": "investigatorCount",
           "id": "$count",
-          "section": "task_progress",
+          "section": "taskProgress",
           "who": "input",
           "op": "add",
           "value": 2
@@ -801,7 +849,7 @@
         {
           "do": "investigatorCount",
           "id": "$count",
-          "section": "task_progress",
+          "section": "taskProgress",
           "who": "input",
           "op": "add",
           "value": -1
@@ -829,7 +877,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "expedition_helped_pilgrim",
+        "id": "expeditionHelpedPilgrim",
         "section": "campaign_notes"
       },
       "then": [
@@ -871,6 +919,39 @@
     "the-western-wall:upgradeDecks": {
       "kind": "upgradeDecks"
     },
+    "the-western-wall:next_sepulchre_of_the_sleeper": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "sepulchre-of-the-sleeper"
+        }
+      ]
+    },
+    "the-western-wall:check_resolution_east": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "expeditionHeadedEast",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-western-wall:next_sepulchre_of_the_sleeper"
+      ],
+      "else": []
+    },
+    "the-western-wall:check_resolution_west": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "expeditionHeadedWest",
+        "section": "campaign_notes"
+      },
+      "then": [],
+      "else": [
+        "the-western-wall:check_resolution_east"
+      ]
+    },
     "the-western-wall:next_the_drowned_quarter": {
       "kind": "effects",
       "effects": [
@@ -910,6 +991,157 @@
         }
       ]
     },
+    "the-western-wall:west_story": {
+      "kind": "story",
+      "text": "It becomes increasingly clear as you proceed westward that the beach you are walking along is the top of an ancient ring wall. Fathoms below, the wall forms a sheer drop to a round plaza on the ocean floor. With some planning, you could descend safely to the ocean floor by moving from pocket to pocket of trapped air in the old ruins. If you’re careful, you may just be able to reach the sea floor alive.",
+      "bullets": []
+    },
+    "the-western-wall:do_no_harm_story": {
+      "kind": "story",
+      "title": "Task: Do No Harm",
+      "text": "As you prepare to traverse the wall, you spot a body lying prone on the black sand. It is a man in a tattered patchwork cloak. Pushing aside questions of how he got here, you approach and take his pulse. He is still alive, though heavily wounded. Yellow pus oozes from round sucker marks on his neck, arms, and chest. You bandage his wounds as best you can, then wake him with some smelling salts. His eyes flutter open and he rasps one word: \"Mother.\" You look to the others. This man clearly needs help.",
+      "bullets": []
+    },
+    "the-western-wall:do_no_harm_choice": {
+      "kind": "chooseOne",
+      "text": "You must decide <i>(choose one)</i>:",
+      "choices": [
+        {
+          "id": "help",
+          "text": "<i>\"Bring him along. We can still save him.\"</i>",
+          "effects": [
+            {
+              "do": "record",
+              "key": "expeditionHelpedPilgrim",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "abandon",
+          "text": "<i>\"Leave him behind.\"</i>",
+          "effects": [
+            {
+              "do": "record",
+              "key": "expeditionAbandonedPilgrim",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        }
+      ]
+    },
+    "the-western-wall:check_do_no_harm": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "the-western-wall:do_no_harm_story",
+        "the-western-wall:do_no_harm_choice"
+      ],
+      "else": []
+    },
+    "the-western-wall:setup_locations_v1:text": {
+      "kind": "story",
+      "text": "Gather each location in <i>The Western Wall</i> encounter set.",
+      "bullets": []
+    },
+    "the-western-wall:set_aside_cards_v1:text": {
+      "kind": "story",
+      "text": "Set the Inescapable enemy, the Hunting Parasite weakness, and the double-sided Seafloor Frieze [tdc_rune_w] treachery aside, out of play.",
+      "bullets": []
+    },
+    "the-western-wall:set_aside_star_spawn:text": {
+      "kind": "story",
+      "text": "Search the <i>Star Spawn</i> encounter set for the Coral Star Spawn enemy and set it aside, out of play. Remove each other card in the <i>Star Spawn</i> encounter set from the game.",
+      "bullets": []
+    },
+    "the-western-wall:setup_act_v1:text": {
+      "kind": "story",
+      "text": "Build the act deck using act 1a — \"Descend into the Abyss.\" Remove the other act from the game.",
+      "bullets": []
+    },
+    "the-western-wall:setup_flood_v1:text": {
+      "kind": "story",
+      "text": "Add the flood tokens to the token pool.",
+      "bullets": []
+    },
+    "the-western-wall:encounter_deck:text": {
+      "kind": "story",
+      "text": "Shuffle the remaining encounter cards to build the encounter deck.",
+      "bullets": []
+    },
+    "the-western-wall:east_story": {
+      "kind": "story",
+      "text": "The unsteady foundations of the ancient city shudder as R’lyeh continues to rise. Collapsing layers of crumbling masonry and exposed hallways form a treacherous path up to the surface. In order to safely ascend, you will need to climb the sheer face of the ancient wall by moving from pocket to pocket of trapped air. Knowing the dangers of pressure sickness, you can’t simply float to the top. If you’re careful, you may just be able to reach the surface alive.",
+      "bullets": []
+    },
+    "the-western-wall:setup_locations_v2:text": {
+      "kind": "story",
+      "text": "Gather each location in <i>The Western Wall</i> encounter set.",
+      "bullets": []
+    },
+    "the-western-wall:setup_act_v2:text": {
+      "kind": "story",
+      "text": "Build the act deck using act 1a-\"Ascend the Wall.\" Remove the other act from the game.",
+      "bullets": []
+    },
+    "the-western-wall:set_aside_cards_v2:text": {
+      "kind": "story",
+      "text": "Set the Hunting Parasite weakness and the double-sided Seafloor Frieze [tdc_rune_w] treachery aside, out of play.",
+      "bullets": []
+    },
+    "the-western-wall:setup_flood_v2:text": {
+      "kind": "story",
+      "text": "Add the flood tokens to the token pool.",
+      "bullets": []
+    },
+    "the-western-wall:check_east": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "expeditionHeadedEast",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-western-wall:east_story",
+        "the-western-wall:check_do_no_harm",
+        "the-western-wall:setup_locations_v2:text",
+        "the-western-wall:setup_act_v2:text",
+        "the-western-wall:set_aside_cards_v2:text",
+        "the-western-wall:set_aside_star_spawn:text",
+        "the-western-wall:setup_flood_v2:text",
+        "the-western-wall:encounter_deck:text"
+      ],
+      "else": []
+    },
+    "the-western-wall:check_west": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "expeditionHeadedWest",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-western-wall:west_story",
+        "the-western-wall:check_do_no_harm",
+        "the-western-wall:setup_locations_v1:text",
+        "the-western-wall:set_aside_cards_v1:text",
+        "the-western-wall:set_aside_star_spawn:text",
+        "the-western-wall:setup_act_v1:text",
+        "the-western-wall:setup_flood_v1:text",
+        "the-western-wall:encounter_deck:text"
+      ],
+      "else": [
+        "the-western-wall:check_east"
+      ]
+    },
     "the-drowned-quarter:clear_one_progress:text": {
       "kind": "story",
       "text": "Your failure has distracted you from your goals. Each investigator must erase 1 progress under their Task, if able.",
@@ -921,7 +1153,7 @@
         {
           "do": "investigatorCount",
           "id": "$count",
-          "section": "task_progress",
+          "section": "taskProgress",
           "who": "each",
           "op": "add",
           "value": -1
@@ -938,8 +1170,8 @@
       "effects": [
         {
           "do": "record",
-          "key": "barrier_node",
-          "section": "artifacts_earned",
+          "key": "barrierNode",
+          "section": "artifactsEarned",
           "value": true
         }
       ]
@@ -949,7 +1181,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "the_power_was_diverted",
+          "key": "thePowerWasDiverted",
           "section": "campaign_notes",
           "value": true
         }
@@ -981,7 +1213,7 @@
       "effects": [
         {
           "do": "crossOut",
-          "key": "the_drowned_quarter",
+          "key": "theDrownedQuarter",
           "section": "locations"
         }
       ]
@@ -1022,7 +1254,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "expedition_headed_east",
+        "id": "expeditionHeadedEast",
         "section": "campaign_notes"
       },
       "then": [
@@ -1034,7 +1266,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "expedition_headed_west",
+        "id": "expeditionHeadedWest",
         "section": "campaign_notes"
       },
       "then": [
@@ -1043,6 +1275,103 @@
       "else": [
         "the-drowned-quarter:check_resolution_east"
       ]
+    },
+    "the-drowned-quarter:no_place_like_home_story": {
+      "kind": "story",
+      "title": "Task: No Place Like Home",
+      "text": "Your head spins as you look up at the alien orrery. The sight brings you back to that first night, the night Tillinghast took you off the streets. The stars that night were bright, and you can't forget their particular formation, the same formation in front of you now. Away from the constant grind and concerns of your life in Arkham, you've done some thinking. Tillinghast's words were kind, but his tone was harsh, cold, unfeeling. Reflecting on it, you have only garnered the businessman's attention when you were useful. There was no kindness in his act, when he saved you, he acquired you as yet another lackey in his quiver of debtors.\nThis is the umpteenth \"last job\" you've been on. Is Tillinghast really worth his word?",
+      "bullets": []
+    },
+    "the-drowned-quarter:no_place_like_home_trauma:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "investigatorCount",
+          "id": "$count",
+          "section": "taskProgress",
+          "who": "input",
+          "op": "add",
+          "value": -1
+        }
+      ]
+    },
+    "the-drowned-quarter:no_place_like_home_trauma": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "the-drowned-quarter:no_place_like_home_trauma:yes:fx"
+      ],
+      "else": []
+    },
+    "the-drowned-quarter:no_place_like_home_alone:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "input",
+          "physical": 0,
+          "mental": 1
+        },
+        {
+          "do": "investigatorCount",
+          "id": "$count",
+          "section": "taskProgress",
+          "who": "input",
+          "op": "add",
+          "value": 2
+        }
+      ]
+    },
+    "the-drowned-quarter:no_place_like_home_alone": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "the-drowned-quarter:no_place_like_home_alone:yes:fx"
+      ],
+      "else": []
+    },
+    "the-drowned-quarter:no_place_like_home_choice": {
+      "kind": "chooseOne",
+      "text": "You must decide <i>(choose one)</i>:",
+      "choices": [
+        {
+          "id": "trust",
+          "text": "<i>\"Mr. Tillinghast has treated me well. I trust him.\"</i>",
+          "effects": [],
+          "steps": [
+            "the-drowned-quarter:no_place_like_home_trauma"
+          ]
+        },
+        {
+          "id": "fear",
+          "text": "<i>\"I'm on my own. There's no one I can trust.\"</i>",
+          "effects": [],
+          "steps": [
+            "the-drowned-quarter:no_place_like_home_alone"
+          ]
+        }
+      ]
+    },
+    "the-drowned-quarter:check_no_place_like_home": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "the-drowned-quarter:no_place_like_home_story",
+        "the-drowned-quarter:no_place_like_home_choice"
+      ],
+      "else": []
     },
     "the-apiary:record_tdc_rune_s:text": {
       "kind": "story",
@@ -1054,7 +1383,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "tdc_rune_s",
+          "key": "tdcRuneS",
           "section": "glyphs",
           "value": true
         }
@@ -1111,7 +1440,7 @@
       "effects": [
         {
           "do": "crossOut",
-          "key": "the_apiary",
+          "key": "theApiary",
           "section": "locations"
         }
       ]
@@ -1126,8 +1455,8 @@
       "effects": [
         {
           "do": "record",
-          "key": "grisly_mask",
-          "section": "artifacts_earned",
+          "key": "grislyMask",
+          "section": "artifactsEarned",
           "value": true
         }
       ]
@@ -1173,7 +1502,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "expedition_headed_west",
+        "id": "expeditionHeadedWest",
         "section": "campaign_notes"
       },
       "then": [
@@ -1186,7 +1515,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "pilgrims_were_saved",
+          "key": "pilgrimsWereSaved",
           "section": "campaign_notes",
           "value": true
         }
@@ -1208,7 +1537,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "pilgrims_were_devoured",
+          "key": "pilgrimsWereDevoured",
           "section": "campaign_notes",
           "value": true
         }
@@ -1219,7 +1548,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "exterminated_the_alien_parasites",
+          "key": "exterminatedTheAlienParasites",
           "section": "campaign_notes",
           "value": true
         }
@@ -1252,6 +1581,234 @@
         }
       ]
     },
+    "the-apiary:west_story": {
+      "kind": "story",
+      "text": "The dank tunnels beneath R’lyeh branch and thread endlessly like the capillaries of some giant beast. Shining nodules are stationed at intervals in the walls, pulsing with soft light. After making camp on the third evening, you sit across the tunnel from Andy as he scribbles furiously in his notebook. The conversation soon turns to the events that led you both into Tillinghast’s employ.",
+      "bullets": []
+    },
+    "the-apiary:west_story_cont": {
+      "kind": "story",
+      "text": "“The long and short of it is… Mr. Tillinghast said he had another big story for me. A chance for me to make my big break. And, well, maybe enough money to pay off my tab at Hibb’s.” He looks bashful. “I had to let off some steam after my last gig! A lot of steam.”\nA tremor rocks the tunnels. Andy’s face grows ashen as he leans in. “I have a theory. This city? It’s rising. I mean, <i>still</i> rising. The shakes, the crumbling foundation, the fact that it was underwater before and now it isn’t. You saw the ship graveyard in the city spires, right? Ships’ve been going missing in this stretch of ocean for centuries. I don’t know what’s causing it, but I keep having these dreams…”\nThe next day, you discover a vast cavern. The walls and ceiling are honeycombed with small round holes that branch off haphazardly into a labyrinthe warren. Andy rushes to the entrance of one particularly foul-smelling tunnel and picks up a bloody scrap of cloth. “I don’t know what lives here, but I think they like eating people.”\nFurther in, fleshy, bilious growths line the tunnel, oozing a thick, phlegmy ichor. Could anyone actually be left alive down here?",
+      "bullets": []
+    },
+    "the-apiary:add_cultist:text": {
+      "kind": "story",
+      "text": "Add 1 [cultist] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-apiary:add_cultist": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        }
+      ]
+    },
+    "the-apiary:walking_in_faith_story": {
+      "kind": "story",
+      "title": "Task: Walking in Faith",
+      "text": "An overwhelming sense of dread and awe fills your chest as you stare at the honeycomb of spongy, fleshy tunnels and the littered debris on the ground. There are several torn cloaks and a broken lantern. A massive chalk arcle composed of Latinate words and eldritch symbols has been drawn in the center of the room. A ritual of protection, perhaps? More disturbigly, a sacred symbol of your own faith is inscribed in its center. Were the ones who drew it fellow adherents of your faith? They could be heretics, but as you think about it, you wonder if they were drawn, much like you, to this ancient city by fate. As you descend into the belly of the beast, your stomach aches. Has your faith led you astray?",
+      "bullets": []
+    },
+    "the-apiary:walk_in_faith_doubt:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "investigatorCount",
+          "id": "$count",
+          "section": "taskProgress",
+          "who": "input",
+          "op": "add",
+          "value": -1
+        }
+      ]
+    },
+    "the-apiary:walk_in_faith_doubt": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "the-apiary:walk_in_faith_doubt:yes:fx"
+      ],
+      "else": []
+    },
+    "the-apiary:walk_in_faith_firm:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "input",
+          "physical": 0,
+          "mental": 1
+        },
+        {
+          "do": "investigatorCount",
+          "id": "$count",
+          "section": "taskProgress",
+          "who": "input",
+          "op": "add",
+          "value": 2
+        }
+      ]
+    },
+    "the-apiary:walk_in_faith_firm": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "the-apiary:walk_in_faith_firm:yes:fx"
+      ],
+      "else": []
+    },
+    "the-apiary:walking_in_faith_choice": {
+      "kind": "chooseOne",
+      "text": "You must decide <i>(choose one)</i>:",
+      "choices": [
+        {
+          "id": "doubt",
+          "text": "<i>\"I have such doubts.\"</i>",
+          "effects": [],
+          "steps": [
+            "the-apiary:walk_in_faith_doubt"
+          ]
+        },
+        {
+          "id": "firm",
+          "text": "<i>\"I am firm in my resolve.\"</i>",
+          "effects": [],
+          "steps": [
+            "the-apiary:walk_in_faith_firm"
+          ]
+        }
+      ]
+    },
+    "the-apiary:check_walk_in_faith": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "the-apiary:walking_in_faith_story",
+        "the-apiary:walking_in_faith_choice"
+      ],
+      "else": []
+    },
+    "the-apiary:setup_location:text": {
+      "kind": "story",
+      "text": "Put Apiary Entrance into play, <i>(Beckoning Light)</i> side faceup.",
+      "bullets": []
+    },
+    "the-apiary:act_deck_v1:text": {
+      "kind": "story",
+      "text": "Build the act deck using act 1a-\"Unsettling Signs\" and act 2a-\"Lost Pilgrims.\" Remove the other act from the game.",
+      "bullets": []
+    },
+    "the-apiary:remove_mother_enemy:text": {
+      "kind": "story",
+      "text": "Remove the Mother enemy from the game.",
+      "bullets": []
+    },
+    "the-apiary:set_aside_v1:text": {
+      "kind": "story",
+      "text": "Set each of the following aside, out of play: each [[Apiary]] location, the Grotesque Amalgam and the double-sided Squamous Parasite [tdc_rune_t] enemies, the Maria Rivera, Ancient Relic [tdc_rune_s], and Grisly \"Mask\" story assets, the <i>Pilgrims</i> and <i>The Inescapable</i> encounter sets, and each copy of the Parasitic Transformation weakness.",
+      "bullets": []
+    },
+    "the-apiary:encounter_deck_v1:text": {
+      "kind": "story",
+      "text": "Shuffle each remaining encounter card to build the encounter deck along with the following set-aside [[Apiary]] locations: Growing Fields and both copies of Fleshy Paths.",
+      "bullets": []
+    },
+    "the-apiary:east_story": {
+      "kind": "story",
+      "text": "The tunnels beyond the heart of the city slope ever-downward through a series of complexes: ancient alien factories frozen in time. “I wonder what they made here,” Ruby says. Clawed metal appendages hang over mile-long tracks while gargantuan statues stare down from high alcoves. Rather than walk in the eerie silence, you ask your companions what brought them into Tillinghast’s employ.\n“Truth is, Tillinghast caught me trying to sneak off with some of his, er, stock,” Ruby says. “Not my best work. But that man knows how to spin any deal in his favor. He offered me a job, instead. The money was good⸺better than the stuff I’d nabbed⸺so I said yes. I’ve been saving up for retirement for a while now.”\nThe factories give way to a labyrinthine tunnel system. After days of exploration, you discover a vast cavern. The walls and ceiling are honeycombed with small round holes that branch off haphazardly into a labyrinthine warren. The gory remains of a young man in a patchwork cloak lies prone in front of one tunnel. The stench is unbearable.\n“This is the same kind of cloak the other fella was wearing,” Ruby holds a handkerchief to her mouth as she pulls a small scrap of paper out of the man’s pocket. Scrawled in blood are two words: SEND HELP. You look down the tunnel. Fleshy, bilious growths line the sides, giving it the look of a giant esophagus. A far worse stench emanates from within.\n“Something tells me there’s nobody left to help. Still, there could be something worthwhile down there,” Ruby says, the usual panache noticeably absent from her voice.",
+      "bullets": []
+    },
+    "the-apiary:add_tablet:text": {
+      "kind": "story",
+      "text": "Add 1 [tablet] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-apiary:add_tablet": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        }
+      ]
+    },
+    "the-apiary:act_deck_v2:text": {
+      "kind": "story",
+      "text": "Build the act deck using act 1a—\"Unsettling Signs\" and act 2a—\"The Hive Mind.\" Remove the other act from the game.",
+      "bullets": []
+    },
+    "the-apiary:remove_maria:text": {
+      "kind": "story",
+      "text": "Remove the Maria Rivera story asset from the game.",
+      "bullets": []
+    },
+    "the-apiary:set_aside_v2:text": {
+      "kind": "story",
+      "text": "Set each of the following aside, out of play: each [[Apiary]] location, the Grotesque Amalgam, Mother, and double-sided Squamous Parasite [tdc_rune_t] enemies, the Grisly \"Mask\" and Ancient Relic [tdc_rune_s] story assets, and each copy of the Parasitic Transformation weakness.",
+      "bullets": []
+    },
+    "the-apiary:encounter_deck_v2:text": {
+      "kind": "story",
+      "text": "Shuffle each remaining encounter card to build the encounter deck along with the following set-aside [[Apiary]] locations: Growing Fields and both copies of Fleshy Paths.",
+      "bullets": []
+    },
+    "the-apiary:check_east": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "expeditionHeadedEast",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-apiary:east_story",
+        "the-apiary:add_tablet:text",
+        "the-apiary:add_tablet",
+        "the-apiary:check_walk_in_faith",
+        "the-apiary:setup_location:text",
+        "the-apiary:act_deck_v2:text",
+        "the-apiary:remove_maria:text",
+        "the-apiary:set_aside_v2:text",
+        "the-apiary:encounter_deck_v2:text"
+      ],
+      "else": []
+    },
+    "the-apiary:check_west": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "expeditionHeadedWest",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "the-apiary:west_story",
+        "the-apiary:west_story_cont",
+        "the-apiary:add_cultist:text",
+        "the-apiary:add_cultist",
+        "the-apiary:check_walk_in_faith",
+        "the-apiary:setup_location:text",
+        "the-apiary:act_deck_v1:text",
+        "the-apiary:remove_mother_enemy:text",
+        "the-apiary:set_aside_v1:text",
+        "the-apiary:encounter_deck_v1:text"
+      ],
+      "else": [
+        "the-apiary:check_east"
+      ]
+    },
     "the-grand-vault:cross_out_grand_vault:text": {
       "kind": "story",
       "text": "Cross out \"The Grand Vault\" on the R'lyeh map.",
@@ -1262,7 +1819,7 @@
       "effects": [
         {
           "do": "crossOut",
-          "key": "the_grand_vault",
+          "key": "theGrandVault",
           "section": "locations"
         }
       ]
@@ -1277,8 +1834,8 @@
       "effects": [
         {
           "do": "record",
-          "key": "tidal_tablet",
-          "section": "artifacts_earned",
+          "key": "tidalTablet",
+          "section": "artifactsEarned",
           "value": true
         }
       ]
@@ -1309,14 +1866,14 @@
         {
           "do": "investigatorCount",
           "id": "$count",
-          "section": "task_progress",
+          "section": "taskProgress",
           "who": "input",
           "op": "add",
           "value": -1
         },
         {
           "do": "record",
-          "key": "tdc_good_money_extra_resources",
+          "key": "tdcGoodMoneyExtraResources",
           "section": "hidden",
           "value": true
         }
@@ -1340,14 +1897,14 @@
         {
           "do": "investigatorCount",
           "id": "$count",
-          "section": "task_progress",
+          "section": "taskProgress",
           "who": "input",
           "op": "add",
           "value": 2
         },
         {
           "do": "record",
-          "key": "tdc_good_money_no_upkeep",
+          "key": "tdcGoodMoneyNoUpkeep",
           "section": "hidden",
           "value": true
         }
@@ -1436,7 +1993,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "expedition_headed_east",
+        "id": "expeditionHeadedEast",
         "section": "campaign_notes"
       },
       "then": [
@@ -1448,7 +2005,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "expedition_headed_west",
+        "id": "expeditionHeadedWest",
         "section": "campaign_notes"
       },
       "then": [
@@ -1457,6 +2014,112 @@
       "else": [
         "the-grand-vault:check_resolution_east"
       ]
+    },
+    "the-grand-vault:add_elder_thing": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        }
+      ]
+    },
+    "the-grand-vault:toe_the_line_story": {
+      "kind": "story",
+      "title": "Toe the Line",
+      "text": "The expedition makes camp before descending into the vault below. Over a bland but filling meal, one of your fellow expedition members reveals they have a history with your former employer. \"Wait, you're the one everyone talks about?\" they snort. \"Trust me, from the things I've heard, you don't want your old job back. Your old boss still jokes about you. Even if Tillinghast could get you the job, nobody back there respects you. You're looking at a life of grunt work, pal.\" You finish your meal in silence as you ponder their words. Your old colleagues might not respect you, but with Tillinghast's connections, you could make them fear you. A few bribes, well-timed threats— even a call from the mob — might put them in their place. It's not exactly above-board, but if you play the cards right, you could oust your former employer. You have the rest of the expedition to plan your move once you get back to Arkham.",
+      "bullets": []
+    },
+    "the-grand-vault:task_beg:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "investigatorCount",
+          "id": "$count",
+          "section": "taskProgress",
+          "who": "input",
+          "op": "add",
+          "value": -1
+        }
+      ]
+    },
+    "the-grand-vault:task_beg": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "the-grand-vault:task_beg:yes:fx"
+      ],
+      "else": []
+    },
+    "the-grand-vault:task_firm:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "investigatorCount",
+          "id": "$count",
+          "section": "taskProgress",
+          "who": "input",
+          "op": "add",
+          "value": 2
+        },
+        {
+          "do": "trauma",
+          "who": "input",
+          "physical": 0,
+          "mental": 1
+        }
+      ]
+    },
+    "the-grand-vault:task_firm": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "the-grand-vault:task_firm:yes:fx"
+      ],
+      "else": []
+    },
+    "the-grand-vault:toe_the_line_choice": {
+      "kind": "chooseOne",
+      "text": "You must decide <i>(choose one)</i>:",
+      "choices": [
+        {
+          "id": "beg",
+          "text": "<i>Take your old job back, at any cost.</i>",
+          "effects": [],
+          "steps": [
+            "the-grand-vault:task_beg"
+          ]
+        },
+        {
+          "id": "firm",
+          "text": "<i>Take the high road. It ain't worth it.</i>",
+          "effects": [],
+          "steps": [
+            "the-grand-vault:task_firm"
+          ]
+        }
+      ]
+    },
+    "the-grand-vault:check_toe_the_line": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "the-grand-vault:toe_the_line_story",
+        "the-grand-vault:toe_the_line_choice"
+      ],
+      "else": []
     },
     "court-of-the-ancients:cross_out_court_of_the_ancients:text": {
       "kind": "story",
@@ -1468,7 +2131,7 @@
       "effects": [
         {
           "do": "crossOut",
-          "key": "court_of_the_ancients",
+          "key": "courtOfTheAncients",
           "section": "locations"
         }
       ]
@@ -1484,7 +2147,7 @@
         {
           "do": "record",
           "key": "shard",
-          "section": "artifacts_earned",
+          "section": "artifactsEarned",
           "value": true
         }
       ]
@@ -1539,7 +2202,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "expedition_headed_east",
+        "id": "expeditionHeadedEast",
         "section": "campaign_notes"
       },
       "then": [
@@ -1551,7 +2214,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "expedition_headed_west",
+        "id": "expeditionHeadedWest",
         "section": "campaign_notes"
       },
       "then": [
@@ -1560,6 +2223,171 @@
       "else": [
         "court-of-the-ancients:check_resolution_east"
       ]
+    },
+    "court-of-the-ancients:west_story": {
+      "kind": "story",
+      "text": "Time seems to slip away as you follow the dark tunnels out of the heart of the city. Eventually the constant churn and thrum of machinery melts away, replaced by an ominous silence. Andy has only just proposed that you turn around to find another route when the endless stairs come to a stop. An intricately carved door is set in the ceiling above you. Pressing a panel in its center reveals a vast, airy structure that vaguely resembles the nave of some ancient alien cathedral. A towering lift dominates the center, surrounded by spiraling ringed floors. The walls are covered in countless alien glyphs, pulsing with green light. You wonder if the great archive might hold anything valuable.",
+      "bullets": []
+    },
+    "court-of-the-ancients:add_cultist:text": {
+      "kind": "story",
+      "text": "Add 1 [cultist] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "court-of-the-ancients:add_cultist": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "cultist"
+        }
+      ]
+    },
+    "court-of-the-ancients:east_story": {
+      "kind": "story",
+      "text": "You land on the top floor of the towering nave. Twisting stairs and catwalks circle the sprawling structure, revealing more levels below. The walls around you are covered in glowing alien glyphs: hundreds of thousands of symbols covering every surface. You wonder if the great archive might hold anything valuable.\n“Watch yourself. We’re not the first ones here,” says Ruby. The jewel thief is bent over a prone human body lying in a pool of fresh blood. You’re struck by their colorful patchwork cloak. A deep, rumbling roar reverberates through the chamber. Ruby’s expression turns grave.\n“If we’re going to find anything of value, we’d better act quickly.”",
+      "bullets": []
+    },
+    "court-of-the-ancients:add_tablet:text": {
+      "kind": "story",
+      "text": "Add 1 [tablet] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "court-of-the-ancients:add_tablet": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "tablet"
+        }
+      ]
+    },
+    "court-of-the-ancients:check_east": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "expeditionHeadedEast",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "court-of-the-ancients:east_story",
+        "court-of-the-ancients:add_tablet:text",
+        "court-of-the-ancients:add_tablet"
+      ],
+      "else": []
+    },
+    "court-of-the-ancients:check_west": {
+      "kind": "branch",
+      "condition": {
+        "kind": "logHas",
+        "id": "expeditionHeadedWest",
+        "section": "campaign_notes"
+      },
+      "then": [
+        "court-of-the-ancients:west_story",
+        "court-of-the-ancients:add_cultist:text",
+        "court-of-the-ancients:add_cultist"
+      ],
+      "else": [
+        "court-of-the-ancients:check_east"
+      ]
+    },
+    "court-of-the-ancients:plumb_the_depths_story": {
+      "kind": "story",
+      "title": "Task: Plumb the Depths",
+      "text": "You can’t help but marvel at the austere grandeur of the ancient structure. Was this an ancient palace? A library? A place of worship? The intricate murals on the walls are a blend of pictograph and alien writing, depicting an ancient migration across the stars. The glyphs glow with a flickering green light, chronicling unknowable histories, ancient secrets hidden from humankind.\nOne image—a nightmarescape of oceanic horrors and sunken cities—catches your attention. You press the eye of a particularly disturbing creature and feel a rush of ancient memories. Thoughts and feelings of an alien being, images of the stygian depths of some distant planet, overwhelm your consciousness. The memories give way to clearer, more defined facts, dates, a history recorded by a prehistoric civilization. You begin to feel yourself slip away as though your consciousness were being drawn through a sieve. There is much more you could learn… but should you?",
+      "bullets": []
+    },
+    "court-of-the-ancients:plumb_the_depths_away:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "investigatorCount",
+          "id": "$count",
+          "section": "taskProgress",
+          "who": "input",
+          "op": "add",
+          "value": -1
+        }
+      ]
+    },
+    "court-of-the-ancients:plumb_the_depths_away": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "court-of-the-ancients:plumb_the_depths_away:yes:fx"
+      ],
+      "else": []
+    },
+    "court-of-the-ancients:plumb_the_depths_seek:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "input",
+          "physical": 0,
+          "mental": 1
+        },
+        {
+          "do": "investigatorCount",
+          "id": "$count",
+          "section": "taskProgress",
+          "who": "input",
+          "op": "add",
+          "value": 2
+        }
+      ]
+    },
+    "court-of-the-ancients:plumb_the_depths_seek": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "court-of-the-ancients:plumb_the_depths_seek:yes:fx"
+      ],
+      "else": []
+    },
+    "court-of-the-ancients:plumb_the_depths_choice": {
+      "kind": "chooseOne",
+      "text": "You must decide <i>(choose one)</i>:",
+      "choices": [
+        {
+          "id": "away",
+          "text": "<i>Look away.</i>",
+          "effects": [],
+          "steps": [
+            "court-of-the-ancients:plumb_the_depths_away"
+          ]
+        },
+        {
+          "id": "seek",
+          "text": "<i>Seek the truth.</i>",
+          "effects": [],
+          "steps": [
+            "court-of-the-ancients:plumb_the_depths_seek"
+          ]
+        }
+      ]
+    },
+    "court-of-the-ancients:check_plumb_the_depths": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "court-of-the-ancients:plumb_the_depths_story",
+        "court-of-the-ancients:plumb_the_depths_choice"
+      ],
+      "else": []
     },
     "obsidian-canyons:cross_out_obsidian_canyons:text": {
       "kind": "story",
@@ -1571,7 +2399,7 @@
       "effects": [
         {
           "do": "crossOut",
-          "key": "obsidian_canyons",
+          "key": "obsidianCanyons",
           "section": "locations"
         }
       ]
@@ -1630,7 +2458,7 @@
         {
           "do": "investigatorCount",
           "id": "$count",
-          "section": "task_progress",
+          "section": "taskProgress",
           "who": "input",
           "op": "add",
           "value": 2
@@ -1681,7 +2509,7 @@
         {
           "do": "investigatorCount",
           "id": "$count",
-          "section": "task_progress",
+          "section": "taskProgress",
           "who": "input",
           "op": "add",
           "value": -1
@@ -1710,7 +2538,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "tdc_helped_with_the_ropes",
+        "id": "tdcHelpedWithTheRopes",
         "section": "hidden"
       },
       "then": [
@@ -1754,6 +2582,15 @@
     "obsidian-canyons:upgradeDecks": {
       "kind": "upgradeDecks"
     },
+    "obsidian-canyons:next_sleepers_tomb": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "sepulchre-of-the-sleeper"
+        }
+      ]
+    },
     "obsidian-canyons:next_court_of_the_ancients": {
       "kind": "effects",
       "effects": [
@@ -1767,7 +2604,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "expedition_headed_east",
+        "id": "expeditionHeadedEast",
         "section": "campaign_notes"
       },
       "then": [
@@ -1779,10 +2616,12 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "expedition_headed_west",
+        "id": "expeditionHeadedWest",
         "section": "campaign_notes"
       },
-      "then": [],
+      "then": [
+        "obsidian-canyons:next_sleepers_tomb"
+      ],
       "else": [
         "obsidian-canyons:check_resolution_east"
       ]
@@ -1797,8 +2636,8 @@
       "effects": [
         {
           "do": "record",
-          "key": "obsidian_claw",
-          "section": "artifacts_earned",
+          "key": "obsidianClaw",
+          "section": "artifactsEarned",
           "value": true
         }
       ]
@@ -1815,6 +2654,358 @@
             "obsidian-canyons:earn_obsidian_claw"
           ]
         }
+      ]
+    },
+    "obsidian-canyons:dreams_of_destruction_story": {
+      "kind": "story",
+      "title": "Task: Dreams of Destruction",
+      "text": "As you look out at the breathtaking landscape, a cacophony of whispers fills your thoughts. Overwhelmed, you fall to your knees, clutching your hands to your temples. In your mind's eye, you see a corona of light, a sky filled with tenebrous shadows, and a gargantuan figure writhing in pain, covered in glowing sigils. Is it a vision? Or an ancient memory? You see the city spires bow like blades of grass as meteors fall from the sky. Something inside you stirs. You are feeling someone— or something— else's sorrow. The city buried, serene, doomed to sleep on the ocean floor for vigintillion years. Whatever it is that you feel, it wants to share your burdens, your fears, your desires. You need only to let it in…",
+      "bullets": []
+    },
+    "obsidian-canyons:dreams_of_destruction_drown:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "investigatorCount",
+          "id": "$count",
+          "section": "taskProgress",
+          "who": "input",
+          "op": "add",
+          "value": -1
+        },
+        {
+          "do": "trauma",
+          "who": "input",
+          "physical": 0,
+          "mental": 1
+        },
+        {
+          "do": "xp",
+          "bonus": 2,
+          "who": "input",
+          "victory": false
+        }
+      ]
+    },
+    "obsidian-canyons:dreams_of_destruction_drown": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "obsidian-canyons:dreams_of_destruction_drown:yes:fx"
+      ],
+      "else": []
+    },
+    "obsidian-canyons:dreams_of_destruction_allow:yes:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "investigatorCount",
+          "id": "$count",
+          "section": "taskProgress",
+          "who": "input",
+          "op": "add",
+          "value": 2
+        }
+      ]
+    },
+    "obsidian-canyons:dreams_of_destruction_allow": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "obsidian-canyons:dreams_of_destruction_allow:yes:fx"
+      ],
+      "else": []
+    },
+    "obsidian-canyons:dreams_of_destruction_choice": {
+      "kind": "chooseOne",
+      "text": "You must decide <i>(choose one)</i>:",
+      "choices": [
+        {
+          "id": "drown",
+          "text": "<i>Drown out the whispers.</i>",
+          "effects": [],
+          "steps": [
+            "obsidian-canyons:dreams_of_destruction_drown"
+          ]
+        },
+        {
+          "id": "allow",
+          "text": "<i>Let it in.</i>",
+          "effects": [],
+          "steps": [
+            "obsidian-canyons:dreams_of_destruction_allow"
+          ]
+        }
+      ]
+    },
+    "obsidian-canyons:check_dreams_of_destruction": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "obsidian-canyons:dreams_of_destruction_story",
+        "obsidian-canyons:dreams_of_destruction_choice"
+      ],
+      "else": []
+    },
+    "obsidian-canyons:prove_your_worth_story": {
+      "kind": "story",
+      "title": "Task: Prove Your Worth",
+      "text": "Nobody else on this expedition appreciates your talents. How could they? It's your duty to help, to show them why you were the perfect choice for this damned expedition. Nobody asked you, but this could be the perfect time to prove your worth.",
+      "bullets": []
+    },
+    "obsidian-canyons:prove_your_worth_choice": {
+      "kind": "chooseOne",
+      "text": "You must decide <i>(choose one)</i>:",
+      "choices": [
+        {
+          "id": "fix",
+          "text": "<i>\"These ropes are all wrong. I can do much better.\"</i>",
+          "effects": [
+            {
+              "do": "record",
+              "key": "tdcHelpedWithTheRopes",
+              "section": "hidden",
+              "value": true
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "trust",
+          "text": "<i>\"I trust their handiwork.\"</i>",
+          "effects": [],
+          "steps": []
+        }
+      ]
+    },
+    "obsidian-canyons:check_prove_your_worth": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "campaign_log_task",
+        "take": false
+      },
+      "then": [
+        "obsidian-canyons:prove_your_worth_story",
+        "obsidian-canyons:prove_your_worth_choice"
+      ],
+      "else": []
+    },
+    "sepulchre-of-the-sleeper:halted_cthulhus_awakening": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "haltedCthulhusAwakening",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "sepulchre-of-the-sleeper:earn_xp_10": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "xp",
+          "bonus": 10,
+          "who": "each",
+          "victory": true
+        }
+      ]
+    },
+    "sepulchre-of-the-sleeper:two_mental_trauma:text": {
+      "kind": "story",
+      "text": "Each investigator suffers 2 mental trauma.",
+      "bullets": []
+    },
+    "sepulchre-of-the-sleeper:two_mental_trauma": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "trauma",
+          "who": "each",
+          "physical": 0,
+          "mental": 2
+        }
+      ]
+    },
+    "sepulchre-of-the-sleeper:setup_epilogue": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "tdc-epilogue"
+        }
+      ]
+    },
+    "sepulchre-of-the-sleeper:upgradeDecks": {
+      "kind": "upgradeDecks"
+    },
+    "sepulchre-of-the-sleeper:win_campaign:text": {
+      "kind": "story",
+      "text": "The investigators win the campaign!",
+      "bullets": []
+    },
+    "sepulchre-of-the-sleeper:win_campaign": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "end",
+          "result": "win"
+        }
+      ]
+    },
+    "sepulchre-of-the-sleeper:check_campaign_log:text": {
+      "kind": "story",
+      "text": "Check the campaign log.",
+      "bullets": []
+    },
+    "sepulchre-of-the-sleeper:intro_2": {
+      "kind": "story",
+      "text": "\"Just how much of that ugly chicken scratch did you decode?\" Ruby asks. Andy is hunched over the obsidian slate, making notes in a leatherbound notebook. In the evening half-light, the glyphs on the slate glow like pale fire. Andy leafs through several waterlogged pages and places a bloody slip of paper on the stone. \"Enough to decode this. I found it on the body of one of the pilgrims. It roughly translates to this,\" he hastily scribbles the translation on a fresh page and holds it out to you. It reads:\n<center><fancy>\"That is not dead which can eternal lie</fancy></center>\n<center><fancy>and with strange aeons even death may die.\"</fancy></center>",
+      "bullets": []
+    },
+    "sepulchre-of-the-sleeper:intro_3": {
+      "kind": "story",
+      "text": "With your own account, Ruby and Andy help you slowly piece together a narrative across the various friezes and artifacts found in the ancient city. A common theme emerges: an alien civilization from far beyond the stars, an ancient war before history itself, the sinking of R'lyeh, the \"death\" and prophesied return of an ancient god named <b><i>Cthulhu</i></b>.\nAndy points to the central spire. The obsidian gates in the base are swung wide open. A faint but sharp smell of decay wafts out of them. \"The crew members who stayed behind say those doors opened a week ago. Someone went inside, but they never returned,\" Andy says. He shares a few translations he made of rubbings from the gate. \"This one describes a glorious rebirth, a risen sleeper, and the return of the great old ones. It claims he will take back what is his: every part of R'lyeh that was stolen, every corner of his domain.\"\n\"This thing—Cthulhu—is dead. Or asleep. I'm not sure; the details are hazy at best. But with the city and everything else in it awakening, I imagine it's only a matter of time until he awakens as well. He's called followers here from their dreams. And judging by the smell, he's in <i>there</i>,\" the reporter points to the obsidian gates.\nAfter a long pause, Ruby stands up.\n\"It wouldn't be much of a heist if we left the doors open,\" she winks. I say we lock this thing up before we sail off into the sunset. Who's with me?\"",
+      "bullets": []
+    },
+    "sepulchre-of-the-sleeper:setup_locations:text": {
+      "kind": "story",
+      "text": "Put Dreamer's Rest and each copy of Sigil-Carved Alcove into play.",
+      "bullets": []
+    },
+    "sepulchre-of-the-sleeper:take_all_artifacts:text": {
+      "kind": "story",
+      "text": "Gather all earned [[Artifact]] assets and put each of them into play under an investigator's control, divided as evenly as possible.",
+      "bullets": []
+    },
+    "sepulchre-of-the-sleeper:setup_act:text": {
+      "kind": "story",
+      "text": "Build a special agenda deck using Beneath the City as the first agenda and Cthulhu Awakened as the second agenda. These replace the act and agenda decks.",
+      "bullets": []
+    },
+    "sepulchre-of-the-sleeper:encounter_deck:text": {
+      "kind": "story",
+      "text": "Shuffle the remaining encounter cards to build the encounter deck.",
+      "bullets": []
+    },
+    "sepulchre-of-the-sleeper:choose_to_play_or_skip": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "skip",
+          "text": "<i>\"We should know better than to disturb whatever is inside.\"</i>",
+          "effects": [
+            {
+              "do": "investigatorCount",
+              "id": "$count",
+              "section": "taskProgress",
+              "who": "each",
+              "op": "add",
+              "value": 1
+            },
+            {
+              "do": "record",
+              "key": "didNotConfrontTheNightmare",
+              "section": "hidden",
+              "value": true
+            },
+            {
+              "do": "nextScenario",
+              "scenario": "the-awakening"
+            }
+          ],
+          "steps": []
+        },
+        {
+          "id": "play",
+          "text": "<i>\"We should lay it to rest... permanently\"</i>",
+          "effects": [],
+          "steps": [
+            "sepulchre-of-the-sleeper:setup_locations:text",
+            "sepulchre-of-the-sleeper:take_all_artifacts:text",
+            "sepulchre-of-the-sleeper:setup_act:text",
+            "sepulchre-of-the-sleeper:encounter_deck:text"
+          ]
+        }
+      ]
+    },
+    "sepulchre-of-the-sleeper:actually_check_artifacts_2:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "the-awakening"
+        }
+      ]
+    },
+    "sepulchre-of-the-sleeper:add_zero_token:text": {
+      "kind": "story",
+      "text": "Add a 0 token to the chaos bag for the remainder of the campaign",
+      "bullets": []
+    },
+    "sepulchre-of-the-sleeper:add_zero_token": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "0"
+        }
+      ]
+    },
+    "sepulchre-of-the-sleeper:actually_check_artifacts_2": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "sepulchre-of-the-sleeper:intro_3",
+        "sepulchre-of-the-sleeper:choose_to_play_or_skip"
+      ],
+      "else": [
+        "sepulchre-of-the-sleeper:actually_check_artifacts_2:no:fx",
+        "sepulchre-of-the-sleeper:add_zero_token:text",
+        "sepulchre-of-the-sleeper:add_zero_token"
+      ]
+    },
+    "sepulchre-of-the-sleeper:actually_check_artifacts_1:no:fx": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "nextScenario",
+          "scenario": "the-awakening"
+        }
+      ]
+    },
+    "sepulchre-of-the-sleeper:actually_check_artifacts_1": {
+      "kind": "branch",
+      "condition": {
+        "kind": "unsupported",
+        "name": "multi",
+        "take": false
+      },
+      "then": [
+        "sepulchre-of-the-sleeper:intro_2",
+        "sepulchre-of-the-sleeper:check_campaign_log:text",
+        "sepulchre-of-the-sleeper:actually_check_artifacts_2"
+      ],
+      "else": [
+        "sepulchre-of-the-sleeper:actually_check_artifacts_1:no:fx"
       ]
     },
     "the-awakening:intro_1": {
@@ -2064,7 +3255,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "walk_in_faith_succeed",
+          "key": "walkInFaithSucceed",
           "section": "campaign_notes",
           "value": true
         },
@@ -2187,7 +3378,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "good_money_succeed",
+          "key": "goodMoneySucceed",
           "section": "campaign_notes",
           "value": true
         },
@@ -2310,7 +3501,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "dreams_of_destruction_succeed",
+          "key": "dreamsOfDestructionSucceed",
           "section": "campaign_notes",
           "value": true
         },
@@ -2460,7 +3651,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "no_place_like_home_succeed",
+          "key": "noPlaceLikeHomeSucceed",
           "section": "campaign_notes",
           "value": true
         },
@@ -2588,7 +3779,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "do_no_harm_succeed",
+          "key": "doNoHarmSucceed",
           "section": "campaign_notes",
           "value": true
         },
@@ -2722,7 +3913,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "toe_the_line_succeed",
+          "key": "toeTheLineSucceed",
           "section": "campaign_notes",
           "value": true
         },
@@ -3100,7 +4291,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "prove_your_worth_succeed",
+          "key": "proveYourWorthSucceed",
           "section": "campaign_notes",
           "value": true
         },
@@ -3218,7 +4409,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "plumb_the_depths_succeed",
+          "key": "plumbTheDepthsSucceed",
           "section": "campaign_notes",
           "value": true
         },
@@ -3347,7 +4538,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "tasks_done",
+          "key": "tasksDone",
           "section": "hidden",
           "value": true
         }
@@ -3403,8 +4594,8 @@
       "effects": [
         {
           "do": "record",
-          "key": "clah_horror",
-          "section": "artifacts_earned",
+          "key": "clahHorror",
+          "section": "artifactsEarned",
           "value": true
         }
       ]
@@ -3420,7 +4611,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "kept_barrier_node",
+              "key": "keptBarrierNode",
               "section": "hidden",
               "value": true
             }
@@ -3428,8 +4619,8 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "barrier_node",
-            "section": "artifacts_earned"
+            "id": "barrierNode",
+            "section": "artifactsEarned"
           }
         },
         {
@@ -3438,7 +4629,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "kept_obsidian_claw",
+              "key": "keptObsidianClaw",
               "section": "hidden",
               "value": true
             }
@@ -3446,8 +4637,8 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "obsidian_claw",
-            "section": "artifacts_earned"
+            "id": "obsidianClaw",
+            "section": "artifactsEarned"
           }
         },
         {
@@ -3456,7 +4647,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "kept_shard",
+              "key": "keptShard",
               "section": "hidden",
               "value": true
             }
@@ -3465,7 +4656,7 @@
           "when": {
             "kind": "logHas",
             "id": "shard",
-            "section": "artifacts_earned"
+            "section": "artifactsEarned"
           }
         },
         {
@@ -3474,7 +4665,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "kept_tidal_tablet",
+              "key": "keptTidalTablet",
               "section": "hidden",
               "value": true
             }
@@ -3482,8 +4673,8 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "tidal_tablet",
-            "section": "artifacts_earned"
+            "id": "tidalTablet",
+            "section": "artifactsEarned"
           }
         },
         {
@@ -3492,7 +4683,7 @@
           "effects": [
             {
               "do": "record",
-              "key": "kept_grisly_mask",
+              "key": "keptGrislyMask",
               "section": "hidden",
               "value": true
             }
@@ -3500,8 +4691,8 @@
           "steps": [],
           "when": {
             "kind": "logHas",
-            "id": "grisly_mask",
-            "section": "artifacts_earned"
+            "id": "grislyMask",
+            "section": "artifactsEarned"
           }
         },
         {
@@ -3530,8 +4721,8 @@
       "effects": [
         {
           "do": "crossOut",
-          "key": "barrier_node",
-          "section": "artifacts_earned"
+          "key": "barrierNode",
+          "section": "artifactsEarned"
         }
       ]
     },
@@ -3539,7 +4730,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "kept_barrier_node",
+        "id": "keptBarrierNode",
         "section": "hidden"
       },
       "then": [],
@@ -3558,8 +4749,8 @@
       "effects": [
         {
           "do": "crossOut",
-          "key": "obsidian_claw",
-          "section": "artifacts_earned"
+          "key": "obsidianClaw",
+          "section": "artifactsEarned"
         }
       ]
     },
@@ -3567,7 +4758,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "kept_obsidian_claw",
+        "id": "keptObsidianClaw",
         "section": "hidden"
       },
       "then": [],
@@ -3587,7 +4778,7 @@
         {
           "do": "crossOut",
           "key": "shard",
-          "section": "artifacts_earned"
+          "section": "artifactsEarned"
         }
       ]
     },
@@ -3595,7 +4786,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "kept_shard",
+        "id": "keptShard",
         "section": "hidden"
       },
       "then": [],
@@ -3614,8 +4805,8 @@
       "effects": [
         {
           "do": "crossOut",
-          "key": "tidal_tablet",
-          "section": "artifacts_earned"
+          "key": "tidalTablet",
+          "section": "artifactsEarned"
         }
       ]
     },
@@ -3623,7 +4814,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "kept_tidal_tablet",
+        "id": "keptTidalTablet",
         "section": "hidden"
       },
       "then": [],
@@ -3642,8 +4833,8 @@
       "effects": [
         {
           "do": "crossOut",
-          "key": "grisly_mask",
-          "section": "artifacts_earned"
+          "key": "grislyMask",
+          "section": "artifactsEarned"
         }
       ]
     },
@@ -3651,7 +4842,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "kept_grisly_mask",
+        "id": "keptGrislyMask",
         "section": "hidden"
       },
       "then": [],
@@ -3677,7 +4868,7 @@
             {
               "do": "record",
               "key": "downtown",
-              "section": "flooded_neighborhoods",
+              "section": "floodedNeighborhoods",
               "value": true
             }
           ],
@@ -3690,7 +4881,7 @@
             {
               "do": "record",
               "key": "easttown",
-              "section": "flooded_neighborhoods",
+              "section": "floodedNeighborhoods",
               "value": true
             }
           ],
@@ -3702,8 +4893,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "miskatonic_university",
-              "section": "flooded_neighborhoods",
+              "key": "miskatonicUniversity",
+              "section": "floodedNeighborhoods",
               "value": true
             }
           ],
@@ -3716,7 +4907,7 @@
             {
               "do": "record",
               "key": "northside",
-              "section": "flooded_neighborhoods",
+              "section": "floodedNeighborhoods",
               "value": true
             }
           ],
@@ -3729,7 +4920,7 @@
             {
               "do": "record",
               "key": "rivertown",
-              "section": "flooded_neighborhoods",
+              "section": "floodedNeighborhoods",
               "value": true
             }
           ],
@@ -3742,7 +4933,7 @@
             {
               "do": "record",
               "key": "southside",
-              "section": "flooded_neighborhoods",
+              "section": "floodedNeighborhoods",
               "value": true
             }
           ],
@@ -3754,8 +4945,8 @@
           "effects": [
             {
               "do": "record",
-              "key": "st_marys_hospital",
-              "section": "flooded_neighborhoods",
+              "key": "stMarysHospital",
+              "section": "floodedNeighborhoods",
               "value": true
             }
           ],
@@ -3820,12 +5011,22 @@
         }
       ]
     },
+    "the-doom-of-arkham-part-1:earn_john": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "earnCard",
+          "code": "11687",
+          "who": "choice"
+        }
+      ]
+    },
     "the-doom-of-arkham-part-2:cthulhu_annihilated_the_city_of_arkham": {
       "kind": "effects",
       "effects": [
         {
           "do": "record",
-          "key": "cthulhu_annihilated_the_city_of_arkham",
+          "key": "cthulhuAnnihilatedTheCityOfArkham",
           "section": "campaign_notes",
           "value": true
         }
@@ -3873,7 +5074,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "cthulhu_was_driven_away",
+          "key": "cthulhuWasDrivenAway",
           "section": "campaign_notes",
           "value": true
         }
@@ -3928,7 +5129,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "cthulhu_was_banished",
+          "key": "cthulhuWasBanished",
           "section": "campaign_notes",
           "value": true
         }
@@ -3974,7 +5175,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "cthulhu_was_banished_but_arkham_was_destroyed",
+          "key": "cthulhuWasBanishedButArkhamWasDestroyed",
           "section": "campaign_notes",
           "value": true
         }
@@ -4021,6 +5222,91 @@
         }
       ]
     },
+    "the-doom-of-arkham-part-2:intro_2": {
+      "kind": "story",
+      "text": "\"I like how you think,\" Inspector Legrasse says as he loads his gun with a satisfying click. Together, you form a plan to fend off the ancient menace. Ruby suggests that some of you take to the rooftops, while Legrasse phones in some connections with the Arkham police. If you stand together, you may be able to draw Cthulhu's ire away from Arkham itself. \"This is the worst idea I've ever heard, but I don't think we have any other choice,\" Ruby says. You see a glimmer of something—is it fear?—in her eyes. You have no other choice but to fight.",
+      "bullets": []
+    },
+    "the-doom-of-arkham-part-2:stood_together": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "stoodTogether",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-doom-of-arkham-part-2:take_control_friends:text": {
+      "kind": "story",
+      "text": "Search the <i>Expedition</i> and <i>The Doom of Arkham</i> encounter sets, each investigator's deck, and all in- and out-of-play areas for the following story assets: John Raymond Legrasse, Ruby Standish, and Andy Van Nortwick. Put each of these assets into play under the control of any investigator(s). Each of these assets does not take up an ally slot during this scenario.",
+      "bullets": []
+    },
+    "the-doom-of-arkham-part-2:add_elder_thing_token:text": {
+      "kind": "story",
+      "text": "Add 1 [elder_thing] token to the chaos bag for the remainder of the campaign.",
+      "bullets": []
+    },
+    "the-doom-of-arkham-part-2:add_elder_thing_token": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "addChaosToken",
+          "token": "elderThing"
+        }
+      ]
+    },
+    "the-doom-of-arkham-part-2:intro_3": {
+      "kind": "story",
+      "text": "Andy beckons you all into a deserted diner as the waters continue to rise. \"This isn't my field of expertise,\" he says, laying a stack of loose papers on a table. \"But I've been translating the glyphs from R'lyeh, and I think we might be able to stop this with, uhm... well, a ritual.\" Ruby waves Inspector Legrasse's objections aside as Andy outlines a \"ritual of returning\" he discovered in the ancient courts of R'lyeh. By using pieces of the ancient city of R'lyeh, you may be able to seal the ancient one away.\n\"The glyphs I translated seemed to imply that Cthulhu and his, er, children are bound to R'lyeh itself—\" he lays out a map of Arkham. \"If we place these artifacts around the city like so, I can recite the ritual and banish him. However, I'll need you all to draw his attention, keep his eyes on you, while I prepare.\" Andy holds up one of the artifacts you recovered from Randall, turning it over in his hand. It glows with an unnatural light.\n\"I'll head to the Arkham police department,\" says Inspector Legrasse. \"I've got some connections there. We should be able to get some officers out on the streets to help the survivors.\" Ruby, who has been silent since Andy outlined the plan, crosses her arms. \"So you want us to rile up the thing that is literally destroying the city so you can recite some words and hide some relics.\" She takes a puff of her cigarette. \"What could go wrong?\"",
+      "bullets": []
+    },
+    "the-doom-of-arkham-part-2:your_allies_have_a_plan": {
+      "kind": "effects",
+      "effects": [
+        {
+          "do": "record",
+          "key": "yourAlliesHaveAPlan",
+          "section": "campaign_notes",
+          "value": true
+        }
+      ]
+    },
+    "the-doom-of-arkham-part-2:gather_friends:text": {
+      "kind": "story",
+      "text": "Search the <i>Expedition</i> and <i>The Doom of Arkham</i> encounter sets, each investigator's deck, and all in- and out-of-play areas for the following story assets: John Raymond Legrasse, Ruby Standish, and Andy Van Nortwick. Set them aside, out of play.",
+      "bullets": []
+    },
+    "the-doom-of-arkham-part-2:choose_approach": {
+      "kind": "chooseOne",
+      "choices": [
+        {
+          "id": "direct",
+          "text": "<i>\"We need to take a last stand and drive him out with sheer firepower.\"</i>",
+          "effects": [],
+          "steps": [
+            "the-doom-of-arkham-part-2:intro_2",
+            "the-doom-of-arkham-part-2:stood_together",
+            "the-doom-of-arkham-part-2:take_control_friends:text",
+            "the-doom-of-arkham-part-2:add_elder_thing_token:text",
+            "the-doom-of-arkham-part-2:add_elder_thing_token"
+          ]
+        },
+        {
+          "id": "alternate",
+          "text": "<i>\"There must be another way.\"</i>",
+          "effects": [],
+          "steps": [
+            "the-doom-of-arkham-part-2:intro_3",
+            "the-doom-of-arkham-part-2:your_allies_have_a_plan",
+            "the-doom-of-arkham-part-2:gather_friends:text",
+            "the-doom-of-arkham-part-2:add_elder_thing_token:text",
+            "the-doom-of-arkham-part-2:add_elder_thing_token"
+          ]
+        }
+      ]
+    },
     "tdc-epilogue:intro_1": {
       "kind": "story",
       "text": "<fancy>August 20</fancy>\nIt has been nearly two months since the destruction of Arkham. According to reports, most of the survivors have been committed to a sanatorium upstate. The remainder were bedridden with the infectious coma that has plagued the city for the past month, and have no clue what really happened. The few accounts we do have attribute the destruction to “a massive behemoth” that rampaged the city, destroying everything in its wake. A dozen other cities along the eastern seaboard and the coast of South America have reported similar phenomena. The locals have taken to calling it a silent rampage, though popular opinion holds that it was an exceptionally strong storm.\nThe future is uncertain for Arkham. With few homes and infrastructure to return to, the surviving residents have dispersed to nearby villages in Dunwich, Kingsport, Innsmouth, and Providence. Discussions about whether to salvage what little remains of Miskatonic University are ongoing, but not likely. Arkham is little more than a ghost town.\n<right><fancy>Minnie Klein</fancy></right>",
@@ -4045,7 +5331,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "halted_cthulhus_awakening",
+        "id": "haltedCthulhusAwakening",
         "section": "campaign_notes"
       },
       "then": [
@@ -4057,7 +5343,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "cthulhu_was_banished",
+        "id": "cthulhuWasBanished",
         "section": "campaign_notes"
       },
       "then": [
@@ -4074,12 +5360,12 @@
         "conditions": [
           {
             "kind": "logHas",
-            "id": "cthulhu_was_driven_away",
+            "id": "cthulhuWasDrivenAway",
             "section": "campaign_notes"
           },
           {
             "kind": "logHas",
-            "id": "cthulhu_was_banished_but_arkham_was_destroyed",
+            "id": "cthulhuWasBanishedButArkhamWasDestroyed",
             "section": "campaign_notes"
           }
         ]
@@ -4095,7 +5381,7 @@
       "kind": "branch",
       "condition": {
         "kind": "logHas",
-        "id": "cthulhu_annihilated_the_city_of_arkham",
+        "id": "cthulhuAnnihilatedTheCityOfArkham",
         "section": "campaign_notes"
       },
       "then": [

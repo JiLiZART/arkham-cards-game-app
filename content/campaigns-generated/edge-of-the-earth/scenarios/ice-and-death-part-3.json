@@ -22,6 +22,7 @@
     "08544",
     "08545"
   ],
+  "setupCards": [],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -99,7 +100,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "team_barely_escaped_the_ice_shelf",
+          "key": "teamBarelyEscapedTheIceShelf",
           "value": true
         },
         {
@@ -116,7 +117,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "team_defeated_the_hunting_creatures",
+          "key": "teamDefeatedTheHuntingCreatures",
           "value": true
         },
         {
@@ -133,7 +134,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "team_fled_to_the_mountains",
+          "key": "teamFledToTheMountains",
           "value": true
         },
         {

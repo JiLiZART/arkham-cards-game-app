@@ -22,6 +22,9 @@
   "agendas": [
     "05285"
   ],
+  "setupCards": [
+    "54049"
+  ],
   "setup": [
     {
       "do": "putIntoPlay",
@@ -148,7 +151,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "doom_draws_ever_closer",
+          "key": "doomDrawsEverCloser",
           "value": true
         },
         {
@@ -165,7 +168,7 @@
       "effects": [
         {
           "do": "record",
-          "key": "doom_draws_ever_closer",
+          "key": "doomDrawsEverCloser",
           "value": true
         },
         {
